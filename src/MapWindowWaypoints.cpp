@@ -65,174 +65,171 @@ public:
   }
 
   void DrawWaypoint(const Waypoint& way_point, bool intask=false) {
-
     POINT sc;
-    if (map.LonLat2ScreenIfVisible(way_point.Location, &sc)) {
+    if (!map.LonLat2ScreenIfVisible(way_point.Location, &sc))
+      return;
 
-      TextInBoxMode_t TextDisplayMode;
-      bool irange = false;
-      bool islandable = false;
-      bool dowrite = intask || (map.SettingsMap().DeclutterLabels<2);
+    TextInBoxMode_t TextDisplayMode;
+    bool irange = false;
+    bool islandable = false;
+    bool dowrite = intask || (map.SettingsMap().DeclutterLabels < 2);
 
-      TextDisplayMode.AsInt = 0;
-      
-      irange = map.WaypointInScaleFilter(way_point);
-      
-      Bitmap *wp_bmp = &MapGfx.hSmall;
+    TextDisplayMode.AsInt = 0;
 
-      bool draw_alt = false;
-      int AltArrivalAGL= 0;
-      
-      if(way_point.is_landable()) {
-        islandable = true; // so we can always draw them
+    irange = map.WaypointInScaleFilter(way_point);
 
-        bool reachable = false;
-      
-        if ((map.SettingsMap().DeclutterLabels<1) || intask) {
+    Bitmap *wp_bmp = &MapGfx.hSmall;
 
-          const AIRCRAFT_STATE aircraft_state = ToAircraftState(map.Basic());
-          UnorderedTaskPoint t(way_point, map.SettingsComputer());
-          GlideResult r =
-            TaskSolution::glide_solution_remaining(t, aircraft_state,
-                                                   glide_polar);
-          reachable = r.glide_reachable();
+    bool draw_alt = false;
+    int AltArrivalAGL= 0;
 
-          if (reachable) {
-            AltArrivalAGL = (int)Units::ToUserUnit(r.AltitudeDifference,
-                                                   Units::AltitudeUnit);
-          }
+    if (way_point.is_landable()) {
+      islandable = true; // so we can always draw them
 
-          draw_alt = reachable;
+      bool reachable = false;
+
+      if ((map.SettingsMap().DeclutterLabels < 1) || intask) {
+        const AIRCRAFT_STATE aircraft_state = ToAircraftState(map.Basic());
+        UnorderedTaskPoint t(way_point, map.SettingsComputer());
+        GlideResult r =
+          TaskSolution::glide_solution_remaining(t, aircraft_state,
+                                                 glide_polar);
+        reachable = r.glide_reachable();
+
+        if (reachable)
+          AltArrivalAGL = (int)Units::ToUserUnit(r.AltitudeDifference,
+                                                 Units::AltitudeUnit);
+
+        draw_alt = reachable;
+      }
+
+      if (reachable) {
+        TextDisplayMode.AsFlag.Reachable = 1;
+
+        if ((map.SettingsMap().DeclutterLabels < 2) || intask) {
+          if (intask || (map.SettingsMap().DeclutterLabels < 1))
+            TextDisplayMode.AsFlag.Border = 1;
+
+          // show all reachable landing fields unless we want a decluttered
+          // screen.
+          dowrite = true;
         }
- 
-        if (reachable) {
-          
-          TextDisplayMode.AsFlag.Reachable = 1;
-          
-          if ((map.SettingsMap().DeclutterLabels<2)||intask) {
-            
-            if (intask || (map.SettingsMap().DeclutterLabels<1)) {
-              TextDisplayMode.AsFlag.Border = 1;
-            }
-            // show all reachable landing fields unless we want a decluttered
-            // screen.
-            dowrite = true;
-          }
-          
-          if (way_point.Flags.Airport)
-            wp_bmp = &MapGfx.hBmpAirportReachable;
-          else
-            wp_bmp = &MapGfx.hBmpFieldReachable;
-        } else {
-          if (way_point.Flags.Airport)
-            wp_bmp = &MapGfx.hBmpAirportUnReachable;
-          else
-            wp_bmp = &MapGfx.hBmpFieldUnReachable;
-        }
+
+        if (way_point.Flags.Airport)
+          wp_bmp = &MapGfx.hBmpAirportReachable;
+        else
+          wp_bmp = &MapGfx.hBmpFieldReachable;
       } else {
-        if (map.GetMapScaleKM()>4) {
-          wp_bmp = &MapGfx.hSmall;
-        } else {
-          wp_bmp = &MapGfx.hTurnPoint;
-        }
+        if (way_point.Flags.Airport)
+          wp_bmp = &MapGfx.hBmpAirportUnReachable;
+        else
+          wp_bmp = &MapGfx.hBmpFieldUnReachable;
       }
-      
-      if (intask) { // VNT
-        TextDisplayMode.AsFlag.WhiteBold = 1;
-      }
-      
-      if(irange || intask || dowrite || islandable) {
-        map.draw_masked_bitmap(canvas, *wp_bmp,
-                               sc.x, sc.y,
-                               20, 20);
-      }
-      
-      if (irange || intask || dowrite) {
-        
-        TCHAR Buffer[32];
-        TCHAR Buffer2[32];
-        
-        switch(pDisplayTextType) {
-        case DISPLAYNAMEIFINTASK:
-          dowrite = intask;
-          if (intask) {
-            if (draw_alt)
-              _stprintf(Buffer, TEXT("%s:%d%s"),
-                        way_point.Name.c_str(),
-                        AltArrivalAGL,
-                        sAltUnit);
-            else
-              _stprintf(Buffer, TEXT("%s"),way_point.Name.c_str());
-          }
-          break;
-        case DISPLAYNAME:
-          if (draw_alt)
-            _stprintf(Buffer, TEXT("%s:%d%s"),
-                      way_point.Name.c_str(),
-                      AltArrivalAGL,
-                      sAltUnit);
-          else
-            _stprintf(Buffer, TEXT("%s"),way_point.Name.c_str());
-          
-          break;
-        case DISPLAYNUMBER:
-          if (draw_alt)
-            _stprintf(Buffer, TEXT("%d:%d%s"),
-                      way_point.id,
-                      AltArrivalAGL,
-                      sAltUnit);
-          else
-            _stprintf(Buffer, TEXT("%d"),way_point.id);
-          
-          break;
-        case DISPLAYFIRSTFIVE:
-          _tcsncpy(Buffer2, way_point.Name.c_str(), 5);
-          Buffer2[5] = '\0';
-          if (draw_alt)
-            _stprintf(Buffer, TEXT("%s:%d%s"),
-                      Buffer2,
-                      AltArrivalAGL,
-                      sAltUnit);
-          else
-            _stprintf(Buffer, TEXT("%s"),Buffer2);
-          
-          break;
-        case DISPLAYFIRSTTHREE:
-          _tcsncpy(Buffer2, way_point.Name.c_str(), 3);
-          Buffer2[3] = '\0';
-          if (draw_alt)
-            _stprintf(Buffer, TEXT("%s:%d%s"),
-                      Buffer2,
-                      AltArrivalAGL,
-                      sAltUnit);
-          else
-            _stprintf(Buffer, TEXT("%s"),Buffer2);
-          
-          break;
-        case DISPLAYNONE:
-          if (draw_alt)
-            _stprintf(Buffer, TEXT("%d%s"),
-                      AltArrivalAGL,
-                      sAltUnit);
-          else
-            Buffer[0]= '\0';
-          break;
-        default:
-          assert(0);
-          break;
-        }
-
-        if (dowrite) {
-          MapWaypointLabelAdd(
-            Buffer,
-            sc.x + 5, sc.y,
-            TextDisplayMode,
-            AltArrivalAGL,
-            intask,false,false,false,
-            map.GetMapRect());
-        }
-      }
+    } else {
+      if (map.GetMapScaleKM() > 4)
+        wp_bmp = &MapGfx.hSmall;
+      else
+        wp_bmp = &MapGfx.hTurnPoint;
     }
+
+    if (intask) // VNT
+      TextDisplayMode.AsFlag.WhiteBold = 1;
+
+    if (irange || intask || dowrite || islandable)
+      map.draw_masked_bitmap(canvas, *wp_bmp,
+                             sc.x, sc.y,
+                             20, 20);
+
+    if (!irange && !intask && !dowrite)
+      return;
+
+    TCHAR Buffer[32];
+    TCHAR Buffer2[32];
+
+    switch (pDisplayTextType) {
+    case DISPLAYNAMEIFINTASK:
+      dowrite = intask;
+      if (intask) {
+        if (draw_alt)
+          _stprintf(Buffer, TEXT("%s:%d%s"),
+                    way_point.Name.c_str(),
+                    AltArrivalAGL,
+                    sAltUnit);
+        else
+          _stprintf(Buffer, TEXT("%s"),way_point.Name.c_str());
+      }
+      break;
+
+    case DISPLAYNAME:
+      if (draw_alt)
+        _stprintf(Buffer, TEXT("%s:%d%s"),
+                  way_point.Name.c_str(),
+                  AltArrivalAGL,
+                  sAltUnit);
+      else
+        _stprintf(Buffer, TEXT("%s"),way_point.Name.c_str());
+
+      break;
+
+    case DISPLAYNUMBER:
+      if (draw_alt)
+        _stprintf(Buffer, TEXT("%d:%d%s"),
+                  way_point.id,
+                  AltArrivalAGL,
+                  sAltUnit);
+      else
+        _stprintf(Buffer, TEXT("%d"),way_point.id);
+
+      break;
+
+    case DISPLAYFIRSTFIVE:
+      _tcsncpy(Buffer2, way_point.Name.c_str(), 5);
+      Buffer2[5] = '\0';
+      if (draw_alt)
+        _stprintf(Buffer, TEXT("%s:%d%s"),
+                  Buffer2,
+                  AltArrivalAGL,
+                  sAltUnit);
+      else
+        _stprintf(Buffer, TEXT("%s"),Buffer2);
+
+      break;
+
+    case DISPLAYFIRSTTHREE:
+      _tcsncpy(Buffer2, way_point.Name.c_str(), 3);
+      Buffer2[3] = '\0';
+      if (draw_alt)
+        _stprintf(Buffer, TEXT("%s:%d%s"),
+                  Buffer2,
+                  AltArrivalAGL,
+                  sAltUnit);
+      else
+        _stprintf(Buffer, TEXT("%s"),Buffer2);
+
+      break;
+
+    case DISPLAYNONE:
+      if (draw_alt)
+        _stprintf(Buffer, TEXT("%d%s"),
+                  AltArrivalAGL,
+                  sAltUnit);
+      else
+        Buffer[0] = '\0';
+      break;
+
+    default:
+      assert(0);
+      break;
+    }
+
+    if (!dowrite)
+      return;
+
+    MapWaypointLabelAdd(Buffer, sc.x + 5, sc.y,
+                        TextDisplayMode,
+                        AltArrivalAGL,
+                        intask,false,false,false,
+                        map.GetMapRect());
   }
 
   void Visit(const Waypoint& way_point) {
