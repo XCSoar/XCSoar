@@ -222,7 +222,6 @@ XCSoarInterface::Debounce(void)
 bool
 vario_visible()
 {
-  bool gaugeVarioInPortrait = is_altair();
   bool enable_gauge;
 
   // TODO TB: logic update...
@@ -246,7 +245,7 @@ vario_visible()
   if (Layout::landscape && (InfoBoxLayout::InfoBoxGeometry == 5))
     return false;
 
-  if (gaugeVarioInPortrait || Layout::landscape)
+  if (is_altair() || Layout::landscape)
     return enable_gauge;
 
   return false;
