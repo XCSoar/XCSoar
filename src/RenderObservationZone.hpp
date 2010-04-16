@@ -50,6 +50,8 @@ public:
 
   void Visit(const FAISectorZone& oz);
 
+  void Visit(const KeyholeZone& oz);
+
   void Visit(const SectorZone& oz);
 
   void Visit(const LineSectorZone& oz);

@@ -134,6 +134,11 @@ public:
       _stprintf(text, _T("FAI Sector"));
     }
 
+  void Visit(const KeyholeZone& oz) 
+    {
+      _stprintf(text, _T("Keyhole"));
+    }
+
   void Visit(const SectorZone& oz) 
     {
       _stprintf(text, _T("Sector"));
@@ -223,6 +228,8 @@ const TCHAR* OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t t
     return _T("Any point within area scored from corner point");
   case AbstractTaskFactory::AST_CYLINDER:
     return _T("Any point within area scored from center");
+  case AbstractTaskFactory::KEYHOLE_SECTOR:
+    return _T("(As used in German rules) Any point within area scored from center");
   case AbstractTaskFactory::AAT_CYLINDER:
     return _T("Scored inside area");
   case AbstractTaskFactory::AAT_SEGMENT:
@@ -250,6 +257,8 @@ const TCHAR* OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
     return _T("Start cylinder");
   case AbstractTaskFactory::FAI_SECTOR:
     return _T("Turnpoint FAI sector");
+  case AbstractTaskFactory::KEYHOLE_SECTOR:
+    return _T("Keyhole sector (DAe)");
   case AbstractTaskFactory::AST_CYLINDER:
     return _T("Turnpoint cylinder");
   case AbstractTaskFactory::AAT_CYLINDER:

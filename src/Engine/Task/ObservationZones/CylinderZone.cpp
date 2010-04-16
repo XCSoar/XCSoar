@@ -40,12 +40,14 @@
 #include <stdlib.h>
 #include <algorithm>
 
-fixed CylinderZone::score_adjustment() const
+fixed 
+CylinderZone::score_adjustment() const
 {
   return Radius;
 }
 
-GEOPOINT CylinderZone::get_boundary_parametric(fixed t) const
+GEOPOINT 
+CylinderZone::get_boundary_parametric(fixed t) const
 { 
   return GeoVector(Radius, t*fixed_360).end_point(get_location());
 }

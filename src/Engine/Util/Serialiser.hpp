@@ -59,6 +59,7 @@ public:
   void Visit(const FinishPoint& data);
   void Visit(const UnorderedTaskPoint& data);
   void Visit(const FAISectorZone& data);
+  void Visit(const KeyholeZone& data);
   void Visit(const SectorZone& data);
   void Visit(const LineSectorZone& data);
   void Visit(const CylinderZone& data);

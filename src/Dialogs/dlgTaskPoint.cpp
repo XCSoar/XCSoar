@@ -89,6 +89,14 @@ public:
         wp->show();
       }
     }
+  void Visit(const KeyholeZone& oz) 
+    {
+      hide_all();
+      WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZKeyhole")));
+      if (wp) {
+        wp->show();
+      }
+    }
 
   void Visit(const SectorZone& oz) 
     {
@@ -155,6 +163,10 @@ private:
     if (wp) {
       wp->hide();
     }
+    wp = ((WndFrame *)wf->FindByName(_T("frmOZKeyhole")));
+    if (wp) {
+      wp->hide();
+    }
     wp = ((WndFrame *)wf->FindByName(_T("frmOZLine")));
     if (wp) {
       wp->hide();
@@ -177,7 +189,9 @@ public:
   void Visit(FAISectorZone& oz) 
     {
     }
-
+  void Visit(KeyholeZone& oz) 
+    {
+    }
   void Visit(SectorZone& oz) 
     {
       WndProperty* wv;

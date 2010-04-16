@@ -39,7 +39,8 @@
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Math/Geometry.hpp"
 
-GEOPOINT SectorZone::get_boundary_parametric(fixed t) const
+GEOPOINT 
+SectorZone::get_boundary_parametric(fixed t) const
 { 
   const fixed half = HalfAngle(StartRadial, EndRadial);
   const fixed angle = AngleLimit360(t*fixed_360+half);
@@ -61,7 +62,8 @@ GEOPOINT SectorZone::get_boundary_parametric(fixed t) const
   }
 }
 
-fixed SectorZone::score_adjustment() const
+fixed 
+SectorZone::score_adjustment() const
 {
   return fixed_zero;
 }

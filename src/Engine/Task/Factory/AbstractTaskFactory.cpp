@@ -38,6 +38,7 @@
 
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
+#include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include <algorithm>
 
@@ -131,6 +132,9 @@ AbstractTaskFactory::getType(const OrderedTaskPoint* point) const
     if (dynamic_cast<const FAISectorZone*>(oz) != NULL) {
       return FAI_SECTOR;
     } else
+    if (dynamic_cast<const KeyholeZone*>(oz) != NULL) {
+      return KEYHOLE_SECTOR;
+    } else
     if (dynamic_cast<const CylinderZone*>(oz) != NULL) {
       return AST_CYLINDER;
     } 
@@ -166,6 +170,8 @@ AbstractTaskFactory::createPoint(const LegalPointType_t type,
     return createStart(new CylinderZone(wp.Location, (fixed)1000), wp);
   case FAI_SECTOR:
     return createAST(new FAISectorZone(wp.Location, true), wp);
+  case KEYHOLE_SECTOR:
+    return createAST(new KeyholeZone(wp.Location), wp);
   case AST_CYLINDER:
     return createAST(new CylinderZone(wp.Location, (fixed)500), wp);
   case AAT_CYLINDER:
@@ -504,7 +510,9 @@ AbstractTaskFactory::validAbstractType(LegalAbstractPointType_t type,
     return is_finish;
   case POINT_AST:
     return is_intermediate &&
-      (validIntermediateType(FAI_SECTOR) || validIntermediateType(AST_CYLINDER));
+      (validIntermediateType(FAI_SECTOR) 
+       || validIntermediateType(AST_CYLINDER)
+       || validIntermediateType(KEYHOLE_SECTOR));
   case POINT_AAT:
     return is_intermediate &&
       (validIntermediateType(AAT_CYLINDER) || validIntermediateType(AAT_SEGMENT));

@@ -89,6 +89,20 @@ RenderObservationZone::Visit(const FAISectorZone& oz)
 }
 
 void 
+RenderObservationZone::Visit(const KeyholeZone& oz) 
+{
+  parms_sector(oz);
+  if (draw_style(false)) {
+    draw_segment(oz.getStartRadial(), oz.getEndRadial());
+    p_radius = m_proj.DistanceMetersToScreen(fixed(500));
+    draw_circle();
+  }
+  if (draw_style(!m_past)) {
+    draw_two_lines();
+  }
+}
+
+void 
 RenderObservationZone::Visit(const SectorZone& oz) 
 {
   parms_sector(oz);

@@ -41,6 +41,7 @@
 #include "Task/ObservationZones/SectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
+#include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/Tasks/BaseTask/ObservationZonePoint.hpp"
 
 /**
@@ -51,7 +52,8 @@ class ObservationZoneConstVisitor:
   public ConstVisitor<FAISectorZone>,
   public ConstVisitor<SectorZone>,
   public ConstVisitor<LineSectorZone>,
-  public ConstVisitor<CylinderZone>
+  public ConstVisitor<CylinderZone>,
+  public ConstVisitor<KeyholeZone>
 {
 
 };
@@ -61,7 +63,8 @@ class ObservationZoneVisitor:
   public Visitor<FAISectorZone>,
   public Visitor<SectorZone>,
   public Visitor<LineSectorZone>,
-  public Visitor<CylinderZone>
+  public Visitor<CylinderZone>,
+  public Visitor<KeyholeZone>
 {
 
 };

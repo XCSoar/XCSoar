@@ -203,6 +203,8 @@ Serialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
     return ls;
   } else if (_tcscmp(type.c_str(), _T("FAISector")) == 0) {
     return new FAISectorZone(wp.Location, is_turnpoint);
+  } else if (_tcscmp(type.c_str(), _T("Keyhole")) == 0) {
+    return new KeyholeZone(wp.Location);
   }
   assert(1);
   return NULL;
@@ -220,6 +222,12 @@ void
 Serialiser::Visit(const FAISectorZone& data)
 {
   m_node.set_attribute(_T("type"), _T("FAISector"));
+}
+
+void 
+Serialiser::Visit(const KeyholeZone& data)
+{
+  m_node.set_attribute(_T("type"), _T("Keyhole"));
 }
 
 void 
