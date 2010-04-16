@@ -46,7 +46,7 @@ class Waypoint;
 
 class Serialiser:
   public TaskPointConstVisitor,
-  public virtual ObservationZoneConstVisitor
+  public ObservationZoneConstVisitor
 {
 public:
   Serialiser(DataNode& the_node): m_node(the_node) {};

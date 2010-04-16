@@ -44,11 +44,18 @@ Copyright_License {
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/Tasks/TaskSolvers/TaskSolution.hpp"
 #include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
+#include "Task/Visitors/TaskPointVisitor.hpp"
+#include "Task/Visitors/TaskVisitor.hpp"
+#include "TaskClientUI.hpp"
 
 #include <assert.h>
 #include <stdio.h>
 
-class WaypointVisitorMap: public WaypointVisitor {
+class WaypointVisitorMap: 
+  public WaypointVisitor, 
+  public TaskPointConstVisitor,
+  public TaskVisitor
+{
 public:
   WaypointVisitorMap(MapWindow &_map,
                      Canvas &_canvas,
@@ -57,6 +64,7 @@ public:
      aircraft_state(ToAircraftState(map.Basic())),
      canvas(_canvas),
      glide_polar(polar) {
+
     // if pan mode, show full names
     pDisplayTextType = map.SettingsMap().DisplayTextType;
     if (map.SettingsMap().EnablePan)
@@ -65,7 +73,7 @@ public:
     _tcscpy(sAltUnit, Units::GetAltitudeName());
   }
 
-  void DrawWaypoint(const Waypoint& way_point, bool intask=false) {
+  void DrawWaypoint(const Waypoint& way_point, bool in_task=false) {
     POINT sc;
     if (!map.LonLat2ScreenIfVisible(way_point.Location, &sc))
       return;
@@ -73,7 +81,7 @@ public:
     TextInBoxMode_t TextDisplayMode;
     bool irange = false;
     bool islandable = false;
-    bool dowrite = intask || (map.SettingsMap().DeclutterLabels < 2);
+    bool dowrite = in_task || (map.SettingsMap().DeclutterLabels < 2);
 
     TextDisplayMode.AsInt = 0;
 
@@ -93,7 +101,7 @@ public:
                                                glide_polar);
       bool reachable = r.glide_reachable();
 
-      if ((map.SettingsMap().DeclutterLabels < 1) || intask) {
+      if ((map.SettingsMap().DeclutterLabels < 1) || in_task) {
         if (reachable)
           AltArrivalAGL = (int)Units::ToUserUnit(r.AltitudeDifference,
                                                  Units::AltitudeUnit);
@@ -103,8 +111,8 @@ public:
       if (reachable) {
         TextDisplayMode.AsFlag.Reachable = 1;
 
-        if ((map.SettingsMap().DeclutterLabels < 2) || intask) {
-          if (intask || (map.SettingsMap().DeclutterLabels < 1))
+        if ((map.SettingsMap().DeclutterLabels < 2) || in_task) {
+          if (in_task || (map.SettingsMap().DeclutterLabels < 1))
             TextDisplayMode.AsFlag.Border = 1;
 
           // show all reachable landing fields unless we want a decluttered
@@ -129,16 +137,16 @@ public:
         wp_bmp = &MapGfx.hTurnPoint;
     }
 
-    if (intask) // VNT
+    if (in_task) // VNT
       TextDisplayMode.AsFlag.WhiteBold = 1;
 
-    if (irange || intask || dowrite || islandable)
+    if (irange || in_task || dowrite || islandable)
       map.draw_masked_bitmap(canvas, *wp_bmp,
                              sc.x, sc.y,
                              20, 20);
 
     if (pDisplayTextType == DISPLAYNAMEIFINTASK) {
-      if (!intask)
+      if (!in_task)
         return;
 
       dowrite = true;
@@ -151,6 +159,10 @@ public:
 
     switch (pDisplayTextType) {
     case DISPLAYNAMEIFINTASK:
+      if (in_task) {
+        _stprintf(Buffer, _T("%s"), way_point.Name.c_str());
+      }
+      break;
     case DISPLAYNAME:
       _stprintf(Buffer, _T("%s"), way_point.Name.c_str());
       break;
@@ -189,13 +201,39 @@ public:
     MapWaypointLabelAdd(Buffer, sc.x + 5, sc.y,
                         TextDisplayMode,
                         AltArrivalAGL,
-                        intask,false,false,false,
+                        in_task,false,false,false,
                         map.GetMapRect());
   }
 
-  void Visit(const Waypoint& way_point) {
-    DrawWaypoint(way_point, map.Calculated().common_stats.is_waypoint_in_task(way_point));
+  void Visit(const AbortTask& task) {
+    task.tp_CAccept(*this);
   }
+  void Visit(const OrderedTask& task) {
+    task.tp_CAccept(*this);
+  }
+  void Visit(const GotoTask& task) {
+    task.tp_CAccept(*this);
+  }
+
+  void Visit(const Waypoint& way_point) {
+    DrawWaypoint(way_point, false);
+  }
+  void Visit(const UnorderedTaskPoint& tp) {
+    DrawWaypoint(tp.get_waypoint(), true);
+  }
+  void Visit(const StartPoint& tp) {
+    DrawWaypoint(tp.get_waypoint(), true);
+  }
+  void Visit(const FinishPoint& tp) {
+    DrawWaypoint(tp.get_waypoint(), true);
+  }
+  void Visit(const AATPoint& tp) {
+    DrawWaypoint(tp.get_waypoint(), true);
+  }
+  void Visit(const ASTPoint& tp) {
+    DrawWaypoint(tp.get_waypoint(), true);
+  }
+
 private:
   MapWindow &map;
   const AIRCRAFT_STATE aircraft_state;
@@ -217,6 +255,9 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
   WaypointVisitorMap v(*this, canvas,
                        get_glide_polar());
   way_points->visit_within_range(PanLocation, fixed(GetScreenDistanceMeters()), v);
+  if (task && SettingsMap().DisplayTextType==DISPLAYNAMEIFINTASK) {
+    task->CAccept(v);
+  }
 
   MapWaypointLabelSortAndRender(canvas);
 }

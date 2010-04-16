@@ -47,7 +47,7 @@ class GotoTask;
  * (e.g. the active task in the TaskManager)
  */
 class TaskVisitor:
-  public BaseVisitor,
+  virtual public BaseVisitor,
   public ConstVisitor<OrderedTask>,
   public ConstVisitor<AbortTask>,
   public ConstVisitor<GotoTask>

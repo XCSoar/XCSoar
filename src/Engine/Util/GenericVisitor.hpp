@@ -95,7 +95,7 @@ public:
  * Special visitor that can visit items within a kd-tree
  */
 template <class T>
-class TreeVisitor: public BaseVisitor
+class TreeVisitor: virtual public BaseVisitor
 {
 public:
   /** Vector of tree items */

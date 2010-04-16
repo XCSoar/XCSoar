@@ -133,40 +133,6 @@ TaskManager::validTaskPoint(const int index_offset) const
 }
 
 
-/**
- * Convenience class to find waypoints in task unobtrusively
- *
- */
-class WaypointLister: public TaskPointConstVisitor
-{
-public:
-  /**
-   * Constructor; clears waypoints in task in stats struct
-   */
-  WaypointLister(CommonStats& the_stats):stats(the_stats) 
-    {
-      stats.clear_waypoints_in_task();
-    };
-
-  void Visit(const UnorderedTaskPoint& tp) {
-    stats.append_waypoint_in_task(tp.get_waypoint());
-  }
-  void Visit(const FinishPoint& tp) {
-    stats.append_waypoint_in_task(tp.get_waypoint());
-  }
-  void Visit(const StartPoint& tp) {
-    stats.append_waypoint_in_task(tp.get_waypoint());
-  }
-  void Visit(const AATPoint& tp) {
-    stats.append_waypoint_in_task(tp.get_waypoint());
-  }
-  void Visit(const ASTPoint& tp) {
-    stats.append_waypoint_in_task(tp.get_waypoint());
-  }
-private:
-  CommonStats& stats;
-};
-
 void
 TaskManager::update_common_stats_times(const AIRCRAFT_STATE &state)
 {
@@ -217,14 +183,6 @@ TaskManager::update_common_stats_waypoints(const AIRCRAFT_STATE &state)
     task_abort.update_offline(state);
   }
   common_stats.landable_reachable |= task_abort.has_landable_reachable();
-
-  WaypointLister lister(common_stats);
-  if (common_stats.ordered_valid) {
-    task_ordered.CAccept(lister);
-  }
-  if (active_task && (active_task != &task_ordered)) {
-    active_task->CAccept(lister);
-  }
 }
 
 void

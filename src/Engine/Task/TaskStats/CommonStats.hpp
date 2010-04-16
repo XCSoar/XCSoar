@@ -57,32 +57,9 @@ public:
   fixed current_bugs; /**< Bugs setting at last update */
   fixed current_ballast; /**< Ballast setting at last update */
 
-  WaypointIdSet waypoints_in_task; /**< List of waypoints by id that are managed in the task */
-
   fixed distance_olc; /**< Optimum distance (m) travelled according to OLC rule */
   fixed time_olc; /**< Time (s) of optimised OLC path */
   fixed speed_olc; /**< Speed (m/s) of optimised OLC path */
-
-/** 
- * Clears the set of waypoints listed as in the task
- * 
- */
-  void clear_waypoints_in_task();
-
-/** 
- * Mark a waypoint as being in the task
- * 
- * @param wp Waypoint to add
- */
-  void append_waypoint_in_task(const Waypoint& wp);
-
-/** 
- * Test whether a waypoint is in the task
- * 
- * @param wp Waypoint to test
- * @return True if in task
- */
-  bool is_waypoint_in_task(const Waypoint& wp) const;
 
 /** 
  * Reset the stats as if never flown

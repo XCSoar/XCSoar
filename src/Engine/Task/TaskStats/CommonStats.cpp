@@ -29,8 +29,6 @@ CommonStats::reset_task()
   active_has_previous = false; 
   next_is_last = false;
   previous_is_first = false;
-
-  clear_waypoints_in_task();
 }
 
 void
@@ -49,22 +47,4 @@ CommonStats::reset()
   speed_olc = fixed_zero;
 
   reset_task();
-}
-
-void
-CommonStats::clear_waypoints_in_task()
-{
-  waypoints_in_task.clear();
-}
-
-void
-CommonStats::append_waypoint_in_task(const Waypoint& wp)
-{
-  waypoints_in_task.insert(wp.id);
-}
-
-bool
-CommonStats::is_waypoint_in_task(const Waypoint& wp) const
-{
-  return waypoints_in_task.find(wp.id) != waypoints_in_task.end();
 }

@@ -49,7 +49,7 @@
  * Generic visitor for const task points (for double-dispatch)
  */
 class TaskPointConstVisitor:
-  public BaseVisitor,
+  virtual public BaseVisitor,
   public ConstVisitor<UnorderedTaskPoint>,
   public ConstVisitor<StartPoint>,
   public ConstVisitor<ASTPoint>,
@@ -62,7 +62,7 @@ class TaskPointConstVisitor:
  * Generic visitor for task points (for double-dispatch)
  */
 class TaskPointVisitor:
-  public BaseVisitor,
+  virtual public BaseVisitor,
   public Visitor<StartPoint>,
   public Visitor<ASTPoint>,
   public Visitor<AATPoint>,
