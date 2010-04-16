@@ -232,19 +232,16 @@ vario_visible()
   // by the gauge already and gauge was graphically too much stretched,
   // requiring a restyle!
 
+  // Disable vario gauge in geometry 5 landscape mode, leave 8 boxes on
+  // the right
+  if (Layout::landscape && (InfoBoxLayout::InfoBoxGeometry == 5))
+    return false;
+
   if (InfoBoxLayout::gnav) {
-    if (Layout::landscape && (InfoBoxLayout::InfoBoxGeometry == 5))
-      enable_gauge = false;
-    else
-      enable_gauge = true;
+    enable_gauge = true;
   } else {
     enable_gauge = false;
   }
-
- // Disable vario gauge in geometry 5 landscape mode, leave 8 boxes on
- // the right
-  if (Layout::landscape && (InfoBoxLayout::InfoBoxGeometry == 5))
-    return false;
 
   return enable_gauge;
 }
