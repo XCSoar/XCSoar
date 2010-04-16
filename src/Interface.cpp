@@ -224,7 +224,8 @@ vario_visible()
 {
   bool enable_gauge;
 
-  // TODO TB: logic update...
+  if (!Layout::landscape && !is_altair())
+    return false;
 
   // VENTA3 disable gauge vario for geometry 5 in landscape mode, use 8
   // box right instead beside those boxes were painted and overwritten
@@ -245,10 +246,7 @@ vario_visible()
   if (Layout::landscape && (InfoBoxLayout::InfoBoxGeometry == 5))
     return false;
 
-  if (is_altair() || Layout::landscape)
-    return enable_gauge;
-
-  return false;
+  return enable_gauge;
 }
 
 #include "Gauge/GaugeVario.hpp"
