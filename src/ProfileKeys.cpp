@@ -40,6 +40,8 @@ Copyright_License {
 #include "Defines.h"
 #include "ProfileKeys.hpp"
 
+#define REGKEYNAME  "Software\\MPSR\\XCSoar"
+
 const TCHAR szProfileKey[] = CONF(REGKEYNAME);
 const TCHAR *szProfileDisplayType[MAXINFOWINDOWS] = {
   CONF("Info0"),

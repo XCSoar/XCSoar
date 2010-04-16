@@ -102,7 +102,6 @@ Copyright_License {
 /** interval in seconds between BA search (slow) */
 #define BESTALTERNATEINTERVAL 60.0
 
-#define REGKEYNAME	"Software\\MPSR\\XCSoar"
 #define XCSDATADIR	"XCSoarData"
 
 /** Max items in any rotary buffer (used in filters) */
