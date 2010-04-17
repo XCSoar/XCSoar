@@ -164,7 +164,7 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info)
   // Logger off
   LoggerActive = false;
 
-  if (gps_info.gps.Simulator)
+  if (gps_info.gps.Simulator || HaveCondorDevice())
     Simulator = true;
 
   // Make space for logger file, if unsuccessful -> cancel
@@ -322,7 +322,9 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
   DiskBufferReset();
   Unlock();
 
-  Simulator = gps_info.gps.Simulator;
+  if (HaveCondorDevice() || gps_info.gps.Simulator) {
+    Simulator = true;
+  }
   if (!Simulator)
     LoggerGInit();
 
@@ -412,7 +414,7 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info, const Declaration &decl)
   IGCWriteRecord(temp, szLoggerFileName);
 
   DeviceConfig device_config;
-  if (gps_info.gps.Simulator) {
+  if (Simulator) {
     _tcscpy(device_config.driver_name, _T("Simulator"));
   } else {
     Profile::GetDeviceConfig(0, device_config);
