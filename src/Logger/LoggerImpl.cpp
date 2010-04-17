@@ -365,16 +365,13 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
 
     }
 
-    FILE *file = _tfopen(szLoggerFileName, _T("w"));
+    FILE *file = _tfopen(szLoggerFileName, _T("r"));
     if (file != NULL) {
-      // file did not already exist, and could be created
+      // file exists, close, try next
       fclose(file);
-#ifdef HAVE_POSIX
-      _tunlink(szLoggerFileName);
-#else
-      DeleteFile(szLoggerFileName);
-#endif
-      break;
+    }
+    else {
+      break;  // file not exist, we'll use this name
     }
   }
 
