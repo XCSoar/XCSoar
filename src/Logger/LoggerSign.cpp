@@ -106,15 +106,17 @@ LoggerImpl::DiskBufferFlush()
     unsigned int iLen = strlen(LoggerDiskBuffer[i]);
 
     // if (file write successful)
-    if (fwrite(LoggerDiskBuffer[i], (size_t)iLen, (size_t)1, LoggerFILE) == (size_t)iLen) {
+    if (fwrite(LoggerDiskBuffer[i], (size_t)1, (size_t)iLen, LoggerFILE) == (size_t)iLen) {
+
       int iBufLen = strlen(LoggerDiskBuffer[i]);
 
       for (int j = 0; (j <= iBufLen) && (j < MAX_IGC_BUFF); j++) {
         buffer_G[j] = (TCHAR)LoggerDiskBuffer[i][j];
       }
 
-      if (!Simulator)
+      if (!Simulator) {
         oGRecord.AppendRecordToBuffer(pbuffer_G);
+      }
     }
   }
 
