@@ -47,6 +47,7 @@ Copyright_License {
 #include "UtilsFile.hpp"
 #include "Units.hpp"
 #include "WayPointFile.hpp"
+#include "Simulator.hpp"
 
 #include <algorithm>
 using std::min;
@@ -108,7 +109,7 @@ SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
     // set team code reference waypoint if we don't have one
     settings.TeamCodeRefWaypoint = settings.HomeWaypoint;
 
-  if (set_location) {
+  if (set_location && is_simulator()) {
     if (const Waypoint *wp = way_points.lookup_id(settings.HomeWaypoint)) {
       // OK, passed all checks now
       LogStartUp(TEXT("Start at home waypoint"));
