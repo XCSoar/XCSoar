@@ -42,7 +42,6 @@
 #include <stdio.h>
 #include <windows.h>
 
-
 int
 GRecord::GetVersion(TCHAR * szOut)
 {
@@ -64,7 +63,6 @@ GRecord::GetDigestMaxLen()
   return 4 * oMD5[0].GetDigestMaxlen() + 1;  // '\0' at end
 }
 
-
 int
 GRecord::AppendRecordToBuffer(TCHAR * szIn)
 {
@@ -81,6 +79,7 @@ GRecord::AppendRecordToBuffer(TCHAR * szIn)
 int
 GRecord::AppendRecordToBuffer(unsigned char * szIn)
 { // returns 1 if record is appended, 0 if skipped
+
   int iRetVal = 0;
   if ( IncludeRecordInGCalc(szIn) ) {
     iRetVal = 1;
@@ -223,18 +222,17 @@ int GRecord::LoadFileToBuffer ()
 
 
   FILE *inFile = NULL;
-  TCHAR data[MAX_REC_LENGTH];
+  char data[MAX_REC_LENGTH];
 
   unsigned char udata[MAX_REC_LENGTH];
 
 
-  inFile = _tfopen(FileName, _T("r"));
+  inFile = _tfopen(FileName, _T("rb"));
   if (inFile == NULL)
     return 0;
 
-
-  while(fgetws(data, MAX_REC_LENGTH, inFile) ) {
-    for (unsigned int i = 0; i <= _tcslen(data); i++) {
+  while(fgets(data, MAX_REC_LENGTH, inFile) ) {
+    for (unsigned int i = 0; i <= strlen(data); i++) {
       udata[i]=(unsigned char)data[i];
     }
 
@@ -383,5 +381,6 @@ int
 GRecord::IsValidIGCChar(char c) //returns 1 if Valid IGC Char
 {//                                  else 0
   // ToDo: RLD move this function out of MD5 class
-  return oMD5[0].IsValidIGCChar(c);
+  return MD5::IsValidIGCChar(c);
 }
+

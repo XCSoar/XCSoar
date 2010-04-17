@@ -69,7 +69,7 @@ public:
   int GetDigest(TCHAR * szOut);
   int GetDigestMaxlen(void);
     //int IsWhiteSpace(char c);
-  int IsValidIGCChar(char c); //returns 1 if Valid IGC Char
+  static int IsValidIGCChar(char c); //returns 1 if Valid IGC Char
 
 };
 
