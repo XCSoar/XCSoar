@@ -60,7 +60,7 @@
     #define TRUE 1
 #endif /* TRUE */
 
-// Enumeration for XML parse errors.
+/** Enumeration for XML parse errors. */
 typedef enum XMLError
 {
   eXMLErrorNone = 0,
@@ -76,7 +76,7 @@ typedef enum XMLError
   eXMLErrorFileNotFound
 } XMLError;
 
-// Enumeration used to manage type of data. Use in conjonction with structure XMLNodeContents
+/** Enumeration used to manage type of data. Use in conjonction with structure XMLNodeContents */
 typedef enum XMLElementType
 {
   eNodeChild = 0,
@@ -86,21 +86,21 @@ typedef enum XMLElementType
   eNodeNULL = 4
 } XMLElementType;
 
-// Structure used to obtain error details if the parse fails.
+/** Structure used to obtain error details if the parse fails. */
 typedef struct XMLResults
 {
   enum XMLError error;
   int nLine, nColumn;
 } XMLResults;
 
-// Structure for XML clear (unformatted) node (usually comments)
+/** Structure for XML clear (unformatted) node (usually comments) */
 typedef struct {
   LPCTSTR lpszOpenTag;
   LPCTSTR lpszValue;
   LPCTSTR lpszCloseTag;
 } XMLClear;
 
-// Structure for XML attribute.
+/** Structure for XML attribute. */
 typedef struct
 {
   LPCTSTR lpszName;

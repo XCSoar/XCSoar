@@ -93,19 +93,24 @@ typedef struct{
   double ToUserOffset;
 } UnitDescriptor_t;
 
+/**
+ * Class to manage unit conversions and display,
+ * internal system units are (metric SI).
+ * 
+ */
 class Units
 {
 private:
   static UnitDescriptor_t UnitDescriptors[unCount];
 
 public:
-  static Units_t DistanceUnit;
-  static Units_t AltitudeUnit;
-  static Units_t SpeedUnit;
-  static Units_t VerticalSpeedUnit;
-  static Units_t WindSpeedUnit;
-  static Units_t TaskSpeedUnit;
-  static CoordinateFormats_t CoordinateFormat;
+  static Units_t DistanceUnit;  /**< Unit for distances */
+  static Units_t AltitudeUnit; /**< Unit for altitudes, heights */
+  static Units_t SpeedUnit; /**< Unit for aircraft speeds */
+  static Units_t VerticalSpeedUnit; /**< Unit for vertical speeds, varios */
+  static Units_t WindSpeedUnit; /**< Unit for wind speeds */
+  static Units_t TaskSpeedUnit; /**< Unit for task speeds */
+  static CoordinateFormats_t CoordinateFormat; /**< Unit for lat/lon */
 
   /**
    * Returns the name of the given Unit

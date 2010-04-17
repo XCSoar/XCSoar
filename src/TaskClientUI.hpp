@@ -45,6 +45,7 @@
 
 class Declaration;
 
+/** Facade class for protected access to task data by GUI/user threads */
 class TaskClientUI: public TaskClient
 {
 public:

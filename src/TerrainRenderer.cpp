@@ -463,7 +463,7 @@ TerrainRenderer::SetMap(const GEOPOINT &loc, int day_time)
     is_terrain = true;
     do_water = true;
     height_scale = 4;
-    DisplayMap = terrain != NULL ? terrain->TerrainMap : NULL;
+    DisplayMap = terrain != NULL ? terrain->get_map() : NULL;
     color_ramp = &terrain_colors[TerrainRamp][0];
     break;
   }

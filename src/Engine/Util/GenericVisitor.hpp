@@ -173,6 +173,7 @@ protected:
 
 };
 
+/** Template class for items that can be visited */
 template <typename R = void>
 class BaseVisitable: public BaseConstVisitable<R>
 {

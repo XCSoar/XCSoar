@@ -150,7 +150,7 @@ class VLAPI_DATA {
 // and call the functions
 // all data exchange with the API will be done through its
 // public members
-//
+/** API facade for Volkslogger device handler */
 class VLAPI : protected VLA_XFR, public VLAPI_DATA {
   boolean vlpresent;
   VLA_ERROR stillconnect();

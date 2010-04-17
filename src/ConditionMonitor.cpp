@@ -295,6 +295,7 @@ protected:
 private:
 };
 
+/** Checks whether arrival time will be less than AAT time */
 class ConditionMonitorAATTime: public ConditionMonitor
 {
 public:

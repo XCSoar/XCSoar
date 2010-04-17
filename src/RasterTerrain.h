@@ -47,41 +47,68 @@ Copyright_License {
 class RasterMap;
 class RasterRounding;
 
+/**
+ * Class to manage raster terrain database, potentially with 
+ * caching or demand-loading.
+ * 
+ */
 class RasterTerrain {
 public:
 
+/** 
+ * Constructor.  Returns uninitialised object. 
+ * 
+ */
   RasterTerrain():
     TerrainMap(NULL) {
   };
 
-   void SetViewCenter(const double &Latitude,
-                      const double &Longitude);
+/** 
+ * Load the terrain.  Determines the file to load from profile settings.
+ * 
+ */
    void OpenTerrain();
+
+/** 
+ * Unload the terrain.
+ * 
+ */
    void CloseTerrain();
 
+/** 
+ * Determine if a valid terrain is loaded
+ * 
+ * @return True if a terrain is loaded
+ */
   bool isTerrainLoaded() const {
     return TerrainMap != NULL;
   }
-   RasterMap* TerrainMap;
-   bool CreateTerrainMap(const char *path);
 
- public:
-   void Lock(void); // should be protected, friend of TerrainDataClient
-   void Unlock(void); // should be protected, friend of TerrainDataClient
+  void Lock(void); // should be protected, friend of TerrainDataClient
+  void Unlock(void); // should be protected, friend of TerrainDataClient
 
-   const RasterMap* GetMap() const {
-     return TerrainMap;
-   }
-   short GetTerrainHeight(const GEOPOINT &location,
-                          const RasterRounding &rounding) const;
-   bool IsDirectAccess(void) const;
-   bool IsPaged(void) const;
-   void ServiceCache();
-   void ServiceTerrainCenter(const GEOPOINT &location);
-   void ServiceFullReload(const GEOPOINT &location);
-   int GetEffectivePixelSize(double *pixel_D, const GEOPOINT &location) const;
-   bool WaypointIsInTerrainRange(const GEOPOINT &location) const;
-   bool GetTerrainCenter(GEOPOINT *location) const;
+  const RasterMap* GetMap() const {
+    return TerrainMap;
+  }
+  RasterMap* get_map() const {
+    return TerrainMap;
+  }
+
+  short GetTerrainHeight(const GEOPOINT &location,
+                         const RasterRounding &rounding) const;
+  bool IsDirectAccess(void) const;
+  bool IsPaged(void) const;
+  void ServiceCache();
+  void ServiceTerrainCenter(const GEOPOINT &location);
+  void ServiceFullReload(const GEOPOINT &location);
+  int GetEffectivePixelSize(double *pixel_D, const GEOPOINT &location) const;
+  bool WaypointIsInTerrainRange(const GEOPOINT &location) const;
+  bool GetTerrainCenter(GEOPOINT *location) const;
+
+private:
+  RasterMap* TerrainMap;
+  bool CreateTerrainMap(const char *path);
+
 };
 
 #endif
