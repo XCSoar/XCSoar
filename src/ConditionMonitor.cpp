@@ -129,6 +129,10 @@ private:
   }
 };
 
+/**
+ * #ConditionMonitor to track/warn on significant changes in wind speed
+ * 
+ */
 class ConditionMonitorWind: public ConditionMonitor
 {
 public:

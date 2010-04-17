@@ -48,7 +48,12 @@ typedef struct _TERRAIN_CACHE
   unsigned int recency;
 } TERRAIN_CACHE;
 
-
+/**
+ * #RasterMap implementation that maintains an array of
+ * terrain heights at specific locations based on demand.
+ * This is useful for low-memory devices but has poor performance.
+ * 
+ */
 class RasterMapCache: public RasterMap {
   enum {
     /** size of terrain cache */

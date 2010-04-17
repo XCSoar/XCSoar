@@ -55,6 +55,11 @@ typedef struct
   TCHAR *mTextPathFile;
 } DataFieldFileReaderEntry;
 
+/**
+ * #DataField specialisation that supplies options as a list of
+ * files matching a suffix.  First entry is always blank for null entry.
+ * 
+ */
 class DataFieldFileReader: public DataField
 {
 private:

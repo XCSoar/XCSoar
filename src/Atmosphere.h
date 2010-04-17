@@ -86,6 +86,11 @@ public:
 /** ThermalIndex threshold in degrees C */
 #define TITHRESHOLD -1.6
 
+/**
+ * Class to provide simple estimates of thermal heights from lapse rates
+ * derived from temperature trace obtained during flight.
+ * 
+ */
 class CuSonde {
 public:
   /** Expected temperature maximum on the ground */

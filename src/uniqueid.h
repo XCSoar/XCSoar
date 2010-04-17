@@ -24,6 +24,10 @@ extern "C" {
 #include <windows.h>
 #include <winioctl.h>
 
+/**
+ * Device ID structure
+ * 
+ */
 typedef struct _DEVICE_ID {
 	DWORD	dwSize;
 	DWORD	dwPresetIDOffset;

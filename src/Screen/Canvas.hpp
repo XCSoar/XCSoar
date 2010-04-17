@@ -57,6 +57,10 @@ Copyright_License {
 #undef OPAQUE
 #undef TRANSPARENT
 
+/**
+ * Base drawable canvas class
+ * 
+ */
 class Canvas {
   friend class WindowCanvas;
 
@@ -479,6 +483,10 @@ public:
 #endif /* __GNUC__ */
 #endif
 
+/**
+ * Base drawable canvas class
+ * 
+ */
 class Canvas {
 protected:
   HDC dc;

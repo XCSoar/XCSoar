@@ -41,6 +41,10 @@
 #include "tstring.hpp"
 #include "Math/fixed.hpp"
 
+/**
+ * Class used as generic node for tree-structured data.
+ * 
+ */
 class DataNode 
 {
 protected:

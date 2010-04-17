@@ -91,6 +91,10 @@ CWaveOutThread variosound_waveOut;
 #define FREQZ 80*5
 #define FREQ 8000
 
+/**
+ * Audio digital filter parameters.
+ * 
+ */
 struct AudioFilter {
   bool stfmode;
   short vcur;

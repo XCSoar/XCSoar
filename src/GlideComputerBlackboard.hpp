@@ -44,6 +44,10 @@ Copyright_License {
 #include "MapProjectionBlackboard.hpp"
 #include "TaskClientCalc.hpp"
 
+/**
+ * Blackboard class used by glide computer (calculation) thread.
+ * Can only write DERIVED_INFO
+ */
 class GlideComputerBlackboard:
   public BaseBlackboard,
   public SettingsComputerBlackboard,
