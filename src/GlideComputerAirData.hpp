@@ -110,7 +110,6 @@ private:
   void ThermalBand();
   void PercentCircling(const double Rate);
   void Turning();
-  void ProcessThermalLocator();
   void ProcessSun();
   GPSClock airspace_clock;
   GPSClock ballast_clock;

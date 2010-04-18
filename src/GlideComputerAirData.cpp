@@ -133,7 +133,12 @@ GlideComputerAirData::ProcessVertical()
 {
   Turning();
   Wind();
-  ProcessThermalLocator();
+
+  thermallocator.Process(Calculated().Circling,
+                         Basic().Time, Basic().Location,
+                         Basic().NettoVario,
+                         Basic().wind, SetCalculated());
+
   CuSonde::updateMeasurements(Basic());
   LastThermalStats();
   LD();
@@ -610,15 +615,6 @@ GlideComputerAirData::PercentCircling(const double Rate)
   } else {
     SetCalculated().PercentCircling = 0.0;
   }
-}
-
-void
-GlideComputerAirData::ProcessThermalLocator()
-{
-  thermallocator.Process(Calculated().Circling,
-                         Basic().Time, Basic().Location,
-                         Basic().NettoVario,
-                         Basic().wind, SetCalculated());
 }
 
 /**
