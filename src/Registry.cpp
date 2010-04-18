@@ -107,12 +107,7 @@ Registry::Get(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 #ifdef WIN32
 
   RegistryKey registry(HKEY_CURRENT_USER, szProfileKey, true);
-  if (!registry.error() && registry.get_value(szRegValue, pPos, dwSize))
-    return true;
-  else {
-    pPos[0] = '\0';
-    return false;
-  }
+  return !registry.error() && registry.get_value(szRegValue, pPos, dwSize);
 
 #else /* !WIN32 */
   return GConf().get(szRegValue, pPos, dwSize);

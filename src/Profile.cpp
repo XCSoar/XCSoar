@@ -152,7 +152,12 @@ Profile::Get(const TCHAR *key, fixed &value)
 bool
 Profile::Get(const TCHAR *key, TCHAR *value, DWORD dwSize)
 {
-  return Registry::Get(key, value, dwSize);
+  if (Registry::Get(key, value, dwSize))
+    return true;
+  else {
+    value[0] = _T('\0');
+    return false;
+  }
 }
 
 bool
