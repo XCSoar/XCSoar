@@ -142,14 +142,8 @@ ThermalLocator::Update(const fixed t_0,
                   location_0, 
                   traildrift, 
                   fixed_one, therm);
-  /*
-  THERMAL_LOCATION_INFO therm0;
-
-  Update_Internal(t_0, location_0,
-                  traildrift, 
-                  fixed_two, therm0);
-  */
 }
+
 
 void
 ThermalLocator::Update_Internal(fixed t_0, 
