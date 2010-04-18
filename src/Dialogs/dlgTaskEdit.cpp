@@ -40,7 +40,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
-#include "Logger.hpp"
+#include "Logger/Logger.hpp"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
 #include "LocalPath.hpp"

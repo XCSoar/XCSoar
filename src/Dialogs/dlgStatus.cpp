@@ -43,7 +43,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Battery.h"
 #include "Units.hpp"
-#include "Logger.hpp"
+#include "Logger/Logger.hpp"
 #include "Math/FastMath.h"
 #include "LocalTime.hpp"
 #include "MainWindow.hpp"
@@ -212,20 +212,10 @@ static void UpdateValuesSystem() {
 
   wp = (WndProperty*)wf->FindByName(_T("prpLogger"));
   if (wp) {
-    logger.LinkGRecordDLL();
-    if (logger.LoggerGActive()) {
-      if (logger.isLoggerActive()) {
-        wp->SetText(gettext(_T("ON (G)")));
-      } else {
-        wp->SetText(gettext(_T("OFF (G)")));
-      }
-    }
-    else { // no G Record
-      if (logger.isLoggerActive()) {
-        wp->SetText(gettext(_T("ON (no G)")));
-      } else {
-        wp->SetText(gettext(_T("OFF (no G)")));
-      }
+    if (logger.isLoggerActive()) {
+      wp->SetText(gettext(_T("ON")));
+    } else {
+      wp->SetText(gettext(_T("OFF")));
     }
     wp->RefreshDisplay();
   }

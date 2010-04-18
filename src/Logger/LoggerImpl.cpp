@@ -36,7 +36,7 @@
 }
 */
 
-#include "LoggerImpl.hpp"
+#include "Logger/LoggerImpl.hpp"
 #include "Components.hpp"
 #include "TaskClientUI.hpp"
 #include "Version.hpp"
@@ -164,7 +164,7 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info)
   // Logger off
   LoggerActive = false;
 
-  if (gps_info.gps.Simulator)
+  if (gps_info.gps.Simulator || HaveCondorDevice())
     Simulator = true;
 
   // Make space for logger file, if unsuccessful -> cancel
@@ -177,7 +177,7 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info)
   Unlock();
 
   // Write GRecord
-  if (!Simulator && LoggerGActive())
+  if (!Simulator)
     LoggerGStop(szLoggerFileName);
 
   NumLoggerPreTakeoffBuffered = 0;
@@ -322,7 +322,9 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
   DiskBufferReset();
   Unlock();
 
-  Simulator = gps_info.gps.Simulator;
+  if (HaveCondorDevice() || gps_info.gps.Simulator) {
+    Simulator = true;
+  }
   if (!Simulator)
     LoggerGInit();
 
@@ -365,16 +367,13 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
 
     }
 
-    FILE *file = _tfopen(szLoggerFileName, _T("w"));
+    FILE *file = _tfopen(szLoggerFileName, _T("r"));
     if (file != NULL) {
-      // file did not already exist, and could be created
+      // file exists, close, try next
       fclose(file);
-#ifdef HAVE_POSIX
-      _tunlink(szLoggerFileName);
-#else
-      DeleteFile(szLoggerFileName);
-#endif
-      break;
+    }
+    else {
+      break;  // file not exist, we'll use this name
     }
   }
 
@@ -415,7 +414,7 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info, const Declaration &decl)
   IGCWriteRecord(temp, szLoggerFileName);
 
   DeviceConfig device_config;
-  if (gps_info.gps.Simulator) {
+  if (Simulator) {
     _tcscpy(device_config.driver_name, _T("Simulator"));
   } else {
     Profile::GetDeviceConfig(0, device_config);

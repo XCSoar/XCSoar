@@ -48,6 +48,8 @@ Copyright_License {
 
 #include <assert.h>
 
+#define XCSCHKLIST  "xcsoar-checklist.txt"
+
 #define MAXTITLE 200
 #define MAXDETAILS 5000
 

@@ -58,7 +58,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "UtilsFLARM.hpp"
 #include "SettingsUser.hpp"
-#include "Logger.hpp"
+#include "Logger/Logger.hpp"
 #include "AirfieldDetails.h"
 #include "Screen/Fonts.hpp"
 #include "DeviceBlackboard.hpp"
@@ -292,9 +292,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   task_manager.reset();
 
   glide_computer.Initialise();
-
-  // try to link DLL if it exists
-  logger.LinkGRecordDLL();
 
   // Load the EGM96 geoid data
   OpenGeoid();

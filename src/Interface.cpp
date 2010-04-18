@@ -222,34 +222,18 @@ XCSoarInterface::Debounce(void)
 bool
 vario_visible()
 {
-  bool gaugeVarioInPortrait = is_altair();
-  bool enable_gauge;
+  if (!Layout::landscape && !is_altair())
+    return false;
 
-  // TODO TB: logic update...
-
-  // VENTA3 disable gauge vario for geometry 5 in landscape mode, use 8
-  // box right instead beside those boxes were painted and overwritten
-  // by the gauge already and gauge was graphically too much stretched,
-  // requiring a restyle!
-
-  if (InfoBoxLayout::gnav) {
-    if (Layout::landscape && (InfoBoxLayout::InfoBoxGeometry == 5))
-      enable_gauge = false;
-    else
-      enable_gauge = true;
-  } else {
-    enable_gauge = false;
-  }
-
- // Disable vario gauge in geometry 5 landscape mode, leave 8 boxes on
- // the right
+  // Disable vario gauge in geometry 5 landscape mode, leave 8 boxes on
+  // the right
   if (Layout::landscape && (InfoBoxLayout::InfoBoxGeometry == 5))
     return false;
 
-  if (gaugeVarioInPortrait || Layout::landscape)
-    return enable_gauge;
+  if (!InfoBoxLayout::gnav)
+    return false;
 
-  return false;
+  return true;
 }
 
 #include "Gauge/GaugeVario.hpp"

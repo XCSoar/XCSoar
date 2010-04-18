@@ -64,7 +64,8 @@ GlideTerrain::GlideTerrain(const SETTINGS_COMPUTER &settings,
   m_terrain(terrain),
   safety_height_terrain(settings.safety_height_terrain),
   TerrainBase(fixed_zero),
-  max_range(-fixed_one)
+  max_range(-fixed_one),
+  rounding(NULL)
 {
   if (const RasterMap *map = m_terrain.GetMap()) {
     rounding = new RasterRounding(*map, 0, 0);

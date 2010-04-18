@@ -93,8 +93,6 @@ Copyright_License {
 #define DOUBLECLICKINTERVAL 350
 /** must be < than DCI/2 to have a chance to make airspace click recon!!! */
 #define VKSHORTCLICK 120
-/** triggers circling/cruis switch on aircraft icon */
-#define VKLONGCLICK 1500
 /** interval to look only for airspace and not WP (IF NOT USING VK) */
 #define AIRSPACECLICK 1000
 
@@ -102,9 +100,7 @@ Copyright_License {
 /** interval in seconds between BA search (slow) */
 #define BESTALTERNATEINTERVAL 60.0
 
-#define REGKEYNAME	"Software\\MPSR\\XCSoar"
 #define XCSDATADIR	"XCSoarData"
-#define XCSCHKLIST	"xcsoar-checklist.txt"
 
 /** Max items in any rotary buffer (used in filters) */
 #define RASIZE 180

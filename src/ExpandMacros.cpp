@@ -39,7 +39,7 @@ Copyright_License {
 #include "ButtonLabel.hpp"
 #include "Language.hpp"
 #include "Gauge/GaugeFLARM.hpp"
-#include "Logger.hpp"
+#include "Logger/Logger.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "SettingsComputer.hpp"

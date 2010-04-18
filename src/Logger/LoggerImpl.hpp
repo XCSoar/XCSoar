@@ -45,6 +45,7 @@ Copyright_License {
 #include "Poco/RWLock.h"
 #include "Poco/RWLock.h"
 #include "Navigation/GeoPoint.hpp"
+#include "Logger/LoggerGRecord.hpp"
 
 #include <tchar.h>
 #include <windef.h>
@@ -83,6 +84,8 @@ public:
      */
     const struct LoggerPreTakeoffBuffer &operator=(const NMEA_INFO &src);
   };
+private:
+  GRecord oGRecord;
 
 public:
   /** Default constructor */
@@ -94,8 +97,6 @@ public:
   bool isTaskDeclared() const;
   bool isLoggerActive() const;
   bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
-  void LinkGRecordDLL(void);
-  bool LoggerGActive() const;
   void guiStartLogger(const NMEA_INFO& gps_info,
                       const SETTINGS_COMPUTER& settings,
                       bool noAsk = false);
@@ -130,7 +131,7 @@ private:
 
   void StopLogger(const NMEA_INFO &gps_info);
   bool IGCWriteRecord(const char *szIn, const TCHAR *);
-
+  void CleanIGCRecord(char * szIn);
   bool LoggerDeclare(struct DeviceDescriptor *dev,
                      const Declaration &decl);
   void LoggerGInit();

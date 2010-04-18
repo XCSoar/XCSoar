@@ -54,7 +54,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Interface.hpp"
 #include "DeviceBlackboard.hpp"
-#include "Logger.hpp"
+#include "Logger/Logger.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 

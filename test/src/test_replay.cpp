@@ -1,7 +1,7 @@
 #include "test_debug.hpp"
 #include "harness_aircraft.hpp"
 #include "TaskEventsPrint.hpp"
-#include "ReplayLogger.hpp"
+#include "ReplayLogger/Logger.hpp"
 #include "Task/TaskManager.hpp"
 #include "UtilsText.hpp"
 #ifdef DO_PRINT

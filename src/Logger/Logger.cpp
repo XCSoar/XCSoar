@@ -36,8 +36,8 @@
 }
 */
 
-#include "Logger.hpp"
-#include "LoggerImpl.hpp"
+#include "Logger/Logger.hpp"
+#include "Logger/LoggerImpl.hpp"
 
 /**
  * Constructor of the Logger class
@@ -99,20 +99,6 @@ Logger::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
 {
   Poco::ScopedRWLock protect(lock, true);
   return _logger->LoggerClearFreeSpace(gps_info);
-}
-
-void
-Logger::LinkGRecordDLL(void)
-{
-  Poco::ScopedRWLock protect(lock, true);
-  return _logger->LinkGRecordDLL();
-}
-
-bool
-Logger::LoggerGActive()
-{
-  Poco::ScopedRWLock protect(lock, false);
-  return _logger->LoggerGActive();
 }
 
 void
