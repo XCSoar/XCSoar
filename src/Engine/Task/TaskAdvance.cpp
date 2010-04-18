@@ -72,8 +72,28 @@ TaskAdvance::state_ready(const TaskPoint &tp,
   return false;
 }
 
-bool TaskAdvance::aat_state_ready(const bool has_entered,
-                                  const bool close_to_target) const
+bool 
+TaskAdvance::aat_state_ready(const bool has_entered,
+                             const bool close_to_target) const
 {
   return has_entered;
+}
+
+void 
+TaskAdvance::set_armed(const bool do_armed) 
+{
+  m_armed = do_armed;
+  m_request_armed = false;
+  update_state();
+}
+
+bool 
+TaskAdvance::toggle_armed() 
+{
+  m_armed = !m_armed;
+  if (m_armed) {
+    m_request_armed = false;
+  }
+  update_state();
+  return m_armed;
 }

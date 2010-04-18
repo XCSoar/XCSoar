@@ -74,6 +74,8 @@ public:
 
 protected:
 
+  void update_state();
+
   TaskAdvanceState_t m_state;       /**< active advance state */
 
 private:

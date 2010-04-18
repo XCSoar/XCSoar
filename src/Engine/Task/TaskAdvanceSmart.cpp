@@ -99,3 +99,32 @@ TaskAdvanceSmart::get_advance_state() const
 {
   return m_state;
 }
+
+void
+TaskAdvanceSmart::update_state()
+{
+  switch (m_state) {
+  case TaskAdvance::START_ARMED:
+    if (!m_armed) {
+      m_state = TaskAdvance::START_DISARMED;
+    }
+    return;
+  case TaskAdvance::START_DISARMED:
+    if (m_armed) {
+      m_state = TaskAdvance::START_ARMED;
+    }
+    return;
+  case TaskAdvance::TURN_ARMED:
+    if (!m_armed) {
+      m_state = TaskAdvance::TURN_DISARMED;
+    }
+    return;
+  case TaskAdvance::TURN_DISARMED:
+    if (m_armed) {
+      m_state = TaskAdvance::TURN_ARMED;
+    }
+    return;
+  default:
+    break;
+  };
+}

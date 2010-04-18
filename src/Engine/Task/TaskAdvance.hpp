@@ -74,11 +74,7 @@ public:
  * 
  * @param do_armed True to arm trigger, false to clear
  */
-  void set_armed(const bool do_armed) 
-    {
-      m_armed = do_armed;
-      m_request_armed = false;
-    }
+  void set_armed(const bool do_armed);
 
 /** 
  * Accessor for arm state
@@ -105,14 +101,7 @@ public:
  * 
  * @return Arm state after toggle
  */
-  bool toggle_armed()
-    {
-      m_armed = !m_armed;
-      if (m_armed) {
-        m_request_armed = false;
-      }
-      return m_armed;
-    }
+  bool toggle_armed();
 
   /** 
    * Retrieve current advance state
@@ -139,6 +128,11 @@ public:
                                 const bool x_exit) = 0;
 
 protected:
+  
+  /** 
+   * Update state after external change to the arm state
+   */
+  virtual void update_state() = 0;
 
 /** 
  * Determine whether, according to OZ entry, an AAT OZ is ready to advance
