@@ -139,6 +139,8 @@ cLXWP0(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   */
 
+  GPS_INFO->gps.Simulator=true;
+
   NMEAParser::ExtractParameter(String,ctemp,1);
   fixed airspeed(Units::ToSysUnit(_tcstod(ctemp, NULL), unKiloMeterPerHour));
 
