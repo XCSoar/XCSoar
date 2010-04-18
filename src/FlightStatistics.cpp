@@ -211,7 +211,7 @@ FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
   chart.DrawTrend(Altitude_Base, Chart::STYLE_BLUETHIN);
   chart.DrawTrend(Altitude_Ceiling, Chart::STYLE_BLUETHIN);
 
-  chart.DrawXLabel(TEXT("t"));
+  chart.DrawXLabel(TEXT("t (hr)"));
   chart.DrawYLabel(TEXT("h"));
 }
 
@@ -244,7 +244,7 @@ FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc,
   chart.DrawLineGraph(Task_Speed, Chart::STYLE_MEDIUMBLACK);
   chart.DrawTrend(Task_Speed, Chart::STYLE_BLUETHIN);
 
-  chart.DrawXLabel(TEXT("t"));
+  chart.DrawXLabel(TEXT("t (m)"));
   chart.DrawYLabel(TEXT("V"));
 }
 
