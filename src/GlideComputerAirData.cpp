@@ -60,7 +60,7 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "LogFile.hpp"
 #include "GPSClock.hpp"
-
+#include "ThermalBase.hpp"
 #include "TaskClientCalc.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "AirspaceClientCalc.hpp"
@@ -775,12 +775,12 @@ GlideComputerAirData::ThermalSources()
   GEOPOINT ground_location;
   fixed ground_altitude;
 
-  thermallocator.EstimateThermalBase(Calculated().ThermalEstimate_Location,
-                                     Basic().NavAltitude,
-                                     Calculated().LastThermalAverage,
-                                     Basic().wind,
-                                     &ground_location,
-      &ground_altitude);
+  EstimateThermalBase(Calculated().ThermalEstimate_Location,
+                      Basic().NavAltitude,
+                      Calculated().LastThermalAverage,
+                      Basic().wind,
+                      &ground_location,
+                      &ground_altitude);
 
   if (ground_altitude > 0) {
     double tbest = 0;

@@ -43,7 +43,6 @@ Copyright_License {
 #define TLOCATOR_NMAX 60
 
 #include "Math/fixed.hpp"
-#include "Math/leastsqs.h"
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/SpeedVector.hpp"
 #include "NMEA/Derived.hpp"
@@ -87,13 +86,6 @@ public:
                const SpeedVector wind,
                THERMAL_LOCATOR_INFO& therm);
 
-  void EstimateThermalBase(const GEOPOINT Thermal_Location,
-                           const fixed altitude,
-                           const fixed wthermal,
-                           const SpeedVector wind,
-                           GEOPOINT *ground_location,
-                           fixed *ground_alt);
-
 private:
 
   void invalid_estimate(THERMAL_LOCATOR_INFO &therm);
@@ -124,7 +116,6 @@ private:
 
   ThermalLocator_Point points[TLOCATOR_NMAX]; /**< Circular buffer of points */
 
-  LeastSquares ols;
   bool initialised;
   int n_index; /**< Index of next point to add */
   int n_points; /**< Number of points in buffer */

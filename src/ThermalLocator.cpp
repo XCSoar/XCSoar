@@ -37,13 +37,9 @@ Copyright_License {
 */
 
 #include "ThermalLocator.h"
-#include "RasterTerrain.h"
-#include "RasterMap.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
-#include "Components.hpp"
 #include <math.h>
-
 
 #define SFACT 111195
 
@@ -224,66 +220,6 @@ ThermalLocator::Drift(fixed t_0,
       points[i].Drift(t_0, location_0, traildrift, decay);
   }
 }
-
-void
-ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
-                                    const fixed altitude, const fixed wthermal,
-                                    const SpeedVector wind,
-                                    GEOPOINT *ground_location, fixed *ground_alt)
-{
-  if ((Thermal_Location.Longitude == 0.0)
-      || (Thermal_Location.Latitude == 0.0)
-      || (wthermal < 1.0)) {
-    ground_location->Longitude = 0.0;
-    ground_location->Latitude = 0.0;
-    *ground_alt = -1.0;
-    return;
-  }
-
-  fixed Tmax;
-  Tmax = (altitude / wthermal);
-  fixed dt = Tmax / 10;
-
-  terrain.Lock();
-
-  GEOPOINT loc;
-  FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * dt, &loc);
-  fixed Xrounding = fabs(loc.Longitude - Thermal_Location.Longitude) / 2;
-  fixed Yrounding = fabs(loc.Latitude - Thermal_Location.Latitude) / 2;
-
-  for (fixed t = fixed_zero; t <= Tmax; t += dt) {
-    FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * t,
-                          &loc);
-
-    fixed hthermal = altitude - wthermal * t;
-    fixed hground = fixed_zero;
-
-    if (terrain.GetMap()) {
-      RasterRounding rounding(*terrain.GetMap(), Xrounding, Yrounding);
-      hground = terrain.GetTerrainHeight(loc, rounding);
-    }
-
-    fixed dh = hthermal - hground;
-    if (dh < 0) {
-      t = t + dh / wthermal;
-      FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * t,
-                            &loc);
-      break;
-    }
-  }
-
-  fixed hground = fixed_zero;
-  if (terrain.GetMap()) {
-    RasterRounding rounding(*terrain.GetMap(), Xrounding, Yrounding);
-    hground = terrain.GetTerrainHeight(loc, rounding);
-  }
-
-  terrain.Unlock();
-
-  *ground_location = loc;
-  *ground_alt = hground;
-}
-
 
 void
 ThermalLocator::Process(const bool circling,
