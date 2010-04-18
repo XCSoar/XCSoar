@@ -42,8 +42,9 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "PeriodClock.hpp"
 
-class DataFieldFloat:public DataField{
-
+class DataFieldFloat: 
+public DataField
+{
   private:
     double mValue;
     double mMin;

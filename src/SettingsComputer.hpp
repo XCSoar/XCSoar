@@ -110,18 +110,18 @@ struct SETTINGS_SOUND {
   int SoundDeadband;
 };
 
+/** 
+ * Settings for teamcode calculations
+ */
 struct SETTINGS_TEAMCODE {
-  int TeamCodeRefWaypoint;
-  bool TeamFlarmTracking;
+  int TeamCodeRefWaypoint;      /**< Reference waypoint id for code origin */
+  bool TeamFlarmTracking;       /**< Whether to enable tracking by FLARM */
 
-  /** CN of the glider to track */
-  TCHAR TeamFlarmCNTarget[4];
+  TCHAR TeamFlarmCNTarget[4];   /**< CN of the glider to track */
+  TCHAR TeammateCode[10];       /**< auto-detected, see also in Info.h */
 
-  /** auto-detected, see also in Info.h */
-  TCHAR TeammateCode[10];
-  bool TeammateCodeValid;
-  /** FlarmId of the glider to track */
-  int TeamFlarmIdTarget;
+  bool TeammateCodeValid;       /**< Whether the teammate code is valid */  
+  int TeamFlarmIdTarget;        /**< FlarmId of the glider to track */
 };
 
 struct SETTINGS_VOICE {
@@ -136,13 +136,16 @@ struct SETTINGS_VOICE {
   bool EnableVoiceAirspace;
 };
 
+/**
+ * Options for tracking places of interest as alternates
+ */
 struct SETTINGS_PLACES_OF_INTEREST {
   bool EnableBestAlternate;
   bool EnableAlternate1;
   bool EnableAlternate2;
 
   /** Array index of the first alternate waypoint */
-  int Alternate1; // VENTA3
+  int Alternate1;
   /** Array index of the second alternate waypoint */
   int Alternate2;
   /** Array index of the home waypoint */
@@ -150,6 +153,9 @@ struct SETTINGS_PLACES_OF_INTEREST {
 };
 
 
+/**
+ * Options for glide computer features
+ */
 struct SETTINGS_FEATURES {
   /** block speed to fly instead of dolphin */
   bool EnableBlockSTF;
@@ -171,8 +177,8 @@ struct SETTINGS_COMPUTER:
   public SETTINGS_FEATURES,
   public TaskBehaviour
 {
-
   bool EnableCalibration;
+
   int EnableExternalTriggerCruise;
 
   short AverEffTime;
