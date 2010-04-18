@@ -56,8 +56,7 @@ public:
     valid = false;
   }
 
-  fixed latitude;
-  fixed longitude;
+  GEOPOINT location;
   fixed t;
   fixed w;
   // fixed logw;
@@ -65,8 +64,10 @@ public:
   bool valid;
   fixed weight;
 
-  void Drift(fixed t_0, fixed longitude_0, fixed latitude_0,
-	    fixed wind_lon, fixed wind_lat, fixed decay);
+  void Drift(fixed t_0, 
+             const GEOPOINT& location_0,
+             const GEOPOINT& wind_drift,
+             fixed decay);
 
   fixed x;
   fixed y;
@@ -105,8 +106,7 @@ private:
   fixed est_w;
   fixed est_r;
   fixed est_t;
-  fixed est_latitude;
-  fixed est_longitude;
+  GEOPOINT est_location;
 
   void AddPoint(const fixed t, const GEOPOINT &location, const fixed w);
   void Update(const fixed t_0,
@@ -115,14 +115,15 @@ private:
               THERMAL_LOCATOR_INFO &therm);
 
   void Update_Internal(fixed t_0,
-                       fixed longitude_0, fixed latitude_0,
-                       fixed traildrift_lon, fixed traildrift_lat,
+                       const GEOPOINT& location_0, 
+                       const GEOPOINT& traildrift,
                        fixed decay,
                        THERMAL_LOCATOR_INFO& therm);
 
   void Drift(fixed t_0,
-	     fixed longitude_0, fixed latitude_0,
-	     fixed wind_lon, fixed wind_lat, fixed decay);
+             const GEOPOINT& location_0, 
+             const GEOPOINT& traildrift,
+             fixed decay);
 
   ThermalLocator_Point points[TLOCATOR_NMAX];
   LeastSquares ols;
