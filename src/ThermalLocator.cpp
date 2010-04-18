@@ -171,6 +171,8 @@ ThermalLocator::Update_Internal(fixed t_0,
   int xav = 0;
   int yav = 0;
 
+  // find glider's average position
+
   for (i = 0; i < TLOCATOR_NMAX; ++i) {
     if (points[i].valid) {
       xav += points[i].x_weighted;
@@ -181,6 +183,8 @@ ThermalLocator::Update_Internal(fixed t_0,
   xav /= acc;
   yav /= acc;
 
+  // find thermal center relative to glider's average position
+
   acc = 0;
   for (i = 0; i < TLOCATOR_NMAX; ++i) {
     if (points[i].valid) {
@@ -189,6 +193,8 @@ ThermalLocator::Update_Internal(fixed t_0,
       acc += points[i].w_scaled * points[i].weight;
     }
   }
+
+  // if sufficient data, estimate location
 
   if (acc > 0.25) {
     sx /= acc;
