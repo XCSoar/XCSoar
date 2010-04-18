@@ -130,10 +130,10 @@ ThermalLocator::Update(const fixed t_0,
 
   FindLatitudeLongitude(location_0, wind.bearing, wind.norm, &dloc);
 
-  GEOPOINT traildrift = location_0-dloc;
+  const GEOPOINT traildrift = location_0-dloc;
 
   // drift estimate from previous time step
-  fixed dt = t_0 - est_t;
+  const fixed dt = t_0 - est_t;
   est_location += traildrift * dt;
   est_x = (est_location.Longitude - location_0.Longitude) * fastcosine(location_0.Latitude);
   est_y = (est_location.Latitude - location_0.Latitude);
