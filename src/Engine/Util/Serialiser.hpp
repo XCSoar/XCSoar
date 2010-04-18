@@ -87,24 +87,83 @@ public:
   void Visit(const CylinderZone& data);
 
 protected:
+  /** 
+   * Serialise OrderedTaskBehaviour
+   * 
+   * @param data Item to serialise
+   */
   void serialise(const OrderedTaskBehaviour& data);
+
+  /** 
+   * Deserialise OrderedTaskBehaviour
+   * 
+   * @param data Item to deserialise
+   */
   void deserialise(OrderedTaskBehaviour& data);
 
+  /** 
+   * Serialise a Waypoint
+   * 
+   * @param data Item to serialise
+   */
   void serialise(const Waypoint& data);
+
+  /** 
+   * Deserialise a Waypoint; client responsible for deletion
+   * 
+   * @return Newly constructed Waypoint or NULL on failure
+   */
   Waypoint* deserialise_waypoint();
 
+  /** 
+   * Serialise a GEOPOINT
+   * 
+   * @param data Item to serialise
+   */
   void serialise(const GEOPOINT& data);
+
+  /** 
+   * Deserialise a GEOPOINT
+   * 
+   * @param data Item to deserialise
+   */
   void deserialise(GEOPOINT& data);
 
+  /** 
+   * Serialise an ObservationZonePoint
+   * 
+   * @param data Item to serialise
+   */
   void serialise(const ObservationZonePoint& data);
+
+  /** 
+   * Deserialise an ObservationZonePoint; client responsible for deletion
+   * 
+   * @param wp Waypoint base of point
+   * @param is_turnpoint Whether the point is a turnpoint
+   *
+   * @return Newly constructed ObservationZonePoint or NULL on failure
+   */
   ObservationZonePoint* deserialise_oz(const Waypoint& wp, const bool is_turnpoint);
 
+  /** 
+   * Serialise an OrderedTaskPoint
+   * 
+   * @param data Item to serialise
+   * @param name Type of point
+   */
   DataNode* serialise(const OrderedTaskPoint& data, const TCHAR* name);
+
+  /** 
+   * Deserialise a point, appending it to the task
+   * 
+   * @param data OrderedTask to append to
+   */
   void deserialise_point(OrderedTask& data);
 
+private:
   DataNode &m_node;
 
-private:
   OrderedTask::Factory_t task_factory_type() const;
   const TCHAR* task_factory_type(OrderedTask::Factory_t the_type) const;
 };
