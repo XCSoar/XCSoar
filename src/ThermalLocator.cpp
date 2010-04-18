@@ -48,23 +48,22 @@ Copyright_License {
 #define SFACT 111195
 
 void
-ThermalLocator_Point::Drift(fixed t_0, 
-                            const GEOPOINT& location_0,
-                            const GEOPOINT& wind_drift,
-                            fixed decay)
+ThermalLocator::ThermalLocator_Point::Drift(fixed t_0, 
+                                            const GEOPOINT& location_0,
+                                            const GEOPOINT& wind_drift,
+                                            fixed decay)
 {
+  static const fixed decay_factor(-1.5/TLOCATOR_NMAX);
   // convert to flat earth coordinates, then drift by wind and delta t
-  fixed dt = t_0 - t;
+  const fixed dt = t_0 - t;
 
-  weight = (exp(-1.5 * decay * dt / TLOCATOR_NMAX));
-
-  x = (location.Longitude + wind_drift.Longitude * dt - location_0.Longitude) 
+  fixed x = (location.Longitude + wind_drift.Longitude * dt - location_0.Longitude) 
     * fastcosine(location_0.Latitude);
-  y = (location.Latitude + wind_drift.Latitude * dt - location_0.Latitude);
+  fixed y = (location.Latitude + wind_drift.Latitude * dt - location_0.Latitude);
 
-  iweight = iround(weight * 100);
-  xiw = iround(x * SFACT * iweight);
-  yiw = iround(y * SFACT * iweight);
+  weight = iround(100*exp(decay_factor * decay * dt));
+  x_weighted = iround(x * SFACT * weight);
+  y_weighted = iround(y * SFACT * weight);
 }
 
 ThermalLocator::ThermalLocator()
@@ -80,29 +79,28 @@ ThermalLocator::Reset()
     initialised = false;
 
     // clear array
-    for (int i = 0; i < TLOCATOR_NMAX; i++) {
+    for (int i = 0; i < TLOCATOR_NMAX; ++i) {
       points[i].valid = false;
     }
-    nindex = 0;
-    npoints = 0;
+    n_index = 0;
+    n_points = 0;
   }
 }
 
 void
 ThermalLocator::AddPoint(const fixed t, const GEOPOINT &location, const fixed w)
 {
-  points[nindex].location = location;
-  points[nindex].t = t;
-  points[nindex].w = w;
-  points[nindex].iw = iround(max(w, fixed(-0.1)) * 10);
-  // points[nindex].logw = log(max(w,0.1)*10.0);
-  points[nindex].valid = true;
+  points[n_index].location = location;
+  points[n_index].t = t;
+  points[n_index].w_scaled = iround(max(w, fixed(-0.1)) * 10);
+  // points[n_index].logw = log(max(w,0.1)*10.0);
+  points[n_index].valid = true;
 
-  nindex++;
-  nindex = (nindex % TLOCATOR_NMAX);
+  n_index++;
+  n_index = (n_index % TLOCATOR_NMAX);
 
-  if (npoints < TLOCATOR_NMAX - 1)
-    npoints++;
+  if (n_points < TLOCATOR_NMAX - 1)
+    n_points++;
 
   if (!initialised) {
     initialised = true;
@@ -123,11 +121,12 @@ ThermalLocator::invalid_estimate(THERMAL_LOCATOR_INFO &therm)
 }
 
 void
-ThermalLocator::Update(const fixed t_0, const GEOPOINT &location_0,
+ThermalLocator::Update(const fixed t_0, 
+                       const GEOPOINT &location_0,
                        const SpeedVector wind, 
                        THERMAL_LOCATOR_INFO &therm)
 {
-  if (npoints < TLOCATOR_NMIN) {
+  if (n_points < TLOCATOR_NMIN) {
     invalid_estimate(therm);
     return; // nothing to do.
   }
@@ -167,43 +166,40 @@ ThermalLocator::Update_Internal(fixed t_0,
   // drift points (only do this once)
   Drift(t_0, location_0, traildrift, decay);
 
-  int slogw = 0;
+  int acc = 0;
   int sx = 0;
   int sy = 0;
   int i;
 
+  // xav, yav is average glider's position
   int xav = 0;
   int yav = 0;
 
-  for (i = 0; i < TLOCATOR_NMAX; i++) {
+  for (i = 0; i < TLOCATOR_NMAX; ++i) {
     if (points[i].valid) {
-      xav += points[i].xiw;
-      yav += points[i].yiw;
-      slogw += points[i].iweight;
+      xav += points[i].x_weighted;
+      yav += points[i].y_weighted;
+      acc += points[i].weight;
     }
   }
-  xav /= slogw;
-  yav /= slogw;
+  xav /= acc;
+  yav /= acc;
 
-  // xav, yav is average glider's position
-
-  slogw = 0;
-  for (i = 0; i < TLOCATOR_NMAX; i++) {
+  acc = 0;
+  for (i = 0; i < TLOCATOR_NMAX; ++i) {
     if (points[i].valid) {
-      int dx = (points[i].xiw - xav * points[i].iweight) * points[i].iw;
-      int dy = (points[i].yiw - yav * points[i].iweight) * points[i].iw;
-      sx += dx;
-      sy += dy;
-      slogw += points[i].iw * points[i].iweight;
+      sx += (points[i].x_weighted - xav * points[i].weight) * points[i].w_scaled;
+      sy += (points[i].y_weighted - yav * points[i].weight) * points[i].w_scaled;
+      acc += points[i].w_scaled * points[i].weight;
     }
   }
 
-  if (slogw > 0.25) {
-    sx /= slogw;
-    sy /= slogw;
+  if (acc > 0.25) {
+    sx /= acc;
+    sy /= acc;
 
-    est_x = (sx + xav) / (1.0 * SFACT);
-    est_y = (sy + yav) / (1.0 * SFACT);
+    est_x = (sx + xav) / SFACT;
+    est_y = (sy + yav) / SFACT;
 
     est_t = t_0;
     est_location.Latitude = est_y + location_0.Latitude;
@@ -223,7 +219,7 @@ ThermalLocator::Drift(fixed t_0,
                       const GEOPOINT& traildrift,
                       fixed decay)
 {
-  for (int i = 0; i < TLOCATOR_NMAX; i++) {
+  for (int i = 0; i < TLOCATOR_NMAX; ++i) {
     if (points[i].valid)
       points[i].Drift(t_0, location_0, traildrift, decay);
   }
@@ -287,6 +283,7 @@ ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
   *ground_location = loc;
   *ground_alt = hground;
 }
+
 
 void
 ThermalLocator::Process(const bool circling,

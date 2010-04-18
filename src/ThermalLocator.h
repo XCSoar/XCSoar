@@ -48,35 +48,33 @@ Copyright_License {
 #include "Navigation/SpeedVector.hpp"
 #include "NMEA/Derived.hpp"
 
-class ThermalLocator_Point {
-public:
-  ThermalLocator_Point()
-  {
-    valid = false;
-  }
-
-  GEOPOINT location;
-  fixed t;
-  fixed w;
-  // fixed logw;
-  fixed d;
-  bool valid;
-  fixed weight;
-
-  void Drift(fixed t_0, 
-             const GEOPOINT& location_0,
-             const GEOPOINT& wind_drift,
-             fixed decay);
-
-  fixed x;
-  fixed y;
-  int xiw;
-  int yiw;
-  int iweight;
-  int iw;
-};
-
 class ThermalLocator {
+private:
+
+  struct ThermalLocator_Point 
+  {
+    ThermalLocator_Point()
+    {
+      valid = false;
+    }
+    
+    GEOPOINT location;          /**< Actual location of sample */
+    fixed t;                    /**< Time of sample (s) */
+    // fixed logw;
+
+    bool valid;                 /**< Whether this point is valid */
+    
+    void Drift(fixed t_0, 
+               const GEOPOINT& location_0,
+               const GEOPOINT& wind_drift,
+               fixed decay);
+    
+    int x_weighted;             /**< X coordinate of relative weighted location */
+    int y_weighted;             /**< Y coordinate of relative weighted location */
+    int weight;
+    int w_scaled;
+  };
+
 public:
   ThermalLocator();
 
@@ -124,11 +122,12 @@ private:
              const GEOPOINT& traildrift,
              fixed decay);
 
-  ThermalLocator_Point points[TLOCATOR_NMAX];
+  ThermalLocator_Point points[TLOCATOR_NMAX]; /**< Circular buffer of points */
+
   LeastSquares ols;
   bool initialised;
-  int nindex;
-  int npoints;
+  int n_index; /**< Index of next point to add */
+  int n_points; /**< Number of points in buffer */
 };
 
 #endif
