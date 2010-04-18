@@ -85,6 +85,9 @@ void FlightStatistics::Reset() {
 #include "Task/Visitors/TaskVisitor.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 
+/**
+ * Utility class to draw task leg entry lines
+ */
 class ChartLegHelper:
   public TaskPointConstVisitor
 {
@@ -126,7 +129,9 @@ private:
   const double m_start_time;
 };
 
-
+/**
+ * Utility class to draw task leg entry lines of ordered task
+ */
 class ChartTaskHelper:
   public TaskVisitor
 {

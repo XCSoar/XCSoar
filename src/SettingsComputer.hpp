@@ -64,18 +64,23 @@ typedef enum
   /** 3: Both */
 } AutoWindModeBits_t;
 
-
+/**
+ * Wind calculator settings
+ */
 struct SETTINGS_WIND {
-  /**
-   * AutoWind calculation mode
-   * 0: Manual
-   * 1: Circling
-   * 2: ZigZag
-   * 3: Both
-   */
-  int AutoWindMode;
+/**
+ * AutoWind calculation mode
+ * 0: Manual
+ * 1: Circling
+ * 2: ZigZag
+ * 3: Both
+ */
+  int AutoWindMode; 
 };
 
+/**
+ * Logger settings
+ */
 struct SETTINGS_LOGGER {
   /** Logger interval in cruise mode */
   int LoggerTimeStepCruise;
@@ -86,15 +91,15 @@ struct SETTINGS_LOGGER {
   bool DisableAutoLogger;
 };
 
+/**
+ * Glide polar settings
+ */
 struct SETTINGS_POLAR {
-  unsigned POLARID;
-  /** ManoeuveringSpeed */
-  double SafetySpeed;
-  // polar info
-  int BallastSecsToEmpty;
-  bool BallastTimerActive;
+  unsigned POLARID;             /**< Index of polar */
+  double SafetySpeed;           /**< Manoeuvering speed (m/s) */
+  int BallastSecsToEmpty;       /**< Time to drain full ballast (s) */
+  bool BallastTimerActive;      /**< Whether the ballast countdown timer is active */
 };
-
 
 struct SETTINGS_SOUND {
   // sound stuff not used?
@@ -108,6 +113,7 @@ struct SETTINGS_SOUND {
 struct SETTINGS_TEAMCODE {
   int TeamCodeRefWaypoint;
   bool TeamFlarmTracking;
+
   /** CN of the glider to track */
   TCHAR TeamFlarmCNTarget[4];
 

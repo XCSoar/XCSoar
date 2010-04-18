@@ -45,6 +45,9 @@ Copyright_License {
 struct NMEA_INFO;
 class ContainerWindow;
 
+/**
+ * Widget to display a FLARM gauge
+ */
 class GaugeFLARM: public BufferWindow
 {
 private:

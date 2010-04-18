@@ -182,6 +182,10 @@ private:
   }
 };
 
+/**
+ * Utility class to read observation zone parameters and update the dlgTaskPoint dialog
+ * items
+ */
 class TPReadObservationZone:
   public ObservationZoneVisitor
 {

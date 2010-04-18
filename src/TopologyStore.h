@@ -50,6 +50,9 @@ class MapWindowProjection;
 class Topology;
 class TopologyWriter;
 
+/**
+ * Class used to manage and render vector topology layers
+ */
 class TopologyStore
 {
   enum {

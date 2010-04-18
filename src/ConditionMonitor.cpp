@@ -348,6 +348,9 @@ protected:
 private:
 };
 
+/**
+ * Checks whether aircraft in start sector is within height/speed rules
+ */
 class ConditionMonitorStartRules: public ConditionMonitor
 {
 public:

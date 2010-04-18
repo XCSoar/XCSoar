@@ -42,6 +42,9 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
+/**
+ * Base class for blackboards, providing read access to NMEA_INFO and DERIVED_INFO
+ */
 class BaseBlackboard
 {
 public:

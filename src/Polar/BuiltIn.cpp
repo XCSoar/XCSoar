@@ -39,27 +39,25 @@ Copyright_License {
 #include "Polar/BuiltIn.hpp"
 #include "Polar/WinPilot.hpp"
 
-typedef struct WinPilotPolarInternal {
-  const TCHAR *name;
-  double ww0;
-  double ww1;
-  double v0;
-  double w0;
-  double v1;
-  double w1;
-  double v2;
-  double w2;
-  double wing_area;
-} WinPilotPolarInternal;
+/**
+ * Struct for internally stored WinPilot-like polars 
+ */
+struct WinPilotPolarInternal 
+{
+  const TCHAR *name;            /**< Name of the glider type */
+  double ww0;                   /**< Mass dry gross (kg) */
+  double ww1;                   /**< Max water ballast (l) */
+  double v0;                    /**< Speed (kph) of point 1 */
+  double w0;                    /**< Sink rate (negative, m/s) of point 1  */
+  double v1;                    /**< Speed (kph) of point 2 */
+  double w1;                    /**< Sink rate (negative, m/s) of point 2  */
+  double v2;                    /**< Speed (kph) of point 3 */
+  double w2;                    /**< Sink rate (negative, m/s) of point 3  */
+  double wing_area;             /**< Reference wing area (m^2) */
+};
 
 static const WinPilotPolarInternal WinPilotPolars[] =
 {
-  // MassDryGross[kg], MaxWaterBallast[liters],
-  // Speed1[km/h], Sink1[m/s],
-  // Speed2[km/h], Sink2[m/s],
-  // Speed3[km/h], Sink3[m/s],
-  // Wing Area
-
   { _T("1-26E"), 315, 0, 82.3, -1.04, 117.73, -1.88, 156.86, -3.8, 14.87},
   { _T("1-34"), 354, 0, 89.82, -0.8, 143.71, -2.1, 179.64, -3.8, 14.03},
   { _T("1-35A"), 381, 179, 98.68, -0.74, 151.82, -1.8, 202.87, -3.9, 9.64},

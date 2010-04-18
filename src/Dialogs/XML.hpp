@@ -44,20 +44,23 @@ Copyright_License {
 class WndForm;
 class SingleWindow;
 
+/**
+ * Class to hold callback entries for dialogs
+ */
 typedef struct{
   const TCHAR *Name;
   void *Ptr;
 } CallBackTableEntry_t;
 
+/**
+ * Dialog display styles
+ */
 typedef enum {
-  // cover screen, stretch controls horizontally
-  eDialogFullWidth = 0,
-  // stretch only frame to maintain aspect ratio
-  eDialogScaled = 1,
-  // like 1 but center dialog in screen
-  eDialogScaledCentered = 2,
-  eDialogFixed = 3
-// don't adjust at all (same as !Layout::ScaleSupported())
+
+  eDialogFullWidth = 0,         /**< cover screen, stretch controls horizontally */
+  eDialogScaled,                /**< stretch only frame to maintain aspect ratio */  
+  eDialogScaledCentered,        /**< like eDialogScaled but center dialog in screen */
+  eDialogFixed                  /**< don't adjust at all (same as !Layout::ScaleSupported()) */
 } DialogStyle_t;
 
 extern DialogStyle_t g_eDialogStyle;

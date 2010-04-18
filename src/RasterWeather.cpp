@@ -53,6 +53,26 @@ Copyright_License {
 const unsigned RasterWeather::MAX_WEATHER_MAP;
 const unsigned RasterWeather::MAX_WEATHER_TIMES;
 
+RasterWeather::RasterWeather() 
+{
+  unsigned i;
+  bsratio = false;
+  for (i=0; i<MAX_WEATHER_MAP; i++) {
+    weather_map[i]= 0;
+  }
+  for (i=0; i<MAX_WEATHER_TIMES; i++) {
+    weather_available[i]= false;
+  }
+  _weather_time = 0;
+  _parameter = 0;
+}
+
+RasterWeather::~RasterWeather() 
+{
+  Close();
+}
+
+
 int RasterWeather::IndexToTime(int x) {
   if (x % 2 == 0) {
     return (x/2)*100;

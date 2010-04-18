@@ -275,7 +275,9 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
   }
 }
 
-
+/**
+ * Class to display airspace details dialog
+ */
 class AirspaceDetailsDialogVisitor: 
   public AirspaceVisitor
 {

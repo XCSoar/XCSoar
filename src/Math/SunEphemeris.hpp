@@ -43,6 +43,9 @@ struct DERIVED_INFO;
 struct GEOPOINT;
 struct BrokenDateTime;
 
+/**
+ * Sun ephemeris model, used largely for calculations of sunset times
+ */
 class SunEphemeris {
   double L, g, DayLength;
 

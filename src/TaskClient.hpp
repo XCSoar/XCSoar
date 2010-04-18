@@ -42,6 +42,10 @@
 
 class TaskManager;
 
+/**
+ * Facade to task/airspace/waypoints as used by threads,
+ * to manage locking
+ */
 class TaskClient 
 {
 public:

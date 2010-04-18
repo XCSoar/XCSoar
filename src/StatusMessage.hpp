@@ -43,11 +43,14 @@ Copyright_License {
 
 #include <tchar.h>
 
+/**
+ * Struct used to store status message items
+ */
 typedef struct {
 	const TCHAR *key;		/* English key */
 	const TCHAR *sound;		/* What sound entry to play */
 	const TCHAR *nmea_gps;		/* NMEA Sentence - to GPS serial */
-	const TCHAR *nmea_vario;		/* NMEA Sentence - to Vario serial */
+	const TCHAR *nmea_vario;	/* NMEA Sentence - to Vario serial */
 	bool doStatus;
 	bool doSound;
 	int delay_ms;		/* Delay for DoStatusMessage */
@@ -57,6 +60,9 @@ typedef struct {
 	int disabled;		/* Disabled - currently during run time */
 } StatusMessageSTRUCT;
 
+/**
+ * Class to manage a list of active and recent status messages
+ */
 class StatusMessageList {
   StatusMessageSTRUCT StatusMessageData[MAXSTATUSMESSAGECACHE];
   int StatusMessageData_Size;

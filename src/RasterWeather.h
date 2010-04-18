@@ -46,27 +46,23 @@ Copyright_License {
 class RasterMap;
 struct GEOPOINT;
 
+/**
+ * Class to manage raster weather data
+ */
 class RasterWeather {
 public:
-  static const unsigned MAX_WEATHER_MAP = 16;
-  static const unsigned MAX_WEATHER_TIMES = 48;
+  static const unsigned MAX_WEATHER_MAP = 16; /**< Max number of items stored */
+  static const unsigned MAX_WEATHER_TIMES = 48; /**< Max time segments of each item */
 
 public:
-  RasterWeather() {
-    unsigned i;
-    bsratio = false;
-    for (i=0; i<MAX_WEATHER_MAP; i++) {
-      weather_map[i]= 0;
-    }
-    for (i=0; i<MAX_WEATHER_TIMES; i++) {
-      weather_available[i]= false;
-    }
-    _weather_time = 0;
-    _parameter = 0;
-  }
-  ~RasterWeather() {
-    Close();
-  }
+  /** 
+   * Default constructor
+   */
+  RasterWeather();
+
+  ~RasterWeather();
+  
+  /** Close loaded data */
   void Close();
 
   void ValueToText(TCHAR* Buffer, short val);
@@ -87,6 +83,7 @@ public:
   unsigned GetTime();
   void SetTime(unsigned i);
   int IndexToTime(int x);
+
  private:
   unsigned _parameter; // was terrain.render_weather
   unsigned _weather_time;
@@ -95,7 +92,6 @@ public:
   bool LoadItem(int item, const TCHAR* name);
   void ServiceFullReload(const GEOPOINT &location);
   bool weather_available[MAX_WEATHER_TIMES];
- private:
   bool bsratio;
   Poco::RWLock lock;
   void _Close();

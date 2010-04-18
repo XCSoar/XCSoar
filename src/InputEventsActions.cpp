@@ -109,13 +109,18 @@ typedef void (CALLBACK *DLLFUNC_SETHINST)(HMODULE);
 #endif /* WIN32 */
 
 #define MAX_DLL_CACHE 256
-typedef struct {
+
+/**
+ * Structure to hold a cached DLL item
+ */
+struct DLLCACHESTRUCT 
+{
   TCHAR *text;
   HINSTANCE hinstance;
-} DLLCACHESTRUCT;
+};
+
 DLLCACHESTRUCT DLLCache[MAX_DLL_CACHE];
 int DLLCache_Count = 0;
-
 
 // -----------------------------------------------------------------------
 // Execution - list of things you can do

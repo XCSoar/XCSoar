@@ -43,6 +43,11 @@ Copyright_License {
 #include "SettingsComputerBlackboard.hpp"
 #include "SettingsMapBlackboard.hpp"
 
+/**
+ * Blackboard used by map window: provides read-only access to local
+ * copies of data required by map window
+ * 
+ */
 class MapWindowBlackboard:
   public BaseBlackboard,
   public SettingsComputerBlackboard,

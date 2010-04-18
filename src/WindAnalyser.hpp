@@ -36,6 +36,9 @@ public:
 
 #define MAXWINDSAMPLES 50
 
+/**
+ * Class to provide wind estimates from circling
+ */
 class WindAnalyser
 {
 public:

@@ -43,6 +43,9 @@ Copyright_License {
 
 class OrderedTask;
 
+/**
+ * Class to load multiple tasks on demand, e.g. for browsing
+ */
 class TaskStore 
 {
 public:

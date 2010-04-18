@@ -53,19 +53,23 @@ typedef enum
 } AirspaceDisplayMode_t;
 
 
+/**
+ * Settings for airspace options
+ */
 struct SETTINGS_AIRSPACE
 {
   /** Airspace warnings enabled (true/false) */
   bool EnableAirspaceWarnings;
   /** Warning time before airspace entry */
   unsigned WarningTime;
+  /** Time an acknowledgement will persist before a warning is reissued */
   unsigned AcknowledgementTime;
 
-  // airspace
-  AirspaceDisplayMode_t AltitudeMode;
-  unsigned ClipAltitude;
-  unsigned AltWarningMargin;
-  int iAirspaceMode[AIRSPACECLASSCOUNT];
+  AirspaceDisplayMode_t AltitudeMode; /**< Mode controlling how airspaces are filtered for display */
+  unsigned ClipAltitude;        /**< Altitude (m) above which airspace is not drawn for clip mode */
+  unsigned AltWarningMargin;    /**< Altitude margin (m) outside of which to not display airspace for auto mode */
+
+  int iAirspaceMode[AIRSPACECLASSCOUNT]; /**< Class-specific display/warning options */
 };
 
 

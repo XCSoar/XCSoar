@@ -41,6 +41,9 @@ Copyright_License {
 
 #include "Formatter/Base.hpp"
 
+/** 
+ * Formatter for waypoints
+ */
 class FormatterWaypoint: public InfoBoxFormatter {
  public:
   FormatterWaypoint(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
@@ -48,6 +51,9 @@ class FormatterWaypoint: public InfoBoxFormatter {
   virtual const TCHAR *Render(int *color);
 };
 
+/** 
+ * Formatter differential bearings
+ */
 class FormatterDiffBearing: public InfoBoxFormatter {
  public:
   FormatterDiffBearing(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
@@ -57,6 +63,9 @@ class FormatterDiffBearing: public InfoBoxFormatter {
 
 
 // VENTA3 / alternates
+/** 
+ * Formatter for alternate waypoints
+ */
 class FormatterAlternate: public InfoBoxFormatter {
  public:
   FormatterAlternate(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
@@ -65,17 +74,5 @@ class FormatterAlternate: public InfoBoxFormatter {
   virtual const TCHAR *RenderTitle(int *color);
   virtual void AssignValue(int i);
 };
-// VENTA3 bestlanding
-/*
-class FormatterBestLanding: public InfoBoxFormatter {
- public:
-  FormatterBestLanding(TCHAR *theformat):InfoBoxFormatter(theformat) {};
-  virtual TCHAR *Render(int *color);
-  virtual TCHAR *RenderTitle(int *color);
-  virtual void AssignValue(int i);
-};
-*/
-
-
 
 #endif

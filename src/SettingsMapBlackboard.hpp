@@ -41,6 +41,9 @@ Copyright_License {
 
 #include "SettingsUser.hpp"
 
+/**
+ * Blackboard for clients requiring read access to map settings
+ */
 class SettingsMapBlackboard
 {
 public:

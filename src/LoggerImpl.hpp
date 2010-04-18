@@ -54,26 +54,38 @@ struct SETTINGS_COMPUTER;
 struct Declaration;
 class OrderedTask;
 
+/**
+ * Implementation of logger
+ */
 class LoggerImpl {
 public:
   enum {
-    LOGGER_PRETAKEOFF_BUFFER_MAX = 60,
-    LOGGER_DISK_BUFFER_NUM_RECS = 10,
+    LOGGER_PRETAKEOFF_BUFFER_MAX = 60, /**< Buffer size (s) of points recorded before takeoff */
+    LOGGER_DISK_BUFFER_NUM_RECS = 10, /**< Number of records in disk buffer */
   };
 
+  /** Buffer for points recorded before takeoff */
   struct LoggerPreTakeoffBuffer {
-    GEOPOINT Location;
-    double Altitude;
-    double BaroAltitude;
-    BrokenDateTime DateTime;
-    int SatelliteIDs[MAXSATELLITES];
-    double Time;
-    int NAVWarning;
+    GEOPOINT Location;          /**< Location of fix */
+    double Altitude;            /**< GPS Altitude (m) */
+    double BaroAltitude;        /**< Barometric altitude (m) */
+    BrokenDateTime DateTime;    /**< Date and time of fix */
+    int SatelliteIDs[MAXSATELLITES]; /**< IDs of satellites in fix */
+    double Time;                /**< Time of fix (s) */
+    int NAVWarning;             /**< GPS fix state */
 
+    /** 
+     * Set buffer value from NMEA_INFO structure
+     * 
+     * @param src Item to set
+     * 
+     * @return Buffer value
+     */
     const struct LoggerPreTakeoffBuffer &operator=(const NMEA_INFO &src);
   };
 
 public:
+  /** Default constructor */
   LoggerImpl();
 
 public:

@@ -46,8 +46,13 @@ Copyright_License {
 
 class GlidePolar;
 
-// the deviceblackboard is used as the global ground truth-state
-// since it is accessed quickly with only one mutex (flight)
+/**
+ * Blackboard used by com devices: can write NMEA_INFO, reads DERIVED_INFO.
+ * Also provides methods to emulate device updates e.g. from logger replay
+ * 
+ * The DeviceBlackboard is used as the global ground truth-state
+ * since it is accessed quickly with only one mutex
+ */
 class DeviceBlackboard:
   public BaseBlackboard,
   public SettingsComputerBlackboard,

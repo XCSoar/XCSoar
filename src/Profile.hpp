@@ -44,6 +44,9 @@ Copyright_License {
 #include <tchar.h>
 #include <windef.h>
 
+/**
+ * Configuration structure for serial devices
+ */
 struct DeviceConfig {
   enum port_type {
     /**
@@ -61,10 +64,10 @@ struct DeviceConfig {
     AUTO,
   };
 
-  port_type port_type;
-  unsigned port_index;
-  unsigned speed_index;
-  TCHAR driver_name[32];
+  port_type port_type;          /**< Type of the port */
+  unsigned port_index;          /**< Index of the port */
+  unsigned speed_index;         /**< Speed index (baud rate) */
+  TCHAR driver_name[32];        /**< Name of the driver */
 };
 
 namespace Profile

@@ -46,6 +46,9 @@ class Canvas;
 class Projection;
 class SETTINGS_MAP;
 
+/**
+ * Utility class to draw multilayer items on a canvas with stencil masking
+ */
 class MapDrawHelper 
 {
 public:

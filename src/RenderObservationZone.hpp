@@ -41,6 +41,9 @@ Copyright_License {
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
 #include "MapDrawHelper.hpp"
 
+/**
+ * Utility class to render an ObzervationZonePoint to a canvas
+ */
 class RenderObservationZone: 
   public ObservationZoneConstVisitor, 
   public MapDrawHelper

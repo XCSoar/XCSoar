@@ -44,7 +44,13 @@ Copyright_License {
 
 #include <windef.h> /* for MAX_PATH */
 
-class RasterMapRaw: public RasterMap {
+/**
+ * RasterMap implementation that loads the entire raster terrain into memory
+ * as a bitmap.  Fast but uses a large amount of memory and storage.
+ */
+class RasterMapRaw: 
+  public RasterMap 
+{
  public:
   RasterMapRaw():
     TerrainMem(NULL)

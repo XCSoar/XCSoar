@@ -43,6 +43,10 @@
 
 class TaskBehaviour;
 
+/**
+ * Facade to task/airspace/waypoints as used by calculation thread,
+ * to manage locking
+ */
 class TaskClientCalc: public TaskClient
 {
 public:
