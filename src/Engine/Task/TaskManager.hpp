@@ -276,7 +276,6 @@ public:
    *
    * @param te Task events
    * @param tb Task behaviour
-   * @param ta Task advance
    * @param gp Glide Polar
    *
    * @return Initialised object
@@ -288,7 +287,7 @@ public:
   /**
    * Copy task into this task
    *
-   * @param other OrderedTask to copy
+   * @param that OrderedTask to copy
    * @return True if this task changed
    */
   bool commit(const OrderedTask& that);
@@ -419,8 +418,18 @@ public:
   void print(const AIRCRAFT_STATE &location);
 #endif
 
+  /** 
+   * Retrieve (const) the OrderedTaskBehaviour used by the OrderedTask
+   * 
+   * @return Read-only OrderedTaskBehaviour
+   */
   const OrderedTaskBehaviour& get_ordered_task_behaviour() const;
 
+  /** 
+   * Copy TaskBehaviour to this task
+   * 
+   * @param behaviour Value to set
+   */
   void set_task_behaviour(const TaskBehaviour& behaviour) {
     task_behaviour = behaviour;
   }
@@ -463,14 +472,26 @@ public:
    * @param visitor Visitor to accept into the active task
    */
   void CAccept(BaseVisitor& visitor) const;
+
+  /**
+   * Allow a (const) visitor to visit the active task
+   *
+   * @param visitor Visitor to accept into the active task
+   */
   void Accept(BaseVisitor& visitor);
+
+  /**
+   * Allow a (const) visitor to visit the ordered task
+   *
+   * @param visitor Visitor to accept into the ordered task
+   */
+  void ordered_CAccept(BaseVisitor& visitor) const;
 
   /**
    * Allow a visitor to visit the ordered task
    *
    * @param visitor Visitor to accept into the ordered task
    */
-  void ordered_CAccept(BaseVisitor& visitor) const;
   void ordered_Accept(BaseVisitor& visitor);
 };
 #endif //TASKMANAGER_H

@@ -132,10 +132,25 @@ public:
  */
   fixed scan_distance_travelled(const GEOPOINT &ref);
 
+/** 
+ * Retrieve maximum possible leg distance
+ * 
+ * @return Distance (m)
+ */
   fixed leg_distance_max() const;
   
+/** 
+ * Retrieve min possible leg distance
+ * 
+ * @return Distance (m)
+ */
   fixed leg_distance_min() const;
 
+/** 
+ * Retrieve nominal leg distance
+ * 
+ * @return Distance (m)
+ */
   fixed leg_distance_nominal() const;
 
 protected:

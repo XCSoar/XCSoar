@@ -175,8 +175,9 @@ class TaskPointCloneVisitor:
 public:
   /**
    * Constructor
-   * @param tb 
-   * @param tp
+   * @param tb TaskBehaviour of clone
+   * @param to OrderedTaskBehaviour of clone
+   * @param tp TaskProjection of clone
    * @param _wp Waypoint to shift the task point to
    */
   TaskPointCloneVisitor(const TaskBehaviour& tb,

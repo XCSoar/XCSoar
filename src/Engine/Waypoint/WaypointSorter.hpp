@@ -80,7 +80,7 @@ public:
  * @param vec List of waypoints to filter (read-write)
  * @param c Character to match
  */
-  void filter_name(WaypointSelectInfoVector& vec, const TCHAR *) const;
+  void filter_name(WaypointSelectInfoVector& vec, const TCHAR *c) const;
 
 /** 
  * Remove waypoints bearing greater than 18 degrees from supplied direction 

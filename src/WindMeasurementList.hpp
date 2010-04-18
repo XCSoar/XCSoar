@@ -26,12 +26,15 @@
 
 #include "Vector.hpp"
 
+/**
+ * Structure to hold a single wind measurement
+ */
 struct WindMeasurement
 {
-  Vector vector;
-  int quality;
-  long time;
-  fixed altitude;
+  Vector vector;                /**< Wind speed vector */
+  int quality;                  /**< Quality of fit */
+  long time;                    /**< Time of fix */
+  fixed altitude;               /**< Altitude of fix */
 };
 
 /** maximum number of windmeasurements in the list. */
