@@ -44,7 +44,6 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Math/leastsqs.h"
-#include "Thread/Mutex.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/SpeedVector.hpp"
 #include "NMEA/Derived.hpp"
@@ -130,7 +129,6 @@ private:
   bool initialised;
   int nindex;
   int npoints;
-  Mutex mutexThermalLocator;
 };
 
 #endif

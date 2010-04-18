@@ -76,8 +76,6 @@ ThermalLocator::ThermalLocator()
 void
 ThermalLocator::Reset()
 {
-  ScopeLock protect(mutexThermalLocator);
-
   if (initialised) {
     initialised = false;
 
@@ -93,8 +91,6 @@ ThermalLocator::Reset()
 void
 ThermalLocator::AddPoint(const fixed t, const GEOPOINT &location, const fixed w)
 {
-  ScopeLock protect(mutexThermalLocator);
-
   points[nindex].location = location;
   points[nindex].t = t;
   points[nindex].w = w;
@@ -131,8 +127,6 @@ ThermalLocator::Update(const fixed t_0, const GEOPOINT &location_0,
                        const SpeedVector wind, 
                        THERMAL_LOCATOR_INFO &therm)
 {
-  ScopeLock protect(mutexThermalLocator);
-
   if (npoints < TLOCATOR_NMIN) {
     invalid_estimate(therm);
     return; // nothing to do.
@@ -241,8 +235,6 @@ ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
                                     const SpeedVector wind,
                                     GEOPOINT *ground_location, fixed *ground_alt)
 {
-  ScopeLock protect(mutexThermalLocator);
-
   if ((Thermal_Location.Longitude == 0.0)
       || (Thermal_Location.Latitude == 0.0)
       || (wthermal < 1.0)) {
