@@ -214,6 +214,7 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
   double MinLat, MinLon;
   char NoS, EoW;
 
+  char IsValidFix = gps_info.NAVWarning == 0 ? 'A' : 'V';
   if (gps_info.gps.Simulator) {
     /* if at least one GPS fix comes from the simulator, disable
        signing */
@@ -252,10 +253,10 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
   MinLon *= 60;
   MinLon *= 1000;
 
-  sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d%03d%02d\r\n",
+  sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%c%c%05d%05d%03d%02d\r\n",
           gps_info.DateTime.hour, gps_info.DateTime.minute,
           gps_info.DateTime.second,
-          DegLat, MinLat, NoS, DegLon, MinLon, EoW,
+          DegLat, MinLat, NoS, DegLon, MinLon, EoW, IsValidFix,
           (int)gps_info.BaroAltitude,(int)gps_info.GPSAltitude,(int)dEPE,iSIU);
 
   IGCWriteRecord(szBRecord, szLoggerFileName);
