@@ -290,6 +290,8 @@ DeviceDescriptor::OnSysTicker()
   if (device == NULL)
     return;
 
+  ScopeLock protect(mutexBlackboard);
+
   ticker = !ticker;
   if (ticker)
     // write settings to vario every second
