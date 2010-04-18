@@ -44,14 +44,14 @@ Copyright_License {
 #define SFACT 111195
 
 void
-ThermalLocator::ThermalLocator_Point::Drift(fixed t_0, 
+ThermalLocator::ThermalLocator_Point::Drift(fixed t, 
                                             const GEOPOINT& location_0,
                                             const GEOPOINT& wind_drift,
                                             fixed decay)
 {
   static const fixed decay_factor(-1.5/TLOCATOR_NMAX);
   // convert to flat earth coordinates, then drift by wind and delta t
-  const fixed dt = t_0 - t;
+  const fixed dt = t - t_0;
 
   fixed x = (location.Longitude + wind_drift.Longitude * dt - location_0.Longitude) 
     * fastcosine(location_0.Latitude);
@@ -87,9 +87,8 @@ void
 ThermalLocator::AddPoint(const fixed t, const GEOPOINT &location, const fixed w)
 {
   points[n_index].location = location;
-  points[n_index].t = t;
+  points[n_index].t_0 = t;
   points[n_index].w_scaled = iround(max(w, fixed(-0.1)) * 10);
-  // points[n_index].logw = log(max(w,0.1)*10.0);
   points[n_index].valid = true;
 
   n_index++;

@@ -47,38 +47,69 @@ Copyright_License {
 #include "Navigation/SpeedVector.hpp"
 #include "NMEA/Derived.hpp"
 
+/**
+ * Class to estimate the location of the center of a thermal
+ * when circling.
+ */
 class ThermalLocator {
 private:
 
+  /** 
+   * Class used to hold thermal estimate samples
+   */
   struct ThermalLocator_Point 
   {
+    /**
+     * Default constructor
+     * 
+     */
     ThermalLocator_Point()
     {
       valid = false;
     }
-    
-    GEOPOINT location;          /**< Actual location of sample */
-    fixed t;                    /**< Time of sample (s) */
-    // fixed logw;
 
-    bool valid;                 /**< Whether this point is valid */
-    
-    void Drift(fixed t_0, 
+    /** 
+     * Calculate drifted, weighted values of point
+     * 
+     * @param t Current time
+     * @param location_0 Initial location
+     * @param wind_drift Wind drift offset
+     * @param decay decay factor for weighting
+     */
+    void Drift(fixed t, 
                const GEOPOINT& location_0,
                const GEOPOINT& wind_drift,
                fixed decay);
+
+    bool valid;                 /**< Whether this point is a valid sample */
     
+    GEOPOINT location;          /**< Actual location of sample */
+    fixed t_0;                  /**< Time of sample (s) */
+    int w_scaled;               /**< Scaled updraft value of sample */
+        
     int x_weighted;             /**< X coordinate of relative weighted location */
     int y_weighted;             /**< Y coordinate of relative weighted location */
-    int weight;
-    int w_scaled;
+    int weight;                 /**< Weighting used for this point */
   };
 
 public:
+  /** 
+   * Default constructor.  Initialises object
+   * 
+   */
   ThermalLocator();
 
-  void Reset();
-
+  /** 
+   * Update locator estimate.  If not in circling mode, resets the 
+   * object.
+   * 
+   * @param circling Whether aircraft is in circling mode
+   * @param time Time of fix (s)
+   * @param location Location of aircraft
+   * @param w Net updraft speed (m/s)
+   * @param wind Wind vector
+   * @param therm Output thermal estimate data
+   */
   void Process(const bool circling,
                const fixed time, 
                const GEOPOINT &location, 
@@ -87,6 +118,8 @@ public:
                THERMAL_LOCATOR_INFO& therm);
 
 private:
+
+  void Reset();
 
   void invalid_estimate(THERMAL_LOCATOR_INFO &therm);
 

@@ -752,11 +752,6 @@ GlideComputerAirData::Turning()
 
         OnSwitchClimbMode(false, LEFT);
       }
-
-      //if ((Basic().Time  - Calculated().TurnStartTime) > ClimbCruiseSwitch/3) {
-      // reset thermal locator if changing thermal cores
-      // thermallocator.Reset();
-      //}
     } else {
       // nope, we are circling again
       // JMW Transition back to climb, because we are turning again
