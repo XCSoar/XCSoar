@@ -466,7 +466,7 @@ VegaDevice::OnSysTicker()
 
   THERMAL_LOCATOR_INFO t = device_blackboard.Calculated();
   TCHAR tbuf[100];
-  swprintf(tbuf, _T("PTLOC,%d,%g,%g,%g,%g"),
+  _stprintf(tbuf, _T("PTLOC,%d,%g,%g,%g,%g"),
            (int)(t.ThermalEstimate_R>0), 
            (double)t.ThermalEstimate_Location.Longitude, 
            (double)t.ThermalEstimate_Location.Latitude, 
