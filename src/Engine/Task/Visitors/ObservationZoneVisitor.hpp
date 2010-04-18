@@ -45,7 +45,7 @@
 #include "Task/Tasks/BaseTask/ObservationZonePoint.hpp"
 
 /**
- * Generic visitor for observation zones (for double-dispatch)
+ * Generic const visitor for observation zones (for double-dispatch)
  */
 class ObservationZoneConstVisitor:
   virtual public BaseVisitor,
@@ -58,6 +58,9 @@ class ObservationZoneConstVisitor:
 
 };
 
+/**
+ * Generic visitor for observation zones (for double-dispatch)
+ */
 class ObservationZoneVisitor:
   virtual public BaseVisitor,
   public Visitor<FAISectorZone>,

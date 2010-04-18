@@ -93,6 +93,9 @@ public:
     POINT_FINISH
   };
 
+  /**
+   * Vector of legal abstract point types (non-OZ specific)
+   */
   typedef std::vector<LegalAbstractPointType_t> LegalAbstractVector;
 
   /**
@@ -111,7 +114,10 @@ public:
     FINISH_LINE,
     FINISH_CYLINDER
   };
-  
+
+  /**
+   * Vector of legal point types
+   */
   typedef std::vector<LegalPointType_t> LegalPointVector;
 
 /** 
@@ -217,6 +223,14 @@ public:
     return m_finish_types;
   }
 
+  /** 
+   * Create a point of supplied type
+   * 
+   * @param type Type of point to be created
+   * @param wp Waypoint reference
+   * 
+   * @return Initialised object.  Transfers ownership to client.
+   */
   OrderedTaskPoint* createPoint(const LegalPointType_t type,
                                 const Waypoint &wp) const;
 
@@ -280,12 +294,47 @@ public:
  */
   FinishPoint* createFinish(const Waypoint &wp) const;
 
+/** 
+ * Create start point given an OZ
+ * 
+ * @param pt OZ to be used
+ * @param wp Waypoint reference
+ * 
+ * @return Initialised object.  Ownership is transferred to client.
+ */
   StartPoint* createStart(ObservationZonePoint* pt,
                                 const Waypoint &wp) const;
+
+/** 
+ * Create an AST point given an OZ
+ * 
+ * @param pt OZ to be used
+ * @param wp Waypoint reference
+ * 
+ * @return Initialised object.  Ownership is transferred to client.
+ */
   ASTPoint* createAST(ObservationZonePoint* pt,
                               const Waypoint &wp) const;
+
+/** 
+ * Create an AAT point given an OZ
+ * 
+ * @param pt OZ to be used
+ * @param wp Waypoint reference
+ * 
+ * @return Initialised object.  Ownership is transferred to client.
+ */
   AATPoint* createAAT(ObservationZonePoint* pt,
                                 const Waypoint &wp) const;
+
+/** 
+ * Create a finish point given an OZ
+ * 
+ * @param pt OZ to be used
+ * @param wp Waypoint reference
+ * 
+ * @return Initialised object.  Ownership is transferred to client.
+ */
   FinishPoint* createFinish(ObservationZonePoint* pt,
                             const Waypoint &wp) const;
 
@@ -296,8 +345,21 @@ public:
  */
   virtual bool validate() = 0;
 
+/** 
+ * Retrieve settings from task
+ * 
+ * @return settings from task
+ */
   const OrderedTaskBehaviour& get_ordered_task_behaviour() const;
 
+/** 
+ * Check whether an abstract type is valid in a specified position
+ * 
+ * @param type Type to check
+ * @param position Index position in task
+ * 
+ * @return True if type is valid
+ */
   virtual bool validAbstractType(LegalAbstractPointType_t type, const unsigned position) const;
 
   /**
@@ -307,18 +369,71 @@ public:
    */
   bool has_entered(unsigned index) const;
 
+/** 
+ * List valid intermediate types for a given position 
+ * 
+ * @param position Index position in task
+ * 
+ * @return Vector of valid types in position
+ */
   LegalPointVector getValidIntermediateTypes(unsigned position) const;
+
+/** 
+ * List valid types for a given position 
+ * 
+ * @param position Index position in task
+ * 
+ * @return Vector of valid types in position
+ */
   LegalPointVector getValidTypes(unsigned position) const;
+
+/** 
+ * Inspect the type of a point
+ * 
+ * @param point Point to check
+ * 
+ * @return Type of supplied point
+ */
   LegalPointType_t getType(const OrderedTaskPoint* point) const;
 
-  // whether task is closed (finish same as start)
+  /**
+   * Determines whether task is closed (finish same as start)
+   * @return true if task is closed
+   */
   bool is_closed() const;
 
-  // whether task is unique (other than start/finish, no points used more than once)
+  /**
+   * Determines whether task is unique 
+   * (other than start/finish, no points used more than once)
+   * @return true if task is unique
+   */
   bool is_unique() const;
 
+/** 
+ * Determine if a type is valid for a FinishPoint
+ * 
+ * @param type Type to check
+ * 
+ * @return True if type is valid
+ */
   bool validFinishType(LegalPointType_t type) const;
+
+/** 
+ * Determine if a type is valid for a StartPoint
+ * 
+ * @param type Type to check
+ * 
+ * @return True if type is valid
+ */
   bool validStartType(LegalPointType_t type) const;
+
+/** 
+ * Determine if a type is valid for an IntermediatePoint
+ * 
+ * @param type Type to check
+ * 
+ * @return True if type is valid
+ */
   bool validIntermediateType(LegalPointType_t type) const;
 
 protected:

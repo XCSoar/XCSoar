@@ -75,6 +75,9 @@ public:
   virtual ReturnType Visit(const T&) = 0;
 };
 
+/**
+ * Generic visitor class
+ */
 template <class T, typename R = void>
 class Visitor
 {

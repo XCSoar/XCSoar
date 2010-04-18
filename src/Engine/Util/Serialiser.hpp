@@ -44,6 +44,9 @@
 class DataNode;
 class Waypoint;
 
+/**
+ * Class to serialise and de-serialise tasks to/from a #DataNode structure
+ */
 class Serialiser:
   public TaskPointConstVisitor,
   public ObservationZoneConstVisitor

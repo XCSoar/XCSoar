@@ -41,6 +41,9 @@ Copyright_License {
 
 #include "FLARM/Traffic.hpp"
 
+/**
+ * Received FLARM data, cached
+ */
 struct FLARM_STATE
 {
   enum {

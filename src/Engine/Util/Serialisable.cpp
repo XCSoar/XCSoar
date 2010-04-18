@@ -37,10 +37,3 @@
 
 #include "Serialisable.hpp"
 
-bool 
-Serialisable::is_serialised_type(const DataNode& node) const
-{
-  return false;
-//  return 
-}
-

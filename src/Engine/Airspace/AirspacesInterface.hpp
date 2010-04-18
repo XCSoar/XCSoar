@@ -46,6 +46,11 @@ class AirspaceVisitor;
 class AirspaceIntersectionVisitor;
 
 
+/**
+ * Abstract class for interface to #Airspaces database.
+ * Allows references to the #Airspaces to be substituted for a
+ * facade protected class where locking is required.
+ */
 class AirspacesInterface {
 public:
   typedef std::vector<Airspace> AirspaceVector; /**< Vector of airspaces (used internally) */

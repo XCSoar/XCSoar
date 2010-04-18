@@ -78,7 +78,7 @@ typedef struct {
 
 typedef lineObj multipointObj;
 
-/* attribute primatives */
+/** attribute primatives */
 typedef struct {
   char *name;
   long type;

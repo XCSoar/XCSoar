@@ -427,6 +427,9 @@ protected:
    */
   virtual bool has_targets() const = 0;
 
+  /**
+   * Determines whether this task is scored
+   */
   virtual bool is_scored() const = 0;
 
 protected:
@@ -468,13 +471,21 @@ public:
 #endif
 
 /** 
- * Accept a task point visitor; makes the visitor visit
+ * Accept a const task point visitor; makes the visitor visit
  * all TaskPoint in the task
  * 
  * @param visitor Visitor to accept
  * @param reverse Perform scan in reverse sequence
  */
   virtual void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const = 0;
+
+/** 
+ * Accept a task point visitor; makes the visitor visit
+ * all TaskPoint in the task
+ * 
+ * @param visitor Visitor to accept
+ * @param reverse Perform scan in reverse sequence
+ */
   virtual void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false) = 0;
   DEFINE_VISITABLE()
 };

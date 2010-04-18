@@ -43,6 +43,10 @@
 class AIRCRAFT_STATE;
 class TaskBehaviour;
 
+/**
+ * Settings for ordered tasks; most of these are set by the #AbstractTaskFactory
+ * but can be overriden
+ */
 class OrderedTaskBehaviour:
   public Serialisable
 {
