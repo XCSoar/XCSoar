@@ -53,6 +53,7 @@ public:
    * Constructor
    * 
    * @param loc Tip point of sector
+   * @param is_turnpoint Whether the sector is a turnpoint, or start/finish
    * 
    * @return Initialised object
    */

@@ -79,10 +79,34 @@ public:
                                           const AirspacePredicate &condition
                                           =AirspacePredicate::always_true) const = 0;
 
+/** 
+ * Lock the airspace database
+ * 
+ */
   virtual void lock() const = 0;
+
+/** 
+ * Unlock the airspace database
+ * 
+ */
   virtual void unlock() const = 0;
+
+/** 
+ * Number of items in database
+ * @return size
+ */
   virtual unsigned size() const = 0;
+
+/** 
+ * Iterator to start of database
+ * @return start element
+ */
   virtual AirspaceTree::const_iterator begin() const = 0;
+
+/** 
+ * Iterator to end of database
+ * @return end element
+ */
   virtual AirspaceTree::const_iterator end() const = 0;
 };
 

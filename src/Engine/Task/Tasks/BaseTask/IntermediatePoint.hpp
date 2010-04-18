@@ -58,7 +58,8 @@ public:
  * @param _oz Observation zone attached to this point
  * @param tp Global projection 
  * @param wp Waypoint origin of turnpoint
- * @param tb Task Behaviour defining options (esp safety heights)
+ * @param tb TaskBehaviour defining options (esp safety heights)
+ * @param to OrderedTaskBehaviour defining task options
  * @param b_scored Whether distance within OZ is scored 
  * 
  * @return Partially-initialised object

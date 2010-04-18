@@ -289,7 +289,7 @@ struct DERIVED_INFO:
 
   SpeedVector estimated_wind;   /**< Wind speed, direction */
 
-  fixed ZoomDistance;
+  fixed ZoomDistance; /**< Distance to zoom to for autozoom */
 
   fixed TimeSunset; /**< Local time of sunset */
 
@@ -299,7 +299,7 @@ struct DERIVED_INFO:
   unsigned time_process_gps; /**< Time (ms) to process main computer functions */
   unsigned time_process_idle; /**< Time (ms) to process idle computer functions */
 
-  fixed Experimental;
+  fixed Experimental; /**< Used as temporary holder for new features */
 };
 
 #endif

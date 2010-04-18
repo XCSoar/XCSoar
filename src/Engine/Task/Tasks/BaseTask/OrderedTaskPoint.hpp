@@ -88,8 +88,9 @@ public:
    * Caller is responsible for destruction.
    *
    * @param task_behaviour Task behaviour of clone
+   * @param ordered_task_behaviour Ordered task behaviour of clone
    * @param task_projection Task projection of clone
-   * @param wp Waypoint to shift to (or NULL)
+   * @param waypoint Waypoint to shift to (or NULL)
    */
   OrderedTaskPoint* clone(const TaskBehaviour &task_behaviour,
                           const OrderedTaskBehaviour &ordered_task_behaviour,
@@ -210,6 +211,11 @@ public:
  */
   virtual bool equals(const OrderedTaskPoint* other) const;
 
+/** 
+ * Update a TaskProjection to include this taskpoint and observation zone
+ * 
+ * @param task_projection Projection to update
+ */
   void scan_projection(TaskProjection& task_projection) const;
 
 #ifdef DO_PRINT

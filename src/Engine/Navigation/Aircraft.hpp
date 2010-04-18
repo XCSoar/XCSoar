@@ -213,7 +213,7 @@ struct AIRCRAFT_STATE:
     return Location;
   }
 
-  SpeedVector wind;
+  SpeedVector wind; /**< Wind speed, direction at aircraft */
 
 /**
  * Calculate predicted state in future.

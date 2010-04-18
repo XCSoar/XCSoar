@@ -162,6 +162,9 @@ public:
     m_warnings.clear();
   }
 
+/**
+ * Acknowledge all active warnings
+ */
   void acknowledge_all();
 
 /** 

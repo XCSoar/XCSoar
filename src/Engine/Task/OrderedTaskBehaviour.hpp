@@ -71,6 +71,7 @@ public:
  * Check whether aircraft speed is within start speed limits
  * 
  * @param state Aircraft state
+ * @param behaviour TaskBehaviour (contains margins)
  * @param with_margin Whether to use margin for minor rule violation
  * 
  * @return True if within limits
@@ -83,6 +84,7 @@ public:
  * Check whether aircraft height is within start height limit
  * 
  * @param state Aircraft state
+ * @param behaviour TaskBehaviour (contains margins)
  * @param with_margin Whether to use margin for minor rule violation
  * 
  * @return True if within limits
@@ -107,6 +109,11 @@ public:
  */
   void all_off();
 
+/** 
+ * Determine if the task should have a fixed number of turnpoints
+ * 
+ * @return True if task is fixed size
+ */
   bool is_fixed_size() const;
 
 public:

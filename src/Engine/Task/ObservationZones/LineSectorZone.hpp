@@ -55,7 +55,7 @@ public:
  * Constructor
  * 
  * @param loc Location of center point of line
- * @param radius Half-length of line (m)
+ * @param length Length of line (m)
  * 
  * @return Initialised object
  */

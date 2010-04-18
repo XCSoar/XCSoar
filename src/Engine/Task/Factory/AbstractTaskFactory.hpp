@@ -456,8 +456,31 @@ protected:
   LegalPointVector m_intermediate_types; /**< list of valid intermediate types, for specialisation */
   LegalPointVector m_finish_types; /**< list of valid finish types, for specialisation */
 
+  /** 
+   * Check whether the supplied position can be a StartPoint
+   * 
+   * @param position index to test
+   * 
+   * @return True if possible
+   */
   bool is_position_start(const unsigned position) const;
+
+  /** 
+   * Check whether the supplied position can be an IntermediatePoint
+   * 
+   * @param position index to test
+   * 
+   * @return True if possible
+   */
   bool is_position_intermediate(const unsigned position) const;
+
+  /** 
+   * Check whether the supplied position can be a FinishPoint
+   * 
+   * @param position index to test
+   * 
+   * @return True if possible
+   */
   bool is_position_finish(const unsigned position) const;
 };
 

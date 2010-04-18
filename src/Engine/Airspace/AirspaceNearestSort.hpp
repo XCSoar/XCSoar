@@ -20,7 +20,7 @@ public:
 /** 
  * Constructor
  * 
- * @param state State of aircraft
+ * @param _location Location of aircraft
  * @param condition Additional condition to be placed on queries (default always true)
  * 
  * @return Initialised object

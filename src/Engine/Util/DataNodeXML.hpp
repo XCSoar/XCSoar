@@ -49,12 +49,45 @@ class DataNodeXML:
   public DataNode
 {
 protected:
+  /** 
+   * Construct a node from an XMLNode
+   * 
+   * @param node_name Name of node
+   * @param the_node XML node reflecting this node
+   * 
+   * @return Initialised object
+   */
   DataNodeXML(const tstring &node_name, const XMLNode& the_node);
 public:
   ~DataNodeXML();
+
+/** 
+ * Create a DataNode tree from an XML file
+ * 
+ * @param path Path to file to load
+ * 
+ * @return Root node (or NULL on failure)
+ */
   static DataNode* load(const TCHAR* path);
+
+/** 
+ * Create root node
+ * 
+ * @param node_name Name of root node
+ * 
+ * @return Pointer to root node
+ */
   static DataNodeXML* createRoot(const tstring &node_name);
+
   const tstring serialise();
+
+/** 
+ * Save tree canonically to file
+ * 
+ * @param path Path of file to save to
+ * 
+ * @return True on success
+ */  
   bool save(const TCHAR* path);
 
   const tstring get_name() const;

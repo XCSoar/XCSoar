@@ -325,6 +325,11 @@ public:
  */
   unsigned task_size() const;
 
+/** 
+ * Determine whether the task is full according to the factory in use
+ * 
+ * @return True if task is full
+ */
   bool is_max_size() const;
 
 /** 
@@ -661,24 +666,75 @@ private:
   TaskAdvanceSmart task_advance;
 
 public:
+  /** 
+   * Retrieve TaskAdvance mechanism
+   * 
+   * @return Reference to TaskAdvance used by this task
+   */
   TaskAdvance& get_task_advance() {
     return task_advance;
   }
 
+  /** 
+   * Retrieve the factory type used by this task
+   * 
+   * @return Factory type
+   */
   Factory_t get_factory_type() const {
     return factory_mode;
   }
 
+  /** 
+   * Retrieve (const) the OrderedTaskBehaviour used by this task
+   * 
+   * @return Read-only OrderedTaskBehaviour
+   */
   const OrderedTaskBehaviour& get_ordered_task_behaviour() const;
+
+  /** 
+   * Retrieve the OrderedTaskBehaviour used by this task
+   * 
+   * @return Reference to OrderedTaskBehaviour
+   */
   OrderedTaskBehaviour& get_ordered_task_behaviour();
+
+  /** 
+   * Copy OrderedTaskBehaviour to this task
+   * 
+   * @param ob Value to set
+   */
   void set_ordered_task_behaviour(const OrderedTaskBehaviour& ob);
 
+  /** 
+   * Retrieve task point by index
+   * 
+   * @param index index position of task point
+   * @return Task point or NULL if not found
+   */
   OrderedTaskPoint* get_tp(const unsigned index);
+
+  /** 
+   * Retrieve (const) task point by index
+   * 
+   * @param index index position of task point
+   * @return Task point or NULL if not found
+   */
   const OrderedTaskPoint* get_tp(const unsigned index) const;
 
 #ifdef DO_PRINT
   void print(const AIRCRAFT_STATE &state);
 #endif
+
+/** 
+ * Accept a (const) task point visitor; makes the visitor visit
+ * all TaskPoint in the task
+ * 
+ * @param visitor Visitor to accept
+ * @param reverse Visit task points in reverse order 
+ *
+ * \todo reverse not implemented yet
+ */
+  void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
 
 /** 
  * Accept a task point visitor; makes the visitor visit
@@ -689,7 +745,6 @@ public:
  *
  * \todo reverse not implemented yet
  */
-  void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
   void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false);
 
   DEFINE_VISITABLE()

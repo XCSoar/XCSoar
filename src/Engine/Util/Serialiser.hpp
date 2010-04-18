@@ -52,8 +52,27 @@ class Serialiser:
   public ObservationZoneConstVisitor
 {
 public:
+  /** 
+   * Constructor
+   * 
+   * @param the_node Node this serialiser will edit
+   * 
+   * @return Initialised object
+   */
   Serialiser(DataNode& the_node): m_node(the_node) {};
+
+  /** 
+   * Serialise a task (create a DataNode structure to reflect the task)
+   * 
+   * @param data OrderedTask to serialise
+   */
   void serialise(const OrderedTask& data);
+
+  /** 
+   * De-serialise a task (create a task to reflect the DataNode structure)
+   * 
+   * @param data OrderedTask to serialise
+   */
   void deserialise(OrderedTask& data);
 
   void Visit(const StartPoint& data);
