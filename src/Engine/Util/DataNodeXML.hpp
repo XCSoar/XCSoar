@@ -42,6 +42,9 @@
 
 struct XMLNode;
 
+/**
+ * DataNode implementation for XML files
+ */
 class DataNodeXML:
   public DataNode
 {

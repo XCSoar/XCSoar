@@ -438,6 +438,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
     break;
   case VV_INSECTOR:
     if (!settings.EnableVoiceInSector) return false;
+#ifdef OLD_TASK
     if (Calculated->IsInSector) {
       // Reports when the aircraft is in an AAT/task sector
       // e.g.:
@@ -447,9 +448,11 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
       DoSend(Time, text);
       return true;
     }
+#endif
     break;
   case VV_AIRSPACE:
     if (!settings.EnableVoiceAirspace) return false;
+#ifdef OLD_TASK
     if (Calculated->IsInAirspace) {
       // Reports when the aircraft is inside airspace
       // e.g.:
@@ -461,6 +464,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
       DoSend(Time, text);
       return true;
     }
+#endif
     break;
   default:
     break;

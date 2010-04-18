@@ -118,7 +118,8 @@ void RasterMapCache::ClearTerrainCache() {
   SortThresold = MAXTERRAINCACHE-1;
 }
 
-static int _cdecl TerrainCacheCompare(const void *elem1, const void *elem2 ){
+static int _cdecl TerrainCacheCompare(const void *elem1, const void *elem2 )
+{
 #ifdef PARANOID
   if (!elem1 && !elem2) {
     return(0);
@@ -130,20 +131,24 @@ static int _cdecl TerrainCacheCompare(const void *elem1, const void *elem2 ){
     return(1);
   }
 #endif
-  if (((TERRAIN_CACHE *)elem1)->recency > ((TERRAIN_CACHE *)elem2)->recency)
+  if (((RasterMapCache::TERRAIN_CACHE *)elem1)->recency > 
+      ((RasterMapCache::TERRAIN_CACHE *)elem2)->recency)
     return (-1);
-  if (((TERRAIN_CACHE *)elem1)->recency < ((TERRAIN_CACHE *)elem2)->recency)
+  if (((RasterMapCache::TERRAIN_CACHE *)elem1)->recency < 
+      ((RasterMapCache::TERRAIN_CACHE *)elem2)->recency)
     return (+1);
-  if (((TERRAIN_CACHE *)elem1)->index > ((TERRAIN_CACHE *)elem2)->index)
+  if (((RasterMapCache::TERRAIN_CACHE *)elem1)->index > 
+      ((RasterMapCache::TERRAIN_CACHE *)elem2)->index)
     return (-1);
-  if (((TERRAIN_CACHE *)elem1)->index < ((TERRAIN_CACHE *)elem2)->index)
+  if (((RasterMapCache::TERRAIN_CACHE *)elem1)->index < 
+      ((RasterMapCache::TERRAIN_CACHE *)elem2)->index)
     return (+1);
   return (0);
 }
 
 void RasterMapCache::OptimiseCache(void){
   qsort(&TerrainCache, MAXTERRAINCACHE,
-        sizeof(_TERRAIN_CACHE), TerrainCacheCompare);
+        sizeof(TERRAIN_CACHE), TerrainCacheCompare);
   SortThresold = MAXTERRAINCACHE-1;
 }
 
@@ -178,22 +183,22 @@ int TerrainCacheSearch(const void *key, const void *elem2 ){
 #ifdef PARANOID
   if (!elem2) return (0);
 #endif
-  if ((long)key > ((TERRAIN_CACHE *)elem2)->index)
+  if ((long)key > ((RasterMapCache::TERRAIN_CACHE *)elem2)->index)
     return (-1);
-  if ((long)key < ((TERRAIN_CACHE *)elem2)->index)
+  if ((long)key < ((RasterMapCache::TERRAIN_CACHE *)elem2)->index)
     return (+1);
   return (0);
 }
 
 short RasterMapCache::LookupTerrainCache(const long &SeekPos) {
-  _TERRAIN_CACHE* tcp, *tcpmin, *tcplim;
+  TERRAIN_CACHE* tcp, *tcpmin, *tcplim;
 
   if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
     return TERRAIN_INVALID;
 
   // search to see if it is found in the cache
-  tcp = (_TERRAIN_CACHE *)bsearch((void *)SeekPos, &TerrainCache,
-                                  SortThresold, sizeof(_TERRAIN_CACHE),
+  tcp = (TERRAIN_CACHE *)bsearch((void *)SeekPos, &TerrainCache,
+                                  SortThresold, sizeof(TERRAIN_CACHE),
                                   TerrainCacheSearch);
 
   if (tcp != NULL){

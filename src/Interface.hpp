@@ -45,6 +45,9 @@ class MainWindow;
 class StatusMessageList;
 class ProgressWindow;
 
+/** 
+ * Class to hold data/methods accessible by all interface subsystems
+ */
 class CommonInterface {
 public:
   /** Instance of the main application */
@@ -124,6 +127,10 @@ public:
   static bool EnableAnimation;
 };
 
+/** 
+ * Class to hold data/methods accessible by interface subsystems
+ * that can perform actions
+ */
 class ActionInterface: public CommonInterface {
 public:
   // settings
@@ -161,6 +168,10 @@ private:
   static HCURSOR oldCursor;
 };
 
+/** 
+ * Class to hold data/methods accessible by interface subsystems
+ * of main program
+ */
 class XCSoarInterface: public ActionInterface {
 public:
   // settings

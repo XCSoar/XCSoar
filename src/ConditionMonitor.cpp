@@ -51,6 +51,10 @@ Copyright_License {
 
 // TODO: JMW: make this use GPSClock (code re-use)
 
+/**
+ * Base class for system to monitor changes in state and issue
+ * warnings or informational messages based on various conditions.
+ */
 class ConditionMonitor
 {
 public:

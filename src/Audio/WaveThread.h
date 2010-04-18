@@ -113,7 +113,7 @@ protected:
    cbWaveIn          m_pcbWaveIn;
 };
 
-// CWaveOutThread thread
+/** CWaveOutThread thread */
 class CWaveOutThread
 {
 public:

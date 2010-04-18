@@ -50,6 +50,9 @@ Copyright_License {
 #define NUMTHERMALBUCKETS 10
 #define MAX_THERMAL_SOURCES 20
 
+/**
+ * Structure to hold information on identified thermal sources on the ground
+ */
 struct THERMAL_SOURCE_INFO
 {
   GEOPOINT Location;
@@ -58,14 +61,21 @@ struct THERMAL_SOURCE_INFO
   fixed Time;
 };
 
+/**
+ * Enumeration for cruise/circling mode detection
+ * 
+ */
 typedef enum {
-  CRUISE= 0,
-  WAITCLIMB,
-  CLIMB,
-  WAITCRUISE
+  CRUISE= 0,                    /**< Established cruise mode */
+  WAITCLIMB,                    /**< In cruise, pending transition to climb */
+  CLIMB,                        /**< Established climb mode */
+  WAITCRUISE                    /**< In climb, pending transition to cruise */
 } CirclingMode_t;
 
-
+/**
+ * Derived vario data
+ * 
+ */
 struct VARIO_INFO
 {
   /** Average vertical speed based on 30s */
@@ -83,6 +93,10 @@ struct VARIO_INFO
   fixed LDvario;
 };
 
+/**
+ * Derived climb data
+ * 
+ */
 struct CLIMB_INFO
 {
   /** Average vertical speed in the thermal */
@@ -102,6 +116,10 @@ struct CLIMB_INFO
 };
 
 
+/**
+ * Data for tracking of climb/cruise mode and transition points
+ * 
+ */
 struct CIRCLING_INFO
 {
 
@@ -145,11 +163,20 @@ struct CIRCLING_INFO
   /** Time spent in circling mode */
   fixed timeCircling;
 
+  /** Minimum altitude since start of task */
   fixed MinAltitude;
+
+  /** Maximum height gain (from MinAltitude) during task */
   fixed MaxHeightGain;
+
+  /** Total height climbed during task */
   fixed TotalHeightClimb;
 };
 
+/**
+ * Derived terrain altitude information, including glide range
+ * 
+ */
 struct TERRAIN_ALT_INFO
 {
   enum {
@@ -171,26 +198,54 @@ struct TERRAIN_ALT_INFO
   fixed TerrainBase;
 };
 
+
+/**
+ * Derived thermal climb rate histogram by altitude (time averaged)
+ * 
+ */
 struct THERMAL_BAND_INFO
 {
-  // JMW thermal band data
+  /** Maximum height achieved in circling */ 
   fixed MaxThermalHeight;
+  /** Number of samples in each bucket */ 
   int    ThermalProfileN[NUMTHERMALBUCKETS];
+  /** Average climb rate in each bucket */ 
   fixed ThermalProfileW[NUMTHERMALBUCKETS];
 };
 
+/**
+ * Derived climb rate history
+ * 
+ */
+struct CLIMB_HISTORY_INFO
+{
+  /** Average climb rate for each episode */
+  fixed AverageClimbRate[200];
+  /** Number of samples in each episode */
+  long AverageClimbRateN[200];
+};
 
+
+/**
+ * Structure for current thermal estimate from ThermalLocator
+ * 
+ */
 struct THERMAL_LOCATOR_INFO
 {
+  /** Location of thermal at aircraft altitude */
   GEOPOINT ThermalEstimate_Location;
+  /** Estimated thermal strength (m/s) */
   fixed ThermalEstimate_W;
+  /** Estimated thermal radius (m) */
   fixed ThermalEstimate_R;
 
   /** Position and data of the last thermal sources */
   THERMAL_SOURCE_INFO ThermalSources[MAX_THERMAL_SOURCES];
 };
 
-
+/**
+ * Derived team code information
+ */
 struct TEAMCODE_INFO
 {
   /** Team code */
@@ -203,6 +258,8 @@ struct TEAMCODE_INFO
   GEOPOINT TeammateLocation;
   /** Team code of the chosen team mate */
   TCHAR  TeammateCode[10]; // auto-detected, see also in settings computer.h
+
+  /** Whether the teammate code is valid */
   bool   TeammateCodeValid;
 };
 
@@ -217,7 +274,8 @@ struct DERIVED_INFO:
   public TERRAIN_ALT_INFO,
   public THERMAL_BAND_INFO,
   public THERMAL_LOCATOR_INFO,
-  public TEAMCODE_INFO
+  public TEAMCODE_INFO,
+  public CLIMB_HISTORY_INFO
 {
   /**
    * @todo Reset to cleared state
@@ -229,30 +287,19 @@ struct DERIVED_INFO:
 
   fixed V_stf; /**< Speed to fly block/dolphin (m/s) */
 
-  /** Wind speed */
-  SpeedVector estimated_wind;
-
-  // reflects whether aircraft is in a start/finish/aat/turn sector
-  bool IsInSector;
-  bool IsInAirspace;
-  bool InFinishSector;
-  int StartSectorWaypoint;
-
-  fixed AverageClimbRate[200];
-  long AverageClimbRateN[200];
+  SpeedVector estimated_wind;   /**< Wind speed, direction */
 
   fixed ZoomDistance;
 
-  fixed TimeSunset;
+  fixed TimeSunset; /**< Local time of sunset */
 
-  // JMW note, new items should go at the bottom of this struct before experimental!
+  TaskStats task_stats; /**< Copy of task statistics data for active task */
+  CommonStats common_stats; /**< Copy of common task statistics data */
+
+  unsigned time_process_gps; /**< Time (ms) to process main computer functions */
+  unsigned time_process_idle; /**< Time (ms) to process idle computer functions */
+
   fixed Experimental;
-
-  TaskStats task_stats;
-  CommonStats common_stats;
-
-  unsigned time_process_gps;
-  unsigned time_process_idle;
 };
 
 #endif

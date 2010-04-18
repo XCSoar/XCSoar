@@ -42,6 +42,9 @@ Copyright_License {
 
 #include "WayPointFile.hpp"
 
+/** 
+ * Waypoint file read/writer for WinPilot format
+ */
 class WayPointFileWinPilot: 
   public WayPointFile 
 {

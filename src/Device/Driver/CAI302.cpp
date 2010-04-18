@@ -61,6 +61,7 @@ Copyright_License {
 
 #pragma pack(push, 1)                  // force byte allignement
 
+/** Structure for CAI302 device info */
 typedef struct{
   unsigned char result[3];
   unsigned char reserved[15];
@@ -72,12 +73,14 @@ typedef struct{
   unsigned char reserved3;
 }cai302_Wdata_t;
 
+/** Structure for CAI302 Odata info */
 typedef struct{
   unsigned char result[3];
   unsigned char PilotCount;
   unsigned char PilotRecordSize;
 }cai302_OdataNoArgs_t;
 
+/** Structure for CAI302 settings */
 typedef struct{
   unsigned char  result[3];
   char           PilotName[24];
@@ -102,11 +105,13 @@ typedef struct{
                                                             // be shure there is space to hold the data
 }cai302_OdataPilot_t;
 
+/** Structure for CAI302 glider response */
 typedef struct{
   unsigned char result[3];
   unsigned char GliderRecordSize;
 }cai302_GdataNoArgs_t;
 
+/** Structure for CAI302 glider data */
 typedef struct{
   unsigned char  result[3];
   unsigned char  GliderType[12];
@@ -127,6 +132,9 @@ typedef struct{
 
 #pragma pack(pop)
 
+/** 
+ * Device driver for Cambridge Aero Instruments 302 
+ */
 class CAI302Device : public AbstractDevice {
 private:
   ComPort *port;

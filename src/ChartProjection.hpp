@@ -39,6 +39,10 @@ Copyright_License {
 #include "TaskClientUI.hpp"
 #include "Projection.hpp"
 
+/**
+ * Utility class to determine projection for a chart from task data,
+ * typically scaled to fill the canvas
+ */
 class ChartProjection:
   public Projection
 {

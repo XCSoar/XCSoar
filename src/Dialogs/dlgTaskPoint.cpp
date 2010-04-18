@@ -251,6 +251,9 @@ public:
 };
 
 
+/**
+ * Utility class to find labels for the task point
+ */
 class TPLabelTaskPoint:
   public TaskPointConstVisitor
 {

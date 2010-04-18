@@ -41,29 +41,15 @@ Copyright_License {
 
 #include "RasterMap.h"
 
-typedef struct _TERRAIN_CACHE
-{
-  short h;
-  long index;
-  unsigned int recency;
-} TERRAIN_CACHE;
-
 /**
  * #RasterMap implementation that maintains an array of
  * terrain heights at specific locations based on demand.
  * This is useful for low-memory devices but has poor performance.
  * 
  */
-class RasterMapCache: public RasterMap {
-  enum {
-    /** size of terrain cache */
-#ifdef WINDOWSPC
-    MAXTERRAINCACHE = 8192 * 2
-#else
-    MAXTERRAINCACHE = 4096,
-#endif
-  };
-
+class RasterMapCache: 
+public RasterMap 
+{
  public:
   RasterMapCache() {
     terraincacheefficiency=0;
@@ -91,14 +77,6 @@ class RasterMapCache: public RasterMap {
   static RasterMapCache *LoadFile(const char *path);
 
  protected:
-  TERRAIN_CACHE TerrainCache[MAXTERRAINCACHE];
-
-  int terraincacheefficiency;
-  long terraincachehits;
-  long terraincachemisses;
-  unsigned int cachetime;
-  int SortThresold;
-
   short _GetFieldAtXY(unsigned int lx,
                       unsigned int ly);
   void OptimiseCache(void);
@@ -108,6 +86,36 @@ class RasterMapCache: public RasterMap {
   short LookupTerrainCacheFile(const long &SeekPos);
   //
   virtual void _Close();
+
+public:
+  /**
+   * Structure used to hold cached terrain items
+   */
+  struct TERRAIN_CACHE
+  {
+    short h;
+    long index;
+    unsigned int recency;
+  };
+
+private:
+  int terraincacheefficiency;
+  long terraincachehits;
+  long terraincachemisses;
+  unsigned int cachetime;
+  int SortThresold;
+
+  enum {
+    /** size of terrain cache */
+#ifdef WINDOWSPC
+    MAXTERRAINCACHE = 8192 * 2
+#else
+    MAXTERRAINCACHE = 4096,
+#endif
+  };
+
+  TERRAIN_CACHE TerrainCache[MAXTERRAINCACHE];
+
 };
 
 #endif

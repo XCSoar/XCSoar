@@ -48,6 +48,9 @@ Copyright_License {
 // Forward declaration
 struct DeviceDescriptor;
 
+/**
+ * Generic ComPort thread handler class
+ */
 class ComPort : protected Thread
 {
 public:

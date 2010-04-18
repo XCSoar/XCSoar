@@ -62,6 +62,7 @@ class ScopedRWLock;
 class Foundation_API RWLock: private RWLockImpl
 {
 public:
+  /** Type of lock */
 	typedef ScopedRWLock ScopedLock;
 
 	/** Creates the Reader/Writer lock. */
@@ -108,6 +109,14 @@ private:
 class Foundation_API ScopedRWLock
 {
 public:
+/** 
+ * Constructor
+ * 
+ * @param rwl Lock to use
+ * @param write If true, locks read-write, otherwise read only
+ * 
+ * @return Scope object
+ */
 	ScopedRWLock(RWLock& rwl, bool write = false);
 	~ScopedRWLock();
 

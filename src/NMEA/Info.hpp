@@ -46,6 +46,9 @@ Copyright_License {
 #include "FLARM/State.hpp"
 #include "Sizes.h"
 
+/**
+ * State of external switch devices (esp Vega)
+ */
 struct SWITCH_INFO
 {
   bool AirbrakeLocked;
@@ -64,6 +67,9 @@ struct SWITCH_INFO
   // bool Stall;
 };
 
+/**
+ * State of GPS fix
+ */
 struct GPS_STATE
 {
   //############
@@ -125,6 +131,9 @@ struct GPS_STATE
   }
 };
 
+/**
+ * State of acceleration of aircraft, with calculated pseudo-attitude reference
+ */
 struct ACCELERATION_STATE
 {
   //##################
