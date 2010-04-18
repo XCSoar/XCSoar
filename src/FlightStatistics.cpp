@@ -244,7 +244,7 @@ FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc,
   chart.DrawLineGraph(Task_Speed, Chart::STYLE_MEDIUMBLACK);
   chart.DrawTrend(Task_Speed, Chart::STYLE_BLUETHIN);
 
-  chart.DrawXLabel(TEXT("t (m)"));
+  chart.DrawXLabel(TEXT("t (hr)"));
   chart.DrawYLabel(TEXT("V"));
 }
 
@@ -808,10 +808,10 @@ FlightStatistics::AverageThermalAdjusted(const double mc_current,
 }
 
 void
-FlightStatistics::SaveTaskSpeed(const double val)
+FlightStatistics::AddTaskSpeed(const double tflight, const double val)
 {
   Lock();
-  Task_Speed.LeastSquaresUpdate(val);
+  Task_Speed.LeastSquaresUpdate(tflight/3600.0, val);
   Unlock();
 }
 

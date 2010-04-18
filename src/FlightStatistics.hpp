@@ -62,9 +62,10 @@ class FlightStatistics {
 public:
   void StartTask();
   double AverageThermalAdjusted(const double wthis, const bool circling);
+
   void AddAltitude(const double tflight, const double alt);
   void AddAltitudeTerrain(const double tflight, const double terrainalt);
-  void SaveTaskSpeed(const double val);
+  void AddTaskSpeed(const double tflight, const double val);
   void AddClimbBase(const double tflight, const double alt);
   void AddClimbCeiling(const double tflight, const double alt);
   void AddThermalAverage(const double v);
