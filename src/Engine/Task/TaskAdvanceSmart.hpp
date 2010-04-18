@@ -74,9 +74,11 @@ public:
 
 protected:
 
+  TaskAdvanceState_t m_state;       /**< active advance state */
+
+private:
   const OrderedTaskBehaviour &m_task_behaviour;
 
-  TaskAdvanceState_t m_state;       /**< active advance state */
 };
 
 

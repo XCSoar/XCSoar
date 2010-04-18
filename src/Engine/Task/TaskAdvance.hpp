@@ -47,13 +47,16 @@ class TaskAdvance
 {
 public:
 
+  /**
+   * Enumeration of states the task advance mechanism can be in
+   */
   enum TaskAdvanceState_t {
-    MANUAL = 0,
-    AUTO,
-    START_ARMED,
-    START_DISARMED,
-    TURN_ARMED,
-    TURN_DISARMED
+    MANUAL = 0,                 /**< Advance is manual (user must manually adjust) */
+    AUTO,                       /**< Advance is auto (no user input required) */
+    START_ARMED,                /**< Armed for start */
+    START_DISARMED,             /**< Not yet armed for start (user must arm when ready) */
+    TURN_ARMED,                 /**< Armed for a turn */
+    TURN_DISARMED               /**< Not yet armed for turn (user must arm when ready) */
   };
 
 /** 
@@ -111,6 +114,11 @@ public:
       return m_armed;
     }
 
+  /** 
+   * Retrieve current advance state
+   * 
+   * @return Advance state
+   */
   virtual TaskAdvanceState_t get_advance_state() const = 0;
 
 /** 
@@ -132,6 +140,14 @@ public:
 
 protected:
 
+/** 
+ * Determine whether, according to OZ entry, an AAT OZ is ready to advance
+ * 
+ * @param has_entered True if the aircraft has entered the OZ
+ * @param close_to_target If true, will advance when aircraft is close to target
+ * 
+ * @return True if ready to advance
+ */
   virtual bool aat_state_ready(const bool has_entered,
                                const bool close_to_target) const;
 

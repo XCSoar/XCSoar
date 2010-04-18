@@ -47,7 +47,7 @@ Copyright_License {
  */
 struct SpeedVector {
   /**
-   * The direction of the vector in degrees (0..360).
+   * The direction of the vector in degrees true (0..360).
    */
   fixed bearing;
 
@@ -56,7 +56,20 @@ struct SpeedVector {
    */
   fixed norm;
 
+  /** 
+   * Constructor for null speed
+   * 
+   * @return Initialised object
+   */
   SpeedVector():bearing(fixed_zero), norm(fixed_zero) {}
+
+  /** 
+   * Constructor given bearing and magnitude
+   * 
+   * @param _bearing Bearing of vector (degrees true)
+   * @param _norm Magnitude of vector (m/s)
+   * @return Initialised object
+   */
   SpeedVector(fixed _bearing, fixed _norm):bearing(_bearing), norm(_norm) {}
 
   /**
