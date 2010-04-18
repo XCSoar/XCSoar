@@ -164,8 +164,9 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info)
   // Logger off
   LoggerActive = false;
 
-  if (gps_info.gps.Simulator || HaveCondorDevice())
+  if (gps_info.gps.Simulator) {
     Simulator = true;
+  }
 
   // Make space for logger file, if unsuccessful -> cancel
   if (!LoggerClearFreeSpace(gps_info))
@@ -213,15 +214,17 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
   double MinLat, MinLon;
   char NoS, EoW;
 
-  if (gps_info.gps.Simulator || is_simulator())
+  if (gps_info.gps.Simulator) {
     /* if at least one GPS fix comes from the simulator, disable
        signing */
     Simulator = true;
-  else
+  }
+
+  if (!Simulator) {
     LogFRecordToFile(gps_info.gps.SatelliteIDs,
                      gps_info.DateTime, gps_info.Time,
                      gps_info.gps.NAVWarning);
-
+  }
   if ((gps_info.GPSAltitude < -100) || (gps_info.BaroAltitude < -100)
       || gps_info.gps.NAVWarning) {
     return;
@@ -306,6 +309,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
 {
   int i;
   TCHAR path[MAX_PATH];
+  Simulator=false;
 
   for (i = 0; i < 3; i++) { // chars must be legal in file names
     strAssetNumber[i] = IsAlphaNum(strAssetNumber[i]) ? strAssetNumber[i] : _T('A');
@@ -322,9 +326,10 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
   DiskBufferReset();
   Unlock();
 
-  if (HaveCondorDevice() || gps_info.gps.Simulator) {
+  if (gps_info.gps.Simulator) {
     Simulator = true;
   }
+
   if (!Simulator)
     LoggerGInit();
 
