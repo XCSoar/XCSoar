@@ -119,15 +119,21 @@ ThermalLocator::AddPoint(const fixed t, const GEOPOINT &location, const fixed w)
 }
 
 void
+ThermalLocator::invalid_estimate(THERMAL_LOCATOR_INFO &therm)
+{
+  therm.ThermalEstimate_R = -1;
+  therm.ThermalEstimate_W = 0;
+}
+
+void
 ThermalLocator::Update(const fixed t_0, const GEOPOINT &location_0,
-                       const SpeedVector wind, const fixed trackbearing,
-    GEOPOINT *Thermal_Location, fixed *Thermal_W, fixed *Thermal_R)
+                       const SpeedVector wind, 
+                       THERMAL_LOCATOR_INFO &therm)
 {
   ScopeLock protect(mutexThermalLocator);
 
   if (npoints < TLOCATOR_NMIN) {
-    *Thermal_R = -1;
-    *Thermal_W = 0;
+    invalid_estimate(therm);
     return; // nothing to do.
   }
 
@@ -145,49 +151,27 @@ ThermalLocator::Update(const fixed t_0, const GEOPOINT &location_0,
   est_x = (est_longitude - location_0.Longitude) * fastcosine(location_0.Latitude);
   est_y = (est_latitude - location_0.Latitude);
 
-  GEOPOINT Thermal_Location0;
-  fixed Thermal_W0;
-  fixed Thermal_R0;
+  Update_Internal(t_0, 
+                  location_0.Longitude, 
+                  location_0.Latitude,
+                  traildrift_lon, traildrift_lat,
+                  fixed_one, therm);
+  /*
+  THERMAL_LOCATION_INFO therm0;
 
   Update_Internal(t_0, location_0.Longitude, location_0.Latitude,
                   traildrift_lon, traildrift_lat,
-                  trackbearing, fixed_one,
-                  &(Thermal_Location->Longitude),
-                  &(Thermal_Location->Latitude),
-                  Thermal_W,
-                  Thermal_R);
-
-  Update_Internal(t_0, location_0.Longitude, location_0.Latitude,
-                  traildrift_lon, traildrift_lat,
-                  trackbearing, fixed_two,
-                  &Thermal_Location0.Longitude,
-                  &Thermal_Location0.Latitude,
-                  &Thermal_W0,
-                  &Thermal_R0);
-
-#ifdef DEBUG_THERMAL_LOCATOR
-  if ((Thermal_W0 > 0) && (*Thermal_W > 0)) {
-    fixed d = Distance(*Thermal_Location, Thermal_Location0);
-
-    // if (d > 200.0) {
-    // big shift detected
-
-    LogDebug(_T("%f %f %f %f %f # center2 \n"),
-        *Thermal_Longitude,
-        *Thermal_Latitude,
-        Thermal_Longitude0,
-        Thermal_Latitude0,
-        d);
-    // }
-  }
-#endif
+                  fixed_two, therm0);
+  */
 }
 
 void
-ThermalLocator::Update_Internal(fixed t_0, fixed longitude_0, fixed latitude_0,
-    fixed traildrift_lon, fixed traildrift_lat, fixed trackbearing,
-    fixed decay, fixed *Thermal_Longitude, fixed *Thermal_Latitude,
-    fixed *Thermal_W, fixed *Thermal_R)
+ThermalLocator::Update_Internal(fixed t_0, 
+                                fixed longitude_0, fixed latitude_0,
+                                fixed traildrift_lon, 
+                                fixed traildrift_lat, 
+                                fixed decay, 
+                                THERMAL_LOCATOR_INFO &therm)
 {
   // drift points (only do this once)
   Drift(t_0, longitude_0, latitude_0, traildrift_lon, traildrift_lat, decay);
@@ -227,16 +211,6 @@ ThermalLocator::Update_Internal(fixed t_0, fixed longitude_0, fixed latitude_0,
     sx /= slogw;
     sy /= slogw;
 
-    // int vx = iround(100*fastsine(trackbearing));
-    // int vy = iround(100*fastcosine(trackbearing));
-    // long dx = sx;
-    // long dy = sy;
-    // int mag = isqrt4((dx*dx+dy*dy)*256*256)/256;
-
-    // find magnitude of angle error
-    // fixed g = max(-0.99,min(0.99,(dx*vx + dy*vy)/(100.0*mag)));
-    // fixed angle = acos(g)*RAD_TO_DEG-90;
-
     est_x = (sx + xav) / (1.0 * SFACT);
     est_y = (sy + yav) / (1.0 * SFACT);
 
@@ -244,13 +218,12 @@ ThermalLocator::Update_Internal(fixed t_0, fixed longitude_0, fixed latitude_0,
     est_latitude = est_y + latitude_0;
     est_longitude = est_x / fastcosine(latitude_0) + longitude_0;
 
-    *Thermal_Longitude = est_longitude;
-    *Thermal_Latitude = est_latitude;
-    *Thermal_R = 1;
-    *Thermal_W = 1;
+    therm.ThermalEstimate_Location.Longitude = est_longitude;
+    therm.ThermalEstimate_Location.Latitude = est_latitude;
+    therm.ThermalEstimate_R = 1;
+    therm.ThermalEstimate_W = 1;
   } else {
-    *Thermal_R = -1;
-    *Thermal_W = 0;
+    invalid_estimate(therm);
   }
 }
 
@@ -323,4 +296,22 @@ ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
 
   *ground_location = loc;
   *ground_alt = hground;
+}
+
+void
+ThermalLocator::Process(const bool circling,
+                        const fixed time, 
+                        const GEOPOINT &location, 
+                        const fixed w,
+                        const SpeedVector wind,
+                        THERMAL_LOCATOR_INFO& therm)
+{
+  if (circling) {
+    AddPoint(time, location, w);
+    Update(time, location, wind, therm);
+  } else {
+    Reset();
+    therm.ThermalEstimate_W = 0;
+    therm.ThermalEstimate_R = -1;
+  }
 }

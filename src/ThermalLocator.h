@@ -47,6 +47,7 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/SpeedVector.hpp"
+#include "NMEA/Derived.hpp"
 
 class ThermalLocator_Point {
 public:
@@ -80,23 +81,24 @@ public:
   ThermalLocator();
 
   void Reset();
-  void AddPoint(const fixed t, const GEOPOINT &location, const fixed w);
-  void Update(const fixed t_0,
-      const GEOPOINT &location_0,
-              const SpeedVector wind,
-      const fixed trackbearing,
-      GEOPOINT *Thermal_Location,
-      fixed *Thermal_W,
-      fixed *Thermal_R);
 
-  //  fixed Estimate(fixed t_x, fixed t_y);
+  void Process(const bool circling,
+               const fixed time, 
+               const GEOPOINT &location, 
+               const fixed w,
+               const SpeedVector wind,
+               THERMAL_LOCATOR_INFO& therm);
 
   void EstimateThermalBase(const GEOPOINT Thermal_Location,
-      const fixed altitude,
-      const fixed wthermal,
+                           const fixed altitude,
+                           const fixed wthermal,
                            const SpeedVector wind,
-      GEOPOINT *ground_location,
-      fixed *ground_alt);
+                           GEOPOINT *ground_location,
+                           fixed *ground_alt);
+
+private:
+
+  void invalid_estimate(THERMAL_LOCATOR_INFO &therm);
 
   fixed est_x;
   fixed est_y;
@@ -106,16 +108,17 @@ public:
   fixed est_latitude;
   fixed est_longitude;
 
-private:
+  void AddPoint(const fixed t, const GEOPOINT &location, const fixed w);
+  void Update(const fixed t_0,
+              const GEOPOINT &location_0,
+              const SpeedVector wind,
+              THERMAL_LOCATOR_INFO &therm);
+
   void Update_Internal(fixed t_0,
                        fixed longitude_0, fixed latitude_0,
                        fixed traildrift_lon, fixed traildrift_lat,
-                       fixed trackbearing,
                        fixed decay,
-                       fixed *Thermal_Longitude,
-                       fixed *Thermal_Latitude,
-                       fixed *Thermal_W,
-                       fixed *Thermal_R);
+                       THERMAL_LOCATOR_INFO& therm);
 
   void Drift(fixed t_0,
 	     fixed longitude_0, fixed latitude_0,

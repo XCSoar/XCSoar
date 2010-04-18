@@ -615,20 +615,10 @@ GlideComputerAirData::PercentCircling(const double Rate)
 void
 GlideComputerAirData::ProcessThermalLocator()
 {
-  if (Calculated().Circling) {
-    thermallocator.AddPoint(Basic().Time, Basic().Location,
-                            Basic().NettoVario);
-
-    thermallocator.Update(Basic().Time, Basic().Location,
-                          Basic().wind,
-                          Basic().TrackBearing,
-        &SetCalculated().ThermalEstimate_Location,
-        &SetCalculated().ThermalEstimate_W, &SetCalculated().ThermalEstimate_R);
-  } else {
-    SetCalculated().ThermalEstimate_W = 0;
-    SetCalculated().ThermalEstimate_R = -1;
-    thermallocator.Reset();
-  }
+  thermallocator.Process(Calculated().Circling,
+                         Basic().Time, Basic().Location,
+                         Basic().NettoVario,
+                         Basic().wind, SetCalculated());
 }
 
 /**
