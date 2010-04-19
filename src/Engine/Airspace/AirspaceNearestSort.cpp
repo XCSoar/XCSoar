@@ -13,11 +13,13 @@ AirspaceNearestSort::populate_queue(const AirspacesInterface &airspaces,
 
   for (AirspacesInterface::AirspaceVector::iterator v=vectors.begin();
        v != vectors.end(); ++v) {
-    const AbstractAirspace &as = *v->get_airspace();
-    const AirspaceInterceptSolution ais = solve_intercept(as);
-    const fixed value = metric(ais);
-    if (!negative(value)) {
-      m_q.push(std::make_pair(m_reverse? -value:value, std::make_pair(ais, *v)));
+    const AbstractAirspace *as = v->get_airspace();
+    if (as != NULL) {
+      const AirspaceInterceptSolution ais = solve_intercept(*as);
+      const fixed value = metric(ais);
+      if (!negative(value)) {
+        m_q.push(std::make_pair(m_reverse? -value:value, std::make_pair(ais, *v)));
+      }
     }
   }
 }

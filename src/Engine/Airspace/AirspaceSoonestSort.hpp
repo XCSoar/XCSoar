@@ -65,7 +65,7 @@ protected:
 private:
   const AIRCRAFT_STATE &m_state;
   const AirspaceAircraftPerformance &m_perf;
-  const fixed& m_max_time;
+  const fixed m_max_time;
 };
 
 
