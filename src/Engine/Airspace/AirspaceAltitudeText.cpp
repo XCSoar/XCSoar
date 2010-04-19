@@ -36,6 +36,7 @@
 */
 #include "AirspaceAltitude.hpp"
 #include "AbstractAirspace.hpp"
+#include "Units.hpp"
 
 const tstring 
 AIRSPACE_ALT::get_as_text_units(const bool concise) const
