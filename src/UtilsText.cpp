@@ -366,8 +366,9 @@ StringMallocParse(const TCHAR* old_string)
 void
 ConvertTToC(char *pszDest, const TCHAR *pszSrc)
 {
-  for (unsigned int i = 0; i < _tcslen(pszSrc); i++)
-    pszDest[i] = (char)pszSrc[i];
+  do {
+    *pszDest++ = (char)*pszSrc;
+  } while (*pszSrc++ != _T('\0'));
 }
 
 /**
@@ -378,8 +379,9 @@ ConvertTToC(char *pszDest, const TCHAR *pszSrc)
 void
 ConvertCToT(TCHAR *pszDest, const char *pszSrc)
 {
-  for (unsigned int i = 0; i < strlen(pszSrc); i++)
-    pszDest[i] = (TCHAR)pszSrc[i];
+  do {
+    *pszDest++ = (TCHAR)*pszSrc;
+  } while (*pszSrc++ != '\0');
 }
 
 int
