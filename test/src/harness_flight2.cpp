@@ -213,16 +213,12 @@ bool test_abort(int n_wind)
     distance_counts();
   }
 
-  TaskBehaviour task_behaviour;
-//  task_behaviour.auto_mc = auto_mc;
-
-  task_behaviour.all_off();
-
   TaskEventsPrint default_events(verbose);
 
   TaskManager task_manager(default_events,
-                           task_behaviour,
                            waypoints);
+
+  task_manager.get_task_behaviour().all_off();
 
   task_manager.set_glide_polar(glide_polar);
 
@@ -245,16 +241,13 @@ bool test_goto(int n_wind, unsigned id, bool auto_mc)
     distance_counts();
   }
 
-  TaskBehaviour task_behaviour;
-
-  task_behaviour.all_off();
-  task_behaviour.auto_mc = auto_mc;
-
   TaskEventsPrint default_events(verbose);
 
   TaskManager task_manager(default_events,
-                           task_behaviour,
                            waypoints);
+
+  task_manager.get_task_behaviour().all_off();
+  task_manager.get_task_behaviour().auto_mc = auto_mc;
 
   task_manager.set_glide_polar(glide_polar);
 
@@ -277,16 +270,12 @@ bool test_null()
     distance_counts();
   }
 
-  TaskBehaviour task_behaviour;
-//  task_behaviour.auto_mc = auto_mc;
-
-  task_behaviour.all_off();
-
   TaskEventsPrint default_events(verbose);
 
   TaskManager task_manager(default_events,
-                           task_behaviour,
                            waypoints);
+
+  task_manager.get_task_behaviour().all_off();
 
   task_manager.set_glide_polar(glide_polar);
 
@@ -407,17 +396,14 @@ bool test_olc(int n_wind, OLCRules olc_type)
     distance_counts();
   }
 
-  TaskBehaviour task_behaviour;
-
-  task_behaviour.all_off();
-  task_behaviour.olc_rules = olc_type;
-  task_behaviour.enable_olc = true;
-
   TaskEventsPrint default_events(verbose);
 
   TaskManager task_manager(default_events,
-                           task_behaviour,
                            waypoints);
+
+  task_manager.get_task_behaviour().all_off();
+  task_manager.get_task_behaviour().olc_rules = olc_type;
+  task_manager.get_task_behaviour().enable_olc = true;
 
   task_manager.set_glide_polar(glide_polar);
   test_task(task_manager, waypoints, 1);

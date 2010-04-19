@@ -19,7 +19,7 @@ double calc_cruise_efficiency=1.0;
 double calc_effective_mc=1.0;
 
 double aat_min_time(int test_num) {
-  TaskBehaviour beh;
+  OrderedTaskBehaviour beh;
   switch (test_num) {
   case 2:
     return 3600*3.8;
@@ -194,21 +194,22 @@ bool test_flight(int test_num, int n_wind, const double speed_factor,
     distance_counts();
   }
 
-  TaskBehaviour task_behaviour;
+  TaskEventsPrint default_events(verbose);
+
+  TaskManager task_manager(default_events,
+                           waypoints);
+
+  task_manager.set_glide_polar(glide_polar);
+
+  TaskBehaviour& task_behaviour = task_manager.get_task_behaviour();
+
+  task_manager.get_ordered_task_behaviour().aat_min_time = aat_min_time(test_num);
+
   task_behaviour.auto_mc = auto_mc;
-  task_behaviour.aat_min_time = aat_min_time(test_num);
   task_behaviour.calc_glide_required = false;
   if ((test_num ==0) || (test_num==2)) {
     task_behaviour.optimise_targets_bearing = false;
   }
-
-  TaskEventsPrint default_events(verbose);
-
-  TaskManager task_manager(default_events,
-                           task_behaviour,
-                           waypoints);
-
-  task_manager.set_glide_polar(glide_polar);
 
   bool goto_target = false;
 

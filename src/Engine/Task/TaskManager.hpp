@@ -426,12 +426,28 @@ public:
   const OrderedTaskBehaviour& get_ordered_task_behaviour() const;
 
   /** 
+   * Retrieve the OrderedTaskBehaviour used by the OrderedTask
+   * 
+   * @return OrderedTaskBehaviour reference
+   */
+  OrderedTaskBehaviour& get_ordered_task_behaviour();
+
+  /** 
    * Copy TaskBehaviour to this task
    * 
    * @param behaviour Value to set
    */
   void set_task_behaviour(const TaskBehaviour& behaviour) {
     task_behaviour = behaviour;
+  }
+  
+  /** 
+   * Retrieve task behaviour
+   * 
+   * @return Reference to task behaviour
+   */
+  TaskBehaviour& get_task_behaviour() {
+    return task_behaviour;
   }
 
 private:

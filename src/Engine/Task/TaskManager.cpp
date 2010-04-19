@@ -620,3 +620,9 @@ TaskManager::get_ordered_task_behaviour() const
 {
   return task_ordered.get_ordered_task_behaviour();
 }
+
+OrderedTaskBehaviour& 
+TaskManager::get_ordered_task_behaviour()
+{
+  return task_ordered.get_ordered_task_behaviour();
+}

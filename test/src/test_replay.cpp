@@ -1,7 +1,7 @@
 #include "test_debug.hpp"
 #include "harness_aircraft.hpp"
 #include "TaskEventsPrint.hpp"
-#include "ReplayLogger/Logger.hpp"
+#include "ReplayLogger.hpp"
 #include "Task/TaskManager.hpp"
 #include "UtilsText.hpp"
 #ifdef DO_PRINT
@@ -57,15 +57,14 @@ test_replay(const OLCRules olc_type)
 
   TaskBehaviour task_behaviour;
 
-  task_behaviour.olc_rules = olc_type;
-  task_behaviour.enable_olc = true;
-
   TaskEventsPrint default_events(verbose);
   TaskManager task_manager(default_events,
-                           task_behaviour,
                            waypoints);
 
   task_manager.set_glide_polar(glide_polar);
+
+  task_manager.get_task_behaviour().olc_rules = olc_type;
+  task_manager.get_task_behaviour().enable_olc = true;
 
   ReplayLoggerSim sim;
   TCHAR szFilename[MAX_PATH];

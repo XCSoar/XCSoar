@@ -11,6 +11,9 @@
 class ObservationZoneVisitorPrint: public ObservationZoneConstVisitor
 {
 public:
+  virtual void Visit(const KeyholeZone& oz) {
+    printf("# kehole zone\n");
+  }
   virtual void Visit(const FAISectorZone& oz) {
     printf("# fai sect zone\n");
   }
@@ -562,7 +565,7 @@ bool test_task_random(TaskManager& task_manager,
   task_report(task_manager, "# adding start\n");
   wp = random_waypoint(waypoints);
   if (wp) {
-    AbstractTaskFactory::LegalStartType_t s = 
+    AbstractTaskFactory::LegalPointType_t s = 
       fact.getStartTypes()[(rand() % fact.getStartTypes().size())];
 
     tp = fact.createStart(s,*wp);
@@ -582,7 +585,7 @@ bool test_task_random(TaskManager& task_manager,
     task_report(task_manager, "# adding intermediate\n");
     wp = random_waypoint(waypoints);
     if (wp) {
-      AbstractTaskFactory::LegalIntermediateType_t s = 
+      AbstractTaskFactory::LegalPointType_t s = 
         fact.getIntermediateTypes()[(rand() % fact.getIntermediateTypes().size())];
 
       tp = fact.createIntermediate(s,*wp);
@@ -599,7 +602,7 @@ bool test_task_random(TaskManager& task_manager,
   task_report(task_manager, "# adding finish\n");
   wp = random_waypoint(waypoints);
   if (wp) {
-    AbstractTaskFactory::LegalFinishType_t s = 
+    AbstractTaskFactory::LegalPointType_t s = 
       fact.getFinishTypes()[(rand() % fact.getFinishTypes().size())];
 
     tp = fact.createFinish(s,*wp);
