@@ -203,7 +203,7 @@ ReplayLogger::ReplayLogger():
   TimeScale(1.0),
   fp(NULL)
 {
-
+  FileName[0] = _T('\0');
 }
 
 
