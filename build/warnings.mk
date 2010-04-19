@@ -6,7 +6,7 @@ CXXFLAGS += $(WARNINGS)
 CXXFLAGS += -Wmissing-noreturn
 
 # disable some warnings, we're not ready for them yet
-CXXFLAGS += -Wno-unused-parameter -Wno-format -Wno-reorder -Wno-switch -Wno-non-virtual-dtor
+CXXFLAGS += -Wno-unused-parameter -Wno-format -Wno-switch -Wno-non-virtual-dtor
 
 ifneq ($(WINHOST),y)
 	CXXFLAGS += -Wno-missing-field-initializers 
