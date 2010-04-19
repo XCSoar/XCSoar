@@ -456,6 +456,8 @@ private:
   Trace trace_full;
   Trace trace_sprint;
 
+  TaskBehaviour task_behaviour;
+
   OrderedTask task_ordered;
 
   GotoTask task_goto;
@@ -463,8 +465,6 @@ private:
   AbortTask task_abort;
 
   OnlineContest task_olc;
-
-  TaskBehaviour task_behaviour;
 
   TaskMode_t mode;
   AbstractTask* active_task;
