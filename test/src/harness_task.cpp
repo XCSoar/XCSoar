@@ -517,13 +517,13 @@ bool test_task_fg(TaskManager& task_manager,
 {
   const Waypoint *wp;
 
-  task_manager.set_factory(OrderedTask::FACTORY_MIXED);
+  task_manager.set_factory(OrderedTask::FACTORY_TOURING);
   AbstractTaskFactory &fact = task_manager.get_factory();
 
   task_report(task_manager, "# adding start\n");
   wp = waypoints.lookup_id(1);
   if (wp) {
-    if (!fact.append(fact.createStart(*wp))) {
+    if (!fact.append(fact.createStart(*wp), false)) {
       return false;
     }
   }
@@ -534,7 +534,7 @@ bool test_task_fg(TaskManager& task_manager,
   task_report(task_manager, "# adding finish\n");
   wp = waypoints.lookup_id(6);
   if (wp) {
-    if (!fact.append(fact.createFinish(*wp))) {
+    if (!fact.append(fact.createFinish(*wp), false)) {
       return false;
     }
   }
