@@ -67,7 +67,7 @@ test_replay(const OLCRules olc_type)
   task_manager.get_task_behaviour().enable_olc = true;
 
   ReplayLoggerSim sim;
-  TCHAR szFilename[MAX_PATH];
+  TCHAR szFilename[MAX_PATH] = _T("");
   ConvertCToT(szFilename, replay_file.c_str());
   sim.SetFilename(szFilename);
   sim.Start();

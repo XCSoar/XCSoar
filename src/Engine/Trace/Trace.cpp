@@ -231,6 +231,9 @@ void
 Trace::erase(TraceTree::const_iterator& rit)
 {
   /// @todo merge data for erased point?
+  if (rit == trace_tree.end()) {
+    return;
+  }
 
   TraceTree::const_iterator it_prev = find_prev(*rit);
   TraceTree::const_iterator it_next = find_next(*rit);
@@ -243,11 +246,11 @@ Trace::erase(TraceTree::const_iterator& rit)
   TracePoint tp_next = *it_next;
   tp_next.last_time = it_prev->time;
 
-  trace_tree.erase(rit);
-  trace_tree.erase(it_next);
-
   distance_delta_map.erase(rit->time);
   time_delta_map.erase(rit->time);
+
+  trace_tree.erase(rit);
+  trace_tree.erase(it_next);
 
   it_next = trace_tree.insert(tp_next);
 

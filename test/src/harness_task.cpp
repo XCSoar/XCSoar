@@ -429,7 +429,7 @@ bool test_task_or(TaskManager& task_manager,
 {
   const Waypoint *wp;
 
-  task_manager.set_factory(OrderedTask::FACTORY_MIXED);
+  task_manager.set_factory(OrderedTask::FACTORY_TOURING);
   AbstractTaskFactory &fact = task_manager.get_factory();
 
   task_report(task_manager, "# adding start\n");
@@ -477,7 +477,7 @@ bool test_task_dash(TaskManager& task_manager,
 {
   const Waypoint *wp;
 
-  task_manager.set_factory(OrderedTask::FACTORY_MIXED);
+  task_manager.set_factory(OrderedTask::FACTORY_TOURING);
   AbstractTaskFactory &fact = task_manager.get_factory();
 
   task_report(task_manager, "# adding start\n");
@@ -579,10 +579,6 @@ bool test_task_random(TaskManager& task_manager,
       fact.getStartTypes()[(rand() % fact.getStartTypes().size())];
 
     tp = fact.createStart(s,*wp);
-    if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
-      cz->setRadius(fixed(500.0));
-      tp->update_oz();
-    }
     if (!fact.append(tp,false)) {
       return false;
     }
@@ -599,10 +595,6 @@ bool test_task_random(TaskManager& task_manager,
         fact.getIntermediateTypes()[(rand() % fact.getIntermediateTypes().size())];
 
       tp = fact.createIntermediate(s,*wp);
-      if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
-        cz->setRadius(fixed(500.0));
-        tp->update_oz();
-      }
       if (!fact.append(tp,false)) {
         return false;
       }
@@ -616,10 +608,6 @@ bool test_task_random(TaskManager& task_manager,
       fact.getFinishTypes()[(rand() % fact.getFinishTypes().size())];
 
     tp = fact.createFinish(s,*wp);
-    if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
-      cz->setRadius(fixed(500.0));
-      tp->update_oz();
-    }
     if (!fact.append(tp,false)) {
       return false;
     }
@@ -641,7 +629,7 @@ bool test_task(TaskManager& task_manager,
                const Waypoints &waypoints,
                int test_num)
 {
-  unsigned n_points = rand()%8;
+  unsigned n_points = rand()%8+1;
   switch (test_num) {
   case 0:
     return test_task_mixed(task_manager,waypoints);
