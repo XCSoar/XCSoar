@@ -202,19 +202,42 @@ LoggerImpl::LogPointToBuffer(const NMEA_INFO &gps_info)
   FirstPoint = LoggerPreTakeoffBuffer[0];
 }
 
+void
+LoggerImpl::LoadGPSPointFromNMEA(const NMEA_INFO& gps_info, LogPoint_GPSPosition &p)
+{
+  p.DegLat = (int)gps_info.Location.Latitude;
+  p.MinLat = gps_info.Location.Latitude - p.DegLat;
+  p.NoS = 'N';
+  if ((p.MinLat < 0) || ((p.MinLat - p.DegLat == 0) && (p.DegLat < 0))) {
+    p.NoS = 'S';
+    p.DegLat *= -1;
+    p.MinLat *= -1;
+  }
+  p.MinLat *= 60;
+  p.MinLat *= 1000;
 
+  p.DegLon = (int)gps_info.Location.Longitude;
+  p.MinLon = gps_info.Location.Longitude - p.DegLon;
+  p.EoW = 'E';
+  if ((p.MinLon < 0) || ((p.MinLon - p.DegLon == 0) && (p.DegLon < 0))) {
+    p.EoW = 'W';
+    p.DegLon *= -1;
+    p.MinLon *= -1;
+  }
+  p.MinLon *= 60;
+  p.MinLon *= 1000;
+  p.GPSAltitude = (int)gps_info.GPSAltitude;
+}
 void
 LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
 {
   char szBRecord[500];
   int iSIU=GetSIU(gps_info);
   double dEPE=GetEPE(gps_info);
+  LogPoint_GPSPosition p;
 
-  int DegLat, DegLon;
-  double MinLat, MinLon;
-  char NoS, EoW;
+  char IsValidFix;
 
-  char IsValidFix = gps_info.NAVWarning == 0 ? 'A' : 'V';
   if (gps_info.gps.Simulator) {
     /* if at least one GPS fix comes from the simulator, disable
        signing */
@@ -226,38 +249,32 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
                      gps_info.DateTime, gps_info.Time,
                      gps_info.gps.NAVWarning);
   }
-  if ((gps_info.GPSAltitude < -100) || (gps_info.BaroAltitude < -100)
-      || gps_info.gps.NAVWarning) {
+
+  if (!LastValidPoint.Initialized &&
+      ((gps_info.GPSAltitude < -100)
+          || (gps_info.BaroAltitude < -100)
+          || gps_info.gps.NAVWarning)) {
     return;
   }
 
-  DegLat = (int)gps_info.Location.Latitude;
-  MinLat = gps_info.Location.Latitude - DegLat;
-  NoS = 'N';
-  if ((MinLat < 0) || ((MinLat - DegLat == 0) && (DegLat < 0))) {
-    NoS = 'S';
-    DegLat *= -1;
-    MinLat *= -1;
+  if (gps_info.gps.NAVWarning) {
+    IsValidFix = 'V'; // invalid
+    p = LastValidPoint;
   }
-  MinLat *= 60;
-  MinLat *= 1000;
+  else {
+    IsValidFix = 'A'; // Active
+    LastValidPoint.Initialized = true;
+    // save last active fix location
+    LoadGPSPointFromNMEA(gps_info, LastValidPoint);
+    LoadGPSPointFromNMEA(gps_info, p);
+  }
 
-  DegLon = (int)gps_info.Location.Longitude;
-  MinLon = gps_info.Location.Longitude - DegLon;
-  EoW = 'E';
-  if ((MinLon < 0) || ((MinLon - DegLon == 0) && (DegLon < 0))) {
-    EoW = 'W';
-    DegLon *= -1;
-    MinLon *= -1;
-  }
-  MinLon *= 60;
-  MinLon *= 1000;
 
   sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%c%c%05d%05d%03d%02d\r\n",
           gps_info.DateTime.hour, gps_info.DateTime.minute,
           gps_info.DateTime.second,
-          DegLat, MinLat, NoS, DegLon, MinLon, EoW, IsValidFix,
-          (int)gps_info.BaroAltitude,(int)gps_info.GPSAltitude,(int)dEPE,iSIU);
+          p.DegLat, p.MinLat, p.NoS, p.DegLon, p.MinLon, p.EoW, IsValidFix,
+          (int)gps_info.BaroAltitude,p.GPSAltitude,(int)dEPE,iSIU);
 
   IGCWriteRecord(szBRecord, szLoggerFileName);
 }
@@ -311,6 +328,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
   int i;
   TCHAR path[MAX_PATH];
   Simulator=false;
+  LastValidPoint.Initialized=false;
 
   for (i = 0; i < 3; i++) { // chars must be legal in file names
     strAssetNumber[i] = IsAlphaNum(strAssetNumber[i]) ? strAssetNumber[i] : _T('A');
@@ -405,7 +423,9 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info, const Declaration &decl)
           gps_info.DateTime.year % 100);
   IGCWriteRecord(temp, szLoggerFileName);
 
-  IGCWriteRecord(GetHFFXARecord(), szLoggerFileName);
+  if (!Simulator) {
+    IGCWriteRecord(GetHFFXARecord(), szLoggerFileName);
+  }
 
   sprintf(temp, "HFPLTPILOT:%S\r\n", decl.PilotName);
   IGCWriteRecord(temp, szLoggerFileName);
@@ -431,7 +451,9 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info, const Declaration &decl)
 
   IGCWriteRecord(datum, szLoggerFileName);
 
-  IGCWriteRecord(GetIRecord(), szLoggerFileName);
+  if (!Simulator) {
+    IGCWriteRecord(GetIRecord(), szLoggerFileName);
+  }
 }
 
 void

@@ -73,8 +73,20 @@ public:
 
     const struct LoggerPreTakeoffBuffer &operator=(const NMEA_INFO &src);
   };
+  struct LogPoint_GPSPosition {
+    bool Initialized;
+    int DegLat;
+    int DegLon;
+    double MinLat;
+    double MinLon;
+    char NoS;
+    char EoW;
+    int GPSAltitude;
+  };
+
 private:
   GRecord oGRecord;
+  LogPoint_GPSPosition LastValidPoint;
 
 public:
   LoggerImpl();
@@ -142,6 +154,7 @@ private:
   const char * GetIRecord(void);
   double GetEPE(const NMEA_INFO& gps_info);
   int GetSIU(const NMEA_INFO& gps_info);
+  void LoadGPSPointFromNMEA(const NMEA_INFO& gps_info, LogPoint_GPSPosition &p);
 
 private:
   bool LoggerActive;
