@@ -159,7 +159,7 @@ bool test_task_manip(TaskManager& task_manager,
   task_report(task_manager, "# auto-replacing at 0 (morph this)\n");
   wp = waypoints.lookup_id(12);
   if (wp) {
-    tp = fact.createIntermediate(AbstractTaskFactory::FAI_SECTOR,*wp);
+    tp = fact.createIntermediate(AbstractTaskFactory::AST_CYLINDER,*wp);
     if (!fact.replace(tp,0)) return false;
   }
 
@@ -244,8 +244,10 @@ bool test_task_mixed(TaskManager& task_manager,
   task_report(task_manager, "# adding intermdiate\n");
   wp = waypoints.lookup_id(2);
   if (wp) {
-    tp = fact.createIntermediate(AbstractTaskFactory::FAI_SECTOR,*wp);
+    tp = fact.createIntermediate(AbstractTaskFactory::AST_CYLINDER,*wp);
     if (!fact.append(tp,false)) return false;
+  } else {
+    return false;
   }
 
   task_report(task_manager, "# adding intermdiate\n");
@@ -257,16 +259,20 @@ bool test_task_mixed(TaskManager& task_manager,
       tp->update_oz();
     }
     if (!fact.append(tp,false)) return false;
+  } else {
+    return false;
   }
 
-  task_report(task_manager, "# adding intermdiate\n");
+  task_report(task_manager, "# adding intermediate\n");
   wp = waypoints.lookup_id(4);
   if (wp) {
     tp = fact.createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
     if (!fact.append(tp,false)) return false;
+  } else {
+    return false;
   }
 
-  task_report(task_manager, "# adding intermdiate\n");
+  task_report(task_manager, "# adding intermediate\n");
   wp = waypoints.lookup_id(5);
   if (wp) {
     tp = fact.createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
@@ -275,13 +281,17 @@ bool test_task_mixed(TaskManager& task_manager,
       tp->update_oz();
     }
     if (!fact.append(tp,false)) return false;
+  } else {
+    return false;
   }
 
   task_report(task_manager, "# adding finish\n");
   wp = waypoints.lookup_id(1);
   if (wp) {
-    tp = fact.createFinish(AbstractTaskFactory::FINISH_SECTOR,*wp);
+    tp = fact.createFinish(AbstractTaskFactory::FINISH_LINE,*wp);
     if (!fact.append(tp,false)) return false;
+  } else {
+    return false;
   }
 
   task_report(task_manager, "# checking task\n");
