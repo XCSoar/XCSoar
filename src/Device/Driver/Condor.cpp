@@ -64,6 +64,8 @@ bool
 CondorDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
                         bool enable_baro)
 {
+  GPS_INFO->gps.Simulator=true;
+
   if(_tcsncmp(_T("$LXWP0"), String, 6)==0)
     {
       return cLXWP0(&String[7], GPS_INFO, enable_baro);
@@ -138,8 +140,6 @@ cLXWP0(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
   11 windspeed (kph)
 
   */
-
-  GPS_INFO->gps.Simulator=true;
 
   NMEAParser::ExtractParameter(String,ctemp,1);
   fixed airspeed(Units::ToSysUnit(_tcstod(ctemp, NULL), unKiloMeterPerHour));
