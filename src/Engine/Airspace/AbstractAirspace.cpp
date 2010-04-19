@@ -206,15 +206,10 @@ AbstractAirspace::get_name_text(const bool concise) const
   }
 }
 
-
 const tstring 
-AbstractAirspace::get_base_text(const bool concise) const
+AbstractAirspace::get_vertical_text() const
 {
-  return m_base.get_as_text(concise);
-}
-
-const tstring 
-AbstractAirspace::get_top_text(const bool concise) const
-{
-  return m_top.get_as_text(concise);
+  return 
+    _T("Base: ") + m_base.get_as_text(false) +
+    _T(" Top: ") + m_top.get_as_text(false);
 }

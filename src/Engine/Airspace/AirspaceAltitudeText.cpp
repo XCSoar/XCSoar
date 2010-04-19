@@ -35,25 +35,10 @@
 }
 */
 #include "AirspaceAltitude.hpp"
-#include "Atmosphere/Pressure.hpp"
-
-void 
-AIRSPACE_ALT::set_flight_level(const AtmosphericPressure &press)
-{
-  static const fixed fl_feet_to_m(30.48);
-  if (Base == abFL)
-    Altitude = press.AltitudeToQNHAltitude(FL * fl_feet_to_m);
-}
-
-void 
-AIRSPACE_ALT::set_ground_level(const fixed alt)
-{
-  if (Base == abAGL)
-    Altitude = AGL+alt;
-}
+#include "AbstractAirspace.hpp"
 
 const tstring 
-AIRSPACE_ALT::get_as_text(const bool concise) const
+AIRSPACE_ALT::get_as_text_units(const bool concise) const
 {
   tstringstream oss;
   switch (Base) {
@@ -61,21 +46,34 @@ AIRSPACE_ALT::get_as_text(const bool concise) const
     if (!positive(AGL)) {
       oss << _T("GND");
     } else {
-      oss << (int)AGL << _T(" AGL");
+      oss << (int)Units::ToUserAltitude(AGL) << _T(" ") << Units::GetAltitudeName() << _T(" AGL");
     }
     break;
   case abFL:
     oss << _T("FL") << (int)FL;
     break;
   case abMSL:
-    oss << (int)Altitude;
+    oss << (int)Units::ToUserAltitude(Altitude) << _T(" ") << Units::GetAltitudeName();
     break;
   case abUndef:
   default:
     break;
   };
   if (!concise && Base!=abMSL && positive(Altitude)) {
-    oss << _T(" ") << (int)Altitude;
+    oss << _T(" ") << (int)Units::ToUserAltitude(Altitude) << _T(" ") << Units::GetAltitudeName();
   }
   return oss.str();
+}
+
+
+const tstring 
+AbstractAirspace::get_base_text(const bool concise) const
+{
+  return m_base.get_as_text_units(concise);
+}
+
+const tstring 
+AbstractAirspace::get_top_text(const bool concise) const
+{
+  return m_top.get_as_text_units(concise);
 }

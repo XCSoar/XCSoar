@@ -100,8 +100,8 @@ public:
     if (do_report) {
 #ifdef DO_PRINT
       *fout << "# Name: " << as.get_name_text() 
-            << " Base: " << as.get_base_text() 
-            << " Top: " << as.get_top_text() << "\n";
+            << " " << as.get_vertical_text() 
+            << "\n";
 #endif
     }
   }

@@ -1,4 +1,8 @@
 
+TASK_GLUE_SRC	:=\
+	$(ENGINE_SRC_DIR)/Airspace/AirspacesTerrain.cpp \
+	$(ENGINE_SRC_DIR)/Airspace/AirspaceAltitudeText.cpp 
+
 TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Airspace/Airspace.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceAltitude.cpp \
@@ -132,8 +136,15 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Util/DataNodeXML.cpp \
 	$(ENGINE_SRC_DIR)/Util/DataNode.cpp
 
-ENGINE_LIBS = $(TARGET_OUTPUT_DIR)/task.a
+ENGINE_CORE_LIBS = $(TARGET_OUTPUT_DIR)/task.a
+ENGINE_GLUE_LIBS = $(TARGET_OUTPUT_DIR)/taskglue.a
 
-$(ENGINE_LIBS): $(call SRC_TO_OBJ,$(TASK_SRC))
+ENGINE_LIBS = $(ENGINE_CORE_LIBS) $(ENGINE_GLUE_LIBS)
+
+$(ENGINE_CORE_LIBS): $(call SRC_TO_OBJ,$(TASK_SRC))
+	@$(NQ)echo "  AR      $@"
+	$(Q)$(AR) $(ARFLAGS) $@ $^
+
+$(ENGINE_GLUE_LIBS): $(call SRC_TO_OBJ,$(TASK_GLUE_SRC))
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^

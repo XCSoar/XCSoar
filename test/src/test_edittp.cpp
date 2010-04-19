@@ -174,6 +174,9 @@ private:
   virtual void Visit(FAISectorZone& tp) {
     // nothing to edit
   }
+  virtual void Visit(KeyholeZone& tp) {
+    // nothing to edit
+  }
   virtual void Visit(SectorZone& tp) {
     // radius, radials
   }

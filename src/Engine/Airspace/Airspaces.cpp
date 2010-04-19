@@ -39,8 +39,6 @@
 #include "AirspaceIntersectionVisitor.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include <deque>
-#include "RasterTerrain.h"
-#include "RasterMap.h"
 
 #ifdef INSTRUMENT_TASK
 extern unsigned n_queries;
@@ -263,23 +261,6 @@ Airspaces::empty() const
 Airspaces::~Airspaces()
 {
   clear();
-}
-
-void 
-Airspaces::set_ground_levels(const RasterTerrain &terrain)
-{
-  if (!terrain.GetMap()) return;
-
-  RasterRounding rounding(*terrain.GetMap(), 0, 0);
-
-  for (AirspaceTree::iterator v = airspace_tree.begin();
-       v != airspace_tree.end(); ++v) {
-    FLAT_GEOPOINT c_flat = v->get_center();
-    GEOPOINT g = task_projection.unproject(c_flat);
-    short h = terrain.GetTerrainHeight(g, rounding);
-    if (h > TERRAIN_INVALID)
-      v->set_ground_level((fixed)h);
-  }
 }
 
 void 

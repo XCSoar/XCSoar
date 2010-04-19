@@ -264,7 +264,16 @@ public:
   const tstring get_name_text(const bool concise=false) const;
 
 /** 
- * Produce text version of base altitude.
+ * Produce text version of base+top altitude (no units).
+ * 
+ * @param concise Whether to use short form or long form
+ * 
+ * @return Text version of base altitude
+ */
+  const tstring get_vertical_text() const;
+
+/** 
+ * Produce text version of base altitude with units.
  * 
  * @param concise Whether to use short form or long form
  * 
@@ -273,7 +282,7 @@ public:
   const tstring get_base_text(const bool concise=false) const;
 
 /** 
- * Produce text version of top altitude.
+ * Produce text version of top altitude with units.
  * 
  * @param concise Whether to use short form or long form
  * 

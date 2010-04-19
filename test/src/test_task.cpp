@@ -13,7 +13,6 @@ int main(int argc, char** argv)
 
   plan_tests(NUM_TASKS+2+NUM_RANDOM+8);
 
-  TaskBehaviour task_behaviour;
   TaskEventsPrint default_events(verbose);
   GlidePolar glide_polar(fixed_two);
 
@@ -22,7 +21,6 @@ int main(int argc, char** argv)
 
   {
     TaskManager task_manager(default_events,
-                             task_behaviour,
                              waypoints);
     task_manager.set_glide_polar(glide_polar);
     test_task_bad(task_manager,waypoints);
@@ -30,7 +28,6 @@ int main(int argc, char** argv)
 
   for (int i=0; i<NUM_TASKS+2; i++) {
     TaskManager task_manager(default_events,
-                             task_behaviour,
                              waypoints);
     task_manager.set_glide_polar(glide_polar);
     ok(test_task(task_manager, waypoints, i),test_name("construction",i,0),0);
@@ -38,7 +35,6 @@ int main(int argc, char** argv)
 
   for (int i=0; i<NUM_RANDOM; i++) {
     TaskManager task_manager(default_events,
-                             task_behaviour,
                              waypoints);
     task_manager.set_glide_polar(glide_polar);
     ok(test_task(task_manager, waypoints, 7),test_name("construction",7,0),0);

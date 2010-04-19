@@ -3,7 +3,6 @@ TESTFAST = \
 	$(TARGET_BIN_DIR)/test_olc$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_fixed$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_waypoints$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_edittp$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_pressure$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_task$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_mc$(TARGET_EXEEXT) \
@@ -38,7 +37,7 @@ testfast: $(TESTFAST)
 
 TESTLIBS = $(HARNESS_LIBS) \
 	   $(ZZIP_LIBS) \
-	   $(ENGINE_LIBS)
+	   $(ENGINE_CORE_LIBS)
 
 ifeq ($(HAVE_WIN32),n)
 TEST_CPPFLAGS += -DDO_PRINT

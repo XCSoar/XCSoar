@@ -34,48 +34,26 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#include "AirspaceAltitude.hpp"
-#include "Atmosphere/Pressure.hpp"
+
+#include "Airspaces.hpp"
+#include "RasterTerrain.h"
+#include "RasterMap.h"
+
 
 void 
-AIRSPACE_ALT::set_flight_level(const AtmosphericPressure &press)
+Airspaces::set_ground_levels(const RasterTerrain &terrain)
 {
-  static const fixed fl_feet_to_m(30.48);
-  if (Base == abFL)
-    Altitude = press.AltitudeToQNHAltitude(FL * fl_feet_to_m);
-}
+  if (!terrain.GetMap()) return;
 
-void 
-AIRSPACE_ALT::set_ground_level(const fixed alt)
-{
-  if (Base == abAGL)
-    Altitude = AGL+alt;
-}
+  RasterRounding rounding(*terrain.GetMap(), 0, 0);
 
-const tstring 
-AIRSPACE_ALT::get_as_text(const bool concise) const
-{
-  tstringstream oss;
-  switch (Base) {
-  case abAGL:
-    if (!positive(AGL)) {
-      oss << _T("GND");
-    } else {
-      oss << (int)AGL << _T(" AGL");
-    }
-    break;
-  case abFL:
-    oss << _T("FL") << (int)FL;
-    break;
-  case abMSL:
-    oss << (int)Altitude;
-    break;
-  case abUndef:
-  default:
-    break;
-  };
-  if (!concise && Base!=abMSL && positive(Altitude)) {
-    oss << _T(" ") << (int)Altitude;
+  for (AirspaceTree::iterator v = airspace_tree.begin();
+       v != airspace_tree.end(); ++v) {
+    FLAT_GEOPOINT c_flat = v->get_center();
+    GEOPOINT g = task_projection.unproject(c_flat);
+    short h = terrain.GetTerrainHeight(g, rounding);
+    if (h > TERRAIN_INVALID)
+      v->set_ground_level((fixed)h);
   }
-  return oss.str();
 }
+

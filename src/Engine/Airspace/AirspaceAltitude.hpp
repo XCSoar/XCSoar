@@ -58,14 +58,20 @@ struct AIRSPACE_ALT
 /** 
  * Generate text form of airspace altitude boundary
  * 
- * \todo
- * - handle units, FL etc, SFC, AGL, GND
- *
  * @param concise Whether to produce short-form
  * 
  * @return String version of altitude reference
  */
   const tstring get_as_text(const bool concise=false) const;
+
+/** 
+ * Generate text form of airspace altitude boundary with user units
+ * 
+ * @param concise Whether to produce short-form
+ * 
+ * @return String version of altitude reference
+ */
+  const tstring get_as_text_units(const bool concise=false) const;
 };
 
 #endif
