@@ -732,7 +732,6 @@ public:
  * @param visitor Visitor to accept
  * @param reverse Visit task points in reverse order 
  *
- * \todo reverse not implemented yet
  */
   void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
 
@@ -743,7 +742,6 @@ public:
  * @param visitor Visitor to accept
  * @param reverse Visit task points in reverse order 
  *
- * \todo reverse not implemented yet
  */
   void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false);
 

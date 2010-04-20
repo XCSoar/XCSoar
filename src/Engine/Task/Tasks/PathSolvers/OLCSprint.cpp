@@ -5,7 +5,6 @@
 #endif
 
 /*
- @todo
   - note, this only searches 2.5 hour blocks, so should be able
     to handle larger number of points than other OLCDijkstra's
   - Therefore, consider having the trace points stored within
