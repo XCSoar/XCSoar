@@ -36,6 +36,9 @@ public:
     num_stages(_num_stages)
     {
       solution.reserve(num_stages);
+      for (unsigned i=0; i<num_stages; i++) {
+        solution.push_back(T());
+      }
     }
 
 /** 

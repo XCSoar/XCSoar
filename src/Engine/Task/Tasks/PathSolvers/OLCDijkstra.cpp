@@ -64,6 +64,7 @@ OLCDijkstra::OLCDijkstra(OnlineContest& _olc,
 {
   m_weightings.reserve(n_legs);
   best_solution.reserve(num_stages);
+  printf("%d %d\n", num_stages, solution.size());
   reset();
 }
 
@@ -147,6 +148,10 @@ OLCDijkstra::score(fixed& the_distance,
 fixed
 OLCDijkstra::calc_time() const
 {
+  if (!solution.size()) {
+    return fixed_zero;
+  }
+  assert(num_stages == solution.size());
   return fixed(solution[num_stages - 1].time - solution[0].time);
 }
 
@@ -224,6 +229,10 @@ OLCDijkstra::finish_satisfied(const ScanTaskPoint &sp) const
 void
 OLCDijkstra::save_solution()
 {
+  if (!solution.size()) {
+    return;
+  }
+
   const fixed the_distance = calc_distance();
   if (the_distance > best_distance) {
     best_solution.clear();
