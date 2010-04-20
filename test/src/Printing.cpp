@@ -581,7 +581,7 @@ OnlineContest::print() const
   if (m_solution.empty()) 
     return;
 
-  {
+  if (positive(common_stats.time_olc)) {
     std::ofstream fs("results/res-olc-solution.txt");
 
     for (TracePointVector::const_iterator it = m_solution.begin();
