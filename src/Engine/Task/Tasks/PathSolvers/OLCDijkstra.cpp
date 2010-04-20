@@ -64,7 +64,6 @@ OLCDijkstra::OLCDijkstra(OnlineContest& _olc,
 {
   m_weightings.reserve(n_legs);
   best_solution.reserve(num_stages);
-  printf("%d %d\n", num_stages, solution.size());
   reset();
 }
 
