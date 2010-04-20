@@ -54,8 +54,7 @@ bool
 MixedTaskFactory::validate()
 {
   /**
-   * \todo
-   * maybe warn on overlap?
+   * \todo like AATTaskFactory, warn on overlap?
    */
 
   if (!m_task.has_start() || !m_task.has_finish()) {

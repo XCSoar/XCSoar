@@ -45,11 +45,6 @@
 #include "Util/Quadratic.hpp"
 #include <assert.h>
 
-/**
- * @todo note polar terms are hardcoded at present, will need proper
- * polar management later
- */
-
 static const fixed fixed_75(75.0);
 
 GlidePolar::GlidePolar(const fixed _mc, const fixed _bugs, const fixed _ballast) :

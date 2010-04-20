@@ -63,8 +63,6 @@ class Polar;
  * \f[ w = a.V^2+b.V+c \f]
  * Where \f$ w, V\f$ are in m/s
  *
- * \todo
- * - currently the polar itself and Vmax is hard-coded
  */
 class GlidePolar
 {

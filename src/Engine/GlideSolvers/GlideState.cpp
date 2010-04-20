@@ -41,7 +41,8 @@
 
 /**
  * Quadratic function solver for MacCready theory constraint equation
- * @todo document this equation!
+ * 
+ * - document this equation!
  */
 class GlideQuadratic: public Quadratic
 {
