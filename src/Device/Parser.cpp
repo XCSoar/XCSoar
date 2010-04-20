@@ -647,7 +647,7 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   // JMW get date info first so TimeModify is accurate
   TCHAR date_buffer[9];
   _tcsncpy(date_buffer, params[8], sizeof(date_buffer) - 1);
-  date_buffer[sizeof(date_buffer) - 1] = 0;
+  date_buffer[(sizeof(date_buffer) / sizeof(date_buffer[0])) - 1] = 0;
 
   GPS_INFO->DateTime.year = _tcstol(&date_buffer[4], &Stop, 10) + 2000;
   date_buffer[4] = '\0';
