@@ -49,9 +49,6 @@
  * No taskpoints shall be present preceding a StartPoint.
  *
  * \todo
- * - currently we don't track crossing the actual line, rather it currently
- *   allows any border crossing
- * - max start height, speed
  * - gate start time?
  * - enabled/disabled for multiple start points
  */

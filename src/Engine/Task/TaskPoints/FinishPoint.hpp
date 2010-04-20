@@ -50,11 +50,6 @@
  *
  * Entry requires previous point to have entered to prevent spurious crossing.
  *
- * \todo
- * - currently we don't track crossing the actual line, rather it currently
- *   allows any border crossing
- * - adjustments in FAI finish for min finish height
- * - consider making all OTP's require previous tps to have entered for this to
  */
 class FinishPoint : public OrderedTaskPoint {
 public:

@@ -53,7 +53,7 @@ class TaskEvents;
  *
  * \todo
  * - Currently undefined as to what happens to interior samples if observation 
- *   zone is modified (e.g. due to previous/next taskpoint moving)
+ *   zone is modified (e.g. due to previous/next taskpoint moving) in update_oz
  */
 class SampledTaskPoint:
   public TaskPoint, 

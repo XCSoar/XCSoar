@@ -47,7 +47,6 @@
  * in scoring calculations.
  *
  * \todo 
- * - implement reset() method
  * - better documentation of this class!
  */
 class ScoredTaskPoint:

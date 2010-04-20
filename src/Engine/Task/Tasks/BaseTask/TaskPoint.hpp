@@ -51,8 +51,6 @@
 /**
  * Base class for all task points 
  *
- * \todo
- * - Lookup terrain height?
  */
 
 class TaskPoint : 
