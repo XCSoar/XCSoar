@@ -348,3 +348,39 @@ AbortTask::get_vector_home(const AIRCRAFT_STATE &state) const
   }
 }
 
+GEOPOINT 
+AbortTask::get_task_center(const GEOPOINT& fallback_location) const
+{
+  if (tps.empty()) {
+    return fallback_location;
+  } else {
+    TaskProjection task_projection;
+    for (unsigned i=0; i<tps.size(); ++i) {
+      if (i==0) {
+        task_projection.reset(tps[i]->get_location());
+      }
+      task_projection.scan_location(tps[i]->get_location());
+    }
+    task_projection.update_fast();
+    return task_projection.get_center();
+  }
+}
+
+fixed 
+AbortTask::get_task_radius(const GEOPOINT& fallback_location) const
+{ 
+  if (tps.empty()) {
+    return fixed_zero;
+  } else {
+    TaskProjection task_projection;
+    for (unsigned i=0; i<tps.size(); ++i) {
+      if (i==0) {
+        task_projection.reset(tps[i]->get_location());
+      }
+      task_projection.scan_location(tps[i]->get_location());
+    }
+    task_projection.update_fast();
+    return task_projection.get_radius();
+  }
+}
+

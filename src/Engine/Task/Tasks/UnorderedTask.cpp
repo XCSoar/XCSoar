@@ -195,8 +195,6 @@ UnorderedTask::get_finish_height() const
 GEOPOINT 
 UnorderedTask::get_task_center(const GEOPOINT& fallback_location) const
 {
-  /// @todo specialise this for AbortTask (similar to OrderedTask)
-
   TaskPoint *tp = getActiveTaskPoint();
   if (!tp) {
     return fallback_location;
@@ -208,8 +206,6 @@ UnorderedTask::get_task_center(const GEOPOINT& fallback_location) const
 fixed 
 UnorderedTask::get_task_radius(const GEOPOINT& fallback_location) const
 {
-  /// @todo specialise this for AbortTask (similar to OrderedTask)
-
   TaskPoint *tp = getActiveTaskPoint();
   if (!tp) {
     return fixed_zero;

@@ -165,6 +165,9 @@ public:
  */
   GlidePolar get_safety_polar() const;
 
+  GEOPOINT get_task_center(const GEOPOINT& fallback_location) const;
+  fixed get_task_radius(const GEOPOINT& fallback_location) const;
+
 protected:
 
 /** 
