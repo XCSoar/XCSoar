@@ -53,7 +53,7 @@ AATTaskFactory::validate()
 {
   /**
    * \todo
-   * maybe warn on overlap?
+   * warn/fail on overlap since this is required by FAI rules
    */
 
   if (!m_task.has_start() || !m_task.has_finish()) {

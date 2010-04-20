@@ -439,7 +439,6 @@ AbstractTaskFactory::get_ordered_task_behaviour() const {
 void 
 AbstractTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
 {
-  /// @todo implement for concrete atf's
 }
 
 
