@@ -64,6 +64,8 @@ bool
 CondorDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
                         bool enable_baro)
 {
+  GPS_INFO->gps.Simulator=true;
+
   if(_tcsncmp(_T("$LXWP0"), String, 6)==0)
     {
       return cLXWP0(&String[7], GPS_INFO, enable_baro);

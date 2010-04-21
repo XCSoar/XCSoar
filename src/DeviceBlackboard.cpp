@@ -115,9 +115,9 @@ DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const double alt)
   SetBasic().Location = loc;
   SetBasic().GPSAltitude = alt;
 
-  // enable the "Simulator" flag because this value was not provided
+  // set NAVWarning flags because this value was not provided
   // by a real GPS
-  SetBasic().gps.Simulator = true;
+  SetBasic().gps.NAVWarning = true;
 }
 
 /**
