@@ -453,6 +453,7 @@ Units::FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size,
   TCHAR sTmp[32];
   UnitDescriptor_t *pU = &UnitDescriptors[AltitudeUnit];
 
+  /// \todo rounding
   Altitude = Altitude * pU->ToUserFact; // + pU->ToUserOffset;
 
   // prec = 4-log10(Altitude);

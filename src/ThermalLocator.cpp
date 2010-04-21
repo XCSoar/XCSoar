@@ -233,7 +233,6 @@ ThermalLocator::Process(const bool circling,
     Update(time, location, wind, therm);
   } else {
     Reset();
-    therm.ThermalEstimate_W = 0;
-    therm.ThermalEstimate_R = -1;
+    invalid_estimate(therm);
   }
 }
