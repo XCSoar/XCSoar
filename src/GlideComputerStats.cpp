@@ -92,8 +92,10 @@ GlideComputerStats::DoLogging()
     FastLogNum--;
   }
 
-  if (log_clock.check_advance(Basic().Time))
+  if (log_clock.check_advance(Basic().Time)) {
     logger.LogPoint(Basic());
+    gps_info.gps.Simulator = false; // reset for next fix (set by NMEA parsing)
+  }
 
   if (Basic().flight.Flying) {
     if (stats_clock.check_advance(Basic().Time)) {
