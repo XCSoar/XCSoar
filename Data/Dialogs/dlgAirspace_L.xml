@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmAirspace" Width=240 Height=320 Caption="Airspace">
-  <WndButton   Name="cmdClose" Caption="Close" X=5 Y=270 Width=60  Height=28 Font=2 OnClickNotify="OnCloseClicked"/>
+<WndForm Name="frmAirspace" Width="240" Height="320" Caption="Airspace">
+  <WndButton Name="cmdClose" Caption="Close" X="5" Y="270" Width="60" Height="28" Font="2" OnClickNotify="OnCloseClicked"/>
 
-  <WndButton   Name="cmdLookup" Caption="Lookup" X=85 Y=270 Width=60  Height=28 Font=2 OnClickNotify="OnLookupClicked"/>
+  <WndButton Name="cmdLookup" Caption="Lookup" X="85" Y="270" Width="60" Height="28" Font="2" OnClickNotify="OnLookupClicked"/>
 
-  <WndListFrame Name="frmAirspaceList" X=0 Y=0 Width=238 Height=250 ItemHeight=18 Font=2 Border="1"/>
+  <WndListFrame Name="frmAirspaceList" X="0" Y="0" Width="238" Height="250" ItemHeight="18" Font="2" Border="1"/>
 </WndForm>

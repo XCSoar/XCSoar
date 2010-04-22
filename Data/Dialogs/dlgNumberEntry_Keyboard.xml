@@ -17,6 +17,6 @@
 
   <WndButton   Caption="0"    X="40" Y="185" Width="120"  Height="40" Font="2" OnClickNotify="OnKey"/>
 
-  <WndButton   Caption="Clear"X="40" Y="230" Width="60"  Height="40" Font="2" OnClickNotify="OnClear"/>
+  <WndButton Caption="Clear" X="40" Y="230" Width="60"  Height="40" Font="2" OnClickNotify="OnClear"/>
   <WndButton   Caption="Ok"   X="100" Y="230" Width="60"  Height="40" Font="2" OnClickNotify="OnOk"/>
 </WndForm>

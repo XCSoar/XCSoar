@@ -1,22 +1,22 @@
-<WndForm Name="frmWayPointSelect" Width=320 Height=240 Caption="Select Waypoint">
+<WndForm Name="frmWayPointSelect" Width="320" Height="240" Caption="Select Waypoint">
   <WndFrame X="0" Y="0" Width="61" Height="20" Font="2" Caption="Filter..." />
 
   <WndFrame X="3" Y="20" Width="61" Height="16" Font="2" Caption="Name" />
   <WndButton Name="cmdFltName" Caption="*" X="3" Y="38" Width="63"  Height="22" Font="2" />
 
-  <WndProperty Name="prpFltDistance"  Caption="Distance"  X=2 Y=-1  Width=63 Height=36 CaptionWidth=0 Font=2 >
+  <WndProperty Name="prpFltDistance" Caption="Distance" X="2" Y="-1" Width="63" Height="36" CaptionWidth="0" Font="2" >
     <DataField name="" DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDistance"/>
   </WndProperty>
-  <WndProperty Name="prpFltDirection" Caption="Direction" X=2 Y=-1  Width=63 Height=36 CaptionWidth=0 Font=2 >
+  <WndProperty Name="prpFltDirection" Caption="Direction" X="2" Y="-1" Width="63" Height="36" CaptionWidth="0" Font="2" >
     <DataField name="" DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
   </WndProperty>
 
-  <WndProperty Name="prpFltType" Caption="Type" X=2 Y=-1  Width=63 Height=36 CaptionWidth=0 Font=2 >
+  <WndProperty Name="prpFltType" Caption="Type" X="2" Y="-1" Width="63" Height="36" CaptionWidth="0" Font="2" >
     <DataField name="" DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterType"/>
   </WndProperty>
 
   <WndButton Name="cmdSelect" Caption="Select" X="2" Y="-1" Width="63"  Height="28" Font="2" />
   <WndButton Name="cmdClose" Caption="Close" X="2" Y="-1" Width="63"  Height="28" Font="2" />
 
-  <WndListFrame Name=frmWayPointList X=65 Y=0 Width=258 Height=222 Font=2 ItemHeight=25 OnListInfo="OnWpListInfo"/>
+  <WndListFrame Name="frmWayPointList" X="65" Y="0" Width="258" Height="222" Font="2" ItemHeight="25" OnListInfo="OnWpListInfo"/>
 </WndForm>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmTextEntry" X=5 Y=5 Width=200 Height=114 Caption="Edit text">
-  <WndOwnerDrawFrame Name="frmGrid" X=0 Y=-1 Width=199 Height=60 Font=3 BackColor=0x404000 ForeColor=0xFFFFFF OnPaint="OnTextPaint" />
+<WndForm Name="frmTextEntry" X="5" Y="5" Width="200" Height="114" Caption="Edit text">
+  <WndOwnerDrawFrame Name="frmGrid" X="0" Y="-1" Width="199" Height="60" Font="3" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTextPaint" />
 
-  <WndButton Name="cmdClose" Caption="Close" X=5 Y=63 Width=60  Height=26 Font=2 />
-  <WndButton Name="cmdUp" Caption="A+" X=67 Y=63 Width=27  Height=26 Font=2 />
-  <WndButton Name="cmdDown" Caption="A-" X=96 Y=63 Width=27  Height=26 Font=2 />
-  <WndButton Name="cmdLeft" Caption="&lt;" X=125 Y=63 Width=27  Height=26 Font=2 />
-  <WndButton Name="cmdRight" Caption="&gt;" X=154 Y=63 Width=27  Height=26 Font=2 />
+  <WndButton Name="cmdClose" Caption="Close" X="5" Y="63" Width="60" Height="26" Font="2" />
+  <WndButton Name="cmdUp" Caption="A+" X="67" Y="63" Width="27" Height="26" Font="2" />
+  <WndButton Name="cmdDown" Caption="A-" X="96" Y="63" Width="27" Height="26" Font="2" />
+  <WndButton Name="cmdLeft" Caption="&lt;" X="125" Y="63" Width="27" Height="26" Font="2" />
+  <WndButton Name="cmdRight" Caption="&gt;" X="154" Y="63" Width="27" Height="26" Font="2" />
 </WndForm>

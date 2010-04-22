@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmStartTaskRegular" X=5 Y=5 Width=143 Height=133 Caption="Task Start">
-  <WndProperty Name="prpTime" Caption="Time"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=68 Font=2 ReadOnly=1 Help="" />
+<WndForm Name="frmStartTaskRegular" X="5" Y="5" Width="143" Height="133" Caption="Task Start">
+  <WndProperty Name="prpTime" Caption="Time" X="2" Y="-1" Width="145" Height="22" CaptionWidth="68" Font="2" ReadOnly="1" Help="" />
 
-  <WndProperty Name="prpSpeed" Caption="Speed"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=68 Font=2 ReadOnly=1 Help="" />
+  <WndProperty Name="prpSpeed" Caption="Speed" X="2" Y="-1" Width="145" Height="22" CaptionWidth="68" Font="2" ReadOnly="1" Help="" />
 
-  <WndProperty Name="prpAltitude" Caption="Altitude" X=2 Y=-1  Width=145 Height=22 CaptionWidth=68 Font=2 ReadOnly=1 Help="" />
+  <WndProperty Name="prpAltitude" Caption="Altitude" X="2" Y="-1" Width="145" Height="22" CaptionWidth="68" Font="2" ReadOnly="1" Help="" />
 
-  <WndButton   Caption="Retry"    X=2 Y=-1 Width=130  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
+  <WndButton Caption="Retry" X="2" Y="-1" Width="130" Height="22" Font="2" OnClickNotify="OnCloseClicked"/>
 
-  <WndButton   Caption="Start Anyway"    X=2 Y=-1 Width=130  Height=22 Font=2 OnClickNotify="OnStartTaskAnywayClicked"/>
+  <WndButton Caption="Start Anyway" X="2" Y="-1" Width="130" Height="22" Font="2" OnClickNotify="OnStartTaskAnywayClicked"/>
 </WndForm>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmComboPopup" Width=320 Height=240 Caption="Picker">
-  <WndButton Name="cmdClose"  Caption="Select"    X=5 Y=100 Width=70  Height=35 Font=2 OnClickNotify="OnCloseClicked"/>
+<WndForm Name="frmComboPopup" Width="320" Height="240" Caption="Picker">
+  <WndButton Name="cmdClose" Caption="Select" X="5" Y="100" Width="70" Height="35" Font="2" OnClickNotify="OnCloseClicked"/>
 
-  <WndButton  Name="cmdCancel"  Caption="Cancel"    X=5 Y=140 Width=70  Height=35 Font=2 OnClickNotify="OnCancelClicked"/>
+  <WndButton Name="cmdCancel" Caption="Cancel" X="5" Y="140" Width="70" Height="35" Font="2" OnClickNotify="OnCancelClicked"/>
 
-  <WndButton  Name="cmdHelp"  Caption="Help"    X=5 Y=180 Width=70  Height=35 Font=2 OnClickNotify="OnHelpClicked"/>
+  <WndButton Name="cmdHelp" Caption="Help" X="5" Y="180" Width="70" Height="35" Font="2" OnClickNotify="OnHelpClicked"/>
 
-  <WndListFrame Name=frmComboPopupList X=80 Y=0 Width=235 Height=222 ItemHeight=25 Font=2 Border="1"/>
+  <WndListFrame Name="frmComboPopupList" X="80" Y="0" Width="235" Height="222" ItemHeight="25" Font="2" Border="1"/>
 </WndForm>

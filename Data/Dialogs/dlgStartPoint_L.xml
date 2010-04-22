@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmStartPoint" Width=240 Height=320 Caption="Alternate Start Points">
-  <WndButton   Name="cmdClose" Caption="Close"    X=2 Y=240 Width=98  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
+<WndForm Name="frmStartPoint" Width="240" Height="320" Caption="Alternate Start Points">
+  <WndButton Name="cmdClose" Caption="Close" X="2" Y="240" Width="98" Height="22" Font="2" OnClickNotify="OnCloseClicked"/>
 
-  <WndButton   Name="cmdClear" Caption="Clear"    X=2 Y=-1 Width=98  Height=22 Font=2 OnClickNotify="OnClearClicked"/>
+  <WndButton Name="cmdClear" Caption="Clear" X="2" Y="-1" Width="98" Height="22" Font="2" OnClickNotify="OnClearClicked"/>
 
-  <WndListFrame Name="frmStartPointList" X=102 Y=0 Width=230 Height=230 ItemHeight=18 Font=2 Border="1"/>
+  <WndListFrame Name="frmStartPointList" X="102" Y="0" Width="230" Height="230" ItemHeight="18" Font="2" Border="1"/>
 </WndForm>

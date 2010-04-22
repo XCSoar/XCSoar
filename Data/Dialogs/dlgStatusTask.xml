@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm X=5 Y=5 Width=251 Height=231 Caption="Task Status">
-  <WndProperty Name="prpTaskTime" Caption="Assigned task time" X=2 Y=2  Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
-  <WndProperty Name="prpETETime"  Caption="Estimated task time"  X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
-  <WndProperty Name="prpRemainingTime"  Caption="Remaining time"  X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
-  <WndProperty Name="prpStartTime"    Caption="Start time"    X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
-  <WndProperty Name="prpTaskDistance"      Caption="Task distance"      X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
-  <WndProperty Name="prpRemainingDistance"      Caption="Remaining distance"      X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
-  <WndProperty Name="prpEstimatedSpeed"      Caption="Speed remaining"      X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
-  <WndProperty Name="prpAverageSpeed"      Caption="Speed achieved"      X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+<WndForm X="5" Y="5" Width="251" Height="231" Caption="Task Status">
+  <WndProperty Name="prpTaskTime" Caption="Assigned task time" X="2" Y="2" Width="242" Height="22" CaptionWidth="150" Font="2" ReadOnly="1" />
+  <WndProperty Name="prpETETime" Caption="Estimated task time" X="2" Y="-1" Width="242" Height="22" CaptionWidth="150" Font="2" ReadOnly="1" />
+  <WndProperty Name="prpRemainingTime" Caption="Remaining time" X="2" Y="-1" Width="242" Height="22" CaptionWidth="150" Font="2" ReadOnly="1" />
+  <WndProperty Name="prpStartTime" Caption="Start time" X="2" Y="-1" Width="242" Height="22" CaptionWidth="150" Font="2" ReadOnly="1" />
+  <WndProperty Name="prpTaskDistance" Caption="Task distance" X="2" Y="-1" Width="242" Height="22" CaptionWidth="150" Font="2" ReadOnly="1" />
+  <WndProperty Name="prpRemainingDistance" Caption="Remaining distance" X="2" Y="-1" Width="242" Height="22" CaptionWidth="150" Font="2" ReadOnly="1" />
+  <WndProperty Name="prpEstimatedSpeed" Caption="Speed remaining" X="2" Y="-1" Width="242" Height="22" CaptionWidth="150" Font="2" ReadOnly="1" />
+  <WndProperty Name="prpAverageSpeed" Caption="Speed achieved" X="2" Y="-1" Width="242" Height="22" CaptionWidth="150" Font="2" ReadOnly="1" />
 
-  <WndButton Name="cmdClose" Caption="Close" X=5 Y=-1 Width=60  Height=28 Font=2 />
+  <WndButton Name="cmdClose" Caption="Close" X="5" Y="-1" Width="60" Height="28" Font="2" />
 </WndForm>
-
-</PMML>
