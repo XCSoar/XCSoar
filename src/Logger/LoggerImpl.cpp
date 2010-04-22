@@ -77,6 +77,10 @@ LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
   Time = src.Time;
 
   NAVWarning = src.gps.NAVWarning;
+  FixQuality = src.gps.FixQuality;
+  SatellitesUsed = src.gps.SatellitesUsed;
+  HDOP = src.gps.HDOP;
+  Simulator = src.gps.Simulator;
 
   std::copy(src.gps.SatelliteIDs, src.gps.SatelliteIDs + MAXSATELLITES,
             SatelliteIDs);
@@ -292,7 +296,12 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
       tmp_info.BaroAltitude = LoggerPreTakeoffBuffer[i].BaroAltitude;
       tmp_info.DateTime = LoggerPreTakeoffBuffer[i].DateTime;
       tmp_info.Time = LoggerPreTakeoffBuffer[i].Time;
+
       tmp_info.gps.NAVWarning = LoggerPreTakeoffBuffer[i].NAVWarning;
+      tmp_info.gps.FixQuality = LoggerPreTakeoffBuffer[i].FixQuality;
+      tmp_info.gps.SatellitesUsed = LoggerPreTakeoffBuffer[i].SatellitesUsed;
+      tmp_info.gps.HDOP = LoggerPreTakeoffBuffer[i].HDOP;
+      tmp_info.gps.Simulator = LoggerPreTakeoffBuffer[i].Simulator;
 
       for (int iSat = 0; iSat < MAXSATELLITES; iSat++)
         tmp_info.gps.SatelliteIDs[iSat] =
@@ -440,7 +449,7 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info, const Declaration &decl)
   IGCWriteRecord(temp, szLoggerFileName);
 
   DeviceConfig device_config;
-  if (Simulator) {
+  if (is_simulator()) { // this is only the XCSoar Simulator, not Condor etc, so don't use Simulator flag
     _tcscpy(device_config.driver_name, _T("Simulator"));
   } else {
     Profile::GetDeviceConfig(0, device_config);

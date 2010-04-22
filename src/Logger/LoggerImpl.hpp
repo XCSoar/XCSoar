@@ -74,6 +74,10 @@ public:
     int SatelliteIDs[MAXSATELLITES]; /**< IDs of satellites in fix */
     double Time;                /**< Time of fix (s) */
     int NAVWarning;             /**< GPS fix state */
+    int FixQuality;             /**< GPS fix quality */
+    int SatellitesUsed;         /**< GPS fix state */
+    bool HDOP;                  /**< GPS Horizontal Dilution of precision */
+    bool Simulator;             /**< GPS Simulator flag  */
 
     /** 
      * Set buffer value from NMEA_INFO structure
