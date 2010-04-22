@@ -65,6 +65,7 @@ DEBUG_PROGRAM_NAMES = \
 	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
 	ReadProfileString ReadProfileInt \
 	WriteProfileString WriteProfileInt \
+	KeyCodeDumper \
 	RunWayPointParser RunDeviceDriver \
 	RunCanvas RunMapWindow RunDialog \
 	RunAirspaceWarningDialog
@@ -171,6 +172,28 @@ WRITE_PROFILE_INT_SOURCES = \
 WRITE_PROFILE_INT_OBJS = $(call SRC_TO_OBJ,$(WRITE_PROFILE_INT_SOURCES))
 WRITE_PROFILE_INT_LDADD = $(IO_LIBS)
 $(TARGET_BIN_DIR)/WriteProfileInt$(TARGET_EXEEXT): $(WRITE_PROFILE_INT_OBJS) $(WRITE_PROFILE_INT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+KEY_CODE_DUMPER_SOURCES = \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Screen/shapelib/mapsearch.cpp \
+	$(SRC)/Thread/Debug.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Compatibility/fmode.c \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeInterface.cpp \
+	$(TEST_SRC_DIR)/KeyCodeDumper.cpp
+KEY_CODE_DUMPER_OBJS = $(call SRC_TO_OBJ,$(KEY_CODE_DUMPER_SOURCES))
+KEY_CODE_DUMPER_BIN = $(TARGET_BIN_DIR)/KeyCodeDumper$(TARGET_EXEEXT)
+KEY_CODE_DUMPER_LDADD = \
+	$(FAKE_LIBS) \
+	$(SCREEN_LIBS) \
+	$(ENGINE_LIBS) \
+	$(COMPAT_LIBS)
+$(KEY_CODE_DUMPER_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(KEY_CODE_DUMPER_BIN): LDLIBS += $(SCREEN_LDLIBS)
+$(KEY_CODE_DUMPER_BIN): $(KEY_CODE_DUMPER_OBJS) $(KEY_CODE_DUMPER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 

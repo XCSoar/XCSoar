@@ -523,9 +523,9 @@ NMEAParser::GLL(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
     GPS_INFO->Location.Latitude = tmplat;
     GPS_INFO->Location.Longitude = tmplon;
-    GPS_INFO->gps.Simulator = false;
-  } else {
-    // data is likely to be invalid (happens on first fix with some GPSs)
+  }
+  else {
+    GPS_INFO->gps.NAVWarning = true;
   }
 
   return true;
@@ -671,7 +671,9 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
     GPS_INFO->Location.Latitude = tmplat;
     GPS_INFO->Location.Longitude = tmplon;
-    gps.Simulator = false;
+  }
+  else {
+    GPS_INFO->gps.NAVWarning = true;
   }
 
   GPS_INFO->GroundSpeed = Units::ToSysUnit(speed, unKnots);
@@ -788,7 +790,9 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
     GPS_INFO->Location.Latitude = tmplat;
     GPS_INFO->Location.Longitude = tmplon;
-    gps.Simulator = false;
+  }
+  else {
+    GPS_INFO->gps.NAVWarning = true;
   }
 
   gps.HDOP = (double)(_tcstod(params[7], NULL));

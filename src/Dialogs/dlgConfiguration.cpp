@@ -1122,7 +1122,7 @@ static void
 SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
                   int &driver_index,
                   WndProperty *port_field, WndProperty *speed_field,
-                  WndProperty *driver_field)
+                  WndProperty *driver_field, WndButton *setup_button)
 {
   static const TCHAR *const COMMPort[] = {
     _T("COM1"), _T("COM2"), _T("COM3"), _T("COM4"),
@@ -1188,6 +1188,10 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
     driver_field->RefreshDisplay();
   }
 
+  if (setup_button != NULL)
+    setup_button->set_visible(is_simulator()
+                              ? _tcscmp(config.driver_name, _T("Vega")) == 0
+                              : device.IsVega());
 }
 
 static void setVariables(void) {
@@ -1239,12 +1243,14 @@ static void setVariables(void) {
   SetupDeviceFields(DeviceList[0], device_config[0], dwDeviceIndex1,
                     (WndProperty*)wf->FindByName(_T("prpComPort1")),
                     (WndProperty*)wf->FindByName(_T("prpComSpeed1")),
-                    (WndProperty*)wf->FindByName(_T("prpComDevice1")));
+                    (WndProperty*)wf->FindByName(_T("prpComDevice1")),
+                    (WndButton *)wf->FindByName(_T("cmdSetupDeviceA")));
 
   SetupDeviceFields(DeviceList[1], device_config[1], dwDeviceIndex2,
                     (WndProperty*)wf->FindByName(_T("prpComPort2")),
                     (WndProperty*)wf->FindByName(_T("prpComSpeed2")),
-                    (WndProperty*)wf->FindByName(_T("prpComDevice2")));
+                    (WndProperty*)wf->FindByName(_T("prpComDevice2")),
+                    (WndButton *)wf->FindByName(_T("cmdSetupDeviceB")));
 
   wp = (WndProperty*)wf->FindByName(_T("prpAirspaceDisplay"));
   if (wp) {

@@ -265,11 +265,28 @@ protected:
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
   virtual bool on_mouse_wheel(int delta);
+
+#if defined(GNAV) || defined(PNA)
   virtual bool on_key_down(unsigned key_code);
+#else
+  virtual bool on_key_up(unsigned key_code);
+#endif
+
   virtual void on_paint(Canvas& canvas);
   virtual bool on_setfocus();
 
 private:
+
+  /**
+   * This (non-virtual, non-inherited) method gets called by either
+   * on_key_down() (Altair and PNAs) or on_key_up() (all other
+   * platforms).
+   *
+   * Some PDAs like iPAQ hx4700 send 0xca..0xcd in WM_KEYDOWN, but
+   * 0xc0..0xc4 (VK_APP1..4) in WM_KEYUP.  We prefer the VK_APP codes.
+   */
+  bool on_key_press(unsigned key_code);
+
   GlidePolar get_glide_polar() const;
 
   void RenderStart(Canvas &canvas, const RECT rc);
