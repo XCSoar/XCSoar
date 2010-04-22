@@ -416,8 +416,26 @@ MapWindow::on_mouse_wheel(int delta)
   return true;
 }
 
+#if defined(GNAV) || defined(PNA)
+
 bool
 MapWindow::on_key_down(unsigned key_code)
+{
+  return on_key_press(key_code) || MaskedPaintWindow::on_key_down(key_code);
+}
+
+#else
+
+bool
+MapWindow::on_key_up(unsigned key_code)
+{
+  return on_key_press(key_code) || MaskedPaintWindow::on_key_up(key_code);
+}
+
+#endif
+
+bool
+MapWindow::on_key_press(unsigned key_code)
 {
   // VENTA-TODO careful here, keyup no more trapped for PNA.
   // Forbidden usage of keypress timing.
@@ -433,5 +451,5 @@ MapWindow::on_key_down(unsigned key_code)
     return true; // don't go to default handler
   }
 
-  return MaskedPaintWindow::on_key_down(key_code);
+  return false;
 }
