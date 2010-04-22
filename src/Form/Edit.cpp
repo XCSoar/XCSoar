@@ -145,7 +145,7 @@ Bitmap WndProperty::hBmpRight32;
 int WndProperty::InstCount = 0;
 
 WndProperty::WndProperty(ContainerControl *Parent,
-                         TCHAR *Caption,
+                         const TCHAR *Caption,
                          int X, int Y,
                          int Width, int Height,
                          int CaptionWidth,
