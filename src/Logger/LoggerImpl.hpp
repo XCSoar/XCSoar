@@ -69,7 +69,12 @@ public:
     BrokenDateTime DateTime;
     int SatelliteIDs[MAXSATELLITES];
     double Time;
+
     int NAVWarning;
+    int FixQuality;
+    int SatellitesUsed;
+    bool HDOP;
+    bool Simulator;
 
     const struct LoggerPreTakeoffBuffer &operator=(const NMEA_INFO &src);
   };
