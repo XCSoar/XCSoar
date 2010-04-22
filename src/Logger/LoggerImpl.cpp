@@ -449,7 +449,7 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info, const Declaration &decl)
   IGCWriteRecord(temp, szLoggerFileName);
 
   DeviceConfig device_config;
-  if (Simulator) {
+  if (is_simulator()) { // this is only the XCSoar Simulator, not Condor etc, so don't use Simulator flag
     _tcscpy(device_config.driver_name, _T("Simulator"));
   } else {
     Profile::GetDeviceConfig(0, device_config);
