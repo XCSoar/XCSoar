@@ -41,8 +41,6 @@
 #include <tchar.h>
 #include "Logger/MD5.hpp"
 
-
-#define BUFF_LEN 255
 #define XCSOAR_IGC_CODE "XCS"
 
 class  GRecord {
@@ -52,8 +50,11 @@ public:
   };
 
 private:
-
   MD5 oMD5[4];
+
+  enum {
+    BUFF_LEN = 255,
+  };
 
   TCHAR Digest[BUFF_LEN];
   TCHAR DigestRead[BUFF_LEN];
