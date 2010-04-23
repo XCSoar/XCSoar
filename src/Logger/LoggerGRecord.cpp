@@ -238,13 +238,8 @@ GRecord::LoadFileToBuffer()
 bool
 GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Record
 {
-  HANDLE hFile;// = INVALID_HANDLE_VALUE;
-  DWORD dwBytesRead;
-
-  hFile = CreateFile(FileName, GENERIC_WRITE, FILE_SHARE_WRITE,
-         NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-
-  if (hFile == NULL)
+  FILE *file = _tfopen(FileName, _T("a"));
+  if (file == NULL)
     return false;
 
   TCHAR szDigestBuff[BUFF_LEN];
@@ -269,26 +264,15 @@ GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Record
       sDig16[iNumCharsPerLine+2]='\n';
       sDig16[iNumCharsPerLine+3]=0;
 
-      SetFilePointer(hFile, 0, NULL, FILE_END);
-      WriteFile(hFile, sDig16, strlen(sDig16), &dwBytesRead,
-        (OVERLAPPED *)NULL);
-
+      fputs(sDig16, file);
     }
   }
   else {
     char sMessage[] = "G Record Invalid\r\n";
-
-    SetFilePointer(hFile, 0, NULL, FILE_END);
-    WriteFile(hFile, sMessage, strlen(sMessage), &dwBytesRead,
-      (OVERLAPPED *)NULL);
-
+    fputs(sMessage, file);
   }
 
-  // this is the code from LogpointtoFile
-
-  FlushFileBuffers(hFile);
-
-  CloseHandle(hFile);
+  fclose(file);
   return true;
 
 }
