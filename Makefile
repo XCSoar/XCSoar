@@ -377,12 +377,10 @@ $(addprefix all-,$(TARGETS)): all-%: $(OUTPUTS)
 ####### products
 
 SYNCE_PCP = synce-pcp
-SYNCE_PRM = synce-prm
 
 install: XCSoar.exe
 	@echo Copying to device...
-	-$(SYNCE_PRM) ':/Program Files/XCSoar/XCSoar.exe'
-	$(SYNCE_PCP) XCSoar.exe ':/Program Files/XCSoar/XCSoar.exe'
+	$(SYNCE_PCP) -f XCSoar.exe ':/Program Files/XCSoar/XCSoar.exe'
 
 CABWIZ = wine 'c:\cabwiz\cabwiz.exe'
 
