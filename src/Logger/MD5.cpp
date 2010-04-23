@@ -40,6 +40,11 @@
 #include <tchar.h>
 #include <stdio.h>
 
+static inline unsigned long
+leftrotate(unsigned long x, unsigned long c)
+{
+    return (x << c) | (x >> (32-c));
+}
 
 void
 MD5::InitKey(unsigned long h0in,
@@ -261,10 +266,4 @@ MD5::GetDigest(TCHAR * szOut)
   }
 
   return 1;
-}
-
-unsigned long
-MD5::leftrotate (unsigned long x, unsigned long c)
-{
-    return (x << c) | (x >> (32-c));
 }

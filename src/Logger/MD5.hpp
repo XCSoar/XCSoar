@@ -58,8 +58,6 @@ private:
   unsigned long MessageLenBits;  // max message size=536,870,912 because of 32-bit length tracking (MD5 standard is 64-bits)
 
   void Process512(unsigned char * s512in);
-  unsigned long leftrotate (unsigned long x, unsigned long c);
-
 
 public:
 
