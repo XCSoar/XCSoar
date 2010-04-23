@@ -2,9 +2,18 @@ VERSION = $(strip $(shell cat $(topdir)/VERSION.txt))$(GIT_COMMIT_ID)
 TARGET_DIST_NAME = XCSoar-$(VERSION)-$(TARGET)
 TARGET_DIST_DIR = $(TARGET_OUTPUT_DIR)/dist
 
+THIRDPARTY_DLL_DIR = $(TARGET_OUTPUT_DIR)/dll
+THIRDPARTY_DLLS =
+
+ifeq ($(HAVE_CE),y)
+THIRDPARTY_DLLS += aygshell.dll libstdc++-6.dll
+endif
+
 dist: $(OUTPUTS)
 	rm -rf $(TARGET_DIST_DIR)/$(TARGET_DIST_NAME)
 	mkdir -p $(TARGET_DIST_DIR)/$(TARGET_DIST_NAME)
-	cp $(OUTPUTS) gpl.txt installmsg.txt $(TARGET_DIST_DIR)/$(TARGET_DIST_NAME)/
+	cp $(OUTPUTS) gpl.txt installmsg.txt \
+		$(addprefix $(THIRDPARTY_DLL_DIR)/,$(THIRDPARTY_DLLS)) \
+		$(TARGET_DIST_DIR)/$(TARGET_DIST_NAME)/
 	cd $(TARGET_DIST_DIR) && zip -qr $(TARGET_DIST_NAME).zip $(TARGET_DIST_NAME)
 	mv $(TARGET_DIST_DIR)/$(TARGET_DIST_NAME).zip $(OUT)/
