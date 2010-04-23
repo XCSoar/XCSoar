@@ -71,7 +71,11 @@ main(int argc, char **argv)
   }
 
   g.FinalizeBuffer();
-  g.AppendGRecordToFile(true);
+
+  if (!g.AppendGRecordToFile(true)) {
+    fprintf(stderr, "Failed to write file\n");
+    return 2;
+  }
 
   return 0;
 }

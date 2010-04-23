@@ -64,24 +64,24 @@ private:
 
 public:
 
-  int Init();
+  void Init();
   const TCHAR *GetVersion() const;
-  int AppendRecordToBuffer(const TCHAR *szIn);
-  int FinalizeBuffer();
-  int GetDigest(TCHAR * szOut);
+  bool AppendRecordToBuffer(const TCHAR *szIn);
+  void FinalizeBuffer();
+  void GetDigest(TCHAR *szOut);
   int IsValidIGCChar(char c);
 
   // File specific functions
-  int SetFileName(const TCHAR *szIn);
-  int LoadFileToBuffer();
-  int AppendGRecordToFile(bool bValid); // writes error if invalid G Record
-  int ReadGRecordFromFile(TCHAR szOutput []);
+  void SetFileName(const TCHAR *szIn);
+  bool LoadFileToBuffer();
+  bool AppendGRecordToFile(bool bValid); // writes error if invalid G Record
+  bool ReadGRecordFromFile(TCHAR szOutput []);
   bool VerifyGRecordInFile(void);  // returns 0 if false, 1 if true
 
 private:
-  int Init(int iKey);
-  int AppendStringToBuffer(const unsigned char *szIn);
-  int AppendRecordToBuffer(const unsigned char *szIn);
+  void Init(int iKey);
+  void AppendStringToBuffer(const unsigned char *szIn);
+  bool AppendRecordToBuffer(const unsigned char *szIn);
   bool IncludeRecordInGCalc(const unsigned char *szIn);
 
 };

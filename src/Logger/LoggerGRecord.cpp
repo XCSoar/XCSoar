@@ -48,14 +48,14 @@ GRecord::GetVersion() const
   return _T("Version 1.0.2");
 }
 
-int
+void
 GRecord::Init()
 {  // key #1 used w/ Vali 1.0.0
    // key #2 used w/ Vali 1.0.2
   return Init(2);  // OLC uses key #2 since 9/1/2008
 }
 
-int
+bool
 GRecord::AppendRecordToBuffer(const TCHAR *szIn)
 {
   unsigned int iLen = _tcslen(szIn);
@@ -68,40 +68,38 @@ GRecord::AppendRecordToBuffer(const TCHAR *szIn)
   return AppendRecordToBuffer( buff);
 }
 
-int
-GRecord::AppendRecordToBuffer(const unsigned char *szIn)
-{ // returns 1 if record is appended, 0 if skipped
+/**
+ * @return returns true if record is appended, false if skipped
+ */
+bool
+GRecord::AppendRecordToBuffer(const unsigned char * szIn)
+{
+  if (!IncludeRecordInGCalc(szIn))
+    return false;
 
-  int iRetVal = 0;
-  if ( IncludeRecordInGCalc(szIn) ) {
-    iRetVal = 1;
-    for (int i = 0; i < 4; i++) {
-      oMD5[i].AppendString(szIn, 1);
-    }
-  }
-
-  return iRetVal;
+  for (int i = 0; i < 4; i++)
+    oMD5[i].AppendString(szIn, 1);
+  return true;
 }
 
-int
-GRecord::AppendStringToBuffer(const unsigned char *szIn)
+void
+GRecord::AppendStringToBuffer(const unsigned char * szIn)
 {
   for (int i = 0; i < 4; i++) {
     oMD5[i].AppendString(szIn, 1); // skip whitespace flag=1
   }
-  return 1;
 }
 
-int
+void
 GRecord::FinalizeBuffer()
 {
   for (int i = 0; i < 4; i++) {
     oMD5[i].Finalize();
   }
-  return 1;
 }
 
-int GRecord::GetDigest(TCHAR * szOutput)
+void
+GRecord::GetDigest(TCHAR *szOutput)
 {
   TCHAR TempBuff[BUFF_LEN];
   for (int idig=0; idig <=3; idig++) {
@@ -112,11 +110,11 @@ int GRecord::GetDigest(TCHAR * szOutput)
   }
 
   szOutput[128]='\0';
-  return 1;
 }
 
 
-int GRecord::Init (int iKey)
+void
+GRecord::Init(int iKey)
 {
 
   unsigned int i=0;
@@ -170,13 +168,12 @@ int GRecord::Init (int iKey)
     break;
 
   }
-  return 1;
 }
 
-int GRecord::SetFileName(const TCHAR *szFileNameIn)
+void
+GRecord::SetFileName(const TCHAR *szFileNameIn)
 {
   _tcscpy(FileName,szFileNameIn);
-  return 0;
 }
 
 bool GRecord::IncludeRecordInGCalc(const unsigned char *szIn)
@@ -207,7 +204,8 @@ bool GRecord::IncludeRecordInGCalc(const unsigned char *szIn)
   return bValid;
 }
 
-int GRecord::LoadFileToBuffer ()
+bool
+GRecord::LoadFileToBuffer()
 { //loads a file into the data buffer
   #define MAX_REC_LENGTH 200
 
@@ -221,7 +219,7 @@ int GRecord::LoadFileToBuffer ()
 
   inFile = _tfopen(FileName, _T("rb"));
   if (inFile == NULL)
-    return 0;
+    return false;
 
   while(fgets(data, MAX_REC_LENGTH, inFile) ) {
     for (unsigned int i = 0; i <= strlen(data); i++) {
@@ -232,12 +230,13 @@ int GRecord::LoadFileToBuffer ()
   } // read
 
   fclose (inFile);
-  return 1;
+  return true;
 }
 
 
 
-int GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Record
+bool
+GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Record
 {
   HANDLE hFile;// = INVALID_HANDLE_VALUE;
   DWORD dwBytesRead;
@@ -246,7 +245,7 @@ int GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Recor
          NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 
   if (hFile == NULL)
-    return 0;
+    return false;
 
   TCHAR szDigestBuff[BUFF_LEN];
   TCHAR * szDigest;
@@ -290,11 +289,12 @@ int GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Recor
   FlushFileBuffers(hFile);
 
   CloseHandle(hFile);
-  return 0;
+  return true;
 
 }
 
-int GRecord::ReadGRecordFromFile(TCHAR szOutput[])
+bool
+GRecord::ReadGRecordFromFile(TCHAR szOutput[])
 {// returns in szOutput the G Record from the file referenced by FileName member
   #define MAX_REC_LENGTH 200
 
@@ -304,9 +304,8 @@ int GRecord::ReadGRecordFromFile(TCHAR szOutput[])
   inFile = _tfopen(FileName, _T("r"));
 
   szOutput[0]='\0';
-  if (inFile == NULL) {
-    return 0;
-  }
+  if (inFile == NULL)
+    return false;
 
   unsigned int iLenDigest=0;
   while(1) {
@@ -334,7 +333,7 @@ int GRecord::ReadGRecordFromFile(TCHAR szOutput[])
 
   szOutput[iLenDigest] = '\0';
   fclose (inFile);
-  return 1;
+  return true;
 }
 
 
