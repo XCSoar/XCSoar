@@ -256,7 +256,7 @@ MD5::Finalize(void)
 }
 
 void
-MD5::Process512(unsigned char * s512in)
+MD5::Process512(const unsigned char *s512in)
 { // assume exactly 512 bytes
 
 //Initialize hash value for this chunk:
