@@ -372,6 +372,7 @@ DBFHandle msDBFCreate( const char * pszFilename )
 
 
     psDBF->bNoHeader = MS_TRUE;
+    psDBF->bUpdated = MS_FALSE;
 
     return( psDBF );
 }
