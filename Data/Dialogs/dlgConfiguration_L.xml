@@ -260,7 +260,7 @@
     </Panel>
   
     <Panel Name="frmComm" X=0 Y=0 Width=240 Height=222 Font=2>
-      <Panel Name="frmComm" X=0 Y=0 Width=240 Height=68 Font=2 Border=30>
+      <Panel Name="frmComm1" X=0 Y=0 Width=240 Height=68 Font=2 Border=30>
         <WndFrame Caption="Device A" X=2 Y=2 Width=60 Height=20 Font=2/>
   
         <WndProperty Name="prpComDevice1" Caption="Name"   X=62 Y=1  Width=173 Height=22 CaptionWidth=80 Font=2 Help="Type of primary device. The primary device should be the most reliable GPS data source.">
@@ -278,7 +278,7 @@
         <WndButton Name="cmdSetupDeviceA" Caption="Setup ..." X=1 Y=43 Width=70  Height=24 Font=2 OnClickNotify="OnSetupDeviceAClicked" />
       </Panel>
   
-      <Panel Name="frmComm" X=0 Y=69 Width=240 Height=68 Font=2 Border=30>
+      <Panel Name="frmComm2" X=0 Y=69 Width=240 Height=68 Font=2 Border=30>
         <WndFrame Caption="Device B" X=2 Y=2 Width=60 Height=20 Font=2/>
   
         <WndProperty Name="prpComDevice2" Caption="Name"     X=62 Y=1  Width=173 Height=22 CaptionWidth=80 Font=2 Help="Type of secondary device.
