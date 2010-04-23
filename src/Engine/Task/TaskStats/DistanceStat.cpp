@@ -55,12 +55,13 @@ DistanceStat::calc_incremental_speed(const double dt)
 {  
   if ((dt>0) && (distance>0)) {
     if (av_dist.update(distance)) {
+      double d_av = av_dist.average();
+      av_dist.reset();
+
       for (unsigned i=0; i<(unsigned)(dt); i++) {
-        double d_av = av_dist.average();
         double v = df.update(d_av)/(N_AV);
         double v_f = v_lpf.update(v);
         speed_incremental = (is_positive? -v_f:v_f);
-        av_dist.reset();
       }
     }
   } else {    
