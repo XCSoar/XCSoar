@@ -97,7 +97,7 @@ MD5::IsValidIGCChar(char c) //returns 1 if Valid IGC Char
 }
 
 void
-MD5::AppendString(unsigned char *szin, int bSkipInvalidIGCCharsFlag) // must be NULL-terminated string!
+MD5::AppendString(const unsigned char *szin, int bSkipInvalidIGCCharsFlag) // must be NULL-terminated string!
 {
 
   int iLen=0;

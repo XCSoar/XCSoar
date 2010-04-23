@@ -64,7 +64,7 @@ public:
          unsigned long h3in);
 
   void InitDigest(void);
-  void AppendString(unsigned char *sin, int bSkipWhiteSpaceFlag); // must be NULL-terminated string!
+  void AppendString(const unsigned char *sin, int bSkipWhiteSpaceFlag); // must be NULL-terminated string!
   void Finalize(void);
   int GetDigest(TCHAR * szOut);
   int GetDigestMaxlen(void);
