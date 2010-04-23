@@ -65,6 +65,7 @@ DEBUG_PROGRAM_NAMES = \
 	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
 	ReadProfileString ReadProfileInt \
 	WriteProfileString WriteProfileInt \
+	ReadGRecord VerifyGRecord AppendGRecord \
 	KeyCodeDumper \
 	RunWayPointParser RunDeviceDriver \
 	RunCanvas RunMapWindow RunDialog \
@@ -172,6 +173,36 @@ WRITE_PROFILE_INT_SOURCES = \
 WRITE_PROFILE_INT_OBJS = $(call SRC_TO_OBJ,$(WRITE_PROFILE_INT_SOURCES))
 WRITE_PROFILE_INT_LDADD = $(IO_LIBS)
 $(TARGET_BIN_DIR)/WriteProfileInt$(TARGET_EXEEXT): $(WRITE_PROFILE_INT_OBJS) $(WRITE_PROFILE_INT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+READ_GRECORD_SOURCES = \
+	$(SRC)/Logger/LoggerGRecord.cpp \
+	$(SRC)/Logger/MD5.cpp \
+	$(TEST_SRC_DIR)/ReadGRecord.cpp
+READ_GRECORD_OBJS = $(call SRC_TO_OBJ,$(READ_GRECORD_SOURCES))
+READ_GRECORD_LDADD = $(IO_LIBS)
+$(TARGET_BIN_DIR)/ReadGRecord$(TARGET_EXEEXT): $(READ_GRECORD_OBJS) $(READ_GRECORD_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+VERIFY_GRECORD_SOURCES = \
+	$(SRC)/Logger/LoggerGRecord.cpp \
+	$(SRC)/Logger/MD5.cpp \
+	$(TEST_SRC_DIR)/VerifyGRecord.cpp
+VERIFY_GRECORD_OBJS = $(call SRC_TO_OBJ,$(VERIFY_GRECORD_SOURCES))
+VERIFY_GRECORD_LDADD = $(IO_LIBS)
+$(TARGET_BIN_DIR)/VerifyGRecord$(TARGET_EXEEXT): $(VERIFY_GRECORD_OBJS) $(VERIFY_GRECORD_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+APPEND_GRECORD_SOURCES = \
+	$(SRC)/Logger/LoggerGRecord.cpp \
+	$(SRC)/Logger/MD5.cpp \
+	$(TEST_SRC_DIR)/AppendGRecord.cpp
+APPEND_GRECORD_OBJS = $(call SRC_TO_OBJ,$(APPEND_GRECORD_SOURCES))
+APPEND_GRECORD_LDADD = $(IO_LIBS)
+$(TARGET_BIN_DIR)/AppendGRecord$(TARGET_EXEEXT): $(APPEND_GRECORD_OBJS) $(APPEND_GRECORD_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
