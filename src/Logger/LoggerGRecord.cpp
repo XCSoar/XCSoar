@@ -42,13 +42,11 @@
 #include <stdio.h>
 #include <windows.h>
 
-int
-GRecord::GetVersion(TCHAR * szOut)
+const TCHAR *
+GRecord::GetVersion() const
 {
-  _tcscpy(szOut, _T("Version 1.0.2"));
-  return 1;
+  return _T("Version 1.0.2");
 }
-
 
 int
 GRecord::Init()

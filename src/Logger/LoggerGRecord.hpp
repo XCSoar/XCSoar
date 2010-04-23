@@ -65,7 +65,7 @@ private:
 public:
 
   int Init();
-  int GetVersion(TCHAR * szOut);
+  const TCHAR *GetVersion() const;
   int AppendRecordToBuffer(TCHAR * szIn);
   int FinalizeBuffer();
   int GetDigest(TCHAR * szOut);
