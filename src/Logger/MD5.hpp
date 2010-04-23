@@ -38,8 +38,8 @@
 #ifndef __MD5__
 #define __MD5__
 
+#include <stdint.h>
 #include <tchar.h>
-
 
 class MD5
 {
@@ -50,19 +50,16 @@ public:
 
 private:
   unsigned char buff512bits[64];
-  unsigned long a, b, c, d;
-  unsigned long h0, h1, h2, h3;
-  unsigned long f, g;
-  unsigned long MessageLenBits;  // max message size=536,870,912 because of 32-bit length tracking (MD5 standard is 64-bits)
+  uint32_t a, b, c, d;
+  uint32_t h0, h1, h2, h3;
+  uint32_t f, g;
+  uint32_t MessageLenBits; // max message size=536,870,912 because of 32-bit length tracking (MD5 standard is 64-bits)
 
   void Process512(const unsigned char * s512in);
 
 public:
 
-  void InitKey(unsigned long h0in,
-         unsigned long h1in,
-         unsigned long h2in,
-         unsigned long h3in);
+  void InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in);
 
   void InitDigest(void);
   void AppendString(const unsigned char *sin, int bSkipWhiteSpaceFlag); // must be NULL-terminated string!

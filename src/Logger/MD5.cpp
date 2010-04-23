@@ -40,7 +40,7 @@
 #include <tchar.h>
 #include <stdio.h>
 
-static const unsigned long k[64] = {
+static const uint32_t k[64] = {
   //k[i] := floor(abs(sin(i)) × (2 pow 32))
   // RLD should be sin(i+1) but want compatibility
   3614090360UL, // k=0
@@ -109,24 +109,21 @@ static const unsigned long k[64] = {
   3951481745UL,  // k=63
 };
 
-static const unsigned long r[64] = {
+static const uint32_t r[64] = {
   7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,
   5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,
   4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,
   6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,
 };
 
-static inline unsigned long
-leftrotate(unsigned long x, unsigned long c)
+static inline uint32_t
+leftrotate(uint32_t x, uint32_t c)
 {
     return (x << c) | (x >> (32-c));
 }
 
 void
-MD5::InitKey(unsigned long h0in,
-       unsigned long h1in,
-       unsigned long h2in,
-       unsigned long h3in)
+MD5::InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in)
 {
   h0=h0in;
   h1=h1in;
@@ -178,14 +175,12 @@ MD5::IsValidIGCChar(char c) //returns 1 if Valid IGC Char
 void
 MD5::AppendString(const unsigned char *szin, int bSkipInvalidIGCCharsFlag) // must be NULL-terminated string!
 {
-
-  int iLen=0;
-  iLen = strlen((char * )szin);
+  size_t iLen = strlen((const char * )szin);
   int BuffLeftover = (MessageLenBits / 8) % 64;
 
-  MessageLenBits += ((unsigned long)iLen * 8);
+  MessageLenBits += ((uint32_t)iLen * 8);
 
-  for (int i = 0; i < iLen; i++) {
+  for (size_t i = 0; i < iLen; i++) {
     if (bSkipInvalidIGCCharsFlag == 1 && !IsValidIGCChar(szin[i]) ) { // skip OD because when saved to file, OD OA comes back as OA only
       MessageLenBits -= 8; //subtract it out of the buffer pointer
     }
@@ -263,13 +258,13 @@ MD5::Process512(const unsigned char *s512in)
   c=h2;
   d=h3;
 
-  // copy the 64 chars into the 16 unsigned longs
-  unsigned long w[16];
+  // copy the 64 chars into the 16 uint32_ts
+  uint32_t w[16];
   for (int j=0; j < 16; j++) {
-    w[j] = (((unsigned long)s512in[(j*4)+3]) << 24) |
-          (((unsigned long)s512in[(j*4)+2]) << 16) |
-          (((unsigned long)s512in[(j*4)+1]) << 8) |
-          ((unsigned long)s512in[(j*4)]);
+    w[j] = (((uint32_t)s512in[(j*4)+3]) << 24) |
+          (((uint32_t)s512in[(j*4)+2]) << 16) |
+          (((uint32_t)s512in[(j*4)+1]) << 8) |
+          ((uint32_t)s512in[(j*4)]);
   }
 //Main loop:
   for (int i=0; i < 64; i++) {
@@ -290,7 +285,7 @@ MD5::Process512(const unsigned char *s512in)
       g = (7 * i) % 16;
     }
 
-    unsigned long temp = d;
+    uint32_t temp = d;
     d = c;
     c = b;
     b = b + leftrotate((a + f + k[i] + w[g]) , r[i]);
@@ -309,7 +304,7 @@ MD5::Process512(const unsigned char *s512in)
 
 int
 MD5::GetDigest(TCHAR * szOut)
-{ // extract 4 bytes from each unsigned long
+{ // extract 4 bytes from each uint32_t
   unsigned char digest[16];
 
   digest[0] = (unsigned char) (h0 & 0xFF);
