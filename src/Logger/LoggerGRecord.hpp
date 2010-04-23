@@ -66,13 +66,13 @@ public:
 
   int Init();
   const TCHAR *GetVersion() const;
-  int AppendRecordToBuffer(TCHAR * szIn);
+  int AppendRecordToBuffer(const TCHAR *szIn);
   int FinalizeBuffer();
   int GetDigest(TCHAR * szOut);
   int IsValidIGCChar(char c);
 
   // File specific functions
-  int SetFileName(TCHAR * szIn);
+  int SetFileName(const TCHAR *szIn);
   int LoadFileToBuffer();
   int AppendGRecordToFile(bool bValid); // writes error if invalid G Record
   int ReadGRecordFromFile(TCHAR szOutput []);
@@ -80,9 +80,9 @@ public:
 
 private:
   int Init(int iKey);
-  int AppendStringToBuffer(unsigned char * szIn);
-  int AppendRecordToBuffer(unsigned char * szIn);
-  bool IncludeRecordInGCalc(unsigned char * szIn);
+  int AppendStringToBuffer(const unsigned char *szIn);
+  int AppendRecordToBuffer(const unsigned char *szIn);
+  bool IncludeRecordInGCalc(const unsigned char *szIn);
 
 };
 #endif

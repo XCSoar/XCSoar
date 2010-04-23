@@ -58,7 +58,7 @@ main(int argc, char **argv)
   if (length == 0)
     return 2;
 #else
-  char *path = argv[1];
+  const char *path = argv[1];
 #endif
 
   GRecord g;

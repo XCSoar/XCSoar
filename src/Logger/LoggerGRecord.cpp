@@ -56,7 +56,7 @@ GRecord::Init()
 }
 
 int
-GRecord::AppendRecordToBuffer(TCHAR * szIn)
+GRecord::AppendRecordToBuffer(const TCHAR *szIn)
 {
   unsigned int iLen = _tcslen(szIn);
   unsigned char buff[BUFF_LEN];
@@ -69,7 +69,7 @@ GRecord::AppendRecordToBuffer(TCHAR * szIn)
 }
 
 int
-GRecord::AppendRecordToBuffer(unsigned char * szIn)
+GRecord::AppendRecordToBuffer(const unsigned char *szIn)
 { // returns 1 if record is appended, 0 if skipped
 
   int iRetVal = 0;
@@ -84,7 +84,7 @@ GRecord::AppendRecordToBuffer(unsigned char * szIn)
 }
 
 int
-GRecord::AppendStringToBuffer(unsigned char * szIn)
+GRecord::AppendStringToBuffer(const unsigned char *szIn)
 {
   for (int i = 0; i < 4; i++) {
     oMD5[i].AppendString(szIn, 1); // skip whitespace flag=1
@@ -173,13 +173,13 @@ int GRecord::Init (int iKey)
   return 1;
 }
 
-int GRecord::SetFileName(TCHAR * szFileNameIn)
+int GRecord::SetFileName(const TCHAR *szFileNameIn)
 {
   _tcscpy(FileName,szFileNameIn);
   return 0;
 }
 
-bool GRecord::IncludeRecordInGCalc(unsigned char * szIn)
+bool GRecord::IncludeRecordInGCalc(const unsigned char *szIn)
 { //returns false if record is not to be included in G record calc (see IGC specs)
   bool bValid;
   TCHAR c1;
