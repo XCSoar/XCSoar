@@ -138,8 +138,6 @@ void
 MD5::InitDigest(void)
 {
   memset(buff512bits,0,64);
-  memset(w,0,sizeof(unsigned long) * 16);
-  memset(digest,0, 16);
 
   MessageLenBits=0;
   a=0; b=0; c=0; d=0;
@@ -266,6 +264,7 @@ MD5::Process512(const unsigned char *s512in)
   d=h3;
 
   // copy the 64 chars into the 16 unsigned longs
+  unsigned long w[16];
   for (int j=0; j < 16; j++) {
     w[j] = (((unsigned long)s512in[(j*4)+3]) << 24) |
           (((unsigned long)s512in[(j*4)+2]) << 16) |
@@ -311,6 +310,7 @@ MD5::Process512(const unsigned char *s512in)
 int
 MD5::GetDigest(TCHAR * szOut)
 { // extract 4 bytes from each unsigned long
+  unsigned char digest[16];
 
   digest[0] = (unsigned char) (h0 & 0xFF);
   digest[1] = (unsigned char)((h0 >> 8) & 0xFF);

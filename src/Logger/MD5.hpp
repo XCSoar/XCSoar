@@ -50,8 +50,6 @@ public:
 
 private:
   unsigned char buff512bits[64];
-  unsigned long w[16];
-  unsigned char digest[16];
   unsigned long a, b, c, d;
   unsigned long h0, h1, h2, h3;
   unsigned long f, g;
