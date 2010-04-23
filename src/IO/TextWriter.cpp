@@ -68,12 +68,8 @@ TextWriter::~TextWriter()
 #ifdef _UNICODE
 
 bool
-TextWriter::write(const TCHAR *s)
+TextWriter::write(const TCHAR *s, size_t src_length)
 {
-  assert(_tcschr(s, _T('\r')) == NULL);
-  assert(_tcschr(s, _T('\n')) == NULL);
-
-  size_t src_length = _tcslen(s);
   if (src_length == 0)
     /* empty string, nothing to do */
     return true;
@@ -89,6 +85,15 @@ TextWriter::write(const TCHAR *s)
     return false;
 
   return write(dest, length);
+}
+
+bool
+TextWriter::write(const TCHAR *s)
+{
+  assert(_tcschr(s, _T('\r')) == NULL);
+  assert(_tcschr(s, _T('\n')) == NULL);
+
+  return write(s, _tcslen(s));
 }
 
 bool

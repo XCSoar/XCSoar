@@ -139,6 +139,8 @@ public:
   }
 
 #ifdef _UNICODE
+  bool write(const TCHAR *s, size_t length);
+
   bool write(const TCHAR *s);
 
   bool writeln(const TCHAR *s) {
