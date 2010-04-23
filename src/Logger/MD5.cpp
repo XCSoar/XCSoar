@@ -174,12 +174,6 @@ MD5::Finalize(void)
 
 }
 
-int
-MD5::GetDigestMaxlen(void)
-{
-  return 16;
-}
-
 void
 MD5::Process512(unsigned char * s512in)
 { // assume exactly 512 bytes

@@ -58,12 +58,6 @@ GRecord::Init()
 }
 
 int
-GRecord::GetDigestMaxLen()
-{
-  return 4 * oMD5[0].GetDigestMaxlen() + 1;  // '\0' at end
-}
-
-int
 GRecord::AppendRecordToBuffer(TCHAR * szIn)
 {
   unsigned int iLen = _tcslen(szIn);

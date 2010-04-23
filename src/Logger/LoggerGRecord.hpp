@@ -46,6 +46,11 @@
 #define XCSOAR_IGC_CODE "XCS"
 
 class  GRecord {
+public:
+  enum {
+    DIGEST_LENGTH = 4 * MD5::DIGEST_LENGTH + 1,
+  };
+
 private:
 
   MD5 oMD5[4];
@@ -61,7 +66,6 @@ public:
   int Init();
   int GetVersion(TCHAR * szOut);
   int AppendRecordToBuffer(TCHAR * szIn);
-  int GetDigestMaxLen(void);
   int FinalizeBuffer();
   int GetDigest(TCHAR * szOut);
   int IsValidIGCChar(char c);

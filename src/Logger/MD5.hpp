@@ -43,6 +43,11 @@
 
 class MD5
 {
+public:
+  enum {
+    DIGEST_LENGTH = 16,
+  };
+
 private:
   unsigned char buff512bits[64];
   unsigned long w[16];
@@ -67,7 +72,6 @@ public:
   void AppendString(const unsigned char *sin, int bSkipWhiteSpaceFlag); // must be NULL-terminated string!
   void Finalize(void);
   int GetDigest(TCHAR * szOut);
-  int GetDigestMaxlen(void);
     //int IsWhiteSpace(char c);
   static int IsValidIGCChar(char c); //returns 1 if Valid IGC Char
 
