@@ -1,6 +1,6 @@
 CABWIZ = wine 'c:\cabwiz\cabwiz.exe'
 
-$(TARGET_BIN_DIR)/XCSoar.inf: build/cab.inf
+$(TARGET_BIN_DIR)/XCSoar.inf: build/cab.inf $(TARGET_BIN_DIR)/dirstamp
 	$(Q)cp $< $@
 
 $(addprefix $(TARGET_BIN_DIR)/,$(THIRDPARTY_DLLS)): $(TARGET_BIN_DIR)/%.dll: $(THIRDPARTY_DLL_DIR)/%.dll
