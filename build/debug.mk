@@ -4,7 +4,7 @@ ifeq ($(DEBUG),y)
 OPTIMIZE := -O0
 OPTIMIZE += -funit-at-a-time
 else
-OPTIMIZE := -O2 -DNDEBUG -Wuninitialized
+OPTIMIZE := -Os -DNDEBUG -Wuninitialized
 endif
 
 ifeq ($(TARGET),UNIX)
