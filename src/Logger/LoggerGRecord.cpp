@@ -293,7 +293,7 @@ GRecord::ReadGRecordFromFile(TCHAR szOutput[])
 
   unsigned int iLenDigest=0;
   while(1) {
-    if (!fgetws(data, MAX_REC_LENGTH, inFile)) {
+    if (!_fgetts(data, MAX_REC_LENGTH, inFile)) {
       break;
     }
 
