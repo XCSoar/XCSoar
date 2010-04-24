@@ -1991,7 +1991,7 @@ static void setVariables(void) {
   LoadFormProperty(*wf, _T("prpTerrainContrast"),
                    iround(XCSoarInterface::SettingsMap().TerrainContrast*100/255));
   LoadFormProperty(*wf, _T("prpTerrainBrightness"),
-                   iround(XCSoarInterface::SettingsMap().TerrainContrast*100/255));
+                   iround(XCSoarInterface::SettingsMap().TerrainBrightness*100/255));
 
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainRamp"));
   if (wp) {
