@@ -1967,6 +1967,7 @@ static void setVariables(void) {
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(gettext(_T("Winpilot")));
     dfe->addEnumText(gettext(_T("Alternate")));
+    dfe->addEnumText(gettext(_T("Green/Orange")));
     dfe->Set(Appearance.IndLandable);
     wp->RefreshDisplay();
   }
