@@ -1143,8 +1143,6 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
 
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
-  static TCHAR t_lau[] = _T("2,1,2,1");
-
   static unsigned h1;
   static unsigned n1;
   static unsigned e1;
@@ -1170,6 +1168,9 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   _stprintf(t_laa1, _T("%d,%d,%d,%d,2,DDA85C,%d,0,0,0,1"), l, n1, e1, h1, t1);
   static TCHAR t_laa2[50];
   _stprintf(t_laa2, _T("0,%d,%d,%d,2,AA9146,%d,0,0,0,1"), n2, e2, h2, t2);
+
+  static TCHAR t_lau[50];
+  _stprintf(t_lau, _T("2,1,2,1,%d"), l);
 
   GPS_INFO->flarm.FLARM_Available = true;
   TCHAR ctemp[MAX_NMEA_LEN];
