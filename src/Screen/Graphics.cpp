@@ -277,6 +277,11 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
     hBmpAirportUnReachable.load(IDB_AIRPORT_UNREACHABLE);
     hBmpFieldReachable.load(IDB_OUTFIELD_REACHABLE);
     hBmpFieldUnReachable.load(IDB_OUTFIELD_UNREACHABLE);
+  } else if (Appearance.IndLandable == wpLandableAltB) {
+    hBmpAirportReachable.load(IDB_AIRPORT_REACHABLE);
+    hBmpAirportUnReachable.load(IDB_AIRPORT_UNREACHABLE2);
+    hBmpFieldReachable.load(IDB_OUTFIELD_REACHABLE);
+    hBmpFieldUnReachable.load(IDB_OUTFIELD_UNREACHABLE2);
   }
 
   for (int i = 0; i < AIRSPACECLASSCOUNT; i++) {

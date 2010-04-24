@@ -83,6 +83,7 @@ typedef enum{
 typedef enum{
   wpLandableDefault=0,
   wpLandableAltA,
+  wpLandableAltB,
 }IndLandable_t;
 
 typedef enum{
