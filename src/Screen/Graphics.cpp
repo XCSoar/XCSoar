@@ -275,8 +275,8 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
   } else if (Appearance.IndLandable == wpLandableAltA) {
     hBmpAirportReachable.load(IDB_AIRPORT_REACHABLE);
     hBmpAirportUnReachable.load(IDB_AIRPORT_UNREACHABLE);
-    hBmpFieldReachable.load(IDB_OUTFILED_REACHABLE);
-    hBmpFieldUnReachable.load(IDB_OUTFILED_UNREACHABLE);
+    hBmpFieldReachable.load(IDB_OUTFIELD_REACHABLE);
+    hBmpFieldUnReachable.load(IDB_OUTFIELD_UNREACHABLE);
   }
 
   for (int i = 0; i < AIRSPACECLASSCOUNT; i++) {

@@ -42,8 +42,8 @@
 #define IDB_UNIT_FT                     288
 #define IDB_AIRPORT_REACHABLE           289
 #define IDB_AIRPORT_UNREACHABLE         290
-#define IDB_OUTFILED_REACHABLE          291
-#define IDB_OUTFILED_UNREACHABLE        292
+#define IDB_OUTFIELD_REACHABLE          291
+#define IDB_OUTFIELD_UNREACHABLE        292
 #define IDB_VARIOSCALEA                 293
 #define IDB_UNIT_MS                     294
 #define IDB_UNIT_KT                     295
@@ -80,7 +80,7 @@
 #define IDB_SWIFT2                      332
 #define IDD_PROGRESS_LANDSCAPE2         333
 #define IDB_AIRPORT_UNREACHABLE2        334
-#define IDB_OUTFILED_UNREACHABLE2       335
+#define IDB_OUTFIELD_UNREACHABLE2       335
 #define IDC_MESSAGE                     1094
 #define IDC_PROGRESS1                   1239
 #define IDC_VERSION                     1254
