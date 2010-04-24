@@ -378,7 +378,7 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   int sunsetmins;
   WndProperty *wp;
 
-  if (!Layout::landscape)
+  if (Layout::landscape)
     wf = dlgLoadFromXML(CallBackTable, _T("dlgWayPointDetails_L.xml"),
                         parent, _T("IDR_XML_WAYPOINTDETAILS_L"));
   else
