@@ -79,6 +79,8 @@
 #define IDB_LAUNCHER2                   331
 #define IDB_SWIFT2                      332
 #define IDD_PROGRESS_LANDSCAPE2         333
+#define IDB_AIRPORT_UNREACHABLE2        334
+#define IDB_OUTFILED_UNREACHABLE2       335
 #define IDC_MESSAGE                     1094
 #define IDC_PROGRESS1                   1239
 #define IDC_VERSION                     1254
