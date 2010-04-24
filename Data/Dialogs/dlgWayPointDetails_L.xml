@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm Name="frmWayPointInfo" Width=320 Height=240 Caption="Waypoint Info">
+  <WndButton Name="cmdGoto" Caption="Goto" X=5 Y=10 Width=60  Height=28 Font=2 />
+
   <WndSymbolButton Name="cmdPrev"  Caption="&lt;" X=5 Y=160 Width=29  Height=28 Font=3 OnClickNotify="OnPrevClicked" />
   <WndSymbolButton Name="cmdNext"  Caption="&gt;" X=36 Y=160 Width=29  Height=28 Font=3 OnClickNotify="OnNextClicked" />
 
@@ -22,8 +24,7 @@
   <WndListFrame Name=frmDetails X=70 Y=0 Width=246 Height=222 ItemHeight=18 Font=3 Border="1"/>
 
   <Panel Name="frmCommands" X=70 Y=0 Width=246 Height=222 Font=2 Visible=0 Border="1">
-    <WndButton Name="cmdGoto"        Caption="Goto" X=50 Y=10 Width=150  Height=30 Font=2 />
-    <WndButton Name="cmdReplace"     Caption="Replace in task"       X=50 Y=-1 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdReplace"     Caption="Replace in task"       X=50 Y=10 Width=150  Height=30 Font=2 />
     <WndButton Name="cmdInserInTask" Caption="Insert in task"        X=50 Y=-1 Width=150  Height=30 Font=2 />
     <WndButton Name="cmdAppendInTask" Caption="Append to task"       X=50 Y=-1 Width=150  Height=30 Font=2 />
     <WndButton Name="cmdRemoveFromTask" Caption="Remove from task"   X=50 Y=-1 Width=150  Height=30 Font=2 />
