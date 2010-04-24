@@ -498,8 +498,6 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     if (Appearance.IndLandable == wpLandableDefault)
       // make space for the green circle
       x += 5;
-    else if (Appearance.IndLandable == wpLandableAltA)
-      x += 0;
   }
 
   // landable waypoint label inside white box
