@@ -47,8 +47,6 @@ static LPTSTR stringDup(const tstring text)
   return stringDup(text.c_str());
 }
 
-/////
-
 DataNodeXML::DataNodeXML(const tstring &node_name, 
                          const XMLNode &the_node):
   DataNode(node_name)
