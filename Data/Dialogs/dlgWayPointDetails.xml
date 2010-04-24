@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm Name="frmWayPointInfo" Width=240 Height=320 Caption="Waypoint Info">
-  <WndSymbolButton Name="cmdPrev"  Caption="&lt;" X=0 Y=240 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" />
-  <WndSymbolButton Name="cmdNext"  Caption="&gt;" X=35 Y=240 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" />
-  <WndButton Name="cmdClose" Caption="Close" X=5 Y=270 Width=60  Height=28 Font=2 />
+  <WndSymbolButton Name="cmdPrev"  Caption="&lt;" X=8 Y=270 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" />
+  <WndSymbolButton Name="cmdNext"  Caption="&gt;" X=48 Y=270 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" />
+  
+  <WndButton Name="cmdClose" Caption="Close" X=172 Y=270 Width=60  Height=28 Font=2 />
 
   <Panel Name="frmInfos" X=0 Y=0 Width=240 Height=220 Font=2 Border="1">
     <WndProperty Name="prpWpComment" Caption="Comment"       X=2 Y=2  Width=230 Height=40 CaptionWidth=100 Font=2 ReadOnly=1 />
