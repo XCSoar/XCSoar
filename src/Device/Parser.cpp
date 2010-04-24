@@ -1006,7 +1006,7 @@ NMEAParser::PFLAU(const TCHAR *String, const TCHAR **params, size_t nparams,
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
   _stscanf(String,
-      _T("%hu,%hu,%hu,%hu"),
+      _T("%hu,%hu,%hu,%*hu,%hu"),
       &flarm.FLARM_RX,
       &flarm.FLARM_TX,
       &flarm.FLARM_GPS,
