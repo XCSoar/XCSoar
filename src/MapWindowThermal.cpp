@@ -43,61 +43,56 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 
-void MapWindow::CalculateScreenPositionsThermalSources() {
-  for (int i=0; i<MAX_THERMAL_SOURCES; i++) {
-    if (Calculated().ThermalSources[i].LiftRate>0) {
-      double dh = Basic().NavAltitude
-        -Calculated().ThermalSources[i].GroundHeight;
-      if (dh<0) {
+void
+MapWindow::CalculateScreenPositionsThermalSources()
+{
+  for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
+    if (Calculated().ThermalSources[i].LiftRate > 0) {
+      double dh = Basic().NavAltitude -
+                  Calculated().ThermalSources[i].GroundHeight;
+      if (dh < 0) {
         ThermalSources[i].Visible = false;
         continue;
       }
 
-      double t = -dh/Calculated().ThermalSources[i].LiftRate;
+      double t = -dh / Calculated().ThermalSources[i].LiftRate;
       GEOPOINT loc;
       FindLatitudeLongitude(Calculated().ThermalSources[i].Location,
-                            Basic().wind.bearing,
-                            Basic().wind.norm * t,
-                            &loc);
+                            Basic().wind.bearing, Basic().wind.norm * t, &loc);
       ThermalSources[i].Visible =
-	LonLat2ScreenIfVisible(loc, &ThermalSources[i].Screen);
+          LonLat2ScreenIfVisible(loc, &ThermalSources[i].Screen);
     } else {
       ThermalSources[i].Visible = false;
     }
   }
 }
 
-
 void
 MapWindow::DrawThermalEstimate(Canvas &canvas)
 {
   if (DisplayMode == dmCircling) {
-    if (Calculated().ThermalEstimate_R>0) {
+    if (Calculated().ThermalEstimate_R > 0)
       draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpThermalSource,
-				    Calculated().ThermalEstimate_Location,
-				    10, 10);
-    }
+                                    Calculated().ThermalEstimate_Location,
+                                    10, 10);
   } else if (GetMapScaleKM() <= 4) {
-    for (int i=0; i<MAX_THERMAL_SOURCES; i++) {
-      if (ThermalSources[i].Visible) {
-	draw_masked_bitmap(canvas, MapGfx.hBmpThermalSource,
-			   ThermalSources[i].Screen.x,
-			   ThermalSources[i].Screen.y,
-			   10, 10, true);
-      }
+    for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
+      if (ThermalSources[i].Visible)
+        draw_masked_bitmap(canvas, MapGfx.hBmpThermalSource,
+                           ThermalSources[i].Screen.x,
+                           ThermalSources[i].Screen.y, 10, 10, true);
     }
   }
 }
 
-
-void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
+void
+MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
 {
-  POINT GliderBand[5] = { {0,0},{23,0},{22,0},{24,0},{0,0} };
+  POINT GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };
 
-  if ((Calculated().task_stats.total.solution_remaining.AltitudeDifference>50)
-      &&(DisplayMode == dmFinalGlide)) {
+  if ((Calculated().task_stats.total.solution_remaining.AltitudeDifference > 50)
+      && (DisplayMode == dmFinalGlide))
     return;
-  }
 
   // JMW TODO accuracy: gather proper statistics
   // note these should/may also be relative to ground
@@ -107,28 +102,28 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
   double h;
   double Wt[NUMTHERMALBUCKETS];
   double ht[NUMTHERMALBUCKETS];
-  double Wmax=0.0;
-  int TBSCALEY = ( (rc.bottom - rc.top )/2)-IBLSCALE(30);
+  double Wmax = 0.0;
+  int TBSCALEY = ((rc.bottom - rc.top) / 2) - IBLSCALE(30);
 #define TBSCALEX 20
 
   // calculate height above safety altitude
-  double hoffset = SettingsComputer().safety_height_terrain
-    +Calculated().TerrainBase;
+  double hoffset = SettingsComputer().safety_height_terrain +
+                   Calculated().TerrainBase;
   h = Basic().NavAltitude - hoffset;
 
   bool draw_start_height = false;
-  double hstart=0;
+  double hstart = 0;
   
   OrderedTaskBehaviour task_props;
   if (task != NULL)
     task_props = task->get_ordered_task_behaviour();
 
   draw_start_height = Calculated().common_stats.ordered_valid
-    && (task_props.start_max_height != 0)
-    && Calculated().TerrainValid;
+                      && (task_props.start_max_height != 0)
+                      && Calculated().TerrainValid;
   if (draw_start_height) {
     if (task_props.start_max_height_ref == 0) {
-      hstart = task_props.start_max_height+Calculated().TerrainAlt;
+      hstart = task_props.start_max_height + Calculated().TerrainAlt;
     } else {
       hstart = task_props.start_max_height;
     }
@@ -145,82 +140,79 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
   }
 
   // no thermalling has been done above safety altitude
-  if (mth<=1) {
+  if (mth <= 1)
     return;
-  }
-  if (maxh-minh<=0) {
+  if (maxh - minh <= 0)
     return;
-  }
 
   // normalised heights
-  double hglider = (h-minh)/(maxh-minh);
-  hstart = (hstart-minh)/(maxh-minh);
+  double hglider = (h - minh) / (maxh - minh);
+  hstart = (hstart - minh) / (maxh - minh);
 
   // calculate averages
   int numtherm = 0;
 
   const double mc = get_glide_polar().get_mc();
-  Wmax = max(0.5,mc);
+  Wmax = max(0.5, mc);
 
-  for (i=0; i<NUMTHERMALBUCKETS; i++) {
+  for (i = 0; i < NUMTHERMALBUCKETS; i++) {
     double wthis = 0;
     // height of this thermal point [0,mth]
-    double hi = i*mth/NUMTHERMALBUCKETS;
-    double hp = ((hi-minh)/(maxh-minh));
+    double hi = i * mth / NUMTHERMALBUCKETS;
+    double hp = ((hi - minh) / (maxh - minh));
 
-    if (Calculated().ThermalProfileN[i]>5) {
+    if (Calculated().ThermalProfileN[i] > 5) {
       // now requires 10 items in bucket before displaying,
       // to eliminate kinks
-      wthis = Calculated().ThermalProfileW[i]
-                 /Calculated().ThermalProfileN[i];
+      wthis = Calculated().ThermalProfileW[i] / Calculated().ThermalProfileN[i];
     }
-    if (wthis>0.0) {
-      ht[numtherm]= hp;
-      Wt[numtherm]= wthis;
-      Wmax = max(Wmax,wthis/1.5);
+    if (wthis > 0.0) {
+      ht[numtherm] = hp;
+      Wt[numtherm] = wthis;
+      Wmax = max(Wmax, wthis / 1.5);
       numtherm++;
     }
   }
 
-  if ((!draw_start_height) && (numtherm<=1)) {
-    return; // don't display if insufficient statistics
+  if ((!draw_start_height) && (numtherm<=1))
+    // don't display if insufficient statistics
     // but do draw if start height needs to be drawn
-  }
+    return;
 
   // position of thermal band
-  if (numtherm>1) {
+  if (numtherm > 1) {
     canvas.select(MapGfx.hpThermalBand);
     canvas.select(MapGfx.hbThermalBand);
 
-    POINT ThermalProfile[NUMTHERMALBUCKETS+2];
-    for (i=0; i<numtherm; i++) {
-      ThermalProfile[1+i].x =
-	(iround((Wt[i]/Wmax)*IBLSCALE(TBSCALEX)))+rc.left;
+    POINT ThermalProfile[NUMTHERMALBUCKETS + 2];
+    for (i = 0; i < numtherm; i++) {
+      ThermalProfile[1 + i].x =
+          (iround((Wt[i] / Wmax) * IBLSCALE(TBSCALEX))) + rc.left;
 
-      ThermalProfile[1+i].y =
-	IBLSCALE(4)+iround(TBSCALEY*(1.0-ht[i]))+rc.top;
+      ThermalProfile[1 + i].y =
+          IBLSCALE(4) + iround(TBSCALEY * (1.0 - ht[i])) + rc.top;
     }
     ThermalProfile[0].x = rc.left;
     ThermalProfile[0].y = ThermalProfile[1].y;
-    ThermalProfile[numtherm+1].x = rc.left;
-    ThermalProfile[numtherm+1].y = ThermalProfile[numtherm].y;
+    ThermalProfile[numtherm + 1].x = rc.left;
+    ThermalProfile[numtherm + 1].y = ThermalProfile[numtherm].y;
 
     canvas.polygon(ThermalProfile, numtherm + 2);
   }
 
   // position of thermal band
 
-  GliderBand[0].y = IBLSCALE(4)+iround(TBSCALEY*(1.0-hglider))+rc.top;
+  GliderBand[0].y = IBLSCALE(4) + iround(TBSCALEY * (1.0 - hglider)) + rc.top;
   GliderBand[1].y = GliderBand[0].y;
-  GliderBand[1].x = max(iround((mc/Wmax)*IBLSCALE(TBSCALEX)),IBLSCALE(4))
-    +rc.left;
+  GliderBand[1].x =
+      max(iround((mc / Wmax) * IBLSCALE(TBSCALEX)), IBLSCALE(4)) + rc.left;
 
-  GliderBand[2].x = GliderBand[1].x-IBLSCALE(4);
-  GliderBand[2].y = GliderBand[0].y-IBLSCALE(4);
+  GliderBand[2].x = GliderBand[1].x - IBLSCALE(4);
+  GliderBand[2].y = GliderBand[0].y - IBLSCALE(4);
   GliderBand[3].x = GliderBand[1].x;
   GliderBand[3].y = GliderBand[1].y;
-  GliderBand[4].x = GliderBand[1].x-IBLSCALE(4);
-  GliderBand[4].y = GliderBand[0].y+IBLSCALE(4);
+  GliderBand[4].x = GliderBand[1].x - IBLSCALE(4);
+  GliderBand[4].y = GliderBand[0].y + IBLSCALE(4);
 
   canvas.select(MapGfx.hpThermalBandGlider);
 
@@ -229,7 +221,7 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
 
   if (draw_start_height) {
     canvas.select(MapGfx.hpFinalGlideBelow);
-    GliderBand[0].y = IBLSCALE(4)+iround(TBSCALEY*(1.0-hstart))+rc.top;
+    GliderBand[0].y = IBLSCALE(4) + iround(TBSCALEY * (1.0 - hstart)) + rc.top;
     GliderBand[1].y = GliderBand[0].y;
     canvas.polyline(GliderBand, 2);
   }
