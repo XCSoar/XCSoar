@@ -189,19 +189,16 @@ dlgTeamCodeShowModal(void)
 {
   WndProperty* wp = NULL;
   WndButton *buttonCode = NULL;
-  wf = NULL;
 
-  if (Layout::landscape) {
+  if (Layout::landscape)
     wf = dlgLoadFromXML(CallBackTable, _T("dlgTeamCode_L.xml"),
         XCSoarInterface::main_window, _T("IDR_XML_TEAMCODE_L"));
-    if (!wf)
-      return;
-  } else {
+  else
     wf = dlgLoadFromXML(CallBackTable, _T("dlgTeamCode.xml"),
         XCSoarInterface::main_window, _T("IDR_XML_TEAMCODE"));
-    if (!wf)
-      return;
-  }
+
+  if (!wf)
+    return;
 
   // set event for button
   buttonCode = ((WndButton *)wf->FindByName(_T("cmdSetCode")));
