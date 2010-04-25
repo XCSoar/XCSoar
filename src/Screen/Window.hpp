@@ -605,6 +605,13 @@ public:
   static Window *get(HWND hWnd) {
     WNDPROC wndproc = (WNDPROC)::GetWindowLongPtr(hWnd, GWLP_WNDPROC);
     return wndproc == WndProc
+#ifdef _WIN32_WCE
+      /* Windows CE seems to put WNDPROC pointers into some other
+         segment (0x22000000 added); this is a dirty workaround which
+         will be implemented properly once we understand what this
+         really means */
+      || ((DWORD)wndproc & 0xffffff) == (DWORD)WndProc
+#endif
       ? get_unchecked(hWnd)
       : NULL;
   }
