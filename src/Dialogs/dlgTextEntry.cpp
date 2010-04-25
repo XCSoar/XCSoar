@@ -48,26 +48,25 @@ Copyright_License {
 
 using std::min;
 
-static WndForm *wf=NULL;
-static WndOwnerDrawFrame *wGrid=NULL;
+static WndForm *wf = NULL;
+static WndOwnerDrawFrame *wGrid = NULL;
 
 #define MAX_TEXTENTRY 40
 static unsigned int cursor = 0;
-static int lettercursor=0;
+static int lettercursor = 0;
 static int max_width = MAX_TEXTENTRY;
 
 static TCHAR edittext[MAX_TEXTENTRY];
 
 static TCHAR EntryLetters[] = _T(" ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-");
 
-#define MAXENTRYLETTERS (sizeof(EntryLetters)/sizeof(EntryLetters[0])-1)
+#define MAXENTRYLETTERS (sizeof(EntryLetters) / sizeof(EntryLetters[0]) - 1)
 
 static void
 OnCloseClicked(gcc_unused WndButton &button)
 {
   wf->SetModalResult(mrOK);
 }
-
 
 static void
 OnTextPaint(WindowControl *Sender, Canvas &canvas)
@@ -85,59 +84,59 @@ OnTextPaint(WindowControl *Sender, Canvas &canvas)
   p[0].y = 20;
 
   p[2].x = p[0].x + tsizec.cx;
-  p[2].y = p[0].y + tsize.cy+5;
+  p[2].y = p[0].y + tsize.cy + 5;
 
   p[3].x = p[0].x + tsizea.cx;
-  p[3].y = p[0].y + tsize.cy+5;
+  p[3].y = p[0].y + tsize.cy + 5;
 
   p[1].x = p[2].x;
-  p[1].y = p[2].y-2;
+  p[1].y = p[2].y - 2;
 
   p[4].x = p[3].x;
-  p[4].y = p[3].y-2;
+  p[4].y = p[3].y - 2;
 
   canvas.white_pen();
   canvas.polyline(p + 1, 4);
 
-  /*
-  int x = (int)((xv-x_min)*xscale)+rc.left-tsize.cx/2;
-  int y = (int)((y_max-yv)*yscale)+rc.top-tsize.cy/2;
-  */
   canvas.background_opaque();
   canvas.text_opaque(p[0].x, p[0].y, NULL, edittext);
   canvas.background_transparent();
 }
 
-
-
-static void UpdateCursor(void) {
+static void
+UpdateCursor(void)
+{
   if (lettercursor >= (int)MAXENTRYLETTERS)
     lettercursor = 0;
-  if (lettercursor<0)
-    lettercursor = MAXENTRYLETTERS-1;
+
+  if (lettercursor < 0)
+    lettercursor = MAXENTRYLETTERS - 1;
+
   edittext[cursor] = EntryLetters[lettercursor];
 
   if (wGrid != NULL)
     wGrid->invalidate();
-
 }
 
+static void
+MoveCursor(void)
+{
+  if (cursor >= _tcslen(edittext))
+    edittext[cursor + 1] = 0;
 
-static void MoveCursor(void) {
-  if (cursor>=_tcslen(edittext)) {
-    edittext[cursor+1] = 0;
-  }
   for (lettercursor = 0; lettercursor < (int)MAXENTRYLETTERS; lettercursor++) {
-    if (edittext[cursor]== EntryLetters[lettercursor])
+    if (edittext[cursor] == EntryLetters[lettercursor])
       break;
   }
-  if (lettercursor== MAXENTRYLETTERS) {
+
+  if (lettercursor == MAXENTRYLETTERS) {
     lettercursor = 0;
     edittext[cursor] = EntryLetters[lettercursor];
   }
-  if (edittext[cursor]== 0) {
-    lettercursor= 0;
-  }
+
+  if (edittext[cursor] == 0)
+    lettercursor = 0;
+
   UpdateCursor();
 }
 
@@ -147,32 +146,34 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   (void)Sender;
 
   switch (key_code) {
-    case VK_LEFT:
-      if (cursor<1)
-        return true; // min width
-      cursor--;
-      MoveCursor();
+  case VK_LEFT:
+    if (cursor < 1)
+      return true; // min width
+
+    cursor--;
+    MoveCursor();
     return true;
 
-    case VK_RIGHT:
-      if ((int)cursor>=(max_width-2))
-        return true; // max width
-      cursor++;
-      MoveCursor();
+  case VK_RIGHT:
+    if ((int)cursor >= (max_width - 2))
+      return true; // max width
+
+    cursor++;
+    MoveCursor();
     return true;
 
-    case VK_UP:
-      lettercursor--;
-      UpdateCursor();
+  case VK_UP:
+    lettercursor--;
+    UpdateCursor();
     return true;
 
-    case VK_DOWN:
-      lettercursor++;
-      UpdateCursor();
+  case VK_DOWN:
+    lettercursor++;
+    UpdateCursor();
     return true;
 
-    case VK_RETURN:
-      wf->SetModalResult(mrOK);
+  case VK_RETURN:
+    wf->SetModalResult(mrOK);
     return true;
 
   default:
@@ -180,13 +181,10 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   }
 }
 
-
-
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnTextPaint),
   DeclareCallBackEntry(NULL)
 };
-
 
 static void
 OnLeftClicked(WndButton &button)
@@ -212,25 +210,25 @@ OnDownClicked(WndButton &button)
   FormKeyDown(&button, VK_DOWN);
 }
 
-
-
-static void dlgTextEntryHighscoreType(TCHAR *text, int width)
+static void
+dlgTextEntryHighscoreType(TCHAR *text, int width)
 {
   wf = NULL;
   wGrid = NULL;
 
-  if (width==0) {
+  if (width == 0)
     width = MAX_TEXTENTRY;
-  }
+
   max_width = min(MAX_TEXTENTRY, width);
 
   wf = dlgLoadFromXML(CallBackTable,
                       is_altair() ? _T("dlgTextEntry_T.xml")
                       : _T("dlgTextEntry.xml"),
-		      XCSoarInterface::main_window,
+                      XCSoarInterface::main_window,
                       is_altair() ? _T("IDR_XML_TEXTENTRY_T")
                       : _T("IDR_XML_TEXTENTRY"));
-  if (!wf) return;
+  if (!wf)
+    return;
 
   wGrid = (WndOwnerDrawFrame*)wf->FindByName(_T("frmGrid"));
 
@@ -260,14 +258,13 @@ static void dlgTextEntryHighscoreType(TCHAR *text, int width)
     wb->SetOnClickNotify(OnDownClicked);
   }
 
-
   cursor = 0;
-  edittext[0]= 0;
-  edittext[1]= 0;
+  edittext[0] = 0;
+  edittext[1] = 0;
   if (!string_is_empty(text)) {
     _tcsupr(text);
-    _tcsncpy(edittext, text, max_width-1);
-    edittext[max_width-1]= 0;
+    _tcsncpy(edittext, text, max_width - 1);
+    edittext[max_width - 1] = 0;
   }
   MoveCursor();
 
@@ -276,11 +273,11 @@ static void dlgTextEntryHighscoreType(TCHAR *text, int width)
   wf->ShowModal();
 
   _tcsncpy(text, edittext, max_width);
-  text[max_width-1]=0;
+  text[max_width - 1] = 0;
 
   // strip trailing spaces
-  int len = _tcslen(text)-1;
-  while ((len>0) && (text[len] == _T(' '))) {
+  int len = _tcslen(text) - 1;
+  while ((len > 0) && (text[len] == _T(' '))) {
     text[len] = 0;
     len--;
   }
@@ -288,10 +285,12 @@ static void dlgTextEntryHighscoreType(TCHAR *text, int width)
   delete wf;
 }
 
-bool dlgTextEntryShowModal(tstring &text, int width)
+bool
+dlgTextEntryShowModal(tstring &text, int width)
 {
   TCHAR buf[width];
   _tcscpy(buf, text.c_str());
+
   if (dlgTextEntryShowModal(buf, width) && _tcslen(buf)) {
     text = tstring(buf);
     return true;
@@ -300,20 +299,19 @@ bool dlgTextEntryShowModal(tstring &text, int width)
   }
 }
 
-
-bool dlgTextEntryShowModal(TCHAR *text, int width)
+bool
+dlgTextEntryShowModal(TCHAR *text, int width)
 {
-  bool bRetVal=false;
-  switch (Appearance.TextInputStyle)
-    {
-    case tiKeyboard:
-      bRetVal=dlgTextEntryKeyboardShowModal(text, width);
-      break;
-    case tiHighScore:
-    default:
-      dlgTextEntryHighscoreType(text, width);
-      bRetVal=true;
-      break;
-    }
+  bool bRetVal = false;
+  switch (Appearance.TextInputStyle) {
+  case tiKeyboard:
+    bRetVal = dlgTextEntryKeyboardShowModal(text, width);
+    break;
+  case tiHighScore:
+  default:
+    dlgTextEntryHighscoreType(text, width);
+    bRetVal = true;
+    break;
+  }
   return bRetVal;
 }
