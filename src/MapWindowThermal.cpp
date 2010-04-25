@@ -47,23 +47,24 @@ void
 MapWindow::CalculateScreenPositionsThermalSources()
 {
   for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
-    if (Calculated().ThermalSources[i].LiftRate > 0) {
-      double dh = Basic().NavAltitude -
-                  Calculated().ThermalSources[i].GroundHeight;
-      if (dh < 0) {
-        ThermalSources[i].Visible = false;
-        continue;
-      }
-
-      double t = -dh / Calculated().ThermalSources[i].LiftRate;
-      GEOPOINT loc;
-      FindLatitudeLongitude(Calculated().ThermalSources[i].Location,
-                            Basic().wind.bearing, Basic().wind.norm * t, &loc);
-      ThermalSources[i].Visible =
-          LonLat2ScreenIfVisible(loc, &ThermalSources[i].Screen);
-    } else {
+    if (Calculated().ThermalSources[i].LiftRate <= 0) {
       ThermalSources[i].Visible = false;
+      continue;
     }
+
+    double dh = Basic().NavAltitude -
+                Calculated().ThermalSources[i].GroundHeight;
+    if (dh < 0) {
+      ThermalSources[i].Visible = false;
+      continue;
+    }
+
+    double t = -dh / Calculated().ThermalSources[i].LiftRate;
+    GEOPOINT loc;
+    FindLatitudeLongitude(Calculated().ThermalSources[i].Location,
+                          Basic().wind.bearing, Basic().wind.norm * t, &loc);
+    ThermalSources[i].Visible =
+        LonLat2ScreenIfVisible(loc, &ThermalSources[i].Screen);
   }
 }
 
