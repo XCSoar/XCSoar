@@ -117,21 +117,21 @@ OnCodeClicked(gcc_unused WndButton &button)
   _tcsncpy(newTeammateCode,
            XCSoarInterface::SettingsComputer().TeammateCode, 10);
 
-  if (dlgTextEntryShowModal(newTeammateCode, 7)) {
+  if (!dlgTextEntryShowModal(newTeammateCode, 7))
+    return;
 
-    int i = _tcslen(newTeammateCode) - 1;
-    while (i >= 0) {
-      if (newTeammateCode[i] != _T(' '))
-        break;
-      newTeammateCode[i] = 0;
-      i--;
-    }
-
-    _tcsncpy(XCSoarInterface::SetSettingsComputer().TeammateCode,
-             newTeammateCode, 10);
-    if (!string_is_empty(XCSoarInterface::SettingsComputer().TeammateCode))
-      XCSoarInterface::SetSettingsComputer().TeammateCodeValid = true;
+  int i = _tcslen(newTeammateCode) - 1;
+  while (i >= 0) {
+    if (newTeammateCode[i] != _T(' '))
+      break;
+    newTeammateCode[i] = 0;
+    i--;
   }
+
+  _tcsncpy(XCSoarInterface::SetSettingsComputer().TeammateCode,
+           newTeammateCode, 10);
+  if (!string_is_empty(XCSoarInterface::SettingsComputer().TeammateCode))
+    XCSoarInterface::SetSettingsComputer().TeammateCodeValid = true;
 }
 
 static void
