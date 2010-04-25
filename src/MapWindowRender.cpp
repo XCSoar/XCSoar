@@ -307,7 +307,7 @@ void MapWindow::Render(Canvas &canvas, const RECT rc)
 
   DrawThermalEstimate(canvas);
 
-  // Render task and waypoints
+  // Render task, waypoints and marks
   RenderTaskElements(canvas, rc);
 
   RenderGlide(canvas, rc);
