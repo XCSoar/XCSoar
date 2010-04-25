@@ -58,8 +58,7 @@ Update()
   double teammateRange = XCSoarInterface::Calculated().TeammateRange;
 
   if (XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint >= 0) {
-    double Value = XCSoarInterface::Calculated().TeammateBearing
-                 - XCSoarInterface::Basic().TrackBearing;
+    double Value = teammateBearing - XCSoarInterface::Basic().TrackBearing;
 
     if (Value < -180.0)
       Value += 360.0;
@@ -120,12 +119,11 @@ OnCodeClicked(gcc_unused WndButton &button)
   if (!dlgTextEntryShowModal(newTeammateCode, 7))
     return;
 
-  int i = _tcslen(newTeammateCode) - 1;
-  while (i >= 0) {
+  for (int i = _tcslen(newTeammateCode) - 1; i >= 0; i--) {
     if (newTeammateCode[i] != _T(' '))
       break;
+
     newTeammateCode[i] = 0;
-    i--;
   }
 
   _tcsncpy(XCSoarInterface::SetSettingsComputer().TeammateCode,
