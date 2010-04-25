@@ -47,7 +47,7 @@
 #include "TeamCodeCalculation.h"
 #include "Compiler.h"
 
-static WndForm *wf=NULL;
+static WndForm *wf = NULL;
 
 static void
 Update()
@@ -59,7 +59,7 @@ Update()
 
   if (XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint >= 0) {
     double Value = XCSoarInterface::Calculated().TeammateBearing
-        - XCSoarInterface::Basic().TrackBearing;
+                 - XCSoarInterface::Basic().TrackBearing;
 
     if (Value < -180.0)
       Value += 360.0;
@@ -72,7 +72,6 @@ Update()
       _stprintf(Text, _T("<%2.0f")_T(DEG), -Value);
     else
       _tcscpy(Text, _T("<>"));
-
   } else {
     _tcscpy(Text, _T("---"));
   }
@@ -88,6 +87,7 @@ Update()
     wp->GetDataField()->SetAsFloat(teammateBearing);
     wp->RefreshDisplay();
   }
+
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(Units::ToUserDistance(teammateRange));
@@ -113,21 +113,22 @@ static void
 OnCodeClicked(gcc_unused WndButton &button)
 {
   TCHAR newTeammateCode[10];
-  _tcsncpy(newTeammateCode, XCSoarInterface::SettingsComputer().TeammateCode,
-      10);
+
+  _tcsncpy(newTeammateCode,
+           XCSoarInterface::SettingsComputer().TeammateCode, 10);
+
   if (dlgTextEntryShowModal(newTeammateCode, 7)) {
 
     int i = _tcslen(newTeammateCode) - 1;
     while (i >= 0) {
-      if (newTeammateCode[i] != _T(' ')) {
+      if (newTeammateCode[i] != _T(' '))
         break;
-      }
       newTeammateCode[i] = 0;
       i--;
-    };
+    }
 
     _tcsncpy(XCSoarInterface::SetSettingsComputer().TeammateCode,
-        newTeammateCode, 10);
+             newTeammateCode, 10);
     if (!string_is_empty(XCSoarInterface::SettingsComputer().TeammateCode))
       XCSoarInterface::SetSettingsComputer().TeammateCodeValid = true;
   }
@@ -138,19 +139,19 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
 {
   TCHAR newTeamFlarmCNTarget[4];
   _tcsncpy(newTeamFlarmCNTarget,
-      XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget, 4);
+           XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget, 4);
 
   if (dlgTextEntryShowModal(newTeamFlarmCNTarget, 4)) {
     _tcsncpy(XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget,
-        newTeamFlarmCNTarget, 4);
+             newTeamFlarmCNTarget, 4);
     XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
   }
   int flarmId = LookupFLARMDetails(
       XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
 
   if (flarmId == 0) {
-    MessageBoxX(gettext(_T("Unknown Competition Number")), gettext(
-        _T("Not Found")), MB_OK | MB_ICONINFORMATION);
+    MessageBoxX(gettext(_T("Unknown Competition Number")),
+                gettext(_T("Not Found")), MB_OK | MB_ICONINFORMATION);
 
     XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = false;
     XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = 0;
@@ -221,5 +222,4 @@ dlgTeamCodeShowModal(void)
   wf->ShowModal();
 
   delete wf;
-
 }
