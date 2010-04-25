@@ -42,16 +42,16 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 /**
- * Limits the angle (theta) to 0 - 360 degrees
+ * Limits the angle (theta) to -180 - +180 degrees
  * @param theta Input angle
- * @return Output angle (0-360 degrees)
+ * @return Output angle (-180 - +180 degrees)
  */
 fixed AngleLimit180(const fixed &theta);
 
 /**
- * Limits the angle (theta) to -180 - +180 degrees
+ * Limits the angle (theta) to 0 - 360 degrees
  * @param theta Input angle
- * @return Output angle (-180 - +180 degrees)
+ * @return Output angle (0-360 degrees)
  */
 fixed AngleLimit360(const fixed &theta);
 
