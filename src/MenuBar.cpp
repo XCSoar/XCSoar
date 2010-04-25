@@ -137,7 +137,7 @@ MenuBar::Button::on_paint(Canvas &canvas)
 
   RECT rc = get_client_rect();
   canvas.formatted_text(&rc, get_text().c_str(),
-                        DT_EXPANDTABS | DT_CENTER | DT_VCENTER |
+                        DT_NOPREFIX | DT_CENTER | DT_VCENTER |
                         DT_NOCLIP | DT_WORDBREAK);
 }
 
