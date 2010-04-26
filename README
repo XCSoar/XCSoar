@@ -1,0 +1,76 @@
+XCSoar README
+=============
+
+XCSoar is a tactical glide computer for the Pocket PC operating
+system.
+
+This file is aimed at developers.  Users should read the manual which
+can be found on the XCSoar home page (http://www.xcsoar.org/).
+
+
+Getting the source
+------------------
+
+The XCSoar source code is managed with git (http://git-scm.com/).  It
+can be downloaded with the following command:
+
+ git clone git://xcsoar.git.sourceforge.net/gitroot/xcsoar/xcsoar
+
+To update your repository, type:
+
+ git pull
+
+For more information, please refer to the git documentation.
+
+
+Compiling from source
+---------------------
+
+To compile from source, you need:
+
+- GNU make
+- GNU compiler collection (gcc)
+
+To cross-compile to (desktop) Windows, you need the mingw32 version of
+gcc:
+
+ http://www.mingw.org/
+
+For Pocket PC / Windows CE / Windows Mobile, you need mingw32ce:
+
+ http://cegcc.sourceforge.net/
+ http://sourceforge.net/projects/cegcc/files/cegcc/0.59.1/mingw32ce-0.59.1.tar.bz2/download
+
+To compile, run:
+
+ make TARGET=PC
+
+Supported targets:
+
+ PC: desktop Windows
+
+ PPC2000, PPC2002, PPC2003: Pocket PC
+
+ WM5: Windows Mobile 5.0 and later
+
+ PPC2003X: Pocket PC 2003 with XScale CPU
+
+ PNA: PNAs running Windows CE without hardware buttons
+
+ ALTAIR: Triadis Altair (unmaintained)
+
+ WINE: WineLib (experimental)
+
+ UNIX: Linux and others (work in progress)
+
+
+Submitting patches
+------------------
+
+Submit patches to the XCSoar developer mailing list
+(xcsoar-devel@lists.sourceforge.net).
+
+- patches should be self-contained
+- patches should be self-documenting (add a good description on what
+  is changed, and why you are changing it)
+- write one patch for one change
