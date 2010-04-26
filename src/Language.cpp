@@ -170,10 +170,6 @@ ReadLanguageFile()
   Profile::Get(szProfileLanguageFile, szFile1, MAX_PATH);
   ExpandLocalPath(szFile1);
 
-  // Reset filename in registry in case language
-  // loading crashes the application
-  Profile::Set(szProfileLanguageFile, TEXT("\0"));
-
   // If the language file is not set use the default one
   if (string_is_empty(szFile1))
     _tcscpy(szFile1, TEXT("default.xcl"));
@@ -207,10 +203,6 @@ ReadLanguageFile()
     // Global counter
     GetTextData_Size++;
   }
-
-  // file was OK, so save filename to registry again
-  ContractLocalPath(szFile1);
-  Profile::Set(szProfileLanguageFile, szFile1);
 
   fclose(fp);
 }
