@@ -72,8 +72,6 @@ StatusMessageList::LoadFile()
   Profile::Get(szProfileStatusFile, szFile1, MAX_PATH);
   ExpandLocalPath(szFile1);
 
-  Profile::Set(szProfileStatusFile, TEXT("\0"));
-
   if (string_is_empty(szFile1))
     return;
 
@@ -145,10 +143,6 @@ StatusMessageList::LoadFile()
   // How many we really got (blank next just in case)
   StatusMessageData_Size++;
   _init_Status(StatusMessageData_Size);
-
-  // file was ok, so save it to registry
-  ContractLocalPath(szFile1);
-  Profile::Set(szProfileStatusFile, szFile1);
 }
 
 void
