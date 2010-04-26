@@ -22,6 +22,9 @@
 #
 #   FIXED       "y" means use fixed point math (for FPU-less platforms)
 #
+#   LTO         "y" enables gcc's link-time optimization flag (experimental,
+#               requires gcc 4.5)
+#
 
 .DEFAULT_GOAL := all
 
