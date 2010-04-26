@@ -126,6 +126,8 @@ WndForm::on_destroy()
   if (mModalResult == 0)
     mModalResult = mrCancel;
 
+  kill_timer(cbTimerID);
+
   ContainerControl::on_destroy();
   return true;
 }
