@@ -130,6 +130,8 @@ enum {
   DT_WORDBREAK = 0x8,
   DT_CALCRECT = 0x10,
   DT_CENTER = 0x20,
+  DT_NOPREFIX = 0x40,
+  DT_VCENTER = 0x80,
 };
 
 static inline void
