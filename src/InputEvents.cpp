@@ -206,7 +206,6 @@ InputEvents::readFile()
   // Open file from registry
   Profile::Get(szProfileInputFile, szFile1, MAX_PATH);
   ExpandLocalPath(szFile1);
-  Profile::Set(szProfileInputFile, TEXT("\0"));
 
   if (string_is_empty(szFile1))
     return;
@@ -447,10 +446,6 @@ InputEvents::readFile()
     }
 
   } // end while
-
-  // file was ok, so save it to registry
-  ContractLocalPath(szFile1);
-  Profile::Set(szProfileInputFile, szFile1);
 }
 
 #ifdef _INPUTDEBUG_
