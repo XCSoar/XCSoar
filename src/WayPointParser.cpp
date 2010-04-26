@@ -162,8 +162,6 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
 
   // Get first waypoint filename
   Profile::Get(szProfileWayPointFile, szFile, MAX_PATH);
-  // and clear registry setting (if loading goes totally wrong)
-  Profile::Set(szProfileWayPointFile, TEXT("\0"));
 
   wp_file0 = WayPointFile::create(szFile, 0);
 
@@ -171,9 +169,6 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
   if (wp_file0) {
     // parse the file
     if (wp_file0->Parse(way_points, terrain)) {
-      // reset the registry to the actual file name
-      Profile::Set(szProfileWayPointFile, szFile);
-
       found = true;
       // Set waypoints writable flag
       way_points.set_file0_writable(wp_file0->IsWritable());
@@ -188,16 +183,12 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
 
   // Get second waypoint filename
   Profile::Get(szProfileAdditionalWayPointFile, szFile, MAX_PATH);
-  // and clear registry setting (if loading goes totally wrong)
-  Profile::Set(szProfileAdditionalWayPointFile, TEXT("\0"));
 
   wp_file1 = WayPointFile::create(szFile, 1);
   // If waypoint file exists
   if (wp_file1) {
     // parse the file
     if (wp_file1->Parse(way_points, terrain)) {
-      // reset the registry to the actual file name
-      Profile::Set(szProfileAdditionalWayPointFile, szFile);
       found = true;
     } else {
       LogStartUp(TEXT("Parse error in waypoint file 2"));
