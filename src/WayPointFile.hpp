@@ -69,7 +69,7 @@ public:
    * @param filenum Index of file
    * @return File type if extension is known to XCSoar
    */
-  static WayPointFile* create(TCHAR* filename, 
+  static WayPointFile* create(const TCHAR* filename,
                               int filenum=0);
 
   /**

@@ -277,7 +277,7 @@ WayPointFile::Save(Waypoints &way_points)
 #include "WayPointFileWinPilot.hpp"
 
 WayPointFile*
-WayPointFile::create(TCHAR* filename, int the_filenum)
+WayPointFile::create(const TCHAR* filename, int the_filenum)
 {
   bool compressed = false;
 
