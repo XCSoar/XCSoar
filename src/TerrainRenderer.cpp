@@ -568,11 +568,8 @@ TerrainRenderer::ScanSpotHeights(const int X0, const int Y0,
   spot_max_val = -1;
   spot_min_val = 32767;
 
-  RECT rect_spot;
-  rect_spot.left = rect_visible.left + IBLSCALE(30);
-  rect_spot.right = rect_visible.right - IBLSCALE(30);
-  rect_spot.top = rect_visible.top + IBLSCALE(30);
-  rect_spot.bottom = rect_visible.bottom - IBLSCALE(30);
+  RECT rect_spot = rect_visible;
+  InflateRect(&rect_visible, -IBLSCALE(30), -IBLSCALE(30));
 
   for (int y = Y0; y < Y1; y += dtquant) {
     for (int x = X0; x < X1; x += dtquant, myhbuf++) {
