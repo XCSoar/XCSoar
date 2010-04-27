@@ -71,8 +71,6 @@ DrawThread::run()
   // bounds have changed and there are pending idle calls
   // to be run in the map.
 
-  bool bounds_dirty = false;
-
   // wait until the startup is finished
   running.wait();
 
@@ -82,10 +80,11 @@ DrawThread::run()
   // first time draw
   map.DrawThreadLoop();
 
-  bounds_dirty = map.SmartBounds(true);
-  map.Idle(true);
+  map.SmartBounds(true);
 
-  while (map.Idle(false)) {};
+  bool bounds_dirty = map.Idle(true);
+  while (bounds_dirty)
+    bounds_dirty = map.Idle(false);
 
   // second time draw
   map.DrawThreadLoop();
