@@ -537,17 +537,10 @@ TerrainRenderer::Height(const MapWindowProjection &map_projection,
   }
 
   POINT orig = map_projection.GetOrigScreen();
-  RECT MapRectBig = map_projection.GetMapRectBig();
-  RECT MapRect = map_projection.GetMapRect();
 
-  rect_visible.left = max((long)MapRectBig.left,
-      (long)(MapRect.left - (long)epx * dtquant)) - orig.x;
-  rect_visible.right = min((long)MapRectBig.right,
-      (long)(MapRect.right + (long)epx * dtquant)) - orig.x;
-  rect_visible.top = max((long)MapRectBig.top,
-      (long)(MapRect.top - (long)epx * dtquant)) - orig.y;
-  rect_visible.bottom = min((long)MapRectBig.bottom,
-      (long)(MapRect.bottom + (long)epx * dtquant)) - orig.y;
+  rect_visible = map_projection.GetMapRect();
+  InflateRect(&rect_visible, epx * dtquant, epx * dtquant);
+  OffsetRect(&rect_visible, -orig.x, -orig.y);
 
   FillHeightBuffer(map_projection, X0 - orig.x, Y0 - orig.y,
       X1 - orig.x, Y1 - orig.y);
