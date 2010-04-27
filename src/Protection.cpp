@@ -50,7 +50,6 @@ Copyright_License {
 #include <assert.h>
 
 Trigger closeTriggerEvent(TEXT("mapCloseEvent"));
-Trigger drawTriggerEvent(TEXT("drawTriggerEvent"),false);
 Trigger globalRunningEvent(TEXT("globalRunning"));
 Trigger airspaceWarningEvent(TEXT("airspaceWarning"));
 Trigger targetManipEvent(TEXT("targetManip"));

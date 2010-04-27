@@ -90,7 +90,6 @@ void DeviceBlackboard::SetSpeed(fixed val) {}
 void
 DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const double alt) {}
 
-Trigger drawTriggerEvent(TEXT("drawTriggerEvent"),false);
 Trigger targetManipEvent(TEXT("targetManip"));
 
 static Waypoints way_points;

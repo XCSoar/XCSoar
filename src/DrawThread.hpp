@@ -63,6 +63,11 @@ class DrawThread : public Thread {
    */
   Trigger running;
 
+  /**
+   * This triggers a redraw.
+   */
+  Trigger trigger;
+
   /** Pointer to the MapWindow */
   MapWindow &map;
 
@@ -72,6 +77,7 @@ class DrawThread : public Thread {
 public:
   DrawThread(MapWindow &_map, GaugeFLARM *_flarm)
     :running(_T("DrawThread::running"), true),
+     trigger(_T("DrawThread::trigger"), false),
      map(_map), flarm(_flarm) {
   }
 
@@ -83,6 +89,20 @@ public:
   /** Releases the Mutex and "continues" the drawing thread */
   void resume() {
     running.trigger();
+  }
+
+  /**
+   * To be removed, only used by MapWindow::Idle().
+   */
+  bool is_triggered() {
+    return trigger.test();
+  }
+
+  /**
+   * Triggers a redraw.
+   */
+  void trigger_redraw() {
+    trigger.trigger();
   }
 
 private:

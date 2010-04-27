@@ -47,6 +47,8 @@ Copyright_License {
 #include "RasterWeather.h"
 #include "Gauge/GaugeCDI.hpp"
 #include "Protection.hpp"
+#include "Components.hpp"
+#include "DrawThread.hpp"
 #include "TaskClientUI.hpp"
 
 #include <tchar.h>
@@ -117,7 +119,7 @@ void
 MapWindow::RefreshMap()
 {
   MapWindowTimer::InterruptTimer();
-  drawTriggerEvent.trigger();
+  draw_thread->trigger_redraw();
 }
 
 void MapWindow::StoreRestoreFullscreen(bool store) {
@@ -240,7 +242,7 @@ MapWindow::Idle(const bool do_force)
     }
 
   } while (RenderTimeAvailable() &&
-	   !drawTriggerEvent.test() &&
+           !draw_thread->is_triggered() &&
 	   (still_dirty =
 	      terrain_idle.dirty
 	    | topology_idle.dirty

@@ -46,6 +46,8 @@ Copyright_License {
 #include "InfoBoxLayout.hpp"
 #include "Screen/Layout.hpp"
 #include "Asset.hpp"
+#include "Components.hpp"
+#include "DrawThread.hpp"
 
 static Mutex mutexInterfaceTimeout;
 static int interface_timeout;
@@ -131,7 +133,7 @@ ActionInterface::SendSettingsMap(const bool trigger_draw)
   device_blackboard.ReadSettingsMap(SettingsMap());
 
   if (trigger_draw)
-    drawTriggerEvent.trigger();
+    draw_thread->trigger_redraw();
 
   // TODO: trigger refresh if the settings are changed
 }

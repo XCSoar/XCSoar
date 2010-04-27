@@ -92,7 +92,7 @@ DrawThread::run()
   // circle until application is closed
   // (use of do-while ensures at least one execution before exit)
   do {
-    if (drawTriggerEvent.wait(MIN_WAIT_TIME)) {
+    if (trigger.wait(MIN_WAIT_TIME)) {
 
       // take control (or wait for the resume())
       running.wait();
@@ -117,7 +117,7 @@ DrawThread::run()
       // Draw the moving map
       map.DrawThreadLoop();
 
-      if (drawTriggerEvent.test()) {
+      if (trigger.test()) {
         // interrupt re-calculation of bounds if there was a 
         // request made.  Since we will re-enter, we know the remainder
         // of this code will be called anyway.

@@ -41,6 +41,8 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Screen/Blank.hpp"
 #include "DeviceBlackboard.hpp"
+#include "Components.hpp"
+#include "DrawThread.hpp"
 
 /**
  * Constructor of the CalculationThread class
@@ -94,7 +96,7 @@ CalculationThread::tick()
   // if (new GPS data)
   if (gps_updated) {
     // inform map new data is ready
-    drawTriggerEvent.trigger();
+    draw_thread->trigger_redraw();
 
     if (!glide_computer.Basic().TotalEnergyVarioAvailable) {
       TriggerVarioUpdate(); // emulate vario update
