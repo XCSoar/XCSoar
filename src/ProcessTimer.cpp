@@ -100,8 +100,6 @@ ProcessTimer::AirspaceProcessTimer()
   }
 }
 
-extern void TestVisitor();
-
 void ProcessTimer::CommonProcessTimer()
 {
   CheckDisplayTimeOut(false);
