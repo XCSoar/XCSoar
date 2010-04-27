@@ -562,10 +562,10 @@ void
 TerrainRenderer::ScanSpotHeights(const int X0, const int Y0,
     const int X1, const int Y1)
 {
-  unsigned short* myhbuf = hBuf;
+  const unsigned short *myhbuf = hBuf;
 
   #ifndef NDEBUG
-  unsigned short* hBufTop = hBuf + ixs * iys;
+  const unsigned short *hBufTop = hBuf + ixs * iys;
   #endif
 
   spot_max_pt.x = -1;
