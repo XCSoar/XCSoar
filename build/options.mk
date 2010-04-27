@@ -26,3 +26,9 @@ ifneq ($(IOIOLIB_DIR),)
 TARGET_CPPFLAGS += -DIOIOLIB
 endif
 endif
+
+# show map renderer times?
+STOP_WATCH ?= n
+ifeq ($(STOP_WATCH),y)
+TARGET_CPPFLAGS += -DSTOP_WATCH
+endif

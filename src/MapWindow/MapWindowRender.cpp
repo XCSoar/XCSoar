@@ -108,20 +108,31 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   label_block.reset();
 
   // Render terrain, groundline and topography
+  draw_sw.Mark(_T("RenderTerrain"));
   RenderTerrain(canvas);
+
+  draw_sw.Mark(_T("RenderTopography"));
   RenderTopography(canvas);
+
+  draw_sw.Mark(_T("RenderFinalGlideShading"));
   RenderFinalGlideShading(canvas);
 
   // Render track bearing (ground track)
+  draw_sw.Mark(_T("DrawTrackBearing"));
   DrawTrackBearing(canvas, aircraft_pos);
 
   // Render airspace
+  draw_sw.Mark(_T("RenderAirspace"));
   RenderAirspace(canvas);
 
   // Render task, waypoints
+  draw_sw.Mark(_T("DrawTask"));
   DrawTask(canvas);
+
+  draw_sw.Mark(_T("DrawWaypoints"));
   DrawWaypoints(canvas);
 
+  draw_sw.Mark(_T("RenderMisc1"));
   // Render weather/terrain max/min values
   if (!m_background.DrawSpotHeights(canvas, label_block))
     DrawTaskOffTrackIndicator(canvas);
@@ -135,10 +146,14 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   DrawThermalEstimate(canvas);
 
   // Render topography on top of airspace, to keep the text readable
+  draw_sw.Mark(_T("RenderTopographyLabels"));
   RenderTopographyLabels(canvas);
 
   // Render glide through terrain range
+  draw_sw.Mark(_T("RenderGlide"));
   RenderGlide(canvas);
+
+  draw_sw.Mark(_T("RenderMisc2"));
 
   DrawBestCruiseTrack(canvas, aircraft_pos);
 

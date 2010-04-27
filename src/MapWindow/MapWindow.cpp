@@ -179,6 +179,7 @@ MapWindow::on_paint_buffer(Canvas &canvas)
 
   // Render the moving map
   Render(canvas, get_client_rect());
+  draw_sw.Finish();
 
 #ifndef ENABLE_OPENGL
   // Stop the drawing timer and calculate drawing time

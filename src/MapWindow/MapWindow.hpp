@@ -33,6 +33,7 @@ Copyright_License {
 #include "Screen/BufferCanvas.hpp"
 #endif
 #include "Screen/LabelBlock.hpp"
+#include "Screen/StopWatch.hpp"
 #include "MapWindowBlackboard.hpp"
 #include "NMEA/Derived.hpp"
 #include "BackgroundDrawHelper.hpp"
@@ -153,6 +154,12 @@ protected:
    */
   unsigned scale_buffer;
 #endif
+
+  /**
+   * The #StopWatch used to benchmark the DrawThread,
+   * i.e. on_paint_buffer().
+   */
+  ScreenStopWatch draw_sw;
 
   friend class DrawThread;
 
