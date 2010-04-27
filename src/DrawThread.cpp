@@ -129,16 +129,11 @@ DrawThread::run()
         // this call is quick
         bounds_dirty = map.Idle(true);
       }
-
-      continue;
-
     } else if (bounds_dirty) {
       // take control (or wait for the resume())
       running.wait();
 
       bounds_dirty = map.Idle(false);
-
-      continue;
     }
   } while (!closeTriggerEvent.wait(MIN_WAIT_TIME));
 }
