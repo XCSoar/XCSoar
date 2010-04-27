@@ -198,7 +198,10 @@ MapWindow::Idle(const bool do_force)
     robin = (robin+1)%3;
     switch(robin) {
     case 0:
-      if (topology != NULL && topology_idle.dirty) {
+      if (!topology_idle.dirty)
+        break;
+
+      if (topology != NULL) {
         if (SettingsMap().EnableTopology) {
           topology_idle.dirty =
             topology->ScanVisibility(*this, *getSmartBounds(), do_force);
@@ -209,7 +212,10 @@ MapWindow::Idle(const bool do_force)
       break;
 
     case 1:
-      if (terrain != NULL && terrain_idle.dirty) {
+      if (!terrain_idle.dirty)
+        break;
+
+      if (terrain != NULL) {
         terrain->ServiceTerrainCenter(Basic().Location);
         terrain->ServiceCache();
 
@@ -221,7 +227,10 @@ MapWindow::Idle(const bool do_force)
       break;
 
     case 2:
-      if (weather != NULL && rasp_idle.dirty) {
+      if (!rasp_idle.dirty)
+        break;
+
+      if (weather != NULL) {
         weather->SetViewCenter(Basic().Location);
         if (!do_force) {
           // JMW this currently isn't working with the smart bounds
