@@ -201,14 +201,8 @@ MapWindow::Idle(const bool do_force)
       if (!topology_idle.dirty)
         break;
 
-      if (topology != NULL) {
-        if (SettingsMap().EnableTopology) {
-          topology_idle.dirty =
-            topology->ScanVisibility(*this, *getSmartBounds(), do_force);
-        } else {
-          topology_idle.dirty = false;
-        }
-      }
+      topology_idle.dirty = topology != NULL && SettingsMap().EnableTopology &&
+        topology->ScanVisibility(*this, *getSmartBounds(), do_force);
       break;
 
     case 1:
