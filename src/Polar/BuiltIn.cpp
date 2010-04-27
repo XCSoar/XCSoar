@@ -56,6 +56,9 @@ struct WinPilotPolarInternal
   double wing_area;             /**< Reference wing area (m^2) */
 };
 
+/**
+ *  Note: new items should be added to bottom, otherwise saved index is lost
+ */
 static const WinPilotPolarInternal WinPilotPolars[] =
 {
   { _T("206 Hornet"), 318, 0, 80, -0.606, 120, -0.99, 160, -1.918, 9.8},
