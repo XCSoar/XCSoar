@@ -212,25 +212,19 @@ MapWindow::Idle(const bool do_force)
       if (terrain != NULL) {
         terrain->ServiceTerrainCenter(Basic().Location);
         terrain->ServiceCache();
-
-        if (!do_force) {
-          // JMW this currently isn't working with the smart bounds
-          terrain_idle.dirty = false;
-        }
       }
+
+      terrain_idle.dirty = false;
       break;
 
     case 2:
       if (!rasp_idle.dirty)
         break;
 
-      if (weather != NULL) {
+      if (weather != NULL)
         weather->SetViewCenter(Basic().Location);
-        if (!do_force) {
-          // JMW this currently isn't working with the smart bounds
-          rasp_idle.dirty = false;
-        }
-      }
+
+      rasp_idle.dirty = false;
       break;
     }
 
