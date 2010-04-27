@@ -213,8 +213,7 @@ MapWindow::DrawProjectedTrack(Canvas &canvas)
     // too small an error to bother
     return;
   } else {
-    pt[1].y = (long)(-max(MapRectBig.right-MapRectBig.left,
-			  MapRectBig.bottom-MapRectBig.top)*1.2);
+    pt[1].y = (long)(max(canvas.get_width(), canvas.get_height()) * -1.2);
     PolygonRotateShift(pt, 2, Orig_Aircraft.x, Orig_Aircraft.y,
 		       bearing-DisplayAngle);
   }
