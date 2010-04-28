@@ -41,9 +41,8 @@ Copyright_License {
 
 #include <assert.h>
 
-#ifdef INSTRUMENT_TASK
+// global, used for test harness
 unsigned count_distbearing = 0;
-#endif
 
 static const fixed fixed_earth_r(6371000);
 static const fixed fixed_double_earth_r(6371000 * 2);

@@ -38,10 +38,9 @@
 #include "Waypoints.hpp"
 #include "WaypointVisitor.hpp"
 
-#ifdef INSTRUMENT_TASK
+// global, used for test harness
 unsigned n_queries = 0;
 extern long count_intersections;
-#endif
 
 /**
  * Container accessor to allow a WaypointVisitor to visit WaypointEnvelopes 

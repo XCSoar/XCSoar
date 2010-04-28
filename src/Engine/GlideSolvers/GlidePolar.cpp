@@ -226,9 +226,8 @@ GlidePolar::solve_min()
   Smin = SinkRate(Vmin);
 }
 
-#ifdef INSTRUMENT_TASK
+// global, used for test harness
 long count_mc = 0;
-#endif
 
 GlideResult
 GlidePolar::solve(const GlideState &task) const
