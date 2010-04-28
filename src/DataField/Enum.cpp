@@ -147,8 +147,10 @@ DataFieldEnum::Dec(void)
 static int _cdecl
 DataFieldEnumCompare(const void *elem1, const void *elem2)
 {
-  return _tcscmp(((DataFieldEnumEntry*)elem1)->mText,
-                 ((DataFieldEnumEntry*)elem2)->mText);
+  const DataFieldEnumEntry *entry1 = (const DataFieldEnumEntry *)elem1;
+  const DataFieldEnumEntry *entry2 = (const DataFieldEnumEntry *)elem2;
+
+  return _tcscmp(entry1->mText, entry2->mText);
 }
 
 void
