@@ -2172,7 +2172,7 @@ void dlgConfigurationShowModal(void){
   WndProperty *wp;
   XCSoarInterface::StartHourglassCursor();
 
-  if (!Layout::landscape) {
+  if (Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgConfiguration_L.xml"),
                         XCSoarInterface::main_window,
