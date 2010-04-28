@@ -124,12 +124,6 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
   ordered_task->CAccept(dv); 
 }
 
-static CallBackTableEntry_t CallBackTable[]={
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(OnTaskPaint),
-  DeclareCallBackEntry(NULL)
-};
-
 
 static void
 OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
@@ -167,7 +161,7 @@ RefreshView()
 
 
 static void
-OnTaskListEnter(unsigned ItemIndex)
+OnSelect()
 {
   if (cursor_is_active()) {
     if (OrderedTaskSave(*active_task)) {
@@ -192,11 +186,32 @@ OnTaskListEnter(unsigned ItemIndex)
   }
 }
 
+static void 
+OnSelectClicked(WindowControl * Sender)
+{
+  OnSelect();
+}
+
+static void
+OnTaskListEnter(unsigned ItemIndex)
+{
+  OnSelect();
+}
+
 static void
 OnTaskCursorCallback(unsigned i)
 {
   RefreshView();
 }
+
+static CallBackTableEntry_t CallBackTable[]={
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnSelectClicked),
+  DeclareCallBackEntry(OnTaskPaint),
+  DeclareCallBackEntry(NULL)
+};
+
+
 
 bool
 dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)

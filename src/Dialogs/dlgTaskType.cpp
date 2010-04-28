@@ -97,7 +97,7 @@ static void OnCloseClicked(WindowControl * Sender)
 }
 
 static void
-OnTaskListEnter(unsigned ItemIndex)
+OnSelect()
 {
   if (ordered_task->get_factory_type() == get_cursor_type()) {
     // no change
@@ -121,6 +121,17 @@ OnTaskListEnter(unsigned ItemIndex)
 }
 
 static void
+OnTaskListEnter(unsigned ItemIndex)
+{
+  OnSelect();
+}
+
+static void OnSelectClicked(WindowControl * Sender)
+{
+  OnSelect();
+}
+
+static void
 OnTaskCursorCallback(unsigned i)
 {
   RefreshView();
@@ -128,6 +139,7 @@ OnTaskCursorCallback(unsigned i)
 
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnSelectClicked),
   DeclareCallBackEntry(NULL)
 };
 

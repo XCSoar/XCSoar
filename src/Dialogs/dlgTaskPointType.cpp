@@ -166,9 +166,8 @@ SetPointType(AbstractTaskFactory::LegalPointType_t type) {
   return false;
 }
 
-
 static void
-OnPointListEnter(unsigned ItemIndex)
+OnSelect()
 {
   if (wPointTypes->GetCursorIndex() >= point_types.size()) {
     return;
@@ -178,6 +177,19 @@ OnPointListEnter(unsigned ItemIndex)
   } else {
     wf->SetModalResult(mrCancel);
   }
+}
+
+static void 
+OnSelectClicked(WindowControl * Sender)
+{
+  OnSelect();
+}
+
+
+static void
+OnPointListEnter(unsigned ItemIndex)
+{
+  OnSelect();
 }
 
 
@@ -190,6 +202,7 @@ OnPointCursorCallback(unsigned i)
 
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnSelectClicked),
   DeclareCallBackEntry(NULL)
 };
 
