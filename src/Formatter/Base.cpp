@@ -496,6 +496,13 @@ InfoBoxFormatter::AssignValue(int i)
     Valid = true;
     break;
 
+  case 73:
+    /// @todo this produces 0 if task not started! (bug)
+    Value = Units::ToUserUnit(Calculated().common_stats.distance_olc,
+                              Units::DistanceUnit);
+    Valid = SettingsComputer().enable_olc;
+    break;
+
   /* TODO feature: add extra infoboxes from Lars
   case 68: // distance flown
     if (Calculated().TaskDistanceCovered != 0) {

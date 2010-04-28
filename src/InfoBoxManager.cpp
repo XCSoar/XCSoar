@@ -590,6 +590,12 @@ static const SCREEN_INFO Data_Options[] = {
     8, 2,
   },
   // 73 //
+  { ugDistance, _T("Online Contest Distance"), _T("OLC"),
+    new InfoBoxFormatter(_T("%2.1f")),
+    ActionInterface::on_key_None,
+    8, 2,
+  },
+  // 74 //
   { ugNone, _T("Experimental2"), _T("Exp2"),
     new InfoBoxFormatter(_T("%-2.1f")),
     ActionInterface::on_key_None,
@@ -597,7 +603,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
 };
 
-const unsigned NUMSELECTSTRINGS = 74;
+const unsigned NUMSELECTSTRINGS = 75;
 
 // TODO locking
 void
