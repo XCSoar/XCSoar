@@ -268,6 +268,9 @@ Profile::Use()
   case 5:
     XCSoarInterface::SetSettingsMap().DisplayTextType = DISPLAYNAMEIFINTASK;
     break;
+  case 6:
+    XCSoarInterface::SetSettingsMap().DisplayTextType = DISPLAYUNTILSPACE;
+    break;
   }
 
   Temp = XCSoarInterface::SetSettingsComputer().AltitudeMode;

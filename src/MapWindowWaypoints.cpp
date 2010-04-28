@@ -182,6 +182,15 @@ public:
       Buffer[0] = '\0';
       break;
 
+    case DISPLAYUNTILSPACE:
+      _stprintf(Buffer, _T("%s"), way_point.Name.c_str());
+      TCHAR *tmp;
+      tmp = _tcsstr(Buffer, _T(" "));
+      if (tmp != NULL)
+        tmp[0] = '\0';
+
+      break;
+
     default:
       assert(0);
       break;
