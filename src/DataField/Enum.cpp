@@ -147,8 +147,8 @@ DataFieldEnum::Dec(void)
 static int _cdecl
 DataFieldEnumCompare(const void *elem1, const void *elem2)
 {
-  const DataFieldEnumEntry *entry1 = (const DataFieldEnumEntry *)elem1;
-  const DataFieldEnumEntry *entry2 = (const DataFieldEnumEntry *)elem2;
+  const DataFieldEnum::Entry *entry1 = (const DataFieldEnum::Entry *)elem1;
+  const DataFieldEnum::Entry *entry2 = (const DataFieldEnum::Entry *)elem2;
 
   return _tcscmp(entry1->mText, entry2->mText);
 }
@@ -156,7 +156,7 @@ DataFieldEnumCompare(const void *elem1, const void *elem2)
 void
 DataFieldEnum::Sort(int startindex)
 {
-  qsort(mEntries + startindex, nEnums - startindex, sizeof(DataFieldEnumEntry),
+  qsort(mEntries + startindex, nEnums - startindex, sizeof(mEntries[0]),
         DataFieldEnumCompare);
 }
 

@@ -41,20 +41,22 @@ Copyright_License {
 
 #include "DataField/Base.hpp"
 
-#define DFE_MAX_ENUMS 100
-
-typedef struct
-{
-  TCHAR *mText;
-  unsigned int index;
-} DataFieldEnumEntry;
-
 class DataFieldEnum: public DataField
 {
+public:
+  enum {
+    DFE_MAX_ENUMS = 100,
+  };
+
+  struct Entry {
+    TCHAR *mText;
+    unsigned int index;
+  };
+
 private:
   unsigned int nEnums;
   unsigned int mValue;
-  DataFieldEnumEntry mEntries[DFE_MAX_ENUMS];
+  Entry mEntries[DFE_MAX_ENUMS];
 
 public:
   DataFieldEnum(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
