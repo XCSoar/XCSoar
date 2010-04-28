@@ -1326,7 +1326,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(_T("None")));
     dfe->addEnumText(gettext(_T("First 3")));
     dfe->addEnumText(gettext(_T("Names in task")));
-    dfe->addEnumText(gettext(_T("Until space")));
+    dfe->addEnumText(gettext(_T("First word")));
     dfe->Set(XCSoarInterface::SettingsMap().DisplayTextType);
     wp->RefreshDisplay();
   }

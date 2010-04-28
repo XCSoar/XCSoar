@@ -307,10 +307,16 @@ AbortTask::check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&)
 void 
 AbortTask::tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) const
 {
-  for (std::vector<TaskPoint*>::const_iterator 
-         i= tps.begin(); i!= tps.end(); ++i) {
-
-    (*i)->CAccept(visitor);
+  if (!reverse) {
+    for (std::vector<TaskPoint*>::const_iterator 
+           i= tps.begin(); i!= tps.end(); ++i) {
+      (*i)->CAccept(visitor);
+    }
+  } else {
+    for (std::vector<TaskPoint*>::const_reverse_iterator 
+           i= tps.rbegin(); i!= tps.rend(); ++i) {
+      (*i)->CAccept(visitor);
+    }
   }
 }
 
