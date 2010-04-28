@@ -37,15 +37,13 @@ Copyright_License {
 */
 
 #include "ThermalLocator.h"
-#include "Math/FastMath.h"
 #include "Math/Earth.hpp"
+#include "Navigation/TaskProjection.hpp"
 #include <math.h>
-
-#define SFACT 111195
 
 void
 ThermalLocator::ThermalLocator_Point::Drift(fixed t, 
-                                            const GEOPOINT& location_0,
+                                            const TaskProjection& projection,
                                             const GEOPOINT& wind_drift,
                                             fixed decay)
 {
@@ -53,13 +51,11 @@ ThermalLocator::ThermalLocator_Point::Drift(fixed t,
   // convert to flat earth coordinates, then drift by wind and delta t
   const fixed dt = t - t_0;
 
-  fixed x = (location.Longitude + wind_drift.Longitude * dt - location_0.Longitude) 
-    * fastcosine(location_0.Latitude);
-  fixed y = (location.Latitude + wind_drift.Latitude * dt - location_0.Latitude);
-
   weight = iround(100*exp(decay_factor * decay * dt));
-  x_weighted = iround(x * SFACT * weight);
-  y_weighted = iround(y * SFACT * weight);
+
+  GEOPOINT p = location+wind_drift*dt;
+
+  loc_drift = projection.fproject(p);
 }
 
 ThermalLocator::ThermalLocator()
@@ -91,10 +87,9 @@ ThermalLocator::AddPoint(const fixed t, const GEOPOINT &location, const fixed w)
   points[n_index].w_scaled = iround(max(w, fixed(-0.1)) * 10);
   points[n_index].valid = true;
 
-  n_index++;
-  n_index = (n_index % TLOCATOR_NMAX);
+  n_index = (n_index+1) % TLOCATOR_NMAX;
 
-  if (n_points < TLOCATOR_NMAX - 1)
+  if (n_points+1 < TLOCATOR_NMAX)
     n_points++;
 
   if (!initialised) {
@@ -102,8 +97,6 @@ ThermalLocator::AddPoint(const fixed t, const GEOPOINT &location, const fixed w)
 
     // set initial estimate
     est_location = location;
-    est_r = 0;
-    est_w = 0;
     est_t = t;
   }
 }
@@ -132,91 +125,93 @@ ThermalLocator::Update(const fixed t_0,
 
   const GEOPOINT traildrift = location_0-dloc;
 
-  // drift estimate from previous time step
-  const fixed dt = t_0 - est_t;
-  est_location += traildrift * dt;
-  est_x = (est_location.Longitude - location_0.Longitude) * fastcosine(location_0.Latitude);
-  est_y = (est_location.Latitude - location_0.Latitude);
+  TaskProjection projection;
+  projection.reset(location_0);
+  projection.update_fast();
 
   Update_Internal(t_0, 
-                  location_0, 
+                  projection, 
+                  location_0,
                   traildrift, 
                   fixed_one, therm);
+}
+
+void
+ThermalLocator::glider_average(fixed &xav, fixed& yav) 
+{
+  // find glider's average position
+  int acc = 0;
+  for (int i = 0; i < TLOCATOR_NMAX; ++i) {
+    if (points[i].valid) {
+      xav += points[i].loc_drift.x;
+      yav += points[i].loc_drift.y;
+      acc++;
+    }
+  }
+  if (acc) {
+    xav/= acc;
+    yav/= acc;
+  }
 }
 
 
 void
 ThermalLocator::Update_Internal(fixed t_0, 
-                                const GEOPOINT& location_0, 
+                                const TaskProjection& projection, 
+                                const GEOPOINT& location_0,
                                 const GEOPOINT& traildrift,
                                 fixed decay, 
                                 THERMAL_LOCATOR_INFO &therm)
 {
-  // drift points (only do this once)
-  Drift(t_0, location_0, traildrift, decay);
+  // drift points 
+  Drift(t_0, projection, traildrift, decay);
 
-  int acc = 0;
-  int sx = 0;
-  int sy = 0;
-  int i;
+  fixed xav = fixed_zero;
+  fixed yav = fixed_zero;
 
-  // xav, yav is average glider's position
-  int xav = 0;
-  int yav = 0;
-
-  // find glider's average position
-
-  for (i = 0; i < TLOCATOR_NMAX; ++i) {
-    if (points[i].valid) {
-      xav += points[i].x_weighted;
-      yav += points[i].y_weighted;
-      acc += points[i].weight;
-    }
-  }
-  xav /= acc;
-  yav /= acc;
+  glider_average(xav, yav);
 
   // find thermal center relative to glider's average position
 
-  acc = 0;
-  for (i = 0; i < TLOCATOR_NMAX; ++i) {
+  int acc = 0;
+  fixed sx = fixed_zero;
+  fixed sy = fixed_zero;
+
+  for (int i = 0; i < TLOCATOR_NMAX; ++i) {
     if (points[i].valid) {
-      sx += (points[i].x_weighted - xav * points[i].weight) * points[i].w_scaled;
-      sy += (points[i].y_weighted - yav * points[i].weight) * points[i].w_scaled;
-      acc += points[i].w_scaled * points[i].weight;
+      int weight = points[i].w_scaled * points[i].weight;
+      sx += (points[i].loc_drift.x - xav) * weight;
+      sy += (points[i].loc_drift.y - yav) * weight;
+      acc += weight;
     }
   }
 
+  est_t = t_0;
+
   // if sufficient data, estimate location
 
-  if (acc > 0.25) {
-    sx /= acc;
-    sy /= acc;
-
-    est_x = (sx + xav) / SFACT;
-    est_y = (sy + yav) / SFACT;
-
-    est_t = t_0;
-    est_location.Latitude = est_y + location_0.Latitude;
-    est_location.Longitude = est_x / fastcosine(location_0.Latitude) + location_0.Longitude;
-
-    therm.ThermalEstimate_Location = est_location;
-    therm.ThermalEstimate_R = 1;
-    therm.ThermalEstimate_W = 1;
-  } else {
+  if (!acc) {
     invalid_estimate(therm);
+    return;
   }
+
+  const FlatPoint f0(sx/acc+xav, sy/acc+yav);
+  est_location = projection.funproject(f0);
+  
+  therm.ThermalEstimate_Location = est_location;
+  therm.ThermalEstimate_R = 1;
+  therm.ThermalEstimate_W = 1;
 }
 
 void
 ThermalLocator::Drift(fixed t_0, 
-                      const GEOPOINT& location_0, 
+                      const TaskProjection& projection, 
                       const GEOPOINT& traildrift,
                       fixed decay)
 {
   for (int i = 0; i < TLOCATOR_NMAX; ++i) {
     if (points[i].valid)
-      points[i].Drift(t_0, location_0, traildrift, decay);
+      points[i].Drift(t_0, projection, traildrift, decay);
   }
 }
 

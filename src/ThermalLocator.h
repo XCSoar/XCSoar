@@ -44,8 +44,11 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Navigation/GeoPoint.hpp"
+#include "Navigation/Flat/FlatPoint.hpp"
 #include "Navigation/SpeedVector.hpp"
 #include "NMEA/Derived.hpp"
+
+class TaskProjection;
 
 /**
  * Class to estimate the location of the center of a thermal
@@ -77,18 +80,16 @@ private:
      * @param decay decay factor for weighting
      */
     void Drift(fixed t, 
-               const GEOPOINT& location_0,
+               const TaskProjection& projection,
                const GEOPOINT& wind_drift,
                fixed decay);
 
     bool valid;                 /**< Whether this point is a valid sample */
     
     GEOPOINT location;          /**< Actual location of sample */
+    FlatPoint loc_drift;        /**< Projected/drifted sample */
     fixed t_0;                  /**< Time of sample (s) */
     int w_scaled;               /**< Scaled updraft value of sample */
-        
-    int x_weighted;             /**< X coordinate of relative weighted location */
-    int y_weighted;             /**< Y coordinate of relative weighted location */
     int weight;                 /**< Weighting used for this point */
   };
 
@@ -123,10 +124,8 @@ private:
 
   void invalid_estimate(THERMAL_LOCATOR_INFO &therm);
 
-  fixed est_x;
-  fixed est_y;
-  fixed est_w;
-  fixed est_r;
+  void glider_average(fixed &xav, fixed& yav);
+
   fixed est_t;
   GEOPOINT est_location;
 
@@ -137,21 +136,22 @@ private:
               THERMAL_LOCATOR_INFO &therm);
 
   void Update_Internal(fixed t_0,
+                       const TaskProjection& projection,
                        const GEOPOINT& location_0, 
                        const GEOPOINT& traildrift,
                        fixed decay,
                        THERMAL_LOCATOR_INFO& therm);
 
   void Drift(fixed t_0,
-             const GEOPOINT& location_0, 
+             const TaskProjection& projection, 
              const GEOPOINT& traildrift,
              fixed decay);
 
   ThermalLocator_Point points[TLOCATOR_NMAX]; /**< Circular buffer of points */
 
   bool initialised;
-  int n_index; /**< Index of next point to add */
-  int n_points; /**< Number of points in buffer */
+  unsigned n_index; /**< Index of next point to add */
+  unsigned n_points; /**< Number of points in buffer */
 };
 
 #endif
