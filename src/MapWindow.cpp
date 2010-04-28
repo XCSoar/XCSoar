@@ -201,6 +201,9 @@ MapWindow::Idle(const bool do_force)
       if (!topology_idle.dirty)
         break;
 
+      /// \todo bug: this will delay servicing if EnableTopology was false and then
+      /// switched on, until do_force is true again
+
       topology_idle.dirty = topology != NULL && SettingsMap().EnableTopology &&
         topology->ScanVisibility(*this, *getSmartBounds(), do_force);
       break;
@@ -209,6 +212,8 @@ MapWindow::Idle(const bool do_force)
       if (!terrain_idle.dirty)
         break;
 
+      // always service terrain even if it's not used by the map,
+      // because it's used by other calculations
       if (terrain != NULL) {
         terrain->ServiceTerrainCenter(Basic().Location);
         terrain->ServiceCache();
@@ -220,6 +225,9 @@ MapWindow::Idle(const bool do_force)
     case 2:
       if (!rasp_idle.dirty)
         break;
+
+      // always service weather even if it's not used by the map,
+      // because it's potentially used by other calculations
 
       if (weather != NULL)
         weather->SetViewCenter(Basic().Location);
