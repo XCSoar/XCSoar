@@ -11,6 +11,10 @@
 
   <WndButton Name="cmdPaste" Caption="Paste" X="5" Y="70" Width="60" Height="28" Font="2" />
 
+  <WndSymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="160" Width="29" Height="28" Font="3" OnClickNotify="OnPrevClicked" />
+  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="36" Y="160" Width="29" Height="28" Font="3" OnClickNotify="OnNextClicked" />
+  <WndButton Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28" Font="2" />
+
   <Tabbed Name="tabbed" X="70" Y="0" Width="250" Height="222">
     <Panel Name="frmSite" X="70" Y="0" Width="250" Height="222" Font="2">
       <WndProperty Name="prpMapFile" Caption="Map file" X="2" Y="-1" Width="246" Height="22" CaptionWidth="100" Font="2"
@@ -761,8 +765,4 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
       </WndProperty>
     </Panel>
   </Tabbed>
-
-  <WndSymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="160" Width="35" Height="28" Font="3" OnClickNotify="OnPrevClicked" />
-  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="35" Y="160" Width="35" Height="28" Font="3" OnClickNotify="OnNextClicked" />
-  <WndButton Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28" Font="2" />
 </WndForm>
