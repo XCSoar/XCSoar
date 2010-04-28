@@ -57,14 +57,12 @@ class WaypointVisitorMap:
   public TaskVisitor
 {
 public:
-  WaypointVisitorMap(MapWindow &_map,
-                     Canvas &_canvas,
-                     const GlidePolar &polar)
-    :map(_map),
-     aircraft_state(ToAircraftState(map.Basic())),
-     canvas(_canvas),
-     glide_polar(polar) {
-
+  WaypointVisitorMap(MapWindow &_map, Canvas &_canvas, const GlidePolar &polar):
+    map(_map),
+    aircraft_state(ToAircraftState(map.Basic())),
+    canvas(_canvas),
+    glide_polar(polar)
+  {
     // if pan mode, show full names
     pDisplayTextType = map.SettingsMap().DisplayTextType;
     if (map.SettingsMap().EnablePan)
@@ -73,7 +71,9 @@ public:
     _tcscpy(sAltUnit, Units::GetAltitudeName());
   }
 
-  void DrawWaypoint(const Waypoint& way_point, bool in_task=false) {
+  void
+  DrawWaypoint(const Waypoint& way_point, bool in_task = false)
+  {
     POINT sc;
     if (!map.LonLat2ScreenIfVisible(way_point.Location, &sc))
       return;
@@ -90,15 +90,14 @@ public:
     Bitmap *wp_bmp = &MapGfx.hSmall;
 
     bool draw_alt = false;
-    int AltArrivalAGL= 0;
+    int AltArrivalAGL = 0;
 
     if (way_point.is_landable()) {
       islandable = true; // so we can always draw them
 
       const UnorderedTaskPoint t(way_point, map.SettingsComputer());
       const GlideResult r =
-        TaskSolution::glide_solution_remaining(t, aircraft_state,
-                                               glide_polar);
+        TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
       bool reachable = r.glide_reachable();
 
       if ((map.SettingsMap().DeclutterLabels < 1) || in_task) {
@@ -137,13 +136,11 @@ public:
         wp_bmp = &MapGfx.hTurnPoint;
     }
 
-    if (in_task) // VNT
+    if (in_task)
       TextDisplayMode.AsFlag.WhiteBold = 1;
 
     if (irange || in_task || dowrite || islandable)
-      map.draw_masked_bitmap(canvas, *wp_bmp,
-                             sc.x, sc.y,
-                             20, 20);
+      map.draw_masked_bitmap(canvas, *wp_bmp, sc.x, sc.y, 20, 20);
 
     if (pDisplayTextType == DISPLAYNAMEIFINTASK) {
       if (!in_task)
@@ -159,10 +156,10 @@ public:
 
     switch (pDisplayTextType) {
     case DISPLAYNAMEIFINTASK:
-      if (in_task) {
+      if (in_task)
         _stprintf(Buffer, _T("%s"), way_point.Name.c_str());
-      }
       break;
+
     case DISPLAYNAME:
       _stprintf(Buffer, _T("%s"), way_point.Name.c_str());
       break;
@@ -198,39 +195,61 @@ public:
       _stprintf(Buffer + length, _T("%d%s"), AltArrivalAGL, sAltUnit);
     }
 
-    MapWaypointLabelAdd(Buffer, sc.x + 5, sc.y,
-                        TextDisplayMode,
-                        AltArrivalAGL,
-                        in_task,false,false,false,
-                        map.GetMapRect());
+    MapWaypointLabelAdd(Buffer, sc.x + 5, sc.y, TextDisplayMode, AltArrivalAGL,
+                        in_task, false, false, false, map.GetMapRect());
   }
 
-  void Visit(const AbortTask& task) {
-    task.tp_CAccept(*this);
-  }
-  void Visit(const OrderedTask& task) {
-    task.tp_CAccept(*this);
-  }
-  void Visit(const GotoTask& task) {
+  void
+  Visit(const AbortTask& task)
+  {
     task.tp_CAccept(*this);
   }
 
-  void Visit(const Waypoint& way_point) {
+  void
+  Visit(const OrderedTask& task)
+  {
+    task.tp_CAccept(*this);
+  }
+
+  void
+  Visit(const GotoTask& task)
+  {
+    task.tp_CAccept(*this);
+  }
+
+  void
+  Visit(const Waypoint& way_point)
+  {
     DrawWaypoint(way_point, false);
   }
-  void Visit(const UnorderedTaskPoint& tp) {
+
+  void
+  Visit(const UnorderedTaskPoint& tp)
+  {
     DrawWaypoint(tp.get_waypoint(), true);
   }
-  void Visit(const StartPoint& tp) {
+
+  void
+  Visit(const StartPoint& tp)
+  {
     DrawWaypoint(tp.get_waypoint(), true);
   }
-  void Visit(const FinishPoint& tp) {
+
+  void
+  Visit(const FinishPoint& tp)
+  {
     DrawWaypoint(tp.get_waypoint(), true);
   }
-  void Visit(const AATPoint& tp) {
+
+  void
+  Visit(const AATPoint& tp)
+  {
     DrawWaypoint(tp.get_waypoint(), true);
   }
-  void Visit(const ASTPoint& tp) {
+
+  void
+  Visit(const ASTPoint& tp)
+  {
     DrawWaypoint(tp.get_waypoint(), true);
   }
 
@@ -243,21 +262,19 @@ private:
   const GlidePolar glide_polar;
 };
 
-
-
-void MapWindow::DrawWaypoints(Canvas &canvas)
+void
+MapWindow::DrawWaypoints(Canvas &canvas)
 {
   if (way_points == NULL)
     return;
 
   MapWaypointLabelClear();
 
-  WaypointVisitorMap v(*this, canvas,
-                       get_glide_polar());
-  way_points->visit_within_range(PanLocation, fixed(GetScreenDistanceMeters()), v);
-  if (task && SettingsMap().DisplayTextType==DISPLAYNAMEIFINTASK) {
+  WaypointVisitorMap v(*this, canvas, get_glide_polar());
+  way_points->visit_within_range(PanLocation,
+                                 fixed(GetScreenDistanceMeters()), v);
+  if (task && SettingsMap().DisplayTextType == DISPLAYNAMEIFINTASK)
     task->CAccept(v);
-  }
 
   MapWaypointLabelSortAndRender(canvas);
 }
