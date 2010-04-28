@@ -239,6 +239,7 @@ OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode)
     if (fabs(lastRead - Sender->GetAsFloat() / 100.0) >= 0.005) {
       lastRead = Sender->GetAsFloat() / 100.0;
       glide_polar->set_bugs(fixed(lastRead));
+      changed = true;
     }
     break;
   }
