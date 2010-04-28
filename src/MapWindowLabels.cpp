@@ -42,24 +42,22 @@ Copyright_License {
 #include <stdlib.h>
 #include <assert.h>
 
-typedef struct{
+typedef struct
+{
   TCHAR Name[NAME_SIZE+1];
   POINT Pos;
   TextInBoxMode_t Mode;
   int AltArivalAGL;
   bool inTask;
-  bool isLandable; // VENTA5
-  bool isAirport; // VENTA5
+  bool isLandable;
+  bool isAirport;
   bool isExcluded;
 } MapWaypointLabel_t;
-
 
 int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2);
 
 MapWaypointLabel_t MapWaypointLabelList[50];
 unsigned MapWaypointLabelListCount = 0;
-
-//static int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2 ){
 
 int _cdecl
 MapWaypointLabelListCompare(const void *elem1, const void *elem2)
@@ -70,10 +68,12 @@ MapWaypointLabelListCompare(const void *elem1, const void *elem2)
     return (-1);
   */
 
-  if (((MapWaypointLabel_t *)elem1)->AltArivalAGL > ((MapWaypointLabel_t *)elem2)->AltArivalAGL)
+  if (((MapWaypointLabel_t *)elem1)->AltArivalAGL
+      > ((MapWaypointLabel_t *)elem2)->AltArivalAGL)
     return -1;
 
-  if (((MapWaypointLabel_t *)elem1)->AltArivalAGL < ((MapWaypointLabel_t *)elem2)->AltArivalAGL)
+  if (((MapWaypointLabel_t *)elem1)->AltArivalAGL
+      < ((MapWaypointLabel_t *)elem2)->AltArivalAGL)
     return 1;
 
   return 0;
@@ -124,21 +124,21 @@ void MapWindow::MapWaypointLabelSortAndRender(Canvas &canvas) {
     MapWaypointLabel_t *E = &MapWaypointLabelList[j];
     // draws if they are in task unconditionally,
     // otherwise, does comparison
-    if (E->inTask) {
+    if (E->inTask)
       TextInBox(canvas, E->Name, E->Pos.x, E->Pos.y, E->Mode, MapRect, NULL);
-    }
   }
 
   // now draw normal waypoints in order of range (furthest away last)
   // without writing over each other (or the task ones)
   for (unsigned i = 0; i < MapWaypointLabelListCount; i++) {
     MapWaypointLabel_t *E = &MapWaypointLabelList[i];
-    if (!E->inTask) {
+    if (!E->inTask)
       TextInBox(canvas, E->Name, E->Pos.x, E->Pos.y, E->Mode, MapRect, &label_block);
-    }
   }
 }
 
-void MapWaypointLabelClear() {
-  MapWaypointLabelListCount= 0;
+void
+MapWaypointLabelClear()
+{
+  MapWaypointLabelListCount = 0;
 }
