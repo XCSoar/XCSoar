@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm Name="frmConfiguration" Width="320" Height="240" Caption="Configuration">
-  <WndProperty Name="prpUserLevel" Caption="" X="0" Y="5" Width="70" Height="28" CaptionWidth="15" Font="2" Help="Sets the level of detail of the configuration settings.
+  <WndProperty Name="prpUserLevel" Caption="" X="5" Y="5" Width="60" Height="25" CaptionWidth="1" Font="2" Help="Sets the level of detail of the configuration settings.
 [Basic]: Only basic settings are shown.
 [Expert]: Basic and advanced settings are shown.">
-      <DataField name="" DataType="enum" Min="0" Max="50" Step="1" OnDataAccess="OnUserLevel" />
-    </WndProperty>
+    <DataField name="" DataType="enum" Min="0" Max="50" Step="1" OnDataAccess="OnUserLevel" />
+  </WndProperty>
 
   <WndButton Name="cmdCopy" Caption="Copy" X="5" Y="40" Width="60" Height="28" Font="2" />
 
