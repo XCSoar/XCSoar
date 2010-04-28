@@ -132,7 +132,7 @@ bool
 DeviceDescriptor::IsDriver(const TCHAR *name) const
 {
   return Driver != NULL
-    ? _tcscmp(Driver->Name, name)
+    ? _tcscmp(Driver->Name, name) == 0
     : false;
 }
 
