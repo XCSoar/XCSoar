@@ -106,7 +106,7 @@
 [Names in task] Names are only displayed for waypoints that are in the active task as well as the home airfield.
 [First 3] The first 3 letters of the waypoint name are displayed.
 [First 5] The first 5 letters of the waypoint name are displayed.
-[First word] The first word of waypoint names are displayed.">
+[First word] The first word of the waypoint name is displayed.">
         <DataField name="" DataType="enum" Min="0" Max="50" Step="1" />
       </WndProperty>
   
