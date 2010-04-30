@@ -292,7 +292,7 @@ InfoBox::PaintTitle(Canvas &canvas)
 
   tsize = canvas.text_size(mTitle);
 
-  halftextwidth = (mWidth - tsize.cx) >> 1;
+  halftextwidth = (recTitle.left + recTitle.right - tsize.cx) / 2;
 
   x = max(1, (int)recTitle.left + halftextwidth);
 
@@ -393,8 +393,8 @@ InfoBox::PaintValue(Canvas &canvas)
     unit_size.cy = 0;
   }
 
-  x = max(1, (int)recValue.left +
-          (mWidth - (int)tsize.cx - Layout::FastScale(unit_size.cx)) / 2);
+  x = max(1, (int)(recValue.left + recValue.right - tsize.cx
+                   - Layout::FastScale(unit_size.cx)) / 2);
 
   y = recValue.top + 1 - mphFontValue->get_ascent_height() +
     (recValue.bottom - recValue.top + mphFontValue->get_capital_height()) / 2;
@@ -476,7 +476,7 @@ InfoBox::PaintComment(Canvas &canvas)
 
   tsize = canvas.text_size(mComment);
 
-  x = max(1, (int)recComment.left + (mWidth - (int)tsize.cx) / 2);
+  x = max(1, (int)(recComment.left + recComment.right - tsize.cx) / 2);
   y = recComment.top + 1 + mphFontComment->get_capital_height()
     - mphFontComment->get_ascent_height();
 
