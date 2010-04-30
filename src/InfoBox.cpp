@@ -60,10 +60,8 @@ Copyright_License {
 
 using std::max;
 
-static Color fgColor(0x0, 0x0, 0x0);
-static Color bkColor(0xff, 0xff, 0xff);
-static Color bkColorSel(150, 0x0, 0x0);
-static Color bdColor(80, 80, 80);
+static const Color bkColorSel(150, 0x0, 0x0);
+static const Color bdColor(80, 80, 80);
 static Brush hBrushDefaultBackGround;
 static Brush hBrushDefaultBackGroundSel;
 static Pen hPenDefaultBorder;
@@ -91,7 +89,7 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
 
   set(parent, mX, mY, mWidth, mHeight);
 
-  Color fgColor, bkColor, bkColorSel;
+  Color fgColor, bkColor;
 
   if (Appearance.InverseInfoBox) {
     fgColor = Color(0xff, 0xff, 0xff);
@@ -101,17 +99,11 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
     fgColor = Color(0x00, 0x00, 0x00);
   }
 
-  bkColorSel = Color(150, 0x0, 0x0);
-  bdColor = Color(80, 80, 80);
-
-  mColorBack = bkColor;
-  mColorFore = fgColor;
-
   if (Count == 0) {
     hBrushDefaultBackGround.set(bkColor);
     hBrushDefaultBackGroundSel.set(bkColorSel);
     hPenDefaultBorder.set(DEFAULTBORDERPENWIDTH, bdColor);
-    hPenSelector.set(DEFAULTBORDERPENWIDTH + 2, mColorFore);
+    hPenSelector.set(DEFAULTBORDERPENWIDTH + 2, fgColor);
   }
 
   mhBrushBk = hBrushDefaultBackGround;

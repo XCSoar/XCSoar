@@ -70,17 +70,12 @@ private:
   int mWidth;
   int mHeight;
   int  mBorderKind;
-  Color mColorBack;
-  Color mColorFore;
   Color mColorTitle;
   Color mColorTitleBk;
   Color mColorValue;
   Color mColorValueBk;
   Color mColorComment;
   Color mColorCommentBk;
-
-  Color mColorRed;
-  Color mColorBlue;
 
   bool mTitleChanged;
 
