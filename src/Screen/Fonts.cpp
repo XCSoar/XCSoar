@@ -376,7 +376,7 @@ InitialiseFontsAuto(RECT rc,
   logfont.lfHeight = iFontHeight;
   logfont.lfWidth =  FontWidth;
   logfont.lfWeight = FW_BOLD;
-  logfont.lfItalic = TRUE;
+  logfont.lfItalic = false;
   logfont.lfCharSet = ANSI_CHARSET;
   ApplyClearType(&logfont);
 
