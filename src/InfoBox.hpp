@@ -56,10 +56,6 @@ typedef enum {
 #define BORDERLEFT   (1<<bkLeft)
 #define BORDERTAB    (1<<(bkLeft+1))
 
-#define TITLESIZE    32
-#define VALUESIZE    32
-#define COMMENTSIZE  32
-
 class Font;
 
 struct InfoBoxLook {
@@ -101,6 +97,10 @@ class InfoBox: public BufferWindow
 public:
   enum {
     BORDER_WIDTH = 1,
+
+    TITLESIZE = 32,
+    VALUESIZE = 32,
+    COMMENTSIZE = 32,
   };
 
 private:
