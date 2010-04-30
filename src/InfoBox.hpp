@@ -127,7 +127,6 @@ private:
   int colorTop;
   bool mSmallerFont;
 
-  void InitializeDrawHelpers(void);
   /**
    * Paints the InfoBox title to the given canvas
    * @param canvas The canvas to paint on
@@ -234,6 +233,9 @@ protected:
    * @return True if the event has been handled, False otherwise
    */
   virtual bool on_mouse_double(int x, int y);
+
+  virtual bool on_resize(unsigned width, unsigned height);
+
   /**
    * This event handler is called when the InfoBox needs to be repainted
    * @param canvas The canvas to paint on

@@ -336,13 +336,6 @@ InfoBox::PaintSelector(Canvas &canvas)
 void
 InfoBox::Paint()
 {
-  static bool InitDone = false;
-
-  if (!InitDone) {
-    InitializeDrawHelpers();
-    InitDone = false;
-  }
-
   Canvas &buffer = get_canvas();
   buffer.background_opaque();
 
@@ -382,9 +375,11 @@ InfoBox::PaintInto(Canvas &dest, int xoff, int yoff, int width, int height)
                0, 0, src.get_width(), src.get_height());
 }
 
-void
-InfoBox::InitializeDrawHelpers(void)
+bool
+InfoBox::on_resize(unsigned width, unsigned height)
 {
+  BufferWindow::on_resize(width, height);
+
   RECT rc = get_client_rect();
 
   if (mBorderKind & BORDERLEFT)
@@ -409,6 +404,8 @@ InfoBox::InitializeDrawHelpers(void)
   recValue = rc;
   recValue.top = recTitle.bottom;
   recValue.bottom = recComment.top;
+
+  return true;
 }
 
 bool
