@@ -111,8 +111,6 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   mhPenBorder = hPenDefaultBorder;
   mhPenSelector = hPenSelector;
 
-  get_canvas().fill_rectangle(0, 0, mWidth, mHeight, mhBrushBk);
-
   mBorderSize = 1;
   if (Appearance.InfoBoxBorder == apIbTab) {
     mBorderKind = BORDERTAB;
@@ -138,8 +136,6 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   _tcscpy(mTitle, TEXT(""));
   _tcscpy(mValue, TEXT(""));
   _tcscpy(mComment, TEXT(""));
-
-  get_canvas().background_transparent();
 
   mHasFocus = false;
 
@@ -551,6 +547,7 @@ InfoBox::Paint()
   }
 
   Canvas &buffer = get_canvas();
+  buffer.background_transparent();
 
   buffer.fill_rectangle(0, mTitleChanged ? 0 : recTitle.bottom, mWidth,
       mHeight, mhBrushBk);
