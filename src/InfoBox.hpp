@@ -114,7 +114,6 @@ private:
   TCHAR mValue[VALUESIZE+1];
   TCHAR mComment[COMMENTSIZE+1];
   Units_t mValueUnit;
-  bool   mHasFocus;
 
   /** a timer which returns keyboard focus back to the map window after a while */
   timer_t focus_timer;

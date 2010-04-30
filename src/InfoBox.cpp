@@ -84,8 +84,6 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height,
   _tcscpy(mTitle, TEXT(""));
   _tcscpy(mValue, TEXT(""));
   _tcscpy(mComment, TEXT(""));
-
-  mHasFocus = false;
 }
 
 void
@@ -475,7 +473,7 @@ InfoBox::on_paint(Canvas &canvas)
   BufferWindow::on_paint(canvas);
 
   // Paint the selector
-  if (mHasFocus)
+  if (has_focus())
     PaintSelector(canvas);
 }
 
@@ -484,9 +482,6 @@ InfoBox::on_setfocus()
 {
   // Call the parent function
   BufferWindow::on_setfocus();
-
-  // Save the focus state
-  mHasFocus = true;
 
   // Start the focus-auto-return timer
   // to automatically return focus back to MapWindow if idle
@@ -503,9 +498,6 @@ InfoBox::on_killfocus()
 {
   // Call the parent function
   BufferWindow::on_killfocus();
-
-  // Save the unfocused state
-  mHasFocus = false;
 
   // Destroy the time if it exists
   if (focus_timer != 0) {
