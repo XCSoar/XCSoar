@@ -55,6 +55,8 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Fonts.hpp"
+#include "Screen/Graphics.hpp"
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
 #include "Interface.hpp"
@@ -66,6 +68,7 @@ Copyright_License {
 #include "Defines.h"
 #include "Components.hpp"
 #include "StringUtil.hpp"
+#include "Appearance.hpp"
 
 #include <assert.h>
 
@@ -604,6 +607,8 @@ static const SCREEN_INFO Data_Options[] = {
 };
 
 const unsigned NUMSELECTSTRINGS = 75;
+
+static InfoBoxLook info_box_look;
 
 // TODO locking
 void
@@ -1276,6 +1281,35 @@ InfoBoxManager::Create(RECT rc)
 {
   ResetInfoBoxes();
 
+  info_box_look.value.fg_color = info_box_look.title.fg_color
+    = info_box_look.comment.fg_color = Appearance.InverseInfoBox
+    ? Color::WHITE : Color::BLACK;
+  info_box_look.value.bg_color = info_box_look.title.bg_color
+    = info_box_look.comment.bg_color = Appearance.InverseInfoBox
+    ? Color::BLACK : Color::WHITE;
+
+  Color border_color = Color(80, 80, 80);
+  info_box_look.border_pen.set(InfoBox::BORDER_WIDTH, border_color);
+  info_box_look.selector_pen.set(IBLSCALE(1) + 2,
+                                 info_box_look.value.fg_color);
+
+  info_box_look.value.font = &InfoWindowFont;
+  info_box_look.title.font = &TitleWindowFont;
+  info_box_look.comment.font = &TitleWindowFont;
+  info_box_look.small_font = &TitleSmallWindowFont;
+
+  info_box_look.colors[0] = border_color;
+  info_box_look.colors[1] = Appearance.InverseInfoBox
+    ? MapGfx.inv_redColor : Color::RED;
+  info_box_look.colors[2] = Appearance.InverseInfoBox
+    ? MapGfx.inv_blueColor : Color::BLUE;
+  info_box_look.colors[3] = Appearance.InverseInfoBox
+    ? MapGfx.inv_greenColor : Color::GREEN;
+  info_box_look.colors[4] = Appearance.InverseInfoBox
+    ? MapGfx.inv_yellowColor : Color::YELLOW;
+  info_box_look.colors[5] = Appearance.InverseInfoBox
+    ? MapGfx.inv_magentaColor : Color::MAGENTA;
+
   int xoff, yoff, sizex, sizey;
 
   RECT retval = InfoBoxLayout::GetInfoBoxSizes(rc);
@@ -1295,7 +1329,8 @@ InfoBoxManager::Create(RECT rc)
   for (unsigned i = 0; i < numInfoWindows; i++) {
     InfoBoxLayout::GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
 
-    InfoBoxes[i] = new InfoBox(main_window, xoff, yoff, sizex, sizey);
+    InfoBoxes[i] = new InfoBox(main_window, xoff, yoff, sizex, sizey,
+                               info_box_look);
 
     int Border = 0;
     if (InfoBoxLayout::gnav) {

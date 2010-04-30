@@ -45,9 +45,7 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/UnitSymbol.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/Layout.hpp"
 #include "SettingsUser.hpp"
@@ -60,16 +58,11 @@ Copyright_License {
 
 using std::max;
 
-static const Color bkColorSel(150, 0x0, 0x0);
-static const Color bdColor(80, 80, 80);
-static Pen hPenDefaultBorder;
-static Pen hPenSelector;
-static int Count = 0;
-
 #define SELECTORWIDTH IBLSCALE(5)
 
-InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
-  :focus_timer(0)
+InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height,
+                 const InfoBoxLook &_look)
+  :look(_look), focus_timer(0)
 {
   mTitleChanged = true;
   mSmallerFont = false;
@@ -80,42 +73,11 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
 
   set(parent, X, Y, Width, Height);
 
-  Color fgColor, bkColor;
-
-  if (Appearance.InverseInfoBox) {
-    fgColor = Color(0xff, 0xff, 0xff);
-    bkColor = Color(0x00, 0x00, 0x00);
-  } else {
-    bkColor = Color(0xff, 0xff, 0xff);
-    fgColor = Color(0x00, 0x00, 0x00);
-  }
-
-  if (Count == 0) {
-    hPenDefaultBorder.set(BORDER_WIDTH, bdColor);
-    hPenSelector.set(IBLSCALE(1) + 2, fgColor);
-  }
-
-  mhPenBorder = hPenDefaultBorder;
-  mhPenSelector = hPenSelector;
-
   if (Appearance.InfoBoxBorder == apIbTab) {
     mBorderKind = BORDERTAB;
   } else {
     mBorderKind = BORDERRIGHT | BORDERBOTTOM;
   }
-
-  mphFontTitle = &TitleWindowFont;
-  mphFontValue = &InfoWindowFont;
-  mphFontComment = &TitleWindowFont;
-  valueFont = &TitleSmallWindowFont;
-
-  mColorTitle = fgColor;
-  mColorValue = fgColor;
-  mColorComment = fgColor;
-
-  mColorTitleBk = bkColor;
-  mColorValueBk = bkColor;
-  mColorCommentBk = bkColor;
 
   mValueUnit = unUndef;
 
@@ -124,17 +86,6 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   _tcscpy(mComment, TEXT(""));
 
   mHasFocus = false;
-
-  Count++;
-}
-
-InfoBox::~InfoBox(void){
-  Count--;
-
-  if (Count == 0) {
-    hPenDefaultBorder.reset();
-    hPenSelector.reset();
-  }
 }
 
 void
@@ -251,39 +202,11 @@ InfoBox::PaintTitle(Canvas &canvas)
   int x, y;
   int halftextwidth;
 
-  canvas.set_background_color(mColorTitleBk);
-  // SetTextColor(mHdcBuf, mColorTitle);
-  switch (colorTop) {
-  case -1:
-    canvas.set_text_color(bdColor);
-    break;
-  case 0:
-    canvas.set_text_color(mColorValue);
-    break;
-  case 1:
-    canvas.set_text_color(Appearance.InverseInfoBox ?
-                          MapGfx.inv_redColor : Color::RED);
-    break;
-  case 2:
-    canvas.set_text_color(Appearance.InverseInfoBox ?
-                          MapGfx.inv_blueColor : Color::BLUE);
-    break;
-    // VENTA3 added colors
-  case 3:
-    canvas.set_text_color(Appearance.InverseInfoBox ?
-                          MapGfx.inv_greenColor : Color::GREEN);
-    break;
-  case 4:
-    canvas.set_text_color(Appearance.InverseInfoBox ?
-                          MapGfx.inv_yellowColor : Color::YELLOW);
-    break;
-  case 5:
-    canvas.set_text_color(Appearance.InverseInfoBox ?
-                          MapGfx.inv_magentaColor : Color::MAGENTA);
-    break;
-  }
+  canvas.set_background_color(look.title.bg_color);
+  canvas.set_text_color(look.get_title_color(colorTop));
 
-  canvas.select(*mphFontTitle);
+  const Font &font = *look.title.font;
+  canvas.select(font);
 
   tsize = canvas.text_size(mTitle);
 
@@ -291,18 +214,16 @@ InfoBox::PaintTitle(Canvas &canvas)
 
   x = max(1, (int)recTitle.left + halftextwidth);
 
-  y = recTitle.top + 1 + mphFontTitle->get_capital_height()
-    - mphFontTitle->get_ascent_height();
+  y = recTitle.top + 1 + font.get_capital_height() - font.get_ascent_height();
 
   canvas.text_opaque(x, y, &recTitle, mTitle);
 
   if ((mBorderKind & BORDERTAB) && (halftextwidth > IBLSCALE(3))) {
-    int ytop = recTitle.top + mphFontTitle->get_capital_height() / 2;
+    int ytop = recTitle.top + font.get_capital_height() / 2;
     int ytopedge = ytop + IBLSCALE(2);
-    int ybottom = recTitle.top + IBLSCALE(6) +
-      mphFontTitle->get_capital_height();
+    int ybottom = recTitle.top + IBLSCALE(6) + font.get_capital_height();
 
-    canvas.select(mhPenBorder);
+    canvas.select(look.border_pen);
 
     POINT tab[8];
     tab[0].x = tab[1].x = recTitle.left + IBLSCALE(1);
@@ -328,54 +249,11 @@ InfoBox::PaintValue(Canvas &canvas)
   SIZE tsize;
   int x, y;
 
-  canvas.set_background_color(mColorValueBk);
+  canvas.set_background_color(look.value.bg_color);
+  canvas.set_text_color(look.get_value_color(color));
 
-  switch (color) {
-  case -1:
-    canvas.set_text_color(bdColor);
-    break;
-  case 0:
-    canvas.set_text_color(mColorValue);
-    break;
-  case 1:
-    if (Appearance.InverseInfoBox)
-      canvas.set_text_color(MapGfx.inv_redColor);
-     else
-      canvas.set_text_color(Color::RED);
-
-    break;
-  case 2:
-    if (Appearance.InverseInfoBox)
-      canvas.set_text_color(MapGfx.inv_blueColor);
-    else
-      canvas.set_text_color(Color::BLUE);
-
-    break;
-// VENTA3 more colors
-  case 3:
-    if (Appearance.InverseInfoBox)
-      canvas.set_text_color(MapGfx.inv_greenColor);
-    else
-      canvas.set_text_color(Color::GREEN);
-
-    break;
-  case 4:
-    if (Appearance.InverseInfoBox)
-      canvas.set_text_color(MapGfx.inv_yellowColor);
-    else
-      canvas.set_text_color(Color::YELLOW);
-
-    break;
-  case 5:
-    if (Appearance.InverseInfoBox)
-      canvas.set_text_color(MapGfx.inv_magentaColor);
-    else
-      canvas.set_text_color(Color::MAGENTA);
-
-    break;
-  }
-
-  canvas.select(mSmallerFont ? *valueFont : *mphFontValue);
+  const Font &font = mSmallerFont ? *look.small_font : *look.value.font;
+  canvas.select(font);
 
   tsize = canvas.text_size(mValue);
 
@@ -391,8 +269,8 @@ InfoBox::PaintValue(Canvas &canvas)
   x = max(1, (int)(recValue.left + recValue.right - tsize.cx
                    - Layout::FastScale(unit_size.cx)) / 2);
 
-  y = recValue.top + 1 - mphFontValue->get_ascent_height() +
-    (recValue.bottom - recValue.top + mphFontValue->get_capital_height()) / 2;
+  y = recValue.top + 1 - font.get_ascent_height() +
+    (recValue.bottom - recValue.top + font.get_capital_height()) / 2;
 
   canvas.text_opaque(x, y, &recValue, mValue);
 
@@ -404,7 +282,7 @@ InfoBox::PaintValue(Canvas &canvas)
     BitmapCanvas temp(canvas, *unit_symbol);
 
     canvas.scale_copy(x + tsize.cx,
-                      y + mphFontValue->get_ascent_height()
+                      y + font.get_ascent_height()
                       - Layout::FastScale(unit_size.cy),
                       temp,
                       origin.x, origin.y,
@@ -418,62 +296,17 @@ InfoBox::PaintComment(Canvas &canvas)
   SIZE tsize;
   int x, y;
 
-  switch (colorBottom) {
-  case -1:
-    canvas.set_text_color(bdColor);
-    break;
-  case 0:
-    canvas.set_text_color(mColorValue);
-    break;
-  case 1:
-    if (Appearance.InverseInfoBox)
-      canvas.set_text_color(MapGfx.inv_redColor);
-    else
-      canvas.set_text_color(Color::RED);
+  canvas.set_background_color(look.comment.bg_color);
+  canvas.set_text_color(look.get_comment_color(colorBottom));
 
-    break;
-  case 2:
-    if (Appearance.InverseInfoBox)
-      canvas.set_text_color(MapGfx.inv_blueColor);
-    else
-      canvas.set_text_color(Color::BLUE);
-
-    break;
-    // VENTA3 more colors
-  case 3:
-    if (Appearance.InverseInfoBox)
-      canvas.set_text_color(MapGfx.inv_greenColor);
-    else
-      canvas.set_text_color(Color::GREEN);
-
-    break;
-  case 4:
-    if (Appearance.InverseInfoBox)
-      canvas.set_text_color(MapGfx.inv_yellowColor);
-    else
-      canvas.set_text_color(Color::YELLOW);
-
-    break;
-  case 5:
-    if (Appearance.InverseInfoBox)
-      canvas.set_text_color(MapGfx.inv_magentaColor);
-    else
-      canvas.set_text_color(Color::MAGENTA);
-
-    break;
-  }
-
-  canvas.set_background_color(mColorCommentBk);
-
-  // SetTextColor(mHdcBuf, mColorComment);
-
-  canvas.select(*mphFontComment);
+  const Font &font = *look.comment.font;
+  canvas.select(font);
 
   tsize = canvas.text_size(mComment);
 
   x = max(1, (int)(recComment.left + recComment.right - tsize.cx) / 2);
-  y = recComment.top + 1 + mphFontComment->get_capital_height()
-    - mphFontComment->get_ascent_height();
+  y = recComment.top + 1 + font.get_capital_height()
+    - font.get_ascent_height();
 
   canvas.text_opaque(x, y, &recComment, mComment);
 }
@@ -482,7 +315,7 @@ void
 InfoBox::PaintSelector(Canvas &canvas)
 {
   if (mHasFocus) {
-    canvas.select(hPenSelector);
+    canvas.select(look.selector_pen);
 
     const unsigned width = canvas.get_width(), height = canvas.get_height();
 
@@ -526,7 +359,7 @@ InfoBox::Paint()
   PaintValue(buffer);
 
   if (mBorderKind != 0) {
-    buffer.select(mhPenBorder);
+    buffer.select(look.border_pen);
 
     const unsigned width = buffer.get_width(), height = buffer.get_height();
 
@@ -575,11 +408,11 @@ InfoBox::InitializeDrawHelpers(void)
     rc.bottom -= BORDER_WIDTH;
 
   recTitle = rc;
-  recTitle.bottom = rc.top + mphFontTitle->get_capital_height() + 2;
+  recTitle.bottom = rc.top + look.title.font->get_capital_height() + 2;
 
   recComment = rc;
   recComment.top = recComment.bottom
-    - (mphFontTitle->get_capital_height() + 2);
+    - (look.comment.font->get_capital_height() + 2);
 
   recValue = rc;
   recValue.top = recTitle.bottom;

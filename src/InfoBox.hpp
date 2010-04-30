@@ -62,6 +62,40 @@ typedef enum {
 
 class Font;
 
+struct InfoBoxLook {
+  Pen border_pen, selector_pen;
+
+  struct {
+    Color fg_color, bg_color;
+    const Font *font;
+  } title, value, comment;
+
+  const Font *small_font;
+
+  Color colors[6];
+
+  Color get_color(int i, Color default_color) const {
+    if (i < 0)
+      return colors[0];
+    else if (i >= 1 && (unsigned)i < sizeof(colors) / sizeof(colors[0]))
+      return colors[i];
+    else
+      return default_color;
+  }
+
+  Color get_title_color(int i) const {
+    return get_color(i, title.fg_color);
+  }
+
+  Color get_value_color(int i) const {
+    return get_color(i, value.fg_color);
+  }
+
+  Color get_comment_color(int i) const {
+    return get_color(i, comment.fg_color);
+  }
+};
+
 class InfoBox: public BufferWindow
 {
 public:
@@ -70,26 +104,16 @@ public:
   };
 
 private:
+  const InfoBoxLook &look;
+
   int  mBorderKind;
-  Color mColorTitle;
-  Color mColorTitleBk;
-  Color mColorValue;
-  Color mColorValueBk;
-  Color mColorComment;
-  Color mColorCommentBk;
 
   bool mTitleChanged;
 
-  Pen mhPenBorder;
-  Pen mhPenSelector;
   TCHAR mTitle[TITLESIZE+1];
   TCHAR mValue[VALUESIZE+1];
   TCHAR mComment[COMMENTSIZE+1];
   Units_t mValueUnit;
-  const Font *mphFontTitle;
-  const Font *mphFontValue;
-  const Font *mphFontComment;
-  const Font *valueFont;
   bool   mHasFocus;
 
   /** a timer which returns keyboard focus back to the map window after a while */
@@ -184,9 +208,8 @@ public:
    * @param Width Width of the InfoBox
    * @param Height Height of the InfoBox
    */
-  InfoBox(ContainerWindow &Parent, int X, int Y, int Width, int Height);
-  /** Destructor */
-  ~InfoBox(void);
+  InfoBox(ContainerWindow &Parent, int X, int Y, int Width, int Height,
+          const InfoBoxLook &_look);
 
 protected:
   /**
