@@ -64,7 +64,6 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height,
                  const InfoBoxLook &_look)
   :look(_look), focus_timer(0)
 {
-  mTitleChanged = true;
   mSmallerFont = false;
 
   color = 0;
@@ -111,6 +110,7 @@ InfoBox::SetBorderKind(int Value)
     } else {
       mBorderKind = Value;
     }
+
     //JMW    Paint();
   }
 
@@ -130,9 +130,7 @@ InfoBox::SetTitle(const TCHAR *Value)
 
   if (_tcscmp(mTitle, sTmp) != 0) {
     _tcscpy(mTitle, sTmp);
-    mTitleChanged = true;
-    //JMW    PaintTitle();
-    //JMW    PaintSelector();
+    invalidate(recTitle);
   }
 }
 
@@ -142,7 +140,7 @@ InfoBox::SetValue(const TCHAR *Value)
   if (_tcscmp(mValue, Value) != 0) {
     _tcsncpy(mValue, Value, VALUESIZE);
     mValue[VALUESIZE] = '\0';
-    //JMW    PaintValue();
+    invalidate(recValue);
   }
 }
 
@@ -179,8 +177,7 @@ InfoBox::SetComment(const TCHAR *Value)
   if (_tcscmp(mComment, Value) != 0) {
     _tcsncpy(mComment, Value, COMMENTSIZE);
     mComment[COMMENTSIZE] = '\0';
-    //JMW    PaintComment();
-    //JMW    PaintSelector();
+    invalidate(recComment);
   }
 }
 
@@ -193,9 +190,6 @@ InfoBox::SetSmallerFont(bool smallerFont)
 void
 InfoBox::PaintTitle(Canvas &canvas)
 {
-  if (!mTitleChanged)
-    return;
-
   SIZE tsize;
   int x, y;
   int halftextwidth;
@@ -237,8 +231,6 @@ InfoBox::PaintTitle(Canvas &canvas)
     canvas.polyline(tab, 4);
     canvas.polyline(tab + 4, 4);
   }
-
-  mTitleChanged = false;
 }
 
 void
@@ -334,34 +326,33 @@ InfoBox::PaintSelector(Canvas &canvas)
 }
 
 void
-InfoBox::Paint()
+InfoBox::Paint(Canvas &canvas)
 {
-  Canvas &buffer = get_canvas();
-  buffer.background_opaque();
+  canvas.background_opaque();
 
-  PaintTitle(buffer);
-  PaintComment(buffer);
-  PaintValue(buffer);
+  PaintTitle(canvas);
+  PaintComment(canvas);
+  PaintValue(canvas);
 
   if (mBorderKind != 0) {
-    buffer.select(look.border_pen);
+    canvas.select(look.border_pen);
 
-    const unsigned width = buffer.get_width(), height = buffer.get_height();
+    const unsigned width = canvas.get_width(), height = canvas.get_height();
 
     if (mBorderKind & BORDERTOP) {
-      buffer.line(0, 0, width - 1, 0);
+      canvas.line(0, 0, width - 1, 0);
     }
 
     if (mBorderKind & BORDERRIGHT) {
-      buffer.line(width - 1, 0, width - 1, height);
+      canvas.line(width - 1, 0, width - 1, height);
     }
 
     if (mBorderKind & BORDERBOTTOM) {
-      buffer.line(0, height - 1, width - 1, height - 1);
+      canvas.line(0, height - 1, width - 1, height - 1);
     }
 
     if (mBorderKind & BORDERLEFT) {
-      buffer.line(0, 0, 0, height - 1);
+      canvas.line(0, 0, 0, height - 1);
     }
   }
 }
@@ -369,16 +360,17 @@ InfoBox::Paint()
 void
 InfoBox::PaintInto(Canvas &dest, int xoff, int yoff, int width, int height)
 {
-  Canvas &src = get_canvas();
+  SIZE size = get_size();
+  BufferCanvas buffer(dest, size.cx, size.cy);
 
-  dest.stretch(xoff, yoff, width, height, src,
-               0, 0, src.get_width(), src.get_height());
+  Paint(buffer);
+  dest.stretch(xoff, yoff, width, height, buffer, 0, 0, size.cx, size.cy);
 }
 
 bool
 InfoBox::on_resize(unsigned width, unsigned height)
 {
-  BufferWindow::on_resize(width, height);
+  PaintWindow::on_resize(width, height);
 
   RECT rc = get_client_rect();
 
@@ -426,7 +418,7 @@ InfoBox::on_key_down(unsigned key_code)
     return true;
   }
 
-  return BufferWindow::on_key_down(key_code);
+  return PaintWindow::on_key_down(key_code);
 }
 
 bool
@@ -463,7 +455,7 @@ void
 InfoBox::on_paint(Canvas &canvas)
 {
   // Call the parent function
-  BufferWindow::on_paint(canvas);
+  Paint(canvas);
 
   // Paint the selector
   if (has_focus())
@@ -474,7 +466,7 @@ bool
 InfoBox::on_setfocus()
 {
   // Call the parent function
-  BufferWindow::on_setfocus();
+  PaintWindow::on_setfocus();
 
   // Start the focus-auto-return timer
   // to automatically return focus back to MapWindow if idle
@@ -490,7 +482,7 @@ bool
 InfoBox::on_killfocus()
 {
   // Call the parent function
-  BufferWindow::on_killfocus();
+  PaintWindow::on_killfocus();
 
   // Destroy the time if it exists
   if (focus_timer != 0) {
@@ -508,7 +500,7 @@ bool
 InfoBox::on_timer(timer_t id)
 {
   if (id != focus_timer)
-    return BufferWindow::on_timer(id);
+    return PaintWindow::on_timer(id);
 
   kill_timer(focus_timer);
   focus_timer = 0;

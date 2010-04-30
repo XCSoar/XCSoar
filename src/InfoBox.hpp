@@ -92,7 +92,7 @@ struct InfoBoxLook {
   }
 };
 
-class InfoBox: public BufferWindow
+class InfoBox : public PaintWindow
 {
 public:
   enum {
@@ -107,8 +107,6 @@ private:
   const InfoBoxLook &look;
 
   int  mBorderKind;
-
-  bool mTitleChanged;
 
   TCHAR mTitle[TITLESIZE+1];
   TCHAR mValue[VALUESIZE+1];
@@ -150,11 +148,12 @@ private:
 
   // LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-public:
   /**
    * Paints the InfoBox with borders, title, comment and value
    */
-  void Paint();
+  void Paint(Canvas &canvas);
+
+public:
   void PaintInto(Canvas &dest, int xoff, int yoff, int width, int height);
 
   /**

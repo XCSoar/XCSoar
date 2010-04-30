@@ -1089,8 +1089,6 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
   default:
     info_box.SetComment(_T(""));
   }
-
-  info_box.Paint();
 }
 
 void
