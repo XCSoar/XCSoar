@@ -104,7 +104,6 @@ void MaskedPaintWindow::draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap,
   int x_offset = centered? IBLSCALE(src_width)/2 : 0;
   int y_offset = centered? IBLSCALE(src_height)/2 : 0;
 
-  mask_canvas.clear();
   mask_canvas.background_opaque();
   mask_canvas.set_text_color(Color(0xff,0xff, 0xff));
   mask_canvas.select(bitmap);
@@ -122,7 +121,6 @@ void MaskedPaintWindow::draw_bitmap(Canvas &canvas, const Bitmap &bitmap,
   int x_offset = centered? IBLSCALE(src_width)/2 : 0;
   int y_offset = centered? IBLSCALE(src_height)/2 : 0;
 
-  mask_canvas.clear();
   mask_canvas.background_opaque();
   mask_canvas.set_text_color(Color(0xff,0xff, 0xff));
   mask_canvas.select(bitmap);
