@@ -336,10 +336,6 @@ InfoBox::PaintSelector(Canvas &canvas)
 void
 InfoBox::Paint()
 {
-  // safety
-  if (!globalRunningEvent.test())
-    return;
-
   static bool InitDone = false;
 
   if (!InitDone) {
