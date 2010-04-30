@@ -93,15 +93,15 @@ MainWindow::set(LPCTSTR text,
   MapGfx.Initialise(XCSoarInterface::hInst,
 		    XCSoarInterface::SettingsMap());
 
+  LogStartUp(TEXT("Initialise fonts"));
+  InitialiseFonts(Appearance, rc);
+
   LogStartUp(TEXT("Create info boxes"));
   InfoBoxManager::Create(rc);
 
   LogStartUp(TEXT("Create button labels"));
   ButtonLabel::CreateButtonLabels(*this);
   ButtonLabel::SetLabelText(0,TEXT("MODE"));
-
-  LogStartUp(TEXT("Initialise fonts"));
-  InitialiseFonts(Appearance, rc);
   ButtonLabel::SetFont(MapWindowBoldFont);
 
   map.set(*this, rcsmall, rc);
