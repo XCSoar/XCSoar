@@ -1276,7 +1276,7 @@ InfoBoxManager::Paint(void)
   }
 }
 
-RECT
+void
 InfoBoxManager::Create(RECT rc)
 {
   ResetInfoBoxes();
@@ -1311,8 +1311,6 @@ InfoBoxManager::Create(RECT rc)
     ? MapGfx.inv_magentaColor : Color::MAGENTA;
 
   int xoff, yoff, sizex, sizey;
-
-  RECT retval = InfoBoxLayout::GetInfoBoxSizes(rc);
 
   // JMW created full screen infobox mode
   xoff=0;
@@ -1351,8 +1349,6 @@ InfoBoxManager::Create(RECT rc)
       InfoBoxes[i]->SetBorderKind(Border);
     }
   }
-
-  return retval; // for use in setting MapWindow
 }
 
 void

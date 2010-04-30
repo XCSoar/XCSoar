@@ -83,7 +83,7 @@ public:
   static void ProcessTimer(void);
   static void SetDirty(bool is_dirty);
 
-  static RECT Create(RECT rc);
+  static void Create(RECT rc);
   static void Destroy(void);
   static void Paint(void);
   static void Show();
