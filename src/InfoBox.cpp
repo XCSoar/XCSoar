@@ -590,45 +590,30 @@ InfoBox::PaintInto(Canvas &dest, int xoff, int yoff, int width, int height)
 void
 InfoBox::InitializeDrawHelpers(void)
 {
-  recTitle.left = 0;
-  recTitle.right = mWidth;
-  recTitle.top = 0;
-  recTitle.bottom = mphFontTitle->get_capital_height() + 2;
+  RECT rc = get_client_rect();
 
-  recComment.left = 0;
-  recComment.right = mWidth;
-  recComment.bottom = mHeight;
+  if (mBorderKind & BORDERLEFT)
+    rc.left += mBorderSize;
+
+  if (mBorderKind & BORDERRIGHT)
+    rc.right -= mBorderSize;
+
+  if (mBorderKind & BORDERTOP)
+    rc.top += mBorderSize;
+
+  if (mBorderKind & BORDERBOTTOM)
+    rc.bottom -= mBorderSize;
+
+  recTitle = rc;
+  recTitle.bottom = rc.top + mphFontTitle->get_capital_height() + 2;
+
+  recComment = rc;
   recComment.top = recComment.bottom
     - (mphFontTitle->get_capital_height() + 2);
 
-  recValue.left = 0;
-  recValue.right = mWidth;
+  recValue = rc;
   recValue.top = recTitle.bottom;
   recValue.bottom = recComment.top;
-
-  if (mBorderKind & BORDERLEFT) {
-    recTitle.left += mBorderSize;
-    recValue.left += mBorderSize;
-    recComment.left += mBorderSize;
-  }
-
-  if (mBorderKind & BORDERRIGHT) {
-    recTitle.right -= mBorderSize;
-    recValue.right -= mBorderSize;
-    recComment.right -= mBorderSize;
-  }
-
-  if (mBorderKind & BORDERTOP) {
-    recTitle.top += mBorderSize;
-    recTitle.bottom += mBorderSize;
-    recValue.top += mBorderSize;
-  }
-
-  if (mBorderKind & BORDERBOTTOM) {
-    recValue.bottom -= mBorderSize;
-    recComment.top -= mBorderSize;
-    recComment.bottom -= mBorderSize;
-  }
 }
 
 bool
