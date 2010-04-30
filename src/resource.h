@@ -13,7 +13,6 @@
 #define IDB_CLIMB                       213
 #define IDB_FINALGLIDE                  214
 #define IDB_AUTOMACCREADY               215
-#define IDB_TOWN                        218
 #define IDB_MARK                        219
 #define IDB_TERRAINWARNING              220
 #define IDB_AIRSPACE                    235
@@ -27,8 +26,6 @@
 #define IDB_ABORT                       269
 #define IDB_LOGGER                      271
 #define IDB_LOGGEROFF                   272
-#define IDB_PEAKHIGH                    273
-#define IDB_PEAKLOW                     274
 #define IDB_VARIOSCALE                  277
 #define IDB_FLARMTRAFFIC                278
 #define IDB_AIRSPACE3                   280
@@ -57,7 +54,6 @@
 #define IDB_DLGBUTTONRIGHT16            303
 #define IDB_DLGBUTTONRIGHT32            304
 #define IDB_AIRSPACE4                   306
-#define IDB_DISCLAIMER                  307
 #define IDB_FLARMROSE                   310
 #define IDB_AIRSPACE5                   311
 #define IDB_CLIMBSMALL                  313
@@ -73,8 +69,6 @@
 #define IDB_SCROLLBARMID                325
 #define IDB_SCROLLBARBOT                326
 #define IDB_SCROLLBARFILL               327
-#define IDB_OBSTACLE                    328
-#define IDB_THERMALSOURCE2              329
 #define IDB_LAUNCHER1                   330
 #define IDB_LAUNCHER2                   331
 #define IDB_SWIFT2                      332
