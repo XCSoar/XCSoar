@@ -68,9 +68,7 @@ static Pen hPenDefaultBorder;
 static Pen hPenSelector;
 static int Count = 0;
 
-// infobox
-#define DEFAULTBORDERPENWIDTH IBLSCALE(1)
-#define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+IBLSCALE(4))
+#define SELECTORWIDTH IBLSCALE(5)
 
 InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   :focus_timer(0)
@@ -102,8 +100,8 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   if (Count == 0) {
     hBrushDefaultBackGround.set(bkColor);
     hBrushDefaultBackGroundSel.set(bkColorSel);
-    hPenDefaultBorder.set(DEFAULTBORDERPENWIDTH, bdColor);
-    hPenSelector.set(DEFAULTBORDERPENWIDTH + 2, fgColor);
+    hPenDefaultBorder.set(BORDER_WIDTH, bdColor);
+    hPenSelector.set(IBLSCALE(1) + 2, fgColor);
   }
 
   mhBrushBk = hBrushDefaultBackGround;
@@ -111,7 +109,6 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   mhPenBorder = hPenDefaultBorder;
   mhPenSelector = hPenSelector;
 
-  mBorderSize = 1;
   if (Appearance.InfoBoxBorder == apIbTab) {
     mBorderKind = BORDERTAB;
   } else {
@@ -551,23 +548,19 @@ InfoBox::Paint()
     buffer.select(mhPenBorder);
 
     if (mBorderKind & BORDERTOP) {
-      buffer.line(0, 0, mWidth, 0);
+      buffer.line(0, 0, mWidth - 1, 0);
     }
 
     if (mBorderKind & BORDERRIGHT) {
-      buffer.line(mWidth - DEFAULTBORDERPENWIDTH, 0,
-                  mWidth - DEFAULTBORDERPENWIDTH, mHeight);
+      buffer.line(mWidth - 1, 0, mWidth - 1, mHeight);
     }
 
     if (mBorderKind & BORDERBOTTOM) {
-      buffer.line(mWidth - DEFAULTBORDERPENWIDTH,
-                  mHeight - DEFAULTBORDERPENWIDTH,
-                  -DEFAULTBORDERPENWIDTH,
-                  mHeight - DEFAULTBORDERPENWIDTH);
+      buffer.line(0, mHeight - 1, mWidth - 1, mHeight - 1);
     }
 
     if (mBorderKind & BORDERLEFT) {
-      buffer.line(0, mHeight - DEFAULTBORDERPENWIDTH, 0, -DEFAULTBORDERPENWIDTH);
+      buffer.line(0, 0, 0, mHeight - 1);
     }
   }
 }
@@ -584,16 +577,16 @@ InfoBox::InitializeDrawHelpers(void)
   RECT rc = get_client_rect();
 
   if (mBorderKind & BORDERLEFT)
-    rc.left += mBorderSize;
+    rc.left += BORDER_WIDTH;
 
   if (mBorderKind & BORDERRIGHT)
-    rc.right -= mBorderSize;
+    rc.right -= BORDER_WIDTH;
 
   if (mBorderKind & BORDERTOP)
-    rc.top += mBorderSize;
+    rc.top += BORDER_WIDTH;
 
   if (mBorderKind & BORDERBOTTOM)
-    rc.bottom -= mBorderSize;
+    rc.bottom -= BORDER_WIDTH;
 
   recTitle = rc;
   recTitle.bottom = rc.top + mphFontTitle->get_capital_height() + 2;

@@ -64,6 +64,11 @@ class Font;
 
 class InfoBox: public BufferWindow
 {
+public:
+  enum {
+    BORDER_WIDTH = 1,
+  };
+
 private:
   int mX;
   int mY;
@@ -103,7 +108,6 @@ private:
   int color;
   int colorBottom;
   int colorTop;
-  int mBorderSize;
   bool mSmallerFont;
 
   void InitializeDrawHelpers(void);
