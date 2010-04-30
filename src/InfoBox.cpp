@@ -314,27 +314,25 @@ InfoBox::PaintComment(Canvas &canvas)
 void
 InfoBox::PaintSelector(Canvas &canvas)
 {
-  if (mHasFocus) {
-    canvas.select(look.selector_pen);
+  canvas.select(look.selector_pen);
 
-    const unsigned width = canvas.get_width(), height = canvas.get_height();
+  const unsigned width = canvas.get_width(), height = canvas.get_height();
 
-    canvas.two_lines(width - SELECTORWIDTH - 1, 0,
-                     width - 1, 0,
-                     width - 1, SELECTORWIDTH + 1);
+  canvas.two_lines(width - SELECTORWIDTH - 1, 0,
+                   width - 1, 0,
+                   width - 1, SELECTORWIDTH + 1);
 
-    canvas.two_lines(width - 1, height - SELECTORWIDTH - 2,
-                     width - 1, height - 1,
-                     width - SELECTORWIDTH - 1, height - 1);
+  canvas.two_lines(width - 1, height - SELECTORWIDTH - 2,
+                   width - 1, height - 1,
+                   width - SELECTORWIDTH - 1, height - 1);
 
-    canvas.two_lines(SELECTORWIDTH + 1, height - 1,
-                     0, height - 1,
-                     0, height - SELECTORWIDTH - 2);
+  canvas.two_lines(SELECTORWIDTH + 1, height - 1,
+                   0, height - 1,
+                   0, height - SELECTORWIDTH - 2);
 
-    canvas.two_lines(0, SELECTORWIDTH + 1,
-                     0, 0,
-                     SELECTORWIDTH + 1, 0);
-  }
+  canvas.two_lines(0, SELECTORWIDTH + 1,
+                   0, 0,
+                   SELECTORWIDTH + 1, 0);
 }
 
 void
@@ -475,8 +473,10 @@ InfoBox::on_paint(Canvas &canvas)
 {
   // Call the parent function
   BufferWindow::on_paint(canvas);
+
   // Paint the selector
-  PaintSelector(canvas);
+  if (mHasFocus)
+    PaintSelector(canvas);
 }
 
 bool
