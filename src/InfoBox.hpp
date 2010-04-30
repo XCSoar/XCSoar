@@ -84,8 +84,6 @@ private:
 
   bool mTitleChanged;
 
-  Brush mhBrushBk;
-  Brush mhBrushBkSel;
   Pen mhPenBorder;
   Pen mhPenSelector;
   TCHAR mTitle[TITLESIZE+1];

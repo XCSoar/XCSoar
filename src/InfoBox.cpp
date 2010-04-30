@@ -62,8 +62,6 @@ using std::max;
 
 static const Color bkColorSel(150, 0x0, 0x0);
 static const Color bdColor(80, 80, 80);
-static Brush hBrushDefaultBackGround;
-static Brush hBrushDefaultBackGroundSel;
 static Pen hPenDefaultBorder;
 static Pen hPenSelector;
 static int Count = 0;
@@ -98,14 +96,10 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   }
 
   if (Count == 0) {
-    hBrushDefaultBackGround.set(bkColor);
-    hBrushDefaultBackGroundSel.set(bkColorSel);
     hPenDefaultBorder.set(BORDER_WIDTH, bdColor);
     hPenSelector.set(IBLSCALE(1) + 2, fgColor);
   }
 
-  mhBrushBk = hBrushDefaultBackGround;
-  mhBrushBkSel = hBrushDefaultBackGroundSel;
   mhPenBorder = hPenDefaultBorder;
   mhPenSelector = hPenSelector;
 
@@ -143,8 +137,6 @@ InfoBox::~InfoBox(void){
   Count--;
 
   if (Count == 0) {
-    hBrushDefaultBackGround.reset();
-    hBrushDefaultBackGroundSel.reset();
     hPenDefaultBorder.reset();
     hPenSelector.reset();
   }
@@ -430,11 +422,6 @@ InfoBox::PaintComment(Canvas &canvas)
 {
   SIZE tsize;
   int x, y;
-  unsigned int len = _tcslen(mComment);
-
-  // nothing to paint
-  if (len == 0)
-    return;
 
   switch (colorBottom) {
   case -1:
@@ -535,10 +522,7 @@ InfoBox::Paint()
   }
 
   Canvas &buffer = get_canvas();
-  buffer.background_transparent();
-
-  buffer.fill_rectangle(0, mTitleChanged ? 0 : recTitle.bottom, mWidth,
-      mHeight, mhBrushBk);
+  buffer.background_opaque();
 
   PaintTitle(buffer);
   PaintComment(buffer);
