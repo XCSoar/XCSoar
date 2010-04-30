@@ -91,38 +91,38 @@ ScreenGraphics::GetAirspaceBrushByClass(const int i,
 }
 
 const Color ScreenGraphics::ColorSelected = Color(0xC0, 0xC0, 0xC0);
-const Color ScreenGraphics::ColorUnselected = Color(0xFF, 0xFF, 0xFF);
-const Color ScreenGraphics::ColorWarning = Color(0xFF, 0x00, 0x00);
-const Color ScreenGraphics::ColorOK = Color(0x00, 0x00, 0xFF);
-const Color ScreenGraphics::ColorBlack = Color(0x00, 0x00, 0x00);
-const Color ScreenGraphics::ColorMidGrey = Color(0x80, 0x80, 0x80);
+const Color ScreenGraphics::ColorUnselected = Color::WHITE;
+const Color ScreenGraphics::ColorWarning = Color::RED;
+const Color ScreenGraphics::ColorOK = Color::BLUE;
+const Color ScreenGraphics::ColorBlack = Color::BLACK;
+const Color ScreenGraphics::ColorMidGrey = Color::GRAY;
 
 const Color ScreenGraphics::inv_redColor = Color(0xff, 0x70, 0x70);
 const Color ScreenGraphics::inv_blueColor = Color(0x90, 0x90, 0xff);
-const Color ScreenGraphics::inv_yellowColor = Color(0xff, 0xff, 0x00);
-const Color ScreenGraphics::inv_greenColor = Color(0x00, 0xff, 0x00);
-const Color ScreenGraphics::inv_magentaColor = Color(0xff, 0x00, 0xff);
+const Color ScreenGraphics::inv_yellowColor = Color::YELLOW;
+const Color ScreenGraphics::inv_greenColor = Color::GREEN;
+const Color ScreenGraphics::inv_magentaColor = Color::MAGENTA;
 
 const Color ScreenGraphics::TaskColor = Color(0, 120, 0); // was 255
-const Color ScreenGraphics::BackgroundColor = Color(0xFF, 0xFF, 0xFF);
+const Color ScreenGraphics::BackgroundColor = Color::WHITE;
 
 const Color ScreenGraphics::Colours[] = {
-  Color(0xFF, 0x00, 0x00),
-  Color(0x00, 0xFF, 0x00),
-  Color(0x00, 0x00, 0xFF),
-  Color(0xFF, 0xFF, 0x00),
-  Color(0xFF, 0x00, 0xFF),
-  Color(0x00, 0xFF, 0xFF),
+  Color::RED,
+  Color::GREEN,
+  Color::BLUE,
+  Color::YELLOW,
+  Color::MAGENTA,
+  Color::CYAN,
   Color(0x7F, 0x00, 0x00),
   Color(0x00, 0x7F, 0x00),
   Color(0x00, 0x00, 0x7F),
   Color(0x7F, 0x7F, 0x00),
   Color(0x7F, 0x00, 0x7F),
   Color(0x00, 0x7F, 0x7F),
-  Color(0xFF, 0xFF, 0xFF),
+  Color::WHITE,
   Color(0xC0, 0xC0, 0xC0),
   Color(0x7F, 0x7F, 0x7F),
-  Color(0x00, 0x00, 0x00),
+  Color::BLACK,
 };
 
 // JMW TODO: some of these should be loaded after settings are loaded
@@ -184,7 +184,7 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
   }
   hAboveTerrainBrush.set(hAboveTerrainBitmap);
 
-  hbWind.set(Color(0x80, 0x80, 0x80));
+  hbWind.set(Color::GRAY);
 
   hBmpMapScale.load(IDB_MAPSCALE_A);
   hBrushFlyingModeAbort.set(Color::RED);
@@ -239,7 +239,7 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
 
   hpWindThick.set(IBLSCALE(4), Color(255, 220, 220));
 
-  hpBearing.set(IBLSCALE(2), Color(0, 0, 0));
+  hpBearing.set(IBLSCALE(2), Color::BLACK);
   hpBestCruiseTrack.set(IBLSCALE(1), Color::BLUE);
   hpCompass.set(IBLSCALE(1), has_colors()
                 ? Color(0xcf, 0xcf, 0xFF) : Color::BLACK);
@@ -256,14 +256,14 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
 
   hpStartFinishThick.set(IBLSCALE(5), TaskColor);
 
-  hpStartFinishThin.set(IBLSCALE(1), Color(255, 0, 0));
+  hpStartFinishThin.set(IBLSCALE(1), Color::RED);
 
-  hpMapScale.set(IBLSCALE(1), Color(0, 0, 0));
+  hpMapScale.set(IBLSCALE(1), Color::BLACK);
   hpTerrainLine.set(Pen::DASH, IBLSCALE(1), Color(0x30, 0x30, 0x30));
   hpTerrainLineBg.set(IBLSCALE(1), Color::WHITE);
 
-  hpVisualGlideLightBlack.set(Pen::DASH, IBLSCALE(1), Color(0x0, 0x0, 0x0));
-  hpVisualGlideHeavyBlack.set(Pen::DASH, IBLSCALE(2), Color(0x0, 0x0, 0x0));
+  hpVisualGlideLightBlack.set(Pen::DASH, IBLSCALE(1), Color::BLACK);
+  hpVisualGlideHeavyBlack.set(Pen::DASH, IBLSCALE(2), Color::BLACK);
   hpVisualGlideLightRed.set(Pen::DASH, IBLSCALE(1), Color::RED);
   hpVisualGlideHeavyRed.set(Pen::DASH, IBLSCALE(2), Color::RED);
 
@@ -605,7 +605,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       canvas.text(x - 2, y, Value);
       canvas.text(x, y + 1, Value);
       canvas.text(x, y - 1, Value);
-      canvas.set_text_color(Color(0x00, 0x00, 0x00));
+      canvas.set_text_color(Color::BLACK);
 
       canvas.text(x, y, Value);
 #else
@@ -615,7 +615,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       canvas.text_opaque(x - 2, y, Value);
       canvas.text_opaque(x, y + 1, Value);
       canvas.text_opaque(x, y - 1, Value);
-      canvas.set_text_color(Color(0x00, 0x00, 0x00));
+      canvas.set_text_color(Color::BLACK);
 
       canvas.text_opaque(x, y, Value);
 #endif

@@ -105,7 +105,7 @@ private:
     canvas.hollow_brush();
     canvas.black_pen();
 
-    Brush red_brush(Color(255, 0, 0));
+    Brush red_brush(Color::RED);
 
     POINT p1[3] = {
       { -100, get_vmiddle() },

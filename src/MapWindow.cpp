@@ -438,7 +438,7 @@ MapWindow::draw_bitmap(Canvas &canvas, const Bitmap &bitmap,
   int y_offset = centered? IBLSCALE(src_height)/2 : 0;
 
   bitmap_canvas.background_opaque();
-  bitmap_canvas.set_text_color(Color(0xff,0xff, 0xff));
+  bitmap_canvas.set_text_color(Color::WHITE);
   bitmap_canvas.select(bitmap);
   canvas.scale_copy(x-x_offset, y-y_offset,
 		    bitmap_canvas,
@@ -457,7 +457,7 @@ MapWindow::draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap,
   int y_offset = centered? IBLSCALE(src_height)/2 : 0;
 
   bitmap_canvas.background_opaque();
-  bitmap_canvas.set_text_color(Color(0xff,0xff, 0xff));
+  bitmap_canvas.set_text_color(Color::WHITE);
   bitmap_canvas.select(bitmap);
   canvas.scale_or_and(x-x_offset, y-y_offset, bitmap_canvas, src_width, src_height);
 }

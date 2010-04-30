@@ -351,7 +351,7 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
   int res_y = iround((rc.bottom - rc.top) * oversampling / dtquant);
 
   sbuf = new CSTScreenBuffer();
-  sbuf->Create(res_x, res_y, Color(0xff, 0xff, 0xff));
+  sbuf->Create(res_x, res_y, Color::WHITE);
   ixs = sbuf->GetCorrectedWidth() / oversampling;
   iys = sbuf->GetHeight() / oversampling;
 
