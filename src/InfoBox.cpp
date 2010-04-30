@@ -310,9 +310,6 @@ InfoBox::PaintTitle(Canvas &canvas)
   y = recTitle.top + 1 + mphFontTitle->get_capital_height()
     - mphFontTitle->get_ascent_height();
 
-  if (mBorderKind & BORDERLEFT)
-    x += DEFAULTBORDERPENWIDTH;
-
   canvas.text_opaque(x, y, &recTitle, mTitle);
 
   if ((mBorderKind & BORDERTAB) && (halftextwidth > IBLSCALE(3))) {
@@ -410,9 +407,6 @@ InfoBox::PaintValue(Canvas &canvas)
   x = max(1, (int)recValue.left +
           (mWidth - (int)tsize.cx - Layout::FastScale(unit_size.cx)) / 2);
 
-  if (mBorderKind & BORDERLEFT)
-    x += DEFAULTBORDERPENWIDTH;
-
   y = recValue.top + 1 - mphFontValue->get_ascent_height() +
     (recValue.bottom - recValue.top + mphFontValue->get_capital_height()) / 2;
 
@@ -499,9 +493,6 @@ InfoBox::PaintComment(Canvas &canvas)
   tsize = canvas.text_size(mComment);
 
   x = max(1, (int)recComment.left + (mWidth - (int)tsize.cx) / 2);
-  if (mBorderKind & BORDERLEFT)
-    x += DEFAULTBORDERPENWIDTH;
-
   y = recComment.top + 1 + mphFontComment->get_capital_height()
     - mphFontComment->get_ascent_height();
 
