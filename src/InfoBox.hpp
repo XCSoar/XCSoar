@@ -70,10 +70,6 @@ public:
   };
 
 private:
-  int mX;
-  int mY;
-  int mWidth;
-  int mHeight;
   int  mBorderKind;
   Color mColorTitle;
   Color mColorTitleBk;

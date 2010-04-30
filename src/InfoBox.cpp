@@ -71,11 +71,6 @@ static int Count = 0;
 InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   :focus_timer(0)
 {
-  mX = X;
-  mY = Y;
-  mWidth = Width;
-  mHeight = Height;
-
   mTitleChanged = true;
   mSmallerFont = false;
 
@@ -83,7 +78,7 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   colorTop = 0;
   colorBottom = 0;
 
-  set(parent, mX, mY, mWidth, mHeight);
+  set(parent, X, Y, Width, Height);
 
   Color fgColor, bkColor;
 
@@ -489,17 +484,19 @@ InfoBox::PaintSelector(Canvas &canvas)
   if (mHasFocus) {
     canvas.select(hPenSelector);
 
-    canvas.two_lines(mWidth - SELECTORWIDTH - 1, 0,
-                     mWidth - 1, 0,
-                     mWidth - 1, SELECTORWIDTH + 1);
+    const unsigned width = canvas.get_width(), height = canvas.get_height();
 
-    canvas.two_lines(mWidth - 1, mHeight - SELECTORWIDTH - 2,
-                     mWidth - 1, mHeight - 1,
-                     mWidth - SELECTORWIDTH - 1, mHeight - 1);
+    canvas.two_lines(width - SELECTORWIDTH - 1, 0,
+                     width - 1, 0,
+                     width - 1, SELECTORWIDTH + 1);
 
-    canvas.two_lines(SELECTORWIDTH + 1, mHeight - 1,
-                     0, mHeight - 1,
-                     0, mHeight - SELECTORWIDTH - 2);
+    canvas.two_lines(width - 1, height - SELECTORWIDTH - 2,
+                     width - 1, height - 1,
+                     width - SELECTORWIDTH - 1, height - 1);
+
+    canvas.two_lines(SELECTORWIDTH + 1, height - 1,
+                     0, height - 1,
+                     0, height - SELECTORWIDTH - 2);
 
     canvas.two_lines(0, SELECTORWIDTH + 1,
                      0, 0,
@@ -531,20 +528,22 @@ InfoBox::Paint()
   if (mBorderKind != 0) {
     buffer.select(mhPenBorder);
 
+    const unsigned width = buffer.get_width(), height = buffer.get_height();
+
     if (mBorderKind & BORDERTOP) {
-      buffer.line(0, 0, mWidth - 1, 0);
+      buffer.line(0, 0, width - 1, 0);
     }
 
     if (mBorderKind & BORDERRIGHT) {
-      buffer.line(mWidth - 1, 0, mWidth - 1, mHeight);
+      buffer.line(width - 1, 0, width - 1, height);
     }
 
     if (mBorderKind & BORDERBOTTOM) {
-      buffer.line(0, mHeight - 1, mWidth - 1, mHeight - 1);
+      buffer.line(0, height - 1, width - 1, height - 1);
     }
 
     if (mBorderKind & BORDERLEFT) {
-      buffer.line(0, 0, 0, mHeight - 1);
+      buffer.line(0, 0, 0, height - 1);
     }
   }
 }
@@ -552,7 +551,10 @@ InfoBox::Paint()
 void
 InfoBox::PaintInto(Canvas &dest, int xoff, int yoff, int width, int height)
 {
-  dest.stretch(xoff, yoff, width, height, get_canvas(), 0, 0, mWidth, mHeight);
+  Canvas &src = get_canvas();
+
+  dest.stretch(xoff, yoff, width, height, src,
+               0, 0, src.get_width(), src.get_height());
 }
 
 void
