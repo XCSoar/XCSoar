@@ -329,7 +329,7 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
   }
 
   blursize = (dtquant - 1) / 2;
-  oversampling = max(1, (blursize + 1) / 2 + 1);
+  oversampling = std::max(1, (blursize + 1) / 2 + 1);
   if (blursize == 0)
     oversampling = 1;
     // no point in oversampling,
@@ -633,7 +633,7 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
         gp.Latitude = PanLatitude - (ycost + x * sint) * InvDrawScale;
         gp.Longitude = PanLongitude + (x * cost - ysint)
             * invfastcosine(gp.Latitude) * InvDrawScale;
-        *myhbuf = max((short)0, DisplayMap->GetField(gp, *rounding));
+        *myhbuf = std::max((short)0, DisplayMap->GetField(gp, *rounding));
       } else {
         *myhbuf = 0;
       }
@@ -647,7 +647,7 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
   for (int y = Y0; y < Y1; y += dtquant) {
     for (int x = X0; x < X1; x += dtquant) {
       map_projection.Screen2LonLat(x, y, X, Y);
-      *myhbuf++ = max(0, DisplayMap->GetField(Y, X, *rounding));
+      *myhbuf++ = std::max(0, DisplayMap->GetField(Y, X, *rounding));
     }
   }
 
@@ -668,7 +668,7 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
   const unsigned int ixsepx = cixs * epx;
   const unsigned int ixsright = cixs - 1 - iepx;
   const unsigned int iysbottom = ciys - iepx;
-  const int hscale = max(1, (int)(pixelsize_d));
+  const int hscale = std::max(1, (int)(pixelsize_d));
   const int tc = TerrainContrast;
   unsigned short *thBuf = hBuf;
 
@@ -778,7 +778,7 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
             int mag = (dd0 * dd0 + dd1 * dd1 + dd2 * dd2);
             if (mag > 0) {
               mag = (dd2 * sz + dd0 * sx + dd1 * sy) / isqrt4(mag);
-              mag = max(-64, min(63, (mag - sz) * tc / 128));
+              mag = std::max(-64, min(63, (mag - sz) * tc / 128));
               *imageBuf = oColorBuf[h + mag * 256];
             } else {
               *imageBuf = oColorBuf[h];

@@ -204,16 +204,16 @@ Projection::CalculateScreenBounds(const fixed scale) const
     unsigned int maxsc=0;
     dx = screen_center.x-MapRect.right;
     dy = screen_center.y-MapRect.top;
-    maxsc = max(maxsc, isqrt4(dx*dx+dy*dy));
+    maxsc = std::max(maxsc, isqrt4(dx*dx+dy*dy));
     dx = screen_center.x-MapRect.left;
     dy = screen_center.y-MapRect.top;
-    maxsc = max(maxsc, isqrt4(dx*dx+dy*dy));
+    maxsc = std::max(maxsc, isqrt4(dx*dx+dy*dy));
     dx = screen_center.x-MapRect.left;
     dy = screen_center.y-MapRect.bottom;
-    maxsc = max(maxsc, isqrt4(dx*dx+dy*dy));
+    maxsc = std::max(maxsc, isqrt4(dx*dx+dy*dy));
     dx = screen_center.x-MapRect.right;
     dy = screen_center.y-MapRect.bottom;
-    maxsc = max(maxsc, isqrt4(dx*dx+dy*dy));
+    maxsc = std::max(maxsc, isqrt4(dx*dx+dy*dy));
 
     for (int i=0; i<10; i++) {
       double ang = i*360.0/10;
@@ -222,10 +222,10 @@ Projection::CalculateScreenBounds(const fixed scale) const
       p.x = screen_center.x + iround(fastcosine(ang)*maxsc*scale);
       p.y = screen_center.y + iround(fastsine(ang)*maxsc*scale);
       Screen2LonLat(p.x, p.y, g);
-      sb.minx = min((double)g.Longitude, sb.minx);
-      sb.miny = min((double)g.Latitude, sb.miny);
-      sb.maxx = max((double)g.Longitude, sb.maxx);
-      sb.maxy = max((double)g.Latitude, sb.maxy);
+      sb.minx = std::min((double)g.Longitude, sb.minx);
+      sb.miny = std::min((double)g.Latitude, sb.miny);
+      sb.maxx = std::max((double)g.Longitude, sb.maxx);
+      sb.maxy = std::max((double)g.Latitude, sb.maxy);
     }
 
   } else {
@@ -243,26 +243,26 @@ Projection::CalculateScreenBounds(const fixed scale) const
     x = MapRect.right;
     y = MapRect.top;
     Screen2LonLat(x, y, g);
-    xmin = min(xmin, (double)g.Longitude);
-    xmax = max(xmax, (double)g.Longitude);
-    ymin = min(ymin, (double)g.Latitude);
-    ymax = max(ymax, (double)g.Latitude);
+    xmin = std::min(xmin, (double)g.Longitude);
+    xmax = std::max(xmax, (double)g.Longitude);
+    ymin = std::min(ymin, (double)g.Latitude);
+    ymax = std::max(ymax, (double)g.Latitude);
 
     x = MapRect.right;
     y = MapRect.bottom;
     Screen2LonLat(x, y, g);
-    xmin = min(xmin, (double)g.Longitude);
-    xmax = max(xmax, (double)g.Longitude);
-    ymin = min(ymin, (double)g.Latitude);
-    ymax = max(ymax, (double)g.Latitude);
+    xmin = std::min(xmin, (double)g.Longitude);
+    xmax = std::max(xmax, (double)g.Longitude);
+    ymin = std::min(ymin, (double)g.Latitude);
+    ymax = std::max(ymax, (double)g.Latitude);
 
     x = MapRect.left;
     y = MapRect.bottom;
     Screen2LonLat(x, y, g);
-    xmin = min(xmin, (double)g.Longitude);
-    xmax = max(xmax, (double)g.Longitude);
-    ymin = min(ymin, (double)g.Latitude);
-    ymax = max(ymax, (double)g.Latitude);
+    xmin = std::min(xmin, (double)g.Longitude);
+    xmax = std::max(xmax, (double)g.Longitude);
+    ymin = std::min(ymin, (double)g.Latitude);
+    ymax = std::max(ymax, (double)g.Latitude);
 
     sb.minx = xmin;
     sb.maxx = xmax;

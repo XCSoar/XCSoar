@@ -102,13 +102,13 @@ anglelimit(double ang)
 static int
 VtoI(double V)
 {
-  return min(NUM_V_POINTS - 1, iround(V * (NUM_V_POINTS - 1) / V_SCALE));
+  return std::min(NUM_V_POINTS - 1, iround(V * (NUM_V_POINTS - 1) / V_SCALE));
 }
 
 static double
 ItoV(int i)
 {
-  return max(0, min(i, NUM_V_POINTS - 1)) * V_SCALE / (NUM_V_POINTS - 1);
+  return std::max(0, std::min(i, NUM_V_POINTS - 1)) * V_SCALE / (NUM_V_POINTS - 1);
 }
 
 /**
@@ -216,7 +216,7 @@ public:
     int v_tas_y = V_gps_y + V_west_y;
     long vv = isqrt4(v_tas_x * v_tas_x + v_tas_y * v_tas_y);
     long vdiff = (long)V_tas_l - vv;
-    int err = (1000 * max(vdiff, -vdiff)) / V_tas_l;
+    int err = (1000 * std::max(vdiff, -vdiff)) / V_tas_l;
     // returns error in tenths of percent
     return err;
   }
@@ -489,8 +489,8 @@ public:
         il = 0;
         ih = NUM_V_POINTS - 1;
       } else {
-        il = min(NUM_V_POINTS - 1, max(0, ib - 3));
-        ih = min(NUM_V_POINTS - 1, max(0, ib + 3));
+        il = std::min(NUM_V_POINTS - 1, std::max(0, ib - 3));
+        ih = std::min(NUM_V_POINTS - 1, std::max(0, ib + 3));
       }
       for (i = il; i <= ih; i++) {
         if (scanned[i]) {
@@ -700,9 +700,9 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
     //double pes = v_error/(V_SCALE/NUM_V_POINTS);
     //quality = iround(0.5+4.5/(1.0+percent_error*percent_error/30.0));
 
-    quality = max(1, 5 - iround(percent_error / 2));
+    quality = std::max(1, 5 - iround(percent_error / 2));
     if (derived.Circling) {
-      quality = max(1, quality / 2); // de-value updates in circling mode
+      quality = std::max(1, quality / 2); // de-value updates in circling mode
     }
 
     #ifdef DEBUG_ZIGZAG

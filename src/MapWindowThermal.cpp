@@ -132,12 +132,12 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
   }
 
   // calculate top/bottom height
-  maxh = max(h, mth);
-  minh = min(h, 0.0);
+  maxh = std::max(h, mth);
+  minh = std::min(h, 0.0);
 
   if (draw_start_height) {
-    maxh = max(maxh, hstart);
-    minh = min(minh, hstart);
+    maxh = std::max(maxh, hstart);
+    minh = std::min(minh, hstart);
   }
 
   // no thermalling has been done above safety altitude
@@ -154,7 +154,7 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
   int numtherm = 0;
 
   const double mc = get_glide_polar().get_mc();
-  Wmax = max(0.5, mc);
+  Wmax = std::max(0.5, mc);
 
   for (i = 0; i < NUMTHERMALBUCKETS; i++) {
     double wthis = 0;
@@ -170,7 +170,7 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
     if (wthis > 0.0) {
       ht[numtherm] = hp;
       Wt[numtherm] = wthis;
-      Wmax = max(Wmax, wthis / 1.5);
+      Wmax = std::max(Wmax, wthis / 1.5);
       numtherm++;
     }
   }
@@ -206,7 +206,7 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
   GliderBand[0].y = IBLSCALE(4) + iround(TBSCALEY * (1.0 - hglider)) + rc.top;
   GliderBand[1].y = GliderBand[0].y;
   GliderBand[1].x =
-      max(iround((mc / Wmax) * IBLSCALE(TBSCALEX)), IBLSCALE(4)) + rc.left;
+    std::max(iround((mc / Wmax) * IBLSCALE(TBSCALEX)), IBLSCALE(4)) + rc.left;
 
   GliderBand[2].x = GliderBand[1].x - IBLSCALE(4);
   GliderBand[2].y = GliderBand[0].y - IBLSCALE(4);
