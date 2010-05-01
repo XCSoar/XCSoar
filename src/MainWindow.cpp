@@ -87,20 +87,21 @@ MainWindow::set(LPCTSTR text,
 
   LogStartUp(TEXT("InfoBox geometry"));
   InfoBoxLayout::ScreenGeometry(rc);
+  RECT rcsmall = InfoBoxLayout::GetInfoBoxSizes(rc);
 
   // color/pattern chart (must have infobox geometry before this)
   MapGfx.Initialise(XCSoarInterface::hInst,
 		    XCSoarInterface::SettingsMap());
 
+  LogStartUp(TEXT("Initialise fonts"));
+  InitialiseFonts(Appearance, rc);
+
   LogStartUp(TEXT("Create info boxes"));
-  RECT rcsmall = InfoBoxManager::Create(rc);
+  InfoBoxManager::Create(rc);
 
   LogStartUp(TEXT("Create button labels"));
   ButtonLabel::CreateButtonLabels(*this);
   ButtonLabel::SetLabelText(0,TEXT("MODE"));
-
-  LogStartUp(TEXT("Initialise fonts"));
-  InitialiseFonts(Appearance, rc);
   ButtonLabel::SetFont(MapWindowBoldFont);
 
   map.set(*this, rcsmall, rc);

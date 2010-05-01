@@ -376,7 +376,7 @@ InitialiseFontsAuto(RECT rc,
   logfont.lfHeight = iFontHeight;
   logfont.lfWidth =  FontWidth;
   logfont.lfWeight = FW_BOLD;
-  logfont.lfItalic = TRUE;
+  logfont.lfItalic = false;
   logfont.lfCharSet = ANSI_CHARSET;
   ApplyClearType(&logfont);
 
@@ -396,7 +396,7 @@ InitialiseFontsAuto(RECT rc,
     TempWindowFont = CreateFontIndirect (&logfont);
     hfOld=(HFONT)SelectObject(canvas, TempWindowFont);
 
-    tsize = canvas.text_size(TEXT("00:00"));
+    tsize = canvas.text_size(_T("1234m"));
 //    DeleteObject(InfoWindowFont);
     SelectObject(canvas, hfOld); // unselect it before deleting it
     DeleteObject(TempWindowFont);

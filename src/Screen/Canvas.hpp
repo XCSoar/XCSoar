@@ -197,6 +197,10 @@ public:
     rectangle(0, 0, surface->w, surface->h);
   }
 
+  void clear(const Brush &brush) {
+    fill_rectangle(0, 0, surface->w, surface->h, brush);
+  }
+
   void round_rectangle(int left, int top, int right, int bottom,
                        unsigned ellipse_width, unsigned ellipse_height) {
     rectangle(left, top, right, bottom); // XXX
@@ -636,6 +640,10 @@ public:
 
   void clear() {
     rectangle(0, 0, width, height);
+  }
+
+  void clear(const Brush &brush) {
+    fill_rectangle(0, 0, width, height, brush);
   }
 
   void round_rectangle(int left, int top, int right, int bottom,

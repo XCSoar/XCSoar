@@ -56,47 +56,62 @@ typedef enum {
 #define BORDERLEFT   (1<<bkLeft)
 #define BORDERTAB    (1<<(bkLeft+1))
 
-#define TITLESIZE    32
-#define VALUESIZE    32
-#define COMMENTSIZE  32
-
 class Font;
 
-class InfoBox: public BufferWindow
+struct InfoBoxLook {
+  Pen border_pen, selector_pen;
+
+  struct {
+    Color fg_color, bg_color;
+    const Font *font;
+  } title, value, comment;
+
+  const Font *small_font;
+
+  Color colors[6];
+
+  Color get_color(int i, Color default_color) const {
+    if (i < 0)
+      return colors[0];
+    else if (i >= 1 && (unsigned)i < sizeof(colors) / sizeof(colors[0]))
+      return colors[i];
+    else
+      return default_color;
+  }
+
+  Color get_title_color(int i) const {
+    return get_color(i, title.fg_color);
+  }
+
+  Color get_value_color(int i) const {
+    return get_color(i, value.fg_color);
+  }
+
+  Color get_comment_color(int i) const {
+    return get_color(i, comment.fg_color);
+  }
+};
+
+class InfoBox : public PaintWindow
 {
+public:
+  enum {
+    BORDER_WIDTH = 1,
+
+    TITLESIZE = 32,
+    VALUESIZE = 32,
+    COMMENTSIZE = 32,
+  };
+
 private:
-  int mX;
-  int mY;
-  int mWidth;
-  int mHeight;
+  const InfoBoxLook &look;
+
   int  mBorderKind;
-  Color mColorBack;
-  Color mColorFore;
-  Color mColorTitle;
-  Color mColorTitleBk;
-  Color mColorValue;
-  Color mColorValueBk;
-  Color mColorComment;
-  Color mColorCommentBk;
 
-  Color mColorRed;
-  Color mColorBlue;
-
-  bool mTitleChanged;
-
-  Brush mhBrushBk;
-  Brush mhBrushBkSel;
-  Pen mhPenBorder;
-  Pen mhPenSelector;
   TCHAR mTitle[TITLESIZE+1];
   TCHAR mValue[VALUESIZE+1];
   TCHAR mComment[COMMENTSIZE+1];
   Units_t mValueUnit;
-  const Font *mphFontTitle;
-  const Font *mphFontValue;
-  const Font *mphFontComment;
-  const Font *valueFont;
-  bool   mHasFocus;
 
   /** a timer which returns keyboard focus back to the map window after a while */
   timer_t focus_timer;
@@ -108,10 +123,8 @@ private:
   int color;
   int colorBottom;
   int colorTop;
-  int mBorderSize;
   bool mSmallerFont;
 
-  void InitializeDrawHelpers(void);
   /**
    * Paints the InfoBox title to the given canvas
    * @param canvas The canvas to paint on
@@ -135,11 +148,12 @@ private:
 
   // LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-public:
   /**
    * Paints the InfoBox with borders, title, comment and value
    */
-  void Paint();
+  void Paint(Canvas &canvas);
+
+public:
   void PaintInto(Canvas &dest, int xoff, int yoff, int width, int height);
 
   /**
@@ -191,9 +205,8 @@ public:
    * @param Width Width of the InfoBox
    * @param Height Height of the InfoBox
    */
-  InfoBox(ContainerWindow &Parent, int X, int Y, int Width, int Height);
-  /** Destructor */
-  ~InfoBox(void);
+  InfoBox(ContainerWindow &Parent, int X, int Y, int Width, int Height,
+          const InfoBoxLook &_look);
 
 protected:
   /**
@@ -219,6 +232,9 @@ protected:
    * @return True if the event has been handled, False otherwise
    */
   virtual bool on_mouse_double(int x, int y);
+
+  virtual bool on_resize(unsigned width, unsigned height);
+
   /**
    * This event handler is called when the InfoBox needs to be repainted
    * @param canvas The canvas to paint on
