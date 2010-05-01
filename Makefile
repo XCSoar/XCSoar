@@ -414,7 +414,7 @@ $(TARGET_BIN_DIR)/XCSoarSetup.dll: $(TARGET_OUTPUT_DIR)/XCSoarSetup.e $(XCSOARSE
 $(TARGET_OUTPUT_DIR)/XCSoarLaunch.e: $(SRC)/XCSoarLaunch.def $(XCSOARLAUNCH_OBJS) | $(TARGET_BIN_DIR)/dirstamp
 	$(Q)$(DLLTOOL) -e $@ -d $^
 
-$(TARGET_OUTPUT_DIR)/XCSoarLaunch.rsc: $(SRC)/XCSoarLaunch.rc | $(TARGET_OUTPUT_DIR)/dirstamp
+$(TARGET_OUTPUT_DIR)/XCSoarLaunch.rsc: Data/XCSoarLaunch.rc | $(TARGET_OUTPUT_DIR)/dirstamp
 	@$(NQ)echo "  WINDRES $@"
 	$(Q)$(WINDRES) $(WINDRESFLAGS) -o $@ $<
 

@@ -148,8 +148,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_AUS
 // Bitmap
 //
 
-IDB_XCSOARLSWIFT        BITMAP  DISCARDABLE     "src/Bitmaps/launcher1.bmp"
-IDB_XCSOARLSWIFTSIM     BITMAP  DISCARDABLE     "src/Bitmaps/launcher2.bmp"
+IDB_XCSOARLSWIFT        BITMAP  DISCARDABLE     "bitmaps/launcher1.bmp"
+IDB_XCSOARLSWIFTSIM     BITMAP  DISCARDABLE     "bitmaps/launcher2.bmp"
 #endif    // English (Australia) resources
 /////////////////////////////////////////////////////////////////////////////
 
