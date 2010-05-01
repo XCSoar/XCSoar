@@ -306,7 +306,7 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
       for (int tt = 0; tt < shape->numlines; tt++) {
         int minx = rc.right;
         int miny = rc.bottom;
-        int msize = min(shape->line[tt].numpoints, (int)MAXCLIPPOLYGON);
+        int msize = std::min(shape->line[tt].numpoints, (int)MAXCLIPPOLYGON);
 
         map_projection.LonLat2Screen(shape->line[tt].point, pt, msize, 1);
 
@@ -330,7 +330,7 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
       for (int tt = 0; tt < shape->numlines; tt++) {
         int minx = rc.right;
         int miny = rc.bottom;
-        int msize = min(shape->line[tt].numpoints / iskip, (int)MAXCLIPPOLYGON);
+        int msize = std::min(shape->line[tt].numpoints / iskip, (int)MAXCLIPPOLYGON);
 
         map_projection.LonLat2Screen(shape->line[tt].point, pt,
             msize * iskip, iskip);
@@ -359,7 +359,7 @@ TopologyLabel::TopologyLabel(const char* shpname, const Color thecolor,
   Topology(shpname, thecolor)
 {
   //sjt 02nov05 - enabled label fields
-  setField(max(0, field1));
+  setField(std::max(0, field1));
   // JMW this is causing XCSoar to crash on my system!
 }
 
