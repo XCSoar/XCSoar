@@ -68,7 +68,7 @@ InfoBox::InfoBox(ContainerWindow &_parent, int X, int Y, int Width, int Height,
   set(parent, X, Y, Width, Height);
 
   if (Appearance.InfoBoxBorder == apIbTab) {
-    mBorderKind = BORDERTAB;
+    mBorderKind = 0;
   } else {
     mBorderKind = BORDERRIGHT | BORDERBOTTOM;
   }
@@ -101,7 +101,7 @@ InfoBox::SetBorderKind(int Value)
     mBorderKind = Value;
 
     if (Appearance.InfoBoxBorder == apIbTab) {
-      mBorderKind = BORDERTAB;
+      mBorderKind = 0;
     } else {
       mBorderKind = Value;
     }
@@ -205,7 +205,7 @@ InfoBox::PaintTitle(Canvas &canvas)
 
   canvas.text_opaque(x, y, &recTitle, mTitle);
 
-  if ((mBorderKind & BORDERTAB) && (halftextwidth > IBLSCALE(3))) {
+  if (Appearance.InfoBoxBorder == apIbTab && halftextwidth > IBLSCALE(3)) {
     int ytop = recTitle.top + font.get_capital_height() / 2;
     int ytopedge = ytop + IBLSCALE(2);
     int ybottom = recTitle.top + IBLSCALE(6) + font.get_capital_height();
