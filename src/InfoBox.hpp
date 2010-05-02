@@ -104,6 +104,7 @@ public:
   };
 
 private:
+  ContainerWindow &parent;
   const InfoBoxLook &look;
 
   int  mBorderKind;

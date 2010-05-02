@@ -40,7 +40,6 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"
-#include "MainWindow.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/Layout.hpp"
@@ -56,9 +55,9 @@ using std::max;
 
 #define SELECTORWIDTH IBLSCALE(5)
 
-InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height,
+InfoBox::InfoBox(ContainerWindow &_parent, int X, int Y, int Width, int Height,
                  const InfoBoxLook &_look)
-  :look(_look), focus_timer(0)
+  :parent(_parent), look(_look), focus_timer(0)
 {
   mSmallerFont = false;
 
@@ -501,7 +500,7 @@ InfoBox::on_timer(timer_t id)
   kill_timer(focus_timer);
   focus_timer = 0;
 
-  CommonInterface::main_window.map.set_focus();
+  parent.set_focus();
 
   return true;
 }
