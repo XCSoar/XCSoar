@@ -139,22 +139,6 @@ WndButton::on_mouse_move(int x, int y, unsigned keys)
 }
 
 bool
-WndButton::on_mouse_double(int x, int y)
-{
-  (void)x;
-  (void)y;
-
-  // Button is now pressed
-  mDown = true;
-  // ... will be repainted
-  invalidate();
-  // ... and gets captured
-  set_capture();
-
-  return true;
-}
-
-bool
 WndButton::on_key_down(unsigned key_code)
 {
   switch (key_code) {

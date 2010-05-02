@@ -107,11 +107,6 @@ protected:
    */
   virtual bool on_mouse_move(int x, int y, unsigned keys);
   /**
-   * The on_mouse_double event is called when the button is double clicked
-   * (derived from Window)
-   */
-  virtual bool on_mouse_double(int x, int y);
-  /**
    * The on_key_down event is called when a key is pressed while the
    * button is focused
    * (derived from Window)
