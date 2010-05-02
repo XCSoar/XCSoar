@@ -37,21 +37,17 @@ Copyright_License {
 */
 
 #include "InfoBox.hpp"
-#include "InfoBoxManager.hpp"
-#include "Protection.hpp"
-#include "Dialogs.h"
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"
-#include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/Layout.hpp"
-#include "SettingsUser.hpp"
+#include "Screen/BufferCanvas.hpp"
+#include "Screen/ContainerWindow.hpp"
 #include "Appearance.hpp"
 #include "Defines.h"
-#include "UtilsSystem.hpp"
 #include "Asset.hpp"
 
 #include <algorithm>

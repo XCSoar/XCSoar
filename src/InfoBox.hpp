@@ -40,7 +40,7 @@ Copyright_License {
 #define XCSOAR_INFO_BOX_HPP
 
 #include "Units.hpp"
-#include "Screen/BufferWindow.hpp"
+#include "Screen/PaintWindow.hpp"
 
 typedef enum {
   bkNone,
