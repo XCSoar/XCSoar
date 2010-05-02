@@ -695,7 +695,6 @@ PaintRadarBackground(Canvas &canvas) {
 static void
 OnRadarPaint(WindowControl *Sender, Canvas &canvas)
 {
-  (void)zoom;
   PaintRadarBackground(canvas);
   PaintRadarPlane(canvas);
   PaintTrafficInfo(canvas);
