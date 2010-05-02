@@ -276,18 +276,9 @@ MapWindow::on_mouse_up(int x, int y)
 
   int dwInterval = mouse_down_clock.elapsed();
   mouse_down_clock.reset();
-  if (dwInterval < 0)
-    return true;
 
   RECT rc = MapRect;
   bool my_target_pan = SettingsMap().TargetPan;
-
-  if (dwInterval == 0) {
-#ifdef DEBUG_VIRTUALKEYS
-    Message::AddMessage(_T("dwInterval==0 impossible!"));
-#endif
-    return true; // should be impossible
-  }
 
   double distance = isqrt4((long)((XstartScreen - x) *
                                   (XstartScreen - x) +
