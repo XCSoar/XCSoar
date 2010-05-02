@@ -1325,17 +1325,15 @@ InfoBoxManager::Create(RECT rc)
   for (unsigned i = 0; i < numInfoWindows; i++) {
     InfoBoxLayout::GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
 
-    InfoBoxes[i] = new InfoBox(main_window, xoff, yoff, sizex, sizey,
-                               info_box_look);
-
-    int Border = 0;
-    if (InfoBoxLayout::gnav) {
+    int Border;
+    if (Appearance.InfoBoxBorder == apIbTab)
+      Border = 0;
+    else if (InfoBoxLayout::gnav) {
+      Border = 0;
       if (i > 0)
         Border |= BORDERTOP;
       if (i < 6)
         Border |= BORDERRIGHT;
-
-      InfoBoxes[i]->SetBorderKind(Border);
     } else if (!Layout::landscape) {
       Border = 0;
       if (i < 4)
@@ -1344,8 +1342,11 @@ InfoBoxManager::Create(RECT rc)
         Border |= BORDERTOP;
 
       Border |= BORDERRIGHT;
-      InfoBoxes[i]->SetBorderKind(Border);
-    }
+    } else
+      Border = BORDERRIGHT | BORDERBOTTOM;
+
+    InfoBoxes[i] = new InfoBox(main_window, xoff, yoff, sizex, sizey,
+                               Border, info_box_look);
   }
 }
 

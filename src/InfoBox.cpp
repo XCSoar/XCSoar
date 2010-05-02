@@ -56,8 +56,11 @@ using std::max;
 #define SELECTORWIDTH IBLSCALE(5)
 
 InfoBox::InfoBox(ContainerWindow &_parent, int X, int Y, int Width, int Height,
+                 int border_flags,
                  const InfoBoxLook &_look)
-  :parent(_parent), look(_look), focus_timer(0)
+  :parent(_parent),
+   mBorderKind(border_flags),
+   look(_look), focus_timer(0)
 {
   mSmallerFont = false;
 
@@ -66,12 +69,6 @@ InfoBox::InfoBox(ContainerWindow &_parent, int X, int Y, int Width, int Height,
   colorBottom = 0;
 
   set(parent, X, Y, Width, Height);
-
-  if (Appearance.InfoBoxBorder == apIbTab) {
-    mBorderKind = 0;
-  } else {
-    mBorderKind = BORDERRIGHT | BORDERBOTTOM;
-  }
 
   mValueUnit = unUndef;
 
@@ -84,32 +81,6 @@ void
 InfoBox::SetValueUnit(Units_t Value)
 {
   mValueUnit = Value;
-}
-
-int
-InfoBox::GetBorderKind(void)
-{
-  return mBorderKind;
-}
-
-int
-InfoBox::SetBorderKind(int Value)
-{
-  int res = mBorderKind;
-
-  if (mBorderKind != Value) {
-    mBorderKind = Value;
-
-    if (Appearance.InfoBoxBorder == apIbTab) {
-      mBorderKind = 0;
-    } else {
-      mBorderKind = Value;
-    }
-
-    //JMW    Paint();
-  }
-
-  return res;
 }
 
 void

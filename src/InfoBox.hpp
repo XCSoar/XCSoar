@@ -178,9 +178,6 @@ public:
   void SetComment(const TCHAR *Value);
   void SetSmallerFont(bool smallerFont);
 
-  int GetBorderKind(void);
-  int SetBorderKind(int Value);
-
   /**
    * Sets the color of the InfoBox value to the given value
    * @param value New color of the InfoBox value
@@ -206,6 +203,7 @@ public:
    * @param Height Height of the InfoBox
    */
   InfoBox(ContainerWindow &Parent, int X, int Y, int Width, int Height,
+          int border_flags,
           const InfoBoxLook &_look);
 
 protected:
