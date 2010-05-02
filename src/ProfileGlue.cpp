@@ -143,7 +143,7 @@ Profile::Use()
 
 #ifdef OLD_TASK // airspace priority
   for (i = 0; i < AIRSPACECLASSCOUNT; i++) {
-    Get(szProfileAirspacePriority[i], AirspacePriority[i]);
+    Get(szProfileAirspacePriority(i), AirspacePriority[i]);
   }
 #endif
 
@@ -220,7 +220,7 @@ Profile::Use()
 
   for (i = 0; i < MAXINFOWINDOWS; i++) {
     Temp = InfoBoxManager::getTypeAll(i);
-    Get(szProfileDisplayType[i], Temp);
+    Get(szProfileDisplayType(i), Temp);
     InfoBoxManager::setTypeAll(i, Temp);
   }
 
@@ -297,9 +297,9 @@ Profile::Use()
     XCSoarInterface::SetSettingsComputer().iAirspaceMode[i] =
         GetAirspaceMode(i);
 
-    Get(szProfileBrush[i],
+    Get(szProfileBrush(i),
         XCSoarInterface::SetSettingsMap().iAirspaceBrush[i]);
-    Get(szProfileColour[i],
+    Get(szProfileColour(i),
         XCSoarInterface::SetSettingsMap().iAirspaceColour[i]);
     if (XCSoarInterface::SettingsMap().iAirspaceColour[i] >= NUMAIRSPACECOLORS) {
       XCSoarInterface::SetSettingsMap().iAirspaceColour[i] = 0;
@@ -708,7 +708,7 @@ int
 Profile::GetAirspaceMode(int i)
 {
   int Temp = 3; // display + warnings
-  Get(szProfileAirspaceMode[i], Temp);
+  Get(szProfileAirspaceMode(i), Temp);
   return Temp;
 }
 
@@ -716,25 +716,25 @@ void
 Profile::SetAirspaceMode(int i)
 {
   int val = XCSoarInterface::SettingsComputer().iAirspaceMode[i];
-  Set(szProfileAirspaceMode[i], val);
+  Set(szProfileAirspaceMode(i), val);
 }
 
 void
 Profile::SetAirspaceColor(int i, int c)
 {
-  Set(szProfileColour[i], c);
+  Set(szProfileColour(i), c);
 }
 
 void
 Profile::SetAirspaceBrush(int i, int c)
 {
-  Set(szProfileBrush[i], c);
+  Set(szProfileBrush(i), c);
 }
 
 void
 Profile::SetInfoBoxes(int Index, int the_type)
 {
-  Set(szProfileDisplayType[Index], the_type);
+  Set(szProfileDisplayType(Index), the_type);
 }
 
 const TCHAR *
