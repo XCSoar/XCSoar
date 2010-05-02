@@ -81,6 +81,7 @@ void
 InfoBox::SetValueUnit(Units_t Value)
 {
   mValueUnit = Value;
+  invalidate(recValue);
 }
 
 void
@@ -117,6 +118,8 @@ InfoBox::SetColor(int value)
     color = value;
   else
     color = 0;
+
+  invalidate(recValue);
 }
 
 void
@@ -126,6 +129,8 @@ InfoBox::SetColorBottom(int value)
     colorBottom = value;
   else
     colorBottom = 0;
+
+  invalidate(recComment);
 }
 
 void
@@ -135,6 +140,8 @@ InfoBox::SetColorTop(int value)
     colorTop = value;
   else
     colorTop = 0;
+
+  invalidate(recTitle);
 }
 
 void
@@ -151,6 +158,7 @@ void
 InfoBox::SetSmallerFont(bool smallerFont)
 {
   this->mSmallerFont = smallerFont;
+  invalidate(recValue);
 }
 
 void
