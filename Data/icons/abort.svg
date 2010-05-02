@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.1"
+   width="24"
+   height="20"
+   id="svg2"
+   style="display:inline">
+  <defs
+     id="defs4" />
+  <g
+     transform="translate(0,-724.09448)"
+     id="layer2">
+    <rect
+       width="17"
+       height="20"
+       rx="3"
+       ry="3"
+       x="7"
+       y="724.09448"
+       id="rect3631"
+       style="fill:#ff0000;fill-opacity:1;stroke:none" />
+    <g
+       id="g3712">
+      <path
+         d="m 11.5,741.09448 0,-4.34044 c 0,-5.07903 3.580219,-5.32059 7.713245,-5.32059"
+         id="path3633-1"
+         style="fill:none;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline" />
+      <path
+         d="m 17.5,726.09448 0,11 5.5,-5.5 -5.5,-5.5 z"
+         id="path3657"
+         style="fill:#ffffff;fill-opacity:1;stroke:none" />
+      <path
+         d="m 11.5,726.79448 0,-0.0404"
+         id="path3633-1-4"
+         style="fill:none;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline" />
+      <path
+         d="m 11.5,730.49448 0,-0.0404"
+         id="path3633-1-4-0"
+         style="fill:none;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline" />
+    </g>
+    <path
+       d="m 5.5039971,740.54126 a 2.2294672,2.2991381 0 1 1 -4.4589343,0 2.2294672,2.2991381 0 1 1 4.4589343,0 z"
+       transform="matrix(1.1213442,0,0,1.087364,-0.17187509,-64.643424)"
+       id="path3719"
+       style="fill:#ff0000;fill-opacity:1;stroke:none" />
+    <path
+       d="m 3.4835425,736.77905 c -1.4630878,-2.64749 -1.8114421,-11.56537 -1.8114421,-11.56537 0.905721,-0.62704 2.8565048,-0.69671 3.692555,0 0,0 -0.1130305,8.99387 -1.8811129,11.56537 z"
+       id="path3721"
+       style="fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+  </g>
+  <g
+     transform="translate(0,-724.09448)"
+     id="layer1"
+     style="opacity:0.36363639;display:none">
+    <image
+       xlink:href="file:///C:/Users/Turbo/_Coding_/Projects/XCSoar/_Git_/src/Bitmaps/abort.bmp"
+       x="-24"
+       y="724.09448"
+       width="48"
+       height="20"
+       id="image2831"
+       style="display:inline" />
+  </g>
+</svg>
