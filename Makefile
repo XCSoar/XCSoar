@@ -293,7 +293,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
 	$(SRC)/ProfileGlue.cpp \
-	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
