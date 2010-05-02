@@ -70,6 +70,7 @@ static int selection = -1;
 static int warning = -1;
 static POINT radar_mid;
 static SIZE radar_size;
+static int side_display_type = 1;
 
 /**
  * Tries to select the next target, if impossible selection = -1
@@ -305,6 +306,17 @@ static void
 OnCloseClicked(gcc_unused WndButton &button)
 {
   wf->SetModalResult(mrOK);
+}
+
+/**
+ * This event handler is called when the "Avg/Alt" button is pressed
+ */
+static void
+OnSwitchDataClicked(gcc_unused WndButton &button)
+{
+  side_display_type++;
+  if (side_display_type > 2)
+    side_display_type = 1;
 }
 
 /**
@@ -607,28 +619,46 @@ PaintRadarTraffic(Canvas &canvas) {
     // Draw the polygon
     canvas.polygon(Arrow, 5);
 
-#ifdef FLARM_AVERAGE
     // if warning exists -> don't draw vertical speeds
     if (warning >= 0)
       continue;
 
-    // if vertical speed to small or negative -> skip this one
-    if (traffic.Average30s < 0.5)
-      continue;
+#ifdef FLARM_AVERAGE
+    if (side_display_type == 1) {
+      // if vertical speed to small or negative -> skip this one
+      if (traffic.Average30s < 0.5)
+        continue;
 
-    // Select font and color
-    canvas.background_transparent();
-    canvas.select(MapWindowBoldFont);
-    if (static_cast<unsigned> (selection) == i)
-      canvas.set_text_color(hcSelection);
-    else
-      canvas.set_text_color(hcStandard);
+      // Select font and color
+      canvas.background_transparent();
+      canvas.select(MapWindowBoldFont);
+      if (static_cast<unsigned> (selection) == i)
+        canvas.set_text_color(hcSelection);
+      else
+        canvas.set_text_color(hcStandard);
 
-    // Draw vertical speed
-    TCHAR tmp[10];
-    Units::FormatUserVSpeed(traffic.Average30s, tmp, 10, false);
-    SIZE sz = canvas.text_size(tmp);
-    canvas.text(sc.x + Layout::FastScale(11), sc.y - sz.cy * 0.5, tmp);
+      // Draw vertical speed
+      TCHAR tmp[10];
+      Units::FormatUserVSpeed(traffic.Average30s, tmp, 10, false);
+      SIZE sz = canvas.text_size(tmp);
+      canvas.text(sc.x + Layout::FastScale(11), sc.y - sz.cy * 0.5, tmp);
+    } else if (side_display_type == 2) {
+#endif
+      // Select font and color
+      canvas.background_transparent();
+      canvas.select(MapWindowBoldFont);
+      if (static_cast<unsigned> (selection) == i)
+        canvas.set_text_color(hcSelection);
+      else
+        canvas.set_text_color(hcStandard);
+
+      // Draw vertical speed
+      TCHAR tmp[10];
+      Units::FormatUserArrival(traffic.RelativeAltitude, tmp, 10, true);
+      SIZE sz = canvas.text_size(tmp);
+      canvas.text(sc.x + Layout::FastScale(11), sc.y - sz.cy * 0.5, tmp);
+#ifdef FLARM_AVERAGE
+    }
 #endif
   }
 }
@@ -752,6 +782,8 @@ dlgFlarmTrafficShowModal()
       SetOnClickNotify(OnNextClicked);
   ((WndButton *)wf->FindByName(_T("cmdClose")))->
       SetOnClickNotify(OnCloseClicked);
+  ((WndButton *)wf->FindByName(_T("cmdSwitchData")))->
+      SetOnClickNotify(OnSwitchDataClicked);
 
   // Update Radar and Selection for the first time
   Update();
