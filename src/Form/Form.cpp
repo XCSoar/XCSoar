@@ -424,26 +424,3 @@ WndForm::SetTimerNotify(TimerNotifyCallback_t OnTimerNotify)
 {
   mOnTimerNotify = OnTimerNotify;
 }
-
-// normal form stuff (nonmodal)
-
-bool
-WndForm::on_unhandled_key(unsigned key_code)
-{
-  switch (key_code) {
-  case VK_ESCAPE:
-    SetModalResult(mrCancel);
-    return true;
-
-  case VK_UP:
-    focus_previous_control();
-    return true;
-
-  case VK_DOWN:
-  case VK_TAB:
-    focus_next_control();
-    return true;
-  }
-
-  return ContainerControl::on_unhandled_key(key_code);
-}

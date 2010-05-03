@@ -115,8 +115,7 @@ WndProperty::Editor::on_key_down(unsigned key_code)
     return true;
   }
 
-  return EditWindow::on_key_down(key_code) ||
-    parent->on_unhandled_key(key_code);
+  return EditWindow::on_key_down(key_code);
 }
 
 bool

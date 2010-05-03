@@ -84,8 +84,6 @@ public:
    */
   virtual bool on_killfocus();
 
-  virtual bool on_unhandled_key(unsigned key_code);
-
   /**
    * The on_key_down event is called when a key is pressed while the
    * control is focused

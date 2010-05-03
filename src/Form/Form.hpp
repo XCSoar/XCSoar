@@ -213,8 +213,6 @@ public:
   /** Set the titlebar text */
   void SetCaption(const TCHAR *Value);
 
-  virtual bool on_unhandled_key(unsigned key_code);
-
   /** from class Window */
   virtual bool on_destroy();
   virtual bool on_timer(timer_t id);
