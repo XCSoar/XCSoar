@@ -131,6 +131,9 @@ SettingsLeave()
 
   if ((WaypointFileChanged) || (TerrainFileChanged) || (AirfieldFileChanged)) {
     XCSoarInterface::CreateProgressDialog(gettext(_T("Loading Terrain File...")));
+
+    XCSoarInterface::main_window.map.set_terrain(NULL);
+
     // re-load terrain
     terrain.CloseTerrain();
     terrain.OpenTerrain();
@@ -146,6 +149,8 @@ SettingsLeave()
     }
 
     terrain.ServiceFullReload(XCSoarInterface::Basic().Location);
+
+    XCSoarInterface::main_window.map.set_terrain(&terrain);
   }
 
   if (TopologyFileChanged) {

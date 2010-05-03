@@ -51,6 +51,11 @@ class RasterMapJPG2000: public RasterMap {
 
   void ReloadJPG2000();
 
+  /**
+   * Lockless version opf SetViewCenter().
+   */
+  void _SetViewCenter(const GEOPOINT &location);
+
   void SetViewCenter(const GEOPOINT &location);
   virtual void SetFieldRounding(const GEOPOINT& delta,
                                 RasterRounding &rounding) const;
