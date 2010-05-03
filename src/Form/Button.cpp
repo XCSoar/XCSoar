@@ -139,6 +139,18 @@ WndButton::on_mouse_move(int x, int y, unsigned keys)
 }
 
 bool
+WndButton::on_key_check(unsigned key_code)
+{
+  switch (key_code) {
+  case VK_RETURN:
+    return true;
+
+  default:
+    return false;
+  }
+}
+
+bool
 WndButton::on_key_down(unsigned key_code)
 {
   switch (key_code) {

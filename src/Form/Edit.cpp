@@ -70,6 +70,22 @@ WndProperty::Editor::on_mouse_down(int x, int y)
 }
 
 bool
+WndProperty::Editor::on_key_check(unsigned key_code)
+{
+  switch (key_code) {
+  case VK_RETURN:
+    return parent->mDialogStyle;
+
+  case VK_LEFT:
+  case VK_RIGHT:
+    return true;
+
+  default:
+    return false;
+  }
+}
+
+bool
 WndProperty::Editor::on_key_down(unsigned key_code)
 {
   // If return key pressed (Compaq uses VKF23)

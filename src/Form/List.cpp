@@ -225,6 +225,30 @@ WndListFrame::SetOrigin(unsigned i)
 }
 
 bool
+WndListFrame::on_key_check(unsigned key_code)
+{
+  switch (key_code) {
+  case VK_RETURN:
+    return ActivateCallback != NULL;
+
+  case VK_LEFT:
+    return true;
+
+  case VK_RIGHT:
+    return true;
+
+  case VK_DOWN:
+    return GetCursorIndex() + 1 < length;
+
+  case VK_UP:
+    return GetCursorIndex() > 0;
+
+  default:
+    return false;
+  }
+}
+
+bool
 WndListFrame::on_key_down(unsigned key_code)
 {
   // XXX SetSourceRectangle(mRc);

@@ -106,6 +106,9 @@ protected:
    * (derived from Window)
    */
   virtual bool on_mouse_move(int x, int y, unsigned keys);
+
+  virtual bool on_key_check(unsigned key_code);
+
   /**
    * The on_key_down event is called when a key is pressed while the
    * button is focused
