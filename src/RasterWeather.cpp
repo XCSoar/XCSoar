@@ -97,7 +97,7 @@ RasterMap* RasterWeather::GetMap() {
   RasterMap* retval;
   if (_parameter) {
     assert(_parameter<=MAX_WEATHER_MAP);
-    retval = weather_map[std::min((unsigned)MAX_WEATHER_MAP, _parameter) - 1];
+    retval = weather_map[min((unsigned)MAX_WEATHER_MAP, _parameter) - 1];
   } else {
     assert(1);
     retval = NULL;
@@ -118,7 +118,7 @@ unsigned RasterWeather::GetTime() {
 bool RasterWeather::isWeatherAvailable(unsigned t) {
   Poco::ScopedRWLock protect(lock, false);
   assert(t<MAX_WEATHER_TIMES);
-  return weather_available[std::min((unsigned)MAX_WEATHER_TIMES, t - 1)];
+  return weather_available[min((unsigned)MAX_WEATHER_TIMES, t - 1)];
 }
 
 void RasterWeather::RASP_filename(char* rasp_filename,
@@ -172,12 +172,12 @@ RasterWeather::Reload(const GEOPOINT &location, int day_time)
       // "Now" time, so find time in half hours
       unsigned dsecs = (int)TimeLocal(day_time);
       unsigned half_hours = (dsecs/1800) % 48;
-      _weather_time = std::max(_weather_time, half_hours);
+      _weather_time = max(_weather_time, half_hours);
       now = true;
     }
 
     // limit values, for safety
-    _weather_time = std::min((unsigned)(MAX_WEATHER_TIMES-1), _weather_time);
+    _weather_time = min((unsigned)(MAX_WEATHER_TIMES-1), _weather_time);
 
     if (_weather_time == last_weather_time) {
       // no change, quick exit.
@@ -326,7 +326,7 @@ void RasterWeather::ValueToText(TCHAR* Buffer, short val) {
               Units::GetAltitudeName());
     return;
   case 5: // blcloudpct
-    _stprintf(Buffer, TEXT("%d%%"), (int)std::max(0, std::min(100, (int)val)));
+    _stprintf(Buffer, TEXT("%d%%"), (int)max(0, min(100, (int)val)));
     return;
   case 6: // sfctemp
     _stprintf(Buffer, TEXT("%d")TEXT(DEG), iround(val * 0.5 - 20.0));

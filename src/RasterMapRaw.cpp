@@ -149,7 +149,7 @@ RasterMapRaw::Open(const char *zfilename)
                              fpTerrain);
 
     for (int i=0; i< nsize; i++) {
-      max_field_value = std::max(TerrainMem[i], max_field_value);
+      max_field_value = max(TerrainMem[i], max_field_value);
     }
     zzip_fclose(fpTerrain);
     terrain_valid = true;

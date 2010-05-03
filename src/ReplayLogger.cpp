@@ -114,7 +114,7 @@ public:
     double s1 = p[1].loc.distance(p[2].loc);
     s1 /= (p[2].t - p[1].t);
 
-    u = std::max(0.0, std::min(1.0,u));
+    u = max(0.0, min(1.0,u));
 
     return s1 * u + s0 * (1.0 - u);
   }
@@ -168,10 +168,7 @@ public:
   double
   GetMaxTime()
   {
-    return std::max(0.0, 
-                    std::max(p[0].t, 
-                             std::max(p[1].t, 
-                                      std::max(p[2].t, p[3].t))));
+    return max(0.0, max(p[0].t, max(p[1].t, max(p[2].t, p[3].t))));
   }
 
   double
