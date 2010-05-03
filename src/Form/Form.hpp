@@ -218,6 +218,7 @@ public:
   /** from class Window */
   virtual bool on_destroy();
   virtual bool on_timer(timer_t id);
+  virtual bool on_command(unsigned id, unsigned code);
 
   /** Set the background color of the window */
   Color SetBackColor(Color Value);
