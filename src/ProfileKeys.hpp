@@ -47,166 +47,157 @@ Copyright_License {
 #define CONF(key) ("/apps/XCSoar/" key)
 #endif
 
-#define REGKEYNAME  "Software\\MPSR\\XCSoar"
-
-#define szProfileKey CONF(REGKEYNAME)
-
-#define szProfileDisplayType(x) CONF("Info" "x")
-#define szProfileColour(x) CONF("Colour" "x")
-#define szProfileBrush(x) CONF("Brush" "x")
-#define szProfileAirspaceMode(x) CONF("AirspaceMode" "x")
-#define szProfileAirspacePriority(x) CONF("AirspacePriority" "x")
-
-#define szProfileAirspaceWarning CONF("AirspaceWarn")
-#define szProfileAirspaceBlackOutline CONF("AirspaceBlackOutline")
-#define szProfileAltMargin CONF("AltMargin")
-#define szProfileAltMode CONF("AltitudeMode")
-#define szProfileAltitudeUnitsValue CONF("Altitude")
-#define szProfileCircleZoom CONF("CircleZoom")
-#define szProfileClipAlt CONF("ClipAlt")
-#define szProfileDisplayText CONF("DisplayText")
-#define szProfileDisplayUpValue CONF("DisplayUp")
-#define szProfileDistanceUnitsValue CONF("Distance")
-#define szProfileDrawTerrain CONF("DrawTerrain")
-#define szProfileDrawTopology CONF("DrawTopology")
-#define szProfileAutoWind CONF("AutoWind")
-#define szProfileHomeWaypoint CONF("HomeWaypoint")
-#define szProfileAlternate1 CONF("Alternate1") // VENTA3
-#define szProfileAlternate2 CONF("Alternate2")
-#define szProfileLiftUnitsValue CONF("Lift")
-#define szProfileLatLonUnits CONF("LatLonUnits")
-#define szProfilePolarID CONF("Polar") // pL
-#define szProfileRegKey CONF("RegKey")
-#define szProfileSafetyAltitudeArrival CONF("SafetyAltitudeArrival")
-#define szProfileSafetyAltitudeTerrain CONF("SafetyAltitudeTerrain")
-#define szProfileSafteySpeed CONF("SafteySpeed")
-#define szProfileSnailTrail CONF("SnailTrail")
-#define szProfileTrailDrift CONF("TrailDrift")
-#define szProfileAnimation CONF("Animation")
-#define szProfileSpeedUnitsValue CONF("Speed")
-#define szProfileTaskSpeedUnitsValue CONF("TaskSpeed")
-#define szProfileWarningTime CONF("WarnTime")
-#define szProfileAcknowledgementTime CONF("AcknowledgementTime")
-#define szProfileWindSpeed CONF("WindSpeed")
-#define szProfileWindBearing CONF("WindBearing")
-#define szProfileAirfieldFile CONF("AirfieldFile") // pL
-#define szProfileAirspaceFile CONF("AirspaceFile") // pL
-#define szProfileAdditionalAirspaceFile CONF("AdditionalAirspaceFile") // pL
-#define szProfilePolarFile CONF("PolarFile") // pL
-#define szProfileTerrainFile CONF("TerrainFile") // pL
-#define szProfileTopologyFile CONF("TopologyFile") // pL
-#define szProfileWayPointFile CONF("WPFile")
-#define szProfileAdditionalWayPointFile CONF("AdditionalWPFile") // pL
-#define szProfileLanguageFile CONF("LanguageFile") // pL
-#define szProfileStatusFile CONF("StatusFile") // pL
-#define szProfileInputFile CONF("InputFile") // pL
-#define szProfilePilotName CONF("PilotName")
-#define szProfileAircraftType CONF("AircraftType")
-#define szProfileAircraftRego CONF("AircraftRego")
-#define szProfileLoggerID CONF("LoggerID")
-#define szProfileLoggerShort CONF("LoggerShortName")
-#define szProfileSoundVolume CONF("SoundVolume")
-#define szProfileSoundDeadband CONF("SoundDeadband")
-#define szProfileSoundAudioVario CONF("AudioVario")
-#define szProfileSoundTask CONF("SoundTask")
-#define szProfileSoundModes CONF("SoundModes")
-#define szProfileNettoSpeed CONF("NettoSpeed")
-#define szProfileAccelerometerZero CONF("AccelerometerZero")
-#define szProfileCDICruise CONF("CDICruise")
-#define szProfileCDICircling CONF("CDICircling")
-
-#define szProfileAutoBlank CONF("AutoBlank")
-#define szProfileAutoBacklight CONF("AutoBacklight")
-#define szProfileAutoSoundVolume CONF("AutoSoundVolume")
-#define szProfileExtendedVisualGlide CONF("ExtVisualGlide")
-#define szProfileVirtualKeys CONF("VirtualKeys")
-#define szProfileAverEffTime CONF("AverEffTime")
-#define szProfileVarioGauge CONF("VarioGauge")
-
-#define szProfileDebounceTimeout CONF("DebounceTimeout")
-
-#define szProfileAppIndFinalGlide CONF("AppIndFinalGlide")
-#define szProfileAppIndLandable CONF("AppIndLandable")
-#define szProfileAppInverseInfoBox CONF("AppInverseInfoBox")
-#define szProfileAppGaugeVarioSpeedToFly CONF("AppGaugeVarioSpeedToFly")
-#define szProfileAppGaugeVarioAvgText CONF("AppGaugeVarioAvgText")
-#define szProfileAppGaugeVarioMc CONF("AppGaugeVarioMc")
-#define szProfileAppGaugeVarioBugs CONF("AppGaugeVarioBugs")
-#define szProfileAppGaugeVarioBallast CONF("AppGaugeVarioBallast")
-#define szProfileAppGaugeVarioGross CONF("AppGaugeVarioGross")
-#define szProfileAppCompassAppearance CONF("AppCompassAppearance")
-#define szProfileAppStatusMessageAlignment CONF("AppStatusMessageAlignment")
-#define szProfileAppTextInputStyle CONF("AppTextInputStyle")
-#define szProfileAppDialogStyle CONF("AppDialogStyle")
-#define szProfileAppInfoBoxColors CONF("AppInfoBoxColors")
-#define szProfileAppDefaultMapWidth CONF("AppDefaultMapWidth")
-#define szProfileTeamcodeRefWaypoint CONF("TeamcodeRefWaypoint")
-#define szProfileAppInfoBoxBorder CONF("AppInfoBoxBorder")
-
+extern const TCHAR szProfileKey[];
+extern const TCHAR *szProfileDisplayType[];
+extern const TCHAR *szProfileColour[];
+extern const TCHAR *szProfileBrush[];
+extern const TCHAR *szProfileAirspaceMode[];
+extern const TCHAR szProfileSpeedUnitsValue[];
+extern const TCHAR szProfileDistanceUnitsValue[];
+extern const TCHAR szProfileAltitudeUnitsValue[];
+extern const TCHAR szProfileLiftUnitsValue[];
+extern const TCHAR szProfileTaskSpeedUnitsValue[];
+extern const TCHAR szProfileDisplayUpValue[];
+extern const TCHAR szProfileDisplayText[];
+extern const TCHAR szProfileSafetyAltitudeArrival[];
+extern const TCHAR szProfileSafetyAltitudeTerrain[];
+extern const TCHAR szProfileSafteySpeed[];
+extern const TCHAR szProfilePolarID[];
+extern const TCHAR szProfileWayPointFile[];
+extern const TCHAR szProfileAdditionalWayPointFile[];
+extern const TCHAR szProfileAirspaceFile[];
+extern const TCHAR szProfileAdditionalAirspaceFile[];
+extern const TCHAR szProfileWindSpeed[];
+extern const TCHAR szProfileWindBearing[];
+extern const TCHAR szProfileAirfieldFile[];
+extern const TCHAR szProfileTopologyFile[];
+extern const TCHAR szProfilePolarFile[];
+extern const TCHAR szProfileTerrainFile[];
+extern const TCHAR szProfileLanguageFile[];
+extern const TCHAR szProfileStatusFile[];
+extern const TCHAR szProfileInputFile[];
+extern const TCHAR szProfileAltMode[];
+extern const TCHAR szProfileClipAlt[];
+extern const TCHAR szProfileAltMargin[];
+extern const TCHAR szProfileRegKey[];
+extern const TCHAR szProfileSnailTrail[];
+extern const TCHAR szProfileDrawTopology[];
+extern const TCHAR szProfileDrawTerrain[];
+extern const TCHAR szProfileAutoWind[];
+extern const TCHAR *szProfileAirspacePriority[];
+extern const TCHAR szProfileAirspaceWarning[];
+extern const TCHAR szProfileAirspaceBlackOutline[];
+extern const TCHAR szProfileWarningTime[];
+extern const TCHAR szProfileAcknowledgementTime[];
+extern const TCHAR szProfileCircleZoom[];
+extern const TCHAR szProfileHomeWaypoint[];
+extern const TCHAR szProfileAlternate1[];         // VENTA3
+extern const TCHAR szProfileAlternate2[];
+extern const TCHAR szProfileTeamcodeRefWaypoint[];
+extern const TCHAR szProfilePilotName[];
+extern const TCHAR szProfileAircraftType[];
+extern const TCHAR szProfileAircraftRego[];
+extern const TCHAR szProfileLoggerID[];
+extern const TCHAR szProfileLoggerShort[];
+extern const TCHAR szProfileSoundVolume[];
+extern const TCHAR szProfileSoundDeadband[];
+extern const TCHAR szProfileSoundAudioVario[];
+extern const TCHAR szProfileSoundTask[];
+extern const TCHAR szProfileSoundModes[];
+extern const TCHAR szProfileNettoSpeed[];
+extern const TCHAR szProfileCDICruise[];
+extern const TCHAR szProfileCDICircling[];
+extern const TCHAR szProfileAutoBlank[];
+extern const TCHAR szProfileAutoBacklight[]; // VENTA4
+extern const TCHAR szProfileAutoSoundVolume[]; // VENTA4
+extern const TCHAR szProfileExtendedVisualGlide[]; // VENTA4
+extern const TCHAR szProfileVirtualKeys[]; // VENTA5
+extern const TCHAR szProfileAverEffTime[]; // VENTA6
+extern const TCHAR szProfileVarioGauge[];
+extern const TCHAR szProfileDebounceTimeout[];
+extern const TCHAR szProfileAppDefaultMapWidth[];
+extern const TCHAR szProfileAppIndFinalGlide[];
+extern const TCHAR szProfileAppIndLandable[];
+extern const TCHAR szProfileAppInverseInfoBox[];
+extern const TCHAR szProfileAppInfoBoxColors[];
+extern const TCHAR szProfileAppGaugeVarioSpeedToFly[];
+extern const TCHAR szProfileAppGaugeVarioAvgText[];
+extern const TCHAR szProfileAppGaugeVarioMc[];
+extern const TCHAR szProfileAppGaugeVarioBugs[];
+extern const TCHAR szProfileAppGaugeVarioBallast[];
+extern const TCHAR szProfileAppGaugeVarioGross[];
+extern const TCHAR szProfileAppCompassAppearance[];
+extern const TCHAR szProfileAppStatusMessageAlignment[];
+extern const TCHAR szProfileAppTextInputStyle[];
+extern const TCHAR szProfileAppDialogStyle[];
+extern const TCHAR szProfileAppInfoBoxBorder[];
 #if defined(PNA) || defined(FIVV)
-#define szProfileAppInfoBoxGeom CONF("AppInfoBoxGeom") // VENTA-ADDON GEOMETRY CONFIG
-#define szProfileAppInfoBoxModel CONF("AppInfoBoxModel") // VENTA-ADDON MODEL CONFIG
+extern const TCHAR szProfileAppInfoBoxGeom[];   // VENTA-ADDON GEOM CHANGE
+extern const TCHAR szProfileAppInfoBoxModel[]; // VENTA-ADDON MODEL CHANGE
 #endif
+extern const TCHAR szProfileAppAveNeedle[];
+extern const TCHAR szProfileAutoAdvance[];
+extern const TCHAR szProfileUTCOffset[];
+extern const TCHAR szProfileBlockSTF[];
+extern const TCHAR szProfileAutoZoom[];
+extern const TCHAR szProfileMenuTimeout[];
+extern const TCHAR szProfileLockSettingsInFlight[];
+extern const TCHAR szProfileTerrainContrast[];
+extern const TCHAR szProfileTerrainBrightness[];
+extern const TCHAR szProfileTerrainRamp[];
+extern const TCHAR szProfileEnableFLARMMap[];
+extern const TCHAR szProfileEnableFLARMGauge[];
+extern const TCHAR szProfileSnailTrail[];
+extern const TCHAR szProfileTrailDrift[];
+extern const TCHAR szProfileGliderScreenPosition[];
+extern const TCHAR szProfileAnimation[];
+extern const TCHAR szProfileSetSystemTimeFromGPS[];
 
-#define szProfileAppAveNeedle CONF("AppAveNeedle")
+extern const TCHAR szProfileVoiceClimbRate[];
+extern const TCHAR szProfileVoiceTerrain[];
+extern const TCHAR szProfileVoiceWaypointDistance[];
+extern const TCHAR szProfileVoiceTaskAltitudeDifference[];
+extern const TCHAR szProfileVoiceMacCready[];
+extern const TCHAR szProfileVoiceNewWaypoint[];
+extern const TCHAR szProfileVoiceInSector[];
+extern const TCHAR szProfileVoiceAirspace[];
 
-#define szProfileAutoAdvance CONF("AutoAdvance")
-#define szProfileUTCOffset CONF("UTCOffset")
-#define szProfileBlockSTF CONF("BlockSpeedToFly")
-#define szProfileAutoZoom CONF("AutoZoom")
-#define szProfileMenuTimeout CONF("MenuTimeout")
-#define szProfileLockSettingsInFlight CONF("LockSettingsInFlight")
-#define szProfileTerrainContrast CONF("TerrainContrast")
-#define szProfileTerrainBrightness CONF("TerrainBrightness")
-#define szProfileTerrainRamp CONF("TerrainRamp")
-#define szProfileEnableFLARMMap CONF("EnableFLARMDisplay")
-#define szProfileEnableFLARMGauge CONF("EnableFLARMGauge")
-#define szProfileFLARMGaugeBearing CONF("FLARMGaugeBearing")
-#define szProfileGliderScreenPosition CONF("GliderScreenPosition")
-#define szProfileSetSystemTimeFromGPS CONF("SetSystemTimeFromGPS")
+extern const TCHAR szProfileFinishMinHeight[];
+extern const TCHAR szProfileStartMaxHeight[];
+extern const TCHAR szProfileStartMaxHeightMargin[];
+extern const TCHAR szProfileStartMaxSpeed[];
+extern const TCHAR szProfileStartMaxSpeedMargin[];
+extern const TCHAR szProfileStartHeightRef[];
 
-#define szProfileVoiceClimbRate CONF("VoiceClimbRate")
-#define szProfileVoiceTerrain CONF("VoiceTerrain")
-#define szProfileVoiceWaypointDistance CONF("VoiceWaypointDistance")
-#define szProfileVoiceTaskAltitudeDifference CONF("VoiceTaskAltitudeDifference")
-#define szProfileVoiceMacCready CONF("VoiceMacCready")
-#define szProfileVoiceNewWaypoint CONF("VoiceNewWaypoint")
-#define szProfileVoiceInSector CONF("VoiceInSector")
-#define szProfileVoiceAirspace CONF("VoiceAirspace")
+extern const TCHAR szProfileEnableNavBaroAltitude[];
 
-#define szProfileFinishMinHeight CONF("FinishMinHeight")
-#define szProfileStartMaxHeight CONF("StartMaxHeight")
-#define szProfileStartMaxSpeed CONF("StartMaxSpeed")
-#define szProfileStartMaxHeightMargin CONF("StartMaxHeightMargin")
-#define szProfileStartMaxSpeedMargin CONF("StartMaxSpeedMargin")
-#define szProfileStartHeightRef CONF("StartHeightRef")
-#define szProfileEnableNavBaroAltitude CONF("EnableNavBaroAltitude")
+extern const TCHAR szProfileLoggerTimeStepCruise[];
+extern const TCHAR szProfileLoggerTimeStepCircling[];
 
-#define szProfileLoggerTimeStepCruise CONF("LoggerTimeStepCruise")
-#define szProfileLoggerTimeStepCircling CONF("LoggerTimeStepCircling")
-
-#define szProfileSafetyMacCready CONF("SafetyMacCready")
-#define szProfileAbortSafetyUseCurrent CONF("AbortSafetyUseCurrent")
-#define szProfileAutoMcMode CONF("AutoMcMode")
-#define szProfileWaypointsOutOfRange CONF("WaypointsOutOfRange")
-#define szProfileEnableExternalTriggerCruise CONF("EnableExternalTriggerCruise")
-#define szProfileOLCRules CONF("OLCRules")
-#define szProfileHandicap CONF("Handicap")
-#define szProfileSnailWidthScale CONF("SnailWidthScale")
-#define szProfileUserLevel CONF("UserLevel")
-#define szProfileRiskGamma CONF("RiskGamma")
-#define szProfileWindArrowStyle CONF("WindArrowStyle")
-#define szProfileDisableAutoLogger CONF("DisableAutoLogger")
-#define szProfileMapFile CONF("MapFile") // pL
-#define szProfileBallastSecsToEmpty CONF("BallastSecsToEmpty")
-#define szProfileUseCustomFonts CONF("UseCustomFonts")
-#define szProfileFontInfoWindowFont CONF("InfoWindowFont")
-#define szProfileFontTitleWindowFont CONF("TitleWindowFont")
-#define szProfileFontMapWindowFont CONF("MapWindowFont")
-#define szProfileFontTitleSmallWindowFont CONF("TeamCodeFont")
-#define szProfileFontMapWindowBoldFont CONF("MapWindowBoldFont")
-#define szProfileFontCDIWindowFont CONF("CDIWindowFont")
-#define szProfileFontMapLabelFont CONF("MapLabelFont")
-#define szProfileFontStatisticsFont CONF("StatisticsFont")
+extern const TCHAR szProfileSafetyMacCready[];
+extern const TCHAR szProfileAbortSafetyUseCurrent[];
+extern const TCHAR szProfileAutoMcMode[];
+extern const TCHAR szProfileWaypointsOutOfRange[];
+extern const TCHAR szProfileEnableExternalTriggerCruise[];
+extern const TCHAR szProfileOLCRules[];
+extern const TCHAR szProfileHandicap[];
+extern const TCHAR szProfileSnailWidthScale[];
+extern const TCHAR szProfileLatLonUnits[];
+extern const TCHAR szProfileUserLevel[];
+extern const TCHAR szProfileRiskGamma[];
+extern const TCHAR szProfileWindArrowStyle[];
+extern const TCHAR szProfileDisableAutoLogger[];
+extern const TCHAR szProfileMapFile[];
+extern const TCHAR szProfileBallastSecsToEmpty[];
+extern const TCHAR szProfileAccelerometerZero[];
+extern const TCHAR szProfileUseCustomFonts[];
+extern const TCHAR szProfileFontInfoWindowFont[];
+extern const TCHAR szProfileFontTitleWindowFont[];
+extern const TCHAR szProfileFontMapWindowFont[];
+extern const TCHAR szProfileFontTitleSmallWindowFont[];
+extern const TCHAR szProfileFontMapWindowBoldFont[];
+extern const TCHAR szProfileFontCDIWindowFont[];
+extern const TCHAR szProfileFontMapLabelFont[];
+extern const TCHAR szProfileFontStatisticsFont[];
 
 #endif
