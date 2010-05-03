@@ -121,6 +121,7 @@ READ_PROFILE_STRING_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
+	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/Units.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/ReadProfileString.cpp
@@ -135,6 +136,7 @@ READ_PROFILE_INT_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
+	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/Units.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/ReadProfileInt.cpp
@@ -149,6 +151,7 @@ WRITE_PROFILE_STRING_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
+	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/Units.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/WriteProfileString.cpp
@@ -163,6 +166,7 @@ WRITE_PROFILE_INT_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
+	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/Units.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/WriteProfileInt.cpp
@@ -233,6 +237,7 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/UtilsFile.cpp \
+	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/StringUtil.cpp \
 	$(SRC)/Simulator.cpp \
@@ -266,6 +271,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/Device/Descriptor.cpp \
 	$(SRC)/Device/FLARM.cpp \
 	$(SRC)/Device/Declaration.cpp \
+	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/FlarmCalculations.cpp \
@@ -376,6 +382,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsSystem.cpp \
+	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/WayPointParser.cpp \
 	$(SRC)/WayPointFile.cpp \
 	$(SRC)/WayPointFileWinPilot.cpp \
@@ -469,6 +476,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsSystem.cpp \
+	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
@@ -522,6 +530,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Registry.cpp \
+	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/StringUtil.cpp \
 	$(SRC)/UtilsText.cpp \
