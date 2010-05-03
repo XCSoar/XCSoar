@@ -679,6 +679,16 @@ public:
   virtual bool on_mouse_up(int x, int y);
   virtual bool on_mouse_double(int x, int y);
   virtual bool on_mouse_wheel(int delta);
+
+  /**
+   * Checks if the window wishes to handle a special key, like cursor
+   * keys and tab.  This wraps the WIN32 message WM_GETDLGCODE.
+   *
+   * @return true if the window will handle they key, false if the
+   * dialog manager may use it
+   */
+  virtual bool on_key_check(unsigned key_code);
+
   virtual bool on_key_down(unsigned key_code);
   virtual bool on_key_up(unsigned key_code);
   virtual bool on_command(unsigned id, unsigned code);

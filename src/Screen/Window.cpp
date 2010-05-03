@@ -283,6 +283,12 @@ Window::on_mouse_wheel(int delta)
 }
 
 bool
+Window::on_key_check(unsigned key_code)
+{
+  return false;
+}
+
+bool
 Window::on_key_down(unsigned key_code)
 {
   return false;
@@ -509,6 +515,11 @@ Window::on_message(HWND _hWnd, UINT message,
       on_paint(canvas);
       return 0;
     }
+    break;
+
+  case WM_GETDLGCODE:
+    if (on_key_check(wParam))
+      return DLGC_WANTMESSAGE;
     break;
   }
 
