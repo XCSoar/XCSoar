@@ -74,7 +74,6 @@ KeyTimer(bool isdown, unsigned thekey)
 WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
                              int X, int Y, int Width, int Height,
                              const WindowStyle style) :
-    mOwner(Owner),
     mColorBack(Color::WHITE),
     mColorFore(Color::BLACK),
     mhBrushBk(mColorBack),
@@ -85,8 +84,8 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
   // Clear the caption
   mCaption[0] = '\0';
 
-  if ((Parent == NULL) && (mOwner != NULL))
-    Parent = (ContainerWindow *)&mOwner->GetClientAreaWindow();
+  if ((Parent == NULL) && (Owner != NULL))
+    Parent = (ContainerWindow *)&Owner->GetClientAreaWindow();
 
   set(*Parent, X, Y, Width, Height, style);
 }

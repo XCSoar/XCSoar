@@ -188,9 +188,6 @@ protected:
   void PaintSelector(Canvas &canvas, const RECT rc);
 
 private:
-  /** Parent ContainerControl */
-  ContainerControl *mOwner;
-
   /** Background color */
   Color mColorBack;
   /** Foreground color */
