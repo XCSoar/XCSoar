@@ -288,13 +288,7 @@ MapWindow::register_class(HINSTANCE hInstance)
   wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
   wc.lpfnWndProc = MapWindow::WndProc;
   wc.cbClsExtra = 0;
-#ifdef WINDOWSPC
   wc.cbWndExtra = 0 ;
-#else
-  WNDCLASS dc;
-  GetClassInfo(hInstance,TEXT("DIALOG"),&dc);
-  wc.cbWndExtra = dc.cbWndExtra ;
-#endif
   wc.hIcon = (HICON)NULL;
   wc.hCursor = LoadCursor(NULL, IDC_ARROW);
   wc.hbrBackground = (HBRUSH)GetStockObject (WHITE_BRUSH);

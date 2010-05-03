@@ -188,13 +188,7 @@ public:
     wc.style = CS_HREDRAW | CS_VREDRAW;
     wc.lpfnWndProc = Window::WndProc;
     wc.cbClsExtra = 0;
-#ifdef WINDOWSPC
     wc.cbWndExtra = 0;
-#else
-    WNDCLASS dc;
-    GetClassInfo(hInstance, TEXT("DIALOG"), &dc);
-    wc.cbWndExtra = dc.cbWndExtra ;
-#endif
     wc.hInstance = hInstance;
     wc.hIcon = NULL;
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
