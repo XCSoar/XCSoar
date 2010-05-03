@@ -26,7 +26,11 @@ $(BMP_ICONS_20): %.bmp: %.png
 	$(Q)$(IM_PREFIX)montage -tile 2x1 -geometry +0+0 $<.tmp1.png $<.tmp2.png -depth 8 $<.tmp3.png
 # convert to 8-bit BMP
 	$(Q)$(IM_PREFIX)convert $<.tmp3.png +dither -colors 256 $@
-
+# remove temporary images
+	$(Q)rm $<.tmp1.png
+	$(Q)rm $<.tmp2.png
+	$(Q)rm $<.tmp3.png
+	
 ifeq ($(HAVE_WIN32),y)
 
 RESOURCE_TEXT = Data/XCSoar.rc
