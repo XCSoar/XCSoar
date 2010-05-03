@@ -43,8 +43,9 @@ Copyright_License {
 #include "MapWindowTimer.hpp"
 #include "Thread/Trigger.hpp"
 #include "Thread/Mutex.hpp"
+#include "Screen/PaintWindow.hpp"
 #include "Screen/BufferCanvas.hpp"
-#include "Screen/MaskedPaintWindow.hpp"
+#include "Screen/BitmapCanvas.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "MapWindowBlackboard.hpp"
 #include "PeriodClock.hpp"
@@ -77,9 +78,9 @@ class Waypoint;
 class AirspaceClientUI;
 class TaskClientUI;
 class GlidePolar;
+class ContainerWindow;
 
-class MapWindow
-: public MaskedPaintWindow,
+class MapWindow : public PaintWindow,
   public MapWindowProjection,
   public MapWindowBlackboard,
   public MapWindowTimer
@@ -242,6 +243,7 @@ private:
   BufferCanvas draw_canvas;
   BufferCanvas buffer_canvas;
   BufferCanvas stencil_canvas;
+  BitmapCanvas bitmap_canvas;
 
   LabelBlock label_block;
 public:
@@ -249,6 +251,21 @@ public:
   LabelBlock *getLabelBlock() {
     return &label_block;
   }
+
+  void draw_bitmap(Canvas &canvas, const Bitmap &bitmap,
+		   const int x, const int y,
+		   const unsigned src_x_offset,
+		   const unsigned src_y_offset,
+		   const unsigned src_width,
+		   const unsigned src_height,
+		   bool centered=true);
+
+  void draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap,
+			  const int x, const int y,
+			  const unsigned src_width,
+			  const unsigned src_height,
+			  bool centered=true);
+
   bool draw_masked_bitmap_if_visible(Canvas &canvas,
 				     Bitmap &bitmap,
 				     const GEOPOINT &loc,

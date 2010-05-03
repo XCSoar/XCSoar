@@ -18,7 +18,6 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/WindowCanvas.cpp \
 	$(SCREEN_SRC_DIR)/BufferWindow.cpp \
 	$(SCREEN_SRC_DIR)/PaintWindow.cpp \
-	$(SCREEN_SRC_DIR)/MaskedPaintWindow.cpp \
 	$(SCREEN_SRC_DIR)/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/TextWindow.cpp \
 	$(SCREEN_SRC_DIR)/EditWindow.cpp \

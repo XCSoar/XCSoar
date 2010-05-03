@@ -39,6 +39,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/WindowCanvas.hpp"
+#include "Screen/Layout.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "TopologyStore.h"
 #include "RasterTerrain.h"
@@ -96,9 +97,9 @@ MapWindow::set(ContainerWindow &parent,
   MapRectSmall = _MapRectSmall;
   MapRect = MapRectBig = _MapRectBig;
 
-  MaskedPaintWindow::set(parent, _T("XCSoarMap"), MapRect.left, MapRect.top,
-                         MapRect.right - MapRect.left,
-                         MapRect.bottom - MapRect.top);
+  PaintWindow::set(parent, _T("XCSoarMap"), MapRect.left, MapRect.top,
+                   MapRect.right - MapRect.left,
+                   MapRect.bottom - MapRect.top);
 
   // initialize other systems
   InitialiseScaleList(SettingsMap());
@@ -426,6 +427,43 @@ void MapWindow::ApplyScreenSize() {
   if (lastDisplayMode != DisplayMode){
     SwitchZoomClimb();
   }
+}
+
+void
+MapWindow::draw_bitmap(Canvas &canvas, const Bitmap &bitmap,
+                       const int x, const int y,
+                       const unsigned src_x_offset,
+                       const unsigned src_y_offset,
+                       const unsigned src_width,
+                       const unsigned src_height,
+                       bool centered)
+{
+  int x_offset = centered? IBLSCALE(src_width)/2 : 0;
+  int y_offset = centered? IBLSCALE(src_height)/2 : 0;
+
+  bitmap_canvas.background_opaque();
+  bitmap_canvas.set_text_color(Color(0xff,0xff, 0xff));
+  bitmap_canvas.select(bitmap);
+  canvas.scale_copy(x-x_offset, y-y_offset,
+		    bitmap_canvas,
+		    src_x_offset, src_y_offset,
+		    src_width, src_height);
+}
+
+void
+MapWindow::draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap,
+                              const int x, const int y,
+                              const unsigned src_width,
+                              const unsigned src_height,
+                              bool centered)
+{
+  int x_offset = centered? IBLSCALE(src_width)/2 : 0;
+  int y_offset = centered? IBLSCALE(src_height)/2 : 0;
+
+  bitmap_canvas.background_opaque();
+  bitmap_canvas.set_text_color(Color(0xff,0xff, 0xff));
+  bitmap_canvas.select(bitmap);
+  canvas.scale_or_and(x-x_offset, y-y_offset, bitmap_canvas, src_width, src_height);
 }
 
 bool MapWindow::draw_masked_bitmap_if_visible(Canvas &canvas,
