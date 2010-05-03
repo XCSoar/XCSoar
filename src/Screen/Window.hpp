@@ -58,19 +58,21 @@ class WindowStyle {
 #ifdef ENABLE_SDL
 protected:
   bool visible;
+  bool double_clicks;
 
 public:
-  WindowStyle():visible(true) {}
+  WindowStyle():visible(true), double_clicks(false) {}
 
 #else /* !ENABLE_SDL */
 protected:
   DWORD style, ex_style;
+  bool double_clicks;
   bool custom_painting;
 
 public:
   WindowStyle()
     :style(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS),
-     ex_style(0), custom_painting(false) {}
+     ex_style(0), double_clicks(false), custom_painting(false) {}
 #endif /* !ENABLE_SDL */
 
   void hide() {
@@ -125,6 +127,10 @@ public:
 #endif
   }
 
+  void enable_double_clicks() {
+    double_clicks = true;
+  }
+
   friend class Window;
 };
 
@@ -158,6 +164,7 @@ protected:
 #endif
 
 private:
+  bool double_clicks;
   bool custom_painting;
 
 private:
@@ -167,9 +174,10 @@ private:
 
 public:
 #ifdef ENABLE_SDL
-  Window():parent(NULL), focused(false) {}
+  Window():parent(NULL), focused(false), double_clicks(false) {}
 #else
-  Window():hWnd(NULL), prev_wndproc(NULL), custom_painting(false) {}
+  Window():hWnd(NULL), prev_wndproc(NULL),
+           double_clicks(false), custom_painting(false) {}
 #endif
   virtual ~Window();
 

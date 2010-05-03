@@ -66,6 +66,8 @@ Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
             int left, int top, unsigned width, unsigned height,
             const WindowStyle window_style)
 {
+  double_clicks = window_style.double_clicks;
+
 #ifdef ENABLE_SDL
   this->parent = parent;
   this->left = left;
@@ -426,7 +428,9 @@ Window::on_message(HWND _hWnd, UINT message,
 
   case WM_LBUTTONDBLCLK:
     XCSoarInterface::InterfaceTimeoutReset();
-    if (on_mouse_double(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
+    if (double_clicks
+        ? on_mouse_double(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))
+        : on_mouse_down(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;

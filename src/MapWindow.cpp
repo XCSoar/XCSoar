@@ -97,9 +97,11 @@ MapWindow::set(ContainerWindow &parent,
   MapRectSmall = _MapRectSmall;
   MapRect = MapRectBig = _MapRectBig;
 
+  WindowStyle style;
+  style.enable_double_clicks();
   PaintWindow::set(parent, _T("XCSoarMap"), MapRect.left, MapRect.top,
-                   MapRect.right - MapRect.left,
-                   MapRect.bottom - MapRect.top);
+                   MapRect.right - MapRect.left, MapRect.bottom - MapRect.top,
+                   style);
 
   // initialize other systems
   InitialiseScaleList(SettingsMap());

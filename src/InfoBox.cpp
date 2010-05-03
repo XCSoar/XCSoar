@@ -68,7 +68,9 @@ InfoBox::InfoBox(ContainerWindow &_parent, int X, int Y, int Width, int Height,
   colorTop = 0;
   colorBottom = 0;
 
-  set(parent, X, Y, Width, Height);
+  WindowStyle style;
+  style.enable_double_clicks();
+  set(parent, X, Y, Width, Height, style);
 
   mValueUnit = unUndef;
 

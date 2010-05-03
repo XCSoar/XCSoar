@@ -139,11 +139,6 @@ public:
    * (derived from Window)
    */
   virtual bool on_mouse_up(int x, int y);
-  /**
-   * The on_mouse_double event is called when the button is double clicked
-   * (derived from Window)
-   */
-  virtual bool on_mouse_double(int x, int y);
 
   /**
    * Returns the Control's DataField

@@ -355,12 +355,6 @@ WndProperty::on_mouse_down(int x, int y)
 }
 
 bool
-WndProperty::on_mouse_double(int x, int y)
-{
-  return on_mouse_down(x, y);
-}
-
-bool
 WndProperty::on_mouse_up(int x, int y)
 {
   if (mDialogStyle) {
