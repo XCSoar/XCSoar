@@ -41,7 +41,7 @@ Copyright_License {
 PanelControl::PanelControl(ContainerControl *owner,
                            int x, int y, unsigned width, unsigned height,
                            const WindowStyle style)
-  :ContainerControl(owner, NULL, x, y, width, height, style)
+  :ContainerControl(&owner->GetClientAreaWindow(), x, y, width, height, style)
 {
   SetForeColor(owner->GetForeColor());
   SetBackColor(owner->GetBackColor());

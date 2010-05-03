@@ -45,8 +45,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-class ContainerControl;
-
 /**
  * The WindowControl class is the base class for every other control
  * including the forms/windows itself, using the ContainerControl.
@@ -58,7 +56,6 @@ public:
 public:
   /**
    * Constructor of the WindowControl class
-   * @param Owner
    * @param Parent
    * @param X x-Coordinate of the Control
    * @param Y y-Coordinate of the Control
@@ -66,7 +63,7 @@ public:
    * @param Height Height of the Control
    * @param Visible Visibility of the Control
    */
-  WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
+  WindowControl(ContainerWindow *Parent,
                 int X, int Y, int Width, int Height,
                 const WindowStyle style);
 

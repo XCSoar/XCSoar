@@ -51,7 +51,7 @@ WndListFrame::WndListFrame(ContainerControl *Owner,
                            int X, int Y, int Width, int Height,
                            const WindowStyle style,
                            unsigned _item_height):
-  WindowControl(Owner, NULL, X, Y, Width, Height, style),
+  WindowControl(&Owner->GetClientAreaWindow(), X, Y, Width, Height, style),
   item_height(_item_height),
   length(0), origin(0), items_visible(Height / item_height),
   relative_cursor(0),

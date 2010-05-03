@@ -43,7 +43,7 @@ WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerControl *Owner,
                                      int X, int Y, int Width, int Height,
                                      const WindowStyle style,
                                      OnPaintCallback_t OnPaintCallback)
-  :WindowControl(Owner, NULL, X, Y, Width, Height, style),
+  :WindowControl(&Owner->GetClientAreaWindow(), X, Y, Width, Height, style),
    mOnPaintCallback(OnPaintCallback)
 {
   mCaption[0] = '\0';

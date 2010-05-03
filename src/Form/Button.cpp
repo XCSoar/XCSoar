@@ -46,7 +46,7 @@ WndButton::WndButton(ContainerControl *Parent,
     const TCHAR *Caption, int X, int Y, int Width, int Height,
                      const WindowStyle style,
     ClickNotifyCallback_t Function) :
-  WindowControl(Parent, NULL, X, Y, Width, Height, style),
+  WindowControl(&Parent->GetClientAreaWindow(), X, Y, Width, Height, style),
   mDown(false),
   mLastDrawTextHeight(-1),
   mOnClickNotify(Function)

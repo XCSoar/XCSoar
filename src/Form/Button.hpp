@@ -41,6 +41,8 @@ Copyright_License {
 
 #include "Form/Control.hpp"
 
+class ContainerControl;
+
 /**
  * This class is used for creating buttons.
  * It is based on the WindowControl class.

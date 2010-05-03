@@ -42,6 +42,8 @@ Copyright_License {
 #include "Form/Control.hpp"
 #include "Screen/Bitmap.hpp"
 
+class ContainerControl;
+
 /**
  * A WndListFrame implements a scrollable list control based on the
  * WindowControl class.

@@ -61,7 +61,7 @@ WndForm::WndForm(SingleWindow &_main_window,
                  const TCHAR *Caption,
                  int X, int Y, int Width, int Height,
                  const WindowStyle style):
-  ContainerControl(NULL, &_main_window, X, Y, Width, Height, style),
+  ContainerControl(&_main_window, X, Y, Width, Height, style),
   main_window(_main_window),
   mModalResult(0),
   mColorTitle(Color::YELLOW),

@@ -43,6 +43,7 @@ Copyright_License {
 #include "Screen/EditWindow.hpp"
 
 class DataField;
+class ContainerControl;
 
 /**
  * The WndProperty class implements a WindowControl with a caption label and
