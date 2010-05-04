@@ -58,17 +58,20 @@ Copyright_License {
 
 static int LineCount;
 
-static const int k_nLineTypes = 9;
+enum line_type {
+  /** special value: end of file */
+  k_nLtEOF,
 
-static const int k_nLtAC	= 0;
-static const int k_nLtAN	= 1;
-static const int k_nLtAL	= 2;
-static const int k_nLtAH	= 3;
-static const int k_nLtV		= 4;
-static const int k_nLtDP	= 5;
-static const int k_nLtDB	= 6;
-static const int k_nLtDA	= 7;
-static const int k_nLtDC	= 8;
+  k_nLtAC,
+  k_nLtAN,
+  k_nLtAL,
+  k_nLtAH,
+  k_nLtV,
+  k_nLtDP,
+  k_nLtDB,
+  k_nLtDA,
+  k_nLtDC,
+};
 
 static const int k_nAreaCount = 12;
 static const TCHAR* k_strAreaStart[k_nAreaCount] = {
@@ -142,11 +145,12 @@ struct TempAirspaceType {
 static TempAirspaceType temp_area;
 
 // Returns index of line type found, or -1 if end of file reached
-static int GetNextLine(TLineReader &reader, TCHAR *&Text)
+static enum line_type
+GetNextLine(TLineReader &reader, TCHAR *&Text)
 {
   TCHAR *Comment;
   int nSize;
-  int nLineType = -1;
+  enum line_type nLineType = k_nLtEOF;
   TCHAR sTmp[READLINE_LENGTH];
 
   while ((Text = reader.read()) != NULL) {
@@ -196,7 +200,7 @@ static int GetNextLine(TLineReader &reader, TCHAR *&Text)
         if (MessageBoxX(sTmp,
                         gettext(_T("Airspace")),
                         MB_OKCANCEL) == IDCANCEL)
-          return(-1);
+          return k_nLtEOF;
         continue;
       }
 
@@ -231,7 +235,7 @@ static int GetNextLine(TLineReader &reader, TCHAR *&Text)
         if (MessageBoxX(sTmp,
                         gettext(_T("Airspace")),
                         MB_OKCANCEL) == IDCANCEL)
-          return(-1);
+          return k_nLtEOF;
         continue;
       }
 
@@ -254,11 +258,11 @@ static int GetNextLine(TLineReader &reader, TCHAR *&Text)
                 gettext(_T("Line skipped.")));
       if (MessageBoxX(sTmp, gettext(_T("Airspace")),
                       MB_OKCANCEL) == IDCANCEL)
-        return(-1);
+        return k_nLtEOF;
       continue;
     }
 
-    if (nLineType >= 0) {// Valid line found
+    if (nLineType != k_nLtEOF) {// Valid line found
       // Strip comments and newline chars from end of line
       Comment = _tcschr(Text, _T('*'));
       if (Comment != NULL) {
@@ -547,7 +551,8 @@ CalculateArc(TCHAR *Text)
 }
 
 static bool
-ParseLine(Airspaces &airspace_database, int nLineType, TCHAR *TempString)
+ParseLine(Airspaces &airspace_database, enum line_type nLineType,
+          TCHAR *TempString)
 {
   int nIndex;
   GEOPOINT TempPoint;
@@ -625,9 +630,6 @@ ParseLine(Airspaces &airspace_database, int nLineType, TCHAR *TempString)
     temp_area.AddCircle(airspace_database);
     temp_area.reset();
     break;
-
-  default:
-    break;
   }
 
   return(true);
@@ -656,7 +658,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
   DWORD	dwStep;
   DWORD	dwPos;
   DWORD	dwOldPos = 0L;
-  int	nLineType;
+  enum line_type nLineType;
 
   LineCount = 0;
 
@@ -671,7 +673,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
   temp_area.reset();
 
   TCHAR *line;
-  while((nLineType = GetNextLine(reader, line)) >= 0) {
+  while((nLineType = GetNextLine(reader, line)) != k_nLtEOF) {
     Tock++;
     Tock %= 50;
 
