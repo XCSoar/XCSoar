@@ -94,12 +94,8 @@ void CreateCalculationThread(void) {
   device_blackboard.ReadBlackboard(glide_computer.Calculated());
 
   GaugeVario *gauge_vario = XCSoarInterface::main_window.vario;
-  if (gauge_vario) {
-    gauge_vario->ReadBlackboardBasic(device_blackboard.Basic());
-    gauge_vario->ReadBlackboardCalculated(device_blackboard.Calculated());
-    gauge_vario->ReadSettingsComputer(device_blackboard.SettingsComputer());
+  if (gauge_vario != NULL)
     instrument_thread = new InstrumentThread(*gauge_vario);
-  }
 
   // Create a read thread for performing calculations
   calculation_thread = new CalculationThread(&glide_computer);
