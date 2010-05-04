@@ -284,7 +284,8 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
   return nLineType;
 }
 
-static bool StartsWith(TCHAR *Text, const TCHAR *LookFor)
+static bool
+StartsWith(const TCHAR *Text, const TCHAR *LookFor)
 {
   while(1) {
     if (!(*LookFor)) return TRUE;
@@ -293,7 +294,8 @@ static bool StartsWith(TCHAR *Text, const TCHAR *LookFor)
   }
 }
 
-static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
+static void
+ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
 {
   TCHAR *Stop;
   TCHAR Text[128];
@@ -416,7 +418,8 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
   }
 }
 
-static bool ReadCoords(TCHAR *Text, GEOPOINT &point)
+static bool
+ReadCoords(const TCHAR *Text, GEOPOINT &point)
 {
   double Ydeg=0, Ymin=0, Ysec=0;
   double Xdeg=0, Xmin=0, Xsec=0;
@@ -481,7 +484,7 @@ OnError:
 }
 
 static void
-CalculateSector(TCHAR *Text)
+CalculateSector(const TCHAR *Text)
 {
   fixed Radius;
   fixed StartBearing;
@@ -512,14 +515,14 @@ CalculateSector(TCHAR *Text)
 }
 
 static void
-CalculateArc(TCHAR *Text)
+CalculateArc(const TCHAR *Text)
 {
   GEOPOINT Start;
   GEOPOINT End;
   fixed StartBearing;
   fixed EndBearing;
   fixed Radius;
-  TCHAR *Comma = NULL;
+  const TCHAR *Comma = NULL;
   GEOPOINT TempPoint;
   static const fixed fixed_75 = fixed(7.5);
   static const fixed fixed_5 = fixed(5);
@@ -552,7 +555,7 @@ CalculateArc(TCHAR *Text)
 
 static bool
 ParseLine(Airspaces &airspace_database, enum line_type nLineType,
-          TCHAR *TempString)
+          const TCHAR *TempString)
 {
   int nIndex;
   GEOPOINT TempPoint;
