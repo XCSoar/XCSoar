@@ -74,8 +74,8 @@ CalculationThread::run()
     const bool gps_updated = gps_trigger.test();
 
     // update and transfer master info to glide computer
-    mutexBlackboard.Lock();
     {
+      ScopeLock protect(mutexBlackboard);
       GlidePolar glide_polar = glide_computer.get_glide_polar();
 
       // if (new GPS data available)
@@ -93,7 +93,6 @@ CalculationThread::run()
       glide_computer.ReadMapProjection(device_blackboard.MapProjection());
       
     }
-    mutexBlackboard.Unlock();
 
     // if (new GPS data)
     if (gps_updated) {
@@ -126,11 +125,10 @@ CalculationThread::run()
     // values changed, so copy them back now: ONLY CALCULATED INFO
     // should be changed in DoCalculations, so we only need to write
     // that one back (otherwise we may write over new data)
-    mutexBlackboard.Lock();
     {
+      ScopeLock protect(mutexBlackboard);
       device_blackboard.ReadBlackboard(glide_computer.Calculated());
     }
-    mutexBlackboard.Unlock();
 
     // reset triggers
     data_trigger.reset();
