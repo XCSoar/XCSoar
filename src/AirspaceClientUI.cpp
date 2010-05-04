@@ -55,10 +55,10 @@ AirspaceClientUI::clear_warnings()
 
 
 bool
-AirspaceClientUI::read(char* path)
+AirspaceClientUI::read(TLineReader &reader)
 {
   Poco::ScopedRWLock lock(mutex, true);
-  return ReadAirspace(airspaces, path);
+  return ReadAirspace(airspaces, reader);
 }
 
 

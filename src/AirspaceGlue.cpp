@@ -43,7 +43,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
-#include "wcecompat/ts_string.h"
+#include "IO/FileLineReader.hpp"
 
 void
 ReadAirspace(AirspaceClientUI &airspace, 
@@ -62,10 +62,8 @@ ReadAirspace(AirspaceClientUI &airspace,
   if (tpath[0] != 0) {
     ExpandLocalPath(tpath);
 
-    char path[MAX_PATH];
-    unicode2ascii(tpath, path, sizeof(path));
-
-    if (!airspace.read(path)) {
+    FileLineReader reader(tpath);
+    if (reader.error() || !airspace.read(reader)) {
       LogStartUp(TEXT("No airspace file 1"));
     } else {
       airspace_ok =  true;
@@ -87,10 +85,8 @@ ReadAirspace(AirspaceClientUI &airspace,
   if (tpath[0] != 0) {
     ExpandLocalPath(tpath);
 
-    char path[MAX_PATH];
-    unicode2ascii(tpath, path, sizeof(path));
-
-    if (!airspace.read(path)) {
+    FileLineReader reader(tpath);
+    if (reader.error() || !airspace.read(reader)) {
       LogStartUp(TEXT("No airspace file 2"));
     } else {
       airspace_ok = true;

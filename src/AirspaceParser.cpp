@@ -46,7 +46,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "options.h"
 #include "Math/Geometry.hpp"
-#include "IO/ZipLineReader.hpp"
+#include "IO/LineReader.hpp"
 
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
@@ -158,7 +158,7 @@ struct TempAirspaceType {
 
 static TempAirspaceType temp_area;
 
-static bool
+bool
 ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
 {
   LogStartUp(TEXT("ReadAirspace"));
@@ -731,14 +731,3 @@ OLD_TASK boundary wrap 180
     }
   }
 */
-
-bool
-ReadAirspace(Airspaces &airspace_database, const char *path)
-{
-  ZipLineReader reader(path);
-  if (reader.error())
-    return false;
-
-  return ReadAirspace(airspace_database, reader);
-}
-
