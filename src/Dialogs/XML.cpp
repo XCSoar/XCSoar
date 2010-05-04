@@ -683,11 +683,6 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     _tcscpy(OnHelpCallback,
             StringToStringDflt(node.getAttribute(_T("OnHelp")), _T("")));
 
-    // Load the caption
-    // todo: duplicate?!
-    _tcscpy(Caption,
-            StringToStringDflt(node.getAttribute(_T("Caption")), _T("")));
-
     // TODO code: Temporary double handling to fix "const unsigned
     // short *" to "unsigned short *" problem
     // Translate the caption
