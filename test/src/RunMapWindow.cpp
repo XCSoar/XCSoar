@@ -53,7 +53,6 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "LocalPath.hpp"
 #include "WayPointParser.h"
-#include "wcecompat/ts_string.h"
 #include "Device/device.hpp"
 #include "InputEvents.h"
 #include "TopologyStore.h"
@@ -72,6 +71,7 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "LogFile.hpp"
+#include "IO/FileLineReader.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -243,10 +243,8 @@ LoadFiles()
   if (tpath[0] != 0) {
     ExpandLocalPath(tpath);
 
-    char path[MAX_PATH];
-    unicode2ascii(tpath, path, sizeof(path));
-
-    if (!ReadAirspace(airspace_database, path))
+    FileLineReader reader(tpath);
+    if (reader.error() || !ReadAirspace(airspace_database, reader))
       LogStartUp(TEXT("No airspace file 1"));
 
     airspace_database.optimise();
