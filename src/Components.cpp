@@ -454,6 +454,9 @@ XCSoarInterface::Shutdown(void)
   LogStartUp(TEXT("CloseDrawingThread"));
   closeTriggerEvent.trigger();
 
+  if (instrument_thread != NULL)
+    instrument_thread->stop();
+
   // Wait for the calculations thread to finish
   calculation_thread->join();
   LogStartUp(TEXT("- calculation thread returned"));
