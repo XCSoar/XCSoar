@@ -53,6 +53,7 @@ Copyright_License {
 #include "jasper/jpc_rtc.h"
 #include "wcecompat/ts_string.h"
 
+#include <assert.h>
 #include <stdint.h>
 
 RasterMapCache::~RasterMapCache()
@@ -120,17 +121,9 @@ void RasterMapCache::ClearTerrainCache() {
 
 static int _cdecl TerrainCacheCompare(const void *elem1, const void *elem2 )
 {
-#ifdef PARANOID
-  if (!elem1 && !elem2) {
-    return(0);
-  }
-  if (elem1 && !elem2) {
-    return(-1);
-  }
-  if (!elem1 && elem2) {
-    return(1);
-  }
-#endif
+  assert(elem1 != NULL);
+  assert(elem2 != NULL);
+
   if (((RasterMapCache::TERRAIN_CACHE *)elem1)->recency > 
       ((RasterMapCache::TERRAIN_CACHE *)elem2)->recency)
     return (-1);
@@ -181,9 +174,8 @@ short RasterMapCache::LookupTerrainCacheFile(const long &SeekPos) {
 static int
 TerrainCacheSearch(const void *key, const void *elem2)
 {
-#ifdef PARANOID
-  if (!elem2) return (0);
-#endif
+  assert(elem2 != NULL);
+
   if ((long)key > ((RasterMapCache::TERRAIN_CACHE *)elem2)->index)
     return (-1);
   if ((long)key < ((RasterMapCache::TERRAIN_CACHE *)elem2)->index)
