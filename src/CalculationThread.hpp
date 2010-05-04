@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_CALCULATION_THREAD_HPP
 #define XCSOAR_CALCULATION_THREAD_HPP
 
-#include "Thread/Thread.hpp"
+#include "Thread/WorkerThread.hpp"
 #include "Thread/Trigger.hpp"
 
 class GlideComputer;
@@ -49,14 +49,7 @@ class GlideComputer;
  * that should not be done directly in the device thread.
  * Data transfer is handled by a blackboard system.
  */
-class CalculationThread : public Thread {
-  /**
-   * The thread runs while this trigger is set.
-   */
-  Trigger running;
-
-  /** The data_trigger is used when new data is available (Vario + GPS) */
-  Trigger data_trigger;
+class CalculationThread : public WorkerThread {
   /** The gps_trigger is used only when new GPS data is available */
   Trigger gps_trigger;
 
@@ -66,17 +59,9 @@ class CalculationThread : public Thread {
 public:
   CalculationThread(GlideComputer &_glide_computer);
 
-  void suspend() {
-    running.reset();
-  }
-
-  void resume() {
-    running.trigger();
-  }
-
   /** Triggers the data_trigger */
   void trigger_data() {
-    data_trigger.trigger();
+    trigger();
   }
 
   /** Triggers the gps_trigger */
@@ -84,13 +69,8 @@ public:
     gps_trigger.trigger();
   }
 
-  /** to be removed, see ::TriggerRedraws() */
-  bool test_gps() {
-    return gps_trigger.test();
-  }
-
 protected:
-  virtual void run();
+  virtual void tick();
 };
 
 #endif
