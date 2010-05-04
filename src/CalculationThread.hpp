@@ -61,10 +61,10 @@ class CalculationThread : public Thread {
   Trigger gps_trigger;
 
   /** Pointer to the GlideComputer that should be used */
-  GlideComputer *glide_computer;
+  GlideComputer &glide_computer;
 
 public:
-  CalculationThread(GlideComputer *_glide_computer);
+  CalculationThread(GlideComputer &_glide_computer);
 
   void suspend() {
     running.reset();

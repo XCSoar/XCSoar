@@ -46,7 +46,7 @@ Copyright_License {
  * Constructor of the CalculationThread class
  * @param _glide_computer The GlideComputer used for the CalculationThread
  */
-CalculationThread::CalculationThread(GlideComputer *_glide_computer)
+CalculationThread::CalculationThread(GlideComputer &_glide_computer)
   :running(_T("CalculationThread::running"), true),
    data_trigger(_T("dataTriggerEvent")),
    gps_trigger(TEXT("gpsUpdatedTriggerEvent")),
@@ -76,7 +76,7 @@ CalculationThread::run()
     // update and transfer master info to glide computer
     mutexBlackboard.Lock();
     {
-      GlidePolar glide_polar = glide_computer->get_glide_polar();
+      GlidePolar glide_polar = glide_computer.get_glide_polar();
 
       // if (new GPS data available)
       if (gps_updated) {
@@ -86,11 +86,11 @@ CalculationThread::run()
       }
       
       // Copy data from DeviceBlackboard to GlideComputerBlackboard
-      glide_computer->ReadBlackboard(device_blackboard.Basic());
+      glide_computer.ReadBlackboard(device_blackboard.Basic());
       // Copy settings form SettingsComputerBlackboard to GlideComputerBlackboard
-      glide_computer->ReadSettingsComputer(device_blackboard.SettingsComputer());
+      glide_computer.ReadSettingsComputer(device_blackboard.SettingsComputer());
       // Copy mapprojection from MapProjectionBlackboard to GlideComputerBlackboard
-      glide_computer->ReadMapProjection(device_blackboard.MapProjection());
+      glide_computer.ReadMapProjection(device_blackboard.MapProjection());
       
     }
     mutexBlackboard.Unlock();
@@ -101,13 +101,13 @@ CalculationThread::run()
       // inform map new data is ready
       drawTriggerEvent.trigger();
 
-      if (!glide_computer->Basic().TotalEnergyVarioAvailable) {
+      if (!glide_computer.Basic().TotalEnergyVarioAvailable) {
         TriggerVarioUpdate(); // emulate vario update
       }
 
       // process GPS data
       // if (time advanced)
-      if (glide_computer->ProcessGPS()){
+      if (glide_computer.ProcessGPS()){
         need_calculations_slow = true;
       }
     }
@@ -119,7 +119,7 @@ CalculationThread::run()
     // if (time advanced and slow calculations need to be updated)
     if (need_calculations_slow) {
       // do slow calculations
-      glide_computer->ProcessIdle();
+      glide_computer.ProcessIdle();
       need_calculations_slow = false;
     }
 
@@ -128,7 +128,7 @@ CalculationThread::run()
     // that one back (otherwise we may write over new data)
     mutexBlackboard.Lock();
     {
-      device_blackboard.ReadBlackboard(glide_computer->Calculated());
+      device_blackboard.ReadBlackboard(glide_computer.Calculated());
     }
     mutexBlackboard.Unlock();
 

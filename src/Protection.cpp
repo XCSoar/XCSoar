@@ -98,5 +98,5 @@ void CreateCalculationThread(void) {
     instrument_thread = new InstrumentThread(*gauge_vario);
 
   // Create a read thread for performing calculations
-  calculation_thread = new CalculationThread(&glide_computer);
+  calculation_thread = new CalculationThread(glide_computer);
 }
