@@ -98,9 +98,9 @@ void CreateCalculationThread(void) {
     gauge_vario->ReadBlackboardBasic(device_blackboard.Basic());
     gauge_vario->ReadBlackboardCalculated(device_blackboard.Calculated());
     gauge_vario->ReadSettingsComputer(device_blackboard.SettingsComputer());
+    instrument_thread = new InstrumentThread(*gauge_vario);
   }
 
   // Create a read thread for performing calculations
   calculation_thread = new CalculationThread(&glide_computer);
-  instrument_thread = new InstrumentThread(gauge_vario);
 }

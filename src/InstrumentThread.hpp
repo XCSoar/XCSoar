@@ -47,10 +47,10 @@ class GaugeVario;
 class InstrumentThread : public Thread {
   Trigger vario_trigger;
 
-  GaugeVario *vario;
+  GaugeVario &vario;
 
 public:
-  InstrumentThread(GaugeVario *_vario);
+  InstrumentThread(GaugeVario &_vario);
 
   void trigger_vario() {
     vario_trigger.trigger();

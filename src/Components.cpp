@@ -407,7 +407,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   calculation_thread->start();
 
   // Start instrument thread
-  instrument_thread->start();
+  if (instrument_thread != NULL)
+    instrument_thread->start();
 
   globalRunningEvent.trigger();
   calculation_thread->resume();
@@ -458,7 +459,8 @@ XCSoarInterface::Shutdown(void)
   LogStartUp(TEXT("- calculation thread returned"));
 
   //  Wait for the instruments thread to finish
-  instrument_thread->join();
+  if (instrument_thread != NULL)
+    instrument_thread->join();
   LogStartUp(TEXT("- instrument thread returned"));
 
   //  Wait for the drawing thread to finish
