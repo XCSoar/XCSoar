@@ -178,8 +178,9 @@ short RasterMapCache::LookupTerrainCacheFile(const long &SeekPos) {
   return Alt;
 }
 
-
-int TerrainCacheSearch(const void *key, const void *elem2 ){
+static int
+TerrainCacheSearch(const void *key, const void *elem2)
+{
 #ifdef PARANOID
   if (!elem2) return (0);
 #endif
