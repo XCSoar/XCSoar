@@ -39,6 +39,8 @@ Copyright_License {
 #if !defined(__UNITS_H)
 #define __UNITS_H
 
+#include "Engine/Math/fixed.hpp"
+
 #include <tchar.h>
 class Angle;
 
@@ -325,6 +327,13 @@ public:
    * @return The value in user-specified unit
    */
   static double ToUserUnit(double Value, Units_t Unit);
+
+#ifdef FIXED_MATH
+  static fixed ToUserUnit(fixed Value, Units_t Unit) {
+    return fixed(ToUserUnit((double)Value, Unit));
+  }
+#endif
+
   /**
    * Converts a Value from the user-specified unit to the system unit
    * @param Value The value in user-specified unit
@@ -332,6 +341,12 @@ public:
    * @return The value in system unit
    */
   static double ToSysUnit(double Value, Units_t Unit);
+
+#ifdef FIXED_MATH
+  static fixed ToSysUnit(fixed Value, Units_t Unit) {
+    return fixed(ToSysUnit((double)Value, Unit));
+  }
+#endif
 
   static double ToUserAltitude(double Value) {
     return ToUserUnit(Value, AltitudeUnit);
@@ -349,6 +364,10 @@ public:
     return ToSysUnit(Value, DistanceUnit);
   }
 
+  static fixed ToSysDistance(fixed Value) {
+    return ToSysUnit(Value, DistanceUnit);
+  }
+
   static double ToUserSpeed(double Value) {
     return ToUserUnit(Value, SpeedUnit);
   }
@@ -362,6 +381,10 @@ public:
   }
 
   static double ToSysVSpeed(double Value) {
+    return ToSysUnit(Value, VerticalSpeedUnit);
+  }
+
+  static fixed ToSysVSpeed(fixed Value) {
     return ToSysUnit(Value, VerticalSpeedUnit);
   }
 

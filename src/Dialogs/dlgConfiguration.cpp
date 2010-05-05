@@ -2252,11 +2252,9 @@ void dlgConfigurationShowModal(void){
     }
   }
 
-  double val;
-
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
   if (wp) {
-    double val = Units::ToSysVSpeed(wp->GetDataField()->GetAsFloat());
+    fixed val = fixed(Units::ToSysVSpeed(wp->GetDataField()->GetAsFloat()));
     if (XCSoarInterface::SettingsComputer().safety_mc != val) {
       XCSoarInterface::SetSettingsComputer().safety_mc = val;
       Profile::Set(szProfileSafetyMacCready,
@@ -2267,7 +2265,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpRiskGamma"));
   if (wp) {
-    val = wp->GetDataField()->GetAsFloat();
+    fixed val = fixed(wp->GetDataField()->GetAsFloat());
     if (XCSoarInterface::SettingsComputer().risk_gamma != val) {
       XCSoarInterface::SetSettingsComputer().risk_gamma = val;
       Profile::Set(szProfileRiskGamma,

@@ -117,8 +117,8 @@ OnAltitudeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
   case DataField::daGet:
-    Sender->Set(Units::ToUserUnit(XCSoarInterface::Basic().BaroAltitude,
-                                  Units::AltitudeUnit));
+    Sender->Set((double)Units::ToUserUnit(XCSoarInterface::Basic().BaroAltitude,
+                                          Units::AltitudeUnit));
     break;
   case DataField::daPut:
     break;

@@ -911,7 +911,7 @@ FlightStatistics::CaptionPolar(TCHAR *sTmp, const GlidePolar& glide_polar) const
                                 Units::SpeedUnit)),
 	      Units::GetSpeedName(),
 	      gettext(TEXT("Min sink")),
-	      Units::ToUserUnit(glide_polar.get_Smin(), Units::VerticalSpeedUnit),
+              (double)Units::ToUserUnit(glide_polar.get_Smin(), Units::VerticalSpeedUnit),
 	      Units::GetVerticalSpeedName(),
         (int)(Units::ToUserUnit(glide_polar.get_Vmin(),
                                 Units::SpeedUnit)),
@@ -925,7 +925,7 @@ FlightStatistics::CaptionPolar(TCHAR *sTmp, const GlidePolar& glide_polar) const
                                 Units::SpeedUnit)),
 	      Units::GetSpeedName(),
 	      gettext(TEXT("Min sink")),
-        Units::ToUserUnit(glide_polar.get_Smin(), Units::VerticalSpeedUnit),
+              (double)Units::ToUserUnit(glide_polar.get_Smin(), Units::VerticalSpeedUnit),
 	      Units::GetVerticalSpeedName(),
         (int)(Units::ToUserUnit(glide_polar.get_Vmin(),
                                 Units::SpeedUnit)),
@@ -968,10 +968,10 @@ FlightStatistics::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const
                     gettext(TEXT("AAT to go")),
 		  timetext2,
 		  gettext(TEXT("Distance to go")),
-		  Units::ToUserUnit(d_remaining, Units::DistanceUnit),
+                  (double)Units::ToUserUnit(d_remaining, Units::DistanceUnit),
 		  Units::GetDistanceName(),
 		  gettext(TEXT("Target speed")),
-		  Units::ToUserUnit(common.aat_speed_remaining, Units::TaskSpeedUnit),
+                  (double)Units::ToUserUnit(common.aat_speed_remaining, Units::TaskSpeedUnit),
 		  Units::GetTaskSpeedName()
 		  );
       } else {
@@ -982,10 +982,10 @@ FlightStatistics::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const
 		  gettext(TEXT("AAT to go")),
 		  timetext2,
 		  gettext(TEXT("Distance to go")),
-                  Units::ToUserUnit(d_remaining, Units::DistanceUnit),
+                  (double)Units::ToUserUnit(d_remaining, Units::DistanceUnit),
 		  Units::GetDistanceName(),
 		  gettext(TEXT("Target speed")),
-		      Units::ToUserUnit(common.aat_speed_remaining, Units::TaskSpeedUnit),
+                  (double)Units::ToUserUnit(common.aat_speed_remaining, Units::TaskSpeedUnit),
 		  Units::GetTaskSpeedName()
 		  );
       }
@@ -995,7 +995,7 @@ FlightStatistics::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const
 		gettext(TEXT("Task to go")),
 		timetext1,
 		gettext(TEXT("Distance to go")),
-		Units::ToUserUnit(d_remaining, Units::DistanceUnit),
+		(double)Units::ToUserUnit(d_remaining, Units::DistanceUnit),
 		Units::GetDistanceName());
     }
   }
