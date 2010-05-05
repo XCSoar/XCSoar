@@ -39,6 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_CANVAS_HPP
 #define XCSOAR_SCREEN_CANVAS_HPP
 
+#include "Util/NonCopyable.hpp"
 #include "Math/fixed.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Color.hpp"
@@ -61,7 +62,7 @@ Copyright_License {
  * Base drawable canvas class
  * 
  */
-class Canvas {
+class Canvas : private NonCopyable {
   friend class WindowCanvas;
 
 protected:

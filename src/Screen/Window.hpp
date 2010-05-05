@@ -39,6 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_WINDOW_HPP
 #define XCSOAR_SCREEN_WINDOW_HPP
 
+#include "Util/NonCopyable.hpp"
 #include "Screen/Font.hpp"
 #include "Thread/Debug.hpp"
 
@@ -139,7 +140,7 @@ public:
  * which optionally interacts with the user.  To draw custom graphics
  * into a Window, derive your class from #PaintWindow.
  */
-class Window {
+class Window : private NonCopyable {
   friend class ContainerWindow;
 
 public:
@@ -166,11 +167,6 @@ protected:
 private:
   bool double_clicks;
   bool custom_painting;
-
-private:
-  /* copy constructor not allowed */
-  Window(const Window &window) {}
-  Window &operator=(const Window &window) { return *this; }
 
 public:
 #ifdef ENABLE_SDL

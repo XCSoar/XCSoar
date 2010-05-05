@@ -39,6 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_BRUSH_HPP
 #define XCSOAR_SCREEN_BRUSH_HPP
 
+#include "Util/NonCopyable.hpp"
 #include "Screen/Color.hpp"
 
 class Bitmap;
@@ -46,7 +47,7 @@ class Bitmap;
 /**
  * A Brush is used for drawing filled circles, rectangles and so on
  */
-class Brush {
+class Brush : private NonCopyable {
 protected:
   #ifdef ENABLE_SDL
   bool hollow;
