@@ -81,6 +81,10 @@ public:
   virtual const TCHAR *GetAsString() const;
   virtual const TCHAR *GetAsDisplayString() const;
 
+  fixed GetAsFixed() const {
+    return fixed(GetAsFloat());
+  }
+
   virtual bool SetAsBoolean(bool Value);
   virtual int SetAsInteger(int Value);
   virtual double SetAsFloat(double Value);
@@ -91,6 +95,12 @@ public:
   virtual void Set(unsigned Value){ Set((int)Value); }
   virtual void Set(double Value){ (void)Value; }
   virtual void Set(const TCHAR *Value){ (void)Value; }
+
+#ifdef FIXED_MATH
+  void Set(fixed Value) {
+    Set((double)Value);
+  }
+#endif
 
   virtual int SetMin(int Value){ (void)Value; return 0; }
   virtual double SetMin(double Value){ (void)Value; return false; }

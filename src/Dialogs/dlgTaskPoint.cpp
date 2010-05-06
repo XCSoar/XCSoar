@@ -201,7 +201,7 @@ public:
       WndProperty* wv;
       wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorRadius")));
       if (wv) {
-        double val = Units::ToSysDistance(wv->GetDataField()->GetAsFloat());
+        fixed val = Units::ToSysDistance(wv->GetDataField()->GetAsFixed());
         if (val != oz.getRadius()) {
           oz.setRadius((fixed)val);
           task_modified = true;
@@ -210,7 +210,7 @@ public:
 
       wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorStartRadial")));
       if (wv) {
-        double val = wv->GetDataField()->GetAsFloat();
+        fixed val = wv->GetDataField()->GetAsFixed();
         if (val != oz.getStartRadial().value_degrees()) {
           oz.setStartRadial(Angle::degrees((fixed)val));
           task_modified = true;
@@ -219,7 +219,7 @@ public:
 
       wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorFinishRadial")));
       if (wv) {
-        double val = wv->GetDataField()->GetAsFloat();
+        fixed val = wv->GetDataField()->GetAsFixed();
         if (val != oz.getEndRadial().value_degrees()) {
           oz.setEndRadial(Angle::degrees((fixed)val));
           task_modified = true;
@@ -232,7 +232,7 @@ public:
       WndProperty* wv;
       wv = ((WndProperty*)wf->FindByName(_T("prpOZLineLength")));
       if (wv) {
-        double val = Units::ToSysDistance(wv->GetDataField()->GetAsFloat());
+        fixed val = Units::ToSysDistance(wv->GetDataField()->GetAsFixed());
         if (val != oz.getLength()) {
           oz.setLength((fixed)val);
           task_modified = true;
@@ -245,7 +245,7 @@ public:
       WndProperty* wv;
       wv = ((WndProperty*)wf->FindByName(_T("prpOZCylinderRadius")));
       if (wv) {
-        double val = Units::ToSysDistance(wv->GetDataField()->GetAsFloat());
+        fixed val = Units::ToSysDistance(wv->GetDataField()->GetAsFixed());
         if (val != oz.getRadius()) {
           oz.setRadius((fixed)val);
           task_modified = true;
