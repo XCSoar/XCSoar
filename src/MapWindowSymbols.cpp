@@ -576,10 +576,9 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
     }
 
     if (Appearance.IndFinalGlide == fgFinalGlideDefault) {
-
-      _stprintf(Value, TEXT("%1.0f "), Units::ToUserUnit(
-          Calculated().task_stats.total.solution_remaining.AltitudeDifference,
-          Units::AltitudeUnit));
+      Units::FormatUserAltitude(Calculated().task_stats.total.solution_remaining.AltitudeDifference,
+                                Value, sizeof(Value) / sizeof(Value[0]),
+                                false);
 
       if (Offset >= 0) {
         Offset = GlideBar[2].y + Offset + IBLSCALE(5);
@@ -602,9 +601,9 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
       //            Appearance.MapWindowBoldFont.CapitalHeight/2-1;
       int x = GlideBar[2].x + IBLSCALE(1);
 
-      _stprintf(Value, TEXT("%1.0f"), Units::ToUserUnit(
-          Calculated().task_stats.total.solution_remaining.AltitudeDifference,
-          Units::AltitudeUnit));
+      Units::FormatUserAltitude(Calculated().task_stats.total.solution_remaining.AltitudeDifference,
+                                Value, sizeof(Value) / sizeof(Value[0]),
+                                false);
 
       canvas.select(MapWindowBoldFont);
       TextSize = canvas.text_size(Value);

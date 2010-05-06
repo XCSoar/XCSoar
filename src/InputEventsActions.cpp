@@ -818,9 +818,9 @@ InputEvents::eventMacCready(const TCHAR *misc)
     }
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
-    _stprintf(Temp, TEXT("%0.1f"),
-              Units::ToUserUnit(task_ui.get_glide_polar().get_mc(),
-                                Units::VerticalSpeedUnit));
+    Units::FormatUserVSpeed(task_ui.get_glide_polar().get_mc(),
+                            Temp, sizeof(Temp) / sizeof(Temp[0]),
+                            false);
     Message::AddMessage(TEXT("MacCready "), Temp);
   }
 }
@@ -1871,12 +1871,10 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     TCHAR TempSpeed[40];
     
     Units::TimeToText(TempTime, (int)TimeLocal((int)start_state.Time));
-    _stprintf(TempAlt, TEXT("%.0f %s"),
-              Units::ToUserUnit(start_state.NavAltitude, Units::AltitudeUnit),
-              Units::GetAltitudeName());
-    _stprintf(TempSpeed, TEXT("%.0f %s"),
-              Units::ToUserUnit(start_state.Speed, Units::TaskSpeedUnit),
-              Units::GetTaskSpeedName());
+    Units::FormatUserAltitude(start_state.NavAltitude,
+                              TempAlt, sizeof(TempAlt[0]), true);
+    Units::FormatUserSpeed(start_state.Speed,
+                           TempSpeed, sizeof(TempSpeed[0]), true);
     
     TCHAR TempAll[120];
     _stprintf(TempAll, TEXT("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"),
