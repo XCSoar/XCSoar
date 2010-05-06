@@ -302,12 +302,11 @@ GlideComputerAirData::Average30s()
 void
 GlideComputerAirData::AverageThermal()
 {
-  if (Calculated().ClimbStartTime >= 0) {
-    if (Basic().Time > Calculated().ClimbStartTime) {
-      double Gain = Basic().TEAltitude - Calculated().ClimbStartAlt;
-      SetCalculated().AverageThermal =
-          Gain / (Basic().Time - Calculated().ClimbStartTime);
-      }
+  if (Calculated().ClimbStartTime >= 0 &&
+      Basic().Time > Calculated().ClimbStartTime) {
+    double Gain = Basic().TEAltitude - Calculated().ClimbStartAlt;
+    SetCalculated().AverageThermal =
+      Gain / (Basic().Time - Calculated().ClimbStartTime);
   }
 }
 
@@ -331,11 +330,10 @@ GlideComputerAirData::MaxHeightGain()
 void
 GlideComputerAirData::ThermalGain()
 {
-  if (Calculated().ClimbStartTime >= 0) {
-    if(Basic().Time >= Calculated().ClimbStartTime) {
-      SetCalculated().ThermalGain = Basic().TEAltitude - Calculated().ClimbStartAlt;
-    }
-  }
+  if (Calculated().ClimbStartTime >= 0 &&
+      Basic().Time >= Calculated().ClimbStartTime)
+    SetCalculated().ThermalGain =
+      Basic().TEAltitude - Calculated().ClimbStartAlt;
 }
 
 void
