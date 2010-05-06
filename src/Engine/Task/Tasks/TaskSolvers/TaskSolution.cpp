@@ -69,7 +69,7 @@ TaskSolution::glide_solution_travelled(const TaskPoint& taskpoint,
                                        const fixed minH)
 {
   GeoVector vec = taskpoint.get_vector_travelled(ac);
-  if (vec.Distance==0) {
+  if (vec.Distance == fixed_zero) {
     GlideResult null_res;
     return null_res;
   } else {

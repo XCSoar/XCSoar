@@ -173,10 +173,10 @@ Projection::LonLat2Screen(const pointObj* const ptin,
 bool
 Projection::LonLatVisible(const GEOPOINT &loc) const
 {
-  if ((loc.Longitude.value_degrees()> screenbounds_latlon.minx) &&
-      (loc.Longitude.value_degrees()< screenbounds_latlon.maxx) &&
-      (loc.Latitude.value_degrees()> screenbounds_latlon.miny) &&
-      (loc.Latitude.value_degrees()< screenbounds_latlon.maxy))
+  if (loc.Longitude.value_degrees() > fixed(screenbounds_latlon.minx) &&
+      loc.Longitude.value_degrees() < fixed(screenbounds_latlon.maxx) &&
+      loc.Latitude.value_degrees() > fixed(screenbounds_latlon.miny) &&
+      loc.Latitude.value_degrees() < fixed(screenbounds_latlon.maxy))
     return true;
   else
     return false;
@@ -220,7 +220,7 @@ Projection::SetScaleMetersToScreen(const fixed scale_meters_to_screen)
 
   m_scale_meters_to_screen = scale_meters_to_screen;
   DrawScale = fixed_r*m_scale_meters_to_screen;
-  InvDrawScale = 1.0/DrawScale;
+  InvDrawScale = fixed_one / DrawScale;
 }
 
 void
@@ -236,7 +236,7 @@ Projection::CalculateScreenBounds(const fixed scale) const
   // compute lat lon extents of visible screen
   rectObj sb;
 
-  if (scale>= 1.0) {
+  if (scale >= fixed_one) {
     POINT screen_center;
     LonLat2Screen(PanLocation, screen_center);
 

@@ -70,7 +70,7 @@ CylinderZone::randomPointInSector(const fixed mag) const
   do {
     Angle dir = Angle::degrees(fixed(rand() % 360));
     fixed dmag = max(min(Radius, fixed(100.0)), Radius*mag);
-    fixed dis = (0.1+(rand()%90)/100.0)*dmag;
+    fixed dis = fixed((0.1 + (rand() % 90) / 100.0)) * dmag;
     GeoVector vec(dis,dir);
     ac.Location = vec.end_point(get_location());
   } while (!isInSector(ac));

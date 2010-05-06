@@ -70,7 +70,7 @@ void ChartProjection::set_projection(const RECT &rc,
                                      const GEOPOINT &center,
                                      const fixed radius)
 {
-  SetScaleMetersToScreen(max_dimension(rc)/(radius*fixed_two));
+  SetScaleMetersToScreen(fixed(max_dimension(rc)) / (radius * 2));
   PanLocation = center;
   MapRect = rc;
   Orig_Screen.x = (rc.left + rc.right)/2;
@@ -88,5 +88,5 @@ ChartProjection::ChartProjection(const RECT &rc,
 
   const GEOPOINT center = task_projection.get_center();
   const fixed radius = max(fixed(1e3), task_projection.get_radius()); 
-  set_projection(rc, center, radius*1.3);
+  set_projection(rc, center, radius * fixed(1.3));
 }

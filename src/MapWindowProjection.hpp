@@ -63,7 +63,7 @@ class MapWindowProjection:
     return MapScale;
   }
   fixed GetMapScaleKM() const {
-    return (fixed)Units::ToSysUnit(MapScale * 0.001, Units::DistanceUnit);
+    return (fixed)Units::ToSysUnit(MapScale * fixed(0.001), Units::DistanceUnit);
   }
   RECT GetMapRectBig() const {
     return MapRectBig;
@@ -109,13 +109,15 @@ class MapWindowProjection:
 
   // 4 = x*30/1000
   fixed DistancePixelsToMeters(const int x) const {
-    return x * MapScale / Units::ToUserUnit(GetMapResolutionFactor(),
-                                            Units::DistanceUnit);
+    return x * MapScale
+      / Units::ToUserUnit(fixed(GetMapResolutionFactor()),
+                          Units::DistanceUnit);
   }
   //
   fixed RequestDistancePixelsToMeters(const int x) const {
-    return x * _RequestedMapScale / Units::ToUserUnit(GetMapResolutionFactor(),
-                                                      Units::DistanceUnit);
+    return x * _RequestedMapScale
+      / Units::ToUserUnit(fixed(GetMapResolutionFactor()),
+                          Units::DistanceUnit);
   }
   fixed DistanceScreenToUser(const int x) const {
     return x*MapScale/GetMapResolutionFactor();

@@ -130,7 +130,7 @@ public:
           wp_bmp = &MapGfx.hBmpFieldUnReachable;
       }
     } else {
-      if (map.GetMapScaleKM() > 4)
+      if (map.GetMapScaleKM() > fixed_four)
         wp_bmp = &MapGfx.hSmall;
       else
         wp_bmp = &MapGfx.hTurnPoint;

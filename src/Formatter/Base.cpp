@@ -114,11 +114,11 @@ InfoBoxFormatter::AssignValue(int i)
     Value = Calculated().task_stats.current_leg.
       solution_remaining.Vector.Bearing.value_degrees();
     Valid = Calculated().task_stats.current_leg.
-      solution_remaining.Vector.Distance > 10.0;
+      solution_remaining.Vector.Distance > fixed(10);
     break;
 
   case 4:
-    if (Calculated().LD == 999) {
+    if (Calculated().LD == fixed(999)) {
       Valid = false;
     } else {
       Valid = true;
@@ -127,7 +127,7 @@ InfoBoxFormatter::AssignValue(int i)
     break;
 
   case 5:
-    if (Calculated().CruiseLD == 999) {
+    if (Calculated().CruiseLD == fixed(999)) {
       Valid = false;
     } else {
       Valid = true;
@@ -360,7 +360,7 @@ InfoBoxFormatter::AssignValue(int i)
     break;
 
   case 53:
-    if (Calculated().LDvario == 999) {
+    if (Calculated().LDvario == fixed(999)) {
       Valid = false;
     } else {
       Valid = Basic().TotalEnergyVarioAvailable && Basic().AirspeedAvailable;
@@ -412,7 +412,7 @@ InfoBoxFormatter::AssignValue(int i)
     break;
 
   case 63:
-    if (Calculated().timeCircling > 0) {
+    if (positive(Calculated().timeCircling)) {
       Value = Units::ToUserUnit(Calculated().TotalHeightClimb /
                                 Calculated().timeCircling,
                                 Units::VerticalSpeedUnit);

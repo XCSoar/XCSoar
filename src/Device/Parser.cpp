@@ -962,7 +962,7 @@ bool
 NMEAParser::PTAS1(const TCHAR *String, const TCHAR **params, size_t nparams,
     NMEA_INFO *GPS_INFO)
 {
-  double wnet, baralt, vtas;
+  fixed wnet, baralt, vtas;
 
   wnet = Units::ToSysUnit((_tcstod(params[0], NULL) - 200) * 0.1, unKnots);
   baralt = max(0.0, Units::ToSysUnit(_tcstod(params[2], NULL) - 2000, unFeet));
@@ -1062,7 +1062,7 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
   fixed FLARM_NorthingToLatitude(0);
   fixed FLARM_EastingToLongitude(0);
 
-  if ((fabs(dlat) > 0.0) && (fabs(dlon) > 0.0)) {
+  if (positive(fabs(dlat)) && positive(fabs(dlon))) {
     FLARM_NorthingToLatitude = delta_lat.value_degrees() / dlat;
     FLARM_EastingToLongitude = delta_lon.value_degrees() / dlon;
   }

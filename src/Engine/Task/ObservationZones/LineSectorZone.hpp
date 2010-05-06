@@ -60,7 +60,7 @@ public:
  * @return Initialised object
  */
   LineSectorZone(const GEOPOINT loc, const fixed length=fixed(1000.0)):
-    SymmetricSectorZone(loc, length*0.5, Angle::radians(fixed_pi))
+    SymmetricSectorZone(loc, length * fixed_half, Angle::radians(fixed_pi))
   {};
 
   ObservationZonePoint* clone(const GEOPOINT * _location=0) const {

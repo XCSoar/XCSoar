@@ -56,7 +56,7 @@ AirspaceCircle::get_bounding_box(const TaskProjection& task_projection)
   static const Angle a045 = Angle::degrees(fixed(045));
   static const Angle a315 = Angle::degrees(fixed(315));
 
-  const fixed eradius = m_radius*1.42;
+  const fixed eradius = m_radius * fixed(1.42);
   const GEOPOINT ll = GeoVector(eradius, a225).end_point(m_center);
   const GEOPOINT lr = GeoVector(eradius, a135).end_point(m_center);
   const GEOPOINT ur = GeoVector(eradius, a045).end_point(m_center);

@@ -83,9 +83,9 @@ void UpdateChanging() {
   // Fill horizontal direction field
   dir -= XCSoarInterface::Basic().TrackBearing;
   dir = dir.as_delta();
-  if (dir.value_degrees() > 1)
+  if (dir.value_degrees() > fixed_one)
     _stprintf(tmp, _T("%2.0f")_T(DEG)_T(" »"), (double)dir.value_degrees());
-  else if (dir.value_degrees() < -1)
+  else if (dir.value_degrees() < fixed_minus_one)
     _stprintf(tmp, _T("« ")_T("%2.0f")_T(DEG), (double)-dir.value_degrees());
   else
     _tcscpy(tmp, _T("«»"));
@@ -97,7 +97,7 @@ void UpdateChanging() {
 
   // Fill vertical direction field
   dir = Angle::radians((fixed)atan2(target->RelativeAltitude, distance)).as_delta();
-  if (dir.magnitude_degrees() > 1)
+  if (dir.magnitude_degrees() > fixed_one)
     _stprintf(tmp, _T("%+2.0f")_T(DEG), (double)dir.value_degrees());
   else
     _stprintf(tmp, _T("--"), (double)dir.value_degrees());

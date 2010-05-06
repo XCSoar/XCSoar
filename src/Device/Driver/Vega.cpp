@@ -266,8 +266,8 @@ PDVDV(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
   GPS_INFO->IndicatedAirspeed = _tcstod(ctemp, NULL) / 10.0;
 
   NMEAParser::ExtractParameter(String,ctemp,2);
-  GPS_INFO->TrueAirspeed = _tcstod(ctemp, NULL) *
-    GPS_INFO->IndicatedAirspeed / 1024.0;
+  GPS_INFO->TrueAirspeed = fixed(_tcstod(ctemp, NULL)) *
+    GPS_INFO->IndicatedAirspeed / 1024;
 
   //hasVega = true;
   GPS_INFO->AirspeedAvailable = true;
@@ -467,7 +467,7 @@ VegaDevice::OnSysTicker()
   THERMAL_LOCATOR_INFO t = device_blackboard.Calculated();
   TCHAR tbuf[100];
   _stprintf(tbuf, _T("PTLOC,%d,%g,%g,%g,%g"),
-            (int)(t.ThermalEstimate_R>0), 
+            (int)(positive(t.ThermalEstimate_R)),
             (double)t.ThermalEstimate_Location.Longitude.value_degrees(), 
             (double)t.ThermalEstimate_Location.Latitude.value_degrees(), 
             (double)t.ThermalEstimate_W, 

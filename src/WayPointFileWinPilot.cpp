@@ -117,7 +117,7 @@ WayPointFileWinPilot::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
   // Hack: the E sign for east is interpreted as exponential sign
   if (s == 4 || (s == 3 && sign == 0)) {
     // Calculate angle
-    val = deg + (fixed)min / 60 + (fixed)sec / 3600;
+    val = fixed(deg) + (fixed)min / 60 + (fixed)sec / 3600;
   } else {
     // Parse usual string
     s =_stscanf(src, _T("%u:%lf%c"), &deg, &val, &sign);
@@ -128,7 +128,7 @@ WayPointFileWinPilot::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
     // Calculate angle
     unsigned minfrac = iround((val - (int)val) * 1000);
     min = (int)val;
-    val = deg + ((fixed)min + (fixed)minfrac / 1000) / 60;
+    val = fixed(deg) + ((fixed)min + (fixed)minfrac / 1000) / 60;
   }
 
   // Limit angle to +/- 90 degrees for Latitude or +/- 180 degrees for Longitude
@@ -267,8 +267,8 @@ WayPointFileWinPilot::composeAngle(const Angle& src, const bool lat)
   // Calculate degrees, minutes and seconds
   fixed smag = src.magnitude_degrees();
   int deg = smag;
-  int min = (smag - deg) * 60;
-  int sec = (((smag - deg) * 60) - min) * 60;
+  int min = ((int)smag - deg) * 60;
+  int sec = ((((int)smag - deg) * 60) - min) * 60;
 
   // Save them into the buffer string
   _stprintf(buffer, (lat ? _T("%02d:%02d:%02d") : _T("%03d:%02d:%02d")),

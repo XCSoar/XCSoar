@@ -56,7 +56,7 @@ ElementStat::set_times(const double ts,
                        const AIRCRAFT_STATE& state)
 {
   TimeStarted = ts;
-  TimeElapsed = max(state.Time-ts, fixed_zero);
+  TimeElapsed = max(state.Time - fixed(ts), fixed_zero);
   TimeRemaining = solution_remaining.TimeElapsed;
   TimePlanned = TimeElapsed+TimeRemaining;
 }
@@ -78,7 +78,7 @@ ElementStat::calc_speeds(const double dt)
   travelled.calc_speed(this);
 
   if (!initialised) {
-    if ((dt>0) && (TimeElapsed>15)) {
+    if (dt > 0 && TimeElapsed > fixed(15)) {
       initialised=true;
     }
     vario.reset(solution_remaining);

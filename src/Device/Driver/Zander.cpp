@@ -104,7 +104,7 @@ static bool
 PZAN2(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
-  double vtas, wnet, vias;
+  fixed vtas, wnet, vias;
 
   NMEAParser::ExtractParameter(String,ctemp,0);
   vtas = _tcstod(ctemp, NULL) / 3.6;

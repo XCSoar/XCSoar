@@ -107,22 +107,22 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool *found) const
 
   for (unsigned i = 0; i < nummeasurementlist; i++) {
     m = measurementlist[i];
-    altdiff = (alt - m->altitude) * 1.0 / altRange;
+    altdiff = (alt - m->altitude) / altRange;
     timediff = fabs(fixed(now - m->time) / timeRange);
 
-    if ((fabs(altdiff) < 1.0) && (timediff < 1.0)) {
+    if ((fabs(altdiff) < fixed_one) && (timediff < fixed_one)) {
       // measurement quality
       q_quality = min(5,m->quality) * REL_FACTOR_QUALITY / 5;
 
       // factor in altitude difference between current altitude and
       // measurement.  Maximum alt difference is 1000 m.
-      a_quality = iround(((2.0 / (altdiff * altdiff + 1.0)) - 1.0)
+      a_quality = iround(((fixed_two / (altdiff * altdiff + fixed_one)) - fixed_one)
           * REL_FACTOR_ALTITUDE);
 
       fixed k(0.0025);
 
       // factor in timedifference. Maximum difference is 1 hours.
-      t_quality = iround(k * (1.0 - timediff) / (timediff * timediff + k)
+      t_quality = iround(k * (fixed_one - timediff) / (timediff * timediff + k)
           * REL_FACTOR_TIME);
 
       if (m->quality == 6) {
@@ -216,7 +216,7 @@ WindMeasurementList::getLeastImportantItem(fixed Time)
     //quality-point (scale: 1 to 5) is equal to 10 minutes.
 
     score = 600 * (6 - measurementlist[i]->quality);
-    score += (int)(Time - measurementlist[i]->time);
+    score += (long)Time - measurementlist[i]->time;
     if (score > maxscore) {
       maxscore = score;
       founditem = i;

@@ -271,7 +271,7 @@ WindAnalyser::_calcWind(const NMEA_INFO &info, DERIVED_INFO &derived)
 
   // reject if average time step greater than 2.0 seconds
   if ((windsamples[numwindsamples - 1].t - windsamples[0].t)
-      / (numwindsamples - 1) > 2.0)
+      / (numwindsamples - 1) > fixed_two)
     return;
 
   // find average
@@ -346,7 +346,7 @@ WindAnalyser::_calcWind(const NMEA_INFO &info, DERIVED_INFO &derived)
 
   int quality;
 
-  if (mag > 1)
+  if (mag > fixed_one)
     quality = 5 - iround(rthis / mag * 3);
   else
     quality = 5 - iround(rthis);
@@ -367,7 +367,7 @@ WindAnalyser::_calcWind(const NMEA_INFO &info, DERIVED_INFO &derived)
     //measurment quality too low
     return;
 
-  if (a.x * a.x + a.y * a.y < 30 * 30)
+  if (a.x * a.x + a.y * a.y < fixed(30 * 30))
     // limit to reasonable values (60 knots), reject otherwise
     slot_newEstimate(info, derived, a, quality);
 }

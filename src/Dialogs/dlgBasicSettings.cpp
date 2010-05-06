@@ -130,8 +130,8 @@ OnAltitudeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 static void
 SetAltitude()
 {
-  static double altlast = -2;
-  if (fabs(XCSoarInterface::Basic().BaroAltitude - altlast) > 1) {
+  static fixed altlast(-2);
+  if (fabs(XCSoarInterface::Basic().BaroAltitude - altlast) > fixed_one) {
     WndProperty* wp;
     wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
     if (wp) {
@@ -196,11 +196,11 @@ OnTimerNotify(WindowControl * Sender)
 static void
 OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  static double lastRead = -1;
+  static fixed lastRead = fixed_minus_one;
 
   switch (Mode) {
   case DataField::daSpecial:
-    if (glide_polar->get_ballast() > 0.01) {
+    if (glide_polar->get_ballast() > fixed(0.01)) {
       XCSoarInterface::SetSettingsComputer().BallastTimerActive =
           !XCSoarInterface::SettingsComputer().BallastTimerActive;
     } else {
@@ -214,7 +214,7 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
     break;
   case DataField::daChange:
   case DataField::daPut:
-    if (fabs(lastRead - Sender->GetAsFloat() / 100.0) >= 0.005) {
+    if (fabs(lastRead - Sender->GetAsFixed() / 100) >= fixed(0.005)) {
       lastRead = Sender->GetAsFloat() / 100.0;
       glide_polar->set_ballast(fixed(lastRead));
       changed = true;

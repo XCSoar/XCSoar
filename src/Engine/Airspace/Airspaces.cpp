@@ -77,7 +77,7 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
 
   GEOPOINT c = vec.mid_point(loc);
   Airspace bb_target(c, task_projection);
-  int mrange = task_projection.project_range(c, vec.Distance/2.0);
+  int mrange = task_projection.project_range(c, vec.Distance / 2);
   std::deque< Airspace > vectors;
   airspace_tree.find_within_range(bb_target, -mrange, std::back_inserter(vectors));
 
@@ -148,10 +148,10 @@ Airspaces::scan_range(const GEOPOINT location,
     if (!condition(*v->get_airspace()))
       continue;
 
-    if ((*v).distance(bb_target)> range)
+    if (fixed((*v).distance(bb_target)) > range)
       continue;
 
-    if ((*v).inside(location) || (range>0))
+    if ((*v).inside(location) || positive(range))
       res.push_back(*v);
   }
 

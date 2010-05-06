@@ -125,7 +125,7 @@ WayPointFileZander::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
   unsigned deg = (int)(val * 0.0001);
   unsigned min = (int)((val - deg * 10000) * 0.01);
   unsigned sec = iround((int)val % 100);
-  val = deg + ((fixed)min / 60) + ((fixed)sec / 3600);
+  val = fixed(deg) + ((fixed)min / 60) + ((fixed)sec / 3600);
 
   // Limit angle to +/- 90 degrees for Latitude or +/- 180 degrees for Longitude
   val = std::min(val, (lat ? 90.0 : 180.0));

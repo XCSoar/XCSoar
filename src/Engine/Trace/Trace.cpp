@@ -23,7 +23,8 @@ Trace::append(const AIRCRAFT_STATE& state)
     task_projection.reset(state.get_location());
     task_projection.update_fast();
     m_last_point.time = null_time;
-  } else if ((trace_tree.size() > 0) && (state.Time < m_last_point.time)) {
+  } else if (trace_tree.size() > 0 &&
+             state.Time < fixed(m_last_point.time)) {
     clear();
     return;
   }

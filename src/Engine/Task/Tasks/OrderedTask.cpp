@@ -307,7 +307,7 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
   stats.task_started = task_started();
 
   if (stats.task_started) {
-    tf->set_fai_finish_height(get_start_state().NavAltitude-1000);
+    tf->set_fai_finish_height(get_start_state().NavAltitude - fixed(1000));
   }
 
   if (stats.task_started && !last_started) {

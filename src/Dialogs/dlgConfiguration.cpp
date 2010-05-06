@@ -2424,7 +2424,7 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeArrival"));
   if (wp) {
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if (XCSoarInterface::SettingsComputer().safety_height_arrival != ival) {
+    if ((int)XCSoarInterface::SettingsComputer().safety_height_arrival != ival) {
       XCSoarInterface::SetSettingsComputer().safety_height_arrival = ival;
       Profile::Set(szProfileSafetyAltitudeArrival,
                    (int)XCSoarInterface::SettingsComputer().safety_height_arrival);
@@ -2435,7 +2435,7 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeTerrain"));
   if (wp) {
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if (XCSoarInterface::SettingsComputer().safety_height_terrain != ival) {
+    if ((int)XCSoarInterface::SettingsComputer().safety_height_terrain != ival) {
       XCSoarInterface::SetSettingsComputer().safety_height_terrain = ival;
       Profile::Set(szProfileSafetyAltitudeTerrain,
                    (int)XCSoarInterface::SettingsComputer().safety_height_terrain);

@@ -587,17 +587,17 @@ WindZigZagCheckAirData(const NMEA_INFO &basic)
   bool airdata_invalid = false;
   if (!basic.flight.Flying) {
     airdata_invalid = true;
-  } else if (fabs(basic.TurnRate) > 20.0) {
+  } else if (fabs(basic.TurnRate) > fixed(20)) {
     airdata_invalid = true;
 #ifdef DEBUG_ZIGZAG_A
     LogDebug(_T("zigzag airdata invalid - turn rate\n"));
 #endif
-  } else if (fabs(basic.GroundSpeed) < 2.5) {
+  } else if (fabs(basic.GroundSpeed) < fixed(2.5)) {
     airdata_invalid = true;
 #ifdef DEBUG_ZIGZAG_A
     LogDebug(_T("zigzag airdata invalid - ground speed\n"));
 #endif
-  } else if (fabs(basic.acceleration.Gload - 1.0) > 0.3) {
+  } else if (fabs(basic.acceleration.Gload - fixed_one) > fixed(0.3)) {
     airdata_invalid = true;
 #ifdef DEBUG_ZIGZAG_A
     LogDebug(_T("zigzag airdata invalid - acceleration\n"));

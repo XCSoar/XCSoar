@@ -50,10 +50,10 @@ EstimateThermalBase(const GEOPOINT Thermal_Location,
 {
   if ((Thermal_Location.Longitude == Angle())
       || (Thermal_Location.Latitude == Angle())
-      || (wthermal < 1.0)) {
+      || (wthermal < fixed_one)) {
     ground_location->Longitude = Angle();
     ground_location->Latitude = Angle();
-    *ground_alt = -1.0;
+    *ground_alt = fixed_minus_one;
     return;
   }
 
@@ -81,7 +81,7 @@ EstimateThermalBase(const GEOPOINT Thermal_Location,
     }
 
     fixed dh = hthermal - hground;
-    if (dh < 0) {
+    if (negative(dh)) {
       t = t + dh / wthermal;
       FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * t,
                             &loc);

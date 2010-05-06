@@ -123,8 +123,8 @@ WindStore::recalculateWind(const NMEA_INFO &info, DERIVED_INFO &derived)
   Vector CurWind = windlist->getWind(info.Time, info.GPSAltitude, &found);
 
   if (found) {
-    if ((fabs(CurWind.x - _lastWind.x) > 1.0)
-        || (fabs(CurWind.y - _lastWind.y) > 1.0)
+    if ((fabs(CurWind.x - _lastWind.x) > fixed_one)
+        || (fabs(CurWind.y - _lastWind.y) > fixed_one)
         || updated) {
       _lastWind = CurWind;
 
@@ -146,10 +146,10 @@ WindStore::NewWind(const NMEA_INFO &info, DERIVED_INFO &derived,
   if (wind.y == fixed_zero && wind.x == fixed_zero)
     bearing = fixed_zero;
   else
-    bearing = atan2(wind.y, wind.x) * RAD_TO_DEG;
+    bearing = atan2(wind.y, wind.x) * fixed_rad_to_deg;
 
-  if (mag < 30) { // limit to reasonable values
-    if (bearing < 0)
+  if (mag < fixed(30)) { // limit to reasonable values
+    if (negative(bearing))
       bearing += fixed_360;
 
     derived.estimated_wind = SpeedVector(Angle::degrees(bearing), mag);

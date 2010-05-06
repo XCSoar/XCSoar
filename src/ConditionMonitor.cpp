@@ -159,10 +159,11 @@ protected:
     fixed mag_change = fabs(wind.norm - last_wind.norm);
     fixed dir_change = (wind.bearing - last_wind.bearing).as_delta().magnitude_degrees();
 
-    if (mag_change > Units::ToSysUnit(5, unKnots))
+    if (mag_change > Units::ToSysUnit(fixed(5), unKnots))
       return true;
 
-    if ((wind.norm > Units::ToSysUnit(10, unKnots)) && (dir_change > 45))
+    if ((wind.norm > Units::ToSysUnit(fixed(10), unKnots)) &&
+        (dir_change > fixed(45)))
       return true;
 
     return false;
@@ -277,7 +278,7 @@ protected:
 
     fixed sunsettime(sun.CalcSunTimes(cmp.Basic().Location,
                                       cmp.Basic().DateTime, GetUTCOffset() / 3600));
-    fixed d1((res.TimeElapsed + DetectCurrentTime(&cmp.Basic())) / 3600);
+    fixed d1((res.TimeElapsed + fixed(DetectCurrentTime(&cmp.Basic()))) / 3600);
     fixed d0(DetectCurrentTime(&cmp.Basic()) / 3600);
 
     bool past_sunset = (d1 > sunsettime) && (d0 < sunsettime);

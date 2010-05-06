@@ -38,8 +38,8 @@
 #include "Math/Earth.hpp"
 #include <algorithm>
 
-static const fixed angle_degree(Angle::degrees(fixed(1)).value_native());
-static const fixed fixed_scale(1000.0/angle_degree);
+static const fixed angle_degree(Angle::degrees(fixed_one).value_native());
+static const fixed fixed_scale(fixed(1000) / angle_degree);
 
 TaskProjection::TaskProjection()
 {
@@ -114,8 +114,8 @@ GEOPOINT
 TaskProjection::unproject(const FLAT_GEOPOINT& fp) const
 {
   GEOPOINT tp;
-  tp.Longitude = Angle::native(fp.Longitude/cos_midloc)+location_mid.Longitude;
-  tp.Latitude = Angle::native(fp.Latitude/fixed_scale)+location_mid.Latitude;
+  tp.Longitude = Angle::native(fixed(fp.Longitude) / cos_midloc) + location_mid.Longitude;
+  tp.Latitude = Angle::native(fixed(fp.Latitude) / fixed_scale) + location_mid.Latitude;
   return tp;
 }
 

@@ -87,8 +87,8 @@ DistanceTravelledStat::DistanceTravelledStat():
 void 
 DistanceRemainingStat::calc_speed(const ElementStat* es) 
 {
-  if (es->TimeRemaining>0) {
-    speed = (distance/es->TimeRemaining);
+  if (positive(es->TimeRemaining)) {
+    speed = fixed(distance) / es->TimeRemaining;
   } else {
     speed = 0;
   }
@@ -97,8 +97,8 @@ DistanceRemainingStat::calc_speed(const ElementStat* es)
 void 
 DistancePlannedStat::calc_speed(const ElementStat* es) 
 {
-  if (es->TimePlanned>0) {
-    speed = (distance/es->TimePlanned);
+  if (positive(es->TimePlanned)) {
+    speed = fixed(distance) / es->TimePlanned;
   } else {
     speed = 0;
   }
@@ -107,8 +107,8 @@ DistancePlannedStat::calc_speed(const ElementStat* es)
 void 
 DistanceTravelledStat::calc_speed(const ElementStat* es) 
 {
-  if (es->TimeElapsed>0) {
-    speed = (distance/es->TimeElapsed);
+  if (positive(es->TimeElapsed)) {
+    speed = fixed(distance) / es->TimeElapsed;
   } else {
     speed = 0;
   }

@@ -61,7 +61,7 @@ FlatBoundingBox::intersects(const FlatRay& ray) const
   fixed tmax = fixed_one;
   
   // Longitude
-  if (ray.vector.Longitude== fixed_zero) {
+  if (ray.vector.Longitude == 0) {
     // ray is parallel to slab. No hit if origin not within slab
     if ((ray.point.Longitude< bb_ll.Longitude) ||
         (ray.point.Longitude> bb_ur.Longitude)) {
@@ -81,7 +81,7 @@ FlatBoundingBox::intersects(const FlatRay& ray) const
 
   // Latitude
   // Longitude
-  if (ray.vector.Latitude== fixed_zero) {
+  if (ray.vector.Latitude == 0) {
     // ray is parallel to slab. No hit if origin not within slab
     if ((ray.point.Latitude< bb_ll.Latitude) ||
         (ray.point.Latitude> bb_ur.Latitude)) {

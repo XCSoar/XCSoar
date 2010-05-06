@@ -48,6 +48,9 @@ Copyright_License {
 #include <stdlib.h>
 #include <math.h>
 
+// ratio of border size to trigger shape cache reload
+static const fixed BORDERFACTOR(1.4);
+
 MapWindowProjection::MapWindowProjection():
   Projection(),
   _origin_centered(false),
@@ -73,8 +76,8 @@ MapWindowProjection::InitialiseScaleList
 bool
 MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
 {
-  return ((way_point.Zoom >= MapScale*10) || (way_point.Zoom == 0))
-    && (MapScale <= 10);
+  return ((fixed(way_point.Zoom) >= MapScale*10) || (way_point.Zoom == 0))
+    && (MapScale <= fixed(10));
 }
 
 
@@ -295,7 +298,7 @@ void MapWindowProjection::ModifyMapScale
     LimitMapScale(_RequestedMapScale, settings_map);
   MapScale = _RequestedMapScale;
 
-  SetScaleMetersToScreen((fixed)Units::ToUserUnit(GetMapResolutionFactor() /
+  SetScaleMetersToScreen(Units::ToUserUnit(fixed(GetMapResolutionFactor()) /
                                            MapScale, Units::DistanceUnit));
 }
 
@@ -312,8 +315,8 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   // if there is user intervention in the scale
   if (settings_map.MapScale>0) {
     fixed ext_mapscale = LimitMapScale(fixed(settings_map.MapScale), settings_map);
-    if ((fabs(_RequestedMapScale-ext_mapscale)>0.05) &&
-	(ext_mapscale>0.0) && (DisplayMode==DisplayModeLast)) {
+    if ((fabs(_RequestedMapScale - ext_mapscale) > fixed(0.05)) &&
+        positive(ext_mapscale) && (DisplayMode==DisplayModeLast)) {
       _RequestedMapScale = ext_mapscale;
     }
   }
@@ -331,13 +334,13 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   if (settings_map.TargetPan) {
     // set scale exactly so that waypoint distance is the zoom factor
     // across the screen
-    _RequestedMapScale = LimitMapScale((fixed)Units::ToUserUnit(wpd / 4.0,
+    _RequestedMapScale = LimitMapScale((fixed)Units::ToUserUnit(wpd / 4,
         Units::DistanceUnit), settings_map);
     ModifyMapScale(settings_map);
     return;
   }
 
-  if (settings_map.AutoZoom && wpd>0) {
+  if (settings_map.AutoZoom && positive(wpd)) {
     if((((settings_map.DisplayOrientation == NORTHTRACK)
 	 &&(DisplayMode != dmCircling))
 	||(settings_map.DisplayOrientation == NORTHUP)
@@ -353,14 +356,14 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
     }
 
     if((wpd < Units::ToSysUnit(AutoZoomFactor * MapScale, Units::DistanceUnit))
-       || (StartingAutoMapScale == 0.0)) {
+       || (StartingAutoMapScale == fixed_zero)) {
       // waypoint is too close, so zoom in
       // OR just turned waypoint
 
       // this is the first time this waypoint has gotten close,
       // so save original map scale
 
-      if (StartingAutoMapScale==0.0) {
+      if (StartingAutoMapScale == fixed_zero) {
 	StartingAutoMapScale = MapScale;
       }
 
@@ -407,8 +410,7 @@ void MapWindowProjection::ExchangeBlackboard(const DERIVED_INFO &derived_info,
   // done here to avoid double latency due to locks
 }
 
-
-#define MINRANGE 0.2
+static const fixed MINRANGE(0.2);
 
 bool RectangleIsInside(rectObj r_exterior, rectObj r_interior) {
   if ((r_interior.minx >= r_exterior.minx)&&
@@ -438,7 +440,7 @@ bool MapWindowProjection::SmartBounds(const bool force) {
   const fixed range = max(fixed(MINRANGE),range_real);
 
   fixed scale = range/smart_range_active;
-  if (max(scale, 1.0/scale)>4) {
+  if (max(scale, fixed_one / scale) > fixed(4)) {
     recompute = true;
   }
 

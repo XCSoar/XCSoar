@@ -117,7 +117,7 @@ public:
   };
 private:
   void draw(const OrderedTaskPoint& tp) {
-    double x = (tp.get_state_entered().Time - m_start_time) / 3600.0;
+    double x = ((double)tp.get_state_entered().Time - m_start_time) / 3600.0;
     if (x>=0) {
       m_chart.DrawLine(x, m_chart.getYmin(),
                        x, m_chart.getYmax(),
@@ -294,9 +294,9 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas,
   Chart chart(canvas, rc);
 
   chart.ScaleYFromValue(0);
-  chart.ScaleYFromValue(-glide_polar.get_Smax() * 1.1);
-  chart.ScaleXFromValue(glide_polar.get_Vmin() * 0.8);
-  chart.ScaleXFromValue(glide_polar.get_Vmax() + 2);
+  chart.ScaleYFromValue(-glide_polar.get_Smax() * fixed(1.1));
+  chart.ScaleXFromValue(glide_polar.get_Vmin() * fixed(0.8));
+  chart.ScaleXFromValue(glide_polar.get_Vmax() + fixed_two);
 
   chart.DrawXGrid(Units::ToSysUnit(10.0, Units::SpeedUnit), 0,
                   Chart::STYLE_THINDASHPAPER, 10.0, true);
@@ -308,7 +308,7 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas,
   bool v0valid = false;
   int i0 = 0;
 
-  for (i = glide_polar.get_Vmin(); i <= glide_polar.get_Vmax(); ++i) {
+  for (i = glide_polar.get_Vmin(); i <= (int)glide_polar.get_Vmax(); ++i) {
     sinkrate0 = -glide_polar.SinkRate(fixed(i));
     sinkrate1 = -glide_polar.SinkRate(fixed(i + 1));
     chart.DrawLine(i, sinkrate0, i + 1, sinkrate1, Chart::STYLE_MEDIUMBLACK);
@@ -525,8 +525,8 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
   }
 
   for (i = 0; i < numsteps; i++) {
-    h = (Altitude_Ceiling.y_max - Altitude_Base.y_min) *
-        i / fixed(numsteps - 1) + Altitude_Base.y_min;
+    h = fixed(Altitude_Ceiling.y_max - Altitude_Base.y_min) *
+      i / fixed(numsteps - 1) + fixed(Altitude_Base.y_min);
 
     wind = wind_store.GetWind(nmea_info.Time, h, &found);
     mag = hypot(wind.x, wind.y);
@@ -561,8 +561,8 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
     wind = wind_store.GetWind(nmea_info.Time, h, &found);
     if (windstats_mag.x_max == 0)
       windstats_mag.x_max = 1; // prevent /0 problems
-    wind.x /= windstats_mag.x_max;
-    wind.y /= windstats_mag.x_max;
+    wind.x /= fixed(windstats_mag.x_max);
+    wind.y /= fixed(windstats_mag.x_max);
     mag = hypot(wind.x, wind.y);
     if (mag <= 0.0)
       continue;
@@ -718,7 +718,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
   terrain.Unlock();
 
   // draw aircraft trend line
-  if (nmea_info.GroundSpeed > 10.0) {
+  if (nmea_info.GroundSpeed > fixed(10)) {
     fixed t = range / nmea_info.GroundSpeed;
     chart.DrawLine(0, nmea_info.GPSAltitude, range,
         nmea_info.GPSAltitude + derived.Average30s * t, Chart::STYLE_BLUETHIN);

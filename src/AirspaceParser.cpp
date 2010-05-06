@@ -335,7 +335,7 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
     else if (_tcscmp(pToken, TEXT("GND")) == 0) {
       // JMW support XXXGND as valid, equivalent to XXXAGL
       Alt->Base = abAGL;
-      if (Alt->Altitude>0) {
+      if (Alt->Altitude > fixed_zero) {
 	Alt->AGL = Alt->Altitude;
 	Alt->Altitude = 0;
       } else {

@@ -80,9 +80,6 @@
 // number of points along final glide to scan for terrain
 #define NUMFINALGLIDETERRAIN 30
 
-// ratio of border size to trigger shape cache reload
-#define BORDERFACTOR 1.4
-
 // timeout in quarter seconds of infobox focus
 #define FOCUSTIMEOUTMAX 24*4
 

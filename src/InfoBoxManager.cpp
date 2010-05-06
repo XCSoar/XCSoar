@@ -1189,7 +1189,7 @@ InfoBoxManager::SetDirty(bool is_dirty)
 void
 InfoBoxManager::ProcessTimer(void)
 {
-  static double lasttime;
+  static fixed lasttime;
 
   if (Basic().Time != lasttime) {
     SetDirty(true);

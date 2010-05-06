@@ -80,7 +80,7 @@ gcc_const
 static inline int
 DEG_TO_INT(fixed x)
 {
-  return ((unsigned short)(x * (65536.0 / 360.0))) >> 4;
+  return ((unsigned short)(x * fixed(65536.0 / 360.0))) >> 4;
 }
 
 gcc_const

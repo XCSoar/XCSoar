@@ -131,14 +131,18 @@ short RasterMap::GetField(const GEOPOINT &location,
 {
   if(isMapLoaded()) {
     if (rounding.DirectFine) {
-      return _GetFieldAtXY(
-        (int)(location.Longitude.value_native()*rounding.fXroundingFine) - rounding.xlleft,
-        rounding.xlltop - (int)(location.Latitude.value_native()*rounding.fYroundingFine));
+      return _GetFieldAtXY((int)(location.Longitude.value_native() *
+                                 fixed(rounding.fXroundingFine)) - rounding.xlleft,
+                           rounding.xlltop -
+                           (int)(location.Latitude.value_native() *
+                                 fixed(rounding.fYroundingFine)));
     } else {
       unsigned int ix =
-        Real2Int((location.Longitude-TerrainInfo.Left).value_native()*rounding.fXrounding)*rounding.Xrounding;
+        Real2Int((location.Longitude - TerrainInfo.Left).value_native() *
+                 fixed(rounding.fXrounding)) * fixed(rounding.Xrounding);
       unsigned int iy =
-        Real2Int((TerrainInfo.Top-location.Latitude).value_native()*rounding.fYrounding)*rounding.Yrounding;
+        Real2Int((TerrainInfo.Top - location.Latitude).value_native() *
+                 fixed(rounding.fYrounding)) * fixed(rounding.Yrounding);
 
       return _GetFieldAtXY(ix<<8, iy<<8);
     }

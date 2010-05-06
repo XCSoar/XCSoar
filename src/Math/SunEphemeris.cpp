@@ -233,17 +233,17 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location,
     DayLength = 0.0;
 
   TimeOfSunRise = 12.0 - 12.0 * HourAngle / M_PI + TimeZone
-    - Location.Longitude.value_degrees() / 15.0 + equation / 60.0;
+    - (double)Location.Longitude.value_degrees() / 15.0 + equation / 60.0;
 
   TimeOfSunSet = 12.0 + 12.0 * HourAngle / M_PI + TimeZone
-    - Location.Longitude.value_degrees() / 15.0 + equation / 60.0;
+    - (double)Location.Longitude.value_degrees() / 15.0 + equation / 60.0;
 
   TimeOfNoon = TimeOfSunRise + 12.0 * HourAngle / M_PI;
-  altmax = 90.0 + Delta * RAD_TO_DEG - Location.Latitude.value_degrees();
+  altmax = 90.0 + Delta * RAD_TO_DEG - (double)Location.Latitude.value_degrees();
 
   // Correction for southern hemisphere suggested by David Smith
   // to express altitude as degrees from the N horizon
-  if (Location.Latitude.value_degrees() < Delta * RAD_TO_DEG)
+  if ((double)Location.Latitude.value_degrees() < Delta * RAD_TO_DEG)
     altmax = 180.0 - altmax;
 
   // morning twilight begin

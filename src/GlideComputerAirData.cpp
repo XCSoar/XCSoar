@@ -237,13 +237,13 @@ GlideComputerAirData::AverageClimbRate()
     }
 
     if (Basic().acceleration.Available) {
-      if (fabs(fabs(Basic().acceleration.Gload) - 1.0) > 0.25) {
+      if (fabs(fabs(Basic().acceleration.Gload) - fixed_one) > fixed(0.25)) {
         // G factor too high
         return;
       }
     }
 
-    if (Basic().TrueAirspeed > 0) {
+    if (positive(Basic().TrueAirspeed)) {
       // TODO: Check this is correct for TAS/IAS
       fixed ias_to_tas = Basic().IndicatedAirspeed /
         Basic().TrueAirspeed;
@@ -301,7 +301,7 @@ GlideComputerAirData::Average30s()
 void
 GlideComputerAirData::AverageThermal()
 {
-  if (Calculated().ClimbStartTime >= 0 &&
+  if (positive(Calculated().ClimbStartTime) &&
       Basic().Time > Calculated().ClimbStartTime) {
     fixed Gain = Basic().TEAltitude - Calculated().ClimbStartAlt;
     SetCalculated().AverageThermal =
@@ -315,7 +315,7 @@ GlideComputerAirData::MaxHeightGain()
   if (!Basic().flight.Flying)
     return;
 
-  if (Calculated().MinAltitude > 0) {
+  if (positive(Calculated().MinAltitude)) {
     fixed height_gain = Basic().NavAltitude
       - Calculated().MinAltitude;
     SetCalculated().MaxHeightGain = max(height_gain, Calculated().MaxHeightGain);
@@ -329,7 +329,7 @@ GlideComputerAirData::MaxHeightGain()
 void
 GlideComputerAirData::ThermalGain()
 {
-  if (Calculated().ClimbStartTime >= 0 &&
+  if (positive(Calculated().ClimbStartTime) &&
       Basic().Time >= Calculated().ClimbStartTime)
     SetCalculated().ThermalGain =
       Basic().TEAltitude - Calculated().ClimbStartAlt;
@@ -374,7 +374,7 @@ void
 GlideComputerAirData::CruiseLD()
 {
   if(!Calculated().Circling) {
-    if (Calculated().CruiseStartTime < 0) {
+    if (negative(Calculated().CruiseStartTime)) {
       SetCalculated().CruiseStartLocation = Basic().Location;
       SetCalculated().CruiseStartAlt = Basic().NavAltitude;
       SetCalculated().CruiseStartTime = Basic().Time;
@@ -427,7 +427,7 @@ GlideComputerAirData::FlightTimes()
     ResetFlight(Basic().gps.Replay);
   }
 
-  if (Basic().Time != 0 && time_retreated()) {
+  if (positive(Basic().Time) && time_retreated()) {
     // 20060519:sgi added (Basic().Time != 0) due to always return here
     // if no GPS time available
     if (!Basic().gps.NAVWarning) {

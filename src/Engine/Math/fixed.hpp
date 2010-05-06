@@ -1665,7 +1665,7 @@ inline fixed fixed::ceil() const
 {
     if(m_nVal%resolution)
     {
-        return floor()+1;
+      return floor() + fixed(1);
     }
     else
     {
