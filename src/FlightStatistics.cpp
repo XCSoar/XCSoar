@@ -708,8 +708,11 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
     }
     points.push_back(points[0]);
 
-    canvas.select(Pen(Pen::SOLID, IBLSCALE(1), Chart::GROUND_COLOUR));
-    canvas.select(Brush(Chart::GROUND_COLOUR));
+    Pen a_pen (Pen::SOLID, IBLSCALE(1), Chart::GROUND_COLOUR);
+    Brush a_brush (Chart::GROUND_COLOUR);
+
+    canvas.select(a_pen);
+    canvas.select(a_brush);
     canvas.polygon(&points[0], points.size());
   }
   terrain.Unlock();
