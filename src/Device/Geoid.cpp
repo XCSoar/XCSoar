@@ -43,7 +43,6 @@ Copyright_License {
  */
 
 #include "Device/Geoid.h"
-#include "Engine/Math/Geometry.hpp"
 #include "Interface.hpp"
 
 #include <windows.h>
@@ -131,8 +130,8 @@ LookupGeoidSeparation(const GEOPOINT pt)
     return fixed_zero;
 
   int ilat, ilon;
-  ilat = iround((fixed_90 - pt.Latitude) / fixed_two);
-  ilon = iround(AngleLimit360(pt.Longitude) / fixed_two);
+  ilat = iround(((Angle(fixed_90) - pt.Latitude) * fixed_half).value());
+  ilon = iround((pt.Longitude.AngleLimit360() * fixed_half).value());
 
   int offset = ilat * 180 + ilon;
   if (offset >= EGM96SIZE)

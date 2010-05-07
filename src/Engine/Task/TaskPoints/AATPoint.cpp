@@ -36,7 +36,6 @@
 */
 
 #include "AATPoint.hpp"
-#include "Math/Geometry.hpp"
 #include <math.h>
 
 const GEOPOINT&

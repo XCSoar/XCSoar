@@ -45,6 +45,7 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 #include "Screen/Bitmap.hpp"
 
+class GEOPOINT;
 class Canvas;
 class MapWindowProjection;
 class MapWindow;
@@ -144,7 +145,7 @@ public:
   TopologyWriter(const char *shpname, const Color thecolor);
   ~TopologyWriter();
 
-  void addPoint(double x, double y);
+  void addPoint(const GEOPOINT &p);
   void Reset(void);
   void CreateFiles(void);
   void DeleteFiles(void);

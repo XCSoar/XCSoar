@@ -35,31 +35,29 @@
 }
  */
 #include "SymmetricSectorZone.hpp"
-#include "Math/Geometry.hpp"
 
 void SymmetricSectorZone::set_legs(const TaskPoint *previous,
                                    const TaskPoint *current,
                                    const TaskPoint *next) 
 {
-  fixed biSector;
+  Angle biSector;
   if (!next && previous) { 
     // final
     biSector = previous->bearing(current->get_location());
   } else if (next && previous) {
     // intermediate
-    biSector = BiSector(previous->bearing(current->get_location()),
-                        current->bearing(next->get_location()));
+    biSector = previous->bearing(current->get_location()).
+      BiSector(current->bearing(next->get_location()));
   } else if (next && !previous) {
     // start
     biSector = next->bearing(current->get_location());
   } else {
     // single point
-    biSector = 0;
+    biSector = Angle(fixed_zero);
   }
 
-  setStartRadial(AngleLimit360(biSector-SectorAngle/2));
-  setEndRadial(AngleLimit360(biSector+SectorAngle/2));
-
+  setStartRadial((biSector-SectorAngle*fixed_half).AngleLimit360());
+  setEndRadial((biSector+SectorAngle*fixed_half).AngleLimit360());
 }
 
 

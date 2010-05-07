@@ -40,7 +40,6 @@
 
 #include "FlatEllipse.hpp"
 #include "Math/FastMath.h"
-#include "Math/Geometry.hpp"
 #include <algorithm>
 #include "Math/fixed.hpp"
 

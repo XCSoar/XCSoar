@@ -42,6 +42,10 @@ Copyright_License {
 #include "Compiler.h"
 #include <math.h>
 
+#ifdef __cplusplus
+
+#include "Math/fixed.hpp"
+
 // =================================================================================
 // Real2Int
 // =================================================================================
@@ -66,58 +70,53 @@ iround(double i)
   return Real2Int(floor(i + 0.5));
 }
 
-extern const double COSTABLE[4096];
-extern const double SINETABLE[4096];
-extern const double INVCOSINETABLE[4096];
+extern const fixed COSTABLE[4096];
+extern const fixed SINETABLE[4096];
+extern const fixed INVCOSINETABLE[4096];
 extern const int ISINETABLE[4096];
 extern const int ICOSTABLE[4096];
 
 gcc_const
 static inline int
-DEG_TO_INT(double x)
+DEG_TO_INT(fixed x)
 {
   return ((unsigned short)(x * (65536.0 / 360.0))) >> 4;
 }
 
 gcc_const
-static inline double
-invfastcosine(double x)
+static inline fixed
+invfastcosine(fixed x)
 {
   return INVCOSINETABLE[DEG_TO_INT(x)];
 }
 
 gcc_const
 static inline int
-ifastsine(double x)
+ifastsine(fixed x)
 {
   return ISINETABLE[DEG_TO_INT(x)];
 }
 
 gcc_const
 static inline int
-ifastcosine(double x)
+ifastcosine(fixed x)
 {
   return ICOSTABLE[DEG_TO_INT(x)];
 }
 
 gcc_const
-static inline double
-fastsine(double x)
+static inline fixed
+fastsine(fixed x)
 {
   return SINETABLE[DEG_TO_INT(x)];
 }
 
 gcc_const
-static inline double
-fastcosine(double x)
+static inline fixed
+fastcosine(fixed x)
 {
   return COSTABLE[DEG_TO_INT(x)];
 }
-
-#ifdef __cplusplus
-
-#ifdef FIXED_MATH
-#include "Math/fixed.hpp"
 
 gcc_const static inline int
 iround(const fixed &x)
@@ -130,7 +129,6 @@ Real2Int(const fixed& val)
 {
   return val.as_int();
 }
-#endif
 
 inline unsigned int
 CombinedDivAndMod(unsigned int &lx)

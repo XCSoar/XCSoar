@@ -102,7 +102,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
     // targets virtual position using the scale factor
     if ((SettingsMap().EnableFLARMMap == 2) && (scalefact > 1.0)) {
       fixed distance;
-      fixed bearing;
+      Angle bearing;
 
       DistanceBearing(Basic().Location, target_loc,
                       &distance, &bearing);
@@ -258,7 +258,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 
     // Rotate and shift the arrow to the right position and angle
     PolygonRotateShift(Arrow, 5, sc.x, sc.y,
-                       traffic.TrackBearing - GetDisplayAngle());
+                       (traffic.TrackBearing - GetDisplayAngle()).value());
 
     // Draw the arrow
     canvas.polygon(Arrow, 5);

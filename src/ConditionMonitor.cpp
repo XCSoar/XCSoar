@@ -38,7 +38,6 @@ Copyright_License {
 */
 
 #include "ConditionMonitor.hpp"
-#include "Math/Geometry.hpp"
 #include "Message.hpp"
 #include "Device/device.hpp"
 #include "Protection.hpp"
@@ -158,7 +157,7 @@ protected:
     }
 
     fixed mag_change = fabs(wind.norm - last_wind.norm);
-    fixed dir_change = fabs(AngleLimit180(wind.bearing - last_wind.bearing));
+    fixed dir_change = (wind.bearing - last_wind.bearing).AngleLimit180().magnitude();
 
     if (mag_change > Units::ToSysUnit(5, unKnots))
       return true;

@@ -443,7 +443,7 @@ cai302DeclAddWayPoint(ComPort *port, const Waypoint &way_point)
   _tcsncpy(Name, way_point.Name.c_str(), 12);
   Name[12] = '\0';
 
-  tmp = way_point.Location.Latitude;
+  tmp = way_point.Location.Latitude.value();
   NoS = 'N';
   if (tmp < 0)
     {
@@ -454,7 +454,7 @@ cai302DeclAddWayPoint(ComPort *port, const Waypoint &way_point)
   MinLat = (tmp - DegLat) * 60;
 
 
-  tmp = way_point.Location.Longitude;
+  tmp = way_point.Location.Longitude.value();
   EoW = 'E';
   if (tmp < 0)
     {
@@ -559,7 +559,7 @@ cai_w(const TCHAR *String, NMEA_INFO *GPS_INFO,
   GPS_INFO->ExternalWindAvailable = true;
   GPS_INFO->wind.norm = _tcstod(ctemp, NULL) / 10.0;
   NMEAParser::ExtractParameter(String,ctemp,0);
-  GPS_INFO->wind.bearing = _tcstod(ctemp, NULL);
+  GPS_INFO->wind.bearing = Angle(fixed(_tcstod(ctemp, NULL)));
 
 
   NMEAParser::ExtractParameter(String,ctemp,4);

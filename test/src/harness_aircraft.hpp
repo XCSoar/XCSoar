@@ -16,7 +16,7 @@ public:
     return state;
   }
   GEOPOINT get_next() const;
-  void set_wind(const double speed, const double direction);
+  void set_wind(const double speed, const Angle direction);
 
   bool far(TaskManager &task_manager);
   fixed small_rand();
@@ -39,7 +39,7 @@ public:
 private:
   fixed target_height(TaskManager &task_manager);
 
-  GEOPOINT endpoint(const fixed bear) const;
+  GEOPOINT endpoint(const Angle& bear) const;
   void update_bearing(TaskManager &task_manager);
 
   int test_num;
@@ -51,7 +51,7 @@ private:
 
   AIRCRAFT_STATE state, state_last;
   std::vector<GEOPOINT> w;
-  fixed bearing;
+  Angle bearing;
   unsigned awp;
 
   enum AcState {

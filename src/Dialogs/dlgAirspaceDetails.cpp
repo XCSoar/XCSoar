@@ -41,7 +41,6 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "AirspaceClientUI.hpp"
 #include "Math/FastMath.h"
-#include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "MainWindow.hpp"
 #include "MapWindow.hpp"

@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "MapWindowProjection.hpp"
 #include "Math/FastRotation.hpp"
-#include "Math/Geometry.hpp"
 #include "Screen/Layout.hpp"
 #include "SettingsComputer.hpp"
 #include "Profile.hpp"
@@ -100,7 +99,7 @@ MapWindowProjection::CalculateOrientationNormal
  const SETTINGS_MAP &settings)
 
 {
-  fixed trackbearing = DrawInfo.TrackBearing;
+  Angle trackbearing = DrawInfo.TrackBearing;
 
   if( (settings.DisplayOrientation == NORTHUP)
       ||
@@ -125,10 +124,10 @@ MapWindowProjection::CalculateOrientationNormal
     // normal, glider forward
     _origin_centered = false;
     DisplayAngle = trackbearing;
-    DisplayAircraftAngle = 0.0;
+    DisplayAircraftAngle = Angle();
   }
 
-  DisplayAircraftAngle = AngleLimit360(DisplayAircraftAngle);
+  DisplayAircraftAngle = DisplayAircraftAngle.AngleLimit360();
 }
 
 

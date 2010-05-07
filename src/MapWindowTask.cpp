@@ -43,7 +43,6 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Earth.hpp"
-#include "Math/Geometry.hpp"
 #include <math.h>
 
 #include "RenderTask.hpp"
@@ -61,7 +60,7 @@ public:
                      const bool draw_bearing,
                      const GEOPOINT location,
                      MapWindow& map,
-                     const fixed bearing,
+                     const Angle bearing,
                      const bool do_draw_off_track):
     RenderTaskPoint(_helper, _ozv, draw_bearing, location),
     m_map(map),
@@ -87,7 +86,7 @@ protected:
       
       GeoVector vec(m_location, tp.get_location_remaining());
 
-      if (fabs(AngleLimit180(m_bearing-vec.Bearing))<10) {
+      if ((m_bearing-vec.Bearing).AngleLimit180().magnitude()<10) {
         // insignificant error
         return;
       }
@@ -142,7 +141,7 @@ protected:
 
 private:
   MapWindow& m_map;
-  const fixed m_bearing;
+  const Angle m_bearing;
   const bool m_draw_off_track;
 };
 

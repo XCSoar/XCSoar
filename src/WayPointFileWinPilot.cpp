@@ -102,7 +102,7 @@ WayPointFileWinPilot::parseString(const TCHAR* src, tstring& dest)
 }
 
 bool
-WayPointFileWinPilot::parseAngle(const TCHAR* src, fixed& dest, const bool lat)
+WayPointFileWinPilot::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
 {
   // Two format variants:
   // 51:47.841N (DD:MM.mmm // the usual)
@@ -139,7 +139,7 @@ WayPointFileWinPilot::parseAngle(const TCHAR* src, fixed& dest, const bool lat)
     val *= -1;
 
   // Save angle
-  dest = (fixed)val;
+  dest = Angle((fixed)val);
   return true;
 }
 
@@ -259,15 +259,16 @@ WayPointFileWinPilot::composeLine(const Waypoint& wp)
 }
 
 tstring
-WayPointFileWinPilot::composeAngle(const fixed& src, const bool lat)
+WayPointFileWinPilot::composeAngle(const Angle& src, const bool lat)
 {
   TCHAR buffer[20];
-  bool negative = src < 0;
+  bool is_negative = negative(src.value());
 
   // Calculate degrees, minutes and seconds
-  int deg = fabs(src);
-  int min = (fabs(src) - deg) * 60;
-  int sec = (((fabs(src) - deg) * 60) - min) * 60;
+  fixed smag = src.magnitude();
+  int deg = smag;
+  int min = (smag - deg) * 60;
+  int sec = (((smag - deg) * 60) - min) * 60;
 
   // Save them into the buffer string
   _stprintf(buffer, (lat ? _T("%02d:%02d:%02d") : _T("%03d:%02d:%02d")),
@@ -276,9 +277,9 @@ WayPointFileWinPilot::composeAngle(const fixed& src, const bool lat)
   // Attach the buffer string to the output
   tstring dest = buffer;
   if (lat)
-    dest += (negative ? _T("S") : _T("N"));
+    dest += (is_negative ? _T("S") : _T("N"));
   else
-    dest += (negative ? _T("W") : _T("E"));
+    dest += (is_negative ? _T("W") : _T("E"));
 
   return dest;
 }

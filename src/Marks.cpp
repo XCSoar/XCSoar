@@ -89,12 +89,14 @@ void Marks::MarkLocation(const GEOPOINT &loc)
   if (settings_computer.EnableSoundModes)
     PlayResource(TEXT("IDR_WAV_CLEAR"));
 
-  topo_marks.addPoint(loc.Longitude, loc.Latitude);
+  topo_marks.addPoint(loc);
   topo_marks.triggerUpdateCache = true;
 
   char message[160];
 
-  sprintf(message,"Lon:%f Lat:%f\r\n", FIXED_DOUBLE(loc.Longitude), FIXED_DOUBLE(loc.Latitude));
+  sprintf(message,"Lon:%f Lat:%f\r\n", 
+          (double)(loc.Longitude.value()), 
+          (double)(loc.Latitude.value()));
 
   FILE *stream;
   TCHAR fname[MAX_PATH];

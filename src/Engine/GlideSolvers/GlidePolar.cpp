@@ -421,8 +421,7 @@ GlidePolar::get_ld_over_ground(const AIRCRAFT_STATE &state) const
   if (state.wind.is_zero())
     return bestLD;
 
-  const fixed c_theta = -cos(fixed_deg_to_rad *
-      (state.wind.bearing - state.TrackBearing));
+  const fixed c_theta = ((state.wind.bearing - state.TrackBearing)*fixed_deg_to_rad).cos();
 
   Quadratic q(-fixed_two * state.wind.norm * c_theta,
               state.wind.norm * state.wind.norm - bestLD * bestLD);

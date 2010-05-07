@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "TaskClientUI.hpp"
 #include "MapWindow.hpp"
-#include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Util.hpp"

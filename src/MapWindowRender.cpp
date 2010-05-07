@@ -99,11 +99,11 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
   if ((terrain != NULL && SettingsMap().EnableTerrain &&
        Calculated().TerrainValid && terrain->isTerrainLoaded()) ||
       (weather != NULL && weather->GetParameter() != 0)) {
-    double sunelevation = 40.0;
-    double sunazimuth = GetDisplayAngle() - Basic().wind.bearing;
+    Angle sunelevation = Angle(fixed(40.0));
+    Angle sunazimuth = GetDisplayAngle() - Basic().wind.bearing;
     // draw sun from constant angle if very low wind speed
     if (Basic().wind.norm < 0.5)
-      sunazimuth = GetDisplayAngle() + 45.0;
+      sunazimuth = GetDisplayAngle() + Angle(fixed(45.0));
 
     // if (dirtyEvent.test()) {
     //   // map has been dirtied since we started drawing, so hurry up

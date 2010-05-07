@@ -20,6 +20,7 @@
 
 #include "Vector.hpp"
 #include "WindStore.hpp"
+#include "Navigation/GeoPoint.hpp"
 
 /**
  * The windanalyser analyses the list of flightsamples looking
@@ -94,8 +95,8 @@ private:
   bool first;
   int startcircle;
 
-  Vector climbstartpos;
-  Vector climbendpos;
+  GEOPOINT climbstartpos;
+  GEOPOINT climbendpos;
   fixed climbstarttime;
   fixed climbendtime;
 

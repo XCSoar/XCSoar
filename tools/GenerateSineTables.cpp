@@ -16,14 +16,14 @@ main(int argc, char **argv)
   (void)argc;
   (void)argv;
 
-  puts("const double SINETABLE[4096] = {");
+  puts("const fixed SINETABLE[4096] = {");
   for (unsigned i = 0; i < 4096; i++)
-    printf("  %.20e,\n", sin(INT_TO_DEG(i)));
+    printf("  fixed(%.20e),\n", sin(INT_TO_DEG(i)));
   puts("};");
 
-  puts("const double COSTABLE[4096] = {");
+  puts("const fixed COSTABLE[4096] = {");
   for (unsigned i = 0; i < 4096; i++)
-    printf("  %.20e,\n", cos(INT_TO_DEG(i)));
+    printf("  fixed(%.20e),\n", cos(INT_TO_DEG(i)));
   puts("};");
 
   puts("const int ISINETABLE[4096] = {");
@@ -36,7 +36,7 @@ main(int argc, char **argv)
     printf("  %d,\n", iround(cos(INT_TO_DEG(i)) * 1024));
   puts("};");
 
-  puts("const double INVCOSINETABLE[4096] = {");
+  puts("const fixed INVCOSINETABLE[4096] = {");
   for (unsigned i = 0; i < 4096; i++) {
     double x = cos(INT_TO_DEG(i));
     if ((x >= 0) && (x < 1.0e-8))
@@ -45,7 +45,7 @@ main(int argc, char **argv)
     if ((x < 0) && (x > -1.0e-8))
       x = -1.0e-8;
 
-    printf("  %.20e,\n", 1.0 / x);
+    printf("  fixed(%.20e),\n", 1.0 / x);
   }
   puts("};");
 }

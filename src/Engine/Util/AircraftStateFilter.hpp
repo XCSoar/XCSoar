@@ -98,7 +98,7 @@ public:
  * 
  * @return Track bearing (deg true north)
  */
-  fixed get_bearing() const;
+  Angle get_bearing() const;
 
 /** 
  * Return filtered climb rate

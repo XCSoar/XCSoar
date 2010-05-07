@@ -47,7 +47,7 @@ struct FLARM_TRAFFIC {
   /** Location of the FLARM target */
   GEOPOINT Location;
   /** TrackBearing of the FLARM target */
-  double TrackBearing;
+  Angle TrackBearing;
   /** Speed of the FLARM target */
   double Speed;
   /** Altitude of the FLARM target */
@@ -57,11 +57,11 @@ struct FLARM_TRAFFIC {
   /** Climbrate of the FLARM target */
   double ClimbRate;
   /** Latitude-based distance of the FLARM target */
-  double RelativeNorth;
+  fixed RelativeNorth;
   /** Longitude-based distance of the FLARM target */
-  double RelativeEast;
+  fixed RelativeEast;
   /** Altidude-based distance of the FLARM target */
-  double RelativeAltitude;
+  fixed RelativeAltitude;
   /** FLARM id of the FLARM target */
   long ID;
   /** (if exists) Name of the FLARM target */

@@ -50,7 +50,7 @@ protected:
   virtual void on_stop();
   virtual void on_bad_file();
   virtual void on_advance(const GEOPOINT &loc,
-                          const double speed, const double bearing,
+                          const double speed, const Angle bearing,
                           const double alt, const double baroalt, const double t);
 
   virtual bool ScanBuffer(const TCHAR *buffer, double *Time, double *Latitude,

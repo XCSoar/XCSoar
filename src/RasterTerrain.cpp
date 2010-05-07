@@ -183,10 +183,10 @@ bool
 RasterTerrain::GetTerrainCenter(GEOPOINT *location) const
 {
   if (TerrainMap) {
-    location->Latitude = (TerrainMap->TerrainInfo.Top+
-                          TerrainMap->TerrainInfo.Bottom)/2.0;
-    location->Longitude = (TerrainMap->TerrainInfo.Left+
-                           TerrainMap->TerrainInfo.Right)/2.0;
+    location->Latitude = ((TerrainMap->TerrainInfo.Top+
+                           TerrainMap->TerrainInfo.Bottom)*fixed_half);
+    location->Longitude = ((TerrainMap->TerrainInfo.Left+
+                            TerrainMap->TerrainInfo.Right)*fixed_half);
     return true;
   } else {
     return false;

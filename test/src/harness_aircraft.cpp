@@ -1,7 +1,6 @@
 
 #include "harness_aircraft.hpp"
 #include "test_debug.hpp"
-#include "Math/Geometry.hpp"
 
 void print_mode(const char* mode) {
   if (verbose>1) {
@@ -43,7 +42,7 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
   state.NavAltitude = start_alt;
   state.Time = 0.0;
   state.wind.norm = 0.0;
-  state.wind.bearing = 0;
+  state.wind.bearing = Angle(fixed(0));
   state.Speed = 16.0;
 
   // start with aircraft moving since this isn't a real replay (no time on ground)
@@ -51,7 +50,7 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
     state.flying_state_moving(state.Time);
   }
   
-  bearing = 0;
+  bearing = Angle(fixed_zero);
   awp= 0;
   
   acstate = Cruise;
@@ -103,7 +102,7 @@ fixed AircraftSim::small_rand() {
 
 void AircraftSim::update_bearing(TaskManager& task_manager) {
   const ElementStat stat = task_manager.get_stats().current_leg;
-  fixed bct = stat.solution_remaining.CruiseTrackBearing;
+  Angle bct = stat.solution_remaining.CruiseTrackBearing;
 
   if (goto_target && (awp>0)) {
     bearing = stat.solution_remaining.Vector.Bearing;
@@ -116,17 +115,18 @@ void AircraftSim::update_bearing(TaskManager& task_manager) {
     bearing = state.Location.bearing(target(task_manager));
   }
 
-  fixed b_best = bearing;
+  Angle b_best = bearing;
   fixed e_best = fixed_360;
-  for (fixed bear= fixed_zero; bear<fixed_360; bear+= fixed_two) {
-    fixed b_this = state.Location.bearing(endpoint(bear));
-    fixed e_this = fabs(::AngleLimit180(b_this-bearing));
+  const Angle delta(fixed_two);
+  for (Angle bear= delta; bear<Angle(fixed_360); bear+= delta) {
+    Angle b_this = state.Location.bearing(endpoint(bear));
+    fixed e_this = (b_this-bearing).AngleLimit180().magnitude();
     if (e_this<e_best) {
       e_best = e_this;
       b_best = bear;
     }    
   }
-  bearing = b_best+small_rand();
+  bearing = b_best+Angle(small_rand());
 }
 
 
@@ -205,11 +205,11 @@ void AircraftSim::update_mode(TaskManager &task_manager)
   };
 }
 
-GEOPOINT AircraftSim::endpoint(const fixed bear) const
+GEOPOINT AircraftSim::endpoint(const Angle &bear) const
 {
   GEOPOINT ref;
-  ref = GeoVector(state.TrueAirspeed,bear).end_point(state.Location);
-  return GeoVector(state.wind.norm, state.wind.bearing + fixed_180).end_point(ref);
+  ref = GeoVector(state.TrueAirspeed, bear).end_point(state.Location);
+  return GeoVector(state.wind.norm, state.wind.bearing + Angle(fixed_180)).end_point(ref);
 }
 
 void AircraftSim::integrate() {
@@ -285,7 +285,7 @@ fixed AircraftSim::time() {
 
 
 void 
-AircraftSim::set_wind(const double speed, const double direction) 
+AircraftSim::set_wind(const double speed, const Angle direction) 
 {
   state.wind.norm = speed;
   state.wind.bearing = direction;

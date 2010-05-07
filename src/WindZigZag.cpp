@@ -584,7 +584,7 @@ static bool
 WindZigZagCheckAirData(const NMEA_INFO &basic)
 {
   static double tLast = -1;
-  static double bearingLast = 0;
+  static Angle bearingLast;
 
   bool airdata_invalid = false;
   if (!basic.flight.Flying) {
@@ -612,7 +612,7 @@ WindZigZagCheckAirData(const NMEA_INFO &basic)
   }
 
   if (basic.Time < tLast + SAMPLE_RATE &&
-      fabs(bearingLast - basic.TrackBearing) < 10.0) {
+      (bearingLast - basic.TrackBearing).magnitude() < 10.0) {
     return false;
   } else {
     tLast = basic.Time;
@@ -649,7 +649,7 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
 
   myzigzag.AddPoint(basic.Time,
                     basic.TrueAirspeed, basic.GroundSpeed,
-                    basic.TrackBearing * DEGTORAD);
+                    basic.TrackBearing.value() * fixed_deg_to_rad);
 
   #ifdef DEBUG_ZIGZAG_A
   LogDebug("%f %03.0f %03.0f %03.0f # zigpoint\n",
@@ -666,7 +666,7 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
     return 0;
 
   double V_wind_estimate = basic.wind.norm;
-  double theta_wind_estimate = basic.wind.bearing * DEGTORAD;
+  double theta_wind_estimate = basic.wind.bearing.value() * DEGTORAD;
   double percent_error = myzigzag.StartSearch(V_wind_estimate, theta_wind_estimate);
 
   // Check spread of zig-zag manoeuver
@@ -707,13 +707,13 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
 
     #ifdef DEBUG_ZIGZAG
     LogDebug(_T("%f %3.1f %03.0f %3.1f %03.0f %f %d # zigzag"),
-               (double)basic.Time,
-            V_wind_estimate,
-            theta_wind_estimate,
-               (double)basic.wind.norm,
-               (double)basic.wind.bearing,
-            percent_error,
-            quality);
+             (double)basic.Time,
+             V_wind_estimate,
+             theta_wind_estimate,
+             (double)basic.wind.norm,
+             (double)basic.wind.bearing.value(),
+             percent_error,
+             quality);
     #endif
 
     return quality;

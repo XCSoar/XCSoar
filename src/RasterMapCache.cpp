@@ -193,7 +193,7 @@ int TerrainCacheSearch(const void *key, const void *elem2 ){
 short RasterMapCache::LookupTerrainCache(const long &SeekPos) {
   TERRAIN_CACHE* tcp, *tcpmin, *tcplim;
 
-  if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
+  if(fpTerrain == NULL || TerrainInfo.StepSize.value() == 0)
     return TERRAIN_INVALID;
 
   // search to see if it is found in the cache
@@ -276,7 +276,7 @@ RasterMapCache::Open(const char *zfilename)
     return false;
   }
 
-  if (!TerrainInfo.StepSize) {
+  if (!TerrainInfo.StepSize.value()) {
     _Close();
     return false;
   }

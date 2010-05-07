@@ -35,7 +35,6 @@
 }
  */
 #include "TaskProjection.hpp"
-#include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include <algorithm>
 
@@ -76,7 +75,7 @@ TaskProjection::update_fast()
 
   location_mid.Longitude = (location_max.Longitude+location_min.Longitude)*fixed_half;
   location_mid.Latitude = (location_max.Latitude+location_min.Latitude)*fixed_half;
-  cos_midloc = fastcosine(location_mid.Latitude)*fixed_scale;
+  cos_midloc = location_mid.Latitude.fastcosine()*fixed_scale;
 
   return (!(old_loc == location_mid)) || (cos_midloc != old_midloc);
 }
@@ -85,8 +84,8 @@ TaskProjection::update_fast()
 FlatPoint
 TaskProjection::fproject(const GEOPOINT& tp) const
 {
-  FlatPoint fp((tp.Longitude-location_mid.Longitude)*cos_midloc,
-               (tp.Latitude-location_mid.Latitude)*fixed_scale);
+  FlatPoint fp(((tp.Longitude-location_mid.Longitude)*cos_midloc).value(),
+               ((tp.Latitude-location_mid.Latitude)*fixed_scale).value());
   return fp;
 }
 
@@ -94,8 +93,8 @@ GEOPOINT
 TaskProjection::funproject(const FlatPoint& fp) const
 {
   GEOPOINT tp;
-  tp.Longitude = fp.x/cos_midloc+location_mid.Longitude;
-  tp.Latitude = fp.y/fixed_scale+location_mid.Latitude;
+  tp.Longitude = Angle(fp.x/cos_midloc)+location_mid.Longitude;
+  tp.Latitude = Angle(fp.y/fixed_scale)+location_mid.Latitude;
   return tp;
 }
 
@@ -114,8 +113,8 @@ GEOPOINT
 TaskProjection::unproject(const FLAT_GEOPOINT& fp) const
 {
   GEOPOINT tp;
-  tp.Longitude = fp.Longitude/cos_midloc+location_mid.Longitude;
-  tp.Latitude = fp.Latitude/fixed_scale+location_mid.Latitude;
+  tp.Longitude = Angle(fp.Longitude/cos_midloc)+location_mid.Longitude;
+  tp.Latitude = Angle(fp.Latitude/fixed_scale)+location_mid.Latitude;
   return tp;
 }
 

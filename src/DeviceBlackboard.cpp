@@ -40,7 +40,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Math/Earth.hpp"
 #include "UtilsSystem.hpp"
-#include "Math/Geometry.hpp"
 #include "TeamCodeCalculation.h"
 #include "UtilsFLARM.hpp"
 #include "Asset.hpp"
@@ -134,7 +133,7 @@ DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const double alt)
  */
 void
 DeviceBlackboard::SetLocation(const GEOPOINT &loc,
-			      const double speed, const double bearing,
+			      const double speed, const Angle bearing,
 			      const double alt, const double baroalt, const double t)
 {
   ScopeLock protect(mutexBlackboard);
@@ -257,10 +256,10 @@ DeviceBlackboard::SetSpeed(fixed val)
  * @param val New TrackBearing
  */
 void
-DeviceBlackboard::SetTrackBearing(fixed val)
+DeviceBlackboard::SetTrackBearing(Angle val)
 {
   ScopeLock protect(mutexBlackboard);
-  SetBasic().TrackBearing = AngleLimit360(val);
+  SetBasic().TrackBearing = val.AngleLimit360();
 }
 
 /**
@@ -490,17 +489,17 @@ DeviceBlackboard::Heading()
   const SpeedVector wind = Basic().wind;
 
   if ((Basic().GroundSpeed > 0) || wind.is_non_zero()) {
-    fixed x0 = fastsine(Basic().TrackBearing) * Basic().GroundSpeed;
-    fixed y0 = fastcosine(Basic().TrackBearing)
+    fixed x0 = (Basic().TrackBearing.fastsine()) * Basic().GroundSpeed;
+    fixed y0 = (Basic().TrackBearing.fastcosine())
       * Basic().GroundSpeed;
-    x0 += fastsine(wind.bearing) * wind.norm;
-    y0 += fastcosine(wind.bearing) * wind.norm;
+    x0 += (wind.bearing.fastsine()) * wind.norm;
+    y0 += (wind.bearing.fastcosine()) * wind.norm;
 
     if (!Basic().flight.Flying) {
       // don't take wind into account when on ground
       SetBasic().Heading = Basic().TrackBearing;
     } else {
-      SetBasic().Heading = AngleLimit360(atan2(x0, y0) * RAD_TO_DEG);
+      SetBasic().Heading = Angle(atan2(x0, y0) * RAD_TO_DEG).AngleLimit360();
     }
 
     // calculate estimated true airspeed
@@ -568,7 +567,7 @@ DeviceBlackboard::TurnRate()
   }
 
   SetBasic().TurnRate =
-    AngleLimit180(Basic().TrackBearing - LastBasic().TrackBearing) / dT;
+    (Basic().TrackBearing - LastBasic().TrackBearing).AngleLimit180().value() / dT;
 
   // if (time passed is less then 2 seconds) time step okay
   if (dT < fixed_two) {
@@ -579,13 +578,14 @@ DeviceBlackboard::TurnRate()
     // QUESTION TB: shouldn't dtlead be = 1, for one second?!
     static const fixed dtlead(0.3);
 
-    const fixed calc_bearing = Basic().TrackBearing + dtlead
-      * (Basic().TurnRate + fixed_half * dtlead * dRate);
+    const Angle calc_bearing = Basic().TrackBearing 
+      + Angle(dtlead
+              * (Basic().TurnRate + fixed_half * dtlead * dRate));
 
     // b_new = b_old + Rate * t + 0.5 * dRate * t * t
 
     // Limit the projected bearing to 360 degrees
-    SetBasic().NextTrackBearing = AngleLimit360(calc_bearing);
+    SetBasic().NextTrackBearing = calc_bearing.AngleLimit360();
 
   } else {
 
@@ -614,7 +614,7 @@ DeviceBlackboard::Dynamics()
 
     if (positive(dT)) {
       SetBasic().TurnRateWind =
-        AngleLimit180(Basic().Heading - LastBasic().Heading) / dT;
+        (Basic().Heading - LastBasic().Heading).AngleLimit180().value() / dT;
     }
 
     // estimate bank angle (assuming balanced turn)

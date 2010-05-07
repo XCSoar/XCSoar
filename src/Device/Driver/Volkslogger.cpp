@@ -283,20 +283,20 @@ VLDeclAddWayPoint(const Waypoint &way_point)
 
   if (nturnpoints == 0) {
     strncpy(vl.declaration.task.startpoint.name, temp, 6);
-    vl.declaration.task.startpoint.lon = way_point.Location.Longitude;
-    vl.declaration.task.startpoint.lat = way_point.Location.Latitude;
+    vl.declaration.task.startpoint.lon = way_point.Location.Longitude.value();
+    vl.declaration.task.startpoint.lat = way_point.Location.Latitude.value();
     nturnpoints++;
   } else {
     strncpy(vl.declaration.task.turnpoints[nturnpoints-1].name, temp, 6);
     vl.declaration.task.turnpoints[nturnpoints-1].lon =
-      way_point.Location.Longitude;
+      way_point.Location.Longitude.value();
     vl.declaration.task.turnpoints[nturnpoints-1].lat =
-      way_point.Location.Latitude;
+      way_point.Location.Latitude.value();
     nturnpoints++;
   }
   strncpy(vl.declaration.task.finishpoint.name, temp, 6);
-  vl.declaration.task.finishpoint.lon = way_point.Location.Longitude;
-  vl.declaration.task.finishpoint.lat = way_point.Location.Latitude;
+  vl.declaration.task.finishpoint.lon = way_point.Location.Longitude.value();
+  vl.declaration.task.finishpoint.lat = way_point.Location.Latitude.value();
 
   return true;
 

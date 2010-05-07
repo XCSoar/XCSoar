@@ -37,21 +37,20 @@ Copyright_License {
 */
 
 #include "Math/FastRotation.hpp"
-#include "Math/Geometry.hpp"
 #include "Math/FastMath.h"
 
 #include <math.h>
 
 void
-FastRotation::SetAngle(fixed _angle)
+FastRotation::SetAngle(Angle _angle)
 {
-  _angle = AngleLimit360(_angle);
+  _angle = _angle.AngleLimit360();
   if (_angle == angle)
     return;
 
   angle = _angle;
-  cost = fastcosine(angle);
-  sint = fastsine(angle);
+  cost = angle.fastcosine();
+  sint = angle.fastsine();
 }
 
 FastRotation::Pair
@@ -61,15 +60,15 @@ FastRotation::Rotate(double x, double y) const
 }
 
 void
-FastIntegerRotation::SetAngle(fixed _angle)
+FastIntegerRotation::SetAngle(Angle _angle)
 {
-  _angle = AngleLimit360(_angle);
+  _angle = _angle.AngleLimit360();
   if (_angle == angle)
     return;
 
   angle = _angle;
-  cost = ifastcosine(angle);
-  sint = ifastsine(angle);
+  cost = ifastcosine(angle.value());
+  sint = ifastsine(angle.value());
 }
 
 FastIntegerRotation::Pair
@@ -77,38 +76,4 @@ FastIntegerRotation::Rotate(int x, int y) const
 {
   return Pair((x * cost - y * sint + 512) / 1024,
               (y * cost + x * sint + 512) / 1024);
-}
-
-
-/**
- * Detects if angle (x) is between two other angles (Angle0 and Angle1)
- * @param Angle0 Limit angle 1
- * @param Angle1 Limit angle 2
- * @param x Input angle
- * @param is_signed Is the input angle signed?
- * @return True if between, False if not
- */
-bool
-AngleInRange(fixed Angle0, fixed Angle1, fixed x, bool is_signed)
-{
-  Angle0 = AngleLimit360(Angle0);
-  Angle1 = AngleLimit360(Angle1);
-  x = AngleLimit360(x);
-
-  if (Angle1>= Angle0) {
-    if ((x>=Angle0) && (x<= Angle1)) {
-      return true;
-    }
-  } else {
-    if (is_signed) {
-      if ((x>=Angle0) || (x<= Angle1)) {
-        return true;
-      }
-    } else {
-      if ((x<=Angle0) || (x>= Angle1)) {
-        return true;
-      }
-    }
-  }
-  return false;
 }

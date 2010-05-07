@@ -2,6 +2,7 @@
 #define RASTERTILE_H
 
 #include <stdlib.h>
+#include "Math/Angle.hpp"
 
 class RasterTile {
 public:

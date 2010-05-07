@@ -41,7 +41,6 @@ Copyright_License {
 #include "TaskClientUI.hpp"
 #include "SettingsComputer.hpp"
 #include "Math/FastMath.h"
-#include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"

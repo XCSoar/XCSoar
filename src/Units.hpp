@@ -40,6 +40,7 @@ Copyright_License {
 #define __UNITS_H
 
 #include <tchar.h>
+class Angle;
 
 #ifndef __GNUC__
 #define DEG "°"
@@ -213,7 +214,7 @@ public:
    * @param ss Seconds (pointer)
    * @param east True if East, False if West (pointer)
    */
-  static void LongitudeToDMS(double Longitude,
+  static void LongitudeToDMS(Angle Longitude,
                              int *dd, int *mm, int *ss, bool *east);
   /**
    * Converts a double-based Latitude to degrees, minute, seconds and a
@@ -224,7 +225,7 @@ public:
    * @param ss Seconds (pointer)
    * @param north True if North, False if South (pointer)
    */
-  static void LatitudeToDMS(double Latitude,
+  static void LatitudeToDMS(Angle Latitude,
                             int *dd, int *mm, int *ss, bool *north);
 
   /**
@@ -233,14 +234,14 @@ public:
    * @param Buffer Buffer string to write to (pointer)
    * @param size Size of the Buffer
    */
-  static bool LongitudeToString(double Longitude, TCHAR *Buffer, size_t size);
+  static bool LongitudeToString(Angle Longitude, TCHAR *Buffer, size_t size);
   /**
    * Converts a double-based Latitude into a formatted string
    * @param Latitude The double-based Latitude
    * @param Buffer Buffer string to write to (pointer)
    * @param size Size of the Buffer
    */
-  static bool LatitudeToString(double Latitude, TCHAR *Buffer, size_t size);
+  static bool LatitudeToString(Angle Latitude, TCHAR *Buffer, size_t size);
 
   static void NotifyUnitChanged(void);
 

@@ -29,7 +29,7 @@ public:
 
 protected:
   void on_advance(const GEOPOINT &loc,
-                  const double speed, const double bearing,
+                  const double speed, const Angle bearing,
                   const double alt, const double baroalt, const double t) {
 
     state.Location = loc;

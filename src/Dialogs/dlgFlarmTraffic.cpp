@@ -550,7 +550,7 @@ PaintRadarTraffic(Canvas &canvas) {
     }
 
     // Rotate x and y to have a track up display
-    fixed DisplayAngle = -XCSoarInterface::Basic().TrackBearing;
+    Angle DisplayAngle = Angle()-XCSoarInterface::Basic().TrackBearing;
     // or use .Heading? (no, because heading is not reliable)
     const FastRotation r(DisplayAngle);
     FastRotation::Pair p = r.Rotate(x, y);
@@ -614,7 +614,7 @@ PaintRadarTraffic(Canvas &canvas) {
 
     // Rotate and shift the arrow
     PolygonRotateShift(Arrow, 5, sc.x, sc.y,
-                       traffic.TrackBearing + DisplayAngle);
+                       (traffic.TrackBearing + DisplayAngle).value());
 
     // Draw the polygon
     canvas.polygon(Arrow, 5);

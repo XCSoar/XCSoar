@@ -63,12 +63,12 @@ protected:
 
 private:
   bool parseString(const TCHAR* src, tstring& dest);
-  bool parseAngle(const TCHAR* src, fixed& dest, const bool lat);
+  bool parseAngle(const TCHAR* src, Angle& dest, const bool lat);
   bool parseAltitude(const TCHAR* src, fixed& dest);
   bool parseFlags(const TCHAR* src, WaypointFlags& dest);
 
   tstring composeLine(const Waypoint& wp);
-  tstring composeAngle(const fixed& src, const bool lat);
+  tstring composeAngle(const Angle& src, const bool lat);
   tstring composeAltitude(const fixed& src);
   tstring composeFlags(const WaypointFlags& src);
 };

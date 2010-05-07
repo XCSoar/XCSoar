@@ -38,7 +38,6 @@
 #include "MacCready.hpp"
 #include <assert.h>
 #include <algorithm>
-#include "Math/Geometry.hpp"
 #include "GlideState.hpp"
 #include "GlidePolar.hpp"
 #include "GlideResult.hpp"

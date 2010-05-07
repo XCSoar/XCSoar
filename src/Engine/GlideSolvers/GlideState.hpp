@@ -93,14 +93,14 @@ struct GlideState
   /** Height (m above MSL) of end */
   fixed MinHeight;
   /** Direction of wind (deg True) */
-  fixed WindDirection;
+  Angle WindDirection;
   /** Aircraft height less target height */
   fixed AltitudeDifference;
 
   /** (internal use) */
   fixed EffectiveWindSpeed;
   /** (internal use) */
-  fixed EffectiveWindAngle;
+  Angle EffectiveWindAngle;
   /** (internal use) */
   fixed wsq_;
   /** (internal use) */

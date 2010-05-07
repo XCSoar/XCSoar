@@ -52,8 +52,8 @@ RenderObservationZone::draw_circle() {
 }
 
 void 
-RenderObservationZone::draw_segment(const fixed start_radial, 
-                                    const fixed end_radial) 
+RenderObservationZone::draw_segment(const Angle start_radial, 
+                                    const Angle end_radial) 
 {
   m_buffer.segment(p_center.x, p_center.y, p_radius, m_rc, 
                    start_radial-m_proj.GetDisplayAngle(), 

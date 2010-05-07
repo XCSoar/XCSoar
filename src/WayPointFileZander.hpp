@@ -57,7 +57,7 @@ protected:
 
 private:
   bool parseString(const TCHAR* src, tstring& dest);
-  bool parseAngle(const TCHAR* src, fixed& dest, const bool lat);
+  bool parseAngle(const TCHAR* src, Angle& dest, const bool lat);
   bool parseAltitude(const TCHAR* src, fixed& dest);
   bool parseFlags(const TCHAR* src, WaypointFlags& dest);
 };

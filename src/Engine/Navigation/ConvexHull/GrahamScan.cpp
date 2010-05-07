@@ -187,8 +187,8 @@ fixed GrahamScan::direction( const GEOPOINT& p0,
                              const GEOPOINT& p1,
                              const GEOPOINT& p2 )
 {
-  return ( (p0.Longitude - p1.Longitude ) * (p2.Latitude - p1.Latitude ) )
-    - ( (p2.Longitude - p1.Longitude ) * (p0.Latitude - p1.Latitude ) );
+  return (( (p0.Longitude - p1.Longitude ) * (p2.Latitude - p1.Latitude ) )
+          - ( (p2.Longitude - p1.Longitude ) * (p0.Latitude - p1.Latitude ) )).value();
 }
 
 

@@ -2,8 +2,8 @@ HOST_EXEEXT = $(findstring .exe,$(MAKE))
 HOSTCC = gcc$(HOST_EXEEXT)
 HOSTCXX = g++$(HOST_EXEEXT)
 
-HOST_CPPFLAGS = $(INCLUDES) $(CPPFLAGS)
-HOST_CXXFLAGS = $(OPTIMIZE) $(CXX_FEATURES) $(CXXFLAGS)
+HOST_CPPFLAGS = $(INCLUDES) $(CPPFLAGS) $(TARGET_CPPFLAGS)
+HOST_CXXFLAGS = $(OPTIMIZE) $(CXX_FEATURES) $(CXXFLAGS) $(TARGET_CPPFLAGS)
 HOST_CFLAGS = $(OPTIMIZE) $(C_FEATURES) $(CFLAGS)
 
 host-cc-flags = $(DEPFLAGS) $(HOST_CFLAGS) $(HOST_CPPFLAGS)
@@ -16,7 +16,7 @@ $(HOST_OUTPUT_DIR)/%.o: %.c | $(HOST_OUTPUT_DIR)/%/../dirstamp
 
 $(HOST_OUTPUT_DIR)/%.o: %.cpp | $(HOST_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  HOSTCXX $@"
-	$(C)$(HOSTCXX) -c $(host-cxx-flags $@ $^
+	$(C)$(HOSTCXX) -c $(host-cxx-flags) -o $@ $^
 
 $(HOST_OUTPUT_DIR)/%$(HOST_EXEEXT): $(HOST_OUTPUT_DIR)/%.o
 	@$(NQ)echo "  HOSTLD  $@"

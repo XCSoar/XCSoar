@@ -630,4 +630,12 @@ Trace::print(const GEOPOINT &loc) const
   print_tpv(vec, ft);
 }
 
+#include "Math/Angle.hpp"
+
+std::ostream& operator<< (std::ostream& o, const Angle& a)
+{
+  o << a.m_value;
+  return o;
+} 
+
 #endif

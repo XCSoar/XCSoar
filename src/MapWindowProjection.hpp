@@ -96,7 +96,7 @@ class MapWindowProjection:
   RECT   MapRectSmall;
   RECT   MapRectBig;
 
-  fixed DisplayAircraftAngle;
+  Angle DisplayAircraftAngle;
 
   // scale/display stuff
   void   CalculateOrigin(const RECT rc,

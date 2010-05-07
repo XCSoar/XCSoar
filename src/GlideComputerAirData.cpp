@@ -46,8 +46,6 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "Math/LowPassFilter.hpp"
 #include "Math/Earth.hpp"
-#include "Math/Geometry.hpp"
-#include "Math/FastMath.h"
 #include "Math/Constants.h"
 #include "RasterTerrain.h"
 #include "RasterMap.h"

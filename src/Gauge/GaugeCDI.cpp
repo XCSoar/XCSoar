@@ -60,7 +60,7 @@ GaugeCDI::GaugeCDI(ContainerWindow &parent)
   hide();
 }
 
-void GaugeCDI::Update(double TrackBearing, double WaypointBearing)
+void GaugeCDI::Update(Angle TrackBearing, Angle WaypointBearing)
 {
   // JMW changed layout here to fit reorganised display
   // insert waypoint bearing ".<|>." into CDIScale string"
@@ -68,18 +68,18 @@ void GaugeCDI::Update(double TrackBearing, double WaypointBearing)
   TCHAR CDIScale[] = TEXT("330..340..350..000..010..020..030..040..050..060..070..080..090..100..110..120..130..140..150..160..170..180..190..200..210..220..230..240..250..260..270..280..290..300..310..320..330..340..350..000..010..020..030..040.");
   TCHAR CDIDisplay[25] = TEXT("");
   int j;
-  int CDI_WP_Bearing = (int)WaypointBearing/2;
+  int CDI_WP_Bearing = (int)WaypointBearing.value()/2;
   CDIScale[CDI_WP_Bearing + 9] = 46;
   CDIScale[CDI_WP_Bearing + 10] = 60;
   CDIScale[CDI_WP_Bearing + 11] = 124; // "|" character
   CDIScale[CDI_WP_Bearing + 12] = 62;
   CDIScale[CDI_WP_Bearing + 13] = 46;
-  for (j=0;j<24;j++) CDIDisplay[j] = CDIScale[(j + (int)(TrackBearing)/2)];
+  for (j=0;j<24;j++) CDIDisplay[j] = CDIScale[(j + (int)(TrackBearing.value())/2)];
   CDIDisplay[24] = _T('\0');
   // JMW fix bug! This indicator doesn't always display correctly!
 
   // JMW added arrows at end of CDI to point to track if way off..
-  int deltacdi = iround(WaypointBearing - TrackBearing);
+  int deltacdi = iround((WaypointBearing - TrackBearing).value());
 
   while (deltacdi>180) {
     deltacdi-= 360;

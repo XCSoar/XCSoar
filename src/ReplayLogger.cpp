@@ -89,8 +89,8 @@ public:
       p[i].t = p[i + 1].t;
     }
 
-    p[3].loc.Latitude = lat;
-    p[3].loc.Longitude = lon;
+    p[3].loc.Latitude = Angle(fixed(lat));
+    p[3].loc.Longitude = Angle(fixed(lon));
     p[3].alt = alt;
     p[3].t = t;
   }
@@ -127,24 +127,24 @@ public:
       return;
     }
 
-    const double u = (time - p[1].t) / (p[2].t - p[1].t);
+    const fixed u((time - p[1].t) / (p[2].t - p[1].t));
 
-    if (u < 0.0) {
+    if (!positive(u)) {
       loc = p[1].loc;
       alt = p[1].alt;
       return;
     }
 
-    if (u > 1.0) {
+    if (u > fixed_one) {
       loc = p[2].loc;
       alt = p[2].alt;
       return;
     }
 
-    const double t = 0.98;
-    const double u2 = u * u;
-    const double u3 = u2 * u;
-    const double c[4]= {-t * u3 + 2 * t * u2 - t * u,
+    const fixed t(0.98);
+    const fixed u2 = u * u;
+    const fixed u3 = u2 * u;
+    const fixed c[4]= {-t * u3 + 2 * t * u2 - t * u,
                         (2 - t) * u3 + (t - 3) * u2 + 1,
                         (t - 2) * u3 + (3 - 2 * t) * u2 + t * u,
                         t * u3 - t * u2};
@@ -373,7 +373,7 @@ ReplayLogger::UpdateInternal()
     cli.Interpolate(t_simulation+0.1, P1, Alt1);
 
     const double Speed = cli.GetSpeed(t_simulation);
-    const double Bearing = P0.bearing(P1);
+    const Angle Bearing = P0.bearing(P1);
 
     on_advance(P0, Speed, Bearing, Alt0, Alt0, t_simulation);
   }

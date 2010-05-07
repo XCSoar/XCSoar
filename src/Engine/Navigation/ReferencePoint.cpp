@@ -36,7 +36,7 @@
  */
 #include "ReferencePoint.hpp"
 
-fixed
+Angle
 ReferencePoint::bearing(const GEOPOINT & ref) const 
 {
   return m_location.bearing(ref);

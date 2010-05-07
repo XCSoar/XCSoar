@@ -209,8 +209,8 @@ LoggerImpl::LogPointToBuffer(const NMEA_INFO &gps_info)
 void
 LoggerImpl::LoadGPSPointFromNMEA(const NMEA_INFO& gps_info, LogPoint_GPSPosition &p)
 {
-  p.DegLat = (int)gps_info.Location.Latitude;
-  p.MinLat = gps_info.Location.Latitude - p.DegLat;
+  p.DegLat = (int)gps_info.Location.Latitude.value();
+  p.MinLat = gps_info.Location.Latitude.value() - p.DegLat;
   p.NoS = 'N';
   if ((p.MinLat < 0) || ((p.MinLat - p.DegLat == 0) && (p.DegLat < 0))) {
     p.NoS = 'S';
@@ -220,8 +220,8 @@ LoggerImpl::LoadGPSPointFromNMEA(const NMEA_INFO& gps_info, LogPoint_GPSPosition
   p.MinLat *= 60;
   p.MinLat *= 1000;
 
-  p.DegLon = (int)gps_info.Location.Longitude;
-  p.MinLon = gps_info.Location.Longitude - p.DegLon;
+  p.DegLon = (int)gps_info.Location.Longitude.value();
+  p.MinLon = gps_info.Location.Longitude.value() - p.DegLon;
   p.EoW = 'E';
   if ((p.MinLon < 0) || ((p.MinLon - p.DegLon == 0) && (p.DegLon < 0))) {
     p.EoW = 'W';
@@ -510,8 +510,8 @@ LoggerImpl::EndDeclaration(void)
 void
 LoggerImpl::AddDeclaration(const GEOPOINT &location, const TCHAR *ID)
 {
-  const double Latitude = location.Latitude;
-  const double Longitude = location.Longitude;
+  const double Latitude = location.Latitude.value();
+  const double Longitude = location.Longitude.value();
 
   char szCRecord[500];
   char IDString[MAX_PATH];

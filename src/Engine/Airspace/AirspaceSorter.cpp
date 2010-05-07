@@ -1,7 +1,6 @@
 #include "AirspaceSorter.hpp"
 #include <algorithm>
 #include "Navigation/Geometry/GeoVector.hpp"
-#include "Math/Geometry.hpp"
 #include "Airspace/Airspaces.hpp"
 
 AirspaceSorter::AirspaceSorter(const AirspacesInterface &airspaces,
@@ -80,20 +79,22 @@ AirspaceSorter::filter_name(AirspaceSelectInfoVector& vec,
 }
 
 static const fixed fixed_18(18);
-static fixed Direction;
+static Angle Direction;
 
 static bool
 AirspaceDirectionFilter(const AirspaceSelectInfo& elem1) 
 {
-  fixed DirectionErr = fabs(AngleLimit180(elem1.Direction-Direction));
+  fixed DirectionErr = (elem1.Direction-Direction).AngleLimit180().magnitude();
   return (DirectionErr > fixed_18);
 }
 
 void 
-AirspaceSorter::filter_direction(AirspaceSelectInfoVector& vec, const fixed direction) const
+AirspaceSorter::filter_direction(AirspaceSelectInfoVector& vec, 
+                                 const Angle direction) const
 {
   Direction = direction;
-  vec.erase(std::remove_if(vec.begin(), vec.end(), AirspaceDirectionFilter), vec.end());
+  vec.erase(std::remove_if(vec.begin(), vec.end(), AirspaceDirectionFilter), 
+            vec.end());
 }
 
 static fixed MaxDistance;

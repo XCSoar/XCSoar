@@ -40,7 +40,7 @@ Copyright_License {
 #define XCSOAR_MATH_FASTROTATION_HPP
 
 #include "Compiler.h"
-#include "Math/fixed.hpp"
+#include "Math/Angle.hpp"
 
 #include <utility>
 
@@ -48,16 +48,16 @@ Copyright_License {
  * Rotate coordinates around the zero origin.
  */
 class FastRotation {
-  fixed angle;
+  Angle angle;
   double cost, sint;
 
 public:
   typedef std::pair<double,double> Pair;
 
   FastRotation():angle(fixed_zero), cost(1), sint(0) {}
-  FastRotation(fixed _angle):angle(9999) { SetAngle(_angle); }
+  FastRotation(Angle _angle):angle(-fixed(9999)) { SetAngle(_angle); }
 
-  fixed GetAngle() const {
+  Angle GetAngle() const {
     return angle;
   }
 
@@ -66,9 +66,9 @@ public:
    *
    * @param _angle an angle between 0 and 360
    */
-  void SetAngle(fixed _angle);
+  void SetAngle(Angle _angle);
 
-  void operator =(fixed _angle) {
+  void operator =(Angle _angle) {
     SetAngle(_angle);
   }
 
@@ -92,22 +92,22 @@ public:
  * Same as #FastRotation, but works with integer coordinates.
  */
 class FastIntegerRotation {
-  fixed angle;
+  Angle angle;
   int cost, sint;
 
 public:
   typedef std::pair<int,int> Pair;
 
-  FastIntegerRotation():angle(0), cost(1024), sint(0) {}
-  FastIntegerRotation(fixed _angle):angle(99999) { SetAngle(_angle); }
+  FastIntegerRotation():angle(fixed_zero), cost(1024), sint(0) {}
+  FastIntegerRotation(Angle _angle):angle(-fixed(9999)) { SetAngle(_angle); }
 
-  fixed GetAngle() const {
+  Angle GetAngle() const {
     return angle;
   }
 
-  void SetAngle(fixed _angle);
+  void SetAngle(Angle _angle);
 
-  void operator =(fixed _angle) {
+  void operator =(Angle _angle) {
     SetAngle(_angle);
   }
 

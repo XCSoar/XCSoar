@@ -54,16 +54,12 @@ Update()
 {
   WndProperty* wp;
   TCHAR Text[100];
-  double teammateBearing = XCSoarInterface::Calculated().TeammateBearing;
+  Angle teammateBearing = XCSoarInterface::Calculated().TeammateBearing;
   double teammateRange = XCSoarInterface::Calculated().TeammateRange;
 
   if (XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint >= 0) {
-    double Value = teammateBearing - XCSoarInterface::Basic().TrackBearing;
-
-    if (Value < -180.0)
-      Value += 360.0;
-    else if (Value > 180.0)
-      Value -= 360.0;
+    double Value = (teammateBearing - XCSoarInterface::Basic().TrackBearing).
+      AngleLimit180().value();
 
     if (Value > 1)
       _stprintf(Text, _T("%2.0f")_T(DEG)_T(">"), Value);
@@ -83,7 +79,7 @@ Update()
 
   wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(teammateBearing);
+    wp->GetDataField()->SetAsFloat(teammateBearing.value());
     wp->RefreshDisplay();
   }
 

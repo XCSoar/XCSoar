@@ -130,10 +130,13 @@ LeonardoParseC(const TCHAR *line, NMEA_INFO &info, bool enable_baro)
 
   // 10 = wind speed [km/h]
   // 11 = wind direction [degrees]
+  fixed windb;
   info.ExternalWindAvailable = ParseNumber(line, 10, info.wind.norm)
-    && ParseNumber(line, 11, info.wind.bearing);
-  if (info.ExternalWindAvailable)
+    && ParseNumber(line, 11, windb);
+  if (info.ExternalWindAvailable) {
+    info.wind.bearing = Angle(windb);
     info.wind.norm = Units::ToSysUnit(info.wind.norm, unKiloMeterPerHour);
+  }
 
   TriggerVarioUpdate();
 

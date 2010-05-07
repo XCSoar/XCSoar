@@ -110,7 +110,7 @@ WayPointFileZander::parseString(const TCHAR* src, tstring& dest)
 }
 
 bool
-WayPointFileZander::parseAngle(const TCHAR* src, fixed& dest, const bool lat)
+WayPointFileZander::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
 {
   double val;
   char sign = 0;
@@ -135,7 +135,7 @@ WayPointFileZander::parseAngle(const TCHAR* src, fixed& dest, const bool lat)
     val *= -1;
 
   // Save angle
-  dest = (fixed)val;
+  dest = Angle((fixed)val);
   return true;
 }
 

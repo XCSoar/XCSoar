@@ -49,7 +49,6 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Defines.h"
-#include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Fonts.hpp"
 #include "Asset.hpp"
@@ -352,12 +351,12 @@ MapWindow::on_mouse_up(int x, int y)
   if (is_simulator() && (dwInterval > 50)) {
     if (!Basic().gps.Replay && !my_target_pan && (distance > IBLSCALE(36))) {
       // This drag moves the aircraft (changes speed and direction)
-      const fixed oldbearing = Basic().TrackBearing;
+      const Angle oldbearing = Basic().TrackBearing;
       const fixed minspeed = 1.1 * (task != NULL ?
                                     task->get_glide_polar() :
                                     GlidePolar(fixed_zero)).get_Vmin();
-      const fixed newbearing = Bearing(LLstart, G);
-      if ((fabs(AngleLimit180(fixed(newbearing - oldbearing))) < 30) ||
+      const Angle newbearing = Bearing(LLstart, G);
+      if (((newbearing - oldbearing).AngleLimit180().magnitude() < 30) ||
           (Basic().GroundSpeed < minspeed))
         device_blackboard.SetSpeed(min(fixed(100.0),
                                    max(minspeed, fixed(distance / 3))));

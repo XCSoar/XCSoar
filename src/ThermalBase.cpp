@@ -48,11 +48,11 @@ EstimateThermalBase(const GEOPOINT Thermal_Location,
                     const SpeedVector wind,
                     GEOPOINT *ground_location, fixed *ground_alt)
 {
-  if ((Thermal_Location.Longitude == 0.0)
-      || (Thermal_Location.Latitude == 0.0)
+  if ((Thermal_Location.Longitude == Angle())
+      || (Thermal_Location.Latitude == Angle())
       || (wthermal < 1.0)) {
-    ground_location->Longitude = 0.0;
-    ground_location->Latitude = 0.0;
+    ground_location->Longitude = Angle();
+    ground_location->Latitude = Angle();
     *ground_alt = -1.0;
     return;
   }
@@ -65,8 +65,8 @@ EstimateThermalBase(const GEOPOINT Thermal_Location,
 
   GEOPOINT loc;
   FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * dt, &loc);
-  fixed Xrounding = fabs(loc.Longitude - Thermal_Location.Longitude) / 2;
-  fixed Yrounding = fabs(loc.Latitude - Thermal_Location.Latitude) / 2;
+  fixed Xrounding = ((loc.Longitude - Thermal_Location.Longitude)*fixed_half).magnitude();
+  fixed Yrounding = ((loc.Latitude - Thermal_Location.Latitude)*fixed_half).magnitude();
 
   for (fixed t = fixed_zero; t <= Tmax; t += dt) {
     FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * t,

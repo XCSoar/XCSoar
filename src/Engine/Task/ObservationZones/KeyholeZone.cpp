@@ -36,7 +36,6 @@
  */
 
 #include "KeyholeZone.hpp"
-#include "Math/Geometry.hpp"
 
 bool
 KeyholeZone::equals(const ObservationZonePoint* other) const
@@ -52,8 +51,8 @@ KeyholeZone::equals(const ObservationZonePoint* other) const
 GEOPOINT 
 KeyholeZone::get_boundary_parametric(fixed t) const
 { 
-  const fixed half = HalfAngle(getStartRadial(), getEndRadial());
-  const fixed angle = AngleLimit360(t*fixed_360+half);
+  const Angle half = getStartRadial().HalfAngle(getEndRadial());
+  const Angle angle = (Angle(t*fixed_360)+half).AngleLimit360();
   if (angleInSector(angle)) {
     return GeoVector(Radius, angle).end_point(get_location());
   } else {

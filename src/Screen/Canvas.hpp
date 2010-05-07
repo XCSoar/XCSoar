@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_CANVAS_HPP
 
 #include "Math/fixed.hpp"
+#include "Math/Angle.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Color.hpp"
 #include "Screen/Font.hpp"
@@ -699,10 +700,10 @@ public:
   void autoclip_circle(int x, int y, unsigned radius, const RECT rc);
 
   void arc(int x, int y, unsigned radius, const RECT rc,
-           fixed start, fixed end);
+           Angle start, Angle end);
 
   void segment(int x, int y, unsigned radius, const RECT rc,
-               fixed start, fixed end, bool horizon=false);
+               Angle start, Angle end, bool horizon=false);
 
   void draw_button(RECT rc, bool down) {
     ::DrawFrameControl(dc, &rc, DFC_BUTTON,

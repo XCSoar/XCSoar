@@ -39,8 +39,8 @@ void setup_airspaces(Airspaces& airspaces, const unsigned n) {
     AbstractAirspace* as;
     if (rand()%4!=0) {
       GEOPOINT c;
-      c.Longitude = (rand()%1200-600)/1000.0+0.5;
-      c.Latitude = (rand()%1200-600)/1000.0+0.5;
+      c.Longitude = Angle(fixed((rand()%1200-600)/1000.0+0.5));
+      c.Latitude = Angle(fixed((rand()%1200-600)/1000.0+0.5));
       fixed radius(10000.0*(0.2+(rand()%12)/12.0));
       as = new AirspaceCircle(c,radius);
     } else {
@@ -49,8 +49,8 @@ void setup_airspaces(Airspaces& airspaces, const unsigned n) {
       // random points
       const unsigned num = rand()%10+5;
       GEOPOINT c;
-      c.Longitude = (rand()%1200-600)/1000.0+0.5;
-      c.Latitude = (rand()%1200-600)/1000.0+0.5;
+      c.Longitude = Angle(fixed((rand()%1200-600)/1000.0+0.5));
+      c.Latitude = Angle(fixed((rand()%1200-600)/1000.0+0.5));
       
       std::vector<GEOPOINT> pts;
       for (unsigned j=0; j<num; j++) {

@@ -187,7 +187,7 @@ static void UpdateList(void)
     sort_distance = true;
     int a = DirectionFilter[wpDirection->GetDataField()->GetAsInteger()];
     if (a == DirHDG) {
-      a = iround(XCSoarInterface::Basic().Heading);
+      a = iround(XCSoarInterface::Basic().Heading.value());
       lastHeading = a;
     }
     waypoint_sorter->filter_direction(WayPointSelectInfo, fixed(a));
@@ -290,9 +290,7 @@ GetDirectionData(int DirectionFilterIdx){
   if (DirectionFilterIdx == 0)
     _stprintf(sTmp, TEXT("%c"), '*');
   else if (DirectionFilterIdx == 1){
-    int a = iround(XCSoarInterface::Basic().Heading);
-    if (a <=0)
-      a += 360;
+    int a = iround(XCSoarInterface::Basic().Heading.AngleLimit360().value());
     _stprintf(sTmp, TEXT("HDG(%d")TEXT(DEG)TEXT(")"), a);
   }else
     _stprintf(sTmp, TEXT("%d")TEXT(DEG), DirectionFilter[DirectionFilterIdx]);
@@ -403,7 +401,7 @@ OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 
     // right justified after distance
     _stprintf(sTmp, _T("%d")_T(DEG),
-	      iround(WayPointSelectInfo[i].Direction));
+	      iround(WayPointSelectInfo[i].Direction.value()));
     x3 = w0-canvas.text_width(sTmp);
     canvas.text(rc.left + x3, rc.top + Layout::FastScale(2), sTmp);
   } else {
@@ -430,7 +428,7 @@ static int OnTimerNotify(WindowControl * Sender) {
   (void)Sender;
   if (wpDirection->GetDataField()->GetAsInteger() == 1){
     int a;
-    a = (lastHeading - iround(XCSoarInterface::Basic().Heading));
+    a = (lastHeading - iround(XCSoarInterface::Basic().Heading.value()));
     if (abs(a) > 0){
       UpdateList();
       InitializeDirection(true);

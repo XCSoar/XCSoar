@@ -40,7 +40,7 @@ Copyright_License {
 #ifndef XCSOAR_GEOPOINT_HPP
 #define XCSOAR_GEOPOINT_HPP
 
-#include "Math/fixed.hpp"
+#include "Math/Angle.hpp"
 
 /**
  * Geodetic coordinate expressed as Longitude and Latitude in degrees.
@@ -54,7 +54,7 @@ struct GEOPOINT {
    *
    * @return Point initialised at origin
    */
-  GEOPOINT() : Longitude(0.0), Latitude(0.0) {}
+  GEOPOINT() : Longitude(fixed_zero), Latitude(fixed_zero) {}
 
   /**
    * Constructor (supplied location)
@@ -64,11 +64,11 @@ struct GEOPOINT {
    *
    * @return Initialised object
    */
-  GEOPOINT(const fixed _Longitude, const fixed _Latitude) :
+  GEOPOINT(const Angle &_Longitude, const Angle &_Latitude) :
     Longitude(_Longitude), Latitude(_Latitude) {}
 
-  fixed Longitude; /**< Longitude (deg) */
-  fixed Latitude; /**< Latitude (deg) */
+  Angle Longitude; /**< Longitude (deg) */
+  Angle Latitude; /**< Latitude (deg) */
 
   /**
    * Find location a parametric distance along a vector from this point
@@ -161,7 +161,7 @@ struct GEOPOINT {
    *
    * @return Bearing (deg)
    */
-  fixed bearing(const GEOPOINT &other) const;
+  Angle bearing(const GEOPOINT &other) const;
 
   /**
    * Find distance along a great-circle path that this point

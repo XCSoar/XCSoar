@@ -507,13 +507,13 @@ TerrainRenderer::Height(const MapWindowProjection &map_projection,
   x = (X0 + X1) / 2 + dd;
   y = (Y0 + Y1) / 2;
   map_projection.Screen2LonLat(x, y, G);
-  double Xrounding = fabs(G.Longitude - middle.Longitude);
+  double Xrounding = (G.Longitude - middle.Longitude).magnitude();
   pixelDX = Distance(middle, G);
 
   x = (X0 + X1) / 2;
   y = (Y0 + Y1) / 2 + dd;
   map_projection.Screen2LonLat(x, y, G);
-  double Yrounding = fabs(G.Latitude - middle.Latitude);
+  double Yrounding = (G.Latitude - middle.Latitude).magnitude();
   pixelDY = Distance(middle, G);
 
   pixelsize_d = sqrt((pixelDX * pixelDX + pixelDY * pixelDY) / 2.0);
@@ -610,12 +610,12 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
   #ifndef SLOW_STUFF
 
   // This code is quickest but not so readable
-  const double PanLatitude = map_projection.GetPanLocation().Latitude;
-  const double PanLongitude = map_projection.GetPanLocation().Longitude;
+  const Angle PanLatitude = map_projection.GetPanLocation().Latitude;
+  const Angle PanLongitude = map_projection.GetPanLocation().Longitude;
   const double InvDrawScale = map_projection.GetScreenScaleToLonLat() / 1024.0;
-  const double DisplayAngle = map_projection.GetDisplayAngle();
-  const int cost = ifastcosine(DisplayAngle);
-  const int sint = ifastsine(DisplayAngle);
+  const Angle DisplayAngle = map_projection.GetDisplayAngle();
+  const int cost = ifastcosine(DisplayAngle.value());
+  const int sint = ifastsine(DisplayAngle.value());
 
   GEOPOINT gp;
   for (int y = Y0; y < Y1; y += dtquant) {
@@ -630,9 +630,10 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
 
         assert(myhbuf < hBufTop);
 
-        gp.Latitude = PanLatitude - (ycost + x * sint) * InvDrawScale;
-        gp.Longitude = PanLongitude + (x * cost - ysint)
-            * invfastcosine(gp.Latitude) * InvDrawScale;
+        gp.Latitude = PanLatitude 
+          - Angle(fixed((ycost + x * sint) * InvDrawScale));
+        gp.Longitude = PanLongitude + Angle((x * cost - ysint)
+                                            * invfastcosine(gp.Latitude.value()) * InvDrawScale);
         *myhbuf = max((short)0, DisplayMap->GetField(gp, *rounding));
       } else {
         *myhbuf = 0;
@@ -860,18 +861,18 @@ TerrainRenderer::Draw(Canvas &canvas, RECT rc)
 bool
 TerrainRenderer::Draw(Canvas &canvas,
                       const MapWindowProjection &map_projection,
-    const double sunazimuth, const double sunelevation, const GEOPOINT &loc,
+    const Angle sunazimuth, const Angle sunelevation, const GEOPOINT &loc,
     int day_time, const bool isBigZoom)
 {
   if (!SetMap(loc, day_time))
     return false;
 
   // step 1: calculate sunlight vector
-  double fudgeelevation = (10.0 + 80.0 * TerrainBrightness / 255.0);
+  Angle fudgeelevation (fixed(10.0 + 80.0 * TerrainBrightness / 255.0));
 
-  int sx = (int)(255 * (fastcosine(fudgeelevation) * fastsine(sunazimuth)));
-  int sy = (int)(255 * (fastcosine(fudgeelevation) * fastcosine(sunazimuth)));
-  int sz = (int)(255 * fastsine(fudgeelevation));
+  int sx = (int)(255 * fudgeelevation.fastcosine() * sunazimuth.fastsine());
+  int sy = (int)(255 * fudgeelevation.fastcosine() * sunazimuth.fastcosine());
+  int sz = (int)(255 * fudgeelevation.fastsine());
 
   ColorTable();
 

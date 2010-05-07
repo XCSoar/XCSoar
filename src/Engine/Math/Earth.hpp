@@ -62,11 +62,11 @@ fixed CrossTrackError(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3,
 fixed ProjectedDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3);
 
 void DistanceBearing(GEOPOINT loc1, GEOPOINT loc2, fixed *Distance,
-    fixed *Bearing);
+    Angle *Bearing);
 
 fixed Distance(GEOPOINT loc1, GEOPOINT loc2);
 
-fixed Bearing(GEOPOINT loc1, GEOPOINT loc2);
+Angle Bearing(GEOPOINT loc1, GEOPOINT loc2);
 
 /**
  * Finds the point along a distance dthis (m) between p1 and p2, which are
@@ -87,7 +87,7 @@ GEOPOINT IntermediatePoint(GEOPOINT loc1, GEOPOINT loc2, const fixed dthis);
  */
 fixed DoubleDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3);
 
-void FindLatitudeLongitude(GEOPOINT loc, fixed Bearing, fixed Distance,
+void FindLatitudeLongitude(GEOPOINT loc, Angle Bearing, fixed Distance,
     GEOPOINT *loc_out);
 
 #endif

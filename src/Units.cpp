@@ -48,6 +48,7 @@ Copyright_License {
 //distance      km   nm   ml   nm
 
 #include "Units.hpp"
+#include "Math/Angle.hpp"
 
 #include <stdio.h>
 
@@ -88,20 +89,20 @@ Units_t Units::WindSpeedUnit = unKiloMeterPerHour;
 Units_t Units::TaskSpeedUnit = unKiloMeterPerHour;
 
 void
-Units::LongitudeToDMS(double Longitude, int *dd, int *mm, int *ss, bool *east)
+Units::LongitudeToDMS(Angle Longitude, int *dd, int *mm, int *ss, bool *east)
 {
   // if (Longitude is negative) -> Longitude is West otherwise East
-  *east = (Longitude < 0 ? false : true);
+  *east = (Longitude.value() < 0 ? false : true);
 
-  Longitude = fabs(Longitude);
+  double mlong = Longitude.magnitude();
   // Calculate degrees
-  *dd = (int)Longitude;
+  *dd = (int)mlong;
   // Calculate minutes
-  Longitude = (Longitude - (*dd)) * 60.0;
-  *mm = (int)(Longitude);
+  mlong = (mlong - (*dd)) * 60.0;
+  *mm = (int)(mlong);
   // Calculate seconds
-  Longitude = (Longitude - (*mm)) * 60.0;
-  *ss = (int)(Longitude + 0.5);
+  mlong = (mlong - (*mm)) * 60.0;
+  *ss = (int)(mlong + 0.5);
 
   // Check if more then 60 seconds
   if (*ss >= 60) {
@@ -117,20 +118,20 @@ Units::LongitudeToDMS(double Longitude, int *dd, int *mm, int *ss, bool *east)
 }
 
 void
-Units::LatitudeToDMS(double Latitude, int *dd, int *mm, int *ss, bool *north)
+Units::LatitudeToDMS(Angle Latitude, int *dd, int *mm, int *ss, bool *north)
 {
   // if (Latitude is negative) -> Latitude is South otherwise North
-  *north = (Latitude < 0 ? false : true);
+  *north = (Latitude.value() < 0 ? false : true);
 
-  Latitude = fabs(Latitude);
+  double mlat = Latitude.magnitude();
   // Calculate degrees
-  *dd = (int)Latitude;
+  *dd = (int)mlat;
   // Calculate minutes
-  Latitude = (Latitude - (*dd)) * 60.0;
-  *mm = (int)(Latitude);
+  mlat = (mlat - (*dd)) * 60.0;
+  *mm = (int)(mlat);
   // Calculate seconds
-  Latitude = (Latitude - (*mm)) * 60.0;
-  *ss = (int)(Latitude + 0.5);
+  mlat = (mlat - (*mm)) * 60.0;
+  *ss = (int)(mlat + 0.5);
 
   // Check if more then 60 seconds
   if (*ss >= 60) {
@@ -146,26 +147,26 @@ Units::LatitudeToDMS(double Latitude, int *dd, int *mm, int *ss, bool *north)
 }
 
 bool
-Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size)
+Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, size_t size)
 {
   (void)size;
   TCHAR EW[] = _T("WE");
   int dd, mm, ss;
 
   // Calculate Longitude sign
-  int sign = Longitude < 0 ? 0 : 1;
-  Longitude = fabs(Longitude);
+  int sign = Longitude.value() < 0 ? 0 : 1;
+  double mlong = Longitude.magnitude();
 
   switch (CoordinateFormat) {
   case cfDDMMSS:
     // Calculate degrees
-    dd = (int)Longitude;
+    dd = (int)mlong;
     // Calculate minutes
-    Longitude = (Longitude - dd) * 60.0;
-    mm = (int)(Longitude);
+    mlong = (mlong - dd) * 60.0;
+    mm = (int)(mlong);
     // Calculate seconds
-    Longitude = (Longitude - mm) * 60.0;
-    ss = (int)(Longitude + 0.5);
+    mlong = (mlong - mm) * 60.0;
+    ss = (int)(mlong + 0.5);
     if (ss >= 60) {
       mm++;
       ss -= 60;
@@ -181,29 +182,29 @@ Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size)
 
   case cfDDMMSSss:
     // Calculate degrees
-    dd = (int)Longitude;
+    dd = (int)mlong;
     // Calculate minutes
-    Longitude = (Longitude - dd) * 60.0;
-    mm = (int)(Longitude);
+    mlong = (mlong - dd) * 60.0;
+    mm = (int)(mlong);
     // Calculate seconds
-    Longitude = (Longitude - mm) * 60.0;
+    mlong = (mlong - mm) * 60.0;
     // Save the string to the Buffer
     _stprintf(Buffer, _T("%c%03d")_T(DEG)_T("%02d'%05.2f\""), EW[sign],
-              dd, mm, Longitude);
+              dd, mm, mlong);
     break;
 
   case cfDDMMmmm:
     // Calculate degrees
-    dd = (int)Longitude;
+    dd = (int)mlong;
     // Calculate minutes
-    Longitude = (Longitude - dd) * 60.0;
+    mlong = (mlong - dd) * 60.0;
     // Save the string to the Buffer
-    _stprintf(Buffer, _T("%c%03d")_T(DEG)_T("%06.3f'"), EW[sign], dd, Longitude);
+    _stprintf(Buffer, _T("%c%03d")_T(DEG)_T("%06.3f'"), EW[sign], dd, mlong);
     break;
 
   case cfDDdddd:
     // Save the string to the Buffer
-    _stprintf(Buffer, _T("%c%08.4f")_T(DEG), EW[sign], Longitude);
+    _stprintf(Buffer, _T("%c%08.4f")_T(DEG), EW[sign], mlong);
     break;
 
   default:
@@ -214,26 +215,26 @@ Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size)
 }
 
 bool
-Units::LatitudeToString(double Latitude, TCHAR *Buffer, size_t size)
+Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, size_t size)
 {
   (void)size;
   TCHAR EW[] = _T("SN");
   int dd, mm, ss;
 
   // Calculate Latitude sign
-  int sign = Latitude < 0 ? 0 : 1;
-  Latitude = fabs(Latitude);
+  int sign = Latitude.value() < 0 ? 0 : 1;
+  double mlat = Latitude.magnitude();
 
   switch (CoordinateFormat) {
   case cfDDMMSS:
     // Calculate degrees
-    dd = (int)Latitude;
+    dd = (int)mlat;
     // Calculate minutes
-    Latitude = (Latitude - dd) * 60.0;
-    mm = (int)(Latitude);
+    mlat = (mlat - dd) * 60.0;
+    mm = (int)(mlat);
     // Calculate seconds
-    Latitude = (Latitude - mm) * 60.0;
-    ss = (int)(Latitude + 0.5);
+    mlat = (mlat - mm) * 60.0;
+    ss = (int)(mlat + 0.5);
     if (ss >= 60) {
       mm++;
       ss -= 60;
@@ -249,29 +250,29 @@ Units::LatitudeToString(double Latitude, TCHAR *Buffer, size_t size)
 
   case cfDDMMSSss:
     // Calculate degrees
-    dd = (int)Latitude;
+    dd = (int)mlat;
     // Calculate minutes
-    Latitude = (Latitude - dd) * 60.0;
-    mm = (int)(Latitude);
+    mlat = (mlat - dd) * 60.0;
+    mm = (int)(mlat);
     // Calculate seconds
-    Latitude = (Latitude - mm) * 60.0;
+    mlat = (mlat - mm) * 60.0;
     // Save the string to the Buffer
     _stprintf(Buffer, _T("%c%02d")_T(DEG)_T("%02d'%05.2f\""), EW[sign],
-              dd, mm, Latitude);
+              dd, mm, mlat);
     break;
 
   case cfDDMMmmm:
     // Calculate degrees
-    dd = (int)Latitude;
+    dd = (int)mlat;
     // Calculate minutes
-    Latitude = (Latitude - dd) * 60.0;
+    mlat = (mlat - dd) * 60.0;
     // Save the string to the Buffer
-    _stprintf(Buffer, _T("%c%02d")_T(DEG)_T("%06.3f'"), EW[sign], dd, Latitude);
+    _stprintf(Buffer, _T("%c%02d")_T(DEG)_T("%06.3f'"), EW[sign], dd, mlat);
     break;
 
   case cfDDdddd:
     // Save the string to the Buffer
-    _stprintf(Buffer, _T("%c%07.4f")_T(DEG), EW[sign], Latitude);
+    _stprintf(Buffer, _T("%c%07.4f")_T(DEG), EW[sign], mlat);
     break;
 
   default:

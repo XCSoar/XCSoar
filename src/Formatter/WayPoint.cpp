@@ -227,8 +227,8 @@ const TCHAR *FormatterDiffBearing::Render(int *color) {
       && (Calculated().task_stats.current_leg.solution_remaining.Vector.Distance > 10.0)) {
     Valid = true;
 
-    Value = Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing 
-      -  Basic().TrackBearing;
+    Value = (Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing 
+             -  Basic().TrackBearing).value();
 
     // TODO use AngleLimit180
     if (Value < -180.0)

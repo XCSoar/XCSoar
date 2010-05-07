@@ -66,8 +66,8 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.UserForceDisplayMode = dmNone;
   settings_map.FullScreen = false;
   settings_map.EnablePan = false;
-  settings_map.PanLocation.Longitude = 0;
-  settings_map.PanLocation.Latitude = 0;
+  settings_map.PanLocation.Longitude = Angle();
+  settings_map.PanLocation.Latitude = Angle();
   settings_map.TargetPan = false;
   settings_map.TargetPanIndex = 0;
   settings_map.TargetZoomDistance = 500;

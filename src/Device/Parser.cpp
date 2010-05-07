@@ -42,7 +42,6 @@ Copyright_License {
 #include "Device/device.hpp"
 #include "Protection.hpp"
 #include "Device/Geoid.h"
-#include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Checksum.h"
@@ -521,8 +520,8 @@ NMEAParser::GLL(const TCHAR *String, const TCHAR **params, size_t nparams,
   tmplon = EastOrWest(tmplon, params[3][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Location.Latitude = tmplat;
-    GPS_INFO->Location.Longitude = tmplon;
+    GPS_INFO->Location.Latitude = Angle((fixed)tmplat);
+    GPS_INFO->Location.Longitude = Angle((fixed)tmplon);
   }
   else {
     GPS_INFO->gps.NAVWarning = true;
@@ -669,8 +668,8 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   tmplon = EastOrWest(tmplon, params[5][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Location.Latitude = tmplat;
-    GPS_INFO->Location.Longitude = tmplon;
+    GPS_INFO->Location.Latitude = Angle(fixed(tmplat));
+    GPS_INFO->Location.Longitude = Angle(fixed(tmplon));
   }
   else {
     GPS_INFO->gps.NAVWarning = true;
@@ -680,7 +679,7 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   if (GPS_INFO->GroundSpeed > fixed_one) {
     // JMW don't update bearing unless we're moving
-    GPS_INFO->TrackBearing = AngleLimit360(fixed(_tcstod(params[7], NULL)));
+    GPS_INFO->TrackBearing = Angle(fixed(_tcstod(params[7], NULL))).AngleLimit360();
   }
 
   if (!gps.Replay) {
@@ -788,8 +787,8 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
   tmplon = EastOrWest(tmplon, params[4][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Location.Latitude = tmplat;
-    GPS_INFO->Location.Longitude = tmplon;
+    GPS_INFO->Location.Latitude = Angle(fixed(tmplat));
+    GPS_INFO->Location.Longitude = Angle(fixed(tmplon));
   }
   else {
     GPS_INFO->gps.NAVWarning = true;
@@ -1057,18 +1056,15 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
   GEOPOINT plon = GPS_INFO->Location;
   plon.Longitude += delta_lon;
 
-  double dlat = Distance(GPS_INFO->Location, plat);
-  double dlon = Distance(GPS_INFO->Location, plon);
+  fixed dlat = Distance(GPS_INFO->Location, plat);
+  fixed dlon = Distance(GPS_INFO->Location, plon);
 
-  double FLARM_NorthingToLatitude;
-  double FLARM_EastingToLongitude;
+  fixed FLARM_NorthingToLatitude(0);
+  fixed FLARM_EastingToLongitude(0);
 
   if ((fabs(dlat) > 0.0) && (fabs(dlon) > 0.0)) {
     FLARM_NorthingToLatitude = delta_lat / dlat;
     FLARM_EastingToLongitude = delta_lon / dlon;
-  } else {
-    FLARM_NorthingToLatitude = 0.0;
-    FLARM_EastingToLongitude = 0.0;
   }
 
   // 5 id, 6 digit hex
@@ -1104,12 +1100,12 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
            &flarm_slot->Type); // unsigned short     10
 
   // 1 relativenorth, meters
-  flarm_slot->Location.Latitude = flarm_slot->RelativeNorth
-      * FLARM_NorthingToLatitude + GPS_INFO->Location.Latitude;
+  flarm_slot->Location.Latitude = Angle(flarm_slot->RelativeNorth
+                                        * FLARM_NorthingToLatitude) + GPS_INFO->Location.Latitude;
 
   // 2 relativeeast, meters
-  flarm_slot->Location.Longitude = flarm_slot->RelativeEast
-      * FLARM_EastingToLongitude + GPS_INFO->Location.Longitude;
+  flarm_slot->Location.Longitude = Angle(flarm_slot->RelativeEast
+                                         * FLARM_EastingToLongitude) + GPS_INFO->Location.Longitude;
 
   // alt
   flarm_slot->Altitude = flarm_slot->RelativeAltitude + GPS_INFO->GPSAltitude;
@@ -1138,8 +1134,8 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   if (i > 80)
     return;
 
-  static fixed angle;
-  angle = (i * 360) / 255;
+  static Angle angle;
+  angle = Angle(fixed((i * 360) / 255));
 
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
@@ -1148,19 +1144,22 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   static unsigned e1;
   static unsigned t1;
   static unsigned l;
-  h1 = ifastsine(angle) / 7;
-  n1 = ifastsine(angle) / 2 - 200;
-  e1 = ifastcosine(angle) / 1.5;
-  t1 = AngleLimit360(-angle);
+  h1 = ifastsine(angle.value()) / 7;
+  n1 = ifastsine(angle.value()) / 2 - 200;
+  e1 = ifastcosine(angle.value()) / 1.5;
+  t1 = -angle.AngleLimit360().value();
   l = (i % 30 > 13 ? 0 : (i % 30 > 5 ? 2 : 1));
   static unsigned h2;
   static unsigned n2;
   static unsigned e2;
   static unsigned t2;
-  h2 = ifastcosine(angle) / 10;
-  n2 = ifastsine(AngleLimit360(angle + 120)) / 1.2 + 300;
-  e2 = ifastcosine(AngleLimit360(angle + 120)) + 500;
-  t2 = AngleLimit360(-angle - 120);
+  Angle dangle = (angle + Angle(fixed(120))).AngleLimit360();
+  Angle hangle = dangle; hangle.flip();
+
+  h2 = ifastcosine(angle.value()) / 10;
+  n2 = ifastsine(dangle.value()) / 1.2 + 300;
+  e2 = ifastcosine(dangle.value()) + 500;
+  t2 = hangle.value();
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>

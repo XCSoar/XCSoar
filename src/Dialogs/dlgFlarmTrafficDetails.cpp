@@ -48,7 +48,6 @@
 #include "FLARM/FLARMNet.hpp"
 #include "UtilsFLARM.hpp"
 #include "Screen/Layout.hpp"
-#include "Engine/Math/Geometry.hpp"
 #include "Engine/Math/Earth.hpp"
 #include "LocalPath.hpp"
 #include "MainWindow.hpp"
@@ -73,7 +72,7 @@ void UpdateChanging() {
     return;
 
   fixed distance;
-  fixed dir;
+  Angle dir;
   DistanceBearing(XCSoarInterface::Basic().Location, target->Location,
       &distance, &dir);
 
@@ -83,11 +82,11 @@ void UpdateChanging() {
 
   // Fill horizontal direction field
   dir -= XCSoarInterface::Basic().TrackBearing;
-  dir = AngleLimit180(dir);
-  if (dir > 1)
-    _stprintf(tmp, _T("%2.0f")_T(DEG)_T(" »"), (double)dir);
-  else if (dir < -1)
-    _stprintf(tmp, _T("« ")_T("%2.0f")_T(DEG), (double)-dir);
+  dir = dir.AngleLimit180();
+  if (dir.value() > 1)
+    _stprintf(tmp, _T("%2.0f")_T(DEG)_T(" »"), (double)dir.value());
+  else if (dir.value() < -1)
+    _stprintf(tmp, _T("« ")_T("%2.0f")_T(DEG), (double)-dir.value());
   else
     _tcscpy(tmp, _T("«»"));
   ((WndProperty *)wf->FindByName(_T("prpDirectionH")))->SetText(tmp);
@@ -97,13 +96,13 @@ void UpdateChanging() {
   ((WndProperty *)wf->FindByName(_T("prpAltitude")))->SetText(tmp);
 
   // Fill vertical direction field
-  dir = (fixed)atan2(target->RelativeAltitude, distance);
+  dir = Angle((fixed)atan2(target->RelativeAltitude, distance));
   dir *=  fixed_180 / M_PI;
-  dir = AngleLimit180(dir);
-  if (dir > 1 || dir < -1)
-    _stprintf(tmp, _T("%+2.0f")_T(DEG), (double)dir);
+  dir = dir.AngleLimit180();
+  if (dir.magnitude() > 1)
+    _stprintf(tmp, _T("%+2.0f")_T(DEG), (double)dir.value());
   else
-    _stprintf(tmp, _T("--"), (double)dir);
+    _stprintf(tmp, _T("--"), (double)dir.value());
   ((WndProperty *)wf->FindByName(_T("prpDirectionV")))->SetText(tmp);
 
   // Fill climb speed field

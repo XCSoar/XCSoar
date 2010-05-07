@@ -43,7 +43,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/BufferCanvas.hpp"
 #include "Math/FastMath.h"
-#include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Math/Constants.h"
 #include "NMEA/Info.hpp"

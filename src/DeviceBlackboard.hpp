@@ -71,7 +71,7 @@ protected:
   NMEA_INFO& SetBasic() { return gps_info; }
 public:
   void SetStartupLocation(const GEOPOINT &loc, const double alt);
-  void SetLocation(const GEOPOINT &loc, const double speed, const double bearing,
+  void SetLocation(const GEOPOINT &loc, const double speed, const Angle bearing,
 		   const double alt, const double baroalt, const double t);
   void ProcessSimulation();
   bool LowerConnection();
@@ -81,7 +81,7 @@ public:
     SetBasic().BaroAltitude = x;
   }
   void SetNAVWarning(bool val);
-  void SetTrackBearing(fixed val);
+  void SetTrackBearing(Angle val);
   void SetSpeed(fixed val);
   void SetAltitude(fixed alt);
   void SetQNH(fixed qnh);

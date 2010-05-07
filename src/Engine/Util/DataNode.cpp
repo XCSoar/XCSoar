@@ -49,6 +49,12 @@ DataNode::DataNode(const tstring &node_name)
 
 
 void 
+DataNode::set_attribute(const tstring &name, Angle value)
+{
+  set_attribute(name, value.value());
+}
+
+void 
 DataNode::set_attribute(const tstring &name, fixed value)
 {
   TCHAR buf[100];
@@ -79,6 +85,17 @@ DataNode::set_attribute(const tstring &name, bool &value)
   _stprintf(buf, _T("%d"), (int)value);
   set_attribute(name, buf);
 }
+
+bool 
+DataNode::get_attribute(const tstring &name, Angle &value) const 
+{
+  bool retval;
+  fixed v = value.value();
+  retval = get_attribute(name, v);
+  value = Angle(v);
+  return retval;
+}
+
 
 bool 
 DataNode::get_attribute(const tstring &name, fixed &value) const 

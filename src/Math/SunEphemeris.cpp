@@ -215,8 +215,8 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location,
 
   equation = 1440.0 * (1.0 - LL / M_PI / 2.0);
 
-  HourAngle = f0(Location.Latitude, Delta);
-  HourAngleTwilight = f1(Location.Latitude, Delta);
+  HourAngle = f0(Location.Latitude.value(), Delta);
+  HourAngleTwilight = f1(Location.Latitude.value(), Delta);
 
   // length of twilight in radians
   TwilightHours = HourAngleTwilight - HourAngle;
@@ -233,17 +233,17 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location,
     DayLength = 0.0;
 
   TimeOfSunRise = 12.0 - 12.0 * HourAngle / M_PI + TimeZone
-      - Location.Longitude / 15.0 + equation / 60.0;
+    - Location.Longitude.value() / 15.0 + equation / 60.0;
 
   TimeOfSunSet = 12.0 + 12.0 * HourAngle / M_PI + TimeZone
-      - Location.Longitude / 15.0 + equation / 60.0;
+    - Location.Longitude.value() / 15.0 + equation / 60.0;
 
   TimeOfNoon = TimeOfSunRise + 12.0 * HourAngle / M_PI;
-  altmax = 90.0 + Delta * RAD_TO_DEG - Location.Latitude;
+  altmax = 90.0 + Delta * RAD_TO_DEG - Location.Latitude.value();
 
   // Correction for southern hemisphere suggested by David Smith
   // to express altitude as degrees from the N horizon
-  if (Location.Latitude < Delta * RAD_TO_DEG)
+  if (Location.Latitude.value() < Delta * RAD_TO_DEG)
     altmax = 180.0 - altmax;
 
   // morning twilight begin

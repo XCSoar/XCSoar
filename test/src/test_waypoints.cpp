@@ -25,7 +25,7 @@ unsigned test_location(const Waypoints& waypoints, bool good)
 {
   GEOPOINT loc; // at 0,0
   if (!good) {
-    loc.Longitude = -23.4;
+    loc.Longitude = Angle(fixed(-23.4));
   }
   const Waypoint *r = waypoints.lookup_location(loc);
   if (r) {

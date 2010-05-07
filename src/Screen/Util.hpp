@@ -45,6 +45,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_UTIL_HPP
 
 #include "Math/fixed.hpp"
+#include "Math/Angle.hpp"
 
 #include <windows.h>
 
@@ -62,10 +63,10 @@ ClippedCircle(Canvas &canvas, long x, long y, int radius, RECT rc,
               bool fill=true);
 
 int Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
-            fixed start, fixed end,
+            Angle start, Angle end,
             bool horizon= false);
 // VENTA3 DrawArc
 int DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
-            fixed start, fixed end);
+            Angle start, Angle end);
 
 #endif

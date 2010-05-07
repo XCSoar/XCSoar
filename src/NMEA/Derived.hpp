@@ -251,7 +251,7 @@ struct TEAMCODE_INFO
   /** Team code */
   TCHAR OwnTeamCode[10];
   /** Bearing to the chosen team mate */
-  fixed TeammateBearing;
+  Angle TeammateBearing;
   /** Distance to the chosen team mate */
   fixed TeammateRange;
   /** Position of the chosen team mate */

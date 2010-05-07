@@ -61,8 +61,8 @@ RasterMapJPG2000::SetFieldRounding(const double xr,
   }
   if ((rounding.Xrounding==1)&&(rounding.Yrounding==1)) {
     rounding.DirectFine = true;
-    rounding.xlleft = (int)(TerrainInfo.Left*rounding.fXroundingFine)+128;
-    rounding.xlltop  = (int)(TerrainInfo.Top*rounding.fYroundingFine)-128;
+    rounding.xlleft = (int)(TerrainInfo.Left.value()*rounding.fXroundingFine)+128;
+    rounding.xlltop  = (int)(TerrainInfo.Top.value()*rounding.fYroundingFine)-128;
   } else {
     rounding.DirectFine = false;
   }
@@ -113,15 +113,15 @@ void RasterMapJPG2000::_ReloadJPG2000(void) {
 
     raster_tile_cache.LoadJPG2000(jp2_filename);
     if (raster_tile_cache.GetInitialised()) {
-      TerrainInfo.Left = raster_tile_cache.lon_min;
-      TerrainInfo.Right = raster_tile_cache.lon_max;
-      TerrainInfo.Top = raster_tile_cache.lat_max;
-      TerrainInfo.Bottom = raster_tile_cache.lat_min;
+      TerrainInfo.Left = Angle((fixed)raster_tile_cache.lon_min);
+      TerrainInfo.Right = Angle((fixed)raster_tile_cache.lon_max);
+      TerrainInfo.Top = Angle((fixed)raster_tile_cache.lat_max);
+      TerrainInfo.Bottom = Angle((fixed)raster_tile_cache.lat_min);
       TerrainInfo.Columns = raster_tile_cache.GetWidth();
       TerrainInfo.Rows = raster_tile_cache.GetHeight();
-      TerrainInfo.StepSize = (raster_tile_cache.lon_max -
-                              raster_tile_cache.lon_min)
-        /raster_tile_cache.GetWidth();
+      TerrainInfo.StepSize = Angle((fixed)(raster_tile_cache.lon_max -
+                                           raster_tile_cache.lon_min)
+                                   /raster_tile_cache.GetWidth());
     }
   }
 }
@@ -135,10 +135,10 @@ void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
 {
   Poco::ScopedRWLock protect(lock, true);
   if (raster_tile_cache.GetInitialised()) {
-    int x = lround((location.Longitude-TerrainInfo.Left)*TerrainInfo.Columns
-                   /(TerrainInfo.Right-TerrainInfo.Left));
-    int y = lround((TerrainInfo.Top-location.Latitude)*TerrainInfo.Rows
-                   /(TerrainInfo.Top-TerrainInfo.Bottom));
+    int x = lround((location.Longitude-TerrainInfo.Left).value()*TerrainInfo.Columns
+                   /(TerrainInfo.Right-TerrainInfo.Left).value());
+    int y = lround((TerrainInfo.Top-location.Latitude).value()*TerrainInfo.Rows
+                   /(TerrainInfo.Top-TerrainInfo.Bottom).value());
     TriggerJPGReload |= raster_tile_cache.PollTiles(x, y);
   }
   if (TriggerJPGReload) {

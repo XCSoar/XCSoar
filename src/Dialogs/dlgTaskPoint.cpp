@@ -114,12 +114,12 @@ public:
       }
       wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorStartRadial")));
       if (wv) {
-        wv->GetDataField()->SetAsFloat(oz.getStartRadial());
+        wv->GetDataField()->SetAsFloat(oz.getStartRadial().value());
         wv->RefreshDisplay();
       }
       wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorFinishRadial")));
       if (wv) {
-        wv->GetDataField()->SetAsFloat(oz.getEndRadial());
+        wv->GetDataField()->SetAsFloat(oz.getEndRadial().value());
         wv->RefreshDisplay();
       }
     }
@@ -211,8 +211,8 @@ public:
       wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorStartRadial")));
       if (wv) {
         double val = wv->GetDataField()->GetAsFloat();
-        if (val != oz.getStartRadial()) {
-          oz.setStartRadial((fixed)val);
+        if (val != oz.getStartRadial().value()) {
+          oz.setStartRadial(Angle((fixed)val));
           task_modified = true;
         }
       }
@@ -220,8 +220,8 @@ public:
       wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorFinishRadial")));
       if (wv) {
         double val = wv->GetDataField()->GetAsFloat();
-        if (val != oz.getEndRadial()) {
-          oz.setEndRadial((fixed)val);
+        if (val != oz.getEndRadial().value()) {
+          oz.setEndRadial(Angle((fixed)val));
           task_modified = true;
         }
       }

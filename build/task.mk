@@ -120,8 +120,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoints.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/WaypointSorter.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/WaypointVisitor.cpp \
-	$(ENGINE_SRC_DIR)/Math/Geometry.cpp \
-	$(ENGINE_SRC_DIR)/Math/FastMath.cpp \
+	$(ENGINE_SRC_DIR)/Math/Angle.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Math/fixed.cpp \
 	$(ENGINE_SRC_DIR)/Util/AircraftStateFilter.cpp \
@@ -134,7 +133,9 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Util/ZeroFinder.cpp \
 	$(ENGINE_SRC_DIR)/Util/Serialiser.cpp \
 	$(ENGINE_SRC_DIR)/Util/DataNodeXML.cpp \
-	$(ENGINE_SRC_DIR)/Util/DataNode.cpp
+	$(ENGINE_SRC_DIR)/Util/DataNode.cpp \
+	$(ENGINE_SRC_DIR)/Math/FastMath.cpp
+
 
 ENGINE_CORE_LIBS = $(TARGET_OUTPUT_DIR)/task.a
 ENGINE_GLUE_LIBS = $(TARGET_OUTPUT_DIR)/taskglue.a

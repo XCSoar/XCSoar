@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Math/Screen.hpp"
-#include "Math/Geometry.hpp"
 #include "Math/FastMath.h"
 #include "Math/Constants.h"
 #include "Navigation/GeoPoint.hpp"
@@ -57,8 +56,8 @@ protate(POINT &pin, const double &angle)
 
   if (angle != lastangle) {
     lastangle = angle;
-    cost = ifastcosine(angle);
-    sint = ifastsine(angle);
+    cost = ifastcosine(fixed(angle));
+    sint = ifastsine(fixed(angle));
   }
 
   pin.x = (x * cost - y * sint + 512) / 1024;
@@ -80,8 +79,8 @@ protateshift(POINT &pin, const double &angle, const int &xs, const int &ys)
 
   if (angle != lastangle) {
     lastangle = angle;
-    cost = ifastcosine(angle);
-    sint = ifastsine(angle);
+    cost = ifastcosine(fixed(angle));
+    sint = ifastsine(fixed(angle));
   }
 
   pin.x = (x * cost - y * sint + 512 + xs * 1024) / 1024;
@@ -148,7 +147,7 @@ PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys,
   if (angle != lastangle) {
     lastangle = angle;
     // TODO TB: use ifastsine() here or does DEG_TO_INT take to long?
-    int deg = DEG_TO_INT(AngleLimit360(angle));
+    int deg = DEG_TO_INT(Angle(angle).AngleLimit360().value());
     cost = Layout::FastScale(ICOSTABLE[deg]);
     sint = Layout::FastScale(ISINETABLE[deg]);
   }
@@ -244,9 +243,9 @@ void
 LatLon2Flat(const GEOPOINT &location, POINT &screen)
 {
   static const fixed fixed_100(100);
-  screen.x = (long)(location.Longitude
-                    * fastcosine(location.Latitude) * fixed_100);
-  screen.y = (long)(location.Latitude * fixed_100);
+  screen.x = (long)(location.Longitude.value()
+                    * location.Latitude.fastcosine() * fixed_100);
+  screen.y = (long)(location.Latitude.value() * fixed_100);
 }
 
 unsigned

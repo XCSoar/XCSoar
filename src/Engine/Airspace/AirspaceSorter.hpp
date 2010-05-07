@@ -11,7 +11,7 @@
 struct AirspaceSelectInfo {
   const AbstractAirspace* airspace; /**< Pointer to actual airspace (unprotected!) */
   fixed Distance; /**< Distance in user units from observer to waypoint */
-  fixed Direction; /**< Bearing (deg true north) from observer to waypoint */
+  Angle Direction; /**< Bearing (deg true north) from observer to waypoint */
   unsigned int FourChars; /**< Fast access of first four characters of name */
 };
 
@@ -66,7 +66,7 @@ public:
  * @param vec List of airspaces to filter (read-write)
  * @param direction Bearing (degrees) of desired direction
  */
-  void filter_direction(AirspaceSelectInfoVector& vec, const fixed direction) const;
+  void filter_direction(AirspaceSelectInfoVector& vec, const Angle direction) const;
 
 /** 
  * Remove airspaces further than desired direction

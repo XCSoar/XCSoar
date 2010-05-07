@@ -45,7 +45,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Math/Earth.hpp"
 #include "options.h"
-#include "Math/Geometry.hpp"
 #include "IO/ZipLineReader.hpp"
 
 #include "Airspace/AirspacePolygon.hpp"
@@ -482,14 +481,14 @@ static bool ReadCoords(TCHAR *Text, GEOPOINT &point)
     }
   }
 
-  point.Latitude = Ysec/3600 + Ymin/60 + Ydeg;
+  point.Latitude = Angle(fixed(Ysec/3600 + Ymin/60 + Ydeg));
 
   if (*Stop == ' ')
     Stop++;
 
   if (*Stop =='\0') goto OnError;
   if ((*Stop == 'S') || (*Stop == 's'))
-    point.Latitude = -point.Latitude;
+    point.Latitude.flip();
 
   Stop++;
   if (*Stop =='\0') goto OnError;
@@ -504,14 +503,15 @@ static bool ReadCoords(TCHAR *Text, GEOPOINT &point)
     Xsec = (double)_tcstod(Stop, &Stop);
   }
 
-  point.Longitude = Xsec/3600 + Xmin/60 + Xdeg;
+  point.Longitude = Angle(fixed(Xsec/3600 + Xmin/60 + Xdeg));
 
   if (*Stop == ' ')
     Stop++;
   if (*Stop =='\0') goto OnError;
   if((*Stop == 'W') || (*Stop == 'w'))
-    point.Longitude = -point.Longitude;
-  AngleLimit360(point.Longitude);
+    point.Longitude.flip();
+
+  point.Longitude = point.Longitude.AngleLimit360();
 
   return(true);
 
@@ -649,27 +649,27 @@ static void
 CalculateSector(TCHAR *Text)
 {
   fixed Radius;
-  fixed StartBearing;
-  fixed EndBearing;
+  Angle StartBearing;
+  Angle EndBearing;
   TCHAR *Stop;
   GEOPOINT TempPoint;
   static const fixed fixed_75 = fixed(7.5);
   static const fixed fixed_5 = fixed(5);
 
   Radius = Units::ToSysUnit(_tcstod(&Text[2], &Stop), unNauticalMiles);
-  StartBearing = _tcstod(&Stop[1], &Stop);
-  EndBearing = _tcstod(&Stop[1], &Stop);
+  StartBearing = Angle(fixed(_tcstod(&Stop[1], &Stop)));
+  EndBearing = Angle(fixed(_tcstod(&Stop[1], &Stop)));
 
   if (EndBearing<StartBearing) {
-    EndBearing += fixed(360);
+    EndBearing += Angle(fixed_360);
   }
 
-  while(fabs(EndBearing-StartBearing) > fixed_75) {
-    StartBearing = AngleLimit360(StartBearing);
-    FindLatitudeLongitude(temp_area.Center, AngleLimit360(StartBearing), Radius,
+  while((EndBearing-StartBearing).magnitude() > fixed_75) {
+    StartBearing = StartBearing.AngleLimit360();
+    FindLatitudeLongitude(temp_area.Center, StartBearing, Radius,
                           &TempPoint);
     temp_area.points.push_back(TempPoint);
-    StartBearing += temp_area.Rotation * fixed_5 ;
+    StartBearing += Angle(temp_area.Rotation * fixed_5);
   }
   FindLatitudeLongitude(temp_area.Center, EndBearing, Radius,
                         &TempPoint);
@@ -681,8 +681,8 @@ CalculateArc(TCHAR *Text)
 {
   GEOPOINT Start;
   GEOPOINT End;
-  fixed StartBearing;
-  fixed EndBearing;
+  Angle StartBearing;
+  Angle EndBearing;
   fixed Radius;
   TCHAR *Comma = NULL;
   GEOPOINT TempPoint;
@@ -703,9 +703,9 @@ CalculateArc(TCHAR *Text)
   TempPoint.Longitude = Start.Longitude;
   temp_area.points.push_back(TempPoint);
 
-  while(fabs(EndBearing-StartBearing) > fixed_75) {
-    StartBearing += temp_area.Rotation *fixed_5;
-    StartBearing = AngleLimit360(StartBearing);
+  while((EndBearing-StartBearing).magnitude() > fixed_75) {
+    StartBearing += Angle(temp_area.Rotation *fixed_5);
+    StartBearing = StartBearing.AngleLimit360();
     FindLatitudeLongitude(temp_area.Center, StartBearing, Radius,
                           &TempPoint);
     temp_area.points.push_back(TempPoint);

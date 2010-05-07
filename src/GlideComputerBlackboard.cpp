@@ -114,11 +114,11 @@ GlideComputerBlackboard::ResetFlight(const bool full)
 
   calculated_info.Circling = false;
   for (int i = 0; i <= TERRAIN_ALT_INFO::NUMTERRAINSWEEPS; i++) {
-    calculated_info.GlideFootPrint[i].Longitude = 0;
-    calculated_info.GlideFootPrint[i].Latitude = 0;
+    calculated_info.GlideFootPrint[i].Longitude = Angle();
+    calculated_info.GlideFootPrint[i].Latitude = Angle();
   }
-  calculated_info.TerrainWarningLocation.Latitude = 0.0;
-  calculated_info.TerrainWarningLocation.Longitude = 0.0;
+  calculated_info.TerrainWarningLocation.Latitude = Angle();
+  calculated_info.TerrainWarningLocation.Longitude = Angle();
 
   // If you load persistent values, you need at least these reset:
   calculated_info.LastThermalAverage=0.0;

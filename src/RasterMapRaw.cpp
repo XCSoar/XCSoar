@@ -57,8 +57,8 @@ RasterMapRaw::SetFieldRounding(const double xr,
   }
   if ((rounding.Xrounding==1)&&(rounding.Yrounding==1)) {
     rounding.DirectFine = true;
-    rounding.xlleft = (int)(TerrainInfo.Left*rounding.fXroundingFine)+128;
-    rounding.xlltop  = (int)(TerrainInfo.Top*rounding.fYroundingFine)-128;
+    rounding.xlleft = (int)(TerrainInfo.Left.value()*rounding.fXroundingFine)+128;
+    rounding.xlltop  = (int)(TerrainInfo.Top.value()*rounding.fYroundingFine)-128;
   } else {
     rounding.DirectFine = false;
   }
@@ -155,7 +155,7 @@ RasterMapRaw::Open(const char *zfilename)
     terrain_valid = true;
   }
 
-  if (!TerrainInfo.StepSize) {
+  if (!TerrainInfo.StepSize.value()) {
     terrain_valid = false;
     zzip_fclose(fpTerrain);
     _Close();

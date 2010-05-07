@@ -49,11 +49,11 @@ Copyright_License {
 
 typedef struct _TERRAIN_INFO
 {
-  double Left;
-  double Right;
-  double Top;
-  double Bottom;
-  double StepSize;
+  Angle Left;
+  Angle Right;
+  Angle Top;
+  Angle Bottom;
+  Angle StepSize;
   long Rows;
   long Columns;
 } TERRAIN_INFO;
@@ -82,7 +82,7 @@ class RasterMap {
 
   bool GetMapCenter(GEOPOINT *loc) const;
 
-  float GetFieldStepSize() const;
+  double GetFieldStepSize() const;
 
   // inaccurate method
   int GetEffectivePixelSize(double pixelsize) const;
@@ -139,7 +139,7 @@ public:
                    const GEOPOINT delta):
       DirectFine(false)
     {
-      Set(map, fabs(delta.Longitude), fabs(delta.Latitude));
+      Set(map, delta.Longitude.magnitude(), delta.Latitude.magnitude());
     }
 
   void Set(const RasterMap &map,

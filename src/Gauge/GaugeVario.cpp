@@ -44,7 +44,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Math/FastRotation.hpp"
-#include "Math/Geometry.hpp"
 #include "Appearance.hpp"
 #include "resource.h"
 

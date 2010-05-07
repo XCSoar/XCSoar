@@ -39,7 +39,6 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "Screen/Canvas.hpp"
 #include "Math/Constants.h"
-#include "Math/Geometry.hpp"
 #include "Math/FastMath.h"
 #include "Screen/shapelib/mapprimitive.h"
 #include "Asset.hpp" // for needclipping
@@ -504,9 +503,11 @@ ClippedCircle(Canvas &canvas, long x, long y, int radius, RECT rc, bool fill)
   return TRUE;
 }
 
+static const fixed seg_steps(64/ 360.0);
+
 int
 Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
-        fixed start, fixed end, bool horizon)
+        Angle start, Angle end, bool horizon)
 {
   POINT pt[66];
   int i;
@@ -530,11 +531,11 @@ Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
 
   // JMW added faster checking...
 
-  start = AngleLimit360(start);
-  end = AngleLimit360(end);
+  start = start.AngleLimit360();
+  end = end.AngleLimit360();
 
-  istart = iround(start / 360.0 * 64);
-  iend = iround(end / 360.0 * 64);
+  istart = iround(start.value()*seg_steps);
+  iend = iround(end.value()*seg_steps);
 
   int npoly = 0;
 
@@ -549,8 +550,8 @@ Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
     pt[0].y = y;
     npoly = 1;
   }
-  pt[npoly].x = x + (long)(radius * fastsine(start));
-  pt[npoly].y = y - (long)(radius * fastcosine(start));
+  pt[npoly].x = x + (long)(radius * start.fastsine());
+  pt[npoly].y = y - (long)(radius * start.fastcosine());
   npoly++;
 
   for (i = 0; i < 64; i++) {
@@ -560,8 +561,8 @@ Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
       npoly++;
     }
   }
-  pt[npoly].x = x + (long)(radius * fastsine(end));
-  pt[npoly].y = y - (long)(radius * fastcosine(end));
+  pt[npoly].x = x + (long)(radius * end.fastsine());
+  pt[npoly].y = y - (long)(radius * end.fastcosine());
   npoly++;
 
   if (!horizon) {
@@ -585,8 +586,9 @@ Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
  */
 int
 DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
-        fixed start, fixed end)
+        Angle start, Angle end)
 {
+
   POINT pt[66];
   int i;
   int istart;
@@ -609,11 +611,11 @@ DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
 
   // JMW added faster checking...
 
-  start = AngleLimit360(start);
-  end = AngleLimit360(end);
+  start = start.AngleLimit360();
+  end = end.AngleLimit360();
 
-  istart = iround(start / 360.0 * 64);
-  iend = iround(end / 360.0 * 64);
+  istart = iround(start.value() * seg_steps);
+  iend = iround(end.value() *seg_steps);
 
   int npoly = 0;
 
@@ -623,8 +625,8 @@ DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
   istart++;
   iend--;
 
-  pt[npoly].x = x + (long)(radius * fastsine(start));
-  pt[npoly].y = y - (long)(radius * fastcosine(start));
+  pt[npoly].x = x + (long)(radius * start.fastsine());
+  pt[npoly].y = y - (long)(radius * start.fastcosine());
   npoly++;
 
   for (i = 0; i < 64; i++) {
@@ -634,8 +636,8 @@ DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
       npoly++;
     }
   }
-  pt[npoly].x = x + (long)(radius * fastsine(end));
-  pt[npoly].y = y - (long)(radius * fastcosine(end));
+  pt[npoly].x = x + (long)(radius * end.fastsine());
+  pt[npoly].y = y - (long)(radius * end.fastcosine());
   npoly++;
   if (npoly) {
     canvas.polyline(pt, npoly); // TODO check ClipPolygon for HP31X

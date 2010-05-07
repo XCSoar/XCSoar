@@ -60,8 +60,8 @@ public:
  */
   SectorZone(const GEOPOINT &loc, 
              const fixed _radius=fixed(10000.0),
-             const fixed _startRadial=fixed_zero,
-             const fixed _endRadial=fixed(360.0)):
+             const Angle _startRadial=Angle(fixed_zero),
+             const Angle _endRadial=Angle(fixed_360)):
     CylinderZone(loc,_radius),
     StartRadial(_startRadial),
     EndRadial(_endRadial) 
@@ -81,21 +81,21 @@ public:
  * 
  * @param x Angle (deg) of radial
  */
-  virtual void setStartRadial(const fixed x); 
+  virtual void setStartRadial(const Angle x); 
 
 /** 
  * Set end angle (most clockwise) of sector
  * 
  * @param x Angle (deg) of radial
  */
-  virtual void setEndRadial(const fixed x); 
+  virtual void setEndRadial(const Angle x); 
 
 /** 
  * Get start radial property value
  * 
  * @return Angle (deg) of radial
  */
-  fixed getStartRadial() const {
+  Angle getStartRadial() const {
     return StartRadial;
   }
 
@@ -104,7 +104,7 @@ public:
  * 
  * @return Angle (deg) of radial
  */
-  fixed getEndRadial() const {
+  Angle getEndRadial() const {
     return EndRadial;
   }
 
@@ -184,15 +184,15 @@ protected:
  * 
  * @return True if that is within the start/end radials
  */
-  virtual bool angleInSector(const fixed that) const;
+  virtual bool angleInSector(const Angle that) const;
 
   GEOPOINT SectorStart; /**< Location of far end point of start radial */
   GEOPOINT SectorEnd; /**< Location of far end point of end radial */
 
 private:
 
-  fixed StartRadial;
-  fixed EndRadial;
+  Angle StartRadial;
+  Angle EndRadial;
 public:
   DEFINE_VISITABLE();
 };

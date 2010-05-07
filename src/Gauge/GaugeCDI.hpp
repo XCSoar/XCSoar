@@ -40,12 +40,13 @@ Copyright_License {
 #define XCSOAR_GAUGE_CDI_HPP
 
 #include "Screen/TextWindow.hpp"
+#include "Math/Angle.hpp"
 
 class GaugeCDI : public TextWindow {
  public:
   GaugeCDI(ContainerWindow &parent);
 
-  void Update(double TrackBearing, double WaypointBearing);
+  void Update(Angle TrackBearing, Angle WaypointBearing);
 };
 
 #endif

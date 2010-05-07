@@ -156,7 +156,7 @@ struct GlideResult {
 
   GeoVector Vector;            /**< Distance/bearing of task achievable */
   fixed DistanceToFinal;       /**< Distance to go before final glide (m) */
-  fixed CruiseTrackBearing;    /**< Track bearing in cruise for optimal drift compensation (deg true) */
+  Angle CruiseTrackBearing;    /**< Track bearing in cruise for optimal drift compensation (deg true) */
   fixed VOpt;                  /**< Optimal speed to fly in cruise (m/s) */
   fixed HeightClimb;           /**< Height to be climbed (m) */
   fixed HeightGlide;           /**< Height that will be glided (m) */
@@ -165,7 +165,7 @@ struct GlideResult {
   fixed AltitudeDifference;    /**< Height above/below final glide for this task (m) */
   fixed AltitudeRequired;      /**< Height required to solve this task (m) */
   fixed EffectiveWindSpeed;    /**< (internal) */
-  fixed EffectiveWindAngle;    /**< (internal) */
+  Angle EffectiveWindAngle;    /**< (internal) */
   fixed HeadWind;              /**< Head wind component (m/s) in cruise */
   GlideResult_t Solution;      /**< Solution validity */
 

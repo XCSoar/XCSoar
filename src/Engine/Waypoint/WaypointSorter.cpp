@@ -1,7 +1,6 @@
 #include "WaypointSorter.hpp"
 #include <algorithm>
 #include "Navigation/Geometry/GeoVector.hpp"
-#include "Math/Geometry.hpp"
 #include "UtilsText.hpp"
 #include "Compatibility/string.h" /* _tcsnicmp -> _strnicmp -> strncasecmp */
 
@@ -125,17 +124,17 @@ WaypointSorter::filter_name(WaypointSelectInfoVector& vec,
 }
 
 static const fixed fixed_18(18);
-static fixed Direction;
+static Angle Direction;
 
 static bool
 WaypointDirectionFilter(const WayPointSelectInfo& elem1) 
 {
-  fixed DirectionErr = fabs(AngleLimit180(elem1.Direction-Direction));
+  fixed DirectionErr = (elem1.Direction-Direction).AngleLimit180().magnitude();
   return (DirectionErr > fixed_18);
 }
 
 void 
-WaypointSorter::filter_direction(WaypointSelectInfoVector& vec, const fixed direction) const
+WaypointSorter::filter_direction(WaypointSelectInfoVector& vec, const Angle direction) const
 {
   Direction = direction;
   vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointDirectionFilter), vec.end());

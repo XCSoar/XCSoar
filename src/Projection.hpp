@@ -78,7 +78,7 @@ public:
   unsigned DistanceMetersToScreen(const fixed x) {
     return iround(m_scale_meters_to_screen*x);
   }
-  fixed GetDisplayAngle() const {
+  Angle GetDisplayAngle() const {
     return DisplayAngle.GetAngle();
   }
   RECT GetMapRect() const {

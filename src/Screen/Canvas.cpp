@@ -77,25 +77,29 @@ Canvas::line_to(int x, int y)
 
 void
 Canvas::arc(int x, int y, unsigned radius, const RECT rc,
-            fixed start, fixed end)
+            Angle start, Angle end)
 {
   // XXX
-  ::pieColor(surface, x, y, radius, start - 90, end - 90,
+  ::pieColor(surface, x, y, radius, start.value() - 90, end.value() - 90,
              brush.get_color().gfx_color());
 }
 
 void
 Canvas::segment(int x, int y, unsigned radius, const RECT rc,
-                fixed start, fixed end, bool horizon)
+                Angle start, Angle end, bool horizon)
 {
   // XXX horizon
 
   if (!brush.is_hollow())
-    ::filledPieColor(surface, x, y, radius, (int)start - 90, (int)end - 90,
+    ::filledPieColor(surface, x, y, radius, 
+                     (int)start.value() - 90, 
+                     (int)end.value() - 90,
                      brush.get_color().gfx_color());
 
   if (pen_over_brush())
-    ::pieColor(surface, x, y, radius, (int)start - 90, (int)end - 90,
+    ::pieColor(surface, x, y, radius, 
+               (int)start.value() - 90, 
+               (int)end.value() - 90,
                pen.get_color().gfx_color());
 }
 
@@ -655,14 +659,14 @@ Canvas::autoclip_circle(int x, int y, unsigned radius, const RECT rc)
 
 void
 Canvas::arc(int x, int y, unsigned radius, const RECT rc,
-            fixed start, fixed end)
+            Angle start, Angle end)
 {
   ::DrawArc(*this, x, y, radius, rc, start, end);
 }
 
 void
 Canvas::segment(int x, int y, unsigned radius, const RECT rc,
-                fixed start, fixed end, bool horizon)
+                Angle start, Angle end, bool horizon)
 {
   ::Segment(*this, x, y, radius, rc, start, end, horizon);
 }

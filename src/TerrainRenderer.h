@@ -130,7 +130,7 @@ public:
    * @param day_time the UTC time, in seconds since midnight
    */
   bool Draw(Canvas &canvas, const MapWindowProjection &map_projection,
-      const double sunazimuth, const double sunelevation, const GEOPOINT &loc,
+      const Angle sunazimuth, const Angle sunelevation, const GEOPOINT &loc,
       int day_time, const bool isBigZoom);
 };
 

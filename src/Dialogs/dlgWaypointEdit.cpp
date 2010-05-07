@@ -371,7 +371,7 @@ static void GetValues(void) {
     num = -num;
   }
 
-  global_wpt->Location.Longitude = num;
+  global_wpt->Location.Longitude = Angle(fixed(num));
 
   wp = (WndProperty*)wf->FindByName(_T("prpLatitudeSign"));
   if (wp) {
@@ -418,7 +418,7 @@ static void GetValues(void) {
     num = -num;
   }
 
-  global_wpt->Location.Latitude = num;
+  global_wpt->Location.Latitude = Angle(fixed(num));
 
   wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
   if (wp) {

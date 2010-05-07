@@ -67,8 +67,8 @@ MapWindow::MapWindow()
    TargetDrag_State(0),
    BigZoom(true)
 {
-  TargetDrag_Location.Latitude = 0;
-  TargetDrag_Location.Longitude = 0;
+  TargetDrag_Location.Latitude = Angle();
+  TargetDrag_Location.Longitude = Angle();
   zoomclimb.CruiseMapScale = 10;
   zoomclimb.ClimbMapScale = 0.25;
   zoomclimb.last_isclimb = false;

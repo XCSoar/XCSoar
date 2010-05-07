@@ -12,7 +12,7 @@
 struct WayPointSelectInfo {
   const Waypoint* way_point; /**< Pointer to actual waypoint (unprotected!) */
   fixed Distance; /**< Distance in user units from observer to waypoint */
-  fixed Direction; /**< Bearing (deg true north) from observer to waypoint */
+  Angle Direction; /**< Bearing (deg true north) from observer to waypoint */
   unsigned int FourChars; /**< Fast access of first four characters of name */
 };
 
@@ -88,7 +88,7 @@ public:
  * @param vec List of waypoints to filter (read-write)
  * @param direction Bearing (degrees) of desired direction
  */
-  void filter_direction(WaypointSelectInfoVector& vec, const fixed direction) const;
+  void filter_direction(WaypointSelectInfoVector& vec, const Angle direction) const;
 
 /** 
  * Remove waypoints further than desired direction

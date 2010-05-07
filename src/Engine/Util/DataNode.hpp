@@ -40,6 +40,7 @@
 
 #include "tstring.hpp"
 #include "Math/fixed.hpp"
+#include "Math/Angle.hpp"
 
 /**
  * Class used as generic node for tree-structured data.
@@ -115,6 +116,8 @@ public:
  */
   void set_attribute(const tstring &name, fixed value);
 
+  void set_attribute(const tstring &name, Angle value);
+
 /** 
  * Set named attribute value, with numeric to text conversion
  * 
@@ -158,6 +161,8 @@ public:
  * @return True if attribute exists
  */
   bool get_attribute(const tstring &name, fixed &value) const;
+
+  bool get_attribute(const tstring &name, Angle &value) const;
 
 /** 
  * Retrieve named attribute value, with numeric conversion

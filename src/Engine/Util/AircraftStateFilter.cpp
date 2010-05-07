@@ -36,7 +36,6 @@
  */
 #include "AircraftStateFilter.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
-#include "Math/Geometry.hpp"
 
 AircraftStateFilter::AircraftStateFilter(const AIRCRAFT_STATE& state,
                                          const double cutoff_wavelength):
@@ -89,8 +88,8 @@ AircraftStateFilter::update(const AIRCRAFT_STATE& state)
   }
 
   GeoVector vec(m_state_last.Location, state.Location);
-  m_x+= sin(fixed_deg_to_rad*vec.Bearing)*vec.Distance;
-  m_y+= cos(fixed_deg_to_rad*vec.Bearing)*vec.Distance;
+  m_x+= (vec.Bearing*fixed_deg_to_rad).sin()*vec.Distance;
+  m_y+= (vec.Bearing*fixed_deg_to_rad).cos()*vec.Distance;
   m_alt = state.NavAltitude;
 
   m_vx = m_lpf_x.update(m_df_x.update(m_x));
@@ -106,10 +105,10 @@ AircraftStateFilter::get_speed() const
   return hypot(m_vx, m_vy);
 }
 
-fixed 
+Angle 
 AircraftStateFilter::get_bearing() const
 {
-  return ::AngleLimit360(fixed_rad_to_deg*atan2(m_vx,m_vy));
+  return Angle(fixed_rad_to_deg*atan2(m_vx,m_vy)).AngleLimit360();
 }
 
 fixed 

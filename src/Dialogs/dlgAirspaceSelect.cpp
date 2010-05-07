@@ -126,7 +126,7 @@ static void UpdateList(void)
     sort_distance = true;
     int a = DirectionFilter[DirectionFilterIdx];
     if (a == DirHDG) {
-      a = iround(XCSoarInterface::Basic().Heading);
+      a = iround(XCSoarInterface::Basic().Heading.value());
       lastHeading = a;
     }
     airspace_sorter->filter_direction(AirspaceSelectInfo, fixed(a));
@@ -256,7 +256,7 @@ static void SetDirectionData(DataField *Sender){
   if (DirectionFilterIdx == 0)
     _stprintf(sTmp, _T("%c"), '*');
   else if (DirectionFilterIdx == 1){
-    int a = iround(XCSoarInterface::Basic().Heading);
+    int a = iround(XCSoarInterface::Basic().Heading.value());
     if (a <=0)
       a += 360;
     _stprintf(sTmp, _T("HDG(%d")_T(DEG)_T(")"), a);
@@ -375,7 +375,7 @@ OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
     
   // right justified after distance
   _stprintf(sTmp, _T("%d")_T(DEG),  
-            (int)AirspaceSelectInfo[i].Direction);
+            (int)AirspaceSelectInfo[i].Direction.value());
   x3 = w0 - canvas.text_width(sTmp);
   canvas.text(rc.left + x3, rc.top + Layout::FastScale(2), sTmp);
 }
@@ -391,7 +391,7 @@ static int OnTimerNotify(WindowControl * Sender) {
   (void)Sender;
   if (DirectionFilterIdx == 1){
     int a;
-    a = (lastHeading - iround(XCSoarInterface::Basic().Heading));
+    a = (lastHeading - iround(XCSoarInterface::Basic().Heading.value()));
     if (abs(a) > 0){
       UpdateList();
       SetDirectionData(NULL);

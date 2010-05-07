@@ -192,7 +192,7 @@ EWMicroRecorderWriteWayPoint(ComPort *port,
   TCHAR NoS, EoW;
 
   // prepare latitude
-  tmp = way_point.Location.Latitude;
+  tmp = way_point.Location.Latitude.value();
   NoS = _T('N');
   if (tmp < 0)
     {
@@ -204,7 +204,7 @@ EWMicroRecorderWriteWayPoint(ComPort *port,
   MinLat = (tmp - DegLat) * 60 * 1000;
 
   // prepare long
-  tmp = way_point.Location.Longitude;
+  tmp = way_point.Location.Longitude.value();
   EoW = _T('E');
   if (tmp < 0)
     {

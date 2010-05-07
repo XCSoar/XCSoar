@@ -37,20 +37,19 @@
 
 #include "SectorZone.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
-#include "Math/Geometry.hpp"
 
 GEOPOINT 
 SectorZone::get_boundary_parametric(fixed t) const
 { 
-  const fixed half = HalfAngle(StartRadial, EndRadial);
-  const fixed angle = AngleLimit360(t*fixed_360+half);
+  const Angle half = StartRadial.HalfAngle(EndRadial);
+  const Angle angle = (half+Angle(t*fixed_360)).AngleLimit360();
   if (angleInSector(angle)) {
     return GeoVector(Radius, angle).end_point(get_location());
   } else {
-    const fixed sweep = (fixed_360-
-                         AngleLimit360(EndRadial-StartRadial))*fixed_half;
-    const fixed d_start = AngleLimit360(StartRadial-angle)/sweep;
-    const fixed d_end = AngleLimit360(angle-EndRadial)/sweep;
+    const Angle sweep = (Angle(fixed_360)-
+                         (EndRadial-StartRadial).AngleLimit360())*fixed_half;
+    const fixed d_start = (StartRadial-angle).AngleLimit360().value()/sweep.value();
+    const fixed d_end = (angle-EndRadial).AngleLimit360().value()/sweep.value();
 
     if (d_start< d_end) {
       return GeoVector(Radius*(fixed_one-d_start), 
@@ -85,21 +84,21 @@ SectorZone::isInSector(const AIRCRAFT_STATE &ref) const
 }
 
 void 
-SectorZone::setStartRadial(const fixed x) 
+SectorZone::setStartRadial(const Angle x) 
 {
   StartRadial = x;
   updateSector();
 }
 
 void 
-SectorZone::setEndRadial(const fixed x) 
+SectorZone::setEndRadial(const Angle x) 
 {
   EndRadial = x;
   updateSector();
 }  
 
 bool 
-SectorZone::angleInSector(const fixed b) const
+SectorZone::angleInSector(const Angle b) const
 {
   if (StartRadial<EndRadial) {
     return ((b<=EndRadial) && (b>=StartRadial));

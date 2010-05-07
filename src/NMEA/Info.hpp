@@ -193,10 +193,10 @@ struct NMEA_INFO {
   GEOPOINT Location;
 
   /** track angle in degrees true */
-  fixed TrackBearing;
+  Angle TrackBearing;
 
   /** Bearing including wind factor */
-  fixed Heading;
+  Angle Heading;
 
   /** Turn rate based on heading (including wind) */
   fixed TurnRateWind;
@@ -205,7 +205,7 @@ struct NMEA_INFO {
   fixed TurnRate;
 
   /** Estimated track bearing at next time step @author JMW */
-  fixed NextTrackBearing;
+  Angle NextTrackBearing;
 
   //############
   //   Speeds

@@ -55,7 +55,7 @@ GEOPOINT::distance(const GEOPOINT &other) const
   return ::Distance(*this, other);
 }
 
-fixed
+Angle
 GEOPOINT::bearing(const GEOPOINT &other) const
 {
   return ::Bearing(*this, other);

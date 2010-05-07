@@ -140,7 +140,7 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
 
   // Circle detection
   if (lastHeading) {
-    int diff = (int)info.TrackBearing - lastHeading;
+    int diff = (int)info.TrackBearing.value() - lastHeading;
 
     if (diff > 180)
       diff -= 360;
@@ -150,7 +150,7 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
     diff = abs(diff);
     circleDeg += diff;
   }
-  lastHeading = (int)info.TrackBearing;
+  lastHeading = (int)info.TrackBearing.value();
 
   if (circleDeg >= 360) {
     //full circle made!
@@ -199,14 +199,14 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
       startcircle--;
 
     if (startcircle == 1) {
-      climbstartpos = Vector(info.Location.Longitude,
-                             info.Location.Latitude);
+      climbstartpos = GEOPOINT(info.Location.Longitude,
+                               info.Location.Latitude);
       climbstarttime = info.Time;
       startcircle = 0;
     }
 
-    climbendpos = Vector(info.Location.Longitude,
-                         info.Location.Latitude);
+    climbendpos = GEOPOINT(info.Location.Longitude,
+                           info.Location.Latitude);
     climbendtime = info.Time;
 
     //no need to reset fullCircle, it will automaticly be reset in the next itteration.
@@ -264,7 +264,7 @@ WindAnalyser::slot_newFlightMode(const NMEA_INFO &info,
 
   // initialize analyser-parameters
   startmarker = marker;
-  startheading = (int)info.TrackBearing;
+  startheading = (int)info.TrackBearing.value();
   active = true;
   first = true;
   numwindsamples = 0;

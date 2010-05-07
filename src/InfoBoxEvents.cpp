@@ -281,11 +281,13 @@ void	ActionInterface::on_key_WindSpeed(int UpDown)
 void
 ActionInterface::on_key_Direction(int UpDown)
 {
+  static const Angle a5 = Angle(fixed(5));
+
   if (is_simulator()) {
     if(UpDown==1) {
-      device_blackboard.SetTrackBearing(Basic().TrackBearing + 5);
+      device_blackboard.SetTrackBearing(Basic().TrackBearing + a5);
     } else if (UpDown==-1) {
-      device_blackboard.SetTrackBearing(Basic().TrackBearing - 5);
+      device_blackboard.SetTrackBearing(Basic().TrackBearing - a5);
     }
   }
   return;

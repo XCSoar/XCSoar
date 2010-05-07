@@ -35,16 +35,16 @@ int wind_to_mag(int n_wind) {
   return 0;
 }
 
-int wind_to_dir(int n_wind) {
+Angle wind_to_dir(int n_wind) {
   if (n_wind) {
-    return 90*((n_wind-1)%4);
+    return Angle(fixed(90*((n_wind-1)%4)));
   }
-  return 0;
+  return Angle(fixed(0));
 }
 
 const char* wind_name(int n_wind) {
   static char buffer[80];
-  sprintf(buffer,"%d m/s @ %d",wind_to_mag(n_wind),wind_to_dir(n_wind));
+  sprintf(buffer,"%d m/s @ %d",wind_to_mag(n_wind),(int)wind_to_dir(n_wind).value());
   return buffer;
 }
 

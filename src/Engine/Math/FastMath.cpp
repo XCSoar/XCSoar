@@ -36,80 +36,60 @@ Copyright_License {
 }
 */
 
-#include "Math/Geometry.hpp"
 #include "Math/FastMath.h"
+#include "Math/Constants.h"
 
-#include <math.h>
+#include "MathTables.h"
+
+extern "C"
+{
 
 /**
- * Limits the angle (theta) to 0 - 360 degrees
- * @param theta Input angle
- * @return Output angle (0-360 degrees)
+ * Calculates the square root of val
+ *
+ * See http://www.azillionmonkeys.com/qed/sqroot.html
+ * @param val Value
+ * @return Rounded square root of val
  */
-fixed
-AngleLimit360(const fixed &theta)
+unsigned int
+isqrt4(unsigned long val)
 {
-  fixed retval = theta;
+  unsigned int temp, g = 0;
 
-  while (retval < fixed_zero)
-    retval += fixed_360;
-
-  while (retval > fixed_360)
-    retval -= fixed_360;
-
-  return retval;
-}
-
-/**
- * Limits the angle (theta) to -180 - +180 degrees
- * @param theta Input angle
- * @return Output angle (-180 - +180 degrees)
- */
-fixed
-AngleLimit180(const fixed &theta)
-{
-  fixed retval = theta;
-  while (retval < -fixed_180)
-    retval += fixed_360;
-
-  while (retval > fixed_180)
-    retval -= fixed_360;
-
-  return retval;
-}
-
-/**
- * Rotate angle by 180 degrees and limit to 0 - 360 degrees
- * @param InBound Input angle
- * @return Output angle (0 - 360 degrees)
- */
-fixed
-Reciprocal(const fixed &InBound)
-{
-  return AngleLimit360(InBound + fixed_180);
-}
-
-fixed
-BiSector(const fixed &InBound, const fixed &OutBound)
-{
-  return HalfAngle(Reciprocal(InBound), OutBound);
-}
-
-fixed
-HalfAngle(const fixed &Start, const fixed &End)
-{
-  if (Start == End) {
-    return Reciprocal(Start);
-  } else if (Start > End) {
-    if ((Start - End) < fixed_180)
-      return Reciprocal((Start + End) * fixed_half);
-    else
-      return (Start + End) * fixed_half;
-  } else {
-    if ((End - Start) < fixed_180)
-      return Reciprocal((Start + End) * fixed_half);
-    else
-      return (Start + End) * fixed_half;
+  if (val >= 0x40000000) {
+    g = 0x8000;
+    val -= 0x40000000;
   }
+
+  #define INNER_MBGSQRT(s)                    \
+  temp = (g << (s)) + (1 << ((s) * 2 - 2));   \
+  if (val >= temp) {                          \
+    g += 1 << ((s)-1);                        \
+    val -= temp;                              \
+  }
+
+  INNER_MBGSQRT (15)
+  INNER_MBGSQRT (14)
+  INNER_MBGSQRT (13)
+  INNER_MBGSQRT (12)
+  INNER_MBGSQRT (11)
+  INNER_MBGSQRT (10)
+  INNER_MBGSQRT ( 9)
+  INNER_MBGSQRT ( 8)
+  INNER_MBGSQRT ( 7)
+  INNER_MBGSQRT ( 6)
+  INNER_MBGSQRT ( 5)
+  INNER_MBGSQRT ( 4)
+  INNER_MBGSQRT ( 3)
+  INNER_MBGSQRT ( 2)
+
+  #undef INNER_MBGSQRT
+
+  temp = g + g + 1;
+  if (val >= temp)
+    g++;
+
+  return g;
 }
 
+}

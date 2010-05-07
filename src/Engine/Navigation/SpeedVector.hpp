@@ -40,7 +40,7 @@ Copyright_License {
 #ifndef XCSOAR_SPEED_VECTOR_HPP
 #define XCSOAR_SPEED_VECTOR_HPP
 
-#include "Math/fixed.hpp"
+#include "Math/Angle.hpp"
 
 /**
  * An object describing the speed vector in a two dimensional surface.
@@ -49,7 +49,7 @@ struct SpeedVector {
   /**
    * The direction of the vector in degrees true (0..360).
    */
-  fixed bearing;
+  Angle bearing;
 
   /**
    * The norm of the vector [m/s].
@@ -70,7 +70,7 @@ struct SpeedVector {
    * @param _norm Magnitude of vector (m/s)
    * @return Initialised object
    */
-  SpeedVector(fixed _bearing, fixed _norm):bearing(_bearing), norm(_norm) {}
+  SpeedVector(Angle _bearing, fixed _norm):bearing(_bearing), norm(_norm) {}
 
   /**
    * Returns true if the norm of the vector is zero.

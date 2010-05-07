@@ -47,6 +47,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "SettingsUser.hpp"
+#include "Navigation/GeoPoint.hpp"
 
 #include <stdlib.h>
 #include <tchar.h>
@@ -288,8 +289,8 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
         for (int jj = 0; jj < shape->line[tt].numpoints; jj++) {
           POINT sc;
           GEOPOINT l;
-          l.Longitude = shape->line[tt].point[jj].x;
-          l.Latitude = shape->line[tt].point[jj].y;
+          l.Longitude = Angle(fixed(shape->line[tt].point[jj].x));
+          l.Latitude = Angle(fixed(shape->line[tt].point[jj].y));
 
           if (m_window.draw_masked_bitmap_if_visible(canvas, hBitmap, l, 10, 10, &sc)) {
             if (render_labels)
@@ -532,9 +533,9 @@ TopologyWriter::Reset(void)
 }
 
 void
-TopologyWriter::addPoint(double x, double y)
+TopologyWriter::addPoint(const GEOPOINT &gp)
 {
-  pointObj p = { x, y, 0.0 };
+  pointObj p = { gp.Longitude.value(), gp.Latitude.value(), 0.0 };
 
   if (shapefileopen) {
     msSHPWritePoint(shpfile.hSHP, &p);

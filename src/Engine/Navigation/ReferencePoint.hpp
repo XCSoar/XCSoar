@@ -59,7 +59,7 @@ public:
 
   /** bearing from this to the reference
    */
-  fixed bearing(const GEOPOINT & ref) const;
+  Angle bearing(const GEOPOINT & ref) const;
 
   /** distance from this to the reference
    */
