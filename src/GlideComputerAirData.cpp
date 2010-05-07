@@ -172,8 +172,8 @@ GlideComputerAirData::Wind()
   if (((SettingsComputer().AutoWindMode & D_AUTOWIND_ZIGZAG) == D_AUTOWIND_ZIGZAG)
       && !Basic().gps.Replay
       && (Basic().TrueAirspeed > m_task.get_glide_polar().get_Vtakeoff())) {
-    double zz_wind_speed;
-    double zz_wind_bearing;
+    fixed zz_wind_speed;
+    fixed zz_wind_bearing;
     int quality;
     quality = WindZigZagUpdate(Basic(), Calculated(),
 			       &zz_wind_speed,

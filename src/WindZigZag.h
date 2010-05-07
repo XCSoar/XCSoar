@@ -39,11 +39,13 @@ Copyright_License {
 #ifndef WINDZIGZAG_H
 #define WINDZIGZAG_H
 
+#include "Engine/Math/fixed.hpp"
+
 struct NMEA_INFO;
 struct DERIVED_INFO;
 
 int
 WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
-                 double *zzwindspeed, double *zzwindbearing);
+                 fixed *zzwindspeed, fixed *zzwindbearing);
 
 #endif
