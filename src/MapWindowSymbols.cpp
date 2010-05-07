@@ -91,13 +91,10 @@ MapWindow::DrawAircraft(Canvas &canvas)
     int i;
     Brush hbAircraftSolid, hbAircraftSolidBg;
 
-    if (Appearance.InverseAircraft) {
-      hbAircraftSolid.set(Color(0xff, 0xff, 0xff));
-      hbAircraftSolidBg.set(Color(0x00, 0x00, 0x00));
-    } else {
-      hbAircraftSolid.set(Color(0x00, 0x00, 0x00));
-      hbAircraftSolidBg.set(Color(0xff, 0xff, 0xff));
-    }
+    hbAircraftSolid.set(Appearance.InverseAircraft
+                        ? Color::WHITE : Color::BLACK);
+    hbAircraftSolidBg.set(Appearance.InverseAircraft
+                          ? Color::BLACK : Color::WHITE);
 
     canvas.select(hbAircraftSolidBg);
     canvas.select(MapGfx.hpAircraft);
@@ -367,7 +364,7 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
     }
 
     // optionally draw dashed line
-    Pen dash_pen(Pen::DASH, 1, Color(0, 0, 0));
+    Pen dash_pen(Pen::DASH, 1, Color::BLACK);
     canvas.select(dash_pen);
     canvas.line(Tail[0], Tail[1]);
   }
@@ -419,7 +416,7 @@ MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
 
   canvas.segment(Start.x, Start.y, radius, rc, alpha1, alpha2, true);
 
-  Pen dash_pen(Pen::DASH, 2, Color(0, 0, 0));
+  Pen dash_pen(Pen::DASH, 2, Color::BLACK);
   canvas.select(dash_pen);
 
   canvas.line(Start.x + radius / 2, Start.y, Start.x - radius / 2, Start.y);
@@ -430,8 +427,7 @@ MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
   int rr2p = lround(radius * ROOT2 + IBLSCALE(1));
   int rr2n = lround(radius * ROOT2);
 
-  Pen penb1(Pen::SOLID, 1, Color(0, 0, 0));
-  canvas.select(penb1);
+  canvas.black_pen();
   canvas.line(Start.x + rr2p, Start.y - rr2p, Start.x + rr2n, Start.y - rr2n);
   canvas.line(Start.x - rr2p, Start.y - rr2p, Start.x - rr2n, Start.y - rr2n);
 
@@ -439,8 +435,7 @@ MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
   double s = max(0.0, min(1.0, Basic().StallRatio));
   long m = (long)((rc.bottom - rc.top) * s * s);
 
-  Pen penr2(Pen::SOLID, 1, Color(0, 0, 0));
-  canvas.select(penr2);
+  canvas.black_pen();
   canvas.line(rc.right - 1, rc.bottom - m, rc.right - 11, rc.bottom - m);
 }
 

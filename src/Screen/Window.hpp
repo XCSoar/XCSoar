@@ -39,6 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_WINDOW_HPP
 #define XCSOAR_SCREEN_WINDOW_HPP
 
+#include "Util/NonCopyable.hpp"
 #include "Screen/Font.hpp"
 #include "Thread/Debug.hpp"
 
@@ -58,19 +59,21 @@ class WindowStyle {
 #ifdef ENABLE_SDL
 protected:
   bool visible;
+  bool double_clicks;
 
 public:
-  WindowStyle():visible(true) {}
+  WindowStyle():visible(true), double_clicks(false) {}
 
 #else /* !ENABLE_SDL */
 protected:
   DWORD style, ex_style;
+  bool double_clicks;
   bool custom_painting;
 
 public:
   WindowStyle()
     :style(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS),
-     ex_style(0), custom_painting(false) {}
+     ex_style(0), double_clicks(false), custom_painting(false) {}
 #endif /* !ENABLE_SDL */
 
   void hide() {
@@ -125,6 +128,10 @@ public:
 #endif
   }
 
+  void enable_double_clicks() {
+    double_clicks = true;
+  }
+
   friend class Window;
 };
 
@@ -133,7 +140,7 @@ public:
  * which optionally interacts with the user.  To draw custom graphics
  * into a Window, derive your class from #PaintWindow.
  */
-class Window {
+class Window : private NonCopyable {
   friend class ContainerWindow;
 
 public:
@@ -158,18 +165,15 @@ protected:
 #endif
 
 private:
+  bool double_clicks;
   bool custom_painting;
-
-private:
-  /* copy constructor not allowed */
-  Window(const Window &window) {}
-  Window &operator=(const Window &window) { return *this; }
 
 public:
 #ifdef ENABLE_SDL
-  Window():parent(NULL), focused(false) {}
+  Window():parent(NULL), focused(false), double_clicks(false) {}
 #else
-  Window():hWnd(NULL), prev_wndproc(NULL), custom_painting(false) {}
+  Window():hWnd(NULL), prev_wndproc(NULL),
+           double_clicks(false), custom_painting(false) {}
 #endif
   virtual ~Window();
 
@@ -671,6 +675,16 @@ public:
   virtual bool on_mouse_up(int x, int y);
   virtual bool on_mouse_double(int x, int y);
   virtual bool on_mouse_wheel(int delta);
+
+  /**
+   * Checks if the window wishes to handle a special key, like cursor
+   * keys and tab.  This wraps the WIN32 message WM_GETDLGCODE.
+   *
+   * @return true if the window will handle they key, false if the
+   * dialog manager may use it
+   */
+  virtual bool on_key_check(unsigned key_code);
+
   virtual bool on_key_down(unsigned key_code);
   virtual bool on_key_up(unsigned key_code);
   virtual bool on_command(unsigned id, unsigned code);

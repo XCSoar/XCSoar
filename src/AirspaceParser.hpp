@@ -40,9 +40,9 @@ Copyright_License {
 #define XCSOAR_AIRSPACE_PARSER_HPP
 
 class Airspaces;
+class TLineReader;
 
 bool
-ReadAirspace(Airspaces &airspace_database, 
-             const char *path);
+ReadAirspace(Airspaces &airspace_database, TLineReader &reader);
 
 #endif

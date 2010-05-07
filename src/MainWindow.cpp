@@ -45,13 +45,7 @@ MainWindow::register_class(HINSTANCE hInstance)
   wc.style                      = CS_HREDRAW | CS_VREDRAW;
   wc.lpfnWndProc = Window::WndProc;
   wc.cbClsExtra                 = 0;
-#ifdef WINDOWSPC
   wc.cbWndExtra = 0;
-#else
-  WNDCLASS dc;
-  GetClassInfo(hInstance,TEXT("DIALOG"),&dc);
-  wc.cbWndExtra                 = dc.cbWndExtra ;
-#endif
   wc.hInstance                  = hInstance;
 #if defined(GNAV) && !defined(PCGNAV)
   wc.hIcon = NULL;

@@ -43,7 +43,6 @@ Copyright_License {
 #include "InputEvents.h"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
-#include "wcecompat/ts_string.h"
 #include "Profile.hpp"
 #include "RasterTerrain.h"
 #include "AirspaceClientUI.hpp"
@@ -56,6 +55,7 @@ Copyright_License {
 #include "InfoBoxLayout.hpp"
 #include "Screen/Layout.hpp"
 #include "SettingsUser.hpp"
+#include "IO/FileLineReader.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -110,10 +110,9 @@ LoadFiles()
   if (tpath[0] != 0) {
     ExpandLocalPath(tpath);
 
-    char path[MAX_PATH];
-    unicode2ascii(tpath, path, sizeof(path));
-
-    ReadAirspace(airspace_database, path);
+    FileLineReader reader(tpath);
+    if (!reader.error())
+      ReadAirspace(airspace_database, reader);
     airspace_database.optimise();
   }
 }

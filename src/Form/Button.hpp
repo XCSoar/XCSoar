@@ -41,6 +41,8 @@ Copyright_License {
 
 #include "Form/Control.hpp"
 
+class ContainerControl;
+
 /**
  * This class is used for creating buttons.
  * It is based on the WindowControl class.
@@ -106,11 +108,9 @@ protected:
    * (derived from Window)
    */
   virtual bool on_mouse_move(int x, int y, unsigned keys);
-  /**
-   * The on_mouse_double event is called when the button is double clicked
-   * (derived from Window)
-   */
-  virtual bool on_mouse_double(int x, int y);
+
+  virtual bool on_key_check(unsigned key_code);
+
   /**
    * The on_key_down event is called when a key is pressed while the
    * button is focused

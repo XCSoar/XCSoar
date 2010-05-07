@@ -71,10 +71,9 @@ KeyTimer(bool isdown, unsigned thekey)
   return false;
 }
 
-WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
+WindowControl::WindowControl(ContainerWindow *Parent,
                              int X, int Y, int Width, int Height,
                              const WindowStyle style) :
-    mOwner(Owner),
     mColorBack(Color::WHITE),
     mColorFore(Color::BLACK),
     mhBrushBk(mColorBack),
@@ -84,9 +83,6 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
 {
   // Clear the caption
   mCaption[0] = '\0';
-
-  if ((Parent == NULL) && (mOwner != NULL))
-    Parent = (ContainerWindow *)&mOwner->GetClientAreaWindow();
 
   set(*Parent, X, Y, Width, Height, style);
 }
@@ -221,7 +217,7 @@ WindowControl::on_key_down(unsigned key_code)
   // JMW: HELP
   KeyTimer(true, key_code);
 
-  return ContainerWindow::on_key_down(key_code) || on_unhandled_key(key_code);
+  return ContainerWindow::on_key_down(key_code);
 }
 
 bool
@@ -250,13 +246,4 @@ WindowControl::on_killfocus()
   ContainerWindow::on_killfocus();
   invalidate();
   return true;
-}
-
-bool
-WindowControl::on_unhandled_key(unsigned key_code)
-{
-  if (mOwner != NULL && mOwner->on_unhandled_key(key_code))
-    return true;
-
-  return false;
 }

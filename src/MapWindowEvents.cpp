@@ -122,7 +122,7 @@ MapWindow::ProcessVirtualKey(int X, int Y, long keytime, short vkmode)
 bool
 MapWindow::on_resize(unsigned width, unsigned height)
 {
-  MaskedPaintWindow::on_resize(width, height);
+  PaintWindow::on_resize(width, height);
 
   draw_canvas.resize(width, height);
   buffer_canvas.resize(width, height);
@@ -134,13 +134,14 @@ MapWindow::on_resize(unsigned width, unsigned height)
 bool
 MapWindow::on_create()
 {
-  if (!MaskedPaintWindow::on_create())
+  if (!PaintWindow::on_create())
     return false;
 
   WindowCanvas canvas(*this);
   draw_canvas.set(canvas);
   buffer_canvas.set(canvas);
   stencil_canvas.set(canvas);
+  bitmap_canvas.set(canvas);
   return true;
 }
 
@@ -151,7 +152,7 @@ MapWindow::on_destroy()
   buffer_canvas.reset();
   stencil_canvas.reset();
 
-  MaskedPaintWindow::on_destroy();
+  PaintWindow::on_destroy();
   return true;
 }
 
@@ -166,7 +167,7 @@ MapWindow::on_paint(Canvas& _canvas)
 bool
 MapWindow::on_setfocus()
 {
-  MaskedPaintWindow::on_setfocus();
+  PaintWindow::on_setfocus();
 
   if (InputEvents::getModeID() == InputEvents::MODE_INFOBOX)
     // the focus comes from the info box; restore the "default" mode
@@ -223,7 +224,7 @@ MapWindow::on_mouse_move(int x, int y, unsigned keys)
   }
 #endif
 
-  return MaskedPaintWindow::on_mouse_move(x, y, keys);
+  return PaintWindow::on_mouse_move(x, y, keys);
 }
 
 bool
@@ -275,18 +276,9 @@ MapWindow::on_mouse_up(int x, int y)
 
   int dwInterval = mouse_down_clock.elapsed();
   mouse_down_clock.reset();
-  if (dwInterval < 0)
-    return true;
 
   RECT rc = MapRect;
   bool my_target_pan = SettingsMap().TargetPan;
-
-  if (dwInterval == 0) {
-#ifdef DEBUG_VIRTUALKEYS
-    Message::AddMessage(_T("dwInterval==0 impossible!"));
-#endif
-    return true; // should be impossible
-  }
 
   double distance = isqrt4((long)((XstartScreen - x) *
                                   (XstartScreen - x) +
@@ -420,7 +412,7 @@ MapWindow::on_mouse_wheel(int delta)
 bool
 MapWindow::on_key_down(unsigned key_code)
 {
-  return on_key_press(key_code) || MaskedPaintWindow::on_key_down(key_code);
+  return on_key_press(key_code) || PaintWindow::on_key_down(key_code);
 }
 
 #else
@@ -428,7 +420,7 @@ MapWindow::on_key_down(unsigned key_code)
 bool
 MapWindow::on_key_up(unsigned key_code)
 {
-  return on_key_press(key_code) || MaskedPaintWindow::on_key_up(key_code);
+  return on_key_press(key_code) || PaintWindow::on_key_up(key_code);
 }
 
 #endif

@@ -39,6 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_CANVAS_HPP
 #define XCSOAR_SCREEN_CANVAS_HPP
 
+#include "Util/NonCopyable.hpp"
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 #include "Screen/Brush.hpp"
@@ -62,7 +63,7 @@ Copyright_License {
  * Base drawable canvas class
  * 
  */
-class Canvas {
+class Canvas : private NonCopyable {
   friend class WindowCanvas;
 
 protected:
@@ -122,11 +123,11 @@ public:
   }
 
   void white_pen() {
-    pen = Pen(1, Color(255, 255, 255));
+    pen = Pen(1, Color::WHITE);
   }
 
   void black_pen() {
-    pen = Pen(1, Color(0, 0, 0));
+    pen = Pen(1, Color::BLACK);
   }
 
   void hollow_brush() {
@@ -134,11 +135,11 @@ public:
   }
 
   void white_brush() {
-    brush = Brush(Color(255, 255, 255));
+    brush = Brush(Color::WHITE);
   }
 
   void black_brush() {
-    brush = Brush(Color(0, 0, 0));
+    brush = Brush(Color::BLACK);
   }
 
   void select(const Pen &_pen) {

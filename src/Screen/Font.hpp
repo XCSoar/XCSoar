@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_FONT_HPP
 #define XCSOAR_SCREEN_FONT_HPP
 
+#include "Util/NonCopyable.hpp"
+
 #ifdef ENABLE_SDL
   #include <SDL/SDL_ttf.h>
 #else
@@ -48,7 +50,7 @@ Copyright_License {
 /**
  * A font loaded from storage.  It is used by #Canvas to draw text.
  */
-class Font {
+class Font : private NonCopyable {
 protected:
   #ifdef ENABLE_SDL
   TTF_Font *font;

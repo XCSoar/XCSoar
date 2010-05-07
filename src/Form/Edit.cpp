@@ -70,6 +70,22 @@ WndProperty::Editor::on_mouse_down(int x, int y)
 }
 
 bool
+WndProperty::Editor::on_key_check(unsigned key_code)
+{
+  switch (key_code) {
+  case VK_RETURN:
+    return parent->mDialogStyle;
+
+  case VK_LEFT:
+  case VK_RIGHT:
+    return true;
+
+  default:
+    return false;
+  }
+}
+
+bool
 WndProperty::Editor::on_key_down(unsigned key_code)
 {
   // If return key pressed (Compaq uses VKF23)
@@ -99,8 +115,7 @@ WndProperty::Editor::on_key_down(unsigned key_code)
     return true;
   }
 
-  return EditWindow::on_key_down(key_code) ||
-    parent->on_unhandled_key(key_code);
+  return EditWindow::on_key_down(key_code);
 }
 
 bool
@@ -152,8 +167,7 @@ WndProperty::WndProperty(ContainerControl *Parent,
                          const WindowStyle style,
                          const EditWindowStyle edit_style,
                          DataChangeCallback_t DataChangeNotify)
-  :WindowControl(Parent,
-                 NULL /*Parent->GetHandle()*/,
+  :WindowControl(&Parent->GetClientAreaWindow(),
                  X, Y, Width, Height,
                  style),
    edit(this),
@@ -352,12 +366,6 @@ WndProperty::on_mouse_down(int x, int y)
   }
 
   return true;
-}
-
-bool
-WndProperty::on_mouse_double(int x, int y)
-{
-  return on_mouse_down(x, y);
 }
 
 bool

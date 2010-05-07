@@ -36,48 +36,59 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_MASKED_PAINT_WINDOW_HXX
-#define XCSOAR_SCREEN_MASKED_PAINT_WINDOW_HXX
+#ifndef XCSOAR_THREAD_WORKER_THREAD_HPP
+#define XCSOAR_THREAD_WORKER_THREAD_HPP
 
-#include "Screen/PaintWindow.hpp"
-#include "Screen/BitmapCanvas.hpp"
+#include "Thread/Thread.hpp"
+#include "Thread/Trigger.hpp"
 
 /**
- * A #Window implementation for custom drawing.  Call get_canvas()
- * whenever you want to draw something.  This also has a mask buffer
- * to offer masked draws
+ * A thread which performs regular work in background.
  */
-class MaskedPaintWindow : public PaintWindow {
-private:
-  BitmapCanvas mask_canvas;
+class WorkerThread : public Thread {
+  Trigger event_trigger, running, stop_trigger;
 
 public:
-  virtual ~MaskedPaintWindow();
+  WorkerThread();
 
-  void set(ContainerWindow &parent, const TCHAR *cls,
-           int left, int top, unsigned width, unsigned height);
+  /**
+   * Wakes up the thread to do work, calls tick().
+   */
+  void trigger() {
+    event_trigger.trigger();
+  }
 
-  void draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap,
-			  const int x, const int y,
-			  const unsigned src_width,
-			  const unsigned src_height,
-			  bool centered=true);
+  /**
+   * Suspend execution until resume() is called.
+   */
+  void suspend() {
+    running.reset();
+  }
 
-  void draw_bitmap(Canvas &canvas, const Bitmap &bitmap,
-		   const int x, const int y,
-		   const unsigned src_x_offset,
-		   const unsigned src_y_offset,
-		   const unsigned src_width,
-		   const unsigned src_height,
-		   bool centered=true);
+  /**
+   * Resume execution after suspend().
+   */
+  void resume() {
+    running.trigger();
+  }
+
+  /**
+   * Triggers thread shutdown.  Call join() after this to wait
+   * synchronously for the thread to exit.
+   */
+  void stop() {
+    stop_trigger.trigger();
+    trigger();
+    resume();
+  }
 
 protected:
-#ifndef ENABLE_SDL
-  virtual bool on_resize(unsigned width, unsigned height);
-#endif /* !ENABLE_SDL */
+  virtual void run();
 
-  virtual bool on_create();
-  virtual bool on_destroy();
+  /**
+   * Implement this to do the actual work.
+   */
+  virtual void tick() = 0;
 };
 
 #endif

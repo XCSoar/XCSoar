@@ -42,6 +42,8 @@ Copyright_License {
 #include "Form/Control.hpp"
 #include "Screen/Bitmap.hpp"
 
+class ContainerControl;
+
 /**
  * A WndListFrame implements a scrollable list control based on the
  * WindowControl class.
@@ -358,6 +360,8 @@ protected:
    * (derived from Window)
    */
   virtual bool on_mouse_wheel(int delta);
+
+  virtual bool on_key_check(unsigned key_code);
 
   /**
    * The on_key_down event is called when a key is pressed while the

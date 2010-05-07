@@ -37,21 +37,16 @@ Copyright_License {
 */
 
 #include "InfoBox.hpp"
-#include "InfoBoxManager.hpp"
-#include "Protection.hpp"
-#include "Dialogs.h"
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"
-#include "Interface.hpp"
-#include "MainWindow.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/Layout.hpp"
-#include "SettingsUser.hpp"
+#include "Screen/BufferCanvas.hpp"
+#include "Screen/ContainerWindow.hpp"
 #include "Appearance.hpp"
 #include "Defines.h"
-#include "UtilsSystem.hpp"
 #include "Asset.hpp"
 
 #include <algorithm>
@@ -60,9 +55,12 @@ using std::max;
 
 #define SELECTORWIDTH IBLSCALE(5)
 
-InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height,
+InfoBox::InfoBox(ContainerWindow &_parent, int X, int Y, int Width, int Height,
+                 int border_flags,
                  const InfoBoxLook &_look)
-  :look(_look), focus_timer(0)
+  :parent(_parent),
+   mBorderKind(border_flags),
+   look(_look), focus_timer(0)
 {
   mSmallerFont = false;
 
@@ -70,13 +68,9 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height,
   colorTop = 0;
   colorBottom = 0;
 
-  set(parent, X, Y, Width, Height);
-
-  if (Appearance.InfoBoxBorder == apIbTab) {
-    mBorderKind = BORDERTAB;
-  } else {
-    mBorderKind = BORDERRIGHT | BORDERBOTTOM;
-  }
+  WindowStyle style;
+  style.enable_double_clicks();
+  set(parent, X, Y, Width, Height, style);
 
   mValueUnit = unUndef;
 
@@ -89,32 +83,7 @@ void
 InfoBox::SetValueUnit(Units_t Value)
 {
   mValueUnit = Value;
-}
-
-int
-InfoBox::GetBorderKind(void)
-{
-  return mBorderKind;
-}
-
-int
-InfoBox::SetBorderKind(int Value)
-{
-  int res = mBorderKind;
-
-  if (mBorderKind != Value) {
-    mBorderKind = Value;
-
-    if (Appearance.InfoBoxBorder == apIbTab) {
-      mBorderKind = BORDERTAB;
-    } else {
-      mBorderKind = Value;
-    }
-
-    //JMW    Paint();
-  }
-
-  return res;
+  invalidate(recValue);
 }
 
 void
@@ -151,6 +120,8 @@ InfoBox::SetColor(int value)
     color = value;
   else
     color = 0;
+
+  invalidate(recValue);
 }
 
 void
@@ -160,6 +131,8 @@ InfoBox::SetColorBottom(int value)
     colorBottom = value;
   else
     colorBottom = 0;
+
+  invalidate(recComment);
 }
 
 void
@@ -169,6 +142,8 @@ InfoBox::SetColorTop(int value)
     colorTop = value;
   else
     colorTop = 0;
+
+  invalidate(recTitle);
 }
 
 void
@@ -185,6 +160,7 @@ void
 InfoBox::SetSmallerFont(bool smallerFont)
 {
   this->mSmallerFont = smallerFont;
+  invalidate(recValue);
 }
 
 void
@@ -210,7 +186,7 @@ InfoBox::PaintTitle(Canvas &canvas)
 
   canvas.text_opaque(x, y, &recTitle, mTitle);
 
-  if ((mBorderKind & BORDERTAB) && (halftextwidth > IBLSCALE(3))) {
+  if (Appearance.InfoBoxBorder == apIbTab && halftextwidth > IBLSCALE(3)) {
     int ytop = recTitle.top + font.get_capital_height() / 2;
     int ytopedge = ytop + IBLSCALE(2);
     int ybottom = recTitle.top + IBLSCALE(6) + font.get_capital_height();
@@ -505,7 +481,7 @@ InfoBox::on_timer(timer_t id)
   kill_timer(focus_timer);
   focus_timer = 0;
 
-  CommonInterface::main_window.map.set_focus();
+  parent.set_focus();
 
   return true;
 }

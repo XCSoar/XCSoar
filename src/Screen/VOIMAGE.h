@@ -26,42 +26,11 @@
 
 #include "imgdecmp.h"
 
-#include <tchar.h>
-
-class CVOResource
-{
-public:
-	CVOResource(HMODULE hModule, DWORD dwResourceID, const TCHAR *pcszClass);
-	~CVOResource();
-
-	BOOL IsLoaded();
-
-	DWORD	GetSize()	{ return m_dwSize; }
-	PBYTE	GetData()	{ return m_pData; }
-
-	void	SetUserData(DWORD dwValue)	{ m_dwUser = dwValue; }
-	DWORD	GetUserData()				{ return m_dwUser; }
-
-protected:
-	DWORD m_dwUser;
-
-	DWORD m_dwSize;
-	PBYTE m_pData;
-	HGLOBAL m_hGlobal;
-	HRSRC m_hrsrc;
-};
-
 class CVOImage
 {
 public:
-	HBITMAP Copy();
-	static DWORD CALLBACK GetImageResourceData(LPSTR szBuffer, DWORD dwBufferMax, LPARAM lParam);
-	BOOL IsLoaded();
 	static void CALLBACK ImageProgress( IImageRender *, BOOL, LPARAM);
 	static DWORD CALLBACK GetImageData( LPSTR, DWORD, LPARAM);
-	BOOL SetBitmap(HDC hdc, DWORD dwResourceID, const TCHAR *pcszClass = _T("IMAGE"), HMODULE hModule = 0 );
-	DWORD GetWidth();
-	DWORD GetHeight();
 	BOOL Draw(HDC hdc, int x, int y, int cx = -1, int cy = -1);
 	BOOL Load(HDC hdc, const TCHAR *pcszFileName);
 	CVOImage();

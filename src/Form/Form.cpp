@@ -61,7 +61,7 @@ WndForm::WndForm(SingleWindow &_main_window,
                  const TCHAR *Caption,
                  int X, int Y, int Width, int Height,
                  const WindowStyle style):
-  ContainerControl(NULL, &_main_window, X, Y, Width, Height, style),
+  ContainerControl(&_main_window, X, Y, Width, Height, style),
   main_window(_main_window),
   mModalResult(0),
   mColorTitle(Color::YELLOW),
@@ -141,6 +141,20 @@ WndForm::on_timer(timer_t id)
     return true;
   } else
     return ContainerControl::on_timer(id);
+}
+
+bool
+WndForm::on_command(unsigned id, unsigned code)
+{
+  switch (id) {
+  case IDCANCEL:
+    /* sent by the WIN32 dialog manager when the user presses
+       Escape */
+    SetModalResult(mrCancel);
+    return true;
+  }
+
+  return false;
 }
 
 const Font *
@@ -284,6 +298,28 @@ int WndForm::ShowModal(bool bEnableMap) {
         mOnKeyDownNotify(this, msg.wParam))
       continue;
 
+    if (msg.message == WM_KEYDOWN && identify_descendant(msg.hwnd) &&
+        (msg.wParam == VK_UP || msg.wParam == VK_DOWN)) {
+      /* VK_UP and VK_DOWN move the focus only within the current
+         control group - but we want it to behave like Shift-Tab and
+         Tab */
+
+      LRESULT r = ::SendMessage(msg.hwnd, WM_GETDLGCODE, msg.wParam,
+                                (LPARAM)&msg);
+      if ((r & DLGC_WANTMESSAGE) == 0) {
+        /* this window doesn't handle VK_UP/VK_DOWN */
+        if (msg.wParam == VK_DOWN)
+          focus_next_control();
+        else
+          focus_previous_control();
+        continue;
+      }
+    }
+
+    /* let the WIN32 dialog manager handle hot keys like Tab */
+    if (::IsDialogMessage(hWnd, &msg))
+      continue;
+
     TranslateMessage(&msg);
     assert_none_locked();
     DispatchMessage(&msg);
@@ -387,27 +423,4 @@ void
 WndForm::SetTimerNotify(TimerNotifyCallback_t OnTimerNotify)
 {
   mOnTimerNotify = OnTimerNotify;
-}
-
-// normal form stuff (nonmodal)
-
-bool
-WndForm::on_unhandled_key(unsigned key_code)
-{
-  switch (key_code) {
-  case VK_ESCAPE:
-    SetModalResult(mrCancel);
-    return true;
-
-  case VK_UP:
-    focus_previous_control();
-    return true;
-
-  case VK_DOWN:
-  case VK_TAB:
-    focus_next_control();
-    return true;
-  }
-
-  return ContainerControl::on_unhandled_key(key_code);
 }

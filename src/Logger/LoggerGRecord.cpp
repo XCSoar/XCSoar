@@ -238,7 +238,7 @@ GRecord::LoadFileToBuffer()
 bool
 GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Record
 {
-  FILE *file = _tfopen(FileName, _T("a"));
+  FILE *file = _tfopen(FileName, _T("ab"));
   if (file == NULL)
     return false;
 

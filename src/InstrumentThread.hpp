@@ -39,25 +39,22 @@ Copyright_License {
 #ifndef XCSOAR_INSTRUMENT_THREAD_HPP
 #define XCSOAR_INSTRUMENT_THREAD_HPP
 
-#include "Thread/Thread.hpp"
-#include "Thread/Trigger.hpp"
+#include "Thread/WorkerThread.hpp"
 
 class GaugeVario;
 
-class InstrumentThread : public Thread {
-  Trigger vario_trigger;
-
-  GaugeVario *vario;
+class InstrumentThread : public WorkerThread {
+  GaugeVario &vario;
 
 public:
-  InstrumentThread(GaugeVario *_vario);
+  InstrumentThread(GaugeVario &_vario);
 
   void trigger_vario() {
-    vario_trigger.trigger();
+    trigger();
   }
 
 protected:
-  virtual void run();
+  virtual void tick();
 };
 
 #endif

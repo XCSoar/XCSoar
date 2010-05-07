@@ -31,6 +31,7 @@ To compile from source, you need:
 - GNU make
 - GNU compiler collection (gcc)
 - rsvg (http://librsvg.sourceforge.net/)
+- ImageMagick (http://www.imagemagick.org/)
 
 To cross-compile to (desktop) Windows, you need the mingw32 version of
 gcc:

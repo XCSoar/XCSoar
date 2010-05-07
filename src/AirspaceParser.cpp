@@ -45,46 +45,32 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Math/Earth.hpp"
 #include "options.h"
-#include "IO/ZipLineReader.hpp"
-
+#include "IO/LineReader.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Compatibility/string.h"
-
 
 #include <math.h>
 #include <tchar.h>
 #include <ctype.h>
 #include <assert.h>
 
-static bool StartsWith(TCHAR *Text, const TCHAR *LookFor);
-static bool ReadCoords(TCHAR *Text, GEOPOINT &point);
-static void ReadAltitude(TCHAR *Text, AIRSPACE_ALT *Alt);
-
-static void
-CalculateArc(TCHAR *Text);
-
-static void
-CalculateSector(TCHAR *Text);
-
-static bool
-ParseLine(Airspaces &airspace_database, int nLineType, TCHAR *TempString);
-
-static int GetNextLine(TLineReader &reader, TCHAR *&Text);
-
 static int LineCount;
 
-static const int k_nLineTypes = 9;
+enum line_type {
+  /** special value: end of file */
+  k_nLtEOF,
 
-static const int k_nLtAC	= 0;
-static const int k_nLtAN	= 1;
-static const int k_nLtAL	= 2;
-static const int k_nLtAH	= 3;
-static const int k_nLtV		= 4;
-static const int k_nLtDP	= 5;
-static const int k_nLtDB	= 6;
-static const int k_nLtDA	= 7;
-static const int k_nLtDC	= 8;
+  k_nLtAC,
+  k_nLtAN,
+  k_nLtAL,
+  k_nLtAH,
+  k_nLtV,
+  k_nLtDP,
+  k_nLtDB,
+  k_nLtDA,
+  k_nLtDC,
+};
 
 static const int k_nAreaCount = 12;
 static const TCHAR* k_strAreaStart[k_nAreaCount] = {
@@ -157,161 +143,13 @@ struct TempAirspaceType {
 
 static TempAirspaceType temp_area;
 
-static bool
-ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
-{
-  LogStartUp(TEXT("ReadAirspace"));
-  int	Tock = 0;
-  DWORD	dwStep;
-  DWORD	dwPos;
-  DWORD	dwOldPos = 0L;
-  int	nLineType;
-
-  LineCount = 0;
-
-  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Airspace File...")));
-  // Need step size finer than default 10
-  XCSoarInterface::SetProgressStepSize(5);
-  dwStep = reader.size() / 5L;
-
-  dwOldPos = 0L;
-  XCSoarInterface::StepProgressDialog();
-
-  temp_area.reset();
-
-  TCHAR *line;
-  while((nLineType = GetNextLine(reader, line)) >= 0) {
-    Tock++;
-    Tock %= 50;
-
-    if (Tock == 0) {
-      dwPos = reader.tell();
-      if ((dwPos - dwOldPos) >= dwStep) {
-        XCSoarInterface::StepProgressDialog();
-        dwOldPos = dwPos;
-      }
-    }
-
-    if (!ParseLine(airspace_database, nLineType, line))
-      return false;
-  }
-
-  // Process final area (if any). bFillMode is true.  JG 10-Nov-2005
-  if (!temp_area.Waiting) 
-    temp_area.AddPolygon(airspace_database);
-
-  return true;
-}
-
-static bool
-ParseLine(Airspaces &airspace_database, int nLineType, TCHAR *TempString)
-{
-  int nIndex;
-  GEOPOINT TempPoint;
-
-  switch (nLineType) {
-  case k_nLtAC:
-    if (!temp_area.Waiting) {
-      temp_area.AddPolygon(airspace_database);
-    }
-    temp_area.reset();
-    
-    for (nIndex = 0; nIndex < k_nAreaCount; nIndex++) {
-      if (StartsWith(&TempString[3], k_strAreaStart[nIndex])) {
-        temp_area.Type = (AirspaceClass_t)k_nAreaType[nIndex];
-        break;
-      }
-    }
-    temp_area.Waiting = false;
-    break;
-
-  case k_nLtAN:
-    temp_area.Name = &TempString[3];
-    break;
-  case k_nLtAL:
-    ReadAltitude(&TempString[3], &temp_area.Base);
-    break;
-  case k_nLtAH:
-    ReadAltitude(&TempString[3],&temp_area.Top);
-    break;
-  case k_nLtV:
-    // Need to set these while in count mode, or DB/DA will crash
-    if (StartsWith(&TempString[2], _T("X=")) ||
-        StartsWith(&TempString[2], _T("x="))) {
-      if (ReadCoords(&TempString[4],temp_area.Center))
-        break;
-    } else if (StartsWith(&TempString[2], _T("D=-")) ||
-               StartsWith(&TempString[2], _T("d=-"))) {
-      temp_area.Rotation = -1;
-      break;
-    } else if (StartsWith(&TempString[2], _T("D=+")) ||
-             StartsWith(&TempString[2], _T("d=+"))) {
-      temp_area.Rotation = +1;
-      break;
-    } else if (StartsWith(&TempString[2], _T("Z")) ||
-               StartsWith(&TempString[2], _T("z"))) {
-      // ToDo Display Zool Level
-      break;
-    } else if (StartsWith(&TempString[2], _T("W")) ||
-               StartsWith(&TempString[2], _T("w"))) {
-      // ToDo width of an airway
-      break;
-    } else if (StartsWith(&TempString[2], _T("T")) ||
-               StartsWith(&TempString[2], _T("t"))) {
-      // ----- JMW THIS IS REQUIRED FOR LEGACY FILES
-      break;
-    }
-    goto OnError;
-
-  case k_nLtDP:
-    if (!ReadCoords(&TempString[3],TempPoint))
-      goto OnError;
-    temp_area.points.push_back(TempPoint);
-    break;
-
-  case k_nLtDB:
-    CalculateArc(TempString);
-    break;
-
-  case k_nLtDA:
-    CalculateSector(TempString);
-    break;
-
-  case k_nLtDC:
-    temp_area.Radius = Units::ToSysUnit(_tcstod(&TempString[2], NULL), unNauticalMiles);
-    temp_area.AddCircle(airspace_database);
-    temp_area.reset();
-    break;
-
-  default:
-    break;
-  }
-
-  return(true);
-
-OnError:
-
-  TCHAR sTmp[MAX_PATH];
-  _stprintf(sTmp, TEXT("%s: %d\r\n\"%s\"\r\n%s."),
-            gettext(TEXT("Parse Error at Line")),
-            LineCount, TempString,
-            gettext(TEXT("Line skipped.")));
-  if (MessageBoxX(sTmp, gettext(TEXT("Airspace")),
-                  MB_OKCANCEL) == IDCANCEL){
-    return(false);
-  }
-
-  return(true);
-
-}
-
-
 // Returns index of line type found, or -1 if end of file reached
-static int GetNextLine(TLineReader &reader, TCHAR *&Text)
+static enum line_type
+GetNextLine(TLineReader &reader, TCHAR *&Text)
 {
   TCHAR *Comment;
   int nSize;
-  int nLineType = -1;
+  enum line_type nLineType = k_nLtEOF;
   TCHAR sTmp[READLINE_LENGTH];
 
   while ((Text = reader.read()) != NULL) {
@@ -361,7 +199,7 @@ static int GetNextLine(TLineReader &reader, TCHAR *&Text)
         if (MessageBoxX(sTmp,
                         gettext(_T("Airspace")),
                         MB_OKCANCEL) == IDCANCEL)
-          return(-1);
+          return k_nLtEOF;
         continue;
       }
 
@@ -396,7 +234,7 @@ static int GetNextLine(TLineReader &reader, TCHAR *&Text)
         if (MessageBoxX(sTmp,
                         gettext(_T("Airspace")),
                         MB_OKCANCEL) == IDCANCEL)
-          return(-1);
+          return k_nLtEOF;
         continue;
       }
 
@@ -419,11 +257,11 @@ static int GetNextLine(TLineReader &reader, TCHAR *&Text)
                 gettext(_T("Line skipped.")));
       if (MessageBoxX(sTmp, gettext(_T("Airspace")),
                       MB_OKCANCEL) == IDCANCEL)
-        return(-1);
+        return k_nLtEOF;
       continue;
     }
 
-    if (nLineType >= 0) {// Valid line found
+    if (nLineType != k_nLtEOF) {// Valid line found
       // Strip comments and newline chars from end of line
       Comment = _tcschr(Text, _T('*'));
       if (Comment != NULL) {
@@ -445,8 +283,8 @@ static int GetNextLine(TLineReader &reader, TCHAR *&Text)
   return nLineType;
 }
 
-
-static bool StartsWith(TCHAR *Text, const TCHAR *LookFor)
+static bool
+StartsWith(const TCHAR *Text, const TCHAR *LookFor)
 {
   while(1) {
     if (!(*LookFor)) return TRUE;
@@ -455,73 +293,8 @@ static bool StartsWith(TCHAR *Text, const TCHAR *LookFor)
   }
 }
 
-static bool ReadCoords(TCHAR *Text, GEOPOINT &point)
-{
-  double Ydeg=0, Ymin=0, Ysec=0;
-  double Xdeg=0, Xmin=0, Xsec=0;
-  TCHAR *Stop;
-
-  // ToDo, add more error checking and making it more tolerant/robust
-
-  Ydeg = (double)_tcstod(Text, &Stop);
-  if ((Text == Stop) || (*Stop =='\0')) goto OnError;
-  Stop++;
-  Ymin = (double)_tcstod(Stop, &Stop);
-  if (Ymin<0 || Ymin >=60){
-    // ToDo
-  }
-  if (*Stop =='\0') goto OnError;
-  if(*Stop == ':'){
-    Stop++;
-    if (*Stop =='\0')
-      goto OnError;
-    Ysec = (double)_tcstod(Stop, &Stop);
-    if (Ysec<0 || Ysec >=60) {
-      // ToDo
-    }
-  }
-
-  point.Latitude = Angle::degrees(fixed(Ysec/3600 + Ymin/60 + Ydeg));
-
-  if (*Stop == ' ')
-    Stop++;
-
-  if (*Stop =='\0') goto OnError;
-  if ((*Stop == 'S') || (*Stop == 's'))
-    point.Latitude.flip();
-
-  Stop++;
-  if (*Stop =='\0') goto OnError;
-
-  Xdeg = (double)_tcstod(Stop, &Stop);
-  Stop++;
-  Xmin = (double)_tcstod(Stop, &Stop);
-  if(*Stop == ':'){
-    Stop++;
-    if (*Stop =='\0')
-      goto OnError;
-    Xsec = (double)_tcstod(Stop, &Stop);
-  }
-
-  point.Longitude = Angle::degrees(fixed(Xsec/3600 + Xmin/60 + Xdeg));
-
-  if (*Stop == ' ')
-    Stop++;
-  if (*Stop =='\0') goto OnError;
-  if((*Stop == 'W') || (*Stop == 'w'))
-    point.Longitude.flip();
-
-  point.Longitude = point.Longitude.AngleLimit360();
-
-  return(true);
-
-OnError:
-  return(false);
-
-}
-
-
-static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
+static void
+ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
 {
   TCHAR *Stop;
   TCHAR Text[128];
@@ -642,11 +415,75 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
     // ToDo warning! no base defined use MSL
     Alt->Base = abMSL;
   }
+}
+
+static bool
+ReadCoords(const TCHAR *Text, GEOPOINT &point)
+{
+  double Ydeg=0, Ymin=0, Ysec=0;
+  double Xdeg=0, Xmin=0, Xsec=0;
+  TCHAR *Stop;
+
+  // ToDo, add more error checking and making it more tolerant/robust
+
+  Ydeg = (double)_tcstod(Text, &Stop);
+  if ((Text == Stop) || (*Stop =='\0')) goto OnError;
+  Stop++;
+  Ymin = (double)_tcstod(Stop, &Stop);
+  if (Ymin<0 || Ymin >=60){
+    // ToDo
+  }
+  if (*Stop =='\0') goto OnError;
+  if(*Stop == ':'){
+    Stop++;
+    if (*Stop =='\0')
+      goto OnError;
+    Ysec = (double)_tcstod(Stop, &Stop);
+    if (Ysec<0 || Ysec >=60) {
+      // ToDo
+    }
+  }
+
+  point.Latitude = Angle::degrees(fixed(Ysec/3600 + Ymin/60 + Ydeg));
+
+  if (*Stop == ' ')
+    Stop++;
+
+  if (*Stop =='\0') goto OnError;
+  if ((*Stop == 'S') || (*Stop == 's'))
+    point.Latitude.flip();
+
+  Stop++;
+  if (*Stop =='\0') goto OnError;
+
+  Xdeg = (double)_tcstod(Stop, &Stop);
+  Stop++;
+  Xmin = (double)_tcstod(Stop, &Stop);
+  if(*Stop == ':'){
+    Stop++;
+    if (*Stop =='\0')
+      goto OnError;
+    Xsec = (double)_tcstod(Stop, &Stop);
+  }
+
+  point.Longitude = Angle::degrees(fixed(Xsec/3600 + Xmin/60 + Xdeg));
+
+  if (*Stop == ' ')
+    Stop++;
+  if (*Stop =='\0') goto OnError;
+  if((*Stop == 'W') || (*Stop == 'w'))
+    point.Longitude.flip();
+  point.Longitude = point.Longitude.AngleLimit360();
+
+  return(true);
+
+OnError:
+  return(false);
 
 }
 
 static void
-CalculateSector(TCHAR *Text)
+CalculateSector(const TCHAR *Text)
 {
   fixed Radius;
   Angle StartBearing;
@@ -677,14 +514,14 @@ CalculateSector(TCHAR *Text)
 }
 
 static void
-CalculateArc(TCHAR *Text)
+CalculateArc(const TCHAR *Text)
 {
   GEOPOINT Start;
   GEOPOINT End;
   Angle StartBearing;
   Angle EndBearing;
   fixed Radius;
-  TCHAR *Comma = NULL;
+  const TCHAR *Comma = NULL;
   GEOPOINT TempPoint;
   static const fixed fixed_75 = fixed(7.5);
   static const fixed fixed_5 = fixed(5);
@@ -715,6 +552,152 @@ CalculateArc(TCHAR *Text)
   temp_area.points.push_back(TempPoint);
 }
 
+static bool
+ParseLine(Airspaces &airspace_database, enum line_type nLineType,
+          const TCHAR *TempString)
+{
+  int nIndex;
+  GEOPOINT TempPoint;
+
+  switch (nLineType) {
+  case k_nLtAC:
+    if (!temp_area.Waiting) {
+      temp_area.AddPolygon(airspace_database);
+    }
+    temp_area.reset();
+    
+    for (nIndex = 0; nIndex < k_nAreaCount; nIndex++) {
+      if (StartsWith(&TempString[3], k_strAreaStart[nIndex])) {
+        temp_area.Type = (AirspaceClass_t)k_nAreaType[nIndex];
+        break;
+      }
+    }
+    temp_area.Waiting = false;
+    break;
+
+  case k_nLtAN:
+    temp_area.Name = &TempString[3];
+    break;
+  case k_nLtAL:
+    ReadAltitude(&TempString[3], &temp_area.Base);
+    break;
+  case k_nLtAH:
+    ReadAltitude(&TempString[3],&temp_area.Top);
+    break;
+  case k_nLtV:
+    // Need to set these while in count mode, or DB/DA will crash
+    if (StartsWith(&TempString[2], _T("X=")) ||
+        StartsWith(&TempString[2], _T("x="))) {
+      if (ReadCoords(&TempString[4],temp_area.Center))
+        break;
+    } else if (StartsWith(&TempString[2], _T("D=-")) ||
+               StartsWith(&TempString[2], _T("d=-"))) {
+      temp_area.Rotation = -1;
+      break;
+    } else if (StartsWith(&TempString[2], _T("D=+")) ||
+             StartsWith(&TempString[2], _T("d=+"))) {
+      temp_area.Rotation = +1;
+      break;
+    } else if (StartsWith(&TempString[2], _T("Z")) ||
+               StartsWith(&TempString[2], _T("z"))) {
+      // ToDo Display Zool Level
+      break;
+    } else if (StartsWith(&TempString[2], _T("W")) ||
+               StartsWith(&TempString[2], _T("w"))) {
+      // ToDo width of an airway
+      break;
+    } else if (StartsWith(&TempString[2], _T("T")) ||
+               StartsWith(&TempString[2], _T("t"))) {
+      // ----- JMW THIS IS REQUIRED FOR LEGACY FILES
+      break;
+    }
+    goto OnError;
+
+  case k_nLtDP:
+    if (!ReadCoords(&TempString[3],TempPoint))
+      goto OnError;
+    temp_area.points.push_back(TempPoint);
+    break;
+
+  case k_nLtDB:
+    CalculateArc(TempString);
+    break;
+
+  case k_nLtDA:
+    CalculateSector(TempString);
+    break;
+
+  case k_nLtDC:
+    temp_area.Radius = Units::ToSysUnit(_tcstod(&TempString[2], NULL), unNauticalMiles);
+    temp_area.AddCircle(airspace_database);
+    temp_area.reset();
+    break;
+  }
+
+  return(true);
+
+OnError:
+
+  TCHAR sTmp[MAX_PATH];
+  _stprintf(sTmp, TEXT("%s: %d\r\n\"%s\"\r\n%s."),
+            gettext(TEXT("Parse Error at Line")),
+            LineCount, TempString,
+            gettext(TEXT("Line skipped.")));
+  if (MessageBoxX(sTmp, gettext(TEXT("Airspace")),
+                  MB_OKCANCEL) == IDCANCEL){
+    return(false);
+  }
+
+  return(true);
+
+}
+
+bool
+ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
+{
+  LogStartUp(TEXT("ReadAirspace"));
+  int	Tock = 0;
+  DWORD	dwStep;
+  DWORD	dwPos;
+  DWORD	dwOldPos = 0L;
+  enum line_type nLineType;
+
+  LineCount = 0;
+
+  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Airspace File...")));
+  // Need step size finer than default 10
+  XCSoarInterface::SetProgressStepSize(5);
+  dwStep = reader.size() / 5L;
+
+  dwOldPos = 0L;
+  XCSoarInterface::StepProgressDialog();
+
+  temp_area.reset();
+
+  TCHAR *line;
+  while((nLineType = GetNextLine(reader, line)) != k_nLtEOF) {
+    Tock++;
+    Tock %= 50;
+
+    if (Tock == 0) {
+      dwPos = reader.tell();
+      if ((dwPos - dwOldPos) >= dwStep) {
+        XCSoarInterface::StepProgressDialog();
+        dwOldPos = dwPos;
+      }
+    }
+
+    if (!ParseLine(airspace_database, nLineType, line))
+      return false;
+  }
+
+  // Process final area (if any). bFillMode is true.  JG 10-Nov-2005
+  if (!temp_area.Waiting) 
+    temp_area.AddPolygon(airspace_database);
+
+  return true;
+}
+
 /*
 OLD_TASK boundary wrap 180
     // JMW detect airspace that wraps across 180
@@ -731,14 +714,3 @@ OLD_TASK boundary wrap 180
     }
   }
 */
-
-bool
-ReadAirspace(Airspaces &airspace_database, const char *path)
-{
-  ZipLineReader reader(path);
-  if (reader.error())
-    return false;
-
-  return ReadAirspace(airspace_database, reader);
-}
-

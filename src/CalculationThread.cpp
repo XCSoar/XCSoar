@@ -46,94 +46,68 @@ Copyright_License {
  * Constructor of the CalculationThread class
  * @param _glide_computer The GlideComputer used for the CalculationThread
  */
-CalculationThread::CalculationThread(GlideComputer *_glide_computer)
-  :running(_T("CalculationThread::running"), true),
-   data_trigger(_T("dataTriggerEvent")),
-   gps_trigger(TEXT("gpsUpdatedTriggerEvent")),
+CalculationThread::CalculationThread(GlideComputer &_glide_computer)
+  :gps_trigger(_T("gpsUpdatedTriggerEvent"), false),
    glide_computer(_glide_computer) {}
 
 /**
  * Main loop of the CalculationThread
  */
 void
-CalculationThread::run()
+CalculationThread::tick()
 {
-  bool need_calculations_slow;
+  const bool gps_updated = gps_trigger.test();
 
-  need_calculations_slow = false;
+  // update and transfer master info to glide computer
+  {
+    ScopeLock protect(mutexBlackboard);
+    const GlidePolar &glide_polar = glide_computer.get_glide_polar();
 
-  // main loop until stop signal is tested
-  while (!closeTriggerEvent.test()) {
-    running.wait();
-
-    // wait until the data_trigger is triggered
-    // or MIN_WAIT_TIME has passed
-    if (!data_trigger.wait(MIN_WAIT_TIME))
-      continue;
-
-    const bool gps_updated = gps_trigger.test();
-
-    // update and transfer master info to glide computer
-    mutexBlackboard.Lock();
-    {
-      GlidePolar glide_polar = glide_computer->get_glide_polar();
-
-      // if (new GPS data available)
-      if (gps_updated) {
-        device_blackboard.tick(glide_polar);                
-      } else {
-        device_blackboard.tick_fast(glide_polar);
-      }
-      
-      // Copy data from DeviceBlackboard to GlideComputerBlackboard
-      glide_computer->ReadBlackboard(device_blackboard.Basic());
-      // Copy settings form SettingsComputerBlackboard to GlideComputerBlackboard
-      glide_computer->ReadSettingsComputer(device_blackboard.SettingsComputer());
-      // Copy mapprojection from MapProjectionBlackboard to GlideComputerBlackboard
-      glide_computer->ReadMapProjection(device_blackboard.MapProjection());
-      
-    }
-    mutexBlackboard.Unlock();
-
-    // if (new GPS data)
+    // if (new GPS data available)
     if (gps_updated) {
-
-      // inform map new data is ready
-      drawTriggerEvent.trigger();
-
-      if (!glide_computer->Basic().TotalEnergyVarioAvailable) {
-        TriggerVarioUpdate(); // emulate vario update
-      }
-
-      // process GPS data
-      // if (time advanced)
-      if (glide_computer->ProcessGPS()){
-        need_calculations_slow = true;
-      }
+      device_blackboard.tick(glide_polar);
+    } else {
+      device_blackboard.tick_fast(glide_polar);
     }
 
-    // drop out on exit event
-    if (closeTriggerEvent.test())
-      break;
+    // Copy data from DeviceBlackboard to GlideComputerBlackboard
+    glide_computer.ReadBlackboard(device_blackboard.Basic());
+    // Copy settings form SettingsComputerBlackboard to GlideComputerBlackboard
+    glide_computer.ReadSettingsComputer(device_blackboard.SettingsComputer());
+    // Copy mapprojection from MapProjectionBlackboard to GlideComputerBlackboard
+    glide_computer.ReadMapProjection(device_blackboard.MapProjection());
+  }
 
-    // if (time advanced and slow calculations need to be updated)
-    if (need_calculations_slow) {
-      // do slow calculations
-      glide_computer->ProcessIdle();
-      need_calculations_slow = false;
+  bool need_calculations_slow = false;
+
+  // if (new GPS data)
+  if (gps_updated) {
+    // inform map new data is ready
+    drawTriggerEvent.trigger();
+
+    if (!glide_computer.Basic().TotalEnergyVarioAvailable) {
+      TriggerVarioUpdate(); // emulate vario update
     }
 
-    // values changed, so copy them back now: ONLY CALCULATED INFO
-    // should be changed in DoCalculations, so we only need to write
-    // that one back (otherwise we may write over new data)
-    mutexBlackboard.Lock();
-    {
-      device_blackboard.ReadBlackboard(glide_computer->Calculated());
+    // process GPS data
+    // if (time advanced)
+    if (glide_computer.ProcessGPS()){
+      need_calculations_slow = true;
     }
-    mutexBlackboard.Unlock();
+  }
 
-    // reset triggers
-    data_trigger.reset();
-    gps_trigger.reset();
+  // if (time advanced and slow calculations need to be updated)
+  if (need_calculations_slow) {
+    // do slow calculations
+    glide_computer.ProcessIdle();
+    need_calculations_slow = false;
+  }
+
+  // values changed, so copy them back now: ONLY CALCULATED INFO
+  // should be changed in DoCalculations, so we only need to write
+  // that one back (otherwise we may write over new data)
+  {
+    ScopeLock protect(mutexBlackboard);
+    device_blackboard.ReadBlackboard(glide_computer.Calculated());
   }
 }

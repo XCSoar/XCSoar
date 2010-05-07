@@ -77,13 +77,7 @@ public:
     wc.style = CS_HREDRAW | CS_VREDRAW;
     wc.lpfnWndProc = Window::WndProc;
     wc.cbClsExtra = 0;
-#ifdef WINDOWSPC
     wc.cbWndExtra = 0;
-#else
-    WNDCLASS dc;
-    GetClassInfo(hInstance, TEXT("DIALOG"), &dc);
-    wc.cbWndExtra = dc.cbWndExtra ;
-#endif
     wc.hInstance = hInstance;
     wc.hIcon = NULL;
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
@@ -111,7 +105,7 @@ private:
     canvas.hollow_brush();
     canvas.black_pen();
 
-    Brush red_brush(Color(255, 0, 0));
+    Brush red_brush(Color::RED);
 
     POINT p1[3] = {
       { -100, get_vmiddle() },

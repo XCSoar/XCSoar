@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_BITMAP_HPP
 #define XCSOAR_SCREEN_BITMAP_HPP
 
+#include "Util/NonCopyable.hpp"
+
 #ifdef ENABLE_SDL
 #include <SDL/SDL_video.h>
 #include <windef.h>
@@ -51,7 +53,7 @@ Copyright_License {
 /**
  * An image loaded from storage.
  */
-class Bitmap {
+class Bitmap : private NonCopyable {
 protected:
 #ifdef ENABLE_SDL
   SDL_Surface *surface;

@@ -46,7 +46,7 @@ WndButton::WndButton(ContainerControl *Parent,
     const TCHAR *Caption, int X, int Y, int Width, int Height,
                      const WindowStyle style,
     ClickNotifyCallback_t Function) :
-  WindowControl(Parent, NULL, X, Y, Width, Height, style),
+  WindowControl(&Parent->GetClientAreaWindow(), X, Y, Width, Height, style),
   mDown(false),
   mLastDrawTextHeight(-1),
   mOnClickNotify(Function)
@@ -139,19 +139,15 @@ WndButton::on_mouse_move(int x, int y, unsigned keys)
 }
 
 bool
-WndButton::on_mouse_double(int x, int y)
+WndButton::on_key_check(unsigned key_code)
 {
-  (void)x;
-  (void)y;
+  switch (key_code) {
+  case VK_RETURN:
+    return true;
 
-  // Button is now pressed
-  mDown = true;
-  // ... will be repainted
-  invalidate();
-  // ... and gets captured
-  set_capture();
-
-  return true;
+  default:
+    return false;
+  }
 }
 
 bool

@@ -53,7 +53,6 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "LocalPath.hpp"
 #include "WayPointParser.h"
-#include "wcecompat/ts_string.h"
 #include "Device/device.hpp"
 #include "InputEvents.h"
 #include "TopologyStore.h"
@@ -72,6 +71,7 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "LogFile.hpp"
+#include "IO/FileLineReader.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -175,6 +175,12 @@ TimeLocal(int d)
 class TestWindow : public SingleWindow {
 public:
   MapWindow map;
+  ButtonWindow close_button;
+
+  enum {
+    ID_START = 100,
+    ID_CLOSE,
+  };
 
 public:
   TestWindow() {}
@@ -188,13 +194,7 @@ public:
     wc.style = CS_HREDRAW | CS_VREDRAW;
     wc.lpfnWndProc = Window::WndProc;
     wc.cbClsExtra = 0;
-#ifdef WINDOWSPC
     wc.cbWndExtra = 0;
-#else
-    WNDCLASS dc;
-    GetClassInfo(hInstance, TEXT("DIALOG"), &dc);
-    wc.cbWndExtra = dc.cbWndExtra ;
-#endif
     wc.hInstance = hInstance;
     wc.hIcon = NULL;
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
@@ -216,6 +216,20 @@ public:
     map.set_airspaces(&airspace_ui);
     map.set_topology(topology);
     map.set_terrain(&terrain);
+
+    close_button.set(*this, _T("Close"), ID_CLOSE, 5, 5, 65, 25);
+    close_button.bring_to_top();
+  }
+
+protected:
+  virtual bool on_command(unsigned id, unsigned code) {
+    switch (id) {
+    case ID_CLOSE:
+      close();
+      return true;
+    }
+
+    return TopWindow::on_command(id, code);
   }
 };
 
@@ -249,10 +263,8 @@ LoadFiles()
   if (tpath[0] != 0) {
     ExpandLocalPath(tpath);
 
-    char path[MAX_PATH];
-    unicode2ascii(tpath, path, sizeof(path));
-
-    if (!ReadAirspace(airspace_database, path))
+    FileLineReader reader(tpath);
+    if (reader.error() || !ReadAirspace(airspace_database, reader))
       LogStartUp(TEXT("No airspace file 1"));
 
     airspace_database.optimise();

@@ -40,7 +40,7 @@ Copyright_License {
 #define XCSOAR_INFO_BOX_HPP
 
 #include "Units.hpp"
-#include "Screen/BufferWindow.hpp"
+#include "Screen/PaintWindow.hpp"
 
 typedef enum {
   bkNone,
@@ -54,7 +54,6 @@ typedef enum {
 #define BORDERRIGHT  (1<<bkRight)
 #define BORDERBOTTOM (1<<bkBottom)
 #define BORDERLEFT   (1<<bkLeft)
-#define BORDERTAB    (1<<(bkLeft+1))
 
 class Font;
 
@@ -104,6 +103,7 @@ public:
   };
 
 private:
+  ContainerWindow &parent;
   const InfoBoxLook &look;
 
   int  mBorderKind;
@@ -178,9 +178,6 @@ public:
   void SetComment(const TCHAR *Value);
   void SetSmallerFont(bool smallerFont);
 
-  int GetBorderKind(void);
-  int SetBorderKind(int Value);
-
   /**
    * Sets the color of the InfoBox value to the given value
    * @param value New color of the InfoBox value
@@ -206,6 +203,7 @@ public:
    * @param Height Height of the InfoBox
    */
   InfoBox(ContainerWindow &Parent, int X, int Y, int Width, int Height,
+          int border_flags,
           const InfoBoxLook &_look);
 
 protected:

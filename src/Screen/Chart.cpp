@@ -180,7 +180,7 @@ Chart::StyleLine(const POINT l1, const POINT l2, const int Style)
     break;
 
   case STYLE_DASHGREEN:
-    canvas.autoclip_dashed_line(2, line[0], line[1], Color(0, 255, 0), rc);
+    canvas.autoclip_dashed_line(2, line[0], line[1], Color::GREEN, rc);
     break;
 
   case STYLE_MEDIUMBLACK:

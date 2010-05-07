@@ -43,6 +43,7 @@ Copyright_License {
 #include "Screen/EditWindow.hpp"
 
 class DataField;
+class ContainerControl;
 
 /**
  * The WndProperty class implements a WindowControl with a caption label and
@@ -66,6 +67,9 @@ class WndProperty : public WindowControl {
      * (derived from Window)
      */
     virtual bool on_mouse_down(int x, int y);
+
+    virtual bool on_key_check(unsigned key_code);
+
     /**
      * The on_key_down event is called when a key is pressed while the
      * button is focused
@@ -139,11 +143,6 @@ public:
    * (derived from Window)
    */
   virtual bool on_mouse_up(int x, int y);
-  /**
-   * The on_mouse_double event is called when the button is double clicked
-   * (derived from Window)
-   */
-  virtual bool on_mouse_double(int x, int y);
 
   /**
    * Returns the Control's DataField

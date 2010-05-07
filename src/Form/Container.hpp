@@ -50,7 +50,6 @@ class ContainerControl : public WindowControl {
 public:
   /**
    * Constructor for the ContainerControl class
-   * @param owner
    * @param parent
    * @param x x-Coordinate of the ContainerControl
    * @param y y-Coordinate of the ContainerControl
@@ -58,10 +57,10 @@ public:
    * @param height Height of the ContainerControl
    * @param visible True if the ContainerControl should be visible, False if not
    */
-  ContainerControl(ContainerControl *owner, ContainerWindow *parent,
+  ContainerControl(ContainerWindow *parent,
                    int x, int y, int width, int height,
                    const WindowStyle style)
-    :WindowControl(owner, parent, x, y, width, height, style) {}
+    :WindowControl(parent, x, y, width, height, style) {}
 
 public:
   virtual ContainerWindow &GetClientAreaWindow();

@@ -41,29 +41,21 @@ Copyright_License {
 #include "Protection.hpp" /* XXX to be removed */
 #include "DeviceBlackboard.hpp"
 
-InstrumentThread::InstrumentThread(GaugeVario *_vario)
-  :vario_trigger(TEXT("varioTriggerEvent"), false), vario(_vario) {}
+#include <assert.h>
 
+InstrumentThread::InstrumentThread(GaugeVario &_vario)
+  :vario(_vario) {}
 
 void
-InstrumentThread::run()
+InstrumentThread::tick()
 {
-  // wait for proper startup signal
-  globalRunningEvent.wait();
+  mutexBlackboard.Lock();
+  vario.ReadBlackboardBasic(device_blackboard.Basic());
+  vario.ReadBlackboardCalculated(device_blackboard.Calculated());
+  vario.ReadSettingsComputer(device_blackboard.SettingsComputer());
+  mutexBlackboard.Unlock();
 
-  while (!closeTriggerEvent.test()) {
-    if (!vario_trigger.wait(MIN_WAIT_TIME))
-      continue;
-
-    if (vario != NULL) {
-      mutexBlackboard.Lock();
-      vario->ReadBlackboardBasic(device_blackboard.Basic());
-      vario->ReadBlackboardCalculated(device_blackboard.Calculated());
-      vario->ReadSettingsComputer(device_blackboard.SettingsComputer());
-      mutexBlackboard.Unlock();
-      vario->Render(); // TODO: only render if not hidden
-    }
-  }
+  vario.Render(); // TODO: only render if not hidden
 }
 
 

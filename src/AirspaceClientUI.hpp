@@ -41,6 +41,7 @@
 #include "Airspace/AirspacesInterface.hpp"
 #include "Airspace/AirspaceWarning.hpp"
 
+class TLineReader;
 class RasterTerrain;
 class AirspaceWarningVisitor;
 
@@ -80,7 +81,7 @@ public:
   void lock() const;
   void unlock() const;
 
-  bool read(char*);
+  bool read(TLineReader &reader);
   void finalise_after_loading(RasterTerrain* terrain,
                               const AtmosphericPressure &press);
 

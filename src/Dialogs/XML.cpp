@@ -212,7 +212,9 @@ GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
   // fix "const unsigned short*" to "unsigned short *" problem
 
   // Translate caption
-  _tcscpy(Caption, gettext(Caption));
+  const TCHAR *translated = gettext(Caption);
+  if (translated != Caption)
+    _tcscpy(Caption, translated);
 }
 
 static void *
@@ -683,15 +685,8 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     _tcscpy(OnHelpCallback,
             StringToStringDflt(node.getAttribute(_T("OnHelp")), _T("")));
 
-    // Load the caption
-    // todo: duplicate?!
-    _tcscpy(Caption,
-            StringToStringDflt(node.getAttribute(_T("Caption")), _T("")));
-
     // TODO code: Temporary double handling to fix "const unsigned
     // short *" to "unsigned short *" problem
-    // Translate the caption
-    _tcscpy(Caption, gettext(Caption));
 
     // Create the Property Control
 

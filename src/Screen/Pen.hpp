@@ -39,12 +39,13 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_PEN_HPP
 #define XCSOAR_SCREEN_PEN_HPP
 
+#include "Util/NonCopyable.hpp"
 #include "Screen/Color.hpp"
 
 /**
  * A pen draws lines and borders.
  */
-class Pen {
+class Pen : private NonCopyable {
 public:
   #ifdef ENABLE_SDL
   enum style {

@@ -51,7 +51,7 @@ WndListFrame::WndListFrame(ContainerControl *Owner,
                            int X, int Y, int Width, int Height,
                            const WindowStyle style,
                            unsigned _item_height):
-  WindowControl(Owner, NULL, X, Y, Width, Height, style),
+  WindowControl(&Owner->GetClientAreaWindow(), X, Y, Width, Height, style),
   item_height(_item_height),
   length(0), origin(0), items_visible(Height / item_height),
   relative_cursor(0),
@@ -222,6 +222,30 @@ WndListFrame::SetOrigin(unsigned i)
 
   if (CursorCallback != NULL)
     CursorCallback(GetCursorIndex());
+}
+
+bool
+WndListFrame::on_key_check(unsigned key_code)
+{
+  switch (key_code) {
+  case VK_RETURN:
+    return ActivateCallback != NULL;
+
+  case VK_LEFT:
+    return true;
+
+  case VK_RIGHT:
+    return true;
+
+  case VK_DOWN:
+    return GetCursorIndex() + 1 < length;
+
+  case VK_UP:
+    return GetCursorIndex() > 0;
+
+  default:
+    return false;
+  }
 }
 
 bool

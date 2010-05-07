@@ -36,45 +36,31 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FORM_DRAW_HPP
-#define XCSOAR_FORM_DRAW_HPP
+#include "Thread/WorkerThread.hpp"
+#include "Thread/Trigger.hpp"
 
-#include "Form/Control.hpp"
+WorkerThread::WorkerThread()
+  :event_trigger(_T("WorkerThread::event_trigger"), false),
+   running(_T("WorkerThread::running"), true),
+   stop_trigger(_T("WorkerThread::stop_trigger"), true) {
+  running.trigger();
+}
 
-class ContainerControl;
+void
+WorkerThread::run()
+{
+  while (true) {
+    /* wait for work */
+    event_trigger.wait();
 
-/**
- * This class is used for creating custom drawn content.
- * It is based on the WindowControl class.
- */
-class WndOwnerDrawFrame : public WindowControl {
-public:
-  typedef void (*OnPaintCallback_t)(WindowControl *Sender, Canvas &canvas);
+    /* paused? */
+    running.wait();
 
-public:
-  WndOwnerDrawFrame(ContainerControl *Owner,
-                    int X, int Y, int Width, int Height,
-                    const WindowStyle style,
-                    OnPaintCallback_t OnPaintCallback);
+    /* got the "stop" trigger? */
+    if (stop_trigger.test())
+      break;
 
-  /**
-   * Sets the callback which actually paints the window.  The
-   * background is cleared before, and all configured fonts and colors
-   * have been set in the #Canvas.
-   */
-  void SetOnPaintNotify(OnPaintCallback_t OnPaintCallback) {
-    mOnPaintCallback = OnPaintCallback;
+    /* do the actual work */
+    tick();
   }
-
-protected:
-  /**
-   * The callback function for painting the content of the control
-   * @see SetOnPaintNotify()
-   */
-  OnPaintCallback_t mOnPaintCallback;
-
-  /** from class PaintWindow */
-  virtual void on_paint(Canvas &canvas);
-};
-
-#endif
+}
