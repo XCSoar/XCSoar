@@ -267,7 +267,8 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-    if (!cmp.Basic().flight.Flying || !cmp.Calculated().task_stats.task_valid)
+    if (!cmp.Basic().flight.Flying || HaveCondorDevice() ||
+        !cmp.Calculated().task_stats.task_valid)
       return false;
   
     const GlideResult& res = cmp.Calculated().task_stats.total.solution_remaining;
@@ -280,12 +281,7 @@ protected:
     double d0 = (DetectCurrentTime(&cmp.Basic())) / 3600;
 
     bool past_sunset = (d1 > sunsettime) && (d0 < sunsettime);
-
-    if (past_sunset && !HaveCondorDevice())
-      // notify on change only
-      return true;
-    else
-      return false;
+    return past_sunset;
   }
 
   void
