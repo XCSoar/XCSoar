@@ -47,10 +47,10 @@ SectorZone::get_boundary_parametric(fixed t) const
     return GeoVector(Radius, angle).end_point(get_location());
   } else {
     const fixed sweep = ((Angle::radians(fixed_two_pi)-
-                         (EndRadial-StartRadial).as_bearing())*fixed_half).value_degrees();
+                         (EndRadial-StartRadial).as_bearing())*fixed_half).value_native();
 
-    const fixed d_start = (StartRadial-angle).as_bearing().value_degrees()/sweep;
-    const fixed d_end = (angle-EndRadial).as_bearing().value_degrees()/sweep;
+    const fixed d_start = (StartRadial-angle).as_bearing().value_native()/sweep;
+    const fixed d_end = (angle-EndRadial).as_bearing().value_native()/sweep;
 
     if (d_start< d_end) {
       return GeoVector(Radius*(fixed_one-d_start), 

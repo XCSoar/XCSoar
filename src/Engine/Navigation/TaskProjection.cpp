@@ -38,7 +38,8 @@
 #include "Math/Earth.hpp"
 #include <algorithm>
 
-static const fixed fixed_scale(1000.0);
+static const fixed angle_degree(Angle::degrees(fixed(1)).value_native());
+static const fixed fixed_scale(1000.0/angle_degree);
 
 TaskProjection::TaskProjection()
 {
@@ -84,8 +85,8 @@ TaskProjection::update_fast()
 FlatPoint
 TaskProjection::fproject(const GEOPOINT& tp) const
 {
-  FlatPoint fp(((tp.Longitude-location_mid.Longitude)*cos_midloc).value_degrees(),
-               ((tp.Latitude-location_mid.Latitude)*fixed_scale).value_degrees());
+  FlatPoint fp(((tp.Longitude-location_mid.Longitude)*cos_midloc).value_native(),
+               ((tp.Latitude-location_mid.Latitude)*fixed_scale).value_native());
   return fp;
 }
 
@@ -93,8 +94,8 @@ GEOPOINT
 TaskProjection::funproject(const FlatPoint& fp) const
 {
   GEOPOINT tp;
-  tp.Longitude = Angle::degrees(fp.x/cos_midloc)+location_mid.Longitude;
-  tp.Latitude = Angle::degrees(fp.y/fixed_scale)+location_mid.Latitude;
+  tp.Longitude = Angle::native(fp.x/cos_midloc)+location_mid.Longitude;
+  tp.Latitude = Angle::native(fp.y/fixed_scale)+location_mid.Latitude;
   return tp;
 }
 
@@ -113,8 +114,8 @@ GEOPOINT
 TaskProjection::unproject(const FLAT_GEOPOINT& fp) const
 {
   GEOPOINT tp;
-  tp.Longitude = Angle::degrees(fp.Longitude/cos_midloc)+location_mid.Longitude;
-  tp.Latitude = Angle::degrees(fp.Latitude/fixed_scale)+location_mid.Latitude;
+  tp.Longitude = Angle::native(fp.Longitude/cos_midloc)+location_mid.Longitude;
+  tp.Latitude = Angle::native(fp.Latitude/fixed_scale)+location_mid.Latitude;
   return tp;
 }
 

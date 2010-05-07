@@ -50,6 +50,9 @@ private:
 public:
   Angle():m_value(fixed_zero) {};
 
+  static Angle native(const fixed& value) {
+    return Angle(value);
+  };
   static Angle degrees(const fixed& value) {
     return Angle(value);
   };
