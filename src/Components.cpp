@@ -144,10 +144,6 @@ XCSoarInterface::PreloadInitialisation(bool ask)
 {
   Profile::Set(TEXT("XCV"), 1);
 
-#ifdef DEBUG_TRANSLATIONS
-  ReadLanguageFile();
-#endif
-
   if (ask) {
     Profile::Load();
     Profile::Use();
