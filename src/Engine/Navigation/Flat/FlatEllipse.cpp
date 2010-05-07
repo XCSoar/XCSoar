@@ -63,8 +63,8 @@ FlatEllipse::FlatEllipse(const FlatPoint &_f1,
 
   FlatPoint op = ap;
   op.sub(p);
-  op.rotate(-theta);
-  theta_initial = fixed_rad_to_deg*atan2(op.y*a, op.x*b);
+  op.rotate(theta.Reciprocal());
+  theta_initial = Angle::radians(atan2(op.y*a, op.x*b));
 }
 
 fixed 
@@ -79,9 +79,11 @@ FlatEllipse::ba() const {
 
 FlatPoint 
 FlatEllipse::parametric(const fixed t) const {
-  const fixed at = (fixed_360*t+theta_initial)*fixed_deg_to_rad;
+  const Angle at = Angle::radians(fixed_two_pi*t)
+    +theta_initial;
+
   fixed cat, sat;
-  sin_cos(at,&sat,&cat);
+  at.sin_cos(sat, cat);
 
   FlatPoint res(a*cat,b*sat);
   res.rotate(theta);
@@ -99,7 +101,7 @@ FlatEllipse::intersect(const FlatLine &line,
   FlatLine s_line = line;  
   
   s_line.sub(p);
-  s_line.rotate(-theta);
+  s_line.rotate(theta.Reciprocal());
   s_line.mul_y(er);
   
   if (s_line.intersect_czero(a, i1, i2)) {
@@ -125,12 +127,12 @@ bool FlatEllipse::intersect_extended(const FlatPoint &pe,
 {
   const FlatLine l_f1p(f1,pe);
   const FlatLine l_pf2(pe,f2);
-  const fixed ang = l_f1p.angle();
+  const Angle ang = l_f1p.angle();
 
   const fixed d = l_pf2.d()+max(a,b); // max line length
 
   fixed can,san;
-  sin_cos(ang*fixed_deg_to_rad,&san,&can);
+  ang.sin_cos(san, can);
 
   FlatLine e_l(pe,FlatPoint(pe.x+d*can,
                             pe.y+d*san));

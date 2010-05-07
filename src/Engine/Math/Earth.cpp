@@ -59,7 +59,8 @@ static const fixed fixed_inv_earth_r(1.0 / 6371000);
 GEOPOINT
 IntermediatePoint(GEOPOINT loc1, GEOPOINT loc2, fixed dthis, fixed dtotal)
 {
-  if ((loc1.Longitude == loc2.Longitude) && (loc1.Latitude == loc2.Latitude))
+  if ((loc1.Longitude == loc2.Longitude) && 
+      (loc1.Latitude == loc2.Latitude))
     return loc1;
 
   if (!positive(dtotal))
@@ -109,11 +110,8 @@ IntermediatePoint(GEOPOINT loc1, GEOPOINT loc2, const fixed dthis)
   if (dthis >= dtotal) {
     return loc2;
   } else {
-    loc1.Latitude *= fixed_deg_to_rad;
-    loc2.Latitude *= fixed_deg_to_rad;
-    loc1.Longitude *= fixed_deg_to_rad;
-    loc2.Longitude *= fixed_deg_to_rad;
-    return IntermediatePoint(loc1, loc2, dthis*fixed_inv_earth_r, dtotal*fixed_inv_earth_r);
+    return IntermediatePoint(loc1, loc2, 
+                             dthis*fixed_inv_earth_r, dtotal*fixed_inv_earth_r);
   }
 }
 
@@ -128,24 +126,20 @@ IntermediatePoint(GEOPOINT loc1, GEOPOINT loc2, const fixed dthis)
 static void
 DistanceBearingS(GEOPOINT loc1, GEOPOINT loc2, fixed *Distance, Angle *Bearing)
 {
-  loc1.Latitude *= fixed_deg_to_rad;
-  loc2.Latitude *= fixed_deg_to_rad;
-  loc1.Longitude *= fixed_deg_to_rad;
-  loc2.Longitude *= fixed_deg_to_rad;
-
   fixed cloc1Latitude, sloc1Latitude;
   loc1.Latitude.sin_cos(sloc1Latitude, cloc1Latitude);
   fixed cloc2Latitude, sloc2Latitude;
   loc2.Latitude.sin_cos(sloc2Latitude, cloc2Latitude);
 
-  const fixed dlon = (loc2.Longitude - loc1.Longitude).value_degrees();
+  const fixed dlon = (loc2.Longitude - loc1.Longitude).value_radians();
 
   if (Distance) {
     const fixed s1 = ((loc2.Latitude - loc1.Latitude) * fixed_half).sin()
         * fixed_expand_x;
     const fixed s2 = sin(dlon * fixed_half) * fixed_expand_x;
-    const fixed a = max(fixed_zero, min(fixed_expand_xsq, s1 * s1
-        + cloc1Latitude * cloc2Latitude * s2 * s2));
+    const fixed a = max(fixed_zero, 
+                        min(fixed_expand_xsq, s1 * s1
+                            + cloc1Latitude * cloc2Latitude * s2 * s2));
 
     *Distance = max(fixed_zero, fixed_two*atan2(sqrt(a),
         sqrt(fixed_expand_xsq - a)));
@@ -186,12 +180,10 @@ CrossTrackError(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3, GEOPOINT *loc4)
   fixed dist_AD; Angle crs_AD;
   DistanceBearingS(loc1, loc3, &dist_AD, &crs_AD);
   dist_AD *= fixed_deg_to_rad;
-  crs_AD *= fixed_deg_to_rad;
 
   fixed dist_AB; Angle crs_AB;
   DistanceBearingS(loc1, loc2, &dist_AB, &crs_AB);
   dist_AB *= fixed_deg_to_rad;
-  crs_AB *= fixed_deg_to_rad;
 
   //  The "along track distance", ATD, the distance from A along the
   //  course towards B to the point abeam D
@@ -207,11 +199,6 @@ CrossTrackError(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3, GEOPOINT *loc4)
     // along track distance
     const fixed ATD(asin(sqrt(sindist_AD * sindist_AD - sinXTD * sinXTD)
                          / cosXTD));
-
-    loc1.Latitude *= fixed_deg_to_rad;
-    loc2.Latitude *= fixed_deg_to_rad;
-    loc1.Longitude *= fixed_deg_to_rad;
-    loc2.Longitude *= fixed_deg_to_rad;
 
     *loc4 = IntermediatePoint(loc1, loc2, ATD, dist_AB);
   }
@@ -230,12 +217,10 @@ ProjectedDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3)
   fixed dist_AD; Angle crs_AD;
   DistanceBearingS(loc1, loc3, &dist_AD, &crs_AD);
   dist_AD *= fixed_deg_to_rad;
-  crs_AD *= fixed_deg_to_rad;
 
   fixed dist_AB; Angle crs_AB;
   DistanceBearingS(loc1, loc2, &dist_AB, &crs_AB);
   dist_AB *= fixed_deg_to_rad;
-  crs_AB *= fixed_deg_to_rad;
 
   // The "along track distance", ATD, the distance from A along the
   // course towards B to the point abeam D
@@ -260,18 +245,11 @@ ProjectedDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3)
 fixed
 DoubleDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3)
 {
-  loc1.Latitude *= fixed_deg_to_rad;
-  loc2.Latitude *= fixed_deg_to_rad;
-  loc3.Latitude *= fixed_deg_to_rad;
-  loc1.Longitude *= fixed_deg_to_rad;
-  loc2.Longitude *= fixed_deg_to_rad;
-  loc3.Longitude *= fixed_deg_to_rad;
-
   const fixed cloc1Latitude = loc1.Latitude.cos();
   const fixed cloc2Latitude = loc2.Latitude.cos();
   const fixed cloc3Latitude = loc3.Latitude.cos();
-  const fixed dloc2Longitude1 = (loc2.Longitude - loc1.Longitude).value_degrees();
-  const fixed dloc3Longitude2 = (loc3.Longitude - loc2.Longitude).value_degrees();
+  const fixed dloc2Longitude1 = (loc2.Longitude - loc1.Longitude).value_radians();
+  const fixed dloc3Longitude2 = (loc3.Longitude - loc2.Longitude).value_radians();
 
   const fixed s21 = ((loc2.Latitude - loc1.Latitude) * fixed_half).sin()
       * fixed_expand_x;
@@ -310,22 +288,22 @@ DoubleDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3)
  * @param loc_out Future location
  */
 void
-FindLatitudeLongitude(GEOPOINT loc, Angle Bearing, fixed Distance, GEOPOINT *loc_out)
+FindLatitudeLongitude(GEOPOINT loc, Angle Bearing, 
+                      fixed Distance, GEOPOINT *loc_out)
 {
   if (!positive(Distance)) {
     *loc_out = loc;
     return;
   }
 
-  loc.Latitude *= fixed_deg_to_rad;
-  loc.Longitude *= fixed_deg_to_rad;
-  Bearing *= fixed_deg_to_rad;
   Distance *= fixed_inv_earth_r;
 
   fixed sinDistance, cosDistance;
   sin_cos(Distance, &sinDistance, &cosDistance);
+
   fixed sinBearing, cosBearing;
   Bearing.sin_cos(sinBearing, cosBearing);
+
   fixed sinLatitude, cosLatitude;
   loc.Latitude.sin_cos(sinLatitude, cosLatitude);
 
@@ -337,10 +315,10 @@ FindLatitudeLongitude(GEOPOINT loc, Angle Bearing, fixed Distance, GEOPOINT *loc
   fixed result;
 
   if (cosLatitude == fixed_zero)
-    result = loc.Longitude.value_degrees();
+    result = loc.Longitude.value_radians();
   else {
     // note that asin is not supported by fixed.hpp!
-    result = loc.Longitude.value_degrees() + 
+    result = loc.Longitude.value_radians() + 
       asin(sinBearing * sinDistance / cosLatitude);
     result = fmod((result + fixed_pi), fixed_two_pi) - fixed_pi;
   }

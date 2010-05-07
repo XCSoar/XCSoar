@@ -38,6 +38,7 @@
 #define FLATPOINT_HPP
 
 #include "Math/fixed.hpp"
+#include "Math/Angle.hpp"
 
 /**
  * 2-d Cartesian projected real-valued point
@@ -99,7 +100,7 @@ struct FlatPoint
  * 
  * @param angle Angle (deg) to rotate point clockwise
  */
-  void rotate(const fixed angle);
+  void rotate(const Angle angle);
 
 /** 
  * Calculate distance between two points

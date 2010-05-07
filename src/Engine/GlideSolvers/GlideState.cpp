@@ -107,7 +107,7 @@ GlideState::calc_speedups(const SpeedVector wind)
     const Angle theta = Angle::radians(fixed_pi) + wind.bearing - Vector.Bearing;
     EffectiveWindAngle = theta;
     wsq_ = wind.norm * wind.norm;
-    HeadWind = -wind.norm*(theta*fixed_deg_to_rad).cos();
+    HeadWind = -wind.norm*theta.cos();
     dwcostheta_ = fixed_two * HeadWind;
   } else {
     WindDirection = Angle();
@@ -125,11 +125,11 @@ GlideState::drifted_distance(const fixed t_cl) const
   if (!positive(EffectiveWindSpeed))
     return Vector.Distance;
 
-  const Angle wd = (Angle::radians(fixed_pi) + WindDirection)*fixed_deg_to_rad;
+  const Angle wd = WindDirection.Reciprocal();
   fixed sinwd, coswd;
   wd.sin_cos(sinwd, coswd);
 
-  const Angle tb = (Vector.Bearing) * fixed_deg_to_rad;
+  const Angle tb = Vector.Bearing;
   fixed sintb, costb;
   tb.sin_cos(sintb, costb);
 

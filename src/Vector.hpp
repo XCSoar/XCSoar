@@ -52,8 +52,8 @@ struct Vector {
   Vector(fixed _x, fixed _y):x(_x), y(_y) {}
 
   Vector(const SpeedVector speed)
-    :x(speed.norm * (speed.bearing * fixed_deg_to_rad).cos()),
-     y(speed.norm * (speed.bearing * fixed_deg_to_rad).sin()) {}
+    :x(speed.norm * speed.bearing.cos()),
+     y(speed.norm * speed.bearing.sin()) {}
 };
 
 #endif

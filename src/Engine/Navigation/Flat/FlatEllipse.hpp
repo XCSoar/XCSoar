@@ -68,8 +68,9 @@ struct FlatEllipse
                 f2(fixed_zero, fixed_zero),
                 ap(fixed_zero, fixed_zero), 
                 p(fixed_zero, fixed_zero),
-                a(fixed_one), b(fixed_one), theta(fixed_zero),
-                theta_initial(fixed_zero)
+                a(fixed_one), b(fixed_one), 
+                theta(),
+                theta_initial()
     {
     };
 
@@ -100,9 +101,9 @@ private:
   FlatPoint p;
   fixed a;
   fixed b;
-  fixed theta;
+  Angle theta;
 
-  fixed theta_initial;
+  Angle theta_initial;
 
   fixed ab() const;
   fixed ba() const;

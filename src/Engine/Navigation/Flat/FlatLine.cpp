@@ -79,14 +79,14 @@ FlatLine::add(const FlatPoint&p) {
   p2.add(p);
 }
 
-fixed 
+Angle 
 FlatLine::angle() const
 {
-  return fixed_rad_to_deg*atan2(dy(),dx());
+  return Angle::radians(atan2(dy(),dx()));
 }
 
 void 
-FlatLine::rotate(const fixed theta) 
+FlatLine::rotate(const Angle theta) 
 {
   p1.rotate(theta);
   p2.rotate(theta);

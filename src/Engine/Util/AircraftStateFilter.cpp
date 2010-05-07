@@ -88,8 +88,8 @@ AircraftStateFilter::update(const AIRCRAFT_STATE& state)
   }
 
   GeoVector vec(m_state_last.Location, state.Location);
-  m_x+= (vec.Bearing*fixed_deg_to_rad).sin()*vec.Distance;
-  m_y+= (vec.Bearing*fixed_deg_to_rad).cos()*vec.Distance;
+  m_x+= vec.Bearing.sin()*vec.Distance;
+  m_y+= vec.Bearing.cos()*vec.Distance;
   m_alt = state.NavAltitude;
 
   m_vx = m_lpf_x.update(m_df_x.update(m_x));

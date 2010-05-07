@@ -102,7 +102,7 @@ struct FlatLine
  * 
  * @return Angle (deg)
  */
-  fixed angle() const;
+  Angle angle() const;
 
 /** 
  * Calculate squared length of line
@@ -137,7 +137,7 @@ struct FlatLine
  * 
  * @param angle Angle (deg) to rotate line clockwise
  */
-  void rotate(const fixed angle);
+  void rotate(const Angle angle);
 
 /** 
  * Scale line in Y direction

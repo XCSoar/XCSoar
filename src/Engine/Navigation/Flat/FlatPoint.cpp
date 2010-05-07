@@ -62,11 +62,11 @@ FlatPoint::add(const FlatPoint&p2) {
 }
 
 void 
-FlatPoint::rotate(const fixed angle) {
+FlatPoint::rotate(const Angle angle) {
   const fixed _x = x;
   const fixed _y = y;
   fixed sa, ca;
-  sin_cos(angle*fixed_deg_to_rad, &sa, &ca);
+  angle.sin_cos(sa, ca);
   x = _x*ca-_y*sa;
   y = _x*sa+_y*ca;
 }

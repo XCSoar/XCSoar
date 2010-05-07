@@ -55,13 +55,13 @@ Angle::flip()
 fixed
 Angle::sin() const 
 {
-  return ::sin(m_value);
+  return ::sin(value_radians());
 }
 
 fixed
 Angle::cos() const 
 {
-  return ::cos(m_value);
+  return ::cos(value_radians());
 }
 
 fixed
@@ -97,7 +97,7 @@ Angle::ifastsine() const
 void 
 Angle::sin_cos(fixed& s, fixed& c) const
 {
-  return ::sin_cos(m_value, &s, &c);
+  return ::sin_cos(value_radians(), &s, &c);
 }
 
 fixed
