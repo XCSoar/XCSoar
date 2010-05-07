@@ -68,10 +68,6 @@ BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc);
 gcc_const
 bool CheckRectOverlap(RECT rc1, RECT rc2);
 
-
-void
-LatLon2Flat(const GEOPOINT &location, POINT &screen);
-
 gcc_const
 unsigned Distance(const POINT &p1, const POINT &p2);
 

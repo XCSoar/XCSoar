@@ -238,15 +238,6 @@ CheckRectOverlap(RECT rc1, RECT rc2)
   return true;
 }
 
-void
-LatLon2Flat(const GEOPOINT &location, POINT &screen)
-{
-  static const fixed fixed_100(100);
-  screen.x = (long)(location.Longitude.value_degrees()
-                    * location.Latitude.fastcosine() * fixed_100);
-  screen.y = (long)(location.Latitude.value_degrees() * fixed_100);
-}
-
 unsigned
 Distance(const POINT &p1, const POINT &p2)
 {
