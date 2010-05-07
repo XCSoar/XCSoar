@@ -101,9 +101,15 @@ Angle::sin_cos(fixed& s, fixed& c) const
 }
 
 fixed
-Angle::magnitude() const 
+Angle::magnitude_degrees() const 
 {
   return fabs(m_value);
+}
+
+fixed
+Angle::magnitude_radians() const 
+{
+  return fabs(m_value*fixed_deg_to_rad);
 }
 
 Angle

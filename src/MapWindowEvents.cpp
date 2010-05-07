@@ -348,7 +348,7 @@ MapWindow::on_mouse_up(int x, int y)
                                     task->get_glide_polar() :
                                     GlidePolar(fixed_zero)).get_Vmin();
       const Angle newbearing = Bearing(LLstart, G);
-      if (((newbearing - oldbearing).AngleLimit180().magnitude() < 30) ||
+      if (((newbearing - oldbearing).AngleLimit180().magnitude_degrees() < 30) ||
           (Basic().GroundSpeed < minspeed))
         device_blackboard.SetSpeed(min(fixed(100.0),
                                    max(minspeed, fixed(distance / 3))));

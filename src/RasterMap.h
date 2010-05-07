@@ -129,18 +129,20 @@ public:
   RasterRounding() {};
 
   RasterRounding(const RasterMap &map,
-    const double xr, const double yr):
+                 const double xr, const double yr):
     DirectFine(false)
   {
     Set(map, xr, yr);
   };
-
-    RasterRounding(const RasterMap &map,
-                   const GEOPOINT delta):
-      DirectFine(false)
-    {
-      Set(map, delta.Longitude.magnitude(), delta.Latitude.magnitude());
-    }
+    
+  RasterRounding(const RasterMap &map,
+                 const GEOPOINT delta):
+    DirectFine(false)
+  {
+    Set(map, 
+        delta.Longitude.magnitude_degrees(), 
+        delta.Latitude.magnitude_degrees());
+  }
 
   void Set(const RasterMap &map,
            const double xr,

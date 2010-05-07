@@ -86,7 +86,7 @@ protected:
       
       GeoVector vec(m_location, tp.get_location_remaining());
 
-      if ((m_bearing-vec.Bearing).AngleLimit180().magnitude()<10) {
+      if ((m_bearing-vec.Bearing).AngleLimit180().magnitude_degrees()<10) {
         // insignificant error
         return;
       }

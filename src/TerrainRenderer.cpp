@@ -507,13 +507,13 @@ TerrainRenderer::Height(const MapWindowProjection &map_projection,
   x = (X0 + X1) / 2 + dd;
   y = (Y0 + Y1) / 2;
   map_projection.Screen2LonLat(x, y, G);
-  double Xrounding = (G.Longitude - middle.Longitude).magnitude();
+  double Xrounding = (G.Longitude - middle.Longitude).magnitude_degrees();
   pixelDX = Distance(middle, G);
 
   x = (X0 + X1) / 2;
   y = (Y0 + Y1) / 2 + dd;
   map_projection.Screen2LonLat(x, y, G);
-  double Yrounding = (G.Latitude - middle.Latitude).magnitude();
+  double Yrounding = (G.Latitude - middle.Latitude).magnitude_degrees();
   pixelDY = Distance(middle, G);
 
   pixelsize_d = sqrt((pixelDX * pixelDX + pixelDY * pixelDY) / 2.0);

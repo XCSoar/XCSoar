@@ -265,7 +265,7 @@ WayPointFileWinPilot::composeAngle(const Angle& src, const bool lat)
   bool is_negative = negative(src.value_degrees());
 
   // Calculate degrees, minutes and seconds
-  fixed smag = src.magnitude();
+  fixed smag = src.magnitude_degrees();
   int deg = smag;
   int min = (smag - deg) * 60;
   int sec = (((smag - deg) * 60) - min) * 60;

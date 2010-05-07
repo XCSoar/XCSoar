@@ -612,7 +612,7 @@ WindZigZagCheckAirData(const NMEA_INFO &basic)
   }
 
   if (basic.Time < tLast + SAMPLE_RATE &&
-      (bearingLast - basic.TrackBearing).magnitude() < 10.0) {
+      (bearingLast - basic.TrackBearing).AngleLimit180().magnitude_degrees() < 10.0) {
     return false;
   } else {
     tLast = basic.Time;

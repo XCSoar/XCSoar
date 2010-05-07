@@ -501,7 +501,7 @@ CalculateSector(const TCHAR *Text)
     EndBearing += Angle::degrees(fixed_360);
   }
 
-  while((EndBearing-StartBearing).magnitude() > fixed_75) {
+  while((EndBearing-StartBearing).magnitude_degrees() > fixed_75) {
     StartBearing = StartBearing.AngleLimit360();
     FindLatitudeLongitude(temp_area.Center, StartBearing, Radius,
                           &TempPoint);
@@ -540,7 +540,7 @@ CalculateArc(const TCHAR *Text)
   TempPoint.Longitude = Start.Longitude;
   temp_area.points.push_back(TempPoint);
 
-  while((EndBearing-StartBearing).magnitude() > fixed_75) {
+  while((EndBearing-StartBearing).magnitude_degrees() > fixed_75) {
     StartBearing += Angle::degrees(temp_area.Rotation *fixed_5);
     StartBearing = StartBearing.AngleLimit360();
     FindLatitudeLongitude(temp_area.Center, StartBearing, Radius,

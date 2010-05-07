@@ -65,8 +65,8 @@ EstimateThermalBase(const GEOPOINT Thermal_Location,
 
   GEOPOINT loc;
   FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * dt, &loc);
-  fixed Xrounding = ((loc.Longitude - Thermal_Location.Longitude)*fixed_half).magnitude();
-  fixed Yrounding = ((loc.Latitude - Thermal_Location.Latitude)*fixed_half).magnitude();
+  fixed Xrounding = ((loc.Longitude - Thermal_Location.Longitude)*fixed_half).magnitude_degrees();
+  fixed Yrounding = ((loc.Latitude - Thermal_Location.Latitude)*fixed_half).magnitude_degrees();
 
   for (fixed t = fixed_zero; t <= Tmax; t += dt) {
     FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * t,

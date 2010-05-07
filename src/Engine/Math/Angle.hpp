@@ -77,7 +77,8 @@ public:
 
   void sin_cos(fixed& s, fixed& c) const;
   
-  fixed magnitude() const;
+  fixed magnitude_degrees() const;
+  fixed magnitude_radians() const;
 
   void flip();
 

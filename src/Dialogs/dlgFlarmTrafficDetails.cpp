@@ -97,7 +97,7 @@ void UpdateChanging() {
 
   // Fill vertical direction field
   dir = Angle::radians((fixed)atan2(target->RelativeAltitude, distance)).AngleLimit180();
-  if (dir.magnitude() > 1)
+  if (dir.magnitude_degrees() > 1)
     _stprintf(tmp, _T("%+2.0f")_T(DEG), (double)dir.value_degrees());
   else
     _stprintf(tmp, _T("--"), (double)dir.value_degrees());

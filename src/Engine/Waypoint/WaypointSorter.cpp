@@ -129,7 +129,7 @@ static Angle Direction;
 static bool
 WaypointDirectionFilter(const WayPointSelectInfo& elem1) 
 {
-  fixed DirectionErr = (elem1.Direction-Direction).AngleLimit180().magnitude();
+  fixed DirectionErr = (elem1.Direction-Direction).AngleLimit180().magnitude_degrees();
   return (DirectionErr > fixed_18);
 }
 
