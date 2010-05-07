@@ -259,6 +259,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   }
 #endif
 
+  PreloadInitialisation(true);
+
   // Initialize DeviceBlackboard
   device_blackboard.Initialise();
 
@@ -292,8 +294,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 
   // Load the EGM96 geoid data
   OpenGeoid();
-
-  PreloadInitialisation(true);
 
   Profile::GetWind();
 
