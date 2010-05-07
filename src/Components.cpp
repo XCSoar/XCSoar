@@ -155,13 +155,6 @@ XCSoarInterface::PreloadInitialisation(bool ask)
     Profile::Use();
 
     CreateProgressDialog(gettext(TEXT("Initialising")));
-
-#ifndef DEBUG_TRANSLATIONS
-    ReadLanguageFile();
-#endif
-
-    status_messages.LoadFile();
-    InputEvents::readFile();
   }
 }
 
@@ -259,6 +252,13 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 #endif
 
   PreloadInitialisation(true);
+
+#ifndef DEBUG_TRANSLATIONS
+  ReadLanguageFile();
+#endif
+
+  status_messages.LoadFile();
+  InputEvents::readFile();
 
   // Initialize DeviceBlackboard
   device_blackboard.Initialise();
