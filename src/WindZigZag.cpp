@@ -368,7 +368,7 @@ private:
   }
 
   // search for theta to give best match at wind speed index i
-  double
+  bool
   FindBestAngle(int i, double *theta_best)
   {
     double debest = 1000000;
