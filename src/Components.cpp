@@ -144,7 +144,7 @@ XCSoarInterface::PreloadInitialisation(bool ask)
 {
   Profile::Set(TEXT("XCV"), 1);
 
-  if (ask) {
+  if (!ask) {
     Profile::Load();
     Profile::Use();
   } else {
@@ -157,7 +157,7 @@ XCSoarInterface::PreloadInitialisation(bool ask)
     CreateProgressDialog(gettext(TEXT("Initialising")));
   }
 
-  if (!ask) {
+  if (ask) {
 #ifndef DEBUG_TRANSLATIONS
     ReadLanguageFile();
 #endif
@@ -237,7 +237,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   MainWindow::register_class(hInst);
   MapWindow::register_class(hInst);
 
-  PreloadInitialisation(true);
+  PreloadInitialisation(false);
 
   // Send the SettingsMap to the DeviceBlackboard
   SendSettingsMap();
@@ -293,7 +293,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   // Load the EGM96 geoid data
   OpenGeoid();
 
-  PreloadInitialisation(false);
+  PreloadInitialisation(true);
 
   Profile::GetWind();
 
