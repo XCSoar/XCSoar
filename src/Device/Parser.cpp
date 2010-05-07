@@ -679,7 +679,7 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   if (GPS_INFO->GroundSpeed > fixed_one) {
     // JMW don't update bearing unless we're moving
-    GPS_INFO->TrackBearing = Angle::degrees(fixed(_tcstod(params[7], NULL))).AngleLimit360();
+    GPS_INFO->TrackBearing = Angle::degrees(fixed(_tcstod(params[7], NULL))).as_bearing();
   }
 
   if (!gps.Replay) {
@@ -1147,13 +1147,13 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   h1 = (angle.ifastsine()) / 7;
   n1 = (angle.ifastsine()) / 2 - 200;
   e1 = (angle.ifastcosine()) / 1.5;
-  t1 = -angle.AngleLimit360().value_degrees();
+  t1 = -angle.as_bearing().value_degrees();
   l = (i % 30 > 13 ? 0 : (i % 30 > 5 ? 2 : 1));
   static unsigned h2;
   static unsigned n2;
   static unsigned e2;
   static unsigned t2;
-  Angle dangle = (angle + Angle::degrees(fixed(120))).AngleLimit360();
+  Angle dangle = (angle + Angle::degrees(fixed(120))).as_bearing();
   Angle hangle = dangle; hangle.flip();
 
   h2 = (angle.ifastcosine()) / 10;

@@ -113,7 +113,7 @@ Angle::magnitude_radians() const
 }
 
 Angle
-Angle::AngleLimit360() const
+Angle::as_bearing() const
 {
   Angle retval(m_value);
 
@@ -127,7 +127,7 @@ Angle::AngleLimit360() const
 }
 
 Angle
-Angle::AngleLimit180() const
+Angle::as_delta() const
 {
   Angle retval(m_value);
   while (retval.m_value < -fixed_180)
@@ -143,7 +143,7 @@ Angle
 Angle::Reciprocal() const
 {
   Angle retval(m_value+ fixed_180);
-  return retval.AngleLimit360();
+  return retval.as_bearing();
 }
 
 Angle

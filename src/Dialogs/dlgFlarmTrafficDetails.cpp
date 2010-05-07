@@ -82,7 +82,7 @@ void UpdateChanging() {
 
   // Fill horizontal direction field
   dir -= XCSoarInterface::Basic().TrackBearing;
-  dir = dir.AngleLimit180();
+  dir = dir.as_delta();
   if (dir.value_degrees() > 1)
     _stprintf(tmp, _T("%2.0f")_T(DEG)_T(" »"), (double)dir.value_degrees());
   else if (dir.value_degrees() < -1)
@@ -96,7 +96,7 @@ void UpdateChanging() {
   ((WndProperty *)wf->FindByName(_T("prpAltitude")))->SetText(tmp);
 
   // Fill vertical direction field
-  dir = Angle::radians((fixed)atan2(target->RelativeAltitude, distance)).AngleLimit180();
+  dir = Angle::radians((fixed)atan2(target->RelativeAltitude, distance)).as_delta();
   if (dir.magnitude_degrees() > 1)
     _stprintf(tmp, _T("%+2.0f")_T(DEG), (double)dir.value_degrees());
   else

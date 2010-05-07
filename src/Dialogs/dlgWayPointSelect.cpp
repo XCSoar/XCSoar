@@ -290,7 +290,7 @@ GetDirectionData(int DirectionFilterIdx){
   if (DirectionFilterIdx == 0)
     _stprintf(sTmp, TEXT("%c"), '*');
   else if (DirectionFilterIdx == 1){
-    int a = iround(XCSoarInterface::Basic().Heading.AngleLimit360().value_degrees());
+    int a = iround(XCSoarInterface::Basic().Heading.as_bearing().value_degrees());
     _stprintf(sTmp, TEXT("HDG(%d")TEXT(DEG)TEXT(")"), a);
   }else
     _stprintf(sTmp, TEXT("%d")TEXT(DEG), DirectionFilter[DirectionFilterIdx]);

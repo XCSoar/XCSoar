@@ -143,7 +143,7 @@ PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys,
 {
   static Angle lastangle = Angle::degrees(-fixed_one);
   static int cost = 1024, sint = 0;
-  angle = angle.AngleLimit360();
+  angle = angle.as_bearing();
 
   if (angle != lastangle) {
     lastangle = angle;

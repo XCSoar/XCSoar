@@ -157,7 +157,7 @@ protected:
     }
 
     fixed mag_change = fabs(wind.norm - last_wind.norm);
-    fixed dir_change = (wind.bearing - last_wind.bearing).AngleLimit180().magnitude_degrees();
+    fixed dir_change = (wind.bearing - last_wind.bearing).as_delta().magnitude_degrees();
 
     if (mag_change > Units::ToSysUnit(5, unKnots))
       return true;

@@ -139,7 +139,7 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
   bool fullCircle = false;
 
   // Circle detection
-  int diff = (int)(info.TrackBearing - lastHeading).AngleLimit180().magnitude_degrees();
+  int diff = (int)(info.TrackBearing - lastHeading).as_delta().magnitude_degrees();
   circleDeg += diff;
   lastHeading = info.TrackBearing;
 

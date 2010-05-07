@@ -131,7 +131,7 @@ LookupGeoidSeparation(const GEOPOINT pt)
 
   int ilat, ilon;
   ilat = iround(((Angle::degrees(fixed_90) - pt.Latitude) * fixed_half).value_degrees());
-  ilon = iround((pt.Longitude.AngleLimit360() * fixed_half).value_degrees());
+  ilon = iround((pt.Longitude.as_bearing() * fixed_half).value_degrees());
 
   int offset = ilat * 180 + ilon;
   if (offset >= EGM96SIZE)

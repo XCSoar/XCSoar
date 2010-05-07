@@ -42,15 +42,15 @@ GEOPOINT
 SectorZone::get_boundary_parametric(fixed t) const
 { 
   const Angle half = StartRadial.HalfAngle(EndRadial);
-  const Angle angle = (half+Angle::radians(t*fixed_two_pi)).AngleLimit360();
+  const Angle angle = (half+Angle::radians(t*fixed_two_pi)).as_bearing();
   if (angleInSector(angle)) {
     return GeoVector(Radius, angle).end_point(get_location());
   } else {
     const fixed sweep = ((Angle::radians(fixed_two_pi)-
-                         (EndRadial-StartRadial).AngleLimit360())*fixed_half).value_degrees();
+                         (EndRadial-StartRadial).as_bearing())*fixed_half).value_degrees();
 
-    const fixed d_start = (StartRadial-angle).AngleLimit360().value_degrees()/sweep;
-    const fixed d_end = (angle-EndRadial).AngleLimit360().value_degrees()/sweep;
+    const fixed d_start = (StartRadial-angle).as_bearing().value_degrees()/sweep;
+    const fixed d_end = (angle-EndRadial).as_bearing().value_degrees()/sweep;
 
     if (d_start< d_end) {
       return GeoVector(Radius*(fixed_one-d_start), 

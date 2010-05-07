@@ -127,7 +127,7 @@ MapWindowProjection::CalculateOrientationNormal
     DisplayAircraftAngle = Angle();
   }
 
-  DisplayAircraftAngle = DisplayAircraftAngle.AngleLimit360();
+  DisplayAircraftAngle = DisplayAircraftAngle.as_bearing();
 }
 
 

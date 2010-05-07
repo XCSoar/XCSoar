@@ -84,7 +84,7 @@ static Angle Direction;
 static bool
 AirspaceDirectionFilter(const AirspaceSelectInfo& elem1) 
 {
-  fixed DirectionErr = (elem1.Direction-Direction).AngleLimit180().magnitude_degrees();
+  fixed DirectionErr = (elem1.Direction-Direction).as_delta().magnitude_degrees();
   return (DirectionErr > fixed_18);
 }
 

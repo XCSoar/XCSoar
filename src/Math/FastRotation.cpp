@@ -44,7 +44,7 @@ Copyright_License {
 void
 FastRotation::SetAngle(Angle _angle)
 {
-  _angle = _angle.AngleLimit360();
+  _angle = _angle.as_bearing();
   if (_angle == angle)
     return;
 
@@ -62,7 +62,7 @@ FastRotation::Rotate(double x, double y) const
 void
 FastIntegerRotation::SetAngle(Angle _angle)
 {
-  _angle = _angle.AngleLimit360();
+  _angle = _angle.as_bearing();
   if (_angle == angle)
     return;
 

@@ -156,7 +156,7 @@ DistanceBearingS(GEOPOINT loc1, GEOPOINT loc2, fixed *Distance, Angle *Bearing)
         - sloc1Latitude * cloc2Latitude * cosdlon;
 
     *Bearing = (x == fixed_zero && y == fixed_zero) ? Angle()
-      : Angle::radians(atan2(y, x)).AngleLimit360();
+      : Angle::radians(atan2(y, x)).as_bearing();
   }
 
 #ifdef INSTRUMENT_TASK

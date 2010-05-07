@@ -86,13 +86,13 @@ public:
    * Limits the angle (theta) to -180 - +180 degrees
    * @return Output angle (-180 - +180 degrees)
    */
-  Angle AngleLimit180() const;
+  Angle as_delta() const;
 
   /**
    * Limits the angle (theta) to 0 - 360 degrees
    * @return Output angle (0-360 degrees)
    */
-  Angle AngleLimit360() const;
+  Angle as_bearing() const;
 
   /**
    * Rotate angle by 180 degrees and limit to 0 - 360 degrees

@@ -473,7 +473,7 @@ ReadCoords(const TCHAR *Text, GEOPOINT &point)
   if (*Stop =='\0') goto OnError;
   if((*Stop == 'W') || (*Stop == 'w'))
     point.Longitude.flip();
-  point.Longitude = point.Longitude.AngleLimit360();
+  point.Longitude = point.Longitude.as_bearing();
 
   return(true);
 
@@ -502,7 +502,7 @@ CalculateSector(const TCHAR *Text)
   }
 
   while((EndBearing-StartBearing).magnitude_degrees() > fixed_75) {
-    StartBearing = StartBearing.AngleLimit360();
+    StartBearing = StartBearing.as_bearing();
     FindLatitudeLongitude(temp_area.Center, StartBearing, Radius,
                           &TempPoint);
     temp_area.points.push_back(TempPoint);
@@ -542,7 +542,7 @@ CalculateArc(const TCHAR *Text)
 
   while((EndBearing-StartBearing).magnitude_degrees() > fixed_75) {
     StartBearing += Angle::degrees(temp_area.Rotation *fixed_5);
-    StartBearing = StartBearing.AngleLimit360();
+    StartBearing = StartBearing.as_bearing();
     FindLatitudeLongitude(temp_area.Center, StartBearing, Radius,
                           &TempPoint);
     temp_area.points.push_back(TempPoint);

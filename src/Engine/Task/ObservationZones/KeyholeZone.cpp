@@ -52,7 +52,7 @@ GEOPOINT
 KeyholeZone::get_boundary_parametric(fixed t) const
 { 
   const Angle half = getStartRadial().HalfAngle(getEndRadial());
-  const Angle angle = (Angle::radians(t*fixed_two_pi)+half).AngleLimit360();
+  const Angle angle = (Angle::radians(t*fixed_two_pi)+half).as_bearing();
   if (angleInSector(angle)) {
     return GeoVector(Radius, angle).end_point(get_location());
   } else {

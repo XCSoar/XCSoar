@@ -358,7 +358,7 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
       { 0, Layout::FastScale(-26 - min(20, wmag) * 3) },
     };
 
-    Angle angle = (wind.bearing - GetDisplayAngle()).AngleLimit360();
+    Angle angle = (wind.bearing - GetDisplayAngle()).as_bearing();
     for (i = 0; i < 2; i++) {
       protateshift(Tail[i], angle, Start.x, Start.y);
     }

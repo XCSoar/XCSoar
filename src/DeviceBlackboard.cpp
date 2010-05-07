@@ -259,7 +259,7 @@ void
 DeviceBlackboard::SetTrackBearing(Angle val)
 {
   ScopeLock protect(mutexBlackboard);
-  SetBasic().TrackBearing = val.AngleLimit360();
+  SetBasic().TrackBearing = val.as_bearing();
 }
 
 /**
@@ -499,7 +499,7 @@ DeviceBlackboard::Heading()
       // don't take wind into account when on ground
       SetBasic().Heading = Basic().TrackBearing;
     } else {
-      SetBasic().Heading = Angle::radians(atan2(x0, y0)).AngleLimit360();
+      SetBasic().Heading = Angle::radians(atan2(x0, y0)).as_bearing();
     }
 
     // calculate estimated true airspeed
@@ -567,7 +567,7 @@ DeviceBlackboard::TurnRate()
   }
 
   SetBasic().TurnRate =
-    (Basic().TrackBearing - LastBasic().TrackBearing).AngleLimit180().value_degrees() / dT;
+    (Basic().TrackBearing - LastBasic().TrackBearing).as_delta().value_degrees() / dT;
 
   // if (time passed is less then 2 seconds) time step okay
   if (dT < fixed_two) {
@@ -585,7 +585,7 @@ DeviceBlackboard::TurnRate()
     // b_new = b_old + Rate * t + 0.5 * dRate * t * t
 
     // Limit the projected bearing to 360 degrees
-    SetBasic().NextTrackBearing = calc_bearing.AngleLimit360();
+    SetBasic().NextTrackBearing = calc_bearing.as_bearing();
 
   } else {
 
@@ -614,7 +614,7 @@ DeviceBlackboard::Dynamics()
 
     if (positive(dT)) {
       SetBasic().TurnRateWind =
-        (Basic().Heading - LastBasic().Heading).AngleLimit180().value_degrees() / dT;
+        (Basic().Heading - LastBasic().Heading).as_delta().value_degrees() / dT;
     }
 
     // estimate bank angle (assuming balanced turn)

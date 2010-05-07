@@ -531,8 +531,8 @@ Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
 
   // JMW added faster checking...
 
-  start = start.AngleLimit360();
-  end = end.AngleLimit360();
+  start = start.as_bearing();
+  end = end.as_bearing();
 
   istart = iround(start.value_degrees()*seg_steps_degrees);
   iend = iround(end.value_degrees()*seg_steps_degrees);
@@ -611,8 +611,8 @@ DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
 
   // JMW added faster checking...
 
-  start = start.AngleLimit360();
-  end = end.AngleLimit360();
+  start = start.as_bearing();
+  end = end.as_bearing();
 
   istart = iround(start.value_degrees() * seg_steps_degrees);
   iend = iround(end.value_degrees() *seg_steps_degrees);

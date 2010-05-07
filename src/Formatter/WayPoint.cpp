@@ -228,7 +228,7 @@ const TCHAR *FormatterDiffBearing::Render(int *color) {
     Valid = true;
 
     Value = (Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing 
-             -  Basic().TrackBearing).AngleLimit180().value_degrees();
+             -  Basic().TrackBearing).as_delta().value_degrees();
 
 #ifndef __MINGW32__
     if (Value > 1)
