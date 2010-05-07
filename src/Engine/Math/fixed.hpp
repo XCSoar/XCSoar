@@ -19,6 +19,7 @@ typedef double fixed;
 #define fixed_zero 0.0
 #define fixed_half 0.5
 #define fixed_one 1.0
+#define fixed_minus_one -1.0
 #define fixed_two 2.0
 #define fixed_four 4.0
 #define fixed_deg_to_rad 0.0174532925199432958
@@ -1741,6 +1742,7 @@ namespace std
 
 fixed const fixed_max(fixed::internal(),0x7fffffffffffffffLL);
 fixed const fixed_one(fixed::internal(),1<<(fixed::resolution_shift));
+fixed const fixed_minus_one(fixed::internal(), ((fixed::value_t)-1) << fixed::resolution_shift);
 fixed const fixed_two(fixed::internal(),1<<(fixed::resolution_shift+1));
 fixed const fixed_four(fixed::internal(),1<<(fixed::resolution_shift+2));
 fixed const fixed_zero(fixed::internal(),0);
