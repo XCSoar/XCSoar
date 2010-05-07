@@ -173,13 +173,16 @@ SettingsMapBlackboard::SettingsMapBlackboard() {}
 static void
 Dump(GEOPOINT location)
 {
+  double latitude = location.Latitude.value_degrees();
+  double longitude = location.Longitude.value_degrees();
+
   printf("%d.%02u.%02u;%d.%02u.%02u",
-         (int)location.Latitude,
-         (int)(location.Latitude * 60) % 60,
-         (int)(location.Latitude * 3600) % 60,
-         (int)location.Longitude,
-         (int)(location.Longitude * 60) % 60,
-         (int)(location.Longitude * 3600) % 60);
+         (int)latitude,
+         (int)(latitude * 60) % 60,
+         (int)(latitude * 3600) % 60,
+         (int)longitude,
+         (int)(longitude * 60) % 60,
+         (int)(longitude * 3600) % 60);
 }
 
 static void
@@ -230,7 +233,8 @@ Dump(const NMEA_INFO &basic)
     printf("NettoVario=%.1f\n", (double)basic.NettoVario);
 
   if (basic.ExternalWindAvailable)
-    printf("Wind=%d/%d\n", (int)basic.wind.bearing, (int)basic.wind.norm);
+    printf("Wind=%d/%d\n",
+           (int)basic.wind.bearing.value_degrees(), (int)basic.wind.norm);
 
   if (basic.TemperatureAvailable)
     printf("OutsideAirTemperature=%d\n", (int)basic.OutsideAirTemperature);
