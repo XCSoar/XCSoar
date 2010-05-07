@@ -1563,6 +1563,11 @@ inline bool operator>=(fixed const& a,char b)
     return a>=fixed(b);
 }
 
+static inline fixed pow(fixed x, fixed y)
+{
+  return fixed(pow((double)x, (double)y));
+}
+
 inline fixed sin(fixed const& x)
 {
     return x.sin();
@@ -1574,6 +1579,16 @@ inline fixed cos(fixed const& x)
 inline fixed tan(fixed const& x)
 {
     return x.tan();
+}
+
+static inline fixed asin(fixed x)
+{
+  return fixed(asin((double)x));
+}
+
+static inline fixed acos(fixed x)
+{
+  return fixed(acos((double)x));
 }
 
 inline fixed atan(fixed const& x)
@@ -1639,6 +1654,11 @@ inline fixed fabs(fixed const& x)
 inline fixed modf(fixed const& x,fixed*integral_part)
 {
     return x.modf(integral_part);
+}
+
+static inline fixed fmod(fixed x, fixed y)
+{
+  return fixed(fmod((double)x, (double)y));
 }
 
 inline fixed fixed::ceil() const
