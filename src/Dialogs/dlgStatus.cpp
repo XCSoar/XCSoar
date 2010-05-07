@@ -359,7 +359,7 @@ static void UpdateValuesFlight(void) {
     }
     wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
     if (wp) {
-      _stprintf(Temp, _T("%d")_T(DEG), (int)vec.Bearing.value());
+      _stprintf(Temp, _T("%d")_T(DEG), (int)vec.Bearing.value_degrees());
       wp->SetText(Temp);
     }
     wp = (WndProperty*)wf->FindByName(_T("prpDistance"));

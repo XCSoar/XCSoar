@@ -468,8 +468,8 @@ VegaDevice::OnSysTicker()
   TCHAR tbuf[100];
   _stprintf(tbuf, _T("PTLOC,%d,%g,%g,%g,%g"),
             (int)(t.ThermalEstimate_R>0), 
-            (double)t.ThermalEstimate_Location.Longitude.value(), 
-            (double)t.ThermalEstimate_Location.Latitude.value(), 
+            (double)t.ThermalEstimate_Location.Longitude.value_degrees(), 
+            (double)t.ThermalEstimate_Location.Latitude.value_degrees(), 
             (double)t.ThermalEstimate_W, 
             (double)t.ThermalEstimate_R);
 

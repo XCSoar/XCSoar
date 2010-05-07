@@ -503,7 +503,7 @@ ClippedCircle(Canvas &canvas, long x, long y, int radius, RECT rc, bool fill)
   return TRUE;
 }
 
-static const fixed seg_steps(64/ 360.0);
+static const fixed seg_steps_degrees(64/ 360.0);
 
 int
 Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
@@ -534,8 +534,8 @@ Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
   start = start.AngleLimit360();
   end = end.AngleLimit360();
 
-  istart = iround(start.value()*seg_steps);
-  iend = iround(end.value()*seg_steps);
+  istart = iround(start.value_degrees()*seg_steps_degrees);
+  iend = iround(end.value_degrees()*seg_steps_degrees);
 
   int npoly = 0;
 
@@ -614,8 +614,8 @@ DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
   start = start.AngleLimit360();
   end = end.AngleLimit360();
 
-  istart = iround(start.value() * seg_steps);
-  iend = iround(end.value() *seg_steps);
+  istart = iround(start.value_degrees() * seg_steps_degrees);
+  iend = iround(end.value_degrees() *seg_steps_degrees);
 
   int npoly = 0;
 

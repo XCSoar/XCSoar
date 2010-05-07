@@ -283,20 +283,20 @@ VLDeclAddWayPoint(const Waypoint &way_point)
 
   if (nturnpoints == 0) {
     strncpy(vl.declaration.task.startpoint.name, temp, 6);
-    vl.declaration.task.startpoint.lon = way_point.Location.Longitude.value();
-    vl.declaration.task.startpoint.lat = way_point.Location.Latitude.value();
+    vl.declaration.task.startpoint.lon = way_point.Location.Longitude.value_degrees();
+    vl.declaration.task.startpoint.lat = way_point.Location.Latitude.value_degrees();
     nturnpoints++;
   } else {
     strncpy(vl.declaration.task.turnpoints[nturnpoints-1].name, temp, 6);
     vl.declaration.task.turnpoints[nturnpoints-1].lon =
-      way_point.Location.Longitude.value();
+      way_point.Location.Longitude.value_degrees();
     vl.declaration.task.turnpoints[nturnpoints-1].lat =
-      way_point.Location.Latitude.value();
+      way_point.Location.Latitude.value_degrees();
     nturnpoints++;
   }
   strncpy(vl.declaration.task.finishpoint.name, temp, 6);
-  vl.declaration.task.finishpoint.lon = way_point.Location.Longitude.value();
-  vl.declaration.task.finishpoint.lat = way_point.Location.Latitude.value();
+  vl.declaration.task.finishpoint.lon = way_point.Location.Longitude.value_degrees();
+  vl.declaration.task.finishpoint.lat = way_point.Location.Latitude.value_degrees();
 
   return true;
 

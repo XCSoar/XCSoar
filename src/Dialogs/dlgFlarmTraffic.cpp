@@ -614,7 +614,7 @@ PaintRadarTraffic(Canvas &canvas) {
 
     // Rotate and shift the arrow
     PolygonRotateShift(Arrow, 5, sc.x, sc.y,
-                       (traffic.TrackBearing + DisplayAngle).value());
+                       traffic.TrackBearing + DisplayAngle);
 
     // Draw the polygon
     canvas.polygon(Arrow, 5);

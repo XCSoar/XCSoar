@@ -38,6 +38,14 @@ Copyright_License {
 #include "Angle.hpp"
 #include "Math/FastMath.h"
 
+int
+Angle::sign() const
+{
+  if (positive(m_value)) return 1;
+  if (negative(m_value)) return -1;
+  return 0;
+}
+
 void
 Angle::flip()
 {
@@ -59,13 +67,31 @@ Angle::cos() const
 fixed
 Angle::fastsine() const 
 {
-  return (::fastsine(m_value));
+  return (::fastsine(value_degrees()));
 }
 
 fixed
 Angle::fastcosine() const 
 {
-  return (::fastcosine(m_value));
+  return (::fastcosine(value_degrees()));
+}
+
+fixed
+Angle::invfastcosine() const 
+{
+  return (::invfastcosine(value_degrees()));
+}
+
+int
+Angle::ifastcosine() const 
+{
+  return (::ifastcosine(value_degrees()));
+}
+
+int
+Angle::ifastsine() const 
+{
+  return (::ifastsine(value_degrees()));
 }
 
 void 

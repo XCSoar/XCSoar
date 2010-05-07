@@ -67,8 +67,8 @@ FastIntegerRotation::SetAngle(Angle _angle)
     return;
 
   angle = _angle;
-  cost = ifastcosine(angle.value());
-  sint = ifastsine(angle.value());
+  cost = angle.ifastcosine();
+  sint = angle.ifastsine();
 }
 
 FastIntegerRotation::Pair

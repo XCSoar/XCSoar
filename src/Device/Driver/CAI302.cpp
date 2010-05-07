@@ -443,7 +443,7 @@ cai302DeclAddWayPoint(ComPort *port, const Waypoint &way_point)
   _tcsncpy(Name, way_point.Name.c_str(), 12);
   Name[12] = '\0';
 
-  tmp = way_point.Location.Latitude.value();
+  tmp = way_point.Location.Latitude.value_degrees();
   NoS = 'N';
   if (tmp < 0)
     {
@@ -454,7 +454,7 @@ cai302DeclAddWayPoint(ComPort *port, const Waypoint &way_point)
   MinLat = (tmp - DegLat) * 60;
 
 
-  tmp = way_point.Location.Longitude.value();
+  tmp = way_point.Location.Longitude.value_degrees();
   EoW = 'E';
   if (tmp < 0)
     {

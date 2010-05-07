@@ -567,7 +567,7 @@ DeviceBlackboard::TurnRate()
   }
 
   SetBasic().TurnRate =
-    (Basic().TrackBearing - LastBasic().TrackBearing).AngleLimit180().value() / dT;
+    (Basic().TrackBearing - LastBasic().TrackBearing).AngleLimit180().value_degrees() / dT;
 
   // if (time passed is less then 2 seconds) time step okay
   if (dT < fixed_two) {
@@ -614,7 +614,7 @@ DeviceBlackboard::Dynamics()
 
     if (positive(dT)) {
       SetBasic().TurnRateWind =
-        (Basic().Heading - LastBasic().Heading).AngleLimit180().value() / dT;
+        (Basic().Heading - LastBasic().Heading).AngleLimit180().value_degrees() / dT;
     }
 
     // estimate bank angle (assuming balanced turn)

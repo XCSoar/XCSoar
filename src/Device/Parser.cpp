@@ -1144,10 +1144,10 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   static unsigned e1;
   static unsigned t1;
   static unsigned l;
-  h1 = ifastsine(angle.value()) / 7;
-  n1 = ifastsine(angle.value()) / 2 - 200;
-  e1 = ifastcosine(angle.value()) / 1.5;
-  t1 = -angle.AngleLimit360().value();
+  h1 = (angle.ifastsine()) / 7;
+  n1 = (angle.ifastsine()) / 2 - 200;
+  e1 = (angle.ifastcosine()) / 1.5;
+  t1 = -angle.AngleLimit360().value_degrees();
   l = (i % 30 > 13 ? 0 : (i % 30 > 5 ? 2 : 1));
   static unsigned h2;
   static unsigned n2;
@@ -1156,10 +1156,10 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   Angle dangle = (angle + Angle(fixed(120))).AngleLimit360();
   Angle hangle = dangle; hangle.flip();
 
-  h2 = ifastcosine(angle.value()) / 10;
-  n2 = ifastsine(dangle.value()) / 1.2 + 300;
-  e2 = ifastcosine(dangle.value()) + 500;
-  t2 = hangle.value();
+  h2 = (angle.ifastcosine()) / 10;
+  n2 = (dangle.ifastsine()) / 1.2 + 300;
+  e2 = (dangle.ifastcosine()) + 500;
+  t2 = hangle.value_degrees();
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>

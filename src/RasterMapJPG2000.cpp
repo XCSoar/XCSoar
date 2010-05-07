@@ -61,8 +61,8 @@ RasterMapJPG2000::SetFieldRounding(const double xr,
   }
   if ((rounding.Xrounding==1)&&(rounding.Yrounding==1)) {
     rounding.DirectFine = true;
-    rounding.xlleft = (int)(TerrainInfo.Left.value()*rounding.fXroundingFine)+128;
-    rounding.xlltop  = (int)(TerrainInfo.Top.value()*rounding.fYroundingFine)-128;
+    rounding.xlleft = (int)(TerrainInfo.Left.value_degrees()*rounding.fXroundingFine)+128;
+    rounding.xlltop  = (int)(TerrainInfo.Top.value_degrees()*rounding.fYroundingFine)-128;
   } else {
     rounding.DirectFine = false;
   }
@@ -135,10 +135,10 @@ void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
 {
   Poco::ScopedRWLock protect(lock, true);
   if (raster_tile_cache.GetInitialised()) {
-    int x = lround((location.Longitude-TerrainInfo.Left).value()*TerrainInfo.Columns
-                   /(TerrainInfo.Right-TerrainInfo.Left).value());
-    int y = lround((TerrainInfo.Top-location.Latitude).value()*TerrainInfo.Rows
-                   /(TerrainInfo.Top-TerrainInfo.Bottom).value());
+    int x = lround((location.Longitude-TerrainInfo.Left).value_degrees()*TerrainInfo.Columns
+                   /(TerrainInfo.Right-TerrainInfo.Left).value_degrees());
+    int y = lround((TerrainInfo.Top-location.Latitude).value_degrees()*TerrainInfo.Rows
+                   /(TerrainInfo.Top-TerrainInfo.Bottom).value_degrees());
     TriggerJPGReload |= raster_tile_cache.PollTiles(x, y);
   }
   if (TriggerJPGReload) {

@@ -112,7 +112,7 @@ InfoBoxFormatter::AssignValue(int i)
 
   case 3:
     Value = Calculated().task_stats.current_leg.
-      solution_remaining.Vector.Bearing.value();
+      solution_remaining.Vector.Bearing.value_degrees();
     Valid = Calculated().task_stats.current_leg.
       solution_remaining.Vector.Distance > 10.0;
     break;
@@ -245,7 +245,7 @@ InfoBoxFormatter::AssignValue(int i)
     break;
 
   case 23:
-    Value = Basic().TrackBearing.value();
+    Value = Basic().TrackBearing.value_degrees();
     break;
 
   case 24:
@@ -259,7 +259,7 @@ InfoBoxFormatter::AssignValue(int i)
     break;
 
   case 26:
-    Value = Basic().wind.bearing.value();
+    Value = Basic().wind.bearing.value_degrees();
     break;
 
   case 28:
@@ -375,7 +375,7 @@ InfoBoxFormatter::AssignValue(int i)
     break;
 
   case 56: // team bearing
-    Value = Calculated().TeammateBearing.value();
+    Value = Calculated().TeammateBearing.value_degrees();
     Valid = true;
 
   case 58: // team range

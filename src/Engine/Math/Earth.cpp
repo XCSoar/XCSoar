@@ -138,7 +138,7 @@ DistanceBearingS(GEOPOINT loc1, GEOPOINT loc2, fixed *Distance, Angle *Bearing)
   fixed cloc2Latitude, sloc2Latitude;
   loc2.Latitude.sin_cos(sloc2Latitude, cloc2Latitude);
 
-  const fixed dlon = (loc2.Longitude - loc1.Longitude).value();
+  const fixed dlon = (loc2.Longitude - loc1.Longitude).value_degrees();
 
   if (Distance) {
     const fixed s1 = ((loc2.Latitude - loc1.Latitude) * fixed_half).sin()
@@ -270,8 +270,8 @@ DoubleDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3)
   const fixed cloc1Latitude = loc1.Latitude.cos();
   const fixed cloc2Latitude = loc2.Latitude.cos();
   const fixed cloc3Latitude = loc3.Latitude.cos();
-  const fixed dloc2Longitude1 = (loc2.Longitude - loc1.Longitude).value();
-  const fixed dloc3Longitude2 = (loc3.Longitude - loc2.Longitude).value();
+  const fixed dloc2Longitude1 = (loc2.Longitude - loc1.Longitude).value_degrees();
+  const fixed dloc3Longitude2 = (loc3.Longitude - loc2.Longitude).value_degrees();
 
   const fixed s21 = ((loc2.Latitude - loc1.Latitude) * fixed_half).sin()
       * fixed_expand_x;
@@ -312,8 +312,6 @@ DoubleDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3)
 void
 FindLatitudeLongitude(GEOPOINT loc, Angle Bearing, fixed Distance, GEOPOINT *loc_out)
 {
-  Angle result;
-
   if (!positive(Distance)) {
     *loc_out = loc;
     return;
@@ -336,16 +334,18 @@ FindLatitudeLongitude(GEOPOINT loc, Angle Bearing, fixed Distance, GEOPOINT *loc
   loc_out->Latitude = (fixed)asin(sinLatitude * cosDistance + cosLatitude
       * sinDistance * cosBearing) * fixed_rad_to_deg;
 
+  fixed result;
+
   if (cosLatitude == fixed_zero)
-    result = loc.Longitude;
+    result = loc.Longitude.value_degrees();
   else {
     // note that asin is not supported by fixed.hpp!
-    result = loc.Longitude + 
-      Angle(fixed(asin(sinBearing * sinDistance / cosLatitude)));
-    result = Angle(fmod((result.value() + fixed_pi), fixed_two_pi) - fixed_pi);
+    result = loc.Longitude.value_degrees() + 
+      asin(sinBearing * sinDistance / cosLatitude);
+    result = fmod((result + fixed_pi), fixed_two_pi) - fixed_pi;
   }
 
-  loc_out->Longitude = result * fixed_rad_to_deg;
+  loc_out->Longitude = result*fixed_rad_to_deg;
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;

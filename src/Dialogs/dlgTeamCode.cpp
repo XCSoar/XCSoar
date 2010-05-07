@@ -59,7 +59,7 @@ Update()
 
   if (XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint >= 0) {
     double Value = (teammateBearing - XCSoarInterface::Basic().TrackBearing).
-      AngleLimit180().value();
+      AngleLimit180().value_degrees();
 
     if (Value > 1)
       _stprintf(Text, _T("%2.0f")_T(DEG)_T(">"), Value);
@@ -79,7 +79,7 @@ Update()
 
   wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(teammateBearing.value());
+    wp->GetDataField()->SetAsFloat(teammateBearing.value_degrees());
     wp->RefreshDisplay();
   }
 

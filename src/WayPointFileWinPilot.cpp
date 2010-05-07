@@ -262,7 +262,7 @@ tstring
 WayPointFileWinPilot::composeAngle(const Angle& src, const bool lat)
 {
   TCHAR buffer[20];
-  bool is_negative = negative(src.value());
+  bool is_negative = negative(src.value_degrees());
 
   // Calculate degrees, minutes and seconds
   fixed smag = src.magnitude();

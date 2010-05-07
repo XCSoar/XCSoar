@@ -107,7 +107,7 @@ WindAnalyser::WindAnalyser()
   circleCount = 0;
   startmarker = 0;
   circleDeg = 0;
-  lastHeading = 0;
+  lastHeading = Angle();
   pastHalfway = false;
 
   minSatCnt = 1; // JMW conf->getWindMinSatCount();
@@ -139,18 +139,9 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
   bool fullCircle = false;
 
   // Circle detection
-  if (lastHeading) {
-    int diff = (int)info.TrackBearing.value() - lastHeading;
-
-    if (diff > 180)
-      diff -= 360;
-    if (diff < -180)
-      diff += 360;
-
-    diff = abs(diff);
-    circleDeg += diff;
-  }
-  lastHeading = (int)info.TrackBearing.value();
+  int diff = (int)(info.TrackBearing - lastHeading).AngleLimit180().magnitude();
+  circleDeg += diff;
+  lastHeading = info.TrackBearing;
 
   if (circleDeg >= 360) {
     //full circle made!
@@ -264,7 +255,6 @@ WindAnalyser::slot_newFlightMode(const NMEA_INFO &info,
 
   // initialize analyser-parameters
   startmarker = marker;
-  startheading = (int)info.TrackBearing.value();
   active = true;
   first = true;
   numwindsamples = 0;

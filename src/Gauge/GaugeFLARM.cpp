@@ -189,7 +189,7 @@ GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 
     // Rotate and shift the arrow
     PolygonRotateShift(Arrow, 5, sc.x, sc.y,
-                       (traffic.TrackBearing + DisplayAngle).value());
+                       traffic.TrackBearing + DisplayAngle);
 
     // Draw the polygon
     canvas.polygon(Arrow, 5);

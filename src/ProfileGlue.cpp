@@ -664,7 +664,7 @@ Profile::SetWind()
   int Temp;
   Temp = iround(XCSoarInterface::Basic().wind.norm);
   Set(szProfileWindSpeed, Temp);
-  Temp = iround(XCSoarInterface::Basic().wind.bearing.value());
+  Temp = iround(XCSoarInterface::Basic().wind.bearing.value_degrees());
   Set(szProfileWindBearing, Temp);
   //TODO  SetWindEstimate(Calculated().WindSpeed, Calculated().WindBearing);
 }

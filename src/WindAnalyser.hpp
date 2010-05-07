@@ -83,9 +83,8 @@ private:
   //active is set to true or false by the slot_newFlightMode slot
   bool active;
   int startmarker;
-  int startheading;
   int circleDeg;
-  int lastHeading;
+  Angle lastHeading;
   bool pastHalfway;
   Vector minVector;
   Vector maxVector;

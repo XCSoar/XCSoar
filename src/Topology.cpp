@@ -535,7 +535,7 @@ TopologyWriter::Reset(void)
 void
 TopologyWriter::addPoint(const GEOPOINT &gp)
 {
-  pointObj p = { gp.Longitude.value(), gp.Latitude.value(), 0.0 };
+  pointObj p = { gp.Longitude.value_degrees(), gp.Latitude.value_degrees(), 0.0 };
 
   if (shapefileopen) {
     msSHPWritePoint(shpfile.hSHP, &p);

@@ -614,8 +614,8 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
   const Angle PanLongitude = map_projection.GetPanLocation().Longitude;
   const double InvDrawScale = map_projection.GetScreenScaleToLonLat() / 1024.0;
   const Angle DisplayAngle = map_projection.GetDisplayAngle();
-  const int cost = ifastcosine(DisplayAngle.value());
-  const int sint = ifastsine(DisplayAngle.value());
+  const int cost = DisplayAngle.ifastcosine();
+  const int sint = DisplayAngle.ifastsine();
 
   GEOPOINT gp;
   for (int y = Y0; y < Y1; y += dtquant) {
@@ -633,7 +633,7 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
         gp.Latitude = PanLatitude 
           - Angle(fixed((ycost + x * sint) * InvDrawScale));
         gp.Longitude = PanLongitude + Angle((x * cost - ysint)
-                                            * invfastcosine(gp.Latitude.value()) * InvDrawScale);
+                                            * gp.Latitude.invfastcosine() * InvDrawScale);
         *myhbuf = max((short)0, DisplayMap->GetField(gp, *rounding));
       } else {
         *myhbuf = 0;

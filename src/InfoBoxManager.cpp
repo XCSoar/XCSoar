@@ -1019,14 +1019,16 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
 
     // VENTA3 wind speed + bearing bottom line
   case 25:
-    _stprintf(sTmp, _T("%d%s"), (int)Basic().wind.bearing.value(), _T(DEG));
+    _stprintf(sTmp, _T("%d%s"), (int)Basic().wind.bearing.value_degrees(), 
+              _T(DEG));
     info_box.SetComment(sTmp);
     break;
 
     // VENTA3 radial
   case 60:
     _stprintf(sTmp, _T("%d%s"),
-              (int)Calculated().common_stats.vector_home.Bearing.value(), _T(DEG));
+              (int)Calculated().common_stats.vector_home.Bearing.value_degrees(), 
+              _T(DEG));
     info_box.SetComment(sTmp);
     break;
 

@@ -53,8 +53,16 @@ public:
   fixed cos() const;
   fixed fastsine() const;
   fixed fastcosine() const;
-  const fixed& value() const {
+  fixed invfastcosine() const;
+  int ifastsine() const;
+  int ifastcosine() const;
+  int sign() const;
+
+  fixed value_degrees() const {
     return m_value;
+  }
+  fixed value_radians() const {
+    return m_value*fixed_deg_to_rad;
   }
 
   void sin_cos(fixed& s, fixed& c) const;

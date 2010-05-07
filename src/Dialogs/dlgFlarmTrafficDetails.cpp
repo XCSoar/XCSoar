@@ -83,10 +83,10 @@ void UpdateChanging() {
   // Fill horizontal direction field
   dir -= XCSoarInterface::Basic().TrackBearing;
   dir = dir.AngleLimit180();
-  if (dir.value() > 1)
-    _stprintf(tmp, _T("%2.0f")_T(DEG)_T(" »"), (double)dir.value());
-  else if (dir.value() < -1)
-    _stprintf(tmp, _T("« ")_T("%2.0f")_T(DEG), (double)-dir.value());
+  if (dir.value_degrees() > 1)
+    _stprintf(tmp, _T("%2.0f")_T(DEG)_T(" »"), (double)dir.value_degrees());
+  else if (dir.value_degrees() < -1)
+    _stprintf(tmp, _T("« ")_T("%2.0f")_T(DEG), (double)-dir.value_degrees());
   else
     _tcscpy(tmp, _T("«»"));
   ((WndProperty *)wf->FindByName(_T("prpDirectionH")))->SetText(tmp);
@@ -100,9 +100,9 @@ void UpdateChanging() {
   dir *=  fixed_180 / M_PI;
   dir = dir.AngleLimit180();
   if (dir.magnitude() > 1)
-    _stprintf(tmp, _T("%+2.0f")_T(DEG), (double)dir.value());
+    _stprintf(tmp, _T("%+2.0f")_T(DEG), (double)dir.value_degrees());
   else
-    _stprintf(tmp, _T("--"), (double)dir.value());
+    _stprintf(tmp, _T("--"), (double)dir.value_degrees());
   ((WndProperty *)wf->FindByName(_T("prpDirectionV")))->SetText(tmp);
 
   // Fill climb speed field

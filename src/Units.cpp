@@ -92,7 +92,7 @@ void
 Units::LongitudeToDMS(Angle Longitude, int *dd, int *mm, int *ss, bool *east)
 {
   // if (Longitude is negative) -> Longitude is West otherwise East
-  *east = (Longitude.value() < 0 ? false : true);
+  *east = (Longitude.value_degrees() < 0 ? false : true);
 
   double mlong = Longitude.magnitude();
   // Calculate degrees
@@ -121,7 +121,7 @@ void
 Units::LatitudeToDMS(Angle Latitude, int *dd, int *mm, int *ss, bool *north)
 {
   // if (Latitude is negative) -> Latitude is South otherwise North
-  *north = (Latitude.value() < 0 ? false : true);
+  *north = (Latitude.value_degrees() < 0 ? false : true);
 
   double mlat = Latitude.magnitude();
   // Calculate degrees
@@ -154,7 +154,7 @@ Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, size_t size)
   int dd, mm, ss;
 
   // Calculate Longitude sign
-  int sign = Longitude.value() < 0 ? 0 : 1;
+  int sign = Longitude.value_degrees() < 0 ? 0 : 1;
   double mlong = Longitude.magnitude();
 
   switch (CoordinateFormat) {
@@ -222,7 +222,7 @@ Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, size_t size)
   int dd, mm, ss;
 
   // Calculate Latitude sign
-  int sign = Latitude.value() < 0 ? 0 : 1;
+  int sign = Latitude.value_degrees() < 0 ? 0 : 1;
   double mlat = Latitude.magnitude();
 
   switch (CoordinateFormat) {

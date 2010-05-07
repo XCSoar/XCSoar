@@ -98,7 +98,7 @@ FlarmDeclare(ComPort *port, const Declaration *decl)
     double tmp, MinLat, MinLon;
     char NoS, EoW;
 
-    tmp = decl->get_location(i).Latitude.value();
+    tmp = decl->get_location(i).Latitude.value_degrees();
     NoS = 'N';
     if(tmp < 0)
       {
@@ -108,7 +108,7 @@ FlarmDeclare(ComPort *port, const Declaration *decl)
     DegLat = (int)tmp;
     MinLat = (tmp - DegLat) * 60 * 1000;
 
-    tmp = decl->get_location(i).Longitude.value();
+    tmp = decl->get_location(i).Longitude.value_degrees();
     EoW = 'E';
     if(tmp < 0)
       {
