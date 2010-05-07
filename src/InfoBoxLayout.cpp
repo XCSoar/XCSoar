@@ -211,13 +211,10 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
 void
 InfoBoxLayout::ScreenGeometry(RECT rc)
 {
-  TCHAR szProfileInfoBoxGeometry[] = TEXT("InfoBoxGeometry");
-
   Profile::Get(szProfileInfoBoxGeometry, InfoBoxGeometry);
 
 #if defined(PNA) || defined(FIVV)
 // VENTA-ADDON GEOM
-  static const TCHAR szProfileInfoBoxGeom[]=  TEXT("AppInfoBoxGeom");
   unsigned Temp = 0;
   Profile::Get(szProfileInfoBoxGeom, Temp);
   if (InfoBoxGeometry != Temp) {

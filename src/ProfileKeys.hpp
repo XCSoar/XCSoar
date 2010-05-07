@@ -200,4 +200,7 @@ extern const TCHAR szProfileFontCDIWindowFont[];
 extern const TCHAR szProfileFontMapLabelFont[];
 extern const TCHAR szProfileFontStatisticsFont[];
 
+extern const TCHAR szProfileInfoBoxGeometry[];
+extern const TCHAR szProfileInfoBoxGeom[];
+
 #endif
