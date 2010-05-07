@@ -118,9 +118,8 @@ class ZigZagPoint
 {
 public:
   ZigZagPoint()
+    :time(-1)
   {
-    time = -1;
-
     for (int i = 0; i < NUM_V_POINTS; i++) {
       theta_west_ok[i] = false;
     }
