@@ -64,10 +64,7 @@ Layout::Initialize(unsigned width, unsigned height)
     dscale *= 240.0 / 320.0;
 
   scale = (int)dscale;
-  if (((double)scale) == dscale)
-    IntScaleFlag = true;
-  else
-    IntScaleFlag = false;
+  IntScaleFlag = (((double)scale) == dscale);
 
   landscape = width > height;
   square = width == height;
