@@ -159,7 +159,9 @@ Trace::trim_point_delta()
   unsigned lowest_dt = null_time;
   TraceTree::const_iterator candidate = trace_tree.end();
 
+#ifndef NDEBUG
   const unsigned min_time = distance_delta_map.begin()->first;
+#endif
 
   for (TraceTree::const_iterator it = trace_tree.begin();
        it != trace_tree.end(); ++it) {
