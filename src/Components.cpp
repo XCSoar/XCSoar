@@ -152,7 +152,8 @@ XCSoarInterface::PreloadInitialisation(bool ask)
     Profile::Load();
     Profile::Use();
   } else {
-    dlgStartupShowModal();
+    if (Profile::use_files())
+      dlgStartupShowModal();
 
     Profile::Load();
     Profile::Use();
