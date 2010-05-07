@@ -77,8 +77,8 @@ using std::max;
 GlideComputerAirData::GlideComputerAirData(AirspaceClientCalc& airspace,
                                            TaskClientCalc& _task):
   m_airspace(airspace),
-  airspace_clock(2.0), // scan airspace every 2 seconds
-  ballast_clock(5),  // only update every 5 seconds to stop flooding
+  airspace_clock(fixed_two), // scan airspace every 2 seconds
+  ballast_clock(fixed(5)), // only update every 5 seconds to stop flooding
 		    // the devices
   vario_30s_filter(30),
   netto_30s_filter(30),

@@ -39,13 +39,15 @@ Copyright_License {
 #ifndef XCSOAR_GPS_CLOCK_HPP
 #define XCSOAR_GPS_CLOCK_HPP
 
+#include "Engine/Math/fixed.hpp"
+
 /**
  * Class for GPS-time based time intervals
  */
 class GPSClock {
 private:
-  double last;
-  double dt;
+  fixed last;
+  fixed dt;
 
 public:
   /**
@@ -54,7 +56,7 @@ public:
    * default behaviour, call update() immediately after creating the
    * object.
    */
-  GPSClock(const double _minstep):last(0),dt(_minstep) {}
+  GPSClock(const fixed _minstep):last(fixed_zero), dt(_minstep) {}
 
   /**
    * Resets the clock.
@@ -68,7 +70,7 @@ public:
    * @param now Current time
    * @return True if time has been reversed, False otherwise
    */
-  bool check_reverse(const double now) {
+  bool check_reverse(const fixed now) {
     if (now<last) {
       last=now;
       return true;
@@ -81,31 +83,31 @@ public:
    * Set dt to a new value defined by _dt
    * @param _dt The new value fot dt
    */
-  void set_dt(const double _dt) {
+  void set_dt(const fixed _dt) {
     dt = _dt;
   }
 
   /**
-   * Calls check_advance(double, double) with dt
+   * Calls check_advance(fixed, fixed) with dt
    * as the default value for dt
    * @param now Current time
-   * @see check_advance(double, double)
+   * @see check_advance(fixed, fixed)
    */
-  bool check_advance(const double now) {
+  bool check_advance(const fixed now) {
     return check_advance(now, dt);
   }
 
-  double delta_advance(const double now) {
-    double dt=now-last;
+  fixed delta_advance(const fixed now) {
+    fixed dt=now-last;
     if (check_reverse(now)) {
-      return -1;
+      return fixed_minus_one;
     }
     // check if time has advanced past dt
     if (now-last>=dt) {
       last= now;
       return dt;
     } else {
-      return 0;
+      return fixed_zero;
     }
   }
 
@@ -116,7 +118,7 @@ public:
    * @param dt The timestep in milliseconds
    * @return
    */
-  bool check_advance(const double now, const double dt) {
+  bool check_advance(const fixed now, const fixed dt) {
     if (check_reverse(now)) {
       return false;
     }

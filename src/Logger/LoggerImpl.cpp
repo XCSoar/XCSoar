@@ -94,7 +94,7 @@ LoggerImpl::LoggerImpl():
   Simulator(false),
   NumLoggerPreTakeoffBuffered(0),
   LoggerDiskBufferCount(0),
-  frecord_clock(270.0) // 4.5 minutes)
+  frecord_clock(fixed(270)) // 4.5 minutes)
 {
   ResetFRecord();
   szLoggerFileName[0] = 0;

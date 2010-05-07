@@ -47,8 +47,8 @@ Copyright_License {
 #include "GPSClock.hpp"
 
 GlideComputerStats::GlideComputerStats(TaskClientCalc &task) :
-  log_clock(5.0),
-  stats_clock(60.0),
+  log_clock(fixed(5)),
+  stats_clock(fixed(60)),
   GlideComputerBlackboard(task)
 {
 
@@ -82,13 +82,13 @@ GlideComputerStats::DoLogging()
 
   // log points more often in circling mode
   if (Calculated().Circling) {
-    log_clock.set_dt(SettingsComputer().LoggerTimeStepCircling);
+    log_clock.set_dt(fixed(SettingsComputer().LoggerTimeStepCircling));
   } else {
-    log_clock.set_dt(SettingsComputer().LoggerTimeStepCruise);
+    log_clock.set_dt(fixed(SettingsComputer().LoggerTimeStepCruise));
   }
 
   if (FastLogNum) {
-    log_clock.set_dt(1.0);
+    log_clock.set_dt(fixed_one);
     FastLogNum--;
   }
 
