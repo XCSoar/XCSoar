@@ -71,9 +71,7 @@ public:
     struct internal
     {};
 
-    fixed():
-        m_nVal(0)
-    {}
+    fixed() {}
     
     fixed(internal, value_t nVal):
         m_nVal(nVal)
