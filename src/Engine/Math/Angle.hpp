@@ -68,6 +68,9 @@ public:
   int ifastcosine() const;
   int sign() const;
 
+  fixed value_native() const {
+    return m_value;
+  }
   fixed value_degrees() const {
     return m_value;
   }

@@ -49,11 +49,15 @@ int main(int argc, char** argv) {
 
   ok(fabs(t-dt)<1.0e5,"atan(y,x)",0);
 
-  GEOPOINT l1; l1.Longitude = Angle(fixed(0.0)); l1.Latitude= Angle(fixed(0.0));
-  GEOPOINT l2; l2.Longitude = Angle(fixed(-0.3)); l2.Latitude= Angle(fixed(1.0));
+  GEOPOINT l1; 
+  l1.Longitude = Angle::degrees(fixed(0.0)); 
+  l1.Latitude= Angle::degrees(fixed(0.0));
+  GEOPOINT l2; 
+  l2.Longitude = Angle::degrees(fixed(-0.3)); 
+  l2.Latitude= Angle::degrees(fixed(1.0));
   fixed d; Angle b;
   ::DistanceBearing(l1,l2,&d,&b);
-  printf("Dist %g bearing %d\n",FIXED_DOUBLE(d),FIXED_INT(b.value()));
+  printf("Dist %g bearing %d\n",FIXED_DOUBLE(d),FIXED_INT(b.value_degrees()));
 
   return exit_status();
 }

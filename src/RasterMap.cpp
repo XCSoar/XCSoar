@@ -76,8 +76,7 @@ RasterMap::GetEffectivePixelSize(double *pixel_D,
                                  const GEOPOINT &location) const
 {
   fixed terrain_step_x, terrain_step_y;
-  Angle step_size = 
-    Angle::degrees(TerrainInfo.StepSize.value_degrees() * sqrt(2.0));
+  Angle step_size = TerrainInfo.StepSize * sqrt(fixed_two); 
 
   if ((*pixel_D<=0) || (step_size.sign()==0)) {
     *pixel_D = 1.0;
@@ -121,20 +120,20 @@ RasterMap::SetFieldRounding(const GEOPOINT& delta,
     return;
   }
 
-  rounding.Xrounding = iround(delta.Longitude.value_degrees()
-                              /TerrainInfo.StepSize.value_degrees());
-  rounding.Yrounding = iround(delta.Latitude.value_degrees()
-                              /TerrainInfo.StepSize.value_degrees());
+  rounding.Xrounding = iround(delta.Longitude.value_native()
+                              /TerrainInfo.StepSize.value_native());
+  rounding.Yrounding = iround(delta.Latitude.value_native()
+                              /TerrainInfo.StepSize.value_native());
 
   if (rounding.Xrounding<1) {
     rounding.Xrounding = 1;
   }
-  rounding.fXrounding = 1.0/(rounding.Xrounding*TerrainInfo.StepSize.value_degrees());
+  rounding.fXrounding = 1.0/(rounding.Xrounding*TerrainInfo.StepSize.value_native());
   rounding.fXroundingFine = rounding.fXrounding*256.0;
   if (rounding.Yrounding<1) {
     rounding.Yrounding = 1;
   }
-  rounding.fYrounding = 1.0/(rounding.Yrounding*TerrainInfo.StepSize.value_degrees());
+  rounding.fYrounding = 1.0/(rounding.Yrounding*TerrainInfo.StepSize.value_native());
   rounding.fYroundingFine = rounding.fYrounding*256.0;
 
   rounding.DirectFine = false;
@@ -151,13 +150,13 @@ short RasterMap::GetField(const GEOPOINT &location,
   if(isMapLoaded()) {
     if (rounding.DirectFine) {
       return _GetFieldAtXY(
-        (int)(location.Longitude.value_degrees()*rounding.fXroundingFine) - rounding.xlleft,
-        rounding.xlltop - (int)(location.Latitude.value_degrees()*rounding.fYroundingFine));
+        (int)(location.Longitude.value_native()*rounding.fXroundingFine) - rounding.xlleft,
+        rounding.xlltop - (int)(location.Latitude.value_native()*rounding.fYroundingFine));
     } else {
       unsigned int ix =
-        Real2Int((location.Longitude-TerrainInfo.Left).value_degrees()*rounding.fXrounding)*rounding.Xrounding;
+        Real2Int((location.Longitude-TerrainInfo.Left).value_native()*rounding.fXrounding)*rounding.Xrounding;
       unsigned int iy =
-        Real2Int((TerrainInfo.Top-location.Latitude).value_degrees()*rounding.fYrounding)*rounding.Yrounding;
+        Real2Int((TerrainInfo.Top-location.Latitude).value_native()*rounding.fYrounding)*rounding.Yrounding;
 
       return _GetFieldAtXY(ix<<8, iy<<8);
     }

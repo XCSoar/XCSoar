@@ -237,7 +237,7 @@ std::ostream& operator<< (std::ostream& f,
   f << "# circle " << as.get_base_altitude() << " " << as.get_top_altitude() << "\n";
   for (double t=0; t<=360; t+= 30) {
     GEOPOINT l;
-    FindLatitudeLongitude(as.m_center, fixed(t), as.m_radius, &l);
+    FindLatitudeLongitude(as.m_center, Angle::degrees(fixed(t)), as.m_radius, &l);
     f << l.Longitude << " " << l.Latitude << "\n";
   }
   f << "\n";

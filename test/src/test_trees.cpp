@@ -27,8 +27,8 @@ bool test_wp(const unsigned n, std::ostream &fo) {
   for (unsigned i=0; i<n_test; i++) {
     int x = rand()%1200-100;
     int y = rand()%1200-100;
-    state.Location.Longitude = Angle(fixed(x/1000.0)); 
-    state.Location.Latitude = Angle(fixed(y/1000.0));
+    state.Location.Longitude = Angle::degrees(fixed(x/1000.0)); 
+    state.Location.Latitude = Angle::degrees(fixed(y/1000.0));
 
     WaypointVisitorPrint wvp;
     waypoints.visit_within_radius(state.Location, fixed(50000.0), wvp);
@@ -50,8 +50,8 @@ bool test_as(const unsigned n, std::ostream &fo) {
   for (unsigned i=0; i<n_test; i++) {
     int x = rand()%1200-100;
     int y = rand()%1200-100;
-    state.Location.Longitude = Angle(fixed(x/1000.0)); 
-    state.Location.Latitude = Angle(fixed(y/1000.0));
+    state.Location.Longitude = Angle::degrees(fixed(x/1000.0)); 
+    state.Location.Latitude = Angle::degrees(fixed(y/1000.0));
     airspaces.find_inside(state);
   }
   print_queries(n, fo);

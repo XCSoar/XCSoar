@@ -25,11 +25,11 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
   if (task_manager.task_size()<=1) {
     short_flight = true;
     // cheat for non-ordered tasks
-    w.push_back(GEOPOINT(fixed(0.1), fixed(0.1)));
+    w.push_back(GEOPOINT(Angle::degrees(fixed(0.1)), Angle::degrees(fixed(0.1))));
     if (task_manager.task_size()>0) {
       w.push_back(task_manager.random_point_in_task(0, fixed(random_mag)));
     } else {
-      w.push_back(GEOPOINT(fixed_one, fixed_zero));
+      w.push_back(GEOPOINT(Angle::degrees(fixed_one), Angle::degrees(fixed_zero)));
     }
   } else {
     for (unsigned i=0; i<task_manager.task_size(); i++) {
@@ -42,7 +42,7 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
   state.NavAltitude = start_alt;
   state.Time = 0.0;
   state.wind.norm = 0.0;
-  state.wind.bearing = Angle(fixed(0));
+  state.wind.bearing = Angle();
   state.Speed = 16.0;
 
   // start with aircraft moving since this isn't a real replay (no time on ground)
@@ -50,7 +50,7 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
     state.flying_state_moving(state.Time);
   }
   
-  bearing = Angle(fixed_zero);
+  bearing = Angle();
   awp= 0;
   
   acstate = Cruise;
@@ -117,16 +117,16 @@ void AircraftSim::update_bearing(TaskManager& task_manager) {
 
   Angle b_best = bearing;
   fixed e_best = fixed_360;
-  const Angle delta(fixed_two);
-  for (Angle bear= delta; bear<Angle(fixed_360); bear+= delta) {
+  const Angle delta = Angle::degrees(fixed_two);
+  for (Angle bear= delta; bear<Angle::degrees(fixed_360); bear+= delta) {
     Angle b_this = state.Location.bearing(endpoint(bear));
-    fixed e_this = (b_this-bearing).AngleLimit180().magnitude();
+    fixed e_this = (b_this-bearing).as_delta().magnitude_degrees();
     if (e_this<e_best) {
       e_best = e_this;
       b_best = bear;
     }    
   }
-  bearing = b_best+Angle(small_rand());
+  bearing = b_best+Angle::degrees(small_rand());
 }
 
 
@@ -148,7 +148,7 @@ void AircraftSim::update_state(TaskManager &task_manager)  {
     break;
   case Climb:
     state.TrueAirspeed = glide_polar.get_Vmin();
-    bearing += fixed_20+small_rand();
+    bearing += Angle::degrees(fixed_20+small_rand());
     state.Vario = climb_rate*climb_factor;
     break;
   };
@@ -209,7 +209,8 @@ GEOPOINT AircraftSim::endpoint(const Angle &bear) const
 {
   GEOPOINT ref;
   ref = GeoVector(state.TrueAirspeed, bear).end_point(state.Location);
-  return GeoVector(state.wind.norm, state.wind.bearing + Angle(fixed_180)).end_point(ref);
+  return GeoVector(state.wind.norm, 
+                   state.wind.bearing+ Angle::degrees(fixed_180)).end_point(ref);
 }
 
 void AircraftSim::integrate() {
