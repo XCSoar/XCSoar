@@ -189,10 +189,10 @@ class ConditionMonitorFinalGlide: public ConditionMonitor
 {
 public:
   ConditionMonitorFinalGlide()
+    :tad(fixed_zero)
   {
     Interval_Notification = 60 * 5;
     Interval_Check = 1;
-    tad = 0;
   }
 
 protected:
@@ -205,25 +205,25 @@ protected:
     const GlideResult& res = cmp.Calculated().task_stats.total.solution_remaining;
 
     // TODO: use low pass filter
-    tad = res.AltitudeDifference * 0.2 + 0.8 * tad;
+    tad = res.AltitudeDifference * fixed(0.2) + fixed(0.8) * tad;
 
     bool BeforeFinalGlide = !res.is_final_glide();
 
     if (BeforeFinalGlide) {
       Interval_Notification = 60 * 5;
-      if ((tad > 50) && (last_tad < -50))
+      if ((tad > fixed(50)) && (last_tad < fixed(-50)))
         // report above final glide early
         return true;
-      else if (tad < -50)
+      else if (tad < fixed(-50))
         last_tad = tad;
     } else {
       Interval_Notification = 60;
       if (res.is_final_glide()) {
-        if ((last_tad < -50) && (tad > 1))
+        if ((last_tad < fixed(-50)) && (tad > fixed_one))
           // just reached final glide, previously well below
           return true;
 
-        if ((last_tad > 1) && (tad < -50)) {
+        if ((last_tad > fixed_one) && (tad < fixed(-50))) {
           // dropped well below final glide, previously above
           last_tad = tad;
           return true; // JMW this was true before
@@ -236,9 +236,9 @@ protected:
   void
   Notify(void)
   {
-    if (tad > 1)
+    if (tad > fixed_one)
       InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_ABOVE);
-    if (tad < -1)
+    if (tad < fixed(-1))
       InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_BELOW);
   }
 
@@ -249,8 +249,8 @@ protected:
   }
 
 private:
-  double tad;
-  double last_tad;
+  fixed tad;
+  fixed last_tad;
 };
 
 class ConditionMonitorSunset: public ConditionMonitor
