@@ -96,6 +96,15 @@ dlgStartupShowModal(void)
   if (!wf)
     return;
 
+  wp = ((WndProperty *)wf->FindByName(_T("prpProfile")));
+  if (!wp)
+    return;
+
+  DataFieldFileReader* dfe;
+  dfe = (DataFieldFileReader*)wp->GetDataField();
+  if (!dfe)
+    return;
+
   ((WndButton *)wf->FindByName(_T("cmdClose")))
     ->SetOnClickNotify(OnCloseClicked);
 
@@ -109,31 +118,22 @@ dlgStartupShowModal(void)
                            _T("operate the aircraft safely. Maintain ")
                            _T("effective lookout."));
 
-  wp = ((WndProperty *)wf->FindByName(_T("prpProfile")));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    if (is_altair())
-      dfe->ScanDirectoryTop(_T("config/*.prf"));
-    else
-      dfe->ScanDirectoryTop(_T("*.prf"));
-    dfe->Lookup(startProfileFile);
-    wp->RefreshDisplay();
-    if (dfe->GetNumFiles( )<= 2) {
-      delete wf;
-      return;
-    }
+
+  if (is_altair())
+    dfe->ScanDirectoryTop(_T("config/*.prf"));
+  else
+    dfe->ScanDirectoryTop(_T("*.prf"));
+  dfe->Lookup(startProfileFile);
+  wp->RefreshDisplay();
+  if (dfe->GetNumFiles( )<= 2) {
+    delete wf;
+    return;
   }
 
   wf->ShowModal();
 
-  wp = (WndProperty*)wf->FindByName(_T("prpProfile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    if (!string_is_empty(dfe->GetPathFile()))
-      _tcscpy(startProfileFile, dfe->GetPathFile());
-  }
+  if (!string_is_empty(dfe->GetPathFile()))
+    _tcscpy(startProfileFile, dfe->GetPathFile());
 
   delete wf;
 }
