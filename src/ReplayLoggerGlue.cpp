@@ -58,9 +58,9 @@
 #include <algorithm>
 
 bool
-ReplayLoggerGlue::ScanBuffer(const TCHAR *buffer, double *Time,
-                             double *Latitude, double *Longitude, 
-                             double *Altitude)
+ReplayLoggerGlue::ScanBuffer(const TCHAR *buffer, fixed *Time,
+                             fixed *Latitude, fixed *Longitude,
+                             fixed *Altitude)
 {
 
   if (ReplayLogger::ScanBuffer(buffer, Time, Latitude, Longitude, Altitude)) {
@@ -90,18 +90,17 @@ ReplayLoggerGlue::ScanBuffer(const TCHAR *buffer, double *Time,
 }
 
 
-double
-ReplayLoggerGlue::get_time(const bool reset,
-                           const double mintime)
+fixed
+ReplayLoggerGlue::get_time(const bool reset, const fixed mintime)
 {
   static PeriodClock clock;
-  static double t_simulation;
+  static fixed t_simulation;
   
   if (reset) {
     clock.reset();
     t_simulation = 0;
   } else {
-    t_simulation += TimeScale * max(clock.elapsed(), 0) / 1000.0;
+    t_simulation += TimeScale * max(clock.elapsed(), 0) / 1000;
     clock.update();
   }
   
@@ -111,8 +110,8 @@ ReplayLoggerGlue::get_time(const bool reset,
 
 void
 ReplayLoggerGlue::on_advance(const GEOPOINT &loc,
-                             const double speed, const Angle bearing,
-                             const double alt, const double baroalt, const double t)
+                             const fixed speed, const Angle bearing,
+                             const fixed alt, const fixed baroalt, const fixed t)
 {
   device_blackboard.SetLocation(loc, speed, bearing, alt, baroalt, t);
   TriggerGPSUpdate();

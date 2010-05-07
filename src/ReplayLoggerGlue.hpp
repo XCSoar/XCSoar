@@ -45,16 +45,16 @@ class ReplayLoggerGlue:
   public ReplayLogger
 {
 protected:
-  virtual double get_time(const bool reset, const double mintime);
+  virtual fixed get_time(const bool reset, const fixed mintime);
   virtual void on_reset();
   virtual void on_stop();
   virtual void on_bad_file();
   virtual void on_advance(const GEOPOINT &loc,
-                          const double speed, const Angle bearing,
-                          const double alt, const double baroalt, const double t);
+                          const fixed speed, const Angle bearing,
+                          const fixed alt, const fixed baroalt, const fixed t);
 
-  virtual bool ScanBuffer(const TCHAR *buffer, double *Time, double *Latitude,
-                          double *Longitude, double *Altitude);
+  virtual bool ScanBuffer(const TCHAR *buffer, fixed *Time, fixed *Latitude,
+                          fixed *Longitude, fixed *Altitude);
 
 };
 

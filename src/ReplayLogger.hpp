@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef REPLAY_LOGGER_HPP
 #define REPLAY_LOGGER_HPP
 
+#include "Engine/Math/fixed.hpp"
+
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
 #include <stdio.h>
@@ -56,25 +58,25 @@ public:
   void Start();
   const TCHAR* GetFilename();
   void SetFilename(const TCHAR *name);
-  double TimeScale;
+  fixed TimeScale;
 
 protected:
-  virtual double get_time(const bool reset, const double mintime);
+  virtual fixed get_time(const bool reset, const fixed mintime);
   virtual void on_reset();
   virtual void on_stop();
   virtual void on_bad_file();
   virtual void on_advance(const GEOPOINT &loc,
-                          const double speed, const Angle bearing,
-                          const double alt, const double baroalt, const double t) = 0;
-  virtual bool ScanBuffer(const TCHAR *buffer, double *Time, double *Latitude,
-                          double *Longitude, double *Altitude);
+                          const fixed speed, const Angle bearing,
+                          const fixed alt, const fixed baroalt, const fixed t) = 0;
+  virtual bool ScanBuffer(const TCHAR *buffer, fixed *Time, fixed *Latitude,
+                          fixed *Longitude, fixed *Altitude);
 
   bool UpdateInternal();
   bool ReadLine(TCHAR *buffer);
   bool Enabled;
 
-  bool ReadPoint(double *Time, double *Latitude, double *Longitude,
-      double *Altitude);
+  bool ReadPoint(fixed *Time, fixed *Latitude, fixed *Longitude,
+                 fixed *Altitude);
 
 private:
   TCHAR FileName[MAX_PATH];
