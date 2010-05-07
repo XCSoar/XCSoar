@@ -51,11 +51,10 @@ Copyright_License {
 #include "wcecompat/ts_string.h"
 
 void
-RasterMapJPG2000::SetFieldRounding(const double xr,
-                                   const double yr,
+RasterMapJPG2000::SetFieldRounding(const GEOPOINT& delta,
                                    RasterRounding &rounding) const
 {
-  RasterMap::SetFieldRounding(xr, yr, rounding);
+  RasterMap::SetFieldRounding(delta, rounding);
   if (!isMapLoaded()) {
     return;
   }

@@ -114,16 +114,17 @@ RasterMap::GetEffectivePixelSize(double dist) const
 
 
 void
-RasterMap::SetFieldRounding(const double xr,
-                            const double yr,
+RasterMap::SetFieldRounding(const GEOPOINT& delta,
                             RasterRounding &rounding) const
 {
   if (!isMapLoaded()) {
     return;
   }
 
-  rounding.Xrounding = iround(xr/TerrainInfo.StepSize.value_degrees());
-  rounding.Yrounding = iround(yr/TerrainInfo.StepSize.value_degrees());
+  rounding.Xrounding = iround(delta.Longitude.value_degrees()
+                              /TerrainInfo.StepSize.value_degrees());
+  rounding.Yrounding = iround(delta.Latitude.value_degrees()
+                              /TerrainInfo.StepSize.value_degrees());
 
   if (rounding.Xrounding<1) {
     rounding.Xrounding = 1;

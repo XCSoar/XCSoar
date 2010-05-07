@@ -504,16 +504,19 @@ TerrainRenderer::Height(const MapWindowProjection &map_projection,
   map_projection.Screen2LonLat(x, y, middle);
   int dd = (int)lround(dtquant * rfact);
 
+  GEOPOINT delta_rounding;
+
   x = (X0 + X1) / 2 + dd;
   y = (Y0 + Y1) / 2;
   map_projection.Screen2LonLat(x, y, G);
-  double Xrounding = (G.Longitude - middle.Longitude).magnitude_degrees();
+  delta_rounding.Longitude = (G.Longitude - middle.Longitude);
+
   pixelDX = Distance(middle, G);
 
   x = (X0 + X1) / 2;
   y = (Y0 + Y1) / 2 + dd;
   map_projection.Screen2LonLat(x, y, G);
-  double Yrounding = (G.Latitude - middle.Latitude).magnitude_degrees();
+  delta_rounding.Latitude = (G.Latitude - middle.Latitude);
   pixelDY = Distance(middle, G);
 
   pixelsize_d = sqrt((pixelDX * pixelDX + pixelDY * pixelDY) / 2.0);
@@ -523,12 +526,11 @@ TerrainRenderer::Height(const MapWindowProjection &map_projection,
   DisplayMap->LockRead();
 
   if (DisplayMap->IsDirectAccess()) {
-    Xrounding = 0;
-    Yrounding = 0;
+    delta_rounding = GEOPOINT();
   }
 
   // set resolution
-  rounding->Set(*DisplayMap, Xrounding, Yrounding);
+  rounding->Set(*DisplayMap, delta_rounding);
 
   epx = DisplayMap->GetEffectivePixelSize(&pixelsize_d, middle);
 

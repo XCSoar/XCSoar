@@ -61,7 +61,7 @@ class RasterMapRaw:
   virtual ~RasterMapRaw();
 
   short *TerrainMem;
-  virtual void SetFieldRounding(const double xr, const double yr,
+  virtual void SetFieldRounding(const GEOPOINT& delta,
                                 RasterRounding &rounding) const;
   bool Open(const char *path);
 

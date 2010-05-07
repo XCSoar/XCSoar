@@ -65,8 +65,8 @@ EstimateThermalBase(const GEOPOINT Thermal_Location,
 
   GEOPOINT loc;
   FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * dt, &loc);
-  fixed Xrounding = ((loc.Longitude - Thermal_Location.Longitude)*fixed_half).magnitude_degrees();
-  fixed Yrounding = ((loc.Latitude - Thermal_Location.Latitude)*fixed_half).magnitude_degrees();
+
+  GEOPOINT delta_rounding = (loc-Thermal_Location)*fixed_half;
 
   for (fixed t = fixed_zero; t <= Tmax; t += dt) {
     FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * t,
@@ -76,7 +76,7 @@ EstimateThermalBase(const GEOPOINT Thermal_Location,
     fixed hground = fixed_zero;
 
     if (terrain.GetMap()) {
-      RasterRounding rounding(*terrain.GetMap(), Xrounding, Yrounding);
+      RasterRounding rounding(*terrain.GetMap(), delta_rounding);
       hground = terrain.GetTerrainHeight(loc, rounding);
     }
 
@@ -91,7 +91,7 @@ EstimateThermalBase(const GEOPOINT Thermal_Location,
 
   fixed hground = fixed_zero;
   if (terrain.GetMap()) {
-    RasterRounding rounding(*terrain.GetMap(), Xrounding, Yrounding);
+    RasterRounding rounding(*terrain.GetMap(), delta_rounding);
     hground = terrain.GetTerrainHeight(loc, rounding);
   }
 

@@ -68,7 +68,7 @@ GlideTerrain::GlideTerrain(const SETTINGS_COMPUTER &settings,
   rounding(NULL)
 {
   if (const RasterMap *map = m_terrain.GetMap()) {
-    rounding = new RasterRounding(*map, 0, 0);
+    rounding = new RasterRounding(*map);
   }
 }
 

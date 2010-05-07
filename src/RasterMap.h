@@ -91,7 +91,7 @@ class RasterMap {
   int GetEffectivePixelSize(double *pixel_D,
                             const GEOPOINT &location) const;
 
-  virtual void SetFieldRounding(const double xr, const double yr,
+  virtual void SetFieldRounding(const GEOPOINT& delta,
                                 RasterRounding &rounding) const;
 
   short GetField(const GEOPOINT &location,
@@ -129,26 +129,22 @@ public:
   RasterRounding() {};
 
   RasterRounding(const RasterMap &map,
-                 const double xr, const double yr):
+                 const GEOPOINT& delta):
     DirectFine(false)
   {
-    Set(map, xr, yr);
+    Set(map, delta);
   };
-    
-  RasterRounding(const RasterMap &map,
-                 const GEOPOINT delta):
+
+  RasterRounding(const RasterMap &map):
     DirectFine(false)
   {
-    Set(map, 
-        delta.Longitude.magnitude_degrees(), 
-        delta.Latitude.magnitude_degrees());
-  }
+    Set(map, GEOPOINT());
+  };
 
   void Set(const RasterMap &map,
-           const double xr,
-           const double yr)
+           const GEOPOINT& delta)
   {
-    map.SetFieldRounding(xr,yr,*this);
+    map.SetFieldRounding(delta,*this);
   }
 
   bool DirectFine;

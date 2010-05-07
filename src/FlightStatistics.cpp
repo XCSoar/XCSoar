@@ -685,7 +685,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
   // draw terrain
   if (terrain.GetMap()) {
     // want most accurate rounding here
-    RasterRounding rounding(*terrain.GetMap(), 0, 0);
+    RasterRounding rounding(*terrain.GetMap());
 
     std::vector<POINT> points;
     POINT pf0, pf1;

@@ -406,7 +406,7 @@ GlideComputerAirData::TerrainHeight()
   terrain.Lock();
   if (terrain.GetMap()) {
     // want most accurate rounding here
-    RasterRounding rounding(*terrain.GetMap(),0,0);
+    RasterRounding rounding(*terrain.GetMap());
     Alt = terrain.GetTerrainHeight(Basic().Location, rounding);
   }
   terrain.Unlock();

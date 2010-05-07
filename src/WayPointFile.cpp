@@ -110,7 +110,7 @@ WayPointFile::AltitudeFromTerrain(GEOPOINT &location,
     return TERRAIN_INVALID;
 
   // Get terrain height
-  RasterRounding rounding(*terrain.GetMap(), 0, 0);
+  RasterRounding rounding(*terrain.GetMap());
   alt = terrain.GetTerrainHeight(location, rounding);
 
   // If terrain altitude okay -> return terrain altitude
