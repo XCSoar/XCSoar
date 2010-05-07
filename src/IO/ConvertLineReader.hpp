@@ -54,12 +54,14 @@ public:
   enum charset {
     UTF8,
     WINDOWS_1252,
+    ISO_LATIN_1,
   };
 
 protected:
   LineReader<char> &source;
 
 #ifdef _UNICODE
+  charset m_charset;
   unsigned code_page;
   ReusableArray<TCHAR> tbuffer;
 #endif

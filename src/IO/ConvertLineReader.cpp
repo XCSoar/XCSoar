@@ -43,7 +43,7 @@ Copyright_License {
 #endif
 
 ConvertLineReader::ConvertLineReader(LineReader<char> &_source, charset cs)
-  :source(_source)
+  :source(_source), m_charset(cs)
 {
 #ifdef _UNICODE
   switch (cs) {
@@ -61,6 +61,14 @@ ConvertLineReader::ConvertLineReader(LineReader<char> &_source, charset cs)
 #else
   // XXX initialize iconv?
 #endif
+}
+
+static void
+iso_latin_1_to_tchar(TCHAR *dest, const char *src)
+{
+    do {
+      *dest++ = *src;
+    } while (*src++ != '\0');
 }
 
 TCHAR *
@@ -83,12 +91,21 @@ ConvertLineReader::read()
     return t;
   }
 
-  int length = MultiByteToWideChar(code_page, 0, narrow, narrow_length,
-                                   t, narrow_length);
-  if (length == 0)
-    return NULL;
+  switch (m_charset) {
+  case ISO_LATIN_1:
+    iso_latin_1_to_tchar(t, narrow);
+    break;
 
-  t[length] = _T('\0');
+  default:
+    int length = MultiByteToWideChar(code_page, 0, narrow, narrow_length,
+                                     t, narrow_length);
+    if (length == 0)
+      return NULL;
+
+    t[length] = _T('\0');
+    break;
+  }
+
   return t;
 #else
   // XXX call iconv?
