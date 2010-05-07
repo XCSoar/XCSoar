@@ -8,3 +8,8 @@ endif
 ifneq ($(GREEN_MENU),n)
 TARGET_CPPFLAGS += -DGREEN_MENU
 endif
+
+# shall the profile be loaded from file into the registry?
+ifeq ($(PROFILE_NO_FILE),y)
+TARGET_CPPFLAGS += -DPROFILE_NO_FILE
+endif

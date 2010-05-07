@@ -72,6 +72,16 @@ struct DeviceConfig {
 
 namespace Profile
 {
+  static inline bool
+  use_files()
+  {
+#ifdef PROFILE_NO_FILE
+    return false;
+#else
+    return true;
+#endif
+  }
+
   /**
    * Loads the profile files
    */

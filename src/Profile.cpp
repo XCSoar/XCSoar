@@ -52,6 +52,9 @@ TCHAR failsafeProfileFile[MAX_PATH];
 void
 Profile::Load()
 {
+  if (!use_files())
+    return;
+
   LogStartUp(_T("Loading profiles"));
   // load registry backup if it exists
   LoadFile(failsafeProfileFile);
@@ -61,6 +64,9 @@ Profile::Load()
 void
 Profile::LoadFile(const TCHAR *szFile)
 {
+  if (!use_files())
+    return;
+
   if (string_is_empty(szFile))
     return;
 
@@ -71,6 +77,9 @@ Profile::LoadFile(const TCHAR *szFile)
 void
 Profile::Save()
 {
+  if (!use_files())
+    return;
+
   LogStartUp(_T("Saving profiles"));
   // save registry backup first (try a few places)
   SaveFile(startProfileFile);
@@ -80,6 +89,9 @@ Profile::Save()
 void
 Profile::SaveFile(const TCHAR *szFile)
 {
+  if (!use_files())
+    return;
+
   if (string_is_empty(szFile))
     return;
 
@@ -91,6 +103,9 @@ Profile::SaveFile(const TCHAR *szFile)
 void
 Profile::SetFiles(const TCHAR* override)
 {
+  if (!use_files())
+    return;
+
   // Set the default profile file
   if (is_altair())
     LocalPath(defaultProfileFile, _T("config/")_T(XCSPROFILE));
