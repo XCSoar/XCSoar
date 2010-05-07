@@ -43,7 +43,8 @@ Copyright_License {
 using std::min;
 using std::max;
 
-namespace Layout {
+namespace Layout
+{
   bool landscape = false;
   bool square = false;
   int scale = 1;
@@ -60,15 +61,13 @@ Layout::Initialize(unsigned width, unsigned height)
   dscale = max(1.0, minsize / 240.0); // always start w/ shortest dimension
 
   if (maxsize == minsize)  // square should be shrunk
-    {
-      dscale *= 240.0 / 320.0;
-    }
+    dscale *= 240.0 / 320.0;
 
   scale = (int)dscale;
-  if ( ((double)scale) == dscale)
-    IntScaleFlag=true;
+  if (((double)scale) == dscale)
+    IntScaleFlag = true;
   else
-    IntScaleFlag=false;
+    IntScaleFlag = false;
 
   landscape = width > height;
   square = width == height;

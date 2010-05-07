@@ -42,7 +42,8 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Compiler.h"
 
-namespace Layout {
+namespace Layout
+{
   extern bool landscape;
   extern bool square;
   extern double dscale;
@@ -62,7 +63,9 @@ namespace Layout {
    * Is scaling supported by this platform?
    */
   gcc_const
-  static inline bool ScaleSupported() {
+  static inline bool
+  ScaleSupported()
+  {
     return !is_altair();
   }
 
@@ -70,12 +73,16 @@ namespace Layout {
    * Is scaling enabled currently?
    */
   gcc_const
-  static inline bool ScaleEnabled() {
+  static inline bool
+  ScaleEnabled()
+  {
     return ScaleSupported() && (dscale > 1);
   }
 
   gcc_const
-  static inline int Scale(int x) {
+  static inline int
+  Scale(int x)
+  {
     if (!ScaleSupported())
       return x;
 
@@ -85,17 +92,23 @@ namespace Layout {
   }
 
   gcc_const
-  static inline unsigned Scale(unsigned x) {
+  static inline unsigned
+  Scale(unsigned x)
+  {
     return Scale((int)x);
   }
 
   gcc_const
-  static inline long Scale(long x) {
+  static inline long
+  Scale(long x)
+  {
     return Scale((int)x);
   }
 
   gcc_const
-  static inline double Scale(double x) {
+  static inline double
+  Scale(double x)
+  {
     if (!ScaleSupported())
       return x;
 
@@ -103,7 +116,9 @@ namespace Layout {
   }
 
   gcc_const
-  static inline int FastScale(int x) {
+  static inline int
+  FastScale(int x)
+  {
     if (!ScaleSupported())
       return x;
 
