@@ -218,7 +218,8 @@ void
 GlideComputerAirData::SetWindEstimate(const double wind_speed,
     const double wind_bearing, const int quality)
 {
-  Vector v_wind = Vector(SpeedVector(fixed(wind_bearing), fixed(wind_speed)));
+  Vector v_wind = Vector(SpeedVector(Angle::degrees(fixed(wind_bearing)), 
+                                     fixed(wind_speed)));
 
   windanalyser.slot_newEstimate(Basic(), SetCalculated(), v_wind, quality);
 }
@@ -529,10 +530,12 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
   unsigned i=0;
 
   AIRCRAFT_STATE state = ToAircraftState(Basic());
-  for (state.TrackBearing = fixed_zero;
-       state.TrackBearing<= fixed_360;
-       state.TrackBearing+= d_bearing, i++) {
-    
+  for (fixed ang = fixed_zero;
+       ang<= fixed_360;
+       ang+= d_bearing, i++) {
+
+    state.TrackBearing = Angle::degrees(ang);
+
     TerrainIntersection its = g_terrain.find_intersection(state, glide_polar);
     
     SetCalculated().GlideFootPrint[i] = its.location;

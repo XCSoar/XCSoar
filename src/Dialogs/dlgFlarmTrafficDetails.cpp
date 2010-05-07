@@ -96,9 +96,7 @@ void UpdateChanging() {
   ((WndProperty *)wf->FindByName(_T("prpAltitude")))->SetText(tmp);
 
   // Fill vertical direction field
-  dir = Angle((fixed)atan2(target->RelativeAltitude, distance));
-  dir *=  fixed_180 / M_PI;
-  dir = dir.AngleLimit180();
+  dir = Angle::radians((fixed)atan2(target->RelativeAltitude, distance)).AngleLimit180();
   if (dir.magnitude() > 1)
     _stprintf(tmp, _T("%+2.0f")_T(DEG), (double)dir.value_degrees());
   else

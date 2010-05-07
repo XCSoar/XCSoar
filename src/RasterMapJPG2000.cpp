@@ -113,15 +113,15 @@ void RasterMapJPG2000::_ReloadJPG2000(void) {
 
     raster_tile_cache.LoadJPG2000(jp2_filename);
     if (raster_tile_cache.GetInitialised()) {
-      TerrainInfo.Left = Angle((fixed)raster_tile_cache.lon_min);
-      TerrainInfo.Right = Angle((fixed)raster_tile_cache.lon_max);
-      TerrainInfo.Top = Angle((fixed)raster_tile_cache.lat_max);
-      TerrainInfo.Bottom = Angle((fixed)raster_tile_cache.lat_min);
+      TerrainInfo.Left = Angle::degrees((fixed)raster_tile_cache.lon_min);
+      TerrainInfo.Right = Angle::degrees((fixed)raster_tile_cache.lon_max);
+      TerrainInfo.Top = Angle::degrees((fixed)raster_tile_cache.lat_max);
+      TerrainInfo.Bottom = Angle::degrees((fixed)raster_tile_cache.lat_min);
       TerrainInfo.Columns = raster_tile_cache.GetWidth();
       TerrainInfo.Rows = raster_tile_cache.GetHeight();
-      TerrainInfo.StepSize = Angle((fixed)(raster_tile_cache.lon_max -
-                                           raster_tile_cache.lon_min)
-                                   /raster_tile_cache.GetWidth());
+      TerrainInfo.StepSize = Angle::degrees((fixed)(raster_tile_cache.lon_max -
+                                                    raster_tile_cache.lon_min)
+                                            /raster_tile_cache.GetWidth());
     }
   }
 }

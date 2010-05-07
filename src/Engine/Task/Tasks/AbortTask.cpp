@@ -349,7 +349,7 @@ AbortTask::get_vector_home(const AIRCRAFT_STATE &state) const
   if (home_waypoint) {
     return GeoVector(state.Location, home_waypoint->Location);
   } else {
-    GeoVector null_vector(fixed_zero, fixed_zero);
+    GeoVector null_vector(fixed_zero);
     return null_vector;
   }
 }

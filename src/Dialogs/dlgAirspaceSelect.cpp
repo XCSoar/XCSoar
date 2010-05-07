@@ -129,7 +129,8 @@ static void UpdateList(void)
       a = iround(XCSoarInterface::Basic().Heading.value_degrees());
       lastHeading = a;
     }
-    airspace_sorter->filter_direction(AirspaceSelectInfo, fixed(a));
+    airspace_sorter->filter_direction(AirspaceSelectInfo, 
+                                      Angle::degrees(fixed(a)));
   }
   if (sort_distance) {
     airspace_sorter->sort_distance(AirspaceSelectInfo);

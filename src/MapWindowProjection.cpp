@@ -53,7 +53,7 @@ MapWindowProjection::MapWindowProjection():
   _origin_centered(false),
   _RequestedMapScale(fixed(5)),
   MapScale(fixed(5)),
-  DisplayAircraftAngle (fixed_zero),
+  DisplayAircraftAngle(),
   ScaleListCount (0),
   smart_range_active(fixed_one),
   DisplayMode(dmCruise)
@@ -117,7 +117,7 @@ MapWindowProjection::CalculateOrientationNormal
       DisplayAngle = DerivedDrawInfo.task_stats.current_leg.solution_remaining.Vector.Bearing;
       DisplayAircraftAngle = trackbearing - DisplayAngle.GetAngle();
     } else {
-      DisplayAngle = fixed_zero;
+      DisplayAngle = Angle();
       DisplayAircraftAngle = trackbearing;
     }
   } else {
@@ -164,8 +164,8 @@ MapWindowProjection::CalculateOrientationTargetPan
     DisplayAircraftAngle = DrawInfo.TrackBearing;
   }
 #else
-  DisplayAngle.SetAngle(fixed_zero);
-    DisplayAircraftAngle = DrawInfo.TrackBearing;
+  DisplayAngle.SetAngle(Angle());
+  DisplayAircraftAngle = DrawInfo.TrackBearing;
 #endif
 }
 

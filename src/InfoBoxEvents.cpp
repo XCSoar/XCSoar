@@ -281,7 +281,7 @@ void	ActionInterface::on_key_WindSpeed(int UpDown)
 void
 ActionInterface::on_key_Direction(int UpDown)
 {
-  static const Angle a5 = Angle(fixed(5));
+  static const Angle a5 = Angle::degrees(fixed(5));
 
   if (is_simulator()) {
     if(UpDown==1) {

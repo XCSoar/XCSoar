@@ -76,9 +76,10 @@ RasterMap::GetEffectivePixelSize(double *pixel_D,
                                  const GEOPOINT &location) const
 {
   fixed terrain_step_x, terrain_step_y;
-  fixed step_size(TerrainInfo.StepSize.value_degrees() * sqrt(2.0));
+  Angle step_size = 
+    Angle::degrees(TerrainInfo.StepSize.value_degrees() * sqrt(2.0));
 
-  if ((*pixel_D<=0) || (step_size==0)) {
+  if ((*pixel_D<=0) || (step_size.sign()==0)) {
     *pixel_D = 1.0;
     return 1;
   }

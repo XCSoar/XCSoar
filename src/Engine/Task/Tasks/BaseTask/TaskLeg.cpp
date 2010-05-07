@@ -42,9 +42,9 @@
 
 
 TaskLeg::TaskLeg(OrderedTaskPoint &_destination):
-    vector_travelled(fixed_zero, fixed_zero),
-    vector_remaining(fixed_zero, fixed_zero),
-    vector_planned(fixed_zero, fixed_zero),
+    vector_travelled(fixed_zero),
+    vector_remaining(fixed_zero),
+    vector_planned(fixed_zero),
     destination(_destination)
 {
 

@@ -310,7 +310,7 @@ void GaugeVario::MakePolygon(const int i) {
   POINT *bit = getPolygon(i);
   POINT *bline = &lines[i+gmax];
 
-  const FastRotation r = FastRotation(fixed(i));
+  const FastRotation r = FastRotation(Angle::degrees(fixed(i)));
   FastRotation::Pair p;
 
   p = r.Rotate(-xoffset + nlength0, nwidth);

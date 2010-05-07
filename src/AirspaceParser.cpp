@@ -135,8 +135,8 @@ struct TempAirspaceType {
   void reset() {
     Type = OTHER;
     points.erase(points.begin(), points.end());
-    Center.Longitude = fixed_zero;
-    Center.Latitude = fixed_zero;
+    Center.Longitude = Angle();
+    Center.Latitude = Angle();
     Rotation = 1;
     Radius = 0;
     Waiting = true;
@@ -481,7 +481,7 @@ static bool ReadCoords(TCHAR *Text, GEOPOINT &point)
     }
   }
 
-  point.Latitude = Angle(fixed(Ysec/3600 + Ymin/60 + Ydeg));
+  point.Latitude = Angle::degrees(fixed(Ysec/3600 + Ymin/60 + Ydeg));
 
   if (*Stop == ' ')
     Stop++;
@@ -503,7 +503,7 @@ static bool ReadCoords(TCHAR *Text, GEOPOINT &point)
     Xsec = (double)_tcstod(Stop, &Stop);
   }
 
-  point.Longitude = Angle(fixed(Xsec/3600 + Xmin/60 + Xdeg));
+  point.Longitude = Angle::degrees(fixed(Xsec/3600 + Xmin/60 + Xdeg));
 
   if (*Stop == ' ')
     Stop++;
@@ -657,11 +657,11 @@ CalculateSector(TCHAR *Text)
   static const fixed fixed_5 = fixed(5);
 
   Radius = Units::ToSysUnit(_tcstod(&Text[2], &Stop), unNauticalMiles);
-  StartBearing = Angle(fixed(_tcstod(&Stop[1], &Stop)));
-  EndBearing = Angle(fixed(_tcstod(&Stop[1], &Stop)));
+  StartBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop)));
+  EndBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop)));
 
   if (EndBearing<StartBearing) {
-    EndBearing += Angle(fixed_360);
+    EndBearing += Angle::degrees(fixed_360);
   }
 
   while((EndBearing-StartBearing).magnitude() > fixed_75) {
@@ -669,7 +669,7 @@ CalculateSector(TCHAR *Text)
     FindLatitudeLongitude(temp_area.Center, StartBearing, Radius,
                           &TempPoint);
     temp_area.points.push_back(TempPoint);
-    StartBearing += Angle(temp_area.Rotation * fixed_5);
+    StartBearing += Angle::degrees(temp_area.Rotation * fixed_5);
   }
   FindLatitudeLongitude(temp_area.Center, EndBearing, Radius,
                         &TempPoint);
@@ -704,7 +704,7 @@ CalculateArc(TCHAR *Text)
   temp_area.points.push_back(TempPoint);
 
   while((EndBearing-StartBearing).magnitude() > fixed_75) {
-    StartBearing += Angle(temp_area.Rotation *fixed_5);
+    StartBearing += Angle::degrees(temp_area.Rotation *fixed_5);
     StartBearing = StartBearing.AngleLimit360();
     FindLatitudeLongitude(temp_area.Center, StartBearing, Radius,
                           &TempPoint);

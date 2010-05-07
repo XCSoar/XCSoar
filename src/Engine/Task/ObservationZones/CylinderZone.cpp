@@ -49,7 +49,7 @@ CylinderZone::score_adjustment() const
 GEOPOINT 
 CylinderZone::get_boundary_parametric(fixed t) const
 { 
-  return GeoVector(Radius, t*fixed_360).end_point(get_location());
+  return GeoVector(Radius, Angle::radians(t*fixed_two_pi)).end_point(get_location());
 }
 
 bool
@@ -68,7 +68,7 @@ CylinderZone::randomPointInSector(const fixed mag) const
 {
   AIRCRAFT_STATE ac;  
   do {
-    fixed dir(rand() % 360);
+    Angle dir = Angle::degrees(fixed(rand() % 360));
     fixed dmag = max(min(Radius, fixed(100.0)), Radius*mag);
     fixed dis = (0.1+(rand()%90)/100.0)*dmag;
     GeoVector vec(dis,dir);

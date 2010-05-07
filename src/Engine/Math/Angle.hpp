@@ -44,10 +44,20 @@ Copyright_License {
 #endif
 
 class Angle {
-public:
+private:
   Angle(const fixed& init_value): m_value(init_value) {};
+
+public:
+  Angle():m_value(fixed_zero) {};
+
+  static Angle degrees(const fixed& value) {
+    return Angle(value);
+  };
+  static Angle radians(const fixed& value) {
+    return Angle(value*fixed_rad_to_deg);
+  };
+
   Angle(const Angle& angle): m_value(angle.m_value) {};
-  Angle(): m_value(fixed_zero) {};
 
   fixed sin() const;
   fixed cos() const;

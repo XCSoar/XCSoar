@@ -134,7 +134,7 @@ LeonardoParseC(const TCHAR *line, NMEA_INFO &info, bool enable_baro)
   info.ExternalWindAvailable = ParseNumber(line, 10, info.wind.norm)
     && ParseNumber(line, 11, windb);
   if (info.ExternalWindAvailable) {
-    info.wind.bearing = Angle(windb);
+    info.wind.bearing = Angle::degrees(windb);
     info.wind.norm = Units::ToSysUnit(info.wind.norm, unKiloMeterPerHour);
   }
 

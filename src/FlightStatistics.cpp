@@ -552,7 +552,6 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
 
   // draw direction vectors
 
-  fixed angle;
   double hfact;
   for (i = 0; i < numsteps; i++) {
     hfact = (i + 1) / (double)(numsteps + 1);
@@ -568,7 +567,7 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
     if (mag <= 0.0)
       continue;
 
-    angle = atan2(wind.x, -wind.y) * RAD_TO_DEG;
+    Angle angle = Angle::radians(atan2(wind.x, -wind.y));
 
     chart.DrawArrow((chart.getXmin() + chart.getXmax()) / 2, h,
         mag * WINDVECTORMAG, angle, Chart::STYLE_MEDIUMBLACK);

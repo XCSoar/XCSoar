@@ -61,7 +61,7 @@ struct SpeedVector {
    * 
    * @return Initialised object
    */
-  SpeedVector():bearing(fixed_zero), norm(fixed_zero) {}
+  SpeedVector():bearing(), norm(fixed_zero) {}
 
   /** 
    * Constructor given bearing and magnitude

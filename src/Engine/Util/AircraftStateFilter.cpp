@@ -108,7 +108,7 @@ AircraftStateFilter::get_speed() const
 Angle 
 AircraftStateFilter::get_bearing() const
 {
-  return Angle(fixed_rad_to_deg*atan2(m_vx,m_vy)).AngleLimit360();
+  return Angle::radians(atan2(m_vx,m_vy)).AngleLimit360();
 }
 
 fixed 

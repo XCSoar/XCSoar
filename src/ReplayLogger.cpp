@@ -89,8 +89,8 @@ public:
       p[i].t = p[i + 1].t;
     }
 
-    p[3].loc.Latitude = Angle(fixed(lat));
-    p[3].loc.Longitude = Angle(fixed(lon));
+    p[3].loc.Latitude = Angle::degrees(fixed(lat));
+    p[3].loc.Longitude = Angle::degrees(fixed(lon));
     p[3].alt = alt;
     p[3].t = t;
   }

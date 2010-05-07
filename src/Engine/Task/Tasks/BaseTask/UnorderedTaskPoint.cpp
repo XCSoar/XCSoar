@@ -48,13 +48,13 @@ UnorderedTaskPoint::get_vector_remaining(const AIRCRAFT_STATE &ref) const
 const GeoVector 
 UnorderedTaskPoint::get_vector_planned() const
 {
-  return GeoVector(fixed_zero, fixed_zero);
+  return GeoVector(fixed_zero);
 }
 
 const GeoVector 
 UnorderedTaskPoint::get_vector_travelled(const AIRCRAFT_STATE &ref) const
 {
-  return GeoVector(fixed_zero, fixed_zero);
+  return GeoVector(fixed_zero);
 }
 
 const AIRCRAFT_STATE& 

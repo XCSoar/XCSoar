@@ -190,7 +190,7 @@ static void UpdateList(void)
       a = iround(XCSoarInterface::Basic().Heading.value_degrees());
       lastHeading = a;
     }
-    waypoint_sorter->filter_direction(WayPointSelectInfo, fixed(a));
+    waypoint_sorter->filter_direction(WayPointSelectInfo, Angle::degrees(fixed(a)));
   }
 
   if (sort_distance) {

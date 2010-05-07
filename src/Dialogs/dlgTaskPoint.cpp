@@ -212,7 +212,7 @@ public:
       if (wv) {
         double val = wv->GetDataField()->GetAsFloat();
         if (val != oz.getStartRadial().value_degrees()) {
-          oz.setStartRadial(Angle((fixed)val));
+          oz.setStartRadial(Angle::degrees((fixed)val));
           task_modified = true;
         }
       }
@@ -221,7 +221,7 @@ public:
       if (wv) {
         double val = wv->GetDataField()->GetAsFloat();
         if (val != oz.getEndRadial().value_degrees()) {
-          oz.setEndRadial(Angle((fixed)val));
+          oz.setEndRadial(Angle::degrees((fixed)val));
           task_modified = true;
         }
       }

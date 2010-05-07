@@ -93,8 +93,8 @@ GEOPOINT
 TaskProjection::funproject(const FlatPoint& fp) const
 {
   GEOPOINT tp;
-  tp.Longitude = Angle(fp.x/cos_midloc)+location_mid.Longitude;
-  tp.Latitude = Angle(fp.y/fixed_scale)+location_mid.Latitude;
+  tp.Longitude = Angle::degrees(fp.x/cos_midloc)+location_mid.Longitude;
+  tp.Latitude = Angle::degrees(fp.y/fixed_scale)+location_mid.Latitude;
   return tp;
 }
 
@@ -113,8 +113,8 @@ GEOPOINT
 TaskProjection::unproject(const FLAT_GEOPOINT& fp) const
 {
   GEOPOINT tp;
-  tp.Longitude = Angle(fp.Longitude/cos_midloc)+location_mid.Longitude;
-  tp.Latitude = Angle(fp.Latitude/fixed_scale)+location_mid.Latitude;
+  tp.Longitude = Angle::degrees(fp.Longitude/cos_midloc)+location_mid.Longitude;
+  tp.Latitude = Angle::degrees(fp.Latitude/fixed_scale)+location_mid.Latitude;
   return tp;
 }
 
@@ -123,7 +123,7 @@ fixed
 TaskProjection::fproject_range(const GEOPOINT &tp, const fixed range) const
 {
   GEOPOINT fr;
-  ::FindLatitudeLongitude(tp,fixed_zero,range,&fr);
+  ::FindLatitudeLongitude(tp,Angle(),range,&fr);
   FlatPoint f = fproject(fr);
   FlatPoint p = fproject(tp);
   return fabs(f.y-p.y);

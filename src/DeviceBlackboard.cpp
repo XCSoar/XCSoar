@@ -499,7 +499,7 @@ DeviceBlackboard::Heading()
       // don't take wind into account when on ground
       SetBasic().Heading = Basic().TrackBearing;
     } else {
-      SetBasic().Heading = Angle(atan2(x0, y0) * RAD_TO_DEG).AngleLimit360();
+      SetBasic().Heading = Angle::radians(atan2(x0, y0)).AngleLimit360();
     }
 
     // calculate estimated true airspeed
@@ -579,8 +579,8 @@ DeviceBlackboard::TurnRate()
     static const fixed dtlead(0.3);
 
     const Angle calc_bearing = Basic().TrackBearing 
-      + Angle(dtlead
-              * (Basic().TurnRate + fixed_half * dtlead * dRate));
+      + Angle::degrees(dtlead
+                       * (Basic().TurnRate + fixed_half * dtlead * dRate));
 
     // b_new = b_old + Rate * t + 0.5 * dRate * t * t
 

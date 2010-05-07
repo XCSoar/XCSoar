@@ -631,9 +631,10 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
         assert(myhbuf < hBufTop);
 
         gp.Latitude = PanLatitude 
-          - Angle(fixed((ycost + x * sint) * InvDrawScale));
-        gp.Longitude = PanLongitude + Angle((x * cost - ysint)
-                                            * gp.Latitude.invfastcosine() * InvDrawScale);
+          - Angle::degrees(fixed((ycost + x * sint) * InvDrawScale));
+        gp.Longitude = PanLongitude + Angle::degrees((x * cost - ysint)
+          * gp.Latitude.invfastcosine() * InvDrawScale);
+
         *myhbuf = max((short)0, DisplayMap->GetField(gp, *rounding));
       } else {
         *myhbuf = 0;
@@ -868,7 +869,8 @@ TerrainRenderer::Draw(Canvas &canvas,
     return false;
 
   // step 1: calculate sunlight vector
-  Angle fudgeelevation (fixed(10.0 + 80.0 * TerrainBrightness / 255.0));
+  Angle fudgeelevation = 
+    Angle::degrees(fixed(10.0 + 80.0 * TerrainBrightness / 255.0));
 
   int sx = (int)(255 * fudgeelevation.fastcosine() * sunazimuth.fastsine());
   int sy = (int)(255 * fudgeelevation.fastcosine() * sunazimuth.fastcosine());

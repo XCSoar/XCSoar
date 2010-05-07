@@ -59,7 +59,8 @@ public:
    */
   FAISectorZone(const GEOPOINT loc, const bool is_turnpoint=true):
     m_is_turnpoint(is_turnpoint),
-    SymmetricSectorZone(loc, fixed(1000.0*(is_turnpoint? 10:1)), fixed_90)
+    SymmetricSectorZone(loc, fixed(1000.0*(is_turnpoint? 10:1)), 
+                        Angle::radians(fixed_half_pi))
     {}
 
   ObservationZonePoint* clone(const GEOPOINT * _location=0) const {

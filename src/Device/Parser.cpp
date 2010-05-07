@@ -520,8 +520,8 @@ NMEAParser::GLL(const TCHAR *String, const TCHAR **params, size_t nparams,
   tmplon = EastOrWest(tmplon, params[3][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Location.Latitude = Angle((fixed)tmplat);
-    GPS_INFO->Location.Longitude = Angle((fixed)tmplon);
+    GPS_INFO->Location.Latitude = Angle::degrees((fixed)tmplat);
+    GPS_INFO->Location.Longitude = Angle::degrees((fixed)tmplon);
   }
   else {
     GPS_INFO->gps.NAVWarning = true;
@@ -668,8 +668,8 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   tmplon = EastOrWest(tmplon, params[5][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Location.Latitude = Angle(fixed(tmplat));
-    GPS_INFO->Location.Longitude = Angle(fixed(tmplon));
+    GPS_INFO->Location.Latitude = Angle::degrees(fixed(tmplat));
+    GPS_INFO->Location.Longitude = Angle::degrees(fixed(tmplon));
   }
   else {
     GPS_INFO->gps.NAVWarning = true;
@@ -679,7 +679,7 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   if (GPS_INFO->GroundSpeed > fixed_one) {
     // JMW don't update bearing unless we're moving
-    GPS_INFO->TrackBearing = Angle(fixed(_tcstod(params[7], NULL))).AngleLimit360();
+    GPS_INFO->TrackBearing = Angle::degrees(fixed(_tcstod(params[7], NULL))).AngleLimit360();
   }
 
   if (!gps.Replay) {
@@ -787,8 +787,8 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
   tmplon = EastOrWest(tmplon, params[4][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Location.Latitude = Angle(fixed(tmplat));
-    GPS_INFO->Location.Longitude = Angle(fixed(tmplon));
+    GPS_INFO->Location.Latitude = Angle::degrees(fixed(tmplat));
+    GPS_INFO->Location.Longitude = Angle::degrees(fixed(tmplon));
   }
   else {
     GPS_INFO->gps.NAVWarning = true;
@@ -1048,8 +1048,8 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   // calculate relative east and north projection to lat/lon
 
-  fixed delta_lat(0.01);
-  fixed delta_lon(0.01);
+  Angle delta_lat = Angle::degrees(fixed(0.01));
+  Angle delta_lon = Angle::degrees(fixed(0.01));
 
   GEOPOINT plat = GPS_INFO->Location;
   plat.Latitude += delta_lat;
@@ -1063,8 +1063,8 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
   fixed FLARM_EastingToLongitude(0);
 
   if ((fabs(dlat) > 0.0) && (fabs(dlon) > 0.0)) {
-    FLARM_NorthingToLatitude = delta_lat / dlat;
-    FLARM_EastingToLongitude = delta_lon / dlon;
+    FLARM_NorthingToLatitude = delta_lat.value_degrees() / dlat;
+    FLARM_EastingToLongitude = delta_lon.value_degrees() / dlon;
   }
 
   // 5 id, 6 digit hex
@@ -1100,11 +1100,11 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
            &flarm_slot->Type); // unsigned short     10
 
   // 1 relativenorth, meters
-  flarm_slot->Location.Latitude = Angle(flarm_slot->RelativeNorth
+  flarm_slot->Location.Latitude = Angle::degrees(flarm_slot->RelativeNorth
                                         * FLARM_NorthingToLatitude) + GPS_INFO->Location.Latitude;
 
   // 2 relativeeast, meters
-  flarm_slot->Location.Longitude = Angle(flarm_slot->RelativeEast
+  flarm_slot->Location.Longitude = Angle::degrees(flarm_slot->RelativeEast
                                          * FLARM_EastingToLongitude) + GPS_INFO->Location.Longitude;
 
   // alt
@@ -1135,7 +1135,7 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
     return;
 
   static Angle angle;
-  angle = Angle(fixed((i * 360) / 255));
+  angle = Angle::degrees(fixed((i * 360) / 255));
 
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
@@ -1153,7 +1153,7 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   static unsigned n2;
   static unsigned e2;
   static unsigned t2;
-  Angle dangle = (angle + Angle(fixed(120))).AngleLimit360();
+  Angle dangle = (angle + Angle::degrees(fixed(120))).AngleLimit360();
   Angle hangle = dangle; hangle.flip();
 
   h2 = (angle.ifastcosine()) / 10;

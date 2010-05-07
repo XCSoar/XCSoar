@@ -40,9 +40,9 @@
 #include "Navigation/Aircraft.hpp"
 
 GlideResult::GlideResult():
-    Vector(fixed_zero,fixed_zero),
+    Vector(fixed_zero),
     DistanceToFinal(fixed_zero),
-    CruiseTrackBearing(fixed_zero),
+    CruiseTrackBearing(),
     VOpt(fixed_zero),
     HeightClimb(fixed_zero),
     HeightGlide(fixed_zero),
@@ -50,7 +50,7 @@ GlideResult::GlideResult():
     TimeVirtual(fixed_zero),
     AltitudeDifference(fixed_zero),
     EffectiveWindSpeed(fixed_zero),
-    EffectiveWindAngle(fixed_zero),
+    EffectiveWindAngle(),
     Solution(RESULT_NOSOLUTION)
 {
   // default is null result
@@ -94,8 +94,8 @@ GlideResult::calc_cruise_bearing()
 
   // Wn/sin(alpha) = V/sin(theta)
   // (Wn/V)*sin(theta) = sin(alpha)
-  CruiseTrackBearing -= fixed_half * fixed_rad_to_deg *
-      asin(sintheta * EffectiveWindSpeed / VOpt);
+  CruiseTrackBearing -= Angle::radians(fixed_half*
+                                       asin(sintheta * EffectiveWindSpeed / VOpt));
 }
 
 void

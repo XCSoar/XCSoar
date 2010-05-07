@@ -53,7 +53,7 @@ void SymmetricSectorZone::set_legs(const TaskPoint *previous,
     biSector = next->bearing(current->get_location());
   } else {
     // single point
-    biSector = Angle(fixed_zero);
+    biSector = Angle();
   }
 
   setStartRadial((biSector-SectorAngle*fixed_half).AngleLimit360());

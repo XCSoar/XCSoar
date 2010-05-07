@@ -65,7 +65,7 @@ struct GeoVector {
    */
   GeoVector(const fixed distance):
     Distance(distance),
-    Bearing(fixed_zero)
+    Bearing()
   {
   }
 

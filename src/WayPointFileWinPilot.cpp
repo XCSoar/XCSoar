@@ -139,7 +139,7 @@ WayPointFileWinPilot::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
     val *= -1;
 
   // Save angle
-  dest = Angle((fixed)val);
+  dest = Angle::degrees((fixed)val);
   return true;
 }
 

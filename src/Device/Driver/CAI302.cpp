@@ -559,7 +559,7 @@ cai_w(const TCHAR *String, NMEA_INFO *GPS_INFO,
   GPS_INFO->ExternalWindAvailable = true;
   GPS_INFO->wind.norm = _tcstod(ctemp, NULL) / 10.0;
   NMEAParser::ExtractParameter(String,ctemp,0);
-  GPS_INFO->wind.bearing = Angle(fixed(_tcstod(ctemp, NULL)));
+  GPS_INFO->wind.bearing = Angle::degrees(fixed(_tcstod(ctemp, NULL)));
 
 
   NMEAParser::ExtractParameter(String,ctemp,4);

@@ -216,8 +216,8 @@ RenderTaskPoint::draw_task_line(const GEOPOINT& start, const GEOPOINT& end)
   POINT p_end;
   m_proj.LonLat2Screen(end, p_end);
   
-  const Angle ang = Angle(atan2(fixed(p_end.x - p_start.x),
-                                fixed(p_start.y - p_end.y)) * fixed_rad_to_deg).AngleLimit360();
+  const Angle ang = Angle::radians(atan2(fixed(p_end.x - p_start.x),
+                                         fixed(p_start.y - p_end.y))).AngleLimit360();
 
   ScreenClosestPoint(p_start, p_end, m_proj.GetOrigScreen(), &p_p, IBLSCALE(25));
   PolygonRotateShift(Arrow, 2, p_p.x, p_p.y, ang);

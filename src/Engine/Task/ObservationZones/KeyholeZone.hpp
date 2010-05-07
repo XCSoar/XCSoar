@@ -57,7 +57,7 @@ public:
    * @return Initialised object
    */
   KeyholeZone(const GEOPOINT loc):
-    SymmetricSectorZone(loc, fixed(10000.0), fixed_90)
+    SymmetricSectorZone(loc, fixed(10000.0), Angle::radians(fixed_half_pi))
     {}
 
   ObservationZonePoint* clone(const GEOPOINT * _location=0) const {

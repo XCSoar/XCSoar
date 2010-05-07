@@ -91,8 +91,8 @@ IntermediatePoint(GEOPOINT loc1, GEOPOINT loc2, fixed dthis, fixed dtotal)
   const fixed z = A * sinLoc1Latitude + B * sinLoc2Latitude;
 
   GEOPOINT loc3;
-  loc3.Latitude = atan2(z, hypot(x, y)) * fixed_rad_to_deg;
-  loc3.Longitude = atan2(y, x) * fixed_rad_to_deg;
+  loc3.Latitude = Angle::radians(atan2(z, hypot(x, y)));
+  loc3.Longitude = Angle::radians(atan2(y, x));
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;
@@ -161,8 +161,8 @@ DistanceBearingS(GEOPOINT loc1, GEOPOINT loc2, fixed *Distance, Angle *Bearing)
     const fixed x = cloc1Latitude * sloc2Latitude
         - sloc1Latitude * cloc2Latitude * cosdlon;
 
-    *Bearing = (x == fixed_zero && y == fixed_zero) ? fixed_zero
-      : Angle(atan2(y, x) * fixed_rad_to_deg).AngleLimit360();
+    *Bearing = (x == fixed_zero && y == fixed_zero) ? Angle()
+      : Angle::radians(atan2(y, x)).AngleLimit360();
   }
 
 #ifdef INSTRUMENT_TASK
@@ -331,8 +331,8 @@ FindLatitudeLongitude(GEOPOINT loc, Angle Bearing, fixed Distance, GEOPOINT *loc
 
   assert(loc_out != NULL); // pointless calling this otherwise
 
-  loc_out->Latitude = (fixed)asin(sinLatitude * cosDistance + cosLatitude
-      * sinDistance * cosBearing) * fixed_rad_to_deg;
+  loc_out->Latitude = Angle::radians((fixed)asin(sinLatitude * cosDistance + cosLatitude
+                                          * sinDistance * cosBearing));
 
   fixed result;
 
@@ -345,7 +345,7 @@ FindLatitudeLongitude(GEOPOINT loc, Angle Bearing, fixed Distance, GEOPOINT *loc
     result = fmod((result + fixed_pi), fixed_two_pi) - fixed_pi;
   }
 
-  loc_out->Longitude = result*fixed_rad_to_deg;
+  loc_out->Longitude = Angle::radians(result);
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;

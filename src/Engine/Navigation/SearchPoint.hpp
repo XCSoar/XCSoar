@@ -57,7 +57,7 @@ public:
    * 
    * @return Null object
    */
-  SearchPoint():ReferencePoint(GEOPOINT(fixed_zero,fixed_zero)) {}
+  SearchPoint():ReferencePoint(GEOPOINT()) {}
 
 /** 
  * Constructor

@@ -190,7 +190,8 @@ Serialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
   } else if (_tcscmp(type.c_str(), _T("Sector")) == 0) {
     SectorZone *ls = new SectorZone(wp.Location);
 
-    fixed radius, start, end;
+    fixed radius;
+    Angle start, end;
     if (m_node.get_attribute(_T("radius"), radius)) {
       ls->setRadius(radius);
     }

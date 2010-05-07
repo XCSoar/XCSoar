@@ -366,7 +366,7 @@ Waypoints::replace(const Waypoint& orig, Waypoint& replacement)
 Waypoint
 Waypoints::create_from_file(const int filenum)
 {
-  Waypoint new_waypoint = create(GEOPOINT(fixed_zero, fixed_zero));
+  Waypoint new_waypoint = create(GEOPOINT());
   new_waypoint.FileNum = filenum;
   new_waypoint.Flags.setDefaultFlags(true);
   return new_waypoint;

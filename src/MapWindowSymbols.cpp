@@ -406,8 +406,8 @@ MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
                                  Basic().acceleration.PitchAngle
                                  * fixed_div)));
   fixed sphi = 180 - phi;
-  fixed alpha1 = sphi - alpha;
-  fixed alpha2 = sphi + alpha;
+  Angle alpha1 = Angle::degrees(sphi - alpha);
+  Angle alpha2 = Angle::degrees(sphi + alpha);
 
   canvas.select(hpHorizonSky);
   canvas.select(hbHorizonSky);

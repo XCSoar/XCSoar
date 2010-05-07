@@ -60,7 +60,7 @@ public:
  */
   SymmetricSectorZone(const GEOPOINT &loc,
                       const fixed radius=fixed(10000.0),
-                      const Angle angle=fixed_90):
+                      const Angle angle=Angle::radians(fixed_half_pi)):
     SectorZone(loc,radius),
     SectorAngle(angle) {}
 

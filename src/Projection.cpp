@@ -39,7 +39,7 @@ Copyright_License {
 #include "Math/Angle.hpp"
 
 Projection::Projection():
-  DisplayAngle (fixed_zero),
+  DisplayAngle (),
   m_scale_meters_to_screen (fixed_zero)
 {
   PanLocation.Latitude = Angle();
@@ -59,9 +59,9 @@ Projection::Screen2LonLat(const int &x,
 {
   const FastIntegerRotation::Pair p =
     DisplayAngle.Rotate(x - Orig_Screen.x, y - Orig_Screen.y);
-  g.Latitude = PanLocation.Latitude - Angle(p.second * InvDrawScale);
-  g.Longitude = PanLocation.Longitude + Angle(p.first * g.Latitude.invfastcosine()
-                                              * InvDrawScale);
+  g.Latitude = PanLocation.Latitude - Angle::degrees(p.second * InvDrawScale);
+  g.Longitude = PanLocation.Longitude + 
+    Angle::degrees(p.first * g.Latitude.invfastcosine()* InvDrawScale);
 }
 
 /**
@@ -96,7 +96,7 @@ void
 Projection::LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
                           unsigned n, unsigned skip) const
 {
-  static Angle lastangle(fixed(-1));
+  static Angle lastangle(Angle::degrees(fixed(-1)));
   static int cost=1024, sint=0;
 
   if (GetDisplayAngle() != lastangle) {
@@ -137,7 +137,7 @@ Projection::LonLat2Screen(const pointObj* const ptin,
                           const int n,
                           const int skip) const
 {
-  static Angle lastangle(fixed(-1));
+  static Angle lastangle(Angle::degrees(fixed(-1)));
   static int cost=1024, sint=0;
 
   if (GetDisplayAngle() != lastangle) {
@@ -153,9 +153,9 @@ Projection::LonLat2Screen(const pointObj* const ptin,
   const pointObj* ptend = ptin+n;
 
   while (p<ptend) {
-    int Y = Real2Int((mPan.Latitude-fixed(p->y)).value_degrees()*mDrawScale);
-    int X = Real2Int((mPan.Longitude-fixed(p->x)).value_degrees()
-                     *fastcosine(fixed(p->y))*mDrawScale);
+    int Y = Real2Int((mPan.Latitude-Angle::degrees(fixed(p->y))).value_degrees()*mDrawScale);
+    int X = Real2Int((mPan.Longitude-Angle::degrees(fixed(p->x))).value_degrees()
+                     *Angle::degrees(fixed(p->y)).fastcosine()*mDrawScale);
 
     ptout->x = (xxs-X*cost + Y*sint)/1024;
     ptout->y = (Y*cost + X*sint + yys)/1024;

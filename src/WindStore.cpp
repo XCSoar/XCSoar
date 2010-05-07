@@ -152,7 +152,7 @@ WindStore::NewWind(const NMEA_INFO &info, DERIVED_INFO &derived,
     if (bearing < 0)
       bearing += fixed_360;
 
-    derived.estimated_wind = SpeedVector(bearing, mag);
+    derived.estimated_wind = SpeedVector(Angle::degrees(bearing), mag);
   } else {
     // TODO code: give warning, wind estimate bogus or very strong!
   }

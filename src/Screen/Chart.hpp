@@ -92,7 +92,7 @@ public:
   void DrawYLabel(const TCHAR *text);
   void DrawLabel(const TCHAR *text, const double xv, const double yv);
   void DrawArrow(const double x, const double y, const double mag,
-      const fixed angle, const int Style);
+      const Angle angle, const int Style);
   void DrawNoData();
 
   double getYmin() { return y_min; }

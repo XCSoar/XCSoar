@@ -92,7 +92,7 @@ DataNode::get_attribute(const tstring &name, Angle &value) const
   bool retval;
   fixed v = value.value_degrees();
   retval = get_attribute(name, v);
-  value = Angle(v);
+  value = Angle::degrees(v);
   return retval;
 }
 
