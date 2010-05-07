@@ -155,12 +155,11 @@ XCSoarInterface::PreloadInitialisation(bool ask)
     Profile::Use();
 
     CreateProgressDialog(gettext(TEXT("Initialising")));
-  }
 
-  if (ask) {
 #ifndef DEBUG_TRANSLATIONS
     ReadLanguageFile();
 #endif
+
     status_messages.LoadFile();
     InputEvents::readFile();
   }
