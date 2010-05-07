@@ -83,7 +83,7 @@ ConvertLineReader::read()
     return t;
   }
 
-  int length = MultiByteToWideChar(CP_UTF8, 0, narrow, narrow_length,
+  int length = MultiByteToWideChar(code_page, 0, narrow, narrow_length,
                                    t, narrow_length);
   if (length == 0)
     return NULL;
