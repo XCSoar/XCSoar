@@ -275,10 +275,10 @@ protected:
 
     /// @todo should be destination location
 
-    double sunsettime = sun.CalcSunTimes(cmp.Basic().Location,
-        cmp.Basic().DateTime, GetUTCOffset() / 3600);
-    double d1 = (res.TimeElapsed + DetectCurrentTime(&cmp.Basic())) / 3600;
-    double d0 = (DetectCurrentTime(&cmp.Basic())) / 3600;
+    fixed sunsettime(sun.CalcSunTimes(cmp.Basic().Location,
+                                      cmp.Basic().DateTime, GetUTCOffset() / 3600));
+    fixed d1((res.TimeElapsed + DetectCurrentTime(&cmp.Basic())) / 3600);
+    fixed d0(DetectCurrentTime(&cmp.Basic()) / 3600);
 
     bool past_sunset = (d1 > sunsettime) && (d0 < sunsettime);
     return past_sunset;
