@@ -86,7 +86,7 @@ dlgStartupShowModal(void)
   WndProperty* wp;
   LogStartUp(_T("Startup dialog"));
 
-  if (!Layout::landscape)
+  if (Layout::landscape)
     wf = dlgLoadFromXML(CallBackTable, _T("dlgStartup_L.xml"),
                         XCSoarInterface::main_window, _T("IDR_XML_STARTUP_L"));
   else
