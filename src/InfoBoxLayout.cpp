@@ -226,25 +226,17 @@ InfoBoxLayout::ScreenGeometry(RECT rc)
   // JMW testing only
   geometrychanged = true;
 
-  if (rc.bottom < rc.right) {
-    // landscape mode
+  if (Layout::landscape) {
     if (InfoBoxGeometry < 4) {
       geometrychanged = true;
-
-      // JMW testing
-      if (1) {
-        InfoBoxGeometry = 6;
-      } else {
-        InfoBoxGeometry += 3;
-      }
+      InfoBoxGeometry = 6;
     }
-  } else if (rc.bottom == rc.right) {
-    if (InfoBoxGeometry < 7) {
+  } else if (Layout::square) {
+    if (InfoBoxGeometry < 7)
       geometrychanged = true;
-    }
+
     InfoBoxGeometry = 7;
   } else {
-    // portrait mode
     gnav = false;
     if (InfoBoxGeometry >= 3) {
       InfoBoxGeometry = 0;
