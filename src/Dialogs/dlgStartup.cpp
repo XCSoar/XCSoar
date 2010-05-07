@@ -51,17 +51,17 @@ Copyright_License {
 
 static WndForm *wf=NULL;
 
-/* use a smaller icon for smaller screens because the "stretch" will not shrink
+/*
+ * use a smaller icon for smaller screens because the "stretch" will not shrink
  */
 static void
 OnSplashPaint(WindowControl *Sender, Canvas &canvas)
 {
   Bitmap splash_bitmap;
-  if (Layout::dscale > 1.5) {
+  if (Layout::dscale > 1.5)
     splash_bitmap.load(IDB_SWIFT);
-  } else {
+  else
     splash_bitmap.load(IDB_SWIFT2);
-  }
 
   BitmapCanvas bitmap_canvas(canvas, splash_bitmap);
   canvas.stretch(bitmap_canvas, 0, 0, Layout::Scale(110), Layout::Scale(82));
@@ -73,40 +73,41 @@ OnCloseClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrOK);
 }
 
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnSplashPaint),
   DeclareCallBackEntry(NULL)
 };
 
 extern TCHAR startProfileFile[];
 
-void dlgStartupShowModal(void){
+void
+dlgStartupShowModal(void)
+{
   WndProperty* wp;
   LogStartUp(_T("Startup dialog"));
 
-  if (!Layout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgStartup_L.xml"),
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_STARTUP_L"));
-  } else {
-    wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgStartup.xml"),
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_STARTUP"));
-  }
-  if (!wf) return;
+  if (!Layout::landscape)
+    wf = dlgLoadFromXML(CallBackTable, _T("dlgStartup_L.xml"),
+                        XCSoarInterface::main_window, _T("IDR_XML_STARTUP_L"));
+  else
+    wf = dlgLoadFromXML(CallBackTable, _T("dlgStartup.xml"),
+                        XCSoarInterface::main_window, _T("IDR_XML_STARTUP"));
+
+  if (!wf)
+    return;
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))
     ->SetOnClickNotify(OnCloseClicked);
 
   TCHAR temp[MAX_PATH];
 
-  _stprintf(temp,_T("XCSoar: Version %s"), XCSoar_VersionString);
+  _stprintf(temp, _T("XCSoar: Version %s"), XCSoar_VersionString);
   wf->SetCaption(temp);
 
-  static WndFrame *wDisclaimer1 = (WndFrame *)wf->FindByName(_T("frmDisclaimer1"));
-  wDisclaimer1->SetCaption(_T("Pilot assumes complete responsibility to operate the aircraft safely.  Maintain effective lookout."));
+  static WndFrame* wDisclaimer1 = (WndFrame*)wf->FindByName(_T("frmDisclaimer1"));
+  wDisclaimer1->SetCaption(_T("Pilot assumes complete responsibility to ")
+                           _T("operate the aircraft safely. Maintain ")
+                           _T("effective lookout."));
 
   wp = ((WndProperty *)wf->FindByName(_T("prpProfile")));
   if (wp) {
@@ -118,9 +119,8 @@ void dlgStartupShowModal(void){
       dfe->ScanDirectoryTop(_T("*.prf"));
     dfe->Lookup(startProfileFile);
     wp->RefreshDisplay();
-    if (dfe->GetNumFiles()<=2) {
+    if (dfe->GetNumFiles( )<= 2) {
       delete wf;
-      wf = NULL;
       return;
     }
   }
@@ -132,12 +132,8 @@ void dlgStartupShowModal(void){
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     if (!string_is_empty(dfe->GetPathFile()))
-      _tcscpy(startProfileFile,dfe->GetPathFile());
+      _tcscpy(startProfileFile, dfe->GetPathFile());
   }
 
   delete wf;
-
-  wf = NULL;
-
 }
-
