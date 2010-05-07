@@ -48,7 +48,12 @@ Copyright_License {
 using std::min;
 using std::max;
 
-#define fSnailColour(cv) max(0,min(NUMSNAILCOLORS-1, (int)((cv + fixed_one) * fixed_half * NUMSNAILCOLORS)))
+static int
+fSnailColour(fixed cv)
+{
+  return max((short)0, min((short)(NUMSNAILCOLORS - 1),
+                           (short)((cv + fixed_one) / 2 * NUMSNAILCOLORS)));
+}
 
 //#define TIME_TRAIL
 

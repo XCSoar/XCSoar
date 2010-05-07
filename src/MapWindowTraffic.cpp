@@ -47,7 +47,12 @@ Copyright_License {
 
 #include <stdio.h>
 
-#define fSnailColour(cv) max((short)0, min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
+static int
+fSnailColour(float cv)
+{
+  return max((short)0, min((short)(NUMSNAILCOLORS - 1),
+                           (short)((cv + 1.0) / 2.0 * NUMSNAILCOLORS)));
+}
 
 /**
  * Draws the FLARM traffic icons onto the given canvas
