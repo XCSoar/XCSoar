@@ -186,7 +186,15 @@ Topology::updateCache(MapWindowProjection &map_projection, rectObj thebounds,
 
   triggerUpdateCache = false;
 
-  msSHPWhichShapes(&shpfile, thebounds, 0);
+  rectObj thebounds_deg = thebounds;
+#ifdef RADIANS
+  thebounds_deg.minx *= RAD_TO_DEG;
+  thebounds_deg.miny *= RAD_TO_DEG;
+  thebounds_deg.maxx *= RAD_TO_DEG;
+  thebounds_deg.maxy *= RAD_TO_DEG;
+#endif  
+
+  msSHPWhichShapes(&shpfile, thebounds_deg, 0);
   if (!shpfile.status) {
     // this happens if entire shape is out of range
     // so clear buffer.
@@ -268,6 +276,12 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
     iskip = 4;
 
   rectObj screenRect = map_projection.CalculateScreenBounds(fixed_zero);
+#ifdef RADIANS
+  screenRect.minx *= RAD_TO_DEG;
+  screenRect.miny *= RAD_TO_DEG;
+  screenRect.maxx *= RAD_TO_DEG;
+  screenRect.maxy *= RAD_TO_DEG;
+#endif  
 
   static POINT pt[MAXCLIPPOLYGON];
   const bool render_labels = (m_window.SettingsMap().DeclutterLabels < 2);

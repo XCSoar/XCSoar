@@ -326,7 +326,6 @@ Projection::CalculateScreenBounds(const fixed scale) const
 
 
 /*
-  
   set PanLocation to latlon center 
   set MapRect
   Orig_Screen.x = (rc.left + rc.right)/2;
