@@ -65,3 +65,17 @@ bool LabelBlock::check(const RECT rc)
 }
 
 
+bool
+LabelBlock::CheckRectOverlap(const RECT& rc1, const RECT& rc2) const
+{
+  if (rc1.left >= rc2.right)
+    return false;
+  if (rc1.right <= rc2.left)
+    return false;
+  if (rc1.top >= rc2.bottom)
+    return false;
+  if (rc1.bottom <= rc2.top)
+    return false;
+
+  return true;
+}

@@ -49,15 +49,10 @@ Copyright_License {
 
 #include <windef.h>
 
-struct GEOPOINT;
-
 void ScreenClosestPoint(const POINT &p1, const POINT &p2,
                         const POINT &p3, POINT *p4, int offset);
 
 void PolygonRotateShift(POINT* poly, int n, int x, int y,
                         Angle angle);
-
-gcc_const
-bool CheckRectOverlap(RECT rc1, RECT rc2);
 
 #endif
