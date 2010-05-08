@@ -54,11 +54,6 @@ Copyright_License {
 
 #ifndef ENABLE_SDL
 #include <commctrl.h>
-#ifndef WINDOWSPC
-#if !defined(CECORE) || UNDER_CE >= 300 || _WIN32_WCE >= 0x0300
-#include <aygshell.h>
-#endif
-#endif
 #endif /* !ENABLE_SDL */
 
 /**
