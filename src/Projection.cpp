@@ -99,7 +99,7 @@ void
 Projection::LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
                           unsigned n, unsigned skip) const
 {
-  static Angle lastangle(Angle::native(fixed_minus_one)));
+  static Angle lastangle(Angle::native(fixed_minus_one));
   static int cost=1024, sint=0;
 
   if (GetDisplayAngle() != lastangle) {
