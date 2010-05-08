@@ -51,7 +51,6 @@ Copyright_License {
 
 struct GEOPOINT;
 
-void protate(POINT &pin, const double &angle);
 void protateshift(POINT &pin, const Angle &angle, const int &x, const int &y);
 
 gcc_const

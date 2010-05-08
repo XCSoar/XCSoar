@@ -47,29 +47,6 @@ Copyright_License {
 // note these use static vars! not thread-safe
 
 void
-protate(POINT &pin, const double &angle)
-{
-  int x = pin.x;
-  int y = pin.y;
-  static double lastangle = 0;
-  static int cost = 1024, sint = 0;
-
-  if (angle != lastangle) {
-    lastangle = angle;
-    cost = ifastcosine(fixed(angle));
-    sint = ifastsine(fixed(angle));
-  }
-
-  pin.x = (x * cost - y * sint + 512) / 1024;
-  pin.y = (y * cost + x * sint + 512) / 1024;
-
-  // round (x/b) = (x+b/2)/b;
-  // b = 2; x = 10 -> (10+1)/2=5
-  // b = 2; x = 11 -> (11+1)/2=6
-  // b = 2; x = -10 -> (-10+1)/2=4
-}
-
-void
 protateshift(POINT &pin, const Angle &angle, const int &xs, const int &ys)
 {
   int x = pin.x;
@@ -141,7 +118,7 @@ void
 PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys,
     Angle angle)
 {
-  static Angle lastangle = Angle::degrees(-fixed_one);
+  static Angle lastangle = Angle::native(-fixed_one);
   static int cost = 1024, sint = 0;
   angle = angle.as_bearing();
 
