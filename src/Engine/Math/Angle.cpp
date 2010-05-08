@@ -39,11 +39,11 @@ Copyright_License {
 #include "Math/FastMath.h"
 
 #ifdef RADIANS
-static const fixed fixed_circle(fixed_two_pi);
-static const fixed fixed_half_circle(fixed_pi);
+static const fixed fixed_circle(M_2PI);
+static const fixed fixed_half_circle(M_PI);
 #else
-static const fixed fixed_circle(fixed_360);
-static const fixed fixed_half_circle(fixed_180);
+static const fixed fixed_circle(360);
+static const fixed fixed_half_circle(180);
 #endif
 
 int

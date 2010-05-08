@@ -474,7 +474,6 @@ ReadCoords(const TCHAR *Text, GEOPOINT &point)
   if((*Stop == 'W') || (*Stop == 'w'))
     point.Longitude.flip();
   point.Longitude = point.Longitude.as_bearing();
-
   return(true);
 
 OnError:
