@@ -55,10 +55,10 @@ void test_glide_alt(const fixed h, const fixed W,
 
   AIRCRAFT_STATE ac;
   ac.wind.norm = fabs(W);
-  if (W<0) {
-    ac.wind.bearing = Angle::degrees(fixed(180+Wangle));
+  if (negative(W)) {
+    ac.wind.bearing = Angle::degrees(fixed(180)+Wangle);
   } else {
-    ac.wind.bearing = Angle::degrees(fixed(Wangle));
+    ac.wind.bearing = Angle::degrees(Wangle);
   }
   ac.NavAltitude = h;
 
@@ -85,10 +85,10 @@ void test_glide_stf(const fixed h, const fixed W,
 
   AIRCRAFT_STATE ac;
   ac.wind.norm = fabs(W);
-  if (W<0) {
-    ac.wind.bearing = Angle::degrees(fixed(180+Wangle));
+  if (negative(W)) {
+    ac.wind.bearing = Angle::degrees(fixed(180)+Wangle);
   } else {
-    ac.wind.bearing = Angle::degrees(fixed(Wangle));
+    ac.wind.bearing = Angle::degrees(Wangle);
   }
   ac.NavAltitude = h;
   ac.NettoVario = S;
@@ -113,31 +113,31 @@ bool test_stf()
 {
   { // variation with height
     std::ofstream hfile("results/res-polar-s0.txt");
-    for (fixed h=fixed_zero; h<40.0; h+= fixed(0.1)) {
+    for (fixed h=fixed_zero; h<fixed(40.0); h+= fixed(0.1)) {
       test_glide_stf(h,fixed_zero,fixed_zero,fixed_zero,hfile);
     }
   }
   { // variation with S, below FG
     std::ofstream hfile("results/res-polar-s1.txt");
-    for (fixed S=fixed(-4.0); S<4.0; S+= fixed(0.1)) {
+    for (fixed S=fixed(-4.0); S<fixed(4.0); S+= fixed(0.1)) {
       test_glide_stf(fixed_zero, fixed_zero,fixed_zero,S, hfile);
     }
   }
   { // variation with S, above FG
     std::ofstream hfile("results/res-polar-s2.txt");
-    for (fixed S=fixed(-4.0); S<4.0; S+= fixed(0.1)) {
+    for (fixed S=fixed(-4.0); S<fixed(4.0); S+= fixed(0.1)) {
       test_glide_stf(fixed(40), fixed_zero,fixed_zero,S, hfile);
     }
   }
   { // variation with S, below FG, wind
     std::ofstream hfile("results/res-polar-s3.txt");
-    for (fixed S=fixed(-4.0); S<4.0; S+= fixed(0.1)) {
+    for (fixed S=fixed(-4.0); S<fixed(4.0); S+= fixed(0.1)) {
       test_glide_stf(fixed_zero, fixed(10.0), fixed_zero,S, hfile);
     }
   }
   { // variation with S, above FG, wind
     std::ofstream hfile("results/res-polar-s4.txt");
-    for (fixed S=fixed(-4.0); S<4.0; S+= fixed(0.1)) {
+    for (fixed S=fixed(-4.0); S<fixed(4.0); S+= fixed(0.1)) {
       test_glide_stf(fixed(40), fixed(10.0), fixed_zero, S, hfile);
     }
   }
@@ -147,35 +147,35 @@ bool test_stf()
 
 bool test_mc()
 {
-  for (fixed mc=fixed_zero; mc<5.0; mc+= fixed(0.1)) {
+  for (fixed mc=fixed_zero; mc<fixed(5.0); mc+= fixed(0.1)) {
     basic_polar(mc);
     polar_mc(mc);
   }
 
   {
     std::ofstream hfile("results/res-polar-h-00.txt");
-    for (fixed h=fixed_zero; h<40.0; h+= fixed(0.1)) {
+    for (fixed h=fixed_zero; h<fixed(40.0); h+= fixed(0.1)) {
       test_glide_alt(h, fixed_zero, fixed_zero, hfile);
     }
   }
 
   {
     std::ofstream hfile("results/res-polar-h-50.txt");
-    for (fixed h=fixed_zero; h<40.0; h+= fixed(0.1)) {
+    for (fixed h=fixed_zero; h<fixed(40.0); h+= fixed(0.1)) {
       test_glide_alt(h, fixed(5.0), fixed_zero, hfile);
     }
   }
 
   {
     std::ofstream hfile("results/res-polar-w.txt");
-    for (fixed w=fixed(-10.0); w<=10.0; w+= fixed(0.1)) {
+    for (fixed w=fixed(-10.0); w<=fixed(10.0); w+= fixed(0.1)) {
       test_glide_alt(fixed(50.0), w, fixed_zero, hfile);
     }
   }
 
   {
     std::ofstream hfile("results/res-polar-a.txt");
-    for (fixed a=fixed_zero; a<=360.0; a+= fixed(10)) {
+    for (fixed a=fixed_zero; a<=fixed(360.0); a+= fixed(10)) {
       test_glide_alt(fixed(50.0), fixed(10.0), a, hfile);
     }
   }
@@ -191,10 +191,10 @@ void test_glide_cb(const fixed h, const fixed W,
 
   AIRCRAFT_STATE ac;
   ac.wind.norm = fabs(W);
-  if (W<0) {
-    ac.wind.bearing = Angle::degrees(fixed(180+Wangle));
+  if (negative(W)) {
+    ac.wind.bearing = Angle::degrees(fixed(180)+Wangle);
   } else {
-    ac.wind.bearing = Angle::degrees(fixed(Wangle));
+    ac.wind.bearing = Angle::degrees(Wangle);
   }
   ac.NavAltitude = h;
 
@@ -216,7 +216,7 @@ bool test_cb()
 {
   {
     std::ofstream hfile("results/res-polar-cb.txt");
-    for (fixed a = fixed_zero; a <= 360.0; a+= fixed(10)) {
+    for (fixed a = fixed_zero; a <= fixed(360.0); a+= fixed(10)) {
       test_glide_cb(fixed_zero, fixed(10.0), a, hfile);
     }
   }

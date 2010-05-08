@@ -12,18 +12,18 @@ int main(int argc, char** argv) {
   plan_tests(14);
 
   /* check the division operator */
-  ok((fixed_one / fixed_one) * 1000 == 1000, "1/1", 0);
-  ok((fixed_two / fixed_two) * 1000 == 1000, "2/2", 0);
-  ok((fixed_one / fixed_two) * 1000 == 500, "1/2", 0);
-  ok((fixed(1000) / fixed(100)) * 1000 == 10000, "1000/100", 0);
-  ok((fixed(100) / fixed(20)) * 1000 == 5000, "100/20", 0);
-  ok((fixed(1000000) / fixed(2)) * 1000 == 500000000, "1M/2", 0);
-  ok((fixed_minus_one / fixed_one) * 1000 == -1000, "-1/1", 0);
-  ok((fixed_one / fixed_minus_one) * 1000 == -1000, "1/-1", 0);
-  ok((fixed_minus_one / fixed_minus_one) * 1000 == 1000, "-1/-1", 0);
-  ok((fixed(-1000000) / fixed(2)) * 1000 == -500000000, "-1M/2", 0);
-  ok((long)((fixed_one / (fixed_one / fixed(10))) * 1000) == 10000, "1/0.1", 0);
-  ok((long)((fixed_one / (fixed_one / fixed(-10))) * 1000) == -10000, "1/-0.1", 0);
+  ok((fixed_one / fixed_one) * fixed(1000) == fixed(1000), "1/1", 0);
+  ok((fixed_two / fixed_two) * fixed(1000) == fixed(1000), "2/2", 0);
+  ok((fixed_one / fixed_two) * fixed(1000) == fixed(500), "1/2", 0);
+  ok((fixed(1000) / fixed(100)) * fixed(1000) == fixed(10000), "1000/100", 0);
+  ok((fixed(100) / fixed(20)) * fixed(1000) == fixed(5000), "100/20", 0);
+  ok((fixed(1000000) / fixed(2)) * fixed(1000) == fixed(500000000), "1M/2", 0);
+  ok((fixed_minus_one / fixed_one) * fixed(1000) == -fixed(1000), "-1/1", 0);
+  ok((fixed_one / fixed_minus_one) * fixed(1000) == -fixed(1000), "1/-1", 0);
+  ok((fixed_minus_one / fixed_minus_one) * fixed(1000) == fixed(1000), "-1/-1", 0);
+  ok((fixed(-1000000) / fixed(2)) * fixed(1000) == -fixed(500000000), "-1M/2", 0);
+  ok((long)((fixed_one / (fixed_one / fixed(10))) * fixed(1000)) == (10000), "1/0.1", 0);
+  ok((long)((fixed_one / (fixed_one / fixed(-10))) * fixed(1000)) == -(10000), "1/-0.1", 0);
 
   double da = 20.0;
   double dsina = sin(da);
@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
   printf("a=%g, sin(a)=%g\n",FIXED_DOUBLE(a),FIXED_DOUBLE(sina));
   printf("a=%g, sin(a)=%g\n",da, dsina);
 
-  ok(fabs(sina-dsina)<1.0e5,"sin(a)",0);
+  ok(fabs(sina-fixed(dsina))<fixed(1.0e5),"sin(a)",0);
 
   double dx=-0.3;
   double dy=0.6;
@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
   printf("x=%g, y=%g atan(y,x)=%g\n",FIXED_DOUBLE(x),FIXED_DOUBLE(y),FIXED_DOUBLE(t));
   printf("x=%g, y=%g atan(y,x)=%g\n",dx,dy,dt);
 
-  ok(fabs(t-dt)<1.0e5,"atan(y,x)",0);
+  ok(fabs(t-fixed(dt))<fixed(1.0e5),"atan(y,x)",0);
 
   GEOPOINT l1; 
   l1.Longitude = Angle::degrees(fixed(0.0)); 

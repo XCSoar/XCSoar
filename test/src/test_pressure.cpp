@@ -5,7 +5,7 @@
 bool test_find_qnh() {
   AtmosphericPressure pres;
   pres.FindQNH(fixed(100), fixed(100));
-  return fabs(pres.get_QNH()-fixed(1013.25))<0.01;
+  return fabs(pres.get_QNH()-fixed(1013.25))<fixed(0.01);
 }
 
 bool test_find_qnh2() {
@@ -14,7 +14,7 @@ bool test_find_qnh2() {
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(pres.get_QNH()));
   }
-  return fabs(pres.get_QNH()-fixed(1015.6))<0.1;
+  return fabs(pres.get_QNH()-fixed(1015.6))<fixed(0.1);
   // example, QNH=1014, ps=100203
   // alt= 100
   // alt_known = 120
@@ -27,7 +27,7 @@ bool test_qnh_to_static() {
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(p0));
   }
-  return fabs(p0-fixed(101325))<0.1;
+  return fabs(p0-fixed(101325))<fixed(0.1);
 }
 
 bool test_qnh_round() {
@@ -37,7 +37,7 @@ bool test_qnh_round() {
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(h0));
   }
-  return fabs(h0-fixed(120))<1;
+  return fabs(h0-fixed(120))<fixed(1);
 }
 
 bool test_qnh_round2() {
@@ -48,7 +48,7 @@ bool test_qnh_round2() {
   if (verbose) {
     printf("%g %g\n",FIXED_DOUBLE(p0),FIXED_DOUBLE(h0));
   }
-  return fabs(h0)<1;
+  return fabs(h0)<fixed(1);
 }
 
 
@@ -58,7 +58,7 @@ bool test_isa_pressure(const fixed alt, const fixed prat) {
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(p0));
   }
-  return fabs(p0/fixed(101325)-prat)<0.001;
+  return fabs(p0/fixed(101325)-prat)<fixed(0.001);
 }
 
 bool test_isa_density(const fixed alt, const fixed prat) {
@@ -67,7 +67,7 @@ bool test_isa_density(const fixed alt, const fixed prat) {
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(p0));
   }
-  return fabs(p0/fixed(1.225)-prat)<0.001;
+  return fabs(p0/fixed(1.225)-prat)<fixed(0.001);
 }
 
 int main(int argc, char** argv)
