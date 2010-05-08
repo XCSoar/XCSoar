@@ -49,10 +49,8 @@ Copyright_License {
 
 typedef struct _TERRAIN_INFO
 {
-  Angle Left;
-  Angle Right;
-  Angle Top;
-  Angle Bottom;
+  GEOPOINT TopLeft;
+  GEOPOINT BottomRight;
   Angle StepSize;
   long Rows;
   long Columns;
@@ -147,7 +145,7 @@ public:
   int xlltop;
   fixed fXrounding, fYrounding;
   fixed fXroundingFine, fYroundingFine;
-  int Xrounding, Yrounding;
+  fixed Xrounding, Yrounding;
 };
 
 

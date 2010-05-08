@@ -166,10 +166,10 @@ bool
 RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location) const
 {
   if (TerrainMap) {
-    if ((location.Latitude<= TerrainMap->TerrainInfo.Top)&&
-        (location.Latitude>= TerrainMap->TerrainInfo.Bottom)&&
-        (location.Longitude<= TerrainMap->TerrainInfo.Right)&&
-        (location.Longitude>= TerrainMap->TerrainInfo.Left)) {
+    if ((location.Latitude<= TerrainMap->TerrainInfo.TopLeft.Latitude)&&
+        (location.Latitude>= TerrainMap->TerrainInfo.BottomRight.Latitude)&&
+        (location.Longitude<= TerrainMap->TerrainInfo.BottomRight.Longitude)&&
+        (location.Longitude>= TerrainMap->TerrainInfo.TopLeft.Latitude)) {
       return true;
     } else {
       return false;
@@ -183,10 +183,9 @@ bool
 RasterTerrain::GetTerrainCenter(GEOPOINT *location) const
 {
   if (TerrainMap) {
-    location->Latitude = ((TerrainMap->TerrainInfo.Top+
-                           TerrainMap->TerrainInfo.Bottom)*fixed_half);
-    location->Longitude = ((TerrainMap->TerrainInfo.Left+
-                            TerrainMap->TerrainInfo.Right)*fixed_half);
+    *location = TerrainMap->TerrainInfo.TopLeft.interpolate(
+      TerrainMap->TerrainInfo.BottomRight,
+      fixed_half);
     return true;
   } else {
     return false;

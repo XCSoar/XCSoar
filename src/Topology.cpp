@@ -288,9 +288,8 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
       for (int tt = 0; tt < shape->numlines; tt++) {
         for (int jj = 0; jj < shape->line[tt].numpoints; jj++) {
           POINT sc;
-          GEOPOINT l;
-          l.Longitude = Angle::native(fixed(shape->line[tt].point[jj].x));
-          l.Latitude = Angle::native(fixed(shape->line[tt].point[jj].y));
+          const GEOPOINT l = map_projection.
+            point2GeoPoint(shape->line[tt].point[jj]);
 
           if (m_window.draw_masked_bitmap_if_visible(canvas, hBitmap, l, 10, 10, &sc)) {
             if (render_labels)

@@ -59,6 +59,8 @@ public:
                         const int n,
                         const int skip) const;
 
+  GEOPOINT point2GeoPoint(const pointObj& p) const;
+
   POINT   GetOrigScreen(void) const { return Orig_Screen; }
   GEOPOINT GetPanLocation() const { return PanLocation; }
 
