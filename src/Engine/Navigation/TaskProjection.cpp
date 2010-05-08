@@ -46,7 +46,7 @@ TaskProjection::TaskProjection()
   GEOPOINT zero;
   reset(zero);
 }
-  
+
 void 
 TaskProjection::reset(const GEOPOINT &ref) 
 {

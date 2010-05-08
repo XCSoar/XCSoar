@@ -78,20 +78,6 @@ MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
 }
 
 
-bool MapWindowProjection::PointInRect(const double &x,
-				      const double &y,
-				      const rectObj &bounds) const
-{
-  if ((x> bounds.minx) &&
-      (x< bounds.maxx) &&
-      (y> bounds.miny) &&
-      (y< bounds.maxy))
-    return true;
-  else
-    return false;
-}
-
-
 void
 MapWindowProjection::CalculateOrientationNormal
 (const NMEA_INFO &DrawInfo,

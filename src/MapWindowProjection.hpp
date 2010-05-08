@@ -89,10 +89,6 @@ class MapWindowProjection:
  protected:
   DisplayMode_t DisplayMode;
 
-  // helpers
-  bool PointInRect(const double &x, const double &y,
-		   const rectObj &bounds) const;
-
   RECT   MapRectSmall;
   RECT   MapRectBig;
 

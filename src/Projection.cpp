@@ -60,8 +60,8 @@ Projection::Screen2LonLat(const int &x,
 {
   const FastIntegerRotation::Pair p =
     DisplayAngle.Rotate(x - Orig_Screen.x, y - Orig_Screen.y);
-  const GEOPOINT pg(Angle::degrees(fixed(p.first*InvDrawScale)),
-                    Angle::degrees(fixed(p.second*InvDrawScale)));
+  const GEOPOINT pg(Angle::native(fixed(p.first*InvDrawScale)),
+                    Angle::native(fixed(p.second*InvDrawScale)));
 
   g.Latitude = PanLocation.Latitude - pg.Latitude;
   g.Longitude = PanLocation.Longitude + pg.Longitude*g.Latitude.invfastcosine();
@@ -78,9 +78,9 @@ Projection::LonLat2Screen(const GEOPOINT &g,
 {
   const GEOPOINT d = PanLocation-g;
   const FastIntegerRotation::Pair p =
-    DisplayAngle.Rotate((int)(d.Longitude.value_degrees() * g.Latitude.fastcosine()
+    DisplayAngle.Rotate((int)(d.Longitude.value_native() * g.Latitude.fastcosine()
                               * DrawScale),
-                        (int)(d.Latitude.value_degrees() * DrawScale));
+                        (int)(d.Latitude.value_native() * DrawScale));
 
   sc.x = Orig_Screen.x - p.first;
   sc.y = Orig_Screen.y + p.second;
@@ -99,7 +99,7 @@ void
 Projection::LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
                           unsigned n, unsigned skip) const
 {
-  static Angle lastangle(Angle::degrees(fixed(-1)));
+  static Angle lastangle(Angle::native(fixed(-1)));
   static int cost=1024, sint=0;
 
   if (GetDisplayAngle() != lastangle) {
@@ -115,8 +115,8 @@ Projection::LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
   const GEOPOINT *ptend = ptin + n;
 
   while (p<ptend) {
-    int Y = Real2Int((mPan.Latitude - p->Latitude).value_degrees() * mDrawScale);
-    int X = Real2Int((mPan.Longitude - p->Longitude).value_degrees() *
+    int Y = Real2Int((mPan.Latitude - p->Latitude).value_native() * mDrawScale);
+    int X = Real2Int((mPan.Longitude - p->Longitude).value_native() *
                      p->Latitude.fastcosine() * mDrawScale);
     ptout->x = (xxs-X*cost + Y*sint)/1024;
     ptout->y = (Y*cost + X*sint + yys)/1024;
@@ -140,7 +140,7 @@ Projection::LonLat2Screen(const pointObj* const ptin,
                           const int n,
                           const int skip) const
 {
-  static Angle lastangle(Angle::degrees(fixed(-1)));
+  static Angle lastangle(Angle::native(fixed(-1)));
   static int cost=1024, sint=0;
 
   if (GetDisplayAngle() != lastangle) {
@@ -156,10 +156,10 @@ Projection::LonLat2Screen(const pointObj* const ptin,
   const pointObj* ptend = ptin+n;
 
   while (p<ptend) {
-    const GEOPOINT g(Angle::degrees(fixed(p->x)),Angle::degrees(fixed(p->y)));
+    const GEOPOINT g(Angle::native(fixed(p->x)),Angle::native(fixed(p->y)));
 
-    const int Y = Real2Int((mPan.Latitude-g.Latitude).value_degrees()*mDrawScale);
-    const int X = Real2Int((mPan.Longitude-g.Longitude).value_degrees()
+    const int Y = Real2Int((mPan.Latitude-g.Latitude).value_native()*mDrawScale);
+    const int X = Real2Int((mPan.Longitude-g.Longitude).value_native()
                            *g.Latitude.fastcosine()*mDrawScale);
 
     ptout->x = (xxs-X*cost + Y*sint)/1024;
@@ -173,10 +173,10 @@ Projection::LonLat2Screen(const pointObj* const ptin,
 bool
 Projection::LonLatVisible(const GEOPOINT &loc) const
 {
-  if ((loc.Longitude.value_degrees()> screenbounds_latlon.minx) &&
-      (loc.Longitude.value_degrees()< screenbounds_latlon.maxx) &&
-      (loc.Latitude.value_degrees()> screenbounds_latlon.miny) &&
-      (loc.Latitude.value_degrees()< screenbounds_latlon.maxy))
+  if ((loc.Longitude.value_native()> screenbounds_latlon.minx) &&
+      (loc.Longitude.value_native()< screenbounds_latlon.maxx) &&
+      (loc.Latitude.value_native()> screenbounds_latlon.miny) &&
+      (loc.Latitude.value_native()< screenbounds_latlon.maxy))
     return true;
   else
     return false;
@@ -236,12 +236,12 @@ Projection::CalculateScreenBounds(const fixed scale) const
   // compute lat lon extents of visible screen
   rectObj sb;
 
-  if (scale>= 1.0) {
+  if (scale>= fixed_one) {
     POINT screen_center;
     LonLat2Screen(PanLocation, screen_center);
 
-    sb.minx = sb.maxx = PanLocation.Longitude.value_degrees();
-    sb.miny = sb.maxy = PanLocation.Latitude.value_degrees();
+    sb.minx = sb.maxx = PanLocation.Longitude.value_native();
+    sb.miny = sb.maxy = PanLocation.Latitude.value_native();
 
     int dx, dy;
     unsigned int maxsc=0;
@@ -265,10 +265,10 @@ Projection::CalculateScreenBounds(const fixed scale) const
       p.x = screen_center.x + iround(fastcosine(ang)*maxsc*scale);
       p.y = screen_center.y + iround(fastsine(ang)*maxsc*scale);
       Screen2LonLat(p.x, p.y, g);
-      sb.minx = min((double)g.Longitude.value_degrees(), sb.minx);
-      sb.miny = min((double)g.Latitude.value_degrees(), sb.miny);
-      sb.maxx = max((double)g.Longitude.value_degrees(), sb.maxx);
-      sb.maxy = max((double)g.Latitude.value_degrees(), sb.maxy);
+      sb.minx = min((double)g.Longitude.value_native(), sb.minx);
+      sb.miny = min((double)g.Latitude.value_native(), sb.miny);
+      sb.maxx = max((double)g.Longitude.value_native(), sb.maxx);
+      sb.maxy = max((double)g.Latitude.value_native(), sb.maxy);
     }
 
   } else {
@@ -280,32 +280,32 @@ Projection::CalculateScreenBounds(const fixed scale) const
     x = MapRect.left;
     y = MapRect.top;
     Screen2LonLat(x, y, g);
-    xmin = g.Longitude.value_degrees(); xmax = g.Longitude.value_degrees();
-    ymin = g.Latitude.value_degrees(); ymax = g.Latitude.value_degrees();
+    xmin = g.Longitude.value_native(); xmax = g.Longitude.value_native();
+    ymin = g.Latitude.value_native(); ymax = g.Latitude.value_native();
 
     x = MapRect.right;
     y = MapRect.top;
     Screen2LonLat(x, y, g);
-    xmin = min(xmin, (double)g.Longitude.value_degrees());
-    xmax = max(xmax, (double)g.Longitude.value_degrees());
-    ymin = min(ymin, (double)g.Latitude.value_degrees());
-    ymax = max(ymax, (double)g.Latitude.value_degrees());
+    xmin = min(xmin, (double)g.Longitude.value_native());
+    xmax = max(xmax, (double)g.Longitude.value_native());
+    ymin = min(ymin, (double)g.Latitude.value_native());
+    ymax = max(ymax, (double)g.Latitude.value_native());
 
     x = MapRect.right;
     y = MapRect.bottom;
     Screen2LonLat(x, y, g);
-    xmin = min(xmin, (double)g.Longitude.value_degrees());
-    xmax = max(xmax, (double)g.Longitude.value_degrees());
-    ymin = min(ymin, (double)g.Latitude.value_degrees());
-    ymax = max(ymax, (double)g.Latitude.value_degrees());
+    xmin = min(xmin, (double)g.Longitude.value_native());
+    xmax = max(xmax, (double)g.Longitude.value_native());
+    ymin = min(ymin, (double)g.Latitude.value_native());
+    ymax = max(ymax, (double)g.Latitude.value_native());
 
     x = MapRect.left;
     y = MapRect.bottom;
     Screen2LonLat(x, y, g);
-    xmin = min(xmin, (double)g.Longitude.value_degrees());
-    xmax = max(xmax, (double)g.Longitude.value_degrees());
-    ymin = min(ymin, (double)g.Latitude.value_degrees());
-    ymax = max(ymax, (double)g.Latitude.value_degrees());
+    xmin = min(xmin, (double)g.Longitude.value_native());
+    xmax = max(xmax, (double)g.Longitude.value_native());
+    ymin = min(ymin, (double)g.Latitude.value_native());
+    ymax = max(ymax, (double)g.Latitude.value_native());
 
     sb.minx = xmin;
     sb.maxx = xmax;

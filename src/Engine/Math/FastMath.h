@@ -65,9 +65,21 @@ Real2Int(double val)
 }
 
 gcc_const static inline int
+Real2Int(const fixed& val)
+{
+  return val.as_int();
+}
+
+gcc_const static inline int
 iround(double i)
 {
   return Real2Int(floor(i + 0.5));
+}
+
+gcc_const static inline int
+iround(const fixed &x)
+{
+  return floor(x+fixed_half).as_int();
 }
 
 extern const fixed COSTABLE[4096];
@@ -78,7 +90,7 @@ extern const int ICOSTABLE[4096];
 
 gcc_const
 static inline int
-DEG_TO_INT(fixed x)
+NATIVE_TO_INT(fixed x)
 {
   return ((unsigned short)(x * (65536.0 / 360.0))) >> 4;
 }
@@ -87,47 +99,35 @@ gcc_const
 static inline fixed
 invfastcosine(fixed x)
 {
-  return INVCOSINETABLE[DEG_TO_INT(x)];
+  return INVCOSINETABLE[NATIVE_TO_INT(x)];
 }
 
 gcc_const
 static inline int
 ifastsine(fixed x)
 {
-  return ISINETABLE[DEG_TO_INT(x)];
+  return ISINETABLE[NATIVE_TO_INT(x)];
 }
 
 gcc_const
 static inline int
 ifastcosine(fixed x)
 {
-  return ICOSTABLE[DEG_TO_INT(x)];
+  return ICOSTABLE[NATIVE_TO_INT(x)];
 }
 
 gcc_const
 static inline fixed
 fastsine(fixed x)
 {
-  return SINETABLE[DEG_TO_INT(x)];
+  return SINETABLE[NATIVE_TO_INT(x)];
 }
 
 gcc_const
 static inline fixed
 fastcosine(fixed x)
 {
-  return COSTABLE[DEG_TO_INT(x)];
-}
-
-gcc_const static inline int
-iround(const fixed &x)
-{
-  return floor(x+fixed_half).as_int();
-}
-
-gcc_const static inline int
-Real2Int(const fixed& val)
-{
-  return val.as_int();
+  return COSTABLE[NATIVE_TO_INT(x)];
 }
 
 inline unsigned int
