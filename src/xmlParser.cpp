@@ -44,7 +44,8 @@
  *
  ****************************************************************************
  */
-#if defined(WIN32) || defined(UNDER_CE)
+
+#if defined(WIN32)
 #include <windows.h> // to have IsTextUnicode, MultiByteToWideChar, WideCharToMultiByte
                      // to handle unicode files
 #endif
@@ -1383,9 +1384,9 @@ XMLNode::parseFile(const char *filename, XMLResults *pResults)
   buf[l] = 0;
   l++;
 
-#if defined(WIN32) || defined(UNDER_CE)
+#if defined(WIN32)
 #ifdef _UNICODE
-#if !defined(UNDER_CE)
+#ifndef _WIN32_WCE
   if (!IsTextUnicode(buf,mmin(l,10000),NULL)) {
 #endif
     LPTSTR b2 = (LPTSTR)malloc(l * 2 + 2);
@@ -1398,7 +1399,7 @@ XMLNode::parseFile(const char *filename, XMLResults *pResults)
                         l * 2 + 2); // size of buffer
     free(buf);
     buf = (char*)b2;
-#if !defined(UNDER_CE)
+#ifndef _WIN32_WCE
   }
 #endif
 #else

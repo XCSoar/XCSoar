@@ -122,7 +122,7 @@
   using Microsoft Visual C. */
 
 // JMW
-#ifdef UNDER_CE
+#ifdef _WIN32_WCE
 #define JAS_WIN_MSVC_BUILD
 #ifndef WIN32
 #define WIN32
