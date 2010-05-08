@@ -81,8 +81,6 @@ Profile::Save()
     return;
 
   LogStartUp(_T("Saving profiles"));
-  // save registry backup first (try a few places)
-  SaveFile(startProfileFile);
   SaveFile(defaultProfileFile);
 }
 
