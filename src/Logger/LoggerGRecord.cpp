@@ -314,8 +314,6 @@ GRecord::ReadGRecordFromFile(TCHAR szOutput[])
 
 bool GRecord::VerifyGRecordInFile()
 { // assumes FileName member is set
-  bool bRetVal = true;
-
   TCHAR OldGRecordBuff[BUFF_LEN];
   TCHAR * szOldGRecord ;
   szOldGRecord = OldGRecordBuff;
@@ -335,12 +333,7 @@ bool GRecord::VerifyGRecordInFile()
   FinalizeBuffer();
   GetDigest(szNewGRecord);
 
-  for (unsigned int i = 0; i < 128; i++) {
-    if (szOldGRecord[i] != szNewGRecord[i] ) {
-      bRetVal = false;
-    }
-  }
-  return bRetVal;
+  return _tcscmp(szOldGRecord, szNewGRecord) == 0;
 }
 
 int
