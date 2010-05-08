@@ -38,6 +38,9 @@ Copyright_License {
 #include "Angle.hpp"
 #include "Math/FastMath.h"
 
+static const fixed fixed_circle(fixed_360);
+static const fixed fixed_half_circle(fixed_180);
+
 int
 Angle::sign() const
 {
@@ -118,10 +121,10 @@ Angle::as_bearing() const
   Angle retval(m_value);
 
   while (retval.m_value < fixed_zero)
-    retval.m_value += fixed_360;
+    retval.m_value += fixed_circle;
 
-  while (retval.m_value > fixed_360)
-    retval.m_value -= fixed_360;
+  while (retval.m_value > fixed_circle)
+    retval.m_value -= fixed_circle;
 
   return retval;
 }
@@ -130,11 +133,11 @@ Angle
 Angle::as_delta() const
 {
   Angle retval(m_value);
-  while (retval.m_value < -fixed_180)
-    retval.m_value += fixed_360;
+  while (retval.m_value < -fixed_half_circle)
+    retval.m_value += fixed_circle;
 
-  while (retval.m_value > fixed_180)
-    retval.m_value -= fixed_360;
+  while (retval.m_value > fixed_half_circle)
+    retval.m_value -= fixed_circle;
 
   return retval;
 }
@@ -142,7 +145,7 @@ Angle::as_delta() const
 Angle
 Angle::Reciprocal() const
 {
-  Angle retval(m_value+ fixed_180);
+  Angle retval(m_value+ fixed_half_circle);
   return retval.as_bearing();
 }
 
@@ -158,12 +161,12 @@ Angle::HalfAngle(const Angle &End) const
   if (m_value == End.m_value) {
     return Reciprocal();
   } else if (m_value > End.m_value) {
-    if ((m_value - End.m_value) < fixed_180)
+    if ((m_value - End.m_value) < fixed_half_circle)
       return Angle((m_value + End.m_value) * fixed_half).Reciprocal();
     else
       return Angle((m_value + End.m_value) * fixed_half);
   } else {
-    if ((End.m_value - m_value) < fixed_180)
+    if ((End.m_value - m_value) < fixed_half_circle)
       return Angle((m_value + End.m_value) * fixed_half).Reciprocal();
     else
       return Angle((m_value + End.m_value) * fixed_half);

@@ -634,7 +634,7 @@ Trace::print(const GEOPOINT &loc) const
 
 std::ostream& operator<< (std::ostream& o, const Angle& a)
 {
-  o << a.m_value;
+  o << a.value_degrees();
   return o;
 } 
 
