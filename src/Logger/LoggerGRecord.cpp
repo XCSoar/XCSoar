@@ -283,26 +283,20 @@ GRecord::ReadGRecordFromFile(TCHAR szOutput[], size_t max_length)
     return false;
 
   unsigned int iLenDigest=0;
-  while(1) {
-    if (!_fgetts(data, MAX_REC_LENGTH, inFile)) {
-      break;
-    }
+  while (_fgetts(data, MAX_REC_LENGTH, inFile) != NULL) {
+    if (data[0] != 'G')
+      continue;
 
-    TCHAR c1, c2;
-    c1=data[0];
-    if ( c1 == 'G') {
-      unsigned int iLenData;
-      iLenData = _tcslen(data);
-      for (unsigned int i = 1; i < iLenData; i++) { // skip initial 'G'
-        c2=data[i];
-        if ((c2 != '\r') && (c2 != '\n')) {
-          szOutput[iLenDigest++]=(TCHAR)c2;
+    unsigned int iLenData = _tcslen(data);
+    for (unsigned int i = 1; i < iLenData; i++) { // skip initial 'G'
+      TCHAR ch = data[i];
+      if ((ch == '\r') || (ch == '\n'))
+        continue;
 
-          if (iLenDigest >= max_length)
-            /* G record too large */
-            return false;
-        }
-      }
+      szOutput[iLenDigest++] = (TCHAR)ch;
+      if (iLenDigest >= max_length)
+        /* G record too large */
+        return false;
     }
   } // read
 
