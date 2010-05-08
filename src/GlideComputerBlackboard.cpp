@@ -76,36 +76,36 @@ GlideComputerBlackboard::ResetFlight(const bool full)
   */
 
   if (full) {
-    calculated_info.timeCruising = 0;
-    calculated_info.timeCircling = 0;
-    calculated_info.TotalHeightClimb = 0;
+    calculated_info.timeCruising = fixed_zero;
+    calculated_info.timeCircling = fixed_zero;
+    calculated_info.TotalHeightClimb = fixed_zero;
 
-    calculated_info.CruiseStartTime = -1;
-    calculated_info.ClimbStartTime = -1;
+    calculated_info.CruiseStartTime = fixed_minus_one;
+    calculated_info.ClimbStartTime = fixed_minus_one;
 
     calculated_info.CruiseLD = INVALID_GR;
     calculated_info.AverageLD = INVALID_GR;
     calculated_info.LD = INVALID_GR;
     calculated_info.LDvario = INVALID_GR;
-    calculated_info.AverageThermal = 0;
+    calculated_info.AverageThermal = fixed_zero;
 
     for (i = 0; i < 200; i++) {
-      calculated_info.AverageClimbRate[i] = 0;
+      calculated_info.AverageClimbRate[i] = fixed_zero;
       calculated_info.AverageClimbRateN[i] = 0;
     }
 
-    calculated_info.MinAltitude = 0;
-    calculated_info.MaxHeightGain = 0;
+    calculated_info.MinAltitude = fixed_zero;
+    calculated_info.MaxHeightGain = fixed_zero;
   }
 
-  calculated_info.MaxThermalHeight = 0;
+  calculated_info.MaxThermalHeight = fixed_zero;
   for (i = 0; i < NUMTHERMALBUCKETS; i++) {
     calculated_info.ThermalProfileN[i] = 0;
-    calculated_info.ThermalProfileW[i] = 0;
+    calculated_info.ThermalProfileW[i] = fixed_zero;
   }
   // clear thermal sources for first time.
   for (i = 0; i < MAX_THERMAL_SOURCES; i++) {
-    calculated_info.ThermalSources[i].LiftRate = -1.0;
+    calculated_info.ThermalSources[i].LiftRate = fixed_minus_one;
   }
 
   calculated_info.Circling = false;
@@ -117,8 +117,8 @@ GlideComputerBlackboard::ResetFlight(const bool full)
   calculated_info.TerrainWarningLocation.Longitude = Angle();
 
   // If you load persistent values, you need at least these reset:
-  calculated_info.LastThermalAverage = 0.0;
-  calculated_info.ThermalGain = 0.0;
+  calculated_info.LastThermalAverage = fixed_zero;
+  calculated_info.ThermalGain = fixed_zero;
 }
 
 /**
@@ -132,13 +132,13 @@ GlideComputerBlackboard::StartTask()
   calculated_info.CruiseStartTime = gps_info.Time;
 
   // JMW reset time cruising/time circling stats on task start
-  calculated_info.timeCircling = 0;
-  calculated_info.timeCruising = 0;
-  calculated_info.TotalHeightClimb = 0;
+  calculated_info.timeCircling = fixed_zero;
+  calculated_info.timeCruising = fixed_zero;
+  calculated_info.TotalHeightClimb = fixed_zero;
 
   // reset max height gain stuff on task start
-  calculated_info.MaxHeightGain = 0;
-  calculated_info.MinAltitude = 0;
+  calculated_info.MaxHeightGain = fixed_zero;
+  calculated_info.MinAltitude = fixed_zero;
 }
 
 void
