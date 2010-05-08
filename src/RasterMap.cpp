@@ -60,26 +60,17 @@ RasterMap::GetMapCenter(GEOPOINT *loc) const
 }
 
 
-double
-RasterMap::GetFieldStepSize() const {
-  if (!isMapLoaded()) {
-    return 0;
-  }
-  // this is approximate of course..
-  return (double)(250.0/0.0025*TerrainInfo.StepSize.value_degrees());
-}
-
 
 // accurate method
 int
-RasterMap::GetEffectivePixelSize(double *pixel_D,
+RasterMap::GetEffectivePixelSize(fixed &pixel_D,
                                  const GEOPOINT &location) const
 {
   fixed terrain_step_x, terrain_step_y;
   Angle step_size = TerrainInfo.StepSize * sqrt(fixed_two); 
 
-  if ((*pixel_D<=0) || (step_size.sign()==0)) {
-    *pixel_D = 1.0;
+  if (negative(pixel_D) || (step_size.sign()==0)) {
+    pixel_D = fixed_one;
     return 1;
   }
   GEOPOINT dloc;
@@ -91,7 +82,7 @@ RasterMap::GetEffectivePixelSize(double *pixel_D,
   dloc = location; dloc.Longitude += step_size;
   terrain_step_y = Distance(location, dloc);
 
-  fixed rfact = max(terrain_step_x, terrain_step_y) / *pixel_D;
+  fixed rfact = max(terrain_step_x, terrain_step_y) / pixel_D;
 
   int epx = (int)(max(fixed_one, ceil(rfact)));
   //  *pixel_D = (*pixel_D)*rfact/epx;
@@ -100,22 +91,13 @@ RasterMap::GetEffectivePixelSize(double *pixel_D,
 }
 
 
-int
-RasterMap::GetEffectivePixelSize(double dist) const
-{
-  int grounding;
-  grounding = iround(2.0*(GetFieldStepSize()/1000.0)/dist);
-  if (grounding<1) {
-    grounding = 1;
-  }
-  return grounding;
-}
 
 
 void
 RasterMap::SetFieldRounding(const GEOPOINT& delta,
                             RasterRounding &rounding) const
 {
+  static const fixed fixed_fact(256.0);
   if (!isMapLoaded()) {
     return;
   }
@@ -128,13 +110,13 @@ RasterMap::SetFieldRounding(const GEOPOINT& delta,
   if (rounding.Xrounding<1) {
     rounding.Xrounding = 1;
   }
-  rounding.fXrounding = 1.0/(rounding.Xrounding*TerrainInfo.StepSize.value_native());
-  rounding.fXroundingFine = rounding.fXrounding*256.0;
+  rounding.fXrounding = fixed_one/(rounding.Xrounding*TerrainInfo.StepSize.value_native());
+  rounding.fXroundingFine = rounding.fXrounding*fixed_fact;
   if (rounding.Yrounding<1) {
     rounding.Yrounding = 1;
   }
-  rounding.fYrounding = 1.0/(rounding.Yrounding*TerrainInfo.StepSize.value_native());
-  rounding.fYroundingFine = rounding.fYrounding*256.0;
+  rounding.fYrounding = fixed_one/(rounding.Yrounding*TerrainInfo.StepSize.value_native());
+  rounding.fYroundingFine = rounding.fYrounding*fixed_fact;
 
   rounding.DirectFine = false;
 }

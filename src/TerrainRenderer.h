@@ -79,7 +79,7 @@ private:
 
   CSTScreenBuffer *sbuf;
 
-  double pixelsize_d;
+  fixed pixelsize_d;
 
   int oversampling;
   int blursize;

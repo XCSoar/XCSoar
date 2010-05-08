@@ -82,13 +82,8 @@ class RasterMap {
 
   bool GetMapCenter(GEOPOINT *loc) const;
 
-  double GetFieldStepSize() const;
-
-  // inaccurate method
-  int GetEffectivePixelSize(double pixelsize) const;
-
   // accurate method
-  int GetEffectivePixelSize(double *pixel_D,
+  int GetEffectivePixelSize(fixed &pixel_D,
                             const GEOPOINT &location) const;
 
   virtual void SetFieldRounding(const GEOPOINT& delta,
@@ -150,8 +145,8 @@ public:
   bool DirectFine;
   int xlleft;
   int xlltop;
-  double fXrounding, fYrounding;
-  double fXroundingFine, fYroundingFine;
+  fixed fXrounding, fYrounding;
+  fixed fXroundingFine, fYroundingFine;
   int Xrounding, Yrounding;
 };
 

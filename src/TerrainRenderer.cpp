@@ -532,7 +532,7 @@ TerrainRenderer::Height(const MapWindowProjection &map_projection,
   // set resolution
   rounding->Set(*DisplayMap, delta_rounding);
 
-  epx = DisplayMap->GetEffectivePixelSize(&pixelsize_d, middle);
+  epx = DisplayMap->GetEffectivePixelSize(pixelsize_d, middle);
 
   if (epx > min(ixs, iys) / 4) {
     do_shading = false;

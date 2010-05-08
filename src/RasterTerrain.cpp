@@ -153,7 +153,7 @@ void RasterTerrain::ServiceFullReload(const GEOPOINT &location) {
   }
 }
 
-int RasterTerrain::GetEffectivePixelSize(double *pixel_D,
+int RasterTerrain::GetEffectivePixelSize(fixed &pixel_D,
                                          const GEOPOINT &location) const {
   if (TerrainMap) {
     return TerrainMap->GetEffectivePixelSize(pixel_D, location);
