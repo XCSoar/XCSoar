@@ -99,21 +99,21 @@ RasterMap::SetFieldRounding(const GEOPOINT& delta,
     return;
   }
 
-  rounding.Xrounding = (fixed)iround(delta.Longitude.value_native()
+  rounding.Xrounding = iround(delta.Longitude.value_native()
                               /TerrainInfo.StepSize.value_native());
-  rounding.Yrounding = (fixed)iround(delta.Latitude.value_native()
+  rounding.Yrounding = iround(delta.Latitude.value_native()
                               /TerrainInfo.StepSize.value_native());
 
-  if (rounding.Xrounding<fixed_one) {
-    rounding.Xrounding = fixed_one;
+  if (rounding.Xrounding<1) {
+    rounding.Xrounding = 1;
   }
-  rounding.fXrounding = fixed_one/(rounding.Xrounding*TerrainInfo.StepSize.value_native());
+  rounding.fXrounding = fixed_one/((fixed)rounding.Xrounding*TerrainInfo.StepSize.value_native());
   rounding.fXroundingFine = rounding.fXrounding*fixed_fact;
 
-  if (rounding.Yrounding<fixed_one) {
-    rounding.Yrounding = fixed_one;
+  if (rounding.Yrounding<1) {
+    rounding.Yrounding = 1;
   }
-  rounding.fYrounding = fixed_one/(rounding.Yrounding*TerrainInfo.StepSize.value_native());
+  rounding.fYrounding = fixed_one/((fixed)rounding.Yrounding*TerrainInfo.StepSize.value_native());
   rounding.fYroundingFine = rounding.fYrounding*fixed_fact;
 
   rounding.DirectFine = false;

@@ -145,7 +145,7 @@ public:
   int xlltop;
   fixed fXrounding, fYrounding;
   fixed fXroundingFine, fYroundingFine;
-  fixed Xrounding, Yrounding;
+  int Xrounding, Yrounding;
 };
 
 

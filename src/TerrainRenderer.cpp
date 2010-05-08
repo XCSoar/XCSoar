@@ -633,8 +633,8 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
         assert(myhbuf < hBufTop);
 
         gp.Latitude = PanLatitude 
-          - Angle::degrees(fixed((ycost + x * sint) * InvDrawScale));
-        gp.Longitude = PanLongitude + Angle::degrees((x * cost - ysint)
+          - Angle::native(fixed((ycost + x * sint) * InvDrawScale));
+        gp.Longitude = PanLongitude + Angle::native((x * cost - ysint)
           * gp.Latitude.invfastcosine() * InvDrawScale);
 
         *myhbuf = max((short)0, DisplayMap->GetField(gp, *rounding));

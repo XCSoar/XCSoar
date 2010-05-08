@@ -58,7 +58,7 @@ RasterMapJPG2000::SetFieldRounding(const GEOPOINT& delta,
   if (!isMapLoaded()) {
     return;
   }
-  if ((rounding.Xrounding==fixed_one)&&(rounding.Yrounding==fixed_one)) {
+  if ((rounding.Xrounding==1)&&(rounding.Yrounding==1)) {
     rounding.DirectFine = true;
     rounding.xlleft = (int)(TerrainInfo.TopLeft.Longitude.value_native() * rounding.fXroundingFine) + 128;
     rounding.xlltop  = (int)(TerrainInfo.TopLeft.Latitude.value_native() * rounding.fYroundingFine) - 128;
