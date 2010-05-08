@@ -43,9 +43,10 @@ Copyright_License {
 // global, used for test harness
 unsigned count_distbearing = 0;
 
-static const fixed fixed_earth_r(6371000);
-static const fixed fixed_double_earth_r(6371000 * 2);
-static const fixed fixed_inv_earth_r(1.0 / 6371000);
+#define REARTH 6371000
+const fixed fixed_earth_r(REARTH);
+const fixed fixed_inv_earth_r(1.0 / REARTH);
+static const fixed fixed_double_earth_r(REARTH * 2);
 
 #ifdef FIXED_MATH
   // need to expand range for meter accuracy

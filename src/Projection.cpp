@@ -36,6 +36,7 @@ Copyright_License {
 }
 */
 #include "Projection.hpp"
+#include "Math/Earth.hpp"
 #include "Math/Angle.hpp"
 
 Projection::Projection():
@@ -214,8 +215,11 @@ Projection::PointVisible(const POINT &P) const
 void 
 Projection::SetScaleMetersToScreen(const fixed scale_meters_to_screen)
 {
+  static const fixed fixed_r 
+    (Angle::native(fixed(fixed_earth_r)).value_radians());
+
   m_scale_meters_to_screen = scale_meters_to_screen;
-  DrawScale = 111194*m_scale_meters_to_screen;
+  DrawScale = fixed_r*m_scale_meters_to_screen;
   InvDrawScale = 1.0/DrawScale;
 }
 

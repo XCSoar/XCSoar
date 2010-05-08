@@ -49,6 +49,9 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include <stdlib.h> // for NULL
 
+extern const fixed fixed_earth_r;
+extern const fixed fixed_inv_earth_r;
+
 /**
  * Finds cross track error in meters and closest point P4 between P3
  * and desired track P1-P2.  Very slow function!
