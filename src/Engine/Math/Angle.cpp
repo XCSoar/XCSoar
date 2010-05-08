@@ -38,8 +38,13 @@ Copyright_License {
 #include "Angle.hpp"
 #include "Math/FastMath.h"
 
+#ifdef RADIANS
+static const fixed fixed_circle(fixed_two_pi);
+static const fixed fixed_half_circle(fixed_pi);
+#else
 static const fixed fixed_circle(fixed_360);
 static const fixed fixed_half_circle(fixed_180);
+#endif
 
 int
 Angle::sign() const
@@ -67,36 +72,6 @@ Angle::cos() const
   return ::cos(value_radians());
 }
 
-fixed
-Angle::fastsine() const 
-{
-  return (::fastsine(value_degrees()));
-}
-
-fixed
-Angle::fastcosine() const 
-{
-  return (::fastcosine(value_degrees()));
-}
-
-fixed
-Angle::invfastcosine() const 
-{
-  return (::invfastcosine(value_degrees()));
-}
-
-int
-Angle::ifastcosine() const 
-{
-  return (::ifastcosine(value_degrees()));
-}
-
-int
-Angle::ifastsine() const 
-{
-  return (::ifastsine(value_degrees()));
-}
-
 void 
 Angle::sin_cos(fixed& s, fixed& c) const
 {
@@ -104,15 +79,45 @@ Angle::sin_cos(fixed& s, fixed& c) const
 }
 
 fixed
+Angle::fastsine() const 
+{
+  return (::fastsine(value_native()));
+}
+
+fixed
+Angle::fastcosine() const 
+{
+  return (::fastcosine(value_native()));
+}
+
+fixed
+Angle::invfastcosine() const 
+{
+  return (::invfastcosine(value_native()));
+}
+
+int
+Angle::ifastcosine() const 
+{
+  return (::ifastcosine(value_native()));
+}
+
+int
+Angle::ifastsine() const 
+{
+  return (::ifastsine(value_native()));
+}
+
+fixed
 Angle::magnitude_degrees() const 
 {
-  return fabs(m_value);
+  return fabs(value_degrees());
 }
 
 fixed
 Angle::magnitude_radians() const 
 {
-  return fabs(m_value*fixed_deg_to_rad);
+  return fabs(value_radians());
 }
 
 Angle

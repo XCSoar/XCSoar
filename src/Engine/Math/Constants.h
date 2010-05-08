@@ -47,6 +47,12 @@ Copyright_License {
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
+#ifndef M_2PI
+#define M_2PI 6.28318530718
+#endif
+#ifndef M_HALFPI
+#define M_HALFPI 1.5707963268
+#endif
 
 //#define   BAM_270_DEG       0xc0000000L    // BAM representation of 270 deg
 //#define   BAM_180_DEG       0x80000000L    // BAM representation of 180 deg

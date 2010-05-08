@@ -8,6 +8,7 @@
 // Extensions and bug/compilation fixes by John Wharington 2009
 
 #include <algorithm>
+#include "Constants.h"
 using std::max;
 using std::min;
 
@@ -23,9 +24,9 @@ typedef double fixed;
 #define fixed_four 4.0
 #define fixed_deg_to_rad 0.0174532925199432958
 #define fixed_rad_to_deg 57.2957795131
-#define fixed_pi 3.1415926
-#define fixed_two_pi 6.2831852
-#define fixed_half_pi 1.5707963
+#define fixed_pi M_PI
+#define fixed_two_pi M_2PI
+#define fixed_half_pi M_HALFPI
 #define fixed_360 360
 #define fixed_180 180
 #define fixed_90 90

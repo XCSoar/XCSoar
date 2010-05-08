@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_MATH_FASTMATH_H
 
 #include "Compiler.h"
+#include "Math/Constants.h"
 #include <math.h>
 
 #ifdef __cplusplus
@@ -92,7 +93,11 @@ gcc_const
 static inline int
 NATIVE_TO_INT(fixed x)
 {
+#ifdef RADIANS
+  return ((unsigned short)(x * (65536.0 / (M_2PI)))) >> 4;
+#else
   return ((unsigned short)(x * (65536.0 / 360.0))) >> 4;
+#endif
 }
 
 gcc_const

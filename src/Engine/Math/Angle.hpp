@@ -49,18 +49,42 @@ private:
 
 public:
   Angle():m_value(fixed_zero) {};
+  Angle(const Angle& angle): m_value(angle.m_value) {};
 
   static Angle native(const fixed& value) {
     return Angle(value);
   };
+  fixed value_native() const {
+    return m_value;
+  }
+
+#ifdef RADIANS
+  static Angle degrees(const fixed& value) {
+    return Angle(value*fixed_deg_to_rad);
+  };
+  static Angle radians(const fixed& value) {
+    return Angle(value);
+  };
+  fixed value_degrees() const {
+    return m_value*fixed_rad_to_deg;
+  }
+  fixed value_radians() const {
+    return m_value;
+  }
+#else
   static Angle degrees(const fixed& value) {
     return Angle(value);
   };
   static Angle radians(const fixed& value) {
     return Angle(value*fixed_rad_to_deg);
   };
-
-  Angle(const Angle& angle): m_value(angle.m_value) {};
+  fixed value_degrees() const {
+    return m_value;
+  }
+  fixed value_radians() const {
+    return m_value*fixed_deg_to_rad;
+  }
+#endif
 
   fixed sin() const;
   fixed cos() const;
@@ -70,16 +94,6 @@ public:
   int ifastsine() const;
   int ifastcosine() const;
   int sign() const;
-
-  fixed value_native() const {
-    return m_value;
-  }
-  fixed value_degrees() const {
-    return m_value;
-  }
-  fixed value_radians() const {
-    return m_value*fixed_deg_to_rad;
-  }
 
   void sin_cos(fixed& s, fixed& c) const;
   
