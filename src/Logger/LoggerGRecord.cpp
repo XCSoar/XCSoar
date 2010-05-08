@@ -287,9 +287,8 @@ GRecord::ReadGRecordFromFile(TCHAR szOutput[], size_t max_length)
     if (data[0] != 'G')
       continue;
 
-    unsigned int iLenData = _tcslen(data);
-    for (unsigned int i = 1; i < iLenData; i++) { // skip initial 'G'
-      TCHAR ch = data[i];
+    for (const TCHAR *p = data + 1; *p != '\0'; ++p) {
+      TCHAR ch = *p;
       if ((ch == '\r') || (ch == '\n'))
         continue;
 
