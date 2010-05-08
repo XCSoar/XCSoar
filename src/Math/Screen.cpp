@@ -142,64 +142,6 @@ PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys,
   }
 }
 
-/* not used!
-BOOL
-PolygonVisible(const POINT *lpPoints, int nCount, RECT rc)
-{
-  const RECT MapRect = MapWindow::GetMapRect();
-  BOOL Sector[9] = { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE };
-  int i;
-  int Count = 0;
-  (void)rc;
-  //return TRUE;
-
-  for (i = 0; i < nCount; i++) {
-    if (lpPoints[i].y < MapRect.top) {
-      if (lpPoints[i].x < MapRect.left) {
-        Sector[0] = TRUE;
-      } else if ((lpPoints[i].x >= MapRect.left) && (lpPoints[i].x
-          < MapRect.right)) {
-        Sector[1] = TRUE;
-      } else if (lpPoints[i].x >= MapRect.right) {
-        Sector[2] = TRUE;
-      }
-    } else if ((lpPoints[i].y >= MapRect.top) && (lpPoints[i].y
-        < MapRect.bottom)) {
-      if (lpPoints[i].x < MapRect.left) {
-        Sector[3] = TRUE;
-      } else if ((lpPoints[i].x >= MapRect.left) && (lpPoints[i].x
-          < MapRect.right)) {
-        Sector[4] = TRUE;
-        return TRUE;
-      } else if (lpPoints[i].x >= MapRect.right) {
-        Sector[5] = TRUE;
-      }
-    } else if (lpPoints[i].y >= MapRect.bottom) {
-      if (lpPoints[i].x < MapRect.left) {
-        Sector[6] = TRUE;
-      } else if ((lpPoints[i].x >= MapRect.left) && (lpPoints[i].x
-          < MapRect.right)) {
-        Sector[7] = TRUE;
-      } else if (lpPoints[i].x >= MapRect.right) {
-        Sector[8] = TRUE;
-      }
-    }
-  }
-
-  for (i = 0; i < 9; i++) {
-    if (Sector[i]) {
-      Count++;
-    }
-  }
-
-  if (Count >= 2) {
-    return TRUE;
-  } else {
-    return FALSE;
-  }
-}
-*/
-
 bool
 CheckRectOverlap(RECT rc1, RECT rc2)
 {
