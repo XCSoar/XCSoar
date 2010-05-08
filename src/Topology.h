@@ -100,7 +100,7 @@ public:
   void TriggerIfScaleNowVisible(MapWindowProjection &map_projection);
 
   void updateCache(MapWindowProjection &map_projection,
-		   rectObj thebounds, bool purgeonly = false);
+		   const rectObj &thebounds, bool purgeonly = false);
   void Paint(Canvas &canvas, MapWindow &m_window, const RECT rc);
 
   double scaleThreshold;

@@ -162,8 +162,9 @@ Topology::flushCache()
 }
 
 void
-Topology::updateCache(MapWindowProjection &map_projection, rectObj thebounds,
-    bool purgeonly)
+Topology::updateCache(MapWindowProjection &map_projection, 
+                      const rectObj &thebounds,
+                      bool purgeonly)
 {
   if (!triggerUpdateCache)
     return;
