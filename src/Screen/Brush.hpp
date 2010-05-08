@@ -47,7 +47,11 @@ class Bitmap;
 /**
  * A Brush is used for drawing filled circles, rectangles and so on
  */
-class Brush : private NonCopyable {
+class Brush
+#ifndef ENABLE_SDL
+  : private NonCopyable
+#endif
+{
 protected:
   #ifdef ENABLE_SDL
   bool hollow;

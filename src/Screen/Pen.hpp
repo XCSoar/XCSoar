@@ -45,7 +45,11 @@ Copyright_License {
 /**
  * A pen draws lines and borders.
  */
-class Pen : private NonCopyable {
+class Pen
+#ifndef ENABLE_SDL
+  : private NonCopyable
+#endif
+{
 public:
   #ifdef ENABLE_SDL
   enum style {
