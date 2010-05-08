@@ -94,9 +94,9 @@ static inline int
 NATIVE_TO_INT(fixed x)
 {
 #ifdef RADIANS
-  return ((unsigned short)(x * (65536.0 / (M_2PI)))) >> 4;
+  return ((unsigned short)(x * fixed(65536.0 / (M_2PI)))) >> 4;
 #else
-  return ((unsigned short)(x * (65536.0 / 360.0))) >> 4;
+  return ((unsigned short)(x * fixed(65536.0 / 360.0))) >> 4;
 #endif
 }
 

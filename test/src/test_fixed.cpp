@@ -18,9 +18,9 @@ int main(int argc, char** argv) {
   ok((fixed(1000) / fixed(100)) * 1000 == 10000, "1000/100", 0);
   ok((fixed(100) / fixed(20)) * 1000 == 5000, "100/20", 0);
   ok((fixed(1000000) / fixed(2)) * 1000 == 500000000, "1M/2", 0);
-  ok((fixed(-1) / fixed_one) * 1000 == -1000, "-1/1", 0);
-  ok((fixed_one / fixed(-1)) * 1000 == -1000, "1/-1", 0);
-  ok((fixed(-1) / fixed(-1)) * 1000 == 1000, "-1/-1", 0);
+  ok((fixed_minus_one / fixed_one) * 1000 == -1000, "-1/1", 0);
+  ok((fixed_one / fixed_minus_one) * 1000 == -1000, "1/-1", 0);
+  ok((fixed_minus_one / fixed_minus_one) * 1000 == 1000, "-1/-1", 0);
   ok((fixed(-1000000) / fixed(2)) * 1000 == -500000000, "-1M/2", 0);
   ok((long)((fixed_one / (fixed_one / fixed(10))) * 1000) == 10000, "1/0.1", 0);
   ok((long)((fixed_one / (fixed_one / fixed(-10))) * 1000) == -10000, "1/-0.1", 0);

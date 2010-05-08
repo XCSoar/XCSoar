@@ -23,7 +23,8 @@ Trace::append(const AIRCRAFT_STATE& state)
     task_projection.reset(state.get_location());
     task_projection.update_fast();
     m_last_point.time = null_time;
-  } else if ((trace_tree.size() > 0) && (state.Time < m_last_point.time)) {
+  } else if (trace_tree.size() > 0 &&
+             state.Time < fixed(m_last_point.time)) {
     clear();
     return;
   }
@@ -159,7 +160,9 @@ Trace::trim_point_delta()
   unsigned lowest_dt = null_time;
   TraceTree::const_iterator candidate = trace_tree.end();
 
+#ifndef NDEBUG
   const unsigned min_time = distance_delta_map.begin()->first;
+#endif
 
   for (TraceTree::const_iterator it = trace_tree.begin();
        it != trace_tree.end(); ++it) {

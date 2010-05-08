@@ -86,13 +86,13 @@ protected:
       
       GeoVector vec(m_location, tp.get_location_remaining());
 
-      if ((m_bearing-vec.Bearing).as_delta().magnitude_degrees()<10) {
+      if ((m_bearing - vec.Bearing).as_delta().magnitude_degrees() < fixed(10)) {
         // insignificant error
         return;
       }
 
       double distance_max = min(vec.Distance,
-                                m_map.GetScreenDistanceMeters()*0.7);
+                                m_map.GetScreenDistanceMeters() * fixed(0.7));
       if (distance_max < 5000.0) {
         // too short to bother
         return;
@@ -114,7 +114,7 @@ protected:
 
         double distance0 = Distance(start, dloc);
         double distance1 = Distance(dloc, target);
-        double distance = (distance0+distance1)/vec.Distance;
+        double distance = fixed(distance0 + distance1) / vec.Distance;
         int idist = iround((distance-1.0)*100);
 
         if ((idist != ilast) && (idist>0) && (idist<1000)) {

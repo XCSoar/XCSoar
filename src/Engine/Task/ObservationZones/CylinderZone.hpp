@@ -115,7 +115,7 @@ public:
  * @param new_radius Radius (m) of cylinder
  */
   virtual void setRadius(fixed new_radius) {
-    assert(new_radius>0);
+    assert(positive(new_radius));
     Radius = new_radius;
   }
 

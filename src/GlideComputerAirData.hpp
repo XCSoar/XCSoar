@@ -108,7 +108,7 @@ private:
   void ThermalSources();
   void LastThermalStats();
   void ThermalBand();
-  void PercentCircling(const double Rate);
+  void PercentCircling(const fixed Rate);
   void Turning();
   void ProcessSun();
   GPSClock airspace_clock;

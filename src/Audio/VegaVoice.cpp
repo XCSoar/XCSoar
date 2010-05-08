@@ -342,7 +342,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
   case VV_CLIMBRATE:
     if (!settings.EnableVoiceClimbRate) return false;
 
-    if (Calculated->Circling && (Calculated->Average30s > 0)) {
+    if (Calculated->Circling && positive(Calculated->Average30s)) {
       // Gives the average climb rate in user units every X seconds
       // while in circling mode
       // e.g. if average = 3.4 (user units)

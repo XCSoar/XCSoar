@@ -206,7 +206,7 @@ void
 MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 {
   static bool flip = true;
-  static double LastTime = 0;
+  static fixed LastTime = fixed_zero;
   bool drawlogger = true;
   static bool lastLoggerActive = false;
   int offset = -1;
@@ -327,7 +327,7 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
   canvas.select(MapGfx.hpWind);
   canvas.select(MapGfx.hbWind);
 
-  int wmag = iround(4.0 * wind.norm);
+  int wmag = iround(4 * wind.norm);
 
   Start.y = Orig.y;
   Start.x = Orig.x;
@@ -400,7 +400,7 @@ MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
       * acos(max(-fixed_one, min(fixed_one,
                                  Basic().acceleration.PitchAngle
                                  * fixed_div)));
-  fixed sphi = 180 - phi;
+  fixed sphi = fixed_180 - phi;
   Angle alpha1 = Angle::degrees(sphi - alpha);
   Angle alpha2 = Angle::degrees(sphi + alpha);
 
@@ -576,10 +576,9 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
     }
 
     if (Appearance.IndFinalGlide == fgFinalGlideDefault) {
-
-      _stprintf(Value, TEXT("%1.0f "), Units::ToUserUnit(
-          Calculated().task_stats.total.solution_remaining.AltitudeDifference,
-          Units::AltitudeUnit));
+      Units::FormatUserAltitude(Calculated().task_stats.total.solution_remaining.AltitudeDifference,
+                                Value, sizeof(Value) / sizeof(Value[0]),
+                                false);
 
       if (Offset >= 0) {
         Offset = GlideBar[2].y + Offset + IBLSCALE(5);
@@ -602,9 +601,9 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
       //            Appearance.MapWindowBoldFont.CapitalHeight/2-1;
       int x = GlideBar[2].x + IBLSCALE(1);
 
-      _stprintf(Value, TEXT("%1.0f"), Units::ToUserUnit(
-          Calculated().task_stats.total.solution_remaining.AltitudeDifference,
-          Units::AltitudeUnit));
+      Units::FormatUserAltitude(Calculated().task_stats.total.solution_remaining.AltitudeDifference,
+                                Value, sizeof(Value) / sizeof(Value[0]),
+                                false);
 
       canvas.select(MapWindowBoldFont);
       TextSize = canvas.text_size(Value);
@@ -690,7 +689,7 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas)
     return;
 
   if (Calculated().task_stats.current_leg.solution_remaining.Vector.Distance
-      < 0.010)
+      < fixed(0.010))
     return;
 
   canvas.select(MapGfx.hpBestCruiseTrack);

@@ -47,19 +47,19 @@ void
 MapWindow::CalculateScreenPositionsThermalSources()
 {
   for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
-    if (Calculated().ThermalSources[i].LiftRate <= 0) {
+    if (!positive(Calculated().ThermalSources[i].LiftRate)) {
       ThermalSources[i].Visible = false;
       continue;
     }
 
-    double dh = Basic().NavAltitude -
+    fixed dh = Basic().NavAltitude -
                 Calculated().ThermalSources[i].GroundHeight;
-    if (dh < 0) {
+    if (negative(dh)) {
       ThermalSources[i].Visible = false;
       continue;
     }
 
-    double t = -dh / Calculated().ThermalSources[i].LiftRate;
+    fixed t = -dh / Calculated().ThermalSources[i].LiftRate;
     GEOPOINT loc;
     FindLatitudeLongitude(Calculated().ThermalSources[i].Location,
                           Basic().wind.bearing, Basic().wind.norm * t, &loc);
@@ -72,11 +72,11 @@ void
 MapWindow::DrawThermalEstimate(Canvas &canvas)
 {
   if (DisplayMode == dmCircling) {
-    if (Calculated().ThermalEstimate_R > 0)
+    if (positive(Calculated().ThermalEstimate_R))
       draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpThermalSource,
                                     Calculated().ThermalEstimate_Location,
                                     10, 10);
-  } else if (GetMapScaleKM() <= 4) {
+  } else if (GetMapScaleKM() <= fixed_four) {
     for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
       if (ThermalSources[i].Visible)
         draw_masked_bitmap(canvas, MapGfx.hBmpThermalSource,
@@ -91,29 +91,29 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
 {
   POINT GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };
 
-  if ((Calculated().task_stats.total.solution_remaining.AltitudeDifference > 50)
+  if ((Calculated().task_stats.total.solution_remaining.AltitudeDifference > fixed(50))
       && (DisplayMode == dmFinalGlide))
     return;
 
   // JMW TODO accuracy: gather proper statistics
   // note these should/may also be relative to ground
   int i;
-  double mth = Calculated().MaxThermalHeight;
-  double maxh, minh;
-  double h;
-  double Wt[NUMTHERMALBUCKETS];
-  double ht[NUMTHERMALBUCKETS];
-  double Wmax = 0.0;
+  fixed mth = Calculated().MaxThermalHeight;
+  fixed maxh, minh;
+  fixed h;
+  fixed Wt[NUMTHERMALBUCKETS];
+  fixed ht[NUMTHERMALBUCKETS];
+  fixed Wmax = fixed_zero;
   int TBSCALEY = ((rc.bottom - rc.top) / 2) - IBLSCALE(30);
 #define TBSCALEX 20
 
   // calculate height above safety altitude
-  double hoffset = SettingsComputer().safety_height_terrain +
+  fixed hoffset = SettingsComputer().safety_height_terrain +
                    Calculated().TerrainBase;
   h = Basic().NavAltitude - hoffset;
 
   bool draw_start_height = false;
-  double hstart = 0;
+  fixed hstart = fixed_zero;
   
   OrderedTaskBehaviour task_props;
   if (task != NULL)
@@ -124,7 +124,7 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
                       && Calculated().TerrainValid;
   if (draw_start_height) {
     if (task_props.start_max_height_ref == 0) {
-      hstart = task_props.start_max_height + Calculated().TerrainAlt;
+      hstart = fixed(task_props.start_max_height) + Calculated().TerrainAlt;
     } else {
       hstart = task_props.start_max_height;
     }
@@ -133,7 +133,7 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
 
   // calculate top/bottom height
   maxh = max(h, mth);
-  minh = min(h, 0.0);
+  minh = min(h, fixed_zero);
 
   if (draw_start_height) {
     maxh = max(maxh, hstart);
@@ -141,36 +141,36 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
   }
 
   // no thermalling has been done above safety altitude
-  if (mth <= 1)
+  if (mth <= fixed_one)
     return;
-  if (maxh - minh <= 0)
+  if (maxh <= minh)
     return;
 
   // normalised heights
-  double hglider = (h - minh) / (maxh - minh);
+  fixed hglider = (h - minh) / (maxh - minh);
   hstart = (hstart - minh) / (maxh - minh);
 
   // calculate averages
   int numtherm = 0;
 
-  const double mc = get_glide_polar().get_mc();
-  Wmax = max(0.5, mc);
+  const fixed mc = get_glide_polar().get_mc();
+  Wmax = max(fixed_half, mc);
 
   for (i = 0; i < NUMTHERMALBUCKETS; i++) {
-    double wthis = 0;
+    fixed wthis = fixed_zero;
     // height of this thermal point [0,mth]
-    double hi = i * mth / NUMTHERMALBUCKETS;
-    double hp = ((hi - minh) / (maxh - minh));
+    fixed hi = i * mth / NUMTHERMALBUCKETS;
+    fixed hp = ((hi - minh) / (maxh - minh));
 
     if (Calculated().ThermalProfileN[i] > 5) {
       // now requires 10 items in bucket before displaying,
       // to eliminate kinks
       wthis = Calculated().ThermalProfileW[i] / Calculated().ThermalProfileN[i];
     }
-    if (wthis > 0.0) {
+    if (positive(wthis)) {
       ht[numtherm] = hp;
       Wt[numtherm] = wthis;
-      Wmax = max(Wmax, wthis / 1.5);
+      Wmax = max(Wmax, wthis / fixed(1.5));
       numtherm++;
     }
   }
@@ -191,7 +191,7 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
           (iround((Wt[i] / Wmax) * IBLSCALE(TBSCALEX))) + rc.left;
 
       ThermalProfile[1 + i].y =
-          IBLSCALE(4) + iround(TBSCALEY * (1.0 - ht[i])) + rc.top;
+          IBLSCALE(4) + iround(TBSCALEY * (fixed_one - ht[i])) + rc.top;
     }
     ThermalProfile[0].x = rc.left;
     ThermalProfile[0].y = ThermalProfile[1].y;
@@ -203,7 +203,7 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
 
   // position of thermal band
 
-  GliderBand[0].y = IBLSCALE(4) + iround(TBSCALEY * (1.0 - hglider)) + rc.top;
+  GliderBand[0].y = IBLSCALE(4) + iround(TBSCALEY * (fixed_one - hglider)) + rc.top;
   GliderBand[1].y = GliderBand[0].y;
   GliderBand[1].x =
       max(iround((mc / Wmax) * IBLSCALE(TBSCALEX)), IBLSCALE(4)) + rc.left;
@@ -222,7 +222,7 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
 
   if (draw_start_height) {
     canvas.select(MapGfx.hpFinalGlideBelow);
-    GliderBand[0].y = IBLSCALE(4) + iround(TBSCALEY * (1.0 - hstart)) + rc.top;
+    GliderBand[0].y = IBLSCALE(4) + iround(TBSCALEY * (fixed_one - hstart)) + rc.top;
     GliderBand[1].y = GliderBand[0].y;
     canvas.polyline(GliderBand, 2);
   }

@@ -64,7 +64,7 @@ protected:
   TaskClientCalc &m_task;
 
   bool time_advanced() {
-    return Basic().Time - LastBasic().Time > 0;
+    return Basic().Time - LastBasic().Time > fixed_zero;
   }
   /**
    * @see GlideComputerBlackboard::ReadBlackboard()

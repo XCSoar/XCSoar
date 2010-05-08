@@ -47,7 +47,12 @@ Copyright_License {
 
 #include <stdio.h>
 
-#define fSnailColour(cv) max((short)0, min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
+static int
+fSnailColour(fixed cv)
+{
+  return max((short)0, min((short)(NUMSNAILCOLORS - 1),
+                           (short)((cv + fixed_one) / 2 * NUMSNAILCOLORS)));
+}
 
 /**
  * Draws the FLARM traffic icons onto the given canvas
@@ -76,8 +81,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
   displaymode.AsInt = 0;
 
   // Determine scale factor for use in Scaled mode
-  double screenrange = GetScreenDistanceMeters();
-  double scalefact = screenrange/6000.0;
+  fixed screenrange = GetScreenDistanceMeters();
+  fixed scalefact = screenrange / 6000;
 
   // Create the brushes for filling the arrow (red/yellow/green)
   static const Brush AlarmBrush(Color::RED);
@@ -85,7 +90,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
   static const Brush TrafficBrush(Color::GREEN);
 
   // Saves the McCready value
-  const double MACCREADY = get_glide_polar().get_mc();
+  const fixed MACCREADY = get_glide_polar().get_mc();
 
   // Circle through the FLARM targets
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
@@ -100,7 +105,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 
     // If Scaled mode is chosen, recalculate the
     // targets virtual position using the scale factor
-    if ((SettingsMap().EnableFLARMMap == 2) && (scalefact > 1.0)) {
+    if ((SettingsMap().EnableFLARMMap == 2) && (scalefact > fixed_one)) {
       fixed distance;
       Angle bearing;
 
@@ -187,11 +192,11 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
         brect.bottom = brect.top + 3 + tsize.cy - ((tsize.cy + 4) >> 3);
 
         // Determine the background color for the average climb indicator
-        float vmax = (float)(1.5 * min(5.0, max(MACCREADY, 0.5)));
-        float vmin = (float)(-1.5 * min(5.0, max(MACCREADY, 2.0)));
+        fixed vmax = (fixed(1.5) * min(fixed(5), max(MACCREADY, fixed_half)));
+        fixed vmin = (fixed(-1.5) * min(fixed(5), max(MACCREADY, fixed_two)));
 
-        float cv = traffic.Average30s;
-        if (cv < 0)
+        fixed cv(traffic.Average30s);
+        if (negative(cv))
           cv /= (-vmin); // JMW fixed bug here
         else
           cv /= vmax;

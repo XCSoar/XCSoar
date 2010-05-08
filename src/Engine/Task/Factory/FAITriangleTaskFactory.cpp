@@ -51,9 +51,9 @@ FAITriangleTaskFactory::validate()
 
   if (m_task.task_size()==4) {
 
-    const double d1 = m_task.getTaskPoint(1)->get_vector_planned().Distance/1000.0;
-    const double d2 = m_task.getTaskPoint(2)->get_vector_planned().Distance/1000.0;
-    const double d3 = m_task.getTaskPoint(3)->get_vector_planned().Distance/1000.0;
+    const double d1 = m_task.getTaskPoint(1)->get_vector_planned().Distance / 1000;
+    const double d2 = m_task.getTaskPoint(2)->get_vector_planned().Distance / 1000;
+    const double d3 = m_task.getTaskPoint(3)->get_vector_planned().Distance / 1000;
     const double d_wp = d1+d2+d3;
 
     /**

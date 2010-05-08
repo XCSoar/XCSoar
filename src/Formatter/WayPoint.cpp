@@ -224,7 +224,7 @@ void FormatterAlternate::AssignValue(int i) {
 const TCHAR *FormatterDiffBearing::Render(int *color) {
 
   if (Calculated().task_stats.task_valid
-      && (Calculated().task_stats.current_leg.solution_remaining.Vector.Distance > 10.0)) {
+      && (Calculated().task_stats.current_leg.solution_remaining.Vector.Distance > fixed(10))) {
     Valid = true;
 
     Value = (Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing 

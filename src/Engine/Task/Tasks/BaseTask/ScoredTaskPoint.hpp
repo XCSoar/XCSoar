@@ -82,7 +82,7 @@ public:
  * @return True if aircraft has entered the OZ
  */
   bool has_entered() const {
-    return m_state_entered.Time>0;
+    return m_state_entered.Time > fixed_zero;
   }
 
 /** 
@@ -91,7 +91,7 @@ public:
  * @return True if aircraft has exited the OZ
  */
   bool has_exited() const {
-    return m_state_exited.Time>0;
+    return m_state_exited.Time > fixed_zero;
   }
 
 /** 

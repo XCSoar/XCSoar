@@ -80,7 +80,7 @@ void FormatterTime::AssignValue(int i) {
     break;
   case 46:
     SecsToDisplayTime((int)(Calculated().task_stats.current_leg.solution_remaining.TimeElapsed
-                            +DetectCurrentTime(&Basic())));
+                            + fixed(DetectCurrentTime(&Basic()))));
     Valid = Calculated().task_stats.current_leg.achievable();
     break;
   default:
@@ -132,7 +132,7 @@ void FormatterAATTime::AssignValue(int i) {
     break;
   case 45:
     SecsToDisplayTime((int)(Calculated().task_stats.total.TimeRemaining
-                            +DetectCurrentTime(&Basic())));
+                            + fixed(DetectCurrentTime(&Basic()))));
     Valid = Calculated().task_stats.task_valid && Calculated().task_stats.total.achievable();
     break;
   case 62:

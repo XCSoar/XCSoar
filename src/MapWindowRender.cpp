@@ -102,7 +102,7 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
     Angle sunelevation = Angle::degrees(fixed(40.0));
     Angle sunazimuth = GetDisplayAngle() - Basic().wind.bearing;
     // draw sun from constant angle if very low wind speed
-    if (Basic().wind.norm < 0.5)
+    if (Basic().wind.norm < fixed_half)
       sunazimuth = GetDisplayAngle() + Angle::degrees(fixed(45.0));
 
     // if (dirtyEvent.test()) {

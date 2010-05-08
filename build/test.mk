@@ -122,7 +122,6 @@ READ_PROFILE_STRING_SOURCES = \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
 	$(SRC)/ProfileKeys.cpp \
-	$(SRC)/Units.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/ReadProfileString.cpp
 READ_PROFILE_STRING_OBJS = $(call SRC_TO_OBJ,$(READ_PROFILE_STRING_SOURCES))
@@ -137,7 +136,6 @@ READ_PROFILE_INT_SOURCES = \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
 	$(SRC)/ProfileKeys.cpp \
-	$(SRC)/Units.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/ReadProfileInt.cpp
 READ_PROFILE_INT_OBJS = $(call SRC_TO_OBJ,$(READ_PROFILE_INT_SOURCES))
@@ -152,7 +150,6 @@ WRITE_PROFILE_STRING_SOURCES = \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
 	$(SRC)/ProfileKeys.cpp \
-	$(SRC)/Units.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/WriteProfileString.cpp
 WRITE_PROFILE_STRING_OBJS = $(call SRC_TO_OBJ,$(WRITE_PROFILE_STRING_SOURCES))
@@ -167,7 +164,6 @@ WRITE_PROFILE_INT_SOURCES = \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
 	$(SRC)/ProfileKeys.cpp \
-	$(SRC)/Units.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/WriteProfileInt.cpp
 WRITE_PROFILE_INT_OBJS = $(call SRC_TO_OBJ,$(WRITE_PROFILE_INT_SOURCES))

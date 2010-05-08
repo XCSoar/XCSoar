@@ -98,7 +98,7 @@ struct FLARM_TRAFFIC {
       return false;
 
     // if (FLARM target is too old or time has gone backwards)
-    if (Time > Time_Fix + 2 || Time < Time_Fix) {
+    if (Time > fixed(Time_Fix) + fixed_two || Time < fixed(Time_Fix)) {
       // clear this slot if it is too old (2 seconds), or if
       // time has gone backwards (due to replay)
       Clear();

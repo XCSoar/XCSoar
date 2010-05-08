@@ -45,8 +45,8 @@
 typedef struct _LOGGER_INTERP_POINT
 {
   GEOPOINT loc;
-  double alt;
-  double t;
+  fixed alt;
+  fixed t;
 } LOGGER_INTERP_POINT;
 
 /*
@@ -76,7 +76,7 @@ public:
   LOGGER_INTERP_POINT p[4];
 
   void
-  Update(double t, double lon, double lat, double alt)
+  Update(fixed t, fixed lon, fixed lat, fixed alt)
   {
     if (num && (t<=p[num-1].t)) return;
 
@@ -101,25 +101,25 @@ public:
     return (num == 4);
   }
 
-  double
-  GetSpeed(double time)
+  fixed
+  GetSpeed(fixed time)
   {
     if (!Ready())
-      return 0.0;
+      return fixed_zero;
 
-    double u = (time - p[1].t) / (p[2].t - p[1].t);
+    fixed u = (time - p[1].t) / (p[2].t - p[1].t);
 
-    double s0 = p[0].loc.distance(p[1].loc);
+    fixed s0 = p[0].loc.distance(p[1].loc);
     s0 /= (p[1].t - p[0].t);
-    double s1 = p[1].loc.distance(p[2].loc);
+    fixed s1 = p[1].loc.distance(p[2].loc);
     s1 /= (p[2].t - p[1].t);
 
-    u = max(0.0, min(1.0,u));
+    u = max(fixed_zero, min(fixed_one, u));
 
-    return s1 * u + s0 * (1.0 - u);
+    return s1 * u + s0 * (fixed_one - u);
   }
   void 
-  Interpolate(double time, GEOPOINT &loc, double &alt) 
+  Interpolate(fixed time, GEOPOINT &loc, fixed &alt)
   {
     if (!Ready()) {
       loc = p[num].loc;
@@ -145,8 +145,8 @@ public:
     const fixed u2 = u * u;
     const fixed u3 = u2 * u;
     const fixed c[4]= {-t * u3 + 2 * t * u2 - t * u,
-                        (2 - t) * u3 + (t - 3) * u2 + 1,
-                        (t - 2) * u3 + (3 - 2 * t) * u2 + t * u,
+                       (fixed_two - t) * u3 + (t - fixed(3)) * u2 + fixed_one,
+                       (t - fixed_two) * u3 + (fixed(3) - 2 * t) * u2 + t * u,
                         t * u3 - t * u2};
 
     loc.Latitude = (p[0].loc.Latitude*c[0] + p[1].loc.Latitude*c[1]
@@ -159,25 +159,25 @@ public:
 
   }
 
-  double
+  fixed
   GetMinTime()
   {
     return p[0].t;
   }
 
-  double
+  fixed
   GetMaxTime()
   {
-    return max(0.0, max(p[0].t, max(p[1].t, max(p[2].t, p[3].t))));
+    return max(fixed_zero, max(p[0].t, max(p[1].t, max(p[2].t, p[3].t))));
   }
 
-  double
+  fixed
   GetAverageTime()
   {
     if (num <= 0)
-      return 0;
+      return fixed_zero;
 
-    double tav = 0;
+    fixed tav = fixed_zero;
     for (int i = 0; i < num; i++) {
       tav += p[i].t / num;
     }
@@ -186,14 +186,14 @@ public:
   }
 
   bool
-  NeedData(double t_simulation)
+  NeedData(fixed t_simulation)
   {
-    return !Ready() || (p[2].t <= t_simulation + 0.1);
+    return !Ready() || (p[2].t <= t_simulation + fixed(0.1));
   }
 
 private:
   int num;
-  double tzero;
+  fixed tzero;
 };
 
 
@@ -235,8 +235,8 @@ ReplayLogger::ReadLine(TCHAR *buffer)
 
 
 bool
-ReplayLogger::ScanBuffer(const TCHAR *buffer, double *Time,
-    double *Latitude, double *Longitude, double *Altitude)
+ReplayLogger::ScanBuffer(const TCHAR *buffer, fixed *Time,
+                         fixed *Latitude, fixed *Longitude, fixed *Altitude)
 {
   int DegLat, DegLon;
   int MinLat, MinLon;
@@ -272,8 +272,8 @@ ReplayLogger::ScanBuffer(const TCHAR *buffer, double *Time,
 }
 
 bool
-ReplayLogger::ReadPoint(double *Time, double *Latitude, double *Longitude,
-    double *Altitude)
+ReplayLogger::ReadPoint(fixed *Time, fixed *Latitude, fixed *Longitude,
+                        fixed *Altitude)
 {
   TCHAR buffer[200];
   bool found = false;
@@ -288,16 +288,15 @@ ReplayLogger::ReadPoint(double *Time, double *Latitude, double *Longitude,
 }
 
 
-double
-ReplayLogger::get_time(const bool reset,
-                       const double mintime)
+fixed
+ReplayLogger::get_time(const bool reset, const fixed mintime)
 {
-  static double t_simulation = 0;
+  static fixed t_simulation = fixed_zero;
   
   if (reset) {
-    t_simulation = 0;
+    t_simulation = fixed_zero;
   } else {
-    t_simulation++;
+    t_simulation + fixed_one;
   }
   t_simulation = std::max(mintime, t_simulation);
   return t_simulation;
@@ -327,7 +326,7 @@ ReplayLogger::UpdateInternal()
   static bool initialised = false;
   static bool finished = false;
   static CatmullRomInterpolator cli;
-  static double t_simulation;
+  static fixed t_simulation;
 
   if (!Enabled) {
     initialised = false;
@@ -348,16 +347,16 @@ ReplayLogger::UpdateInternal()
 
   // if need a new point
   while (cli.NeedData(t_simulation) && (!finished)) {
-    double t1=0;
-    double Lat1, Lon1, Alt1;
+    fixed t1 = fixed_zero;
+    fixed Lat1, Lon1, Alt1;
     finished = !ReadPoint(&t1, &Lat1, &Lon1, &Alt1);
 
-    if (!finished && (t1 > 0)) {
+    if (!finished && positive(t1)) {
       cli.Update(t1, Lon1, Lat1, Alt1);
     }
   }
 
-  if (t_simulation == 0) {
+  if (t_simulation == fixed_zero) {
     t_simulation = cli.GetMaxTime();
   }
 
@@ -365,14 +364,14 @@ ReplayLogger::UpdateInternal()
     Stop();
   } else {
 
-    double Alt0;
-    double Alt1;
+    fixed Alt0;
+    fixed Alt1;
     GEOPOINT P0, P1;
 
     cli.Interpolate(t_simulation, P0, Alt0);
-    cli.Interpolate(t_simulation+0.1, P1, Alt1);
+    cli.Interpolate(t_simulation + fixed(0.1), P1, Alt1);
 
-    const double Speed = cli.GetSpeed(t_simulation);
+    const fixed Speed = cli.GetSpeed(t_simulation);
     const Angle Bearing = P0.bearing(P1);
 
     on_advance(P0, Speed, Bearing, Alt0, Alt0, t_simulation);

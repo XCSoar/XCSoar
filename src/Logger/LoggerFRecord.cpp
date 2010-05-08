@@ -67,7 +67,7 @@ LoggerImpl::ResetFRecord(void)
   LastFRecordValid=true;
   DetectFRecordChange=true;
   frecord_clock.reset(); // reset clock / timer
-  frecord_clock.set_dt(1); // 1 sec so it appears at top of each file
+  frecord_clock.set_dt(fixed_one); // 1 sec so it appears at top of each file
   for (int iFirst = 0; iFirst < MAX_IGC_BUFF; iFirst++)
     szLastFRecord[iFirst]=0;
 }
@@ -99,14 +99,14 @@ LoggerImpl::LogFRecordToFile(const int SatelliteIDs[],
   }
   
   if (iNumberSatellites < 3 || NAVWarning) {
-    frecord_clock.set_dt(30);  // accelerate to 30 seconds if bad signal
+    frecord_clock.set_dt(fixed(30)); // accelerate to 30 seconds if bad signal
   }
    
-  if ( frecord_clock.check_advance(Time) && DetectFRecordChange) {
+  if (frecord_clock.check_advance(fixed(Time)) && DetectFRecordChange) {
     if (IGCWriteRecord(szFRecord, szLoggerFileName)) {
       strcpy(szLastFRecord, szFRecord);
       DetectFRecordChange=false;
-      frecord_clock.set_dt(270); //4.5 minutes
+      frecord_clock.set_dt(fixed(270)); //4.5 minutes
     }
   }
 

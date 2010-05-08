@@ -94,7 +94,7 @@ LoggerImpl::LoggerImpl():
   Simulator(false),
   NumLoggerPreTakeoffBuffered(0),
   LoggerDiskBufferCount(0),
-  frecord_clock(270.0) // 4.5 minutes)
+  frecord_clock(fixed(270)) // 4.5 minutes)
 {
   ResetFRecord();
   szLoggerFileName[0] = 0;
@@ -210,7 +210,7 @@ void
 LoggerImpl::LoadGPSPointFromNMEA(const NMEA_INFO& gps_info, LogPoint_GPSPosition &p)
 {
   p.DegLat = (int)gps_info.Location.Latitude.value_degrees();
-  p.MinLat = gps_info.Location.Latitude.value_degrees() - p.DegLat;
+  p.MinLat = gps_info.Location.Latitude.value_degrees() - fixed(p.DegLat);
   p.NoS = 'N';
   if ((p.MinLat < 0) || ((p.MinLat - p.DegLat == 0) && (p.DegLat < 0))) {
     p.NoS = 'S';
@@ -221,7 +221,7 @@ LoggerImpl::LoadGPSPointFromNMEA(const NMEA_INFO& gps_info, LogPoint_GPSPosition
   p.MinLat *= 1000;
 
   p.DegLon = (int)gps_info.Location.Longitude.value_degrees();
-  p.MinLon = gps_info.Location.Longitude.value_degrees() - p.DegLon;
+  p.MinLon = gps_info.Location.Longitude.value_degrees() - fixed(p.DegLon);
   p.EoW = 'E';
   if ((p.MinLon < 0) || ((p.MinLon - p.DegLon == 0) && (p.DegLon < 0))) {
     p.EoW = 'W';
@@ -256,8 +256,8 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
   }
 
   if (!LastValidPoint.Initialized &&
-      ((gps_info.GPSAltitude < -100)
-          || (gps_info.BaroAltitude < -100)
+      ((gps_info.GPSAltitude < fixed(-100))
+       || (gps_info.BaroAltitude < fixed(-100))
           || gps_info.gps.NAVWarning)) {
     return;
   }

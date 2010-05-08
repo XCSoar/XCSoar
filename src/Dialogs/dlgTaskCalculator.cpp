@@ -184,7 +184,7 @@ static void OnMacCreadyData(DataField *Sender,
   double MACCREADY;
   switch(Mode){
   case DataField::daSpecial:
-    if (XCSoarInterface::Calculated().timeCircling>0) {
+    if (positive(XCSoarInterface::Calculated().timeCircling)) {
       MACCREADY = XCSoarInterface::Calculated().TotalHeightClimb
 	/XCSoarInterface::Calculated().timeCircling;
       Sender->Set(Units::ToUserVSpeed(MACCREADY));

@@ -145,9 +145,8 @@ ReadValues()
 
   wp = ((WndProperty*)wf->FindByName(_T("prpMinTime")));
   if (wp) {
-    if (p.aat_min_time
-        != (wp->GetDataField()->GetAsFloat()*60)) {
-      p.aat_min_time = (wp->GetDataField()->GetAsFloat()*60);
+    if (p.aat_min_time != wp->GetDataField()->GetAsFixed() * 60) {
+      p.aat_min_time = wp->GetDataField()->GetAsFixed() * 60;
       task_changed = true;
     }
   }

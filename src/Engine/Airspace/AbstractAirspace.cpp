@@ -156,7 +156,7 @@ AbstractAirspace::intercept(const AIRCRAFT_STATE &state,
     } else {
       solution.location = loc_start;
     }
-    assert(solution.distance>=0);
+    assert(!negative(solution.distance));
     return true;
   } else {
     return false;

@@ -157,10 +157,10 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
     // Runway length (e.g. 546.0m)
     if (iRWLen < n_params && parseAltitude(params[iRWLen], rwlen)) {
       // If runway length is between 100m and 300m -> landpoint
-      if (rwlen > 100 && rwlen <= 300)
+      if (rwlen > fixed(100) && rwlen <= fixed(300))
         new_waypoint.Flags.LandPoint = true;
       // If runway length is higher then 300m -> airport
-      if (rwlen > 300)
+      if (rwlen > fixed(300))
         new_waypoint.Flags.Airport = true;
     }
   }
@@ -199,7 +199,7 @@ WayPointFileSeeYou::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
   unsigned minfrac = iround((val - (int)val) * 1000);
   unsigned min = (int)val % 100;
   unsigned deg = ((int)val - min) * 0.01;
-  val = deg + ((fixed)min + (fixed)minfrac / 1000) / 60;
+  val = fixed(deg) + ((fixed)min + (fixed)minfrac / 1000) / 60;
 
   // Limit angle to +/- 90 degrees for Latitude or +/- 180 degrees for Longitude
   val = std::min(val, (lat ? 90.0 : 180.0));

@@ -2252,11 +2252,9 @@ void dlgConfigurationShowModal(void){
     }
   }
 
-  double val;
-
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
   if (wp) {
-    double val = Units::ToSysVSpeed(wp->GetDataField()->GetAsFloat());
+    fixed val = Units::ToSysVSpeed(wp->GetDataField()->GetAsFixed());
     if (XCSoarInterface::SettingsComputer().safety_mc != val) {
       XCSoarInterface::SetSettingsComputer().safety_mc = val;
       Profile::Set(szProfileSafetyMacCready,
@@ -2267,7 +2265,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpRiskGamma"));
   if (wp) {
-    val = wp->GetDataField()->GetAsFloat();
+    fixed val = wp->GetDataField()->GetAsFixed();
     if (XCSoarInterface::SettingsComputer().risk_gamma != val) {
       XCSoarInterface::SetSettingsComputer().risk_gamma = val;
       Profile::Set(szProfileRiskGamma,
@@ -2426,7 +2424,7 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeArrival"));
   if (wp) {
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if (XCSoarInterface::SettingsComputer().safety_height_arrival != ival) {
+    if ((int)XCSoarInterface::SettingsComputer().safety_height_arrival != ival) {
       XCSoarInterface::SetSettingsComputer().safety_height_arrival = ival;
       Profile::Set(szProfileSafetyAltitudeArrival,
                    (int)XCSoarInterface::SettingsComputer().safety_height_arrival);
@@ -2437,7 +2435,7 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeTerrain"));
   if (wp) {
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if (XCSoarInterface::SettingsComputer().safety_height_terrain != ival) {
+    if ((int)XCSoarInterface::SettingsComputer().safety_height_terrain != ival) {
       XCSoarInterface::SetSettingsComputer().safety_height_terrain = ival;
       Profile::Set(szProfileSafetyAltitudeTerrain,
                    (int)XCSoarInterface::SettingsComputer().safety_height_terrain);

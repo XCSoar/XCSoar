@@ -92,7 +92,7 @@ public:
   fixed
   solution_max() const
   {
-    return (da > 0 ? solution(true) : solution(false));
+    return positive(da) ? solution(true) : solution(false);
   }
 
   /**
@@ -103,7 +103,7 @@ public:
   fixed
   solution_min() const
   {
-    return (da > 0 ? solution(false) : solution(true));
+    return positive(da) ? solution(false) : solution(true);
   }
 
 private:

@@ -99,7 +99,7 @@ void
 Projection::LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
                           unsigned n, unsigned skip) const
 {
-  static Angle lastangle(Angle::native(fixed(-1)));
+  static Angle lastangle(Angle::native(fixed_minus_one)));
   static int cost=1024, sint=0;
 
   if (GetDisplayAngle() != lastangle) {
@@ -140,7 +140,7 @@ Projection::LonLat2Screen(const pointObj* const ptin,
                           const int n,
                           const int skip) const
 {
-  static Angle lastangle(Angle::native(fixed(-1)));
+  static Angle lastangle(Angle::native(fixed_minus_one));
   static int cost=1024, sint=0;
 
   if (GetDisplayAngle() != lastangle) {
@@ -173,10 +173,17 @@ Projection::LonLat2Screen(const pointObj* const ptin,
 bool
 Projection::LonLatVisible(const GEOPOINT &loc) const
 {
+<<<<<<< HEAD:src/Projection.cpp
   if ((loc.Longitude.value_native()> screenbounds_latlon.minx) &&
       (loc.Longitude.value_native()< screenbounds_latlon.maxx) &&
       (loc.Latitude.value_native()> screenbounds_latlon.miny) &&
       (loc.Latitude.value_native()< screenbounds_latlon.maxy))
+=======
+  if (loc.Longitude.value_degrees() > fixed(screenbounds_latlon.minx) &&
+      loc.Longitude.value_degrees() < fixed(screenbounds_latlon.maxx) &&
+      loc.Latitude.value_degrees() > fixed(screenbounds_latlon.miny) &&
+      loc.Latitude.value_degrees() < fixed(screenbounds_latlon.maxy))
+>>>>>>> ac05a4045115ab0971f9b934879c9f3dd48efc05:src/Projection.cpp
     return true;
   else
     return false;
@@ -220,7 +227,7 @@ Projection::SetScaleMetersToScreen(const fixed scale_meters_to_screen)
 
   m_scale_meters_to_screen = scale_meters_to_screen;
   DrawScale = fixed_r*m_scale_meters_to_screen;
-  InvDrawScale = 1.0/DrawScale;
+  InvDrawScale = fixed_one / DrawScale;
 }
 
 void
@@ -236,7 +243,11 @@ Projection::CalculateScreenBounds(const fixed scale) const
   // compute lat lon extents of visible screen
   rectObj sb;
 
+<<<<<<< HEAD:src/Projection.cpp
   if (scale>= fixed_one) {
+=======
+  if (scale >= fixed_one) {
+>>>>>>> ac05a4045115ab0971f9b934879c9f3dd48efc05:src/Projection.cpp
     POINT screen_center;
     LonLat2Screen(PanLocation, screen_center);
 

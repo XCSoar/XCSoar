@@ -44,6 +44,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Profile.hpp"
 #include "Sizes.h"
+#include "IO/FileLineReader.hpp"
 
 /**
  * A struct that saves a translation (key + text)
@@ -164,7 +165,6 @@ ReadLanguageFile()
   LogStartUp(TEXT("Loading language file"));
 
   TCHAR szFile1[MAX_PATH];
-  FILE *fp = NULL;
 
   // Read the language filename from the registry
   Profile::Get(szProfileLanguageFile, szFile1, MAX_PATH);
@@ -175,25 +175,28 @@ ReadLanguageFile()
     _tcscpy(szFile1, TEXT("default.xcl"));
 
   // Open the language file
-  fp = _tfopen(szFile1, TEXT("rt"));
+  FileLineReader reader(szFile1, ConvertLineReader::ISO_LATIN_1);
 
   // Return if file error
-  if (fp == NULL)
+  if (reader.error())
     return;
 
-  // TODO code: Safer sizes, strings etc - use C++ (can scanf restrict length?)
-  TCHAR buffer[2049]; // key from scanf
-  TCHAR key[2049]; // key from scanf
-  TCHAR value[2049]; // value from scanf
-  int found; // Entries found from scanf
-
   // Read from the file
+  TCHAR *buffer;
   while ((GetTextData_Size < MAXSTATUSMESSAGECACHE) &&
-         _fgetts(buffer, 2048, fp) &&
-         ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)) {
+         (buffer = reader.read()) != NULL) {
+    if (*buffer == _T('#'))
+      continue;
 
-    // Check valid line?
-    if ((found != 2) || key[0] == 0 || value[0] == 0)
+    TCHAR *equals = _tcschr(buffer, _T('='));
+    if (equals == NULL || equals == buffer)
+      continue;
+
+    *equals = 0;
+
+    const TCHAR *key = buffer;
+    const TCHAR *value = equals + 1;
+    if (string_is_empty(value))
       continue;
 
     // Save parsed translation to the cache
@@ -203,6 +206,4 @@ ReadLanguageFile()
     // Global counter
     GetTextData_Size++;
   }
-
-  fclose(fp);
 }

@@ -54,14 +54,14 @@ static void OnCloseClicked(WindowControl * Sender){
 
 static void UpdateWind(bool set) {
   WndProperty *wp;
-  double ws = 0.0, wb = 0.0;
+  fixed ws = fixed_zero, wb = fixed_zero;
   wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
   if (wp) {
-    ws = Units::ToSysSpeed(wp->GetDataField()->GetAsFloat());
+    ws = Units::ToSysSpeed(wp->GetDataField()->GetAsFixed());
   }
   wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
   if (wp) {
-    wb = wp->GetDataField()->GetAsFloat();
+    wb = wp->GetDataField()->GetAsFixed();
   }
   if ((ws != XCSoarInterface::Basic().wind.norm)
       ||(wb != XCSoarInterface::Basic().wind.bearing.value_degrees())) {

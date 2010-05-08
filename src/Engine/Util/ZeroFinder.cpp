@@ -274,7 +274,7 @@ fixed ZeroFinder::find_min(const fixed xstart)
   fixed b = xmax;
   bool x_best = true;
 
-  assert(tolerance > 0 && b > a);
+  assert(positive(tolerance) && b > a);
 
   /* First step - always gold section*/
   x = w = v = a + r * (b - a);

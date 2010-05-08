@@ -52,11 +52,11 @@ void FormatterLowWarning::AssignValue(int i) {
                                 Units::AltitudeUnit);
     break;
   case 2:
-    minimum = Units::ToUserUnit(0.5 * Calculated().common_stats.current_risk_mc,
+    minimum = Units::ToUserUnit(fixed_half * Calculated().common_stats.current_risk_mc,
                                 Units::VerticalSpeedUnit);
     break;
   case 21:
-    minimum = Units::ToUserUnit(0.667 * Calculated().common_stats.current_risk_mc,
+    minimum = Units::ToUserUnit(fixed(0.667) * Calculated().common_stats.current_risk_mc,
                                 Units::VerticalSpeedUnit);
     break;
   }

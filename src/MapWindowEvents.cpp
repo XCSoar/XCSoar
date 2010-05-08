@@ -344,11 +344,11 @@ MapWindow::on_mouse_up(int x, int y)
     if (!Basic().gps.Replay && !my_target_pan && (distance > IBLSCALE(36))) {
       // This drag moves the aircraft (changes speed and direction)
       const Angle oldbearing = Basic().TrackBearing;
-      const fixed minspeed = 1.1 * (task != NULL ?
+      const fixed minspeed = fixed(1.1) * (task != NULL ?
                                     task->get_glide_polar() :
                                     GlidePolar(fixed_zero)).get_Vmin();
       const Angle newbearing = Bearing(LLstart, G);
-      if (((newbearing - oldbearing).as_delta().magnitude_degrees() < 30) ||
+      if (((newbearing - oldbearing).as_delta().magnitude_degrees() < fixed(30)) ||
           (Basic().GroundSpeed < minspeed))
         device_blackboard.SetSpeed(min(fixed(100.0),
                                    max(minspeed, fixed(distance / 3))));

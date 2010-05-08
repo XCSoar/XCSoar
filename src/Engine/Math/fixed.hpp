@@ -20,6 +20,7 @@ typedef double fixed;
 #define fixed_zero 0.0
 #define fixed_half 0.5
 #define fixed_one 1.0
+#define fixed_minus_one -1.0
 #define fixed_two 2.0
 #define fixed_four 4.0
 #define fixed_deg_to_rad 0.0174532925199432958
@@ -72,9 +73,7 @@ public:
     struct internal
     {};
 
-    fixed():
-        m_nVal(0)
-    {}
+    fixed() {}
     
     fixed(internal, value_t nVal):
         m_nVal(nVal)
@@ -266,14 +265,6 @@ public:
         m_nVal += val.m_nVal;
         return *this;
     }
-    fixed& operator*=(double val)
-    {
-        return (*this)*=fixed(val);
-    }
-    fixed& operator*=(float val)
-    {
-        return (*this)*=fixed(val);
-    }
 /*
     fixed& operator*=(value_t val)
     {
@@ -327,14 +318,6 @@ public:
     {
         m_nVal*=val;
         return *this;
-    }
-    fixed& operator/=(double val)
-    {
-        return (*this)/=fixed(val);
-    }
-    fixed& operator/=(float val)
-    {
-        return (*this)/=fixed(val);
     }
 /*
     fixed& operator/=(value_t val)
@@ -427,254 +410,10 @@ inline bool fixed::negative() const
   return (m_nVal<0);
 }
 
-inline fixed operator-(double a, fixed const& b)
-{
-    fixed temp(a);
-    return temp-=b;
-}
-
-
-inline fixed operator-(float a, fixed const& b)
-{
-    fixed temp(a);
-    return temp-=b;
-}
-
-inline fixed operator-(unsigned long a, fixed const& b)
-{
-    fixed temp(a);
-    return temp-=b;
-}
-
-inline fixed operator-(long a, fixed const& b)
-{
-    fixed temp(a);
-    return temp-=b;
-}
-
-inline fixed operator-(unsigned a, fixed const& b)
-{
-    fixed temp(a);
-    return temp-=b;
-}
-
-inline fixed operator-(int a, fixed const& b)
-{
-    fixed temp(a);
-    return temp-=b;
-}
-
-inline fixed operator-(unsigned short a, fixed const& b)
-{
-    fixed temp(a);
-    return temp-=b;
-}
-
-inline fixed operator-(short a, fixed const& b)
-{
-    fixed temp(a);
-    return temp-=b;
-}
-
-inline fixed operator-(unsigned char a, fixed const& b)
-{
-    fixed temp(a);
-    return temp-=b;
-}
-
-inline fixed operator-(char a, fixed const& b)
-{
-    fixed temp(a);
-    return temp-=b;
-}
-
-inline fixed operator-(fixed const& a,double b)
-{
-    fixed temp(a);
-    return temp -= fixed(b);
-}
-
-
-inline fixed operator-(fixed const& a,float b)
-{
-    fixed temp(a);
-    return temp -= fixed(b);
-}
-
-inline fixed operator-(fixed const& a,unsigned long b)
-{
-    fixed temp(a);
-    return temp -= fixed(b);
-}
-
-inline fixed operator-(fixed const& a,long b)
-{
-    fixed temp(a);
-    return temp -= fixed(b);
-}
-
-inline fixed operator-(fixed const& a,unsigned b)
-{
-    fixed temp(a);
-    return temp -= fixed(b);
-}
-
-inline fixed operator-(fixed const& a,int b)
-{
-    fixed temp(a);
-    return temp -= fixed(b);
-}
-
-inline fixed operator-(fixed const& a,unsigned short b)
-{
-    fixed temp(a);
-    return temp -= fixed(b);
-}
-
-inline fixed operator-(fixed const& a,short b)
-{
-    fixed temp(a);
-    return temp -= fixed(b);
-}
-
-inline fixed operator-(fixed const& a,unsigned char b)
-{
-    fixed temp(a);
-    return temp -= fixed(b);
-}
-
-inline fixed operator-(fixed const& a,char b)
-{
-    fixed temp(a);
-    return temp -= fixed(b);
-}
-
 inline fixed operator-(fixed const& a,fixed const& b)
 {
     fixed temp(a);
     return temp-=b;
-}
-
-inline fixed operator%(double a, fixed const& b)
-{
-    fixed temp(a);
-    return temp%=b;
-}
-
-
-inline fixed operator%(float a, fixed const& b)
-{
-    fixed temp(a);
-    return temp%=b;
-}
-
-inline fixed operator%(unsigned long a, fixed const& b)
-{
-    fixed temp(a);
-    return temp%=b;
-}
-
-inline fixed operator%(long a, fixed const& b)
-{
-    fixed temp(a);
-    return temp%=b;
-}
-
-inline fixed operator%(unsigned a, fixed const& b)
-{
-    fixed temp(a);
-    return temp%=b;
-}
-
-inline fixed operator%(int a, fixed const& b)
-{
-    fixed temp(a);
-    return temp%=b;
-}
-
-inline fixed operator%(unsigned short a, fixed const& b)
-{
-    fixed temp(a);
-    return temp%=b;
-}
-
-inline fixed operator%(short a, fixed const& b)
-{
-    fixed temp(a);
-    return temp%=b;
-}
-
-inline fixed operator%(unsigned char a, fixed const& b)
-{
-    fixed temp(a);
-    return temp%=b;
-}
-
-inline fixed operator%(char a, fixed const& b)
-{
-    fixed temp(a);
-    return temp%=b;
-}
-
-inline fixed operator%(fixed const& a,double b)
-{
-    fixed temp(a);
-    return temp %= fixed(b);
-}
-
-
-inline fixed operator%(fixed const& a,float b)
-{
-    fixed temp(a);
-    return temp %= fixed(b);
-}
-
-inline fixed operator%(fixed const& a,unsigned long b)
-{
-    fixed temp(a);
-    return temp %= fixed(b);
-}
-
-inline fixed operator%(fixed const& a,long b)
-{
-    fixed temp(a);
-    return temp %= fixed(b);
-}
-
-inline fixed operator%(fixed const& a,unsigned b)
-{
-    fixed temp(a);
-    return temp %= fixed(b);
-}
-
-inline fixed operator%(fixed const& a,int b)
-{
-    fixed temp(a);
-    return temp %= fixed(b);
-}
-
-inline fixed operator%(fixed const& a,unsigned short b)
-{
-    fixed temp(a);
-    return temp %= fixed(b);
-}
-
-inline fixed operator%(fixed const& a,short b)
-{
-    fixed temp(a);
-    return temp %= fixed(b);
-}
-
-inline fixed operator%(fixed const& a,unsigned char b)
-{
-    fixed temp(a);
-    return temp %= fixed(b);
-}
-
-inline fixed operator%(fixed const& a,char b)
-{
-    fixed temp(a);
-    return temp %= fixed(b);
 }
 
 inline fixed operator%(fixed const& a,fixed const& b)
@@ -683,145 +422,10 @@ inline fixed operator%(fixed const& a,fixed const& b)
     return temp%=b;
 }
 
-inline fixed operator+(double a, fixed const& b)
-{
-    fixed temp(a);
-    return temp+=b;
-}
-
-
-inline fixed operator+(float a, fixed const& b)
-{
-    fixed temp(a);
-    return temp+=b;
-}
-
-inline fixed operator+(unsigned long a, fixed const& b)
-{
-    fixed temp(a);
-    return temp+=b;
-}
-
-inline fixed operator+(long a, fixed const& b)
-{
-    fixed temp(a);
-    return temp+=b;
-}
-
-inline fixed operator+(unsigned a, fixed const& b)
-{
-    fixed temp(a);
-    return temp+=b;
-}
-
-inline fixed operator+(int a, fixed const& b)
-{
-    fixed temp(a);
-    return temp+=b;
-}
-
-inline fixed operator+(unsigned short a, fixed const& b)
-{
-    fixed temp(a);
-    return temp+=b;
-}
-
-inline fixed operator+(short a, fixed const& b)
-{
-    fixed temp(a);
-    return temp+=b;
-}
-
-inline fixed operator+(unsigned char a, fixed const& b)
-{
-    fixed temp(a);
-    return temp+=b;
-}
-
-inline fixed operator+(char a, fixed const& b)
-{
-    fixed temp(a);
-    return temp+=b;
-}
-
-inline fixed operator+(fixed const& a,double b)
-{
-    fixed temp(a);
-    return temp += fixed(b);
-}
-
-
-inline fixed operator+(fixed const& a,float b)
-{
-    fixed temp(a);
-    return temp += fixed(b);
-}
-
-inline fixed operator+(fixed const& a,unsigned long b)
-{
-    fixed temp(a);
-    return temp += fixed(b);
-}
-
-inline fixed operator+(fixed const& a,long b)
-{
-    fixed temp(a);
-    return temp += fixed(b);
-}
-
-inline fixed operator+(fixed const& a,unsigned b)
-{
-    fixed temp(a);
-    return temp += fixed(b);
-}
-
-inline fixed operator+(fixed const& a,int b)
-{
-    fixed temp(a);
-    return temp += fixed(b);
-}
-
-inline fixed operator+(fixed const& a,unsigned short b)
-{
-    fixed temp(a);
-    return temp += fixed(b);
-}
-
-inline fixed operator+(fixed const& a,short b)
-{
-    fixed temp(a);
-    return temp += fixed(b);
-}
-
-inline fixed operator+(fixed const& a,unsigned char b)
-{
-    fixed temp(a);
-    return temp += fixed(b);
-}
-
-inline fixed operator+(fixed const& a,char b)
-{
-    fixed temp(a);
-    return temp += fixed(b);
-}
-
 inline fixed operator+(fixed const& a,fixed const& b)
 {
     fixed temp(a);
     return temp+=b;
-}
-
-inline fixed operator*(double a, fixed const& b)
-{
-    fixed temp(b);
-    return temp*=a;
-}
-
-
-inline fixed operator*(float a, fixed const& b)
-{
-    fixed temp(b);
-    return temp*=a;
 }
 
 inline fixed operator*(unsigned long a, fixed const& b)
@@ -870,19 +474,6 @@ inline fixed operator*(char a, fixed const& b)
 {
     fixed temp(b);
     return temp*=a;
-}
-
-inline fixed operator*(fixed const& a,double b)
-{
-    fixed temp(a);
-    return temp *= fixed(b);
-}
-
-
-inline fixed operator*(fixed const& a,float b)
-{
-    fixed temp(a);
-    return temp *= fixed(b);
 }
 
 inline fixed operator*(fixed const& a,unsigned long b)
@@ -939,80 +530,6 @@ inline fixed operator*(fixed const& a,fixed const& b)
     return temp*=b;
 }
 
-inline fixed operator/(double a, fixed const& b)
-{
-    fixed temp(a);
-    return temp/=b;
-}
-
-
-inline fixed operator/(float a, fixed const& b)
-{
-    fixed temp(a);
-    return temp/=b;
-}
-
-inline fixed operator/(unsigned long a, fixed const& b)
-{
-    fixed temp(a);
-    return temp/=b;
-}
-
-inline fixed operator/(long a, fixed const& b)
-{
-    fixed temp(a);
-    return temp/=b;
-}
-
-inline fixed operator/(unsigned a, fixed const& b)
-{
-    fixed temp(a);
-    return temp/=b;
-}
-
-inline fixed operator/(int a, fixed const& b)
-{
-    fixed temp(a);
-    return temp/=b;
-}
-
-inline fixed operator/(unsigned short a, fixed const& b)
-{
-    fixed temp(a);
-    return temp/=b;
-}
-
-inline fixed operator/(short a, fixed const& b)
-{
-    fixed temp(a);
-    return temp/=b;
-}
-
-inline fixed operator/(unsigned char a, fixed const& b)
-{
-    fixed temp(a);
-    return temp/=b;
-}
-
-inline fixed operator/(char a, fixed const& b)
-{
-    fixed temp(a);
-    return temp/=b;
-}
-
-inline fixed operator/(fixed const& a,double b)
-{
-    fixed temp(a);
-    return temp /= fixed(b);
-}
-
-
-inline fixed operator/(fixed const& a,float b)
-{
-    fixed temp(a);
-    return temp /= fixed(b);
-}
-
 inline fixed operator/(fixed const& a,unsigned long b)
 {
     fixed temp(a);
@@ -1067,502 +584,9 @@ inline fixed operator/(fixed const& a,fixed const& b)
     return temp/=b;
 }
 
-inline bool operator==(double a, fixed const& b)
+static inline fixed pow(fixed x, fixed y)
 {
-    return fixed(a)==b;
-}
-inline bool operator==(float a, fixed const& b)
-{
-    return fixed(a)==b;
-}
-
-inline bool operator==(unsigned long a, fixed const& b)
-{
-    return fixed(a)==b;
-}
-inline bool operator==(long a, fixed const& b)
-{
-    return fixed(a)==b;
-}
-inline bool operator==(unsigned a, fixed const& b)
-{
-    return fixed(a)==b;
-}
-inline bool operator==(int a, fixed const& b)
-{
-    return fixed(a)==b;
-}
-inline bool operator==(unsigned short a, fixed const& b)
-{
-    return fixed(a)==b;
-}
-inline bool operator==(short a, fixed const& b)
-{
-    return fixed(a)==b;
-}
-inline bool operator==(unsigned char a, fixed const& b)
-{
-    return fixed(a)==b;
-}
-inline bool operator==(char a, fixed const& b)
-{
-    return fixed(a)==b;
-}
-
-inline bool operator==(fixed const& a,double b)
-{
-    return a==fixed(b);
-}
-inline bool operator==(fixed const& a,float b)
-{
-    return a==fixed(b);
-}
-inline bool operator==(fixed const& a,unsigned long b)
-{
-    return a==fixed(b);
-}
-inline bool operator==(fixed const& a,long b)
-{
-    return a==fixed(b);
-}
-inline bool operator==(fixed const& a,unsigned b)
-{
-    return a==fixed(b);
-}
-inline bool operator==(fixed const& a,int b)
-{
-    return a==fixed(b);
-}
-inline bool operator==(fixed const& a,unsigned short b)
-{
-    return a==fixed(b);
-}
-inline bool operator==(fixed const& a,short b)
-{
-    return a==fixed(b);
-}
-inline bool operator==(fixed const& a,unsigned char b)
-{
-    return a==fixed(b);
-}
-inline bool operator==(fixed const& a,char b)
-{
-    return a==fixed(b);
-}
-
-inline bool operator!=(double a, fixed const& b)
-{
-    return fixed(a)!=b;
-}
-inline bool operator!=(float a, fixed const& b)
-{
-    return fixed(a)!=b;
-}
-
-inline bool operator!=(unsigned long a, fixed const& b)
-{
-    return fixed(a)!=b;
-}
-inline bool operator!=(long a, fixed const& b)
-{
-    return fixed(a)!=b;
-}
-inline bool operator!=(unsigned a, fixed const& b)
-{
-    return fixed(a)!=b;
-}
-inline bool operator!=(int a, fixed const& b)
-{
-    return fixed(a)!=b;
-}
-inline bool operator!=(unsigned short a, fixed const& b)
-{
-    return fixed(a)!=b;
-}
-inline bool operator!=(short a, fixed const& b)
-{
-    return fixed(a)!=b;
-}
-inline bool operator!=(unsigned char a, fixed const& b)
-{
-    return fixed(a)!=b;
-}
-inline bool operator!=(char a, fixed const& b)
-{
-    return fixed(a)!=b;
-}
-
-inline bool operator!=(fixed const& a,double b)
-{
-    return a!=fixed(b);
-}
-inline bool operator!=(fixed const& a,float b)
-{
-    return a!=fixed(b);
-}
-inline bool operator!=(fixed const& a,unsigned long b)
-{
-    return a!=fixed(b);
-}
-inline bool operator!=(fixed const& a,long b)
-{
-    return a!=fixed(b);
-}
-inline bool operator!=(fixed const& a,unsigned b)
-{
-    return a!=fixed(b);
-}
-inline bool operator!=(fixed const& a,int b)
-{
-    return a!=fixed(b);
-}
-inline bool operator!=(fixed const& a,unsigned short b)
-{
-    return a!=fixed(b);
-}
-inline bool operator!=(fixed const& a,short b)
-{
-    return a!=fixed(b);
-}
-inline bool operator!=(fixed const& a,unsigned char b)
-{
-    return a!=fixed(b);
-}
-inline bool operator!=(fixed const& a,char b)
-{
-    return a!=fixed(b);
-}
-
-inline bool operator<(double a, fixed const& b)
-{
-    return fixed(a)<b;
-}
-inline bool operator<(float a, fixed const& b)
-{
-    return fixed(a)<b;
-}
-
-inline bool operator<(unsigned long a, fixed const& b)
-{
-    return fixed(a)<b;
-}
-inline bool operator<(long a, fixed const& b)
-{
-    return fixed(a)<b;
-}
-inline bool operator<(unsigned a, fixed const& b)
-{
-    return fixed(a)<b;
-}
-inline bool operator<(int a, fixed const& b)
-{
-    return fixed(a)<b;
-}
-inline bool operator<(unsigned short a, fixed const& b)
-{
-    return fixed(a)<b;
-}
-inline bool operator<(short a, fixed const& b)
-{
-    return fixed(a)<b;
-}
-inline bool operator<(unsigned char a, fixed const& b)
-{
-    return fixed(a)<b;
-}
-inline bool operator<(char a, fixed const& b)
-{
-    return fixed(a)<b;
-}
-
-inline bool operator<(fixed const& a,double b)
-{
-    return a<fixed(b);
-}
-inline bool operator<(fixed const& a,float b)
-{
-    return a<fixed(b);
-}
-inline bool operator<(fixed const& a,unsigned long b)
-{
-    return a<fixed(b);
-}
-inline bool operator<(fixed const& a,long b)
-{
-    return a<fixed(b);
-}
-inline bool operator<(fixed const& a,unsigned b)
-{
-    return a<fixed(b);
-}
-inline bool operator<(fixed const& a,int b)
-{
-    return a<fixed(b);
-}
-inline bool operator<(fixed const& a,unsigned short b)
-{
-    return a<fixed(b);
-}
-inline bool operator<(fixed const& a,short b)
-{
-    return a<fixed(b);
-}
-inline bool operator<(fixed const& a,unsigned char b)
-{
-    return a<fixed(b);
-}
-inline bool operator<(fixed const& a,char b)
-{
-    return a<fixed(b);
-}
-
-inline bool operator>(double a, fixed const& b)
-{
-    return fixed(a)>b;
-}
-inline bool operator>(float a, fixed const& b)
-{
-    return fixed(a)>b;
-}
-
-inline bool operator>(unsigned long a, fixed const& b)
-{
-    return fixed(a)>b;
-}
-inline bool operator>(long a, fixed const& b)
-{
-    return fixed(a)>b;
-}
-inline bool operator>(unsigned a, fixed const& b)
-{
-    return fixed(a)>b;
-}
-inline bool operator>(int a, fixed const& b)
-{
-    return fixed(a)>b;
-}
-inline bool operator>(unsigned short a, fixed const& b)
-{
-    return fixed(a)>b;
-}
-inline bool operator>(short a, fixed const& b)
-{
-    return fixed(a)>b;
-}
-inline bool operator>(unsigned char a, fixed const& b)
-{
-    return fixed(a)>b;
-}
-inline bool operator>(char a, fixed const& b)
-{
-    return fixed(a)>b;
-}
-
-inline bool operator>(fixed const& a,double b)
-{
-    return a>fixed(b);
-}
-inline bool operator>(fixed const& a,float b)
-{
-    return a>fixed(b);
-}
-inline bool operator>(fixed const& a,unsigned long b)
-{
-    return a>fixed(b);
-}
-inline bool operator>(fixed const& a,long b)
-{
-    return a>fixed(b);
-}
-inline bool operator>(fixed const& a,unsigned b)
-{
-    return a>fixed(b);
-}
-inline bool operator>(fixed const& a,int b)
-{
-    return a>fixed(b);
-}
-inline bool operator>(fixed const& a,unsigned short b)
-{
-    return a>fixed(b);
-}
-inline bool operator>(fixed const& a,short b)
-{
-    return a>fixed(b);
-}
-inline bool operator>(fixed const& a,unsigned char b)
-{
-    return a>fixed(b);
-}
-inline bool operator>(fixed const& a,char b)
-{
-    return a>fixed(b);
-}
-
-inline bool operator<=(double a, fixed const& b)
-{
-    return fixed(a)<=b;
-}
-inline bool operator<=(float a, fixed const& b)
-{
-    return fixed(a)<=b;
-}
-
-inline bool operator<=(unsigned long a, fixed const& b)
-{
-    return fixed(a)<=b;
-}
-inline bool operator<=(long a, fixed const& b)
-{
-    return fixed(a)<=b;
-}
-inline bool operator<=(unsigned a, fixed const& b)
-{
-    return fixed(a)<=b;
-}
-inline bool operator<=(int a, fixed const& b)
-{
-    return fixed(a)<=b;
-}
-inline bool operator<=(unsigned short a, fixed const& b)
-{
-    return fixed(a)<=b;
-}
-inline bool operator<=(short a, fixed const& b)
-{
-    return fixed(a)<=b;
-}
-inline bool operator<=(unsigned char a, fixed const& b)
-{
-    return fixed(a)<=b;
-}
-inline bool operator<=(char a, fixed const& b)
-{
-    return fixed(a)<=b;
-}
-
-inline bool operator<=(fixed const& a,double b)
-{
-    return a<=fixed(b);
-}
-inline bool operator<=(fixed const& a,float b)
-{
-    return a<=fixed(b);
-}
-inline bool operator<=(fixed const& a,unsigned long b)
-{
-    return a<=fixed(b);
-}
-inline bool operator<=(fixed const& a,long b)
-{
-    return a<=fixed(b);
-}
-inline bool operator<=(fixed const& a,unsigned b)
-{
-    return a<=fixed(b);
-}
-inline bool operator<=(fixed const& a,int b)
-{
-    return a<=fixed(b);
-}
-inline bool operator<=(fixed const& a,unsigned short b)
-{
-    return a<=fixed(b);
-}
-inline bool operator<=(fixed const& a,short b)
-{
-    return a<=fixed(b);
-}
-inline bool operator<=(fixed const& a,unsigned char b)
-{
-    return a<=fixed(b);
-}
-inline bool operator<=(fixed const& a,char b)
-{
-    return a<=fixed(b);
-}
-
-inline bool operator>=(double a, fixed const& b)
-{
-    return fixed(a)>=b;
-}
-inline bool operator>=(float a, fixed const& b)
-{
-    return fixed(a)>=b;
-}
-
-inline bool operator>=(unsigned long a, fixed const& b)
-{
-    return fixed(a)>=b;
-}
-inline bool operator>=(long a, fixed const& b)
-{
-    return fixed(a)>=b;
-}
-inline bool operator>=(unsigned a, fixed const& b)
-{
-    return fixed(a)>=b;
-}
-inline bool operator>=(int a, fixed const& b)
-{
-    return fixed(a)>=b;
-}
-inline bool operator>=(unsigned short a, fixed const& b)
-{
-    return fixed(a)>=b;
-}
-inline bool operator>=(short a, fixed const& b)
-{
-    return fixed(a)>=b;
-}
-inline bool operator>=(unsigned char a, fixed const& b)
-{
-    return fixed(a)>=b;
-}
-inline bool operator>=(char a, fixed const& b)
-{
-    return fixed(a)>=b;
-}
-
-inline bool operator>=(fixed const& a,double b)
-{
-    return a>=fixed(b);
-}
-inline bool operator>=(fixed const& a,float b)
-{
-    return a>=fixed(b);
-}
-inline bool operator>=(fixed const& a,unsigned long b)
-{
-    return a>=fixed(b);
-}
-inline bool operator>=(fixed const& a,long b)
-{
-    return a>=fixed(b);
-}
-inline bool operator>=(fixed const& a,unsigned b)
-{
-    return a>=fixed(b);
-}
-inline bool operator>=(fixed const& a,int b)
-{
-    return a>=fixed(b);
-}
-inline bool operator>=(fixed const& a,unsigned short b)
-{
-    return a>=fixed(b);
-}
-inline bool operator>=(fixed const& a,short b)
-{
-    return a>=fixed(b);
-}
-inline bool operator>=(fixed const& a,unsigned char b)
-{
-    return a>=fixed(b);
-}
-inline bool operator>=(fixed const& a,char b)
-{
-    return a>=fixed(b);
+  return fixed(pow((double)x, (double)y));
 }
 
 inline fixed sin(fixed const& x)
@@ -1576,6 +600,16 @@ inline fixed cos(fixed const& x)
 inline fixed tan(fixed const& x)
 {
     return x.tan();
+}
+
+static inline fixed asin(fixed x)
+{
+  return fixed(asin((double)x));
+}
+
+static inline fixed acos(fixed x)
+{
+  return fixed(acos((double)x));
 }
 
 inline fixed atan(fixed const& x)
@@ -1643,11 +677,16 @@ inline fixed modf(fixed const& x,fixed*integral_part)
     return x.modf(integral_part);
 }
 
+static inline fixed fmod(fixed x, fixed y)
+{
+  return fixed(fmod((double)x, (double)y));
+}
+
 inline fixed fixed::ceil() const
 {
     if(m_nVal%resolution)
     {
-        return floor()+1;
+      return floor() + fixed(1);
     }
     else
     {
@@ -1744,6 +783,7 @@ namespace std
 
 fixed const fixed_max(fixed::internal(),0x7fffffffffffffffLL);
 fixed const fixed_one(fixed::internal(),1<<(fixed::resolution_shift));
+fixed const fixed_minus_one(fixed::internal(), ((fixed::value_t)-1) << fixed::resolution_shift);
 fixed const fixed_two(fixed::internal(),1<<(fixed::resolution_shift+1));
 fixed const fixed_four(fixed::internal(),1<<(fixed::resolution_shift+2));
 fixed const fixed_zero(fixed::internal(),0);

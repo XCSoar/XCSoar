@@ -82,9 +82,10 @@ vl_PGCS1(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
   fixed InternalAltitude(HexStrToDouble(ctemp, NULL));
 
   if (enable_baro) {
-    if(InternalAltitude > 60000)
+    if (InternalAltitude > fixed(60000))
       GPS_INFO->BaroAltitude =
-        GPS_INFO->pressure.AltitudeToQNHAltitude(InternalAltitude - 65535);
+        GPS_INFO->pressure.AltitudeToQNHAltitude(InternalAltitude -
+                                                 fixed(65535));
     // Assuming that altitude has wrapped around.  60 000 m occurs at
     // QNH ~2000 hPa
     else

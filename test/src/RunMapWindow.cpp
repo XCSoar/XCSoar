@@ -84,7 +84,7 @@ int DisplayTimeOut;
 
 DeviceBlackboard device_blackboard;
 
-void DeviceBlackboard::SetTrackBearing(fixed val) {}
+void DeviceBlackboard::SetTrackBearing(Angle val) {}
 void DeviceBlackboard::SetSpeed(fixed val) {}
 
 void
@@ -129,7 +129,7 @@ InputEvents::mode InputEvents::getModeID() { return MODE_DEFAULT; }
 void InputEvents::sub_ScaleZoom(int vswitch) {}
 
 GaugeCDI::GaugeCDI(ContainerWindow &parent) {}
-void GaugeCDI::Update(double TrackBearing, double WaypointBearing) {}
+void GaugeCDI::Update(Angle TrackBearing, Angle WaypointBearing) {}
 
 int
 propGetScaleList(fixed *List, size_t Size)
@@ -281,9 +281,9 @@ GenerateBlackboard(MapWindow &map)
   memset(&nmea_info, 0, sizeof(nmea_info));
   nmea_info.gps.Connected = 2;
   nmea_info.gps.SatellitesUsed = 4;
-  nmea_info.Location.Latitude = 51.2;
-  nmea_info.Location.Longitude = 7.7;
-  nmea_info.TrackBearing = 90;
+  nmea_info.Location.Latitude = Angle::degrees(fixed(51.2));
+  nmea_info.Location.Longitude = Angle::degrees(fixed(7.7));
+  nmea_info.TrackBearing = Angle::degrees(fixed_90);
   nmea_info.GroundSpeed = 50;
   nmea_info.GPSAltitude = 1500;
 

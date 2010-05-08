@@ -488,7 +488,7 @@ DeviceBlackboard::Heading()
 {
   const SpeedVector wind = Basic().wind;
 
-  if ((Basic().GroundSpeed > 0) || wind.is_non_zero()) {
+  if (positive(Basic().GroundSpeed) || wind.is_non_zero()) {
     fixed x0 = (Basic().TrackBearing.fastsine()) * Basic().GroundSpeed;
     fixed y0 = (Basic().TrackBearing.fastcosine())
       * Basic().GroundSpeed;
@@ -700,7 +700,7 @@ DeviceBlackboard::FlightState(const GlidePolar& glide_polar)
     SetBasic().flight.flying_state_moving(Basic().Time);
   } else {
     const bool on_ground = Calculated().TerrainValid &&
-      Basic().AltitudeAGL < 300;
+      Basic().AltitudeAGL < fixed(300);
     SetBasic().flight.flying_state_stationary(Basic().Time, on_ground);
   }
 }

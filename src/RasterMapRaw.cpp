@@ -56,8 +56,8 @@ RasterMapRaw::SetFieldRounding(const GEOPOINT& delta,
   }
   if ((rounding.Xrounding==1)&&(rounding.Yrounding==1)) {
     rounding.DirectFine = true;
-    rounding.xlleft = (int)(TerrainInfo.Left.value_native()*rounding.fXroundingFine)+128;
-    rounding.xlltop  = (int)(TerrainInfo.Top.value_native()*rounding.fYroundingFine)-128;
+    rounding.xlleft = (int)(TerrainInfo.Left.value_native() * fixed(rounding.fXroundingFine)) + 128;
+    rounding.xlltop  = (int)(TerrainInfo.Top.value_native() * fixed(rounding.fYroundingFine)) - 128;
   } else {
     rounding.DirectFine = false;
   }
