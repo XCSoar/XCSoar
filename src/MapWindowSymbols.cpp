@@ -359,9 +359,7 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
     };
 
     Angle angle = (wind.bearing - GetDisplayAngle()).as_bearing();
-    for (i = 0; i < 2; i++) {
-      protateshift(Tail[i], angle, Start.x, Start.y);
-    }
+    PolygonRotateShift(Tail, 2, Start.x, Start.y, angle);
 
     // optionally draw dashed line
     Pen dash_pen(Pen::DASH, 1, Color::BLACK);

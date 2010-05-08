@@ -47,30 +47,6 @@ Copyright_License {
 // note these use static vars! not thread-safe
 
 void
-protateshift(POINT &pin, const Angle &angle, const int &xs, const int &ys)
-{
-  int x = pin.x;
-  int y = pin.y;
-  static Angle lastangle = Angle();
-  static int cost = 1024, sint = 0;
-
-  if (angle != lastangle) {
-    lastangle = angle;
-    cost = angle.ifastcosine();
-    sint = angle.ifastsine();
-  }
-
-  pin.x = (x * cost - y * sint + 512 + xs * 1024) / 1024;
-  pin.y = (y * cost + x * sint + 512 + ys * 1024) / 1024;
-}
-
-double
-ScreenAngle(int x1, int y1, int x2, int y2)
-{
-  return atan2((double)y2 - y1, (double)x2 - x1) * RAD_TO_DEG;
-}
-
-void
 ScreenClosestPoint(const POINT &p1, const POINT &p2, const POINT &p3,
                    POINT *p4, int offset)
 {
@@ -157,11 +133,3 @@ CheckRectOverlap(RECT rc1, RECT rc2)
   return true;
 }
 
-unsigned
-Distance(const POINT &p1, const POINT &p2)
-{
-  POINT d = p1;
-  d.x -= p2.x;
-  d.y -= p2.y;
-  return isqrt4(d.x * d.x + d.y * d.y);
-}

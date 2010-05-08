@@ -51,23 +51,13 @@ Copyright_License {
 
 struct GEOPOINT;
 
-void protateshift(POINT &pin, const Angle &angle, const int &x, const int &y);
-
-gcc_const
-double ScreenAngle(int x1, int y1, int x2, int y2);
-
 void ScreenClosestPoint(const POINT &p1, const POINT &p2,
                         const POINT &p3, POINT *p4, int offset);
 
 void PolygonRotateShift(POINT* poly, int n, int x, int y,
                         Angle angle);
 
-BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc);
-
 gcc_const
 bool CheckRectOverlap(RECT rc1, RECT rc2);
-
-gcc_const
-unsigned Distance(const POINT &p1, const POINT &p2);
 
 #endif
