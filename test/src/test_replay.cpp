@@ -29,15 +29,15 @@ public:
 
 protected:
   void on_advance(const GEOPOINT &loc,
-                  const double speed, const Angle bearing,
-                  const double alt, const double baroalt, const double t) {
+                  const fixed speed, const Angle bearing,
+                  const fixed alt, const fixed baroalt, const fixed t) {
 
     state.Location = loc;
     state.Speed = speed;
     state.TrackBearing = bearing;
     state.NavAltitude = alt;
     state.Time = t;
-    if (t>0) {
+    if (positive(t)) {
       started = true;
     }
   }
@@ -116,7 +116,7 @@ test_replay(const OLCRules olc_type)
   const CommonStats& stats = task_manager.get_common_stats();
   printf("# OLC dist %g speed %g time %g\n",
          (double)stats.distance_olc,
-         (double)(stats.speed_olc*3.6),
+         (double)(stats.speed_olc*fixed(3.6)),
          (double)stats.time_olc);
 
   if (verbose) {

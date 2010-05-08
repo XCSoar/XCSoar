@@ -94,7 +94,7 @@ std::ostream& operator<< (std::ostream& f,
   f << "#    HeightGlide         " <<  gl.HeightGlide << " (m)\n";
   f << "#    TimeElapsed         " <<  gl.TimeElapsed << " (s)\n";
   f << "#    TimeVirtual         " <<  gl.TimeVirtual << " (s)\n";
-  if (gl.TimeElapsed>0) {
+  if (positive(gl.TimeElapsed)) {
     f << "#    Vave remaining      " <<  gl.Vector.Distance/gl.TimeElapsed << " (m/s)\n";
   }
   f << "#    EffectiveWindSpeed  " <<  gl.EffectiveWindSpeed << " (m/s)\n";
@@ -303,7 +303,7 @@ AbstractTask::print(const AIRCRAFT_STATE &state)
     f6 << "# Time atp mc_best d_tot_rem_eff d_tot_rem ceff v_tot_rem v_tot_rem_inc v_tot_eff v_tot_eff_inc task_vario effective_mc\n";
   }
 
-  if (stats.Time>0) {
+  if (positive(stats.Time)) {
     f6 << stats.Time
        << " " << activeTaskPoint
        << " " << stats.mc_best

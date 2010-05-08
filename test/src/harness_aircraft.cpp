@@ -143,13 +143,13 @@ void AircraftSim::update_state(TaskManager &task_manager)  {
     } else {
       state.TrueAirspeed = glide_polar.get_VbestLD();
     }
-    state.Vario = -glide_polar.SinkRate(state.TrueAirspeed)*sink_factor;
+    state.Vario = -glide_polar.SinkRate(state.TrueAirspeed)*fixed(sink_factor);
     update_bearing(task_manager);
     break;
   case Climb:
     state.TrueAirspeed = glide_polar.get_Vmin();
     bearing += Angle::degrees(fixed_20+small_rand());
-    state.Vario = climb_rate*climb_factor;
+    state.Vario = climb_rate*fixed(climb_factor);
     break;
   };
   state.NettoVario = state.Vario+glide_polar.SinkRate(state.TrueAirspeed);
