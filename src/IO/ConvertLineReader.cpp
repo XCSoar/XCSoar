@@ -43,7 +43,10 @@ Copyright_License {
 #endif
 
 ConvertLineReader::ConvertLineReader(LineReader<char> &_source, charset cs)
-  :source(_source), m_charset(cs)
+  :source(_source)
+#ifdef _UNICODE
+  , m_charset(cs)
+#endif
 {
 #ifdef _UNICODE
   switch (cs) {
@@ -63,6 +66,8 @@ ConvertLineReader::ConvertLineReader(LineReader<char> &_source, charset cs)
 #endif
 }
 
+#ifdef _UNICODE
+
 static void
 iso_latin_1_to_tchar(TCHAR *dest, const char *src)
 {
@@ -70,6 +75,8 @@ iso_latin_1_to_tchar(TCHAR *dest, const char *src)
       *dest++ = *src;
     } while (*src++ != '\0');
 }
+
+#endif
 
 TCHAR *
 ConvertLineReader::read()
