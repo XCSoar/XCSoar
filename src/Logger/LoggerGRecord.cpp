@@ -271,7 +271,7 @@ GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Record
 }
 
 bool
-GRecord::ReadGRecordFromFile(TCHAR szOutput[])
+GRecord::ReadGRecordFromFile(TCHAR szOutput[], size_t max_length)
 {// returns in szOutput the G Record from the file referenced by FileName member
   #define MAX_REC_LENGTH 200
 
@@ -301,6 +301,10 @@ GRecord::ReadGRecordFromFile(TCHAR szOutput[])
         c2=data[i];
         if ( ( c2 !='\r' ) && (c2 != '\n') && (c2 != 0) ) {
           szOutput[iLenDigest++]=(TCHAR)c2;
+
+          if (iLenDigest >= max_length)
+            /* G record too large */
+            return false;
         }
       }
     }
@@ -326,7 +330,7 @@ bool GRecord::VerifyGRecordInFile()
   LoadFileToBuffer();
 
   // load Existing Digest "old"
-  if (!ReadGRecordFromFile(szOldGRecord))
+  if (!ReadGRecordFromFile(szOldGRecord, BUFF_LEN))
     return false;
 
   // recalculate digest from buffer

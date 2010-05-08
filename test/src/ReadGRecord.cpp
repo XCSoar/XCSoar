@@ -66,7 +66,7 @@ main(int argc, char **argv)
   g.SetFileName(path);
 
   TCHAR data[1024];
-  if (!g.ReadGRecordFromFile(data)) {
+  if (!g.ReadGRecordFromFile(data, sizeof(data) / sizeof(data[0]))) {
     fprintf(stderr, "Error\n");
     return 2;
   }

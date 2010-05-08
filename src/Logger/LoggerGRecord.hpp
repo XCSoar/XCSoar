@@ -75,7 +75,7 @@ public:
   void SetFileName(const TCHAR *szIn);
   bool LoadFileToBuffer();
   bool AppendGRecordToFile(bool bValid); // writes error if invalid G Record
-  bool ReadGRecordFromFile(TCHAR szOutput []);
+  bool ReadGRecordFromFile(TCHAR *buffer, size_t max_length);
   bool VerifyGRecordInFile(void);  // returns 0 if false, 1 if true
 
 private:
