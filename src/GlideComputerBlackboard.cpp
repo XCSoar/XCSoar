@@ -44,14 +44,10 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "GlideRatio.hpp"
 
-//#include "Persist.hpp"
-
 GlideComputerBlackboard::GlideComputerBlackboard(TaskClientCalc& task):
   m_task(task)
 {
-
 }
-
 
 /**
  * Initializes the GlideComputerBlackboard
@@ -94,8 +90,8 @@ GlideComputerBlackboard::ResetFlight(const bool full)
     calculated_info.AverageThermal = 0;
 
     for (i = 0; i < 200; i++) {
-      calculated_info.AverageClimbRate[i]= 0;
-      calculated_info.AverageClimbRateN[i]= 0;
+      calculated_info.AverageClimbRate[i] = 0;
+      calculated_info.AverageClimbRateN[i] = 0;
     }
 
     calculated_info.MinAltitude = 0;
@@ -104,12 +100,12 @@ GlideComputerBlackboard::ResetFlight(const bool full)
 
   calculated_info.MaxThermalHeight = 0;
   for (i = 0; i < NUMTHERMALBUCKETS; i++) {
-    calculated_info.ThermalProfileN[i]=0;
-    calculated_info.ThermalProfileW[i]=0;
+    calculated_info.ThermalProfileN[i] = 0;
+    calculated_info.ThermalProfileW[i] = 0;
   }
   // clear thermal sources for first time.
   for (i = 0; i < MAX_THERMAL_SOURCES; i++) {
-    calculated_info.ThermalSources[i].LiftRate= -1.0;
+    calculated_info.ThermalSources[i].LiftRate = -1.0;
   }
 
   calculated_info.Circling = false;
@@ -121,8 +117,8 @@ GlideComputerBlackboard::ResetFlight(const bool full)
   calculated_info.TerrainWarningLocation.Longitude = Angle();
 
   // If you load persistent values, you need at least these reset:
-  calculated_info.LastThermalAverage=0.0;
-  calculated_info.ThermalGain=0.0;
+  calculated_info.LastThermalAverage = 0.0;
+  calculated_info.ThermalGain = 0.0;
 }
 
 /**
@@ -144,7 +140,6 @@ GlideComputerBlackboard::StartTask()
   calculated_info.MaxHeightGain = 0;
   calculated_info.MinAltitude = 0;
 }
-
 
 void
 GlideComputerBlackboard::SaveFinish()
