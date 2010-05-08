@@ -173,17 +173,10 @@ Projection::LonLat2Screen(const pointObj* const ptin,
 bool
 Projection::LonLatVisible(const GEOPOINT &loc) const
 {
-<<<<<<< HEAD:src/Projection.cpp
-  if ((loc.Longitude.value_native()> screenbounds_latlon.minx) &&
-      (loc.Longitude.value_native()< screenbounds_latlon.maxx) &&
-      (loc.Latitude.value_native()> screenbounds_latlon.miny) &&
-      (loc.Latitude.value_native()< screenbounds_latlon.maxy))
-=======
-  if (loc.Longitude.value_degrees() > fixed(screenbounds_latlon.minx) &&
-      loc.Longitude.value_degrees() < fixed(screenbounds_latlon.maxx) &&
-      loc.Latitude.value_degrees() > fixed(screenbounds_latlon.miny) &&
-      loc.Latitude.value_degrees() < fixed(screenbounds_latlon.maxy))
->>>>>>> ac05a4045115ab0971f9b934879c9f3dd48efc05:src/Projection.cpp
+  if (loc.Longitude.value_native() > fixed(screenbounds_latlon.minx) &&
+      loc.Longitude.value_native() < fixed(screenbounds_latlon.maxx) &&
+      loc.Latitude.value_native() > fixed(screenbounds_latlon.miny) &&
+      loc.Latitude.value_native() < fixed(screenbounds_latlon.maxy))
     return true;
   else
     return false;
@@ -243,11 +236,7 @@ Projection::CalculateScreenBounds(const fixed scale) const
   // compute lat lon extents of visible screen
   rectObj sb;
 
-<<<<<<< HEAD:src/Projection.cpp
-  if (scale>= fixed_one) {
-=======
   if (scale >= fixed_one) {
->>>>>>> ac05a4045115ab0971f9b934879c9f3dd48efc05:src/Projection.cpp
     POINT screen_center;
     LonLat2Screen(PanLocation, screen_center);
 
