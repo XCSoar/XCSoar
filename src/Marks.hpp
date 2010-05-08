@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#ifndef MARKS_H
-#define MARKS_H
+#ifndef XCSOAR_MARKS_HPP
+#define XCSOAR_MARKS_HPP
 
 #include "Topology.h"
 #include "Navigation/GeoPoint.hpp"

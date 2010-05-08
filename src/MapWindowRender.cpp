@@ -38,7 +38,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
-#include "Marks.h"
+#include "Marks.hpp"
 #include "TerrainRenderer.h"
 #include "RasterTerrain.h"
 #include "TopologyStore.h"

@@ -71,7 +71,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Math/FastMath.h"
 #include "Dialogs.h"
 #include "Message.hpp"
-#include "Marks.h"
+#include "Marks.hpp"
 #include "InfoBoxLayout.hpp"
 #include "InfoBoxManager.hpp"
 #include "Units.hpp"
