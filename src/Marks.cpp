@@ -47,6 +47,7 @@ Copyright_License {
 #include "Audio/Sound.hpp"
 #include "LogFile.hpp"
 #include "resource.h"
+#include "IO/TextWriter.hpp"
 
 #include <assert.h>
 
@@ -94,18 +95,15 @@ void Marks::MarkLocation(const GEOPOINT &loc)
 
   char message[160];
 
-  sprintf(message,"Lon:%f Lat:%f\r\n", 
+  sprintf(message,"Lon:%f Lat:%f",
           (double)(loc.Longitude.value_degrees()), 
           (double)(loc.Latitude.value_degrees()));
 
-  FILE *stream;
   TCHAR fname[MAX_PATH];
   LocalPath(fname,TEXT("xcsoar-marks.txt"));
-  stream = _tfopen(fname,TEXT("a+"));
-  if (stream != NULL){
-    fwrite(message,strlen(message),1,stream);
-    fclose(stream);
-  }
+  TextWriter writer(fname, true);
+  if (!writer.error())
+    writer.writeln(message);
 }
 
 
