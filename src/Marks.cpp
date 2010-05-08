@@ -37,11 +37,7 @@ Copyright_License {
 */
 
 #include "Marks.hpp"
-#include "Protection.hpp"
-#include "Topology.h"
-#include "Dialogs.h"
 #include "SettingsComputer.hpp"
-#include "SettingsUser.hpp"
 #include "Compatibility/string.h"
 #include "LocalPath.hpp"
 #include "Audio/Sound.hpp"
@@ -50,9 +46,6 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 
 #include <assert.h>
-
-#include "wcecompat/ts_string.h"
-// TODO code: check ts_string does the right thing
 
 Marks::Marks(const char* name, const SETTINGS_COMPUTER &_settings_computer)
   :topo_marks(name, Color(0xD0,0xD0,0xD0)),
@@ -80,8 +73,6 @@ Marks::~Marks() {
   Poco::ScopedRWLock protect(lock, true);
   topo_marks.DeleteFiles();
 }
-
-#include "Interface.hpp"
 
 void Marks::MarkLocation(const GEOPOINT &loc)
 {
