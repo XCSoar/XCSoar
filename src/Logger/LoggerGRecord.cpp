@@ -299,7 +299,7 @@ GRecord::ReadGRecordFromFile(TCHAR szOutput[], size_t max_length)
       iLenData = _tcslen(data);
       for (unsigned int i = 1; i < iLenData; i++) { // skip initial 'G'
         c2=data[i];
-        if ( ( c2 !='\r' ) && (c2 != '\n') && (c2 != 0) ) {
+        if ((c2 != '\r') && (c2 != '\n')) {
           szOutput[iLenDigest++]=(TCHAR)c2;
 
           if (iLenDigest >= max_length)
