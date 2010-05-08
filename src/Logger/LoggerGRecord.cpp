@@ -37,10 +37,12 @@
 
 #include "Logger/LoggerGRecord.hpp"
 #include "Logger/MD5.hpp"
+#include "IO/FileSource.hpp"
+#include "IO/LineSplitter.hpp"
+#include "IO/TextWriter.hpp"
+
 #include <tchar.h>
 #include <string.h>
-#include <stdio.h>
-#include <windows.h>
 
 const TCHAR *
 GRecord::GetVersion() const
@@ -207,22 +209,16 @@ bool GRecord::IncludeRecordInGCalc(const unsigned char *szIn)
 bool
 GRecord::LoadFileToBuffer()
 { //loads a file into the data buffer
-  #define MAX_REC_LENGTH 200
-
-
-
-  FILE *inFile = NULL;
-  char data[MAX_REC_LENGTH];
-
-  inFile = _tfopen(FileName, _T("rb"));
-  if (inFile == NULL)
+  FileSource source(FileName);
+  if (source.error())
     return false;
 
-  while(fgets(data, MAX_REC_LENGTH, inFile) ) {
-    AppendRecordToBuffer((const unsigned char *)data);
-  } // read
+  LineSplitter splitter(source);
+  char *line;
 
-  fclose (inFile);
+  while ((line = splitter.read()) != NULL)
+    AppendRecordToBuffer((const unsigned char *)line);
+
   return true;
 }
 
@@ -231,8 +227,8 @@ GRecord::LoadFileToBuffer()
 bool
 GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Record
 {
-  FILE *file = _tfopen(FileName, _T("ab"));
-  if (file == NULL)
+  TextWriter writer(FileName, true);
+  if (writer.error())
     return false;
 
   TCHAR szDigestBuff[BUFF_LEN];
@@ -253,19 +249,16 @@ GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Record
         sDig16[iChar+1] = (char)szDigest[iChar + iNumCharsPerLine*iLine];
       }
 
-      sDig16[iNumCharsPerLine+1]='\r';  // +1 is the initial "G"
-      sDig16[iNumCharsPerLine+2]='\n';
-      sDig16[iNumCharsPerLine+3]=0;
+      sDig16[iNumCharsPerLine+1]=0; // +1 is the initial "G"
 
-      fputs(sDig16, file);
+      writer.writeln(sDig16);
     }
   }
   else {
-    char sMessage[] = "G Record Invalid\r\n";
-    fputs(sMessage, file);
+    static const char sMessage[] = "G Record Invalid";
+    writer.writeln(sMessage);
   }
 
-  fclose(file);
   return true;
 
 }
@@ -273,26 +266,20 @@ GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Record
 bool
 GRecord::ReadGRecordFromFile(TCHAR szOutput[], size_t max_length)
 {// returns in szOutput the G Record from the file referenced by FileName member
-  #define MAX_REC_LENGTH 200
-
-  FILE *inFile = NULL;
-  TCHAR data[MAX_REC_LENGTH];
-
-  inFile = _tfopen(FileName, _T("r"));
-  if (inFile == NULL)
+  FileSource source(FileName);
+  if (source.error())
     return false;
 
+  LineSplitter splitter(source);
+
   unsigned int iLenDigest=0;
-  while (_fgetts(data, MAX_REC_LENGTH, inFile) != NULL) {
+  char *data;
+  while ((data = splitter.read()) != NULL) {
     if (data[0] != 'G')
       continue;
 
-    for (const TCHAR *p = data + 1; *p != '\0'; ++p) {
-      TCHAR ch = *p;
-      if ((ch == '\r') || (ch == '\n'))
-        continue;
-
-      szOutput[iLenDigest++] = (TCHAR)ch;
+    for (const char *p = data + 1; *p != '\0'; ++p) {
+      szOutput[iLenDigest++] = (TCHAR)*p;
       if (iLenDigest >= max_length)
         /* G record too large */
         return false;
@@ -300,7 +287,6 @@ GRecord::ReadGRecordFromFile(TCHAR szOutput[], size_t max_length)
   } // read
 
   szOutput[iLenDigest] = '\0';
-  fclose (inFile);
   return true;
 }
 
