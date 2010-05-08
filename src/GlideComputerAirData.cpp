@@ -147,8 +147,8 @@ GlideComputerAirData::ProcessVertical()
 
   Average30s();
   AverageClimbRate();
-  AverageThermal();
   ThermalGain();
+  AverageThermal();
 }
 
 /**
@@ -302,11 +302,9 @@ void
 GlideComputerAirData::AverageThermal()
 {
   if (positive(Calculated().ClimbStartTime) &&
-      Basic().Time > Calculated().ClimbStartTime) {
-    fixed Gain = Basic().TEAltitude - Calculated().ClimbStartAlt;
+      Basic().Time > Calculated().ClimbStartTime)
     SetCalculated().AverageThermal =
-      Gain / (Basic().Time - Calculated().ClimbStartTime);
-  }
+      Calculated().ThermalGain / (Basic().Time - Calculated().ClimbStartTime);
 }
 
 void
