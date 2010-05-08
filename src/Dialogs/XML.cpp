@@ -295,42 +295,18 @@ xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
       buf[l + 1] = 0;
       len = l;
 
-#if defined(WIN32) || defined(UNDER_CE)
 #ifdef _UNICODE
-#if !defined(UNDER_CE) && !defined(WINDOWSPC)
-      if (!IsTextUnicode(buf, min(l, 10000), NULL)) {
-#endif
-        LPTSTR b2 = (LPTSTR)malloc(l * 2 + 2);
-        MultiByteToWideChar(CP_ACP,          // code page
-                            MB_PRECOMPOSED,  // character-type options
-                            buf,             // string to map
-                            l,               // number of bytes in string
-                            b2,              // wide-character buffer
-                            l * 2 + 2);      // size of buffer
-        free(buf);
-        buf = (char*)b2;
-        buf[l * 2] = 0;
-        buf[l * 2 + 1] = 0;
-#if !defined(UNDER_CE) && !defined(WINDOWSPC)
-      }
-#endif
-#else
-      if (IsTextUnicode(buf, min(l, 10000), NULL)) {
-        l >>= 1;
-        LPTSTR b2 = (LPTSTR)malloc(l + 2);
-        WideCharToMultiByte(CP_ACP,                      // code page
-                            0,                           // performance and mapping flags
-                            (const WCHAR*)buf,           // wide-character string
-                            l,                           // number of chars in string
-                            b2,                          // buffer for new string
-                            l + 2,                       // size of buffer
-                            NULL,                        // default for unmappable chars
-                            NULL                         // set when default char used
-                            );
-        free(buf);
-        buf = (char*)b2;
-      }
-#endif
+      LPTSTR b2 = (LPTSTR)malloc(l * 2 + 2);
+      MultiByteToWideChar(CP_ACP,          // code page
+                          MB_PRECOMPOSED,  // character-type options
+                          buf,             // string to map
+                          l,               // number of bytes in string
+                          b2,              // wide-character buffer
+                          l * 2 + 2);      // size of buffer
+      free(buf);
+      buf = (char*)b2;
+      buf[l * 2] = 0;
+      buf[l * 2 + 1] = 0;
 #endif
 
       XMLNode x = XMLNode::parseString((LPTSTR)buf, pResults);
