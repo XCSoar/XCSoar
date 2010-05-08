@@ -279,8 +279,6 @@ GRecord::ReadGRecordFromFile(TCHAR szOutput[])
   TCHAR data[MAX_REC_LENGTH];
 
   inFile = _tfopen(FileName, _T("r"));
-
-  szOutput[0]='\0';
   if (inFile == NULL)
     return false;
 
@@ -330,8 +328,8 @@ bool GRecord::VerifyGRecordInFile()
   LoadFileToBuffer();
 
   // load Existing Digest "old"
-  ReadGRecordFromFile(szOldGRecord);
-
+  if (!ReadGRecordFromFile(szOldGRecord))
+    return false;
 
   // recalculate digest from buffer
   FinalizeBuffer();
