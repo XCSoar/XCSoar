@@ -322,10 +322,10 @@ public:
   }
 
   void arc(int x, int y, unsigned radius, const RECT rc,
-           fixed start, fixed end);
+           Angle start, Angle end);
 
   void segment(int x, int y, unsigned radius, const RECT rc,
-               fixed start, fixed end, bool horizon=false);
+               Angle start, Angle end, bool horizon=false);
 
   void draw_button(RECT rc, bool down);
 

@@ -80,7 +80,8 @@ Canvas::arc(int x, int y, unsigned radius, const RECT rc,
             Angle start, Angle end)
 {
   // XXX
-  ::pieColor(surface, x, y, radius, start.value() - 90, end.value() - 90,
+  ::pieColor(surface, x, y, radius,
+             (int)start.value_degrees() - 90, (int)end.value_degrees() - 90,
              brush.get_color().gfx_color());
 }
 
@@ -92,14 +93,14 @@ Canvas::segment(int x, int y, unsigned radius, const RECT rc,
 
   if (!brush.is_hollow())
     ::filledPieColor(surface, x, y, radius, 
-                     (int)start.value() - 90, 
-                     (int)end.value() - 90,
+                     (int)start.value_degrees() - 90,
+                     (int)end.value_degrees() - 90,
                      brush.get_color().gfx_color());
 
   if (pen_over_brush())
     ::pieColor(surface, x, y, radius, 
-               (int)start.value() - 90, 
-               (int)end.value() - 90,
+               (int)start.value_degrees() - 90,
+               (int)end.value_degrees() - 90,
                pen.get_color().gfx_color());
 }
 
