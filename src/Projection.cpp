@@ -59,9 +59,11 @@ Projection::Screen2LonLat(const int &x,
 {
   const FastIntegerRotation::Pair p =
     DisplayAngle.Rotate(x - Orig_Screen.x, y - Orig_Screen.y);
-  g.Latitude = PanLocation.Latitude - Angle::degrees(p.second * InvDrawScale);
-  g.Longitude = PanLocation.Longitude + 
-    Angle::degrees(p.first * g.Latitude.invfastcosine()* InvDrawScale);
+  const GEOPOINT pg(Angle::degrees(fixed(p.first*InvDrawScale)),
+                    Angle::degrees(fixed(p.second*InvDrawScale)));
+
+  g.Latitude = PanLocation.Latitude - pg.Latitude;
+  g.Longitude = PanLocation.Longitude + pg.Longitude*g.Latitude.invfastcosine();
 }
 
 /**
@@ -153,9 +155,11 @@ Projection::LonLat2Screen(const pointObj* const ptin,
   const pointObj* ptend = ptin+n;
 
   while (p<ptend) {
-    int Y = Real2Int((mPan.Latitude-Angle::degrees(fixed(p->y))).value_degrees()*mDrawScale);
-    int X = Real2Int((mPan.Longitude-Angle::degrees(fixed(p->x))).value_degrees()
-                     *Angle::degrees(fixed(p->y)).fastcosine()*mDrawScale);
+    const GEOPOINT g(Angle::degrees(fixed(p->x)),Angle::degrees(fixed(p->y)));
+
+    const int Y = Real2Int((mPan.Latitude-g.Latitude).value_degrees()*mDrawScale);
+    const int X = Real2Int((mPan.Longitude-g.Longitude).value_degrees()
+                           *g.Latitude.fastcosine()*mDrawScale);
 
     ptout->x = (xxs-X*cost + Y*sint)/1024;
     ptout->y = (Y*cost + X*sint + yys)/1024;
@@ -163,6 +167,7 @@ Projection::LonLat2Screen(const pointObj* const ptin,
     p+= skip;
   }
 }
+
 
 bool
 Projection::LonLatVisible(const GEOPOINT &loc) const

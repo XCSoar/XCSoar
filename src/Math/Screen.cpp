@@ -38,8 +38,6 @@ Copyright_License {
 
 #include "Math/Screen.hpp"
 #include "Math/FastMath.h"
-#include "Math/Constants.h"
-#include "Navigation/GeoPoint.hpp"
 #include "Screen/Layout.hpp"
 
 #include <math.h>
