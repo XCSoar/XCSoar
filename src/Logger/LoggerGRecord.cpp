@@ -214,19 +214,12 @@ GRecord::LoadFileToBuffer()
   FILE *inFile = NULL;
   char data[MAX_REC_LENGTH];
 
-  unsigned char udata[MAX_REC_LENGTH];
-
-
   inFile = _tfopen(FileName, _T("rb"));
   if (inFile == NULL)
     return false;
 
   while(fgets(data, MAX_REC_LENGTH, inFile) ) {
-    for (unsigned int i = 0; i <= strlen(data); i++) {
-      udata[i]=(unsigned char)data[i];
-    }
-
-    AppendRecordToBuffer(udata);
+    AppendRecordToBuffer((const unsigned char *)data);
   } // read
 
   fclose (inFile);
