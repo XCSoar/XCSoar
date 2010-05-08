@@ -288,11 +288,7 @@ GRecord::ReadGRecordFromFile(TCHAR szOutput[], size_t max_length)
       break;
     }
 
-    int bValid;
     TCHAR c1, c2;
-    int i;
-    i = 0;
-    bValid=0;
     c1=data[0];
     if ( c1 == 'G') {
       unsigned int iLenData;
