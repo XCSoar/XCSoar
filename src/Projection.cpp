@@ -60,8 +60,8 @@ Projection::Screen2LonLat(const int &x,
 {
   const FastIntegerRotation::Pair p =
     DisplayAngle.Rotate(x - Orig_Screen.x, y - Orig_Screen.y);
-  const GEOPOINT pg(Angle::native(fixed(p.first*InvDrawScale)),
-                    Angle::native(fixed(p.second*InvDrawScale)));
+  const GEOPOINT pg(Angle::native(fixed(p.first)*InvDrawScale),
+                    Angle::native(fixed(p.second)*InvDrawScale));
 
   g.Latitude = PanLocation.Latitude - pg.Latitude;
   g.Longitude = PanLocation.Longitude + pg.Longitude*g.Latitude.invfastcosine();

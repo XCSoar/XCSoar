@@ -38,8 +38,11 @@
 #include "Math/Earth.hpp"
 #include <algorithm>
 
-static const fixed angle_degree(Angle::degrees(fixed_one).value_native());
-static const fixed fixed_scale(fixed(1000) / angle_degree);
+#ifdef RADIANS
+static const fixed fixed_scale(fixed(57295.7));
+#else
+static const fixed fixed_scale(fixed(1000.0));
+#endif
 
 TaskProjection::TaskProjection()
 {
