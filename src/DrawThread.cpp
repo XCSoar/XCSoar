@@ -91,7 +91,10 @@ DrawThread::run()
 
   // circle until application is closed
   while (true) {
-    if (trigger.wait(MIN_WAIT_TIME)) {
+    if (!bounds_dirty)
+      trigger.wait();
+
+    if (!bounds_dirty || trigger.wait(MIN_WAIT_TIME)) {
 
       // take control (or wait for the resume())
       running.wait();
