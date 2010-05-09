@@ -38,6 +38,7 @@
 #include "Math/Earth.hpp"
 #include <algorithm>
 
+// scaling for flat earth integer representation, gives approximately 50m resolution
 #ifdef RADIANS
 static const fixed fixed_scale(fixed(57295.7));
 #else

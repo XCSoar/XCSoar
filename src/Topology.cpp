@@ -75,6 +75,15 @@ XShape::load(shapefileObj* shpfile, int i)
 {
   msInitShape(&shape);
   msSHPReadShape(shpfile->hSHP, i, &shape);
+
+#ifdef RADIANS
+  for (int tt = 0; tt < shape.numlines; ++tt) {
+    for (int jj = 0; jj < shape.line[tt].numpoints; ++jj) {
+      shape.line[tt].point[jj].x *= DEG_TO_RAD;
+      shape.line[tt].point[jj].y *= DEG_TO_RAD;
+    }
+  }
+#endif
 }
 
 void
@@ -300,8 +309,8 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
       if (!checkVisible(*shape, screenRect))
         break;
 
-      for (int tt = 0; tt < shape->numlines; tt++) {
-        for (int jj = 0; jj < shape->line[tt].numpoints; jj++) {
+      for (int tt = 0; tt < shape->numlines; ++tt) {
+        for (int jj = 0; jj < shape->line[tt].numpoints; ++jj) {
           POINT sc;
           const GEOPOINT l = map_projection.
             point2GeoPoint(shape->line[tt].point[jj]);
@@ -318,14 +327,14 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
       if (!checkVisible(*shape, screenRect))
         break;
 
-      for (int tt = 0; tt < shape->numlines; tt++) {
+      for (int tt = 0; tt < shape->numlines; ++tt) {
         int minx = rc.right;
         int miny = rc.bottom;
         int msize = min(shape->line[tt].numpoints, (int)MAXCLIPPOLYGON);
 
         map_projection.LonLat2Screen(shape->line[tt].point, pt, msize, 1);
 
-        for (int jj = 0; jj < msize; jj++) {
+        for (int jj = 0; jj < msize; ++jj) {
           if (pt[jj].x <= minx) {
             minx = pt[jj].x;
             miny = pt[jj].y;
@@ -342,7 +351,7 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
       if (!checkVisible(*shape, screenRect))
         break;
 
-      for (int tt = 0; tt < shape->numlines; tt++) {
+      for (int tt = 0; tt < shape->numlines; ++tt) {
         int minx = rc.right;
         int miny = rc.bottom;
         int msize = min(shape->line[tt].numpoints / iskip, (int)MAXCLIPPOLYGON);
@@ -350,7 +359,7 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
         map_projection.LonLat2Screen(shape->line[tt].point, pt,
             msize * iskip, iskip);
 
-        for (int jj = 0; jj < msize; jj++) {
+        for (int jj = 0; jj < msize; ++jj) {
           if (pt[jj].x <= minx) {
             minx = pt[jj].x;
             miny = pt[jj].y;

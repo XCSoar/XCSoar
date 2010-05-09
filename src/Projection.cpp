@@ -128,7 +128,7 @@ Projection::LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
 GEOPOINT 
 Projection::point2GeoPoint(const pointObj& p) const
 {
-  return GEOPOINT (Angle::degrees(fixed(p.x)),Angle::degrees(fixed(p.y)));
+  return GEOPOINT (Angle::native(fixed(p.x)),Angle::native(fixed(p.y)));
 }
 
 
