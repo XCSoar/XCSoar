@@ -52,6 +52,7 @@
 #include "Math/FastRotation.hpp"
 #include "Math/Screen.hpp"
 #include "MainWindow.hpp"
+#include "Profile.hpp"
 #include "Compiler.h"
 
 static const Color hcWarning(0xFF, 0xA2, 0x00);
@@ -71,6 +72,7 @@ static int warning = -1;
 static POINT radar_mid;
 static SIZE radar_size;
 static int side_display_type = 1;
+static bool simple_control = false;
 
 /**
  * Tries to select the next target, if impossible selection = -1
@@ -330,6 +332,16 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   (void)Sender;
 
   switch (key_code) {
+  case VK_UP:
+    if (!simple_control) break;
+    ZoomIn();
+    Update();
+    return true;
+  case VK_DOWN:
+    if (!simple_control) break;
+    ZoomOut();
+    Update();
+    return true;
   case VK_LEFT:
   case '6':
     PrevTarget();
@@ -340,10 +352,9 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
     NextTarget();
     Update();
     return true;
-
-  default:
-    return false;
   }
+
+  return false;
 }
 
 /**
@@ -787,6 +798,9 @@ dlgFlarmTrafficShowModal()
 
   // Update Radar and Selection for the first time
   Update();
+
+  // Check if "SimpleControl" is activated
+  Profile::Get(szProfileFlarmSimpleControl, simple_control);
 
   // Show the dialog
   wf->ShowModal();

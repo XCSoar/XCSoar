@@ -528,6 +528,11 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
         Help="This enables the display of the FLARM radar gauge. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level.">
         <DataField name="" DataType="boolean"/>
       </WndProperty>
+
+      <WndProperty Name="prpFlarmSimpleControl" Caption="FLARM control" X="2" Y="-1" Width="235" Height="22" CaptionWidth="100" Font="2"
+        Help="If this is enabled the FLARM Radar dialog can be controlled with the arrow keys. If set to standard, the Up/Down keys show the usual behaviour.">
+        <DataField name="" DataType="boolean" />
+      </WndProperty>
     </Panel>
   
     <Panel Name="frmTaskRules" X="0" Y="0" Width="240" Height="222" Font="2">
