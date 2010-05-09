@@ -194,7 +194,8 @@ XCSoarInterface::AfterStartup()
 
   main_window.full_screen();
   InfoBoxManager::SetDirty(true);
-  TriggerAll();
+
+  TriggerGPSUpdate();
 
   status_messages.Startup(false);
 #ifdef _INPUTDEBUG_

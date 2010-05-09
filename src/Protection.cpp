@@ -73,12 +73,6 @@ void TriggerVarioUpdate()
   instrument_thread->trigger_vario();
 }
 
-void TriggerAll(void) {
-  calculation_thread->trigger_data();
-  drawTriggerEvent.trigger();
-  instrument_thread->trigger_vario();
-}
-
 #include "DeviceBlackboard.hpp"
 
 

@@ -46,7 +46,6 @@ extern Mutex mutexBlackboard;
 
 void TriggerGPSUpdate();
 void TriggerVarioUpdate();
-void TriggerAll(void);
 void CreateCalculationThread(void);
 
 // changed only in config or by user interface
