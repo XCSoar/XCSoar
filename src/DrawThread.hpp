@@ -54,6 +54,10 @@ class GaugeFLARM;
  * 
  */
 class DrawThread : public Thread {
+  enum {
+    MIN_WAIT_TIME = 100,
+  };
+
   /**
    * The drawing thread runs while this trigger is set.
    */
