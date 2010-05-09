@@ -150,11 +150,11 @@ bool
 Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, size_t size)
 {
   (void)size;
-  TCHAR EW[] = _T("WE");
+  TCHAR EW[] = _T("WEE");
   int dd, mm, ss;
 
   // Calculate Longitude sign
-  int sign = Longitude.sign();
+  int sign = Longitude.sign()+1;
   double mlong = Longitude.magnitude_degrees();
 
   switch (CoordinateFormat) {
@@ -218,11 +218,11 @@ bool
 Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, size_t size)
 {
   (void)size;
-  TCHAR EW[] = _T("SN");
+  TCHAR EW[] = _T("SNN");
   int dd, mm, ss;
 
   // Calculate Latitude sign
-  int sign = Latitude.sign();
+  int sign = Latitude.sign()+1;
   double mlat = Latitude.magnitude_degrees();
 
   switch (CoordinateFormat) {
