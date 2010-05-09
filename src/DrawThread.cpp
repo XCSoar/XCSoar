@@ -90,12 +90,15 @@ DrawThread::run()
   map.DrawThreadLoop();
 
   // circle until application is closed
-  // (use of do-while ensures at least one execution before exit)
-  do {
+  while (true) {
     if (trigger.wait(MIN_WAIT_TIME)) {
 
       // take control (or wait for the resume())
       running.wait();
+
+      /* got the "stop" trigger? */
+      if (stop_trigger.test())
+        break;
 
       // Get data from the DeviceBlackboard
       ExchangeBlackboard();
@@ -132,7 +135,11 @@ DrawThread::run()
       // take control (or wait for the resume())
       running.wait();
 
+      /* got the "stop" trigger? */
+      if (stop_trigger.test())
+        break;
+
       bounds_dirty = map.Idle(false);
     }
-  } while (!closeTriggerEvent.wait(MIN_WAIT_TIME));
+  }
 }

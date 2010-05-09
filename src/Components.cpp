@@ -450,6 +450,7 @@ XCSoarInterface::Shutdown(void)
   // Stop threads
   LogStartUp(TEXT("CloseDrawingThread"));
   closeTriggerEvent.trigger();
+  draw_thread->stop();
   calculation_thread->stop();
 
   if (instrument_thread != NULL)

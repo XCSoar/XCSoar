@@ -68,6 +68,11 @@ class DrawThread : public Thread {
    */
   Trigger trigger;
 
+  /**
+   * Shuts down the thread.
+   */
+  Trigger stop_trigger;
+
   /** Pointer to the MapWindow */
   MapWindow &map;
 
@@ -78,6 +83,7 @@ public:
   DrawThread(MapWindow &_map, GaugeFLARM *_flarm)
     :running(_T("DrawThread::running"), true),
      trigger(_T("DrawThread::trigger"), false),
+     stop_trigger(_T("WorkerThread::stop_trigger"), true),
      map(_map), flarm(_flarm) {
   }
 
@@ -103,6 +109,16 @@ public:
    */
   void trigger_redraw() {
     trigger.trigger();
+  }
+
+  /**
+   * Triggers thread shutdown.  Call join() after this to wait
+   * synchronously for the thread to exit.
+   */
+  void stop() {
+    stop_trigger.trigger();
+    trigger_redraw();
+    resume();
   }
 
 private:
