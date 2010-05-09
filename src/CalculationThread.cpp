@@ -78,7 +78,18 @@ CalculationThread::tick()
     glide_computer.ReadMapProjection(device_blackboard.MapProjection());
   }
 
-  bool need_calculations_slow = false;
+  // if (time advanced and slow calculations need to be updated)
+  if (gps_updated && glide_computer.ProcessGPS())
+    // do slow calculations
+    glide_computer.ProcessIdle();
+
+  // values changed, so copy them back now: ONLY CALCULATED INFO
+  // should be changed in DoCalculations, so we only need to write
+  // that one back (otherwise we may write over new data)
+  {
+    ScopeLock protect(mutexBlackboard);
+    device_blackboard.ReadBlackboard(glide_computer.Calculated());
+  }
 
   // if (new GPS data)
   if (gps_updated) {
@@ -88,26 +99,5 @@ CalculationThread::tick()
     if (!glide_computer.Basic().TotalEnergyVarioAvailable) {
       TriggerVarioUpdate(); // emulate vario update
     }
-
-    // process GPS data
-    // if (time advanced)
-    if (glide_computer.ProcessGPS()){
-      need_calculations_slow = true;
-    }
-  }
-
-  // if (time advanced and slow calculations need to be updated)
-  if (need_calculations_slow) {
-    // do slow calculations
-    glide_computer.ProcessIdle();
-    need_calculations_slow = false;
-  }
-
-  // values changed, so copy them back now: ONLY CALCULATED INFO
-  // should be changed in DoCalculations, so we only need to write
-  // that one back (otherwise we may write over new data)
-  {
-    ScopeLock protect(mutexBlackboard);
-    device_blackboard.ReadBlackboard(glide_computer.Calculated());
   }
 }
