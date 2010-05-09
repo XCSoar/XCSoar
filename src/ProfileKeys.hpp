@@ -204,5 +204,6 @@ extern const TCHAR szProfileInfoBoxGeometry[];
 extern const TCHAR szProfileInfoBoxGeom[];
 
 extern const TCHAR szProfileFlarmSimpleControl[];
+extern const TCHAR szProfileFlarmSideData[];
 
 #endif

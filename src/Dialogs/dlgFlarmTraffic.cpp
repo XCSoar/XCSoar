@@ -319,6 +319,8 @@ OnSwitchDataClicked(gcc_unused WndButton &button)
   side_display_type++;
   if (side_display_type > 2)
     side_display_type = 1;
+
+  Profile::Set(szProfileFlarmSideData, side_display_type);
 }
 
 /**
@@ -798,6 +800,9 @@ dlgFlarmTrafficShowModal()
 
   // Update Radar and Selection for the first time
   Update();
+
+  // Get the last chosen Side Data configuration
+  Profile::Get(szProfileFlarmSideData, side_display_type);
 
   // Check if "SimpleControl" is activated
   Profile::Get(szProfileFlarmSimpleControl, simple_control);
