@@ -154,7 +154,8 @@ GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
     slope = max(-1.0, min(1.0, slope * 2)); // scale so 45 degrees or more=90
 
     // display for FLARM gauge is always track up
-    Angle DisplayAngle = (Angle()-gps_info.TrackBearing).as_bearing();
+    const Angle DisplayAngle = (Angle()-gps_info.TrackBearing).as_bearing();
+    const Angle TrafficAngle = (traffic.TrackBearing + DisplayAngle).as_bearing();
 
     // or use .Heading? (no, because heading is not reliable)
     const FastRotation r(DisplayAngle);
@@ -198,11 +199,12 @@ GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
     Arrow[4].y = 4;
 
     // Rotate and shift the arrow
-    PolygonRotateShift(Arrow, 5, sc.x, sc.y,
-                       traffic.TrackBearing + DisplayAngle);
+    PolygonRotateShift(Arrow, 5, sc.x, sc.y, TrafficAngle);
 
     // Draw the polygon
     canvas.polygon(Arrow, 5);
+
+    continue; // DEBUG TEST
 
     short relalt = iround(Units::ToUserUnit(traffic.RelativeAltitude / 100,
                                             Units::AltitudeUnit));

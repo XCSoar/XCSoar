@@ -1083,21 +1083,28 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
   // set time of fix to current time
   flarm_slot->Time_Fix = GPS_INFO->Time;
 
+  double rn, re, ra, rt;
+
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
   _stscanf(String,
       _T("%hu,%lf,%lf,%lf,%hu,%lx,%lf,%lf,%lf,%lf,%hu"),
            &flarm_slot->AlarmLevel, // unsigned short 0
-           &flarm_slot->RelativeNorth, // double?     1
-           &flarm_slot->RelativeEast, // double?      2
-           &flarm_slot->RelativeAltitude, // double   3
+           &rn, // double?     1
+           &re, // double?      2
+           &ra, // double   3
            &flarm_slot->IDType, // unsigned short     4
            &flarm_slot->ID, // 6 char hex
-           &flarm_slot->TrackBearing, // double       6
+           &rt, // double       6
            &flarm_slot->TurnRate, // double           7
            &flarm_slot->Speed, // double              8
            &flarm_slot->ClimbRate, // double          9
            &flarm_slot->Type); // unsigned short     10
+
+  flarm_slot->RelativeAltitude = fixed(ra);
+  flarm_slot->RelativeNorth = fixed(rn);
+  flarm_slot->RelativeEast = fixed(re);
+  flarm_slot->TrackBearing = Angle::degrees(fixed(rt));
 
   // 1 relativenorth, meters
   flarm_slot->Location.Latitude = Angle::degrees(flarm_slot->RelativeNorth
@@ -1134,26 +1141,25 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   if (i > 80)
     return;
 
-  static Angle angle;
-  angle = Angle::degrees(fixed((i * 360) / 255)).as_bearing();
+  const Angle angle = Angle::degrees(fixed((i * 360) / 255)).as_bearing();
 
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
-  static int h1;
-  static int n1;
-  static int e1;
-  static int t1;
-  static unsigned l;
+  int h1;
+  int n1;
+  int e1;
+  int t1;
+  unsigned l;
   h1 = (angle.ifastsine()) / 7;
   n1 = (angle.ifastsine()) / 2 - 200;
   e1 = (angle.ifastcosine()) / 1.5;
   t1 = -angle.as_bearing().value_degrees();
 
   l = (i % 30 > 13 ? 0 : (i % 30 > 5 ? 2 : 1));
-  static int h2;
-  static int n2;
-  static int e2;
-  static int t2;
+  int h2;
+  int n2;
+  int e2;
+  int t2;
   Angle dangle = (angle + Angle::degrees(fixed(120))).as_bearing();
   Angle hangle = dangle; hangle.flip(); hangle = hangle.as_bearing();
 
@@ -1164,12 +1170,12 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
-  static TCHAR t_laa1[50];
+  TCHAR t_laa1[50];
   _stprintf(t_laa1, _T("%d,%d,%d,%d,2,DDA85C,%d,0,0,0,1"), l, n1, e1, h1, t1);
-  static TCHAR t_laa2[50];
+  TCHAR t_laa2[50];
   _stprintf(t_laa2, _T("0,%d,%d,%d,2,AA9146,%d,0,0,0,1"), n2, e2, h2, t2);
 
-  static TCHAR t_lau[50];
+  TCHAR t_lau[50];
   _stprintf(t_lau, _T("2,1,2,1,%d"), l);
 
   GPS_INFO->flarm.FLARM_Available = true;
