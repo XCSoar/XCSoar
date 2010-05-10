@@ -54,10 +54,8 @@ ClimbAverageCalculator::GetAverage(double curTime,
                                    int averageTime)
 {
   int bestHistory;
-  int oldestValIndex = 0;
 
   newestValIndex = newestValIndex < MAX_HISTORY - 1 ? newestValIndex + 1 : 0;
-  oldestValIndex = newestValIndex < MAX_HISTORY - 1 ? newestValIndex + 1 : 0;
 
   // add the new sample
   history[newestValIndex].time = curTime;
