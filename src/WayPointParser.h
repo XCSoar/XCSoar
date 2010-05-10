@@ -41,18 +41,10 @@ Copyright_License {
 #define WAYPOINTPARSER_HPP
 
 #include "Engine/Math/fixed.hpp"
-#include "Engine/Waypoint/Waypoint.hpp"
-
-#include <tchar.h>
-
 
 class Waypoints;
 class RasterTerrain;
-
-struct Waypoint;
-struct GEOPOINT;
 struct SETTINGS_COMPUTER;
-
 
 void SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
     SETTINGS_COMPUTER &settings, const bool reset,

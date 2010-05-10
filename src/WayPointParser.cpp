@@ -39,25 +39,13 @@ Copyright_License {
 #include "WayPointParser.h"
 #include "DeviceBlackboard.hpp"
 #include "Profile.hpp"
-#include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
 #include "RasterTerrain.h"
 #include "Waypoint/Waypoints.hpp"
-#include "UtilsFile.hpp"
-#include "Units.hpp"
 #include "WayPointFile.hpp"
 
-#include <algorithm>
-using std::min;
-using std::max;
-
 #include <tchar.h>
-#include <stdio.h>
-
-#ifdef HAVE_POSIX
-#include <errno.h>
-#endif
 
 WayPointFile* WayPointParser::wp_file0 = NULL;
 WayPointFile* WayPointParser::wp_file1 = NULL;
