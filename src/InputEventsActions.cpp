@@ -332,7 +332,7 @@ InputEvents::eventScreenModes(const TCHAR *misc)
         SetSettingsMap().EnableAuxiliaryInfo = false;
       } else {
         if (SettingsMap().FullScreen) {
-          SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
+          SetSettingsMap().FullScreen = false;
 
           if (SettingsComputer().EnableSoundModes)
             PlayResource(TEXT("IDR_WAV_BELL"));
