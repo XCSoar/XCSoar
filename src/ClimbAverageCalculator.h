@@ -43,7 +43,6 @@ class ClimbAverageCalculator
 {
 public:
 	ClimbAverageCalculator();
-	~ClimbAverageCalculator();
 	double GetAverage(double curTime, double curAltitude, int averageTime);
 
 private:

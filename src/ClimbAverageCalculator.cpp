@@ -48,10 +48,6 @@ ClimbAverageCalculator::ClimbAverageCalculator()
 	}
 }
 
-ClimbAverageCalculator::~ClimbAverageCalculator()
-{
-}
-
 double
 ClimbAverageCalculator::GetAverage(double curTime,
                                    double curAltitude,
