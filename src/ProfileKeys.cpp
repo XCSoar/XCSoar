@@ -286,5 +286,3 @@ const TCHAR szProfileFontStatisticsFont[] = CONF("StatisticsFont");
 
 const TCHAR szProfileInfoBoxGeometry[] = CONF("InfoBoxGeometry");
 const TCHAR szProfileInfoBoxGeom[] = CONF("AppInfoBoxGeom");
-
-const TCHAR szProfileFlarmSimpleControl[] = CONF("FlarmRadarSimpleControl");

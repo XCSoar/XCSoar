@@ -1309,11 +1309,6 @@ static void setVariables(void) {
 
   LoadFormProperty(*wf, _T("prpEnableFLARMGauge"),
                    XCSoarInterface::SettingsMap().EnableFLARMGauge);
-
-  bool simple_control = false;
-  Profile::Get(szProfileFlarmSimpleControl, simple_control);
-  LoadFormProperty(*wf, _T("prpFlarmSimpleControl"), simple_control);
-
   LoadFormProperty(*wf, _T("prpAirspaceWarnings"),
                    XCSoarInterface::SettingsComputer().EnableAirspaceWarnings);
   LoadFormProperty(*wf, _T("prpWarningTime"),
@@ -2325,12 +2320,6 @@ void dlgConfigurationShowModal(void){
   changed |= SetValueRegistryOnChange(wf, _T("prpEnableFLARMGauge"),
                                       szProfileEnableFLARMGauge,
                                       XCSoarInterface::SetSettingsMap().EnableFLARMGauge);
-
-  bool simple_control = false;
-  Profile::Get(szProfileFlarmSimpleControl, simple_control);
-  changed |= SetValueRegistryOnChange(wf, _T("prpFlarmSimpleControl"),
-                                      szProfileFlarmSimpleControl,
-                                      simple_control);
 
   wp = (WndProperty*)wf->FindByName(_T("prpDebounceTimeout"));
   if (wp) {

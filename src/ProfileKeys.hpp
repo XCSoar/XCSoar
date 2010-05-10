@@ -203,6 +203,4 @@ extern const TCHAR szProfileFontStatisticsFont[];
 extern const TCHAR szProfileInfoBoxGeometry[];
 extern const TCHAR szProfileInfoBoxGeom[];
 
-extern const TCHAR szProfileFlarmSimpleControl[];
-
 #endif
