@@ -283,65 +283,23 @@ InputEvents::eventScreenModes(const TCHAR *misc)
   } else if (_tcscmp(misc, TEXT("togglebiginfo")) == 0) {
     InfoBoxLayout::fullscreen = !InfoBoxLayout::fullscreen;
   } else {
-    if (model_is_hp31x()) {
-      // 1 normal > 2 aux > 3 biginfo > 4 fullscreen
-      short pnascrollstatus = 1;
+    if (SettingsMap().EnableAuxiliaryInfo) {
+      if (SettingsComputer().EnableSoundModes)
+        PlayResource(TEXT("IDR_WAV_CLICK"));
 
-      if (InfoBoxLayout::fullscreen == true)
-        pnascrollstatus = 3;
-      if (SettingsMap().FullScreen)
-        pnascrollstatus = 4;
-      if (SettingsMap().EnableAuxiliaryInfo)
-        pnascrollstatus = 2;
+      SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
+      SetSettingsMap().EnableAuxiliaryInfo = false;
+    } else {
+      if (SettingsMap().FullScreen) {
+        SetSettingsMap().FullScreen = false;
 
-      switch (pnascrollstatus) {
-      case 1:
-        if (SettingsComputer().EnableSoundModes)
+        if (is_pna() && SettingsComputer().EnableSoundModes)
+          PlayResource(TEXT("IDR_WAV_BELL"));
+      } else {
+        if (is_pna() && SettingsComputer().EnableSoundModes)
           PlayResource(TEXT("IDR_WAV_CLICK"));
 
         SetSettingsMap().EnableAuxiliaryInfo = true;
-        break;
-      case 2:
-        //  Disable BigInfo until it is useful
-        //	SetSettingsMap().EnableAuxiliaryInfo = false;
-        //	SetSettingsMap().FullScreen = true;
-        //	break;
-      case 3:
-        if (SettingsComputer().EnableSoundModes)
-          PlayResource(TEXT("IDR_WAV_CLICK"));
-
-        SetSettingsMap().EnableAuxiliaryInfo = false;
-        SetSettingsMap().FullScreen = true;
-        break;
-      case 4:
-        SetSettingsMap().EnableAuxiliaryInfo = false;
-        SetSettingsMap().FullScreen = false;
-        if (SettingsComputer().EnableSoundModes)
-          PlayResource(TEXT("IDR_WAV_BELL"));
-
-        break;
-      default:
-        break;
-      }
-    } else {
-      if (SettingsMap().EnableAuxiliaryInfo) {
-        if (SettingsComputer().EnableSoundModes)
-          PlayResource(TEXT("IDR_WAV_CLICK"));
-
-        SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
-        SetSettingsMap().EnableAuxiliaryInfo = false;
-      } else {
-        if (SettingsMap().FullScreen) {
-          SetSettingsMap().FullScreen = false;
-
-          if (is_pna() && SettingsComputer().EnableSoundModes)
-            PlayResource(TEXT("IDR_WAV_BELL"));
-        } else {
-          if (is_pna() && SettingsComputer().EnableSoundModes)
-            PlayResource(TEXT("IDR_WAV_CLICK"));
-
-          SetSettingsMap().EnableAuxiliaryInfo = true;
-        }
       }
     }
   }
