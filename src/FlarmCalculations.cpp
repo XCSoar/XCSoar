@@ -40,28 +40,29 @@ Copyright_License {
 #include "FlarmCalculations.h"
 #include "FLARM/State.hpp"
 
-double FlarmCalculations::Average30s(long flarmId, double curTime, double curAltitude)
+double
+FlarmCalculations::Average30s(long flarmId, double curTime, double curAltitude)
 {
   ClimbAverageCalculator *itemTemp = NULL;
   AverageCalculatorMap::iterator iterFind = averageCalculatorMap.find(flarmId);
-  if( iterFind != averageCalculatorMap.end() )
-    {
-      itemTemp = averageCalculatorMap[flarmId];
-    }
-  else
-    {
-      itemTemp = new ClimbAverageCalculator();
-      averageCalculatorMap[flarmId] = itemTemp;
-    }
+
+  if (iterFind != averageCalculatorMap.end()) {
+    itemTemp = averageCalculatorMap[flarmId];
+  } else {
+    itemTemp = new ClimbAverageCalculator();
+    averageCalculatorMap[flarmId] = itemTemp;
+  }
+
   return itemTemp->GetAverage(curTime, curAltitude, 30);
 }
 
 #endif
 
-bool IsFlarmTargetCNInRange(const FLARM_STATE &flarm, const long target_id)
+bool
+IsFlarmTargetCNInRange(const FLARM_STATE &flarm, const long target_id)
 {
   bool FlarmTargetContact = false;
-  for(int z = 0; z < FLARM_STATE::FLARM_MAX_TRAFFIC; z++) {
+  for (int z = 0; z < FLARM_STATE::FLARM_MAX_TRAFFIC; z++) {
     if (flarm.FLARM_Traffic[z].defined()) {
       if (flarm.FLARM_Traffic[z].ID == target_id) {
         FlarmTargetContact = true;
