@@ -61,15 +61,15 @@ FlarmCalculations::Average30s(long flarmId, double curTime, double curAltitude)
 bool
 IsFlarmTargetCNInRange(const FLARM_STATE &flarm, const long target_id)
 {
-  bool FlarmTargetContact = false;
   for (int z = 0; z < FLARM_STATE::FLARM_MAX_TRAFFIC; z++) {
     if (!flarm.FLARM_Traffic[z].defined())
       continue;
 
-    if (flarm.FLARM_Traffic[z].ID == target_id) {
-      FlarmTargetContact = true;
-      break;
-    }
+    if (flarm.FLARM_Traffic[z].ID != target_id)
+      continue;
+
+    return true;
   }
-  return FlarmTargetContact;
+
+  return false;
 }
