@@ -139,12 +139,22 @@ GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
       y = 0;
     }
     double dh = traffic.RelativeAltitude;
-    double slope = atan2(dh, d) * 2.0 / M_PI; // (-1,1)
-
+    double slope;
+    if (d > 0) {
+      slope = atan2(dh, d) * 2.0 / M_PI; // (-1,1)
+    } else {
+      if (dh>0) {
+        slope = 1;
+      } else if (dh<0) {
+        slope = -1;
+      } else {
+        slope = 0;
+      }
+    }
     slope = max(-1.0, min(1.0, slope * 2)); // scale so 45 degrees or more=90
 
     // display for FLARM gauge is always track up
-    Angle DisplayAngle = Angle()-gps_info.TrackBearing;
+    Angle DisplayAngle = (Angle()-gps_info.TrackBearing).as_bearing();
 
     // or use .Heading? (no, because heading is not reliable)
     const FastRotation r(DisplayAngle);

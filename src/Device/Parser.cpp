@@ -1135,29 +1135,30 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
     return;
 
   static Angle angle;
-  angle = Angle::degrees(fixed((i * 360) / 255));
+  angle = Angle::degrees(fixed((i * 360) / 255)).as_bearing();
 
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
-  static unsigned h1;
-  static unsigned n1;
-  static unsigned e1;
-  static unsigned t1;
+  static int h1;
+  static int n1;
+  static int e1;
+  static int t1;
   static unsigned l;
   h1 = (angle.ifastsine()) / 7;
   n1 = (angle.ifastsine()) / 2 - 200;
   e1 = (angle.ifastcosine()) / 1.5;
   t1 = -angle.as_bearing().value_degrees();
+
   l = (i % 30 > 13 ? 0 : (i % 30 > 5 ? 2 : 1));
-  static unsigned h2;
-  static unsigned n2;
-  static unsigned e2;
-  static unsigned t2;
+  static int h2;
+  static int n2;
+  static int e2;
+  static int t2;
   Angle dangle = (angle + Angle::degrees(fixed(120))).as_bearing();
-  Angle hangle = dangle; hangle.flip();
+  Angle hangle = dangle; hangle.flip(); hangle = hangle.as_bearing();
 
   h2 = (angle.ifastcosine()) / 10;
-  n2 = (dangle.ifastsine()) / 1.2 + 300;
+  n2 = (dangle.ifastsine()) / 1.20 + 300;
   e2 = (dangle.ifastcosine()) + 500;
   t2 = hangle.value_degrees();
 
