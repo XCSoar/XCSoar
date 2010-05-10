@@ -323,36 +323,23 @@ InputEvents::eventScreenModes(const TCHAR *misc)
       default:
         break;
       }
-    } else if (is_pna()) {
-      if (SettingsMap().EnableAuxiliaryInfo) {
-        if (SettingsComputer().EnableSoundModes)
-          PlayResource(TEXT("IDR_WAV_CLICK"));
-
-        SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
-        SetSettingsMap().EnableAuxiliaryInfo = false;
-      } else {
-        if (SettingsMap().FullScreen) {
-          SetSettingsMap().FullScreen = false;
-
-          if (SettingsComputer().EnableSoundModes)
-            PlayResource(TEXT("IDR_WAV_BELL"));
-        } else {
-          if (SettingsComputer().EnableSoundModes)
-            PlayResource(TEXT("IDR_WAV_CLICK"));
-
-          SetSettingsMap().EnableAuxiliaryInfo = true;
-        }
-      }
     } else {
       if (SettingsMap().EnableAuxiliaryInfo) {
         if (SettingsComputer().EnableSoundModes)
           PlayResource(TEXT("IDR_WAV_CLICK"));
+
         SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
         SetSettingsMap().EnableAuxiliaryInfo = false;
       } else {
         if (SettingsMap().FullScreen) {
           SetSettingsMap().FullScreen = false;
+
+          if (is_pna() && SettingsComputer().EnableSoundModes)
+            PlayResource(TEXT("IDR_WAV_BELL"));
         } else {
+          if (is_pna() && SettingsComputer().EnableSoundModes)
+            PlayResource(TEXT("IDR_WAV_CLICK"));
+
           SetSettingsMap().EnableAuxiliaryInfo = true;
         }
       }
