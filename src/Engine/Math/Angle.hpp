@@ -39,6 +39,7 @@ Copyright_License {
 #define ANGLE_HPP
 
 #include "Math/fixed.hpp"
+#include "Math/FastMath.h"
 #ifdef DO_PRINT
 #include <iostream>
 #endif
@@ -86,16 +87,32 @@ public:
   }
 #endif
 
-  fixed sin() const;
-  fixed cos() const;
-  fixed fastsine() const;
-  fixed fastcosine() const;
-  fixed invfastcosine() const;
-  int ifastsine() const;
-  int ifastcosine() const;
+  inline fixed sin() const {
+    return ::sin(value_radians());
+  }
+  inline fixed cos() const {
+    return ::cos(value_radians());
+  }
+  inline fixed fastsine() const {
+    return (::fastsine(value_native()));
+  }
+  inline fixed fastcosine() const {
+    return (::fastcosine(value_native()));
+  }
+  inline fixed invfastcosine() const {
+    return (::invfastcosine(value_native()));
+  }
+  inline int ifastsine() const {
+    return (::ifastsine(value_native()));
+  }
+  inline int ifastcosine() const {
+    return (::ifastcosine(value_native()));
+  }
   int sign() const;
 
-  void sin_cos(fixed& s, fixed& c) const;
+  inline void sin_cos(fixed& s, fixed& c) const {
+    return ::sin_cos(value_radians(), &s, &c);
+  }
   
   fixed magnitude_degrees() const;
   fixed magnitude_radians() const;

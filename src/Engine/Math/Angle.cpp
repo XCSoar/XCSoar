@@ -36,7 +36,6 @@ Copyright_License {
 }
 */
 #include "Angle.hpp"
-#include "Math/FastMath.h"
 
 #ifdef RADIANS
 static const fixed fixed_circle(M_2PI);
@@ -58,54 +57,6 @@ void
 Angle::flip()
 {
   m_value = -m_value;
-}
-
-fixed
-Angle::sin() const 
-{
-  return ::sin(value_radians());
-}
-
-fixed
-Angle::cos() const 
-{
-  return ::cos(value_radians());
-}
-
-void 
-Angle::sin_cos(fixed& s, fixed& c) const
-{
-  return ::sin_cos(value_radians(), &s, &c);
-}
-
-fixed
-Angle::fastsine() const 
-{
-  return (::fastsine(value_native()));
-}
-
-fixed
-Angle::fastcosine() const 
-{
-  return (::fastcosine(value_native()));
-}
-
-fixed
-Angle::invfastcosine() const 
-{
-  return (::invfastcosine(value_native()));
-}
-
-int
-Angle::ifastcosine() const 
-{
-  return (::ifastcosine(value_native()));
-}
-
-int
-Angle::ifastsine() const 
-{
-  return (::ifastsine(value_native()));
 }
 
 fixed
