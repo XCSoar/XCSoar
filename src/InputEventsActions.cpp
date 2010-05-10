@@ -283,11 +283,6 @@ InputEvents::eventScreenModes(const TCHAR *misc)
   } else if (_tcscmp(misc, TEXT("togglebiginfo")) == 0) {
     InfoBoxLayout::fullscreen = !InfoBoxLayout::fullscreen;
   } else {
-
-  //
-  // VENTA-ADDON TOGGLE SCROLLWHEEL as INPUT on the HP31X
-  //
-
     if (model_is_hp31x()) {
       // 1 normal > 2 aux > 3 biginfo > 4 fullscreen
       short pnascrollstatus = 1;
@@ -307,11 +302,11 @@ InputEvents::eventScreenModes(const TCHAR *misc)
         SetSettingsMap().EnableAuxiliaryInfo = true;
         break;
       case 2:
-        //	EnableAuxiliaryInfo = false;		// Disable BigInfo until it is useful
-        //	InfoBoxLayout::fullscreen = true;
+        //  Disable BigInfo until it is useful
+        //	SetSettingsMap().EnableAuxiliaryInfo = false;
+        //	SetSettingsMap().FullScreen = true;
         //	break;
       case 3:
-        //	InfoBoxLayout::fullscreen = false;
         if (SettingsComputer().EnableSoundModes)
           PlayResource(TEXT("IDR_WAV_CLICK"));
 
@@ -319,7 +314,6 @@ InputEvents::eventScreenModes(const TCHAR *misc)
         SetSettingsMap().FullScreen = true;
         break;
       case 4:
-        //	InfoBoxLayout::fullscreen = false;
         SetSettingsMap().EnableAuxiliaryInfo = false;
         SetSettingsMap().FullScreen = false;
         if (SettingsComputer().EnableSoundModes)
@@ -1742,17 +1736,11 @@ InputEvents::sub_TerrainTopology(int vswitch)
 void
 InputEvents::sub_Pan(int vswitch)
 {
-  //  static bool oldfullscreen = 0;  never assigned!
   bool oldPan = SettingsMap().EnablePan;
 
   if (vswitch == -2) {
     // supertoogle, toogle pan mode and fullscreen
-
-    // new mode
     SetSettingsMap().EnablePan = !SettingsMap().EnablePan;
-    if (SettingsMap().EnablePan) { // pan now on, so go fullscreen
-      //JMW illegal      askFullScreen = true;
-    }
   } else if (vswitch == -1)
     // toogle, toogle pan mode only
     SetSettingsMap().EnablePan = !SettingsMap().EnablePan;
