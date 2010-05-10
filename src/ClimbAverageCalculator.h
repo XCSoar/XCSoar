@@ -42,8 +42,8 @@ Copyright_License {
 class ClimbAverageCalculator
 {
 public:
-	ClimbAverageCalculator(void);
-	~ClimbAverageCalculator(void);
+	ClimbAverageCalculator();
+	~ClimbAverageCalculator();
 	double GetAverage(double curTime, double curAltitude, int averageTime);
 
 private:
@@ -55,7 +55,7 @@ private:
 	};
 
 	flarmAltHistoryItem history[MAX_HISTORY];
-  	int newestValIndex;
+  int newestValIndex;
 };
 
 #endif
