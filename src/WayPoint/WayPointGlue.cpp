@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "WayPointParser.h"
+#include "WayPointGlue.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Profile.hpp"
 #include "StringUtil.hpp"
@@ -47,10 +47,9 @@ Copyright_License {
 
 #include <tchar.h>
 
-WayPointFile* WayPointParser::wp_file0 = NULL;
-WayPointFile* WayPointParser::wp_file1 = NULL;
-WayPointFile* WayPointParser::wp_file2 = NULL;
-
+static WayPointFile* wp_file0 = NULL;
+static WayPointFile* wp_file1 = NULL;
+static WayPointFile* wp_file2 = NULL;
 
 /**
  * This functions checks if the home, alternate 1/2 and teamcode waypoint
@@ -124,7 +123,7 @@ SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
 
 
 bool
-WayPointParser::ReadWaypoints(Waypoints &way_points,
+WayPointGlue::ReadWaypoints(Waypoints &way_points,
                               const RasterTerrain *terrain)
 {
   LogStartUp(TEXT("ReadWaypoints"));
@@ -218,7 +217,7 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
 
 
 void
-WayPointParser::SaveWaypoints(Waypoints &way_points)
+WayPointGlue::SaveWaypoints(Waypoints &way_points)
 {
   LogStartUp(TEXT("SaveWaypoints"));
 
@@ -242,10 +241,8 @@ WayPointParser::SaveWaypoints(Waypoints &way_points)
 }
 
 void
-WayPointParser::CloseWaypoints(Waypoints &way_points)
+WayPointGlue::CloseWaypoints(Waypoints &way_points)
 {
   // Clear the waypoint list
   way_points.clear();
 }
-
-

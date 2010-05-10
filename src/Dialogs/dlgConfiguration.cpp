@@ -69,7 +69,7 @@ Copyright_License {
 #include "GlideRatio.hpp"
 #include "Components.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "WayPointParser.h"
+#include "WayPointGlue.hpp"
 #include "WayPointFile.hpp"
 #include "StringUtil.hpp"
 #include "Simulator.hpp"
@@ -932,13 +932,13 @@ static void AskWaypointSave(void) {
     if(MessageBoxX(gettext(_T("Waypoints excluded, save anyway?")),
                    gettext(_T("Waypoints outside terrain")),
                    MB_YESNO | MB_ICONQUESTION) == IDYES) {
-      WayPointParser::SaveWaypoints(way_points);
+      WayPointGlue::SaveWaypoints(way_points);
 
       WaypointFileChanged= true;
       changed = true;
     }
   } else {
-    WayPointParser::SaveWaypoints(way_points);
+    WayPointGlue::SaveWaypoints(way_points);
 
     WaypointFileChanged= true;
     changed = true;

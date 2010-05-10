@@ -82,7 +82,7 @@ Copyright_License {
 #include "ReplayLoggerGlue.hpp"
 
 #include "Waypoint/Waypoints.hpp"
-#include "WayPointParser.h"
+#include "WayPointGlue.hpp"
 
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/Airspaces.hpp"
@@ -310,7 +310,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   terrain.OpenTerrain();
 
   // Read the waypoint files
-  WayPointParser::ReadWaypoints(way_points, &terrain);
+  WayPointGlue::ReadWaypoints(way_points, &terrain);
 
   // Read and parse the airfield info file
   ReadAirfieldFile();

@@ -229,7 +229,6 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
 	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
 	$(SRC)/WayPoint/WayPointFileZander.cpp \
-	$(SRC)/WayPoint/WayPointParser.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/UtilsFile.cpp \
@@ -379,7 +378,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/ProfileKeys.cpp \
-	$(SRC)/WayPoint/WayPointParser.cpp \
+	$(SRC)/WayPoint/WayPointGlue.cpp \
 	$(SRC)/WayPoint/WayPointFile.cpp \
 	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
 	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
@@ -533,7 +532,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Units.cpp \
-	$(SRC)/WayPointParser.cpp \
+	$(SRC)/WayPointGlue.cpp \
 	$(SRC)/WayPointFile.cpp \
 	$(SRC)/WayPointFileWinPilot.cpp \
 	$(SRC)/WayPointFileSeeYou.cpp \

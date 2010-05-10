@@ -52,7 +52,7 @@ Copyright_License {
 #include "ProfileKeys.hpp"
 #include "LocalTime.hpp"
 #include "LocalPath.hpp"
-#include "WayPointParser.h"
+#include "WayPointGlue.hpp"
 #include "Device/device.hpp"
 #include "InputEvents.h"
 #include "TopologyStore.h"
@@ -255,7 +255,7 @@ LoadFiles()
 
   terrain.OpenTerrain();
 
-  WayPointParser::ReadWaypoints(way_points, &terrain);
+  WayPointGlue::ReadWaypoints(way_points, &terrain);
 
   TCHAR tpath[MAX_PATH];
   Profile::Get(szProfileAirspaceFile, tpath, MAX_PATH);

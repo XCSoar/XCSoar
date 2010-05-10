@@ -36,9 +36,8 @@ Copyright_License {
 }
 */
 
-
-#ifndef WAYPOINTPARSER_HPP
-#define WAYPOINTPARSER_HPP
+#ifndef XCSOAR_WAY_POINT_GLUE_HPP
+#define XCSOAR_WAY_POINT_GLUE_HPP
 
 #include "Engine/Math/fixed.hpp"
 
@@ -52,28 +51,20 @@ void SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
 
 class WayPointFile;
 
-
 /**
  * This class is used to parse different waypoint files
  */
-class WayPointParser {
-public:
-
+namespace WayPointGlue {
   /**
    * Reads the waypoints out of the two waypoint files and appends them to the
    * specified waypoint list
    * @param way_points The waypoint list to fill
    * @param terrain RasterTerrain (for automatic waypoint height)
    */
-  static bool ReadWaypoints(Waypoints &way_points,
+  bool ReadWaypoints(Waypoints &way_points,
                             const RasterTerrain *terrain);
-  static void SaveWaypoints(Waypoints &way_points);
-  static void CloseWaypoints(Waypoints &way_points);
-
-private:
-  static WayPointFile *wp_file0;
-  static WayPointFile *wp_file1;
-  static WayPointFile *wp_file2;
+  void SaveWaypoints(Waypoints &way_points);
+  void CloseWaypoints(Waypoints &way_points);
 };
 
 #endif

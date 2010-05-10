@@ -56,7 +56,7 @@ Copyright_License {
 #include "DrawThread.hpp"
 #include "CalculationThread.hpp"
 #include "AirspaceGlue.hpp"
-#include "WayPointParser.h"
+#include "WayPointGlue.hpp"
 #include "TaskClientUI.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
@@ -132,7 +132,7 @@ void SettingsLeave() {
     terrain.OpenTerrain();
 
     // re-load waypoints
-    WayPointParser::ReadWaypoints(way_points, &terrain);
+    WayPointGlue::ReadWaypoints(way_points, &terrain);
     ReadAirfieldFile();
 
     // re-set home
