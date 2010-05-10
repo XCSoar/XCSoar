@@ -53,9 +53,6 @@ Copyright_License {
 
 #include "wcecompat/ts_string.h"
 
-
-int dlgWaypointOutOfTerrain(const TCHAR *Message);
-
 int WayPointFile::WaypointsOutOfRangeSetting = 0;
 int WayPointFile::WaypointOutOfTerrainRangeDialogResult = 0;
 bool WayPointFile::initialised_range_setting = false;

@@ -68,6 +68,9 @@ int dlgAirspacePatternsShowModal();
 void dlgAirspaceShowModal(bool colored);
 void dlgAirspaceSelect();
 
+int
+dlgWaypointOutOfTerrain(const TCHAR *Message);
+
 const Waypoint *
 dlgWayPointSelect(SingleWindow &parent,
                   const GEOPOINT &location,
