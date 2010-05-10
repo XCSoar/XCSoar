@@ -204,10 +204,8 @@ GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
     // Draw the polygon
     canvas.polygon(Arrow, 5);
 
-    continue; // DEBUG TEST
-
-    short relalt = iround(Units::ToUserUnit(traffic.RelativeAltitude / 100,
-                                            Units::AltitudeUnit));
+    const short relalt = iround(Units::ToUserUnit(traffic.RelativeAltitude / 100,
+                                                  Units::AltitudeUnit));
 
     // if (relative altitude is other than zero)
     if (relalt == 0)
