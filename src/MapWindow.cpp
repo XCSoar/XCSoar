@@ -182,7 +182,7 @@ MapWindow::Idle(const bool do_force)
 {
   bool still_dirty=false;
 
-  StartTimer();
+  // StartTimer();
 
   static MapIdleTrigger terrain_idle;
   static MapIdleTrigger topology_idle;
