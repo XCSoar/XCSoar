@@ -41,7 +41,7 @@ Copyright_License {
 
 #ifdef FLARM_AVERAGE
 
-#include "ClimbAverageCalculator.h"
+#include "ClimbAverageCalculator.hpp"
 
 #include <map>
 #include <tchar.h>

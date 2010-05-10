@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "ClimbAverageCalculator.h"
+#include "ClimbAverageCalculator.hpp"
 
 ClimbAverageCalculator::ClimbAverageCalculator()
 {

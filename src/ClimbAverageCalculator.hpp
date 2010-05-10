@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#ifndef CLIMBAVERAGECALCULATOR_H
-#define CLIMBAVERAGECALCULATOR_H
+#ifndef CLIMBAVERAGECALCULATOR_HPP
+#define CLIMBAVERAGECALCULATOR_HPP
 
 class ClimbAverageCalculator
 {
