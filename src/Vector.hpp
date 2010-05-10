@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#ifndef VECTOR_H
-#define VECTOR_H
+#ifndef VECTOR_HPP
+#define VECTOR_HPP
 
 #include "Engine/Math/Constants.h"
 #include "Engine/Math/fixed.hpp"
