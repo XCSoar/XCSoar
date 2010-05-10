@@ -104,11 +104,7 @@ GlideComputer::Initialise()
 void
 GlideComputer::DoLogging()
 {
-  // call Stats::DoLogging()
-  // -> returns if valid fix
-  // if (valid fix)
-  if (GlideComputerStats::DoLogging()) {
-  }
+  GlideComputerStats::DoLogging();
 }
 
 /**
