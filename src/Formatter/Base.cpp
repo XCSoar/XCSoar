@@ -151,7 +151,7 @@ InfoBoxFormatter::AssignValue(int i)
     break;
 
   case 10:
-    Value = (int)Units::ToUserUnit(Calculated().common_stats.current_mc * 10,
+    Value = (int)Units::ToUserUnit(Calculated().common_stats.current_risk_mc * 10,
                                    Units::VerticalSpeedUnit) / 10.0;
     break;
 
