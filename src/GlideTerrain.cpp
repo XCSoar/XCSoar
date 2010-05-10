@@ -39,7 +39,7 @@ Copyright_License {
 
 /**
  * Final glide through terrain and footprint calculations
- * @file GlideSolvers.cpp
+ * @file GlideTerrain.cpp
  */
 
 #include "GlideTerrain.hpp"
