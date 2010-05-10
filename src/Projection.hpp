@@ -40,9 +40,8 @@ Copyright_License {
 
 #include "Navigation/GeoPoint.hpp"
 #include "Screen/shapelib/mapprimitive.h"
-#include <windef.h>
-#include "Math/FastMath.h"
 #include "Math/FastRotation.hpp"
+#include <windef.h>
 
 class Projection {
 public:
@@ -59,7 +58,9 @@ public:
                         const int n,
                         const int skip) const;
 
-  GEOPOINT point2GeoPoint(const pointObj& p) const;
+  GEOPOINT point2GeoPoint(const pointObj& p) const {
+    return GEOPOINT (Angle::native(fixed(p.x)),Angle::native(fixed(p.y)));
+  }
 
   POINT   GetOrigScreen(void) const { return Orig_Screen; }
   GEOPOINT GetPanLocation() const { return PanLocation; }

@@ -125,12 +125,6 @@ Projection::LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
   }
 }
 
-GEOPOINT 
-Projection::point2GeoPoint(const pointObj& p) const
-{
-  return GEOPOINT (Angle::native(fixed(p.x)),Angle::native(fixed(p.y)));
-}
-
 
 /**
  * Converts a LatLon-based polygon to screen coordinates
