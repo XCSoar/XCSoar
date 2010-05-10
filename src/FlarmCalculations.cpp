@@ -40,16 +40,6 @@ Copyright_License {
 #include "FlarmCalculations.h"
 #include "FLARM/State.hpp"
 
-FlarmCalculations::FlarmCalculations(void)
-{
-}
-
-FlarmCalculations::~FlarmCalculations(void)
-{
-  // TODO code: delete on exit
-}
-
-
 double FlarmCalculations::Average30s(long flarmId, double curTime, double curAltitude)
 {
   ClimbAverageCalculator *itemTemp = NULL;
