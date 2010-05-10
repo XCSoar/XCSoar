@@ -1872,9 +1872,9 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     
     Units::TimeToText(TempTime, (int)TimeLocal((int)start_state.Time));
     Units::FormatUserAltitude(start_state.NavAltitude,
-                              TempAlt, sizeof(TempAlt[0]), true);
+                              TempAlt, sizeof(TempAlt)/sizeof(TCHAR), true);
     Units::FormatUserSpeed(start_state.Speed,
-                           TempSpeed, sizeof(TempSpeed[0]), true);
+                           TempSpeed, sizeof(TempSpeed)/sizeof(TCHAR), true);
     
     TCHAR TempAll[120];
     _stprintf(TempAll, TEXT("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"),
