@@ -71,14 +71,16 @@ ClimbAverageCalculator::GetAverage(double curTime,
 
   // now run through the history and find the best sample for average period within the average time period
   for (i = 0; i < MAX_HISTORY; i++) {
-    if (history[i].time != -99999) {
-      // inside the period ?
-      if (history[i].time + averageTime >= curTime) {
-        // is the sample older (and therefore better) than the current found ?
-        if (history[i].time < history[bestHistory].time)
-          bestHistory = i;
-      }
-    }
+    if (history[i].time == -99999)
+      continue;
+
+    // inside the period ?
+    if (history[i].time + averageTime < curTime)
+      continue;
+
+    // is the sample older (and therefore better) than the current found ?
+    if (history[i].time < history[bestHistory].time)
+      bestHistory = i;
   }
 
   // calculate the average !
