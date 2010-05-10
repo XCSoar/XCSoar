@@ -443,7 +443,7 @@ InputEvents::eventTerrainTopology(const TCHAR *misc)
 {
   if (_tcscmp(misc, TEXT("terrain toggle")) == 0)
     sub_TerrainTopology(-2);
-  else if (_tcscmp(misc, TEXT("toplogy toggle")) == 0)
+  else if (_tcscmp(misc, TEXT("topology toggle")) == 0)
     sub_TerrainTopology(-3);
   else if (_tcscmp(misc, TEXT("terrain on")) == 0)
     sub_TerrainTopology(3);
@@ -662,7 +662,7 @@ InputEvents::eventStatus(const TCHAR *misc)
     dlgStatusShowModal(1);
   } else if (_tcscmp(misc, TEXT("task")) == 0) {
     dlgStatusShowModal(2);
-  } else if (_tcscmp(misc, TEXT("Aircraft")) == 0) {
+  } else if (_tcscmp(misc, TEXT("aircraft")) == 0) {
     dlgStatusShowModal(0);
   } else {
     dlgStatusShowModal(-1);
