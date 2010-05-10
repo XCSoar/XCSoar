@@ -169,7 +169,7 @@ RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location) const
     if ((location.Latitude<= TerrainMap->TerrainInfo.TopLeft.Latitude)&&
         (location.Latitude>= TerrainMap->TerrainInfo.BottomRight.Latitude)&&
         (location.Longitude<= TerrainMap->TerrainInfo.BottomRight.Longitude)&&
-        (location.Longitude>= TerrainMap->TerrainInfo.TopLeft.Latitude)) {
+        (location.Longitude>= TerrainMap->TerrainInfo.TopLeft.Longitude)) {
       return true;
     } else {
       return false;
