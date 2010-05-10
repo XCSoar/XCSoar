@@ -122,27 +122,6 @@ MapWindow::RefreshMap()
   draw_thread->trigger_redraw();
 }
 
-void MapWindow::StoreRestoreFullscreen(bool store) {
-  /* JMW broken, will need new implementation
-  static bool oldfullscreen = 0;
-  static bool SuperPan = false;
-  if (store) {
-    // pan not active on entry, save fullscreen status
-    SuperPan = true;
-    oldfullscreen = MapWindow::isMapFullScreen();
-  } else {
-    if (SuperPan) {
-      // pan is active, need to restore
-      if (!oldfullscreen) {
-        // change it if necessary
-        askFullScreen = false;
-      }
-      SuperPan = false;
-    }
-  }
-  */
-}
-
 /**
  * Copies the given basic and calculated info to the MapWindowBlackboard
  * and reads the Settings from the DeviceBlackboard.

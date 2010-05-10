@@ -1748,14 +1748,6 @@ InputEvents::sub_Pan(int vswitch)
   if (vswitch == -2) {
     // supertoogle, toogle pan mode and fullscreen
 
-    /* JMW broken/illegal
-    if (!EnablePan) {
-      StoreRestoreFullscreen(true);
-    } else {
-      StoreRestoreFullscreen(false);
-    }
-    */
-
     // new mode
     SetSettingsMap().EnablePan = !SettingsMap().EnablePan;
     if (SettingsMap().EnablePan) { // pan now on, so go fullscreen
@@ -1808,10 +1800,8 @@ InputEvents::sub_AutoZoom(int vswitch)
   else
     SetSettingsMap().AutoZoom = (vswitch != 0); // 0 off, 1 on
 
-  if (SettingsMap().AutoZoom && SettingsMap().EnablePan) {
-      SetSettingsMap().EnablePan = false;
-      // StoreRestoreFullscreen(false);
-  }
+  if (SettingsMap().AutoZoom && SettingsMap().EnablePan)
+    SetSettingsMap().EnablePan = false;
 }
 
 void

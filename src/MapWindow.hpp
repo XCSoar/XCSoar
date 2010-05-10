@@ -183,7 +183,6 @@ private:
 
   // projection
   bool      BigZoom;
-  void      StoreRestoreFullscreen(bool);
 
   // interface handlers
   int ProcessVirtualKey(int X, int Y, long keytime, short vkmode);
