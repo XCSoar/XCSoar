@@ -288,4 +288,3 @@ const TCHAR szProfileInfoBoxGeometry[] = CONF("InfoBoxGeometry");
 const TCHAR szProfileInfoBoxGeom[] = CONF("AppInfoBoxGeom");
 
 const TCHAR szProfileFlarmSimpleControl[] = CONF("FlarmRadarSimpleControl");
-const TCHAR szProfileFlarmSideData[] = CONF("FlarmRadarSideData");
