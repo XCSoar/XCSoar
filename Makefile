@@ -82,7 +82,7 @@ include $(topdir)/build/cab.mk
 
 ######## compiler flags
 
-INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR)
+INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR) -I$(SRC)/WayPoint
 CPPFLAGS += $(GCONF_CPPFLAGS)
 
 ####### linker configuration
@@ -185,11 +185,11 @@ XCSOAR_SOURCES := \
 	$(SRC)/TeamCodeCalculation.cpp \
 	$(SRC)/ThermalLocator.cpp \
 	$(SRC)/ThermalBase.cpp \
-	$(SRC)/WayPointParser.cpp \
-	$(SRC)/WayPointFile.cpp \
-	$(SRC)/WayPointFileWinPilot.cpp \
-	$(SRC)/WayPointFileSeeYou.cpp \
-	$(SRC)/WayPointFileZander.cpp \
+	$(SRC)/WayPoint/WayPointParser.cpp \
+	$(SRC)/WayPoint/WayPointFile.cpp \
+	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
+	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
+	$(SRC)/WayPoint/WayPointFileZander.cpp \
 	$(SRC)/WindAnalyser.cpp \
 	$(SRC)/WindMeasurementList.cpp \
 	$(SRC)/WindStore.cpp \

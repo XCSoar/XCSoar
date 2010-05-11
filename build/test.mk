@@ -225,11 +225,11 @@ $(KEY_CODE_DUMPER_BIN): $(KEY_CODE_DUMPER_OBJS) $(KEY_CODE_DUMPER_LDADD) | $(TAR
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 RUN_WAY_POINT_PARSER_SOURCES = \
-	$(SRC)/WayPointFile.cpp \
-	$(SRC)/WayPointFileWinPilot.cpp \
-	$(SRC)/WayPointFileSeeYou.cpp \
-	$(SRC)/WayPointFileZander.cpp \
-	$(SRC)/WayPointParser.cpp \
+	$(SRC)/WayPoint/WayPointFile.cpp \
+	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
+	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
+	$(SRC)/WayPoint/WayPointFileZander.cpp \
+	$(SRC)/WayPoint/WayPointParser.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/UtilsFile.cpp \
@@ -379,11 +379,11 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/ProfileKeys.cpp \
-	$(SRC)/WayPointParser.cpp \
-	$(SRC)/WayPointFile.cpp \
-	$(SRC)/WayPointFileWinPilot.cpp \
-	$(SRC)/WayPointFileSeeYou.cpp \
-	$(SRC)/WayPointFileZander.cpp \
+	$(SRC)/WayPoint/WayPointParser.cpp \
+	$(SRC)/WayPoint/WayPointFile.cpp \
+	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
+	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
+	$(SRC)/WayPoint/WayPointFileZander.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/xmlParser.cpp \
