@@ -83,13 +83,14 @@ static bool cursor_at_active_task() {
 static OrderedTask* get_cursor_task() {
   if (get_cursor_index()> task_store.size())
     return NULL;
-  if (cursor_at_active_task()) {
+
+  if (cursor_at_active_task())
     return active_task;
-  } else if (get_cursor_index()> task_store.size()) {
+
+  if (get_cursor_index()> task_store.size())
     return NULL;
-  } else {
-    return task_store.get_task(get_cursor_index()-1);
-  }
+
+  return task_store.get_task(get_cursor_index() - 1);
 }
 
 static void
