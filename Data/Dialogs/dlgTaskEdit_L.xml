@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmTaskEdit" Width="240" Height="320" Caption="Edit Task">
-  <WndListFrame Name="frmTaskPoints" X="2" Y="0" Width="234" Height="152" ItemHeight="18" Font="2" Border="1"/>
+<WndForm Name="frmTaskEdit" Width="320" Height="240" Caption="Edit Task">
+  <WndButton Name="cmdClose" Caption="Close" X="2" Y="2" Width="98" Height="22" Font="2" OnClick="OnCloseClicked"/>
 
-  <WndOwnerDrawFrame Name="frmTaskView" X="2" Y="154" Width="90" Height="128" Font="0" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
-  <WndFrame Name="frmSummary" X="94" Y="154" Width="144" Height="46" Font="2" Border="1"/>
+  <WndOwnerDrawFrame Name="frmTaskView" X="0" Y="26" Width="100" Height="100" Font="0" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
 
-  <WndButton Name="cmdNew" Caption="New" X="92" Y="202" Width="70" Height="22" Font="2" OnClick="OnNewClicked"/>
-  <WndButton Name="cmdProperties" Caption="Properties" X="162" Y="202" Width="76" Height="22" Font="2" OnClick="OnPropertiesClicked"/>
-  <WndButton Name="cmdSave" Caption="Save" X="92" Y="226" Width="70" Height="22" Font="2" OnClick="OnSaveClicked"/>
-  <WndButton Name="cmdDeclare" Caption="Declare" X="162" Y="226" Width="76" Height="22" Font="2" OnClick="OnDeclareClicked"/>
+  <WndButton Name="cmdNew" Caption="New" X="2" Y="128" Width="98" Height="22" Font="2" OnClick="OnNewClicked"/>
+  <WndButton Name="cmdProperties" Caption="Properties" X="2" Y="-1" Width="98" Height="22" Font="2" OnClick="OnPropertiesClicked"/>
+  <WndButton Name="cmdSave" Caption="Save" X="2" Y="-1" Width="98" Height="22" Font="2" OnClick="OnSaveClicked"/>
+  <WndButton Name="cmdDeclare" Caption="Declare" X="2" Y="-1" Width="98" Height="22" Font="2" OnClick="OnDeclareClicked"/>
 
-  <WndButton Name="cmdClose" Caption="Close" X="162" Y="250" Width="76" Height="22" Font="2" OnClick="OnCloseClicked"/>
+  <WndListFrame Name="frmTaskPoints" X="102" Y="0" Width="215" Height="162" ItemHeight="18" Font="2" Border="1"/>
+
+  <WndFrame Name="frmSummary" X="102" Y="164" Width="215" Height="56" Font="2" Border="1"/>
 
 </WndForm>

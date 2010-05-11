@@ -219,7 +219,7 @@ dlgTaskEditShowModal(SingleWindow &parent, OrderedTask** task)
 
   wf = NULL;
 
-  if (!Layout::landscape) {
+  if (Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgTaskEdit_L.xml"),
                         parent,
