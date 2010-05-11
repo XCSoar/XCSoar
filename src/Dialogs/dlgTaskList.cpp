@@ -76,14 +76,14 @@ static unsigned get_cursor_index() {
   return wTasks->GetCursorIndex();
 }
 
-static bool cursor_is_active() {
+static bool cursor_at_active_task() {
   return (wTasks->GetCursorIndex()==0);
 }
 
 static OrderedTask* get_cursor_task() {
   if (get_cursor_index()> task_store.size())
     return NULL;
-  if (cursor_is_active()) {
+  if (cursor_at_active_task()) {
     return active_task;
   } else if (get_cursor_index()> task_store.size()) {
     return NULL;
@@ -163,7 +163,7 @@ RefreshView()
 static void
 OnSelect()
 {
-  if (cursor_is_active()) {
+  if (cursor_at_active_task()) {
     if (OrderedTaskSave(*active_task)) {
       task_store.scan();
       RefreshView();
