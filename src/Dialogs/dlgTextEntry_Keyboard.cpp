@@ -46,8 +46,8 @@ Copyright_License {
 
 using std::min;
 
-static WndForm *wf=NULL;
-static WndOwnerDrawFrame *wGrid=NULL;
+static WndForm *wf = NULL;
+static WndOwnerDrawFrame *wGrid = NULL;
 
 #define MAX_TEXTENTRY 40
 static unsigned int cursor = 0;
@@ -56,16 +56,17 @@ static bool gRetVal;
 static TCHAR edittext[MAX_TEXTENTRY];
 #define MAXENTRYLETTERS (sizeof(EntryLetters)/sizeof(EntryLetters[0])-1)
 
-static void ShowCursor(WndProperty * wp)
+static void
+ShowCursor(WndProperty * wp)
 {
   WndButton *wb;
-  int iCursorX=0;
+  int iCursorX = 0;
 
-  wb=(WndButton*)wf->FindByName(TEXT("Cursor"));
+  wb = (WndButton*)wf->FindByName(TEXT("Cursor"));
   if (wb && wp) {
     if (cursor < 1) {
-      iCursorX=0;
-    }else {
+      iCursorX = 0;
+    } else {
       VirtualCanvas canvas(1, 1);
       canvas.select(*wp->GetFont());
       iCursorX = canvas.text_width(edittext);
@@ -74,7 +75,8 @@ static void ShowCursor(WndProperty * wp)
   }
 }
 
-static void UpdateTextboxProp(void)
+static void
+UpdateTextboxProp(void)
 {
   WndProperty *wp;
   wp = (WndProperty*)wf->FindByName(_T("prpText"));
@@ -84,8 +86,10 @@ static void UpdateTextboxProp(void)
   }
 }
 
-static bool DoBackspace() {
-  if (cursor<1)
+static bool
+DoBackspace()
+{
+  if (cursor < 1)
     return true; // min width
   cursor--;
   edittext[cursor] = 0;
@@ -109,45 +113,51 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   }
 }
 
-static void OnBackspace(WindowControl * Sender) {
+static void
+OnBackspace(WindowControl * Sender)
+{
   DoBackspace();
 }
 
-static void OnKey(WindowControl * Sender)
+static void
+OnKey(WindowControl * Sender)
 {
   TCHAR *Caption = Sender->GetCaption();
-  if (cursor < max_width-1)
-    {
-      edittext[cursor++] = Caption[0];
-    }
+  if (cursor < max_width - 1) {
+    edittext[cursor++] = Caption[0];
+  }
   UpdateTextboxProp();
 }
 
-static void OnOk(WindowControl * Sender)
+static void
+OnOk(WindowControl * Sender)
 {
-  gRetVal=true;
-  wf->SetModalResult(mrOK);
-}
-static void OnCancel(WindowControl * Sender)
-{
-  gRetVal=false;
+  gRetVal = true;
   wf->SetModalResult(mrOK);
 }
 
-static void ClearText(void)
+static void
+OnCancel(WindowControl * Sender)
+{
+  gRetVal = false;
+  wf->SetModalResult(mrOK);
+}
+
+static void
+ClearText(void)
 {
   cursor = 0;
-  memset(edittext, 0, sizeof(TCHAR)*MAX_TEXTENTRY);
+  memset(edittext, 0, sizeof(TCHAR) * MAX_TEXTENTRY);
   UpdateTextboxProp();
 }
 
-
-static void OnClear(WindowControl * Sender)
+static void
+OnClear(WindowControl * Sender)
 {
   ClearText();
 }
 
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnBackspace),
   DeclareCallBackEntry(OnKey),
   DeclareCallBackEntry(OnClear),
@@ -156,17 +166,18 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
+bool
+dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
 {
   wf = NULL;
   wGrid = NULL;
-  if (width==0) {
+
+  if (width == 0)
     width = MAX_TEXTENTRY;
-  }
+
   max_width = min(MAX_TEXTENTRY, width);
 
-  if (Layout::landscape)
-  {
+  if (Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("frmTextEntry_Keyboard_L.xml"),
 			XCSoarInterface::main_window,
@@ -185,24 +196,19 @@ bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
   cursor = 0;
   ClearText();
 
-  /*edittext[0]= 0;
-    edittext[1]= 0;*/
-
   if (!string_is_empty(text)) {
     _tcsupr(text);
-    _tcsncpy(edittext, text, max_width-1);
-    edittext[max_width-1]= 0;
-    cursor=_tcslen(text);
+    _tcsncpy(edittext, text, max_width - 1);
+    edittext[max_width - 1] = 0;
+    cursor = _tcslen(text);
   }
 
   UpdateTextboxProp();
   wf->SetKeyDownNotify(FormKeyDown);
   wf->ShowModal();
   _tcsncpy(text, edittext, max_width);
-  text[max_width-1]=0;
+  text[max_width - 1] = 0;
   delete wf;
 
   return gRetVal;
 }
-
-
