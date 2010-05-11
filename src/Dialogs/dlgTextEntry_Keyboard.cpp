@@ -125,10 +125,11 @@ OnBackspace(WindowControl * Sender)
 static void
 OnKey(WindowControl * Sender)
 {
+  if (cursor >= max_width - 1)
+    return;
+
   TCHAR *Caption = Sender->GetCaption();
-  if (cursor < max_width - 1) {
-    edittext[cursor++] = Caption[0];
-  }
+  edittext[cursor++] = Caption[0];
   UpdateTextboxProp();
 }
 
