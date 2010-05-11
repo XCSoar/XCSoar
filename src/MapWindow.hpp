@@ -91,6 +91,10 @@ class MapWindow : public PaintWindow,
   TopologyStore *topology;
   RasterTerrain *terrain;
   RasterWeather *weather;
+
+  bool topology_dirty, terrain_dirty, weather_dirty;
+  unsigned idle_robin;
+
   TerrainRenderer *terrain_renderer;
   AirspaceClientUI *m_airspace;
   TaskClientUI *task;

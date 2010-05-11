@@ -63,7 +63,10 @@ ScreenGraphics MapGfx;
 MapWindow::MapWindow()
   :MapWindowProjection(),
    way_points(NULL),
-   topology(NULL), terrain(NULL), weather(NULL), terrain_renderer(NULL),
+   topology(NULL), terrain(NULL), weather(NULL),
+   topology_dirty(true), terrain_dirty(true), weather_dirty(true),
+   idle_robin(2),
+   terrain_renderer(NULL),
    m_airspace(NULL), task(NULL),
    marks(NULL), 
    cdi(NULL),
@@ -156,13 +159,8 @@ MapWindow::Idle(const bool do_force)
 
   // StartTimer();
 
-  static bool terrain_dirty;
-  static bool topology_dirty;
-  static bool weather_dirty;
-  static unsigned robin = 2;
-
   if (do_force) {
-    robin = 2;
+    idle_robin = 2;
     terrain_dirty = true;
     topology_dirty = true;
     weather_dirty = true;
@@ -172,8 +170,8 @@ MapWindow::Idle(const bool do_force)
   }
 
   do {
-    robin = (robin+1)%3;
-    switch(robin) {
+    idle_robin = (idle_robin + 1) % 3;
+    switch (idle_robin) {
     case 0:
       if (!topology_dirty)
         break;
