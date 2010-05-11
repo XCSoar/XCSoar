@@ -245,6 +245,17 @@ has_pointer()
 }
 
 /**
+ * Does this device have a keyboard device?
+ * @return True if a keyboard is assumed for the hardware
+ * that XCSoar is running on, False if the hardware has no keyboard
+ */
+static inline bool
+has_keyboard()
+{
+  return !is_embedded();
+}
+
+/**
  * Does this device have a display with colors?
  *
  * XXX not yet implemented!
