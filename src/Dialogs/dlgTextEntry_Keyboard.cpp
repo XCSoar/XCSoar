@@ -87,6 +87,22 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
     return true;
   }
 
+  if (!has_keyboard() || cursor >= max_width - 1)
+    return false;
+
+  if ((key_code >= 'A' && key_code <= 'Z') ||
+      (key_code >= '0' && key_code <= '9')) {
+    edittext[cursor++] = key_code;
+    UpdateTextboxProp();
+    return true;
+  }
+
+  if (key_code == VK_SPACE) {
+    edittext[cursor++] = _T(' ');
+    UpdateTextboxProp();
+    return true;
+  }
+
   return false;
 }
 
