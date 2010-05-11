@@ -102,8 +102,6 @@ void dlgStatusShowModal(int page);
 
 void dlgSwitchesShowModal();
 
-// new task ////////
-
 class OrderedTask;
 
 void
@@ -129,8 +127,6 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
 
 bool
 dlgTaskPointNew(SingleWindow &parent, OrderedTask** task, const unsigned index);
-
-/////////
 
 void dlgVoiceShowModal();
 
