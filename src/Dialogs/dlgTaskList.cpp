@@ -253,23 +253,55 @@ OnDelete()
 }
 
 static void
+OnRename()
+{
+  if (cursor_at_active_task())
+    return;
+
+  tstring oldname = get_cursor_name();
+  tstring newname = oldname;
+  if (newname.find(_T(".tsk")) != tstring::npos)
+    newname = newname.substr(0, newname.find(_T(".tsk")));
+
+  if (!dlgTextEntryShowModal(newname, 10))
+    return;
+
+  newname += _T(".tsk");
+
+  TCHAR oldpath[MAX_PATH];
+  TCHAR newpath[MAX_PATH];
+  LocalPath(oldpath, oldname.c_str());
+  LocalPath(newpath, newname.c_str());
+
+  MoveFile(oldpath, newpath);
+
+  task_store.scan();
+  RefreshView();
+}
+
+static void
 UpdateButtons()
 {
   WndButton* wbSelect = (WndButton*)wf->FindByName(_T("cmdLoadSave"));
   WndButton* wbDelete = (WndButton*)wf->FindByName(_T("cmdDelete"));
-  if (!wbSelect || !wbDelete)
+  WndButton* wbRename = (WndButton*)wf->FindByName(_T("cmdRename"));
+  if (!wbSelect || !wbDelete || !wbRename)
     return;
 
   if (cursor_at_active_task()) {
     wbSelect->SetCaption(_T("Save"));
     wbDelete->set_enabled(false);
     wbDelete->SetForeColor(Color::GRAY);
+    wbRename->set_enabled(false);
+    wbRename->SetForeColor(Color::GRAY);
     return;
   }
 
   wbSelect->SetCaption(_T("Load"));
   wbDelete->set_enabled(true);
   wbDelete->SetForeColor(Color::BLACK);
+  wbRename->set_enabled(true);
+  wbRename->SetForeColor(Color::BLACK);
 }
 
 static void 
@@ -282,6 +314,12 @@ static void
 OnDeleteClicked(WindowControl * Sender)
 {
   OnDelete();
+}
+
+static void
+OnRenameClicked(WindowControl * Sender)
+{
+  OnRename();
 }
 
 static void
@@ -301,6 +339,7 @@ static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnLoadSaveClicked),
   DeclareCallBackEntry(OnDeleteClicked),
+  DeclareCallBackEntry(OnRenameClicked),
   DeclareCallBackEntry(OnTaskPaint),
   DeclareCallBackEntry(NULL)
 };

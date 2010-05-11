@@ -3,8 +3,9 @@
 <WndForm Name="frmTaskList" Width="320" Height="240" Caption="Task Browser">
   <WndButton Name="cmdClose" Caption="Close" X="2" Y="2" Width="98" Height="22" Font="2" OnClick="OnCloseClicked"/>
 
-  <WndButton Name="cmdLoadSave" Caption="Load" X="139" Y="2" Width="60" Height="22" Font="2" OnClick="OnLoadSaveClicked"/>
-  <WndButton Name="cmdDelete" Caption="Delete" X="200" Y="2" Width="60" Height="22" Font="2" OnClick="OnDeleteClicked"/>
+  <WndButton Name="cmdLoadSave" Caption="Load" X="138" Y="2" Width="60" Height="22" Font="2" OnClick="OnLoadSaveClicked"/>
+  <WndButton Name="cmdRename" Caption="Rename" X="198" Y="2" Width="60" Height="22" Font="2" OnClick="OnRenameClicked"/>
+  <WndButton Name="cmdDelete" Caption="Delete" X="258" Y="2" Width="60" Height="22" Font="2" OnClick="OnDeleteClicked"/>
 
   <WndOwnerDrawFrame Name="frmTaskView" X="2" Y="24" Width="135" Height="118" Font="0" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
 
