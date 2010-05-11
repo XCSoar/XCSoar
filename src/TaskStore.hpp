@@ -49,9 +49,6 @@ class OrderedTask;
 class TaskStore 
 {
 public:
-  TaskStore();
-  ~TaskStore();
-
   void scan();
   void clear();
 

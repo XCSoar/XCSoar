@@ -42,15 +42,6 @@ Copyright_License {
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Components.hpp"
 
-TaskStore::TaskStore()
-{
-}
-
-TaskStore::~TaskStore()
-{
-  
-}
-
 void
 TaskStore::clear()
 {
