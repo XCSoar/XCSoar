@@ -47,7 +47,6 @@ Copyright_License {
 using std::min;
 
 static WndForm *wf = NULL;
-static WndOwnerDrawFrame *wGrid = NULL;
 
 #define MAX_TEXTENTRY 40
 static unsigned int cursor = 0;
@@ -174,7 +173,6 @@ bool
 dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
 {
   wf = NULL;
-  wGrid = NULL;
 
   if (width == 0)
     width = MAX_TEXTENTRY;
@@ -190,8 +188,6 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
 
   if (!wf)
     return false;
-
-  wGrid = (WndOwnerDrawFrame*)wf->FindByName(_T("frmGrid"));
 
   cursor = 0;
   ClearText();
