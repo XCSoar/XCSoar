@@ -6,6 +6,6 @@
   <WndButton Name="cmdClose" Caption="Close" X="5" Y="63" Width="60" Height="26" Font="2" OnClickNotify="OnCloseClicked" />
   <WndButton Name="cmdDown" Caption="A+" X="67" Y="63" Width="27" Height="26" Font="2" OnClickNotify="OnDownClicked" />
   <WndButton Name="cmdUp" Caption="A-" X="96" Y="63" Width="27" Height="26" Font="2" OnClickNotify="OnUpClicked" />
-  <WndButton Name="cmdLeft" Caption="&lt;" X="125" Y="63" Width="27" Height="26" Font="2" OnClickNotify="OnLeftClicked" />
-  <WndButton Name="cmdRight" Caption="&gt;" X="154" Y="63" Width="27" Height="26" Font="2" OnClickNotify="OnRightClicked" />
+  <WndSymbolButton Name="cmdLeft" Caption="&lt;" X="125" Y="63" Width="27" Height="26" Font="2" OnClickNotify="OnLeftClicked" />
+  <WndSymbolButton Name="cmdRight" Caption="&gt;" X="154" Y="63" Width="27" Height="26" Font="2" OnClickNotify="OnRightClicked" />
 </WndForm>
