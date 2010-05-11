@@ -52,34 +52,42 @@ Copyright_License {
 using std::min;
 using std::max;
 
-static WndForm *wf=NULL;
+static WndForm *wf = NULL;
 
-static double emc= 0.0;
-static double cruise_efficiency= 1.0;
+static double emc = 0.0;
+static double cruise_efficiency = 1.0;
 
-
-static void OnCancelClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnCancelClicked(WindowControl * Sender)
+{
+  (void)Sender;
   wf->SetModalResult(mrCancel);
 }
 
-static void OnOKClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnOKClicked(WindowControl * Sender)
+{
+  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
-
-static void GetCruiseEfficiency(void) {
+static void
+GetCruiseEfficiency(void)
+{
   cruise_efficiency = XCSoarInterface::Calculated().task_stats.cruise_efficiency;
 }
 
-static void RefreshCalculator(void) {
+static void
+RefreshCalculator(void)
+{
   WndProperty* wp;
 
   // update outputs
   wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat((XCSoarInterface::Calculated().common_stats.task_time_remaining+XCSoarInterface::Calculated().common_stats.task_time_elapsed)/60);
+    wp->GetDataField()->SetAsFloat((
+        XCSoarInterface::Calculated().common_stats.task_time_remaining +
+        XCSoarInterface::Calculated().common_stats.task_time_elapsed) / 60);
     wp->RefreshDisplay();
   }
 
@@ -87,7 +95,8 @@ static void RefreshCalculator(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpAATTime"));
   if (wp) {
     if (XCSoarInterface::Calculated().task_stats.has_targets) {
-      wp->GetDataField()->SetAsFloat(task_ui.get_ordered_task_behaviour().aat_min_time/60);
+      wp->GetDataField()->SetAsFloat(
+          task_ui.get_ordered_task_behaviour().aat_min_time / 60);
       wp->RefreshDisplay();
     } else {
       wp->hide();
@@ -157,7 +166,9 @@ static void RefreshCalculator(void) {
   }
 }
 
-static void DoOptimise(void) {
+static void
+DoOptimise(void)
+{
   // should do a GUI::ExchangeBlackboard() here and use local storage
 
   targetManipEvent.trigger();
@@ -165,8 +176,9 @@ static void DoOptimise(void) {
   targetManipEvent.reset();
 }
 
-
-static void OnTargetClicked(WindowControl * Sender){
+static void
+OnTargetClicked(WindowControl * Sender)
+{
   (void)Sender;
   wf->hide();
 #ifdef OLD_TASK
@@ -179,14 +191,15 @@ static void OnTargetClicked(WindowControl * Sender){
 }
 
 
-static void OnMacCreadyData(DataField *Sender,
-			    DataField::DataAccessKind_t Mode){
+static void
+OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
   double MACCREADY;
-  switch(Mode){
+  switch (Mode) {
   case DataField::daSpecial:
     if (positive(XCSoarInterface::Calculated().timeCircling)) {
-      MACCREADY = XCSoarInterface::Calculated().TotalHeightClimb
-	/XCSoarInterface::Calculated().timeCircling;
+      MACCREADY = XCSoarInterface::Calculated().TotalHeightClimb /
+                  XCSoarInterface::Calculated().timeCircling;
       Sender->Set(Units::ToUserVSpeed(MACCREADY));
 #ifdef OLD_TASK
       GlidePolar::SetMacCready(MACCREADY);
@@ -208,10 +221,11 @@ static void OnMacCreadyData(DataField *Sender,
   }
 }
 
-
-static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode){
+static void
+OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
   double rthis;
-  switch(Mode){
+  switch (Mode) {
   case DataField::daSpecial:
     DoOptimise();
     break;
@@ -222,7 +236,7 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode){
   case DataField::daChange:
     rthis = Sender->GetAsFloat()/100.0;
 #ifdef OLD_TASK
-    if (fabs(Range-rthis)>0.01) {
+    if (fabs(Range - rthis) > 0.01) {
       Range = rthis;
       task.AdjustAATTargets(Range);
       RefreshCalculator();
@@ -232,12 +246,13 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode){
   }
 }
 
-
-static void OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode) {
+static void
+OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
   double clast = task_ui.get_glide_polar().get_cruise_efficiency();
   (void)clast; // unused for now
 
-  switch(Mode){
+  switch (Mode) {
   case DataField::daGet:
     break;
   case DataField::daSpecial:
@@ -262,14 +277,13 @@ static void OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_
   }
 }
 
-
-
-static void OnOptimiseClicked(WindowControl * Sender){
+static void
+OnOptimiseClicked(WindowControl * Sender)
+{
   DoOptimise();
 }
 
-
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnMacCreadyData),
   DeclareCallBackEntry(OnRangeData),
   DeclareCallBackEntry(OnOKClicked),
@@ -283,12 +297,11 @@ static CallBackTableEntry_t CallBackTable[]={
 void
 dlgTaskCalculatorShowModal(SingleWindow &parent)
 {
-  wf = dlgLoadFromXML(CallBackTable,
-                      _T("dlgTaskCalculator.xml"),
-		      XCSoarInterface::main_window,
-		      _T("IDR_XML_TASKCALCULATOR"));
+  wf = dlgLoadFromXML(CallBackTable, _T("dlgTaskCalculator.xml"),
+		                  XCSoarInterface::main_window, _T("IDR_XML_TASKCALCULATOR"));
 
-  if (!wf) return;
+  if (!wf)
+    return;
 
   GlidePolar polar = task_ui.get_glide_polar();
   double MACCREADY_enter = polar.get_mc();
@@ -308,12 +321,12 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
   RefreshCalculator();
 
 #ifdef OLD_TASK
-  if (!task.getSettings().AATEnabled || !task.ValidTaskPoint(task.getActiveIndex()+1)) {
+  if (!task.getSettings().AATEnabled ||
+      !task.ValidTaskPoint(task.getActiveIndex() + 1))
     ((WndButton *)wf->FindByName(_T("Optimise")))->hide();
-  }
-  if (!task.ValidTaskPoint(task.getActiveIndex())) {
+
+  if (!task.ValidTaskPoint(task.getActiveIndex()))
     ((WndButton *)wf->FindByName(_T("Target")))->hide();
-  }
 #endif
 
   if (wf->ShowModal() == mrCancel) {
