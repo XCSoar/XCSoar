@@ -52,6 +52,7 @@
 #include "Math/FastRotation.hpp"
 #include "Math/Screen.hpp"
 #include "MainWindow.hpp"
+#include "Profile.hpp"
 #include "Compiler.h"
 
 static const Color hcWarning(0xFF, 0xA2, 0x00);
@@ -317,6 +318,8 @@ OnSwitchDataClicked(gcc_unused WndButton &button)
   side_display_type++;
   if (side_display_type > 2)
     side_display_type = 1;
+
+  Profile::Set(szProfileFlarmSideData, side_display_type);
 }
 
 /**
@@ -787,6 +790,9 @@ dlgFlarmTrafficShowModal()
 
   // Update Radar and Selection for the first time
   Update();
+
+  // Get the last chosen Side Data configuration
+  Profile::Get(szProfileFlarmSideData, side_display_type);
 
   // Show the dialog
   wf->ShowModal();
