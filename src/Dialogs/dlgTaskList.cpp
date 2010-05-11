@@ -186,6 +186,21 @@ OnSelect()
   }
 }
 
+static void
+UpdateButtons()
+{
+  WndButton* wbSelect = (WndButton*)wf->FindByName(_T("cmdSelect"));
+  if (!wbSelect)
+    return;
+
+  if (cursor_at_active_task()) {
+    wbSelect->SetCaption(_T("Save"));
+    return;
+  }
+
+  wbSelect->SetCaption(_T("Load"));
+}
+
 static void 
 OnSelectClicked(WindowControl * Sender)
 {
@@ -201,6 +216,7 @@ OnTaskListEnter(unsigned ItemIndex)
 static void
 OnTaskCursorCallback(unsigned i)
 {
+  UpdateButtons();
   RefreshView();
 }
 
@@ -249,6 +265,7 @@ dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)
   wTasks->SetPaintItemCallback(OnTaskPaintListItem);
   wTasks->SetCursorCallback(OnTaskCursorCallback);
 
+  UpdateButtons();
   RefreshView();
 
   wf->ShowModal();
