@@ -149,6 +149,54 @@ MapWindow::UpdateProjection()
   MapWindowProjection::ExchangeBlackboard(Calculated(), SettingsMap());
 }
 
+void
+MapWindow::UpdateTopologyCache()
+{
+  if (topology != NULL)
+    topology->TriggerUpdateCaches(*this);
+}
+
+void
+MapWindow::UpdateTopology(bool force)
+{
+  if (!topology_dirty)
+    return;
+
+  topology_dirty = topology != NULL && SettingsMap().EnableTopology &&
+    topology->ScanVisibility(*this, *getSmartBounds(), force);
+}
+
+void
+MapWindow::UpdateTerrain()
+{
+  if (!terrain_dirty)
+    return;
+
+  // always service terrain even if it's not used by the map,
+  // because it's used by other calculations
+  if (terrain != NULL) {
+    terrain->ServiceTerrainCenter(Basic().Location);
+    terrain->ServiceCache();
+  }
+
+  terrain_dirty = false;
+}
+
+void
+MapWindow::UpdateWeather()
+{
+  if (!weather_dirty)
+    return;
+
+  // always service weather even if it's not used by the map,
+  // because it's potentially used by other calculations
+
+  if (weather != NULL)
+    weather->SetViewCenter(Basic().Location);
+
+  weather_dirty = false;
+}
+
 /**
  * This idle function allows progressive scanning of visibility etc
  */
@@ -165,49 +213,25 @@ MapWindow::Idle(const bool do_force)
     topology_dirty = true;
     weather_dirty = true;
 
-    if (topology != NULL)
-      topology->TriggerUpdateCaches(*this);
+    UpdateTopologyCache();
   }
 
   do {
     idle_robin = (idle_robin + 1) % 3;
     switch (idle_robin) {
     case 0:
-      if (!topology_dirty)
-        break;
-
       /// \todo bug: this will delay servicing if EnableTopology was false and then
       /// switched on, until do_force is true again
 
-      topology_dirty = topology != NULL && SettingsMap().EnableTopology &&
-        topology->ScanVisibility(*this, *getSmartBounds(), do_force);
+      UpdateTopology(do_force);
       break;
 
     case 1:
-      if (!terrain_dirty)
-        break;
-
-      // always service terrain even if it's not used by the map,
-      // because it's used by other calculations
-      if (terrain != NULL) {
-        terrain->ServiceTerrainCenter(Basic().Location);
-        terrain->ServiceCache();
-      }
-
-      terrain_dirty = false;
+      UpdateTerrain();
       break;
 
     case 2:
-      if (!weather_dirty)
-        break;
-
-      // always service weather even if it's not used by the map,
-      // because it's potentially used by other calculations
-
-      if (weather != NULL)
-        weather->SetViewCenter(Basic().Location);
-
-      weather_dirty = false;
+      UpdateWeather();
       break;
     }
 

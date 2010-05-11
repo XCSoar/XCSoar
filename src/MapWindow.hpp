@@ -236,6 +236,20 @@ private:
 
   // thread, main functions
   void Render(Canvas &canvas, const RECT rc);
+
+  void UpdateTopologyCache();
+  void UpdateTopology(bool force);
+  void UpdateTerrain();
+  void UpdateWeather();
+
+  void UpdateAll() {
+    UpdateTopologyCache();
+    while (topology_dirty)
+      UpdateTopology(true);
+    UpdateTerrain();
+    UpdateWeather();
+  }
+
   bool Idle(const bool force=false);
 
   // graphics vars
