@@ -182,8 +182,8 @@ OnLoad()
   if (orig == NULL)
     return;
 
-  if (MessageBoxX(gettext(_T("Activate task?")),
-                  gettext(_T("Task Selection")),
+  if (MessageBoxX(gettext(_T("Load the selected task?")),
+                  gettext(_T("Task Browser")),
                   MB_YESNO|MB_ICONQUESTION) != IDYES)
     return;
 
