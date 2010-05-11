@@ -963,7 +963,7 @@ dlgConfigurationVarioShowModal(void)
 
   XCSoarInterface::CreateProgressDialog(gettext(_T("Reading vario settings...")));
   // Need step size finer than default 10
-  XCSoarInterface::SetProgressStepSize(2);
+  XCSoarInterface::SetProgressStepSize(20);
   UpdateParameters(true);
   XCSoarInterface::CloseProgressDialog();
 

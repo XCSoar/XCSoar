@@ -127,8 +127,6 @@ void SettingsLeave() {
 
   if ((WaypointFileChanged) || (TerrainFileChanged) || (AirfieldFileChanged)) {
     XCSoarInterface::CreateProgressDialog(gettext(_T("Loading Terrain File...")));
-    XCSoarInterface::SetProgressStepSize(2);
-
     // re-load terrain
     terrain.CloseTerrain();
     terrain.OpenTerrain();

@@ -665,7 +665,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
 
   XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Airspace File...")));
   // Need step size finer than default 10
-  XCSoarInterface::SetProgressStepSize(5);
+  XCSoarInterface::SetProgressStepSize(50);
   dwStep = reader.size() / 5L;
 
   dwOldPos = 0L;

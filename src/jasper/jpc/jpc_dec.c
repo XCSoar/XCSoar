@@ -632,6 +632,8 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
     return -1;
   }
 
+//  printf("%d\n", dec->numtiles);
+
   if (!tile->partno) {
     if (!jpc_dec_cp_isvalid(tile->cp)) {
       return -1;
@@ -1353,6 +1355,7 @@ static int jpc_dec_process_eoc(jpc_dec_t *dec, jpc_ms_t *ms)
 
   for (tileno = 0, tile = dec->tiles; tileno < dec->numtiles; ++tileno,
 	 ++tile) {
+
     if (tile->state == JPC_TILE_ACTIVE) {
       if (jpc_dec_tiledecode(dec, tile)) {
 	return -1;

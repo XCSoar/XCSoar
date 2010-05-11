@@ -306,7 +306,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 
   // Read the terrain file
   CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
-  SetProgressStepSize(2);
   LogStartUp(TEXT("OpenTerrain"));
   terrain.OpenTerrain();
 

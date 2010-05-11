@@ -156,7 +156,7 @@ RasterMapJPG2000::Open(const char *zfilename)
   strcpy(jp2_filename,zfilename);
 
   // force first-time load
-  XCSoarInterface::SetProgressStepSize(1);
+  XCSoarInterface::SetProgressStepSize(1000/324);
   TriggerJPGReload = true;
   _ReloadJPG2000();
 
