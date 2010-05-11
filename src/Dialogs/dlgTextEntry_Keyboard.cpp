@@ -144,7 +144,7 @@ static void
 OnCancel(WindowControl * Sender)
 {
   gRetVal = false;
-  wf->SetModalResult(mrOK);
+  wf->SetModalResult(mrCancel);
 }
 
 static void
