@@ -161,7 +161,7 @@ dlgTaskManagerShowModal(SingleWindow &parent)
 
   wf = NULL;
 
-  if (!Layout::landscape) {
+  if (Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgTaskManager_L.xml"),
                         parent,
