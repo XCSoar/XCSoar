@@ -81,13 +81,10 @@ static bool cursor_at_active_task() {
 }
 
 static OrderedTask* get_cursor_task() {
-  if (get_cursor_index()> task_store.size())
-    return NULL;
-
   if (cursor_at_active_task())
     return active_task;
 
-  if (get_cursor_index()> task_store.size())
+  if (get_cursor_index() > task_store.size())
     return NULL;
 
   return task_store.get_task(get_cursor_index() - 1);
