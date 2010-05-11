@@ -79,11 +79,14 @@ static bool
 FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
   switch (key_code) {
+  case VK_RIGHT:
+    return true;
   case VK_LEFT:
-    return DoBackspace();
-  default:
-    return false;
+    DoBackspace();
+    return true;
   }
+
+  return false;
 }
 
 static void
