@@ -279,17 +279,18 @@ const TCHAR* OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
 
 bool OrderedTaskSave(const OrderedTask& task, bool noask)
 {
-  if (noask || MessageBoxX(gettext(_T("Save task?")),
+  if (!noask && MessageBoxX(gettext(_T("Save task?")),
                            gettext(_T("Task Selection")),
-                           MB_YESNO|MB_ICONQUESTION) == IDYES) {
-    tstring fname;
-    if (dlgTextEntryShowModal(fname, 10)) {
-      TCHAR path[MAX_PATH];
-      fname += _T(".tsk");
-      LocalPath(path, fname.c_str());
-      task_ui.task_save(path, task);
-      return true;
-    };
-  }
-  return false;
+                           MB_YESNO|MB_ICONQUESTION) != IDYES)
+    return false;
+
+  tstring fname;
+  if (!dlgTextEntryShowModal(fname, 10))
+    return false;
+
+  TCHAR path[MAX_PATH];
+  fname += _T(".tsk");
+  LocalPath(path, fname.c_str());
+  task_ui.task_save(path, task);
+  return true;
 }
