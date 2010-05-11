@@ -282,14 +282,14 @@ OnRename()
 static void
 UpdateButtons()
 {
-  WndButton* wbSelect = (WndButton*)wf->FindByName(_T("cmdLoadSave"));
+  WndButton* wbLoadSave = (WndButton*)wf->FindByName(_T("cmdLoadSave"));
   WndButton* wbDelete = (WndButton*)wf->FindByName(_T("cmdDelete"));
   WndButton* wbRename = (WndButton*)wf->FindByName(_T("cmdRename"));
-  if (!wbSelect || !wbDelete || !wbRename)
+  if (!wbLoadSave || !wbDelete || !wbRename)
     return;
 
   if (cursor_at_active_task()) {
-    wbSelect->SetCaption(_T("Save"));
+    wbLoadSave->SetCaption(_T("Save"));
     wbDelete->set_enabled(false);
     wbDelete->SetForeColor(Color::GRAY);
     wbRename->set_enabled(false);
@@ -297,7 +297,7 @@ UpdateButtons()
     return;
   }
 
-  wbSelect->SetCaption(_T("Load"));
+  wbLoadSave->SetCaption(_T("Load"));
   wbDelete->set_enabled(true);
   wbDelete->SetForeColor(Color::BLACK);
   wbRename->set_enabled(true);
