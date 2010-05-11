@@ -40,7 +40,7 @@ Copyright_License {
 #define XCSOAR_MAIN_WINDOW_HXX
 
 #include "Screen/SingleWindow.hpp"
-#include "MapWindow.hpp"
+#include "GlueMapWindow.hpp"
 #include "PopupMessage.hpp"
 
 class GaugeVario;
@@ -52,7 +52,7 @@ class StatusMessageList;
  */
 class MainWindow : public SingleWindow {
 public:
-  MapWindow map;
+  GlueMapWindow map;
   GaugeVario *vario;
   GaugeFLARM *flarm;
   PopupMessage popup;

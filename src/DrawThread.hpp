@@ -42,7 +42,7 @@ Copyright_License {
 #include "Thread/Thread.hpp"
 #include "Thread/Trigger.hpp"
 
-class MapWindow;
+class GlueMapWindow;
 class GaugeFLARM;
 
 /**
@@ -74,13 +74,13 @@ class DrawThread : public Thread {
   Trigger stop_trigger;
 
   /** Pointer to the MapWindow */
-  MapWindow &map;
+  GlueMapWindow &map;
 
   /** Pointer to the FLARM gauge */
   GaugeFLARM *flarm;
 
 public:
-  DrawThread(MapWindow &_map, GaugeFLARM *_flarm)
+  DrawThread(GlueMapWindow &_map, GaugeFLARM *_flarm)
     :running(_T("DrawThread::running"), true),
      trigger(_T("DrawThread::trigger"), false),
      stop_trigger(_T("WorkerThread::stop_trigger"), true),
@@ -98,7 +98,7 @@ public:
   }
 
   /**
-   * To be removed, only used by MapWindow::Idle().
+   * To be removed, only used by GlueMapWindow::Idle().
    */
   bool is_triggered() {
     return trigger.test();
@@ -124,7 +124,7 @@ public:
 private:
   /**
    * Exchanges blackboard data between the device (device_blackboard)
-   * and the #MapWindow.
+   * and the #GlueMapWindow.
    */
   void ExchangeBlackboard();
 

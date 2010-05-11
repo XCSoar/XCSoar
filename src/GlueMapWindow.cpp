@@ -36,50 +36,65 @@ Copyright_License {
 }
 */
 
-#include "MapWindow.hpp"
-#include "Screen/WindowCanvas.hpp"
+#include "GlueMapWindow.hpp"
+#include "Components.hpp"
+#include "DrawThread.hpp"
 
+GlueMapWindow::GlueMapWindow()
+  :idle_robin(2) {}
+
+/**
+ * This idle function allows progressive scanning of visibility etc
+ */
 bool
-MapWindow::on_resize(unsigned width, unsigned height)
+GlueMapWindow::Idle(const bool do_force)
 {
-  PaintWindow::on_resize(width, height);
+  bool still_dirty=false;
 
-  draw_canvas.resize(width, height);
-  buffer_canvas.resize(width, height);
-  stencil_canvas.resize(width, height);
+  // StartTimer();
 
-  return true;
+  if (do_force) {
+    idle_robin = 2;
+    terrain_dirty = true;
+    topology_dirty = true;
+    weather_dirty = true;
+
+    UpdateTopologyCache();
+  }
+
+  do {
+    idle_robin = (idle_robin + 1) % 3;
+    switch (idle_robin) {
+    case 0:
+      /// \todo bug: this will delay servicing if EnableTopology was false and then
+      /// switched on, until do_force is true again
+
+      UpdateTopology(do_force);
+      break;
+
+    case 1:
+      UpdateTerrain();
+      break;
+
+    case 2:
+      UpdateWeather();
+      break;
+    }
+
+  } while (RenderTimeAvailable() &&
+           !draw_thread->is_triggered() &&
+           (still_dirty = terrain_dirty || topology_dirty || weather_dirty));
+
+  return still_dirty;
 }
 
-bool
-MapWindow::on_create()
-{
-  if (!PaintWindow::on_create())
-    return false;
-
-  WindowCanvas canvas(*this);
-  draw_canvas.set(canvas);
-  buffer_canvas.set(canvas);
-  stencil_canvas.set(canvas);
-  bitmap_canvas.set(canvas);
-  return true;
-}
-
-bool
-MapWindow::on_destroy()
-{
-  draw_canvas.reset();
-  buffer_canvas.reset();
-  stencil_canvas.reset();
-
-  PaintWindow::on_destroy();
-  return true;
-}
-
+/**
+ * Triggers the drawTrigger and is called by
+ * the on_mouse_up event in case of panning
+ */
 void
-MapWindow::on_paint(Canvas& _canvas)
+GlueMapWindow::RefreshMap()
 {
-  mutexBuffer.Lock();
-  _canvas.copy(draw_canvas);
-  mutexBuffer.Unlock();
+  MapWindowTimer::InterruptTimer();
+  draw_thread->trigger_redraw();
 }

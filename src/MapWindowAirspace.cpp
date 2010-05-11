@@ -37,19 +37,11 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
-#include "Screen/Graphics.hpp"
 #include "AirspaceClientUI.hpp"
-#include "Dialogs.h"
-#include "Screen/Layout.hpp"
-
-#include <assert.h>
-
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspaceVisitor.hpp"
 #include "AirspaceVisibility.hpp"
-#include "Components.hpp"
-#include "Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningVisitor.hpp"
 
 class AirspaceWarningCopy: 
@@ -273,66 +265,4 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
 
     m_airspace_intersections = awc.get_locations();
   }
-}
-
-/**
- * Class to display airspace details dialog
- */
-class AirspaceDetailsDialogVisitor: 
-  public AirspaceVisitor
-{
-public:
-  AirspaceDetailsDialogVisitor(const SETTINGS_COMPUTER& _settings, 
-                               const fixed& _altitude,
-                               const AirspaceWarningCopy& warnings):
-    visible(_settings, _altitude, false, warnings),
-    m_airspace(NULL)
-  {
-    m_predicate = &visible;
-  }
-
-  void Visit(const AirspacePolygon& as) {
-    visit_general(as);
-  };
-  void Visit(const AirspaceCircle& as) {
-    visit_general(as);
-  };
-  void visit_general(const AbstractAirspace& as) {
-    if (m_predicate->condition(as)) {
-      m_airspace = &as;
-    }
-  };
-  void display() {
-    if (m_airspace) {
-      dlgAirspaceDetails(*m_airspace);
-    }
-  };
-  bool found() const {
-    return m_airspace != NULL;
-  }
-private:
-  const AirspaceMapVisible visible;
-  const AbstractAirspace *m_airspace;
-};
-
-
-bool
-MapWindow::AirspaceDetailsAtPoint(const GEOPOINT &location) const
-{
-  if (m_airspace == NULL)
-    return false;
-
-  AirspaceWarningCopy awc;
-  m_airspace->visit_warnings(awc);
-
-  AirspaceDetailsDialogVisitor airspace_copy_popup(SettingsComputer(),
-                                                   Basic().GetAltitudeBaroPreferred(),
-                                                   awc);
-
-  m_airspace->visit_within_range(location, fixed(100.0),
-                                 airspace_copy_popup);
-
-  airspace_copy_popup.display();
-
-  return airspace_copy_popup.found();
 }

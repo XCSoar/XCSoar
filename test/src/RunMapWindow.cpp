@@ -306,10 +306,7 @@ public:
   static void Draw(MapWindow &map) {
     map.DrawThreadLoop();
     map.SmartBounds(true);
-    map.Idle(false);
-    for (unsigned i = 0; i < 4; ++i)
-      map.Idle(false);
-    //while (map.Idle(false)) {};
+    map.UpdateAll();
     map.DrawThreadLoop();
   }
 };

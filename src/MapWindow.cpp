@@ -40,15 +40,11 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/WindowCanvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Waypoint/Waypoints.hpp"
 #include "TopologyStore.h"
 #include "RasterTerrain.h"
 #include "TerrainRenderer.h"
 #include "RasterWeather.h"
 #include "Gauge/GaugeCDI.hpp"
-#include "Protection.hpp"
-#include "Components.hpp"
-#include "DrawThread.hpp"
 #include "TaskClientUI.hpp"
 
 #include <tchar.h>
@@ -65,7 +61,6 @@ MapWindow::MapWindow()
    way_points(NULL),
    topology(NULL), terrain(NULL), weather(NULL),
    topology_dirty(true), terrain_dirty(true), weather_dirty(true),
-   idle_robin(2),
    terrain_renderer(NULL),
    m_airspace(NULL), task(NULL),
    marks(NULL), 
@@ -110,17 +105,6 @@ MapWindow::set(ContainerWindow &parent,
   InitialiseScaleList(SettingsMap());
 
   cdi = new GaugeCDI(parent); /* XXX better attach to "this"? */
-}
-
-/**
- * Triggers the drawTrigger and is called by
- * the on_mouse_up event in case of panning
- */
-void
-MapWindow::RefreshMap()
-{
-  MapWindowTimer::InterruptTimer();
-  draw_thread->trigger_redraw();
 }
 
 /**
@@ -195,51 +179,6 @@ MapWindow::UpdateWeather()
     weather->SetViewCenter(Basic().Location);
 
   weather_dirty = false;
-}
-
-/**
- * This idle function allows progressive scanning of visibility etc
- */
-bool
-MapWindow::Idle(const bool do_force)
-{
-  bool still_dirty=false;
-
-  // StartTimer();
-
-  if (do_force) {
-    idle_robin = 2;
-    terrain_dirty = true;
-    topology_dirty = true;
-    weather_dirty = true;
-
-    UpdateTopologyCache();
-  }
-
-  do {
-    idle_robin = (idle_robin + 1) % 3;
-    switch (idle_robin) {
-    case 0:
-      /// \todo bug: this will delay servicing if EnableTopology was false and then
-      /// switched on, until do_force is true again
-
-      UpdateTopology(do_force);
-      break;
-
-    case 1:
-      UpdateTerrain();
-      break;
-
-    case 2:
-      UpdateWeather();
-      break;
-    }
-
-  } while (RenderTimeAvailable() &&
-           !draw_thread->is_triggered() &&
-           (still_dirty = terrain_dirty || topology_dirty || weather_dirty));
-
-  return still_dirty;
 }
 
 /**

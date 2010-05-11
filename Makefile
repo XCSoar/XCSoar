@@ -243,6 +243,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/MapWindowTraffic.cpp \
 	$(SRC)/MapWindowTrail.cpp \
 	$(SRC)/MapWindowWaypoints.cpp \
+	$(SRC)/GlueMapWindow.cpp \
+	$(SRC)/GlueMapWindowAirspace.cpp \
+	$(SRC)/GlueMapWindowEvents.cpp \
 	$(SRC)/DrawThread.cpp \
 	\
 	$(SRC)/DeviceBlackboard.cpp \

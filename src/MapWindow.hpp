@@ -41,14 +41,12 @@ Copyright_License {
 
 #include "MapWindowProjection.hpp"
 #include "MapWindowTimer.hpp"
-#include "Thread/Trigger.hpp"
 #include "Thread/Mutex.hpp"
 #include "Screen/PaintWindow.hpp"
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "MapWindowBlackboard.hpp"
-#include "PeriodClock.hpp"
 #include "NMEA/Derived.hpp"
 
 #include <vector>
@@ -85,15 +83,13 @@ class MapWindow : public PaintWindow,
   public MapWindowBlackboard,
   public MapWindowTimer
 {
-  PeriodClock mouse_down_clock;
-
+protected:
   Waypoints *way_points;
   TopologyStore *topology;
   RasterTerrain *terrain;
   RasterWeather *weather;
 
   bool topology_dirty, terrain_dirty, weather_dirty;
-  unsigned idle_robin;
 
   TerrainRenderer *terrain_renderer;
   AirspaceClientUI *m_airspace;
@@ -169,7 +165,6 @@ private:
   void ApplyScreenSize();
 
   // display management
-  void          RefreshMap();
   void          SwitchZoomClimb(void);
 
   // state/localcopy/local data
@@ -184,9 +179,6 @@ private:
 
   // projection
   bool      BigZoom;
-
-  // interface handlers
-  int ProcessVirtualKey(int X, int Y, long keytime, short vkmode);
 
   // display element functions
 
@@ -226,10 +218,6 @@ private:
   void DrawCDI();
   void DrawSpotHeights(Canvas &canvas);
 
-  // events
-
-  bool AirspaceDetailsAtPoint(const GEOPOINT &location) const;
-
   //  void DrawSpeedToFly(HDC hDC, RECT rc);
   void DrawFLARMTraffic(Canvas &canvas);
   double    findMapScaleBarSize(const RECT rc);
@@ -237,6 +225,7 @@ private:
   // thread, main functions
   void Render(Canvas &canvas, const RECT rc);
 
+protected:
   void UpdateTopologyCache();
   void UpdateTopology(bool force);
   void UpdateTerrain();
@@ -250,8 +239,7 @@ private:
     UpdateWeather();
   }
 
-  bool Idle(const bool force=false);
-
+private:
   // graphics vars
 
   BufferCanvas draw_canvas;
@@ -291,33 +279,10 @@ protected:
   virtual bool on_create();
   virtual bool on_destroy();
   virtual bool on_resize(unsigned width, unsigned height);
-  virtual bool on_mouse_double(int x, int y);
-  virtual bool on_mouse_move(int x, int y, unsigned keys);
-  virtual bool on_mouse_down(int x, int y);
-  virtual bool on_mouse_up(int x, int y);
-  virtual bool on_mouse_wheel(int delta);
-
-#if defined(GNAV) || defined(PNA)
-  virtual bool on_key_down(unsigned key_code);
-#else
-  virtual bool on_key_up(unsigned key_code);
-#endif
 
   virtual void on_paint(Canvas& canvas);
-  virtual bool on_setfocus();
 
 private:
-
-  /**
-   * This (non-virtual, non-inherited) method gets called by either
-   * on_key_down() (Altair and PNAs) or on_key_up() (all other
-   * platforms).
-   *
-   * Some PDAs like iPAQ hx4700 send 0xca..0xcd in WM_KEYDOWN, but
-   * 0xc0..0xc4 (VK_APP1..4) in WM_KEYUP.  We prefer the VK_APP codes.
-   */
-  bool on_key_press(unsigned key_code);
-
   GlidePolar get_glide_polar() const;
 
   void RenderStart(Canvas &canvas, const RECT rc);
