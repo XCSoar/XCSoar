@@ -128,16 +128,17 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
 static void
 OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
-  if (DrawListIndex <= task_store.size()) {
-    tstring name;
-    if (DrawListIndex==0) {
-      name = _T("(Active task)");
-    } else {
-      name = task_store.get_name(DrawListIndex-1);
-    }
-    canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
-                name.c_str());
-  }
+  if (DrawListIndex > task_store.size())
+    return;
+
+  tstring name;
+  if (DrawListIndex == 0)
+    name = _T("(Active task)");
+  else
+    name = task_store.get_name(DrawListIndex-1);
+
+  canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
+              name.c_str());
 }
 
 static void
