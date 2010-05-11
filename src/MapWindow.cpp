@@ -146,11 +146,6 @@ MapWindow::UpdateProjection()
   MapWindowProjection::ExchangeBlackboard(Calculated(), SettingsMap());
 }
 
-typedef struct {
-  DWORD time_last;
-  bool dirty;
-} MapIdleTrigger;
-
 /**
  * This idle function allows progressive scanning of visibility etc
  */
@@ -161,16 +156,16 @@ MapWindow::Idle(const bool do_force)
 
   // StartTimer();
 
-  static MapIdleTrigger terrain_idle;
-  static MapIdleTrigger topology_idle;
-  static MapIdleTrigger rasp_idle;
+  static bool terrain_dirty;
+  static bool topology_dirty;
+  static bool weather_dirty;
   static unsigned robin = 2;
 
   if (do_force) {
     robin = 2;
-    terrain_idle.dirty = true;
-    topology_idle.dirty = true;
-    rasp_idle.dirty = true;
+    terrain_dirty = true;
+    topology_dirty = true;
+    weather_dirty = true;
 
     if (topology != NULL)
       topology->TriggerUpdateCaches(*this);
@@ -180,18 +175,18 @@ MapWindow::Idle(const bool do_force)
     robin = (robin+1)%3;
     switch(robin) {
     case 0:
-      if (!topology_idle.dirty)
+      if (!topology_dirty)
         break;
 
       /// \todo bug: this will delay servicing if EnableTopology was false and then
       /// switched on, until do_force is true again
 
-      topology_idle.dirty = topology != NULL && SettingsMap().EnableTopology &&
+      topology_dirty = topology != NULL && SettingsMap().EnableTopology &&
         topology->ScanVisibility(*this, *getSmartBounds(), do_force);
       break;
 
     case 1:
-      if (!terrain_idle.dirty)
+      if (!terrain_dirty)
         break;
 
       // always service terrain even if it's not used by the map,
@@ -201,11 +196,11 @@ MapWindow::Idle(const bool do_force)
         terrain->ServiceCache();
       }
 
-      terrain_idle.dirty = false;
+      terrain_dirty = false;
       break;
 
     case 2:
-      if (!rasp_idle.dirty)
+      if (!weather_dirty)
         break;
 
       // always service weather even if it's not used by the map,
@@ -214,16 +209,13 @@ MapWindow::Idle(const bool do_force)
       if (weather != NULL)
         weather->SetViewCenter(Basic().Location);
 
-      rasp_idle.dirty = false;
+      weather_dirty = false;
       break;
     }
 
   } while (RenderTimeAvailable() &&
            !draw_thread->is_triggered() &&
-	   (still_dirty =
-	      terrain_idle.dirty
-	    | topology_idle.dirty
-	    | rasp_idle.dirty));
+           (still_dirty = terrain_dirty || topology_dirty || weather_dirty));
 
   return still_dirty;
 }
