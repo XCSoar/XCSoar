@@ -55,12 +55,12 @@ TaskStore::scan()
   clear();
 
   // scan files
-  DataFieldFileReader fr(_T("%s"),_T("%s"), NULL);
+  DataFieldFileReader fr(_T("%s"), _T("%s"), NULL);
   fr.ScanDirectoryTop(_T("*.tsk"));
   fr.Sort();
 
   // append to list
-  for (unsigned i=1; i< fr.size(); i++) {
+  for (unsigned i = 1; i < fr.size(); i++) {
     const DataFieldFileReaderEntry& item = fr.getItem(i);
     m_store.push_back(TaskStoreItem(item.mTextPathFile, item.mTextFile));
   }
@@ -72,10 +72,13 @@ TaskStore::size() const
   return m_store.size();
 }
 
-
-TaskStore::TaskStoreItem::TaskStoreItem():filename(_T("unk")),
-                                          short_name(_T("unk")),
-                                          task(NULL),valid(false) {};
+TaskStore::TaskStoreItem::TaskStoreItem():
+  filename(_T("unk")),
+  short_name(_T("unk")),
+  task(NULL),
+  valid(false)
+{
+}
 
 TaskStore::TaskStoreItem::TaskStoreItem(const tstring the_filename, 
                                         const tstring the_short_name):
@@ -88,23 +91,22 @@ TaskStore::TaskStoreItem::TaskStoreItem(const tstring the_filename,
 
 TaskStore::TaskStoreItem::~TaskStoreItem() 
 {
-  if (!filename.empty() && (task != NULL)) {
+  if (!filename.empty() && (task != NULL))
     delete task;
-  }
 }
 
 OrderedTask*
 TaskStore::TaskStoreItem::get_task() 
 {
-  if (task != NULL) {
+  if (task != NULL)
     return task;
-  }
-  if (valid) {
+
+  if (valid)
     task = task_ui.task_create(filename.c_str());
-  }
-  if (task == NULL) {
+
+  if (task == NULL)
     valid = false;
-  }
+
   return task;
 }
 
