@@ -227,7 +227,7 @@ dlgTaskPropertiesShowModal(SingleWindow &parent, OrderedTask** task)
 
   wf = NULL;
 
-  if (!Layout::landscape) {
+  if (Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgTaskProperties_L.xml"),
                         parent,

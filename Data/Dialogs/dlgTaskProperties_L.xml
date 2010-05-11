@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmTaskProperties" Width="240" Height="320" Caption="Task Properties">
+<WndForm Name="frmTaskProperties" Width="320" Height="240" Caption="Task Properties">
   <WndButton Name="cmdClose" Caption="Close" X="2" Y="2" Width="60" Height="22" Font="2" OnClick="OnCloseClicked"/>
 
-  <WndButton Name="butType" Caption="Type" X="64" Y="2" Width="68" Height="22" Font="2" OnClick="OnTypeClicked"/>
+  <WndButton Name="butType" Caption="Type" X="2" Y="200" Width="68" Height="22" Font="2" OnClick="OnTypeClicked"/>
 
-  <Panel Name="frmProperties" X="2" Y="24" Width="232" Height="248" Font="2">
+  <Panel Name="frmProperties" X="70" Y="0" Width="248" Height="222" Font="2">
 
     <WndProperty Name="prpMinTime" Caption="AAT min time" X="2" Y="-1" Width="220" Height="22" CaptionWidth="150" Font="2" ReadOnly="0" min="0" max="600" step="10" Help="Minimum AAT task time in minutes.">
       <DataField name="" DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f"/>
