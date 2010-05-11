@@ -203,10 +203,13 @@ OnLoad()
   if (orig == NULL)
     return;
 
-  (void)get_cursor_name();
+  tstring fname = get_cursor_name();
+  tstring text = gettext(_T("Load the selected task?"));
+  text += _T("\n(");
+  text += fname;
+  text += _T(")");
 
-  if (MessageBoxX(gettext(_T("Load the selected task?")),
-                  gettext(_T("Task Browser")),
+  if (MessageBoxX(text.c_str(), gettext(_T("Task Browser")),
                   MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
@@ -231,12 +234,16 @@ OnDelete()
   if (cursor_at_active_task())
     return;
 
-  if (MessageBoxX(gettext(_T("Delete the selected task?")),
-                  gettext(_T("Task Browser")),
+  tstring fname = get_cursor_name();
+  tstring text = gettext(_T("Delete the selected task?"));
+  text += _T("\n(");
+  text += fname;
+  text += _T(")");
+
+  if (MessageBoxX(text.c_str(), gettext(_T("Task Browser")),
                   MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
-  tstring fname = get_cursor_name();
   TCHAR path[MAX_PATH];
   LocalPath(path, fname.c_str());
   DeleteFile(path);
