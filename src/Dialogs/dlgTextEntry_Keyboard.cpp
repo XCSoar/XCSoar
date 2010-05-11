@@ -177,19 +177,15 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
 
   max_width = min(MAX_TEXTENTRY, width);
 
-  if (Layout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable,
-                        _T("frmTextEntry_Keyboard_L.xml"),
-			XCSoarInterface::main_window,
-			_T("IDR_XML_TEXTENTRY_KEYBOARD_L"));
-    if (!wf) return false;
-  } else {
-    wf = dlgLoadFromXML(CallBackTable,
-                        _T("frmTextEntry_Keyboard.xml"),
-			XCSoarInterface::main_window,
-			_T("IDR_XML_TEXTENTRY_KEYBOARD"));
-    if (!wf) return false;
-  }
+  if (Layout::landscape)
+    wf = dlgLoadFromXML(CallBackTable, _T("frmTextEntry_Keyboard_L.xml"),
+			XCSoarInterface::main_window, _T("IDR_XML_TEXTENTRY_KEYBOARD_L"));
+  else
+    wf = dlgLoadFromXML(CallBackTable, _T("frmTextEntry_Keyboard.xml"),
+			XCSoarInterface::main_window, _T("IDR_XML_TEXTENTRY_KEYBOARD"));
+
+  if (!wf)
+    return false;
 
   wGrid = (WndOwnerDrawFrame*)wf->FindByName(_T("frmGrid"));
 
