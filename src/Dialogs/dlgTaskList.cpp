@@ -159,21 +159,26 @@ RefreshView()
   }
 }
 
+static void
+OnSave()
+{
+  if (!cursor_at_active_task())
+    return;
+
+  if (OrderedTaskSave(*active_task)) {
+    task_store.scan();
+    RefreshView();
+  }
+}
 
 static void
-OnSelect()
+OnLoad()
 {
-  if (cursor_at_active_task()) {
-    if (OrderedTaskSave(*active_task)) {
-      task_store.scan();
-      RefreshView();
-    }
+  if (cursor_at_active_task())
     return;
-  }
 
   const OrderedTask* orig = get_cursor_task();
   if (orig != NULL) {
-
     if (MessageBoxX(gettext(_T("Activate task?")),
                     gettext(_T("Task Selection")),
                     MB_YESNO|MB_ICONQUESTION) == IDYES) {
@@ -184,6 +189,15 @@ OnSelect()
       task_modified = true;
     }
   }
+}
+
+static void
+OnSelect()
+{
+  if (cursor_at_active_task())
+    OnSave();
+  else
+    OnLoad();
 }
 
 static void
