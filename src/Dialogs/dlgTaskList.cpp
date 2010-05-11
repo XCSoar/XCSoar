@@ -90,6 +90,16 @@ static OrderedTask* get_cursor_task() {
   return task_store.get_task(get_cursor_index() - 1);
 }
 
+static tstring get_cursor_name() {
+  if (cursor_at_active_task())
+    return _T("(Active Task)");
+
+  if (get_cursor_index() > task_store.size())
+    return _T("");
+
+  return task_store.get_name(get_cursor_index() - 1);
+}
+
 static void
 OnTaskPaint(WindowControl *Sender, Canvas &canvas)
 {
@@ -182,6 +192,8 @@ OnLoad()
   const OrderedTask* orig = get_cursor_task();
   if (orig == NULL)
     return;
+
+  (void)get_cursor_name();
 
   if (MessageBoxX(gettext(_T("Load the selected task?")),
                   gettext(_T("Task Browser")),
