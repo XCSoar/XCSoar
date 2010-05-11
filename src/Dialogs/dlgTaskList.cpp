@@ -225,7 +225,7 @@ dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)
 
   wf = NULL;
 
-  if (!Layout::landscape) {
+  if (Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgTaskList_L.xml"),
                         parent,
