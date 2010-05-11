@@ -291,7 +291,7 @@ dlgTextEntryShowModal(tstring &text, int width)
   TCHAR buf[width];
   _tcscpy(buf, text.c_str());
 
-  if (!dlgTextEntryShowModal(buf, width) && _tcslen(buf))
+  if (!dlgTextEntryShowModal(buf, width))
     return false;
 
   text = tstring(buf);
