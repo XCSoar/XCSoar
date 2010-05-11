@@ -307,6 +307,8 @@ private:
   std::vector<WaypointEnvelope>
     find_within_range(const GEOPOINT &loc, const fixed range) const;
 
+  unsigned next_id;
+
   WaypointTree waypoint_tree;
   TaskProjection task_projection;
 

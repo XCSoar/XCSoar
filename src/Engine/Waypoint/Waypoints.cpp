@@ -80,6 +80,7 @@ private:
 };
 
 Waypoints::Waypoints():
+  next_id(1),
   m_file0_writable(false),
   m_home(NULL)
 {
@@ -378,9 +379,9 @@ Waypoints::create(const GEOPOINT &location)
 {
   Waypoint edit_waypoint;
   edit_waypoint.Location = location;
-  edit_waypoint.id = size() + tmp_wps.size() + 1;
+  edit_waypoint.id = next_id++;
 
-  if (edit_waypoint.id == 1) {
+  if (empty()) {
     // first waypoint, put into primary file (this will be auto-generated)
     edit_waypoint.FileNum = 0;
     m_file0_writable = true;
