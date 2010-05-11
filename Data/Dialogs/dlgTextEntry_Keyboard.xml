@@ -3,8 +3,6 @@
 <WndForm Name="frmTextEntry_Keyboard" Width="240" Height="320" Caption="Edit text">
   <WndProperty Name="prpText"  Caption=""   X="0" Y="2" Width="190" Height="22" CaptionWidth="1" Font="2" ReadOnly="1" />
 
-  <WndButton Name="Cursor"  Caption="-"    X="0" Y="25" Width="8"  Height="5" Font="2" Readonly="1"/>
-
   <WndButton Name="btnBackspace" Caption="&lt;-"    X="192" Y="3" Width="36"  Height="20" Font="2" OnClickNotify="OnBackspace"/>
 
   <WndButton Caption="1"    X="0" y="25" width="24"  Height="40" Font="2" OnClickNotify="OnKey"/>

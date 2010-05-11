@@ -55,36 +55,12 @@ static TCHAR edittext[MAX_TEXTENTRY];
 #define MAXENTRYLETTERS (sizeof(EntryLetters)/sizeof(EntryLetters[0])-1)
 
 static void
-ShowCursor(WndProperty * wp)
-{
-  if (!wp)
-    return;
-
-  WndButton *wb;
-  int iCursorX = 0;
-
-  wb = (WndButton*)wf->FindByName(TEXT("Cursor"));
-  if (!wb)
-    return;
-
-  if (cursor < 1) {
-    iCursorX = 0;
-  } else {
-    VirtualCanvas canvas(1, 1);
-    canvas.select(*wp->GetFont());
-    iCursorX = canvas.text_width(edittext);
-  }
-  wb->move(iCursorX, wp->get_position().bottom - Layout::FastScale(3));
-}
-
-static void
 UpdateTextboxProp(void)
 {
   WndProperty *wp;
   wp = (WndProperty*)wf->FindByName(_T("prpText"));
   if (wp) {
     wp->SetText(edittext);
-    ShowCursor(wp);
   }
 }
 
