@@ -52,7 +52,7 @@ static WndOwnerDrawFrame *wGrid = NULL;
 #define MAX_TEXTENTRY 40
 static unsigned int cursor = 0;
 static unsigned int max_width = MAX_TEXTENTRY;
-static bool gRetVal;
+static bool gRetVal = false;
 static TCHAR edittext[MAX_TEXTENTRY];
 #define MAXENTRYLETTERS (sizeof(EntryLetters)/sizeof(EntryLetters[0])-1)
 
