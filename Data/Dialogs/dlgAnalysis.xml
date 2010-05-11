@@ -5,11 +5,11 @@
 
   <WndFrame Name="frmInfo" X="0" Y="5" Width="90" Height="120" Font="2"/>
 
-  <WndButton Name="cmdCalc" Caption="Calc" X="5" Y="130" Width="80" Height="28" Font="2" OnClickNotify="OnCalcClicked" />
+  <WndButton Name="cmdCalc" Caption="Calc" X="5" Y="130" Width="80" Height="28" Font="2" OnClick="OnCalcClicked" />
 
-  <WndSymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="160" Width="37" Height="28" Font="3" OnClickNotify="OnPrevClicked" />
+  <WndSymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="160" Width="37" Height="28" Font="3" OnClick="OnPrevClicked" />
 
-  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="48" Y="160" Width="37" Height="28" Font="3" OnClickNotify="OnNextClicked" />
+  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="48" Y="160" Width="37" Height="28" Font="3" OnClick="OnNextClicked" />
 
   <WndButton Name="cmdClose" Caption="Close" X="5" Y="190" Width="80" Height="28" Font="2" />
 </WndForm>

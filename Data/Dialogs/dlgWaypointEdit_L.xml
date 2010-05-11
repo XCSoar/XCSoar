@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm Name="frmWaypointEdit" Width="240" Height="320" Caption="Waypoint Editor">
-  <WndButton Caption="Close" X="5" Y="270" Width="60" Height="28" Font="2" OnClickNotify="OnCloseClicked"/>
+  <WndButton Caption="Close" X="5" Y="270" Width="60" Height="28" Font="2" OnClick="OnCloseClicked"/>
 
   <WndButton Name="cmdName" Caption="Name: " X="2" Y="0" Width="230" Height="28" Font="2" />
 

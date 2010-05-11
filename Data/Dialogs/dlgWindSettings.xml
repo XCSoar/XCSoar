@@ -20,7 +20,7 @@
     <DataField name="" DataType="boolean"/>
   </WndProperty>
   
-  <WndButton Caption="Save" X="2" Y="90" Width="66" Height="22" Font="2" OnClickNotify="OnSaveClicked"/>
+  <WndButton Caption="Save" X="2" Y="90" Width="66" Height="22" Font="2" OnClick="OnSaveClicked"/>
   
-  <WndButton Caption="Close" X="74" Y="90" Width="66" Height="22" Font="2" OnClickNotify="OnCloseClicked"/>
+  <WndButton Caption="Close" X="74" Y="90" Width="66" Height="22" Font="2" OnClick="OnCloseClicked"/>
 </WndForm>

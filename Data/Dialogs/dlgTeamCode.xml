@@ -17,9 +17,9 @@
   
   <WndProperty Name="prpFlarmLock" Caption="Flarm lock:" X="2" Y="-1"  Width="240" Height="22" CaptionWidth="115" Font="2" ReadOnly="1" />
 
-  <WndButton   Caption="Flarm Lock"    X="5" Y="135" Width="110"  Height="35" Font="2" OnClickNotify="OnFlarmLockClicked" />
+  <WndButton   Caption="Flarm Lock"    X="5" Y="135" Width="110"  Height="35" Font="2" OnClick="OnFlarmLockClicked" />
   
   <WndButton Name="cmdSetCode" Caption="Set Mate code" X="115" Y="135" Width="110"  Height="35" Font="2" />
 
-  <WndButton   Caption="Close"    X="5" Y="-1" Width="220"  Height="35" Font="2" OnClickNotify="OnCloseClicked" />
+  <WndButton   Caption="Close"    X="5" Y="-1" Width="220"  Height="35" Font="2" OnClick="OnCloseClicked" />
 </WndForm>

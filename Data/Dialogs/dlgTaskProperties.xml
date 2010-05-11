@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm Name="frmTaskProperties" Width="320" Height="240" Caption="Task Properties">
-  <WndButton Name="cmdClose" Caption="Close" X="2" Y="2" Width="60" Height="22" Font="2" OnClickNotify="OnCloseClicked"/>
+  <WndButton Name="cmdClose" Caption="Close" X="2" Y="2" Width="60" Height="22" Font="2" OnClick="OnCloseClicked"/>
 
-  <WndButton Name="butType" Caption="Type" X="2" Y="200" Width="68" Height="22" Font="2" OnClickNotify="OnTypeClicked"/>
+  <WndButton Name="butType" Caption="Type" X="2" Y="200" Width="68" Height="22" Font="2" OnClick="OnTypeClicked"/>
 
   <Panel Name="frmProperties" X="70" Y="0" Width="248" Height="222" Font="2">
 

@@ -718,7 +718,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     // Determine ClickCallback function
     TCHAR ClickCallback[128];
     _tcscpy(ClickCallback,
-            StringToStringDflt(node.getAttribute(_T("OnClickNotify")), _T("")));
+            StringToStringDflt(node.getAttribute(_T("OnClick")), _T("")));
 
     // Create the ButtonControl
 
@@ -736,7 +736,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     // Determine ClickCallback function
     TCHAR ClickCallback[128];
     _tcscpy(ClickCallback,
-            StringToStringDflt(node.getAttribute(_T("OnClickNotify")), _T("")));
+            StringToStringDflt(node.getAttribute(_T("OnClick")), _T("")));
 
     // Create the SymbolButtonControl
 

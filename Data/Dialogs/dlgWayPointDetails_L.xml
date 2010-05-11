@@ -3,8 +3,8 @@
 <WndForm Name="frmWayPointInfo" Width="320" Height="240" Caption="Waypoint Info">
   <WndButton Name="cmdGoto" Caption="Goto" X="5" Y="10" Width="60" Height="28" Font="2" />
 
-  <WndSymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="160" Width="29" Height="28" Font="3" OnClickNotify="OnPrevClicked" />
-  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="36" Y="160" Width="29" Height="28" Font="3" OnClickNotify="OnNextClicked" />
+  <WndSymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="160" Width="29" Height="28" Font="3" OnClick="OnPrevClicked" />
+  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="36" Y="160" Width="29" Height="28" Font="3" OnClick="OnNextClicked" />
 
   <WndButton Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28" Font="2" />
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm Name="frmBrightness" X="5" Y="5" Width="153" Height="111" Caption="Screen Brightness">
-  <WndButton Caption="Close" X="68" Y="2" Width="60" Height="22" Font="2" OnClickNotify="OnCloseClicked"/>
+  <WndButton Caption="Close" X="68" Y="2" Width="60" Height="22" Font="2" OnClick="OnCloseClicked"/>
 
   <WndProperty Name="prpAuto" Caption="Auto" X="2" Y="-1" Width="145" Height="22" CaptionWidth="68" Font="2" Help=" (Altair only) Enables automatic backlight, responsive to light sensor.">
     <DataField name="" DataType="boolean" OnDataAccess="OnAutoData"/>

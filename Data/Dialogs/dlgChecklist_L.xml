@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm Name="frmChecklist" Width="240" Height="320" Caption="Checklist">
-  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="35" Y="240" Width="35" Height="28" Font="3" OnClickNotify="OnNextClicked" />
+  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="35" Y="240" Width="35" Height="28" Font="3" OnClick="OnNextClicked" />
 
-  <WndSymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="240" Width="35" Height="28" Font="3" OnClickNotify="OnPrevClicked" />
+  <WndSymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="240" Width="35" Height="28" Font="3" OnClick="OnPrevClicked" />
 
   <WndButton Name="cmdClose" Caption="Close" X="5" Y="270" Width="60" Height="28" Font="2" />
 

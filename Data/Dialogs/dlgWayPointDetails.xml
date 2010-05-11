@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm Name="frmWayPointInfo" Width="240" Height="320" Caption="Waypoint Info">
-  <WndSymbolButton Name="cmdPrev" Caption="&lt;" X="8" Y="270" Width="35" Height="28" Font="3" OnClickNotify="OnPrevClicked" />
-  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="48" Y="270" Width="35" Height="28" Font="3" OnClickNotify="OnNextClicked" />
+  <WndSymbolButton Name="cmdPrev" Caption="&lt;" X="8" Y="270" Width="35" Height="28" Font="3" OnClick="OnPrevClicked" />
+  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="48" Y="270" Width="35" Height="28" Font="3" OnClick="OnNextClicked" />
   
   <WndButton Name="cmdGoto" Caption="Goto" X="88" Y="270" Width="60" Height="28" Font="2" />
 

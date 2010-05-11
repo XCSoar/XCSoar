@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm Name="frmTaskPoint" Width="240" Height="320" Caption="Waypoint">
-  <WndButton Caption="Close" X="2" Y="-1" Width="70" Height="22" Font="2" OnClickNotify="OnCloseClicked"/>
+  <WndButton Caption="Close" X="2" Y="-1" Width="70" Height="22" Font="2" OnClick="OnCloseClicked"/>
 
   <WndOwnerDrawFrame Name="frmTaskView" X="2" Y="26" Width="70" Height="70" Font="0" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
 
-  <WndButton Name="butRemove" Caption="Remove" X="2" Y="-1" Width="70" Height="22" Font="2" OnClickNotify="OnRemoveClicked"/>
-  <WndButton Name="butRelocate" Caption="Relocate" X="2" Y="-1" Width="70" Height="22" Font="2" OnClickNotify="OnRelocateClicked"/>
-  <WndButton Name="butDown" Caption="Move down" X="2" Y="-1" Width="70" Height="22" Font="2" OnClickNotify="OnMoveAfterClicked"/>
-  <WndButton Name="butUp" Caption="Move up" X="2" Y="-1" Width="70" Height="22" Font="2" OnClickNotify="OnMoveBeforeClicked"/>
+  <WndButton Name="butRemove" Caption="Remove" X="2" Y="-1" Width="70" Height="22" Font="2" OnClick="OnRemoveClicked"/>
+  <WndButton Name="butRelocate" Caption="Relocate" X="2" Y="-1" Width="70" Height="22" Font="2" OnClick="OnRelocateClicked"/>
+  <WndButton Name="butDown" Caption="Move down" X="2" Y="-1" Width="70" Height="22" Font="2" OnClick="OnMoveAfterClicked"/>
+  <WndButton Name="butUp" Caption="Move up" X="2" Y="-1" Width="70" Height="22" Font="2" OnClick="OnMoveBeforeClicked"/>
 
   <Panel Name="frmPointCommon" X="80" Y="0" Width="240" Height="80" Font="2">
-  <WndButton Name="butDetails" Caption="Details" X="10" Y="-1" Width="220" Height="22" Font="2" OnClickNotify="OnDetailsClicked"/>
-  <WndButton Name="butType" Caption="Type" X="10" Y="-1" Width="220" Height="22" Font="2" OnClickNotify="OnTypeClicked"/>
+  <WndButton Name="butDetails" Caption="Details" X="10" Y="-1" Width="220" Height="22" Font="2" OnClick="OnDetailsClicked"/>
+  <WndButton Name="butType" Caption="Type" X="10" Y="-1" Width="220" Height="22" Font="2" OnClick="OnTypeClicked"/>
   </Panel>
 
   <Panel Name="frmOZLine" X="80" Y="80" Width="240" Height="142" Font="2">

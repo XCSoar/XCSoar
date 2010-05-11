@@ -3,11 +3,11 @@
 <WndForm Name="frmWaypointOutOfTerrain" X="30" Y="55" Width="200" Height="120" Caption="Waypoint Parser">
   <WndFrame Name="frmWaypointOutOfTerrainText" X="0" Y="0" Width="200" Height="80" Font="2" />
 
-  <WndButton Caption="Yes" X="4" Y="74" width="35" height="22" Font="2" OnClickNotify="OnYesClicked"/>
+  <WndButton Caption="Yes" X="4" Y="74" width="35" height="22" Font="2" OnClick="OnYesClicked"/>
 
-  <WndButton Caption="No" X="41" Y="74" width="35" height="22" Font="2" OnClickNotify="OnNoClicked"/>
+  <WndButton Caption="No" X="41" Y="74" width="35" height="22" Font="2" OnClick="OnNoClicked"/>
 
-  <WndButton Caption="Yes All" X="83" Y="74" width="50" height="22" Font="2" OnClickNotify="OnYesAllClicked"/>
+  <WndButton Caption="Yes All" X="83" Y="74" width="50" height="22" Font="2" OnClick="OnYesAllClicked"/>
 
-  <WndButton Caption="No All" X="139" Y="74" width="50" height="22" Font="2" OnClickNotify="OnNoAllClicked"/>
+  <WndButton Caption="No All" X="139" Y="74" width="50" height="22" Font="2" OnClick="OnNoAllClicked"/>
 </WndForm>

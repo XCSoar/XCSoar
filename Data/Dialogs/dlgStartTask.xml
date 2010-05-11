@@ -7,7 +7,7 @@
 
   <WndProperty Name="prpAltitude" Caption="Altitude" X="2" Y="-1" Width="145" Height="22" CaptionWidth="68" Font="2" ReadOnly="1" Help="" />
 
-  <WndButton Caption="Retry" X="2" Y="-1" Width="130" Height="22" Font="2" OnClickNotify="OnCloseClicked"/>
+  <WndButton Caption="Retry" X="2" Y="-1" Width="130" Height="22" Font="2" OnClick="OnCloseClicked"/>
 
-  <WndButton Caption="Start Anyway" X="2" Y="-1" Width="130" Height="22" Font="2" OnClickNotify="OnStartTaskAnywayClicked"/>
+  <WndButton Caption="Start Anyway" X="2" Y="-1" Width="130" Height="22" Font="2" OnClick="OnStartTaskAnywayClicked"/>
 </WndForm>

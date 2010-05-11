@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm Name="frmConfiguration" Width="240" Height="320" Caption="Configuration">
-  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="35" Y="240" Width="35" Height="28" Font="3" OnClickNotify="OnNextClicked" />
-  <WndSymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="240" Width="35" Height="28" Font="3" OnClickNotify="OnPrevClicked" />
+  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="35" Y="240" Width="35" Height="28" Font="3" OnClick="OnNextClicked" />
+  <WndSymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="240" Width="35" Height="28" Font="3" OnClick="OnPrevClicked" />
   <WndButton Name="cmdClose" Caption="Close" X="5" Y="270" Width="60" Height="28" Font="2" />
 
   <WndProperty Name="prpUserLevel" Caption="" X="70" Y="270" Width="100" Height="28" CaptionWidth="15" Font="2" Help="Sets the level of detail of the configuration settings.
@@ -60,8 +60,8 @@
     </Panel>
   
     <Panel Name="frmAirspace" X="0" Y="0" Width="240" Height="222" Font="2">
-      <WndButton Name="cmdAirspaceColours" Caption="Colours" X="60" Y="2" Width="70" Height="22" Font="2" OnClickNotify="OnAirspaceColoursClicked" />
-      <WndButton Name="cmdAirspaceMode" Caption="Filter" X="140" Y="2" Width="70" Height="22" Font="2" OnClickNotify="OnAirspaceModeClicked" />
+      <WndButton Name="cmdAirspaceColours" Caption="Colours" X="60" Y="2" Width="70" Height="22" Font="2" OnClick="OnAirspaceColoursClicked" />
+      <WndButton Name="cmdAirspaceMode" Caption="Filter" X="140" Y="2" Width="70" Height="22" Font="2" OnClick="OnAirspaceModeClicked" />
   
       <WndProperty Name="prpAirspaceDisplay" Caption="Airspace display" X="2" Y="-1" Width="235" Height="22" CaptionWidth="150" Font="2" Help="Controls filtering of airspace for display and warnings.  The airspace filter button also allows filtering of display and warnings independently for each airspace class.
 [All on] All is displayed.
@@ -276,7 +276,7 @@
           <DataField name="" DataType="enum" Min="0" Max="50" Step="1"/>
         </WndProperty>
   
-        <WndButton Name="cmdSetupDeviceA" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" Font="2" OnClickNotify="OnSetupDeviceAClicked" />
+        <WndButton Name="cmdSetupDeviceA" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" Font="2" OnClick="OnSetupDeviceAClicked" />
       </Panel>
   
       <Panel Name="frmComm2" X="0" Y="69" Width="240" Height="68" Font="2" Border="30">
@@ -297,7 +297,7 @@
           <DataField name="" DataType="enum" Min="0" Max="50" Step="1"/>
         </WndProperty>
   
-        <WndButton Name="cmdSetupDeviceB" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" Font="2" OnClickNotify="OnSetupDeviceBClicked" />
+        <WndButton Name="cmdSetupDeviceB" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" Font="2" OnClick="OnSetupDeviceBClicked" />
       </Panel>
   
       <WndProperty Name="prpSetSystemTimeFromGPS" Caption="Use GPS time" X="62" Y="-1" Width="173" Height="22" CaptionWidth="80" Font="2"
@@ -455,28 +455,28 @@
       </WndProperty>
     
       <WndProperty Name="prpTitleWindowFont" Caption="Info box titles" X="2" Y="27" Width="180" Height="22" CaptionWidth="180" Font="2" ReadOnly="1" />
-      <WndButton Name="cmdTitleWindowFont" Caption="Edit" X="185" Y="27" Width="50" Height="22" Font="2" OnClickNotify="OnEditTitleWindowFontClicked" />
+      <WndButton Name="cmdTitleWindowFont" Caption="Edit" X="185" Y="27" Width="50" Height="22" Font="2" OnClick="OnEditTitleWindowFontClicked" />
     
       <WndProperty Name="prpInfoWindowFont" Caption="Info box values" X="2" Y="52" Width="180" Height="22" CaptionWidth="180" Font="2" ReadOnly="1" />
-      <WndButton Name="cmdInfoWindowFont" Caption="Edit" X="185" Y="52" Width="50" Height="22" Font="2" OnClickNotify="OnEditInfoWindowFontClicked" />
+      <WndButton Name="cmdInfoWindowFont" Caption="Edit" X="185" Y="52" Width="50" Height="22" Font="2" OnClick="OnEditInfoWindowFontClicked" />
     
       <WndProperty Name="prpMapWindowFont" Caption="Map waypoints" X="2" Y="77" Width="180" Height="22" CaptionWidth="180" Font="2" ReadOnly="1" />
-      <WndButton Name="cmdMapWindowFont" Caption="Edit" X="185" Y="77" Width="50" Height="22" Font="2" OnClickNotify="OnEditMapWindowFontClicked" />
+      <WndButton Name="cmdMapWindowFont" Caption="Edit" X="185" Y="77" Width="50" Height="22" Font="2" OnClick="OnEditMapWindowFontClicked" />
     
       <WndProperty Name="prpMapLabelFont" Caption="Topology labels" X="2" Y="102" Width="180" Height="22" CaptionWidth="180" Font="2" ReadOnly="1" />
-      <WndButton Name="cmdMapLabelFont" Caption="Edit" X="185" Y="102" Width="50" Height="22" Font="2" OnClickNotify="OnEditMapLabelFontClicked" />
+      <WndButton Name="cmdMapLabelFont" Caption="Edit" X="185" Y="102" Width="50" Height="22" Font="2" OnClick="OnEditMapLabelFontClicked" />
     
       <WndProperty Name="prpMapWindowBoldFont" Caption="Dialog boxes" X="2" Y="127" Width="180" Height="22" CaptionWidth="180" Font="2" ReadOnly="1" />
-      <WndButton Name="cmdMapWindowBoldFont" Caption="Edit" X="185" Y="127" Width="50" Height="22" Font="2" OnClickNotify="OnEditMapWindowBoldFontClicked" />
+      <WndButton Name="cmdMapWindowBoldFont" Caption="Edit" X="185" Y="127" Width="50" Height="22" Font="2" OnClick="OnEditMapWindowBoldFontClicked" />
     
       <WndProperty Name="prpStatisticsFont" Caption="Statistics screens" X="2" Y="152" Width="180" Height="22" CaptionWidth="180" Font="2" ReadOnly="1" />
-      <WndButton Name="cmdStatisticsFont" Caption="Edit" X="185" Y="152" Width="50" Height="22" Font="2" OnClickNotify="OnEditStatisticsFontClicked" />
+      <WndButton Name="cmdStatisticsFont" Caption="Edit" X="185" Y="152" Width="50" Height="22" Font="2" OnClick="OnEditStatisticsFontClicked" />
     
       <WndProperty Name="prpCDIWindowFont" Caption="Gauges" X="2" Y="177" Width="180" Height="22" CaptionWidth="180" Font="2" ReadOnly="1" />
-      <WndButton Name="cmdCDIWindowFont" Caption="Edit" X="185" Y="177" Width="50" Height="22" Font="2" OnClickNotify="OnEditCDIWindowFontClicked" />
+      <WndButton Name="cmdCDIWindowFont" Caption="Edit" X="185" Y="177" Width="50" Height="22" Font="2" OnClick="OnEditCDIWindowFontClicked" />
     
       <WndProperty Name="prpTitleSmallWindowFont" Caption="Info box values small" X="2" Y="202" Width="180" Height="22" CaptionWidth="180" Font="2" ReadOnly="1" />
-      <WndButton Name="cmdTitleSmallWindowFont" Caption="Edit" X="185" Y="202" Width="50" Height="22" Font="2" OnClickNotify="OnEditTitleSmallWindowFontClicked" />
+      <WndButton Name="cmdTitleSmallWindowFont" Caption="Edit" X="185" Y="202" Width="50" Height="22" Font="2" OnClick="OnEditTitleSmallWindowFontClicked" />
     </Panel>
   
     <Panel Name="frmVarioAppearance" X="0" Y="0" Width="240" Height="222" Font="2">
@@ -711,10 +711,10 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
     </Panel>
   
     <Panel Name="frmWaypointEdit" X="0" Y="0" Width="240" Height="222" Font="2">
-      <WndButton Name="cmdWaypointNew" Caption="New" X="50" Y="-1" Width="150" Height="28" Font="2" OnClickNotify="OnWaypointNewClicked" />
-      <WndButton Name="cmdWaypointEdit" Caption="Edit" X="50" Y="-1" Width="150" Height="28" Font="2" OnClickNotify="OnWaypointEditClicked" />
-      <WndButton Name="cmdWaypointSave" Caption="Save" X="50" Y="-1" Width="150" Height="28" Font="2" OnClickNotify="OnWaypointSaveClicked" />
-      <WndButton Name="cmdWaypointDelete" Caption="Delete" X="50" Y="-1" Width="150" Height="28" Font="2" OnClickNotify="OnWaypointDeleteClicked" />
+      <WndButton Name="cmdWaypointNew" Caption="New" X="50" Y="-1" Width="150" Height="28" Font="2" OnClick="OnWaypointNewClicked" />
+      <WndButton Name="cmdWaypointEdit" Caption="Edit" X="50" Y="-1" Width="150" Height="28" Font="2" OnClick="OnWaypointEditClicked" />
+      <WndButton Name="cmdWaypointSave" Caption="Save" X="50" Y="-1" Width="150" Height="28" Font="2" OnClick="OnWaypointSaveClicked" />
+      <WndButton Name="cmdWaypointDelete" Caption="Delete" X="50" Y="-1" Width="150" Height="28" Font="2" OnClick="OnWaypointDeleteClicked" />
     </Panel>
   
     <Panel Name="frmSpecials" X="0" Y="0" Width="240" Height="222" Font="2">

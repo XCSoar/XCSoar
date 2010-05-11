@@ -21,6 +21,6 @@
     <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="0" Max="50" Step="1" OnDataAccess="OnTempData"/>
   </WndProperty>
 
-  <WndButton Caption="Close" X="102" Y="-1" Width="60" Height="38" Font="4" OnClickNotify="OnCloseClicked">
+  <WndButton Caption="Close" X="102" Y="-1" Width="60" Height="38" Font="4" OnClick="OnCloseClicked">
   </WndButton>
 </WndForm>
