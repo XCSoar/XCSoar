@@ -66,11 +66,12 @@ private:
   short* Overview;
   bool scan_overview;
   unsigned int width, height;
+  bool load_all;
 public:
   bool GetScanType(void);
   short GetField(unsigned int lx,
                  unsigned int ly);
-  void LoadJPG2000(char* jp2_filename);
+  void LoadJPG2000(char* jp2_filename, const bool do_load_all);
   bool GetInitialised(void);
   void Reset();
   void SetInitialised(bool val);

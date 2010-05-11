@@ -220,7 +220,6 @@ bool RasterTileCache::PollTiles(int x, int y) {
 
 
 bool RasterTileCache::TileRequest(int index) {
-  bool retval = 0;
   int num_used = 0;
 
   if (index>=MAX_RTC_TILES) {
@@ -228,8 +227,8 @@ bool RasterTileCache::TileRequest(int index) {
     return false;
   }
 
-  retval = tiles[index].request;
-  if (!retval) return false;
+  if (!tiles[index].request) 
+    return false;
 
   for (int i=0; i< MAX_RTC_TILES; i++) {
     if (tiles[i].IsEnabled()) {
@@ -237,7 +236,7 @@ bool RasterTileCache::TileRequest(int index) {
     }
   }
 
-  if (loaded_one) {
+  if (loaded_one && !load_all) {
     return false; // already loaded one
   }
 
@@ -413,7 +412,7 @@ void RasterTileCache::SetInitialised(bool val) {
     return;
   }
   initialised = val;
-  loaded_one = false;
+  loaded_one = false;  
 }
 
 
@@ -441,10 +440,11 @@ short RasterTileCache::GetMaxElevation(void) {
 
 extern RasterTileCache *raster_tile_current;
 
-void RasterTileCache::LoadJPG2000(char* jp2_filename) {
+void RasterTileCache::LoadJPG2000(char* jp2_filename, const bool do_load_all) {
   jas_stream_t *in;
 
   raster_tile_current = this;
+  load_all = do_load_all;
 
   in = jas_stream_fopen(jp2_filename, "rb");
   if (!in) {

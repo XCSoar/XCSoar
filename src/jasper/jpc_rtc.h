@@ -16,6 +16,7 @@ extern "C" {
   int jas_rtc_GetScanType(void);
   short* jas_rtc_GetOverview(void);
   void jas_rtc_stepprogress(void);
+  void jas_rtc_set_num_tiles(unsigned num);
 
 #ifdef __cplusplus
 }

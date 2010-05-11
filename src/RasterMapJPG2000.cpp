@@ -99,18 +99,19 @@ RasterMapJPG2000::~RasterMapJPG2000() {
 int RasterMapJPG2000::ref_count = 0;
 
 void RasterMapJPG2000::ReloadJPG2000Full(const GEOPOINT &location) {
-  // load all 16 tiles...
-  for (int i=0; i<MAX_ACTIVE_TILES; i++) {
-    TriggerJPGReload = true;
-    SetViewCenter(location);
-  }
+  TriggerJPGReload = true;
+  FullJPGReload= true;
+  SetViewCenter(location);
+  FullJPGReload= false;
 }
 
-void RasterMapJPG2000::_ReloadJPG2000(void) {
+void RasterMapJPG2000::_ReloadJPG2000() {
   if (TriggerJPGReload) {
     TriggerJPGReload = false;
 
-    raster_tile_cache.LoadJPG2000(jp2_filename);
+    raster_tile_cache.LoadJPG2000(jp2_filename, FullJPGReload);
+    FullJPGReload = false;
+
     if (raster_tile_cache.GetInitialised()) {
       TerrainInfo.TopLeft.Longitude = 
         Angle::degrees((fixed)raster_tile_cache.lon_min);
@@ -156,8 +157,9 @@ RasterMapJPG2000::Open(const char *zfilename)
   strcpy(jp2_filename,zfilename);
 
   // force first-time load
-  XCSoarInterface::SetProgressStepSize(1000/324);
   TriggerJPGReload = true;
+  FullJPGReload = true;
+
   _ReloadJPG2000();
 
   terrain_valid = raster_tile_cache.GetInitialised();

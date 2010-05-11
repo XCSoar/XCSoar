@@ -4,14 +4,32 @@
 
 RasterTileCache *raster_tile_current = 0;
 
+static int num_calls_0 = 0;
+static int num_calls_1 = 0;
+
 static void StepProgressDialog(void) {
   XCSoarInterface::StepProgressDialog();
+}
+
+#include <stdio.h>
+static void SetNumTiles(unsigned num) {
+  if (num) {
+    num_calls_0++;
+    XCSoarInterface::SetProgressStepSize(1000/num);
+  } else {
+    num_calls_1++;
+    XCSoarInterface::SetProgressStepSize(1000/MAX_ACTIVE_TILES);
+  }
+//  printf("%d %d %d\n", num, num_calls_0, num_calls_1);
 }
 
 extern "C" {
 
   void jas_rtc_stepprogress(void) {
     StepProgressDialog();
+  }
+  void jas_rtc_set_num_tiles(unsigned num) {
+    SetNumTiles(num);
   }
 
   void jas_rtc_SetTile(int index,
