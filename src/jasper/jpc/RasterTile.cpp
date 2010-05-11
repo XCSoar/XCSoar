@@ -91,29 +91,20 @@ bool RasterTile::GetField(unsigned int lx,
     return false;
 
   // check x in range, and decompose fraction part
-  int ix = CombinedDivAndMod(lx);
+  const int ix = CombinedDivAndMod(lx);
   if ((lx-= xstart)>=width)
     return false;
 
   // check y in range, and decompose fraction part
-  int iy = CombinedDivAndMod(ly);
+  const int iy = CombinedDivAndMod(ly);
   if ((ly-= ystart)>=height)
     return false;
 
   // perform piecewise linear interpolation
-  const unsigned int dx= 1;
-  const unsigned int dy= width+1;
+  const unsigned int dx= (lx==width)? 0:1;
+  const unsigned int dy= (ly==height)? 0:width+1;
 
   const short *tm = ImageBuffer+ly*dy+lx;
-
-  if (ly==height-1) {
-    short hy = tm[dy];
-    hy++;
-  }
-  if (lx==width-1) {
-    short hx = tm[dx];
-    hx++;
-  }
 
   if (ix>iy) {
     // lower triangle
@@ -127,42 +118,42 @@ bool RasterTile::GetField(unsigned int lx,
 }
 
 
-int RasterTile::CheckTileVisibility(int view_x, int view_y) {
+bool 
+RasterTile::CheckTileVisibility(const int view_x, const int view_y) {
   if (!width || !height) {
     if (IsEnabled()) {
       Disable();
     }
-    return 0;
+    return false;
   }
 
-  unsigned int dx1 = abs(view_x - xstart);
-  unsigned int dx2 = abs(xend - view_x);
-  unsigned int dy1 = abs(view_y - ystart);
-  unsigned int dy2 = abs(yend - view_y);
+  const unsigned int dx1 = abs(view_x - xstart);
+  const unsigned int dx2 = abs(xend - view_x);
+  const unsigned int dy1 = abs(view_y - ystart);
+  const unsigned int dy2 = abs(yend - view_y);
 
   if (min(dx1,dx2)*2 < width*3) {
     if (min(dy1,dy2) < height) {
-      return 1;
+      return true;
     }
   }
   if (min(dy1,dy2)*2 < height*3) {
     if (min(dx1,dx2) < width) {
-      return 1;
+      return true;
     }
   }
-  if ( (max(dx1,dx2) > width*2)
-       || (max(dy1,dy2) > height*2)) {
-    if (IsEnabled()) {
+  if (IsEnabled()) {
+    if ( (max(dx1,dx2) > width*2)
+         || (max(dy1,dy2) > height*2)) {
       Disable();
     }
-    return 0;
   }
-  return 0;
+  return false;
 }
 
 
 bool RasterTile::VisibilityChanged(int view_x, int view_y) {
-  request = (CheckTileVisibility(view_x, view_y) && IsDisabled());
+  request = CheckTileVisibility(view_x, view_y) && IsDisabled();
   // JMW note: order of these is important!
   return request;
 }
@@ -205,11 +196,13 @@ bool RasterTileCache::PollTiles(int x, int y) {
     return false;
   }
 
-  for (i= MAX_ACTIVE_TILES; i--; ) {
+  for (i= MAX_ACTIVE_TILES; --i; ) {
     ActiveTiles[i] = -1;
   }
-  for (i= MAX_RTC_TILES; i--; ) {
-    retval |= tiles[i].VisibilityChanged(view_x, view_y);
+  for (i= MAX_RTC_TILES; --i; ) {
+    if (tiles[i].VisibilityChanged(view_x, view_y)) {
+      retval = true;
+    }
     if (tiles[i].IsEnabled()) {
       ActiveTiles[num_used] = i;
       num_used++;
@@ -230,7 +223,7 @@ bool RasterTileCache::TileRequest(int index) {
   if (!tiles[index].request) 
     return false;
 
-  for (int i=0; i< MAX_RTC_TILES; i++) {
+  for (int i=0; i< MAX_RTC_TILES; ++i) {
     if (tiles[i].IsEnabled()) {
       num_used++;
     }
@@ -267,7 +260,7 @@ short RasterTileCache::GetField(unsigned int lx,
   }
 
   int tile_this;
-  for (unsigned int i= MAX_ACTIVE_TILES; i--; ) {
+  for (unsigned int i= MAX_ACTIVE_TILES; --i; ) {
     if (((tile_this = ActiveTiles[i])>=0) &&
         (tile_this != tile_last) &&
         tiles[tile_this].GetField(lx, ly, &retval)) {

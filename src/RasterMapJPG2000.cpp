@@ -138,15 +138,17 @@ void RasterMapJPG2000::ReloadJPG2000(void) {
 void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
 {
   Poco::ScopedRWLock protect(lock, true);
+  int x, y;
   if (raster_tile_cache.GetInitialised()) {
-    int x = lround((location.Longitude-TerrainInfo.TopLeft.Longitude).value_native()*TerrainInfo.Columns
+    x = lround((location.Longitude-TerrainInfo.TopLeft.Longitude).value_native()*TerrainInfo.Columns
                    /(TerrainInfo.BottomRight.Longitude-TerrainInfo.TopLeft.Longitude).value_native());
-    int y = lround((TerrainInfo.TopLeft.Latitude-location.Latitude).value_native()*TerrainInfo.Rows
+    y = lround((TerrainInfo.TopLeft.Latitude-location.Latitude).value_native()*TerrainInfo.Rows
                    /(TerrainInfo.TopLeft.Latitude-TerrainInfo.BottomRight.Latitude).value_native());
     TriggerJPGReload |= raster_tile_cache.PollTiles(x, y);
   }
   if (TriggerJPGReload) {
     _ReloadJPG2000();
+    raster_tile_cache.PollTiles(x, y);
   }
 }
 

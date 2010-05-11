@@ -17,7 +17,7 @@ public:
   bool request;
   short *ImageBuffer;
 
-  int CheckTileVisibility(int view_x, int view_y);
+  bool CheckTileVisibility(const int view_x, const int view_y);
   bool SetEdgeIfInRange(unsigned int x, unsigned int y, short val);
 
  public:
