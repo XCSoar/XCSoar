@@ -245,16 +245,16 @@ dlgTextEntryHighscoreType(TCHAR *text, int width)
 
   wf->SetKeyDownNotify(FormKeyDown);
 
-  wf->ShowModal();
+  if (wf->ShowModal() == mrOK) {
+    _tcsncpy(text, edittext, max_width);
+    text[max_width - 1] = 0;
 
-  _tcsncpy(text, edittext, max_width);
-  text[max_width - 1] = 0;
-
-  // strip trailing spaces
-  int len = _tcslen(text) - 1;
-  while ((len > 0) && (text[len] == _T(' '))) {
-    text[len] = 0;
-    len--;
+    // strip trailing spaces
+    int len = _tcslen(text) - 1;
+    while ((len > 0) && (text[len] == _T(' '))) {
+      text[len] = 0;
+      len--;
+    }
   }
 
   delete wf;
