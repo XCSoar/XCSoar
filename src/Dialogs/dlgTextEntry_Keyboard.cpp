@@ -82,6 +82,7 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   case VK_RIGHT:
     return true;
   case VK_LEFT:
+  case VK_BACK:
     DoBackspace();
     return true;
   }

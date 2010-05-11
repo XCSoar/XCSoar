@@ -69,6 +69,7 @@ enum {
   VK_F23,
   VK_ESCAPE,
   VK_TAB,
+  VK_BACK,
 };
 
 enum {
