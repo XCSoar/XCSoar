@@ -81,11 +81,6 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   switch (key_code) {
   case VK_LEFT:
     return DoBackspace();
-      /* JMW this prevents cursor buttons from being used to enter
-    case VK_RETURN:
-      wf->SetModalResult(mrOK);
-    return true;
-      */
   default:
     return false;
   }
