@@ -194,7 +194,7 @@ OnLoad()
 }
 
 static void
-OnSelect()
+OnLoadSave()
 {
   if (cursor_at_active_task())
     OnSave();
@@ -205,7 +205,7 @@ OnSelect()
 static void
 UpdateButtons()
 {
-  WndButton* wbSelect = (WndButton*)wf->FindByName(_T("cmdSelect"));
+  WndButton* wbSelect = (WndButton*)wf->FindByName(_T("cmdLoadSave"));
   if (!wbSelect)
     return;
 
@@ -218,15 +218,15 @@ UpdateButtons()
 }
 
 static void 
-OnSelectClicked(WindowControl * Sender)
+OnLoadSaveClicked(WindowControl * Sender)
 {
-  OnSelect();
+  OnLoadSave();
 }
 
 static void
 OnTaskListEnter(unsigned ItemIndex)
 {
-  OnSelect();
+  OnLoadSave();
 }
 
 static void
@@ -238,7 +238,7 @@ OnTaskCursorCallback(unsigned i)
 
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(OnSelectClicked),
+  DeclareCallBackEntry(OnLoadSaveClicked),
   DeclareCallBackEntry(OnTaskPaint),
   DeclareCallBackEntry(NULL)
 };
