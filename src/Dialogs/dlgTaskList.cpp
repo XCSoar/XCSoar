@@ -179,17 +179,18 @@ OnLoad()
     return;
 
   const OrderedTask* orig = get_cursor_task();
-  if (orig != NULL) {
-    if (MessageBoxX(gettext(_T("Activate task?")),
-                    gettext(_T("Task Selection")),
-                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
-      
-      delete active_task;
-      active_task = task_ui.task_copy(*orig);
-      RefreshView();
-      task_modified = true;
-    }
-  }
+  if (orig == NULL)
+    return;
+
+  if (MessageBoxX(gettext(_T("Activate task?")),
+                  gettext(_T("Task Selection")),
+                  MB_YESNO|MB_ICONQUESTION) != IDYES)
+    return;
+
+  delete active_task;
+  active_task = task_ui.task_copy(*orig);
+  RefreshView();
+  task_modified = true;
 }
 
 static void
