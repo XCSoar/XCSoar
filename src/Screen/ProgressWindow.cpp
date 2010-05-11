@@ -82,7 +82,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 #endif
 
 #if defined(_WIN32_WCE) && !defined(GNAV)
-  SHFullScreen(hWnd, SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
+  ::SHFullScreen(hWnd, SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
 #endif
 
   set_range(0, 100);
@@ -92,7 +92,14 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 
 #ifndef ENABLE_SDL
   ::SetForegroundWindow(hWnd);
+
+  if (Layout::landscape) {
+    long windowLong = GetWindowLong(get_item(IDC_PROGRESS1), GWL_STYLE);
+    windowLong |= PBS_VERTICAL;
+    ::SetWindowLong(get_item(IDC_PROGRESS1), GWL_STYLE, windowLong);
+  }
 #endif /* !ENABLE_SDL */
+
   update();
 }
 

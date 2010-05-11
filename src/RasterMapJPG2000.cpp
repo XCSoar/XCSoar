@@ -45,10 +45,10 @@ Copyright_License {
 #define int_fast8_t jas_int_fast8_t
 #endif
 
-// JMW experimental
 #include "jasper/jasper.h"
 #include "jasper/jpc_rtc.h"
 #include "wcecompat/ts_string.h"
+#include "Interface.hpp"
 
 void
 RasterMapJPG2000::SetFieldRounding(const GEOPOINT& delta,
@@ -156,6 +156,7 @@ RasterMapJPG2000::Open(const char *zfilename)
   strcpy(jp2_filename,zfilename);
 
   // force first-time load
+  XCSoarInterface::SetProgressStepSize(1);
   TriggerJPGReload = true;
   _ReloadJPG2000();
 

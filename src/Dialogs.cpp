@@ -117,8 +117,6 @@ XCSoarInterface::StepProgressDialog(void)
 bool
 XCSoarInterface::SetProgressStepSize(int nSize)
 {
-  nSize = 5;
-
   if (nSize < 100 && progress_window != NULL)
     progress_window->set_step(nSize);
 
