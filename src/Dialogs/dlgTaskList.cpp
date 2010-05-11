@@ -55,6 +55,7 @@ Copyright_License {
 #include "TaskStore.hpp"
 #include "TaskClientUI.hpp"
 #include "Components.hpp"
+#include "LocalPath.hpp"
 
 #include <assert.h>
 
@@ -225,24 +226,55 @@ OnLoadSave()
 }
 
 static void
+OnDelete()
+{
+  if (cursor_at_active_task())
+    return;
+
+  if (MessageBoxX(gettext(_T("Delete the selected task?")),
+                  gettext(_T("Task Browser")),
+                  MB_YESNO | MB_ICONQUESTION) != IDYES)
+    return;
+
+  tstring fname = get_cursor_name();
+  TCHAR path[MAX_PATH];
+  LocalPath(path, fname.c_str());
+  DeleteFile(path);
+
+  task_store.scan();
+  RefreshView();
+}
+
+static void
 UpdateButtons()
 {
   WndButton* wbSelect = (WndButton*)wf->FindByName(_T("cmdLoadSave"));
-  if (!wbSelect)
+  WndButton* wbDelete = (WndButton*)wf->FindByName(_T("cmdDelete"));
+  if (!wbSelect || !wbDelete)
     return;
 
   if (cursor_at_active_task()) {
     wbSelect->SetCaption(_T("Save"));
+    wbDelete->set_enabled(false);
+    wbDelete->SetForeColor(Color::GRAY);
     return;
   }
 
   wbSelect->SetCaption(_T("Load"));
+  wbDelete->set_enabled(true);
+  wbDelete->SetForeColor(Color::BLACK);
 }
 
 static void 
 OnLoadSaveClicked(WindowControl * Sender)
 {
   OnLoadSave();
+}
+
+static void
+OnDeleteClicked(WindowControl * Sender)
+{
+  OnDelete();
 }
 
 static void
@@ -261,6 +293,7 @@ OnTaskCursorCallback(unsigned i)
 static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnLoadSaveClicked),
+  DeclareCallBackEntry(OnDeleteClicked),
   DeclareCallBackEntry(OnTaskPaint),
   DeclareCallBackEntry(NULL)
 };
