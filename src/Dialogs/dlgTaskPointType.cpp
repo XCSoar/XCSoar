@@ -231,7 +231,7 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
 
   wf = NULL;
 
-  if (!Layout::landscape) {
+  if (Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgTaskPointType_L.xml"),
                         parent,
