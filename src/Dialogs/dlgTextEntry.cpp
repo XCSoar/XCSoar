@@ -181,11 +181,6 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   }
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
-  DeclareCallBackEntry(OnTextPaint),
-  DeclareCallBackEntry(NULL)
-};
-
 static void
 OnLeftClicked(WndButton &button)
 {
@@ -210,6 +205,16 @@ OnDownClicked(WndButton &button)
   FormKeyDown(&button, VK_DOWN);
 }
 
+static CallBackTableEntry_t CallBackTable[] = {
+  DeclareCallBackEntry(OnTextPaint),
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnLeftClicked),
+  DeclareCallBackEntry(OnRightClicked),
+  DeclareCallBackEntry(OnUpClicked),
+  DeclareCallBackEntry(OnDownClicked),
+  DeclareCallBackEntry(NULL)
+};
+
 static void
 dlgTextEntryHighscoreType(TCHAR *text, int width)
 {
@@ -227,32 +232,6 @@ dlgTextEntryHighscoreType(TCHAR *text, int width)
     return;
 
   wGrid = (WndOwnerDrawFrame*)wf->FindByName(_T("frmGrid"));
-
-  WndButton* wb;
-  wb = (WndButton *)(wf->FindByName(_T("cmdClose")));
-  if (wb) {
-    wb->SetOnClickNotify(OnCloseClicked);
-  }
-
-  wb = (WndButton *)(wf->FindByName(_T("cmdLeft")));
-  if (wb) {
-    wb->SetOnClickNotify(OnLeftClicked);
-  }
-
-  wb = (WndButton *)(wf->FindByName(_T("cmdRight")));
-  if (wb) {
-    wb->SetOnClickNotify(OnRightClicked);
-  }
-
-  wb = (WndButton *)(wf->FindByName(_T("cmdUp")));
-  if (wb) {
-    wb->SetOnClickNotify(OnUpClicked);
-  }
-
-  wb = (WndButton *)(wf->FindByName(_T("cmdDown")));
-  if (wb) {
-    wb->SetOnClickNotify(OnDownClicked);
-  }
 
   cursor = 0;
   edittext[0] = 0;
