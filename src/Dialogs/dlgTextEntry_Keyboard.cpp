@@ -68,7 +68,8 @@ static bool
 DoBackspace()
 {
   if (cursor < 1)
-    return true; // min width
+    return false;
+
   cursor--;
   edittext[cursor] = 0;
   UpdateTextboxProp();
