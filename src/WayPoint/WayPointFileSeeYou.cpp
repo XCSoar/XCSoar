@@ -110,7 +110,8 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   if (ignore_following)
     return true;
 
-  Waypoint new_waypoint = way_points.create_from_file(file_num);
+  Waypoint new_waypoint;
+  new_waypoint.FileNum = file_num;
 
   // Get fields
   n_params = extractParameters(line, ctemp, params, 20);

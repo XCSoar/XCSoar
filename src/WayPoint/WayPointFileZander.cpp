@@ -60,7 +60,8 @@ WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
   if (len < 34)
     return false;
 
-  Waypoint new_waypoint = way_points.create_from_file(file_num);
+  Waypoint new_waypoint;
+  new_waypoint.FileNum = file_num;
 
   // Name (Characters 0-12)
   if (!parseString(line, new_waypoint.Name))
