@@ -77,6 +77,18 @@ DoBackspace()
 }
 
 static bool
+DoCharacter(TCHAR character)
+{
+  if (cursor >= max_width - 1)
+    return false;
+
+  edittext[cursor++] = character;
+  edittext[cursor] = 0;
+  UpdateTextboxProp();
+  return true;
+}
+
+static bool
 FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
   switch (key_code) {
@@ -88,19 +100,17 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
     return true;
   }
 
-  if (!has_keyboard() || cursor >= max_width - 1)
+  if (!has_keyboard())
     return false;
 
   if ((key_code >= 'A' && key_code <= 'Z') ||
       (key_code >= '0' && key_code <= '9')) {
-    edittext[cursor++] = key_code;
-    UpdateTextboxProp();
+    DoCharacter(key_code);
     return true;
   }
 
   if (key_code == VK_SPACE) {
-    edittext[cursor++] = _T(' ');
-    UpdateTextboxProp();
+    DoCharacter(_T(' '));
     return true;
   }
 
@@ -116,12 +126,8 @@ OnBackspace(WindowControl * Sender)
 static void
 OnKey(WindowControl * Sender)
 {
-  if (cursor >= max_width - 1)
-    return;
-
   TCHAR *Caption = Sender->GetCaption();
-  edittext[cursor++] = Caption[0];
-  UpdateTextboxProp();
+  DoCharacter(Caption[0]);
 }
 
 static void
@@ -140,7 +146,7 @@ static void
 ClearText(void)
 {
   cursor = 0;
-  memset(edittext, 0, sizeof(TCHAR) * MAX_TEXTENTRY);
+  edittext[0] = 0;
   UpdateTextboxProp();
 }
 
