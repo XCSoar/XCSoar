@@ -59,9 +59,10 @@ UpdateTextboxProp(void)
 {
   WndProperty *wp;
   wp = (WndProperty*)wf->FindByName(_T("prpText"));
-  if (wp) {
-    wp->SetText(edittext);
-  }
+  if (!wp)
+    return;
+
+  wp->SetText(edittext);
 }
 
 static bool
