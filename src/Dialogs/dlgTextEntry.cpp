@@ -301,16 +301,13 @@ dlgTextEntryShowModal(tstring &text, int width)
 bool
 dlgTextEntryShowModal(TCHAR *text, int width)
 {
-  bool bRetVal = false;
   switch (Appearance.TextInputStyle) {
   case tiKeyboard:
-    bRetVal = dlgTextEntryKeyboardShowModal(text, width);
-    break;
+    return dlgTextEntryKeyboardShowModal(text, width);
   case tiHighScore:
   default:
     dlgTextEntryHighscoreType(text, width);
-    bRetVal = true;
-    break;
+    return true;
   }
-  return bRetVal;
+  return false;
 }
