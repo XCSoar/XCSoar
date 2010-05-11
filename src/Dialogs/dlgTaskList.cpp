@@ -165,10 +165,11 @@ OnSave()
   if (!cursor_at_active_task())
     return;
 
-  if (OrderedTaskSave(*active_task)) {
-    task_store.scan();
-    RefreshView();
-  }
+  if (!OrderedTaskSave(*active_task))
+    return;
+
+  task_store.scan();
+  RefreshView();
 }
 
 static void
