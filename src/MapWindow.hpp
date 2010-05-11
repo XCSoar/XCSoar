@@ -162,9 +162,6 @@ private:
   void DrawThreadInitialise (void);
   Mutex    mutexBuffer;
 
-  // state
-  BOOL     Initialised;
-
   void ApplyScreenSize();
 
   // display management
