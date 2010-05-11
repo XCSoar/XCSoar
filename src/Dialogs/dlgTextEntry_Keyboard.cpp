@@ -172,8 +172,6 @@ static CallBackTableEntry_t CallBackTable[] = {
 bool
 dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
 {
-  wf = NULL;
-
   if (width == 0)
     width = MAX_TEXTENTRY;
 
