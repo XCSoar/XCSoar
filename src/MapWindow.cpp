@@ -87,8 +87,6 @@ MapWindow::~MapWindow()
     delete cdi;
   if (terrain_renderer != NULL)
     delete terrain_renderer;
-
-  reset();
 }
 
 void
