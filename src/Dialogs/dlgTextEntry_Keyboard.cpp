@@ -51,7 +51,6 @@ static WndForm *wf = NULL;
 #define MAX_TEXTENTRY 40
 static unsigned int cursor = 0;
 static unsigned int max_width = MAX_TEXTENTRY;
-static bool gRetVal = false;
 static TCHAR edittext[MAX_TEXTENTRY];
 #define MAXENTRYLETTERS (sizeof(EntryLetters)/sizeof(EntryLetters[0])-1)
 
@@ -136,14 +135,12 @@ OnKey(WindowControl * Sender)
 static void
 OnOk(WindowControl * Sender)
 {
-  gRetVal = true;
   wf->SetModalResult(mrOK);
 }
 
 static void
 OnCancel(WindowControl * Sender)
 {
-  gRetVal = false;
   wf->SetModalResult(mrCancel);
 }
 
@@ -200,10 +197,13 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
 
   UpdateTextboxProp();
   wf->SetKeyDownNotify(FormKeyDown);
-  wf->ShowModal();
-  _tcsncpy(text, edittext, max_width);
-  text[max_width - 1] = 0;
-  delete wf;
+  bool result = (wf->ShowModal() == mrOK);
 
-  return gRetVal;
+  if (result) {
+    _tcsncpy(text, edittext, max_width);
+    text[max_width - 1] = 0;
+  }
+
+  delete wf;
+  return result;
 }
