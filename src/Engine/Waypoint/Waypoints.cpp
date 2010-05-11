@@ -114,7 +114,10 @@ Waypoints::append(const Waypoint& wp)
 
   task_projection.scan_location(wp.Location);
 
-  tmp_wps.push_back(WaypointEnvelope(wp));
+  Waypoint wp2(wp);
+  wp2.id = next_id++;
+
+  tmp_wps.push_back(WaypointEnvelope(wp2));
 }
 
 const Waypoint*
@@ -379,7 +382,6 @@ Waypoints::create(const GEOPOINT &location)
 {
   Waypoint edit_waypoint;
   edit_waypoint.Location = location;
-  edit_waypoint.id = next_id++;
 
   if (empty()) {
     // first waypoint, put into primary file (this will be auto-generated)
