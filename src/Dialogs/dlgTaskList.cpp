@@ -147,16 +147,18 @@ RefreshView()
   wTaskView->invalidate();
 
   WndFrame* wSummary = (WndFrame *)wf->FindByName(_T("frmSummary"));
-  if (wSummary) {
-    OrderedTask* ordered_task = get_cursor_task();
-    if (ordered_task != NULL) {
-      TCHAR text[300];
-      OrderedTaskSummary(ordered_task, text);
-      wSummary->SetCaption(text);
-    } else {
-      wSummary->SetCaption(_T(""));
-    }
+  if (!wSummary)
+    return;
+
+  OrderedTask* ordered_task = get_cursor_task();
+  if (ordered_task == NULL) {
+    wSummary->SetCaption(_T(""));
+    return;
   }
+
+  TCHAR text[300];
+  OrderedTaskSummary(ordered_task, text);
+  wSummary->SetCaption(text);
 }
 
 static void
