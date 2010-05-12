@@ -77,12 +77,16 @@ OnAirspaceListEnter(unsigned i)
   FocusAirspace = CursorAirspace;
 }
 
-
-static void DoAck(int Ack) {
-  const AbstractAirspace *airspace = has_pointer() || FocusAirspace == NULL
+static const AbstractAirspace *
+GetSelectedAirspace()
+{
+  return has_pointer() || FocusAirspace == NULL
     ? CursorAirspace
     : FocusAirspace;
+}
 
+static void DoAck(int Ack) {
+  const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace == NULL)
     return;
 
