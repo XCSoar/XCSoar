@@ -358,19 +358,22 @@ update_list()
     if (i < 0)
       /* the selection may have changed, update CursorAirspace */
       AirspaceWarningCursorCallback(wAirspaceList->GetCursorIndex());
+
+    wAirspaceList->invalidate();
+
+    return true;
   } else {
     wAirspaceList->SetLength(1);
-  }
 
-  if (!Count) {
-    if (wf && wf->is_visible()) {
+    CursorAirspace = NULL;
+
+    if (wf && wf->is_visible())
       // auto close
       OnCloseClicked(NULL);
-    }
+    else
+      wAirspaceList->invalidate();
+
     return false;
-  } else {
-    wAirspaceList->invalidate();
-    return true;
   }
 }
 
