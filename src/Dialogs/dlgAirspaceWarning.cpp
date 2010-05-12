@@ -85,49 +85,49 @@ GetSelectedAirspace()
     : FocusAirspace;
 }
 
-static void DoAck(int Ack) {
-  const AbstractAirspace *airspace = GetSelectedAirspace();
-  if (airspace == NULL)
-    return;
-
-  switch(Ack) {
-  case -1:
-    airspace_ui.acknowledge_warning(*airspace, true);
-    break;
-  case 0:
-    airspace_ui.acknowledge_warning(*airspace, false);
-    airspace_ui.acknowledge_day(*airspace, false);
-    break;
-  case 3:
-    airspace_ui.acknowledge_inside(*airspace, true);
-    break;
-  case 4:
-    airspace_ui.acknowledge_day(*airspace, true);
-    break;
-  default:
-    break;
-  };
-  wAirspaceList->invalidate();
-}
-
+/** ack inside */
 static void OnAckClicked(WindowControl * Sender){
   (void)Sender;
-  DoAck(3); // ack inside
+
+  const AbstractAirspace *airspace = GetSelectedAirspace();
+  if (airspace != NULL) {
+    airspace_ui.acknowledge_inside(*airspace, true);
+    wAirspaceList->invalidate();
+  }
 }
 
+/** ack warn */
 static void OnAck1Clicked(WindowControl * Sender){
   (void)Sender;
-  DoAck(-1); // ack warn
+
+  const AbstractAirspace *airspace = GetSelectedAirspace();
+  if (airspace != NULL) {
+    airspace_ui.acknowledge_warning(*airspace, true);
+    wAirspaceList->invalidate();
+  }
 }
 
+/** ack day */
 static void OnAck2Clicked(WindowControl * Sender){
   (void)Sender;
-  DoAck(4); // ack day
+
+  const AbstractAirspace *airspace = GetSelectedAirspace();
+  if (airspace != NULL) {
+    airspace_ui.acknowledge_day(*airspace, true);
+    wAirspaceList->invalidate();
+  }
 }
 
+/** unack */
 static void OnEnableClicked(WindowControl * Sender) {
   (void)Sender;
-  DoAck(0); // unack
+
+  const AbstractAirspace *airspace = GetSelectedAirspace();
+  if (airspace != NULL) {
+    airspace_ui.acknowledge_warning(*airspace, false);
+    airspace_ui.acknowledge_day(*airspace, false);
+    wAirspaceList->invalidate();
+  }
 }
 
 static void OnCloseClicked(WindowControl * Sender) {
