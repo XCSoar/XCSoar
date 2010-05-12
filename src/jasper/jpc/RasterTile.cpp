@@ -179,8 +179,6 @@ void RasterTileCache::SetTile(int index,
     tiles[index].width = tiles[index].xend-tiles[index].xstart;
     tiles[index].height = tiles[index].yend-tiles[index].ystart;
   } else {
-    int j=index;
-    j++;
     // error!
   }
 }

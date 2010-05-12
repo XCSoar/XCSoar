@@ -1312,7 +1312,7 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
       // JMW put data into image buffer
       dptr = jas_rtc_GetImageBuffer(tile->cache_index);
       if (dptr) {
-        jas_rtc_set_num_tiles(0);
+        jas_rtc_set_num_tiles(dec->numtiles);
         jas_rtc_stepprogress();
         for (i = 0; i < jas_matrix_numrows(tcomp->data); ++i) {
           for (j = 0; j < jas_matrix_numcols(tcomp->data); ++j) {
