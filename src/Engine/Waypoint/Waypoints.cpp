@@ -339,6 +339,7 @@ void
 Waypoints::clear()
 {
   waypoint_tree.clear();
+  next_id = 1;
   m_file0_writable = false;
 }
 
