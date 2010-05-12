@@ -64,19 +64,22 @@ static WayPointFile* wp_file2 = NULL;
  * @param set_location If true, the SetStartupLocation function will be called
  */
 void
-SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
+SetHome(Waypoints &way_points, const RasterTerrain *terrain,
         SETTINGS_COMPUTER &settings,
         const bool reset, const bool set_location)
 {
   LogStartUp(TEXT("SetHome"));
 
   // check invalid home waypoint or forced reset due to file change
-  if (reset || way_points.empty() ||
-      !way_points.lookup_id(settings.HomeWaypoint)) {
+  const Waypoint *wp = reset ? NULL : way_points.lookup_id(settings.HomeWaypoint);
+  if (wp != NULL) {
+    // home waypoint found
+    way_points.set_home(settings.HomeWaypoint);
+  } else {
     // search for home in waypoint list, if we don't have a home
     settings.HomeWaypoint = -1;
 
-    const Waypoint* wp = way_points.find_home();
+    wp = way_points.find_home();
     if (wp)
       settings.HomeWaypoint = wp->id;
   }
