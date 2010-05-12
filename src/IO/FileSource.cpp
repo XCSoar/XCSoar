@@ -120,9 +120,20 @@ WindowsFileSource::~WindowsFileSource()
 long
 WindowsFileSource::size() const
 {
-  BY_HANDLE_FILE_INFORMATION i;
-  return ::GetFileInformationByHandle(handle, &i)
-    ? i.nFileSizeLow
+  struct {
+    BY_HANDLE_FILE_INFORMATION i;
+
+#ifdef _WIN32_WCE
+    /* on Windows CE, GetFileInformationByHandle() seems to overflow
+       the BY_HANDLE_FILE_INFORMATION variable by 4 bytes
+       (undocumented on MSDN); adding the following DWORD gives it
+       enough buffer to play with */
+    DWORD dummy;
+#endif
+  } i;
+
+  return ::GetFileInformationByHandle(handle, &i.i)
+    ? i.i.nFileSizeLow
     : -1;
 }
 
