@@ -208,10 +208,7 @@ Waypoints::find_home() const
     }
   }
 
-  if (m_home)
-    return m_home;
-
-  return NULL;
+  return m_home;
 }
 
 bool
