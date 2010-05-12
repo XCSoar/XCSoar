@@ -48,6 +48,8 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "InputEvents.h"
 #include "LocalPath.hpp"
+#include "UtilsText.hpp"
+#include "IO/TextWriter.hpp"
 
 #include <math.h>
 #include <ctype.h>
@@ -1192,7 +1194,6 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
 }
 
 bool EnableLogNMEA = false;
-FILE *nmeaLogFile = NULL;
 
 /**
  * Logs NMEA string to log file
@@ -1202,21 +1203,22 @@ void
 LogNMEA(const TCHAR* text)
 {
   if (!EnableLogNMEA) {
-    if (nmeaLogFile != NULL) {
-      fclose(nmeaLogFile);
-      nmeaLogFile = NULL;
-    }
-
     return;
   }
 
-  if (nmeaLogFile == NULL) {
-    TCHAR path[MAX_PATH];
-    LocalPath(path, _T("xcsoar-nmea.log"));
-    nmeaLogFile = _tfopen(path, _T("w"));
-    if (nmeaLogFile == NULL)
-      return;
-  }
+  static bool initialised = false;
+  TCHAR path[MAX_PATH];
+  LocalPath(path, _T("xcsoar-nmea.log"));
 
-  fwrite(text, sizeof(text[0]), _tcslen(text), nmeaLogFile);
+  TextWriter writer(path, initialised);
+  if (writer.error())
+    return;
+
+  TCHAR ttext[100];
+  _tcsncpy(ttext, text, 100);
+  TrimRight(ttext);
+  writer.writeln(ttext);
+
+  if (!initialised)
+    initialised = true;
 }
