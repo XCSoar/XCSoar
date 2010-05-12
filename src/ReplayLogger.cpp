@@ -296,7 +296,7 @@ ReplayLogger::get_time(const bool reset, const fixed mintime)
   if (reset) {
     t_simulation = fixed_zero;
   } else {
-    t_simulation + fixed_one;
+    t_simulation += fixed_one;
   }
   t_simulation = std::max(mintime, t_simulation);
   return t_simulation;
