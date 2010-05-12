@@ -47,6 +47,7 @@ Copyright_License {
 #include "NMEA/Checksum.h"
 #include "StringUtil.hpp"
 #include "InputEvents.h"
+#include "LocalPath.hpp"
 
 #include <math.h>
 #include <ctype.h>
@@ -1210,7 +1211,9 @@ LogNMEA(const TCHAR* text)
   }
 
   if (nmeaLogFile == NULL) {
-    nmeaLogFile = _tfopen(_T("\\SD Card\\xcsoar-nmea.log"), _T("w"));
+    TCHAR path[MAX_PATH];
+    LocalPath(path, _T("xcsoar-nmea.log"));
+    nmeaLogFile = _tfopen(path, _T("w"));
     if (nmeaLogFile == NULL)
       return;
   }
