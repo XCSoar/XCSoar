@@ -94,8 +94,8 @@ WndListFrame::on_paint(Canvas &canvas)
   if (PaintItemCallback != NULL) {
     // paint using the PaintItemCallback
     RECT rc;
-    rc.left = rc.top = Layout::FastScale(2);
-    rc.right = scroll_bar.get_left(get_size()) - rc.left;
+    rc.left = rc.top = 0;
+    rc.right = scroll_bar.get_left(get_size());
     rc.bottom = rc.top + item_height;
 
     canvas.set_text_color(GetForeColor());
