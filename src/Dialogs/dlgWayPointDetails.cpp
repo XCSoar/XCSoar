@@ -250,6 +250,7 @@ OnReplaceClicked(gcc_unused WndButton &button)
 static void 
 OnNewHomeClicked(gcc_unused WndButton &button)
 {
+  way_points.set_home(selected_waypoint->id);
   XCSoarInterface::SetSettingsComputer().HomeWaypoint = selected_waypoint->id;
   Profile::Set(szProfileHomeWaypoint, XCSoarInterface::SettingsComputer().HomeWaypoint);
 #ifdef OLD_TASK
