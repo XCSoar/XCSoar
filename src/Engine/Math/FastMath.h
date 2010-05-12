@@ -65,11 +65,13 @@ Real2Int(double val)
   #endif
 }
 
+#ifdef FIXED_MATH
 gcc_const static inline int
 Real2Int(const fixed& val)
 {
   return val.as_int();
 }
+#endif
 
 gcc_const static inline int
 iround(double i)
@@ -77,11 +79,13 @@ iround(double i)
   return Real2Int(floor(i + 0.5));
 }
 
+#ifdef FIXED_MATH
 gcc_const static inline int
 iround(const fixed &x)
 {
   return floor(x+fixed_half).as_int();
 }
+#endif
 
 extern const fixed COSTABLE[4096];
 extern const fixed SINETABLE[4096];
