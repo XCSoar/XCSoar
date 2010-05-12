@@ -48,10 +48,6 @@ Copyright_License {
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <algorithm>
-
-using std::max;
-
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceList=NULL;
 static Brush hBrushInsideBk;
@@ -349,8 +345,8 @@ static bool
 update_list()
 {
   unsigned Count = airspace_ui.warning_size();
-  if (Count) {
-    wAirspaceList->SetLength(std::max((unsigned)1, Count));
+  if (Count > 0) {
+    wAirspaceList->SetLength(Count);
     if (CursorAirspace) {
       wAirspaceList->SetCursorIndex(airspace_ui.get_warning_index(*CursorAirspace));
     } else {
@@ -359,6 +355,8 @@ update_list()
     if (Count==1) {
       AirspaceWarningCursorCallback(0);
     }
+  } else {
+    wAirspaceList->SetLength(1);
   }
 
   if (!Count) {
