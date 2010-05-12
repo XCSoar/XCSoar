@@ -347,14 +347,17 @@ update_list()
   unsigned Count = airspace_ui.warning_size();
   if (Count > 0) {
     wAirspaceList->SetLength(Count);
-    if (CursorAirspace) {
-      wAirspaceList->SetCursorIndex(airspace_ui.get_warning_index(*CursorAirspace));
-    } else {
-      wAirspaceList->SetCursorIndex(0);
+
+    int i = -1;
+    if (CursorAirspace != NULL) {
+      i = airspace_ui.get_warning_index(*CursorAirspace);
+      if (i >= 0)
+        wAirspaceList->SetCursorIndex(i);
     }
-    if (Count==1) {
-      AirspaceWarningCursorCallback(0);
-    }
+
+    if (i < 0)
+      /* the selection may have changed, update CursorAirspace */
+      AirspaceWarningCursorCallback(wAirspaceList->GetCursorIndex());
   } else {
     wAirspaceList->SetLength(1);
   }
