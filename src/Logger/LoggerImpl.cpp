@@ -285,7 +285,10 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
 {
   if (!LoggerActive) {
     LogPointToBuffer(gps_info);
-  } else if (NumLoggerPreTakeoffBuffered) {
+    return;
+  }
+
+  if (NumLoggerPreTakeoffBuffered) {
     for (int i = 0; i < NumLoggerPreTakeoffBuffered; i++) {
       NMEA_INFO tmp_info;
       tmp_info.Location = LoggerPreTakeoffBuffer[i].Location;
@@ -310,9 +313,7 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
     NumLoggerPreTakeoffBuffered = 0;
   }
 
-  if (LoggerActive) {
-    LogPointToFile(gps_info);
-  }
+  LogPointToFile(gps_info);
 }
 
 static bool
