@@ -98,16 +98,6 @@ GlideComputer::Initialise()
 }
 
 /**
- * Log GPS fixes for GlideComputerStats and
- * GlideComputerTask, if valid fix is detected
- */
-void
-GlideComputer::DoLogging()
-{
-  GlideComputerStats::DoLogging();
-}
-
-/**
  * Is called by the CalculationThread and processes the received GPS data in Basic()
  */
 bool

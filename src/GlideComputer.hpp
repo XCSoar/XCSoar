@@ -74,7 +74,6 @@ public:
 
 protected:
   VegaVoice    vegavoice;
-  void DoLogging();
   virtual void OnTakeoff();
   virtual void OnLanding();
   virtual void OnSwitchClimbMode(bool isclimb, bool left);
