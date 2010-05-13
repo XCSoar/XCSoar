@@ -289,22 +289,22 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
   }
 
   for (int i = 0; i < NumLoggerPreTakeoffBuffered; i++) {
+    const struct LoggerPreTakeoffBuffer &src = LoggerPreTakeoffBuffer[i];
     NMEA_INFO tmp_info;
-    tmp_info.Location = LoggerPreTakeoffBuffer[i].Location;
-    tmp_info.GPSAltitude = LoggerPreTakeoffBuffer[i].Altitude;
-    tmp_info.BaroAltitude = LoggerPreTakeoffBuffer[i].BaroAltitude;
-    tmp_info.DateTime = LoggerPreTakeoffBuffer[i].DateTime;
-    tmp_info.Time = LoggerPreTakeoffBuffer[i].Time;
+    tmp_info.Location = src.Location;
+    tmp_info.GPSAltitude = src.Altitude;
+    tmp_info.BaroAltitude = src.BaroAltitude;
+    tmp_info.DateTime = src.DateTime;
+    tmp_info.Time = src.Time;
 
-    tmp_info.gps.NAVWarning = LoggerPreTakeoffBuffer[i].NAVWarning;
-    tmp_info.gps.FixQuality = LoggerPreTakeoffBuffer[i].FixQuality;
-    tmp_info.gps.SatellitesUsed = LoggerPreTakeoffBuffer[i].SatellitesUsed;
-    tmp_info.gps.HDOP = LoggerPreTakeoffBuffer[i].HDOP;
-    tmp_info.gps.Simulator = LoggerPreTakeoffBuffer[i].Simulator;
+    tmp_info.gps.NAVWarning = src.NAVWarning;
+    tmp_info.gps.FixQuality = src.FixQuality;
+    tmp_info.gps.SatellitesUsed = src.SatellitesUsed;
+    tmp_info.gps.HDOP = src.HDOP;
+    tmp_info.gps.Simulator = src.Simulator;
 
     for (int iSat = 0; iSat < MAXSATELLITES; iSat++)
-      tmp_info.gps.SatelliteIDs[iSat] =
-        LoggerPreTakeoffBuffer[i].SatelliteIDs[iSat];
+      tmp_info.gps.SatelliteIDs[iSat] = src.SatelliteIDs[iSat];
 
     LogPointToFile(tmp_info);
   }
