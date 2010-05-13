@@ -89,8 +89,8 @@ private:
     GEOPOINT location;          /**< Actual location of sample */
     FlatPoint loc_drift;        /**< Projected/drifted sample */
     fixed t_0;                  /**< Time of sample (s) */
-    int w_scaled;               /**< Scaled updraft value of sample */
-    int weight;                 /**< Weighting used for this point */
+    fixed w;                    /**< Scaled updraft value of sample */
+    fixed weight;               /**< Weighting used for this point */
   };
 
 public:
@@ -135,17 +135,17 @@ private:
               const SpeedVector wind,
               THERMAL_LOCATOR_INFO &therm);
 
-  void Update_Internal(fixed t_0,
+  void Update_Internal(const fixed t_0,
                        const TaskProjection& projection,
                        const GEOPOINT& location_0, 
                        const GEOPOINT& traildrift,
-                       fixed decay,
+                       const fixed decay,
                        THERMAL_LOCATOR_INFO& therm);
 
-  void Drift(fixed t_0,
+  void Drift(const fixed t_0,
              const TaskProjection& projection, 
              const GEOPOINT& traildrift,
-             fixed decay);
+             const fixed decay);
 
   ThermalLocator_Point points[TLOCATOR_NMAX]; /**< Circular buffer of points */
 

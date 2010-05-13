@@ -51,7 +51,7 @@ ThermalLocator::ThermalLocator_Point::Drift(fixed t,
   // convert to flat earth coordinates, then drift by wind and delta t
   const fixed dt = t - t_0;
 
-  weight = iround(100*exp(decay_factor * decay * dt));
+  weight = exp(decay_factor * decay * dt);
 
   GEOPOINT p = location+wind_drift*dt;
 
@@ -84,7 +84,7 @@ ThermalLocator::AddPoint(const fixed t, const GEOPOINT &location, const fixed w)
 {
   points[n_index].location = location;
   points[n_index].t_0 = t;
-  points[n_index].w_scaled = iround(max(w, fixed(-0.1)) * 10);
+  points[n_index].w = max(w, fixed(-0.1));
   points[n_index].valid = true;
 
   n_index = (n_index+1) % TLOCATOR_NMAX;
@@ -156,11 +156,11 @@ ThermalLocator::glider_average(fixed &xav, fixed& yav)
 
 
 void
-ThermalLocator::Update_Internal(fixed t_0, 
+ThermalLocator::Update_Internal(const fixed t_0, 
                                 const TaskProjection& projection, 
                                 const GEOPOINT& location_0,
                                 const GEOPOINT& traildrift,
-                                fixed decay, 
+                                const fixed decay, 
                                 THERMAL_LOCATOR_INFO &therm)
 {
   // drift points 
@@ -173,13 +173,13 @@ ThermalLocator::Update_Internal(fixed t_0,
 
   // find thermal center relative to glider's average position
 
-  int acc = 0;
+  fixed acc = fixed_zero;
   fixed sx = fixed_zero;
   fixed sy = fixed_zero;
 
   for (int i = 0; i < TLOCATOR_NMAX; ++i) {
     if (points[i].valid) {
-      int weight = points[i].w_scaled * points[i].weight;
+      const fixed weight = points[i].w * points[i].weight;
       sx += (points[i].loc_drift.x - xav) * weight;
       sy += (points[i].loc_drift.y - yav) * weight;
       acc += weight;
@@ -190,7 +190,7 @@ ThermalLocator::Update_Internal(fixed t_0,
 
   // if sufficient data, estimate location
 
-  if (!acc) {
+  if (!positive(acc)) {
     invalid_estimate(therm);
     return;
   }
@@ -204,10 +204,10 @@ ThermalLocator::Update_Internal(fixed t_0,
 }
 
 void
-ThermalLocator::Drift(fixed t_0, 
+ThermalLocator::Drift(const fixed t_0, 
                       const TaskProjection& projection, 
                       const GEOPOINT& traildrift,
-                      fixed decay)
+                      const fixed decay)
 {
   for (int i = 0; i < TLOCATOR_NMAX; ++i) {
     if (points[i].valid)
