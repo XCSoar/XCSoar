@@ -60,18 +60,19 @@ Copyright_License {
  * @param ReplaceWith The replacement
  * @param Size (?)
  */
-static void ReplaceInString(TCHAR *String, const TCHAR *ToReplace,
-                            const TCHAR *ReplaceWith, size_t Size){
+static void
+ReplaceInString(TCHAR *String, const TCHAR *ToReplace,
+                const TCHAR *ReplaceWith, size_t Size)
+{
   TCHAR TmpBuf[MAX_PATH];
   size_t iR = _tcslen(ToReplace);
   TCHAR *pC;
 
-  while((pC = _tcsstr(String, ToReplace)) != NULL){
+  while ((pC = _tcsstr(String, ToReplace)) != NULL) {
     _tcscpy(TmpBuf, pC + iR);
     _tcscpy(pC, ReplaceWith);
     _tcscat(pC, TmpBuf);
   }
-
 }
 
 /**
@@ -84,23 +85,26 @@ static void ReplaceInString(TCHAR *String, const TCHAR *ToReplace,
  * @param FalseText The replacement if Condition is false
  * @param Size (?)
  */
-static void CondReplaceInString(bool Condition, TCHAR *Buffer,
-                                const TCHAR *Macro, const TCHAR *TrueText,
-                                const TCHAR *FalseText, size_t Size){
+static void
+CondReplaceInString(bool Condition, TCHAR *Buffer, const TCHAR *Macro,
+                    const TCHAR *TrueText, const TCHAR *FalseText, size_t Size)
+{
   if (Condition)
     ReplaceInString(Buffer, Macro, TrueText, Size);
   else
     ReplaceInString(Buffer, Macro, FalseText, Size);
 }
 
-bool ButtonLabel::ExpandMacros(const TCHAR *In,
-			       TCHAR *OutBuffer, size_t Size) {
+bool
+ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
+{
   // ToDo, check Buffer Size
   bool invalid = false;
   _tcsncpy(OutBuffer, In, Size);
-  OutBuffer[Size-1] = '\0';
+  OutBuffer[Size - 1] = '\0';
 
-  if (_tcsstr(OutBuffer, TEXT("$(")) == NULL) return false;
+  if (_tcsstr(OutBuffer, TEXT("$(")) == NULL)
+    return false;
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckAirspace)"))) {
     if (airspace_ui.airspace_empty())
@@ -117,21 +121,24 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   }
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckTask)"))) {
-    if (!Calculated().task_stats.task_valid) {
+    if (!Calculated().task_stats.task_valid)
       invalid = true;
-    }
+
     ReplaceInString(OutBuffer, TEXT("$(CheckTask)"), TEXT(""), Size);
   }
 
-  if (!Calculated().task_stats.task_valid || Calculated().common_stats.mode_goto) {
+  if (!Calculated().task_stats.task_valid
+      || Calculated().common_stats.mode_goto) {
 
     if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
       invalid = true;
-      ReplaceInString(OutBuffer, TEXT("$(WaypointNext)"), TEXT("Waypoint\nNext"), Size);
+      ReplaceInString(OutBuffer, TEXT("$(WaypointNext)"),
+          TEXT("Waypoint\nNext"), Size);
 
     } else if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
       invalid = true;
-      ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"), TEXT("Waypoint\nPrevious"), Size);
+      ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"),
+          TEXT("Waypoint\nPrevious"), Size);
     }
 
   } else if (Calculated().common_stats.mode_abort) {
@@ -229,9 +236,9 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   if (_tcsstr(OutBuffer, TEXT("$(CheckAutoMc)"))) {
     if (!Calculated().task_stats.task_valid
         && ((SettingsComputer().auto_mc_mode==TaskBehaviour::AUTOMC_FINALGLIDE)
-	    || (SettingsComputer().auto_mc_mode==TaskBehaviour::AUTOMC_BOTH))) {
+	          || (SettingsComputer().auto_mc_mode==TaskBehaviour::AUTOMC_BOTH)))
       invalid = true;
-    }
+
     ReplaceInString(OutBuffer, TEXT("$(CheckAutoMc)"), TEXT(""), Size);
   }
 
@@ -247,9 +254,9 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   }
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckReplay)"))) {
-    if (!Basic().gps.Replay && Basic().gps.MovementDetected) {
+    if (!Basic().gps.Replay && Basic().gps.MovementDetected)
       invalid = true;
-    }
+
     ReplaceInString(OutBuffer, TEXT("$(CheckReplay)"), TEXT(""), Size);
   }
 
@@ -260,80 +267,91 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckSettingsLockout)"))) {
     if (!is_simulator() && XCSoarInterface::LockSettingsInFlight &&
-        Basic().flight.Flying) {
+        Basic().flight.Flying)
       invalid = true;
-    }
+
     ReplaceInString(OutBuffer, TEXT("$(CheckSettingsLockout)"), TEXT(""), Size);
   }
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckFLARM)"))) {
-    if (!Basic().flarm.FLARM_Available) {
+    if (!Basic().flarm.FLARM_Available)
       invalid = true;
-    }
+
     ReplaceInString(OutBuffer, TEXT("$(CheckFLARM)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckTerrain)"))) {
-    if (!Calculated().TerrainValid) {
+    if (!Calculated().TerrainValid)
       invalid = true;
-    }
+
     ReplaceInString(OutBuffer, TEXT("$(CheckTerrain)"), TEXT(""), Size);
   }
 
   CondReplaceInString(logger.isLoggerActive(), OutBuffer,
-                      TEXT("$(LoggerActive)"), TEXT("Stop"), TEXT("Start"), Size);
+                      TEXT("$(LoggerActive)"), TEXT("Stop"),
+                      TEXT("Start"), Size);
 
   if (_tcsstr(OutBuffer, TEXT("$(SnailTrailToggleName)"))) {
     switch(SettingsMap().TrailActive) {
     case 0:
-      ReplaceInString(OutBuffer, TEXT("$(SnailTrailToggleName)"), TEXT("Long"), Size);
+      ReplaceInString(OutBuffer, TEXT("$(SnailTrailToggleName)"),
+                      TEXT("Long"), Size);
       break;
     case 1:
-      ReplaceInString(OutBuffer, TEXT("$(SnailTrailToggleName)"), TEXT("Short"), Size);
+      ReplaceInString(OutBuffer, TEXT("$(SnailTrailToggleName)"),
+                      TEXT("Short"), Size);
       break;
     case 2:
-      ReplaceInString(OutBuffer, TEXT("$(SnailTrailToggleName)"), TEXT("Full"), Size);
+      ReplaceInString(OutBuffer, TEXT("$(SnailTrailToggleName)"),
+                      TEXT("Full"), Size);
       break;
     case 3:
-      ReplaceInString(OutBuffer, TEXT("$(SnailTrailToggleName)"), TEXT("Off"), Size);
-      break;
-    }
-  }
-// VENTA3 VisualGlide
-  if (_tcsstr(OutBuffer, TEXT("$(VisualGlideToggleName)"))) {
-    switch(SettingsMap().VisualGlide) {
-    case 0:
-      ReplaceInString(OutBuffer, TEXT("$(VisualGlideToggleName)"), TEXT("Steady"), Size);
-      break;
-    case 1:
-	if (SettingsMap().ExtendedVisualGlide)
-		ReplaceInString(OutBuffer, TEXT("$(VisualGlideToggleName)"), TEXT("Moving"), Size);
-	else
-		ReplaceInString(OutBuffer, TEXT("$(VisualGlideToggleName)"), TEXT("Off"), Size);
-      break;
-    case 2:
-      ReplaceInString(OutBuffer, TEXT("$(VisualGlideToggleName)"), TEXT("Off"), Size);
+      ReplaceInString(OutBuffer, TEXT("$(SnailTrailToggleName)"),
+                      TEXT("Off"), Size);
       break;
     }
   }
 
-// VENTA3 AirSpace event
+  if (_tcsstr(OutBuffer, TEXT("$(VisualGlideToggleName)"))) {
+    switch(SettingsMap().VisualGlide) {
+    case 0:
+      ReplaceInString(OutBuffer, TEXT("$(VisualGlideToggleName)"),
+                      TEXT("Steady"), Size);
+      break;
+    case 1:
+      if (SettingsMap().ExtendedVisualGlide)
+        ReplaceInString(OutBuffer, TEXT("$(VisualGlideToggleName)"),
+                        TEXT("Moving"), Size);
+      else
+        ReplaceInString(OutBuffer, TEXT("$(VisualGlideToggleName)"),
+                        TEXT("Off"), Size);
+      break;
+    case 2:
+      ReplaceInString(OutBuffer, TEXT("$(VisualGlideToggleName)"),
+                      TEXT("Off"), Size);
+      break;
+    }
+  }
+
   if (_tcsstr(OutBuffer, TEXT("$(AirSpaceToggleName)"))) {
     switch(SettingsMap().OnAirSpace) {
     case 0:
-      ReplaceInString(OutBuffer, TEXT("$(AirSpaceToggleName)"), TEXT("ON"), Size);
+      ReplaceInString(OutBuffer, TEXT("$(AirSpaceToggleName)"),
+                      TEXT("ON"), Size);
       break;
     case 1:
-      ReplaceInString(OutBuffer, TEXT("$(AirSpaceToggleName)"), TEXT("OFF"), Size);
+      ReplaceInString(OutBuffer, TEXT("$(AirSpaceToggleName)"),
+                      TEXT("OFF"), Size);
       break;
     }
   }
 
   if (_tcsstr(OutBuffer, TEXT("$(TerrainTopologyToggleName)"))) {
-    char val;
-    val = 0;
-    if (SettingsMap().EnableTopology) val++;
-    if (SettingsMap().EnableTerrain) val += (char)2;
-    switch(val) {
+    char val = 0;
+    if (SettingsMap().EnableTopology)
+      val++;
+    if (SettingsMap().EnableTerrain)
+      val += (char)2;
+    switch (val) {
     case 0:
       ReplaceInString(OutBuffer, TEXT("$(TerrainTopologyToggleName)"),
                       TEXT("Topology\nOn"), Size);
@@ -357,10 +375,14 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
                       TEXT("$(FullScreenToggleActionName)"),
                       TEXT("Off"), TEXT("On"), Size);
   CondReplaceInString(SettingsMap().AutoZoom, OutBuffer,
-		      TEXT("$(ZoomAutoToggleActionName)"),
-		      TEXT("Manual"), TEXT("Auto"), Size);
-  CondReplaceInString(SettingsMap().EnableTopology, OutBuffer, TEXT("$(TopologyToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
-  CondReplaceInString(SettingsMap().EnableTerrain, OutBuffer, TEXT("$(TerrainToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
+		                  TEXT("$(ZoomAutoToggleActionName)"),
+		                  TEXT("Manual"), TEXT("Auto"), Size);
+  CondReplaceInString(SettingsMap().EnableTopology, OutBuffer,
+                      TEXT("$(TopologyToggleActionName)"),
+                      TEXT("Off"), TEXT("On"), Size);
+  CondReplaceInString(SettingsMap().EnableTerrain, OutBuffer,
+                      TEXT("$(TerrainToggleActionName)"),
+                      TEXT("Off"), TEXT("On"), Size);
 
   if (_tcsstr(OutBuffer, TEXT("$(MapLabelsToggleActionName)"))) {
     switch(SettingsMap().DeclutterLabels) {
@@ -379,34 +401,75 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     }
   }
 
-  CondReplaceInString(SettingsComputer().auto_mc, OutBuffer, TEXT("$(MacCreadyToggleActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
-  CondReplaceInString(SettingsMap().EnableAuxiliaryInfo, OutBuffer, TEXT("$(AuxInfoToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
+  CondReplaceInString(SettingsComputer().auto_mc,
+                      OutBuffer, TEXT("$(MacCreadyToggleActionName)"),
+                      TEXT("Manual"), TEXT("Auto"), Size);
+  CondReplaceInString(SettingsMap().EnableAuxiliaryInfo,
+                      OutBuffer, TEXT("$(AuxInfoToggleActionName)"),
+                      TEXT("Off"), TEXT("On"), Size);
 
-  CondReplaceInString(SettingsMap().UserForceDisplayMode == dmCircling, OutBuffer, TEXT("$(DispModeClimbShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
-  CondReplaceInString(SettingsMap().UserForceDisplayMode == dmCruise, OutBuffer, TEXT("$(DispModeCruiseShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
-  CondReplaceInString(SettingsMap().UserForceDisplayMode == dmNone, OutBuffer, TEXT("$(DispModeAutoShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
-  CondReplaceInString(SettingsMap().UserForceDisplayMode == dmFinalGlide, OutBuffer, TEXT("$(DispModeFinalShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(SettingsMap().UserForceDisplayMode == dmCircling,
+                      OutBuffer, TEXT("$(DispModeClimbShortIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(SettingsMap().UserForceDisplayMode == dmCruise,
+                      OutBuffer, TEXT("$(DispModeCruiseShortIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(SettingsMap().UserForceDisplayMode == dmNone,
+                      OutBuffer, TEXT("$(DispModeAutoShortIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(SettingsMap().UserForceDisplayMode == dmFinalGlide,
+                      OutBuffer, TEXT("$(DispModeFinalShortIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
 
-  CondReplaceInString(SettingsComputer().AltitudeMode == ALLON, OutBuffer, TEXT("$(AirspaceModeAllShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
-  CondReplaceInString(SettingsComputer().AltitudeMode == CLIP,  OutBuffer, TEXT("$(AirspaceModeClipShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
-  CondReplaceInString(SettingsComputer().AltitudeMode == AUTO,  OutBuffer, TEXT("$(AirspaceModeAutoShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
-  CondReplaceInString(SettingsComputer().AltitudeMode == ALLBELOW, OutBuffer, TEXT("$(AirspaceModeBelowShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
-  CondReplaceInString(SettingsComputer().AltitudeMode == ALLOFF, OutBuffer, TEXT("$(AirspaceModeAllOffIndicator)"), TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(SettingsComputer().AltitudeMode == ALLON,
+                      OutBuffer, TEXT("$(AirspaceModeAllShortIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(SettingsComputer().AltitudeMode == CLIP,
+                      OutBuffer, TEXT("$(AirspaceModeClipShortIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(SettingsComputer().AltitudeMode == AUTO,
+                      OutBuffer, TEXT("$(AirspaceModeAutoShortIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(SettingsComputer().AltitudeMode == ALLBELOW,
+                      OutBuffer, TEXT("$(AirspaceModeBelowShortIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(SettingsComputer().AltitudeMode == ALLOFF,
+                      OutBuffer, TEXT("$(AirspaceModeAllOffIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
 
-  CondReplaceInString(SettingsMap().TrailActive == 0, OutBuffer, TEXT("$(SnailTrailOffShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
-  CondReplaceInString(SettingsMap().TrailActive == 2, OutBuffer, TEXT("$(SnailTrailShortShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
-  CondReplaceInString(SettingsMap().TrailActive == 1, OutBuffer, TEXT("$(SnailTrailLongShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
-  CondReplaceInString(SettingsMap().TrailActive == 3, OutBuffer, TEXT("$(SnailTrailFullShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(SettingsMap().TrailActive == 0,
+                      OutBuffer, TEXT("$(SnailTrailOffShortIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(SettingsMap().TrailActive == 2,
+                      OutBuffer, TEXT("$(SnailTrailShortShortIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(SettingsMap().TrailActive == 1,
+                      OutBuffer, TEXT("$(SnailTrailLongShortIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(SettingsMap().TrailActive == 3,
+                      OutBuffer, TEXT("$(SnailTrailFullShortIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
 
-// VENTA3 VisualGlide
-  CondReplaceInString(SettingsMap().VisualGlide == 0, OutBuffer, TEXT("$(VisualGlideOffShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
-  CondReplaceInString(SettingsMap().VisualGlide == 1, OutBuffer, TEXT("$(VisualGlideLightShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
-  CondReplaceInString(SettingsMap().VisualGlide == 2, OutBuffer, TEXT("$(VisualGlideHeavyShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
-// VENTA3 AirSpace
-  CondReplaceInString(SettingsMap().OnAirSpace  == 0, OutBuffer, TEXT("$(AirSpaceOffShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
-  CondReplaceInString(SettingsMap().OnAirSpace  == 1, OutBuffer, TEXT("$(AirSpaceOnShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(SettingsMap().VisualGlide == 0,
+                      OutBuffer, TEXT("$(VisualGlideOffShortIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(SettingsMap().VisualGlide == 1,
+                      OutBuffer, TEXT("$(VisualGlideLightShortIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(SettingsMap().VisualGlide == 2,
+                      OutBuffer, TEXT("$(VisualGlideHeavyShortIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
 
-  CondReplaceInString(SettingsMap().EnableFLARMGauge != 0, OutBuffer, TEXT("$(FlarmDispToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
+  CondReplaceInString(SettingsMap().OnAirSpace == 0,
+                      OutBuffer, TEXT("$(AirSpaceOffShortIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(SettingsMap().OnAirSpace == 1,
+                      OutBuffer, TEXT("$(AirSpaceOnShortIndicator)"),
+                      TEXT("(*)"), TEXT(""), Size);
+
+  CondReplaceInString(SettingsMap().EnableFLARMGauge != 0,
+                      OutBuffer, TEXT("$(FlarmDispToggleActionName)"),
+                      TEXT("Off"), TEXT("On"), Size);
 
   return invalid;
 }
