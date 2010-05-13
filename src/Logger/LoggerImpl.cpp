@@ -92,7 +92,6 @@ LoggerImpl::LoggerImpl():
   LoggerActive(false),
   DeclaredToDevice(false),
   Simulator(false),
-  NumLoggerPreTakeoffBuffered(0),
   LoggerDiskBufferCount(0),
   frecord_clock(fixed(270)) // 4.5 minutes)
 {
@@ -185,21 +184,15 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info)
   if (!Simulator)
     LoggerGStop(szLoggerFileName);
 
-  NumLoggerPreTakeoffBuffered = 0;
+  PreTakeoffBuffer.clear();
 }
 
 void
 LoggerImpl::LogPointToBuffer(const NMEA_INFO &gps_info)
 {
-  if (NumLoggerPreTakeoffBuffered == LOGGER_PRETAKEOFF_BUFFER_MAX) {
-    for (int i = 0; i < NumLoggerPreTakeoffBuffered - 1; i++) {
-      LoggerPreTakeoffBuffer[i] = LoggerPreTakeoffBuffer[i+1];
-    }
-  } else {
-    NumLoggerPreTakeoffBuffered++;
-  }
-
-  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered - 1] = gps_info;
+  LoggerPreTakeoffBuffer item;
+  item = gps_info;
+  PreTakeoffBuffer.push(item);
 }
 
 void
@@ -288,8 +281,8 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
     return;
   }
 
-  for (int i = 0; i < NumLoggerPreTakeoffBuffered; i++) {
-    const struct LoggerPreTakeoffBuffer &src = LoggerPreTakeoffBuffer[i];
+  while (!PreTakeoffBuffer.empty()) {
+    const struct LoggerPreTakeoffBuffer &src = PreTakeoffBuffer.shift();
     NMEA_INFO tmp_info;
     tmp_info.Location = src.Location;
     tmp_info.GPSAltitude = src.Altitude;
@@ -308,8 +301,6 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
 
     LogPointToFile(tmp_info);
   }
-
-  NumLoggerPreTakeoffBuffered = 0;
 
   LogPointToFile(gps_info);
 }
@@ -469,8 +460,8 @@ LoggerImpl::StartDeclaration(const NMEA_INFO &gps_info, const int ntp)
   char start[] = "C0000000N00000000ETAKEOFF\r\n";
   char temp[100];
 
-  BrokenDateTime FirstDateTime = NumLoggerPreTakeoffBuffered > 0
-    ? LoggerPreTakeoffBuffer[0].DateTime
+  BrokenDateTime FirstDateTime = !PreTakeoffBuffer.empty()
+    ? PreTakeoffBuffer.peek().DateTime
     : gps_info.DateTime;
 
   // JMW added task start declaration line
@@ -895,5 +886,5 @@ LoggerImpl::guiToggleLogger(const NMEA_INFO& gps_info,
 void
 LoggerImpl::clearBuffer()
 {
-  NumLoggerPreTakeoffBuffered = 0;
+  PreTakeoffBuffer.clear();
 }

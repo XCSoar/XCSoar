@@ -46,6 +46,7 @@ Copyright_License {
 #include "Poco/RWLock.h"
 #include "Navigation/GeoPoint.hpp"
 #include "Logger/LoggerGRecord.hpp"
+#include "OverwritingRingBuffer.hpp"
 
 #include <tchar.h>
 #include <windef.h>
@@ -185,8 +186,7 @@ private:
 
   TCHAR szLoggerFileName[MAX_PATH];
   char szLoggerFileName_c[MAX_PATH];
-  int NumLoggerPreTakeoffBuffered;
-  LoggerPreTakeoffBuffer LoggerPreTakeoffBuffer[LOGGER_PRETAKEOFF_BUFFER_MAX];
+  OverwritingRingBuffer<LoggerPreTakeoffBuffer,LOGGER_PRETAKEOFF_BUFFER_MAX> PreTakeoffBuffer;
 
   /* stdio buffering is bad on wince3.0:
    * it appends up to 1024 NULLs at the end of the file if PDA power fails
