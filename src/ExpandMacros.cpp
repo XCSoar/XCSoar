@@ -318,12 +318,9 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       TEXT("Steady"), Size);
       break;
     case 1:
-      if (SettingsMap().ExtendedVisualGlide)
-        ReplaceInString(OutBuffer, TEXT("$(VisualGlideToggleName)"),
-                        TEXT("Moving"), Size);
-      else
-        ReplaceInString(OutBuffer, TEXT("$(VisualGlideToggleName)"),
-                        TEXT("Off"), Size);
+      ReplaceInString(OutBuffer, TEXT("$(VisualGlideToggleName)"),
+                      SettingsMap().ExtendedVisualGlide ?
+                          TEXT("Moving") : TEXT("Off"), Size);
       break;
     case 2:
       ReplaceInString(OutBuffer, TEXT("$(VisualGlideToggleName)"),
