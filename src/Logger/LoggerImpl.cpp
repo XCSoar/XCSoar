@@ -288,30 +288,28 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
     return;
   }
 
-  if (NumLoggerPreTakeoffBuffered) {
-    for (int i = 0; i < NumLoggerPreTakeoffBuffered; i++) {
-      NMEA_INFO tmp_info;
-      tmp_info.Location = LoggerPreTakeoffBuffer[i].Location;
-      tmp_info.GPSAltitude = LoggerPreTakeoffBuffer[i].Altitude;
-      tmp_info.BaroAltitude = LoggerPreTakeoffBuffer[i].BaroAltitude;
-      tmp_info.DateTime = LoggerPreTakeoffBuffer[i].DateTime;
-      tmp_info.Time = LoggerPreTakeoffBuffer[i].Time;
+  for (int i = 0; i < NumLoggerPreTakeoffBuffered; i++) {
+    NMEA_INFO tmp_info;
+    tmp_info.Location = LoggerPreTakeoffBuffer[i].Location;
+    tmp_info.GPSAltitude = LoggerPreTakeoffBuffer[i].Altitude;
+    tmp_info.BaroAltitude = LoggerPreTakeoffBuffer[i].BaroAltitude;
+    tmp_info.DateTime = LoggerPreTakeoffBuffer[i].DateTime;
+    tmp_info.Time = LoggerPreTakeoffBuffer[i].Time;
 
-      tmp_info.gps.NAVWarning = LoggerPreTakeoffBuffer[i].NAVWarning;
-      tmp_info.gps.FixQuality = LoggerPreTakeoffBuffer[i].FixQuality;
-      tmp_info.gps.SatellitesUsed = LoggerPreTakeoffBuffer[i].SatellitesUsed;
-      tmp_info.gps.HDOP = LoggerPreTakeoffBuffer[i].HDOP;
-      tmp_info.gps.Simulator = LoggerPreTakeoffBuffer[i].Simulator;
+    tmp_info.gps.NAVWarning = LoggerPreTakeoffBuffer[i].NAVWarning;
+    tmp_info.gps.FixQuality = LoggerPreTakeoffBuffer[i].FixQuality;
+    tmp_info.gps.SatellitesUsed = LoggerPreTakeoffBuffer[i].SatellitesUsed;
+    tmp_info.gps.HDOP = LoggerPreTakeoffBuffer[i].HDOP;
+    tmp_info.gps.Simulator = LoggerPreTakeoffBuffer[i].Simulator;
 
-      for (int iSat = 0; iSat < MAXSATELLITES; iSat++)
-        tmp_info.gps.SatelliteIDs[iSat] =
-          LoggerPreTakeoffBuffer[i].SatelliteIDs[iSat];
+    for (int iSat = 0; iSat < MAXSATELLITES; iSat++)
+      tmp_info.gps.SatelliteIDs[iSat] =
+        LoggerPreTakeoffBuffer[i].SatelliteIDs[iSat];
 
-      LogPointToFile(tmp_info);
-    }
-
-    NumLoggerPreTakeoffBuffered = 0;
+    LogPointToFile(tmp_info);
   }
+
+  NumLoggerPreTakeoffBuffered = 0;
 
   LogPointToFile(gps_info);
 }
