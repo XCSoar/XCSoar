@@ -186,7 +186,6 @@ private:
   TCHAR szLoggerFileName[MAX_PATH];
   char szLoggerFileName_c[MAX_PATH];
   int NumLoggerPreTakeoffBuffered;
-  LoggerPreTakeoffBuffer FirstPoint;
   LoggerPreTakeoffBuffer LoggerPreTakeoffBuffer[LOGGER_PRETAKEOFF_BUFFER_MAX];
 
   /* stdio buffering is bad on wince3.0:

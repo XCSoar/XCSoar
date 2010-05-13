@@ -200,10 +200,6 @@ LoggerImpl::LogPointToBuffer(const NMEA_INFO &gps_info)
   }
 
   LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered - 1] = gps_info;
-
-  // This is the first point that will be output to file.
-  // Declaration must happen before this, so must save this time.
-  FirstPoint = LoggerPreTakeoffBuffer[0];
 }
 
 void
@@ -474,9 +470,9 @@ LoggerImpl::StartDeclaration(const NMEA_INFO &gps_info, const int ntp)
   char start[] = "C0000000N00000000ETAKEOFF\r\n";
   char temp[100];
 
-  if (NumLoggerPreTakeoffBuffered == 0) {
-    FirstPoint.DateTime = gps_info.DateTime;
-  }
+  BrokenDateTime FirstDateTime = NumLoggerPreTakeoffBuffered > 0
+    ? LoggerPreTakeoffBuffer[0].DateTime
+    : gps_info.DateTime;
 
   // JMW added task start declaration line
 
@@ -485,12 +481,12 @@ LoggerImpl::StartDeclaration(const NMEA_INFO &gps_info, const int ntp)
   // IGC GNSS specification 3.6.1
   sprintf(temp, "C%02u%02u%02u%02u%02u%02u0000000000%02d\r\n",
       // DD  MM  YY  HH  MM  SS  DD  MM  YY IIII TT
-          FirstPoint.DateTime.day,
-          FirstPoint.DateTime.month,
-          FirstPoint.DateTime.year % 100,
-          FirstPoint.DateTime.hour,
-          FirstPoint.DateTime.minute,
-          FirstPoint.DateTime.second,
+          FirstDateTime.day,
+          FirstDateTime.month,
+          FirstDateTime.year % 100,
+          FirstDateTime.hour,
+          FirstDateTime.minute,
+          FirstDateTime.second,
       ntp-2);
 
   IGCWriteRecord(temp, szLoggerFileName);
