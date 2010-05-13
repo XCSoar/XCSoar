@@ -364,9 +364,11 @@ public:
     return ToSysUnit(Value, DistanceUnit);
   }
 
+#ifdef FIXED_MATH
   static fixed ToSysDistance(fixed Value) {
     return ToSysUnit(Value, DistanceUnit);
   }
+#endif
 
   static double ToUserSpeed(double Value) {
     return ToUserUnit(Value, SpeedUnit);
@@ -384,9 +386,11 @@ public:
     return ToSysUnit(Value, VerticalSpeedUnit);
   }
 
+#ifdef FIXED_MATH
   static fixed ToSysVSpeed(fixed Value) {
     return ToSysUnit(Value, VerticalSpeedUnit);
   }
+#endif
 
   static double ToUserTaskSpeed(double Value) {
     return ToUserUnit(Value, TaskSpeedUnit);
