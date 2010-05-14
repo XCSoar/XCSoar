@@ -282,7 +282,7 @@ Update()
   UpdateSelector();
   UpdateWarnings();
 
-  if (enable_auto_zoom)
+  if (enable_auto_zoom || WarningMode())
     CalcAutoZoom();
 
   wdf->invalidate();
