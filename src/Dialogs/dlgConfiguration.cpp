@@ -992,79 +992,80 @@ static CallBackTableEntry_t CallBackTable[]={
 static void SetInfoBoxSelector(unsigned item, int mode)
 {
   WndProperty *wp = FindInfoBoxField(mode, item);
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    for (unsigned i = 0; i < NUMSELECTSTRINGS; i++) {
-      dfe->addEnumText(gettext(InfoBoxManager::GetTypeDescription(i)));
-    }
-    dfe->Sort(0);
+  if (wp == NULL)
+    return;
 
-    int it=0;
-
-    switch(mode) {
-    case 0: // cruise
-      it = InfoBoxManager::getType(item, 1);
-      break;
-    case 1: // climb
-      it = InfoBoxManager::getType(item, 0);
-      break;
-    case 2: // final glide
-      it = InfoBoxManager::getType(item, 2);
-      break;
-    case 3: // aux
-      it = InfoBoxManager::getType(item, 3);
-      break;
-    };
-    dfe->Set(it);
-    wp->RefreshDisplay();
+  DataFieldEnum* dfe;
+  dfe = (DataFieldEnum*)wp->GetDataField();
+  for (unsigned i = 0; i < NUMSELECTSTRINGS; i++) {
+    dfe->addEnumText(gettext(InfoBoxManager::GetTypeDescription(i)));
   }
-}
+  dfe->Sort(0);
 
+  int it=0;
+
+  switch(mode) {
+  case 0: // cruise
+    it = InfoBoxManager::getType(item, 1);
+    break;
+  case 1: // climb
+    it = InfoBoxManager::getType(item, 0);
+    break;
+  case 2: // final glide
+    it = InfoBoxManager::getType(item, 2);
+    break;
+  case 3: // aux
+    it = InfoBoxManager::getType(item, 3);
+    break;
+  };
+  dfe->Set(it);
+  wp->RefreshDisplay();
+}
 
 static void GetInfoBoxSelector(unsigned item, int mode)
 {
   WndProperty *wp = FindInfoBoxField(mode, item);
-  if (wp) {
-    int itnew = wp->GetDataField()->GetAsInteger();
-    int it=0;
+  if (wp == NULL)
+    return;
 
-    switch(mode) {
-    case 0: // cruise
-      it = InfoBoxManager::getType(item, 1);
-      break;
-    case 1: // climb
-      it = InfoBoxManager::getType(item, 0);
-      break;
-    case 2: // final glide
-      it = InfoBoxManager::getType(item, 2);
-      break;
-    case 3: // aux
-      it = InfoBoxManager::getType(item, 3);
-      break;
-    };
+  int itnew = wp->GetDataField()->GetAsInteger();
+  int it=0;
 
-    if (it != itnew) {
+  switch(mode) {
+  case 0: // cruise
+    it = InfoBoxManager::getType(item, 1);
+    break;
+  case 1: // climb
+    it = InfoBoxManager::getType(item, 0);
+    break;
+  case 2: // final glide
+    it = InfoBoxManager::getType(item, 2);
+    break;
+  case 3: // aux
+    it = InfoBoxManager::getType(item, 3);
+    break;
+  };
 
-      changed = true;
+  if (it == itnew)
+    return;
 
-      switch(mode) {
-      case 0: // cruise
-        InfoBoxManager::setType(item, itnew, 1);
-        break;
-      case 1: // climb
-        InfoBoxManager::setType(item, itnew, 0);
-        break;
-      case 2: // final glide
-        InfoBoxManager::setType(item, itnew, 2);
-        break;
-      case 3: // aux
-        InfoBoxManager::setType(item, itnew, 3);
-        break;
-      };
-      Profile::SetInfoBoxes(item, InfoBoxManager::getTypeAll(item));
-    }
-  }
+  changed = true;
+
+  switch(mode) {
+  case 0: // cruise
+    InfoBoxManager::setType(item, itnew, 1);
+    break;
+  case 1: // climb
+    InfoBoxManager::setType(item, itnew, 0);
+    break;
+  case 2: // final glide
+    InfoBoxManager::setType(item, itnew, 2);
+    break;
+  case 3: // aux
+    InfoBoxManager::setType(item, itnew, 3);
+    break;
+  };
+  Profile::SetInfoBoxes(item, InfoBoxManager::getTypeAll(item));
 }
 
 
