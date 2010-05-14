@@ -128,7 +128,7 @@ Bitmap::load(const TCHAR *name)
 
 #ifdef ENABLE_SDL
 void
-Bitmap::load(WORD id)
+Bitmap::load(unsigned id)
 {
   // XXX
 

@@ -67,7 +67,7 @@ public:
   explicit Bitmap(const TCHAR *name):surface(NULL) {
     load(name);
   }
-  explicit Bitmap(WORD id):surface(NULL) {
+  explicit Bitmap(unsigned id):surface(NULL) {
     load(id);
   }
 #else
@@ -75,7 +75,7 @@ public:
   explicit Bitmap(const TCHAR *name):bitmap(NULL) {
     load(name);
   }
-  explicit Bitmap(WORD id):bitmap(NULL) {
+  explicit Bitmap(unsigned id):bitmap(NULL) {
     load(id);
   }
 #endif
@@ -93,9 +93,9 @@ public:
   void load(const TCHAR *name);
 
 #ifdef ENABLE_SDL
-  void load(WORD id);
+  void load(unsigned id);
 #else
-  void load(WORD id) {
+  void load(unsigned id) {
     load(MAKEINTRESOURCE(id));
   }
 #endif
