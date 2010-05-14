@@ -1,4 +1,5 @@
 SVG_ICONS = $(wildcard Data/icons/*.svg)
+SVG_NOALIAS_ICONS = $(patsubst Data/icons/%.svg,output/data/icons/%.svg,$(SVG_ICONS))
 PNG_ICONS_20 = $(patsubst Data/icons/%.svg,output/data/icons/%-20.png,$(SVG_ICONS))
 BMP_ICONS_20 = $(PNG_ICONS_20:.png=.bmp)
 
@@ -8,7 +9,11 @@ else
   IM_PREFIX :=
 endif
 
-$(PNG_ICONS_20): output/data/icons/%-20.png: Data/icons/%.svg | output/data/icons/dirstamp
+$(SVG_NOALIAS_ICONS): output/data/icons/%.svg: build/no_anti_aliasing.xsl Data/icons/%.svg | output/data/icons/dirstamp
+	@$(NQ)echo "  XSLT    $@"
+	$(Q)xsltproc --output $@ $^
+
+$(PNG_ICONS_20): output/data/icons/%-20.png: output/data/icons/%.svg | output/data/icons/dirstamp
 	@$(NQ)echo "  SVG     $@"
 	$(Q)rsvg-convert --width=20 $< -o $@
 
