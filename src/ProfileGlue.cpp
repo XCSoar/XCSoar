@@ -83,6 +83,9 @@ SetAltairDefaults()
 static void
 CheckInfoTypes()
 {
+  if (InfoBoxManager::IsEmpty(1))
+    return;
+
   bool iszero_fg = InfoBoxManager::IsEmpty(2);
   bool iszero_aux = InfoBoxManager::IsEmpty(3);
   if (!iszero_fg && !iszero_aux)
