@@ -40,6 +40,7 @@ Copyright_License {
 #include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "RasterMapJPG2000.hpp"
+#include "StringUtil.hpp"
 #include "wcecompat/ts_string.h"
 
 // General, open/close
@@ -48,20 +49,18 @@ void RasterTerrain::OpenTerrain(void)
 {
   TCHAR szFile[MAX_PATH];
 
-  Profile::Get(szProfileTerrainFile, szFile, MAX_PATH);
-
-  char zfilename[MAX_PATH];
+  if (Profile::Get(szProfileTerrainFile, szFile, MAX_PATH) &&
+      !string_is_empty(szFile)) {
+  } else if (Profile::Get(szProfileMapFile, szFile, MAX_PATH) &&
+             !string_is_empty(szFile)) {
+    _tcscat(szFile, _T("/terrain.jp2"));
+  } else
+    return;
 
   ExpandLocalPath(szFile);
 
+  char zfilename[MAX_PATH];
   unicode2ascii(szFile, zfilename, MAX_PATH);
-
-  if (strlen(zfilename)==0) {
-    Profile::Get(szProfileMapFile, szFile, MAX_PATH);
-    ExpandLocalPath(szFile);
-    _tcscat(szFile,TEXT("/terrain.jp2"));
-    unicode2ascii(szFile, zfilename, MAX_PATH);
-  }
 
   // TODO code: Check locking, especially when reloading a file.
   // TODO bug: Fix cache method
