@@ -7,6 +7,7 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/STScreenBuffer.cpp \
 	$(SCREEN_SRC_DIR)/Util.cpp \
 	$(SCREEN_SRC_DIR)/Bitmap.cpp \
+	$(SCREEN_SRC_DIR)/Icon.cpp \
 	$(SCREEN_SRC_DIR)/Brush.cpp \
 	$(SCREEN_SRC_DIR)/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/Color.cpp \

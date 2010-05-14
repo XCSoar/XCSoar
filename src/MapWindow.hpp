@@ -245,8 +245,11 @@ private:
   BufferCanvas draw_canvas;
   BufferCanvas buffer_canvas;
   BufferCanvas stencil_canvas;
+
+public:
   BitmapCanvas bitmap_canvas;
 
+private:
   LabelBlock label_block;
 public:
   bool checkLabelBlock(RECT rc);

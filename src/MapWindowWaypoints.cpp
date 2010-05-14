@@ -87,7 +87,7 @@ public:
 
     irange = map.WaypointInScaleFilter(way_point);
 
-    Bitmap *wp_bmp = &MapGfx.hSmall;
+    const MaskedIcon *icon = &MapGfx.SmallIcon;
 
     bool draw_alt = false;
     int AltArrivalAGL = 0;
@@ -120,27 +120,27 @@ public:
         }
 
         if (way_point.Flags.Airport)
-          wp_bmp = &MapGfx.hBmpAirportReachable;
+          icon = &MapGfx.AirportReachableIcon;
         else
-          wp_bmp = &MapGfx.hBmpFieldReachable;
+          icon = &MapGfx.FieldReachableIcon;
       } else {
         if (way_point.Flags.Airport)
-          wp_bmp = &MapGfx.hBmpAirportUnReachable;
+          icon = &MapGfx.AirportUnreachableIcon;
         else
-          wp_bmp = &MapGfx.hBmpFieldUnReachable;
+          icon = &MapGfx.FieldUnreachableIcon;
       }
     } else {
       if (map.GetMapScaleKM() > fixed_four)
-        wp_bmp = &MapGfx.hSmall;
+        icon = &MapGfx.SmallIcon;
       else
-        wp_bmp = &MapGfx.hTurnPoint;
+        icon = &MapGfx.TurnPointIcon;
     }
 
     if (in_task)
       TextDisplayMode.AsFlag.WhiteBold = 1;
 
     if (irange || in_task || dowrite || islandable)
-      map.draw_masked_bitmap(canvas, *wp_bmp, sc.x, sc.y, 20, 20);
+      icon->draw(canvas, map.bitmap_canvas, sc.x, sc.y);
 
     if (pDisplayTextType == DISPLAYNAMEIFINTASK) {
       if (!in_task)

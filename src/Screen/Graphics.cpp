@@ -152,8 +152,6 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
 
   hFLARMTraffic.load(IDB_FLARMTRAFFIC);
   hTerrainWarning.load(IDB_TERRAINWARNING);
-  hTurnPoint.load(IDB_TURNPOINT);
-  hSmall.load(IDB_SMALL);
   hAutoMacCready.load(IDB_AUTOMACCREADY);
   hGPSStatus1.load(IDB_GPSSTATUS1);
   hGPSStatus2.load(IDB_GPSSTATUS2);
@@ -267,21 +265,24 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
   hpVisualGlideLightRed.set(Pen::DASH, IBLSCALE(1), Color::RED);
   hpVisualGlideHeavyRed.set(Pen::DASH, IBLSCALE(2), Color::RED);
 
+  SmallIcon.load(IDB_SMALL);
+  TurnPointIcon.load(IDB_TURNPOINT);
+
   if (Appearance.IndLandable == wpLandableDefault) {
-    hBmpAirportReachable.load(IDB_REACHABLE);
-    hBmpAirportUnReachable.load(IDB_LANDABLE);
-    hBmpFieldReachable.load(IDB_REACHABLE);
-    hBmpFieldUnReachable.load(IDB_LANDABLE);
+    AirportReachableIcon.load(IDB_REACHABLE);
+    AirportUnreachableIcon.load(IDB_LANDABLE);
+    FieldReachableIcon.load(IDB_REACHABLE);
+    FieldUnreachableIcon.load(IDB_LANDABLE);
   } else if (Appearance.IndLandable == wpLandableAltA) {
-    hBmpAirportReachable.load(IDB_AIRPORT_REACHABLE);
-    hBmpAirportUnReachable.load(IDB_AIRPORT_UNREACHABLE);
-    hBmpFieldReachable.load(IDB_OUTFIELD_REACHABLE);
-    hBmpFieldUnReachable.load(IDB_OUTFIELD_UNREACHABLE);
+    AirportReachableIcon.load(IDB_AIRPORT_REACHABLE);
+    AirportUnreachableIcon.load(IDB_AIRPORT_UNREACHABLE);
+    FieldReachableIcon.load(IDB_OUTFIELD_REACHABLE);
+    FieldUnreachableIcon.load(IDB_OUTFIELD_UNREACHABLE);
   } else if (Appearance.IndLandable == wpLandableAltB) {
-    hBmpAirportReachable.load(IDB_AIRPORT_REACHABLE);
-    hBmpAirportUnReachable.load(IDB_AIRPORT_UNREACHABLE2);
-    hBmpFieldReachable.load(IDB_OUTFIELD_REACHABLE);
-    hBmpFieldUnReachable.load(IDB_OUTFIELD_UNREACHABLE2);
+    AirportReachableIcon.load(IDB_AIRPORT_REACHABLE);
+    AirportUnreachableIcon.load(IDB_AIRPORT_UNREACHABLE2);
+    FieldReachableIcon.load(IDB_OUTFIELD_REACHABLE);
+    FieldUnreachableIcon.load(IDB_OUTFIELD_UNREACHABLE2);
   }
 
   for (int i = 0; i < AIRSPACECLASSCOUNT; i++) {
@@ -294,8 +295,6 @@ ScreenGraphics::Destroy()
 {
   int i;
 
-  hTurnPoint.reset();
-  hSmall.reset();
   hCruise.reset();
   hClimb.reset();
   hFinalGlide.reset();
@@ -349,10 +348,13 @@ ScreenGraphics::Destroy()
   hpCompassBorder.reset();
   hBrushFlyingModeAbort.reset();
 
-  hBmpAirportReachable.reset();
-  hBmpAirportUnReachable.reset();
-  hBmpFieldReachable.reset();
-  hBmpFieldUnReachable.reset();
+  SmallIcon.reset();
+  TurnPointIcon.reset();
+
+  AirportReachableIcon.reset();
+  AirportUnreachableIcon.reset();
+  FieldReachableIcon.reset();
+  FieldUnreachableIcon.reset();
   hBmpThermalSource.reset();
   hBmpTarget.reset();
   hBmpTeammatePosition.reset();

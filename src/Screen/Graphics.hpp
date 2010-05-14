@@ -41,6 +41,7 @@ Copyright_License {
 
 #include "Sizes.h"
 #include "Screen/Bitmap.hpp"
+#include "Screen/Icon.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Color.hpp"
 #include "Screen/Pen.hpp"
@@ -97,7 +98,7 @@ public:
   Brush hAboveTerrainBrush;
   Bitmap hAirspaceInterceptBitmap;
 
-  Bitmap hTurnPoint, hSmall, hCruise, hClimb, hFinalGlide, hAutoMacCready,
+  Bitmap hCruise, hClimb, hFinalGlide, hAutoMacCready,
       hTerrainWarning, hGPSStatus1, hGPSStatus2, hAbort, hLogger, hLoggerOff,
       hFLARMTraffic;
 
@@ -139,10 +140,9 @@ public:
   Pen hpCompassBorder;
   Brush hBrushFlyingModeAbort;
 
-  Bitmap hBmpAirportReachable;
-  Bitmap hBmpAirportUnReachable;
-  Bitmap hBmpFieldReachable;
-  Bitmap hBmpFieldUnReachable;
+  MaskedIcon SmallIcon, TurnPointIcon;
+  MaskedIcon AirportReachableIcon, AirportUnreachableIcon;
+  MaskedIcon FieldReachableIcon, FieldUnreachableIcon;
   Bitmap hBmpThermalSource;
   Bitmap hBmpTarget;
   Bitmap hBmpTeammatePosition;
