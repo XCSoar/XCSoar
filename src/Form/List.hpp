@@ -329,7 +329,7 @@ protected:
    * @param xPos x-Coordinate
    * @param yPos y-Coordinate
    */
-  void SelectItemFromScreen(int xPos, int yPos);
+  void SelectItemFromScreen(int y);
 
   /** Draws the ScrollBar */
   void DrawScrollBar(Canvas &canvas);

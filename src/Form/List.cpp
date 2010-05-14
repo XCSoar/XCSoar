@@ -310,16 +310,14 @@ WndListFrame::on_mouse_up(int x, int y)
 }
 
 void
-WndListFrame::SelectItemFromScreen(int xPos, int yPos)
+WndListFrame::SelectItemFromScreen(int y)
 {
-  (void)xPos;
-
   // If mouse was clicked above the list items -> cancel
-  if (yPos < 0)
+  if (y < 0)
     return;
 
   // Calculate the item the user clicked on
-  unsigned index = yPos / item_height + origin;
+  unsigned index = y / item_height + origin;
   if (index >= length)
     return;
 
@@ -395,7 +393,7 @@ WndListFrame::on_mouse_down(int x, int y)
   } else {
     // if click in ListBox area
     // -> select appropriate item
-    SelectItemFromScreen(x, y);
+    SelectItemFromScreen(Pos.y);
   }
 
   return false;
