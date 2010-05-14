@@ -43,7 +43,6 @@
  * information is given on the selected target. When a warning/alarm is present
  * the target with the highest alarm level is automatically selected and
  * highlighted in orange or red (depending on the level)
- * @todo make targets selectable via mouse
  */
 
 #include "Dialogs/Internal.hpp"
@@ -72,6 +71,7 @@ static int warning = -1;
 static POINT radar_mid;
 static SIZE radar_size;
 static int side_display_type = 1;
+static POINT sc[FLARM_STATE::FLARM_MAX_TRAFFIC];
 
 /**
  * Tries to select the next target, if impossible selection = -1
@@ -547,24 +547,23 @@ PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
   y = p.second;
 
   // Calculate screen coordinates
-  POINT sc;
-  sc.x = radar_mid.x + iround(x * scale);
-  sc.y = radar_mid.y + iround(y * scale);
+  sc[i].x = radar_mid.x + iround(x * scale);
+  sc[i].y = radar_mid.y + iround(y * scale);
 
   // Set the arrow color depending on alarm level
   switch (traffic.AlarmLevel) {
   case 1:
     canvas.hollow_brush();
     canvas.select(hpWarning);
-    canvas.circle(sc.x, sc.y, Layout::FastScale(16));
+    canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(16));
     canvas.select(hbWarning);
     break;
   case 2:
   case 3:
     canvas.hollow_brush();
     canvas.select(hpAlarm);
-    canvas.circle(sc.x, sc.y, Layout::FastScale(16));
-    canvas.circle(sc.x, sc.y, Layout::FastScale(19));
+    canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(16));
+    canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(19));
     canvas.select(hbAlarm);
     break;
   case 0:
@@ -602,7 +601,7 @@ PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
   Arrow[4].y = 8;
 
   // Rotate and shift the arrow
-  PolygonRotateShift(Arrow, 5, sc.x, sc.y,
+  PolygonRotateShift(Arrow, 5, sc[i].x, sc[i].y,
                      traffic.TrackBearing + DisplayAngle);
 
   // Draw the polygon
@@ -630,7 +629,7 @@ PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
     TCHAR tmp[10];
     Units::FormatUserVSpeed(traffic.Average30s, tmp, 10, false);
     SIZE sz = canvas.text_size(tmp);
-    canvas.text(sc.x + Layout::FastScale(11), sc.y - sz.cy * 0.5, tmp);
+    canvas.text(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy * 0.5, tmp);
   } else if (side_display_type == 2) {
 #endif
     // Select font and color
@@ -645,7 +644,7 @@ PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
     TCHAR tmp[10];
     Units::FormatUserArrival(traffic.RelativeAltitude, tmp, 10, true);
     SIZE sz = canvas.text_size(tmp);
-    canvas.text(sc.x + Layout::FastScale(11), sc.y - sz.cy * 0.5, tmp);
+    canvas.text(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy * 0.5, tmp);
 #ifdef FLARM_AVERAGE
   }
 #endif
@@ -744,6 +743,43 @@ OnRadarPaint(WindowControl *Sender, Canvas &canvas)
   PaintRadarTraffic(canvas);
 }
 
+static void
+SelectNearTarget(int x, int y)
+{
+  int min_distance = 99999;
+  int min_id = -1;
+
+  for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
+    // If FLARM target does not exist -> next one
+    if (!XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined())
+      continue;
+
+    int distance_sq = (x - sc[i].x) * (x - sc[i].x) +
+                      (y - sc[i].y) * (y - sc[i].y);
+
+    if (distance_sq > min_distance
+        || distance_sq > Layout::FastScale(15) * Layout::FastScale(15))
+      continue;
+
+    min_distance = distance_sq;
+    min_id = i;
+  }
+
+  if (min_id >= 0)
+    selection = min_id;
+
+  Update();
+}
+
+static bool
+OnMouseDown(WindowControl *Sender, int x, int y)
+{
+  if (!XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].defined())
+    SelectNearTarget(x, y);
+
+  return true;
+}
+
 static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnTimerNotify),
   DeclareCallBackEntry(NULL)
@@ -774,6 +810,7 @@ dlgFlarmTrafficShowModal()
   wdf = ((WndOwnerDrawFrame *)wf->FindByName(_T("frmRadar")));
   // Set Radar frame event
   wdf->SetOnPaintNotify(OnRadarPaint);
+  wdf->SetOnMouseDownNotify(OnMouseDown);
 
   // Calculate Radar size
   int size = min(wdf->get_height(), wdf->get_width());
