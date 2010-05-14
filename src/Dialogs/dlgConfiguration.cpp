@@ -114,8 +114,6 @@ static const struct {
 static const unsigned num_port_types =
   sizeof(port_types) / sizeof(port_types[0]) - 1;
 
-extern ldrotary_s rotaryLD;
-
 static Font TempInfoWindowFont;
 static Font TempTitleWindowFont;
 static Font TempMapWindowFont;
