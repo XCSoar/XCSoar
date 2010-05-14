@@ -30,7 +30,7 @@ $(BMP_ICONS_20): %.bmp: %.png
 	$(Q)rm $<.tmp1.png
 	$(Q)rm $<.tmp2.png
 	$(Q)rm $<.tmp3.png
-	
+
 ifeq ($(HAVE_WIN32),y)
 
 RESOURCE_TEXT = Data/XCSoar.rc
