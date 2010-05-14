@@ -738,17 +738,17 @@ OnPaste(gcc_unused WndButton &button)
 
   if(MessageBoxX(gettext(_T("Overwrite?")),
                  gettext(_T("InfoBox paste")),
-                 MB_YESNO|MB_ICONQUESTION) == IDYES) {
+                 MB_YESNO|MB_ICONQUESTION) != IDYES)
+    return;
 
-    for (unsigned item = 0; item < numInfoWindows; item++) {
-      InfoBoxPropName(name, item, mode);
-      WndProperty *wp;
-      wp = (WndProperty*)wf->FindByName(name);
-      if (wp && (cpyInfoBox[item] >=0 ) &&
-          ((unsigned)cpyInfoBox[item] < NUMSELECTSTRINGS)) {
-        wp->GetDataField()->Set(cpyInfoBox[item]);
-        wp->RefreshDisplay();
-      }
+  for (unsigned item = 0; item < numInfoWindows; item++) {
+    InfoBoxPropName(name, item, mode);
+    WndProperty *wp;
+    wp = (WndProperty*)wf->FindByName(name);
+    if (wp && (cpyInfoBox[item] >=0 ) &&
+        ((unsigned)cpyInfoBox[item] < NUMSELECTSTRINGS)) {
+      wp->GetDataField()->Set(cpyInfoBox[item]);
+      wp->RefreshDisplay();
     }
   }
 }
