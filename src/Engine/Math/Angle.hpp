@@ -171,6 +171,12 @@ public:
     return Angle(m_value - x.m_value);
   }
 
+  Angle
+  operator-() const
+  {
+    return Angle(-m_value);
+  }
+
   const Angle&
   operator*=(const fixed x)
   {
