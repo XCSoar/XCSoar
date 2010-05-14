@@ -1311,21 +1311,14 @@ InfoBoxManager::Create(RECT rc)
   info_box_look.colors[5] = Appearance.InverseInfoBox
     ? MapGfx.inv_magentaColor : Color::MAGENTA;
 
-  int xoff, yoff, sizex, sizey;
-
-  // JMW created full screen infobox mode
-  xoff=0;
-  yoff=0;
-  sizex=rc.right-rc.left;
-  sizey=rc.bottom-rc.top;
-
   WindowStyle style;
   style.hide();
-
-  full_window.set(main_window, xoff, yoff, sizex, sizey, style);
+  full_window.set(main_window, rc.left, rc.right,
+                  rc.right - rc.left, rc.bottom - rc.top);
 
   // create infobox windows
   for (unsigned i = 0; i < numInfoWindows; i++) {
+    int xoff, yoff, sizex, sizey;
     InfoBoxLayout::GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
 
     int Border;
