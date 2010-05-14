@@ -91,31 +91,25 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
-    SetCalcCaption(_T("Settings"));
     fs.RenderBarograph(canvas, rcgfx, XCSoarInterface::Basic(), 
                        XCSoarInterface::Calculated(), task_ui);
     break;
   case ANALYSIS_PAGE_CLIMB:
-    SetCalcCaption(_T("Task calc"));
     fs.RenderClimb(canvas, rcgfx, glide_polar);
     break;
   case ANALYSIS_PAGE_WIND:
-    SetCalcCaption(_T("Set wind"));
     fs.RenderWind(canvas, rcgfx, XCSoarInterface::Basic(),
                   glide_computer.windanalyser.windstore);
     break;
   case ANALYSIS_PAGE_POLAR:
-    SetCalcCaption(_T("Settings"));
     fs.RenderGlidePolar(canvas, rcgfx, XCSoarInterface::Calculated(),
                         XCSoarInterface::SettingsComputer(),
                         glide_polar);
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
-    SetCalcCaption(_T("Settings"));
     fs.RenderTemperature(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_TASK:
-    SetCalcCaption(_T("Task calc"));
     fs.RenderTask(canvas, rcgfx, XCSoarInterface::Basic(),
                   XCSoarInterface::SettingsComputer(),
                   XCSoarInterface::SettingsMap(),
@@ -123,21 +117,18 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
                   trace);
     break;
   case ANALYSIS_PAGE_OLC:
-    SetCalcCaption(_T("Optimise"));
     fs.RenderOLC(canvas, rcgfx, XCSoarInterface::Basic(),
                  XCSoarInterface::SettingsComputer(),
                  XCSoarInterface::SettingsMap(),
                  olc, trace);
     break;
   case ANALYSIS_PAGE_AIRSPACE:
-    SetCalcCaption(_T("Warnings"));
     fs.RenderAirspace(canvas, rcgfx, XCSoarInterface::Basic(),
                       XCSoarInterface::Calculated(),
                       XCSoarInterface::SettingsMap(),
                       airspace_ui, terrain);
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
-    SetCalcCaption(_T("Task calc"));
     fs.RenderSpeed(canvas, rcgfx, XCSoarInterface::Basic(), 
                    XCSoarInterface::Calculated(), task_ui);
     break;
@@ -163,22 +154,27 @@ Update(void)
     wf->SetCaption(sTmp);
     fs.CaptionBarograph(sTmp);
     wInfo->SetCaption(sTmp);
+    SetCalcCaption(_T("Settings"));
     break;
+
   case ANALYSIS_PAGE_CLIMB:
     _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
               gettext(_T("Climb")));
     wf->SetCaption(sTmp);
     fs.CaptionClimb(sTmp);
     wInfo->SetCaption(sTmp);
-
+    SetCalcCaption(_T("Task calc"));
     break;
+
   case ANALYSIS_PAGE_WIND:
     _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
               gettext(_T("Wind at Altitude")));
     wf->SetCaption(sTmp);
     _stprintf(sTmp, _T(" "));
     wInfo->SetCaption(sTmp);
+    SetCalcCaption(_T("Set wind"));
     break;
+
   case ANALYSIS_PAGE_POLAR:
     _stprintf(sTmp, _T("%s: %s (Mass %d kg)"), gettext(_T("Analysis")),
               gettext(_T("Glide Polar")),
@@ -186,27 +182,35 @@ Update(void)
     wf->SetCaption(sTmp);
     fs.CaptionPolar(sTmp, polar);
     wInfo->SetCaption(sTmp);
-    break;
+    SetCalcCaption(_T("Settings"));
+   break;
+
   case ANALYSIS_PAGE_TEMPTRACE:
     _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
               gettext(_T("Temp trace")));
     wf->SetCaption(sTmp);
     fs.CaptionTempTrace(sTmp);
     wInfo->SetCaption(sTmp);
+    SetCalcCaption(_T("Settings"));
     break;
+
   case ANALYSIS_PAGE_TASK_SPEED:
     _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
               gettext(_T("Task speed")));
     wf->SetCaption(sTmp);
     wInfo->SetCaption(_T(""));
+    SetCalcCaption(_T("Task calc"));
     break;
+
   case ANALYSIS_PAGE_TASK:
     _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
               gettext(_T("Task")));
     wf->SetCaption(sTmp);
     fs.CaptionTask(sTmp, XCSoarInterface::Calculated());
     wInfo->SetCaption(sTmp);
+    SetCalcCaption(_T("Task calc"));
     break;
+
   case ANALYSIS_PAGE_OLC:
     _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
               gettext(_T("OnLine Contest")));
@@ -238,12 +242,15 @@ Update(void)
                 Units::GetTaskSpeedName());
     }
     wInfo->SetCaption(sTmp);
+    SetCalcCaption(_T("Optimise"));
     break;
+
   case ANALYSIS_PAGE_AIRSPACE:
     _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
               gettext(_T("Airspace")));
     wf->SetCaption(sTmp);
     wInfo->SetCaption(_T(" "));
+    SetCalcCaption(_T("Warnings"));
     break;
   }
 
