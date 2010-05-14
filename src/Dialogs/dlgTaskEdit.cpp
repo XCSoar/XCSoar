@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Dialogs/dlgTaskHelpers.hpp"
 #include "Screen/Layout.hpp"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
@@ -45,13 +46,9 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
-
-#include "Dialogs/dlgTaskHelpers.hpp"
-
 #include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/TaskPoints/FinishPoint.hpp"
 #include "Task/Visitors/TaskVisitor.hpp"
-
 #include "RenderTask.hpp"
 #include "RenderTaskPoint.hpp"
 #include "RenderObservationZone.hpp"
@@ -61,13 +58,14 @@ Copyright_License {
 #include <assert.h>
 
 static SingleWindow *parent_window;
-static WndForm *wf=NULL;
-static WndFrame* wTaskView= NULL;
-static WndListFrame* wTaskPoints= NULL;
-static OrderedTask* ordered_task= NULL;
+static WndForm *wf = NULL;
+static WndFrame* wTaskView = NULL;
+static WndListFrame* wTaskPoints = NULL;
+static OrderedTask* ordered_task = NULL;
 static bool task_modified = false;
 
-static void OnCloseClicked(WindowControl * Sender)
+static void
+OnCloseClicked(WindowControl * Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrCancel);
@@ -76,11 +74,11 @@ static void OnCloseClicked(WindowControl * Sender)
 static void
 RefreshView()
 {
-  if (!ordered_task->is_max_size()) {
+  if (!ordered_task->is_max_size())
     wTaskPoints->SetLength(ordered_task->task_size()+1);
-  } else {
+  else
     wTaskPoints->SetLength(ordered_task->task_size());
-  }
+
   wTaskView->invalidate();
   wTaskPoints->invalidate();
 
@@ -92,23 +90,23 @@ RefreshView()
   }
 }
 
-
-static void OnPropertiesClicked(WindowControl * Sender)
+static void
+OnPropertiesClicked(WindowControl * Sender)
 {
   (void)Sender;
   task_modified |= dlgTaskPropertiesShowModal(*parent_window, &ordered_task);
   RefreshView();
 }
 
-static void OnNewClicked(WindowControl * Sender)
+static void
+OnNewClicked(WindowControl * Sender)
 {
   (void)Sender;
 
-  if ((ordered_task->task_size()<2) || 
+  if ((ordered_task->task_size() < 2) ||
       (MessageBoxX(gettext(_T("Clear task?")),
                    gettext(_T("Task edit")),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
-
     task_modified = true;
     ordered_task->clear();
     dlgTaskTypeShowModal(*parent_window, &ordered_task);
@@ -136,35 +134,34 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
   RenderObservationZone ozv(helper);
   RenderTaskPoint tpv(helper, ozv, false, XCSoarInterface::Basic().Location);
   ::RenderTask dv(tpv);
-  ordered_task->CAccept(dv); 
+  ordered_task->CAccept(dv);
 }
-
 
 static void
 OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
   TCHAR sTmp[120];
-  if (DrawListIndex > ordered_task->task_size()) {
+  if (DrawListIndex > ordered_task->task_size())
     // error!
     return;
-  }
+
   if (DrawListIndex == ordered_task->task_size()) {
     if (!ordered_task->is_max_size()) {
       _stprintf(sTmp, _T("  (%s)"), gettext(_T("add waypoint")));
-      canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
-                  sTmp);
+      canvas.text(rc.left + Layout::FastScale(2),
+                  rc.top + Layout::FastScale(2), sTmp);
     }
   } else {
     OrderedTaskPointLabel(ordered_task, DrawListIndex, sTmp);
-    canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
-                sTmp);
+    canvas.text(rc.left + Layout::FastScale(2),
+                rc.top + Layout::FastScale(2), sTmp);
   }
 }
 
 static void
 OnTaskListEnter(unsigned ItemIndex)
 {
-  if (ItemIndex< ordered_task->task_size()) {
+  if (ItemIndex < ordered_task->task_size()) {
     if (dlgTaskPointShowModal(*parent_window, &ordered_task, ItemIndex)) {
       task_modified = true;
       RefreshView();
@@ -200,7 +197,7 @@ OnSaveClicked(WindowControl * Sender)
   }
 }
 
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnPropertiesClicked),
   DeclareCallBackEntry(OnNewClicked),
@@ -217,36 +214,29 @@ dlgTaskEditShowModal(SingleWindow &parent, OrderedTask** task)
   parent_window = &parent;
   task_modified = false;
 
-  wf = NULL;
-
-  if (Layout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgTaskEdit_L.xml"),
-                        parent,
-                        _T("IDR_XML_TASKEDIT_L"));
-  } else {
-    wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgTaskEdit.xml"),
-                        parent,
-                        _T("IDR_XML_TASKEDIT"));
-  }
+  if (Layout::landscape)
+    wf = dlgLoadFromXML(CallBackTable, _T("dlgTaskEdit_L.xml"),
+                        parent, _T("IDR_XML_TASKEDIT_L"));
+  else
+    wf = dlgLoadFromXML(CallBackTable, _T("dlgTaskEdit.xml"),
+                        parent, _T("IDR_XML_TASKEDIT"));
 
   wTaskPoints = (WndListFrame*)wf->FindByName(_T("frmTaskPoints"));
-  assert(wTaskPoints!=NULL);
+  assert(wTaskPoints != NULL);
 
   wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView"));
-  assert(wTaskView!=NULL);
+  assert(wTaskView != NULL);
 
   wTaskPoints->SetActivateCallback(OnTaskListEnter);
   wTaskPoints->SetPaintItemCallback(OnTaskPaintListItem);
 
   RefreshView();
 
-  if (!wf) return false;
-  assert(wf!=NULL);
+  if (!wf)
+    return false;
+  assert(wf != NULL);
   wf->ShowModal();
   delete wf;
-  wf = NULL;
 
   if (*task != ordered_task) {
     *task = ordered_task;
