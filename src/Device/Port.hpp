@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_PORT_HPP
 #define XCSOAR_DEVICE_PORT_HPP
 
+#include "FifoBuffer.hpp"
+
 #include <Thread/Thread.hpp>
 
 #include <windows.h>
@@ -115,8 +117,7 @@ private:
   TCHAR sPortName[64];
   bool CloseThread;
 
-  TCHAR BuildingString[NMEA_BUF_SIZE];
-  int bi;
+  FifoBuffer<TCHAR> buffer;
 };
 
 #endif

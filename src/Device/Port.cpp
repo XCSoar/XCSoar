@@ -81,7 +81,8 @@ ComPort::ComPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
    hPort(INVALID_HANDLE_VALUE),
    dwMask(0),
 #endif
-   CloseThread(false)
+   CloseThread(false),
+   buffer(NMEA_BUF_SIZE)
 {
   assert(path != NULL);
 
@@ -102,7 +103,7 @@ ComPort::Open()
   DWORD dwError;
   DCB PortDCB;
 
-  bi = 0;
+  buffer.clear();
 
   // Open the serial port.
   hPort = CreateFile(sPortName, // Pointer to the name of the port
@@ -615,19 +616,22 @@ ComPort::Read(void *Buffer, size_t Size)
 void
 ComPort::ProcessChar(char c)
 {
-  if (bi >= NMEA_BUF_SIZE - 1) {
+  FifoBuffer<TCHAR>::Range range = buffer.write();
+  if (range.second == 0) {
     // overflow, so reset buffer
-    bi = 0;
+    buffer.clear();
     return;
   }
 
-  BuildingString[bi++] = c;
+  if (c == '\n') {
+    range.first[0] = _T('\0');
+    buffer.append(1);
 
-  if (c != '\n')
-    return;
-
-  BuildingString[bi] = '\0';
-  bi = 0;
-
-  handler.LineReceived(BuildingString);
+    range = buffer.read();
+    handler.LineReceived(range.first);
+    buffer.clear();
+  } else {
+    range.first[0] = (TCHAR)c;
+    buffer.append(1);
+  }
 }
