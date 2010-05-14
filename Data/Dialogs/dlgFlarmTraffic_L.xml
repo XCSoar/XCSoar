@@ -9,5 +9,6 @@
   <WndButton Name="cmdClose" Caption="Close" X="3" Y="193" Width="58" Height="28" Font="2" />
   <WndOwnerDrawFrame Name="frmRadar" X="65" Y="5" Width="247" Height="214" Font="1" BackColor="0xFFFFFF" />
 
-  <WndButton Name="cmdSwitchData" Caption="Avg/Alt" X="3" Y="63" Width="58" Height="28" Font="2" />
+  <WndButton Name="cmdAutoZoom" Caption="A. Zoom" X="3" Y="3" Width="58" Height="28" Font="2" />
+  <WndButton Name="cmdSwitchData" Caption="Avg/Alt" X="3" Y="33" Width="58" Height="28" Font="2" />
 </WndForm>

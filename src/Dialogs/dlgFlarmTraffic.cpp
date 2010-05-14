@@ -71,6 +71,7 @@ static int warning = -1;
 static POINT radar_mid;
 static SIZE radar_size;
 static int side_display_type = 1;
+static bool enable_auto_zoom = true;
 static POINT sc[FLARM_STATE::FLARM_MAX_TRAFFIC];
 
 static bool
@@ -236,6 +237,42 @@ UpdateWarnings()
     warning = -1;
 }
 
+static void
+SetAutoZoom(bool enabled)
+{
+  enable_auto_zoom = enabled;
+  Profile::Set(szProfileFlarmAutoZoom, enabled);
+  ((WndButton *)wf->FindByName(_T("cmdAutoZoom")))->
+      SetForeColor(enable_auto_zoom ? Color::BLUE : Color::BLACK);
+}
+
+static void
+CalcAutoZoom()
+{
+  bool warning_mode = WarningMode();
+  double zoom_dist = 0;
+
+  for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
+    if (warning_mode
+        && !XCSoarInterface::Basic().flarm.FLARM_Traffic[i].HasAlarm())
+      continue;
+
+    double dist = XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeNorth
+                * XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeNorth
+                + XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeEast
+                * XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeEast;
+
+    zoom_dist = max(dist, zoom_dist);
+  }
+
+  for (unsigned i = 0; i <= 4; i++) {
+    if (i == 4 || (GetZoomDistance(i) * GetZoomDistance(i)) >= zoom_dist) {
+      zoom = i;
+      break;
+    }
+  }
+}
+
 /**
  * This should be called when the radar needs to be repainted
  */
@@ -244,6 +281,10 @@ Update()
 {
   UpdateSelector();
   UpdateWarnings();
+
+  if (enable_auto_zoom)
+    CalcAutoZoom();
+
   wdf->invalidate();
 }
 
@@ -256,6 +297,7 @@ ZoomOut()
   if (zoom < 4)
     zoom++;
 
+  SetAutoZoom(false);
   Update();
 }
 
@@ -268,6 +310,7 @@ ZoomIn()
   if (zoom > 0)
     zoom--;
 
+  SetAutoZoom(false);
   Update();
 }
 
@@ -358,6 +401,15 @@ OnSwitchDataClicked(gcc_unused WndButton &button)
     side_display_type = 1;
 
   Profile::Set(szProfileFlarmSideData, side_display_type);
+}
+
+/**
+ * This event handler is called when the "AutoZoom" button is pressed
+ */
+static void
+OnAutoZoomClicked(gcc_unused WndButton &button)
+{
+  SetAutoZoom(!enable_auto_zoom);
 }
 
 /**
@@ -856,12 +908,17 @@ dlgFlarmTrafficShowModal()
       SetOnClickNotify(OnCloseClicked);
   ((WndButton *)wf->FindByName(_T("cmdSwitchData")))->
       SetOnClickNotify(OnSwitchDataClicked);
+  ((WndButton *)wf->FindByName(_T("cmdAutoZoom")))->
+      SetOnClickNotify(OnAutoZoomClicked);
 
   // Update Radar and Selection for the first time
   Update();
 
   // Get the last chosen Side Data configuration
   Profile::Get(szProfileFlarmSideData, side_display_type);
+  Profile::Get(szProfileFlarmAutoZoom, enable_auto_zoom);
+  ((WndButton *)wf->FindByName(_T("cmdAutoZoom")))->
+      SetForeColor(enable_auto_zoom ? Color::BLUE : Color::BLACK);
 
   // Show the dialog
   wf->ShowModal();
