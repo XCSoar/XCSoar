@@ -708,19 +708,24 @@ static void InfoBoxPropName(TCHAR *name, int item, int mode) {
   _stprintf(name, _T("prpInfoBox%s%1d"), info_box_mode_names[mode], item);
 }
 
+static WndProperty *
+FindInfoBoxField(int mode, int item)
+{
+  TCHAR name[80];
+  InfoBoxPropName(name, item, mode);
+  return (WndProperty*)wf->FindByName(name);
+}
+
 static void
 OnCopy(gcc_unused WndButton &button)
 {
   int mode = page2mode();
-  TCHAR name[80];
   if ((mode<0)||(mode>3)) {
     return;
   }
 
   for (unsigned item = 0; item < numInfoWindows; item++) {
-    InfoBoxPropName(name, item, mode);
-    WndProperty *wp;
-    wp = (WndProperty*)wf->FindByName(name);
+    WndProperty *wp = FindInfoBoxField(mode, item);
     if (wp) {
       cpyInfoBox[item] = wp->GetDataField()->GetAsInteger();
     }
@@ -731,7 +736,6 @@ static void
 OnPaste(gcc_unused WndButton &button)
 {
   int mode = page2mode();
-  TCHAR name[80];
   if ((mode<0)||(mode>3)||(cpyInfoBox[0]<0)) {
     return;
   }
@@ -742,9 +746,7 @@ OnPaste(gcc_unused WndButton &button)
     return;
 
   for (unsigned item = 0; item < numInfoWindows; item++) {
-    InfoBoxPropName(name, item, mode);
-    WndProperty *wp;
-    wp = (WndProperty*)wf->FindByName(name);
+    WndProperty *wp = FindInfoBoxField(mode, item);
     if (wp && (cpyInfoBox[item] >=0 ) &&
         ((unsigned)cpyInfoBox[item] < NUMSELECTSTRINGS)) {
       wp->GetDataField()->Set(cpyInfoBox[item]);
