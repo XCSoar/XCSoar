@@ -90,13 +90,13 @@ public:
 #endif
   }
 
-  void load(const TCHAR *name);
+  bool load(const TCHAR *name);
 
 #ifdef ENABLE_SDL
-  void load(unsigned id);
+  bool load(unsigned id);
 #else
-  void load(unsigned id) {
-    load(MAKEINTRESOURCE(id));
+  bool load(unsigned id) {
+    return load(MAKEINTRESOURCE(id));
   }
 #endif
 

@@ -69,7 +69,7 @@ Bitmap::~Bitmap()
   reset();
 }
 
-void
+bool
 Bitmap::load(const TCHAR *name)
 {
   reset();
@@ -78,23 +78,23 @@ Bitmap::load(const TCHAR *name)
 #ifdef WIN32
   HRSRC resource = FindResource(CommonInterface::hInst, name, RT_BITMAP);
   if (resource == NULL)
-    return;
+    return false;
 
   DWORD size = ::SizeofResource(CommonInterface::hInst, resource);
   if (size == 0)
-    return;
+    return false;
 
   HGLOBAL handle = ::LoadResource(CommonInterface::hInst, resource);
   if (handle == NULL)
-    return;
+    return false;
 
   LPVOID data = ::LockResource(handle);
   if (data == NULL)
-    return;
+    return false;
 
   const BITMAPINFO *info = (const BITMAPINFO *)data;
   if (size < sizeof(*info))
-    return;
+    return false;
 
   int pitch = (((info->bmiHeader.biWidth * info->bmiHeader.biBitCount) / 8 - 1) | 3) + 1;
   int data_size = pitch * info->bmiHeader.biHeight;
@@ -104,7 +104,7 @@ Bitmap::load(const TCHAR *name)
   BITMAPFILEHEADER *header = (BITMAPFILEHEADER *)malloc(sizeof(*header) + size);
   if (header == NULL)
     /* out of memory */
-    return;
+    return false;
 
   /* byte order?  this constant is correct according to MSDN */
   header->bfType = 0x4D42;
@@ -118,16 +118,20 @@ Bitmap::load(const TCHAR *name)
   surface = SDL_LoadBMP_RW(rw, 1);
   SDL_FreeRW(rw);
   free(header);
+
+  return true;
 #else
   surface = ::SDL_LoadBMP(name);
+  return surface != NULL;
 #endif
 #else /* !ENABLE_SDL */
   bitmap = LoadBitmap(XCSoarInterface::hInst, name);
+  return bitmap != NULL;
 #endif /* !ENABLE_SDL */
 }
 
 #ifdef ENABLE_SDL
-void
+bool
 Bitmap::load(unsigned id)
 {
   // XXX
@@ -136,7 +140,7 @@ Bitmap::load(unsigned id)
   TCHAR name[10];
 
   _stprintf(name, _T("%u"), (unsigned)id);
-  load(name);
+  return load(name);
 #else
   TCHAR name[32];
 
@@ -145,7 +149,8 @@ Bitmap::load(unsigned id)
 
   TCHAR path[MAX_PATH];
   LocalPath(path, name);
-  load(path);
+
+  return load(path);
 #endif
 }
 #endif /* !ENABLE_SDL */
