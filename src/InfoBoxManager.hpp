@@ -95,6 +95,9 @@ public:
   static int getTypeAll(unsigned i);
   static void setTypeAll(unsigned i, unsigned j);
 
+  static bool IsEmpty(unsigned mode);
+  static bool IsEmpty();
+
   static bool IsFocus();
   //
 };

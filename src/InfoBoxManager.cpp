@@ -726,6 +726,26 @@ InfoBoxManager::getType(unsigned i)
   return min(NUMSELECTSTRINGS - 1, retval);
 }
 
+bool
+InfoBoxManager::IsEmpty(unsigned mode)
+{
+  for (unsigned i = 0; i < MAXINFOWINDOWS; ++i)
+    if (InfoBoxManager::getType(i, mode) != 0)
+      return false;
+
+  return true;
+}
+
+bool
+InfoBoxManager::IsEmpty()
+{
+  for (unsigned i = 0; i < MAXINFOWINDOWS; ++i)
+    if (InfoBoxManager::getTypeAll(i) != 0)
+      return false;
+
+  return true;
+}
+
 void
 InfoBoxManager::setType(unsigned i, char j, unsigned layer)
 {
