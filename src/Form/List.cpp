@@ -310,7 +310,7 @@ WndListFrame::on_mouse_up(int x, int y)
 }
 
 void
-WndListFrame::SelectItemFromScreen(int y)
+WndListFrame::SelectItemFromScreen(int y, bool use_callback)
 {
   // If mouse was clicked above the list items -> cancel
   if (y < 0)
@@ -324,7 +324,7 @@ WndListFrame::SelectItemFromScreen(int y)
   if (index == GetCursorIndex()) {
     // If item was already selected
     // -> call event handler
-    if (ActivateCallback != NULL)
+    if (use_callback && ActivateCallback != NULL)
       ActivateCallback(index);
 
     // -> and redraw
@@ -366,7 +366,8 @@ WndListFrame::on_mouse_down(int x, int y)
   Pos.y = y;
 
   // If possible -> Give focus to the Control
-  if (!has_focus())
+  bool had_focus = has_focus();
+  if (!had_focus)
     set_focus();
 
   if (scroll_bar.in_slider(Pos)) {
@@ -393,7 +394,7 @@ WndListFrame::on_mouse_down(int x, int y)
   } else {
     // if click in ListBox area
     // -> select appropriate item
-    SelectItemFromScreen(Pos.y);
+    SelectItemFromScreen(Pos.y, had_focus);
   }
 
   return false;
