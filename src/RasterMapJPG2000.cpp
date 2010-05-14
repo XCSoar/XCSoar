@@ -82,7 +82,6 @@ RasterMapJPG2000::RasterMapJPG2000() {
   TriggerJPGReload = false;
   jp2_filename[0] = '\0';
   DirectAccess = true;
-  Paged = true;
   if (ref_count==0) {
     jas_init();
   }
@@ -169,12 +168,9 @@ RasterMapJPG2000::Open(const char *zfilename)
   _ReloadJPG2000();
 
   terrain_valid = raster_tile_cache.GetInitialised();
-  if (!terrain_valid) {
+  if (!terrain_valid)
     raster_tile_cache.Reset();
-    max_field_value = 0;
-  } else {
-    max_field_value = raster_tile_cache.GetMaxElevation();
-  }
+
   return terrain_valid;
 }
 

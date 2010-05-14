@@ -63,9 +63,7 @@ class RasterMap {
  public:
   RasterMap():
     terrain_valid(false),
-    max_field_value(0),
-    DirectAccess(false),
-    Paged(false)
+    DirectAccess(false)
     {}
   virtual ~RasterMap() {};
 
@@ -73,7 +71,6 @@ class RasterMap {
     return terrain_valid;
   }
 
-  short max_field_value;
   TERRAIN_INFO TerrainInfo;
 
   virtual void SetViewCenter(const GEOPOINT &location) {};
@@ -97,10 +94,6 @@ class RasterMap {
     return DirectAccess;
   };
 
-  bool IsPaged(void) const {
-    return Paged;
-  };
-
   // export methods to global, take care!
   virtual void LockRead();
   virtual void Unlock();
@@ -109,7 +102,6 @@ class RasterMap {
   Poco::RWLock lock;
 
   bool terrain_valid;
-  bool Paged;
 
   bool DirectAccess;
 

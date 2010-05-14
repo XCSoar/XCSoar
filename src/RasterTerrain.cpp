@@ -117,15 +117,6 @@ bool RasterTerrain::IsDirectAccess(void) const {
   }
 }
 
-bool RasterTerrain::IsPaged(void) const {
-  if (TerrainMap) {
-    return TerrainMap->IsPaged();
-  } else {
-    return false;
-  }
-}
-
-
 void RasterTerrain::ServiceCache(void) {
   if (TerrainMap) {
     TerrainMap->ServiceCache();

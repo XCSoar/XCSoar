@@ -97,7 +97,6 @@ public:
   short GetTerrainHeight(const GEOPOINT &location,
                          const RasterRounding &rounding) const;
   bool IsDirectAccess(void) const;
-  bool IsPaged(void) const;
   void ServiceCache();
   void ServiceTerrainCenter(const GEOPOINT &location);
   void ServiceFullReload(const GEOPOINT &location);
