@@ -79,6 +79,10 @@ protected:
   }
 
 public:
+  void clear() {
+    head = tail = 0;
+  }
+
   /**
    * Prepares writing.  Returns a buffer range which may be written.
    * When you are finished, call append().
