@@ -199,21 +199,11 @@ PageSwitched()
 
   wf->SetCaption(gettext(captions[config_page]));
 
-  if ((config_page>=14) && (config_page<=17)) {
-    if (buttonCopy) {
-      buttonCopy->show();
-    }
-    if (buttonPaste) {
-      buttonPaste->show();
-    }
-  } else {
-    if (buttonCopy) {
-      buttonCopy->hide();
-    }
-    if (buttonPaste) {
-      buttonPaste->hide();
-    }
-  }
+  if (buttonCopy != NULL)
+    buttonCopy->set_visible(config_page >= 14 && config_page <= 17);
+
+  if (buttonPaste != NULL)
+    buttonPaste->set_visible(config_page >= 14 && config_page <= 17);
 }
 
 static void
