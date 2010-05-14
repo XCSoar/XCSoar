@@ -539,7 +539,7 @@ PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
   }
 
   // Rotate x and y to have a track up display
-  Angle DisplayAngle = Angle()-XCSoarInterface::Basic().TrackBearing;
+  Angle DisplayAngle = -XCSoarInterface::Basic().TrackBearing;
   // or use .Heading? (no, because heading is not reliable)
   const FastRotation r(DisplayAngle);
   FastRotation::Pair p = r.Rotate(x, y);
