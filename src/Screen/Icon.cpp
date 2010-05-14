@@ -44,19 +44,18 @@ Copyright_License {
 void
 MaskedIcon::load(unsigned id, bool center)
 {
-  bitmap.load(id);
+  if (Layout::ScaleSupported())
+    bitmap.load_stretch(id, Layout::FastScale(1));
+  else
+    bitmap.load(id);
 
   size = bitmap.get_size();
   /* left half is mask, right half is icon */
   size.cx /= 2;
 
-  SIZE screen_size;
-  screen_size.cx = Layout::FastScale(size.cx);
-  screen_size.cy = Layout::FastScale(size.cy);
-
   if (center) {
-    origin.x = screen_size.cx / 2;
-    origin.y = screen_size.cy / 2;
+    origin.x = size.cx / 2;
+    origin.y = size.cy / 2;
   } else
     origin.x = origin.y = 0;
 }
@@ -68,6 +67,8 @@ MaskedIcon::draw(Canvas &canvas, BitmapCanvas &bitmap_canvas, int x, int y) cons
   bitmap_canvas.set_text_color(Color::WHITE);
   bitmap_canvas.select(bitmap);
 
-  canvas.scale_or_and(x - origin.x, y - origin.y,
-                      bitmap_canvas, size.cx, size.cy);
+  canvas.copy_or(x - origin.x, y - origin.y, size.cx, size.cy,
+                 bitmap_canvas, 0, 0);
+  canvas.copy_and(x - origin.x, y - origin.y, size.cx, size.cy,
+                  bitmap_canvas, size.cx, 0);
 }
