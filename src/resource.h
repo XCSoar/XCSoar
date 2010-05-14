@@ -6,7 +6,9 @@
 #define IDI_XCSOAR                      101
 #define IDD_PROGRESS                    104
 #define IDB_LANDABLE                    139
+#define IDB_LANDABLE_BIG 400
 #define IDB_REACHABLE                   140
+#define IDB_REACHABLE_BIG 401
 #define IDB_TURNPOINT                   141
 #define IDB_SMALL                       142
 #define IDB_CRUISE                      212

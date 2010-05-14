@@ -269,10 +269,10 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
   TurnPointIcon.load(IDB_TURNPOINT);
 
   if (Appearance.IndLandable == wpLandableDefault) {
-    AirportReachableIcon.load(IDB_REACHABLE);
-    AirportUnreachableIcon.load(IDB_LANDABLE);
-    FieldReachableIcon.load(IDB_REACHABLE);
-    FieldUnreachableIcon.load(IDB_LANDABLE);
+    AirportReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_BIG);
+    AirportUnreachableIcon.load_big(IDB_LANDABLE, IDB_LANDABLE_BIG);
+    FieldReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_BIG);
+    FieldUnreachableIcon.load_big(IDB_LANDABLE, IDB_LANDABLE_BIG);
   } else if (Appearance.IndLandable == wpLandableAltA) {
     AirportReachableIcon.load(IDB_AIRPORT_REACHABLE);
     AirportUnreachableIcon.load(IDB_AIRPORT_UNREACHABLE);
