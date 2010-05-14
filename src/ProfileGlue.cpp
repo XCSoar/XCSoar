@@ -100,8 +100,6 @@ CheckInfoTypes()
       InfoBoxManager::setType(i, InfoBoxManager::getType(i, 1), 2);
     if (iszero_aux)
       InfoBoxManager::setType(i, InfoBoxManager::getType(i, 1), 3);
-
-    Profile::SetInfoBoxes(i, InfoBoxManager::getTypeAll(i));
   }
 }
 
