@@ -36,7 +36,6 @@ Copyright_License {
 }
 */
 
-
 #include "Dialogs/Internal.hpp"
 #include "TaskClientUI.hpp"
 #include "SettingsComputer.hpp"
@@ -152,7 +151,6 @@ static void
 Update(void)
 {
   TCHAR sTmp[1000];
-  //  WndProperty *wp;
 
   FlightStatistics &fs = glide_computer.GetFlightStats();
   GlidePolar polar = task_ui.get_glide_polar();
@@ -315,38 +313,37 @@ static void
 OnCalcClicked(WindowControl *Sender)
 {
   (void)Sender;
-  if (page == ANALYSIS_PAGE_BAROGRAPH) {
+  if (page == ANALYSIS_PAGE_BAROGRAPH)
     dlgBasicSettingsShowModal();
-  }
+
   if (page == ANALYSIS_PAGE_CLIMB) {
     wf->hide();
     dlgTaskCalculatorShowModal(XCSoarInterface::main_window);
     wf->show();
   }
-  if (page == ANALYSIS_PAGE_WIND) {
+
+  if (page == ANALYSIS_PAGE_WIND)
     dlgWindSettingsShowModal();
-  }
-  if (page == ANALYSIS_PAGE_POLAR) {
+
+  if (page == ANALYSIS_PAGE_POLAR)
     dlgBasicSettingsShowModal();
-  }
-  if (page == ANALYSIS_PAGE_TEMPTRACE) {
+
+  if (page == ANALYSIS_PAGE_TEMPTRACE)
     dlgBasicSettingsShowModal();
-  }
+
   if ((page == ANALYSIS_PAGE_TASK) || (page == ANALYSIS_PAGE_TASK_SPEED)) {
     wf->hide();
     dlgTaskCalculatorShowModal(XCSoarInterface::main_window);
     wf->show();
   }
-  if (page == ANALYSIS_PAGE_OLC) {
-    // nothing to do!
-  }
-  if (page == ANALYSIS_PAGE_AIRSPACE) {
+
+  if (page == ANALYSIS_PAGE_AIRSPACE)
     airspaceWarningEvent.trigger();
-  }
+
   Update();
 }
 
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnAnalysisPaint),
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
@@ -357,7 +354,6 @@ static CallBackTableEntry_t CallBackTable[]={
 void
 dlgAnalysisShowModal(void)
 {
-
   wf = NULL;
   wGrid = NULL;
   wInfo = NULL;
@@ -377,7 +373,7 @@ dlgAnalysisShowModal(void)
 
   wGrid = (WndOwnerDrawFrame*)wf->FindByName(_T("frmGrid"));
   wInfo = (WndFrame *)wf->FindByName(_T("frmInfo"));
-  wCalc = ((WndButton *)wf->FindByName(_T("cmdCalc")));
+  wCalc = (WndButton *)wf->FindByName(_T("cmdCalc"));
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->
       SetOnClickNotify(OnCloseClicked);
@@ -387,5 +383,4 @@ dlgAnalysisShowModal(void)
   wf->ShowModal();
 
   delete wf;
-  wf = NULL;
 }
