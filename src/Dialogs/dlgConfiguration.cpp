@@ -987,6 +987,18 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
+/**
+ * Convert a page number mode returned by page2mode() to a
+ * InfoBoxManager mode number.
+ */
+static unsigned
+page_mode_to_ibm_mode(unsigned page_mode)
+{
+  static const unsigned table[] = { 1, 0, 2, 3 };
+
+  assert(page_mode < sizeof(table) / sizeof(table[0]));
+  return table[page_mode];
+}
 
 
 static void SetInfoBoxSelector(unsigned item, int mode)
@@ -1002,23 +1014,7 @@ static void SetInfoBoxSelector(unsigned item, int mode)
   }
   dfe->Sort(0);
 
-  int it=0;
-
-  switch(mode) {
-  case 0: // cruise
-    it = InfoBoxManager::getType(item, 1);
-    break;
-  case 1: // climb
-    it = InfoBoxManager::getType(item, 0);
-    break;
-  case 2: // final glide
-    it = InfoBoxManager::getType(item, 2);
-    break;
-  case 3: // aux
-    it = InfoBoxManager::getType(item, 3);
-    break;
-  };
-  dfe->Set(it);
+  dfe->Set(InfoBoxManager::getType(item, page_mode_to_ibm_mode(mode)));
   wp->RefreshDisplay();
 }
 
@@ -1029,42 +1025,13 @@ static void GetInfoBoxSelector(unsigned item, int mode)
     return;
 
   int itnew = wp->GetDataField()->GetAsInteger();
-  int it=0;
-
-  switch(mode) {
-  case 0: // cruise
-    it = InfoBoxManager::getType(item, 1);
-    break;
-  case 1: // climb
-    it = InfoBoxManager::getType(item, 0);
-    break;
-  case 2: // final glide
-    it = InfoBoxManager::getType(item, 2);
-    break;
-  case 3: // aux
-    it = InfoBoxManager::getType(item, 3);
-    break;
-  };
+  int it = InfoBoxManager::getType(item, page_mode_to_ibm_mode(mode));
 
   if (it == itnew)
     return;
 
   changed = true;
-
-  switch(mode) {
-  case 0: // cruise
-    InfoBoxManager::setType(item, itnew, 1);
-    break;
-  case 1: // climb
-    InfoBoxManager::setType(item, itnew, 0);
-    break;
-  case 2: // final glide
-    InfoBoxManager::setType(item, itnew, 2);
-    break;
-  case 3: // aux
-    InfoBoxManager::setType(item, itnew, 3);
-    break;
-  };
+  InfoBoxManager::setType(item, itnew, page_mode_to_ibm_mode(mode));
   Profile::SetInfoBoxes(item, InfoBoxManager::getTypeAll(item));
 }
 
