@@ -12,20 +12,22 @@ $(PNG_ICONS_20): output/data/icons/%-20.png: Data/icons/%.svg | output/data/icon
 	@$(NQ)echo "  SVG     $@"
 	$(Q)rsvg-convert --width=20 $< -o $@
 
-$(BMP_ICONS_20): %.bmp: %.png
-	@$(NQ)echo "  BMP     $@"
 # extract alpha channel
-	$(Q)$(IM_PREFIX)convert $< -alpha Extract +matte +dither -colors 8 $<.tmp1.png
+%-alpha.png: %.png
+	$(Q)$(IM_PREFIX)convert $< -alpha Extract +matte +dither -colors 8 $@
+
 # extract RGB channels
-	$(Q)$(IM_PREFIX)convert $< -background white -flatten +matte +dither -colors 64 $<.tmp2.png
+%-rgb.png: %.png
+	$(Q)$(IM_PREFIX)convert $< -background white -flatten +matte +dither -colors 64 $@
+
 # tile both images
-	$(Q)$(IM_PREFIX)montage -tile 2x1 -geometry +0+0 $<.tmp1.png $<.tmp2.png -depth 8 $<.tmp3.png
+%-tile.png: %-alpha.png %-rgb.png
+	$(Q)$(IM_PREFIX)montage -tile 2x1 -geometry +0+0 $^ -depth 8 $@
+
 # convert to 8-bit BMP
-	$(Q)$(IM_PREFIX)convert $<.tmp3.png +dither -colors 256 $@
-# remove temporary images
-	$(Q)rm $<.tmp1.png
-	$(Q)rm $<.tmp2.png
-	$(Q)rm $<.tmp3.png
+$(BMP_ICONS_20): %.bmp: %-tile.png
+	@$(NQ)echo "  BMP     $@"
+	$(Q)$(IM_PREFIX)convert $< +dither -colors 256 $@
 
 ifeq ($(HAVE_WIN32),y)
 
