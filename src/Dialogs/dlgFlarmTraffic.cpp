@@ -503,13 +503,8 @@ PaintRadarNoTraffic(Canvas &canvas) {
  * @param canvas The canvas to paint on
  */
 static void
-PaintRadarTraffic(Canvas &canvas) {
-  if (!XCSoarInterface::Basic().flarm.FLARM_Available ||
-      XCSoarInterface::Basic().flarm.GetActiveTrafficCount() == 0) {
-    PaintRadarNoTraffic(canvas);
-    return;
-  }
-
+PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
+{
   static const Brush hbWarning(hcWarning);
   static const Brush hbAlarm(hcAlarm);
   static const Brush hbStandard(hcStandard);
@@ -523,6 +518,151 @@ PaintRadarTraffic(Canvas &canvas) {
   static const Pen hpPassive(Layout::FastScale(2), hcPassive);
   static const Pen hpSelection(Layout::FastScale(2), hcSelection);
 
+  // Save relative East/North
+  double x, y;
+  x = traffic.RelativeEast;
+  y = -traffic.RelativeNorth;
+
+  // Calculate the distance in meters
+  double d = sqrt(x * x + y * y);
+
+  // Calculate the distance in pixels
+  double scale = RangeScale(d);
+
+  // x and y are not between 0 and 1 (distance will be handled via scale)
+  if (d > 0) {
+    x /= d;
+    y /= d;
+  } else {
+    x = 0;
+    y = 0;
+  }
+
+  // Rotate x and y to have a track up display
+  Angle DisplayAngle = Angle()-XCSoarInterface::Basic().TrackBearing;
+  // or use .Heading? (no, because heading is not reliable)
+  const FastRotation r(DisplayAngle);
+  FastRotation::Pair p = r.Rotate(x, y);
+  x = p.first;
+  y = p.second;
+
+  // Calculate screen coordinates
+  POINT sc;
+  sc.x = radar_mid.x + iround(x * scale);
+  sc.y = radar_mid.y + iround(y * scale);
+
+  // Set the arrow color depending on alarm level
+  switch (traffic.AlarmLevel) {
+  case 1:
+    canvas.hollow_brush();
+    canvas.select(hpWarning);
+    canvas.circle(sc.x, sc.y, Layout::FastScale(16));
+    canvas.select(hbWarning);
+    break;
+  case 2:
+  case 3:
+    canvas.hollow_brush();
+    canvas.select(hpAlarm);
+    canvas.circle(sc.x, sc.y, Layout::FastScale(16));
+    canvas.circle(sc.x, sc.y, Layout::FastScale(19));
+    canvas.select(hbAlarm);
+    break;
+  case 0:
+  case 4:
+    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].defined()) {
+      canvas.select(hbPassive);
+      canvas.select(hpPassive);
+    } else {
+      if (static_cast<unsigned> (selection) == i) {
+        canvas.select(hpSelection);
+        canvas.select(hbSelection);
+      } else {
+        canvas.select(hbStandard);
+        canvas.select(hpStandard);
+      }
+      if (XCSoarInterface::SettingsComputer().TeamFlarmTracking &&
+          traffic.ID == XCSoarInterface::SettingsComputer().TeamFlarmIdTarget) {
+        canvas.select(hbTeam);
+      }
+    }
+    break;
+  }
+
+  // Create an arrow polygon
+  POINT Arrow[5];
+  Arrow[0].x = -6;
+  Arrow[0].y = 8;
+  Arrow[1].x = 0;
+  Arrow[1].y = -10;
+  Arrow[2].x = 6;
+  Arrow[2].y = 8;
+  Arrow[3].x = 0;
+  Arrow[3].y = 5;
+  Arrow[4].x = -6;
+  Arrow[4].y = 8;
+
+  // Rotate and shift the arrow
+  PolygonRotateShift(Arrow, 5, sc.x, sc.y,
+                     traffic.TrackBearing + DisplayAngle);
+
+  // Draw the polygon
+  canvas.polygon(Arrow, 5);
+
+  // if warning exists -> don't draw vertical speeds
+  if (warning >= 0)
+    return;
+
+#ifdef FLARM_AVERAGE
+  if (side_display_type == 1) {
+    // if vertical speed to small or negative -> skip this one
+    if (traffic.Average30s < 0.5)
+      return;
+
+    // Select font and color
+    canvas.background_transparent();
+    canvas.select(MapWindowBoldFont);
+    if (static_cast<unsigned> (selection) == i)
+      canvas.set_text_color(hcSelection);
+    else
+      canvas.set_text_color(hcStandard);
+
+    // Draw vertical speed
+    TCHAR tmp[10];
+    Units::FormatUserVSpeed(traffic.Average30s, tmp, 10, false);
+    SIZE sz = canvas.text_size(tmp);
+    canvas.text(sc.x + Layout::FastScale(11), sc.y - sz.cy * 0.5, tmp);
+  } else if (side_display_type == 2) {
+#endif
+    // Select font and color
+    canvas.background_transparent();
+    canvas.select(MapWindowBoldFont);
+    if (static_cast<unsigned> (selection) == i)
+      canvas.set_text_color(hcSelection);
+    else
+      canvas.set_text_color(hcStandard);
+
+    // Draw vertical speed
+    TCHAR tmp[10];
+    Units::FormatUserArrival(traffic.RelativeAltitude, tmp, 10, true);
+    SIZE sz = canvas.text_size(tmp);
+    canvas.text(sc.x + Layout::FastScale(11), sc.y - sz.cy * 0.5, tmp);
+#ifdef FLARM_AVERAGE
+  }
+#endif
+}
+
+/**
+ * Paints the traffic symbols on the given canvas
+ * @param canvas The canvas to paint on
+ */
+static void
+PaintRadarTraffic(Canvas &canvas) {
+  if (!XCSoarInterface::Basic().flarm.FLARM_Available ||
+      XCSoarInterface::Basic().flarm.GetActiveTrafficCount() == 0) {
+    PaintRadarNoTraffic(canvas);
+    return;
+  }
+
   // Iterate through the traffic
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
     const FLARM_TRAFFIC &traffic =
@@ -532,137 +672,7 @@ PaintRadarTraffic(Canvas &canvas) {
     if (!traffic.defined())
       continue;
 
-    // Save relative East/North
-    double x, y;
-    x = traffic.RelativeEast;
-    y = -traffic.RelativeNorth;
-
-    // Calculate the distance in meters
-    double d = sqrt(x * x + y * y);
-
-    // Calculate the distance in pixels
-    double scale = RangeScale(d);
-
-    // x and y are not between 0 and 1 (distance will be handled via scale)
-    if (d > 0) {
-      x /= d;
-      y /= d;
-    } else {
-      x = 0;
-      y = 0;
-    }
-
-    // Rotate x and y to have a track up display
-    Angle DisplayAngle = Angle()-XCSoarInterface::Basic().TrackBearing;
-    // or use .Heading? (no, because heading is not reliable)
-    const FastRotation r(DisplayAngle);
-    FastRotation::Pair p = r.Rotate(x, y);
-    x = p.first;
-    y = p.second;
-
-    // Calculate screen coordinates
-    POINT sc;
-    sc.x = radar_mid.x + iround(x * scale);
-    sc.y = radar_mid.y + iround(y * scale);
-
-    // Set the arrow color depending on alarm level
-    switch (traffic.AlarmLevel) {
-    case 1:
-      canvas.hollow_brush();
-      canvas.select(hpWarning);
-      canvas.circle(sc.x, sc.y, Layout::FastScale(16));
-      canvas.select(hbWarning);
-      break;
-    case 2:
-    case 3:
-      canvas.hollow_brush();
-      canvas.select(hpAlarm);
-      canvas.circle(sc.x, sc.y, Layout::FastScale(16));
-      canvas.circle(sc.x, sc.y, Layout::FastScale(19));
-      canvas.select(hbAlarm);
-      break;
-    case 0:
-    case 4:
-      if (XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].defined()) {
-        canvas.select(hbPassive);
-        canvas.select(hpPassive);
-      } else {
-        if (static_cast<unsigned> (selection) == i) {
-          canvas.select(hpSelection);
-          canvas.select(hbSelection);
-        } else {
-          canvas.select(hbStandard);
-          canvas.select(hpStandard);
-        }
-        if (XCSoarInterface::SettingsComputer().TeamFlarmTracking &&
-            traffic.ID == XCSoarInterface::SettingsComputer().TeamFlarmIdTarget) {
-          canvas.select(hbTeam);
-        }
-      }
-      break;
-    }
-
-    // Create an arrow polygon
-    POINT Arrow[5];
-    Arrow[0].x = -6;
-    Arrow[0].y = 8;
-    Arrow[1].x = 0;
-    Arrow[1].y = -10;
-    Arrow[2].x = 6;
-    Arrow[2].y = 8;
-    Arrow[3].x = 0;
-    Arrow[3].y = 5;
-    Arrow[4].x = -6;
-    Arrow[4].y = 8;
-
-    // Rotate and shift the arrow
-    PolygonRotateShift(Arrow, 5, sc.x, sc.y,
-                       traffic.TrackBearing + DisplayAngle);
-
-    // Draw the polygon
-    canvas.polygon(Arrow, 5);
-
-    // if warning exists -> don't draw vertical speeds
-    if (warning >= 0)
-      continue;
-
-#ifdef FLARM_AVERAGE
-    if (side_display_type == 1) {
-      // if vertical speed to small or negative -> skip this one
-      if (traffic.Average30s < 0.5)
-        continue;
-
-      // Select font and color
-      canvas.background_transparent();
-      canvas.select(MapWindowBoldFont);
-      if (static_cast<unsigned> (selection) == i)
-        canvas.set_text_color(hcSelection);
-      else
-        canvas.set_text_color(hcStandard);
-
-      // Draw vertical speed
-      TCHAR tmp[10];
-      Units::FormatUserVSpeed(traffic.Average30s, tmp, 10, false);
-      SIZE sz = canvas.text_size(tmp);
-      canvas.text(sc.x + Layout::FastScale(11), sc.y - sz.cy * 0.5, tmp);
-    } else if (side_display_type == 2) {
-#endif
-      // Select font and color
-      canvas.background_transparent();
-      canvas.select(MapWindowBoldFont);
-      if (static_cast<unsigned> (selection) == i)
-        canvas.set_text_color(hcSelection);
-      else
-        canvas.set_text_color(hcStandard);
-
-      // Draw vertical speed
-      TCHAR tmp[10];
-      Units::FormatUserArrival(traffic.RelativeAltitude, tmp, 10, true);
-      SIZE sz = canvas.text_size(tmp);
-      canvas.text(sc.x + Layout::FastScale(11), sc.y - sz.cy * 0.5, tmp);
-#ifdef FLARM_AVERAGE
-    }
-#endif
+    PaintRadarTarget(canvas, traffic, i);
   }
 }
 
