@@ -218,29 +218,18 @@ Update(void)
 
     TCHAR timetext1[100];
     Units::TimeToText(timetext1, (int)stats.time_olc);
-    if (Layout::landscape) {
-      _stprintf(sTmp,
-                _T("%s:\r\n  %d %s\r\n%s: %s\r\n%s: %d %s\r\n"),
-                gettext(_T("Distance")),
-                (int)Units::ToUserUnit(stats.distance_olc, Units::DistanceUnit),
-                Units::GetDistanceName(),
-                gettext(_T("Time")),
-                timetext1,
-                gettext(_T("Speed")),
-                (int)Units::ToUserUnit(stats.speed_olc, Units::TaskSpeedUnit),
-                Units::GetTaskSpeedName());
-    } else {
-      _stprintf(sTmp,
-                _T("%s: %d %s\r\n%s: %s\r\n%s: %d %s\r\n"),
-                gettext(_T("Distance")),
-                (int)Units::ToUserUnit(stats.distance_olc, Units::DistanceUnit),
-                Units::GetDistanceName(),
-                gettext(_T("Time")),
-                timetext1,
-                gettext(_T("Speed")),
-                (int)Units::ToUserUnit(stats.speed_olc, Units::TaskSpeedUnit),
-                Units::GetTaskSpeedName());
-    }
+    _stprintf(sTmp,
+              (Layout::landscape
+              ? _T("%s:\r\n  %d %s\r\n%s: %s\r\n%s: %d %s\r\n")
+              : _T("%s: %d %s\r\n%s: %s\r\n%s: %d %s\r\n")),
+              gettext(_T("Distance")),
+              (int)Units::ToUserUnit(stats.distance_olc, Units::DistanceUnit),
+              Units::GetDistanceName(),
+              gettext(_T("Time")),
+              timetext1,
+              gettext(_T("Speed")),
+              (int)Units::ToUserUnit(stats.speed_olc, Units::TaskSpeedUnit),
+              Units::GetTaskSpeedName());
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_T("Optimise"));
     break;
