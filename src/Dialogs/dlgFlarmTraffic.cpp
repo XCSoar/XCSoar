@@ -333,6 +333,18 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   (void)Sender;
 
   switch (key_code) {
+  case VK_UP:
+    if (!has_pointer())
+      break;
+
+    ZoomIn();
+    return true;
+  case VK_DOWN:
+    if (!has_pointer())
+      break;
+
+    ZoomOut();
+    return true;
   case VK_LEFT:
   case '6':
     PrevTarget();
@@ -343,10 +355,9 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
     NextTarget();
     Update();
     return true;
-
-  default:
-    return false;
   }
+
+  return false;
 }
 
 /**
