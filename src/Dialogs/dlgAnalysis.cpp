@@ -50,6 +50,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "Components.hpp"
 #include "Protection.hpp"
+#include "StringUtil.hpp"
 #include "Compiler.h"
 
 #define MAXPAGE 8
@@ -61,10 +62,22 @@ static WndFrame *wInfo;
 static WndButton *wCalc = NULL;
 
 static void
+SetCalcVisibility(const bool visible)
+{
+  if (!wCalc)
+    return;
+
+  wCalc->set_visible(visible);
+}
+
+static void
 SetCalcCaption(const TCHAR* caption)
 {
-  if (wCalc)
-    wCalc->SetCaption(gettext(caption));
+  if (!wCalc)
+    return;
+
+  wCalc->SetCaption(gettext(caption));
+  SetCalcVisibility(!string_is_empty(caption));
 }
 
 #define ANALYSIS_PAGE_BAROGRAPH    0
@@ -231,7 +244,7 @@ Update(void)
               (int)Units::ToUserUnit(stats.speed_olc, Units::TaskSpeedUnit),
               Units::GetTaskSpeedName());
     wInfo->SetCaption(sTmp);
-    SetCalcCaption(_T("Optimise"));
+    SetCalcCaption(_T(""));
     break;
 
   case ANALYSIS_PAGE_AIRSPACE:
