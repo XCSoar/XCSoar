@@ -85,6 +85,32 @@ WarningMode()
   return false;
 }
 
+static double
+GetZoomDistance(unsigned zoom) {
+  switch (zoom) {
+    case 0:
+      return 500;
+    case 1:
+      return 1000;
+    case 3:
+      return 5000;
+    case 4:
+      return 10000;
+    case 2:
+    default:
+      return 2000;
+  }
+}
+
+static void
+GetZoomDistanceString(TCHAR* str1, TCHAR* str2, unsigned size) {
+  double z = GetZoomDistance(zoom);
+  double z_half = z * 0.5;
+
+  Units::FormatUserDistance(z, str1, size);
+  Units::FormatUserDistance(z_half, str2, size);
+}
+
 /**
  * Tries to select the next target, if impossible selection = -1
  */
@@ -384,32 +410,6 @@ OnTimerNotify(WindowControl * Sender)
   return 0;
 }
 
-static double
-GetZoomDistance() {
-  switch (zoom) {
-    case 0:
-      return 500;
-    case 1:
-      return 1000;
-    case 3:
-      return 5000;
-    case 4:
-      return 10000;
-    case 2:
-    default:
-      return 2000;
-  }
-}
-
-static void
-GetZoomDistanceString(TCHAR* str1, TCHAR* str2, unsigned size) {
-  double z = GetZoomDistance();
-  double z_half = z * 0.5;
-
-  Units::FormatUserDistance(z, str1, size);
-  Units::FormatUserDistance(z_half, str2, size);
-}
-
 /**
  * Returns the distance to the own plane in pixels
  * @param d Distance in meters to the own plane
@@ -417,7 +417,7 @@ GetZoomDistanceString(TCHAR* str1, TCHAR* str2, unsigned size) {
 static double
 RangeScale(double d)
 {
-  d = d / GetZoomDistance();
+  d = d / GetZoomDistance(zoom);
   return min(d, 1.0) * radar_size.cx * 0.5;
 }
 
