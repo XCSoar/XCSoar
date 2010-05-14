@@ -697,26 +697,15 @@ static int page2mode(void) {
   return configuration_tabbed->GetCurrentPage() - 15;  // RLD upped by 1
 }
 
+static const TCHAR *const info_box_mode_names[] = {
+  _T("Circling"),
+  _T("Cruise"),
+  _T("FinalGlide"),
+  _T("Aux"),
+};
 
 static void InfoBoxPropName(TCHAR *name, int item, int mode) {
-  _tcscpy(name,_T("prpInfoBox"));
-  switch (mode) {
-  case 0:
-    _tcscat(name,_T("Circling"));
-    break;
-  case 1:
-    _tcscat(name,_T("Cruise"));
-    break;
-  case 2:
-    _tcscat(name,_T("FinalGlide"));
-    break;
-  case 3:
-    _tcscat(name,_T("Aux"));
-    break;
-  }
-  TCHAR buf[3];
-  _stprintf(buf,_T("%1d"), item);
-  _tcscat(name,buf);
+  _stprintf(name, _T("prpInfoBox%s%1d"), info_box_mode_names[mode], item);
 }
 
 static void
