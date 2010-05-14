@@ -148,7 +148,7 @@ UpdateWarnings()
       continue;
 
     // if current target has no alarm -> goto next one
-    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].AlarmLevel == 0)
+    if (!XCSoarInterface::Basic().flarm.FLARM_Traffic[i].HasAlarm())
       continue;
 
     // remember that a warning exists
@@ -471,7 +471,7 @@ PaintTrafficInfo(Canvas &canvas) {
   // ID / Name
   if (traffic.HasName()) {
     canvas.select(InfoWindowFont);
-    if (traffic.AlarmLevel < 1) {
+    if (!traffic.HasAlarm()) {
       if (XCSoarInterface::SettingsComputer().TeamFlarmTracking &&
           traffic.ID == XCSoarInterface::SettingsComputer().TeamFlarmIdTarget)
         canvas.set_text_color(hcTeam);
