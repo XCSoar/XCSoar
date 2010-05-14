@@ -603,6 +603,10 @@ PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
   // Calculate the distance in pixels
   double scale = RangeScale(d);
 
+  // Don't display distracting, far away targets in WarningMode
+  if (WarningMode() && !traffic.HasAlarm() && scale == radar_size.cx * 0.5)
+    return;
+
   // x and y are not between 0 and 1 (distance will be handled via scale)
   if (d > 0) {
     x /= d;
