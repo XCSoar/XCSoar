@@ -59,9 +59,9 @@ Copyright_License {
 #include <assert.h>
 
 static SingleWindow *parent_window;
-static WndForm *wf=NULL;
+static WndForm *wf = NULL;
 static WndFrame* wTaskView = NULL;
-static OrderedTask* ordered_task= NULL;
+static OrderedTask* ordered_task = NULL;
 static bool task_modified = false;
 
 static bool
@@ -71,7 +71,6 @@ CommitTaskChanges()
     return true;
 
   if (!ordered_task->task_size() || ordered_task->check_task()) {
-
     MessageBoxX (gettext(TEXT("Active task modified")),
                  TEXT("Task Manager"), MB_OK);
 
@@ -80,10 +79,9 @@ CommitTaskChanges()
 
     task_modified = false;
     return true;
-
   } else if (MessageBoxX(gettext(_T("Task not valid. Changes will be lost.")),
-                    gettext(_T("Task Manager")),
-                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
+                         gettext(_T("Task Manager")),
+                         MB_YESNO | MB_ICONQUESTION) == IDYES) {
     return true;
   }
   return false;
@@ -98,30 +96,25 @@ RefreshView()
 static void OnCloseClicked(WindowControl * Sender)
 {
   (void)Sender;
-
-  if (CommitTaskChanges()) {
+  if (CommitTaskChanges())
     wf->SetModalResult(mrOK);
-  }
 }
 
 static void OnEditClicked(WindowControl * Sender)
 {
   (void)Sender;
   task_modified |= dlgTaskEditShowModal(*parent_window, &ordered_task);
-  if (task_modified) {
+  if (task_modified)
     RefreshView();
-  }
 }
 
 static void OnListClicked(WindowControl * Sender)
 {
   (void)Sender;
   task_modified |= dlgTaskListShowModal(*parent_window, &ordered_task);
-  if (task_modified) {
+  if (task_modified)
     RefreshView();
-  }
 }
-
 
 static void
 OnTaskPaint(WindowControl *Sender, Canvas &canvas)
@@ -146,7 +139,7 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
   ordered_task->CAccept(dv); 
 }
 
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnEditClicked),
   DeclareCallBackEntry(OnListClicked),
@@ -159,22 +152,20 @@ dlgTaskManagerShowModal(SingleWindow &parent)
 {
   parent_window = &parent;
 
-  wf = NULL;
-
-  if (Layout::landscape) {
+  if (Layout::landscape)
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgTaskManager_L.xml"),
                         parent,
                         _T("IDR_XML_TASKMANAGER_L"));
-  } else {
+  else
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgTaskManager.xml"),
                         parent,
                         _T("IDR_XML_TASKMANAGER"));
-  }
 
-  if (!wf) return;
-  assert(wf!=NULL);
+  if (!wf)
+    return;
+  assert(wf != NULL);
 
   ordered_task = task_ui.task_clone();
   task_modified = false;
@@ -185,5 +176,4 @@ dlgTaskManagerShowModal(SingleWindow &parent)
 
   delete wf;
   delete ordered_task;
-  wf = NULL;
 }
