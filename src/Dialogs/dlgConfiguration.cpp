@@ -694,7 +694,7 @@ OnCloseClicked(gcc_unused WndButton &button)
 static int cpyInfoBox[10];
 
 static int page2mode(void) {
-  return configuration_tabbed->GetCurrentPage() - 15;  // RLD upped by 1
+  return configuration_tabbed->GetCurrentPage() - 14;
 }
 
 static const TCHAR *const info_box_mode_names[] = {
