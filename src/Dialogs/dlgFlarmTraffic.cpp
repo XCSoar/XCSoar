@@ -73,6 +73,18 @@ static SIZE radar_size;
 static int side_display_type = 1;
 static POINT sc[FLARM_STATE::FLARM_MAX_TRAFFIC];
 
+static bool
+WarningMode()
+{
+  if (warning < 0 || warning >= FLARM_STATE::FLARM_MAX_TRAFFIC)
+    return false;
+
+  if (XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].defined())
+    return true;
+
+  return false;
+}
+
 /**
  * Tries to select the next target, if impossible selection = -1
  */
@@ -154,7 +166,7 @@ UpdateWarnings()
     // remember that a warning exists
     found = true;
     // if it did not before -> save the id and goto next one
-    if (!XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].defined()) {
+    if (!WarningMode()) {
       warning = i;
       continue;
     }
@@ -241,7 +253,7 @@ OnDetailsClicked(gcc_unused WndButton &button)
 {
 
   // If warning is displayed -> prevent from opening details dialog
-  if (warning >= 0)
+  if (WarningMode())
     return;
 
   // Don't open the details dialog if no plane selected
@@ -279,7 +291,7 @@ static void
 OnPrevClicked(gcc_unused WndButton &button)
 {
   // If warning is displayed -> prevent selector movement
-  if (warning >= 0)
+  if (WarningMode())
     return;
 
   PrevTarget();
@@ -293,7 +305,7 @@ static void
 OnNextClicked(gcc_unused WndButton &button)
 {
   // If warning is displayed -> prevent selector movement
-  if (warning >= 0)
+  if (WarningMode())
     return;
 
   NextTarget();
@@ -426,8 +438,7 @@ PaintTrafficInfo(Canvas &canvas) {
   SIZE sz;
   // Shortcut to the selected traffic
   FLARM_TRAFFIC traffic;
-  if (warning >= 0 &&
-      XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].defined())
+  if (WarningMode())
     traffic = XCSoarInterface::Basic().flarm.FLARM_Traffic[warning];
   else
     traffic = XCSoarInterface::Basic().flarm.FLARM_Traffic[selection];
@@ -458,7 +469,7 @@ PaintTrafficInfo(Canvas &canvas) {
   canvas.background_transparent();
 
   // Climb Rate
-  if (warning < 0) {
+  if (!WarningMode()) {
 #ifdef FLARM_AVERAGE
     Units::FormatUserVSpeed(traffic.Average30s, tmp, 20);
 #else
@@ -579,7 +590,7 @@ PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
     break;
   case 0:
   case 4:
-    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].defined()) {
+    if (WarningMode()) {
       canvas.select(hbPassive);
       canvas.select(hpPassive);
     } else {
@@ -619,7 +630,7 @@ PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
   canvas.polygon(Arrow, 5);
 
   // if warning exists -> don't draw vertical speeds
-  if (warning >= 0)
+  if (WarningMode())
     return;
 
 #ifdef FLARM_AVERAGE
