@@ -10,11 +10,7 @@ endif
 
 $(PNG_ICONS_20): output/data/icons/%-20.png: Data/icons/%.svg | output/data/icons/dirstamp
 	@$(NQ)echo "  SVG     $@"
-ifeq ($(WINHOST),y)
 	$(Q)rsvg-convert --width=20 $< -o $@
-else
-	$(Q)rsvg --width=20 $< $@
-endif
 
 $(BMP_ICONS_20): %.bmp: %.png
 	@$(NQ)echo "  BMP     $@"
