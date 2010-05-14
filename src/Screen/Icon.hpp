@@ -60,7 +60,11 @@ public:
     return bitmap.defined();
   }
 
-  void load(unsigned id, bool center=true);
+  void load_big(unsigned id, unsigned big_id, bool center=true);
+
+  void load(unsigned id, bool center=true) {
+    load_big(id, 0, center);
+  }
 
   void reset() {
     bitmap.reset();

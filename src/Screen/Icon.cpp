@@ -42,11 +42,14 @@ Copyright_License {
 #include "Screen/BitmapCanvas.hpp"
 
 void
-MaskedIcon::load(unsigned id, bool center)
+MaskedIcon::load_big(unsigned id, unsigned big_id, bool center)
 {
-  if (Layout::ScaleSupported())
-    bitmap.load_stretch(id, Layout::FastScale(1));
-  else
+  if (Layout::ScaleSupported()) {
+    if (big_id > 0 && Layout::ScaleEnabled())
+      bitmap.load(big_id);
+    else
+      bitmap.load_stretch(id, Layout::FastScale(1));
+  } else
     bitmap.load(id);
 
   size = bitmap.get_size();
