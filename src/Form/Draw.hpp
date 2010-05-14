@@ -50,6 +50,7 @@ class ContainerControl;
 class WndOwnerDrawFrame : public WindowControl {
 public:
   typedef void (*OnPaintCallback_t)(WindowControl *Sender, Canvas &canvas);
+  typedef bool (*OnMouseDownCallback_t)(WindowControl *Sender, int x, int y);
 
 public:
   WndOwnerDrawFrame(ContainerControl *Owner,
@@ -66,6 +67,14 @@ public:
     mOnPaintCallback = OnPaintCallback;
   }
 
+  /**
+   * Sets the callback which is called when the mouse is
+   * pressed over the control.
+   */
+  void SetOnMouseDownNotify(OnMouseDownCallback_t OnMouseDownCallback) {
+    mOnMouseDownCallback = OnMouseDownCallback;
+  }
+
 protected:
   /**
    * The callback function for painting the content of the control
@@ -73,8 +82,18 @@ protected:
    */
   OnPaintCallback_t mOnPaintCallback;
 
+  /**
+   * The callback function that is called when the mouse is
+   * pressed over the control
+   * @see SetOnMouseDownNotify()
+   */
+  OnMouseDownCallback_t mOnMouseDownCallback;
+
   /** from class PaintWindow */
   virtual void on_paint(Canvas &canvas);
+
+  /** from class Window */
+  virtual bool on_mouse_down(int x, int y);
 };
 
 #endif

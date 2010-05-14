@@ -66,3 +66,12 @@ WndOwnerDrawFrame::on_paint(Canvas &canvas)
 
   mOnPaintCallback(this, canvas);
 }
+
+bool
+WndOwnerDrawFrame::on_mouse_down(int x, int y)
+{
+  if (mOnMouseDownCallback)
+    return mOnMouseDownCallback(this, x, y);
+
+  return false;
+}
