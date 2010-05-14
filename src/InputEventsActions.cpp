@@ -89,7 +89,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Language.hpp"
 #include "Logger/Logger.hpp"
 #include "Asset.hpp"
-
+#include "Logger/NMEALogger.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "TaskClientUI.hpp"
 #include "AirspaceClientUI.hpp"

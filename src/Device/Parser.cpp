@@ -47,9 +47,7 @@ Copyright_License {
 #include "NMEA/Checksum.h"
 #include "StringUtil.hpp"
 #include "InputEvents.h"
-#include "LocalPath.hpp"
-#include "UtilsText.hpp"
-#include "IO/TextWriter.hpp"
+#include "Logger/NMEALogger.hpp"
 
 #include <math.h>
 #include <ctype.h>
@@ -184,8 +182,7 @@ NMEAParser::ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_INFO)
     return false;
 
   // if (logging enabled) log;
-  if (EnableLogNMEA)
-    LogNMEA(String);
+  LogNMEA(String);
 
   // if (proprietary sentence) ...
   if (params[0][1] == 'P') {
@@ -1191,34 +1188,4 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   PFLAA(t_laa1, params, nr, GPS_INFO);
   nr = ExtractParameters(t_laa2, ctemp, params, MAX_NMEA_PARAMS);
   PFLAA(t_laa2, params, nr, GPS_INFO);
-}
-
-bool EnableLogNMEA = false;
-
-/**
- * Logs NMEA string to log file
- * @param text
- */
-void
-LogNMEA(const TCHAR* text)
-{
-  if (!EnableLogNMEA) {
-    return;
-  }
-
-  static bool initialised = false;
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T("xcsoar-nmea.log"));
-
-  TextWriter writer(path, initialised);
-  if (writer.error())
-    return;
-
-  TCHAR ttext[100];
-  _tcsncpy(ttext, text, 100);
-  TrimRight(ttext);
-  writer.writeln(ttext);
-
-  if (!initialised)
-    initialised = true;
 }

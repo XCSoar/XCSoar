@@ -180,6 +180,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Logger/LoggerImpl.cpp \
 	$(SRC)/Logger/LoggerSign.cpp \
 	$(SRC)/Logger/MD5.cpp \
+	$(SRC)/Logger/NMEALogger.cpp \
 	$(SRC)/ReplayLogger.cpp \
 	$(SRC)/ReplayLoggerGlue.cpp \
 	$(SRC)/TeamCodeCalculation.cpp \
