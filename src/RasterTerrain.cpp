@@ -40,8 +40,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Profile.hpp"
 #include "LocalPath.hpp"
-#include "RasterMapRaw.hpp"
-#include "RasterMapCache.hpp"
 #include "RasterMapJPG2000.hpp"
 
 #include "wcecompat/ts_string.h"
@@ -76,14 +74,7 @@ void RasterTerrain::OpenTerrain(void)
 bool
 RasterTerrain::CreateTerrainMap(const char *zfilename)
 {
-  if (strstr(zfilename,".jp2")) {
-    TerrainMap = RasterMapJPG2000::LoadFile(zfilename);
-  } else {
-    TerrainMap = RasterMapRaw::LoadFile(zfilename);
-    if (TerrainMap == NULL)
-      TerrainMap = RasterMapCache::LoadFile(zfilename);
-  }
-
+  TerrainMap = RasterMapJPG2000::LoadFile(zfilename);
   return TerrainMap != NULL;
 }
 

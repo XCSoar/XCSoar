@@ -343,8 +343,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Math/FastRotation.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/RasterMapJPG2000.cpp \
-	$(SRC)/RasterMapRaw.cpp \
-	$(SRC)/RasterMapCache.cpp \
 	$(SRC)/RasterMap.cpp \
 	$(SRC)/RasterTerrain.cpp \
 	$(SRC)/RasterWeather.cpp \
