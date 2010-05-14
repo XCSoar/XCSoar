@@ -183,8 +183,7 @@ Update(void)
     _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
               gettext(_T("Wind at Altitude")));
     wf->SetCaption(sTmp);
-    _stprintf(sTmp, _T(" "));
-    wInfo->SetCaption(sTmp);
+    wInfo->SetCaption(_T(""));
     SetCalcCaption(_T("Set wind"));
     break;
 
@@ -251,7 +250,7 @@ Update(void)
     _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
               gettext(_T("Airspace")));
     wf->SetCaption(sTmp);
-    wInfo->SetCaption(_T(" "));
+    wInfo->SetCaption(_T(""));
     SetCalcCaption(_T("Warnings"));
     break;
   }
