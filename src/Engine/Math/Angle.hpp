@@ -54,7 +54,7 @@ public:
 
   static Angle native(const fixed& value) {
     return Angle(value);
-  };
+  }
   fixed value_native() const {
     return m_value;
   }
@@ -62,10 +62,10 @@ public:
 #ifdef RADIANS
   static Angle degrees(const fixed& value) {
     return Angle(value*fixed_deg_to_rad);
-  };
+  }
   static Angle radians(const fixed& value) {
     return Angle(value);
-  };
+  }
   fixed value_degrees() const {
     return m_value*fixed_rad_to_deg;
   }
@@ -75,10 +75,10 @@ public:
 #else
   static Angle degrees(const fixed& value) {
     return Angle(value);
-  };
+  }
   static Angle radians(const fixed& value) {
     return Angle(value*fixed_rad_to_deg);
-  };
+  }
   fixed value_degrees() const {
     return m_value;
   }
@@ -141,80 +141,92 @@ public:
 
   Angle HalfAngle(const Angle &End) const;
 
-  Angle operator* (const Angle x) const
-    {
-      return Angle(m_value*x.m_value);
-    }
+  Angle
+  operator*(const Angle x) const
+  {
+    return Angle(m_value * x.m_value);
+  }
 
-  Angle operator* (const fixed x) const
-    {
-      return Angle(m_value*x);
-    }
+  Angle
+  operator*(const fixed x) const
+  {
+    return Angle(m_value * x);
+  }
 
-  Angle operator/ (const fixed x) const
-    {
-      return Angle(m_value/x);
-    }
+  Angle
+  operator/(const fixed x) const
+  {
+    return Angle(m_value / x);
+  }
 
-  Angle operator+ (const Angle &x) const
-    {
-      return Angle(m_value+x.m_value);
-    }
+  Angle
+  operator+(const Angle &x) const
+  {
+    return Angle(m_value + x.m_value);
+  }
 
-  Angle operator- (const Angle &x) const
-    {
-      return Angle(m_value-x.m_value);
-    }
+  Angle
+  operator-(const Angle &x) const
+  {
+    return Angle(m_value - x.m_value);
+  }
 
-  const Angle& operator*= (const fixed x)
-    {
-      m_value*= x;
-      return *this;
-    }
+  const Angle&
+  operator*=(const fixed x)
+  {
+    m_value *= x;
+    return *this;
+  }
 
-  const Angle& 
-  operator+= (const Angle& x)
-    {
-      m_value+= x.m_value;
-      return *this;
-    }
+  const Angle&
+  operator+=(const Angle& x)
+  {
+    m_value += x.m_value;
+    return *this;
+  }
 
-  const Angle& 
-  operator-= (const Angle& x)
-    {
-      m_value-= x.m_value;
-      return *this;
-    }
+  const Angle&
+  operator-=(const Angle& x)
+  {
+    m_value -= x.m_value;
+    return *this;
+  }
 
-  bool operator== (const Angle&x) const
-    {
-      return m_value== x.m_value;
-    }
+  bool
+  operator==(const Angle&x) const
+  {
+    return m_value == x.m_value;
+  }
 
-  bool operator!= (const Angle&x) const
-    {
-      return m_value!= x.m_value;
-    }
+  bool
+  operator!=(const Angle&x) const
+  {
+    return m_value != x.m_value;
+  }
 
-  bool operator< (const Angle&x) const
-    {
-      return m_value < x.m_value;
-    }
+  bool
+  operator<(const Angle&x) const
+  {
+    return m_value < x.m_value;
+  }
 
-  bool operator> (const Angle&x) const
-    {
-      return m_value > x.m_value;
-    }
+  bool
+  operator>(const Angle&x) const
+  {
+    return m_value > x.m_value;
+  }
 
-  bool operator<= (const Angle&x) const
-    {
-      return m_value <= x.m_value;
-    }
+  bool
+  operator<=(const Angle&x) const
+  {
+    return m_value <= x.m_value;
+  }
 
-  bool operator>= (const Angle&x) const
-    {
-      return m_value >= x.m_value;
-    }
+  bool
+  operator>=(const Angle&x) const
+  {
+    return m_value >= x.m_value;
+  }
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, const Angle& a);
