@@ -73,8 +73,8 @@ ComPort_StatusMessage(UINT type, const TCHAR *caption, const TCHAR *fmt, ...)
 }
 
 ComPort::ComPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
-  :handler(_handler),
-   baud_rate(_baud_rate),
+  :baud_rate(_baud_rate),
+   handler(_handler),
 #ifdef HAVE_POSIX
    fd(-1),
 #else

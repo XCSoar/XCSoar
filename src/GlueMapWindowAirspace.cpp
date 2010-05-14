@@ -98,8 +98,8 @@ public:
   AirspaceMapVisible(const SETTINGS_COMPUTER& _settings, 
                      const fixed& _altitude, const bool& _border,
                      const AirspaceWarningCopy& warnings):
-    m_border(_border),
     AirspaceVisible(_settings, _altitude),
+    m_border(_border),
     m_warnings(warnings)
     {
     };

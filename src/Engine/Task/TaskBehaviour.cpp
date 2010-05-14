@@ -45,14 +45,14 @@ TaskBehaviour::TaskBehaviour():
     calc_effective_mc(true),
     calc_glide_required(true),
     goto_nonlandable(true),
-    safety_height_terrain(150.0),
-    safety_height_arrival(300.0),
     risk_gamma(0.0),
     enable_olc(false),
     olc_rules(OLC_Sprint),
     olc_handicap(100),
     safety_mc(fixed_one),
     safety_mc_use_current(false),
+    safety_height_terrain(150.0),
+    safety_height_arrival(300.0),
     start_max_speed_margin(0.0),
     start_max_height_margin(0)
 {

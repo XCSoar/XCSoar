@@ -123,8 +123,8 @@ protected:
 FlarmTrafficWindow::FlarmTrafficWindow()
   :zoom(2),
    selection(-1), warning(-1),
-   side_display_type(1),
-   direction(Angle::radians(fixed_zero))
+   direction(Angle::radians(fixed_zero)),
+   side_display_type(1)
 {
   memset(&data, 0, sizeof(data));
 }

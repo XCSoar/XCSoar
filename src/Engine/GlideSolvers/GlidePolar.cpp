@@ -52,13 +52,13 @@ GlidePolar::GlidePolar(const fixed _mc, const fixed _bugs, const fixed _ballast)
   bugs(_bugs),
   ballast(_ballast),
   cruise_efficiency(fixed_one),
+  Vmax(fixed_75),
   ideal_polar_a(0.00157),
   ideal_polar_b(-0.0734),
   ideal_polar_c(1.48),
   ballast_ratio(0.3),
   empty_mass(300),
-  wing_area(fixed_zero),
-  Vmax(fixed_75)
+  wing_area(fixed_zero)
 {
   update();
 }

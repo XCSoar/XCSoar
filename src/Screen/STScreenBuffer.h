@@ -24,7 +24,7 @@ struct BGRColor
 {
 	BGRColor() {}
 	BGRColor(unsigned char R, unsigned char G, unsigned char B)
-		: m_R(R), m_G(G), m_B(B) {}
+        : m_B(B), m_G(G), m_R(R) {}
 	unsigned char m_B;
 	unsigned char m_G;
 	unsigned char m_R;

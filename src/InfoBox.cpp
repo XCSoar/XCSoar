@@ -59,8 +59,9 @@ InfoBox::InfoBox(ContainerWindow &_parent, int X, int Y, int Width, int Height,
                  int border_flags,
                  const InfoBoxLook &_look)
   :parent(_parent),
+   look(_look),
    mBorderKind(border_flags),
-   look(_look), focus_timer(0)
+   focus_timer(0)
 {
   mSmallerFont = false;
 

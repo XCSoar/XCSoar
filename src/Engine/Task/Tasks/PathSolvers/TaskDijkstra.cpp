@@ -45,8 +45,8 @@ TaskDijkstra::~TaskDijkstra() {
 
 TaskDijkstra::TaskDijkstra(OrderedTask& _task):
   NavDijkstra<SearchPoint>(_task.task_size()),
-  active_stage(_task.getActiveTaskPointIndex()),
-  task(_task)
+  task(_task),
+  active_stage(_task.getActiveTaskPointIndex())
 {
   sp_sizes.reserve(num_stages);
 }

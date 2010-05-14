@@ -53,13 +53,13 @@ OLCDijkstra::OLCDijkstra(OnlineContest& _olc,
                          const unsigned finish_alt_diff,
                          const bool full_trace):
   NavDijkstra<TracePoint>(n_legs+1),
+  m_dijkstra(ScanTaskPoint(0,0), false),
   olc(_olc),
   m_finish_alt_diff(finish_alt_diff),
-  m_dijkstra(ScanTaskPoint(0,0), false),
+  solution_found(false),
   best_distance(fixed_zero),
   best_speed(fixed_zero),
   best_time(fixed_zero),
-  solution_found(false),
   m_full_trace(full_trace)
 {
   m_weightings.reserve(n_legs);

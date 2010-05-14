@@ -89,11 +89,11 @@ LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
 }
 
 LoggerImpl::LoggerImpl():
+  frecord_clock(fixed(270)), // 4.5 minutes)
   LoggerActive(false),
   DeclaredToDevice(false),
   Simulator(false),
-  LoggerDiskBufferCount(0),
-  frecord_clock(fixed(270)) // 4.5 minutes)
+  LoggerDiskBufferCount(0)
 {
   ResetFRecord();
   szLoggerFileName[0] = 0;

@@ -50,8 +50,8 @@ OrderedTaskPoint::OrderedTaskPoint(ObservationZonePoint* _oz,
   TaskLeg(*this),
   ScoredTaskPoint(tp, wp, tb, b_scored),
   ObservationZoneClient(_oz),
-  m_active_state(NOTFOUND_ACTIVE),
   m_ordered_task_behaviour(to),
+  m_active_state(NOTFOUND_ACTIVE),
   tp_next(NULL),
   tp_previous(NULL)
 {

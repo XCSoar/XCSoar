@@ -47,9 +47,9 @@ Copyright_License {
 #include "GPSClock.hpp"
 
 GlideComputerStats::GlideComputerStats(TaskClientCalc &task) :
+  GlideComputerBlackboard(task),
   log_clock(fixed(5)),
-  stats_clock(fixed(60)),
-  GlideComputerBlackboard(task)
+  stats_clock(fixed(60))
 {
 
 }

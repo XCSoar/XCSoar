@@ -52,7 +52,7 @@ ZipSource::ZipSource(const char *path)
 
 #ifdef _UNICODE
 ZipSource::ZipSource(const TCHAR *path)
-  :file(NULL), BufferedSource<char>(4096)
+  :BufferedSource<char>(4096), file(NULL)
 {
   char narrow_path[4096];
 

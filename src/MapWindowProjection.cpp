@@ -53,13 +53,13 @@ static const fixed BORDERFACTOR(1.4);
 
 MapWindowProjection::MapWindowProjection():
   Projection(),
-  _origin_centered(false),
-  _RequestedMapScale(fixed(5)),
-  MapScale(fixed(5)),
+  DisplayMode(dmCruise),
   DisplayAircraftAngle(),
+  MapScale(fixed(5)),
+  _RequestedMapScale(fixed(5)),
+  _origin_centered(false),
   ScaleListCount (0),
-  smart_range_active(fixed_one),
-  DisplayMode(dmCruise)
+  smart_range_active(fixed_one)
 {
 }
 

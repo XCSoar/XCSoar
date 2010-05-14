@@ -75,13 +75,13 @@ static const fixed THERMAL_TIME_MIN(45);
 
 GlideComputerAirData::GlideComputerAirData(AirspaceClientCalc& airspace,
                                            TaskClientCalc& _task):
+  GlideComputerBlackboard(_task),
   m_airspace(airspace),
   airspace_clock(fixed_two), // scan airspace every 2 seconds
   ballast_clock(fixed(5)), // only update every 5 seconds to stop flooding
 		    // the devices
   vario_30s_filter(30),
-  netto_30s_filter(30),
-  GlideComputerBlackboard(_task)
+  netto_30s_filter(30)
 {
   InitLDRotary(SettingsComputer(), &rotaryLD);
 

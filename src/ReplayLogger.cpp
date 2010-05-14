@@ -199,8 +199,8 @@ private:
 
 
 ReplayLogger::ReplayLogger():
-  Enabled(false),
   TimeScale(1.0),
+  Enabled(false),
   fp(NULL)
 {
   FileName[0] = _T('\0');

@@ -163,9 +163,9 @@ class LabelTaskPoint:
 {
 public:
   LabelTaskPoint(const unsigned index, TCHAR* buff):
-    text(buff),
+    m_index(0),
     m_active_index(index),
-    m_index(0) {
+    text(buff) {
     text[0] = NULL;
   }
 

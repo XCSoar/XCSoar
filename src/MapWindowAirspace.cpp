@@ -98,8 +98,8 @@ public:
   AirspaceMapVisible(const SETTINGS_COMPUTER& _settings, 
                      const fixed& _altitude, const bool& _border,
                      const AirspaceWarningCopy& warnings):
-    m_border(_border),
     AirspaceVisible(_settings, _altitude),
+    m_border(_border),
     m_warnings(warnings)
     {
     };
@@ -137,13 +137,13 @@ public:
                      const NMEA_INFO& state):
     MapDrawHelper(_helper),
     m_warnings(warnings),
-    m_border(false),
     pen_thick(Pen::SOLID, IBLSCALE(10), Color(0x00, 0x00, 0x00)),
     pen_medium(Pen::SOLID, IBLSCALE(3), Color(0x00, 0x00, 0x00)),
     visible(settings_computer,
             state.GetAltitudeBaroPreferred(),
             m_border,
-            warnings)
+            warnings),
+    m_border(false)
     {
       m_predicate = &visible;
     };

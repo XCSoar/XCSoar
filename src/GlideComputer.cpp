@@ -55,10 +55,10 @@ Copyright_License {
 GlideComputer::GlideComputer(TaskClientCalc &task,
                              AirspaceClientCalc& airspace,
                              GlideComputerTaskEvents& events):
+  GlideComputerBlackboard(task),
   GlideComputerAirData(airspace, task),
   GlideComputerTask(task),
-  GlideComputerStats(task),
-  GlideComputerBlackboard(task)
+  GlideComputerStats(task)
 {
   events.set_computer(*this);
 }
