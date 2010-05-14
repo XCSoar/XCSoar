@@ -96,19 +96,17 @@ WayPointFile::extractParameters(const TCHAR *src, TCHAR *dst,
   return i;
 }
 
-double
+short
 WayPointFile::AltitudeFromTerrain(GEOPOINT &location,
                                   const RasterTerrain &terrain)
 {
-  double alt = TERRAIN_INVALID;
-
   // If terrain not loaded yet -> return INVALID
   if (!terrain.GetMap())
     return TERRAIN_INVALID;
 
   // Get terrain height
   RasterRounding rounding(*terrain.GetMap());
-  alt = terrain.GetTerrainHeight(location, rounding);
+  short alt = terrain.GetTerrainHeight(location, rounding);
 
   // If terrain altitude okay -> return terrain altitude
   if (alt > TERRAIN_INVALID)
@@ -140,7 +138,7 @@ WayPointFile::check_altitude(Waypoint &new_waypoint,
                              bool alt_ok)
 {
   // Load waypoint altitude from terrain
-  const double t_alt = terrain != NULL
+  const short t_alt = terrain != NULL
     ? AltitudeFromTerrain(new_waypoint.Location, *terrain)
     : TERRAIN_INVALID;
   if (t_alt == TERRAIN_INVALID) {
