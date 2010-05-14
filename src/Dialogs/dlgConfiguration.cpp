@@ -991,11 +991,7 @@ static CallBackTableEntry_t CallBackTable[]={
 
 static void SetInfoBoxSelector(unsigned item, int mode)
 {
-  TCHAR name[80];
-  InfoBoxPropName(name, item, mode);
-
-  WndProperty *wp;
-  wp = (WndProperty*)wf->FindByName(name);
+  WndProperty *wp = FindInfoBoxField(mode, item);
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
@@ -1028,10 +1024,7 @@ static void SetInfoBoxSelector(unsigned item, int mode)
 
 static void GetInfoBoxSelector(unsigned item, int mode)
 {
-  TCHAR name[80];
-  InfoBoxPropName(name, item, mode);
-  WndProperty *wp;
-  wp = (WndProperty*)wf->FindByName(name);
+  WndProperty *wp = FindInfoBoxField(mode, item);
   if (wp) {
     int itnew = wp->GetDataField()->GetAsInteger();
     int it=0;
