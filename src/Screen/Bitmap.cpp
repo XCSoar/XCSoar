@@ -155,6 +155,55 @@ Bitmap::load(unsigned id)
 }
 #endif /* !ENABLE_SDL */
 
+bool
+Bitmap::load_stretch(unsigned id, unsigned zoom)
+{
+  assert(zoom > 0);
+
+#ifdef ENABLE_SDL
+  // XXX
+  return load(id);
+#else
+  if (!load(id))
+    return false;
+
+  if (zoom <= 1)
+    return true;
+
+  SIZE src_size = get_size();
+  SIZE dest_size;
+  dest_size.cx = src_size.cx * zoom;
+  dest_size.cy = src_size.cy * zoom;
+
+  HDC dc = ::GetDC(NULL), src_dc = ::CreateCompatibleDC(dc),
+    dest_dc = ::CreateCompatibleDC(dc);
+  HBITMAP dest_bitmap = ::CreateCompatibleBitmap(dc,
+                                                 dest_size.cx, dest_size.cy);
+  ::ReleaseDC(NULL, dc);
+
+  if (dest_bitmap == NULL) {
+    ::DeleteDC(src_dc);
+    ::DeleteDC(dest_dc);
+    return false;
+  }
+
+  ::SelectObject(src_dc, bitmap);
+  ::SelectObject(dest_dc, dest_bitmap);
+
+  ::StretchBlt(dest_dc, 0, 0, dest_size.cx, dest_size.cy,
+               src_dc, 0, 0, src_size.cx, src_size.cy,
+               SRCCOPY);
+
+  ::DeleteDC(src_dc);
+  ::DeleteDC(dest_dc);
+
+  ::DeleteObject(bitmap);
+  bitmap = dest_bitmap;
+
+  return true;
+#endif
+}
+
 void *
 Bitmap::create(unsigned width, unsigned height)
 {

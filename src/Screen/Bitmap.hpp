@@ -100,6 +100,11 @@ public:
   }
 #endif
 
+  /**
+   * Load a bitmap and stretch it by the specified zoom factor.
+   */
+  bool load_stretch(unsigned id, unsigned zoom);
+
   void *create(unsigned width, unsigned height);
 
   void reset();
