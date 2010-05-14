@@ -6,6 +6,10 @@
 
 class RasterTile {
 public:
+  /** invalid value for terrain */
+  static const short TERRAIN_INVALID = -1000;
+
+public:
   RasterTile() {
     xstart = ystart = xend = yend = 0;
     width = height = 0;

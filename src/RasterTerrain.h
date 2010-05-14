@@ -54,6 +54,10 @@ class RasterRounding;
  */
 class RasterTerrain {
 public:
+  /** invalid value for terrain */
+  static const short TERRAIN_INVALID = -1000;
+
+public:
 
 /** 
  * Constructor.  Returns uninitialised object. 

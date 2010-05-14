@@ -396,7 +396,7 @@ GlideComputerAirData::CruiseLD()
 void
 GlideComputerAirData::TerrainHeight()
 {
-  short Alt = TERRAIN_INVALID;
+  short Alt = RasterTerrain::TERRAIN_INVALID;
 
   terrain.Lock();
   if (terrain.GetMap()) {
@@ -406,7 +406,7 @@ GlideComputerAirData::TerrainHeight()
   }
   terrain.Unlock();
 
-  SetCalculated().TerrainValid = (Alt > TERRAIN_INVALID);
+  SetCalculated().TerrainValid = Alt > RasterTerrain::TERRAIN_INVALID;
   SetCalculated().TerrainAlt = std::max((short)0, Alt);
 }
 
