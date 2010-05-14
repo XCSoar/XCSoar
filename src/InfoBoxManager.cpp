@@ -72,6 +72,10 @@ Copyright_License {
 
 #include <assert.h>
 
+#include <algorithm>
+
+using std::min;
+
 BufferWindow InfoBoxManager::full_window;
 
 static bool InfoBoxesDirty = false;
@@ -702,9 +706,6 @@ InfoBoxManager::setTypeAll(unsigned i, unsigned j)
   // TODO: check it's within range
 }
 
-#define m_min(a,b) (((a) < (b)) ? (a) : (b))
-#define m_max(a,b) (((a) > (b)) ? (a) : (b))
-
 int
 InfoBoxManager::getType(unsigned i)
 {
@@ -722,7 +723,7 @@ InfoBoxManager::getType(unsigned i)
     }
   }
 
-  return m_min(NUMSELECTSTRINGS - 1, retval);
+  return min(NUMSELECTSTRINGS - 1, retval);
 }
 
 void
@@ -1143,7 +1144,7 @@ InfoBoxManager::ProcessKey(int keycode)
   InputEvents::HideMenu();
 
   i = getType(InfoFocus);
-  Data_Options[m_min(NUMSELECTSTRINGS - 1, i)].Process(keycode);
+  Data_Options[min(NUMSELECTSTRINGS - 1, i)].Process(keycode);
 
   InfoBoxesDirty = true;
 
@@ -1249,7 +1250,7 @@ InfoBoxManager::Paint(void)
       }
       fw = rw / (double)InfoBoxLayout::ControlWidth;
       fh = rh / (double)InfoBoxLayout::ControlHeight;
-      double f = m_min(fw, fh);
+      double f = min(fw, fh);
       rw = (int)(f * InfoBoxLayout::ControlWidth);
       rh = (int)(f * InfoBoxLayout::ControlHeight);
 
