@@ -47,7 +47,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "RasterMap.h"
 #include "Navigation/Aircraft.hpp"
-
+#include "Sizes.h"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideResult.hpp"

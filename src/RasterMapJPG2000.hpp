@@ -40,7 +40,6 @@ Copyright_License {
 #define RASTERMAPJPG2000_H
 
 #include "RasterMap.h"
-#include <zzip/lib.h>
 #include "jasper/RasterTile.h"
 
 class RasterMapJPG2000: public RasterMap {

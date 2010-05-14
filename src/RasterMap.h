@@ -39,12 +39,7 @@ Copyright_License {
 #ifndef RASTERMAP_H
 #define RASTERMAP_H
 
-#include "Sizes.h"
-#include <zzip/lib.h>
 #include "Poco/RWLock.h"
-
-#include <windef.h> /* for MAX_PATH */
-
 #include "Navigation/GeoPoint.hpp"
 
 typedef struct _TERRAIN_INFO

@@ -37,9 +37,7 @@ Copyright_License {
 */
 
 #include "RasterMap.h"
-#include "Math/FastMath.h"
 #include "Math/Earth.hpp"
-#include "UtilsSystem.hpp"
 
 // export methods to global, take care!
 void RasterMap::LockRead() { lock.readLock(); };

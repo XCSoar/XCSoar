@@ -39,10 +39,7 @@ Copyright_License {
 #ifndef RASTERTERRAIN_H
 #define RASTERTERRAIN_H
 
-#include "Sizes.h"
 #include "Navigation/GeoPoint.hpp"
-
-#include <windows.h>
 
 class RasterMap;
 class RasterRounding;

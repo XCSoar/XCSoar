@@ -37,18 +37,12 @@ Copyright_License {
 */
 
 #include "RasterMapJPG2000.hpp"
-#include "Math/FastMath.h"
-#include "Math/Earth.hpp"
-#include "UtilsSystem.hpp"
 
 #ifdef __GNUC__
 #define int_fast8_t jas_int_fast8_t
 #endif
 
 #include "jasper/jasper.h"
-#include "jasper/jpc_rtc.h"
-#include "wcecompat/ts_string.h"
-#include "Interface.hpp"
 
 void
 RasterMapJPG2000::SetFieldRounding(const GEOPOINT& delta,

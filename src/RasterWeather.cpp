@@ -38,12 +38,9 @@ Copyright_License {
 
 #include "RasterWeather.h"
 #include "Language.hpp"
-#include "Math/FastMath.h"
 #include "Units.hpp"
-#include "Math/FastMath.h"
 #include "LocalPath.hpp"
 #include "LocalTime.hpp"
-#include "wcecompat/ts_string.h"
 #include "RasterMapJPG2000.hpp"
 
 #include <assert.h>

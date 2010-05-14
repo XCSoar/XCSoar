@@ -37,11 +37,9 @@ Copyright_License {
 */
 
 #include "RasterTerrain.h"
-#include "Math/FastMath.h"
 #include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "RasterMapJPG2000.hpp"
-
 #include "wcecompat/ts_string.h"
 
 // General, open/close
