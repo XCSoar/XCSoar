@@ -144,6 +144,7 @@ const TCHAR szProfileDisplayUpValue[] = CONF("DisplayUp");
 const TCHAR szProfileDistanceUnitsValue[] = CONF("Distance");
 const TCHAR szProfileDrawTerrain[] = CONF("DrawTerrain");
 const TCHAR szProfileDrawTopology[] = CONF("DrawTopology");
+const TCHAR szProfileFinalGlideTerrain[] = CONF("FinalGlideTerrain");
 const TCHAR szProfileAutoWind[] = CONF("AutoWind");
 const TCHAR szProfileHomeWaypoint[] = CONF("HomeWaypoint");
 const TCHAR szProfileAlternate1[] = CONF("Alternate1"); // VENTA3

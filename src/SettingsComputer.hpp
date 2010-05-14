@@ -157,6 +157,9 @@ struct SETTINGS_PLACES_OF_INTEREST {
  * Options for glide computer features
  */
 struct SETTINGS_FEATURES {
+  /** Calculate final glide over terrain */
+  int FinalGlideTerrain;
+
   /** block speed to fly instead of dolphin */
   bool EnableBlockSTF;
 

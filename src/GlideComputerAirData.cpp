@@ -506,6 +506,9 @@ GlideComputerAirData::AirspaceWarning()
 void
 GlideComputerAirData::TerrainFootprint(double screen_range)
 {
+  if (!SettingsComputer().FinalGlideTerrain)
+     return;
+
   // initialise base
   SetCalculated().TerrainBase = Calculated().TerrainAlt;
 

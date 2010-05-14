@@ -83,6 +83,7 @@ extern const TCHAR szProfileRegKey[];
 extern const TCHAR szProfileSnailTrail[];
 extern const TCHAR szProfileDrawTopology[];
 extern const TCHAR szProfileDrawTerrain[];
+extern const TCHAR szProfileFinalGlideTerrain[];
 extern const TCHAR szProfileAutoWind[];
 extern const TCHAR *szProfileAirspacePriority[];
 extern const TCHAR szProfileAirspaceWarning[];

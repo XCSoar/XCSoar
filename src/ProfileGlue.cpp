@@ -319,6 +319,9 @@ Profile::Use()
   Get(szProfileDrawTerrain,
       XCSoarInterface::SetSettingsMap().EnableTerrain);
 
+  Get(szProfileFinalGlideTerrain,
+      XCSoarInterface::SetSettingsComputer().FinalGlideTerrain);
+
   Get(szProfileAutoWind,
       XCSoarInterface::SetSettingsComputer().AutoWindMode);
 

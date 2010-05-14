@@ -131,10 +131,9 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
                              BigZoom);
     }
 
-    if (Calculated().TerrainValid) {
+    if (SettingsComputer().FinalGlideTerrain == 2 && Calculated().TerrainValid)
       // Draw the groundline (and shading)
       DrawTerrainAbove(canvas, rc, buffer_canvas);
-    }
 
     BigZoom = false;
   }
@@ -195,9 +194,9 @@ void MapWindow::RenderTaskElements(Canvas &canvas, const RECT rc)
 void MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
 {
   // draw red cross on glide through terrain marker
-  if (Calculated().TerrainValid) {
+  if (Calculated().TerrainValid)
     DrawGlideThroughTerrain(canvas);
-  }
+
   if ((terrain != NULL && SettingsMap().EnableTerrain &&
        Calculated().TerrainValid) ||
       (weather != NULL && weather->GetParameter() != 0)) {

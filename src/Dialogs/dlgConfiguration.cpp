@@ -1310,6 +1310,17 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(_T("prpFinalGlideTerrain"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(_T("OFF")));
+    dfe->addEnumText(gettext(_T("Line")));
+    dfe->addEnumText(gettext(_T("Shade")));
+    dfe->Set(XCSoarInterface::SettingsComputer().FinalGlideTerrain);
+    wp->RefreshDisplay();
+  }
+
   LoadFormProperty(*wf, _T("prpEnableNavBaroAltitude"),
                    XCSoarInterface::SettingsComputer().EnableNavBaroAltitude);
 
@@ -2416,6 +2427,10 @@ void dlgConfigurationShowModal(void){
   changed |= SetValueRegistryOnChange(wf, _T("prpEnableNavBaroAltitude"),
                                       szProfileEnableNavBaroAltitude,
                                       XCSoarInterface::SetSettingsComputer().EnableNavBaroAltitude);
+
+  changed |= SetValueRegistryOnChange(wf, _T("prpFinalGlideTerrain"),
+                                      szProfileFinalGlideTerrain,
+                                      XCSoarInterface::SetSettingsComputer().FinalGlideTerrain);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpBlockSTF"),
                                       szProfileBlockSTF,
