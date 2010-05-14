@@ -221,6 +221,10 @@ dlgTaskEditShowModal(SingleWindow &parent, OrderedTask** task)
     wf = dlgLoadFromXML(CallBackTable, _T("dlgTaskEdit.xml"),
                         parent, _T("IDR_XML_TASKEDIT"));
 
+  assert(wf != NULL);
+  if (!wf)
+    return false;
+
   wTaskPoints = (WndListFrame*)wf->FindByName(_T("frmTaskPoints"));
   assert(wTaskPoints != NULL);
 
@@ -232,9 +236,6 @@ dlgTaskEditShowModal(SingleWindow &parent, OrderedTask** task)
 
   RefreshView();
 
-  if (!wf)
-    return false;
-  assert(wf != NULL);
   wf->ShowModal();
   delete wf;
 
