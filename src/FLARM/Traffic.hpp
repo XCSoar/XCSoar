@@ -79,6 +79,10 @@ struct FLARM_TRAFFIC {
     return ID > 0;
   }
 
+  bool HasAlarm() const {
+    return (AlarmLevel > 0 && AlarmLevel < 4);
+  }
+
   bool HasName() const {
     return Name[0] != _T('\0');
   }
