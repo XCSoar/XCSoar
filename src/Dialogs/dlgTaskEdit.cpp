@@ -250,8 +250,8 @@ dlgTaskEditShowModal(SingleWindow &parent, OrderedTask** task)
 
   if (*task != ordered_task) {
     *task = ordered_task;
-    return true;
-  } else {
-    return task_modified;
+    task_modified = true;
   }
+
+  return task_modified;
 }
