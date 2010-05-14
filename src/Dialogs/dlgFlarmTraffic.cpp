@@ -740,7 +740,7 @@ PaintRadarTraffic(Canvas &canvas) {
     return;
   }
 
-  // Iterate through the traffic
+  // Iterate through the traffic (normal traffic)
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
     const FLARM_TRAFFIC &traffic =
         XCSoarInterface::Basic().flarm.FLARM_Traffic[i];
@@ -749,7 +749,24 @@ PaintRadarTraffic(Canvas &canvas) {
     if (!traffic.defined())
       continue;
 
-    PaintRadarTarget(canvas, traffic, i);
+    if (!traffic.HasAlarm())
+      PaintRadarTarget(canvas, traffic, i);
+  }
+
+  if (!WarningMode())
+    return;
+
+  // Iterate through the traffic (alarm traffic)
+  for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
+    const FLARM_TRAFFIC &traffic =
+        XCSoarInterface::Basic().flarm.FLARM_Traffic[i];
+
+    // If FLARM target does not exist -> next one
+    if (!traffic.defined())
+      continue;
+
+    if (traffic.HasAlarm())
+      PaintRadarTarget(canvas, traffic, i);
   }
 }
 
