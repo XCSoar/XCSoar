@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "RasterMapJPG2000.hpp"
+#include "jasper/RasterTile.h"
 
 #ifdef __GNUC__
 #define int_fast8_t jas_int_fast8_t
