@@ -2147,10 +2147,6 @@ void dlgConfigurationShowModal(void){
   configuration_tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
   assert(configuration_tabbed != NULL);
 
-  /* restore previous page */
-  configuration_tabbed->SetCurrentPage(config_page);
-  PageSwitched();
-
   wf->FilterAdvanced(XCSoarInterface::UserLevel>0);
 
   if (!is_pna() && !is_fivv()) {
@@ -2170,6 +2166,9 @@ void dlgConfigurationShowModal(void){
   }
 
   setVariables();
+
+  /* restore previous page */
+  configuration_tabbed->SetCurrentPage(config_page);
   PageSwitched();
 
   changed = false;
