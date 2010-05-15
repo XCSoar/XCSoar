@@ -133,10 +133,11 @@ DataNodeXML::set_attribute(const tstring &name, const tstring value)
 bool 
 DataNodeXML::get_attribute(const tstring &name, tstring &value) const
 {
-  if (!m_xml_node->isAttributeSet(name.c_str())) {
+  const TCHAR *v = m_xml_node->getAttribute(name.c_str());
+  if (v == NULL)
     return false;
-  }
-  tstring val(m_xml_node->getAttribute(name.c_str()));
+
+  tstring val(v);
   value = val;
   return true;
 }
