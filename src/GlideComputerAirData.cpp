@@ -854,43 +854,37 @@ GlideComputerAirData::ThermalBand()
 
   if (dheight > Calculated().MaxThermalHeight) {
     // moved beyond ceiling, so redistribute buckets
-    fixed max_thermal_height_new;
-    fixed tmpW[NUMTHERMALBUCKETS];
-    int tmpN[NUMTHERMALBUCKETS];
+    THERMAL_BAND_INFO new_tbi;
     fixed h;
 
     // calculate new buckets so glider is below max
     fixed hbuk = Calculated().MaxThermalHeight/NUMTHERMALBUCKETS;
 
-    max_thermal_height_new = max(fixed_one, Calculated().MaxThermalHeight);
-    while (max_thermal_height_new < dheight) {
-      max_thermal_height_new += hbuk;
+    new_tbi.MaxThermalHeight = max(fixed_one, Calculated().MaxThermalHeight);
+    while (new_tbi.MaxThermalHeight < dheight) {
+      new_tbi.MaxThermalHeight += hbuk;
     }
 
     // reset counters
     for (i = 0; i < NUMTHERMALBUCKETS; i++) {
-      tmpW[i]= 0.0;
-      tmpN[i]= 0;
+      new_tbi.ThermalProfileW[i] = fixed_zero;
+      new_tbi.ThermalProfileN[i] = 0;
     }
     // shift data into new buckets
     for (i = 0; i < NUMTHERMALBUCKETS; i++) {
       h = (i) * (Calculated().MaxThermalHeight) / (NUMTHERMALBUCKETS);
       // height of center of bucket
-      j = iround(NUMTHERMALBUCKETS * h / max_thermal_height_new);
+      j = iround(NUMTHERMALBUCKETS * h / new_tbi.MaxThermalHeight);
 
       if (j < NUMTHERMALBUCKETS) {
         if (Calculated().ThermalProfileN[i] > 0) {
-          tmpW[j] += Calculated().ThermalProfileW[i];
-          tmpN[j] += Calculated().ThermalProfileN[i];
+          new_tbi.ThermalProfileW[j] += Calculated().ThermalProfileW[i];
+          new_tbi.ThermalProfileN[j] += Calculated().ThermalProfileN[i];
         }
       }
     }
 
-    for (i = 0; i < NUMTHERMALBUCKETS; i++) {
-      SetCalculated().ThermalProfileW[i] = tmpW[i];
-      SetCalculated().ThermalProfileN[i] = tmpN[i];
-    }
-    SetCalculated().MaxThermalHeight = max_thermal_height_new;
+    (THERMAL_BAND_INFO &)SetCalculated() = new_tbi;
   }
 
   index = min(NUMTHERMALBUCKETS - 1,
