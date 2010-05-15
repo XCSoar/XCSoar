@@ -839,7 +839,7 @@ GlideComputerAirData::ThermalBand()
 
   const fixed dheight = Basic().working_band_height;
 
-  int index, i, j;
+  int i;
 
   if (!positive(Basic().working_band_height)) {
     return; // nothing to do.
@@ -856,44 +856,31 @@ GlideComputerAirData::ThermalBand()
   if (dheight > tbi.MaxThermalHeight) {
     // moved beyond ceiling, so redistribute buckets
     ThermalBandInfo new_tbi;
-    fixed h;
 
     // calculate new buckets so glider is below max
     fixed hbuk = tbi.MaxThermalHeight / NUMTHERMALBUCKETS;
 
+    new_tbi.clear();
     new_tbi.MaxThermalHeight = max(fixed_one, tbi.MaxThermalHeight);
     while (new_tbi.MaxThermalHeight < dheight) {
       new_tbi.MaxThermalHeight += hbuk;
     }
 
-    // reset counters
-    for (i = 0; i < NUMTHERMALBUCKETS; i++) {
-      new_tbi.ThermalProfileW[i] = fixed_zero;
-      new_tbi.ThermalProfileN[i] = 0;
-    }
     // shift data into new buckets
     for (i = 0; i < NUMTHERMALBUCKETS; i++) {
-      h = i * tbi.MaxThermalHeight / NUMTHERMALBUCKETS;
+      fixed h = tbi.bucket_height(i);
       // height of center of bucket
-      j = iround(NUMTHERMALBUCKETS * h / new_tbi.MaxThermalHeight);
-
-      if (j < NUMTHERMALBUCKETS) {
-        if (tbi.ThermalProfileN[i] > 0) {
-          new_tbi.ThermalProfileW[j] += tbi.ThermalProfileW[i];
-          new_tbi.ThermalProfileN[j] += tbi.ThermalProfileN[i];
-        }
+      unsigned j = new_tbi.bucket_for_height(h);
+      if (tbi.ThermalProfileN[i] > 0) {
+        new_tbi.ThermalProfileW[j] += tbi.ThermalProfileW[i];
+        new_tbi.ThermalProfileN[j] += tbi.ThermalProfileN[i];
       }
     }
 
     tbi = new_tbi;
   }
 
-  index = min(NUMTHERMALBUCKETS - 1,
-              iround(NUMTHERMALBUCKETS
-                     * (dheight / max(fixed_one, tbi.MaxThermalHeight))));
-
-  tbi.ThermalProfileW[index] += Basic().TotalEnergyVario;
-  tbi.ThermalProfileN[index]++;
+  tbi.add(dheight, Basic().TotalEnergyVario);
 }
 
 

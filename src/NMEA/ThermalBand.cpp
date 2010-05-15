@@ -36,39 +36,53 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_NMEA_THERMAL_BAND_H
-#define XCSOAR_NMEA_THERMAL_BAND_H
+#include "ThermalBand.hpp"
 
-#include "Math/fixed.hpp"
+#include <assert.h>
 
-#define NUMTHERMALBUCKETS 10
-
-/**
- * Derived thermal climb rate histogram by altitude (time averaged)
- * 
- */
-struct ThermalBandInfo
+void
+ThermalBandInfo::clear()
 {
-  /** Maximum height achieved in circling */ 
-  fixed MaxThermalHeight;
-  /** Number of samples in each bucket */ 
-  int    ThermalProfileN[NUMTHERMALBUCKETS];
-  /** Average climb rate in each bucket */ 
-  fixed ThermalProfileW[NUMTHERMALBUCKETS];
+  MaxThermalHeight = fixed_zero;
 
-  void clear();
+  for (unsigned i = 0; i < NUMTHERMALBUCKETS; i++) {
+    ThermalProfileW[i] = fixed_zero;
+    ThermalProfileN[i] = 0;
+  }
+}
 
-  /**
-   * Calculates the bucket number for the specified height.
-   */
-  unsigned bucket_for_height(fixed height) const;
+unsigned
+ThermalBandInfo::bucket_for_height(fixed height) const
+{
+  if (negative(height))
+    return 0;
 
-  /**
-   * Calculates the base height of the specified bucket.
-   */
-  fixed bucket_height(unsigned bucket) const;
+  if (height >= MaxThermalHeight)
+    return NUMTHERMALBUCKETS - 1;
 
-  void add(fixed height, fixed total_energy_vario);
-};
+  int bucket = NUMTHERMALBUCKETS * height / MaxThermalHeight;
+  if (bucket < 0)
+    return 0;
 
-#endif
+  if (bucket >= NUMTHERMALBUCKETS)
+    return NUMTHERMALBUCKETS - 1;
+
+  return bucket;
+}
+
+fixed
+ThermalBandInfo::bucket_height(unsigned bucket) const
+{
+  assert(bucket < NUMTHERMALBUCKETS);
+
+  return bucket * MaxThermalHeight / NUMTHERMALBUCKETS;
+}
+
+void
+ThermalBandInfo::add(fixed height, fixed total_energy_vario)
+{
+  unsigned bucket = bucket_for_height(height);
+  ThermalProfileW[bucket] += total_energy_vario;
+  ThermalProfileN[bucket]++;
+}
+

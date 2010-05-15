@@ -98,11 +98,8 @@ GlideComputerBlackboard::ResetFlight(const bool full)
     calculated_info.MaxHeightGain = fixed_zero;
   }
 
-  calculated_info.thermal_band.MaxThermalHeight = fixed_zero;
-  for (i = 0; i < NUMTHERMALBUCKETS; i++) {
-    calculated_info.thermal_band.ThermalProfileN[i] = 0;
-    calculated_info.thermal_band.ThermalProfileW[i] = fixed_zero;
-  }
+  calculated_info.thermal_band.clear();
+
   // clear thermal sources for first time.
   for (i = 0; i < MAX_THERMAL_SOURCES; i++) {
     calculated_info.ThermalSources[i].LiftRate = fixed_minus_one;
