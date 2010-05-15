@@ -844,23 +844,24 @@ GlideComputerAirData::ThermalBand()
   if (!positive(Basic().working_band_height)) {
     return; // nothing to do.
   }
-  if (Calculated().MaxThermalHeight == fixed_zero) {
-    SetCalculated().MaxThermalHeight = dheight;
-  }
+
+  ThermalBandInfo &tbi = SetCalculated().thermal_band;
+  if (tbi.MaxThermalHeight == fixed_zero)
+    tbi.MaxThermalHeight = dheight;
 
   // only do this if in thermal and have been climbing
   if ((!Calculated().Circling) || negative(Calculated().Average30s))
     return;
 
-  if (dheight > Calculated().MaxThermalHeight) {
+  if (dheight > tbi.MaxThermalHeight) {
     // moved beyond ceiling, so redistribute buckets
-    THERMAL_BAND_INFO new_tbi;
+    ThermalBandInfo new_tbi;
     fixed h;
 
     // calculate new buckets so glider is below max
-    fixed hbuk = Calculated().MaxThermalHeight/NUMTHERMALBUCKETS;
+    fixed hbuk = tbi.MaxThermalHeight / NUMTHERMALBUCKETS;
 
-    new_tbi.MaxThermalHeight = max(fixed_one, Calculated().MaxThermalHeight);
+    new_tbi.MaxThermalHeight = max(fixed_one, tbi.MaxThermalHeight);
     while (new_tbi.MaxThermalHeight < dheight) {
       new_tbi.MaxThermalHeight += hbuk;
     }
@@ -872,27 +873,27 @@ GlideComputerAirData::ThermalBand()
     }
     // shift data into new buckets
     for (i = 0; i < NUMTHERMALBUCKETS; i++) {
-      h = (i) * (Calculated().MaxThermalHeight) / (NUMTHERMALBUCKETS);
+      h = i * tbi.MaxThermalHeight / NUMTHERMALBUCKETS;
       // height of center of bucket
       j = iround(NUMTHERMALBUCKETS * h / new_tbi.MaxThermalHeight);
 
       if (j < NUMTHERMALBUCKETS) {
-        if (Calculated().ThermalProfileN[i] > 0) {
-          new_tbi.ThermalProfileW[j] += Calculated().ThermalProfileW[i];
-          new_tbi.ThermalProfileN[j] += Calculated().ThermalProfileN[i];
+        if (tbi.ThermalProfileN[i] > 0) {
+          new_tbi.ThermalProfileW[j] += tbi.ThermalProfileW[i];
+          new_tbi.ThermalProfileN[j] += tbi.ThermalProfileN[i];
         }
       }
     }
 
-    (THERMAL_BAND_INFO &)SetCalculated() = new_tbi;
+    tbi = new_tbi;
   }
 
   index = min(NUMTHERMALBUCKETS - 1,
               iround(NUMTHERMALBUCKETS
-                     * (dheight / max(fixed_one, Calculated().MaxThermalHeight))));
+                     * (dheight / max(fixed_one, tbi.MaxThermalHeight))));
 
-  SetCalculated().ThermalProfileW[index] += Basic().TotalEnergyVario;
-  SetCalculated().ThermalProfileN[index]++;
+  tbi.ThermalProfileW[index] += Basic().TotalEnergyVario;
+  tbi.ThermalProfileN[index]++;
 }
 
 

@@ -257,7 +257,6 @@ struct DERIVED_INFO:
   public CLIMB_INFO,
   public CIRCLING_INFO,
   public TERRAIN_ALT_INFO,
-  public THERMAL_BAND_INFO,
   public THERMAL_LOCATOR_INFO,
   public TEAMCODE_INFO,
   public CLIMB_HISTORY_INFO
@@ -280,6 +279,8 @@ struct DERIVED_INFO:
 
   TaskStats task_stats; /**< Copy of task statistics data for active task */
   CommonStats common_stats; /**< Copy of common task statistics data */
+
+  ThermalBandInfo thermal_band;
 
   unsigned time_process_gps; /**< Time (ms) to process main computer functions */
   unsigned time_process_idle; /**< Time (ms) to process idle computer functions */

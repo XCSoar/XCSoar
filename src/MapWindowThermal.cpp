@@ -95,10 +95,12 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
       && (DisplayMode == dmFinalGlide))
     return;
 
+  const ThermalBandInfo &thermal_band = Calculated().thermal_band;
+
   // JMW TODO accuracy: gather proper statistics
   // note these should/may also be relative to ground
   int i;
-  fixed mth = Calculated().MaxThermalHeight;
+  fixed mth = thermal_band.MaxThermalHeight;
   fixed maxh, minh;
   fixed h;
   fixed Wt[NUMTHERMALBUCKETS];
@@ -162,10 +164,10 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
     fixed hi = i * mth / NUMTHERMALBUCKETS;
     fixed hp = ((hi - minh) / (maxh - minh));
 
-    if (Calculated().ThermalProfileN[i] > 5) {
+    if (thermal_band.ThermalProfileN[i] > 5) {
       // now requires 10 items in bucket before displaying,
       // to eliminate kinks
-      wthis = Calculated().ThermalProfileW[i] / Calculated().ThermalProfileN[i];
+      wthis = thermal_band.ThermalProfileW[i] / thermal_band.ThermalProfileN[i];
     }
     if (positive(wthis)) {
       ht[numtherm] = hp;

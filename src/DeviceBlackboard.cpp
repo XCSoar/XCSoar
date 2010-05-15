@@ -675,7 +675,7 @@ DeviceBlackboard::WorkingBand()
     SetBasic().working_band_fraction = fixed_zero;
     return;
   }
-  const fixed max_height = Calculated().MaxThermalHeight;
+  const fixed max_height = Calculated().thermal_band.MaxThermalHeight;
   if (positive(max_height)) {
     SetBasic().working_band_fraction =
       working_band_height / max_height;

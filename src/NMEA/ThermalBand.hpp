@@ -47,7 +47,7 @@ Copyright_License {
  * Derived thermal climb rate histogram by altitude (time averaged)
  * 
  */
-struct THERMAL_BAND_INFO
+struct ThermalBandInfo
 {
   /** Maximum height achieved in circling */ 
   fixed MaxThermalHeight;
