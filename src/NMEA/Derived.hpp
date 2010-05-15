@@ -44,10 +44,10 @@ Copyright_License {
 #include "Navigation/SpeedVector.hpp"
 #include "Task/TaskStats/TaskStats.hpp"
 #include "Task/TaskStats/CommonStats.hpp"
+#include "NMEA/ThermalBand.hpp"
 
 #include <tchar.h>
 
-#define NUMTHERMALBUCKETS 10
 #define MAX_THERMAL_SOURCES 20
 
 /**
@@ -196,21 +196,6 @@ struct TERRAIN_ALT_INFO
 
   /** Lowest height within glide range */
   fixed TerrainBase;
-};
-
-
-/**
- * Derived thermal climb rate histogram by altitude (time averaged)
- * 
- */
-struct THERMAL_BAND_INFO
-{
-  /** Maximum height achieved in circling */ 
-  fixed MaxThermalHeight;
-  /** Number of samples in each bucket */ 
-  int    ThermalProfileN[NUMTHERMALBUCKETS];
-  /** Average climb rate in each bucket */ 
-  fixed ThermalProfileW[NUMTHERMALBUCKETS];
 };
 
 /**
