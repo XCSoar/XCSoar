@@ -152,7 +152,7 @@ public:
     }
     operator bool() const
     {
-        return m_nVal?true:false;
+      return m_nVal != 0;
     }
     inline operator double() const
     {
