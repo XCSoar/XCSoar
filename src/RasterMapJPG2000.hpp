@@ -42,6 +42,8 @@ Copyright_License {
 #include "RasterMap.h"
 #include "jasper/RasterTile.h"
 
+#include <syslimits.h>
+
 class RasterMapJPG2000: public RasterMap {
  public:
   RasterMapJPG2000();
@@ -59,7 +61,7 @@ class RasterMapJPG2000: public RasterMap {
   static RasterMapJPG2000 *LoadFile(const char *path);
 
  protected:
-  char jp2_filename[MAX_PATH];
+  char jp2_filename[PATH_MAX];
   virtual short _GetFieldAtXY(unsigned int lx,
                               unsigned int ly);
   bool TriggerJPGReload;
