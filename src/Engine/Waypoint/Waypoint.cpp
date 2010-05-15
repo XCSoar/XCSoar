@@ -55,3 +55,9 @@ Waypoint::Waypoint(const bool is_turnpoint):
 {
   Flags.setDefaultFlags(is_turnpoint);
 }
+
+bool
+Waypoint::is_close_to(const GEOPOINT &location, const fixed range) const
+{
+  return Location.distance(location) <= range;
+}

@@ -50,6 +50,7 @@
 class OrderedTaskPoint;
 class TaskPointVisitor;
 class AbstractTaskFactory;
+class Waypoints;
 
 /**
  * A task comprising an ordered sequence of task points, each with
@@ -162,6 +163,16 @@ public:
    * @return True if this task changed
    */
   bool commit(const OrderedTask& other);
+  
+  /** 
+   * Check waypoints in this task have duplicates in the
+   * waypoint database, replacing as required.
+   * 
+   * @param waypoints Waypoint database
+   * 
+   * @return True if database was modified
+   */
+  bool check_duplicate_waypoints(Waypoints& waypoints);
 
 /** 
  * Retrieves the active task point sequence.
