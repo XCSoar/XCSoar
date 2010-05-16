@@ -108,14 +108,17 @@ RasterMap::SetFieldRounding(const GEOPOINT& delta,
     rounding.Yrounding = 1;
   }
 
-  const fixed fx = rounding.Xrounding * TerrainInfo.StepSize.value_native();
-  const fixed fy = rounding.Yrounding * TerrainInfo.StepSize.value_native();
+  // use double here for maximum accuracy, since we are dealing with
+  // numbers close to the lower range of the fixed type
 
-  rounding.fXrounding = fixed_one / fx;
-  rounding.fXroundingFine = 256 * rounding.fXrounding;
+  const double fx = rounding.Xrounding*(double)TerrainInfo.StepSize.value_native();
+  const double fy = rounding.Yrounding*(double)TerrainInfo.StepSize.value_native();
 
-  rounding.fYrounding = fixed_one / fy;
-  rounding.fYroundingFine = 256 * rounding.fYrounding;
+  rounding.fXrounding = fixed(1.0/fx);
+  rounding.fXroundingFine = fixed(256.0/fx);
+
+  rounding.fYrounding = fixed(1.0/fy);
+  rounding.fYroundingFine = fixed(256.0/fy);
 
   rounding.DirectFine = false;
 }
