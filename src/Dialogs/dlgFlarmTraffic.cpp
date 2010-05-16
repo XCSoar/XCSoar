@@ -693,33 +693,55 @@ PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
     if (traffic.Average30s < 0.5)
       return;
 
-    // Select font and color
+    // Select font
     canvas.background_transparent();
     canvas.select(MapWindowBoldFont);
-    if (static_cast<unsigned> (selection) == i)
-      canvas.set_text_color(hcSelection);
-    else
-      canvas.set_text_color(hcStandard);
 
-    // Draw vertical speed
+    // Format string
     TCHAR tmp[10];
     Units::FormatUserVSpeed(traffic.Average30s, tmp, 10, false);
     SIZE sz = canvas.text_size(tmp);
-    canvas.text(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy * 0.5, tmp);
-  } else if (side_display_type == 2) {
-#endif
-    // Select font and color
-    canvas.background_transparent();
-    canvas.select(MapWindowBoldFont);
+
+    // Draw vertical speed shadow
+    canvas.set_text_color(Color::WHITE);
+    canvas.text(sc[i].x + Layout::FastScale(11) + 1,
+                sc[i].y - sz.cy * 0.5 + 1, tmp);
+    canvas.text(sc[i].x + Layout::FastScale(11) - 1,
+                sc[i].y - sz.cy * 0.5 - 1, tmp);
+
+    // Select color
     if (static_cast<unsigned> (selection) == i)
       canvas.set_text_color(hcSelection);
     else
       canvas.set_text_color(hcStandard);
 
     // Draw vertical speed
+    canvas.text(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy * 0.5, tmp);
+  } else if (side_display_type == 2) {
+#endif
+    // Select font
+    canvas.background_transparent();
+    canvas.select(MapWindowBoldFont);
+
+    // Format string
     TCHAR tmp[10];
     Units::FormatUserArrival(traffic.RelativeAltitude, tmp, 10, true);
     SIZE sz = canvas.text_size(tmp);
+
+    // Draw vertical speed shadow
+    canvas.set_text_color(Color::WHITE);
+    canvas.text(sc[i].x + Layout::FastScale(11) + 1,
+                sc[i].y - sz.cy * 0.5 + 1, tmp);
+    canvas.text(sc[i].x + Layout::FastScale(11) - 1,
+                sc[i].y - sz.cy * 0.5 - 1, tmp);
+
+    // Select color
+    if (static_cast<unsigned> (selection) == i)
+      canvas.set_text_color(hcSelection);
+    else
+      canvas.set_text_color(hcStandard);
+
+    // Draw vertical speed
     canvas.text(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy * 0.5, tmp);
 #ifdef FLARM_AVERAGE
   }
