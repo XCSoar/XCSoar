@@ -74,7 +74,7 @@ public:
    *
    * @param wp Waypoint to add to internal store
    */
-  void append(Waypoint& wp);
+  void append(const Waypoint& wp);
 
   /**
    * Erase waypoint from the internal store.  Requires optimise() to
@@ -216,16 +216,6 @@ public:
    * @return Pointer to waypoint if found (or NULL if not)
    */
   const Waypoint* lookup_name(const tstring &name) const;
-
-/** 
- * Check if a waypoint with same name and approximate location
- * is already in the database.  If not, is appended to the database.
- * 
- * @param waypoint Waypoint to check against (replaced)
- * 
- * @return True if found
- */
-  bool find_duplicate(Waypoint& waypoint);
 
   /**
    * Call visitor function on waypoints within approximate range

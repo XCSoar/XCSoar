@@ -103,12 +103,12 @@ public:
   OrderedTask* task_blank();
 
   /**
-   * Copy task into this task.
+   * Copy task into this task
    *
    * @param other OrderedTask to copy
    * @return True if this task changed
    */
-  bool task_commit(OrderedTask& that);
+  bool task_commit(const OrderedTask& that);
 
   const OrderedTaskBehaviour get_ordered_task_behaviour() const;
 

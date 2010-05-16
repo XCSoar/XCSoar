@@ -74,7 +74,6 @@ CommitTaskChanges()
     MessageBoxX (gettext(TEXT("Active task modified")),
                  TEXT("Task Manager"), MB_OK);
 
-    ordered_task->check_duplicate_waypoints(way_points);
     task_ui.task_commit(*ordered_task);
     task_ui.task_save_default();
 

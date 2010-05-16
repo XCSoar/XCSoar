@@ -128,8 +128,7 @@ WayPointFile::add_waypoint_if_in_range(Waypoints &way_points,
 
   // Append the new waypoint to the waypoint list and
   // return successful line parse
-  Waypoint wp(new_waypoint);
-  way_points.append(wp);
+  way_points.append(new_waypoint);
   return;
 }
 

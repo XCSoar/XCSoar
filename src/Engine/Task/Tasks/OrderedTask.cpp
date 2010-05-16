@@ -60,7 +60,6 @@
 #include "Task/Factory/MixedTaskFactory.hpp"
 #include "Task/Factory/TouringTaskFactory.hpp"
 
-#include "Waypoint/Waypoints.hpp"
 
 void
 OrderedTask::update_geometry() 
@@ -952,24 +951,6 @@ OrderedTask::clone(TaskEvents &te,
   }
   new_task->update_geometry();
   return new_task;
-}
-
-bool
-OrderedTask::check_duplicate_waypoints(Waypoints& waypoints)
-{
-  bool changed = false;
-  for (unsigned i=0; i<task_size(); ++i) {
-    Waypoint wp(tps[i]->get_waypoint());
-    changed = !waypoints.find_duplicate(wp);
-    replace(tps[i]->clone(task_behaviour,
-                          m_ordered_behaviour,
-                          get_task_projection(),
-                          &wp), i);
-  }
-  if (changed) {
-    waypoints.optimise();
-  }
-  return changed;
 }
 
 bool
