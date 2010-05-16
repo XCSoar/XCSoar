@@ -581,8 +581,6 @@ PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
 {
   static const Brush hbWarning(hcWarning);
   static const Brush hbAlarm(hcAlarm);
-  static const Brush hbStandard(hcStandard);
-  static const Brush hbPassive(hcPassive);
   static const Brush hbSelection(hcSelection);
   static const Brush hbTeam(hcTeam);
 
@@ -647,14 +645,14 @@ PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
   case 0:
   case 4:
     if (WarningMode()) {
-      canvas.select(hbPassive);
+      canvas.hollow_brush();
       canvas.select(hpPassive);
     } else {
       if (static_cast<unsigned> (selection) == i) {
         canvas.select(hpSelection);
         canvas.select(hbSelection);
       } else {
-        canvas.select(hbStandard);
+        canvas.hollow_brush();
         canvas.select(hpStandard);
       }
       if (XCSoarInterface::SettingsComputer().TeamFlarmTracking &&
