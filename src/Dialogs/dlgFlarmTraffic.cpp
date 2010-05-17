@@ -119,6 +119,7 @@ SetTarget(int i)
     return;
 
   selection = i;
+  wdf->invalidate();
 }
 
 /**
@@ -375,7 +376,6 @@ OnPrevClicked(gcc_unused WndButton &button)
     return;
 
   PrevTarget();
-  wdf->invalidate();
 }
 
 /**
@@ -389,7 +389,6 @@ OnNextClicked(gcc_unused WndButton &button)
     return;
 
   NextTarget();
-  wdf->invalidate();
 }
 
 /**
@@ -449,12 +448,10 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   case VK_LEFT:
   case '6':
     PrevTarget();
-    wdf->invalidate();
     return true;
   case VK_RIGHT:
   case '7':
     NextTarget();
-    wdf->invalidate();
     return true;
   }
 
