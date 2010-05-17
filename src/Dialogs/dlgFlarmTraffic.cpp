@@ -63,21 +63,33 @@ static const Color hcTeam(0x74, 0xFF, 0x00);
 static const Color hcBackground(0xFF, 0xFF, 0xFF);
 static const Color hcRadar(0x55, 0x55, 0x55);
 
-static unsigned zoom = 2;
-static int selection = -1;
-static int warning = -1;
-static POINT radar_mid;
-static SIZE radar_size;
-static int side_display_type = 1;
-static bool enable_auto_zoom = true;
-static POINT sc[FLARM_STATE::FLARM_MAX_TRAFFIC];
-
 /**
  * A Window which renders FLARM traffic.
  */
 class FlarmTrafficWindow : public PaintWindow {
+protected:
+  unsigned zoom;
+  int selection;
+  int warning;
+  POINT radar_mid;
+  SIZE radar_size;
+  POINT sc[FLARM_STATE::FLARM_MAX_TRAFFIC];
+
 public:
+  int side_display_type;
+
+public:
+  FlarmTrafficWindow()
+    :zoom(2),
+     selection(-1), warning(-1),
+     side_display_type(1) {}
+
   bool WarningMode() const;
+
+  int GetTarget() const {
+    return selection;
+  }
+
   void SetTarget(int i);
   void NextTarget();
   void PrevTarget();
@@ -125,11 +137,27 @@ FlarmTrafficWindow::on_resize(unsigned width, unsigned height)
  */
 class FlarmTrafficControl : public FlarmTrafficWindow {
 protected:
+  bool enable_auto_zoom;
+
+public:
+  FlarmTrafficControl()
+    :enable_auto_zoom(true) {}
+
+protected:
   void CalcAutoZoom();
 
 public:
   void Update();
+
+  bool GetAutoZoom() const {
+    return enable_auto_zoom;
+  }
+
   void SetAutoZoom(bool enabled);
+  void ToggleAutoZoom() {
+    SetAutoZoom(!enable_auto_zoom);
+  }
+
   void ZoomOut();
   void ZoomIn();
 
@@ -425,6 +453,7 @@ OnDetailsClicked(gcc_unused WndButton &button)
     return;
 
   // Don't open the details dialog if no plane selected
+  int selection = wdf->GetTarget();
   if (selection == -1 ||
       !XCSoarInterface::Basic().flarm.FLARM_Traffic[selection].defined())
     return;
@@ -493,11 +522,11 @@ OnCloseClicked(gcc_unused WndButton &button)
 static void
 OnSwitchDataClicked(gcc_unused WndButton &button)
 {
-  side_display_type++;
-  if (side_display_type > 2)
-    side_display_type = 1;
+  wdf->side_display_type++;
+  if (wdf->side_display_type > 2)
+    wdf->side_display_type = 1;
 
-  Profile::Set(szProfileFlarmSideData, side_display_type);
+  Profile::Set(szProfileFlarmSideData, wdf->side_display_type);
 }
 
 /**
@@ -506,7 +535,7 @@ OnSwitchDataClicked(gcc_unused WndButton &button)
 static void
 OnAutoZoomClicked(gcc_unused WndButton &button)
 {
-  wdf->SetAutoZoom(!enable_auto_zoom);
+  wdf->ToggleAutoZoom();
 }
 
 /**
@@ -1070,7 +1099,7 @@ dlgFlarmTrafficShowModal()
 
   // Get the last chosen Side Data configuration
   ((WndButton *)wf->FindByName(_T("cmdAutoZoom")))->
-      SetForeColor(enable_auto_zoom ? Color::BLUE : Color::BLACK);
+    SetForeColor(wdf->GetAutoZoom() ? Color::BLUE : Color::BLACK);
 
   // Show the dialog
   wf->ShowModal();
