@@ -309,6 +309,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   LogStartUp(TEXT("OpenTerrain"));
   terrain.OpenTerrain();
 
+  CreateProgressDialog(gettext(TEXT("Loading way points...")));
+
   // Read the waypoint files
   WayPointGlue::ReadWaypoints(way_points, &terrain);
 
