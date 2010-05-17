@@ -39,8 +39,11 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_XML_HPP
 #define XCSOAR_DIALOGS_XML_HPP
 
+#include "Screen/Window.hpp"
+
 #include <tchar.h>
 
+class ContainerWindow;
 class WndForm;
 class SingleWindow;
 
@@ -62,6 +65,14 @@ typedef enum {
   eDialogScaledCentered,        /**< like eDialogScaled but center dialog in screen */
   eDialogFixed                  /**< don't adjust at all (same as !Layout::ScaleSupported()) */
 } DialogStyle_t;
+
+/**
+ * Callback type for the "Custom" element, attribute "OnCreate".
+ */
+typedef Window *(*CreateWindowCallback_t)(ContainerWindow &parent,
+                                          int left, int top,
+                                          unsigned width, unsigned height,
+                                          const WindowStyle style);
 
 extern DialogStyle_t g_eDialogStyle;
 

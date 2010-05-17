@@ -613,6 +613,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
   TCHAR Caption[128];
   TCHAR Name[64];
 
+  Window *window = NULL;
   WindowControl *WC = NULL;
 
   // Determine name, coordinates, width, height,
@@ -836,6 +837,17 @@ LoadChild(WndForm &form, ContainerControl *Parent,
         tabbed->AddClient(window);
         continue;
     }
+  } else if (_tcscmp(node.getName(), _T("Custom")) == 0) {
+    // Create a custom Window object with a callback
+    CreateWindowCallback_t create = (CreateWindowCallback_t)
+      CallBackLookup(LookUpTable,
+                     StringToStringDflt(node.getAttribute(_T("OnCreate")),
+                                        _T("")));
+    if (create == NULL)
+      return NULL;
+
+    window = create(Parent->GetClientAreaWindow(),
+                    X, Y, Width, Height, style);
   }
 
   // If WindowControl has been created
@@ -851,16 +863,20 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     if (!string_is_empty(Caption))
       WC->SetCaption(Caption);
 
-    form.AddDestruct(WC);
-
-    if (!string_is_empty(Name))
-      form.AddNamed(Name, WC);
-
-    if (advanced)
-      form.AddAdvanced(WC);
+    window = WC;
   }
 
-  return WC;
+  if (window != NULL) {
+    if (!string_is_empty(Name))
+      form.AddNamed(Name, window);
+
+    if (advanced)
+      form.AddAdvanced(window);
+
+    form.AddDestruct(WC);
+  }
+
+  return window;
 }
 
 /**
