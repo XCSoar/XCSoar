@@ -44,7 +44,8 @@ WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerControl *Owner,
                                      const WindowStyle style,
                                      OnPaintCallback_t OnPaintCallback)
   :WindowControl(&Owner->GetClientAreaWindow(), X, Y, Width, Height, style),
-   mOnPaintCallback(OnPaintCallback)
+   mOnPaintCallback(OnPaintCallback),
+   mOnMouseDownCallback(NULL)
 {
   mCaption[0] = '\0';
   SetForeColor(Owner->GetForeColor());
