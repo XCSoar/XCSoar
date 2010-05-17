@@ -76,6 +76,30 @@ static POINT sc[FLARM_STATE::FLARM_MAX_TRAFFIC];
  * A Window which renders FLARM traffic.
  */
 class FlarmTrafficWindow : public PaintWindow {
+public:
+  bool WarningMode() const;
+  void SetTarget(int i);
+  void NextTarget();
+  void PrevTarget();
+  void SelectNearTarget(int x, int y);
+
+protected:
+  static double GetZoomDistance(unsigned zoom);
+
+  void GetZoomDistanceString(TCHAR* str1, TCHAR* str2, unsigned size) const;
+  double RangeScale(double d) const;
+
+  void UpdateSelector();
+  void UpdateWarnings();
+  void Update();
+  void PaintTrafficInfo(Canvas &canvas) const;
+  void PaintRadarNoTraffic(Canvas &canvas) const;
+  void PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic,
+                        unsigned i);
+  void PaintRadarTraffic(Canvas &canvas);
+  void PaintRadarPlane(Canvas &canvas) const;
+  void PaintRadarBackground(Canvas &canvas) const;
+
 protected:
   virtual bool on_resize(unsigned width, unsigned height);
   virtual void on_paint(Canvas &canvas);
@@ -101,6 +125,15 @@ FlarmTrafficWindow::on_resize(unsigned width, unsigned height)
  */
 class FlarmTrafficControl : public FlarmTrafficWindow {
 protected:
+  void CalcAutoZoom();
+
+public:
+  void Update();
+  void SetAutoZoom(bool enabled);
+  void ZoomOut();
+  void ZoomIn();
+
+protected:
   virtual bool on_create();
   virtual bool on_mouse_down(int x, int y);
 };
@@ -119,8 +152,8 @@ FlarmTrafficControl::on_create()
   return true;
 }
 
-static bool
-WarningMode()
+bool
+FlarmTrafficWindow::WarningMode() const
 {
   if (warning < 0 || warning >= FLARM_STATE::FLARM_MAX_TRAFFIC)
     return false;
@@ -131,8 +164,9 @@ WarningMode()
   return false;
 }
 
-static double
-GetZoomDistance(unsigned zoom) {
+double
+FlarmTrafficWindow::GetZoomDistance(unsigned zoom)
+{
   switch (zoom) {
     case 0:
       return 500;
@@ -148,8 +182,10 @@ GetZoomDistance(unsigned zoom) {
   }
 }
 
-static void
-GetZoomDistanceString(TCHAR* str1, TCHAR* str2, unsigned size) {
+void
+FlarmTrafficWindow::GetZoomDistanceString(TCHAR* str1, TCHAR* str2,
+                                          unsigned size) const
+{
   double z = GetZoomDistance(zoom);
   double z_half = z * 0.5;
 
@@ -157,21 +193,21 @@ GetZoomDistanceString(TCHAR* str1, TCHAR* str2, unsigned size) {
   Units::FormatUserDistance(z_half, str2, size);
 }
 
-static void
-SetTarget(int i)
+void
+FlarmTrafficWindow::SetTarget(int i)
 {
   if (selection == i)
     return;
 
   selection = i;
-  wdf->invalidate();
+  invalidate();
 }
 
 /**
  * Tries to select the next target, if impossible selection = -1
  */
-static void
-NextTarget()
+void
+FlarmTrafficWindow::NextTarget()
 {
   for (int i = selection + 1; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
     if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined()) {
@@ -192,8 +228,8 @@ NextTarget()
 /**
  * Tries to select the previous target, if impossible selection = -1
  */
-static void
-PrevTarget()
+void
+FlarmTrafficWindow::PrevTarget()
 {
   for (int i = selection - 1; i >= 0; i--) {
     if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined()) {
@@ -215,8 +251,8 @@ PrevTarget()
  * Checks whether the selection is still on the valid target and if not tries
  * to select the next one
  */
-static void
-UpdateSelector()
+void
+FlarmTrafficWindow::UpdateSelector()
 {
   if (!XCSoarInterface::Basic().flarm.FLARM_Available ||
       XCSoarInterface::Basic().flarm.GetActiveTrafficCount() == 0) {
@@ -233,8 +269,8 @@ UpdateSelector()
  * Iterates through the traffic array, finds the target with the highest
  * alarm level and saves it to "warning".
  */
-static void
-UpdateWarnings()
+void
+FlarmTrafficWindow::UpdateWarnings()
 {
   bool found = false;
 
@@ -294,8 +330,8 @@ UpdateWarnings()
     warning = -1;
 }
 
-static void
-SetAutoZoom(bool enabled)
+void
+FlarmTrafficControl::SetAutoZoom(bool enabled)
 {
   enable_auto_zoom = enabled;
   Profile::Set(szProfileFlarmAutoZoom, enabled);
@@ -303,8 +339,8 @@ SetAutoZoom(bool enabled)
       SetForeColor(enable_auto_zoom ? Color::BLUE : Color::BLACK);
 }
 
-static void
-CalcAutoZoom()
+void
+FlarmTrafficControl::CalcAutoZoom()
 {
   bool warning_mode = WarningMode();
   double zoom_dist = 0;
@@ -333,42 +369,48 @@ CalcAutoZoom()
 /**
  * This should be called when the radar needs to be repainted
  */
-static void
-Update()
+void
+FlarmTrafficWindow::Update()
 {
   UpdateSelector();
   UpdateWarnings();
 
+  invalidate();
+}
+
+void
+FlarmTrafficControl::Update()
+{
+  FlarmTrafficWindow::Update();
+
   if (enable_auto_zoom || WarningMode())
     CalcAutoZoom();
-
-  wdf->invalidate();
 }
 
 /**
  * Zoom out one step
  */
-static void
-ZoomOut()
+void
+FlarmTrafficControl::ZoomOut()
 {
   if (zoom < 4)
     zoom++;
 
   SetAutoZoom(false);
-  wdf->invalidate();
+  invalidate();
 }
 
 /**
  * Zoom in one step
  */
-static void
-ZoomIn()
+void
+FlarmTrafficControl::ZoomIn()
 {
   if (zoom > 0)
     zoom--;
 
   SetAutoZoom(false);
-  wdf->invalidate();
+  invalidate();
 }
 
 /**
@@ -379,7 +421,7 @@ OnDetailsClicked(gcc_unused WndButton &button)
 {
 
   // If warning is displayed -> prevent from opening details dialog
-  if (WarningMode())
+  if (wdf->WarningMode())
     return;
 
   // Don't open the details dialog if no plane selected
@@ -398,7 +440,7 @@ OnDetailsClicked(gcc_unused WndButton &button)
 static void
 OnZoomInClicked(gcc_unused WndButton &button)
 {
-  ZoomIn();
+  wdf->ZoomIn();
 }
 
 /**
@@ -407,7 +449,7 @@ OnZoomInClicked(gcc_unused WndButton &button)
 static void
 OnZoomOutClicked(gcc_unused WndButton &button)
 {
-  ZoomOut();
+  wdf->ZoomOut();
 }
 
 /**
@@ -417,10 +459,10 @@ static void
 OnPrevClicked(gcc_unused WndButton &button)
 {
   // If warning is displayed -> prevent selector movement
-  if (WarningMode())
+  if (wdf->WarningMode())
     return;
 
-  PrevTarget();
+  wdf->PrevTarget();
 }
 
 /**
@@ -430,10 +472,10 @@ static void
 OnNextClicked(gcc_unused WndButton &button)
 {
   // If warning is displayed -> prevent selector movement
-  if (WarningMode())
+  if (wdf->WarningMode())
     return;
 
-  NextTarget();
+  wdf->NextTarget();
 }
 
 /**
@@ -464,7 +506,7 @@ OnSwitchDataClicked(gcc_unused WndButton &button)
 static void
 OnAutoZoomClicked(gcc_unused WndButton &button)
 {
-  SetAutoZoom(!enable_auto_zoom);
+  wdf->SetAutoZoom(!enable_auto_zoom);
 }
 
 /**
@@ -482,21 +524,21 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
     if (!has_pointer())
       break;
 
-    ZoomIn();
+    wdf->ZoomIn();
     return true;
   case VK_DOWN:
     if (!has_pointer())
       break;
 
-    ZoomOut();
+    wdf->ZoomOut();
     return true;
   case VK_LEFT:
   case '6':
-    PrevTarget();
+    wdf->PrevTarget();
     return true;
   case VK_RIGHT:
   case '7':
-    NextTarget();
+    wdf->NextTarget();
     return true;
   }
 
@@ -511,7 +553,7 @@ static int
 OnTimerNotify(WindowControl * Sender)
 {
   (void)Sender;
-  Update();
+  wdf->Update();
   return 0;
 }
 
@@ -519,8 +561,8 @@ OnTimerNotify(WindowControl * Sender)
  * Returns the distance to the own plane in pixels
  * @param d Distance in meters to the own plane
  */
-static double
-RangeScale(double d)
+double
+FlarmTrafficWindow::RangeScale(double d) const
 {
   d = d / GetZoomDistance(zoom);
   return min(d, 1.0) * radar_size.cx * 0.5;
@@ -530,8 +572,9 @@ RangeScale(double d)
  * Paints the basic info for the selected target on the given canvas
  * @param canvas The canvas to paint on
  */
-static void
-PaintTrafficInfo(Canvas &canvas) {
+void
+FlarmTrafficWindow::PaintTrafficInfo(Canvas &canvas) const
+{
   // Don't paint numbers if no plane selected
   if (selection == -1 ||
       !XCSoarInterface::Basic().flarm.FLARM_Traffic[selection].defined())
@@ -616,8 +659,9 @@ PaintTrafficInfo(Canvas &canvas) {
  * Paints a "No Traffic" sign on the given canvas
  * @param canvas The canvas to paint on
  */
-static void
-PaintRadarNoTraffic(Canvas &canvas) {
+void
+FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const
+{
   static TCHAR str[] = _T("No Traffic");
   canvas.select(StatisticsFont);
   SIZE ts = canvas.text_size(str);
@@ -629,8 +673,10 @@ PaintRadarNoTraffic(Canvas &canvas) {
  * Paints the traffic symbols on the given canvas
  * @param canvas The canvas to paint on
  */
-static void
-PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
+void
+FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
+                                     const FLARM_TRAFFIC &traffic,
+                                     unsigned i)
 {
   static const Brush hbWarning(hcWarning);
   static const Brush hbAlarm(hcAlarm);
@@ -805,8 +851,9 @@ PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
  * Paints the traffic symbols on the given canvas
  * @param canvas The canvas to paint on
  */
-static void
-PaintRadarTraffic(Canvas &canvas) {
+void
+FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
+{
   if (!XCSoarInterface::Basic().flarm.FLARM_Available ||
       XCSoarInterface::Basic().flarm.GetActiveTrafficCount() == 0) {
     PaintRadarNoTraffic(canvas);
@@ -855,8 +902,9 @@ PaintRadarTraffic(Canvas &canvas) {
  * Paint a plane symbol in the middle of the radar on the given canvas
  * @param canvas The canvas to paint on
  */
-static void
-PaintRadarPlane(Canvas &canvas) {
+void
+FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
+{
   static const Pen hpPlane(Layout::FastScale(2), hcRadar);
 
   canvas.select(hpPlane);
@@ -878,8 +926,9 @@ PaintRadarPlane(Canvas &canvas) {
  * Paints the radar circle on the given canvas
  * @param canvas The canvas to paint on
  */
-static void
-PaintRadarBackground(Canvas &canvas) {
+void
+FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
+{
   static const Pen hpRadar(1, hcRadar);
 
   canvas.hollow_brush();
@@ -923,8 +972,8 @@ FlarmTrafficWindow::on_paint(Canvas &canvas)
   PaintRadarTraffic(canvas);
 }
 
-static void
-SelectNearTarget(int x, int y)
+void
+FlarmTrafficWindow::SelectNearTarget(int x, int y)
 {
   int min_distance = 99999;
   int min_id = -1;
@@ -948,7 +997,7 @@ SelectNearTarget(int x, int y)
   if (min_id >= 0)
     SetTarget(min_id);
 
-  wdf->invalidate();
+  invalidate();
 }
 
 bool
@@ -1017,7 +1066,7 @@ dlgFlarmTrafficShowModal()
       SetOnClickNotify(OnAutoZoomClicked);
 
   // Update Radar and Selection for the first time
-  Update();
+  wdf->Update();
 
   // Get the last chosen Side Data configuration
   ((WndButton *)wf->FindByName(_T("cmdAutoZoom")))->
