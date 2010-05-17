@@ -70,7 +70,10 @@ short RasterMapJPG2000::_GetFieldAtXY(unsigned int lx,
 }
 
 void RasterMapJPG2000::ServiceFullReload(const GEOPOINT &location) {
-  ReloadJPG2000Full(location);
+  TriggerJPGReload = true;
+  FullJPGReload= true;
+  SetViewCenter(location);
+  FullJPGReload= false;
 }
 
 RasterMapJPG2000::RasterMapJPG2000() {
@@ -91,13 +94,6 @@ RasterMapJPG2000::~RasterMapJPG2000() {
 }
 
 int RasterMapJPG2000::ref_count = 0;
-
-void RasterMapJPG2000::ReloadJPG2000Full(const GEOPOINT &location) {
-  TriggerJPGReload = true;
-  FullJPGReload= true;
-  SetViewCenter(location);
-  FullJPGReload= false;
-}
 
 void RasterMapJPG2000::_ReloadJPG2000() {
   if (TriggerJPGReload) {
