@@ -218,7 +218,7 @@ GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
 }
 
 static void *
-CallBackLookup(CallBackTableEntry_t *LookUpTable, TCHAR *Name)
+CallBackLookup(CallBackTableEntry_t *LookUpTable, const TCHAR *Name)
 {
   int i;
 
@@ -546,7 +546,6 @@ LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable,
   TCHAR DataType[32];
   TCHAR DisplayFmt[32];
   TCHAR EditFormat[32];
-  TCHAR OnDataAccess[64];
   double Min, Max, Step;
   int Fine;
 
@@ -559,9 +558,6 @@ LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable,
   _tcscpy(EditFormat,
           StringToStringDflt(node.getAttribute(_T("EditFormat")),
                              _T("")));
-  _tcscpy(OnDataAccess,
-          StringToStringDflt(node.getAttribute(_T("OnDataAccess")),
-                             _T("")));
 
   Min = StringToIntDflt(node.getAttribute(_T("Min")), INT_MIN);
   Max = StringToIntDflt(node.getAttribute(_T("Max")), INT_MAX);
@@ -569,7 +565,9 @@ LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable,
   Fine = StringToIntDflt(node.getAttribute(_T("Fine")), 0);
 
   DataField::DataAccessCallback_t callback = (DataField::DataAccessCallback_t)
-    CallBackLookup(LookUpTable, OnDataAccess);
+    CallBackLookup(LookUpTable,
+                   StringToStringDflt(node.getAttribute(_T("OnDataAccess")),
+                                      NULL));
 
   if (_tcsicmp(DataType, _T("enum")) == 0)
     return new DataFieldEnum(EditFormat, DisplayFmt, false, callback);
@@ -639,8 +637,6 @@ LoadChild(WndForm &form, ContainerControl *Parent,
   if (_tcscmp(node.getName(), _T("WndProperty")) == 0) {
     WndProperty *W;
     int CaptionWidth;
-    TCHAR DataNotifyCallback[128];
-    TCHAR OnHelpCallback[128];
     int ReadOnly;
     int MultiLine;
 
@@ -654,11 +650,17 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     ReadOnly = StringToIntDflt(node.getAttribute(_T("ReadOnly")), 0);
 
     // Load the event callback properties
-    _tcscpy(DataNotifyCallback,
-            StringToStringDflt(node.getAttribute(_T("OnDataNotify")), _T("")));
+    WndProperty::DataChangeCallback_t DataNotifyCallback =
+      (WndProperty::DataChangeCallback_t)
+      CallBackLookup(LookUpTable,
+                     StringToStringDflt(node.getAttribute(_T("OnDataNotify")),
+                                        NULL));
 
-    _tcscpy(OnHelpCallback,
-            StringToStringDflt(node.getAttribute(_T("OnHelp")), _T("")));
+    WindowControl::OnHelpCallback_t OnHelpCallback =
+      (WindowControl::OnHelpCallback_t)
+      CallBackLookup(LookUpTable,
+                     StringToStringDflt(node.getAttribute(_T("OnHelp")),
+                                        NULL));
 
     // TODO code: Temporary double handling to fix "const unsigned
     // short *" to "unsigned short *" problem
@@ -688,12 +690,10 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     WC = W = new WndProperty(Parent, Caption, X, Y, Width, Height,
                              CaptionWidth,
                              style, edit_style,
-                             (WndProperty::DataChangeCallback_t)
-                             CallBackLookup(LookUpTable, DataNotifyCallback));
+                             DataNotifyCallback);
 
     // Set the help function event callback
-    W->SetOnHelpCallback((WindowControl::OnHelpCallback_t)
-                         CallBackLookup(LookUpTable, OnHelpCallback));
+    W->SetOnHelpCallback(OnHelpCallback);
 
     // Load the help text
     W->SetHelpText(StringToStringDflt(node.getAttribute(_T("Help")), _T("")));
@@ -715,36 +715,36 @@ LoadChild(WndForm &form, ContainerControl *Parent,
   // ButtonControl (WndButton)
   } else if (_tcscmp(node.getName(), _T("WndButton")) == 0) {
     // Determine ClickCallback function
-    TCHAR ClickCallback[128];
-    _tcscpy(ClickCallback,
-            StringToStringDflt(node.getAttribute(_T("OnClick")), _T("")));
+    WndButton::ClickNotifyCallback_t ClickCallback =
+      (WndButton::ClickNotifyCallback_t)
+      CallBackLookup(LookUpTable,
+                     StringToStringDflt(node.getAttribute(_T("OnClick")),
+                                        NULL));
 
     // Create the ButtonControl
 
     style.tab_stop();
 
     WC = new WndButton(Parent, Caption, X, Y, Width, Height,
-                       style,
-                       (WndButton::ClickNotifyCallback_t)
-                       CallBackLookup(LookUpTable, ClickCallback));
+                       style, ClickCallback);
 
     Caption[0] = '\0';
 
   // SymbolButtonControl (WndSymbolButton) not used yet
   } else if (_tcscmp(node.getName(), _T("WndSymbolButton")) == 0) {
     // Determine ClickCallback function
-    TCHAR ClickCallback[128];
-    _tcscpy(ClickCallback,
-            StringToStringDflt(node.getAttribute(_T("OnClick")), _T("")));
+    WndButton::ClickNotifyCallback_t ClickCallback =
+      (WndButton::ClickNotifyCallback_t)
+      CallBackLookup(LookUpTable,
+                     StringToStringDflt(node.getAttribute(_T("OnClick")),
+                                        NULL));
 
     // Create the SymbolButtonControl
 
     style.tab_stop();
 
     WC = new WndSymbolButton(Parent, Caption, X, Y, Width, Height,
-                             style,
-                             (WndButton::ClickNotifyCallback_t)
-                             CallBackLookup(LookUpTable, ClickCallback));
+                             style, ClickCallback);
 
     Caption[0] = '\0';
 
@@ -786,15 +786,15 @@ LoadChild(WndForm &form, ContainerControl *Parent,
   // DrawControl (WndOwnerDrawFrame)
   } else if (_tcscmp(node.getName(), _T("WndOwnerDrawFrame")) == 0) {
     // Determine DrawCallback function
-    TCHAR PaintCallback[128];
-    _tcscpy(PaintCallback,
-            StringToStringDflt(node.getAttribute(_T("OnPaint")), _T("")));
+    WndOwnerDrawFrame::OnPaintCallback_t PaintCallback =
+      (WndOwnerDrawFrame::OnPaintCallback_t)
+      CallBackLookup(LookUpTable,
+                     StringToStringDflt(node.getAttribute(_T("OnPaint")),
+                                        NULL));
 
     // Create the DrawControl
     WC = new WndOwnerDrawFrame(Parent, X, Y, Width, Height,
-                               WindowStyle(),
-                               (WndOwnerDrawFrame::OnPaintCallback_t)
-                               CallBackLookup(LookUpTable, PaintCallback));
+                               WindowStyle(), PaintCallback);
 
   // FrameControl (WndFrame)
   } else if (_tcscmp(node.getName(), _T("WndFrame")) == 0){
