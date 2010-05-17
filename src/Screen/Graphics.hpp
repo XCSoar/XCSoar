@@ -46,8 +46,10 @@ Copyright_License {
 #include "Screen/Color.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Canvas.hpp"
-#include "LabelBlock.hpp"
-#include "SettingsUser.hpp"
+#include "Airspace/AirspaceClass.hpp"
+
+struct SETTINGS_MAP;
+class LabelBlock;
 
 typedef union
 {

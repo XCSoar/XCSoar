@@ -42,14 +42,9 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Ramp.hpp"
 #include "Appearance.hpp"
-#include "MapWindowProjection.hpp"
-#include "Math/Screen.hpp"
-#include <stdlib.h>
 #include "SettingsUser.hpp"
-#include "SettingsAirspace.hpp"
 #include "Units.hpp"
 #include "Screen/LabelBlock.hpp"
-#include "MapWindow.hpp"
 #include "resource.h"
 
 #define NUMSNAILRAMP 6
