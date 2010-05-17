@@ -86,7 +86,7 @@ using std::min;
 static long
 StringToIntDflt(const TCHAR *String, long Default)
 {
-  if (String == NULL || String[0] == '\0')
+  if (String == NULL || string_is_empty(String))
     return Default;
   return _tcstol(String, NULL, 0);
 }
@@ -101,7 +101,7 @@ StringToIntDflt(const TCHAR *String, long Default)
 static double
 StringToFloatDflt(const TCHAR *String, double Default)
 {
-  if (String == NULL || String[0] == '\0')
+  if (String == NULL || string_is_empty(String))
     return Default;
   return _tcstod(String, NULL);
 }
@@ -115,7 +115,7 @@ StringToFloatDflt(const TCHAR *String, double Default)
 static const TCHAR *
 StringToStringDflt(const TCHAR *String, const TCHAR *Default)
 {
-  if (String == NULL || String[0] == '\0')
+  if (String == NULL || string_is_empty(String))
     return Default;
   return String;
 }
@@ -222,7 +222,7 @@ CallBackLookup(CallBackTableEntry_t *LookUpTable, TCHAR *Name)
 {
   int i;
 
-  if (LookUpTable != NULL && Name != NULL && Name[0] != '\0')
+  if (LookUpTable != NULL && Name != NULL && !string_is_empty(Name))
     for (i = 0; LookUpTable[i].Ptr != NULL; i++) {
       if (_tcscmp(LookUpTable[i].Name, Name) == 0) {
         return LookUpTable[i].Ptr;
@@ -848,12 +848,12 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     LoadColors(*WC, node);
 
     // If caption hasn't been set -> set it
-    if (Caption[0] != '\0')
+    if (!string_is_empty(Caption))
       WC->SetCaption(Caption);
 
     form.AddDestruct(WC);
 
-    if (Name[0] != '\0')
+    if (!string_is_empty(Name))
       form.AddNamed(Name, WC);
 
     if (advanced)
