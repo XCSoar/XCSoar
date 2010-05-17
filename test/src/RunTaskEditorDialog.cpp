@@ -44,7 +44,6 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "wcecompat/ts_string.h"
-#include "RasterTerrain.h"
 #include "WayPointParser.h"
 #include "AirspaceClientUI.hpp"
 #include "TaskClientUI.hpp"
@@ -82,25 +81,6 @@ void
 DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
                                      const double alt)
 {
-}
-
-bool
-RasterTerrain::GetTerrainCenter(GEOPOINT *location) const
-{
-  return false;
-}
-
-short
-RasterTerrain::GetTerrainHeight(const GEOPOINT &Location,
-                                const RasterRounding &rounding) const
-{
-  return 0;
-}
-
-bool
-RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location) const
-{
-  return true;
 }
 
 int

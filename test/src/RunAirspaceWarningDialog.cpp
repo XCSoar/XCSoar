@@ -44,7 +44,6 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "Profile.hpp"
-#include "RasterTerrain.h"
 #include "AirspaceClientUI.hpp"
 #include "AirspaceParser.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
@@ -70,16 +69,6 @@ pt2Event
 InputEvents::findEvent(const TCHAR *)
 {
   return NULL;
-}
-
-void RasterTerrain::Lock(void) {}
-void RasterTerrain::Unlock(void) {}
-
-short
-RasterTerrain::GetTerrainHeight(const GEOPOINT &location,
-                                const RasterRounding &rounding) const
-{
-  return 0;
 }
 
 #ifndef ENABLE_SDL
