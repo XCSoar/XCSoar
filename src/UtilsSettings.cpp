@@ -77,7 +77,9 @@ bool LanguageFileChanged = false;
 bool StatusFileChanged = false;
 bool InputFileChanged = false;
 
-void SettingsEnter() {
+static void
+SettingsEnter()
+{
   draw_thread->suspend();
   // This prevents the map and calculation threads from doing anything
   // with shared data while it is being changed (also prevents drawing)
@@ -95,7 +97,9 @@ void SettingsEnter() {
   DevicePortChanged = false;
 }
 
-void SettingsLeave() {
+static void
+SettingsLeave()
+{
   if (!globalRunningEvent.test())
     return;
 
