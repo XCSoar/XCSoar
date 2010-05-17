@@ -172,7 +172,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/GlideComputerStats.cpp \
 	$(SRC)/GlideComputerTask.cpp \
 	$(SRC)/GlideRatio.cpp \
-	$(SRC)/GlideTerrain.cpp \
+	$(SRC)/Terrain/GlideTerrain.cpp \
 	$(SRC)/Logger/Logger.cpp \
 	$(SRC)/Logger/LoggerFRecord.cpp \
 	$(SRC)/Logger/LoggerGRecord.cpp \
@@ -262,11 +262,11 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Topology.cpp \
 	$(SRC)/TopologyStore.cpp \
-	$(SRC)/RasterMap.cpp \
-	$(SRC)/RasterMapJPG2000.cpp \
-	$(SRC)/RasterTerrain.cpp \
-	$(SRC)/RasterWeather.cpp \
-	$(SRC)/TerrainRenderer.cpp \
+	$(SRC)/Terrain/RasterMap.cpp \
+	$(SRC)/Terrain/RasterMapJPG2000.cpp \
+	$(SRC)/Terrain/RasterTerrain.cpp \
+	$(SRC)/Terrain/RasterWeather.cpp \
+	$(SRC)/Terrain/TerrainRenderer.cpp \
 	$(SRC)/Marks.cpp \
 	\
 	$(SRC)/Persist.cpp \

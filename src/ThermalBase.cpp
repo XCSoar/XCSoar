@@ -37,8 +37,8 @@ Copyright_License {
 */
 
 #include "ThermalBase.hpp"
-#include "RasterTerrain.h"
-#include "RasterMap.h"
+#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/RasterMap.hpp"
 #include "Components.hpp"
 #include "Math/Earth.hpp"
 

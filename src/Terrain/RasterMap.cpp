@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "RasterMap.h"
+#include "Terrain/RasterMap.hpp"
 #include "Math/Earth.hpp"
 
 // export methods to global, take care!

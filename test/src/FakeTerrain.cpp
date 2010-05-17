@@ -35,7 +35,7 @@ Copyright_License {
 }
 */
 
-#include "RasterTerrain.h"
+#include "Terrain/RasterTerrain.hpp"
 
 void RasterTerrain::Lock(void) {}
 void RasterTerrain::Unlock(void) {}

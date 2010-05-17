@@ -36,8 +36,8 @@
 */
 
 #include "Airspaces.hpp"
-#include "RasterTerrain.h"
-#include "RasterMap.h"
+#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/RasterMap.hpp"
 
 void 
 Airspaces::set_ground_levels(const RasterTerrain &terrain)

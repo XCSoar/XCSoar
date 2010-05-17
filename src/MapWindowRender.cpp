@@ -39,10 +39,10 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Marks.hpp"
-#include "TerrainRenderer.h"
-#include "RasterTerrain.h"
+#include "Terrain/TerrainRenderer.hpp"
+#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/RasterWeather.hpp"
 #include "TopologyStore.h"
-#include "RasterWeather.h"
 
 #include "TaskClientUI.hpp"
 
@@ -345,8 +345,6 @@ static void DrawSpotHeight_Internal(Canvas &canvas,
 
   canvas.text(pt.x, pt.y, Buffer);
 }
-
-#include "RasterWeather.h"
 
 void MapWindow::DrawSpotHeights(Canvas &canvas) {
   // JMW testing, display of spot max/min

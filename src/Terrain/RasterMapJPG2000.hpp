@@ -36,65 +36,40 @@ Copyright_License {
 }
 */
 
-#ifndef RASTERWEATHER_H
-#define RASTERWEATHER_H
+#ifndef XCSOAR_TERRAIN_RASTER_MAP_JPG2000_HPP
+#define XCSOAR_TERRAIN_RASTER_MAP_JPG2000_HPP
 
-#include "Poco/RWLock.h"
+#include "Terrain/RasterMap.hpp"
+#include "jasper/RasterTile.h"
 
-#include <tchar.h>
+#include <syslimits.h>
 
-class RasterMap;
-struct GEOPOINT;
+class RasterMapJPG2000: public RasterMap {
+ public:
+  RasterMapJPG2000();
+  ~RasterMapJPG2000();
 
-/**
- * Class to manage raster weather data
- */
-class RasterWeather {
-public:
-  static const unsigned MAX_WEATHER_MAP = 16; /**< Max number of items stored */
-  static const unsigned MAX_WEATHER_TIMES = 48; /**< Max time segments of each item */
+  void ReloadJPG2000();
+  void ReloadJPG2000Full(const GEOPOINT &location);
 
-public:
-  /** 
-   * Default constructor
-   */
-  RasterWeather();
-
-  ~RasterWeather();
-  
-  /** Close loaded data */
-  void Close();
-
-  void ValueToText(TCHAR* Buffer, short val);
   void SetViewCenter(const GEOPOINT &location);
-  void ItemLabel(int i, TCHAR* Buffer);
-  RasterMap* GetMap();
-  unsigned GetParameter();
-  void SetParameter(unsigned i);
-
-  /**
-   * @param location Location of observer
-   * @param day_time the UTC time, in seconds since midnight
-   */
-  void Reload(const GEOPOINT &location, int day_time);
-
-  void ScanAll(const GEOPOINT &location);
-  bool isWeatherAvailable(unsigned t);
-  unsigned GetTime();
-  void SetTime(unsigned i);
-  int IndexToTime(int x);
-
- private:
-  unsigned _parameter; // was terrain.render_weather
-  unsigned _weather_time;
-  RasterMap* weather_map[MAX_WEATHER_MAP];
-  void RASP_filename(char* rasp_filename, const TCHAR* name);
-  bool LoadItem(int item, const TCHAR* name);
+  virtual void SetFieldRounding(const GEOPOINT& delta,
+                                RasterRounding &rounding) const;
+  bool Open(const char *path);
   void ServiceFullReload(const GEOPOINT &location);
-  bool weather_available[MAX_WEATHER_TIMES];
-  bool bsratio;
-  Poco::RWLock lock;
-  void _Close();
+
+  static RasterMapJPG2000 *LoadFile(const char *path);
+
+ protected:
+  char jp2_filename[PATH_MAX];
+  virtual short _GetFieldAtXY(unsigned int lx,
+                              unsigned int ly);
+  bool TriggerJPGReload;
+  bool FullJPGReload;
+  static int ref_count;
+  RasterTileCache raster_tile_cache;
+  virtual void _ReloadJPG2000(void);
 };
+
 
 #endif

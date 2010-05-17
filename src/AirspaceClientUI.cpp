@@ -2,7 +2,7 @@
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "AirspaceParser.hpp"
-#include "RasterTerrain.h"
+#include "Terrain/RasterTerrain.hpp"
 
 const AirspacesInterface::AirspaceVector 
 AirspaceClientUI::scan_range(const GEOPOINT location,

@@ -36,79 +36,65 @@ Copyright_License {
 }
 */
 
-#ifndef RASTERTERRAIN_H
-#define RASTERTERRAIN_H
+#ifndef XCSOAR_TERRAIN_RASTER_WEATHER_HPP
+#define XCSOAR_TERRAIN_RASTER_WEATHER_HPP
 
-#include "Navigation/GeoPoint.hpp"
+#include "Poco/RWLock.h"
+
+#include <tchar.h>
 
 class RasterMap;
-class RasterRounding;
+struct GEOPOINT;
 
 /**
- * Class to manage raster terrain database, potentially with 
- * caching or demand-loading.
- * 
+ * Class to manage raster weather data
  */
-class RasterTerrain {
+class RasterWeather {
 public:
-  /** invalid value for terrain */
-  static const short TERRAIN_INVALID = -1000;
+  static const unsigned MAX_WEATHER_MAP = 16; /**< Max number of items stored */
+  static const unsigned MAX_WEATHER_TIMES = 48; /**< Max time segments of each item */
 
 public:
+  /** 
+   * Default constructor
+   */
+  RasterWeather();
 
-/** 
- * Constructor.  Returns uninitialised object. 
- * 
- */
-  RasterTerrain():
-    TerrainMap(NULL) {
-  };
+  ~RasterWeather();
+  
+  /** Close loaded data */
+  void Close();
 
-/** 
- * Load the terrain.  Determines the file to load from profile settings.
- * 
- */
-   void OpenTerrain();
+  void ValueToText(TCHAR* Buffer, short val);
+  void SetViewCenter(const GEOPOINT &location);
+  void ItemLabel(int i, TCHAR* Buffer);
+  RasterMap* GetMap();
+  unsigned GetParameter();
+  void SetParameter(unsigned i);
 
-/** 
- * Unload the terrain.
- * 
- */
-   void CloseTerrain();
+  /**
+   * @param location Location of observer
+   * @param day_time the UTC time, in seconds since midnight
+   */
+  void Reload(const GEOPOINT &location, int day_time);
 
-/** 
- * Determine if a valid terrain is loaded
- * 
- * @return True if a terrain is loaded
- */
-  bool isTerrainLoaded() const {
-    return TerrainMap != NULL;
-  }
+  void ScanAll(const GEOPOINT &location);
+  bool isWeatherAvailable(unsigned t);
+  unsigned GetTime();
+  void SetTime(unsigned i);
+  int IndexToTime(int x);
 
-  void Lock(void); // should be protected, friend of TerrainDataClient
-  void Unlock(void); // should be protected, friend of TerrainDataClient
-
-  const RasterMap* GetMap() const {
-    return TerrainMap;
-  }
-  RasterMap* get_map() const {
-    return TerrainMap;
-  }
-
-  short GetTerrainHeight(const GEOPOINT &location,
-                         const RasterRounding &rounding) const;
-  bool IsDirectAccess(void) const;
-  void ServiceCache();
-  void ServiceTerrainCenter(const GEOPOINT &location);
+ private:
+  unsigned _parameter; // was terrain.render_weather
+  unsigned _weather_time;
+  RasterMap* weather_map[MAX_WEATHER_MAP];
+  void RASP_filename(char* rasp_filename, const TCHAR* name);
+  bool LoadItem(int item, const TCHAR* name);
   void ServiceFullReload(const GEOPOINT &location);
-  int GetEffectivePixelSize(fixed &pixel_D, const GEOPOINT &location) const;
-  bool WaypointIsInTerrainRange(const GEOPOINT &location) const;
-  bool GetTerrainCenter(GEOPOINT *location) const;
-
-private:
-  RasterMap* TerrainMap;
-  bool CreateTerrainMap(const char *path);
-
+  bool weather_available[MAX_WEATHER_TIMES];
+  bool bsratio;
+  Poco::RWLock lock;
+  void _Close();
 };
 
 #endif
