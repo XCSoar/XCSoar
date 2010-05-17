@@ -39,7 +39,6 @@ Copyright_License {
 #include "WayPointFileSeeYou.hpp"
 #include "Units.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "RasterTerrain.h"
 
 #include <stdio.h>
 
