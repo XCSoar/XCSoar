@@ -614,7 +614,6 @@ LoadChild(WndForm &form, ContainerControl *Parent,
   int X, Y, Width, Height, Font;
   TCHAR Caption[128];
   TCHAR Name[64];
-  bool Visible;
 
   WindowControl *WC = NULL;
 
@@ -623,13 +622,13 @@ LoadChild(WndForm &form, ContainerControl *Parent,
   GetDefaultWindowControlProps(&node, Name, &X, &Y, &Width, &Height,
                                &Font, Caption, eDialogStyle);
 
-  // Determine whether the control is visible on startup (default = visible)
-  Visible = StringToIntDflt(node.getAttribute(_T("Visible")), 1) == 1;
-
   // Determine the control's font (default = parent's font)
   Font = StringToIntDflt(node.getAttribute(_T("Font")), ParentFont);
 
   WindowStyle style;
+
+  if (!StringToIntDflt(node.getAttribute(_T("Visible")), 1))
+    style.hide();
 
   if (StringToIntDflt(node.getAttribute(_T("Border")), 0))
     style.border();
@@ -847,10 +846,6 @@ LoadChild(WndForm &form, ContainerControl *Parent,
 
     // Set the fore- and background color
     LoadColors(*WC, node);
-
-    // If control is invisible -> hide it
-    if (!Visible)
-      WC->hide();
 
     // If caption hasn't been set -> set it
     if (Caption[0] != '\0')
