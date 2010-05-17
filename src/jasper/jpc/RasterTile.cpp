@@ -82,8 +82,8 @@ bool RasterTile::SetEdgeIfInRange(unsigned int x, unsigned int y,
 
 bool RasterTile::GetField(unsigned int lx,
                           unsigned int ly,
-                          short *theight) {
-
+                          short *theight) const
+{
   // we want to exit out of this function as soon as possible
   // if we have the wrong tile
 
@@ -158,7 +158,6 @@ bool RasterTile::VisibilityChanged(int view_x, int view_y) {
   return request;
 }
 
-
 short* RasterTileCache::GetImageBuffer(int index) {
   if (index< MAX_RTC_TILES) {
     return tiles[index].GetImageBuffer();
@@ -167,6 +166,15 @@ short* RasterTileCache::GetImageBuffer(int index) {
   }
 }
 
+const short *
+RasterTileCache::GetImageBuffer(int index) const
+{
+  if (index< MAX_RTC_TILES) {
+    return tiles[index].GetImageBuffer();
+  } else {
+    return NULL;
+  }
+}
 
 void RasterTileCache::SetTile(int index,
                               int xstart, int ystart,
@@ -275,7 +283,8 @@ short RasterTileCache::GetField(unsigned int lx,
 };
 
 short RasterTileCache::GetOverviewField(unsigned int lx,
-                                        unsigned int ly) {
+                                        unsigned int ly) const
+{
   // check x in range, and decompose fraction part
   const unsigned int ix = CombinedDivAndMod(lx);
   if (lx>=overview_width)
@@ -302,7 +311,7 @@ short RasterTileCache::GetOverviewField(unsigned int lx,
 
 
 void RasterTileCache::StitchTile(unsigned int src_tile) {
-  short *h_src = tiles[src_tile].GetImageBuffer();
+  const short *h_src = tiles[src_tile].GetImageBuffer();
   if (!h_src)
     return;
 
@@ -406,8 +415,9 @@ void RasterTileCache::SetInitialised(bool val) {
   loaded_one = false;  
 }
 
-
-bool RasterTileCache::GetInitialised(void) {
+bool
+RasterTileCache::GetInitialised(void) const
+{
   return initialised;
 }
 
@@ -415,11 +425,15 @@ short* RasterTileCache::GetOverview(void) {
   return Overview;
 }
 
-bool RasterTileCache::GetScanType(void) {
+bool
+RasterTileCache::GetScanType(void) const
+{
   return scan_overview;
 }
 
-short RasterTileCache::GetMaxElevation(void) {
+short
+RasterTileCache::GetMaxElevation(void) const
+{
   short max_elevation = 0;
   if (Overview) {
     for (unsigned int i= overview_width*overview_height; i--; ) {
