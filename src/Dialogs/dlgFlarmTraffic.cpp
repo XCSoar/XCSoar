@@ -309,7 +309,7 @@ ZoomOut()
     zoom++;
 
   SetAutoZoom(false);
-  Update();
+  wdf->invalidate();
 }
 
 /**
@@ -322,7 +322,7 @@ ZoomIn()
     zoom--;
 
   SetAutoZoom(false);
-  Update();
+  wdf->invalidate();
 }
 
 /**
@@ -375,7 +375,7 @@ OnPrevClicked(gcc_unused WndButton &button)
     return;
 
   PrevTarget();
-  Update();
+  wdf->invalidate();
 }
 
 /**
@@ -389,7 +389,7 @@ OnNextClicked(gcc_unused WndButton &button)
     return;
 
   NextTarget();
-  Update();
+  wdf->invalidate();
 }
 
 /**
@@ -449,12 +449,12 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   case VK_LEFT:
   case '6':
     PrevTarget();
-    Update();
+    wdf->invalidate();
     return true;
   case VK_RIGHT:
   case '7':
     NextTarget();
-    Update();
+    wdf->invalidate();
     return true;
   }
 
@@ -902,7 +902,7 @@ SelectNearTarget(int x, int y)
   if (min_id >= 0)
     SetTarget(min_id);
 
-  Update();
+  wdf->invalidate();
 }
 
 static bool
