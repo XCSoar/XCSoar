@@ -36,13 +36,11 @@ Copyright_License {
 }
 */
 
-#include "jasper/jasper.h"
 #include "jasper/RasterTile.h"
-#include "Sizes.h"
+#include "jasper/jasper.h"
+#include "Math/Angle.hpp"
 
 #include <algorithm>
-#include <stdlib.h>
-#include <stdio.h>
 
 using std::min;
 using std::max;
