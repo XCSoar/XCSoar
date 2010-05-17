@@ -86,8 +86,11 @@ public:
 
   bool WarningMode() const;
 
-  int GetTarget() const {
-    return selection;
+  const FLARM_TRAFFIC *GetTarget() const {
+    return selection >= 0 &&
+      XCSoarInterface::Basic().flarm.FLARM_Traffic[selection].defined()
+      ? &XCSoarInterface::Basic().flarm.FLARM_Traffic[selection]
+      : NULL;
   }
 
   void SetTarget(int i);
@@ -453,14 +456,12 @@ OnDetailsClicked(gcc_unused WndButton &button)
     return;
 
   // Don't open the details dialog if no plane selected
-  int selection = wdf->GetTarget();
-  if (selection == -1 ||
-      !XCSoarInterface::Basic().flarm.FLARM_Traffic[selection].defined())
+  const FLARM_TRAFFIC *traffic = wdf->GetTarget();
+  if (traffic == NULL)
     return;
 
   // Show the details dialog
-  dlgFlarmTrafficDetailsShowModal(
-      XCSoarInterface::Basic().flarm.FLARM_Traffic[selection].ID);
+  dlgFlarmTrafficDetailsShowModal(traffic->ID);
 }
 
 /**
