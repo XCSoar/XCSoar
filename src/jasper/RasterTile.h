@@ -10,11 +10,10 @@ public:
   static const short TERRAIN_INVALID = -1000;
 
 public:
-  RasterTile() {
-    xstart = ystart = xend = yend = 0;
-    width = height = 0;
-    ImageBuffer = NULL;
-  }
+  RasterTile()
+    :xstart(0), ystart(0), xend(0), yend(0),
+     width(0), height(0),
+     ImageBuffer(NULL) {}
 
   unsigned int xstart, ystart, xend, yend;
   unsigned int width, height;
@@ -52,9 +51,8 @@ public:
 class RasterTileCache {
 public:
 
-  RasterTileCache() {
-    Overview = NULL;
-    scan_overview = true;
+  RasterTileCache()
+    :Overview(NULL), scan_overview(true) {
     Reset();
   };
   ~RasterTileCache() {
