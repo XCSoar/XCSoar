@@ -63,8 +63,6 @@ static const Color hcTeam(0x74, 0xFF, 0x00);
 static const Color hcBackground(0xFF, 0xFF, 0xFF);
 static const Color hcRadar(0x55, 0x55, 0x55);
 
-static WndForm *wf = NULL;
-static WndOwnerDrawFrame *wdf = NULL;
 static unsigned zoom = 2;
 static int selection = -1;
 static int warning = -1;
@@ -73,6 +71,53 @@ static SIZE radar_size;
 static int side_display_type = 1;
 static bool enable_auto_zoom = true;
 static POINT sc[FLARM_STATE::FLARM_MAX_TRAFFIC];
+
+/**
+ * A Window which renders FLARM traffic.
+ */
+class FlarmTrafficWindow : public PaintWindow {
+protected:
+  virtual bool on_resize(unsigned width, unsigned height);
+  virtual void on_paint(Canvas &canvas);
+};
+
+bool
+FlarmTrafficWindow::on_resize(unsigned width, unsigned height)
+{
+  PaintWindow::on_resize(width, height);
+
+  // Calculate Radar size
+  int size = min(height, width);
+  radar_size.cx = size - Layout::FastScale(20);
+  radar_size.cy = size - Layout::FastScale(20);
+  radar_mid.x = width / 2;
+  radar_mid.y = height / 2;
+
+  return true;
+}
+
+/**
+ * A Window which renders FLARM traffic, with user interaction.
+ */
+class FlarmTrafficControl : public FlarmTrafficWindow {
+protected:
+  virtual bool on_create();
+  virtual bool on_mouse_down(int x, int y);
+};
+
+static WndForm *wf = NULL;
+static FlarmTrafficControl *wdf;
+
+bool
+FlarmTrafficControl::on_create()
+{
+  FlarmTrafficWindow::on_create();
+
+  Profile::Get(szProfileFlarmSideData, side_display_type);
+  Profile::Get(szProfileFlarmAutoZoom, enable_auto_zoom);
+
+  return true;
+}
 
 static bool
 WarningMode()
@@ -865,9 +910,13 @@ PaintRadarBackground(Canvas &canvas) {
  * @param Sender WindowControl that send the "repaint" message
  * @param canvas The canvas to paint on
  */
-static void
-OnRadarPaint(WindowControl *Sender, Canvas &canvas)
+void
+FlarmTrafficWindow::on_paint(Canvas &canvas)
 {
+  canvas.white_pen();
+  canvas.white_brush();
+  canvas.clear();
+
   PaintRadarBackground(canvas);
   PaintRadarPlane(canvas);
   PaintTrafficInfo(canvas);
@@ -902,8 +951,8 @@ SelectNearTarget(int x, int y)
   wdf->invalidate();
 }
 
-static bool
-OnMouseDown(WindowControl *Sender, int x, int y)
+bool
+FlarmTrafficControl::on_mouse_down(int x, int y)
 {
   if (!XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].defined())
     SelectNearTarget(x, y);
@@ -911,7 +960,19 @@ OnMouseDown(WindowControl *Sender, int x, int y)
   return true;
 }
 
+static Window *
+OnCreateFlarmTrafficControl(ContainerWindow &parent, int left, int top,
+                            unsigned width, unsigned height,
+                            const WindowStyle style)
+{
+  wdf = new FlarmTrafficControl();
+  wdf->set(parent, left, top, width, height, style);
+
+  return wdf;
+}
+
 static CallBackTableEntry_t CallBackTable[] = {
+  DeclareCallBackEntry(OnCreateFlarmTrafficControl),
   DeclareCallBackEntry(OnTimerNotify),
   DeclareCallBackEntry(NULL)
 };
@@ -937,19 +998,6 @@ dlgFlarmTrafficShowModal()
   wf->SetKeyDownNotify(FormKeyDown);
   wf->SetTimerNotify(OnTimerNotify);
 
-  // Find Radar frame
-  wdf = ((WndOwnerDrawFrame *)wf->FindByName(_T("frmRadar")));
-  // Set Radar frame event
-  wdf->SetOnPaintNotify(OnRadarPaint);
-  wdf->SetOnMouseDownNotify(OnMouseDown);
-
-  // Calculate Radar size
-  int size = min(wdf->get_height(), wdf->get_width());
-  radar_size.cx = size - Layout::FastScale(20);
-  radar_size.cy = size - Layout::FastScale(20);
-  radar_mid.x = wdf->get_width() / 2;
-  radar_mid.y = wdf->get_height() / 2;
-
   // Set button events
   ((WndButton *)wf->FindByName(_T("cmdDetails")))->
       SetOnClickNotify(OnDetailsClicked);
@@ -972,8 +1020,6 @@ dlgFlarmTrafficShowModal()
   Update();
 
   // Get the last chosen Side Data configuration
-  Profile::Get(szProfileFlarmSideData, side_display_type);
-  Profile::Get(szProfileFlarmAutoZoom, enable_auto_zoom);
   ((WndButton *)wf->FindByName(_T("cmdAutoZoom")))->
       SetForeColor(enable_auto_zoom ? Color::BLUE : Color::BLACK);
 
