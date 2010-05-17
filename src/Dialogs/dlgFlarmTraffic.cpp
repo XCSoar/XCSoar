@@ -112,6 +112,15 @@ GetZoomDistanceString(TCHAR* str1, TCHAR* str2, unsigned size) {
   Units::FormatUserDistance(z_half, str2, size);
 }
 
+static void
+SetTarget(int i)
+{
+  if (selection == i)
+    return;
+
+  selection = i;
+}
+
 /**
  * Tries to select the next target, if impossible selection = -1
  */
@@ -120,17 +129,18 @@ NextTarget()
 {
   for (int i = selection + 1; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
     if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined()) {
-      selection = i;
+      SetTarget(i);
       return;
     }
   }
   for (int i = 0; i < selection; i++) {
     if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined()) {
-      selection = i;
+      SetTarget(i);
       return;
     }
   }
-  selection = -1;
+
+  SetTarget(-1);
 }
 
 /**
@@ -141,17 +151,18 @@ PrevTarget()
 {
   for (int i = selection - 1; i >= 0; i--) {
     if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined()) {
-      selection = i;
+      SetTarget(i);
       return;
     }
   }
   for (int i = FLARM_STATE::FLARM_MAX_TRAFFIC - 1; i > selection; i--) {
     if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined()) {
-      selection = i;
+      SetTarget(i);
       return;
     }
   }
-  selection = -1;
+
+  SetTarget(-1);
 }
 
 /**
@@ -163,7 +174,7 @@ UpdateSelector()
 {
   if (!XCSoarInterface::Basic().flarm.FLARM_Available ||
       XCSoarInterface::Basic().flarm.GetActiveTrafficCount() == 0) {
-    selection = -1;
+    SetTarget(-1);
     return;
   }
 
@@ -889,7 +900,7 @@ SelectNearTarget(int x, int y)
   }
 
   if (min_id >= 0)
-    selection = min_id;
+    SetTarget(min_id);
 
   Update();
 }
