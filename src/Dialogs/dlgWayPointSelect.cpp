@@ -36,6 +36,7 @@ Copyright_License {
 }
 */
 
+#include "TaskClientUI.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Layout.hpp"
@@ -531,7 +532,8 @@ dlgWayPointSelect(SingleWindow &parent,
   wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
   wpType = ((WndProperty *)wf->FindByName(TEXT("prpFltType")));
 
-  WaypointSorter g_waypoint_sorter(way_points, location, fixed(Units::ToUserDistance(1)));
+  WaypointSorter g_waypoint_sorter(task_ui.get_waypoints(), 
+                                   location, fixed(Units::ToUserDistance(1)));
   waypoint_sorter = &g_waypoint_sorter;
   PrepareData();
   UpdateList();

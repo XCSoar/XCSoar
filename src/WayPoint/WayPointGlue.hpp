@@ -45,16 +45,16 @@ class Waypoints;
 class RasterTerrain;
 struct SETTINGS_COMPUTER;
 
-void SetHome(Waypoints &way_points, const RasterTerrain *terrain,
-    SETTINGS_COMPUTER &settings, const bool reset,
-    const bool set_location = false);
-
 class WayPointFile;
 
 /**
  * This class is used to parse different waypoint files
  */
 namespace WayPointGlue {
+  void SetHome(Waypoints &way_points, const RasterTerrain &terrain,
+               SETTINGS_COMPUTER &settings, const bool reset,
+               const bool set_location = false);
+
   /**
    * Reads the waypoints out of the two waypoint files and appends them to the
    * specified waypoint list
@@ -62,9 +62,8 @@ namespace WayPointGlue {
    * @param terrain RasterTerrain (for automatic waypoint height)
    */
   bool ReadWaypoints(Waypoints &way_points,
-                            const RasterTerrain *terrain);
-  void SaveWaypoints(Waypoints &way_points);
-  void CloseWaypoints(Waypoints &way_points);
+                     const RasterTerrain &terrain);
+  void SaveWaypoints(const Waypoints &way_points);
 };
 
 #endif

@@ -82,7 +82,6 @@ Copyright_License {
 #include "ReplayLoggerGlue.hpp"
 
 #include "Waypoint/Waypoints.hpp"
-#include "WayPointGlue.hpp"
 
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/Airspaces.hpp"
@@ -118,7 +117,8 @@ TaskClientCalc task_calc(task_manager);
 
 TaskClientUI task_ui(task_manager, 
                      XCSoarInterface::SettingsComputer(),
-                     task_events);
+                     task_events, 
+                     way_points);
 /// @todo JMW have ui-specific task_events! Don't use glide computer's events
 
 AIRCRAFT_STATE ac_state;
@@ -310,13 +310,13 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   terrain.OpenTerrain();
 
   // Read the waypoint files
-  WayPointGlue::ReadWaypoints(way_points, &terrain);
+  task_ui.read_waypoints(terrain);
 
   // Read and parse the airfield info file
   ReadAirfieldFile();
 
   // Set the home waypoint
-  SetHome(way_points, &terrain, SetSettingsComputer(), false, true);
+  task_ui.set_home(terrain, SetSettingsComputer(), false, true);
 
   // ReSynchronise the blackboards here since SetHome touches them
   ReadBlackboardBasic(device_blackboard.Basic());

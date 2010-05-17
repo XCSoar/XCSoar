@@ -69,11 +69,11 @@ Copyright_License {
 #include "GlideRatio.hpp"
 #include "Components.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "WayPointGlue.hpp"
 #include "WayPointFile.hpp"
 #include "StringUtil.hpp"
 #include "Simulator.hpp"
 #include "Compiler.h"
+#include "TaskClientUI.hpp"
 
 #include <assert.h>
 
@@ -875,10 +875,10 @@ extern void OnInfoBoxHelp(WindowControl * Sender);
 static void OnWaypointNewClicked(WindowControl * Sender){
   (void)Sender;
 
-  Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().Location);
+  Waypoint edit_waypoint = task_ui.create_waypoint(XCSoarInterface::Basic().Location);
   if (dlgWaypointEditShowModal(edit_waypoint)) {
     if (edit_waypoint.Name.size()) {
-      way_points.append(edit_waypoint);
+      task_ui.append_waypoint(edit_waypoint);
       waypointneedsave = true;
     }
   }
@@ -891,11 +891,11 @@ static void OnWaypointEditClicked(WindowControl * Sender){
   const Waypoint *way_point = dlgWayPointSelect(XCSoarInterface::main_window,
                                                 XCSoarInterface::Basic().Location);
   if (way_point){
-    if (way_points.get_writable(*way_point)) {
+    if (task_ui.waypoint_is_writable(*way_point)) {
       Waypoint wp_copy = *way_point;
       if (dlgWaypointEditShowModal(wp_copy)) {
         waypointneedsave = true;
-        way_points.replace(*way_point, wp_copy);
+        task_ui.replace_waypoint(*way_point, wp_copy);
       }
     } else {
       MessageBoxX (
@@ -911,14 +911,13 @@ static void AskWaypointSave(void) {
     if(MessageBoxX(gettext(_T("Waypoints excluded, save anyway?")),
                    gettext(_T("Waypoints outside terrain")),
                    MB_YESNO | MB_ICONQUESTION) == IDYES) {
-      WayPointGlue::SaveWaypoints(way_points);
+      task_ui.save_waypoints();
 
       WaypointFileChanged= true;
       changed = true;
     }
   } else {
-    WayPointGlue::SaveWaypoints(way_points);
-
+    task_ui.save_waypoints();
     WaypointFileChanged= true;
     changed = true;
   }
@@ -3193,7 +3192,7 @@ void dlgConfigurationShowModal(void){
   }
 
   if (waypointneedsave) {
-    way_points.optimise();
+    task_ui.optimise_waypoints();
     if(MessageBoxX(gettext(_T("Save changes to waypoint file?")),
                    gettext(_T("Waypoints edited")),
                    MB_YESNO|MB_ICONQUESTION) == IDYES) {

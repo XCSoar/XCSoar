@@ -42,8 +42,13 @@
 #include "Waypoint/Waypoint.hpp"
 #include "Task/TaskManager.hpp"
 #include "Task/TaskAdvance.hpp"
+#include "Waypoint/WaypointSorter.hpp"
 
 class Declaration;
+class Waypoints;
+class Waypoint;
+class RasterTerrain;
+class SETTINGS_COMPUTER;
 
 /** Facade class for protected access to task data by GUI/user threads */
 class TaskClientUI: public TaskClient
@@ -51,11 +56,13 @@ class TaskClientUI: public TaskClient
 public:
   TaskClientUI(TaskManager& tm,
                const TaskBehaviour& tb,
-               TaskEvents& te):
+               TaskEvents& te,
+               Waypoints& waypoints):
     TaskClient(tm),
     task_behaviour(tb),
     task_events(te),
-    glide_polar(tm.get_glide_polar()) {};
+    glide_polar(tm.get_glide_polar()),
+    m_waypoints(waypoints) {};
 
   TaskAdvance::TaskAdvanceState_t get_advance_state() const;
 
@@ -93,6 +100,26 @@ public:
   void CAccept(BaseVisitor& visitor) const;
   void ordered_CAccept(BaseVisitor& visitor) const;
 
+  // waypoints
+  bool read_waypoints(const RasterTerrain& terrain);
+  void save_waypoints();
+  void close_waypoints();
+  bool waypoint_is_writable(const Waypoint& wp) const;
+  bool check_duplicate_waypoints(OrderedTask& ordered_task);
+  void set_waypoint_details(const Waypoint& wp, const tstring& Details);
+  WaypointSelectInfoVector get_airports(const GEOPOINT &loc) const;
+  bool is_waypoints_empty() const;
+  Waypoint create_waypoint(const GEOPOINT &location);
+  void append_waypoint(Waypoint& wp);
+  void replace_waypoint(const Waypoint& wp, Waypoint& copy);
+  void optimise_waypoints();
+  const Waypoints& get_waypoints() const { return m_waypoints; }
+  void set_home(const RasterTerrain &terrain,
+                SETTINGS_COMPUTER &settings,
+                const bool reset, const bool set_location= false);
+  const Waypoint* get_nearest_waypoint(const GEOPOINT& location) const;
+
+  // trace points
   TracePointVector find_trace_points(const GEOPOINT &loc, 
                                      const fixed range,
                                      const unsigned mintime, 
@@ -126,6 +153,7 @@ protected:
   GlidePolar glide_polar;
 
   static const TCHAR default_task_path[];
+  Waypoints &m_waypoints;
 };
 
 

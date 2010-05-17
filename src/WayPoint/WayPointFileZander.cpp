@@ -45,7 +45,7 @@ Copyright_License {
 
 bool
 WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
-    Waypoints &way_points, const RasterTerrain *terrain)
+    Waypoints &way_points, const RasterTerrain &terrain)
 {
   // If (end-of-file or comment)
   if (line[0] == '\0' || line[0] == 0x1a ||

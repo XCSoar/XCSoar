@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "TaskClientUI.hpp"
 #include "Dialogs/Internal.hpp"
+#include "TaskClientUI.hpp"
 #include "Protection.hpp"
 #include "Math/Earth.hpp"
 #include "Profile.hpp"
@@ -51,7 +52,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
 #include "Components.hpp"
-#include "Waypoint/Waypoints.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/TaskManager.hpp"
 #include "Task/Tasks/TaskSolvers/TaskSolution.hpp"
@@ -250,9 +250,8 @@ OnReplaceClicked(gcc_unused WndButton &button)
 static void 
 OnNewHomeClicked(gcc_unused WndButton &button)
 {
-  way_points.set_home(selected_waypoint->id);
   XCSoarInterface::SetSettingsComputer().HomeWaypoint = selected_waypoint->id;
-  Profile::Set(szProfileHomeWaypoint, XCSoarInterface::SettingsComputer().HomeWaypoint);
+  task_ui.set_home(terrain, XCSoarInterface::SetSettingsComputer(), false, false);
 #ifdef OLD_TASK
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());

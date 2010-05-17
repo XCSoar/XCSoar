@@ -119,11 +119,11 @@ WayPointFile::AltitudeFromTerrain(GEOPOINT &location,
 void
 WayPointFile::add_waypoint_if_in_range(Waypoints &way_points, 
                                        const Waypoint &new_waypoint,
-                                       const RasterTerrain *terrain)
+                                       const RasterTerrain &terrain)
 {
   // if waypoint out of terrain range and should not be included
   // -> return without error condition
-  if (terrain != NULL && !checkWaypointInTerrainRange(new_waypoint, *terrain))
+  if (!checkWaypointInTerrainRange(new_waypoint, terrain))
     return;
 
   // Append the new waypoint to the waypoint list and
@@ -135,13 +135,11 @@ WayPointFile::add_waypoint_if_in_range(Waypoints &way_points,
 
 void
 WayPointFile::check_altitude(Waypoint &new_waypoint,
-                             const RasterTerrain *terrain,
+                             const RasterTerrain &terrain,
                              bool alt_ok)
 {
   // Load waypoint altitude from terrain
-  const short t_alt = terrain != NULL
-    ? AltitudeFromTerrain(new_waypoint.Location, *terrain)
-    : RasterTerrain::TERRAIN_INVALID;
+  const short t_alt = AltitudeFromTerrain(new_waypoint.Location, terrain);
   if (t_alt == RasterTerrain::TERRAIN_INVALID) {
     if (!alt_ok)
       new_waypoint.Altitude = fixed_zero;
@@ -205,7 +203,8 @@ WayPointFile::checkWaypointInTerrainRange(const Waypoint &way_point,
 
 
 bool
-WayPointFile::Parse(Waypoints &way_points, const RasterTerrain *terrain)
+WayPointFile::Parse(Waypoints &way_points, 
+                    const RasterTerrain &terrain)
 {
   // If no file loaded yet -> return false
   if (file[0] == 0)
@@ -243,7 +242,7 @@ WayPointFile::Parse(Waypoints &way_points, const RasterTerrain *terrain)
 }
 
 bool
-WayPointFile::Save(Waypoints &way_points)
+WayPointFile::Save(const Waypoints &way_points)
 {
   // No filename -> return
   if (file[0] == 0)

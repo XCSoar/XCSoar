@@ -50,7 +50,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "GlideComputer.hpp"
 #include "Components.hpp"
-#include "Waypoint/Waypoints.hpp"
+#include "TaskClientUI.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Compiler.h"
 
@@ -581,7 +581,7 @@ void dlgStatusShowModal(int start_page){
     }
   }
 
-  nearest_waypoint = way_points.get_nearest(XCSoarInterface::Basic().Location);
+  nearest_waypoint = task_ui.get_nearest_waypoint(XCSoarInterface::Basic().Location);
 
   UpdateValuesSystem();
   UpdateValuesFlight();

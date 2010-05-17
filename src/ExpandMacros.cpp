@@ -261,7 +261,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   }
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckWaypointFile)"))) {
-    invalid |= way_points.empty();
+    invalid |= task_ui.is_waypoints_empty();
     ReplaceInString(OutBuffer, TEXT("$(CheckWaypointFile)"), TEXT(""), Size);
   }
 

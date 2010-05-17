@@ -54,7 +54,6 @@ class TaskBehaviour;
 class ReplayLoggerGlue;
 
 // other global objects
-extern Waypoints way_points;
 extern AirspaceClientUI airspace_ui;
 extern TaskClientUI task_ui;
 extern ReplayLoggerGlue replay;

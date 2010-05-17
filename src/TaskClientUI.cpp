@@ -2,8 +2,10 @@
 #include "Util/Serialiser.hpp"
 #include "Util/DataNodeXML.hpp"
 #include "LocalPath.hpp"
-
+#include "Util/tstring.hpp"
 #include "Task/TaskAdvance.hpp"
+#include "Waypoint/Waypoints.hpp"
+#include "WayPointGlue.hpp"
 
 TaskAdvance::TaskAdvanceState_t 
 TaskClientUI::get_advance_state() const
@@ -321,3 +323,107 @@ TaskClientUI::task_save_default()
 }
 
 
+bool
+TaskClientUI::check_duplicate_waypoints(OrderedTask& ordered_task)
+{
+  ScopeLock lock(mutex);
+  return ordered_task.check_duplicate_waypoints(m_waypoints);
+}
+
+void
+TaskClientUI::set_waypoint_details(const Waypoint& wp, const tstring& Details)
+{
+  ScopeLock lock(mutex);
+  m_waypoints.set_details(wp, Details);
+}
+
+WaypointSelectInfoVector 
+TaskClientUI::get_airports(const GEOPOINT &location) const
+{
+  // doesn't need lock since task UI is only thing that modifies waypoints
+  WaypointSorter waypoints_filter(m_waypoints,
+                                  location,
+                                  fixed_one);
+  WaypointSelectInfoVector airports = waypoints_filter.get_list();
+  waypoints_filter.filter_airport(airports);
+  return airports;
+}
+
+
+bool
+TaskClientUI::is_waypoints_empty() const
+{
+  // doesn't need lock since task UI is only thing that modifies waypoints
+  return m_waypoints.empty();
+}
+
+Waypoint
+TaskClientUI::create_waypoint(const GEOPOINT &location) 
+{
+  ScopeLock lock(mutex);
+  return m_waypoints.create(location);
+}
+
+void 
+TaskClientUI::append_waypoint(Waypoint& wp)
+{
+  ScopeLock lock(mutex);
+  return m_waypoints.append(wp);
+}
+
+bool 
+TaskClientUI::read_waypoints(const RasterTerrain& terrain)
+{
+  ScopeLock lock(mutex);
+  return WayPointGlue::ReadWaypoints(m_waypoints, terrain);
+}
+
+void 
+TaskClientUI::save_waypoints()
+{
+  // doesn't need lock since task UI is only thing that modifies waypoints
+  return WayPointGlue::SaveWaypoints(m_waypoints);
+}
+
+void 
+TaskClientUI::close_waypoints()
+{
+  ScopeLock lock(mutex);
+  m_waypoints.clear();
+}
+
+bool 
+TaskClientUI::waypoint_is_writable(const Waypoint& wp) const
+{
+  return m_waypoints.get_writable(wp);
+}
+
+void 
+TaskClientUI::replace_waypoint(const Waypoint& wp, Waypoint& copy)
+{
+  ScopeLock lock(mutex);
+  m_waypoints.replace(wp, copy);
+}
+
+void 
+TaskClientUI::optimise_waypoints()
+{
+  ScopeLock lock(mutex);
+  m_waypoints.optimise();
+}
+
+
+void 
+TaskClientUI::set_home(const RasterTerrain &terrain,
+                       SETTINGS_COMPUTER &settings,
+                       const bool reset, const bool set_location)
+{
+  ScopeLock lock(mutex);
+  WayPointGlue::SetHome(m_waypoints, terrain, settings, reset, set_location);
+}
+
+const Waypoint*
+TaskClientUI::get_nearest_waypoint(const GEOPOINT& location) const
+{
+  return m_waypoints.get_nearest(location);
+}

@@ -77,7 +77,7 @@ bool
 MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
 {
   static const fixed fixed_10(10.0);
-  return ((way_point.Zoom >= (int)(MapScale*fixed_10)) || (way_point.Zoom == 0))
+  return ((way_point.Zoom <= (int)(MapScale*fixed_10)) || (way_point.Zoom == 0))
     && (MapScale <= fixed_10);
 }
 

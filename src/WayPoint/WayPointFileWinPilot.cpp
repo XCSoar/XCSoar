@@ -44,7 +44,8 @@ Copyright_License {
 
 bool
 WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
-                                Waypoints &way_points, const RasterTerrain *terrain)
+                                Waypoints &way_points, 
+                                const RasterTerrain &terrain)
 {
   TCHAR ctemp[255];
   const TCHAR *params[20];

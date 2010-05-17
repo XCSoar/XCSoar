@@ -52,7 +52,6 @@ Copyright_License {
 #include "RenderTask.hpp"
 #include "RenderTaskPoint.hpp"
 #include "RenderObservationZone.hpp"
-#include "TaskClientUI.hpp"
 #include "Screen/Chart.hpp"
 #include "ChartProjection.hpp"
 
@@ -74,7 +73,7 @@ CommitTaskChanges()
     MessageBoxX (gettext(TEXT("Active task modified")),
                  TEXT("Task Manager"), MB_OK);
 
-    ordered_task->check_duplicate_waypoints(way_points);
+    task_ui.check_duplicate_waypoints(*ordered_task);
     task_ui.task_commit(*ordered_task);
     task_ui.task_save_default();
 

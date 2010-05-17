@@ -64,9 +64,9 @@ static WayPointFile* wp_file2 = NULL;
  * @param set_location If true, the SetStartupLocation function will be called
  */
 void
-SetHome(Waypoints &way_points, const RasterTerrain *terrain,
-        SETTINGS_COMPUTER &settings,
-        const bool reset, const bool set_location)
+WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain &terrain,
+                      SETTINGS_COMPUTER &settings,
+                      const bool reset, const bool set_location)
 {
   LogStartUp(TEXT("SetHome"));
 
@@ -103,10 +103,10 @@ SetHome(Waypoints &way_points, const RasterTerrain *terrain,
       // OK, passed all checks now
       LogStartUp(TEXT("Start at home waypoint"));
       device_blackboard.SetStartupLocation(wp->Location, wp->Altitude);
-    } else if (terrain != NULL) {
+    } else {
       // no home at all, so set it from center of terrain if available
       GEOPOINT loc;
-      if (terrain->GetTerrainCenter(&loc)) {
+      if (terrain.GetTerrainCenter(&loc)) {
         LogStartUp(TEXT("Start at terrain center"));
         device_blackboard.SetStartupLocation(loc, 0);
       }
@@ -127,7 +127,7 @@ SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 
 bool
 WayPointGlue::ReadWaypoints(Waypoints &way_points,
-                              const RasterTerrain *terrain)
+                            const RasterTerrain &terrain)
 {
   LogStartUp(TEXT("ReadWaypoints"));
 
@@ -135,7 +135,7 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
   TCHAR szFile[MAX_PATH];
 
   // Delete old waypoints
-  CloseWaypoints(way_points);
+  way_points.clear();
 
   // tear down old parsers
   if (wp_file0) {
@@ -220,7 +220,7 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
 
 
 void
-WayPointGlue::SaveWaypoints(Waypoints &way_points)
+WayPointGlue::SaveWaypoints(const Waypoints &way_points)
 {
   LogStartUp(TEXT("SaveWaypoints"));
 
@@ -243,9 +243,3 @@ WayPointGlue::SaveWaypoints(Waypoints &way_points)
   }
 }
 
-void
-WayPointGlue::CloseWaypoints(Waypoints &way_points)
-{
-  // Clear the waypoint list
-  way_points.clear();
-}
