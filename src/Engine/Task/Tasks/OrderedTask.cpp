@@ -960,11 +960,14 @@ OrderedTask::check_duplicate_waypoints(Waypoints& waypoints)
   bool changed = false;
   for (unsigned i=0; i<task_size(); ++i) {
     Waypoint wp(tps[i]->get_waypoint());
-    changed = !waypoints.find_duplicate(wp);
-    replace(tps[i]->clone(task_behaviour,
-                          m_ordered_behaviour,
-                          get_task_projection(),
-                          &wp), i);
+    bool this_changed = !waypoints.find_duplicate(wp);
+    changed |= this_changed;
+    if (this_changed) {
+      replace(tps[i]->clone(task_behaviour,
+                            m_ordered_behaviour,
+                            get_task_projection(),
+                            &wp), i);
+    }
   }
   if (changed) {
     waypoints.optimise();
