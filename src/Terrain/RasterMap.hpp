@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#ifndef RASTERMAP_H
-#define RASTERMAP_H
+#ifndef XCSOAR_TERRAIN_RASTER_MAP_HPP
+#define XCSOAR_TERRAIN_RASTER_MAP_HPP
 
 #include "Poco/RWLock.h"
 #include "Navigation/GeoPoint.hpp"

@@ -226,7 +226,7 @@ TaskClientUI::task_blank()
 
 
 bool
-TaskClientUI::task_commit(OrderedTask& that)
+TaskClientUI::task_commit(const OrderedTask& that)
 {
   ScopeLock lock(mutex);
   return task_manager.commit(that);

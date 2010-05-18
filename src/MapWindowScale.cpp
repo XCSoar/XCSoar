@@ -43,7 +43,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/UnitSymbol.hpp"
-#include "RasterWeather.h"
+#include "Terrain/RasterWeather.hpp"
 
 #include <math.h>
 #include <stdio.h>

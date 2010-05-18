@@ -37,8 +37,8 @@ Copyright_License {
 */
 
 #include "WayPointFile.hpp"
-#include "RasterTerrain.h"
-#include "RasterMap.h"
+#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/RasterMap.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Dialogs.h"
 #include "Profile.hpp"
@@ -128,8 +128,7 @@ WayPointFile::add_waypoint_if_in_range(Waypoints &way_points,
 
   // Append the new waypoint to the waypoint list and
   // return successful line parse
-  Waypoint wp(new_waypoint);
-  way_points.append(wp);
+  way_points.append(new_waypoint);
   return;
 }
 

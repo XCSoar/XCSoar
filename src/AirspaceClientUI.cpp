@@ -2,14 +2,13 @@
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "AirspaceParser.hpp"
-#include "RasterTerrain.h"
+#include "Terrain/RasterTerrain.hpp"
 
 const AirspacesInterface::AirspaceVector 
 AirspaceClientUI::scan_range(const GEOPOINT location,
                              const fixed range,
                              const AirspacePredicate &condition) const
 {
-  Poco::ScopedRWLock lock(mutex);
   return airspaces.scan_range(location, range, condition);
 }
 
@@ -25,7 +24,6 @@ AirspaceClientUI::visit_within_range(const GEOPOINT &loc,
                                      const fixed range,
                                      AirspaceVisitor& visitor) const
 {
-  Poco::ScopedRWLock lock(mutex);
   return airspaces.visit_within_range(loc, range, visitor);
 }
 
@@ -34,7 +32,6 @@ AirspaceClientUI::visit_intersecting(const GEOPOINT &loc,
                                      const GeoVector &vec,
                                      AirspaceIntersectionVisitor& visitor) const
 {
-  Poco::ScopedRWLock lock(mutex);
   return airspaces.visit_intersecting(loc, vec, visitor);
 }
 
@@ -57,7 +54,6 @@ AirspaceClientUI::clear_warnings()
 bool
 AirspaceClientUI::read(TLineReader &reader)
 {
-  Poco::ScopedRWLock lock(mutex, true);
   return ReadAirspace(airspaces, reader);
 }
 
@@ -66,8 +62,6 @@ void
 AirspaceClientUI::finalise_after_loading(RasterTerrain* terrain,
                                          const AtmosphericPressure &press)
 {
-  Poco::ScopedRWLock lock(mutex, true);
-
   airspaces.optimise();
   airspaces.set_flight_levels(press);
     
@@ -94,7 +88,6 @@ AirspaceClientUI::unlock() const
 unsigned 
 AirspaceClientUI::size() const
 {
-  Poco::ScopedRWLock lock(mutex);
   return airspaces.size();
 }
 
@@ -173,6 +166,5 @@ AirspaceClientUI::acknowledge_inside(const AbstractAirspace& airspace,
 bool 
 AirspaceClientUI::airspace_empty() const
 {
-  Poco::ScopedRWLock lock(mutex);
   return airspaces.empty();
 }

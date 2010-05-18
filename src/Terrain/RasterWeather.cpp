@@ -36,12 +36,12 @@ Copyright_License {
 }
 */
 
-#include "RasterWeather.h"
+#include "Terrain/RasterWeather.hpp"
+#include "Terrain/RasterMapJPG2000.hpp"
 #include "Language.hpp"
 #include "Units.hpp"
 #include "LocalPath.hpp"
 #include "LocalTime.hpp"
-#include "RasterMapJPG2000.hpp"
 
 #include <assert.h>
 #include <tchar.h>

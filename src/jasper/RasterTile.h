@@ -1,8 +1,7 @@
 #ifndef RASTERTILE_H
 #define RASTERTILE_H
 
-#include <stdlib.h>
-#include "Math/Angle.hpp"
+#include <stddef.h>
 
 class RasterTile {
 public:
@@ -10,11 +9,10 @@ public:
   static const short TERRAIN_INVALID = -1000;
 
 public:
-  RasterTile() {
-    xstart = ystart = xend = yend = 0;
-    width = height = 0;
-    ImageBuffer = NULL;
-  }
+  RasterTile()
+    :xstart(0), ystart(0), xend(0), yend(0),
+     width(0), height(0),
+     ImageBuffer(NULL) {}
 
   unsigned int xstart, ystart, xend, yend;
   unsigned int width, height;
@@ -27,15 +25,18 @@ public:
  public:
   void Disable();
   void Enable();
-  inline  bool IsEnabled() {
+  bool IsEnabled() const {
     return (ImageBuffer != NULL);
   }
-  inline  bool IsDisabled() {
+  bool IsDisabled() const {
     return (ImageBuffer == NULL);
   }
   bool GetField(unsigned int x, unsigned int y,
-                short *theight);
+                short *theight) const;
   inline short* GetImageBuffer() {
+    return ImageBuffer;
+  }
+  const short* GetImageBuffer() const {
     return ImageBuffer;
   }
   bool VisibilityChanged(int view_x, int view_y);
@@ -49,9 +50,8 @@ public:
 class RasterTileCache {
 public:
 
-  RasterTileCache() {
-    Overview = NULL;
-    scan_overview = true;
+  RasterTileCache()
+    :Overview(NULL), scan_overview(true) {
     Reset();
   };
   ~RasterTileCache() {
@@ -72,11 +72,11 @@ private:
   unsigned int width, height;
   bool load_all;
 public:
-  bool GetScanType(void);
+  bool GetScanType(void) const;
   short GetField(unsigned int lx,
                  unsigned int ly);
   void LoadJPG2000(char* jp2_filename, const bool do_load_all);
-  bool GetInitialised(void);
+  bool GetInitialised(void) const;
   void Reset();
   void SetInitialised(bool val);
 
@@ -84,11 +84,12 @@ public:
   short* GetOverview(void);
   void SetSize(int width, int height);
   short* GetImageBuffer(int index);
+  const short* GetImageBuffer(int index) const;
   void SetLatLonBounds(double lon_min, double lon_max,
                        double lat_min, double lat_max);
   void SetTile(int index, int xstart, int ystart, int xend, int yend);
   bool PollTiles(int x, int y);
-  short GetMaxElevation(void);
+  short GetMaxElevation(void) const;
 
   double lat_min, lat_max, lon_min, lon_max;
   unsigned int GetWidth() { return width; }
@@ -98,7 +99,7 @@ public:
   unsigned int overview_width_fine, overview_height_fine;
 
   short GetOverviewField(unsigned int lx,
-                         unsigned int ly);
+                         unsigned int ly) const;
 
   void StitchTiles(void);
  private:

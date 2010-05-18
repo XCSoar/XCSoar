@@ -63,31 +63,150 @@ static const Color hcTeam(0x74, 0xFF, 0x00);
 static const Color hcBackground(0xFF, 0xFF, 0xFF);
 static const Color hcRadar(0x55, 0x55, 0x55);
 
-static WndForm *wf = NULL;
-static WndOwnerDrawFrame *wdf = NULL;
-static unsigned zoom = 2;
-static int selection = -1;
-static int warning = -1;
-static POINT radar_mid;
-static SIZE radar_size;
-static int side_display_type = 1;
-static bool enable_auto_zoom = true;
-static POINT sc[FLARM_STATE::FLARM_MAX_TRAFFIC];
+/**
+ * A Window which renders FLARM traffic.
+ */
+class FlarmTrafficWindow : public PaintWindow {
+protected:
+  unsigned zoom;
+  int selection;
+  int warning;
+  POINT radar_mid;
+  SIZE radar_size;
+  POINT sc[FLARM_STATE::FLARM_MAX_TRAFFIC];
 
-static bool
-WarningMode()
+  Angle direction;
+  FLARM_STATE data;
+
+public:
+  int side_display_type;
+
+public:
+  FlarmTrafficWindow();
+
+public:
+  bool WarningMode() const;
+
+  const FLARM_TRAFFIC *GetTarget() const {
+    return selection >= 0 && data.FLARM_Traffic[selection].defined()
+      ? &data.FLARM_Traffic[selection]
+      : NULL;
+  }
+
+  void SetTarget(int i);
+  void NextTarget();
+  void PrevTarget();
+  void SelectNearTarget(int x, int y);
+
+protected:
+  static double GetZoomDistance(unsigned zoom);
+
+  void GetZoomDistanceString(TCHAR* str1, TCHAR* str2, unsigned size) const;
+  double RangeScale(double d) const;
+
+  void UpdateSelector();
+  void UpdateWarnings();
+  void Update(Angle new_direction, const FLARM_STATE &new_data);
+  void PaintTrafficInfo(Canvas &canvas) const;
+  void PaintRadarNoTraffic(Canvas &canvas) const;
+  void PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic,
+                        unsigned i);
+  void PaintRadarTraffic(Canvas &canvas);
+  void PaintRadarPlane(Canvas &canvas) const;
+  void PaintRadarBackground(Canvas &canvas) const;
+
+protected:
+  virtual bool on_resize(unsigned width, unsigned height);
+  virtual void on_paint(Canvas &canvas);
+};
+
+FlarmTrafficWindow::FlarmTrafficWindow()
+  :zoom(2),
+   selection(-1), warning(-1),
+   side_display_type(1),
+   direction(Angle::radians(fixed_zero))
+{
+  memset(&data, 0, sizeof(data));
+}
+
+bool
+FlarmTrafficWindow::on_resize(unsigned width, unsigned height)
+{
+  PaintWindow::on_resize(width, height);
+
+  // Calculate Radar size
+  int size = min(height, width);
+  radar_size.cx = size - Layout::FastScale(20);
+  radar_size.cy = size - Layout::FastScale(20);
+  radar_mid.x = width / 2;
+  radar_mid.y = height / 2;
+
+  return true;
+}
+
+/**
+ * A Window which renders FLARM traffic, with user interaction.
+ */
+class FlarmTrafficControl : public FlarmTrafficWindow {
+protected:
+  bool enable_auto_zoom;
+
+public:
+  FlarmTrafficControl()
+    :enable_auto_zoom(true) {}
+
+protected:
+  void CalcAutoZoom();
+
+public:
+  void Update(Angle new_direction, const FLARM_STATE &new_data);
+
+  bool GetAutoZoom() const {
+    return enable_auto_zoom;
+  }
+
+  void SetAutoZoom(bool enabled);
+  void ToggleAutoZoom() {
+    SetAutoZoom(!enable_auto_zoom);
+  }
+
+  void ZoomOut();
+  void ZoomIn();
+
+protected:
+  virtual bool on_create();
+  virtual bool on_mouse_down(int x, int y);
+};
+
+static WndForm *wf = NULL;
+static FlarmTrafficControl *wdf;
+
+bool
+FlarmTrafficControl::on_create()
+{
+  FlarmTrafficWindow::on_create();
+
+  Profile::Get(szProfileFlarmSideData, side_display_type);
+  Profile::Get(szProfileFlarmAutoZoom, enable_auto_zoom);
+
+  return true;
+}
+
+bool
+FlarmTrafficWindow::WarningMode() const
 {
   if (warning < 0 || warning >= FLARM_STATE::FLARM_MAX_TRAFFIC)
     return false;
 
-  if (XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].defined())
+  if (data.FLARM_Traffic[warning].defined())
     return true;
 
   return false;
 }
 
-static double
-GetZoomDistance(unsigned zoom) {
+double
+FlarmTrafficWindow::GetZoomDistance(unsigned zoom)
+{
   switch (zoom) {
     case 0:
       return 500;
@@ -103,8 +222,10 @@ GetZoomDistance(unsigned zoom) {
   }
 }
 
-static void
-GetZoomDistanceString(TCHAR* str1, TCHAR* str2, unsigned size) {
+void
+FlarmTrafficWindow::GetZoomDistanceString(TCHAR* str1, TCHAR* str2,
+                                          unsigned size) const
+{
   double z = GetZoomDistance(zoom);
   double z_half = z * 0.5;
 
@@ -112,63 +233,73 @@ GetZoomDistanceString(TCHAR* str1, TCHAR* str2, unsigned size) {
   Units::FormatUserDistance(z_half, str2, size);
 }
 
+void
+FlarmTrafficWindow::SetTarget(int i)
+{
+  if (selection == i)
+    return;
+
+  selection = i;
+  invalidate();
+}
+
 /**
  * Tries to select the next target, if impossible selection = -1
  */
-static void
-NextTarget()
+void
+FlarmTrafficWindow::NextTarget()
 {
   for (int i = selection + 1; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
-    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined()) {
-      selection = i;
+    if (data.FLARM_Traffic[i].defined()) {
+      SetTarget(i);
       return;
     }
   }
   for (int i = 0; i < selection; i++) {
-    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined()) {
-      selection = i;
+    if (data.FLARM_Traffic[i].defined()) {
+      SetTarget(i);
       return;
     }
   }
-  selection = -1;
+
+  SetTarget(-1);
 }
 
 /**
  * Tries to select the previous target, if impossible selection = -1
  */
-static void
-PrevTarget()
+void
+FlarmTrafficWindow::PrevTarget()
 {
   for (int i = selection - 1; i >= 0; i--) {
-    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined()) {
-      selection = i;
+    if (data.FLARM_Traffic[i].defined()) {
+      SetTarget(i);
       return;
     }
   }
   for (int i = FLARM_STATE::FLARM_MAX_TRAFFIC - 1; i > selection; i--) {
-    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined()) {
-      selection = i;
+    if (data.FLARM_Traffic[i].defined()) {
+      SetTarget(i);
       return;
     }
   }
-  selection = -1;
+
+  SetTarget(-1);
 }
 
 /**
  * Checks whether the selection is still on the valid target and if not tries
  * to select the next one
  */
-static void
-UpdateSelector()
+void
+FlarmTrafficWindow::UpdateSelector()
 {
-  if (!XCSoarInterface::Basic().flarm.FLARM_Available ||
-      XCSoarInterface::Basic().flarm.GetActiveTrafficCount() == 0) {
-    selection = -1;
+  if (!data.FLARM_Available || data.GetActiveTrafficCount() == 0) {
+    SetTarget(-1);
     return;
   }
 
-  if (selection == -1 ||
-      !XCSoarInterface::Basic().flarm.FLARM_Traffic[selection].defined())
+  if (selection == -1 || !data.FLARM_Traffic[selection].defined())
     NextTarget();
 }
 
@@ -176,18 +307,18 @@ UpdateSelector()
  * Iterates through the traffic array, finds the target with the highest
  * alarm level and saves it to "warning".
  */
-static void
-UpdateWarnings()
+void
+FlarmTrafficWindow::UpdateWarnings()
 {
   bool found = false;
 
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
     // if Traffic[i] not defined -> goto next one
-    if (!XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined())
+    if (!data.FLARM_Traffic[i].defined())
       continue;
 
     // if current target has no alarm -> goto next one
-    if (!XCSoarInterface::Basic().flarm.FLARM_Traffic[i].HasAlarm())
+    if (!data.FLARM_Traffic[i].HasAlarm())
       continue;
 
     // remember that a warning exists
@@ -199,33 +330,33 @@ UpdateWarnings()
     }
 
     // if it did before and the other level was higher -> just goto next one
-    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].AlarmLevel >
-        XCSoarInterface::Basic().flarm.FLARM_Traffic[i].AlarmLevel) {
+    if (data.FLARM_Traffic[warning].AlarmLevel >
+        data.FLARM_Traffic[i].AlarmLevel) {
       continue;
     }
 
     // if the other level was lower -> save the id and goto next one
-    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].AlarmLevel <
-        XCSoarInterface::Basic().flarm.FLARM_Traffic[i].AlarmLevel) {
+    if (data.FLARM_Traffic[warning].AlarmLevel <
+        data.FLARM_Traffic[i].AlarmLevel) {
       warning = i;
       continue;
     }
 
     // if the levels match -> let the distance decide (smaller distance wins)
     double dist_w = sqrt(
-        XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].RelativeAltitude *
-        XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].RelativeAltitude +
-        XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].RelativeEast *
-        XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].RelativeEast +
-        XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].RelativeNorth *
-        XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].RelativeNorth);
+        data.FLARM_Traffic[warning].RelativeAltitude *
+        data.FLARM_Traffic[warning].RelativeAltitude +
+        data.FLARM_Traffic[warning].RelativeEast *
+        data.FLARM_Traffic[warning].RelativeEast +
+        data.FLARM_Traffic[warning].RelativeNorth *
+        data.FLARM_Traffic[warning].RelativeNorth);
     double dist_i = sqrt(
-        XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeAltitude *
-        XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeAltitude +
-        XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeEast *
-        XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeEast +
-        XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeNorth *
-        XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeNorth);
+        data.FLARM_Traffic[i].RelativeAltitude *
+        data.FLARM_Traffic[i].RelativeAltitude +
+        data.FLARM_Traffic[i].RelativeEast *
+        data.FLARM_Traffic[i].RelativeEast +
+        data.FLARM_Traffic[i].RelativeNorth *
+        data.FLARM_Traffic[i].RelativeNorth);
 
     if (dist_w > dist_i) {
       warning = i;
@@ -237,8 +368,8 @@ UpdateWarnings()
     warning = -1;
 }
 
-static void
-SetAutoZoom(bool enabled)
+void
+FlarmTrafficControl::SetAutoZoom(bool enabled)
 {
   enable_auto_zoom = enabled;
   Profile::Set(szProfileFlarmAutoZoom, enabled);
@@ -246,21 +377,20 @@ SetAutoZoom(bool enabled)
       SetForeColor(enable_auto_zoom ? Color::BLUE : Color::BLACK);
 }
 
-static void
-CalcAutoZoom()
+void
+FlarmTrafficControl::CalcAutoZoom()
 {
   bool warning_mode = WarningMode();
   double zoom_dist = 0;
 
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
-    if (warning_mode
-        && !XCSoarInterface::Basic().flarm.FLARM_Traffic[i].HasAlarm())
+    if (warning_mode && !data.FLARM_Traffic[i].HasAlarm())
       continue;
 
-    double dist = XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeNorth
-                * XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeNorth
-                + XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeEast
-                * XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeEast;
+    double dist = data.FLARM_Traffic[i].RelativeNorth
+                * data.FLARM_Traffic[i].RelativeNorth
+                + data.FLARM_Traffic[i].RelativeEast
+                * data.FLARM_Traffic[i].RelativeEast;
 
     zoom_dist = max(dist, zoom_dist);
   }
@@ -276,42 +406,51 @@ CalcAutoZoom()
 /**
  * This should be called when the radar needs to be repainted
  */
-static void
-Update()
+void
+FlarmTrafficWindow::Update(Angle new_direction, const FLARM_STATE &new_data)
 {
+  direction = new_direction;
+  data = new_data;
+
   UpdateSelector();
   UpdateWarnings();
 
+  invalidate();
+}
+
+void
+FlarmTrafficControl::Update(Angle new_direction, const FLARM_STATE &new_data)
+{
+  FlarmTrafficWindow::Update(new_direction, new_data);
+
   if (enable_auto_zoom || WarningMode())
     CalcAutoZoom();
-
-  wdf->invalidate();
 }
 
 /**
  * Zoom out one step
  */
-static void
-ZoomOut()
+void
+FlarmTrafficControl::ZoomOut()
 {
   if (zoom < 4)
     zoom++;
 
   SetAutoZoom(false);
-  Update();
+  invalidate();
 }
 
 /**
  * Zoom in one step
  */
-static void
-ZoomIn()
+void
+FlarmTrafficControl::ZoomIn()
 {
   if (zoom > 0)
     zoom--;
 
   SetAutoZoom(false);
-  Update();
+  invalidate();
 }
 
 /**
@@ -322,17 +461,16 @@ OnDetailsClicked(gcc_unused WndButton &button)
 {
 
   // If warning is displayed -> prevent from opening details dialog
-  if (WarningMode())
+  if (wdf->WarningMode())
     return;
 
   // Don't open the details dialog if no plane selected
-  if (selection == -1 ||
-      !XCSoarInterface::Basic().flarm.FLARM_Traffic[selection].defined())
+  const FLARM_TRAFFIC *traffic = wdf->GetTarget();
+  if (traffic == NULL)
     return;
 
   // Show the details dialog
-  dlgFlarmTrafficDetailsShowModal(
-      XCSoarInterface::Basic().flarm.FLARM_Traffic[selection].ID);
+  dlgFlarmTrafficDetailsShowModal(traffic->ID);
 }
 
 /**
@@ -341,7 +479,7 @@ OnDetailsClicked(gcc_unused WndButton &button)
 static void
 OnZoomInClicked(gcc_unused WndButton &button)
 {
-  ZoomIn();
+  wdf->ZoomIn();
 }
 
 /**
@@ -350,7 +488,7 @@ OnZoomInClicked(gcc_unused WndButton &button)
 static void
 OnZoomOutClicked(gcc_unused WndButton &button)
 {
-  ZoomOut();
+  wdf->ZoomOut();
 }
 
 /**
@@ -360,11 +498,10 @@ static void
 OnPrevClicked(gcc_unused WndButton &button)
 {
   // If warning is displayed -> prevent selector movement
-  if (WarningMode())
+  if (wdf->WarningMode())
     return;
 
-  PrevTarget();
-  Update();
+  wdf->PrevTarget();
 }
 
 /**
@@ -374,11 +511,10 @@ static void
 OnNextClicked(gcc_unused WndButton &button)
 {
   // If warning is displayed -> prevent selector movement
-  if (WarningMode())
+  if (wdf->WarningMode())
     return;
 
-  NextTarget();
-  Update();
+  wdf->NextTarget();
 }
 
 /**
@@ -396,11 +532,11 @@ OnCloseClicked(gcc_unused WndButton &button)
 static void
 OnSwitchDataClicked(gcc_unused WndButton &button)
 {
-  side_display_type++;
-  if (side_display_type > 2)
-    side_display_type = 1;
+  wdf->side_display_type++;
+  if (wdf->side_display_type > 2)
+    wdf->side_display_type = 1;
 
-  Profile::Set(szProfileFlarmSideData, side_display_type);
+  Profile::Set(szProfileFlarmSideData, wdf->side_display_type);
 }
 
 /**
@@ -409,7 +545,7 @@ OnSwitchDataClicked(gcc_unused WndButton &button)
 static void
 OnAutoZoomClicked(gcc_unused WndButton &button)
 {
-  SetAutoZoom(!enable_auto_zoom);
+  wdf->ToggleAutoZoom();
 }
 
 /**
@@ -427,23 +563,21 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
     if (!has_pointer())
       break;
 
-    ZoomIn();
+    wdf->ZoomIn();
     return true;
   case VK_DOWN:
     if (!has_pointer())
       break;
 
-    ZoomOut();
+    wdf->ZoomOut();
     return true;
   case VK_LEFT:
   case '6':
-    PrevTarget();
-    Update();
+    wdf->PrevTarget();
     return true;
   case VK_RIGHT:
   case '7':
-    NextTarget();
-    Update();
+    wdf->NextTarget();
     return true;
   }
 
@@ -458,7 +592,8 @@ static int
 OnTimerNotify(WindowControl * Sender)
 {
   (void)Sender;
-  Update();
+  wdf->Update(XCSoarInterface::Basic().TrackBearing,
+              XCSoarInterface::Basic().flarm);
   return 0;
 }
 
@@ -466,8 +601,8 @@ OnTimerNotify(WindowControl * Sender)
  * Returns the distance to the own plane in pixels
  * @param d Distance in meters to the own plane
  */
-static double
-RangeScale(double d)
+double
+FlarmTrafficWindow::RangeScale(double d) const
 {
   d = d / GetZoomDistance(zoom);
   return min(d, 1.0) * radar_size.cx * 0.5;
@@ -477,11 +612,12 @@ RangeScale(double d)
  * Paints the basic info for the selected target on the given canvas
  * @param canvas The canvas to paint on
  */
-static void
-PaintTrafficInfo(Canvas &canvas) {
+void
+FlarmTrafficWindow::PaintTrafficInfo(Canvas &canvas) const
+{
   // Don't paint numbers if no plane selected
   if (selection == -1 ||
-      !XCSoarInterface::Basic().flarm.FLARM_Traffic[selection].defined())
+      !data.FLARM_Traffic[selection].defined())
     return;
 
   // Temporary string
@@ -491,9 +627,9 @@ PaintTrafficInfo(Canvas &canvas) {
   // Shortcut to the selected traffic
   FLARM_TRAFFIC traffic;
   if (WarningMode())
-    traffic = XCSoarInterface::Basic().flarm.FLARM_Traffic[warning];
+    traffic = data.FLARM_Traffic[warning];
   else
-    traffic = XCSoarInterface::Basic().flarm.FLARM_Traffic[selection];
+    traffic = data.FLARM_Traffic[selection];
 
   RECT rc;
   rc.left = min(radar_mid.x - radar_size.cx * 0.5,
@@ -563,8 +699,9 @@ PaintTrafficInfo(Canvas &canvas) {
  * Paints a "No Traffic" sign on the given canvas
  * @param canvas The canvas to paint on
  */
-static void
-PaintRadarNoTraffic(Canvas &canvas) {
+void
+FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const
+{
   static TCHAR str[] = _T("No Traffic");
   canvas.select(StatisticsFont);
   SIZE ts = canvas.text_size(str);
@@ -576,13 +713,13 @@ PaintRadarNoTraffic(Canvas &canvas) {
  * Paints the traffic symbols on the given canvas
  * @param canvas The canvas to paint on
  */
-static void
-PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
+void
+FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
+                                     const FLARM_TRAFFIC &traffic,
+                                     unsigned i)
 {
   static const Brush hbWarning(hcWarning);
   static const Brush hbAlarm(hcAlarm);
-  static const Brush hbStandard(hcStandard);
-  static const Brush hbPassive(hcPassive);
   static const Brush hbSelection(hcSelection);
   static const Brush hbTeam(hcTeam);
 
@@ -617,7 +754,7 @@ PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
   }
 
   // Rotate x and y to have a track up display
-  Angle DisplayAngle = -XCSoarInterface::Basic().TrackBearing;
+  Angle DisplayAngle = -direction;
   // or use .Heading? (no, because heading is not reliable)
   const FastRotation r(DisplayAngle);
   FastRotation::Pair p = r.Rotate(x, y);
@@ -647,14 +784,14 @@ PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
   case 0:
   case 4:
     if (WarningMode()) {
-      canvas.select(hbPassive);
+      canvas.hollow_brush();
       canvas.select(hpPassive);
     } else {
       if (static_cast<unsigned> (selection) == i) {
         canvas.select(hpSelection);
         canvas.select(hbSelection);
       } else {
-        canvas.select(hbStandard);
+        canvas.hollow_brush();
         canvas.select(hpStandard);
       }
       if (XCSoarInterface::SettingsComputer().TeamFlarmTracking &&
@@ -695,33 +832,55 @@ PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
     if (traffic.Average30s < 0.5)
       return;
 
-    // Select font and color
+    // Select font
     canvas.background_transparent();
     canvas.select(MapWindowBoldFont);
-    if (static_cast<unsigned> (selection) == i)
-      canvas.set_text_color(hcSelection);
-    else
-      canvas.set_text_color(hcStandard);
 
-    // Draw vertical speed
+    // Format string
     TCHAR tmp[10];
     Units::FormatUserVSpeed(traffic.Average30s, tmp, 10, false);
     SIZE sz = canvas.text_size(tmp);
-    canvas.text(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy * 0.5, tmp);
-  } else if (side_display_type == 2) {
-#endif
-    // Select font and color
-    canvas.background_transparent();
-    canvas.select(MapWindowBoldFont);
+
+    // Draw vertical speed shadow
+    canvas.set_text_color(Color::WHITE);
+    canvas.text(sc[i].x + Layout::FastScale(11) + 1,
+                sc[i].y - sz.cy * 0.5 + 1, tmp);
+    canvas.text(sc[i].x + Layout::FastScale(11) - 1,
+                sc[i].y - sz.cy * 0.5 - 1, tmp);
+
+    // Select color
     if (static_cast<unsigned> (selection) == i)
       canvas.set_text_color(hcSelection);
     else
       canvas.set_text_color(hcStandard);
 
     // Draw vertical speed
+    canvas.text(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy * 0.5, tmp);
+  } else if (side_display_type == 2) {
+#endif
+    // Select font
+    canvas.background_transparent();
+    canvas.select(MapWindowBoldFont);
+
+    // Format string
     TCHAR tmp[10];
     Units::FormatUserArrival(traffic.RelativeAltitude, tmp, 10, true);
     SIZE sz = canvas.text_size(tmp);
+
+    // Draw vertical speed shadow
+    canvas.set_text_color(Color::WHITE);
+    canvas.text(sc[i].x + Layout::FastScale(11) + 1,
+                sc[i].y - sz.cy * 0.5 + 1, tmp);
+    canvas.text(sc[i].x + Layout::FastScale(11) - 1,
+                sc[i].y - sz.cy * 0.5 - 1, tmp);
+
+    // Select color
+    if (static_cast<unsigned> (selection) == i)
+      canvas.set_text_color(hcSelection);
+    else
+      canvas.set_text_color(hcStandard);
+
+    // Draw vertical speed
     canvas.text(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy * 0.5, tmp);
 #ifdef FLARM_AVERAGE
   }
@@ -732,25 +891,31 @@ PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic, unsigned i)
  * Paints the traffic symbols on the given canvas
  * @param canvas The canvas to paint on
  */
-static void
-PaintRadarTraffic(Canvas &canvas) {
-  if (!XCSoarInterface::Basic().flarm.FLARM_Available ||
-      XCSoarInterface::Basic().flarm.GetActiveTrafficCount() == 0) {
+void
+FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
+{
+  if (!data.FLARM_Available || data.GetActiveTrafficCount() == 0) {
     PaintRadarNoTraffic(canvas);
     return;
   }
 
   // Iterate through the traffic (normal traffic)
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
-    const FLARM_TRAFFIC &traffic =
-        XCSoarInterface::Basic().flarm.FLARM_Traffic[i];
+    const FLARM_TRAFFIC &traffic = data.FLARM_Traffic[i];
 
     // If FLARM target does not exist -> next one
     if (!traffic.defined())
       continue;
 
-    if (!traffic.HasAlarm())
+    if (!traffic.HasAlarm() && static_cast<unsigned> (selection) != i)
       PaintRadarTarget(canvas, traffic, i);
+  }
+
+  if (selection >= 0 && selection < FLARM_STATE::FLARM_MAX_TRAFFIC) {
+    const FLARM_TRAFFIC &traffic = data.FLARM_Traffic[selection];
+
+    if (traffic.defined() && !traffic.HasAlarm())
+      PaintRadarTarget(canvas, traffic, selection);
   }
 
   if (!WarningMode())
@@ -758,8 +923,7 @@ PaintRadarTraffic(Canvas &canvas) {
 
   // Iterate through the traffic (alarm traffic)
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
-    const FLARM_TRAFFIC &traffic =
-        XCSoarInterface::Basic().flarm.FLARM_Traffic[i];
+    const FLARM_TRAFFIC &traffic = data.FLARM_Traffic[i];
 
     // If FLARM target does not exist -> next one
     if (!traffic.defined())
@@ -774,8 +938,9 @@ PaintRadarTraffic(Canvas &canvas) {
  * Paint a plane symbol in the middle of the radar on the given canvas
  * @param canvas The canvas to paint on
  */
-static void
-PaintRadarPlane(Canvas &canvas) {
+void
+FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
+{
   static const Pen hpPlane(Layout::FastScale(2), hcRadar);
 
   canvas.select(hpPlane);
@@ -797,8 +962,9 @@ PaintRadarPlane(Canvas &canvas) {
  * Paints the radar circle on the given canvas
  * @param canvas The canvas to paint on
  */
-static void
-PaintRadarBackground(Canvas &canvas) {
+void
+FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
+{
   static const Pen hpRadar(1, hcRadar);
 
   canvas.hollow_brush();
@@ -829,24 +995,28 @@ PaintRadarBackground(Canvas &canvas) {
  * @param Sender WindowControl that send the "repaint" message
  * @param canvas The canvas to paint on
  */
-static void
-OnRadarPaint(WindowControl *Sender, Canvas &canvas)
+void
+FlarmTrafficWindow::on_paint(Canvas &canvas)
 {
+  canvas.white_pen();
+  canvas.white_brush();
+  canvas.clear();
+
   PaintRadarBackground(canvas);
   PaintRadarPlane(canvas);
   PaintTrafficInfo(canvas);
   PaintRadarTraffic(canvas);
 }
 
-static void
-SelectNearTarget(int x, int y)
+void
+FlarmTrafficWindow::SelectNearTarget(int x, int y)
 {
   int min_distance = 99999;
   int min_id = -1;
 
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
     // If FLARM target does not exist -> next one
-    if (!XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined())
+    if (!data.FLARM_Traffic[i].defined())
       continue;
 
     int distance_sq = (x - sc[i].x) * (x - sc[i].x) +
@@ -861,21 +1031,33 @@ SelectNearTarget(int x, int y)
   }
 
   if (min_id >= 0)
-    selection = min_id;
+    SetTarget(min_id);
 
-  Update();
+  invalidate();
 }
 
-static bool
-OnMouseDown(WindowControl *Sender, int x, int y)
+bool
+FlarmTrafficControl::on_mouse_down(int x, int y)
 {
-  if (!XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].defined())
+  if (!data.FLARM_Traffic[warning].defined())
     SelectNearTarget(x, y);
 
   return true;
 }
 
+static Window *
+OnCreateFlarmTrafficControl(ContainerWindow &parent, int left, int top,
+                            unsigned width, unsigned height,
+                            const WindowStyle style)
+{
+  wdf = new FlarmTrafficControl();
+  wdf->set(parent, left, top, width, height, style);
+
+  return wdf;
+}
+
 static CallBackTableEntry_t CallBackTable[] = {
+  DeclareCallBackEntry(OnCreateFlarmTrafficControl),
   DeclareCallBackEntry(OnTimerNotify),
   DeclareCallBackEntry(NULL)
 };
@@ -901,19 +1083,6 @@ dlgFlarmTrafficShowModal()
   wf->SetKeyDownNotify(FormKeyDown);
   wf->SetTimerNotify(OnTimerNotify);
 
-  // Find Radar frame
-  wdf = ((WndOwnerDrawFrame *)wf->FindByName(_T("frmRadar")));
-  // Set Radar frame event
-  wdf->SetOnPaintNotify(OnRadarPaint);
-  wdf->SetOnMouseDownNotify(OnMouseDown);
-
-  // Calculate Radar size
-  int size = min(wdf->get_height(), wdf->get_width());
-  radar_size.cx = size - Layout::FastScale(20);
-  radar_size.cy = size - Layout::FastScale(20);
-  radar_mid.x = wdf->get_width() / 2;
-  radar_mid.y = wdf->get_height() / 2;
-
   // Set button events
   ((WndButton *)wf->FindByName(_T("cmdDetails")))->
       SetOnClickNotify(OnDetailsClicked);
@@ -933,13 +1102,12 @@ dlgFlarmTrafficShowModal()
       SetOnClickNotify(OnAutoZoomClicked);
 
   // Update Radar and Selection for the first time
-  Update();
+  wdf->Update(XCSoarInterface::Basic().TrackBearing,
+              XCSoarInterface::Basic().flarm);
 
   // Get the last chosen Side Data configuration
-  Profile::Get(szProfileFlarmSideData, side_display_type);
-  Profile::Get(szProfileFlarmAutoZoom, enable_auto_zoom);
   ((WndButton *)wf->FindByName(_T("cmdAutoZoom")))->
-      SetForeColor(enable_auto_zoom ? Color::BLUE : Color::BLACK);
+    SetForeColor(wdf->GetAutoZoom() ? Color::BLUE : Color::BLACK);
 
   // Show the dialog
   wf->ShowModal();

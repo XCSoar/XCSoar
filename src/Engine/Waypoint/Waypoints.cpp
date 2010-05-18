@@ -107,15 +107,17 @@ Waypoints::optimise()
 }
 
 void
-Waypoints::append(Waypoint& wp)
+Waypoints::append(const Waypoint& wp)
 {
   if (empty())
     task_projection.reset(wp.Location);
 
   task_projection.scan_location(wp.Location);
 
-  wp.id = next_id++;
-  tmp_wps.push_back(WaypointEnvelope(wp));
+  Waypoint wp2(wp);
+  wp2.id = next_id++;
+
+  tmp_wps.push_back(WaypointEnvelope(wp2));
 }
 
 const Waypoint*
@@ -183,7 +185,7 @@ Waypoints::lookup_location(const GEOPOINT &loc, const fixed range) const
     const Waypoint* wp = &(found.first)->get_waypoint();
     if (wp->Location == loc)
       return wp;
-    else if (positive(range) && (wp->is_close_to(loc, range)))
+    else if (positive(range) && (wp->Location.distance(loc) <= range))
       return wp;
   }
 
@@ -411,16 +413,4 @@ Waypoints::get_writable(const Waypoint& wp) const
   } else {
     return true;
   }
-}
-
-bool
-Waypoints::find_duplicate(Waypoint& waypoint)
-{
-  const Waypoint* found = lookup_name(waypoint.Name);
-  if (found && found->is_close_to(waypoint.Location, fixed(100))) {
-    waypoint = found;
-    return true;
-  }
-  append(waypoint);
-  return false;
 }

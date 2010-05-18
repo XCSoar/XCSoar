@@ -40,7 +40,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
-#include "RasterTerrain.h"
+#include "Terrain/RasterTerrain.hpp"
 #include "AirfieldDetails.h"
 #include "TopologyStore.h"
 #include "Dialogs.h"
@@ -76,7 +76,9 @@ bool LanguageFileChanged = false;
 bool StatusFileChanged = false;
 bool InputFileChanged = false;
 
-void SettingsEnter() {
+static void
+SettingsEnter()
+{
   draw_thread->suspend();
   // This prevents the map and calculation threads from doing anything
   // with shared data while it is being changed (also prevents drawing)
@@ -94,7 +96,9 @@ void SettingsEnter() {
   DevicePortChanged = false;
 }
 
-void SettingsLeave() {
+static void
+SettingsLeave()
+{
   if (!globalRunningEvent.test())
     return;
 
@@ -126,6 +130,9 @@ void SettingsLeave() {
 
   if ((WaypointFileChanged) || (TerrainFileChanged) || (AirfieldFileChanged)) {
     XCSoarInterface::CreateProgressDialog(gettext(_T("Loading Terrain File...")));
+
+    XCSoarInterface::main_window.map.set_terrain(NULL);
+
     // re-load terrain
     terrain.CloseTerrain();
     terrain.OpenTerrain();
@@ -141,6 +148,8 @@ void SettingsLeave() {
     }
 
     terrain.ServiceFullReload(XCSoarInterface::Basic().Location);
+
+    XCSoarInterface::main_window.map.set_terrain(&terrain);
   }
 
   if (TopologyFileChanged) {

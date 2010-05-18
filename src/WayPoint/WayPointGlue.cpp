@@ -41,7 +41,7 @@ Copyright_License {
 #include "Profile.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
-#include "RasterTerrain.h"
+#include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "WayPointFile.hpp"
 

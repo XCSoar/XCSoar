@@ -70,7 +70,10 @@ short RasterMapJPG2000::_GetFieldAtXY(unsigned int lx,
 }
 
 void RasterMapJPG2000::ServiceFullReload(const GEOPOINT &location) {
-  ReloadJPG2000Full(location);
+  TriggerJPGReload = true;
+  FullJPGReload= true;
+  _SetViewCenter(location);
+  FullJPGReload= false;
 }
 
 RasterMapJPG2000::RasterMapJPG2000() {
@@ -91,13 +94,6 @@ RasterMapJPG2000::~RasterMapJPG2000() {
 }
 
 int RasterMapJPG2000::ref_count = 0;
-
-void RasterMapJPG2000::ReloadJPG2000Full(const GEOPOINT &location) {
-  TriggerJPGReload = true;
-  FullJPGReload= true;
-  SetViewCenter(location);
-  FullJPGReload= false;
-}
 
 void RasterMapJPG2000::_ReloadJPG2000() {
   if (TriggerJPGReload) {
@@ -125,13 +121,17 @@ void RasterMapJPG2000::_ReloadJPG2000() {
 }
 
 void RasterMapJPG2000::ReloadJPG2000(void) {
-  Poco::ScopedRWLock protect(lock, true);
   _ReloadJPG2000();
 }
 
 void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
 {
   Poco::ScopedRWLock protect(lock, true);
+  _SetViewCenter(location);
+}
+
+void RasterMapJPG2000::_SetViewCenter(const GEOPOINT &location)
+{
   int x, y;
   bool do_poll = false;
   if (raster_tile_cache.GetInitialised()) {
@@ -153,7 +153,6 @@ void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
 bool
 RasterMapJPG2000::Open(const char *zfilename)
 {
-  Poco::ScopedRWLock protect(lock, true);
   strcpy(jp2_filename,zfilename);
 
   // force first-time load

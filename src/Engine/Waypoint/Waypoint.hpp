@@ -127,18 +127,6 @@ public:
     return id == wp.id;
   }
 
-/** 
- * Determine if a waypoint is close to a given location within
- * a threshold
- * 
- * @param location Location to compare to
- * @param range Distance threshold (m)
- * 
- * @return True if close to reference location
- */
-  bool
-  is_close_to(const GEOPOINT &location, const fixed range) const;
-
 public:
   DEFINE_CONSTVISITABLE()
 

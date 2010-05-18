@@ -42,10 +42,10 @@ Copyright_License {
  * @file GlideTerrain.cpp
  */
 
-#include "GlideTerrain.hpp"
+#include "Terrain/GlideTerrain.hpp"
+#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/RasterMap.hpp"
 #include "SettingsComputer.hpp"
-#include "RasterTerrain.h"
-#include "RasterMap.h"
 #include "Navigation/Aircraft.hpp"
 #include "Sizes.h"
 #include "Navigation/Geometry/GeoVector.hpp"

@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#ifndef TERRAIN_RENDERER_H
-#define TERRAIN_RENDERER_H
+#ifndef XCSOAR_TERRAIN_RENDERER_HPP
+#define XCSOAR_TERRAIN_RENDERER_HPP
 
 #include "Navigation/GeoPoint.hpp"
 

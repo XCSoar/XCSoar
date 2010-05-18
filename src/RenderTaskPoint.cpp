@@ -43,6 +43,7 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "RenderObservationZone.hpp"
 #include "NMEA/Info.hpp"
+#include "SettingsUser.hpp"
 
 RenderTaskPoint::RenderTaskPoint(MapDrawHelper &_helper,
                                  RenderObservationZone &_ozv,

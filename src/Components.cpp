@@ -44,8 +44,8 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "InfoBox.hpp"
 #include "InfoBoxManager.hpp"
-#include "RasterTerrain.h"
-#include "RasterWeather.h"
+#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/RasterWeather.hpp"
 #include "InputEvents.h"
 #include "Atmosphere.h"
 #include "Device/Geoid.h"
@@ -308,6 +308,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
   LogStartUp(TEXT("OpenTerrain"));
   terrain.OpenTerrain();
+
+  CreateProgressDialog(gettext(TEXT("Loading way points...")));
 
   // Read the waypoint files
   task_ui.read_waypoints(terrain);

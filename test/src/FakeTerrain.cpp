@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+  Copyright (C) 2000 - 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,7 +18,6 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
-	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -36,40 +35,26 @@ Copyright_License {
 }
 */
 
-#ifndef RASTERMAPJPG2000_H
-#define RASTERMAPJPG2000_H
+#include "Terrain/RasterTerrain.hpp"
 
-#include "RasterMap.h"
-#include "jasper/RasterTile.h"
+void RasterTerrain::Lock(void) {}
+void RasterTerrain::Unlock(void) {}
 
-#include <syslimits.h>
+bool
+RasterTerrain::GetTerrainCenter(GEOPOINT *location) const
+{
+  return false;
+}
 
-class RasterMapJPG2000: public RasterMap {
- public:
-  RasterMapJPG2000();
-  ~RasterMapJPG2000();
+short
+RasterTerrain::GetTerrainHeight(const GEOPOINT &location,
+                                const RasterRounding &rounding) const
+{
+  return 0;
+}
 
-  void ReloadJPG2000();
-  void ReloadJPG2000Full(const GEOPOINT &location);
-
-  void SetViewCenter(const GEOPOINT &location);
-  virtual void SetFieldRounding(const GEOPOINT& delta,
-                                RasterRounding &rounding) const;
-  bool Open(const char *path);
-  void ServiceFullReload(const GEOPOINT &location);
-
-  static RasterMapJPG2000 *LoadFile(const char *path);
-
- protected:
-  char jp2_filename[PATH_MAX];
-  virtual short _GetFieldAtXY(unsigned int lx,
-                              unsigned int ly);
-  bool TriggerJPGReload;
-  bool FullJPGReload;
-  static int ref_count;
-  RasterTileCache raster_tile_cache;
-  virtual void _ReloadJPG2000(void);
-};
-
-
-#endif
+bool
+RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location) const
+{
+  return true;
+}

@@ -39,7 +39,6 @@ Copyright_License {
 #include "WayPointFileWinPilot.hpp"
 #include "Units.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "RasterTerrain.h"
 #include "IO/TextWriter.hpp"
 
 bool

@@ -1,6 +1,7 @@
 #include "RenderObservationZone.hpp"
 #include "Screen/Graphics.hpp"
 #include "Projection.hpp"
+#include "SettingsUser.hpp"
 
 RenderObservationZone::RenderObservationZone(MapDrawHelper &_draw)
   :MapDrawHelper(_draw),

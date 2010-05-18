@@ -41,9 +41,9 @@ Copyright_License {
 #include "Screen/WindowCanvas.hpp"
 #include "Screen/Layout.hpp"
 #include "TopologyStore.h"
-#include "RasterTerrain.h"
-#include "TerrainRenderer.h"
-#include "RasterWeather.h"
+#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainRenderer.hpp"
+#include "Terrain/RasterWeather.hpp"
 #include "Gauge/GaugeCDI.hpp"
 #include "TaskClientUI.hpp"
 

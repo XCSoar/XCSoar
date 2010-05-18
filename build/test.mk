@@ -244,6 +244,7 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeProgressDialog.cpp \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/RunWayPointParser.cpp
 RUN_WAY_POINT_PARSER_OBJS = $(call SRC_TO_OBJ,$(RUN_WAY_POINT_PARSER_SOURCES))
 RUN_WAY_POINT_PARSER_LDADD = \
@@ -342,10 +343,11 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Marks.cpp \
 	$(SRC)/Math/FastRotation.cpp \
 	$(SRC)/Math/Screen.cpp \
-	$(SRC)/RasterMapJPG2000.cpp \
-	$(SRC)/RasterMap.cpp \
-	$(SRC)/RasterTerrain.cpp \
-	$(SRC)/RasterWeather.cpp \
+	$(SRC)/Terrain/RasterMapJPG2000.cpp \
+	$(SRC)/Terrain/RasterMap.cpp \
+	$(SRC)/Terrain/RasterTerrain.cpp \
+	$(SRC)/Terrain/RasterWeather.cpp \
+	$(SRC)/Terrain/TerrainRenderer.cpp \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Screen/Animation.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \
@@ -366,7 +368,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/StringUtil.cpp \
 	$(SRC)/TaskClient.cpp \
 	$(SRC)/TaskClientUI.cpp \
-	$(SRC)/TerrainRenderer.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Topology.cpp \
@@ -480,6 +481,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeProgressDialog.cpp \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/RunAirspaceWarningDialog.cpp
 RUN_AIRSPACE_WARNING_DIALOG_BIN = $(TARGET_BIN_DIR)/RunAirspaceWarningDialog$(TARGET_EXEEXT)
 RUN_AIRSPACE_WARNING_DIALOG_OBJS = $(call SRC_TO_OBJ,$(RUN_AIRSPACE_WARNING_DIALOG_SOURCES))
@@ -543,6 +545,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeProgressDialog.cpp \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/RunTaskEditorDialog.cpp
 RUN_TASK_EDITOR_DIALOG_BIN = $(TARGET_BIN_DIR)/RunTaskEditorDialog$(TARGET_EXEEXT)
 RUN_TASK_EDITOR_DIALOG_OBJS = $(call SRC_TO_OBJ,$(RUN_TASK_EDITOR_DIALOG_SOURCES))

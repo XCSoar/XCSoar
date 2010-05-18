@@ -60,7 +60,6 @@
 #include "Task/Factory/MixedTaskFactory.hpp"
 #include "Task/Factory/TouringTaskFactory.hpp"
 
-#include "Waypoint/Waypoints.hpp"
 
 void
 OrderedTask::update_geometry() 

@@ -39,9 +39,9 @@ Copyright_License {
 
 #include "GlideComputerTask.hpp"
 #include "TaskClientCalc.hpp"
-#include "RasterTerrain.h"
+#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/GlideTerrain.hpp"
 #include "Components.hpp"
-#include "GlideTerrain.hpp"
 
 #include <algorithm>
 

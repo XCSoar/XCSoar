@@ -42,15 +42,11 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Ramp.hpp"
 #include "Appearance.hpp"
-#include "MapWindowProjection.hpp"
-#include "Math/Screen.hpp"
-#include <stdlib.h>
 #include "SettingsUser.hpp"
-#include "SettingsAirspace.hpp"
 #include "Units.hpp"
 #include "Screen/LabelBlock.hpp"
-#include "MapWindow.hpp"
 #include "resource.h"
+#include "Asset.hpp"
 
 #define NUMSNAILRAMP 6
 
@@ -550,12 +546,12 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       canvas.round_rectangle(brect.left, brect.top, brect.right, brect.bottom,
           IBLSCALE(8), IBLSCALE(8));
 
-#ifdef WINDOWSPC
-      canvas.background_transparent();
-      canvas.text(x, y, Value);
-#else
-      canvas.text_opaque(x, y, Value);
-#endif
+      if (is_embedded()) {
+        canvas.text_opaque(x, y, Value);
+      } else {
+        canvas.background_transparent();
+        canvas.text(x, y, Value);
+      }
 
       drawn = true;
     }
@@ -599,28 +595,28 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     if (notoverlapping) {
       canvas.set_text_color(Color::WHITE);
 
-#ifdef WINDOWSPC
-      canvas.background_transparent();
-      canvas.text(x + 1, y, Value);
-      canvas.text(x + 2, y, Value);
-      canvas.text(x - 1, y, Value);
-      canvas.text(x - 2, y, Value);
-      canvas.text(x, y + 1, Value);
-      canvas.text(x, y - 1, Value);
-      canvas.set_text_color(Color::BLACK);
+      if (is_embedded()) {
+        canvas.text_opaque(x + 2, y, Value);
+        canvas.text_opaque(x + 1, y, Value);
+        canvas.text_opaque(x - 1, y, Value);
+        canvas.text_opaque(x - 2, y, Value);
+        canvas.text_opaque(x, y + 1, Value);
+        canvas.text_opaque(x, y - 1, Value);
+        canvas.set_text_color(Color::BLACK);
 
-      canvas.text(x, y, Value);
-#else
-      canvas.text_opaque(x + 2, y, Value);
-      canvas.text_opaque(x + 1, y, Value);
-      canvas.text_opaque(x - 1, y, Value);
-      canvas.text_opaque(x - 2, y, Value);
-      canvas.text_opaque(x, y + 1, Value);
-      canvas.text_opaque(x, y - 1, Value);
-      canvas.set_text_color(Color::BLACK);
+        canvas.text_opaque(x, y, Value);
+      } else {
+        canvas.background_transparent();
+        canvas.text(x + 1, y, Value);
+        canvas.text(x + 2, y, Value);
+        canvas.text(x - 1, y, Value);
+        canvas.text(x - 2, y, Value);
+        canvas.text(x, y + 1, Value);
+        canvas.text(x, y - 1, Value);
+        canvas.set_text_color(Color::BLACK);
 
-      canvas.text_opaque(x, y, Value);
-#endif
+        canvas.text(x, y, Value);
+      }
 
       drawn = true;
     }
@@ -636,12 +632,12 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       notoverlapping = true;
 
     if (notoverlapping) {
-#ifdef WINDOWSPC
-      canvas.background_transparent();
-      canvas.text(x, y, Value);
-#else
-      canvas.text_opaque(x, y, Value);
-#endif
+      if (is_embedded()) {
+        canvas.text_opaque(x, y, Value);
+      } else {
+        canvas.background_transparent();
+        canvas.text(x, y, Value);
+      }
 
       drawn = true;
     }
