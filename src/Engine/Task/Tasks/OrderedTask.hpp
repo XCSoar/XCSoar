@@ -50,6 +50,7 @@
 class OrderedTaskPoint;
 class TaskPointVisitor;
 class AbstractTaskFactory;
+class Waypoints;
 
 /**
  * A task comprising an ordered sequence of task points, each with
@@ -359,6 +360,8 @@ public:
   fixed get_task_radius(const GEOPOINT& fallback_location) const;
 
   bool has_targets() const;
+
+  bool check_duplicate_waypoints(Waypoints& waypoints);
 
 protected:
 
