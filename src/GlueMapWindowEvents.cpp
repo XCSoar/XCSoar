@@ -316,8 +316,8 @@ GlueMapWindow::on_mouse_up(int x, int y)
     if (CommonInterface::VirtualKeys == (VirtualKeys_t)vkEnabled) {
       if (dwInterval < VKSHORTCLICK) {
         // 100ms is NOT enough for a short click since GetTickCount is OEM custom!
-        if (way_points != NULL &&
-            PopupNearestWaypointDetails(*way_points, LLstart,
+        if (task != NULL &&
+            PopupNearestWaypointDetails(task->get_waypoints(), LLstart,
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
           return true;
         }
@@ -327,8 +327,8 @@ GlueMapWindow::on_mouse_up(int x, int y)
       }
     } else {
       if(dwInterval < AIRSPACECLICK) { // original and untouched interval
-        if (way_points != NULL &&
-            PopupNearestWaypointDetails(*way_points, LLstart,
+        if (task != NULL &&
+            PopupNearestWaypointDetails(task->get_waypoints(), LLstart,
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
           return true;
         }

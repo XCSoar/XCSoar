@@ -39,7 +39,6 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "MapWindowLabels.hpp"
 #include "Screen/Graphics.hpp"
-#include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/Tasks/TaskSolvers/TaskSolution.hpp"
@@ -274,15 +273,15 @@ private:
 void
 MapWindow::DrawWaypoints(Canvas &canvas)
 {
-  if (way_points == NULL)
+  if (!task || task->is_waypoints_empty()) 
     return;
 
   MapWaypointLabelClear();
 
   WaypointVisitorMap v(*this, canvas, get_glide_polar());
-  way_points->visit_within_range(PanLocation,
-                                 fixed(GetScreenDistanceMeters()), v);
-  if (task && SettingsMap().DisplayTextType == DISPLAYNAMEIFINTASK)
+  task->waypoints_visit_within_range(PanLocation,
+                                     fixed(GetScreenDistanceMeters()), v);
+  if (SettingsMap().DisplayTextType == DISPLAYNAMEIFINTASK)
     task->CAccept(v);
 
   MapWaypointLabelSortAndRender(canvas);

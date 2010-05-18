@@ -49,6 +49,7 @@ class Waypoints;
 class Waypoint;
 class RasterTerrain;
 class SETTINGS_COMPUTER;
+class WaypointVisitor;
 
 /** Facade class for protected access to task data by GUI/user threads */
 class TaskClientUI: public TaskClient
@@ -118,6 +119,9 @@ public:
                 SETTINGS_COMPUTER &settings,
                 const bool reset, const bool set_location= false);
   const Waypoint* get_nearest_waypoint(const GEOPOINT& location) const;
+  void waypoints_visit_within_range(const GEOPOINT& location,
+                                    const fixed range,
+                                    WaypointVisitor& visitor) const;
 
   // trace points
   TracePointVector find_trace_points(const GEOPOINT &loc, 

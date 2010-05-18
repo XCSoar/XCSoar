@@ -427,3 +427,12 @@ TaskClientUI::get_nearest_waypoint(const GEOPOINT& location) const
 {
   return m_waypoints.get_nearest(location);
 }
+
+void 
+TaskClientUI::waypoints_visit_within_range(const GEOPOINT& location,
+                                           const fixed range,
+                                           WaypointVisitor& visitor) const
+{
+  ScopeLock lock(mutex);
+  m_waypoints.visit_within_range(location, range, visitor);
+}

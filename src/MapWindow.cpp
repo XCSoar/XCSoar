@@ -58,7 +58,6 @@ ScreenGraphics MapGfx;
  */
 MapWindow::MapWindow()
   :MapWindowProjection(),
-   way_points(NULL),
    topology(NULL), terrain(NULL), weather(NULL),
    topology_dirty(true), terrain_dirty(true), weather_dirty(true),
    terrain_renderer(NULL),

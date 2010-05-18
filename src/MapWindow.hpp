@@ -71,7 +71,6 @@ class RasterWeather;
 class TerrainRenderer;
 class Marks;
 class GaugeCDI;
-class Waypoints;
 class Waypoint;
 class AirspaceClientUI;
 class TaskClientUI;
@@ -84,7 +83,6 @@ class MapWindow : public PaintWindow,
   public MapWindowTimer
 {
 protected:
-  Waypoints *way_points;
   TopologyStore *topology;
   RasterTerrain *terrain;
   RasterWeather *weather;
@@ -115,10 +113,6 @@ public:
 
   void set(ContainerWindow &parent,
            const RECT _MapRectSmall, const RECT _MapRectBig);
-
-  void set_way_points(Waypoints *_way_points) {
-    way_points = _way_points;
-  }
 
   void set_task(TaskClientUI *_task) {
     task = _task;

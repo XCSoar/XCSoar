@@ -363,7 +363,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 
   CreateProgressDialog(gettext(TEXT("Initialising display")));
 
-  main_window.map.set_way_points(&way_points);
   main_window.map.set_task(&task_ui);
   main_window.map.set_airspaces(&airspace_ui);
 
