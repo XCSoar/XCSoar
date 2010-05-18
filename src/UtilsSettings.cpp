@@ -138,7 +138,7 @@ SettingsLeave()
     terrain.OpenTerrain();
 
     // re-load waypoints
-    task_ui.read_waypoints(terrain);
+    task_ui.read_waypoints(&terrain);
     ReadAirfieldFile();
 
     // re-set home

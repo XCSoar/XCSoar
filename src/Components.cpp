@@ -312,7 +312,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   CreateProgressDialog(gettext(TEXT("Loading way points...")));
 
   // Read the waypoint files
-  task_ui.read_waypoints(terrain);
+  task_ui.read_waypoints(&terrain);
 
   // Read and parse the airfield info file
   ReadAirfieldFile();

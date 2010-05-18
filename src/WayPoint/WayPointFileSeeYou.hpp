@@ -58,7 +58,7 @@ protected:
    * @see http://data.naviter.si/docs/cup_format.pdf
    */
   bool parseLine(const TCHAR* line, const unsigned linenum,
-                 Waypoints &way_points, const RasterTerrain &terrain);
+                 Waypoints &way_points, const RasterTerrain *terrain);
 
   bool IsWritable() { return false; }
 

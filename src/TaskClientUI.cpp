@@ -372,7 +372,7 @@ TaskClientUI::append_waypoint(Waypoint& wp)
 }
 
 bool 
-TaskClientUI::read_waypoints(const RasterTerrain& terrain)
+TaskClientUI::read_waypoints(const RasterTerrain *terrain)
 {
   ScopeLock lock(mutex);
   return WayPointGlue::ReadWaypoints(m_waypoints, terrain);

@@ -62,7 +62,7 @@ namespace WayPointGlue {
    * @param terrain RasterTerrain (for automatic waypoint height)
    */
   bool ReadWaypoints(Waypoints &way_points,
-                     const RasterTerrain &terrain);
+                     const RasterTerrain *terrain);
   void SaveWaypoints(const Waypoints &way_points);
 };
 

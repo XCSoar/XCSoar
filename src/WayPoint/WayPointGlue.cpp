@@ -127,7 +127,7 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain &terrain,
 
 bool
 WayPointGlue::ReadWaypoints(Waypoints &way_points,
-                            const RasterTerrain &terrain)
+                            const RasterTerrain *terrain)
 {
   LogStartUp(TEXT("ReadWaypoints"));
 

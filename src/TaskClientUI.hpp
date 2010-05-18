@@ -102,7 +102,7 @@ public:
   void ordered_CAccept(BaseVisitor& visitor) const;
 
   // waypoints
-  bool read_waypoints(const RasterTerrain& terrain);
+  bool read_waypoints(const RasterTerrain *terrain);
   void save_waypoints();
   void close_waypoints();
   bool waypoint_is_writable(const Waypoint& wp) const;
