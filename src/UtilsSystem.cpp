@@ -348,7 +348,7 @@ SetModelName(DWORD Temp)
 const TCHAR*
 gmfpathname()
 {
-  TCHAR gmfpathname_buffer[MAX_PATH];
+  static TCHAR gmfpathname_buffer[MAX_PATH];
   TCHAR *p;
 
   if (GetModuleFileName(NULL, gmfpathname_buffer, MAX_PATH) <= 0)
@@ -380,7 +380,7 @@ gmfpathname()
 const TCHAR*
 gmfbasename()
 {
-  TCHAR gmfbasename_buffer[MAX_PATH];
+  static TCHAR gmfbasename_buffer[MAX_PATH];
   TCHAR *p, *lp;
 
   if (GetModuleFileName(NULL, gmfbasename_buffer, MAX_PATH) <= 0)
