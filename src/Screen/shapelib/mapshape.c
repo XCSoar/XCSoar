@@ -93,11 +93,33 @@ set_uint32_be(uint8_t *dest, uint32_t value)
 }
 
 static void
+set_uint32_le(uint8_t *dest, uint32_t value)
+{
+  if (!bBigEndian)
+    *(uint32_t *)dest = value;
+  else {
+    dest[0] = value >> 24;
+    dest[1] = value >> 16;
+    dest[2] = value >> 8;
+    dest[3] = value;
+  }
+}
+
+static void
 set_double_be(uint8_t *dest, double value)
 {
   *(double *)dest = value;
 
   if (!bBigEndian)
+    SwapWord(sizeof(value), dest);
+}
+
+static void
+set_double_le(uint8_t *dest, double value)
+{
+  *(double *)dest = value;
+
+  if (bBigEndian)
     SwapWord(sizeof(value), dest);
 }
 
@@ -138,18 +160,18 @@ static void writeHeader( SHPHandle psSHP )
   set_uint32_be(abyHeader + 24, psSHP->nFileSize / 2);
 
   /* version */
-  set_uint32_be(abyHeader + 28, 1000);
+  set_uint32_le(abyHeader + 28, 1000);
 
   /* shape type */
-  set_uint32_be(abyHeader + 32, psSHP->nShapeType);
+  abyHeader[32] = psSHP->nShapeType;
 
   /* set bounds */
-  set_double_be(abyHeader + 36, psSHP->adBoundsMin[0]);
-  set_double_be(abyHeader + 44, psSHP->adBoundsMin[1]);
-  set_double_be(abyHeader + 52, psSHP->adBoundsMax[0]);
-  set_double_be(abyHeader + 60, psSHP->adBoundsMax[1]);
-  set_double_be(abyHeader + 84, psSHP->adBoundsMin[3]);
-  set_double_be(abyHeader + 92, psSHP->adBoundsMax[3]);
+  set_double_le(abyHeader + 36, psSHP->adBoundsMin[0]);
+  set_double_le(abyHeader + 44, psSHP->adBoundsMin[1]);
+  set_double_le(abyHeader + 52, psSHP->adBoundsMax[0]);
+  set_double_le(abyHeader + 60, psSHP->adBoundsMax[1]);
+  set_double_le(abyHeader + 84, psSHP->adBoundsMin[3]);
+  set_double_le(abyHeader + 92, psSHP->adBoundsMax[3]);
 
   /* -------------------------------------------------------------------- */
   /*      Write .shp file header.                                         */
@@ -486,10 +508,10 @@ SHPHandle msSHPCreate( const char * pszLayer, int nShapeType )
   set_uint32_be(abyHeader + 24, 50);
 
   /* version */
-  set_uint32_be(abyHeader + 28, 1000);
+  set_uint32_le(abyHeader + 28, 1000);
 
   /* shape type */
-  set_uint32_be(abyHeader + 32, nShapeType);
+  set_uint32_le(abyHeader + 32, nShapeType);
 
   /* set bounds */
   set_double_be(abyHeader + 36, 0.0);
@@ -551,10 +573,10 @@ static void writeBounds( uchar * pabyRec, shapeObj *shape, int nVCount )
     }
   }
 
-  set_double_be(pabyRec, dXMin);
-  set_double_be(pabyRec + 8, dYMin);
-  set_double_be(pabyRec + 16, dXMax);
-  set_double_be(pabyRec + 24, dYMax);
+  set_double_le(pabyRec, dXMin);
+  set_double_le(pabyRec + 8, dYMin);
+  set_double_le(pabyRec + 16, dXMax);
+  set_double_le(pabyRec + 24, dYMax);
 }
 
 int msSHPWritePoint(SHPHandle psSHP, pointObj *point )
@@ -597,8 +619,8 @@ int msSHPWritePoint(SHPHandle psSHP, pointObj *point )
   /*      Write vertices for a point.                                     */
   /* -------------------------------------------------------------------- */
 
-  set_double_be(pabyRec + 12, point->x);
-  set_double_be(pabyRec + 20, point->y);
+  set_double_le(pabyRec + 12, point->x);
+  set_double_le(pabyRec + 20, point->y);
 
   nRecordSize = 20;
 
@@ -613,7 +635,7 @@ int msSHPWritePoint(SHPHandle psSHP, pointObj *point )
   set_uint32_be(pabyRec + 4, nRecordSize / 2);
 
   /* shape type */
-  set_uint32_be(pabyRec + 8, psSHP->nShapeType);
+  set_uint32_le(pabyRec + 8, psSHP->nShapeType);
 
   /* -------------------------------------------------------------------- */
   /*      Write out record.                                               */
@@ -698,23 +720,23 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
 
     writeBounds( pabyRec + 12, shape, t_nPoints );
 
-    set_uint32_be(pabyRec + 40 + 8, nPoints);
-    set_uint32_be(pabyRec + 36 + 8, nParts);
+    set_uint32_le(pabyRec + 40 + 8, nPoints);
+    set_uint32_le(pabyRec + 36 + 8, nParts);
 
     partSize = 0; // first part always starts at 0
-    set_uint32_be(pabyRec + 44 + 8 + 4 * 0, partSize);
+    set_uint32_le(pabyRec + 44 + 8 + 4 * 0, partSize);
 
     for( i = 1; i < t_nParts; i++ ) {
       partSize += shape->line[i-1].numpoints;
-      set_uint32_be(pabyRec + 44 + 8 + 4 * i, partSize);
+      set_uint32_le(pabyRec + 44 + 8 + 4 * i, partSize);
     }
 
     k = 0; // overall point counter
     for( i = 0; i < shape->numlines; i++ ) {
       for( j = 0; j < shape->line[i].numpoints; j++ ) {
-        set_double_be(pabyRec + 44 + 4 * t_nParts + 8 + k * 16,
+        set_double_le(pabyRec + 44 + 4 * t_nParts + 8 + k * 16,
                       shape->line[i].point[j].x);
-        set_double_be(pabyRec + 44 + 4 * t_nParts + 8 + k * 16 + 8,
+        set_double_le(pabyRec + 44 + 4 * t_nParts + 8 + k * 16 + 8,
                       shape->line[i].point[j].y);
 
 	k++;
@@ -732,17 +754,17 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
 
         nRecordSize = 44 + 4*t_nParts + 8 + (t_nPoints* 16);
 
-        set_double_be(pabyRec + nRecordSize, dfMMin);
+        set_double_le(pabyRec + nRecordSize, dfMMin);
         nRecordSize += 8;
 
-        set_double_be(pabyRec + nRecordSize, dfMMax);
+        set_double_le(pabyRec + nRecordSize, dfMMax);
         nRecordSize += 8;
 
         for( i = 0; i < shape->numlines; i++ )
         {
             for( j = 0; j < shape->line[i].numpoints; j++ )
             {
-              set_double_be(pabyRec + nRecordSize, shape->line[i].point[j].m);
+              set_double_le(pabyRec + nRecordSize, shape->line[i].point[j].m);
                 nRecordSize += 8;
             }
         }
@@ -762,11 +784,11 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
 
     writeBounds( pabyRec + 12, shape, nPoints );
 
-    set_uint32_be(pabyRec + 44, nPoints);
+    set_uint32_le(pabyRec + 44, nPoints);
 
     for( i = 0; i < shape->line[0].numpoints; i++ ) {
-      set_double_be(pabyRec + 48 + i * 16, shape->line[0].point[i].x);
-      set_double_be(pabyRec + 48 + i * 16 + 8, shape->line[0].point[i].y);
+      set_double_le(pabyRec + 48 + i * 16, shape->line[0].point[i].x);
+      set_double_le(pabyRec + 48 + i * 16 + 8, shape->line[0].point[i].y);
     }
     if (psSHP->nShapeType == SHP_MULTIPOINTM)
     {
@@ -775,15 +797,15 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
         dfMMin = shape->line[0].point[0].m;
         dfMMax = shape->line[0].point[shape->line[0].numpoints-1].m;
 
-        set_double_be(pabyRec + nRecordSize, dfMMin);
+        set_double_le(pabyRec + nRecordSize, dfMMin);
         nRecordSize += 8;
 
-        set_double_be(pabyRec + nRecordSize, dfMMax);
+        set_double_le(pabyRec + nRecordSize, dfMMax);
         nRecordSize += 8;
 
         for( i = 0; i < shape->line[0].numpoints; i++ )
         {
-          set_double_be(pabyRec + nRecordSize, shape->line[0].point[i].m);
+          set_double_le(pabyRec + nRecordSize, shape->line[0].point[i].m);
             nRecordSize += 8;
         }
     }
@@ -795,8 +817,8 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
   /*      Write vertices for a point.                                     */
   /* -------------------------------------------------------------------- */
   else if( psSHP->nShapeType == SHP_POINT ||  psSHP->nShapeType == SHP_POINTM) {
-    set_double_be(pabyRec + 12, shape->line[0].point[0].x);
-    set_double_be(pabyRec + 20, shape->line[0].point[0].y);
+    set_double_le(pabyRec + 12, shape->line[0].point[0].x);
+    set_double_le(pabyRec + 20, shape->line[0].point[0].y);
 
     if( bBigEndian ) {
       SwapWord( 8, pabyRec + 12 );
@@ -807,7 +829,7 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
     {
         nRecordSize = 28;
 
-        set_double_be(pabyRec + nRecordSize, shape->line[0].point[0].m);
+        set_double_le(pabyRec + nRecordSize, shape->line[0].point[0].m);
         nRecordSize += 8;
     }
     else
@@ -825,7 +847,7 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
   set_uint32_be(pabyRec + 4, nRecordSize / 2);
 
   /* shape type */
-  set_uint32_be(pabyRec + 8, psSHP->nShapeType);
+  set_uint32_le(pabyRec + 8, psSHP->nShapeType);
 
   /* -------------------------------------------------------------------- */
   /*      Write out record.                                               */
