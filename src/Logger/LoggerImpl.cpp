@@ -583,6 +583,10 @@ LoggerImpl::LoggerDeviceDeclare(const OrderedTask& task)
 {
   DeclaredToDevice = false;
   bool found_logger = false;
+
+  // don't do anything if task is not valid
+  if (!task.check_task()) return;
+
   const Declaration decl(task);
 
   for (unsigned i = 0; i < NUMDEV; ++i)
