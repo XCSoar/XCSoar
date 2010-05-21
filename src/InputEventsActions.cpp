@@ -93,6 +93,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Waypoint/Waypoints.hpp"
 #include "TaskClientUI.hpp"
 #include "AirspaceClientUI.hpp"
+#include "DrawThread.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -136,6 +137,8 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
   } else {
     marks->MarkLocation(Basic().Location);
   }
+
+  draw_thread->trigger_topology_changed();
 }
 
 void

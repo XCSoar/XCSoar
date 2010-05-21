@@ -112,6 +112,11 @@ public:
   }
 
   /**
+   * Call this when the topology has changed.
+   */
+  void trigger_topology_changed();
+
+  /**
    * Triggers thread shutdown.  Call join() after this to wait
    * synchronously for the thread to exit.
    */
