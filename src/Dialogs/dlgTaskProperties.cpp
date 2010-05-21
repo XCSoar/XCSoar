@@ -54,6 +54,34 @@ static OrderedTask* ordered_task= NULL;
 static bool task_changed = false;
 
 static void 
+InitView()
+{
+  WndProperty* wp;
+  wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxSpeed")));
+  if (wp) {
+    wp->GetDataField()->SetUnits(Units::GetSpeedName());
+  }
+
+  wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxHeight")));
+  if (wp) {
+    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
+  }
+
+  wp = ((WndProperty*)wf->FindByName(_T("prpFinishMinHeight")));
+  if (wp) {
+    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(_T("AGL")));
+    dfe->addEnumText(gettext(_T("MSL")));
+  }
+}
+
+static void 
 RefreshView()
 {
   WndProperty* wp;
@@ -95,7 +123,6 @@ RefreshView()
   if (wp) {
     wp->set_visible(racing_types);
     wp->GetDataField()->SetAsFloat(Units::ToUserSpeed(p.start_max_speed));
-    wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }
 
@@ -103,7 +130,6 @@ RefreshView()
   if (wp) {
     wp->set_visible(racing_types);
     wp->GetDataField()->SetAsFloat(Units::ToUserAltitude(p.start_max_height));
-    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
@@ -111,7 +137,6 @@ RefreshView()
   if (wp) {
     wp->set_visible(racing_types);
     wp->GetDataField()->SetAsFloat(Units::ToUserAltitude(p.finish_min_height));
-    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
@@ -120,8 +145,6 @@ RefreshView()
     wp->set_visible(racing_types);
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("AGL")));
-    dfe->addEnumText(gettext(_T("MSL")));
     dfe->Set(p.start_max_height_ref);
     wp->RefreshDisplay();
   }
@@ -241,6 +264,8 @@ dlgTaskPropertiesShowModal(SingleWindow &parent, OrderedTask** task)
 
   if (!wf) return false;
   assert(wf!=NULL);
+
+  InitView();
 
   RefreshView();
 
