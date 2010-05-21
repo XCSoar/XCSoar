@@ -991,7 +991,11 @@ InputEvents::eventAbortTask(const TCHAR *misc)
       task_ui.abort();
       break;
     case TaskManager::MODE_GOTO:
-      task_ui.resume();
+      if (task_ui.check_ordered_task()) {
+        task_ui.resume();
+      } else {
+        task_ui.abort();
+      }
       break;
     case TaskManager::MODE_ABORT:
       task_ui.resume();
