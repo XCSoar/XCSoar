@@ -127,9 +127,11 @@ class AirspaceDetailsDialogVisitor:
 public:
   AirspaceDetailsDialogVisitor(const SETTINGS_COMPUTER& _settings, 
                                const fixed& _altitude,
-                               const AirspaceWarningCopy& warnings):
+                               const AirspaceWarningCopy& warnings,
+                               const GEOPOINT &location):
     visible(_settings, _altitude, false, warnings),
-    m_airspace(NULL)
+    m_airspace(NULL),
+    m_location(location)
   {
     m_predicate = &visible;
   }
@@ -141,7 +143,7 @@ public:
     visit_general(as);
   };
   void visit_general(const AbstractAirspace& as) {
-    if (m_predicate->condition(as)) {
+    if (m_predicate->condition(as) && as.inside(m_location)) {
       m_airspace = &as;
     }
   };
@@ -156,6 +158,7 @@ public:
 private:
   const AirspaceMapVisible visible;
   const AbstractAirspace *m_airspace;
+  const GEOPOINT &m_location;
 };
 
 bool
@@ -169,7 +172,8 @@ GlueMapWindow::AirspaceDetailsAtPoint(const GEOPOINT &location) const
 
   AirspaceDetailsDialogVisitor airspace_copy_popup(SettingsComputer(),
                                                    Basic().GetAltitudeBaroPreferred(),
-                                                   awc);
+                                                   awc,
+                                                   location);
 
   m_airspace->visit_within_range(location, fixed(100.0),
                                  airspace_copy_popup);
