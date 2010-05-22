@@ -594,11 +594,11 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
   // fill the buffer
   unsigned short* myhbuf = hBuf;
 
+  #ifdef FAST_TERRAIN_STUFF
+
   #ifndef NDEBUG
   unsigned short* hBufTop = hBuf + ixs * iys;
   #endif
-
-  #ifdef FAST_TERRAIN_STUFF
 
   /// \@todo note this is broken currently
 
