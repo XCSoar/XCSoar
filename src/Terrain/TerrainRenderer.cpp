@@ -653,11 +653,9 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
 void
 TerrainRenderer::Slope(const int sx, const int sy, const int sz)
 {
-  const int c_quantisation_effective = (int)quantisation_effective;
+  const unsigned int c_quantisation_effective = quantisation_effective;
   const unsigned int c_width_sub = width_sub;
   const unsigned int c_height_sub = height_sub;
-  const unsigned int row_delta = 
-    c_width_sub * quantisation_effective;
   const unsigned int right_index = c_width_sub - 1 - c_quantisation_effective;
   const unsigned int bottom_index = c_height_sub - c_quantisation_effective;
   const int height_slope_factor = max(1, (int)(pixelsize_d));
@@ -669,96 +667,74 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
   if (!imageBuf)
     return;
 
-  short h;
-
   #ifndef NDEBUG
   unsigned short* hBufTop = hBuf + c_width_sub * c_height_sub;
   #endif
 
   for (unsigned int y = 0; y < height_sub; ++y) {
-    const int itss_y = c_height_sub - 1 - y;
-    const int itss_y_width_sub = itss_y * c_width_sub;
-    const int row_offset = y * c_width_sub;
+    const int row_plus_index = ((y< bottom_index)? 
+                                c_quantisation_effective: 
+                                (c_height_sub-1-y));
+    const int row_plus_offset = c_width_sub*row_plus_index;
 
-    bool use_bottom = false;
-    bool use_top = false;
+    const int row_minus_index = (y>= c_quantisation_effective)?
+      c_quantisation_effective: y;
+    const int row_minus_offset = c_width_sub*row_minus_index;
 
-    int p31, p32, p31s;
-
-    if (y < bottom_index) {
-      p31 = c_quantisation_effective;
-      use_bottom = true;
-    } else {
-      p31 = itss_y;
-    }
-
-    if (y >= (unsigned int)c_quantisation_effective) {
-      p31 += c_quantisation_effective;
-    } else {
-      p31 += y;
-      use_top = true;
-    }
-
-    p31s = p31 * height_slope_factor;
+    const int p31 = row_plus_index+row_minus_index;
 
     for (unsigned int x = 0; x < c_width_sub; ++x, ++p_terrain_buffer, ++imageBuf) {
       assert(p_terrain_buffer < hBufTop);
 
+      short h;
       if ((h = *p_terrain_buffer) > 0) {
-        int p20, p22;
 
         h = min(255, h >> height_scale);
+
         // no need to calculate slope if undefined height or sea level
 
         if (do_shading) {
-          if (x < right_index) {
-            p20 = c_quantisation_effective;
-            p22 = *(p_terrain_buffer + c_quantisation_effective);
-            assert(p_terrain_buffer + c_quantisation_effective < hBufTop);
-          } else {
-            const int itss_x = c_width_sub - x - 2;
-            p20 = itss_x;
-            p22 = *(p_terrain_buffer + itss_x);
-            assert(p_terrain_buffer + itss_x < hBufTop);
-            assert(p_terrain_buffer + itss_x >= hBuf);
-          }
 
-          if (x >= (unsigned int)c_quantisation_effective) {
-            p20 += c_quantisation_effective;
-            p22 -= *(p_terrain_buffer - c_quantisation_effective);
-            assert(p_terrain_buffer - c_quantisation_effective >= hBuf);
-          } else {
-            p20 += x;
-            p22 -= *(p_terrain_buffer - x);
-            assert(p_terrain_buffer - x >= hBuf);
-          }
+          // Y direction
 
-          if (use_bottom) {
-            p32 = *(p_terrain_buffer + row_delta);
-            assert(p_terrain_buffer + row_delta < hBufTop);
-          } else {
-            p32 = *(p_terrain_buffer + itss_y_width_sub);
-            assert(p_terrain_buffer + itss_y_width_sub < hBufTop);
-          }
+          assert(p_terrain_buffer + row_plus_offset < hBufTop);
+          assert(p_terrain_buffer + row_plus_offset >= hBuf);
+          assert(p_terrain_buffer - row_minus_offset < hBufTop);
+          assert(p_terrain_buffer - row_minus_offset >= hBuf);
 
-          if (use_top) {
-            p32 -= *(p_terrain_buffer - row_offset);
-            assert(p_terrain_buffer - row_offset >= hBuf);
-          } else {
-            p32 -= *(p_terrain_buffer - row_delta);
-            assert(p_terrain_buffer - row_delta >= hBuf);
-          }
+          const int p32 = 
+            (*(p_terrain_buffer - row_minus_offset))-
+            (*(p_terrain_buffer + row_plus_offset));
+
+          // X direction
+
+          const int column_plus_index = (x< right_index)? 
+            c_quantisation_effective: (c_width_sub - x - 2);
+          const int column_minus_index = (x>= c_quantisation_effective)?
+            c_quantisation_effective: x;
+         
+          assert(p_terrain_buffer + column_plus_index < hBufTop);
+          assert(p_terrain_buffer + column_plus_index >= hBuf);
+          assert(p_terrain_buffer - column_minus_index < hBufTop);
+          assert(p_terrain_buffer - column_minus_index >= hBuf);
+          
+          const int p22 = 
+            *(p_terrain_buffer + column_plus_index)-
+            *(p_terrain_buffer - column_minus_index);
 
           if ((p22 == 0) && (p32 == 0)) {
             // slope is zero, so just look up the color
             *imageBuf = oColorBuf[h];
           } else {
+
+            const int p20 = column_plus_index+column_minus_index;
+
             // p20 and p31 are never 0... so only p22 or p32 can be zero
             // if both are zero, the vector is 0,0,1 so there is no need
             // to normalise the vector
             const long dd0 = p22 * p31;
             const long dd1 = p20 * p32;
-            const long dd2 = p20 * p31s;
+            const long dd2 = p20 * p31 * height_slope_factor;
             const long mag = (dd0 * dd0 + dd1 * dd1 + dd2 * dd2);
             const long num = (dd2 * sz + dd0 * sx + dd1 * sy);
             if (mag > 0) {
