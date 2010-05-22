@@ -299,7 +299,7 @@ TerrainShading(const short illum, BYTE &r, BYTE &g, BYTE &b)
 // map scale is approximately 2 points on the grid
 // therefore, want one to one mapping if mapscale is 0.5
 // there are approx 30 pixels in mapscale
-// 240/DTQUANT resolution = 6 pixels per terrain
+// 240/QUANTISATION_PIXELS resolution = 6 pixels per terrain
 // (mapscale/30)  km/pixels
 //        0.250   km/terrain
 // (0.25*30/mapscale) pixels/terrain
@@ -317,18 +317,18 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
   TerrainRamp = 0;
 
   if (terrain == NULL || !terrain->IsDirectAccess()) {
-    dtquant = 6;
+    quantisation_pixels = 6;
   } else {
-    // SAM: experiment with dtquant between 2 and 4
-    dtquant = 2;
+    // SAM: experiment with quantisation_pixels between 2 and 4
+    quantisation_pixels = 2;
 
     // on my PDA (600MhZ, 320x240 screen):
-    // dtquant=2, latency=170 ms
-    // dtquant=3, latency=136 ms
-    // dtquant=4, latency= 93 ms
+    // quantisation_pixels=2, latency=170 ms
+    // quantisation_pixels=3, latency=136 ms
+    // quantisation_pixels=4, latency= 93 ms
   }
 
-  blursize = (dtquant - 1) / 2;
+  blursize = (quantisation_pixels - 1) / 2;
   oversampling = max(1, (blursize + 1) / 2 + 1);
   if (blursize == 0)
     oversampling = 1;
@@ -344,23 +344,26 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
   5    3    2     192    144     64  48     3072        27648
   */
 
-  // scale dtquant so resolution is not too high on large displays
-  dtquant = Layout::FastScale(dtquant);
+  // scale quantisation_pixels so resolution is not too high on large displays
+  quantisation_pixels = Layout::FastScale(quantisation_pixels);
 
-  int res_x = iround((rc.right - rc.left) * oversampling / dtquant);
-  int res_y = iround((rc.bottom - rc.top) * oversampling / dtquant);
+  const int res_x = 
+    iround((rc.right - rc.left) * oversampling / quantisation_pixels);
+  const int res_y = 
+    iround((rc.bottom - rc.top) * oversampling / quantisation_pixels);
 
   sbuf = new CSTScreenBuffer();
   sbuf->Create(res_x, res_y, Color::WHITE);
-  ixs = sbuf->GetCorrectedWidth() / oversampling;
-  iys = sbuf->GetHeight() / oversampling;
+  width_sub = sbuf->GetCorrectedWidth() / oversampling;
+  height_sub = sbuf->GetHeight() / oversampling;
 
-  hBuf = (unsigned short*)malloc(sizeof(unsigned short) * ixs * iys);
+  hBuf = (unsigned short*)malloc(sizeof(unsigned short) * width_sub * height_sub);
 
   colorBuf = (BGRColor*)malloc(256 * 128 * sizeof(BGRColor));
 
   rounding = new RasterRounding();
 }
+
 
 TerrainRenderer::~TerrainRenderer()
 {
@@ -485,10 +488,10 @@ TerrainRenderer::Height(const MapWindowProjection &map_projection,
 {
   GEOPOINT G, middle;
   int x, y;
-  const int X0 = (int)(dtquant / 2);
-  const int Y0 = (int)(dtquant / 2);
-  const int X1 = (int)(X0 + dtquant * ixs);
-  const int Y1 = (int)(Y0 + dtquant * iys);
+  const int X0 = (int)(quantisation_pixels / 2);
+  const int Y0 = (int)(quantisation_pixels / 2);
+  const int X1 = (int)(X0 + quantisation_pixels * width_sub);
+  const int Y1 = (int)(Y0 + quantisation_pixels * height_sub);
 
   unsigned int rfact = 1;
 
@@ -502,7 +505,7 @@ TerrainRenderer::Height(const MapWindowProjection &map_projection,
   x = (X0 + X1) / 2;
   y = (Y0 + Y1) / 2;
   map_projection.Screen2LonLat(x, y, middle);
-  int dd = (int)lround(dtquant * rfact);
+  int dd = (int)lround(quantisation_pixels * rfact);
 
   GEOPOINT delta_rounding;
 
@@ -532,9 +535,9 @@ TerrainRenderer::Height(const MapWindowProjection &map_projection,
   // set resolution
   rounding->Set(*DisplayMap, delta_rounding);
 
-  epx = DisplayMap->GetEffectivePixelSize(pixelsize_d, middle);
+  quantisation_effective = DisplayMap->GetEffectivePixelSize(pixelsize_d, middle);
 
-  if (epx > min(ixs, iys) / 4) {
+  if (quantisation_effective > min(width_sub, height_sub) / 4) {
     do_shading = false;
   }
 
@@ -555,7 +558,7 @@ TerrainRenderer::ScanSpotHeights(const int X0, const int Y0,
   const unsigned short *myhbuf = hBuf;
 
   #ifndef NDEBUG
-  const unsigned short *hBufTop = hBuf + ixs * iys;
+  const unsigned short *hBufTop = hBuf + width_sub * height_sub;
   #endif
 
   spot_max_pt.x = -1;
@@ -565,8 +568,8 @@ TerrainRenderer::ScanSpotHeights(const int X0, const int Y0,
   spot_max_val = -1;
   spot_min_val = 32767;
 
-  for (int y = Y0; y < Y1; y += dtquant) {
-    for (int x = X0; x < X1; x += dtquant, myhbuf++) {
+  for (int y = Y0; y < Y1; y += quantisation_pixels) {
+    for (int x = X0; x < X1; x += quantisation_pixels, myhbuf++) {
 
       assert(myhbuf<hBufTop);
 
@@ -597,7 +600,7 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
   #ifdef FAST_TERRAIN_STUFF
 
   #ifndef NDEBUG
-  unsigned short* hBufTop = hBuf + ixs * iys;
+  unsigned short* hBufTop = hBuf + width_sub * height_sub;
   #endif
 
   /// \@todo note this is broken currently
@@ -611,11 +614,11 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
   const int sint = DisplayAngle.ifastsine();
 
   GEOPOINT gp;
-  for (int y = Y0; y < Y1; y += dtquant) {
+  for (int y = Y0; y < Y1; y += quantisation_pixels) {
     const int ycost = y * cost;
     const int ysint = y * sint;
 
-    for (int x = X0; x < X1; x += dtquant, ++myhbuf) {
+    for (int x = X0; x < X1; x += quantisation_pixels, ++myhbuf) {
 
       assert(myhbuf < hBufTop);
       
@@ -631,8 +634,8 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
   #else
 
   // This code is marginally slower but readable
-  for (int y = Y0; y < Y1; y += dtquant) {
-    for (int x = X0; x < X1; x += dtquant) {
+  for (int y = Y0; y < Y1; y += quantisation_pixels) {
+    for (int x = X0; x < X1; x += quantisation_pixels) {
       GEOPOINT p;
       map_projection.Screen2LonLat(x, y, p);
       *myhbuf++ = max((short)0, DisplayMap->GetField(p, *rounding));
@@ -645,20 +648,21 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
 // JMW: if zoomed right in (e.g. one unit is larger than terrain
 // grid), then increase the step size to be equal to the terrain
 // grid for purposes of calculating slope, to avoid shading problems
-// (gridding of display) This is why epx is used instead of 1
-// previously.  for large zoom levels, epx=1
+// (gridding of display) This is why quantisation_effective is used instead of 1
+// previously.  for large zoom levels, quantisation_effective=1
 void
 TerrainRenderer::Slope(const int sx, const int sy, const int sz)
 {
-  const int iepx = (int)epx;
-  const unsigned int cixs = ixs;
-  const unsigned int ciys = iys;
-  const unsigned int ixsepx = cixs * epx;
-  const unsigned int ixsright = cixs - 1 - iepx;
-  const unsigned int iysbottom = ciys - iepx;
-  const int hscale = max(1, (int)(pixelsize_d));
-  const int tc = TerrainContrast;
-  unsigned short *thBuf = hBuf;
+  const int c_quantisation_effective = (int)quantisation_effective;
+  const unsigned int c_width_sub = width_sub;
+  const unsigned int c_height_sub = height_sub;
+  const unsigned int row_delta = 
+    c_width_sub * quantisation_effective;
+  const unsigned int right_index = c_width_sub - 1 - c_quantisation_effective;
+  const unsigned int bottom_index = c_height_sub - c_quantisation_effective;
+  const int height_slope_factor = max(1, (int)(pixelsize_d));
+  const int terrain_contrast = TerrainContrast;
+  unsigned short *p_terrain_buffer = hBuf;
 
   const BGRColor* oColorBuf = colorBuf + 64 * 256;
   BGRColor* imageBuf = sbuf->GetBuffer();
@@ -668,81 +672,81 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
   short h;
 
   #ifndef NDEBUG
-  unsigned short* hBufTop = hBuf + cixs * ciys;
+  unsigned short* hBufTop = hBuf + c_width_sub * c_height_sub;
   #endif
 
-  for (unsigned int y = 0; y < iys; ++y) {
-    const int itss_y = ciys - 1 - y;
-    const int itss_y_ixs = itss_y * cixs;
-    const int yixs = y * cixs;
+  for (unsigned int y = 0; y < height_sub; ++y) {
+    const int itss_y = c_height_sub - 1 - y;
+    const int itss_y_width_sub = itss_y * c_width_sub;
+    const int row_offset = y * c_width_sub;
 
-    bool ybottom = false;
-    bool ytop = false;
+    bool use_bottom = false;
+    bool use_top = false;
 
     int p31, p32, p31s;
 
-    if (y < iysbottom) {
-      p31 = iepx;
-      ybottom = true;
+    if (y < bottom_index) {
+      p31 = c_quantisation_effective;
+      use_bottom = true;
     } else {
       p31 = itss_y;
     }
 
-    if (y >= (unsigned int)iepx) {
-      p31 += iepx;
+    if (y >= (unsigned int)c_quantisation_effective) {
+      p31 += c_quantisation_effective;
     } else {
       p31 += y;
-      ytop = true;
+      use_top = true;
     }
 
-    p31s = p31 * hscale;
+    p31s = p31 * height_slope_factor;
 
-    for (unsigned int x = 0; x < cixs; ++x, ++thBuf, ++imageBuf) {
-      assert(thBuf < hBufTop);
+    for (unsigned int x = 0; x < c_width_sub; ++x, ++p_terrain_buffer, ++imageBuf) {
+      assert(p_terrain_buffer < hBufTop);
 
-      if ((h = *thBuf) > 0) {
+      if ((h = *p_terrain_buffer) > 0) {
         int p20, p22;
 
         h = min(255, h >> height_scale);
         // no need to calculate slope if undefined height or sea level
 
         if (do_shading) {
-          if (x < ixsright) {
-            p20 = iepx;
-            p22 = *(thBuf + iepx);
-            assert(thBuf + iepx < hBufTop);
+          if (x < right_index) {
+            p20 = c_quantisation_effective;
+            p22 = *(p_terrain_buffer + c_quantisation_effective);
+            assert(p_terrain_buffer + c_quantisation_effective < hBufTop);
           } else {
-            const int itss_x = cixs - x - 2;
+            const int itss_x = c_width_sub - x - 2;
             p20 = itss_x;
-            p22 = *(thBuf + itss_x);
-            assert(thBuf + itss_x < hBufTop);
-            assert(thBuf + itss_x >= hBuf);
+            p22 = *(p_terrain_buffer + itss_x);
+            assert(p_terrain_buffer + itss_x < hBufTop);
+            assert(p_terrain_buffer + itss_x >= hBuf);
           }
 
-          if (x >= (unsigned int)iepx) {
-            p20 += iepx;
-            p22 -= *(thBuf - iepx);
-            assert(thBuf - iepx >= hBuf);
+          if (x >= (unsigned int)c_quantisation_effective) {
+            p20 += c_quantisation_effective;
+            p22 -= *(p_terrain_buffer - c_quantisation_effective);
+            assert(p_terrain_buffer - c_quantisation_effective >= hBuf);
           } else {
             p20 += x;
-            p22 -= *(thBuf - x);
-            assert(thBuf - x >= hBuf);
+            p22 -= *(p_terrain_buffer - x);
+            assert(p_terrain_buffer - x >= hBuf);
           }
 
-          if (ybottom) {
-            p32 = *(thBuf + ixsepx);
-            assert(thBuf + ixsepx < hBufTop);
+          if (use_bottom) {
+            p32 = *(p_terrain_buffer + row_delta);
+            assert(p_terrain_buffer + row_delta < hBufTop);
           } else {
-            p32 = *(thBuf + itss_y_ixs);
-            assert(thBuf + itss_y_ixs < hBufTop);
+            p32 = *(p_terrain_buffer + itss_y_width_sub);
+            assert(p_terrain_buffer + itss_y_width_sub < hBufTop);
           }
 
-          if (ytop) {
-            p32 -= *(thBuf - yixs);
-            assert(thBuf - yixs >= hBuf);
+          if (use_top) {
+            p32 -= *(p_terrain_buffer - row_offset);
+            assert(p_terrain_buffer - row_offset >= hBuf);
           } else {
-            p32 -= *(thBuf - ixsepx);
-            assert(thBuf - ixsepx >= hBuf);
+            p32 -= *(p_terrain_buffer - row_delta);
+            assert(p_terrain_buffer - row_delta >= hBuf);
           }
 
           if ((p22 == 0) && (p32 == 0)) {
@@ -759,7 +763,7 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
             const long num = (dd2 * sz + dd0 * sx + dd1 * sy);
             if (mag > 0) {
               const int sval = num/(int)sqrt((fixed)mag);
-              const int sindex = max(-64, min(63, (sval - sz) * tc / 128));
+              const int sindex = max(-64, min(63, (sval - sz) * terrain_contrast / 128));
               *imageBuf = oColorBuf[h + 256*sindex];
             } else {
               *imageBuf = oColorBuf[h];
