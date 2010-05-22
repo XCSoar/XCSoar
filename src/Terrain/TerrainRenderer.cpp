@@ -485,10 +485,10 @@ TerrainRenderer::Height(const MapWindowProjection &map_projection,
 {
   GEOPOINT G, middle;
   int x, y;
-  int X0 = (unsigned int)(dtquant / 2);
-  int Y0 = (unsigned int)(dtquant / 2);
-  int X1 = (unsigned int)(X0 + dtquant * ixs);
-  int Y1 = (unsigned int)(Y0 + dtquant * iys);
+  const int X0 = (int)(dtquant / 2);
+  const int Y0 = (int)(dtquant / 2);
+  const int X1 = (int)(X0 + dtquant * ixs);
+  const int Y1 = (int)(Y0 + dtquant * iys);
 
   unsigned int rfact = 1;
 
@@ -497,7 +497,7 @@ TerrainRenderer::Height(const MapWindowProjection &map_projection,
     // to avoid too many cache misses
     rfact = 2;
 
-  double pixelDX, pixelDY;
+  fixed pixelDX, pixelDY;
 
   x = (X0 + X1) / 2;
   y = (Y0 + Y1) / 2;
@@ -519,7 +519,7 @@ TerrainRenderer::Height(const MapWindowProjection &map_projection,
   delta_rounding.Latitude = (G.Latitude - middle.Latitude);
   pixelDY = Distance(middle, G);
 
-  pixelsize_d = sqrt((pixelDX * pixelDX + pixelDY * pixelDY) / 2.0);
+  pixelsize_d = sqrt((pixelDX * pixelDX + pixelDY * pixelDY)*fixed_half);
 
   // OK, ready to start loading height
 
@@ -538,19 +538,14 @@ TerrainRenderer::Height(const MapWindowProjection &map_projection,
     do_shading = false;
   }
 
-  POINT orig = map_projection.GetOrigScreen();
-
-  rect_visible = map_projection.GetMapRect();
-  InflateRect(&rect_visible, epx * dtquant, epx * dtquant);
-  OffsetRect(&rect_visible, -orig.x, -orig.y);
-
-  FillHeightBuffer(map_projection, X0 - orig.x, Y0 - orig.y,
-      X1 - orig.x, Y1 - orig.y);
+  FillHeightBuffer(map_projection, 
+                   X0, Y0,
+                   X1, Y1);
 
   DisplayMap->Unlock();
 
   if (weather != NULL && weather->GetParameter())
-    ScanSpotHeights(X0 - orig.x, Y0 - orig.y, X1 - orig.x, Y1 - orig.y);
+    ScanSpotHeights(X0, Y0, X1, Y1);
 }
 
 void
@@ -570,37 +565,31 @@ TerrainRenderer::ScanSpotHeights(const int X0, const int Y0,
   spot_max_val = -1;
   spot_min_val = 32767;
 
-  RECT rect_spot = rect_visible;
-  InflateRect(&rect_visible, -IBLSCALE(30), -IBLSCALE(30));
-
   for (int y = Y0; y < Y1; y += dtquant) {
     for (int x = X0; x < X1; x += dtquant, myhbuf++) {
-      if ((x >= rect_spot.left) &&
-          (x <= rect_spot.right) &&
-          (y >= rect_spot.top) &&
-          (y <= rect_spot.bottom)) {
 
-        assert(myhbuf<hBufTop);
+      assert(myhbuf<hBufTop);
 
-        short val = *myhbuf;
-        if (val > spot_max_val) {
-          spot_max_val = val;
-          spot_max_pt.x = x;
-          spot_max_pt.y = y;
-        }
-        if (val < spot_min_val) {
-          spot_min_val = val;
-          spot_min_pt.x = x;
-          spot_min_pt.y = y;
-        }
+      short val = *myhbuf;
+      if (val > spot_max_val) {
+        spot_max_val = val;
+        spot_max_pt.x = x;
+        spot_max_pt.y = y;
+      }
+      if (val < spot_min_val) {
+        spot_min_val = val;
+        spot_min_pt.x = x;
+        spot_min_pt.y = y;
       }
     }
   }
 }
 
+
 void
 TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
-    const int X0, const int Y0, const int X1, const int Y1)
+                                  const int X0, const int Y0, 
+                                  const int X1, const int Y1)
 {
   // fill the buffer
   unsigned short* myhbuf = hBuf;
@@ -609,7 +598,9 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
   unsigned short* hBufTop = hBuf + ixs * iys;
   #endif
 
-  #ifndef SLOW_STUFF
+  #ifdef FAST_TERRAIN_STUFF
+
+  /// \@todo note this is broken currently
 
   // This code is quickest but not so readable
   const Angle PanLatitude = map_projection.GetPanLocation().Latitude;
@@ -621,37 +612,30 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
 
   GEOPOINT gp;
   for (int y = Y0; y < Y1; y += dtquant) {
-    int ycost = y * cost;
-    int ysint = y * sint;
+    const int ycost = y * cost;
+    const int ysint = y * sint;
 
-    for (int x = X0; x < X1; x += dtquant, myhbuf++) {
-      if ((x >= rect_visible.left) &&
-          (x <= rect_visible.right) &&
-          (y >= rect_visible.top) &&
-          (y <= rect_visible.bottom)) {
+    for (int x = X0; x < X1; x += dtquant, ++myhbuf) {
 
-        assert(myhbuf < hBufTop);
-
-        gp.Latitude = PanLatitude 
-          - Angle::native(fixed((ycost + x * sint) * InvDrawScale));
-        gp.Longitude = PanLongitude + Angle::native((x * cost - ysint)
-          * gp.Latitude.invfastcosine() * InvDrawScale);
-
-        *myhbuf = max((short)0, DisplayMap->GetField(gp, *rounding));
-      } else {
-        *myhbuf = 0;
-      }
+      assert(myhbuf < hBufTop);
+      
+      gp.Latitude = PanLatitude 
+        - Angle::native(fixed((ycost + x * sint) * InvDrawScale));
+      gp.Longitude = PanLongitude + Angle::native((x * cost - ysint)
+                                                  * gp.Latitude.invfastcosine() * InvDrawScale);
+      
+      *myhbuf = max((short)0, DisplayMap->GetField(gp, *rounding));
     }
   }
 
   #else
 
   // This code is marginally slower but readable
-  double X, Y;
   for (int y = Y0; y < Y1; y += dtquant) {
     for (int x = X0; x < X1; x += dtquant) {
-      map_projection.Screen2LonLat(x, y, X, Y);
-      *myhbuf++ = max(0, DisplayMap->GetField(Y, X, *rounding));
+      GEOPOINT p;
+      map_projection.Screen2LonLat(x, y, p);
+      *myhbuf++ = max((short)0, DisplayMap->GetField(p, *rounding));
     }
   }
 
@@ -687,7 +671,7 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
   unsigned short* hBufTop = hBuf + cixs * ciys;
   #endif
 
-  for (unsigned int y = 0; y < iys; y++) {
+  for (unsigned int y = 0; y < iys; ++y) {
     const int itss_y = ciys - 1 - y;
     const int itss_y_ixs = itss_y * cixs;
     const int yixs = y * cixs;
@@ -713,7 +697,7 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
 
     p31s = p31 * hscale;
 
-    for (unsigned int x = 0; x < cixs; x++, thBuf++, imageBuf++) {
+    for (unsigned int x = 0; x < cixs; ++x, ++thBuf, ++imageBuf) {
       assert(thBuf < hBufTop);
 
       if ((h = *thBuf) > 0) {
@@ -728,7 +712,7 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
             p22 = *(thBuf + iepx);
             assert(thBuf + iepx < hBufTop);
           } else {
-            int itss_x = cixs - x - 2;
+            const int itss_x = cixs - x - 2;
             p20 = itss_x;
             p22 = *(thBuf + itss_x);
             assert(thBuf + itss_x < hBufTop);
@@ -768,22 +752,15 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
             // p20 and p31 are never 0... so only p22 or p32 can be zero
             // if both are zero, the vector is 0,0,1 so there is no need
             // to normalise the vector
-            int dd0 = p22 * p31;
-            int dd1 = p20 * p32;
-            int dd2 = p20 * p31s;
-
-            while (dd2 > 512) {
-              // prevent overflow of magnitude calculation
-              dd0 /= 2;
-              dd1 /= 2;
-              dd2 /= 2;
-            }
-
-            int mag = (dd0 * dd0 + dd1 * dd1 + dd2 * dd2);
+            const long dd0 = p22 * p31;
+            const long dd1 = p20 * p32;
+            const long dd2 = p20 * p31s;
+            const long mag = (dd0 * dd0 + dd1 * dd1 + dd2 * dd2);
+            const long num = (dd2 * sz + dd0 * sx + dd1 * sy);
             if (mag > 0) {
-              mag = (dd2 * sz + dd0 * sx + dd1 * sy) / isqrt4(mag);
-              mag = max(-64, min(63, (mag - sz) * tc / 128));
-              *imageBuf = oColorBuf[h + mag * 256];
+              const int sval = num/(int)sqrt((fixed)mag);
+              const int sindex = max(-64, min(63, (sval - sz) * tc / 128));
+              *imageBuf = oColorBuf[h + 256*sindex];
             } else {
               *imageBuf = oColorBuf[h];
             }

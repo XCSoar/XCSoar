@@ -75,8 +75,6 @@ private:
   // step size used for slope calculations
   unsigned int epx;
 
-  RECT rect_visible;
-
   CSTScreenBuffer *sbuf;
 
   fixed pixelsize_d;
