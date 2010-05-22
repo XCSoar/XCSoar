@@ -597,36 +597,35 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
   // fill the buffer
   unsigned short* myhbuf = hBuf;
 
-  #ifdef FAST_TERRAIN_STUFF
+  #ifndef SLOW_TERRAIN_STUFF
+  // This code is quickest (by a little) but not so readable
 
   #ifndef NDEBUG
   unsigned short* hBufTop = hBuf + width_sub * height_sub;
   #endif
 
-  /// \@todo note this is broken currently
-
-  // This code is quickest but not so readable
-  const Angle PanLatitude = map_projection.GetPanLocation().Latitude;
-  const Angle PanLongitude = map_projection.GetPanLocation().Longitude;
-  const fixed InvDrawScale = map_projection.GetScreenScaleToLonLat() / 1024;
-  const Angle DisplayAngle = map_projection.GetDisplayAngle();
-  const int cost = DisplayAngle.ifastcosine();
-  const int sint = DisplayAngle.ifastsine();
+  const GEOPOINT PanLocation = map_projection.GetPanLocation();
+  const fixed InvDrawScale = map_projection.GetScreenScaleToLonLat();
+  const POINT Orig_Screen = map_projection.GetOrigScreen();
+  const int cost = map_projection.GetDisplayAngle().ifastcosine();
+  const int sint = map_projection.GetDisplayAngle().ifastsine();
 
   GEOPOINT gp;
   for (int y = Y0; y < Y1; y += quantisation_pixels) {
-    const int ycost = y * cost;
-    const int ysint = y * sint;
+    const int dy = y-Orig_Screen.y;
+    const int dycost = dy * cost+512;
+    const int dysint = dy * sint-512;
 
     for (int x = X0; x < X1; x += quantisation_pixels, ++myhbuf) {
-
+      const int dx = x-Orig_Screen.x;
+      const POINT r = { (dx*cost - dysint)/1024,
+                        (dycost + dx*sint)/1024 };
+      gp.Latitude = PanLocation.Latitude 
+        - Angle::native(r.y*InvDrawScale);
+      gp.Longitude = PanLocation.Longitude + Angle::native(r.x*InvDrawScale)
+        *gp.Latitude.invfastcosine();
+      
       assert(myhbuf < hBufTop);
-      
-      gp.Latitude = PanLatitude 
-        - Angle::native(fixed((ycost + x * sint) * InvDrawScale));
-      gp.Longitude = PanLongitude + Angle::native((x * cost - ysint)
-                                                  * gp.Latitude.invfastcosine() * InvDrawScale);
-      
       *myhbuf = max((short)0, DisplayMap->GetField(gp, *rounding));
     }
   }
