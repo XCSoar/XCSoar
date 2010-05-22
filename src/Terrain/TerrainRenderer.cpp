@@ -660,7 +660,7 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
   const unsigned int bottom_index = c_height_sub - c_quantisation_effective;
   const int height_slope_factor = max(1, (int)(pixelsize_d));
   const int terrain_contrast = TerrainContrast;
-  unsigned short *p_terrain_buffer = hBuf;
+  const unsigned short *p_terrain_buffer = hBuf;
 
   const BGRColor* oColorBuf = colorBuf + 64 * 256;
   BGRColor* imageBuf = sbuf->GetBuffer();
@@ -668,7 +668,7 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
     return;
 
   #ifndef NDEBUG
-  unsigned short* hBufTop = hBuf + c_width_sub * c_height_sub;
+  const unsigned short* hBufTop = hBuf + c_width_sub * c_height_sub;
   #endif
 
   for (unsigned int y = 0; y < height_sub; ++y) {
