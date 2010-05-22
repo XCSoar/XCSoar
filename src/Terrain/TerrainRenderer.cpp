@@ -719,36 +719,25 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
           assert(p_terrain_buffer - column_minus_index >= hBuf);
           
           const int p22 = 
-            *(p_terrain_buffer + column_plus_index)-
-            *(p_terrain_buffer - column_minus_index);
+            (*(p_terrain_buffer + column_plus_index))-
+            (*(p_terrain_buffer - column_minus_index));
 
-          if ((p22 == 0) && (p32 == 0)) {
-            // slope is zero, so just look up the color
-            *imageBuf = oColorBuf[h];
-          } else {
+          const int p20 = column_plus_index+column_minus_index;
 
-            const int p20 = column_plus_index+column_minus_index;
-
-            // p20 and p31 are never 0... so only p22 or p32 can be zero
-            // if both are zero, the vector is 0,0,1 so there is no need
-            // to normalise the vector
-            const long dd0 = p22 * p31;
-            const long dd1 = p20 * p32;
-            const long dd2 = p20 * p31 * height_slope_factor;
-            const long mag = (dd0 * dd0 + dd1 * dd1 + dd2 * dd2);
+          const long dd0 = p22 * p31;
+          const long dd1 = p20 * p32;
+          const long dd2 = p20 * p31 * height_slope_factor;
+          const long mag = (dd0 * dd0 + dd1 * dd1 + dd2 * dd2);
+          if (mag>0) {
             const long num = (dd2 * sz + dd0 * sx + dd1 * sy);
-            if (mag > 0) {
-              const int sval = num/(int)sqrt((fixed)mag);
-              const int sindex = max(-64, min(63, (sval - sz) * terrain_contrast / 128));
-              *imageBuf = oColorBuf[h + 256*sindex];
-            } else {
-              *imageBuf = oColorBuf[h];
-            }
+            const int sval = num/(int)sqrt((fixed)mag);
+            const int sindex = max(-64, min(63, (sval - sz) * terrain_contrast / 128));
+            *imageBuf = oColorBuf[h + 256*sindex];
+            continue;        
           }
-        } else {
-          // slope is zero, so just look up the color
-          *imageBuf = oColorBuf[h];
         }
+        // slope is zero, so just look up the color
+        *imageBuf = oColorBuf[h];
       } else {
         // we're in the water, so look up the color for water
         *imageBuf = oColorBuf[255];
