@@ -663,32 +663,40 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
   if (!imageBuf)
     return;
 
-  for (int y = rect_quantised.top; y < rect_quantised.bottom; ++y) {
-    const int row_plus_index = ((y< border.bottom)? 
-                                quantisation_effective: 
-                                border.bottom-1-y);
-    const int row_plus_offset = width_q*row_plus_index;
+  if (do_shading) {
+    for (int y = rect_quantised.top; y < rect_quantised.bottom; ++y) {
+      const int row_plus_index = ((y< border.bottom)? 
+                                  quantisation_effective: 
+                                  rect_quantised.bottom-1-y);
+      assert(row_plus_index>=0);
 
-    const int row_minus_index = (y>= border.top)?
-      quantisation_effective: y;
-    const int row_minus_offset = width_q*row_minus_index;
+      const int row_plus_offset = width_q*row_plus_index;
+      
+      const int row_minus_index = (y>= border.top)?
+        quantisation_effective: y-rect_quantised.top;
 
-    const int p31 = row_plus_index+row_minus_index;
+      assert(row_minus_index>=0);
 
-    BGRColor* i_buf = imageBuf+rect_quantised.left+y*width_sub;
+      const int row_minus_offset = width_q*row_minus_index;
+      
+      const int p31 = row_plus_index+row_minus_index;
+      
+      BGRColor* i_buf = imageBuf+rect_quantised.left+y*width_sub;
+      
+      for (int x = rect_quantised.left; x < rect_quantised.right; ++x, ++h_buf) {
 
-    for (int x = rect_quantised.left; x < rect_quantised.right; ++x, ++h_buf,
-      ++i_buf) {
-
-      short h;
-      if ((h = *h_buf) > 0) {
-        h = min(255, h >> height_scale);
-
-        // no need to calculate slope if undefined height or sea level
-
-        if (do_shading) {
+        assert(i_buf < imageBuf+width_sub*height_sub); 
+        
+        if (short h = *h_buf) {
+          h = min(255, h >> height_scale);
+          
+          // no need to calculate slope if undefined height or sea level
 
           // Y direction
+          assert(h_buf-row_minus_offset >= hBuf);
+          assert(h_buf+row_plus_offset >= hBuf);
+          assert(h_buf-row_minus_offset < hBuf+width_sub*height_sub);
+          assert(h_buf+row_plus_offset < hBuf+width_sub*height_sub);
 
           const int p32 = 
             h_buf[-row_minus_offset]-
@@ -697,9 +705,19 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
           // X direction
 
           const int column_plus_index = (x< border.right)? 
-            quantisation_effective: border.right-1-x;
+            quantisation_effective: rect_quantised.right-1-x;
+
+          assert(column_plus_index>=0);
+
           const int column_minus_index = (x>= border.left)?
-            quantisation_effective: x;
+            quantisation_effective: x-rect_quantised.left;
+
+          assert(column_minus_index>=0);
+
+          assert(h_buf-column_minus_index >= hBuf);
+          assert(h_buf+column_plus_index >= hBuf);
+          assert(h_buf-column_minus_index < hBuf+width_sub*height_sub);
+          assert(h_buf+column_plus_index < hBuf+width_sub*height_sub);
 
           const int p22 = 
             h_buf[column_plus_index]-
@@ -715,15 +733,29 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
             const long num = (dd2 * sz + dd0 * sx + dd1 * sy);
             const int sval = num/(int)sqrt((fixed)mag);
             const int sindex = max(-64, min(63, (sval - sz) * terrain_contrast / 128));
-            *i_buf = oColorBuf[h + 256*sindex];
+            *i_buf++ = oColorBuf[h + 256*sindex];
             continue;        
+          } else {
+            // slope is zero, so just look up the color
+            *i_buf++ = oColorBuf[h];
           }
+        } else {
+          // we're in the water, so look up the color for water
+          *i_buf++ = oColorBuf[255];
         }
-        // slope is zero, so just look up the color
-        *i_buf = oColorBuf[h];
-      } else {
-        // we're in the water, so look up the color for water
-        *i_buf = oColorBuf[255];
+      }
+    }
+  } else {
+    for (int y = rect_quantised.top; y < rect_quantised.bottom; ++y) {
+      BGRColor* i_buf = imageBuf+rect_quantised.left+y*width_sub;
+      for (int x = rect_quantised.left; x < rect_quantised.right; ++x) {
+        if (short h = *h_buf++) {
+          h = min(255, h >> height_scale);
+          *i_buf++ = oColorBuf[h];
+        } else {
+          // we're in the water, so look up the color for water
+          *i_buf++ = oColorBuf[255];
+        }
       }
     }
   }
