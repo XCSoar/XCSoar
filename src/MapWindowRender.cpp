@@ -127,8 +127,7 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
       // Draw the terrain
       terrain_renderer->Draw(canvas, *this, sunazimuth,
                              sunelevation, Basic().Location,
-                             (int)Basic().Time,
-                             BigZoom);
+                             (int)Basic().Time);
     }
 
     if (SettingsComputer().FinalGlideTerrain == 2 && Calculated().TerrainValid)

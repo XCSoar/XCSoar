@@ -40,20 +40,19 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Terrain/RasterMap.hpp"
-#include "Topology.h"
 #include "Screen/STScreenBuffer.h"
 #include "Dialogs.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
-#include "Compatibility/string.h"
 #include "Screen/Ramp.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
-#include "MapWindowProjection.hpp"
+#include "Projection.hpp"
 
 #include <assert.h>
+#include <stdio.h>
 
 #define NUM_COLOR_RAMP_LEVELS 13
 
@@ -308,9 +307,10 @@ TerrainShading(const short illum, BYTE &r, BYTE &g, BYTE &b)
 //
 // this is for TerrainInfo.StepSize = 0.0025;
 TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
-    RasterWeather *_weather, RECT rc) :
+    RasterWeather *_weather, const RECT &rc) :
   terrain(_terrain),
-  weather(_weather)
+  weather(_weather),
+  rect_big(rc)
 {
   TerrainContrast = 150;
   TerrainBrightness = 36;
@@ -482,45 +482,35 @@ TerrainRenderer::SetMap(const GEOPOINT &loc, int day_time)
     return false;
 }
 
-void
-TerrainRenderer::Height(const MapWindowProjection &map_projection,
-                        bool isBigZoom)
+const RECT
+TerrainRenderer::Height(const Projection &map_projection)
 {
-  GEOPOINT G, middle;
+  GEOPOINT Gx, Gy, Gmid;
   int x, y;
-  const int X0 = (int)(quantisation_pixels / 2);
-  const int Y0 = (int)(quantisation_pixels / 2);
-  const int X1 = (int)(X0 + quantisation_pixels * width_sub);
-  const int Y1 = (int)(Y0 + quantisation_pixels * height_sub);
 
-  unsigned int rfact = 1;
+  const RECT rect_visible = map_projection.GetMapRect();
 
-  if (isBigZoom && terrain != NULL && !terrain->IsDirectAccess())
-    // first time displaying this data, so do it at half resolution
-    // to avoid too many cache misses
-    rfact = 2;
+  x = (rect_visible.left + rect_visible.right) / 2;
+  y = (rect_visible.top + rect_visible.bottom) / 2;
+  map_projection.Screen2LonLat(x, y, Gmid);
 
-  fixed pixelDX, pixelDY;
-
-  x = (X0 + X1) / 2;
-  y = (Y0 + Y1) / 2;
-  map_projection.Screen2LonLat(x, y, middle);
-  int dd = (int)lround(quantisation_pixels * rfact);
+  const int dstep = (int)lround(quantisation_pixels);
 
   GEOPOINT delta_rounding;
 
-  x = (X0 + X1) / 2 + dd;
-  y = (Y0 + Y1) / 2;
-  map_projection.Screen2LonLat(x, y, G);
-  delta_rounding.Longitude = (G.Longitude - middle.Longitude);
+  x = (rect_visible.left + rect_visible.right) / 2 + dstep;
+  y = (rect_visible.top + rect_visible.bottom) / 2;
+  map_projection.Screen2LonLat(x, y, Gx);
+  delta_rounding.Longitude = (Gx.Longitude - Gmid.Longitude);
 
-  pixelDX = Distance(middle, G);
+  const fixed pixelDX = Distance(Gmid, Gx);
 
-  x = (X0 + X1) / 2;
-  y = (Y0 + Y1) / 2 + dd;
-  map_projection.Screen2LonLat(x, y, G);
-  delta_rounding.Latitude = (G.Latitude - middle.Latitude);
-  pixelDY = Distance(middle, G);
+  x = (rect_visible.left + rect_visible.right) / 2;
+  y = (rect_visible.top + rect_visible.bottom) / 2 + dstep;
+  map_projection.Screen2LonLat(x, y, Gy);
+  delta_rounding.Latitude = (Gy.Latitude - Gmid.Latitude);
+
+  const fixed pixelDY = Distance(Gmid, Gy);
 
   pixelsize_d = sqrt((pixelDX * pixelDX + pixelDY * pixelDY)*fixed_half);
 
@@ -535,32 +525,33 @@ TerrainRenderer::Height(const MapWindowProjection &map_projection,
   // set resolution
   rounding->Set(*DisplayMap, delta_rounding);
 
-  quantisation_effective = DisplayMap->GetEffectivePixelSize(pixelsize_d, middle);
+  quantisation_effective = DisplayMap->GetEffectivePixelSize(pixelsize_d, Gmid);
 
   if (quantisation_effective > min(width_sub, height_sub) / 4) {
     do_shading = false;
   }
 
-  FillHeightBuffer(map_projection, 
-                   X0, Y0,
-                   X1, Y1);
+  RECT rect_quantised = rect_visible;
+  rect_quantised.left= rect_visible.left/quantisation_pixels; 
+  rect_quantised.right= min(width_sub+rect_quantised.left, 
+                            rect_visible.right/quantisation_pixels); 
+  rect_quantised.top= rect_visible.top/quantisation_pixels; 
+  rect_quantised.bottom= min(height_sub+rect_quantised.top, 
+                             rect_visible.bottom/quantisation_pixels); 
+
+  FillHeightBuffer(map_projection, rect_visible);
 
   DisplayMap->Unlock();
 
   if (weather != NULL && weather->GetParameter())
-    ScanSpotHeights(X0, Y0, X1, Y1);
+    ScanSpotHeights(rect_visible);
+
+  return rect_quantised;
 }
 
 void
-TerrainRenderer::ScanSpotHeights(const int X0, const int Y0,
-    const int X1, const int Y1)
+TerrainRenderer::ScanSpotHeights(const RECT& rect)
 {
-  const unsigned short *myhbuf = hBuf;
-
-  #ifndef NDEBUG
-  const unsigned short *hBufTop = hBuf + width_sub * height_sub;
-  #endif
-
   spot_max_pt.x = -1;
   spot_max_pt.y = -1;
   spot_min_pt.x = -1;
@@ -568,12 +559,11 @@ TerrainRenderer::ScanSpotHeights(const int X0, const int Y0,
   spot_max_val = -1;
   spot_min_val = 32767;
 
-  for (int y = Y0; y < Y1; y += quantisation_pixels) {
-    for (int x = X0; x < X1; x += quantisation_pixels, myhbuf++) {
+  const unsigned short* h_buf = hBuf;
 
-      assert(myhbuf<hBufTop);
-
-      short val = *myhbuf;
+  for (int y = rect.top; y < rect.bottom; y += quantisation_pixels) {
+    for (int x = rect.left; x < rect.right; x += quantisation_pixels, ++h_buf) {
+      const short val = *h_buf;
       if (val > spot_max_val) {
         spot_max_val = val;
         spot_max_pt.x = x;
@@ -590,19 +580,13 @@ TerrainRenderer::ScanSpotHeights(const int X0, const int Y0,
 
 
 void
-TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
-                                  const int X0, const int Y0, 
-                                  const int X1, const int Y1)
+TerrainRenderer::FillHeightBuffer(const Projection &map_projection,
+                                  const RECT& rect)
 {
-  // fill the buffer
-  unsigned short* myhbuf = hBuf;
+  const int width = (rect.right-rect.left)/quantisation_pixels;
 
   #ifndef SLOW_TERRAIN_STUFF
   // This code is quickest (by a little) but not so readable
-
-  #ifndef NDEBUG
-  unsigned short* hBufTop = hBuf + width_sub * height_sub;
-  #endif
 
   const GEOPOINT PanLocation = map_projection.GetPanLocation();
   const fixed InvDrawScale = map_projection.GetScreenScaleToLonLat();
@@ -611,12 +595,14 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
   const int sint = map_projection.GetDisplayAngle().ifastsine();
 
   GEOPOINT gp;
-  for (int y = Y0; y < Y1; y += quantisation_pixels) {
+  for (int y = rect.top; y < rect.bottom; y += quantisation_pixels) {
     const int dy = y-Orig_Screen.y;
     const int dycost = dy * cost+512;
     const int dysint = dy * sint-512;
 
-    for (int x = X0; x < X1; x += quantisation_pixels, ++myhbuf) {
+    unsigned short* h_buf = hBuf+width*y/quantisation_pixels+rect.left/quantisation_pixels;
+
+    for (int x = rect.left; x < rect.right; x += quantisation_pixels, ++h_buf) {
       const int dx = x-Orig_Screen.x;
       const POINT r = { (dx*cost - dysint)/1024,
                         (dycost + dx*sint)/1024 };
@@ -625,23 +611,35 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
       gp.Longitude = PanLocation.Longitude + Angle::native(r.x*InvDrawScale)
         *gp.Latitude.invfastcosine();
       
-      assert(myhbuf < hBufTop);
-      *myhbuf = max((short)0, DisplayMap->GetField(gp, *rounding));
+      *h_buf = max((short)0, DisplayMap->GetField(gp, *rounding));
     }
   }
 
   #else
 
   // This code is marginally slower but readable
-  for (int y = Y0; y < Y1; y += quantisation_pixels) {
-    for (int x = X0; x < X1; x += quantisation_pixels) {
-      GEOPOINT p;
-      map_projection.Screen2LonLat(x, y, p);
-      *myhbuf++ = max((short)0, DisplayMap->GetField(p, *rounding));
+
+  for (int y = rect.top; y < rect.bottom; y += quantisation_pixels) {
+
+    unsigned short* h_buf = hBuf+width*y/quantisation_pixels+rect.left/quantisation_pixels;
+
+    for (int x = rect.left; x < rect.right; x += quantisation_pixels, ++h_buf) {
+      GEOPOINT gp;
+      map_projection.Screen2LonLat(x, y, gp);
+      *h_buf = max((short)0, DisplayMap->GetField(gp, *rounding));
     }
   }
 
   #endif
+}
+
+const RECT 
+TerrainRenderer::BorderSlope(const RECT& rect_quantised, 
+                             const int edge) const
+{
+  RECT border = rect_quantised;
+  InflateRect(&border, -edge, -edge);
+  return border;
 }
 
 // JMW: if zoomed right in (e.g. one unit is larger than terrain
@@ -650,44 +648,40 @@ TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
 // (gridding of display) This is why quantisation_effective is used instead of 1
 // previously.  for large zoom levels, quantisation_effective=1
 void
-TerrainRenderer::Slope(const int sx, const int sy, const int sz)
+TerrainRenderer::Slope(const RECT& rect_quantised, 
+                       const int sx, const int sy, const int sz)
 {
-  const unsigned int c_quantisation_effective = quantisation_effective;
-  const unsigned int c_width_sub = width_sub;
-  const unsigned int c_height_sub = height_sub;
-  const unsigned int right_index = c_width_sub - 1 - c_quantisation_effective;
-  const unsigned int bottom_index = c_height_sub - c_quantisation_effective;
+  const RECT border = BorderSlope(rect_quantised, quantisation_effective);
   const int height_slope_factor = max(1, (int)(pixelsize_d));
   const int terrain_contrast = TerrainContrast;
-  const unsigned short *p_terrain_buffer = hBuf;
+  const int width_q = (rect_quantised.right-rect_quantised.left);
+
+  const unsigned short* h_buf = hBuf;
 
   const BGRColor* oColorBuf = colorBuf + 64 * 256;
   BGRColor* imageBuf = sbuf->GetBuffer();
   if (!imageBuf)
     return;
 
-  #ifndef NDEBUG
-  const unsigned short* hBufTop = hBuf + c_width_sub * c_height_sub;
-  #endif
+  for (int y = rect_quantised.top; y < rect_quantised.bottom; ++y) {
+    const int row_plus_index = ((y< border.bottom)? 
+                                quantisation_effective: 
+                                border.bottom-1-y);
+    const int row_plus_offset = width_q*row_plus_index;
 
-  for (unsigned int y = 0; y < height_sub; ++y) {
-    const int row_plus_index = ((y< bottom_index)? 
-                                c_quantisation_effective: 
-                                (c_height_sub-1-y));
-    const int row_plus_offset = c_width_sub*row_plus_index;
-
-    const int row_minus_index = (y>= c_quantisation_effective)?
-      c_quantisation_effective: y;
-    const int row_minus_offset = c_width_sub*row_minus_index;
+    const int row_minus_index = (y>= border.top)?
+      quantisation_effective: y;
+    const int row_minus_offset = width_q*row_minus_index;
 
     const int p31 = row_plus_index+row_minus_index;
 
-    for (unsigned int x = 0; x < c_width_sub; ++x, ++p_terrain_buffer, ++imageBuf) {
-      assert(p_terrain_buffer < hBufTop);
+    BGRColor* i_buf = imageBuf+rect_quantised.left+y*width_sub;
+
+    for (int x = rect_quantised.left; x < rect_quantised.right; ++x, ++h_buf,
+      ++i_buf) {
 
       short h;
-      if ((h = *p_terrain_buffer) > 0) {
-
+      if ((h = *h_buf) > 0) {
         h = min(255, h >> height_scale);
 
         // no need to calculate slope if undefined height or sea level
@@ -696,30 +690,20 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
 
           // Y direction
 
-          assert(p_terrain_buffer + row_plus_offset < hBufTop);
-          assert(p_terrain_buffer + row_plus_offset >= hBuf);
-          assert(p_terrain_buffer - row_minus_offset < hBufTop);
-          assert(p_terrain_buffer - row_minus_offset >= hBuf);
-
           const int p32 = 
-            (*(p_terrain_buffer - row_minus_offset))-
-            (*(p_terrain_buffer + row_plus_offset));
+            h_buf[-row_minus_offset]-
+            h_buf[row_plus_offset];
 
           // X direction
 
-          const int column_plus_index = (x< right_index)? 
-            c_quantisation_effective: (c_width_sub - x - 2);
-          const int column_minus_index = (x>= c_quantisation_effective)?
-            c_quantisation_effective: x;
-         
-          assert(p_terrain_buffer + column_plus_index < hBufTop);
-          assert(p_terrain_buffer + column_plus_index >= hBuf);
-          assert(p_terrain_buffer - column_minus_index < hBufTop);
-          assert(p_terrain_buffer - column_minus_index >= hBuf);
-          
+          const int column_plus_index = (x< border.right)? 
+            quantisation_effective: border.right-1-x;
+          const int column_minus_index = (x>= border.left)?
+            quantisation_effective: x;
+
           const int p22 = 
-            (*(p_terrain_buffer + column_plus_index))-
-            (*(p_terrain_buffer - column_minus_index));
+            h_buf[column_plus_index]-
+            h_buf[-column_minus_index];
 
           const int p20 = column_plus_index+column_minus_index;
 
@@ -731,19 +715,20 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
             const long num = (dd2 * sz + dd0 * sx + dd1 * sy);
             const int sval = num/(int)sqrt((fixed)mag);
             const int sindex = max(-64, min(63, (sval - sz) * terrain_contrast / 128));
-            *imageBuf = oColorBuf[h + 256*sindex];
+            *i_buf = oColorBuf[h + 256*sindex];
             continue;        
           }
         }
         // slope is zero, so just look up the color
-        *imageBuf = oColorBuf[h];
+        *i_buf = oColorBuf[h];
       } else {
         // we're in the water, so look up the color for water
-        *imageBuf = oColorBuf[255];
+        *i_buf = oColorBuf[255];
       }
     }
   }
 }
+
 
 void
 TerrainRenderer::ColorTable()
@@ -792,48 +777,48 @@ TerrainRenderer::Draw(Canvas &canvas, RECT rc)
     sbuf->HorizontalBlur(blursize);
     sbuf->VerticalBlur(blursize);
   }
-
   sbuf->DrawStretch(canvas, rc);
 }
 
 /**
  * Draws the terrain to the given canvas
  * @param canvas The drawing canvas
- * @param map_projection The MapWindowProjection
+ * @param map_projection The Projection
  * @param sunazimuth Azimuth of the sun (for terrain shading)
  * @param sunelevation Azimuth of the sun (for terrain shading)
  * @param loc Current location
- * @param isBigZoom (?)
  * @return (?)
  */
 bool
 TerrainRenderer::Draw(Canvas &canvas,
-                      const MapWindowProjection &map_projection,
+                      const Projection &map_projection,
     const Angle sunazimuth, const Angle sunelevation, const GEOPOINT &loc,
-    int day_time, const bool isBigZoom)
+    int day_time)
 {
   if (!SetMap(loc, day_time))
     return false;
 
   // step 1: calculate sunlight vector
-  Angle fudgeelevation = 
+  const Angle fudgeelevation = 
     Angle::degrees(fixed(10.0 + 80.0 * TerrainBrightness / 255.0));
 
-  int sx = (int)(255 * fudgeelevation.fastcosine() * sunazimuth.fastsine());
-  int sy = (int)(255 * fudgeelevation.fastcosine() * sunazimuth.fastcosine());
-  int sz = (int)(255 * fudgeelevation.fastsine());
+  const int sx = (int)(255 * fudgeelevation.fastcosine() * sunazimuth.fastsine());
+  const int sy = (int)(255 * fudgeelevation.fastcosine() * sunazimuth.fastcosine());
+  const int sz = (int)(255 * fudgeelevation.fastsine());
 
   ColorTable();
 
   // step 2: fill height buffer
-  Height(map_projection, isBigZoom);
+  const RECT rect_quantised = Height(map_projection);
 
   // step 3: calculate derivatives of height buffer
   // step 4: calculate illumination and colors
-  Slope(sx, sy, sz);
+  const RECT rect_visible = map_projection.GetMapRect();
+
+  Slope(rect_quantised, sx, sy, sz);
 
   // step 5: draw
-  Draw(canvas, map_projection.GetMapRectBig());
+  Draw(canvas, rect_visible);
 
   // note, not all of this really needs to be locked
   return true;

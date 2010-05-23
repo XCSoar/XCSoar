@@ -47,7 +47,7 @@ class CSTScreenBuffer;
 class Canvas;
 class BGRColor;
 class RasterMap;
-class MapWindowProjection;
+class Projection;
 class RasterTerrain;
 class RasterWeather;
 class RasterRounding;
@@ -56,7 +56,7 @@ struct COLORRAMP;
 class TerrainRenderer {
 public:
   TerrainRenderer(const RasterTerrain *_terrain, RasterWeather *_weather,
-      RECT rc);
+                  const RECT &rc);
   ~TerrainRenderer();
 
 public:
@@ -68,6 +68,9 @@ public:
 private:
   const RasterTerrain *terrain;
   RasterWeather *weather;
+  const RECT rect_big;
+
+  const RECT BorderSlope(const RECT& rect_quantised, const int edge) const;
 
   // screen dimensions in coarse pixels
   unsigned int width_sub, height_sub;
@@ -99,11 +102,11 @@ private:
   short TerrainBrightness;
 
 private:
-  void Height(const MapWindowProjection &map_projection, bool isBigZoom);
-  void ScanSpotHeights(const int X0, const int Y0, const int X1, const int Y1);
-  void FillHeightBuffer(const MapWindowProjection &map_projection,
-			const int X0, const int Y0, const int X1, const int Y1);
-  void Slope(const int sx, const int sy, const int sz);
+  const RECT Height(const Projection &map_projection);
+  void ScanSpotHeights(const RECT& rect);
+  void FillHeightBuffer(const Projection &map_projection,
+                        const RECT& rect);
+  void Slope(const RECT& rect_quantised, const int sx, const int sy, const int sz);
   void ColorTable();
   void Draw(Canvas &canvas, RECT rc);
 
@@ -127,9 +130,9 @@ public:
   /**
    * @param day_time the UTC time, in seconds since midnight
    */
-  bool Draw(Canvas &canvas, const MapWindowProjection &map_projection,
+  bool Draw(Canvas &canvas, const Projection &map_projection,
       const Angle sunazimuth, const Angle sunelevation, const GEOPOINT &loc,
-      int day_time, const bool isBigZoom);
+      int day_time);
 };
 
 #endif
