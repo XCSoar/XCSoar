@@ -49,14 +49,10 @@ public:
                   const RECT &rc);
   ~WeatherTerrainRenderer();
 protected:
-  bool SetMap(const GEOPOINT &loc, int day_time);
+  bool SetMap();
 
 private:
   RasterWeather *weather;
-  /**
-   * @param loc Location of center
-   * @param day_time the UTC time, in seconds since midnight
-   */
   bool do_scan_spot();
 };
 

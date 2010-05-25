@@ -75,11 +75,7 @@ protected:
   RasterMap *DisplayMap;
   int interp_levels;
 
-  /**
-   * @param loc Location of center
-   * @param day_time the UTC time, in seconds since midnight
-   */
-  virtual bool SetMap(const GEOPOINT &loc, int day_time);
+  virtual bool SetMap();
 
 private:
   const RasterTerrain *terrain;
@@ -132,8 +128,7 @@ public:
    * @param day_time the UTC time, in seconds since midnight
    */
   bool Draw(Canvas &canvas, const Projection &map_projection,
-      const Angle sunazimuth, const Angle sunelevation, const GEOPOINT &loc,
-      int day_time);
+      const Angle sunazimuth, const Angle sunelevation);
 };
 
 #endif

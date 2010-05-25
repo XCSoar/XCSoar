@@ -282,7 +282,7 @@ TerrainRenderer::~TerrainRenderer()
 }
 
 bool
-TerrainRenderer::SetMap(const GEOPOINT &loc, int day_time)
+TerrainRenderer::SetMap()
 {
   interp_levels = 2;
   is_terrain = true;
@@ -645,10 +645,9 @@ TerrainRenderer::Draw(Canvas &canvas, RECT rc)
 bool
 TerrainRenderer::Draw(Canvas &canvas,
                       const Projection &map_projection,
-    const Angle sunazimuth, const Angle sunelevation, const GEOPOINT &loc,
-    int day_time)
+                      const Angle sunazimuth, const Angle sunelevation)
 {
-  if (!SetMap(loc, day_time))
+  if (!SetMap())
     return false;
 
   // step 1: calculate sunlight vector

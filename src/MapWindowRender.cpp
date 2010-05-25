@@ -121,14 +121,16 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
         // loaded terrain properties
         terrain_renderer = new WeatherTerrainRenderer(terrain, weather, MapRectBig);
       }
+
+      if (weather != NULL && weather->GetParameter())
+        weather->Reload(Basic().Location, (int)Basic().Time);
+
       terrain_renderer->SetSettings(SettingsMap().TerrainRamp,
                                     SettingsMap().TerrainContrast,
                                     SettingsMap().TerrainBrightness);
 
       // Draw the terrain
-      terrain_renderer->Draw(canvas, *this, sunazimuth,
-                             sunelevation, Basic().Location,
-                             (int)Basic().Time);
+      terrain_renderer->Draw(canvas, *this, sunazimuth, sunelevation);
     }
 
     if (SettingsComputer().FinalGlideTerrain == 2 && Calculated().TerrainValid)

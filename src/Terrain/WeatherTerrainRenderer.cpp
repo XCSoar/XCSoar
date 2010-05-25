@@ -135,11 +135,8 @@ const COLORRAMP weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
 
 
 bool
-WeatherTerrainRenderer::SetMap(const GEOPOINT &loc, int day_time)
+WeatherTerrainRenderer::SetMap()
 {
-  if (weather != NULL && weather->GetParameter())
-    weather->Reload(loc, day_time);
-
   interp_levels = 5;
   switch (weather != NULL ? weather->GetParameter() : 0) {
   case 1: // wstar
@@ -215,7 +212,7 @@ WeatherTerrainRenderer::SetMap(const GEOPOINT &loc, int day_time)
     break;
 
   default:
-    return TerrainRenderer::SetMap(loc, day_time);
+    return TerrainRenderer::SetMap();
   }
 
   if (is_terrain)
