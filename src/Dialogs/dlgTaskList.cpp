@@ -57,6 +57,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "LocalPath.hpp"
 
+#include "BackgroundDrawHelper.hpp"
+
 #include <assert.h>
 
 static SingleWindow *parent_window;
@@ -133,6 +135,9 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
   stencil.set(canvas);
 
   ChartProjection proj(rc, *ordered_task, XCSoarInterface::Basic().Location);
+
+  BackgroundDrawHelper background;
+  background.Draw(canvas, rc, proj, XCSoarInterface::SettingsMap());
 
   MapDrawHelper helper(canvas, buffer, stencil, proj, rc,
                        XCSoarInterface::SettingsMap());
