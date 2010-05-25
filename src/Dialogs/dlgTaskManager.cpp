@@ -54,9 +54,7 @@ Copyright_License {
 #include "RenderObservationZone.hpp"
 #include "Screen/Chart.hpp"
 #include "ChartProjection.hpp"
-
-#include "Terrain/RasterTerrain.hpp"
-#include "Terrain/TerrainRenderer.hpp"
+#include "BackgroundDrawHelper.hpp"
 
 #include <assert.h>
 
@@ -134,12 +132,8 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
 
   ChartProjection proj(rc, *ordered_task, XCSoarInterface::Basic().Location);
 
-  if (terrain.isTerrainLoaded()) {
-    TerrainRenderer trend(&terrain, rc);
-    trend.Draw(canvas, proj, 
-               Angle::degrees(fixed(45.0)), 
-               Angle::degrees(fixed(45.0)));
-  };
+  BackgroundDrawHelper background;
+  background.Draw(canvas, rc, proj, XCSoarInterface::SettingsMap());
 
   MapDrawHelper helper(canvas, buffer, stencil, proj, rc,
                        XCSoarInterface::SettingsMap());
