@@ -39,7 +39,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Marks.hpp"
-#include "Terrain/TerrainRenderer.hpp"
+#include "Terrain/WeatherTerrainRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "TopologyStore.h"
@@ -99,6 +99,7 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
   if ((terrain != NULL && SettingsMap().EnableTerrain &&
        Calculated().TerrainValid && terrain->isTerrainLoaded()) ||
       (weather != NULL && weather->GetParameter() != 0)) {
+
     Angle sunelevation = Angle::degrees(fixed(40.0));
     Angle sunazimuth = GetDisplayAngle() - Basic().wind.bearing;
     // draw sun from constant angle if very low wind speed
@@ -118,7 +119,7 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
         // defer rendering until first draw because
         // the buffer size, smoothing etc is set by the
         // loaded terrain properties
-        terrain_renderer = new TerrainRenderer(terrain, weather, MapRectBig);
+        terrain_renderer = new WeatherTerrainRenderer(terrain, weather, MapRectBig);
       }
       terrain_renderer->SetSettings(SettingsMap().TerrainRamp,
                                     SettingsMap().TerrainContrast,

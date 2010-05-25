@@ -43,21 +43,22 @@ Copyright_License {
 
 #include <windef.h>
 
+#define NUM_COLOR_RAMP_LEVELS 13
+
 class CSTScreenBuffer;
 class Canvas;
 class BGRColor;
 class RasterMap;
 class Projection;
 class RasterTerrain;
-class RasterWeather;
 class RasterRounding;
 struct COLORRAMP;
 
 class TerrainRenderer {
 public:
-  TerrainRenderer(const RasterTerrain *_terrain, RasterWeather *_weather,
+  TerrainRenderer(const RasterTerrain *_terrain,
                   const RECT &rc);
-  ~TerrainRenderer();
+  virtual ~TerrainRenderer();
 
 public:
   POINT spot_max_pt;
@@ -65,9 +66,23 @@ public:
   short spot_max_val;
   short spot_min_val;
 
+protected:
+  bool is_terrain;
+  bool do_shading;
+  bool do_water;
+  unsigned int height_scale;
+  const COLORRAMP *color_ramp;
+  RasterMap *DisplayMap;
+  int interp_levels;
+
+  /**
+   * @param loc Location of center
+   * @param day_time the UTC time, in seconds since midnight
+   */
+  virtual bool SetMap(const GEOPOINT &loc, int day_time);
+
 private:
   const RasterTerrain *terrain;
-  RasterWeather *weather;
   const RECT rect_big;
 
   const RECT BorderSlope(const RECT& rect_quantised, const int edge) const;
@@ -87,21 +102,12 @@ private:
 
   unsigned short *hBuf;
   BGRColor *colorBuf;
-  bool do_shading;
-  bool do_water;
-  RasterMap *DisplayMap;
   RasterRounding *rounding;
-
-  bool is_terrain;
-  int interp_levels;
-  const COLORRAMP *color_ramp;
-  unsigned int height_scale;
 
   short TerrainRamp;
   short TerrainContrast;
   short TerrainBrightness;
 
-private:
   const RECT Height(const Projection &map_projection);
   void ScanSpotHeights(const RECT& rect);
   void FillHeightBuffer(const Projection &map_projection,
@@ -110,11 +116,7 @@ private:
   void ColorTable();
   void Draw(Canvas &canvas, RECT rc);
 
-  /**
-   * @param loc Location of center
-   * @param day_time the UTC time, in seconds since midnight
-   */
-  bool SetMap(const GEOPOINT &loc, int day_time);
+  virtual bool do_scan_spot();
 
 public:
   void
@@ -126,7 +128,6 @@ public:
     TerrainBrightness = _TerrainBrightness;
   }
 
-public:
   /**
    * @param day_time the UTC time, in seconds since midnight
    */

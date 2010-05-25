@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "Terrain/TerrainRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Terrain/RasterWeather.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Screen/STScreenBuffer.h"
 #include "Dialogs.h"
@@ -47,107 +46,10 @@ Copyright_License {
 #include "Screen/Ramp.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
-#include "LocalPath.hpp"
-#include "LogFile.hpp"
 #include "Projection.hpp"
 
 #include <assert.h>
 #include <stdio.h>
-
-#define NUM_COLOR_RAMP_LEVELS 13
-
-const COLORRAMP weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
-  { // Blue to red       // vertical speed
-    {   0,       0,     0,     255}, // -200
-    { 100,       0,     195,   255}, // -100
-    { 200,     52,      192,    11}, // 0
-    { 250,     182,     233,     4}, // 40
-    { 300,     255,     233,     0}, // 80
-    { 360,     255,     209,     0}, // 120
-    { 420,     255,     155,     0}, // 160
-    { 480,     255,     109,     0}, // 200
-    { 540,     255,     35,      0}, // 240
-    { 600,     255,     00,      0}, // 300
-    {1000,         0xFF, 0x00, 0x00},
-    {8000,         0xFF, 0x00, 0x00},
-    {9000,         0xFF, 0x00, 0x00}
-  },
-  {
-    {0,            0xFF, 0xFF, 0xFF},
-    {250,          0x80, 0x80, 0xFF},
-    {500,          0x80, 0xFF, 0xFF},
-    {750,          0xFF, 0xFF, 0x80},
-    {1000,         0xFF, 0x80, 0x80},
-    {1250,         0xFF, 0x80, 0x80},
-    {2000,         0xFF, 0xA0, 0xA0},
-    {3000,         0xFF, 0xA0, 0xA0},
-    {4000,         0xFF, 0x00, 0x00},
-    {5000,         0xFF, 0x00, 0x00},
-    {6000,         0xFF, 0x00, 0x00},
-    {7000,         0xFF, 0x00, 0x00},
-    {8000,         0xFF, 0x00, 0x00}
-  },
-  {
-    {0,            0xFF, 0xFF, 0xFF},
-    {750,          0x80, 0x80, 0xFF},
-    {1500,          0x80, 0xFF, 0xFF},
-    {2250,          0xFF, 0xFF, 0x80},
-    {3000,          0xFF, 0x80, 0x80},
-    {3500,         0xFF, 0x80, 0x80},
-    {6000,         0xFF, 0xA0, 0xA0},
-    {8000,         0xFF, 0xA0, 0xA0},
-    {9000,         0xFF, 0x00, 0x00},
-    {9500,         0xFF, 0x00, 0x00},
-    {9600,         0xFF, 0x00, 0x00},
-    {9700,         0xFF, 0x00, 0x00},
-    {20000,         0xFF, 0x00, 0x00}
-  },
-  { // Blue to Gray, 8 steps
-    {   0,       0,     153,     204},
-    {  12,     102,     229,     255},
-    {  25,     153,     255,     255},
-    {  37,     204,     255,     255},
-    {  50,     229,     229,     229},
-    {  62,     173,     173,     173},
-    {  75,     122,     122,     122},
-    { 100,      81,      81,      81},
-    {5000,      71,      71,      71},
-    {6000,         0xFF, 0x00, 0x00},
-    {7000,         0xFF, 0x00, 0x00},
-    {8000,         0xFF, 0x00, 0x00},
-    {9000,         0xFF, 0x00, 0x00}
-  },
-  { // sfctemp, blue to orange to red
-    {   0,       7,      90,     255},
-    {  30,      50,     118,     255},
-    {  70,      89,     144,     255},
-    {  73,     140,     178,     255},
-    {  76,     191,     212,     255},
-    {  79,     229,     238,     255},
-    {  82,     247,     249,     255},
-    {  85,     255,     255,     204},
-    {  88,     255,     255,     153},
-    {  91,     255,     255,       0},
-    {  95,     255,     204,       0},
-    { 100,     255,     153,       0},
-    { 120,     255,       0,       0}
-  },
-  { // Blue to white to red       // vertical speed (convergence)
-    {   0,       7,      90,     255},
-    { 100,      50,     118,     255},
-    { 140,      89,     144,     255},
-    { 160,     140,     178,     255},
-    { 180,     191,     212,     255},
-    { 190,     229,     238,     255},
-    { 200,     247,     249,     255},
-    { 210,     255,     255,     204},
-    { 220,     255,     255,     153},
-    { 240,     255,     255,       0},
-    { 260,     255,     204,       0},
-    { 300,     255,     153,       0},
-    {1000,     255,     102,       0},
-  },
-};
 
 
 const COLORRAMP terrain_colors[8][NUM_COLOR_RAMP_LEVELS] = {
@@ -307,9 +209,8 @@ TerrainShading(const short illum, BYTE &r, BYTE &g, BYTE &b)
 //
 // this is for TerrainInfo.StepSize = 0.0025;
 TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
-    RasterWeather *_weather, const RECT &rc) :
+                                 const RECT &rc) :
   terrain(_terrain),
-  weather(_weather),
   rect_big(rc)
 {
   TerrainContrast = 150;
@@ -383,93 +284,12 @@ TerrainRenderer::~TerrainRenderer()
 bool
 TerrainRenderer::SetMap(const GEOPOINT &loc, int day_time)
 {
-  if (weather != NULL && weather->GetParameter())
-    weather->Reload(loc, day_time);
-
-  interp_levels = 5;
-  switch (weather != NULL ? weather->GetParameter() : 0) {
-  case 1: // wstar
-    is_terrain = false;
-    do_water = false;
-    height_scale = 2; // max range 256*(2**2) = 1024 cm/s = 10 m/s
-    DisplayMap = weather->GetMap();
-    color_ramp = &weather_colors[0][0];
-    break;
-
-  case 2: // bl wind spd
-    is_terrain = false;
-    do_water = false;
-    height_scale = 3;
-    DisplayMap = weather->GetMap();
-    color_ramp = &weather_colors[1][0];
-    break;
-
-  case 3: // hbl
-    is_terrain = false;
-    do_water = false;
-    height_scale = 4;
-    DisplayMap = weather->GetMap();
-    color_ramp = &weather_colors[2][0];
-    break;
-
-  case 4: // dwcrit
-    is_terrain = false;
-    do_water = false;
-    height_scale = 4;
-    DisplayMap = weather->GetMap();
-    color_ramp = &weather_colors[2][0];
-    break;
-
-  case 5: // blcloudpct
-    is_terrain = false;
-    do_water = true;
-    height_scale = 0;
-    DisplayMap = weather->GetMap();
-    color_ramp = &weather_colors[3][0];
-    break;
-
-  case 6: // sfctemp
-    is_terrain = false;
-    do_water = false;
-    height_scale = 0;
-    DisplayMap = weather->GetMap();
-    color_ramp = &weather_colors[4][0];
-    break;
-
-  case 7: // hwcrit
-    is_terrain = false;
-    do_water = false;
-    height_scale = 4;
-    DisplayMap = weather->GetMap();
-    color_ramp = &weather_colors[2][0];
-    break;
-
-  case 8: // wblmaxmin
-    is_terrain = false;
-    do_water = false;
-    height_scale = 1; // max range 256*(1**2) = 512 cm/s = 5.0 m/s
-    DisplayMap = weather->GetMap();
-    color_ramp = &weather_colors[5][0];
-    break;
-
-  case 9: // blcwbase
-    is_terrain = false;
-    do_water = false;
-    height_scale = 4;
-    DisplayMap = weather->GetMap();
-    color_ramp = &weather_colors[2][0];
-    break;
-
-  default:
-  case 0: // terrain!
-    interp_levels = 2;
-    is_terrain = true;
-    do_water = true;
-    height_scale = 4;
-    DisplayMap = terrain != NULL ? terrain->get_map() : NULL;
-    color_ramp = &terrain_colors[TerrainRamp][0];
-    break;
-  }
+  interp_levels = 2;
+  is_terrain = true;
+  do_water = true;
+  height_scale = 4;
+  DisplayMap = terrain != NULL ? terrain->get_map() : NULL;
+  color_ramp = &terrain_colors[TerrainRamp][0];
 
   if (is_terrain)
     do_shading = true;
@@ -481,6 +301,7 @@ TerrainRenderer::SetMap(const GEOPOINT &loc, int day_time)
   else
     return false;
 }
+
 
 const RECT
 TerrainRenderer::Height(const Projection &map_projection)
@@ -543,7 +364,7 @@ TerrainRenderer::Height(const Projection &map_projection)
 
   DisplayMap->Unlock();
 
-  if (weather != NULL && weather->GetParameter())
+  if (do_scan_spot())
     ScanSpotHeights(rect_visible);
 
   return rect_quantised;
@@ -854,4 +675,10 @@ TerrainRenderer::Draw(Canvas &canvas,
 
   // note, not all of this really needs to be locked
   return true;
+}
+
+bool 
+TerrainRenderer::do_scan_spot()
+{
+  return false;
 }
