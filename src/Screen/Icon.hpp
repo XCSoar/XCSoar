@@ -56,6 +56,9 @@ protected:
   POINT origin;
 
 public:
+  const POINT& get_origin() const {
+    return origin;
+  }
   bool defined() const {
     return bitmap.defined();
   }

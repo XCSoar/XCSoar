@@ -180,19 +180,19 @@ MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc, const GPS_STATE &gps)
   TCHAR gpswarningtext2[] = TEXT("GPS waiting for fix");
   TextInBoxMode_t TextInBoxMode = { 2 };
   TCHAR *txt = NULL;
-  MaskedIcon *bmp = NULL;
+  MaskedIcon *icon = NULL;
 
   if (!gps.Connected) {
-    bmp = &MapGfx.hGPSStatus2;
+    icon = &MapGfx.hGPSStatus2;
     txt = gpswarningtext1;
   } else if (gps.NAVWarning || (gps.SatellitesUsed == 0)) {
-    bmp = &MapGfx.hGPSStatus2;
+    icon = &MapGfx.hGPSStatus2;
     txt = gpswarningtext2;
   } else {
     return; // early exit
   }
 
-  bmp->draw(canvas, get_bitmap_canvas(),
+  icon->draw(canvas, get_bitmap_canvas(),
             rc.left + IBLSCALE(2),
             rc.bottom + IBLSCALE(Appearance.GPSStatusOffset.y - 22));
 

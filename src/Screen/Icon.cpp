@@ -59,12 +59,16 @@ MaskedIcon::load_big(unsigned id, unsigned big_id, bool center)
   if (center) {
     origin.x = size.cx / 2;
     origin.y = size.cy / 2;
-  } else
-    origin.x = origin.y = 0;
+  } else {
+    origin.x = 0;
+    origin.y = 0;
+  }
 }
 
 void
-MaskedIcon::draw(Canvas &canvas, BitmapCanvas &bitmap_canvas, int x, int y) const
+MaskedIcon::draw(Canvas &canvas, 
+                 BitmapCanvas &bitmap_canvas, 
+                 int x, int y) const
 {
   bitmap_canvas.background_opaque();
   bitmap_canvas.set_text_color(Color::WHITE);
