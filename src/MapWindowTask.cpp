@@ -131,7 +131,7 @@ protected:
           brect.top = sc.y-4;
           brect.bottom = brect.top+tsize.cy+4;
           
-          if (m_map.getLabelBlock()->check(brect)) {
+          if (m_map.getLabelBlock().check(brect)) {
             m_canvas.text(sc.x - tsize.cx / 2, sc.y - tsize.cy / 2, Buffer);
             ilast = idist;
           }

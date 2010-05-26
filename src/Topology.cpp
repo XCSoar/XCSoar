@@ -258,7 +258,7 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
     return;
 
   MapWindowProjection &map_projection = m_window;
-  LabelBlock *label_block = m_window.getLabelBlock();
+  LabelBlock &label_block = m_window.getLabelBlock();
 
   double map_scale = map_projection.GetMapScaleUser();
 
@@ -317,7 +317,7 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
 
           if (m_window.draw_masked_bitmap_if_visible(canvas, hBitmap, l, 10, 10, &sc)) {
             if (render_labels)
-              cshape->renderSpecial(canvas, *label_block, sc.x, sc.y);
+              cshape->renderSpecial(canvas, label_block, sc.x, sc.y);
           }
         }
       }
@@ -343,7 +343,7 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
 
         canvas.polyline(pt, msize);
         if (render_labels)
-          cshape->renderSpecial(canvas, *label_block, minx, miny);
+          cshape->renderSpecial(canvas, label_block, minx, miny);
       }
       break;
 
@@ -368,7 +368,7 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
 
         canvas.polygon(pt, msize);
         if (render_labels)
-          cshape->renderSpecial(canvas, *label_block, minx, miny);
+          cshape->renderSpecial(canvas, label_block, minx, miny);
       }
       break;
 

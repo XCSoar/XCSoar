@@ -247,8 +247,8 @@ private:
   LabelBlock label_block;
 public:
   bool checkLabelBlock(RECT rc);
-  LabelBlock *getLabelBlock() {
-    return &label_block;
+  LabelBlock &getLabelBlock() {
+    return label_block;
   }
 
   void draw_bitmap(Canvas &canvas, const Bitmap &bitmap,
@@ -268,8 +268,8 @@ public:
   bool draw_masked_bitmap_if_visible(Canvas &canvas,
 				     Bitmap &bitmap,
 				     const GEOPOINT &loc,
-				     unsigned width,
-				     unsigned height,
+				     const unsigned width,
+				     const unsigned height,
 				     POINT *sc=NULL);
 
 protected:

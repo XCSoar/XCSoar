@@ -378,14 +378,15 @@ MapWindow::draw_bitmap(Canvas &canvas, const Bitmap &bitmap,
 }
 
 void
-MapWindow::draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap,
+MapWindow::draw_masked_bitmap(Canvas &canvas, 
+                              const Bitmap &bitmap,
                               const int x, const int y,
                               const unsigned src_width,
                               const unsigned src_height,
                               bool centered)
 {
-  int x_offset = centered? IBLSCALE(src_width)/2 : 0;
-  int y_offset = centered? IBLSCALE(src_height)/2 : 0;
+  const int x_offset = centered? IBLSCALE(src_width)/2 : 0;
+  const int y_offset = centered? IBLSCALE(src_height)/2 : 0;
 
   bitmap_canvas.background_opaque();
   bitmap_canvas.set_text_color(Color::WHITE);
@@ -396,8 +397,8 @@ MapWindow::draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap,
 bool MapWindow::draw_masked_bitmap_if_visible(Canvas &canvas,
 					      Bitmap &bitmap,
 					      const GEOPOINT &loc,
-					      unsigned width,
-					      unsigned height,
+					      const unsigned width,
+					      const unsigned height,
 					      POINT *scin)
 {
   POINT sc;

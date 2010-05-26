@@ -394,7 +394,7 @@ void MapWindowProjection::ExchangeBlackboard(const DERIVED_INFO &derived_info,
 
 static const fixed MINRANGE(0.2);
 
-bool RectangleIsInside(rectObj r_exterior, rectObj r_interior) {
+static bool RectangleIsInside(rectObj r_exterior, rectObj r_interior) {
   if ((r_interior.minx >= r_exterior.minx)&&
       (r_interior.maxx <= r_exterior.maxx)&&
       (r_interior.miny >= r_exterior.miny)&&
