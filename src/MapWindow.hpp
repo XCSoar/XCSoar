@@ -233,14 +233,6 @@ protected:
   void UpdateTerrain();
   void UpdateWeather();
 
-  void UpdateAll() {
-    UpdateTopologyCache();
-    while (topology_dirty)
-      UpdateTopology(true);
-    UpdateTerrain();
-    UpdateWeather();
-  }
-
 private:
   // graphics vars
 
