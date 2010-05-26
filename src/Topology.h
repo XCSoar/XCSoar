@@ -47,7 +47,7 @@ Copyright_License {
 
 class GEOPOINT;
 class Canvas;
-class MapWindowProjection;
+class Projection;
 class MapWindow;
 class LabelBlock;
 
@@ -97,9 +97,9 @@ public:
 
   void Open();
   void Close();
-  void TriggerIfScaleNowVisible(MapWindowProjection &map_projection);
+  void TriggerIfScaleNowVisible(Projection &map_projection);
 
-  void updateCache(MapWindowProjection &map_projection,
+  void updateCache(Projection &map_projection,
 		   const rectObj &thebounds, bool purgeonly = false);
   void Paint(Canvas &canvas, MapWindow &m_window, const RECT rc);
 

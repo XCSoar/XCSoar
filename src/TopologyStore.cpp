@@ -55,7 +55,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-TopologyStore::TriggerUpdateCaches(MapWindowProjection &m_projection)
+TopologyStore::TriggerUpdateCaches(Projection &m_projection)
 {
   Poco::ScopedRWLock protect(lock, true);
 
@@ -75,7 +75,7 @@ TopologyStore::TriggerUpdateCaches(MapWindowProjection &m_projection)
 }
 
 bool
-TopologyStore::ScanVisibility(MapWindowProjection &m_projection,
+TopologyStore::ScanVisibility(Projection &m_projection,
     rectObj &_bounds_active, const bool force)
 {
   Poco::ScopedRWLock protect(lock, true);

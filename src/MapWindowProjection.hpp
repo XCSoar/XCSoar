@@ -59,9 +59,8 @@ class MapWindowProjection:
 
   fixed  GetScreenDistanceMeters(void) const;
 
-  fixed GetMapScaleUser() const { // Topology
-    return MapScale;
-  }
+  virtual fixed GetMapScaleUser() const;
+
   fixed GetMapScaleKM() const {
     return (fixed)Units::ToSysUnit(MapScale * fixed(0.001), Units::DistanceUnit);
   }
@@ -162,7 +161,6 @@ private:
   int       ScaleCurrent;
   fixed    ScaleList[SCALELISTSIZE];
   int       ScaleListCount;
-  int GetMapResolutionFactor() const;
 
   rectObj smart_bounds_active;
   fixed smart_range_active;

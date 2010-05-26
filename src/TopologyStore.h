@@ -46,7 +46,7 @@ Copyright_License {
 
 class Canvas;
 class MapWindow;
-class MapWindowProjection;
+class Projection;
 class Topology;
 class TopologyWriter;
 
@@ -64,9 +64,9 @@ public:
   TopologyStore(TopologyWriter* _marks):topo_marks(_marks) {};
   ~TopologyStore();
 
-  bool ScanVisibility(MapWindowProjection &m_projection,
+  bool ScanVisibility(Projection &m_projection,
       rectObj &_bounds_active, const bool force = false);
-  void TriggerUpdateCaches(MapWindowProjection &m_projection);
+  void TriggerUpdateCaches(Projection &m_projection);
   void Open();
   void Close();
   void Draw(Canvas &canvas, MapWindow &m_window, const RECT rc);

@@ -205,12 +205,6 @@ MapWindowProjection::GetScreenDistanceMeters() const
   return DistancePixelsToMeters(max_dimension(MapRectBig));
 }
 
-int
-MapWindowProjection::GetMapResolutionFactor(void) const
-{
-  return IBLSCALE(30);
-}
-
 fixed 
 MapWindowProjection::LimitMapScale(fixed value,
                                    const SETTINGS_MAP& settings_map) {
@@ -286,7 +280,8 @@ void MapWindowProjection::ModifyMapScale
   MapScale = _RequestedMapScale;
 
   SetScaleMetersToScreen(Units::ToUserUnit(fixed(GetMapResolutionFactor()) /
-                                           MapScale, Units::DistanceUnit));
+                                           MapScale, 
+                                           Units::DistanceUnit));
 }
 
 
@@ -449,5 +444,11 @@ bool MapWindowProjection::SmartBounds(const bool force) {
   } else {
     return false;
   }
+}
+
+fixed 
+MapWindowProjection::GetMapScaleUser() const 
+{
+  return MapScale;
 }
 

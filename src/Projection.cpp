@@ -38,6 +38,8 @@ Copyright_License {
 #include "Projection.hpp"
 #include "Math/Earth.hpp"
 #include "Math/Angle.hpp"
+#include "Screen/Layout.hpp"
+#include "Units.hpp"
 
 Projection::Projection():
   DisplayAngle (),
@@ -332,5 +334,18 @@ long
 Projection::max_dimension(const RECT &rc) const
 {
   return std::max(rc.right-rc.left, rc.bottom-rc.top);
+}
+
+fixed 
+Projection::GetMapScaleUser() const 
+{
+  fixed map_scale = fixed(GetMapResolutionFactor())/m_scale_meters_to_screen;
+  return map_scale; // Units::ToUserUnit(map_scale, Units::DistanceUnit);
+}
+
+int
+Projection::GetMapResolutionFactor(void) const
+{
+  return IBLSCALE(30);
 }
 

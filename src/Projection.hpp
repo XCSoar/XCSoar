@@ -47,6 +47,8 @@ class Projection {
 public:
   Projection();
 
+  virtual fixed GetMapScaleUser() const;
+
   void    Screen2LonLat(const int &x, const int &y,
                         GEOPOINT &location) const;
 
@@ -92,6 +94,9 @@ public:
   rectObj CalculateScreenBounds(const fixed scale) const;
 
 protected:
+
+  int GetMapResolutionFactor(void) const;
+
   void SetScaleMetersToScreen(const fixed scale_meters_to_screen);
 
   GEOPOINT PanLocation;

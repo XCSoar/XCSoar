@@ -156,7 +156,7 @@ Topology::CheckScale(double map_scale)
 }
 
 void
-Topology::TriggerIfScaleNowVisible(MapWindowProjection &map_projection)
+Topology::TriggerIfScaleNowVisible(Projection &map_projection)
 {
   triggerUpdateCache |= (CheckScale(map_projection.GetMapScaleUser()) != in_scale);
 }
@@ -171,7 +171,7 @@ Topology::flushCache()
 }
 
 void
-Topology::updateCache(MapWindowProjection &map_projection, 
+Topology::updateCache(Projection &map_projection, 
                       const rectObj &thebounds,
                       bool purgeonly)
 {
