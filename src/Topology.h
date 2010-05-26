@@ -43,7 +43,7 @@ Copyright_License {
 #include "Screen/shapelib/mapshape.h"
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
-#include "Screen/Bitmap.hpp"
+#include "Screen/Icon.hpp"
 
 class GEOPOINT;
 class Canvas;
@@ -104,7 +104,7 @@ public:
   void Paint(Canvas &canvas, MapWindow &m_window, const RECT rc);
 
   double scaleThreshold;
-  void loadBitmap(const int);
+  void loadIcon(const int);
   bool triggerUpdateCache;
 
   int
@@ -134,7 +134,7 @@ protected:
   bool in_scale;
   Pen hPen;
   Brush hbBrush;
-  Bitmap hBitmap;
+  MaskedIcon icon;
   shapefileObj shpfile;
   bool shapefileopen;
 };

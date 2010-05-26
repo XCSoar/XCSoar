@@ -269,7 +269,7 @@ TopologyStore::Open()
       }
 
       if (ShapeIcon != 0)
-        topology_store[numtopo]->loadBitmap(ShapeIcon);
+        topology_store[numtopo]->loadIcon(ShapeIcon);
 
       topology_store[numtopo]->scaleThreshold = ShapeRange;
 

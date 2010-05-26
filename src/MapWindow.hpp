@@ -240,37 +240,18 @@ private:
   BufferCanvas buffer_canvas;
   BufferCanvas stencil_canvas;
 
-public:
+protected:
   BitmapCanvas bitmap_canvas;
 
 private:
   LabelBlock label_block;
 public:
+  BitmapCanvas& get_bitmap_canvas() { return bitmap_canvas; };
+
   bool checkLabelBlock(RECT rc);
   LabelBlock &getLabelBlock() {
     return label_block;
   }
-
-  void draw_bitmap(Canvas &canvas, const Bitmap &bitmap,
-		   const int x, const int y,
-		   const unsigned src_x_offset,
-		   const unsigned src_y_offset,
-		   const unsigned src_width,
-		   const unsigned src_height,
-		   bool centered=true);
-
-  void draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap,
-			  const int x, const int y,
-			  const unsigned src_width,
-			  const unsigned src_height,
-			  bool centered=true);
-
-  bool draw_masked_bitmap_if_visible(Canvas &canvas,
-				     Bitmap &bitmap,
-				     const GEOPOINT &loc,
-				     const unsigned width,
-				     const unsigned height,
-				     POINT *sc=NULL);
 
 protected:
   virtual bool on_create();

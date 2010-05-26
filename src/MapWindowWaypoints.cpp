@@ -139,7 +139,7 @@ public:
       TextDisplayMode.AsFlag.WhiteBold = 1;
 
     if (irange || in_task || dowrite || islandable)
-      icon->draw(canvas, map.bitmap_canvas, sc.x, sc.y);
+      icon->draw(canvas, map.get_bitmap_canvas(), sc.x, sc.y);
 
     if (pDisplayTextType == DISPLAYNAMEIFINTASK) {
       if (!in_task)

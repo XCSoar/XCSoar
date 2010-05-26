@@ -228,9 +228,10 @@ RenderTaskPoint::draw_target(const TaskPoint &tp)
     return;
 
 /*  
-  m_map.draw_masked_bitmap_if_visible(m_buffer, MapGfx.hBmpTarget,
-                                      tp.get_location_remaining(),
-                                      10, 10);
+    POINT sc;
+    if (map.LonLat2ScreenIfVisible(tp.get_location_remaining(), &sc)) {
+    MapGfx.hBmpTarget.draw(get_canvas(), get_bitmap_canvas(), sc.x, sc.y);
+    }
 */
 }
 

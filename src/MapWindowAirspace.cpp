@@ -230,8 +230,11 @@ MapWindow::DrawAirspaceIntersections(Canvas &canvas)
   for (std::vector<GEOPOINT>::const_iterator it = m_airspace_intersections.begin();
        it != m_airspace_intersections.end(); ++it) {
     
-    draw_masked_bitmap_if_visible(canvas, MapGfx.hAirspaceInterceptBitmap,
-                                  *it, 10, 10);
+    POINT sc;
+    if (LonLat2ScreenIfVisible(*it, &sc)) {
+      MapGfx.hAirspaceInterceptBitmap.draw(canvas, 
+                                           get_bitmap_canvas(), sc.x, sc.y);
+    }
   }
 }
 

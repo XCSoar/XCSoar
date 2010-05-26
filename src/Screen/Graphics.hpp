@@ -98,11 +98,12 @@ public:
 
   Bitmap hAboveTerrainBitmap;
   Brush hAboveTerrainBrush;
-  Bitmap hAirspaceInterceptBitmap;
-
-  Bitmap hCruise, hClimb, hFinalGlide, hAutoMacCready,
-      hTerrainWarning, hGPSStatus1, hGPSStatus2, hAbort, hLogger, hLoggerOff,
-      hFLARMTraffic;
+  MaskedIcon hAirspaceInterceptBitmap;
+  MaskedIcon hTerrainWarning;
+  MaskedIcon hFLARMTraffic;
+  MaskedIcon hLogger, hLoggerOff;
+  MaskedIcon hCruise, hClimb, hFinalGlide, hAbort;
+  MaskedIcon hAutoMacCready, hGPSStatus1, hGPSStatus2;
 
   Brush hBackgroundBrush;
 
@@ -145,9 +146,9 @@ public:
   MaskedIcon SmallIcon, TurnPointIcon;
   MaskedIcon AirportReachableIcon, AirportUnreachableIcon;
   MaskedIcon FieldReachableIcon, FieldUnreachableIcon;
-  Bitmap hBmpThermalSource;
-  Bitmap hBmpTarget;
-  Bitmap hBmpTeammatePosition;
+  MaskedIcon hBmpThermalSource;
+  MaskedIcon hBmpTarget;
+  MaskedIcon hBmpTeammatePosition;
 
   Bitmap hBmpMapScale;
   Bitmap hBmpCompassBg;

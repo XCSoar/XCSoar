@@ -72,10 +72,12 @@ protected:
     {
       if (!do_draw_target(tp)) 
         return;
-      
-      m_map.draw_masked_bitmap_if_visible(m_buffer, MapGfx.hBmpTarget,
-                                          tp.get_location_remaining(),
-                                          10, 10);
+
+      POINT sc;
+      if (m_map.LonLat2ScreenIfVisible(tp.get_location_remaining(), &sc)) {
+        MapGfx.hBmpTarget.draw(m_canvas, 
+                               m_map.get_bitmap_canvas(), sc.x, sc.y);
+      }
     }
   void draw_off_track(const TaskPoint &tp) 
     {

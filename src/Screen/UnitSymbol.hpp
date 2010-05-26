@@ -42,6 +42,9 @@ Copyright_License {
 #include "Units.hpp"
 #include "Screen/Bitmap.hpp"
 
+class Canvas;
+class BitmapCanvas;
+
 class UnitSymbol {
 public:
   enum kind {
@@ -83,6 +86,9 @@ public:
   const SIZE get_size() const {
     return size;
   }
+
+  void draw(Canvas& canvas, BitmapCanvas& bitmap_canvas,
+            const int x, const int y) const;
 };
 
 void

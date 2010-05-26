@@ -180,7 +180,7 @@ MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc, const GPS_STATE &gps)
   TCHAR gpswarningtext2[] = TEXT("GPS waiting for fix");
   TextInBoxMode_t TextInBoxMode = { 2 };
   TCHAR *txt = NULL;
-  Bitmap *bmp = NULL;
+  MaskedIcon *bmp = NULL;
 
   if (!gps.Connected) {
     bmp = &MapGfx.hGPSStatus2;
@@ -192,10 +192,10 @@ MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc, const GPS_STATE &gps)
     return; // early exit
   }
 
-  draw_bitmap(canvas, *bmp,
-              rc.left + IBLSCALE(2),
-              rc.bottom + IBLSCALE(Appearance.GPSStatusOffset.y - 22),
-              0, 0, 20, 20, false);
+  bmp->draw(canvas, get_bitmap_canvas(),
+            rc.left + IBLSCALE(2),
+            rc.bottom + IBLSCALE(Appearance.GPSStatusOffset.y - 22));
+
   TextInBox(canvas, gettext(txt),
             rc.left + IBLSCALE(24),
             rc.bottom + IBLSCALE(Appearance.GPSStatusOffset.y - 19),
@@ -227,20 +227,18 @@ MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 
     if (drawlogger) {
       offset -= 7;
-
-      draw_masked_bitmap(canvas,
-                         (logger.isLoggerActive() && flip) ?
-                         MapGfx.hLogger : MapGfx.hLoggerOff,
-                         rc.right +
-                         IBLSCALE(offset + Appearance.FlightModeOffset.x),
-                         rc.bottom +
-                         IBLSCALE(-7 + Appearance.FlightModeOffset.y),
-                         7, 7, false);
+      MaskedIcon &icon = (logger.isLoggerActive() && flip) ?
+        MapGfx.hLogger : MapGfx.hLoggerOff;
+      icon.draw(canvas, get_bitmap_canvas(), 
+                rc.right +
+                IBLSCALE(offset + Appearance.FlightModeOffset.x),
+                rc.bottom +
+                IBLSCALE(-7 + Appearance.FlightModeOffset.y));
     }
   }
 
   if (Appearance.FlightModeIcon == apFlightModeIconDefault) {
-    Bitmap *bmp;
+    MaskedIcon *bmp;
 
     if (task != NULL && (task->get_mode() == TaskManager::MODE_ABORT))
       bmp = &MapGfx.hAbort;
@@ -253,54 +251,19 @@ MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 
     offset -= 24;
 
-    draw_masked_bitmap(canvas, *bmp,
-		       rc.right + IBLSCALE(offset - 1 + Appearance.FlightModeOffset.x),
-		       rc.bottom + IBLSCALE(-20 - 1 + Appearance.FlightModeOffset.y),
-		       24, 20, false);
+    bmp->draw(canvas, get_bitmap_canvas(),
+              rc.right + IBLSCALE(offset - 1 + Appearance.FlightModeOffset.x),
+              rc.bottom + IBLSCALE(-20 - 1 + Appearance.FlightModeOffset.y));
 
-  } else if (Appearance.FlightModeIcon == apFlightModeIconAltA) {
-    #define SetPoint(Idx,X,Y) Arrow[Idx].x = X; Arrow[Idx].y = Y
-
-    POINT Arrow[3];
-    POINT Center;
-
-    Center.x = rc.right - 10;
-    Center.y = rc.bottom - 10;
-
-    if (DisplayMode == dmCircling) {
-      SetPoint(0, Center.x, Center.y - IBLSCALE(4));
-      SetPoint(1, Center.x - IBLSCALE(8), Center.y + IBLSCALE(4));
-      SetPoint(2, Center.x + IBLSCALE(8), Center.y + IBLSCALE(4));
-    } else if (DisplayMode == dmFinalGlide) {
-      SetPoint(0, Center.x, Center.y + IBLSCALE(4));
-      SetPoint(1, Center.x - IBLSCALE(8), Center.y - IBLSCALE(4));
-      SetPoint(2, Center.x + IBLSCALE(8), Center.y - IBLSCALE(4));
-    } else {
-      SetPoint(0, Center.x + IBLSCALE(4), Center.y);
-      SetPoint(1, Center.x - IBLSCALE(4), Center.y + IBLSCALE(8));
-      SetPoint(2, Center.x - IBLSCALE(4), Center.y - IBLSCALE(8));
-    }
-
-    if (task != NULL && (task->get_mode() == TaskManager::MODE_ABORT))
-      canvas.select(MapGfx.hBrushFlyingModeAbort);
-    else
-      canvas.select(MapGfx.hbCompass);
-
-    canvas.select(MapGfx.hpCompassBorder);
-    canvas.polygon(Arrow, 3);
-
-    canvas.select(MapGfx.hpCompass);
-    canvas.polygon(Arrow, 3);
   }
 
   if (!Appearance.DontShowAutoMacCready && SettingsComputer().auto_mc) {
     offset -= 24;
 
     //changed draw mode & icon for higher opacity 12aug -st
-    draw_masked_bitmap(canvas, MapGfx.hAutoMacCready,
-		       rc.right + IBLSCALE(offset - 3 + Appearance.FlightModeOffset.x),
-		       rc.bottom + IBLSCALE(-20 - 3 + Appearance.FlightModeOffset.y),
-		       24, 20, false);
+    MapGfx.hAutoMacCready.draw(canvas, get_bitmap_canvas(),
+                               rc.right + IBLSCALE(offset - 3 + Appearance.FlightModeOffset.x),
+                               rc.bottom + IBLSCALE(-20 - 3 + Appearance.FlightModeOffset.y));
   }
 }
 
@@ -618,14 +581,11 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
                   MapWindowBoldFont.get_ascent_height() + IBLSCALE(1), Value);
 
       const UnitSymbol *unit_symbol = GetUnitSymbol(
-          Units::GetUserAltitudeUnit());
+        Units::GetUserAltitudeUnit());
 
       if (unit_symbol != NULL) {
-        POINT BmpPos = unit_symbol->get_origin(UnitSymbol::NORMAL);
-        SIZE size = unit_symbol->get_size();
-
-        draw_bitmap(canvas, *unit_symbol, x + TextSize.cx + IBLSCALE(1), y,
-                    BmpPos.x, BmpPos.y, size.cx, size.cy, false);
+        unit_symbol->draw(canvas, get_bitmap_canvas(),
+                          x + TextSize.cx + IBLSCALE(1), y);
       }
     }
   }

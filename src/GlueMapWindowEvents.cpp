@@ -166,7 +166,7 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
         task->setTaskPoint(index, tp);
         TargetDrag_Location = mouseMove;
 
-        draw_masked_bitmap(get_canvas(), MapGfx.hBmpTarget, x, y, 10, 10, true);
+        MapGfx.hBmpTarget.draw(get_canvas(), get_bitmap_canvas(), x, y);
         return true;
       }
     }

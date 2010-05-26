@@ -356,61 +356,6 @@ void MapWindow::ApplyScreenSize() {
   }
 }
 
-void
-MapWindow::draw_bitmap(Canvas &canvas, const Bitmap &bitmap,
-                       const int x, const int y,
-                       const unsigned src_x_offset,
-                       const unsigned src_y_offset,
-                       const unsigned src_width,
-                       const unsigned src_height,
-                       bool centered)
-{
-  int x_offset = centered? IBLSCALE(src_width)/2 : 0;
-  int y_offset = centered? IBLSCALE(src_height)/2 : 0;
-
-  bitmap_canvas.background_opaque();
-  bitmap_canvas.set_text_color(Color::WHITE);
-  bitmap_canvas.select(bitmap);
-  canvas.scale_copy(x-x_offset, y-y_offset,
-		    bitmap_canvas,
-		    src_x_offset, src_y_offset,
-		    src_width, src_height);
-}
-
-void
-MapWindow::draw_masked_bitmap(Canvas &canvas, 
-                              const Bitmap &bitmap,
-                              const int x, const int y,
-                              const unsigned src_width,
-                              const unsigned src_height,
-                              bool centered)
-{
-  const int x_offset = centered? IBLSCALE(src_width)/2 : 0;
-  const int y_offset = centered? IBLSCALE(src_height)/2 : 0;
-
-  bitmap_canvas.background_opaque();
-  bitmap_canvas.set_text_color(Color::WHITE);
-  bitmap_canvas.select(bitmap);
-  canvas.scale_or_and(x-x_offset, y-y_offset, bitmap_canvas, src_width, src_height);
-}
-
-bool MapWindow::draw_masked_bitmap_if_visible(Canvas &canvas,
-					      Bitmap &bitmap,
-					      const GEOPOINT &loc,
-					      const unsigned width,
-					      const unsigned height,
-					      POINT *scin)
-{
-  POINT sc;
-  POINT *scp = (scin!=NULL)? (scin):(&sc);
-
-  if (LonLat2ScreenIfVisible(loc, scp)) {
-    draw_masked_bitmap(canvas, bitmap, scp->x, scp->y, width, height, true);
-    return true;
-  }
-  return false;
-}
-
 
 GlidePolar 
 MapWindow::get_glide_polar() const

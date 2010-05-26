@@ -87,9 +87,9 @@ XShape::load(shapefileObj* shpfile, int i)
 }
 
 void
-Topology::loadBitmap(const int xx)
+Topology::loadIcon(const int xx)
 {
-  hBitmap.load(xx);
+  icon.load(xx);
 }
 
 Topology::Topology(const char* shpname, const Color thecolor, bool doappend)
@@ -253,13 +253,13 @@ Topology::checkVisible(const shapeObj& shape,
 }
 
 void
-Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
+Topology::Paint(Canvas &canvas, MapWindow &map_window, const RECT rc)
 {
   if (!shapefileopen)
     return;
 
-  MapWindowProjection &map_projection = m_window;
-  LabelBlock &label_block = m_window.getLabelBlock();
+  MapWindowProjection &map_projection = map_window;
+  LabelBlock &label_block = map_window.getLabelBlock();
 
   double map_scale = map_projection.GetMapScaleUser();
 
@@ -295,7 +295,7 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
 #endif  
 
   static POINT pt[MAXCLIPPOLYGON];
-  const bool render_labels = (m_window.SettingsMap().DeclutterLabels < 2);
+  const bool render_labels = (map_window.SettingsMap().DeclutterLabels < 2);
 
   for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
     XShape *cshape = shpCache[ixshp];
@@ -316,7 +316,9 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
           const GEOPOINT l = map_projection.
             point2GeoPoint(shape->line[tt].point[jj]);
 
-          if (m_window.draw_masked_bitmap_if_visible(canvas, hBitmap, l, 10, 10, &sc)) {
+          if (map_projection.LonLat2ScreenIfVisible(l, &sc)) {
+            icon.draw(canvas, map_window.get_bitmap_canvas(),
+                      sc.x, sc.y);
             if (render_labels)
               cshape->renderSpecial(canvas, label_block, sc.x, sc.y);
           }

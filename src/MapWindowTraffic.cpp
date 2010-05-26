@@ -225,7 +225,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 
     // If FLARM alarm draw alarm icon below corresponding target
     if ((traffic.AlarmLevel > 0) && (traffic.AlarmLevel < 4)) {
-      draw_masked_bitmap(canvas, MapGfx.hFLARMTraffic, sc.x, sc.y, 10, 10, true);
+      MapGfx.hFLARMTraffic.draw(canvas, 
+                                  get_bitmap_canvas(), sc.x, sc.y);
     }
 
     // Fill the Arrow array with a normal arrow pointing north
@@ -278,7 +279,10 @@ void
 MapWindow::DrawTeammate(Canvas &canvas)
 {
   if (SettingsComputer().TeammateCodeValid) {
-    draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTeammatePosition,
-        Calculated().TeammateLocation, 20, 20);
+    POINT sc;
+    if (LonLat2ScreenIfVisible(Calculated().TeammateLocation, &sc)) {
+      MapGfx.hBmpTeammatePosition.draw(canvas, 
+                                       get_bitmap_canvas(), sc.x, sc.y);
+    }
   }
 }

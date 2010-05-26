@@ -72,16 +72,20 @@ void
 MapWindow::DrawThermalEstimate(Canvas &canvas)
 {
   if (DisplayMode == dmCircling) {
-    if (positive(Calculated().ThermalEstimate_R))
-      draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpThermalSource,
-                                    Calculated().ThermalEstimate_Location,
-                                    10, 10);
+    if (positive(Calculated().ThermalEstimate_R)) {
+      POINT sc;
+      if (LonLat2ScreenIfVisible(Calculated().ThermalEstimate_Location, &sc)) {
+        MapGfx.hBmpThermalSource.draw(canvas, 
+                                      get_bitmap_canvas(), sc.x, sc.y);
+      }
+    }
   } else if (GetMapScaleKM() <= fixed_four) {
     for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
-      if (ThermalSources[i].Visible)
-        draw_masked_bitmap(canvas, MapGfx.hBmpThermalSource,
-                           ThermalSources[i].Screen.x,
-                           ThermalSources[i].Screen.y, 10, 10, true);
+      if (ThermalSources[i].Visible) 
+        MapGfx.hBmpThermalSource.draw(canvas, 
+                                      get_bitmap_canvas(), 
+                                      ThermalSources[i].Screen.x,
+                                      ThermalSources[i].Screen.y);
     }
   }
 }

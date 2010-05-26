@@ -100,9 +100,11 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
 
   if (!(Calculated().TerrainWarningLocation.equals(null_point))) {
     
-    draw_masked_bitmap_if_visible(canvas, MapGfx.hTerrainWarning,
-                                  Calculated().TerrainWarningLocation,
-                                  10, 10);
+    POINT sc;
+    if (LonLat2ScreenIfVisible(Calculated().TerrainWarningLocation, &sc)) {
+      MapGfx.hTerrainWarning.draw(canvas, 
+                                  get_bitmap_canvas(), sc.x, sc.y);
+    }
   }
 }
 

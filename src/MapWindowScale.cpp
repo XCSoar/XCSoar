@@ -121,6 +121,25 @@ void MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc)
 }
 
 
+static void
+draw_bitmap(Canvas &canvas, 
+            BitmapCanvas &bitmap_canvas, 
+            const Bitmap &bitmap,
+            const int x, const int y,
+            const unsigned src_x_offset,
+            const unsigned src_y_offset,
+            const unsigned src_width,
+            const unsigned src_height)
+{
+  bitmap_canvas.background_opaque();
+  bitmap_canvas.set_text_color(Color::WHITE);
+  bitmap_canvas.select(bitmap);
+  canvas.scale_copy(x, y,
+		    bitmap_canvas,
+		    src_x_offset, src_y_offset,
+		    src_width, src_height);
+}
+
 void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
                              const bool ScaleChangeFeedback)
 {
@@ -162,23 +181,19 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
                 rc.bottom - MapWindowBoldFont.get_ascent_height() - IBLSCALE(1),
                 ScaleInfo);
 
-    draw_bitmap(canvas, MapGfx.hBmpMapScale,
+    draw_bitmap(canvas, get_bitmap_canvas(), MapGfx.hBmpMapScale,
 		0, rc.bottom-Height,
-		0, 0, 6, 11, false);
-    draw_bitmap(canvas, MapGfx.hBmpMapScale,
+		0, 0, 6, 11);
+    draw_bitmap(canvas, get_bitmap_canvas(), MapGfx.hBmpMapScale,
 		IBLSCALE(14)+TextSize.cx, rc.bottom-Height,
-		6, 0, 8, 11, false);
+		6, 0, 8, 11);
 
     if (!ScaleChangeFeedback){
       const UnitSymbol *symbol = GetUnitSymbol(Unit);
 
       if (symbol != NULL) {
-        POINT origin = symbol->get_origin(UnitSymbol::NORMAL);
-        SIZE size = symbol->get_size();
-
-        draw_bitmap(canvas, *symbol,
-                    IBLSCALE(8) + TextSize.cx, rc.bottom - Height,
-                    origin.x, origin.y, size.cx, size.cy, false);
+        symbol->draw(canvas, get_bitmap_canvas(),
+                     IBLSCALE(8) + TextSize.cx, rc.bottom - Height);
       }
     }
 
