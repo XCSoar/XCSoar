@@ -150,13 +150,13 @@ Topology::~Topology()
 }
 
 bool
-Topology::CheckScale(double map_scale)
+Topology::CheckScale(const double map_scale) const
 {
   return (map_scale <= scaleThreshold);
 }
 
 void
-Topology::TriggerIfScaleNowVisible(Projection &map_projection)
+Topology::TriggerIfScaleNowVisible(const Projection &map_projection)
 {
   triggerUpdateCache |= (CheckScale(map_projection.GetMapScaleUser()) != in_scale);
 }
@@ -246,7 +246,8 @@ Topology::removeShape(const int i)
 }
 
 bool
-Topology::checkVisible(shapeObj& shape, rectObj &screenRect)
+Topology::checkVisible(const shapeObj& shape, 
+                       const rectObj &screenRect) const
 {
   return (msRectOverlap(&shape.bounds, &screenRect) == MS_TRUE);
 }
@@ -302,7 +303,7 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
     if (!cshape || cshape->hide)
       continue;
 
-    shapeObj *shape = &(cshape->shape);
+    const shapeObj *shape = &(cshape->shape);
 
     switch (shape->type) {
     case (MS_SHAPE_POINT):

@@ -97,7 +97,7 @@ public:
 
   void Open();
   void Close();
-  void TriggerIfScaleNowVisible(Projection &map_projection);
+  void TriggerIfScaleNowVisible(const Projection &map_projection);
 
   void updateCache(Projection &map_projection,
 		   const rectObj &thebounds, bool purgeonly = false);
@@ -108,19 +108,19 @@ public:
   bool triggerUpdateCache;
 
   int
-  getNumVisible()
+  getNumVisible() const
   {
     return shapes_visible_count;
   }
 
 private:
-  bool CheckScale(double map_scale);
+  bool CheckScale(const double map_scale) const;
 
   int shapes_visible_count;
 
   XShape** shpCache;
 
-  bool checkVisible(shapeObj& shape, rectObj &screenRect);
+  bool checkVisible(const shapeObj& shape, const rectObj &screenRect) const;
 
   virtual void removeShape(const int i);
   virtual XShape* addShape(const int i);
