@@ -42,7 +42,7 @@ Copyright_License {
 #include "wcecompat/ts_string.h"
 #include "Screen/Util.hpp"
 #include "MapWindow.hpp"
-#include "MapWindowProjection.hpp"
+#include "Projection.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/LabelBlock.hpp"
