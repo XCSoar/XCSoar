@@ -635,28 +635,21 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas)
   canvas.select(MapGfx.hpBestCruiseTrack);
   canvas.select(MapGfx.hbBestCruiseTrack);
 
+  const Angle angle = Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing
+                    - GetDisplayAngle();
+
   if (Appearance.BestCruiseTrack == ctBestCruiseTrackDefault) {
-    int dy = (long)(70);
-    POINT Arrow[7] = { { -1, -40 }, { 1, -40 }, { 1, 0 }, { 6, 8 }, { -6, 8 },
-        { -1, 0 }, { -1, -40 } };
+    POINT Arrow[] = { { -1, -40 }, {  1, -40 }, {  1, -70 }, { 6, -62 },
+                      { -6, -62 }, { -1, -70 }, { -1, -40 } };
 
-    Arrow[2].y -= dy;
-    Arrow[3].y -= dy;
-    Arrow[4].y -= dy;
-    Arrow[5].y -= dy;
-    const Angle angle = Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing
-                      - GetDisplayAngle();
-
-    PolygonRotateShift(Arrow, 7, GetOrigAircraft().x, GetOrigAircraft().y,
+    PolygonRotateShift(Arrow, sizeof(Arrow) / sizeof(Arrow[0]),
+                       GetOrigAircraft().x, GetOrigAircraft().y,
                        angle);
 
-    canvas.polygon(Arrow, 7);
+    canvas.polygon(Arrow, sizeof(Arrow) / sizeof(Arrow[0]));
   } else if (Appearance.BestCruiseTrack == ctBestCruiseTrackAltA) {
-    POINT Arrow[] = { { -1, -40 }, { -1, -62 }, { -6, -62 }, { 0, -70 },
-                      { 6, -62 }, { 1, -62 }, { 1, -40 }, { -1, -40 } };
-
-    const Angle angle = Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing
-                      - GetDisplayAngle();
+    POINT Arrow[] = { { -1, -40 }, { -1, -62 }, { -6, -62 }, {  0, -70 },
+                      {  6, -62 }, {  1, -62 }, {  1, -40 }, { -1, -40 } };
 
     PolygonRotateShift(Arrow, sizeof(Arrow) / sizeof(Arrow[0]),
                        GetOrigAircraft().x, GetOrigAircraft().y,
