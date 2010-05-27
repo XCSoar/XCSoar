@@ -66,7 +66,6 @@ MapWindow::DrawCrossHairs(Canvas &canvas)
 void
 MapWindow::DrawAircraft(Canvas &canvas)
 {
-
   if (Appearance.Aircraft == afAircraftDefault) {
     #define NUMAIRCRAFTPOINTS 16
     POINT Aircraft[NUMAIRCRAFTPOINTS] = {
@@ -88,7 +87,6 @@ MapWindow::DrawAircraft(Canvas &canvas)
       {-1, -6}
     };
 
-    int i;
     Brush hbAircraftSolid, hbAircraftSolidBg;
 
     hbAircraftSolid.set(Appearance.InverseAircraft
@@ -110,7 +108,7 @@ MapWindow::DrawAircraft(Canvas &canvas)
     canvas.select(MapGfx.hpAircraftBorder);
     canvas.select(hbAircraftSolid);
 
-    for (i = 0; i < NUMAIRCRAFTPOINTS; i++) {
+    for (int i = 0; i < NUMAIRCRAFTPOINTS; i++) {
       Aircraft[i].x -= 1;
       Aircraft[i].y -= 1;
     }
@@ -138,20 +136,10 @@ MapWindow::DrawAircraft(Canvas &canvas)
       {1, -5},
     };
 
-    /* Experiment, when turning show the high wing larger, low wing smaller
-    if (Calculated().TurnRate>10) {
-      Aircraft[3].y = 0;
-      Aircraft[12].y = 2;
-    } else if (Calculated().TurnRate<-10) {
-      Aircraft[3].y = 2;
-      Aircraft[12].y = 0;
-    }
-    */
-
-      int n = sizeof(Aircraft) / sizeof(Aircraft[0]);
+    int n = sizeof(Aircraft) / sizeof(Aircraft[0]);
 
     const Angle angle = DisplayAircraftAngle +
-      (Basic().Heading - Basic().TrackBearing);
+                        (Basic().Heading - Basic().TrackBearing);
 
     PolygonRotateShift(Aircraft, n, GetOrigAircraft().x - 1, 
                        GetOrigAircraft().y, angle);
@@ -164,7 +152,7 @@ MapWindow::DrawAircraft(Canvas &canvas)
     else
       canvas.black_brush();
 
-    canvas.select(MapGfx.hpAircraftBorder); // hpBearing
+    canvas.select(MapGfx.hpAircraftBorder);
     canvas.polygon(Aircraft, n);
   }
 }
@@ -219,21 +207,20 @@ MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
       flip = !flip;
 
       // don't bother drawing logger if not active for more than one second
-      if ((!logger.isLoggerActive()) && (!lastLoggerActive)) {
+      if ((!logger.isLoggerActive()) && (!lastLoggerActive))
         drawlogger = false;
-      }
+
       lastLoggerActive = logger.isLoggerActive();
     }
 
     if (drawlogger) {
       offset -= 7;
       MaskedIcon &icon = (logger.isLoggerActive() && flip) ?
-        MapGfx.hLogger : MapGfx.hLoggerOff;
-      icon.draw(canvas, get_bitmap_canvas(), 
-                rc.right +
-                IBLSCALE(offset + Appearance.FlightModeOffset.x),
-                rc.bottom +
-                IBLSCALE(-7 + Appearance.FlightModeOffset.y));
+                         MapGfx.hLogger : MapGfx.hLoggerOff;
+
+      icon.draw(canvas, get_bitmap_canvas(),
+                rc.right + IBLSCALE(offset + Appearance.FlightModeOffset.x),
+                rc.bottom + IBLSCALE(-7 + Appearance.FlightModeOffset.y));
     }
   }
 
@@ -310,8 +297,8 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
   for (i = 1; i < 4; i++)
     Arrow[i].y -= wmag;
 
-  PolygonRotateShift(Arrow, 7, Start.x, Start.y,
-                     wind.bearing - GetDisplayAngle());
+  PolygonRotateShift(Arrow, 7, Start.x, Start.y, wind.bearing
+      - GetDisplayAngle());
 
   canvas.polygon(Arrow, 5);
 
@@ -333,19 +320,18 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
   _stprintf(sTmp, TEXT("%i"),
             iround(Units::ToUserUnit(wind.norm, Units::WindSpeedUnit)));
 
-  TextInBoxMode_t TextInBoxMode = { 16 | 32 }; // JMW test {2 | 16};
-  if (Arrow[5].y >= Arrow[6].y) {
+  TextInBoxMode_t TextInBoxMode = { 16 | 32 };
+
+  if (Arrow[5].y >= Arrow[6].y)
     TextInBox(canvas, sTmp, Arrow[5].x - kx, Arrow[5].y, TextInBoxMode, rc);
-  } else {
+  else
     TextInBox(canvas, sTmp, Arrow[6].x - kx, Arrow[6].y, TextInBoxMode, rc);
-  }
 }
 
 void
 MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
 {
   POINT Start;
-
   Start.y = IBLSCALE(55) + rc.top;
   Start.x = rc.right - IBLSCALE(19);
 
@@ -359,10 +345,10 @@ MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
 
   int radius = IBLSCALE(17);
   fixed phi = max(-fixed_89, min(fixed_89, Basic().acceleration.BankAngle));
-  fixed alpha = fixed_rad_to_deg
-      * acos(max(-fixed_one, min(fixed_one,
-                                 Basic().acceleration.PitchAngle
-                                 * fixed_div)));
+  fixed alpha = fixed_rad_to_deg *
+                acos(max(-fixed_one,
+                     min(fixed_one,
+                         Basic().acceleration.PitchAngle * fixed_div)));
   fixed sphi = fixed_180 - phi;
   Angle alpha1 = Angle::degrees(sphi - alpha);
   Angle alpha2 = Angle::degrees(sphi + alpha);
@@ -432,9 +418,8 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
       Offset = -60;
 
     Offset = IBLSCALE(Offset);
-    if (Offset < 0) {
+    if (Offset < 0)
       GlideBar[1].y = IBLSCALE(9);
-    }
 
     if (Offset0 > 60)
       Offset0 = 60;
@@ -442,14 +427,14 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
       Offset0 = -60;
 
     Offset0 = IBLSCALE(Offset0);
-    if (Offset0 < 0) {
+    if (Offset0 < 0)
       GlideBar0[1].y = IBLSCALE(9);
-    }
 
     for (i = 0; i < 6; i++) {
       GlideBar[i].y += y0;
       GlideBar[i].x = IBLSCALE(GlideBar[i].x) + rc.left;
     }
+
     GlideBar[0].y -= Offset;
     GlideBar[1].y -= Offset;
     GlideBar[2].y -= Offset;
@@ -458,6 +443,7 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
       GlideBar0[i].y += y0;
       GlideBar0[i].x = IBLSCALE(GlideBar0[i].x) + rc.left;
     }
+
     GlideBar0[0].y -= Offset0;
     GlideBar0[1].y -= Offset0;
     GlideBar0[2].y -= Offset0;
@@ -484,9 +470,8 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
       GlideBar0[4].y = GlideBar[1].y;
       GlideBar0[5].y = GlideBar[2].y;
 
-      if (abs(Offset0 - Offset) < IBLSCALE(4)) {
+      if (abs(Offset0 - Offset) < IBLSCALE(4))
         Offset = Offset0;
-      }
     }
 
     // draw actual glide bar
@@ -543,15 +528,12 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
                                 Value, sizeof(Value) / sizeof(Value[0]),
                                 false);
 
-      if (Offset >= 0) {
+      if (Offset >= 0)
         Offset = GlideBar[2].y + Offset + IBLSCALE(5);
-      } else {
-        if (Offset0 > 0) {
-          Offset = GlideBar0[1].y - IBLSCALE(15);
-        } else {
-          Offset = GlideBar[2].y + Offset - IBLSCALE(15);
-        }
-      }
+      else if (Offset0 > 0)
+        Offset = GlideBar0[1].y - IBLSCALE(15);
+      else
+        Offset = GlideBar[2].y + Offset - IBLSCALE(15);
 
       TextInBoxMode_t TextInBoxMode = { 1 | 8 };
       TextInBox(canvas, Value, 0, (int)Offset, TextInBoxMode, rc);
@@ -565,13 +547,12 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
       int x = GlideBar[2].x + IBLSCALE(1);
 
       Units::FormatUserAltitude(Calculated().task_stats.total.solution_remaining.AltitudeDifference,
-                                Value, sizeof(Value) / sizeof(Value[0]),
-                                false);
+                                Value, sizeof(Value) / sizeof(Value[0]), false);
 
       canvas.select(MapWindowBoldFont);
       TextSize = canvas.text_size(Value);
 
-        canvas.white_brush();
+      canvas.white_brush();
       canvas.white_pen();
       canvas.rectangle(x, y, x + IBLSCALE(1) + TextSize.cx,
                        y + MapWindowBoldFont.get_capital_height() + IBLSCALE(2));
@@ -583,10 +564,9 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
       const UnitSymbol *unit_symbol = GetUnitSymbol(
         Units::GetUserAltitudeUnit());
 
-      if (unit_symbol != NULL) {
+      if (unit_symbol != NULL)
         unit_symbol->draw(canvas, get_bitmap_canvas(),
                           x + TextSize.cx + IBLSCALE(1), y);
-      }
     }
   }
 }
@@ -665,7 +645,7 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas)
     Arrow[4].y -= dy;
     Arrow[5].y -= dy;
     const Angle angle = Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing
-      -GetDisplayAngle();
+                      - GetDisplayAngle();
 
     PolygonRotateShift(Arrow, 7, GetOrigAircraft().x, GetOrigAircraft().y,
                        angle);
@@ -676,7 +656,7 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas)
                       { 6, -62 }, { 1, -62 }, { 1, -40 }, { -1, -40 } };
 
     const Angle angle = Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing
-      -GetDisplayAngle();
+                      - GetDisplayAngle();
 
     PolygonRotateShift(Arrow, sizeof(Arrow) / sizeof(Arrow[0]),
                        GetOrigAircraft().x, GetOrigAircraft().y,
@@ -689,9 +669,9 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas)
 #include "Gauge/GaugeCDI.hpp"
 
 void MapWindow::DrawCDI() {
-  bool dodrawcdi = Calculated().Circling
-    ? SettingsMap().EnableCDICircling
-    : SettingsMap().EnableCDICruise;
+  bool dodrawcdi = Calculated().Circling ?
+                   SettingsMap().EnableCDICircling :
+                   SettingsMap().EnableCDICruise;
 
   if (dodrawcdi) {
     cdi->show_on_top();
