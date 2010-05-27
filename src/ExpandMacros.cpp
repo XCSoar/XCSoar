@@ -133,33 +133,31 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
       invalid = true;
       ReplaceInString(OutBuffer, TEXT("$(WaypointNext)"),
-          TEXT("Waypoint\nNext"), Size);
+          TEXT("Next\nTurnpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
       invalid = true;
       ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"),
-          TEXT("Waypoint\nPrevious"), Size);
+          TEXT("Previous\nTurnpoint"), Size);
     }
 
   } else if (Calculated().common_stats.mode_abort) {
 
     if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
-      // Waypoint\nNext
       invalid |= !Calculated().common_stats.active_has_next;
       CondReplaceInString(Calculated().common_stats.next_is_last,
                           OutBuffer,
                           TEXT("$(WaypointNext)"),
-                          TEXT("Landpoint\nFurthest"),
-                          TEXT("Landpoint\nNext"), Size);
+                          TEXT("Furthest\nLandpoint"),
+                          TEXT("Next\nLandpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
-      // Waypoint\nNext
       invalid |= !Calculated().common_stats.active_has_previous;
       CondReplaceInString(Calculated().common_stats.previous_is_first,
                           OutBuffer,
                           TEXT("$(WaypointPrevious)"),
-                          TEXT("Landpoint\nClosest"),
-                          TEXT("Landpoint\nPrevious"), Size);
+                          TEXT("Closest\nLandpoint"),
+                          TEXT("Previous\nLandpoint"), Size);
     }
 
   } else {
@@ -169,16 +167,16 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
       CondReplaceInString(Calculated().common_stats.next_is_last,
                           OutBuffer,
                           TEXT("$(WaypointNext)"),
-                          TEXT("Waypoint\nFinish"),
-                          TEXT("Waypoint\nNext"), Size);
+                          TEXT("Finish\nTurnpoint"),
+                          TEXT("Next\nTurnpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
       invalid |= !Calculated().common_stats.active_has_previous;
       CondReplaceInString(Calculated().common_stats.previous_is_first,
                           OutBuffer,
                           TEXT("$(WaypointPrevious)"),
-                          TEXT("Waypoint\nStart"),
-                          TEXT("Waypoint\nPrevious"), Size);
+                          TEXT("Start\nTurnpoint"),
+                          TEXT("Previous\nTurnpoint"), Size);
     } 
 #ifdef OLD_TASK // multiple start points
     else if (task.getSettings().EnableMultipleStartPoints) {
