@@ -662,15 +662,14 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas)
 #include "Gauge/GaugeCDI.hpp"
 
 void MapWindow::DrawCDI() {
-  bool dodrawcdi = Calculated().Circling ?
-                   SettingsMap().EnableCDICircling :
-                   SettingsMap().EnableCDICruise;
-
-  if (dodrawcdi) {
-    cdi->show_on_top();
-    cdi->Update(Basic().TrackBearing,
-                Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing);
-  } else {
+  if (Calculated().Circling ?
+      !SettingsMap().EnableCDICircling :
+      !SettingsMap().EnableCDICruise) {
     cdi->hide();
+    return;
   }
+
+  cdi->show_on_top();
+  cdi->Update(Basic().TrackBearing,
+              Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing);
 }
