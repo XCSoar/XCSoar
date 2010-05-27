@@ -370,9 +370,9 @@ location=1
 mode=Nav1
 type=key
 data=6
-event=GotoLookup
+event=Calculator
 event=Mode default
-label=GoTo
+label=Task\nCalc$(CheckTaskResumed)$(CheckTask)
 location=5
 
 mode=Nav1
@@ -429,9 +429,9 @@ location=5
 mode=Nav2
 type=key
 data=7
-event=Calculator
+event=GotoLookup
 event=Mode default
-label=Task\nCalc$(CheckTaskResumed)$(CheckTask)
+label=GoTo
 location=6
 
 mode=Nav2
