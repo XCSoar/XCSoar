@@ -51,8 +51,7 @@ Copyright_License {
 
 #include <stdio.h>
 
-class RenderTaskPointMap:
-  public RenderTaskPoint
+class RenderTaskPointMap: public RenderTaskPoint
 {
 public:
   RenderTaskPointMap(MapDrawHelper &_helper, 
@@ -68,78 +67,72 @@ public:
     m_draw_off_track(do_draw_off_track) {};
 
 protected:
-  void draw_target(const TaskPoint &tp) 
-    {
-      if (!do_draw_target(tp)) 
-        return;
+  void draw_target(const TaskPoint &tp)
+  {
+    if (!do_draw_target(tp))
+      return;
 
-      POINT sc;
-      if (m_map.LonLat2ScreenIfVisible(tp.get_location_remaining(), &sc)) {
-        MapGfx.hBmpTarget.draw(m_canvas, 
-                               m_map.get_bitmap_canvas(), sc.x, sc.y);
-      }
-    }
+    POINT sc;
+    if (m_map.LonLat2ScreenIfVisible(tp.get_location_remaining(), &sc))
+      MapGfx.hBmpTarget.draw(m_canvas, m_map.get_bitmap_canvas(), sc.x, sc.y);
+  }
+
   void draw_off_track(const TaskPoint &tp) 
     {
-      if (!m_draw_off_track) 
-        return;
-      if (!point_current())
-        return;
-      
-      GeoVector vec(m_location, tp.get_location_remaining());
+    if (!m_draw_off_track)
+      return;
+    if (!point_current())
+      return;
 
-      if ((m_bearing - vec.Bearing).as_delta().magnitude_degrees() < fixed(10)) {
-        // insignificant error
-        return;
-      }
+    GeoVector vec(m_location, tp.get_location_remaining());
 
-      double distance_max = min(vec.Distance,
-                                m_map.GetScreenDistanceMeters() * fixed(0.7));
-      if (distance_max < 5000.0) {
-        // too short to bother
-        return;
-      }
+    if ((m_bearing - vec.Bearing).as_delta().magnitude_degrees() < fixed(10))
+      // insignificant error
+      return;
 
-      GEOPOINT start = m_location;
-      GEOPOINT target = tp.get_location_remaining();
+    double distance_max = min(vec.Distance, m_map.GetScreenDistanceMeters()
+                              * fixed(0.7));
 
-      m_canvas.select(TitleWindowFont);
-      m_canvas.set_text_color(Color(0x0, 0x0, 0x0));
+    if (distance_max < 5000.0)
+      // too short to bother
+      return;
 
-      GEOPOINT dloc;
-      int ilast = 0;
-      for (double d=0.25; d<=1.0; d+= 0.25) {
-        FindLatitudeLongitude(start,
-                              m_bearing,
-                              (fixed)(distance_max*d),
-                              &dloc);
+    GEOPOINT start = m_location;
+    GEOPOINT target = tp.get_location_remaining();
 
-        double distance0 = Distance(start, dloc);
-        double distance1 = Distance(dloc, target);
-        double distance = fixed(distance0 + distance1) / vec.Distance;
-        int idist = iround((distance-1.0)*100);
+    m_canvas.select(TitleWindowFont);
+    m_canvas.set_text_color(Color(0x0, 0x0, 0x0));
 
-        if ((idist != ilast) && (idist>0) && (idist<1000)) {
+    GEOPOINT dloc;
+    int ilast = 0;
+    for (double d = 0.25; d <= 1.0; d += 0.25) {
+      FindLatitudeLongitude(start, m_bearing, (fixed)(distance_max * d), &dloc);
 
-          TCHAR Buffer[5];
-          _stprintf(Buffer, TEXT("%d"), idist);
-          POINT sc;
-          RECT brect;
-          m_map.LonLat2Screen(dloc, sc);
-          SIZE tsize = m_canvas.text_size(Buffer);
+      double distance0 = Distance(start, dloc);
+      double distance1 = Distance(dloc, target);
+      double distance = fixed(distance0 + distance1) / vec.Distance;
+      int idist = iround((distance - 1.0) * 100);
 
-          brect.left = sc.x-4;
-          brect.right = brect.left+tsize.cx+4;
-          brect.top = sc.y-4;
-          brect.bottom = brect.top+tsize.cy+4;
-          
-          if (m_map.getLabelBlock().check(brect)) {
-            m_canvas.text(sc.x - tsize.cx / 2, sc.y - tsize.cy / 2, Buffer);
-            ilast = idist;
-          }
+      if ((idist != ilast) && (idist > 0) && (idist < 1000)) {
+        TCHAR Buffer[5];
+        _stprintf(Buffer, TEXT("%d"), idist);
+        POINT sc;
+        RECT brect;
+        m_map.LonLat2Screen(dloc, sc);
+        SIZE tsize = m_canvas.text_size(Buffer);
+
+        brect.left = sc.x - 4;
+        brect.right = brect.left + tsize.cx + 4;
+        brect.top = sc.y - 4;
+        brect.bottom = brect.top + tsize.cy + 4;
+
+        if (m_map.getLabelBlock().check(brect)) {
+          m_canvas.text(sc.x - tsize.cx / 2, sc.y - tsize.cy / 2, Buffer);
+          ilast = idist;
         }
       }
     }
+  }
 
 private:
   MapWindow& m_map;
