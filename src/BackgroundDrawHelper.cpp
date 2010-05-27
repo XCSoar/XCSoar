@@ -35,6 +35,7 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "BackgroundDrawHelper.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/TerrainRenderer.hpp"
@@ -44,15 +45,12 @@ Copyright_License {
 BackgroundDrawHelper::BackgroundDrawHelper():
   m_rend(NULL)
 {
-
-
 }
 
 BackgroundDrawHelper::~BackgroundDrawHelper()
 {
-  if (m_rend) {
+  if (m_rend)
     delete m_rend;
-  }
 }
 
 void 
@@ -75,4 +73,3 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
                Angle::degrees(fixed(45.0)), 
                Angle::degrees(fixed(45.0)));
 }
-

@@ -35,6 +35,7 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #ifndef BACKGROUND_DRAW_HELPER_HPP
 #define BACKGROUND_DRAW_HELPER_HPP
 
@@ -61,6 +62,5 @@ public:
 private:
   TerrainRenderer* m_rend;
 };
-
 
 #endif
