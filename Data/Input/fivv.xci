@@ -422,7 +422,7 @@ type=key
 data=0
 event=Mode default
 event=WaypointDetails select
-label=Waypoint\nLookup$(CheckWaypointFile)
+label=Waypoint\nList$(CheckWaypointFile)
 location=9
 
 # -------------
