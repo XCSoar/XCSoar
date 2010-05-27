@@ -91,16 +91,12 @@ MapWindowProjection::CalculateOrientationNormal
 {
   Angle trackbearing = DrawInfo.TrackBearing;
 
-  if( (settings.DisplayOrientation == NORTHUP)
-      ||
-      ((settings.DisplayOrientation == NORTHTRACK)
-       &&(DisplayMode != dmCircling))
-      ||
-      (
-       ((settings.DisplayOrientation == NORTHCIRCLE)
-        ||(settings.DisplayOrientation==TRACKCIRCLE))
-       && (DisplayMode == dmCircling) )
-      ) {
+  if ((settings.DisplayOrientation == NORTHUP)
+      || ((settings.DisplayOrientation == NORTHTRACK)
+          && (DisplayMode != dmCircling))
+      || (((settings.DisplayOrientation == NORTHCIRCLE)
+           || (settings.DisplayOrientation == TRACKCIRCLE))
+          && (DisplayMode == dmCircling))) {
     _origin_centered = true;
 
     if (settings.DisplayOrientation == TRACKCIRCLE) {
@@ -119,7 +115,6 @@ MapWindowProjection::CalculateOrientationNormal
 
   DisplayAircraftAngle = DisplayAircraftAngle.as_bearing();
 }
-
 
 void
 MapWindowProjection::CalculateOrientationTargetPan
@@ -159,21 +154,17 @@ MapWindowProjection::CalculateOrientationTargetPan
 #endif
 }
 
-
 void
-MapWindowProjection::CalculateOrigin
-(const RECT rc,
- const NMEA_INFO &DrawInfo,
- const DERIVED_INFO &DerivedDrawInfo,
- const SETTINGS_COMPUTER &settings_computer,
- const SETTINGS_MAP &settings_map)
+MapWindowProjection::CalculateOrigin(const RECT rc, const NMEA_INFO &DrawInfo,
+    const DERIVED_INFO &DerivedDrawInfo,
+    const SETTINGS_COMPUTER &settings_computer,
+    const SETTINGS_MAP &settings_map)
 {
 
-  if (settings_map.TargetPan) {
+  if (settings_map.TargetPan)
     CalculateOrientationTargetPan(DrawInfo, DerivedDrawInfo, settings_map);
-  } else {
+  else
     CalculateOrientationNormal(DrawInfo, DerivedDrawInfo, settings_map);
-  }
 
   if (_origin_centered || settings_map.EnablePan) {
     Orig_Screen.x = (rc.left + rc.right)/2;
@@ -184,20 +175,16 @@ MapWindowProjection::CalculateOrigin
 		     settings_map.GliderScreenPosition/100)+rc.bottom;
   }
 
-  //
-  if (settings_map.EnablePan) {
+  if (settings_map.EnablePan)
     PanLocation = settings_map.PanLocation;
-  } else {
+  else
     // Pan is off
     PanLocation = DrawInfo.Location;
-  }
 
-  LonLat2Screen(DrawInfo.Location,
-                Orig_Aircraft);
+  LonLat2Screen(DrawInfo.Location, Orig_Aircraft);
 
   UpdateScreenBounds();
 }
-
 
 fixed
 MapWindowProjection::GetScreenDistanceMeters() const
@@ -205,9 +192,10 @@ MapWindowProjection::GetScreenDistanceMeters() const
   return DistancePixelsToMeters(max_dimension(MapRectBig));
 }
 
-fixed 
+fixed
 MapWindowProjection::LimitMapScale(fixed value,
-                                   const SETTINGS_MAP& settings_map) {
+    const SETTINGS_MAP& settings_map)
+{
 
   fixed minreasonable;
 
@@ -233,57 +221,56 @@ MapWindowProjection::LimitMapScale(fixed value,
   return value;
 }
 
-
-fixed MapWindowProjection::StepMapScale(int Step){
-  if (abs(Step)>=4) {
-    ScaleCurrent += Step/4;
-  } else {
+fixed
+MapWindowProjection::StepMapScale(int Step)
+{
+  if (abs(Step) >= 4)
+    ScaleCurrent += Step / 4;
+  else
     ScaleCurrent += Step;
-  }
-  ScaleCurrent = max(0,min(ScaleListCount-1, ScaleCurrent));
-  return((ScaleList[ScaleCurrent]*GetMapResolutionFactor())
-         /(IBLSCALE(/*Appearance.DefaultMapWidth*/ MapRect.right)));
+
+  ScaleCurrent = max(0, min(ScaleListCount - 1, ScaleCurrent));
+  return ((ScaleList[ScaleCurrent] * GetMapResolutionFactor())
+         / (IBLSCALE(/*Appearance.DefaultMapWidth*/MapRect.right)));
 }
 
-fixed MapWindowProjection::FindMapScale(const fixed Value){
+fixed
+MapWindowProjection::FindMapScale(const fixed Value)
+{
 
-  int    i;
+  int i;
   fixed BestFit(99999);
-  int    BestFitIdx=-1;
-  fixed DesiredScale =
-    (Value*IBLSCALE(/*Appearance.DefaultMapWidth*/ MapRect.right))/GetMapResolutionFactor();
+  int BestFitIdx = -1;
+  fixed DesiredScale = (Value * IBLSCALE(MapRect.right))
+                     / GetMapResolutionFactor();
 
-  for (i=0; i<ScaleListCount; i++){
-    fixed err = fabs(DesiredScale - ScaleList[i])/DesiredScale;
-    if (err < BestFit){
+  for (i = 0; i < ScaleListCount; i++) {
+    fixed err = fabs(DesiredScale - ScaleList[i]) / DesiredScale;
+    if (err < BestFit) {
       BestFit = err;
       BestFitIdx = i;
     }
   }
 
-  if (BestFitIdx != -1){
+  if (BestFitIdx != -1) {
     ScaleCurrent = BestFitIdx;
-    return((ScaleList[ScaleCurrent]*GetMapResolutionFactor())
-           /IBLSCALE(/*Appearance.DefaultMapWidth*/MapRect.right-MapRect.left));
+    return ((ScaleList[ScaleCurrent] * GetMapResolutionFactor())
+           / IBLSCALE(MapRect.right-MapRect.left));
   }
-  return(Value);
+
+  return Value;
 }
 
-
-
-void MapWindowProjection::ModifyMapScale
-(const SETTINGS_MAP &settings_map)
+void
+MapWindowProjection::ModifyMapScale(const SETTINGS_MAP &settings_map)
 {
   // limit zoomed in so doesn't reach silly levels
-  _RequestedMapScale =
-    LimitMapScale(_RequestedMapScale, settings_map);
+  _RequestedMapScale = LimitMapScale(_RequestedMapScale, settings_map);
   MapScale = _RequestedMapScale;
 
-  SetScaleMetersToScreen(Units::ToUserUnit(fixed(GetMapResolutionFactor()) /
-                                           MapScale, 
-                                           Units::DistanceUnit));
+  SetScaleMetersToScreen(Units::ToUserUnit(fixed(GetMapResolutionFactor())
+      / MapScale, Units::DistanceUnit));
 }
-
 
 void
 MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
@@ -295,24 +282,25 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   static DisplayMode_t DisplayModeLast = DisplayMode;
 
   // if there is user intervention in the scale
-  if (settings_map.MapScale>0) {
-    fixed ext_mapscale = LimitMapScale(fixed(settings_map.MapScale), settings_map);
-    if ((fabs(_RequestedMapScale - ext_mapscale) > fixed(0.05)) &&
-        positive(ext_mapscale) && (DisplayMode==DisplayModeLast)) {
+  if (settings_map.MapScale > 0) {
+    fixed ext_mapscale = LimitMapScale(fixed(settings_map.MapScale),
+        settings_map);
+    if ((fabs(_RequestedMapScale - ext_mapscale) > fixed(0.05))
+        && positive(ext_mapscale) && (DisplayMode == DisplayModeLast))
       _RequestedMapScale = ext_mapscale;
-    }
   }
-  if(MapScale != _RequestedMapScale) {
+
+  if(MapScale != _RequestedMapScale)
     ModifyMapScale(settings_map);
-  }
+
   DisplayModeLast = DisplayMode;
 
   fixed wpd;
-  if (settings_map.TargetPan) {
+  if (settings_map.TargetPan)
     wpd = settings_map.TargetZoomDistance;
-  } else {
+  else
     wpd = DerivedDrawInfo.ZoomDistance;
-  }
+
   if (settings_map.TargetPan) {
     // set scale exactly so that waypoint distance is the zoom factor
     // across the screen
@@ -323,38 +311,34 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   }
 
   if (settings_map.AutoZoom && positive(wpd)) {
-    if((((settings_map.DisplayOrientation == NORTHTRACK)
-	 &&(DisplayMode != dmCircling))
-	||(settings_map.DisplayOrientation == NORTHUP)
-	||
-	(((settings_map.DisplayOrientation == NORTHCIRCLE)
-	  || (settings_map.DisplayOrientation == TRACKCIRCLE))
-	 && (DisplayMode == dmCircling) ))
-       && !settings_map.TargetPan
-       ) {
+    if ((((settings_map.DisplayOrientation == NORTHTRACK)
+          && (DisplayMode != dmCircling))
+         || (settings_map.DisplayOrientation == NORTHUP)
+         || (((settings_map.DisplayOrientation == NORTHCIRCLE)
+             || (settings_map.DisplayOrientation == TRACKCIRCLE))
+            && (DisplayMode == dmCircling)))
+        && !settings_map.TargetPan) {
       AutoZoomFactor = 2.5;
     } else {
       AutoZoomFactor = 4;
     }
 
-    if((wpd < Units::ToSysUnit(AutoZoomFactor * MapScale, Units::DistanceUnit))
-       || (StartingAutoMapScale == fixed_zero)) {
+    if ((wpd < Units::ToSysUnit(AutoZoomFactor * MapScale, Units::DistanceUnit))
+        || (StartingAutoMapScale == fixed_zero)) {
       // waypoint is too close, so zoom in
       // OR just turned waypoint
 
       // this is the first time this waypoint has gotten close,
       // so save original map scale
 
-      if (StartingAutoMapScale == fixed_zero) {
-	StartingAutoMapScale = MapScale;
-      }
+      if (StartingAutoMapScale == fixed_zero)
+        StartingAutoMapScale = MapScale;
 
       // set scale exactly so that waypoint distance is the zoom factor
       // across the screen
-      _RequestedMapScale = LimitMapScale((fixed)Units::ToUserUnit(
-          wpd / AutoZoomFactor, Units::DistanceUnit), settings_map);
+      _RequestedMapScale = LimitMapScale((fixed)Units::ToUserUnit(wpd
+          / AutoZoomFactor, Units::DistanceUnit), settings_map);
       ModifyMapScale(settings_map);
-
     }
   }
 
@@ -384,9 +368,9 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
 #endif
 }
 
-
-void MapWindowProjection::ExchangeBlackboard(const DERIVED_INFO &derived_info,
-					     const SETTINGS_MAP &settings_map)
+void
+MapWindowProjection::ExchangeBlackboard(const DERIVED_INFO &derived_info,
+                                        const SETTINGS_MAP &settings_map)
 {
   UpdateMapScale(derived_info, settings_map);
   // done here to avoid double latency due to locks
@@ -394,17 +378,21 @@ void MapWindowProjection::ExchangeBlackboard(const DERIVED_INFO &derived_info,
 
 static const fixed MINRANGE(0.2);
 
-static bool RectangleIsInside(rectObj r_exterior, rectObj r_interior) {
-  if ((r_interior.minx >= r_exterior.minx)&&
-      (r_interior.maxx <= r_exterior.maxx)&&
-      (r_interior.miny >= r_exterior.miny)&&
+static bool
+RectangleIsInside(rectObj r_exterior, rectObj r_interior)
+{
+  if ((r_interior.minx >= r_exterior.minx) &&
+      (r_interior.maxx <= r_exterior.maxx) &&
+      (r_interior.miny >= r_exterior.miny) &&
       (r_interior.maxy <= r_exterior.maxy))
     return true;
   else
     return false;
 }
 
-bool MapWindowProjection::SmartBounds(const bool force) {
+bool
+MapWindowProjection::SmartBounds(const bool force)
+{
   const rectObj bounds_screen = CalculateScreenBounds(fixed_one);
   bool recompute = false;
 
@@ -412,38 +400,36 @@ bool MapWindowProjection::SmartBounds(const bool force) {
   // need to have some trigger for this..
 
   // trigger if the border goes outside the stored area
-  if (!RectangleIsInside(smart_bounds_active, bounds_screen)) {
+  if (!RectangleIsInside(smart_bounds_active, bounds_screen))
     recompute = true;
-  }
 
   // also trigger if the scale has changed heaps
-  const fixed range_real = fixed(max((bounds_screen.maxx-bounds_screen.minx),
-                                     (bounds_screen.maxy-bounds_screen.miny)));
-  const fixed range = max(fixed(MINRANGE),range_real);
+  const fixed range_real = fixed(max((bounds_screen.maxx - bounds_screen.minx),
+                                     (bounds_screen.maxy - bounds_screen.miny)));
+  const fixed range = max(fixed(MINRANGE), range_real);
 
-  fixed scale = range/smart_range_active;
-  if (max(scale, fixed_one / scale) > fixed(4)) {
+  fixed scale = range / smart_range_active;
+  if (max(scale, fixed_one / scale) > fixed(4))
     recompute = true;
-  }
 
   if (recompute || force) {
-
     // make bounds bigger than screen
-    if (range_real<MINRANGE) {
-      scale = BORDERFACTOR*MINRANGE/range_real;
-    } else {
+    if (range_real < MINRANGE)
+      scale = BORDERFACTOR * MINRANGE / range_real;
+    else
       scale = BORDERFACTOR;
-    }
+
     smart_bounds_active = CalculateScreenBounds(scale);
 
-    smart_range_active = max((smart_bounds_active.maxx-smart_bounds_active.minx),
-			     (smart_bounds_active.maxy-smart_bounds_active.miny));
+    smart_range_active = max((smart_bounds_active.maxx
+        - smart_bounds_active.minx), (smart_bounds_active.maxy
+        - smart_bounds_active.miny));
 
     // now update visibility of objects in the map window
     return true;
-  } else {
-    return false;
   }
+
+  return false;
 }
 
 fixed 
@@ -451,4 +437,3 @@ MapWindowProjection::GetMapScaleUser() const
 {
   return MapScale;
 }
-
