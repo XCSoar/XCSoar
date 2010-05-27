@@ -64,15 +64,13 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
   if (!terrain.isTerrainLoaded())
     return;
   
-  if (!m_rend) {
+  if (!m_rend)
     m_rend = new TerrainRenderer(&terrain, rc);
-  }
-  /**
-     @todo this is not working (not sure why?) comes up black
+
   m_rend->SetSettings(settings_map.TerrainRamp,
                       settings_map.TerrainContrast,
                       settings_map.TerrainBrightness);
-  */
+
   m_rend->Draw(canvas, proj, 
                Angle::degrees(fixed(45.0)), 
                Angle::degrees(fixed(45.0)));
