@@ -433,6 +433,9 @@ FlarmTrafficControl::Update(Angle new_direction, const FLARM_STATE &new_data)
 void
 FlarmTrafficControl::ZoomOut()
 {
+  if (WarningMode())
+    return;
+
   if (zoom < 4)
     zoom++;
 
@@ -446,6 +449,9 @@ FlarmTrafficControl::ZoomOut()
 void
 FlarmTrafficControl::ZoomIn()
 {
+  if (WarningMode())
+    return;
+
   if (zoom > 0)
     zoom--;
 
