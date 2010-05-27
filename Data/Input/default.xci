@@ -422,7 +422,7 @@ type=key
 data=6
 event=Setup Task
 event=Mode default
-label=Task\nEdit$(CheckWaypointFile)
+label=Task$(CheckWaypointFile)
 location=5
 
 mode=Nav2
