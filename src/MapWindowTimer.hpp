@@ -43,7 +43,8 @@ Copyright_License {
 /**
  * This class is used for drawing time calculations
  */
-class MapWindowTimer {
+class MapWindowTimer
+{
 public:
   MapWindowTimer();
   virtual bool RenderTimeAvailable();
@@ -54,10 +55,12 @@ public:
   int GetAverageTime() {
     return timestats_av;
   }
+
 protected:
   void StartTimer();
   void StopTimer();
   void InterruptTimer();
+
 private:
   DWORD timestamp_newdata;
   DWORD timestamp_draw;

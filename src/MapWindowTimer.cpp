@@ -72,13 +72,12 @@ bool
 MapWindowTimer::RenderTimeAvailable()
 {
   DWORD fpsTime = ::GetTickCount();
-  if (fpsTime-timestamp_newdata<700) {
+  if (fpsTime - timestamp_newdata < 700)
     // it's been less than 700 ms since last data
     // was posted
     return true;
-  } else {
-    return false;
-  }
+
+  return false;
 }
 
 /**
@@ -88,7 +87,8 @@ void
 MapWindowTimer::InterruptTimer()
 {
   timestats_dirty = true;
-  timestamp_newdata = ::GetTickCount()-700; // cause to expire
+  // cause to expire
+  timestamp_newdata = ::GetTickCount() - 700;
 }
 
 /**
@@ -103,9 +103,9 @@ MapWindowTimer::StopTimer()
 
   if (!timestats_dirty) {
     // Calculates the drawing time with low pass filter
-    tottime = (2*tottime+(timestamp_draw-timestamp_newdata))/3;
+    tottime = (2 * tottime + (timestamp_draw - timestamp_newdata)) / 3;
     timestats_av = tottime;
-    cpuload=0;
+    cpuload = 0;
   }
 
   timestats_dirty = false;
