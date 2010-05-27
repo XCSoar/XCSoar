@@ -59,7 +59,7 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
                            const Projection& proj,
                            const SETTINGS_MAP& settings_map)
 {
-  if (!terrain.isTerrainLoaded())
+  if (!terrain.isTerrainLoaded() || !settings_map.EnableTerrain)
     return;
   
   if (!m_rend)
