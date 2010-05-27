@@ -200,32 +200,32 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     switch (s) {
     case TaskAdvance::MANUAL:
       ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
-                      TEXT("(manual)"), Size);
+                      TEXT("Advance\n(manual)"), Size);
       invalid = true;
       break;
     case TaskAdvance::AUTO:
       ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
-                      TEXT("(auto)"), Size);
+                      TEXT("Advance\n(auto)"), Size);
       invalid = true;
       break;
     case TaskAdvance::START_ARMED:
       ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
-                      TEXT("Hold\nStart"), Size);
+                      TEXT("Abort\nStart"), Size);
       invalid = false;
       break;
     case TaskAdvance::START_DISARMED:
       ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
-                      TEXT("Ready\nStart"), Size);
+                      TEXT("Arm\nStart"), Size);
       invalid = false;
       break;
     case TaskAdvance::TURN_ARMED:
       ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
-                      TEXT("Hold\nTurn"), Size);
+                      TEXT("Abort\nTurn"), Size);
       invalid = false;
       break;
     case TaskAdvance::TURN_DISARMED:
       ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
-                      TEXT("Ready\nTurn"), Size);
+                      TEXT("Arm\nTurn"), Size);
       invalid = false;
       break;
     default:
