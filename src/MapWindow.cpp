@@ -49,8 +49,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-// Initialization
-
 ScreenGraphics MapGfx;
 
 /**
@@ -82,6 +80,7 @@ MapWindow::~MapWindow()
 {
   if (cdi != NULL)
     delete cdi;
+
   if (terrain_renderer != NULL)
     delete terrain_renderer;
 }
@@ -271,13 +270,15 @@ MapWindow::set_weather(RasterWeather *_weather)
   }
 }
 
-bool MapWindow::checkLabelBlock(const RECT brect) {
+bool
+MapWindow::checkLabelBlock(const RECT brect)
+{
   return label_block.check(brect);
 }
 
-
-void MapWindow::SwitchZoomClimb(void) {
-
+void
+MapWindow::SwitchZoomClimb(void)
+{
   bool isclimb = (DisplayMode == dmCircling);
 
   bool my_target_pan = SettingsMap().TargetPan;
@@ -285,18 +286,17 @@ void MapWindow::SwitchZoomClimb(void) {
   if (my_target_pan != zoomclimb.last_targetpan) {
     if (my_target_pan) {
       // save starting values
-      if (isclimb) {
+      if (isclimb)
         zoomclimb.ClimbMapScale = GetMapScaleUser();
-      } else {
+      else
         zoomclimb.CruiseMapScale = GetMapScaleUser();
-      }
     } else {
       // restore scales
-      if (isclimb) {
+      if (isclimb)
         RequestMapScale(zoomclimb.ClimbMapScale, SettingsMap());
-      } else {
+      else
         RequestMapScale(zoomclimb.CruiseMapScale, SettingsMap());
-      }
+
       BigZoom = true;
     }
     zoomclimb.last_targetpan = my_target_pan;
@@ -323,43 +323,46 @@ void MapWindow::SwitchZoomClimb(void) {
   }
 }
 
-
-void MapWindow::ApplyScreenSize() {
-  if (SettingsMap().FullScreen) {
+void
+MapWindow::ApplyScreenSize()
+{
+  if (SettingsMap().FullScreen)
     SetMapRect(MapRectBig);
-  } else {
+  else
     SetMapRect(MapRectSmall);
-  }
 
   DisplayMode_t lastDisplayMode = DisplayMode;
   switch (SettingsMap().UserForceDisplayMode) {
   case dmCircling:
     DisplayMode = dmCircling;
     break;
+
   case dmCruise:
     DisplayMode = dmCruise;
     break;
+
   case dmFinalGlide:
     DisplayMode = dmFinalGlide;
     break;
+
   case dmNone:
-    if (Calculated().Circling){
+    if (Calculated().Circling)
       DisplayMode = dmCircling;
-    } else if (Calculated().task_stats.flight_mode_final_glide){
+    else if (Calculated().task_stats.flight_mode_final_glide)
       DisplayMode = dmFinalGlide;
-    } else
+    else
       DisplayMode = dmCruise;
+
     break;
   }
-  if (lastDisplayMode != DisplayMode){
+
+  if (lastDisplayMode != DisplayMode)
     SwitchZoomClimb();
-  }
 }
 
 
 GlidePolar 
 MapWindow::get_glide_polar() const
 {
-  return task != NULL ? task->get_glide_polar()
-    : GlidePolar(fixed_zero);
+  return task != NULL ? task->get_glide_polar() : GlidePolar(fixed_zero);
 }

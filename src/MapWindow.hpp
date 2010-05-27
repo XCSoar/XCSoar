@@ -156,7 +156,7 @@ public:
 
   const MapWindowProjection &MapProjection() const {
     return *this;
-  };
+  }
 
 private:
 
@@ -167,20 +167,20 @@ private:
   void ApplyScreenSize();
 
   // display management
-  void          SwitchZoomClimb(void);
+  void SwitchZoomClimb(void);
 
   // state/localcopy/local data
-  GEOPOINT      TargetDrag_Location;
-  int           TargetDrag_State;
+  GEOPOINT TargetDrag_Location;
+  int TargetDrag_State;
 
-  POINT         Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1];
+  POINT Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1];
 
-  ZoomClimb_t    zoomclimb;
+  ZoomClimb_t zoomclimb;
 
   THERMAL_SOURCE_VIEW ThermalSources[MAX_THERMAL_SOURCES];
 
   // projection
-  bool      BigZoom;
+  bool BigZoom;
 
   // display element functions
 
@@ -222,7 +222,7 @@ private:
 
   //  void DrawSpeedToFly(HDC hDC, RECT rc);
   void DrawFLARMTraffic(Canvas &canvas);
-  double    findMapScaleBarSize(const RECT rc);
+  double findMapScaleBarSize(const RECT rc);
 
   // thread, main functions
   void Render(Canvas &canvas, const RECT rc);
@@ -245,6 +245,7 @@ protected:
 
 private:
   LabelBlock label_block;
+
 public:
   BitmapCanvas& get_bitmap_canvas() { return bitmap_canvas; };
 
