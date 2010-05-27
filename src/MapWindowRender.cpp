@@ -35,6 +35,7 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "MapWindow.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
@@ -43,7 +44,6 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "TopologyStore.h"
-
 #include "TaskClientUI.hpp"
 
 /**
@@ -51,12 +51,11 @@ Copyright_License {
  * @param canvas The drawing canvas
  * @param rc The area to draw in
  */
-void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
+void
+MapWindow::RenderStart(Canvas &canvas, const RECT rc)
 {
   // Calculate screen position of the aircraft
-  CalculateOrigin(rc, Basic(), Calculated(),
-		  SettingsComputer(),
-		  SettingsMap());
+  CalculateOrigin(rc, Basic(), Calculated(), SettingsComputer(), SettingsMap());
 
   // Calculate screen positions of the thermal sources
   CalculateScreenPositionsThermalSources();
@@ -72,7 +71,8 @@ void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
  * @param canvas The drawing canvas
  * @param rc The area to draw in
  */
-void MapWindow::RenderBackground(Canvas &canvas, const RECT rc)
+void
+MapWindow::RenderBackground(Canvas &canvas, const RECT rc)
 {
   // If (no other background chosen) create white background
   if (terrain == NULL || !SettingsMap().EnableTerrain ||
@@ -94,7 +94,8 @@ void MapWindow::RenderBackground(Canvas &canvas, const RECT rc)
  * @param canvas The drawing canvas
  * @param rc The area to draw in
  */
-void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
+void
+MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
 {
   if ((terrain != NULL && SettingsMap().EnableTerrain &&
        Calculated().TerrainValid && terrain->isTerrainLoaded()) ||
@@ -153,12 +154,12 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
  * @param canvas The drawing canvas
  * @param rc The area to draw in
  */
-void MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
+void
+MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
 {
   // Draw airspace on top
-  if (SettingsMap().OnAirSpace > 0) {
+  if (SettingsMap().OnAirSpace > 0)
     DrawAirspace(canvas, buffer_canvas);
-  }
 }
 
 /**
@@ -166,7 +167,8 @@ void MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
  * @param canvas The drawing canvas
  * @param rc The area to draw in
  */
-void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
+void
+MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
 {
   DrawTrail(canvas);
 }
@@ -176,11 +178,11 @@ void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
  * @param canvas The drawing canvas
  * @param rc The area to draw in
  */
-void MapWindow::RenderTaskElements(Canvas &canvas, const RECT rc)
+void
+MapWindow::RenderTaskElements(Canvas &canvas, const RECT rc)
 {
-  if (task != NULL && task->check_task()) {
+  if (task != NULL && task->check_task())
     DrawTask(canvas, rc, buffer_canvas);
-  }
 
   DrawWaypoints(canvas);
 
@@ -193,7 +195,8 @@ void MapWindow::RenderTaskElements(Canvas &canvas, const RECT rc)
  * @param canvas The drawing canvas
  * @param rc The area to draw in
  */
-void MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
+void
+MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
 {
   // draw red cross on glide through terrain marker
   if (Calculated().TerrainValid)
@@ -201,9 +204,8 @@ void MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
 
   if ((terrain != NULL && SettingsMap().EnableTerrain &&
        Calculated().TerrainValid) ||
-      (weather != NULL && weather->GetParameter() != 0)) {
+      (weather != NULL && weather->GetParameter() != 0))
     DrawSpotHeights(canvas);
-  }
 }
 
 /**
@@ -211,28 +213,26 @@ void MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
  * @param canvas The drawing canvas
  * @param rc The area to draw in
  */
-void MapWindow::RenderAirborne(Canvas &canvas, const RECT rc)
+void
+MapWindow::RenderAirborne(Canvas &canvas, const RECT rc)
 {
   // Draw wind vector at aircraft
-  if (!SettingsMap().EnablePan) {
+  if (!SettingsMap().EnablePan)
     DrawWindAtAircraft2(canvas, GetOrigAircraft(), rc);
-  } else if (SettingsMap().TargetPan) {
+  else if (SettingsMap().TargetPan)
     DrawWindAtAircraft2(canvas, GetOrigScreen(), rc);
-  }
 
   // Draw traffic
   DrawTeammate(canvas);
   DrawFLARMTraffic(canvas);
 
   // Draw center screen cross hair in pan mode
-  if (SettingsMap().EnablePan && !SettingsMap().TargetPan) {
+  if (SettingsMap().EnablePan && !SettingsMap().TargetPan)
     DrawCrossHairs(canvas);
-  }
 
   // Finally, draw you!
-  if (Basic().gps.Connected) {
+  if (Basic().gps.Connected)
     DrawAircraft(canvas);
-  }
 }
 
 /**
@@ -241,7 +241,8 @@ void MapWindow::RenderAirborne(Canvas &canvas, const RECT rc)
  * @param canvas The drawing canvas
  * @param rc The area to draw in
  */
-void MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
+void
+MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
 {
   const NMEA_INFO &data = Basic();
 
@@ -255,15 +256,13 @@ void MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
 
   // JMW Experimental only! EXPERIMENTAL
 #if 0
-  if (EnableAuxiliaryInfo) {
+  if (EnableAuxiliaryInfo)
     DrawHorizon(canvas, rc);
-  }
 #endif
 
   DrawFlightMode(canvas, rc);
   DrawThermalBand(canvas, rc);
   DrawFinalGlide(canvas,rc);
-  //  DrawSpeedToFly(canvas, rc);
   DrawGPSStatus(canvas, rc, data.gps);
 }
 
@@ -272,12 +271,12 @@ void MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
  * @param canvas
  * @param rc
  */
-void MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
+void
+MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
 {
-  if (Basic().gps.Connected) {
+  if (Basic().gps.Connected)
     // TODO enhancement: don't draw offtrack indicator if showing spot heights
     DrawBestCruiseTrack(canvas);
-  }
 
   DrawAirspaceIntersections(canvas);
 }
@@ -287,7 +286,8 @@ void MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
  * @param canvas The drawing canvas
  * @param rc The area to draw in
  */
-void MapWindow::Render(Canvas &canvas, const RECT rc)
+void
+MapWindow::Render(Canvas &canvas, const RECT rc)
 { 
   // Calculate screen positions
   RenderStart(canvas, rc);
@@ -323,24 +323,23 @@ void MapWindow::Render(Canvas &canvas, const RECT rc)
   RenderSymbology_upper(canvas, rc);
 }
 
-static void DrawSpotHeight_Internal(Canvas &canvas,
-				    MapWindowProjection &map_projection,
-				    LabelBlock &label_block,
-				    TCHAR *Buffer, POINT pt) {
-  int size = _tcslen(Buffer);
-  if (size==0) {
+static void
+DrawSpotHeight_Internal(Canvas &canvas, MapWindowProjection &map_projection,
+                        LabelBlock &label_block, TCHAR *Buffer, POINT pt)
+{
+  if (_tcslen(Buffer) == 0)
     return;
-  }
+
   POINT orig = map_projection.GetOrigScreen();
   RECT brect;
   SIZE tsize = canvas.text_size(Buffer);
 
-  pt.x+= 2+orig.x;
-  pt.y+= 2+orig.y;
+  pt.x += 2 + orig.x;
+  pt.y += 2 + orig.y;
   brect.left = pt.x;
-  brect.right = brect.left+tsize.cx;
+  brect.right = brect.left + tsize.cx;
   brect.top = pt.y;
-  brect.bottom = brect.top+tsize.cy;
+  brect.bottom = brect.top + tsize.cy;
 
   if (!label_block.check(brect))
     return;
@@ -348,8 +347,9 @@ static void DrawSpotHeight_Internal(Canvas &canvas,
   canvas.text(pt.x, pt.y, Buffer);
 }
 
-void MapWindow::DrawSpotHeights(Canvas &canvas) {
-  // JMW testing, display of spot max/min
+void
+MapWindow::DrawSpotHeights(Canvas &canvas)
+{
   if (weather == NULL || weather->GetParameter() == 0 ||
       terrain_renderer == NULL)
     return;
