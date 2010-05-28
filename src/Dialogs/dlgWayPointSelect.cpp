@@ -47,6 +47,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "DataField/Enum.hpp"
 #include "LogFile.hpp"
+#include "StringUtil.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -196,9 +197,9 @@ static void UpdateList(void)
   if (sort_distance) {
     waypoint_sorter->sort_distance(WayPointSelectInfo);
   }
-  if (_tcslen(sNameFilter) > 0) {
+
+  if (!string_is_empty(sNameFilter))
     waypoint_sorter->filter_name(WayPointSelectInfo, sNameFilter);
-  }
 
   UpLimit = WayPointSelectInfo.size();
   wWayPointList->SetLength(UpLimit);
@@ -246,9 +247,8 @@ OnFilterNameButton(gcc_unused WndButton &button){
 
   if (wbName) {
 
-    if (sNameFilter[0]=='\0') {
+    if (string_is_empty(sNameFilter))
       SetNameCaptionFlushLeft(TEXT("*"));
-    }
     else {
       SetNameCaptionFlushLeft(sNameFilter);
     }
