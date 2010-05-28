@@ -457,13 +457,6 @@ dlgWayPointSelect(SingleWindow &parent,
 {
   UpLimit = 0;
 
-  if (type > -1){
-    wpDistance->GetDataField()->SetAsInteger(type);
-  }
-  if (FilterNear){
-    wpDistance->GetDataField()->SetAsInteger(1);
-  }
-
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgWayPointSelect_L.xml"),
@@ -503,6 +496,13 @@ dlgWayPointSelect(SingleWindow &parent,
   wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
   wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
   wpType = ((WndProperty *)wf->FindByName(TEXT("prpFltType")));
+
+  if (type > -1){
+    wpDistance->GetDataField()->SetAsInteger(type);
+  }
+  if (FilterNear){
+    wpDistance->GetDataField()->SetAsInteger(1);
+  }
 
   WaypointSorter g_waypoint_sorter(way_points,
                                    location, fixed(Units::ToUserDistance(1)));
