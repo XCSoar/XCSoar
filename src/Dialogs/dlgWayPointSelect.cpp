@@ -157,21 +157,22 @@ static void UpdateList(void)
 {
   WayPointSelectInfo = waypoint_sorter->get_list();
 
-  switch( wpType->GetDataField()->GetAsInteger() ) {
+  switch (wpType->GetDataField()->GetAsInteger()) {
   case 1: 
     waypoint_sorter->filter_airport(WayPointSelectInfo);
     break;
+
   case 2:
     waypoint_sorter->filter_landable(WayPointSelectInfo);
     break;
+
   case 3: 
     waypoint_sorter->filter_turnpoint(WayPointSelectInfo);
     break;
+
   case 4:
   case 5:
     waypoint_sorter->filter_file(WayPointSelectInfo, wpType->GetDataField()->GetAsInteger()-4);
-    break;
-  default:
     break;
   }
 
@@ -259,14 +260,15 @@ OnFilterNameButton(gcc_unused WndButton &button){
 static void
 OnFilterDistance(DataField *Sender, DataField::DataAccessKind_t Mode){
 
-  switch(Mode){
-    case DataField::daGet:
-    case DataField::daPut:
+  switch (Mode) {
+  case DataField::daGet:
+  case DataField::daPut:
     break;
-    case DataField::daChange:
-    case DataField::daInc:
-    case DataField::daDec:
-      UpdateList();
+
+  case DataField::daChange:
+  case DataField::daInc:
+  case DataField::daDec:
+    UpdateList();
     break;
   }
 }
@@ -291,16 +293,18 @@ GetDirectionData(int DirectionFilterIdx){
 static void
 OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mode){
 
-  switch(Mode){
-    case DataField::daGet:
-      Sender->Set(TEXT("*"));
+  switch (Mode) {
+  case DataField::daGet:
+    Sender->Set(TEXT("*"));
     break;
-    case DataField::daPut:
+
+  case DataField::daPut:
     break;
-    case DataField::daChange:
-    case DataField::daInc:
-    case DataField::daDec:
-      UpdateList();
+
+  case DataField::daChange:
+  case DataField::daInc:
+  case DataField::daDec:
+    UpdateList();
     break;
   }
 }
@@ -308,14 +312,15 @@ OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mode){
 static void
 OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode){
 
-  switch(Mode){
-    case DataField::daGet:
-    case DataField::daPut:
+  switch (Mode) {
+  case DataField::daGet:
+  case DataField::daPut:
     break;
-    case DataField::daChange:
-    case DataField::daInc:
-    case DataField::daDec:
-      UpdateList();
+
+  case DataField::daChange:
+  case DataField::daInc:
+  case DataField::daDec:
+    UpdateList();
     break;
   }
 }
@@ -417,15 +422,17 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
   int NewIndex = wpType->GetDataField()->GetAsInteger();;
 
-  switch(key_code){
-    case VK_F1:
-      NewIndex = 0;
+  switch (key_code){
+  case VK_F1:
+    NewIndex = 0;
     break;
-    case VK_F2:
-      NewIndex = 2;
+
+  case VK_F2:
+    NewIndex = 2;
     break;
-    case VK_F3:
-      NewIndex = 3;
+
+  case VK_F3:
+    NewIndex = 3;
     break;
 
   default:
