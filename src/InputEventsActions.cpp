@@ -1195,11 +1195,11 @@ InputEvents::eventNearestWaypointDetails(const TCHAR *misc)
 {
   if (_tcscmp(misc, TEXT("aircraft")) == 0)
     // big range..
-    PopupNearestWaypointDetails(task_ui.get_waypoints(), Basic().Location,
+    PopupNearestWaypointDetails(way_points, Basic().Location,
                                 1.0e5, false);
   else if (_tcscmp(misc, TEXT("pan")) == 0)
     // big range..
-    PopupNearestWaypointDetails(task_ui.get_waypoints(), Basic().Location,
+    PopupNearestWaypointDetails(way_points, Basic().Location,
                                 1.0e5, true);
 }
 
