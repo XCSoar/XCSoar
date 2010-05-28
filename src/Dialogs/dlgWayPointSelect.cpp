@@ -273,7 +273,6 @@ OnFilterDistance(DataField *Sender, DataField::DataAccessKind_t Mode){
       UpdateList();
     break;
     case DataField::daDec:
-      FilterMode(false);
       UpdateList();
     break;
   }
@@ -314,7 +313,6 @@ OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mode){
       UpdateList();
     break;
     case DataField::daDec:
-      FilterMode(false);
       UpdateList();
     break;
   }
@@ -337,7 +335,6 @@ OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode){
       UpdateList();
     break;
     case DataField::daDec:
-      FilterMode(false);
       UpdateList();
     break;
   }
@@ -456,7 +453,6 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   }
 
   if (wpType->GetDataField()->GetAsInteger() != NewIndex){
-    FilterMode(false);
     UpdateList();
     wpType->GetDataField()->SetAsInteger(NewIndex);
     wpType->RefreshDisplay();
