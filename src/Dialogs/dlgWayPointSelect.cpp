@@ -120,16 +120,11 @@ static void PrepareData(void){
   if (wpDistance) {  // initialize datafieldenum for Distance
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wpDistance->GetDataField();
-    for (unsigned i=0; i < sizeof(DistanceFilter) / sizeof(DistanceFilter[0]); i++) {
-      if (i== 0) {
-        sTmp[0]='*';
-        sTmp[1]='\0';
-      }
-      else {
-        _stprintf(sTmp, TEXT("%.0f%s"),
+    dfe->addEnumText(_T("*"));
+    for (unsigned i = 1; i < sizeof(DistanceFilter) / sizeof(DistanceFilter[0]); i++) {
+      _stprintf(sTmp, TEXT("%.0f%s"),
                 (double)DistanceFilter[i],
                 Units::GetDistanceName());
-      }
       dfe->addEnumText(sTmp);
     }
     dfe->SetAsInteger(0);
