@@ -498,7 +498,7 @@ dlgWayPointSelect(SingleWindow &parent,
   wpType = ((WndProperty *)wf->FindByName(TEXT("prpFltType")));
 
   if (type > -1){
-    wpDistance->GetDataField()->SetAsInteger(type);
+    wpType->GetDataField()->SetAsInteger(type);
   }
   if (FilterNear){
     wpDistance->GetDataField()->SetAsInteger(1);
