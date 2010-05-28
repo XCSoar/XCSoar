@@ -210,9 +210,9 @@ TerrainShading(const short illum, BYTE &r, BYTE &g, BYTE &b)
 // this is for TerrainInfo.StepSize = 0.0025;
 TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
                                  const RECT &rc) :
+  last_color_ramp(NULL),
   terrain(_terrain),
-  rect_big(rc),
-  last_color_ramp(NULL)
+  rect_big(rc)
 {
   TerrainContrast = 150;
   TerrainBrightness = 36;
