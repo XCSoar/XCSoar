@@ -104,7 +104,7 @@ typedef struct{
 class Units
 {
 private:
-  static UnitDescriptor_t UnitDescriptors[unCount];
+  static const UnitDescriptor_t UnitDescriptors[unCount];
 
 public:
   static Units_t DistanceUnit;  /**< Unit for distances */
