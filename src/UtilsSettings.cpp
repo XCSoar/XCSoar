@@ -57,6 +57,7 @@ Copyright_License {
 #include "CalculationThread.hpp"
 #include "AirspaceGlue.hpp"
 #include "TaskClientUI.hpp"
+#include "WayPoint/WayPointGlue.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "Waypoint/Waypoints.hpp"
@@ -138,13 +139,14 @@ SettingsLeave()
     terrain.OpenTerrain();
 
     // re-load waypoints
-    task_ui.read_waypoints(&terrain);
+    WayPointGlue::ReadWaypoints(way_points, &terrain);
     ReadAirfieldFile();
 
     // re-set home
     if (WaypointFileChanged || TerrainFileChanged) {
-      task_ui.set_home(terrain, XCSoarInterface::SetSettingsComputer(),
-                       WaypointFileChanged);
+      WayPointGlue::SetHome(way_points, terrain,
+                            XCSoarInterface::SetSettingsComputer(),
+                            WaypointFileChanged, false);
     }
 
     terrain.ServiceFullReload(XCSoarInterface::Basic().Location);
