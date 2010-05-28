@@ -104,8 +104,6 @@ static void InitializeDirection(bool bOnlyHeading) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wpDirection->GetDataField();
     if (!bOnlyHeading) {
-      filter_data.direction_index = 0;
-
       for (unsigned int i=0; i < sizeof(DirectionFilter) / sizeof(DirectionFilter[0]); i++) {
         dfe->addEnumText(GetDirectionData(i));
       }
@@ -128,8 +126,6 @@ static void PrepareData(void){
   TCHAR sTmp[15];
 
   filter_data.name[0] = _T('\0');
-  filter_data.distance_index = 0;
-  filter_data.type_index = 0;
 
   SetNameCaptionFlushLeft(_T("*"));
 
