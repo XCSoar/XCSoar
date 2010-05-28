@@ -46,6 +46,7 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "CalculationThread.hpp"
 #include "InstrumentThread.hpp"
+#include "DrawThread.hpp"
 
 #include <assert.h>
 
@@ -92,4 +93,18 @@ void CreateCalculationThread(void) {
 
   // Create a read thread for performing calculations
   calculation_thread = new CalculationThread(glide_computer);
+}
+
+void
+SuspendAllThreads()
+{
+  draw_thread->suspend();
+  calculation_thread->suspend();
+}
+
+void
+ResumeAllThreads()
+{
+  calculation_thread->resume();
+  draw_thread->resume();
 }
