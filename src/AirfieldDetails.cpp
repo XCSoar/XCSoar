@@ -47,7 +47,8 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "Components.hpp"
-#include "TaskClientUI.hpp"
+#include "Waypoint/Waypoint.hpp"
+#include "Waypoint/WaypointSorter.hpp"
 
 static bool
 check_name(const Waypoint &waypoint, const TCHAR *Name)
@@ -103,7 +104,7 @@ LookupAirfieldDetail(WaypointSelectInfoVector &airports,
     const Waypoint &wp = *it->way_point;
 
     if (check_name(wp, Name)) {
-      task_ui.set_waypoint_details(wp, Details);
+      way_points.set_details(wp, Details);
 
       airports.erase(it); // this one no longer needs searching, remove from list
       return;
@@ -130,8 +131,11 @@ ParseAirfieldDetails(TLineReader &reader)
   unsigned j;
   int k = 0;
 
-  WaypointSelectInfoVector airports = 
-    task_ui.get_airports(XCSoarInterface::Basic().Location);
+  WaypointSorter waypoints_filter(way_points,
+                                  XCSoarInterface::Basic().Location,
+                                  fixed_one);
+  WaypointSelectInfoVector airports = waypoints_filter.get_list();
+  waypoints_filter.filter_airport(airports);
 
   TCHAR *TempString;
   while ((TempString = reader.read()) != NULL) {
