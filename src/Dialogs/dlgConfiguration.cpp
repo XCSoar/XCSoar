@@ -907,16 +907,10 @@ static void OnWaypointEditClicked(WindowControl * Sender){
 
 static void AskWaypointSave(void) {
   /// @todo terrain check???
-  if (WayPointFile::WaypointsOutOfRangeSetting == 2) {
-    if(MessageBoxX(gettext(_T("Waypoints excluded, save anyway?")),
+  if (WayPointFile::WaypointsOutOfRangeSetting != 2 ||
+      MessageBoxX(gettext(_T("Waypoints excluded, save anyway?")),
                    gettext(_T("Waypoints outside terrain")),
                    MB_YESNO | MB_ICONQUESTION) == IDYES) {
-      task_ui.save_waypoints();
-
-      WaypointFileChanged= true;
-      changed = true;
-    }
-  } else {
     task_ui.save_waypoints();
     WaypointFileChanged= true;
     changed = true;
