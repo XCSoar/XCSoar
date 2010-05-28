@@ -50,8 +50,8 @@ WaypointFlags::setDefaultFlags(bool turnpoint)
   WaypointFlag = false;
 }
 
-Waypoint::Waypoint(const bool is_turnpoint):
-  Zoom(0)
+Waypoint::Waypoint(const GEOPOINT &_location, const bool is_turnpoint):
+  Location(_location), Zoom(0)
 {
   Flags.setDefaultFlags(is_turnpoint);
 }

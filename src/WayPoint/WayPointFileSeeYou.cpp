@@ -121,19 +121,21 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   if (iLongitude >= n_params)
     return false;
 
-  Waypoint new_waypoint;
+  GEOPOINT location;
+
+  // Latitude (e.g. 5115.900N)
+  if (!parseAngle(params[iLatitude], location.Latitude, true))
+    return false;
+
+  // Longitude (e.g. 00715.900W)
+  if (!parseAngle(params[iLongitude], location.Longitude, false))
+    return false;
+
+  Waypoint new_waypoint(location);
   new_waypoint.FileNum = file_num;
 
   // Name (e.g. "Some Turnpoint", with quotes)
   if (!parseString(params[iName], new_waypoint.Name))
-    return false;
-
-  // Latitude (e.g. 5115.900N)
-  if (!parseAngle(params[iLatitude], new_waypoint.Location.Latitude, true))
-    return false;
-
-  // Longitude (e.g. 00715.900W)
-  if (!parseAngle(params[iLongitude], new_waypoint.Location.Longitude, false))
     return false;
 
   // Elevation (e.g. 458.0m)

@@ -57,24 +57,26 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
     // -> return without error condition
     return true;
 
-  Waypoint new_waypoint;
-  new_waypoint.FileNum = file_num;
+  GEOPOINT location;
 
   // Get fields
   n_params = extractParameters(line, ctemp, params, 20);
   if (n_params < 5)
     return false;
 
-  // Name (e.g. KAMPLI)
-  if (!parseString(params[5], new_waypoint.Name))
-    return false;
-
   // Latitude (e.g. 51:15.900N)
-  if (!parseAngle(params[1], new_waypoint.Location.Latitude, true))
+  if (!parseAngle(params[1], location.Latitude, true))
     return false;
 
   // Longitude (e.g. 00715.900W)
-  if (!parseAngle(params[2], new_waypoint.Location.Longitude, false))
+  if (!parseAngle(params[2], location.Longitude, false))
+    return false;
+
+  Waypoint new_waypoint(location);
+  new_waypoint.FileNum = file_num;
+
+  // Name (e.g. KAMPLI)
+  if (!parseString(params[5], new_waypoint.Name))
     return false;
 
   // Altitude (e.g. 458M)

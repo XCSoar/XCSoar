@@ -91,7 +91,7 @@ public:
    * @param is_turnpoint Whether newly created waypoint is a turnpoint
    * @return Uninitialised object
    */
-  Waypoint(const bool is_turnpoint= false);
+  Waypoint(const GEOPOINT &_location, const bool is_turnpoint= false);
 
   unsigned id; /**< Unique id */
   GEOPOINT Location; /**< Geodetic location */

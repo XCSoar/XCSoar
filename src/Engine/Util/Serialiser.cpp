@@ -287,13 +287,11 @@ Serialiser::deserialise_waypoint()
 
   /// @todo: check if waypoint is already in database or needs to be added
 
-  Waypoint *wp = new Waypoint();
+  Waypoint *wp = new Waypoint(loc);
   m_node.get_attribute(_T("name"), wp->Name);
   m_node.get_attribute(_T("id"), wp->id);
   m_node.get_attribute(_T("comment"), wp->Comment);
   m_node.get_attribute(_T("altitude"), wp->Altitude);
-
-  wp->Location = loc;
 
   return wp;
 }

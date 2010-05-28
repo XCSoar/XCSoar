@@ -9,8 +9,8 @@ WaypointEnvelope::project(const TaskProjection& task_projection)
 
 WaypointEnvelope::WaypointEnvelope(const GEOPOINT &location,
                    const TaskProjection &task_projection)
+  :waypoint(location)
 {
-  waypoint.Location = location;
   project(task_projection);
 }
 
