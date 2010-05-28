@@ -211,7 +211,8 @@ TerrainShading(const short illum, BYTE &r, BYTE &g, BYTE &b)
 TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
                                  const RECT &rc) :
   terrain(_terrain),
-  rect_big(rc)
+  rect_big(rc),
+  last_color_ramp(NULL)
 {
   TerrainContrast = 150;
   TerrainBrightness = 36;
@@ -586,12 +587,11 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
 void
 TerrainRenderer::ColorTable()
 {
-  static const COLORRAMP *lastColorRamp = NULL;
-  if (color_ramp == lastColorRamp)
+  if (color_ramp == last_color_ramp)
     // no need to update the color table
     return;
 
-  lastColorRamp = color_ramp;
+  last_color_ramp = color_ramp;
 
   for (int i = 0; i < 256; i++) {
     for (int mag = -64; mag < 64; mag++) {

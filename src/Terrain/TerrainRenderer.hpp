@@ -72,6 +72,7 @@ protected:
   bool do_water;
   unsigned int height_scale;
   const COLORRAMP *color_ramp;
+  const COLORRAMP *last_color_ramp;
   RasterMap *DisplayMap;
   int interp_levels;
 
