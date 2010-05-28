@@ -110,9 +110,6 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   if (ignore_following)
     return true;
 
-  Waypoint new_waypoint;
-  new_waypoint.FileNum = file_num;
-
   // Get fields
   n_params = extractParameters(line, ctemp, params, 20);
 
@@ -123,6 +120,9 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
     return false;
   if (iLongitude >= n_params)
     return false;
+
+  Waypoint new_waypoint;
+  new_waypoint.FileNum = file_num;
 
   // Name (e.g. "Some Turnpoint", with quotes)
   if (!parseString(params[iName], new_waypoint.Name))
