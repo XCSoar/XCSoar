@@ -64,8 +64,6 @@ check_name(const Waypoint &waypoint, const TCHAR *Name)
   _tcscpy(UName, waypoint.Name.c_str());
   
   CharUpper(UName); // WP name
-  // VENTA3 fix: If airfields name
-  // was not uppercase it was not recon
   
   _stprintf(NameA, TEXT("%s A/F"), Name);
   _stprintf(NameB, TEXT("%s AF"), Name);
@@ -119,11 +117,6 @@ LookupAirfieldDetail(WaypointSelectInfoVector &airports,
 static void
 ParseAirfieldDetails(TLineReader &reader)
 {
-  /*
-   * VENTA3 fix: if empty lines, do not set details for the waypoint
-   *        fix: remove CR from text appearing as a spurious char in waypoint details
-   */
-
   TCHAR CleanString[READLINE_LENGTH + 1];
   tstring Details;
   TCHAR Name[201];
@@ -132,7 +125,7 @@ ParseAirfieldDetails(TLineReader &reader)
   CleanString[0] = 0;
 
   bool inDetails = false;
-  bool hasDetails = false; // VENTA3
+  bool hasDetails = false;
   int i, n;
   unsigned j;
   int k = 0;
@@ -166,7 +159,7 @@ ParseAirfieldDetails(TLineReader &reader)
       }
       k++;
     } else {
-      // VENTA3: append text to details string
+      // append text to details string
       for (j = 0; j < _tcslen(TempString); j++) {
         if (TempString[j] > 0x20) {
           hasDetails = true;
