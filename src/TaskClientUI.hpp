@@ -105,23 +105,7 @@ public:
   bool read_waypoints(const RasterTerrain *terrain);
   void save_waypoints();
   void close_waypoints();
-  bool waypoint_is_writable(const Waypoint& wp) const;
   bool check_duplicate_waypoints(OrderedTask& ordered_task);
-  void set_waypoint_details(const Waypoint& wp, const tstring& Details);
-  WaypointSelectInfoVector get_airports(const GEOPOINT &loc) const;
-  bool is_waypoints_empty() const;
-  Waypoint create_waypoint(const GEOPOINT &location);
-  void append_waypoint(Waypoint& wp);
-  void replace_waypoint(const Waypoint& wp, Waypoint& copy);
-  void optimise_waypoints();
-  const Waypoints& get_waypoints() const { return m_waypoints; }
-  void set_home(const RasterTerrain &terrain,
-                SETTINGS_COMPUTER &settings,
-                const bool reset, const bool set_location= false);
-  const Waypoint* get_nearest_waypoint(const GEOPOINT& location) const;
-  void waypoints_visit_within_range(const GEOPOINT& location,
-                                    const fixed range,
-                                    WaypointVisitor& visitor) const;
 
   // trace points
   TracePointVector find_trace_points(const GEOPOINT &loc, 
