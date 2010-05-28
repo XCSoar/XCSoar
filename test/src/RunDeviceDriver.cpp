@@ -158,7 +158,10 @@ ComPort::Read(void *Buffer, size_t Size)
  */
 
 Projection::Projection() {}
+fixed Projection::GetMapScaleUser() const { return fixed_one; }
+
 MapWindowProjection::MapWindowProjection() {}
+fixed MapWindowProjection::GetMapScaleUser() const { return fixed_one; }
 
 /*
  * Fake Settings*Blackboard.cpp
