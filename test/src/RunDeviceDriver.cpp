@@ -110,7 +110,8 @@ bool InputEvents::processNmea(int key)
  */
 
 ComPort::ComPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
-  :handler(_handler) {}
+  :handler(_handler),
+   buffer(NMEA_BUF_SIZE) {}
 
 void ComPort::run() {}
 
