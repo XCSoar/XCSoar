@@ -52,7 +52,11 @@ Copyright_License {
 #include <assert.h>
 #include <stdlib.h>
 
-static TCHAR sNameFilter[NAMEFILTERLEN+1];
+struct WayPointFilterData {
+  TCHAR name[NAMEFILTERLEN + 1];
+};
+
+static WayPointFilterData filter_data;
 
 static WndForm *wf=NULL;
 static WndListFrame *wWayPointList=NULL;
@@ -114,7 +118,7 @@ static void PrepareData(void){
 
   TCHAR sTmp[15];
 
-  sNameFilter[0]='\0';
+  filter_data.name[0] = _T('\0');
   SetNameCaptionFlushLeft(_T("*"));
 
   if (wpDistance) {  // initialize datafieldenum for Distance
@@ -191,8 +195,8 @@ static void UpdateList(void)
     waypoint_sorter->sort_distance(WayPointSelectInfo);
   }
 
-  if (!string_is_empty(sNameFilter))
-    waypoint_sorter->filter_name(WayPointSelectInfo, sNameFilter);
+  if (!string_is_empty(filter_data.name))
+    waypoint_sorter->filter_name(WayPointSelectInfo, filter_data.name);
 
   UpLimit = WayPointSelectInfo.size();
   wWayPointList->SetLength(UpLimit);
@@ -223,7 +227,7 @@ OnFilterNameButton(gcc_unused WndButton &button){
 
 
   TCHAR newNameFilter[NAMEFILTERLEN+1];
-  _tcsncpy(newNameFilter, sNameFilter, NAMEFILTERLEN);
+  _tcsncpy(newNameFilter, filter_data.name, NAMEFILTERLEN);
   dlgTextEntryShowModal(newNameFilter, NAMEFILTERLEN);
 
   int i= _tcslen(newNameFilter)-1;
@@ -236,14 +240,14 @@ OnFilterNameButton(gcc_unused WndButton &button){
     i--;
   };
 
-  _tcsncpy(sNameFilter, newNameFilter, NAMEFILTERLEN);
+  _tcsncpy(filter_data.name, newNameFilter, NAMEFILTERLEN);
 
   if (wbName) {
 
-    if (string_is_empty(sNameFilter))
+    if (string_is_empty(filter_data.name))
       SetNameCaptionFlushLeft(TEXT("*"));
     else {
-      SetNameCaptionFlushLeft(sNameFilter);
+      SetNameCaptionFlushLeft(filter_data.name);
     }
   }
   FilterMode(true);
