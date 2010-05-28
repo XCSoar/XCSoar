@@ -82,6 +82,7 @@ Copyright_License {
 #include "ReplayLoggerGlue.hpp"
 
 #include "Waypoint/Waypoints.hpp"
+#include "WayPoint/WayPointGlue.hpp"
 
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/Airspaces.hpp"
@@ -312,13 +313,14 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   CreateProgressDialog(gettext(TEXT("Loading way points...")));
 
   // Read the waypoint files
-  task_ui.read_waypoints(&terrain);
+  WayPointGlue::ReadWaypoints(way_points, &terrain);
 
   // Read and parse the airfield info file
   ReadAirfieldFile();
 
   // Set the home waypoint
-  task_ui.set_home(terrain, SetSettingsComputer(), false, true);
+  WayPointGlue::SetHome(way_points, terrain, SetSettingsComputer(),
+                        false, true);
 
   // ReSynchronise the blackboards here since SetHome touches them
   ReadBlackboardBasic(device_blackboard.Basic());
