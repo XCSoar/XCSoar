@@ -57,13 +57,11 @@ class TaskClientUI: public TaskClient
 public:
   TaskClientUI(TaskManager& tm,
                const TaskBehaviour& tb,
-               TaskEvents& te,
-               Waypoints& waypoints):
+               TaskEvents& te):
     TaskClient(tm),
     task_behaviour(tb),
     task_events(te),
-    glide_polar(tm.get_glide_polar()),
-    m_waypoints(waypoints) {};
+    glide_polar(tm.get_glide_polar()) {}
 
   TaskAdvance::TaskAdvanceState_t get_advance_state() const;
 
@@ -105,7 +103,8 @@ public:
   bool read_waypoints(const RasterTerrain *terrain);
   void save_waypoints();
   void close_waypoints();
-  bool check_duplicate_waypoints(OrderedTask& ordered_task);
+  bool check_duplicate_waypoints(OrderedTask& ordered_task,
+                                 Waypoints &way_points);
 
   // trace points
   TracePointVector find_trace_points(const GEOPOINT &loc, 
@@ -141,7 +140,6 @@ protected:
   GlidePolar glide_polar;
 
   static const TCHAR default_task_path[];
-  Waypoints &m_waypoints;
 };
 
 

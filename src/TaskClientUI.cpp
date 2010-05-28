@@ -324,8 +324,9 @@ TaskClientUI::task_save_default()
 
 
 bool
-TaskClientUI::check_duplicate_waypoints(OrderedTask& ordered_task)
+TaskClientUI::check_duplicate_waypoints(OrderedTask& ordered_task,
+                                        Waypoints &way_points)
 {
   ScopeLock lock(mutex);
-  return ordered_task.check_duplicate_waypoints(m_waypoints);
+  return ordered_task.check_duplicate_waypoints(way_points);
 }

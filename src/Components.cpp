@@ -118,8 +118,7 @@ TaskClientCalc task_calc(task_manager);
 
 TaskClientUI task_ui(task_manager, 
                      XCSoarInterface::SettingsComputer(),
-                     task_events, 
-                     way_points);
+                     task_events);
 /// @todo JMW have ui-specific task_events! Don't use glide computer's events
 
 AIRCRAFT_STATE ac_state;
