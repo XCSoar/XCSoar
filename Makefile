@@ -148,6 +148,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/AirspaceClientUI.cpp \
 	$(SRC)/AirspaceClientCalc.cpp \
 	$(SRC)/TaskClient.cpp \
+	$(SRC)/TaskClientMap.cpp \
 	$(SRC)/TaskClientUI.cpp \
 	$(SRC)/TaskClientCalc.cpp \
 	$(SRC)/TaskStore.cpp \

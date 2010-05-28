@@ -45,7 +45,7 @@ Copyright_License {
 #include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Visitors/TaskVisitor.hpp"
-#include "TaskClientUI.hpp"
+#include "TaskClientMap.hpp"
 
 #include <assert.h>
 #include <stdio.h>

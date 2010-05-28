@@ -45,7 +45,7 @@ Copyright_License {
 #include "Terrain/TerrainRenderer.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Gauge/GaugeCDI.hpp"
-#include "TaskClientUI.hpp"
+#include "TaskClientMap.hpp"
 
 #include <tchar.h>
 

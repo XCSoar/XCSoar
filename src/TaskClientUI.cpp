@@ -81,13 +81,6 @@ TaskClientUI::incrementActiveTaskPoint(int offset)
 }
 
 
-TaskManager::TaskMode_t 
-TaskClientUI::get_mode() const
-{
-  ScopeLock lock(mutex);
-  return task_manager.get_mode();
-}
-
 bool 
 TaskClientUI::do_goto(const Waypoint & wp)
 {
@@ -147,13 +140,6 @@ TaskClientUI::check_ordered_task() const
   return task_manager.check_ordered_task();
 }
 
-bool 
-TaskClientUI::check_task() const
-{
-  ScopeLock lock(mutex);
-  return task_manager.check_task();
-}
-
 
 GEOPOINT 
 TaskClientUI::get_task_center(const GEOPOINT& fallback_location) const
@@ -169,30 +155,6 @@ TaskClientUI::get_task_radius(const GEOPOINT& fallback_location) const
   return task_manager.get_task_radius(fallback_location);
 }
 
-
-void 
-TaskClientUI::CAccept(BaseVisitor& visitor) const
-{
-  ScopeLock lock(mutex);
-  task_manager.CAccept(visitor);
-}
-
-void 
-TaskClientUI::ordered_CAccept(BaseVisitor& visitor) const
-{
-  ScopeLock lock(mutex);
-  task_manager.ordered_CAccept(visitor);
-}
-
-TracePointVector 
-TaskClientUI::find_trace_points(const GEOPOINT &loc, 
-                                const fixed range,
-                                const unsigned mintime, 
-                                const fixed resolution) const
-{
-  ScopeLock lock(mutex);
-  return task_manager.find_trace_points(loc, range, mintime, resolution);
-}
 
 OrderedTask*
 TaskClientUI::task_clone()
@@ -232,12 +194,6 @@ TaskClientUI::task_commit(const OrderedTask& that)
   return task_manager.commit(that);
 }
 
-const OrderedTaskBehaviour 
-TaskClientUI::get_ordered_task_behaviour() const
-{
-  ScopeLock lock(mutex);
-  return task_manager.get_ordered_task_behaviour();
-}
 
 bool 
 TaskClientUI::task_save(const TCHAR* path, const OrderedTask& task)
@@ -350,13 +306,6 @@ TaskClientUI::get_airports(const GEOPOINT &location) const
 }
 
 
-bool
-TaskClientUI::is_waypoints_empty() const
-{
-  // doesn't need lock since task UI is only thing that modifies waypoints
-  return m_waypoints.empty();
-}
-
 Waypoint
 TaskClientUI::create_waypoint(const GEOPOINT &location) 
 {
@@ -428,11 +377,3 @@ TaskClientUI::get_nearest_waypoint(const GEOPOINT& location) const
   return m_waypoints.get_nearest(location);
 }
 
-void 
-TaskClientUI::waypoints_visit_within_range(const GEOPOINT& location,
-                                           const fixed range,
-                                           WaypointVisitor& visitor) const
-{
-  ScopeLock lock(mutex);
-  m_waypoints.visit_within_range(location, range, visitor);
-}

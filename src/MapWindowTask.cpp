@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "TaskClientUI.hpp"
+#include "TaskClientMap.hpp"
 #include "MapWindow.hpp"
 #include "Protection.hpp"
 #include "Screen/Graphics.hpp"

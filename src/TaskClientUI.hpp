@@ -38,32 +38,28 @@
 #define TASKCLIENTUI_HPP
 
 #include <tchar.h>
-#include "TaskClient.hpp"
+#include "TaskClientMap.hpp"
 #include "Waypoint/Waypoint.hpp"
-#include "Task/TaskManager.hpp"
 #include "Task/TaskAdvance.hpp"
 #include "Waypoint/WaypointSorter.hpp"
 
 class Declaration;
-class Waypoints;
 class Waypoint;
 class RasterTerrain;
 class SETTINGS_COMPUTER;
-class WaypointVisitor;
 
 /** Facade class for protected access to task data by GUI/user threads */
-class TaskClientUI: public TaskClient
+class TaskClientUI: public TaskClientMap
 {
 public:
   TaskClientUI(TaskManager& tm,
                const TaskBehaviour& tb,
                TaskEvents& te,
                Waypoints& waypoints):
-    TaskClient(tm),
+    TaskClientMap(tm, waypoints),
     task_behaviour(tb),
     task_events(te),
-    glide_polar(tm.get_glide_polar()),
-    m_waypoints(waypoints) {};
+    glide_polar(tm.get_glide_polar()) {};
 
   TaskAdvance::TaskAdvanceState_t get_advance_state() const;
 
@@ -81,7 +77,6 @@ public:
 
   void incrementActiveTaskPoint(int offset);
 
-  TaskManager::TaskMode_t get_mode() const;
   bool do_goto(const Waypoint & wp);
   void abort();
   void resume();
@@ -93,13 +88,9 @@ public:
   const TracePointVector get_olc_points();
 
   bool check_ordered_task() const;
-  bool check_task() const;
 
   GEOPOINT get_task_center(const GEOPOINT& fallback_location) const;
   fixed get_task_radius(const GEOPOINT& fallback_location) const;
-
-  void CAccept(BaseVisitor& visitor) const;
-  void ordered_CAccept(BaseVisitor& visitor) const;
 
   // waypoints
   bool read_waypoints(const RasterTerrain *terrain);
@@ -109,25 +100,14 @@ public:
   bool check_duplicate_waypoints(OrderedTask& ordered_task);
   void set_waypoint_details(const Waypoint& wp, const tstring& Details);
   WaypointSelectInfoVector get_airports(const GEOPOINT &loc) const;
-  bool is_waypoints_empty() const;
   Waypoint create_waypoint(const GEOPOINT &location);
   void append_waypoint(Waypoint& wp);
   void replace_waypoint(const Waypoint& wp, Waypoint& copy);
   void optimise_waypoints();
-  const Waypoints& get_waypoints() const { return m_waypoints; }
   void set_home(const RasterTerrain &terrain,
                 SETTINGS_COMPUTER &settings,
                 const bool reset, const bool set_location= false);
   const Waypoint* get_nearest_waypoint(const GEOPOINT& location) const;
-  void waypoints_visit_within_range(const GEOPOINT& location,
-                                    const fixed range,
-                                    WaypointVisitor& visitor) const;
-
-  // trace points
-  TracePointVector find_trace_points(const GEOPOINT &loc, 
-                                     const fixed range,
-                                     const unsigned mintime, 
-                                     const fixed resolution) const;
 
   // 
   OrderedTask* task_clone();
@@ -140,8 +120,6 @@ public:
    * @return True if this task changed
    */
   bool task_commit(const OrderedTask& that);
-
-  const OrderedTaskBehaviour get_ordered_task_behaviour() const;
 
   bool task_save(const TCHAR* path);
   bool task_load(const TCHAR* path);
@@ -157,7 +135,6 @@ protected:
   GlidePolar glide_polar;
 
   static const TCHAR default_task_path[];
-  Waypoints &m_waypoints;
 };
 
 

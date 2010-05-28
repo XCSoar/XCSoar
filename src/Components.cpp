@@ -91,6 +91,7 @@ Copyright_License {
 
 #include "Task/TaskManager.hpp"
 #include "TaskClientUI.hpp"
+#include "TaskClientMap.hpp"
 #include "TaskClientCalc.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideComputerInterface.hpp"
@@ -119,6 +120,10 @@ TaskClientUI task_ui(task_manager,
                      XCSoarInterface::SettingsComputer(),
                      task_events, 
                      way_points);
+
+TaskClientMap task_map(task_manager, 
+                       way_points);
+
 /// @todo JMW have ui-specific task_events! Don't use glide computer's events
 
 AIRCRAFT_STATE ac_state;
@@ -365,7 +370,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 
   CreateProgressDialog(gettext(TEXT("Initialising display")));
 
-  main_window.map.set_task(&task_ui);
+  main_window.map.set_task(&task_map);
   main_window.map.set_airspaces(&airspace_ui);
 
   main_window.map.set_topology(topology);

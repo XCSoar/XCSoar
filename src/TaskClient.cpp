@@ -36,3 +36,49 @@ TaskClient::unlock()
 {
   mutex.Unlock();
 }
+
+bool 
+TaskClient::check_task() const
+{
+  ScopeLock lock(mutex);
+  return task_manager.check_task();
+}
+
+TaskManager::TaskMode_t 
+TaskClient::get_mode() const
+{
+  ScopeLock lock(mutex);
+  return task_manager.get_mode();
+}
+
+TracePointVector 
+TaskClient::find_trace_points(const GEOPOINT &loc, 
+                              const fixed range,
+                              const unsigned mintime, 
+                              const fixed resolution) const
+{
+  ScopeLock lock(mutex);
+  return task_manager.find_trace_points(loc, range, mintime, resolution);
+}
+
+
+void 
+TaskClient::CAccept(BaseVisitor& visitor) const
+{
+  ScopeLock lock(mutex);
+  task_manager.CAccept(visitor);
+}
+
+void 
+TaskClient::ordered_CAccept(BaseVisitor& visitor) const
+{
+  ScopeLock lock(mutex);
+  task_manager.ordered_CAccept(visitor);
+}
+
+const OrderedTaskBehaviour 
+TaskClient::get_ordered_task_behaviour() const
+{
+  ScopeLock lock(mutex);
+  return task_manager.get_ordered_task_behaviour();
+}

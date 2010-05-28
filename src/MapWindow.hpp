@@ -73,7 +73,7 @@ class Marks;
 class GaugeCDI;
 class Waypoint;
 class AirspaceClientUI;
-class TaskClientUI;
+class TaskClientMap;
 class GlidePolar;
 class ContainerWindow;
 
@@ -91,7 +91,7 @@ protected:
 
   TerrainRenderer *terrain_renderer;
   AirspaceClientUI *m_airspace;
-  TaskClientUI *task;
+  TaskClientMap *task;
 
   Marks *marks;
 
@@ -114,7 +114,7 @@ public:
   void set(ContainerWindow &parent,
            const RECT _MapRectSmall, const RECT _MapRectBig);
 
-  void set_task(TaskClientUI *_task) {
+  void set_task(TaskClientMap *_task) {
     task = _task;
   }
 

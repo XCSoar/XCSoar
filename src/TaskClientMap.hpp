@@ -34,46 +34,31 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef TASKCLIENT_HPP
-#define TASKCLIENT_HPP
+#ifndef TASKCLIENTMAP_HPP
+#define TASKCLIENTMAP_HPP
 
-#include "Thread/Mutex.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
-#include "Task/TaskManager.hpp"
+#include "TaskClient.hpp"
 
+class Waypoints;
+class WaypointVisitor;
 
-/**
- * Facade to task/airspace/waypoints as used by threads,
- * to manage locking
- */
-class TaskClient 
+/** Facade class for protected access to task data by GUI/user threads */
+class TaskClientMap: public TaskClient
 {
 public:
-  TaskClient(TaskManager& tm);
+  TaskClientMap(TaskManager& tm,
+               Waypoints& waypoints):
+    TaskClient(tm),
+    m_waypoints(waypoints) {};
 
-// common accessors for ui and calc clients
-  GlidePolar get_glide_polar() const;
-  void set_glide_polar(const GlidePolar& glide_polar);
-
-  static void lock();
-  static void unlock();
-
-  bool check_task() const;
-  TaskManager::TaskMode_t get_mode() const;
-
-  // trace points
-  TracePointVector find_trace_points(const GEOPOINT &loc, 
-                                     const fixed range,
-                                     const unsigned mintime, 
-                                     const fixed resolution) const;
-
-  void CAccept(BaseVisitor& visitor) const;
-  void ordered_CAccept(BaseVisitor& visitor) const;
-  const OrderedTaskBehaviour get_ordered_task_behaviour() const;
+  bool is_waypoints_empty() const;
+  void waypoints_visit_within_range(const GEOPOINT& location,
+                                    const fixed range,
+                                    WaypointVisitor& visitor) const;
+  const Waypoints& get_waypoints() const { return m_waypoints; }
 
 protected:
-  TaskManager& task_manager;
-  static Mutex mutex;
+  Waypoints &m_waypoints;
 };
 
 

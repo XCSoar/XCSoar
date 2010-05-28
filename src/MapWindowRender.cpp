@@ -44,7 +44,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "TopologyStore.h"
-#include "TaskClientUI.hpp"
+#include "TaskClientMap.hpp"
 
 /**
  * Calculates the screen positions of all important features
