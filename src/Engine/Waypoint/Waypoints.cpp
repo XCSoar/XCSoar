@@ -419,7 +419,7 @@ Waypoints::find_duplicate(Waypoint& waypoint)
 {
   const Waypoint* found = lookup_name(waypoint.Name);
   if (found && found->is_close_to(waypoint.Location, fixed(100))) {
-    waypoint = found;
+    waypoint = *found;
     return true;
   }
   append(waypoint);
