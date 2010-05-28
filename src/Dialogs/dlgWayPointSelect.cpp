@@ -54,9 +54,6 @@ Copyright_License {
 
 static TCHAR sNameFilter[NAMEFILTERLEN+1];
 
-
-static GEOPOINT Location;
-
 static WndForm *wf=NULL;
 static WndListFrame *wWayPointList=NULL;
 static WndButton *wbName;
@@ -481,8 +478,6 @@ dlgWayPointSelect(SingleWindow &parent,
                   const int type, const int FilterNear)
 {
   UpLimit = 0;
-
-  Location = location;
 
   if (type > -1){
     wpDistance->GetDataField()->SetAsInteger(type);
