@@ -261,17 +261,10 @@ OnFilterDistance(DataField *Sender, DataField::DataAccessKind_t Mode){
 
   switch(Mode){
     case DataField::daGet:
-    break;
     case DataField::daPut:
     break;
     case DataField::daChange:
-      FilterMode(false);
-      UpdateList();
-    break;
     case DataField::daInc:
-      FilterMode(false);
-      UpdateList();
-    break;
     case DataField::daDec:
       UpdateList();
     break;
@@ -305,13 +298,7 @@ OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mode){
     case DataField::daPut:
     break;
     case DataField::daChange:
-      FilterMode(false);
-      UpdateList();
-    break;
     case DataField::daInc:
-      FilterMode(false);
-      UpdateList();
-    break;
     case DataField::daDec:
       UpdateList();
     break;
@@ -323,17 +310,10 @@ OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode){
 
   switch(Mode){
     case DataField::daGet:
-    break;
     case DataField::daPut:
     break;
     case DataField::daChange:
-      FilterMode(false);
-      UpdateList();
-    break;
     case DataField::daInc:
-      FilterMode(false);
-      UpdateList();
-    break;
     case DataField::daDec:
       UpdateList();
     break;
