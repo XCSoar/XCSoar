@@ -137,6 +137,7 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
   ChartProjection proj(rc, *ordered_task, XCSoarInterface::Basic().Location);
 
   BackgroundDrawHelper background;
+  background.set_terrain(&terrain);
   background.Draw(canvas, rc, proj, XCSoarInterface::SettingsMap());
 
   MapDrawHelper helper(canvas, buffer, stencil, proj, rc,

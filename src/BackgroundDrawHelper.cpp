@@ -38,20 +38,67 @@ Copyright_License {
 
 #include "BackgroundDrawHelper.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Terrain/TerrainRenderer.hpp"
-#include "Components.hpp"
+#include "Terrain/RasterWeather.hpp"
+#include "Terrain/WeatherTerrainRenderer.hpp"
 #include "SettingsUser.hpp"
+#include "Navigation/SpeedVector.hpp"
+#include "Projection.hpp"
+#include "Screen/Canvas.hpp"
+#include "Screen/Graphics.hpp"
+#include "Screen/LabelBlock.hpp"
 
-BackgroundDrawHelper::BackgroundDrawHelper():
-  m_rend(NULL)
+BackgroundDrawHelper::BackgroundDrawHelper(const bool white_background):
+  m_rend(NULL),
+  m_terrain(NULL),
+  m_weather(NULL),
+  m_white_background(white_background)
 {
   default_sun();
 }
 
 BackgroundDrawHelper::~BackgroundDrawHelper()
 {
+  reset();
+}
+
+void
+BackgroundDrawHelper::reset()
+{
   if (m_rend)
     delete m_rend;
+}
+
+
+void 
+BackgroundDrawHelper::set_terrain(RasterTerrain* terrain)
+{
+  m_terrain = terrain;
+  reset();
+}
+
+void 
+BackgroundDrawHelper::set_weather(RasterWeather* weather)
+{
+  m_weather = weather;
+  reset();
+}
+
+
+void
+BackgroundDrawHelper::draw_background(Canvas& canvas,
+                                      const RECT& rc) const
+{
+  if (m_white_background) {
+    canvas.select(MapGfx.hBackgroundBrush);
+    canvas.white_pen();
+    canvas.white_brush();
+    canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
+  } else {
+    canvas.select(MapGfx.hBackgroundBrush);
+    canvas.black_pen();
+    canvas.black_brush();
+    canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
+  }
 }
 
 void 
@@ -60,12 +107,33 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
                            const Projection& proj,
                            const SETTINGS_MAP& settings_map)
 {
-  if (!terrain.isTerrainLoaded() || !settings_map.EnableTerrain)
+  if (!m_terrain || !m_terrain->isTerrainLoaded()) {
+    // terrain may have been re-set, so may need new renderer
+    reset();
+    draw_background(canvas, rc);
     return;
-  
-  if (!m_rend) {
-    m_rend = new TerrainRenderer(&terrain, rc);
   }
+  if (!settings_map.EnableTerrain) {
+    draw_background(canvas, rc);
+    return;
+  }
+
+  if (!m_rend) {
+    // defer creation until first draw because
+    // the buffer size, smoothing etc is set by the
+    // loaded terrain properties
+    if (m_weather) {
+      m_rend = new WeatherTerrainRenderer(m_terrain, m_weather, rc);
+    } else {
+      m_rend = new TerrainRenderer(m_terrain, rc);
+    }
+  }
+
+/** @todo
+      if (m_weather != NULL && m_weather->GetParameter())
+        m_weather->Reload(Basic().Location, (int)Basic().Time);
+*/
+
   m_rend->SetSettings(settings_map.TerrainRamp,
                       settings_map.TerrainContrast,
                       settings_map.TerrainBrightness);
@@ -87,6 +155,65 @@ BackgroundDrawHelper::set_sun(const Angle& sun_azimuth,
 void
 BackgroundDrawHelper::default_sun()
 {
-  m_sun_elevation = Angle::degrees(fixed(45.0));
+  m_sun_elevation = Angle::degrees(fixed(40.0));
   m_sun_azimuth = Angle::degrees(fixed(45.0));
+}
+
+void
+BackgroundDrawHelper::sun_from_wind(const Projection& projection,
+                                    const SpeedVector& wind)
+{
+  m_sun_elevation = Angle::degrees(fixed(40.0));
+  // draw sun from constant angle if very low wind speed
+  if (wind.norm < fixed_half) {
+    m_sun_azimuth = projection.GetDisplayAngle() + Angle::degrees(fixed(45.0));
+  } else {
+    m_sun_azimuth = projection.GetDisplayAngle() - wind.bearing;
+  }
+}
+
+
+static void
+DrawSpotHeight_Internal(Canvas &canvas, 
+                        const Projection &map_projection,
+                        LabelBlock &block, 
+                        TCHAR *Buffer, POINT pt)
+{
+  if (_tcslen(Buffer) == 0)
+    return;
+
+  POINT orig = map_projection.GetOrigScreen();
+  RECT brect;
+  SIZE tsize = canvas.text_size(Buffer);
+
+  pt.x += 2 + orig.x;
+  pt.y += 2 + orig.y;
+  brect.left = pt.x;
+  brect.right = brect.left + tsize.cx;
+  brect.top = pt.y;
+  brect.bottom = brect.top + tsize.cy;
+
+  if (!block.check(brect))
+    return;
+
+  canvas.text(pt.x, pt.y, Buffer);
+}
+
+void
+BackgroundDrawHelper::DrawSpotHeights(Canvas &canvas, 
+                                      const Projection &proj,
+                                      LabelBlock& block)
+{
+  if (m_weather == NULL || m_weather->GetParameter() == 0 ||
+      m_rend == NULL)
+    return;
+
+  TCHAR Buffer[20];
+  m_weather->ValueToText(Buffer, m_rend->spot_max_val);
+  DrawSpotHeight_Internal(canvas, proj, block,
+			  Buffer, m_rend->spot_max_pt);
+
+  m_weather->ValueToText(Buffer, m_rend->spot_min_val);
+  DrawSpotHeight_Internal(canvas, proj, block,
+			  Buffer, m_rend->spot_min_pt);
 }

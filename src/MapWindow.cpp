@@ -42,7 +42,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "TopologyStore.h"
 #include "Terrain/RasterTerrain.hpp"
-#include "Terrain/TerrainRenderer.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Gauge/GaugeCDI.hpp"
 #include "TaskClientMap.hpp"
@@ -58,7 +57,7 @@ MapWindow::MapWindow()
   :MapWindowProjection(),
    topology(NULL), terrain(NULL), weather(NULL),
    topology_dirty(true), terrain_dirty(true), weather_dirty(true),
-   terrain_renderer(NULL),
+   m_background(true),
    m_airspace(NULL), task(NULL),
    marks(NULL), 
    cdi(NULL),
@@ -80,9 +79,6 @@ MapWindow::~MapWindow()
 {
   if (cdi != NULL)
     delete cdi;
-
-  if (terrain_renderer != NULL)
-    delete terrain_renderer;
 }
 
 void
@@ -246,28 +242,21 @@ void
 MapWindow::set_topology(TopologyStore *_topology)
 {
   topology = _topology;
+  m_background.reset();
 }
 
 void
 MapWindow::set_terrain(RasterTerrain *_terrain)
 {
   terrain = _terrain;
-
-  if (terrain_renderer != NULL) {
-    delete terrain_renderer;
-    terrain_renderer = NULL;
-  }
+  m_background.set_terrain(_terrain);
 }
 
 void
 MapWindow::set_weather(RasterWeather *_weather)
 {
   weather = _weather;
-
-  if (terrain_renderer != NULL) {
-    delete terrain_renderer;
-    terrain_renderer = NULL;
-  }
+  m_background.set_weather(_weather);
 }
 
 bool

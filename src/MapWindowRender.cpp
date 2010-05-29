@@ -66,28 +66,6 @@ MapWindow::RenderStart(Canvas &canvas, const RECT rc)
   BigZoom = false;
 }
 
-/**
- * Renders a white background (if no terrain) and resets brush, pen and font
- * @param canvas The drawing canvas
- * @param rc The area to draw in
- */
-void
-MapWindow::RenderBackground(Canvas &canvas, const RECT rc)
-{
-  // If (no other background chosen) create white background
-  if (terrain == NULL || !SettingsMap().EnableTerrain ||
-      !Calculated().TerrainValid || !terrain->isTerrainLoaded()) {
-    canvas.select(MapGfx.hBackgroundBrush);
-    canvas.white_pen();
-    canvas.white_brush();
-    canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
-  }
-
-  // Select black brush/pen and the MapWindowFont
-  canvas.black_brush();
-  canvas.black_pen();
-  canvas.select(MapWindowFont);
-}
 
 /**
  * Renders the terrain background, the groundline and the topology
@@ -97,47 +75,19 @@ MapWindow::RenderBackground(Canvas &canvas, const RECT rc)
 void
 MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
 {
-  if ((terrain != NULL && SettingsMap().EnableTerrain &&
-       Calculated().TerrainValid && terrain->isTerrainLoaded()) ||
-      (weather != NULL && weather->GetParameter() != 0)) {
+  m_background.sun_from_wind(*this, Basic().wind);
+  m_background.Draw(canvas, MapRectBig, *this, SettingsMap());
 
-    Angle sunelevation = Angle::degrees(fixed(40.0));
-    Angle sunazimuth = GetDisplayAngle() - Basic().wind.bearing;
-    // draw sun from constant angle if very low wind speed
-    if (Basic().wind.norm < fixed_half)
-      sunazimuth = GetDisplayAngle() + Angle::degrees(fixed(45.0));
+  // Select black brush/pen and the MapWindowFont
+  canvas.black_brush();
+  canvas.black_pen();
+  canvas.select(MapWindowFont);
 
-    // if (dirtyEvent.test()) {
-    //   // map has been dirtied since we started drawing, so hurry up
-    //   BigZoom = true;
-    // }
-    // TODO: implement a workaround
-
-    if (terrain != NULL && terrain->isTerrainLoaded()) {
-      // TODO feature: sun-based rendering option
-
-      if (!terrain_renderer) {
-        // defer rendering until first draw because
-        // the buffer size, smoothing etc is set by the
-        // loaded terrain properties
-        terrain_renderer = new WeatherTerrainRenderer(terrain, weather, MapRectBig);
-      }
-
-      if (weather != NULL && weather->GetParameter())
-        weather->Reload(Basic().Location, (int)Basic().Time);
-
-      terrain_renderer->SetSettings(SettingsMap().TerrainRamp,
-                                    SettingsMap().TerrainContrast,
-                                    SettingsMap().TerrainBrightness);
-
-      // Draw the terrain
-      terrain_renderer->Draw(canvas, *this, sunazimuth, sunelevation);
-    }
-
-    if (SettingsComputer().FinalGlideTerrain == 2 && Calculated().TerrainValid)
+  if (terrain != NULL) {
+    if ((SettingsComputer().FinalGlideTerrain == 2) && 
+        Calculated().TerrainValid)
       // Draw the groundline (and shading)
       DrawTerrainAbove(canvas, rc, buffer_canvas);
-
     BigZoom = false;
   }
 
@@ -191,7 +141,7 @@ MapWindow::RenderTaskElements(Canvas &canvas, const RECT rc)
 }
 
 /**
- * Render final glide through terrain marker and RASP spot heights (?)
+ * Render final glide through terrain marker 
  * @param canvas The drawing canvas
  * @param rc The area to draw in
  */
@@ -201,11 +151,6 @@ MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
   // draw red cross on glide through terrain marker
   if (Calculated().TerrainValid)
     DrawGlideThroughTerrain(canvas);
-
-  if ((terrain != NULL && SettingsMap().EnableTerrain &&
-       Calculated().TerrainValid) ||
-      (weather != NULL && weather->GetParameter() != 0))
-    DrawSpotHeights(canvas);
 }
 
 /**
@@ -292,10 +237,7 @@ MapWindow::Render(Canvas &canvas, const RECT rc)
   // Calculate screen positions
   RenderStart(canvas, rc);
 
-  // Render a clean background and reset pen, brush and font
-  RenderBackground(canvas, rc);
-
-  // Render terrain, groundline and topology
+  // Render terrain, groundline and topology and reset pen, brush and font
   RenderMapLayer(canvas, rc);
 
   // Render the AAT areas and airspace
@@ -311,7 +253,12 @@ MapWindow::Render(Canvas &canvas, const RECT rc)
   // Render task, waypoints and marks
   RenderTaskElements(canvas, rc);
 
+  // Render glide through terrain range
   RenderGlide(canvas, rc);
+
+  // Render weather/terrain max/min values
+  canvas.select(TitleWindowFont);
+  m_background.DrawSpotHeights(canvas, *this, label_block);
 
   // Render lower symbology
   RenderSymbology_lower(canvas, rc);
@@ -323,46 +270,3 @@ MapWindow::Render(Canvas &canvas, const RECT rc)
   RenderSymbology_upper(canvas, rc);
 }
 
-static void
-DrawSpotHeight_Internal(Canvas &canvas, MapWindowProjection &map_projection,
-                        LabelBlock &label_block, TCHAR *Buffer, POINT pt)
-{
-  if (_tcslen(Buffer) == 0)
-    return;
-
-  POINT orig = map_projection.GetOrigScreen();
-  RECT brect;
-  SIZE tsize = canvas.text_size(Buffer);
-
-  pt.x += 2 + orig.x;
-  pt.y += 2 + orig.y;
-  brect.left = pt.x;
-  brect.right = brect.left + tsize.cx;
-  brect.top = pt.y;
-  brect.bottom = brect.top + tsize.cy;
-
-  if (!label_block.check(brect))
-    return;
-
-  canvas.text(pt.x, pt.y, Buffer);
-}
-
-void
-MapWindow::DrawSpotHeights(Canvas &canvas)
-{
-  if (weather == NULL || weather->GetParameter() == 0 ||
-      terrain_renderer == NULL)
-    return;
-
-  canvas.select(TitleWindowFont);
-
-  TCHAR Buffer[20];
-
-  weather->ValueToText(Buffer, terrain_renderer->spot_max_val);
-  DrawSpotHeight_Internal(canvas, *this, label_block,
-			  Buffer, terrain_renderer->spot_max_pt);
-
-  weather->ValueToText(Buffer, terrain_renderer->spot_min_val);
-  DrawSpotHeight_Internal(canvas, *this, label_block,
-			  Buffer, terrain_renderer->spot_min_pt);
-}

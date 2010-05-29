@@ -48,6 +48,7 @@ Copyright_License {
 #include "Screen/LabelBlock.hpp"
 #include "MapWindowBlackboard.hpp"
 #include "NMEA/Derived.hpp"
+#include "BackgroundDrawHelper.hpp"
 
 #include <vector>
 
@@ -68,7 +69,6 @@ struct ZoomClimb_t
 class TopologyStore;
 class RasterTerrain;
 class RasterWeather;
-class TerrainRenderer;
 class Marks;
 class GaugeCDI;
 class Waypoint;
@@ -89,7 +89,7 @@ protected:
 
   bool topology_dirty, terrain_dirty, weather_dirty;
 
-  TerrainRenderer *terrain_renderer;
+  BackgroundDrawHelper m_background;
   AirspaceClientUI *m_airspace;
   TaskClientMap *task;
 
@@ -218,7 +218,6 @@ private:
   void DrawGlideThroughTerrain(Canvas &canvas);
   void DrawTerrainAbove(Canvas &hDC, const RECT rc, Canvas &buffer);
   void DrawCDI();
-  void DrawSpotHeights(Canvas &canvas);
 
   //  void DrawSpeedToFly(HDC hDC, RECT rc);
   void DrawFLARMTraffic(Canvas &canvas);
@@ -265,7 +264,6 @@ private:
   GlidePolar get_glide_polar() const;
 
   void RenderStart(Canvas &canvas, const RECT rc);
-  void RenderBackground(Canvas &canvas, const RECT rc);
   void RenderMapLayer(Canvas &canvas, const RECT rc);
   void RenderAreas(Canvas &canvas, const RECT rc);
   void RenderTrail(Canvas &canvas, const RECT rc);

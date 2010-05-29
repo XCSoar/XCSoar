@@ -43,6 +43,11 @@ class Canvas;
 class Projection;
 class SETTINGS_MAP;
 class TerrainRenderer;
+class SpeedVector;
+class RasterTerrain;
+class RasterWeather;
+class LabelBlock;
+
 #include "Math/Angle.hpp"
 #include <windef.h>
 
@@ -52,7 +57,7 @@ class TerrainRenderer;
 class BackgroundDrawHelper 
 {
 public:
-  BackgroundDrawHelper();
+  BackgroundDrawHelper(const bool white_background=false);
   ~BackgroundDrawHelper();
 
   void Draw(Canvas& canvas,
@@ -60,12 +65,27 @@ public:
             const Projection& proj,
             const SETTINGS_MAP& settings_map);
 
+  void DrawSpotHeights(Canvas& canvas,
+                       const Projection &proj,
+                       LabelBlock& block);
+
   void set_sun(const Angle& sun_azimuth,
                const Angle& sun_elevation);
   void default_sun();
+  void sun_from_wind(const Projection& proj,
+                     const SpeedVector& wind);
+  void reset();
+  void set_terrain(RasterTerrain* terrain);
+  void set_weather(RasterWeather* weather);
 
 private:
+  void draw_background(Canvas& canvas,
+                       const RECT& rc) const;
+
   TerrainRenderer* m_rend;
+  RasterTerrain* m_terrain;
+  RasterWeather* m_weather;
+  const bool m_white_background;
   Angle m_sun_elevation;
   Angle m_sun_azimuth;
 };
