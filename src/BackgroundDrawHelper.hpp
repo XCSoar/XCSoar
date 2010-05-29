@@ -43,6 +43,7 @@ class Canvas;
 class Projection;
 class SETTINGS_MAP;
 class TerrainRenderer;
+#include "Math/Angle.hpp"
 #include <windef.h>
 
 /**
@@ -59,8 +60,14 @@ public:
             const Projection& proj,
             const SETTINGS_MAP& settings_map);
 
+  void set_sun(const Angle& sun_azimuth,
+               const Angle& sun_elevation);
+  void default_sun();
+
 private:
   TerrainRenderer* m_rend;
+  Angle m_sun_elevation;
+  Angle m_sun_azimuth;
 };
 
 #endif

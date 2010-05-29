@@ -45,6 +45,7 @@ Copyright_License {
 BackgroundDrawHelper::BackgroundDrawHelper():
   m_rend(NULL)
 {
+  default_sun();
 }
 
 BackgroundDrawHelper::~BackgroundDrawHelper()
@@ -68,7 +69,24 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
   m_rend->SetSettings(settings_map.TerrainRamp,
                       settings_map.TerrainContrast,
                       settings_map.TerrainBrightness);
-  m_rend->Draw(canvas, proj, 
-               Angle::degrees(fixed(45.0)), 
-               Angle::degrees(fixed(45.0)));
+  m_rend->Draw(canvas, proj,
+               m_sun_azimuth,
+               m_sun_elevation);
+}
+
+
+void
+BackgroundDrawHelper::set_sun(const Angle& sun_azimuth,
+                              const Angle& sun_elevation)
+{
+  m_sun_azimuth = sun_azimuth;
+  m_sun_elevation = sun_elevation;
+}
+
+
+void
+BackgroundDrawHelper::default_sun()
+{
+  m_sun_elevation = Angle::degrees(fixed(45.0));
+  m_sun_azimuth = Angle::degrees(fixed(45.0));
 }
