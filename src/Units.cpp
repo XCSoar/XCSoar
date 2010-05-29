@@ -63,7 +63,7 @@ CoordinateFormats_t Units::CoordinateFormat;
 
 //SI to Local Units
 
-UnitDescriptor_t Units::UnitDescriptors[] = {
+const UnitDescriptor_t Units::UnitDescriptors[] = {
   { NULL, 1, 0 },
   { _T("km"), 0.001, 0 },
   { _T("nm"), 0.00053996, 0 },
@@ -452,7 +452,7 @@ Units::FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size,
 {
   int prec;
   TCHAR sTmp[32];
-  UnitDescriptor_t *pU = &UnitDescriptors[AltitudeUnit];
+  const UnitDescriptor_t *pU = &UnitDescriptors[AltitudeUnit];
 
   /// \todo rounding
   Altitude = Altitude * pU->ToUserFact; // + pU->ToUserOffset;
@@ -504,7 +504,7 @@ Units::FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size,
 {
   int prec;
   TCHAR sTmp[32];
-  UnitDescriptor_t *pU = &UnitDescriptors[AltitudeUnit];
+  const UnitDescriptor_t *pU = &UnitDescriptors[AltitudeUnit];
 
   Altitude = Altitude * pU->ToUserFact; // + pU->ToUserOffset;
 
@@ -535,7 +535,7 @@ Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size,
   double value;
   TCHAR sTmp[32];
 
-  UnitDescriptor_t *pU = &UnitDescriptors[DistanceUnit];
+  const UnitDescriptor_t *pU = &UnitDescriptors[DistanceUnit];
 
   value = Distance * pU->ToUserFact; // + pU->ToUserOffset;
 
@@ -589,7 +589,7 @@ Units::FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer,
   double value;
   TCHAR sTmp[32];
 
-  UnitDescriptor_t *pU = &UnitDescriptors[DistanceUnit];
+  const UnitDescriptor_t *pU = &UnitDescriptors[DistanceUnit];
 
   if (Unit != NULL)
     *Unit = DistanceUnit;
@@ -641,7 +641,7 @@ Units::FormatUserSpeed(double Speed, TCHAR *Buffer, size_t size,
 {
   int prec;
   TCHAR sTmp[32];
-  UnitDescriptor_t *pU = &UnitDescriptors[SpeedUnit];
+  const UnitDescriptor_t *pU = &UnitDescriptors[SpeedUnit];
 
   Speed = Speed * pU->ToUserFact;
 
@@ -669,7 +669,7 @@ Units::FormatUserVSpeed(double Speed, TCHAR *Buffer, size_t size,
                         bool IncludeUnit)
 {
   TCHAR sTmp[32];
-  UnitDescriptor_t *pU = &UnitDescriptors[VerticalSpeedUnit];
+  const UnitDescriptor_t *pU = &UnitDescriptors[VerticalSpeedUnit];
 
   Speed = Speed * pU->ToUserFact;
 
@@ -697,7 +697,7 @@ Units::ConvertUnits(double Value, Units_t From, Units_t To)
 double
 Units::ToUserUnit(double Value, Units_t Unit)
 {
-  UnitDescriptor_t *pU = &UnitDescriptors[Unit];
+  const UnitDescriptor_t *pU = &UnitDescriptors[Unit];
   Value *= pU->ToUserFact; // + pU->ToUserOffset;
   return Value;
 }
@@ -705,7 +705,7 @@ Units::ToUserUnit(double Value, Units_t Unit)
 double
 Units::ToSysUnit(double Value, Units_t Unit)
 {
-  UnitDescriptor_t *pU = &UnitDescriptors[Unit];
+  const UnitDescriptor_t *pU = &UnitDescriptors[Unit];
   Value /= pU->ToUserFact; // + pU->ToUserOffset;
   return Value;
 }

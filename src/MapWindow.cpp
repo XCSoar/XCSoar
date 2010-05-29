@@ -44,7 +44,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Gauge/GaugeCDI.hpp"
-#include "TaskClientMap.hpp"
+#include "TaskClientUI.hpp"
 
 #include <tchar.h>
 
@@ -55,6 +55,7 @@ ScreenGraphics MapGfx;
  */
 MapWindow::MapWindow()
   :MapWindowProjection(),
+   way_points(NULL),
    topology(NULL), terrain(NULL), weather(NULL),
    topology_dirty(true), terrain_dirty(true), weather_dirty(true),
    m_background(true),
@@ -141,7 +142,7 @@ MapWindow::UpdateTopology(bool force)
     return;
 
   topology_dirty = topology != NULL && SettingsMap().EnableTopology &&
-    topology->ScanVisibility(*this, getSmartBounds(), force);
+    topology->ScanVisibility(*this, *getSmartBounds(), force);
 }
 
 void

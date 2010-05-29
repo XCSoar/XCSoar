@@ -348,6 +348,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Terrain/RasterTerrain.cpp \
 	$(SRC)/Terrain/RasterWeather.cpp \
 	$(SRC)/Terrain/TerrainRenderer.cpp \
+	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Screen/Animation.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \

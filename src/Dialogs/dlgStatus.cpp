@@ -581,7 +581,7 @@ void dlgStatusShowModal(int start_page){
     }
   }
 
-  nearest_waypoint = task_ui.get_nearest_waypoint(XCSoarInterface::Basic().Location);
+  nearest_waypoint = way_points.get_nearest(XCSoarInterface::Basic().Location);
 
   UpdateValuesSystem();
   UpdateValuesFlight();

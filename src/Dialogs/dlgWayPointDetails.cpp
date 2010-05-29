@@ -56,6 +56,7 @@ Copyright_License {
 #include "Task/TaskManager.hpp"
 #include "Task/Tasks/TaskSolvers/TaskSolution.hpp"
 #include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
+#include "WayPoint/WayPointGlue.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -251,7 +252,14 @@ static void
 OnNewHomeClicked(gcc_unused WndButton &button)
 {
   XCSoarInterface::SetSettingsComputer().HomeWaypoint = selected_waypoint->id;
-  task_ui.set_home(terrain, XCSoarInterface::SetSettingsComputer(), false, false);
+
+  {
+    ScopeSuspendAllThreads suspend;
+    WayPointGlue::SetHome(way_points, terrain,
+                          XCSoarInterface::SetSettingsComputer(),
+                          false, false);
+  }
+
 #ifdef OLD_TASK
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());

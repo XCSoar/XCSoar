@@ -73,8 +73,8 @@ class MapWindowProjection: public Projection
   // used by waypoint nearest routine
   bool WaypointInScaleFilter(const Waypoint &way_point) const;
 
-  rectObj& getSmartBounds() {
-    return smart_bounds_active;
+  rectObj* getSmartBounds() {
+    return &smart_bounds_active;
   }
 
   // called on receipt of new data, to trigger projection/scale change functions

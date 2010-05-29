@@ -6,9 +6,6 @@
 
 #include <string>
 
-static int SelectedWayPointFileIdx=0;
-
-
 WaypointSorter::WaypointSorter(const Waypoints &way_points,
                                const GEOPOINT &Location,
                                const fixed distance_factor)
@@ -82,18 +79,23 @@ WaypointSorter::filter_turnpoint(WaypointSelectInfoVector& vec) const
   vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointTurnPointFilter), vec.end());
 }
 
-static bool 
-WaypointFileIdxFilter(const WayPointSelectInfo& elem1) 
-{
-  return elem1.way_point->FileNum != SelectedWayPointFileIdx;
-}
+class WaypointFileIdxFilter {
+  int file_num;
+
+public:
+  WaypointFileIdxFilter(int _file_num):file_num(_file_num) {}
+
+  bool operator()(const WayPointSelectInfo &i) const {
+    return i.way_point->FileNum != file_num;
+  }
+};
 
 void
 WaypointSorter::filter_file(WaypointSelectInfoVector& vec,
                             const int file_idx) const
 {
-  SelectedWayPointFileIdx = file_idx;
-  vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointFileIdxFilter), vec.end());
+  const WaypointFileIdxFilter filter(file_idx);
+  vec.erase(std::remove_if(vec.begin(), vec.end(), filter), vec.end());
 }
 
 static unsigned char MatchChar = 0;
@@ -124,35 +126,42 @@ WaypointSorter::filter_name(WaypointSelectInfoVector& vec,
 }
 
 static const fixed fixed_18(18);
-static Angle Direction;
 
-static bool
-WaypointDirectionFilter(const WayPointSelectInfo& elem1) 
-{
-  fixed DirectionErr = (elem1.Direction-Direction).as_delta().magnitude_degrees();
-  return (DirectionErr > fixed_18);
-}
+class WaypointDirectionFilter {
+  Angle direction;
+
+public:
+  WaypointDirectionFilter(Angle _direction):direction(_direction) {}
+
+  bool operator()(const WayPointSelectInfo& i) const {
+    fixed DirectionErr = (i.Direction - direction).as_delta().magnitude_degrees();
+    return DirectionErr > fixed_18;
+  }
+};
 
 void 
 WaypointSorter::filter_direction(WaypointSelectInfoVector& vec, const Angle direction) const
 {
-  Direction = direction;
-  vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointDirectionFilter), vec.end());
+  const WaypointDirectionFilter filter(direction);
+  vec.erase(std::remove_if(vec.begin(), vec.end(), filter), vec.end());
 }
 
-static fixed MaxDistance;
+class WaypointDistanceFilter {
+  fixed max_distance;
 
-static bool
-WaypointDistanceFilter(const WayPointSelectInfo& elem1)
-{
-  return (elem1.Distance > MaxDistance);
-}
+public:
+  WaypointDistanceFilter(fixed _max_distance):max_distance(_max_distance) {}
+
+  bool operator()(const WayPointSelectInfo& i) const {
+    return i.Distance > max_distance;
+  }
+};
 
 void 
 WaypointSorter::filter_distance(WaypointSelectInfoVector& vec, const fixed distance) const
 {
-  MaxDistance = distance;
-  vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointDistanceFilter), vec.end());
+  const WaypointDistanceFilter filter(distance);
+  vec.erase(std::remove_if(vec.begin(), vec.end(), filter), vec.end());
 }
 
 

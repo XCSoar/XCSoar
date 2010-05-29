@@ -13,10 +13,8 @@
 bool setup_waypoints(Waypoints &waypoints, const unsigned n) 
 {
 
-  Waypoint wp;
-
-  wp = waypoints.create(GEOPOINT(Angle::degrees(fixed_zero), 
-                                 Angle::degrees(fixed_zero)));
+  Waypoint wp = waypoints.create(GEOPOINT(Angle::degrees(fixed_zero),
+                                          Angle::degrees(fixed_zero)));
   wp.Flags.Airport = true;
   wp.Altitude=0.25;
   waypoints.append(wp);

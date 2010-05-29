@@ -463,6 +463,8 @@ static unsigned num_passed=0;
 static DWORD	fpsTime_start = 0;
 static DWORD	fpsTime_finish = 0;
 
+#ifndef __GNUC__
+
 void ok(int a, const char* b, unsigned int c) {
   if (a) {
     num_passed++;
@@ -470,6 +472,8 @@ void ok(int a, const char* b, unsigned int c) {
     // print failed
   }
 }
+
+#endif
 
 int plan_tests(unsigned int a) {
   num_planned = a;

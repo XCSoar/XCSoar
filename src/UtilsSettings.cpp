@@ -54,9 +54,9 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Simulator.hpp"
 #include "DrawThread.hpp"
-#include "CalculationThread.hpp"
 #include "AirspaceGlue.hpp"
 #include "TaskClientUI.hpp"
+#include "WayPoint/WayPointGlue.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "Waypoint/Waypoints.hpp"
@@ -80,6 +80,7 @@ static void
 SettingsEnter()
 {
   draw_thread->suspend();
+
   // This prevents the map and calculation threads from doing anything
   // with shared data while it is being changed (also prevents drawing)
 
@@ -104,7 +105,7 @@ SettingsLeave()
 
   XCSoarInterface::main_window.map.set_focus();
 
-  calculation_thread->suspend();
+  SuspendAllThreads();
 
 /*
   if (MapFileChanged) { printf("MapFileChanged\n"); }
@@ -138,13 +139,14 @@ SettingsLeave()
     terrain.OpenTerrain();
 
     // re-load waypoints
-    task_ui.read_waypoints(&terrain);
+    WayPointGlue::ReadWaypoints(way_points, &terrain);
     ReadAirfieldFile();
 
     // re-set home
     if (WaypointFileChanged || TerrainFileChanged) {
-      task_ui.set_home(terrain, XCSoarInterface::SetSettingsComputer(),
-                       WaypointFileChanged);
+      WayPointGlue::SetHome(way_points, terrain,
+                            XCSoarInterface::SetSettingsComputer(),
+                            WaypointFileChanged, false);
     }
 
     terrain.ServiceFullReload(XCSoarInterface::Basic().Location);
@@ -178,12 +180,10 @@ SettingsLeave()
     XCSoarInterface::main_window.map.set_focus();
   }
 
-  calculation_thread->resume();
-
   if (DevicePortChanged)
     devRestart();
 
-  draw_thread->resume();
+  ResumeAllThreads();
   // allow map and calculations threads to continue
 }
 

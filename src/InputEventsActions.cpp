@@ -1195,11 +1195,11 @@ InputEvents::eventNearestWaypointDetails(const TCHAR *misc)
 {
   if (_tcscmp(misc, TEXT("aircraft")) == 0)
     // big range..
-    PopupNearestWaypointDetails(task_ui.get_waypoints(), Basic().Location,
+    PopupNearestWaypointDetails(way_points, Basic().Location,
                                 1.0e5, false);
   else if (_tcscmp(misc, TEXT("pan")) == 0)
     // big range..
-    PopupNearestWaypointDetails(task_ui.get_waypoints(), Basic().Location,
+    PopupNearestWaypointDetails(way_points, Basic().Location,
                                 1.0e5, true);
 }
 
@@ -1546,10 +1546,11 @@ InputEvents::eventAirspaceDisplayMode(const TCHAR *misc)
 void
 InputEvents::eventAddWaypoint(const TCHAR *misc)
 {
-  Waypoint edit_waypoint = task_ui.create_waypoint(Basic().Location);
+  Waypoint edit_waypoint = way_points.create(Basic().Location);
   if (dlgWaypointEditShowModal(edit_waypoint)) {
     if (edit_waypoint.Name.size()) {
-      task_ui.append_waypoint(edit_waypoint);
+      ScopeSuspendAllThreads suspend;
+      way_points.append(edit_waypoint);
     }
   }
 }

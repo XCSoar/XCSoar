@@ -36,7 +36,6 @@ Copyright_License {
 }
 */
 
-#include "TaskClientUI.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Layout.hpp"
@@ -48,14 +47,22 @@ Copyright_License {
 #include "Compiler.h"
 #include "DataField/Enum.hpp"
 #include "LogFile.hpp"
+#include "StringUtil.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
 
-static TCHAR sNameFilter[NAMEFILTERLEN+1];
+struct WayPointFilterData {
+  TCHAR name[NAMEFILTERLEN + 1];
 
+  int distance_index;
 
-static GEOPOINT Location;
+  int direction_index;
+
+  int type_index;
+};
+
+static WayPointFilterData filter_data;
 
 static WndForm *wf=NULL;
 static WndListFrame *wWayPointList=NULL;
@@ -100,7 +107,8 @@ static void InitializeDirection(bool bOnlyHeading) {
       for (unsigned int i=0; i < sizeof(DirectionFilter) / sizeof(DirectionFilter[0]); i++) {
         dfe->addEnumText(GetDirectionData(i));
       }
-      dfe->SetAsInteger(0);
+
+      dfe->SetAsInteger(filter_data.direction_index);
     }
     dfe->replaceEnumText(1,GetDirectionData(1)); // update heading value to current heading
     wpDirection->RefreshDisplay();
@@ -117,25 +125,21 @@ static void PrepareData(void){
 
   TCHAR sTmp[15];
 
-  sNameFilter[0]='\0';
+  filter_data.name[0] = _T('\0');
+
   SetNameCaptionFlushLeft(_T("*"));
 
   if (wpDistance) {  // initialize datafieldenum for Distance
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wpDistance->GetDataField();
-    for (unsigned i=0; i < sizeof(DistanceFilter) / sizeof(DistanceFilter[0]); i++) {
-      if (i== 0) {
-        sTmp[0]='*';
-        sTmp[1]='\0';
-      }
-      else {
-        _stprintf(sTmp, TEXT("%.0f%s"),
+    dfe->addEnumText(_T("*"));
+    for (unsigned i = 1; i < sizeof(DistanceFilter) / sizeof(DistanceFilter[0]); i++) {
+      _stprintf(sTmp, TEXT("%.0f%s"),
                 (double)DistanceFilter[i],
                 Units::GetDistanceName());
-      }
       dfe->addEnumText(sTmp);
     }
-    dfe->SetAsInteger(0);
+    dfe->SetAsInteger(filter_data.distance_index);
     wpDistance->RefreshDisplay();
   }
 
@@ -148,7 +152,7 @@ static void PrepareData(void){
       _stprintf(sTmp, TEXT("%s"), TypeFilter[i]);
       dfe->addEnumText(sTmp);
     }
-    dfe->SetAsInteger(0);
+    dfe->SetAsInteger(filter_data.type_index);
     wpType->RefreshDisplay();
   }
 
@@ -160,33 +164,34 @@ static void UpdateList(void)
 {
   WayPointSelectInfo = waypoint_sorter->get_list();
 
-  switch( wpType->GetDataField()->GetAsInteger() ) {
+  switch (filter_data.type_index) {
   case 1: 
     waypoint_sorter->filter_airport(WayPointSelectInfo);
     break;
+
   case 2:
     waypoint_sorter->filter_landable(WayPointSelectInfo);
     break;
+
   case 3: 
     waypoint_sorter->filter_turnpoint(WayPointSelectInfo);
     break;
+
   case 4:
   case 5:
-    waypoint_sorter->filter_file(WayPointSelectInfo, wpType->GetDataField()->GetAsInteger()-4);
-    break;
-  default:
+    waypoint_sorter->filter_file(WayPointSelectInfo, filter_data.type_index - 4);
     break;
   }
 
   bool sort_distance = false;
-  if (wpDistance->GetDataField()->GetAsInteger()) {
+  if (filter_data.distance_index > 0) {
     sort_distance = true;
-    waypoint_sorter->filter_distance(WayPointSelectInfo, DistanceFilter[wpDistance->GetDataField()->GetAsInteger()]);
+    waypoint_sorter->filter_distance(WayPointSelectInfo, DistanceFilter[filter_data.distance_index]);
   } 
 
-  if (wpDirection->GetDataField()->GetAsInteger()) {
+  if (filter_data.direction_index > 0) {
     sort_distance = true;
-    int a = DirectionFilter[wpDirection->GetDataField()->GetAsInteger()];
+    int a = DirectionFilter[filter_data.direction_index];
     if (a == DirHDG) {
       a = iround(XCSoarInterface::Basic().Heading.value_degrees());
       lastHeading = a;
@@ -197,9 +202,9 @@ static void UpdateList(void)
   if (sort_distance) {
     waypoint_sorter->sort_distance(WayPointSelectInfo);
   }
-  if (_tcslen(sNameFilter) > 0) {
-    waypoint_sorter->filter_name(WayPointSelectInfo, sNameFilter);
-  }
+
+  if (!string_is_empty(filter_data.name))
+    waypoint_sorter->filter_name(WayPointSelectInfo, filter_data.name);
 
   UpLimit = WayPointSelectInfo.size();
   wWayPointList->SetLength(UpLimit);
@@ -208,16 +213,18 @@ static void UpdateList(void)
 
 static void FilterMode(bool direction) {
   if (direction) {
+    filter_data.distance_index = 0; // "*"
+    filter_data.direction_index = 0; // "*"
 
     if (wpDistance) {
       wpDistance->GetDataField()->SetDetachGUI(true);
-      wpDistance->GetDataField()->SetAsInteger(0);  // "*"
+      wpDistance->GetDataField()->SetAsInteger(filter_data.distance_index);
       wpDistance->GetDataField()->SetDetachGUI(false);
       wpDistance->RefreshDisplay();
     }
     if (wpDirection) {
       wpDirection->GetDataField()->SetDetachGUI(true);
-      wpDirection->GetDataField()->SetAsInteger(0);
+      wpDirection->GetDataField()->SetAsInteger(filter_data.direction_index);
       wpDirection->GetDataField()->SetDetachGUI(false);
       wpDirection->RefreshDisplay();
     }
@@ -230,7 +237,7 @@ OnFilterNameButton(gcc_unused WndButton &button){
 
 
   TCHAR newNameFilter[NAMEFILTERLEN+1];
-  _tcsncpy(newNameFilter, sNameFilter, NAMEFILTERLEN);
+  _tcsncpy(newNameFilter, filter_data.name, NAMEFILTERLEN);
   dlgTextEntryShowModal(newNameFilter, NAMEFILTERLEN);
 
   int i= _tcslen(newNameFilter)-1;
@@ -243,15 +250,14 @@ OnFilterNameButton(gcc_unused WndButton &button){
     i--;
   };
 
-  _tcsncpy(sNameFilter, newNameFilter, NAMEFILTERLEN);
+  _tcsncpy(filter_data.name, newNameFilter, NAMEFILTERLEN);
 
   if (wbName) {
 
-    if (sNameFilter[0]=='\0') {
+    if (string_is_empty(filter_data.name))
       SetNameCaptionFlushLeft(TEXT("*"));
-    }
     else {
-      SetNameCaptionFlushLeft(sNameFilter);
+      SetNameCaptionFlushLeft(filter_data.name);
     }
   }
   FilterMode(true);
@@ -263,22 +269,16 @@ OnFilterNameButton(gcc_unused WndButton &button){
 static void
 OnFilterDistance(DataField *Sender, DataField::DataAccessKind_t Mode){
 
-  switch(Mode){
-    case DataField::daGet:
+  switch (Mode) {
+  case DataField::daGet:
+  case DataField::daPut:
     break;
-    case DataField::daPut:
-    break;
-    case DataField::daChange:
-      FilterMode(false);
-      UpdateList();
-    break;
-    case DataField::daInc:
-      FilterMode(false);
-      UpdateList();
-    break;
-    case DataField::daDec:
-      FilterMode(false);
-      UpdateList();
+
+  case DataField::daChange:
+  case DataField::daInc:
+  case DataField::daDec:
+    filter_data.distance_index = Sender->GetAsInteger();
+    UpdateList();
     break;
   }
 }
@@ -303,23 +303,19 @@ GetDirectionData(int DirectionFilterIdx){
 static void
 OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mode){
 
-  switch(Mode){
-    case DataField::daGet:
-      Sender->Set(TEXT("*"));
+  switch (Mode) {
+  case DataField::daGet:
+    Sender->Set(TEXT("*"));
     break;
-    case DataField::daPut:
+
+  case DataField::daPut:
     break;
-    case DataField::daChange:
-      FilterMode(false);
-      UpdateList();
-    break;
-    case DataField::daInc:
-      FilterMode(false);
-      UpdateList();
-    break;
-    case DataField::daDec:
-      FilterMode(false);
-      UpdateList();
+
+  case DataField::daChange:
+  case DataField::daInc:
+  case DataField::daDec:
+    filter_data.direction_index = Sender->GetAsInteger();
+    UpdateList();
     break;
   }
 }
@@ -327,22 +323,16 @@ OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mode){
 static void
 OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode){
 
-  switch(Mode){
-    case DataField::daGet:
+  switch (Mode) {
+  case DataField::daGet:
+  case DataField::daPut:
     break;
-    case DataField::daPut:
-    break;
-    case DataField::daChange:
-      FilterMode(false);
-      UpdateList();
-    break;
-    case DataField::daInc:
-      FilterMode(false);
-      UpdateList();
-    break;
-    case DataField::daDec:
-      FilterMode(false);
-      UpdateList();
+
+  case DataField::daChange:
+  case DataField::daInc:
+  case DataField::daDec:
+    filter_data.type_index = Sender->GetAsInteger();
+    UpdateList();
     break;
   }
 }
@@ -427,7 +417,7 @@ OnWPSCloseClicked(gcc_unused WndButton &button)
 
 static int OnTimerNotify(WindowControl * Sender) {
   (void)Sender;
-  if (wpDirection->GetDataField()->GetAsInteger() == 1){
+  if (filter_data.direction_index == 1){
     int a;
     a = (lastHeading - iround(XCSoarInterface::Basic().Heading.value_degrees()));
     if (abs(a) > 0){
@@ -442,27 +432,29 @@ static int OnTimerNotify(WindowControl * Sender) {
 static bool
 FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
-  int NewIndex = wpType->GetDataField()->GetAsInteger();;
+  int NewIndex = filter_data.type_index;
 
-  switch(key_code){
-    case VK_F1:
-      NewIndex = 0;
+  switch (key_code){
+  case VK_F1:
+    NewIndex = 0;
     break;
-    case VK_F2:
-      NewIndex = 2;
+
+  case VK_F2:
+    NewIndex = 2;
     break;
-    case VK_F3:
-      NewIndex = 3;
+
+  case VK_F3:
+    NewIndex = 3;
     break;
 
   default:
     return false;
   }
 
-  if (wpType->GetDataField()->GetAsInteger() != NewIndex){
-    FilterMode(false);
+  if (filter_data.type_index != NewIndex){
+    filter_data.type_index = NewIndex;
     UpdateList();
-    wpType->GetDataField()->SetAsInteger(NewIndex);
+    wpType->GetDataField()->SetAsInteger(filter_data.type_index);
     wpType->RefreshDisplay();
   }
 
@@ -482,15 +474,6 @@ dlgWayPointSelect(SingleWindow &parent,
                   const int type, const int FilterNear)
 {
   UpLimit = 0;
-
-  Location = location;
-
-  if (type > -1){
-    wpDistance->GetDataField()->SetAsInteger(type);
-  }
-  if (FilterNear){
-    wpDistance->GetDataField()->SetAsInteger(1);
-  }
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
@@ -532,7 +515,14 @@ dlgWayPointSelect(SingleWindow &parent,
   wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
   wpType = ((WndProperty *)wf->FindByName(TEXT("prpFltType")));
 
-  WaypointSorter g_waypoint_sorter(task_ui.get_waypoints(), 
+  if (type > -1){
+    filter_data.type_index = type;
+  }
+  if (FilterNear){
+    filter_data.distance_index = 1;
+  }
+
+  WaypointSorter g_waypoint_sorter(way_points,
                                    location, fixed(Units::ToUserDistance(1)));
   waypoint_sorter = &g_waypoint_sorter;
   PrepareData();

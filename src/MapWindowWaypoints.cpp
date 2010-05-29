@@ -45,7 +45,7 @@ Copyright_License {
 #include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Visitors/TaskVisitor.hpp"
-#include "TaskClientMap.hpp"
+#include "TaskClientUI.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -273,15 +273,15 @@ private:
 void
 MapWindow::DrawWaypoints(Canvas &canvas)
 {
-  if (!task || task->is_waypoints_empty()) 
+  if (way_points == NULL || way_points->empty())
     return;
 
   MapWaypointLabelClear();
 
   WaypointVisitorMap v(*this, canvas, get_glide_polar());
-  task->waypoints_visit_within_range(PanLocation,
-                                     fixed(GetScreenDistanceMeters()), v);
-  if (SettingsMap().DisplayTextType == DISPLAYNAMEIFINTASK)
+  way_points->visit_within_range(PanLocation,
+                                 fixed(GetScreenDistanceMeters()), v);
+  if (task != NULL && SettingsMap().DisplayTextType == DISPLAYNAMEIFINTASK)
     task->CAccept(v);
 
   MapWaypointLabelSortAndRender(canvas);

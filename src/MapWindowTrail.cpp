@@ -36,13 +36,12 @@ Copyright_License {
 }
 */
 
-#include "TaskClientMap.hpp"
+#include "TaskClientUI.hpp"
 #include "MapWindow.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Util.hpp"
 #include "Screen/Graphics.hpp"
-#include <math.h>
 #include <algorithm>
 
 using std::min;

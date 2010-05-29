@@ -71,9 +71,10 @@ class RasterTerrain;
 class RasterWeather;
 class Marks;
 class GaugeCDI;
+class Waypoints;
 class Waypoint;
 class AirspaceClientUI;
-class TaskClientMap;
+class TaskClientUI;
 class GlidePolar;
 class ContainerWindow;
 
@@ -83,6 +84,7 @@ class MapWindow : public PaintWindow,
   public MapWindowTimer
 {
 protected:
+  const Waypoints *way_points;
   TopologyStore *topology;
   RasterTerrain *terrain;
   RasterWeather *weather;
@@ -91,7 +93,7 @@ protected:
 
   BackgroundDrawHelper m_background;
   AirspaceClientUI *m_airspace;
-  TaskClientMap *task;
+  TaskClientUI *task;
 
   Marks *marks;
 
@@ -114,7 +116,11 @@ public:
   void set(ContainerWindow &parent,
            const RECT _MapRectSmall, const RECT _MapRectBig);
 
-  void set_task(TaskClientMap *_task) {
+  void set_way_points(const Waypoints *_way_points) {
+    way_points = _way_points;
+  }
+
+  void set_task(TaskClientUI *_task) {
     task = _task;
   }
 
@@ -231,6 +237,14 @@ protected:
   void UpdateTopology(bool force);
   void UpdateTerrain();
   void UpdateWeather();
+
+  void UpdateAll() {
+    UpdateTopologyCache();
+    while (topology_dirty)
+      UpdateTopology(true);
+    UpdateTerrain();
+    UpdateWeather();
+  }
 
 private:
   // graphics vars

@@ -60,19 +60,21 @@ WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
   if (len < 34)
     return false;
 
-  Waypoint new_waypoint;
+  GEOPOINT location;
+
+  // Latitude (Characters 13-20 // DDMMSS(N/S))
+  if (!parseAngle(line + 13, location.Latitude, true))
+    return false;
+
+  // Longitude (Characters 21-29 // DDDMMSS(E/W))
+  if (!parseAngle(line + 21, location.Longitude, false))
+    return false;
+
+  Waypoint new_waypoint(location);
   new_waypoint.FileNum = file_num;
 
   // Name (Characters 0-12)
   if (!parseString(line, new_waypoint.Name))
-    return false;
-
-  // Latitude (Characters 13-20 // DDMMSS(N/S))
-  if (!parseAngle(line + 13, new_waypoint.Location.Latitude, true))
-    return false;
-
-  // Longitude (Characters 21-29 // DDDMMSS(E/W))
-  if (!parseAngle(line + 21, new_waypoint.Location.Longitude, false))
     return false;
 
   // Altitude (Characters 30-34 // e.g. 1561 (in meters))

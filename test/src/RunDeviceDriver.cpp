@@ -110,7 +110,8 @@ bool InputEvents::processNmea(int key)
  */
 
 ComPort::ComPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
-  :handler(_handler) {}
+  :handler(_handler),
+   buffer(NMEA_BUF_SIZE) {}
 
 void ComPort::run() {}
 
@@ -157,7 +158,10 @@ ComPort::Read(void *Buffer, size_t Size)
  */
 
 Projection::Projection() {}
+fixed Projection::GetMapScaleUser() const { return fixed_one; }
+
 MapWindowProjection::MapWindowProjection() {}
+fixed MapWindowProjection::GetMapScaleUser() const { return fixed_one; }
 
 /*
  * Fake Settings*Blackboard.cpp

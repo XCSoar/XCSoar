@@ -62,7 +62,10 @@ DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
 }
 
 Projection::Projection() {}
+fixed Projection::GetMapScaleUser() const { return fixed_one; }
+
 MapWindowProjection::MapWindowProjection() {}
+fixed MapWindowProjection::GetMapScaleUser() const { return fixed_one; }
 
 SettingsComputerBlackboard::SettingsComputerBlackboard() {}
 SettingsMapBlackboard::SettingsMapBlackboard() {}

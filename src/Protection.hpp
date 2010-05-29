@@ -68,5 +68,24 @@ extern Trigger airspaceWarningEvent;
 extern Trigger targetManipEvent;
 extern Trigger triggerClimbEvent;
 
+/**
+ * Suspend all threads which have unprotected access to shared data.
+ * Call this before doing write operations on shared data.
+ */
+void
+SuspendAllThreads();
+
+/**
+ * Resume all threads suspended by SuspendAllThreads().
+ */
+void
+ResumeAllThreads();
+
+class ScopeSuspendAllThreads {
+public:
+  ScopeSuspendAllThreads() { SuspendAllThreads(); }
+  ~ScopeSuspendAllThreads() { ResumeAllThreads(); }
+};
+
 #endif
 

@@ -382,8 +382,7 @@ Waypoints::create_from_file(const int filenum)
 Waypoint
 Waypoints::create(const GEOPOINT &location)
 {
-  Waypoint edit_waypoint;
-  edit_waypoint.Location = location;
+  Waypoint edit_waypoint(location);
 
   if (empty()) {
     // first waypoint, put into primary file (this will be auto-generated)
@@ -419,7 +418,7 @@ Waypoints::find_duplicate(Waypoint& waypoint)
 {
   const Waypoint* found = lookup_name(waypoint.Name);
   if (found && found->is_close_to(waypoint.Location, fixed(100))) {
-    waypoint = found;
+    waypoint = *found;
     return true;
   }
   append(waypoint);
