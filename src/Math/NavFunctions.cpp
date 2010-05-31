@@ -38,7 +38,8 @@ Copyright_License {
 
 #include "Math/NavFunctions.hpp"
 #include "Math/Constants.h"
-#include "Compatibility/math.h"
+
+#include <math.h>
 
 void
 xXY_to_LL(double Lat_TP, double Long_TP, double X_int, double Y_int,
@@ -154,7 +155,7 @@ xXY_Brg_Rng(double X_1, double Y_1, double X_2, double Y_2, double *Bearing,
     Rad_Bearing += Rad_360;
   }
   *Bearing = (double)(RAD_TO_DEG * Rad_Bearing);
-  *Range = (double)(_hypot((double)(X_2 - X_1), (double)(Y_2 - Y_1)));
+  *Range = (double)hypot((double)(X_2 - X_1), (double)(Y_2 - Y_1));
 }
 
 void

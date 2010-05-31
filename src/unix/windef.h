@@ -55,8 +55,6 @@ Copyright_License {
 #define MAX_PATH 4096
 #endif
 
-#define _hypot hypot
-
 typedef bool BOOL;
 enum {
 	FALSE = false,
