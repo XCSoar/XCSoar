@@ -67,7 +67,8 @@ protected:
   void CalcAutoZoom();
 
 public:
-  void Update(Angle new_direction, const FLARM_STATE &new_data);
+  void Update(Angle new_direction, const FLARM_STATE &new_data,
+              const SETTINGS_TEAMCODE &new_settings);
 
   bool GetAutoZoom() const {
     return enable_auto_zoom;
@@ -148,9 +149,10 @@ FlarmTrafficControl::CalcAutoZoom()
 }
 
 void
-FlarmTrafficControl::Update(Angle new_direction, const FLARM_STATE &new_data)
+FlarmTrafficControl::Update(Angle new_direction, const FLARM_STATE &new_data,
+                            const SETTINGS_TEAMCODE &new_settings)
 {
-  FlarmTrafficWindow::Update(new_direction, new_data);
+  FlarmTrafficWindow::Update(new_direction, new_data, new_settings);
 
   if (enable_auto_zoom || WarningMode())
     CalcAutoZoom();
@@ -328,7 +330,8 @@ OnTimerNotify(WindowControl * Sender)
 {
   (void)Sender;
   wdf->Update(XCSoarInterface::Basic().TrackBearing,
-              XCSoarInterface::Basic().flarm);
+              XCSoarInterface::Basic().flarm,
+              XCSoarInterface::SettingsComputer());
   return 0;
 }
 
@@ -399,7 +402,8 @@ dlgFlarmTrafficShowModal()
 
   // Update Radar and Selection for the first time
   wdf->Update(XCSoarInterface::Basic().TrackBearing,
-              XCSoarInterface::Basic().flarm);
+              XCSoarInterface::Basic().flarm,
+              XCSoarInterface::SettingsComputer());
 
   // Get the last chosen Side Data configuration
   ((WndButton *)wf->FindByName(_T("cmdAutoZoom")))->

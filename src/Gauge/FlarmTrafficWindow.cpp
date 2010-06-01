@@ -42,7 +42,6 @@
 #include "Units.hpp"
 #include "Math/FastRotation.hpp"
 #include "Math/Screen.hpp"
-#include "Interface.hpp"
 
 static const Color hcWarning(0xFF, 0xA2, 0x00);
 static const Color hcAlarm(0xFF, 0x00, 0x00);
@@ -233,10 +232,12 @@ FlarmTrafficWindow::UpdateWarnings()
  * This should be called when the radar needs to be repainted
  */
 void
-FlarmTrafficWindow::Update(Angle new_direction, const FLARM_STATE &new_data)
+FlarmTrafficWindow::Update(Angle new_direction, const FLARM_STATE &new_data,
+                           const SETTINGS_TEAMCODE &new_settings)
 {
   direction = new_direction;
   data = new_data;
+  settings = new_settings;
 
   UpdateSelector();
   UpdateWarnings();
@@ -329,8 +330,8 @@ FlarmTrafficWindow::PaintTrafficInfo(Canvas &canvas) const
   if (traffic.HasName()) {
     canvas.select(InfoWindowFont);
     if (!traffic.HasAlarm()) {
-      if (XCSoarInterface::SettingsComputer().TeamFlarmTracking &&
-          traffic.ID == XCSoarInterface::SettingsComputer().TeamFlarmIdTarget)
+      if (settings.TeamFlarmTracking &&
+          traffic.ID == settings.TeamFlarmIdTarget)
         canvas.set_text_color(hcTeam);
       else
         canvas.set_text_color(hcSelection);
@@ -441,8 +442,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
         canvas.hollow_brush();
         canvas.select(hpStandard);
       }
-      if (XCSoarInterface::SettingsComputer().TeamFlarmTracking &&
-          traffic.ID == XCSoarInterface::SettingsComputer().TeamFlarmIdTarget) {
+      if (settings.TeamFlarmTracking &&
+          traffic.ID == settings.TeamFlarmIdTarget) {
         canvas.select(hbTeam);
       }
     }

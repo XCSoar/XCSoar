@@ -41,6 +41,7 @@
 
 #include "Screen/PaintWindow.hpp"
 #include "FLARM/State.hpp"
+#include "SettingsComputer.hpp"
 
 /**
  * A Window which renders FLARM traffic.
@@ -56,6 +57,7 @@ protected:
 
   Angle direction;
   FLARM_STATE data;
+  SETTINGS_TEAMCODE settings;
 
 public:
   int side_display_type;
@@ -85,7 +87,8 @@ protected:
 
   void UpdateSelector();
   void UpdateWarnings();
-  void Update(Angle new_direction, const FLARM_STATE &new_data);
+  void Update(Angle new_direction, const FLARM_STATE &new_data,
+              const SETTINGS_TEAMCODE &new_settings);
   void PaintTrafficInfo(Canvas &canvas) const;
   void PaintRadarNoTraffic(Canvas &canvas) const;
   void PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic,
