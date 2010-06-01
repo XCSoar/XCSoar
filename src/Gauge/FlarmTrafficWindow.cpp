@@ -372,7 +372,7 @@ FlarmTrafficWindow::PaintTrafficInfo(Canvas &canvas) const
 void
 FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const
 {
-  static TCHAR str[] = _T("No Traffic");
+  static const TCHAR str[] = _T("No Traffic");
   canvas.select(StatisticsFont);
   SIZE ts = canvas.text_size(str);
   canvas.set_text_color(hcStandard);
