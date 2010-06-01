@@ -53,9 +53,20 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Compiler.h"
 
-#define MAXPAGE 8
+enum analysis_page {
+  ANALYSIS_PAGE_BAROGRAPH,
+  ANALYSIS_PAGE_CLIMB,
+  ANALYSIS_PAGE_TASK_SPEED,
+  ANALYSIS_PAGE_WIND,
+  ANALYSIS_PAGE_POLAR,
+  ANALYSIS_PAGE_TEMPTRACE,
+  ANALYSIS_PAGE_TASK,
+  ANALYSIS_PAGE_OLC,
+  ANALYSIS_PAGE_AIRSPACE,
+  ANALYSIS_PAGE_COUNT
+};
 
-static int page = 0;
+static enum analysis_page page = ANALYSIS_PAGE_BAROGRAPH;
 static WndForm *wf = NULL;
 static WndOwnerDrawFrame *wGrid = NULL;
 static WndFrame *wInfo;
@@ -79,16 +90,6 @@ SetCalcCaption(const TCHAR* caption)
   wCalc->SetCaption(gettext(caption));
   SetCalcVisibility(!string_is_empty(caption));
 }
-
-#define ANALYSIS_PAGE_BAROGRAPH    0
-#define ANALYSIS_PAGE_CLIMB        1
-#define ANALYSIS_PAGE_TASK_SPEED   2
-#define ANALYSIS_PAGE_WIND         3
-#define ANALYSIS_PAGE_POLAR        4
-#define ANALYSIS_PAGE_TEMPTRACE    5
-#define ANALYSIS_PAGE_TASK         6
-#define ANALYSIS_PAGE_OLC          7
-#define ANALYSIS_PAGE_AIRSPACE     8
 
 static void
 OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
@@ -255,7 +256,7 @@ Update(void)
     break;
   }
 
-  wGrid->set_visible(page < MAXPAGE + 1);
+  wGrid->set_visible(page < ANALYSIS_PAGE_COUNT);
 
   if (wGrid != NULL)
     wGrid->invalidate();
@@ -264,12 +265,13 @@ Update(void)
 static void
 NextPage(int Step)
 {
-  page += Step;
+  int new_page = (int)page + Step;
 
-  if (page > MAXPAGE)
-    page = 0;
-  if (page < 0)
-    page = MAXPAGE;
+  if (new_page >= ANALYSIS_PAGE_COUNT)
+    new_page = 0;
+  if (new_page < 0)
+    new_page = ANALYSIS_PAGE_COUNT - 1;
+  page = (enum analysis_page)new_page;
 
   Update();
 }
