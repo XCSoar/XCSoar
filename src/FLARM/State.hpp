@@ -212,6 +212,10 @@ public:
     return PreviousTraffic(LastTrafficSlot() + 1);
   }
 
+  unsigned TrafficIndex(const FLARM_TRAFFIC *traffic) const {
+    return traffic - FirstTrafficSlot();
+  }
+
   void Refresh(fixed Time) {
     bool present = false;
 
