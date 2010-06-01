@@ -60,6 +60,4 @@ private:
 
 #endif
 
-bool IsFlarmTargetCNInRange(const FLARM_STATE &flarm, const long target_id);
-
 #endif

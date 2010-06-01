@@ -970,8 +970,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
     info_box.SetComment(Calculated().TeammateCode);
 
     if (SettingsComputer().TeamFlarmTracking) {
-      if (IsFlarmTargetCNInRange(Basic().flarm,
-                                 SettingsComputer().TeamFlarmIdTarget)) {
+      if (Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget) != NULL) {
         info_box.SetColorBottom(2);
       } else {
         info_box.SetColorBottom(1);
@@ -992,8 +991,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
       info_box.SetComment(_T("---"));
     }
 
-    if (IsFlarmTargetCNInRange(Basic().flarm,
-                               SettingsComputer().TeamFlarmIdTarget)) {
+    if (Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget) != NULL) {
       info_box.SetColorBottom(2);
     } else {
       info_box.SetColorBottom(1);
@@ -1011,8 +1009,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
       info_box.SetComment(_T("---"));
     }
 
-    if (IsFlarmTargetCNInRange(Basic().flarm,
-                               SettingsComputer().TeamFlarmIdTarget)) {
+    if (Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget) != NULL) {
       info_box.SetColorBottom(2);
     } else {
       info_box.SetColorBottom(1);
@@ -1030,8 +1027,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
       info_box.SetComment(_T("---"));
     }
 
-    if (IsFlarmTargetCNInRange(Basic().flarm,
-                               SettingsComputer().TeamFlarmIdTarget)) {
+    if (Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget) != NULL) {
       info_box.SetColorBottom(2);
     } else {
       info_box.SetColorBottom(1);
