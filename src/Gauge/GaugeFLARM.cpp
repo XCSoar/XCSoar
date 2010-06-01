@@ -330,14 +330,7 @@ void
 GaugeFLARM::Show(const bool enable_gauge)
 {
   Visible = ForceVisible || (Traffic && enable_gauge && !Suppress);
-  static bool lastvisible = true;
-  if (Visible && !lastvisible) {
-    show();
-  }
-  if (!Visible && lastvisible) {
-    hide();
-  }
-  lastvisible = Visible;
+  set_visible(Visible);
 }
 
 /**
