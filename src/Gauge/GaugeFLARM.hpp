@@ -57,7 +57,7 @@ private:
   int radius;
 
 public:
-  bool Visible, ForceVisible, Suppress, Traffic;
+  bool ForceVisible, Suppress, Traffic;
 
 public:
   GaugeFLARM(ContainerWindow &parent,

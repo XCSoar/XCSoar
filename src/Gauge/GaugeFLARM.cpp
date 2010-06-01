@@ -263,7 +263,7 @@ GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 void
 GaugeFLARM::Render(const NMEA_INFO &gps_info)
 {
-  if (!Visible)
+  if (!is_visible())
     return;
 
   // Render the background
@@ -286,7 +286,7 @@ GaugeFLARM::Render(const NMEA_INFO &gps_info)
  */
 GaugeFLARM::GaugeFLARM(ContainerWindow &parent,
                        int left, int top, unsigned width, unsigned height)
-  :Visible(false), ForceVisible(false), Suppress(false), Traffic(false)
+  :ForceVisible(false), Suppress(false), Traffic(false)
 {
   // start of new code for displaying FLARM window
 
@@ -329,8 +329,7 @@ GaugeFLARM::TrafficPresent(bool present)
 void
 GaugeFLARM::Show(const bool enable_gauge)
 {
-  Visible = ForceVisible || (Traffic && enable_gauge && !Suppress);
-  set_visible(Visible);
+  set_visible(ForceVisible || (Traffic && enable_gauge && !Suppress));
 }
 
 /**
