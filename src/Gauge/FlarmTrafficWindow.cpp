@@ -62,6 +62,25 @@ FlarmTrafficWindow::FlarmTrafficWindow()
 }
 
 bool
+FlarmTrafficWindow::on_create()
+{
+  PaintWindow::on_create();
+
+  hbWarning.set(hcWarning);
+  hbAlarm.set(hcAlarm);
+  hbSelection.set(hcSelection);
+  hbTeam.set(hcTeam);
+
+  hpWarning.set(Layout::FastScale(2), hcWarning);
+  hpAlarm.set(Layout::FastScale(2), hcAlarm);
+  hpStandard.set(Layout::FastScale(2), hcStandard);
+  hpPassive.set(Layout::FastScale(2), hcPassive);
+  hpSelection.set(Layout::FastScale(2), hcSelection);
+
+  return true;
+}
+
+bool
 FlarmTrafficWindow::on_resize(unsigned width, unsigned height)
 {
   PaintWindow::on_resize(width, height);
@@ -366,17 +385,6 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
                                      const FLARM_TRAFFIC &traffic,
                                      unsigned i)
 {
-  static const Brush hbWarning(hcWarning);
-  static const Brush hbAlarm(hcAlarm);
-  static const Brush hbSelection(hcSelection);
-  static const Brush hbTeam(hcTeam);
-
-  static const Pen hpWarning(Layout::FastScale(2), hcWarning);
-  static const Pen hpAlarm(Layout::FastScale(2), hcAlarm);
-  static const Pen hpStandard(Layout::FastScale(2), hcStandard);
-  static const Pen hpPassive(Layout::FastScale(2), hcPassive);
-  static const Pen hpSelection(Layout::FastScale(2), hcSelection);
-
   // Save relative East/North
   double x, y;
   x = traffic.RelativeEast;

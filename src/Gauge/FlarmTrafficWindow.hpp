@@ -48,6 +48,17 @@
  */
 class FlarmTrafficWindow : public PaintWindow {
 protected:
+  Brush hbWarning;
+  Brush hbAlarm;
+  Brush hbSelection;
+  Brush hbTeam;
+
+  Pen hpWarning;
+  Pen hpAlarm;
+  Pen hpStandard;
+  Pen hpPassive;
+  Pen hpSelection;
+
   unsigned zoom;
   int selection;
   int warning;
@@ -98,6 +109,7 @@ protected:
   void PaintRadarBackground(Canvas &canvas) const;
 
 protected:
+  virtual bool on_create();
   virtual bool on_resize(unsigned width, unsigned height);
   virtual void on_paint(Canvas &canvas);
 };
