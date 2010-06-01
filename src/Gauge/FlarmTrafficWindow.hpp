@@ -82,7 +82,7 @@ public:
   bool WarningMode() const;
 
   const FLARM_TRAFFIC *GetTarget() const {
-    return selection >= 0 && data.FLARM_Traffic[selection].defined()
+    return selection >= 0
       ? &data.FLARM_Traffic[selection]
       : NULL;
   }

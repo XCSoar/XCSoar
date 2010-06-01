@@ -43,6 +43,8 @@
 #include "Math/FastRotation.hpp"
 #include "Math/Screen.hpp"
 
+#include <assert.h>
+
 static const Color hcWarning(0xFF, 0xA2, 0x00);
 static const Color hcAlarm(0xFF, 0x00, 0x00);
 static const Color hcStandard(0x00, 0x00, 0x00);
@@ -64,13 +66,11 @@ FlarmTrafficWindow::FlarmTrafficWindow()
 bool
 FlarmTrafficWindow::WarningMode() const
 {
-  if (warning < 0 || warning >= FLARM_STATE::FLARM_MAX_TRAFFIC)
-    return false;
+  assert(warning < FLARM_STATE::FLARM_MAX_TRAFFIC);
+  assert(warning < 0 || data.FLARM_Traffic[warning].defined());
+  assert(warning < 0 || data.FLARM_Traffic[warning].HasAlarm());
 
-  if (data.FLARM_Traffic[warning].defined())
-    return true;
-
-  return false;
+  return warning >= 0;
 }
 
 bool
@@ -142,6 +142,9 @@ FlarmTrafficWindow::GetZoomDistanceString(TCHAR* str1, TCHAR* str2,
 void
 FlarmTrafficWindow::SetTarget(int i)
 {
+  assert(selection < FLARM_STATE::FLARM_MAX_TRAFFIC);
+  assert(selection < 0 || data.FLARM_Traffic[selection].defined());
+
   if (selection == i)
     return;
 
@@ -155,8 +158,9 @@ FlarmTrafficWindow::SetTarget(int i)
 void
 FlarmTrafficWindow::NextTarget()
 {
-  const FLARM_TRAFFIC *traffic;
+  assert(selection < FLARM_STATE::FLARM_MAX_TRAFFIC);
 
+  const FLARM_TRAFFIC *traffic;
   if (selection >= 0)
     traffic = data.NextTraffic(&data.FLARM_Traffic[selection]);
   else
@@ -174,8 +178,9 @@ FlarmTrafficWindow::NextTarget()
 void
 FlarmTrafficWindow::PrevTarget()
 {
-  const FLARM_TRAFFIC *traffic;
+  assert(selection < FLARM_STATE::FLARM_MAX_TRAFFIC);
 
+  const FLARM_TRAFFIC *traffic;
   if (selection >= 0)
     traffic = data.PreviousTraffic(&data.FLARM_Traffic[selection]);
   else
@@ -249,9 +254,10 @@ void
 FlarmTrafficWindow::PaintTrafficInfo(Canvas &canvas) const
 {
   // Don't paint numbers if no plane selected
-  if (selection == -1 ||
-      !data.FLARM_Traffic[selection].defined())
+  if (selection == -1)
     return;
+
+  assert(data.FLARM_Traffic[selection].defined());
 
   // Temporary string
   TCHAR tmp[20];
