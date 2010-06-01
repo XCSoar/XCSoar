@@ -101,18 +101,6 @@ FlarmTrafficControl::on_create()
   return true;
 }
 
-bool
-FlarmTrafficWindow::WarningMode() const
-{
-  if (warning < 0 || warning >= FLARM_STATE::FLARM_MAX_TRAFFIC)
-    return false;
-
-  if (data.FLARM_Traffic[warning].defined())
-    return true;
-
-  return false;
-}
-
 void
 FlarmTrafficControl::SetAutoZoom(bool enabled)
 {

@@ -62,6 +62,18 @@ FlarmTrafficWindow::FlarmTrafficWindow()
 }
 
 bool
+FlarmTrafficWindow::WarningMode() const
+{
+  if (warning < 0 || warning >= FLARM_STATE::FLARM_MAX_TRAFFIC)
+    return false;
+
+  if (data.FLARM_Traffic[warning].defined())
+    return true;
+
+  return false;
+}
+
+bool
 FlarmTrafficWindow::on_create()
 {
   PaintWindow::on_create();
