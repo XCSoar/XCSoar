@@ -45,6 +45,8 @@ Copyright_License {
 #include "Compiler.h"
 #include "Simulator.hpp"
 
+#ifdef SIMULATOR_AVAILABLE
+
 static WndForm *wf=NULL;
 
 static void
@@ -65,7 +67,10 @@ static CallBackTableEntry_t CallBackTable[]={
     DeclareCallBackEntry(NULL)
 };
 
+#endif
+
 void dlgSimulatorPromptShowModal(void){
+#ifdef SIMULATOR_AVAILABLE
   LogStartUp(_T("PromptSimulator dialog"));
 
   if (!Layout::landscape) {
@@ -92,5 +97,6 @@ void dlgSimulatorPromptShowModal(void){
   delete wf;
 
   wf = NULL;
+#endif
 }
 
