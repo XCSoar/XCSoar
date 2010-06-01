@@ -120,8 +120,15 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   LPCTSTR lpCmdLine = GetCommandLine();
 #endif
 
+#ifdef _WIN32_WCE
+  int argc = 2;
+
+  WCHAR arg0[] = _T("");
+  LPWSTR argv[] = { arg0, lpCmdLine, NULL };
+#else
   int argc;
   LPWSTR* argv = CommandLineToArgvW(lpCmdLine, &argc);
+#endif
 
   CommonInterface::hInst = hInstance;
 
