@@ -45,6 +45,8 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
 
+#include <stdlib.h>
+
 static FLARMNetDatabase flarm_net;
 
 static int NumberOfFLARMNames = 0;
@@ -92,12 +94,14 @@ OpenFLARMDetails()
   if (reader.error())
     return;
 
-  const TCHAR *line;
+  TCHAR *line;
   while ((line = reader.read()) != NULL) {
     long id;
-    TCHAR Name[MAX_PATH];
+    TCHAR *endptr;
 
-    if (_stscanf(line, TEXT("%lx=%s"), &id, Name) == 2) {
+    id = _tcstol(line, &endptr, 16);
+    if (endptr > line && endptr[0] == _T('=') && endptr[1] != _T('\0')) {
+      TCHAR *Name = endptr + 1;
       TrimRight(Name);
       if (!AddFlarmLookupItem(id, Name, false))
         break; // cant add anymore items !
