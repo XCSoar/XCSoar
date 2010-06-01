@@ -112,6 +112,9 @@ ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
 const tstring
 ButtonWindow::get_text() const
 {
+  assert_none_locked();
+  assert_thread();
+
   TCHAR buffer[256]; /* should be large enough for buttons */
 
   int length = GetWindowText(hWnd, buffer,

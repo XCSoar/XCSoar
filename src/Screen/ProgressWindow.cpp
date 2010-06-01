@@ -107,6 +107,9 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 void
 ProgressWindow::set_message(const TCHAR *text)
 {
+  assert_none_locked();
+  assert_thread();
+
   set_item_text(IDC_MESSAGE, text);
   update();
 }
@@ -114,6 +117,9 @@ ProgressWindow::set_message(const TCHAR *text)
 void
 ProgressWindow::set_range(unsigned min_value, unsigned max_value)
 {
+  assert_none_locked();
+  assert_thread();
+
 #ifdef ENABLE_SDL
   // XXX
 #else /* !ENABLE_SDL */
@@ -126,6 +132,9 @@ ProgressWindow::set_range(unsigned min_value, unsigned max_value)
 void
 ProgressWindow::set_step(unsigned size)
 {
+  assert_none_locked();
+  assert_thread();
+
 #ifdef ENABLE_SDL
   // XXX
 #else /* !ENABLE_SDL */
@@ -137,6 +146,9 @@ ProgressWindow::set_step(unsigned size)
 void
 ProgressWindow::set_pos(unsigned value)
 {
+  assert_none_locked();
+  assert_thread();
+
   if (value == position)
     return;
 

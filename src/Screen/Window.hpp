@@ -208,6 +208,17 @@ public:
   }
 #endif
 
+protected:
+  /**
+   * Assert that the current thread is the one which created this
+   * window.
+   */
+#ifdef NDEBUG
+  void assert_thread() const {}
+#else
+  void assert_thread() const;
+#endif
+
 public:
   bool defined() const {
 #ifdef ENABLE_SDL
@@ -281,6 +292,7 @@ public:
 
   void move(int left, int top) {
     assert_none_locked();
+    assert_thread();
 
 #ifdef ENABLE_SDL
     this->left = left;
@@ -294,6 +306,7 @@ public:
 
   void move(int left, int top, unsigned width, unsigned height) {
     assert_none_locked();
+    assert_thread();
 
 #ifdef ENABLE_SDL
     // XXX
@@ -306,6 +319,7 @@ public:
 
   void resize(unsigned width, unsigned height) {
     assert_none_locked();
+    assert_thread();
 
 #ifdef ENABLE_SDL
     // XXX
@@ -319,6 +333,7 @@ public:
 
   void bring_to_top() {
     assert_none_locked();
+    assert_thread();
 
 #ifdef ENABLE_SDL
     // XXX
@@ -329,6 +344,7 @@ public:
 
   void show_on_top() {
     assert_none_locked();
+    assert_thread();
 
 #ifdef ENABLE_SDL
     // XXX
@@ -340,6 +356,7 @@ public:
 
   void set_font(const Font &font) {
     assert_none_locked();
+    assert_thread();
 
 #ifdef ENABLE_SDL
     // XXX
@@ -358,6 +375,8 @@ public:
   }
 
   void show() {
+    assert_thread();
+
 #ifdef ENABLE_SDL
     // XXX
 #else
@@ -366,6 +385,8 @@ public:
   }
 
   void hide() {
+    assert_thread();
+
 #ifdef ENABLE_SDL
     // XXX
 #else
@@ -395,6 +416,8 @@ public:
    * Specifies whether this window can get user input.
    */
   void set_enabled(bool enabled) {
+    assert_thread();
+
 #ifdef ENABLE_SDL
     // XXX
 #else
@@ -411,6 +434,7 @@ public:
 
   void set_focus() {
     assert_none_locked();
+    assert_thread();
 
     ::SetFocus(hWnd);
   }
@@ -435,6 +459,7 @@ public:
 
   void set_capture() {
     assert_none_locked();
+    assert_thread();
 
 #ifdef ENABLE_SDL
     // XXX
@@ -445,6 +470,7 @@ public:
 
   void release_capture() {
     assert_none_locked();
+    assert_thread();
 
 #ifdef ENABLE_SDL
     // XXX
@@ -456,17 +482,23 @@ public:
 #ifndef ENABLE_SDL
   WNDPROC set_wndproc(WNDPROC wndproc)
   {
+    assert_thread();
+
     return (WNDPROC)::SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)wndproc);
   }
 
   void set_userdata(void *value)
   {
+    assert_thread();
+
     ::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)value);
   }
 #endif /* !ENABLE_SDL */
 
   timer_t set_timer(unsigned id, unsigned ms)
   {
+    assert_thread();
+
 #ifdef ENABLE_SDL
     return new SDLTimer(*this, ms);
 #else
@@ -477,6 +509,8 @@ public:
 
   void kill_timer(timer_t id)
   {
+    assert_thread();
+
 #ifdef ENABLE_SDL
     delete id;
 #else
@@ -588,10 +622,14 @@ public:
   void expose() {}
 
   HDC BeginPaint(PAINTSTRUCT *ps) {
+    assert_thread();
+
     return ::BeginPaint(hWnd, ps);
   }
 
   void EndPaint(PAINTSTRUCT *ps) {
+    assert_thread();
+
     ::EndPaint(hWnd, ps);
   }
 #endif /* !ENABLE_SDL */
@@ -643,6 +681,7 @@ public:
 
   void send_command(const Window &from) {
     assert_none_locked();
+    assert_thread();
 
 #ifdef ENABLE_SDL
     // XXX

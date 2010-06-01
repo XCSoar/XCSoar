@@ -61,6 +61,19 @@ Window::~Window()
   reset();
 }
 
+#ifndef NDEBUG
+
+void
+Window::assert_thread() const
+{
+#ifdef WIN32
+  assert(hWnd != NULL);
+  assert(GetWindowThreadProcessId(hWnd, NULL) == GetCurrentThreadId());
+#endif
+}
+
+#endif /* !NDEBUG */
+
 void
 Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
             int left, int top, unsigned width, unsigned height,
@@ -107,12 +120,17 @@ Window::created(HWND _hWnd)
 {
   assert(hWnd == NULL);
   hWnd = _hWnd;
+
+  assert_thread();
 }
 #endif /* !ENABLE_SDL */
 
 void
 Window::reset()
 {
+  if (defined())
+    assert_thread();
+
 #ifdef ENABLE_SDL
   on_destroy();
   canvas.reset();

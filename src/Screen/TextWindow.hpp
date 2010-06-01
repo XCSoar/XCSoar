@@ -66,6 +66,7 @@ public:
 
   void set_text(const TCHAR *text) {
     assert_none_locked();
+    assert_thread();
 
 #ifdef ENABLE_SDL
     // XXX

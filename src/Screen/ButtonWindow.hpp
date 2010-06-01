@@ -88,6 +88,7 @@ public:
 
   void set_text(const TCHAR *_text) {
     assert_none_locked();
+    assert_thread();
 
     text = _text;
     invalidate();
@@ -125,6 +126,7 @@ public:
 
   void set_text(const TCHAR *text) {
     assert_none_locked();
+    assert_thread();
 
     ::SetWindowText(hWnd, text);
   }
@@ -132,6 +134,9 @@ public:
   const tstring get_text() const;
 
   bool is_down() const {
+    assert_none_locked();
+    assert_thread();
+
     return (Button_GetState(hWnd) & BST_PUSHED) != 0;
   }
 };
