@@ -11,5 +11,6 @@
   <WndSymbolButton Name="cmdNext" Caption="&gt;" X="93" Y="272" Width="28" Height="28" Font="2" />
   <WndButton Name="cmdAutoZoom" Caption="A. Zoom" X="173" Y="272" Width="58" Height="28" Font="2" />
   
-  <Custom Name="frmRadar" X="4" Y="5" Width="228" Height="232" OnCreate="OnCreateFlarmTrafficControl"/>
+  <Custom Name="frmRadar" X="4" Y="5" Width="228" Height="232" Border="1"
+          OnCreate="OnCreateFlarmTrafficControl"/>
 </WndForm>
