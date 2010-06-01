@@ -165,6 +165,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Calibration.cpp \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/State.cpp \
 	$(SRC)/FLARM/FLARMNet.cpp \
 	$(SRC)/FlarmCalculations.cpp \
 	$(SRC)/GlideComputer.cpp \

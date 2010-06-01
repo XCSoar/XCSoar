@@ -207,50 +207,10 @@ FlarmTrafficWindow::UpdateSelector()
 void
 FlarmTrafficWindow::UpdateWarnings()
 {
-  bool found = false;
-
-  for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
-    // if Traffic[i] not defined -> goto next one
-    if (!data.FLARM_Traffic[i].defined())
-      continue;
-
-    // if current target has no alarm -> goto next one
-    if (!data.FLARM_Traffic[i].HasAlarm())
-      continue;
-
-    // remember that a warning exists
-    found = true;
-    // if it did not before -> save the id and goto next one
-    if (!WarningMode()) {
-      warning = i;
-      continue;
-    }
-
-    // if it did before and the other level was higher -> just goto next one
-    if (data.FLARM_Traffic[warning].AlarmLevel >
-        data.FLARM_Traffic[i].AlarmLevel) {
-      continue;
-    }
-
-    // if the other level was lower -> save the id and goto next one
-    if (data.FLARM_Traffic[warning].AlarmLevel <
-        data.FLARM_Traffic[i].AlarmLevel) {
-      warning = i;
-      continue;
-    }
-
-    // if the levels match -> let the distance decide (smaller distance wins)
-    double dist_w = data.FLARM_Traffic[warning].SquareDistance();
-    double dist_i = data.FLARM_Traffic[i].SquareDistance();
-
-    if (dist_w > dist_i) {
-      warning = i;
-    }
-  }
-
-  // If no warning was found -> set warning to -1
-  if (!found)
-    warning = -1;
+  const FLARM_TRAFFIC *alert = data.FindMaximumAlert();
+  warning = alert != NULL
+    ? data.TrafficIndex(alert)
+    : - 1;
 }
 
 /**

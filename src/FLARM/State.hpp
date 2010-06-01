@@ -212,6 +212,12 @@ public:
     return PreviousTraffic(LastTrafficSlot() + 1);
   }
 
+  /**
+   * Finds the most critical alert.  Returns NULL if there is no
+   * alert.
+   */
+  const FLARM_TRAFFIC *FindMaximumAlert() const;
+
   unsigned TrafficIndex(const FLARM_TRAFFIC *traffic) const {
     return traffic - FirstTrafficSlot();
   }
