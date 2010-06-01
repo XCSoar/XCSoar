@@ -562,11 +562,8 @@ FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
     const FLARM_TRAFFIC &traffic = data.FLARM_Traffic[i];
 
-    // If FLARM target does not exist -> next one
-    if (!traffic.defined())
-      continue;
-
-    if (!traffic.HasAlarm() && static_cast<unsigned> (selection) != i)
+    if (traffic.defined() && !traffic.HasAlarm() &&
+        static_cast<unsigned> (selection) != i)
       PaintRadarTarget(canvas, traffic, i);
   }
 
@@ -584,11 +581,7 @@ FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
     const FLARM_TRAFFIC &traffic = data.FLARM_Traffic[i];
 
-    // If FLARM target does not exist -> next one
-    if (!traffic.defined())
-      continue;
-
-    if (traffic.HasAlarm())
+    if (traffic.defined() && traffic.HasAlarm())
       PaintRadarTarget(canvas, traffic, i);
   }
 }
