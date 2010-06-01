@@ -126,12 +126,12 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   CommonInterface::hInst = hInstance;
 
   PaintWindow::register_class(hInstance);
-#else
+#endif
+
   if (argc < 2) {
     fprintf(stderr, "Usage: %s XMLFILE\n", argv[0]);
     return 1;
   }
-#endif
 
   Layout::Initialize(320,240);
   SingleWindow main_window;
