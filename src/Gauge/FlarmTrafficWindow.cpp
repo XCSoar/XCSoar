@@ -679,6 +679,4 @@ FlarmTrafficWindow::SelectNearTarget(int x, int y)
 
   if (min_id >= 0)
     SetTarget(min_id);
-
-  invalidate();
 }
