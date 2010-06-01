@@ -87,7 +87,6 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   RECT rc;
 
   assert(lpText != NULL);
-  assert(lpCaption != NULL);
 
   // JMW this makes the first key if pressed quickly, ignored
   // TODO bug: doesn't work sometimes. buttons have to be pressed multiple times (TB)
