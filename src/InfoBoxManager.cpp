@@ -981,7 +981,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
     break;
 
   case 56: // team bearing
-    if (SettingsComputer().TeamFlarmIdTarget != 0) {
+    if (SettingsComputer().TeamFlarmIdTarget.defined()) {
       if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
         info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
       } else {
@@ -999,7 +999,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
     break;
 
   case 57: // team bearing dif
-    if (SettingsComputer().TeamFlarmIdTarget != 0) {
+    if (SettingsComputer().TeamFlarmIdTarget.defined()) {
       if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
         info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
       } else {
@@ -1017,7 +1017,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
     break;
 
   case 58: // team range
-    if (SettingsComputer().TeamFlarmIdTarget != 0) {
+    if (SettingsComputer().TeamFlarmIdTarget.defined()) {
       if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
         info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
       } else {

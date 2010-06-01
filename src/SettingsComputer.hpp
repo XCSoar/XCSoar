@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_SETTINGS_COMPUTER_HPP
 #define XCSOAR_SETTINGS_COMPUTER_HPP
 
+#include "FLARM/FlarmId.hpp"
+
 #include <tchar.h>
 
 #include "Task/TaskBehaviour.hpp"
@@ -121,7 +123,7 @@ struct SETTINGS_TEAMCODE {
   TCHAR TeammateCode[10];       /**< auto-detected, see also in Info.h */
 
   bool TeammateCodeValid;       /**< Whether the teammate code is valid */  
-  int TeamFlarmIdTarget;        /**< FlarmId of the glider to track */
+  FlarmId TeamFlarmIdTarget; /**< FlarmId of the glider to track */
 };
 
 struct SETTINGS_VOICE {

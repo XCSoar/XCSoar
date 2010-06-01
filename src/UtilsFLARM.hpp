@@ -38,6 +38,8 @@ Copyright_License {
 #if !defined(XCSOAR_UTILS_FLARM_H)
 #define XCSOAR_UTILS_FLARM_H
 
+#include "FLARM/Traffic.hpp"
+
 #include <tchar.h>
 
 void
@@ -47,15 +49,15 @@ void
 CloseFLARMDetails();
 
 const TCHAR *
-LookupFLARMDetails(long id);
+LookupFLARMDetails(FlarmId id);
 
-int
+FlarmId
 LookupFLARMDetails(const TCHAR *cn);
 
 bool
-AddFlarmLookupItem(int id, const TCHAR *name, bool saveFile);
+AddFlarmLookupItem(FlarmId id, const TCHAR *name, bool saveFile);
 
 int
-LookupSecondaryFLARMId(int id);
+LookupSecondaryFLARMId(FlarmId id);
 
 #endif

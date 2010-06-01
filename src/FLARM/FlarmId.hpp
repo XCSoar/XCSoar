@@ -36,25 +36,40 @@ Copyright_License {
 }
 */
 
-#ifdef FLARM_AVERAGE
-#include "FlarmCalculations.h"
-#include "FLARM/State.hpp"
+#ifndef XCSOAR_FLARM_ID_HPP
+#define XCSOAR_FLARM_ID_HPP
 
-double
-FlarmCalculations::Average30s(FlarmId flarmId, double curTime,
-                              double curAltitude)
-{
-  ClimbAverageCalculator *itemTemp = NULL;
-  AverageCalculatorMap::iterator iterFind = averageCalculatorMap.find(flarmId);
+#include <tchar.h>
 
-  if (iterFind != averageCalculatorMap.end()) {
-    itemTemp = averageCalculatorMap[flarmId];
-  } else {
-    itemTemp = new ClimbAverageCalculator();
-    averageCalculatorMap[flarmId] = itemTemp;
+/**
+ * The identification number of a FLARM traffic.
+ */
+class FlarmId {
+  enum {
+    UNDEFINED_VALUE = 0,
+  };
+
+  long value;
+
+public:
+  bool defined() const {
+    return value != UNDEFINED_VALUE;
   }
 
-  return itemTemp->GetAverage(curTime, curAltitude, 30);
-}
+  void clear() {
+    value = UNDEFINED_VALUE;
+  }
+
+  bool operator==(FlarmId other) const {
+    return value == other.value;
+  }
+
+  bool operator<(FlarmId other) const {
+    return value < other.value;
+  }
+
+  void parse(const TCHAR *input, TCHAR **endptr_r);
+  const TCHAR *format(TCHAR *buffer) const;
+};
 
 #endif

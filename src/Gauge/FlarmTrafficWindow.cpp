@@ -338,7 +338,7 @@ FlarmTrafficWindow::PaintTrafficInfo(Canvas &canvas) const
     }
     _tcscpy(tmp, traffic.Name);
   } else {
-    _stprintf(tmp, _T("%lX"), traffic.ID);
+    traffic.ID.format(tmp);
   }
   canvas.text(rc.left, rc.top, tmp);
 }

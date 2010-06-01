@@ -150,7 +150,7 @@ LoadString(FILE *file, int charCount, TCHAR *res)
  * @return FLARMNetRecord object
  */
 const FLARMNetRecord *
-FLARMNetDatabase::Find(long id) const
+FLARMNetDatabase::Find(FlarmId id) const
 {
   const_iterator i = find(id);
   if (i != end())
@@ -179,8 +179,10 @@ FLARMNetDatabase::Find(const TCHAR *cn) const
   return NULL;
 }
 
-long
+FlarmId
 FLARMNetRecord::GetId() const
 {
-  return _tcstoul(id, NULL, 16);
+  FlarmId id;
+  id.parse(this->id, NULL);
+  return id;
 };

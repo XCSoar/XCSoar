@@ -39,6 +39,8 @@ Copyright_License {
 #if !defined(XCSOAR_DIALOGS_H)
 #define XCSOAR_DIALOGS_H
 
+#include "FLARM/FlarmId.hpp"
+
 #include <tchar.h>
 #include "Util/tstring.hpp"
 
@@ -144,7 +146,7 @@ bool dlgWaypointEditShowModal(Waypoint &way_point);
 void dlgWeatherShowModal();
 void dlgTarget();
 void dlgFlarmTrafficShowModal();
-void dlgFlarmTrafficDetailsShowModal(long id);
+void dlgFlarmTrafficDetailsShowModal(FlarmId id);
 bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width = 0);
 void dlgNumberEntryKeyboardShowModal(int *value, int width = 0);
 

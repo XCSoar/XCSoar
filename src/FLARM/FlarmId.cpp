@@ -36,25 +36,20 @@ Copyright_License {
 }
 */
 
-#ifdef FLARM_AVERAGE
-#include "FlarmCalculations.h"
-#include "FLARM/State.hpp"
+#include "FlarmId.hpp"
 
-double
-FlarmCalculations::Average30s(FlarmId flarmId, double curTime,
-                              double curAltitude)
+#include <stdlib.h>
+#include <stdio.h>
+
+void
+FlarmId::parse(const TCHAR *input, TCHAR **endptr_r)
 {
-  ClimbAverageCalculator *itemTemp = NULL;
-  AverageCalculatorMap::iterator iterFind = averageCalculatorMap.find(flarmId);
-
-  if (iterFind != averageCalculatorMap.end()) {
-    itemTemp = averageCalculatorMap[flarmId];
-  } else {
-    itemTemp = new ClimbAverageCalculator();
-    averageCalculatorMap[flarmId] = itemTemp;
-  }
-
-  return itemTemp->GetAverage(curTime, curAltitude, 30);
+  value = _tcstol(input, endptr_r, 16);
 }
 
-#endif
+const TCHAR *
+FlarmId::format(TCHAR *buffer) const
+{
+  _stprintf(buffer, _T("%lX"), value);
+  return buffer;
+}

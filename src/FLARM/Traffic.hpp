@@ -39,6 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_TRAFFIC_HPP
 #define XCSOAR_FLARM_TRAFFIC_HPP
 
+#include "FlarmId.hpp"
 #include "Navigation/GeoPoint.hpp"
 
 #include <tchar.h>
@@ -63,7 +64,7 @@ struct FLARM_TRAFFIC {
   /** Altidude-based distance of the FLARM target */
   fixed RelativeAltitude;
   /** FLARM id of the FLARM target */
-  long ID;
+  FlarmId ID;
   /** (if exists) Name of the FLARM target */
   TCHAR Name[10];
   unsigned short IDType;
@@ -76,7 +77,7 @@ struct FLARM_TRAFFIC {
 #endif
 
   bool defined() const {
-    return ID > 0;
+    return ID.defined();
   }
 
   bool HasAlarm() const {
@@ -103,7 +104,7 @@ struct FLARM_TRAFFIC {
   }
 
   void Clear() {
-    ID = 0;
+    ID.clear();
     Name[0] = 0;
   }
 

@@ -140,15 +140,16 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
              newTeamFlarmCNTarget, 4);
     XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
   }
-  int flarmId = LookupFLARMDetails(
-      XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
 
-  if (flarmId == 0) {
+  FlarmId flarmId =
+    LookupFLARMDetails(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
+
+  if (!flarmId.defined()) {
     MessageBoxX(gettext(_T("Unknown Competition Number")),
                 gettext(_T("Not Found")), MB_OK | MB_ICONINFORMATION);
 
     XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = false;
-    XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = 0;
+    XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget.clear();
     XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
   } else {
     XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = flarmId;

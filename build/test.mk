@@ -258,6 +258,7 @@ $(TARGET_BIN_DIR)/RunWayPointParser$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 RUN_DEVICE_DRIVER_SOURCES = \
+	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/Device/Driver.cpp \

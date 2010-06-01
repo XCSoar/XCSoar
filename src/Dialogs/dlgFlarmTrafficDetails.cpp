@@ -56,7 +56,7 @@
 #include <math.h>
 
 static WndForm *wf = NULL;
-static long target_id;
+static FlarmId target_id;
 
 /**
  * Updates all the dialogs fields, that are changing frequently.
@@ -127,7 +127,7 @@ void Update() {
     wf->SetModalResult(mrCancel);
 
   // Set the dialog caption
-  _stprintf(tmp, _T("FLARM Traffic Details (%lX)"), target->ID);
+  _stprintf(tmp, _T("FLARM Traffic Details (%s)"), target->ID.format(tmp));
   wf->SetCaption(tmp);
 
   // Try to find the target in the FLARMnet database
@@ -282,7 +282,7 @@ static CallBackTableEntry_t CallBackTable[] = {
  * The function opens the FLARM Traffic Details dialog
  */
 void
-dlgFlarmTrafficDetailsShowModal(long id)
+dlgFlarmTrafficDetailsShowModal(FlarmId id)
 {
   target_id = id;
 

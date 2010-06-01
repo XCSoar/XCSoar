@@ -87,7 +87,7 @@ void
 ActionInterface::on_key_TeamCode(int UpDown)
 {
   const FLARM_STATE &flarm = Basic().flarm;
-  const FLARM_TRAFFIC *traffic = SettingsComputer().TeamFlarmIdTarget != 0
+  const FLARM_TRAFFIC *traffic = SettingsComputer().TeamFlarmIdTarget.defined()
     ? flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget)
     : NULL;
 
@@ -121,7 +121,7 @@ ActionInterface::on_key_TeamCode(int UpDown)
     }
   } else {
     // no flarm traffic to select!
-    SetSettingsComputer().TeamFlarmIdTarget = 0;
+    SetSettingsComputer().TeamFlarmIdTarget.clear();
     SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
     return;
   }

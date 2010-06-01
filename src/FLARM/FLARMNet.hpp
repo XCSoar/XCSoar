@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_NET_HPP
 #define XCSOAR_FLARM_NET_HPP
 
+#include "FLARM/Traffic.hpp"
+
 #include <map>
 #include <tchar.h>
 
@@ -56,18 +58,19 @@ public:
   TCHAR cn[4];          /**< Callsign 3 bytes */
   TCHAR freq[8];        /**< Radio frequency 6 bytes */
 
-  long GetId() const;
+  FlarmId GetId() const;
 };
 
 /**
  * Handles the FLARMnet.org file
  */
-class FLARMNetDatabase : protected std::map<long, FLARMNetRecord*>
+class FLARMNetDatabase
+  : protected std::map<FlarmId, FLARMNetRecord*>
 {
 public:
   unsigned LoadFile(const TCHAR *path);
 
-  const FLARMNetRecord *Find(long id) const;
+  const FLARMNetRecord *Find(FlarmId id) const;
   const FLARMNetRecord *Find(const TCHAR *cn) const;
 };
 

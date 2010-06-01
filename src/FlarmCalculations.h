@@ -41,6 +41,7 @@ Copyright_License {
 
 #ifdef FLARM_AVERAGE
 
+#include "FLARM/FlarmId.hpp"
 #include "ClimbAverageCalculator.hpp"
 
 #include <map>
@@ -51,10 +52,10 @@ struct FLARM_STATE;
 class FlarmCalculations
 {
 public:
-  double Average30s(long flarmId, double curTime, double curAltitude);
+  double Average30s(FlarmId flarmId, double curTime, double curAltitude);
 
 private:
-  typedef std::map<long, ClimbAverageCalculator*> AverageCalculatorMap;
+  typedef std::map<FlarmId, ClimbAverageCalculator*> AverageCalculatorMap;
   AverageCalculatorMap averageCalculatorMap;
 };
 

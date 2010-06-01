@@ -109,7 +109,7 @@ public:
    * @param id FLARM id
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
-  FLARM_TRAFFIC *FindTraffic(long id) {
+  FLARM_TRAFFIC *FindTraffic(FlarmId id) {
     for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
       if (FLARM_Traffic[i].ID == id)
         return &FLARM_Traffic[i];
@@ -123,7 +123,7 @@ public:
    * @param id FLARM id
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
-  const FLARM_TRAFFIC *FindTraffic(long id) const {
+  const FLARM_TRAFFIC *FindTraffic(FlarmId id) const {
     for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
       if (FLARM_Traffic[i].ID == id)
         return &FLARM_Traffic[i];

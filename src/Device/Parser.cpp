@@ -1067,7 +1067,8 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
   }
 
   // 5 id, 6 digit hex
-  long ID = _tcstol(params[5], NULL, 16);
+  FlarmId ID;
+  ID.parse(params[5], NULL);
 
   FLARM_TRAFFIC *flarm_slot = flarm.FindTraffic(ID);
   if (flarm_slot == NULL) {

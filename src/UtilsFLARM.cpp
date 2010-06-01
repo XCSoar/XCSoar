@@ -52,7 +52,7 @@ static FLARMNetDatabase flarm_net;
 static int NumberOfFLARMNames = 0;
 
 typedef struct {
-  long ID;
+  FlarmId ID;
   TCHAR Name[21];
 } FLARM_Names_t;
 
@@ -96,10 +96,9 @@ OpenFLARMDetails()
 
   TCHAR *line;
   while ((line = reader.read()) != NULL) {
-    long id;
     TCHAR *endptr;
-
-    id = _tcstol(line, &endptr, 16);
+    FlarmId id;
+    id.parse(line, &endptr);
     if (endptr > line && endptr[0] == _T('=') && endptr[1] != _T('\0')) {
       TCHAR *Name = endptr + 1;
       TrimRight(Name);
@@ -128,9 +127,10 @@ SaveFLARMDetails(void)
   if (writer.error())
     return;
 
+  TCHAR id[16];
   for (int z = 0; z < NumberOfFLARMNames; z++)
-    writer.printfln(_T("%lx=%s"),
-                    FLARM_Names[z].ID, FLARM_Names[z].Name);
+    writer.printfln(_T("%s=%s"),
+                    FLARM_Names[z].ID.format(id), FLARM_Names[z].Name);
 }
 
 /**
@@ -140,7 +140,7 @@ SaveFLARMDetails(void)
  * @return Array id if found, otherwise -1
  */
 int
-LookupSecondaryFLARMId(int id)
+LookupSecondaryFLARMId(FlarmId id)
 {
   for (int i = 0; i < NumberOfFLARMNames; i++)
     if (FLARM_Names[i].ID == id)
@@ -172,7 +172,7 @@ LookupSecondaryFLARMId(const TCHAR *cn)
  * @return The corresponding callsign if found, otherwise NULL
  */
 const TCHAR *
-LookupFLARMDetails(long id)
+LookupFLARMDetails(FlarmId id)
 {
   // try to find flarm from userFile
   int index = LookupSecondaryFLARMId(id);
@@ -193,7 +193,7 @@ LookupFLARMDetails(long id)
  * @param cn Callsign
  * @return The corresponding FLARM id if found, otherwise 0
  */
-int
+FlarmId
 LookupFLARMDetails(const TCHAR *cn)
 {
   // try to find flarm from userFile
@@ -206,7 +206,9 @@ LookupFLARMDetails(const TCHAR *cn)
   if (record != NULL)
     return record->GetId();
 
-  return 0;
+  FlarmId id;
+  id.clear();
+  return id;
 }
 
 /**
@@ -219,7 +221,7 @@ LookupFLARMDetails(const TCHAR *cn)
  * @return True if successfully added, False otherwise
  */
 bool
-AddFlarmLookupItem(int id, const TCHAR *name, bool saveFile)
+AddFlarmLookupItem(FlarmId id, const TCHAR *name, bool saveFile)
 {
   int index = LookupSecondaryFLARMId(id);
 
