@@ -263,9 +263,6 @@ GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 void
 GaugeFLARM::Render(const NMEA_INFO &gps_info)
 {
-  if (!is_visible())
-    return;
-
   // Render the background
   RenderBg(get_canvas());
 
@@ -286,7 +283,7 @@ GaugeFLARM::Render(const NMEA_INFO &gps_info)
  */
 GaugeFLARM::GaugeFLARM(ContainerWindow &parent,
                        int left, int top, unsigned width, unsigned height)
-  :ForceVisible(false), Suppress(false), Traffic(false)
+  :ForceVisible(false), Suppress(false)
 {
   // start of new code for displaying FLARM window
 
@@ -307,29 +304,23 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent,
 
   // Render Background for the first time
   RenderBg(get_canvas());
-
-  // Hide the gauge
-  Show(false);
 }
 
-/**
- * Sets the Traffic field of the class to present
- * @param present New value for the Traffic field
- */
 void
-GaugeFLARM::TrafficPresent(bool present)
+GaugeFLARM::Update(bool enable, const NMEA_INFO &gps_info)
 {
-  Traffic = present;
-}
+  // If FLARM alarm level higher then 0
+  if (gps_info.flarm.FLARM_AlarmLevel > 0)
+    // Show FLARM gauge and do not care about suppression
+    Suppress = false;
 
-/**
- * Shows or hides the FLARM gauge depending on enable_gauge
- * @param enable_gauge Enables the gauge if true, disables otherwise
- */
-void
-GaugeFLARM::Show(const bool enable_gauge)
-{
-  set_visible(ForceVisible || (Traffic && enable_gauge && !Suppress));
+  bool visible = ForceVisible ||
+    (gps_info.flarm.FLARMTraffic && enable && !Suppress);
+  if (visible) {
+    Render(gps_info);
+    show();
+  } else
+    hide();
 }
 
 /**

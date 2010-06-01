@@ -57,16 +57,18 @@ private:
   int radius;
 
 public:
-  bool ForceVisible, Suppress, Traffic;
+  bool ForceVisible, Suppress;
 
 public:
   GaugeFLARM(ContainerWindow &parent,
              int left, int top, unsigned width, unsigned height);
+
+  void Update(bool enable, const NMEA_INFO &gps_info);
+
+protected:
   void Render(const NMEA_INFO &gps_info);
   void RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info);
   void RenderBg(Canvas &canvas);
-  void Show(const bool enable_gauge);
-  void TrafficPresent(bool traffic);
 
   bool on_mouse_down(int x, int y);
 

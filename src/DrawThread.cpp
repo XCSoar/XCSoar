@@ -113,19 +113,8 @@ DrawThread::run()
       // Get data from the DeviceBlackboard
       ExchangeBlackboard();
 
-      if (flarm != NULL) {
-        // If FLARM alarm level higher then 0
-        if (map.Basic().flarm.FLARM_AlarmLevel > 0) {
-          // Show FLARM gauge and do not care about suppression
-          flarm->Suppress = false;
-        }
-
-        flarm->TrafficPresent(map.Basic().flarm.FLARMTraffic);
-        flarm->Show(map.SettingsMap().EnableFLARMGauge);
-
-        // Draw/Render the FLARM gauge
-        flarm->Render(map.Basic());
-      }
+      if (flarm != NULL)
+        flarm->Update(map.SettingsMap().EnableFLARMGauge, map.Basic());
 
       // Draw the moving map
       map.DrawThreadLoop();
