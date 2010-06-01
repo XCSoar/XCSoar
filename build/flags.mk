@@ -8,8 +8,6 @@ else
 C_FEATURES =
 endif
 
-CPPFLAGS += -DNOMINMAX
-
 GIT_COMMIT_ID := $(shell git rev-parse --short --verify HEAD 2>/dev/null)
 ifneq ($(GIT_COMMIT_ID),)
 CPPFLAGS += -DGIT_COMMIT_ID=\"$(GIT_COMMIT_ID)\"
