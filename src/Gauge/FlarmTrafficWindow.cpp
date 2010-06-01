@@ -155,20 +155,17 @@ FlarmTrafficWindow::SetTarget(int i)
 void
 FlarmTrafficWindow::NextTarget()
 {
-  for (int i = selection + 1; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
-    if (data.FLARM_Traffic[i].defined()) {
-      SetTarget(i);
-      return;
-    }
-  }
-  for (int i = 0; i < selection; i++) {
-    if (data.FLARM_Traffic[i].defined()) {
-      SetTarget(i);
-      return;
-    }
-  }
+  const FLARM_TRAFFIC *traffic;
 
-  SetTarget(-1);
+  if (selection >= 0)
+    traffic = data.NextTraffic(&data.FLARM_Traffic[selection]);
+  else
+    traffic = NULL;
+
+  if (traffic == NULL)
+    traffic = data.FirstTraffic();
+
+  SetTarget(traffic != NULL ? data.TrafficIndex(traffic) : -1);
 }
 
 /**
@@ -177,20 +174,17 @@ FlarmTrafficWindow::NextTarget()
 void
 FlarmTrafficWindow::PrevTarget()
 {
-  for (int i = selection - 1; i >= 0; i--) {
-    if (data.FLARM_Traffic[i].defined()) {
-      SetTarget(i);
-      return;
-    }
-  }
-  for (int i = FLARM_STATE::FLARM_MAX_TRAFFIC - 1; i > selection; i--) {
-    if (data.FLARM_Traffic[i].defined()) {
-      SetTarget(i);
-      return;
-    }
-  }
+  const FLARM_TRAFFIC *traffic;
 
-  SetTarget(-1);
+  if (selection >= 0)
+    traffic = data.PreviousTraffic(&data.FLARM_Traffic[selection]);
+  else
+    traffic = NULL;
+
+  if (traffic == NULL)
+    traffic = data.LastTraffic();
+
+  SetTarget(traffic != NULL ? data.TrafficIndex(traffic) : -1);
 }
 
 /**
