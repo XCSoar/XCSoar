@@ -326,7 +326,7 @@ OnTimerNotify(WindowControl * Sender)
 bool
 FlarmTrafficControl::on_mouse_down(int x, int y)
 {
-  if (!data.FLARM_Traffic[warning].defined())
+  if (!WarningMode())
     SelectNearTarget(x, y);
 
   return true;
