@@ -198,6 +198,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/WindStore.cpp \
 	$(SRC)/WindZigZag.cpp \
 	\
+	$(SRC)/Gauge/FlarmTrafficWindow.cpp \
 	$(SRC)/Gauge/GaugeCDI.cpp \
 	$(SRC)/Gauge/GaugeFLARM.cpp \
 	$(SRC)/Gauge/GaugeVario.cpp \
