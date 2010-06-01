@@ -77,6 +77,9 @@ FlarmTrafficWindow::on_create()
   hpPassive.set(Layout::FastScale(2), hcPassive);
   hpSelection.set(Layout::FastScale(2), hcSelection);
 
+  hpPlane.set(Layout::FastScale(2), hcRadar);
+  hpRadar.set(1, hcRadar);
+
   return true;
 }
 
@@ -597,8 +600,6 @@ FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
 void
 FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
 {
-  static const Pen hpPlane(Layout::FastScale(2), hcRadar);
-
   canvas.select(hpPlane);
   canvas.line(radar_mid.x + Layout::FastScale(10),
               radar_mid.y - Layout::FastScale(2),
@@ -621,8 +622,6 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
 void
 FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
 {
-  static const Pen hpRadar(1, hcRadar);
-
   canvas.hollow_brush();
   canvas.select(hpRadar);
   canvas.set_text_color(hcRadar);

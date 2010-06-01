@@ -59,6 +59,8 @@ protected:
   Pen hpPassive;
   Pen hpSelection;
 
+  Pen hpPlane, hpRadar;
+
   unsigned zoom;
   int selection;
   int warning;
