@@ -50,6 +50,6 @@ FlarmId::parse(const TCHAR *input, TCHAR **endptr_r)
 const TCHAR *
 FlarmId::format(TCHAR *buffer) const
 {
-  _stprintf(buffer, _T("%lX"), value);
+  _stprintf(buffer, _T("%lX"), (unsigned long)value);
   return buffer;
 }

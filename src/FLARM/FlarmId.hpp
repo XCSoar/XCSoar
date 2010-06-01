@@ -39,6 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_ID_HPP
 #define XCSOAR_FLARM_ID_HPP
 
+#include <stdint.h>
 #include <tchar.h>
 
 /**
@@ -49,7 +50,7 @@ class FlarmId {
     UNDEFINED_VALUE = 0,
   };
 
-  long value;
+  uint32_t value;
 
 public:
   bool defined() const {
