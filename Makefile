@@ -386,6 +386,19 @@ call-%:
 
 $(addprefix all-,$(TARGETS)): all-%: $(OUTPUTS)
 
+EVERYTHING = $(OUTPUTS) debug-$(TARGET)
+ifeq ($(TARGET),UNIX)
+EVERYTHING += $(TESTS)
+endif
+
+everything-: $(addprefix call-everything-,$(DEFAULT_TARGETS))
+call-everything-%:
+	$(MAKE) everything TARGET=$(patsubst call-everything-%,%,$@) EVERYTHING=$(EVERYTHING) V=$(V)
+
+$(addprefix everything-,$(TARGETS)): everything-%: $(EVERYTHING)
+
+everything: everything-$(TARGET)
+
 ####### products
 
 SYNCE_PCP = synce-pcp
