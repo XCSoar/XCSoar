@@ -321,6 +321,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Projection.cpp \
 	$(SRC)/RenderObservationZone.cpp \
+	$(SRC)/BackgroundDrawHelper.cpp \
 	$(SRC)/MapWindow.cpp \
 	$(SRC)/MapWindowAirspace.cpp \
 	$(SRC)/MapWindowBlackboard.cpp \
