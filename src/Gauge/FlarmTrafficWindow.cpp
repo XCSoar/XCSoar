@@ -194,12 +194,9 @@ FlarmTrafficWindow::PrevTarget()
 void
 FlarmTrafficWindow::UpdateSelector()
 {
-  if (!data.FLARM_Available || data.GetActiveTrafficCount() == 0) {
+  if (!data.FLARM_Available)
     SetTarget(-1);
-    return;
-  }
-
-  if (selection == -1 || !data.FLARM_Traffic[selection].defined())
+  else if (selection < 0 || !data.FLARM_Traffic[selection].defined())
     NextTarget();
 }
 
