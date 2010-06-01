@@ -216,20 +216,8 @@ FlarmTrafficWindow::UpdateWarnings()
     }
 
     // if the levels match -> let the distance decide (smaller distance wins)
-    double dist_w = sqrt(
-        data.FLARM_Traffic[warning].RelativeAltitude *
-        data.FLARM_Traffic[warning].RelativeAltitude +
-        data.FLARM_Traffic[warning].RelativeEast *
-        data.FLARM_Traffic[warning].RelativeEast +
-        data.FLARM_Traffic[warning].RelativeNorth *
-        data.FLARM_Traffic[warning].RelativeNorth);
-    double dist_i = sqrt(
-        data.FLARM_Traffic[i].RelativeAltitude *
-        data.FLARM_Traffic[i].RelativeAltitude +
-        data.FLARM_Traffic[i].RelativeEast *
-        data.FLARM_Traffic[i].RelativeEast +
-        data.FLARM_Traffic[i].RelativeNorth *
-        data.FLARM_Traffic[i].RelativeNorth);
+    double dist_w = data.FLARM_Traffic[warning].SquareDistance();
+    double dist_i = data.FLARM_Traffic[i].SquareDistance();
 
     if (dist_w > dist_i) {
       warning = i;
