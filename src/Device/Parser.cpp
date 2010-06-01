@@ -48,6 +48,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "InputEvents.h"
 #include "Logger/NMEALogger.hpp"
+#include "Compatibility/string.h" /* for _ttoi() */
 
 #include <math.h>
 #include <ctype.h>
@@ -1004,12 +1005,10 @@ NMEAParser::PFLAU(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
-  _stscanf(String,
-      _T("%hu,%hu,%hu,%*hu,%hu"),
-      &flarm.FLARM_RX,
-      &flarm.FLARM_TX,
-      &flarm.FLARM_GPS,
-      &flarm.FLARM_AlarmLevel);
+  flarm.FLARM_RX = _ttoi(params[0]);
+  flarm.FLARM_TX = _ttoi(params[1]);
+  flarm.FLARM_GPS = _ttoi(params[2]);
+  flarm.FLARM_AlarmLevel = _ttoi(params[4]);
 
   // process flarm updates
 
@@ -1077,34 +1076,26 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
       // no more slots available
       return false;
 
+    flarm_slot->ID = ID;
+
     flarm.NewTraffic = true;
   }
 
   // set time of fix to current time
   flarm_slot->Time_Fix = GPS_INFO->Time;
 
-  double rn, re, ra, rt;
-
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
-  _stscanf(String,
-      _T("%hu,%lf,%lf,%lf,%hu,%lx,%lf,%lf,%lf,%lf,%hu"),
-           &flarm_slot->AlarmLevel, // unsigned short 0
-           &rn, // double?     1
-           &re, // double?      2
-           &ra, // double   3
-           &flarm_slot->IDType, // unsigned short     4
-           &flarm_slot->ID, // 6 char hex
-           &rt, // double       6
-           &flarm_slot->TurnRate, // double           7
-           &flarm_slot->Speed, // double              8
-           &flarm_slot->ClimbRate, // double          9
-           &flarm_slot->Type); // unsigned short     10
-
-  flarm_slot->RelativeAltitude = fixed(ra);
-  flarm_slot->RelativeNorth = fixed(rn);
-  flarm_slot->RelativeEast = fixed(re);
-  flarm_slot->TrackBearing = Angle::degrees(fixed(rt));
+  flarm_slot->AlarmLevel = _ttoi(params[0]);
+  flarm_slot->RelativeNorth = fixed(_tcstod(params[1], NULL));
+  flarm_slot->RelativeEast = fixed(_tcstod(params[2], NULL));
+  flarm_slot->RelativeAltitude = fixed(_tcstod(params[3], NULL));
+  flarm_slot->IDType = _ttoi(params[4]);
+  flarm_slot->TrackBearing = Angle::degrees(fixed(_tcstod(params[6], NULL)));
+  flarm_slot->TurnRate = _tcstod(params[7], NULL);
+  flarm_slot->Speed = _tcstod(params[8], NULL);
+  flarm_slot->ClimbRate = _tcstod(params[9], NULL);
+  flarm_slot->Type = _ttoi(params[10]);
 
   // 1 relativenorth, meters
   flarm_slot->Location.Latitude = Angle::degrees(flarm_slot->RelativeNorth

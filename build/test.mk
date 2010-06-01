@@ -272,6 +272,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/FlarmCalculations.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
+	$(SRC)/Compatibility/string.c \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
