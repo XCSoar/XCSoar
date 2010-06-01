@@ -556,7 +556,6 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
             const int sval = num/(int)sqrt((fixed)mag);
             const int sindex = max(-64, min(63, (sval - sz) * terrain_contrast / 128));
             *i_buf++ = oColorBuf[h + 256*sindex];
-            continue;        
           } else {
             // slope is zero, so just look up the color
             *i_buf++ = oColorBuf[h];
