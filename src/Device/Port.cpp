@@ -439,18 +439,8 @@ ComPort::StopRxThread()
   }
 #endif /* !HAVE_POSIX */
 
-  bool terminated = Thread::join(20000);
-
-  if (!terminated) {
-    if (is_embedded())
-      ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"), sPortName,
-                            gettext(_T("RX Thread not Terminated!")));
-    else
-      Thread::terminate();
-    Thread::join();
-  }
-
-  return terminated;
+  Thread::join();
+  return true;
 }
 
 // Restart Rx Thread
