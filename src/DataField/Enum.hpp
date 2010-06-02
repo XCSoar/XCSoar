@@ -45,7 +45,7 @@ class DataFieldEnum: public DataField
 {
 public:
   enum {
-    DFE_MAX_ENUMS = 100,
+    DFE_MAX_ENUMS = 128,
   };
 
   struct Entry {
