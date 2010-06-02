@@ -571,7 +571,6 @@ LoggerImpl::LoggerDeclare(struct DeviceDescriptor *dev,
     } else {
       MessageBoxX(gettext(_T("Error occured,\r\nTask NOT Declared!")),
                   dev->GetName(), MB_OK| MB_ICONERROR);
-      DeclaredToDevice = false;
     }
   }
 
