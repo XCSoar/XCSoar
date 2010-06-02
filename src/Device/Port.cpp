@@ -291,14 +291,13 @@ ComPort::run()
       Sleep(50); // ToDo rewrite the whole driver to use overlaped IO
       // on W2K or higher
 
-      dwCommModemStatus = EV_RXFLAG;
       dwCommModemStatus = EV_RXCHAR;
     }
 
     // Re-specify the set of events to be monitored for the port.
     //    SetCommMask(hPort, dwMask1);
 
-    if ((dwCommModemStatus & EV_RXFLAG) || (dwCommModemStatus & EV_RXCHAR)) {
+    if (dwCommModemStatus & EV_RXCHAR) {
 
       // Loop for waiting for the data.
       do {
