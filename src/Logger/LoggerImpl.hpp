@@ -113,7 +113,7 @@ public:
   bool CheckDeclaration(void);
   bool isTaskDeclared() const;
   bool isLoggerActive() const;
-  bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
+  static bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
   void StartLogger(const NMEA_INFO &gps_info,
                    const SETTINGS_COMPUTER &settings,
                    const TCHAR *strAssetNumber,
