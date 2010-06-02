@@ -824,38 +824,43 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
   const Declaration decl(*task);
   delete task;
 
-  TCHAR TaskMessage[1024];
-  _tcscpy(TaskMessage, _T("Start Logger With Declaration\r\n"));
+  if (!noAsk) {
+    TCHAR TaskMessage[1024];
+    _tcscpy(TaskMessage, _T("Start Logger With Declaration\r\n"));
+
+    if (decl.size()) {
+      for (unsigned i = 0; i< decl.size(); ++i) {
+        _tcscat(TaskMessage, decl.get_name(i));
+        _tcscat(TaskMessage, _T("\r\n"));
+      }
+    } else {
+      _tcscat(TaskMessage, _T("None"));
+    }
+
+    if (MessageBoxX(TaskMessage, gettext(_T("Start Logger")),
+                    MB_YESNO | MB_ICONQUESTION) != IDYES)
+      return;
+  }
+
+  if (!LoggerClearFreeSpace(gps_info)) {
+    MessageBoxX(gettext(_T("Logger inactive, insufficient storage!")),
+                gettext(_T("Logger Error")), MB_OK| MB_ICONERROR);
+    LogStartUp(_T("Logger not started: Insufficient Storage"));
+    return;
+  }
+
+  StartLogger(gps_info, settings, strAssetNumber);
+  LoggerHeader(gps_info, decl);
 
   if (decl.size()) {
+    StartDeclaration(gps_info, decl.size());
     for (unsigned i = 0; i< decl.size(); ++i) {
-      _tcscat(TaskMessage, decl.get_name(i));
-      _tcscat(TaskMessage, _T("\r\n"));
+      AddDeclaration(decl.get_location(i), decl.get_name(i));
     }
-  } else {
-    _tcscat(TaskMessage, _T("None"));
+    EndDeclaration();
   }
 
-  if (noAsk || (MessageBoxX(TaskMessage, gettext(_T("Start Logger")),
-                           MB_YESNO | MB_ICONQUESTION) == IDYES)) {
-    if (LoggerClearFreeSpace(gps_info)) {
-      StartLogger(gps_info, settings, strAssetNumber);
-      LoggerHeader(gps_info, decl);
-
-      if (decl.size()) {
-        StartDeclaration(gps_info, decl.size());
-        for (unsigned i = 0; i< decl.size(); ++i) {
-          AddDeclaration(decl.get_location(i), decl.get_name(i));
-        }
-        EndDeclaration();
-      }
-      LoggerActive = true; // start logger after Header is completed.  Concurrency
-    } else {
-      MessageBoxX(gettext(_T("Logger inactive, insufficient storage!")),
-                  gettext(_T("Logger Error")), MB_OK| MB_ICONERROR);
-      LogStartUp(_T("Logger not started: Insufficient Storage"));
-    }
-  }
+  LoggerActive = true; // start logger after Header is completed.  Concurrency
 }
 
 void
