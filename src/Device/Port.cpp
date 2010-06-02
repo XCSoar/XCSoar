@@ -262,7 +262,7 @@ ComPort::run()
 
   char buffer[1024];
 
-  while (closeTriggerEvent.test() && !CloseThread) {
+  while (!CloseThread) {
     ssize_t nbytes = read(fd, buffer, sizeof(buffer));
     if (globalRunningEvent.test()) // ignore everything until started
       for (ssize_t i = 0; i < nbytes; ++i)
@@ -283,8 +283,7 @@ ComPort::run()
   if (is_embedded())
     SetCommMask(hPort, dwMask);
 
-  while (!closeTriggerEvent.test()
-      && (!CloseThread)) {
+  while (!CloseThread) {
 
     if (is_embedded()) {
       // Wait for an event to occur for the port.
