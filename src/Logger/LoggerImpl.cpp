@@ -815,13 +815,8 @@ void
 LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
     const SETTINGS_COMPUTER& settings, bool noAsk)
 {
-  if (LoggerActive)
+  if (LoggerActive || gps_info.gps.Replay)
     return;
-
-  if (gps_info.gps.Replay) {
-    guiStopLogger(gps_info, true);
-    return;
-  }
 
   OrderedTask* task = task_ui.task_clone();
   if (!task) return;
