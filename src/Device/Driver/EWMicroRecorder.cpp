@@ -59,13 +59,11 @@ class EWMicroRecorderDevice : public AbstractDevice {
 protected:
   ComPort *port;
 
-  int nDeclErrorCode;
-  unsigned user_size;
   TCHAR user_data[2500];
 
 public:
   EWMicroRecorderDevice(ComPort *_port)
-    :port(_port), nDeclErrorCode(0), user_size(0) {}
+    :port(_port) {}
 
 protected:
   bool TryConnect();
@@ -139,7 +137,7 @@ EWMicroRecorderDevice::TryConnect()
 
     port->WriteString(_T("\x02"));         // send IO Mode command
 
-    user_size = 0;
+    unsigned user_size = 0;
     bool started = false;
 
     while ((ch = port->GetChar()) != _TEOF) {
@@ -165,7 +163,6 @@ EWMicroRecorderDevice::TryConnect()
 
   }
 
-  nDeclErrorCode = 1;
   return false;
 }
 
@@ -226,8 +223,6 @@ EWMicroRecorderWriteWayPoint(ComPort *port,
 bool
 EWMicroRecorderDevice::Declare(const Declaration *decl)
 {
-  nDeclErrorCode = 0;
-
   // Must have at least two, max 12 waypoints
   if (decl->size() < 2 || decl->size() > 12)
     return false;
@@ -270,16 +265,14 @@ EWMicroRecorderDevice::Declare(const Declaration *decl)
 
   port->WriteString(_T("\x03"));         // finish sending user file
 
-  if (!ExpectStringWait(port, _T("uploaded successfully"))) {
-    // error!
-    nDeclErrorCode = 1;
-  }
+  bool success = ExpectStringWait(port, _T("uploaded successfully"));
+
   port->WriteString(_T("!!\r\n"));         // go back to NMEA mode
 
   port->SetRxTimeout(0);                       // clear timeout
   port->StartRxThread();                       // restart RX thread
 
-  return nDeclErrorCode == 0; // return true on success
+  return success;
 }
 
 
