@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Device/Port.hpp"
-#include "Protection.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Message.hpp"
@@ -263,9 +262,8 @@ ComPort::run()
   // XXX use poll()
   while (!stop_trigger.wait(50)) {
     ssize_t nbytes = read(fd, buffer, sizeof(buffer));
-    if (globalRunningEvent.test()) // ignore everything until started
-      for (ssize_t i = 0; i < nbytes; ++i)
-        ProcessChar(buffer[i]);
+    for (ssize_t i = 0; i < nbytes; ++i)
+      ProcessChar(buffer[i]);
   }
 #else /* !HAVE_POSIX */
   DWORD dwCommModemStatus, dwBytesTransferred;
@@ -304,10 +302,6 @@ ComPort::run()
       Sleep(100);
       continue;
     }
-
-    if (!globalRunningEvent.test())
-      // ignore everything until started
-      continue;
 
     for (unsigned int j = 0; j < dwBytesTransferred; j++)
       ProcessChar(inbuf[j]);
