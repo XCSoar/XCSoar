@@ -84,14 +84,12 @@ Logger::LogPoint(const NMEA_INFO &gps_info)
 bool
 Logger::CheckDeclaration(void)
 {
-  Poco::ScopedRWLock protect(lock, true);
   return _logger->CheckDeclaration();
 }
 
 bool
 Logger::isTaskDeclared()
 {
-  Poco::ScopedRWLock protect(lock, false);
   return _logger->isTaskDeclared();
 }
 
@@ -182,7 +180,6 @@ Logger::guiStopLogger(const NMEA_INFO &gps_info,
 void
 Logger::LoggerDeviceDeclare(const OrderedTask& task)
 {
-  Poco::ScopedRWLock protect(lock, true);
   return _logger->LoggerDeviceDeclare(task);
 }
 
