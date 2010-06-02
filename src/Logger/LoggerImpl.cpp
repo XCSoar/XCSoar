@@ -808,47 +808,13 @@ LoggerImpl::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
   }
 }
 
-#include "Interface.hpp"
-
 // TODO: fix scope so only gui things can start it
 void
-LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
-    const SETTINGS_COMPUTER& settings, bool noAsk)
+LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
+                        const SETTINGS_COMPUTER &settings,
+                        const TCHAR *strAssetNumber,
+                        const Declaration &decl)
 {
-  if (LoggerActive || gps_info.gps.Replay)
-    return;
-
-  OrderedTask* task = task_ui.task_clone();
-  if (!task) return;
-
-  const Declaration decl(*task);
-  delete task;
-
-  if (!noAsk) {
-    TCHAR TaskMessage[1024];
-    _tcscpy(TaskMessage, _T("Start Logger With Declaration\r\n"));
-
-    if (decl.size()) {
-      for (unsigned i = 0; i< decl.size(); ++i) {
-        _tcscat(TaskMessage, decl.get_name(i));
-        _tcscat(TaskMessage, _T("\r\n"));
-      }
-    } else {
-      _tcscat(TaskMessage, _T("None"));
-    }
-
-    if (MessageBoxX(TaskMessage, gettext(_T("Start Logger")),
-                    MB_YESNO | MB_ICONQUESTION) != IDYES)
-      return;
-  }
-
-  if (!LoggerClearFreeSpace(gps_info)) {
-    MessageBoxX(gettext(_T("Logger inactive, insufficient storage!")),
-                gettext(_T("Logger Error")), MB_OK| MB_ICONERROR);
-    LogStartUp(_T("Logger not started: Insufficient Storage"));
-    return;
-  }
-
   StartLogger(gps_info, settings, strAssetNumber);
   LoggerHeader(gps_info, decl);
 
@@ -861,30 +827,6 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
   }
 
   LoggerActive = true; // start logger after Header is completed.  Concurrency
-}
-
-void
-LoggerImpl::guiStopLogger(const NMEA_INFO& gps_info, bool noAsk)
-{
-  if (!LoggerActive)
-    return;
-
-  if(noAsk || (MessageBoxX(gettext(_T("Stop Logger")),
-                           gettext(_T("Stop Logger")),
-                           MB_YESNO | MB_ICONQUESTION) == IDYES)) {
-    StopLogger(gps_info);
-  }
-}
-
-void
-LoggerImpl::guiToggleLogger(const NMEA_INFO& gps_info,
-    const SETTINGS_COMPUTER& settings, bool noAsk)
-{
-  if (LoggerActive) {
-    guiStopLogger(gps_info, noAsk);
-  } else {
-    guiStartLogger(gps_info, settings, noAsk);
-  }
 }
 
 void

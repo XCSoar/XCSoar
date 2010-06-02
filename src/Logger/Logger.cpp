@@ -38,6 +38,14 @@
 
 #include "Logger/Logger.hpp"
 #include "Logger/LoggerImpl.hpp"
+#include "Device/Declaration.hpp"
+#include "NMEA/Info.hpp"
+#include "Language.hpp"
+#include "Dialogs/Message.hpp"
+#include "Components.hpp"
+#include "LogFile.hpp"
+#include "TaskClientUI.hpp"
+#include "Asset.hpp"
 
 /**
  * Constructor of the Logger class
@@ -106,9 +114,42 @@ Logger::guiStartLogger(const NMEA_INFO& gps_info,
                     const SETTINGS_COMPUTER& settings,
                     bool noAsk)
 {
+  if (!isLoggerActive() || gps_info.gps.Replay)
+    return;
+
+  OrderedTask* task = task_ui.task_clone();
+  if (!task) return;
+
+  const Declaration decl(*task);
+  delete task;
+
+  if (!noAsk) {
+    TCHAR TaskMessage[1024];
+    _tcscpy(TaskMessage, _T("Start Logger With Declaration\r\n"));
+
+    if (decl.size()) {
+      for (unsigned i = 0; i< decl.size(); ++i) {
+        _tcscat(TaskMessage, decl.get_name(i));
+        _tcscat(TaskMessage, _T("\r\n"));
+      }
+    } else {
+      _tcscat(TaskMessage, _T("None"));
+    }
+
+    if (MessageBoxX(TaskMessage, gettext(_T("Start Logger")),
+                    MB_YESNO | MB_ICONQUESTION) != IDYES)
+      return;
+  }
+
+  if (!LoggerClearFreeSpace(gps_info)) {
+    MessageBoxX(gettext(_T("Logger inactive, insufficient storage!")),
+                gettext(_T("Logger Error")), MB_OK| MB_ICONERROR);
+    LogStartUp(_T("Logger not started: Insufficient Storage"));
+    return;
+  }
+
   Poco::ScopedRWLock protect(lock, true);
-  return _logger->guiStartLogger(gps_info,
-                                 settings, noAsk);
+  _logger->StartLogger(gps_info, settings, strAssetNumber, decl);
 }
 
 void
@@ -116,16 +157,26 @@ Logger::guiToggleLogger(const NMEA_INFO& gps_info,
                      const SETTINGS_COMPUTER& settings,
                      bool noAsk)
 {
-  Poco::ScopedRWLock protect(lock, true);
-  return _logger->guiToggleLogger(gps_info, settings, noAsk);
+  if (isLoggerActive()) {
+    guiStopLogger(gps_info, noAsk);
+  } else {
+    guiStartLogger(gps_info, settings, noAsk);
+  }
 }
 
 void
 Logger::guiStopLogger(const NMEA_INFO &gps_info,
                    bool noAsk)
 {
-  Poco::ScopedRWLock protect(lock, true);
-  return _logger->guiStopLogger(gps_info, noAsk);
+  if (!isLoggerActive())
+    return;
+
+  if (noAsk || (MessageBoxX(gettext(_T("Stop Logger")),
+                            gettext(_T("Stop Logger")),
+                            MB_YESNO | MB_ICONQUESTION) == IDYES)) {
+    Poco::ScopedRWLock protect(lock, true);
+    _logger->StopLogger(gps_info);
+  }
 }
 
 void

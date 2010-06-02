@@ -114,14 +114,11 @@ public:
   bool isTaskDeclared() const;
   bool isLoggerActive() const;
   bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
-  void guiStartLogger(const NMEA_INFO& gps_info,
-                      const SETTINGS_COMPUTER& settings,
-                      bool noAsk = false);
-  void guiToggleLogger(const NMEA_INFO& gps_info,
-                       const SETTINGS_COMPUTER& settings,
-                       bool noAsk = false);
-  void guiStopLogger(const NMEA_INFO &gps_info,
-                     bool noAsk = false);
+  void StartLogger(const NMEA_INFO &gps_info,
+                   const SETTINGS_COMPUTER &settings,
+                   const TCHAR *strAssetNumber,
+                   const Declaration &decl);
+  void StopLogger(const NMEA_INFO &gps_info);
   void LoggerDeviceDeclare(const OrderedTask& task);
   void LoggerNote(const TCHAR *text);
   void clearBuffer();
@@ -146,7 +143,6 @@ private:
   void EndDeclaration(void);
   void LoggerHeader(const NMEA_INFO &gps_info, const Declaration& decl);
 
-  void StopLogger(const NMEA_INFO &gps_info);
   bool IGCWriteRecord(const char *szIn, const TCHAR *);
   void CleanIGCRecord(char * szIn);
   bool LoggerDeclare(struct DeviceDescriptor *dev,
