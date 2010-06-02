@@ -593,11 +593,9 @@ LoggerImpl::LoggerDeviceDeclare(const OrderedTask& task)
     if (LoggerDeclare(&DeviceList[i], decl))
       found_logger = true;
 
-  if (!found_logger) {
+  if (!found_logger)
     MessageBoxX(gettext(_T("No logger connected")),
                 gettext(_T("Declare task")), MB_OK | MB_ICONINFORMATION);
-    DeclaredToDevice = true; // testing only
-  }
 }
 
 /**
