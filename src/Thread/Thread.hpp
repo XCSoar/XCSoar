@@ -72,6 +72,17 @@ public:
 #endif
   }
 
+  /**
+   * Check if this thread is the current thread.
+   */
+  bool inside() const {
+#ifdef HAVE_POSIX
+    return pthread_self() == handle;
+#else
+    return GetCurrentThread() == handle;
+#endif
+  }
+
   bool start();
   void join();
   bool join(unsigned timeout_ms);
