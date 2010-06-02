@@ -413,6 +413,8 @@ ComPort::WriteString(const TCHAR *Text)
 bool
 ComPort::StopRxThread()
 {
+  assert(!Thread::inside());
+
 #ifdef HAVE_POSIX
   if (fd < 0)
     return false;
@@ -447,6 +449,8 @@ ComPort::StopRxThread()
 bool
 ComPort::StartRxThread(void)
 {
+  assert(!Thread::inside());
+
 #ifdef HAVE_POSIX
   if (fd < 0)
     return false;
@@ -479,7 +483,7 @@ ComPort::GetChar(void)
   BYTE  inbuf[2];
   DWORD dwBytesTransferred;
 
-  if (hPort == INVALID_HANDLE_VALUE || !CloseThread)
+  if (hPort == INVALID_HANDLE_VALUE || Thread::defined())
     return EOF;
 
   if (ReadFile(hPort, inbuf, 1, &dwBytesTransferred, (OVERLAPPED *)NULL)) {
