@@ -40,8 +40,8 @@ Copyright_License {
 #define XCSOAR_DEVICE_PORT_HPP
 
 #include "FifoBuffer.hpp"
-
-#include <Thread/Thread.hpp>
+#include "Thread/Thread.hpp"
+#include "Thread/Trigger.hpp"
 
 #include <windows.h>
 
@@ -115,7 +115,8 @@ private:
 #endif /* !HAVE_POSIX */
 
   TCHAR sPortName[64];
-  bool CloseThread;
+
+  Trigger stop_trigger;
 
   FifoBuffer<TCHAR> buffer;
 };

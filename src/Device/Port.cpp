@@ -81,7 +81,7 @@ ComPort::ComPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
    hPort(INVALID_HANDLE_VALUE),
    dwMask(0),
 #endif
-   CloseThread(false),
+   stop_trigger(_T("ComPort::stop_trigger"), true),
    buffer(NMEA_BUF_SIZE)
 {
   assert(path != NULL);
@@ -258,17 +258,14 @@ void
 ComPort::run()
 {
 #ifdef HAVE_POSIX
-  static const struct timespec yield = { 0, 50000000 };
-
   char buffer[1024];
 
-  while (!CloseThread) {
+  // XXX use poll()
+  while (!stop_trigger.wait(50)) {
     ssize_t nbytes = read(fd, buffer, sizeof(buffer));
     if (globalRunningEvent.test()) // ignore everything until started
       for (ssize_t i = 0; i < nbytes; ++i)
         ProcessChar(buffer[i]);
-
-    nanosleep(&yield, NULL); // XXX use poll()
   }
 #else /* !HAVE_POSIX */
   DWORD dwCommModemStatus, dwBytesTransferred;
@@ -283,7 +280,7 @@ ComPort::run()
   if (is_embedded())
     SetCommMask(hPort, dwMask);
 
-  while (!CloseThread) {
+  while (!stop_trigger.test()) {
 
     if (is_embedded()) {
       // Wait for an event to occur for the port.
@@ -319,10 +316,7 @@ ComPort::run()
         Sleep(50); // JMW20070515: give port some time to
         // fill... prevents ReadFile from causing the
         // thread to take up too much CPU
-
-        if (CloseThread)
-          dwBytesTransferred = 0;
-      } while (dwBytesTransferred != 0);
+      } while (dwBytesTransferred != 0 && !stop_trigger.test());
     }
 
     // give port some time to fill
@@ -426,7 +420,7 @@ ComPort::StopRxThread()
   if (!Thread::defined())
     return true;
 
-  CloseThread = true;
+  stop_trigger.trigger();
 
 #ifndef HAVE_POSIX
   if (is_embedded()) {
@@ -459,7 +453,7 @@ ComPort::StartRxThread(void)
     return false;
 #endif /* !HAVE_POSIX */
 
-  CloseThread = false;
+  stop_trigger.reset();
 
   Thread::start();
   return true;
