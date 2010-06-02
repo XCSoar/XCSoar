@@ -318,12 +318,6 @@ ComPort::run()
         // thread to take up too much CPU
       } while (dwBytesTransferred != 0 && !stop_trigger.test());
     }
-
-    // give port some time to fill
-    Sleep(5);
-
-    // Retrieve modem control-register values.
-    GetCommModemStatus(hPort, &dwCommModemStatus);
   }
 #endif /* !HAVE_POSIX */
 
