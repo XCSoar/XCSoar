@@ -298,23 +298,23 @@ ComPort::run()
       // on W2K or higher
     }
 
-    // Loop for waiting for the data.
-    do {
-      dwBytesTransferred = 0;
-      // Read the data from the serial port.
-      if (ReadFile(hPort, inbuf, 1024, &dwBytesTransferred, (OVERLAPPED *)NULL)) {
-        if (globalRunningEvent.test()) // ignore everything until started
-          for (unsigned int j = 0; j < dwBytesTransferred; j++) {
-            ProcessChar(inbuf[j]);
-          }
-      } else {
-        dwBytesTransferred = 0;
-      }
+    // Read the data from the serial port.
+    if (!ReadFile(hPort, inbuf, 1024, &dwBytesTransferred, NULL)) {
+      // ignore everything until started
+      Sleep(100);
+      continue;
+    }
 
-      Sleep(50); // JMW20070515: give port some time to
-      // fill... prevents ReadFile from causing the
-      // thread to take up too much CPU
-    } while (dwBytesTransferred != 0 && !stop_trigger.test());
+    if (!globalRunningEvent.test())
+      // ignore everything until started
+      continue;
+
+    for (unsigned int j = 0; j < dwBytesTransferred; j++)
+      ProcessChar(inbuf[j]);
+
+    Sleep(50); // JMW20070515: give port some time to
+    // fill... prevents ReadFile from causing the
+    // thread to take up too much CPU
   }
 #endif /* !HAVE_POSIX */
 
