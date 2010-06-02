@@ -284,39 +284,37 @@ ComPort::run()
 
     if (is_embedded()) {
       // Wait for an event to occur for the port.
-      if (!WaitCommEvent(hPort, &dwCommModemStatus, 0))
+      if (!WaitCommEvent(hPort, &dwCommModemStatus, 0)) {
         // error reading from port
         Sleep(100);
+        continue;
+      }
+
+      if ((dwCommModemStatus & EV_RXCHAR) == 0)
+        /* no data available */
+        continue;
     } else {
       Sleep(50); // ToDo rewrite the whole driver to use overlaped IO
       // on W2K or higher
-
-      dwCommModemStatus = EV_RXCHAR;
     }
 
-    // Re-specify the set of events to be monitored for the port.
-    //    SetCommMask(hPort, dwMask1);
-
-    if (dwCommModemStatus & EV_RXCHAR) {
-
-      // Loop for waiting for the data.
-      do {
+    // Loop for waiting for the data.
+    do {
+      dwBytesTransferred = 0;
+      // Read the data from the serial port.
+      if (ReadFile(hPort, inbuf, 1024, &dwBytesTransferred, (OVERLAPPED *)NULL)) {
+        if (globalRunningEvent.test()) // ignore everything until started
+          for (unsigned int j = 0; j < dwBytesTransferred; j++) {
+            ProcessChar(inbuf[j]);
+          }
+      } else {
         dwBytesTransferred = 0;
-        // Read the data from the serial port.
-        if (ReadFile(hPort, inbuf, 1024, &dwBytesTransferred, (OVERLAPPED *)NULL)) {
-          if (globalRunningEvent.test()) // ignore everything until started
-            for (unsigned int j = 0; j < dwBytesTransferred; j++) {
-              ProcessChar(inbuf[j]);
-            }
-        } else {
-          dwBytesTransferred = 0;
-        }
+      }
 
-        Sleep(50); // JMW20070515: give port some time to
-        // fill... prevents ReadFile from causing the
-        // thread to take up too much CPU
-      } while (dwBytesTransferred != 0 && !stop_trigger.test());
-    }
+      Sleep(50); // JMW20070515: give port some time to
+      // fill... prevents ReadFile from causing the
+      // thread to take up too much CPU
+    } while (dwBytesTransferred != 0 && !stop_trigger.test());
   }
 #endif /* !HAVE_POSIX */
 
