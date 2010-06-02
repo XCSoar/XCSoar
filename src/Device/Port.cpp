@@ -262,7 +262,7 @@ ComPort::run()
 
   char buffer[1024];
 
-  while (fd >= 0 && closeTriggerEvent.test() && !CloseThread) {
+  while (closeTriggerEvent.test() && !CloseThread) {
     ssize_t nbytes = read(fd, buffer, sizeof(buffer));
     if (globalRunningEvent.test()) // ignore everything until started
       for (ssize_t i = 0; i < nbytes; ++i)
@@ -283,7 +283,7 @@ ComPort::run()
   if (is_embedded())
     SetCommMask(hPort, dwMask);
 
-  while ((hPort != INVALID_HANDLE_VALUE) && (!closeTriggerEvent.test())
+  while (!closeTriggerEvent.test()
       && (!CloseThread)) {
 
     if (is_embedded()) {
