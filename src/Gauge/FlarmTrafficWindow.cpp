@@ -142,8 +142,8 @@ FlarmTrafficWindow::GetZoomDistanceString(TCHAR* str1, TCHAR* str2,
 void
 FlarmTrafficWindow::SetTarget(int i)
 {
-  assert(selection < FLARM_STATE::FLARM_MAX_TRAFFIC);
-  assert(selection < 0 || data.FLARM_Traffic[selection].defined());
+  assert(i < FLARM_STATE::FLARM_MAX_TRAFFIC);
+  assert(i < 0 || data.FLARM_Traffic[i].defined());
 
   if (selection == i)
     return;
