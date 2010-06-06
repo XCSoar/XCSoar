@@ -65,7 +65,12 @@ protected:
   int selection;
   int warning;
   POINT radar_mid;
-  SIZE radar_size;
+
+  /**
+   * The radius of the biggest circle in pixels.
+   */
+  unsigned radius;
+
   POINT sc[FLARM_STATE::FLARM_MAX_TRAFFIC];
 
   Angle direction;

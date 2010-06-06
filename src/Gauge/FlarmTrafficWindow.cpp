@@ -102,8 +102,7 @@ FlarmTrafficWindow::on_resize(unsigned width, unsigned height)
 
   // Calculate Radar size
   int size = min(height, width);
-  radar_size.cx = size - Layout::FastScale(20);
-  radar_size.cy = size - Layout::FastScale(20);
+  radius = (size - Layout::FastScale(20)) / 2;
   radar_mid.x = width / 2;
   radar_mid.y = height / 2;
 
@@ -243,7 +242,7 @@ double
 FlarmTrafficWindow::RangeScale(double d) const
 {
   d = d / GetZoomDistance(zoom);
-  return min(d, 1.0) * radar_size.cx * 0.5;
+  return min(d, 1.0) * radius;
 }
 
 /**
@@ -271,8 +270,7 @@ FlarmTrafficWindow::PaintTrafficInfo(Canvas &canvas) const
     traffic = data.FLARM_Traffic[selection];
 
   RECT rc;
-  rc.left = min(radar_mid.x - radar_size.cx * 0.5,
-                radar_mid.y - radar_size.cy * 0.5);
+  rc.left = min(radar_mid.x, radar_mid.y) - radius;
   rc.top = rc.left;
   rc.right = 2 * radar_mid.x - rc.left;
   rc.bottom = 2 * radar_mid.y - rc.top;
@@ -345,7 +343,7 @@ FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const
   canvas.select(StatisticsFont);
   SIZE ts = canvas.text_size(str);
   canvas.set_text_color(hcStandard);
-  canvas.text(radar_mid.x - (ts.cx / 2), radar_mid.y - (radar_size.cy / 4), str);
+  canvas.text(radar_mid.x - (ts.cx / 2), radar_mid.y - (radius / 2), str);
 }
 
 /**
@@ -369,7 +367,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   double scale = RangeScale(d);
 
   // Don't display distracting, far away targets in WarningMode
-  if (WarningMode() && !traffic.HasAlarm() && scale == radar_size.cx * 0.5)
+  if (WarningMode() && !traffic.HasAlarm() && scale == radius)
     return;
 
   // x and y are not between 0 and 1 (distance will be handled via scale)
@@ -589,8 +587,8 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
   canvas.set_text_color(hcRadar);
 
   // Paint circles
-  canvas.circle(radar_mid.x, radar_mid.y, radar_size.cx * 0.5);
-  canvas.circle(radar_mid.x, radar_mid.y, radar_size.cx * 0.25);
+  canvas.circle(radar_mid.x, radar_mid.y, radius);
+  canvas.circle(radar_mid.x, radar_mid.y, radius / 2);
 
   // Paint zoom strings
   TCHAR str1[10], str2[10];
@@ -599,10 +597,10 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
   canvas.background_opaque();
   SIZE sz1 = canvas.text_size(str1);
   canvas.text(radar_mid.x - sz1.cx / 2,
-              radar_mid.y + radar_size.cx * 0.5 - sz1.cy * 0.75, str1);
+              radar_mid.y + radius - sz1.cy * 0.75, str1);
   SIZE sz2 = canvas.text_size(str2);
   canvas.text(radar_mid.x - sz2.cx / 2,
-              radar_mid.y + radar_size.cx * 0.25 - sz2.cy * 0.75, str2);
+              radar_mid.y + radius / 2 - sz2.cy * 0.75, str2);
   canvas.background_transparent();
 }
 
