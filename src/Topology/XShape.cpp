@@ -117,10 +117,7 @@ XShapeLabel::XShapeLabel(shapefileObj *shpfile, int i, int field)
     label = (char*)malloc(strlen(src) + 1);
     if (label)
       strcpy(label, src);
-
-    hide = false;
   } else {
-    label = NULL;
     hide = true;
   }
 }
