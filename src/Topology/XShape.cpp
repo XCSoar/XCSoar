@@ -42,18 +42,8 @@ Copyright_License {
 #include <tchar.h>
 
 
-XShape::XShape()
+XShape::XShape(shapefileObj *shpfile, int i)
   :hide(false)
-{
-}
-
-XShape::~XShape()
-{
-  msFreeShape(&shape);
-}
-
-void
-XShape::load(shapefileObj* shpfile, int i)
 {
   msInitShape(&shape);
   msSHPReadShape(shpfile->hSHP, i, &shape);
@@ -66,6 +56,11 @@ XShape::load(shapefileObj* shpfile, int i)
     }
   }
 #endif
+}
+
+XShape::~XShape()
+{
+  msFreeShape(&shape);
 }
 
 void

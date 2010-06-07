@@ -47,10 +47,8 @@ Copyright_License {
 class XShape
 {
 public:
-  XShape();
+  XShape(shapefileObj *shpfile, int i);
   virtual ~XShape();
-
-  virtual void load(shapefileObj* shpfile, int i);
 
   virtual void
   renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y)
@@ -67,7 +65,8 @@ public:
 class XShapeLabel: public XShape
 {
 public:
-  XShapeLabel():label(NULL) {}
+  XShapeLabel(shapefileObj *shpfile, int i)
+    :XShape(shpfile, i), label(NULL) {}
 
   virtual ~XShapeLabel();
 

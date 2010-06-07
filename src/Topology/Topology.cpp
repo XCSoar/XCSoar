@@ -198,9 +198,7 @@ Topology::updateCache(Projection &map_projection,
 XShape*
 Topology::addShape(const int i)
 {
-  XShape* theshape = new XShape();
-  theshape->load(&shpfile, i);
-  return theshape;
+  return new XShape(&shpfile, i);
 }
 
 void
@@ -371,8 +369,7 @@ TopologyLabel::setField(int i)
 XShape*
 TopologyLabel::addShape(const int i)
 {
-  XShapeLabel* theshape = new XShapeLabel();
-  theshape->load(&shpfile, i);
+  XShapeLabel* theshape = new XShapeLabel(&shpfile, i);
   theshape->setlabel(msDBFReadStringAttribute(shpfile.hDBF, i, field));
   return theshape;
 }
