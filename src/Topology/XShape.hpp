@@ -52,12 +52,7 @@ public:
   virtual ~XShape();
 
   virtual void
-  renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y)
-  {
-    (void)canvas;
-    (void)x;
-    (void)y;
-  }
+  renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y) {}
 
   bool hide;
   shapeObj shape;
@@ -71,7 +66,8 @@ public:
 
   char *label;
 
-  virtual void renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y);
+  virtual void
+  renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y);
 };
 
 #endif
