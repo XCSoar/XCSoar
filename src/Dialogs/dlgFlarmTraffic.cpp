@@ -61,7 +61,8 @@ protected:
 
 public:
   FlarmTrafficControl()
-    :enable_auto_zoom(true) {}
+    :FlarmTrafficWindow(Layout::Scale(10)),
+     enable_auto_zoom(true) {}
 
 protected:
   void CalcAutoZoom();

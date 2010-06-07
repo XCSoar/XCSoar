@@ -67,6 +67,12 @@ protected:
   POINT radar_mid;
 
   /**
+   * The minimum distance between the window boundary and the biggest
+   * circle in pixels.
+   */
+  unsigned padding;
+
+  /**
    * The radius of the biggest circle in pixels.
    */
   unsigned radius;
@@ -81,7 +87,7 @@ public:
   int side_display_type;
 
 public:
-  FlarmTrafficWindow();
+  FlarmTrafficWindow(unsigned _padding);
 
 public:
   bool WarningMode() const;

@@ -54,9 +54,10 @@ static const Color hcTeam(0x74, 0xFF, 0x00);
 static const Color hcBackground(0xFF, 0xFF, 0xFF);
 static const Color hcRadar(0x55, 0x55, 0x55);
 
-FlarmTrafficWindow::FlarmTrafficWindow()
+FlarmTrafficWindow::FlarmTrafficWindow(unsigned _padding)
   :zoom(2),
    selection(-1), warning(-1),
+   padding(_padding),
    direction(Angle::radians(fixed_zero)),
    side_display_type(1)
 {
@@ -102,7 +103,7 @@ FlarmTrafficWindow::on_resize(unsigned width, unsigned height)
 
   // Calculate Radar size
   int size = min(height, width);
-  radius = (size - Layout::FastScale(20)) / 2;
+  radius = size / 2 - padding;
   radar_mid.x = width / 2;
   radar_mid.y = height / 2;
 
@@ -270,10 +271,10 @@ FlarmTrafficWindow::PaintTrafficInfo(Canvas &canvas) const
     traffic = data.FLARM_Traffic[selection];
 
   RECT rc;
-  rc.left = min(radar_mid.x, radar_mid.y) - radius;
-  rc.top = rc.left;
-  rc.right = 2 * radar_mid.x - rc.left;
-  rc.bottom = 2 * radar_mid.y - rc.top;
+  rc.left = padding;
+  rc.top = padding;
+  rc.right = canvas.get_width() - padding;
+  rc.bottom = canvas.get_height() - padding;
 
   // Set the text color and background
   switch (traffic.AlarmLevel) {
