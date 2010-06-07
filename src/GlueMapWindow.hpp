@@ -50,16 +50,6 @@ class GlueMapWindow : public MapWindow {
 public:
   GlueMapWindow();
 
-  static bool register_class(HINSTANCE hInstance);
-
-#ifdef WIN32
-  /**
-   * Identifies the HWND: if the handle is a MapWindow instance, this
-   * function returns true.
-   */
-  static bool identify(HWND hWnd);
-#endif
-
   bool Idle(const bool force=false);
 
 private:
@@ -72,41 +62,6 @@ private:
   // events
 
   bool AirspaceDetailsAtPoint(const GEOPOINT &location) const;
-
-  // graphics vars
-
-  BufferCanvas draw_canvas;
-  BufferCanvas buffer_canvas;
-  BufferCanvas stencil_canvas;
-  BitmapCanvas bitmap_canvas;
-
-  LabelBlock label_block;
-public:
-  bool checkLabelBlock(RECT rc);
-  LabelBlock *getLabelBlock() {
-    return &label_block;
-  }
-
-  void draw_bitmap(Canvas &canvas, const Bitmap &bitmap,
-		   const int x, const int y,
-		   const unsigned src_x_offset,
-		   const unsigned src_y_offset,
-		   const unsigned src_width,
-		   const unsigned src_height,
-		   bool centered=true);
-
-  void draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap,
-			  const int x, const int y,
-			  const unsigned src_width,
-			  const unsigned src_height,
-			  bool centered=true);
-
-  bool draw_masked_bitmap_if_visible(Canvas &canvas,
-				     Bitmap &bitmap,
-				     const GEOPOINT &loc,
-				     unsigned width,
-				     unsigned height,
-				     POINT *sc=NULL);
 
 protected:
   virtual bool on_mouse_double(int x, int y);
