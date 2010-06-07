@@ -70,7 +70,11 @@ protected:
 
   Pen hpPlane, hpRadar;
 
-  unsigned zoom;
+  /**
+   * The distance of the biggest circle in meters.
+   */
+  fixed distance;
+
   int selection;
   int warning;
   POINT radar_mid;
@@ -112,14 +116,12 @@ public:
   void PrevTarget();
   void SelectNearTarget(int x, int y);
 
-  void SetZoom(unsigned _zoom) {
-    zoom = _zoom;
+  void SetDistance(fixed _distance) {
+    distance = _distance;
     invalidate();
   }
 
 protected:
-  static unsigned GetZoomDistance(unsigned zoom);
-
   fixed RangeScale(fixed d) const;
 
   void UpdateSelector();

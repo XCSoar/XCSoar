@@ -59,11 +59,13 @@
 class FlarmTrafficControl : public FlarmTrafficWindow {
 protected:
   bool enable_auto_zoom;
+  unsigned zoom;
 
 public:
   FlarmTrafficControl()
     :FlarmTrafficWindow(Layout::Scale(10)),
-     enable_auto_zoom(true) {}
+     enable_auto_zoom(true),
+     zoom(2) {}
 
 protected:
   void CalcAutoZoom();
@@ -74,6 +76,13 @@ public:
 
   bool GetAutoZoom() const {
     return enable_auto_zoom;
+  }
+
+  static unsigned GetZoomDistance(unsigned zoom);
+
+  void SetZoom(unsigned _zoom) {
+    zoom = _zoom;
+    SetDistance(fixed(GetZoomDistance(_zoom)));
   }
 
   void SetAutoZoom(bool enabled);
@@ -105,6 +114,24 @@ FlarmTrafficControl::on_create()
   Profile::Get(szProfileFlarmAutoZoom, enable_auto_zoom);
 
   return true;
+}
+
+unsigned
+FlarmTrafficControl::GetZoomDistance(unsigned zoom)
+{
+  switch (zoom) {
+  case 0:
+    return 500;
+  case 1:
+    return 1000;
+  case 3:
+    return 5000;
+  case 4:
+    return 10000;
+  case 2:
+  default:
+    return 2000;
+  }
 }
 
 void

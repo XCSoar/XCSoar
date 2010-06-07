@@ -55,7 +55,7 @@ const Color FlarmTrafficWindow::hcBackground(0xFF, 0xFF, 0xFF);
 const Color FlarmTrafficWindow::hcRadar(0x55, 0x55, 0x55);
 
 FlarmTrafficWindow::FlarmTrafficWindow(unsigned _padding)
-  :zoom(2),
+  :distance(2000),
    selection(-1), warning(-1),
    padding(_padding),
    direction(Angle::radians(fixed_zero)),
@@ -108,24 +108,6 @@ FlarmTrafficWindow::on_resize(unsigned width, unsigned height)
   radar_mid.y = height / 2;
 
   return true;
-}
-
-unsigned
-FlarmTrafficWindow::GetZoomDistance(unsigned zoom)
-{
-  switch (zoom) {
-  case 0:
-    return 500;
-  case 1:
-    return 1000;
-  case 3:
-    return 5000;
-  case 4:
-    return 10000;
-  case 2:
-  default:
-    return 2000;
-  }
 }
 
 void
@@ -231,7 +213,7 @@ FlarmTrafficWindow::Update(Angle new_direction, const FLARM_STATE &new_data,
 fixed
 FlarmTrafficWindow::RangeScale(fixed d) const
 {
-  d = d / GetZoomDistance(zoom);
+  d = d / distance;
   return min(d, fixed_one) * radius;
 }
 
@@ -498,7 +480,6 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
   canvas.select(MapWindowFont);
   canvas.background_opaque();
 
-  unsigned distance = GetZoomDistance(zoom);
   TCHAR distance_string[10];
   Units::FormatUserDistance(distance, distance_string,
                             sizeof(distance_string) / sizeof(distance_string[0]));
