@@ -115,7 +115,7 @@ public:
 protected:
   static unsigned GetZoomDistance(unsigned zoom);
 
-  double RangeScale(double d) const;
+  fixed RangeScale(fixed d) const;
 
   void UpdateSelector();
   void UpdateWarnings();

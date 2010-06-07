@@ -228,11 +228,11 @@ FlarmTrafficWindow::Update(Angle new_direction, const FLARM_STATE &new_data,
  * Returns the distance to the own plane in pixels
  * @param d Distance in meters to the own plane
  */
-double
-FlarmTrafficWindow::RangeScale(double d) const
+fixed
+FlarmTrafficWindow::RangeScale(fixed d) const
 {
   d = d / GetZoomDistance(zoom);
-  return min(d, 1.0) * radius;
+  return min(d, fixed_one) * radius;
 }
 
 /**
@@ -259,22 +259,22 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
                                      unsigned i)
 {
   // Save relative East/North
-  double x, y;
+  fixed x, y;
   x = traffic.RelativeEast;
   y = -traffic.RelativeNorth;
 
   // Calculate the distance in meters
-  double d = hypot(x, y);
+  fixed d = hypot(x, y);
 
   // Calculate the distance in pixels
-  double scale = RangeScale(d);
+  fixed scale = RangeScale(d);
 
   // Don't display distracting, far away targets in WarningMode
-  if (WarningMode() && !traffic.HasAlarm() && scale == radius)
+  if (WarningMode() && !traffic.HasAlarm() && scale == fixed(radius))
     return;
 
   // x and y are not between 0 and 1 (distance will be handled via scale)
-  if (d > 0) {
+  if (positive(d)) {
     x /= d;
     y /= d;
   } else {

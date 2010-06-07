@@ -120,13 +120,13 @@ void
 FlarmTrafficControl::CalcAutoZoom()
 {
   bool warning_mode = WarningMode();
-  double zoom_dist = 0;
+  fixed zoom_dist = fixed_zero;
 
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
     if (warning_mode && !data.FLARM_Traffic[i].HasAlarm())
       continue;
 
-    double dist = data.FLARM_Traffic[i].RelativeNorth
+    fixed dist = data.FLARM_Traffic[i].RelativeNorth
                 * data.FLARM_Traffic[i].RelativeNorth
                 + data.FLARM_Traffic[i].RelativeEast
                 * data.FLARM_Traffic[i].RelativeEast;
@@ -135,7 +135,8 @@ FlarmTrafficControl::CalcAutoZoom()
   }
 
   for (unsigned i = 0; i <= 4; i++) {
-    if (i == 4 || (GetZoomDistance(i) * GetZoomDistance(i)) >= zoom_dist) {
+    if (i == 4 ||
+        fixed(GetZoomDistance(i) * GetZoomDistance(i)) >= zoom_dist) {
       zoom = i;
       break;
     }
