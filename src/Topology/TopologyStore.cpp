@@ -36,10 +36,10 @@ Copyright_License {
 }
 */
 
-#include "TopologyStore.h"
+#include "Topology/TopologyStore.hpp"
 #include "Protection.hpp"
 #include "MapWindow.hpp"
-#include "Topology.h"
+#include "Topology/Topology.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Compatibility/string.h"

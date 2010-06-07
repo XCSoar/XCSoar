@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_MARKS_HPP
 #define XCSOAR_MARKS_HPP
 
-#include "Topology.h"
+#include "Topology/Topology.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Poco/RWLock.h"
 

@@ -55,7 +55,7 @@ Copyright_License {
 #include "WayPointGlue.hpp"
 #include "Device/device.hpp"
 #include "InputEvents.h"
-#include "TopologyStore.h"
+#include "Topology/TopologyStore.hpp"
 #include "Dialogs.h"
 #include "Protection.hpp"
 #include "Gauge/GaugeCDI.hpp"

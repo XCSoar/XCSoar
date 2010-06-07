@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "Topology.h"
+#include "Topology/Topology.hpp"
 #include <ctype.h> // needed for Wine
 #include "Interface.hpp"
 #include "wcecompat/ts_string.h"
