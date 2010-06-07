@@ -115,7 +115,6 @@ public:
 protected:
   static unsigned GetZoomDistance(unsigned zoom);
 
-  void GetZoomDistanceString(TCHAR* str1, TCHAR* str2, unsigned size) const;
   double RangeScale(double d) const;
 
   void UpdateSelector();

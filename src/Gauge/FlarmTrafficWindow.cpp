@@ -129,17 +129,6 @@ FlarmTrafficWindow::GetZoomDistance(unsigned zoom)
 }
 
 void
-FlarmTrafficWindow::GetZoomDistanceString(TCHAR* str1, TCHAR* str2,
-                                          unsigned size) const
-{
-  double z = GetZoomDistance(zoom);
-  double z_half = z * 0.5;
-
-  Units::FormatUserDistance(z, str1, size);
-  Units::FormatUserDistance(z_half, str2, size);
-}
-
-void
 FlarmTrafficWindow::SetTarget(int i)
 {
   assert(i < FLARM_STATE::FLARM_MAX_TRAFFIC);
@@ -592,16 +581,24 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
   canvas.circle(radar_mid.x, radar_mid.y, radius / 2);
 
   // Paint zoom strings
-  TCHAR str1[10], str2[10];
-  GetZoomDistanceString(str1, str2, 10);
+
   canvas.select(MapWindowFont);
   canvas.background_opaque();
-  SIZE sz1 = canvas.text_size(str1);
-  canvas.text(radar_mid.x - sz1.cx / 2,
-              radar_mid.y + radius - sz1.cy * 0.75, str1);
-  SIZE sz2 = canvas.text_size(str2);
-  canvas.text(radar_mid.x - sz2.cx / 2,
-              radar_mid.y + radius / 2 - sz2.cy * 0.75, str2);
+
+  unsigned distance = GetZoomDistance(zoom);
+  TCHAR distance_string[10];
+  Units::FormatUserDistance(distance, distance_string,
+                            sizeof(distance_string) / sizeof(distance_string[0]));
+  SIZE s = canvas.text_size(distance_string);
+  canvas.text(radar_mid.x - s.cx / 2,
+              radar_mid.y + radius - s.cy * 0.75, distance_string);
+
+  Units::FormatUserDistance(distance / 2, distance_string,
+                            sizeof(distance_string) / sizeof(distance_string[0]));
+  s = canvas.text_size(distance_string);
+  canvas.text(radar_mid.x - s.cx / 2,
+              radar_mid.y + radius / 2 - s.cy * 0.75, distance_string);
+
   canvas.background_transparent();
 }
 
