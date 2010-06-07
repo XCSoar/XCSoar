@@ -48,6 +48,15 @@
  */
 class FlarmTrafficWindow : public PaintWindow {
 protected:
+  static const Color hcWarning;
+  static const Color hcAlarm;
+  static const Color hcStandard;
+  static const Color hcPassive;
+  static const Color hcSelection;
+  static const Color hcTeam;
+  static const Color hcBackground;
+  static const Color hcRadar;
+
   Brush hbWarning;
   Brush hbAlarm;
   Brush hbSelection;

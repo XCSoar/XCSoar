@@ -45,14 +45,14 @@
 
 #include <assert.h>
 
-static const Color hcWarning(0xFF, 0xA2, 0x00);
-static const Color hcAlarm(0xFF, 0x00, 0x00);
-static const Color hcStandard(0x00, 0x00, 0x00);
-static const Color hcPassive(0x99, 0x99, 0x99);
-static const Color hcSelection(0x00, 0x00, 0xFF);
-static const Color hcTeam(0x74, 0xFF, 0x00);
-static const Color hcBackground(0xFF, 0xFF, 0xFF);
-static const Color hcRadar(0x55, 0x55, 0x55);
+const Color FlarmTrafficWindow::hcWarning(0xFF, 0xA2, 0x00);
+const Color FlarmTrafficWindow::hcAlarm(0xFF, 0x00, 0x00);
+const Color FlarmTrafficWindow::hcStandard(0x00, 0x00, 0x00);
+const Color FlarmTrafficWindow::hcPassive(0x99, 0x99, 0x99);
+const Color FlarmTrafficWindow::hcSelection(0x00, 0x00, 0xFF);
+const Color FlarmTrafficWindow::hcTeam(0x74, 0xFF, 0x00);
+const Color FlarmTrafficWindow::hcBackground(0xFF, 0xFF, 0xFF);
+const Color FlarmTrafficWindow::hcRadar(0x55, 0x55, 0x55);
 
 FlarmTrafficWindow::FlarmTrafficWindow(unsigned _padding)
   :zoom(2),
