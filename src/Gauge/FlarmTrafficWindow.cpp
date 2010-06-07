@@ -264,7 +264,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   y = -traffic.RelativeNorth;
 
   // Calculate the distance in meters
-  double d = sqrt(x * x + y * y);
+  double d = hypot(x, y);
 
   // Calculate the distance in pixels
   double scale = RangeScale(d);
