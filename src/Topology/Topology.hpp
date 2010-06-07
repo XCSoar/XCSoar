@@ -56,8 +56,6 @@ class Topology
 {
 public:
   Topology(const char* shpname, const Color thecolor, bool doappend = false);
-  Topology() {};
-
   virtual ~Topology();
 
   void Open();
@@ -110,8 +108,8 @@ class TopologyLabel: public Topology
 {
 public:
   TopologyLabel(const char* shpname, const Color thecolor, INT field1);
-  ~TopologyLabel();
   virtual XShape* addShape(const int i);
+
 private:
   void setField(int i);
   int field;

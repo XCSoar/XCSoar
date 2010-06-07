@@ -355,10 +355,6 @@ TopologyLabel::TopologyLabel(const char* shpname, const Color thecolor,
   setField(max(0, field1));
 }
 
-TopologyLabel::~TopologyLabel()
-{
-}
-
 void
 TopologyLabel::setField(int i)
 {
