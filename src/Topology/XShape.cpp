@@ -70,7 +70,7 @@ XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y
     return;
 
   TCHAR Temp[100];
-  _stprintf(Temp, TEXT("%S"), label);
+  _stprintf(Temp, _T("%S"), label);
   canvas.background_transparent();
 
   // TODO code: JMW asks, what does this do?
@@ -81,9 +81,9 @@ XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y
     dTemp = _tcstod(Temp, NULL);
     dTemp = Units::ToUserUnit(dTemp, Units::AltitudeUnit);
     if (dTemp > 999)
-      _stprintf(Temp, TEXT("%.1f"), (dTemp / 1000));
+      _stprintf(Temp, _T("%.1f"), (dTemp / 1000));
     else
-      _stprintf(Temp, TEXT("%d"), int(dTemp));
+      _stprintf(Temp, _T("%d"), int(dTemp));
   }
 
   SIZE tsize = canvas.text_size(Temp);
