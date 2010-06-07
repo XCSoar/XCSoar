@@ -56,15 +56,19 @@ Topology::loadIcon(const int res_id)
   icon.load(res_id);
 }
 
-Topology::Topology(const char* shpname, const Color thecolor, bool doappend)
-  :scaleThreshold(0), triggerUpdateCache(false),
-   shpCache(NULL), append(doappend), in_scale(false),
-   hPen(1, thecolor), hbBrush(thecolor),
-   shapefileopen(false)
+Topology::Topology(const char* shpname, const Color thecolor, bool doappend) :
+  scaleThreshold(0),
+  triggerUpdateCache(false),
+  shpCache(NULL),
+  append(doappend),
+  in_scale(false),
+  hPen(1, thecolor),
+  hbBrush(thecolor),
+  shapefileopen(false)
 {
   memset((void*)&shpfile, 0, sizeof(shpfile));
-
   strcpy(filename, shpname);
+
   Open();
 }
 
@@ -77,14 +81,15 @@ Topology::Open()
     return;
 
   scaleThreshold = 1000.0;
+
   shpCache = (XShape**)malloc(sizeof(XShape*) * shpfile.numshapes);
   if (!shpCache)
     return;
 
   shapefileopen = true;
-  for (int i = 0; i < shpfile.numshapes; i++) {
+
+  for (int i = 0; i < shpfile.numshapes; i++)
     shpCache[i] = NULL;
-  }
 }
 
 void
@@ -117,15 +122,16 @@ Topology::CheckScale(const double map_scale) const
 void
 Topology::TriggerIfScaleNowVisible(const Projection &map_projection)
 {
-  triggerUpdateCache |= (CheckScale(map_projection.GetMapScaleUser()) != in_scale);
+  triggerUpdateCache |=
+      (CheckScale(map_projection.GetMapScaleUser()) != in_scale);
 }
 
 void
 Topology::flushCache()
 {
-  for (int i = 0; i < shpfile.numshapes; i++) {
+  for (int i = 0; i < shpfile.numshapes; i++)
     removeShape(i);
-  }
+
   shapes_visible_count = 0;
 }
 
@@ -156,7 +162,8 @@ Topology::updateCache(Projection &map_projection,
   triggerUpdateCache = false;
 
   rectObj thebounds_deg = thebounds;
-#ifdef RADIANS
+
+  #ifdef RADIANS
   thebounds_deg.minx *= RAD_TO_DEG;
   thebounds_deg.miny *= RAD_TO_DEG;
   thebounds_deg.maxx *= RAD_TO_DEG;
@@ -243,6 +250,7 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
     iskip = 4;
 
   rectObj screenRect = map_projection.CalculateScreenBounds(fixed_zero);
+
 #ifdef RADIANS
   screenRect.minx *= RAD_TO_DEG;
   screenRect.miny *= RAD_TO_DEG;
@@ -262,15 +270,15 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
     const shapeObj *shape = &(cshape->shape);
 
     switch (shape->type) {
-    case (MS_SHAPE_POINT):
+    case MS_SHAPE_POINT:
       if (!checkVisible(*shape, screenRect))
         break;
 
       for (int tt = 0; tt < shape->numlines; ++tt) {
         for (int jj = 0; jj < shape->line[tt].numpoints; ++jj) {
           POINT sc;
-          const GEOPOINT l = map_projection.
-            point2GeoPoint(shape->line[tt].point[jj]);
+          const GEOPOINT l =
+              map_projection.point2GeoPoint(shape->line[tt].point[jj]);
 
           if (map_projection.LonLat2ScreenIfVisible(l, &sc)) {
             icon.draw(canvas, bitmap_canvas, sc.x, sc.y);
@@ -281,7 +289,7 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
       }
       break;
 
-    case (MS_SHAPE_LINE):
+    case MS_SHAPE_LINE:
       if (!checkVisible(*shape, screenRect))
         break;
 
@@ -307,7 +315,7 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
       }
       break;
 
-    case (MS_SHAPE_POLYGON):
+    case MS_SHAPE_POLYGON:
       if (!checkVisible(*shape, screenRect))
         break;
 
@@ -315,7 +323,7 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
         int msize = min(shape->line[tt].numpoints / iskip, (int)MAXCLIPPOLYGON);
 
         map_projection.LonLat2Screen(shape->line[tt].point, pt,
-            msize * iskip, iskip);
+                                     msize * iskip, iskip);
 
         canvas.polygon(pt, msize);
 
@@ -344,9 +352,7 @@ TopologyLabel::TopologyLabel(const char* shpname, const Color thecolor,
     int field1) :
   Topology(shpname, thecolor)
 {
-  //sjt 02nov05 - enabled label fields
   setField(max(0, field1));
-  // JMW this is causing XCSoar to crash on my system!
 }
 
 TopologyLabel::~TopologyLabel()
