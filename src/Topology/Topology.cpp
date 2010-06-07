@@ -51,9 +51,9 @@ Copyright_License {
 #include <tchar.h>
 
 void
-Topology::loadIcon(const int xx)
+Topology::loadIcon(const int res_id)
 {
-  icon.load(xx);
+  icon.load(res_id);
 }
 
 Topology::Topology(const char* shpname, const Color thecolor, bool doappend)
