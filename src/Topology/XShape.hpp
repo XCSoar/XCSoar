@@ -51,7 +51,6 @@ public:
   virtual ~XShape();
 
   virtual void load(shapefileObj* shpfile, int i);
-  virtual void clear();
 
   virtual void
   renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y)
@@ -74,7 +73,7 @@ public:
   }
 
   virtual ~XShapeLabel();
-  virtual void clear();
+
   char *label;
   void setlabel(const char* src);
   virtual void renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y);

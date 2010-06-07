@@ -49,12 +49,6 @@ XShape::XShape()
 
 XShape::~XShape()
 {
-  clear();
-}
-
-void
-XShape::clear()
-{
   msFreeShape(&shape);
 }
 
@@ -136,18 +130,6 @@ void XShapeLabel::setlabel(const char* src) {
 
 XShapeLabel::~XShapeLabel()
 {
-  if (!label)
-    return;
-
-  free(label);
-  label = NULL;
-}
-
-void
-XShapeLabel::clear()
-{
-  XShape::clear();
-
   if (!label)
     return;
 
