@@ -137,7 +137,7 @@ FlarmTrafficControl::CalcAutoZoom()
   for (unsigned i = 0; i <= 4; i++) {
     if (i == 4 ||
         fixed(GetZoomDistance(i) * GetZoomDistance(i)) >= zoom_dist) {
-      zoom = i;
+      SetZoom(i);
       break;
     }
   }
@@ -163,10 +163,9 @@ FlarmTrafficControl::ZoomOut()
     return;
 
   if (zoom < 4)
-    zoom++;
+    SetZoom(zoom + 1);
 
   SetAutoZoom(false);
-  invalidate();
 }
 
 /**
@@ -179,10 +178,9 @@ FlarmTrafficControl::ZoomIn()
     return;
 
   if (zoom > 0)
-    zoom--;
+    SetZoom(zoom - 1);
 
   SetAutoZoom(false);
-  invalidate();
 }
 
 /**

@@ -112,6 +112,11 @@ public:
   void PrevTarget();
   void SelectNearTarget(int x, int y);
 
+  void SetZoom(unsigned _zoom) {
+    zoom = _zoom;
+    invalidate();
+  }
+
 protected:
   static unsigned GetZoomDistance(unsigned zoom);
 
