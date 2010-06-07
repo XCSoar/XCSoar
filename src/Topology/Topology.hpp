@@ -106,18 +106,6 @@ protected:
   bool shapefileopen;
 };
 
-class TopologyWriter: public Topology
-{
-public:
-  TopologyWriter(const char *shpname, const Color thecolor);
-  ~TopologyWriter();
-
-  void addPoint(const GEOPOINT &p);
-  void Reset(void);
-  void CreateFiles(void);
-  void DeleteFiles(void);
-};
-
 class TopologyLabel: public Topology
 {
 public:

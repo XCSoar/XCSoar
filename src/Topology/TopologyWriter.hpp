@@ -1,4 +1,5 @@
 /*
+
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
@@ -36,35 +37,24 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MARKS_HPP
-#define XCSOAR_MARKS_HPP
+#ifndef TOPOLOGY_WRITER_H
+#define TOPOLOGY_WRITER_H
 
-#include "Topology/TopologyWriter.hpp"
-#include "Navigation/GeoPoint.hpp"
-#include "Poco/RWLock.h"
+#include "Topology/Topology.hpp"
 
-struct SETTINGS_COMPUTER;
-class Canvas;
-class MapWindow;
+class GEOPOINT;
+struct Color;
 
-class Marks {
- public:
-  Marks(const char* name, const SETTINGS_COMPUTER &_settings_computer);
-  ~Marks();
-  void Reset();
-  void Initialise();
-  void Close();
-  void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-            const Projection &projection, LabelBlock &label_block,
-            const SETTINGS_MAP &settings_map);
-  void MarkLocation(const GEOPOINT &loc);
-  TopologyWriter* GetTopology() {
-    return &topo_marks;
-  }
- private:
-   TopologyWriter topo_marks;
-   const SETTINGS_COMPUTER &settings_computer;
-   Poco::RWLock lock;
+class TopologyWriter: public Topology
+{
+public:
+  TopologyWriter(const char *shpname, const Color thecolor);
+  ~TopologyWriter();
+
+  void addPoint(const GEOPOINT &p);
+  void Reset(void);
+  void CreateFiles(void);
+  void DeleteFiles(void);
 };
 
 #endif

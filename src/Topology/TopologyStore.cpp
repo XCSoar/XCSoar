@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Topology/TopologyStore.hpp"
+#include "Topology/TopologyWriter.hpp"
 #include "Protection.hpp"
 #include "Topology/Topology.hpp"
 #include "Dialogs.h"
