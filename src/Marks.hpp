@@ -54,7 +54,9 @@ class Marks {
   void Reset();
   void Initialise();
   void Close();
-  void Draw(Canvas &canvas, MapWindow &m_window);
+  void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
+            const Projection &projection, LabelBlock &label_block,
+            const SETTINGS_MAP &settings_map);
   void MarkLocation(const GEOPOINT &loc);
   TopologyWriter* GetTopology() {
     return &topo_marks;

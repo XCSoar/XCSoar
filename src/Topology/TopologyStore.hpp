@@ -45,10 +45,12 @@ Copyright_License {
 #include <windef.h> /* for RECT */
 
 class Canvas;
-class MapWindow;
+class BitmapCanvas;
 class Projection;
+class LabelBlock;
 class Topology;
 class TopologyWriter;
+struct SETTINGS_MAP;
 
 /**
  * Class used to manage and render vector topology layers
@@ -69,7 +71,9 @@ public:
   void TriggerUpdateCaches(Projection &m_projection);
   void Open();
   void Close();
-  void Draw(Canvas &canvas, MapWindow &m_window);
+  void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
+            const Projection &projection, LabelBlock &label_block,
+            const SETTINGS_MAP &settings_map);
 
 private:
   Topology* topology_store[MAXTOPOLOGY];

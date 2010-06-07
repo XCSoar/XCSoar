@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "Topology/TopologyStore.hpp"
 #include "Protection.hpp"
-#include "MapWindow.hpp"
 #include "Topology/Topology.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
@@ -127,17 +126,19 @@ TopologyStore::Close()
 /**
  * Draws the topology to the given canvas
  * @param canvas The drawing canvas
- * @param m_window the MapWindow
  * @param rc The area to draw in
  */
 void
-TopologyStore::Draw(Canvas &canvas, MapWindow &m_window)
+TopologyStore::Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
+                    const Projection &projection, LabelBlock &label_block,
+                    const SETTINGS_MAP &settings_map)
 {
   Poco::ScopedRWLock protect(lock, false);
 
   for (int z = 0; z < MAXTOPOLOGY; z++) {
     if (topology_store[z])
-      topology_store[z]->Paint(canvas, m_window);
+      topology_store[z]->Paint(canvas, bitmap_canvas, projection,
+                               label_block, settings_map);
   }
 }
 

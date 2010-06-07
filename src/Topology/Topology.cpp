@@ -41,7 +41,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "wcecompat/ts_string.h"
 #include "Screen/Util.hpp"
-#include "MapWindow.hpp"
 #include "Projection.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
@@ -214,13 +213,12 @@ Topology::checkVisible(const shapeObj& shape,
 }
 
 void
-Topology::Paint(Canvas &canvas, MapWindow &map_window)
+Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
+                const Projection &map_projection, LabelBlock &label_block,
+                const SETTINGS_MAP &settings_map)
 {
   if (!shapefileopen)
     return;
-
-  MapWindowProjection &map_projection = map_window;
-  LabelBlock &label_block = map_window.getLabelBlock();
 
   double map_scale = map_projection.GetMapScaleUser();
 
@@ -256,7 +254,7 @@ Topology::Paint(Canvas &canvas, MapWindow &map_window)
 #endif  
 
   static POINT pt[MAXCLIPPOLYGON];
-  const bool render_labels = (map_window.SettingsMap().DeclutterLabels < 2);
+  const bool render_labels = settings_map.DeclutterLabels < 2;
 
   for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
     XShape *cshape = shpCache[ixshp];
@@ -278,8 +276,7 @@ Topology::Paint(Canvas &canvas, MapWindow &map_window)
             point2GeoPoint(shape->line[tt].point[jj]);
 
           if (map_projection.LonLat2ScreenIfVisible(l, &sc)) {
-            icon.draw(canvas, map_window.get_bitmap_canvas(),
-                      sc.x, sc.y);
+            icon.draw(canvas, bitmap_canvas, sc.x, sc.y);
             if (render_labels)
               cshape->renderSpecial(canvas, label_block, sc.x, sc.y);
           }

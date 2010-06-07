@@ -49,8 +49,8 @@ Copyright_License {
 class GEOPOINT;
 class Canvas;
 class Projection;
-class MapWindow;
 class LabelBlock;
+struct SETTINGS_MAP;
 
 class Topology
 {
@@ -66,7 +66,9 @@ public:
 
   void updateCache(Projection &map_projection,
 		   const rectObj &thebounds, bool purgeonly = false);
-  void Paint(Canvas &canvas, MapWindow &m_window);
+  void Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
+             const Projection &projection, LabelBlock &label_block,
+             const SETTINGS_MAP &settings_map);
 
   double scaleThreshold;
   void loadIcon(const int);
