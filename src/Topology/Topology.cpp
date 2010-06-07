@@ -61,19 +61,14 @@ Topology::loadIcon(const int xx)
 }
 
 Topology::Topology(const char* shpname, const Color thecolor, bool doappend)
+  :scaleThreshold(0), triggerUpdateCache(false),
+   shpCache(NULL), append(doappend), in_scale(false),
+   hPen(1, thecolor), hbBrush(thecolor),
+   shapefileopen(false)
 {
-  append = doappend;
   memset((void*)&shpfile, 0, sizeof(shpfile));
-  shapefileopen = false;
-  triggerUpdateCache = false;
-  scaleThreshold = 0;
-  shpCache = NULL;
-
-  in_scale = false;
 
   strcpy(filename, shpname);
-  hPen.set(1, thecolor);
-  hbBrush.set(thecolor);
   Open();
 }
 
