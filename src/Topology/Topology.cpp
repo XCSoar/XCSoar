@@ -292,22 +292,24 @@ Topology::Paint(Canvas &canvas, MapWindow &map_window)
         break;
 
       for (int tt = 0; tt < shape->numlines; ++tt) {
-        int minx = canvas.get_width();
-        int miny = canvas.get_height();
         int msize = min(shape->line[tt].numpoints, (int)MAXCLIPPOLYGON);
 
         map_projection.LonLat2Screen(shape->line[tt].point, pt, msize, 1);
 
-        for (int jj = 0; jj < msize; ++jj) {
-          if (pt[jj].x <= minx) {
-            minx = pt[jj].x;
-            miny = pt[jj].y;
-          }
-        }
-
         canvas.polyline(pt, msize);
-        if (render_labels)
+
+        if (render_labels) {
+          int minx = canvas.get_width();
+          int miny = canvas.get_height();
+          for (int jj = 0; jj < msize; ++jj) {
+            if (pt[jj].x <= minx) {
+              minx = pt[jj].x;
+              miny = pt[jj].y;
+            }
+          }
+
           cshape->renderSpecial(canvas, label_block, minx, miny);
+        }
       }
       break;
 
@@ -316,23 +318,25 @@ Topology::Paint(Canvas &canvas, MapWindow &map_window)
         break;
 
       for (int tt = 0; tt < shape->numlines; ++tt) {
-        int minx = canvas.get_width();
-        int miny = canvas.get_height();
         int msize = min(shape->line[tt].numpoints / iskip, (int)MAXCLIPPOLYGON);
 
         map_projection.LonLat2Screen(shape->line[tt].point, pt,
             msize * iskip, iskip);
 
-        for (int jj = 0; jj < msize; ++jj) {
-          if (pt[jj].x <= minx) {
-            minx = pt[jj].x;
-            miny = pt[jj].y;
-          }
-        }
-
         canvas.polygon(pt, msize);
-        if (render_labels)
+
+        if (render_labels) {
+          int minx = canvas.get_width();
+          int miny = canvas.get_height();
+          for (int jj = 0; jj < msize; ++jj) {
+            if (pt[jj].x <= minx) {
+              minx = pt[jj].x;
+              miny = pt[jj].y;
+            }
+          }
+
           cshape->renderSpecial(canvas, label_block, minx, miny);
+        }
       }
       break;
 
