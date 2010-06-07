@@ -43,8 +43,8 @@ Copyright_License {
 
 
 XShape::XShape()
+  :hide(false)
 {
-  hide = false;
 }
 
 XShape::~XShape()

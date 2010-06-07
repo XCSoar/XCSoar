@@ -67,10 +67,7 @@ public:
 class XShapeLabel: public XShape
 {
 public:
-  XShapeLabel()
-  {
-    label = NULL;
-  }
+  XShapeLabel():label(NULL) {}
 
   virtual ~XShapeLabel();
 
