@@ -46,6 +46,7 @@
  */
 
 #include "Dialogs/Internal.hpp"
+#include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "Profile.hpp"
@@ -84,7 +85,11 @@ public:
   void ZoomIn();
 
 protected:
+  void PaintTrafficInfo(Canvas &canvas) const;
+
+protected:
   virtual bool on_create();
+  virtual void on_paint(Canvas &canvas);
   virtual bool on_mouse_down(int x, int y);
 };
 
@@ -177,6 +182,101 @@ FlarmTrafficControl::ZoomIn()
 
   SetAutoZoom(false);
   invalidate();
+}
+
+/**
+ * Paints the basic info for the selected target on the given canvas
+ * @param canvas The canvas to paint on
+ */
+void
+FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
+{
+  // Don't paint numbers if no plane selected
+  if (selection == -1)
+    return;
+
+  assert(data.FLARM_Traffic[selection].defined());
+
+  // Temporary string
+  TCHAR tmp[20];
+  // Temporary string size
+  SIZE sz;
+  // Shortcut to the selected traffic
+  FLARM_TRAFFIC traffic;
+  if (WarningMode())
+    traffic = data.FLARM_Traffic[warning];
+  else
+    traffic = data.FLARM_Traffic[selection];
+
+  RECT rc;
+  rc.left = padding;
+  rc.top = padding;
+  rc.right = canvas.get_width() - padding;
+  rc.bottom = canvas.get_height() - padding;
+
+  // Set the text color and background
+  switch (traffic.AlarmLevel) {
+  case 1:
+    canvas.set_text_color(hcWarning);
+    break;
+  case 2:
+  case 3:
+    canvas.set_text_color(hcAlarm);
+    break;
+  case 4:
+  case 0:
+  default:
+    canvas.set_text_color(hcStandard);
+    break;
+  }
+  canvas.select(TitleSmallWindowFont);
+  canvas.background_transparent();
+
+  // Climb Rate
+  if (!WarningMode()) {
+#ifdef FLARM_AVERAGE
+    Units::FormatUserVSpeed(traffic.Average30s, tmp, 20);
+#else
+    Units::FormatUserVSpeed(traffic.ClimbRate, tmp, 20);
+#endif
+    sz = canvas.text_size(tmp);
+    canvas.text(rc.right - sz.cx, rc.top, tmp);
+  }
+
+  // Distance
+  Units::FormatUserDistance(sqrt(traffic.RelativeEast * traffic.RelativeEast
+      + traffic.RelativeNorth * traffic.RelativeNorth), tmp, 20);
+  sz = canvas.text_size(tmp);
+  canvas.text(rc.left, rc.bottom - sz.cy, tmp);
+
+  // Relative Height
+  Units::FormatUserArrival(traffic.RelativeAltitude, tmp, 20);
+  sz = canvas.text_size(tmp);
+  canvas.text(rc.right - sz.cx, rc.bottom - sz.cy, tmp);
+
+  // ID / Name
+  if (traffic.HasName()) {
+    canvas.select(InfoWindowFont);
+    if (!traffic.HasAlarm()) {
+      if (settings.TeamFlarmTracking &&
+          traffic.ID == settings.TeamFlarmIdTarget)
+        canvas.set_text_color(hcTeam);
+      else
+        canvas.set_text_color(hcSelection);
+    }
+    _tcscpy(tmp, traffic.Name);
+  } else {
+    traffic.ID.format(tmp);
+  }
+  canvas.text(rc.left, rc.top, tmp);
+}
+
+void
+FlarmTrafficControl::on_paint(Canvas &canvas)
+{
+  FlarmTrafficWindow::on_paint(canvas);
+
+  PaintTrafficInfo(canvas);
 }
 
 /**

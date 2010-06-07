@@ -121,7 +121,6 @@ protected:
   void UpdateWarnings();
   void Update(Angle new_direction, const FLARM_STATE &new_data,
               const SETTINGS_TEAMCODE &new_settings);
-  void PaintTrafficInfo(Canvas &canvas) const;
   void PaintRadarNoTraffic(Canvas &canvas) const;
   void PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic,
                         unsigned i);
