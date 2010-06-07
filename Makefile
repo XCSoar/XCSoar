@@ -267,6 +267,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Topology/Topology.cpp \
 	$(SRC)/Topology/TopologyStore.cpp \
+	$(SRC)/Topology/XShape.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterMapJPG2000.cpp \
 	$(SRC)/Terrain/RasterTerrain.cpp \

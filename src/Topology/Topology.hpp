@@ -44,48 +44,13 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Icon.hpp"
+#include "Topology/XShape.hpp"
 
 class GEOPOINT;
 class Canvas;
 class Projection;
 class MapWindow;
 class LabelBlock;
-
-class XShape
-{
-public:
-  XShape();
-  virtual ~XShape();
-
-  virtual void load(shapefileObj* shpfile, int i);
-  virtual void clear();
-
-  virtual void
-  renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y)
-  {
-    (void)canvas;
-    (void)x;
-    (void)y;
-  }
-
-  bool hide;
-  shapeObj shape;
-};
-
-class XShapeLabel: public XShape
-{
-public:
-  XShapeLabel()
-  {
-    label = NULL;
-  }
-
-  virtual ~XShapeLabel();
-  virtual void clear();
-  char *label;
-  void setlabel(const char* src);
-  virtual void renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y);
-};
 
 class Topology
 {

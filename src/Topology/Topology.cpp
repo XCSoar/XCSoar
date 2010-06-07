@@ -54,38 +54,6 @@ Copyright_License {
 
 #include "LogFile.hpp"
 
-XShape::XShape()
-{
-  hide = false;
-}
-
-XShape::~XShape()
-{
-  clear();
-}
-
-void
-XShape::clear()
-{
-  msFreeShape(&shape);
-}
-
-void
-XShape::load(shapefileObj* shpfile, int i)
-{
-  msInitShape(&shape);
-  msSHPReadShape(shpfile->hSHP, i, &shape);
-
-#ifdef RADIANS
-  for (int tt = 0; tt < shape.numlines; ++tt) {
-    for (int jj = 0; jj < shape.line[tt].numpoints; ++jj) {
-      shape.line[tt].point[jj].x *= DEG_TO_RAD;
-      shape.line[tt].point[jj].y *= DEG_TO_RAD;
-    }
-  }
-#endif
-}
-
 void
 Topology::loadIcon(const int xx)
 {
@@ -408,89 +376,6 @@ TopologyLabel::addShape(const int i)
   theshape->setlabel(msDBFReadStringAttribute(shpfile.hDBF, i, field));
   return theshape;
 }
-
-void
-XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y)
-{
-  if (!label)
-    return;
-
-  TCHAR Temp[100];
-  _stprintf(Temp, TEXT("%S"), label);
-  canvas.background_transparent();
-
-  // TODO code: JMW asks, what does this do?
-  if (ispunct(Temp[0])) {
-    double dTemp;
-
-    Temp[0] = '0';
-    dTemp = _tcstod(Temp, NULL);
-    dTemp = Units::ToUserUnit(dTemp, Units::AltitudeUnit);
-    if (dTemp > 999)
-      _stprintf(Temp, TEXT("%.1f"), (dTemp / 1000));
-    else
-      _stprintf(Temp, TEXT("%d"), int(dTemp));
-  }
-
-  SIZE tsize = canvas.text_size(Temp);
-
-  x += 2;
-  y += 2;
-
-  RECT brect;
-  brect.left = x;
-  brect.right = brect.left + tsize.cx;
-  brect.top = y;
-  brect.bottom = brect.top + tsize.cy;
-
-  if (!label_block.check(brect))
-    return;
-
-  canvas.set_text_color(Color(0x20, 0x20, 0x20));
-  canvas.text(x, y, Temp);
-}
-
-void XShapeLabel::setlabel(const char* src) {
-  if (label)
-    free(label);
-
-  if (src &&
-      (strcmp(src,"UNK") != 0) &&
-      (strcmp(src,"RAILWAY STATION") != 0) &&
-      (strcmp(src,"RAILROAD STATION") != 0)) {
-    label = (char*)malloc(strlen(src) + 1);
-    if (label)
-      strcpy(label, src);
-
-    hide = false;
-  } else {
-    label = NULL;
-    hide = true;
-  }
-}
-
-XShapeLabel::~XShapeLabel()
-{
-  if (!label)
-    return;
-
-  free(label);
-  label = NULL;
-}
-
-void
-XShapeLabel::clear()
-{
-  XShape::clear();
-
-  if (!label)
-    return;
-
-  free(label);
-  label = NULL;
-}
-
-//       wsprintf(Scale,TEXT("%1.2f%c"),MapScale, autozoomstring);
 
 TopologyWriter::~TopologyWriter()
 {
