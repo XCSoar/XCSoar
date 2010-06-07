@@ -269,11 +269,11 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 
     const shapeObj *shape = &(cshape->shape);
 
+    if (!checkVisible(*shape, screenRect))
+      continue;
+
     switch (shape->type) {
     case MS_SHAPE_POINT:
-      if (!checkVisible(*shape, screenRect))
-        break;
-
       for (int tt = 0; tt < shape->numlines; ++tt) {
         for (int jj = 0; jj < shape->line[tt].numpoints; ++jj) {
           POINT sc;
@@ -290,9 +290,6 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
       break;
 
     case MS_SHAPE_LINE:
-      if (!checkVisible(*shape, screenRect))
-        break;
-
       for (int tt = 0; tt < shape->numlines; ++tt) {
         int msize = min(shape->line[tt].numpoints, (int)MAXCLIPPOLYGON);
 
@@ -316,9 +313,6 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
       break;
 
     case MS_SHAPE_POLYGON:
-      if (!checkVisible(*shape, screenRect))
-        break;
-
       for (int tt = 0; tt < shape->numlines; ++tt) {
         int msize = min(shape->line[tt].numpoints / iskip, (int)MAXCLIPPOLYGON);
 
