@@ -110,7 +110,7 @@ FlarmTrafficWindow::on_resize(unsigned width, unsigned height)
   return true;
 }
 
-double
+unsigned
 FlarmTrafficWindow::GetZoomDistance(unsigned zoom)
 {
   switch (zoom) {

@@ -113,7 +113,7 @@ public:
   void SelectNearTarget(int x, int y);
 
 protected:
-  static double GetZoomDistance(unsigned zoom);
+  static unsigned GetZoomDistance(unsigned zoom);
 
   void GetZoomDistanceString(TCHAR* str1, TCHAR* str2, unsigned size) const;
   double RangeScale(double d) const;
