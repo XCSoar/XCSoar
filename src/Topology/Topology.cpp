@@ -214,7 +214,7 @@ Topology::checkVisible(const shapeObj& shape,
 }
 
 void
-Topology::Paint(Canvas &canvas, MapWindow &map_window, const RECT rc)
+Topology::Paint(Canvas &canvas, MapWindow &map_window)
 {
   if (!shapefileopen)
     return;
@@ -292,8 +292,8 @@ Topology::Paint(Canvas &canvas, MapWindow &map_window, const RECT rc)
         break;
 
       for (int tt = 0; tt < shape->numlines; ++tt) {
-        int minx = rc.right;
-        int miny = rc.bottom;
+        int minx = canvas.get_width();
+        int miny = canvas.get_height();
         int msize = min(shape->line[tt].numpoints, (int)MAXCLIPPOLYGON);
 
         map_projection.LonLat2Screen(shape->line[tt].point, pt, msize, 1);
@@ -316,8 +316,8 @@ Topology::Paint(Canvas &canvas, MapWindow &map_window, const RECT rc)
         break;
 
       for (int tt = 0; tt < shape->numlines; ++tt) {
-        int minx = rc.right;
-        int miny = rc.bottom;
+        int minx = canvas.get_width();
+        int miny = canvas.get_height();
         int msize = min(shape->line[tt].numpoints / iskip, (int)MAXCLIPPOLYGON);
 
         map_projection.LonLat2Screen(shape->line[tt].point, pt,

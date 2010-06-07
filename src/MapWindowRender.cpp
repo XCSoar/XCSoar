@@ -93,7 +93,7 @@ MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
 
   if (topology != NULL && SettingsMap().EnableTopology)
     // Draw the topology
-    topology->Draw(canvas, *this, rc);
+    topology->Draw(canvas, *this);
 
   // reset label over-write preventer
   label_block.reset();
@@ -137,7 +137,7 @@ MapWindow::RenderTaskElements(Canvas &canvas, const RECT rc)
   DrawWaypoints(canvas);
 
   if (marks != NULL)
-    marks->Draw(canvas, *this, rc);
+    marks->Draw(canvas, *this);
 }
 
 /**

@@ -69,7 +69,7 @@ public:
   void TriggerUpdateCaches(Projection &m_projection);
   void Open();
   void Close();
-  void Draw(Canvas &canvas, MapWindow &m_window, const RECT rc);
+  void Draw(Canvas &canvas, MapWindow &m_window);
 
 private:
   Topology* topology_store[MAXTOPOLOGY];

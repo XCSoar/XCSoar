@@ -99,8 +99,8 @@ void Marks::MarkLocation(const GEOPOINT &loc)
 }
 
 
-void Marks::Draw(Canvas &canvas, MapWindow &m_window, const RECT rc)
+void Marks::Draw(Canvas &canvas, MapWindow &m_window)
 {
   Poco::ScopedRWLock protect(lock, false); // read only
-  topo_marks.Paint(canvas, m_window, rc);
+  topo_marks.Paint(canvas, m_window);
 }

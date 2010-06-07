@@ -66,7 +66,7 @@ public:
 
   void updateCache(Projection &map_projection,
 		   const rectObj &thebounds, bool purgeonly = false);
-  void Paint(Canvas &canvas, MapWindow &m_window, const RECT rc);
+  void Paint(Canvas &canvas, MapWindow &m_window);
 
   double scaleThreshold;
   void loadIcon(const int);

@@ -131,13 +131,13 @@ TopologyStore::Close()
  * @param rc The area to draw in
  */
 void
-TopologyStore::Draw(Canvas &canvas, MapWindow &m_window, const RECT rc)
+TopologyStore::Draw(Canvas &canvas, MapWindow &m_window)
 {
   Poco::ScopedRWLock protect(lock, false);
 
   for (int z = 0; z < MAXTOPOLOGY; z++) {
     if (topology_store[z])
-      topology_store[z]->Paint(canvas, m_window, rc);
+      topology_store[z]->Paint(canvas, m_window);
   }
 }
 
