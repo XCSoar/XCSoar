@@ -41,8 +41,9 @@ Copyright_License {
 #define TOPOLOGY_XSHAPE_HPP
 
 #include "Screen/shapelib/mapshape.h"
-#include "Screen/LabelBlock.hpp"
-#include "Screen/Canvas.hpp"
+
+class Canvas;
+class LabelBlock;
 
 class XShape
 {

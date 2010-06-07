@@ -37,10 +37,13 @@ Copyright_License {
 */
 
 #include "Topology/XShape.hpp"
-#include "MapWindow.hpp"
+#include "Screen/Canvas.hpp"
+#include "Screen/LabelBlock.hpp"
+#include "Units.hpp"
 
 #include <tchar.h>
-
+#include <string.h>
+#include <stdio.h>
 
 XShape::XShape(shapefileObj *shpfile, int i)
   :hide(false)
