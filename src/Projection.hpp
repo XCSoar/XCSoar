@@ -35,7 +35,8 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#if !defined(XCSOAR_PROJECTION_HPP)
+
+#ifndef XCSOAR_PROJECTION_HPP
 #define XCSOAR_PROJECTION_HPP
 
 #include "Navigation/GeoPoint.hpp"
@@ -49,43 +50,41 @@ public:
 
   virtual fixed GetMapScaleUser() const;
 
-  void    Screen2LonLat(const int &x, const int &y,
-                        GEOPOINT &location) const;
+  void Screen2LonLat(const int &x, const int &y, GEOPOINT &location) const;
 
-  void    LonLat2Screen(const GEOPOINT &location,
-                        POINT &sc) const;
-  void    LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
-                        unsigned n, unsigned skip) const;
-  void    LonLat2Screen(const pointObj* const ptin, POINT *ptout,
-                        const int n,
-                        const int skip) const;
+  void LonLat2Screen(const GEOPOINT &location, POINT &sc) const;
+  void LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
+                     unsigned n, unsigned skip) const;
+  void LonLat2Screen(const pointObj* const ptin, POINT *ptout,
+                     const int n, const int skip) const;
 
   GEOPOINT point2GeoPoint(const pointObj& p) const {
-    return GEOPOINT (Angle::native(fixed(p.x)),Angle::native(fixed(p.y)));
+    return GEOPOINT(Angle::native(fixed(p.x)), Angle::native(fixed(p.y)));
   }
 
-  POINT   GetOrigScreen(void) const { return Orig_Screen; }
+  POINT GetOrigScreen(void) const { return Orig_Screen; }
   GEOPOINT GetPanLocation() const { return PanLocation; }
 
-  bool LonLat2ScreenIfVisible(const GEOPOINT &loc,
-			      POINT *sc) const;
-
+  bool LonLat2ScreenIfVisible(const GEOPOINT &loc, POINT *sc) const;
   bool LonLatVisible(const GEOPOINT &loc) const;
-
   bool PointVisible(const POINT &P) const;
 
   fixed GetScreenScaleToLonLat() const {
     return InvDrawScale;
   }
+
   fixed GetLonLatToScreenScale() const {
     return DrawScale;
   }
+
   unsigned DistanceMetersToScreen(const fixed x) {
-    return iround(m_scale_meters_to_screen*x);
+    return iround(m_scale_meters_to_screen * x);
   }
+
   Angle GetDisplayAngle() const {
     return DisplayAngle.GetAngle();
   }
+
   RECT GetMapRect() const {
     return MapRect;
   }
@@ -94,19 +93,19 @@ public:
   rectObj CalculateScreenBounds(const fixed scale) const;
 
 protected:
-
   int GetMapResolutionFactor(void) const;
 
   void SetScaleMetersToScreen(const fixed scale_meters_to_screen);
 
   GEOPOINT PanLocation;
-  POINT  Orig_Screen;
+  POINT Orig_Screen;
   FastIntegerRotation DisplayAngle;
-  RECT   MapRect;
+  RECT MapRect;
 
   long max_dimension(const RECT &rc) const;
 
   void UpdateScreenBounds();
+
 private:
   fixed DrawScale;
   fixed InvDrawScale;
@@ -115,4 +114,3 @@ private:
 };
 
 #endif
-
