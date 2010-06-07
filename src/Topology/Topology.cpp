@@ -37,9 +37,8 @@ Copyright_License {
 */
 
 #include "Topology/Topology.hpp"
+#include "Topology/XShape.hpp"
 #include <ctype.h> // needed for Wine
-#include "Interface.hpp"
-#include "wcecompat/ts_string.h"
 #include "Screen/Util.hpp"
 #include "Projection.hpp"
 #include "Screen/Graphics.hpp"
@@ -50,8 +49,6 @@ Copyright_License {
 
 #include <stdlib.h>
 #include <tchar.h>
-
-#include "LogFile.hpp"
 
 void
 Topology::loadIcon(const int xx)

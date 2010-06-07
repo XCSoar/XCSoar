@@ -44,13 +44,13 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Icon.hpp"
-#include "Topology/XShape.hpp"
 
 class GEOPOINT;
 class Canvas;
 class Projection;
 class LabelBlock;
 struct SETTINGS_MAP;
+class XShape;
 
 class Topology
 {
