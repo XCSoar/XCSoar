@@ -65,13 +65,11 @@ public:
 class XShapeLabel: public XShape
 {
 public:
-  XShapeLabel(shapefileObj *shpfile, int i)
-    :XShape(shpfile, i), label(NULL) {}
-
+  XShapeLabel(shapefileObj *shpfile, int i, int field);
   virtual ~XShapeLabel();
 
   char *label;
-  void setlabel(const char* src);
+
   virtual void renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y);
 };
 

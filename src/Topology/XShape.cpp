@@ -104,10 +104,9 @@ XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y
   canvas.text(x, y, Temp);
 }
 
-void XShapeLabel::setlabel(const char* src) {
-  if (label)
-    free(label);
-
+XShapeLabel::XShapeLabel(shapefileObj *shpfile, int i, int field)
+  :XShape(shpfile, i), label(NULL) {
+  const char *src = msDBFReadStringAttribute(shpfile->hDBF, i, field);
   if (src &&
       (strcmp(src,"UNK") != 0) &&
       (strcmp(src,"RAILWAY STATION") != 0) &&

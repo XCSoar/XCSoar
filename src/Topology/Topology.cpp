@@ -369,9 +369,7 @@ TopologyLabel::setField(int i)
 XShape*
 TopologyLabel::addShape(const int i)
 {
-  XShapeLabel* theshape = new XShapeLabel(&shpfile, i);
-  theshape->setlabel(msDBFReadStringAttribute(shpfile.hDBF, i, field));
-  return theshape;
+  return new XShapeLabel(&shpfile, i, field);
 }
 
 TopologyWriter::~TopologyWriter()
