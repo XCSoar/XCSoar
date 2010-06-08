@@ -53,7 +53,6 @@ Marks::Marks(const char* name, const SETTINGS_COMPUTER &_settings_computer) :
   settings_computer(_settings_computer)
 {
   LogStartUp(TEXT("Initialise marks"));
-  topo_marks.scaleThreshold = 30.0;
   topo_marks.loadIcon(IDB_MARK);
   Reset();
 }
@@ -63,6 +62,7 @@ Marks::Reset()
 {
   Poco::ScopedRWLock protect(lock, true);
   topo_marks.Reset();
+  topo_marks.scaleThreshold = 30.0;
 }
 
 Marks::~Marks()
