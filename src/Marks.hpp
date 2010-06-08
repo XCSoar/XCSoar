@@ -47,6 +47,7 @@ Copyright_License {
 class Projection;
 class Canvas;
 struct GEOPOINT;
+struct BrokenDateTime;
 
 class Marks
 {
@@ -57,7 +58,9 @@ public:
   void Reset();
   void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
             const Projection &projection);
-  void MarkLocation(const GEOPOINT &loc, bool play_sound);
+  void MarkLocation(const GEOPOINT &loc,
+                    const BrokenDateTime time,
+                    bool play_sound);
 
 private:
   MaskedIcon icon;

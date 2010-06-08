@@ -135,7 +135,8 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
   if (_tcscmp(misc, TEXT("reset")) == 0) {
     marks->Reset();
   } else {
-    marks->MarkLocation(Basic().Location, SettingsComputer().EnableSoundModes);
+    marks->MarkLocation(Basic().Location, Basic().DateTime,
+                        SettingsComputer().EnableSoundModes);
   }
 
   draw_thread->trigger_topology_changed();

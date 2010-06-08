@@ -45,7 +45,7 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Projection.hpp"
-
+#include "DateTime.hpp"
 
 Marks::Marks()
 {
@@ -71,7 +71,9 @@ Marks::~Marks()
 }
 
 void
-Marks::MarkLocation(const GEOPOINT &loc, bool play_sound)
+Marks::MarkLocation(const GEOPOINT &loc,
+                    const BrokenDateTime time,
+                    bool play_sound)
 {
   Poco::ScopedRWLock protect(lock, true);
 
@@ -81,7 +83,9 @@ Marks::MarkLocation(const GEOPOINT &loc, bool play_sound)
   marker_store.push_back(loc);
 
   char message[160];
-  sprintf(message, "Lon:%f Lat:%f",
+  sprintf(message, "%02u.%02u.%04u\t%02u:%02u:%02u\tLon:%f\tLat:%f",
+          time.day, time.month, time.year,
+          time.hour, time.minute, time.second,
           (double)(loc.Longitude.value_degrees()), 
           (double)(loc.Latitude.value_degrees()));
 
