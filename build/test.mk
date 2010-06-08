@@ -61,6 +61,22 @@ testtap: $(BUILDTESTS)
 $(TARGET_BIN_DIR)/01_test_tap$(TARGET_EXEEXT): $(TEST_SRC_DIR)/01_test_tap.c | $(TARGET_BIN_DIR)/dirstamp
 	gcc -o $@ $<
 
+TESTS = \
+	$(TARGET_BIN_DIR)/TestRadixTree$(TARGET_EXEEXT)
+
+TEST_RADIX_TREE_SOURCES = \
+	$(TEST_SRC_DIR)/TestRadixTree.cpp
+TEST_RADIX_TREE_OBJS = $(call SRC_TO_OBJ,$(TEST_RADIX_TREE_SOURCES))
+$(TARGET_BIN_DIR)/TestRadixTree$(TARGET_EXEEXT): $(TEST_RADIX_TREE_OBJS) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+build-check: $(TESTS)
+
+check: $(TESTS)
+	@$(NQ)echo "  TEST    $(notdir $(patsubst %$(TARGET_EXEEXT),%,$^))"
+	$(Q)for i in $(TESTS); do $$i || exit $$?; done
+
 DEBUG_PROGRAM_NAMES = \
 	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
 	ReadProfileString ReadProfileInt \

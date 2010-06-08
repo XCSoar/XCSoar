@@ -390,7 +390,7 @@ call-%:
 
 $(addprefix all-,$(TARGETS)): all-%: $(OUTPUTS)
 
-EVERYTHING = $(OUTPUTS) debug-$(TARGET)
+EVERYTHING = $(OUTPUTS) debug-$(TARGET) build-check
 ifeq ($(TARGET),UNIX)
 EVERYTHING += $(TESTS)
 endif
