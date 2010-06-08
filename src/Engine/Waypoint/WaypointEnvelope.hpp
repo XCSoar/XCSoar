@@ -81,7 +81,7 @@ public:
  * 
  * @return Distance in flat units
  */
-  unsigned flat_distance_to(const FLAT_GEOPOINT &f) {
+  unsigned flat_distance_to(const FLAT_GEOPOINT &f) const {
     return FlatLocation.distance_to(f);
   }
 
