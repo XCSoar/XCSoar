@@ -46,7 +46,6 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "Projection.hpp"
 
-#include <assert.h>
 
 Marks::Marks()
 {

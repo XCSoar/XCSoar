@@ -41,10 +41,10 @@ Copyright_License {
 
 #include "Poco/RWLock.h"
 #include "Screen/Icon.hpp"
-#include "Projection.hpp"
 
 #include <vector>
 
+class Projection;
 class Canvas;
 struct GEOPOINT;
 
