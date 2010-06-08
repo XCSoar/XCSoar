@@ -107,7 +107,7 @@ protected:
 class TopologyLabel: public Topology
 {
 public:
-  TopologyLabel(const char* shpname, const Color thecolor, INT field1);
+  TopologyLabel(const char* shpname, const Color thecolor, int _field);
   virtual XShape* addShape(const int i);
 
 private:

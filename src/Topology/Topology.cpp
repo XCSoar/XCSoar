@@ -343,10 +343,10 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 }
 
 TopologyLabel::TopologyLabel(const char* shpname, const Color thecolor,
-    int field1) :
+    int _field) :
   Topology(shpname, thecolor)
 {
-  setField(max(0, field1));
+  setField(max(0, _field));
 }
 
 void
