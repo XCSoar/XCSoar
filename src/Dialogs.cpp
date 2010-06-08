@@ -114,6 +114,20 @@ XCSoarInterface::StepProgressDialog(void)
     progress_window->step();
 }
 
+void
+XCSoarInterface::SetProgressDialogValue(unsigned value)
+{
+  if (progress_window != NULL)
+    progress_window->set_pos(value);
+}
+
+void
+XCSoarInterface::SetProgressDialogMaxValue(unsigned value)
+{
+  if (progress_window != NULL)
+    progress_window->set_range(0, value);
+}
+
 bool
 XCSoarInterface::SetProgressStepSize(int nSize)
 {

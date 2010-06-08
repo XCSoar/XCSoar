@@ -192,6 +192,8 @@ public:
   static void CreateProgressDialog(const TCHAR *text);
   static void CloseProgressDialog();
   static void StepProgressDialog();
+  static void SetProgressDialogValue(unsigned value);
+  static void SetProgressDialogMaxValue(unsigned value);
   static bool SetProgressStepSize(int nSize);
 
   static void ExchangeBlackboard();
