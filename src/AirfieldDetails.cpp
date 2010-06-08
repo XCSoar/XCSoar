@@ -121,7 +121,6 @@ ParseAirfieldDetails(TLineReader &reader)
   CleanString[0] = 0;
 
   bool inDetails = false;
-  bool hasDetails = false;
   int i, n;
   unsigned j;
   int k = 0;
@@ -133,7 +132,6 @@ ParseAirfieldDetails(TLineReader &reader)
         LookupAirfieldDetail(Name, Details);
         Details.clear();
         Name[0] = 0;
-        hasDetails = false;
       }
 
       // extract name
@@ -153,15 +151,7 @@ ParseAirfieldDetails(TLineReader &reader)
       k++;
     } else {
       // append text to details string
-      for (j = 0; j < _tcslen(TempString); j++) {
-        if (TempString[j] > 0x20) {
-          hasDetails = true;
-          break;
-        }
-      }
-
-      // first hasDetails set true for rest of details
-      if (hasDetails == true) {
+      if (!string_is_empty(TempString)) {
         // Remove carriage returns
         for (j = 0, n = 0; j < _tcslen(TempString); j++) {
           if (TempString[j] == 0x0d)
