@@ -45,26 +45,24 @@ Copyright_License {
 
 #include <vector>
 
-struct SETTINGS_COMPUTER;
 class Canvas;
 struct GEOPOINT;
 
 class Marks
 {
 public:
-  Marks(const SETTINGS_COMPUTER &_settings_computer);
+  Marks();
   ~Marks();
 
   void Reset();
   void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
             const Projection &projection);
-  void MarkLocation(const GEOPOINT &loc);
+  void MarkLocation(const GEOPOINT &loc, bool play_sound);
 
 private:
   MaskedIcon icon;
   std::vector<GEOPOINT> marker_store;
 
-  const SETTINGS_COMPUTER &settings_computer;
   Poco::RWLock lock;
 };
 

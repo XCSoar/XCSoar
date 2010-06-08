@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Marks.hpp"
-#include "SettingsComputer.hpp"
 #include "Compatibility/string.h"
 #include "LocalPath.hpp"
 #include "Audio/Sound.hpp"
@@ -49,8 +48,7 @@ Copyright_License {
 
 #include <assert.h>
 
-Marks::Marks(const SETTINGS_COMPUTER &_settings_computer) :
-  settings_computer(_settings_computer)
+Marks::Marks()
 {
   LogStartUp(TEXT("Initialise marks"));
   icon.load(IDB_MARK);
@@ -74,11 +72,11 @@ Marks::~Marks()
 }
 
 void
-Marks::MarkLocation(const GEOPOINT &loc)
+Marks::MarkLocation(const GEOPOINT &loc, bool play_sound)
 {
   Poco::ScopedRWLock protect(lock, true);
 
-  if (settings_computer.EnableSoundModes)
+  if (play_sound)
     PlayResource(TEXT("IDR_WAV_CLEAR"));
 
   marker_store.push_back(loc);
