@@ -50,13 +50,6 @@ public:
   const WaypointSelectInfoVector& get_list();
 
 /** 
- * Remove non-airport waypoints
- * 
- * @param vec List of waypoints to filter (read-write)
- */
-  static void filter_airport(WaypointSelectInfoVector& vec);
-
-/** 
  * Sort waypoints by distance
  * 
  * @param vec List of waypoints to sort (read-write)

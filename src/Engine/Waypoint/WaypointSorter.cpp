@@ -48,18 +48,6 @@ WaypointSorter::get_list()
   return m_waypoints_all;
 }
 
-static bool 
-WaypointAirportFilter(const WayPointSelectInfo& elem1) 
-{
-  return !elem1.way_point->Flags.Airport;
-}
-
-void
-WaypointSorter::filter_airport(WaypointSelectInfoVector& vec)
-{
-  vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointAirportFilter), vec.end());
-}
-
 static bool
 WaypointDistanceCompare(const WayPointSelectInfo& elem1, 
                         const WayPointSelectInfo& elem2 ) 
