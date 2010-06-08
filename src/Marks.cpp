@@ -44,6 +44,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "resource.h"
 #include "IO/TextWriter.hpp"
+#include "Navigation/GeoPoint.hpp"
 
 #include <assert.h>
 

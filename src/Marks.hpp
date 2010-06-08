@@ -40,12 +40,12 @@ Copyright_License {
 #define XCSOAR_MARKS_HPP
 
 #include "Topology/TopologyWriter.hpp"
-#include "Navigation/GeoPoint.hpp"
 #include "Poco/RWLock.h"
 
 struct SETTINGS_COMPUTER;
 class Canvas;
 class MapWindow;
+struct GEOPOINT;
 
 class Marks {
 public:
