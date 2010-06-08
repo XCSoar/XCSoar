@@ -44,6 +44,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "StringUtil.hpp"
+#include "UtilsText.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "Components.hpp"
@@ -121,8 +122,7 @@ ParseAirfieldDetails(TLineReader &reader)
   CleanString[0] = 0;
 
   bool inDetails = false;
-  int i, n;
-  unsigned j;
+  int i;
   int k = 0;
 
   TCHAR *TempString;
@@ -153,14 +153,9 @@ ParseAirfieldDetails(TLineReader &reader)
       // append text to details string
       if (!string_is_empty(TempString)) {
         // Remove carriage returns
-        for (j = 0, n = 0; j < _tcslen(TempString); j++) {
-          if (TempString[j] == 0x0d)
-            continue;
-          CleanString[n++] = TempString[j];
-        }
-        CleanString[n] = '\0';
+        TrimRight(TempString);
 
-        Details += CleanString;
+        Details += TempString;
         Details += _T("\r\n");
       }
     }
