@@ -48,9 +48,10 @@ class Canvas;
 class MapWindow;
 
 class Marks {
- public:
+public:
   Marks(const char* name, const SETTINGS_COMPUTER &_settings_computer);
   ~Marks();
+
   void Reset();
   void Initialise();
   void Close();
@@ -58,13 +59,12 @@ class Marks {
             const Projection &projection, LabelBlock &label_block,
             const SETTINGS_MAP &settings_map);
   void MarkLocation(const GEOPOINT &loc);
-  TopologyWriter* GetTopology() {
-    return &topo_marks;
-  }
- private:
-   TopologyWriter topo_marks;
-   const SETTINGS_COMPUTER &settings_computer;
-   Poco::RWLock lock;
+  TopologyWriter* GetTopology() { return &topo_marks; }
+
+private:
+  TopologyWriter topo_marks;
+  const SETTINGS_COMPUTER &settings_computer;
+  Poco::RWLock lock;
 };
 
 #endif

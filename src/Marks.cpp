@@ -47,35 +47,32 @@ Copyright_License {
 
 #include <assert.h>
 
-Marks::Marks(const char* name, const SETTINGS_COMPUTER &_settings_computer)
-  :topo_marks(name, Color(0xD0,0xD0,0xD0)),
-   settings_computer(_settings_computer) {
+Marks::Marks(const char* name, const SETTINGS_COMPUTER &_settings_computer) :
+  topo_marks(name, Color(0xD0, 0xD0, 0xD0)),
+  settings_computer(_settings_computer)
+{
   LogStartUp(TEXT("Initialise marks"));
   topo_marks.scaleThreshold = 30.0;
   topo_marks.loadIcon(IDB_MARK);
   Reset();
 }
 
-// TODO code: - This convert to non-unicode will not support all languages
-//		(some may use more complicated PATH names, containing Unicode)
-//  char buffer[MAX_PATH];
-//  ConvertTToC(buffer, LocalPath(TEXT("xcsoar-marks")));
-// DISABLED LocalPath
-// JMW localpath does NOT work for the shapefile renderer!
-
-void Marks::Reset() {
+void
+Marks::Reset()
+{
   Poco::ScopedRWLock protect(lock, true);
   topo_marks.Reset();
 }
 
-
-Marks::~Marks() {
+Marks::~Marks()
+{
   LogStartUp(TEXT("CloseMarks"));
   Poco::ScopedRWLock protect(lock, true);
   topo_marks.DeleteFiles();
 }
 
-void Marks::MarkLocation(const GEOPOINT &loc)
+void
+Marks::MarkLocation(const GEOPOINT &loc)
 {
   Poco::ScopedRWLock protect(lock, true);
 
@@ -87,17 +84,16 @@ void Marks::MarkLocation(const GEOPOINT &loc)
 
   char message[160];
 
-  sprintf(message,"Lon:%f Lat:%f",
+  sprintf(message, "Lon:%f Lat:%f",
           (double)(loc.Longitude.value_degrees()), 
           (double)(loc.Latitude.value_degrees()));
 
   TCHAR fname[MAX_PATH];
-  LocalPath(fname,TEXT("xcsoar-marks.txt"));
+  LocalPath(fname, TEXT("xcsoar-marks.txt"));
   TextWriter writer(fname, true);
   if (!writer.error())
     writer.writeln(message);
 }
-
 
 void Marks::Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
                  const Projection &projection, LabelBlock &label_block,
