@@ -104,17 +104,6 @@ public:
   Waypoint create(const GEOPOINT& location);
 
   /**
-   * Create new waypoint (without appending it to the store),
-   * with set id, for a waypoint to be loaded from file.  
-   * This is like a factory method.
-   *
-   * @param filenum File index of new waypoint
-   *
-   * @return Blank object at given location, with id set
-   */
-  Waypoint create_from_file(const int filenum);
-
-  /**
    * Optimise the internal search tree after adding/removing elements.
    * Also performs projection to flat earth for new elements.
    * This updates the task_projection.
