@@ -57,54 +57,6 @@ public:
   static void filter_airport(WaypointSelectInfoVector& vec);
 
 /** 
- * Remove non-landable waypoints
- * 
- * @param vec List of waypoints to filter (read-write)
- */
-  static void filter_landable(WaypointSelectInfoVector& vec);
-
-/** 
- * Remove non-turnpoint waypoints
- * 
- * @param vec List of waypoints to filter (read-write)
- */
-  static void filter_turnpoint(WaypointSelectInfoVector& vec);
-
-/** 
- * Remove waypoints not from file index 
- * 
- * @param vec List of waypoints to filter (read-write)
- * @param idx File index (0 or 1) to search for
- */
-  static void filter_file(WaypointSelectInfoVector& vec, const int idx);
-
-/** 
- * Remove waypoints not matching supplied initial character 
- * 
- * @param vec List of waypoints to filter (read-write)
- * @param c Character to match
- */
-  static void filter_name(WaypointSelectInfoVector& vec, const TCHAR *c);
-
-/** 
- * Remove waypoints bearing greater than 18 degrees from supplied direction 
- * 
- * @param vec List of waypoints to filter (read-write)
- * @param direction Bearing (degrees) of desired direction
- */
-  static void filter_direction(WaypointSelectInfoVector& vec,
-                               const Angle direction);
-
-/** 
- * Remove waypoints further than desired direction
- * 
- * @param vec List of waypoints to filter (read-write)
- * @param distance Distance (user units) of limit
- */
-  static void filter_distance(WaypointSelectInfoVector& vec,
-                              const fixed distance);
-
-/** 
  * Sort waypoints by distance
  * 
  * @param vec List of waypoints to sort (read-write)
