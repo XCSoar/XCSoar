@@ -128,11 +128,10 @@ ParseAirfieldDetails(TLineReader &reader)
   TCHAR *TempString;
   while ((TempString = reader.read()) != NULL) {
     if (TempString[0] == '[') { // Look for start
-      if (inDetails) {
+      if (inDetails)
         SetAirfieldDetails(Name, Details);
-        Details.clear();
-        Name[0] = 0;
-      }
+
+      Details.clear();
 
       // extract name
       for (i = 1; i < 200; i++) {
