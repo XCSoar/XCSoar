@@ -134,10 +134,10 @@ ParseAirfieldDetails(TLineReader &reader)
       Details.clear();
 
       // extract name
-      for (i = 1; i < 200; i++) {
-        if (TempString[i] == ']') {
+      for (i = 1; i <= 201; i++) {
+        if (TempString[i] == ']')
           break;
-        }
+
         Name[i - 1] = TempString[i];
       }
       Name[i - 1] = 0;
