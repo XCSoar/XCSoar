@@ -123,7 +123,9 @@ ParseAirfieldDetails(TLineReader &reader)
 
   bool inDetails = false;
   int i;
-  int k = 0;
+
+  double filesize = std::max(reader.size(), 1l);
+  XCSoarInterface::SetProgressDialogMaxValue(100);
 
   TCHAR *TempString;
   while ((TempString = reader.read()) != NULL) {
@@ -144,10 +146,14 @@ ParseAirfieldDetails(TLineReader &reader)
 
       inDetails = true;
 
-      if (k % 20 == 0) {
-        XCSoarInterface::StepProgressDialog();
-      }
-      k++;
+      unsigned status = reader.tell() * 100 / filesize;
+      XCSoarInterface::SetProgressDialogValue(status);
+
+      TCHAR status_text[100];
+      _stprintf(status_text,
+                TEXT("Loading Airfield Details File... %u %%"),
+                status);
+      XCSoarInterface::SetProgressDialogText(status_text);
     } else {
       // append text to details string
       if (!string_is_empty(TempString)) {
