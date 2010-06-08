@@ -297,28 +297,44 @@ Waypoints::visit_within_range(const GEOPOINT &loc, const fixed range,
 #endif
 }
 
+/**
+ * Forwards a visited way point to another visitor if it is within the
+ * specified radius.
+ */
+class RadiusVisitor : public ConstVisitor<WaypointEnvelope> {
+  FLAT_GEOPOINT location;
+  unsigned mrange;
+  WaypointVisitor *visitor;
+
+public:
+  RadiusVisitor(FLAT_GEOPOINT _location, unsigned _mrange,
+                WaypointVisitor *_visitor)
+    :location(_location), mrange(_mrange), visitor(_visitor) {}
+
+  void operator()(const WaypointEnvelope &envelope) {
+    Visit(envelope);
+  }
+
+  void Visit(const WaypointEnvelope &envelope) {
+#ifdef INSTRUMENT_TASK
+    count_intersections++;
+#endif
+
+    if (envelope.flat_distance_to(location) <= mrange)
+      (*visitor)(envelope.get_waypoint());
+  }
+};
+
 void
 Waypoints::visit_within_radius(const GEOPOINT &loc, const fixed range,
     WaypointVisitor& visitor) const
 {
   const unsigned mrange = task_projection.project_range(loc, range);
+  WaypointEnvelope bb_target(loc, task_projection);
+
   FLAT_GEOPOINT floc = task_projection.project(loc);
-
-  std::vector<WaypointEnvelope> vectors = find_within_range(loc, range);
-
-  for (std::vector< WaypointEnvelope >::iterator v=vectors.begin(); v != vectors.end();) {
-
-#ifdef INSTRUMENT_TASK
-    count_intersections++;
-#endif
-
-    if ((*v).flat_distance_to(floc) > mrange) {
-      vectors.erase(v);
-    } else {
-      visitor(v->get_waypoint());
-      ++v;
-    }
-  }
+  RadiusVisitor radius_visitor(floc, mrange, &visitor);
+  waypoint_tree.visit_within_range(bb_target, mrange, radius_visitor);
 }
 
 Waypoints::WaypointTree::const_iterator
