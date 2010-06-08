@@ -376,7 +376,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Topology/Topology.cpp \
 	$(SRC)/Topology/TopologyStore.cpp \
-	$(SRC)/Topology/TopologyWriter.cpp \
 	$(SRC)/Topology/XShape.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/UtilsText.cpp \
