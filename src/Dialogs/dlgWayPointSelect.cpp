@@ -43,6 +43,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "DataField/Base.hpp"
 #include "Waypoint/WaypointSorter.hpp"
+#include "Waypoint/WaypointVisitor.hpp"
 #include "Components.hpp"
 #include "Compiler.h"
 #include "DataField/Enum.hpp"
@@ -62,6 +63,7 @@ struct WayPointFilterData {
   int type_index;
 };
 
+static GEOPOINT g_location;
 static WayPointFilterData filter_data;
 
 static WndForm *wf=NULL;
@@ -95,7 +97,6 @@ OnWaypointListEnter(unsigned i)
 
 static WaypointSelectInfoVector WayPointSelectInfo;
 
-static WaypointSorter* waypoint_sorter;
 static unsigned UpLimit = 0;
 
 
@@ -159,51 +160,100 @@ static void PrepareData(void){
 
 }
 
-
-static void UpdateList(void)
+static bool
+compare_type(const Waypoint &wp, int type_index)
 {
-  WayPointSelectInfo = waypoint_sorter->get_list();
+  switch (type_index) {
+  case 0:
+    return true;
 
-  switch (filter_data.type_index) {
-  case 1: 
-    waypoint_sorter->filter_airport(WayPointSelectInfo);
-    break;
+  case 1:
+    return wp.Flags.Airport;
 
   case 2:
-    waypoint_sorter->filter_landable(WayPointSelectInfo);
-    break;
+    return wp.is_landable();
 
-  case 3: 
-    waypoint_sorter->filter_turnpoint(WayPointSelectInfo);
-    break;
+  case 3:
+    return wp.Flags.TurnPoint;
 
   case 4:
   case 5:
-    waypoint_sorter->filter_file(WayPointSelectInfo, filter_data.type_index - 4);
-    break;
+    return wp.FileNum == type_index - 4;
   }
 
-  bool sort_distance = false;
+  /* not reachable */
+  return false;
+}
+
+static bool
+compare_direction(const Waypoint &wp, int direction_index,
+                  GEOPOINT location, Angle heading)
+{
+  if (direction_index <= 0)
+    return true;
+
+  int a = DirectionFilter[filter_data.direction_index];
+  Angle angle = a == DirHDG
+    ? last_heading = XCSoarInterface::Basic().Heading
+    : Angle::degrees(fixed(a));
+
+  const GeoVector vec(location, wp.Location);
+  fixed DirectionErr = (vec.Bearing - heading).as_delta().magnitude_degrees();
+
+  static const fixed fixed_18(18);
+  return DirectionErr > fixed_18;
+}
+
+static bool
+compare_name(const Waypoint &wp, const TCHAR *name)
+{
+  return _tcsnicmp(wp.Name.c_str(), name, _tcslen(name)) == 0;
+}
+
+class FilterWaypointVisitor
+  : public WaypointVisitor, private WayPointFilterData {
+  const GEOPOINT location;
+  const Angle heading;
+  WaypointSelectInfoVector &vector;
+
+public:
+  FilterWaypointVisitor(const WayPointFilterData &filter,
+                        GEOPOINT _location, Angle _heading,
+                        WaypointSelectInfoVector &_vector)
+    :WayPointFilterData(filter), location(_location), heading(_heading),
+     vector(_vector) {}
+
+  void Visit(const Waypoint &wp) {
+    if (compare_type(wp, type_index) &&
+        compare_name(wp, name) &&
+        compare_direction(wp, direction_index, location, heading))
+      vector.push_back(wp, location, Units::ToUserDistance(fixed_one));
+  }
+};
+
+static void UpdateList(void)
+{
+  WayPointSelectInfo.clear();
+
+  const GEOPOINT location = g_location;
+  FilterWaypointVisitor visitor(filter_data, location,
+                                XCSoarInterface::Basic().Heading,
+                                WayPointSelectInfo);
+
   if (filter_data.distance_index > 0) {
-    sort_distance = true;
-    waypoint_sorter->filter_distance(WayPointSelectInfo, DistanceFilter[filter_data.distance_index]);
-  } 
-
-  if (filter_data.direction_index > 0) {
-    sort_distance = true;
-    int a = DirectionFilter[filter_data.direction_index];
-    Angle angle = a == DirHDG
-      ? last_heading = XCSoarInterface::Basic().Heading
-      : Angle::degrees(fixed(a));
-    waypoint_sorter->filter_direction(WayPointSelectInfo, angle);
+    way_points.visit_within_radius(location,
+                                   Units::ToSysDistance(DistanceFilter[filter_data.distance_index]),
+                                   visitor);
+  } else {
+    for (Waypoints::WaypointTree::const_iterator it = way_points.begin();
+         it != way_points.end(); ++it)
+      visitor.Visit(it->get_waypoint());
   }
 
-  if (sort_distance) {
-    waypoint_sorter->sort_distance(WayPointSelectInfo);
-  }
-
-  if (!string_is_empty(filter_data.name))
-    waypoint_sorter->filter_name(WayPointSelectInfo, filter_data.name);
+  if (filter_data.distance_index > 0 || filter_data.direction_index > 0)
+    WaypointSorter::sort_distance(WayPointSelectInfo);
+  else
+    WaypointSorter::sort_name(WayPointSelectInfo);
 
   UpLimit = WayPointSelectInfo.size();
   wWayPointList->SetLength(UpLimit);
@@ -520,9 +570,7 @@ dlgWayPointSelect(SingleWindow &parent,
     filter_data.distance_index = 1;
   }
 
-  WaypointSorter g_waypoint_sorter(way_points,
-                                   location, Units::ToUserDistance(fixed_one));
-  waypoint_sorter = &g_waypoint_sorter;
+  g_location = location;
   PrepareData();
   UpdateList();
 
