@@ -352,13 +352,31 @@ public:
     return ToUserUnit(Value, AltitudeUnit);
   }
 
+#ifdef FIXED_MATH
+  static fixed ToUserAltitude(fixed Value) {
+    return ToUserUnit(Value, AltitudeUnit);
+  }
+#endif
+
   static double ToSysAltitude(double Value) {
     return ToSysUnit(Value, AltitudeUnit);
   }
 
+#ifdef FIXED_MATH
+  static fixed ToSysAltitude(fixed Value) {
+    return ToSysUnit(Value, AltitudeUnit);
+  }
+#endif
+
   static double ToUserDistance(double Value) {
     return ToUserUnit(Value, DistanceUnit);
   }
+
+#ifdef FIXED_MATH
+  static fixed ToUserDistance(fixed Value) {
+    return ToUserUnit(Value, DistanceUnit);
+  }
+#endif
 
   static double ToSysDistance(double Value) {
     return ToSysUnit(Value, DistanceUnit);
@@ -373,6 +391,12 @@ public:
   static double ToUserSpeed(double Value) {
     return ToUserUnit(Value, SpeedUnit);
   }
+
+#ifdef FIXED_MATH
+  static fixed ToUserSpeed(fixed Value) {
+    return ToUserUnit(Value, SpeedUnit);
+  }
+#endif
 
   static double ToSysSpeed(double Value) {
     return ToSysUnit(Value, SpeedUnit);

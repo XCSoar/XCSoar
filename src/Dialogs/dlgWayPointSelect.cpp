@@ -523,7 +523,7 @@ dlgWayPointSelect(SingleWindow &parent,
   }
 
   WaypointSorter g_waypoint_sorter(way_points,
-                                   location, fixed(Units::ToUserDistance(1)));
+                                   location, Units::ToUserDistance(fixed_one));
   waypoint_sorter = &g_waypoint_sorter;
   PrepareData();
   UpdateList();

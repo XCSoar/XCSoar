@@ -335,7 +335,7 @@ static void UpdateValuesFlight(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
   if (wp) {
     _stprintf(Temp, _T("%.0f %s"),
-              Units::ToUserAltitude(XCSoarInterface::Basic().GPSAltitude),
+              (double)Units::ToUserAltitude(XCSoarInterface::Basic().GPSAltitude),
               Units::GetAltitudeName());
     wp->SetText(Temp);
   }
@@ -437,7 +437,7 @@ static void UpdateValuesRules(void) {
   if (wp) {
     if (XCSoarInterface::Calculated().common_stats.task_started) {
       _stprintf(Temp, _T("%.0f %s"),
-                Units::ToUserAltitude(start_state.NavAltitude),
+                (double)Units::ToUserAltitude(start_state.NavAltitude),
                 Units::GetAltitudeName());
       wp->SetText(Temp);
     } else {
@@ -448,7 +448,7 @@ static void UpdateValuesRules(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpFinishAlt"));
   if (wp) {
     _stprintf(Temp, _T("%.0f %s"),
-              Units::ToUserAltitude(task_ui.get_finish_height()),
+              (double)Units::ToUserAltitude(task_ui.get_finish_height()),
               Units::GetAltitudeName());
     wp->SetText(Temp);
   }
