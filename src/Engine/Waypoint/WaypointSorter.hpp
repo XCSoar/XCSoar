@@ -16,7 +16,11 @@ struct WayPointSelectInfo {
   unsigned int FourChars; /**< Fast access of first four characters of name */
 };
 
-typedef std::vector<WayPointSelectInfo> WaypointSelectInfoVector;
+class WaypointSelectInfoVector : public std::vector<WayPointSelectInfo> {
+public:
+  void push_back(const Waypoint &way_point, const GEOPOINT &Location,
+                 const fixed distance_factor);
+};
 
 /**
  * Utility class to manage sorting of waypoints (e.g. for dlgWayPointSelect)
