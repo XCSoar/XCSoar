@@ -94,7 +94,7 @@ check_name(const Waypoint &waypoint, const TCHAR *Name)
 }
 
 static void
-LookupAirfieldDetail(TCHAR *Name, const tstring &Details)
+SetAirfieldDetails(TCHAR *Name, const tstring &Details)
 {
   CharUpper(Name); // AIR name
 
@@ -129,7 +129,7 @@ ParseAirfieldDetails(TLineReader &reader)
   while ((TempString = reader.read()) != NULL) {
     if (TempString[0] == '[') { // Look for start
       if (inDetails) {
-        LookupAirfieldDetail(Name, Details);
+        SetAirfieldDetails(Name, Details);
         Details.clear();
         Name[0] = 0;
       }
@@ -167,7 +167,7 @@ ParseAirfieldDetails(TLineReader &reader)
   }
 
   if (inDetails) {
-    LookupAirfieldDetail(Name, Details);
+    SetAirfieldDetails(Name, Details);
     Details.clear();
   }
 }
