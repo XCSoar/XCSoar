@@ -80,7 +80,7 @@ static const fixed DistanceFilter[] = {
 #define DirHDG -1
 static int DirectionFilter[] = {0, DirHDG, 360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330};
 
-static int lastHeading=0;
+static Angle last_heading = Angle::native(fixed_zero);
 
 static const TCHAR *TypeFilter[] = {_T("*"), _T("Airport"), _T("Landable"),
 				    _T("Turnpoint"), _T("File 1"), _T("File 2")};
@@ -192,11 +192,10 @@ static void UpdateList(void)
   if (filter_data.direction_index > 0) {
     sort_distance = true;
     int a = DirectionFilter[filter_data.direction_index];
-    if (a == DirHDG) {
-      a = iround(XCSoarInterface::Basic().Heading.value_degrees());
-      lastHeading = a;
-    }
-    waypoint_sorter->filter_direction(WayPointSelectInfo, Angle::degrees(fixed(a)));
+    Angle angle = a == DirHDG
+      ? last_heading = XCSoarInterface::Basic().Heading
+      : Angle::degrees(fixed(a));
+    waypoint_sorter->filter_direction(WayPointSelectInfo, angle);
   }
 
   if (sort_distance) {
@@ -418,9 +417,8 @@ OnWPSCloseClicked(gcc_unused WndButton &button)
 static int OnTimerNotify(WindowControl * Sender) {
   (void)Sender;
   if (filter_data.direction_index == 1){
-    int a;
-    a = (lastHeading - iround(XCSoarInterface::Basic().Heading.value_degrees()));
-    if (abs(a) > 0){
+    Angle a = last_heading - XCSoarInterface::Basic().Heading;
+    if (a.as_delta().magnitude_degrees() >= fixed_one) {
       UpdateList();
       InitializeDirection(true);
       wpDirection->RefreshDisplay();
