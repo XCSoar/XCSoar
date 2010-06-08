@@ -39,18 +39,10 @@ Copyright_License {
 #include "Topology/TopologyWriter.hpp"
 
 #include "wcecompat/ts_string.h"
-#include "Screen/Util.hpp"
-#include "Projection.hpp"
-#include "Screen/Graphics.hpp"
-#include "Screen/Fonts.hpp"
-#include "Screen/LabelBlock.hpp"
-#include "SettingsUser.hpp"
 #include "Navigation/GeoPoint.hpp"
 
-#include <stdlib.h>
+#include <windows.h>
 #include <tchar.h>
-
-#include "LogFile.hpp"
 
 TopologyWriter::~TopologyWriter()
 {
