@@ -200,82 +200,81 @@ TopologyStore::Open()
 
   while ((TempString = reader.read()) != NULL) {
     // Look For Comment
-    if (!string_is_empty(TempString)
-        && (_tcsstr(TempString, TEXT("*")) != TempString)) {
+    if (string_is_empty(TempString)
+        || (_tcsstr(TempString, TEXT("*")) == TempString))
+      continue;
 
-      BYTE red, green, blue;
-      // filename,range,icon,field
+    BYTE red, green, blue;
+    // filename,range,icon,field
 
-      // File name
-      PExtractParameter(TempString, ctemp, 0);
-      _tcscpy(ShapeName, ctemp);
+    // File name
+    PExtractParameter(TempString, ctemp, 0);
+    _tcscpy(ShapeName, ctemp);
 
-      _tcscpy(wShapeFilename, Directory);
-      _tcscat(wShapeFilename, ShapeName);
-      _tcscat(wShapeFilename, TEXT(".shp"));
+    _tcscpy(wShapeFilename, Directory);
+    _tcscat(wShapeFilename, ShapeName);
+    _tcscat(wShapeFilename, TEXT(".shp"));
 
 #ifdef _UNICODE
-      WideCharToMultiByte(CP_ACP, 0, wShapeFilename,
-          _tcslen(wShapeFilename) + 1, ShapeFilename, 200, NULL, NULL);
+    WideCharToMultiByte(CP_ACP, 0, wShapeFilename,
+        _tcslen(wShapeFilename) + 1, ShapeFilename, 200, NULL, NULL);
 #else
-      strcpy(ShapeFilename, wShapeFilename);
+    strcpy(ShapeFilename, wShapeFilename);
 #endif
 
-      // Shape range
-      PExtractParameter(TempString, ctemp, 1);
-      ShapeRange = _tcstod(ctemp, NULL);
+    // Shape range
+    PExtractParameter(TempString, ctemp, 1);
+    ShapeRange = _tcstod(ctemp, NULL);
 
-      // Shape icon
-      PExtractParameter(TempString, ctemp, 2);
-      ShapeIcon = _tcstol(ctemp, &Stop, 10);
+    // Shape icon
+    PExtractParameter(TempString, ctemp, 2);
+    ShapeIcon = _tcstol(ctemp, &Stop, 10);
 
-      // Shape field for text display
-
-      // sjt 02NOV05 - field parameter enabled
-      PExtractParameter(TempString, ctemp, 3);
-      if (_istalnum(ctemp[0])) {
-        ShapeField = _tcstol(ctemp, &Stop, 10);
-        ShapeField--;
-      } else {
-        ShapeField = -1;
-      }
-
-      // Red component of line / shading colour
-      PExtractParameter(TempString, ctemp, 4);
-      red = (BYTE)_tcstol(ctemp, &Stop, 10);
-
-      // Green component of line / shading colour
-      PExtractParameter(TempString, ctemp, 5);
-      green = (BYTE)_tcstol(ctemp, &Stop, 10);
-
-      // Blue component of line / shading colour
-      PExtractParameter(TempString, ctemp, 6);
-      blue = (BYTE)_tcstol(ctemp, &Stop, 10);
-
-      if ((red == 64) && (green == 96) && (blue == 240)) {
-        // JMW update colours to ICAO standard
-        red = 85; // water colours
-        green = 160;
-        blue = 255;
-      }
-
-      if (ShapeField < 0) {
-        Topology* newtopo;
-        newtopo = new Topology(ShapeFilename, Color(red, green, blue));
-        topology_store[numtopo] = newtopo;
-      } else {
-        TopologyLabel *newtopol;
-        newtopol = new TopologyLabel(ShapeFilename, Color(red, green, blue),
-            ShapeField);
-        topology_store[numtopo] = newtopol;
-      }
-
-      if (ShapeIcon != 0)
-        topology_store[numtopo]->loadIcon(ShapeIcon);
-
-      topology_store[numtopo]->scaleThreshold = ShapeRange;
-
-      numtopo++;
+    // Shape field for text display
+    // sjt 02NOV05 - field parameter enabled
+    PExtractParameter(TempString, ctemp, 3);
+    if (_istalnum(ctemp[0])) {
+      ShapeField = _tcstol(ctemp, &Stop, 10);
+      ShapeField--;
+    } else {
+      ShapeField = -1;
     }
+
+    // Red component of line / shading colour
+    PExtractParameter(TempString, ctemp, 4);
+    red = (BYTE)_tcstol(ctemp, &Stop, 10);
+
+    // Green component of line / shading colour
+    PExtractParameter(TempString, ctemp, 5);
+    green = (BYTE)_tcstol(ctemp, &Stop, 10);
+
+    // Blue component of line / shading colour
+    PExtractParameter(TempString, ctemp, 6);
+    blue = (BYTE)_tcstol(ctemp, &Stop, 10);
+
+    if ((red == 64) && (green == 96) && (blue == 240)) {
+      // JMW update colours to ICAO standard
+      red = 85; // water colours
+      green = 160;
+      blue = 255;
+    }
+
+    if (ShapeField < 0) {
+      Topology* newtopo;
+      newtopo = new Topology(ShapeFilename, Color(red, green, blue));
+      topology_store[numtopo] = newtopo;
+    } else {
+      TopologyLabel *newtopol;
+      newtopol = new TopologyLabel(ShapeFilename, Color(red, green, blue),
+          ShapeField);
+      topology_store[numtopo] = newtopol;
+    }
+
+    if (ShapeIcon != 0)
+      topology_store[numtopo]->loadIcon(ShapeIcon);
+
+    topology_store[numtopo]->scaleThreshold = ShapeRange;
+
+    numtopo++;
   }
 }
