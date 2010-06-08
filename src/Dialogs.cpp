@@ -128,6 +128,13 @@ XCSoarInterface::SetProgressDialogMaxValue(unsigned value)
     progress_window->set_range(0, value);
 }
 
+void
+XCSoarInterface::SetProgressDialogText(const TCHAR* text)
+{
+  if (progress_window != NULL)
+    progress_window->set_message(text);
+}
+
 bool
 XCSoarInterface::SetProgressStepSize(int nSize)
 {
