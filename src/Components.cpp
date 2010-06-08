@@ -266,8 +266,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   device_blackboard.Initialise();
 
   // Initialize Marks
-  marks = new Marks("xcsoar-marks", SettingsComputer());
-  topology = new TopologyStore(marks->GetTopology());
+  marks = new Marks(SettingsComputer());
+  topology = new TopologyStore();
 
   // Show the main and map windows
   LogStartUp(TEXT("Create map window"));

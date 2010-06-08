@@ -39,7 +39,6 @@ Copyright_License {
 #ifndef XCSOAR_MARKS_HPP
 #define XCSOAR_MARKS_HPP
 
-#include "Topology/TopologyWriter.hpp"
 #include "Poco/RWLock.h"
 #include "Screen/Icon.hpp"
 #include "Projection.hpp"
@@ -48,26 +47,20 @@ Copyright_License {
 
 struct SETTINGS_COMPUTER;
 class Canvas;
-class MapWindow;
 struct GEOPOINT;
 
 class Marks
 {
 public:
-  Marks(const char* name, const SETTINGS_COMPUTER &_settings_computer);
+  Marks(const SETTINGS_COMPUTER &_settings_computer);
   ~Marks();
 
   void Reset();
-  void Initialise();
-  void Close();
   void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-            const Projection &projection, LabelBlock &label_block,
-            const SETTINGS_MAP &settings_map);
+            const Projection &projection);
   void MarkLocation(const GEOPOINT &loc);
-  TopologyWriter* GetTopology() { return &topo_marks; }
 
 private:
-  TopologyWriter topo_marks;
   MaskedIcon icon;
   std::vector<GEOPOINT> marker_store;
 

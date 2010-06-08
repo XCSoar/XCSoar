@@ -49,7 +49,6 @@ class BitmapCanvas;
 class Projection;
 class LabelBlock;
 class Topology;
-class TopologyWriter;
 struct SETTINGS_MAP;
 
 /**
@@ -63,7 +62,6 @@ class TopologyStore
   };
 
 public:
-  TopologyStore(TopologyWriter* _marks):topo_marks(_marks) {};
   ~TopologyStore();
 
   bool ScanVisibility(Projection &m_projection,
@@ -77,7 +75,6 @@ public:
 
 private:
   Topology* topology_store[MAXTOPOLOGY];
-  TopologyWriter* topo_marks;
   Poco::RWLock lock;
 };
 

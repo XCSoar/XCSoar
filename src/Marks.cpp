@@ -49,12 +49,10 @@ Copyright_License {
 
 #include <assert.h>
 
-Marks::Marks(const char* name, const SETTINGS_COMPUTER &_settings_computer) :
-  topo_marks(name, Color(0xD0, 0xD0, 0xD0)),
+Marks::Marks(const SETTINGS_COMPUTER &_settings_computer) :
   settings_computer(_settings_computer)
 {
   LogStartUp(TEXT("Initialise marks"));
-  topo_marks.loadIcon(IDB_MARK);
   icon.load(IDB_MARK);
   Reset();
 }
@@ -63,16 +61,15 @@ void
 Marks::Reset()
 {
   Poco::ScopedRWLock protect(lock, true);
-  topo_marks.Reset();
-  topo_marks.scaleThreshold = 30.0;
+
   marker_store.clear();
 }
 
 Marks::~Marks()
 {
-  LogStartUp(TEXT("CloseMarks"));
   Poco::ScopedRWLock protect(lock, true);
-  topo_marks.DeleteFiles();
+
+  LogStartUp(TEXT("CloseMarks"));
   marker_store.clear();
 }
 
@@ -84,8 +81,6 @@ Marks::MarkLocation(const GEOPOINT &loc)
   if (settings_computer.EnableSoundModes)
     PlayResource(TEXT("IDR_WAV_CLEAR"));
 
-  topo_marks.addPoint(loc);
-  topo_marks.triggerUpdateCache = true;
   marker_store.push_back(loc);
 
   char message[160];
@@ -101,8 +96,7 @@ Marks::MarkLocation(const GEOPOINT &loc)
 }
 
 void Marks::Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-                 const Projection &projection, LabelBlock &label_block,
-                 const SETTINGS_MAP &settings_map)
+                 const Projection &projection)
 {
   Poco::ScopedRWLock protect(lock, false); // read only
 

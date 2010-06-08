@@ -250,7 +250,7 @@ static Blackboard blackboard;
 static void
 LoadFiles()
 {
-  topology = new TopologyStore(NULL);
+  topology = new TopologyStore();
   topology->Open();
 
   terrain.OpenTerrain();

@@ -64,9 +64,6 @@ TopologyStore::TriggerUpdateCaches(Projection &m_projection)
       topology_store[z]->triggerUpdateCache = true;
   }
 
-  if (topo_marks)
-    topo_marks->triggerUpdateCache = true;
-
   // check if things have come into or out of scale limit
   for (int z = 0; z < MAXTOPOLOGY; z++) {
     if (topology_store[z])
@@ -79,9 +76,6 @@ TopologyStore::ScanVisibility(Projection &m_projection,
     rectObj &_bounds_active, const bool force)
 {
   Poco::ScopedRWLock protect(lock, true);
-
-  if (topo_marks && topo_marks->triggerUpdateCache)
-    topo_marks->updateCache(m_projection, _bounds_active);
 
   // check if any needs to have cache updates because wasnt
   // visible previously when bounds moved

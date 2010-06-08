@@ -137,7 +137,7 @@ MapWindow::RenderTaskElements(Canvas &canvas, const RECT rc)
   DrawWaypoints(canvas);
 
   if (marks != NULL)
-    marks->Draw(canvas, bitmap_canvas, *this, label_block, SettingsMap());
+    marks->Draw(canvas, bitmap_canvas, *this);
 }
 
 /**
