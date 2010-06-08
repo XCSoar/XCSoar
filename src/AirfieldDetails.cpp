@@ -94,19 +94,14 @@ check_name(const Waypoint &waypoint, const TCHAR *Name)
 }
 
 static void
-LookupAirfieldDetail(WaypointSelectInfoVector &airports,
-                     TCHAR *Name, const tstring &Details)
+LookupAirfieldDetail(TCHAR *Name, const tstring &Details)
 {
   CharUpper(Name); // AIR name
 
-  for (WaypointSelectInfoVector::iterator it =
-         airports.begin(); it!= airports.end(); ++it) {
-    const Waypoint &wp = *it->way_point;
-
-    if (check_name(wp, Name)) {
-      way_points.set_details(wp, Details);
-
-      airports.erase(it); // this one no longer needs searching, remove from list
+  for (Waypoints::WaypointTree::const_iterator it = way_points.begin();
+      it != way_points.end(); ++it) {
+    if (check_name(it->get_waypoint(), Name)) {
+      way_points.set_details(it->get_waypoint(), Details);
       return;
     }
   }
@@ -131,17 +126,11 @@ ParseAirfieldDetails(TLineReader &reader)
   unsigned j;
   int k = 0;
 
-  WaypointSorter waypoints_filter(way_points,
-                                  XCSoarInterface::Basic().Location,
-                                  fixed_one);
-  WaypointSelectInfoVector airports = waypoints_filter.get_list();
-  waypoints_filter.filter_airport(airports);
-
   TCHAR *TempString;
   while ((TempString = reader.read()) != NULL) {
     if (TempString[0] == '[') { // Look for start
       if (inDetails) {
-        LookupAirfieldDetail(airports, Name, Details);
+        LookupAirfieldDetail(Name, Details);
         Details.clear();
         Name[0] = 0;
         hasDetails = false;
@@ -188,7 +177,7 @@ ParseAirfieldDetails(TLineReader &reader)
   }
 
   if (inDetails) {
-    LookupAirfieldDetail(airports, Name, Details);
+    LookupAirfieldDetail(Name, Details);
     Details.clear();
   }
 }
