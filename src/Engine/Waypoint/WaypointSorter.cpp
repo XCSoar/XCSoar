@@ -55,7 +55,7 @@ WaypointAirportFilter(const WayPointSelectInfo& elem1)
 }
 
 void
-WaypointSorter::filter_airport(WaypointSelectInfoVector& vec) const
+WaypointSorter::filter_airport(WaypointSelectInfoVector& vec)
 {
   vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointAirportFilter), vec.end());
 }
@@ -67,7 +67,7 @@ WaypointLandableFilter(const WayPointSelectInfo& elem1)
 }
 
 void
-WaypointSorter::filter_landable(WaypointSelectInfoVector& vec) const
+WaypointSorter::filter_landable(WaypointSelectInfoVector& vec)
 {
   vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointLandableFilter), vec.end());
 }
@@ -79,7 +79,7 @@ WaypointTurnPointFilter(const WayPointSelectInfo& elem1)
 }
 
 void
-WaypointSorter::filter_turnpoint(WaypointSelectInfoVector& vec) const
+WaypointSorter::filter_turnpoint(WaypointSelectInfoVector& vec)
 {
   vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointTurnPointFilter), vec.end());
 }
@@ -97,7 +97,7 @@ public:
 
 void
 WaypointSorter::filter_file(WaypointSelectInfoVector& vec,
-                            const int file_idx) const
+                            const int file_idx)
 {
   const WaypointFileIdxFilter filter(file_idx);
   vec.erase(std::remove_if(vec.begin(), vec.end(), filter), vec.end());
@@ -122,7 +122,7 @@ WaypointNameFilter(const WayPointSelectInfo& elem1)
 
 void
 WaypointSorter::filter_name(WaypointSelectInfoVector& vec,
-                            const TCHAR * s) const
+                            const TCHAR * s)
 {
   MatchChar = s[0] &0xff;
   _tcscpy(MatchString, s);
@@ -145,7 +145,8 @@ public:
 };
 
 void 
-WaypointSorter::filter_direction(WaypointSelectInfoVector& vec, const Angle direction) const
+WaypointSorter::filter_direction(WaypointSelectInfoVector& vec,
+                                 const Angle direction)
 {
   const WaypointDirectionFilter filter(direction);
   vec.erase(std::remove_if(vec.begin(), vec.end(), filter), vec.end());
@@ -163,7 +164,8 @@ public:
 };
 
 void 
-WaypointSorter::filter_distance(WaypointSelectInfoVector& vec, const fixed distance) const
+WaypointSorter::filter_distance(WaypointSelectInfoVector& vec,
+                                const fixed distance)
 {
   const WaypointDistanceFilter filter(distance);
   vec.erase(std::remove_if(vec.begin(), vec.end(), filter), vec.end());
@@ -178,7 +180,7 @@ WaypointDistanceCompare(const WayPointSelectInfo& elem1,
 }
 
 void 
-WaypointSorter::sort_distance(WaypointSelectInfoVector& vec) const
+WaypointSorter::sort_distance(WaypointSelectInfoVector& vec)
 {
   std::sort(vec.begin(),
             vec.end(),
@@ -201,7 +203,7 @@ WaypointNameCompare(const WayPointSelectInfo& elem1,
 
 
 void 
-WaypointSorter::sort_name(WaypointSelectInfoVector& vec) const
+WaypointSorter::sort_name(WaypointSelectInfoVector& vec)
 {
   std::sort(vec.begin(),
             vec.end(),

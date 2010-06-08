@@ -54,21 +54,21 @@ public:
  * 
  * @param vec List of waypoints to filter (read-write)
  */
-  void filter_airport(WaypointSelectInfoVector& vec) const;
+  static void filter_airport(WaypointSelectInfoVector& vec);
 
 /** 
  * Remove non-landable waypoints
  * 
  * @param vec List of waypoints to filter (read-write)
  */
-  void filter_landable(WaypointSelectInfoVector& vec) const;
+  static void filter_landable(WaypointSelectInfoVector& vec);
 
 /** 
  * Remove non-turnpoint waypoints
  * 
  * @param vec List of waypoints to filter (read-write)
  */
-  void filter_turnpoint(WaypointSelectInfoVector& vec) const;
+  static void filter_turnpoint(WaypointSelectInfoVector& vec);
 
 /** 
  * Remove waypoints not from file index 
@@ -76,7 +76,7 @@ public:
  * @param vec List of waypoints to filter (read-write)
  * @param idx File index (0 or 1) to search for
  */
-  void filter_file(WaypointSelectInfoVector& vec, const int idx) const;
+  static void filter_file(WaypointSelectInfoVector& vec, const int idx);
 
 /** 
  * Remove waypoints not matching supplied initial character 
@@ -84,7 +84,7 @@ public:
  * @param vec List of waypoints to filter (read-write)
  * @param c Character to match
  */
-  void filter_name(WaypointSelectInfoVector& vec, const TCHAR *c) const;
+  static void filter_name(WaypointSelectInfoVector& vec, const TCHAR *c);
 
 /** 
  * Remove waypoints bearing greater than 18 degrees from supplied direction 
@@ -92,7 +92,8 @@ public:
  * @param vec List of waypoints to filter (read-write)
  * @param direction Bearing (degrees) of desired direction
  */
-  void filter_direction(WaypointSelectInfoVector& vec, const Angle direction) const;
+  static void filter_direction(WaypointSelectInfoVector& vec,
+                               const Angle direction);
 
 /** 
  * Remove waypoints further than desired direction
@@ -100,21 +101,22 @@ public:
  * @param vec List of waypoints to filter (read-write)
  * @param distance Distance (user units) of limit
  */
-  void filter_distance(WaypointSelectInfoVector& vec, const fixed distance) const;
+  static void filter_distance(WaypointSelectInfoVector& vec,
+                              const fixed distance);
 
 /** 
  * Sort waypoints by distance
  * 
  * @param vec List of waypoints to sort (read-write)
  */
-  void sort_distance(WaypointSelectInfoVector& vec) const;
+  static void sort_distance(WaypointSelectInfoVector& vec);
 
 /** 
  * Sort waypoints alphabetically
  * 
  * @param vec List of waypoints to sort (read-write)
  */
-  void sort_name(WaypointSelectInfoVector& vec) const;
+  static void sort_name(WaypointSelectInfoVector& vec);
 
 private:
   WaypointSelectInfoVector m_waypoints_all;
