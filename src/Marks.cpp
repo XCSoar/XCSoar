@@ -45,6 +45,7 @@ Copyright_License {
 #include "resource.h"
 #include "IO/TextWriter.hpp"
 #include "Navigation/GeoPoint.hpp"
+#include "Projection.hpp"
 
 #include <assert.h>
 
@@ -54,6 +55,7 @@ Marks::Marks(const char* name, const SETTINGS_COMPUTER &_settings_computer) :
 {
   LogStartUp(TEXT("Initialise marks"));
   topo_marks.loadIcon(IDB_MARK);
+  icon.load(IDB_MARK);
   Reset();
 }
 
@@ -63,6 +65,7 @@ Marks::Reset()
   Poco::ScopedRWLock protect(lock, true);
   topo_marks.Reset();
   topo_marks.scaleThreshold = 30.0;
+  marker_store.clear();
 }
 
 Marks::~Marks()
@@ -70,6 +73,7 @@ Marks::~Marks()
   LogStartUp(TEXT("CloseMarks"));
   Poco::ScopedRWLock protect(lock, true);
   topo_marks.DeleteFiles();
+  marker_store.clear();
 }
 
 void
@@ -82,9 +86,9 @@ Marks::MarkLocation(const GEOPOINT &loc)
 
   topo_marks.addPoint(loc);
   topo_marks.triggerUpdateCache = true;
+  marker_store.push_back(loc);
 
   char message[160];
-
   sprintf(message, "Lon:%f Lat:%f",
           (double)(loc.Longitude.value_degrees()), 
           (double)(loc.Latitude.value_degrees()));
@@ -101,6 +105,15 @@ void Marks::Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
                  const SETTINGS_MAP &settings_map)
 {
   Poco::ScopedRWLock protect(lock, false); // read only
-  topo_marks.Paint(canvas, bitmap_canvas, projection,
-                   label_block, settings_map);
+
+  if (projection.GetMapScaleUser() > fixed(30.0))
+    return;
+
+  for (unsigned i = 0; i < marker_store.size(); i++) {
+    POINT sc;
+    if (!projection.LonLat2ScreenIfVisible(marker_store[i], &sc))
+      continue;
+
+    icon.draw(canvas, bitmap_canvas, sc.x, sc.y);
+  }
 }

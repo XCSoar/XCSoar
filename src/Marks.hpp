@@ -41,13 +41,18 @@ Copyright_License {
 
 #include "Topology/TopologyWriter.hpp"
 #include "Poco/RWLock.h"
+#include "Screen/Icon.hpp"
+#include "Projection.hpp"
+
+#include <vector>
 
 struct SETTINGS_COMPUTER;
 class Canvas;
 class MapWindow;
 struct GEOPOINT;
 
-class Marks {
+class Marks
+{
 public:
   Marks(const char* name, const SETTINGS_COMPUTER &_settings_computer);
   ~Marks();
@@ -63,6 +68,9 @@ public:
 
 private:
   TopologyWriter topo_marks;
+  MaskedIcon icon;
+  std::vector<GEOPOINT> marker_store;
+
   const SETTINGS_COMPUTER &settings_computer;
   Poco::RWLock lock;
 };
