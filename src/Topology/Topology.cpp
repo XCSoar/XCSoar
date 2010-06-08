@@ -346,13 +346,7 @@ TopologyLabel::TopologyLabel(const char* shpname, const Color thecolor,
     int _field) :
   Topology(shpname, thecolor)
 {
-  setField(max(0, _field));
-}
-
-void
-TopologyLabel::setField(int i)
-{
-  field = i;
+  field = max(0, _field);
 }
 
 XShape*

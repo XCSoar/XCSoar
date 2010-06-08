@@ -111,7 +111,6 @@ public:
   virtual XShape* addShape(const int i);
 
 private:
-  void setField(int i);
   int field;
 };
 
