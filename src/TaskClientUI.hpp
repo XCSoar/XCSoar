@@ -37,11 +37,10 @@
 #ifndef TASKCLIENTUI_HPP
 #define TASKCLIENTUI_HPP
 
-#include <tchar.h>
 #include "TaskClient.hpp"
-#include "Waypoint/Waypoint.hpp"
 #include "Task/TaskAdvance.hpp"
-#include "Waypoint/WaypointSorter.hpp"
+
+#include <tchar.h>
 
 class Declaration;
 class Waypoint;

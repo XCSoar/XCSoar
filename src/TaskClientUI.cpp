@@ -2,10 +2,6 @@
 #include "Util/Serialiser.hpp"
 #include "Util/DataNodeXML.hpp"
 #include "LocalPath.hpp"
-#include "Util/tstring.hpp"
-#include "Task/TaskAdvance.hpp"
-#include "Waypoint/Waypoints.hpp"
-#include "WayPointGlue.hpp"
 
 TaskAdvance::TaskAdvanceState_t 
 TaskClientUI::get_advance_state() const
