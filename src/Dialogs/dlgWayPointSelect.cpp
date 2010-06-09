@@ -225,7 +225,7 @@ public:
 
   void Visit(const Waypoint &wp) {
     if (compare_type(wp, type_index) &&
-        compare_name(wp, name) &&
+        (filter_data.distance_index == 0 || compare_name(wp, name)) &&
         compare_direction(wp, direction_index, location, heading))
       vector.push_back(wp, location, Units::ToUserDistance(fixed_one));
   }
@@ -245,15 +245,11 @@ static void UpdateList(void)
                                    Units::ToSysDistance(DistanceFilter[filter_data.distance_index]),
                                    visitor);
   } else {
-    for (Waypoints::WaypointTree::const_iterator it = way_points.begin();
-         it != way_points.end(); ++it)
-      visitor.Visit(it->get_waypoint());
+    way_points.visit_name_prefix(filter_data.name, visitor);
   }
 
   if (filter_data.distance_index > 0 || filter_data.direction_index > 0)
     WaypointSorter::sort_distance(WayPointSelectInfo);
-  else
-    WaypointSorter::sort_name(WayPointSelectInfo);
 
   UpLimit = WayPointSelectInfo.size();
   wWayPointList->SetLength(UpLimit);
