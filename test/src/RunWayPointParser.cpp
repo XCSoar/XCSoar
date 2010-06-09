@@ -106,6 +106,8 @@ int main(int argc, char **argv)
     return 1;
   }
 
+  delete parser;
+
   way_points.optimise();
   printf("Size %d\n", way_points.size());
 
