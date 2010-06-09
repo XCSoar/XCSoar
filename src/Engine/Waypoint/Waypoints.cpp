@@ -97,9 +97,9 @@ Waypoints::optimise()
 
   if (!tmp_wps.empty()) {
     while (!tmp_wps.empty()) {
-      WaypointEnvelope w = (tmp_wps.front());
+      WaypointEnvelope &w = tmp_wps.front();
       w.project(task_projection);
-      waypoint_tree.insert(w);
+      WaypointTree::iterator it = waypoint_tree.insert(w);
       tmp_wps.pop_front();
     }
     waypoint_tree.optimize();
