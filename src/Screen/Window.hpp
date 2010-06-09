@@ -84,6 +84,14 @@ public:
 #endif
   }
 
+  void disable() {
+#ifdef ENABLE_SDL
+    // XXX
+#else
+    style |= WS_DISABLED;
+#endif
+  }
+
   void tab_stop() {
 #ifndef ENABLE_SDL
     style |= WS_TABSTOP;
