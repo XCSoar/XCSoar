@@ -241,6 +241,12 @@ public:
                            WaypointVisitor& visitor) const;
 
   /**
+   * Call visitor function on waypoints with the specified name
+   * prefix.
+   */
+  void visit_name_prefix(const TCHAR *prefix, WaypointVisitor& visitor) const;
+
+  /**
    * Type of KD-tree data structure for waypoint container
    */
   typedef KDTree::KDTree<2, 

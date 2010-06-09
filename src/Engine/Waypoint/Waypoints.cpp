@@ -338,6 +338,25 @@ Waypoints::visit_within_radius(const GEOPOINT &loc, const fixed range,
   waypoint_tree.visit_within_range(bb_target, mrange, radius_visitor);
 }
 
+struct VisitorAdapter {
+  WaypointVisitor &visitor;
+  VisitorAdapter(WaypointVisitor &_visitor):visitor(_visitor) {}
+
+  void operator()(const Waypoint *wp) {
+    visitor.Visit(*wp);
+  }
+};
+
+void
+Waypoints::visit_name_prefix(const TCHAR *prefix,
+                             WaypointVisitor& visitor) const
+{
+  TCHAR normalized[_tcslen(prefix) + 1];
+  normalize_search_string(normalized, prefix);
+  VisitorAdapter adapter(visitor);
+  name_tree.visit_prefix(normalized, adapter);
+}
+
 Waypoints::WaypointTree::const_iterator
 Waypoints::begin() const
 {
