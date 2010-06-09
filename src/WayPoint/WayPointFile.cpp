@@ -234,12 +234,6 @@ WayPointFile::Parse(Waypoints &way_points,
 
       unsigned status = reader.tell() * 100 / filesize;
       XCSoarInterface::SetProgressDialogValue(status);
-
-      TCHAR status_text[100];
-      _stprintf(status_text,
-                TEXT("Loading Waypoints... %u %%"),
-                status);
-      XCSoarInterface::SetProgressDialogText(status_text);
     }
   // If compressed file inside map file
   } else {
@@ -259,12 +253,6 @@ WayPointFile::Parse(Waypoints &way_points,
 
       unsigned status = reader.tell() * 100 / filesize;
       XCSoarInterface::SetProgressDialogValue(status);
-
-      TCHAR status_text[100];
-      _stprintf(status_text,
-                TEXT("Loading Airfield Details File... %u %%"),
-                status);
-      XCSoarInterface::SetProgressDialogText(status_text);
     }
   }
 
