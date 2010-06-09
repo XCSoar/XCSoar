@@ -212,11 +212,10 @@ Waypoints::find_home() const
 bool
 Waypoints::set_home(const unsigned id)
 {
-  WaypointTree::iterator found = waypoint_tree.begin();
-
   m_home = NULL;
 
-  while (found != waypoint_tree.end()) {
+  for (WaypointTree::iterator found = waypoint_tree.begin();
+       found != waypoint_tree.end(); ++found) {
     const WaypointEnvelope* wp = &(*found);
 
     if (wp->get_waypoint().id == id) {
@@ -224,8 +223,6 @@ Waypoints::set_home(const unsigned id)
       wp->set_home(true);
       return true;
     }
-
-    ++found;
   }
 
   return false;
