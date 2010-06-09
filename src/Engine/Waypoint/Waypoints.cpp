@@ -231,14 +231,10 @@ Waypoints::set_home(const unsigned id)
 const Waypoint*
 Waypoints::lookup_id(const unsigned id) const
 {
-  WaypointTree::const_iterator found = waypoint_tree.begin();
-
-  while (found != waypoint_tree.end()) {
+  for (WaypointTree::const_iterator found = waypoint_tree.begin();
+       found != waypoint_tree.end(); ++found)
     if (found->get_waypoint().id == id)
       return &found->get_waypoint();
-
-    ++found;
-  }
 
   return NULL;
 }
