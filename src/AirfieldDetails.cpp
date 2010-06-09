@@ -47,9 +47,10 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ZipLineReader.hpp"
-#include "Components.hpp"
-#include "Waypoint/Waypoint.hpp"
-#include "Waypoint/WaypointSorter.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
+
+extern Waypoints way_points;
 
 static bool
 check_name(const Waypoint &waypoint, const TCHAR *Name)
