@@ -45,6 +45,8 @@ Copyright_License {
  * The XCSoar splash screen with a progress bar.
  */
 class ProgressWindow : public Dialog {
+  unsigned position;
+
 public:
   explicit ProgressWindow(ContainerWindow &parent);
 

@@ -51,6 +51,7 @@ Copyright_License {
 #endif
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent)
+  :position(0)
 {
 
   RECT rc = parent.get_client_rect();
@@ -136,6 +137,11 @@ ProgressWindow::set_step(unsigned size)
 void
 ProgressWindow::set_pos(unsigned value)
 {
+  if (value == position)
+    return;
+
+  position = value;
+
 #ifdef ENABLE_SDL
   // XXX
 #else /* !ENABLE_SDL */
