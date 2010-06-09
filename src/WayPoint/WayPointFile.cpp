@@ -47,6 +47,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "UtilsFile.hpp"
+#include "Interface.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "IO/TextWriter.hpp"
@@ -213,6 +214,8 @@ WayPointFile::Parse(Waypoints &way_points,
   if (file[0] == 0)
     return false;
 
+  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Waypoints...")));
+
   // If normal file
   if (!compressed) {
     // Try to open waypoint file
@@ -220,11 +223,23 @@ WayPointFile::Parse(Waypoints &way_points,
     if (reader.error())
       return false;
 
+    double filesize = std::max(reader.size(), 1l);
+    XCSoarInterface::SetProgressDialogMaxValue(100);
+
     // Read through the lines of the file
     TCHAR *line;
     for (unsigned i = 0; (line = reader.read()) != NULL; i++) {
       // and parse them
       parseLine(line, i, way_points, terrain);
+
+      unsigned status = reader.tell() * 100 / filesize;
+      XCSoarInterface::SetProgressDialogValue(status);
+
+      TCHAR status_text[100];
+      _stprintf(status_text,
+                TEXT("Loading Waypoints... %u %%"),
+                status);
+      XCSoarInterface::SetProgressDialogText(status_text);
     }
   // If compressed file inside map file
   } else {
@@ -233,11 +248,23 @@ WayPointFile::Parse(Waypoints &way_points,
     if (reader.error())
       return false;
 
+    double filesize = std::max(reader.size(), 1l);
+    XCSoarInterface::SetProgressDialogMaxValue(100);
+
     // Read through the lines of the file
     TCHAR *line;
     for (unsigned i = 0; (line = reader.read()) != NULL; i++) {
       // and parse them
       parseLine(line, i, way_points, terrain);
+
+      unsigned status = reader.tell() * 100 / filesize;
+      XCSoarInterface::SetProgressDialogValue(status);
+
+      TCHAR status_text[100];
+      _stprintf(status_text,
+                TEXT("Loading Airfield Details File... %u %%"),
+                status);
+      XCSoarInterface::SetProgressDialogText(status_text);
     }
   }
 
