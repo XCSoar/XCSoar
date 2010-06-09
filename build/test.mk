@@ -245,7 +245,7 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
 	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
 	$(SRC)/WayPoint/WayPointFileZander.cpp \
-	$(SRC)/UtilsText.cpp \
+	$(SRC)/StringUtil.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/ProfileKeys.cpp \
@@ -275,6 +275,7 @@ $(TARGET_BIN_DIR)/RunWayPointParser$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS
 
 RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/StringUtil.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/Device/Driver.cpp \

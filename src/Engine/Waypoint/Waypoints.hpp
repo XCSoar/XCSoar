@@ -38,6 +38,7 @@
 #define WAYPOINTS_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Util/RadixTree.hpp"
 #include <kdtree++/kdtree.hpp>
 #include "WaypointEnvelope.hpp"
 #ifdef DO_PRINT
@@ -247,6 +248,8 @@ public:
                          WaypointEnvelope::kd_get_location
                          > WaypointTree;
 
+  typedef RadixTree<const Waypoint*> WaypointNameTree;
+
   /**
    * Looks up nearest waypoint to the search location.
    * Performs search according to flat-earth internal representation,
@@ -309,6 +312,7 @@ private:
   unsigned next_id;
 
   WaypointTree waypoint_tree;
+  WaypointNameTree name_tree;
   TaskProjection task_projection;
 
   std::deque<WaypointEnvelope> tmp_wps;

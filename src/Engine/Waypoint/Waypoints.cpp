@@ -37,6 +37,7 @@
 
 #include "Waypoints.hpp"
 #include "WaypointVisitor.hpp"
+#include "StringUtil.hpp"
 
 // global, used for test harness
 unsigned n_queries = 0;
@@ -92,6 +93,7 @@ Waypoints::optimise()
   if (task_projection.update_fast()) {
     // task projection changed, so need to push items back onto stack
     std::copy(begin(), end(), std::back_inserter(tmp_wps));
+    name_tree.clear();
     waypoint_tree.clear();
   }
 
@@ -103,6 +105,17 @@ Waypoints::optimise()
       tmp_wps.pop_front();
     }
     waypoint_tree.optimize();
+
+    /* rebuild the radix tree - we have to do this because the
+       pointers to Waypoint objects in KDTree are not stable */
+    name_tree.clear();
+    for (Waypoints::WaypointTree::const_iterator it = begin();
+         it != end(); ++it) {
+      const Waypoint &wp = it->get_waypoint();
+      TCHAR normalized_name[wp.Name.length() + 1];
+      normalize_search_string(normalized_name, wp.Name.c_str());
+      name_tree.add(normalized_name, &wp);
+    }
   }
 }
 
@@ -345,6 +358,7 @@ Waypoints::end() const
 void
 Waypoints::clear()
 {
+  name_tree.clear();
   waypoint_tree.clear();
   next_id = 1;
   m_file0_writable = false;
@@ -367,7 +381,10 @@ Waypoints::erase(const Waypoint& wp)
 {
   WaypointEnvelope w(wp);
   w.project(task_projection);
-  waypoint_tree.erase_exact(w);
+
+  WaypointTree::const_iterator it = waypoint_tree.find_exact(w);
+  name_tree.remove(it->get_waypoint().Name.c_str(), &it->get_waypoint());
+  waypoint_tree.erase(it);
 }
 
 void
