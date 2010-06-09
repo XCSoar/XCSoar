@@ -98,7 +98,8 @@ SetAirfieldDetails(TCHAR *Name, const tstring &Details)
 
   for (Waypoints::WaypointTree::const_iterator it = way_points.begin();
       it != way_points.end(); ++it) {
-    if (check_name(it->get_waypoint(), Name)) {
+    if (it->get_waypoint().is_landable()
+        && check_name(it->get_waypoint(), Name)) {
       way_points.set_details(it->get_waypoint(), Details);
       return;
     }
