@@ -193,20 +193,19 @@ Waypoints::lookup_location(const GEOPOINT &loc, const fixed range) const
 const Waypoint*
 Waypoints::find_home() const
 {
-  if (!m_home || !m_home->Flags.Home) {
+  if (m_home && m_home->Flags.Home)
+    return m_home;
 
-    WaypointTree::const_iterator found = waypoint_tree.begin();
-    while (found != waypoint_tree.end()) {
-      const Waypoint* wp = &(*found).get_waypoint();
-      if (wp->Flags.Home) {
-        m_home = wp;
-        return wp;
-      }
-      ++found;
+  for (WaypointTree::const_iterator found = waypoint_tree.begin();
+       found != waypoint_tree.end(); ++found) {
+    const Waypoint* wp = &(*found).get_waypoint();
+    if (wp->Flags.Home) {
+      m_home = wp;
+      return wp;
     }
   }
 
-  return m_home;
+  return NULL;
 }
 
 bool
