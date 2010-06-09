@@ -58,41 +58,37 @@ check_name(const Waypoint &waypoint, const TCHAR *Name)
   // TODO: detect and warn on multiple matches!
   
   TCHAR UName[100];
-  TCHAR NameA[100];
-  TCHAR NameB[100];
-  TCHAR NameC[100];
-  TCHAR NameD[100];
-  TCHAR TmpName[100];
-  
   _tcscpy(UName, waypoint.Name.c_str());
-  
   CharUpper(UName); // WP name
-  
-  _stprintf(NameA, TEXT("%s A/F"), Name);
-  _stprintf(NameB, TEXT("%s AF"), Name);
-  _stprintf(NameC, TEXT("%s A/D"), Name);
-  _stprintf(NameD, TEXT("%s AD"), Name);
-  
-  bool isHome = false;
-  
-  _stprintf(TmpName, TEXT("%s=HOME"), UName);
-  if ((_tcscmp(Name, TmpName) == 0))
-    isHome = true;
-  
-  if (isHome == true) {
-    XCSoarInterface::SetSettingsComputer().HomeWaypoint = waypoint.id;
-  }
-  
-  if ((_tcscmp(UName, Name) == 0)
-      || (_tcscmp(UName, NameA) == 0)
-      || (_tcscmp(UName, NameB) == 0)
-      || (_tcscmp(UName, NameC) == 0)
-      || (_tcscmp(UName, NameD) == 0) || isHome) {
-    // found
+
+  if (_tcscmp(UName, Name) == 0)
     return true;
-  } else {
-    return false;
+
+  TCHAR tmp[100];
+
+  _stprintf(tmp, TEXT("%s A/F"), Name);
+  if (_tcscmp(UName, tmp) == 0)
+    return true;
+  
+  _stprintf(tmp, TEXT("%s AF"), Name);
+  if (_tcscmp(UName, tmp) == 0)
+    return true;
+  
+  _stprintf(tmp, TEXT("%s A/D"), Name);
+  if (_tcscmp(UName, tmp) == 0)
+    return true;
+  
+  _stprintf(tmp, TEXT("%s AD"), Name);
+  if (_tcscmp(UName, tmp) == 0)
+    return true;
+  
+  _stprintf(tmp, TEXT("%s=HOME"), Name);
+  if (_tcscmp(UName, tmp) == 0) {
+    XCSoarInterface::SetSettingsComputer().HomeWaypoint = waypoint.id;
+    return true;
   }
+
+  return false;
 }
 
 static void
