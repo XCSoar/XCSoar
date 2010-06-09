@@ -74,6 +74,8 @@ DrawThread::trigger_topology_changed()
 void
 DrawThread::run()
 {
+  set_low_priority();
+
   // bounds_dirty maintains the status of whether the map
   // bounds have changed and there are pending idle calls
   // to be run in the map.

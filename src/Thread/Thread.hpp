@@ -83,6 +83,12 @@ public:
 #endif
   }
 
+  void set_low_priority() {
+#ifdef WIN32
+    ::SetThreadPriority(handle, THREAD_PRIORITY_LOWEST);
+#endif
+  }
+
   bool start();
   void join();
   bool join(unsigned timeout_ms);
