@@ -40,6 +40,7 @@ Copyright_License {
 
 #include <assert.h>
 #include <string.h>
+#include <ctype.h>
 
 const TCHAR *
 string_after_prefix(const TCHAR *string, const TCHAR *prefix)
@@ -51,4 +52,18 @@ string_after_prefix(const TCHAR *string, const TCHAR *prefix)
   return _tcsncmp(string, prefix, prefix_length) == 0
     ? string + prefix_length
     : NULL;
+}
+
+TCHAR *
+normalize_search_string(TCHAR *dest, const TCHAR *src)
+{
+  TCHAR *retval = dest;
+
+  for (; !string_is_empty(src); ++src)
+    if (_istalnum(*src))
+      *dest++ = _totupper(*src);
+
+  *dest = _T('\0');
+
+  return retval;
 }

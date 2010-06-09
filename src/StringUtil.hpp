@@ -55,4 +55,17 @@ string_is_empty(const TCHAR *string)
 const TCHAR *
 string_after_prefix(const TCHAR *string, const TCHAR *prefix);
 
+/**
+ * Normalize a string for searching.  This strips all characters
+ * except letters and digits, folds case to a neutral form.  It is
+ * possible to do this in-place (src==dest).
+ *
+ * @param dest the destination buffer; there must be enough room for
+ * the source string and the trailing zero
+ * @param src the source string
+ * @return the destination buffer
+ */
+TCHAR *
+normalize_search_string(TCHAR *dest, const TCHAR *src);
+
 #endif

@@ -89,6 +89,7 @@ typedef wchar_t TCHAR;
 #define _tcstod wcstod
 
 #define _istalpha iswalpha
+#define _istalnum iswalnum
 #define _istspace iswspace
 #define _istdigit iswdigit
 
@@ -145,6 +146,7 @@ typedef char TCHAR;
 #define _tcscspn strcspn
 
 #define _istalpha isalpha
+#define _istalnum isalnum
 #define _istdigit isdigit
 #define _istspace isspace
 
