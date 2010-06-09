@@ -8,7 +8,6 @@ public:
   /** invalid value for terrain */
   static const short TERRAIN_INVALID = -1000;
 
-public:
   RasterTile()
     :xstart(0), ystart(0), xend(0), yend(0),
      width(0), height(0),
@@ -22,7 +21,6 @@ public:
   bool CheckTileVisibility(const int view_x, const int view_y);
   bool SetEdgeIfInRange(unsigned int x, unsigned int y, short val);
 
- public:
   void Disable();
   void Enable();
   bool IsEnabled() const {
@@ -49,11 +47,10 @@ public:
 
 class RasterTileCache {
 public:
-
   RasterTileCache()
     :Overview(NULL), scan_overview(true) {
     Reset();
-  };
+  }
   ~RasterTileCache() {
     Reset();
   }
@@ -61,7 +58,6 @@ public:
 private:
   bool initialised;
   bool loaded_one;
-private:
   int view_x;
   int view_y;
   RasterTile tiles[MAX_RTC_TILES];
@@ -71,6 +67,7 @@ private:
   bool scan_overview;
   unsigned int width, height;
   bool load_all;
+
 public:
   bool GetScanType(void) const;
   short GetField(unsigned int lx,
@@ -94,7 +91,8 @@ public:
   double lat_min, lat_max, lon_min, lon_max;
   unsigned int GetWidth() { return width; }
   unsigned int GetHeight() { return height; }
- private:
+
+private:
   unsigned int overview_width, overview_height;
   unsigned int overview_width_fine, overview_height_fine;
 
@@ -102,9 +100,9 @@ public:
                          unsigned int ly) const;
 
   void StitchTiles(void);
- private:
-  void StitchTile(unsigned int i);
 
+private:
+  void StitchTile(unsigned int i);
 };
 
 #endif

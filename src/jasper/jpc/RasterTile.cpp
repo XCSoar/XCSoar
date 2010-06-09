@@ -45,42 +45,43 @@ Copyright_License {
 using std::min;
 using std::max;
 
-
-void RasterTile::Disable() {
+void
+RasterTile::Disable()
+{
   if (ImageBuffer) {
     free(ImageBuffer);
     ImageBuffer = NULL;
   }
 }
 
-void RasterTile::Enable() {
+void
+RasterTile::Enable()
+{
   if (!width || !height) {
     Disable();
   } else {
-    ImageBuffer = (short*)malloc((width+1)*(height+1)*sizeof(short));
+    ImageBuffer = (short*)malloc((width + 1) * (height + 1) * sizeof(short));
   }
 }
 
-
-bool RasterTile::SetEdgeIfInRange(unsigned int x, unsigned int y,
-                                  short val)
+bool
+RasterTile::SetEdgeIfInRange(unsigned int x, unsigned int y, short val)
 {
   if (!ImageBuffer)
     return false;
-  if ((x-= xstart)>width) {
+
+  if ((x -= xstart) > width)
     return false;
-  }
-  if ((y-= ystart)>height) {
+
+  if ((y-= ystart)>height)
     return false;
-  }
+
   ImageBuffer[y*(width+1)+x]= val;
   return true;
 }
 
-
-bool RasterTile::GetField(unsigned int lx,
-                          unsigned int ly,
-                          short *theight) const
+bool
+RasterTile::GetField(unsigned int lx, unsigned int ly, short *theight) const
 {
   // we want to exit out of this function as soon as possible
   // if we have the wrong tile
@@ -90,38 +91,38 @@ bool RasterTile::GetField(unsigned int lx,
 
   // check x in range, and decompose fraction part
   const int ix = CombinedDivAndMod(lx);
-  if ((lx-= xstart)>=width)
+  if ((lx -= xstart) >= width)
     return false;
 
   // check y in range, and decompose fraction part
   const int iy = CombinedDivAndMod(ly);
-  if ((ly-= ystart)>=height)
+  if ((ly -= ystart) >= height)
     return false;
 
   // perform piecewise linear interpolation
-  const unsigned int dx= (lx==width)? 0:1;
-  const unsigned int dy= (ly==height)? 0:width+1;
+  const unsigned int dx = (lx == width) ? 0 : 1;
+  const unsigned int dy = (ly == height) ? 0 : width + 1;
 
-  const short *tm = ImageBuffer+ly*dy+lx;
+  const short *tm = ImageBuffer + ly * dy + lx;
 
-  if (ix>iy) {
+  if (ix > iy) {
     // lower triangle
-    *theight = *tm+((ix*(tm[dx]-*tm)+iy*(tm[dx+dy]-tm[dx]))/256);
+    *theight = *tm + ((ix * (tm[dx] - *tm) + iy * (tm[dx + dy] - tm[dx])) / 256);
     return true;
   } else {
     // upper triangle
-    *theight = *tm+((iy*(tm[dy]-*tm)+ix*(tm[dx+dy]-tm[dy]))/256);
+    *theight = *tm + ((iy * (tm[dy] - *tm) + ix * (tm[dx + dy] - tm[dy])) / 256);
     return true;
   }
 }
 
-
-bool 
-RasterTile::CheckTileVisibility(const int view_x, const int view_y) {
+bool
+RasterTile::CheckTileVisibility(const int view_x, const int view_y)
+{
   if (!width || !height) {
-    if (IsEnabled()) {
+    if (IsEnabled())
       Disable();
-    }
+
     return false;
   }
 
@@ -130,144 +131,134 @@ RasterTile::CheckTileVisibility(const int view_x, const int view_y) {
   const unsigned int dy1 = abs(view_y - ystart);
   const unsigned int dy2 = abs(yend - view_y);
 
-  if (min(dx1,dx2)*2 < width*3) {
-    if (min(dy1,dy2) < height) {
+  if (min(dx1, dx2) * 2 < width * 3) {
+    if (min(dy1, dy2) < height)
       return true;
-    }
   }
-  if (min(dy1,dy2)*2 < height*3) {
-    if (min(dx1,dx2) < width) {
+  if (min(dy1, dy2) * 2 < height * 3) {
+    if (min(dx1, dx2) < width)
       return true;
-    }
   }
   if (IsEnabled()) {
-    if ( (max(dx1,dx2) > width*2)
-         || (max(dy1,dy2) > height*2)) {
+    if ((max(dx1, dx2) > width * 2) || (max(dy1, dy2) > height * 2))
       Disable();
-    }
   }
   return false;
 }
 
-
-bool RasterTile::VisibilityChanged(int view_x, int view_y) {
+bool
+RasterTile::VisibilityChanged(int view_x, int view_y)
+{
   request = CheckTileVisibility(view_x, view_y) && IsDisabled();
   // JMW note: order of these is important!
   return request;
 }
 
-short* RasterTileCache::GetImageBuffer(int index) {
-  if (index< MAX_RTC_TILES) {
+short*
+RasterTileCache::GetImageBuffer(int index)
+{
+  if (index < MAX_RTC_TILES)
     return tiles[index].GetImageBuffer();
-  } else {
-    return NULL;
-  }
+
+  return NULL;
 }
 
 const short *
 RasterTileCache::GetImageBuffer(int index) const
 {
-  if (index< MAX_RTC_TILES) {
+  if (index< MAX_RTC_TILES)
     return tiles[index].GetImageBuffer();
-  } else {
-    return NULL;
-  }
+
+  return NULL;
 }
 
-void RasterTileCache::SetTile(int index,
-                              int xstart, int ystart,
-                              int xend, int yend) {
-  if (index<MAX_RTC_TILES) {
+void
+RasterTileCache::SetTile(int index, int xstart, int ystart, int xend, int yend)
+{
+  if (index < MAX_RTC_TILES) {
     tiles[index].xstart = xstart;
     tiles[index].ystart = ystart;
     tiles[index].xend = xend;
     tiles[index].yend = yend;
-    tiles[index].width = tiles[index].xend-tiles[index].xstart;
-    tiles[index].height = tiles[index].yend-tiles[index].ystart;
-  } else {
-    // error!
+    tiles[index].width = tiles[index].xend - tiles[index].xstart;
+    tiles[index].height = tiles[index].yend - tiles[index].ystart;
   }
 }
 
-
-bool RasterTileCache::PollTiles(int x, int y) {
+bool
+RasterTileCache::PollTiles(int x, int y)
+{
   bool retval = false;
-  int i, num_used=0;
+  int i, num_used = 0;
   view_x = x;
   view_y = y;
 
-  if (scan_overview) {
+  if (scan_overview)
     return false;
-  }
 
-  for (i= MAX_ACTIVE_TILES; --i; ) {
+  for (i = MAX_ACTIVE_TILES; --i;)
     ActiveTiles[i] = -1;
-  }
+
   for (i= MAX_RTC_TILES; --i; ) {
-    if (tiles[i].VisibilityChanged(view_x, view_y)) {
+    if (tiles[i].VisibilityChanged(view_x, view_y))
       retval = true;
-    }
+
     if (tiles[i].IsEnabled()) {
       ActiveTiles[num_used] = i;
       num_used++;
     }
   }
+
   return retval;
 }
 
-
-bool RasterTileCache::TileRequest(int index) {
+bool
+RasterTileCache::TileRequest(int index)
+{
   int num_used = 0;
 
-  if (index>=MAX_RTC_TILES) {
+  if (index >= MAX_RTC_TILES) {
     // tile index too big!
     return false;
   }
 
-  if (!tiles[index].request) 
+  if (!tiles[index].request)
     return false;
 
-  for (int i=0; i< MAX_RTC_TILES; ++i) {
-    if (tiles[i].IsEnabled()) {
+  for (int i = 0; i < MAX_RTC_TILES; ++i)
+    if (tiles[i].IsEnabled())
       num_used++;
-    }
-  }
 
-  if (loaded_one && !load_all) {
+  if (loaded_one && !load_all)
     return false; // already loaded one
-  }
 
-  if (num_used< MAX_ACTIVE_TILES) {
+  if (num_used < MAX_ACTIVE_TILES) {
     loaded_one = true;
     tiles[index].Enable();
     return true; // want to load this one!
-  } else {
-    return false; // not enough memory for it or not visible anyway
   }
-};
 
+  return false; // not enough memory for it or not visible anyway
+}
 
-short RasterTileCache::GetField(unsigned int lx,
-                                unsigned int ly) {
-
-  if ((lx>= overview_width_fine) ||
-      (ly>= overview_height_fine)) {
+short
+RasterTileCache::GetField(unsigned int lx, unsigned int ly)
+{
+  if ((lx >= overview_width_fine) || (ly >= overview_height_fine))
     // outside overall bounds
     return RasterTile::TERRAIN_INVALID;
-  }
 
   short retval;
 
   // search starting from last found tile
-  if (tiles[tile_last].GetField(lx, ly, &retval)) {
+  if (tiles[tile_last].GetField(lx, ly, &retval))
     return retval;
-  }
 
   int tile_this;
-  for (unsigned int i= MAX_ACTIVE_TILES; --i; ) {
-    if (((tile_this = ActiveTiles[i])>=0) &&
-        (tile_this != tile_last) &&
-        tiles[tile_this].GetField(lx, ly, &retval)) {
+  for (unsigned int i = MAX_ACTIVE_TILES; --i;) {
+    if (((tile_this = ActiveTiles[i]) >= 0)
+        && (tile_this != tile_last)
+        && tiles[tile_this].GetField(lx, ly, &retval)) {
       tile_last = tile_this;
       return retval;
     }
@@ -275,40 +266,41 @@ short RasterTileCache::GetField(unsigned int lx,
   // still not found, so go to overview
   if (Overview) {
     return GetOverviewField(lx/RTC_SUBSAMPLING, ly/RTC_SUBSAMPLING);
-  } else {
-    return RasterTile::TERRAIN_INVALID;
   }
-};
 
-short RasterTileCache::GetOverviewField(unsigned int lx,
-                                        unsigned int ly) const
+  return RasterTile::TERRAIN_INVALID;
+}
+
+short
+RasterTileCache::GetOverviewField(unsigned int lx, unsigned int ly) const
 {
   // check x in range, and decompose fraction part
   const unsigned int ix = CombinedDivAndMod(lx);
-  if (lx>=overview_width)
+  if (lx >= overview_width)
     return RasterTile::TERRAIN_INVALID;
 
   // check y in range, and decompose fraction part
   const unsigned int iy = CombinedDivAndMod(ly);
-  if (ly>= overview_height)
+  if (ly >= overview_height)
     return RasterTile::TERRAIN_INVALID;
 
   // perform piecewise linear interpolation
-  const unsigned int dx= (lx==overview_width-1)? 0: 1;
-  const unsigned int dy= (ly==overview_height-1)? 0: overview_width;
-  const short *tm = Overview+ly*overview_width+lx;
+  const unsigned int dx = (lx == overview_width - 1) ? 0 : 1;
+  const unsigned int dy = (ly == overview_height - 1) ? 0 : overview_width;
+  const short *tm = Overview + ly * overview_width + lx;
 
-  if (ix>iy) {
+  if (ix > iy) {
     // lower triangle
-    return *tm+((ix*(tm[dx]-*tm)-iy*(tm[dx]-tm[dx+dy]))>>8);
+    return *tm + ((ix * (tm[dx] - *tm) - iy * (tm[dx] - tm[dx + dy])) >> 8);
   } else {
     // upper triangle
-    return *tm+((iy*(tm[dy]-*tm)-ix*(tm[dy]-tm[dx+dy]))>>8);
+    return *tm + ((iy * (tm[dy] - *tm) - ix * (tm[dy] - tm[dx + dy])) >> 8);
   }
-};
+}
 
-
-void RasterTileCache::StitchTile(unsigned int src_tile) {
+void
+RasterTileCache::StitchTile(unsigned int src_tile)
+{
   const short *h_src = tiles[src_tile].GetImageBuffer();
   if (!h_src)
     return;
@@ -319,60 +311,57 @@ void RasterTileCache::StitchTile(unsigned int src_tile) {
   const unsigned int ystart = tiles[src_tile].ystart;
   unsigned int i;
 
-  for (unsigned int dst_tile= MAX_RTC_TILES; dst_tile--; ) {
+  for (unsigned int dst_tile = MAX_RTC_TILES; dst_tile--;) {
     if (tiles[dst_tile].GetImageBuffer() && (dst_tile != src_tile)) {
-
       short h;
-
-      for (i=0; i<width; i++) {
+      for (i = 0; i < width; i++) {
         h = h_src[i];
-        tiles[dst_tile].SetEdgeIfInRange(i+xstart, ystart, h);
+        tiles[dst_tile].SetEdgeIfInRange(i + xstart, ystart, h);
       }
-      for (i=0; i<height; i++) {
-        h = h_src[i*(width+1)];
-        tiles[dst_tile].SetEdgeIfInRange(xstart, i+ystart, h);
+      for (i = 0; i < height; i++) {
+        h = h_src[i * (width + 1)];
+        tiles[dst_tile].SetEdgeIfInRange(xstart, i + ystart, h);
       }
     }
   }
-
 }
 
-
-void RasterTileCache::StitchTiles(void) {
-  for (unsigned int i= MAX_RTC_TILES; i--; ) {
-    if (tiles[i].GetImageBuffer()) {
+void
+RasterTileCache::StitchTiles(void)
+{
+  for (unsigned int i = MAX_RTC_TILES; i--;)
+    if (tiles[i].GetImageBuffer())
       StitchTile(i);
-    }
-  }
 }
 
-
-
-void RasterTileCache::SetSize(int _width, int _height) {
+void
+RasterTileCache::SetSize(int _width, int _height)
+{
   width = _width;
   height = _height;
   if (!Overview) {
-    overview_width = width/RTC_SUBSAMPLING;
-    overview_height = height/RTC_SUBSAMPLING;
-    overview_width_fine = width*256;
-    overview_height_fine = height*256;
+    overview_width = width / RTC_SUBSAMPLING;
+    overview_height = height / RTC_SUBSAMPLING;
+    overview_width_fine = width * 256;
+    overview_height_fine = height * 256;
 
-    Overview = (short*)malloc(overview_width*overview_height
-                              *sizeof(short));
+    Overview = (short*)malloc(overview_width * overview_height * sizeof(short));
   }
 }
 
-
-void RasterTileCache::SetLatLonBounds(double _lon_min, double _lon_max,
-                                      double _lat_min, double _lat_max) {
-  lat_min = min(_lat_min,_lat_max);
-  lat_max = max(_lat_min,_lat_max);
-  lon_min = min(_lon_min,_lon_max);
-  lon_max = max(_lon_min,_lon_max);
+void
+RasterTileCache::SetLatLonBounds(double _lon_min, double _lon_max,
+                                 double _lat_min, double _lat_max)
+{
+  lat_min = min(_lat_min, _lat_max);
+  lat_max = max(_lat_min, _lat_max);
+  lon_min = min(_lon_min, _lon_max);
+  lon_max = max(_lon_min, _lon_max);
 }
 
-
-void RasterTileCache::Reset() {
+void
+RasterTileCache::Reset()
+{
   tile_last = 0;
   view_x = 0;
   view_y = 0;
@@ -380,37 +369,38 @@ void RasterTileCache::Reset() {
   height = 0;
   initialised = false;
   scan_overview = true;
+
   if (Overview) {
     free(Overview);
     Overview = 0;
   }
+
   int i;
-  for (i=0; i< MAX_RTC_TILES; i++) {
-    if (tiles[i].IsEnabled()) {
+  for (i = 0; i < MAX_RTC_TILES; i++)
+    if (tiles[i].IsEnabled())
       tiles[i].Disable();
-    }
-  }
-  for (i= MAX_ACTIVE_TILES; i--; ) {
+
+  for (i = MAX_ACTIVE_TILES; i--;)
     ActiveTiles[i] = -1;
-  }
 }
 
-
-void RasterTileCache::SetInitialised(bool val) {
+void
+RasterTileCache::SetInitialised(bool val)
+{
   if (!initialised && val) {
-    if (lon_max-lon_min<0) {
+    if (lon_max - lon_min < 0)
       return;
-    }
-    if (lat_max-lat_min<0) {
+
+    if (lat_max - lat_min < 0)
       return;
-    }
+
     initialised = true;
     scan_overview = false;
 
     return;
   }
   initialised = val;
-  loaded_one = false;  
+  loaded_one = false;
 }
 
 bool
@@ -419,7 +409,9 @@ RasterTileCache::GetInitialised(void) const
   return initialised;
 }
 
-short* RasterTileCache::GetOverview(void) {
+short*
+RasterTileCache::GetOverview(void)
+{
   return Overview;
 }
 
@@ -433,17 +425,20 @@ short
 RasterTileCache::GetMaxElevation(void) const
 {
   short max_elevation = 0;
+
   if (Overview) {
-    for (unsigned int i= overview_width*overview_height; i--; ) {
+    for (unsigned int i = overview_width * overview_height; i--;)
       max_elevation = max(max_elevation, Overview[i]);
-    }
   }
+
   return max_elevation;
 }
 
 extern RasterTileCache *raster_tile_current;
 
-void RasterTileCache::LoadJPG2000(char* jp2_filename, const bool do_load_all) {
+void
+RasterTileCache::LoadJPG2000(char* jp2_filename, const bool do_load_all)
+{
   jas_stream_t *in;
 
   raster_tile_current = this;
@@ -456,7 +451,7 @@ void RasterTileCache::LoadJPG2000(char* jp2_filename, const bool do_load_all) {
     jas_image_decode(in, -1, "xcsoar=1");
     jas_stream_close(in);
   }
-  if (GetInitialised()) {
+
+  if (GetInitialised())
     StitchTiles();
-  }
-};
+}
