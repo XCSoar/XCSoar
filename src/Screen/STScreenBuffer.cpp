@@ -47,14 +47,14 @@ Copyright_License {
 
 int CSTScreenBuffer::CorrectedWidth(int nWidth)
 {
-	return ( ( nWidth + 3 ) / 4 ) * 4;
+  return ((nWidth + 3) / 4) * 4;
 }
 
 // CSTScreenBuffer
 
 CSTScreenBuffer::CSTScreenBuffer()
-	: m_pBuffer(NULL),
-	  m_pBufferTmp(NULL)
+  : m_pBuffer(NULL),
+    m_pBufferTmp(NULL)
 {
 }
 
@@ -63,15 +63,16 @@ CSTScreenBuffer::~CSTScreenBuffer()
   if (m_hBitmap.defined())
     m_hBitmap.reset();
 
-	if (m_pBufferTmp) {
-	  free(m_pBufferTmp);
-	}
+  if (m_pBufferTmp) {
+    free(m_pBufferTmp);
+  }
 }
 
-BOOL CSTScreenBuffer::CreateBitmap(int nWidth, int nHeight)
+BOOL
+CSTScreenBuffer::CreateBitmap(int nWidth, int nHeight)
 {
-  assert(nWidth>0);
-  assert(nHeight>0);
+  assert(nWidth > 0);
+  assert(nHeight > 0);
 
   if (m_hBitmap.defined())
     m_hBitmap.reset();
@@ -84,31 +85,35 @@ BOOL CSTScreenBuffer::CreateBitmap(int nWidth, int nHeight)
   assert(m_hBitmap.defined());
   assert(m_pBuffer);
 
-  m_pBufferTmp = (BGRColor*)malloc(sizeof(BGRColor)*m_nHeight*m_nCorrectedWidth);
+  m_pBufferTmp = (BGRColor*)malloc(sizeof(BGRColor) *
+                                   m_nHeight * m_nCorrectedWidth);
 
   return TRUE;
 }
 
-void CSTScreenBuffer::Create(int nWidth, int nHeight, const Color clr)
+void
+CSTScreenBuffer::Create(int nWidth, int nHeight, const Color clr)
 {
-	assert(nWidth>0);
-	assert(nHeight>0);
+  assert(nWidth > 0);
+  assert(nHeight > 0);
 
-	CreateBitmap(nWidth, nHeight);
+  CreateBitmap(nWidth, nHeight);
 
-        BGRColor bgrColor = BGRColor(clr.blue(), clr.green(), clr.red());
-	int nPosition = 0;
+  BGRColor bgrColor = BGRColor(clr.blue(), clr.green(), clr.red());
+  int nPosition = 0;
 
-	for (int y=0; y<nHeight; y++) {
-		nPosition = m_nCorrectedWidth*y;
-		for (int x=0; x<nWidth; x++) {
-			m_pBuffer[nPosition] = bgrColor;
-			nPosition++;
-		}
-	}
+  for (int y = 0; y < nHeight; y++) {
+    nPosition = m_nCorrectedWidth * y;
+    for (int x = 0; x < nWidth; x++) {
+      m_pBuffer[nPosition] = bgrColor;
+      nPosition++;
+    }
+  }
 }
 
-void CSTScreenBuffer::Zoom(unsigned int step) {
+void
+CSTScreenBuffer::Zoom(unsigned int step)
+{
   BGRColor* src = m_pBuffer;
   BGRColor* dst = m_pBufferTmp;
   BGRColor* dst_start = m_pBufferTmp;
@@ -119,140 +124,137 @@ void CSTScreenBuffer::Zoom(unsigned int step) {
   const unsigned int wstep = m_nCorrectedWidth*step;
   const unsigned int stepmo = step-1;
 
-  dst_start = m_pBufferTmp+(smally-1)*wstep;
-  for (unsigned int y= smally; y--; dst_start-= wstep) {
+  dst_start = m_pBufferTmp + (smally - 1) * wstep;
+  for (unsigned int y = smally; y--; dst_start -= wstep) {
     dst = dst_start;
-    for (unsigned int x= smallx; x--; src++) {
-      for (unsigned int j= step; j--; ) {
-	*dst++ = *src;
-      }
-    }
+    for (unsigned int x = smallx; x--; src++)
+      for (unsigned int j = step; j--; )
+        *dst++ = *src;
+
     // done first row, now copy each row
-    for (unsigned int k= stepmo; k--; dst+= m_nCorrectedWidth) {
+    for (unsigned int k= stepmo; k--; dst+= m_nCorrectedWidth)
       memcpy((char*)dst, (char*)dst_start, rowsize);
-    }
   }
 
   // copy it back to main buffer
   memcpy((char*)m_pBuffer, (char*)m_pBufferTmp,
-	 rowsize*m_nHeight);
+         rowsize*m_nHeight);
 
 }
 
-
-void CSTScreenBuffer::HorizontalBlur(unsigned int boxw) {
-
-  const unsigned int muli = (boxw*2+1);
-  BGRColor* src = m_pBuffer;
-  BGRColor* dst = m_pBufferTmp;
+void
+CSTScreenBuffer::HorizontalBlur(unsigned int boxw)
+{
+  const unsigned int muli = boxw * 2 + 1;
+  BGRColor *src = m_pBuffer;
+  BGRColor *dst = m_pBufferTmp;
   BGRColor *c;
 
   const unsigned int off1 = boxw+1;
-  const unsigned int off2 = m_nCorrectedWidth-boxw-1;
-  const unsigned int right = m_nCorrectedWidth-boxw;
+  const unsigned int off2 = m_nCorrectedWidth - boxw - 1;
+  const unsigned int right = m_nCorrectedWidth - boxw;
 
-  for (unsigned int y=m_nHeight;y--; )
-    {
-      unsigned int tot_r=0;
-      unsigned int tot_g=0;
-      unsigned int tot_b=0;
-      unsigned int x;
+  for (unsigned int y = m_nHeight; y--; ) {
+    unsigned int tot_r=0;
+    unsigned int tot_g=0;
+    unsigned int tot_b=0;
+    unsigned int x;
 
-      c = src+boxw-1;
-      for (x=boxw;x--; c--) {
-        tot_r+= c->m_R;
-        tot_g+= c->m_G;
-        tot_b+= c->m_B;
-      }
-      for (x=0;x< m_nCorrectedWidth; x++)
-	{
-	  unsigned int acc = muli;
-	  if (x>boxw) {
-	    c = src-off1;
-	    tot_r-= c->m_R;
-	    tot_g-= c->m_G;
-	    tot_b-= c->m_B;
-	  }  else {
-	    acc += x-boxw;
-	  }
-	  if (x< right) {
-	    c = src+boxw;
-	    tot_r+= c->m_R;
-	    tot_g+= c->m_G;
-	    tot_b+= c->m_B;
-	  } else {
-	    acc += off2-x;
-	  }
-	  dst->m_R=(unsigned char)(tot_r/acc);
-	  dst->m_G=(unsigned char)(tot_g/acc);
-	  dst->m_B=(unsigned char)(tot_b/acc);
+    c = src + boxw - 1;
 
-	  src++;
-	  dst++;
-	}
+    for (x = boxw; x--; c--) {
+      tot_r += c->m_R;
+      tot_g += c->m_G;
+      tot_b += c->m_B;
     }
 
-  // copy it back to main buffer
-  memcpy((char*)m_pBuffer, (char*)m_pBufferTmp,
-	 m_nCorrectedWidth*m_nHeight*sizeof(BGRColor));
+    for (x = 0; x < m_nCorrectedWidth; x++) {
+      unsigned int acc = muli;
+      if (x > boxw) {
+        c = src-off1;
+        tot_r -= c->m_R;
+        tot_g -= c->m_G;
+        tot_b -= c->m_B;
+      } else
+        acc += x-boxw;
 
+      if (x < right) {
+        c = src+boxw;
+        tot_r += c->m_R;
+        tot_g += c->m_G;
+        tot_b += c->m_B;
+      } else
+        acc += off2 - x;
+
+      dst->m_R = (unsigned char)(tot_r / acc);
+      dst->m_G = (unsigned char)(tot_g / acc);
+      dst->m_B = (unsigned char)(tot_b / acc);
+
+      src++;
+      dst++;
+    }
+  }
+
+  // copy it back to main buffer
+  memcpy((char *)m_pBuffer, (char *)m_pBufferTmp,
+         m_nCorrectedWidth * m_nHeight * sizeof(BGRColor));
 }
 
-void CSTScreenBuffer::VerticalBlur(unsigned int boxh) {
-
-  BGRColor* src = m_pBuffer;
-  BGRColor* dst = m_pBufferTmp;
+void
+CSTScreenBuffer::VerticalBlur(unsigned int boxh)
+{
+  BGRColor *src = m_pBuffer;
+  BGRColor *dst = m_pBufferTmp;
   BGRColor *c, *d, *e;
 
-  const unsigned int muli = (boxh*2+1);
-  const unsigned int iboxh = m_nCorrectedWidth*boxh;
-  const unsigned int off1 = iboxh+m_nCorrectedWidth;
-  const unsigned int off2 = m_nHeight-boxh-1;
-  const unsigned int bottom = m_nHeight-boxh;
+  const unsigned int muli = (boxh * 2 + 1);
+  const unsigned int iboxh = m_nCorrectedWidth * boxh;
+  const unsigned int off1 = iboxh + m_nCorrectedWidth;
+  const unsigned int off2 = m_nHeight - boxh - 1;
+  const unsigned int bottom = m_nHeight - boxh;
 
-  for (unsigned int x= m_nCorrectedWidth; x--;)
-    {
-      unsigned int tot_r=0;
-      unsigned int tot_g=0;
-      unsigned int tot_b=0;
-      unsigned int y;
+  for (unsigned int x = m_nCorrectedWidth; x--;) {
+    unsigned int tot_r = 0;
+    unsigned int tot_g = 0;
+    unsigned int tot_b = 0;
+    unsigned int y;
 
-      c = d = src+x;
-      e = dst+x;
-      for (y=boxh;y--; c+= m_nCorrectedWidth) {
-	tot_r+= c->m_R;
-	tot_g+= c->m_G;
-	tot_b+= c->m_B;
-      }
+    c = d = src + x;
+    e = dst + x;
 
-      for (y=0;y< m_nHeight; y++) {
-	unsigned int acc = muli;
-        if (y>boxh) {
-          c = d-off1;
-          tot_r-= c->m_R;
-          tot_g-= c->m_G;
-          tot_b-= c->m_B;
-        }  else {
-          acc += y-boxh;
-        }
-        if (y< bottom) {
-          c = d+iboxh;
-          tot_r+= c->m_R;
-          tot_g+= c->m_G;
-          tot_b+= c->m_B;
-        } else {
-          acc += off2-y;
-        }
-        e->m_R=(unsigned char)(tot_r/acc);
-        e->m_G=(unsigned char)(tot_g/acc);
-        e->m_B=(unsigned char)(tot_b/acc);
-        d+= m_nCorrectedWidth;
-        e+= m_nCorrectedWidth;
-      }
+    for (y = boxh; y--; c += m_nCorrectedWidth) {
+      tot_r += c->m_R;
+      tot_g += c->m_G;
+      tot_b += c->m_B;
     }
 
-  // copy it back to main buffer
-  memcpy((char*)m_pBuffer, (char*)m_pBufferTmp,
-	 m_nCorrectedWidth*m_nHeight*sizeof(BGRColor));
+    for (y = 0; y < m_nHeight; y++) {
+      unsigned int acc = muli;
+      if (y > boxh) {
+        c = d - off1;
+        tot_r -= c->m_R;
+        tot_g -= c->m_G;
+        tot_b -= c->m_B;
+      } else
+        acc += y-boxh;
 
+      if (y < bottom) {
+        c = d + iboxh;
+        tot_r += c->m_R;
+        tot_g += c->m_G;
+        tot_b += c->m_B;
+      } else
+        acc += off2- y;
+
+      e->m_R = (unsigned char)(tot_r / acc);
+      e->m_G = (unsigned char)(tot_g / acc);
+      e->m_B = (unsigned char)(tot_b / acc);
+      d += m_nCorrectedWidth;
+      e += m_nCorrectedWidth;
+    }
+  }
+
+  // copy it back to main buffer
+  memcpy((char *)m_pBuffer, (char *)m_pBufferTmp,
+         m_nCorrectedWidth * m_nHeight * sizeof(BGRColor));
 }
