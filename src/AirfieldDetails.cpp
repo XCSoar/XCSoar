@@ -122,7 +122,7 @@ ParseAirfieldDetails(TLineReader &reader)
   bool inDetails = false;
   int i;
 
-  double filesize = std::max(reader.size(), 1l);
+  long filesize = std::max(reader.size(), 1l);
   XCSoarInterface::SetProgressDialogMaxValue(100);
 
   TCHAR *TempString;
