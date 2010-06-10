@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef AIRFIELDDETAILS_H
 #define AIRFIELDDETAILS_H
 
-void ReadAirfieldFile();
+class Waypoints;
+
+void ReadAirfieldFile(Waypoints &way_points);
 
 #endif

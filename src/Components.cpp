@@ -314,7 +314,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   WayPointGlue::ReadWaypoints(way_points, &terrain);
 
   // Read and parse the airfield info file
-  ReadAirfieldFile();
+  ReadAirfieldFile(way_points);
 
   // Set the home waypoint
   WayPointGlue::SetHome(way_points, terrain, SetSettingsComputer(),

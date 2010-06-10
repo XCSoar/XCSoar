@@ -139,7 +139,7 @@ SettingsLeave()
 
     // re-load waypoints
     WayPointGlue::ReadWaypoints(way_points, &terrain);
-    ReadAirfieldFile();
+    ReadAirfieldFile(way_points);
 
     // re-set home
     if (WaypointFileChanged || TerrainFileChanged) {

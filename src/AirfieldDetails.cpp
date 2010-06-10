@@ -50,8 +50,6 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
-extern Waypoints way_points;
-
 static bool
 check_name(const Waypoint &waypoint, const TCHAR *Name)
 {
@@ -92,7 +90,7 @@ check_name(const Waypoint &waypoint, const TCHAR *Name)
 }
 
 static void
-SetAirfieldDetails(TCHAR *Name, const tstring &Details)
+SetAirfieldDetails(Waypoints &way_points, TCHAR *Name, const tstring &Details)
 {
   CharUpper(Name); // AIR name
 
@@ -110,7 +108,7 @@ SetAirfieldDetails(TCHAR *Name, const tstring &Details)
  * Parses the data provided by the airfield details file handle
  */
 static void
-ParseAirfieldDetails(TLineReader &reader)
+ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader)
 {
   tstring Details;
   TCHAR Name[201];
@@ -127,7 +125,7 @@ ParseAirfieldDetails(TLineReader &reader)
   while ((TempString = reader.read()) != NULL) {
     if (TempString[0] == '[') { // Look for start
       if (inDetails)
-        SetAirfieldDetails(Name, Details);
+        SetAirfieldDetails(way_points, Name, Details);
 
       Details.clear();
 
@@ -156,7 +154,7 @@ ParseAirfieldDetails(TLineReader &reader)
   }
 
   if (inDetails) {
-    SetAirfieldDetails(Name, Details);
+    SetAirfieldDetails(way_points, Name, Details);
     Details.clear();
   }
 }
@@ -165,7 +163,7 @@ ParseAirfieldDetails(TLineReader &reader)
  * Opens the airfield details file and parses it
  */
 void
-ReadAirfieldFile()
+ReadAirfieldFile(Waypoints &way_points)
 {
   LogStartUp(TEXT("ReadAirfieldFile"));
   XCSoarInterface::CreateProgressDialog(
@@ -181,7 +179,7 @@ ReadAirfieldFile()
     if (reader.error())
       return;
 
-    ParseAirfieldDetails(reader);
+    ParseAirfieldDetails(way_points, reader);
   } else {
     Profile::Get(szProfileMapFile, path, MAX_PATH);
     if (string_is_empty(path))
@@ -194,6 +192,6 @@ ReadAirfieldFile()
     if (reader.error())
       return;
 
-    ParseAirfieldDetails(reader);
+    ParseAirfieldDetails(way_points, reader);
   }
 }
