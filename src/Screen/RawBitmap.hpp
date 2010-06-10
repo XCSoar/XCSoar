@@ -52,41 +52,6 @@ public:
   }
 
   /**
-   * Sets color of the given point
-   * @param nX x-Coordinate of the point
-   * @param nY y-Coordinate of the point
-   * @param R Value of the red component
-   * @param G Value of the green component
-   * @param B Value of the blue component
-   */
-  inline void SetPoint(int nX, int nY, unsigned char R,
-                       unsigned char G, unsigned char B) {
-    // m_pBuffer[m_nCorrectedWidth*(m_nHeight-nY-1)+nX] = BGRColor(R,G,B);
-    m_pBuffer[m_nCorrectedWidth * nY + nX] = BGRColor(R, G, B);
-  }
-
-  /**
-   * Sets color of the given point
-   * @param i ID of the point
-   * @param R Value of the red component
-   * @param G Value of the green component
-   * @param B Value of the blue component
-   */
-  inline void SetPoint(int i, unsigned char R,
-                       unsigned char G, unsigned char B) {
-    m_pBuffer[i] = BGRColor(R, G, B);
-  }
-
-  /**
-   * Sets color of the given point
-   * @param i ID of the point
-   * @param c Color of the Point
-   */
-  inline void SetPoint(int i, const BGRColor& c) {
-    m_pBuffer[i] = c;
-  }
-
-  /**
    * Returns the Buffer
    * @return The Buffer as BGRColor array
    */
@@ -97,17 +62,6 @@ public:
   void HorizontalBlur(unsigned int boxw);
   void VerticalBlur(unsigned int boxh);
   void Zoom(unsigned int step);
-
-  /**
-   * Returns the color of the given point
-   * @param nX
-   * @param nY
-   * @return
-   */
-  inline BGRColor GetPoint(int nX, int nY) {
-    // return m_pBuffer[m_nCorrectedWidth*(m_nHeight-nY-1)+nX];
-    return m_pBuffer[m_nCorrectedWidth * nY + nX];
-  }
 
   /**
    * Returns real width of the screen buffer. It could be slightly more then
