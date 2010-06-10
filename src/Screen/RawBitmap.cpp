@@ -47,10 +47,30 @@ int RawBitmap::CorrectedWidth(int nWidth)
   return ((nWidth + 3) / 4) * 4;
 }
 
-RawBitmap::RawBitmap()
-  : m_pBuffer(NULL),
-    m_pBufferTmp(NULL)
+RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight, const Color clr)
+  :m_nWidth(nWidth), m_nHeight(nHeight),
+   m_nCorrectedWidth(CorrectedWidth(nWidth))
 {
+  assert(nWidth > 0);
+  assert(nHeight > 0);
+
+  m_pBuffer = (BGRColor *)m_hBitmap.create(m_nCorrectedWidth, m_nHeight);
+  assert(m_hBitmap.defined());
+  assert(m_pBuffer);
+
+  m_pBufferTmp = (BGRColor*)malloc(sizeof(BGRColor) *
+                                   m_nHeight * m_nCorrectedWidth);
+
+  BGRColor bgrColor = BGRColor(clr.blue(), clr.green(), clr.red());
+  int nPosition = 0;
+
+  for (unsigned y = 0; y < nHeight; y++) {
+    nPosition = m_nCorrectedWidth * y;
+    for (unsigned x = 0; x < nWidth; x++) {
+      m_pBuffer[nPosition] = bgrColor;
+      nPosition++;
+    }
+  }
 }
 
 RawBitmap::~RawBitmap()
@@ -60,49 +80,6 @@ RawBitmap::~RawBitmap()
 
   if (m_pBufferTmp) {
     free(m_pBufferTmp);
-  }
-}
-
-BOOL
-RawBitmap::CreateBitmap(int nWidth, int nHeight)
-{
-  assert(nWidth > 0);
-  assert(nHeight > 0);
-
-  if (m_hBitmap.defined())
-    m_hBitmap.reset();
-
-  m_nCorrectedWidth = CorrectedWidth(nWidth);
-  m_nWidth = nWidth;
-  m_nHeight = nHeight;
-
-  m_pBuffer = (BGRColor *)m_hBitmap.create(m_nCorrectedWidth, m_nHeight);
-  assert(m_hBitmap.defined());
-  assert(m_pBuffer);
-
-  m_pBufferTmp = (BGRColor*)malloc(sizeof(BGRColor) *
-                                   m_nHeight * m_nCorrectedWidth);
-
-  return TRUE;
-}
-
-void
-RawBitmap::Create(int nWidth, int nHeight, const Color clr)
-{
-  assert(nWidth > 0);
-  assert(nHeight > 0);
-
-  CreateBitmap(nWidth, nHeight);
-
-  BGRColor bgrColor = BGRColor(clr.blue(), clr.green(), clr.red());
-  int nPosition = 0;
-
-  for (int y = 0; y < nHeight; y++) {
-    nPosition = m_nCorrectedWidth * y;
-    for (int x = 0; x < nWidth; x++) {
-      m_pBuffer[nPosition] = bgrColor;
-      nPosition++;
-    }
   }
 }
 

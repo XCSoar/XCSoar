@@ -37,21 +37,15 @@ class RawBitmap
 {
 public:
   /**
-   * Creates uninitialized buffer. Call Create or CreateRGB to
-   * initialize the buffer.
-   */
-  RawBitmap();
-
-  virtual ~RawBitmap();
-
-  /**
    * Creates buffer with the given size and fills it with
    * the given color
    * @param nWidth Width of the buffer
    * @param nHeight Height of the buffer
    * @param clr Fill color of the buffer
    */
-  void Create(int nWidth, int nHeight, const Color clr);
+  RawBitmap(unsigned width, unsigned height, const Color color);
+
+  virtual ~RawBitmap();
 
   const Bitmap &GetBitmap() const {
     return m_hBitmap;
@@ -149,14 +143,6 @@ public:
   static int CorrectedWidth(int nWidth);
 
 protected:
-  /**
-   * Creates internal bitmap and image buffer. Assigns width and
-   * height properties
-   * @param nWidth Width of the buffer
-   * @param nHeight Height of the buffer
-   */
-  BOOL CreateBitmap(int nWidth, int nHeight);
-
   unsigned int m_nWidth;
   unsigned int m_nHeight;
   unsigned int m_nCorrectedWidth;
