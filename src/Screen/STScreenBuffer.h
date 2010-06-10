@@ -53,19 +53,9 @@ public:
 	 */
 	void Create(int nWidth, int nHeight, const Color clr);
 
-	/**
-	 * Draws buffer into the given device context starting from
-	 * the given point (top left corner)
-	 */
-	BOOL DrawStretch(Canvas &canvas, POINT ptDest, unsigned int cx,
-                         unsigned int cy);
-
-        BitmapCanvas memDc;
-
-	/**
-	 * Draws buffer into given device context within rectangle
-	 */
-	BOOL DrawStretch(Canvas &canvas, RECT rcDest);
+  const Bitmap &GetBitmap() const {
+    return m_hBitmap;
+  }
 
 	/**
 	 * Sets color of the given point

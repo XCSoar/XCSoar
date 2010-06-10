@@ -621,7 +621,7 @@ TerrainRenderer::ColorTable()
 }
 
 void
-TerrainRenderer::Draw(Canvas &canvas, RECT rc)
+TerrainRenderer::Draw(Canvas &canvas, RECT src_rect, RECT dest_rect)
 {
   sbuf->Zoom(oversampling);
 
@@ -629,7 +629,17 @@ TerrainRenderer::Draw(Canvas &canvas, RECT rc)
     sbuf->HorizontalBlur(blursize);
     sbuf->VerticalBlur(blursize);
   }
-  sbuf->DrawStretch(canvas, rc);
+
+  BitmapCanvas bitmap_canvas(canvas);
+  bitmap_canvas.select(sbuf->GetBitmap());
+
+  canvas.stretch(dest_rect.left, dest_rect.top,
+                 dest_rect.right - dest_rect.left,
+                 dest_rect.bottom - dest_rect.top,
+                 bitmap_canvas,
+                 src_rect.left, src_rect.top,
+                 src_rect.right - src_rect.left,
+                 src_rect.bottom - src_rect.top);
 }
 
 /**
@@ -669,7 +679,7 @@ TerrainRenderer::Draw(Canvas &canvas,
   Slope(rect_quantised, sx, sy, sz);
 
   // step 5: draw
-  Draw(canvas, rect_visible);
+  Draw(canvas, rect_quantised, rect_visible);
 
   // note, not all of this really needs to be locked
   return true;

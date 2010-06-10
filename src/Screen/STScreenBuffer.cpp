@@ -66,7 +66,6 @@ CSTScreenBuffer::~CSTScreenBuffer()
 	if (m_pBufferTmp) {
 	  free(m_pBufferTmp);
 	}
-        memDc.reset();
 }
 
 BOOL CSTScreenBuffer::CreateBitmap(int nWidth, int nHeight)
@@ -107,55 +106,6 @@ void CSTScreenBuffer::Create(int nWidth, int nHeight, const Color clr)
 			nPosition++;
 		}
 	}
-}
-
-BOOL CSTScreenBuffer::DrawStretch(Canvas &canvas, RECT rcDest)
-{
-  POINT ptDest;
-  unsigned int cx;
-  unsigned int cy;
-
-  ptDest.x = rcDest.left;
-  ptDest.y = rcDest.top;
-  cx = rcDest.right-rcDest.left;
-  cy = rcDest.bottom-rcDest.top;
-  return DrawStretch(canvas, ptDest, cx, cy);
-}
-
-BOOL CSTScreenBuffer::DrawStretch(Canvas &canvas, POINT ptDest,
-                                  unsigned int cx,
-                                  unsigned int cy)
-{
-  assert(m_hBitmap.defined());
-
-  POINT Origin = {0,0};
-
-  if (!memDc.defined()) {
-    memDc.set(canvas);
-  }
-  if (!memDc.defined()) {
-    return FALSE;
-  }
-
-  memDc.select(m_hBitmap);
-
-  int cropsize;
-  if (cy < m_nWidth || Layout::landscape) {
-    cropsize = m_nHeight*cx/cy;
-  } else {
-    // NOT TESTED!
-    cropsize = m_nWidth;
-  }
-
-  canvas.stretch(ptDest.x, ptDest.y, cx, cy,
-                 memDc, Origin.x, Origin.y, cropsize, m_nHeight);
-  /*
-  BitBlt(*pDC,
-         ptDest.x, ptDest.y,
-         cx, cy, memDc, 0, 0, SRCCOPY);
-  */
-
-  return true;
 }
 
 void CSTScreenBuffer::Zoom(unsigned int step) {
