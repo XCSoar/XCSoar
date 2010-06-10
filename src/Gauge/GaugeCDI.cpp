@@ -38,7 +38,6 @@ Copyright_License {
 */
 
 #include "Gauge/GaugeCDI.hpp"
-#include "LogFile.hpp"
 #include "Math/FastMath.h"
 #include "InfoBoxLayout.hpp"
 #include "Screen/Fonts.hpp"
@@ -47,9 +46,6 @@ Copyright_License {
 
 GaugeCDI::GaugeCDI(ContainerWindow &parent)
 {
-  // start of new code for displaying CDI window
-  LogStartUp(TEXT("Create CDI"));
-
   set(parent, NULL,
       (int)(InfoBoxLayout::ControlWidth * 0.6),
       (int)(InfoBoxLayout::ControlHeight + 1),
