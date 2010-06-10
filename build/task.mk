@@ -118,7 +118,6 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/WaypointEnvelope.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoints.cpp \
-	$(ENGINE_SRC_DIR)/Waypoint/WaypointSorter.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/WaypointVisitor.cpp \
 	$(ENGINE_SRC_DIR)/Math/Angle.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \

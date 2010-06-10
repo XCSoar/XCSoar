@@ -42,7 +42,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "Math/FastMath.h"
 #include "DataField/Base.hpp"
-#include "Waypoint/WaypointSorter.hpp"
+#include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
 #include "Components.hpp"
 #include "Compiler.h"
@@ -54,6 +54,10 @@ Copyright_License {
 
 #include <assert.h>
 #include <stdlib.h>
+
+enum {
+  NAMEFILTERLEN = 10,
+};
 
 struct WayPointFilterData {
   TCHAR name[NAMEFILTERLEN + 1];
@@ -67,6 +71,30 @@ struct WayPointFilterData {
   bool defined() const {
     return !string_is_empty(name) || distance_index > 0 ||
       direction_index > 0 || type_index > 0;
+  }
+};
+
+/**
+ * Structure to hold Waypoint sorting information
+ */
+struct WayPointSelectInfo {
+  const Waypoint* way_point; /**< Pointer to actual waypoint (unprotected!) */
+  fixed Distance; /**< Distance in user units from observer to waypoint */
+  Angle Direction; /**< Bearing (deg true north) from observer to waypoint */
+};
+
+struct WaypointSelectInfoVector : public std::vector<WayPointSelectInfo> {
+  void push_back(const Waypoint &way_point, const GEOPOINT &Location) {
+    WayPointSelectInfo info;
+
+    info.way_point = &way_point;
+
+    const GeoVector vec(Location, way_point.Location);
+
+    info.Distance = vec.Distance;
+    info.Direction = vec.Bearing;
+
+    std::vector<WayPointSelectInfo>::push_back(info);
   }
 };
 
