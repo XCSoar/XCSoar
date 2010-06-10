@@ -399,6 +399,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsSystem.cpp \
+	$(SRC)/Profile.cpp \
 	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/WayPoint/WayPointGlue.cpp \
 	$(SRC)/WayPoint/WayPointFile.cpp \
@@ -413,7 +414,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeProgressDialog.cpp \
 	$(TEST_SRC_DIR)/RunMapWindow.cpp
 RUN_MAP_WINDOW_OBJS = $(call SRC_TO_OBJ,$(RUN_MAP_WINDOW_SOURCES))

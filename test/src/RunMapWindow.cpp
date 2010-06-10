@@ -90,6 +90,12 @@ void DeviceBlackboard::SetSpeed(fixed val) {}
 void
 DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const double alt) {}
 
+int
+Profile::GetScaleList(fixed *List, size_t Size)
+{
+  return 0;
+}
+
 Trigger targetManipEvent(TEXT("targetManip"));
 
 static Waypoints way_points;
