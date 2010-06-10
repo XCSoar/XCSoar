@@ -149,9 +149,6 @@ protected:
   BGRColor *m_pBuffer;
   BGRColor *m_pBufferTmp;
   Bitmap m_hBitmap;
-
-  // Members related to device context
-  HBITMAP m_hSaveBitmap;
 };
 
 #endif // !defined(AFX_STSCREENBUFFER_H__22D62F5D_32E2_4785_B3D9_2341C11F84A3__INCLUDED_)
