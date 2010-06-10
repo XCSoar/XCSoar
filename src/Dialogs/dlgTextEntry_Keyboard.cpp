@@ -126,13 +126,6 @@ OnBackspace(WindowControl * Sender)
 }
 
 static void
-OnKey(WindowControl * Sender)
-{
-  TCHAR *Caption = Sender->GetCaption();
-  DoCharacter(Caption[0]);
-}
-
-static void
 OnOk(WindowControl * Sender)
 {
   wf->SetModalResult(mrOK);
@@ -166,7 +159,6 @@ OnCharacter(TCHAR character)
 
 static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnBackspace),
-  DeclareCallBackEntry(OnKey),
   DeclareCallBackEntry(OnClear),
   DeclareCallBackEntry(OnCancel),
   DeclareCallBackEntry(OnOk),
