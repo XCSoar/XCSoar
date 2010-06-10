@@ -630,7 +630,7 @@ TerrainRenderer::Draw(Canvas &canvas, RECT src_rect, RECT dest_rect)
   }
 
   BitmapCanvas bitmap_canvas(canvas);
-  bitmap_canvas.select(sbuf->GetBitmap());
+  bitmap_canvas.select(*sbuf);
 
   canvas.stretch(dest_rect.left, dest_rect.top,
                  dest_rect.right - dest_rect.left,

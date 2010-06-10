@@ -54,8 +54,8 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight, const Color clr)
   assert(nWidth > 0);
   assert(nHeight > 0);
 
-  buffer = (BGRColor *)m_hBitmap.create(corrected_width, height);
-  assert(m_hBitmap.defined());
+  buffer = (BGRColor *)create(corrected_width, height);
+  assert(defined());
   assert(buffer);
 
   BGRColor bgrColor = BGRColor(clr.blue(), clr.green(), clr.red());
@@ -72,9 +72,6 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight, const Color clr)
 
 RawBitmap::~RawBitmap()
 {
-  if (m_hBitmap.defined())
-    m_hBitmap.reset();
-
   delete[](second_buffer);
 }
 

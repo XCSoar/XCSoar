@@ -33,13 +33,11 @@ struct BGRColor
 /**
  * This class provides fast drawing methods and offscreen buffer.
  */
-class RawBitmap
-{
+class RawBitmap : public Bitmap {
 protected:
   unsigned int width;
   unsigned int height;
   unsigned int corrected_width;
-  Bitmap m_hBitmap;
   BGRColor *buffer;
   BGRColor *second_buffer;
 
@@ -54,10 +52,6 @@ public:
   RawBitmap(unsigned width, unsigned height, const Color color);
 
   virtual ~RawBitmap();
-
-  const Bitmap &GetBitmap() const {
-    return m_hBitmap;
-  }
 
   /**
    * Returns the Buffer
