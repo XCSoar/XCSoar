@@ -64,8 +64,8 @@ BackgroundDrawHelper::~BackgroundDrawHelper()
 void
 BackgroundDrawHelper::reset()
 {
-  if (m_rend)
-    delete m_rend;
+  delete m_rend;
+  m_rend = NULL;
 }
 
 
