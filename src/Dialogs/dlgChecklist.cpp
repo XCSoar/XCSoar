@@ -88,7 +88,7 @@ NextPage(int Step)
   }
   wf->SetCaption(buffer);
 
-  wDetails->SetLength(nTextLines - 1);
+  wDetails->SetLength(nTextLines);
   wDetails->invalidate();
 }
 
@@ -213,7 +213,6 @@ LoadChecklist(void)
     // Look for start
     if (TempString[0] == '[') {
       if (inDetails) {
-        _tcscat(Details, _T("\r\n"));
         addChecklist(Name, Details);
         Details[0] = 0;
         Name[0] = 0;
@@ -238,7 +237,6 @@ LoadChecklist(void)
   }
 
   if (inDetails) {
-    _tcscat(Details, _T("\r\n"));
     addChecklist(Name, Details);
   }
 }

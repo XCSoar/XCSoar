@@ -514,7 +514,7 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   assert(wDetails != NULL);
 
   nTextLines = TextToLineOffsets(way_point.Details.c_str(), LineOffsets, MAXLINES);
-  wDetails->SetLength(nTextLines - 1);
+  wDetails->SetLength(nTextLines);
 
   /*
   TODO enhancement: wpdetails
