@@ -78,7 +78,7 @@ RawBitmap::~RawBitmap()
 void
 RawBitmap::Zoom(unsigned int step)
 {
-  BGRColor* src = buffer;
+  const BGRColor *src = buffer;
   BGRColor* dst = second_buffer;
   BGRColor* dst_start = second_buffer;
 
@@ -108,9 +108,8 @@ void
 RawBitmap::HorizontalBlur(unsigned int boxw)
 {
   const unsigned int muli = boxw * 2 + 1;
-  BGRColor *src = buffer;
+  const BGRColor *src = buffer;
   BGRColor *dst = second_buffer;
-  BGRColor *c;
 
   const unsigned int off1 = boxw+1;
   const unsigned int off2 = corrected_width - boxw - 1;
@@ -122,7 +121,7 @@ RawBitmap::HorizontalBlur(unsigned int boxw)
     unsigned int tot_b=0;
     unsigned int x;
 
-    c = src + boxw - 1;
+    const BGRColor *c = src + boxw - 1;
 
     for (x = boxw; x--; c--) {
       tot_r += c->m_R;
@@ -164,9 +163,8 @@ RawBitmap::HorizontalBlur(unsigned int boxw)
 void
 RawBitmap::VerticalBlur(unsigned int boxh)
 {
-  BGRColor *src = buffer;
+  const BGRColor *src = buffer;
   BGRColor *dst = second_buffer;
-  BGRColor *c, *d, *e;
 
   const unsigned int muli = (boxh * 2 + 1);
   const unsigned int iboxh = corrected_width * boxh;
@@ -180,8 +178,9 @@ RawBitmap::VerticalBlur(unsigned int boxh)
     unsigned int tot_b = 0;
     unsigned int y;
 
+    const BGRColor *c, *d;
     c = d = src + x;
-    e = dst + x;
+    BGRColor *e = dst + x;
 
     for (y = boxh; y--; c += corrected_width) {
       tot_r += c->m_R;
