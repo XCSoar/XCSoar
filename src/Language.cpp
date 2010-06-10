@@ -156,6 +156,35 @@ gettext(const TCHAR* text)
   return (const TCHAR*)text;
 }
 
+static void
+ReadLanguageFile(TLineReader &reader)
+{
+  TCHAR *buffer;
+  while ((GetTextData_Size < MAXSTATUSMESSAGECACHE) &&
+         (buffer = reader.read()) != NULL) {
+    if (*buffer == _T('#'))
+      continue;
+
+    TCHAR *equals = _tcschr(buffer, _T('='));
+    if (equals == NULL || equals == buffer)
+      continue;
+
+    *equals = 0;
+
+    const TCHAR *key = buffer;
+    const TCHAR *value = equals + 1;
+    if (string_is_empty(value))
+      continue;
+
+    // Save parsed translation to the cache
+    GetTextData[GetTextData_Size].key = StringMallocParse(key);
+    GetTextData[GetTextData_Size].text = StringMallocParse(value);
+
+    // Global counter
+    GetTextData_Size++;
+  }
+}
+
 /**
  * Reads the selected LanguageFile into the cache
  */
@@ -182,28 +211,5 @@ ReadLanguageFile()
     return;
 
   // Read from the file
-  TCHAR *buffer;
-  while ((GetTextData_Size < MAXSTATUSMESSAGECACHE) &&
-         (buffer = reader.read()) != NULL) {
-    if (*buffer == _T('#'))
-      continue;
-
-    TCHAR *equals = _tcschr(buffer, _T('='));
-    if (equals == NULL || equals == buffer)
-      continue;
-
-    *equals = 0;
-
-    const TCHAR *key = buffer;
-    const TCHAR *value = equals + 1;
-    if (string_is_empty(value))
-      continue;
-
-    // Save parsed translation to the cache
-    GetTextData[GetTextData_Size].key = StringMallocParse(key);
-    GetTextData[GetTextData_Size].text = StringMallocParse(value);
-
-    // Global counter
-    GetTextData_Size++;
-  }
+  ReadLanguageFile(reader);
 }
