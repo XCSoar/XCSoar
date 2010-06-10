@@ -50,6 +50,8 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "StringUtil.hpp"
 
+#include <algorithm>
+
 #include <assert.h>
 #include <stdlib.h>
 
@@ -236,6 +238,14 @@ public:
   }
 };
 
+static bool
+WaypointDistanceCompare(const struct WayPointSelectInfo &a,
+                        const struct WayPointSelectInfo &b)
+{
+  return a.Distance < b.Distance;
+}
+
+
 static void
 FillList(WaypointSelectInfoVector &dest, const Waypoints &src,
          GEOPOINT location, Angle heading, const WayPointFilterData &filter)
@@ -255,7 +265,7 @@ FillList(WaypointSelectInfoVector &dest, const Waypoints &src,
     src.visit_name_prefix(filter.name, visitor);
 
   if (filter.distance_index > 0 || filter.direction_index > 0)
-    WaypointSorter::sort_distance(dest);
+    std::sort(dest.begin(), dest.end(), WaypointDistanceCompare);
 }
 
 static void UpdateList(void)
