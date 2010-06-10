@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Form/Keyboard.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
@@ -157,6 +158,12 @@ OnClear(WindowControl * Sender)
   ClearText();
 }
 
+static void
+OnCharacter(TCHAR character)
+{
+  DoCharacter(character);
+}
+
 static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnBackspace),
   DeclareCallBackEntry(OnKey),
@@ -183,6 +190,9 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
 
   if (!wf)
     return false;
+
+  ((KeyboardControl*)wf->FindByName(_T("Keyboard")))->
+      SetOnCharacterCallback(OnCharacter);
 
   cursor = 0;
   ClearText();
