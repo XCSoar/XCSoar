@@ -35,9 +35,9 @@ struct BGRColor
  */
 class RawBitmap : public Bitmap {
 protected:
-  unsigned int width;
-  unsigned int height;
-  unsigned int corrected_width;
+  const unsigned int width;
+  const unsigned int height;
+  const unsigned int corrected_width;
   BGRColor *buffer;
   BGRColor *second_buffer;
 
@@ -71,7 +71,7 @@ public:
    * points array directly (using GetPointsArray function).
    * @return Real width of the screen buffer
    */
-  int GetCorrectedWidth() {
+  int GetCorrectedWidth() const {
     return corrected_width;
   }
 
@@ -79,7 +79,7 @@ public:
    * Returns the screen buffer width
    * @return The screen buffer width
    */
-  int GetWidth() {
+  int GetWidth() const {
     return width;
   }
 
@@ -87,7 +87,7 @@ public:
    * Returns screen buffer height
    * @return The screen buffer height
    */
-  int GetHeight() {
+  int GetHeight() const {
     return height;
   }
 
