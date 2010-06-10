@@ -82,8 +82,8 @@ check_name(const Waypoint &waypoint, const TCHAR *Name)
   if (_tcscmp(UName, tmp) == 0)
     return true;
   
-  _stprintf(tmp, TEXT("%s=HOME"), Name);
-  if (_tcscmp(UName, tmp) == 0) {
+  _stprintf(tmp, TEXT("%s=HOME"), UName);
+  if (_tcscmp(Name, tmp) == 0) {
     XCSoarInterface::SetSettingsComputer().HomeWaypoint = waypoint.id;
     return true;
   }
