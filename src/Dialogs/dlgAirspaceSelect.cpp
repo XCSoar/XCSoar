@@ -48,6 +48,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "AirspaceClientUI.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Busy.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -444,10 +445,10 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-
-void dlgAirspaceSelect(void) {
-
-  XCSoarInterface::StartHourglassCursor();
+static void
+PrepareAirspaceSelectDialog()
+{
+  gcc_unused ScopeBusyIndicator busy;
 
   UpLimit = 0;
   GEOPOINT Location = XCSoarInterface::Basic().Location;
@@ -490,8 +491,13 @@ void dlgAirspaceSelect(void) {
   UpdateList();
 
   wf->SetTimerNotify(OnTimerNotify);
+}
 
-  XCSoarInterface::StopHourglassCursor();
+void
+dlgAirspaceSelect()
+{
+  PrepareAirspaceSelectDialog();
+
   wf->ShowModal();
 
   delete wf;

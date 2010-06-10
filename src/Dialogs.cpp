@@ -54,44 +54,6 @@ Copyright_License {
 
 ProgressWindow *XCSoarInterface::progress_window = NULL;
 
-#ifndef ENABLE_SDL
-HCURSOR ActionInterface::oldCursor = NULL;
-#endif /* !ENABLE_SDL */
-
-/**
- * Activates the Hourglass animation
- */
-void
-ActionInterface::StartHourglassCursor(void)
-{
-  #ifdef ENABLE_SDL
-  // XXX
-  #else /* !ENABLE_SDL */
-  HCURSOR newc = LoadCursor(NULL, IDC_WAIT);
-  oldCursor = (HCURSOR)SetCursor(newc);
-  if (is_altair()) {
-    SetCursorPos(160,120);
-  }
-  #endif /* !ENABLE_SDL */
-}
-
-/**
- * Deactivates the Hourglass animation
- */
-void
-ActionInterface::StopHourglassCursor(void)
-{
-  #ifdef ENABLE_SDL
-  // XXX
-  #else /* !ENABLE_SDL */
-  SetCursor(oldCursor);
-  if (is_altair()) {
-    SetCursorPos(640, 480);
-  }
-  oldCursor = NULL;
-  #endif /* !ENABLE_SDL */
-}
-
 /**
  * Closes the ProgressWindow
  */

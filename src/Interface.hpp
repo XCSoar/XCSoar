@@ -158,8 +158,6 @@ public:
   static void on_key_Airspeed(int UpDown);
   static void on_key_TeamCode(int UpDown);
   static void on_key_ForecastTemperature(int UpDown);
-  static void StartHourglassCursor();
-  static void StopHourglassCursor();
   static void SignalShutdown(bool force);
   static bool LockSettingsInFlight;
   static unsigned UserLevel;

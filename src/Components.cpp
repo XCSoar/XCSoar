@@ -69,6 +69,7 @@ Copyright_License {
 #include "Topology/Topology.hpp"
 #include "Audio/VarioSound.h"
 #include "Screen/Graphics.hpp"
+#include "Screen/Busy.hpp"
 #include "Polar/Loader.hpp"
 #include "Persist.hpp"
 #include "MainWindow.hpp"
@@ -80,6 +81,7 @@ Copyright_License {
 #include "CalculationThread.hpp"
 #include "InstrumentThread.hpp"
 #include "ReplayLoggerGlue.hpp"
+#include "Compiler.h"
 
 #include "Waypoint/Waypoints.hpp"
 #include "WayPoint/WayPointGlue.hpp"
@@ -418,9 +420,10 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 void
 XCSoarInterface::Shutdown(void)
 {
+  gcc_unused ScopeBusyIndicator busy;
+
   // Show progress dialog
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
-  StartHourglassCursor();
 
   // Log shutdown information
   LogStartUp(TEXT("Entering shutdown..."));
@@ -514,7 +517,6 @@ XCSoarInterface::Shutdown(void)
   if (is_altair()) {
     LogStartUp(TEXT("Altair shutdown"));
     Sleep(2500);
-    StopHourglassCursor();
     InputEvents::eventDLLExecute(TEXT("altairplatform.dll SetShutdown 1"));
     while (true)
       Sleep(100); // free time up for processor to perform shutdown
@@ -555,5 +557,4 @@ XCSoarInterface::Shutdown(void)
   StartupLogFreeRamAndStorage();
 
   LogStartUp(TEXT("Finished shutdown"));
-  StopHourglassCursor();
 }

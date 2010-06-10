@@ -52,6 +52,7 @@ Copyright_License {
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
 #include "Screen/Animation.hpp"
+#include "Screen/Busy.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
@@ -2111,10 +2112,12 @@ FinishDeviceFields(DeviceConfig &config, int &driver_index,
   return changed;
 }
 
-void dlgConfigurationShowModal(void){
+static void
+PrepareConfigurationDialog()
+{
+  gcc_unused ScopeBusyIndicator busy;
 
   WndProperty *wp;
-  XCSoarInterface::StartHourglassCursor();
 
   if (Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
@@ -2128,10 +2131,8 @@ void dlgConfigurationShowModal(void){
                         _T("IDR_XML_CONFIGURATION"));
   }
 
-  if (!wf) {
-    XCSoarInterface::StopHourglassCursor();
+  if (wf == NULL)
     return;
-  }
 
   wf->SetKeyDownNotify(FormKeyDown);
 
@@ -2169,8 +2170,12 @@ void dlgConfigurationShowModal(void){
   requirerestart = false;
   utcchanged = false;
   waypointneedsave = false;
+}
 
-  XCSoarInterface::StopHourglassCursor();
+void dlgConfigurationShowModal(void)
+{
+  PrepareConfigurationDialog();
+
   wf->ShowModal();
 
   /* save page number for next time this dialog is opened */
@@ -2183,6 +2188,7 @@ void dlgConfigurationShowModal(void){
                                       szProfileAbortSafetyUseCurrent,
                                       XCSoarInterface::SetSettingsComputer().safety_mc_use_current);
 
+  WndProperty *wp;
   wp = (WndProperty*)wf->FindByName(TEXT("prpDisableAutoLogger"));
   if (wp) { // GUI label is "Enable Auto Logger"
     if (!XCSoarInterface::SetSettingsComputer().DisableAutoLogger
