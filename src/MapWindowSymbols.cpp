@@ -665,11 +665,10 @@ void MapWindow::DrawCDI() {
   if (Calculated().Circling ?
       !SettingsMap().EnableCDICircling :
       !SettingsMap().EnableCDICruise) {
-    cdi->hide();
+    cdi->hide_async();
     return;
   }
 
-  cdi->show_on_top();
-  cdi->Update(Basic().TrackBearing,
-              Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing);
+  cdi->update_async(Basic().TrackBearing,
+                    Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing);
 }

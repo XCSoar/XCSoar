@@ -128,7 +128,9 @@ InputEvents::mode InputEvents::getModeID() { return MODE_DEFAULT; }
 void InputEvents::sub_ScaleZoom(int vswitch) {}
 
 GaugeCDI::GaugeCDI(ContainerWindow &parent) {}
-void GaugeCDI::Update(Angle TrackBearing, Angle WaypointBearing) {}
+void GaugeCDI::update_async(Angle TrackBearing, Angle WaypointBearing) {}
+void GaugeCDI::hide_async() {}
+bool GaugeCDI::on_user(unsigned id) { return true; }
 
 int
 propGetScaleList(fixed *List, size_t Size)

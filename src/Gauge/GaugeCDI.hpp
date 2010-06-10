@@ -43,10 +43,23 @@ Copyright_License {
 #include "Math/Angle.hpp"
 
 class GaugeCDI : public TextWindow {
+  enum msg {
+    MSG_UPDATE,
+    MSG_HIDE,
+  };
+
+  Angle track_bearing, waypoint_bearing;
+
  public:
   GaugeCDI(ContainerWindow &parent);
 
   void Update(Angle TrackBearing, Angle WaypointBearing);
+
+  void update_async(Angle TrackBearing, Angle WaypointBearing);
+  void hide_async();
+
+protected:
+  virtual bool on_user(unsigned id);
 };
 
 #endif

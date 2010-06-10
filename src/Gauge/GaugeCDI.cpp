@@ -45,6 +45,8 @@ Copyright_License {
 #include <tchar.h>
 
 GaugeCDI::GaugeCDI(ContainerWindow &parent)
+  :track_bearing(Angle::radians(fixed_zero)),
+   waypoint_bearing(Angle::radians(fixed_zero))
 {
   TextWindowStyle style;
   style.hide();
@@ -98,5 +100,37 @@ void GaugeCDI::Update(Angle TrackBearing, Angle WaypointBearing)
   }
 
   set_text(CDIDisplay);
-  // end of new code to display CDI scale
+  show_on_top();
+}
+
+void
+GaugeCDI::update_async(Angle TrackBearing, Angle WaypointBearing)
+{
+  track_bearing = TrackBearing;
+  waypoint_bearing = WaypointBearing;
+
+  /* do the real work asynchronously in the main thread */
+  send_user(MSG_UPDATE);
+}
+
+void
+GaugeCDI::hide_async()
+{
+  send_user(MSG_HIDE);
+}
+
+bool
+GaugeCDI::on_user(unsigned id)
+{
+  switch ((msg)id) {
+  case MSG_UPDATE:
+    update_async(track_bearing, waypoint_bearing);
+    return true;
+
+  case MSG_HIDE:
+    show();
+    return true;
+  }
+
+  return TextWindow::on_user(id);
 }
