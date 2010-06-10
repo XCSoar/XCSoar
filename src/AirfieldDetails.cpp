@@ -112,12 +112,10 @@ SetAirfieldDetails(TCHAR *Name, const tstring &Details)
 static void
 ParseAirfieldDetails(TLineReader &reader)
 {
-  TCHAR CleanString[READLINE_LENGTH + 1];
   tstring Details;
   TCHAR Name[201];
 
   Name[0] = 0;
-  CleanString[0] = 0;
 
   bool inDetails = false;
   int i;
