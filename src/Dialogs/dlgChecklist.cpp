@@ -231,7 +231,7 @@ LoadChecklist(void)
     } else {
       // append text to details string
       _tcsncat(Details, TempString, MAXDETAILS - 2);
-      _tcscat(Details, _T("\r\n"));
+      _tcscat(Details, _T("\n"));
       // TODO code: check the string is not too long
     }
   }
