@@ -59,15 +59,10 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight, const Color clr)
   assert(buffer);
 
   BGRColor bgrColor = BGRColor(clr.blue(), clr.green(), clr.red());
-  int nPosition = 0;
-
-  for (unsigned y = 0; y < nHeight; y++) {
-    nPosition = corrected_width * y;
-    for (unsigned x = 0; x < nWidth; x++) {
-      buffer[nPosition] = bgrColor;
-      nPosition++;
-    }
-  }
+  for (BGRColor *p = buffer,
+         *end = buffer + corrected_width * height;
+       p < end; ++p)
+    *p++ = bgrColor;
 }
 
 RawBitmap::~RawBitmap()
