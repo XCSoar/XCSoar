@@ -68,7 +68,8 @@ Window::assert_thread() const
 {
 #ifdef WIN32
   assert(hWnd != NULL);
-  assert(GetWindowThreadProcessId(hWnd, NULL) == GetCurrentThreadId());
+  assert(!::IsWindow(hWnd) ||
+         ::GetWindowThreadProcessId(hWnd, NULL) == ::GetCurrentThreadId());
 #endif
 }
 
