@@ -92,6 +92,54 @@ PolarWinPilot2XCSoar(class Polar &polar,
   polar.WingArea = 0.0;
 }
 
+static bool
+ReadWinPilotPolar(Polar &polar, const TCHAR *line)
+{
+  if (line[0] == _T('*'))
+    /* a comment */
+    return false;
+
+  TCHAR ctemp[80];
+  double POLARV[3];
+  double POLARW[3];
+  double ww[2];
+
+  PExtractParameter(line, ctemp, 0);
+  ww[0] = _tcstod(ctemp, NULL);
+
+  PExtractParameter(line, ctemp, 1);
+  ww[1] = _tcstod(ctemp, NULL);
+
+  PExtractParameter(line, ctemp, 2);
+  POLARV[0] = _tcstod(ctemp, NULL);
+  PExtractParameter(line, ctemp, 3);
+  POLARW[0] = _tcstod(ctemp, NULL);
+
+  PExtractParameter(line, ctemp, 4);
+  POLARV[1] = _tcstod(ctemp, NULL);
+  PExtractParameter(line, ctemp, 5);
+  POLARW[1] = _tcstod(ctemp, NULL);
+
+  PExtractParameter(line, ctemp, 6);
+  POLARV[2] = _tcstod(ctemp, NULL);
+  PExtractParameter(line, ctemp, 7);
+  POLARW[2] = _tcstod(ctemp, NULL);
+
+  PolarWinPilot2XCSoar(polar, POLARV, POLARW, ww);
+  return true;
+}
+
+static bool
+ReadWinPilotPolar(Polar &polar, TLineReader &reader)
+{
+  const TCHAR *line;
+  while ((line = reader.read()) != NULL)
+    if (ReadWinPilotPolar(polar, line))
+      return true;
+
+  return false;
+}
+
 // Example:
 // *LS-3  WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
 // 403, 101, 115.03, -0.86, 174.04, -1.76, 212.72,  -3.4
@@ -103,20 +151,6 @@ bool
 ReadWinPilotPolar(Polar &polar)
 {
   TCHAR szFile[MAX_PATH];
-  TCHAR ctemp[80];
-
-  double POLARV[3];
-  double POLARW[3];
-  double ww[2];
-
-  ww[0]= 403.0; // 383
-  ww[1]= 101.0; // 121
-  POLARV[0]= 115.03;
-  POLARW[0]= -0.86;
-  POLARV[1]= 174.04;
-  POLARW[1]= -1.76;
-  POLARV[2]= 212.72;
-  POLARW[2]= -3.4;
 
   Profile::Get(szProfilePolarFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
@@ -125,35 +159,5 @@ ReadWinPilotPolar(Polar &polar)
   if (reader.error())
     return false;
 
-  const TCHAR *line;
-  while ((line = reader.read()) != NULL) {
-    if (line[0] != _T('*')) { /* not a comment */
-      PExtractParameter(line, ctemp, 0);
-      ww[0] = _tcstod(ctemp, NULL);
-
-      PExtractParameter(line, ctemp, 1);
-      ww[1] = _tcstod(ctemp, NULL);
-
-      PExtractParameter(line, ctemp, 2);
-      POLARV[0] = _tcstod(ctemp, NULL);
-      PExtractParameter(line, ctemp, 3);
-      POLARW[0] = _tcstod(ctemp, NULL);
-
-      PExtractParameter(line, ctemp, 4);
-      POLARV[1] = _tcstod(ctemp, NULL);
-      PExtractParameter(line, ctemp, 5);
-      POLARW[1] = _tcstod(ctemp, NULL);
-
-      PExtractParameter(line, ctemp, 6);
-      POLARV[2] = _tcstod(ctemp, NULL);
-      PExtractParameter(line, ctemp, 7);
-      POLARW[2] = _tcstod(ctemp, NULL);
-
-      PolarWinPilot2XCSoar(polar, POLARV, POLARW, ww);
-
-      return true;
-    }
-  }
-
-  return false;
+  return ReadWinPilotPolar(polar, reader);
 }
