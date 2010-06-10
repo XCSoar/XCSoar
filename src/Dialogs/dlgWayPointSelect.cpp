@@ -234,7 +234,7 @@ public:
     if (compare_type(wp, type_index) &&
         (filter_data.distance_index == 0 || compare_name(wp, name)) &&
         compare_direction(wp, direction_index, location, heading))
-      vector.push_back(wp, location, fixed_one);
+      vector.push_back(wp, location);
   }
 };
 

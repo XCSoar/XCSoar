@@ -17,8 +17,7 @@ struct WayPointSelectInfo {
 
 class WaypointSelectInfoVector : public std::vector<WayPointSelectInfo> {
 public:
-  void push_back(const Waypoint &way_point, const GEOPOINT &Location,
-                 const fixed distance_factor);
+  void push_back(const Waypoint &way_point, const GEOPOINT &Location);
 };
 
 #endif

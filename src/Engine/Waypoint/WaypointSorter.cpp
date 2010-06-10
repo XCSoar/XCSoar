@@ -5,8 +5,7 @@
 
 void
 WaypointSelectInfoVector::push_back(const Waypoint &way_point,
-                                    const GEOPOINT &Location,
-                                    const fixed distance_factor)
+                                    const GEOPOINT &Location)
 {
   WayPointSelectInfo info;
 
@@ -14,7 +13,7 @@ WaypointSelectInfoVector::push_back(const Waypoint &way_point,
 
   const GeoVector vec(Location, way_point.Location);
 
-  info.Distance = vec.Distance*distance_factor;
+  info.Distance = vec.Distance;
   info.Direction = vec.Bearing;
 
   std::vector<WayPointSelectInfo>::push_back(info);
