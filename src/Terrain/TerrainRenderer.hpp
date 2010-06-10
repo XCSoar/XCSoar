@@ -45,7 +45,7 @@ Copyright_License {
 
 #define NUM_COLOR_RAMP_LEVELS 13
 
-class CSTScreenBuffer;
+class RawBitmap;
 class Canvas;
 class BGRColor;
 class RasterMap;
@@ -90,7 +90,7 @@ private:
   // step size used for slope calculations
   unsigned int quantisation_effective;
 
-  CSTScreenBuffer *sbuf;
+  RawBitmap *sbuf;
 
   fixed pixelsize_d;
 

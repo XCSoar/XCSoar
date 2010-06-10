@@ -4,7 +4,7 @@ SCREEN_SRC_DIR = $(SRC)/Screen
 
 SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/ButtonWindow.cpp \
-	$(SCREEN_SRC_DIR)/STScreenBuffer.cpp \
+	$(SCREEN_SRC_DIR)/RawBitmap.cpp \
 	$(SCREEN_SRC_DIR)/Util.cpp \
 	$(SCREEN_SRC_DIR)/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/Icon.cpp \

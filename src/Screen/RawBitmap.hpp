@@ -8,8 +8,8 @@
  * @version 2.0
  */
 
-#if !defined(AFX_STSCREENBUFFER_H__22D62F5D_32E2_4785_B3D9_2341C11F84A3__INCLUDED_)
-#define AFX_STSCREENBUFFER_H__22D62F5D_32E2_4785_B3D9_2341C11F84A3__INCLUDED_
+#ifndef XCSOAR_SCREEN_RAW_BITMAP_HPP
+#define XCSOAR_SCREEN_RAW_BITMAP_HPP
 
 #include <windows.h>
 
@@ -33,16 +33,16 @@ struct BGRColor
 /**
  * This class provides fast drawing methods and offscreen buffer.
  */
-class CSTScreenBuffer
+class RawBitmap
 {
 public:
   /**
    * Creates uninitialized buffer. Call Create or CreateRGB to
    * initialize the buffer.
    */
-  CSTScreenBuffer();
+  RawBitmap();
 
-  virtual ~CSTScreenBuffer();
+  virtual ~RawBitmap();
 
   /**
    * Creates buffer with the given size and fills it with

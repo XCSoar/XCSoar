@@ -1,4 +1,3 @@
-
 /*
 Copyright_License {
 
@@ -37,28 +36,24 @@ Copyright_License {
 }
 */
 
-#include "Screen/STScreenBuffer.h"
+#include "Screen/RawBitmap.hpp"
 #include "Screen/Layout.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
 
-// Construction/Destruction
-
-int CSTScreenBuffer::CorrectedWidth(int nWidth)
+int RawBitmap::CorrectedWidth(int nWidth)
 {
   return ((nWidth + 3) / 4) * 4;
 }
 
-// CSTScreenBuffer
-
-CSTScreenBuffer::CSTScreenBuffer()
+RawBitmap::RawBitmap()
   : m_pBuffer(NULL),
     m_pBufferTmp(NULL)
 {
 }
 
-CSTScreenBuffer::~CSTScreenBuffer()
+RawBitmap::~RawBitmap()
 {
   if (m_hBitmap.defined())
     m_hBitmap.reset();
@@ -69,7 +64,7 @@ CSTScreenBuffer::~CSTScreenBuffer()
 }
 
 BOOL
-CSTScreenBuffer::CreateBitmap(int nWidth, int nHeight)
+RawBitmap::CreateBitmap(int nWidth, int nHeight)
 {
   assert(nWidth > 0);
   assert(nHeight > 0);
@@ -92,7 +87,7 @@ CSTScreenBuffer::CreateBitmap(int nWidth, int nHeight)
 }
 
 void
-CSTScreenBuffer::Create(int nWidth, int nHeight, const Color clr)
+RawBitmap::Create(int nWidth, int nHeight, const Color clr)
 {
   assert(nWidth > 0);
   assert(nHeight > 0);
@@ -112,7 +107,7 @@ CSTScreenBuffer::Create(int nWidth, int nHeight, const Color clr)
 }
 
 void
-CSTScreenBuffer::Zoom(unsigned int step)
+RawBitmap::Zoom(unsigned int step)
 {
   BGRColor* src = m_pBuffer;
   BGRColor* dst = m_pBufferTmp;
@@ -143,7 +138,7 @@ CSTScreenBuffer::Zoom(unsigned int step)
 }
 
 void
-CSTScreenBuffer::HorizontalBlur(unsigned int boxw)
+RawBitmap::HorizontalBlur(unsigned int boxw)
 {
   const unsigned int muli = boxw * 2 + 1;
   BGRColor *src = m_pBuffer;
@@ -201,7 +196,7 @@ CSTScreenBuffer::HorizontalBlur(unsigned int boxw)
 }
 
 void
-CSTScreenBuffer::VerticalBlur(unsigned int boxh)
+RawBitmap::VerticalBlur(unsigned int boxh)
 {
   BGRColor *src = m_pBuffer;
   BGRColor *dst = m_pBufferTmp;

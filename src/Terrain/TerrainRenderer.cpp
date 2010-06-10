@@ -39,7 +39,7 @@ Copyright_License {
 #include "Terrain/TerrainRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterMap.hpp"
-#include "Screen/STScreenBuffer.h"
+#include "Screen/RawBitmap.hpp"
 #include "Dialogs.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
@@ -254,7 +254,7 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
   const int res_y = 
     iround((rc.bottom - rc.top) * oversampling / quantisation_pixels);
 
-  sbuf = new CSTScreenBuffer();
+  sbuf = new RawBitmap();
   sbuf->Create(res_x, res_y, Color::WHITE);
   width_sub = sbuf->GetCorrectedWidth() / oversampling;
   height_sub = sbuf->GetHeight() / oversampling;
