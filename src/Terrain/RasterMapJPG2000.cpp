@@ -132,7 +132,7 @@ void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
 
 void RasterMapJPG2000::_SetViewCenter(const GEOPOINT &location)
 {
-  int x, y;
+  int x = 0, y = 0; /* initalize to work around bogus gcc warning */
   bool do_poll = false;
   if (raster_tile_cache.GetInitialised()) {
     do_poll = true;
