@@ -61,6 +61,7 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Form/Tabbed.hpp"
 #include "Form/Panel.hpp"
+#include "Form/Keyboard.hpp"
 #include "StringUtil.hpp"
 
 #include <stdio.h>    // for _stprintf
@@ -776,12 +777,25 @@ LoadChild(WndForm &form, ContainerControl *Parent,
 
     style.control_parent();
 
-    PanelControl *frame = new PanelControl(Parent,
-                                           X, Y, Width, Height, style);
+    PanelControl *frame = new PanelControl(Parent, X, Y, Width, Height, style);
+
     WC = frame;
 
     // Load children controls from the XMLNode
     LoadChildrenFromXML(form, frame, LookUpTable, &node,
+                        Font, eDialogStyle);
+
+  // KeyboardControl
+  } else if (_tcscmp(node.getName(), _T("Keyboard")) == 0) {
+    style.control_parent();
+
+    // Create the KeyboardControl
+    KeyboardControl *kb = new KeyboardControl(form, Parent, X, Y, Width, Height,
+        FontMap[Font], style);
+    WC = kb;
+
+    // Load children controls from the XMLNode
+    LoadChildrenFromXML(form, kb, LookUpTable, &node,
                         ParentFont, eDialogStyle);
 
   // DrawControl (WndOwnerDrawFrame)
