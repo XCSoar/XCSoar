@@ -444,18 +444,11 @@ PaintWaypoint(Canvas &canvas, const RECT rc,
 static void
 OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  TCHAR sTmp[12];
-
   if (i < UpLimit)
     PaintWaypoint(canvas, rc, WayPointSelectInfo[i]);
-  else {
-    if (i == 0){
-      _stprintf(sTmp, _T("%s"), gettext(_T("No Match!")));
-      canvas.text(rc.left + Layout::FastScale(2),
-                  rc.top + Layout::FastScale(2), sTmp);
-    }
-  }
-
+  else if (i == 0)
+    canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
+                gettext(_T("No Match!")));
 }
 static void
 OnWPSSelectClicked(gcc_unused WndButton &button){
