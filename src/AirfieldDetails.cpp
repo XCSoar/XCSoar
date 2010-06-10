@@ -50,58 +50,45 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
-static bool
-check_name(const Waypoint &waypoint, const TCHAR *Name)
+static const Waypoint *
+find_waypoint(Waypoints &way_points, const TCHAR *name)
 {
-  // TODO: detect and warn on multiple matches!
-  
-  TCHAR UName[100];
-  _tcscpy(UName, waypoint.Name.c_str());
-  CharUpper(UName); // WP name
+  const Waypoint *wp = way_points.lookup_name(name);
+  if (wp != NULL)
+    return wp;
 
-  if (_tcscmp(UName, Name) == 0)
-    return true;
+  size_t name_length = _tcslen(name);
+  TCHAR buffer[name_length + 4];
+  _tcscpy(buffer, name);
+  _tcscpy(buffer + name_length, _T(" AF"));
+  wp = way_points.lookup_name(buffer);
+  if (wp != NULL)
+    return wp;
 
-  TCHAR tmp[100];
+  _tcscpy(buffer + name_length, _T(" AD"));
+  wp = way_points.lookup_name(buffer);
+  if (wp != NULL)
+    return wp;
 
-  _stprintf(tmp, TEXT("%s A/F"), Name);
-  if (_tcscmp(UName, tmp) == 0)
-    return true;
-  
-  _stprintf(tmp, TEXT("%s AF"), Name);
-  if (_tcscmp(UName, tmp) == 0)
-    return true;
-  
-  _stprintf(tmp, TEXT("%s A/D"), Name);
-  if (_tcscmp(UName, tmp) == 0)
-    return true;
-  
-  _stprintf(tmp, TEXT("%s AD"), Name);
-  if (_tcscmp(UName, tmp) == 0)
-    return true;
-  
-  _stprintf(tmp, TEXT("%s=HOME"), UName);
-  if (_tcscmp(Name, tmp) == 0) {
-    XCSoarInterface::SetSettingsComputer().HomeWaypoint = waypoint.id;
-    return true;
+  if (name_length > 5 && _tcscmp(name + name_length - 5, _T("=HOME")) == 0) {
+    buffer[name_length - 5] = _T('\0');
+    wp = way_points.lookup_name(buffer);
+    if (wp != NULL) {
+      XCSoarInterface::SetSettingsComputer().HomeWaypoint = wp->id;
+      return wp;
+    }
   }
 
-  return false;
+  return NULL;
 }
 
 static void
-SetAirfieldDetails(Waypoints &way_points, TCHAR *Name, const tstring &Details)
+SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
+                   const tstring &Details)
 {
-  CharUpper(Name); // AIR name
-
-  for (Waypoints::WaypointTree::const_iterator it = way_points.begin();
-      it != way_points.end(); ++it) {
-    if (it->get_waypoint().is_landable()
-        && check_name(it->get_waypoint(), Name)) {
-      way_points.set_details(it->get_waypoint(), Details);
-      return;
-    }
-  }
+  const Waypoint *wp = find_waypoint(way_points, name);
+  if (wp != NULL)
+    way_points.set_details(*wp, Details);
 }
 
 /**
