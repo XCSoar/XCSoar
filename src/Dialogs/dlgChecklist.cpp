@@ -108,14 +108,8 @@ OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
     nlen = LineOffsets[i + 1] - LineOffsets[i] - 1;
     nlen--;
   } else {
-    nlen = _tcslen(text + nstart);
+    nlen = _tcslen(text + nstart) - 1;
   }
-
-  while (_tcscmp(text + nstart + nlen - 1, _T("\r")) == 0)
-    nlen--;
-
-  while (_tcscmp(text + nstart + nlen - 1, _T("\n")) == 0)
-    nlen--;
 
   if (nlen > 0)
     canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
