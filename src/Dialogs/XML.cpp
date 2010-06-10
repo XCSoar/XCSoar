@@ -622,7 +622,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
                                &Font, Caption, eDialogStyle);
 
   // Determine the control's font (default = parent's font)
-  Font = StringToIntDflt(node.getAttribute(_T("Font")), ParentFont);
+  Font = std::min(StringToIntDflt(node.getAttribute(_T("Font")), ParentFont), 4l);
 
   WindowStyle style;
 
