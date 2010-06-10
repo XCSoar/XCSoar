@@ -46,14 +46,16 @@ Copyright_License {
 
 GaugeCDI::GaugeCDI(ContainerWindow &parent)
 {
+  TextWindowStyle style;
+  style.hide();
+
   set(parent, NULL,
       (int)(InfoBoxLayout::ControlWidth * 0.6),
       (int)(InfoBoxLayout::ControlHeight + 1),
       (int)(InfoBoxLayout::ControlWidth * 2.8),
-      (int)(InfoBoxLayout::TitleHeight * 1.4));
+      (int)(InfoBoxLayout::TitleHeight * 1.4),
+      style);
   set_font(CDIWindowFont);
-
-  hide();
 }
 
 void GaugeCDI::Update(Angle TrackBearing, Angle WaypointBearing)
