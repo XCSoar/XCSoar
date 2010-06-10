@@ -144,14 +144,7 @@ ParseAirfieldDetails(TLineReader &reader)
 
       inDetails = true;
 
-      unsigned status = reader.tell() * 100 / filesize;
-      XCSoarInterface::SetProgressDialogValue(status);
-
-      TCHAR status_text[100];
-      _stprintf(status_text,
-                TEXT("Loading Airfield Details File... %u %%"),
-                status);
-      XCSoarInterface::SetProgressDialogText(status_text);
+      XCSoarInterface::SetProgressDialogValue(reader.tell() * 100 / filesize);
     } else {
       // append text to details string
       if (!string_is_empty(TempString)) {
