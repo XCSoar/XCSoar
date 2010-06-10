@@ -22,49 +22,4 @@ public:
                  const fixed distance_factor);
 };
 
-/**
- * Utility class to manage sorting of waypoints (e.g. for dlgWayPointSelect)
- * Note that distance queries do not yet make use of the kdtree, but this system
- * keeps a local master list so won't need to lock the waypoints for long.
- */
-
-class WaypointSorter
-{
-public:
-/** 
- * Constructor.  Sorts master list of waypoints by name 
- * 
- * @param _waypoints Waypoints store
- * @param Location Location of aircraft at time of query
- * @param distance_factor Units factor to apply to distance calculations
- */
-  WaypointSorter(const Waypoints &_waypoints, 
-                 const GEOPOINT &Location,
-                 const fixed distance_factor);
-
-/** 
- * Return master list
- * 
- * @return Master list
- */
-  const WaypointSelectInfoVector& get_list();
-
-/** 
- * Sort waypoints by distance
- * 
- * @param vec List of waypoints to sort (read-write)
- */
-  static void sort_distance(WaypointSelectInfoVector& vec);
-
-/** 
- * Sort waypoints alphabetically
- * 
- * @param vec List of waypoints to sort (read-write)
- */
-  static void sort_name(WaypointSelectInfoVector& vec);
-
-private:
-  WaypointSelectInfoVector m_waypoints_all;
-};
-
 #endif
