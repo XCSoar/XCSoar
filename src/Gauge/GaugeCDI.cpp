@@ -48,6 +48,7 @@ GaugeCDI::GaugeCDI(ContainerWindow &parent)
 {
   TextWindowStyle style;
   style.hide();
+  style.disable();
 
   set(parent, NULL,
       (int)(InfoBoxLayout::ControlWidth * 0.6),
