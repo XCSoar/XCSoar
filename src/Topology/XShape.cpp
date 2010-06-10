@@ -42,6 +42,7 @@ Copyright_License {
 #include "Units.hpp"
 
 #include <tchar.h>
+#include <ctype.h>
 #include <string.h>
 #include <stdio.h>
 
