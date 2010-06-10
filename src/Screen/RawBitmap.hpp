@@ -35,6 +35,14 @@ struct BGRColor
  */
 class RawBitmap
 {
+protected:
+  unsigned int width;
+  unsigned int height;
+  unsigned int corrected_width;
+  Bitmap m_hBitmap;
+  BGRColor *buffer;
+  BGRColor *second_buffer;
+
 public:
   /**
    * Creates buffer with the given size and fills it with
@@ -56,7 +64,7 @@ public:
    * @return The Buffer as BGRColor array
    */
   BGRColor *GetBuffer(void) {
-    return m_pBuffer;
+    return buffer;
   }
 
   void HorizontalBlur(unsigned int boxw);
@@ -70,7 +78,7 @@ public:
    * @return Real width of the screen buffer
    */
   int GetCorrectedWidth() {
-    return m_nCorrectedWidth;
+    return corrected_width;
   }
 
   /**
@@ -78,7 +86,7 @@ public:
    * @return The screen buffer width
    */
   int GetWidth() {
-    return m_nWidth;
+    return width;
   }
 
   /**
@@ -86,7 +94,7 @@ public:
    * @return The screen buffer height
    */
   int GetHeight() {
-    return m_nHeight;
+    return height;
   }
 
 public:
@@ -95,14 +103,6 @@ public:
    * that is acceptable as image width (not all numbers are acceptable)
    */
   static int CorrectedWidth(int nWidth);
-
-protected:
-  unsigned int m_nWidth;
-  unsigned int m_nHeight;
-  unsigned int m_nCorrectedWidth;
-  BGRColor *m_pBuffer;
-  BGRColor *m_pBufferTmp;
-  Bitmap m_hBitmap;
 };
 
 #endif // !defined(AFX_STSCREENBUFFER_H__22D62F5D_32E2_4785_B3D9_2341C11F84A3__INCLUDED_)

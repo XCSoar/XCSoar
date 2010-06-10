@@ -48,26 +48,26 @@ int RawBitmap::CorrectedWidth(int nWidth)
 }
 
 RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight, const Color clr)
-  :m_nWidth(nWidth), m_nHeight(nHeight),
-   m_nCorrectedWidth(CorrectedWidth(nWidth))
+  :width(nWidth), height(nHeight),
+   corrected_width(CorrectedWidth(nWidth))
 {
   assert(nWidth > 0);
   assert(nHeight > 0);
 
-  m_pBuffer = (BGRColor *)m_hBitmap.create(m_nCorrectedWidth, m_nHeight);
+  buffer = (BGRColor *)m_hBitmap.create(corrected_width, height);
   assert(m_hBitmap.defined());
-  assert(m_pBuffer);
+  assert(buffer);
 
-  m_pBufferTmp = (BGRColor*)malloc(sizeof(BGRColor) *
-                                   m_nHeight * m_nCorrectedWidth);
+  second_buffer = (BGRColor*)malloc(sizeof(BGRColor) *
+                                    height * corrected_width);
 
   BGRColor bgrColor = BGRColor(clr.blue(), clr.green(), clr.red());
   int nPosition = 0;
 
   for (unsigned y = 0; y < nHeight; y++) {
-    nPosition = m_nCorrectedWidth * y;
+    nPosition = corrected_width * y;
     for (unsigned x = 0; x < nWidth; x++) {
-      m_pBuffer[nPosition] = bgrColor;
+      buffer[nPosition] = bgrColor;
       nPosition++;
     }
   }
@@ -78,25 +78,25 @@ RawBitmap::~RawBitmap()
   if (m_hBitmap.defined())
     m_hBitmap.reset();
 
-  if (m_pBufferTmp) {
-    free(m_pBufferTmp);
+  if (second_buffer) {
+    free(second_buffer);
   }
 }
 
 void
 RawBitmap::Zoom(unsigned int step)
 {
-  BGRColor* src = m_pBuffer;
-  BGRColor* dst = m_pBufferTmp;
-  BGRColor* dst_start = m_pBufferTmp;
+  BGRColor* src = buffer;
+  BGRColor* dst = second_buffer;
+  BGRColor* dst_start = second_buffer;
 
-  const unsigned int smallx = m_nCorrectedWidth/step;
-  const unsigned int smally = m_nHeight/step;
-  const unsigned int rowsize = m_nCorrectedWidth*sizeof(BGRColor);
-  const unsigned int wstep = m_nCorrectedWidth*step;
+  const unsigned int smallx = corrected_width / step;
+  const unsigned int smally = height / step;
+  const unsigned int rowsize = corrected_width * sizeof(BGRColor);
+  const unsigned int wstep = corrected_width * step;
   const unsigned int stepmo = step-1;
 
-  dst_start = m_pBufferTmp + (smally - 1) * wstep;
+  dst_start = second_buffer + (smally - 1) * wstep;
   for (unsigned int y = smally; y--; dst_start -= wstep) {
     dst = dst_start;
     for (unsigned int x = smallx; x--; src++)
@@ -104,29 +104,27 @@ RawBitmap::Zoom(unsigned int step)
         *dst++ = *src;
 
     // done first row, now copy each row
-    for (unsigned int k= stepmo; k--; dst+= m_nCorrectedWidth)
-      memcpy((char*)dst, (char*)dst_start, rowsize);
+    for (unsigned int k = stepmo; k--; dst += corrected_width)
+      memcpy(dst, dst_start, rowsize);
   }
 
   // copy it back to main buffer
-  memcpy((char*)m_pBuffer, (char*)m_pBufferTmp,
-         rowsize*m_nHeight);
-
+  memcpy(buffer, second_buffer, rowsize * height);
 }
 
 void
 RawBitmap::HorizontalBlur(unsigned int boxw)
 {
   const unsigned int muli = boxw * 2 + 1;
-  BGRColor *src = m_pBuffer;
-  BGRColor *dst = m_pBufferTmp;
+  BGRColor *src = buffer;
+  BGRColor *dst = second_buffer;
   BGRColor *c;
 
   const unsigned int off1 = boxw+1;
-  const unsigned int off2 = m_nCorrectedWidth - boxw - 1;
-  const unsigned int right = m_nCorrectedWidth - boxw;
+  const unsigned int off2 = corrected_width - boxw - 1;
+  const unsigned int right = corrected_width - boxw;
 
-  for (unsigned int y = m_nHeight; y--; ) {
+  for (unsigned int y = height; y--; ) {
     unsigned int tot_r=0;
     unsigned int tot_g=0;
     unsigned int tot_b=0;
@@ -140,7 +138,7 @@ RawBitmap::HorizontalBlur(unsigned int boxw)
       tot_b += c->m_B;
     }
 
-    for (x = 0; x < m_nCorrectedWidth; x++) {
+    for (x = 0; x < corrected_width; x++) {
       unsigned int acc = muli;
       if (x > boxw) {
         c = src-off1;
@@ -168,24 +166,23 @@ RawBitmap::HorizontalBlur(unsigned int boxw)
   }
 
   // copy it back to main buffer
-  memcpy((char *)m_pBuffer, (char *)m_pBufferTmp,
-         m_nCorrectedWidth * m_nHeight * sizeof(BGRColor));
+  memcpy(buffer, second_buffer, corrected_width * height * sizeof(buffer[0]));
 }
 
 void
 RawBitmap::VerticalBlur(unsigned int boxh)
 {
-  BGRColor *src = m_pBuffer;
-  BGRColor *dst = m_pBufferTmp;
+  BGRColor *src = buffer;
+  BGRColor *dst = second_buffer;
   BGRColor *c, *d, *e;
 
   const unsigned int muli = (boxh * 2 + 1);
-  const unsigned int iboxh = m_nCorrectedWidth * boxh;
-  const unsigned int off1 = iboxh + m_nCorrectedWidth;
-  const unsigned int off2 = m_nHeight - boxh - 1;
-  const unsigned int bottom = m_nHeight - boxh;
+  const unsigned int iboxh = corrected_width * boxh;
+  const unsigned int off1 = iboxh + corrected_width;
+  const unsigned int off2 = height - boxh - 1;
+  const unsigned int bottom = height - boxh;
 
-  for (unsigned int x = m_nCorrectedWidth; x--;) {
+  for (unsigned int x = corrected_width; x--;) {
     unsigned int tot_r = 0;
     unsigned int tot_g = 0;
     unsigned int tot_b = 0;
@@ -194,13 +191,13 @@ RawBitmap::VerticalBlur(unsigned int boxh)
     c = d = src + x;
     e = dst + x;
 
-    for (y = boxh; y--; c += m_nCorrectedWidth) {
+    for (y = boxh; y--; c += corrected_width) {
       tot_r += c->m_R;
       tot_g += c->m_G;
       tot_b += c->m_B;
     }
 
-    for (y = 0; y < m_nHeight; y++) {
+    for (y = 0; y < height; y++) {
       unsigned int acc = muli;
       if (y > boxh) {
         c = d - off1;
@@ -221,12 +218,11 @@ RawBitmap::VerticalBlur(unsigned int boxh)
       e->m_R = (unsigned char)(tot_r / acc);
       e->m_G = (unsigned char)(tot_g / acc);
       e->m_B = (unsigned char)(tot_b / acc);
-      d += m_nCorrectedWidth;
-      e += m_nCorrectedWidth;
+      d += corrected_width;
+      e += corrected_width;
     }
   }
 
   // copy it back to main buffer
-  memcpy((char *)m_pBuffer, (char *)m_pBufferTmp,
-         m_nCorrectedWidth * m_nHeight * sizeof(BGRColor));
+  memcpy(buffer, second_buffer, corrected_width * height * sizeof(buffer[0]));
 }
