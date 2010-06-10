@@ -231,25 +231,30 @@ public:
   }
 };
 
+static void
+FillList(WaypointSelectInfoVector &dest, const Waypoints &src,
+         GEOPOINT location, Angle heading, const WayPointFilterData &filter)
+{
+  dest.clear();
+
+  FilterWaypointVisitor visitor(filter, location, heading, dest);
+
+  if (filter.distance_index > 0)
+    src.visit_within_radius(location,
+                            Units::ToSysDistance(DistanceFilter[filter.distance_index]),
+                            visitor);
+  else
+    src.visit_name_prefix(filter.name, visitor);
+
+  if (filter.distance_index > 0 || filter.direction_index > 0)
+    WaypointSorter::sort_distance(dest);
+}
+
 static void UpdateList(void)
 {
-  WayPointSelectInfo.clear();
-
-  const GEOPOINT location = g_location;
-  FilterWaypointVisitor visitor(filter_data, location,
-                                XCSoarInterface::Basic().Heading,
-                                WayPointSelectInfo);
-
-  if (filter_data.distance_index > 0) {
-    way_points.visit_within_radius(location,
-                                   Units::ToSysDistance(DistanceFilter[filter_data.distance_index]),
-                                   visitor);
-  } else {
-    way_points.visit_name_prefix(filter_data.name, visitor);
-  }
-
-  if (filter_data.distance_index > 0 || filter_data.direction_index > 0)
-    WaypointSorter::sort_distance(WayPointSelectInfo);
+  FillList(WayPointSelectInfo, way_points,
+           g_location, XCSoarInterface::Basic().Heading,
+           filter_data);
 
   UpLimit = WayPointSelectInfo.size();
   wWayPointList->SetLength(UpLimit);
