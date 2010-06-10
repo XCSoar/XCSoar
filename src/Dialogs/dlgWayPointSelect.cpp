@@ -232,7 +232,7 @@ public:
     if (compare_type(wp, type_index) &&
         (filter_data.distance_index == 0 || compare_name(wp, name)) &&
         compare_direction(wp, direction_index, location, heading))
-      vector.push_back(wp, location, Units::ToUserDistance(fixed_one));
+      vector.push_back(wp, location, fixed_one);
   }
 };
 
@@ -415,8 +415,8 @@ PaintWaypoint(Canvas &canvas, const RECT rc,
   canvas.text(rc.left + x1, rc.top + Layout::FastScale(2), buffer);
 
   // right justified after waypoint flags
-  _stprintf(buffer, _T("%.0f%s"),
-            (double)info.Distance, Units::GetDistanceName());
+  Units::FormatUserDistance(info.Distance, buffer,
+                            sizeof(buffer) / sizeof(buffer[0]));
   x2 = w0 - w3 - canvas.text_width(buffer);
   canvas.text(rc.left + x2, rc.top + Layout::FastScale(2), buffer);
 
