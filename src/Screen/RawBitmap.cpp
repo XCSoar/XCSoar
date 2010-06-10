@@ -40,7 +40,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 #include <assert.h>
-#include <stdlib.h>
 
 int RawBitmap::CorrectedWidth(int nWidth)
 {
@@ -49,7 +48,8 @@ int RawBitmap::CorrectedWidth(int nWidth)
 
 RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight, const Color clr)
   :width(nWidth), height(nHeight),
-   corrected_width(CorrectedWidth(nWidth))
+   corrected_width(CorrectedWidth(nWidth)),
+   second_buffer(new BGRColor[height * corrected_width])
 {
   assert(nWidth > 0);
   assert(nHeight > 0);
@@ -57,9 +57,6 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight, const Color clr)
   buffer = (BGRColor *)m_hBitmap.create(corrected_width, height);
   assert(m_hBitmap.defined());
   assert(buffer);
-
-  second_buffer = (BGRColor*)malloc(sizeof(BGRColor) *
-                                    height * corrected_width);
 
   BGRColor bgrColor = BGRColor(clr.blue(), clr.green(), clr.red());
   int nPosition = 0;
@@ -78,9 +75,7 @@ RawBitmap::~RawBitmap()
   if (m_hBitmap.defined())
     m_hBitmap.reset();
 
-  if (second_buffer) {
-    free(second_buffer);
-  }
+  delete[](second_buffer);
 }
 
 void
