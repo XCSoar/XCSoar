@@ -39,6 +39,8 @@ Copyright_License {
 #include "Screen/RawBitmap.hpp"
 #include "Screen/Layout.hpp"
 
+#include <algorithm>
+
 #include <assert.h>
 
 /**
@@ -89,9 +91,8 @@ RawBitmap::Zoom(unsigned int step)
   BGRColor *dst_start = second_buffer + (smally - 1) * wstep;
   for (unsigned int y = smally; y--; dst_start -= wstep) {
     BGRColor *dst = dst_start;
-    for (unsigned int x = smallx; x--; src++)
-      for (unsigned int j = step; j--; )
-        *dst++ = *src;
+    for (unsigned int x = smallx; x--; src++, dst += step)
+      std::fill(dst, dst + step, *src);
 
     // done first row, now copy each row
     for (unsigned int k = stepmo; k--; dst += corrected_width)
