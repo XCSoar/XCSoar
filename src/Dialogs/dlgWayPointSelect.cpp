@@ -61,6 +61,11 @@ struct WayPointFilterData {
   int direction_index;
 
   int type_index;
+
+  bool defined() const {
+    return !string_is_empty(name) || distance_index > 0 ||
+      direction_index > 0 || type_index > 0;
+  }
 };
 
 static GEOPOINT g_location;
@@ -236,6 +241,9 @@ FillList(WaypointSelectInfoVector &dest, const Waypoints &src,
          GEOPOINT location, Angle heading, const WayPointFilterData &filter)
 {
   dest.clear();
+
+  if (!filter.defined() && src.size() >= 500)
+    return;
 
   FilterWaypointVisitor visitor(filter, location, heading, dest);
 
@@ -448,7 +456,9 @@ OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
     PaintWaypoint(canvas, rc, WayPointSelectInfo[i]);
   else if (i == 0)
     canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
-                gettext(_T("No Match!")));
+                filter_data.defined() || way_points.empty()
+                ? gettext(_T("No Match!"))
+                : gettext(_T("Choose a filter")));
 }
 static void
 OnWPSSelectClicked(gcc_unused WndButton &button){
