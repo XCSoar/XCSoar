@@ -45,8 +45,8 @@ Copyright_License {
  * Returns minimum width that is greater then the given width and
  * that is acceptable as image width (not all numbers are acceptable)
  */
-static inline int
-CorrectedWidth(int nWidth)
+static inline unsigned
+CorrectedWidth(unsigned nWidth)
 {
   return ((nWidth + 3) / 4) * 4;
 }

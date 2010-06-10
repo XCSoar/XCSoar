@@ -71,7 +71,7 @@ public:
    * points array directly (using GetPointsArray function).
    * @return Real width of the screen buffer
    */
-  int GetCorrectedWidth() const {
+  unsigned GetCorrectedWidth() const {
     return corrected_width;
   }
 
@@ -79,7 +79,7 @@ public:
    * Returns the screen buffer width
    * @return The screen buffer width
    */
-  int GetWidth() const {
+  unsigned GetWidth() const {
     return width;
   }
 
@@ -87,7 +87,7 @@ public:
    * Returns screen buffer height
    * @return The screen buffer height
    */
-  int GetHeight() const {
+  unsigned GetHeight() const {
     return height;
   }
 };
