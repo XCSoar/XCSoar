@@ -147,7 +147,8 @@ MainWindow::on_setfocus()
     /* the main window should never have the keyboard focus; if we
        happen to get the focus despite of that, forward it to the map
        window to make keyboard shortcuts work */
-    map.set_focus();
+    if (map.defined())
+      map.set_focus();
     return true;
   }
 
