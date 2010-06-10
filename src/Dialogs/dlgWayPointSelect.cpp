@@ -269,27 +269,6 @@ static void UpdateList(void)
   wWayPointList->invalidate();
 }
 
-static void FilterMode(bool direction) {
-  if (direction) {
-    filter_data.distance_index = 0; // "*"
-    filter_data.direction_index = 0; // "*"
-
-    if (wpDistance) {
-      wpDistance->GetDataField()->SetDetachGUI(true);
-      wpDistance->GetDataField()->SetAsInteger(filter_data.distance_index);
-      wpDistance->GetDataField()->SetDetachGUI(false);
-      wpDistance->RefreshDisplay();
-    }
-    if (wpDirection) {
-      wpDirection->GetDataField()->SetDetachGUI(true);
-      wpDirection->GetDataField()->SetAsInteger(filter_data.direction_index);
-      wpDirection->GetDataField()->SetDetachGUI(false);
-      wpDirection->RefreshDisplay();
-    }
-  }
-}
-
-
 static void
 OnFilterNameButton(gcc_unused WndButton &button){
 
@@ -318,9 +297,8 @@ OnFilterNameButton(gcc_unused WndButton &button){
       SetNameCaptionFlushLeft(filter_data.name);
     }
   }
-  FilterMode(true);
-  UpdateList();
 
+  UpdateList();
 }
 
 
