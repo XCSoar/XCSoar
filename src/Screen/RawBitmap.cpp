@@ -79,8 +79,6 @@ void
 RawBitmap::Zoom(unsigned int step)
 {
   const BGRColor *src = buffer;
-  BGRColor* dst = second_buffer;
-  BGRColor* dst_start = second_buffer;
 
   const unsigned int smallx = corrected_width / step;
   const unsigned int smally = height / step;
@@ -88,9 +86,9 @@ RawBitmap::Zoom(unsigned int step)
   const unsigned int wstep = corrected_width * step;
   const unsigned int stepmo = step-1;
 
-  dst_start = second_buffer + (smally - 1) * wstep;
+  BGRColor *dst_start = second_buffer + (smally - 1) * wstep;
   for (unsigned int y = smally; y--; dst_start -= wstep) {
-    dst = dst_start;
+    BGRColor *dst = dst_start;
     for (unsigned int x = smallx; x--; src++)
       for (unsigned int j = step; j--; )
         *dst++ = *src;
