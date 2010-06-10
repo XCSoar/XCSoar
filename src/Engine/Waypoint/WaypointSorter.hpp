@@ -13,7 +13,6 @@ struct WayPointSelectInfo {
   const Waypoint* way_point; /**< Pointer to actual waypoint (unprotected!) */
   fixed Distance; /**< Distance in user units from observer to waypoint */
   Angle Direction; /**< Bearing (deg true north) from observer to waypoint */
-  unsigned int FourChars; /**< Fast access of first four characters of name */
 };
 
 class WaypointSelectInfoVector : public std::vector<WayPointSelectInfo> {
