@@ -15,6 +15,7 @@
 #define IDB_CLIMB                       213
 #define IDB_FINALGLIDE                  214
 #define IDB_AUTOMACCREADY               215
+#define IDB_TOWN                        218
 #define IDB_MARK                        219
 #define IDB_TERRAINWARNING              220
 #define IDB_AIRSPACE                    235
