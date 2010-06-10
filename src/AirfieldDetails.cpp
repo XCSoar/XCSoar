@@ -39,16 +39,14 @@ Copyright_License {
 
 #include "AirfieldDetails.h"
 #include "Language.hpp"
-#include "Profile.hpp"
-#include "LocalPath.hpp"
+#include "ProfileKeys.hpp"
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "StringUtil.hpp"
 #include "UtilsText.hpp"
-#include "IO/FileLineReader.hpp"
-#include "IO/ZipLineReader.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "IO/ConfiguredFile.hpp"
 
 static const Waypoint *
 find_waypoint(Waypoints &way_points, const TCHAR *name)
@@ -150,32 +148,15 @@ void
 ReadAirfieldFile(Waypoints &way_points)
 {
   LogStartUp(TEXT("ReadAirfieldFile"));
+
+  TLineReader *reader =
+    OpenConfiguredTextFile(szProfileAirfieldFile, _T("airfields.txt"));
+  if (reader == NULL)
+    return;
+
   XCSoarInterface::CreateProgressDialog(
       gettext(TEXT("Loading Airfield Details File...")));
 
-  TCHAR path[MAX_PATH];
-  Profile::Get(szProfileAirfieldFile, path, MAX_PATH);
-
-  if (!string_is_empty(path)) {
-    ExpandLocalPath(path);
-
-    FileLineReader reader(path);
-    if (reader.error())
-      return;
-
-    ParseAirfieldDetails(way_points, reader);
-  } else {
-    Profile::Get(szProfileMapFile, path, MAX_PATH);
-    if (string_is_empty(path))
-      return;
-
-    ExpandLocalPath(path);
-    _tcscat(path, _T("/airfields.txt"));
-
-    ZipLineReader reader(path);
-    if (reader.error())
-      return;
-
-    ParseAirfieldDetails(way_points, reader);
-  }
+  ParseAirfieldDetails(way_points, *reader);
+  delete reader;
 }

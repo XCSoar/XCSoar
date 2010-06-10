@@ -36,57 +36,38 @@ Copyright_License {
 }
 */
 
-#include "AirspaceGlue.hpp"
-#include "AirspaceParser.hpp"
-#include "AirspaceClientUI.hpp"
-#include "ProfileKeys.hpp"
-#include "Terrain/RasterTerrain.hpp"
-#include "LogFile.hpp"
-#include "IO/ConfiguredFile.hpp"
+#ifndef XCSOAR_IO_CONFIGURED_FILE_HPP
+#define XCSOAR_IO_CONFIGURED_FILE_HPP
 
-void
-ReadAirspace(AirspaceClientUI &airspace, 
-             RasterTerrain *terrain,
-             const AtmosphericPressure &press)
-{
-  // TODO bug: add exception handler to protect parser code against crashes
-  // TODO bug: second file should be opened even if first was not okay
+#include "ConvertLineReader.hpp"
 
-  bool airspace_ok = false;
+/**
+ * Opens a file whose name is configured in the profile.
+ *
+ * @param profile_key the profile key which is used to read the
+ * file name
+ * @param cs the character set of the input file
+ * @return a TLineReader which must be deleted by the caller; NULL if
+ * there is no such setting, or if an error occurred opening the file
+ */
+TLineReader *
+OpenConfiguredTextFile(const TCHAR *profile_key,
+                       ConvertLineReader::charset cs=ConvertLineReader::UTF8);
 
-  // Read the airspace filenames from the registry
-  TLineReader *reader =
-    OpenConfiguredTextFile(szProfileAirspaceFile, _T("airspace.txt"));
-  if (reader != NULL) {
-    if (!airspace.read(*reader)) {
-      LogStartUp(TEXT("No airspace file 1"));
-    } else {
-      airspace_ok =  true;
-    }
+/**
+ * Opens a file whose name is configured in the profile.  If there is
+ * no such setting, attempt to open a file from inside the map file.
+ *
+ * @param profile_key the profile key which is used to read the
+ * file name
+ * @param in_map_file if no profile setting is found, attempt to open
+ * this file from inside the map file
+ * @param cs the character set of the input file
+ * @return a TLineReader which must be deleted by the caller; NULL if
+ * there is no such setting, or if an error occurred opening the file
+ */
+TLineReader *
+OpenConfiguredTextFile(const TCHAR *profile_key, const TCHAR *in_map_file,
+                       ConvertLineReader::charset cs=ConvertLineReader::UTF8);
 
-    delete reader;
-  }
-
-  reader = OpenConfiguredTextFile(szProfileAdditionalAirspaceFile);
-  if (reader != NULL) {
-    if (!airspace.read(*reader)) {
-      LogStartUp(TEXT("No airspace file 2"));
-    } else {
-      airspace_ok = true;
-    }
-
-    delete reader;
-  }
-
-  if (airspace_ok) {
-    airspace.finalise_after_loading(terrain, press);
-  } else {
-    airspace.clear(); // there was a problem
-  }
-}
-
-void 
-CloseAirspace(AirspaceClientUI &airspace) 
-{
-  airspace.clear();
-}
+#endif

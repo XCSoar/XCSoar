@@ -39,12 +39,12 @@ Copyright_License {
 #include "Polar/WinPilot.hpp"
 #include "Polar/Polar.hpp"
 #include "UtilsText.hpp"
-#include "IO/FileLineReader.hpp"
-#include "Profile.hpp"
-#include "LocalPath.hpp"
+#include "IO/ConfiguredFile.hpp"
+#include "ProfileKeys.hpp"
 #include "Sizes.h"
 
 #include <math.h>
+#include <stdlib.h>
 
 /**
  * Converts a WinPilot based to a XCSoar based polar
@@ -150,14 +150,12 @@ ReadWinPilotPolar(Polar &polar, TLineReader &reader)
 bool
 ReadWinPilotPolar(Polar &polar)
 {
-  TCHAR szFile[MAX_PATH];
-
-  Profile::Get(szProfilePolarFile, szFile, MAX_PATH);
-  ExpandLocalPath(szFile);
-
-  FileLineReader reader(szFile);
-  if (reader.error())
+  TLineReader *reader = OpenConfiguredTextFile(szProfilePolarFile);
+  if (reader == NULL)
     return false;
 
-  return ReadWinPilotPolar(polar, reader);
+  bool success = ReadWinPilotPolar(polar, *reader);
+  delete reader;
+
+  return success;
 }
