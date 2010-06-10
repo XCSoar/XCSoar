@@ -205,7 +205,11 @@ public:
    *
    * @return Pointer to waypoint if found (or NULL if not)
    */
-  const Waypoint* lookup_name(const tstring &name) const;
+  const Waypoint* lookup_name(const TCHAR *name) const;
+
+  const Waypoint* lookup_name(const tstring &name) const {
+    return lookup_name(name.c_str());
+  }
 
  /** 
   * Check if a waypoint with same name and approximate location

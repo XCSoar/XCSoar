@@ -149,9 +149,7 @@ LoadFiles()
 static void
 CreateDefaultTask(TaskManager &task_manager, const Waypoints &way_points)
 {
-  const tstring start_name(_T("Bergneustadt"));
-  const tstring first_turn_point(_T("Uslar"));
-  const tstring second_turn_point(_T("Suhl Goldlaut"));
+  const TCHAR start_name[] = _T("Bergneustadt");
 
   task_manager.set_factory(OrderedTask::FACTORY_MIXED);
   AbstractTaskFactory &factory = task_manager.get_factory();
@@ -169,7 +167,7 @@ CreateDefaultTask(TaskManager &task_manager, const Waypoints &way_points)
     fprintf(stderr, "No start waypoint\n");
   }
 
-  wp = way_points.lookup_name(first_turn_point);
+  wp = way_points.lookup_name(_T("Uslar"));
   if (wp != NULL) {
     tp = factory.createIntermediate(AbstractTaskFactory::AST_CYLINDER, *wp);
     if (!factory.append(tp, false)) {
@@ -179,7 +177,7 @@ CreateDefaultTask(TaskManager &task_manager, const Waypoints &way_points)
     fprintf(stderr, "No turn point\n");
   }
 
-  wp = way_points.lookup_name(second_turn_point);
+  wp = way_points.lookup_name(_T("Suhl Goldlaut"));
   if (wp != NULL) {
     tp = factory.createIntermediate(AbstractTaskFactory::AST_CYLINDER, *wp);
     if (!factory.append(tp, false)) {

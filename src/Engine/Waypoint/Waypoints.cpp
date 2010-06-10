@@ -169,10 +169,10 @@ Waypoints::set_details(const Waypoint& wp, const tstring& Details)
 }
 
 const Waypoint*
-Waypoints::lookup_name(const tstring &name) const
+Waypoints::lookup_name(const TCHAR *name) const
 {
-  TCHAR normalized[name.length() + 1];
-  normalize_search_string(normalized, name.c_str());
+  TCHAR normalized[_tcslen(name) + 1];
+  normalize_search_string(normalized, name);
   return name_tree.get(normalized, NULL);
 }
 
