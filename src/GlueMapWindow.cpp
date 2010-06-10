@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "GlueMapWindow.hpp"
 #include "Components.hpp"
+#include "Interface.hpp"
 #include "DrawThread.hpp"
 
 GlueMapWindow::GlueMapWindow()
@@ -86,6 +87,16 @@ GlueMapWindow::Idle(const bool do_force)
            (still_dirty = terrain_dirty || topology_dirty || weather_dirty));
 
   return still_dirty;
+}
+
+void
+GlueMapWindow::SetFullScreen(bool full_screen)
+{
+  if (full_screen == GetFullScreen())
+    return;
+
+  XCSoarInterface::SetSettingsMap().FullScreen = full_screen;
+  SetMapRect(full_screen ? MapRectBig : MapRectSmall);
 }
 
 /**

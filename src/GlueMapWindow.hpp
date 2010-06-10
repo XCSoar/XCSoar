@@ -52,6 +52,12 @@ public:
 
   bool Idle(const bool force=false);
 
+  bool GetFullScreen() const {
+    return SettingsMap().FullScreen;
+  }
+
+  void SetFullScreen(bool full_screen);
+
 private:
   // display management
   void RefreshMap();

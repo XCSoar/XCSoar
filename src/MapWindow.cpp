@@ -316,11 +316,6 @@ MapWindow::SwitchZoomClimb(void)
 void
 MapWindow::ApplyScreenSize()
 {
-  if (SettingsMap().FullScreen)
-    SetMapRect(MapRectBig);
-  else
-    SetMapRect(MapRectSmall);
-
   DisplayMode_t lastDisplayMode = DisplayMode;
   switch (SettingsMap().UserForceDisplayMode) {
   case dmCircling:

@@ -265,20 +265,20 @@ InputEvents::eventScreenModes(const TCHAR *misc)
   //  -- normal infobox
 
   if (_tcscmp(misc, TEXT("normal")) == 0) {
-    SetSettingsMap().FullScreen = false;
+    main_window.map.SetFullScreen(false);
     SetSettingsMap().EnableAuxiliaryInfo = false;
   } else if (_tcscmp(misc, TEXT("auxilary")) == 0) {
-    SetSettingsMap().FullScreen = false;
+    main_window.map.SetFullScreen(false);
     SetSettingsMap().EnableAuxiliaryInfo = true;
   } else if (_tcscmp(misc, TEXT("toggleauxiliary")) == 0) {
-    SetSettingsMap().FullScreen = false;
+    main_window.map.SetFullScreen(false);
     SetSettingsMap().EnableAuxiliaryInfo = !SettingsMap().EnableAuxiliaryInfo;
   } else if (_tcscmp(misc, TEXT("full")) == 0) {
-    SetSettingsMap().FullScreen = true;
+    main_window.map.SetFullScreen(true);
   } else if (_tcscmp(misc, TEXT("togglefull")) == 0) {
-    SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
+    main_window.map.SetFullScreen(!main_window.map.GetFullScreen());
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (SettingsMap().FullScreen)
+    if (main_window.map.GetFullScreen())
       Message::AddMessage(TEXT("Screen Mode Full"));
     else if (SettingsMap().EnableAuxiliaryInfo)
       Message::AddMessage(TEXT("Screen Mode Auxiliary"));
@@ -291,11 +291,11 @@ InputEvents::eventScreenModes(const TCHAR *misc)
       if (SettingsComputer().EnableSoundModes)
         PlayResource(TEXT("IDR_WAV_CLICK"));
 
-      SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
+      main_window.map.SetFullScreen(!main_window.map.GetFullScreen());
       SetSettingsMap().EnableAuxiliaryInfo = false;
     } else {
-      if (SettingsMap().FullScreen) {
-        SetSettingsMap().FullScreen = false;
+      if (main_window.map.GetFullScreen()) {
+        main_window.map.SetFullScreen(false);
 
         if (is_pna() && SettingsComputer().EnableSoundModes)
           PlayResource(TEXT("IDR_WAV_BELL"));
