@@ -50,6 +50,14 @@ class ContainerWindow;
  */
 class GaugeFLARM: public BufferWindow
 {
+  /**
+   * WM_USER offsets.
+   */
+  enum msg {
+    MSG_SHOW,
+    MSG_HIDE,
+  };
+
 private:
   Bitmap hRoseBitMap;
   SIZE hRoseBitMapSize;
@@ -71,6 +79,7 @@ protected:
   void RenderBg(Canvas &canvas);
 
   bool on_mouse_down(int x, int y);
+  virtual bool on_user(unsigned id);
 
 private:
   int RangeScale(double d);

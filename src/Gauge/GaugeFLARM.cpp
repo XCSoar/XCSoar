@@ -318,9 +318,9 @@ GaugeFLARM::Update(bool enable, const NMEA_INFO &gps_info)
     (gps_info.flarm.FLARMTraffic && enable && !Suppress);
   if (visible) {
     Render(gps_info);
-    show();
+    send_user(MSG_SHOW);
   } else
-    hide();
+    send_user(MSG_HIDE);
 }
 
 /**
@@ -335,4 +335,20 @@ GaugeFLARM::on_mouse_down(int x, int y)
 {
   dlgFlarmTrafficShowModal();
   return true;
+}
+
+bool
+GaugeFLARM::on_user(unsigned id)
+{
+  switch ((msg)id) {
+  case MSG_SHOW:
+    show();
+    return true;
+
+  case MSG_HIDE:
+    hide();
+    return true;
+  }
+
+  return BufferWindow::on_user(id);
 }
