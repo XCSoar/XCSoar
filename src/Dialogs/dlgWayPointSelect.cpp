@@ -388,64 +388,67 @@ OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode){
 }
 
 static void
+PaintWaypoint(Canvas &canvas, const RECT rc,
+              const struct WayPointSelectInfo &info)
+{
+  const Waypoint &way_point = *info.way_point;
+
+  int w0, w1, w2, w3, x1, x2, x3;
+  w0 = rc.right - rc.left - Layout::FastScale(4);
+  w1 = canvas.text_width(_T("XXX"));
+  w2 = canvas.text_width(_T(" 000km"));
+  w3 = canvas.text_width(_T(" 000")_T(DEG));
+
+  x1 = w0 - w1 - w2 - w3;
+
+  canvas.text_clipped(rc.left + Layout::FastScale(2),
+                      rc.top + Layout::FastScale(2),
+                      x1 - Layout::FastScale(5),
+                      way_point.Name.c_str());
+
+  TCHAR buffer[12];
+  buffer[0] = '\0';
+  buffer[1] = '\0';
+  buffer[2] = '\0';
+
+  if (way_point.Flags.Home)
+    buffer[0] = 'H';
+  else if (way_point.Flags.Airport)
+    buffer[0] = 'A';
+  else if (way_point.Flags.LandPoint)
+    buffer[0] = 'L';
+
+  if (way_point.Flags.TurnPoint) {
+    if (buffer[0] == '\0')
+      buffer[0] = 'T';
+    else
+      buffer[1] = 'T';
+  }
+
+  // left justified
+  canvas.text(rc.left + x1, rc.top + Layout::FastScale(2), buffer);
+
+  // right justified after waypoint flags
+  _stprintf(buffer, _T("%.0f%s"),
+            (double)info.Distance, Units::GetDistanceName());
+  x2 = w0 - w3 - canvas.text_width(buffer);
+  canvas.text(rc.left + x2, rc.top + Layout::FastScale(2), buffer);
+
+  // right justified after distance
+  _stprintf(buffer, _T("%d")_T(DEG),
+            iround(info.Direction.value_degrees()));
+  x3 = w0-canvas.text_width(buffer);
+  canvas.text(rc.left + x3, rc.top + Layout::FastScale(2), buffer);
+}
+
+static void
 OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
   TCHAR sTmp[12];
 
-  if (i < UpLimit) {
-
-    const Waypoint &way_point = *WayPointSelectInfo[i].way_point;
-
-    int w0, w1, w2, w3, x1, x2, x3;
-    w0 = rc.right - rc.left - Layout::FastScale(4);
-    w1 = canvas.text_width(_T("XXX"));
-    w2 = canvas.text_width(_T(" 000km"));
-    w3 = canvas.text_width(_T(" 000")_T(DEG));
-
-    x1 = w0-w1-w2-w3;
-
-    canvas.text_clipped(rc.left + Layout::FastScale(2),
-                        rc.top + Layout::FastScale(2),
-                        x1 - Layout::FastScale(5),
-                        way_point.Name.c_str());
-
-    sTmp[0] = '\0';
-    sTmp[1] = '\0';
-    sTmp[2] = '\0';
-
-    if (way_point.Flags.Home){
-      sTmp[0] = 'H';
-    }else
-    if (way_point.Flags.Airport){
-      sTmp[0] = 'A';
-    }else
-    if (way_point.Flags.LandPoint){
-      sTmp[0] = 'L';
-    }
-
-    if (way_point.Flags.TurnPoint) {
-      if (sTmp[0] == '\0')
-        sTmp[0] = 'T';
-      else
-        sTmp[1] = 'T';
-    }
-
-    // left justified
-    canvas.text(rc.left + x1, rc.top + Layout::FastScale(2), sTmp);
-
-    // right justified after waypoint flags
-    _stprintf(sTmp, _T("%.0f%s"),
-              (double)WayPointSelectInfo[i].Distance,
-              Units::GetDistanceName());
-    x2 = w0-w3-canvas.text_width(sTmp);
-    canvas.text(rc.left + x2, rc.top + Layout::FastScale(2), sTmp);
-
-    // right justified after distance
-    _stprintf(sTmp, _T("%d")_T(DEG),
-	      iround(WayPointSelectInfo[i].Direction.value_degrees()));
-    x3 = w0-canvas.text_width(sTmp);
-    canvas.text(rc.left + x3, rc.top + Layout::FastScale(2), sTmp);
-  } else {
+  if (i < UpLimit)
+    PaintWaypoint(canvas, rc, WayPointSelectInfo[i]);
+  else {
     if (i == 0){
       _stprintf(sTmp, _T("%s"), gettext(_T("No Match!")));
       canvas.text(rc.left + Layout::FastScale(2),
