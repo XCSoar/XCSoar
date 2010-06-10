@@ -144,9 +144,6 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader)
     } else {
       // append text to details string
       if (!string_is_empty(TempString)) {
-        // Remove carriage returns
-        TrimRight(TempString);
-
         Details += TempString;
         Details += _T("\r\n");
       }
