@@ -182,7 +182,7 @@ protected:
   TCHAR mCaption[254];
 
   /** Paints the "Selector" */
-  void PaintSelector(Canvas &canvas, const RECT rc);
+  static void PaintSelector(Canvas &canvas, const RECT rc);
 
 private:
   /** Background color */
