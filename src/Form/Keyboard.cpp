@@ -84,6 +84,28 @@ KeyboardControl::SetButtonSize(unsigned width, unsigned height)
   move_buttons();
 }
 
+static void
+ApplyAllowedCharacters(Window *window, TCHAR ch, const TCHAR *allowed)
+{
+  if (window != NULL)
+    window->set_visible(allowed == NULL || _tcschr(allowed, ch) != NULL);
+}
+
+void
+KeyboardControl::SetAllowedCharacters(const TCHAR *allowed)
+{
+  TCHAR name[] = _T("cmd ");
+  for (const TCHAR *i = keyboard_letters; !string_is_empty(i); ++i) {
+    name[3] = *i;
+    ApplyAllowedCharacters(get_button(name), *i, allowed);
+  }
+
+  ApplyAllowedCharacters(get_button(_T("cmdSpace")), ' ', allowed);
+  ApplyAllowedCharacters(get_button(_T("cmdPeriod")), '.', allowed);
+  ApplyAllowedCharacters(get_button(_T("cmdComma")), ',', allowed);
+  ApplyAllowedCharacters(get_button(_T("cmdMinus")), '-', allowed);
+}
+
 ButtonWindow *
 KeyboardControl::get_button(const TCHAR* name)
 {

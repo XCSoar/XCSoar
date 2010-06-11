@@ -68,6 +68,11 @@ public:
 
   void SetButtonSize(unsigned width, unsigned height);
 
+  /**
+   * Show only the buttons representing the specified character list.
+   */
+  void SetAllowedCharacters(const TCHAR *allowed);
+
   void SetOnCharacterCallback(OnCharacterCallback_t Function) {
     mOnCharacter = Function;
   }
