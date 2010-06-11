@@ -63,7 +63,6 @@ public:
    */
   KeyboardControl(WndForm &form, ContainerWindow &parent, int x, int y,
                   unsigned width, unsigned height,
-                  unsigned button_width, unsigned button_height,
                   Color background_color, const Font *font,
                   const WindowStyle _style = WindowStyle());
 
@@ -94,6 +93,7 @@ private:
   void move_button(const TCHAR* name, int left, int top);
   void resize_button(const TCHAR* name, unsigned int width, unsigned int height);
   void resize_buttons();
+  void set_buttons_size();
   void move_buttons_to_row(const TCHAR* buttons, int row, int offset_left = 0);
   void move_buttons();
 

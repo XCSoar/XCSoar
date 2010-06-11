@@ -49,14 +49,14 @@ static const TCHAR keyboard_letters[] =
 
 KeyboardControl::KeyboardControl(WndForm &form, ContainerWindow &parent,
                                  int x, int y, unsigned width, unsigned height,
-                                 unsigned button_width, unsigned button_height,
                                  Color background_color, const Font *font,
                                  const WindowStyle _style) :
   background_brush(background_color),
-  button_width(button_width), button_height(button_height),
+  button_width(50), button_height(50),
   parent_form(form)
 {
   set(parent, x, y, width, height, _style);
+  set_buttons_size();
 
   TCHAR caption[] = _T(" ");
   TCHAR name[] = _T("cmd ");
@@ -166,6 +166,13 @@ KeyboardControl::resize_buttons()
 }
 
 void
+KeyboardControl::set_buttons_size()
+{
+  button_width = get_width() / 10;
+  button_height = get_height() / 5;
+}
+
+void
 KeyboardControl::move_buttons_to_row(const TCHAR* buttons, int row, int offset)
 {
   if (string_is_empty(buttons))
@@ -199,9 +206,9 @@ KeyboardControl::move_buttons()
     move_button(_T("cmdSpace"), button_width * 2.5, button_height * 4);
     resize_button(_T("cmdSpace"), button_width * 3, button_height);
   } else {
-    move_button(_T("cmdMinus"), button_width * 8, button_height * 4.5);
+    move_button(_T("cmdMinus"), button_width * 8, button_height * 4);
 
-    move_button(_T("cmdSpace"), button_width * 2, button_height * 4.5);
+    move_button(_T("cmdSpace"), button_width * 2, button_height * 4);
     resize_button(_T("cmdSpace"), button_width * 5, button_height);
   }                              
 }

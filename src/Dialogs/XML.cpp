@@ -791,10 +791,6 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     KeyboardControl *kb =
       new KeyboardControl(form, Parent->GetClientAreaWindow(),
                           X, Y, Width, Height,
-                          Layout::Scale(StringToIntDflt(
-                              node.getAttribute(_T("ButtonWidth")), 50)),
-                          Layout::Scale(StringToIntDflt(
-                              node.getAttribute(_T("ButtonHeight")), 50)),
                           Parent->GetBackColor(), FontMap[Font], style);
 
     window = kb;
