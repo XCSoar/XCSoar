@@ -61,6 +61,7 @@ static TCHAR edittext[MAX_TEXTENTRY];
 static void
 UpdateAllowedCharacters()
 {
+  if (AllowedCharactersCallback != NULL)
     kb->SetAllowedCharacters(AllowedCharactersCallback(edittext));
 }
 
