@@ -231,6 +231,15 @@ KeyboardControl::on_command(unsigned id, unsigned code)
     return ContainerWindow::on_command(id, code);
 }
 
+bool
+KeyboardControl::on_resize(unsigned width, unsigned height)
+{
+  set_buttons_size();
+  resize_buttons();
+  move_buttons();
+  return true;
+}
+
 void
 KeyboardControl::add_button(WndForm &form, const TCHAR* name,
                             const TCHAR* caption, const Font *font)

@@ -79,6 +79,7 @@ public:
 protected:
   virtual void on_paint(Canvas &canvas);
   virtual bool on_command(unsigned id, unsigned code);
+  virtual bool on_resize(unsigned width, unsigned height);
 
 private:
   Brush background_brush;
