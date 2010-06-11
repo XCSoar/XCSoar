@@ -118,7 +118,7 @@ void OnWeatherHelp(WindowControl * Sender){
   WndProperty *wp = (WndProperty*)Sender;
   int type = wp->GetDataField()->GetAsInteger();
   TCHAR caption[80];
-  _stprintf(caption, gettext(_T("Weather parameters")));
+  _tcscpy(caption, gettext(_T("Weather parameters")));
 
   switch(type) {
   case 0:

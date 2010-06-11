@@ -160,7 +160,7 @@ static void UpdateButtons(void) {
   if (buttonPilotName) {
     Profile::Get(szProfilePilotName, val, 100);
     if (string_is_empty(val))
-      _stprintf(val, gettext(_T("(blank)")));
+      _tcscpy(val, gettext(_T("(blank)")));
 
     _stprintf(text,_T("%s: %s"), gettext(_T("Pilot name")), val);
     buttonPilotName->SetCaption(text);
@@ -168,7 +168,7 @@ static void UpdateButtons(void) {
   if (buttonAircraftType) {
     Profile::Get(szProfileAircraftType, val, 100);
     if (string_is_empty(val))
-      _stprintf(val, gettext(_T("(blank)")));
+      _tcscpy(val, gettext(_T("(blank)")));
 
     _stprintf(text,_T("%s: %s"), gettext(_T("Aircraft type")), val);
     buttonAircraftType->SetCaption(text);
@@ -176,7 +176,7 @@ static void UpdateButtons(void) {
   if (buttonAircraftRego) {
     Profile::Get(szProfileAircraftRego, val, 100);
     if (string_is_empty(val))
-      _stprintf(val, gettext(_T("(blank)")));
+      _tcscpy(val, gettext(_T("(blank)")));
 
     _stprintf(text,_T("%s: %s"), gettext(_T("Competition ID")), val);
     buttonAircraftRego->SetCaption(text);
@@ -184,7 +184,7 @@ static void UpdateButtons(void) {
   if (buttonLoggerID) {
     Profile::Get(szProfileLoggerID, val, 100);
     if (string_is_empty(val))
-      _stprintf(val, gettext(_T("(blank)")));
+      _tcscpy(val, gettext(_T("(blank)")));
 
     _stprintf(text,_T("%s: %s"), gettext(_T("Logger ID")), val);
     buttonLoggerID->SetCaption(text);

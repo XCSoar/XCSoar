@@ -952,7 +952,7 @@ FlightStatistics::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const
   double d_remaining  = derived.task_stats.total.remaining.get_distance();
 
   if (!common.ordered_valid) {
-    _stprintf(sTmp, gettext(TEXT("No task")));
+    _tcscpy(sTmp, gettext(_T("No task")));
   } else {
     TCHAR timetext1[100];
     TCHAR timetext2[100];

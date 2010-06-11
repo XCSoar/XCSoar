@@ -78,7 +78,7 @@ NextPage(int Step)
 
   nTextLines = TextToLineOffsets(ChecklistText[page], LineOffsets, MAXLINES);
 
-  _stprintf(buffer, gettext(_T("Checklist")));
+  _tcscpy(buffer, gettext(_T("Checklist")));
 
   if (ChecklistTitle[page] &&
       !string_is_empty(ChecklistTitle[page]) &&
