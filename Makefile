@@ -25,6 +25,8 @@
 #   LTO         "y" enables gcc's link-time optimization flag (experimental,
 #               requires gcc 4.5)
 #
+#   CLANG       "y" to use clang instead of gcc
+#
 
 .DEFAULT_GOAL := all
 
@@ -53,6 +55,7 @@ include $(topdir)/build/flags.mk
 include $(topdir)/build/charset.mk
 include $(topdir)/build/warnings.mk
 include $(topdir)/build/compile.mk
+include $(topdir)/build/llvm.mk
 include $(topdir)/build/tools.mk
 include $(topdir)/build/resource.mk
 include $(topdir)/build/generate.mk
