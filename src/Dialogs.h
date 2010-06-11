@@ -135,8 +135,8 @@ void dlgVoiceShowModal();
 void
 dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& waypoint);
 
-bool dlgTextEntryShowModal(TCHAR *text, int width = 0);
-bool dlgTextEntryShowModal(tstring &text, int width = 0);
+bool dlgTextEntryShowModal(TCHAR *text, int width);
+bool dlgTextEntryShowModal(tstring &text, int width);
 
 void dlgTeamCodeShowModal();
 void dlgStartPointShowModal();
