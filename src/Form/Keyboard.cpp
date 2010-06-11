@@ -76,15 +76,6 @@ KeyboardControl::KeyboardControl(WndForm &form, ContainerWindow &parent,
   move_buttons();
 }
 
-void
-KeyboardControl::SetButtonSize(unsigned width, unsigned height)
-{
-  button_width = width;
-  button_height = height;
-  resize_buttons();
-  move_buttons();
-}
-
 static void
 ApplyAllowedCharacters(Window *window, TCHAR ch, const TCHAR *allowed)
 {

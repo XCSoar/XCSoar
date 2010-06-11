@@ -67,8 +67,6 @@ public:
                   Color background_color, const Font *font,
                   const WindowStyle _style = WindowStyle());
 
-  void SetButtonSize(unsigned width, unsigned height);
-
   /**
    * Show only the buttons representing the specified character list.
    */
