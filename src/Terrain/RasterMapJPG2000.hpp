@@ -49,8 +49,6 @@ class RasterMapJPG2000: public RasterMap {
   RasterMapJPG2000();
   ~RasterMapJPG2000();
 
-  void ReloadJPG2000();
-
   /**
    * Lockless version opf SetViewCenter().
    */

@@ -120,10 +120,6 @@ void RasterMapJPG2000::_ReloadJPG2000() {
   }
 }
 
-void RasterMapJPG2000::ReloadJPG2000(void) {
-  _ReloadJPG2000();
-}
-
 void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
 {
   Poco::ScopedRWLock protect(lock, true);
