@@ -40,7 +40,6 @@
 #include "wcecompat/ts_string.h"
 
 #include <stdio.h>
-#include <syslimits.h>
 
 static LPTSTR stringDup(const tstring text) 
 {
@@ -63,7 +62,7 @@ DataNodeXML::~DataNodeXML()
 DataNode* 
 DataNodeXML::load(const TCHAR* path)
 {
-  char buf[PATH_MAX];
+  char buf[_tcslen(path) + 1];
   unicode2ascii(path,buf);
 
   XMLNode child = XMLNode::openFileHelper(buf);
@@ -147,7 +146,7 @@ DataNodeXML::save(const TCHAR* path)
 {
   /// @todo make xml writing portable (unicode etc)
 
-  char buf[PATH_MAX];
+  char buf[_tcslen(path) + 1];
   unicode2ascii(path,buf);
 
   FILE* file = fopen(buf, "wt");
