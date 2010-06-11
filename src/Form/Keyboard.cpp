@@ -44,7 +44,8 @@ Copyright_License {
 #include "Form/Container.hpp"
 #include "Form/KeyboardButton.hpp"
 
-static TCHAR keyboard_letters[] = _T("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+static const TCHAR keyboard_letters[] =
+  _T("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
 KeyboardControl::KeyboardControl(WndForm &form, ContainerControl *owner,
                                  int x, int y, unsigned width, unsigned height,
