@@ -251,6 +251,15 @@ public:
   void visit_name_prefix(const TCHAR *prefix, WaypointVisitor& visitor) const;
 
   /**
+   * Returns a set of possible characters following the specified
+   * prefix.
+   */
+  TCHAR *suggest_name_prefix(const TCHAR *prefix,
+                             TCHAR *dest, size_t max_length) const {
+    return name_tree.suggest(prefix, dest, max_length);
+  }
+
+  /**
    * Type of KD-tree data structure for waypoint container
    */
   typedef KDTree::KDTree<2, 
