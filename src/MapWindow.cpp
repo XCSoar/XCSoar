@@ -58,7 +58,6 @@ MapWindow::MapWindow()
    way_points(NULL),
    topology(NULL), terrain(NULL), weather(NULL),
    topology_dirty(true), terrain_dirty(true), weather_dirty(true),
-   m_background(true),
    m_airspace(NULL), task(NULL),
    marks(NULL), 
    cdi(NULL),

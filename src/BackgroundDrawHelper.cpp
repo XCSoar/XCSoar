@@ -47,11 +47,10 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/LabelBlock.hpp"
 
-BackgroundDrawHelper::BackgroundDrawHelper(const bool white_background):
+BackgroundDrawHelper::BackgroundDrawHelper():
   m_rend(NULL),
   m_terrain(NULL),
-  m_weather(NULL),
-  m_white_background(white_background)
+  m_weather(NULL)
 {
   default_sun();
 }
@@ -83,24 +82,6 @@ BackgroundDrawHelper::set_weather(RasterWeather* weather)
   reset();
 }
 
-
-void
-BackgroundDrawHelper::draw_background(Canvas& canvas,
-                                      const RECT& rc) const
-{
-  if (m_white_background) {
-    canvas.select(MapGfx.hBackgroundBrush);
-    canvas.white_pen();
-    canvas.white_brush();
-    canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
-  } else {
-    canvas.select(MapGfx.hBackgroundBrush);
-    canvas.black_pen();
-    canvas.black_brush();
-    canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
-  }
-}
-
 void 
 BackgroundDrawHelper::Draw(Canvas& canvas,
                            const RECT& rc,
@@ -110,11 +91,11 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
   if (!m_terrain || !m_terrain->isTerrainLoaded()) {
     // terrain may have been re-set, so may need new renderer
     reset();
-    draw_background(canvas, rc);
+    canvas.fill_rectangle(rc, MapGfx.hBackgroundBrush);
     return;
   }
   if (!settings_map.EnableTerrain) {
-    draw_background(canvas, rc);
+    canvas.fill_rectangle(rc, MapGfx.hBackgroundBrush);
     return;
   }
 

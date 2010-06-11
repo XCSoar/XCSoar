@@ -57,7 +57,7 @@ class LabelBlock;
 class BackgroundDrawHelper 
 {
 public:
-  BackgroundDrawHelper(const bool white_background=false);
+  BackgroundDrawHelper();
   ~BackgroundDrawHelper();
 
   void Draw(Canvas& canvas,
@@ -79,13 +79,9 @@ public:
   void set_weather(RasterWeather* weather);
 
 private:
-  void draw_background(Canvas& canvas,
-                       const RECT& rc) const;
-
   TerrainRenderer* m_rend;
   RasterTerrain* m_terrain;
   RasterWeather* m_weather;
-  const bool m_white_background;
   Angle m_sun_elevation;
   Angle m_sun_azimuth;
 };
