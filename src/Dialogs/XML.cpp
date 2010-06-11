@@ -787,8 +787,6 @@ LoadChild(WndForm &form, ContainerControl *Parent,
 
   // KeyboardControl
   } else if (_tcscmp(node.getName(), _T("Keyboard")) == 0) {
-    style.control_parent();
-
     // Create the KeyboardControl
     KeyboardControl *kb = new KeyboardControl(form, Parent, X, Y, Width, Height,
         FontMap[Font], style);

@@ -214,8 +214,6 @@ KeyboardControl::add_button(WndForm &form, const TCHAR* name,
                             const TCHAR* caption, const Font *font)
 {
   WindowStyle style;
-  style.tab_stop();
-
   KeyboardButton *button = NULL;
   button = new KeyboardButton(this, caption, 0, 0, button_width,
                               button_height, style);
