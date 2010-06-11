@@ -77,7 +77,6 @@ void RasterMapJPG2000::ServiceFullReload(const GEOPOINT &location) {
 
 RasterMapJPG2000::RasterMapJPG2000() {
   TriggerJPGReload = false;
-  jp2_filename[0] = '\0';
   DirectAccess = true;
   if (ref_count==0) {
     jas_init();
@@ -97,7 +96,7 @@ int RasterMapJPG2000::ref_count = 0;
 void RasterMapJPG2000::_ReloadJPG2000() {
   TriggerJPGReload = false;
 
-  raster_tile_cache.LoadJPG2000(jp2_filename, FullJPGReload);
+  raster_tile_cache.LoadJPG2000(path.c_str(), FullJPGReload);
   FullJPGReload = false;
 
   if (!raster_tile_cache.GetInitialised())
@@ -147,7 +146,7 @@ void RasterMapJPG2000::_SetViewCenter(const GEOPOINT &location)
 bool
 RasterMapJPG2000::Open(const char *zfilename)
 {
-  strcpy(jp2_filename,zfilename);
+  path = zfilename;
 
   // force first-time load
   FullJPGReload = true;
