@@ -58,10 +58,9 @@ KeyboardControl::KeyboardControl(WndForm &form, ContainerControl *owner,
   TCHAR caption[] = _T(" ");
   TCHAR name[] = _T("cmd ");
 
-  for (unsigned i = 0;
-       i < sizeof(keyboard_letters) / sizeof(keyboard_letters[0]) - 1; i++) {
-    caption[0] = keyboard_letters[i];
-    name[3] = keyboard_letters[i];
+  for (const TCHAR *i = keyboard_letters; !string_is_empty(i); ++i) {
+    caption[0] = *i;
+    name[3] = *i;
 
     add_button(form, name, caption, font);
   }
