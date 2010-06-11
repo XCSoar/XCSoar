@@ -55,15 +55,13 @@ KeyboardControl::KeyboardControl(WndForm &form, ContainerControl *owner,
   button_width(50), button_height(50),
   parent_form(form)
 {
+  TCHAR caption[] = _T(" ");
+  TCHAR name[] = _T("cmd ");
+
   for (unsigned i = 0;
        i < sizeof(keyboard_letters) / sizeof(keyboard_letters[0]) - 1; i++) {
-    TCHAR caption[2];
-    _tcsncpy(caption, keyboard_letters + i, 1);
-    caption[1] = 0;
-
-    TCHAR name[5] = _T("cmd");
-    _tcsncat(name, keyboard_letters + i, 1);
-    name[4] = 0;
+    caption[0] = keyboard_letters[i];
+    name[3] = keyboard_letters[i];
 
     add_button(form, name, caption, font);
   }
