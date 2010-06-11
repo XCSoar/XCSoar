@@ -488,12 +488,12 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
     for (int y = rect_quantised.top; y < rect_quantised.bottom; ++y) {
       const unsigned row_plus_index = y < border.bottom
         ? quantisation_effective
-        : rect_quantised.bottom - 1 - y;
+        : (unsigned)(rect_quantised.bottom - 1 - y);
       const unsigned row_plus_offset = width_q * row_plus_index;
       
       const unsigned row_minus_index = y >= border.top
         ? quantisation_effective
-        : y - rect_quantised.top;
+        : (unsigned)(y - rect_quantised.top);
       const unsigned row_minus_offset = width_q * row_minus_index;
       
       const unsigned p31 = row_plus_index + row_minus_index;
@@ -523,10 +523,10 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
 
           const unsigned column_plus_index = x < border.right
             ? quantisation_effective
-            : rect_quantised.right - 1 - x;
+            : (unsigned)(rect_quantised.right - 1 - x);
           const unsigned column_minus_index = x >= border.left
             ? quantisation_effective
-            : x - rect_quantised.left;
+            : (unsigned)(x - rect_quantised.left);
 
           assert(h_buf-column_minus_index >= hBuf);
           assert(h_buf+column_plus_index >= hBuf);

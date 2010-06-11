@@ -185,7 +185,7 @@ FlarmTrafficWindow::UpdateWarnings()
 {
   const FLARM_TRAFFIC *alert = data.FindMaximumAlert();
   warning = alert != NULL
-    ? data.TrafficIndex(alert)
+    ? (int)data.TrafficIndex(alert)
     : - 1;
 }
 

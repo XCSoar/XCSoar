@@ -102,7 +102,9 @@ WndListFrame::ScrollBar::set_slider(unsigned size, unsigned view_size,
   const int netto_height = get_netto_height();
 
   // If (no size) slider fills the whole area (no scrolling)
-  int height = (size > 0) ? (netto_height * view_size / size) : netto_height;
+  int height = size > 0
+    ? (int)(netto_height * view_size / size)
+    : netto_height;
   // Prevent the slider from getting to small
   if (height < get_width())
     height = get_width();
