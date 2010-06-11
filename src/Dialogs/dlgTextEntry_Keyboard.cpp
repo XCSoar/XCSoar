@@ -48,6 +48,7 @@ Copyright_License {
 using std::min;
 
 static WndForm *wf = NULL;
+static KeyboardControl *kb = NULL;
 
 #define MAX_TEXTENTRY 40
 static unsigned int cursor = 0;
@@ -183,8 +184,15 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
   if (!wf)
     return false;
 
-  ((KeyboardControl*)wf->FindByName(_T("Keyboard")))->
-      SetOnCharacterCallback(OnCharacter);
+  kb = (KeyboardControl*)wf->FindByName(_T("Keyboard"));
+  if (!kb)
+    return false;
+
+  kb->SetOnCharacterCallback(OnCharacter);
+  if (Layout::landscape)
+    kb->SetButtonSize(Layout::FastScale(32), Layout::FastScale(40));
+  else
+    kb->SetButtonSize(Layout::FastScale(24), Layout::FastScale(40));
 
   cursor = 0;
   ClearText();

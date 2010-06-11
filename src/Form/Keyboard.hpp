@@ -66,6 +66,8 @@ public:
                   unsigned width, unsigned height, const Font *font,
                   const WindowStyle _style = WindowStyle());
 
+  void SetButtonSize(unsigned width, unsigned height);
+
   void SetOnCharacterCallback(OnCharacterCallback_t Function) {
     mOnCharacter = Function;
   }
@@ -73,12 +75,18 @@ public:
   void on_keyboard_button(const TCHAR* caption);
 
 private:
+  unsigned button_width;
+  unsigned button_height;
+
   WndForm &parent_form;
 
   KeyboardButton* get_button(const TCHAR* name);
+  KeyboardButton* get_button_by_caption(const TCHAR* caption);
 
   void move_button(const TCHAR* name, int left, int top);
   void resize_button(const TCHAR* name, unsigned int width, unsigned int height);
+  void resize_buttons();
+  void move_buttons_to_row(const TCHAR* buttons, int row, int offset_left = 0);
   void move_buttons();
 
   void add_button(WndForm &form, const TCHAR* name,

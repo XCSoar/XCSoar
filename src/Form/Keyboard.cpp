@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "Form/Keyboard.hpp"
 
+#include "StringUtil.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/Form.hpp"
 #include "Form/Container.hpp"
@@ -50,6 +51,7 @@ KeyboardControl::KeyboardControl(WndForm &form, ContainerControl *owner,
                                  const Font *font,
                                  const WindowStyle _style) :
   PanelControl(owner, x, y, width, height, _style),
+  button_width(50), button_height(50),
   parent_form(form)
 {
   for (unsigned i = 0;
@@ -73,10 +75,42 @@ KeyboardControl::KeyboardControl(WndForm &form, ContainerControl *owner,
   move_buttons();
 }
 
+void
+KeyboardControl::SetButtonSize(unsigned width, unsigned height)
+{
+  button_width = width;
+  button_height = height;
+  resize_buttons();
+  move_buttons();
+}
+
 KeyboardButton*
 KeyboardControl::get_button(const TCHAR* name)
 {
   return (KeyboardButton*)parent_form.FindByName(name);
+}
+
+KeyboardButton*
+KeyboardControl::get_button_by_caption(const TCHAR* caption)
+{
+  if (_tcscmp(caption, _T(",")) == 0)
+    return get_button(_T("cmdComma"));
+  if (_tcscmp(caption, _T(".")) == 0)
+    return get_button(_T("cmdPeriod"));
+  if (_tcscmp(caption, _T("-")) == 0)
+    return get_button(_T("cmdMinus"));
+  if (_tcscmp(caption, _T(" ")) == 0 || _tcscmp(caption, _T(" Space ")) == 0)
+    return get_button(_T("cmdSpace"));
+
+  if (_tcslen(caption) == 1 && _tcschr(keyboard_letters, caption[0]) != NULL) {
+    TCHAR name[5] = _T("cmd");
+    _tcsncat(name, caption, 1);
+    name[4] = 0;
+
+    return get_button(name);
+  }
+
+  return NULL;
 }
 
 void
@@ -97,103 +131,65 @@ KeyboardControl::resize_button(const TCHAR* name,
 }
 
 void
+KeyboardControl::resize_buttons()
+{
+  KeyboardButton* kb;
+  for (unsigned i = 0; i < _tcslen(keyboard_letters); i++) {
+    TCHAR caption[2];
+    _tcsncpy(caption, keyboard_letters + i, 1);
+    caption[1] = 0;
+
+    kb = get_button_by_caption(caption);
+    if (!kb)
+      continue;
+
+    kb->resize(button_width, button_height);
+  }
+  resize_button(_T("cmdComma"), button_width, button_height);
+  resize_button(_T("cmdPeriod"), button_width, button_height);
+  resize_button(_T("cmdMinus"), button_width, button_height);
+  resize_button(_T("cmdSpace"), button_width, button_height);
+}
+
+void
+KeyboardControl::move_buttons_to_row(const TCHAR* buttons, int row, int offset)
+{
+  if (string_is_empty(buttons))
+    return;
+
+  KeyboardButton* kb;
+  for (unsigned i = 0; i < _tcslen(buttons); i++) {
+    TCHAR caption[2];
+    _tcsncpy(caption, buttons + i, 1);
+    caption[1] = 0;
+
+    kb = get_button_by_caption(caption);
+    if (!kb)
+      continue;
+
+    kb->move(i * button_width + offset, row * button_height);
+  }
+}
+
+void
 KeyboardControl::move_buttons()
 {
+  move_buttons_to_row(_T("1234567890"), 0);
+  move_buttons_to_row(_T("QWERTYUIOP"), 1);
+  move_buttons_to_row(_T("ASDFGHJKL"), 2, button_width * 0.333);
+  move_buttons_to_row(_T("ZXCVBNM,."), 3, button_width * 0.667);
+
   if (Layout::landscape) {
-    move_button(_T("cmd1"), Layout::FastScale(0), Layout::FastScale(0));
-    move_button(_T("cmd2"), Layout::FastScale(32), Layout::FastScale(0));
-    move_button(_T("cmd3"), Layout::FastScale(64), Layout::FastScale(0));
-    move_button(_T("cmd4"), Layout::FastScale(96), Layout::FastScale(0));
-    move_button(_T("cmd5"), Layout::FastScale(128), Layout::FastScale(0));
-    move_button(_T("cmd6"), Layout::FastScale(160), Layout::FastScale(0));
-    move_button(_T("cmd7"), Layout::FastScale(192), Layout::FastScale(0));
-    move_button(_T("cmd8"), Layout::FastScale(224), Layout::FastScale(0));
-    move_button(_T("cmd9"), Layout::FastScale(256), Layout::FastScale(0));
-    move_button(_T("cmd0"), Layout::FastScale(288), Layout::FastScale(0));
+    move_button(_T("cmdMinus"), button_width * 9, button_height * 4);
 
-    move_button(_T("cmdQ"), Layout::FastScale(0), Layout::FastScale(40));
-    move_button(_T("cmdW"), Layout::FastScale(32), Layout::FastScale(40));
-    move_button(_T("cmdE"), Layout::FastScale(64), Layout::FastScale(40));
-    move_button(_T("cmdR"), Layout::FastScale(96), Layout::FastScale(40));
-    move_button(_T("cmdT"), Layout::FastScale(128), Layout::FastScale(40));
-    move_button(_T("cmdY"), Layout::FastScale(160), Layout::FastScale(40));
-    move_button(_T("cmdU"), Layout::FastScale(192), Layout::FastScale(40));
-    move_button(_T("cmdI"), Layout::FastScale(224), Layout::FastScale(40));
-    move_button(_T("cmdO"), Layout::FastScale(256), Layout::FastScale(40));
-    move_button(_T("cmdP"), Layout::FastScale(288), Layout::FastScale(40));
-
-    move_button(_T("cmdA"), Layout::FastScale(10), Layout::FastScale(80));
-    move_button(_T("cmdS"), Layout::FastScale(42), Layout::FastScale(80));
-    move_button(_T("cmdD"), Layout::FastScale(74), Layout::FastScale(80));
-    move_button(_T("cmdF"), Layout::FastScale(106), Layout::FastScale(80));
-    move_button(_T("cmdG"), Layout::FastScale(138), Layout::FastScale(80));
-    move_button(_T("cmdH"), Layout::FastScale(170), Layout::FastScale(80));
-    move_button(_T("cmdJ"), Layout::FastScale(202), Layout::FastScale(80));
-    move_button(_T("cmdK"), Layout::FastScale(234), Layout::FastScale(80));
-    move_button(_T("cmdL"), Layout::FastScale(266), Layout::FastScale(80));
-
-    move_button(_T("cmdZ"), Layout::FastScale(20), Layout::FastScale(120));
-    move_button(_T("cmdX"), Layout::FastScale(52), Layout::FastScale(120));
-    move_button(_T("cmdC"), Layout::FastScale(84), Layout::FastScale(120));
-    move_button(_T("cmdV"), Layout::FastScale(116), Layout::FastScale(120));
-    move_button(_T("cmdB"), Layout::FastScale(148), Layout::FastScale(120));
-    move_button(_T("cmdN"), Layout::FastScale(180), Layout::FastScale(120));
-    move_button(_T("cmdM"), Layout::FastScale(212), Layout::FastScale(120));
-
-    move_button(_T("cmdComma"), Layout::FastScale(244), Layout::FastScale(120));
-    move_button(_T("cmdPeriod"), Layout::FastScale(276), Layout::FastScale(120));
-    move_button(_T("cmdMinus"), Layout::FastScale(285), Layout::FastScale(160));
-
-    move_button(_T("cmdSpace"), Layout::FastScale(81), Layout::FastScale(160));
-    resize_button(_T("cmdSpace"), Layout::FastScale(97), Layout::FastScale(40));
+    move_button(_T("cmdSpace"), button_width * 2.5, button_height * 4);
+    resize_button(_T("cmdSpace"), button_width * 3, button_height);
   } else {
-    move_button(_T("cmd1"), Layout::FastScale(0), Layout::FastScale(0));
-    move_button(_T("cmd2"), Layout::FastScale(24), Layout::FastScale(0));
-    move_button(_T("cmd3"), Layout::FastScale(48), Layout::FastScale(0));
-    move_button(_T("cmd4"), Layout::FastScale(72), Layout::FastScale(0));
-    move_button(_T("cmd5"), Layout::FastScale(96), Layout::FastScale(0));
-    move_button(_T("cmd6"), Layout::FastScale(120), Layout::FastScale(0));
-    move_button(_T("cmd7"), Layout::FastScale(144), Layout::FastScale(0));
-    move_button(_T("cmd8"), Layout::FastScale(168), Layout::FastScale(0));
-    move_button(_T("cmd9"), Layout::FastScale(192), Layout::FastScale(0));
-    move_button(_T("cmd0"), Layout::FastScale(216), Layout::FastScale(0));
+    move_button(_T("cmdMinus"), button_width * 8, button_height * 4.5);
 
-    move_button(_T("cmdQ"), Layout::FastScale(0), Layout::FastScale(50));
-    move_button(_T("cmdW"), Layout::FastScale(24), Layout::FastScale(50));
-    move_button(_T("cmdE"), Layout::FastScale(48), Layout::FastScale(50));
-    move_button(_T("cmdR"), Layout::FastScale(72), Layout::FastScale(50));
-    move_button(_T("cmdT"), Layout::FastScale(96), Layout::FastScale(50));
-    move_button(_T("cmdY"), Layout::FastScale(120), Layout::FastScale(50));
-    move_button(_T("cmdU"), Layout::FastScale(144), Layout::FastScale(50));
-    move_button(_T("cmdI"), Layout::FastScale(168), Layout::FastScale(50));
-    move_button(_T("cmdO"), Layout::FastScale(192), Layout::FastScale(50));
-    move_button(_T("cmdP"), Layout::FastScale(216), Layout::FastScale(50));
-
-    move_button(_T("cmdA"), Layout::FastScale(8), Layout::FastScale(100));
-    move_button(_T("cmdS"), Layout::FastScale(32), Layout::FastScale(100));
-    move_button(_T("cmdD"), Layout::FastScale(56), Layout::FastScale(100));
-    move_button(_T("cmdF"), Layout::FastScale(80), Layout::FastScale(100));
-    move_button(_T("cmdG"), Layout::FastScale(104), Layout::FastScale(100));
-    move_button(_T("cmdH"), Layout::FastScale(128), Layout::FastScale(100));
-    move_button(_T("cmdJ"), Layout::FastScale(152), Layout::FastScale(100));
-    move_button(_T("cmdK"), Layout::FastScale(176), Layout::FastScale(100));
-    move_button(_T("cmdL"), Layout::FastScale(200), Layout::FastScale(100));
-
-    move_button(_T("cmdZ"), Layout::FastScale(16), Layout::FastScale(150));
-    move_button(_T("cmdX"), Layout::FastScale(40), Layout::FastScale(150));
-    move_button(_T("cmdC"), Layout::FastScale(64), Layout::FastScale(150));
-    move_button(_T("cmdV"), Layout::FastScale(88), Layout::FastScale(150));
-    move_button(_T("cmdB"), Layout::FastScale(112), Layout::FastScale(150));
-    move_button(_T("cmdN"), Layout::FastScale(136), Layout::FastScale(150));
-    move_button(_T("cmdM"), Layout::FastScale(160), Layout::FastScale(150));
-
-    move_button(_T("cmdComma"), Layout::FastScale(184), Layout::FastScale(150));
-    move_button(_T("cmdPeriod"), Layout::FastScale(208), Layout::FastScale(150));
-    move_button(_T("cmdMinus"), Layout::FastScale(208), Layout::FastScale(197));
-
-    move_button(_T("cmdSpace"), Layout::FastScale(72), Layout::FastScale(197));
-    resize_button(_T("cmdSpace"), Layout::FastScale(96), Layout::FastScale(40));
-  }
+    move_button(_T("cmdSpace"), button_width * 2, button_height * 4.5);
+    resize_button(_T("cmdSpace"), button_width * 5, button_height);
+  }                              
 }
 
 void
@@ -223,12 +219,8 @@ KeyboardControl::add_button(WndForm &form, const TCHAR* name,
   style.tab_stop();
 
   KeyboardButton *button = NULL;
-  if (Layout::landscape)
-    button = new KeyboardButton(this, caption, 0, 0, Layout::FastScale(32),
-                                Layout::FastScale(40), style);
-  else
-    button = new KeyboardButton(this, caption, 0, 0, Layout::FastScale(24),
-                                Layout::FastScale(40), style);
+  button = new KeyboardButton(this, caption, 0, 0, button_width,
+                              button_height, style);
   button->SetFont(font);
   form.AddNamed(name, button);
   form.AddDestruct(button);
