@@ -92,8 +92,14 @@ typedef enum{
 }StateMessageAlign_t;
 
 typedef enum{
-  tiHighScore=0,
+  /**
+   * Use the platform default - i.e. keyboard if the device has a
+   * pointing device.
+   */
+  tiDefault,
+
   tiKeyboard,
+  tiHighScore,
 }TextInputStyle_t;
 
 typedef enum{

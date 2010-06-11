@@ -1711,8 +1711,9 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("HighScore Style")));
+    dfe->addEnumText(gettext(_T("Default")));
     dfe->addEnumText(gettext(_T("Keyboard")));
+    dfe->addEnumText(gettext(_T("HighScore Style")));
     dfe->Set(Appearance.TextInputStyle);
     wp->RefreshDisplay();
   }
