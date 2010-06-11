@@ -49,10 +49,11 @@ static const TCHAR keyboard_letters[] =
 
 KeyboardControl::KeyboardControl(WndForm &form, ContainerWindow &parent,
                                  int x, int y, unsigned width, unsigned height,
+                                 unsigned button_width, unsigned button_height,
                                  Color background_color, const Font *font,
                                  const WindowStyle _style) :
   background_brush(background_color),
-  button_width(50), button_height(50),
+  button_width(button_width), button_height(button_height),
   parent_form(form)
 {
   set(parent, x, y, width, height, _style);

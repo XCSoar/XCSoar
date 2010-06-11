@@ -63,6 +63,7 @@ public:
    */
   KeyboardControl(WndForm &form, ContainerWindow &parent, int x, int y,
                   unsigned width, unsigned height,
+                  unsigned button_width, unsigned button_height,
                   Color background_color, const Font *font,
                   const WindowStyle _style = WindowStyle());
 

@@ -202,10 +202,6 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, int width,
     return false;
 
   kb->SetOnCharacterCallback(OnCharacter);
-  if (Layout::landscape)
-    kb->SetButtonSize(Layout::FastScale(32), Layout::FastScale(40));
-  else
-    kb->SetButtonSize(Layout::FastScale(24), Layout::FastScale(40));
 
   cursor = 0;
   ClearText();
