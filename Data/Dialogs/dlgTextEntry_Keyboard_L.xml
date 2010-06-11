@@ -4,9 +4,9 @@
   <WndProperty Name="prpText"  Caption=""   X="0" Y="2" Width="270" Height="22" CaptionWidth="1" Font="2" ReadOnly="1" />
   <WndButton Name="btnBackspace" Caption="&lt;-"    X="272" Y="3" Width="36"  Height="20" Font="2" OnClick="OnBackspace"/>
 
-  <Keyboard Name="Keyboard" X="0" Y="25" Width="318" Height="225" Font="2">
-    <WndButton Name="btnOK"  Caption="Ok" X="4" Y="160" Width="73"  Height="40" Font="2" OnClick="OnOk"/>
-    <WndButton   Caption="Cancel"    X="183" Y="160" Width="50"  Height="40" Font="2" OnClick="OnCancel"/>
-    <WndButton   Caption="Clear"    X="234" Y="160" Width="50"  Height="40" Font="2" OnClick="OnClear"/>
-  </Keyboard>
+  <WndButton Name="btnOK" Caption="Ok" X="4" Y="185" Width="73"  Height="40" Font="2" OnClick="OnOk"/>
+  <WndButton Caption="Cancel" X="183" Y="185" Width="50" Height="40" Font="2" OnClick="OnCancel"/>
+  <WndButton Caption="Clear" X="234" Y="185" Width="50" Height="40" Font="2" OnClick="OnClear"/>
+
+  <Keyboard Name="Keyboard" X="0" Y="25" Width="318" Height="225" Font="2"/>
 </WndForm>

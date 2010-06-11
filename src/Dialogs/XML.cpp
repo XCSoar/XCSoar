@@ -791,11 +791,6 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     KeyboardControl *kb = new KeyboardControl(form, Parent, X, Y, Width, Height,
         FontMap[Font], style);
     WC = kb;
-
-    // Load children controls from the XMLNode
-    LoadChildrenFromXML(form, kb, LookUpTable, &node,
-                        ParentFont, eDialogStyle);
-
   // DrawControl (WndOwnerDrawFrame)
   } else if (_tcscmp(node.getName(), _T("WndOwnerDrawFrame")) == 0) {
     // Determine DrawCallback function
