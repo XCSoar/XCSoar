@@ -75,13 +75,21 @@ void RasterMapJPG2000::ServiceFullReload(const GEOPOINT &location) {
   FullJPGReload= false;
 }
 
-RasterMapJPG2000::RasterMapJPG2000() {
+RasterMapJPG2000::RasterMapJPG2000(const char *_path)
+  :path(_path), FullJPGReload(true)
+{
   TriggerJPGReload = false;
   DirectAccess = true;
   if (ref_count==0) {
     jas_init();
   }
   ref_count++;
+
+  _ReloadJPG2000();
+
+  terrain_valid = raster_tile_cache.GetInitialised();
+  if (!terrain_valid)
+    raster_tile_cache.Reset();
 }
 
 RasterMapJPG2000::~RasterMapJPG2000() {
@@ -143,31 +151,14 @@ void RasterMapJPG2000::_SetViewCenter(const GEOPOINT &location)
   }
 }
 
-bool
-RasterMapJPG2000::Open(const char *zfilename)
-{
-  path = zfilename;
-
-  // force first-time load
-  FullJPGReload = true;
-
-  _ReloadJPG2000();
-
-  terrain_valid = raster_tile_cache.GetInitialised();
-  if (!terrain_valid)
-    raster_tile_cache.Reset();
-
-  return terrain_valid;
-}
-
 RasterMapJPG2000 *
 RasterMapJPG2000::LoadFile(const char *path)
 {
-  RasterMapJPG2000 *map = new RasterMapJPG2000();
+  RasterMapJPG2000 *map = new RasterMapJPG2000(path);
   if (map == NULL)
     return NULL;
 
-  if (!map->Open(path)) {
+  if (!map->isMapLoaded()) {
     delete map;
     return NULL;
   }

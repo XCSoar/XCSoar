@@ -46,7 +46,7 @@ Copyright_License {
 
 class RasterMapJPG2000: public RasterMap {
  public:
-  RasterMapJPG2000();
+  RasterMapJPG2000(const char *path);
   ~RasterMapJPG2000();
 
   /**
@@ -57,7 +57,6 @@ class RasterMapJPG2000: public RasterMap {
   void SetViewCenter(const GEOPOINT &location);
   virtual void SetFieldRounding(const GEOPOINT& delta,
                                 RasterRounding &rounding) const;
-  bool Open(const char *path);
   void ServiceFullReload(const GEOPOINT &location);
 
   static RasterMapJPG2000 *LoadFile(const char *path);
