@@ -40,9 +40,9 @@ Copyright_License {
 
 #include "StringUtil.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/ButtonWindow.hpp"
 #include "Form/Form.hpp"
 #include "Form/Container.hpp"
-#include "Form/KeyboardButton.hpp"
 
 static const TCHAR keyboard_letters[] =
   _T("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
@@ -82,13 +82,13 @@ KeyboardControl::SetButtonSize(unsigned width, unsigned height)
   move_buttons();
 }
 
-KeyboardButton*
+ButtonWindow *
 KeyboardControl::get_button(const TCHAR* name)
 {
-  return (KeyboardButton*)parent_form.FindByName(name);
+  return (ButtonWindow *)parent_form.FindByName(name);
 }
 
-KeyboardButton*
+ButtonWindow *
 KeyboardControl::get_button_by_caption(const TCHAR* caption)
 {
   if (_tcscmp(caption, _T(",")) == 0)
@@ -114,7 +114,7 @@ KeyboardControl::get_button_by_caption(const TCHAR* caption)
 void
 KeyboardControl::move_button(const TCHAR* name, int left, int top)
 {
-  KeyboardButton* kb = get_button(name);
+  ButtonWindow *kb = get_button(name);
   if (kb)
     kb->move(left, top);
 }
@@ -123,7 +123,7 @@ void
 KeyboardControl::resize_button(const TCHAR* name,
                                unsigned int width, unsigned int height)
 {
-  KeyboardButton* kb = get_button(name);
+  ButtonWindow *kb = get_button(name);
   if (kb)
     kb->resize(width, height);
 }
@@ -131,7 +131,7 @@ KeyboardControl::resize_button(const TCHAR* name,
 void
 KeyboardControl::resize_buttons()
 {
-  KeyboardButton* kb;
+  ButtonWindow *kb;
   for (unsigned i = 0; i < _tcslen(keyboard_letters); i++) {
     TCHAR caption[2];
     _tcsncpy(caption, keyboard_letters + i, 1);
@@ -155,7 +155,7 @@ KeyboardControl::move_buttons_to_row(const TCHAR* buttons, int row, int offset)
   if (string_is_empty(buttons))
     return;
 
-  KeyboardButton* kb;
+  ButtonWindow *kb;
   for (unsigned i = 0; i < _tcslen(buttons); i++) {
     TCHAR caption[2];
     _tcsncpy(caption, buttons + i, 1);
@@ -190,34 +190,24 @@ KeyboardControl::move_buttons()
   }                              
 }
 
-void
-KeyboardControl::on_keyboard_button(const TCHAR* caption)
+bool
+KeyboardControl::on_command(unsigned id, unsigned code)
 {
-  if (mOnCharacter == NULL)
-    return;
-
-  if (_tcscmp(caption, _T(" Space ")) == 0 || _tcscmp(caption, _T(" ")) == 0)
-    mOnCharacter(_T(' '));
-  if (_tcscmp(caption, _T(".")) == 0)
-    mOnCharacter(_T('.'));
-  if (_tcscmp(caption, _T(",")) == 0)
-    mOnCharacter(_T(','));
-  if (_tcscmp(caption, _T("-")) == 0)
-    mOnCharacter(_T('-'));
-
-  if (_tcslen(caption) == 1 && _tcschr(keyboard_letters, caption[0]) != NULL)
-    mOnCharacter(caption[0]);
+  if (id >= 0x20) {
+    mOnCharacter((TCHAR)id);
+    return true;
+  } else
+    return PanelControl::on_command(id, code);
 }
 
 void
 KeyboardControl::add_button(WndForm &form, const TCHAR* name,
                             const TCHAR* caption, const Font *font)
 {
-  WindowStyle style;
-  KeyboardButton *button = NULL;
-  button = new KeyboardButton(this, caption, 0, 0, button_width,
-                              button_height, style);
-  button->SetFont(font);
+  ButtonWindow *button = new ButtonWindow();
+  button->set(*this, caption, (unsigned)caption[0],
+              0, 0, button_width, button_height);
+  button->set_font(*font);
   form.AddNamed(name, button);
   form.AddDestruct(button);
 }

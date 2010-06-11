@@ -45,7 +45,7 @@ Copyright_License {
 
 class WndForm;
 class ContainerControl;
-class KeyboardButton;
+class ButtonWindow;
 
 /**
  * The PanelControl class implements the simplest form of a ContainerControl
@@ -72,7 +72,8 @@ public:
     mOnCharacter = Function;
   }
 
-  void on_keyboard_button(const TCHAR* caption);
+protected:
+  virtual bool on_command(unsigned id, unsigned code);
 
 private:
   unsigned button_width;
@@ -80,8 +81,8 @@ private:
 
   WndForm &parent_form;
 
-  KeyboardButton* get_button(const TCHAR* name);
-  KeyboardButton* get_button_by_caption(const TCHAR* caption);
+  ButtonWindow *get_button(const TCHAR* name);
+  ButtonWindow *get_button_by_caption(const TCHAR* caption);
 
   void move_button(const TCHAR* name, int left, int top);
   void resize_button(const TCHAR* name, unsigned int width, unsigned int height);

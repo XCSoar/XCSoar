@@ -17,7 +17,6 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/Edit.cpp \
 	$(FORM_SRC_DIR)/Tabbed.cpp \
 	$(FORM_SRC_DIR)/Keyboard.cpp \
-	$(FORM_SRC_DIR)/KeyboardButton.cpp \
 	$(FORM_SRC_DIR)/Util.cpp
 
 FORM_OBJS = $(call SRC_TO_OBJ,$(FORM_SOURCES))
