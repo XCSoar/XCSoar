@@ -261,12 +261,13 @@ dlgTextEntryHighscoreType(TCHAR *text, int width)
 }
 
 bool
-dlgTextEntryShowModal(tstring &text, int width)
+dlgTextEntryShowModal(tstring &text, int width,
+                      AllowedCharactersCallback_t accb)
 {
   TCHAR buf[width];
   _tcscpy(buf, text.c_str());
 
-  if (!dlgTextEntryShowModal(buf, width))
+  if (!dlgTextEntryShowModal(buf, width, accb))
     return false;
 
   text = tstring(buf);
@@ -274,11 +275,12 @@ dlgTextEntryShowModal(tstring &text, int width)
 }
 
 bool
-dlgTextEntryShowModal(TCHAR *text, int width)
+dlgTextEntryShowModal(TCHAR *text, int width,
+                      AllowedCharactersCallback_t accb)
 {
   switch (Appearance.TextInputStyle) {
   case tiKeyboard:
-    return dlgTextEntryKeyboardShowModal(text, width);
+    return dlgTextEntryKeyboardShowModal(text, width, accb);
   case tiHighScore:
   default:
     dlgTextEntryHighscoreType(text, width);

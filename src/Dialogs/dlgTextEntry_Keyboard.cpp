@@ -50,11 +50,19 @@ using std::min;
 static WndForm *wf = NULL;
 static KeyboardControl *kb = NULL;
 
+static AllowedCharactersCallback_t AllowedCharactersCallback;
+
 #define MAX_TEXTENTRY 40
 static unsigned int cursor = 0;
 static unsigned int max_width = MAX_TEXTENTRY;
 static TCHAR edittext[MAX_TEXTENTRY];
 #define MAXENTRYLETTERS (sizeof(EntryLetters)/sizeof(EntryLetters[0])-1)
+
+static void
+UpdateAllowedCharacters()
+{
+    kb->SetAllowedCharacters(AllowedCharactersCallback(edittext));
+}
 
 static void
 UpdateTextboxProp(void)
@@ -65,6 +73,8 @@ UpdateTextboxProp(void)
     return;
 
   wp->SetText(edittext);
+
+  UpdateAllowedCharacters();
 }
 
 static bool
@@ -167,7 +177,8 @@ static CallBackTableEntry_t CallBackTable[] = {
 };
 
 bool
-dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
+dlgTextEntryKeyboardShowModal(TCHAR *text, int width,
+                              AllowedCharactersCallback_t accb)
 {
   if (width == 0)
     width = MAX_TEXTENTRY;
@@ -183,6 +194,8 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
 
   if (!wf)
     return false;
+
+  AllowedCharactersCallback = accb;
 
   kb = (KeyboardControl*)wf->FindByName(_T("Keyboard"));
   if (!kb)

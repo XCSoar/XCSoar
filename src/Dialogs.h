@@ -135,8 +135,12 @@ void dlgVoiceShowModal();
 void
 dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& waypoint);
 
-bool dlgTextEntryShowModal(TCHAR *text, int width);
-bool dlgTextEntryShowModal(tstring &text, int width);
+typedef const TCHAR *(*AllowedCharactersCallback_t)(const TCHAR *value);
+
+bool dlgTextEntryShowModal(TCHAR *text, int width,
+                           AllowedCharactersCallback_t accb=NULL);
+bool dlgTextEntryShowModal(tstring &text, int width,
+                           AllowedCharactersCallback_t accb=NULL);
 
 void dlgTeamCodeShowModal();
 void dlgStartPointShowModal();
@@ -147,7 +151,8 @@ void dlgWeatherShowModal();
 void dlgTarget();
 void dlgFlarmTrafficShowModal();
 void dlgFlarmTrafficDetailsShowModal(FlarmId id);
-bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width = 0);
+bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width = 0,
+                                   AllowedCharactersCallback_t accb=NULL);
 void dlgNumberEntryKeyboardShowModal(int *value, int width = 0);
 
 int dlgComboPicker(SingleWindow &parent, WndProperty *theProperty);
