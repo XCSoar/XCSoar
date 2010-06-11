@@ -140,7 +140,7 @@ FlarmTrafficWindow::NextTarget()
   if (traffic == NULL)
     traffic = data.FirstTraffic();
 
-  SetTarget(traffic != NULL ? data.TrafficIndex(traffic) : -1);
+  SetTarget(traffic);
 }
 
 /**
@@ -160,7 +160,7 @@ FlarmTrafficWindow::PrevTarget()
   if (traffic == NULL)
     traffic = data.LastTraffic();
 
-  SetTarget(traffic != NULL ? data.TrafficIndex(traffic) : -1);
+  SetTarget(traffic);
 }
 
 /**

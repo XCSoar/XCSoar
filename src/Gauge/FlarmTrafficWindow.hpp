@@ -112,6 +112,11 @@ public:
   }
 
   void SetTarget(int i);
+
+  void SetTarget(const FLARM_TRAFFIC *traffic) {
+    SetTarget(traffic != NULL ? (int)data.TrafficIndex(traffic) : -1);
+  }
+
   void NextTarget();
   void PrevTarget();
   void SelectNearTarget(int x, int y);
