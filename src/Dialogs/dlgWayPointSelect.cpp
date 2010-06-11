@@ -307,13 +307,22 @@ static void UpdateList(void)
   wWayPointList->invalidate();
 }
 
+static const TCHAR *
+WaypointNameAllowedCharacters(const TCHAR *prefix)
+{
+  static TCHAR buffer[256];
+  return way_points.suggest_name_prefix(prefix, buffer,
+                                        sizeof(buffer) / sizeof(buffer[0]));
+}
+
 static void
 OnFilterNameButton(gcc_unused WndButton &button){
 
 
   TCHAR newNameFilter[NAMEFILTERLEN+1];
   _tcsncpy(newNameFilter, filter_data.name, NAMEFILTERLEN);
-  dlgTextEntryShowModal(newNameFilter, NAMEFILTERLEN);
+  dlgTextEntryShowModal(newNameFilter, NAMEFILTERLEN,
+                        WaypointNameAllowedCharacters);
 
   int i= _tcslen(newNameFilter)-1;
   while (i>=0) {
