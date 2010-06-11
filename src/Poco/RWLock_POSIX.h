@@ -89,6 +89,9 @@ inline bool RWLockImpl::tryReadLockImpl()
 #ifdef HAVEEXCEPTIONS
 	else
 		throw SystemException("cannot lock reader/writer lock");
+#else
+	else
+		return false;
 #endif
 
 }
