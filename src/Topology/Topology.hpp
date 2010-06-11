@@ -45,7 +45,7 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 #include "Screen/Icon.hpp"
 
-class GEOPOINT;
+struct GEOPOINT;
 class Canvas;
 class Projection;
 class LabelBlock;

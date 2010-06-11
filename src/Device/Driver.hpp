@@ -44,8 +44,8 @@ Copyright_License {
 #include <tchar.h>
 
 struct NMEA_INFO;
-struct ComPort;
-struct AtmosphericPressure;
+class ComPort;
+class AtmosphericPressure;
 
 /**
  * This is the interface for a device driver.

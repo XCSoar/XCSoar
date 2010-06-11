@@ -45,7 +45,7 @@
 #include <list>
 #include <map>
 
-class AIRCRAFT_STATE;
+struct AIRCRAFT_STATE;
 
 typedef std::set<TracePoint, TracePoint::time_sort> TracePointSet;
 typedef std::list<TracePoint> TracePointList;

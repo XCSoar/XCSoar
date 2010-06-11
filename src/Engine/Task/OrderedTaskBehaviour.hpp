@@ -40,7 +40,7 @@
 #include "Math/fixed.hpp"
 #include "Util/Serialisable.hpp"
 
-class AIRCRAFT_STATE;
+struct AIRCRAFT_STATE;
 class TaskBehaviour;
 
 /**

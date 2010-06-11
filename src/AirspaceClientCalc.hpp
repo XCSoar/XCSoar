@@ -39,7 +39,7 @@
 
 #include "AirspaceClient.hpp"
 
-class AIRCRAFT_STATE;
+struct AIRCRAFT_STATE;
 class AtmosphericPressure;
 
 class AirspaceClientCalc:

@@ -41,11 +41,11 @@ Copyright_License {
 
 #include <stddef.h>
 
-class AIRCRAFT_STATE;
+struct AIRCRAFT_STATE;
 struct SETTINGS_COMPUTER;
 class RasterTerrain;
 class GlidePolar;
-class GlideResult;
+struct GlideResult;
 class RasterRounding;
 
 #include "Math/fixed.hpp"

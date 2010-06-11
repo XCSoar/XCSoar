@@ -47,7 +47,7 @@ Copyright_License {
 
 class RawBitmap;
 class Canvas;
-class BGRColor;
+struct BGRColor;
 class RasterMap;
 class Projection;
 class RasterTerrain;

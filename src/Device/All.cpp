@@ -51,7 +51,7 @@ devTick()
   ScopeLock protect(mutexComm);
 
   for (i = 0; i < NUMDEV; i++) {
-    struct DeviceDescriptor *d = &DeviceList[i];
+    DeviceDescriptor *d = &DeviceList[i];
     d->OnSysTicker();
   }
 }

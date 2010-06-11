@@ -251,7 +251,7 @@ SetPipeTo(DeviceDescriptor &out)
 static bool
 devInit(const TCHAR *CommandLine)
 {
-  struct DeviceDescriptor *pDevNmeaOut = NULL;
+  DeviceDescriptor *pDevNmeaOut = NULL;
 
   for (unsigned i = 0; i < NUMDEV; i++)
     DeviceList[i].Clear();
@@ -367,7 +367,7 @@ VarioWriteNMEA(const TCHAR *text)
         DeviceList[i].Com->WriteString(tmp);
 }
 
-struct DeviceDescriptor *
+DeviceDescriptor *
 devVarioFindVega(void)
 {
   for (int i = 0; i < NUMDEV; i++)

@@ -51,7 +51,7 @@ extern Mutex mutexComm;
 
 void devWriteNMEAString(DeviceDescriptor &d, const TCHAR *Text);
 void VarioWriteNMEA(const TCHAR *Text);
-struct DeviceDescriptor *devVarioFindVega(void);
+DeviceDescriptor *devVarioFindVega(void);
 
 bool devHasBaroSource(void);
 bool devDeclare(DeviceDescriptor &d, const struct Declaration *decl);

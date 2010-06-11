@@ -48,7 +48,7 @@ enum {
   NUMDEV = 2,
 };
 
-struct DeviceDescriptor;
+class DeviceDescriptor;
 
 extern DeviceDescriptor DeviceList[NUMDEV];
 

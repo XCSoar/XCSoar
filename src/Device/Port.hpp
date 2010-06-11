@@ -48,7 +48,7 @@ Copyright_License {
 #define NMEA_BUF_SIZE 100
 
 // Forward declaration
-struct DeviceDescriptor;
+class DeviceDescriptor;
 
 /**
  * Generic ComPort thread handler class

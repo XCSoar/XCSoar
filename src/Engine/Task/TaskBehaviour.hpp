@@ -40,7 +40,7 @@
 #include "Tasks/PathSolvers/OLCRules.hpp"
 #include "OrderedTaskBehaviour.hpp"
 
-class AIRCRAFT_STATE;
+struct AIRCRAFT_STATE;
 
 /**
  *  Class defining options for task system.

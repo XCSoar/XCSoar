@@ -41,7 +41,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct AtmosphericPressure;
+class AtmosphericPressure;
 
 void devTick(void);
 

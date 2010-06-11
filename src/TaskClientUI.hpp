@@ -42,10 +42,10 @@
 
 #include <tchar.h>
 
-class Declaration;
+struct Declaration;
 class Waypoint;
 class RasterTerrain;
-class SETTINGS_COMPUTER;
+struct SETTINGS_COMPUTER;
 
 /** Facade class for protected access to task data by GUI/user threads */
 class TaskClientUI: public TaskClient

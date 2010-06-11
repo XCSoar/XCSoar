@@ -4,7 +4,8 @@
 #include "Math/fixed.hpp"
 #include "Util/Filter.hpp"
 #include "Util/DiffFilter.hpp"
-class GlideResult;
+
+struct GlideResult;
 
 /**
  * Helper class to produce pseudo variometer based on rate of change

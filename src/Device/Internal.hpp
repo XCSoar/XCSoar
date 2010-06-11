@@ -49,7 +49,6 @@ Copyright_License {
 #include <tchar.h>
 
 class ComPort;
-struct DeviceDescriptor;
 
 /**
  * Writes one line of NMEA data.

@@ -40,7 +40,7 @@
 #include "AirspaceVisitor.hpp"
 #include "AbstractAirspace.hpp"
 
-class AIRCRAFT_STATE;
+struct AIRCRAFT_STATE;
 class AirspaceAircraftPerformance;
 
 /**

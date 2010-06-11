@@ -41,9 +41,9 @@ Copyright_License {
 
 class Canvas;
 class Projection;
-class SETTINGS_MAP;
+struct SETTINGS_MAP;
 class TerrainRenderer;
-class SpeedVector;
+struct SpeedVector;
 class RasterTerrain;
 class RasterWeather;
 class LabelBlock;

@@ -3,7 +3,7 @@
 
 class AbstractAirspace;
 class AirspacePredicateTrue;
-class AIRCRAFT_STATE;
+struct AIRCRAFT_STATE;
 
 /**
  *  Functor class for conditions to be applied to airspace queries

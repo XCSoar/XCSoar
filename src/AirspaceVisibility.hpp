@@ -4,7 +4,7 @@
 #include "Airspace/AirspacePredicate.hpp"
 #include "Math/fixed.hpp"
 
-class SETTINGS_COMPUTER;
+struct SETTINGS_COMPUTER;
 
 class AirspaceVisible: public AirspacePredicate
 {

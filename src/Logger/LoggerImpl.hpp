@@ -55,6 +55,7 @@ struct NMEA_INFO;
 struct SETTINGS_COMPUTER;
 struct Declaration;
 class OrderedTask;
+class DeviceDescriptor;
 
 /**
  * Implementation of logger
@@ -145,8 +146,7 @@ private:
 
   bool IGCWriteRecord(const char *szIn, const TCHAR *);
   void CleanIGCRecord(char * szIn);
-  bool LoggerDeclare(struct DeviceDescriptor *dev,
-                     const Declaration &decl);
+  bool LoggerDeclare(DeviceDescriptor *dev, const Declaration &decl);
   void LoggerGInit();
   
 private:

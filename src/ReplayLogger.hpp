@@ -45,7 +45,7 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 #include <stdio.h>
 
-class GEOPOINT;
+struct GEOPOINT;
 class Angle;
 
 class ReplayLogger

@@ -44,7 +44,7 @@ Copyright_License {
 
 class Canvas;
 class Projection;
-class SETTINGS_MAP;
+struct SETTINGS_MAP;
 
 /**
  * Utility class to draw multilayer items on a canvas with stencil masking
