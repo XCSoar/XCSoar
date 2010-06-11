@@ -96,28 +96,27 @@ RasterMapJPG2000::~RasterMapJPG2000() {
 int RasterMapJPG2000::ref_count = 0;
 
 void RasterMapJPG2000::_ReloadJPG2000() {
-  if (TriggerJPGReload) {
-    TriggerJPGReload = false;
+  TriggerJPGReload = false;
 
-    raster_tile_cache.LoadJPG2000(jp2_filename, FullJPGReload);
-    FullJPGReload = false;
+  raster_tile_cache.LoadJPG2000(jp2_filename, FullJPGReload);
+  FullJPGReload = false;
 
-    if (raster_tile_cache.GetInitialised()) {
-      TerrainInfo.TopLeft.Longitude = 
-        Angle::degrees((fixed)raster_tile_cache.lon_min);
-      TerrainInfo.BottomRight.Longitude =
-        Angle::degrees((fixed)raster_tile_cache.lon_max);
-      TerrainInfo.TopLeft.Latitude = 
-        Angle::degrees((fixed)raster_tile_cache.lat_max);
-      TerrainInfo.BottomRight.Latitude = 
-        Angle::degrees((fixed)raster_tile_cache.lat_min);
-      TerrainInfo.Columns = raster_tile_cache.GetWidth();
-      TerrainInfo.Rows = raster_tile_cache.GetHeight();
-      TerrainInfo.StepSize = Angle::degrees((fixed)(raster_tile_cache.lon_max -
-                                                    raster_tile_cache.lon_min)
-                                            /raster_tile_cache.GetWidth());
-    }
-  }
+  if (!raster_tile_cache.GetInitialised())
+    return;
+
+  TerrainInfo.TopLeft.Longitude =
+    Angle::degrees((fixed)raster_tile_cache.lon_min);
+  TerrainInfo.BottomRight.Longitude =
+    Angle::degrees((fixed)raster_tile_cache.lon_max);
+  TerrainInfo.TopLeft.Latitude =
+    Angle::degrees((fixed)raster_tile_cache.lat_max);
+  TerrainInfo.BottomRight.Latitude =
+    Angle::degrees((fixed)raster_tile_cache.lat_min);
+  TerrainInfo.Columns = raster_tile_cache.GetWidth();
+  TerrainInfo.Rows = raster_tile_cache.GetHeight();
+  TerrainInfo.StepSize = Angle::degrees((fixed)(raster_tile_cache.lon_max -
+                                                raster_tile_cache.lon_min)
+                                        / raster_tile_cache.GetWidth());
 }
 
 void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
@@ -152,7 +151,6 @@ RasterMapJPG2000::Open(const char *zfilename)
   strcpy(jp2_filename,zfilename);
 
   // force first-time load
-  TriggerJPGReload = true;
   FullJPGReload = true;
 
   _ReloadJPG2000();
