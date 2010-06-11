@@ -226,7 +226,6 @@ GlueMapWindow::on_mouse_up(int x, int y)
   int dwInterval = mouse_down_clock.elapsed();
   mouse_down_clock.reset();
 
-  RECT rc = MapRect;
   bool my_target_pan = SettingsMap().TargetPan;
 
   double distance = isqrt4((long)((XstartScreen - x) *
