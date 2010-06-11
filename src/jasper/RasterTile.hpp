@@ -72,7 +72,7 @@ public:
   bool GetScanType(void) const;
   short GetField(unsigned int lx,
                  unsigned int ly);
-  void LoadJPG2000(char* jp2_filename, const bool do_load_all);
+  void LoadJPG2000(const char *path, const bool do_load_all);
   bool GetInitialised(void) const;
   void Reset();
   void SetInitialised(bool val);
