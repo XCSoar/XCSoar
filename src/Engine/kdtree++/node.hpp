@@ -176,7 +176,7 @@ namespace KDTree
    */
   template <typename _Val, typename _Cmp, typename _Acc, typename NodeType>
   inline
-  NodeType*
+  const NodeType*
   _S_node_descend (const size_t __dim,
 		   const _Cmp& __cmp, const _Acc& __acc,
 		   const _Val& __val, const NodeType* __node)
