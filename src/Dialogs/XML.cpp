@@ -787,11 +787,17 @@ LoadChild(WndForm &form, ContainerControl *Parent,
 
   // KeyboardControl
   } else if (_tcscmp(node.getName(), _T("Keyboard")) == 0) {
+    KeyboardControl::OnCharacterCallback_t CharacterCallback =
+      (KeyboardControl::OnCharacterCallback_t)
+      CallBackLookup(LookUpTable,
+                     StringToStringDflt(node.getAttribute(_T("OnCharacter")),
+                                        NULL));
+
     // Create the KeyboardControl
     KeyboardControl *kb =
       new KeyboardControl(form, Parent->GetClientAreaWindow(),
-                          X, Y, Width, Height,
-                          Parent->GetBackColor(), FontMap[Font], style);
+                          X, Y, Width, Height, Parent->GetBackColor(),
+                          FontMap[Font], CharacterCallback, style);
 
     window = kb;
   // DrawControl (WndOwnerDrawFrame)

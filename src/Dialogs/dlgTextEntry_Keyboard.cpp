@@ -170,6 +170,7 @@ OnCharacter(TCHAR character)
 }
 
 static CallBackTableEntry_t CallBackTable[] = {
+  DeclareCallBackEntry(OnCharacter),
   DeclareCallBackEntry(OnBackspace),
   DeclareCallBackEntry(OnClear),
   DeclareCallBackEntry(OnCancel),
@@ -202,7 +203,6 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, int width,
   if (!kb)
     return false;
 
-  kb->SetOnCharacterCallback(OnCharacter);
 
   cursor = 0;
   ClearText();

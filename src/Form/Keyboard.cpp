@@ -50,10 +50,12 @@ static const TCHAR keyboard_letters[] =
 KeyboardControl::KeyboardControl(WndForm &form, ContainerWindow &parent,
                                  int x, int y, unsigned width, unsigned height,
                                  Color background_color, const Font *font,
+                                 OnCharacterCallback_t function,
                                  const WindowStyle _style) :
   background_brush(background_color),
   button_width(50), button_height(50),
-  parent_form(form)
+  parent_form(form),
+  mOnCharacter(function)
 {
   set(parent, x, y, width, height, _style);
   set_buttons_size();
@@ -222,7 +224,7 @@ KeyboardControl::on_paint(Canvas &canvas)
 bool
 KeyboardControl::on_command(unsigned id, unsigned code)
 {
-  if (id >= 0x20) {
+  if (id >= 0x20 && mOnCharacter != NULL) {
     mOnCharacter((TCHAR)id);
     return true;
   } else

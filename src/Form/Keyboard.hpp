@@ -64,6 +64,7 @@ public:
   KeyboardControl(WndForm &form, ContainerWindow &parent, int x, int y,
                   unsigned width, unsigned height,
                   Color background_color, const Font *font,
+                  OnCharacterCallback_t function,
                   const WindowStyle _style = WindowStyle());
 
   /**
