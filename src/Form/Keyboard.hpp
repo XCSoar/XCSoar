@@ -39,31 +39,31 @@ Copyright_License {
 #ifndef XCSOAR_KEYBOARD_CONTROL_HPP
 #define XCSOAR_KEYBOARD_CONTROL_HPP
 
-#include "Form/Panel.hpp"
+#include "Screen/ContainerWindow.hpp"
 
 #include <tchar.h>
 
 class WndForm;
-class ContainerControl;
 class ButtonWindow;
 
 /**
  * The PanelControl class implements the simplest form of a ContainerControl
  */
-class KeyboardControl : public PanelControl {
+class KeyboardControl : public ContainerWindow {
 public:
   typedef void (*OnCharacterCallback_t)(TCHAR key);
 
   /**
    * Constructor of the KeyboardControl class
-   * @param owner Parent ContainerControl
+   * @param parent the parent window
    * @param x x-Coordinate of the Control
    * @param y y-Coordinate of the Control
    * @param width Width of the Control
    * @param height Height of the Control
    */
-  KeyboardControl(WndForm &form, ContainerControl *owner, int x, int y,
-                  unsigned width, unsigned height, const Font *font,
+  KeyboardControl(WndForm &form, ContainerWindow &parent, int x, int y,
+                  unsigned width, unsigned height,
+                  Color background_color, const Font *font,
                   const WindowStyle _style = WindowStyle());
 
   void SetButtonSize(unsigned width, unsigned height);
@@ -73,9 +73,12 @@ public:
   }
 
 protected:
+  virtual void on_paint(Canvas &canvas);
   virtual bool on_command(unsigned id, unsigned code);
 
 private:
+  Brush background_brush;
+
   unsigned button_width;
   unsigned button_height;
 

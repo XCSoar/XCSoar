@@ -47,14 +47,16 @@ Copyright_License {
 static const TCHAR keyboard_letters[] =
   _T("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
-KeyboardControl::KeyboardControl(WndForm &form, ContainerControl *owner,
+KeyboardControl::KeyboardControl(WndForm &form, ContainerWindow &parent,
                                  int x, int y, unsigned width, unsigned height,
-                                 const Font *font,
+                                 Color background_color, const Font *font,
                                  const WindowStyle _style) :
-  PanelControl(owner, x, y, width, height, _style),
+  background_brush(background_color),
   button_width(50), button_height(50),
   parent_form(form)
 {
+  set(parent, x, y, width, height, _style);
+
   TCHAR caption[] = _T(" ");
   TCHAR name[] = _T("cmd ");
 
@@ -190,6 +192,12 @@ KeyboardControl::move_buttons()
   }                              
 }
 
+void
+KeyboardControl::on_paint(Canvas &canvas)
+{
+  canvas.clear(background_brush);
+}
+
 bool
 KeyboardControl::on_command(unsigned id, unsigned code)
 {
@@ -197,7 +205,7 @@ KeyboardControl::on_command(unsigned id, unsigned code)
     mOnCharacter((TCHAR)id);
     return true;
   } else
-    return PanelControl::on_command(id, code);
+    return ContainerWindow::on_command(id, code);
 }
 
 void
