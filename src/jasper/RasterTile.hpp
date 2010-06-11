@@ -1,5 +1,5 @@
-#ifndef RASTERTILE_H
-#define RASTERTILE_H
+#ifndef XCSOAR_RASTERTILE_HPP
+#define XCSOAR_RASTERTILE_HPP
 
 #include <stddef.h>
 

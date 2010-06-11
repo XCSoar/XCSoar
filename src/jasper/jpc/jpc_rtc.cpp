@@ -1,5 +1,5 @@
 #include "jasper/jpc_rtc.h"
-#include "jasper/RasterTile.h"
+#include "jasper/RasterTile.hpp"
 #include "Interface.hpp"
 
 RasterTileCache *raster_tile_current = 0;

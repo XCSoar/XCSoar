@@ -40,7 +40,7 @@ Copyright_License {
 #define XCSOAR_TERRAIN_RASTER_MAP_JPG2000_HPP
 
 #include "Terrain/RasterMap.hpp"
-#include "jasper/RasterTile.h"
+#include "jasper/RasterTile.hpp"
 
 #include <syslimits.h>
 

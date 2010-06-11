@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "jasper/RasterTile.h"
+#include "jasper/RasterTile.hpp"
 #include "jasper/jasper.h"
 #include "Math/Angle.hpp"
 
