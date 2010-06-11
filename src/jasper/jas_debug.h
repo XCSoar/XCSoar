@@ -90,7 +90,7 @@ extern "C" {
   level is set sufficiently high. */
 #ifndef NDEBUG
 #define	JAS_DBGLOG(n, x) \
-	((jas_getdbglevel() >= (n)) ? (jas_eprintf x) : 0)
+  (void)((jas_getdbglevel() >= (n)) ? (jas_eprintf x) : 0)
 #else
 #define	JAS_DBGLOG(n, x)
 #endif
