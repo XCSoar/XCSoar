@@ -79,8 +79,6 @@ ApplyClearType(LOGFONT *logfont)
   logfont->lfQuality = ANTIALIASED_QUALITY;
 }
 
-#endif /* !ENABLE_SDL */
-
 static bool
 IsNullLogFont(LOGFONT logfont)
 {
@@ -92,6 +90,8 @@ IsNullLogFont(LOGFONT logfont)
 
   return false;
 }
+
+#endif /* !ENABLE_SDL */
 
 void
 InitializeOneFont(Font *theFont, LOGFONT autoLogFont,
@@ -141,15 +141,6 @@ InitialiseFontsHardCoded(const struct Appearance &appearance, RECT rc,
 {
 
   int ScreenSize = 0;
-
-  memset((char *)ptrhardInfoWindowLogFont, 0, sizeof(LOGFONT));
-  memset((char *)ptrhardTitleWindowLogFont, 0, sizeof(LOGFONT));
-  memset((char *)ptrhardMapWindowLogFont, 0, sizeof(LOGFONT));
-  memset((char *)ptrhardTitleSmallWindowLogFont, 0, sizeof(LOGFONT));
-  memset((char *)ptrhardMapWindowBoldLogFont, 0, sizeof(LOGFONT));
-  memset((char *)ptrhardCDIWindowLogFont, 0, sizeof(LOGFONT));
-  memset((char *)ptrhardMapLabelLogFont, 0, sizeof(LOGFONT));
-  memset((char *)ptrhardStatisticsLogFont, 0, sizeof(LOGFONT));
 
 /*
  * VENTA-ADDON 2/2/08
@@ -444,49 +435,15 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
                       &autoMapLabelLogFont,
                       &autoStatisticsLogFont);
 
-  LOGFONT hardInfoWindowLogFont;
-  LOGFONT hardTitleWindowLogFont;
-  LOGFONT hardMapWindowLogFont;
-  LOGFONT hardTitleSmallWindowLogFont;
-  LOGFONT hardMapWindowBoldLogFont;
-  LOGFONT hardCDIWindowLogFont;
-  LOGFONT hardMapLabelLogFont;
-  LOGFONT hardStatisticsLogFont;
-
   InitialiseFontsHardCoded(appearance, rc,
-                           &hardInfoWindowLogFont,
-                           &hardTitleWindowLogFont,
-                           &hardMapWindowLogFont,
-                           &hardTitleSmallWindowLogFont,
-                           &hardMapWindowBoldLogFont,
-                           &hardCDIWindowLogFont,
-                           &hardMapLabelLogFont,
-                           &hardStatisticsLogFont);
-
-  // for PNA & GNAV, merge the "hard" into the "auto" if one exists
-  if (!IsNullLogFont(hardInfoWindowLogFont))
-    autoInfoWindowLogFont = hardInfoWindowLogFont;
-
-  if (!IsNullLogFont(hardTitleWindowLogFont))
-    autoTitleWindowLogFont = hardTitleWindowLogFont;
-
-  if (!IsNullLogFont(hardMapWindowLogFont))
-    autoMapWindowLogFont = hardMapWindowLogFont;
-
-  if (!IsNullLogFont(hardTitleSmallWindowLogFont))
-    autoTitleSmallWindowLogFont = hardTitleSmallWindowLogFont;
-
-  if (!IsNullLogFont(hardMapWindowBoldLogFont))
-    autoMapWindowBoldLogFont = hardMapWindowBoldLogFont;
-
-  if (!IsNullLogFont(hardCDIWindowLogFont))
-    autoCDIWindowLogFont = hardCDIWindowLogFont;
-
-  if (!IsNullLogFont(hardMapLabelLogFont))
-    autoMapLabelLogFont = hardMapLabelLogFont;
-
-  if (!IsNullLogFont(hardStatisticsLogFont))
-    autoStatisticsLogFont = hardStatisticsLogFont;
+                           &autoInfoWindowLogFont,
+                           &autoTitleWindowLogFont,
+                           &autoMapWindowLogFont,
+                           &autoTitleSmallWindowLogFont,
+                           &autoMapWindowBoldLogFont,
+                           &autoCDIWindowLogFont,
+                           &autoMapLabelLogFont,
+                           &autoStatisticsLogFont);
 
   if (UseCustomFonts) {
     LoadCustomFont(&InfoWindowFont, szProfileFontInfoWindowFont);
