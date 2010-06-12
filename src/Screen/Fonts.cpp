@@ -246,7 +246,7 @@ InitialiseFontsAuto()
 {
 #ifndef ENABLE_SDL
   LOGFONT logfont;
-  int FontHeight, FontWidth;
+  int FontHeight, FontWidth = 0;
 
   memset(&autoInfoWindowLogFont, 0, sizeof(LOGFONT));
   memset(&autoTitleWindowLogFont, 0, sizeof(LOGFONT));
@@ -266,9 +266,6 @@ InitialiseFontsAuto()
 
   // oversize first so can then scale down
   int iFontHeight = (int)(FontHeight * 1.4);
-
-  // JMW this should be done so closest font is found
-  FontWidth = 0;
 
   memset((char *)&logfont, 0, sizeof(logfont));
 
