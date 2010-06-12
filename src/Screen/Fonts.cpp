@@ -49,13 +49,18 @@ Copyright_License {
 
 #include <stdio.h>
 
-// Display Gobals
+/// values inside infoboxes  like numbers, etc.
 Font InfoWindowFont;
+/// Titles of infoboxes like Next, WP L/D etc.
 Font TitleWindowFont;
+/// text names on the map
 Font MapWindowFont;
 Font TitleSmallWindowFont;
+/// menu buttons, waypoint selection, messages, etc.
 Font MapWindowBoldFont;
+/// vario display, runway informations
 Font CDIWindowFont; // New
+/// Flarm Traffic draweing and stats, map labels in italic
 Font MapLabelFont;
 Font StatisticsFont;
 
@@ -141,27 +146,6 @@ InitialiseFontsHardCoded(const struct Appearance &appearance, RECT rc,
 {
 
   int ScreenSize = 0;
-
-/*
- * VENTA-ADDON 2/2/08
- * Adding custom font settings for PNAs
- *
- * InfoWindowFont	= values inside infoboxes  like numbers, etc.
- * TitleWindowFont	= Titles of infoboxes like Next, WP L/D etc.
- * TitleSmallWindowFont =
- * CDIWindowFont	= vario display, runway informations
- * MapLabelFont		= Flarm Traffic draweing and stats, map labels in italic
- * StatisticsFont
- * MapWindowFont	= text names on the map
- * MapWindowBoldFont = menu buttons, waypoint selection, messages, etc.
- *
- *
- */
-// VENTA2-ADDON  different infobox fonts for different geometries on HP31X.
-// VENTA2-ADDON	 different ELLIPSE values for different geometries!
-// RLD this loads the elipses each time and handles the fonts with the new font system
-// VENTA4  ok but should apply only for PNAs, not for PC and PDAs..  For PDA there was a font registry problem,
-//         but RLD fontsystem should have fixed it once forever.
 
   int iWidth = rc.right - rc.left;
   int iHeight = rc.bottom - rc.top;
