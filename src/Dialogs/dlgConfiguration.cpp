@@ -314,56 +314,26 @@ static void ResetFonts(bool bUseCustom) {
   bool UseCustomFontsold = UseCustomFonts;
   UseCustomFonts=bUseCustom;
 
+  LoadCustomFont(&TempInfoWindowFont, szProfileFontInfoWindowFont);
+  LoadCustomFont(&TempTitleWindowFont, szProfileFontTitleWindowFont);
+  LoadCustomFont(&TempMapWindowFont, szProfileFontMapWindowFont);
+  LoadCustomFont(&TempTitleSmallWindowFont, szProfileFontTitleSmallWindowFont);
+  LoadCustomFont(&TempMapWindowBoldFont, szProfileFontMapWindowBoldFont);
+  LoadCustomFont(&TempCDIWindowFont, szProfileFontCDIWindowFont);
+  LoadCustomFont(&TempMapLabelFont, szProfileFontMapLabelFont);
+  LoadCustomFont(&TempStatisticsFont, szProfileFontStatisticsFont);
 
+  InitializeOneFont (&TempUseCustomFontsFont, autoMapWindowLogFont);
+  InitializeOneFont(&TempInfoWindowFont, autoInfoWindowLogFont);
+  InitializeOneFont(&TempTitleWindowFont, autoTitleWindowLogFont);
+  InitializeOneFont(&TempMapWindowFont, autoMapWindowLogFont);
+  InitializeOneFont(&TempTitleSmallWindowFont, autoTitleSmallWindowLogFont);
+  InitializeOneFont(&TempMapWindowBoldFont, autoMapWindowBoldLogFont);
+  InitializeOneFont(&TempCDIWindowFont, autoCDIWindowLogFont);
+  InitializeOneFont(&TempMapLabelFont, autoMapLabelLogFont);
+  InitializeOneFont(&TempStatisticsFont, autoStatisticsLogFont);
 
-  InitializeOneFont (&TempUseCustomFontsFont,
-                        _T("THIS FONT IS NOT CUSTOMIZABLE"),
-                        autoMapWindowLogFont,
-                        NULL);
-
-
-
-  InitializeOneFont (&TempInfoWindowFont,
-                        szProfileFontInfoWindowFont,
-                        autoInfoWindowLogFont,
-                        NULL);
-
-  InitializeOneFont (&TempTitleWindowFont,
-                        szProfileFontTitleWindowFont,
-                        autoTitleWindowLogFont,
-                        NULL);
-
-  InitializeOneFont (&TempMapWindowFont,
-                        szProfileFontMapWindowFont,
-                        autoMapWindowLogFont,
-                        NULL);
-
-  InitializeOneFont (&TempTitleSmallWindowFont,
-                        szProfileFontTitleSmallWindowFont,
-                        autoTitleSmallWindowLogFont,
-                        NULL);
-
-  InitializeOneFont (&TempMapWindowBoldFont,
-                        szProfileFontMapWindowBoldFont,
-                        autoMapWindowBoldLogFont,
-                        NULL);
-
-  InitializeOneFont (&TempCDIWindowFont,
-                        szProfileFontCDIWindowFont,
-                        autoCDIWindowLogFont,
-                        NULL);
-
-  InitializeOneFont (&TempMapLabelFont,
-                        szProfileFontMapLabelFont,
-                        autoMapLabelLogFont,
-                        NULL);
-
-  InitializeOneFont (&TempStatisticsFont,
-                        szProfileFontStatisticsFont,
-                        autoStatisticsLogFont,
-                        NULL);
-
-  UseCustomFonts=UseCustomFontsold;
+  UseCustomFonts = UseCustomFontsold;
 }
 
 static void ShowFontEditButtons(bool bVisible) {

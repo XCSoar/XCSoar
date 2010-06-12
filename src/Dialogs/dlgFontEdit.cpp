@@ -428,10 +428,8 @@ bool dlgFontEditShowModal(const TCHAR * FontDescription,
 
   bool UseCustomFonts_old = UseCustomFonts;
   UseCustomFonts = true;// global var
-  InitializeOneFont (&NewFont,
-                        FontRegKey,
-                        autoLogFont,
-                        &OriginalLogFont);
+  LoadCustomFont(&NewFont, FontRegKey, &OriginalLogFont);
+  InitializeOneFont(&NewFont, autoLogFont, &OriginalLogFont);
   UseCustomFonts=UseCustomFonts_old;
 
 

@@ -94,8 +94,23 @@ IsNullLogFont(LOGFONT logfont)
 }
 
 void
-InitializeOneFont(Font *theFont, const TCHAR FontRegKey[], LOGFONT autoLogFont,
+InitializeOneFont(Font *theFont, LOGFONT autoLogFont,
                   LOGFONT * LogFontUsed)
+{
+#ifdef ENABLE_SDL
+  // XXX
+#else /* !ENABLE_SDL */
+  if (!theFont->defined() && !IsNullLogFont(autoLogFont)) {
+    ApplyClearType(&autoLogFont);
+    theFont->set(&autoLogFont);
+    if (theFont->defined() && LogFontUsed != NULL)
+      *LogFontUsed = autoLogFont; // RLD save for custom font GUI
+  }
+#endif /* !ENABLE_SDL */
+}
+
+void
+LoadCustomFont(Font *theFont, const TCHAR FontRegKey[], LOGFONT * LogFontUsed)
 {
 #ifdef ENABLE_SDL
   // XXX
@@ -109,13 +124,6 @@ InitializeOneFont(Font *theFont, const TCHAR FontRegKey[], LOGFONT autoLogFont,
       if (theFont->defined() && LogFontUsed != NULL)
         *LogFontUsed = logfont; // RLD save for custom font GUI
     }
-  }
-
-  if (!theFont->defined() && !IsNullLogFont(autoLogFont)) {
-    ApplyClearType(&autoLogFont);
-    theFont->set(&autoLogFont);
-    if (theFont->defined() && LogFontUsed != NULL)
-      *LogFontUsed = autoLogFont; // RLD save for custom font GUI
   }
 #endif /* !ENABLE_SDL */
 }
@@ -490,29 +498,25 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
   if (!IsNullLogFont(hardStatisticsLogFont))
     autoStatisticsLogFont = hardStatisticsLogFont;
 
-  InitializeOneFont(&InfoWindowFont, szProfileFontInfoWindowFont,
-                    autoInfoWindowLogFont);
+  if (UseCustomFonts) {
+    LoadCustomFont(&InfoWindowFont, szProfileFontInfoWindowFont);
+    LoadCustomFont(&TitleWindowFont, szProfileFontTitleWindowFont);
+    LoadCustomFont(&CDIWindowFont, szProfileFontCDIWindowFont);
+    LoadCustomFont(&MapLabelFont, szProfileFontMapLabelFont);
+    LoadCustomFont(&StatisticsFont, szProfileFontStatisticsFont);
+    LoadCustomFont(&MapWindowFont, szProfileFontMapWindowFont);
+    LoadCustomFont(&MapWindowBoldFont, szProfileFontMapWindowBoldFont);
+    LoadCustomFont(&TitleSmallWindowFont, szProfileFontTitleSmallWindowFont);
+  }
 
-  InitializeOneFont(&TitleWindowFont, szProfileFontTitleWindowFont,
-                    autoTitleWindowLogFont);
-
-  InitializeOneFont(&CDIWindowFont, szProfileFontCDIWindowFont,
-                    autoCDIWindowLogFont);
-
-  InitializeOneFont(&MapLabelFont, szProfileFontMapLabelFont,
-                    autoMapLabelLogFont);
-
-  InitializeOneFont(&StatisticsFont, szProfileFontStatisticsFont,
-                    autoStatisticsLogFont);
-
-  InitializeOneFont(&MapWindowFont, szProfileFontMapWindowFont,
-                    autoMapWindowLogFont);
-
-  InitializeOneFont(&MapWindowBoldFont, szProfileFontMapWindowBoldFont,
-                    autoMapWindowBoldLogFont);
-
-  InitializeOneFont(&TitleSmallWindowFont, szProfileFontTitleSmallWindowFont,
-                    autoTitleSmallWindowLogFont);
+  InitializeOneFont(&InfoWindowFont, autoInfoWindowLogFont);
+  InitializeOneFont(&TitleWindowFont, autoTitleWindowLogFont);
+  InitializeOneFont(&CDIWindowFont, autoCDIWindowLogFont);
+  InitializeOneFont(&MapLabelFont, autoMapLabelLogFont);
+  InitializeOneFont(&StatisticsFont, autoStatisticsLogFont);
+  InitializeOneFont(&MapWindowFont, autoMapWindowLogFont);
+  InitializeOneFont(&MapWindowBoldFont, autoMapWindowBoldLogFont);
+  InitializeOneFont(&TitleSmallWindowFont, autoTitleSmallWindowLogFont);
 }
 
 void
