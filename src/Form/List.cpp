@@ -103,7 +103,7 @@ WndListFrame::on_paint(Canvas &canvas)
     canvas.background_transparent();
     canvas.select(*GetFont());
 
-    for (unsigned i = 0; i < items_visible; i++) {
+    for (unsigned i = 0; i < items_visible + 1; i++) {
       if (has_focus() && i == relative_cursor) {
         Brush brush(GetBackColor().highlight());
         canvas.fill_rectangle(rc, brush);
