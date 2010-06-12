@@ -77,16 +77,6 @@ static void
 ApplyClearType(LOGFONT *logfont)
 {
   logfont->lfQuality = ANTIALIASED_QUALITY;
-#ifdef CLEARTYPE_COMPAT_QUALITY
-  if (0) {
-    logfont->lfQuality = CLEARTYPE_COMPAT_QUALITY; // VENTA TODO FIX HERE. WHY NOT LANDSCAPE? cleartype is not native, but better than nothing!
-#ifndef NOCLEARTYPE
-  if (!Layout::landscape) {
-    logfont->lfQuality = CLEARTYPE_COMPAT_QUALITY; // VENTA TODO FIX HERE. WHY NOT LANDSCAPE? cleartype is not native, but better than nothing!
-  }
-#endif
-  }
-#endif
 }
 
 #endif /* !ENABLE_SDL */
