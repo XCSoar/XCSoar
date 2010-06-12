@@ -234,6 +234,8 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   else
     traffic = data.FLARM_Traffic[selection];
 
+  assert(traffic.defined());
+
   RECT rc;
   rc.left = padding;
   rc.top = padding;

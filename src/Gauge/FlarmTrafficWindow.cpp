@@ -504,6 +504,12 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
 void
 FlarmTrafficWindow::on_paint(Canvas &canvas)
 {
+  assert(selection < FLARM_STATE::FLARM_MAX_TRAFFIC);
+  assert(selection < 0 || data.FLARM_Traffic[selection].defined());
+  assert(warning < FLARM_STATE::FLARM_MAX_TRAFFIC);
+  assert(warning < 0 || data.FLARM_Traffic[warning].defined());
+  assert(warning < 0 || data.FLARM_Traffic[warning].HasAlarm());
+
   canvas.white_pen();
   canvas.white_brush();
   canvas.clear();
