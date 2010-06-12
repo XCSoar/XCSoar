@@ -535,25 +535,15 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
   MapLabelFont.reset();
   StatisticsFont.reset();
 
-  memset ((char *)&autoInfoWindowLogFont, 0, sizeof (LOGFONT));
-  memset ((char *)&autoTitleWindowLogFont, 0, sizeof (LOGFONT));
-  memset ((char *)&autoMapWindowLogFont, 0, sizeof (LOGFONT));
-  memset ((char *)&autoTitleSmallWindowLogFont, 0, sizeof (LOGFONT));
-  memset ((char *)&autoMapWindowBoldLogFont, 0, sizeof (LOGFONT));
-  memset ((char *)&autoCDIWindowLogFont, 0, sizeof (LOGFONT));
-  memset ((char *)&autoMapLabelLogFont, 0, sizeof (LOGFONT));
-  memset ((char *)&autoStatisticsLogFont, 0, sizeof (LOGFONT));
-
-
   InitialiseFontsAuto(rc,
-                        &autoInfoWindowLogFont,
-                        &autoTitleWindowLogFont,
-                        &autoMapWindowLogFont,
-                        &autoTitleSmallWindowLogFont,
-                        &autoMapWindowBoldLogFont,
-                        &autoCDIWindowLogFont, // New
-                        &autoMapLabelLogFont,
-                        &autoStatisticsLogFont);
+                      &autoInfoWindowLogFont,
+                      &autoTitleWindowLogFont,
+                      &autoMapWindowLogFont,
+                      &autoTitleSmallWindowLogFont,
+                      &autoMapWindowBoldLogFont,
+                      &autoCDIWindowLogFont, // New
+                      &autoMapLabelLogFont,
+                      &autoStatisticsLogFont);
 
 
   LOGFONT hardInfoWindowLogFont;
@@ -565,24 +555,15 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
   LOGFONT hardMapLabelLogFont;
   LOGFONT hardStatisticsLogFont;
 
-  memset ((char *)&hardInfoWindowLogFont, 0, sizeof (LOGFONT));
-  memset ((char *)&hardTitleWindowLogFont, 0, sizeof (LOGFONT));
-  memset ((char *)&hardMapWindowLogFont, 0, sizeof (LOGFONT));
-  memset ((char *)&hardTitleSmallWindowLogFont, 0, sizeof (LOGFONT));
-  memset ((char *)&hardMapWindowBoldLogFont, 0, sizeof (LOGFONT));
-  memset ((char *)&hardCDIWindowLogFont, 0, sizeof (LOGFONT));
-  memset ((char *)&hardMapLabelLogFont, 0, sizeof (LOGFONT));
-  memset ((char *)&hardStatisticsLogFont, 0, sizeof (LOGFONT));
-
   InitialiseFontsHardCoded(appearance, rc,
-                        &hardInfoWindowLogFont,
-                        &hardTitleWindowLogFont,
-                        &hardMapWindowLogFont,
-                        &hardTitleSmallWindowLogFont,
-                        &hardMapWindowBoldLogFont,
-                        &hardCDIWindowLogFont, // New
-                        &hardMapLabelLogFont,
-                        &hardStatisticsLogFont);
+                           &hardInfoWindowLogFont,
+                           &hardTitleWindowLogFont,
+                           &hardMapWindowLogFont,
+                           &hardTitleSmallWindowLogFont,
+                           &hardMapWindowBoldLogFont,
+                           &hardCDIWindowLogFont, // New
+                           &hardMapLabelLogFont,
+                           &hardStatisticsLogFont);
 
 // for PNA & GNAV, merge the "hard" into the "auto" if one exists
   if (!IsNullLogFont(hardInfoWindowLogFont))
