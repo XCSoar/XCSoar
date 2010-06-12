@@ -341,19 +341,15 @@ InitialiseFontsAuto(RECT rc,
   memset ((char *)ptrautoStatisticsLogFont, 0, sizeof (LOGFONT));
 
   // VENTA TODO : reconsider all algorithms for unconventional screen resolutions, expecially wide screens where 1.66 and 2.03 multipliers apply
-  if (fontsz1 < fontsz2) {
+  if (Layout::landscape)
     // landscape
     FontHeight = (int)(fontsz1 / FONTHEIGHTRATIO * 1.33); // use small dimension, to work for widscreens and adjust so it works for 4x3 screens too.
-    FontWidth = (int)(FontHeight * 0.4);
-  } else if (fontsz1 == fontsz2) {
+  else if (Layout::square)
     // square
     FontHeight = (int)(fontsz2 / FONTHEIGHTRATIO);
-    FontWidth = (int)(FontHeight * 0.4);
-  } else {
+  else
     // portrait
     FontHeight = (int)(fontsz2 / FONTHEIGHTRATIO * 1.33);
-    FontWidth = (int)(FontHeight * 0.4);
-  }
 
   int iFontHeight = (int)(FontHeight*1.4);
   // oversize first so can then scale down
