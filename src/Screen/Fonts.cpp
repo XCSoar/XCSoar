@@ -340,7 +340,9 @@ InitialiseFontsAuto(RECT rc,
   memset ((char *)ptrautoMapLabelLogFont, 0, sizeof (LOGFONT));
   memset ((char *)ptrautoStatisticsLogFont, 0, sizeof (LOGFONT));
 
-  // VENTA TODO : reconsider all algorithms for unconventional screen resolutions, expecially wide screens where 1.66 and 2.03 multipliers apply
+  // VENTA TODO : reconsider all algorithms for unconventional screen
+  //              resolutions, expecially wide screens where 1.66 and
+  //              2.03 multipliers apply
   if (Layout::landscape)
     // landscape
     FontHeight = (int)(fontsz1 / FONTHEIGHTRATIO * 1.33); // use small dimension, to work for widscreens and adjust so it works for 4x3 screens too.
@@ -351,19 +353,19 @@ InitialiseFontsAuto(RECT rc,
     // portrait
     FontHeight = (int)(fontsz2 / FONTHEIGHTRATIO * 1.33);
 
-  int iFontHeight = (int)(FontHeight*1.4);
   // oversize first so can then scale down
+  int iFontHeight = (int)(FontHeight*1.4);
 
-  FontWidth = 0; // JMW this should be done so closest font is found
-
-  // sgi todo
+  // JMW this should be done so closest font is found
+  FontWidth = 0;
 
   memset ((char *)&logfont, 0, sizeof (logfont));
 
   if (is_pna())
     /* Only for PNA, since we still do not copy Fonts in their Windows
        memory.  though we could already do it automatically. */
-    _tcscpy(logfont.lfFaceName, _T("Tahoma")); // VENTA TODO copy DejaVu fonts also for PNA like for PDAs in SD version
+    // VENTA TODO copy DejaVu fonts also for PNA like for PDAs in SD version
+    _tcscpy(logfont.lfFaceName, _T("Tahoma"));
   else
     _tcscpy(logfont.lfFaceName, _T("DejaVu Sans Condensed"));
 
@@ -385,129 +387,82 @@ InitialiseFontsAuto(RECT rc,
 
     iFontHeight--;
     logfont.lfHeight = iFontHeight;
-//    InfoWindowFont = CreateFontIndirect (&logfont);
-//    SelectObject(iwhdc, InfoWindowFont);
 
     TempWindowFont = CreateFontIndirect (&logfont);
     hfOld=(HFONT)SelectObject(canvas, TempWindowFont);
 
     tsize = canvas.text_size(_T("1234m"));
-//    DeleteObject(InfoWindowFont);
-    SelectObject(canvas, hfOld); // unselect it before deleting it
+    // unselect it before deleting it
+    SelectObject(canvas, hfOld);
     DeleteObject(TempWindowFont);
-
-  } while (tsize.cx>InfoBoxLayout::ControlWidth);
+  } while (tsize.cx > InfoBoxLayout::ControlWidth);
 
   iFontHeight++;
   logfont.lfHeight = iFontHeight;
-
-//  propGetFontSettings(TEXT("InfoWindowFont"), &logfont);
-//  InfoWindowFont = CreateFontIndirect (&logfont);
- memcpy ((void *)ptrautoInfoWindowLogFont, &logfont, sizeof (LOGFONT));
-
-
-  // next font..
+  memcpy ((void *)ptrautoInfoWindowLogFont, &logfont, sizeof (LOGFONT));
 
 #ifdef WINDOWSPC
-  FontHeight= (int)(FontHeight/1.35);
-  FontWidth= (int)(FontWidth/1.35);
+  FontHeight = (int)(FontHeight / 1.35);
+  FontWidth = (int)(FontWidth / 1.35);
 #endif
 
   memset ((char *)&logfont, 0, sizeof (logfont));
-
   _tcscpy(logfont.lfFaceName, _T("Tahoma"));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = (int)(FontHeight/TITLEFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth/TITLEFONTWIDTHRATIO);
   logfont.lfWeight = FW_BOLD;
-  //  ApplyClearType(&logfont);
-  // RLD this was the only auto font to not have "ApplyClearType()".  It does not apply to very small fonts
-  // we now apply ApplyClearType to all fonts in CreateOneFont().
-
-//  propGetFontSettings(TEXT("TitleWindowFont"), &logfont);
-//  TitleWindowFont = CreateFontIndirect (&logfont);
   memcpy ((void *)ptrautoTitleWindowLogFont, &logfont, sizeof (LOGFONT));
 
-  memset ((char *)&logfont, 0, sizeof (logfont));
-
   // new font for CDI Scale
-
+  memset ((char *)&logfont, 0, sizeof (logfont));
   _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
   logfont.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = (int)(FontHeight*CDIFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth*CDIFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
-//  ApplyClearType(&logfont);
-
-//  propGetFontSettings(TEXT("CDIWindowFont"), &logfont);
-//  CDIWindowFont = CreateFontIndirect (&logfont);
   memcpy ((void *)ptrautoCDIWindowLogFont, &logfont, sizeof (LOGFONT));
 
   // new font for map labels
   memset ((char *)&logfont, 0, sizeof (logfont));
-
   _tcscpy(logfont.lfFaceName, _T("Tahoma"));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = (int)(FontHeight*MAPFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
   logfont.lfItalic = TRUE;
-//  ApplyClearType(&logfont);
-
-//  propGetFontSettings(TEXT("MapLabelFont"), &logfont);
-//  MapLabelFont = CreateFontIndirect (&logfont);
   memcpy ((void *)ptrautoMapLabelLogFont, &logfont, sizeof (LOGFONT));
-
 
   // Font for map other text
   memset ((char *)&logfont, 0, sizeof (logfont));
-
   _tcscpy(logfont.lfFaceName, _T("Tahoma"));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = (int)(FontHeight*STATISTICSFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth*STATISTICSFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
-//  ApplyClearType(&logfont);
-
-//  propGetFontSettings(TEXT("StatisticsFont"), &logfont);
-//  StatisticsFont = CreateFontIndirect (&logfont);
   memcpy ((void *)ptrautoStatisticsLogFont, &logfont, sizeof (LOGFONT));
 
   // new font for map labels
-
   _tcscpy(logfont.lfFaceName, _T("Tahoma"));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = (int)(FontHeight*MAPFONTHEIGHTRATIO*1.3);
   logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO*1.3);
   logfont.lfWeight = FW_MEDIUM;
-//  ApplyClearType(&logfont);
-
-//  propGetFontSettings(TEXT("MapWindowFont"), &logfont);
-//  MapWindowFont = CreateFontIndirect (&logfont);
-
-//  SendMessage(hWndMapWindow,WM_SETFONT,
-//        (WPARAM)MapWindowFont,MAKELPARAM(TRUE,0));
   memcpy ((void *)ptrautoMapWindowLogFont, &logfont, sizeof (LOGFONT));
 
   // Font for map bold text
-
   _tcscpy(logfont.lfFaceName, _T("Tahoma"));
   logfont.lfWeight = FW_BOLD;
   logfont.lfWidth =  0; // JMW (int)(FontWidth*MAPFONTWIDTHRATIO*1.3) +2;
-
-//  propGetFontSettings(TEXT("MapWindowBoldFont"), &logfont);
-//  MapWindowBoldFont = CreateFontIndirect (&logfont);
   memcpy ((void *)ptrautoMapWindowBoldLogFont, &logfont, sizeof (LOGFONT));
 
   // TODO code: create font settings for this one...
   memset((char *)&logfont, 0, sizeof (logfont));
   _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
-
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = IBLSCALE(20);
   logfont.lfWidth =  IBLSCALE(8);
   logfont.lfWeight = FW_MEDIUM;
-
   memcpy ((void *)ptrautoTitleSmallWindowLogFont, &logfont, sizeof (LOGFONT));
 #else /* !ENABLE_SDL */
   // XXX implement
