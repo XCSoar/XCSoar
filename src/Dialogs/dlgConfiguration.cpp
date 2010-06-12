@@ -1844,7 +1844,7 @@ static void setVariables(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpUseCustomFonts"));
   if (wp) {
     DataFieldBoolean * dfb = (DataFieldBoolean*) wp->GetDataField();
-    dfb->Set(UseCustomFonts);
+    dfb->Set(Appearance.UseCustomFonts);
     ShowFontEditButtons(dfb->GetAsBoolean());
     wp->RefreshDisplay();
     RefreshFonts();
@@ -2837,10 +2837,10 @@ void dlgConfigurationShowModal(void)
   if (wp) {
     DataFieldBoolean * dfb = (DataFieldBoolean*) wp->GetDataField();
     if (dfb) {
-      if ((UseCustomFonts != dfb->GetAsBoolean())
-          || (UseCustomFonts && FontRegistryChanged)) {
-        UseCustomFonts = !UseCustomFonts;
-        Profile::Set(szProfileUseCustomFonts, UseCustomFonts);
+      if ((Appearance.UseCustomFonts != dfb->GetAsBoolean())
+          || (Appearance.UseCustomFonts && FontRegistryChanged)) {
+        Appearance.UseCustomFonts = !Appearance.UseCustomFonts;
+        Profile::Set(szProfileUseCustomFonts, Appearance.UseCustomFonts);
         changed = true;
         requirerestart = true;
       }

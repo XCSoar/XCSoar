@@ -74,8 +74,6 @@ LOGFONT autoCDIWindowLogFont;
 LOGFONT autoMapLabelLogFont;
 LOGFONT autoStatisticsLogFont;
 
-bool UseCustomFonts;
-
 #ifndef ENABLE_SDL
 
 static void
@@ -395,7 +393,7 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
 
   InitialiseFontsHardCoded(appearance, rc);
 
-  if (UseCustomFonts) {
+  if (appearance.UseCustomFonts) {
     LoadCustomFont(&InfoWindowFont, szProfileFontInfoWindowFont);
     LoadCustomFont(&TitleWindowFont, szProfileFontTitleWindowFont);
     LoadCustomFont(&CDIWindowFont, szProfileFontCDIWindowFont);

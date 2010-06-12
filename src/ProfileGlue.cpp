@@ -580,7 +580,7 @@ Profile::Use()
   Get(szProfileSetSystemTimeFromGPS,
       XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS);
   Get(szProfileUseCustomFonts,
-      UseCustomFonts);
+      Appearance.UseCustomFonts);
   Get(szProfileVoiceClimbRate,
       XCSoarInterface::SetSettingsComputer().EnableVoiceClimbRate);
   Get(szProfileVoiceTerrain,

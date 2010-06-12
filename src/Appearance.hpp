@@ -173,6 +173,7 @@ struct Appearance {
   bool InverseAircraft;
   bool GaugeVarioGross;
   bool GaugeVarioAveNeedle;
+  bool UseCustomFonts;
 };
 
 // Specials

@@ -64,6 +64,4 @@ extern Font CDIWindowFont;
 extern Font MapLabelFont;
 extern Font StatisticsFont;
 
-extern bool UseCustomFonts;
-
 #endif

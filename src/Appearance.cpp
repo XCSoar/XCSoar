@@ -76,6 +76,7 @@ Appearance_t Appearance = {
   apIbBox,
   false,
   true,
+  false,
   false
 };
 #else
@@ -113,6 +114,7 @@ struct Appearance Appearance = {
 #endif
   false,
   true,
+  false,
   false
 };
 
