@@ -292,8 +292,6 @@ InitialiseFontsAuto(RECT rc,
 #ifndef ENABLE_SDL
   LOGFONT logfont;
   int FontHeight, FontWidth;
-  int fontsz1 = (rc.bottom - rc.top);
-  int fontsz2 = (rc.right - rc.left);
 
   memset((char *)ptrautoInfoWindowLogFont, 0, sizeof(LOGFONT));
   memset((char *)ptrautoTitleWindowLogFont, 0, sizeof(LOGFONT));
@@ -304,18 +302,12 @@ InitialiseFontsAuto(RECT rc,
   memset((char *)ptrautoMapLabelLogFont, 0, sizeof(LOGFONT));
   memset((char *)ptrautoStatisticsLogFont, 0, sizeof(LOGFONT));
 
-  // VENTA TODO : reconsider all algorithms for unconventional screen
-  //              resolutions, expecially wide screens where 1.66 and
-  //              2.03 multipliers apply
-  if (Layout::landscape)
-    // landscape
-    FontHeight = (int)(fontsz1 / FONTHEIGHTRATIO * 1.33); // use small dimension, to work for widscreens and adjust so it works for 4x3 screens too.
-  else if (Layout::square)
+  if (Layout::square)
     // square
-    FontHeight = (int)(fontsz2 / FONTHEIGHTRATIO);
+    FontHeight = Layout::Scale(26);
   else
-    // portrait
-    FontHeight = (int)(fontsz2 / FONTHEIGHTRATIO * 1.33);
+    // portrait & landscape
+    FontHeight = Layout::Scale(35);
 
   // oversize first so can then scale down
   int iFontHeight = (int)(FontHeight * 1.4);
