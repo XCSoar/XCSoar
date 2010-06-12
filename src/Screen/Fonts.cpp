@@ -108,22 +108,16 @@ InitializeOneFont(Font *theFont, const TCHAR FontRegKey[], LOGFONT autoLogFont,
     propGetFontSettings(FontRegKey, &logfont);
     if (!IsNullLogFont(logfont)) {
       theFont->set(&logfont);
-      if (theFont->defined()) {
-        if (LogFontUsed != NULL)
-          *LogFontUsed = logfont; // RLD save for custom font GUI
-      }
+      if (theFont->defined() && LogFontUsed != NULL)
+        *LogFontUsed = logfont; // RLD save for custom font GUI
     }
   }
 
-  if (!theFont->defined()) {
-    if (!IsNullLogFont(autoLogFont)) {
-      ApplyClearType(&autoLogFont);
-      theFont->set(&autoLogFont);
-      if (theFont->defined()) {
-        if (LogFontUsed != NULL)
-          *LogFontUsed = autoLogFont; // RLD save for custom font GUI
-      }
-    }
+  if (!theFont->defined() && !IsNullLogFont(autoLogFont)) {
+    ApplyClearType(&autoLogFont);
+    theFont->set(&autoLogFont);
+    if (theFont->defined() && LogFontUsed != NULL)
+      *LogFontUsed = autoLogFont; // RLD save for custom font GUI
   }
 #endif /* !ENABLE_SDL */
 }
