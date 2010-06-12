@@ -2833,19 +2833,18 @@ void dlgConfigurationShowModal(void)
 #endif
 
   //Fonts
-  bool UseCustomFontsold = UseCustomFonts;
   wp = (WndProperty*)wf->FindByName(_T("prpUseCustomFonts"));
   if (wp) {
     DataFieldBoolean * dfb = (DataFieldBoolean*) wp->GetDataField();
     if (dfb) {
-      Profile::Set(szProfileUseCustomFonts, dfb->GetAsInteger());
-      UseCustomFonts = dfb->GetAsBoolean(); // global var
+      if ((UseCustomFonts != dfb->GetAsBoolean())
+          || (UseCustomFonts && FontRegistryChanged)) {
+        UseCustomFonts = !UseCustomFonts;
+        Profile::Set(szProfileUseCustomFonts, UseCustomFonts);
+        changed = true;
+        requirerestart = true;
+      }
     }
-  }
-  if ( (UseCustomFontsold != UseCustomFonts) ||
-    (UseCustomFonts && FontRegistryChanged) ) {
-      changed = true;
-      requirerestart = true;
   }
   TempUseCustomFontsFont.reset();
 
