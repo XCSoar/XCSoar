@@ -250,27 +250,20 @@ InitialiseFontsHardCoded(const struct Appearance &appearance, RECT rc,
 }
 
 static void
-InitialiseFontsAuto(LOGFONT *ptrautoInfoWindowLogFont,
-                    LOGFONT *ptrautoTitleWindowLogFont,
-                    LOGFONT *ptrautoMapWindowLogFont,
-                    LOGFONT *ptrautoTitleSmallWindowLogFont,
-                    LOGFONT *ptrautoMapWindowBoldLogFont,
-                    LOGFONT *ptrautoCDIWindowLogFont, // New
-                    LOGFONT *ptrautoMapLabelLogFont,
-                    LOGFONT *ptrautoStatisticsLogFont)
+InitialiseFontsAuto()
 {
 #ifndef ENABLE_SDL
   LOGFONT logfont;
   int FontHeight, FontWidth;
 
-  memset((char *)ptrautoInfoWindowLogFont, 0, sizeof(LOGFONT));
-  memset((char *)ptrautoTitleWindowLogFont, 0, sizeof(LOGFONT));
-  memset((char *)ptrautoMapWindowLogFont, 0, sizeof(LOGFONT));
-  memset((char *)ptrautoTitleSmallWindowLogFont, 0, sizeof(LOGFONT));
-  memset((char *)ptrautoMapWindowBoldLogFont, 0, sizeof(LOGFONT));
-  memset((char *)ptrautoCDIWindowLogFont, 0, sizeof(LOGFONT));
-  memset((char *)ptrautoMapLabelLogFont, 0, sizeof(LOGFONT));
-  memset((char *)ptrautoStatisticsLogFont, 0, sizeof(LOGFONT));
+  memset(&autoInfoWindowLogFont, 0, sizeof(LOGFONT));
+  memset(&autoTitleWindowLogFont, 0, sizeof(LOGFONT));
+  memset(&autoMapWindowLogFont, 0, sizeof(LOGFONT));
+  memset(&autoTitleSmallWindowLogFont, 0, sizeof(LOGFONT));
+  memset(&autoMapWindowBoldLogFont, 0, sizeof(LOGFONT));
+  memset(&autoCDIWindowLogFont, 0, sizeof(LOGFONT));
+  memset(&autoMapLabelLogFont, 0, sizeof(LOGFONT));
+  memset(&autoStatisticsLogFont, 0, sizeof(LOGFONT));
 
   if (Layout::square)
     // square
@@ -325,7 +318,7 @@ InitialiseFontsAuto(LOGFONT *ptrautoInfoWindowLogFont,
 
   iFontHeight++;
   logfont.lfHeight = iFontHeight;
-  memcpy((void *)ptrautoInfoWindowLogFont, &logfont, sizeof(LOGFONT));
+  memcpy(&autoInfoWindowLogFont, &logfont, sizeof(LOGFONT));
 
 #ifdef WINDOWSPC
   FontHeight = (int)(FontHeight / 1.35);
@@ -338,7 +331,7 @@ InitialiseFontsAuto(LOGFONT *ptrautoInfoWindowLogFont,
   logfont.lfHeight = (int)(FontHeight * TITLEFONTHEIGHTRATIO);
   logfont.lfWidth = (int)(FontWidth * TITLEFONTWIDTHRATIO);
   logfont.lfWeight = FW_BOLD;
-  memcpy((void *)ptrautoTitleWindowLogFont, &logfont, sizeof(LOGFONT));
+  memcpy(&autoTitleWindowLogFont, &logfont, sizeof(LOGFONT));
 
   // new font for CDI Scale
   memset((char *)&logfont, 0, sizeof(logfont));
@@ -347,7 +340,7 @@ InitialiseFontsAuto(LOGFONT *ptrautoInfoWindowLogFont,
   logfont.lfHeight = (int)(FontHeight * CDIFONTHEIGHTRATIO);
   logfont.lfWidth = (int)(FontWidth * CDIFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
-  memcpy((void *)ptrautoCDIWindowLogFont, &logfont, sizeof(LOGFONT));
+  memcpy(&autoCDIWindowLogFont, &logfont, sizeof(LOGFONT));
 
   // new font for map labels
   memset((char *)&logfont, 0, sizeof(logfont));
@@ -357,7 +350,7 @@ InitialiseFontsAuto(LOGFONT *ptrautoInfoWindowLogFont,
   logfont.lfWidth = (int)(FontWidth * MAPFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
   logfont.lfItalic = TRUE;
-  memcpy((void *)ptrautoMapLabelLogFont, &logfont, sizeof(LOGFONT));
+  memcpy(&autoMapLabelLogFont, &logfont, sizeof(LOGFONT));
 
   // Font for map other text
   memset((char *)&logfont, 0, sizeof(logfont));
@@ -366,7 +359,7 @@ InitialiseFontsAuto(LOGFONT *ptrautoInfoWindowLogFont,
   logfont.lfHeight = (int)(FontHeight * STATISTICSFONTHEIGHTRATIO);
   logfont.lfWidth = (int)(FontWidth * STATISTICSFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
-  memcpy((void *)ptrautoStatisticsLogFont, &logfont, sizeof(LOGFONT));
+  memcpy(&autoStatisticsLogFont, &logfont, sizeof(LOGFONT));
 
   // new font for map labels
   _tcscpy(logfont.lfFaceName, _T("Tahoma"));
@@ -374,13 +367,13 @@ InitialiseFontsAuto(LOGFONT *ptrautoInfoWindowLogFont,
   logfont.lfHeight = (int)(FontHeight * MAPFONTHEIGHTRATIO * 1.3);
   logfont.lfWidth = (int)(FontWidth * MAPFONTWIDTHRATIO * 1.3);
   logfont.lfWeight = FW_MEDIUM;
-  memcpy((void *)ptrautoMapWindowLogFont, &logfont, sizeof(LOGFONT));
+  memcpy(&autoMapWindowLogFont, &logfont, sizeof(LOGFONT));
 
   // Font for map bold text
   _tcscpy(logfont.lfFaceName, _T("Tahoma"));
   logfont.lfWeight = FW_BOLD;
   logfont.lfWidth = 0; // JMW (int)(FontWidth*MAPFONTWIDTHRATIO*1.3) +2;
-  memcpy((void *)ptrautoMapWindowBoldLogFont, &logfont, sizeof(LOGFONT));
+  memcpy(&autoMapWindowBoldLogFont, &logfont, sizeof(LOGFONT));
 
   // TODO code: create font settings for this one...
   memset((char *)&logfont, 0, sizeof(logfont));
@@ -389,7 +382,7 @@ InitialiseFontsAuto(LOGFONT *ptrautoInfoWindowLogFont,
   logfont.lfHeight = IBLSCALE(20);
   logfont.lfWidth = IBLSCALE(8);
   logfont.lfWeight = FW_MEDIUM;
-  memcpy((void *)ptrautoTitleSmallWindowLogFont, &logfont, sizeof(LOGFONT));
+  memcpy(&autoTitleSmallWindowLogFont, &logfont, sizeof(LOGFONT));
 #else /* !ENABLE_SDL */
   // XXX implement
 #endif /* !ENABLE_SDL */
@@ -409,14 +402,7 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
   MapLabelFont.reset();
   StatisticsFont.reset();
 
-  InitialiseFontsAuto(&autoInfoWindowLogFont,
-                      &autoTitleWindowLogFont,
-                      &autoMapWindowLogFont,
-                      &autoTitleSmallWindowLogFont,
-                      &autoMapWindowBoldLogFont,
-                      &autoCDIWindowLogFont,
-                      &autoMapLabelLogFont,
-                      &autoStatisticsLogFont);
+  InitialiseFontsAuto();
 
   InitialiseFontsHardCoded(appearance, rc,
                            &autoInfoWindowLogFont,
