@@ -100,11 +100,9 @@ InitializeOneFont(Font *theFont, const TCHAR FontRegKey[], LOGFONT autoLogFont,
 #ifdef ENABLE_SDL
   // XXX
 #else /* !ENABLE_SDL */
-  LOGFONT logfont;
-
-  memset((char *)&logfont, 0, sizeof(LOGFONT));
-
   if (UseCustomFonts) {
+    LOGFONT logfont;
+    memset((char *)&logfont, 0, sizeof(LOGFONT));
     propGetFontSettings(FontRegKey, &logfont);
     if (!IsNullLogFont(logfont)) {
       theFont->set(&logfont);
