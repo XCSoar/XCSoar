@@ -69,7 +69,7 @@ LOGFONT autoCDIWindowLogFont;
 LOGFONT autoMapLabelLogFont;
 LOGFONT autoStatisticsLogFont;
 
-int  UseCustomFonts;
+bool UseCustomFonts;
 
 #ifndef ENABLE_SDL
 

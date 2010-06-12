@@ -311,7 +311,7 @@ static void OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t Mode){
 static void ResetFonts(bool bUseCustom) {
 // resest fonts when UseCustomFonts is turned off
 
-  int UseCustomFontsold = UseCustomFonts;
+  bool UseCustomFontsold = UseCustomFonts;
   UseCustomFonts=bUseCustom;
 
 
@@ -2867,13 +2867,13 @@ void dlgConfigurationShowModal(void)
 #endif
 
   //Fonts
-  int UseCustomFontsold = UseCustomFonts;
+  bool UseCustomFontsold = UseCustomFonts;
   wp = (WndProperty*)wf->FindByName(_T("prpUseCustomFonts"));
   if (wp) {
     DataFieldBoolean * dfb = (DataFieldBoolean*) wp->GetDataField();
     if (dfb) {
       Profile::Set(szProfileUseCustomFonts, dfb->GetAsInteger());
-      UseCustomFonts = dfb->GetAsInteger(); // global var
+      UseCustomFonts = dfb->GetAsBoolean(); // global var
     }
   }
   if ( (UseCustomFontsold != UseCustomFonts) ||
