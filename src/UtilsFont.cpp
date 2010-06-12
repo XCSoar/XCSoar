@@ -43,48 +43,62 @@ Copyright_License {
 #include <assert.h>
 #include <stdlib.h> /* for strtol() */
 
-void propGetFontSettingsFromString(const TCHAR *Buffer1, LOGFONT* lplf)
+void
+propGetFontSettingsFromString(const TCHAR *Buffer1, LOGFONT* lplf)
 {
-#define propGetFontSettingsMAX_SIZE 128
-  TCHAR Buffer[propGetFontSettingsMAX_SIZE]; // RLD need a buffer (not sz) for _tcstok_r w/ gcc optimized ARM920
+  // FontDescription of format:
+  // typical font entry
+  // 26,0,0,0,700,1,0,0,0,0,0,4,2,<fontname>
+
+  #define propGetFontSettingsMAX_SIZE 128
+  // RLD need a buffer (not sz) for _tcstok_r w/ gcc optimized ARM920
+  TCHAR Buffer[propGetFontSettingsMAX_SIZE];
 
   TCHAR *pWClast, *pToken;
   LOGFONT lfTmp;
   _tcsncpy(Buffer, Buffer1, propGetFontSettingsMAX_SIZE);
-    // FontDescription of format:
-    // typical font entry
-    // 26,0,0,0,700,1,0,0,0,0,0,4,2,<fontname>
-
-    //FW_THIN   100
-    //FW_NORMAL 400
-    //FW_MEDIUM 500
-    //FW_BOLD   700
-    //FW_HEAVY  900
 
   assert(lplf != NULL);
-  memset ((void *)&lfTmp, 0, sizeof (LOGFONT));
-
-  if ((pToken = _tcstok_r(Buffer, TEXT(","), &pWClast)) == NULL) return;
+  memset((void *)&lfTmp, 0, sizeof(LOGFONT));
+  if ((pToken = _tcstok_r(Buffer, TEXT(","), &pWClast)) == NULL)
+    return;
   lfTmp.lfHeight = _tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return;
   lfTmp.lfWidth = _tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return;
   lfTmp.lfEscapement = _tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return;
   lfTmp.lfOrientation = _tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return;
+
+  //FW_THIN   100
+  //FW_NORMAL 400
+  //FW_MEDIUM 500
+  //FW_BOLD   700
+  //FW_HEAVY  900
+
   lfTmp.lfWeight = _tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return;
   lfTmp.lfItalic = (unsigned char)_tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return;
   lfTmp.lfUnderline = (unsigned char)_tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return;
   lfTmp.lfStrikeOut = (unsigned char)_tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return;
   lfTmp.lfCharSet = (unsigned char)_tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return;
   lfTmp.lfOutPrecision = (unsigned char)_tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return;
   lfTmp.lfClipPrecision = (unsigned char)_tcstol(pToken, NULL, 10);
 
   // DEFAULT_QUALITY			   0
@@ -95,24 +109,25 @@ void propGetFontSettingsFromString(const TCHAR *Buffer1, LOGFONT* lplf)
   // CLEARTYPE_QUALITY       5
   // CLEARTYPE_COMPAT_QUALITY 6
 
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return;
   lfTmp.lfQuality = (unsigned char)_tcstol(pToken, NULL, 10);
 
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return;
   lfTmp.lfPitchAndFamily = (unsigned char)_tcstol(pToken, NULL, 10);
 
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return;
 
   _tcscpy(lfTmp.lfFaceName, pToken);
 
-  memcpy((void *)lplf, (void *)&lfTmp, sizeof (LOGFONT));
-
-  return;
+  memcpy((void *)lplf, (void *)&lfTmp, sizeof(LOGFONT));
 }
 
-
-void propGetFontSettings(const TCHAR *Name, LOGFONT* lplf) {
-
+void
+propGetFontSettings(const TCHAR *Name, LOGFONT* lplf)
+{
   TCHAR Buffer[128];
 
   assert(Name != NULL);
