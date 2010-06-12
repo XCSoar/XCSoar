@@ -36,11 +36,6 @@
 
 #define MAX_LOADSTRING 100
 
-// ratio of height of screen to main font height
-#define FONTHEIGHTRATIO 9
-// ratio of width of screen to main font width
-#define FONTWIDTHRATIO 22
-
 // ratio of title font height to main font height
 #define TITLEFONTHEIGHTRATIO 0.333
 // ratio of title font width to main font width
