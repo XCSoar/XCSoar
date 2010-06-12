@@ -84,15 +84,13 @@ ApplyClearType(LOGFONT *logfont)
 static bool
 IsNullLogFont(LOGFONT logfont)
 {
-  bool bRetVal = false;
-
   LOGFONT LogFontBlank;
   memset((char *)&LogFontBlank, 0, sizeof(LOGFONT));
 
   if (memcmp(&logfont, &LogFontBlank, sizeof(LOGFONT)) == 0)
-    bRetVal = true;
+    return true;
 
-  return bRetVal;
+  return false;
 }
 
 void
