@@ -209,7 +209,7 @@ KeyboardControl::move_buttons()
     move_button(_T("cmdMinus"), button_width * 8, button_height * 4);
 
     move_button(_T("cmdSpace"), button_width * 2, button_height * 4);
-    resize_button(_T("cmdSpace"), button_width * 5, button_height);
+    resize_button(_T("cmdSpace"), button_width * 5.5, button_height);
   }                              
 }
 
