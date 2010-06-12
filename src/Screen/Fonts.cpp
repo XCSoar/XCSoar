@@ -144,34 +144,33 @@ InitialiseFontsHardCoded(const struct Appearance &appearance, RECT rc,
                          LOGFONT *ptrhardMapLabelLogFont,
                          LOGFONT *ptrhardStatisticsLogFont)
 {
-
-  int ScreenSize = 0;
-
-  int iWidth = rc.right - rc.left;
-  int iHeight = rc.bottom - rc.top;
-
-  if (iWidth == 240 && iHeight == 320)
-    ScreenSize = (ScreenSize_t)ss240x320; // QVGA	portrait
-  else if (iWidth == 480 && iHeight == 640)
-    ScreenSize = (ScreenSize_t)ss480x640; //  VGA
-  else if (iWidth == 480 && iHeight == 800)
-    ScreenSize = (ScreenSize_t)ss480x800;
-  else if (iWidth == 480 && iHeight == 272)
-    ScreenSize = (ScreenSize_t)ss480x272; // WQVGA	landscape
-  else if (iWidth == 320 && iHeight == 240)
-    ScreenSize = (ScreenSize_t)ss320x240; //  QVGA
-  else if (iWidth == 480 && iHeight == 234)
-    ScreenSize = (ScreenSize_t)ss480x234; //   iGo
-  else if (iWidth == 640 && iHeight == 480)
-    ScreenSize = (ScreenSize_t)ss640x480; //   VGA
-  else if (iWidth == 800 && iHeight == 480)
-    ScreenSize = (ScreenSize_t)ss800x480; //  WVGA
-  else {
-    LogStartUp(_T("--- ERROR UNKNOWN RESOLUTION %dx%d !"), iWidth, iHeight);
-    return;
-  }
-
   if (is_pna()) {
+    int ScreenSize = 0;
+
+    int iWidth = rc.right - rc.left;
+    int iHeight = rc.bottom - rc.top;
+
+    if (iWidth == 240 && iHeight == 320)
+      ScreenSize = (ScreenSize_t)ss240x320; // QVGA portrait
+    else if (iWidth == 480 && iHeight == 640)
+      ScreenSize = (ScreenSize_t)ss480x640; //  VGA
+    else if (iWidth == 480 && iHeight == 800)
+      ScreenSize = (ScreenSize_t)ss480x800;
+    else if (iWidth == 480 && iHeight == 272)
+      ScreenSize = (ScreenSize_t)ss480x272; // WQVGA  landscape
+    else if (iWidth == 320 && iHeight == 240)
+      ScreenSize = (ScreenSize_t)ss320x240; //  QVGA
+    else if (iWidth == 480 && iHeight == 234)
+      ScreenSize = (ScreenSize_t)ss480x234; //   iGo
+    else if (iWidth == 640 && iHeight == 480)
+      ScreenSize = (ScreenSize_t)ss640x480; //   VGA
+    else if (iWidth == 800 && iHeight == 480)
+      ScreenSize = (ScreenSize_t)ss800x480; //  WVGA
+    else {
+      LogStartUp(_T("--- ERROR UNKNOWN RESOLUTION %dx%d !"), iWidth, iHeight);
+      return;
+    }
+
     if (ScreenSize == (ScreenSize_t)ss480x272) {
       // WQVGA  e.g. MIO
       propGetFontSettingsFromString(TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
