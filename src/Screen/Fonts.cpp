@@ -115,16 +115,18 @@ LoadCustomFont(Font *theFont, const TCHAR FontRegKey[], LOGFONT * LogFontUsed)
 #ifdef ENABLE_SDL
   // XXX
 #else /* !ENABLE_SDL */
-  if (UseCustomFonts) {
-    LOGFONT logfont;
-    memset((char *)&logfont, 0, sizeof(LOGFONT));
-    propGetFontSettings(FontRegKey, &logfont);
-    if (!IsNullLogFont(logfont)) {
-      theFont->set(&logfont);
-      if (theFont->defined() && LogFontUsed != NULL)
-        *LogFontUsed = logfont; // RLD save for custom font GUI
-    }
-  }
+  if (!UseCustomFonts)
+    return;
+
+  LOGFONT logfont;
+  memset((char *)&logfont, 0, sizeof(LOGFONT));
+  propGetFontSettings(FontRegKey, &logfont);
+  if (IsNullLogFont(logfont))
+    return;
+
+  theFont->set(&logfont);
+  if (theFont->defined() && LogFontUsed != NULL)
+    *LogFontUsed = logfont; // RLD save for custom font GUI
 #endif /* !ENABLE_SDL */
 }
 
