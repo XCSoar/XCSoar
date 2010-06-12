@@ -46,9 +46,9 @@
 #define FONTWIDTHRATIO 22
 
 // ratio of title font height to main font height
-#define TITLEFONTHEIGHTRATIO 3.0
+#define TITLEFONTHEIGHTRATIO 0.333
 // ratio of title font width to main font width
-#define TITLEFONTWIDTHRATIO 2.9 //1.8
+#define TITLEFONTWIDTHRATIO 0.345
 
 #define CDIFONTHEIGHTRATIO 0.6
 #define CDIFONTWIDTHRATIO 0.75

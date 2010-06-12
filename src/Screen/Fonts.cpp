@@ -364,8 +364,8 @@ InitialiseFontsAuto(RECT rc,
   memset((char *)&logfont, 0, sizeof(logfont));
   _tcscpy(logfont.lfFaceName, _T("Tahoma"));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE;
-  logfont.lfHeight = (int)(FontHeight / TITLEFONTHEIGHTRATIO);
-  logfont.lfWidth = (int)(FontWidth / TITLEFONTWIDTHRATIO);
+  logfont.lfHeight = (int)(FontHeight * TITLEFONTHEIGHTRATIO);
+  logfont.lfWidth = (int)(FontWidth * TITLEFONTWIDTHRATIO);
   logfont.lfWeight = FW_BOLD;
   memcpy((void *)ptrautoTitleWindowLogFont, &logfont, sizeof(LOGFONT));
 
