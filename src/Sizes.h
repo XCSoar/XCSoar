@@ -36,10 +36,6 @@
 
 #define MAX_LOADSTRING 100
 
-#define GLOBALFONT "Tahoma"
-//#define GLOBALFONT "DejaVu Sans Condensed"
-//#define GLOBALFONT "HelmetCondensed"
-
 // ratio of height of screen to main font height
 #define FONTHEIGHTRATIO 9
 // ratio of width of screen to main font width

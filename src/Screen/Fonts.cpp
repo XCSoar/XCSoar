@@ -239,6 +239,8 @@ InitialiseFontsHardCoded(const struct Appearance &appearance, RECT rc)
   }
 }
 
+
+
 static void
 InitialiseFontsAuto()
 {
@@ -322,7 +324,7 @@ InitialiseFontsAuto()
 
   // new font for CDI Scale
   memset((char *)&logfont, 0, sizeof(logfont));
-  _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
+  _tcscpy(logfont.lfFaceName, _T("Tahoma"));
   logfont.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE;
   logfont.lfHeight = (int)(FontHeight * CDIFONTHEIGHTRATIO);
   logfont.lfWidth = (int)(FontWidth * CDIFONTWIDTHRATIO);
@@ -364,7 +366,7 @@ InitialiseFontsAuto()
 
   // TODO code: create font settings for this one...
   memset((char *)&logfont, 0, sizeof(logfont));
-  _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
+  _tcscpy(logfont.lfFaceName, _T("Tahoma"));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE;
   logfont.lfHeight = IBLSCALE(20);
   logfont.lfWidth = IBLSCALE(8);
