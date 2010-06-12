@@ -491,28 +491,28 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
     autoStatisticsLogFont = hardStatisticsLogFont;
 
   InitializeOneFont(&InfoWindowFont, szProfileFontInfoWindowFont,
-                    autoInfoWindowLogFont, NULL);
+                    autoInfoWindowLogFont);
 
   InitializeOneFont(&TitleWindowFont, szProfileFontTitleWindowFont,
-                    autoTitleWindowLogFont, NULL);
+                    autoTitleWindowLogFont);
 
   InitializeOneFont(&CDIWindowFont, szProfileFontCDIWindowFont,
-                    autoCDIWindowLogFont, NULL);
+                    autoCDIWindowLogFont);
 
   InitializeOneFont(&MapLabelFont, szProfileFontMapLabelFont,
-                    autoMapLabelLogFont, NULL);
+                    autoMapLabelLogFont);
 
   InitializeOneFont(&StatisticsFont, szProfileFontStatisticsFont,
-                    autoStatisticsLogFont, NULL);
+                    autoStatisticsLogFont);
 
   InitializeOneFont(&MapWindowFont, szProfileFontMapWindowFont,
-                    autoMapWindowLogFont, NULL);
+                    autoMapWindowLogFont);
 
   InitializeOneFont(&MapWindowBoldFont, szProfileFontMapWindowBoldFont,
-                    autoMapWindowBoldLogFont, NULL);
+                    autoMapWindowBoldLogFont);
 
   InitializeOneFont(&TitleSmallWindowFont, szProfileFontTitleSmallWindowFont,
-                    autoTitleSmallWindowLogFont, NULL);
+                    autoTitleSmallWindowLogFont);
 }
 
 void
