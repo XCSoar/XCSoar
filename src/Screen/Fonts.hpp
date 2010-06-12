@@ -46,10 +46,8 @@ class Font;
 
 void DeleteFonts();
 
-void InitializeOneFont(Font *theFont,
-                       const TCHAR FontRegKey[] ,
-                       LOGFONT autoLogFont,
-                       LOGFONT *LogFontUsed);
+void InitializeOneFont(Font *theFont, const TCHAR FontRegKey[],
+                       LOGFONT autoLogFont, LOGFONT *LogFontUsed);
 
 void
 InitialiseFonts(const struct Appearance &appearance, RECT rc);
