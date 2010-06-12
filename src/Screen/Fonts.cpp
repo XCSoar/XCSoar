@@ -279,8 +279,7 @@ InitialiseFontsHardCoded(const struct Appearance &appearance, RECT rc,
 }
 
 static void
-InitialiseFontsAuto(RECT rc,
-                    LOGFONT *ptrautoInfoWindowLogFont,
+InitialiseFontsAuto(LOGFONT *ptrautoInfoWindowLogFont,
                     LOGFONT *ptrautoTitleWindowLogFont,
                     LOGFONT *ptrautoMapWindowLogFont,
                     LOGFONT *ptrautoTitleSmallWindowLogFont,
@@ -439,13 +438,12 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
   MapLabelFont.reset();
   StatisticsFont.reset();
 
-  InitialiseFontsAuto(rc,
-                      &autoInfoWindowLogFont,
+  InitialiseFontsAuto(&autoInfoWindowLogFont,
                       &autoTitleWindowLogFont,
                       &autoMapWindowLogFont,
                       &autoTitleSmallWindowLogFont,
                       &autoMapWindowBoldLogFont,
-                      &autoCDIWindowLogFont, // New
+                      &autoCDIWindowLogFont,
                       &autoMapLabelLogFont,
                       &autoStatisticsLogFont);
 
@@ -464,7 +462,7 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
                            &hardMapWindowLogFont,
                            &hardTitleSmallWindowLogFont,
                            &hardMapWindowBoldLogFont,
-                           &hardCDIWindowLogFont, // New
+                           &hardCDIWindowLogFont,
                            &hardMapLabelLogFont,
                            &hardStatisticsLogFont);
 
