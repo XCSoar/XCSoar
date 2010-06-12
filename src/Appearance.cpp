@@ -42,45 +42,6 @@ Copyright_License {
   #define MapScale2  apMs2Default
 #endif
 
-#ifdef SAMGI
-Appearance_t Appearance = {
-  apMsAltA,
-  apMs2None,
-  true,
-  206,
-  {0,-13},
-  apFlightModeIconDefault,
-  {10,3},
-  apCompassAltA,
-  {0,0,0},
-  {0,0,0},
-  {0,0,0},
-  {0,0,0},
-  {0,0,0},
-  ctBestCruiseTrackAltA,
-  afAircraftAltA,
-  true,
-  fgFinalGlideAltA,
-  wpLandableAltA,
-  true,
-  true,
-  true,
-  smAlignTopLeft,
-  true,
-  true,
-  true,
-  true,
-  true,
-  gvnsDefault,
-  false,
-  apIbBox,
-  false,
-  true,
-  false,
-  false
-};
-#else
-
 struct Appearance Appearance = {
   apMsAltA, // mapscale
   MapScale2,
@@ -117,6 +78,3 @@ struct Appearance Appearance = {
   false,
   false
 };
-
-#endif
-
