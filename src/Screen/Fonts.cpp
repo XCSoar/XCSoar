@@ -100,12 +100,13 @@ InitializeOneFont(Font *theFont, LOGFONT autoLogFont,
 #ifdef ENABLE_SDL
   // XXX
 #else /* !ENABLE_SDL */
-  if (!theFont->defined() && !IsNullLogFont(autoLogFont)) {
-    ApplyClearType(&autoLogFont);
-    theFont->set(&autoLogFont);
-    if (theFont->defined() && LogFontUsed != NULL)
-      *LogFontUsed = autoLogFont; // RLD save for custom font GUI
-  }
+  if (theFont->defined() || IsNullLogFont(autoLogFont))
+    return;
+
+  ApplyClearType(&autoLogFont);
+  theFont->set(&autoLogFont);
+  if (theFont->defined() && LogFontUsed != NULL)
+    *LogFontUsed = autoLogFont; // RLD save for custom font GUI
 #endif /* !ENABLE_SDL */
 }
 
