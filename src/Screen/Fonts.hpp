@@ -49,8 +49,8 @@ void DeleteFonts();
 void LoadCustomFont(Font *theFont, const TCHAR FontRegKey[],
                     LOGFONT *LogFontUsed = NULL);
 
-void InitializeOneFont(Font *theFont, LOGFONT autoLogFont,
-                       LOGFONT *LogFontUsed = NULL);
+void InitializeFont(Font *theFont, LOGFONT autoLogFont,
+                    LOGFONT *LogFontUsed = NULL);
 
 void
 InitialiseFonts(const struct Appearance &appearance, RECT rc);

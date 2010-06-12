@@ -427,7 +427,7 @@ bool dlgFontEditShowModal(const TCHAR * FontDescription,
     return false;
 
   LoadCustomFont(&NewFont, FontRegKey, &OriginalLogFont);
-  InitializeOneFont(&NewFont, autoLogFont, &OriginalLogFont);
+  InitializeFont(&NewFont, autoLogFont, &OriginalLogFont);
 
   OriginalFontRegKey=FontRegKey;
   NewLogFont=OriginalLogFont;

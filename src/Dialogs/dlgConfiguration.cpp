@@ -321,15 +321,15 @@ ResetFonts(bool bUseCustom)
     LoadCustomFont(&TempStatisticsFont, szProfileFontStatisticsFont);
   }
 
-  InitializeOneFont (&TempUseCustomFontsFont, autoMapWindowLogFont);
-  InitializeOneFont(&TempInfoWindowFont, autoInfoWindowLogFont);
-  InitializeOneFont(&TempTitleWindowFont, autoTitleWindowLogFont);
-  InitializeOneFont(&TempMapWindowFont, autoMapWindowLogFont);
-  InitializeOneFont(&TempTitleSmallWindowFont, autoTitleSmallWindowLogFont);
-  InitializeOneFont(&TempMapWindowBoldFont, autoMapWindowBoldLogFont);
-  InitializeOneFont(&TempCDIWindowFont, autoCDIWindowLogFont);
-  InitializeOneFont(&TempMapLabelFont, autoMapLabelLogFont);
-  InitializeOneFont(&TempStatisticsFont, autoStatisticsLogFont);
+  InitializeFont (&TempUseCustomFontsFont, autoMapWindowLogFont);
+  InitializeFont(&TempInfoWindowFont, autoInfoWindowLogFont);
+  InitializeFont(&TempTitleWindowFont, autoTitleWindowLogFont);
+  InitializeFont(&TempMapWindowFont, autoMapWindowLogFont);
+  InitializeFont(&TempTitleSmallWindowFont, autoTitleSmallWindowLogFont);
+  InitializeFont(&TempMapWindowBoldFont, autoMapWindowBoldLogFont);
+  InitializeFont(&TempCDIWindowFont, autoCDIWindowLogFont);
+  InitializeFont(&TempMapLabelFont, autoMapLabelLogFont);
+  InitializeFont(&TempStatisticsFont, autoStatisticsLogFont);
 }
 
 static void ShowFontEditButtons(bool bVisible) {

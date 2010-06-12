@@ -97,7 +97,7 @@ IsNullLogFont(LOGFONT logfont)
 #endif /* !ENABLE_SDL */
 
 void
-InitializeOneFont(Font *theFont, LOGFONT autoLogFont,
+InitializeFont(Font *theFont, LOGFONT autoLogFont,
                   LOGFONT * LogFontUsed)
 {
 #ifdef ENABLE_SDL
@@ -406,14 +406,14 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
     LoadCustomFont(&TitleSmallWindowFont, szProfileFontTitleSmallWindowFont);
   }
 
-  InitializeOneFont(&InfoWindowFont, autoInfoWindowLogFont);
-  InitializeOneFont(&TitleWindowFont, autoTitleWindowLogFont);
-  InitializeOneFont(&CDIWindowFont, autoCDIWindowLogFont);
-  InitializeOneFont(&MapLabelFont, autoMapLabelLogFont);
-  InitializeOneFont(&StatisticsFont, autoStatisticsLogFont);
-  InitializeOneFont(&MapWindowFont, autoMapWindowLogFont);
-  InitializeOneFont(&MapWindowBoldFont, autoMapWindowBoldLogFont);
-  InitializeOneFont(&TitleSmallWindowFont, autoTitleSmallWindowLogFont);
+  InitializeFont(&InfoWindowFont, autoInfoWindowLogFont);
+  InitializeFont(&TitleWindowFont, autoTitleWindowLogFont);
+  InitializeFont(&CDIWindowFont, autoCDIWindowLogFont);
+  InitializeFont(&MapLabelFont, autoMapLabelLogFont);
+  InitializeFont(&StatisticsFont, autoStatisticsLogFont);
+  InitializeFont(&MapWindowFont, autoMapWindowLogFont);
+  InitializeFont(&MapWindowBoldFont, autoMapWindowBoldLogFont);
+  InitializeFont(&TitleSmallWindowFont, autoTitleSmallWindowLogFont);
 }
 
 void
