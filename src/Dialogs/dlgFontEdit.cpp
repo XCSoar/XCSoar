@@ -426,12 +426,8 @@ bool dlgFontEditShowModal(const TCHAR * FontDescription,
   if (wf == NULL)
     return false;
 
-  bool UseCustomFonts_old = UseCustomFonts;
-  UseCustomFonts = true;// global var
   LoadCustomFont(&NewFont, FontRegKey, &OriginalLogFont);
   InitializeOneFont(&NewFont, autoLogFont, &OriginalLogFont);
-  UseCustomFonts=UseCustomFonts_old;
-
 
   OriginalFontRegKey=FontRegKey;
   NewLogFont=OriginalLogFont;

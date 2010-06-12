@@ -307,21 +307,19 @@ static void OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
 }
 
-
-static void ResetFonts(bool bUseCustom) {
-// resest fonts when UseCustomFonts is turned off
-
-  bool UseCustomFontsold = UseCustomFonts;
-  UseCustomFonts=bUseCustom;
-
-  LoadCustomFont(&TempInfoWindowFont, szProfileFontInfoWindowFont);
-  LoadCustomFont(&TempTitleWindowFont, szProfileFontTitleWindowFont);
-  LoadCustomFont(&TempMapWindowFont, szProfileFontMapWindowFont);
-  LoadCustomFont(&TempTitleSmallWindowFont, szProfileFontTitleSmallWindowFont);
-  LoadCustomFont(&TempMapWindowBoldFont, szProfileFontMapWindowBoldFont);
-  LoadCustomFont(&TempCDIWindowFont, szProfileFontCDIWindowFont);
-  LoadCustomFont(&TempMapLabelFont, szProfileFontMapLabelFont);
-  LoadCustomFont(&TempStatisticsFont, szProfileFontStatisticsFont);
+static void
+ResetFonts(bool bUseCustom)
+{
+  if (bUseCustom) {
+    LoadCustomFont(&TempInfoWindowFont, szProfileFontInfoWindowFont);
+    LoadCustomFont(&TempTitleWindowFont, szProfileFontTitleWindowFont);
+    LoadCustomFont(&TempMapWindowFont, szProfileFontMapWindowFont);
+    LoadCustomFont(&TempTitleSmallWindowFont, szProfileFontTitleSmallWindowFont);
+    LoadCustomFont(&TempMapWindowBoldFont, szProfileFontMapWindowBoldFont);
+    LoadCustomFont(&TempCDIWindowFont, szProfileFontCDIWindowFont);
+    LoadCustomFont(&TempMapLabelFont, szProfileFontMapLabelFont);
+    LoadCustomFont(&TempStatisticsFont, szProfileFontStatisticsFont);
+  }
 
   InitializeOneFont (&TempUseCustomFontsFont, autoMapWindowLogFont);
   InitializeOneFont(&TempInfoWindowFont, autoInfoWindowLogFont);
@@ -332,8 +330,6 @@ static void ResetFonts(bool bUseCustom) {
   InitializeOneFont(&TempCDIWindowFont, autoCDIWindowLogFont);
   InitializeOneFont(&TempMapLabelFont, autoMapLabelLogFont);
   InitializeOneFont(&TempStatisticsFont, autoStatisticsLogFont);
-
-  UseCustomFonts = UseCustomFontsold;
 }
 
 static void ShowFontEditButtons(bool bVisible) {

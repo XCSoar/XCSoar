@@ -116,9 +116,6 @@ LoadCustomFont(Font *theFont, const TCHAR FontRegKey[], LOGFONT * LogFontUsed)
 #ifdef ENABLE_SDL
   // XXX
 #else /* !ENABLE_SDL */
-  if (!UseCustomFonts)
-    return;
-
   LOGFONT logfont;
   memset((char *)&logfont, 0, sizeof(LOGFONT));
   propGetFontSettings(FontRegKey, &logfont);
