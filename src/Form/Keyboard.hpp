@@ -99,6 +99,8 @@ private:
   void move_buttons_to_row(const TCHAR* buttons, int row, int offset_left = 0);
   void move_buttons();
 
+  bool is_landscape();
+
   void add_button(WndForm &form, const TCHAR* name,
                   const TCHAR* caption, const Font *font);
 
