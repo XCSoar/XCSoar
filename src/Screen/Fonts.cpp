@@ -262,7 +262,6 @@ static void
 InitialiseFontsAuto()
 {
 #ifndef ENABLE_SDL
-  LOGFONT logfont;
   int FontHeight, FontWidth = 0;
 
   memset(&autoInfoWindowLogFont, 0, sizeof(LOGFONT));
@@ -284,21 +283,10 @@ InitialiseFontsAuto()
   // oversize first so can then scale down
   int iFontHeight = (int)(FontHeight * 1.4);
 
-  memset((char *)&logfont, 0, sizeof(logfont));
-
-  if (is_pna())
-    /* Only for PNA, since we still do not copy Fonts in their Windows
-       memory.  though we could already do it automatically. */
-    // VENTA TODO copy DejaVu fonts also for PNA like for PDAs in SD version
-    _tcscpy(logfont.lfFaceName, _T("Tahoma"));
-  else
-    _tcscpy(logfont.lfFaceName, _T("DejaVu Sans Condensed"));
-
-  logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE;
-  logfont.lfHeight = iFontHeight;
-  logfont.lfWidth = FontWidth;
-  logfont.lfWeight = FW_BOLD;
-  logfont.lfItalic = false;
+  LOGFONT logfont;
+  InitialiseLogfont(&logfont,
+                    (!is_pna() ? _T("Tahoma") : _T("DejaVu Sans Condensed")),
+                    true, iFontHeight, FontWidth, true, false);
   logfont.lfCharSet = ANSI_CHARSET;
   ApplyClearType(&logfont);
 
