@@ -42,8 +42,66 @@ Copyright_License {
 #include <stdio.h>
 #include <stdlib.h>
 
+/**
+ * Decodes the FLARMnet.org file and puts the wanted
+ * characters into the res pointer
+ * @param file File handle
+ * @param charCount Number of character to decode
+ * @param res Pointer to be written in
+ */
 static void
-LoadRecord(FILE *file, FLARMNetRecord *record);
+LoadString(FILE *file, int charCount, TCHAR *res)
+{
+  int bytesToRead = charCount * 2;
+  char bytes[100];
+
+  fread(bytes, 1, bytesToRead, file);
+
+  TCHAR *curChar = res;
+  for (int z = 0; z < bytesToRead; z += 2) {
+    char tmp[3];
+    tmp[0] = bytes[z];
+    tmp[1] = bytes[z+1];
+    tmp[2] = 0;
+
+    *curChar = (unsigned char)strtoul(tmp, NULL, 16);
+    curChar++;
+  }
+
+  *curChar = 0;
+
+  // Trim the string of any additional spaces
+  TrimRight(res);
+}
+
+/**
+ * Reads next FLARMnet.org file entry and saves it
+ * into the given record
+ * @param file File handle
+ * @param record Pointer to the FLARMNetRecord to be filled
+ */
+static void
+LoadRecord(FILE *file, FLARMNetRecord *record)
+{
+  LoadString(file, 6, record->id);
+  LoadString(file, 21, record->name);
+  LoadString(file, 21, record->airfield);
+  LoadString(file, 21, record->type);
+  LoadString(file, 7, record->reg);
+  LoadString(file, 3, record->cn);
+  LoadString(file, 7, record->freq);
+
+  int i = 0;
+  int maxSize = sizeof(record->cn) / sizeof(TCHAR);
+  while(record->cn[i] != 0 && i < maxSize) {
+    if (record->cn[i] == 32)
+      record->cn[i] = 0;
+
+    i++;
+  }
+
+  fseek(file, 1, SEEK_CUR);
+}
 
 /**
  * Reads the FLARMnet.org file and fills the map
@@ -78,70 +136,6 @@ FLARMNetDatabase::LoadFile(const TCHAR *path)
   fclose(hFile);
 
   return itemCount;
-}
-
-static void
-LoadString(FILE *file, int charCount, TCHAR *res);
-
-/**
- * Reads next FLARMnet.org file entry and saves it
- * into the given record
- * @param file File handle
- * @param record Pointer to the FLARMNetRecord to be filled
- */
-static void
-LoadRecord(FILE *file, FLARMNetRecord *record)
-{
-  LoadString(file, 6, record->id);
-  LoadString(file, 21, record->name);
-  LoadString(file, 21, record->airfield);
-  LoadString(file, 21, record->type);
-  LoadString(file, 7, record->reg);
-  LoadString(file, 3, record->cn);
-  LoadString(file, 7, record->freq);
-
-  int i = 0;
-  int maxSize = sizeof(record->cn) / sizeof(TCHAR);
-  while(record->cn[i] != 0 && i < maxSize) {
-    if (record->cn[i] == 32)
-      record->cn[i] = 0;
-
-    i++;
-  }
-
-  fseek(file, 1, SEEK_CUR);
-}
-
-/**
- * Decodes the FLARMnet.org file and puts the wanted
- * characters into the res pointer
- * @param file File handle
- * @param charCount Number of character to decode
- * @param res Pointer to be written in
- */
-static void
-LoadString(FILE *file, int charCount, TCHAR *res)
-{
-  int bytesToRead = charCount * 2;
-  char bytes[100];
-
-  fread(bytes, 1, bytesToRead, file);
-
-  TCHAR *curChar = res;
-  for (int z = 0; z < bytesToRead; z += 2) {
-    char tmp[3];
-    tmp[0] = bytes[z];
-    tmp[1] = bytes[z+1];
-    tmp[2] = 0;
-
-    *curChar = (unsigned char)strtoul(tmp, NULL, 16);
-    curChar++;
-  }
-
-  *curChar = 0;
-
-  // Trim the string of any additional spaces
-  TrimRight(res);
 }
 
 /**
