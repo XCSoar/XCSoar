@@ -41,7 +41,6 @@ Copyright_License {
 #include <windows.h>
 
 struct Appearance;
-struct FontHeightInfo;
 class Font;
 
 void ResetFonts();
