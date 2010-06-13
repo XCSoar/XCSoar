@@ -44,7 +44,7 @@ struct Appearance;
 struct FontHeightInfo;
 class Font;
 
-void DeleteFonts();
+void ResetFonts();
 
 void LoadCustomFont(Font *theFont, const TCHAR FontRegKey[],
                     LOGFONT *LogFontUsed = NULL);

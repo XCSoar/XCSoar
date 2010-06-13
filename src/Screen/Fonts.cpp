@@ -395,7 +395,7 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
 }
 
 void
-DeleteFonts()
+ResetFonts()
 {
   InfoWindowFont.reset();
   TitleWindowFont.reset();
