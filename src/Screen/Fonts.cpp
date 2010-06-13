@@ -264,7 +264,7 @@ static void
 InitialiseFontsAuto()
 {
 #ifndef ENABLE_SDL
-  int FontHeight, FontWidth = 0;
+  int FontHeight;
 
   if (Layout::square)
     // square
@@ -279,7 +279,7 @@ InitialiseFontsAuto()
   LOGFONT logfont;
   InitialiseLogfont(&logfont,
                     (!is_pna() ? _T("Tahoma") : _T("DejaVu Sans Condensed")),
-                    true, iFontHeight, FontWidth, true, false);
+                    true, iFontHeight, 0, true, false);
   logfont.lfCharSet = ANSI_CHARSET;
   ApplyClearType(&logfont);
 
@@ -310,32 +310,28 @@ InitialiseFontsAuto()
 
 #ifdef WINDOWSPC
   FontHeight = (int)(FontHeight / 1.35);
-  FontWidth = (int)(FontWidth / 1.35);
 #endif
 
   InitialiseLogfont(&autoTitleWindowLogFont, _T("Tahoma"), true,
-                    (int)(FontHeight * TITLEFONTHEIGHTRATIO),
-                    (int)(FontWidth * TITLEFONTWIDTHRATIO), true, false);
+                    (int)(FontHeight * TITLEFONTHEIGHTRATIO), 0, true, false);
 
   // new font for CDI Scale
   InitialiseLogfont(&autoCDIWindowLogFont, _T("Tahoma"), false,
-                    (int)(FontHeight * CDIFONTHEIGHTRATIO),
-                    (int)(FontWidth * CDIFONTWIDTHRATIO), false, false);
+                    (int)(FontHeight * CDIFONTHEIGHTRATIO), 0, false, false);
 
   // new font for map labels
   InitialiseLogfont(&autoMapLabelLogFont, _T("Tahoma"), true,
-                    (int)(FontHeight * MAPFONTHEIGHTRATIO),
-                    (int)(FontWidth * MAPFONTWIDTHRATIO), false, true);
+                    (int)(FontHeight * MAPFONTHEIGHTRATIO), 0, false, true);
 
   // Font for map other text
   InitialiseLogfont(&autoStatisticsLogFont, _T("Tahoma"), true,
                     (int)(FontHeight * STATISTICSFONTHEIGHTRATIO),
-                    (int)(FontWidth * STATISTICSFONTWIDTHRATIO), false, false);
+                    0, false, false);
 
   // new font for map labels
   InitialiseLogfont(&autoMapWindowLogFont, _T("Tahoma"), true,
                     (int)(FontHeight * MAPFONTHEIGHTRATIO * 1.3),
-                    (int)(FontWidth * MAPFONTWIDTHRATIO * 1.3), false, false);
+                    0, false, false);
 
   // Font for map bold text
   InitialiseLogfont(&autoMapWindowBoldLogFont, _T("Tahoma"), true,
