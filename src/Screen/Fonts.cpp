@@ -359,15 +359,7 @@ void
 InitialiseFonts(const struct Appearance &appearance, RECT rc)
 {
   //this routine must be called only at start/restart of XCSoar b/c there are many pointers to these fonts
-
-  InfoWindowFont.reset();
-  TitleWindowFont.reset();
-  MapWindowFont.reset();
-  TitleSmallWindowFont.reset();
-  MapWindowBoldFont.reset();
-  CDIWindowFont.reset();
-  MapLabelFont.reset();
-  StatisticsFont.reset();
+  ResetFonts();
 
   InitialiseFontsAuto();
 
