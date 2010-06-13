@@ -243,6 +243,8 @@ InitialiseFontsHardCoded(const struct Appearance &appearance, RECT rc)
 static void
 InitialiseLogfont(LOGFONT* font, const TCHAR* facename, bool variable_pitch,
                   long height, long width, bool bold, bool italic) {
+  memset((char *)font, 0, sizeof(font));
+
   LOGFONT tmpfont;
   memset((char *)&tmpfont, 0, sizeof(tmpfont));
 
@@ -263,15 +265,6 @@ InitialiseFontsAuto()
 {
 #ifndef ENABLE_SDL
   int FontHeight, FontWidth = 0;
-
-  memset(&autoInfoWindowLogFont, 0, sizeof(LOGFONT));
-  memset(&autoTitleWindowLogFont, 0, sizeof(LOGFONT));
-  memset(&autoMapWindowLogFont, 0, sizeof(LOGFONT));
-  memset(&autoTitleSmallWindowLogFont, 0, sizeof(LOGFONT));
-  memset(&autoMapWindowBoldLogFont, 0, sizeof(LOGFONT));
-  memset(&autoCDIWindowLogFont, 0, sizeof(LOGFONT));
-  memset(&autoMapLabelLogFont, 0, sizeof(LOGFONT));
-  memset(&autoStatisticsLogFont, 0, sizeof(LOGFONT));
 
   if (Layout::square)
     // square
@@ -312,6 +305,7 @@ InitialiseFontsAuto()
 
   iFontHeight++;
   logfont.lfHeight = iFontHeight;
+  memset(&autoInfoWindowLogFont, 0, sizeof(LOGFONT));
   memcpy(&autoInfoWindowLogFont, &logfont, sizeof(LOGFONT));
 
 #ifdef WINDOWSPC
