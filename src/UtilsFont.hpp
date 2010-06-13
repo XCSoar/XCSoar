@@ -42,7 +42,7 @@ Copyright_License {
 #include <windows.h>
 #include <tchar.h>
 
-void propGetFontSettings(const TCHAR *Name, LOGFONT* lplf);
-void propGetFontSettingsFromString(const TCHAR *Buffer, LOGFONT* lplf);
+bool propGetFontSettings(const TCHAR *Name, LOGFONT* lplf);
+bool propGetFontSettingsFromString(const TCHAR *Buffer, LOGFONT* lplf);
 
 #endif
