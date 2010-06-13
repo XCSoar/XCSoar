@@ -132,11 +132,7 @@ void Update() {
 
   // Try to find the target in the FLARMnet database
   /// @todo: make this code a little more usable
-  TCHAR filename[MAX_PATH];
-  FLARMNetDatabase flarm_net;
-  LocalPath(filename, _T("data.fln"));
-  flarm_net.LoadFile(filename);
-  const FLARMNetRecord *record = flarm_net.Find(target_id);
+  const FLARMNetRecord *record = LookupFLARMRecord(target_id);
   if (record) {
     // Fill the pilot name field
     _tcscpy(tmp, record->name);

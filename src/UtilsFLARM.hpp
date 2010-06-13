@@ -39,6 +39,7 @@ Copyright_License {
 #define XCSOAR_UTILS_FLARM_H
 
 #include "FLARM/Traffic.hpp"
+#include "FLARM/FLARMNet.hpp"
 
 #include <tchar.h>
 
@@ -47,6 +48,9 @@ OpenFLARMDetails();
 
 void
 CloseFLARMDetails();
+
+const FLARMNetRecord *
+LookupFLARMRecord(FlarmId id);
 
 const TCHAR *
 LookupFLARMDetails(FlarmId id);

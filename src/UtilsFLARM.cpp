@@ -166,6 +166,23 @@ LookupSecondaryFLARMId(const TCHAR *cn)
 }
 
 /**
+ * Looks up the FLARM id in the FLARMNet Database
+ * and returns the FLARMNet Record
+ * @param id FLARM id
+ * @return The corresponding FLARMNet Record if found, otherwise NULL
+ */
+const FLARMNetRecord *
+LookupFLARMRecord(FlarmId id)
+{
+  // try to find flarm from FLARMNet.org File
+  const FLARMNetRecord *record = flarm_net.Find(id);
+  if (record != NULL)
+    return record;
+
+  return NULL;
+}
+
+/**
  * Looks up the FLARM id in the FLARM details array
  * and the FLARMnet file and returns the callsign
  * @param id FLARM id
