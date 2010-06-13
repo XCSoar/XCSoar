@@ -100,8 +100,7 @@ InitializeFont(Font *theFont, LOGFONT autoLogFont,
   if (theFont->defined() || IsNullLogFont(autoLogFont))
     return;
 
-  theFont->set(&autoLogFont);
-  if (theFont->defined() && LogFontUsed != NULL)
+  if (theFont->set(&autoLogFont) && LogFontUsed != NULL)
     *LogFontUsed = autoLogFont; // RLD save for custom font GUI
 #endif /* !ENABLE_SDL */
 }
@@ -117,8 +116,7 @@ LoadCustomFont(Font *theFont, const TCHAR FontRegKey[], LOGFONT * LogFontUsed)
   if (!Profile::GetFont(FontRegKey, &logfont))
     return;
 
-  theFont->set(&logfont);
-  if (theFont->defined() && LogFontUsed != NULL)
+  if (theFont->set(&logfont) && LogFontUsed != NULL)
     *LogFontUsed = logfont; // RLD save for custom font GUI
 #endif /* !ENABLE_SDL */
 }
