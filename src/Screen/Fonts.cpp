@@ -76,12 +76,6 @@ LOGFONT autoStatisticsLogFont;
 
 #ifndef ENABLE_SDL
 
-static void
-ApplyClearType(LOGFONT *logfont)
-{
-  logfont->lfQuality = ANTIALIASED_QUALITY;
-}
-
 static bool
 IsNullLogFont(LOGFONT logfont)
 {
@@ -106,7 +100,6 @@ InitializeFont(Font *theFont, LOGFONT autoLogFont,
   if (theFont->defined() || IsNullLogFont(autoLogFont))
     return;
 
-  ApplyClearType(&autoLogFont);
   theFont->set(&autoLogFont);
   if (theFont->defined() && LogFontUsed != NULL)
     *LogFontUsed = autoLogFont; // RLD save for custom font GUI
@@ -255,6 +248,7 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, bool variable_pitch,
   tmpfont.lfWidth = width;
   tmpfont.lfWeight = (bold ? FW_BOLD : FW_MEDIUM);
   tmpfont.lfItalic = italic;
+  tmpfont.lfQuality = ANTIALIASED_QUALITY;
 
   memcpy(font, &tmpfont, sizeof(LOGFONT));
 }
@@ -281,7 +275,6 @@ InitialiseFontsAuto()
                     (!is_pna() ? _T("Tahoma") : _T("DejaVu Sans Condensed")),
                     true, iFontHeight, 0, true, false);
   logfont.lfCharSet = ANSI_CHARSET;
-  ApplyClearType(&logfont);
 
   // JMW algorithm to auto-size info window font.
   // this is still required in case title font property doesn't exist.
