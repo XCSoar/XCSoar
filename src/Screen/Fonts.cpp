@@ -348,6 +348,15 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
   InitialiseFontsPNA(appearance, rc);
   InitialiseFontsAltair();
 
+  InitializeFont(&InfoWindowFont, InfoWindowLogFont);
+  InitializeFont(&TitleWindowFont, TitleWindowLogFont);
+  InitializeFont(&CDIWindowFont, CDIWindowLogFont);
+  InitializeFont(&MapLabelFont, MapLabelLogFont);
+  InitializeFont(&StatisticsFont, StatisticsLogFont);
+  InitializeFont(&MapWindowFont, MapWindowLogFont);
+  InitializeFont(&MapWindowBoldFont, MapWindowBoldLogFont);
+  InitializeFont(&TitleSmallWindowFont, TitleSmallWindowLogFont);
+
   if (appearance.UseCustomFonts) {
     LoadCustomFont(&InfoWindowFont, szProfileFontInfoWindowFont);
     LoadCustomFont(&TitleWindowFont, szProfileFontTitleWindowFont);
@@ -358,15 +367,6 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
     LoadCustomFont(&MapWindowBoldFont, szProfileFontMapWindowBoldFont);
     LoadCustomFont(&TitleSmallWindowFont, szProfileFontTitleSmallWindowFont);
   }
-
-  InitializeFont(&InfoWindowFont, InfoWindowLogFont);
-  InitializeFont(&TitleWindowFont, TitleWindowLogFont);
-  InitializeFont(&CDIWindowFont, CDIWindowLogFont);
-  InitializeFont(&MapLabelFont, MapLabelLogFont);
-  InitializeFont(&StatisticsFont, StatisticsLogFont);
-  InitializeFont(&MapWindowFont, MapWindowLogFont);
-  InitializeFont(&MapWindowBoldFont, MapWindowBoldLogFont);
-  InitializeFont(&TitleSmallWindowFont, TitleSmallWindowLogFont);
 }
 
 void
