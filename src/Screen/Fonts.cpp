@@ -256,7 +256,7 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, bool variable_pitch,
 #endif
 
 static void
-InitialiseFontsAuto()
+InitialiseLogFonts()
 {
 #ifndef ENABLE_SDL
   int FontHeight;
@@ -345,7 +345,7 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
   //this routine must be called only at start/restart of XCSoar b/c there are many pointers to these fonts
   ResetFonts();
 
-  InitialiseFontsAuto();
+  InitialiseLogFonts();
 
   InitialiseFontsPNA(appearance, rc);
   InitialiseFontsAltair();
