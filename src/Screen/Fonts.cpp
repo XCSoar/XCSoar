@@ -236,21 +236,16 @@ InitialiseFontsHardCoded(const struct Appearance &appearance, RECT rc)
 static void
 InitialiseLogfont(LOGFONT* font, const TCHAR* facename, bool variable_pitch,
                   long height, long width, bool bold, bool italic) {
-  memset((char *)font, 0, sizeof(font));
+  memset((char *)font, 0, sizeof(LOGFONT));
 
-  LOGFONT tmpfont;
-  memset((char *)&tmpfont, 0, sizeof(tmpfont));
-
-  _tcscpy(tmpfont.lfFaceName, facename);
-  tmpfont.lfPitchAndFamily = (variable_pitch ? VARIABLE_PITCH : FIXED_PITCH)
-                             | FF_DONTCARE;
-  tmpfont.lfHeight = height;
-  tmpfont.lfWidth = width;
-  tmpfont.lfWeight = (bold ? FW_BOLD : FW_MEDIUM);
-  tmpfont.lfItalic = italic;
-  tmpfont.lfQuality = ANTIALIASED_QUALITY;
-
-  memcpy(font, &tmpfont, sizeof(LOGFONT));
+  _tcscpy(font->lfFaceName, facename);
+  font->lfPitchAndFamily = (variable_pitch ? VARIABLE_PITCH : FIXED_PITCH)
+                          | FF_DONTCARE;
+  font->lfHeight = height;
+  font->lfWidth = width;
+  font->lfWeight = (bold ? FW_BOLD : FW_MEDIUM);
+  font->lfItalic = italic;
+  font->lfQuality = ANTIALIASED_QUALITY;
 }
 #endif
 
