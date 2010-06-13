@@ -150,54 +150,14 @@ static void RedrawSampleFont(void)
 }
 
 static void
-OnFontNameData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  if (Mode == DataField::daChange)
-    RedrawSampleFont();
-}
-
-static void
-OnFontWeightData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  if (Mode == DataField::daChange)
-    RedrawSampleFont();
-}
-
-static void
-OnFontHeightData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  if (Mode == DataField::daChange)
-    RedrawSampleFont();
-}
-
-static void
-OnFontItalicData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  if (Mode == DataField::daChange)
-    RedrawSampleFont();
-}
-
-static void
-OnFontTrueTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  if (Mode == DataField::daChange)
-    RedrawSampleFont();
-}
-
-static void
-OnFontPitchAndFamilyData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   if (Mode == DataField::daChange)
     RedrawSampleFont();
 }
 
 static CallBackTableEntry_t CallBackTable[] = {
-  DeclareCallBackEntry(OnFontTrueTypeData),
-  DeclareCallBackEntry(OnFontPitchAndFamilyData),
-  DeclareCallBackEntry(OnFontItalicData),
-  DeclareCallBackEntry(OnFontWeightData),
-  DeclareCallBackEntry(OnFontHeightData),
-  DeclareCallBackEntry(OnFontNameData),
+  DeclareCallBackEntry(OnData),
   DeclareCallBackEntry(OnResetClicked),
   DeclareCallBackEntry(OnCancelClicked),
   DeclareCallBackEntry(OnCloseClicked),
