@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "UtilsFont.hpp"
 #include "UtilsText.hpp"
-#include "Profile.hpp"
 
 #include <assert.h>
 #include <stdlib.h> /* for strtol() */
@@ -125,19 +124,3 @@ GetFontFromString(const TCHAR *Buffer1, LOGFONT* lplf)
   memcpy((void *)lplf, (void *)&lfTmp, sizeof(LOGFONT));
   return true;
 }
-
-bool
-GetFontFromProfile(const TCHAR *Name, LOGFONT* lplf)
-{
-  TCHAR Buffer[128];
-
-  assert(Name != NULL);
-  assert(Name[0] != '\0');
-  assert(lplf != NULL);
-
-  if (Profile::Get(Name, Buffer, sizeof(Buffer) / sizeof(TCHAR)))
-    return GetFontFromString(Buffer, lplf);
-
-  return false;
-}
-

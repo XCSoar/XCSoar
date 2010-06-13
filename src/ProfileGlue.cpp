@@ -46,6 +46,7 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "WayPointFile.hpp"
 #include "UtilsText.hpp"
+#include "UtilsFont.hpp"
 
 #include <assert.h>
 
@@ -839,4 +840,19 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
   _tcscpy(buffer, CONF("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
   Set(buffer, config.driver_name);
+}
+
+bool
+Profile::GetFont(const TCHAR *key, LOGFONT* lplf)
+{
+  TCHAR Buffer[128];
+
+  assert(key != NULL);
+  assert(key[0] != '\0');
+  assert(lplf != NULL);
+
+  if (Get(key, Buffer, sizeof(Buffer) / sizeof(TCHAR)))
+    return GetFontFromString(Buffer, lplf);
+
+  return false;
 }

@@ -43,6 +43,7 @@ Copyright_License {
 #include "Engine/Math/fixed.hpp"
 #include <tchar.h>
 #include <windef.h>
+#include <windows.h>
 
 /**
  * Configuration structure for serial devices
@@ -165,6 +166,8 @@ namespace Profile
 
   void GetDeviceConfig(unsigned n, DeviceConfig &config);
   void SetDeviceConfig(unsigned n, const DeviceConfig &config);
+
+  bool GetFont(const TCHAR *key, LOGFONT* lplf);
 };
 
 #endif
