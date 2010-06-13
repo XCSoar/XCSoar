@@ -152,100 +152,43 @@ static void RedrawSampleFont(void)
 static void
 OnFontNameData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  switch (Mode) {
-  case DataField::daGet:
-    break;
-
-  case DataField::daPut:
-    break;
-
-  case DataField::daChange:
+  if (Mode == DataField::daChange)
     RedrawSampleFont();
-
-    break;
-  }
 }
 
 static void
 OnFontWeightData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  switch (Mode) {
-  case DataField::daGet:
-    break;
-
-  case DataField::daPut:
-    break;
-
-  case DataField::daChange:
+  if (Mode == DataField::daChange)
     RedrawSampleFont();
-
-    break;
-  }
 }
 
-static void OnFontHeightData(DataField *Sender, DataField::DataAccessKind_t Mode){
-  switch (Mode) {
-  case DataField::daGet:
-    break;
-
-  case DataField::daPut:
-    break;
-
-  case DataField::daChange:
+static void
+OnFontHeightData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  if (Mode == DataField::daChange)
     RedrawSampleFont();
-
-    break;
-  }
 }
+
 static void
 OnFontItalicData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  switch (Mode) {
-  case DataField::daGet:
-    break;
-
-  case DataField::daPut:
-    break;
-
-  case DataField::daChange:
+  if (Mode == DataField::daChange)
     RedrawSampleFont();
-
-    break;
-  }
 }
 
 static void
 OnFontTrueTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  switch (Mode) {
-  case DataField::daGet:
-    break;
-
-  case DataField::daPut:
-    break;
-
-  case DataField::daChange:
+  if (Mode == DataField::daChange)
     RedrawSampleFont();
-
-    break;
-  }
 }
 
 static void
 OnFontPitchAndFamilyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  switch (Mode) {
-  case DataField::daGet:
-    break;
-
-  case DataField::daPut:
-    break;
-
-  case DataField::daChange:
+  if (Mode == DataField::daChange)
     RedrawSampleFont();
-
-    break;
-  }
 }
 
 static CallBackTableEntry_t CallBackTable[] = {
