@@ -118,7 +118,7 @@ void UpdateChanging() {
  * target does not exist.
  */
 void Update() {
-  TCHAR tmp[200];
+  TCHAR tmp[200], tmp_id[7];
   const FLARM_TRAFFIC* target =
       XCSoarInterface::Basic().flarm.FindTraffic(target_id);
 
@@ -127,7 +127,7 @@ void Update() {
     wf->SetModalResult(mrCancel);
 
   // Set the dialog caption
-  _stprintf(tmp, _T("FLARM Traffic Details (%s)"), target->ID.format(tmp));
+  _stprintf(tmp, _T("FLARM Traffic Details (%s)"), target->ID.format(tmp_id));
   wf->SetCaption(tmp);
 
   // Try to find the target in the FLARMnet database
