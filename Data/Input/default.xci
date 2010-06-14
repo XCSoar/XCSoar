@@ -818,6 +818,7 @@ mode=Info2
 type=key
 data=6
 event=Status all
+event=Mode default
 label=Status
 location=5
 
