@@ -335,6 +335,10 @@ public:
   void segment(int x, int y, unsigned radius, const RECT rc,
                Angle start, Angle end, bool horizon=false);
 
+  void draw_focus(RECT rc) {
+    // XXX
+  }
+
   void draw_button(RECT rc, bool down);
 
   const SIZE text_size(const TCHAR *text, size_t length) const;
@@ -721,6 +725,10 @@ public:
 
   void segment(int x, int y, unsigned radius, const RECT rc,
                Angle start, Angle end, bool horizon=false);
+
+  void draw_focus(RECT rc) {
+    ::DrawFocusRect(dc, &rc);
+  }
 
   void draw_button(RECT rc, bool down) {
     ::DrawFrameControl(dc, &rc, DFC_BUTTON,
