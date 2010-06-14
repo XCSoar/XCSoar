@@ -695,7 +695,6 @@ mode=Vario1
 type=key
 data=9
 event=AdjustVarioFilter zero
-event=StatusMessage Not yet implemented
 label=Setup\nStall
 location=8
 
