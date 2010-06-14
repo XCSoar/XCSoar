@@ -204,9 +204,9 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   rcTextClip = paint_rc;
   rcTextClip.right = IBLSCALE(Col1Left - 2);
 
-  canvas.set_text_color(warning.get_ack_expired()
-                        ? wAirspaceList->GetForeColor()
-                        : Color::GRAY);
+  Color old_text_color = canvas.get_text_color();
+  if (!warning.get_ack_expired())
+    canvas.set_text_color(Color::GRAY);
 
   { // name, altitude info
     _stprintf(sTmp, _T("%-20s"), sName.c_str());
@@ -337,6 +337,9 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
                       paint_rc.top + IBLSCALE(TextTop + TextHeight),
                       rcTextClip, sTmp);
 */  
+
+  if (!warning.get_ack_expired())
+    canvas.set_text_color(old_text_color);
 }
 
 
