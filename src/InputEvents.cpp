@@ -184,14 +184,10 @@ InputEvents::readFile()
 
   // Get defaults
   if (!InitONCE) {
-    if (is_fivv()) {
-      #include "InputEvents_fivv.cpp"   // VENTA3
-    } else if (!is_embedded()) {
+    if (!is_embedded()) {
       #include "InputEvents_pc.cpp"
     } else if (is_altair()) {
       #include "InputEvents_altair.cpp"
-    } else if (is_pna()) {
-      #include "InputEvents_pna.cpp"
     } else {
       #include "InputEvents_default.cpp"
     }

@@ -14,7 +14,7 @@ $(OUT)/include/InputEvents_Text2Event.cpp: $(SRC)/InputEvents.h \
 	$(Q)$(PERL) $(topdir)/Data/Input/h2cpp.pl $< >$@.tmp
 	@mv $@.tmp $@
 
-XCI_LIST = pc altair pna fivv default
+XCI_LIST = pc altair default
 XCI_HEADERS = $(patsubst %,$(OUT)/include/InputEvents_%.cpp,$(XCI_LIST))
 
 $(XCI_HEADERS): $(OUT)/include/InputEvents_%.cpp: \
