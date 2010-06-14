@@ -44,7 +44,7 @@ Copyright_License {
 #include <stdlib.h> /* for strtol() */
 
 bool
-propGetFontSettingsFromString(const TCHAR *Buffer1, LOGFONT* lplf)
+GetFontFromString(const TCHAR *Buffer1, LOGFONT* lplf)
 {
   // FontDescription of format:
   // typical font entry
@@ -127,7 +127,7 @@ propGetFontSettingsFromString(const TCHAR *Buffer1, LOGFONT* lplf)
 }
 
 bool
-propGetFontSettings(const TCHAR *Name, LOGFONT* lplf)
+GetFontFromProfile(const TCHAR *Name, LOGFONT* lplf)
 {
   TCHAR Buffer[128];
 
@@ -136,7 +136,7 @@ propGetFontSettings(const TCHAR *Name, LOGFONT* lplf)
   assert(lplf != NULL);
 
   if (Profile::Get(Name, Buffer, sizeof(Buffer) / sizeof(TCHAR)))
-    return propGetFontSettingsFromString(Buffer, lplf);
+    return GetFontFromString(Buffer, lplf);
 
   return false;
 }
