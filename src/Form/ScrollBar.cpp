@@ -174,6 +174,7 @@ WndListFrame::ScrollBar::paint(Canvas &canvas) const
   up_arrow_rect.bottom = up_arrow_rect.top + get_width();
   canvas.line(up_arrow_rect.left, up_arrow_rect.bottom,
               up_arrow_rect.right, up_arrow_rect.bottom);
+  canvas.draw_button(up_arrow_rect, false);
 
   POINT up_arrow[3] = {
     { (up_arrow_rect.left + rc.right) / 2,
@@ -190,6 +191,7 @@ WndListFrame::ScrollBar::paint(Canvas &canvas) const
   down_arrow_rect.top = down_arrow_rect.bottom - get_width();
   canvas.line(down_arrow_rect.left, down_arrow_rect.top - 1,
               down_arrow_rect.right, down_arrow_rect.top - 1);
+  canvas.draw_button(down_arrow_rect, false);
 
   POINT down_arrow[3] = {
     { (down_arrow_rect.left + rc.right) / 2,
