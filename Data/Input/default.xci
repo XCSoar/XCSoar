@@ -701,7 +701,8 @@ location=8
 mode=Vario1
 type=key
 data=0
-label=
+event=AdjustVarioFilter accel
+label=Accel
 location=9
 
 # -------------
