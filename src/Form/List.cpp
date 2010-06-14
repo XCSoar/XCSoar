@@ -108,7 +108,6 @@ void
 WndListFrame::on_paint(Canvas &canvas)
 {
   Brush background_brush(background_color);
-  canvas.fill_rectangle(get_client_rect(), background_brush);
 
   if (PaintItemCallback != NULL) {
     // paint using the PaintItemCallback
@@ -126,7 +125,8 @@ WndListFrame::on_paint(Canvas &canvas)
       if (has_focus() && i == relative_cursor) {
         Brush brush(selected_background_color);
         canvas.fill_rectangle(rc, brush);
-      }
+      } else
+        canvas.fill_rectangle(rc, background_brush);
 
       PaintItemCallback(canvas, rc, origin + i);
 
