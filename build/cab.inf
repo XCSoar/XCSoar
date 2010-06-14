@@ -69,7 +69,7 @@ DejaVuSansCondensed-BoldOblique2.ttf = 5
 DejaVuSansCondensed2.ttf = 5
 DejaVuSansCondensed-Bold2.ttf = 5
 DejaVuSansCondensed-Oblique2.ttf = 5
-standard.xci = 6
+default.xci = 6
 english.xcl = 7
 italian.xcl = 7
 german.xcl = 7
@@ -109,7 +109,7 @@ DejaVuSansCondensed-Oblique2.ttf,,,0x00000010
 DejaVuSansCondensed2.ttf,,,0x00000010
 
 [Files.Input]
-standard.xci
+default.xci
 
 [Files.Language]
 english.xcl
