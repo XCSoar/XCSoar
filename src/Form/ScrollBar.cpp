@@ -123,9 +123,9 @@ WndListFrame::ScrollBar::set_slider(unsigned size, unsigned view_size,
 
   // Update slider coordinates
   rc_slider.left = rc.left;
-  rc_slider.top = rc.top + get_width() + top - 1;
-  rc_slider.right = rc.right - 1; // -2 if use 3x pen.  -1 if 2x pen
-  rc_slider.bottom = rc_slider.top + height + 2; // +2 for 3x pen, +1 for 2x pen
+  rc_slider.top = rc.top + get_width() + top;
+  rc_slider.right = rc.right;
+  rc_slider.bottom = rc_slider.top + height;
 }
 
 unsigned
@@ -146,11 +146,10 @@ WndListFrame::ScrollBar::to_origin(unsigned size, unsigned view_size,
 }
 
 void
-WndListFrame::ScrollBar::paint(Canvas &canvas, Color fore_color) const
+WndListFrame::ScrollBar::paint(Canvas &canvas) const
 {
   // Prepare Pen
-  Pen pen(DEFAULTBORDERPENWIDTH, fore_color);
-  canvas.select(pen);
+  canvas.black_pen();
 
   // ###################
   // #### ScrollBar ####
@@ -216,18 +215,10 @@ WndListFrame::ScrollBar::paint(Canvas &canvas, Color fore_color) const
                      rc_slider.bottom - rc_slider.top - 2,
                      bitmap_canvas, 0, 0, 30, 28);
 
-  // box around slider rect
-  pen.set(DEFAULTBORDERPENWIDTH * 2, fore_color);
-  canvas.select(pen);
-
-  int iBorderOffset = 1;  // set to 1 if BORDERWIDTH >2, else 0
-
-  canvas.two_lines(rc_slider.left + iBorderOffset, rc_slider.top,
-                   rc_slider.left + iBorderOffset, rc_slider.bottom,
-                   rc_slider.right, rc_slider.bottom); // just left line of scrollbar
-  canvas.two_lines(rc_slider.right, rc_slider.bottom,
-                   rc_slider.right, rc_slider.top,
-                   rc_slider.left + iBorderOffset, rc_slider.top); // just left line of scrollbar
+  canvas.line(rc_slider.left, rc_slider.top,
+              rc_slider.right, rc_slider.top);
+  canvas.line(rc_slider.left, rc_slider.bottom,
+              rc_slider.right, rc_slider.bottom);
 }
 
 void

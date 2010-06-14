@@ -200,7 +200,7 @@ class WndListFrame : public WindowControl {
     unsigned to_origin(unsigned size, unsigned view_size, int y) const;
 
     /** Paints the ScollBar */
-    void paint(Canvas &canvas, Color fore_color) const;
+    void paint(Canvas &canvas) const;
 
     /**
      * Returns whether the slider is currently being dragged

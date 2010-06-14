@@ -130,7 +130,7 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
     return;
 
   scroll_bar.set_slider(length, items_visible, origin);
-  scroll_bar.paint(canvas, GetForeColor());
+  scroll_bar.paint(canvas);
 }
 
 void
