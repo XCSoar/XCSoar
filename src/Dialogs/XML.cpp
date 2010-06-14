@@ -500,7 +500,7 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const TCHAR *FileName,
   case eDialogScaled:
     break;
   case eDialogScaledCentered:
-    X = (rc.right - rc.left) / 2; // center form horizontally on screen
+    X = (rc.right + rc.left - Width) / 2; // center form horizontally on screen
     break;
   case eDialogFixed:
     break;
