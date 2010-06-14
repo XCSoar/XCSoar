@@ -21,7 +21,7 @@
     <WndProperty Name="prpMc2" Caption="Alt diff Mc current" X="2" Y="-1" Width="230" Height="22" CaptionWidth="150" Font="2" ReadOnly="1" />
   </Panel>
 
-  <WndListFrame Name="frmDetails" X="0" Y="0" Width="240" Height="255" ItemHeight="18" Font="3" Border="0"/>
+  <WndListFrame Name="frmDetails" X="0" Y="0" Width="240" Height="255" ItemHeight="18" Font="3" Border="1"/>
 
   <Panel Name="frmCommands" X="0" Y="0" Width="240" Height="255" Font="2" Visible="0" Border="0">
     <WndButton Name="cmdReplace" Caption="Replace in task" X="50" Y="10" Width="150" Height="30" Font="2" />
