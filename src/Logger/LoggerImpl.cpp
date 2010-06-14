@@ -712,8 +712,7 @@ DeleteOldestIGCFile(const NMEA_INFO &gps_info, const TCHAR *pathname)
 
   _tdirent *ent;
   while ((ent = _treaddir(dir)) != NULL) {
-    if (!MatchesExtension(ent->d_name, _T(".igc")) &&
-        !MatchesExtension(ent->d_name, _T(".IGC")))
+    if (!MatchesExtension(ent->d_name, _T(".igc")))
       continue;
 
     _tcscpy(fullname, pathname);

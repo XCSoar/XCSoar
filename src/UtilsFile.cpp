@@ -85,5 +85,5 @@ MatchesExtension(const TCHAR *filename, const TCHAR* extension)
   size_t extension_length = _tcslen(extension);
 
   return filename_length > extension_length &&
-    _tcscmp(filename + filename_length - extension_length, extension) == 0;
+    _tcsicmp(filename + filename_length - extension_length, extension) == 0;
 }
