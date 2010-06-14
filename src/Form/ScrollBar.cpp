@@ -76,10 +76,6 @@ WndListFrame::ScrollBar::set(const SIZE size)
   rc.top = 0;
   rc.right = size.cx;
   rc.bottom = size.cy;
-
-  // Load bitmaps
-  if (!hScrollBarBitmapFill.defined())
-    hScrollBarBitmapFill.load(IDB_SCROLLBARFILL);
 }
 
 void
@@ -154,8 +150,6 @@ WndListFrame::ScrollBar::paint(Canvas &canvas) const
                    rc.right, rc.bottom);
   canvas.two_lines(rc.right, rc.bottom, rc.right, rc.top,
                    rc.left, rc.top);
-
-  // TODO: ScrollBar Fill Bitmap is unused
 
   // ###################
   // ####  Buttons  ####
