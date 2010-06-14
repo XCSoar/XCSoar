@@ -71,6 +71,16 @@ struct GEOPOINT {
   Angle Latitude; /**< Latitude (deg) */
 
   /**
+   * Normalize the values, so this object can be used properly in
+   * calculations, without unintended side effects (such as -1 degrees
+   * vs 359 degrees).  This modification is in-place.
+   */
+  GEOPOINT &normalize() {
+    Longitude = Longitude.as_delta();
+    return *this;
+  }
+
+  /**
    * Find location a parametric distance along a vector from this point
    *
    * @param delta Vector to feed in
@@ -142,7 +152,7 @@ struct GEOPOINT {
     GEOPOINT res = *this;
     res.Longitude -= delta.Longitude;
     res.Latitude -= delta.Latitude;
-    return res;
+    return res.normalize();
   };
 
   /**
