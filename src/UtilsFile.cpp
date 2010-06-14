@@ -40,6 +40,7 @@ Copyright_License {
 #include "zzip/zzip.h"
 
 #include <stdio.h>
+#include <string.h>
 
 bool
 FileExists(const TCHAR *FileName)
@@ -80,15 +81,9 @@ FileExistsZipped(const char *FileName)
 bool
 MatchesExtension(const TCHAR *filename, const TCHAR* extension)
 {
-  // Search for extension
-  const TCHAR *ptr;
-  ptr = _tcsstr(filename, extension);
+  size_t filename_length = _tcslen(filename);
+  size_t extension_length = _tcslen(extension);
 
-  // If the extension is not at the end of the filename
-  if (ptr != filename + _tcslen(filename) - _tcslen(extension))
-    // -> does not match
-    return false;
-
-  // else -> filename matches extension
-  return true;
+  return filename_length > extension_length &&
+    _tcscmp(filename + filename_length - extension_length, extension) == 0;
 }
