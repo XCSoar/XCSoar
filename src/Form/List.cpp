@@ -112,7 +112,7 @@ WndListFrame::on_paint(Canvas &canvas)
       PaintItemCallback(canvas, rc, origin + i);
 
       if (i == relative_cursor)
-        PaintSelector(canvas, rc);
+        canvas.draw_focus(rc);
 
       ::OffsetRect(&rc, 0, rc.bottom - rc.top);
     }
