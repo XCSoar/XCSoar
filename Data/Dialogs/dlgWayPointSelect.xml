@@ -18,5 +18,5 @@
   <WndButton Name="cmdSelect" Caption="Select" X="2" Y="-1" Width="63"  Height="28" Font="2" />
   <WndButton Name="cmdClose" Caption="Close" X="2" Y="-1" Width="63"  Height="28" Font="2" />
 
-  <WndListFrame Name="frmWayPointList" X="65" Y="0" Width="258" Height="222" Font="2" ItemHeight="25" OnListInfo="OnWpListInfo"/>
+  <WndListFrame Name="frmWayPointList" X="65" Y="0" Width="258" Height="222" Font="2" ItemHeight="25"/>
 </WndForm>
