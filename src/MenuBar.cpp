@@ -49,7 +49,7 @@ static const Color menu_button_bk_down(0x80, 0xc0, 0x80);
 static const Color menu_button_bk_disabled(0xb0, 0xc0, 0xb0);
 #endif
 
-void
+static void
 GetButtonPosition(unsigned i, RECT rc, int *x, int *y, int *sizex, int *sizey)
 {
   int hwidth = (rc.right - rc.left) / 4;
