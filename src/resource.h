@@ -68,9 +68,7 @@
 #define IDB_TARGET                      320
 #define IDB_ABOVETERRAIN                321
 #define IDB_TEAMMATE_POS                322
-#define IDB_SCROLLBARTOP                324
 #define IDB_SCROLLBARMID                325
-#define IDB_SCROLLBARBOT                326
 #define IDB_SCROLLBARFILL               327
 #define IDB_LAUNCHER1                   330
 #define IDB_LAUNCHER2                   331

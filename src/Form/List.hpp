@@ -54,12 +54,8 @@ class WndListFrame : public PaintWindow {
   static const Color selected_background_color;
 
   class ScrollBar {
-    /** Top button bitmap */
-    Bitmap hScrollBarBitmapTop;
     /** Slider bitmap */
     Bitmap hScrollBarBitmapMid;
-    /** Bottom button bitmap */
-    Bitmap hScrollBarBitmapBot;
     /** Scrollbar background bitmap */
     Bitmap hScrollBarBitmapFill;
 
@@ -97,7 +93,7 @@ class WndListFrame : public PaintWindow {
 
     /** Returns the height of the scrollable area of the ScrollBar */
     int get_netto_height() const {
-      return get_height() - 2 * get_width();
+      return get_height() - 2 * get_width() - 1;
     }
 
     /**

@@ -78,12 +78,8 @@ WndListFrame::ScrollBar::set(const SIZE size)
   rc.bottom = size.cy;
 
   // Load bitmaps
-  if (!hScrollBarBitmapTop.defined())
-    hScrollBarBitmapTop.load(IDB_SCROLLBARTOP);
   if (!hScrollBarBitmapMid.defined())
     hScrollBarBitmapMid.load(IDB_SCROLLBARMID);
-  if (!hScrollBarBitmapBot.defined())
-    hScrollBarBitmapBot.load(IDB_SCROLLBARBOT);
   if (!hScrollBarBitmapFill.defined())
     hScrollBarBitmapFill.load(IDB_SCROLLBARFILL);
 }
@@ -167,42 +163,43 @@ WndListFrame::ScrollBar::paint(Canvas &canvas) const
   // ####  Buttons  ####
   // ###################
 
-  bool bTransparentUpDown = true;
-
   // Create a canvas for drawing the bitmaps
   BitmapCanvas bitmap_canvas(canvas);
 
-  if (get_width() == SCROLLBARWIDTH_INITIAL) {
-    // If the Scrollbar size hasn't been changed
-    // -> just copy the button bitmaps to the canvas
+  unsigned arrow_padding = max(get_width() / 4, 4);
+  canvas.black_brush();
 
-    bitmap_canvas.select(hScrollBarBitmapTop);
-    canvas.copy(rc.left, rc.top,
-                SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
-                bitmap_canvas, 0, 0,
-                bTransparentUpDown);
+  RECT up_arrow_rect = rc;
+  ++up_arrow_rect.left;
+  up_arrow_rect.bottom = up_arrow_rect.top + get_width();
+  canvas.line(up_arrow_rect.left, up_arrow_rect.bottom,
+              up_arrow_rect.right, up_arrow_rect.bottom);
 
-    bitmap_canvas.select(hScrollBarBitmapBot);
-    canvas.copy(rc.left, rc.bottom - SCROLLBARWIDTH_INITIAL,
-                SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
-                bitmap_canvas, 0, 0,
-                bTransparentUpDown);
-  } else {
-    // If the Scrollbar size has been changed
-    // -> stretch-copy the button bitmaps to the canvas
+  POINT up_arrow[3] = {
+    { (up_arrow_rect.left + rc.right) / 2,
+      up_arrow_rect.top + arrow_padding },
+    { up_arrow_rect.left + arrow_padding,
+      up_arrow_rect.bottom - arrow_padding },
+    { rc.right - arrow_padding,
+      up_arrow_rect.bottom - arrow_padding },
+  };
+  canvas.polygon(up_arrow, sizeof(up_arrow) / sizeof(up_arrow[0]));
 
-    bitmap_canvas.select(hScrollBarBitmapTop);
-    canvas.stretch(rc.left, rc.top, get_width(), get_width(),
-                   bitmap_canvas,
-                   0, 0, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
-                   bTransparentUpDown);
+  RECT down_arrow_rect = rc;
+  ++down_arrow_rect.left;
+  down_arrow_rect.top = down_arrow_rect.bottom - get_width();
+  canvas.line(down_arrow_rect.left, down_arrow_rect.top - 1,
+              down_arrow_rect.right, down_arrow_rect.top - 1);
 
-    bitmap_canvas.select(hScrollBarBitmapBot);
-    canvas.stretch(rc.left, rc.bottom - get_width(), get_width(), get_width(),
-                   bitmap_canvas,
-                   0, 0, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
-                   bTransparentUpDown);
-  }
+  POINT down_arrow[3] = {
+    { (down_arrow_rect.left + rc.right) / 2,
+      down_arrow_rect.bottom - arrow_padding },
+    { down_arrow_rect.left + arrow_padding,
+      down_arrow_rect.top + arrow_padding },
+    { rc.right - arrow_padding,
+      down_arrow_rect.top + arrow_padding },
+  };
+  canvas.polygon(down_arrow, sizeof(down_arrow) / sizeof(down_arrow[0]));
 
   // ###################
   // ####  Slider   ####
