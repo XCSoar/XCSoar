@@ -829,7 +829,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
 
     style.tab_stop();
 
-    WC = new WndListFrame(Parent, X, Y, Width, Height,
+    WC = new WndListFrame(Parent->GetClientAreaWindow(), X, Y, Width, Height,
                           style,
                           item_height);
 

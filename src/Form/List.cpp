@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Form/List.hpp"
-#include "Form/Container.hpp"
+#include "Screen/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
 
 #include <assert.h>
@@ -51,11 +51,11 @@ const Color WndListFrame::text_color = Color::BLACK;
 const Color WndListFrame::background_color = Color::WHITE;
 const Color WndListFrame::selected_background_color = Color::LIGHT_GRAY;
 
-WndListFrame::WndListFrame(ContainerControl *Owner,
+WndListFrame::WndListFrame(ContainerWindow &parent,
                            int X, int Y, int Width, int Height,
                            const WindowStyle style,
                            unsigned _item_height):
-  WindowControl(&Owner->GetClientAreaWindow(), X, Y, Width, Height, style),
+  WindowControl(&parent, X, Y, Width, Height, style),
   item_height(_item_height),
   length(0), origin(0), items_visible(Height / item_height),
   relative_cursor(0),

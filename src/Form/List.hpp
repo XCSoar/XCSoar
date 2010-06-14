@@ -42,7 +42,7 @@ Copyright_License {
 #include "Form/Control.hpp"
 #include "Screen/Bitmap.hpp"
 
-class ContainerControl;
+class ContainerWindow;
 
 /**
  * A WndListFrame implements a scrollable list control based on the
@@ -257,14 +257,14 @@ protected:
 public:
   /**
    * Constructor of the WndListFrame class
-   * @param Owner Parent ContainerControl
+   * @param parent the parent window
    * @param X x-Coordinate of the ListFrameControl
    * @param Y y-Coordinate of the ListFrameControl
    * @param Width Width of the ListFrameControl
    * @param Height Height of the ListFrameControl
    * @param _item_height Height of an item of the ListFrameControl
    */
-  WndListFrame(ContainerControl *Owner,
+  WndListFrame(ContainerWindow &parent,
                int X, int Y, int Width, int Height,
                const WindowStyle style,
                unsigned _item_height);
