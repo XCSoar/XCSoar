@@ -122,6 +122,10 @@ public:
                                 color.value.g, color.value.b));
   }
 
+  void null_pen() {
+    pen = Pen(0, Color::BLACK);
+  }
+
   void white_pen() {
     pen = Pen(1, Color::WHITE);
   }
@@ -555,6 +559,10 @@ public:
   const HWColor map(const Color color) const
   {
     return HWColor(color);
+  }
+
+  void null_pen() {
+    ::SelectObject(dc, GetStockObject(NULL_PEN));
   }
 
   void white_pen() {
