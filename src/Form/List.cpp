@@ -37,8 +37,9 @@ Copyright_License {
 */
 
 #include "Form/List.hpp"
+#include "Form/Control.hpp"
 #include "Screen/ContainerWindow.hpp"
-#include "Screen/Layout.hpp"
+#include "Screen/Fonts.hpp"
 
 #include <assert.h>
 
@@ -55,7 +56,6 @@ WndListFrame::WndListFrame(ContainerWindow &parent,
                            int X, int Y, int Width, int Height,
                            const WindowStyle style,
                            unsigned _item_height):
-  WindowControl(&parent, X, Y, Width, Height, style),
   item_height(_item_height),
   length(0), origin(0), items_visible(Height / item_height),
   relative_cursor(0),
@@ -63,9 +63,7 @@ WndListFrame::WndListFrame(ContainerWindow &parent,
   CursorCallback(NULL),
   PaintItemCallback(NULL)
 {
-  mCaption[0] = '\0';
-  SetForeColor(text_color);
-  SetBackColor(background_color);
+  set(parent, X, Y, Width, Height, style);
 }
 
 void
@@ -85,15 +83,32 @@ WndListFrame::show_or_hide_scroll_bar()
 bool
 WndListFrame::on_resize(unsigned width, unsigned height)
 {
-  WindowControl::on_resize(width, height);
+  PaintWindow::on_resize(width, height);
   show_or_hide_scroll_bar();
+  return true;
+}
+
+bool
+WndListFrame::on_setfocus()
+{
+  PaintWindow::on_setfocus();
+  invalidate();
+  return true;
+}
+
+bool
+WndListFrame::on_killfocus()
+{
+  PaintWindow::on_killfocus();
+  invalidate();
   return true;
 }
 
 void
 WndListFrame::on_paint(Canvas &canvas)
 {
-  canvas.fill_rectangle(get_client_rect(), GetBackBrush());
+  Brush background_brush(background_color);
+  canvas.fill_rectangle(get_client_rect(), background_brush);
 
   if (PaintItemCallback != NULL) {
     // paint using the PaintItemCallback
@@ -102,10 +117,10 @@ WndListFrame::on_paint(Canvas &canvas)
     rc.right = scroll_bar.get_left(get_size());
     rc.bottom = rc.top + item_height;
 
-    canvas.set_text_color(GetForeColor());
-    canvas.set_background_color(GetBackColor());
+    canvas.set_text_color(text_color);
+    canvas.set_background_color(background_color);
     canvas.background_transparent();
-    canvas.select(*GetFont());
+    canvas.select(MapWindowBoldFont);
 
     for (unsigned i = 0; i < items_visible + 1; i++) {
       if (has_focus() && i == relative_cursor) {
@@ -303,7 +318,7 @@ WndListFrame::on_key_down(unsigned key_code)
     return true;
   }
 
-  return WindowControl::on_key_down(key_code);
+  return PaintWindow::on_key_down(key_code);
 }
 
 bool

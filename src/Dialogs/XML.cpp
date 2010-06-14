@@ -829,9 +829,10 @@ LoadChild(WndForm &form, ContainerControl *Parent,
 
     style.tab_stop();
 
-    WC = new WndListFrame(Parent->GetClientAreaWindow(), X, Y, Width, Height,
-                          style,
-                          item_height);
+    window = new WndListFrame(Parent->GetClientAreaWindow(),
+                              X, Y, Width, Height,
+                              style,
+                              item_height);
 
   // TabControl (Tabbed)
   } else if (_tcscmp(node.getName(), _T("Tabbed")) == 0) {

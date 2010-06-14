@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_FORM_LIST_HPP
 #define XCSOAR_FORM_LIST_HPP
 
-#include "Form/Control.hpp"
+#include "Screen/PaintWindow.hpp"
 #include "Screen/Bitmap.hpp"
 
 class ContainerWindow;
@@ -48,7 +48,7 @@ class ContainerWindow;
  * A WndListFrame implements a scrollable list control based on the
  * WindowControl class.
  */
-class WndListFrame : public WindowControl {
+class WndListFrame : public PaintWindow {
   static const Color text_color;
   static const Color background_color;
   static const Color selected_background_color;
@@ -343,6 +343,9 @@ protected:
    * (derived from Window)
    */
   virtual bool on_resize(unsigned width, unsigned height);
+
+  virtual bool on_setfocus();
+  virtual bool on_killfocus();
 
   /**
    * The on_mouse_down event is called when the mouse is pressed over the button
