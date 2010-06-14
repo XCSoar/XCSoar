@@ -125,14 +125,14 @@ static Font TempMapLabelFont;
 static Font TempStatisticsFont;
 static Font TempUseCustomFontsFont;
 
-extern LOGFONT autoInfoWindowLogFont;
-extern LOGFONT autoTitleWindowLogFont;
-extern LOGFONT autoMapWindowLogFont;
-extern LOGFONT autoTitleSmallWindowLogFont;
-extern LOGFONT autoMapWindowBoldLogFont;
-extern LOGFONT autoCDIWindowLogFont; // New
-extern LOGFONT autoMapLabelLogFont;
-extern LOGFONT autoStatisticsLogFont;
+extern LOGFONT InfoWindowLogFont;
+extern LOGFONT TitleWindowLogFont;
+extern LOGFONT MapWindowLogFont;
+extern LOGFONT TitleSmallWindowLogFont;
+extern LOGFONT MapWindowBoldLogFont;
+extern LOGFONT CDIWindowLogFont; // New
+extern LOGFONT MapLabelLogFont;
+extern LOGFONT StatisticsLogFont;
 
 extern bool dlgFontEditShowModal(const TCHAR * FontDescription,
                           const TCHAR * FontRegKey,
@@ -321,15 +321,15 @@ ResetFonts(bool bUseCustom)
     LoadCustomFont(&TempStatisticsFont, szProfileFontStatisticsFont);
   }
 
-  InitializeFont (&TempUseCustomFontsFont, autoMapWindowLogFont);
-  InitializeFont(&TempInfoWindowFont, autoInfoWindowLogFont);
-  InitializeFont(&TempTitleWindowFont, autoTitleWindowLogFont);
-  InitializeFont(&TempMapWindowFont, autoMapWindowLogFont);
-  InitializeFont(&TempTitleSmallWindowFont, autoTitleSmallWindowLogFont);
-  InitializeFont(&TempMapWindowBoldFont, autoMapWindowBoldLogFont);
-  InitializeFont(&TempCDIWindowFont, autoCDIWindowLogFont);
-  InitializeFont(&TempMapLabelFont, autoMapLabelLogFont);
-  InitializeFont(&TempStatisticsFont, autoStatisticsLogFont);
+  InitializeFont (&TempUseCustomFontsFont, MapWindowLogFont);
+  InitializeFont(&TempInfoWindowFont, InfoWindowLogFont);
+  InitializeFont(&TempTitleWindowFont, TitleWindowLogFont);
+  InitializeFont(&TempMapWindowFont, MapWindowLogFont);
+  InitializeFont(&TempTitleSmallWindowFont, TitleSmallWindowLogFont);
+  InitializeFont(&TempMapWindowBoldFont, MapWindowBoldLogFont);
+  InitializeFont(&TempCDIWindowFont, CDIWindowLogFont);
+  InitializeFont(&TempMapLabelFont, MapLabelLogFont);
+  InitializeFont(&TempStatisticsFont, StatisticsLogFont);
 }
 
 static void ShowFontEditButtons(bool bVisible) {
@@ -470,7 +470,7 @@ OnEditInfoWindowFontClicked(gcc_unused WndButton &button)
   GetFontDescription(FontDesc, _T("prpInfoWindowFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
                             szProfileFontInfoWindowFont,
-                            autoInfoWindowLogFont)) {
+                            InfoWindowLogFont)) {
     FontRegistryChanged=true;
     RefreshFonts();
   }
@@ -483,7 +483,7 @@ OnEditTitleWindowFontClicked(gcc_unused WndButton &button)
   GetFontDescription(FontDesc, _T("prpTitleWindowFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
                            szProfileFontTitleWindowFont,
-                           autoTitleWindowLogFont)) {
+                           TitleWindowLogFont)) {
     FontRegistryChanged=true;
     RefreshFonts();
   }
@@ -496,7 +496,7 @@ OnEditMapWindowFontClicked(gcc_unused WndButton &button)
   GetFontDescription(FontDesc, _T("prpMapWindowFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
                            szProfileFontMapWindowFont,
-                           autoMapWindowLogFont)) {
+                           MapWindowLogFont)) {
     FontRegistryChanged=true;
     RefreshFonts();
   }
@@ -509,7 +509,7 @@ OnEditTitleSmallWindowFontClicked(gcc_unused WndButton &button)
   GetFontDescription(FontDesc, _T("prpTitleSmallWindowFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
                            szProfileFontTitleSmallWindowFont,
-                           autoTitleSmallWindowLogFont)) {
+                           TitleSmallWindowLogFont)) {
     FontRegistryChanged=true;
     RefreshFonts();
   }
@@ -522,7 +522,7 @@ OnEditMapWindowBoldFontClicked(gcc_unused WndButton &button)
   GetFontDescription(FontDesc, _T("prpMapWindowBoldFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
                            szProfileFontMapWindowBoldFont,
-                           autoMapWindowBoldLogFont)) {
+                           MapWindowBoldLogFont)) {
     FontRegistryChanged=true;
     RefreshFonts();
   }
@@ -535,7 +535,7 @@ OnEditCDIWindowFontClicked(gcc_unused WndButton &button)
   GetFontDescription(FontDesc, _T("prpCDIWindowFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
                            szProfileFontCDIWindowFont,
-                           autoCDIWindowLogFont)) {
+                           CDIWindowLogFont)) {
     FontRegistryChanged=true;
     RefreshFonts();
   }
@@ -548,7 +548,7 @@ OnEditMapLabelFontClicked(gcc_unused WndButton &button)
   GetFontDescription(FontDesc, _T("prpMapLabelFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
                            szProfileFontMapLabelFont,
-                           autoMapLabelLogFont)) {
+                           MapLabelLogFont)) {
     FontRegistryChanged=true;
     RefreshFonts();
   }
@@ -561,7 +561,7 @@ OnEditStatisticsFontClicked(gcc_unused WndButton &button)
   GetFontDescription(FontDesc, _T("prpStatisticsFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
                            szProfileFontStatisticsFont,
-                           autoStatisticsLogFont)) {
+                           StatisticsLogFont)) {
     FontRegistryChanged=true;
     RefreshFonts();
   }
