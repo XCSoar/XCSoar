@@ -53,7 +53,6 @@ extern int GlobalModelType;
 extern TCHAR GlobalModelName[];
 extern float GlobalEllipse;
 extern const TCHAR *gmfpathname();
-extern const TCHAR *gmfbasename();
 extern int GetGlobalModelName();
 extern void SmartGlobalModelType();
 extern short InstallFonts();

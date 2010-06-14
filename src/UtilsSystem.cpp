@@ -373,29 +373,6 @@ gmfpathname()
   return gmfpathname_buffer;
 }
 
-/**
- * gmfbasename returns the filename of the current executed program, without leading path.
- * Example:  xcsoar.exe
- */
-const TCHAR*
-gmfbasename()
-{
-  static TCHAR gmfbasename_buffer[MAX_PATH];
-  TCHAR *p, *lp;
-
-  if (GetModuleFileName(NULL, gmfbasename_buffer, MAX_PATH) <= 0)
-    return _T("ERROR_04");
-
-  if (gmfbasename_buffer[0] != '\\')
-    return _T("ERROR_05");
-
-  for (p = gmfbasename_buffer + 1, lp = NULL; *p != '\0'; p++) {
-    if (*p == '\\')
-      lp = ++p;
-  }
-  return lp;
-}
-
 /*
  *	A little hack in the executable filename: if it contains an
  *	underscore, then the following chars up to the .exe is
