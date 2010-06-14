@@ -54,8 +54,6 @@ class WndListFrame : public PaintWindow {
   static const Color selected_background_color;
 
   class ScrollBar {
-    /** Slider bitmap */
-    Bitmap hScrollBarBitmapMid;
     /** Scrollbar background bitmap */
     Bitmap hScrollBarBitmapFill;
 

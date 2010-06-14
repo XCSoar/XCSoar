@@ -78,8 +78,6 @@ WndListFrame::ScrollBar::set(const SIZE size)
   rc.bottom = size.cy;
 
   // Load bitmaps
-  if (!hScrollBarBitmapMid.defined())
-    hScrollBarBitmapMid.load(IDB_SCROLLBARMID);
   if (!hScrollBarBitmapFill.defined())
     hScrollBarBitmapFill.load(IDB_SCROLLBARFILL);
 }
@@ -163,9 +161,6 @@ WndListFrame::ScrollBar::paint(Canvas &canvas) const
   // ####  Buttons  ####
   // ###################
 
-  // Create a canvas for drawing the bitmaps
-  BitmapCanvas bitmap_canvas(canvas);
-
   unsigned arrow_padding = max(get_width() / 4, 4);
   canvas.black_brush();
 
@@ -207,17 +202,15 @@ WndListFrame::ScrollBar::paint(Canvas &canvas) const
   // ####  Slider   ####
   // ###################
 
-  bitmap_canvas.select(hScrollBarBitmapMid);
-  // always SRCAND b/c on top of scrollbutton texture
-  canvas.stretch_and(rc_slider.left + 1, rc_slider.top + 1,
-                     rc_slider.right - rc_slider.left - 2,
-                     rc_slider.bottom - rc_slider.top - 2,
-                     bitmap_canvas, 0, 0, 30, 28);
-
   canvas.line(rc_slider.left, rc_slider.top,
               rc_slider.right, rc_slider.top);
   canvas.line(rc_slider.left, rc_slider.bottom,
               rc_slider.right, rc_slider.bottom);
+
+  RECT rc_slider2 = rc_slider;
+  ++rc_slider2.left;
+  ++rc_slider2.top;
+  canvas.draw_button(rc_slider2, false);
 }
 
 void
