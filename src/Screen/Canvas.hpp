@@ -162,8 +162,16 @@ public:
     text_color = c;
   }
 
+  Color get_text_color() const {
+    return text_color;
+  }
+
   void set_background_color(const Color c) {
     background_color = c;
+  }
+
+  Color get_background_color() const {
+    return background_color;
   }
 
   void background_opaque() {
@@ -581,8 +589,16 @@ public:
     ::SetTextColor(dc, c);
   }
 
+  Color get_text_color() const {
+    return Color(::GetTextColor(dc));
+  }
+
   void set_background_color(const Color c) {
     ::SetBkColor(dc, c);
+  }
+
+  Color get_background_color() const {
+    return Color(::GetBkColor(dc));
   }
 
   void background_opaque() {
