@@ -5,7 +5,7 @@
 
   <WndButton Name="cmdSelect" Caption="Select" X="200" Y="2" Width="60" Height="22" Font="2" OnClick="OnSelectClicked"/>
 
-  <WndListFrame Name="frmTaskTypes" X="2" Y="24" Width="140" Height="194" ItemHeight="18" Font="2" Border="1"/>
+  <WndListFrame Name="frmTaskTypes" X="2" Y="24" Width="140" Height="194" ItemHeight="18" Border="1"/>
 
   <WndFrame Name="frmSummary" X="142" Y="24" Width="176" Height="194" Font="2" Border="1"/>
 

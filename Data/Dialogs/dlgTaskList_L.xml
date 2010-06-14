@@ -11,6 +11,6 @@
 
   <WndFrame Name="frmSummary" X="2" Y="144" Width="135" Height="50" Font="2" Border="1"/>
 
-  <WndListFrame Name="frmTasks" X="139" Y="24" Width="178" Height="200" ItemHeight="18" Font="2" Border="1"/>
+  <WndListFrame Name="frmTasks" X="139" Y="24" Width="178" Height="200" ItemHeight="18" Border="1"/>
 
 </WndForm>

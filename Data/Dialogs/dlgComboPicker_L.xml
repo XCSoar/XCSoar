@@ -7,5 +7,5 @@
 
   <WndButton Name="cmdHelp" Caption="Help" X="160" Y="260" Width="70" Height="35" Font="2" OnClick="OnHelpClicked"/>
 
-  <WndListFrame Name="frmComboPopupList" X="0" Y="0" Width="235" Height="222" ItemHeight="25" Font="2" Border="1"/>
+  <WndListFrame Name="frmComboPopupList" X="0" Y="0" Width="235" Height="222" ItemHeight="18" Border="1"/>
 </WndForm>
