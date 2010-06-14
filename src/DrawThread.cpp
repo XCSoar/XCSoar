@@ -104,6 +104,7 @@ DrawThread::run()
       trigger.wait();
 
     if (!bounds_dirty || trigger.wait(MIN_WAIT_TIME)) {
+      trigger.reset();
 
       // take control (or wait for the resume())
       running.wait();

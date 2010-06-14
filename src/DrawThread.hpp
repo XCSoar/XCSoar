@@ -82,7 +82,7 @@ class DrawThread : public Thread {
 public:
   DrawThread(GlueMapWindow &_map, GaugeFLARM *_flarm)
     :running(_T("DrawThread::running"), true),
-     trigger(_T("DrawThread::trigger"), false),
+     trigger(_T("DrawThread::trigger"), true),
      stop_trigger(_T("WorkerThread::stop_trigger"), true),
      map(_map), flarm(_flarm) {
   }
