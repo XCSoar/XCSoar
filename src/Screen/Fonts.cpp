@@ -239,7 +239,24 @@ InitialiseFontsHardCoded(const struct Appearance &appearance, RECT rc)
   }
 }
 
+#ifndef ENABLE_SDL
+static void
+InitialiseLogfont(LOGFONT* font, const TCHAR* facename, bool variable_pitch,
+                  long height, long width, bool bold, bool italic) {
+  LOGFONT tmpfont;
+  memset((char *)&tmpfont, 0, sizeof(tmpfont));
 
+  _tcscpy(tmpfont.lfFaceName, facename);
+  tmpfont.lfPitchAndFamily = (variable_pitch ? VARIABLE_PITCH : FIXED_PITCH)
+                             | FF_DONTCARE;
+  tmpfont.lfHeight = height;
+  tmpfont.lfWidth = width;
+  tmpfont.lfWeight = (bold ? FW_BOLD : FW_MEDIUM);
+  tmpfont.lfItalic = italic;
+
+  memcpy(font, &tmpfont, sizeof(LOGFONT));
+}
+#endif
 
 static void
 InitialiseFontsAuto()
@@ -314,64 +331,37 @@ InitialiseFontsAuto()
   FontWidth = (int)(FontWidth / 1.35);
 #endif
 
-  memset((char *)&logfont, 0, sizeof(logfont));
-  _tcscpy(logfont.lfFaceName, _T("Tahoma"));
-  logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE;
-  logfont.lfHeight = (int)(FontHeight * TITLEFONTHEIGHTRATIO);
-  logfont.lfWidth = (int)(FontWidth * TITLEFONTWIDTHRATIO);
-  logfont.lfWeight = FW_BOLD;
-  memcpy(&autoTitleWindowLogFont, &logfont, sizeof(LOGFONT));
+  InitialiseLogfont(&autoTitleWindowLogFont, _T("Tahoma"), true,
+                    (int)(FontHeight * TITLEFONTHEIGHTRATIO),
+                    (int)(FontWidth * TITLEFONTWIDTHRATIO), true, false);
 
   // new font for CDI Scale
-  memset((char *)&logfont, 0, sizeof(logfont));
-  _tcscpy(logfont.lfFaceName, _T("Tahoma"));
-  logfont.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE;
-  logfont.lfHeight = (int)(FontHeight * CDIFONTHEIGHTRATIO);
-  logfont.lfWidth = (int)(FontWidth * CDIFONTWIDTHRATIO);
-  logfont.lfWeight = FW_MEDIUM;
-  memcpy(&autoCDIWindowLogFont, &logfont, sizeof(LOGFONT));
+  InitialiseLogfont(&autoCDIWindowLogFont, _T("Tahoma"), false,
+                    (int)(FontHeight * CDIFONTHEIGHTRATIO),
+                    (int)(FontWidth * CDIFONTWIDTHRATIO), false, false);
 
   // new font for map labels
-  memset((char *)&logfont, 0, sizeof(logfont));
-  _tcscpy(logfont.lfFaceName, _T("Tahoma"));
-  logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE;
-  logfont.lfHeight = (int)(FontHeight * MAPFONTHEIGHTRATIO);
-  logfont.lfWidth = (int)(FontWidth * MAPFONTWIDTHRATIO);
-  logfont.lfWeight = FW_MEDIUM;
-  logfont.lfItalic = TRUE;
-  memcpy(&autoMapLabelLogFont, &logfont, sizeof(LOGFONT));
+  InitialiseLogfont(&autoMapLabelLogFont, _T("Tahoma"), true,
+                    (int)(FontHeight * MAPFONTHEIGHTRATIO),
+                    (int)(FontWidth * MAPFONTWIDTHRATIO), false, true);
 
   // Font for map other text
-  memset((char *)&logfont, 0, sizeof(logfont));
-  _tcscpy(logfont.lfFaceName, _T("Tahoma"));
-  logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE;
-  logfont.lfHeight = (int)(FontHeight * STATISTICSFONTHEIGHTRATIO);
-  logfont.lfWidth = (int)(FontWidth * STATISTICSFONTWIDTHRATIO);
-  logfont.lfWeight = FW_MEDIUM;
-  memcpy(&autoStatisticsLogFont, &logfont, sizeof(LOGFONT));
+  InitialiseLogfont(&autoStatisticsLogFont, _T("Tahoma"), true,
+                    (int)(FontHeight * STATISTICSFONTHEIGHTRATIO),
+                    (int)(FontWidth * STATISTICSFONTWIDTHRATIO), false, false);
 
   // new font for map labels
-  _tcscpy(logfont.lfFaceName, _T("Tahoma"));
-  logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE;
-  logfont.lfHeight = (int)(FontHeight * MAPFONTHEIGHTRATIO * 1.3);
-  logfont.lfWidth = (int)(FontWidth * MAPFONTWIDTHRATIO * 1.3);
-  logfont.lfWeight = FW_MEDIUM;
-  memcpy(&autoMapWindowLogFont, &logfont, sizeof(LOGFONT));
+  InitialiseLogfont(&autoMapWindowLogFont, _T("Tahoma"), true,
+                    (int)(FontHeight * MAPFONTHEIGHTRATIO * 1.3),
+                    (int)(FontWidth * MAPFONTWIDTHRATIO * 1.3), false, false);
 
   // Font for map bold text
-  _tcscpy(logfont.lfFaceName, _T("Tahoma"));
-  logfont.lfWeight = FW_BOLD;
-  logfont.lfWidth = 0; // JMW (int)(FontWidth*MAPFONTWIDTHRATIO*1.3) +2;
-  memcpy(&autoMapWindowBoldLogFont, &logfont, sizeof(LOGFONT));
+  InitialiseLogfont(&autoMapWindowBoldLogFont, _T("Tahoma"), true,
+                    (int)(FontHeight * MAPFONTHEIGHTRATIO * 1.3),
+                    0, true, false);
 
-  // TODO code: create font settings for this one...
-  memset((char *)&logfont, 0, sizeof(logfont));
-  _tcscpy(logfont.lfFaceName, _T("Tahoma"));
-  logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE;
-  logfont.lfHeight = IBLSCALE(20);
-  logfont.lfWidth = IBLSCALE(8);
-  logfont.lfWeight = FW_MEDIUM;
-  memcpy(&autoTitleSmallWindowLogFont, &logfont, sizeof(LOGFONT));
+  InitialiseLogfont(&autoTitleSmallWindowLogFont, _T("Tahoma"), true,
+                    Layout::Scale(20), Layout::Scale(8), false, false);
 #else /* !ENABLE_SDL */
   // XXX implement
 #endif /* !ENABLE_SDL */
