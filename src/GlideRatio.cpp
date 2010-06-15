@@ -38,12 +38,7 @@ Copyright_License {
 
 #include "GlideRatio.hpp"
 #include "Math/LowPassFilter.hpp"
-#include "NMEA/Info.hpp"
-#include "NMEA/Derived.hpp"
 #include "SettingsComputer.hpp"
-
-#include <math.h>
-#include <string.h>
 
 void
 InitLDRotary(const SETTINGS_COMPUTER& settings, ldrotary_s *buf)
