@@ -44,6 +44,8 @@ Copyright_License {
 #include <windows.h>
 #include <shlobj.h>
 
+#define XCSDATADIR "XCSoarData"
+
 /**
  * Returns the path of the XCSoarData folder, optionally including
  * the given file name

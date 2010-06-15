@@ -71,8 +71,6 @@ Copyright_License {
 /** interval to look only for airspace and not WP (IF NOT USING VK) */
 #define AIRSPACECLICK 1000
 
-#define XCSDATADIR	"XCSoarData"
-
 /** over this, show INVALID_GR */
 #define MAXEFFICIENCYSHOW 200
 

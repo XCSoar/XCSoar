@@ -41,7 +41,6 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Compatibility/string.h"
 #include "LogFile.hpp"
-#include "Defines.h"
 
 #include <windows.h>
 #include <stdlib.h>

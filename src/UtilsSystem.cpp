@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "UtilsSystem.hpp"
 #include "UtilsText.hpp"
-#include "Defines.h"
 #include "Interface.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
