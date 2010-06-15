@@ -60,48 +60,6 @@ Copyright_License {
 static TCHAR *data_path;
 static size_t data_path_length;
 
-/*
-	Get pathname & c. from GetModuleFilename (gmf)
-	In case of problems, always return \ERRORxx\  as path name
-	It will be displayed at startup and users will know that
-	something is wrong reporting the error code to us.
-	Approach not followed: It works but we don't know why
-	Approach followed: It doesn't work and we DO know why
-
-	These are temporary solutions to be improved
- */
-const TCHAR*
-gmfpathname()
-{
-#ifdef WIN32
-  static TCHAR gmfpathname_buffer[MAX_PATH];
-  TCHAR *p;
-
-  if (GetModuleFileName(NULL, gmfpathname_buffer, MAX_PATH) <= 0)
-    return(_T("\\ERROR_01\\") );
-
-  if (gmfpathname_buffer[0] != '\\' )
-    return(_T("\\ERROR_02\\"));
-
-  // truncate for safety
-  gmfpathname_buffer[MAX_PATH - 1] = '\0';
-
-  for (p = gmfpathname_buffer + 1; *p != '\0'; p++)
-    // search for the very first "\"
-    if (*p == '\\')
-      break;
-
-  if (*p == '\0')
-    return (_T("\\ERROR_03\\"));
-
-  *++p = '\0';
-
-  return gmfpathname_buffer;
-#else
-  return(_T("\\ERROR_01\\") );
-#endif
-}
-
 const TCHAR *
 GetPrimaryDataPath()
 {

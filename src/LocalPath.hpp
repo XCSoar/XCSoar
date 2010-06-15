@@ -44,15 +44,6 @@ Copyright_License {
 #define XCSDATADIR _T("XCSoarData")
 
 /**
- * gmfpathname returns the pathname of the current executed program, with
- * leading and trailing slash
- * examples:  \sdmmc\   \SD CARD\
- * In case of double slash, it is assumed currently as a single "\" .
- */
-const TCHAR *
-gmfpathname();
-
-/**
  * Returns the absolute path of the primary data directory.
  */
 const TCHAR *
