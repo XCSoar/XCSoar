@@ -41,7 +41,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-#include <windows.h>
 #include <shlobj.h>
 
 #define XCSDATADIR _T("XCSoarData")
@@ -52,11 +51,11 @@ Copyright_License {
  * @param buffer Output buffer
  * @param file optional filename to include in the output
  */
-void LocalPath(TCHAR* buf, const TCHAR* file = TEXT(""),
+void LocalPath(TCHAR* buf, const TCHAR* file = _T(""),
                int loc = CSIDL_PERSONAL);
 
 #ifndef HAVE_POSIX
-void LocalPath(char* buf, const TCHAR* file = TEXT(""),
+void LocalPath(char* buf, const TCHAR* file = _T(""),
                int loc = CSIDL_PERSONAL);
 #endif
 

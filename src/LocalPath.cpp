@@ -59,7 +59,7 @@ LocalPath(TCHAR* buffer, const TCHAR* file, int loc)
   CSIDL_PROGRAM_FILES 0x0026   The program files folder.
   */
   #if defined(GNAV) && !defined(PCGNAV)
-    _tcscpy(buffer, TEXT("\\NOR Flash"));
+    _tcscpy(buffer, _T("\\NOR Flash"));
   #elif defined (PNA) && !defined(WINDOWSPC)
    /*
     * VENTA-ADDON "smartpath" for PNA only
@@ -134,7 +134,7 @@ ExpandLocalPath(TCHAR* filein)
     return;
 
   TCHAR lpath[MAX_PATH];
-  TCHAR code[] = TEXT("%LOCAL_PATH%\\");
+  TCHAR code[] = _T("%LOCAL_PATH%\\");
   TCHAR output[MAX_PATH];
 
   // Get the XCSoarData folder location (lpath)
@@ -146,7 +146,7 @@ ExpandLocalPath(TCHAR* filein)
     return;
 
   // Replace the code "%LOCAL_PATH%\\" by the full local path (output)
-  _stprintf(output, TEXT("%s%s"), lpath, ptr);
+  _stprintf(output, _T("%s%s"), lpath, ptr);
   // ... and copy it to the buffer (filein)
   _tcscpy(filein, output);
 
@@ -162,7 +162,7 @@ ContractLocalPath(TCHAR* filein)
     return;
 
   TCHAR lpath[MAX_PATH];
-  TCHAR code[] = TEXT("%LOCAL_PATH%\\");
+  TCHAR code[] = _T("%LOCAL_PATH%\\");
   TCHAR output[MAX_PATH];
 
   // Get the XCSoarData folder location (lpath)
@@ -174,7 +174,7 @@ ContractLocalPath(TCHAR* filein)
     return;
 
   // Replace the full local path by the code "%LOCAL_PATH%\\" (output)
-  _stprintf(output, TEXT("%s%s"), code, ptr);
+  _stprintf(output, _T("%s%s"), code, ptr);
   // ... and copy it to the buffer (filein)
   _tcscpy(filein, output);
 }
