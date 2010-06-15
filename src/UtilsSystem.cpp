@@ -521,7 +521,7 @@ InstallFonts()
   TCHAR srcfile[MAX_PATH];
   TCHAR dstfile[MAX_PATH];
 
-  _stprintf(srcdir, _T("%s%s\\Fonts"), gmfpathname(), XCSDATADIR);
+  LocalPath(srcdir, _T("Fonts"));
   if (GetFileAttributes(srcdir) != FILE_ATTRIBUTE_DIRECTORY)
     return 1;
 
