@@ -39,7 +39,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
-#include "options.h" /* for IBLSCALE() */
+
 #include <stdio.h>
 
 void MapWindow::CalculateScreenPositionsGroundline(void) {

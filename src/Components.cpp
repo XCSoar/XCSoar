@@ -77,7 +77,6 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "DrawThread.hpp"
 #include "StatusMessage.hpp"
-#include "options.h"
 #include "CalculationThread.hpp"
 #include "InstrumentThread.hpp"
 #include "ReplayLoggerGlue.hpp"

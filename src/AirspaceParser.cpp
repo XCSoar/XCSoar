@@ -44,7 +44,6 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "LogFile.hpp"
 #include "Math/Earth.hpp"
-#include "options.h"
 #include "IO/LineReader.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
