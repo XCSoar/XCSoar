@@ -41,7 +41,6 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Compatibility/string.h"
 #include "Compatibility/path.h"
-#include "LogFile.hpp"
 
 #if defined(_WIN32_WCE) && !defined(GNAV)
 #include "OS/FlashCardEnumerator.hpp"
@@ -132,19 +131,13 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
   }
 #else
   // non altair, (non windowspc e non mingw32) e non ppc2002
-  static bool first = true;
-
   TCHAR FlashPath[MAX_PATH];
   FlashCardEnumerator enumerator;
   const TCHAR *name;
   while ((name = enumerator.next()) != NULL) {
     _stprintf(FlashPath, _T("/%s/%s"), name, XCSDATADIR);
     ScanDirectories(FlashPath, filter);
-    if (first)
-        LogStartUp(TEXT("%s"), FlashPath);
   }
-
-  first = false;
 #endif
 #endif /* _WIN32_WCE && !GNAV*/
 
