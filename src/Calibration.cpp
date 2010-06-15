@@ -38,10 +38,8 @@ Copyright_License {
 */
 
 #include "Calibration.hpp"
-#include "Math/FastMath.h"
 #include "LogFile.hpp"
 #include "NMEA/Info.hpp"
-#include "NMEA/Derived.hpp"
 
 #include <tchar.h>
 

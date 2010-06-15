@@ -40,7 +40,6 @@ Copyright_License {
 #define CALIBRATION_HPP
 
 struct NMEA_INFO;
-struct DERIVED_INFO;
 
 void CalibrationInit(void);
 void CalibrationUpdate(const NMEA_INFO *Basic);
