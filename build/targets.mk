@@ -334,6 +334,10 @@ ifeq ($(HAVE_CE),y)
       TARGET_LDLIBS += -limgdecmp
     endif
   endif
+
+  ifeq ($(findstring $(TARGET),PPC2000 ALTAIR),)
+    TARGET_LDLIBS += -lnote_prj
+  endif
 endif
 
 ifeq ($(TARGET),UNIX)

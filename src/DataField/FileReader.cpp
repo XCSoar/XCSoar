@@ -40,9 +40,16 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "Compatibility/string.h"
+#include "LogFile.hpp"
+#include "Defines.h"
 
 #include <windows.h>
 #include <stdlib.h>
+
+#if defined(_WIN32_WCE) && _WIN32_WCE > 0x300
+#include <projects.h>
+} // fix for syntax error in mingw32ce's header (0.59.1)
+#endif
 
 #ifdef HAVE_POSIX
 #include <sys/types.h>
@@ -110,9 +117,16 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
   ScanDirectories(buffer, filter);
 
 #if defined(_WIN32_WCE) && !defined(GNAV)
-
-#ifndef __GNUC__
-#ifndef OLDPPC
+#ifdef FIVV
+  // Scan only XCSoarData in the root directory where the xcsoar.exe is placed!
+  // In large SD card this was leading great confusion since .dat files are ALSO
+  // used by other software, namely TOMTOM!
+  TCHAR tBuffer[MAX_PATH];
+  _stprintf(tBuffer,TEXT("%s%S"),gmfpathname(), XCSDATADIR );
+  if (_tcscmp(buffer,tBuffer) != 0) {
+    ScanDirectories(tBuffer,filter);
+  }
+#elif _WIN32_WCE > 0x300 /* PPC2002 or newer */
   // non altair, (non windowspc e non mingw32) e non ppc2002
   static bool first = true;
 
@@ -148,18 +162,7 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
   FindClose(hFlashCard); // Close the search handle.
 
   first = false;
-#endif
-#else // mingw32 and PC
-#ifdef FIVV
-  // Scan only XCSoarData in the root directory where the xcsoar.exe is placed!
-  // In large SD card this was leading great confusion since .dat files are ALSO
-  // used by other software, namely TOMTOM!
-  TCHAR tBuffer[MAX_PATH];
-  _stprintf(tBuffer,TEXT("%s%S"),gmfpathname(), XCSDATADIR );
-  if (_tcscmp(buffer,tBuffer) != 0) {
-    ScanDirectories(tBuffer,filter);
-  }
-#else
+#else /* PPC2000 */
   // To Do: RLD appending "XCSoarData" to card names is a "quick fix" for the upcoming stable release 5.2.3? and
   // the better solution involves changing multiple files, and will remove this list altogether
   ScanDirectories(TEXT("\\Carte de stockage\\XCSoarData"),filter);
@@ -171,9 +174,7 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
   ScanDirectories(TEXT("\\CF Card\\XCSoarData"),filter);
   ScanDirectories(TEXT("\\Speicherkarte\\XCSoarData"),filter);
   ScanDirectories(TEXT("\\SDMMC\\XCSoarData"),filter);
-#endif // FIVV
-#endif // MINGW
-
+#endif
 #endif /* _WIN32_WCE && !GNAV*/
 
   Sort();
