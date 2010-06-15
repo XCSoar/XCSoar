@@ -100,16 +100,9 @@ public:
     // Iterate through the file array and delete
     // everything except the first entry
     for (unsigned int i = 1; i < nFiles; i++) {
-      if (fields[i].mTextFile) {
-        free(fields[i].mTextFile);
-        fields[i].mTextFile = NULL;
-      }
-      if (fields[i].mTextPathFile) {
-        free(fields[i].mTextPathFile);
-        fields[i].mTextPathFile = NULL;
-      }
+      free(fields[i].mTextFile);
+      free(fields[i].mTextPathFile);
     }
-    nFiles = 1;
   }
 
   /** Move the selection up (+1) */
