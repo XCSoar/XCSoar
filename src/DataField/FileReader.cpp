@@ -46,7 +46,7 @@ Copyright_License {
 #include <windows.h>
 #include <stdlib.h>
 
-#if defined(_WIN32_WCE) && _WIN32_WCE > 0x300
+#ifdef _WIN32_WCE
 #include <projects.h>
 } // fix for syntax error in mingw32ce's header (0.59.1)
 #endif
@@ -126,7 +126,7 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
   if (_tcscmp(buffer,tBuffer) != 0) {
     ScanDirectories(tBuffer,filter);
   }
-#elif _WIN32_WCE > 0x300 /* PPC2002 or newer */
+#else
   // non altair, (non windowspc e non mingw32) e non ppc2002
   static bool first = true;
 
@@ -162,18 +162,6 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
   FindClose(hFlashCard); // Close the search handle.
 
   first = false;
-#else /* PPC2000 */
-  // To Do: RLD appending "XCSoarData" to card names is a "quick fix" for the upcoming stable release 5.2.3? and
-  // the better solution involves changing multiple files, and will remove this list altogether
-  ScanDirectories(TEXT("\\Carte de stockage\\XCSoarData"),filter);
-  ScanDirectories(TEXT("\\Storage Card\\XCSoarData"),filter);
-  ScanDirectories(TEXT("\\SD-MMC Card\\XCSoarData"),filter);
-  ScanDirectories(TEXT("\\SD Karte\\XCSoarData"),filter);
-  ScanDirectories(TEXT("\\CF Karte\\XCSoarData"),filter);
-  ScanDirectories(TEXT("\\SD Card\\XCSoarData"),filter);
-  ScanDirectories(TEXT("\\CF Card\\XCSoarData"),filter);
-  ScanDirectories(TEXT("\\Speicherkarte\\XCSoarData"),filter);
-  ScanDirectories(TEXT("\\SDMMC\\XCSoarData"),filter);
 #endif
 #endif /* _WIN32_WCE && !GNAV*/
 

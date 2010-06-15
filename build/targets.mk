@@ -335,7 +335,7 @@ ifeq ($(HAVE_CE),y)
     endif
   endif
 
-  ifeq ($(findstring $(TARGET),PPC2000 ALTAIR),)
+  ifeq ($(findstring $(TARGET),ALTAIR),)
     TARGET_LDLIBS += -lnote_prj
   endif
 endif
