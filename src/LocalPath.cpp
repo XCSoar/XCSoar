@@ -153,20 +153,16 @@ ExpandLocalPath(TCHAR* filein)
 void
 ContractLocalPath(TCHAR* filein)
 {
-  TCHAR lpath[MAX_PATH];
   TCHAR code[] = _T("%LOCAL_PATH%\\");
   TCHAR output[MAX_PATH];
 
-  // Get the XCSoarData folder location (lpath)
-  LocalPath(lpath);
-
   // Get the relative file name and location (ptr)
-  const TCHAR *ptr = string_after_prefix(filein, lpath);
-  if (!ptr || string_is_empty(ptr))
+  const TCHAR *ptr = string_after_prefix(filein, data_path);
+  if (ptr == NULL || *ptr != DIR_SEPARATOR)
     return;
 
   // Replace the full local path by the code "%LOCAL_PATH%\\" (output)
-  _stprintf(output, _T("%s%s"), code, ptr);
+  _stprintf(output, _T("%s%s"), code, ptr + 1);
   // ... and copy it to the buffer (filein)
   _tcscpy(filein, output);
 }
