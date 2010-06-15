@@ -47,31 +47,6 @@ Copyright_License {
  */
 #define ALTERNATE_MAXVALIDGR 200
 
-/**
- * Normally GlidePolar::bestld * 0.7 makes an efficiency 40 become 28 as a safety margin
- */
-#define SAFELD_FACTOR	0.7
-
-/**
- * Quiet sound mode under safetyaltitude + QUIETMARGIN
- * (in meters)
- */
-#define ALTERNATE_QUIETMARGIN 250
-
-/**
- * Additional height over arrival altitude needed for safety searches and green
- * and blue Ok status. This is really needed since car GPS or non-baro GPS
- * may be in error of several meters, and we can't accept a +30m over safety
- * if the gps altitude is wrong!!
- * (in meters)
- */
-#define ALTERNATE_OVERSAFETY  100
-/**
- * bestalternate search is within this maximum limit
- * (in kilometers)
- */
-#define ALTERNATE_MAXRANGE    100
-
 /** seconds between infobox dynamic flipping */
 #define DYNABOXTIME 3.0
 
@@ -96,20 +71,7 @@ Copyright_License {
 /** interval to look only for airspace and not WP (IF NOT USING VK) */
 #define AIRSPACECLICK 1000
 
-
-/** interval in seconds between BA search (slow) */
-#define BESTALTERNATEINTERVAL 60.0
-
 #define XCSDATADIR	"XCSoarData"
-
-/** Max items in any rotary buffer (used in filters) */
-#define RASIZE 180
-
-/**
- * Max number of iterations during a filter convergence search
- * just for safety, it should stop at 3-4 automatically
- */
-#define MAXITERFILTER 10
 
 /** max size of rotary buffer for LD calculation */
 #define MAXLDROTARYSIZE 180
