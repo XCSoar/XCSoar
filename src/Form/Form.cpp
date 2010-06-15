@@ -304,8 +304,8 @@ int WndForm::ShowModal(bool bEnableMap) {
     // hack to stop exiting immediately
     if (is_embedded() && !is_altair() && !hastimed &&
         is_user_input(msg.message)) {
-      if (!enter_clock.check(1000))
-        /* ignore user input in the first 1000ms */
+      if (!enter_clock.check(200))
+        /* ignore user input in the first 200ms */
         continue;
       else
         hastimed = true;
