@@ -53,6 +53,7 @@
 #include "Device/Descriptor.hpp"
 #include "Device/List.hpp"
 #include "Compatibility/string.h"
+#include "Compatibility/path.h"
 #include "SettingsComputer.hpp"
 #include "NMEA/Info.hpp"
 #include "Simulator.hpp"
@@ -358,7 +359,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
     if (!settings.LoggerShortName) {
       // Long file name
       _stprintf(szLoggerFileName,
-                _T("%s\\%04u-%02u-%02u-XCS-%c%c%c-%02d.IGC"),
+                _T("%s" DIR_SEPARATOR_S "%04u-%02u-%02u-XCS-%c%c%c-%02d.IGC"),
           path,
                 gps_info.DateTime.year,
                 gps_info.DateTime.month,
@@ -375,7 +376,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
       cday = NumToIGCChar(gps_info.DateTime.day);
       cflight = NumToIGCChar(i);
       _stprintf(szLoggerFileName,
-                _T("%s\\%c%c%cX%c%c%c%c.IGC"),
+                _T("%s" DIR_SEPARATOR_S "%c%c%cX%c%c%c%c.IGC"),
           path,
           cyear,
           cmonth,

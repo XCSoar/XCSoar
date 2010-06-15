@@ -58,6 +58,7 @@ Copyright_License {
 #include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
 #include "WayPoint/WayPointGlue.hpp"
 #include "Compiler.h"
+#include "Compatibility/path.h"
 
 #include <assert.h>
 
@@ -396,10 +397,10 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   ExpandLocalPath(szWaypointFile);
   ExtractDirectory(Directory, szWaypointFile);
 
-  _stprintf(path_modis,TEXT("%s\\modis-%03d.jpg"),
+  _stprintf(path_modis, _T("%s" DIR_SEPARATOR_S "modis-%03d.jpg"),
            Directory,
            selected_waypoint->id+1);
-  _stprintf(path_google,TEXT("%s\\google-%03d.jpg"),
+  _stprintf(path_google,TEXT("%s" DIR_SEPARATOR_S "google-%03d.jpg"),
            Directory,
            selected_waypoint->id+1);
 

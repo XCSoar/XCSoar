@@ -40,6 +40,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "Compatibility/string.h"
+#include "Compatibility/path.h"
 #include "LogFile.hpp"
 
 #if defined(_WIN32_WCE) && !defined(GNAV)
@@ -198,8 +199,8 @@ DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filter)
 
   ScanFiles(FileName, filter);
 
-  _tcscat(DirPath, TEXT("\\"));
-  _tcscat(FileName, TEXT("\\*"));
+  _tcscat(DirPath, _T(DIR_SEPARATOR_S));
+  _tcscat(FileName, _T(DIR_SEPARATOR_S "*"));
 
   hFind = FindFirstFile(FileName, &FindFileData); // find the first file
   if (hFind == INVALID_HANDLE_VALUE)
@@ -271,7 +272,7 @@ DataFieldFileReader::ScanFiles(const TCHAR* sPath, const TCHAR* filter)
   else
     DirPath[0] = 0;
 
-  _tcscat(DirPath, TEXT("\\"));
+  _tcscat(DirPath, _T(DIR_SEPARATOR_S));
   _tcscat(DirPath, filter);
 
   if (sPath)
@@ -279,7 +280,7 @@ DataFieldFileReader::ScanFiles(const TCHAR* sPath, const TCHAR* filter)
   else
     FileName[0] = 0;
 
-  _tcscat(FileName, TEXT("\\"));
+  _tcscat(FileName, _T(DIR_SEPARATOR_S));
 
   hFind = FindFirstFile(DirPath, &FindFileData); // find the first file
   if (hFind == INVALID_HANDLE_VALUE)
