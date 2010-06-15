@@ -510,9 +510,7 @@ XCSoarInterface::Shutdown(void)
 
   // Save everything in the persistent memory file
   SaveCalculationsPersist(Basic(), Calculated());
-#if (EXPERIMENTAL > 0)
   //  CalibrationSave();
-#endif
 
   if (is_altair()) {
     LogStartUp(TEXT("Altair shutdown"));

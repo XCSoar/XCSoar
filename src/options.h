@@ -39,8 +39,6 @@ Copyright_License {
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
-#define   EXPERIMENTAL          0             // ????
-
 #define   LOGGDEVCOMMANDLINE    NULL          // device in-stream logger command line
                                               // ie TEXT("-logA=\\Speicherkarte\\logA.log ""-logB=\\SD Card\\logB.log""")
 
