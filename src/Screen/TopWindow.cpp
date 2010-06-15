@@ -68,7 +68,7 @@ TopWindow::TopWindow()
   :hSavedFocus(NULL)
 #endif
 {
-#ifdef HAVE_ACTIVATE_INFO
+#ifdef HAVE_AYGSHELL_DLL
   memset(&s_sai, 0, sizeof(s_sai));
   s_sai.cbSize = sizeof(s_sai);
 #endif
@@ -233,7 +233,7 @@ LRESULT TopWindow::on_message(HWND _hWnd, UINT message,
 			       WPARAM wParam, LPARAM lParam) {
   switch (message) {
   case WM_ACTIVATE:
-#ifdef HAVE_ACTIVATE_INFO
+#ifdef HAVE_AYGSHELL_DLL
     SHHandleWMActivate(_hWnd, wParam, lParam, &s_sai, FALSE);
 #endif
 
@@ -242,7 +242,7 @@ LRESULT TopWindow::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_SETTINGCHANGE:
-#ifdef HAVE_ACTIVATE_INFO
+#ifdef HAVE_AYGSHELL_DLL
     SHHandleWMSettingChange(_hWnd, wParam, lParam, &s_sai);
 #endif
     break;

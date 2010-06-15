@@ -41,11 +41,7 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 
-#if defined(_WIN32_WCE) && _WIN32_WCE >= 0x0300 && !defined(GNAV)
-#define HAVE_ACTIVATE_INFO
-#endif
-
-#ifdef HAVE_ACTIVATE_INFO
+#ifdef HAVE_AYGSHELL_DLL
 #include <aygshell.h>
 #endif
 
@@ -71,7 +67,7 @@ class TopWindow : public ContainerWindow {
    */
   HWND hSavedFocus;
 
-#ifdef HAVE_ACTIVATE_INFO
+#ifdef HAVE_AYGSHELL_DLL
   SHACTIVATEINFO s_sai;
 #endif
 #endif /* !ENABLE_SDL */

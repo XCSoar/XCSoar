@@ -275,7 +275,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   main_window.show();
   main_window.map.show();
 
-#ifdef HAVE_ACTIVATE_INFO
+#ifdef HAVE_AYGSHELL_DLL
   SHSetAppKeyWndAssoc(VK_APP1, main_window);
   SHSetAppKeyWndAssoc(VK_APP2, main_window);
   SHSetAppKeyWndAssoc(VK_APP3, main_window);

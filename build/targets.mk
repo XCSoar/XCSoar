@@ -325,6 +325,7 @@ ifeq ($(HAVE_CE),y)
     TARGET_LDLIBS += -lnote_prj
 
     TARGET_LDLIBS += -laygshell
+    TARGET_CPPFLAGS += -DHAVE_AYGSHELL_DLL
 
     ifneq ($(TARGET),PNA)
       TARGET_LDLIBS += -limgdecmp

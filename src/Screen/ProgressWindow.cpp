@@ -46,7 +46,7 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-#ifdef _WIN32_WCE
+#ifdef HAVE_AYGSHELL_DLL
 #include "aygshell.h"
 #endif
 
@@ -82,7 +82,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   move(rc.left, rc.top, rcp.right - rcp.left, rcp.bottom - rcp.top);
 #endif
 
-#if defined(_WIN32_WCE) && !defined(GNAV)
+#ifdef HAVE_AYGSHELL_DLL
   ::SHFullScreen(hWnd, SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
 #endif
 
