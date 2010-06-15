@@ -328,51 +328,6 @@ SetModelName(DWORD Temp)
 #if defined(PNA) || defined(FIVV)  // VENTA-ADDON gmfpathname & C.
 
 /*
-	Get pathname & c. from GetModuleFilename (gmf)
-	In case of problems, always return \ERRORxx\  as path name
-	It will be displayed at startup and users will know that
-	something is wrong reporting the error code to us.
-	Approach not followed: It works but we don't know why
-	Approach followed: It doesn't work and we DO know why
-
-	These are temporary solutions to be improved
- */
-
-/**
- * gmfpathname returns the pathname of the current executed program, with
- * leading and trailing slash
- * examples:  \sdmmc\   \SD CARD\
- * In case of double slash, it is assumed currently as a single "\" .
- */
-const TCHAR*
-gmfpathname()
-{
-  static TCHAR gmfpathname_buffer[MAX_PATH];
-  TCHAR *p;
-
-  if (GetModuleFileName(NULL, gmfpathname_buffer, MAX_PATH) <= 0)
-    return(_T("\\ERROR_01\\") );
-
-  if (gmfpathname_buffer[0] != '\\' )
-    return(_T("\\ERROR_02\\"));
-
-  // truncate for safety
-  gmfpathname_buffer[MAX_PATH - 1] = '\0';
-
-  for (p = gmfpathname_buffer + 1; *p != '\0'; p++)
-    // search for the very first "\"
-    if (*p == '\\')
-      break;
-
-  if (*p == '\0')
-    return (_T("\\ERROR_03\\"));
-
-  *++p = '\0';
-
-  return gmfpathname_buffer;
-}
-
-/*
  *	A little hack in the executable filename: if it contains an
  *	underscore, then the following chars up to the .exe is
  *	considered a modelname
