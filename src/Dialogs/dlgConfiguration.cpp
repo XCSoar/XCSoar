@@ -2026,6 +2026,31 @@ static void setVariables(void) {
   }
 }
 
+static bool
+FinishFileField(const WndProperty &wp, const TCHAR *profile_key,
+                const TCHAR *old_value)
+{
+  const DataFieldFileReader *dfe =
+    (const DataFieldFileReader *)wp.GetDataField();
+  _tcscpy(temptext, dfe->GetPathFile());
+  ContractLocalPath(temptext);
+
+  if (_tcscmp(temptext, old_value) == 0)
+    return false;
+
+  Profile::Set(profile_key, temptext);
+  changed = true;
+  return true;
+}
+
+static bool
+FinishFileField(WndForm &wf, const TCHAR *control_name,
+                const TCHAR *profile_key, const TCHAR *old_value)
+{
+  const WndProperty *wp = (const WndProperty *)wf.FindByName(control_name);
+  return wp != NULL && FinishFileField(*wp, profile_key, old_value);
+}
+
 /**
  * @return true if the value has changed
  */
@@ -2530,161 +2555,44 @@ void dlgConfigurationShowModal(void)
                                       szProfileHandicap,
                                       XCSoarInterface::SetSettingsComputer().olc_handicap);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpPolarFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    _tcscpy(temptext, dfe->GetPathFile());
-    ContractLocalPath(temptext);
-    if (_tcscmp(temptext,szPolarFile)) {
-      Profile::Set(szProfilePolarFile, temptext);
-      PolarFileChanged = true;
-      changed = true;
-    }
-  }
+  PolarFileChanged = FinishFileField(*wf, _T("prpPolarFile"),
+                                     szProfilePolarFile, szPolarFile);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpWaypointFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    _tcscpy(temptext, dfe->GetPathFile());
-    ContractLocalPath(temptext);
-    if (_tcscmp(temptext,szWaypointFile)) {
-      Profile::Set(szProfileWayPointFile, temptext);
-      WaypointFileChanged= true;
-      changed = true;
-    }
-  }
+  WaypointFileChanged =
+    FinishFileField(*wf, _T("prpWaypointFile"),
+                    szProfileWayPointFile, szWaypointFile) ||
+    FinishFileField(*wf, _T("prpAdditionalWaypointFile"),
+                    szProfileAdditionalWayPointFile, szAdditionalWaypointFile);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAdditionalWaypointFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    _tcscpy(temptext, dfe->GetPathFile());
-    ContractLocalPath(temptext);
-    if (_tcscmp(temptext,szAdditionalWaypointFile)) {
-      Profile::Set(szProfileAdditionalWayPointFile, temptext);
-      WaypointFileChanged= true;
-      changed = true;
-    }
-  }
+  AirspaceFileChanged =
+    FinishFileField(*wf, _T("prpAirspaceFile"),
+                    szProfileAirspaceFile, szAirspaceFile) ||
+    FinishFileField(*wf, _T("prpAdditionalAirspaceFile"),
+                    szProfileAdditionalAirspaceFile, szAdditionalAirspaceFile);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAirspaceFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    _tcscpy(temptext, dfe->GetPathFile());
-    ContractLocalPath(temptext);
-    if (_tcscmp(temptext,szAirspaceFile)) {
-      Profile::Set(szProfileAirspaceFile, temptext);
-      AirspaceFileChanged= true;
-      changed = true;
-    }
-  }
+  MapFileChanged = FinishFileField(*wf, _T("prpMapFile"),
+                                   szProfileMapFile, szMapFile);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAdditionalAirspaceFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    _tcscpy(temptext, dfe->GetPathFile());
-    ContractLocalPath(temptext);
-    if (_tcscmp(temptext,szAdditionalAirspaceFile)) {
-      Profile::Set(szProfileAdditionalAirspaceFile, temptext);
-      AirspaceFileChanged= true;
-      changed = true;
-    }
-  }
+  TerrainFileChanged = FinishFileField(*wf, _T("prpTerrainFile"),
+                                       szProfileTerrainFile, szTerrainFile);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpMapFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    _tcscpy(temptext, dfe->GetPathFile());
-    ContractLocalPath(temptext);
-    if (_tcscmp(temptext,szMapFile)) {
-      Profile::Set(szProfileMapFile, temptext);
-      MapFileChanged= true;
-      changed = true;
-    }
-  }
+  TopologyFileChanged = FinishFileField(*wf, _T("prpTopologyFile"),
+                                        szProfileTopologyFile, szTopologyFile);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpTerrainFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    _tcscpy(temptext, dfe->GetPathFile());
-    ContractLocalPath(temptext);
-    if (_tcscmp(temptext,szTerrainFile)) {
-      Profile::Set(szProfileTerrainFile, temptext);
-      TerrainFileChanged= true;
-      changed = true;
-    }
-  }
+  AirfieldFileChanged = FinishFileField(*wf, _T("prpAirfieldFile"),
+                                        szProfileAirfieldFile, szAirfieldFile);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpTopologyFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    _tcscpy(temptext, dfe->GetPathFile());
-    ContractLocalPath(temptext);
-    if (_tcscmp(temptext,szTopologyFile)) {
-      Profile::Set(szProfileTopologyFile, temptext);
-      TopologyFileChanged= true;
-      changed = true;
-    }
-  }
+  if (FinishFileField(*wf, _T("prpLanguageFile"),
+                      szProfileLanguageFile, szLanguageFile))
+    requirerestart = true;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAirfieldFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    _tcscpy(temptext, dfe->GetPathFile());
-    ContractLocalPath(temptext);
-    if (_tcscmp(temptext,szAirfieldFile)) {
-      Profile::Set(szProfileAirfieldFile, temptext);
-      AirfieldFileChanged= true;
-      changed = true;
-    }
-  }
+  if (FinishFileField(*wf, _T("prpStartMaxSpeedMargin"),
+                      szProfileStatusFile, szStatusFile))
+    requirerestart = true;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpLanguageFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    _tcscpy(temptext, dfe->GetPathFile());
-    ContractLocalPath(temptext);
-    if (_tcscmp(temptext,szLanguageFile)) {
-      Profile::Set(szProfileLanguageFile, temptext);
-      requirerestart = true;
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpStatusFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    _tcscpy(temptext, dfe->GetPathFile());
-    ContractLocalPath(temptext);
-    if (_tcscmp(temptext,szStatusFile)) {
-      Profile::Set(szProfileStatusFile, temptext);
-      requirerestart = true;
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpInputFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    _tcscpy(temptext, dfe->GetPathFile());
-    ContractLocalPath(temptext);
-    if (_tcscmp(temptext,szInputFile)) {
-      Profile::Set(szProfileInputFile, temptext);
-      requirerestart = true;
-      changed = true;
-    }
-  }
+  if (FinishFileField(*wf, _T("prpInputFile"),
+                      szProfileInputFile, szInputFile))
+    requirerestart = true;
 
   changed |= SetValueRegistryOnChange(wf, _T("prpBallastSecsToEmpty"),
                                       szProfileBallastSecsToEmpty,
