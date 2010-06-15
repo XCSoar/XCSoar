@@ -764,11 +764,7 @@ LoggerImpl::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
   int numtries = 0;
 
   LocalPath(pathname);
-  if (is_altair()) {
-    LocalPath(subpathname, _T("logs"));
-  } else {
-    LocalPath(subpathname);
-  }
+  LocalPath(subpathname, _T("logs"));
 
 #ifdef DEBUG_IGCFILENAME
   bool retval;
