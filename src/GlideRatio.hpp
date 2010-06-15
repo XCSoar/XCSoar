@@ -55,7 +55,7 @@ typedef enum {
 
 class GlideRatioCalculator : private NonCopyable {
   struct record {
-    int distance;
+    unsigned distance;
     int altitude;
   };
 
@@ -63,23 +63,24 @@ class GlideRatioCalculator : private NonCopyable {
    * Rotary array with a predefined max capacity.
    */
   record records[MAXLDROTARYSIZE];
-  int totaldistance;
+
+  unsigned totaldistance;
 
   /**
    * Pointer to current first item in rotarybuf if used.
    */
-  short start;
+  unsigned short start;
 
   /**
    * Real size of rotary buffer.
    */
-  short size;
+  unsigned short size;
 
   bool valid;
 
 public:
   void init(const SETTINGS_COMPUTER &settings);
-  void add(int distance, int altitude);
+  void add(unsigned distance, int altitude);
   int calculate() const;
 };
 

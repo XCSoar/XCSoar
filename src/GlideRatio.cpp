@@ -43,7 +43,7 @@ Copyright_License {
 void
 GlideRatioCalculator::init(const SETTINGS_COMPUTER &settings)
 {
-  short bsize;
+  unsigned bsize;
 
   switch (settings.AverEffTime) {
   case ae15seconds:
@@ -78,7 +78,7 @@ GlideRatioCalculator::init(const SETTINGS_COMPUTER &settings)
 }
 
 void
-GlideRatioCalculator::add(int distance, int altitude)
+GlideRatioCalculator::add(unsigned distance, int altitude)
 {
   static short errs = 0;
 
@@ -114,7 +114,7 @@ GlideRatioCalculator::calculate() const
   int altdiff, eff;
   short bcold;
 
-  if (start < 0)
+  if (start >= size)
     return 0;
 
   if (!valid) {
@@ -133,7 +133,7 @@ GlideRatioCalculator::calculate() const
   if (altdiff == 0)
     return INVALID_GR; // infinitum
 
-  eff = totaldistance / altdiff;
+  eff = (int)totaldistance / altdiff;
   if (eff > MAXEFFICIENCYSHOW)
     eff = INVALID_GR;
 
