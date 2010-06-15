@@ -60,6 +60,10 @@ Copyright_License {
 #endif
 #endif
 
+#ifdef WIN32
+#include <shlobj.h>
+#endif
+
 #include <assert.h>
 #include <tchar.h>
 
@@ -518,12 +522,11 @@ InstallFonts()
   TCHAR dstfile[MAX_PATH];
 
   _stprintf(srcdir, _T("%s%s\\Fonts"), gmfpathname(), XCSDATADIR);
-  _stprintf(dstdir, _T("\\Windows\\Fonts"), gmfpathname());
-
-
   if (GetFileAttributes(srcdir) != FILE_ATTRIBUTE_DIRECTORY)
     return 1;
-  if (GetFileAttributes(dstdir) != FILE_ATTRIBUTE_DIRECTORY)
+
+  if (!SHGetSpecialFolderPath(NULL, dstdir, CSIDL_FONTS, true) ||
+      GetFileAttributes(dstdir) != FILE_ATTRIBUTE_DIRECTORY)
     return 2;
 
   _stprintf(srcfile,_T("%s\\DejaVuSansCondensed2.ttf"), srcdir);
