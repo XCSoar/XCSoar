@@ -49,6 +49,10 @@ Copyright_License {
 #include <shlobj.h>
 #endif
 
+#ifdef _WIN32_WCE
+#include "OS/FlashCardEnumerator.hpp"
+#endif
+
 /**
  * The absolute location of the XCSoarData directory.
  */
@@ -175,6 +179,52 @@ ContractLocalPath(TCHAR* filein)
   _tcscpy(filein, output);
 }
 
+#ifdef _WIN32_WCE
+
+static bool
+InFlashNamed(const TCHAR *path, const TCHAR *name)
+{
+  size_t name_length = _tcslen(name);
+
+  return is_dir_separator(path[0]) &&
+    memcmp(path + 1, name, name_length * sizeof(name[0])) == 0 &&
+    is_dir_separator(path[1 + name_length]);
+}
+
+/**
+ * Determine whether the specified path is on a flash disk.  If yes,
+ * it returns the absolute root path of the disk.
+ */
+static const TCHAR *
+InFlash(const TCHAR *path, TCHAR *buffer)
+{
+  assert(path != NULL);
+  assert(buffer != NULL);
+
+  FlashCardEnumerator enumerator;
+  const TCHAR *name;
+  while ((name = enumerator.next()) != NULL) {
+    if (InFlashNamed(path, name)) {
+      buffer[0] = '/';
+      _stprintf(buffer, _T("/%s"), name);
+      return buffer;
+    }
+  }
+
+  return NULL;
+}
+
+static const TCHAR *
+ModuleInFlash(HMODULE hModule, TCHAR *buffer)
+{
+  if (GetModuleFileName(hModule, buffer, MAX_PATH) <= 0)
+    return NULL;
+
+  return InFlash(buffer, buffer);
+}
+
+#endif /* _WIN32_WCE */
+
 static TCHAR *
 FindDataPath()
 {
@@ -182,15 +232,18 @@ FindDataPath()
     /* hard-coded path for Altair */
     return _tcsdup(_T("\\NOR Flash"));
 
-  if (is_pna() || (is_fivv() && is_embedded())) {
-    const TCHAR *exe_path = gmfpathname();
-    if (exe_path != NULL) {
-      TCHAR buffer[MAX_PATH];
-      _tcscpy(buffer, exe_path);
+#ifdef _WIN32_WCE
+  /* if XCSoar was started from a flash disk, put the XCSoarData onto
+     it, too */
+  {
+    TCHAR buffer[MAX_PATH];
+    if (ModuleInFlash(NULL, buffer) != NULL) {
+      _tcscat(buffer, _T(DIR_SEPARATOR_S));
       _tcscat(buffer, XCSDATADIR);
       return _tcsdup(buffer);
     }
   }
+#endif
 
 #ifdef HAVE_POSIX
   /* on Unix or WINE, use ~/.xcsoar */
