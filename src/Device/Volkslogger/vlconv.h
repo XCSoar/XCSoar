@@ -18,25 +18,8 @@
 #ifndef VLCONV_H
 #define VLCONV_H
 
-#include "options.h"
-
 #include <stdio.h>
-#ifndef NOTIME_H
 #include <time.h>
-#else
-struct tm
-{
-	int tm_sec;
-	int tm_min;
-	int tm_hour;
-	int tm_mday;
-	int tm_mon;
-	int tm_year;
-	int tm_wday;
-	int tm_yday;
-	int tm_isdst;
-};
-#endif
 
 #include <memory.h>
 #include "Device/Volkslogger/vlapityp.h"

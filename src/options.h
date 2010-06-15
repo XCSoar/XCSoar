@@ -44,7 +44,6 @@ Copyright_License {
 #ifdef WIN32_PLATFORM_PSPC /* Pocket PC */
   #if _WIN32_WCE == 300 /* Pocket PC 2000 (unsupported?) */
     #define OLDPPC
-    #define NOTIME_H
   #endif /* _WIN32_WCE == 300 */
 #endif /* WIN32_PLATFORM_PSPC */
 
