@@ -12,7 +12,6 @@ ALTAIR_PORTRAIT := n
 CONFIG_PNA := n
 HAVE_CE := n
 HAVE_FPU := y
-MINIMAL := n
 XSCALE := n
 GTARGET := $(TARGET)
 
@@ -48,7 +47,6 @@ endif
 ifeq ($(TARGET),ALTAIR)
   CONFIG_ALTAIR := y
   HAVE_CE := y
-  MINIMAL := y
   XSCALE := y
 endif
 
@@ -56,7 +54,6 @@ ifeq ($(TARGET),ALTAIRPORTRAIT)
   CONFIG_ALTAIR := y
   ALTAIR_PORTRAIT := y
   HAVE_CE := y
-  MINIMAL := y
   XSCALE := y
 endif
 
@@ -64,19 +61,16 @@ ifeq ($(TARGET),PNA)
   CONFIG_PNA := y
   CONFIG_PPC2003 := y
   HAVE_CE := y
-  MINIMAL := n
 endif
 
 ifeq ($(TARGET),WM5)
   CONFIG_WM5 := y
   HAVE_CE := y
-  MINIMAL := n
 endif
 
 ifeq ($(TARGET),WM5X)
   CONFIG_WM5 := y
   HAVE_CE := y
-  MINIMAL := n
   XSCALE := y
 endif
 
@@ -327,16 +321,14 @@ endif
 ifeq ($(HAVE_CE),y)
   TARGET_LDLIBS := -lcommctrl -lstdc++
 
-  ifeq ($(MINIMAL),n)
+  ifeq ($(findstring $(TARGET),ALTAIR ALTAIRPORTRAIT),)
+    TARGET_LDLIBS += -lnote_prj
+
     TARGET_LDLIBS += -laygshell
 
     ifneq ($(TARGET),PNA)
       TARGET_LDLIBS += -limgdecmp
     endif
-  endif
-
-  ifeq ($(findstring $(TARGET),ALTAIR),)
-    TARGET_LDLIBS += -lnote_prj
   endif
 endif
 
