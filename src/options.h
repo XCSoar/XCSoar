@@ -41,14 +41,6 @@ Copyright_License {
 
 #define   LOGGDEVCOMMANDLINE    NULL          // device in-stream logger command line
                                               // ie TEXT("-logA=\\Speicherkarte\\logA.log ""-logB=\\SD Card\\logB.log""")
-
-#define DISABLEAUDIOVARIO
-
-#if defined(GNAV)
-  // disable internally generated sounds
-  #define DISABLEAUDIO
-#endif
-
 #ifdef WIN32_PLATFORM_PSPC /* Pocket PC */
   #if _WIN32_WCE == 300 /* Pocket PC 2000 (unsupported?) */
     #define OLDPPC
