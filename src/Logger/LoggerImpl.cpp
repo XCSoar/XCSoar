@@ -334,7 +334,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
   #if defined(GNAV) || defined(FIVV) || defined(PNA)
     LocalPath(path, _T("logs"));
   #else
-    LocalPath(path);
+  _tcscpy(path, GetPrimaryDataPath());
   #endif
 
   WriteLock();
@@ -759,11 +759,10 @@ LoggerImpl::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
 {
   bool found = true;
   unsigned long kbfree = 0;
-  TCHAR pathname[MAX_PATH];
+  const TCHAR *pathname = GetPrimaryDataPath();
   TCHAR subpathname[MAX_PATH];
   int numtries = 0;
 
-  LocalPath(pathname);
   LocalPath(subpathname, _T("logs"));
 
 #ifdef DEBUG_IGCFILENAME

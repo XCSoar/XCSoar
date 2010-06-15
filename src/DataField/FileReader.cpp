@@ -116,9 +116,8 @@ DataFieldFileReader::SetAsInteger(int Value)
 void
 DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
 {
-  TCHAR buffer[MAX_PATH] = TEXT("\0");
-  LocalPath(buffer);
-  ScanDirectories(buffer, filter);
+  const TCHAR *data_path = GetPrimaryDataPath();
+  ScanDirectories(data_path, filter);
 
 #if defined(_WIN32_WCE) && !defined(GNAV)
 #ifdef FIVV

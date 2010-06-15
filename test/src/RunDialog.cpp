@@ -56,6 +56,12 @@ int DisplayTimeOut = 0;
 #include <shellapi.h>
 #endif
 
+const TCHAR *
+GetPrimaryDataPath()
+{
+  return _T("");
+}
+
 void
 LocalPath(TCHAR *buf, const TCHAR* file)
 {

@@ -53,15 +53,21 @@ const TCHAR *
 gmfpathname();
 
 /**
+ * Returns the absolute path of the primary data directory.
+ */
+const TCHAR *
+GetPrimaryDataPath();
+
+/**
  * Returns the path of the XCSoarData folder, optionally including
  * the given file name
  * @param buffer Output buffer
  * @param file optional filename to include in the output
  */
-void LocalPath(TCHAR* buf, const TCHAR* file = _T(""));
+void LocalPath(TCHAR* buf, const TCHAR *file);
 
 #ifndef HAVE_POSIX
-void LocalPath(char* buf, const TCHAR* file = _T(""));
+void LocalPath(char* buf, const TCHAR *file);
 #endif
 
 /**

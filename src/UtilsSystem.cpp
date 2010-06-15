@@ -682,9 +682,7 @@ void
 StartupLogFreeRamAndStorage()
 {
   int freeram = CheckFreeRam() / 1024;
-  TCHAR buffer[MAX_PATH];
-  LocalPath(buffer);
-  int freestorage = FindFreeSpace(buffer);
+  int freestorage = FindFreeSpace(GetPrimaryDataPath());
   LogStartUp(_T("Free ram %d; free storage %d"), freeram, freestorage);
 }
 

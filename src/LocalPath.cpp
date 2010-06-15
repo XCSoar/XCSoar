@@ -97,6 +97,14 @@ gmfpathname()
 #endif
 }
 
+const TCHAR *
+GetPrimaryDataPath()
+{
+  assert(data_path != NULL);
+
+  return data_path;
+}
+
 void
 LocalPath(TCHAR *buffer, const TCHAR *file)
 {

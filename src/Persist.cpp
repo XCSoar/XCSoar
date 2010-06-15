@@ -85,7 +85,7 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
       LocalPath(szCalculationsPersistDirectory, TEXT("persist"));
     } else {
       LocalPath(szCalculationsPersistFileName, TEXT("xcsoar-persist.log"));
-      LocalPath(szCalculationsPersistDirectory);
+      _tcscpy(szCalculationsPersistDirectory, GetPrimaryDataPath());
     }
   }
 
