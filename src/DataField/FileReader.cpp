@@ -42,13 +42,12 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "LogFile.hpp"
 
+#if defined(_WIN32_WCE) && !defined(GNAV)
+#include "OS/FlashCardEnumerator.hpp"
+#endif
+
 #include <windows.h>
 #include <stdlib.h>
-
-#ifdef _WIN32_WCE
-#include <projects.h>
-} // fix for syntax error in mingw32ce's header (0.59.1)
-#endif
 
 #ifdef HAVE_POSIX
 #include <sys/types.h>
@@ -135,36 +134,15 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
   // non altair, (non windowspc e non mingw32) e non ppc2002
   static bool first = true;
 
-  bool bContinue = true; // If true, continue searching
-  // If false, stop searching.
-  HANDLE hFlashCard; // Search handle for storage cards
-  WIN32_FIND_DATA FlashCardTmp; // Structure for storing card
-  // information temporarily
   TCHAR FlashPath[MAX_PATH];
-
-  hFlashCard = FindFirstFlashCard(&FlashCardTmp);
-  if (hFlashCard == INVALID_HANDLE_VALUE) {
-    Sort();
-    return;
-  }
-  // VENTA3 CHECK should it be double //??
-  _stprintf(FlashPath, _T("/%s/%s"), FlashCardTmp.cFileName, XCSDATADIR);
-  ScanDirectories(FlashPath, filter);
-  if (first) {
-    LogStartUp(TEXT("%s"), FlashPath);
-  }
-  while (bContinue) {
-    // Search for the next storage card.
-    bContinue = FindNextFlashCard(hFlashCard, &FlashCardTmp);
-    if (bContinue) {
-      _stprintf(FlashPath, _T("/%s/%s"), FlashCardTmp.cFileName, XCSDATADIR);
-      ScanDirectories(FlashPath, filter);
-      if (first) {
+  FlashCardEnumerator enumerator;
+  const TCHAR *name;
+  while ((name = enumerator.next()) != NULL) {
+    _stprintf(FlashPath, _T("/%s/%s"), name, XCSDATADIR);
+    ScanDirectories(FlashPath, filter);
+    if (first)
         LogStartUp(TEXT("%s"), FlashPath);
-      }
-    }
   }
-  FindClose(hFlashCard); // Close the search handle.
 
   first = false;
 #endif
