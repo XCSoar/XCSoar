@@ -105,10 +105,6 @@ DataFieldFileReader::SetAsInteger(int Value)
 void
 DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
 {
-
-#ifdef ALTAIRSYNC
-  ScanDirectories(TEXT("\\NOR Flash"),filter);
-#else
   TCHAR buffer[MAX_PATH] = TEXT("\0");
   LocalPath(buffer);
   ScanDirectories(buffer, filter);
@@ -180,7 +176,6 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
 #endif // !WINDOWSPC
 #endif // MINGW
 #endif // NOT OLDPPC
-#endif // NOT ALTAIRSYNC
 #endif /* !HAVE_POSIX */
   Sort();
 }
