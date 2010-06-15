@@ -43,7 +43,7 @@ Copyright_License {
 void
 InitLDRotary(const SETTINGS_COMPUTER& settings, ldrotary_s *buf)
 {
-  short i, bsize;
+  short bsize;
 
   switch (settings.AverEffTime) {
   case ae15seconds:
@@ -70,10 +70,6 @@ InitLDRotary(const SETTINGS_COMPUTER& settings, ldrotary_s *buf)
   }
 
   //if (bsize <3 || bsize>MAXLDROTARYSIZE) return false;
-  for (i = 0; i < MAXLDROTARYSIZE; i++) {
-    buf->distance[i] = 0;
-    buf->altitude[i] = 0;
-  }
 
   buf->totaldistance = 0;
   buf->start = -1;
