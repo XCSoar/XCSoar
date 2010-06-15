@@ -54,7 +54,7 @@ Copyright_License {
  * The maximum length of a line is limited by the buffer size of the
  * Source object.
  */
-class LineSplitter : public LineReader<char> {
+class LineSplitter : public NLineReader {
 protected:
   Source<char> &source;
 

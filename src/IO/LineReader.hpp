@@ -70,6 +70,7 @@ public:
   }
 };
 
+class NLineReader : public LineReader<char> {};
 class TLineReader : public LineReader<TCHAR> {};
 
 #endif
