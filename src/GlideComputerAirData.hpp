@@ -61,7 +61,7 @@ public:
   GlideComputerAirData(AirspaceClientCalc& airspace,
                        TaskClientCalc& _task);
 
-  ldrotary_s           rotaryLD;
+  GlideRatioCalculator rotaryLD;
   SunEphemeris sun;
   virtual void ProcessIdle();
 

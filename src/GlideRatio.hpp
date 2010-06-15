@@ -52,12 +52,16 @@ typedef enum {
   ae3minutes,
 } AverEffTime_t;
 
-typedef struct {
+class GlideRatioCalculator {
+  struct record {
+    int distance;
+    int altitude;
+  };
+
   /**
    * Rotary array with a predefined max capacity.
    */
-  int distance[MAXLDROTARYSIZE];
-  int altitude[MAXLDROTARYSIZE];
+  record records[MAXLDROTARYSIZE];
   int totaldistance;
 
   /**
@@ -71,15 +75,12 @@ typedef struct {
   short size;
 
   bool valid;
-} ldrotary_s;
 
-void InitLDRotary(const SETTINGS_COMPUTER& settings, ldrotary_s *buf);
-
-void
-InsertLDRotary(ldrotary_s *buf, int distance, int altitude);
-
-int
-CalculateLDRotary(const ldrotary_s &ld);
+public:
+  void init(const SETTINGS_COMPUTER &settings);
+  void add(int distance, int altitude);
+  int calculate() const;
+};
 
 // methods using low-pass filter
 

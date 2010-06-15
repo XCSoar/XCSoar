@@ -83,7 +83,7 @@ GlideComputerAirData::GlideComputerAirData(AirspaceClientCalc& airspace,
   vario_30s_filter(30),
   netto_30s_filter(30)
 {
-  InitLDRotary(SettingsComputer(), &rotaryLD);
+  rotaryLD.init(SettingsComputer());
 
   // JMW TODO enhancement: seed initial wind store with start conditions
   // SetWindEstimate(Calculated().WindSpeed, Calculated().WindBearing, 1);
@@ -142,7 +142,7 @@ GlideComputerAirData::ProcessVertical()
   CruiseLD();
 
   if (!Basic().flight.OnGround && !Calculated().Circling) {
-    SetCalculated().AverageLD = CalculateLDRotary(rotaryLD);
+    SetCalculated().AverageLD = rotaryLD.calculate();
   }
 
   Average30s();
@@ -351,8 +351,7 @@ GlideComputerAirData::LD()
                0.1);
 
     if (!Basic().flight.OnGround && !Calculated().Circling) {
-      InsertLDRotary(&rotaryLD,(int)DistanceFlown,
-                     (int)Basic().NavAltitude);
+      rotaryLD.add((int)DistanceFlown, (int)Basic().NavAltitude);
     }
   }
 
@@ -570,7 +569,7 @@ GlideComputerAirData::BallastDump()
 void
 GlideComputerAirData::OnSwitchClimbMode(bool isclimb, bool left)
 {
-  InitLDRotary(SettingsComputer(), &rotaryLD);
+  rotaryLD.init(SettingsComputer());
 
   // Tell the windanalyser of the new flight mode
   DoWindCirclingMode(left);
