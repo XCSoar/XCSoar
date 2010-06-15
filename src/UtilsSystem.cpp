@@ -562,7 +562,7 @@ InstallFonts()
   TCHAR srcfile[MAX_PATH];
   TCHAR dstfile[MAX_PATH];
 
-  _stprintf(srcdir, _T("%s%S\\Fonts"), gmfpathname(), XCSDATADIR);
+  _stprintf(srcdir, _T("%s%s\\Fonts"), gmfpathname(), XCSDATADIR);
   _stprintf(dstdir, _T("\\Windows\\Fonts"), gmfpathname());
 
 
@@ -600,7 +600,7 @@ InstallFonts()
  */
 bool CheckDataDir() {
 	TCHAR srcdir[MAX_PATH];
-  _stprintf(srcdir, _T("%s%S"), gmfpathname(), XCSDATADIR);
+  _stprintf(srcdir, _T("%s%s"), gmfpathname(), XCSDATADIR);
 
   if (GetFileAttributes(srcdir) != FILE_ATTRIBUTE_DIRECTORY)
 	  return false;

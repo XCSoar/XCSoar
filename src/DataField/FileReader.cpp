@@ -127,7 +127,7 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
   // In large SD card this was leading great confusion since .dat files are ALSO
   // used by other software, namely TOMTOM!
   TCHAR tBuffer[MAX_PATH];
-  _stprintf(tBuffer,TEXT("%s%S"),gmfpathname(), XCSDATADIR );
+  _stprintf(tBuffer, _T("%s%s"), gmfpathname(), XCSDATADIR);
   if (_tcscmp(buffer,tBuffer) != 0) {
     ScanDirectories(tBuffer,filter);
   }
@@ -148,7 +148,7 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
     return;
   }
   // VENTA3 CHECK should it be double //??
-  _stprintf(FlashPath, TEXT("/%s/%S"), FlashCardTmp.cFileName, XCSDATADIR);
+  _stprintf(FlashPath, _T("/%s/%s"), FlashCardTmp.cFileName, XCSDATADIR);
   ScanDirectories(FlashPath, filter);
   if (first) {
     LogStartUp(TEXT("%s"), FlashPath);
@@ -157,7 +157,7 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
     // Search for the next storage card.
     bContinue = FindNextFlashCard(hFlashCard, &FlashCardTmp);
     if (bContinue) {
-      _stprintf(FlashPath, TEXT("/%s/%S"), FlashCardTmp.cFileName, XCSDATADIR);
+      _stprintf(FlashPath, _T("/%s/%s"), FlashCardTmp.cFileName, XCSDATADIR);
       ScanDirectories(FlashPath, filter);
       if (first) {
         LogStartUp(TEXT("%s"), FlashPath);

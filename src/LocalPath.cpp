@@ -79,10 +79,10 @@ LocalPath(TCHAR* buffer, const TCHAR* file, int loc)
     /*
      * Force LOCALPATH to be the same of the executing program
      */
-    _stprintf(buffer, TEXT("%s%S"), gmfpathname(), XCSDATADIR);
+    _stprintf(buffer, _T("%s%s"), gmfpathname(), XCSDATADIR);
   // VENTA2 FIX PC BUG
   #elif defined (FIVV) && !defined(WINDOWSPC)
-    _stprintf(buffer, TEXT("%s%S"), gmfpathname(), XCSDATADIR);
+    _stprintf(buffer, _T("%s%s"), gmfpathname(), XCSDATADIR);
   #elif !defined(_WIN32) || defined(__WINE__)
     /* on Unix or WINE, use ~/.xcsoar */
     const char *home = getenv("HOME");
@@ -94,7 +94,7 @@ LocalPath(TCHAR* buffer, const TCHAR* file, int loc)
     // everything else that's not special
     SHGetSpecialFolderPath(NULL, buffer, loc, false);
     _tcscat(buffer, _T(DIR_SEPARATOR_S));
-    _tcscat(buffer,TEXT(XCSDATADIR));
+    _tcscat(buffer, XCSDATADIR);
   #endif
 
   if (!string_is_empty(file)) {
