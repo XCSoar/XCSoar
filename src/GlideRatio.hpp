@@ -43,23 +43,34 @@ Copyright_License {
 
 struct SETTINGS_COMPUTER;
 
-typedef enum{
-	ae15seconds=0,
-	ae30seconds,
-	ae60seconds,
-	ae90seconds,
-	ae2minutes,
-	ae3minutes,
+typedef enum {
+  ae15seconds,
+  ae30seconds,
+  ae60seconds,
+  ae90seconds,
+  ae2minutes,
+  ae3minutes,
 } AverEffTime_t;
 
-
 typedef struct {
-        int     distance[MAXLDROTARYSIZE]; // rotary array with a predefined max capacity
-        int     altitude[MAXLDROTARYSIZE];
-	int	totaldistance;
-        short   start;          // pointer to current first item in rotarybuf if used
-        short   size;           // real size of rotary buffer (0-size)
-	bool	valid;
+  /**
+   * Rotary array with a predefined max capacity.
+   */
+  int distance[MAXLDROTARYSIZE];
+  int altitude[MAXLDROTARYSIZE];
+  int totaldistance;
+
+  /**
+   * Pointer to current first item in rotarybuf if used.
+   */
+  short start;
+
+  /**
+   * Real size of rotary buffer.
+   */
+  short size;
+
+  bool valid;
 } ldrotary_s;
 
 void InitLDRotary(const SETTINGS_COMPUTER& settings, ldrotary_s *buf);

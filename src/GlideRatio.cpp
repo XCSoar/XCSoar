@@ -75,10 +75,10 @@ InitLDRotary(const SETTINGS_COMPUTER& settings, ldrotary_s *buf)
     buf->altitude[i] = 0;
   }
 
-  buf->totaldistance=0;
-  buf->start=-1;
-  buf->size=bsize;
-  buf->valid=false;
+  buf->totaldistance = 0;
+  buf->start = -1;
+  buf->size = bsize;
+  buf->valid = false;
 }
 
 void
@@ -90,7 +90,7 @@ InsertLDRotary(ldrotary_s *buf,
   if (distance < 3 || distance > 150) { // just ignore, no need to reset rotary
     if (errs > 2) {
       // InitLDRotary(settings, buf); // bug fix
-      errs=0;
+      errs = 0;
       return;
     }
     errs++;
