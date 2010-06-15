@@ -622,6 +622,16 @@ LoadChild(WndForm &form, ContainerControl &Parent,
   GetDefaultWindowControlProps(&node, Name, &X, &Y, &Width, &Height,
                                &Font, Caption, eDialogStyle);
 
+  if (Width <= 0 || Height <= 0) {
+    /* a non-positive width/height specifies the distance from the
+       right/bottom border of the parent */
+    RECT rc = Parent.GetClientAreaWindow().get_client_rect();
+    if (Width <= 0)
+      Width += rc.right - X;
+    if (Height <= 0)
+      Height += rc.bottom - Y;
+  }
+
   // Determine the control's font (default = parent's font)
   Font = std::min(StringToIntDflt(node.getAttribute(_T("Font")), ParentFont), 4l);
 

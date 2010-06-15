@@ -12,10 +12,10 @@
 
   <WndOwnerDrawFrame Name="frmspacer3" X="2" Y="-1" Width="240" Height="7" />
   
-  <Panel Name="frmShade" X="0" Y="-1" Width="240" Height="145" Font="2" Border="0" BackColor="0xDADBAB">
-    <WndButton Name="cmdClose" Caption="Accept" X="2" Y="-1" Width="235" Height="30" Font="2" />
+  <Panel Name="frmShade" X="0" Y="-1" Width="0" Height="145" Font="2" Border="0" BackColor="0xDADBAB">
+    <WndButton Name="cmdClose" Caption="Accept" X="2" Y="-1" Width="-2" Height="30" Font="2" />
 
-    <WndProperty Name="prpProfile" Caption="Profile" X="2" Y="-1" Width="235" Height="25" CaptionWidth="60" Font="2" BackColor="0xDADBAB">
+    <WndProperty Name="prpProfile" Caption="Profile" X="2" Y="-1" Width="-2" Height="25" CaptionWidth="60" Font="2" BackColor="0xDADBAB">
       <DataField name="" DataType="filereader" Min="0" Max="200" Step="1"/>
     </WndProperty>
   </Panel>

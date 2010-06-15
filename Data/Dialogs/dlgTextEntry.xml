@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm Name="frmTextEntry" X="5" Y="5" Width="200" Height="83" Caption="Edit text">
-  <WndOwnerDrawFrame Name="frmGrid" X="0" Y="-1" Width="199" Height="35" Font="3" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTextPaint" />
+  <WndOwnerDrawFrame Name="frmGrid" X="2" Y="2" Width="-2" Height="35" Font="3" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTextPaint" />
 
   <WndButton Name="cmdClose" Caption="Close" X="5" Y="38" Width="60" Height="26" Font="2" OnClick="OnCloseClicked" />
   <WndButton Name="cmdDown" Caption="A+" X="67" Y="38" Width="27" Height="26" Font="2" OnClick="OnDownClicked" />

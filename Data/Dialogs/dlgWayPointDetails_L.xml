@@ -8,7 +8,7 @@
 
   <WndButton Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28" Font="2" />
 
-  <Panel Name="frmInfos" X="70" Y="0" Width="246" Height="222" Font="2" Border="0">
+  <Panel Name="frmInfos" X="70" Y="0" Width="0" Height="222" Font="2" Border="0">
     <WndProperty Name="prpWpComment" Caption="Comment" X="2" Y="2" Width="242" Height="40" CaptionWidth="100" Font="2" ReadOnly="1" />
     <WndProperty Name="prpLatitude" Caption="Latitude" X="2" Y="-1" Width="242" Height="22" CaptionWidth="150" Font="2" ReadOnly="1" />
     <WndProperty Name="prpLongitude" Caption="Longitude" X="2" Y="-1" Width="242" Height="22" CaptionWidth="150" Font="2" ReadOnly="1" />
@@ -21,7 +21,7 @@
     <WndProperty Name="prpMc2" Caption="Alt diff Mc current" X="2" Y="-1" Width="242" Height="22" CaptionWidth="150" Font="2" ReadOnly="1" />
   </Panel>
 
-  <WndListFrame Name="frmDetails" X="70" Y="0" Width="246" Height="222" ItemHeight="18" Border="1"/>
+  <WndListFrame Name="frmDetails" X="70" Y="0" Width="0" Height="222" ItemHeight="18" Border="1"/>
 
   <Panel Name="frmCommands" X="70" Y="0" Width="246" Height="222" Font="2" Visible="0" Border="0">
     <WndButton Name="cmdReplace" Caption="Replace in task" X="50" Y="10" Width="150" Height="30" Font="2" />
@@ -30,7 +30,7 @@
     <WndButton Name="cmdRemoveFromTask" Caption="Remove from task" X="50" Y="-1" Width="150" Height="30" Font="2" />
   </Panel>
 
-  <WndOwnerDrawFrame Name="frmImage" X="70" Y="0" Width="246" Height="222" Font="2" Visible="0" Border="0"/>
+  <WndOwnerDrawFrame Name="frmImage" X="70" Y="0" Width="0" Height="222" Font="2" Visible="0" Border="0"/>
 
   <Panel Name="frmSpecial" X="70" Y="0" Width="246" Height="222" Font="2" Visible="0" Border="0">
     <WndButton Name="cmdSetAlternate1" Caption="Set as Alternate 1" X="50" Y="10" Width="150" Height="30" Font="2" />

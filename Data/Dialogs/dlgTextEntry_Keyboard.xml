@@ -8,5 +8,5 @@
   <WndButton Name="btnCancel" Caption="Cancel" X="120" Y="263" Width="70" Height="40" Font="2" OnClick="OnCancel"/>
   <WndButton Caption="Clear" X="190" Y="263" Width="47" Height="40" Font="2" OnClick="OnClear"/>
 
-  <Keyboard Name="Keyboard" X="2" Y="25" Width="238" Height="239" Font="2" OnCharacter="OnCharacter"/>
+  <Keyboard Name="Keyboard" X="2" Y="25" Width="-2" Height="239" Font="2" OnCharacter="OnCharacter"/>
 </WndForm>

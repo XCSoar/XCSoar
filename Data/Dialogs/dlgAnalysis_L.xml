@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm Width="240" Height="320" Caption="Analysis">
-  <WndOwnerDrawFrame Name="frmGrid" X="0" Y="2" Width="235" Height="200" Font="0" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnAnalysisPaint" />
+  <WndOwnerDrawFrame Name="frmGrid" X="1" Y="1" Width="-1" Height="200" Font="0" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnAnalysisPaint" />
 
   <WndFrame Name="frmInfo" X="90" Y="205" Width="130" Height="100" Font="2"/>
 

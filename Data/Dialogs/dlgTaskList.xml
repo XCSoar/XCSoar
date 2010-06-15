@@ -10,5 +10,5 @@
   <WndButton Name="cmdDelete" Caption="Delete" X="160" Y="158" Width="77" Height="22" Font="2" OnClick="OnDeleteClicked"/>
 
   <WndOwnerDrawFrame Name="frmTaskView" X="2" Y="184" Width="115" Height="118" Font="0" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
-  <WndFrame Name="frmSummary" X="119" Y="184" Width="117" Height="118" Font="2" Border="1"/>
+  <WndFrame Name="frmSummary" X="119" Y="184" Width="-2" Height="118" Font="2" Border="1"/>
 </WndForm>

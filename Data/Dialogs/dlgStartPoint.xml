@@ -5,5 +5,5 @@
 
   <WndButton Name="cmdClear" Caption="Clear" X="2" Y="-1" Width="98" Height="22" Font="2" OnClick="OnClearClicked"/>
 
-  <WndListFrame Name="frmStartPointList" X="102" Y="0" Width="215" Height="222" ItemHeight="18" Border="1"/>
+  <WndListFrame Name="frmStartPointList" X="102" Y="1" Width="-1" Height="-1" ItemHeight="18" Border="1"/>
 </WndForm>

@@ -10,7 +10,7 @@
   <WndButton Name="cmdSave" Caption="Save" X="2" Y="-1" Width="98" Height="22" Font="2" OnClick="OnSaveClicked"/>
   <WndButton Name="cmdDeclare" Caption="Declare" X="2" Y="-1" Width="98" Height="22" Font="2" OnClick="OnDeclareClicked"/>
 
-  <WndListFrame Name="frmTaskPoints" X="102" Y="0" Width="215" Height="162" ItemHeight="18" Border="1"/>
+  <WndListFrame Name="frmTaskPoints" X="102" Y="0" Width="-2" Height="162" ItemHeight="18" Border="1"/>
 
   <WndFrame Name="frmSummary" X="102" Y="164" Width="215" Height="56" Font="2" Border="1"/>
 
