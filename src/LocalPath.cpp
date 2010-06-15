@@ -130,14 +130,15 @@ normalize_backslashes(TCHAR *p)
 #endif
 }
 
+static const TCHAR local_path_code[] = _T("%LOCAL_PATH%\\");
+
 void
 ExpandLocalPath(TCHAR* filein)
 {
-  TCHAR code[] = _T("%LOCAL_PATH%\\");
   TCHAR output[MAX_PATH];
 
   // Get the relative file name and location (ptr)
-  const TCHAR *ptr = string_after_prefix(filein, code);
+  const TCHAR *ptr = string_after_prefix(filein, local_path_code);
   if (!ptr || string_is_empty(ptr))
     return;
 
@@ -153,7 +154,6 @@ ExpandLocalPath(TCHAR* filein)
 void
 ContractLocalPath(TCHAR* filein)
 {
-  TCHAR code[] = _T("%LOCAL_PATH%\\");
   TCHAR output[MAX_PATH];
 
   // Get the relative file name and location (ptr)
@@ -162,7 +162,7 @@ ContractLocalPath(TCHAR* filein)
     return;
 
   // Replace the full local path by the code "%LOCAL_PATH%\\" (output)
-  _stprintf(output, _T("%s%s"), code, ptr + 1);
+  _stprintf(output, _T("%s%s"), local_path_code, ptr + 1);
   // ... and copy it to the buffer (filein)
   _tcscpy(filein, output);
 }
