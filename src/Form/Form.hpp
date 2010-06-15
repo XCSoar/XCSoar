@@ -141,6 +141,10 @@ public:
   /** Destructor */
   virtual ~WndForm();
 
+protected:
+  void UpdateLayout();
+
+public:
   ContainerWindow &GetClientAreaWindow(void);
 
   /**
@@ -214,6 +218,7 @@ public:
   void SetCaption(const TCHAR *Value);
 
   /** from class Window */
+  virtual bool on_resize(unsigned width, unsigned height);
   virtual bool on_destroy();
   virtual bool on_timer(timer_t id);
   virtual bool on_command(unsigned id, unsigned code);

@@ -76,13 +76,10 @@ WndForm::WndForm(SingleWindow &_main_window,
 
   WindowStyle client_style;
   client_style.control_parent();
-  client_area.set(*this, 0, 20, Width, Height, client_style);
+  client_area.set(*this, mClientRect.left, mClientRect.top,
+                  mClientRect.right - mClientRect.left,
+                  mClientRect.bottom - mClientRect.top, client_style);
   client_area.SetBackColor(GetBackColor());
-
-  mClientRect.top=0;
-  mClientRect.left=0;
-  mClientRect.bottom=Width;
-  mClientRect.right=Height;
 
   cbTimerID = set_timer(1001, 500);
 
@@ -106,6 +103,23 @@ WndForm::~WndForm()
     delete *i;
 }
 
+void
+WndForm::UpdateLayout()
+{
+  RECT rc = get_client_rect();
+
+  mTitleRect = rc;
+  mTitleRect.bottom = rc.top + mhTitleFont->get_height();
+
+  mClientRect = rc;
+  mClientRect.top = mTitleRect.bottom;
+
+  if (client_area.defined())
+    client_area.move(mClientRect.left, mClientRect.top,
+                     mClientRect.right - mClientRect.left,
+                     mClientRect.bottom - mClientRect.top);
+}
+
 ContainerWindow &
 WndForm::GetClientAreaWindow(void)
 {
@@ -118,6 +132,14 @@ WndForm::FilterAdvanced(bool advanced)
   for (window_list_t::const_iterator i = advanced_windows.begin();
        i != advanced_windows.end(); ++i)
     (*i)->set_visible(advanced);
+}
+
+bool
+WndForm::on_resize(unsigned width, unsigned height)
+{
+  ContainerControl::on_resize(width, height);
+  UpdateLayout();
+  return true;
 }
 
 bool
@@ -167,6 +189,7 @@ WndForm::SetTitleFont(const Font &font)
     mhTitleFont = &font;
 
     invalidate();
+    UpdateLayout();
   }
 
   return res;
@@ -369,27 +392,8 @@ WndForm::on_paint(Canvas &canvas)
 
   // Set the titlebar font and font-size
   canvas.select(*mhTitleFont);
-  SIZE tsize = canvas.text_size(mCaption);
 
   // JMW todo add here icons?
-
-  // Calculate the titlebar coordinates
-  CopyRect(&mTitleRect, &rcClient);
-  mTitleRect.bottom = mTitleRect.top;
-  if (tsize.cy > 0)
-    mTitleRect.bottom += tsize.cy + Layout::FastScale(1);
-
-  if (!EqualRect(&mClientRect, &rcClient)) {
-    // Calculate the ClientWindow coordinates
-    rcClient.top += tsize.cy + Layout::FastScale(1);
-
-    // Move the ClientWindow to the new coordinates
-    client_area.move(rcClient.left, rcClient.top,
-        (rcClient.right - rcClient.left), (rcClient.bottom - rcClient.top));
-
-    // Save the new coordinates
-    CopyRect(&mClientRect, &rcClient);
-  }
 
   // Draw titlebar text
   canvas.text_opaque(mTitleRect.left + Layout::FastScale(2),
