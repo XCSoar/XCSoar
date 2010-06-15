@@ -133,10 +133,6 @@ normalize_backslashes(TCHAR *p)
 void
 ExpandLocalPath(TCHAR* filein)
 {
-  // If no string to convert -> return
-  if (string_is_empty(filein))
-    return;
-
   TCHAR lpath[MAX_PATH];
   TCHAR code[] = _T("%LOCAL_PATH%\\");
   TCHAR output[MAX_PATH];
@@ -161,10 +157,6 @@ ExpandLocalPath(TCHAR* filein)
 void
 ContractLocalPath(TCHAR* filein)
 {
-  // If no string to convert -> return
-  if (string_is_empty(filein))
-    return;
-
   TCHAR lpath[MAX_PATH];
   TCHAR code[] = _T("%LOCAL_PATH%\\");
   TCHAR output[MAX_PATH];
