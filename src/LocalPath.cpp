@@ -37,13 +37,14 @@ Copyright_License {
 */
 
 #include "LocalPath.hpp"
-#include "Appearance.hpp"
 #include "Compatibility/path.h"
 #include "StringUtil.hpp"
 #include "Asset.hpp"
 
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <windows.h> // for MAX_PATH
 
 #ifdef WIN32
 #include <shlobj.h>
