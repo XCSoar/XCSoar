@@ -120,17 +120,6 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
   ScanDirectories(data_path, filter);
 
 #if defined(_WIN32_WCE) && !defined(GNAV)
-#ifdef FIVV
-  // Scan only XCSoarData in the root directory where the xcsoar.exe is placed!
-  // In large SD card this was leading great confusion since .dat files are ALSO
-  // used by other software, namely TOMTOM!
-  TCHAR tBuffer[MAX_PATH];
-  _stprintf(tBuffer, _T("%s%s"), gmfpathname(), XCSDATADIR);
-  if (_tcscmp(buffer,tBuffer) != 0) {
-    ScanDirectories(tBuffer,filter);
-  }
-#else
-  // non altair, (non windowspc e non mingw32) e non ppc2002
   TCHAR FlashPath[MAX_PATH];
   FlashCardEnumerator enumerator;
   const TCHAR *name;
@@ -138,7 +127,6 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
     _stprintf(FlashPath, _T("/%s/%s"), name, XCSDATADIR);
     ScanDirectories(FlashPath, filter);
   }
-#endif
 #endif /* _WIN32_WCE && !GNAV*/
 
   Sort();
