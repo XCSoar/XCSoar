@@ -2,11 +2,10 @@
 // (see http://msdn.microsoft.com/en-us/library/ms889982.aspx)
 HI_RES_AWARE CEUX {1}
 
-#include "resource.h"
+#include <afxres.h>
+#include <commctrl.h>
 
-#define APSTUDIO_READONLY_SYMBOLS
-#include "newres.h"
-#undef APSTUDIO_READONLY_SYMBOLS
+#include "resource.h"
 
 
 // --- Icons ---
