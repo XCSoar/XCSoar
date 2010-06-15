@@ -53,7 +53,7 @@ public:
   typedef bool (*OnMouseDownCallback_t)(WindowControl *Sender, int x, int y);
 
 public:
-  WndOwnerDrawFrame(ContainerControl *Owner,
+  WndOwnerDrawFrame(ContainerControl &parent,
                     int X, int Y, int Width, int Height,
                     const WindowStyle style,
                     OnPaintCallback_t OnPaintCallback);

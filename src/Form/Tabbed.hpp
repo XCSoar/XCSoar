@@ -45,7 +45,7 @@ Copyright_License {
 
 class TabbedControl : public ContainerControl {
 public:
-  TabbedControl(ContainerControl *owner,
+  TabbedControl(ContainerControl &parent,
                 int x, int y, unsigned width, unsigned height,
                 const WindowStyle style=WindowStyle());
 

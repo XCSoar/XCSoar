@@ -159,7 +159,7 @@ Bitmap WndProperty::hBmpRight32;
 
 int WndProperty::InstCount = 0;
 
-WndProperty::WndProperty(ContainerControl *Parent,
+WndProperty::WndProperty(ContainerControl &parent,
                          const TCHAR *Caption,
                          int X, int Y,
                          int Width, int Height,
@@ -167,7 +167,7 @@ WndProperty::WndProperty(ContainerControl *Parent,
                          const WindowStyle style,
                          const EditWindowStyle edit_style,
                          DataChangeCallback_t DataChangeNotify)
-  :WindowControl(&Parent->GetClientAreaWindow(),
+  :WindowControl(&parent.GetClientAreaWindow(),
                  X, Y, Width, Height,
                  style),
    edit(this),
@@ -201,8 +201,8 @@ WndProperty::WndProperty(ContainerControl *Parent,
   ::SetWindowText(hWnd, Caption);
 #endif
 
-  SetForeColor(Parent->GetForeColor());
-  SetBackColor(Parent->GetBackColor());
+  SetForeColor(parent.GetForeColor());
+  SetBackColor(parent.GetBackColor());
 
   if (InstCount == 0) {
     hBmpLeft32.load(IDB_DLGBUTTONLEFT32);

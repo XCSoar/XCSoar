@@ -234,7 +234,7 @@ CallBackLookup(CallBackTableEntry_t *LookUpTable, const TCHAR *Name)
 }
 
 static void
-LoadChildrenFromXML(WndForm &form, ContainerControl *Parent,
+LoadChildrenFromXML(WndForm &form, ContainerControl &parent,
                     CallBackTableEntry_t *LookUpTable,
                     XMLNode *Node, int Font, const DialogStyle_t eDialogStyle);
 
@@ -524,7 +524,7 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const TCHAR *FileName,
   LoadColors(*theForm, xNode);
 
   // Load the children controls
-  LoadChildrenFromXML(*theForm, theForm, LookUpTable, &xNode,
+  LoadChildrenFromXML(*theForm, *theForm, LookUpTable, &xNode,
                       Font, eDialogStyle);
 
   // If XML error occurred -> Error messagebox + cancel
@@ -606,7 +606,7 @@ LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable,
  * @param eDialogStyle The parent's dialog style
  */
 static Window *
-LoadChild(WndForm &form, ContainerControl *Parent,
+LoadChild(WndForm &form, ContainerControl &Parent,
           CallBackTableEntry_t *LookUpTable,
           XMLNode node, int ParentFont, const DialogStyle_t eDialogStyle)
 {
@@ -782,7 +782,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     WC = frame;
 
     // Load children controls from the XMLNode
-    LoadChildrenFromXML(form, frame, LookUpTable, &node,
+    LoadChildrenFromXML(form, *frame, LookUpTable, &node,
                         Font, eDialogStyle);
 
   // KeyboardControl
@@ -795,8 +795,8 @@ LoadChild(WndForm &form, ContainerControl *Parent,
 
     // Create the KeyboardControl
     KeyboardControl *kb =
-      new KeyboardControl(form, Parent->GetClientAreaWindow(),
-                          X, Y, Width, Height, Parent->GetBackColor(),
+      new KeyboardControl(form, Parent.GetClientAreaWindow(),
+                          X, Y, Width, Height, Parent.GetBackColor(),
                           FontMap[Font], CharacterCallback, style);
 
     window = kb;
@@ -829,7 +829,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
 
     style.tab_stop();
 
-    window = new WndListFrame(Parent->GetClientAreaWindow(),
+    window = new WndListFrame(Parent.GetClientAreaWindow(),
                               X, Y, Width, Height,
                               style,
                               item_height);
@@ -847,7 +847,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     const unsigned n = node.nChildNode();
     for (unsigned i = 0; i < n; ++i) {
       // Load each child control from the child nodes
-      Window *window = LoadChild(form, tabbed, LookUpTable,
+      Window *window = LoadChild(form, *tabbed, LookUpTable,
                                  node.getChildNode(i), ParentFont,
                                  eDialogStyle);
       if (window != NULL)
@@ -863,7 +863,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     if (create == NULL)
       return NULL;
 
-    window = create(Parent->GetClientAreaWindow(),
+    window = create(Parent.GetClientAreaWindow(),
                     X, Y, Width, Height, style);
   }
 
@@ -907,7 +907,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
  * @param eDialogStyle The parent's dialog style
  */
 static void
-LoadChildrenFromXML(WndForm &form, ContainerControl *Parent,
+LoadChildrenFromXML(WndForm &form, ContainerControl &Parent,
                     CallBackTableEntry_t *LookUpTable,
                     XMLNode *Node, int ParentFont, const DialogStyle_t eDialogStyle)
 {

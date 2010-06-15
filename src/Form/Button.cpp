@@ -42,19 +42,19 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Interface.hpp"
 
-WndButton::WndButton(ContainerControl *Parent,
+WndButton::WndButton(ContainerControl &parent,
     const TCHAR *Caption, int X, int Y, int Width, int Height,
                      const WindowStyle style,
     ClickNotifyCallback_t Function) :
-  WindowControl(&Parent->GetClientAreaWindow(), X, Y, Width, Height, style),
+  WindowControl(&parent.GetClientAreaWindow(), X, Y, Width, Height, style),
   mDown(false),
   mLastDrawTextHeight(-1),
   mOnClickNotify(Function)
 {
   // initial fore- and background color should be derived
   // from the parent control
-  SetForeColor(Parent->GetForeColor());
-  SetBackColor(Parent->GetBackColor());
+  SetForeColor(parent.GetForeColor());
+  SetBackColor(parent.GetBackColor());
 
   // copy the buttons initial caption to the mCaption field
   _tcscpy(mCaption, Caption);

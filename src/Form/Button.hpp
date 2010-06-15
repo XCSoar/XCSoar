@@ -63,7 +63,7 @@ public:
    * @param Function The function that should be called
    * when the button is clicked
    */
-  WndButton(ContainerControl *Parent, const TCHAR *Caption,
+  WndButton(ContainerControl &parent, const TCHAR *Caption,
       int X, int Y, int Width, int Height,
             const WindowStyle style,
       ClickNotifyCallback_t Function = NULL);

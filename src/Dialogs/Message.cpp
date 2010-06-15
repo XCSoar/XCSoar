@@ -54,7 +54,7 @@ class ModalResultButton : public WndButton {
   int result;
 
 public:
-  ModalResultButton(ContainerControl *Parent, const TCHAR *Caption,
+  ModalResultButton(ContainerControl &Parent, const TCHAR *Caption,
                     int X, int Y, int Width, int Height,
                     const WindowStyle style,
                     WndForm &_form, int _result)
@@ -78,7 +78,6 @@ protected:
 int WINAPI
 MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 {
-  WndForm *wf = NULL;
   WndFrame *wText = NULL;
   int X, Y, Width, Height;
   WndButton *wButtons[10];
@@ -113,12 +112,12 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   WindowStyle style;
   style.hide();
 
-  wf = new WndForm(XCSoarInterface::main_window,
-                   lpCaption, X, Y, Width, Height,
-                   style);
-  wf->SetFont(MapWindowBoldFont);
-  wf->SetTitleFont(MapWindowBoldFont);
-  wf->SetBackColor(Color(0xDA, 0xDB, 0xAB));
+  WndForm wf(XCSoarInterface::main_window,
+             lpCaption, X, Y, Width, Height,
+             style);
+  wf.SetFont(MapWindowBoldFont);
+  wf.SetTitleFont(MapWindowBoldFont);
+  wf.SetBackColor(Color(0xDA, 0xDB, 0xAB));
 
   // Create text element
   wText = new WndFrame(wf, 0, Layout::Scale(5), Width, Height);
@@ -133,7 +132,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   */
   dY = Layout::Scale(-40);
   wText->resize(Width, wText->GetTextHeight() + 5);
-  wf->resize(Width, wf->get_size().cy + dY);
+  wf.resize(Width, wf.get_size().cy + dY);
 
   y += dY;
 
@@ -145,7 +144,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   if (uType == MB_OK || uType == MB_OKCANCEL) {
     wButtons[ButtonCount] =
       new ModalResultButton(wf, gettext(_T("OK")), 0, y, w, h,
-                            button_style, *wf, IDOK);
+                            button_style, wf, IDOK);
 
     ButtonCount++;
   }
@@ -153,13 +152,13 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   if (uType == MB_YESNO || uType == MB_YESNOCANCEL) {
     wButtons[ButtonCount] =
       new ModalResultButton(wf, gettext(_T("Yes")), 0, y, w, h,
-                            button_style, *wf, IDYES);
+                            button_style, wf, IDYES);
 
     ButtonCount++;
 
     wButtons[ButtonCount] =
       new ModalResultButton(wf, gettext(_T("No")), 0, y, w, h,
-                            button_style, *wf, IDNO);
+                            button_style, wf, IDNO);
 
     ButtonCount++;
   }
@@ -167,7 +166,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   if (uType == MB_ABORTRETRYIGNORE || uType == MB_RETRYCANCEL) {
     wButtons[ButtonCount] =
       new ModalResultButton(wf, gettext(_T("Retry")), 0, y, w, h,
-                            button_style, *wf, IDRETRY);
+                            button_style, wf, IDRETRY);
 
     ButtonCount++;
   }
@@ -175,7 +174,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   if (uType == MB_OKCANCEL || uType == MB_RETRYCANCEL || uType == MB_YESNOCANCEL) {
     wButtons[ButtonCount] =
       new ModalResultButton(wf, gettext(_T("Cancel")), 0, y, w, h,
-                            button_style, *wf, IDCANCEL);
+                            button_style, wf, IDCANCEL);
 
     ButtonCount++;
   }
@@ -183,13 +182,13 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   if (uType == MB_ABORTRETRYIGNORE) {
     wButtons[ButtonCount] =
       new ModalResultButton(wf, gettext(_T("Abort")), 0, y, w, h,
-                            button_style, *wf, IDABORT);
+                            button_style, wf, IDABORT);
 
     ButtonCount++;
 
     wButtons[ButtonCount] =
       new ModalResultButton(wf, gettext(_T("Ignore")), 0, y, w, h,
-                            button_style, *wf, IDIGNORE);
+                            button_style, wf, IDIGNORE);
 
     ButtonCount++;
   }
@@ -205,12 +204,12 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   }
 
   // Show MessageBox and save result
-  res = wf->ShowModal();
+  res = wf.ShowModal();
 
   delete wText;
   for (int i = 0; i < ButtonCount; ++i)
     delete wButtons[i];
-  delete wf;
+  wf.reset();
 
 #ifdef ALTAIRSYNC
   // force a refresh of the window behind

@@ -114,7 +114,7 @@ public:
    * @param DataChangeNotify Function to call when the data changed
    * @param MultiLine If true, the Control can handle mutliple lines
    */
-  WndProperty(ContainerControl *Parent, const TCHAR *Caption,
+  WndProperty(ContainerControl &parent, const TCHAR *Caption,
               int X, int Y, int Width, int Height, int CaptionWidth,
               const WindowStyle style,
               const EditWindowStyle edit_style,

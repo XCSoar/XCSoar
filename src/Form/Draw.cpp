@@ -39,17 +39,17 @@ Copyright_License {
 #include "Form/Draw.hpp"
 #include "Form/Container.hpp"
 
-WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerControl *Owner,
+WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerControl &parent,
                                      int X, int Y, int Width, int Height,
                                      const WindowStyle style,
                                      OnPaintCallback_t OnPaintCallback)
-  :WindowControl(&Owner->GetClientAreaWindow(), X, Y, Width, Height, style),
+  :WindowControl(&parent.GetClientAreaWindow(), X, Y, Width, Height, style),
    mOnPaintCallback(OnPaintCallback),
    mOnMouseDownCallback(NULL)
 {
   mCaption[0] = '\0';
-  SetForeColor(Owner->GetForeColor());
-  SetBackColor(Owner->GetBackColor());
+  SetForeColor(parent.GetForeColor());
+  SetBackColor(parent.GetBackColor());
 }
 
 void

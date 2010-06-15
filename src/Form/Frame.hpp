@@ -43,7 +43,7 @@ Copyright_License {
 
 class WndFrame : public WindowControl {
 public:
-  WndFrame(ContainerControl *Owner,
+  WndFrame(ContainerControl &parent,
            int X, int Y, int Width, int Height,
            const WindowStyle style=WindowStyle());
 

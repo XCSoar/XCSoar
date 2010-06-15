@@ -64,7 +64,7 @@ WndEventButton::~WndEventButton() {
 }
 
 
-WndEventButton::WndEventButton(ContainerControl *Parent,
+WndEventButton::WndEventButton(ContainerControl &Parent,
 			       const TCHAR *Caption,
 			       int X, int Y, int Width, int Height,
                                const WindowStyle style,

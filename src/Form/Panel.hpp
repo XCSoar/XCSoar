@@ -54,7 +54,7 @@ public:
    * @param width Width of the Control
    * @param height Height of the Control
    */
-  PanelControl(ContainerControl *owner,
+  PanelControl(ContainerControl &parent,
                int x, int y, unsigned width, unsigned height,
                const WindowStyle style=WindowStyle());
 
