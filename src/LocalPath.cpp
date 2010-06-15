@@ -133,12 +133,8 @@ normalize_backslashes(TCHAR *p)
 void
 ExpandLocalPath(TCHAR* filein)
 {
-  TCHAR lpath[MAX_PATH];
   TCHAR code[] = _T("%LOCAL_PATH%\\");
   TCHAR output[MAX_PATH];
-
-  // Get the XCSoarData folder location (lpath)
-  LocalPath(lpath);
 
   // Get the relative file name and location (ptr)
   const TCHAR *ptr = string_after_prefix(filein, code);
@@ -146,7 +142,7 @@ ExpandLocalPath(TCHAR* filein)
     return;
 
   // Replace the code "%LOCAL_PATH%\\" by the full local path (output)
-  _stprintf(output, _T("%s%s"), lpath, ptr);
+  LocalPath(output, ptr);
   // ... and copy it to the buffer (filein)
   _tcscpy(filein, output);
 
