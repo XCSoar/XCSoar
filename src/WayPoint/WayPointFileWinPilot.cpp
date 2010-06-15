@@ -57,6 +57,10 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
     // -> return without error condition
     return true;
 
+  if (_tcslen(line) >= sizeof(ctemp) / sizeof(ctemp[0]))
+    /* line too long for buffer */
+    return false;
+
   GEOPOINT location;
 
   // Get fields

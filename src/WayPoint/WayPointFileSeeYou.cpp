@@ -65,6 +65,10 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
     // -> return without error condition
     return true;
 
+  if (_tcslen(line) >= sizeof(ctemp) / sizeof(ctemp[0]))
+    /* line too long for buffer */
+    return false;
+
   // Parse first line holding field order
   /// @todo linenum == 0 should be the first
   /// (not ignored) line, not just line 0
