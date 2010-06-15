@@ -252,6 +252,7 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/StringUtil.cpp \
 	$(SRC)/Simulator.cpp \
+	$(SRC)/UtilsText.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
