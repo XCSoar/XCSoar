@@ -43,6 +43,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "resource.h"
 #include "IO/TextWriter.hpp"
+#include "IO/DataFile.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Projection.hpp"
 #include "DateTime.hpp"
@@ -89,11 +90,11 @@ Marks::MarkLocation(const GEOPOINT &loc,
           (double)(loc.Longitude.value_degrees()), 
           (double)(loc.Latitude.value_degrees()));
 
-  TCHAR fname[MAX_PATH];
-  LocalPath(fname, TEXT("xcsoar-marks.txt"));
-  TextWriter writer(fname, true);
-  if (!writer.error())
-    writer.writeln(message);
+  TextWriter *writer = CreateDataTextFile(_T("xcsoar-marks.txt"), true);
+  if (writer != NULL) {
+    writer->writeln(message);
+    delete writer;
+  }
 }
 
 void Marks::Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,

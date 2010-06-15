@@ -331,6 +331,7 @@ $(RUN_CANVAS_BIN): $(RUN_CANVAS_OBJS) $(RUN_CANVAS_LDADD) | $(TARGET_BIN_DIR)/di
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 RUN_MAP_WINDOW_SOURCES = \
+	$(IO_SRC_DIR)/DataFile.cpp \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/AirspaceClient.cpp \
 	$(SRC)/AirspaceClientUI.cpp \

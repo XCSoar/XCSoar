@@ -42,8 +42,9 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Sizes.h"
 #include "FLARM/FLARMNet.hpp"
-#include "IO/FileLineReader.hpp"
+#include "IO/DataFile.hpp"
 #include "IO/TextWriter.hpp"
+#include "IO/LineSplitter.hpp"
 
 #include <stdlib.h>
 
@@ -104,17 +105,23 @@ OpenFLARMDetails()
   if (NumberOfFLARMNames)
     CloseFLARMDetails();
 
-  TCHAR filename[MAX_PATH];
-  LocalPath(filename, TEXT("xcsoar-flarm.txt"));
+  TLineReader *reader = OpenDataTextFile(_T("xcsoar-flarm.txt"));
+  if (reader != NULL) {
+    LoadFLARMDetails(*reader);
+    delete reader;
+  }
 
-  FileLineReader reader(filename);
-  if (!reader.error())
-      LoadFLARMDetails(reader);
+  delete reader;
 
-  LocalPath(filename, _T("data.fln"));
-  unsigned num_records = flarm_net.LoadFile(filename);
-  if (num_records > 0)
-    LogStartUp(_T("%u FLARMnet ids found"), num_records);
+  Source<char> *source = OpenDataFile(_T("data.fln"));
+  if (source != NULL) {
+    LineSplitter splitter(*source);
+    unsigned num_records = flarm_net.LoadFile(splitter);
+    delete source;
+
+    if (num_records > 0)
+      LogStartUp(_T("%u FLARMnet ids found"), num_records);
+  }
 }
 
 /**
@@ -124,17 +131,16 @@ OpenFLARMDetails()
 void
 SaveFLARMDetails(void)
 {
-  TCHAR filename[MAX_PATH];
-  LocalPath(filename, TEXT("xcsoar-flarm.txt"));
-
-  TextWriter writer(filename);
-  if (writer.error())
+  TextWriter *writer = CreateDataTextFile(_T("xcsoar-flarm.txt"));
+  if (writer == NULL)
     return;
 
   TCHAR id[16];
   for (int z = 0; z < NumberOfFLARMNames; z++)
-    writer.printfln(_T("%s=%s"),
-                    FLARM_Names[z].ID.format(id), FLARM_Names[z].Name);
+    writer->printfln(_T("%s=%s"),
+                     FLARM_Names[z].ID.format(id), FLARM_Names[z].Name);
+
+  delete writer;
 }
 
 /**

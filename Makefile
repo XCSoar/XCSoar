@@ -148,6 +148,7 @@ DIALOG_SOURCES = \
 
 XCSOAR_SOURCES := \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
+	$(IO_SRC_DIR)/DataFile.cpp \
 	$(SRC)/AirspaceClient.cpp \
 	$(SRC)/AirspaceClientUI.cpp \
 	$(SRC)/AirspaceClientCalc.cpp \
