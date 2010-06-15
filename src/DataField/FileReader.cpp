@@ -108,9 +108,10 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
   TCHAR buffer[MAX_PATH] = TEXT("\0");
   LocalPath(buffer);
   ScanDirectories(buffer, filter);
-#ifndef HAVE_POSIX
-#ifndef GNAV
-#if !defined(WINDOWSPC) && !defined(__GNUC__)
+
+#if defined(_WIN32_WCE) && !defined(GNAV)
+
+#ifndef __GNUC__
 #ifndef OLDPPC
   // non altair, (non windowspc e non mingw32) e non ppc2002
   static bool first = true;
@@ -149,8 +150,6 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
   first = false;
 #endif
 #else // mingw32 and PC
-#ifndef WINDOWSPC
-  // VENTA2-FIVV SDCARD FIX
 #ifdef FIVV
   // Scan only XCSoarData in the root directory where the xcsoar.exe is placed!
   // In large SD card this was leading great confusion since .dat files are ALSO
@@ -173,10 +172,10 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
   ScanDirectories(TEXT("\\Speicherkarte\\XCSoarData"),filter);
   ScanDirectories(TEXT("\\SDMMC\\XCSoarData"),filter);
 #endif // FIVV
-#endif // !WINDOWSPC
 #endif // MINGW
-#endif // NOT OLDPPC
-#endif /* !HAVE_POSIX */
+
+#endif /* _WIN32_WCE && !GNAV*/
+
   Sort();
 }
 
