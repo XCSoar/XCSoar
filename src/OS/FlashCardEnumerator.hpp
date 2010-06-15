@@ -39,8 +39,12 @@ Copyright_License {
 #ifndef XCSOAR_FLASH_CARD_ENUMERATOR_HPP
 #define XCSOAR_FLASH_CARD_ENUMERATOR_HPP
 
+#ifdef HAVE_NOTE_PRJ_DLL
 #include <projects.h>
 } // fix for syntax error in mingw32ce's header (0.59.1)
+#else
+#include <windows.h>
+#endif
 
 class FlashCardEnumerator {
   HANDLE handle;
@@ -48,8 +52,14 @@ class FlashCardEnumerator {
   bool first;
 
 public:
+#ifdef HAVE_NOTE_PRJ_DLL
   FlashCardEnumerator()
     :handle(::FindFirstFlashCard(&data)), first(true) {}
+#else
+  FlashCardEnumerator()
+    :handle(::FindFirstFile(_T("\\*"), &data)), first(true) {}
+#endif
+
   ~FlashCardEnumerator() {
     if (handle != INVALID_HANDLE_VALUE)
       ::FindClose(handle);
@@ -59,10 +69,26 @@ public:
     if (handle == INVALID_HANDLE_VALUE)
       return NULL;
 
+#ifdef HAVE_NOTE_PRJ_DLL
     if (first)
       first = false;
     else if (!::FindNextFlashCard(handle, &data))
       return NULL;
+#else
+    enum {
+      /* Directories with the "TEMPORARY" flag set seem to be
+         mountable flash drives - use this trick on platforms where
+         note_prj.dll is unavailable */
+      FLASH = FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_TEMPORARY,
+    };
+
+    do {
+      if (first)
+        first = false;
+      else if (!::FindNextFile(handle, &data))
+        return NULL;
+    } while ((data.dwFileAttributes & FLASH) != FLASH);
+#endif
 
     return data.cFileName;
   }

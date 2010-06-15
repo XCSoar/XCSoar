@@ -321,15 +321,14 @@ endif
 ifeq ($(HAVE_CE),y)
   TARGET_LDLIBS := -lcommctrl -lstdc++
 
-  ifeq ($(findstring $(TARGET),ALTAIR ALTAIRPORTRAIT),)
+  ifeq ($(findstring $(TARGET),PNA ALTAIR ALTAIRPORTRAIT),)
     TARGET_LDLIBS += -lnote_prj
+    TARGET_CPPFLAGS += -DHAVE_NOTE_PRJ_DLL
 
     TARGET_LDLIBS += -laygshell
     TARGET_CPPFLAGS += -DHAVE_AYGSHELL_DLL
 
-    ifneq ($(TARGET),PNA)
-      TARGET_LDLIBS += -limgdecmp
-    endif
+    TARGET_LDLIBS += -limgdecmp
   endif
 endif
 
