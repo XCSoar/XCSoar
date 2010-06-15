@@ -42,11 +42,18 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Asset.hpp"
 
+#include <assert.h>
 #include <stdio.h>
 
 #ifdef WIN32
 #include <shlobj.h>
 #endif
+
+/**
+ * The absolute location of the XCSoarData directory.
+ */
+static TCHAR *data_path;
+static size_t data_path_length;
 
 /*
 	Get pathname & c. from GetModuleFilename (gmf)
@@ -93,60 +100,11 @@ gmfpathname()
 void
 LocalPath(TCHAR *buffer, const TCHAR *file)
 {
-  /*
-  loc = CSIDL_PROGRAMS
+  assert(data_path != NULL);
 
-  File system directory that contains the user's program groups (which
-  are also file system directories).
-
-  CSIDL_PERSONAL               File system directory that serves as a common
-                               repository for documents.
-
-  CSIDL_PROGRAM_FILES 0x0026   The program files folder.
-  */
-  #if defined(GNAV) && !defined(PCGNAV)
-    _tcscpy(buffer, _T("\\NOR Flash"));
-  #elif defined (PNA) && !defined(WINDOWSPC)
-   /*
-    * VENTA-ADDON "smartpath" for PNA only
-    *
-    * (moved up elif from bottom to here to prevent messy behaviour if a
-    * PNA exec is loaded on a PPC)
-    *
-    * For PNAs the localpath is taken from the application exec path
-    * example> \sdmmc\bin\Program.exe  results in localpath=\sdmmc\XCSoarData
-    *
-    * Then the basename is searched for an underscore char, which is
-    * used as a separator for getting the model type.  example>
-    * program_pna.exe results in GlobalModelType=pna
-    *
-    */
-
-    /*
-     * Force LOCALPATH to be the same of the executing program
-     */
-    _stprintf(buffer, _T("%s%s"), gmfpathname(), XCSDATADIR);
-  // VENTA2 FIX PC BUG
-  #elif defined (FIVV) && !defined(WINDOWSPC)
-    _stprintf(buffer, _T("%s%s"), gmfpathname(), XCSDATADIR);
-  #elif !defined(_WIN32) || defined(__WINE__)
-    /* on Unix or WINE, use ~/.xcsoar */
-    const char *home = getenv("HOME");
-    if (home != NULL)
-      _stprintf(buffer, _T("%s/.xcsoar"), home);
-    else
-      _tcscat(buffer, _T("/etc/xcsoar"));
-  #else
-    // everything else that's not special
-    SHGetSpecialFolderPath(NULL, buffer, CSIDL_PERSONAL, false);
-    _tcscat(buffer, _T(DIR_SEPARATOR_S));
-    _tcscat(buffer, XCSDATADIR);
-  #endif
-
-  if (!string_is_empty(file)) {
-    _tcsncat(buffer, _T(DIR_SEPARATOR_S), MAX_PATH);
-    _tcsncat(buffer, file, MAX_PATH);
-  }
+  memcpy(buffer, data_path, data_path_length * sizeof(data_path[0]));
+  buffer[data_path_length] = _T(DIR_SEPARATOR);
+  _tcscpy(buffer + data_path_length + 1, file);
 }
 
 #ifndef HAVE_POSIX
@@ -225,3 +183,53 @@ ContractLocalPath(TCHAR* filein)
   _tcscpy(filein, output);
 }
 
+static TCHAR *
+FindDataPath()
+{
+  if (is_altair())
+    /* hard-coded path for Altair */
+    return _tcsdup(_T("\\NOR Flash"));
+
+  if (is_pna() || (is_fivv() && is_embedded())) {
+    const TCHAR *exe_path = gmfpathname();
+    if (exe_path != NULL) {
+      TCHAR buffer[MAX_PATH];
+      _tcscpy(buffer, exe_path);
+      _tcscat(buffer, XCSDATADIR);
+      return _tcsdup(buffer);
+    }
+  }
+
+#ifdef HAVE_POSIX
+  /* on Unix or WINE, use ~/.xcsoar */
+  const TCHAR *home = getenv("HOME");
+  if (home != NULL) {
+    TCHAR buffer[_tcslen(home) + 9];
+    _tcscpy(buffer, home);
+    _tcscat(buffer, _T("/.xcsoar"));
+    return _tcsdup(buffer);
+  } else
+    return _tcsdup(_T("/etc/xcsoar"));
+#else
+  TCHAR buffer[MAX_PATH];
+  SHGetSpecialFolderPath(NULL, buffer, CSIDL_PERSONAL, false);
+  _tcscat(buffer, _T(DIR_SEPARATOR_S));
+  _tcscat(buffer, XCSDATADIR);
+  return _tcsdup(buffer);
+#endif
+}
+
+struct ScopePathGlobalInit {
+  ScopePathGlobalInit() {
+    data_path = FindDataPath();
+    assert(data_path != NULL);
+
+    data_path_length = _tcslen(data_path);
+  }
+
+  ~ScopePathGlobalInit() {
+    free(data_path);
+  }
+};
+
+static const ScopePathGlobalInit path_global_init;
