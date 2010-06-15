@@ -307,6 +307,9 @@ ifeq ($(HAVE_WIN32),y)
     TARGET_LDFLAGS := -Wl,--major-subsystem-version=$(CE_MAJOR)
     TARGET_LDFLAGS += -Wl,--minor-subsystem-version=$(CE_MINOR)
   endif
+
+  # link libstdc++-6.dll statically, so we don't have to distribute it
+  TARGET_LDFLAGS += -static
 endif
 
 ifeq ($(HAVE_POSIX),y)
