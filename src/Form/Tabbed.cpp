@@ -96,3 +96,16 @@ TabbedControl::PreviousPage()
 
   SetCurrentPage((current + tabs.size() - 1) % tabs.size());
 }
+
+bool
+TabbedControl::on_resize(unsigned width, unsigned height)
+{
+  ContainerControl::on_resize(width, height);
+
+  const RECT rc = get_client_rect();
+  for (std::vector<Window *>::iterator it = tabs.begin();
+       it != tabs.end(); ++it)
+    (*it)->move(rc.left, rc.top, rc.right, rc.bottom);
+
+  return true;
+}

@@ -60,6 +60,9 @@ public:
   void PreviousPage();
 
 protected:
+  virtual bool on_resize(unsigned width, unsigned height);
+
+protected:
   std::vector<Window *> tabs;
   unsigned current;
 };
