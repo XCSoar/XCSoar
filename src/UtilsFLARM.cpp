@@ -99,7 +99,7 @@ LoadFLARMDetails(TLineReader &reader)
 void
 OpenFLARMDetails()
 {
-  LogStartUp(TEXT("OpenFLARMDetails"));
+  LogStartUp(_T("OpenFLARMDetails"));
 
   // if (FLARM Details already there) delete them;
   if (NumberOfFLARMNames)
