@@ -43,7 +43,10 @@ Copyright_License {
 #include "Asset.hpp"
 
 #include <stdio.h>
+
+#ifdef WIN32
 #include <shlobj.h>
+#endif
 
 /*
 	Get pathname & c. from GetModuleFilename (gmf)
