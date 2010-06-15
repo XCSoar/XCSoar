@@ -96,6 +96,12 @@ IsInternalFile(const TCHAR* str)
   return false;
 }
 
+bool
+DataFieldFileReader::GetAsBoolean() const
+{
+  return mValue > 0;
+}
+
 int
 DataFieldFileReader::GetAsInteger(void) const
 {

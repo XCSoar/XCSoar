@@ -137,6 +137,11 @@ public:
   int GetNumFiles(void) const;
 
   /**
+   * Returns true if a file was selected.
+   */
+  virtual bool GetAsBoolean() const;
+
+  /**
    * Returns the selection index in integer format
    * @return The selection index in integer format
    */

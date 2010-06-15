@@ -818,7 +818,7 @@ static void OnPolarTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
     if (Sender->GetAsInteger() != POLARUSEWINPILOTFILE){
       // then ... clear Winpilot File if Polar Type is not WinpilotFile
 
-      if (wp != NULL && wp->GetDataField()->GetAsInteger() > 0){
+      if (wp != NULL && wp->GetDataField()->GetAsBoolean()) {
         lastSelectedPolarFile = wp->GetDataField()->GetAsInteger();
         wp->GetDataField()->SetAsInteger(-1);
         wp->RefreshDisplay();
