@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_COMPATIBILITY_PATH_H
 #define XCSOAR_COMPATIBILITY_PATH_H
 
-#if defined(_WIN32) && !defined(__WINE__)
+#if defined(WIN32) && !defined(__WINE__) && !defined(_WIN32_WCE)
 
 #define DIR_SEPARATOR '\\'
 #define DIR_SEPARATOR_S "\\"
