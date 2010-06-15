@@ -75,7 +75,6 @@ italian.xcl = 7
 german.xcl = 7
 astircs.plr = 8
 cobra.plr = 8
-aygshell.dll = 1
 libstdc++-6.dll = 1
 
 [DefaultInstall]
@@ -96,7 +95,6 @@ Links = 0,%CE11% ; "\Windows\Start Menu" directory
 [TheFiles]
 XCSoar.exe
 XCSoarSetup.dll
-aygshell.dll
 libstdc++-6.dll
 
 [Files.Windows]

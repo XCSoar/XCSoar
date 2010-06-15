@@ -6,7 +6,7 @@ THIRDPARTY_DLL_DIR = $(TARGET_OUTPUT_DIR)/dll
 THIRDPARTY_DLLS =
 
 ifeq ($(HAVE_CE),y)
-THIRDPARTY_DLLS += aygshell.dll libstdc++-6.dll
+THIRDPARTY_DLLS += libstdc++-6.dll
 endif
 
 dist: $(OUTPUTS)
