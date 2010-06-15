@@ -45,13 +45,6 @@ Copyright_License {
 #define DISABLEAUDIOVARIO
 
 #if defined(GNAV)
-  // use exception handling
-  #ifndef ALTAIRPROTOTYPE
-    #ifndef __GNUC__
-      #define HAVEEXCEPTIONS
-    #endif
-  #endif
-
   // disable internally generated sounds
   #define DISABLEAUDIO
 #endif

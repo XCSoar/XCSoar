@@ -85,10 +85,6 @@ dlgWaypointOutOfTerrain(const TCHAR *Message)
   WndFrame* wfrm;
   int res = 0;
 
-#ifdef HAVEEXCEPTIONS
-  __try{
-#endif
-
   wf = dlgLoadFromXML(CallBackTable, _T("dlgWaypointOutOfTerrain.xml"),
                       XCSoarInterface::main_window,
                       _T("IDR_XML_WAYPOINTTERRAIN"));
@@ -102,13 +98,6 @@ dlgWaypointOutOfTerrain(const TCHAR *Message)
 
   res = wf->ShowModal();
   delete wf;
-
-#ifdef HAVEEXCEPTIONS
-  } __except(EXCEPTION_EXECUTE_HANDLER) {
-    res = 0;
-    // ToDo: log that problem
-  };
-#endif
 
   return res;
 }
