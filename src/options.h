@@ -39,8 +39,6 @@ Copyright_License {
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
-#define   LOGGDEVCOMMANDLINE    NULL          // device in-stream logger command line
-                                              // ie TEXT("-logA=\\Speicherkarte\\logA.log ""-logB=\\SD Card\\logB.log""")
 #ifdef WIN32_PLATFORM_PSPC /* Pocket PC */
   #if _WIN32_WCE == 300 /* Pocket PC 2000 (unsupported?) */
     #define OLDPPC

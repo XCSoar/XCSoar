@@ -51,7 +51,6 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "NMEA/Checksum.h"
-#include "options.h" /* for LOGGDEVCOMMANDLINE */
 #include "Asset.hpp"
 #include "Simulator.hpp"
 #include "Profile.hpp"
@@ -276,8 +275,6 @@ devInit(const TCHAR *CommandLine)
 
   if (config[0].port_index != config[1].port_index)
     devInitOne(DeviceList[1], config[1], pDevNmeaOut);
-
-  CommandLine = LOGGDEVCOMMANDLINE;
 
   if (CommandLine != NULL) {
     ParseLogOption(DeviceList[0], CommandLine, _T("-logA="));
