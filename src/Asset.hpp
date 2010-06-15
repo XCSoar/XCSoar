@@ -55,7 +55,6 @@ extern float GlobalEllipse;
 extern int GetGlobalModelName();
 extern void SmartGlobalModelType();
 extern short InstallFonts();
-extern bool CheckDataDir();
 
 static inline void
 SetGlobalEllipse(float value)

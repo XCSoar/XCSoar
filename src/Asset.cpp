@@ -327,12 +327,6 @@ InitAsset()
   // VENTA2-ADDON install fonts on PDAs and check XCSoarData existance
   #if defined(FIVV) && (!defined(WINDOWSPC) || WINDOWSPC == 0)
   //#ifndef PNA
-  bool datadir = CheckDataDir();
-  if (datadir)
-    LogStartUp(TEXT("XCSoarData directory found."));
-  else
-    LogStartUp(TEXT("ERROR: NO XCSOARDATA DIRECTORY FOUND!"));
-
   LogStartUp(TEXT("Check for installing fonts"));
   short didfonts = InstallFonts();  // check if really did it, and maybe restart
   LogStartUp(_T("InstallFonts() result=%d (0=installed >0 not installed)"), didfonts);

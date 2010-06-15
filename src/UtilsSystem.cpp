@@ -548,19 +548,6 @@ InstallFonts()
 
   return 0;
 }
-
-/*
- * Check that XCSoarData exist where it should be
- * Return false if error, true if Ok
- */
-bool CheckDataDir() {
-	TCHAR srcdir[MAX_PATH];
-  _stprintf(srcdir, _T("%s%s"), gmfpathname(), XCSDATADIR);
-
-  if (GetFileAttributes(srcdir) != FILE_ATTRIBUTE_DIRECTORY)
-	  return false;
-	return true;
-}
 #endif
 
 
