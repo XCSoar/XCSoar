@@ -57,7 +57,7 @@ public:
     :handle(::FindFirstFlashCard(&data)), first(true) {}
 #else
   FlashCardEnumerator()
-    :handle(::FindFirstFile(_T("\\*"), &data)), first(true) {}
+    :handle(::FindFirstFile(_T("/*"), &data)), first(true) {}
 #endif
 
   ~FlashCardEnumerator() {
