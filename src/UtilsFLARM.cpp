@@ -73,6 +73,23 @@ CloseFLARMDetails()
   NumberOfFLARMNames = 0;
 }
 
+static void
+LoadFLARMDetails(TLineReader &reader)
+{
+  TCHAR *line;
+  while ((line = reader.read()) != NULL) {
+    TCHAR *endptr;
+    FlarmId id;
+    id.parse(line, &endptr);
+    if (endptr > line && endptr[0] == _T('=') && endptr[1] != _T('\0')) {
+      TCHAR *Name = endptr + 1;
+      TrimRight(Name);
+      if (!AddFlarmLookupItem(id, Name, false))
+        break; // cant add anymore items !
+    }
+  }
+}
+
 /**
  * Opens XCSoars own FLARM details file, parses it and
  * adds its entries as FlarmLookupItems
@@ -91,21 +108,8 @@ OpenFLARMDetails()
   LocalPath(filename, TEXT("xcsoar-flarm.txt"));
 
   FileLineReader reader(filename);
-  if (reader.error())
-    return;
-
-  TCHAR *line;
-  while ((line = reader.read()) != NULL) {
-    TCHAR *endptr;
-    FlarmId id;
-    id.parse(line, &endptr);
-    if (endptr > line && endptr[0] == _T('=') && endptr[1] != _T('\0')) {
-      TCHAR *Name = endptr + 1;
-      TrimRight(Name);
-      if (!AddFlarmLookupItem(id, Name, false))
-        break; // cant add anymore items !
-    }
-  }
+  if (!reader.error())
+      LoadFLARMDetails(reader);
 
   LocalPath(filename, _T("data.fln"));
   unsigned num_records = flarm_net.LoadFile(filename);
