@@ -39,6 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_GLIDE_RATIO_HPP
 #define XCSOAR_GLIDE_RATIO_HPP
 
+#include "Util/NonCopyable.hpp"
 #include "Defines.h"
 
 struct SETTINGS_COMPUTER;
@@ -52,7 +53,7 @@ typedef enum {
   ae3minutes,
 } AverEffTime_t;
 
-class GlideRatioCalculator {
+class GlideRatioCalculator : private NonCopyable {
   struct record {
     int distance;
     int altitude;
