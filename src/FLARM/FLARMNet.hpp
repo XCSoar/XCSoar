@@ -44,6 +44,8 @@ Copyright_License {
 #include <map>
 #include <tchar.h>
 
+class NLineReader;
+
 /**
  * FLARMnet.org file entry
  */
@@ -68,6 +70,7 @@ class FLARMNetDatabase
   : protected std::map<FlarmId, FLARMNetRecord*>
 {
 public:
+  unsigned LoadFile(NLineReader &reader);
   unsigned LoadFile(const TCHAR *path);
 
   const FLARMNetRecord *Find(FlarmId id) const;

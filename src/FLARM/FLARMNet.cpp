@@ -38,6 +38,8 @@ Copyright_License {
 
 #include "FLARM/FLARMNet.hpp"
 #include "UtilsText.hpp"
+#include "IO/LineReader.hpp"
+#include "IO/FileLineReader.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -50,12 +52,9 @@ Copyright_License {
  * @param res Pointer to be written in
  */
 static void
-LoadString(FILE *file, int charCount, TCHAR *res)
+LoadString(const char *bytes, int charCount, TCHAR *res)
 {
   int bytesToRead = charCount * 2;
-  char bytes[100];
-
-  fread(bytes, 1, bytesToRead, file);
 
   TCHAR *curChar = res;
   for (int z = 0; z < bytesToRead; z += 2) {
@@ -81,15 +80,18 @@ LoadString(FILE *file, int charCount, TCHAR *res)
  * @param record Pointer to the FLARMNetRecord to be filled
  */
 static void
-LoadRecord(FILE *file, FLARMNetRecord *record)
+LoadRecord(const char *line, FLARMNetRecord *record)
 {
-  LoadString(file, 6, record->id);
-  LoadString(file, 21, record->name);
-  LoadString(file, 21, record->airfield);
-  LoadString(file, 21, record->type);
-  LoadString(file, 7, record->reg);
-  LoadString(file, 3, record->cn);
-  LoadString(file, 7, record->freq);
+  if (strlen(line) < 172)
+    return;
+
+  LoadString(line, 6, record->id);
+  LoadString(line + 12, 21, record->name);
+  LoadString(line + 54, 21, record->airfield);
+  LoadString(line + 96, 21, record->type);
+  LoadString(line + 138, 7, record->reg);
+  LoadString(line + 152, 3, record->cn);
+  LoadString(line + 158, 7, record->freq);
 
   int i = 0;
   int maxSize = sizeof(record->cn) / sizeof(TCHAR);
@@ -99,8 +101,28 @@ LoadRecord(FILE *file, FLARMNetRecord *record)
 
     i++;
   }
+}
 
-  fseek(file, 1, SEEK_CUR);
+unsigned
+FLARMNetDatabase::LoadFile(NLineReader &reader)
+{
+  /* skip first line */
+  const char *line = reader.read();
+  if (line == NULL)
+    return 0;
+
+  int itemCount = 0;
+  while ((line = reader.read()) != NULL) {
+    FLARMNetRecord *record = new FLARMNetRecord;
+
+    LoadRecord(line, record);
+
+    insert(value_type(record->GetId(), record));
+
+    itemCount++;
+  };
+
+  return itemCount;
 }
 
 /**
@@ -112,30 +134,12 @@ LoadRecord(FILE *file, FLARMNetRecord *record)
 unsigned
 FLARMNetDatabase::LoadFile(const TCHAR *path)
 {
-  FILE* hFile = _tfopen(path, _T("rt"));
-  if (hFile == NULL)
+  FileSource file(path);
+  if (file.error())
     return 0;
 
-  long fileLength;
-
-  fseek (hFile , 0 , SEEK_END);
-  fileLength = ftell (hFile);
-  fseek (hFile , 7 , SEEK_SET);
-
-  int itemCount = 0;
-  while(fileLength - ftell(hFile) > 87) {
-    FLARMNetRecord *record = new FLARMNetRecord;
-
-    LoadRecord(hFile, record);
-
-    insert(value_type(record->GetId(), record));
-
-    itemCount++;
-  };
-
-  fclose(hFile);
-
-  return itemCount;
+  LineSplitter splitter(file);
+  return LoadFile(splitter);
 }
 
 /**
