@@ -43,9 +43,10 @@ Copyright_License {
 #include "Asset.hpp"
 
 #include <stdio.h>
+#include <shlobj.h>
 
 void
-LocalPath(TCHAR* buffer, const TCHAR* file, int loc)
+LocalPath(TCHAR *buffer, const TCHAR *file)
 {
   /*
   loc = CSIDL_PROGRAMS
@@ -92,7 +93,7 @@ LocalPath(TCHAR* buffer, const TCHAR* file, int loc)
       _tcscat(buffer, _T("/etc/xcsoar"));
   #else
     // everything else that's not special
-    SHGetSpecialFolderPath(NULL, buffer, loc, false);
+    SHGetSpecialFolderPath(NULL, buffer, CSIDL_PERSONAL, false);
     _tcscat(buffer, _T(DIR_SEPARATOR_S));
     _tcscat(buffer, XCSDATADIR);
   #endif
@@ -105,10 +106,10 @@ LocalPath(TCHAR* buffer, const TCHAR* file, int loc)
 
 #ifndef HAVE_POSIX
 void
-LocalPath(char *buffer, const TCHAR* file, int loc)
+LocalPath(char *buffer, const TCHAR *file)
 {
   TCHAR wbuffer[MAX_PATH];
-  LocalPath(wbuffer, file, loc);
+  LocalPath(wbuffer, file);
   sprintf(buffer, "%S", wbuffer);
 }
 #endif

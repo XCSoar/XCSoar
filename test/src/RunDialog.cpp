@@ -57,14 +57,14 @@ int DisplayTimeOut = 0;
 #endif
 
 void
-LocalPath(TCHAR *buf, const TCHAR* file, int loc)
+LocalPath(TCHAR *buf, const TCHAR* file)
 {
   _tcscpy(buf, file);
 }
 
 #ifdef _UNICODE
 void
-LocalPath(char *buf, const TCHAR* file, int loc)
+LocalPath(char *buf, const TCHAR* file)
 {
 //  strcpy(buf, (const char *)file);
   unicode2ascii(file, buf);
