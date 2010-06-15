@@ -3,6 +3,8 @@
 #include "Util/DataNodeXML.hpp"
 #include "LocalPath.hpp"
 
+#include <windef.h> // for MAX_PATH
+
 TaskAdvance::TaskAdvanceState_t 
 TaskClientUI::get_advance_state() const
 {

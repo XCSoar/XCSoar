@@ -43,6 +43,7 @@ Copyright_License {
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <windef.h> // for MAX_PATH
 
 #if !defined(NDEBUG) && !defined(GNAV)
 /**

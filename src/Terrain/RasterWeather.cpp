@@ -46,6 +46,7 @@ Copyright_License {
 #include <assert.h>
 #include <tchar.h>
 #include <stdio.h>
+#include <windef.h> // for MAX_PATH
 
 const unsigned RasterWeather::MAX_WEATHER_MAP;
 const unsigned RasterWeather::MAX_WEATHER_TIMES;

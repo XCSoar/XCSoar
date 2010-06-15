@@ -41,6 +41,8 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
 
+#include <windef.h> // for MAX_PATH
+
 bool EnableLogNMEA = false;
 
 void
