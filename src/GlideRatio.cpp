@@ -39,6 +39,9 @@ Copyright_License {
 #include "GlideRatio.hpp"
 #include "Math/LowPassFilter.hpp"
 #include "SettingsComputer.hpp"
+#include "Defines.h"
+
+#include <assert.h>
 
 void
 GlideRatioCalculator::init(const SETTINGS_COMPUTER &settings)
@@ -69,7 +72,8 @@ GlideRatioCalculator::init(const SETTINGS_COMPUTER &settings)
     break;
   }
 
-  //if (bsize <3 || bsize>MAXLDROTARYSIZE) return false;
+  assert(bsize >= 3);
+  assert(bsize < sizeof(records) / sizeof(records[0]));
 
   totaldistance = 0;
   start = -1;

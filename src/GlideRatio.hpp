@@ -40,7 +40,6 @@ Copyright_License {
 #define XCSOAR_GLIDE_RATIO_HPP
 
 #include "Util/NonCopyable.hpp"
-#include "Defines.h"
 
 struct SETTINGS_COMPUTER;
 
@@ -62,7 +61,7 @@ class GlideRatioCalculator : private NonCopyable {
   /**
    * Rotary array with a predefined max capacity.
    */
-  record records[MAXLDROTARYSIZE];
+  record records[180];
 
   unsigned totaldistance;
 

@@ -62,6 +62,7 @@ Copyright_License {
 #include "TaskClientCalc.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "AirspaceClientCalc.hpp"
+#include "Defines.h"
 
 #include <algorithm>
 

@@ -73,9 +73,6 @@ Copyright_License {
 
 #define XCSDATADIR	"XCSoarData"
 
-/** max size of rotary buffer for LD calculation */
-#define MAXLDROTARYSIZE 180
-
 /** over this, show INVALID_GR */
 #define MAXEFFICIENCYSHOW 200
 

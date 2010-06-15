@@ -43,6 +43,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "GlideRatio.hpp"
+#include "Defines.h"
 
 GlideComputerBlackboard::GlideComputerBlackboard(TaskClientCalc& task):
   m_task(task)
