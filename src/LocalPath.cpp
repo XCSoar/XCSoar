@@ -166,7 +166,7 @@ ContractLocalPath(TCHAR* filein)
 
   // Get the relative file name and location (ptr)
   const TCHAR *ptr = string_after_prefix(filein, data_path);
-  if (ptr == NULL || *ptr != DIR_SEPARATOR)
+  if (ptr == NULL || !is_dir_separator(*ptr))
     return;
 
   // Replace the full local path by the code "%LOCAL_PATH%\\" (output)
