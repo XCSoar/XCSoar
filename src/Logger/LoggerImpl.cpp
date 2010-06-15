@@ -331,12 +331,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
     strAssetNumber[i] = IsAlphaNum(strAssetNumber[i]) ? strAssetNumber[i] : _T('A');
   }
 
-  // VENTA3 use logs subdirectory when not in main memory (true for FIVV and PNA)
-  #if defined(GNAV) || defined(FIVV) || defined(PNA)
-    LocalPath(path, _T("logs"));
-  #else
-  _tcscpy(path, GetPrimaryDataPath());
-  #endif
+  LocalPath(path, _T("logs"));
 
   WriteLock();
   DiskBufferReset();
