@@ -1,5 +1,5 @@
 FIXED ?= $(call bool_or,$(DEBUG),$(call bool_not,$(HAVE_FPU)))
-RADIANS ?= n
+RADIANS ?= y
 GREEN_MENU ?= y
 PROFILE_NO_FILE ?= n
 
