@@ -181,6 +181,7 @@ protected:
   /** Caption/Text of the Control */
   TCHAR mCaption[254];
 
+public:
   /** Paints the "Selector" */
   static void PaintSelector(Canvas &canvas, const RECT rc);
 
