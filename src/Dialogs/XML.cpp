@@ -197,10 +197,7 @@ GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
   // Calculate width and height
   *Width = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("Width")), 50),
                            eDialogStyle);
-  *Height = StringToIntDflt(Node->getAttribute(_T("Height")), 50);
-  if (*Height >= 0) {
-    (*Height) = Layout::Scale(*Height);
-  }
+  *Height = Layout::Scale(StringToIntDflt(Node->getAttribute(_T("Height")), 50));
 
   // Determine font style
   *Font = StringToIntDflt(Node->getAttribute(_T("Font")), -1);
