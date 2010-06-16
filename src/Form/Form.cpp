@@ -57,11 +57,18 @@ WndForm::ClientAreaWindow::on_paint(Canvas &canvas)
 
 PeriodClock WndForm::timeAnyOpenClose;
 
+static WindowStyle
+add_border(WindowStyle style)
+{
+  style.border();
+  return style;
+}
+
 WndForm::WndForm(SingleWindow &_main_window,
                  const TCHAR *Caption,
                  int X, int Y, int Width, int Height,
                  const WindowStyle style):
-  ContainerControl(&_main_window, X, Y, Width, Height, style),
+  ContainerControl(&_main_window, X, Y, Width, Height, add_border(style)),
   main_window(_main_window),
   mModalResult(0),
   mColorTitle(Color::YELLOW),
