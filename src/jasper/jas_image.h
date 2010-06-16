@@ -187,9 +187,9 @@ typedef struct {
 // this field here added for aditional information about the image
 // e.g. GeoTiff information
 typedef struct {
-  int id;    // just some info about the buffer contents
-  long size; // size of the buffer
-  unsigned char *buf; // the buffer itself
+	int id; // just some info about the buffer contents
+	long size; // size of the buffer
+	unsigned char *buf; // the buffer itself
 } jas_aux_buffer_t;
 
 typedef struct {
@@ -224,11 +224,10 @@ typedef struct {
 
 	bool inmem_;
 
-  // dima
-  // this field here added for aditional information about the image
-  // e.g. GeoTiff information
-  jas_aux_buffer_t aux_buf;
-
+	// dima
+	// this field here added for aditional information about the image
+	// e.g. GeoTiff information
+	jas_aux_buffer_t aux_buf;
 
 } jas_image_t;
 
@@ -581,7 +580,6 @@ jas_image_t *tiff_decode(jas_stream_t *in, const char *optstr);
 int tiff_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
 int tiff_validate(jas_stream_t *in);
 #endif
-
 
 #ifdef __cplusplus
 }

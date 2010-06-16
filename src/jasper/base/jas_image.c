@@ -204,10 +204,10 @@ jas_image_t *jas_image_create0()
 	image->inmem_ = true;
 	image->cmprof_ = 0;
 
-  // dima - buffer defines
+	// dima - buffer defines
 	image->aux_buf.id   = -1;
-  image->aux_buf.size = 0;
-  image->aux_buf.buf  = NULL;
+	image->aux_buf.size = 0;
+	image->aux_buf.buf  = NULL;
 
 	return image;
 }
@@ -290,20 +290,20 @@ void jas_image_destroy(jas_image_t *image)
 {
 	int i;
 
-  // dima - free buffer
-  if ( (image->aux_buf.size != 0) && (image->aux_buf.buf != NULL) )
-  jas_free(image->aux_buf.buf);
+	// dima - free buffer
+	if ((image->aux_buf.size != 0) && (image->aux_buf.buf != NULL))
+		jas_free(image->aux_buf.buf);
 
-  if (image->cmpts_) {
-    for (i = 0; i < image->numcmpts_; ++i) {
-      jas_image_cmpt_destroy(image->cmpts_[i]);
-      image->cmpts_[i] = 0;
-    }
-    jas_free(image->cmpts_);
-  }
-  if (image->cmprof_)
-    jas_cmprof_destroy(image->cmprof_);
-  jas_free(image);
+	if (image->cmpts_) {
+		for (i = 0; i < image->numcmpts_; ++i) {
+			jas_image_cmpt_destroy(image->cmpts_[i]);
+			image->cmpts_[i] = 0;
+		}
+		jas_free(image->cmpts_);
+	}
+	if (image->cmprof_)
+		jas_cmprof_destroy(image->cmprof_);
+	jas_free(image);
 }
 
 static jas_image_cmpt_t *jas_image_cmpt_create(uint_fast32_t tlx, uint_fast32_t tly,
@@ -385,7 +385,7 @@ jas_image_t *jas_image_decode(jas_stream_t *in, int fmt, const char *optstr)
 	/* Create a color profile if needed. */
 	if (!jas_clrspc_isunknown(image->clrspc_) &&
 	  !jas_clrspc_isgeneric(image->clrspc_) && !image->cmprof_) {
-	  // JMW memory leak here!
+		// JMW memory leak here!
 		if (!(image->cmprof_ =
 		  jas_cmprof_createfromclrspc(jas_image_clrspc(image))))
 			goto error;
@@ -398,8 +398,7 @@ error:
 	return 0;
 }
 
-int jas_image_encode(jas_image_t *image, jas_stream_t *out, int fmt,
-                     const char *optstr)
+int jas_image_encode(jas_image_t *image, jas_stream_t *out, int fmt, const char *optstr)
 {
 	jas_image_fmtinfo_t *fmtinfo;
 	if (!(fmtinfo = jas_image_lookupfmtbyid(fmt))) {
@@ -621,7 +620,7 @@ int jas_image_fmtfromname(char *name)
 		return -1;
 	}
 	++ext;
-	/* Try to find a format that uses this extension. */
+	/* Try to find a format that uses this extension. */	
 	for (i = 0, fmtinfo = jas_image_fmtinfos; i < jas_image_numfmts; ++i,
 	  ++fmtinfo) {
 		/* Do we have a match? */

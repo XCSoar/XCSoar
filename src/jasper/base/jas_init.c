@@ -118,13 +118,13 @@ int jas_init()
 
 #if !defined(EXCLUDE_JP2_SUPPORT)
 	fmtops.decode = jp2_decode;
-        //JMW	fmtops.encode = jp2_encode;
+	// fmtops.encode = jp2_encode;
 	fmtops.validate = jp2_validate;
 	jas_image_addfmt(fmtid, "jp2", "jp2",
 	  "JPEG-2000 JP2 File Format Syntax (ISO/IEC 15444-1)", &fmtops);
 	++fmtid;
 	fmtops.decode = jpc_decode;
-        //JMW	fmtops.encode = jpc_encode;
+	// fmtops.encode = jpc_encode;
 	fmtops.validate = jpc_validate;
 	jas_image_addfmt(fmtid, "jpc", "jpc",
 	  "JPEG-2000 Code Stream Syntax (ISO/IEC 15444-1)", &fmtops);

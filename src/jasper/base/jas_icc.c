@@ -426,7 +426,7 @@ int jas_iccprof_save(jas_iccprof_t *prof, jas_stream_t *out)
 				goto error;
 			curoff += reloff;
 		}
-	}
+	}	
 	return 0;
 error:
 	/* XXX - need to free some resources here */
@@ -1106,7 +1106,7 @@ static int jas_icctxt_copy(jas_iccattrval_t *attrval,
 {
 	jas_icctxt_t *txt = &attrval->data.txt;
 	jas_icctxt_t *othtxt = &othattrval->data.txt;
-        if (!(txt->string = strdup(othtxt->string)))
+	if (!(txt->string = strdup(othtxt->string)))
 		return -1;
 	return 0;
 }

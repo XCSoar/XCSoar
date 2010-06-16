@@ -90,29 +90,29 @@
 
 void *jas_malloc(size_t size)
 {
-  return malloc(size);
+	return malloc(size);
 }
 
 void jas_free(void *ptr)
 {
-  free(ptr);
+	free(ptr);
 }
 
 void *jas_realloc(void *ptr, size_t size)
 {
-  return realloc(ptr, size);
+	return realloc(ptr, size);
 }
 
 void *jas_calloc(size_t nmemb, size_t size)
 {
-  void *ptr;
-  size_t n;
-  n = nmemb * size;
-  if (!(ptr = jas_malloc(n * sizeof(char)))) {
-    return 0;
-  }
-  memset(ptr, 0, n);
-  return ptr;
+	void *ptr;
+	size_t n;
+	n = nmemb * size;
+	if (!(ptr = jas_malloc(n * sizeof(char)))) {
+		return 0;
+	}
+	memset(ptr, 0, n);
+	return ptr;
 }
 
 #endif

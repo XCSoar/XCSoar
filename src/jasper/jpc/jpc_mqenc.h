@@ -127,7 +127,7 @@ typedef struct {
 
 	/* The error indicator. */
 	int err;
-
+	
 } jpc_mqenc_t;
 
 /* MQ arithmetic encoder state information. */

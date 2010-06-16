@@ -232,6 +232,6 @@ jas_taginfo_t *jas_taginfo_nonull(jas_taginfo_t *taginfo)
 	static jas_taginfo_t invalidtaginfo = {
 		-1, 0
 	};
-
+	
 	return taginfo ? taginfo : &invalidtaginfo;
 }

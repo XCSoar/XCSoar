@@ -220,7 +220,7 @@ jas_stream_t *jas_stream_memopen(char *buf, int bufsize)
 		obj->len_ = 0;
 	}
 	obj->pos_ = 0;
-
+	
 	return stream;
 }
 
@@ -267,7 +267,7 @@ jas_stream_t *jas_stream_fopen(const char *filename, const char *mode)
 	obj->fd = -1;
 	obj->flags = 0;
 	//obj->pathname[0] = '\0';
-        strncpy(obj->pathname, filename, DIM_MAX_FILE_NAME); //dima
+	strncpy(obj->pathname, filename, DIM_MAX_FILE_NAME); //dima
 
 	stream->obj_ = (void *) obj;
 
@@ -275,16 +275,16 @@ jas_stream_t *jas_stream_fopen(const char *filename, const char *mode)
 	stream->ops_ = &jas_stream_fileops;
 
 	/* Open the underlying file. */
-        /*
+	/*
 	if ((obj->fd = open(filename, openflags, JAS_STREAM_PERMS)) < 0) {
 		jas_stream_destroy(stream);
 		return 0;
 	}
         */
-        // JMW quick hack!
+	// JMW quick hack!
 	if ((obj->zfile = zzip_fopen(filename, "rb")) == NULL) {
-          jas_stream_close(stream);
-          return 0;
+		jas_stream_close(stream);
+		return 0;
 	}
 
 	/* By default, use full buffering for this type of stream. */
@@ -998,25 +998,25 @@ static int mem_close(jas_stream_obj_t *obj)
 static int file_read(jas_stream_obj_t *obj, char *buf, int cnt)
 {
 	jas_stream_fileobj_t *fileobj = JAS_CAST(jas_stream_fileobj_t *, obj);
-        //	return read(fileobj->fd, buf, cnt);
-        // JMW zzlib
-        return zzip_fread(buf, 1, cnt, fileobj->zfile);
+	// return read(fileobj->fd, buf, cnt);
+	// JMW zzlib
+	return zzip_fread(buf, 1, cnt, fileobj->zfile);
 
 }
 
 static int file_write(jas_stream_obj_t *obj, char *buf, int cnt)
 {
 	jas_stream_fileobj_t *fileobj = JAS_CAST(jas_stream_fileobj_t *, obj);
-        // JMW not used!!
+	// JMW not used!!
 	return write(fileobj->fd, buf, cnt);
 }
 
 static long file_seek(jas_stream_obj_t *obj, long offset, int origin)
 {
 	jas_stream_fileobj_t *fileobj = JAS_CAST(jas_stream_fileobj_t *, obj);
-        //	return lseek(fileobj->fd, offset, origin);
-        // JMW zzlib
-        return zzip_seek(fileobj->zfile, offset, origin);
+	// return lseek(fileobj->fd, offset, origin);
+	// JMW zzlib
+	return zzip_seek(fileobj->zfile, offset, origin);
 }
 
 static int file_close(jas_stream_obj_t *obj)
@@ -1024,9 +1024,9 @@ static int file_close(jas_stream_obj_t *obj)
 	jas_stream_fileobj_t *fileobj = JAS_CAST(jas_stream_fileobj_t *, obj);
 	int ret;
 
-        //	ret = close(fileobj->fd);
-        // JMW zzlib
-        ret = zzip_fclose(fileobj->zfile);
+	// ret = close(fileobj->fd);
+	// JMW zzlib
+	ret = zzip_fclose(fileobj->zfile);
 
 	if (fileobj->flags & JAS_STREAM_FILEOBJ_DELONCLOSE) {
 		unlink(fileobj->pathname);

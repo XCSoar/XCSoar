@@ -90,7 +90,7 @@
 extern "C" {
 #endif
 
-  // JMW added zziplib support
+// JMW added zziplib support
 #include <zzip/lib.h>
 
 /******************************************************************************\
@@ -257,7 +257,7 @@ typedef struct {
 	int flags;
 	//char pathname[L_tmpnam + 1];
 	char pathname[DIM_MAX_FILE_NAME]; // dima
-  ZZIP_FILE* zfile; // JMW
+	ZZIP_FILE* zfile; // JMW
 } jas_stream_fileobj_t;
 
 #define	JAS_STREAM_FILEOBJ_DELONCLOSE	0x01

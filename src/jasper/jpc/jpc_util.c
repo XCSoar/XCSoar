@@ -102,9 +102,9 @@ int jpc_atoaf(char *s, int *numvalues, double **values)
 	if ((cp = strtok(buf, delim))) {
 		++n;
 		while ((cp = strtok(0, delim))) {
-                  if (*cp != '\0') { // SGI fix, was cp != '\0'
-                    ++n;
-                  }
+			if (*cp != '\0') { // SGI fix, was cp != '\0'
+				++n;
+			}
 		}
 	}
 
@@ -120,10 +120,10 @@ int jpc_atoaf(char *s, int *numvalues, double **values)
 			vs[n] = atof(cp);
 			++n;
 			while ((cp = strtok(0, delim))) {
-                          if (*cp != '\0') { // SGI fix, was cp != '\0'
-                            vs[n] = atof(cp);
-                            ++n;
-                          }
+				if (*cp != '\0') { // SGI fix, was cp != '\0'
+					vs[n] = atof(cp);
+					++n;
+				}
 			}
 		}
 	} else {

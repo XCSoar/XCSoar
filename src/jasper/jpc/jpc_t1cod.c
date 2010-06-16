@@ -138,9 +138,9 @@ int JPC_NOMINALGAIN(int qmfbid, int numlvls, int lvlno, int orient)
 	/* Avoid compiler warnings about unused parameters. */
 	numlvls = 0;
 
-        if (qmfbid == JPC_COX_INS) {
-          return 0;
-        }
+if (qmfbid == JPC_COX_INS) {
+	return 0;
+}
 	assert(qmfbid == JPC_COX_RFT);
 	if (lvlno == 0) {
 		assert(orient == JPC_TSFB_LL);
@@ -157,8 +157,8 @@ int JPC_NOMINALGAIN(int qmfbid, int numlvls, int lvlno, int orient)
 		}
 	}
 	abort();
-        // JMW shouldn't get here?
-        return 0;
+	// JMW shouldn't get here?
+	return 0;
 }
 
 /******************************************************************************\

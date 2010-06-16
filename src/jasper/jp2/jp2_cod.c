@@ -639,8 +639,8 @@ static int jp2_getuint64(jas_stream_t *in, uint_fast64_t *val)
 	in = 0;
 	val = 0;
 	abort();
-        // JMW don't know what this is...
-        return 0;
+	// JMW don't know what this is...
+	return 0;
 }
 
 /******************************************************************************\
@@ -677,11 +677,11 @@ static int jp2_putuint32(jas_stream_t *out, uint_fast32_t val)
 
 static int jp2_putuint64(jas_stream_t *out, uint_fast64_t val)
 {
-  if (jp2_putuint32(out, (uint_fast32_t)((val >> 32) & 0xffffffffUL)) ||
-      jp2_putuint32(out, (uint_fast32_t)(val & 0xffffffffUL))) {
-    return -1;
-  }
-  return 0;
+	if (jp2_putuint32(out, (uint_fast32_t)((val >> 32) & 0xffffffffUL)) ||
+	  jp2_putuint32(out, (uint_fast32_t)(val & 0xffffffffUL))) {
+		return -1;
+	}
+	return 0;
 }
 
 /******************************************************************************\
@@ -729,7 +729,7 @@ static int jp2_cmap_getdata(jp2_box_t *box, jas_stream_t *in)
 			return -1;
 		}
 	}
-
+	
 	return 0;
 }
 

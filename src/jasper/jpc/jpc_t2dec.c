@@ -371,7 +371,6 @@ hdroffstart = jas_stream_getrwcount(pkthdrstream);
 	/* decode the packet body. */
 
 	if (jas_getdbglevel() >= 1) {
-
 		fprintf(stderr, "packet body offset=%06ld\n", (long) jas_stream_getrwcount(in));
 	}
 
@@ -457,7 +456,6 @@ if (dec->maxpkts >= 0 && dec->numpkts >= dec->maxpkts) {
 	return 0;
 }
 		if (jas_getdbglevel() >= 1) {
-
 			fprintf(stderr, "packet offset=%08ld prg=%d cmptno=%02d "
 			  "rlvlno=%02d prcno=%03d lyrno=%02d\n", (long)
 			  jas_stream_getrwcount(in), jpc_pi_prg(pi), jpc_pi_cmptno(pi),

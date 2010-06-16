@@ -980,8 +980,8 @@ static int jpc_enc_encodemainhdr(jpc_enc_t *enc)
 	jpc_cod_t *cod;
 	jpc_qcd_t *qcd;
 	int i;
-	long startoff;
-	long mainhdrlen;
+long startoff;
+long mainhdrlen;
 	jpc_enc_cp_t *cp;
 	jpc_qcc_t *qcc;
 	jpc_enc_tccp_t *tccp;
@@ -1001,7 +1001,7 @@ static int jpc_enc_encodemainhdr(jpc_enc_t *enc)
 
 	cp = enc->cp;
 
-	startoff = jas_stream_getrwcount(enc->out);
+startoff = jas_stream_getrwcount(enc->out);
 
 	/* Write SOC marker segment. */
 	if (!(enc->mrk = jpc_ms_create(JPC_MS_SOC))) {
@@ -1229,15 +1229,14 @@ static int jpc_enc_encodemainbody(jpc_enc_t *enc)
 	int samestepsizes;
 	jpc_enc_ccp_t *ccps;
 	jpc_enc_tccp_t *tccp;
-
-	int bandno;
-	uint_fast32_t x;
-	uint_fast32_t y;
-	int mingbits;
-	int actualnumbps;
-	jpc_fix_t mxmag;
-	jpc_fix_t mag;
-	int numgbits;
+int bandno;
+uint_fast32_t x;
+uint_fast32_t y;
+int mingbits;
+int actualnumbps;
+jpc_fix_t mxmag;
+jpc_fix_t mag;
+int numgbits;
 
 	cp = enc->cp;
 

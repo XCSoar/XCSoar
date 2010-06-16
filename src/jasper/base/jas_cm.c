@@ -306,7 +306,7 @@ static jas_cmprof_t *jas_cmprof_create()
 }
 
 void jas_cmprof_destroy(jas_cmprof_t *prof)
-{
+{ 
 	int i;
 	for (i = 0; i < JAS_CMPROF_NUMPXFORMSEQS; ++i) {
 		if (prof->pxformseqs[i]) {
@@ -550,10 +550,10 @@ int jas_cmxform_apply(jas_cmxform_t *xform, jas_cmpixmap_t *in, jas_cmpixmap_t *
 					goto error;
 			}
 		}
-
+	
 		n += m;
 	}
-
+	
 	return 0;
 error:
 	return -1;

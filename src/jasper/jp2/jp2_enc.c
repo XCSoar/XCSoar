@@ -343,8 +343,7 @@ error:
 	return -1;
 }
 
-int jp2_write_codestream(jas_image_t *image, jas_stream_t *out,
-                         const char *optstr)
+int jp2_write_codestream(jas_image_t *image, jas_stream_t *out, const char *optstr)
 {
 	jp2_box_t *box;
 	char buf[4096];
@@ -387,27 +386,26 @@ error:
 
 int jp2_encode(jas_image_t *image, jas_stream_t *out, const char *optstr)
 {
-  jp2_box_t *uuid_box = NULL;
+	jp2_box_t *uuid_box = NULL;
 
-  if (jp2_write_header(image, out) < 0)
+	if (jp2_write_header(image, out) < 0)
 		return -1;
 
-  // write UUID if received, dima
-  if ( (image->aux_buf.size > 0) && (image->aux_buf.buf != NULL) )
-  {
-    uuid_box = jp2_box_create( JP2_BOX_UUID );
+	// write UUID if received, dima
+	if ((image->aux_buf.size > 0) && (image->aux_buf.buf != NULL)) {
+		uuid_box = jp2_box_create( JP2_BOX_UUID );
 
-    memcpy( uuid_box->data.uuid.uuid, msi_uuid2, sizeof(msi_uuid2) );
-    uuid_box->data.uuid.data_len = image->aux_buf.size;
-    uuid_box->data.uuid.data = jas_malloc( image->aux_buf.size );
-    memcpy( uuid_box->data.uuid.data, image->aux_buf.buf, image->aux_buf.size );
+		memcpy(uuid_box->data.uuid.uuid, msi_uuid2, sizeof(msi_uuid2));
+		uuid_box->data.uuid.data_len = image->aux_buf.size;
+		uuid_box->data.uuid.data = jas_malloc( image->aux_buf.size );
+		memcpy(uuid_box->data.uuid.data, image->aux_buf.buf, image->aux_buf.size);
 
-    if (uuid_box) {
-		  if (jp2_box_put(uuid_box, out))
-			  return -1;
-    }
+		if (uuid_box) {
+			if (jp2_box_put(uuid_box, out))
+				return -1;
+		}
 	}
-  // write UUID if received, dima
+	// write UUID if received, dima
 
 	if (jp2_write_codestream(image, out, optstr) < 0)
 		return -1;

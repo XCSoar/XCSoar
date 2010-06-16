@@ -380,10 +380,10 @@ assert(numnodebands == 4 || numnodebands == 3);
 			jas_seq_destroy(vfilter);
 #else
 			if (!jpc_tsfbnode_getequivfilters(node, nodebandno, band->xend - band->xstart, band->yend - band->ystart, &hfilter, &vfilter)) {
-			  band->synenergywt = jpc_fix_mul(jpc_seq_norm(hfilter),
-							  jpc_seq_norm(vfilter));
-			  jas_seq_destroy(hfilter);
-			  jas_seq_destroy(vfilter);
+				band->synenergywt = jpc_fix_mul(jpc_seq_norm(hfilter),
+				  jpc_seq_norm(vfilter));
+				jas_seq_destroy(hfilter);
+				jas_seq_destroy(vfilter);
 			}
 #endif
 			++(*bands);

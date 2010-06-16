@@ -532,9 +532,9 @@ typedef struct {
 	/* The packet iterator for this tile. */
 	jpc_pi_t *pi;
 
-  /* JMW hidden and caching */
-  int hidden;
-  int cache_index;
+	/* JMW hidden and caching */
+	int hidden;
+	int cache_index;
 
 } jpc_dec_tile_t;
 
@@ -562,7 +562,7 @@ typedef struct {
 
 	/* The sample alignment horizontal offset. */
 	uint_fast32_t hsubstep;
-
+	
 	/* The sample alignment vertical offset. */
 	uint_fast32_t vsubstep;
 
@@ -663,8 +663,8 @@ typedef struct {
 	/* This is required by the tier-2 decoder. */
 	jpc_cstate_t *cstate;
 
-  // JMW
-  int xcsoar; // xcsoar progressive import mode
+	// JMW
+	int xcsoar; // xcsoar progressive import mode
 } jpc_dec_t;
 
 /* Decoder options. */
@@ -680,7 +680,7 @@ typedef struct {
 	/* The maximum number of packets to decode. */
 	int maxpkts;
 
-  int xcsoar; // xcsoar progressive import mode
+	int xcsoar; // xcsoar progressive import mode
 } jpc_dec_importopts_t;
 
 /******************************************************************************\

@@ -154,7 +154,7 @@ int jpc_enc_encpkts(jpc_enc_t *enc, jas_stream_t *out)
 			}
 		}
 	}
-
+	
 	return 0;
 }
 
