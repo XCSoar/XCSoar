@@ -1,4 +1,4 @@
-CXX_FEATURES = -fno-exceptions 
+CXX_FEATURES = -fno-exceptions -fno-rtti
 
 ifneq ($(TARGET),WINE)
 C_FEATURES = -std=gnu99
