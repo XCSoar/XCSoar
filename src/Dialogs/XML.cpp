@@ -190,9 +190,8 @@ GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
   *X = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("X")), 0),
                        eDialogStyle);
   *Y = StringToIntDflt(Node->getAttribute(_T("Y")), 0);
-  if (*Y >= 0) { // not -1
+  if (*Y != -1)
     (*Y) = Layout::Scale(*Y);
-  }
 
   // Calculate width and height
   *Width = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("Width")), 50),
@@ -617,10 +616,14 @@ LoadChild(WndForm &form, ContainerControl &Parent,
   GetDefaultWindowControlProps(&node, Name, &X, &Y, &Width, &Height,
                                &Font, Caption, eDialogStyle);
 
-  if (Width <= 0 || Height <= 0) {
+  if (X < -1 || Y < -1 || Width <= 0 || Height <= 0) {
     /* a non-positive width/height specifies the distance from the
        right/bottom border of the parent */
     RECT rc = Parent.GetClientAreaWindow().get_client_rect();
+    if (X < -1)
+      X += rc.right;
+    if (Y < -1)
+      Y += rc.bottom;
     if (Width <= 0)
       Width += rc.right - X;
     if (Height <= 0)

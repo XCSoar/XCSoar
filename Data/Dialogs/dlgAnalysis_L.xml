@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm Width="240" Height="320" Caption="Analysis">
-  <WndOwnerDrawFrame Name="frmGrid" X="1" Y="1" Width="-1" Height="200" Font="0" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnAnalysisPaint" />
+  <WndOwnerDrawFrame Name="frmGrid" X="1" Y="1" Width="-1" Height="-92" Font="0" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnAnalysisPaint" />
 
-  <WndFrame Name="frmInfo" X="90" Y="205" Width="130" Height="100" Font="2"/>
+  <WndFrame Name="frmInfo" X="90" Y="-90" Width="130" Height="88" Font="2"/>
 
-  <WndButton Name="cmdCalc" Caption="Calc" X="5" Y="210" Width="80" Height="28" Font="2" OnClick="OnCalcClicked" />
+  <WndButton Name="cmdCalc" Caption="Calc" X="5" Y="-90" Width="80" Height="28" Font="2" OnClick="OnCalcClicked" />
 
-  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="48" Y="240" Width="37" Height="28" Font="3" OnClick="OnNextClicked" />
+  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="48" Y="-60" Width="37" Height="28" Font="3" OnClick="OnNextClicked" />
 
-  <WndSymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="240" Width="37" Height="28" Font="3" OnClick="OnPrevClicked" />
+  <WndSymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="-60" Width="37" Height="28" Font="3" OnClick="OnPrevClicked" />
 
-  <WndButton Name="cmdClose" Caption="Close" X="5" Y="270" Width="80" Height="28" Font="2" />
+  <WndButton Name="cmdClose" Caption="Close" X="5" Y="-30" Width="80" Height="28" Font="2" />
 </WndForm>
