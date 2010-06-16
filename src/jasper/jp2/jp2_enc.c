@@ -399,7 +399,7 @@ int jp2_encode(jas_image_t *image, jas_stream_t *out, const char *optstr)
 
     memcpy( uuid_box->data.uuid.uuid, msi_uuid2, sizeof(msi_uuid2) );
     uuid_box->data.uuid.data_len = image->aux_buf.size;
-    uuid_box->data.uuid.data = (uint_fast8_t *)jas_malloc( image->aux_buf.size );
+    uuid_box->data.uuid.data = jas_malloc( image->aux_buf.size );
     memcpy( uuid_box->data.uuid.data, image->aux_buf.buf, image->aux_buf.size );
 
     if (uuid_box) {

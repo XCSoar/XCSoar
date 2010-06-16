@@ -188,7 +188,7 @@ jp2_box_t *jp2_box_create(int type)
 	jp2_box_t *box;
 	jp2_boxinfo_t *boxinfo;
 
-	if (!(box = (jp2_box_t *) jas_malloc(sizeof(jp2_box_t)))) {
+	if (!(box = jas_malloc(sizeof(jp2_box_t)))) {
 		return 0;
 	}
 	memset(box, 0, sizeof(jp2_box_t));
@@ -248,7 +248,7 @@ jp2_box_t *jp2_box_get(jas_stream_t *in)
 	box = 0;
 	tmpstream = 0;
 
-	if (!(box = (jp2_box_t *) jas_malloc(sizeof(jp2_box_t)))) {
+	if (!(box = jas_malloc(sizeof(jp2_box_t)))) {
 		goto error;
 	}
 	box->ops = &jp2_boxinfo_unk.ops;
@@ -353,7 +353,7 @@ static int jp2_bpcc_getdata(jp2_box_t *box, jas_stream_t *in)
 	jp2_bpcc_t *bpcc = &box->data.bpcc;
 	unsigned int i;
 	bpcc->numcmpts = box->len - JP2_BOX_HDRLEN;
-	if (!(bpcc->bpcs = (uint_fast8_t *) jas_malloc(bpcc->numcmpts * sizeof(uint_fast8_t)))) {
+	if (!(bpcc->bpcs = jas_malloc(bpcc->numcmpts * sizeof(uint_fast8_t)))) {
 		return -1;
 	}
 	for (i = 0; i < bpcc->numcmpts; ++i) {
@@ -383,7 +383,7 @@ static int jp2_colr_getdata(jp2_box_t *box, jas_stream_t *in)
 		break;
 	case JP2_COLR_ICC:
 		colr->iccplen = box->len - JP2_BOX_HDRLEN - 3;
-		if (!(colr->iccp = (uint_fast8_t *) jas_malloc(colr->iccplen * sizeof(uint_fast8_t)))) {
+		if (!(colr->iccp = jas_malloc(colr->iccplen * sizeof(uint_fast8_t)))) {
 			return -1;
 		}
 		if (jas_stream_read(in, colr->iccp, colr->iccplen) != colr->iccplen) {
@@ -410,7 +410,7 @@ static int jp2_cdef_getdata(jp2_box_t *box, jas_stream_t *in)
 	if (jp2_getuint16(in, &cdef->numchans)) {
 		return -1;
 	}
-	if (!(cdef->ents = (jp2_cdefchan_t *) jas_malloc(cdef->numchans * sizeof(jp2_cdefchan_t)))) {
+	if (!(cdef->ents = jas_malloc(cdef->numchans * sizeof(jp2_cdefchan_t)))) {
 		return -1;
 	}
 	for (channo = 0; channo < cdef->numchans; ++channo) {
@@ -718,7 +718,7 @@ static int jp2_cmap_getdata(jp2_box_t *box, jas_stream_t *in)
 	unsigned int i;
 
 	cmap->numchans = (box->len - JP2_BOX_HDRLEN) / 4;
-	if (!(cmap->ents = (jp2_cmapent_t *) jas_malloc(cmap->numchans * sizeof(jp2_cmapent_t)))) {
+	if (!(cmap->ents = jas_malloc(cmap->numchans * sizeof(jp2_cmapent_t)))) {
 		return -1;
 	}
 	for (i = 0; i < cmap->numchans; ++i) {
@@ -767,10 +767,10 @@ static int jp2_pclr_getdata(jp2_box_t *box, jas_stream_t *in)
 		return -1;
 	}
 	lutsize = pclr->numlutents * pclr->numchans;
-	if (!(pclr->lutdata = (int_fast32_t *) jas_malloc(lutsize * sizeof(int_fast32_t)))) {
+	if (!(pclr->lutdata = jas_malloc(lutsize * sizeof(int_fast32_t)))) {
 		return -1;
 	}
-	if (!(pclr->bpc = (uint_fast8_t *) jas_malloc(pclr->numchans * sizeof(uint_fast8_t)))) {
+	if (!(pclr->bpc = jas_malloc(pclr->numchans * sizeof(uint_fast8_t)))) {
 		return -1;
 	}
 	for (i = 0; i < pclr->numchans; ++i) {
@@ -823,7 +823,7 @@ static int jp2_uuid_getdata(jp2_box_t *box, jas_stream_t *in)
 	}
 
 	uuid->data_len = box->data_len - 16;
-	uuid->data = (uint_fast8_t *) jas_malloc(uuid->data_len * sizeof(uint_fast8_t));
+	uuid->data = jas_malloc(uuid->data_len * sizeof(uint_fast8_t));
 	for (i = 0; i < (int)uuid->data_len; i++)
 	{
 	    if (jp2_getuint8(in, &uuid->data[i]))

@@ -140,7 +140,7 @@ static jas_stream_t *jas_stream_create()
 {
 	jas_stream_t *stream;
 
-	if (!(stream = (jas_stream_t *) jas_malloc(sizeof(jas_stream_t)))) {
+	if (!(stream = jas_malloc(sizeof(jas_stream_t)))) {
 		return 0;
 	}
 	stream->openmode_ = 0;
@@ -181,7 +181,7 @@ jas_stream_t *jas_stream_memopen(char *buf, int bufsize)
 	stream->ops_ = &jas_stream_memops;
 
 	/* Allocate memory for the underlying memory stream object. */
-	if (!(obj = (jas_stream_memobj_t *) jas_malloc(sizeof(jas_stream_memobj_t)))) {
+	if (!(obj = jas_malloc(sizeof(jas_stream_memobj_t)))) {
 		jas_stream_destroy(stream);
 		return 0;
 	}
@@ -203,7 +203,7 @@ jas_stream_t *jas_stream_memopen(char *buf, int bufsize)
 	if (buf) {
 		obj->buf_ = (unsigned char *) buf;
 	} else {
-		obj->buf_ = (unsigned char *) jas_malloc(obj->bufsize_ * sizeof(char));
+		obj->buf_ = jas_malloc(obj->bufsize_ * sizeof(char));
 		obj->myalloc_ = 1;
 	}
 	if (!obj->buf_) {
@@ -260,7 +260,7 @@ jas_stream_t *jas_stream_fopen(const char *filename, const char *mode)
 	}
 
 	/* Allocate space for the underlying file stream object. */
-	if (!(obj = (jas_stream_fileobj_t *) jas_malloc(sizeof(jas_stream_fileobj_t)))) {
+	if (!(obj = jas_malloc(sizeof(jas_stream_fileobj_t)))) {
 		jas_stream_destroy(stream);
 		return 0;
 	}
@@ -307,7 +307,7 @@ jas_stream_t *jas_stream_tmpfile()
 	stream->openmode_ = JAS_STREAM_READ | JAS_STREAM_WRITE | JAS_STREAM_BINARY;
 
 	/* Allocate memory for the underlying temporary file object. */
-	if (!(obj = (jas_stream_fileobj_t *) jas_malloc(sizeof(jas_stream_fileobj_t)))) {
+	if (!(obj = jas_malloc(sizeof(jas_stream_fileobj_t)))) {
 		jas_stream_destroy(stream);
 		return 0;
 	}
@@ -383,7 +383,7 @@ jas_stream_t *jas_stream_fdopen(int fd, const char *mode)
 #endif
 
 	/* Allocate space for the underlying file stream object. */
-	if (!(obj = (jas_stream_fileobj_t *) jas_malloc(sizeof(jas_stream_fileobj_t)))) {
+	if (!(obj = jas_malloc(sizeof(jas_stream_fileobj_t)))) {
 		jas_stream_destroy(stream);
 		return 0;
 	}
@@ -469,7 +469,7 @@ int jas_stream_read(jas_stream_t *stream, void *buf, int cnt)
 	int c;
 	char *bufptr;
 
-	bufptr = (char *)buf;
+	bufptr = buf;
 
 	n = 0;
 	while (n < cnt) {
@@ -488,7 +488,7 @@ int jas_stream_write(jas_stream_t *stream, const void *buf, int cnt)
 	int n;
 	const char *bufptr;
 
-	bufptr = (const char *) buf;
+	bufptr = buf;
 
 	n = 0;
 	while (n < cnt) {
@@ -664,7 +664,7 @@ static void jas_stream_initbuf(jas_stream_t *stream, int bufmode, char *buf,
 		if (!buf) {
 			/* The caller has not specified a buffer to employ, so allocate
 			  one. */
-			if ((stream->bufbase_ = (unsigned char *)jas_malloc(JAS_STREAM_BUFSIZE +
+			if ((stream->bufbase_ = jas_malloc(JAS_STREAM_BUFSIZE +
 			  JAS_STREAM_MAXPUTBACK))) {
 				stream->bufmode_ |= JAS_STREAM_FREEBUF;
 				stream->bufsize_ = JAS_STREAM_BUFSIZE;
@@ -900,7 +900,7 @@ static int mem_resize(jas_stream_memobj_t *m, int bufsize)
 	unsigned char *buf;
 
 	assert(m->buf_);
-	if (!(buf = (unsigned char *) jas_realloc(m->buf_, bufsize * sizeof(unsigned char)))) {
+	if (!(buf = jas_realloc(m->buf_, bufsize * sizeof(unsigned char)))) {
 		return -1;
 	}
 	m->buf_ = buf;
