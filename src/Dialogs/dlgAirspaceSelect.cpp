@@ -451,7 +451,6 @@ PrepareAirspaceSelectDialog()
   gcc_unused ScopeBusyIndicator busy;
 
   UpLimit = 0;
-  GEOPOINT Location = XCSoarInterface::Basic().Location;
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
@@ -484,12 +483,6 @@ PrepareAirspaceSelectDialog()
   wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
   wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
 
-  AirspaceSorter g_airspace_sorter(airspace_ui, Location, fixed(
-      Units::ToUserUnit(1, Units::DistanceUnit)));
-  airspace_sorter = &g_airspace_sorter;
-
-  UpdateList();
-
   wf->SetTimerNotify(OnTimerNotify);
 }
 
@@ -497,6 +490,13 @@ void
 dlgAirspaceSelect()
 {
   PrepareAirspaceSelectDialog();
+
+  GEOPOINT Location = XCSoarInterface::Basic().Location;
+  AirspaceSorter g_airspace_sorter(airspace_ui, Location, fixed(
+      Units::ToUserUnit(1, Units::DistanceUnit)));
+  airspace_sorter = &g_airspace_sorter;
+
+  UpdateList();
 
   wf->ShowModal();
 
