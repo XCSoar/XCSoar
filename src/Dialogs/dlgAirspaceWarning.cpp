@@ -81,6 +81,27 @@ GetSelectedAirspace()
     : FocusAirspace;
 }
 
+static bool
+HasWarning()
+{
+  for (unsigned i = 0; i < airspace_ui.warning_size(); ++i) {
+    const AirspaceWarning *warning = airspace_ui.get_warning(i);
+    if (warning != NULL && warning->get_ack_expired())
+      return true;
+  }
+
+  return false;
+}
+
+static void
+AutoHide()
+{
+  if (!HasWarning()) {
+    wf->hide();
+    wf->SetModalResult(mrOK);
+  }
+}
+
 /** ack inside */
 static void OnAckClicked(WindowControl * Sender){
   (void)Sender;
@@ -89,6 +110,7 @@ static void OnAckClicked(WindowControl * Sender){
   if (airspace != NULL) {
     airspace_ui.acknowledge_inside(*airspace, true);
     wAirspaceList->invalidate();
+    AutoHide();
   }
 }
 
@@ -100,6 +122,7 @@ static void OnAck1Clicked(WindowControl * Sender){
   if (airspace != NULL) {
     airspace_ui.acknowledge_warning(*airspace, true);
     wAirspaceList->invalidate();
+    AutoHide();
   }
 }
 
@@ -111,6 +134,7 @@ static void OnAck2Clicked(WindowControl * Sender){
   if (airspace != NULL) {
     airspace_ui.acknowledge_day(*airspace, true);
     wAirspaceList->invalidate();
+    AutoHide();
   }
 }
 
