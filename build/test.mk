@@ -37,7 +37,8 @@ testfast: $(TESTFAST)
 
 TESTLIBS = $(HARNESS_LIBS) \
 	   $(ZZIP_LIBS) \
-	   $(ENGINE_CORE_LIBS)
+	$(ENGINE_CORE_LIBS) \
+	$(UTIL_LIBS)
 
 ifeq ($(HAVE_WIN32),n)
 TEST_CPPFLAGS += -DDO_PRINT
@@ -133,7 +134,6 @@ $(TARGET_BIN_DIR)/RunTextWriter$(TARGET_EXEEXT): $(RUN_TEXT_WRITER_OBJS) $(RUN_T
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 READ_PROFILE_STRING_SOURCES = \
-	$(SRC)/StringUtil.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
@@ -141,13 +141,12 @@ READ_PROFILE_STRING_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/ReadProfileString.cpp
 READ_PROFILE_STRING_OBJS = $(call SRC_TO_OBJ,$(READ_PROFILE_STRING_SOURCES))
-READ_PROFILE_STRING_LDADD = $(IO_LIBS)
+READ_PROFILE_STRING_LDADD = $(IO_LIBS) $(UTIL_LIBS)
 $(TARGET_BIN_DIR)/ReadProfileString$(TARGET_EXEEXT): $(READ_PROFILE_STRING_OBJS) $(READ_PROFILE_STRING_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 READ_PROFILE_INT_SOURCES = \
-	$(SRC)/StringUtil.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
@@ -155,13 +154,12 @@ READ_PROFILE_INT_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/ReadProfileInt.cpp
 READ_PROFILE_INT_OBJS = $(call SRC_TO_OBJ,$(READ_PROFILE_INT_SOURCES))
-READ_PROFILE_INT_LDADD = $(IO_LIBS)
+READ_PROFILE_INT_LDADD = $(IO_LIBS) $(UTIL_LIBS)
 $(TARGET_BIN_DIR)/ReadProfileInt$(TARGET_EXEEXT): $(READ_PROFILE_INT_OBJS) $(READ_PROFILE_INT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 WRITE_PROFILE_STRING_SOURCES = \
-	$(SRC)/StringUtil.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
@@ -169,13 +167,12 @@ WRITE_PROFILE_STRING_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/WriteProfileString.cpp
 WRITE_PROFILE_STRING_OBJS = $(call SRC_TO_OBJ,$(WRITE_PROFILE_STRING_SOURCES))
-WRITE_PROFILE_STRING_LDADD = $(IO_LIBS)
+WRITE_PROFILE_STRING_LDADD = $(IO_LIBS) $(UTIL_LIBS)
 $(TARGET_BIN_DIR)/WriteProfileString$(TARGET_EXEEXT): $(WRITE_PROFILE_STRING_OBJS) $(WRITE_PROFILE_STRING_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 WRITE_PROFILE_INT_SOURCES = \
-	$(SRC)/StringUtil.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
@@ -183,7 +180,7 @@ WRITE_PROFILE_INT_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/WriteProfileInt.cpp
 WRITE_PROFILE_INT_OBJS = $(call SRC_TO_OBJ,$(WRITE_PROFILE_INT_SOURCES))
-WRITE_PROFILE_INT_LDADD = $(IO_LIBS)
+WRITE_PROFILE_INT_LDADD = $(IO_LIBS) $(UTIL_LIBS)
 $(TARGET_BIN_DIR)/WriteProfileInt$(TARGET_EXEEXT): $(WRITE_PROFILE_INT_OBJS) $(WRITE_PROFILE_INT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
@@ -245,12 +242,10 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
 	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
 	$(SRC)/WayPoint/WayPointFileZander.cpp \
-	$(SRC)/StringUtil.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/LocalPath.cpp \
-	$(SRC)/StringUtil.cpp \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/Compatibility/fmode.c \
@@ -269,6 +264,7 @@ RUN_WAY_POINT_PARSER_LDADD = \
 	$(ENGINE_LIBS) \
 	$(IO_LIBS) \
 	$(ZZIP_LIBS) \
+	$(UTIL_LIBS) \
 	$(COMPAT_LIBS)
 $(TARGET_BIN_DIR)/RunWayPointParser$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS) $(RUN_WAY_POINT_PARSER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
@@ -276,7 +272,6 @@ $(TARGET_BIN_DIR)/RunWayPointParser$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS
 
 RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
-	$(SRC)/StringUtil.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/Device/Driver.cpp \
@@ -304,6 +299,7 @@ RUN_DEVICE_DRIVER_LDADD = \
 	$(ZZIP_LIBS) \
 	$(ENGINE_LIBS) \
 	$(DRIVER_LIBS) \
+	$(UTIL_LIBS) \
 	$(COMPAT_LIBS)
 $(TARGET_BIN_DIR)/RunDeviceDriver$(TARGET_EXEEXT): $(RUN_DEVICE_DRIVER_OBJS) $(RUN_DEVICE_DRIVER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
@@ -388,7 +384,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Screen/shapelib/mapxbase.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \
-	$(SRC)/StringUtil.cpp \
 	$(SRC)/TaskClient.cpp \
 	$(SRC)/TaskClientUI.cpp \
 	$(SRC)/Thread/Debug.cpp \
@@ -428,6 +423,7 @@ RUN_MAP_WINDOW_LDADD = \
 	$(JASPER_LIBS) \
 	$(IO_LIBS) \
 	$(ZZIP_LIBS) \
+	$(UTIL_LIBS) \
 	$(COMPAT_LIBS) \
 	$(RESOURCE_BINARY)
 $(RUN_MAP_WINDOW_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
@@ -492,7 +488,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Registry.cpp \
 	$(SRC)/LocalPath.cpp \
-	$(SRC)/StringUtil.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
@@ -520,6 +515,7 @@ RUN_AIRSPACE_WARNING_DIALOG_LDADD = \
 	$(ENGINE_LIBS) \
 	$(IO_LIBS) \
 	$(ZZIP_LIBS) \
+	$(UTIL_LIBS) \
 	$(COMPAT_LIBS) \
 	$(RESOURCE_BINARY)
 $(RUN_AIRSPACE_WARNING_DIALOG_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
@@ -555,7 +551,6 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Registry.cpp \
 	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/LocalPath.cpp \
-	$(SRC)/StringUtil.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
@@ -584,6 +579,7 @@ RUN_TASK_EDITOR_DIALOG_LDADD = \
 	$(ENGINE_LIBS) \
 	$(IO_LIBS) \
 	$(ZZIP_LIBS) \
+	$(UTIL_LIBS) \
 	$(COMPAT_LIBS) \
 	$(RESOURCE_BINARY)
 $(RUN_TASK_EDITOR_DIALOG_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)

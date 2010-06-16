@@ -62,6 +62,7 @@ include $(topdir)/build/generate.mk
 include $(topdir)/build/doco.mk
 
 # Create libraries for zzip, jasper and compatibility stuff
+include $(topdir)/build/libutil.mk
 include $(topdir)/build/zzip.mk
 include $(topdir)/build/jasper.mk
 include $(topdir)/build/compat.mk
@@ -293,7 +294,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Interface.cpp \
 	$(SRC)/LocalTime.cpp \
 	$(SRC)/Units.cpp \
-	$(SRC)/StringUtil.cpp \
 	$(SRC)/UtilsFLARM.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsFont.cpp \
@@ -376,6 +376,7 @@ XCSOAR_LDADD = \
 	$(JASPER_LIBS) \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS) \
+	$(UTIL_LIBS) \
 	$(RESOURCE_BINARY)
 
 XCSOARSETUP_SOURCES = \
