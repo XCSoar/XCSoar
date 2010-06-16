@@ -735,10 +735,10 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     style.tab_stop();
 
-    WC = new WndButton(Parent, Caption, X, Y, Width, Height,
-                       style, ClickCallback);
-
-    Caption[0] = '\0';
+    window = new WndButton(Parent.GetClientAreaWindow(), Caption,
+                           X, Y, Width, Height,
+                           style, Parent.GetBackColor(),
+                           ClickCallback);
 
   // SymbolButtonControl (WndSymbolButton) not used yet
   } else if (_tcscmp(node.getName(), _T("WndSymbolButton")) == 0) {
@@ -753,10 +753,10 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     style.tab_stop();
 
-    WC = new WndSymbolButton(Parent, Caption, X, Y, Width, Height,
-                             style, ClickCallback);
-
-    Caption[0] = '\0';
+    window = new WndSymbolButton(Parent.GetClientAreaWindow(), Caption,
+                                 X, Y, Width, Height,
+                                 style, Parent.GetBackColor(),
+                                 ClickCallback);
 
 #ifndef ALTAIRSYNC
   // EventButtonControl (WndEventButton) not used yet
@@ -772,11 +772,10 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     style.tab_stop();
 
-    WC = new WndEventButton(Parent, Caption, X, Y, Width, Height,
-                            style,
-                            iename, ieparameters);
-
-    Caption[0] = '\0';
+    window = new WndEventButton(Parent.GetClientAreaWindow(), Caption,
+                                X, Y, Width, Height,
+                                style, Parent.GetBackColor(),
+                                iename, ieparameters);
 #endif
 
   // PanelControl (WndPanel)

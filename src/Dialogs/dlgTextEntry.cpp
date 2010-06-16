@@ -184,25 +184,25 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
 static void
 OnLeftClicked(WndButton &button)
 {
-  FormKeyDown(&button, VK_LEFT);
+  FormKeyDown(NULL, VK_LEFT);
 }
 
 static void
 OnRightClicked(WndButton &button)
 {
-  FormKeyDown(&button, VK_RIGHT);
+  FormKeyDown(NULL, VK_RIGHT);
 }
 
 static void
 OnUpClicked(WndButton &button)
 {
-  FormKeyDown(&button, VK_UP);
+  FormKeyDown(NULL, VK_UP);
 }
 
 static void
 OnDownClicked(WndButton &button)
 {
-  FormKeyDown(&button, VK_DOWN);
+  FormKeyDown(NULL, VK_DOWN);
 }
 
 static CallBackTableEntry_t CallBackTable[] = {

@@ -37,31 +37,31 @@ Copyright_License {
 */
 
 #include "Form/Button.hpp"
-#include "Form/Container.hpp"
+#include "Form/Control.hpp"
 #include "Screen/Animation.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Fonts.hpp"
 #include "Interface.hpp"
 
-WndButton::WndButton(ContainerControl &parent,
+WndButton::WndButton(ContainerWindow &parent,
     const TCHAR *Caption, int X, int Y, int Width, int Height,
                      const WindowStyle style,
+                     Color background_color,
     ClickNotifyCallback_t Function) :
-  WindowControl(&parent.GetClientAreaWindow(), X, Y, Width, Height, style),
+  text_color(Color::BLACK),
+  background_brush(background_color),
   mDown(false),
   mLastDrawTextHeight(-1),
   mOnClickNotify(Function)
 {
-  // initial fore- and background color should be derived
-  // from the parent control
-  SetForeColor(parent.GetForeColor());
-  SetBackColor(parent.GetBackColor());
-
   // copy the buttons initial caption to the mCaption field
   _tcscpy(mCaption, Caption);
 
 #if defined(WIN32) && !defined(NDEBUG)
   ::SetWindowText(hWnd, Caption);
 #endif
+
+  set(parent, X, Y, Width, Height, style);
 }
 
 void
@@ -73,11 +73,27 @@ WndButton::on_click()
 }
 
 bool
+WndButton::on_setfocus()
+{
+  PaintWindow::on_setfocus();
+  invalidate();
+  return true;
+}
+
+bool
+WndButton::on_killfocus()
+{
+  PaintWindow::on_killfocus();
+  invalidate();
+  return true;
+}
+
+bool
 WndButton::on_mouse_up(int x, int y)
 {
   // If button does not have capture -> call parent function
   if (!has_capture())
-    return WindowControl::on_mouse_up(x, y);
+    return PaintWindow::on_mouse_up(x, y);
 
   release_capture();
 
@@ -126,7 +142,7 @@ WndButton::on_mouse_move(int x, int y, unsigned keys)
 {
   // If button does not have capture -> call parent function
   if (!has_capture())
-    return WindowControl::on_mouse_move(x, y, keys);
+    return PaintWindow::on_mouse_move(x, y, keys);
 
   // If button is currently pressed and mouse cursor is moving on top of it
   bool in = in_client_rect(x, y);
@@ -169,7 +185,7 @@ WndButton::on_key_down(unsigned key_code)
   }
 
   // If key_down hasn't been handled yet -> call parent function
-  return WindowControl::on_key_down(key_code);
+  return PaintWindow::on_key_down(key_code);
 }
 
 bool
@@ -203,7 +219,7 @@ WndButton::on_key_up(unsigned key_code)
   }
 
   // If key_down hasn't been handled yet -> call parent function
-  return WindowControl::on_key_up(key_code);
+  return PaintWindow::on_key_up(key_code);
 }
 
 void
@@ -211,10 +227,10 @@ WndButton::on_paint(Canvas &canvas)
 {
   /* background and selector */
   RECT rc = get_client_rect();
-  canvas.fill_rectangle(rc, GetBackBrush());
+  canvas.fill_rectangle(rc, background_brush);
 
   if (has_focus())
-    PaintSelector(canvas, get_client_rect());
+    WindowControl::PaintSelector(canvas, get_client_rect());
 
   // Get button RECT and shrink it to make room for the selector/focus
   InflateRect(&rc, -2, -2); // todo border width
@@ -229,11 +245,11 @@ WndButton::on_paint(Canvas &canvas)
     return;
 
   // Set drawing colors
-  canvas.set_text_color(GetForeColor());
+  canvas.set_text_color(text_color);
   canvas.background_transparent();
 
   // Set drawing font
-  canvas.select(*GetFont());
+  canvas.select(MapWindowBoldFont);
 
   if (mLastDrawTextHeight < 0) {
     // Calculate the text height and save it for the future
@@ -259,7 +275,8 @@ WndButton::on_paint(Canvas &canvas)
 void
 WndButton::SetCaption(const TCHAR *Value)
 {
-  WindowControl::SetCaption(Value);
+  _tcscpy(mCaption, Value);
   mLastDrawTextHeight = -1;
+  invalidate();
 }
 

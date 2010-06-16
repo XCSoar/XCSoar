@@ -58,7 +58,8 @@ public:
                     int X, int Y, int Width, int Height,
                     const WindowStyle style,
                     WndForm &_form, int _result)
-    :WndButton(Parent, Caption, X, Y, Width, Height, style),
+    :WndButton(Parent.GetClientAreaWindow(), Caption, X, Y, Width, Height,
+               style, Parent.GetBackColor()),
      form(_form), result(_result) {}
 
 protected:
@@ -198,7 +199,6 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   // Move buttons to the right positions
   for (i = 0; i < ButtonCount; i++) {
-    wButtons[i]->SetFont(&MapWindowBoldFont);
     wButtons[i]->move(x, y);
     x += d;
   }

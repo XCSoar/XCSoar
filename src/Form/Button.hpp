@@ -39,17 +39,22 @@ Copyright_License {
 #ifndef XCSOAR_FORM_BUTTON_HPP
 #define XCSOAR_FORM_BUTTON_HPP
 
-#include "Form/Control.hpp"
+#include "Screen/PaintWindow.hpp"
 
-class ContainerControl;
+class ContainerWindow;
 
 /**
  * This class is used for creating buttons.
  * It is based on the WindowControl class.
  */
-class WndButton : public WindowControl {
+class WndButton : public PaintWindow {
 public:
   typedef void (*ClickNotifyCallback_t)(WndButton &button);
+
+protected:
+  Color text_color;
+  Brush background_brush;
+  TCHAR mCaption[254];
 
 public:
   /**
@@ -63,9 +68,10 @@ public:
    * @param Function The function that should be called
    * when the button is clicked
    */
-  WndButton(ContainerControl &parent, const TCHAR *Caption,
+  WndButton(ContainerWindow &parent, const TCHAR *Caption,
       int X, int Y, int Width, int Height,
             const WindowStyle style,
+            Color background_color,
       ClickNotifyCallback_t Function = NULL);
 
   /**
@@ -83,7 +89,12 @@ public:
    * (derived from WindowControl)
    * @param Value The new Caption/Text of the Control
    */
-  virtual void SetCaption(const TCHAR *Value);
+  void SetCaption(const TCHAR *Value);
+
+  void SetForeColor(Color color) {
+    text_color = color;
+    invalidate();
+  }
 
 protected:
   /**
@@ -92,6 +103,9 @@ protected:
    * callback.
    */
   virtual void on_click();
+
+  virtual bool on_setfocus();
+  virtual bool on_killfocus();
 
   /**
    * The on_mouse_up event is called when the mouse is released over the button

@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Form/SymbolButton.hpp"
-#include "Form/Container.hpp"
 #include "Screen/Animation.hpp"
 #include "Screen/Layout.hpp"
 #include "Interface.hpp"
@@ -50,10 +49,10 @@ WndSymbolButton::on_paint(Canvas &canvas)
 {
   /* background and selector */
   RECT rc = get_client_rect();
-  canvas.fill_rectangle(rc, GetBackBrush());
+  canvas.fill_rectangle(rc, background_brush);
 
   if (has_focus())
-    PaintSelector(canvas, get_client_rect());
+    WindowControl::PaintSelector(canvas, get_client_rect());
 
   // Get button RECT and shrink it to make room for the selector/focus
   InflateRect(&rc, -2, -2); // todo border width
@@ -69,9 +68,9 @@ WndSymbolButton::on_paint(Canvas &canvas)
   if (mDown)
     OffsetRect(&rc, Layout::FastScale(1), Layout::FastScale(1));
 
-  const Pen p(0, GetForeColor());
+  const Pen p(0, text_color);
   canvas.select(p);
-  const Brush b(GetForeColor());
+  const Brush b(text_color);
   canvas.select(b);
 
   // Draw arrow symbols instead of < and >

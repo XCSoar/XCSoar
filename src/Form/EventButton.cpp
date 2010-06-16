@@ -64,14 +64,15 @@ WndEventButton::~WndEventButton() {
 }
 
 
-WndEventButton::WndEventButton(ContainerControl &Parent,
+WndEventButton::WndEventButton(ContainerWindow &Parent,
 			       const TCHAR *Caption,
 			       int X, int Y, int Width, int Height,
                                const WindowStyle style,
+                               Color background_color,
 			       const TCHAR* ename,
 			       const TCHAR* theparameters):
   WndButton(Parent, Caption, X, Y, Width, Height,
-            style,
+            style, background_color,
 	    WndEventButton_OnClickNotify)
 {
   inputEvent = InputEvents::findEvent(ename);
