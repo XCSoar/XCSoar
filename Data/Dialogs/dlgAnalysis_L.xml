@@ -7,9 +7,8 @@
 
   <WndButton Name="cmdCalc" Caption="Calc" X="5" Y="-90" Width="80" Height="28" Font="2" OnClick="OnCalcClicked" />
 
-  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="48" Y="-60" Width="37" Height="28" Font="3" OnClick="OnNextClicked" />
-
   <WndSymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="-60" Width="37" Height="28" Font="3" OnClick="OnPrevClicked" />
+  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="48" Y="-60" Width="37" Height="28" Font="3" OnClick="OnNextClicked" />
 
   <WndButton Name="cmdClose" Caption="Close" X="5" Y="-30" Width="80" Height="28" Font="2" />
 </WndForm>
