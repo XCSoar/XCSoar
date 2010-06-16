@@ -490,12 +490,10 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const TCHAR *FileName,
   // Correct dialog size and position for dialog style
   switch (eDialogStyle) {
   case eDialogFullWidth:
-    X = rc.top;
-    Y = rc.bottom;
+    X = rc.left;
+    Y = rc.top;
     Width = rc.right - rc.left; // stretch form to full width of screen
     Height = rc.bottom - rc.top;
-    X = 0;
-    Y = 0;
     break;
   case eDialogScaled:
     break;
