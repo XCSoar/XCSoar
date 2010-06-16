@@ -546,6 +546,8 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, lpb bin_puffer,
   long temptime;
   long decl_time;
   tm firsttime;
+  memset(&firsttime, 0, sizeof(firsttime));
+
   tm realtime;
   byte Haupttyp;
   byte Untertyp;
@@ -1058,10 +1060,14 @@ conv_dir(DIRENTRY* flights, lpb p, int countonly)
   byte l; // length of DS
   lpb p2; // Pointer to the beginning of the content of a vrb or vrt
   tm olddate;
+  memset(&olddate, 0, sizeof(olddate));
+
   int olddate_flg = 0;
   int flight_of_day = 0;
   long temptime;
   tm timetm1;
+  memset(&timetm1, 0, sizeof(timetm1));
+
   int bfv = 0;
   number_of_flights = 0;
   char pilot1[17];
