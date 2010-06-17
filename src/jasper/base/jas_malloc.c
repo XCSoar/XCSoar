@@ -83,7 +83,7 @@
 \******************************************************************************/
 
 #if defined(DEBUG_MEMALLOC)
-//JMW#include "../../../local/src/memalloc.c"
+#include "../../../local/src/memalloc.c"
 #endif
 
 #if !defined(DEBUG_MEMALLOC)
