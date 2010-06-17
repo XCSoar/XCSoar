@@ -36,10 +36,11 @@ Copyright_License {
 }
 */
 
-#include "Form/List.hpp"
+#include "Form/ScrollBar.hpp"
 #include "Form/Internal.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Window.hpp"
 #include "resource.h"
 #include "Asset.hpp"
 
@@ -49,7 +50,7 @@ Copyright_License {
 
 using std::min;
 
-WndListFrame::ScrollBar::ScrollBar()
+ScrollBar::ScrollBar()
   :dragging(false)
 {
   // Reset the ScrollBar on creation
@@ -57,7 +58,7 @@ WndListFrame::ScrollBar::ScrollBar()
 }
 
 void
-WndListFrame::ScrollBar::set(const SIZE size)
+ScrollBar::set(const SIZE size)
 {
   unsigned width;
 
@@ -79,14 +80,14 @@ WndListFrame::ScrollBar::set(const SIZE size)
 }
 
 void
-WndListFrame::ScrollBar::reset()
+ScrollBar::reset()
 {
   SetRectEmpty(&rc);
   SetRectEmpty(&rc_slider);
 }
 
 void
-WndListFrame::ScrollBar::set_slider(unsigned size, unsigned view_size,
+ScrollBar::set_slider(unsigned size, unsigned view_size,
                                     unsigned origin)
 {
   const int netto_height = get_netto_height();
@@ -119,7 +120,7 @@ WndListFrame::ScrollBar::set_slider(unsigned size, unsigned view_size,
 }
 
 unsigned
-WndListFrame::ScrollBar::to_origin(unsigned size, unsigned view_size,
+ScrollBar::to_origin(unsigned size, unsigned view_size,
                                    int y) const
 {
   // Calculate highest origin (counted in ListItems)
@@ -136,7 +137,7 @@ WndListFrame::ScrollBar::to_origin(unsigned size, unsigned view_size,
 }
 
 void
-WndListFrame::ScrollBar::paint(Canvas &canvas) const
+ScrollBar::paint(Canvas &canvas) const
 {
   // Prepare Pen
   canvas.black_pen();
@@ -215,7 +216,7 @@ WndListFrame::ScrollBar::paint(Canvas &canvas) const
 }
 
 void
-WndListFrame::ScrollBar::drag_begin(Window *w, unsigned y)
+ScrollBar::drag_begin(Window *w, unsigned y)
 {
   // Make sure that we are not dragging already
   assert(!dragging);
@@ -228,7 +229,7 @@ WndListFrame::ScrollBar::drag_begin(Window *w, unsigned y)
 }
 
 void
-WndListFrame::ScrollBar::drag_end(Window *w)
+ScrollBar::drag_end(Window *w)
 {
   // If we are not dragging right now -> nothing to end
   if (!dragging)
@@ -240,7 +241,7 @@ WndListFrame::ScrollBar::drag_end(Window *w)
 }
 
 unsigned
-WndListFrame::ScrollBar::drag_move(unsigned size, unsigned view_size,
+ScrollBar::drag_move(unsigned size, unsigned view_size,
                                    int y) const
 {
   assert(dragging);
