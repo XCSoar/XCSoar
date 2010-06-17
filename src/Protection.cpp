@@ -64,12 +64,18 @@ Mutex mutexBlackboard;
  */
 void TriggerGPSUpdate()
 {
+  if (calculation_thread == NULL)
+    return;
+
   calculation_thread->trigger_gps();
   calculation_thread->trigger_data();
 }
 
 void TriggerVarioUpdate()
 {
+  if (instrument_thread == NULL)
+    return;
+
   instrument_thread->trigger_vario();
 }
 
