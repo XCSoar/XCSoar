@@ -76,7 +76,9 @@ DeviceDescriptor::Open()
   if (Driver == NULL)
     return false;
 
-  assert(Driver->CreateOnComPort != NULL);
+  assert(Driver->CreateOnComPort != NULL || Driver->Flags & drfNmeaOut);
+  if (Driver->CreateOnComPort == NULL)
+    return true;
 
   parser.Reset();
 
