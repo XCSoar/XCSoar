@@ -59,7 +59,7 @@ ReadAirspace(AirspaceClientUI &airspace,
     OpenConfiguredTextFile(szProfileAirspaceFile, _T("airspace.txt"));
   if (reader != NULL) {
     if (!airspace.read(*reader)) {
-      LogStartUp(TEXT("No airspace file 1"));
+      LogStartUp(_T("No airspace file 1"));
     } else {
       airspace_ok =  true;
     }
@@ -70,7 +70,7 @@ ReadAirspace(AirspaceClientUI &airspace,
   reader = OpenConfiguredTextFile(szProfileAdditionalAirspaceFile);
   if (reader != NULL) {
     if (!airspace.read(*reader)) {
-      LogStartUp(TEXT("No airspace file 2"));
+      LogStartUp(_T("No airspace file 2"));
     } else {
       airspace_ok = true;
     }
