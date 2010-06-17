@@ -435,3 +435,13 @@ WndListFrame::on_mouse_wheel(int delta)
 
   return true;
 }
+
+bool
+WndListFrame::on_cancel_mode()
+{
+  if (scroll_bar.is_dragging()) {
+    scroll_bar.drag_end(this);
+    return true;
+  } else
+    return false;
+}

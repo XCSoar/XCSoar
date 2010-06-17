@@ -371,6 +371,8 @@ protected:
    */
   virtual bool on_key_down(unsigned key_code);
 
+  virtual bool on_cancel_mode();
+
   /**
    * The on_paint event is called when the button needs to be drawn
    * (derived from PaintWindow)
