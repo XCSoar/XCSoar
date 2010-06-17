@@ -84,7 +84,7 @@ public:
   }
 
   void set_low_priority() {
-#ifdef WIN32
+#ifndef HAVE_POSIX
     ::SetThreadPriority(handle, THREAD_PRIORITY_LOWEST);
 #endif
   }
