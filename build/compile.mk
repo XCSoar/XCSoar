@@ -8,7 +8,7 @@ DLLTOOL = $(TCPATH)dlltool$(EXE)
 SIZE = $(TCPATH)size$(EXE)
 STRIP = $(TCPATH)strip$(EXE)
 WINDRES = $(TCPATH)windres$(EXE)
-ARFLAGS = r
+ARFLAGS = rc
 
 ifeq ($(CONFIG_WINE),y)
 AR = ar$(EXE)
