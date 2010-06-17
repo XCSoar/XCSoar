@@ -422,16 +422,6 @@ static void RefreshFonts(void) {
   // now fix the rest of the dlgConfiguration fonts:
   wf->SetFont(TempMapWindowBoldFont);
   wf->SetTitleFont(TempMapWindowBoldFont);
-
-  wp = (WndProperty*)wf->FindByName(_T("cmdNext"));
-  if (wp) {
-    wp->SetFont(TempCDIWindowFont);
-  }
-  wp = (WndProperty*)wf->FindByName(_T("cmdPrev"));
-  if (wp) {
-    wp->SetFont(TempCDIWindowFont);
-  }
-
 }
 
 
