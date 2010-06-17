@@ -358,19 +358,13 @@ WndListFrame::SelectItemFromScreen(int y, bool use_callback)
 bool
 WndListFrame::on_mouse_move(int x, int y, unsigned keys)
 {
-  // Make sure this method can not be called multiple times parallel
-  static bool bMoving = false;
-  if (!bMoving) {
-    bMoving = true;
-
-    // If we are currently dragging the ScrollBar slider
-    if (scroll_bar.is_dragging()) {
-      // -> Update ListBox origin
-      SetOrigin(scroll_bar.drag_move(length, items_visible, y));
-    }
-
-    bMoving = false;
+  // If we are currently dragging the ScrollBar slider
+  if (scroll_bar.is_dragging()) {
+    // -> Update ListBox origin
+    SetOrigin(scroll_bar.drag_move(length, items_visible, y));
+    return true;
   }
+
   return false;
 }
 
