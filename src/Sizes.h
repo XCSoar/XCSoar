@@ -36,22 +36,8 @@
 
 #define MAX_LOADSTRING 100
 
-// ratio of title font height to main font height
-#define TITLEFONTHEIGHTRATIO 0.333
-// ratio of title font width to main font width
-#define TITLEFONTWIDTHRATIO 0.345
-
-#define CDIFONTHEIGHTRATIO 0.6
-#define CDIFONTWIDTHRATIO 0.75
-
-#define MAPFONTHEIGHTRATIO 0.39
-#define MAPFONTWIDTHRATIO 0.39
-
 #define CONTROLHEIGHTRATIO 7.4
 #define TITLEHEIGHTRATIO 3.1
-
-#define STATISTICSFONTHEIGHTRATIO 0.7
-#define STATISTICSFONTWIDTHRATIO 0.7
 
 #define MENUBUTTONWIDTHRATIO 0.6
 
