@@ -327,6 +327,9 @@ WndListFrame::on_mouse_up(int x, int y)
   if (scroll_bar.is_dragging()) {
     scroll_bar.drag_end(this);
     return true;
+  } else if (dragging) {
+    drag_end();
+    return true;
   } else
     return PaintWindow::on_mouse_up(x, y);
 }
@@ -358,6 +361,15 @@ WndListFrame::SelectItemFromScreen(int y, bool use_callback)
   }
 }
 
+void
+WndListFrame::drag_end()
+{
+  if (dragging) {
+    dragging = false;
+    release_capture();
+  }
+}
+
 bool
 WndListFrame::on_mouse_move(int x, int y, unsigned keys)
 {
@@ -365,6 +377,12 @@ WndListFrame::on_mouse_move(int x, int y, unsigned keys)
   if (scroll_bar.is_dragging()) {
     // -> Update ListBox origin
     SetOrigin(scroll_bar.drag_move(length, items_visible, y));
+    return true;
+  } else if (dragging) {
+    int new_origin = drag_line - y / (int)item_height;
+    if (new_origin < 0)
+      new_origin = 0;
+    SetOrigin(new_origin);
     return true;
   }
 
@@ -376,6 +394,7 @@ WndListFrame::on_mouse_down(int x, int y)
 {
   // End any previous drag
   scroll_bar.drag_end(this);
+  drag_end();
 
   POINT Pos;
   Pos.x = x;
@@ -411,6 +430,10 @@ WndListFrame::on_mouse_down(int x, int y)
     // if click in ListBox area
     // -> select appropriate item
     SelectItemFromScreen(Pos.y, had_focus);
+
+    drag_line = origin + y / item_height;
+    dragging = true;
+    set_capture();
   }
 
   return true;
@@ -420,6 +443,7 @@ bool
 WndListFrame::on_mouse_wheel(int delta)
 {
   scroll_bar.drag_end(this);
+  drag_end();
 
   if (delta > 0) {
     // scroll up

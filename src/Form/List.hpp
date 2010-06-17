@@ -244,6 +244,9 @@ protected:
   /** The index of the selected item on the screen. */
   unsigned relative_cursor;
 
+  bool dragging;
+  int drag_line;
+
   ActivateCallback_t ActivateCallback;
   CursorCallback_t CursorCallback;
   PaintItemCallback_t PaintItemCallback;
@@ -328,6 +331,8 @@ protected:
    * @param yPos y-Coordinate
    */
   void SelectItemFromScreen(int y, bool use_callback);
+
+  void drag_end();
 
   /** Draws the ScrollBar */
   void DrawScrollBar(Canvas &canvas);
