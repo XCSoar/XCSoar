@@ -37,12 +37,11 @@ Copyright_License {
 */
 
 #include "Form/SymbolButton.hpp"
-#include "Screen/Animation.hpp"
+#include "Form/Control.hpp"
+#include "Screen/Bitmap.hpp"
+#include "Screen/BitmapCanvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Interface.hpp"
 #include "resource.h"
-#include "Dialogs/Internal.hpp"
-#include "MainWindow.hpp"
 
 void
 WndSymbolButton::on_paint(Canvas &canvas)
