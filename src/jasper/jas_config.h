@@ -117,30 +117,8 @@
 /* This identifies the version of JasPer. */
 #define	JAS_VERSION "1.700.2"
 
-/* The preprocessor symbol JAS_WIN_MSVC_BUILD should not be defined
-  unless the JasPer software is being built under Microsoft Windows
-  using Microsoft Visual C. */
-
-// JMW
-#ifdef _WIN32_WCE
-#define JAS_WIN_MSVC_BUILD
-#ifndef WIN32
-#define WIN32
-#endif
-#endif
-
-#ifndef WIN32
-#ifdef _WIN32
-#define WIN32
-#endif
-#endif
-#ifndef JAS_WIN_MSVC_BUILD
-#define JAS_WIN_MSVC_BUILD
-#endif
-
-// JMW
-
-#ifndef	JAS_WIN_MSVC_BUILD
+/* XCSoar doesn't use autoconf */
+#if 0
 
 /* Define to empty if the keyword does not work.  */
 /* #undef const */
