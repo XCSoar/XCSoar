@@ -94,10 +94,6 @@
  *
 \******************************************************************************/
 
-
-#define JMW_NUMTILES 2
-
-
 #define	JPC_MHSOC	0x0001
 /* In the main header, expecting a SOC marker segment. */
 #define	JPC_MHSIZ	0x0002
