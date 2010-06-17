@@ -324,8 +324,11 @@ WndListFrame::on_key_down(unsigned key_code)
 bool
 WndListFrame::on_mouse_up(int x, int y)
 {
-  scroll_bar.drag_end(this);
-  return false;
+  if (scroll_bar.is_dragging()) {
+    scroll_bar.drag_end(this);
+    return true;
+  } else
+    return PaintWindow::on_mouse_up(x, y);
 }
 
 void
@@ -365,7 +368,7 @@ WndListFrame::on_mouse_move(int x, int y, unsigned keys)
     return true;
   }
 
-  return false;
+  return PaintWindow::on_mouse_move(x, y, keys);
 }
 
 bool
@@ -410,7 +413,7 @@ WndListFrame::on_mouse_down(int x, int y)
     SelectItemFromScreen(Pos.y, had_focus);
   }
 
-  return false;
+  return true;
 }
 
 bool
