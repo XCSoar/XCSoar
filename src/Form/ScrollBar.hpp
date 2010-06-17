@@ -39,15 +39,12 @@ Copyright_License {
 #ifndef XCSOAR_FORM_SCROLL_BAR_HPP
 #define XCSOAR_FORM_SCROLL_BAR_HPP
 
-#include "Screen/Bitmap.hpp"
+#include <windows.h>
 
 class Window;
 class Canvas;
 
 class ScrollBar {
-  /** Scrollbar background bitmap */
-  Bitmap hScrollBarBitmapFill;
-
 protected:
   /** Whether the slider is currently being dragged */
   bool dragging;

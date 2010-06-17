@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "Form/ScrollBar.hpp"
 #include "Form/Internal.hpp"
-#include "Screen/BitmapCanvas.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Window.hpp"
 #include "resource.h"
