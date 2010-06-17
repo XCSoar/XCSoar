@@ -419,6 +419,8 @@ WndListFrame::on_mouse_down(int x, int y)
 bool
 WndListFrame::on_mouse_wheel(int delta)
 {
+  scroll_bar.drag_end(this);
+
   if (delta > 0) {
     // scroll up
     if (origin > 0) {
