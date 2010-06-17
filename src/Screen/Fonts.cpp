@@ -257,14 +257,7 @@ static void
 InitialiseLogFonts()
 {
 #ifndef ENABLE_SDL
-  int FontHeight;
-
-  if (Layout::square)
-    // square
-    FontHeight = Layout::Scale(26);
-  else
-    // portrait & landscape
-    FontHeight = Layout::Scale(35);
+  int FontHeight = (Layout::square ? Layout::Scale(26) : Layout::Scale(35));
 
   // oversize first so can then scale down
   int iFontHeight = (int)(FontHeight * 1.4);
