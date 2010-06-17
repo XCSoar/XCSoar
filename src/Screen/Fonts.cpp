@@ -305,30 +305,27 @@ InitialiseLogFonts()
 #endif
 
   InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"), true,
-                    (int)(FontHeight * TITLEFONTHEIGHTRATIO), 0, true, false);
+                    (int)(FontHeight * 0.333), 0, true, false);
 
   // new font for CDI Scale
   InitialiseLogfont(&CDIWindowLogFont, _T("Tahoma"), false,
-                    (int)(FontHeight * CDIFONTHEIGHTRATIO), 0, false, false);
+                    (int)(FontHeight * 0.6), 0, false, false);
 
   // new font for map labels
   InitialiseLogfont(&MapLabelLogFont, _T("Tahoma"), true,
-                    (int)(FontHeight * MAPFONTHEIGHTRATIO), 0, false, true);
+                    (int)(FontHeight * 0.39), 0, false, true);
 
   // Font for map other text
   InitialiseLogfont(&StatisticsLogFont, _T("Tahoma"), true,
-                    (int)(FontHeight * STATISTICSFONTHEIGHTRATIO),
-                    0, false, false);
+                    (int)(FontHeight * 0.7), 0, false, false);
 
   // new font for map labels
   InitialiseLogfont(&MapWindowLogFont, _T("Tahoma"), true,
-                    (int)(FontHeight * MAPFONTHEIGHTRATIO * 1.3),
-                    0, false, false);
+                    (int)(FontHeight * 0.507), 0, false, false);
 
   // Font for map bold text
   InitialiseLogfont(&MapWindowBoldLogFont, _T("Tahoma"), true,
-                    (int)(FontHeight * MAPFONTHEIGHTRATIO * 1.3),
-                    0, true, false);
+                    (int)(FontHeight * 0.507), 0, true, false);
 
   InitialiseLogfont(&TitleSmallWindowLogFont, _T("Tahoma"), true,
                     Layout::Scale(20), Layout::Scale(8), false, false);
