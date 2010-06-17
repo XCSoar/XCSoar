@@ -90,6 +90,34 @@ IsNullLogFont(LOGFONT logfont)
 
 #endif /* !ENABLE_SDL */
 
+static void
+InitialiseLogfont(LOGFONT* font, const TCHAR* facename, bool variable_pitch,
+                  int height, int width, int bold, bool italic)
+{
+#ifndef ENABLE_SDL
+  memset((char *)font, 0, sizeof(LOGFONT));
+
+  _tcscpy(font->lfFaceName, facename);
+  font->lfPitchAndFamily = (variable_pitch ? VARIABLE_PITCH : FIXED_PITCH)
+                          | FF_DONTCARE;
+  font->lfHeight = (long)height;
+  font->lfWidth = (long)width;
+  font->lfWeight = (long)bold;
+  font->lfItalic = italic;
+  font->lfQuality = ANTIALIASED_QUALITY;
+#endif /* !ENABLE_SDL */
+}
+
+static void
+InitialiseLogfont(LOGFONT* font, const TCHAR* facename, bool variable_pitch,
+                  int height, int width, bool bold, bool italic)
+{
+#ifndef ENABLE_SDL
+  InitialiseLogfont(font, facename, variable_pitch, height, width,
+                    (bold ? FW_BOLD : FW_MEDIUM), italic);
+#endif /* !ENABLE_SDL */
+}
+
 void
 InitializeFont(Font *theFont, LOGFONT autoLogFont,
                   LOGFONT * LogFontUsed)
@@ -155,14 +183,23 @@ InitialiseFontsPNA(const struct Appearance &appearance, RECT rc)
 
   if (ScreenSize == (ScreenSize_t)ss480x272) {
     // WQVGA  e.g. MIO
-    GetFontFromString(_T("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"), &InfoWindowLogFont);
-    GetFontFromString(_T("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"), &TitleWindowLogFont);
-    GetFontFromString(_T("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"), &TitleSmallWindowLogFont);
-    GetFontFromString(_T("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"), &CDIWindowLogFont);
-    GetFontFromString(_T("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"), &MapLabelLogFont); // RLD 16 works well too
-    GetFontFromString(_T("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), &StatisticsLogFont);//  (RLD is this used?)
-    GetFontFromString(_T("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), &MapWindowLogFont);
-    GetFontFromString(_T("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"), &MapWindowBoldLogFont);
+    InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
+                      true, 28, 0, 800, false);
+    InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
+                      true, 16, 0, 500, false);
+    InitialiseLogfont(&TitleSmallWindowLogFont, _T("Tahoma"),
+                      true, 16, 0, 100, true);
+    InitialiseLogfont(&CDIWindowLogFont, _T("TahomaBD"),
+                      true, 28, 0, 400, false);
+    InitialiseLogfont(&MapLabelLogFont, _T("Tahoma"),
+                      true, 14, 0, 100, true);
+    InitialiseLogfont(&StatisticsLogFont, _T("Tahoma"),
+                      true, 20, 0, 400, false);
+    InitialiseLogfont(&MapWindowLogFont, _T("Tahoma"),
+                      true, 18, 0, 400, false);
+    InitialiseLogfont(&MapWindowBoldLogFont, _T("TahomaBD"),
+                      true, 16, 0, 500, false);
+
     if (appearance.InfoBoxGeom == 5)
       // We don't use vario gauge in landscape geo5 anymore.. but doesn't hurt.
       SetGlobalEllipse(1.32f);
@@ -170,14 +207,23 @@ InitialiseFontsPNA(const struct Appearance &appearance, RECT rc)
       SetGlobalEllipse(1.1f);
   } else if (ScreenSize == (ScreenSize_t)ss480x234) {
     // e.g. Messada 2440
-    GetFontFromString(_T("22,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"), &InfoWindowLogFont);
-    GetFontFromString(_T("18,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"), &TitleWindowLogFont);
-    GetFontFromString(_T("20,0,0,0,400,1,0,0,0,0,0,3,2,Tahoma"), &TitleSmallWindowLogFont);
-    GetFontFromString(_T("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"), &CDIWindowLogFont);
-    GetFontFromString(_T("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"), &MapLabelLogFont); // RLD 16 works well too
-    GetFontFromString(_T("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), &StatisticsLogFont);//  (RLD is this used?)
-    GetFontFromString(_T("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), &MapWindowLogFont);
-    GetFontFromString(_T("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"), &MapWindowBoldLogFont);
+    InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
+                      true, 22, 0, 400, false);
+    InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
+                      true, 18, 0, 500, false);
+    InitialiseLogfont(&TitleSmallWindowLogFont, _T("Tahoma"),
+                      true, 20, 0, 400, true);
+    InitialiseLogfont(&CDIWindowLogFont, _T("TahomaBD"),
+                      true, 28, 0, 400, false);
+    InitialiseLogfont(&MapLabelLogFont, _T("Tahoma"),
+                      true, 14, 0, 100, true);
+    InitialiseLogfont(&StatisticsLogFont, _T("Tahoma"),
+                      true, 20, 0, 400, false);
+    InitialiseLogfont(&MapWindowLogFont, _T("Tahoma"),
+                      true, 18, 0, 400, false);
+    InitialiseLogfont(&MapWindowBoldLogFont, _T("TahomaBD"),
+                      true, 16, 0, 500, false);
+
     SetGlobalEllipse(1.1f); // to be checked, TODO
   } else if (ScreenSize == (ScreenSize_t)ss800x480) {// e.g. ipaq 31x {
     switch (appearance.InfoBoxGeom) {
@@ -186,35 +232,49 @@ InitialiseFontsPNA(const struct Appearance &appearance, RECT rc)
     case 2:
     case 3:
     case 6: // standard landscape
-      GetFontFromString(_T("56,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"), &InfoWindowLogFont);
-      GetFontFromString(_T("20,0,0,0,200,0,0,0,0,0,0,3,2,Tahoma"), &TitleWindowLogFont);
+      InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
+                        true, 56, 0, 600, false);
+      InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
+                        true, 20, 0, 200, false);
       SetGlobalEllipse(1.1f);
       break;
     case 4:
     case 5:
-      GetFontFromString(_T("64,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"), &InfoWindowLogFont);
-      GetFontFromString(_T("26,0,0,0,600,0,0,0,0,0,0,3,2,Tahoma"), &TitleWindowLogFont);
+      InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
+                        true, 64, 0, 600, false);
+      InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
+                        true, 26, 0, 600, false);
       SetGlobalEllipse(1.32f);
       break;
     case 7:
-      GetFontFromString(_T("66,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"), &InfoWindowLogFont);
-      GetFontFromString(_T("23,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), &TitleWindowLogFont);
+      InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
+                        true, 66, 0, 600, false);
+      InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
+                        true, 23, 0, 400, false);
       break;
 
       // This is a failsafe with an impossible setting so that you know
       // something is going very wrong.
     default:
-      GetFontFromString(_T("30,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"), &InfoWindowLogFont);
-      GetFontFromString(_T("10,0,0,0,200,0,0,0,0,0,0,3,2,Tahoma"), &TitleWindowLogFont);
+      InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
+                        true, 30, 0, 600, false);
+      InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
+                        true, 10, 0, 200, false);
       break;
     } // special geometry cases for 31x
 
-    GetFontFromString(_T("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"), &TitleSmallWindowLogFont);
-    GetFontFromString(_T("36,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), &CDIWindowLogFont);
-    GetFontFromString(_T("28,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"), &MapLabelLogFont);
-    GetFontFromString(_T("48,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), &StatisticsLogFont);
-    GetFontFromString(_T("36,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), &MapWindowLogFont);
-    GetFontFromString(_T("32,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"), &MapWindowBoldLogFont);
+    InitialiseLogfont(&TitleSmallWindowLogFont, _T("Tahoma"),
+                      true, 16, 0, 100, true);
+    InitialiseLogfont(&CDIWindowLogFont, _T("Tahoma"),
+                      true, 36, 0, 400, false);
+    InitialiseLogfont(&MapLabelLogFont, _T("Tahoma"),
+                      true, 28, 0, 100, true);
+    InitialiseLogfont(&StatisticsLogFont, _T("Tahoma"),
+                      true, 48, 0, 400, false);
+    InitialiseLogfont(&MapWindowLogFont, _T("Tahoma"),
+                      true, 36, 0, 400, false);
+    InitialiseLogfont(&MapWindowBoldLogFont, _T("TahomaBD"),
+                      true, 32, 0, 600, false);
   }
 }
 
@@ -224,41 +284,34 @@ InitialiseFontsAltair()
   if (!is_altair())
     return;
 
-  // RLD Altair also loads these in registry and by default, uses the registry
-
-  GetFontFromString(_T("24,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"), &InfoWindowLogFont);
-  GetFontFromString(_T("10,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicNineCond"), &TitleWindowLogFont);
-  GetFontFromString(_T("19,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicEighteenCond"), &CDIWindowLogFont);
-  GetFontFromString(_T("13,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicTwelveCond"), &MapLabelLogFont);
-  GetFontFromString(_T("15,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"), &StatisticsLogFont);
-  GetFontFromString(_T("15,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"), &MapWindowLogFont);
-  GetFontFromString(_T("15,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"), &MapWindowBoldLogFont);
-  GetFontFromString(_T("19,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicEighteenCond"), &TitleSmallWindowLogFont);
+  InitialiseLogfont(&InfoWindowLogFont, _T("RasterGothicTwentyFourCond"),
+                    true, 24, 0, 700, false);
+  InitialiseLogfont(&TitleWindowLogFont, _T("RasterGothicNineCond"),
+                    true, 10, 0, 500, false);
+  InitialiseLogfont(&CDIWindowLogFont, _T("RasterGothicEighteenCond"),
+                    true, 19, 0, 700, false);
+  InitialiseLogfont(&MapLabelLogFont, _T("RasterGothicTwelveCond"),
+                    true, 13, 0, 500, false);
+  InitialiseLogfont(&StatisticsLogFont, _T("RasterGothicFourteenCond"),
+                    true, 15, 0, 500, false);
+  InitialiseLogfont(&MapWindowLogFont, _T("RasterGothicFourteenCond"),
+                    true, 15, 0, 500, false);
+  InitialiseLogfont(&MapWindowBoldLogFont, _T("RasterGothicFourteenCond"),
+                    true, 15, 0, 700, false);
+  InitialiseLogfont(&TitleSmallWindowLogFont, _T("RasterGothicEighteenCond"),
+                    true, 19, 0, 700, false);
 }
-
-#ifndef ENABLE_SDL
-static void
-InitialiseLogfont(LOGFONT* font, const TCHAR* facename, bool variable_pitch,
-                  long height, long width, bool bold, bool italic) {
-  memset((char *)font, 0, sizeof(LOGFONT));
-
-  _tcscpy(font->lfFaceName, facename);
-  font->lfPitchAndFamily = (variable_pitch ? VARIABLE_PITCH : FIXED_PITCH)
-                          | FF_DONTCARE;
-  font->lfHeight = height;
-  font->lfWidth = width;
-  font->lfWeight = (bold ? FW_BOLD : FW_MEDIUM);
-  font->lfItalic = italic;
-  font->lfQuality = ANTIALIASED_QUALITY;
-}
-#endif
 
 static void
 InitialiseLogFonts()
 {
-#ifndef ENABLE_SDL
   int FontHeight = (Layout::square ? Layout::Scale(26) : Layout::Scale(35));
 
+#ifdef WINDOWSPC
+  FontHeight = (int)(FontHeight / 1.35);
+#endif
+
+#ifndef ENABLE_SDL
   // oversize first so can then scale down
   int iFontHeight = (int)(FontHeight * 1.4);
 
@@ -293,9 +346,9 @@ InitialiseLogFonts()
   memset(&InfoWindowLogFont, 0, sizeof(LOGFONT));
   memcpy(&InfoWindowLogFont, &logfont, sizeof(LOGFONT));
 
-#ifdef WINDOWSPC
-  FontHeight = (int)(FontHeight / 1.35);
-#endif
+#else /* !ENABLE_SDL */
+  // XXX implement
+#endif /* !ENABLE_SDL */
 
   InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"), true,
                     (int)(FontHeight * 0.333), 0, true, false);
@@ -322,9 +375,6 @@ InitialiseLogFonts()
 
   InitialiseLogfont(&TitleSmallWindowLogFont, _T("Tahoma"), true,
                     Layout::Scale(20), Layout::Scale(8), false, false);
-#else /* !ENABLE_SDL */
-  // XXX implement
-#endif /* !ENABLE_SDL */
 }
 
 void
