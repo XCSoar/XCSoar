@@ -102,15 +102,15 @@
 #include <sys/types.h>
 #endif
 
-#ifndef __cplusplus
 #if defined(HAVE_STDBOOL_H)
 /*
  * The C language implementation does correctly provide the standard header
  * file "stdbool.h".
  */
-//JMW#include <stdbool.h>
+#include <stdbool.h>
 #else
 
+#ifndef __cplusplus
 /*
  * The C language implementation does not provide the standard header file
  * "stdbool.h" as required by ISO/IEC 9899:1999.  Try to compensate for this
