@@ -84,7 +84,6 @@
 #include "jpc_t1dec.h"
 #include "jpc_t1cod.h"
 #include "jpc_dec.h"
-#include "jasper/jas_debug.h"
 
 /******************************************************************************\
 *
