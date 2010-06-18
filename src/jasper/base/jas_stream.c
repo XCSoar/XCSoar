@@ -356,7 +356,7 @@ jas_stream_t *jas_stream_fdopen(int fd, const char *mode)
 	/* Parse the mode string. */
 	stream->openmode_ = jas_strtoopenmode(mode);
 
-#if defined(WIN32)
+#if defined(HAVE_MSVCRT) && !defined(_WIN32_WCE)
 	/* Argh!!!  Someone ought to banish text mode (i.e., O_TEXT) to the
 	  greatest depths of purgatory! */
 	/* Ensure that the file descriptor is in binary mode, if the caller
@@ -368,13 +368,9 @@ jas_stream_t *jas_stream_fdopen(int fd, const char *mode)
 	  files in text mode.  For example, in the Cygwin environment,
 	  shells often open files in text mode when I/O redirection is
 	  used.  Grr... */
-#ifdef WINDOWSPC
-#ifdef HAVE_MSVCRT
 	if (stream->openmode_ & JAS_STREAM_BINARY) {
 		setmode(fd, O_BINARY);
 	}
-#endif
-#endif
 #endif
 
 	/* Allocate space for the underlying file stream object. */
