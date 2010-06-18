@@ -153,7 +153,7 @@ struct CIRCLING_INFO
   CirclingMode_t TurnMode;
 
   /** True if in circling mode, False otherwise */
-  int    Circling;
+  bool Circling;
 
   /** Circling/Cruise ratio in percent */
   fixed PercentCircling;
