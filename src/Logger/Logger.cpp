@@ -107,12 +107,13 @@ Logger::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
   return _logger->LoggerClearFreeSpace(gps_info);
 }
 
+
 void
 Logger::guiStartLogger(const NMEA_INFO& gps_info,
                     const SETTINGS_COMPUTER& settings,
                     bool noAsk)
 {
-  if (!isLoggerActive() || gps_info.gps.Replay)
+  if (isLoggerActive() || gps_info.gps.Replay)
     return;
 
   OrderedTask* task = task_ui.task_clone();
