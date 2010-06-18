@@ -40,14 +40,16 @@ Copyright_License {
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Profile.hpp"
 
-Declaration::Declaration(const OrderedTask& task)
+Declaration::Declaration(const OrderedTask* task)
 {
   Profile::Get(szProfilePilotName, PilotName, 64);
   Profile::Get(szProfileAircraftType, AircraftType, 32);
   Profile::Get(szProfileAircraftRego, AircraftRego, 32);
 
-  for (unsigned i=0; i< task.task_size(); i++) {
-    waypoints.push_back(task.get_tp(i)->get_waypoint());
+  if (task) {
+    for (unsigned i=0; i< task->task_size(); i++) {
+      waypoints.push_back(task->get_tp(i)->get_waypoint());
+    }
   }
 }
 

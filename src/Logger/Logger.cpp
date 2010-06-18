@@ -116,27 +116,28 @@ Logger::guiStartLogger(const NMEA_INFO& gps_info,
     return;
 
   OrderedTask* task = task_ui.task_clone();
-  if (!task) return;
+  const Declaration decl(task);
 
-  const Declaration decl(*task);
-  delete task;
+  if (task) {
+    delete task;
 
-  if (!noAsk) {
-    TCHAR TaskMessage[1024];
-    _tcscpy(TaskMessage, _T("Start Logger With Declaration\r\n"));
-
-    if (decl.size()) {
-      for (unsigned i = 0; i< decl.size(); ++i) {
-        _tcscat(TaskMessage, decl.get_name(i));
-        _tcscat(TaskMessage, _T("\r\n"));
+    if (!noAsk) {
+      TCHAR TaskMessage[1024];
+      _tcscpy(TaskMessage, _T("Start Logger With Declaration\r\n"));
+      
+      if (decl.size()) {
+        for (unsigned i = 0; i< decl.size(); ++i) {
+          _tcscat(TaskMessage, decl.get_name(i));
+          _tcscat(TaskMessage, _T("\r\n"));
+        }
+      } else {
+        _tcscat(TaskMessage, _T("None"));
       }
-    } else {
-      _tcscat(TaskMessage, _T("None"));
+      
+      if (MessageBoxX(TaskMessage, gettext(_T("Start Logger")),
+                      MB_YESNO | MB_ICONQUESTION) != IDYES)
+        return;
     }
-
-    if (MessageBoxX(TaskMessage, gettext(_T("Start Logger")),
-                    MB_YESNO | MB_ICONQUESTION) != IDYES)
-      return;
   }
 
   if (!LoggerClearFreeSpace(gps_info)) {

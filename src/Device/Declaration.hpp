@@ -49,7 +49,7 @@ class Waypoint;
 
 struct Declaration {
 public:
-  Declaration(const OrderedTask& task);
+  Declaration(const OrderedTask* task);
   TCHAR PilotName[64];
   TCHAR AircraftType[32];
   TCHAR AircraftRego[32];

@@ -581,7 +581,7 @@ LoggerImpl::LoggerDeviceDeclare(const OrderedTask& task)
   // don't do anything if task is not valid
   if (!task.check_task()) return;
 
-  const Declaration decl(task);
+  const Declaration decl(&task);
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     if (LoggerDeclare(&DeviceList[i], decl))
