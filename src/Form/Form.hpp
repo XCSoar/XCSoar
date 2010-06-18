@@ -66,14 +66,22 @@ class WndForm: public ContainerControl
   typedef std::map<tstring, Window *, tstring_less_than> name_to_window_t;
 
   class ClientAreaWindow : public ContainerWindow {
+  public:
+    typedef bool (*CommandCallback_t)(unsigned cmd);
+    CommandCallback_t mCommandCallback;
+
+  protected:
     Brush background;
 
   public:
+    ClientAreaWindow():mCommandCallback(NULL) {}
+
     void SetBackColor(Color color) {
       background.set(color);
     }
 
   protected:
+    virtual bool on_command(unsigned id, unsigned code);
     virtual void on_paint(Canvas &canvas);
   };
 
@@ -232,6 +240,10 @@ public:
 
   void SetTimerNotify(TimerNotifyCallback_t OnTimerNotify) {
     mOnTimerNotify = OnTimerNotify;
+  }
+
+  void SetCommandCallback(ClientAreaWindow::CommandCallback_t CommandCallback) {
+    client_area.mCommandCallback = CommandCallback;
   }
 
 private:

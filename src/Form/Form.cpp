@@ -47,6 +47,13 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
 
+bool
+WndForm::ClientAreaWindow::on_command(unsigned id, unsigned code)
+{
+  return (mCommandCallback != NULL && mCommandCallback(id))
+    || ContainerWindow::on_command(id, code);
+}
+
 void
 WndForm::ClientAreaWindow::on_paint(Canvas &canvas)
 {
