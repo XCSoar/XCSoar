@@ -77,44 +77,45 @@ public:
     if (!map.LonLat2ScreenIfVisible(way_point.Location, &sc))
       return;
 
-    TextInBoxMode_t TextDisplayMode;
-    bool scale_in_range = false;
-    bool is_landable = false;
+    if (!map.WaypointInScaleFilter(way_point) && !in_task)
+      return;
+
+    TextInBoxMode_t text_mode;
+    text_mode.AsInt = 0;
+    if (in_task)
+      text_mode.AsFlag.WhiteBold = 1;
+
     bool do_write_label = in_task || (map.SettingsMap().DeclutterLabels < 2);
-
-    TextDisplayMode.AsInt = 0;
-
-    scale_in_range = map.WaypointInScaleFilter(way_point);
 
     const MaskedIcon *icon = &MapGfx.SmallIcon;
 
-    bool draw_alt = false;
+    bool do_write_alt = false;
     int AltArrivalAGL = 0;
 
     if (way_point.is_landable()) {
-      is_landable = true; // so we can always draw them
 
       const UnorderedTaskPoint t(way_point, map.SettingsComputer());
       const GlideResult r =
         TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
-      bool reachable = r.glide_reachable();
+      const bool is_reachable = r.glide_reachable();
 
-      if ((map.SettingsMap().DeclutterLabels < 1) || in_task) {
-        if (reachable)
+      if (is_reachable) {
+        text_mode.AsFlag.Reachable = 1;
+
+        if ((map.SettingsMap().DeclutterLabels < 1) || in_task) {
           AltArrivalAGL = (int)Units::ToUserUnit(r.AltitudeDifference,
                                                  Units::AltitudeUnit);
-        draw_alt = reachable;
-      }
+          do_write_alt = true;
 
-      if (reachable) {
-        TextDisplayMode.AsFlag.Reachable = 1;
-
+          // show all reachable landing field altitudes unless we want a
+          // decluttered screen.
+        } 
         if ((map.SettingsMap().DeclutterLabels < 2) || in_task) {
           if (in_task || (map.SettingsMap().DeclutterLabels < 1))
-            TextDisplayMode.AsFlag.Border = 1;
+            text_mode.AsFlag.Border = 1;
 
-          // show all reachable landing fields unless we want a decluttered
-          // screen.
+          // show all reachable landing field labels unless we want a
+          // decluttered screen.
           do_write_label = true;
         }
 
@@ -128,18 +129,17 @@ public:
         else
           icon = &MapGfx.FieldUnreachableIcon;
       }
+
     } else {
+      // non landable turnpoint
+
       if (map.GetMapScaleKM() > fixed_four)
         icon = &MapGfx.SmallIcon;
       else
         icon = &MapGfx.TurnPointIcon;
     }
 
-    if (in_task)
-      TextDisplayMode.AsFlag.WhiteBold = 1;
-
-    if (scale_in_range || in_task || do_write_label || is_landable)
-      icon->draw(canvas, map.get_bitmap_canvas(), sc.x, sc.y);
+    icon->draw(canvas, map.get_bitmap_canvas(), sc.x, sc.y);
 
     if (pDisplayTextType == DISPLAYNAMEIFINTASK) {
       if (!in_task)
@@ -148,54 +148,56 @@ public:
       do_write_label = true;
     }
 
-    if (!do_write_label)
-      return;
-
     TCHAR Buffer[32];
 
-    switch (pDisplayTextType) {
-    case DISPLAYNAMEIFINTASK:
-      if (in_task)
+    if (do_write_label) {
+
+      switch (pDisplayTextType) {
+      case DISPLAYNAMEIFINTASK:
+        if (in_task)
+          _stprintf(Buffer, _T("%s"), way_point.Name.c_str());
+        break;
+        
+      case DISPLAYNAME:
         _stprintf(Buffer, _T("%s"), way_point.Name.c_str());
-      break;
-
-    case DISPLAYNAME:
-      _stprintf(Buffer, _T("%s"), way_point.Name.c_str());
-      break;
-
-    case DISPLAYNUMBER:
-      _stprintf(Buffer, _T("%d"), way_point.id);
-      break;
-
-    case DISPLAYFIRSTFIVE:
-      _tcsncpy(Buffer, way_point.Name.c_str(), 5);
-      Buffer[5] = '\0';
-      break;
-
-    case DISPLAYFIRSTTHREE:
-      _tcsncpy(Buffer, way_point.Name.c_str(), 3);
-      Buffer[3] = '\0';
-      break;
-
-    case DISPLAYNONE:
+        break;
+        
+      case DISPLAYNUMBER:
+        _stprintf(Buffer, _T("%d"), way_point.id);
+        break;
+        
+      case DISPLAYFIRSTFIVE:
+        _tcsncpy(Buffer, way_point.Name.c_str(), 5);
+        Buffer[5] = '\0';
+        break;
+        
+      case DISPLAYFIRSTTHREE:
+        _tcsncpy(Buffer, way_point.Name.c_str(), 3);
+        Buffer[3] = '\0';
+        break;
+        
+      case DISPLAYNONE:
+        Buffer[0] = '\0';
+        break;
+        
+      case DISPLAYUNTILSPACE:
+        _stprintf(Buffer, _T("%s"), way_point.Name.c_str());
+        TCHAR *tmp;
+        tmp = _tcsstr(Buffer, _T(" "));
+        if (tmp != NULL)
+          tmp[0] = '\0';
+        
+        break;
+        
+      default:
+        assert(0);
+        break;
+      }
+    } else {
       Buffer[0] = '\0';
-      break;
-
-    case DISPLAYUNTILSPACE:
-      _stprintf(Buffer, _T("%s"), way_point.Name.c_str());
-      TCHAR *tmp;
-      tmp = _tcsstr(Buffer, _T(" "));
-      if (tmp != NULL)
-        tmp[0] = '\0';
-
-      break;
-
-    default:
-      assert(0);
-      break;
     }
 
-    if (draw_alt) {
+    if (do_write_alt) {
       size_t length = _tcslen(Buffer);
       if (length > 0)
         Buffer[length++] = _T(':');
@@ -203,7 +205,7 @@ public:
       _stprintf(Buffer + length, _T("%d%s"), AltArrivalAGL, sAltUnit);
     }
 
-    MapWaypointLabelAdd(Buffer, sc.x + 5, sc.y, TextDisplayMode, AltArrivalAGL,
+    MapWaypointLabelAdd(Buffer, sc.x + 5, sc.y, text_mode, AltArrivalAGL,
                         in_task, false, false, false, map.GetMapRect());
   }
 

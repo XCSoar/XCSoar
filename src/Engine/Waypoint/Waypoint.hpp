@@ -97,7 +97,6 @@ public:
   GEOPOINT Location; /**< Geodetic location */
   fixed Altitude; /**< Height AMSL (m) of waypoint terrain */
   WaypointFlags Flags; /**< Flag types of this waypoint */
-  int Zoom; /**< Minimum zoom level this waypoint is visible at */
   int FileNum; /**< File number to store waypoint in (0,1), -1 to delete/ignore */
   tstring Name; /**< Name of waypoint */
   tstring Comment; /**< Additional comment text for waypoint */

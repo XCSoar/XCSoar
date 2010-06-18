@@ -51,7 +51,7 @@ WaypointFlags::setDefaultFlags(bool turnpoint)
 }
 
 Waypoint::Waypoint(const GEOPOINT &_location, const bool is_turnpoint):
-  Location(_location), Zoom(0)
+  Location(_location)
 {
   Flags.setDefaultFlags(is_turnpoint);
 }

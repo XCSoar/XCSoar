@@ -70,9 +70,6 @@ class MapWindowProjection: public Projection
     return Orig_Aircraft;
   }
 
-  // used by waypoint nearest routine
-  bool WaypointInScaleFilter(const Waypoint &way_point) const;
-
   rectObj* getSmartBounds() {
     return &smart_bounds_active;
   }
@@ -134,6 +131,8 @@ public:
     return ScaleListCount > 0;
   }
   fixed StepMapScale(int Step);
+
+  bool WaypointInScaleFilter(const Waypoint &way_point) const;
 
 private:
   POINT Orig_Aircraft;
