@@ -71,17 +71,20 @@ class WndForm: public ContainerControl
     CommandCallback_t mCommandCallback;
 
   protected:
-    Brush background;
+    Color background_color;
+    Brush background_brush;
 
   public:
     ClientAreaWindow():mCommandCallback(NULL) {}
 
     void SetBackColor(Color color) {
-      background.set(color);
+      background_color = color;
+      background_brush.set(color);
     }
 
   protected:
     virtual bool on_command(unsigned id, unsigned code);
+    virtual Brush *on_color(Window &window, Canvas &canvas);
     virtual void on_paint(Canvas &canvas);
   };
 

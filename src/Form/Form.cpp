@@ -54,10 +54,18 @@ WndForm::ClientAreaWindow::on_command(unsigned id, unsigned code)
     || ContainerWindow::on_command(id, code);
 }
 
+Brush *
+WndForm::ClientAreaWindow::on_color(Window &window, Canvas &canvas)
+{
+  canvas.set_text_color(Color::BLACK);
+  canvas.set_background_color(background_color);
+  return &background_brush;
+}
+
 void
 WndForm::ClientAreaWindow::on_paint(Canvas &canvas)
 {
-  canvas.fill_rectangle(get_client_rect(), background);
+  canvas.fill_rectangle(get_client_rect(), background_brush);
 
   ContainerWindow::on_paint(canvas);
 }
