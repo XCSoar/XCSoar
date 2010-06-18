@@ -200,6 +200,7 @@ ContainerWindow::on_message(HWND hWnd, UINT message,
 {
   switch (message) {
   case WM_CTLCOLORSTATIC:
+  case WM_CTLCOLORBTN:
     {
       Window *window = Window::get((HWND)lParam);
       if (window == NULL)
