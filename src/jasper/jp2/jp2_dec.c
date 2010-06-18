@@ -262,7 +262,6 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 		goto error;
 	}
 
-	// JMW call special decode here?
 	if (!(dec->image = jpc_decode(in, optstr))) {
 		jas_eprintf("error: cannot decode code stream\n");
 		goto error;
@@ -429,6 +428,7 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 	}
 
 	/* Mark all components as being of unknown type. */
+
 	for (i = 0; i < JAS_CAST(uint, jas_image_numcmpts(dec->image)); ++i) {
 		jas_image_setcmpttype(dec->image, i, JAS_IMAGE_CT_UNKNOWN);
 	}

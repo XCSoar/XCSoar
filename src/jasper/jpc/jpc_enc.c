@@ -1109,7 +1109,7 @@ startoff = jas_stream_getrwcount(enc->out);
 				  (analgain + 1)), bandinfo->synenergywt);
 			} else {
 				absstepsize = jpc_inttofix(1);
-			}
+			}	
 			cp->ccps[cmptno].stepsizes[bandno] =
 			  jpc_abstorelstepsize(absstepsize,
 			  cp->ccps[cmptno].prec + analgain);

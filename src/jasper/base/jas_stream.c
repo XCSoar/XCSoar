@@ -312,7 +312,6 @@ jas_stream_t *jas_stream_tmpfile()
 	stream->obj_ = obj;
 
 	/* Choose a file name. */
-
 #ifndef WIN32
 	tmpnam(obj->pathname);
 #endif

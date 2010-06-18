@@ -251,11 +251,11 @@ typedef struct {
 	/* The raw (i.e., uncompressed) size of the image in bytes. */
 	uint_fast32_t rawsize;
 
-  double lon_min;
-  double lon_max;
-  double lat_min;
-  double lat_max;
-  bool xcsoar_mode;
+	double lon_min;
+	double lon_max;
+	double lat_min;
+	double lat_max;
+	bool xcsoar_mode;
 
 } jpc_enc_cp_t;
 

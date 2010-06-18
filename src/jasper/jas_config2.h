@@ -118,10 +118,11 @@
  * Try to compensate for this here, by specifying the preprocessor symbols
  * normally defined by configure.
  */
+
 #if !defined(_WIN32_WCE) || defined(__BORLANDC__) || defined(__GNUC__)
- #define	uchar		unsigned char
- #define	longlong	long long
- #define	ulonglong	unsigned long long
+#define	uchar		unsigned char
+#define	longlong	long long
+#define	ulonglong	unsigned long long
 /*#define	ssize_t		int*/
 #endif
 
@@ -139,11 +140,11 @@
 #define	HAVE_SYS_TYPES_H	1
 
 #if !defined(HAVE_STDLIB_H)
- #define	HAVE_STDLIB_H	1
+#define	HAVE_STDLIB_H		1
 #endif
 
 #if !defined(HAVE_STDDEF_H)
- #define	HAVE_STDDEF_H		1
+#define	HAVE_STDDEF_H		1
 #endif
 
 #define EXCLUDE_MIF_SUPPORT

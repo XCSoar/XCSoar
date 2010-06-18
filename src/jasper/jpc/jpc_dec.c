@@ -633,7 +633,6 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
 		}
 		jpc_dec_cp_prepare(tile->cp);
 
-		// JMW to do special init for ignored tiles
 		if (jpc_dec_tileinit(dec, tile)) {
 			return -1;
 		}
@@ -653,7 +652,7 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
 	/* Are packet headers stored in the main header or tile-part header? */
 	if (dec->pkthdrstreams) {
 		/* Get the stream containing the packet header data for this
-		   tile-part. */
+		  tile-part. */
 		if (!(tile->pkthdrstream = jpc_streamlist_remove(dec->pkthdrstreams, 0))) {
 			return -1;
 		}
@@ -676,15 +675,13 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
 	}
 
 	// JMW hack
-	if (!tile->hidden) {
-
-		if (jpc_dec_decodepkts(dec, (tile->pkthdrstream) ? tile->pkthdrstream :
-				       dec->in, dec->in)) {
+	if (!tile->hidden &&
+	  jpc_dec_decodepkts(dec, (tile->pkthdrstream) ? tile->pkthdrstream :
+	  dec->in, dec->in)) {
 #if 0 // JMW
 		fprintf(stderr, "jpc_dec_decodepkts failed\n");
 #endif
 		return -1;
-		}
 	}
 
 	/* Gobble any unconsumed tile data. */
