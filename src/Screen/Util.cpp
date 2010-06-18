@@ -465,7 +465,7 @@ void StartArc(HDC hdc,
  * @param fill Whether the circle will be filled (closed polygon) 
  * @return
  */
-int
+bool
 ClippedCircle(Canvas &canvas, long x, long y, int radius, RECT rc, bool fill)
 {
   POINT pt[65];
@@ -483,7 +483,7 @@ ClippedCircle(Canvas &canvas, long x, long y, int radius, RECT rc, bool fill)
   rcrect.maxy = rc.bottom;
 
   if (msRectOverlap(&rect, &rcrect) != MS_TRUE) {
-    return FALSE;
+    return false;
   }
   // JMW added faster checking...
 
@@ -500,12 +500,12 @@ ClippedCircle(Canvas &canvas, long x, long y, int radius, RECT rc, bool fill)
   pt[step].y = y + (long)(radius * ycoords[0]);
 
   ClipPolygon(canvas, pt, step + 1, rc, fill);
-  return TRUE;
+  return true;
 }
 
 static const fixed seg_steps_degrees(64/ 360.0);
 
-int
+bool
 Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
         Angle start, Angle end, bool horizon)
 {
@@ -526,7 +526,7 @@ Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
   rcrect.maxy = rc.bottom;
 
   if (msRectOverlap(&rect, &rcrect) != MS_TRUE) {
-    return FALSE;
+    return false;
   }
 
   // JMW added faster checking...
@@ -578,13 +578,13 @@ Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
     canvas.polygon(pt, npoly);
   }
 
-  return TRUE;
+  return true;
 }
 
 /*
  * VENTA3 This is a modified Segment()
  */
-int
+bool
 DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
         Angle start, Angle end)
 {
@@ -606,7 +606,7 @@ DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
   rcrect.maxy = rc.bottom;
 
   if (msRectOverlap(&rect, &rcrect) != MS_TRUE) {
-    return FALSE;
+    return false;
   }
 
   // JMW added faster checking...
@@ -643,7 +643,7 @@ DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
     canvas.polyline(pt, npoly); // TODO check ClipPolygon for HP31X
   }
 
-  return TRUE;
+  return true;
 }
 
 /* Not used
