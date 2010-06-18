@@ -371,7 +371,7 @@ jas_stream_t *jas_stream_fdopen(int fd, const char *mode)
 #ifdef WINDOWSPC
 #ifdef HAVE_MSVCRT
 	if (stream->openmode_ & JAS_STREAM_BINARY) {
-		_setmode(fd, O_BINARY);
+		setmode(fd, O_BINARY);
 	}
 #endif
 #endif
