@@ -56,6 +56,9 @@ protected:
   POINT origin;
 
 public:
+  const SIZE& get_size() const {
+    return size;
+  }
   const POINT& get_origin() const {
     return origin;
   }

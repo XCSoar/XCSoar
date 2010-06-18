@@ -174,14 +174,14 @@ MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc, const GPS_STATE &gps)
     icon = &MapGfx.hGPSStatus2;
     txt = gpswarningtext1;
   } else if (gps.NAVWarning || (gps.SatellitesUsed == 0)) {
-    icon = &MapGfx.hGPSStatus2;
+    icon = &MapGfx.hGPSStatus1;
     txt = gpswarningtext2;
   } else {
     return; // early exit
   }
 
   icon->draw(canvas, get_bitmap_canvas(),
-            rc.left + IBLSCALE(2),
+             rc.left + IBLSCALE(2),
             rc.bottom + IBLSCALE(Appearance.GPSStatusOffset.y - 22));
 
   TextInBox(canvas, gettext(txt),

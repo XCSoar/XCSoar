@@ -103,7 +103,8 @@ public:
   MaskedIcon hFLARMTraffic;
   MaskedIcon hLogger, hLoggerOff;
   MaskedIcon hCruise, hClimb, hFinalGlide, hAbort;
-  MaskedIcon hAutoMacCready, hGPSStatus1, hGPSStatus2;
+  MaskedIcon hAutoMacCready;
+  MaskedIcon hGPSStatus1, hGPSStatus2;
 
   Brush hBackgroundBrush;
 
