@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmTaskManager" Width="320" Height="240" Caption="Task Manager">
-  <WndButton Name="cmdClose" Caption="Close" X="2" Y="2" Width="98" Height="22" Font="2" OnClick="OnCloseClicked"/>
-  <WndButton Name="cmdEdit" Caption="Edit" X="2" Y="-1" Width="98" Height="22" Font="2" OnClick="OnEditClicked"/>
-  <WndButton Name="cmdList" Caption="Browse" X="2" Y="-1" Width="98" Height="22" Font="2" OnClick="OnListClicked"/>
+<Form Name="frmTaskManager" Width="320" Height="240" Caption="Task Manager">
+  <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="98" Height="22" Font="2" OnClick="OnCloseClicked"/>
+  <Button Name="cmdEdit" Caption="Edit" X="2" Y="-1" Width="98" Height="22" Font="2" OnClick="OnEditClicked"/>
+  <Button Name="cmdList" Caption="Browse" X="2" Y="-1" Width="98" Height="22" Font="2" OnClick="OnListClicked"/>
 
-  <WndOwnerDrawFrame Name="frmTaskView" X="102" Y="2" Width="215" Height="220" Font="0" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
+  <Canvas Name="frmTaskView" X="102" Y="2" Width="215" Height="220" Font="0" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
 
-</WndForm>
+</Form>

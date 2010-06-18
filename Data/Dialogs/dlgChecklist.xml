@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmChecklist" Width="320" Height="240" Caption="Checklist">
-  <WndSymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="160" Width="35" Height="28" Font="2" OnClick="OnPrevClicked" />
+<Form Name="frmChecklist" Width="320" Height="240" Caption="Checklist">
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="160" Width="35" Height="28" Font="2" OnClick="OnPrevClicked" />
 
-  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="35" Y="160" Width="35" Height="28" Font="2" OnClick="OnNextClicked" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="35" Y="160" Width="35" Height="28" Font="2" OnClick="OnNextClicked" />
 
-  <WndButton Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28" Font="2" />
+  <Button Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28" Font="2" />
 
-  <WndListFrame Name="frmDetails" X="70" Y="1" Width="-1" Height="-1" ItemHeight="18" Border="1"/>
-</WndForm>
+  <List Name="frmDetails" X="70" Y="1" Width="-1" Height="-1" ItemHeight="18" Border="1"/>
+</Form>

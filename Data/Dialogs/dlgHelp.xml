@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmHelp" Width="320" Height="240" Caption="Help">
-  <WndButton Caption="Close" X="2" Y="2" Width="60" Height="22" Font="2" OnClick="OnCloseClicked"/>
+<Form Name="frmHelp" Width="320" Height="240" Caption="Help">
+  <Button Caption="Close" X="2" Y="2" Width="60" Height="22" Font="2" OnClick="OnCloseClicked"/>
 
-  <WndProperty Name="prpHelpText" Caption="" X="62" Y="2" Width="-2" Height="-2" CaptionWidth="10" Font="2" ReadOnly="1" MultiLine="1"/>
-</WndForm>
+  <Edit Name="prpHelpText" Caption="" X="62" Y="2" Width="-2" Height="-2" CaptionWidth="10" Font="2" ReadOnly="1" MultiLine="1"/>
+</Form>

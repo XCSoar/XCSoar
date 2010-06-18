@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmFlarmTraffic" Width="240" Height="320" Caption="FLARM Traffic">
-  <WndButton Name="cmdDetails" Caption="Details" X="3" Y="242" Width="58" Height="28" Font="2" />
-  <WndSymbolButton Name="cmdZoomIn" Caption="+" X="63" Y="242" Width="28" Height="28" Font="2" />
-  <WndSymbolButton Name="cmdZoomOut" Caption="-" X="93" Y="242" Width="28" Height="28" Font="2" />
-  <WndButton Name="cmdSwitchData" Caption="Avg/Alt" X="173" Y="242" Width="58" Height="28" Font="2" />
+<Form Name="frmFlarmTraffic" Width="240" Height="320" Caption="FLARM Traffic">
+  <Button Name="cmdDetails" Caption="Details" X="3" Y="242" Width="58" Height="28" Font="2" />
+  <SymbolButton Name="cmdZoomIn" Caption="+" X="63" Y="242" Width="28" Height="28" Font="2" />
+  <SymbolButton Name="cmdZoomOut" Caption="-" X="93" Y="242" Width="28" Height="28" Font="2" />
+  <Button Name="cmdSwitchData" Caption="Avg/Alt" X="173" Y="242" Width="58" Height="28" Font="2" />
 
-  <WndButton Name="cmdClose" Caption="Close" X="3" Y="272" Width="58" Height="28" Font="2" />
-  <WndSymbolButton Name="cmdPrev" Caption="&lt;" X="63" Y="272" Width="28" Height="28" Font="2" />
-  <WndSymbolButton Name="cmdNext" Caption="&gt;" X="93" Y="272" Width="28" Height="28" Font="2" />
+  <Button Name="cmdClose" Caption="Close" X="3" Y="272" Width="58" Height="28" Font="2" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="63" Y="272" Width="28" Height="28" Font="2" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="93" Y="272" Width="28" Height="28" Font="2" />
 
   <Custom X="173" Y="272" Width="58" Height="28" OnCreate="OnCreateAutoZoom"/>
   
   <Custom Name="frmRadar" X="1" Y="1" Width="-1" Height="232" Border="1"
           OnCreate="OnCreateFlarmTrafficControl"/>
-</WndForm>
+</Form>

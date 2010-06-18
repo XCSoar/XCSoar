@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmAirspaceWarning" X="2" Y="2" Width="236" Height="172" Caption="Airspace Warnings">
-  <WndListFrame Name="frmAirspaceWarningList" X="1" Y="1" Width="-1" Height="-40" ItemHeight="30" Border="1"/>
+<Form Name="frmAirspaceWarning" X="2" Y="2" Width="236" Height="172" Caption="Airspace Warnings">
+  <List Name="frmAirspaceWarningList" X="1" Y="1" Width="-1" Height="-40" ItemHeight="30" Border="1"/>
 
-  <WndButton name="cmdAckOutside" Caption="ACK Warn" X="1" Y="-38" width="46" height="36" Font="2" OnClick="OnAck1Clicked"/>
+  <Button name="cmdAckOutside" Caption="ACK Warn" X="1" Y="-38" width="46" height="36" Font="2" OnClick="OnAck1Clicked"/>
 
-  <WndButton name="cmdAck" Caption="ACK Space" X="47" Y="-38" width="46" height="36" Font="2" OnClick="OnAckClicked"/>
+  <Button name="cmdAck" Caption="ACK Space" X="47" Y="-38" width="46" height="36" Font="2" OnClick="OnAckClicked"/>
 
-  <WndButton Caption="ACK Day" X="93" Y="-38" width="46" height="36" Font="2" OnClick="OnAck2Clicked"/>
+  <Button Caption="ACK Day" X="93" Y="-38" width="46" height="36" Font="2" OnClick="OnAck2Clicked"/>
 
-  <WndButton Caption="Enable" X="140" Y="-38" width="48" height="36" Font="2" OnClick="OnEnableClicked"/>
+  <Button Caption="Enable" X="140" Y="-38" width="48" height="36" Font="2" OnClick="OnEnableClicked"/>
 
-  <WndButton Caption="Close" X="189" Y="-38" width="45" height="36" Font="2" OnClick="OnCloseClicked"/>
-</WndForm>
+  <Button Caption="Close" X="189" Y="-38" width="45" height="36" Font="2" OnClick="OnCloseClicked"/>
+</Form>

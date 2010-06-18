@@ -444,14 +444,14 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const TCHAR *FileName,
 
   XMLNode xNode;
 
-  // If the main XMLNode is of type "WndForm"
-  if (_tcsicmp(xMainNode.getName(), _T("WndForm")) == 0)
+  // If the main XMLNode is of type "Form"
+  if (_tcsicmp(xMainNode.getName(), _T("Form")) == 0)
     // -> save it as the dialog node
     xNode = xMainNode;
   else
-    // Get the first child node of the type "WndForm"
+    // Get the first child node of the type "Form"
     // and save it as the dialog node
-    xNode = xMainNode.getChildNode(_T("WndForm"));
+    xNode = xMainNode.getChildNode(_T("Form"));
 
   FontMap[0] = &TitleWindowFont;
   FontMap[1] = &MapWindowFont;
@@ -644,7 +644,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
   bool advanced = _tcschr(Caption, _T('*')) != NULL;
 
   // PropertyControl (WndProperty)
-  if (_tcscmp(node.getName(), _T("WndProperty")) == 0) {
+  if (_tcscmp(node.getName(), _T("Edit")) == 0) {
     WndProperty *W;
     int CaptionWidth;
     int ReadOnly;
@@ -723,7 +723,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     }
 
   // ButtonControl (WndButton)
-  } else if (_tcscmp(node.getName(), _T("WndButton")) == 0) {
+  } else if (_tcscmp(node.getName(), _T("Button")) == 0) {
     // Determine ClickCallback function
     WndButton::ClickNotifyCallback_t ClickCallback =
       (WndButton::ClickNotifyCallback_t)
@@ -741,7 +741,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
                            ClickCallback);
 
   // SymbolButtonControl (WndSymbolButton) not used yet
-  } else if (_tcscmp(node.getName(), _T("WndSymbolButton")) == 0) {
+  } else if (_tcscmp(node.getName(), _T("SymbolButton")) == 0) {
     // Determine ClickCallback function
     WndButton::ClickNotifyCallback_t ClickCallback =
       (WndButton::ClickNotifyCallback_t)
@@ -760,7 +760,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
 #ifndef ALTAIRSYNC
   // EventButtonControl (WndEventButton) not used yet
-  } else if (_tcscmp(node.getName(), _T("WndEventButton")) == 0) {
+  } else if (_tcscmp(node.getName(), _T("EventButton")) == 0) {
     TCHAR iename[100];
     TCHAR ieparameters[100];
     _tcscpy(iename,
@@ -808,7 +808,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     window = kb;
   // DrawControl (WndOwnerDrawFrame)
-  } else if (_tcscmp(node.getName(), _T("WndOwnerDrawFrame")) == 0) {
+  } else if (_tcscmp(node.getName(), _T("Canvas")) == 0) {
     // Determine DrawCallback function
     WndOwnerDrawFrame::OnPaintCallback_t PaintCallback =
       (WndOwnerDrawFrame::OnPaintCallback_t)
@@ -821,13 +821,13 @@ LoadChild(WndForm &form, ContainerControl &Parent,
                                WindowStyle(), PaintCallback);
 
   // FrameControl (WndFrame)
-  } else if (_tcscmp(node.getName(), _T("WndFrame")) == 0){
+  } else if (_tcscmp(node.getName(), _T("Label")) == 0){
     // Create the FrameControl
     WC = new WndFrame(Parent, X, Y, Width, Height,
                       WindowStyle());
 
   // ListBoxControl (WndListFrame)
-  } else if (_tcscmp(node.getName(), _T("WndListFrame")) == 0){
+  } else if (_tcscmp(node.getName(), _T("List")) == 0){
     // Determine ItemHeight of the list items
     unsigned item_height =
       Layout::Scale(StringToIntDflt(node.getAttribute(_T("ItemHeight")), 18));

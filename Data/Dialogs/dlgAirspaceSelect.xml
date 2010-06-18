@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmAirspaceSelect" Width="320" Height="240" Caption="Select Airspace">
-  <WndFrame X="0" Y="0" Width="100" Height="20" Font="2" Caption="Filter..." />
+<Form Name="frmAirspaceSelect" Width="320" Height="240" Caption="Select Airspace">
+  <Label X="0" Y="0" Width="100" Height="20" Font="2" Caption="Filter..." />
 
-  <WndProperty Name="prpFltName" Caption="Name" X="2" Y="-1" Width="98" Height="36" CaptionWidth="0" Font="2">
+  <Edit Name="prpFltName" Caption="Name" X="2" Y="-1" Width="98" Height="36" CaptionWidth="0" Font="2">
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterName"/>
-  </WndProperty>
+  </Edit>
 
-  <WndProperty Name="prpFltDistance" Caption="Distance" X="2" Y="-1" Width="98" Height="36" CaptionWidth="0" Font="2">
+  <Edit Name="prpFltDistance" Caption="Distance" X="2" Y="-1" Width="98" Height="36" CaptionWidth="0" Font="2">
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDistance"/>
-  </WndProperty>
+  </Edit>
 
-  <WndProperty Name="prpFltDirection" Caption="Direction" X="2" Y="-1" Width="98" Height="36" CaptionWidth="0" Font="2">
+  <Edit Name="prpFltDirection" Caption="Direction" X="2" Y="-1" Width="98" Height="36" CaptionWidth="0" Font="2">
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
-  </WndProperty>
+  </Edit>
 
-  <WndProperty Name="prpFltType" Caption="Type" X="2" Y="-1" Width="98" Height="36" CaptionWidth="0" Font="2">
+  <Edit Name="prpFltType" Caption="Type" X="2" Y="-1" Width="98" Height="36" CaptionWidth="0" Font="2">
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterType"/>
-  </WndProperty>
+  </Edit>
 
-  <WndButton Name="cmdClose" Caption="Close" X="2" Y="190" Width="60" Height="28" Font="2" />
+  <Button Name="cmdClose" Caption="Close" X="2" Y="190" Width="60" Height="28" Font="2" />
 
-  <WndListFrame Name="frmAirspaceList" X="102" Y="1" Width="-1" Height="-1" ItemHeight="18" Border="1"/>
-</WndForm>
+  <List Name="frmAirspaceList" X="102" Y="1" Width="-1" Height="-1" ItemHeight="18" Border="1"/>
+</Form>

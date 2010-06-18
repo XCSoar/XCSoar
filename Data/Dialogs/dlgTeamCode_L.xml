@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmTeamCode" Width="206" Height="240" Caption="Team code">
-  <WndProperty Name="prpOwnCode" Caption="Own code:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1" />
+<Form Name="frmTeamCode" Width="206" Height="240" Caption="Team code">
+  <Edit Name="prpOwnCode" Caption="Own code:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1" />
 
-  <WndProperty Name="prpMateCode" Caption="Mate code:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1" />
+  <Edit Name="prpMateCode" Caption="Mate code:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1" />
 
-  <WndProperty Name="prpRange" Caption="Range:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1">
+  <Edit Name="prpRange" Caption="Range:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1">
     <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" ReadOnly="1" />
-  </WndProperty>
+  </Edit>
 
-  <WndProperty Name="prpBearing" Caption="Bearing:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1">
+  <Edit Name="prpBearing" Caption="Bearing:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1">
     <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" ReadOnly="1" />
-  </WndProperty>
+  </Edit>
 
-  <WndProperty Name="prpRelBearing" Caption="Rel. Bearing:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1" />
+  <Edit Name="prpRelBearing" Caption="Rel. Bearing:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1" />
 
-  <WndProperty Name="prpFlarmLock" Caption="Flarm lock:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1" />
+  <Edit Name="prpFlarmLock" Caption="Flarm lock:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1" />
 
-  <WndButton   Caption="Flarm Lock"    X="5" Y="140" Width="90"  Height="40" Font="2" OnClick="OnFlarmLockClicked" />
+  <Button   Caption="Flarm Lock"    X="5" Y="140" Width="90"  Height="40" Font="2" OnClick="OnFlarmLockClicked" />
 
-  <WndButton Name="cmdSetCode" Caption="Set Mate code" X="95" Y="140" Width="90"  Height="40" Font="2" />
+  <Button Name="cmdSetCode" Caption="Set Mate code" X="95" Y="140" Width="90"  Height="40" Font="2" />
 
-  <WndButton   Caption="Close"    X="5" Y="185" Width="180"  Height="35" Font="2" OnClick="OnCloseClicked" />
-</WndForm>
+  <Button   Caption="Close"    X="5" Y="185" Width="180"  Height="35" Font="2" OnClick="OnCloseClicked" />
+</Form>

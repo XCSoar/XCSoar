@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmFlarmTrafficDetails" Width="320" Height="240" Caption="FLARM Traffic Details">
-  <WndButton Name="cmdSetAsTeamMate" Caption="Team" X="3" Y="163" Width="58" Height="28" Font="2" />
-  <WndButton Name="cmdClose" Caption="Close" X="3" Y="193" Width="58" Height="28" Font="2" />
+<Form Name="frmFlarmTrafficDetails" Width="320" Height="240" Caption="FLARM Traffic Details">
+  <Button Name="cmdSetAsTeamMate" Caption="Team" X="3" Y="163" Width="58" Height="28" Font="2" />
+  <Button Name="cmdClose" Caption="Close" X="3" Y="193" Width="58" Height="28" Font="2" />
 
-  <WndButton Name="cmdCallsign" Caption="..." X="259" Y="20" Width="36" Height="22" Font="2" />
+  <Button Name="cmdCallsign" Caption="..." X="259" Y="20" Width="36" Height="22" Font="2" />
 
-  <WndProperty Name="prpCallsign" Caption="Comp. ID" X="65" Y="20" Width=210 Height="22" CaptionWidth=90 ReadOnly=1 />
-  <WndProperty Name="prpDirectionH" Caption=" " X="229" Y="50" Width=83 Height="22" CaptionWidth=1 ReadOnly=1 />
-  <WndProperty Name="prpDirectionV" Caption=" " X="229" Y="70" Width=83 Height="22" CaptionWidth=1 ReadOnly=1 />
-  <WndProperty Name="prpDistance" Caption="Distance" X="65" Y="50" Width=180 Height="22" CaptionWidth=90 ReadOnly=1 />
-  <WndProperty Name="prpAltitude" Caption="Altitude" X="65" Y="70" Width=180 Height="22" CaptionWidth=90 ReadOnly=1 />
-  <WndProperty Name="prpVSpeed" Caption="Vario" X="65" Y="90" Width=247 Height="22" CaptionWidth=90 ReadOnly=1 />
-  <WndProperty Name="prpPilot" Caption="Pilot" X="65" Y="120" Width=247 Height="22" CaptionWidth=90 ReadOnly=1 />
-  <WndProperty Name="prpAirport" Caption="Airport" X="65" Y="140" Width=247 Height="22" CaptionWidth=90 ReadOnly=1 />
-  <WndProperty Name="prpFrequency" Caption="Freq." X="65" Y="160" Width=247 Height="22" CaptionWidth=90 ReadOnly=1 />
-  <WndProperty Name="prpPlaneType" Caption="Plane" X="65" Y="180" Width=247 Height="22" CaptionWidth=90 ReadOnly=1 />
-</WndForm>
+  <Edit Name="prpCallsign" Caption="Comp. ID" X="65" Y="20" Width=210 Height="22" CaptionWidth=90 ReadOnly=1 />
+  <Edit Name="prpDirectionH" Caption=" " X="229" Y="50" Width=83 Height="22" CaptionWidth=1 ReadOnly=1 />
+  <Edit Name="prpDirectionV" Caption=" " X="229" Y="70" Width=83 Height="22" CaptionWidth=1 ReadOnly=1 />
+  <Edit Name="prpDistance" Caption="Distance" X="65" Y="50" Width=180 Height="22" CaptionWidth=90 ReadOnly=1 />
+  <Edit Name="prpAltitude" Caption="Altitude" X="65" Y="70" Width=180 Height="22" CaptionWidth=90 ReadOnly=1 />
+  <Edit Name="prpVSpeed" Caption="Vario" X="65" Y="90" Width=247 Height="22" CaptionWidth=90 ReadOnly=1 />
+  <Edit Name="prpPilot" Caption="Pilot" X="65" Y="120" Width=247 Height="22" CaptionWidth=90 ReadOnly=1 />
+  <Edit Name="prpAirport" Caption="Airport" X="65" Y="140" Width=247 Height="22" CaptionWidth=90 ReadOnly=1 />
+  <Edit Name="prpFrequency" Caption="Freq." X="65" Y="160" Width=247 Height="22" CaptionWidth=90 ReadOnly=1 />
+  <Edit Name="prpPlaneType" Caption="Plane" X="65" Y="180" Width=247 Height="22" CaptionWidth=90 ReadOnly=1 />
+</Form>

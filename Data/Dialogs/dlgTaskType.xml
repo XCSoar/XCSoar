@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmTaskType" Width="240" Height="320" Caption="Task Type">
-  <WndButton Name="cmdClose" Caption="Close" X="2" Y="2" Width="60" Height="22" Font="2" OnClick="OnCloseClicked"/>
+<Form Name="frmTaskType" Width="240" Height="320" Caption="Task Type">
+  <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="60" Height="22" Font="2" OnClick="OnCloseClicked"/>
 
-  <WndButton Name="cmdSelect" Caption="Select" X="150" Y="2" Width="60" Height="22" Font="2" OnClick="OnSelectClicked"/>
+  <Button Name="cmdSelect" Caption="Select" X="150" Y="2" Width="60" Height="22" Font="2" OnClick="OnSelectClicked"/>
 
-  <WndListFrame Name="frmTaskTypes" X="2" Y="26" Width="-2" Height="-54" ItemHeight="18" Border="1"/>
+  <List Name="frmTaskTypes" X="2" Y="26" Width="-2" Height="-54" ItemHeight="18" Border="1"/>
 
-  <WndFrame Name="frmSummary" X="2" Y="-52" Width="176" Height="50" Font="2" Border="1"/>
+  <Label Name="frmSummary" X="2" Y="-52" Width="176" Height="50" Font="2" Border="1"/>
 
-</WndForm>
+</Form>

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmTaskList" Width="320" Height="240" Caption="Task Browser">
-  <WndButton Name="cmdClose" Caption="Close" X="2" Y="2" Width="98" Height="22" Font="2" OnClick="OnCloseClicked"/>
+<Form Name="frmTaskList" Width="320" Height="240" Caption="Task Browser">
+  <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="98" Height="22" Font="2" OnClick="OnCloseClicked"/>
 
-  <WndButton Name="cmdLoadSave" Caption="Load" X="138" Y="2" Width="60" Height="22" Font="2" OnClick="OnLoadSaveClicked"/>
-  <WndButton Name="cmdRename" Caption="Rename" X="198" Y="2" Width="60" Height="22" Font="2" OnClick="OnRenameClicked"/>
-  <WndButton Name="cmdDelete" Caption="Delete" X="258" Y="2" Width="60" Height="22" Font="2" OnClick="OnDeleteClicked"/>
+  <Button Name="cmdLoadSave" Caption="Load" X="138" Y="2" Width="60" Height="22" Font="2" OnClick="OnLoadSaveClicked"/>
+  <Button Name="cmdRename" Caption="Rename" X="198" Y="2" Width="60" Height="22" Font="2" OnClick="OnRenameClicked"/>
+  <Button Name="cmdDelete" Caption="Delete" X="258" Y="2" Width="60" Height="22" Font="2" OnClick="OnDeleteClicked"/>
 
-  <WndOwnerDrawFrame Name="frmTaskView" X="2" Y="24" Width="135" Height="118" Font="0" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
+  <Canvas Name="frmTaskView" X="2" Y="24" Width="135" Height="118" Font="0" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
 
-  <WndFrame Name="frmSummary" X="2" Y="144" Width="135" Height="50" Font="2" Border="1"/>
+  <Label Name="frmSummary" X="2" Y="144" Width="135" Height="50" Font="2" Border="1"/>
 
-  <WndListFrame Name="frmTasks" X="139" Y="24" Width="-2" Height="-2" ItemHeight="18" Border="1"/>
+  <List Name="frmTasks" X="139" Y="24" Width="-2" Height="-2" ItemHeight="18" Border="1"/>
 
-</WndForm>
+</Form>

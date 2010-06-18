@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmTextEntry_Keyboard" Width="320" Height="240" Caption="Edit text">
-  <WndProperty Name="prpText"  Caption=""   X="0" Y="2" Width="270" Height="22" CaptionWidth="1" Font="2" ReadOnly="1" />
-  <WndButton Name="btnBackspace" Caption="&lt;-"    X="272" Y="3" Width="36"  Height="20" Font="2" OnClick="OnBackspace"/>
+<Form Name="frmTextEntry_Keyboard" Width="320" Height="240" Caption="Edit text">
+  <Edit Name="prpText"  Caption=""   X="0" Y="2" Width="270" Height="22" CaptionWidth="1" Font="2" ReadOnly="1" />
+  <Button Name="btnBackspace" Caption="&lt;-"    X="272" Y="3" Width="36"  Height="20" Font="2" OnClick="OnBackspace"/>
 
-  <WndButton Name="btnOK" Caption="Ok" X="1" Y="183" Width="80" Height="41" Font="2" OnClick="OnOk"/>
-  <WndButton Caption="Cancel" X="175" Y="183" Width="60" Height="41" Font="2" OnClick="OnCancel"/>
-  <WndButton Caption="Clear" X="235" Y="183" Width="50" Height="41" Font="2" OnClick="OnClear"/>
+  <Button Name="btnOK" Caption="Ok" X="1" Y="183" Width="80" Height="41" Font="2" OnClick="OnOk"/>
+  <Button Caption="Cancel" X="175" Y="183" Width="60" Height="41" Font="2" OnClick="OnCancel"/>
+  <Button Caption="Clear" X="235" Y="183" Width="50" Height="41" Font="2" OnClick="OnClear"/>
 
   <Keyboard Name="Keyboard" X="2" Y="25" Width="-2" Height="199" Font="2" OnCharacter="OnCharacter"/>
-</WndForm>
+</Form>
