@@ -375,13 +375,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
-	$(SRC)/Screen/shapelib/mapbits.cpp \
-	$(SRC)/Screen/shapelib/maperror.cpp \
-	$(SRC)/Screen/shapelib/mapprimitive.cpp \
-	$(SRC)/Screen/shapelib/mapsearch.cpp \
-	$(SRC)/Screen/shapelib/mapshape.cpp \
-	$(SRC)/Screen/shapelib/maptree.cpp \
-	$(SRC)/Screen/shapelib/mapxbase.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/TaskClient.cpp \
@@ -419,6 +412,7 @@ RUN_MAP_WINDOW_BIN = $(TARGET_BIN_DIR)/RunMapWindow$(TARGET_EXEEXT)
 RUN_MAP_WINDOW_LDADD = \
 	$(FAKE_LIBS) \
 	$(SCREEN_LIBS) \
+	$(SHAPELIB_LIBS) \
 	$(ENGINE_LIBS) \
 	$(JASPER_LIBS) \
 	$(IO_LIBS) \
