@@ -193,13 +193,13 @@
 #define HAVE_LIMITS_H 1
 
 /* Define if you have the <stdbool.h> header file.  */
-//#define HAVE_STDBOOL_H
+#define HAVE_STDBOOL_H 1
 
 /* Define if you have the <stddef.h> header file.  */
 #define HAVE_STDDEF_H 1
 
 /* Define if you have the <stdint.h> header file.  */
-//#define HAVE_STDINT_H 1
+#define HAVE_STDINT_H 1
 
 /* Define if you have the <stdlib.h> header file.  */
 #define HAVE_STDLIB_H 1
@@ -208,7 +208,7 @@
 #define HAVE_SYS_TYPES_H 1
 
 /* Define if you have the <unistd.h> header file.  */
-//#define HAVE_UNISTD_H 1
+#define HAVE_UNISTD_H 1
 
 /* Define if you have the <windows.h> header file.  */
 /* #undef HAVE_WINDOWS_H */
@@ -221,8 +221,6 @@
 
 /* Version number of package */
 #define VERSION "1.700.2"
-
-typedef unsigned int uint;
 
 #else
 #include <jasper/jas_config2.h>

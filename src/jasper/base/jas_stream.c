@@ -72,27 +72,22 @@
 \******************************************************************************/
 
 #include <assert.h>
-#if defined(HAVE_FCNTL_H)
 #include <fcntl.h>
-#endif
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <ctype.h>
+#if defined(HAVE_UNISTD_H)
 #include <unistd.h>
+#endif
+#if defined(WIN32) || defined(HAVE_IO_H)
+#include <io.h>
+#endif
 
 #include "jasper/jas_types.h"
 #include "jasper/jas_stream.h"
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_math.h"
-
-//#if defined(HAVE_MSVCRT) && (defined(WIN32) || defined(HAVE_IO_H))
-//#include <io.h>
-//#endif
-
-#if defined(HAVE_IO_H)
-  #include <io.h>
-#endif
 
 /******************************************************************************\
 * Local function prototypes.

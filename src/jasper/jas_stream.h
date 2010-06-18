@@ -77,12 +77,10 @@
 #include <jasper/jas_config.h>
 
 #include <stdio.h>
-#if defined(HAVE_FCNTL_H)
 #include <fcntl.h>
-#endif
 #include <string.h>
 #if defined(HAVE_UNISTD_H)
-//JMW#include <unistd.h>
+#include <unistd.h>
 #endif
 #include <jasper/jas_types.h>
 
