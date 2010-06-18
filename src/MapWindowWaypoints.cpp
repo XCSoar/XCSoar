@@ -78,13 +78,13 @@ public:
       return;
 
     TextInBoxMode_t TextDisplayMode;
-    bool irange = false;
-    bool islandable = false;
-    bool dowrite = in_task || (map.SettingsMap().DeclutterLabels < 2);
+    bool scale_in_range = false;
+    bool is_landable = false;
+    bool do_write_label = in_task || (map.SettingsMap().DeclutterLabels < 2);
 
     TextDisplayMode.AsInt = 0;
 
-    irange = map.WaypointInScaleFilter(way_point);
+    scale_in_range = map.WaypointInScaleFilter(way_point);
 
     const MaskedIcon *icon = &MapGfx.SmallIcon;
 
@@ -92,7 +92,7 @@ public:
     int AltArrivalAGL = 0;
 
     if (way_point.is_landable()) {
-      islandable = true; // so we can always draw them
+      is_landable = true; // so we can always draw them
 
       const UnorderedTaskPoint t(way_point, map.SettingsComputer());
       const GlideResult r =
@@ -115,7 +115,7 @@ public:
 
           // show all reachable landing fields unless we want a decluttered
           // screen.
-          dowrite = true;
+          do_write_label = true;
         }
 
         if (way_point.Flags.Airport)
@@ -138,17 +138,17 @@ public:
     if (in_task)
       TextDisplayMode.AsFlag.WhiteBold = 1;
 
-    if (irange || in_task || dowrite || islandable)
+    if (scale_in_range || in_task || do_write_label || is_landable)
       icon->draw(canvas, map.get_bitmap_canvas(), sc.x, sc.y);
 
     if (pDisplayTextType == DISPLAYNAMEIFINTASK) {
       if (!in_task)
         return;
 
-      dowrite = true;
+      do_write_label = true;
     }
 
-    if (!dowrite)
+    if (!do_write_label)
       return;
 
     TCHAR Buffer[32];
