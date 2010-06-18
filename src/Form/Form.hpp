@@ -226,8 +226,13 @@ public:
   /** Set the background color of the window */
   Color SetBackColor(Color Value);
 
-  void SetKeyDownNotify(KeyDownNotifyCallback_t KeyDownNotify);
-  void SetTimerNotify(TimerNotifyCallback_t OnTimerNotify);
+  void SetKeyDownNotify(KeyDownNotifyCallback_t KeyDownNotify) {
+    mOnKeyDownNotify = KeyDownNotify;
+  }
+
+  void SetTimerNotify(TimerNotifyCallback_t OnTimerNotify) {
+    mOnTimerNotify = OnTimerNotify;
+  }
 
 private:
   static PeriodClock timeAnyOpenClose; // when any dlg opens or child closes

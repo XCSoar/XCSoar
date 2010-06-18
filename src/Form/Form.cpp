@@ -423,15 +423,3 @@ Color WndForm::SetBackColor(Color Value)
   client_area.SetBackColor(Value);
   return ContainerControl::SetBackColor(Value);
 }
-
-void
-WndForm::SetKeyDownNotify(KeyDownNotifyCallback_t KeyDownNotify)
-{
-  mOnKeyDownNotify = KeyDownNotify;
-}
-
-void
-WndForm::SetTimerNotify(TimerNotifyCallback_t OnTimerNotify)
-{
-  mOnTimerNotify = OnTimerNotify;
-}
