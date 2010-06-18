@@ -577,8 +577,8 @@ int pgx_validate(jas_stream_t *in);
 
 #if !defined(EXCLUDE_TIFF_SUPPORT)
 /* Format-dependent operations for TIFF support. */
-jas_image_t *tiff_decode(jas_stream_t *in, const char *optstr);
-int tiff_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
+jas_image_t *tiff_decode(jas_stream_t *in, char *optstr);
+int tiff_encode(jas_image_t *image, jas_stream_t *out, char *optstr);
 int tiff_validate(jas_stream_t *in);
 #endif
 

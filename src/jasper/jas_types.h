@@ -102,6 +102,7 @@
 #include <sys/types.h>
 #endif
 
+#ifndef __cplusplus
 #if defined(HAVE_STDBOOL_H)
 /*
  * The C language implementation does correctly provide the standard header
@@ -110,7 +111,6 @@
 #include <stdbool.h>
 #else
 
-#ifndef __cplusplus
 /*
  * The C language implementation does not provide the standard header file
  * "stdbool.h" as required by ISO/IEC 9899:1999.  Try to compensate for this
@@ -151,7 +151,6 @@ typedef signed char int_fast8_t;
 /**********/
 #if !defined(UINT_FAST8_MAX)
 typedef unsigned char uint_fast8_t;
-#define UINT_FAST8_MIN	0
 #define UINT_FAST8_MAX	255
 #endif
 /**********/
@@ -163,7 +162,6 @@ typedef short int_fast16_t;
 /**********/
 #if !defined(UINT_FAST16_MAX)
 typedef unsigned short uint_fast16_t;
-#define UINT_FAST16_MIN	USHRT_MIN
 #define UINT_FAST16_MAX	USHRT_MAX
 #endif
 /**********/
@@ -175,7 +173,6 @@ typedef int int_fast32_t;
 /**********/
 #if !defined(UINT_FAST32_MIN) && !defined(UINT_FAST32_MAX)
 typedef unsigned int uint_fast32_t;
-#define UINT_FAST32_MIN	UINT_MIN
 #define UINT_FAST32_MAX	UINT_MAX
 #endif
 /**********/
@@ -187,7 +184,6 @@ typedef longlong int_fast64_t;
 /**********/
 #if !defined(UINT_FAST64_MIN) && !defined(UINT_FAST64_MAX)
 typedef ulonglong uint_fast64_t;
-#define UINT_FAST64_MIN	ULLONG_MIN
 #define UINT_FAST64_MAX	ULLONG_MAX
 #endif
 /**********/

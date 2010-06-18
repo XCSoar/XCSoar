@@ -158,7 +158,11 @@ jas_cmprof_t *jas_cmprof_createfromclrspc(int clrspc)
 			goto error;
 		if (!(prof = jas_cmprof_createfromiccprof(iccprof)))
 			goto error;
+#if 0
 		jas_iccprof_destroy(iccprof);
+#else
+		prof->iccprof = iccprof;
+#endif
 		if (!jas_clrspc_isgeneric(clrspc))
 			prof->clrspc = clrspc;
 		break;

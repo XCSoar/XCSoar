@@ -77,7 +77,9 @@
 #include <jasper/jas_config.h>
 
 #include <stdio.h>
+#if defined(HAVE_FCNTL_H)
 #include <fcntl.h>
+#endif
 #include <string.h>
 #if defined(HAVE_UNISTD_H)
 #include <unistd.h>
