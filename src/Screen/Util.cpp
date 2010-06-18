@@ -38,11 +38,6 @@ Copyright_License {
 
 #include "Screen/Util.hpp"
 #include "Screen/Canvas.hpp"
-#include "Math/Constants.h"
-#include "Math/FastMath.h"
-#include "Asset.hpp" // for needclipping
-
-#include <tchar.h>
 
 /**
  * The "OutputToInput" function sets the resulting polygon of this

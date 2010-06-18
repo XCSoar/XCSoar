@@ -44,10 +44,9 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_UTIL_HPP
 #define XCSOAR_SCREEN_UTIL_HPP
 
-#include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 
-#include <windows.h>
+#include <windef.h>
 
 class Canvas;
 
