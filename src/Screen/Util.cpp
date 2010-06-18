@@ -40,7 +40,6 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Math/Constants.h"
 #include "Math/FastMath.h"
-#include "Screen/shapelib/mapprimitive.h"
 #include "Asset.hpp" // for needclipping
 
 #include <tchar.h>
@@ -471,21 +470,10 @@ ClippedCircle(Canvas &canvas, long x, long y, int radius, RECT rc, bool fill)
   POINT pt[65];
   unsigned int i;
 
-  rectObj rect;
-  rect.minx = x-radius;
-  rect.maxx = x+radius;
-  rect.miny = y-radius;
-  rect.maxy = y+radius;
-  rectObj rcrect;
-  rcrect.minx = rc.left;
-  rcrect.maxx = rc.right;
-  rcrect.miny = rc.top;
-  rcrect.maxy = rc.bottom;
-
-  if (msRectOverlap(&rect, &rcrect) != MS_TRUE) {
+  RECT bounds;
+  SetRect(&bounds, x - radius, y - radius, x + radius, y + radius);
+  if (!IntersectRect(&bounds, &bounds, &rc))
     return false;
-  }
-  // JMW added faster checking...
 
   unsigned int step = 1;
   if (radius < 20) {
@@ -514,22 +502,10 @@ Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
   int istart;
   int iend;
 
-  rectObj rect;
-  rect.minx = x - radius;
-  rect.maxx = x + radius;
-  rect.miny = y - radius;
-  rect.maxy = y + radius;
-  rectObj rcrect;
-  rcrect.minx = rc.left;
-  rcrect.maxx = rc.right;
-  rcrect.miny = rc.top;
-  rcrect.maxy = rc.bottom;
-
-  if (msRectOverlap(&rect, &rcrect) != MS_TRUE) {
+  RECT bounds;
+  SetRect(&bounds, x - radius, y - radius, x + radius, y + radius);
+  if (!IntersectRect(&bounds, &bounds, &rc))
     return false;
-  }
-
-  // JMW added faster checking...
 
   start = start.as_bearing();
   end = end.as_bearing();
@@ -594,22 +570,10 @@ DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
   int istart;
   int iend;
 
-  rectObj rect;
-  rect.minx = x - radius;
-  rect.maxx = x + radius;
-  rect.miny = y - radius;
-  rect.maxy = y + radius;
-  rectObj rcrect;
-  rcrect.minx = rc.left;
-  rcrect.maxx = rc.right;
-  rcrect.miny = rc.top;
-  rcrect.maxy = rc.bottom;
-
-  if (msRectOverlap(&rect, &rcrect) != MS_TRUE) {
+  RECT bounds;
+  SetRect(&bounds, x - radius, y - radius, x + radius, y + radius);
+  if (!IntersectRect(&bounds, &bounds, &rc))
     return false;
-  }
-
-  // JMW added faster checking...
 
   start = start.as_bearing();
   end = end.as_bearing();
