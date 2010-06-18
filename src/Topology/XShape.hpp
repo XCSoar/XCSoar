@@ -40,7 +40,7 @@ Copyright_License {
 #ifndef TOPOLOGY_XSHAPE_HPP
 #define TOPOLOGY_XSHAPE_HPP
 
-#include "Screen/shapelib/mapshape.h"
+#include "shapelib/mapshape.h"
 
 class Canvas;
 class LabelBlock;

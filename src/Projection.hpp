@@ -40,7 +40,7 @@ Copyright_License {
 #define XCSOAR_PROJECTION_HPP
 
 #include "Navigation/GeoPoint.hpp"
-#include "Screen/shapelib/mapprimitive.h"
+#include "Topology/shapelib/mapprimitive.h"
 #include "Math/FastRotation.hpp"
 #include <windef.h>
 

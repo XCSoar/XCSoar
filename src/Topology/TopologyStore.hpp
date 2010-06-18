@@ -40,7 +40,7 @@ Copyright_License {
 #define TOPOLOGY_STORE_H
 
 #include "Poco/RWLock.h"
-#include "Screen/shapelib/mapshape.h"
+#include "shapelib/mapshape.h"
 
 #include <windef.h> /* for RECT */
 
