@@ -87,31 +87,6 @@ OutputToInput(unsigned int *inLength, POINT *inVertexArray,
   }
 }
 
-/*
- * The "Inside" function returns TRUE if the vertex tested is on the
- * inside of the clipping boundary. "Inside" is defined as "to the
- * left of clipping boundary when one looks from the first vertex to
- * the second vertex of the clipping boundary".
- * @param testVertex Vertex to be tested
- * @param clipBoundary Clipping boundary
- * @return True if the vertex tested is on the inside of the
- * clipping boundary
- */
-/*
-static bool Inside (const POINT *testVertex, const POINT *clipBoundary)
-{
-  if (clipBoundary[1].x > clipBoundary[0].x)              // bottom edge
-    if (testVertex->y <= clipBoundary[0].y) return TRUE;
-  if (clipBoundary[1].x < clipBoundary[0].x)              // top edge
-   if (testVertex->y >= clipBoundary[0].y) return TRUE;
-  if (clipBoundary[1].y < clipBoundary[0].y)              // right edge
-    if (testVertex->x <= clipBoundary[1].x) return TRUE;
-  if (clipBoundary[1].y > clipBoundary[0].y)              // left edge
-    if (testVertex->x >= clipBoundary[1].x) return TRUE;
-  return FALSE;
-}
-*/
-
 #define INSIDE_LEFT_EDGE(a,b)   (a->x >= b[1].x)
 #define INSIDE_BOTTOM_EDGE(a,b) (a->y <= b[0].y)
 #define INSIDE_RIGHT_EDGE(a,b)  (a->x <= b[1].x)
@@ -399,61 +374,6 @@ static const double ycoords[64] = {
   0.707106781,	0.773010453,	0.831469612,	0.881921264,	0.923879533,	0.956940336,	0.98078528,		0.995184727
 };
 
-#ifdef ENABLE_UNUSED_CODE
-void StartArc(HDC hdc,
-	      double longitude0, double latitude0,
-	      double longitude1, double latitude1,
-	      double arclength) {
-
-  double radius, bearing;
-  DistanceBearing(latitude0, longitude0,
-                  latitude1, longitude1,
-                  &radius,
-                  &bearing);
-  double angle = 360*min(1, arclength/(2.0*M_PI*radius));
-  int i0 = (int)(bearing+angle/2);
-  int i1 = (int)(bearing-angle/2);
-  int i;
-  if (i0<0) { i1+= 360; }
-  if (i1<0) { i1+= 360; }
-  if (i0>360) {i0-= 360; }
-  if (i1>360) {i1-= 360; }
-  i0 = i0*64/360;
-  i1 = i1*64/360;
-  POINT pt[2];
-//  double lat, lon;
-  int x=0;
-  int y=0;
-
-  if (i1<i0) {
-    for (i=i0; i<64-1; i++) {
-      //      MapWindow::LatLon2Screen(lon, lat, &scx, &scy);
-      pt[0].x = x + (long) (radius * xcoords[i]);
-      pt[0].y = y + (long) (radius * ycoords[i]);
-      pt[1].x = x + (long) (radius * xcoords[i+1]);
-      pt[1].y = y + (long) (radius * ycoords[i+1]);
-      Polygon(hdc,pt,2);
-    }
-    for (i=0; i<i1-1; i++) {
-      pt[0].x = x + (long) (radius * xcoords[i]);
-      pt[0].y = y + (long) (radius * ycoords[i]);
-      pt[1].x = x + (long) (radius * xcoords[i+1]);
-      pt[1].y = y + (long) (radius * ycoords[i+1]);
-      Polygon(hdc,pt,2);
-    }
-  } else {
-    for (i=i0; i<i1-1; i++) {
-      pt[0].x = x + (long) (radius * xcoords[i]);
-      pt[0].y = y + (long) (radius * ycoords[i]);
-      pt[1].x = x + (long) (radius * xcoords[i+1]);
-      pt[1].y = y + (long) (radius * ycoords[i+1]);
-      Polygon(hdc,pt,2);
-    }
-  }
-
-}
-#endif /* ENABLE_UNUSED_CODE */
-
 /**
  * Paints a circle to the canvas
  * @param canvas Painting canvas
@@ -609,32 +529,3 @@ DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
 
   return true;
 }
-
-/* Not used
-   void DrawDotLine(HDC hdc, POINT ptStart, POINT ptEnd, COLORREF cr,
-   const RECT rc)
-   {
-   HPEN hpDot, hpOld;
-   LOGPEN dashLogPen;
-   POINT pt[2];
-   //Create a dot pen
-   dashLogPen.lopnColor = cr;
-   dashLogPen.lopnStyle = PS_DOT;
-   dashLogPen.lopnWidth.x = 0;
-   dashLogPen.lopnWidth.y = 0;
-
-   hpDot = (HPEN)CreatePenIndirect(&dashLogPen);
-   hpOld = (HPEN)SelectObject(hdc, hpDot);
-
-   pt[0].x = ptStart.x;
-   pt[0].y = ptStart.y;
-   pt[1].x = ptEnd.x;
-   pt[1].y = ptEnd.y;
-
-   Polyline(hdc, pt, 2);
-
-   SelectObject(hdc, hpOld);
-   DeleteObject((HPEN)hpDot);
-   }
-
-*/
