@@ -42,9 +42,9 @@ Copyright_License {
 }
 */
 
-#include "Screen/shapelib/mapprimitive.h"
-#include "Screen/shapelib/mapshape.h"
-#include "Screen/shapelib/maperror.h"
+#include "mapprimitive.h"
+#include "mapshape.h"
+#include "maperror.h"
 
 #include <stdlib.h>
 #include <string.h>

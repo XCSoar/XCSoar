@@ -36,74 +36,77 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_THREAD_THREAD_HPP
-#define XCSOAR_THREAD_THREAD_HPP
+#ifndef XCSOAR_SCREEN_CHECK_BOX_WINDOW_HXX
+#define XCSOAR_SCREEN_CHECK_BOX_WINDOW_HXX
 
-#ifdef HAVE_POSIX
-#include <pthread.h>
-#else
-#include <windows.h>
+#include "Screen/Window.hpp"
+
+class CheckBoxStyle : public WindowStyle {
+public:
+  CheckBoxStyle() {
+#ifndef ENABLE_SDL
+    style |= BS_CHECKBOX | BS_AUTOCHECKBOX;
 #endif
+  }
+
+  CheckBoxStyle(const WindowStyle _style):WindowStyle(_style) {
+#ifndef ENABLE_SDL
+    style |= BS_CHECKBOX | BS_AUTOCHECKBOX;
+#endif
+  }
+
+  void enable_custom_painting() {
+    WindowStyle::enable_custom_painting();
+#ifndef ENABLE_SDL
+    style |= BS_OWNERDRAW;
+#endif
+  }
+};
+
+#ifdef ENABLE_SDL
+
+#include "Screen/PaintWindow.hpp"
+
+class CheckBox : public PaintWindow {
+public:
+  void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
+           int left, int top, unsigned width, unsigned height,
+           const CheckBoxStyle style=CheckBoxStyle()) {
+    // XXX
+    PaintWindow::set(parent, left, top, width, height);
+  }
+
+  bool get_checked() const {
+    return false; // XXX
+  }
+
+  void set_checked(bool value) {
+    // XXX
+  }
+};
+
+#else /* !ENABLE_SDL */
+
+#include <commctrl.h>
 
 /**
- * This class provides an OS independent view on a thread.
+ * A check box.
  */
-class Thread {
-#ifdef HAVE_POSIX
-  pthread_t handle;
-  bool m_defined;
-#else
-  HANDLE handle;
-#endif
-
+class CheckBox : public Window {
 public:
-#ifdef HAVE_POSIX
-  Thread():m_defined(false) {}
-#else
-  Thread():handle(NULL) {}
-#endif
-  virtual ~Thread();
+  void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
+           int left, int top, unsigned width, unsigned height,
+           const CheckBoxStyle style=CheckBoxStyle());
 
-  bool defined() const {
-#ifdef HAVE_POSIX
-    return m_defined;
-#else
-    return handle != NULL;
-#endif
+  bool get_checked() const {
+    return SendMessage(hWnd, BM_GETCHECK, 0, 0) == BST_CHECKED;
   }
 
-  /**
-   * Check if this thread is the current thread.
-   */
-  bool inside() const {
-#ifdef HAVE_POSIX
-    return pthread_self() == handle;
-#else
-    return GetCurrentThread() == handle;
-#endif
+  void set_checked(bool value) {
+    SendMessage(hWnd, BM_SETCHECK, value ? BST_CHECKED : BST_UNCHECKED, 0);
   }
-
-  void set_low_priority() {
-#ifndef HAVE_POSIX
-    ::SetThreadPriority(handle, THREAD_PRIORITY_LOWEST);
-#endif
-  }
-
-  bool start();
-  void join();
-  bool join(unsigned timeout_ms);
-
-  void terminate();
-
-protected:
-  virtual void run() = 0;
-
-private:
-#ifdef HAVE_POSIX
-  static void *thread_proc(void *lpParameter);
-#else
-  static DWORD WINAPI thread_proc(LPVOID lpParameter);
-#endif
 };
+
+#endif
 
 #endif

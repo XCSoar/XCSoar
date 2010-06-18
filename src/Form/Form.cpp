@@ -47,10 +47,25 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
 
+bool
+WndForm::ClientAreaWindow::on_command(unsigned id, unsigned code)
+{
+  return (mCommandCallback != NULL && mCommandCallback(id))
+    || ContainerWindow::on_command(id, code);
+}
+
+Brush *
+WndForm::ClientAreaWindow::on_color(Window &window, Canvas &canvas)
+{
+  canvas.set_text_color(Color::BLACK);
+  canvas.set_background_color(background_color);
+  return &background_brush;
+}
+
 void
 WndForm::ClientAreaWindow::on_paint(Canvas &canvas)
 {
-  canvas.fill_rectangle(get_client_rect(), background);
+  canvas.fill_rectangle(get_client_rect(), background_brush);
 
   ContainerWindow::on_paint(canvas);
 }
@@ -422,16 +437,4 @@ Color WndForm::SetBackColor(Color Value)
 {
   client_area.SetBackColor(Value);
   return ContainerControl::SetBackColor(Value);
-}
-
-void
-WndForm::SetKeyDownNotify(KeyDownNotifyCallback_t KeyDownNotify)
-{
-  mOnKeyDownNotify = KeyDownNotify;
-}
-
-void
-WndForm::SetTimerNotify(TimerNotifyCallback_t OnTimerNotify)
-{
-  mOnTimerNotify = OnTimerNotify;
 }

@@ -36,57 +36,29 @@ Copyright_License {
 }
 */
 
-#include "AirspaceGlue.hpp"
-#include "AirspaceParser.hpp"
-#include "AirspaceClientUI.hpp"
-#include "ProfileKeys.hpp"
-#include "Terrain/RasterTerrain.hpp"
-#include "LogFile.hpp"
-#include "IO/ConfiguredFile.hpp"
+#include "Screen/CheckBox.hpp"
+
+#ifdef ENABLE_SDL
+// XXX
+#else /* !ENABLE_SDL */
+
+#include "Screen/Window.hpp"
+
+#include <commctrl.h>
 
 void
-ReadAirspace(AirspaceClientUI &airspace, 
-             RasterTerrain *terrain,
-             const AtmosphericPressure &press)
+CheckBox::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
+              int left, int top, unsigned width, unsigned height,
+              const CheckBoxStyle style)
 {
-  // TODO bug: add exception handler to protect parser code against crashes
-  // TODO bug: second file should be opened even if first was not okay
+  Window::set(&parent, WC_BUTTON, text,
+              left, top, width, height,
+              style);
 
-  bool airspace_ok = false;
+  ::SetWindowLong(hWnd, GWL_ID, id);
 
-  // Read the airspace filenames from the registry
-  TLineReader *reader =
-    OpenConfiguredTextFile(szProfileAirspaceFile, _T("airspace.txt"));
-  if (reader != NULL) {
-    if (!airspace.read(*reader)) {
-      LogStartUp(_T("No airspace file 1"));
-    } else {
-      airspace_ok =  true;
-    }
-
-    delete reader;
-  }
-
-  reader = OpenConfiguredTextFile(szProfileAdditionalAirspaceFile);
-  if (reader != NULL) {
-    if (!airspace.read(*reader)) {
-      LogStartUp(_T("No airspace file 2"));
-    } else {
-      airspace_ok = true;
-    }
-
-    delete reader;
-  }
-
-  if (airspace_ok) {
-    airspace.finalise_after_loading(terrain, press);
-  } else {
-    airspace.clear(); // there was a problem
-  }
+  /* this is needed to make the parent's on_color() work */
+  install_wndproc();
 }
 
-void 
-CloseAirspace(AirspaceClientUI &airspace) 
-{
-  airspace.clear();
-}
+#endif /* !ENABLE_SDL */

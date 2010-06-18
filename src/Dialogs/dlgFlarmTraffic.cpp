@@ -48,10 +48,15 @@
 #include "Dialogs/Internal.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/CheckBox.hpp"
 #include "MainWindow.hpp"
 #include "Profile.hpp"
 #include "Compiler.h"
 #include "Gauge/FlarmTrafficWindow.hpp"
+
+enum {
+  ID_AUTO_ZOOM = 100,
+};
 
 /**
  * A Window which renders FLARM traffic, with user interaction.
@@ -86,9 +91,6 @@ public:
   }
 
   void SetAutoZoom(bool enabled);
-  void ToggleAutoZoom() {
-    SetAutoZoom(!enable_auto_zoom);
-  }
 
   void ZoomOut();
   void ZoomIn();
@@ -104,6 +106,7 @@ protected:
 
 static WndForm *wf = NULL;
 static FlarmTrafficControl *wdf;
+static CheckBox *auto_zoom;
 
 bool
 FlarmTrafficControl::on_create()
@@ -139,8 +142,7 @@ FlarmTrafficControl::SetAutoZoom(bool enabled)
 {
   enable_auto_zoom = enabled;
   Profile::Set(szProfileFlarmAutoZoom, enabled);
-  ((WndButton *)wf->FindByName(_T("cmdAutoZoom")))->
-      SetForeColor(enable_auto_zoom ? Color::BLUE : Color::BLACK);
+  auto_zoom->set_checked(enabled);
 }
 
 void
@@ -396,10 +398,17 @@ OnSwitchDataClicked(gcc_unused WndButton &button)
 /**
  * This event handler is called when the "AutoZoom" button is pressed
  */
-static void
-OnAutoZoomClicked(gcc_unused WndButton &button)
+static bool
+OnCommand(unsigned id)
 {
-  wdf->ToggleAutoZoom();
+  switch (id) {
+  case ID_AUTO_ZOOM:
+    wdf->SetAutoZoom(auto_zoom->get_checked());
+    return true;
+
+  default:
+    return false;
+  }
 }
 
 /**
@@ -472,8 +481,23 @@ OnCreateFlarmTrafficControl(ContainerWindow &parent, int left, int top,
   return wdf;
 }
 
+static Window *
+OnCreateAutoZoom(ContainerWindow &parent, int left, int top,
+                 unsigned width, unsigned height,
+                 const WindowStyle _style)
+{
+  CheckBoxStyle style(_style);
+  style.tab_stop();
+  auto_zoom = new CheckBox();
+  auto_zoom->set(parent, gettext(_T("A. Zoom")), ID_AUTO_ZOOM,
+                 left, top, width, height, style);
+  auto_zoom->set_font(MapWindowFont);
+  return auto_zoom;
+}
+
 static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnCreateFlarmTrafficControl),
+  DeclareCallBackEntry(OnCreateAutoZoom),
   DeclareCallBackEntry(OnTimerNotify),
   DeclareCallBackEntry(NULL)
 };
@@ -499,6 +523,8 @@ dlgFlarmTrafficShowModal()
   wf->SetKeyDownNotify(FormKeyDown);
   wf->SetTimerNotify(OnTimerNotify);
 
+  wf->SetCommandCallback(OnCommand);
+
   // Set button events
   ((WndButton *)wf->FindByName(_T("cmdDetails")))->
       SetOnClickNotify(OnDetailsClicked);
@@ -514,8 +540,6 @@ dlgFlarmTrafficShowModal()
       SetOnClickNotify(OnCloseClicked);
   ((WndButton *)wf->FindByName(_T("cmdSwitchData")))->
       SetOnClickNotify(OnSwitchDataClicked);
-  ((WndButton *)wf->FindByName(_T("cmdAutoZoom")))->
-      SetOnClickNotify(OnAutoZoomClicked);
 
   // Update Radar and Selection for the first time
   wdf->Update(XCSoarInterface::Basic().TrackBearing,
@@ -523,8 +547,7 @@ dlgFlarmTrafficShowModal()
               XCSoarInterface::SettingsComputer());
 
   // Get the last chosen Side Data configuration
-  ((WndButton *)wf->FindByName(_T("cmdAutoZoom")))->
-    SetForeColor(wdf->GetAutoZoom() ? Color::BLUE : Color::BLACK);
+  auto_zoom->set_checked(wdf->GetAutoZoom());
 
   // Show the dialog
   wf->ShowModal();

@@ -191,4 +191,15 @@ EqualRect(const RECT *a, const RECT *b)
     a->right == b->right && a->bottom == b->bottom;
 }
 
+static inline bool
+IntersectRect(RECT *dest, const RECT *a, const RECT *b)
+{
+  dest->left = a->left < b->left ? a->left : b->left;
+  dest->top = a->top < b->top ? a->top : b->top;
+  dest->right = a->right > b->right ? a->right : b->right;
+  dest->bottom = a->bottom > b->bottom ? a->bottom : b->bottom;
+
+  return dest->left < dest->right && dest->top < dest->bottom;
+}
+
 #endif

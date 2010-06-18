@@ -44,10 +44,9 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_UTIL_HPP
 #define XCSOAR_SCREEN_UTIL_HPP
 
-#include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 
-#include <windows.h>
+#include <windef.h>
 
 class Canvas;
 
@@ -58,15 +57,17 @@ enum {
 void ClipPolygon(Canvas &canvas, const POINT *m_ptin, unsigned int inLength,
                  RECT rc, bool fill);
 
-int
+bool
 ClippedCircle(Canvas &canvas, long x, long y, int radius, RECT rc,
               bool fill=true);
 
-int Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
-            Angle start, Angle end,
-            bool horizon= false);
-// VENTA3 DrawArc
-int DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
-            Angle start, Angle end);
+bool
+Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
+        Angle start, Angle end,
+        bool horizon=false);
+
+bool
+DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
+        Angle start, Angle end);
 
 #endif

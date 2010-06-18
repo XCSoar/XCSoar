@@ -54,6 +54,7 @@ Copyright_License {
 #include "Screen/Animation.hpp"
 #include "Screen/Busy.hpp"
 #include "Screen/Blank.hpp"
+#include "Screen/CheckBox.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "Profile.hpp"
@@ -77,6 +78,10 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <assert.h>
+
+enum {
+  ID_USER_LEVEL = 100,
+};
 
 static const TCHAR *const captions[] = {
   _T("1 Site"),
@@ -146,6 +151,7 @@ static bool waypointneedsave = false;
 static bool FontRegistryChanged=false;
 static unsigned config_page;
 static WndForm *wf=NULL;
+static CheckBox *user_level;
 TabbedControl *configuration_tabbed;
 static WndButton *buttonPilotName=NULL;
 static WndButton *buttonAircraftType=NULL;
@@ -257,26 +263,36 @@ UpdateDeviceSetupButton(unsigned DeviceIdx, const TCHAR *Name)
     wb->set_visible(Name != NULL && _tcscmp(Name, _T("Vega")) == 0);
 }
 
+static Window *
+OnCreateUserLevel(ContainerWindow &parent, int left, int top,
+                  unsigned width, unsigned height,
+                  const WindowStyle _style)
+{
+  CheckBoxStyle style(_style);
+  style.tab_stop();
+  user_level = new CheckBox();
+  user_level->set(parent, gettext(_T("Expert")), ID_USER_LEVEL,
+                  left, top, width, height, style);
+  user_level->set_font(MapWindowFont);
+  user_level->set_checked(XCSoarInterface::UserLevel > 0);
+  return user_level;
+}
 
-static void OnUserLevel(DataField *Sender, DataField::DataAccessKind_t Mode){
-  WndProperty* wp;
-
-  switch(Mode){
-  case DataField::daGet:
-    break;
-  case DataField::daPut:
-  case DataField::daChange:
-    wp = (WndProperty*)wf->FindByName(_T("prpUserLevel"));
-    if (wp) {
-      if (wp->GetDataField()->GetAsInteger() !=
-          (int)XCSoarInterface::UserLevel) {
-        XCSoarInterface::UserLevel = wp->GetDataField()->GetAsInteger();
-        changed = true;
-        Profile::Set(szProfileUserLevel,(int)XCSoarInterface::UserLevel);
-        wf->FilterAdvanced(XCSoarInterface::UserLevel>0);
-      }
+static bool
+OnCommand(unsigned id)
+{
+  switch (id) {
+  case ID_USER_LEVEL:
+    if ((int)user_level->get_checked() != (int)XCSoarInterface::UserLevel) {
+      XCSoarInterface::UserLevel = (int)user_level->get_checked();
+      changed = true;
+      Profile::Set(szProfileUserLevel,(int)XCSoarInterface::UserLevel);
+      wf->FilterAdvanced(XCSoarInterface::UserLevel>0);
     }
-    break;
+    return true;
+
+  default:
+    return false;
   }
 }
 
@@ -932,7 +948,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnEditMapLabelFontClicked),
   DeclareCallBackEntry(OnEditStatisticsFontClicked),
 
-  DeclareCallBackEntry(OnUserLevel),
+  DeclareCallBackEntry(OnCreateUserLevel),
 
   DeclareCallBackEntry(NULL)
 };
@@ -1114,16 +1130,6 @@ static void setVariables(void) {
   }
 
   UpdateButtons();
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUserLevel"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Basic")));
-    dfe->addEnumText(gettext(_T("Expert")));
-    dfe->Set(XCSoarInterface::UserLevel);
-    wp->RefreshDisplay();
-  }
 
   //  DWORD dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
 
@@ -2117,6 +2123,7 @@ PrepareConfigurationDialog()
     return;
 
   wf->SetKeyDownNotify(FormKeyDown);
+  wf->SetCommandCallback(OnCommand);
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 

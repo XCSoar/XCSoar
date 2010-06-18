@@ -40,8 +40,8 @@ Copyright_License {
 }
 */
 
-#include "Screen/shapelib/maptree.h"
-#include "Screen/shapelib/maperror.h"
+#include "maptree.h"
+#include "maperror.h"
 
 #include <stdlib.h>
 #include <string.h>

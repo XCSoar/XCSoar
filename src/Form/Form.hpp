@@ -66,14 +66,25 @@ class WndForm: public ContainerControl
   typedef std::map<tstring, Window *, tstring_less_than> name_to_window_t;
 
   class ClientAreaWindow : public ContainerWindow {
-    Brush background;
+  public:
+    typedef bool (*CommandCallback_t)(unsigned cmd);
+    CommandCallback_t mCommandCallback;
+
+  protected:
+    Color background_color;
+    Brush background_brush;
 
   public:
+    ClientAreaWindow():mCommandCallback(NULL) {}
+
     void SetBackColor(Color color) {
-      background.set(color);
+      background_color = color;
+      background_brush.set(color);
     }
 
   protected:
+    virtual bool on_command(unsigned id, unsigned code);
+    virtual Brush *on_color(Window &window, Canvas &canvas);
     virtual void on_paint(Canvas &canvas);
   };
 
@@ -226,8 +237,17 @@ public:
   /** Set the background color of the window */
   Color SetBackColor(Color Value);
 
-  void SetKeyDownNotify(KeyDownNotifyCallback_t KeyDownNotify);
-  void SetTimerNotify(TimerNotifyCallback_t OnTimerNotify);
+  void SetKeyDownNotify(KeyDownNotifyCallback_t KeyDownNotify) {
+    mOnKeyDownNotify = KeyDownNotify;
+  }
+
+  void SetTimerNotify(TimerNotifyCallback_t OnTimerNotify) {
+    mOnTimerNotify = OnTimerNotify;
+  }
+
+  void SetCommandCallback(ClientAreaWindow::CommandCallback_t CommandCallback) {
+    client_area.mCommandCallback = CommandCallback;
+  }
 
 private:
   static PeriodClock timeAnyOpenClose; // when any dlg opens or child closes

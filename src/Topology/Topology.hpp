@@ -40,7 +40,7 @@ Copyright_License {
 #ifndef TOPOLOGY_H
 #define TOPOLOGY_H
 
-#include "Screen/shapelib/mapshape.h"
+#include "shapelib/mapshape.h"
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Icon.hpp"

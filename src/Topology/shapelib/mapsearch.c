@@ -1,4 +1,3 @@
-
 /*
 Copyright_License {
 
@@ -37,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "Screen/shapelib/mapprimitive.h"
+#include "mapprimitive.h"
 
 #include <math.h>
 

@@ -1,7 +1,7 @@
 #ifndef MAPSHAPE_H
 #define MAPSHAPE_H
 
-#include "Screen/shapelib/mapprimitive.h"
+#include "mapprimitive.h"
 
 #include <stdio.h>
 

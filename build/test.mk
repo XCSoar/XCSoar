@@ -217,7 +217,6 @@ $(TARGET_BIN_DIR)/AppendGRecord$(TARGET_EXEEXT): $(APPEND_GRECORD_OBJS) $(APPEND
 
 KEY_CODE_DUMPER_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/shapelib/mapsearch.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Compatibility/fmode.c \
@@ -307,7 +306,6 @@ $(TARGET_BIN_DIR)/RunDeviceDriver$(TARGET_EXEEXT): $(RUN_DEVICE_DRIVER_OBJS) $(R
 
 RUN_CANVAS_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/shapelib/mapsearch.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Compatibility/fmode.c \
@@ -375,13 +373,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
-	$(SRC)/Screen/shapelib/mapbits.cpp \
-	$(SRC)/Screen/shapelib/maperror.cpp \
-	$(SRC)/Screen/shapelib/mapprimitive.cpp \
-	$(SRC)/Screen/shapelib/mapsearch.cpp \
-	$(SRC)/Screen/shapelib/mapshape.cpp \
-	$(SRC)/Screen/shapelib/maptree.cpp \
-	$(SRC)/Screen/shapelib/mapxbase.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/TaskClient.cpp \
@@ -419,6 +410,7 @@ RUN_MAP_WINDOW_BIN = $(TARGET_BIN_DIR)/RunMapWindow$(TARGET_EXEEXT)
 RUN_MAP_WINDOW_LDADD = \
 	$(FAKE_LIBS) \
 	$(SCREEN_LIBS) \
+	$(SHAPELIB_LIBS) \
 	$(ENGINE_LIBS) \
 	$(JASPER_LIBS) \
 	$(IO_LIBS) \
@@ -438,7 +430,6 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgComboPicker.cpp \
 	$(SRC)/Screen/Animation.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/shapelib/mapsearch.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/UtilsText.cpp \
@@ -483,7 +474,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Screen/Animation.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
-	$(SRC)/Screen/shapelib/mapsearch.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Registry.cpp \
@@ -543,7 +533,6 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Screen/Animation.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
-	$(SRC)/Screen/shapelib/mapsearch.cpp \
 	$(SRC)/TaskClient.cpp \
 	$(SRC)/TaskClientUI.cpp \
 	$(SRC)/Thread/Debug.cpp \

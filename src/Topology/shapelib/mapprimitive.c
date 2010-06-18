@@ -1,4 +1,3 @@
-//#include "Screen/shapelib/map.h"
 /*
 Copyright_License {
 
@@ -37,9 +36,12 @@ Copyright_License {
 }
 */
 
-#include "Screen/shapelib/mapprimitive.h"
-#include "Screen/shapelib/maperror.h"
+#include "mapprimitive.h"
+#include "maperror.h"
+
 #include <string.h>
+#include <stdlib.h>
+#include <math.h>
 
 typedef enum {CLIP_LEFT, CLIP_MIDDLE, CLIP_RIGHT} CLIP_STATE;
 
@@ -48,6 +50,7 @@ typedef enum {CLIP_LEFT, CLIP_MIDDLE, CLIP_RIGHT} CLIP_STATE;
 #define SWAP( a, b, t) ( (t) = (a), (a) = (b), (b) = (t) )
 #define EDGE_CHECK( x0, x, x1) ((x) < MS_MIN( (x0), (x1)) ? CLIP_LEFT : ((x) > MS_MAX( (x0), (x1)) ? CLIP_RIGHT : CLIP_MIDDLE ))
 
+#undef INFINITY
 #define INFINITY	(1.0e+30)
 #define NEARZERO	(1.0e-30)	/* 1/INFINITY */
 
@@ -71,19 +74,6 @@ void msFreeCharArray(char **array, int num_items)
   return;
 }
 
-void msPrintShape(shapeObj *p)
-{
-  int i,j;
-
-  msDebug("Shape contains %d parts.\n",  p->numlines);
-  for (i=0; i<p->numlines; i++) {
-    msDebug("\tPart %d contains %d points.\n", i, p->line[i].numpoints);
-    for (j=0; j<p->line[i].numpoints; j++) {
-      msDebug("\t\t%d: (%f, %f)\n", j, p->line[i].point[j].x, p->line[i].point[j].y);
-    }
-  }
-}
-
 void msInitShape(shapeObj *shape)
 {
   // spatial component
@@ -105,7 +95,7 @@ void msInitShape(shapeObj *shape)
   shape->tileindex = shape->index = -1;
 }
 
-int msCopyShape(shapeObj *from, shapeObj *to) {
+int msCopyShape(const shapeObj *from, shapeObj *to) {
   int i;
 
   if(!from || !to) return(-1);
@@ -245,7 +235,8 @@ void msRectToPolygon(rectObj rect, shapeObj *poly)
 ** from "Getting Graphic: Programming Fundamentals in C and C++" by Mark Finlay
 ** and John Petritis. (pages 179-182)
 */
- int clipLine(double *x1, double *y1, double *x2, double *y2, rectObj rect)
+static int
+clipLine(double *x1, double *y1, double *x2, double *y2, rectObj rect)
 {
   double x, y;
   double slope;
@@ -323,7 +314,10 @@ void msClipPolylineRect(shapeObj *shape, rectObj rect)
   int i,j;
   lineObj line={0,NULL};
   double x1, x2, y1, y2;
-  shapeObj tmp={0,NULL};
+  shapeObj tmp = {
+    .numlines = 0,
+    .line = NULL,
+  };
 
   if(shape->numlines == 0) /* nothing to clip */
     return;
@@ -517,3 +511,343 @@ void msClipPolygonRect(shapeObj *shape, rectObj rect)
   return;
 }
 
+/*
+** Converts from map coordinates to image coordinates
+*/
+void msTransformShapeToPixel(shapeObj *shape, rectObj extent, double cellsize)
+{
+  int i,j,k; /* loop counters */
+
+
+  if(shape->numlines == 0) return; // nothing to transform
+
+  if(shape->type == MS_SHAPE_LINE || shape->type == MS_SHAPE_POLYGON) { // remove co-linear vertices
+
+    for(i=0; i<shape->numlines; i++) { // for each part
+
+      shape->line[i].point[0].x = MS_MAP2IMAGE_X(shape->line[i].point[0].x, extent.minx, cellsize);
+      shape->line[i].point[0].y = MS_MAP2IMAGE_Y(shape->line[i].point[0].y, extent.maxy, cellsize);
+
+      for(j=1, k=1; j < shape->line[i].numpoints; j++ ) {
+
+	shape->line[i].point[k].x = MS_MAP2IMAGE_X(shape->line[i].point[j].x, extent.minx, cellsize);
+	shape->line[i].point[k].y = MS_MAP2IMAGE_Y(shape->line[i].point[j].y, extent.maxy, cellsize);
+
+	if(k == 1) {
+	  if((shape->line[i].point[0].x != shape->line[i].point[1].x) || (shape->line[i].point[0].y != shape->line[i].point[1].y))
+	    k++;
+	} else {
+	  if((shape->line[i].point[k-1].x != shape->line[i].point[k].x) || (shape->line[i].point[k-1].y != shape->line[i].point[k].y)) {
+	    if(((shape->line[i].point[k-2].y - shape->line[i].point[k-1].y)*(shape->line[i].point[k-1].x - shape->line[i].point[k].x)) == ((shape->line[i].point[k-2].x - shape->line[i].point[k-1].x)*(shape->line[i].point[k-1].y - shape->line[i].point[k].y))) {
+	      shape->line[i].point[k-1].x = shape->line[i].point[k].x;
+	      shape->line[i].point[k-1].y = shape->line[i].point[k].y;
+	    } else {
+	      k++;
+	    }
+	  }
+	}
+      }
+      shape->line[i].numpoints = k; // save actual number kept
+    }
+  } else { // points or untyped shapes
+    for(i=0; i<shape->numlines; i++) { // for each part
+      for(j=1; j < shape->line[i].numpoints; j++ ) {
+	shape->line[i].point[j].x = MS_MAP2IMAGE_X(shape->line[i].point[j].x, extent.minx, cellsize);
+	shape->line[i].point[j].y = MS_MAP2IMAGE_Y(shape->line[i].point[j].y, extent.maxy, cellsize);
+	  }
+	}
+  }
+}
+/*
+** Converts from map coordinates to image coordinates
+*/
+void msTransformPixelToShape(shapeObj *shape, rectObj extent, double cellsize)
+{
+	int i,j; /* loop counters */
+
+	if(shape->numlines == 0) return; // nothing to transform
+
+	if(shape->type == MS_SHAPE_LINE || shape->type == MS_SHAPE_POLYGON)  // remove co-linear vertices
+	{
+		for(i=0; i<shape->numlines; i++)  // for each part
+		{
+			for(j=0; j < shape->line[i].numpoints; j++ )
+			{
+				shape->line[i].point[j].x = MS_IMAGE2MAP_X(shape->line[i].point[j].x, extent.minx, cellsize);
+				shape->line[i].point[j].y = MS_IMAGE2MAP_Y(shape->line[i].point[j].y, extent.maxy, cellsize);
+			}
+		}
+	}
+	else  // points or untyped shapes
+	{
+		for(i=0; i<shape->numlines; i++)  // for each part
+		{
+			for(j=1; j < shape->line[i].numpoints; j++ )
+			{
+				shape->line[i].point[j].x = MS_IMAGE2MAP_X(shape->line[i].point[j].x, extent.minx, cellsize);
+				shape->line[i].point[j].y = MS_IMAGE2MAP_Y(shape->line[i].point[j].y, extent.maxy, cellsize);
+			}
+		}
+	}
+
+	return;
+}
+
+// Currently unused.
+#ifdef notdef
+static int get_centroid(shapeObj *p, pointObj *lp, double *miny, double *maxy)
+{
+  int i,j;
+  double cent_weight_x=0.0, cent_weight_y=0.0;
+  double len, total_len=0;
+
+  *miny = *maxy = p->line[0].point[0].y;
+  for(i=0; i<p->numlines; i++) {
+    for(j=1; j<p->line[i].numpoints; j++) {
+      *miny = MS_MIN(*miny, p->line[i].point[j].y);
+      *maxy = MS_MAX(*maxy, p->line[i].point[j].y);
+      len = length(p->line[i].point[j-1], p->line[i].point[j]);
+      cent_weight_x += len * ((p->line[i].point[j-1].x + p->line[i].point[j].x)/2);
+      cent_weight_y += len * ((p->line[i].point[j-1].y + p->line[i].point[j].y)/2);
+      total_len += len;
+    }
+  }
+
+  if(total_len == 0)
+    return(-1);
+
+  lp->x = cent_weight_x / total_len;
+  lp->y = cent_weight_y / total_len;
+
+  return(0);
+}
+#endif
+
+static void
+get_bbox(shapeObj *poly, double *minx, double *miny, double *maxx, double *maxy)
+{
+  int i, j;
+
+  *minx = *maxx = poly->line[0].point[0].x;
+  *miny = *maxy = poly->line[0].point[0].y;
+  for(i=0; i<poly->numlines; i++) {
+    for(j=1; j<poly->line[i].numpoints; j++) {
+      *minx = MS_MIN(*minx, poly->line[i].point[j].x);
+      *maxx = MS_MAX(*maxx, poly->line[i].point[j].x);
+      *miny = MS_MIN(*miny, poly->line[i].point[j].y);
+      *maxy = MS_MAX(*maxy, poly->line[i].point[j].y);
+    }
+  }
+
+  return;
+}
+
+#define NUM_SCANLINES 5
+
+/*
+** Find a label point in a polygon.
+*/
+int msPolygonLabelPoint(shapeObj *p, pointObj *lp, int min_dimension)
+{
+  double slope;
+  pointObj *point1=NULL, *point2=NULL;
+  int i, j, k, nfound;
+  double x, y, *xintersect, temp;
+  double hi_y, lo_y;
+  int wrong_order, n;
+  double len, max_len=0;
+  double skip, minx, maxx, maxy, miny;
+
+  get_bbox(p, &minx, &miny, &maxx, &maxy);
+
+  if(min_dimension != -1)
+    if(MS_MIN(maxx-minx,maxy-miny) < min_dimension) return(MS_FAILURE);
+
+  //if(get_centroid(p, lp, &miny, &maxy) == -1) return(MS_FAILURE);
+  lp->x = (maxx+minx)/2.0;
+  lp->y = (maxy+miny)/2.0;
+
+  if(msIntersectPointPolygon(lp, p) == MS_TRUE) return(MS_SUCCESS);
+
+  /* do it the hard way - scanline */
+
+  skip = (maxy - miny)/NUM_SCANLINES;
+
+  n=0;
+  for(j=0; j<p->numlines; j++) /* count total number of points */
+    n += p->line[j].numpoints;
+  xintersect = (double *)calloc(n, sizeof(double));
+
+  for(k=1; k<=NUM_SCANLINES; k++) { /* sample the shape in the y direction */
+
+    y = maxy - k*skip;
+
+    /* need to find a y that won't intersect any vertices exactly */
+    hi_y = y - 1; /* first initializing lo_y, hi_y to be any 2 pnts on either side of lp->y */
+    lo_y = y + 1;
+    for(j=0; j<p->numlines; j++) {
+      if((lo_y < y) && (hi_y >= y))
+	break; /* already initialized */
+      for(i=0; i < p->line[j].numpoints; i++) {
+	if((lo_y < y) && (hi_y >= y))
+	  break; /* already initialized */
+	if(p->line[j].point[i].y < y)
+	  lo_y = p->line[j].point[i].y;
+	if(p->line[j].point[i].y >= y)
+	  hi_y = p->line[j].point[i].y;
+      }
+    }
+
+    n=0;
+    for(j=0; j<p->numlines; j++) {
+      for(i=0; i < p->line[j].numpoints; i++) {
+	if((p->line[j].point[i].y < y) && ((y - p->line[j].point[i].y) < (y - lo_y)))
+	  lo_y = p->line[j].point[i].y;
+	if((p->line[j].point[i].y >= y) && ((p->line[j].point[i].y - y) < (hi_y - y)))
+	  hi_y = p->line[j].point[i].y;
+      }
+    }
+
+    if(lo_y == hi_y)
+      return (MS_FAILURE);
+    else
+      y = (hi_y + lo_y)/2.0;
+
+    nfound = 0;
+    for(j=0; j<p->numlines; j++) { /* for each line */
+
+      point1 = &( p->line[j].point[p->line[j].numpoints-1] );
+      for(i=0; i < p->line[j].numpoints; i++) {
+	point2 = &( p->line[j].point[i] );
+
+	if(EDGE_CHECK(point1->y, y, point2->y) == CLIP_MIDDLE) {
+
+	  if(point1->y == point2->y)
+	    continue; /* ignore horizontal edges */
+	  else
+	    slope = (point2->x - point1->x) / (point2->y - point1->y);
+
+	  x = point1->x + (y - point1->y)*slope;
+	  xintersect[nfound++] = x;
+	} /* End of checking this edge */
+
+	point1 = point2;  /* Go on to next edge */
+      }
+    } /* Finished the scanline */
+
+    /* First, sort the intersections */
+    do {
+      wrong_order = 0;
+      for(i=0; i < nfound-1; i++) {
+	if(xintersect[i] > xintersect[i+1]) {
+	  wrong_order = 1;
+	  SWAP(xintersect[i], xintersect[i+1], temp);
+	}
+      }
+    } while(wrong_order);
+
+    /* Great, now find longest span */
+    for(i=0; i < nfound; i += 2) {
+      len = fabs(xintersect[i] - xintersect[i+1]);
+      if(len > max_len) {
+	max_len = len;
+	lp->x = (xintersect[i] + xintersect[i+1])/2;
+	lp->y = y;
+      }
+    }
+  }
+
+  free(xintersect);
+
+  if(max_len > 0)
+    return(MS_SUCCESS);
+  else
+    return(MS_FAILURE);
+}
+
+/*
+** Find center of longest segment in polyline p. The polyline must have been converted
+** to image coordinates before calling this function.
+*/
+int msPolylineLabelPoint(shapeObj *p, pointObj *lp, int min_length, double *angle, double *length)
+{
+  double segment_length, line_length, total_length, max_segment_length, max_line_length;
+  int segment_index, line_index, temp_segment_index;
+  int i, j;
+  double theta;
+
+  temp_segment_index = segment_index = line_index = 0;
+
+  total_length = 0;
+  max_line_length = 0;
+  for(i=0; i<p->numlines; i++) {
+
+    line_length = 0;
+    max_segment_length = 0;
+    for(j=1;j<p->line[i].numpoints;j++) {
+      segment_length = sqrt((pow((p->line[i].point[j].x-p->line[i].point[j-1].x),2) + pow((p->line[i].point[j].y-p->line[i].point[j-1].y),2)));
+      line_length += segment_length;
+      if(segment_length > max_segment_length) {
+	max_segment_length = segment_length;
+	temp_segment_index = j;
+      }
+    }
+
+    total_length += line_length;
+
+    if(line_length > max_line_length) {
+      max_line_length = line_length;
+      line_index = i;
+      segment_index = temp_segment_index;
+    }
+  }
+
+  if(segment_index == 0) /* must have a degenerate line, skip it */
+    return(MS_FAILURE);
+
+  if((min_length != -1) && (total_length < min_length)) /* too short to label */
+    return(MS_FAILURE);
+
+  // ok, now we know which line and which segment within that line
+  i = line_index;
+  j = segment_index;
+
+  *length = total_length;
+
+  lp->x = (p->line[i].point[j].x + p->line[i].point[j-1].x)/2.0;
+  lp->y = (p->line[i].point[j].y + p->line[i].point[j-1].y)/2.0;
+
+  theta = asin(MS_ABS(p->line[i].point[j].x - p->line[i].point[j-1].x)/sqrt((pow((p->line[i].point[j].x - p->line[i].point[j-1].x),2) + pow((p->line[i].point[j].y - p->line[i].point[j-1].y),2))));
+
+  if(p->line[i].point[j-1].x < p->line[i].point[j].x) { /* i.e. to the left */
+    if(p->line[i].point[j-1].y < p->line[i].point[j].y) /* i.e. below */
+      *angle = -(90.0 - MS_RAD_TO_DEG*theta);
+    else
+      *angle = (90.0 - MS_RAD_TO_DEG*theta);
+  } else {
+    if(p->line[i].point[j-1].y < p->line[i].point[j].y) /* i.e. below */
+      *angle = (90.0 - MS_RAD_TO_DEG*theta);
+    else
+      *angle = -(90.0 - MS_RAD_TO_DEG*theta);
+  }
+
+  return(MS_SUCCESS);
+}
+
+
+ZZIP_FILE *ppc_fopen(const char *filename, const char *mode)
+{
+  /*
+  WCHAR wszFileName[256];          // Unicode user name
+  WCHAR wszMode[10];
+
+  MultiByteToWideChar( CP_ACP, 0, filename,
+        strlen(filename)+1, wszFileName,
+     sizeof(wszFileName)/sizeof(wszFileName[0]) );
+  MultiByteToWideChar( CP_ACP, 0, mode,
+        strlen(mode)+1, wszMode,
+     sizeof(wszMode)/sizeof(wszMode[0]) );
+  return _tfopen(wszFileName, wszMode);
+  */
+  return zzip_fopen(filename, mode);
+}
