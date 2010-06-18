@@ -1,4 +1,3 @@
-//#include "Screen/shapelib/map.h"
 /*
 Copyright_License {
 
@@ -37,8 +36,9 @@ Copyright_License {
 }
 */
 
-#include "Screen/shapelib/mapprimitive.h"
-#include "Screen/shapelib/maperror.h"
+#include "mapprimitive.h"
+#include "maperror.h"
+
 #include <string.h>
 
 typedef enum {CLIP_LEFT, CLIP_MIDDLE, CLIP_RIGHT} CLIP_STATE;

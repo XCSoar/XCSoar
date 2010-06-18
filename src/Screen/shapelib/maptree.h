@@ -1,8 +1,8 @@
 #ifndef MAPTREE_H
 #define MAPTREE_H
 
-#include "Screen/shapelib/mapprimitive.h"
-#include "Screen/shapelib/mapshape.h"
+#include "mapprimitive.h"
+#include "mapshape.h"
 
 #ifdef __cplusplus
 extern "C" {
