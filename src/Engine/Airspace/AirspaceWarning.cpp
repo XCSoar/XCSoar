@@ -141,7 +141,9 @@ AirspaceWarning::get_ack_day() const
 bool 
 AirspaceWarning::trivial() const 
 {
-  return (m_state==WARNING_CLEAR) && (m_state_last==WARNING_CLEAR) && get_ack_expired()
+  return (m_state==WARNING_CLEAR) 
+    && (m_state_last==WARNING_CLEAR) 
+    && get_ack_expired()
     && (!m_debouncetime);
 }
 
