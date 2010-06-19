@@ -271,7 +271,9 @@ AirspaceWarningManager::update_predicted(const AIRCRAFT_STATE& state,
                                          const AirspaceWarning::AirspaceWarningState& warning_state,
                                          const fixed max_time) 
 {
-  AirspaceIntersectionWarningVisitor visitor(state, perf, *this, warning_state, max_time,
+  AirspaceIntersectionWarningVisitor visitor(state, perf, 
+                                             *this, 
+                                             warning_state, max_time,
                                              state.NavAltitude + fixed(1000));
 
   GeoVector vector_predicted(state.Location, location_predicted);
