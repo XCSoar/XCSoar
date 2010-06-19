@@ -63,7 +63,7 @@ AbortTask::setActiveTaskPoint(unsigned index)
 {
   if (index<tps.size()) {
     activeTaskPoint = index;
-    active_waypoint = tps[index]->get_waypoint().id;
+    active_waypoint = tps[index].first->get_waypoint().id;
   }
 }
 
@@ -71,7 +71,7 @@ TaskPoint*
 AbortTask::getActiveTaskPoint() const
 {
   if (activeTaskPoint<tps.size()) {
-    return tps[activeTaskPoint];
+    return tps[activeTaskPoint].first;
   } else {
     return NULL;
   }
@@ -94,9 +94,9 @@ AbortTask::task_size() const
 
 void 
 AbortTask::clear() {
-  for (std::vector< TaskPoint* >::iterator v=tps.begin();
+  for (AlternateTaskVector::iterator v=tps.begin();
        v != tps.end(); ) {
-    delete (*v); 
+    delete (v->first); 
     tps.erase(v);
   }
   m_landable_reachable = false;
@@ -131,45 +131,52 @@ AbortTask::task_full() const
   return (tps.size()>=10);
 }
 
-
-fixed 
-AbortTask::is_reachable(const AIRCRAFT_STATE &state,
-                        const Waypoint& waypoint,
-                        const GlidePolar &polar,
-                        const bool final_glide) const
-{
-  UnorderedTaskPoint t(waypoint, task_behaviour);
-  GlideResult r = TaskSolution::glide_solution_remaining(t, state, polar);
-  if (!r.glide_reachable(final_glide)) {
-    return -fixed_one;
-  } else {
-    return r.TimeElapsed;
+/**
+ * Function object used to rank waypoints by arrival time
+ */
+struct AlternateRank : public std::binary_function<AbortTask::Alternate, 
+                                                   AbortTask::Alternate, bool> {
+  /**
+   * Condition, ranks by arrival time 
+   */
+  bool operator()(const AbortTask::Alternate& x, 
+                  const AbortTask::Alternate& y) const {
+    return x.second.TimeElapsed > y.second.TimeElapsed;
   }
-}
+};
 
+
+bool 
+AbortTask::is_reachable(const GlideResult result,
+                        const bool final_glide) const 
+{
+  return !positive(result.Vector.Distance) || 
+    (!negative(result.TimeElapsed) && result.glide_reachable(final_glide));
+}
 
 bool
 AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
-                          WaypointVector &approx_waypoints,
+                          AlternateVector &approx_waypoints,
                           const GlidePolar &polar,
                           const bool only_airfield,
                           const bool final_glide)
-{  
+{
   if (task_full()) {
     return false;
   }
   bool found = false;
-  std::priority_queue<WP_ALT, std::vector<WP_ALT>, Rank> q;
-  for (WaypointVector::iterator v = approx_waypoints.begin();
+  std::priority_queue<Alternate, AlternateVector, AlternateRank> q;
+  for (AlternateVector::iterator v = approx_waypoints.begin();
        v!=approx_waypoints.end(); ) {
 
-    if (only_airfield && !v->Flags.Airport) {
+    if (only_airfield && !v->first.Flags.Airport) {
       ++v;
       continue;
     }
-    const fixed t_elapsed = is_reachable(state, *v, polar, final_glide);
-    if (!negative(t_elapsed)) {
-      q.push(std::make_pair(*v, t_elapsed));
+    UnorderedTaskPoint t(v->first, task_behaviour);
+    const GlideResult result = TaskSolution::glide_solution_remaining(t, state, polar);
+    if (is_reachable(result, final_glide)) {
+      q.push(std::make_pair(v->first, result));
       // remove it since it's already in the list now      
       approx_waypoints.erase(v);
 
@@ -180,10 +187,12 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
     }
   }
   while (!q.empty() && !task_full()) {
-    tps.push_back(new UnorderedTaskPoint(q.top().first, task_behaviour));
+    const Alternate top = q.top();
+    tps.push_back(std::make_pair(new UnorderedTaskPoint(top.first, task_behaviour),
+                                 top.second));
 
     const int i = tps.size()-1;
-    if (tps[i]->get_waypoint().id == active_waypoint) {
+    if (tps[i].first->get_waypoint().id == active_waypoint) {
       activeTaskPoint = i;
     }
 
@@ -210,7 +219,7 @@ public:
  * 
  * @return Initialised object
  */
-  WaypointVisitorVector(AbortTask::WaypointVector& wpv):vector(wpv) {};
+  WaypointVisitorVector(AbortTask::AlternateVector& wpv):vector(wpv) {};
 
 /** 
  * Visit method, adds result to vector
@@ -218,10 +227,12 @@ public:
  * @param wp Waypoint that is visited
  */
   void Visit(const Waypoint& wp) {
-    vector.push_back(wp);
+    if (wp.is_landable()) {
+      vector.push_back(std::make_pair(wp, GlideResult()));
+    }
   }
 private:
-  AbortTask::WaypointVector &vector;
+  AbortTask::AlternateVector &vector;
 };
 
 
@@ -235,11 +246,10 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
   const unsigned active_waypoint_on_entry = active_waypoint;
   activeTaskPoint = 0; // default to best result if can't find user-set one 
 
-  WaypointVector approx_waypoints; 
+  AlternateVector approx_waypoints; 
 
   WaypointVisitorVector wvv(approx_waypoints);
   waypoints.visit_within_radius(state.Location, abort_range(state), wvv);
-  remove_unlandable(approx_waypoints);
   if (!approx_waypoints.size()) {
     /**
      * \todo
@@ -265,9 +275,9 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
   fill_reachable(fake, approx_waypoints, glide_polar, false, false);
 
   if (tps.size()) {
-    active_waypoint = tps[activeTaskPoint]->get_waypoint().id;
+    active_waypoint = tps[activeTaskPoint].first->get_waypoint().id;
     if (active_waypoint_on_entry != active_waypoint) {
-      task_events.active_changed(*tps[activeTaskPoint]);
+      task_events.active_changed(*(tps[activeTaskPoint].first));
     }
   }
 
@@ -282,16 +292,17 @@ AbortTask::update_offline(const AIRCRAFT_STATE &state)
   update_polar();
   m_landable_reachable = false;
 
-  WaypointVector approx_waypoints; 
+  AlternateVector approx_waypoints; 
 
   WaypointVisitorVector wvv(approx_waypoints);
   waypoints.visit_within_radius(state.Location, abort_range(state), wvv);
-  remove_unlandable(approx_waypoints);
 
-  for (WaypointVector::iterator v = approx_waypoints.begin();
+  for (AlternateVector::iterator v = approx_waypoints.begin();
        v!=approx_waypoints.end(); ++v) {
 
-    if (!negative(is_reachable(state, *v, polar_safety, true))) {
+    UnorderedTaskPoint t(v->first, task_behaviour);
+    const GlideResult result = TaskSolution::glide_solution_remaining(t, state, polar_safety);
+    if (is_reachable(result, true)) {
       m_landable_reachable = true;
       return;
     }
@@ -308,28 +319,14 @@ void
 AbortTask::tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) const
 {
   if (!reverse) {
-    for (std::vector<TaskPoint*>::const_iterator 
+    for (AlternateTaskVector::const_iterator 
            i= tps.begin(); i!= tps.end(); ++i) {
-      (*i)->CAccept(visitor);
+      (i->first)->CAccept(visitor);
     }
   } else {
-    for (std::vector<TaskPoint*>::const_reverse_iterator 
+    for (AlternateTaskVector::const_reverse_iterator 
            i= tps.rbegin(); i!= tps.rend(); ++i) {
-      (*i)->CAccept(visitor);
-    }
-  }
-}
-
-void 
-AbortTask::remove_unlandable(WaypointVector &approx_waypoints)
-{
-  for (WaypointVector::iterator v = approx_waypoints.begin();
-       v!=approx_waypoints.end(); ) {
-
-    if (!v->is_landable()) {
-      approx_waypoints.erase(v);
-    } else {
-      ++v;
+      (i->first)->CAccept(visitor);
     }
   }
 }
@@ -363,9 +360,9 @@ AbortTask::get_task_center(const GEOPOINT& fallback_location) const
     TaskProjection task_projection;
     for (unsigned i=0; i<tps.size(); ++i) {
       if (i==0) {
-        task_projection.reset(tps[i]->get_location());
+        task_projection.reset(tps[i].first->get_location());
       }
-      task_projection.scan_location(tps[i]->get_location());
+      task_projection.scan_location(tps[i].first->get_location());
     }
     task_projection.update_fast();
     return task_projection.get_center();
@@ -381,9 +378,9 @@ AbortTask::get_task_radius(const GEOPOINT& fallback_location) const
     TaskProjection task_projection;
     for (unsigned i=0; i<tps.size(); ++i) {
       if (i==0) {
-        task_projection.reset(tps[i]->get_location());
+        task_projection.reset(tps[i].first->get_location());
       }
-      task_projection.scan_location(tps[i]->get_location());
+      task_projection.scan_location(tps[i].first->get_location());
     }
     task_projection.update_fast();
     return task_projection.get_radius();

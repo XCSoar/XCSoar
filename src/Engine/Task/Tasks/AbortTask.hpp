@@ -54,7 +54,9 @@ class AbortTask :
 {
 public:
 
-  typedef std::vector < Waypoint > WaypointVector; /**< Vector of waypoints used to store candidates */
+  typedef std::pair < Waypoint, GlideResult > Alternate;
+  typedef std::vector < Alternate > AlternateVector; 
+     /**< Vector of waypoints and solutions used to store candidates */
 
   /** 
    * Base constructor.
@@ -170,6 +172,9 @@ public:
 
 protected:
 
+  bool is_reachable(const GlideResult result,
+                    const bool final_glide) const;
+
 /** 
  * Test whether (and how) transitioning into/out of task points should occur, typically
  * according to task_advance mechanism.  This also may call the task_event callbacks.
@@ -211,14 +216,6 @@ protected:
   void update_polar();
 
 /** 
- * Prune out non-landable (landable or airport flagged) waypoints from
- * candidates 
- *
- * @param approx_waypoints Waypoint list to prune
- */
-  void remove_unlandable(WaypointVector &approx_waypoints);
-
-/** 
  * Fill abort task list with candidate waypoints given a list of
  * waypoints satisfying approximate range queries.  Can be used
  * to add airfields only, or landpoints.
@@ -232,44 +229,14 @@ protected:
  * @return True if a reachable landpoint was found
  */
   bool fill_reachable(const AIRCRAFT_STATE &state,
-                      WaypointVector &approx_waypoints,
+                      AlternateVector &approx_waypoints,
                       const GlidePolar &polar,
                       const bool only_airfield,
                       const bool final_glide);
 
-  typedef std::pair<Waypoint,fixed> WP_ALT; /**< Class used to hold sorting data, second item is arival altitude */
-
-  /**
-   * Function object used to rank waypoints by arrival altitude
-   */
-  struct Rank : public std::binary_function<WP_ALT, WP_ALT, bool> {
-    /**
-     * Condition, ranks by arrival altitude 
-     */
-    bool operator()(const WP_ALT& x, const WP_ALT& y) const {
-      return x.second > y.second;
-    }
-  };
-
 private:
-
-/** 
- * Test whether the given waypoint is reachable with the specified
- * glide polar.
- *
- * @param state Aircraft state
- * @param waypoint Waypoint to test
- * @param polar Polar to use for tests
- * @param final_glide Whether solution must be glide only or climb allowed
- *
- * @return Time elapsed to arrive if possible, otherwise negative
- */
-  fixed is_reachable(const AIRCRAFT_STATE &state,
-                     const Waypoint& waypoint,
-                     const GlidePolar &polar,
-                     const bool final_glide) const;
-
-  std::vector<TaskPoint*> tps;
+  typedef std::vector<std::pair<TaskPoint*, GlideResult> > AlternateTaskVector;
+  AlternateTaskVector tps;
   unsigned active_waypoint;
   const Waypoints &waypoints;
   GlidePolar polar_safety;
