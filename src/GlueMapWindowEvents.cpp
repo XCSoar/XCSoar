@@ -283,7 +283,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
   }
 #endif
 
-  if (!my_target_pan && SettingsMap().EnablePan && (distance > IBLSCALE(36))) {
+  if (!my_target_pan && SettingsMap().EnablePan && (distance > Layout::Scale(36))) {
     // JMW broken!
     XCSoarInterface::SetSettingsMap().PanLocation.Longitude += drag_start_geopoint.Longitude - G.Longitude;
     XCSoarInterface::SetSettingsMap().PanLocation.Latitude += drag_start_geopoint.Latitude - G.Latitude;
@@ -292,7 +292,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
   }
 
   if (is_simulator() && (click_time > 50)) {
-    if (!Basic().gps.Replay && !my_target_pan && (distance > IBLSCALE(36))) {
+    if (!Basic().gps.Replay && !my_target_pan && (distance > Layout::Scale(36))) {
       // This drag moves the aircraft (changes speed and direction)
       const Angle oldbearing = Basic().TrackBearing;
       const fixed minspeed = fixed(1.1) * (task != NULL ?
@@ -320,7 +320,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
         // 100ms is NOT enough for a short click since GetTickCount is OEM custom!
         if (way_points != NULL &&
             PopupNearestWaypointDetails(*way_points, drag_start_geopoint,
-					DistancePixelsToMeters(IBLSCALE(10)), false)) {
+					DistancePixelsToMeters(Layout::Scale(10)), false)) {
           return true;
         }
       } else {
@@ -331,7 +331,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
       if(click_time < AIRSPACECLICK) { // original and untouched interval
         if (way_points != NULL &&
             PopupNearestWaypointDetails(*way_points, drag_start_geopoint,
-					DistancePixelsToMeters(IBLSCALE(10)), false)) {
+					DistancePixelsToMeters(Layout::Scale(10)), false)) {
           return true;
         }
       } else {
