@@ -226,7 +226,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
     return true;
   }
 
-  int dwInterval = mouse_down_clock.elapsed();
+  int click_time = mouse_down_clock.elapsed();
   mouse_down_clock.reset();
 
   bool my_target_pan = SettingsMap().TargetPan;
@@ -251,8 +251,8 @@ GlueMapWindow::on_mouse_up(int x, int y)
 
   if ((distance < 50) &&
       (CommonInterface::VirtualKeys==(VirtualKeys_t)vkEnabled) &&
-      (dwInterval>= DOUBLECLICKINTERVAL)) {
-    unsigned wParam = ProcessVirtualKey(x, y, dwInterval, 0);
+      (click_time>= DOUBLECLICKINTERVAL)) {
+    unsigned wParam = ProcessVirtualKey(x, y, click_time, 0);
     if (wParam == 0) {
 #ifdef DEBUG_VIRTUALKEYS
       Message::AddMessage(_T("E02 INVALID Virtual Key!"));
@@ -291,7 +291,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
     return true;
   }
 
-  if (is_simulator() && (dwInterval > 50)) {
+  if (is_simulator() && (click_time > 50)) {
     if (!Basic().gps.Replay && !my_target_pan && (distance > IBLSCALE(36))) {
       // This drag moves the aircraft (changes speed and direction)
       const Angle oldbearing = Basic().TrackBearing;
@@ -316,7 +316,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
 
   if (!my_target_pan) {
     if (CommonInterface::VirtualKeys == (VirtualKeys_t)vkEnabled) {
-      if (dwInterval < VKSHORTCLICK) {
+      if (click_time < VKSHORTCLICK) {
         // 100ms is NOT enough for a short click since GetTickCount is OEM custom!
         if (way_points != NULL &&
             PopupNearestWaypointDetails(*way_points, LLstart,
@@ -328,7 +328,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
           return true;
       }
     } else {
-      if(dwInterval < AIRSPACECLICK) { // original and untouched interval
+      if(click_time < AIRSPACECLICK) { // original and untouched interval
         if (way_points != NULL &&
             PopupNearestWaypointDetails(*way_points, LLstart,
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
