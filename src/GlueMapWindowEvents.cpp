@@ -157,26 +157,27 @@ GlueMapWindow::on_mouse_up(int x, int y)
   int click_time = mouse_down_clock.elapsed();
   mouse_down_clock.reset();
 
-  bool my_target_pan = SettingsMap().TargetPan;
-
   double distance = hypot(drag_start.x - x, drag_start.y - y);
   distance /= Layout::scale;
 
+  if (SettingsMap().TargetPan) {
 #ifdef OLD_TASK // target control
-  if (task != NULL &&
-      task->getSettings().AATEnabled &&
-      my_target_pan &&
-      TargetDrag_State > 0) {
-    TargetDrag_State = 2;
-    if (task->InAATTurnSector(G, SettingsMap().TargetPanIndex))
-      // if release mouse out of sector, don't update w/ bad coords
-      TargetDrag_Location = G;
+    if (task != NULL &&
+        task->getSettings().AATEnabled &&
+        TargetDrag_State > 0) {
+      TargetDrag_State = 2;
+      if (task->InAATTurnSector(G, SettingsMap().TargetPanIndex))
+        // if release mouse out of sector, don't update w/ bad coords
+        TargetDrag_Location = G;
 
-    return true;
-  }
+      return true;
+    }
+
+    return false;
 #endif
+  }
 
-  if (!my_target_pan && SettingsMap().EnablePan && (distance > Layout::Scale(36))) {
+  if (SettingsMap().EnablePan && (distance > Layout::Scale(36))) {
     GEOPOINT G;
     Screen2LonLat(x, y, G);
 
@@ -188,7 +189,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
   }
 
   if (is_simulator() && (click_time > 50)) {
-    if (!Basic().gps.Replay && !my_target_pan && (distance > Layout::Scale(36))) {
+    if (!Basic().gps.Replay && (distance > Layout::Scale(36))) {
       GEOPOINT G;
       Screen2LonLat(x, y, G);
 
@@ -213,18 +214,16 @@ GlueMapWindow::on_mouse_up(int x, int y)
     }
   }
 
-  if (!my_target_pan) {
-    if(click_time < AIRSPACECLICK) { // original and untouched interval
-      if (way_points != NULL &&
-          PopupNearestWaypointDetails(*way_points, drag_start_geopoint,
-        DistancePixelsToMeters(Layout::Scale(10)), false)) {
-        return true;
-      }
-    } else {
-      if (m_airspace != NULL &&
-          AirspaceDetailsAtPoint(drag_start_geopoint))
-        return true;
+  if(click_time < AIRSPACECLICK) { // original and untouched interval
+    if (way_points != NULL &&
+        PopupNearestWaypointDetails(*way_points, drag_start_geopoint,
+      DistancePixelsToMeters(Layout::Scale(10)), false)) {
+      return true;
     }
+  } else {
+    if (m_airspace != NULL &&
+        AirspaceDetailsAtPoint(drag_start_geopoint))
+      return true;
   }
 
   return false;
