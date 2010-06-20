@@ -125,7 +125,7 @@ GlueMapWindow::on_setfocus()
   return true;
 }
 
-static GEOPOINT LLstart;
+static GEOPOINT drag_start_geopoint;
 static int XstartScreen, YstartScreen;
 static bool ignore_single_click = true;
 
@@ -190,7 +190,7 @@ GlueMapWindow::on_mouse_down(int x, int y)
   // TODO VNT move Screen2LonLat in LBUTTONUP after making sure we
   // really need Xstart and Ystart so we save precious
   // milliseconds waiting for BUTTONUP GetTickCount
-  Screen2LonLat(x, y, LLstart);
+  Screen2LonLat(x, y, drag_start_geopoint);
   XstartScreen = x;
   YstartScreen = y;
 
@@ -285,8 +285,8 @@ GlueMapWindow::on_mouse_up(int x, int y)
 
   if (!my_target_pan && SettingsMap().EnablePan && (distance > IBLSCALE(36))) {
     // JMW broken!
-    XCSoarInterface::SetSettingsMap().PanLocation.Longitude += LLstart.Longitude - G.Longitude;
-    XCSoarInterface::SetSettingsMap().PanLocation.Latitude += LLstart.Latitude - G.Latitude;
+    XCSoarInterface::SetSettingsMap().PanLocation.Longitude += drag_start_geopoint.Longitude - G.Longitude;
+    XCSoarInterface::SetSettingsMap().PanLocation.Latitude += drag_start_geopoint.Latitude - G.Latitude;
     RefreshMap();
     return true;
   }
@@ -298,7 +298,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
       const fixed minspeed = fixed(1.1) * (task != NULL ?
                                     task->get_glide_polar() :
                                     GlidePolar(fixed_zero)).get_Vmin();
-      const Angle newbearing = Bearing(LLstart, G);
+      const Angle newbearing = Bearing(drag_start_geopoint, G);
       if (((newbearing - oldbearing).as_delta().magnitude_degrees() < fixed(30)) ||
           (Basic().GroundSpeed < minspeed))
         device_blackboard.SetSpeed(min(fixed(100.0),
@@ -319,24 +319,24 @@ GlueMapWindow::on_mouse_up(int x, int y)
       if (click_time < VKSHORTCLICK) {
         // 100ms is NOT enough for a short click since GetTickCount is OEM custom!
         if (way_points != NULL &&
-            PopupNearestWaypointDetails(*way_points, LLstart,
+            PopupNearestWaypointDetails(*way_points, drag_start_geopoint,
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
           return true;
         }
       } else {
-        if (m_airspace != NULL && AirspaceDetailsAtPoint(LLstart))
+        if (m_airspace != NULL && AirspaceDetailsAtPoint(drag_start_geopoint))
           return true;
       }
     } else {
       if(click_time < AIRSPACECLICK) { // original and untouched interval
         if (way_points != NULL &&
-            PopupNearestWaypointDetails(*way_points, LLstart,
+            PopupNearestWaypointDetails(*way_points, drag_start_geopoint,
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
           return true;
         }
       } else {
         if (m_airspace != NULL &&
-            AirspaceDetailsAtPoint(LLstart))
+            AirspaceDetailsAtPoint(drag_start_geopoint))
           return true;
       }
     } // VK enabled
