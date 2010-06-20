@@ -126,7 +126,7 @@ GlueMapWindow::on_setfocus()
 }
 
 static GEOPOINT drag_start_geopoint;
-static int XstartScreen, YstartScreen;
+static POINT drag_start;
 static bool ignore_single_click = true;
 
 bool
@@ -187,12 +187,12 @@ GlueMapWindow::on_mouse_down(int x, int y)
 
   set_focus();
 
+  drag_start.x = x;
+  drag_start.y = y;
   // TODO VNT move Screen2LonLat in LBUTTONUP after making sure we
   // really need Xstart and Ystart so we save precious
   // milliseconds waiting for BUTTONUP GetTickCount
   Screen2LonLat(x, y, drag_start_geopoint);
-  XstartScreen = x;
-  YstartScreen = y;
 
 #ifdef OLD_TASK // target control
   if (task != NULL &&
@@ -202,10 +202,10 @@ GlueMapWindow::on_mouse_down(int x, int y)
       POINT tscreen;
       LonLat2Screen(task->getTargetLocation(SettingsMap().TargetPanIndex),
                     tscreen);
-      double distance = isqrt4((long)((XstartScreen - tscreen.x) *
-                                      (XstartScreen - tscreen.x) +
-                                      (YstartScreen - tscreen.y) *
-                                      (YstartScreen - tscreen.y)));
+      double distance = isqrt4((long)((drag_start.x - tscreen.x) *
+                                      (drag_start.x - tscreen.x) +
+                                      (drag_start.y - tscreen.y) *
+                                      (drag_start.y - tscreen.y)));
       distance /= Layout::scale;
 
       if (distance < 10)
@@ -231,10 +231,10 @@ GlueMapWindow::on_mouse_up(int x, int y)
 
   bool my_target_pan = SettingsMap().TargetPan;
 
-  double distance = isqrt4((long)((XstartScreen - x) *
-                                  (XstartScreen - x) +
-                                  (YstartScreen - y) *
-                                  (YstartScreen - y)));
+  double distance = isqrt4((long)((drag_start.x - x) *
+                                  (drag_start.x - x) +
+                                  (drag_start.y - y) *
+                                  (drag_start.y - y)));
   distance /= Layout::scale;
 
 #ifdef DEBUG_VIRTUALKEYS
