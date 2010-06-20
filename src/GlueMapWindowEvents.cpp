@@ -202,10 +202,8 @@ GlueMapWindow::on_mouse_down(int x, int y)
       POINT tscreen;
       LonLat2Screen(task->getTargetLocation(SettingsMap().TargetPanIndex),
                     tscreen);
-      double distance = isqrt4((long)((drag_start.x - tscreen.x) *
-                                      (drag_start.x - tscreen.x) +
-                                      (drag_start.y - tscreen.y) *
-                                      (drag_start.y - tscreen.y)));
+      double distance = hypot(drag_start.x - tscreen.x,
+                              drag_start.y - tscreen.y);
       distance /= Layout::scale;
 
       if (distance < 10)
@@ -231,10 +229,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
 
   bool my_target_pan = SettingsMap().TargetPan;
 
-  double distance = isqrt4((long)((drag_start.x - x) *
-                                  (drag_start.x - x) +
-                                  (drag_start.y - y) *
-                                  (drag_start.y - y)));
+  double distance = hypot(drag_start.x - x, drag_start.y - y);
   distance /= Layout::scale;
 
 #ifdef DEBUG_VIRTUALKEYS
