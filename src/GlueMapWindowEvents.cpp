@@ -127,7 +127,7 @@ GlueMapWindow::on_setfocus()
 
 static GEOPOINT LLstart;
 static int XstartScreen, YstartScreen;
-static bool ignorenext = true;
+static bool ignore_single_click = true;
 
 bool
 GlueMapWindow::on_mouse_double(int x, int y)
@@ -139,7 +139,7 @@ GlueMapWindow::on_mouse_double(int x, int y)
   //
   mouse_down_clock.update();
   InputEvents::ShowMenu();
-  ignorenext = true;
+  ignore_single_click = true;
   return true;
 }
 
@@ -179,9 +179,11 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
 bool
 GlueMapWindow::on_mouse_down(int x, int y)
 {
-  mouse_down_clock.update();
-  if (ignorenext)
+  // Ignore single click event if double click detected
+  if (ignore_single_click)
     return true;
+
+  mouse_down_clock.update();
 
   set_focus();
 
@@ -218,8 +220,9 @@ GlueMapWindow::on_mouse_down(int x, int y)
 bool
 GlueMapWindow::on_mouse_up(int x, int y)
 {
-  if (ignorenext) {
-    ignorenext = false;
+  // Ignore single click event if double click detected
+  if (ignore_single_click) {
+    ignore_single_click = false;
     return true;
   }
 
