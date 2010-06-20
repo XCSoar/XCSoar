@@ -266,9 +266,6 @@ GlueMapWindow::on_mouse_up(int x, int y)
     }
   }
 
-  GEOPOINT G;
-  Screen2LonLat(x, y, G);
-
 #ifdef OLD_TASK // target control
   if (task != NULL &&
       task->getSettings().AATEnabled &&
@@ -284,6 +281,9 @@ GlueMapWindow::on_mouse_up(int x, int y)
 #endif
 
   if (!my_target_pan && SettingsMap().EnablePan && (distance > Layout::Scale(36))) {
+    GEOPOINT G;
+    Screen2LonLat(x, y, G);
+
     // JMW broken!
     XCSoarInterface::SetSettingsMap().PanLocation.Longitude += drag_start_geopoint.Longitude - G.Longitude;
     XCSoarInterface::SetSettingsMap().PanLocation.Latitude += drag_start_geopoint.Latitude - G.Latitude;
@@ -293,6 +293,9 @@ GlueMapWindow::on_mouse_up(int x, int y)
 
   if (is_simulator() && (click_time > 50)) {
     if (!Basic().gps.Replay && !my_target_pan && (distance > Layout::Scale(36))) {
+      GEOPOINT G;
+      Screen2LonLat(x, y, G);
+
       // This drag moves the aircraft (changes speed and direction)
       const Angle oldbearing = Basic().TrackBearing;
       const fixed minspeed = fixed(1.1) * (task != NULL ?
