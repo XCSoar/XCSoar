@@ -213,13 +213,16 @@ GlueMapWindow::on_mouse_up(int x, int y)
     return true;
   }
 
-  if(click_time < AIRSPACECLICK) { // original and untouched interval
+  if(click_time < 1000) {
+    // click less then one second -> open nearest waypoint details
     if (way_points != NULL &&
         PopupNearestWaypointDetails(*way_points, drag_start_geopoint,
-      DistancePixelsToMeters(Layout::Scale(10)), false)) {
+                                    DistancePixelsToMeters(Layout::Scale(10)),
+                                    false)) {
       return true;
     }
   } else {
+    // click more then one second -> open nearest airspace details
     if (m_airspace != NULL &&
         AirspaceDetailsAtPoint(drag_start_geopoint))
       return true;
