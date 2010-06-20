@@ -55,8 +55,6 @@ Copyright_License {
 using std::min;
 using std::max;
 
-// Interface/touchscreen callbacks
-
 bool
 GlueMapWindow::on_setfocus()
 {
@@ -72,11 +70,6 @@ GlueMapWindow::on_setfocus()
 bool
 GlueMapWindow::on_mouse_double(int x, int y)
 {
-  // Added by ARH to show menu button when mapwindow is double clicked.
-  //
-  // VNT TODO: do not handle this event and remove CS_DBLCLKS in register class.
-  // Only handle timed clicks in BUTTONDOWN with no proximity.
-  //
   mouse_down_clock.update();
   InputEvents::ShowMenu();
   ignore_single_click = true;
@@ -129,9 +122,6 @@ GlueMapWindow::on_mouse_down(int x, int y)
 
   drag_start.x = x;
   drag_start.y = y;
-  // TODO VNT move Screen2LonLat in LBUTTONUP after making sure we
-  // really need Xstart and Ystart so we save precious
-  // milliseconds waiting for BUTTONUP GetTickCount
   Screen2LonLat(x, y, drag_start_geopoint);
 
 #ifdef OLD_TASK // target control
@@ -235,7 +225,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
           AirspaceDetailsAtPoint(drag_start_geopoint))
         return true;
     }
-  } // !TargetPan
+  }
 
   return false;
 }
@@ -274,9 +264,6 @@ GlueMapWindow::on_key_up(unsigned key_code)
 bool
 GlueMapWindow::on_key_press(unsigned key_code)
 {
-  // VENTA-TODO careful here, keyup no more trapped for PNA.
-  // Forbidden usage of keypress timing.
-
   key_code = TranscodeKey(key_code);
   if (is_altair() && key_code == 0xF5) {
     XCSoarInterface::SignalShutdown(false);
