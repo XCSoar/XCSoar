@@ -43,7 +43,6 @@ Copyright_License {
 #include "DateTime.hpp"
 #include "GPSClock.hpp"
 #include "Poco/RWLock.h"
-#include "Poco/RWLock.h"
 #include "Navigation/GeoPoint.hpp"
 #include "Logger/LoggerGRecord.hpp"
 #include "OverwritingRingBuffer.hpp"

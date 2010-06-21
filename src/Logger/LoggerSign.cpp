@@ -37,17 +37,6 @@
 */
 
 #include "Logger/LoggerImpl.hpp"
-#include "Protection.hpp"
-#include "Dialogs.h"
-#include "Device/Port.hpp"
-#include "Math/Earth.hpp"
-#include "LogFile.hpp"
-#include "Asset.hpp"
-#include "LocalPath.hpp"
-#include "Device/device.hpp"
-#include "InputEvents.h"
-#include "Compatibility/string.h"
-#include "UtilsFile.hpp"
 #include "UtilsText.hpp" // for ConvertToC()
 
 #include <assert.h>

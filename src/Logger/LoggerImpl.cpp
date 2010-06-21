@@ -37,7 +37,6 @@
 */
 
 #include "Logger/LoggerImpl.hpp"
-#include "Components.hpp"
 #include "TaskClientUI.hpp"
 #include "Version.hpp"
 #include "Dialogs/Message.hpp"
@@ -45,14 +44,12 @@
 #include "Profile.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
-#include "UtilsText.hpp"
 #include "UtilsSystem.hpp"
 #include "UtilsFile.hpp"
 #include "LocalPath.hpp"
 #include "Device/device.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/List.hpp"
-#include "Compatibility/string.h"
 #include "Compatibility/path.h"
 #include "SettingsComputer.hpp"
 #include "NMEA/Info.hpp"

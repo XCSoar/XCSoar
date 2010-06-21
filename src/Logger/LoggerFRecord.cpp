@@ -35,11 +35,10 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#include "Logger/LoggerImpl.hpp"
-#include "wcecompat/ts_string.h"
-#include <tchar.h>
-#include <stdio.h>
 
+#include "Logger/LoggerImpl.hpp"
+
+#include <stdio.h>
 
 /*
  * From FAI_Tech_Spec_Gnss.pdf 
