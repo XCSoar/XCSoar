@@ -50,41 +50,37 @@
 #include <string.h>
 #include <tchar.h>
 
-typedef enum
-{
-	eValidationFailed,
-	eValidationPassed,
-	eValidationFileNotFound,
-	eValidationFileRead,
+typedef enum {
+  eValidationFailed,
+  eValidationPassed,
+  eValidationFileNotFound,
+  eValidationFileRead,
 } STATUS_t;
 
-
-char szPass[]="Validation check passed, data indicated as correct\r\n";
-char szFail[]="Validation check failed.  G Record is invalid\r\n";
-char szNoFile[]="Validation check failed.  File not found\r\n";
-char szInfo[]="Vali XCS for the XCSoar Flight Computer Version 1.0.2\r\n";
+char szPass[] = "Validation check passed, data indicated as correct\r\n";
+char szFail[] = "Validation check failed.  G Record is invalid\r\n";
+char szNoFile[] = "Validation check failed.  File not found\r\n";
+char szInfo[] = "Vali XCS for the XCSoar Flight Computer Version 1.0.2\r\n";
 
 STATUS_t
-ValidateXCS (char * FileName, GRecord &oGRecord)
+ValidateXCS(char *FileName, GRecord &oGRecord)
 {
   STATUS_t eStatus = eStatus=eValidationFileNotFound;
 
   FILE *inFile = NULL;
-  inFile = fopen((char*)FileName, ("r"));
-  
-  if (inFile == NULL) {
+  inFile = fopen(FileName, ("r"));
+  if (inFile == NULL)
     return eStatus;
-  }
-  fclose (inFile);
+
+  fclose(inFile);
 
   eStatus = eValidationFailed;
 
   oGRecord.Init();
   oGRecord.SetFileName(FileName);
-  if ( oGRecord.VerifyGRecordInFile())
-  {
-	  eStatus = eValidationPassed;
-  }
+  if (oGRecord.VerifyGRecordInFile())
+    eStatus = eValidationPassed;
+
   return eStatus;
 }
 
@@ -92,35 +88,34 @@ int main(int argc, char* argv[])
 {
   GRecord oGRecord;
 
-	int iRetVal;
-	STATUS_t eStatus;
-	iRetVal = 0; //false
-	eStatus= eValidationFailed;
+  int iRetVal;
+  STATUS_t eStatus;
+  iRetVal = 0; //false
+  eStatus = eValidationFailed;
 
-	printf(szInfo);
-	if ((argc > 1) && (strcmp(argv[1],"-?") != 0))
-	{
-		eStatus= ValidateXCS((char*)argv[1], oGRecord);
-		switch (eStatus)
-		{
-		case 	eValidationFailed:
-			printf(szFail);
-			break;
-		
-		case eValidationPassed:
-			iRetVal=1; // success
-			printf(szPass);
-			break;
-		
-		case eValidationFileNotFound:
-			printf(szNoFile);
-			break;
+  printf(szInfo);
+  if (argc > 1 && strcmp(argv[1], "-?") != 0) {
+    eStatus = ValidateXCS((char*)argv[1], oGRecord);
+    switch (eStatus) {
+    case eValidationFailed:
+      printf(szFail);
+      break;
 
-		default:
-			printf(szFail);
-			break;
-		}
+    case eValidationPassed:
+      iRetVal = 1; // success
+      printf(szPass);
+      break;
 
-	}
-	return iRetVal;
+    case eValidationFileNotFound:
+      printf(szNoFile);
+      break;
+
+    default:
+      printf(szFail);
+      break;
+    }
+
+  }
+
+  return iRetVal;
 }
