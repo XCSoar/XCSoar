@@ -74,7 +74,7 @@ LoggerImpl::IGCWriteRecord(const char *szIn, const TCHAR* szLoggerFileName)
 /**
  * Flushes the data in the DiskBuffer to the disk
  */
-void
+bool
 LoggerImpl::DiskBufferFlush()
 {
   FILE * LoggerFILE;
@@ -85,21 +85,26 @@ LoggerImpl::DiskBufferFlush()
   LoggerFILE = fopen (szLoggerFileName_c,"ab");
 
   if (!LoggerFILE)
-    return;
+    return false;
 
   for (int i = 0; i < LoggerDiskBufferCount; i++) {
     unsigned int iLen = strlen(LoggerDiskBuffer[i]);
 
     // if (file write successful)
-    if (fwrite(LoggerDiskBuffer[i], (size_t)1, (size_t)iLen, LoggerFILE) == (size_t)iLen) {
-      if (!Simulator) {
-        oGRecord.AppendRecordToBuffer(LoggerDiskBuffer[i]);
-      }
+    if (fwrite(LoggerDiskBuffer[i], (size_t)1, (size_t)iLen, LoggerFILE) != (size_t)iLen) {
+      fclose(LoggerFILE);
+      return false;
     }
+
+    if (!Simulator)
+      oGRecord.AppendRecordToBuffer(LoggerDiskBuffer[i]);
   }
 
-  fclose(LoggerFILE);
+  if (fclose(LoggerFILE) == EOF)
+    return false;
+
   DiskBufferReset();
+  return true;
 }
 
 /**
@@ -110,12 +115,11 @@ LoggerImpl::DiskBufferFlush()
 bool
 LoggerImpl::DiskBufferAdd(char *sIn)
 {
-  if (LoggerDiskBufferCount >= LOGGER_DISK_BUFFER_NUM_RECS) {
-    DiskBufferFlush();
-  }
-
-  if (LoggerDiskBufferCount >= LOGGER_DISK_BUFFER_NUM_RECS)
+  if (LoggerDiskBufferCount >= LOGGER_DISK_BUFFER_NUM_RECS &&
+      !DiskBufferFlush())
     return false;
+
+  assert(LoggerDiskBufferCount < LOGGER_DISK_BUFFER_NUM_RECS);
 
   strncpy(LoggerDiskBuffer[LoggerDiskBufferCount], sIn, MAX_IGC_BUFF);
   LoggerDiskBuffer[LoggerDiskBufferCount][MAX_IGC_BUFF - 1] = '\0';

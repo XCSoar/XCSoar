@@ -194,7 +194,7 @@ private:
 private:
   int LoggerDiskBufferCount;
   char LoggerDiskBuffer[LOGGER_DISK_BUFFER_NUM_RECS][MAX_IGC_BUFF];
-  void DiskBufferFlush();
+  bool DiskBufferFlush();
   bool DiskBufferAdd(char *sIn);
   void DiskBufferReset();
 };
