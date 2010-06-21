@@ -57,13 +57,13 @@ typedef enum {
   eValidationFileRead,
 } STATUS_t;
 
-char szPass[] = "Validation check passed, data indicated as correct\n";
-char szFail[] = "Validation check failed.  G Record is invalid\n";
-char szNoFile[] = "Validation check failed.  File not found\n";
-char szInfo[] = "Vali XCS for the XCSoar Flight Computer Version 1.0.2\n";
+static const char szPass[] = "Validation check passed, data indicated as correct\n";
+static const char szFail[] = "Validation check failed.  G Record is invalid\n";
+static const char szNoFile[] = "Validation check failed.  File not found\n";
+static const char szInfo[] = "Vali XCS for the XCSoar Flight Computer Version 1.0.2\n";
 
-STATUS_t
-ValidateXCS(char *FileName, GRecord &oGRecord)
+static STATUS_t
+ValidateXCS(const char *FileName, GRecord &oGRecord)
 {
   STATUS_t eStatus = eValidationFileNotFound;
 
@@ -95,7 +95,7 @@ int main(int argc, char* argv[])
 
   printf(szInfo);
   if (argc > 1 && strcmp(argv[1], "-?") != 0) {
-    eStatus = ValidateXCS((char*)argv[1], oGRecord);
+    eStatus = ValidateXCS(argv[1], oGRecord);
     switch (eStatus) {
     case eValidationFailed:
       printf(szFail);
