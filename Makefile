@@ -75,11 +75,12 @@ include $(topdir)/build/screen.mk
 include $(topdir)/build/form.mk
 include $(topdir)/build/harness.mk
 
+include $(topdir)/build/vali.mk
 include $(topdir)/build/test.mk
 
 ######## output files
 
-OUTPUTS := $(TARGET_BIN_DIR)/XCSoar$(TARGET_EXEEXT)
+OUTPUTS := $(TARGET_BIN_DIR)/XCSoar$(TARGET_EXEEXT) $(VALI_XCS)
 
 include $(topdir)/build/dist.mk
 include $(topdir)/build/cab.mk

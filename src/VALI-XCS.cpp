@@ -35,10 +35,6 @@
 }
  */
 
-/* to build:
- * $ g++ -o VALI-XCS.exe VALI-XCS.cpp ../../Logger/LoggerGRecord.cpp ../../Logger/MD5.cpp -I../../Logger  -I../../
- */
-
 /* This creates the VALI-XCS.exe program
  * This is a DOS program that is used by the OLC or a scorer in a contest
  * to validate the GRecord of an XCSoar-generated IGC file
