@@ -44,10 +44,11 @@
  * to validate the GRecord of an XCSoar-generated IGC file
  */
 
+#include "Logger/LoggerGRecord.hpp"
+
 #include <stdio.h>
 #include <string.h>
 #include <tchar.h>
-#include "../../Logger/LoggerGRecord.hpp"
 
 typedef enum
 {
