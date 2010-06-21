@@ -79,8 +79,7 @@ GRecord::AppendRecordToBuffer(const unsigned char * szIn)
   if (!IncludeRecordInGCalc(szIn))
     return false;
 
-  for (int i = 0; i < 4; i++)
-    oMD5[i].AppendString(szIn, 1);
+  AppendStringToBuffer(szIn);
   return true;
 }
 
