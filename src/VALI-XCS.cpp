@@ -65,7 +65,7 @@ char szInfo[] = "Vali XCS for the XCSoar Flight Computer Version 1.0.2\r\n";
 STATUS_t
 ValidateXCS(char *FileName, GRecord &oGRecord)
 {
-  STATUS_t eStatus = eStatus=eValidationFileNotFound;
+  STATUS_t eStatus = eValidationFileNotFound;
 
   FILE *inFile = NULL;
   inFile = fopen(FileName, ("r"));
