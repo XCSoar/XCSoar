@@ -158,7 +158,6 @@ GlueMapWindow::on_mouse_up(int x, int y)
   mouse_down_clock.reset();
 
   double distance = hypot(drag_start.x - x, drag_start.y - y);
-  distance /= Layout::scale;
 
   if (SettingsMap().TargetPan) {
 #ifdef OLD_TASK // target control
@@ -202,7 +201,8 @@ GlueMapWindow::on_mouse_up(int x, int y)
       if (((newbearing - oldbearing).as_delta().magnitude_degrees() < fixed(30)) ||
           (Basic().GroundSpeed < minspeed))
         device_blackboard.SetSpeed(min(fixed(100.0),
-                                   max(minspeed, fixed(distance / 3))));
+                                   max(minspeed,
+                                       fixed(distance / (3 * Layout::scale)))));
 
       device_blackboard.SetTrackBearing(newbearing);
       // change bearing without changing speed if direction change > 30
