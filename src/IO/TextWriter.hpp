@@ -94,8 +94,8 @@ public:
    * the physical device; they might still reside in the filesystem
    * cache.
    */
-  void flush() {
-    fflush(file);
+  bool flush() {
+    return fflush(file) == 0;
   }
 
   /**
@@ -126,16 +126,15 @@ public:
   /**
    * Write a string to the file.
    */
-  void write(const char *s) {
-    fputs(s, file);
+  bool write(const char *s) {
+    return fputs(s, file) >= 0;
   }
 
   /**
    * Write a string to the file, and finish the current line.
    */
-  void writeln(const char *s) {
-    write(s);
-    newline();
+  bool writeln(const char *s) {
+    return write(s) && newline();
   }
 
 #ifdef _UNICODE
