@@ -42,7 +42,7 @@ Copyright_License {
 #include "DrawThread.hpp"
 
 GlueMapWindow::GlueMapWindow()
-  :idle_robin(2), ignore_single_click(true) {}
+  :idle_robin(2), is_gesture(false), ignore_single_click(true) {}
 
 /**
  * This idle function allows progressive scanning of visibility etc

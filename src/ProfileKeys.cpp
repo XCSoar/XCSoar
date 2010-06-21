@@ -195,6 +195,7 @@ const TCHAR szProfileAutoBlank[] = CONF("AutoBlank");
 const TCHAR szProfileAutoBacklight[] = CONF("AutoBacklight");
 const TCHAR szProfileAutoSoundVolume[] = CONF("AutoSoundVolume");
 const TCHAR szProfileExtendedVisualGlide[] = CONF("ExtVisualGlide");
+const TCHAR szProfileGestures[] = CONF("Gestures");
 const TCHAR szProfileAverEffTime[] = CONF("AverEffTime");
 const TCHAR szProfileVarioGauge[] = CONF("VarioGauge");
 

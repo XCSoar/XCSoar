@@ -55,6 +55,24 @@ Copyright_License {
 using std::min;
 using std::max;
 
+const TCHAR*
+getDirection(int X1, int Y1, int X2, int Y2)
+{
+  int dx = X2 - X1;
+  int dy = Y2 - Y1;
+
+  if (dy < 0 && -dy >= abs(dx))
+    return _T("U");
+  if (dy > 0 && dy >= abs(dx))
+    return _T("D");
+  if (dx > 0 && dx >= abs(dy))
+    return _T("R");
+  if (dx < 0 && -dx >= abs(dy))
+    return _T("L");
+
+  return _T("");
+}
+
 bool
 GlueMapWindow::on_setfocus()
 {
@@ -106,6 +124,34 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
   }
 #endif
 
+  // If we are dragging already or starting to drag now...
+  if (XCSoarInterface::SettingsComputer().EnableGestures
+      && (is_gesture
+          || hypot(drag_start.x - x, drag_start.y - y) > Layout::Scale(70))) {
+    // Set is_gesture = true to save us one square-root operation each call
+    is_gesture = true;
+
+    // Get current dragging direction
+    const TCHAR* direction = getDirection(drag_last.x, drag_last.y, x, y);
+
+    // If no gesture yet or (the direction has
+    // changed and more then 70px from last direction change)...
+    if (string_is_empty(gesture)
+        || (direction[0] != gesture[_tcslen(gesture) - 1]
+        && hypot(gesture_corner.x - x, gesture_corner.y - y)
+           > Layout::Scale(70))) {
+      // Append current direction to the gesture string
+      _tcsncat(gesture, direction, 10);
+      // Save position of the direction change
+      gesture_corner.x = x;
+      gesture_corner.y = y;
+    }
+
+    // Save position for next direction query
+    drag_last.x = x;
+    drag_last.y = y;
+  }
+
   return MapWindow::on_mouse_move(x, y, keys);
 }
 
@@ -123,6 +169,14 @@ GlueMapWindow::on_mouse_down(int x, int y)
   drag_start.x = x;
   drag_start.y = y;
   Screen2LonLat(x, y, drag_start_geopoint);
+
+  if (XCSoarInterface::SettingsComputer().EnableGestures) {
+    is_gesture = false;
+    gesture_corner = drag_last = drag_start;
+
+    // Reset gesture
+    _tcscpy(gesture, _T(""));
+  }
 
 #ifdef OLD_TASK // target control
   if (task != NULL &&
@@ -213,6 +267,13 @@ GlueMapWindow::on_mouse_up(int x, int y)
     return true;
   }
 
+  if (XCSoarInterface::SettingsComputer().EnableGestures && is_gesture) {
+    // Finish gesture
+    is_gesture = false;
+    if (on_mouse_gesture(gesture))
+      return true;
+  }
+
   if(click_time < 1000) {
     // click less then one second -> open nearest waypoint details
     if (way_points != NULL &&
@@ -242,6 +303,45 @@ GlueMapWindow::on_mouse_wheel(int delta)
     InputEvents::sub_ScaleZoom(-1);
 
   return true;
+}
+
+bool
+GlueMapWindow::on_mouse_gesture(TCHAR* gesture)
+{
+  if (!XCSoarInterface::SettingsComputer().EnableGestures)
+    return false;
+
+  if (_tcscmp(gesture, _T("U")) == 0) {
+    InputEvents::processKey(VK_UP);
+    return true;
+  }
+  if (_tcscmp(gesture, _T("D")) == 0) {
+    InputEvents::processKey(VK_DOWN);
+    return true;
+  }
+  if (_tcscmp(gesture, _T("L")) == 0) {
+    InputEvents::processKey(VK_LEFT);
+    return true;
+  }
+  if (_tcscmp(gesture, _T("R")) == 0) {
+    InputEvents::processKey(VK_RIGHT);
+    return true;
+  }
+
+  if (_tcscmp(gesture, _T("DU")) == 0) {
+    InputEvents::ShowMenu();
+    return true;
+  }
+
+  if (_tcscmp(gesture, _T("DR")) == 0) {
+    InputEvents::eventGotoLookup(_T(""));
+    return true;
+  }
+
+  if (is_debug())
+    Message::AddMessage(gesture);
+
+  return false;
 }
 
 #if defined(GNAV) || defined(PNA)

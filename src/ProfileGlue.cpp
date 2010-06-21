@@ -397,6 +397,9 @@ Profile::Use()
   Get(szProfileExtendedVisualGlide,
       XCSoarInterface::SetSettingsMap().ExtendedVisualGlide);
 
+  Get(szProfileGestures,
+      XCSoarInterface::SetSettingsComputer().EnableGestures);
+
   Temp = (AverEffTime_t)ae2minutes;
   Get(szProfileAverEffTime,Temp);
   XCSoarInterface::SetSettingsComputer().AverEffTime = Temp;

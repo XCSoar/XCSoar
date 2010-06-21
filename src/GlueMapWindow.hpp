@@ -61,7 +61,16 @@ public:
 private:
   GEOPOINT drag_start_geopoint;
   POINT drag_start;
+  /** True if a gesture movement has been detected */
+  bool is_gesture;
+  /** Position of the last mouse_move event */
+  POINT drag_last;
+  /** Position of the last direction change */
+  POINT gesture_corner;
+  /** The gesture string */
+  TCHAR gesture[11];
   bool ignore_single_click;
+
   // display management
   void RefreshMap();
 
@@ -74,6 +83,14 @@ protected:
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
   virtual bool on_mouse_wheel(int delta);
+  /**
+   * This event handler gets called when a gesture has
+   * been painted by the user
+   * @param gesture The gesture string (e.g. "ULR")
+   * @return True if the gesture was handled by the
+   * event handler, False otherwise
+   */
+  bool on_mouse_gesture(TCHAR* gesture);
 
 #if defined(GNAV) || defined(PNA)
   virtual bool on_key_down(unsigned key_code);

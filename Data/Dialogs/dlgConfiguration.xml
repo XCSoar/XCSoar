@@ -728,6 +728,10 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
         <DataField name="" DataType="enum" Min="0" Max="50" Step="1"/>
       </WndProperty>
   
+      <WndProperty Name="prpGestures" Caption="Gestures" X="2" Y="-1" Width="-2" Height="22" CaptionWidth="150" Font="2">
+        <DataField name="" DataType="boolean"/>
+      </WndProperty>
+      
       <WndProperty Name="prpAverEffTime" Caption="L/D Average period" X="2" Y="-1" Width="-2" Height="22" CaptionWidth="150" Font="2"
         Help="Average efficiency is always calculated in REAL TIME. Here you can decide on how many seconds of flight this calculation must be done. The real distance covered second by second in this period is divided by the final difference of altitude.  So if for example you go and return back to the same point after 2 minutes, and you have set 2 minutes as period, averageLD will consider the total distance covered in those two minutes , and NOT the distance between your position 2 minutes before and your current position, that in this case could be almost zero! Normally for gliders a good value is 90-120 seconds, and for paragliders 15 seconds. Lower values will give as a result pretty much the same as LD Instant , while higher values will look like LD Cruise. Other commercial instruments and software use 2 minutes. ">
         <DataField name="" DataType="enum" Min="0" Max="10" Step="1"/>

@@ -1810,6 +1810,17 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(_T("prpGestures"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(_T("Disabled")));
+    dfe->addEnumText(gettext(_T("Enabled")));
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->Set(XCSoarInterface::SettingsComputer().EnableGestures);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(_T("prpAverEffTime"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -2638,6 +2649,17 @@ void dlgConfigurationShowModal(void)
         (wp->GetDataField()->GetAsInteger());
       Profile::Set(szProfileExtendedVisualGlide,
                     XCSoarInterface::SettingsMap().ExtendedVisualGlide);
+      changed = true;
+    }
+  }
+  wp = (WndProperty*)wf->FindByName(_T("prpGestures")); // VENTA6
+  if (wp) {
+    if (XCSoarInterface::SettingsComputer().EnableGestures
+        != wp->GetDataField()->GetAsBoolean()) {
+      XCSoarInterface::SetSettingsComputer().EnableGestures =
+          !XCSoarInterface::SettingsComputer().EnableGestures;
+      Profile::Set(szProfileGestures,
+                   XCSoarInterface::SettingsComputer().EnableGestures);
       changed = true;
     }
   }
