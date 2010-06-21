@@ -86,10 +86,6 @@
 // used by map window
 #define WPCIRCLESIZE        2
 
-enum {
-  MAX_IGC_BUFF = 255,
-};
-
 #define SCALELISTSIZE  30
 
 #endif

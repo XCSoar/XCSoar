@@ -65,6 +65,7 @@ public:
   enum {
     LOGGER_PRETAKEOFF_BUFFER_MAX = 60, /**< Buffer size (s) of points recorded before takeoff */
     LOGGER_DISK_BUFFER_NUM_RECS = 10, /**< Number of records in disk buffer */
+    MAX_IGC_BUFF = 255,
   };
 
   /** Buffer for points recorded before takeoff */
