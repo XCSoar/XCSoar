@@ -397,14 +397,6 @@ Profile::Use()
   Get(szProfileExtendedVisualGlide,
       XCSoarInterface::SetSettingsMap().ExtendedVisualGlide);
 
-#ifdef PNA
-  Temp = 1;
-#else
-  Temp = 0;
-#endif
-  Get(szProfileVirtualKeys,Temp);
-  XCSoarInterface::VirtualKeys = Temp;
-
   Temp = (AverEffTime_t)ae2minutes;
   Get(szProfileAverEffTime,Temp);
   XCSoarInterface::SetSettingsComputer().AverEffTime = Temp;

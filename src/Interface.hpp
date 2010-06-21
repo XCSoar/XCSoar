@@ -120,7 +120,6 @@ private:
 
 public:
   // settings
-  static bool VirtualKeys;
   static bool EnableAutoBacklight;
   static bool EnableAutoSoundVolume;
   static int  ActiveAlternate;

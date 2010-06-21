@@ -1810,17 +1810,6 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpVirtualKeys"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Disabled")));
-    dfe->addEnumText(gettext(_T("Enabled")));
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->Set(CommonInterface::VirtualKeys);
-    wp->RefreshDisplay();
-  }
-
   wp = (WndProperty*)wf->FindByName(_T("prpAverEffTime"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -2649,17 +2638,6 @@ void dlgConfigurationShowModal(void)
         (wp->GetDataField()->GetAsInteger());
       Profile::Set(szProfileExtendedVisualGlide,
                     XCSoarInterface::SettingsMap().ExtendedVisualGlide);
-      changed = true;
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpVirtualKeys")); // VENTA6
-  if (wp) {
-    if (CommonInterface::VirtualKeys != (VirtualKeys_t)
-        (wp->GetDataField()->GetAsInteger())) {
-      CommonInterface::VirtualKeys = (VirtualKeys_t)
-        (wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileVirtualKeys,
-                    CommonInterface::VirtualKeys);
       changed = true;
     }
   }

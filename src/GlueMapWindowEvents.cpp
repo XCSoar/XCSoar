@@ -57,62 +57,6 @@ using std::max;
 
 // Interface/touchscreen callbacks
 
-/**
- * Virtual Key Manager
- * @param X
- * @param Y
- * @param keytime
- * @param vkmode
- * @return 0 if invalid virtual scan code, otherwise a valid transcoded keycode
- */
-int
-GlueMapWindow::ProcessVirtualKey(int X, int Y, long keytime, short vkmode)
-{
-  // 0 is always thermal mode, and does not account
-#define MAXBOTTOMMODES 5
-#define VKTIMELONG 1500
-
-#ifdef DEBUG_PROCVK
-  TCHAR buf[100];
-  wsprintf(buf, _T("R=%d,%d,%d,%d, X=%d Y=%d kt=%ld"),
-           MapRect.left, MapRect.top,
-           MapRect.right, MapRect.bottom,
-           X, Y, keytime);
-  DoStatusMessage(buf);
-#endif
-
-  short sizeup = MapRect.bottom - MapRect.top;
-  short yup = (sizeup / 3) + MapRect.top;
-  short ydown = MapRect.bottom - (sizeup / 3);
-
-  if (Y < yup) {
-    if (keytime >= VKTIMELONG)
-      return 0xc1;
-    else
-      return 38;
-  }
-  if (Y > ydown) {
-    if (keytime >= VKTIMELONG)
-      return 0xc2;
-    else
-      return 40;
-  }
-
-  /*
-   * FIX ready: do not pass virtual ENTER while in Panmode.
-   * Currently it is allowed, should be better tested.  VNT 090702
-   if ( !MapWindow::EnablePan ) {
-     DoStatusMessage(_T("Virtual ENTER"));
-     return 13;
-   }
-   return 0; // ignore it
-  */
-  return 13;
-
-  Message::AddMessage(_T("VirtualKey Error"));
-  return 0;
-}
-
 bool
 GlueMapWindow::on_setfocus()
 {
@@ -228,35 +172,6 @@ GlueMapWindow::on_mouse_up(int x, int y)
   double distance = hypot(drag_start.x - x, drag_start.y - y);
   distance /= Layout::scale;
 
-#ifdef DEBUG_VIRTUALKEYS
-  TCHAR buf[80];
-  char sbuf[80];
-  sprintf(sbuf,"%.0f",distance);
-  _stprintf(buf, _T("XY=%d,%d dist=%S Up=%ld Down=%ld Int=%ld"),
-            x, y, sbuf, dwUpTime, dwDownTime, dwInterval);
-  Message::AddMessage(buf);
-#endif
-
-  // Caution, timed clicks from PC with a mouse are different
-  // from real touchscreen devices
-
-  if ((distance < 50) &&
-      (CommonInterface::VirtualKeys==(VirtualKeys_t)vkEnabled) &&
-      (click_time>= DOUBLECLICKINTERVAL)) {
-    unsigned wParam = ProcessVirtualKey(x, y, click_time, 0);
-    if (wParam == 0) {
-#ifdef DEBUG_VIRTUALKEYS
-      Message::AddMessage(_T("E02 INVALID Virtual Key!"));
-#endif
-      return true;
-    }
-    else {
-      if (InputEvents::processKey(wParam)) {
-        return true; // don't go to default handler
-      }
-    }
-  }
-
 #ifdef OLD_TASK // target control
   if (task != NULL &&
       task->getSettings().AATEnabled &&
@@ -309,31 +224,17 @@ GlueMapWindow::on_mouse_up(int x, int y)
   }
 
   if (!my_target_pan) {
-    if (CommonInterface::VirtualKeys == (VirtualKeys_t)vkEnabled) {
-      if (click_time < VKSHORTCLICK) {
-        // 100ms is NOT enough for a short click since GetTickCount is OEM custom!
-        if (way_points != NULL &&
-            PopupNearestWaypointDetails(*way_points, drag_start_geopoint,
-					DistancePixelsToMeters(Layout::Scale(10)), false)) {
-          return true;
-        }
-      } else {
-        if (m_airspace != NULL && AirspaceDetailsAtPoint(drag_start_geopoint))
-          return true;
+    if(click_time < AIRSPACECLICK) { // original and untouched interval
+      if (way_points != NULL &&
+          PopupNearestWaypointDetails(*way_points, drag_start_geopoint,
+        DistancePixelsToMeters(Layout::Scale(10)), false)) {
+        return true;
       }
     } else {
-      if(click_time < AIRSPACECLICK) { // original and untouched interval
-        if (way_points != NULL &&
-            PopupNearestWaypointDetails(*way_points, drag_start_geopoint,
-					DistancePixelsToMeters(Layout::Scale(10)), false)) {
-          return true;
-        }
-      } else {
-        if (m_airspace != NULL &&
-            AirspaceDetailsAtPoint(drag_start_geopoint))
-          return true;
-      }
-    } // VK enabled
+      if (m_airspace != NULL &&
+          AirspaceDetailsAtPoint(drag_start_geopoint))
+        return true;
+    }
   } // !TargetPan
 
   return false;

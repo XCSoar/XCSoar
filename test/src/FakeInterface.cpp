@@ -39,7 +39,6 @@ Copyright_License {
 
 HINSTANCE CommonInterface::hInst;
 bool CommonInterface::EnableAnimation;
-bool CommonInterface::VirtualKeys;
 bool CommonInterface::EnableAutoBacklight;
 bool CommonInterface::EnableAutoSoundVolume;
 

@@ -183,11 +183,6 @@ typedef enum{
 	evgExtended,
 } ExtendedVisualGlide_t;
 
-typedef enum{
-	vkDisabled=0,
-	vkEnabled,
-} VirtualKeys_t;
-
 extern short ScreenSize; // VENTA6
 
 #endif

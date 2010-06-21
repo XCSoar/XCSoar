@@ -65,14 +65,10 @@ private:
   // display management
   void RefreshMap();
 
-  // interface handlers
-  int ProcessVirtualKey(int X, int Y, long keytime, short vkmode);
-
-  // events
-
   bool AirspaceDetailsAtPoint(const GEOPOINT &location) const;
 
 protected:
+  // events
   virtual bool on_mouse_double(int x, int y);
   virtual bool on_mouse_move(int x, int y, unsigned keys);
   virtual bool on_mouse_down(int x, int y);
