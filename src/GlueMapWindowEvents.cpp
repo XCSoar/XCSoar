@@ -187,31 +187,30 @@ GlueMapWindow::on_mouse_up(int x, int y)
     return true;
   }
 
-  if (is_simulator() && (click_time > 50)) {
-    if (!Basic().gps.Replay && (distance > Layout::Scale(36))) {
-      GEOPOINT G;
-      Screen2LonLat(x, y, G);
+  if (is_simulator() && !Basic().gps.Replay
+      && click_time > 50 && distance > Layout::Scale(36)) {
+    GEOPOINT G;
+    Screen2LonLat(x, y, G);
 
-      // This drag moves the aircraft (changes speed and direction)
-      const Angle oldbearing = Basic().TrackBearing;
-      const fixed minspeed = fixed(1.1) * (task != NULL ?
-                                    task->get_glide_polar() :
-                                    GlidePolar(fixed_zero)).get_Vmin();
-      const Angle newbearing = Bearing(drag_start_geopoint, G);
-      if (((newbearing - oldbearing).as_delta().magnitude_degrees() < fixed(30)) ||
-          (Basic().GroundSpeed < minspeed))
-        device_blackboard.SetSpeed(min(fixed(100.0),
-                                   max(minspeed,
-                                       fixed(distance / (3 * Layout::scale)))));
+    // This drag moves the aircraft (changes speed and direction)
+    const Angle oldbearing = Basic().TrackBearing;
+    const fixed minspeed = fixed(1.1) * (task != NULL ?
+                                  task->get_glide_polar() :
+                                  GlidePolar(fixed_zero)).get_Vmin();
+    const Angle newbearing = Bearing(drag_start_geopoint, G);
+    if (((newbearing - oldbearing).as_delta().magnitude_degrees() < fixed(30)) ||
+        (Basic().GroundSpeed < minspeed))
+      device_blackboard.SetSpeed(min(fixed(100.0),
+                                 max(minspeed,
+                                     fixed(distance / (3 * Layout::scale)))));
 
-      device_blackboard.SetTrackBearing(newbearing);
-      // change bearing without changing speed if direction change > 30
-      // 20080815 JMW prevent dragging to stop glider
+    device_blackboard.SetTrackBearing(newbearing);
+    // change bearing without changing speed if direction change > 30
+    // 20080815 JMW prevent dragging to stop glider
 
-      // JMW trigger recalcs immediately
-      TriggerGPSUpdate();
-      return true;
-    }
+    // JMW trigger recalcs immediately
+    TriggerGPSUpdate();
+    return true;
   }
 
   if(click_time < AIRSPACECLICK) { // original and untouched interval
