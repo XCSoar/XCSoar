@@ -50,6 +50,10 @@
 #include <string.h>
 #include <tchar.h>
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 typedef enum {
   eValidationFailed,
   eValidationPassed,
@@ -63,12 +67,12 @@ static const char szNoFile[] = "Validation check failed.  File not found\n";
 static const char szInfo[] = "Vali XCS for the XCSoar Flight Computer Version 1.0.2\n";
 
 static STATUS_t
-ValidateXCS(const char *FileName, GRecord &oGRecord)
+ValidateXCS(const TCHAR *FileName, GRecord &oGRecord)
 {
   STATUS_t eStatus = eValidationFileNotFound;
 
   FILE *inFile = NULL;
-  inFile = fopen(FileName, ("r"));
+  inFile = _tfopen(FileName, _T("r"));
   if (inFile == NULL)
     return eStatus;
 
@@ -95,7 +99,16 @@ int main(int argc, char* argv[])
 
   printf(szInfo);
   if (argc > 1 && strcmp(argv[1], "-?") != 0) {
-    eStatus = ValidateXCS(argv[1], oGRecord);
+#ifdef _UNICODE
+    TCHAR path[MAX_PATH];
+    int length = ::MultiByteToWideChar(CP_ACP, 0, argv[1], -1, path, MAX_PATH);
+    if (length == 0)
+      return 2;
+#else
+    const char *path = argv[1];
+#endif
+
+    eStatus = ValidateXCS(path, oGRecord);
     switch (eStatus) {
     case eValidationFailed:
       printf(szFail);
