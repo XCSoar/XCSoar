@@ -96,15 +96,15 @@ RunValidate(const TCHAR *path)
 
   case eValidationPassed:
     printf(szPass);
-    return 1; // success
+    return 0; // success
 
   case eValidationFileNotFound:
     printf(szNoFile);
-    return 0;
+    return 1;
 
   default:
     printf(szFail);
-    return 0;
+    return 1;
   }
 }
 
