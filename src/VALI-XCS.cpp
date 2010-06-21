@@ -57,10 +57,10 @@ typedef enum {
   eValidationFileRead,
 } STATUS_t;
 
-char szPass[] = "Validation check passed, data indicated as correct\r\n";
-char szFail[] = "Validation check failed.  G Record is invalid\r\n";
-char szNoFile[] = "Validation check failed.  File not found\r\n";
-char szInfo[] = "Vali XCS for the XCSoar Flight Computer Version 1.0.2\r\n";
+char szPass[] = "Validation check passed, data indicated as correct\n";
+char szFail[] = "Validation check failed.  G Record is invalid\n";
+char szNoFile[] = "Validation check failed.  File not found\n";
+char szInfo[] = "Vali XCS for the XCSoar Flight Computer Version 1.0.2\n";
 
 STATUS_t
 ValidateXCS(char *FileName, GRecord &oGRecord)
