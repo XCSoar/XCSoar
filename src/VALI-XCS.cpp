@@ -84,15 +84,32 @@ ValidateXCS(const TCHAR *FileName, GRecord &oGRecord)
   return eStatus;
 }
 
-int main(int argc, char* argv[])
+static int
+RunValidate(const TCHAR *path)
 {
   GRecord oGRecord;
+  STATUS_t eStatus = ValidateXCS(path, oGRecord);
+  switch (eStatus) {
+  case eValidationFailed:
+    printf(szFail);
+    return 0;
 
-  int iRetVal;
-  STATUS_t eStatus;
-  iRetVal = 0; //false
-  eStatus = eValidationFailed;
+  case eValidationPassed:
+    printf(szPass);
+    return 1; // success
 
+  case eValidationFileNotFound:
+    printf(szNoFile);
+    return 0;
+
+  default:
+    printf(szFail);
+    return 0;
+  }
+}
+
+int main(int argc, char* argv[])
+{
   printf(szInfo);
   if (argc > 1 && strcmp(argv[1], "-?") != 0) {
 #ifdef _UNICODE
@@ -104,27 +121,7 @@ int main(int argc, char* argv[])
     const char *path = argv[1];
 #endif
 
-    eStatus = ValidateXCS(path, oGRecord);
-    switch (eStatus) {
-    case eValidationFailed:
-      printf(szFail);
-      break;
-
-    case eValidationPassed:
-      iRetVal = 1; // success
-      printf(szPass);
-      break;
-
-    case eValidationFileNotFound:
-      printf(szNoFile);
-      break;
-
-    default:
-      printf(szFail);
-      break;
-    }
-
-  }
-
-  return iRetVal;
+    return RunValidate(path);
+  } else
+    return 0;
 }
