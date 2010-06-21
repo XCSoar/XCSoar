@@ -59,6 +59,9 @@ public:
   void SetFullScreen(bool full_screen);
 
 private:
+  GEOPOINT drag_start_geopoint;
+  POINT drag_start;
+  bool ignore_single_click;
   // display management
   void RefreshMap();
 

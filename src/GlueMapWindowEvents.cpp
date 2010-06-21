@@ -125,10 +125,6 @@ GlueMapWindow::on_setfocus()
   return true;
 }
 
-static GEOPOINT drag_start_geopoint;
-static POINT drag_start;
-static bool ignore_single_click = true;
-
 bool
 GlueMapWindow::on_mouse_double(int x, int y)
 {
