@@ -37,7 +37,7 @@
 */
 
 #include "Logger/LoggerImpl.hpp"
-#include "UtilsText.hpp" // for ConvertToC()
+#include "IO/TextWriter.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -49,8 +49,7 @@
 void
 LoggerImpl::CleanIGCRecord(char * szIn)
 {  
-  // don't clean terminating \r\n!
-  int iLen = strlen(szIn) - 2;
+  int iLen = strlen(szIn);
   for (int i = 0; i < iLen; i++) {
     if (!oGRecord.IsValidIGCChar(szIn[i]))
       szIn[i] = ' ';
@@ -77,30 +76,19 @@ LoggerImpl::IGCWriteRecord(const char *szIn, const TCHAR* szLoggerFileName)
 bool
 LoggerImpl::DiskBufferFlush()
 {
-  FILE * LoggerFILE;
-
-  ConvertTToC(szLoggerFileName_c, szLoggerFileName);
-  szLoggerFileName_c[_tcslen(szLoggerFileName)] = 0;
-  // stays open for buffered io
-  LoggerFILE = fopen (szLoggerFileName_c,"ab");
-
-  if (!LoggerFILE)
+  TextWriter writer(szLoggerFileName, true);
+  if (writer.error())
     return false;
 
   for (int i = 0; i < LoggerDiskBufferCount; i++) {
-    unsigned int iLen = strlen(LoggerDiskBuffer[i]);
-
-    // if (file write successful)
-    if (fwrite(LoggerDiskBuffer[i], (size_t)1, (size_t)iLen, LoggerFILE) != (size_t)iLen) {
-      fclose(LoggerFILE);
+    if (!writer.writeln(LoggerDiskBuffer[i]))
       return false;
-    }
 
     if (!Simulator)
       oGRecord.AppendRecordToBuffer(LoggerDiskBuffer[i]);
   }
 
-  if (fclose(LoggerFILE) == EOF)
+  if (!writer.flush())
     return false;
 
   DiskBufferReset();
