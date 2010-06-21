@@ -64,7 +64,29 @@ char szFail[]="Validation check failed.  G Record is invalid\r\n";
 char szNoFile[]="Validation check failed.  File not found\r\n";
 char szInfo[]="Vali XCS for the XCSoar Flight Computer Version 1.0.2\r\n";
 
-STATUS_t ValidateXCS (char * FileName, GRecord &oGRecord);
+STATUS_t
+ValidateXCS (char * FileName, GRecord &oGRecord)
+{
+  STATUS_t eStatus = eStatus=eValidationFileNotFound;
+
+  FILE *inFile = NULL;
+  inFile = fopen((char*)FileName, ("r"));
+  
+  if (inFile == NULL) {
+    return eStatus;
+  }
+  fclose (inFile);
+
+  eStatus = eValidationFailed;
+
+  oGRecord.Init();
+  oGRecord.SetFileName(FileName);
+  if ( oGRecord.VerifyGRecordInFile())
+  {
+	  eStatus = eValidationPassed;
+  }
+  return eStatus;
+}
 
 int main(int argc, char* argv[])
 {
@@ -102,30 +124,3 @@ int main(int argc, char* argv[])
 	}
 	return iRetVal;
 }
-
-
-STATUS_t
-ValidateXCS (char * FileName, GRecord &oGRecord)
-{
-  STATUS_t eStatus = eStatus=eValidationFileNotFound;
-
-  FILE *inFile = NULL;
-  inFile = fopen((char*)FileName, ("r"));
-  
-  if (inFile == NULL) {
-    return eStatus;
-  }
-  fclose (inFile);
-
-  eStatus = eValidationFailed;
-
-  oGRecord.Init();
-  oGRecord.SetFileName(FileName);
-  if ( oGRecord.VerifyGRecordInFile())
-  {
-	  eStatus = eValidationPassed;
-  }
-  return eStatus;
-}
-
-
