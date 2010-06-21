@@ -66,7 +66,10 @@ public:
 
   void Init();
   const TCHAR *GetVersion() const;
+#ifdef _UNICODE
   bool AppendRecordToBuffer(const TCHAR *szIn);
+#endif
+  bool AppendRecordToBuffer(const char *szIn);
   void FinalizeBuffer();
   void GetDigest(TCHAR *szOut);
   int IsValidIGCChar(char c);
@@ -81,7 +84,6 @@ public:
 private:
   void Init(int iKey);
   void AppendStringToBuffer(const unsigned char *szIn);
-  bool AppendRecordToBuffer(const unsigned char *szIn);
   bool IncludeRecordInGCalc(const unsigned char *szIn);
 
 };

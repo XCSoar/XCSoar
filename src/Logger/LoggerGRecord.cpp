@@ -57,11 +57,13 @@ GRecord::Init()
   return Init(2);  // OLC uses key #2 since 9/1/2008
 }
 
+#ifdef _UNICODE
+
 bool
 GRecord::AppendRecordToBuffer(const TCHAR *szIn)
 {
   unsigned int iLen = _tcslen(szIn);
-  unsigned char buff[BUFF_LEN];
+  char buff[BUFF_LEN];
 
   for (unsigned int i = 0; i <= iLen ; i++) {
     buff[i] = (unsigned char) szIn[i];
@@ -70,12 +72,16 @@ GRecord::AppendRecordToBuffer(const TCHAR *szIn)
   return AppendRecordToBuffer( buff);
 }
 
+#endif /* _UNICODE */
+
 /**
  * @return returns true if record is appended, false if skipped
  */
 bool
-GRecord::AppendRecordToBuffer(const unsigned char * szIn)
+GRecord::AppendRecordToBuffer(const char *record)
 {
+  const unsigned char *szIn = (const unsigned char *)record;
+
   if (!IncludeRecordInGCalc(szIn))
     return false;
 
@@ -216,7 +222,7 @@ GRecord::LoadFileToBuffer()
   char *line;
 
   while ((line = splitter.read()) != NULL)
-    AppendRecordToBuffer((const unsigned char *)line);
+    AppendRecordToBuffer(line);
 
   return true;
 }

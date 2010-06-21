@@ -87,24 +87,13 @@ LoggerImpl::DiskBufferFlush()
   if (!LoggerFILE)
     return;
 
-  TCHAR buffer_G[MAX_IGC_BUFF];
-  TCHAR * pbuffer_G;
-  pbuffer_G = buffer_G;
-
   for (int i = 0; i < LoggerDiskBufferCount; i++) {
     unsigned int iLen = strlen(LoggerDiskBuffer[i]);
 
     // if (file write successful)
     if (fwrite(LoggerDiskBuffer[i], (size_t)1, (size_t)iLen, LoggerFILE) == (size_t)iLen) {
-
-      int iBufLen = strlen(LoggerDiskBuffer[i]);
-
-      for (int j = 0; (j <= iBufLen) && (j < MAX_IGC_BUFF); j++) {
-        buffer_G[j] = (TCHAR)LoggerDiskBuffer[i][j];
-      }
-
       if (!Simulator) {
-        oGRecord.AppendRecordToBuffer(pbuffer_G);
+        oGRecord.AppendRecordToBuffer(LoggerDiskBuffer[i]);
       }
     }
   }
