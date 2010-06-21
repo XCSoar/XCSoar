@@ -90,8 +90,7 @@ LoggerImpl::LoggerImpl():
   frecord_clock(fixed(270)), // 4.5 minutes)
   LoggerActive(false),
   DeclaredToDevice(false),
-  Simulator(false),
-  LoggerDiskBufferCount(0)
+  Simulator(false)
 {
   ResetFRecord();
   szLoggerFileName[0] = 0;

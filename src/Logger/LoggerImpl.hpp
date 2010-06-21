@@ -46,6 +46,7 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "Logger/LoggerGRecord.hpp"
 #include "OverwritingRingBuffer.hpp"
+#include "BatchBuffer.hpp"
 
 #include <tchar.h>
 #include <windef.h>
@@ -104,6 +105,7 @@ public:
 private:
   GRecord oGRecord;
   LogPoint_GPSPosition LastValidPoint;
+  BatchBuffer<char[MAX_IGC_BUFF],LOGGER_DISK_BUFFER_NUM_RECS> DiskBuffer;
 
 public:
   /** Default constructor */
@@ -192,8 +194,6 @@ private:
    */
    
 private:
-  int LoggerDiskBufferCount;
-  char LoggerDiskBuffer[LOGGER_DISK_BUFFER_NUM_RECS][MAX_IGC_BUFF];
   bool DiskBufferFlush();
   bool DiskBufferAdd(char *sIn);
   void DiskBufferReset();

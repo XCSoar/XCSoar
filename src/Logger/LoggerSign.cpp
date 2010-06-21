@@ -80,12 +80,14 @@ LoggerImpl::DiskBufferFlush()
   if (writer.error())
     return false;
 
-  for (int i = 0; i < LoggerDiskBufferCount; i++) {
-    if (!writer.writeln(LoggerDiskBuffer[i]))
+  for (unsigned i = 0; i < DiskBuffer.length(); ++i) {
+    const char *record = DiskBuffer[i];
+
+    if (!writer.writeln(record))
       return false;
 
     if (!Simulator)
-      oGRecord.AppendRecordToBuffer(LoggerDiskBuffer[i]);
+      oGRecord.AppendRecordToBuffer(record);
   }
 
   if (!writer.flush())
@@ -103,15 +105,15 @@ LoggerImpl::DiskBufferFlush()
 bool
 LoggerImpl::DiskBufferAdd(char *sIn)
 {
-  if (LoggerDiskBufferCount >= LOGGER_DISK_BUFFER_NUM_RECS &&
-      !DiskBufferFlush())
+  if (DiskBuffer.full() && !DiskBufferFlush())
     return false;
 
-  assert(LoggerDiskBufferCount < LOGGER_DISK_BUFFER_NUM_RECS);
+  assert(!DiskBuffer.full());
 
-  strncpy(LoggerDiskBuffer[LoggerDiskBufferCount], sIn, MAX_IGC_BUFF);
-  LoggerDiskBuffer[LoggerDiskBufferCount][MAX_IGC_BUFF - 1] = '\0';
-  LoggerDiskBufferCount++;
+  char *dest = DiskBuffer.append();
+
+  strncpy(dest, sIn, MAX_IGC_BUFF);
+  dest[MAX_IGC_BUFF - 1] = '\0';
 
   return true;
 }
@@ -122,10 +124,7 @@ LoggerImpl::DiskBufferAdd(char *sIn)
 void
 LoggerImpl::DiskBufferReset()
 {
-  for (int i = 0; i < LOGGER_DISK_BUFFER_NUM_RECS; i++) {
-    LoggerDiskBuffer[i][0] = '\0';
-  }
-  LoggerDiskBufferCount = 0;
+  DiskBuffer.clear();
 }
 
 // VENTA3 TODO: if ifdef PPC2002 load correct dll. Put the dll inside
