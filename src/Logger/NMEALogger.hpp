@@ -43,6 +43,9 @@ Copyright_License {
 
 extern bool EnableLogNMEA;
 
+void
+RawLoggerShutdown();
+
 /**
  * Logs NMEA string to log file
  * @param text

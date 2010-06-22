@@ -59,6 +59,7 @@ Copyright_License {
 #include "UtilsFLARM.hpp"
 #include "SettingsUser.hpp"
 #include "Logger/Logger.hpp"
+#include "Logger/NMEALogger.hpp"
 #include "AirfieldDetails.h"
 #include "Screen/Fonts.hpp"
 #include "DeviceBlackboard.hpp"
@@ -506,6 +507,8 @@ XCSoarInterface::Shutdown(void)
 
   // Close any device connections
   devShutdown();
+
+  RawLoggerShutdown();
 
   // Save everything in the persistent memory file
   SaveCalculationsPersist(Basic(), Calculated());

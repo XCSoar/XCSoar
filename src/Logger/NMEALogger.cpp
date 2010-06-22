@@ -37,34 +37,43 @@ Copyright_License {
 */
 
 #include "Logger/NMEALogger.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/BatchTextWriter.hpp"
 #include "LocalPath.hpp"
-#include "UtilsText.hpp"
+#include "Thread/Mutex.hpp"
 
 #include <windef.h> // for MAX_PATH
 
+static Mutex RawLoggerMutex;
+static BatchTextWriter *RawLoggerWriter;
+
 bool EnableLogNMEA = false;
+
+static bool
+RawLoggerStart()
+{
+  if (RawLoggerWriter != NULL)
+    return true;
+
+  TCHAR path[MAX_PATH];
+  LocalPath(path, _T("xcsoar-nmea.log"));
+
+  RawLoggerWriter = new BatchTextWriter(path, false);
+  return RawLoggerWriter != NULL;
+}
+
+void
+RawLoggerShutdown()
+{
+  delete RawLoggerWriter;
+}
 
 void
 LogNMEA(const TCHAR* text)
 {
-  if (!EnableLogNMEA) {
-    return;
-  }
-
-  static bool initialised = false;
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T("xcsoar-nmea.log"));
-
-  TextWriter writer(path, initialised);
-  if (writer.error())
+  if (!EnableLogNMEA)
     return;
 
-  TCHAR ttext[100];
-  _tcsncpy(ttext, text, 100);
-  TrimRight(ttext);
-  writer.writeln(ttext);
-
-  if (!initialised)
-    initialised = true;
+  ScopeLock protect(RawLoggerMutex);
+  if (RawLoggerStart())
+    RawLoggerWriter->writeln(text);
 }
