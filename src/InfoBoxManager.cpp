@@ -1196,9 +1196,6 @@ InfoBoxManager::GetTypeDescription(unsigned i)
   return Data_Options[i].Description;
 }
 
-// TODO: this should go into the manager
-extern InfoBox *InfoBoxes[MAXINFOWINDOWS];
-
 void
 InfoBoxManager::Paint()
 {
