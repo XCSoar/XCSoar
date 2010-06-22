@@ -81,7 +81,7 @@ MainWindow::set(LPCTSTR text,
 
   LogStartUp(TEXT("InfoBox geometry"));
   InfoBoxLayout::ScreenGeometry(rc);
-  RECT rcsmall = InfoBoxLayout::GetInfoBoxSizes(rc);
+  RECT map_rect = InfoBoxLayout::GetInfoBoxSizes(rc);
 
   // color/pattern chart (must have infobox geometry before this)
   MapGfx.Initialise(XCSoarInterface::hInst,
@@ -98,9 +98,9 @@ MainWindow::set(LPCTSTR text,
   ButtonLabel::SetLabelText(0,TEXT("MODE"));
   ButtonLabel::SetFont(MapWindowBoldFont);
 
-  map.set(*this, rcsmall, rc);
+  map.set(*this, map_rect, rc);
   map.set_font(MapWindowFont);
-  map.SetMapRect(rcsmall);
+  map.SetMapRect(map_rect);
 
   vario = new GaugeVario(*this,
                          rc.right - InfoBoxLayout::ControlWidth, 0,
