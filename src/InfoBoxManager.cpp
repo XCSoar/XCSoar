@@ -80,7 +80,7 @@ BufferWindow InfoBoxManager::full_window;
 
 static bool InfoBoxesDirty = false;
 static bool InfoBoxesHidden = false;
-static double LastFlipBoxTime = 0; // VENTA3
+static double LastFlipBoxTime = 0;
 unsigned numInfoWindows = 8;
 
 InfoBox *InfoBoxes[MAXINFOWINDOWS];
@@ -121,11 +121,10 @@ typedef struct _SCREEN_INFO
   char prev_screen;
 } SCREEN_INFO;
 
-
 // Groups:
 //   Altitude 0,1,20,33
 //   Aircraft info 3,6,23,32,37,47,54
-//   LD 4,5,19,38,53, 66    VENTA-ADDON added 66 for GR final
+//   LD 4,5,19,38,53,66
 //   Vario 2,7,8,9,21,22,24,44
 //   Wind 25,26,48,49,50
 //   MacCready 10,34,35,43
@@ -620,22 +619,19 @@ InfoBoxManager::Hide()
 {
   InfoBoxesHidden = true;
 
-  for (unsigned i = 0; i < numInfoWindows; i++) {
+  for (unsigned i = 0; i < numInfoWindows; i++)
     InfoBoxes[i]->hide();
-  }
 
   full_window.hide();
 }
-
 
 void
 InfoBoxManager::Show()
 {
   InfoBoxesHidden = false;
 
-  for (unsigned i = 0; i < numInfoWindows; i++) {
+  for (unsigned i = 0; i < numInfoWindows; i++)
     InfoBoxes[i]->show();
-  }
 }
 
 int
@@ -662,11 +658,10 @@ InfoBoxManager::Event_Select(int i)
       InfoFocus = -1;
   }
 
-  if (InfoFocus >= 0) {
+  if (InfoFocus >= 0)
     main_window.map.set_focus();
-  } else {
+  else
     InfoBoxes[i]->set_focus();
-  }
 }
 
 int
@@ -711,17 +706,14 @@ InfoBoxManager::getType(unsigned i)
 {
   unsigned retval = 0;
 
-  if (SettingsMap().EnableAuxiliaryInfo) {
+  if (SettingsMap().EnableAuxiliaryInfo)
     retval = getType(i, 3);
-  } else {
-    if (MapProjection().GetDisplayMode() == dmCircling)
-      retval = getType(i, 0);
-    else if (MapProjection().GetDisplayMode() == dmFinalGlide) {
-      retval = getType(i, 2);
-    } else {
-      retval = getType(i, 1); // cruise
-    }
-  }
+  else if (MapProjection().GetDisplayMode() == dmCircling)
+    retval = getType(i, 0);
+  else if (MapProjection().GetDisplayMode() == dmFinalGlide)
+    retval = getType(i, 2);
+  else
+    retval = getType(i, 1);
 
   return min(NUMSELECTSTRINGS - 1, retval);
 }
@@ -774,17 +766,14 @@ InfoBoxManager::setType(unsigned i, char j, unsigned layer)
 void
 InfoBoxManager::setType(unsigned i, char j)
 {
-  if (SettingsMap().EnableAuxiliaryInfo) {
+  if (SettingsMap().EnableAuxiliaryInfo)
     setType(i, j, 3);
-  } else {
-    if (MapProjection().GetDisplayMode() == dmCircling) {
-      setType(i, j, 0);
-    } else if (MapProjection().GetDisplayMode() == dmFinalGlide) {
-      setType(i, j, 2);
-    } else {
-      setType(i, j, 1);
-    }
-  }
+  else if (MapProjection().GetDisplayMode() == dmCircling)
+    setType(i, j, 0);
+  else if (MapProjection().GetDisplayMode() == dmFinalGlide)
+    setType(i, j, 2);
+  else
+    setType(i, j, 1);
 }
 
 void
@@ -888,6 +877,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
 
     if (needupdate)
       info_box.SetValueUnit(Units::GetUserUnitByGroup(Data_Options[type].UnitGroup));
+
     break;
 
   default:
@@ -910,11 +900,11 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
   //
   switch (type) {
   case 14: // Next waypoint
-    if (const Waypoint* way_point = task_ui.getActiveWaypoint()) {
+    if (const Waypoint* way_point = task_ui.getActiveWaypoint())
       info_box.SetComment(way_point->Comment.c_str());
-    } else {
+    else
       info_box.SetComment(_T(""));
-    }
+
     break;
 
   case 10:
@@ -925,8 +915,8 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
     break;
 
   case 0: // GPS Alt
-    Units::FormatAlternateUserAltitude(Basic().GPSAltitude, sTmp, sizeof(sTmp)
-                                       / sizeof(sTmp[0]));
+    Units::FormatAlternateUserAltitude(Basic().GPSAltitude, sTmp,
+                                       sizeof(sTmp) / sizeof(sTmp[0]));
     info_box.SetComment(sTmp);
     break;
 
@@ -951,97 +941,84 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
   case 45: // ete
   case 46: // leg ete
   case 62: // ete
-    if (Data_Options[type].Formatter->isValid()) {
+    if (Data_Options[type].Formatter->isValid())
       info_box.SetComment(Data_Options[type].Formatter->GetCommentText());
-    } else {
+    else
       info_box.SetComment(_T(""));
-    }
+
     break;
 
   case 43:
-    if (SettingsComputer().EnableBlockSTF) {
+    if (SettingsComputer().EnableBlockSTF)
       info_box.SetComment(_T("BLOCK"));
-    } else {
+    else
       info_box.SetComment(_T("DOLPHIN"));
-    }
+
     break;
 
   case 55: // own team code
     info_box.SetComment(Calculated().TeammateCode);
 
-    if (SettingsComputer().TeamFlarmTracking) {
-      if (Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget) != NULL) {
-        info_box.SetColorBottom(2);
-      } else {
-        info_box.SetColorBottom(1);
-      }
-    } else {
+    if (!SettingsComputer().TeamFlarmTracking)
       info_box.SetColorBottom(0);
-    }
+    else if (Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget) != NULL)
+      info_box.SetColorBottom(2);
+    else
+      info_box.SetColorBottom(1);
+
     break;
 
   case 56: // team bearing
-    if (SettingsComputer().TeamFlarmIdTarget.defined()) {
-      if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
-        info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
-      } else {
-        info_box.SetComment(_T("???"));
-      }
-    } else {
+    if (!SettingsComputer().TeamFlarmIdTarget.defined())
       info_box.SetComment(_T("---"));
-    }
+    else if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget))
+      info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
+    else
+      info_box.SetComment(_T("???"));
 
-    if (Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget) != NULL) {
+    if (Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget) != NULL)
       info_box.SetColorBottom(2);
-    } else {
+    else
       info_box.SetColorBottom(1);
-    }
+
     break;
 
   case 57: // team bearing dif
-    if (SettingsComputer().TeamFlarmIdTarget.defined()) {
-      if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
-        info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
-      } else {
-        info_box.SetComment(_T("???"));
-      }
-    } else {
+    if (!SettingsComputer().TeamFlarmIdTarget.defined())
       info_box.SetComment(_T("---"));
-    }
+    else if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget))
+      info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
+    else
+      info_box.SetComment(_T("???"));
 
-    if (Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget) != NULL) {
+    if (Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget) != NULL)
       info_box.SetColorBottom(2);
-    } else {
+    else
       info_box.SetColorBottom(1);
-    }
+
     break;
 
   case 58: // team range
-    if (SettingsComputer().TeamFlarmIdTarget.defined()) {
-      if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
-        info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
-      } else {
-        info_box.SetComment(_T("???"));
-      }
-    } else {
+    if (SettingsComputer().TeamFlarmIdTarget.defined())
       info_box.SetComment(_T("---"));
-    }
+    else if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget))
+      info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
+    else
+      info_box.SetComment(_T("???"));
 
-    if (Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget) != NULL) {
+    if (Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget) != NULL)
       info_box.SetColorBottom(2);
-    } else {
+    else
       info_box.SetColorBottom(1);
-    }
+
     break;
 
-    // VENTA3 wind speed + bearing bottom line
   case 25:
     _stprintf(sTmp, _T("%d%s"), (int)Basic().wind.bearing.value_degrees(), 
               _T(DEG));
     info_box.SetComment(sTmp);
     break;
 
-    // VENTA3 radial
   case 60:
     _stprintf(sTmp, _T("%d%s"),
               (int)Calculated().common_stats.vector_home.Bearing.value_degrees(), 
@@ -1090,16 +1067,6 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
     break;
 
   case 70: // QFE
-    /*
-    // Showing the diff value offset was just interesting ;-)
-    if (FlipBoxValue == true) {
-      //Units::FormatUserArrival(QFEAltitudeOffset,
-      Units::FormatUserAltitude(QFEAltitudeOffset,
-                                sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
-                                info_box.SetComment(sTmp);
-    } else {
-    */
-
     Units::FormatUserAltitude(Basic().GPSAltitude,
                               sTmp, sizeof(sTmp) / sizeof(sTmp[0]));
     info_box.SetComment(sTmp);
@@ -1111,7 +1078,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
 }
 
 void
-InfoBoxManager::DisplayInfoBox(void)
+InfoBoxManager::DisplayInfoBox()
 {
   if (InfoBoxesHidden)
     return;
@@ -1121,7 +1088,7 @@ InfoBoxManager::DisplayInfoBox(void)
   static int DisplayTypeLast[MAXINFOWINDOWS];
   static bool FlipBoxValue = false;
 
-  // VENTA3 - Dynamic box values
+  // Dynamic box values
   if (LastFlipBoxTime > DYNABOXTIME) {
     FlipBoxValue = (FlipBoxValue == false);
     LastFlipBoxTime = 0;
@@ -1130,9 +1097,9 @@ InfoBoxManager::DisplayInfoBox(void)
   // JMW note: this is updated every GPS time step
 
   for (unsigned i = 0; i < numInfoWindows; i++) {
-    // VENTA3
-    // All calculations are made in a separate thread. Slow calculations should apply to
-    // the function DoCalculationsSlow() . Do not put calculations here!
+    // All calculations are made in a separate thread. Slow calculations
+    // should apply to the function DoCalculationsSlow()
+    // Do not put calculations here!
 
     DisplayType[i] = getType(i);
     Data_Options[DisplayType[i]].Formatter->AssignValue(DisplayType[i]);
@@ -1143,6 +1110,7 @@ InfoBoxManager::DisplayInfoBox(void)
 
     DisplayTypeLast[i] = DisplayType[i];
   }
+
   Paint();
 
   first = false;
@@ -1164,7 +1132,8 @@ InfoBoxManager::ProcessKey(int keycode)
 
   InfoBoxesDirty = true;
 
-  TriggerGPSUpdate(); // emulate update to trigger calculations
+  // emulate update to trigger calculations
+  TriggerGPSUpdate();
 
   ResetDisplayTimeOut();
 }
@@ -1172,10 +1141,8 @@ InfoBoxManager::ProcessKey(int keycode)
 void
 InfoBoxManager::DestroyInfoBoxFormatters()
 {
-  //  CommandBar_Destroy(hWndCB);
-  for (unsigned i = 0; i < NUMSELECTSTRINGS; i++) {
+  for (unsigned i = 0; i < NUMSELECTSTRINGS; i++)
     delete Data_Options[i].Formatter;
-  }
 }
 
 bool
@@ -1185,7 +1152,7 @@ InfoBoxManager::IsFocus()
 }
 
 void
-InfoBoxManager::InfoBoxDrawIfDirty(void)
+InfoBoxManager::InfoBoxDrawIfDirty()
 {
   // No need to redraw map or infoboxes if screen is blanked.
   // This should save lots of battery power due to CPU usage
@@ -1204,7 +1171,7 @@ InfoBoxManager::SetDirty(bool is_dirty)
 }
 
 void
-InfoBoxManager::ProcessTimer(void)
+InfoBoxManager::ProcessTimer()
 {
   static fixed lasttime;
 
@@ -1212,11 +1179,12 @@ InfoBoxManager::ProcessTimer(void)
     SetDirty(true);
     lasttime = Basic().Time;
   }
+
   InfoBoxDrawIfDirty();
   LastFlipBoxTime++;
 }
 
-void InfoBoxManager::ResetInfoBoxes(void) {
+void InfoBoxManager::ResetInfoBoxes() {
   memcpy(InfoType,
          is_altair() ? InfoTypeAltairDefault : InfoTypeDefault,
          sizeof(InfoType));
@@ -1232,14 +1200,12 @@ InfoBoxManager::GetTypeDescription(unsigned i)
 extern InfoBox *InfoBoxes[MAXINFOWINDOWS];
 
 void
-InfoBoxManager::Paint(void)
+InfoBoxManager::Paint()
 {
-  unsigned i;
-
   if (!InfoBoxLayout::fullscreen) {
     full_window.hide();
 
-    for (i = 0; i < numInfoWindows; i++)
+    for (unsigned i = 0; i < numInfoWindows; i++)
       InfoBoxes[i]->invalidate();
   } else {
     Canvas &canvas = full_window.get_canvas();
@@ -1248,7 +1214,7 @@ InfoBoxManager::Paint(void)
     canvas.white_pen();
     canvas.clear();
 
-    for (i = 0; i < numInfoWindows; i++) {
+    for (unsigned i = 0; i < numInfoWindows; i++) {
       // JMW TODO: make these calculated once only.
       int x, y;
       int rx, ry;
@@ -1262,10 +1228,11 @@ InfoBoxManager::Paint(void)
       } else {
         rw = 120;
         rh = 80;
-
       }
+
       fw = rw / (double)InfoBoxLayout::ControlWidth;
       fh = rh / (double)InfoBoxLayout::ControlHeight;
+
       double f = min(fw, fh);
       rw = (int)(f * InfoBoxLayout::ControlWidth);
       rh = (int)(f * InfoBoxLayout::ControlHeight);
@@ -1298,12 +1265,14 @@ InfoBoxManager::Create(RECT rc)
 {
   ResetInfoBoxes();
 
-  info_box_look.value.fg_color = info_box_look.title.fg_color
-    = info_box_look.comment.fg_color = Appearance.InverseInfoBox
-    ? Color::WHITE : Color::BLACK;
-  info_box_look.value.bg_color = info_box_look.title.bg_color
-    = info_box_look.comment.bg_color = Appearance.InverseInfoBox
-    ? Color::BLACK : Color::WHITE;
+  info_box_look.value.fg_color
+    = info_box_look.title.fg_color
+    = info_box_look.comment.fg_color
+    = Appearance.InverseInfoBox ? Color::WHITE : Color::BLACK;
+  info_box_look.value.bg_color
+    = info_box_look.title.bg_color
+    = info_box_look.comment.bg_color
+    = Appearance.InverseInfoBox ? Color::BLACK : Color::WHITE;
 
   Color border_color = Color(80, 80, 80);
   info_box_look.border_pen.set(InfoBox::BORDER_WIDTH, border_color);
@@ -1363,13 +1332,11 @@ InfoBoxManager::Create(RECT rc)
 }
 
 void
-InfoBoxManager::Destroy(void)
+InfoBoxManager::Destroy()
 {
-  for (unsigned i = 0; i < numInfoWindows; i++) {
+  for (unsigned i = 0; i < numInfoWindows; i++)
     delete (InfoBoxes[i]);
-  }
 
   full_window.reset();
-
   DestroyInfoBoxFormatters();
 }

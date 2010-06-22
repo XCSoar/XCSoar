@@ -39,6 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_INFO_BOX_MANAGER_HPP
 #define XCSOAR_INFO_BOX_MANAGER_HPP
 
+#include "Interface.hpp"
 #include "Screen/BufferWindow.hpp"
 
 #include <windef.h>
@@ -46,16 +47,15 @@ Copyright_License {
 extern unsigned numInfoWindows;
 extern const unsigned NUMSELECTSTRINGS;
 
-#include "Interface.hpp"
-
 class InfoBox;
 
-class InfoBoxManager: public ActionInterface {
+class InfoBoxManager: public ActionInterface
+{
   /** the window for displaying infoboxes full-screen */
   static BufferWindow full_window;
 
- private:
-  static void ResetInfoBoxes(void);
+private:
+  static void ResetInfoBoxes();
   static int getType(unsigned i);
   static void setType(unsigned i, char j);
   static void FocusOnWindow(unsigned i, bool selected);
@@ -65,10 +65,11 @@ class InfoBoxManager: public ActionInterface {
    */
   static void Update(InfoBox &info_box, unsigned type, bool needupdate);
 
-  static void DisplayInfoBox(void);
+  static void DisplayInfoBox();
   static void InfoBoxDrawIfDirty();
   static void DestroyInfoBoxFormatters();
   static int GetFocused();
+
 public:
   static void Event_Select(int i);
   static void Event_Change(int i);
@@ -78,14 +79,14 @@ public:
   static void ProcessKey(int keycode);
   static bool Click(InfoBox &ib);
 
-  static bool Defocus(void);
+  static bool Defocus();
 
-  static void ProcessTimer(void);
+  static void ProcessTimer();
   static void SetDirty(bool is_dirty);
 
   static void Create(RECT rc);
-  static void Destroy(void);
-  static void Paint(void);
+  static void Destroy();
+  static void Paint();
   static void Show();
   static void Hide();
 
@@ -99,7 +100,6 @@ public:
   static bool IsEmpty();
 
   static bool IsFocus();
-  //
 };
 
 #endif
