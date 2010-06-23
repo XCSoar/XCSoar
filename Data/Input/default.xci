@@ -89,13 +89,13 @@ event=StatusMessage Final Glide Through Terrain
 # clear main entry buttons
 
 
-mode=default Display1 Display2 Config1 Config2 Info1 Info2 Bugs Ballast Wind Vario VarioTest pan Exit
+mode=default Display1 Display2 Config1 Config2 Config3 Info1 Info2 Bugs Ballast Wind Vario VarioTest pan Exit
 type=key
 data=APP1
 label=
 location=1
 
-mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Bugs Ballast Wind Vario VarioTest pan Exit
+mode=default Nav1 Nav2 Config1 Config2 Config3 Info1 Info2 Bugs Ballast Wind Vario VarioTest pan Exit
 type=key
 data=APP2
 label=
@@ -107,7 +107,7 @@ data=APP3
 label=
 location=3
 
-mode=default Nav1 Nav2 Display1 Display2 Config1 Config2 Bugs Ballast Wind Vario VarioTest pan Exit
+mode=default Nav1 Nav2 Display1 Display2 Config1 Config2 Config3 Bugs Ballast Wind Vario VarioTest pan Exit
 type=key
 data=APP4
 label=
@@ -614,7 +614,7 @@ location=9
 mode=Config2
 type=key
 data=APP3
-event=Mode default
+event=Mode Config3
 label=Config
 location=3
 
@@ -655,6 +655,51 @@ data=0
 event=Setup Replay
 event=Mode default
 label=Logger\nReplay$(CheckReplay)
+location=9
+
+# -------------
+# mode=Config3
+# -------------
+mode=Config3
+type=key
+data=APP3
+event=Mode default
+label=Config
+location=3
+
+mode=Config3
+type=key
+data=6
+event=Logger nmea
+label=Raw Logger
+location=5
+
+mode=Config3
+type=key
+data=7
+event=Null
+label=
+location=6
+
+mode=Config3
+type=key
+data=8
+event=Null
+label=
+location=7
+
+mode=Config3
+type=key
+data=9
+event=Null
+label=
+location=8
+
+mode=Config3
+type=key
+data=0
+event=Null
+label=
 location=9
 
 
