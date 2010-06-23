@@ -602,7 +602,7 @@ ComPort::ProcessChar(char c)
     range = buffer.read();
     handler.LineReceived(range.first);
     buffer.clear();
-  } else {
+  } else if (c != '\r') {
     range.first[0] = (TCHAR)c;
     buffer.append(1);
   }
