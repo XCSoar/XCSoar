@@ -192,9 +192,7 @@ ProgressWindow::on_erase(Canvas &canvas)
 {
   canvas.white_pen();
   canvas.white_brush();
-
-  RECT rc = get_client_rect();
-  canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
+  canvas.clear();
   return true;
 }
 
