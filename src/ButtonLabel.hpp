@@ -39,10 +39,9 @@ Copyright_License {
 #ifndef BUTTON_LABEL_HPP
 #define BUTTON_LABEL_HPP
 
-#include "Screen/TextWindow.hpp"
 #include "Interface.hpp"
-#include "MenuData.hpp"
 
+class Font;
 class ContainerWindow;
 class MenuBar;
 

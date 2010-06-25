@@ -40,8 +40,6 @@ Copyright_License {
 #include "MenuBar.hpp"
 #include "Language.hpp"
 
-#include <assert.h>
-
 MenuBar *ButtonLabel::bar;
 
 void
