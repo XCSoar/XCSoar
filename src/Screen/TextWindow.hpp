@@ -42,6 +42,7 @@ Copyright_License {
 #include "Screen/Window.hpp"
 
 class TextWindowStyle : public WindowStyle {
+public:
   void center() {
 #ifndef ENABLE_SDL
     style |= SS_CENTER;
