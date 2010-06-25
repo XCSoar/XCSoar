@@ -43,6 +43,18 @@ Copyright_License {
 
 class TextWindowStyle : public WindowStyle {
 public:
+  void left() {
+#ifndef ENABLE_SDL
+    style |= SS_LEFT;
+#endif
+  }
+
+  void right() {
+#ifndef ENABLE_SDL
+    style |= SS_RIGHT;
+#endif
+  }
+
   void center() {
 #ifndef ENABLE_SDL
     style |= SS_CENTER;
