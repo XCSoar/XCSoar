@@ -42,9 +42,13 @@ Copyright_License {
 #ifndef ENABLE_SDL
 
 void
-BitmapCanvas::select(const Bitmap &bitmap, unsigned _width, unsigned _height)
+BitmapCanvas::select(const Bitmap &bitmap)
 {
   old = (HBITMAP)SelectObject(dc, bitmap.native());
+
+  SIZE size = bitmap.get_size();
+  width = size.cx;
+  height = size.cy;
 }
 
 void BitmapCanvas::clear()

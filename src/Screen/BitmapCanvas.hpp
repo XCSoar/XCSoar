@@ -107,7 +107,7 @@ public:
     VirtualCanvas::set(canvas, 1, 1);
   }
 
-  void select(const Bitmap &bitmap, unsigned _width=1, unsigned _height=1);
+  void select(const Bitmap &bitmap);
 
   void clear();
 };
