@@ -37,70 +37,67 @@ Copyright_License {
 */
 
 #include "Screen/ProgressWindow.hpp"
-#include "Screen/Layout.hpp"
-#include "Language.hpp"
+#include "Screen/BitmapCanvas.hpp"
 #include "Version.hpp"
 #include "resource.h"
 
-#include <commctrl.h>
-#include <tchar.h>
-#include <stdio.h>
+#include <algorithm>
 
-#ifdef HAVE_AYGSHELL_DLL
-#include "aygshell.h"
-#endif
+using std::min;
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent)
-  :position(0)
+  :background_color(Color::WHITE),
+   background_brush(background_color),
+   position(0)
 {
-
   RECT rc = parent.get_client_rect();
-  bool isWINDOWSPC=false;
-#ifdef WINDOWSPC
-  isWINDOWSPC=true;
-#endif
+  set(parent, rc.left, rc.top, rc.right, rc.bottom);
 
-  if (rc.right - rc.left > 640 && !isWINDOWSPC){
-    set(parent,
-        Layout::landscape
-        ? (const TCHAR *)IDD_PROGRESS_LANDSCAPE2
-        : (const TCHAR *)IDD_PROGRESS);
-  }else{
-    set(parent,
-        Layout::landscape
-        ? (const TCHAR *)IDD_PROGRESS_LANDSCAPE
-        : (const TCHAR *)IDD_PROGRESS);
+  unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
+
+  logo.load(width >= 280 && height >= 220 ? IDB_SWIFT : IDB_SWIFT2);
+
+  VirtualCanvas canvas(1, 1);
+  unsigned text_height = canvas.text_height(_T("W"));
+  unsigned progress_size = text_height * 3 / 2;
+
+  TextWindowStyle version_style;
+  version_style.left();
+  version.set(*this, XCSoar_ProductToken,
+              0, 0, width - progress_size * 2, text_height, version_style);
+
+  TextWindowStyle message_style;
+  message_style.center();
+
+  ProgressBarStyle pb_style;
+  pb_style.border();
+
+  if (width < height) {
+    /* portrait */
+
+    message.set(*this, NULL, 0, height - text_height - progress_size - 8,
+                width, text_height, message_style);
+    progress_bar.set(*this, 10, height - progress_size - 10,
+                     width - 20, progress_size, pb_style);
+  } else {
+    /* landscape */
+
+    message.set(*this, NULL, 10, height - text_height - 10,
+                width - progress_size - 20, text_height, message_style);
+
+    pb_style.vertical();
+    pb_style.smooth();
+    progress_bar.set(*this, width - progress_size - 10, 10,
+                     progress_size, height - 20, pb_style);
   }
 
-  TCHAR Temp[1024];
-  _stprintf(Temp, _T("%s"), XCSoar_ProductToken);
-  set_item_text(IDC_VERSION, Temp);
-
-#ifdef WINDOWSPC
-  RECT rcp = get_client_rect();
-
-  move(rc.left, rc.top, rcp.right - rcp.left, rcp.bottom - rcp.top);
-#endif
-
-#ifdef HAVE_AYGSHELL_DLL
-  ::SHFullScreen(hWnd, SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
-#endif
+  version.install_wndproc(); // needed for on_color()
+  message.install_wndproc(); // needed for on_color()
 
   set_range(0, 1000);
   set_step(50);
 
-  show_on_top();
-
-#ifndef ENABLE_SDL
-  ::SetForegroundWindow(hWnd);
-
-  if (Layout::landscape) {
-    long windowLong = GetWindowLong(get_item(IDC_PROGRESS1), GWL_STYLE);
-    windowLong |= PBS_VERTICAL | PBS_SMOOTH;
-    ::SetWindowLong(get_item(IDC_PROGRESS1), GWL_STYLE, windowLong);
-  }
-#endif /* !ENABLE_SDL */
-
+  bring_to_top();
   update();
 }
 
@@ -110,37 +107,19 @@ ProgressWindow::set_message(const TCHAR *text)
   assert_none_locked();
   assert_thread();
 
-  set_item_text(IDC_MESSAGE, text);
-  update();
+  message.set_text(text);
 }
 
 void
 ProgressWindow::set_range(unsigned min_value, unsigned max_value)
 {
-  assert_none_locked();
-  assert_thread();
-
-#ifdef ENABLE_SDL
-  // XXX
-#else /* !ENABLE_SDL */
-  ::SendMessage(get_item(IDC_PROGRESS1),
-                PBM_SETRANGE, (WPARAM)0,
-                (LPARAM)MAKELPARAM(min_value, max_value));
-#endif /* !ENABLE_SDL */
+  progress_bar.set_range(min_value, max_value);
 }
 
 void
 ProgressWindow::set_step(unsigned size)
 {
-  assert_none_locked();
-  assert_thread();
-
-#ifdef ENABLE_SDL
-  // XXX
-#else /* !ENABLE_SDL */
-  ::SendMessage(get_item(IDC_PROGRESS1),
-                PBM_SETSTEP, (WPARAM)size, (LPARAM)0);
-#endif /* !ENABLE_SDL */
+  progress_bar.set_step(size);
 }
 
 void
@@ -153,56 +132,54 @@ ProgressWindow::set_pos(unsigned value)
     return;
 
   position = value;
-
-#ifdef ENABLE_SDL
-  // XXX
-#else /* !ENABLE_SDL */
-  ::SendMessage(get_item(IDC_PROGRESS1), PBM_SETPOS,
-                value, 0);
-#endif /* !ENABLE_SDL */
-  update();
+  progress_bar.set_position(value);
 }
 
 void
 ProgressWindow::step()
 {
-#ifdef ENABLE_SDL
-  // XXX
-#else /* !ENABLE_SDL */
-  ::SendMessage(get_item(IDC_PROGRESS1), PBM_STEPIT,
-                (WPARAM)0, (LPARAM)0);
-#endif /* !ENABLE_SDL */
-  update();
-}
-
-bool
-ProgressWindow::on_initdialog()
-{
-  Dialog::on_initdialog();
-
-#ifdef WINDOWSPC
-  move(0, 0);
-#endif
-
-  return true;
+  progress_bar.step();
 }
 
 bool
 ProgressWindow::on_erase(Canvas &canvas)
 {
-  canvas.white_pen();
-  canvas.white_brush();
-  canvas.clear();
+  canvas.clear(background_brush);
   return true;
 }
 
-bool
-ProgressWindow::on_command(unsigned id, unsigned code)
+void
+ProgressWindow::on_paint(Canvas &canvas)
 {
-  if (id == IDOK) {
-    end(id);
-    return true;
-  }
+  BitmapCanvas bitmap_canvas(canvas, logo);
 
-  return Dialog::on_command(id, code);
+  int window_width = canvas.get_width();
+  int window_height = canvas.get_height();
+  int bitmap_width = bitmap_canvas.get_width();
+  int bitmap_height = bitmap_canvas.get_height();
+
+  int scale = min((window_width - 20) / bitmap_width,
+                  (window_height - 20) / bitmap_height);
+  if (scale > 1) {
+    int dest_width = bitmap_width * scale;
+    int dest_height = bitmap_height * scale;
+
+    canvas.stretch((window_width - dest_width) / 2,
+                   (window_height - dest_height) / 2,
+                   dest_width, dest_height,
+                   bitmap_canvas, 0, 0,
+                   bitmap_width, bitmap_height);
+  } else
+    canvas.copy((window_width - bitmap_width) / 2,
+                (window_height - bitmap_height) / 2,
+                bitmap_width, bitmap_height,
+                bitmap_canvas, 0, 0);
+}
+
+Brush *
+ProgressWindow::on_color(Window &window, Canvas &canvas)
+{
+  canvas.set_text_color(Color::BLACK);
+  canvas.set_background_color(background_color);
+  return &background_brush;
 }

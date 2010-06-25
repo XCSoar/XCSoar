@@ -39,12 +39,23 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_PROGRESS_WINDOW_HXX
 #define XCSOAR_SCREEN_PROGRESS_WINDOW_HXX
 
-#include "Screen/Dialog.hpp"
+#include "ContainerWindow.hpp"
+#include "TextWindow.hpp"
+#include "ProgressBar.hpp"
+#include "Bitmap.hpp"
 
 /**
  * The XCSoar splash screen with a progress bar.
  */
-class ProgressWindow : public Dialog {
+class ProgressWindow : public ContainerWindow {
+  Color background_color;
+  Brush background_brush;
+
+  Bitmap logo;
+
+  TextWindow version, message;
+
+  ProgressBar progress_bar;
   unsigned position;
 
 public:
@@ -58,9 +69,9 @@ public:
   void step();
 
 protected:
-  virtual bool on_initdialog();
   virtual bool on_erase(Canvas &canvas);
-  virtual bool on_command(unsigned id, unsigned code);
+  virtual void on_paint(Canvas &canvas);
+  virtual Brush *on_color(Window &window, Canvas &canvas);
 };
 
 #endif

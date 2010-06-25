@@ -183,60 +183,6 @@ IDR_XML_TASKPOINTTYPE_L XMLDIALOG DISCARDABLE   "Dialogs/dlgTaskPointType_L.xml"
 
 IDR_RASTER_EGM96S       RASTERDATA DISCARDABLE  "other/egm96s.dem"
 
-// --- Progress Dialog ---
-IDD_PROGRESS DIALOG DISCARDABLE  0, 0, 1000, 1000
-STYLE DS_CENTER | WS_CHILD | WS_VISIBLE
-FONT 10, "System"
-BEGIN
-    EDITTEXT        IDC_MESSAGE,4,125,124,14,ES_CENTER | ES_MULTILINE |
-                    ES_AUTOHSCROLL | ES_READONLY
-    RTEXT           "unknown",IDC_VERSION,10,116,117,8
-    CONTROL         251,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,2,10,
-                    129,93
-    CONTROL         "Progress1",IDC_PROGRESS1,"msctls_progress32",
-			WS_EX_CLIENTEDGE,
-                    4,141,124,8
-END
-
-IDD_PROGRESS_LANDSCAPE DIALOG DISCARDABLE  0, 0, 1000, 1000
-STYLE DS_CENTER | WS_CHILD | WS_VISIBLE | WS_GROUP
-FONT 10, "System"
-BEGIN
-    LTEXT           "Version",IDC_VERSION,2,0,136,11
-    CONTROL         251,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,8,12,
-                    126,93
-    CONTROL         "Progress1",IDC_PROGRESS1,"msctls_progress32",
-#ifndef WINDOWSPC
-                    PBS_VERTICAL | PBS_SMOOTH,
-#else
-		    WS_EX_CLIENTEDGE,
-#endif
-		    140,0,17,121,
-                    WS_EX_DLGMODALFRAME
-    RTEXT           "Progress please wait",IDC_MESSAGE,2,110,136,11,
-                    SS_CENTERIMAGE
-END
-
-IDD_PROGRESS_LANDSCAPE2 DIALOG DISCARDABLE  0, 0, 1000, 1000
-STYLE DS_CENTER | WS_CHILD | WS_VISIBLE | WS_GROUP
-FONT 18, "System"
-BEGIN
-    LTEXT           "Version",IDC_VERSION,4,0,272,22
-    CONTROL         251,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,90,75,
-                    126,93
-    CONTROL         "Progress1",IDC_PROGRESS1,"msctls_progress32",
-#ifndef WINDOWSPC
-                    PBS_VERTICAL | PBS_SMOOTH,
-#else
-		    WS_EX_CLIENTEDGE,
-#endif
-		    280,0,34,242,
-                    WS_EX_DLGMODALFRAME
-    RTEXT           "Progress please wait",IDC_MESSAGE,4,220,172,22,
-                    SS_CENTERIMAGE
-END
-
-
 #ifdef APSTUDIO_INVOKED
 GUIDELINES DESIGNINFO DISCARDABLE
 BEGIN
