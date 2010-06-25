@@ -654,39 +654,22 @@ bool
 ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
 {
   LogStartUp(TEXT("ReadAirspace"));
-  int	Tock = 0;
-  DWORD	dwStep;
-  DWORD	dwPos;
-  DWORD	dwOldPos = 0L;
   enum line_type nLineType;
 
   LineCount = 0;
 
   XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Airspace File...")));
-  // Need step size finer than default 10
-  XCSoarInterface::SetProgressStepSize(50);
-  dwStep = reader.size() / 5L;
-
-  dwOldPos = 0L;
-  XCSoarInterface::StepProgressDialog();
+  XCSoarInterface::SetProgressDialogMaxValue(1024);
+  long file_size = reader.size();
 
   temp_area.reset();
 
   TCHAR *line;
   while((nLineType = GetNextLine(reader, line)) != k_nLtEOF) {
-    Tock++;
-    Tock %= 50;
-
-    if (Tock == 0) {
-      dwPos = reader.tell();
-      if ((dwPos - dwOldPos) >= dwStep) {
-        XCSoarInterface::StepProgressDialog();
-        dwOldPos = dwPos;
-      }
-    }
-
     if (!ParseLine(airspace_database, nLineType, line))
       return false;
+
+    XCSoarInterface::SetProgressDialogValue(reader.tell() * 1024 / file_size);
   }
 
   // Process final area (if any). bFillMode is true.  JG 10-Nov-2005
