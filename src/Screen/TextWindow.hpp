@@ -85,6 +85,10 @@ public:
     // XXX
 #else /* !ENABLE_SDL */
     ::SetWindowText(hWnd, text);
+
+#ifdef _WIN32_WCE
+    ::UpdateWindow(hWnd);
+#endif
 #endif /* !ENABLE_SDL */
   }
 };
