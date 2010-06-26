@@ -293,11 +293,6 @@ GaugeVario::Render()
 }
 
 void
-GaugeVario::RenderBg(Canvas &canvas)
-{
-}
-
-void
 GaugeVario::MakePolygon(const int i)
 {
   POINT *bit = getPolygon(i);

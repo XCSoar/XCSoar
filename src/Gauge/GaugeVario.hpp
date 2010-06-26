@@ -99,7 +99,6 @@ public:
   ~GaugeVario();
 
   void Render();
-  void RenderBg(Canvas &canvas);
 
 private:
   void RenderZero(Canvas &canvas);
