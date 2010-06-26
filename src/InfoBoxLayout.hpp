@@ -41,20 +41,18 @@ Copyright_License {
 
 #include <windef.h>
 
-class InfoBoxLayout
+namespace InfoBoxLayout
 {
-public:
-  static bool fullscreen;
-  static unsigned InfoBoxGeometry;
-  static int ControlWidth, ControlHeight, TitleHeight;
-  static void ScreenGeometry(RECT rc);
+  extern bool fullscreen;
+  extern unsigned InfoBoxGeometry;
+  extern int ControlWidth, ControlHeight, TitleHeight;
+  extern void ScreenGeometry(RECT rc);
 
-public:
   // used by manager
-  static void GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
+  void GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
                                  int *sizex, int *sizey);
-  static RECT GetInfoBoxSizes(RECT rc);
-};
 
+  RECT GetInfoBoxSizes(RECT rc);
+};
 
 #endif
