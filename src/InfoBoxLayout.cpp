@@ -80,9 +80,6 @@ int InfoBoxLayout::ControlHeight;
 int InfoBoxLayout::TitleHeight;
 
 bool InfoBoxLayout::gnav = false;
-
-bool geometrychanged = false;
-
 bool InfoBoxLayout::fullscreen = false;
 
 void
@@ -194,9 +191,6 @@ InfoBoxLayout::ScreenGeometry(RECT rc)
     InfoBoxGeometry=Temp;
   }
 #endif
-
-  // JMW testing only
-  geometrychanged = true;
 
   if (Layout::landscape) {
     if (InfoBoxGeometry < 4)
