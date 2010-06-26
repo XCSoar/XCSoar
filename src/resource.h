@@ -2,7 +2,6 @@
 // Microsoft Developer Studio generated include file.
 // Used by XCSoar.rc
 //
-#define IDC_XCSOAR                      3
 #define IDI_XCSOAR                      101
 #define IDD_PROGRESS                    104
 #define IDB_LANDABLE                    139
