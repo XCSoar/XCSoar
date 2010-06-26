@@ -48,4 +48,6 @@ main(int argc, char **argv)
     printf("  fixed(%.20e),\n", 1.0 / x);
   }
   puts("};");
+
+  return 0;
 }
