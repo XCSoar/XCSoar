@@ -60,10 +60,9 @@ static Color colTextGray;
 static Color colText;
 static Color colTextBackgnd;
 
-
 #define NARROWS 3
-#define ARROWYSIZE IBLSCALE(3)
-#define ARROWXSIZE IBLSCALE(7)
+#define ARROWYSIZE Layout::Scale(3)
+#define ARROWXSIZE Layout::Scale(7)
 
 GaugeVario::GaugeVario(ContainerWindow &parent,
                        int left, int top, unsigned width, unsigned height)
@@ -123,8 +122,8 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
   bluePen.set(1, theblueColor);
   yellowPen.set(1, theyellowColor);
   greenPen.set(1, thegreenColor);
-  redThickPen.set(IBLSCALE(5), theredColor);
-  blueThickPen.set(IBLSCALE(5), theblueColor);
+  redThickPen.set(Layout::Scale(5), theredColor);
+  blueThickPen.set(Layout::Scale(5), theblueColor);
 
   if (Appearance.InverseInfoBox){
     colText = Color::WHITE;
@@ -138,7 +137,7 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
     hBitmapClimb.load(IDB_CLIMBSMALL);
   }
 
-  blankThickPen.set(IBLSCALE(5), colTextBackgnd);
+  blankThickPen.set(Layout::Scale(5), colTextBackgnd);
 
   get_canvas().set_text_color(colText);
   get_canvas().set_background_color(colTextBackgnd);
@@ -350,8 +349,8 @@ void GaugeVario::MakeAllPolygons() {
 
 void GaugeVario::RenderClimb(Canvas &canvas)
 {
-  int x = get_right() - IBLSCALE(14);
-  int y = get_bottom() - IBLSCALE(24);
+  int x = get_right() - Layout::Scale(14);
+  int y = get_bottom() - Layout::Scale(24);
 
   // testing  Basic().SwitchState.VarioCircling = true;
 
@@ -366,7 +365,7 @@ void GaugeVario::RenderClimb(Canvas &canvas)
       canvas.white_pen();
     }
 
-    canvas.rectangle(x, y, x + IBLSCALE(12), y + IBLSCALE(12));
+    canvas.rectangle(x, y, x + Layout::Scale(12), y + Layout::Scale(12));
   } else {
     BitmapCanvas hdcTemp(canvas, hBitmapClimb);
     canvas.scale_copy(x, y, hdcTemp, 12, 0, 12, 12);
@@ -381,8 +380,8 @@ void GaugeVario::RenderZero(Canvas &canvas)
   else
     canvas.black_pen();
 
-  canvas.line(0, yoffset, IBLSCALE(17), yoffset);
-  canvas.line(0, yoffset + 1, IBLSCALE(17), yoffset + 1);
+  canvas.line(0, yoffset, Layout::Scale(17), yoffset);
+  canvas.line(0, yoffset + 1, Layout::Scale(17), yoffset + 1);
 }
 
 int  GaugeVario::ValueToNeedlePos(double Value) {
@@ -514,8 +513,8 @@ void GaugeVario::RenderValue(Canvas &canvas, int x, int y,
 
   if (!diValue->InitDone){
 
-    diValue->recBkg.right = x-IBLSCALE(5);
-    diValue->recBkg.top = y +IBLSCALE(3)
+    diValue->recBkg.right = x-Layout::Scale(5);
+    diValue->recBkg.top = y +Layout::Scale(3)
       + TitleWindowFont.get_capital_height();
 
     diValue->recBkg.left = diValue->recBkg.right;
@@ -536,7 +535,7 @@ void GaugeVario::RenderValue(Canvas &canvas, int x, int y,
   if (!diLabel->InitDone){
 
     diLabel->recBkg.right = x;
-    diLabel->recBkg.top = y+IBLSCALE(1);
+    diLabel->recBkg.top = y+Layout::Scale(1);
 
     diLabel->recBkg.left = diLabel->recBkg.right;
     // update back rect with max label size
@@ -592,7 +591,7 @@ void GaugeVario::RenderValue(Canvas &canvas, int x, int y,
     SIZE BitmapUnitSize = unit_symbol->get_size();
 
     BitmapCanvas hdcTemp(canvas, *unit_symbol);
-    canvas.scale_copy(x - IBLSCALE(5), diValue->recBkg.top,
+    canvas.scale_copy(x - Layout::Scale(5), diValue->recBkg.top,
                       hdcTemp,
                       BitmapUnitPos.x, BitmapUnitPos.y,
                       BitmapUnitSize.cx, BitmapUnitSize.cy);
@@ -622,10 +621,10 @@ void GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
   int ybottom = get_bottom()
     -YOFFSET - nary - Layout::FastScale(1);
 
-  ytop += IBLSCALE(14);
-  ybottom -= IBLSCALE(14);
+  ytop += Layout::Scale(14);
+  ybottom -= Layout::Scale(14);
   // JMW
-  //  x = rc.left+IBLSCALE(1);
+  //  x = rc.left+Layout::Scale(1);
   x = get_right() - 2 * ARROWXSIZE;
 
   // only draw speed command if flying and vario is not circling
