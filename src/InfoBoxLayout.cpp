@@ -89,120 +89,92 @@ void
 InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
     int *sizex, int *sizey)
 {
-  TCHAR reggeompx[50];
-  TCHAR reggeompy[50];
-  TCHAR reggeomsx[50];
-  TCHAR reggeomsy[50];
+  // not defined in registry so go with defaults
+  // these will be saved back to registry
+  switch (InfoBoxGeometry) {
+  case 0:
+    if (i < numInfoWindows / 2) {
+      *x = i * ControlWidth;
+      *y = rc.top;
+    } else {
+      *x = (i - numInfoWindows / 2) * ControlWidth;
+      *y = rc.bottom - ControlHeight;
+    }
+    break;
 
-  _stprintf(reggeompx, TEXT("InfoBoxPositionPosX%u"), i);
-  _stprintf(reggeompy, TEXT("InfoBoxPositionPosY%u"), i);
-  _stprintf(reggeomsx, TEXT("InfoBoxPositionSizeX%u"), i);
-  _stprintf(reggeomsy, TEXT("InfoBoxPositionSizeY%u"), i);
+  case 1:
+    if (i < numInfoWindows / 2) {
+      *x = i * ControlWidth;
+      *y = rc.bottom - ControlHeight * 2;
+    } else {
+      *x = (i - numInfoWindows / 2) * ControlWidth;
+      *y = rc.bottom - ControlHeight;
+    }
+    break;
 
-  Profile::Get(reggeompx, *x);
-  Profile::Get(reggeompy, *y);
-  Profile::Get(reggeomsx, *sizex);
-  Profile::Get(reggeomsy, *sizey);
+  case 2:
+    if (i < numInfoWindows / 2) {
+      *x = i * ControlWidth;
+      *y = rc.top;
+    } else {
+      *x = (i - numInfoWindows / 2) * ControlWidth;
+      *y = rc.top + ControlHeight;
+    }
+    break;
 
-  if (*sizey != ControlHeight)
-    geometrychanged = true;
-  if (*sizex != ControlWidth)
-    geometrychanged = true;
-
-  if ((*sizex == 0) || (*sizey == 0) || geometrychanged) {
-    // not defined in registry so go with defaults
-    // these will be saved back to registry
-    switch (InfoBoxGeometry) {
-    case 0:
-      if (i < numInfoWindows / 2) {
-        *x = i * ControlWidth;
-        *y = rc.top;
-      } else {
-        *x = (i - numInfoWindows / 2) * ControlWidth;
-        *y = rc.bottom - ControlHeight;
-      }
-      break;
-
-    case 1:
-      if (i < numInfoWindows / 2) {
-        *x = i * ControlWidth;
-        *y = rc.bottom - ControlHeight * 2;
-      } else {
-        *x = (i - numInfoWindows / 2) * ControlWidth;
-        *y = rc.bottom - ControlHeight;
-      }
-      break;
-
-    case 2:
-      if (i < numInfoWindows / 2) {
-        *x = i * ControlWidth;
-        *y = rc.top;
-        ;
-      } else {
-        *x = (i - numInfoWindows / 2) * ControlWidth;
-        *y = rc.top + ControlHeight;
-      }
-      break;
-
-    case 3:
-      if (i < numInfoWindows / 2) {
-        *x = rc.left;
-        *y = rc.top + ControlHeight * i;
-      } else {
-        *x = rc.right - ControlWidth;
-        *y = rc.top + ControlHeight * (i - numInfoWindows / 2);
-      }
-      break;
-
-    case 4:
-      if (i < numInfoWindows / 2) {
-        *x = rc.left;
-        *y = rc.top + ControlHeight * i;
-      } else {
-        *x = rc.left + ControlWidth;
-        *y = rc.top + ControlHeight * (i - numInfoWindows / 2);
-      }
-      break;
-
-    case 5:
-      if (i < numInfoWindows / 2) {
-        *x = rc.right - ControlWidth * 2;
-        *y = rc.top + ControlHeight * i;
-      } else {
-        *x = rc.right - ControlWidth;
-        *y = rc.top + ControlHeight * (i - numInfoWindows / 2);
-      }
-      break;
-
-    case 6:
-      if (i < 3) {
-        *x = rc.right - ControlWidth * 2;
-        *y = rc.top + ControlHeight * i;
-      } else {
-        if (i < 6) {
-          *x = rc.right - ControlWidth * 2;
-          *y = rc.top + ControlHeight * (i - 3) + ControlHeight * 3;
-        } else {
-          *x = rc.right - ControlWidth;
-          *y = rc.top + ControlHeight * (i - 6) + ControlHeight * 3;
-        }
-      }
-      break;
-
-    case 7:
-      *x = rc.right - ControlWidth;
+  case 3:
+    if (i < numInfoWindows / 2) {
+      *x = rc.left;
       *y = rc.top + ControlHeight * i;
-      break;
-    };
+    } else {
+      *x = rc.right - ControlWidth;
+      *y = rc.top + ControlHeight * (i - numInfoWindows / 2);
+    }
+    break;
 
-    *sizex = ControlWidth;
-    *sizey = ControlHeight;
+  case 4:
+    if (i < numInfoWindows / 2) {
+      *x = rc.left;
+      *y = rc.top + ControlHeight * i;
+    } else {
+      *x = rc.left + ControlWidth;
+      *y = rc.top + ControlHeight * (i - numInfoWindows / 2);
+    }
+    break;
 
-    Profile::Set(reggeompx, *x);
-    Profile::Set(reggeompy, *y);
-    Profile::Set(reggeomsx, (int &)*sizex);
-    Profile::Set(reggeomsy, (int &)*sizey);
-  }
+  case 5:
+    if (i < numInfoWindows / 2) {
+      *x = rc.right - ControlWidth * 2;
+      *y = rc.top + ControlHeight * i;
+    } else {
+      *x = rc.right - ControlWidth;
+      *y = rc.top + ControlHeight * (i - numInfoWindows / 2);
+    }
+    break;
+
+  case 6:
+    if (i < 3) {
+      *x = rc.right - ControlWidth * 2;
+      *y = rc.top + ControlHeight * i;
+    } else {
+      if (i < 6) {
+        *x = rc.right - ControlWidth * 2;
+        *y = rc.top + ControlHeight * (i - 3) + ControlHeight * 3;
+      } else {
+        *x = rc.right - ControlWidth;
+        *y = rc.top + ControlHeight * (i - 6) + ControlHeight * 3;
+      }
+    }
+    break;
+
+  case 7:
+    *x = rc.right - ControlWidth;
+    *y = rc.top + ControlHeight * i;
+    break;
+  };
+
+  *sizex = ControlWidth;
+  *sizey = ControlHeight;
 }
 
 //
