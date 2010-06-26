@@ -124,7 +124,7 @@ public:
   /**
    * Runs the event loop until the application quits.
    */
-  int event_loop(unsigned accelerators_id);
+  int event_loop();
 };
 
 #endif

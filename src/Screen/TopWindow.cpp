@@ -252,7 +252,7 @@ LRESULT TopWindow::on_message(HWND _hWnd, UINT message,
 #endif /* !ENABLE_SDL */
 
 int
-TopWindow::event_loop(unsigned accelerators_id)
+TopWindow::event_loop()
 {
 #ifdef ENABLE_SDL
   SDL_Event event;
@@ -275,18 +275,10 @@ TopWindow::event_loop(unsigned accelerators_id)
 
 #else /* !ENABLE_SDL */
 
-  HACCEL hAccelerators = accelerators_id != 0
-    ? ::LoadAccelerators(XCSoarInterface::hInst,
-                         MAKEINTRESOURCE(accelerators_id))
-    : NULL;
-
   MSG msg;
   while (::GetMessage(&msg, NULL, 0, 0)) {
-    if (hAccelerators == NULL ||
-        !::TranslateAccelerator(msg.hwnd, hAccelerators, &msg)) {
-      ::TranslateMessage(&msg);
-      ::DispatchMessage(&msg);
-    }
+    ::TranslateMessage(&msg);
+    ::DispatchMessage(&msg);
   }
 
   return msg.wParam;

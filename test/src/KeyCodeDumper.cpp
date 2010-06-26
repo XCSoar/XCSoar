@@ -219,7 +219,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   window.set(0, 0, 240, 100);
   window.show();
 
-  window.event_loop(0);
+  window.event_loop();
 
   return 0;
 }

@@ -100,7 +100,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   if (!XCSoarInterface::Startup(hInstance, lpCmdLine))
     return 0;
 
-  return CommonInterface::main_window.event_loop(0);
+  return CommonInterface::main_window.event_loop();
 }
 
 /*
