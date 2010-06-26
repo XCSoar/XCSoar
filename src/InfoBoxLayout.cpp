@@ -79,7 +79,6 @@ int InfoBoxLayout::ControlWidth;
 int InfoBoxLayout::ControlHeight;
 int InfoBoxLayout::TitleHeight;
 
-bool InfoBoxLayout::gnav = false;
 bool InfoBoxLayout::fullscreen = false;
 
 void
@@ -198,24 +197,18 @@ InfoBoxLayout::ScreenGeometry(RECT rc)
   } else if (Layout::square) {
     InfoBoxGeometry = 7;
   } else {
-    gnav = false;
     if (InfoBoxGeometry >= 3)
       InfoBoxGeometry = 0;
   }
 
   Profile::Set(szProfileInfoBoxGeometry, (int &)InfoBoxGeometry);
 
-  // JMW testing
   if (InfoBoxGeometry == 6)
-    gnav = true;
-
-  if (gnav) {
     numInfoWindows = 9;
-  } else if (Layout::square) {
+  else if (Layout::square)
     numInfoWindows = 5;
-  } else {
+  else
     numInfoWindows = 8;
-  }
 }
 
 RECT

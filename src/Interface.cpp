@@ -231,7 +231,7 @@ vario_visible()
   if (Layout::landscape && (InfoBoxLayout::InfoBoxGeometry == 5))
     return false;
 
-  if (!InfoBoxLayout::gnav)
+  if (InfoBoxLayout::InfoBoxGeometry != 6)
     return false;
 
   return true;

@@ -45,7 +45,6 @@ class InfoBoxLayout
 {
 public:
   static bool fullscreen;
-  static bool gnav;
   static unsigned InfoBoxGeometry;
   static int ControlWidth, ControlHeight, TitleHeight;
   static void ScreenGeometry(RECT rc);
