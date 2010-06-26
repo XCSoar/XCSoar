@@ -152,13 +152,6 @@ GlideComputer::ProcessIdle()
   PeriodClock clock;
   clock.update();
 
-  /*
-  // VENTA3 Alternates
-  if ( EnableAlternate1 == true ) DoAlternates(Basic, Calculated,Alternate1);
-  if ( EnableAlternate2 == true ) DoAlternates(Basic, Calculated,Alternate2);
-  if ( EnableBestAlternate == true ) DoAlternates(Basic, Calculated,BestAlternate);
-  */
-
   // Log GPS fixes for internal usage
   // (snail trail, stats, olc, ...)
   DoLogging();
