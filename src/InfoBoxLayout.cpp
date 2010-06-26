@@ -227,21 +227,14 @@ InfoBoxLayout::ScreenGeometry(RECT rc)
   geometrychanged = true;
 
   if (Layout::landscape) {
-    if (InfoBoxGeometry < 4) {
-      geometrychanged = true;
+    if (InfoBoxGeometry < 4)
       InfoBoxGeometry = 6;
-    }
   } else if (Layout::square) {
-    if (InfoBoxGeometry < 7)
-      geometrychanged = true;
-
     InfoBoxGeometry = 7;
   } else {
     gnav = false;
-    if (InfoBoxGeometry >= 3) {
+    if (InfoBoxGeometry >= 3)
       InfoBoxGeometry = 0;
-      geometrychanged = true;
-    }
   }
 
   Profile::Set(szProfileInfoBoxGeometry, (int &)InfoBoxGeometry);
