@@ -46,7 +46,7 @@ Copyright_License {
 class ContainerWindow;
 class UnitSymbol;
 
-typedef struct{
+typedef struct {
   bool    InitDone;
   int     maxLabelSize;
   RECT    recBkg;
@@ -54,7 +54,7 @@ typedef struct{
   double  lastValue;
   TCHAR   lastText[32];
   const UnitSymbol *last_unit_symbol;
-}DrawInfo_t;
+} DrawInfo_t;
 
 class GaugeVario:
   public BufferWindow,
@@ -93,7 +93,7 @@ private:
   DrawInfo_t diLabelBottom;
   const UnitSymbol *unit_symbol;
 
- public:
+public:
   GaugeVario(ContainerWindow &parent,
              int left, int top, unsigned width, unsigned height);
   ~GaugeVario();
@@ -101,7 +101,7 @@ private:
   void Render();
   void RenderBg(Canvas &canvas);
 
- private:
+private:
   void RenderZero(Canvas &canvas);
   void RenderValue(Canvas &canvas, int x, int y,
                    DrawInfo_t *diValue, DrawInfo_t *diLabel,
@@ -117,7 +117,6 @@ private:
   void MakePolygon(const int i);
   void MakeAllPolygons();
   POINT* getPolygon(const int i);
-
 };
 
 #endif
