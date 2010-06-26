@@ -47,6 +47,12 @@ Copyright_License {
 #include "Components.hpp"
 #include "PeriodClock.hpp"
 #include "GlideComputerInterface.hpp"
+#include "Math/NavFunctions.hpp"
+#include "InputEvents.h"
+#include "SettingsComputer.hpp"
+#include "Math/Earth.hpp"
+
+static PeriodClock last_team_code_update;
 
 /**
  * Constructor of the GlideComputer class
@@ -75,7 +81,6 @@ GlideComputer::ResetFlight(const bool full)
   GlideComputerTask::ResetFlight(full);
   GlideComputerStats::ResetFlight(full);
 }
-
 
 /**
  * Initializes the GlideComputer
@@ -142,7 +147,6 @@ GlideComputer::ProcessGPS()
   return true;
 }
 
-
 /**
  * Process slow calculations. Called by the CalculationThread.
  */
@@ -160,14 +164,6 @@ GlideComputer::ProcessIdle()
   GlideComputerTask::ProcessIdle();
   SetCalculated().time_process_idle = clock.elapsed();
 }
-
-
-#include "Math/NavFunctions.hpp" // used for team code
-#include "InputEvents.h"
-#include "SettingsComputer.hpp"
-#include "Math/Earth.hpp"
-
-static PeriodClock last_team_code_update;
 
 /**
  * Calculates the own TeamCode and saves it to Calculated
