@@ -1306,7 +1306,7 @@ InfoBoxManager::Create(RECT rc)
     int Border;
     if (Appearance.InfoBoxBorder == apIbTab)
       Border = 0;
-    else if (InfoBoxLayout::InfoBoxGeometry == 6) {
+    else if (InfoBoxLayout::InfoBoxGeometry == InfoBoxLayout::ibGNav) {
       Border = 0;
       if (i > 0)
         Border |= BORDERTOP;

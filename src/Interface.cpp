@@ -228,10 +228,11 @@ vario_visible()
 
   // Disable vario gauge in geometry 5 landscape mode, leave 8 boxes on
   // the right
-  if (Layout::landscape && (InfoBoxLayout::InfoBoxGeometry == 5))
+  if (Layout::landscape &&
+      (InfoBoxLayout::InfoBoxGeometry == InfoBoxLayout::ibRight8))
     return false;
 
-  if (InfoBoxLayout::InfoBoxGeometry != 6)
+  if (InfoBoxLayout::InfoBoxGeometry != InfoBoxLayout::ibGNav)
     return false;
 
   return true;

@@ -47,14 +47,6 @@ Copyright_License {
 
 #include <stdio.h>
 
-// Layouts:
-// 0: default, infoboxes along top and bottom, map in middle
-// 1: both infoboxes along bottom
-// 2: both infoboxes along top
-// 3: infoboxes along both sides
-// 4: infoboxes along left side
-// 5: infoboxes along right side
-// 6: infoboxes GNAV
 
 /*
 Screen
@@ -74,7 +66,7 @@ Button 1 (x,y,sx,sy)
 InfoBox 0 (x,y,sx,sy)
 */
 
-unsigned InfoBoxLayout::InfoBoxGeometry = 0;
+unsigned InfoBoxLayout::InfoBoxGeometry = ibTop4Bottom4;
 int InfoBoxLayout::ControlWidth;
 int InfoBoxLayout::ControlHeight;
 int InfoBoxLayout::TitleHeight;
@@ -88,7 +80,7 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
   // not defined in registry so go with defaults
   // these will be saved back to registry
   switch (InfoBoxGeometry) {
-  case 0:
+  case ibTop4Bottom4:
     if (i < numInfoWindows / 2) {
       *x = i * ControlWidth;
       *y = rc.top;
@@ -98,7 +90,7 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
     }
     break;
 
-  case 1:
+  case ibBottom8:
     if (i < numInfoWindows / 2) {
       *x = i * ControlWidth;
       *y = rc.bottom - ControlHeight * 2;
@@ -108,7 +100,7 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
     }
     break;
 
-  case 2:
+  case ibTop8:
     if (i < numInfoWindows / 2) {
       *x = i * ControlWidth;
       *y = rc.top;
@@ -118,7 +110,7 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
     }
     break;
 
-  case 3:
+  case ibLeft4Right4:
     if (i < numInfoWindows / 2) {
       *x = rc.left;
       *y = rc.top + ControlHeight * i;
@@ -128,7 +120,7 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
     }
     break;
 
-  case 4:
+  case ibLeft8:
     if (i < numInfoWindows / 2) {
       *x = rc.left;
       *y = rc.top + ControlHeight * i;
@@ -138,7 +130,7 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
     }
     break;
 
-  case 5:
+  case ibRight8:
     if (i < numInfoWindows / 2) {
       *x = rc.right - ControlWidth * 2;
       *y = rc.top + ControlHeight * i;
@@ -148,7 +140,7 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
     }
     break;
 
-  case 6:
+  case ibGNav:
     if (i < 3) {
       *x = rc.right - ControlWidth * 2;
       *y = rc.top + ControlHeight * i;
@@ -163,7 +155,7 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
     }
     break;
 
-  case 7:
+  case ibSquare:
     *x = rc.right - ControlWidth;
     *y = rc.top + ControlHeight * i;
     break;
@@ -192,18 +184,18 @@ InfoBoxLayout::ScreenGeometry(RECT rc)
 #endif
 
   if (Layout::landscape) {
-    if (InfoBoxGeometry < 4)
-      InfoBoxGeometry = 6;
+    if (InfoBoxGeometry < ibLeft8)
+      InfoBoxGeometry = ibGNav;
   } else if (Layout::square) {
-    InfoBoxGeometry = 7;
+    InfoBoxGeometry = ibSquare;
   } else {
-    if (InfoBoxGeometry >= 3)
-      InfoBoxGeometry = 0;
+    if (InfoBoxGeometry >= ibLeft4Right4)
+      InfoBoxGeometry = ibTop4Bottom4;
   }
 
   Profile::Set(szProfileInfoBoxGeometry, (int &)InfoBoxGeometry);
 
-  if (InfoBoxGeometry == 6)
+  if (InfoBoxGeometry == ibGNav)
     numInfoWindows = 9;
   else if (Layout::square)
     numInfoWindows = 5;
@@ -217,7 +209,7 @@ InfoBoxLayout::GetInfoBoxSizes(RECT rc)
   RECT MapRect;
 
   switch (InfoBoxGeometry) {
-  case 0:
+  case ibTop4Bottom4:
     // portrait
     // calculate control dimensions
     ControlWidth = 2 * (rc.right - rc.left) / numInfoWindows;
@@ -232,7 +224,7 @@ InfoBoxLayout::GetInfoBoxSizes(RECT rc)
     MapRect.right = rc.right;
     break;
 
-  case 1:
+  case ibBottom8:
     // not used
     // calculate control dimensions
 
@@ -248,7 +240,7 @@ InfoBoxLayout::GetInfoBoxSizes(RECT rc)
     MapRect.right = rc.right;
     break;
 
-  case 2:
+  case ibTop8:
     // not used
     // calculate control dimensions
 
@@ -264,7 +256,7 @@ InfoBoxLayout::GetInfoBoxSizes(RECT rc)
     MapRect.right = rc.right;
     break;
 
-  case 3:
+  case ibLeft4Right4:
     // not used
     // calculate control dimensions
 
@@ -280,7 +272,7 @@ InfoBoxLayout::GetInfoBoxSizes(RECT rc)
     MapRect.right = rc.right - ControlWidth;
     break;
 
-  case 4:
+  case ibLeft8:
     // calculate control dimensions
 
     ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3);
@@ -295,7 +287,7 @@ InfoBoxLayout::GetInfoBoxSizes(RECT rc)
     MapRect.right = rc.right;
     break;
 
-  case 5:
+  case ibRight8:
     // not used
     // calculate control dimensions
 
@@ -311,7 +303,7 @@ InfoBoxLayout::GetInfoBoxSizes(RECT rc)
     MapRect.right = rc.right - ControlWidth * 2;
     break;
 
-  case 6:
+  case ibGNav:
     // landscape
     // calculate control dimensions
 
@@ -328,7 +320,7 @@ InfoBoxLayout::GetInfoBoxSizes(RECT rc)
 
     break;
 
-  case 7:
+  case ibSquare:
     // square
     // calculate control dimensions
 

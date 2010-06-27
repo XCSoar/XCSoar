@@ -43,6 +43,25 @@ Copyright_License {
 
 namespace InfoBoxLayout
 {
+  enum Layouts {
+    // 0: default, infoboxes along top and bottom, map in middle
+    ibTop4Bottom4 = 0,
+    // 1: both infoboxes along bottom
+    ibBottom8 = 1,
+    // 2: both infoboxes along top
+    ibTop8 = 2,
+    // 3: infoboxes along both sides
+    ibLeft4Right4 = 3,
+    // 4: infoboxes along left side
+    ibLeft8 = 4,
+    // 5: infoboxes along right side
+    ibRight8 = 5,
+    // 6: infoboxes GNAV
+    ibGNav = 6,
+    // 7: infoboxes (5) along right side (square screen)
+    ibSquare = 7
+  };
+
   extern bool fullscreen;
   extern unsigned InfoBoxGeometry;
   extern int ControlWidth, ControlHeight, TitleHeight;
