@@ -197,7 +197,7 @@ InfoBoxLayout::ScreenGeometry(RECT rc)
 
   if (InfoBoxGeometry == ibGNav)
     numInfoWindows = 9;
-  else if (Layout::square)
+  else if (InfoBoxGeometry == ibSquare)
     numInfoWindows = 5;
   else
     numInfoWindows = 8;
