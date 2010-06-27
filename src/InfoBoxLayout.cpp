@@ -144,14 +144,12 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
     if (i < 3) {
       *x = rc.right - ControlWidth * 2;
       *y = rc.top + ControlHeight * i;
+    } else if (i < 6) {
+      *x = rc.right - ControlWidth * 2;
+      *y = rc.top + ControlHeight * (i - 3) + ControlHeight * 3;
     } else {
-      if (i < 6) {
-        *x = rc.right - ControlWidth * 2;
-        *y = rc.top + ControlHeight * (i - 3) + ControlHeight * 3;
-      } else {
-        *x = rc.right - ControlWidth;
-        *y = rc.top + ControlHeight * (i - 6) + ControlHeight * 3;
-      }
+      *x = rc.right - ControlWidth;
+      *y = rc.top + ControlHeight * (i - 6) + ControlHeight * 3;
     }
     break;
 
