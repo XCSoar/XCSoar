@@ -66,11 +66,10 @@ CalculationThread::tick()
     const GlidePolar &glide_polar = glide_computer.get_glide_polar();
 
     // if (new GPS data available)
-    if (gps_updated) {
+    if (gps_updated)
       device_blackboard.tick(glide_polar);
-    } else {
+    else
       device_blackboard.tick_fast(glide_polar);
-    }
 
     // Copy data from DeviceBlackboard to GlideComputerBlackboard
     glide_computer.ReadBlackboard(device_blackboard.Basic());
@@ -98,8 +97,8 @@ CalculationThread::tick()
     // inform map new data is ready
     draw_thread->trigger_redraw();
 
-    if (!glide_computer.Basic().TotalEnergyVarioAvailable) {
-      TriggerVarioUpdate(); // emulate vario update
-    }
+    if (!glide_computer.Basic().TotalEnergyVarioAvailable)
+      // emulate vario update
+      TriggerVarioUpdate();
   }
 }
