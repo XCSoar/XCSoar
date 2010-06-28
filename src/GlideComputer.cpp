@@ -203,38 +203,33 @@ GlideComputer::CalculateOwnTeamCode()
 void
 GlideComputer::CalculateTeammateBearingRange()
 {
-#ifdef OLD_TASK // team code
   static bool InTeamSector = false;
 
   // No reference waypoint for teamcode calculation chosen -> cancel
   if (SettingsComputer().TeamCodeRefWaypoint < 0)
     return;
 
-  double ownDistance = 0;
-  double ownBearing = 0;
-  double mateDistance = 0;
-  double mateBearing = 0;
+  fixed ownDistance;
+  Angle ownBearing;
+  fixed mateDistance;
+  Angle mateBearing;
 
-  // Get own bearing and distance to the reference waypoint
-  LL_to_BearRange(
-      way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Latitude,
-      way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Longitude,
-      Basic().Location.Latitude,
-      Basic().Location.Longitude,
-      &ownBearing, &ownDistance);
+  // Get bearing and distance to the reference waypoint
+  const Waypoint *wp =
+      way_points.lookup_id(SettingsComputer().TeamCodeRefWaypoint);
+
+  if (!wp)
+    return;
+
+  ownBearing = wp->Location.bearing(Basic().Location);
+  ownDistance = wp->Location.distance(Basic().Location);
 
   // If (TeamCode exists and is valid)
   if (SettingsComputer().TeammateCodeValid) {
     // Calculate bearing and distance to teammate
-    CalcTeammateBearingRange(ownBearing, ownDistance,
-        Calculated().TeammateCode, &mateBearing, &mateDistance);
-
-    // TODO code ....change the result of CalcTeammateBearingRange to do this !
-    if (mateBearing > 180) {
-      mateBearing -= 180;
-    } else {
-      mateBearing += 180;
-    }
+    CalcTeammateBearingRange(wp->Location, Basic().Location,
+                             SettingsComputer().TeammateCode,
+                             mateBearing, mateDistance);
 
     // Save bearing and distance to teammate in Calculated
     SetCalculated().TeammateBearing = mateBearing;
@@ -246,21 +241,18 @@ GlideComputer::CalculateTeammateBearingRange()
 
     // Hysteresis for GlideComputerEvent
     // If (closer than 100m to the teammates last position and "event" not reset)
-    if (mateDistance < 100 && InTeamSector == false) {
+    if (mateDistance < fixed(100) && InTeamSector == false) {
       InTeamSector = true;
       // Raise GCE_TEAM_POS_REACHED event
       InputEvents::processGlideComputer(GCE_TEAM_POS_REACHED);
-    } else if (mateDistance > 300) {
+    } else if (mateDistance > fixed(300)) {
       // Reset "event" when distance is greater than 300m again
       InTeamSector = false;
     }
   } else {
-    SetCalculated().TeammateBearing = 0;
-    SetCalculated().TeammateRange = 0;
+    SetCalculated().TeammateBearing = Angle::degrees(fixed_zero);
+    SetCalculated().TeammateRange = fixed_zero;
   }
-#else
-  return;
-#endif
 }
 
 void
