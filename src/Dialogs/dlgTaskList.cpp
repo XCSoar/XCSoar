@@ -223,6 +223,8 @@ OnLoad()
   active_task = task_ui.task_copy(*orig);
   RefreshView();
   task_modified = true;
+
+  wf->SetModalResult(mrOK);
 }
 
 static void
