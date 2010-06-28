@@ -309,33 +309,25 @@ GlideComputer::FLARM_ScanTraffic()
   if (!wp)
     return;
 
-  // Iterate through all FLARM contacts
-  for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
-    const FLARM_TRAFFIC &traffic = Basic().flarm.FLARM_Traffic[i];
+  const FLARM_TRAFFIC *traffic =
+      Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget);
 
-    // If (FLARM contact found)
-    if (traffic.defined()) {
-      // JMW TODO: this is dangerous, it uses the task!
-      // it should be done outside the parser/comms thread
+  if (!traffic)
+    return;
 
-      // If (FLARM contact == TeamMate)
-      if (traffic.ID == SettingsComputer().TeamFlarmIdTarget) {
-        Angle bearing;
-        fixed distance;
+  Angle bearing;
+  fixed distance;
 
-        // Set Teammate location to FLARM contact location
-        SetCalculated().TeammateLocation = traffic.Location;
+  // Set Teammate location to FLARM contact location
+  SetCalculated().TeammateLocation = traffic->Location;
 
-        // Calculate distance and bearing from teammate to reference waypoint
-        bearing = wp->Location.bearing(traffic.Location);
-        distance = wp->Location.distance(traffic.Location);
+  // Calculate distance and bearing from teammate to reference waypoint
+  bearing = wp->Location.bearing(traffic->Location);
+  distance = wp->Location.distance(traffic->Location);
 
-        // Calculate TeamCode and save it in Calculated
-        GetTeamCode(SetCalculated().TeammateCode, bearing, distance);
-        SetCalculated().TeammateCodeValid = true;
-      }
-    }
-  }
+  // Calculate TeamCode and save it in Calculated
+  GetTeamCode(SetCalculated().TeammateCode, bearing, distance);
+  SetCalculated().TeammateCodeValid = true;
 }
 
 
