@@ -187,6 +187,9 @@ GlideComputer::CalculateOwnTeamCode()
   const Waypoint *wp =
       way_points.lookup_id(SettingsComputer().TeamCodeRefWaypoint);
 
+  if (!wp)
+    return;
+
   bearing = wp->Location.bearing(Basic().Location);
   distance = wp->Location.distance(Basic().Location);
 
