@@ -47,8 +47,7 @@ Copyright_License {
 struct GEOPOINT;
 
 void GetTeamCode(TCHAR *code, Angle bearing, fixed range);
-void CalcTeammateBearingRange(GEOPOINT wpPos, GEOPOINT ownPos,
-    const TCHAR *TeamMateCode, Angle &bearToMate, fixed &distToMate);
+GEOPOINT GetTeamCodePosition(GEOPOINT wpPos, const TCHAR *TeamMateCode);
 Angle GetTeammateBearingFromRef(const TCHAR *code);
 fixed GetTeammateRangeFromRef(const TCHAR *code);
 

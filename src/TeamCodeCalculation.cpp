@@ -216,16 +216,13 @@ GetValueFromTeamCode(const TCHAR *code, int maxCount)
  * @param bearToMate Bearing to the teammate (pointer)
  * @param distToMate Distance to the teammate (pointer)
  */
-void
-CalcTeammateBearingRange(GEOPOINT wpPos, GEOPOINT ownPos,
-    const TCHAR *TeamMateCode, Angle &bearToMate, fixed &distToMate)
+GEOPOINT
+GetTeamCodePosition(GEOPOINT wpPos, const TCHAR *TeamCode)
 {
-  Angle mateBear = GetBearing(TeamMateCode);
-	fixed mateDist = GetRange(TeamMateCode);
+  Angle bearing = GetBearing(TeamCode);
+	fixed distance = GetRange(TeamCode);
 
-  GEOPOINT matePos;
-  FindLatitudeLongitude(wpPos, mateBear, mateDist, &matePos);
-
-  bearToMate = ownPos.bearing(matePos);
-  distToMate = ownPos.distance(matePos);
+	GEOPOINT position;
+  FindLatitudeLongitude(wpPos, bearing, distance, &position);
+  return position;
 }
