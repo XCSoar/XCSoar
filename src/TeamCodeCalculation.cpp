@@ -44,8 +44,8 @@ Copyright_License {
 
 void ConvertBearingToTeamCode(const Angle bearing, TCHAR *code);
 void NumberToTeamCode(double value, TCHAR *code, int minCiffers);
-double GetBearing(const TCHAR *code);
-double GetRange(const TCHAR *code);
+Angle GetBearing(const TCHAR *code);
+fixed GetRange(const TCHAR *code);
 int GetValueFromTeamCode(const TCHAR *code, int maxCount);
 
 #define TEAMCODE_COMBINATIONS 1296
@@ -134,19 +134,14 @@ NumberToTeamCode(double value, TCHAR *code, int minCiffers)
  * @param code The teamcode
  * @return Bearing to the reference waypoint
  */
-double
+Angle
 GetBearing(const TCHAR *code)
 {
   // Get the first two values from teamcode (1-2)
 	int val = GetValueFromTeamCode(code, 2);
 
 	// Calculate bearing
-	double bearing = (val * 360.0 / TEAMCODE_COMBINATIONS);
-  if (bearing < 0) {
-		bearing += 360;
-	}
-
-	return bearing;
+	return Angle::degrees(fixed(val * 360.0 / TEAMCODE_COMBINATIONS)).as_bearing();
 }
 
 /**
@@ -154,18 +149,18 @@ GetBearing(const TCHAR *code)
  * @param code The teamcode
  * @return Distance to the reference waypoint
  */
-double
+fixed
 GetRange(const TCHAR *code)
 {
   // Get last three values from teamcode (3-5)
 	int val = GetValueFromTeamCode(&code[2], 3);
-	return val * 100.0;
+	return fixed(val * 100);
 }
 
 /**
  * @see GetBearing()
  */
-double
+Angle
 GetTeammateBearingFromRef(const TCHAR *code)
 {
 	return GetBearing(code);
@@ -174,7 +169,7 @@ GetTeammateBearingFromRef(const TCHAR *code)
 /**
  * @see GetRange()
  */
-double
+fixed
 GetTeammateRangeFromRef(const TCHAR *code)
 {
 	return GetRange(code);
@@ -269,11 +264,8 @@ void
 CalcTeammateBearingRange(double ownBear, double ownDist,
     const TCHAR *TeamMateCode, double *bearToMate, double *distToMate)
 {
-	double calcBearing = GetBearing(TeamMateCode); // + 180
+	double calcBearing = GetBearing(TeamMateCode).value_degrees();
 	double calcRange = GetRange(TeamMateCode);
-
-	//if (calcBearing > 360)
-	//	calcBearing -= 360;
 
 	CalcTeamMatePos(ownBear, ownDist, calcBearing, calcRange, bearToMate, distToMate);
 }

@@ -47,7 +47,7 @@ Copyright_License {
 void GetTeamCode(TCHAR *code, Angle bearing, fixed range);
 void CalcTeammateBearingRange(double ownDist, double ownBear,
     const TCHAR *TeamMateCode,  double *distToMate, double *bearToMate);
-double GetTeammateBearingFromRef(const TCHAR *code);
-double GetTeammateRangeFromRef(const TCHAR *code);
+Angle GetTeammateBearingFromRef(const TCHAR *code);
+fixed GetTeammateRangeFromRef(const TCHAR *code);
 
 #endif
