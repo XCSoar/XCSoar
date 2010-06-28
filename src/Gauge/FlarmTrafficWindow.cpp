@@ -544,7 +544,7 @@ FlarmTrafficWindow::on_paint(Canvas &canvas)
 }
 
 bool
-FlarmTrafficWindow::SelectNearTarget(int x, int y)
+FlarmTrafficWindow::SelectNearTarget(int x, int y, int max_distance)
 {
   int min_distance = 99999;
   int min_id = -1;
@@ -558,7 +558,7 @@ FlarmTrafficWindow::SelectNearTarget(int x, int y)
                       (y - sc[i].y) * (y - sc[i].y);
 
     if (distance_sq > min_distance
-        || distance_sq > Layout::FastScale(15) * Layout::FastScale(15))
+        || distance_sq > max_distance * max_distance)
       continue;
 
     min_distance = distance_sq;

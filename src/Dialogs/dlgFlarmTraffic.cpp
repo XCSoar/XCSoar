@@ -468,7 +468,7 @@ bool
 FlarmTrafficControl::on_mouse_down(int x, int y)
 {
   if (!WarningMode())
-    SelectNearTarget(x, y);
+    SelectNearTarget(x, y, Layout::Scale(15));
 
   return true;
 }
