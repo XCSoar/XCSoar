@@ -102,8 +102,7 @@ FlarmTrafficWindow::on_resize(unsigned width, unsigned height)
   PaintWindow::on_resize(width, height);
 
   // Calculate Radar size
-  int size = min(height, width);
-  radius = size / 2 - padding;
+  radius = min(height, width) / 2 - padding;
   radar_mid.x = width / 2;
   radar_mid.y = height / 2;
 
