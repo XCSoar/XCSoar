@@ -172,7 +172,9 @@ FlarmTrafficWindow::UpdateSelector()
 {
   if (!data.FLARM_Available)
     SetTarget(-1);
-  else if (selection < 0 || !data.FLARM_Traffic[selection].defined())
+  else if (selection < 0 || (!data.FLARM_Traffic[selection].defined() &&
+                             !SelectNearTarget(sc[selection].x, sc[selection].y,
+                                               radius * 2)))
     NextTarget();
 }
 
