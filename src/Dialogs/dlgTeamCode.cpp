@@ -144,6 +144,12 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
            newTeamFlarmCNTarget, 4);
   XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
 
+  if (string_is_empty(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget)) {
+    XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = false;
+    XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget.clear();
+    return;
+  }
+
   FlarmId flarmId =
     LookupFLARMDetails(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
 
