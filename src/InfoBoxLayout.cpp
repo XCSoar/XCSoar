@@ -59,13 +59,6 @@ leaving 220 = 110 control width
 */
 
 
-/*
-Button 0 (x,y,sx,sy)
-Button 1 (x,y,sx,sy)
-...
-InfoBox 0 (x,y,sx,sy)
-*/
-
 unsigned InfoBoxLayout::InfoBoxGeometry = ibTop4Bottom4;
 int InfoBoxLayout::ControlWidth;
 int InfoBoxLayout::ControlHeight;
@@ -77,8 +70,6 @@ void
 InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
     int *sizex, int *sizey)
 {
-  // not defined in registry so go with defaults
-  // these will be saved back to registry
   switch (InfoBoxGeometry) {
   case ibTop4Bottom4:
     if (i < numInfoWindows / 2) {
@@ -163,9 +154,6 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
   *sizey = ControlHeight;
 }
 
-//
-// Paolo Ventafridda, VENTA-ADDON Geometry change in Config menu 11
-//
 void
 InfoBoxLayout::ScreenGeometry(RECT rc)
 {
@@ -208,14 +196,12 @@ InfoBoxLayout::GetInfoBoxSizes(RECT rc)
 
   switch (InfoBoxGeometry) {
   case ibTop4Bottom4:
-    // portrait
     // calculate control dimensions
     ControlWidth = 2 * (rc.right - rc.left) / numInfoWindows;
     ControlHeight = (unsigned)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
     TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
 
     // calculate small map screen size
-
     MapRect.top = rc.top + ControlHeight;
     MapRect.left = rc.left;
     MapRect.bottom = rc.bottom - ControlHeight;
@@ -223,15 +209,12 @@ InfoBoxLayout::GetInfoBoxSizes(RECT rc)
     break;
 
   case ibBottom8:
-    // not used
     // calculate control dimensions
-
     ControlWidth = 2 * (rc.right - rc.left) / numInfoWindows;
     ControlHeight = (unsigned)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
     TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
 
     // calculate small map screen size
-
     MapRect.top = rc.top;
     MapRect.left = rc.left;
     MapRect.bottom = rc.bottom - ControlHeight * 2;
@@ -239,15 +222,12 @@ InfoBoxLayout::GetInfoBoxSizes(RECT rc)
     break;
 
   case ibTop8:
-    // not used
     // calculate control dimensions
-
     ControlWidth = 2 * (rc.right - rc.left) / numInfoWindows;
     ControlHeight = (unsigned)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
     TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
 
     // calculate small map screen size
-
     MapRect.top = rc.top + ControlHeight * 2;
     MapRect.left = rc.left;
     MapRect.bottom = rc.bottom;
@@ -255,15 +235,12 @@ InfoBoxLayout::GetInfoBoxSizes(RECT rc)
     break;
 
   case ibLeft4Right4:
-    // not used
     // calculate control dimensions
-
     ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3);
     ControlHeight = (unsigned)(2 * (rc.bottom - rc.top) / numInfoWindows);
     TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
 
     // calculate small map screen size
-
     MapRect.top = rc.top;
     MapRect.left = rc.left + ControlWidth;
     MapRect.bottom = rc.bottom;
@@ -272,13 +249,11 @@ InfoBoxLayout::GetInfoBoxSizes(RECT rc)
 
   case ibLeft8:
     // calculate control dimensions
-
     ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3);
     ControlHeight = (unsigned)(2 * (rc.bottom - rc.top) / numInfoWindows);
     TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
 
     // calculate small map screen size
-
     MapRect.top = rc.top;
     MapRect.left = rc.left + ControlWidth * 2;
     MapRect.bottom = rc.bottom;
@@ -286,15 +261,12 @@ InfoBoxLayout::GetInfoBoxSizes(RECT rc)
     break;
 
   case ibRight8:
-    // not used
     // calculate control dimensions
-
     ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3);
     ControlHeight = (unsigned)(2 * (rc.bottom - rc.top) / numInfoWindows);
     TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
 
     // calculate small map screen size
-
     MapRect.top = rc.top;
     MapRect.left = rc.left;
     MapRect.bottom = rc.bottom;
@@ -302,39 +274,32 @@ InfoBoxLayout::GetInfoBoxSizes(RECT rc)
     break;
 
   case ibGNav:
-    // landscape
     // calculate control dimensions
-
     ControlHeight = (unsigned)((rc.bottom - rc.top) / 6);
     ControlWidth = (unsigned)(ControlHeight * 1.44); // preserve relative shape
     TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
 
     // calculate small map screen size
-
     MapRect.top = rc.top;
     MapRect.left = rc.left;
     MapRect.bottom = rc.bottom;
     MapRect.right = rc.right - ControlWidth * 2;
-
     break;
 
   case ibSquare:
-    // square
     // calculate control dimensions
-
     ControlWidth = (unsigned)((rc.right - rc.left) * 0.2);
     ControlHeight = (unsigned)((rc.bottom - rc.top) / 5);
     TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
 
     // calculate small map screen size
-
     MapRect.top = rc.top;
     MapRect.left = rc.left;
     MapRect.bottom = rc.bottom;
     MapRect.right = rc.right - ControlWidth;
 
     break;
-  };
+  }
 
   return MapRect;
 }
