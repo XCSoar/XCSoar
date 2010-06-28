@@ -171,7 +171,6 @@ GlideComputer::ProcessIdle()
 void
 GlideComputer::CalculateOwnTeamCode()
 {
-#ifdef OLD_TASK // team code
   // No reference waypoint for teamcode calculation chosen -> cancel
   if (SettingsComputer().TeamCodeRefWaypoint < 0)
     return;
@@ -180,18 +179,16 @@ GlideComputer::CalculateOwnTeamCode()
   if (!last_team_code_update.check_update(10000))
     return;
 
-  // JMW TODO: locking
-  double distance = 0;
-  double bearing = 0;
+  fixed distance;
+  Angle bearing;
   TCHAR code[10];
 
   // Get bearing and distance to the reference waypoint
-  LL_to_BearRange(
-      way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Latitude,
-      way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Longitude,
-      Basic().Location.Latitude,
-      Basic().Location.Longitude,
-      &bearing, &distance);
+  const Waypoint *wp =
+      way_points.lookup_id(SettingsComputer().TeamCodeRefWaypoint);
+
+  bearing = wp->Location.bearing(Basic().Location);
+  distance = wp->Location.distance(Basic().Location);
 
   // Calculate teamcode from bearing and distance
   GetTeamCode(code, bearing, distance);
@@ -202,9 +199,6 @@ GlideComputer::CalculateOwnTeamCode()
 
   // Save teamcode to Calculated
   _tcsncpy(SetCalculated().OwnTeamCode, code, 5);
-#else
-  return;
-#endif
 }
 
 void
