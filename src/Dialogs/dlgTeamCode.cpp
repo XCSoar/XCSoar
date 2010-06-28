@@ -102,6 +102,13 @@ Update()
     wp->SetText(XCSoarInterface::SettingsComputer().TeammateCode);
     wp->RefreshDisplay();
   }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpFlarmLock"));
+  if (wp) {
+    wp->SetText(XCSoarInterface::SettingsComputer().TeamFlarmTracking ?
+                XCSoarInterface::SettingsComputer().TeamFlarmCNTarget : _T(""));
+    wp->RefreshDisplay();
+  }
 }
 
 static void
