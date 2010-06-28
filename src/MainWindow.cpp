@@ -81,7 +81,8 @@ MainWindow::set(LPCTSTR text,
 
   LogStartUp(TEXT("InfoBox geometry"));
   InfoBoxLayout::ScreenGeometry(rc);
-  RECT map_rect = InfoBoxLayout::CalcInfoBoxSizes(rc);
+  InfoBoxLayout::CalcInfoBoxSizes(rc);
+  RECT map_rect = InfoBoxLayout::GetRemainingRect(rc);
 
   // color/pattern chart (must have infobox geometry before this)
   MapGfx.Initialise(XCSoarInterface::hInst,

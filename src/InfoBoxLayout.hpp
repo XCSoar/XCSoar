@@ -71,7 +71,8 @@ namespace InfoBoxLayout
   void GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
                                  int *sizex, int *sizey);
 
-  RECT CalcInfoBoxSizes(RECT rc);
+  void CalcInfoBoxSizes(RECT rc);
+  RECT GetRemainingRect(RECT rc);
 };
 
 #endif
