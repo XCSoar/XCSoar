@@ -1708,31 +1708,14 @@ static void setVariables(void) {
       DataFieldEnum* dfe;
       dfe = (DataFieldEnum*)wp->GetDataField();
 
-      if (Layout::landscape) {
-        dfe->addEnumText(gettext(_T("vario+9box"))); // 0
-        dfe->addEnumText(gettext(_T("(empty) A")));  // 1
-        dfe->addEnumText(gettext(_T("(empty) B")));  // 2
-        dfe->addEnumText(gettext(_T("(empty) C")));  // 3
-        dfe->addEnumText(gettext(_T("8box left")));  // 4
-        dfe->addEnumText(gettext(_T("8box right"))); // 5 VENTA3
-        dfe->addEnumText(gettext(_T("(empty) D")));  // 6
-        dfe->addEnumText(gettext(_T("5box right"))); // 7
-      } else {
-        // VENTA2 FIX portrait mode selection geometry
-        dfe->addEnumText(gettext(_T("top+bottom"))); // 0
-        dfe->addEnumText(gettext(_T("bottom")));     // 1
-        dfe->addEnumText(gettext(_T("top")));        // 2
-        dfe->addEnumText(gettext(_T("3 free"))); // 3
-        dfe->addEnumText(gettext(_T("4 free")));       // 4
-        dfe->addEnumText(gettext(_T("5 free")));      // 5
-        dfe->addEnumText(gettext(_T("6 free")));      // 6
-
-        //dfe->addEnumText(gettext(_T("left+right"))); // 3
-        //dfe->addEnumText(gettext(_T("left")));       // 4
-        //dfe->addEnumText(gettext(_T("right")));      // 5
-        //dfe->addEnumText(gettext(_T("vario")));      // 6
-        dfe->addEnumText(gettext(_T("7")));          // 7
-      }
+      dfe->addEnumText(gettext(_T("8 Top + Bottom (Portrait)"))); // 0
+      dfe->addEnumText(gettext(_T("8 Top (Portrait)")));  // 1
+      dfe->addEnumText(gettext(_T("8 Bottom (Portrait)")));  // 2
+      dfe->addEnumText(gettext(_T("8 Left + Right (Landscape)")));  // 3
+      dfe->addEnumText(gettext(_T("8 Left (Landscape)")));  // 4
+      dfe->addEnumText(gettext(_T("8 Right (Landscape)"))); // 5
+      dfe->addEnumText(gettext(_T("9 Right + Vario (Landscape)")));  // 6
+      dfe->addEnumText(gettext(_T("5 Right (Square)"))); // 7
       dfe->Set(Appearance.InfoBoxGeom);
       wp->RefreshDisplay();
     }
