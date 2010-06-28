@@ -122,7 +122,7 @@ public:
 
   void NextTarget();
   void PrevTarget();
-  void SelectNearTarget(int x, int y);
+  bool SelectNearTarget(int x, int y);
 
   void SetDistance(fixed _distance) {
     distance = _distance;

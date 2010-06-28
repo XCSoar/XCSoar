@@ -543,7 +543,7 @@ FlarmTrafficWindow::on_paint(Canvas &canvas)
   PaintRadarTraffic(canvas);
 }
 
-void
+bool
 FlarmTrafficWindow::SelectNearTarget(int x, int y)
 {
   int min_distance = 99999;
@@ -567,4 +567,6 @@ FlarmTrafficWindow::SelectNearTarget(int x, int y)
 
   if (min_id >= 0)
     SetTarget(min_id);
+
+  return min_id >= 0;
 }
