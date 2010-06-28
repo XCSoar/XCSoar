@@ -124,8 +124,10 @@ OnCodeClicked(gcc_unused WndButton &button)
 
   _tcsncpy(XCSoarInterface::SetSettingsComputer().TeammateCode,
            newTeammateCode, 10);
-  if (!string_is_empty(XCSoarInterface::SettingsComputer().TeammateCode))
+  if (!string_is_empty(XCSoarInterface::SettingsComputer().TeammateCode)) {
     XCSoarInterface::SetSettingsComputer().TeammateCodeValid = true;
+    XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = false;
+  }
 }
 
 static void
