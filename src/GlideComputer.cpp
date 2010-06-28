@@ -196,10 +196,6 @@ GlideComputer::CalculateOwnTeamCode()
   // Calculate teamcode from bearing and distance
   GetTeamCode(code, bearing, distance);
 
-  // QUESTION TB: why save the own bearing/distance as TeammateBearing/Range ??
-  SetCalculated().TeammateBearing = bearing;
-  SetCalculated().TeammateRange = distance;
-
   // Save teamcode to Calculated
   _tcsncpy(SetCalculated().OwnTeamCode, code, 5);
 }
