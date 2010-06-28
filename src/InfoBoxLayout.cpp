@@ -169,7 +169,7 @@ InfoBoxLayout::ScreenGeometry(RECT rc)
       InfoBoxGeometry = ibTop4Bottom4;
   }
 
-  Profile::Set(szProfileInfoBoxGeometry, (int &)InfoBoxGeometry);
+  Profile::Set(szProfileInfoBoxGeometry, InfoBoxGeometry);
 
   if (InfoBoxGeometry == ibGNav)
     numInfoWindows = 9;
