@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "TeamCodeCalculation.h"
 #include "Math/Constants.h"
+#include "Engine/Math/Earth.hpp"
 
 #include <math.h>
 #include <string.h>
@@ -206,51 +207,6 @@ GetValueFromTeamCode(const TCHAR *code, int maxCount)
 }
 
 /**
- * Calculates distance and bearing to the teammate by comparing the
- * distances and bearings to the shared reference waypoint
- * @param ownBear Own bearing to the reference waypoint
- * @param ownDist Own distance to the reference waypoint
- * @param mateBear Teammate bearing to the reference waypoint
- * @param mateDist Teammate distance to the reference waypoint
- * @param bearToMate Bearing to the teammate (pointer)
- * @param distToMate Distance to the teammate (pointer)
- */
-void
-CalcTeamMatePos(double ownBear, double ownDist, double mateBear,
-    double mateDist, double *bearToMate, double *distToMate)
-{
-	// Convert bearings to radians
-	ownBear = ownBear * DEG_TO_RAD;
-	mateBear = mateBear * DEG_TO_RAD;
-
-	// Calculate range
-	double Xs = ownDist * sin(ownBear) - mateDist * sin(mateBear);
-  double Ys = ownDist * cos(ownBear) - mateDist * cos(mateBear);
-  double range = hypot(Xs, Ys);
-	*distToMate = range;
-
-	// Trivial solutions for bearing calculation
-	if (Xs == 0) {
-    if (Ys >= 0)
-      *bearToMate = 180;
-    else
-      *bearToMate = 0;
-
-	  return;
-	}
-
-  // Calculate bearing
-  double bearing;
-	bearing = atan(Ys / Xs) * RAD_TO_DEG;
-	if (Xs < 0)
-	  bearing = bearing + 180;
-
-	*bearToMate = 90.0 - bearing;
-	if (*bearToMate < 0)
-	  *bearToMate += 360;
-}
-
-/**
  * Calculates distance and bearing to the teammate by decoding the given
  * teamcode and comparing the value with own bearing and distance to
  * the reference waypoint
@@ -261,11 +217,15 @@ CalcTeamMatePos(double ownBear, double ownDist, double mateBear,
  * @param distToMate Distance to the teammate (pointer)
  */
 void
-CalcTeammateBearingRange(double ownBear, double ownDist,
-    const TCHAR *TeamMateCode, double *bearToMate, double *distToMate)
+CalcTeammateBearingRange(GEOPOINT wpPos, GEOPOINT ownPos,
+    const TCHAR *TeamMateCode, Angle &bearToMate, fixed &distToMate)
 {
-	double calcBearing = GetBearing(TeamMateCode).value_degrees();
-	double calcRange = GetRange(TeamMateCode);
+  Angle mateBear = GetBearing(TeamMateCode);
+	fixed mateDist = GetRange(TeamMateCode);
 
-	CalcTeamMatePos(ownBear, ownDist, calcBearing, calcRange, bearToMate, distToMate);
+  GEOPOINT matePos;
+  FindLatitudeLongitude(wpPos, mateBear, mateDist, &matePos);
+
+  bearToMate = ownPos.bearing(matePos);
+  distToMate = ownPos.distance(matePos);
 }
