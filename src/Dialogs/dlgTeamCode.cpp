@@ -137,11 +137,12 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
   _tcsncpy(newTeamFlarmCNTarget,
            XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget, 4);
 
-  if (dlgTextEntryShowModal(newTeamFlarmCNTarget, 4)) {
-    _tcsncpy(XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget,
-             newTeamFlarmCNTarget, 4);
-    XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
-  }
+  if (!dlgTextEntryShowModal(newTeamFlarmCNTarget, 4))
+    return;
+
+  _tcsncpy(XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget,
+           newTeamFlarmCNTarget, 4);
+  XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
 
   FlarmId flarmId =
     LookupFLARMDetails(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
