@@ -1709,8 +1709,6 @@ static void setVariables(void) {
       dfe = (DataFieldEnum*)wp->GetDataField();
 
       if (Layout::landscape) {
-
-
         dfe->addEnumText(gettext(_T("vario+9box"))); // 0
         dfe->addEnumText(gettext(_T("(empty) A")));  // 1
         dfe->addEnumText(gettext(_T("(empty) B")));  // 2
@@ -1719,9 +1717,6 @@ static void setVariables(void) {
         dfe->addEnumText(gettext(_T("8box right"))); // 5 VENTA3
         dfe->addEnumText(gettext(_T("(empty) D")));  // 6
         dfe->addEnumText(gettext(_T("5box right"))); // 7
-        dfe->Set(Appearance.InfoBoxGeom);
-        wp->RefreshDisplay();
-
       } else {
         // VENTA2 FIX portrait mode selection geometry
         dfe->addEnumText(gettext(_T("top+bottom"))); // 0
@@ -1737,10 +1732,9 @@ static void setVariables(void) {
         //dfe->addEnumText(gettext(_T("right")));      // 5
         //dfe->addEnumText(gettext(_T("vario")));      // 6
         dfe->addEnumText(gettext(_T("7")));          // 7
-        dfe->Set(Appearance.InfoBoxGeom);
-        wp->RefreshDisplay();
-
       }
+      dfe->Set(Appearance.InfoBoxGeom);
+      wp->RefreshDisplay();
     }
   }
 
