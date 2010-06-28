@@ -65,7 +65,8 @@ namespace InfoBoxLayout
   extern bool fullscreen;
   extern unsigned InfoBoxGeometry;
   extern int ControlWidth, ControlHeight, TitleHeight;
-  extern void ScreenGeometry(RECT rc);
+
+  void ScreenGeometry(RECT rc);
 
   // used by manager
   void GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
