@@ -42,7 +42,7 @@ Copyright_License {
 #include <math.h>
 #include <string.h>
 
-void ConvertBearingToTeamCode(const double bearing, TCHAR *code);
+void ConvertBearingToTeamCode(const Angle bearing, TCHAR *code);
 void NumberToTeamCode(double value, TCHAR *code, int minCiffers);
 double GetBearing(const TCHAR *code);
 double GetRange(const TCHAR *code);
@@ -57,7 +57,7 @@ int GetValueFromTeamCode(const TCHAR *code, int maxCount);
  * @param range Distance to the reference waypoint
  */
 void
-GetTeamCode(TCHAR *code, double bearing, double range)
+GetTeamCode(TCHAR *code, Angle bearing, fixed range)
 {
 	memset(code, 0, sizeof(TCHAR) * 10);
 
@@ -71,7 +71,7 @@ GetTeamCode(TCHAR *code, double bearing, double range)
 	// Calculate bearing part of the teamcode
 	ConvertBearingToTeamCode(bearing, code);
 	// Calculate distance part of the teamcode
-	NumberToTeamCode(range / 100.0, &code[2], 0);
+	NumberToTeamCode(range / fixed(100.0), &code[2], 0);
 }
 
 /**
@@ -80,15 +80,10 @@ GetTeamCode(TCHAR *code, double bearing, double range)
  * @param code The teamcode (pointer)
  */
 void
-ConvertBearingToTeamCode(const double bearing, TCHAR *code)
+ConvertBearingToTeamCode(const Angle bearing, TCHAR *code)
 {
-  if (bearing >= 360) {
-    code[0] = '-';
-    code[1] = '-';
-    return;
-  }
-
-  const double bamValue = (bearing * TEAMCODE_COMBINATIONS) / 360.0;
+  const double bamValue = bearing.as_bearing().value_degrees() / fixed_360
+                          * TEAMCODE_COMBINATIONS;
   NumberToTeamCode(bamValue, code, 2);
 }
 

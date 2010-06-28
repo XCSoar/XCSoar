@@ -39,9 +39,12 @@ Copyright_License {
 #ifndef	TEAMCALCULATION_H
 #define	TEAMCALCULATION_H
 
+#include "Engine/Math/fixed.hpp"
+#include "Engine/Math/Angle.hpp"
+
 #include <tchar.h>
 
-void GetTeamCode(TCHAR *code, double bearing, double range);
+void GetTeamCode(TCHAR *code, Angle bearing, fixed range);
 void CalcTeammateBearingRange(double ownDist, double ownBear,
     const TCHAR *TeamMateCode,  double *distToMate, double *bearToMate);
 double GetTeammateBearingFromRef(const TCHAR *code);
