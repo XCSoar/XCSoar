@@ -51,7 +51,7 @@ const Color FlarmTrafficWindow::hcPassive(0x99, 0x99, 0x99);
 const Color FlarmTrafficWindow::hcSelection(0x00, 0x00, 0xFF);
 const Color FlarmTrafficWindow::hcTeam(0x74, 0xFF, 0x00);
 const Color FlarmTrafficWindow::hcBackground(0xFF, 0xFF, 0xFF);
-const Color FlarmTrafficWindow::hcRadar(0x55, 0x55, 0x55);
+const Color FlarmTrafficWindow::hcRadar(0xB0, 0xB0, 0xB0);
 
 FlarmTrafficWindow::FlarmTrafficWindow(unsigned _padding)
   :distance(2000),
