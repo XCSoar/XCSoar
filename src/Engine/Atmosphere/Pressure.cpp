@@ -87,14 +87,14 @@ AtmosphericPressure::FindQNH(const fixed alt_raw,
   m_QNH = pow(pow(psraw*pa_to_hpa, k1) + k2*alt_known, inv_k1);
 }
 
-fixed 
-AtmosphericPressure::AirDensity(const fixed altitude) const
+fixed
+AtmosphericPressure::AirDensity(const fixed altitude)
 {
   return fixed(pow((k4 - altitude) * k6, k7));
 }
 
 fixed
-AtmosphericPressure::AirDensityRatio(const fixed altitude) const
+AtmosphericPressure::AirDensityRatio(const fixed altitude)
 {
   return sqrt(isa_sea_level_density/AirDensity(altitude));
 }

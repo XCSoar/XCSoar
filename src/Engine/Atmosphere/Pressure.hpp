@@ -92,19 +92,19 @@ public:
  */
   fixed AltitudeToQNHAltitude(const fixed alt) const;
 
-/**
- * Calculates the air density from a given QNH-based altitude
- * @param altitude QNH-based altitude (m)
- * @return Air density (kg/m^3)
- */
-  fixed AirDensity(const fixed altitude) const;
+  /**
+   * Calculates the air density from a given QNH-based altitude
+   * @param altitude QNH-based altitude (m)
+   * @return Air density (kg/m^3)
+   */
+  static fixed AirDensity(const fixed altitude);
 
-/**
- * Divide TAS by this number to get IAS
- * @param altitude QNH-based altitude (m)
- * @return Ratio of TAS to IAS
- */
-  fixed AirDensityRatio(const fixed altitude) const;
+  /**
+   * Divide TAS by this number to get IAS
+   * @param altitude QNH-based altitude (m)
+   * @return Ratio of TAS to IAS
+   */
+  static fixed AirDensityRatio(const fixed altitude);
 
 /**
  * Converts a pressure value to the corresponding QNH-based altitude

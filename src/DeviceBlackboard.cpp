@@ -513,7 +513,7 @@ DeviceBlackboard::Heading()
   if (!Basic().AirspeedAvailable) {
     SetBasic().TrueAirspeed = Basic().TrueAirspeedEstimated;
     SetBasic().IndicatedAirspeed = Basic().TrueAirspeed
-      /Basic().pressure.AirDensityRatio(Basic().GetAltitudeBaroPreferred());
+      / AtmosphericPressure::AirDensityRatio(Basic().GetAltitudeBaroPreferred());
   }
 }
 
@@ -652,7 +652,7 @@ void
 DeviceBlackboard::EnergyHeight()
 {
   const fixed ias_to_tas =
-    Basic().pressure.AirDensityRatio(Basic().GetAltitudeBaroPreferred());
+      AtmosphericPressure::AirDensityRatio(Basic().GetAltitudeBaroPreferred());
   static const fixed fixed_inv_2g (1.0/(2.0*9.81));
 
   const fixed V_target = Calculated().common_stats.V_block * ias_to_tas;

@@ -135,7 +135,7 @@ LXWP0(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
   fixed alt(_tcstod(ctemp, NULL));
 
   GPS_INFO->IndicatedAirspeed =
-      airspeed / GPS_INFO->pressure.AirDensityRatio(alt);
+      airspeed / AtmosphericPressure::AirDensityRatio(alt);
   GPS_INFO->TrueAirspeed = airspeed;
 
   if (enable_baro) {

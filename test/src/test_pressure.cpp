@@ -62,8 +62,7 @@ bool test_isa_pressure(const fixed alt, const fixed prat) {
 }
 
 bool test_isa_density(const fixed alt, const fixed prat) {
-  AtmosphericPressure pres;
-  fixed p0 = pres.AirDensity(alt);
+  fixed p0 = AtmosphericPressure::AirDensity(alt);
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(p0));
   }

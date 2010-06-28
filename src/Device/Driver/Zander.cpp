@@ -116,7 +116,7 @@ PZAN2(const TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->TotalEnergyVarioAvailable = true;
 
   if (GPS_INFO->BaroAltitudeAvailable) {
-    vias = vtas/GPS_INFO->pressure.AirDensityRatio(GPS_INFO->BaroAltitude);
+    vias = vtas/AtmosphericPressure::AirDensityRatio(GPS_INFO->BaroAltitude);
   } else {
     vias = 0.0;
   }
