@@ -309,11 +309,10 @@ OnClearAlternatesClicked(gcc_unused WndButton &button)
 static void
 OnTeamCodeClicked(gcc_unused WndButton &button)
 {
-#ifdef OLD_TASK
-  XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint = SelectedWaypoint;
+  XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint =
+      selected_waypoint->id;
   Profile::Set(szProfileTeamcodeRefWaypoint,
       XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint);
-#endif
 
   wf->SetModalResult(mrOK);
 }
