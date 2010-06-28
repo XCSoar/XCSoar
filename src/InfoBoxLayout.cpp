@@ -180,7 +180,7 @@ InfoBoxLayout::ScreenGeometry(RECT rc)
 }
 
 RECT
-InfoBoxLayout::GetInfoBoxSizes(RECT rc)
+InfoBoxLayout::CalcInfoBoxSizes(RECT rc)
 {
   RECT MapRect;
 
