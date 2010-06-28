@@ -61,6 +61,7 @@ protected:
   Brush hbAlarm;
   Brush hbSelection;
   Brush hbTeam;
+  Brush hbRadar;
 
   Pen hpWarning;
   Pen hpAlarm;
@@ -139,6 +140,7 @@ protected:
   void PaintRadarTraffic(Canvas &canvas);
   void PaintRadarPlane(Canvas &canvas) const;
   void PaintRadarBackground(Canvas &canvas) const;
+  void PaintNorth(Canvas &canvas) const;
 
 protected:
   virtual bool on_create();

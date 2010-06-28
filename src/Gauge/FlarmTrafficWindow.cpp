@@ -83,6 +83,7 @@ FlarmTrafficWindow::on_create()
   hbAlarm.set(hcAlarm);
   hbSelection.set(hcSelection);
   hbTeam.set(hcTeam);
+  hbRadar.set(hcRadar);
 
   hpWarning.set(Layout::FastScale(2), hcWarning);
   hpAlarm.set(Layout::FastScale(2), hcAlarm);
@@ -465,6 +466,31 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
  * @param canvas The canvas to paint on
  */
 void
+FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
+{
+  const FastRotation r(-direction);
+  FastRotation::Pair p = r.Rotate(0, -1);
+  double x = p.first;
+  double y = p.second;
+
+  canvas.set_text_color(Color::WHITE);
+  canvas.select(hpRadar);
+  canvas.select(hbRadar);
+  canvas.background_transparent();
+  canvas.select(MapWindowFont);
+
+  SIZE s = canvas.text_size(_T("N"));
+  canvas.circle(radar_mid.x + iround(x * radius),
+                radar_mid.y + iround(y * radius), s.cy * 0.65);
+  canvas.text(radar_mid.x + iround(x * radius) - s.cx / 2,
+              radar_mid.y + iround(y * radius) - s.cy / 2, _T("N"));
+}
+
+/**
+ * Paints the radar circle on the given canvas
+ * @param canvas The canvas to paint on
+ */
+void
 FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
 {
   canvas.hollow_brush();
@@ -494,6 +520,8 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
               radar_mid.y + radius / 2 - s.cy * 0.75, distance_string);
 
   canvas.background_transparent();
+
+  PaintNorth(canvas);
 }
 
 /**
