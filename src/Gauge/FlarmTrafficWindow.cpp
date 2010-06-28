@@ -53,10 +53,11 @@ const Color FlarmTrafficWindow::hcTeam(0x74, 0xFF, 0x00);
 const Color FlarmTrafficWindow::hcBackground(0xFF, 0xFF, 0xFF);
 const Color FlarmTrafficWindow::hcRadar(0xB0, 0xB0, 0xB0);
 
-FlarmTrafficWindow::FlarmTrafficWindow(unsigned _padding)
+FlarmTrafficWindow::FlarmTrafficWindow(unsigned _padding, bool _small)
   :distance(2000),
    selection(-1), warning(-1),
    padding(_padding),
+   small(_small),
    direction(Angle::radians(fixed_zero)),
    side_display_type(1)
 {
@@ -84,13 +85,14 @@ FlarmTrafficWindow::on_create()
   hbTeam.set(hcTeam);
   hbRadar.set(hcRadar);
 
-  hpWarning.set(Layout::FastScale(2), hcWarning);
-  hpAlarm.set(Layout::FastScale(2), hcAlarm);
-  hpStandard.set(Layout::FastScale(2), hcStandard);
-  hpPassive.set(Layout::FastScale(2), hcPassive);
-  hpSelection.set(Layout::FastScale(2), hcSelection);
+  int width = Layout::FastScale(small ? 1 : 2);
+  hpWarning.set(width, hcWarning);
+  hpAlarm.set(width, hcAlarm);
+  hpStandard.set(width, hcStandard);
+  hpPassive.set(width, hcPassive);
+  hpSelection.set(width, hcSelection);
 
-  hpPlane.set(Layout::FastScale(2), hcRadar);
+  hpPlane.set(width, hcRadar);
   hpRadar.set(1, hcRadar);
 
   return true;
@@ -169,7 +171,7 @@ FlarmTrafficWindow::PrevTarget()
 void
 FlarmTrafficWindow::UpdateSelector()
 {
-  if (!data.FLARM_Available)
+  if (small || !data.FLARM_Available)
     SetTarget(-1);
   else if (selection < 0 || (!data.FLARM_Traffic[selection].defined() &&
                              !SelectNearTarget(sc[selection].x, sc[selection].y,
@@ -226,6 +228,9 @@ FlarmTrafficWindow::RangeScale(fixed d) const
 void
 FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const
 {
+  if (small)
+    return;
+
   static const TCHAR str[] = _T("No Traffic");
   canvas.select(StatisticsFont);
   SIZE ts = canvas.text_size(str);
@@ -280,15 +285,15 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   case 1:
     canvas.hollow_brush();
     canvas.select(hpWarning);
-    canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(16));
+    canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
     canvas.select(hbWarning);
     break;
   case 2:
   case 3:
     canvas.hollow_brush();
     canvas.select(hpAlarm);
-    canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(16));
-    canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(19));
+    canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
+    canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 10 : 19));
     canvas.select(hbAlarm);
     break;
   case 0:
@@ -297,7 +302,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
       canvas.hollow_brush();
       canvas.select(hpPassive);
     } else {
-      if (static_cast<unsigned> (selection) == i) {
+      if (!small && static_cast<unsigned> (selection) == i) {
         canvas.select(hpSelection);
         canvas.select(hbSelection);
       } else {
@@ -314,16 +319,29 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   // Create an arrow polygon
   POINT Arrow[5];
-  Arrow[0].x = -6;
-  Arrow[0].y = 8;
-  Arrow[1].x = 0;
-  Arrow[1].y = -10;
-  Arrow[2].x = 6;
-  Arrow[2].y = 8;
-  Arrow[3].x = 0;
-  Arrow[3].y = 5;
-  Arrow[4].x = -6;
-  Arrow[4].y = 8;
+  if (small) {
+    Arrow[0].x = -3;
+    Arrow[0].y = 4;
+    Arrow[1].x = 0;
+    Arrow[1].y = -5;
+    Arrow[2].x = 3;
+    Arrow[2].y = 4;
+    Arrow[3].x = 0;
+    Arrow[3].y = 2;
+    Arrow[4].x = -3;
+    Arrow[4].y = 4;
+  } else {
+    Arrow[0].x = -6;
+    Arrow[0].y = 8;
+    Arrow[1].x = 0;
+    Arrow[1].y = -10;
+    Arrow[2].x = 6;
+    Arrow[2].y = 8;
+    Arrow[3].x = 0;
+    Arrow[3].y = 5;
+    Arrow[4].x = -6;
+    Arrow[4].y = 8;
+  }
 
   // Rotate and shift the arrow
   PolygonRotateShift(Arrow, 5, sc[i].x, sc[i].y,
@@ -331,6 +349,71 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   // Draw the polygon
   canvas.polygon(Arrow, 5);
+
+  if (small) {
+    if (WarningMode() && !traffic.HasAlarm())
+      return;
+
+    const short relalt =
+        iround(Units::ToUserAltitude(traffic.RelativeAltitude / 100));
+
+    // if (relative altitude is other than zero)
+    if (relalt == 0)
+      return;
+
+    // Write the relativ altitude devided by 100 to the Buffer
+    TCHAR Buffer[10];
+    _stprintf(Buffer, TEXT("%d"), abs(relalt));
+
+    // Calculate size of the output string
+    SIZE tsize = canvas.text_size(Buffer);
+
+    // Select font
+    canvas.background_transparent();
+    canvas.select(TitleWindowFont);
+    canvas.set_text_color(Color::BLACK);
+
+    int dist = Layout::FastScale(traffic.HasAlarm() ? 12 : 8);
+
+    // Draw string
+    canvas.text(sc[i].x + dist,
+                sc[i].y - tsize.cy / 2,
+                Buffer);
+
+    // Set black brush for the up/down arrow
+    canvas.black_brush();
+    canvas.null_pen();
+
+    // Prepare the triangular polygon
+    POINT triangle[4];
+    triangle[0].x = 0;
+    triangle[0].y = -4;
+    triangle[1].x = 3;
+    triangle[1].y = 0;
+    triangle[2].x = -3;
+    triangle[2].y = 0;
+
+    // Flip = -1 for arrow pointing downwards
+    short flip = 1;
+    if (relalt < 0)
+      flip = -1;
+
+    // Shift the arrow to the right position
+    for (int j = 0; j < 3; j++) {
+      triangle[j].x = Layout::FastScale(triangle[j].x);
+      triangle[j].y = Layout::FastScale(triangle[j].y);
+
+      triangle[j].x = sc[i].x + dist + triangle[j].x + tsize.cx / 2;
+      triangle[j].y = sc[i].y + flip * (triangle[j].y  - tsize.cy / 2);
+    }
+    triangle[3].x = triangle[0].x;
+    triangle[3].y = triangle[0].y;
+
+    // Draw the arrow
+    canvas.polygon(triangle, 4);
+
+    return;
+  }
 
   // if warning exists -> don't draw vertical speeds
   if (WarningMode())
@@ -445,18 +528,18 @@ void
 FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
 {
   canvas.select(hpPlane);
-  canvas.line(radar_mid.x + Layout::FastScale(10),
-              radar_mid.y - Layout::FastScale(2),
-              radar_mid.x - Layout::FastScale(10),
-              radar_mid.y - Layout::FastScale(2));
+  canvas.line(radar_mid.x + Layout::FastScale(small ? 5 : 10),
+              radar_mid.y - Layout::FastScale(small ? 1 : 2),
+              radar_mid.x - Layout::FastScale(small ? 5 : 10),
+              radar_mid.y - Layout::FastScale(small ? 1 : 2));
   canvas.line(radar_mid.x,
-              radar_mid.y - Layout::FastScale(6),
+              radar_mid.y - Layout::FastScale(small ? 3 : 6),
               radar_mid.x,
-              radar_mid.y + Layout::FastScale(6));
-  canvas.line(radar_mid.x + Layout::FastScale(4),
-              radar_mid.y + Layout::FastScale(4),
-              radar_mid.x - Layout::FastScale(4),
-              radar_mid.y + Layout::FastScale(4));
+              radar_mid.y + Layout::FastScale(small ? 3 : 6));
+  canvas.line(radar_mid.x + Layout::FastScale(small ? 2 : 4),
+              radar_mid.y + Layout::FastScale(small ? 2 : 4),
+              radar_mid.x - Layout::FastScale(small ? 2 : 4),
+              radar_mid.y + Layout::FastScale(small ? 2 : 4));
 }
 
 /**
@@ -498,8 +581,12 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
   canvas.circle(radar_mid.x, radar_mid.y, radius);
   canvas.circle(radar_mid.x, radar_mid.y, radius / 2);
 
-  // Paint zoom strings
+  PaintRadarPlane(canvas);
 
+  if (small)
+    return;
+
+  // Paint zoom strings
   canvas.select(MapWindowFont);
   canvas.background_opaque();
 
@@ -540,7 +627,6 @@ FlarmTrafficWindow::on_paint(Canvas &canvas)
   canvas.clear();
 
   PaintRadarBackground(canvas);
-  PaintRadarPlane(canvas);
   PaintRadarTraffic(canvas);
 }
 

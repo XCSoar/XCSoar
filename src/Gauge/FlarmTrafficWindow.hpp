@@ -92,6 +92,8 @@ protected:
    */
   unsigned radius;
 
+  bool small;
+
   POINT sc[FLARM_STATE::FLARM_MAX_TRAFFIC];
 
   Angle direction;
@@ -103,7 +105,7 @@ public:
   int side_display_type;
 
 public:
-  FlarmTrafficWindow(unsigned _padding);
+  FlarmTrafficWindow(unsigned _padding, bool _small = false);
 
 public:
   bool WarningMode() const;
