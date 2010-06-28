@@ -63,8 +63,14 @@ unsigned InfoBoxLayout::InfoBoxGeometry = ibTop4Bottom4;
 int InfoBoxLayout::ControlWidth;
 int InfoBoxLayout::ControlHeight;
 int InfoBoxLayout::TitleHeight;
-
 bool InfoBoxLayout::fullscreen = false;
+
+void
+InfoBoxLayout::Init(RECT rc)
+{
+  ScreenGeometry(rc);
+  CalcInfoBoxSizes(rc);
+}
 
 void
 InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,

@@ -66,6 +66,7 @@ namespace InfoBoxLayout
   extern unsigned InfoBoxGeometry;
   extern int ControlWidth, ControlHeight, TitleHeight;
 
+  void Init(RECT rc);
   void ScreenGeometry(RECT rc);
 
   // used by manager

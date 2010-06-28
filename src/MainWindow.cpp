@@ -80,8 +80,7 @@ MainWindow::set(LPCTSTR text,
   Layout::Initialize(rc.right - rc.left, rc.bottom - rc.top);
 
   LogStartUp(TEXT("InfoBox geometry"));
-  InfoBoxLayout::ScreenGeometry(rc);
-  InfoBoxLayout::CalcInfoBoxSizes(rc);
+  InfoBoxLayout::Init(rc);
   RECT map_rect = InfoBoxLayout::GetRemainingRect(rc);
 
   // color/pattern chart (must have infobox geometry before this)
