@@ -40,7 +40,6 @@
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Units.hpp"
-#include "Math/FastRotation.hpp"
 #include "Math/Screen.hpp"
 
 #include <assert.h>
@@ -198,6 +197,7 @@ FlarmTrafficWindow::Update(Angle new_direction, const FLARM_STATE &new_data,
                            const SETTINGS_TEAMCODE &new_settings)
 {
   direction = new_direction;
+  fr.SetAngle(-direction);
   data = new_data;
   settings = new_settings;
 
@@ -266,10 +266,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   }
 
   // Rotate x and y to have a track up display
-  Angle DisplayAngle = -direction;
-  // or use .Heading? (no, because heading is not reliable)
-  const FastRotation r(DisplayAngle);
-  FastRotation::Pair p = r.Rotate(x, y);
+  FastRotation::Pair p = fr.Rotate(x, y);
   x = p.first;
   y = p.second;
 
@@ -329,7 +326,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   // Rotate and shift the arrow
   PolygonRotateShift(Arrow, 5, sc[i].x, sc[i].y,
-                     traffic.TrackBearing + DisplayAngle);
+                     traffic.TrackBearing - direction);
 
   // Draw the polygon
   canvas.polygon(Arrow, 5);
@@ -468,8 +465,7 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
 void
 FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
 {
-  const FastRotation r(-direction);
-  FastRotation::Pair p = r.Rotate(0, -1);
+  FastRotation::Pair p = fr.Rotate(0, -1);
   double x = p.first;
   double y = p.second;
 

@@ -42,6 +42,7 @@
 #include "Screen/PaintWindow.hpp"
 #include "FLARM/State.hpp"
 #include "SettingsComputer.hpp"
+#include "Math/FastRotation.hpp"
 
 /**
  * A Window which renders FLARM traffic.
@@ -94,6 +95,7 @@ protected:
   POINT sc[FLARM_STATE::FLARM_MAX_TRAFFIC];
 
   Angle direction;
+  FastRotation fr;
   FLARM_STATE data;
   SETTINGS_TEAMCODE settings;
 
