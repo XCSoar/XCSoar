@@ -133,7 +133,6 @@ extern const TCHAR szProfileAppTextInputStyle[];
 extern const TCHAR szProfileAppDialogStyle[];
 extern const TCHAR szProfileAppInfoBoxBorder[];
 #if defined(PNA) || defined(FIVV)
-extern const TCHAR szProfileAppInfoBoxGeom[];   // VENTA-ADDON GEOM CHANGE
 extern const TCHAR szProfileAppInfoBoxModel[]; // VENTA-ADDON MODEL CHANGE
 #endif
 extern const TCHAR szProfileAppAveNeedle[];
@@ -202,7 +201,6 @@ extern const TCHAR szProfileFontMapLabelFont[];
 extern const TCHAR szProfileFontStatisticsFont[];
 
 extern const TCHAR szProfileInfoBoxGeometry[];
-extern const TCHAR szProfileInfoBoxGeom[];
 
 extern const TCHAR szProfileFlarmSideData[];
 extern const TCHAR szProfileFlarmAutoZoom[];

@@ -159,16 +159,6 @@ InfoBoxLayout::ScreenGeometry(RECT rc)
 {
   Profile::Get(szProfileInfoBoxGeometry, InfoBoxGeometry);
 
-#if defined(PNA) || defined(FIVV)
-// VENTA-ADDON GEOM
-  unsigned Temp = 0;
-  Profile::Get(szProfileInfoBoxGeom, Temp);
-  if (InfoBoxGeometry != Temp) {
-    LogStartUp(_T("Geometry was changed in config, applying"));
-    InfoBoxGeometry=Temp;
-  }
-#endif
-
   if (Layout::landscape) {
     if (InfoBoxGeometry < ibLeft8)
       InfoBoxGeometry = ibGNav;

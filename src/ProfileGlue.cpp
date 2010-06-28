@@ -463,10 +463,6 @@ Profile::Use()
   // I had to move here the font setting because I needed first to
   // know the screen geometry, in the registry!
 #if defined(PNA) || defined(FIVV)
-  Temp = InfoBoxLayout::InfoBoxGeometry;
-  Get(szProfileAppInfoBoxGeom, Temp);
-  InfoBoxLayout::InfoBoxGeometry = (InfoBoxGeomAppearance_t)Temp;
-
   if (GlobalModelType == MODELTYPE_PNA_HP31X ) {
     // key transcoding for this one
     LogStartUp(_T("Loading HP31X settings"));

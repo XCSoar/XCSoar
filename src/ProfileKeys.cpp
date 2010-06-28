@@ -220,7 +220,6 @@ const TCHAR szProfileTeamcodeRefWaypoint[] = CONF("TeamcodeRefWaypoint");
 const TCHAR szProfileAppInfoBoxBorder[] = CONF("AppInfoBoxBorder");
 
 #if defined(PNA) || defined(FIVV)
-const TCHAR szProfileAppInfoBoxGeom[] = CONF("AppInfoBoxGeom"); // VENTA-ADDON GEOMETRY CONFIG
 const TCHAR szProfileAppInfoBoxModel[] = CONF("AppInfoBoxModel"); // VENTA-ADDON MODEL CONFIG
 #endif
 
@@ -286,7 +285,6 @@ const TCHAR szProfileFontMapLabelFont[] = CONF("MapLabelFont");
 const TCHAR szProfileFontStatisticsFont[] = CONF("StatisticsFont");
 
 const TCHAR szProfileInfoBoxGeometry[] = CONF("InfoBoxGeometry");
-const TCHAR szProfileInfoBoxGeom[] = CONF("AppInfoBoxGeom");
 
 const TCHAR szProfileFlarmSideData[] = CONF("FlarmRadarSideData");
 const TCHAR szProfileFlarmAutoZoom[] = CONF("FlarmRadarAutoZoom");

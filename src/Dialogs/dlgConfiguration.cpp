@@ -2661,7 +2661,7 @@ void dlgConfigurationShowModal(void)
   if (wp) {
     if (InfoBoxLayout::InfoBoxGeometry != (unsigned)wp->GetDataField()->GetAsInteger()) {
       InfoBoxLayout::InfoBoxGeometry = (unsigned)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileAppInfoBoxGeom, InfoBoxLayout::InfoBoxGeometry);
+      Profile::Set(szProfileInfoBoxGeometry, InfoBoxLayout::InfoBoxGeometry);
       changed = true;
       requirerestart = true;
     }
