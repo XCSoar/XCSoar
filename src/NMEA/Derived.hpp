@@ -241,11 +241,6 @@ struct TEAMCODE_INFO
   fixed TeammateRange;
   /** Position of the chosen team mate */
   GEOPOINT TeammateLocation;
-  /** Team code of the chosen team mate */
-  TCHAR  TeammateCode[10]; // auto-detected, see also in settings computer.h
-
-  /** Whether the teammate code is valid */
-  bool   TeammateCodeValid;
 };
 
 /**

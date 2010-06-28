@@ -957,7 +957,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
     break;
 
   case 55: // own team code
-    info_box.SetComment(Calculated().TeammateCode);
+    info_box.SetComment(SettingsComputer().TeammateCode);
 
     if (!SettingsComputer().TeamFlarmTracking)
       info_box.SetColorBottom(0);

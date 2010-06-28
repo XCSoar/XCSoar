@@ -89,9 +89,6 @@ XCSoarInterface::ReceiveBlackboard()
   ScopeLock protect(mutexBlackboard);
   ReadBlackboardBasic(device_blackboard.Basic());
   ReadBlackboardCalculated(device_blackboard.Calculated());
-
-  if (Calculated().TeammateCodeValid)
-    SetSettingsComputer().TeammateCodeValid = true;
 }
 
 void
