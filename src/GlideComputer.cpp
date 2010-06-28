@@ -307,9 +307,18 @@ GlideComputer::OnDepartedThermal()
 void
 GlideComputer::FLARM_ScanTraffic()
 {
-#ifdef OLD_TASK // flarm team code
   // If (not FLARM available) cancel
   if (!Basic().flarm.FLARM_Available)
+    return;
+
+  if (SettingsComputer().TeamCodeRefWaypoint < 0)
+    return;
+
+  // Get bearing and distance to the reference waypoint
+  const Waypoint *wp =
+      way_points.lookup_id(SettingsComputer().TeamCodeRefWaypoint);
+
+  if (!wp)
     return;
 
   // Iterate through all FLARM contacts
@@ -322,18 +331,16 @@ GlideComputer::FLARM_ScanTraffic()
       // it should be done outside the parser/comms thread
 
       // If (FLARM contact == TeamMate)
-      if ((traffic.ID == SettingsComputer().TeamFlarmIdTarget)
-          && way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint)) {
-        double bearing;
-        double distance;
+      if (traffic.ID == SettingsComputer().TeamFlarmIdTarget) {
+        Angle bearing;
+        fixed distance;
 
         // Set Teammate location to FLARM contact location
         SetCalculated().TeammateLocation = traffic.Location;
 
         // Calculate distance and bearing from teammate to reference waypoint
-        DistanceBearing(
-            way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location,
-            traffic.Location, &distance, &bearing);
+        bearing = wp->Location.bearing(traffic.Location);
+        distance = wp->Location.distance(traffic.Location);
 
         // Calculate TeamCode and save it in Calculated
         GetTeamCode(SetCalculated().TeammateCode, bearing, distance);
@@ -341,7 +348,6 @@ GlideComputer::FLARM_ScanTraffic()
       }
     }
   }
-#endif
 }
 
 
