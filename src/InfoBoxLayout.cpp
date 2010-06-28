@@ -68,7 +68,7 @@ bool InfoBoxLayout::fullscreen = false;
 void
 InfoBoxLayout::Init(RECT rc)
 {
-  ScreenGeometry(rc);
+  LoadGeometry(rc);
   CalcInfoBoxSizes(rc);
 }
 
@@ -161,7 +161,7 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
 }
 
 void
-InfoBoxLayout::ScreenGeometry(RECT rc)
+InfoBoxLayout::LoadGeometry(RECT rc)
 {
   Profile::Get(szProfileInfoBoxGeometry, InfoBoxGeometry);
 

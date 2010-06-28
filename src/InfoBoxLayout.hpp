@@ -67,7 +67,7 @@ namespace InfoBoxLayout
   extern int ControlWidth, ControlHeight, TitleHeight;
 
   void Init(RECT rc);
-  void ScreenGeometry(RECT rc);
+  void LoadGeometry(RECT rc);
 
   // used by manager
   void GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
