@@ -117,7 +117,8 @@ DrawThread::run()
       ExchangeBlackboard();
 
       if (flarm != NULL)
-        flarm->Update(map.SettingsMap().EnableFLARMGauge, map.Basic());
+        flarm->Update(map.SettingsMap().EnableFLARMGauge, map.Basic(),
+                      map.SettingsComputer());
 
       // Draw the moving map
       map.DrawThreadLoop();

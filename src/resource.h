@@ -55,7 +55,6 @@
 #define IDB_DLGBUTTONRIGHT16            303
 #define IDB_DLGBUTTONRIGHT32            304
 #define IDB_AIRSPACE4                   306
-#define IDB_FLARMROSE                   310
 #define IDB_AIRSPACE5                   311
 #define IDB_CLIMBSMALL                  313
 #define IDB_CLIMBSMALLINV               314

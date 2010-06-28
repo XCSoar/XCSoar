@@ -38,7 +38,6 @@ IDB_DLGBUTTONLEFT32     BITMAP  DISCARDABLE     "bitmaps/DialogButtonLeft32x32.b
 IDB_DLGBUTTONRIGHT16    BITMAP  DISCARDABLE     "bitmaps/DialogButtonRight16x16.bmp"
 IDB_DLGBUTTONRIGHT32    BITMAP  DISCARDABLE     "bitmaps/DialogButtonRight32x32.bmp"
 IDB_FINALGLIDE          BITMAP  DISCARDABLE     "bitmaps/finalgli.bmp"
-IDB_FLARMROSE           BITMAP  DISCARDABLE     "bitmaps/flarmcluster.bmp"
 IDB_FLARMTRAFFIC        BITMAP  DISCARDABLE     "bitmaps/flarmtra.bmp"
 IDB_GPSSTATUS1          BITMAP  DISCARDABLE     "../output/data/icons/gpslost_1-19.bmp"
 IDB_GPSSTATUS2          BITMAP  DISCARDABLE     "../output/data/icons/gpslost_2-19.bmp"

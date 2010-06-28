@@ -41,6 +41,7 @@ Copyright_License {
 
 #include "Screen/BufferWindow.hpp"
 #include "Screen/Bitmap.hpp"
+#include "FlarmTrafficWindow.hpp"
 
 struct NMEA_INFO;
 class ContainerWindow;
@@ -48,8 +49,7 @@ class ContainerWindow;
 /**
  * Widget to display a FLARM gauge
  */
-class GaugeFLARM: public BufferWindow
-{
+class GaugeFLARM : public FlarmTrafficWindow {
   /**
    * WM_USER offsets.
    */
@@ -58,12 +58,6 @@ class GaugeFLARM: public BufferWindow
     MSG_HIDE,
   };
 
-private:
-  Bitmap hRoseBitMap;
-  SIZE hRoseBitMapSize;
-  POINT center;
-  int radius;
-
 public:
   bool ForceVisible, Suppress;
 
@@ -71,13 +65,10 @@ public:
   GaugeFLARM(ContainerWindow &parent,
              int left, int top, unsigned width, unsigned height);
 
-  void Update(bool enable, const NMEA_INFO &gps_info);
+  void Update(bool enable, const NMEA_INFO &gps_info,
+              const SETTINGS_TEAMCODE &settings);
 
 protected:
-  void Render(const NMEA_INFO &gps_info);
-  void RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info);
-  void RenderBg(Canvas &canvas);
-
   bool on_mouse_down(int x, int y);
   virtual bool on_user(unsigned id);
 
