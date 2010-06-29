@@ -89,12 +89,10 @@ ReplayLoggerGlue::ScanBuffer(const TCHAR *buffer, fixed *Time,
   return false;
 }
 
-
-fixed
+void
 ReplayLoggerGlue::get_time(const bool reset, const fixed mintime)
 {
   static PeriodClock clock;
-  static fixed t_simulation;
   
   if (reset) {
     clock.reset();
@@ -105,7 +103,6 @@ ReplayLoggerGlue::get_time(const bool reset, const fixed mintime)
   }
   
   t_simulation = std::max(mintime, t_simulation);
-  return t_simulation;
 }
 
 void

@@ -45,7 +45,7 @@ class ReplayLoggerGlue:
   public ReplayLogger
 {
 protected:
-  virtual fixed get_time(const bool reset, const fixed mintime);
+  virtual void get_time(const bool reset, const fixed mintime);
   virtual void on_reset();
   virtual void on_stop();
   virtual void on_bad_file();

@@ -62,7 +62,7 @@ public:
   fixed TimeScale;
 
 protected:
-  virtual fixed get_time(const bool reset, const fixed mintime);
+  virtual void get_time(const bool reset, const fixed mintime);
   virtual void on_reset();
   virtual void on_stop();
   virtual void on_bad_file();
@@ -75,6 +75,7 @@ protected:
   bool UpdateInternal();
   bool ReadLine(TCHAR *buffer);
   bool Enabled;
+  fixed t_simulation;
 
   bool ReadPoint(fixed *Time, fixed *Latitude, fixed *Longitude,
                  fixed *Altitude);
@@ -83,7 +84,6 @@ private:
   CatmullRomInterpolator cli;
   bool initialised;
   bool finished;
-  fixed t_simulation;
 
   TCHAR FileName[MAX_PATH];
   FILE *fp;
