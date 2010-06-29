@@ -55,7 +55,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Asset.hpp"
 #include "Simulator.hpp"
-#include "ReplayLoggerGlue.hpp"
+#include "Replay/ReplayLoggerGlue.hpp"
 
 void
 ProcessTimer::HeapCompact()

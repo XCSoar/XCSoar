@@ -36,7 +36,7 @@
 }
 */
 
-#include "ReplayLogger.hpp"
+#include "Replay/ReplayLogger.hpp"
 #include <algorithm>
 
 #include "Navigation/GeoPoint.hpp"

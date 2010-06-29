@@ -36,7 +36,7 @@
 }
 */
 
-#include "ReplayLoggerGlue.hpp"
+#include "Replay/ReplayLoggerGlue.hpp"
 #include "Logger/Logger.hpp"
 #include "Protection.hpp"
 #include "Dialogs/Message.hpp"

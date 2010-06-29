@@ -80,7 +80,7 @@ Copyright_License {
 #include "StatusMessage.hpp"
 #include "CalculationThread.hpp"
 #include "InstrumentThread.hpp"
-#include "ReplayLoggerGlue.hpp"
+#include "Replay/ReplayLoggerGlue.hpp"
 #include "Compiler.h"
 
 #include "Waypoint/Waypoints.hpp"

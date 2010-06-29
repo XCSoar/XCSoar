@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef REPLAY_LOGGER_GLUE_HPP
 #define REPLAY_LOGGER_GLUE_HPP
 
-#include "ReplayLogger.hpp"
+#include "Replay/ReplayLogger.hpp"
 
 class ReplayLoggerGlue: 
   public ReplayLogger

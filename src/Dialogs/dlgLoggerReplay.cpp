@@ -39,7 +39,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Units.hpp"
 #include "Components.hpp"
-#include "ReplayLoggerGlue.hpp"
+#include "Replay/ReplayLoggerGlue.hpp"
 #include "DataField/FileReader.hpp"
 #include "MainWindow.hpp"
 
