@@ -118,6 +118,7 @@ public:
 
     return s1 * u + s0 * (fixed_one - u);
   }
+
   void 
   Interpolate(fixed time, GEOPOINT &loc, fixed &alt)
   {
@@ -156,7 +157,6 @@ public:
                      + p[2].loc.Longitude*c[2] + p[3].loc.Longitude*c[3]);
 
     alt = (p[0].alt*c[0] + p[1].alt*c[1] + p[2].alt*c[2] + p[3].alt*c[3]);
-
   }
 
   fixed
@@ -196,16 +196,13 @@ private:
   fixed tzero;
 };
 
-
-
-ReplayLogger::ReplayLogger():
+ReplayLogger::ReplayLogger() :
   TimeScale(1.0),
   Enabled(false),
   fp(NULL)
 {
   FileName[0] = _T('\0');
 }
-
 
 bool
 ReplayLogger::ReadLine(TCHAR *buffer)
@@ -221,9 +218,8 @@ ReplayLogger::ReadLine(TCHAR *buffer)
   if (fp == NULL && !string_is_empty(FileName))
     fp = _tfopen(FileName, _T("rt"));
 
-  if (fp == NULL) {
+  if (fp == NULL)
     return false;
-  }
 
   if (_fgetts(buffer, 200, fp) == NULL) {
     _tcscat(buffer, TEXT("\0"));
@@ -232,7 +228,6 @@ ReplayLogger::ReadLine(TCHAR *buffer)
 
   return true;
 }
-
 
 bool
 ReplayLogger::ScanBuffer(const TCHAR *buffer, fixed *Time,
@@ -243,10 +238,10 @@ ReplayLogger::ScanBuffer(const TCHAR *buffer, fixed *Time,
   TCHAR NoS, EoW;
   int iAltitude;
   int bAltitude;
-  int Hour=0;
-  int Minute=0;
-  int Second=0;
-  int lfound=0;
+  int Hour = 0;
+  int Minute = 0;
+  int Second = 0;
+  int lfound = 0;
 
   if ((lfound = _stscanf(buffer,
       TEXT("B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%05d"), &Hour, &Minute,
@@ -255,14 +250,13 @@ ReplayLogger::ScanBuffer(const TCHAR *buffer, fixed *Time,
 
     if (lfound == 11) {
       *Latitude = DegLat + MinLat / 60000.0;
-      if (NoS == _T('S')) {
+      if (NoS == _T('S'))
         *Latitude *= -1;
-      }
 
       *Longitude = DegLon + MinLon / 60000.0;
-      if (EoW == _T('W')) {
+      if (EoW == _T('W'))
         *Longitude *= -1;
-      }
+
       *Altitude = iAltitude;
       *Time = Hour * 3600 + Minute * 60 + Second;
       return (lfound > 0);
@@ -279,25 +273,23 @@ ReplayLogger::ReadPoint(fixed *Time, fixed *Latitude, fixed *Longitude,
   bool found = false;
 
   while (ReadLine(buffer) && !found) {
-    if (ScanBuffer(buffer, Time, Latitude, Longitude, Altitude)) {
+    if (ScanBuffer(buffer, Time, Latitude, Longitude, Altitude))
       found = true;
-    }
   }
 
   return found;
 }
-
 
 fixed
 ReplayLogger::get_time(const bool reset, const fixed mintime)
 {
   static fixed t_simulation = fixed_zero;
   
-  if (reset) {
+  if (reset)
     t_simulation = fixed_zero;
-  } else {
+  else
     t_simulation += fixed_one;
-  }
+
   t_simulation = std::max(mintime, t_simulation);
   return t_simulation;
 }
@@ -341,9 +333,8 @@ ReplayLogger::UpdateInternal()
   const int t_simulation_last = t_simulation;
   t_simulation = get_time(!initialised, cli.GetMinTime());
   initialised = true;
-  if ((int)t_simulation<= t_simulation_last) {
+  if ((int)t_simulation <= t_simulation_last)
     return true;
-  }
 
   // if need a new point
   while (cli.NeedData(t_simulation) && (!finished)) {
@@ -351,19 +342,16 @@ ReplayLogger::UpdateInternal()
     fixed Lat1, Lon1, Alt1;
     finished = !ReadPoint(&t1, &Lat1, &Lon1, &Alt1);
 
-    if (!finished && positive(t1)) {
+    if (!finished && positive(t1))
       cli.Update(t1, Lon1, Lat1, Alt1);
-    }
   }
 
-  if (t_simulation == fixed_zero) {
+  if (t_simulation == fixed_zero)
     t_simulation = cli.GetMaxTime();
-  }
 
   if (finished) {
     Stop();
   } else {
-
     fixed Alt0;
     fixed Alt1;
     GEOPOINT P0, P1;
@@ -381,30 +369,28 @@ ReplayLogger::UpdateInternal()
 }
 
 void
-ReplayLogger::Stop(void)
+ReplayLogger::Stop()
 {
   ReadLine(NULL); // close the file
 
-  if (Enabled) {
+  if (Enabled)
     on_stop();
-  }
 
   Enabled = false;
 }
 
 void
-ReplayLogger::Start(void)
+ReplayLogger::Start()
 {
   if (Enabled)
     Stop();
 
-  if (!UpdateInternal()) {
+  if (!UpdateInternal())
     on_bad_file();
-  }
 }
 
 const TCHAR*
-ReplayLogger::GetFilename(void)
+ReplayLogger::GetFilename()
 {
   return FileName;
 }
@@ -420,7 +406,7 @@ ReplayLogger::SetFilename(const TCHAR *name)
 }
 
 bool
-ReplayLogger::Update(void)
+ReplayLogger::Update()
 {
   if (!Enabled)
     return false;
