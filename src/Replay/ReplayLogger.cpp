@@ -127,24 +127,6 @@ ReplayLogger::reset_time()
 }
 
 void
-ReplayLogger::on_reset()
-{
-  // nothing
-}
-
-void
-ReplayLogger::on_stop()
-{
-  // nothing
-}
-
-void
-ReplayLogger::on_bad_file()
-{
-  // nothing
-}
-
-void
 ReplayLogger::UpdateInternal()
 {
   if (!update_time(cli.GetMinTime()))

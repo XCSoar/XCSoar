@@ -64,9 +64,9 @@ public:
 protected:
   virtual bool update_time(const fixed mintime);
   virtual void reset_time();
-  virtual void on_reset();
-  virtual void on_stop();
-  virtual void on_bad_file();
+  virtual void on_reset() = 0;
+  virtual void on_stop() = 0;
+  virtual void on_bad_file() = 0;
   virtual void on_advance(const GEOPOINT &loc,
                           const fixed speed, const Angle bearing,
                           const fixed alt, const fixed baroalt, const fixed t) = 0;
