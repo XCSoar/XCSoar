@@ -88,7 +88,7 @@ ReplayLoggerGlue::ScanBuffer(const TCHAR *buffer, fixed *Time,
 }
 
 void
-ReplayLoggerGlue::get_time(const fixed mintime)
+ReplayLoggerGlue::update_time(const fixed mintime)
 {
   t_simulation += TimeScale * max(clock.elapsed(), 0) / 1000;
   clock.update();

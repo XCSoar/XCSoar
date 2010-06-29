@@ -62,7 +62,7 @@ public:
   fixed TimeScale;
 
 protected:
-  virtual void get_time(const fixed mintime);
+  virtual void update_time(const fixed mintime);
   virtual void reset_time();
   virtual void on_reset();
   virtual void on_stop();
