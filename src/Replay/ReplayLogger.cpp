@@ -55,18 +55,10 @@ ReplayLogger::ReplayLogger() :
 bool
 ReplayLogger::ReadLine(TCHAR *buffer)
 {
-  if (!buffer)
+  if (!buffer || !OpenFile())
     return false;
 
-  if (!OpenFile())
-    return false;
-
-  if (_fgetts(buffer, 200, fp) == NULL) {
-    _tcscat(buffer, TEXT("\0"));
-    return false;
-  }
-
-  return true;
+  return _fgetts(buffer, 200, fp);
 }
 
 bool
