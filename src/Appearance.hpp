@@ -112,17 +112,6 @@ typedef enum{
   apIbTab
 }InfoBoxBorderAppearance_t;
 
-typedef enum{
-  apIg0=0,
-  apIg1,
-  apIg2,
-  apIg3,
-  apIg4,
-  apIg5,
-  apIg6,
-  apIg7
-}InfoBoxGeomAppearance_t;
-
 #if defined(PNA) || defined(FIVV)
 // VENTA-ADDON MODEL
 typedef enum{
@@ -163,12 +152,7 @@ struct Appearance {
   bool InfoBoxColors;
   InfoBoxBorderAppearance_t InfoBoxBorder;
 #if defined(PNA) || defined(FIVV)
-  InfoBoxGeomAppearance_t InfoBoxGeom; // VENTA-ADDON
   InfoBoxModelAppearance_t InfoBoxModel; // VENTA-ADDON model change
-#else
-  enum {
-    InfoBoxGeom = apIg6,
-  };
 #endif
   bool InverseAircraft;
   bool GaugeVarioGross;

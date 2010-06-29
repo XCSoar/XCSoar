@@ -70,7 +70,6 @@ struct Appearance Appearance = {
   true,
   apIbBox,
 #if defined(PNA) || defined(FIVV)  // VENTA-ADDON Model type
-  apIg0,  // VENTA-ADDON GEOM
   apImPnaGeneric,
 #endif
   false,
