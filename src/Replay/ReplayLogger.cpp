@@ -46,7 +46,6 @@ ReplayLogger::ReplayLogger() :
   TimeScale(1.0),
   Enabled(false),
   cli(fixed(0.98)),
-  finished(false),
   fp(NULL)
 {
   FileName[0] = _T('\0');
@@ -152,19 +151,19 @@ ReplayLogger::UpdateInternal()
     return;
 
   // if need a new point
-  while (cli.NeedData(t_simulation) && (!finished)) {
+  while (cli.NeedData(t_simulation) && Enabled) {
     fixed t1 = fixed_zero;
     fixed Lat1, Lon1, Alt1;
-    finished = !ReadPoint(&t1, &Lat1, &Lon1, &Alt1);
+    Enabled = ReadPoint(&t1, &Lat1, &Lon1, &Alt1);
 
-    if (!finished && positive(t1))
+    if (Enabled && positive(t1))
       cli.Update(t1, Lon1, Lat1, Alt1);
   }
 
   if (t_simulation == fixed_zero)
     t_simulation = cli.GetMaxTime();
 
-  if (finished) {
+  if (!Enabled) {
     Stop();
   } else {
     fixed Alt;
@@ -177,8 +176,6 @@ ReplayLogger::UpdateInternal()
 
     on_advance(Pos, Speed, Bearing, Alt, Alt, t_simulation);
   }
-
-  Enabled = !finished;
 }
 
 void
@@ -186,8 +183,7 @@ ReplayLogger::Stop()
 {
   CloseFile();
 
-  if (Enabled)
-    on_stop();
+  on_stop();
 
   Enabled = false;
 }
@@ -207,7 +203,6 @@ ReplayLogger::Start()
   reset_time();
   on_reset();
 
-  finished = false;
   Enabled = true;
 }
 
