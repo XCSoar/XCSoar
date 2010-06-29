@@ -53,6 +53,10 @@ typedef struct _LOGGER_INTERP_POINT
   [-t 2-t t-2 t] p3
 */
 
+/**
+ * A Catmull-Rom splines interpolator
+ * @see http://www.cs.cmu.edu/~462/projects/assn2/assn2/catmullRom.pdf
+ */
 class CatmullRomInterpolator
 {
 public:
@@ -61,21 +65,21 @@ public:
     Reset();
   }
 
+  LOGGER_INTERP_POINT p[4];
+
   void
   Reset()
   {
     num = 0;
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++)
       p[i].t = 0;
-    }
   }
-
-  LOGGER_INTERP_POINT p[4];
 
   void
   Update(fixed t, fixed lon, fixed lat, fixed alt)
   {
-    if (num && (t<=p[num-1].t)) return;
+    if (num && (t <= p[num - 1].t))
+      return;
 
     if (num < 4)
       num++;
@@ -147,13 +151,13 @@ public:
                        (t - fixed_two) * u3 + (fixed(3) - 2 * t) * u2 + t * u,
                         t * u3 - t * u2};
 
-    loc.Latitude = (p[0].loc.Latitude*c[0] + p[1].loc.Latitude*c[1]
-                    + p[2].loc.Latitude*c[2] + p[3].loc.Latitude*c[3]);
+    loc.Latitude = (p[0].loc.Latitude * c[0] + p[1].loc.Latitude * c[1]
+                    + p[2].loc.Latitude * c[2] + p[3].loc.Latitude * c[3]);
 
-    loc.Longitude = (p[0].loc.Longitude*c[0] + p[1].loc.Longitude*c[1]
-                     + p[2].loc.Longitude*c[2] + p[3].loc.Longitude*c[3]);
+    loc.Longitude = (p[0].loc.Longitude * c[0] + p[1].loc.Longitude * c[1]
+                     + p[2].loc.Longitude * c[2] + p[3].loc.Longitude * c[3]);
 
-    alt = (p[0].alt*c[0] + p[1].alt*c[1] + p[2].alt*c[2] + p[3].alt*c[3]);
+    alt = (p[0].alt * c[0] + p[1].alt * c[1] + p[2].alt * c[2] + p[3].alt * c[3]);
   }
 
   fixed
