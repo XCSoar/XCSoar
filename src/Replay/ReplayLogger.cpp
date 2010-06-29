@@ -111,14 +111,16 @@ ReplayLogger::ReadPoint(fixed *Time, fixed *Latitude, fixed *Longitude,
 }
 
 void
-ReplayLogger::get_time(const bool reset, const fixed mintime)
+ReplayLogger::get_time(const fixed mintime)
 {
-  if (reset)
-    t_simulation = fixed_zero;
-  else
-    t_simulation += fixed_one;
-
+  t_simulation += fixed_one;
   t_simulation = std::max(mintime, t_simulation);
+}
+
+void
+ReplayLogger::reset_time()
+{
+  t_simulation = fixed_zero;
 }
 
 void
@@ -153,7 +155,10 @@ ReplayLogger::UpdateInternal()
   }
 
   const int t_simulation_last = t_simulation;
-  get_time(!initialised, cli.GetMinTime());
+  if (!initialised)
+    reset_time();
+  else
+    get_time(cli.GetMinTime());
   initialised = true;
   if ((int)t_simulation <= t_simulation_last)
     return true;
