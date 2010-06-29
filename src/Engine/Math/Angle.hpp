@@ -141,6 +141,8 @@ public:
 
   Angle HalfAngle(const Angle &End) const;
 
+  Angle Fraction(const Angle &End, const fixed fraction) const;
+
   Angle
   operator*(const Angle x) const
   {
