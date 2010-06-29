@@ -55,10 +55,8 @@ ReplayLogger::ReplayLogger() :
 bool
 ReplayLogger::ReadLine(TCHAR *buffer)
 {
-  if (!buffer) {
-    CloseFile();
+  if (!buffer)
     return false;
-  }
 
   if (fp == NULL && !string_is_empty(FileName))
     fp = _tfopen(FileName, _T("rt"));
@@ -162,7 +160,7 @@ ReplayLogger::UpdateInternal()
 {
   if (!Enabled) {
     initialised = false;
-    ReadLine(NULL); // close file
+    CloseFile();
     finished = false;
     cli.Reset();
     t_simulation = 0;
@@ -211,7 +209,7 @@ ReplayLogger::UpdateInternal()
 void
 ReplayLogger::Stop()
 {
-  ReadLine(NULL); // close the file
+  CloseFile();
 
   if (Enabled)
     on_stop();
