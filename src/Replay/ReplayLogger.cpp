@@ -147,10 +147,9 @@ ReplayLogger::UpdateInternal()
     CloseFile();
     finished = false;
     cli.Reset();
-    t_simulation = 0;
+    reset_time();
     Enabled = true;
     on_reset();
-    reset_time();
     return true;
   }
 
