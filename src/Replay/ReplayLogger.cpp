@@ -147,16 +147,6 @@ ReplayLogger::on_bad_file()
 bool
 ReplayLogger::UpdateInternal()
 {
-  if (!Enabled) {
-    CloseFile();
-    finished = false;
-    cli.Reset();
-    reset_time();
-    Enabled = true;
-    on_reset();
-    return true;
-  }
-
   if (!update_time(cli.GetMinTime()))
     return true;
 
@@ -209,8 +199,17 @@ ReplayLogger::Start()
   if (Enabled)
     Stop();
 
-  if (!UpdateInternal())
+  if (!OpenFile()) {
     on_bad_file();
+    return;
+  }
+
+  cli.Reset();
+  reset_time();
+  on_reset();
+
+  finished = false;
+  Enabled = true;
 }
 
 const TCHAR*
