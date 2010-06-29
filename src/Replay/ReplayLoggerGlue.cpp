@@ -87,13 +87,17 @@ ReplayLoggerGlue::ScanBuffer(const TCHAR *buffer, fixed *Time,
   return false;
 }
 
-void
+bool
 ReplayLoggerGlue::update_time(const fixed mintime)
 {
+  const fixed t_simulation_last = t_simulation;
+
   t_simulation += TimeScale * max(clock.elapsed(), 0) / 1000;
   clock.update();
 
   t_simulation = std::max(mintime, t_simulation);
+
+  return (t_simulation > t_simulation_last);
 }
 
 void
