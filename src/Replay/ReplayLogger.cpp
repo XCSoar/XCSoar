@@ -175,7 +175,7 @@ ReplayLogger::UpdateInternal()
     cli.Interpolate(t_simulation + fixed(0.1), P1, Alt1);
 
     const fixed Speed = cli.GetSpeed(t_simulation);
-    const Angle Bearing = P0.bearing(P1);
+    const Angle Bearing = cli.GetBearing(t_simulation);
 
     on_advance(P0, Speed, Bearing, Alt0, Alt0, t_simulation);
   }
