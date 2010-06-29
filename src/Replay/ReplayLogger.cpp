@@ -153,9 +153,9 @@ ReplayLogger::UpdateInternal()
     return true;
   }
 
-  const int t_simulation_last = t_simulation;
+  const fixed t_simulation_last = t_simulation;
   update_time(cli.GetMinTime());
-  if ((int)t_simulation <= t_simulation_last)
+  if (t_simulation <= t_simulation_last)
     return true;
 
   // if need a new point
