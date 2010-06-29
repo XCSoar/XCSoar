@@ -46,13 +46,6 @@ typedef struct _LOGGER_INTERP_POINT
   fixed t;
 } LOGGER_INTERP_POINT;
 
-/*
-  ps = (1 u u^2 u^3)[0  1 0 0] p0
-  [-t 0 t 0] p1
-  [2t t-3 3-2t -t] p2
-  [-t 2-t t-2 t] p3
-*/
-
 /**
  * A Catmull-Rom splines interpolator
  * @see http://www.cs.cmu.edu/~462/projects/assn2/assn2/catmullRom.pdf
@@ -144,6 +137,14 @@ public:
     }
 
     const fixed t(0.98);
+    /*
+      ps = ( c0   c1    c2  c3)
+           [  0    1     0   0] 1
+           [ -t    0     t   0] u
+           [ 2t  t-3  3-2t  -t] u^2
+           [ -t  2-t   t-2   t] u^3
+    */
+
     const fixed u2 = u * u;
     const fixed u3 = u2 * u;
     const fixed c[4]= {-t * u3 + 2 * t * u2 - t * u,
