@@ -40,6 +40,7 @@ Copyright_License {
 #define REPLAY_LOGGER_HPP
 
 #include "Engine/Math/fixed.hpp"
+#include "CatmullRomInterpolator.hpp"
 
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
@@ -79,6 +80,8 @@ protected:
                  fixed *Altitude);
 
 private:
+  CatmullRomInterpolator cli;
+
   TCHAR FileName[MAX_PATH];
   FILE *fp;
 };

@@ -41,7 +41,6 @@
 
 #include "Navigation/GeoPoint.hpp"
 #include "StringUtil.hpp"
-#include "CatmullRomInterpolator.hpp"
 
 ReplayLogger::ReplayLogger() :
   TimeScale(1.0),
@@ -164,7 +163,6 @@ ReplayLogger::UpdateInternal()
 {
   static bool initialised = false;
   static bool finished = false;
-  static CatmullRomInterpolator cli;
   static fixed t_simulation;
 
   if (!Enabled) {
