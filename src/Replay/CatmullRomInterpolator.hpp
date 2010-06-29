@@ -116,6 +116,22 @@ public:
     return s1 * u + s0 * (fixed_one - u);
   }
 
+  Angle
+  GetBearing(fixed time)
+  {
+    if (!Ready())
+      return Angle::degrees(fixed_zero);
+
+    fixed u = (time - p[1].t) / (p[2].t - p[1].t);
+
+    Angle a0 = p[0].loc.bearing(p[1].loc);
+    Angle a1 = p[1].loc.bearing(p[2].loc);
+
+    u = max(fixed_zero, min(fixed_one, u));
+
+    return a0.Fraction(a1, u);
+  }
+
   void
   Interpolate(fixed time, GEOPOINT &loc, fixed &alt)
   {
