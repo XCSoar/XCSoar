@@ -45,6 +45,7 @@
 ReplayLogger::ReplayLogger() :
   TimeScale(1.0),
   Enabled(false),
+  cli(fixed(0.98)),
   finished(false),
   fp(NULL)
 {
