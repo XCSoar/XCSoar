@@ -145,11 +145,11 @@ ReplayLogger::on_bad_file()
   // nothing
 }
 
-bool
+void
 ReplayLogger::UpdateInternal()
 {
   if (!update_time(cli.GetMinTime()))
-    return true;
+    return;
 
   // if need a new point
   while (cli.NeedData(t_simulation) && (!finished)) {
@@ -178,7 +178,7 @@ ReplayLogger::UpdateInternal()
     on_advance(Pos, Speed, Bearing, Alt, Alt, t_simulation);
   }
 
-  return !finished;
+  Enabled = !finished;
 }
 
 void
@@ -233,7 +233,7 @@ ReplayLogger::Update()
   if (!Enabled)
     return false;
 
-  Enabled = UpdateInternal();
+  UpdateInternal();
   return Enabled;
 }
 
