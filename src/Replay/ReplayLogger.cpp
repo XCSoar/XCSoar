@@ -101,14 +101,13 @@ ReplayLogger::ReadPoint(fixed *Time, fixed *Latitude, fixed *Longitude,
                         fixed *Altitude)
 {
   TCHAR buffer[200];
-  bool found = false;
 
-  while (ReadLine(buffer) && !found) {
+  while (ReadLine(buffer)) {
     if (ScanBuffer(buffer, Time, Latitude, Longitude, Altitude))
-      found = true;
+      return true;
   }
 
-  return found;
+  return false;
 }
 
 void
