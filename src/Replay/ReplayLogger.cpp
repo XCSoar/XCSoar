@@ -167,17 +167,15 @@ ReplayLogger::UpdateInternal()
   if (finished) {
     Stop();
   } else {
-    fixed Alt0;
-    fixed Alt1;
-    GEOPOINT P0, P1;
+    fixed Alt;
+    GEOPOINT Pos;
 
-    cli.Interpolate(t_simulation, P0, Alt0);
-    cli.Interpolate(t_simulation + fixed(0.1), P1, Alt1);
+    cli.Interpolate(t_simulation, Pos, Alt);
 
     const fixed Speed = cli.GetSpeed(t_simulation);
     const Angle Bearing = cli.GetBearing(t_simulation);
 
-    on_advance(P0, Speed, Bearing, Alt0, Alt0, t_simulation);
+    on_advance(Pos, Speed, Bearing, Alt, Alt, t_simulation);
   }
 
   return !finished;
