@@ -63,16 +63,15 @@ ReplayLoggerGlue::ScanBuffer(const TCHAR *buffer, fixed *Time,
                              fixed *Altitude)
 {
 
-  if (ReplayLogger::ScanBuffer(buffer, Time, Latitude, Longitude, Altitude)) {
+  if (ReplayLogger::ScanBuffer(buffer, Time, Latitude, Longitude, Altitude))
     return true;
-  }
 
-  int found=0;
+  int found = 0;
   TCHAR event[200];
   TCHAR misc[200];
 
-  found = _stscanf(buffer, TEXT("LPLT event=%[^ ] %[A-Za-z0-9 \\/().,]"),
-      event, misc);
+  found = _stscanf(buffer, _T("LPLT event=%[^ ] %[A-Za-z0-9 \\/().,]"),
+                   event, misc);
 
   if (found > 0) {
     pt2Event fevent = InputEvents::findEvent(event);
@@ -106,9 +105,9 @@ ReplayLoggerGlue::get_time(const bool reset, const fixed mintime)
 }
 
 void
-ReplayLoggerGlue::on_advance(const GEOPOINT &loc,
-                             const fixed speed, const Angle bearing,
-                             const fixed alt, const fixed baroalt, const fixed t)
+ReplayLoggerGlue::on_advance(const GEOPOINT &loc, const fixed speed,
+                             const Angle bearing, const fixed alt,
+                             const fixed baroalt, const fixed t)
 {
   device_blackboard.SetLocation(loc, speed, bearing, alt, baroalt, t);
   TriggerGPSUpdate();
@@ -133,4 +132,3 @@ ReplayLoggerGlue::on_reset()
 {
   logger.clearBuffer();
 }
-
