@@ -43,15 +43,18 @@ Copyright_License {
 #include "DataField/FileReader.hpp"
 #include "MainWindow.hpp"
 
-static WndForm *wf=NULL;
+static WndForm *wf = NULL;
 
-
-static void OnStopClicked(WindowControl * Sender){
+static void
+OnStopClicked(WindowControl * Sender)
+{
 	(void)Sender;
   replay.Stop();
 }
 
-static void OnStartClicked(WindowControl * Sender){
+static void
+OnStartClicked(WindowControl * Sender)
+{
 	(void)Sender;
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(_T("prpIGCFile"));
@@ -63,29 +66,28 @@ static void OnStartClicked(WindowControl * Sender){
   replay.Start();
 }
 
-
-static void OnCloseClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnCloseClicked(WindowControl * Sender)
+{
+  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
-
-static void OnRateData(DataField *Sender, DataField::DataAccessKind_t Mode){
-
-  switch(Mode){
-    case DataField::daGet:
-      Sender->Set(replay.TimeScale);
+static void
+OnRateData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  switch (Mode) {
+  case DataField::daGet:
+    Sender->Set(replay.TimeScale);
     break;
-    case DataField::daPut:
-    case DataField::daChange:
-      replay.TimeScale = Sender->GetAsFloat();
+  case DataField::daPut:
+  case DataField::daChange:
+    replay.TimeScale = Sender->GetAsFloat();
     break;
   }
-
 }
 
-
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnStopClicked),
   DeclareCallBackEntry(OnStartClicked),
   DeclareCallBackEntry(OnRateData),
@@ -93,13 +95,12 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-
-void dlgLoggerReplayShowModal(void){
-  wf = dlgLoadFromXML(CallBackTable,
-                      _T("dlgLoggerReplay.xml"),
-		      XCSoarInterface::main_window,
-		      _T("IDR_XML_LOGGERREPLAY"));
-  if (wf == NULL)
+void
+dlgLoggerReplayShowModal(void)
+{
+  wf = dlgLoadFromXML(CallBackTable, _T("dlgLoggerReplay.xml"),
+                      XCSoarInterface::main_window, _T("IDR_XML_LOGGERREPLAY"));
+  if (!wf)
     return;
 
   WndProperty* wp;
@@ -120,5 +121,6 @@ void dlgLoggerReplayShowModal(void){
   }
 
   wf->ShowModal();
+
   delete wf;
 }
