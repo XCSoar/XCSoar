@@ -46,6 +46,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/VirtualCanvas.hpp"
 #include "Appearance.hpp"
+#include "InfoBoxLayout.hpp"
 
 #include <stdio.h>
 
@@ -200,7 +201,7 @@ InitialiseFontsPNA(const struct Appearance &appearance, RECT rc)
     InitialiseLogfont(&MapWindowBoldLogFont, _T("TahomaBD"),
                       true, 16, 0, 500, false);
 
-    if (appearance.InfoBoxGeom == 5)
+    if (InfoBoxLayout::InfoBoxGeometry == InfoBoxLayout::ibRight8)
       // We don't use vario gauge in landscape geo5 anymore.. but doesn't hurt.
       SetGlobalEllipse(1.32f);
     else
@@ -226,27 +227,27 @@ InitialiseFontsPNA(const struct Appearance &appearance, RECT rc)
 
     SetGlobalEllipse(1.1f); // to be checked, TODO
   } else if (ScreenSize == (ScreenSize_t)ss800x480) {// e.g. ipaq 31x {
-    switch (appearance.InfoBoxGeom) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 6: // standard landscape
+    switch (InfoBoxLayout::InfoBoxGeometry) {
+    case InfoBoxLayout::ibTop4Bottom4:
+    case InfoBoxLayout::ibBottom8:
+    case InfoBoxLayout::ibTop8:
+    case InfoBoxLayout::ibLeft4Right4:
+    case InfoBoxLayout::ibGNav: // standard landscape
       InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
                         true, 56, 0, 600, false);
       InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
                         true, 20, 0, 200, false);
       SetGlobalEllipse(1.1f);
       break;
-    case 4:
-    case 5:
+    case InfoBoxLayout::ibLeft8:
+    case InfoBoxLayout::ibRight8:
       InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
                         true, 64, 0, 600, false);
       InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
                         true, 26, 0, 600, false);
       SetGlobalEllipse(1.32f);
       break;
-    case 7:
+    case InfoBoxLayout::ibSquare:
       InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
                         true, 66, 0, 600, false);
       InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),

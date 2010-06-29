@@ -47,6 +47,7 @@ Copyright_License {
 #include "WayPointFile.hpp"
 #include "UtilsText.hpp"
 #include "UtilsFont.hpp"
+#include "InfoBoxLayout.hpp"
 
 #include <assert.h>
 
@@ -462,9 +463,9 @@ Profile::Use()
   // I had to move here the font setting because I needed first to
   // know the screen geometry, in the registry!
 #if defined(PNA) || defined(FIVV)
-  Temp = Appearance.InfoBoxGeom;
+  Temp = InfoBoxLayout::InfoBoxGeometry;
   Get(szProfileAppInfoBoxGeom, Temp);
-  Appearance.InfoBoxGeom = (InfoBoxGeomAppearance_t)Temp;
+  InfoBoxLayout::InfoBoxGeometry = (InfoBoxGeomAppearance_t)Temp;
 
   if (GlobalModelType == MODELTYPE_PNA_HP31X ) {
     // key transcoding for this one

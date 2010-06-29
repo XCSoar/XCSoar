@@ -76,6 +76,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Simulator.hpp"
 #include "Compiler.h"
+#include "InfoBoxLayout.hpp"
 
 #include <assert.h>
 
@@ -1716,7 +1717,7 @@ static void setVariables(void) {
       dfe->addEnumText(gettext(_T("8 Right (Landscape)"))); // 5
       dfe->addEnumText(gettext(_T("9 Right + Vario (Landscape)")));  // 6
       dfe->addEnumText(gettext(_T("5 Right (Square)"))); // 7
-      dfe->Set(Appearance.InfoBoxGeom);
+      dfe->Set(InfoBoxLayout::InfoBoxGeometry);
       wp->RefreshDisplay();
     }
   }
@@ -2656,20 +2657,15 @@ void dlgConfigurationShowModal(void)
 
 
 #if defined(PNA) || defined(FIVV)
-  // VENTA-ADDON GEOM
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxGeom"));
   if (wp) {
-    if (Appearance.InfoBoxGeom != (InfoBoxGeomAppearance_t)
-        (wp->GetDataField()->GetAsInteger())) {
-      Appearance.InfoBoxGeom = (InfoBoxGeomAppearance_t)
-        (wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileAppInfoBoxGeom,
-                    Appearance.InfoBoxGeom);
+    if (InfoBoxLayout::InfoBoxGeometry != (unsigned)wp->GetDataField()->GetAsInteger()) {
+      InfoBoxLayout::InfoBoxGeometry = (unsigned)wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileAppInfoBoxGeom, InfoBoxLayout::InfoBoxGeometry);
       changed = true;
       requirerestart = true;
     }
   }
-  //
 #endif
 
 #if defined(PNA)
