@@ -69,7 +69,6 @@ ProcessTimer::HeapCompact()
   }
 }
 
-
 void
 ProcessTimer::SystemProcessTimer()
 {
@@ -100,7 +99,8 @@ ProcessTimer::AirspaceProcessTimer()
   }
 }
 
-void ProcessTimer::CommonProcessTimer()
+void
+ProcessTimer::CommonProcessTimer()
 {
   CheckDisplayTimeOut(false);
 
@@ -117,26 +117,23 @@ void ProcessTimer::CommonProcessTimer()
   MessageProcessTimer();
 }
 
-int ProcessTimer::ConnectionProcessTimer(int itimeout) {
+int
+ProcessTimer::ConnectionProcessTimer(int itimeout)
+{
   devConnectionMonitor();
 
   static bool connected_last = false;
   static bool wait_connect = false;
   static bool wait_lock = false;
-  //
-  // replace bool with BOOL to correct warnings and match variable
-  // declarations RB
-  //
 
   if (!Basic().gps.Connected) {
     // if gps is not connected, set navwarning to true so
     // calculations flight timers don't get updated
     device_blackboard.SetNAVWarning(true);
   }
+
   bool connected_now = device_blackboard.LowerConnection();
-
   if (connected_now && Basic().gps.NAVWarning) {
-
     if (!wait_lock) {
       // waiting for lock first time
       wait_lock = true;
@@ -155,18 +152,20 @@ int ProcessTimer::ConnectionProcessTimer(int itimeout) {
         // Shutdown();
       }
     }
-  } else if (connected_now) { // !navwarning
+  } else if (connected_now) {
+    // !navwarning
     wait_connect = false;
     wait_lock = false;
     itimeout = 0;
-  } else { // not connected
+  } else {
+    // not connected
     wait_lock = false;
   }
 
-  if(!connected_now && !connected_last) {
+  if (!connected_now && !connected_last) {
     AllDevicesLinkTimeout();
 
-    if(!wait_connect) {
+    if (!wait_connect) {
       // gps is waiting for connection first time
       wait_connect = true;
       InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
@@ -192,8 +191,8 @@ int ProcessTimer::ConnectionProcessTimer(int itimeout) {
   return itimeout;
 }
 
-
-void ProcessTimer::Process(void)
+void
+ProcessTimer::Process(void)
 {
   CommonProcessTimer();
 
@@ -206,26 +205,25 @@ void ProcessTimer::Process(void)
 
     // also service replay logger
     if (replay.Update()) {
-      if (Basic().gps.MovementDetected) {
+      if (Basic().gps.MovementDetected)
         replay.Stop();
-      }
+
       device_blackboard.RaiseConnection();
       device_blackboard.SetNAVWarning(false);
       return;
     }
 
-    if (itimeout % 10 == 0) {
+    if (itimeout % 10 == 0)
       // check connection status every 5 seconds
       itimeout = ConnectionProcessTimer(itimeout);
-    }
   } else {
     static PeriodClock m_clock;
-    if (m_clock.elapsed()<0) {
+    if (m_clock.elapsed() < 0)
       m_clock.update();
-    }
+
     if (replay.Update()) {
       m_clock.update();
-    } else if (m_clock.elapsed()>=1000) {
+    } else if (m_clock.elapsed() >= 1000) {
       m_clock.update();
       device_blackboard.ProcessSimulation();
       TriggerGPSUpdate();
