@@ -56,10 +56,7 @@ bool
 ReplayLogger::ReadLine(TCHAR *buffer)
 {
   if (!buffer) {
-    if (fp) {
-      fclose(fp);
-      fp = NULL;
-    }
+    CloseFile();
     return false;
   }
 
@@ -256,4 +253,14 @@ ReplayLogger::Update()
 
   Enabled = UpdateInternal();
   return Enabled;
+}
+
+void
+ReplayLogger::CloseFile()
+{
+  if (!fp)
+    return;
+
+  fclose(fp);
+  fp = NULL;
 }
