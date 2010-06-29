@@ -69,19 +69,18 @@ ReplayLogger::ScanBuffer(const TCHAR *buffer, fixed *Time,
   int MinLat, MinLon;
   TCHAR NoS, EoW;
   int iAltitude;
-  int bAltitude;
   int Hour = 0;
   int Minute = 0;
   int Second = 0;
   int lfound =
-      _stscanf(buffer, _T("B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%05d"),
+      _stscanf(buffer, _T("B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%*05d"),
       &Hour, &Minute, &Second, &DegLat, &MinLat, &NoS, &DegLon,
-      &MinLon, &EoW, &iAltitude, &bAltitude);
+      &MinLon, &EoW, &iAltitude);
 
   if (lfound == EOF)
     return false;
 
-  if (lfound != 11)
+  if (lfound != 10)
     return false;
 
   *Latitude = DegLat + MinLat / 60000.0;
