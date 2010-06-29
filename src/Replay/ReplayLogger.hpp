@@ -83,7 +83,6 @@ protected:
 
 private:
   CatmullRomInterpolator cli;
-  bool initialised;
   bool finished;
 
   TCHAR FileName[MAX_PATH];

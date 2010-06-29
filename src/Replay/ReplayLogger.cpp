@@ -45,7 +45,6 @@
 ReplayLogger::ReplayLogger() :
   TimeScale(1.0),
   Enabled(false),
-  initialised(false),
   finished(false),
   fp(NULL)
 {
@@ -145,21 +144,18 @@ bool
 ReplayLogger::UpdateInternal()
 {
   if (!Enabled) {
-    initialised = false;
     CloseFile();
     finished = false;
     cli.Reset();
     t_simulation = 0;
     Enabled = true;
     on_reset();
+    reset_time();
+    return true;
   }
 
   const int t_simulation_last = t_simulation;
-  if (!initialised)
-    reset_time();
-  else
-    get_time(cli.GetMinTime());
-  initialised = true;
+  get_time(cli.GetMinTime());
   if ((int)t_simulation <= t_simulation_last)
     return true;
 
