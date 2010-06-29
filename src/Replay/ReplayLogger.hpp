@@ -88,6 +88,7 @@ private:
   TCHAR FileName[MAX_PATH];
   FILE *fp;
 
+  bool OpenFile();
   void CloseFile();
 };
 

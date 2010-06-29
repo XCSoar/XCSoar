@@ -58,10 +58,7 @@ ReplayLogger::ReadLine(TCHAR *buffer)
   if (!buffer)
     return false;
 
-  if (fp == NULL && !string_is_empty(FileName))
-    fp = _tfopen(FileName, _T("rt"));
-
-  if (fp == NULL)
+  if (!OpenFile())
     return false;
 
   if (_fgetts(buffer, 200, fp) == NULL) {
@@ -251,6 +248,22 @@ ReplayLogger::Update()
 
   Enabled = UpdateInternal();
   return Enabled;
+}
+
+bool
+ReplayLogger::OpenFile()
+{
+  if (fp)
+    return true;
+
+  if (string_is_empty(FileName))
+    return false;
+
+  fp = _tfopen(FileName, _T("rt"));
+  if (fp)
+    return true;
+
+  return false;
 }
 
 void
