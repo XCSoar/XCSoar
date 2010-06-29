@@ -53,7 +53,6 @@
 #include "Compatibility/string.h"
 #include "DeviceBlackboard.hpp"
 #include "Components.hpp"
-#include "PeriodClock.hpp"
 
 #include <algorithm>
 
@@ -91,8 +90,6 @@ ReplayLoggerGlue::ScanBuffer(const TCHAR *buffer, fixed *Time,
 void
 ReplayLoggerGlue::get_time(const bool reset, const fixed mintime)
 {
-  static PeriodClock clock;
-  
   if (reset) {
     clock.reset();
     t_simulation = 0;

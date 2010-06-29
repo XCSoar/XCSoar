@@ -40,6 +40,7 @@ Copyright_License {
 #define REPLAY_LOGGER_GLUE_HPP
 
 #include "Replay/ReplayLogger.hpp"
+#include "PeriodClock.hpp"
 
 class ReplayLoggerGlue: 
   public ReplayLogger
@@ -55,7 +56,8 @@ protected:
 
   virtual bool ScanBuffer(const TCHAR *buffer, fixed *Time, fixed *Latitude,
                           fixed *Longitude, fixed *Altitude);
-
+private:
+  PeriodClock clock;
 };
 
 #endif
