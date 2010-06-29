@@ -238,7 +238,7 @@ ReplayLogger::GetFilename()
 void
 ReplayLogger::SetFilename(const TCHAR *name)
 {
-  if (!name)
+  if (!name || string_is_empty(name))
     return;
 
   if (_tcscmp(FileName, name) != 0)
