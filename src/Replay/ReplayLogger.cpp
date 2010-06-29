@@ -45,6 +45,8 @@
 ReplayLogger::ReplayLogger() :
   TimeScale(1.0),
   Enabled(false),
+  initialised(false),
+  finished(false),
   fp(NULL)
 {
   FileName[0] = _T('\0');
@@ -161,10 +163,6 @@ ReplayLogger::on_bad_file()
 bool
 ReplayLogger::UpdateInternal()
 {
-  static bool initialised = false;
-  static bool finished = false;
-  static fixed t_simulation;
-
   if (!Enabled) {
     initialised = false;
     ReadLine(NULL); // close file

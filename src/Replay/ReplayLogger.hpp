@@ -81,6 +81,9 @@ protected:
 
 private:
   CatmullRomInterpolator cli;
+  bool initialised;
+  bool finished;
+  fixed t_simulation;
 
   TCHAR FileName[MAX_PATH];
   FILE *fp;
