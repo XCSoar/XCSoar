@@ -73,28 +73,28 @@ ReplayLogger::ScanBuffer(const TCHAR *buffer, fixed *Time,
   int Hour = 0;
   int Minute = 0;
   int Second = 0;
-  int lfound = 0;
+  int lfound =
+      _stscanf(buffer, _T("B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%05d"),
+      &Hour, &Minute, &Second, &DegLat, &MinLat, &NoS, &DegLon,
+      &MinLon, &EoW, &iAltitude, &bAltitude);
 
-  if ((lfound = _stscanf(buffer,
-      TEXT("B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%05d"), &Hour, &Minute,
-      &Second, &DegLat, &MinLat, &NoS, &DegLon, &MinLon, &EoW, &iAltitude,
-      &bAltitude)) != EOF) {
+  if (lfound == EOF)
+    return false;
 
-    if (lfound == 11) {
-      *Latitude = DegLat + MinLat / 60000.0;
-      if (NoS == _T('S'))
-        *Latitude *= -1;
+  if (lfound != 11)
+    return false;
 
-      *Longitude = DegLon + MinLon / 60000.0;
-      if (EoW == _T('W'))
-        *Longitude *= -1;
+  *Latitude = DegLat + MinLat / 60000.0;
+  if (NoS == _T('S'))
+    *Latitude *= -1;
 
-      *Altitude = iAltitude;
-      *Time = Hour * 3600 + Minute * 60 + Second;
-      return (lfound > 0);
-    }
-  }
-  return lfound != EOF;
+  *Longitude = DegLon + MinLon / 60000.0;
+  if (EoW == _T('W'))
+    *Longitude *= -1;
+
+  *Altitude = iAltitude;
+  *Time = Hour * 3600 + Minute * 60 + Second;
+  return true;
 }
 
 bool
