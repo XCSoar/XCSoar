@@ -74,7 +74,6 @@ protected:
   virtual bool ScanBuffer(const TCHAR *buffer, fixed *Time, fixed *Latitude,
                           fixed *Longitude, fixed *Altitude);
 
-  void UpdateInternal();
   bool Enabled;
   fixed t_simulation;
 

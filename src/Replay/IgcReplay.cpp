@@ -118,40 +118,6 @@ IgcReplay::reset_time()
 }
 
 void
-IgcReplay::UpdateInternal()
-{
-  if (!update_time(cli.GetMinTime()))
-    return;
-
-  // if need a new point
-  while (cli.NeedData(t_simulation) && Enabled) {
-    fixed t1 = fixed_zero;
-    fixed Lat1, Lon1, Alt1;
-    Enabled = ReadPoint(&t1, &Lat1, &Lon1, &Alt1);
-
-    if (Enabled && positive(t1))
-      cli.Update(t1, Lon1, Lat1, Alt1);
-  }
-
-  if (t_simulation == fixed_zero)
-    t_simulation = cli.GetMaxTime();
-
-  if (!Enabled) {
-    Stop();
-  } else {
-    fixed Alt;
-    GEOPOINT Pos;
-
-    cli.Interpolate(t_simulation, Pos, Alt);
-
-    const fixed Speed = cli.GetSpeed(t_simulation);
-    const Angle Bearing = cli.GetBearing(t_simulation);
-
-    on_advance(Pos, Speed, Bearing, Alt, Alt, t_simulation);
-  }
-}
-
-void
 IgcReplay::Stop()
 {
   CloseFile();
@@ -201,7 +167,36 @@ IgcReplay::Update()
   if (!Enabled)
     return false;
 
-  UpdateInternal();
+  if (!update_time(cli.GetMinTime()))
+    return true;
+
+  // if need a new point
+  while (cli.NeedData(t_simulation) && Enabled) {
+    fixed t1 = fixed_zero;
+    fixed Lat1, Lon1, Alt1;
+    Enabled = ReadPoint(&t1, &Lat1, &Lon1, &Alt1);
+
+    if (Enabled && positive(t1))
+      cli.Update(t1, Lon1, Lat1, Alt1);
+  }
+
+  if (t_simulation == fixed_zero)
+    t_simulation = cli.GetMaxTime();
+
+  if (!Enabled) {
+    Stop();
+  } else {
+    fixed Alt;
+    GEOPOINT Pos;
+
+    cli.Interpolate(t_simulation, Pos, Alt);
+
+    const fixed Speed = cli.GetSpeed(t_simulation);
+    const Angle Bearing = cli.GetBearing(t_simulation);
+
+    on_advance(Pos, Speed, Bearing, Alt, Alt, t_simulation);
+  }
+
   return Enabled;
 }
 
