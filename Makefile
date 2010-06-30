@@ -83,6 +83,7 @@ include $(topdir)/build/test.mk
 ######## output files
 
 OUTPUTS := $(TARGET_BIN_DIR)/XCSoar$(TARGET_EXEEXT) $(VALI_XCS)
+OUTPUTS += $(XCSOARSETUP_DLL) $(XCSOARLAUNCH_DLL)
 
 include $(topdir)/build/dist.mk
 include $(topdir)/build/cab.mk

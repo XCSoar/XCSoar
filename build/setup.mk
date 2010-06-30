@@ -1,5 +1,7 @@
 # Rules for XCSoarSetup.dll
 
+ifeq ($(HAVE_CE)$(findstring $(TARGET),PNA ALTAIR ALTAIRPORTRAIT),y)
+
 XCSOARSETUP_DLL = $(TARGET_BIN_DIR)/XCSoarSetup.dll
 XCSOARSETUP_SOURCES = \
 	$(SRC)/XCSoarSetup.cpp
@@ -13,3 +15,9 @@ $(XCSOARSETUP_DLL): $(TARGET_OUTPUT_DIR)/XCSoarSetup.e $(XCSOARSETUP_OBJS) | $(T
 	@$(NQ)echo "  DLL     $@"
 	$(CC) -shared $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 # JMW not tested yet, probably need to use dlltool?
+
+else
+
+XCSOARSETUP_DLL =
+
+endif
