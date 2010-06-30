@@ -197,6 +197,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
 	$(SRC)/Replay/IgcReplayGlue.cpp \
+	$(SRC)/Replay/NmeaReplay.cpp \
+	$(SRC)/Replay/NmeaReplayGlue.cpp \
 	$(SRC)/TeamCodeCalculation.cpp \
 	$(SRC)/ThermalLocator.cpp \
 	$(SRC)/ThermalBase.cpp \
