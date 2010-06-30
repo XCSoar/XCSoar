@@ -1,7 +1,7 @@
 JASSRC = $(SRC)/jasper
 JASPER = \
 	$(JASSRC)/base/jas_cm.c 	$(JASSRC)/base/jas_debug.c \
-	$(JASSRC)/base/jas_getopt.c	$(JASSRC)/base/jas_icc.c \
+	$(JASSRC)/base/jas_icc.c \
 	$(JASSRC)/base/jas_iccdata.c 	$(JASSRC)/base/jas_image.c \
 	$(JASSRC)/base/jas_init.c 	$(JASSRC)/base/jas_malloc.c \
 	$(JASSRC)/base/jas_seq.c 	$(JASSRC)/base/jas_stream.c \

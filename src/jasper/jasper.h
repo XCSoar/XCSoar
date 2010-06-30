@@ -120,7 +120,6 @@
 #include <jasper/jas_icc.h>
 #include <jasper/jas_fix.h>
 #include <jasper/jas_debug.h>
-#include <jasper/jas_getopt.h>
 #include <jasper/jas_image.h>
 #include <jasper/jas_icc.h>
 #include <jasper/jas_math.h>
