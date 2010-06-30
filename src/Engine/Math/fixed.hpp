@@ -799,7 +799,7 @@ extern fixed const fixed_180;
 extern fixed const fixed_90;
 
 inline fixed fixed::sigmoid(const fixed&x) {
-  return fixed_two/(fixed_one+x.exp())-fixed_one;
+  return fixed_two/(fixed_one+(-x).exp())-fixed_one;
 }
 
 inline bool positive(const fixed&f) {
