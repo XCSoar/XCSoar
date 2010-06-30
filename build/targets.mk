@@ -333,6 +333,7 @@ ifeq ($(HAVE_CE),y)
     TARGET_CPPFLAGS += -DHAVE_AYGSHELL_DLL
 
     TARGET_LDLIBS += -limgdecmp
+    TARGET_CPPFLAGS += -DHAVE_IMGDECMP_DLL
   endif
 endif
 
