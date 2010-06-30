@@ -46,18 +46,9 @@ ReplayLogger::ReplayLogger() :
   TimeScale(1.0),
   Enabled(false),
   cli(fixed(0.98)),
-  fp(NULL)
+  reader(NULL)
 {
   FileName[0] = _T('\0');
-}
-
-bool
-ReplayLogger::ReadLine(TCHAR *buffer)
-{
-  if (!buffer || !OpenFile())
-    return false;
-
-  return _fgetts(buffer, 200, fp);
 }
 
 bool
@@ -99,9 +90,9 @@ bool
 ReplayLogger::ReadPoint(fixed *Time, fixed *Latitude, fixed *Longitude,
                         fixed *Altitude)
 {
-  TCHAR buffer[200];
+  TCHAR *buffer;
 
-  while (ReadLine(buffer)) {
+  while ((buffer = reader->read()) != NULL) {
     if (ScanBuffer(buffer, Time, Latitude, Longitude, Altitude))
       return true;
   }
@@ -217,14 +208,14 @@ ReplayLogger::Update()
 bool
 ReplayLogger::OpenFile()
 {
-  if (fp)
+  if (reader)
     return true;
 
   if (string_is_empty(FileName))
     return false;
 
-  fp = _tfopen(FileName, _T("rt"));
-  if (fp)
+  reader = new FileLineReader(FileName);
+  if (!reader->error())
     return true;
 
   return false;
@@ -233,9 +224,8 @@ ReplayLogger::OpenFile()
 void
 ReplayLogger::CloseFile()
 {
-  if (!fp)
+  if (!reader)
     return;
 
-  fclose(fp);
-  fp = NULL;
+  delete reader;
 }

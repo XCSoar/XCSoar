@@ -41,6 +41,7 @@ Copyright_License {
 
 #include "Engine/Math/fixed.hpp"
 #include "Replay/CatmullRomInterpolator.hpp"
+#include "IO/FileLineReader.hpp"
 
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
@@ -74,7 +75,6 @@ protected:
                           fixed *Longitude, fixed *Altitude);
 
   void UpdateInternal();
-  bool ReadLine(TCHAR *buffer);
   bool Enabled;
   fixed t_simulation;
 
@@ -85,7 +85,7 @@ private:
   CatmullRomInterpolator cli;
 
   TCHAR FileName[MAX_PATH];
-  FILE *fp;
+  FileLineReader *reader;
 
   bool OpenFile();
   void CloseFile();
