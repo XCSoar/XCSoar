@@ -6,6 +6,6 @@
 
   <List Name="frmTaskTypes" X="2" Y="24" Width="140" Height="194" ItemHeight="18" Border="1"/>
 
-  <Label Name="frmSummary" X="142" Y="24" Width="176" Height="194" Font="2" Border="1"/>
+  <Label Name="frmSummary" X="142" Y="24" Width="176" Height="194" Border="1"/>
 
 </Form>

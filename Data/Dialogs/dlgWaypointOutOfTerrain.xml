@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Name="frmWaypointOutOfTerrain" X="30" Y="55" Width="200" Height="120" Caption="Waypoint Parser">
-  <Label Name="frmWaypointOutOfTerrainText" X="0" Y="0" Width="200" Height="80" Font="2" />
+  <Label Name="frmWaypointOutOfTerrainText" X="0" Y="0" Width="200" Height="80"/>
 
   <Button Caption="Yes" X="4" Y="74" width="35" height="22" OnClick="OnYesClicked"/>
 

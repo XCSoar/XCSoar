@@ -7,9 +7,9 @@
   <Button Name="cmdRename" Caption="Rename" X="198" Y="2" Width="60" Height="22" OnClick="OnRenameClicked"/>
   <Button Name="cmdDelete" Caption="Delete" X="258" Y="2" Width="60" Height="22" OnClick="OnDeleteClicked"/>
 
-  <Canvas Name="frmTaskView" X="2" Y="24" Width="135" Height="118" Font="0" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
+  <Canvas Name="frmTaskView" X="2" Y="24" Width="135" Height="118" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
 
-  <Label Name="frmSummary" X="2" Y="144" Width="135" Height="50" Font="2" Border="1"/>
+  <Label Name="frmSummary" X="2" Y="144" Width="135" Height="50" Border="1"/>
 
   <List Name="frmTasks" X="139" Y="24" Width="-2" Height="-2" ItemHeight="18" Border="1"/>
 

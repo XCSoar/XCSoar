@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Name="frmAirspaceSelect" Width="240" Height="320" Caption="Select Airspace">
-  <Label X="0" Y="0" Width="100" Height="20" Font="2" Caption="Filter..." />
+  <Label X="0" Y="0" Width="100" Height="20" Caption="Filter..." />
 
   <Button Name="cmdClose" Caption="Close" X="100" Y="0" Width="60" Height="28"/>
 
-  <Edit Name="prpFltName" Caption="Name" X="2" Y="32" Width="98" Height="40" CaptionWidth="0" Font="2">
+  <Edit Name="prpFltName" Caption="Name" X="2" Y="32" Width="98" Height="40" CaptionWidth="0">
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterName"/>
   </Edit>
 
-  <Edit Name="prpFltType" Caption="Type" X="100" Y="32" Width="98" Height="40" CaptionWidth="0" Font="2">
+  <Edit Name="prpFltType" Caption="Type" X="100" Y="32" Width="98" Height="40" CaptionWidth="0">
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterType"/>
   </Edit>
 
-  <Edit Name="prpFltDistance" Caption="Distance" X="2" Y="74" Width="98" Height="40" CaptionWidth="0" Font="2">
+  <Edit Name="prpFltDistance" Caption="Distance" X="2" Y="74" Width="98" Height="40" CaptionWidth="0">
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDistance"/>
   </Edit>
 
-  <Edit Name="prpFltDirection" Caption="Direction" X="100" Y="74" Width="98" Height="40" CaptionWidth="0" Font="2">
+  <Edit Name="prpFltDirection" Caption="Direction" X="100" Y="74" Width="98" Height="40" CaptionWidth="0">
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
   </Edit>
 

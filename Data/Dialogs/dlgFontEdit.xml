@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Name="frmEditFont" X="5" Y="5" Width="240" Height="230" Caption="Edit Font">
-  <Edit Name="prpFontName" Caption="Font Face" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Font="2" Help="Standard names of fonts available">
+  <Edit Name="prpFontName" Caption="Font Face" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Help="Standard names of fonts available">
     <DataField name="" DataType="enum" Min="0" Max="50" Step="1" OnDataAccess="OnData"/>
   </Edit>
 
-  <Edit Name="prpFontHeight" Caption="Height" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Font="2" Help="Height of font.  65 is large, 20 is very small.">
+  <Edit Name="prpFontHeight" Caption="Height" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Help="Height of font.  65 is large, 20 is very small.">
     <DataField name="" DataType="double" DisplayFormat="%.0f" Min="1" Max="200" EditFormat="%.0f" OnDataAccess="OnData"/>
   </Edit>
 
-  <Edit Name="prpFontWeight" Caption="Weight" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Font="2" Help="Weight of the font.  700 is heavy bold, 100 normal.">
+  <Edit Name="prpFontWeight" Caption="Weight" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Help="Weight of the font.  700 is heavy bold, 100 normal.">
     <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="100" Max="900" Step="100" OnDataAccess="OnData"/>
   </Edit>
 
-  <Edit Name="prpFontItalic" Caption="Italic" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Font="2" Help="Italic font">
+  <Edit Name="prpFontItalic" Caption="Italic" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Help="Italic font">
     <DataField name="" DataType="boolean"  OnDataAccess="OnData"/>
   </Edit>
 
-  <Edit Name="prpFontPitchAndFamily" Caption="Pitch" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Font="2" Help="Variable or fixed pitch">
+  <Edit Name="prpFontPitchAndFamily" Caption="Pitch" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Help="Variable or fixed pitch">
     <DataField name="" DataType="enum"  OnDataAccess="OnData"/>
   </Edit>
 
-  <Edit Name="prpFontTrueType" Caption="True Type" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Font="2" Help="Use True type font">
+  <Edit Name="prpFontTrueType" Caption="True Type" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Help="Use True type font">
     <DataField name="" DataType="boolean"  OnDataAccess="OnData"/>
   </Edit>
 
-  <Edit Name="prpFontSample" Caption="my sample" X="2" Y="-1" Width="235" Height="40" CaptionWidth="235" Font="2" readonly="1" Help="" />
+  <Edit Name="prpFontSample" Caption="my sample" X="2" Y="-1" Width="235" Height="40" CaptionWidth="235" readonly="1" Help="" />
 
   <Button Caption="Ok" X="2" Y="185" Width="70" Height="22" OnClick="OnCloseClicked" />
   <Button Caption="Reset" X="77" Y="185" Width="70" Height="22" OnClick="OnResetClicked" />

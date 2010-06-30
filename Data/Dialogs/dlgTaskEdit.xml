@@ -3,8 +3,8 @@
 <Form Name="frmTaskEdit" Width="240" Height="320" Caption="Edit Task">
   <List Name="frmTaskPoints" X="2" Y="0" Width="-2" Height="152" ItemHeight="18" Border="1"/>
 
-  <Canvas Name="frmTaskView" X="2" Y="154" Width="90" Height="128" Font="0" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
-  <Label Name="frmSummary" X="94" Y="154" Width="144" Height="46" Font="2" Border="1"/>
+  <Canvas Name="frmTaskView" X="2" Y="154" Width="90" Height="128" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
+  <Label Name="frmSummary" X="94" Y="154" Width="144" Height="46" Border="1"/>
 
   <Button Name="cmdNew" Caption="New" X="92" Y="202" Width="70" Height="22" OnClick="OnNewClicked"/>
   <Button Name="cmdProperties" Caption="Properties" X="162" Y="202" Width="76" Height="22" OnClick="OnPropertiesClicked"/>

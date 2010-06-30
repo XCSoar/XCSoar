@@ -3,11 +3,11 @@
 <Form Name="frmWeather" X="200" Y="0" Width="119" Height="240" Caption="Weather Forecast">
   <Button Caption="Close" X="2" Y="2" Width="66" Height="22" OnClick="OnCloseClicked" />
 
-  <Edit Name="prpDisplayItem" Caption="Field" X="2" Y="-1" Width="115" Height="22" CaptionWidth="45" Font="2" OnHelp="OnWeatherHelp">
+  <Edit Name="prpDisplayItem" Caption="Field" X="2" Y="-1" Width="115" Height="22" CaptionWidth="45" OnHelp="OnWeatherHelp">
     <DataField name="" DataType="enum" Min="0" Max="50" Step="1" OnDataAccess="OnDisplayItemData"/>
   </Edit>
 
-  <Edit Name="prpTime" Caption="Time" X="2" Y="-1" Width="115" Height="22" CaptionWidth="45" Font="2" Help="TODO">
+  <Edit Name="prpTime" Caption="Time" X="2" Y="-1" Width="115" Height="22" CaptionWidth="45" Help="TODO">
     <DataField name="" DataType="enum" Min="0" Max="50" Step="1" OnDataAccess="OnTimeData"/>
   </Edit>
 </Form>

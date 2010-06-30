@@ -7,6 +7,6 @@
 
   <List Name="frmPointTypes" X="2" Y="-1" Width="232" Height="174" ItemHeight="18" Border="1"/>
 
-  <Label Name="frmSummary" X="2" Y="-1" Width="176" Height="96" Font="2" Border="1"/>
+  <Label Name="frmSummary" X="2" Y="-1" Width="176" Height="96" Border="1"/>
 
 </Form>

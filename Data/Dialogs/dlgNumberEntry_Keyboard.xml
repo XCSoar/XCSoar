@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Name="frmTextEntry_Keyboard" Width="240" Height="320" Caption="Enter number">
-  <Edit Name="prpText"  Caption="Number: "   X="2" Y="20" Width="200" Height="22" CaptionWidth="70" Font="2" ReadOnly="1" />
+  <Edit Name="prpText"  Caption="Number: "   X="2" Y="20" Width="200" Height="22" CaptionWidth="70" ReadOnly="1" />
 
   <Button   Caption="9"    X="40" Y="65" Width="40"  Height="40" OnClick="OnKey"/>
   <Button   Caption="8"    X="80" Y="65" Width="40"  Height="40" OnClick="OnKey"/>

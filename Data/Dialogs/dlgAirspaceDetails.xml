@@ -5,13 +5,13 @@
 
   <Button Name="cmdAcknowledge" Caption="Ack Day" X="167" Y="2" Width="70" Height="28" OnClick="OnAcknowledgeClicked" />
 
-  <Edit Name="prpName" Caption="Name" X="2" Y="40" Width="238" Height="22" CaptionWidth="50" Font="2" ReadOnly="1" />
+  <Edit Name="prpName" Caption="Name" X="2" Y="40" Width="238" Height="22" CaptionWidth="50" ReadOnly="1" />
 
-  <Edit Name="prpType" Caption="Type" X="2" Y="-1" Width="238" Height="22" CaptionWidth="50" Font="2" ReadOnly="1" />
+  <Edit Name="prpType" Caption="Type" X="2" Y="-1" Width="238" Height="22" CaptionWidth="50" ReadOnly="1" />
 
-  <Edit Name="prpTop" Caption="Top" X="2" Y="-1" Width="238" Height="22" CaptionWidth="50" Font="2" ReadOnly="1" />
+  <Edit Name="prpTop" Caption="Top" X="2" Y="-1" Width="238" Height="22" CaptionWidth="50" ReadOnly="1" />
 
-  <Edit Name="prpBase" Caption="Base" X="2" Y="-1" Width="238" Height="22" CaptionWidth="50" Font="2" ReadOnly="1" />
+  <Edit Name="prpBase" Caption="Base" X="2" Y="-1" Width="238" Height="22" CaptionWidth="50" ReadOnly="1" />
 
-  <Edit Name="prpRange" Caption="Range" X="2" Y="-1" Width="238" Height="22" CaptionWidth="50" Font="2" ReadOnly="1" />
+  <Edit Name="prpRange" Caption="Range" X="2" Y="-1" Width="238" Height="22" CaptionWidth="50" ReadOnly="1" />
 </Form>
