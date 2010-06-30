@@ -75,6 +75,8 @@ include $(topdir)/build/screen.mk
 include $(topdir)/build/form.mk
 include $(topdir)/build/harness.mk
 
+include $(topdir)/build/setup.mk
+include $(topdir)/build/launch.mk
 include $(topdir)/build/vali.mk
 include $(topdir)/build/test.mk
 
@@ -380,14 +382,6 @@ XCSOAR_LDADD = \
 	$(UTIL_LIBS) \
 	$(RESOURCE_BINARY)
 
-XCSOARSETUP_SOURCES = \
-	$(SRC)/XCSoarSetup.cpp
-XCSOARSETUP_OBJS = $(call SRC_TO_OBJ,$(XCSOARSETUP_SOURCES))
-
-XCSOARLAUNCH_SOURCES = \
-	$(SRC)/XCSoarLaunch.c
-XCSOARLAUNCH_OBJS = $(call SRC_TO_OBJ,$(XCSOARLAUNCH_SOURCES))
-
 all: all-$(TARGET)
 
 # if no TARGET is set, build all targets
@@ -431,28 +425,6 @@ $(TARGET_BIN_DIR)/XCSoar$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): CPPFLAGS += $(SCREEN_
 $(TARGET_BIN_DIR)/XCSoar$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS) $(XCSOAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(SCREEN_LDLIBS) -o $@
-
-$(XCSOARSETUP_OBJS) $(XCSOARLAUNCH_OBJS): CFLAGS += -Wno-missing-declarations -Wno-missing-prototypes
-
-$(TARGET_OUTPUT_DIR)/XCSoarSetup.e: $(SRC)/XcSoarSetup.def $(XCSOARSETUP_OBJS) | $(TARGET_BIN_DIR)/dirstamp
-	$(Q)$(DLLTOOL) -e $@ -d $^
-
-$(TARGET_BIN_DIR)/XCSoarSetup.dll: TARGET_LDLIBS =
-$(TARGET_BIN_DIR)/XCSoarSetup.dll: $(TARGET_OUTPUT_DIR)/XCSoarSetup.e $(XCSOARSETUP_OBJS) | $(TARGET_BIN_DIR)/dirstamp
-	@$(NQ)echo "  DLL     $@"
-	$(CC) -shared $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
-# JMW not tested yet, probably need to use dlltool?
-
-$(TARGET_OUTPUT_DIR)/XCSoarLaunch.e: $(SRC)/XCSoarLaunch.def $(XCSOARLAUNCH_OBJS) | $(TARGET_BIN_DIR)/dirstamp
-	$(Q)$(DLLTOOL) -e $@ -d $^
-
-$(TARGET_OUTPUT_DIR)/XCSoarLaunch.rsc: Data/XCSoarLaunch.rc | $(TARGET_OUTPUT_DIR)/dirstamp
-	@$(NQ)echo "  WINDRES $@"
-	$(Q)$(WINDRES) $(WINDRESFLAGS) -o $@ $<
-
-$(TARGET_BIN_DIR)/XCSoarLaunch.dll: TARGET_LDLIBS = -laygshell
-$(TARGET_BIN_DIR)/XCSoarLaunch.dll: $(TARGET_OUTPUT_DIR)/XCSoarLaunch.e $(XCSOARLAUNCH_OBJS) $(TARGET_OUTPUT_DIR)/XCSoarLaunch.rsc | $(TARGET_BIN_DIR)/dirstamp
-	$(CC) -shared $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o
 
