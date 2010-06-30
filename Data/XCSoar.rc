@@ -80,7 +80,6 @@ IDB_UNIT_KMH            BITMAP  DISCARDABLE     "bitmaps/UnitKMH.bmp"
 IDB_UNIT_MPH            BITMAP  DISCARDABLE     "bitmaps/UnitMPH.bmp"
 IDB_VARIOSCALEA         BITMAP  DISCARDABLE     "bitmaps/VarioScaleB.bmp"
 IDB_VARIOSCALEC         BITMAP  DISCARDABLE     "bitmaps/VarioScaleC.bmp"
-IDB_VARIOSCALE          BITMAP  DISCARDABLE     "bitmaps/VarioScale.bmp"
 
 // --- Audio ---
 
