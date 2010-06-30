@@ -105,7 +105,7 @@ IgcReplay::update_time(const fixed mintime)
 {
   const fixed t_simulation_last = t_simulation;
 
-  t_simulation += fixed_one;
+  t_simulation += fixed_one * TimeScale;
   t_simulation = std::max(mintime, t_simulation);
 
   return (t_simulation > t_simulation_last);
