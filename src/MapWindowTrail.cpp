@@ -54,8 +54,6 @@ fSnailColour(fixed cv)
                            (short)((cv + fixed_one) / 2 * NUMSNAILCOLORS)));
 }
 
-//#define TIME_TRAIL
-
 void
 MapWindow::DrawTrail(Canvas &canvas)
 {
@@ -80,20 +78,10 @@ MapWindow::DrawTrail(Canvas &canvas)
     }
   }
 
-#ifdef TIME_TRAIL
-  PeriodClock clock;
-  clock.update();
-#endif
-
   TracePointVector trace = task->find_trace_points(GetPanLocation(),
                                                    fixed(GetScreenDistanceMeters()), 
                                                    min_time, 
                                                    fixed(DistancePixelsToMeters(3)));
-
-#ifdef TIME_TRAIL
-  printf("A: %d\n", clock.elapsed());
-  clock.update();
-#endif
 
   if (trace.empty()) return; // nothing to draw
 
@@ -144,10 +132,6 @@ MapWindow::DrawTrail(Canvas &canvas)
     last_time = it->time;
   }
   canvas.line_to(GetOrigAircraft().x, GetOrigAircraft().y);
-
-#ifdef TIME_TRAIL
-  printf("B: %d\n", clock.elapsed());
-#endif
 }
 
 
