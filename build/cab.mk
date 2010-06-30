@@ -7,7 +7,7 @@ $(addprefix $(TARGET_BIN_DIR)/,$(THIRDPARTY_DLLS)): $(TARGET_BIN_DIR)/%.dll: $(T
 	$(Q)cp $< $@
 
 $(TARGET_BIN_DIR)/XCSoar.$(PCPU).CAB: $(TARGET_BIN_DIR)/XCSoar.inf $(OUTPUTS) \
-	$(TARGET_BIN_DIR)/XCSoarSetup.dll $(TARGET_BIN_DIR)/XCSoarLaunch.dll \
+	$(XCSOARSETUP_DLL) $(XCSOARLAUNCH_DLL) \
 	$(addprefix $(TARGET_BIN_DIR)/,$(THIRDPARTY_DLLS))
 	@$(NQ)echo "  CAB     $@"
 	$(Q)cd $(TARGET_BIN_DIR) && $(CABWIZ) XCSoar.inf /cpu $(PCPU)
