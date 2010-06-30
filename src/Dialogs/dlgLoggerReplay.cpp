@@ -39,7 +39,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Units.hpp"
 #include "Components.hpp"
-#include "Replay/IgcReplayGlue.hpp"
+#include "Replay/Replay.hpp"
 #include "DataField/FileReader.hpp"
 #include "MainWindow.hpp"
 
@@ -78,11 +78,11 @@ OnRateData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
   case DataField::daGet:
-    Sender->Set(replay.TimeScale);
+    Sender->Set(replay.GetTimeScale());
     break;
   case DataField::daPut:
   case DataField::daChange:
-    replay.TimeScale = Sender->GetAsFloat();
+    replay.SetTimeScale(fixed(Sender->GetAsFloat()));
     break;
   }
 }
@@ -107,7 +107,7 @@ dlgLoggerReplayShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpRate"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(replay.TimeScale);
+    wp->GetDataField()->SetAsFloat(replay.GetTimeScale());
     wp->RefreshDisplay();
   }
 
@@ -116,6 +116,8 @@ dlgLoggerReplayShowModal(void)
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(_T("*.igc"));
+    dfe->ScanDirectoryTop(_T("*.nmea"));
+    dfe->ScanDirectoryTop(_T("xcsoar-nmea.log"));
     dfe->Lookup(replay.GetFilename());
     wp->RefreshDisplay();
   }
