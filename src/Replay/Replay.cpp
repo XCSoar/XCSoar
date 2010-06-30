@@ -98,3 +98,9 @@ Replay::SetTimeScale(const fixed TimeScale)
   Igc.TimeScale = TimeScale;
   Nmea.TimeScale = TimeScale;
 }
+
+bool
+Replay::NmeaReplayEnabled()
+{
+  return (!UseIgcReplay && Nmea.IsEnabled());
+}

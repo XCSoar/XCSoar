@@ -58,6 +58,8 @@ public:
   void SetFilename(const TCHAR *name);
   fixed TimeScale;
 
+  bool IsEnabled();
+
 protected:
   virtual void on_bad_file() = 0;
   virtual void on_sentence(TCHAR* line) = 0;

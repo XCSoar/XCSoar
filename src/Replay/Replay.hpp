@@ -60,6 +60,8 @@ public:
   fixed GetTimeScale();
   void SetTimeScale(const fixed TimeScale);
 
+  bool NmeaReplayEnabled();
+
 private:
   bool UseIgcReplay;
 

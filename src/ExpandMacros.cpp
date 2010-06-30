@@ -50,6 +50,7 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "AirspaceClientUI.hpp"
 #include "TaskClientUI.hpp"
+#include "Replay/Replay.hpp"
 
 #include <stdlib.h>
 
@@ -252,7 +253,9 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   }
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckReplay)"))) {
-    if (!Basic().gps.Replay && Basic().gps.MovementDetected)
+    if (!Basic().gps.Replay
+        && !replay.NmeaReplayEnabled()
+        && Basic().gps.MovementDetected)
       invalid = true;
 
     ReplaceInString(OutBuffer, TEXT("$(CheckReplay)"), TEXT(""), Size);

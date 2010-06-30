@@ -94,6 +94,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "TaskClientUI.hpp"
 #include "AirspaceClientUI.hpp"
 #include "DrawThread.hpp"
+#include "Replay/Replay.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -1306,7 +1307,7 @@ InputEvents::eventSetup(const TCHAR *misc)
   else if (_tcscmp(misc, TEXT("Weather")) == 0)
     dlgWeatherShowModal();
   else if (_tcscmp(misc, TEXT("Replay")) == 0) {
-    if (!Basic().gps.MovementDetected)
+    if (!Basic().gps.MovementDetected || replay.NmeaReplayEnabled())
       dlgLoggerReplayShowModal();
   } else if (_tcscmp(misc, TEXT("Switches")) == 0)
     dlgSwitchesShowModal();

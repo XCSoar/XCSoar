@@ -147,3 +147,9 @@ NmeaReplay::CloseFile()
 
   delete reader;
 }
+
+bool
+NmeaReplay::IsEnabled()
+{
+  return Enabled;
+}

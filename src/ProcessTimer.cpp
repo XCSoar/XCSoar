@@ -205,7 +205,7 @@ ProcessTimer::Process(void)
 
     // also service replay logger
     if (replay.Update()) {
-      if (Basic().gps.MovementDetected)
+      if (Basic().gps.MovementDetected && !replay.NmeaReplayEnabled())
         replay.Stop();
 
       device_blackboard.RaiseConnection();
