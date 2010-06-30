@@ -11,15 +11,15 @@
  */
 
 /* __START_OF_JASPER_LICENSE__
- *
+ * 
  * JasPer License Version 2.0
- *
+ * 
  * Copyright (c) 1999-2000 Image Power, Inc.
  * Copyright (c) 1999-2000 The University of British Columbia
  * Copyright (c) 2001-2003 Michael David Adams
- *
+ * 
  * All rights reserved.
- *
+ * 
  * Permission is hereby granted, free of charge, to any person (the
  * "User") obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction,
@@ -27,15 +27,15 @@
  * publish, distribute, and/or sell copies of the Software, and to permit
  * persons to whom the Software is furnished to do so, subject to the
  * following conditions:
- *
+ * 
  * 1.  The above copyright notices and this permission notice (which
  * includes the disclaimer below) shall be included in all copies or
  * substantial portions of the Software.
- *
+ * 
  * 2.  The name of a copyright holder shall not be used to endorse or
  * promote products derived from the Software without specific prior
  * written permission.
- *
+ * 
  * THIS DISCLAIMER OF WARRANTY CONSTITUTES AN ESSENTIAL PART OF THIS
  * LICENSE.  NO USE OF THE SOFTWARE IS AUTHORIZED HEREUNDER EXCEPT UNDER
  * THIS DISCLAIMER.  THE SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS
@@ -62,7 +62,7 @@
  * PERSONAL INJURY, OR SEVERE PHYSICAL OR ENVIRONMENTAL DAMAGE ("HIGH
  * RISK ACTIVITIES").  THE COPYRIGHT HOLDERS SPECIFICALLY DISCLAIM ANY
  * EXPRESS OR IMPLIED WARRANTY OF FITNESS FOR HIGH RISK ACTIVITIES.
- *
+ * 
  * __END_OF_JASPER_LICENSE__
  */
 
@@ -386,26 +386,27 @@ error:
 
 int jp2_encode(jas_image_t *image, jas_stream_t *out, const char *optstr)
 {
-	jp2_box_t *uuid_box = NULL;
-
-	if (jp2_write_header(image, out) < 0)
+  jp2_box_t *uuid_box = NULL;
+  
+  if (jp2_write_header(image, out) < 0)
 		return -1;
 
-	// write UUID if received, dima
-	if ((image->aux_buf.size > 0) && (image->aux_buf.buf != NULL)) {
-		uuid_box = jp2_box_create( JP2_BOX_UUID );
-
-		memcpy(uuid_box->data.uuid.uuid, msi_uuid2, sizeof(msi_uuid2));
-		uuid_box->data.uuid.data_len = image->aux_buf.size;
-		uuid_box->data.uuid.data = jas_malloc( image->aux_buf.size );
-		memcpy(uuid_box->data.uuid.data, image->aux_buf.buf, image->aux_buf.size);
-
-		if (uuid_box) {
-			if (jp2_box_put(uuid_box, out))
-				return -1;
-		}
+  // write UUID if received, dima
+  if ( (image->aux_buf.size > 0) && (image->aux_buf.buf != NULL) )
+  {
+    uuid_box = jp2_box_create( JP2_BOX_UUID );
+    
+    memcpy( uuid_box->data.uuid.uuid, msi_uuid2, sizeof(msi_uuid2) );
+    uuid_box->data.uuid.data_len = image->aux_buf.size;
+    uuid_box->data.uuid.data = (uint_fast8_t *)jas_malloc( image->aux_buf.size );
+    memcpy( uuid_box->data.uuid.data, image->aux_buf.buf, image->aux_buf.size );
+  
+    if (uuid_box) {
+		  if (jp2_box_put(uuid_box, out))
+			  return -1;
+    }
 	}
-	// write UUID if received, dima
+  // write UUID if received, dima
 
 	if (jp2_write_codestream(image, out, optstr) < 0)
 		return -1;

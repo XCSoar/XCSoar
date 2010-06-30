@@ -6,15 +6,15 @@
  */
 
 /* __START_OF_JASPER_LICENSE__
- *
+ * 
  * JasPer License Version 2.0
- *
+ * 
  * Copyright (c) 1999-2000 Image Power, Inc.
  * Copyright (c) 1999-2000 The University of British Columbia
  * Copyright (c) 2001-2003 Michael David Adams
- *
+ * 
  * All rights reserved.
- *
+ * 
  * Permission is hereby granted, free of charge, to any person (the
  * "User") obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction,
@@ -22,15 +22,15 @@
  * publish, distribute, and/or sell copies of the Software, and to permit
  * persons to whom the Software is furnished to do so, subject to the
  * following conditions:
- *
+ * 
  * 1.  The above copyright notices and this permission notice (which
  * includes the disclaimer below) shall be included in all copies or
  * substantial portions of the Software.
- *
+ * 
  * 2.  The name of a copyright holder shall not be used to endorse or
  * promote products derived from the Software without specific prior
  * written permission.
- *
+ * 
  * THIS DISCLAIMER OF WARRANTY CONSTITUTES AN ESSENTIAL PART OF THIS
  * LICENSE.  NO USE OF THE SOFTWARE IS AUTHORIZED HEREUNDER EXCEPT UNDER
  * THIS DISCLAIMER.  THE SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS
@@ -57,7 +57,7 @@
  * PERSONAL INJURY, OR SEVERE PHYSICAL OR ENVIRONMENTAL DAMAGE ("HIGH
  * RISK ACTIVITIES").  THE COPYRIGHT HOLDERS SPECIFICALLY DISCLAIM ANY
  * EXPRESS OR IMPLIED WARRANTY OF FITNESS FOR HIGH RISK ACTIVITIES.
- *
+ * 
  * __END_OF_JASPER_LICENSE__
  */
 
@@ -238,7 +238,7 @@ jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr)
 	jpc_dec_importopts_t opts;
 	jpc_dec_t *dec;
 	jas_image_t *image = 0;
-	unsigned int i;
+  unsigned int i;
 
 	dec = 0;
 
@@ -263,27 +263,24 @@ jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr)
 		return 0;
 	}
 
-	// dima: define the default for color space
+  // dima: define the default for color space
 	jas_image_setclrspc(dec->image, JAS_CLRSPC_SGRAY);
-	for (i=0; i< (unsigned int)jas_image_numcmpts(dec->image); ++i)
+  for (i=0; i<(unsigned int)jas_image_numcmpts(dec->image); ++i)
 		jas_image_setcmpttype(dec->image, i, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_GRAY_Y));
 
 
 	if (jas_image_numcmpts(dec->image) >= 3) {
 		jas_image_setclrspc(dec->image, JAS_CLRSPC_SRGB);
-		jas_image_setcmpttype(dec->image, 0,
-		  JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_R));
-		jas_image_setcmpttype(dec->image, 1,
-		  JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_G));
-		jas_image_setcmpttype(dec->image, 2,
-		  JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_B));
-	} else {
-		/* dima: already defined
+		jas_image_setcmpttype(dec->image, 0, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_R));
+		jas_image_setcmpttype(dec->image, 1, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_G));
+		jas_image_setcmpttype(dec->image, 2, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_B));
+	} 
+  /* dima: already defined
+  else {
 		jas_image_setclrspc(dec->image, JAS_CLRSPC_SGRAY);
-		jas_image_setcmpttype(dec->image, 0,
-		  JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_GRAY_Y));
-		*/
+		jas_image_setcmpttype(dec->image, 0, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_GRAY_Y));
 	}
+  */
 
 	/* Save the return value. */
 	image = dec->image;
@@ -403,12 +400,12 @@ static int jpc_dec_decode(jpc_dec_t *dec)
 		/* Get the next marker segment in the code stream. */
 		if (!(ms = jpc_getms(dec->in, cstate))) {
 
-			// dima: adobe photoshop cs2 files seem not to end with the EOC marker
-			// although they carry additional pair of SOT/SOD markers
-			// we can get this by checking for tile number and leave
-			if (dec->tiles && dec->tiles->partno >= dec->tiles->numparts && dec->state == JPC_TPHSOT) {
-				return 0;
-			}
+      // dima: adobe photoshop cs2 files seem not to end with the EOC marker
+      // although they carry additional pair of SOT/SOD markers
+      // we can get this by checking for tile number and leave
+      if (dec->tiles && dec->tiles->partno >= dec->tiles->numparts && dec->state == JPC_TPHSOT) {
+        return 0;
+      }
 
 #if 0 // JMW
 			fprintf(stderr, "cannot get marker segment\n");
@@ -445,7 +442,6 @@ static int jpc_dec_decode(jpc_dec_t *dec)
 		} else if (ret > 0) {
 			break;
 		}
-
 	}
 
 	return 0;
@@ -535,8 +531,7 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 	}
 
 	if (sot->len > 0) {
-		dec->curtileendoff = jas_stream_getrwcount(dec->in) - ms->len -
-		  4 + sot->len;
+		dec->curtileendoff = jas_stream_getrwcount(dec->in) - ms->len - 4 + sot->len;
 	} else {
 		dec->curtileendoff = 0;
 	}
@@ -571,15 +566,17 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 	if (sot->partno != tile->partno) {
 		return -1;
 	}
-	if (tile->numparts > 0 && sot->partno >= tile->numparts) {
-		// dima: photoshop cs2 saves jpeg2000 with additional group of SOT/SOD
-		// here we simply ignore these boxes
-		if (tile->state == JPC_TILE_DONE) {
-			dec->state = JPC_TPH;
-			return 0;
-		}
-		return -1;
+	
+  if (tile->numparts > 0 && sot->partno >= tile->numparts) {
+    // dima: photoshop cs2 saves jpeg2000 with additional group of SOT/SOD
+    // here we simply ignore these boxes
+    if (tile->state == JPC_TILE_DONE) {
+      dec->state = JPC_TPH;
+      return 0;
+    }
+  	return -1;
 	}
+
 	if (!tile->numparts && sot->numparts > 0) {
 		tile->numparts = sot->numparts;
 	}
@@ -638,15 +635,15 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
 		}
 	}
 
-	// dima: photoshop cs2 saves jpeg2000 with additional group of SOT/SOD
-	// here we simply ignore these markers
+  // dima: photoshop cs2 saves jpeg2000 with additional group of SOT/SOD
+  // here we simply ignore these markers
 	if (tile->numparts > 0 && tile->partno >= tile->numparts) {
-		dec->curtile = 0;
-		// Increment the expected tile-part number.
-		++tile->partno;
-		// We should expect to encounter a SOT marker segment next.
-		dec->state = JPC_TPHSOT;
-		return 0;
+  	dec->curtile = 0;
+  	// Increment the expected tile-part number.
+  	++tile->partno;
+  	// We should expect to encounter a SOT marker segment next.
+  	dec->state = JPC_TPHSOT;
+    return 0;
 	}
 
 	/* Are packet headers stored in the main header or tile-part header? */
@@ -1194,18 +1191,18 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 
 
 	/* Apply an inverse intercomponent transform if necessary. */
-	// dima: if there are more components than 3, let it go!
+  // dima: if there are more components than 3, let it go!
 	if (dec->numcomps >= 3)
-		switch (tile->cp->mctid) {
-		case JPC_MCT_RCT:
-			//assert(dec->numcomps == 3);
-			jpc_irct(tile->tcomps[0].data, tile->tcomps[1].data, tile->tcomps[2].data);
-			break;
-		case JPC_MCT_ICT:
-			//assert(dec->numcomps == 3);
-			jpc_iict(tile->tcomps[0].data, tile->tcomps[1].data, tile->tcomps[2].data);
-			break;
-		}
+  switch (tile->cp->mctid) {
+	case JPC_MCT_RCT:
+		//assert(dec->numcomps == 3);
+		jpc_irct(tile->tcomps[0].data, tile->tcomps[1].data, tile->tcomps[2].data);
+		break;
+	case JPC_MCT_ICT:
+		//assert(dec->numcomps == 3);
+		jpc_iict(tile->tcomps[0].data, tile->tcomps[1].data, tile->tcomps[2].data);
+		break;
+	}
 
 	/* Perform rounding and convert to integer values. */
 	if (tile->realmode) {

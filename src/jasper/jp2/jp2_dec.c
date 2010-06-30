@@ -6,15 +6,15 @@
  */
 
 /* __START_OF_JASPER_LICENSE__
- *
+ * 
  * JasPer License Version 2.0
- *
+ * 
  * Copyright (c) 1999-2000 Image Power, Inc.
  * Copyright (c) 1999-2000 The University of British Columbia
  * Copyright (c) 2001-2003 Michael David Adams
- *
+ * 
  * All rights reserved.
- *
+ * 
  * Permission is hereby granted, free of charge, to any person (the
  * "User") obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction,
@@ -22,15 +22,15 @@
  * publish, distribute, and/or sell copies of the Software, and to permit
  * persons to whom the Software is furnished to do so, subject to the
  * following conditions:
- *
+ * 
  * 1.  The above copyright notices and this permission notice (which
  * includes the disclaimer below) shall be included in all copies or
  * substantial portions of the Software.
- *
+ * 
  * 2.  The name of a copyright holder shall not be used to endorse or
  * promote products derived from the Software without specific prior
  * written permission.
- *
+ * 
  * THIS DISCLAIMER OF WARRANTY CONSTITUTES AN ESSENTIAL PART OF THIS
  * LICENSE.  NO USE OF THE SOFTWARE IS AUTHORIZED HEREUNDER EXCEPT UNDER
  * THIS DISCLAIMER.  THE SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS
@@ -57,7 +57,7 @@
  * PERSONAL INJURY, OR SEVERE PHYSICAL OR ENVIRONMENTAL DAMAGE ("HIGH
  * RISK ACTIVITIES").  THE COPYRIGHT HOLDERS SPECIFICALLY DISCLAIM ANY
  * EXPRESS OR IMPLIED WARRANTY OF FITNESS FOR HIGH RISK ACTIVITIES.
- *
+ * 
  * __END_OF_JASPER_LICENSE__
  */
 
@@ -122,12 +122,12 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 	jas_icchdr_t icchdr;
 	jas_iccprof_t *iccprof;
 
-	jas_aux_buffer_t aux_buf;
-	aux_buf.id = 0;
+  jas_aux_buffer_t aux_buf;
+  aux_buf.id = 0;
 	aux_buf.size = 0;
 	aux_buf.buf = NULL;
 
-	dec = 0;
+  dec = 0;
 	box = 0;
 	image = 0;
 
@@ -208,19 +208,19 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 				box = 0;
 			}
 			break;
-
-		//-------------------------------------------------------
-		case JP2_BOX_UUID: // begin: dima
-			if (memcmp(box->data.uuid.uuid, msi_uuid2, 16) == 0) {
-				aux_buf.id = -1;
-				aux_buf.size = box->data.uuid.data_len;
-				aux_buf.buf = jas_malloc(box->data.uuid.data_len);
-				memcpy(aux_buf.buf, box->data.uuid.data, aux_buf.size);
-			}
+    
+    //-------------------------------------------------------
+    case JP2_BOX_UUID: // begin: dima
+      if( memcmp( box->data.uuid.uuid, msi_uuid2, 16 ) == 0 )
+      {
+        aux_buf.id = -1;
+        aux_buf.size = box->data.uuid.data_len;
+        aux_buf.buf = (uint_fast8_t *)jas_malloc( box->data.uuid.data_len );
+        memcpy( aux_buf.buf, box->data.uuid.data, aux_buf.size );
+      }
 			break;
-		}
-		// end: dima
-		//-------------------------------------------------------
+    } // end: dima
+    //-------------------------------------------------------
 
 		if (box) {
 			jp2_box_destroy(box);
@@ -231,31 +231,33 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 		}
 	}
 
-	//-------------------------------------------------------
-	// begin: dima
-	// print geojpeg2000 if needed
-	if (aux_buf.id == -1) {
-		if ( ((optstr) && ( strstr(optstr, "listgeo") != NULL ) ) ) {
-			// JMW do special thing here to get corner coordinates
-			long w=1, h=1;
-
-			if (dec->ihdr) {
-				w = dec->ihdr->data.ihdr.width;
-				h = dec->ihdr->data.ihdr.height;
-			}
-			//fprintf(stdout, "\nW=%d H=%d\n", w, h);
-			//	  printGTIFFromMemBufA( aux_buf.buf, aux_buf.size, w, h );
-			//return NULL;
-			exit(0);
-		}
-		else {
+  //-------------------------------------------------------
+  // begin: dima
+  // print geojpeg2000 if needed
+  if (aux_buf.id == -1)
+  {
+    if ( (optstr) && ( strstr(optstr, "listgeo") != NULL ) )
+    {
+      long w=1, h=1;
+      
+      if (dec->ihdr)
+      {
+        w = dec->ihdr->data.ihdr.width;
+        h = dec->ihdr->data.ihdr.height;
+      }
+      //fprintf(stdout, "\nW=%d H=%d\n", w, h);
+      //printGTIFFromMemBufA( aux_buf.buf, aux_buf.size, w, h );
+      //return NULL; 
+      exit(0);
+    }
+    else {
 #if 0 // JMW
-			fprintf(stdout, "GeoJp2 info found...\n");
+      fprintf(stdout, "GeoJp2 info found...\n");
 #endif
-		}
-	}
-	// end: dima
-	//-------------------------------------------------------
+    }
+  }
+  // end: dima
+  //-------------------------------------------------------
 
 	if (!found) {
 		jas_eprintf("error: no code stream found\n");
@@ -428,7 +430,6 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 	}
 
 	/* Mark all components as being of unknown type. */
-
 	for (i = 0; i < JAS_CAST(uint, jas_image_numcmpts(dec->image)); ++i) {
 		jas_image_setcmpttype(dec->image, i, JAS_IMAGE_CT_UNKNOWN);
 	}
@@ -448,21 +449,21 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 		}
 	}
 
-	/* Delete any components that are not of interest. */
-	/*
+  /*
+  // Delete any components that are not of interest.
 	for (i = jas_image_numcmpts(dec->image); i > 0; --i) {
 		if (jas_image_cmpttype(dec->image, i - 1) == JAS_IMAGE_CT_UNKNOWN) {
 			jas_image_delcmpt(dec->image, i - 1);
 		}
 	}
-	*/
-	// dima: let's preserve the actual image data by marking unknown components as gray
+  */
+  // dima: let's preserve the actual image data by marking unknown components as gray
 	for (i = jas_image_numcmpts(dec->image); i > 0; --i) {
 		if (jas_image_cmpttype(dec->image, i-1) == JAS_IMAGE_CT_UNKNOWN) {
 			jas_image_setcmpttype(dec->image, i-1, JAS_IMAGE_CT_GRAY_Y);
 		}
 	}
-
+ 
 	/* Ensure that some components survived. */
 	if (!jas_image_numcmpts(dec->image)) {
 		jas_eprintf("error: no components\n");
@@ -474,11 +475,12 @@ fprintf(stderr, "no of components is %d\n", jas_image_numcmpts(dec->image));
 
 	/* Prevent the image from being destroyed later. */
 
-	//dima
-	if (aux_buf.id == -1) {
-		dec->image->aux_buf = aux_buf;
-		aux_buf.buf = 0;
-	}
+  //dima
+  if (aux_buf.id == -1)
+  {
+    dec->image->aux_buf = aux_buf;
+    aux_buf.buf = 0;
+  }
 
 	image = dec->image;
 	dec->image = 0;
