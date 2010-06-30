@@ -1,18 +1,18 @@
 #include "test_debug.hpp"
 #include "harness_aircraft.hpp"
 #include "TaskEventsPrint.hpp"
-#include "Replay/ReplayLogger.hpp"
+#include "Replay/IgcReplay.hpp"
 #include "Task/TaskManager.hpp"
 #include "UtilsText.hpp"
 #ifdef DO_PRINT
 #include <fstream>
 #endif
 
-class ReplayLoggerSim: public ReplayLogger
+class ReplayLoggerSim: public IgcReplay
 {
 public:
   ReplayLoggerSim(): 
-    ReplayLogger(),
+    IgcReplay(),
     started(false) {}
 
   AIRCRAFT_STATE state;

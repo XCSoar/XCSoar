@@ -1,5 +1,5 @@
 TEST_SRC = \
-	$(SRC)/Replay/ReplayLogger.cpp \
+	$(SRC)/Replay/IgcReplay.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/test_debug.cpp \

@@ -36,13 +36,13 @@
 }
 */
 
-#include "Replay/ReplayLogger.hpp"
+#include "Replay/IgcReplay.hpp"
 #include <algorithm>
 
 #include "Navigation/GeoPoint.hpp"
 #include "StringUtil.hpp"
 
-ReplayLogger::ReplayLogger() :
+IgcReplay::IgcReplay() :
   TimeScale(1.0),
   Enabled(false),
   cli(fixed(0.98)),
@@ -52,7 +52,7 @@ ReplayLogger::ReplayLogger() :
 }
 
 bool
-ReplayLogger::ScanBuffer(const TCHAR *buffer, fixed *Time,
+IgcReplay::ScanBuffer(const TCHAR *buffer, fixed *Time,
                          fixed *Latitude, fixed *Longitude, fixed *Altitude)
 {
   int DegLat, DegLon;
@@ -87,7 +87,7 @@ ReplayLogger::ScanBuffer(const TCHAR *buffer, fixed *Time,
 }
 
 bool
-ReplayLogger::ReadPoint(fixed *Time, fixed *Latitude, fixed *Longitude,
+IgcReplay::ReadPoint(fixed *Time, fixed *Latitude, fixed *Longitude,
                         fixed *Altitude)
 {
   TCHAR *buffer;
@@ -101,7 +101,7 @@ ReplayLogger::ReadPoint(fixed *Time, fixed *Latitude, fixed *Longitude,
 }
 
 bool
-ReplayLogger::update_time(const fixed mintime)
+IgcReplay::update_time(const fixed mintime)
 {
   const fixed t_simulation_last = t_simulation;
 
@@ -112,13 +112,13 @@ ReplayLogger::update_time(const fixed mintime)
 }
 
 void
-ReplayLogger::reset_time()
+IgcReplay::reset_time()
 {
   t_simulation = fixed_zero;
 }
 
 void
-ReplayLogger::UpdateInternal()
+IgcReplay::UpdateInternal()
 {
   if (!update_time(cli.GetMinTime()))
     return;
@@ -152,7 +152,7 @@ ReplayLogger::UpdateInternal()
 }
 
 void
-ReplayLogger::Stop()
+IgcReplay::Stop()
 {
   CloseFile();
 
@@ -162,7 +162,7 @@ ReplayLogger::Stop()
 }
 
 void
-ReplayLogger::Start()
+IgcReplay::Start()
 {
   if (Enabled)
     Stop();
@@ -180,13 +180,13 @@ ReplayLogger::Start()
 }
 
 const TCHAR*
-ReplayLogger::GetFilename()
+IgcReplay::GetFilename()
 {
   return FileName;
 }
 
 void
-ReplayLogger::SetFilename(const TCHAR *name)
+IgcReplay::SetFilename(const TCHAR *name)
 {
   if (!name || string_is_empty(name))
     return;
@@ -196,7 +196,7 @@ ReplayLogger::SetFilename(const TCHAR *name)
 }
 
 bool
-ReplayLogger::Update()
+IgcReplay::Update()
 {
   if (!Enabled)
     return false;
@@ -206,7 +206,7 @@ ReplayLogger::Update()
 }
 
 bool
-ReplayLogger::OpenFile()
+IgcReplay::OpenFile()
 {
   if (reader)
     return true;
@@ -222,7 +222,7 @@ ReplayLogger::OpenFile()
 }
 
 void
-ReplayLogger::CloseFile()
+IgcReplay::CloseFile()
 {
   if (!reader)
     return;

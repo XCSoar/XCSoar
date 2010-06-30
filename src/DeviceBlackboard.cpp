@@ -122,14 +122,14 @@ DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const double alt)
 /**
  * Sets the location, altitude and other basic parameters
  *
- * Used by the ReplayLogger
+ * Used by the IgcReplay
  * @param loc New location
  * @param speed New speed
  * @param bearing New bearing
  * @param alt New altitude
  * @param baroalt New barometric altitude
  * @param t New time
- * @see ReplayLogger::UpdateInternal()
+ * @see IgcReplay::UpdateInternal()
  */
 void
 DeviceBlackboard::SetLocation(const GEOPOINT &loc,

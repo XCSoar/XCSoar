@@ -36,14 +36,14 @@ Copyright_License {
 }
 */
 
-#ifndef REPLAY_LOGGER_GLUE_HPP
-#define REPLAY_LOGGER_GLUE_HPP
+#ifndef IGC_REPLAY_GLUE_HPP
+#define IGC_REPLAY_GLUE_HPP
 
-#include "Replay/ReplayLogger.hpp"
+#include "Replay/IgcReplay.hpp"
 #include "PeriodClock.hpp"
 
-class ReplayLoggerGlue: 
-  public ReplayLogger
+class IgcReplayGlue: 
+  public IgcReplay
 {
 protected:
   virtual bool update_time(const fixed mintime);

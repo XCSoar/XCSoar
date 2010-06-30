@@ -51,13 +51,13 @@ class Waypoints;
 class AirspaceClientUI;
 class TaskClientUI;
 class TaskBehaviour;
-class ReplayLoggerGlue;
+class IgcReplayGlue;
 
 // other global objects
 extern AirspaceClientUI airspace_ui;
 extern Waypoints way_points;
 extern TaskClientUI task_ui;
-extern ReplayLoggerGlue replay;
+extern IgcReplayGlue replay;
 extern Marks *marks;
 extern TopologyStore *topology;
 extern RasterTerrain terrain;

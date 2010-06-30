@@ -195,8 +195,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Logger/NMEALogger.cpp \
 	$(SRC)/NMEA/ThermalBand.cpp \
-	$(SRC)/Replay/ReplayLogger.cpp \
-	$(SRC)/Replay/ReplayLoggerGlue.cpp \
+	$(SRC)/Replay/IgcReplay.cpp \
+	$(SRC)/Replay/IgcReplayGlue.cpp \
 	$(SRC)/TeamCodeCalculation.cpp \
 	$(SRC)/ThermalLocator.cpp \
 	$(SRC)/ThermalBase.cpp \

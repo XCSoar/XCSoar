@@ -80,7 +80,7 @@ Copyright_License {
 #include "StatusMessage.hpp"
 #include "CalculationThread.hpp"
 #include "InstrumentThread.hpp"
-#include "Replay/ReplayLoggerGlue.hpp"
+#include "Replay/IgcReplayGlue.hpp"
 #include "Compiler.h"
 
 #include "Waypoint/Waypoints.hpp"
@@ -109,7 +109,7 @@ CalculationThread *calculation_thread;
 InstrumentThread *instrument_thread;
 
 Logger logger;
-ReplayLoggerGlue replay;
+IgcReplayGlue replay;
 
 Waypoints way_points;
 

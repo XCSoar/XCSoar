@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#ifndef REPLAY_LOGGER_HPP
-#define REPLAY_LOGGER_HPP
+#ifndef IGC_REPLAY_HPP
+#define IGC_REPLAY_HPP
 
 #include "Engine/Math/fixed.hpp"
 #include "Replay/CatmullRomInterpolator.hpp"
@@ -50,10 +50,10 @@ Copyright_License {
 struct GEOPOINT;
 class Angle;
 
-class ReplayLogger
+class IgcReplay
 {
 public:
-  ReplayLogger();
+  IgcReplay();
 
   bool Update();
   void Stop();

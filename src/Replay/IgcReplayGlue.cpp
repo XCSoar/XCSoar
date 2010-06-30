@@ -36,7 +36,7 @@
 }
 */
 
-#include "Replay/ReplayLoggerGlue.hpp"
+#include "Replay/IgcReplayGlue.hpp"
 #include "Logger/Logger.hpp"
 #include "Protection.hpp"
 #include "Dialogs/Message.hpp"
@@ -57,12 +57,12 @@
 #include <algorithm>
 
 bool
-ReplayLoggerGlue::ScanBuffer(const TCHAR *buffer, fixed *Time,
+IgcReplayGlue::ScanBuffer(const TCHAR *buffer, fixed *Time,
                              fixed *Latitude, fixed *Longitude,
                              fixed *Altitude)
 {
 
-  if (ReplayLogger::ScanBuffer(buffer, Time, Latitude, Longitude, Altitude))
+  if (IgcReplay::ScanBuffer(buffer, Time, Latitude, Longitude, Altitude))
     return true;
 
   int found = 0;
@@ -88,7 +88,7 @@ ReplayLoggerGlue::ScanBuffer(const TCHAR *buffer, fixed *Time,
 }
 
 bool
-ReplayLoggerGlue::update_time(const fixed mintime)
+IgcReplayGlue::update_time(const fixed mintime)
 {
   const fixed t_simulation_last = t_simulation;
 
@@ -101,14 +101,14 @@ ReplayLoggerGlue::update_time(const fixed mintime)
 }
 
 void
-ReplayLoggerGlue::reset_time()
+IgcReplayGlue::reset_time()
 {
   clock.reset();
   t_simulation = 0;
 }
 
 void
-ReplayLoggerGlue::on_advance(const GEOPOINT &loc, const fixed speed,
+IgcReplayGlue::on_advance(const GEOPOINT &loc, const fixed speed,
                              const Angle bearing, const fixed alt,
                              const fixed baroalt, const fixed t)
 {
@@ -117,21 +117,21 @@ ReplayLoggerGlue::on_advance(const GEOPOINT &loc, const fixed speed,
 }
 
 void
-ReplayLoggerGlue::on_stop()
+IgcReplayGlue::on_stop()
 {
   device_blackboard.StopReplay();
   logger.clearBuffer();
 }
 
 void
-ReplayLoggerGlue::on_bad_file()
+IgcReplayGlue::on_bad_file()
 {
   MessageBoxX(gettext(TEXT("Could not open IGC file!")),
               gettext(TEXT("Flight replay")), MB_OK | MB_ICONINFORMATION);
 }
 
 void
-ReplayLoggerGlue::on_reset()
+IgcReplayGlue::on_reset()
 {
   logger.clearBuffer();
 }
