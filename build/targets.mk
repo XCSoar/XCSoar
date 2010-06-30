@@ -274,9 +274,6 @@ ifeq ($(HAVE_WIN32),y)
   TARGET_ARCH += -mwin32
 
   WINDRESFLAGS := -I$(SRC) $(TARGET_CPPFLAGS) -D_MINGW32_
-  ifeq ($(CONFIG_ALTAIR),y)
-    WINDRESFLAGS += -DGNAV
-  endif
 endif # UNIX
 
 ifeq ($(TARGET),PC)
