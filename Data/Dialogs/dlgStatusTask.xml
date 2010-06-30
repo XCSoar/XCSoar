@@ -10,5 +10,5 @@
   <Edit Name="prpEstimatedSpeed" Caption="Speed remaining" X="2" Y="-1" Width="242" Height="22" CaptionWidth="150" Font="2" ReadOnly="1" />
   <Edit Name="prpAverageSpeed" Caption="Speed achieved" X="2" Y="-1" Width="242" Height="22" CaptionWidth="150" Font="2" ReadOnly="1" />
 
-  <Button Name="cmdClose" Caption="Close" X="5" Y="-1" Width="60" Height="28" Font="2" />
+  <Button Name="cmdClose" Caption="Close" X="5" Y="-1" Width="60" Height="28"/>
 </Form>

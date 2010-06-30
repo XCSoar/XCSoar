@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Name="frmTaskPoint" Width="240" Height="320" Caption="Waypoint">
-  <Button Caption="Close" X="2" Y="-1" Width="70" Height="22" Font="2" OnClick="OnCloseClicked"/>
+  <Button Caption="Close" X="2" Y="-1" Width="70" Height="22" OnClick="OnCloseClicked"/>
 
   <Canvas Name="frmTaskView" X="2" Y="26" Width="70" Height="70" Font="0" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
 
-  <Button Name="butRemove" Caption="Remove" X="2" Y="-1" Width="70" Height="22" Font="2" OnClick="OnRemoveClicked"/>
-  <Button Name="butRelocate" Caption="Relocate" X="2" Y="-1" Width="70" Height="22" Font="2" OnClick="OnRelocateClicked"/>
-  <Button Name="butDown" Caption="Move down" X="2" Y="-1" Width="70" Height="22" Font="2" OnClick="OnMoveAfterClicked"/>
-  <Button Name="butUp" Caption="Move up" X="2" Y="-1" Width="70" Height="22" Font="2" OnClick="OnMoveBeforeClicked"/>
+  <Button Name="butRemove" Caption="Remove" X="2" Y="-1" Width="70" Height="22" OnClick="OnRemoveClicked"/>
+  <Button Name="butRelocate" Caption="Relocate" X="2" Y="-1" Width="70" Height="22" OnClick="OnRelocateClicked"/>
+  <Button Name="butDown" Caption="Move down" X="2" Y="-1" Width="70" Height="22" OnClick="OnMoveAfterClicked"/>
+  <Button Name="butUp" Caption="Move up" X="2" Y="-1" Width="70" Height="22" OnClick="OnMoveBeforeClicked"/>
 
   <Panel Name="frmPointCommon" X="80" Y="0" Width="240" Height="80" Font="2">
-  <Button Name="butDetails" Caption="Details" X="10" Y="-1" Width="220" Height="22" Font="2" OnClick="OnDetailsClicked"/>
-  <Button Name="butType" Caption="Type" X="10" Y="-1" Width="220" Height="22" Font="2" OnClick="OnTypeClicked"/>
+  <Button Name="butDetails" Caption="Details" X="10" Y="-1" Width="220" Height="22" OnClick="OnDetailsClicked"/>
+  <Button Name="butType" Caption="Type" X="10" Y="-1" Width="220" Height="22" OnClick="OnTypeClicked"/>
   </Panel>
 
   <Panel Name="frmOZLine" X="80" Y="80" Width="240" Height="142" Font="2">

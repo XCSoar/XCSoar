@@ -17,9 +17,9 @@
 
   <Edit Name="prpFlarmLock" Caption="Flarm lock:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1" />
 
-  <Button   Caption="Flarm Lock"    X="5" Y="140" Width="90"  Height="40" Font="2" OnClick="OnFlarmLockClicked" />
+  <Button Caption="Flarm Lock" X="5" Y="140" Width="90"  Height="40" OnClick="OnFlarmLockClicked" />
 
-  <Button Name="cmdSetCode" Caption="Set Mate code" X="95" Y="140" Width="90"  Height="40" Font="2" />
+  <Button Name="cmdSetCode" Caption="Set Mate code" X="95" Y="140" Width="90"  Height="40" />
 
-  <Button   Caption="Close"    X="5" Y="185" Width="180"  Height="35" Font="2" OnClick="OnCloseClicked" />
+  <Button Caption="Close" X="5" Y="185" Width="180"  Height="35" OnClick="OnCloseClicked" />
 </Form>

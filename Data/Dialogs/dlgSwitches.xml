@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Name="frmSwitches" Width="300" Height="240" Caption="Switches">
-  <Button Caption="Close" X="2" Y="2" Width="60" Height="22" Font="2" OnClick="OnCloseClicked"/>
+  <Button Caption="Close" X="2" Y="2" Width="60" Height="22" OnClick="OnCloseClicked"/>
 
   <Panel Name="frmFrm1" X="0" Y="30" Width="145" Height="200" Font="2">
     <Edit Name="prpAirbrakeExtended" Caption="Airbrake locked" X="2" Y="-1" Width="145" Height="22" CaptionWidth="88" Font="2" Readonly="1">

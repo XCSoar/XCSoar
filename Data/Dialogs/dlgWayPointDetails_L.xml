@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Name="frmWayPointInfo" Width="320" Height="240" Caption="Waypoint Info">
-  <Button Name="cmdGoto" Caption="Goto" X="5" Y="10" Width="60" Height="28" Font="2" />
+  <Button Name="cmdGoto" Caption="Goto" X="5" Y="10" Width="60" Height="28" />
 
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="160" Width="29" Height="28" Font="3" OnClick="OnPrevClicked" />
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="36" Y="160" Width="29" Height="28" Font="3" OnClick="OnNextClicked" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="160" Width="29" Height="28" OnClick="OnPrevClicked" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="36" Y="160" Width="29" Height="28" OnClick="OnNextClicked" />
 
-  <Button Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28" Font="2" />
+  <Button Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28" />
 
   <Panel Name="frmInfos" X="70" Y="0" Width="0" Height="222" Font="2" Border="0">
     <Edit Name="prpWpComment" Caption="Comment" X="2" Y="2" Width="242" Height="40" CaptionWidth="100" Font="2" ReadOnly="1" />
@@ -24,19 +24,19 @@
   <List Name="frmDetails" X="70" Y="0" Width="0" Height="222" ItemHeight="18" Border="1"/>
 
   <Panel Name="frmCommands" X="70" Y="0" Width="246" Height="222" Font="2" Visible="0" Border="0">
-    <Button Name="cmdReplace" Caption="Replace in task" X="50" Y="10" Width="150" Height="30" Font="2" />
-    <Button Name="cmdInserInTask" Caption="Insert in task" X="50" Y="-1" Width="150" Height="30" Font="2" />
-    <Button Name="cmdAppendInTask" Caption="Append to task" X="50" Y="-1" Width="150" Height="30" Font="2" />
-    <Button Name="cmdRemoveFromTask" Caption="Remove from task" X="50" Y="-1" Width="150" Height="30" Font="2" />
+    <Button Name="cmdReplace" Caption="Replace in task" X="50" Y="10" Width="150" Height="30" />
+    <Button Name="cmdInserInTask" Caption="Insert in task" X="50" Y="-1" Width="150" Height="30" />
+    <Button Name="cmdAppendInTask" Caption="Append to task" X="50" Y="-1" Width="150" Height="30" />
+    <Button Name="cmdRemoveFromTask" Caption="Remove from task" X="50" Y="-1" Width="150" Height="30" />
   </Panel>
 
   <Canvas Name="frmImage" X="70" Y="0" Width="0" Height="222" Font="2" Visible="0" Border="0"/>
 
   <Panel Name="frmSpecial" X="70" Y="0" Width="246" Height="222" Font="2" Visible="0" Border="0">
-    <Button Name="cmdSetAlternate1" Caption="Set as Alternate 1" X="50" Y="10" Width="150" Height="30" Font="2" />
-    <Button Name="cmdSetAlternate2" Caption="Set as Alternate 2" X="50" Y="-1" Width="150" Height="30" Font="2" />
-    <Button Name="cmdNewHome" Caption="Set as new home" X="50" Y="-1" Width="150" Height="30" Font="2" />
-    <Button Name="cmdTeamCode" Caption="Set teamcode" X="50" Y="-1" Width="150" Height="30" Font="2" />
-    <Button Name="cmdClearAlternates" Caption="Clear Alternates" X="50" Y="-1" Width="150" Height="30" Font="2" />
+    <Button Name="cmdSetAlternate1" Caption="Set as Alternate 1" X="50" Y="10" Width="150" Height="30" />
+    <Button Name="cmdSetAlternate2" Caption="Set as Alternate 2" X="50" Y="-1" Width="150" Height="30" />
+    <Button Name="cmdNewHome" Caption="Set as new home" X="50" Y="-1" Width="150" Height="30" />
+    <Button Name="cmdTeamCode" Caption="Set teamcode" X="50" Y="-1" Width="150" Height="30" />
+    <Button Name="cmdClearAlternates" Caption="Clear Alternates" X="50" Y="-1" Width="150" Height="30" />
   </Panel>
 </Form>

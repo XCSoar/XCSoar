@@ -13,7 +13,7 @@
   <Canvas Name="frmspacer3" X="2" Y="-1" Width="240" Height="7" />
   
   <Panel Name="frmShade" X="0" Y="-1" Width="0" Height="145" Font="2" Border="0" BackColor="0xDADBAB">
-    <Button Name="cmdClose" Caption="Accept" X="2" Y="-1" Width="-2" Height="30" Font="2" />
+    <Button Name="cmdClose" Caption="Accept" X="2" Y="-1" Width="-2" Height="30"/>
 
     <Edit Name="prpProfile" Caption="Profile" X="2" Y="-1" Width="-2" Height="25" CaptionWidth="60" Font="2" BackColor="0xDADBAB">
       <DataField name="" DataType="filereader" Min="0" Max="200" Step="1"/>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form X="5" Y="5" Width="240" Height="231" Caption="Status">
-  <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="60" Height="28" Font="2" />
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="165" Y="2" Width="35" Height="28" Font="3" OnClick="OnPrevClicked" />
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="202" Y="2" Width="35" Height="28" Font="3" OnClick="OnNextClicked" />
+  <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="60" Height="28" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="165" Y="2" Width="35" Height="28" OnClick="OnPrevClicked" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="202" Y="2" Width="35" Height="28" OnClick="OnNextClicked" />
 
   <Tabbed Name="tabbed" X="0" Y="32" Width="230" Height="200">
     <Panel Name="frmStatusFlight" X="0" Y="32" Width="230" Height="200" Font="2">

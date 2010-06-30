@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Name="frmWaypointEdit" Width="320" Height="240" Caption="Waypoint Editor">
-  <Button Caption="Close" X="2" Y="2" Width="60" Height="22" Font="2" OnClick="OnCloseClicked"/>
+  <Button Caption="Close" X="2" Y="2" Width="60" Height="22" OnClick="OnCloseClicked"/>
 
-  <Button Name="cmdName" Caption="Name: " X="70" Y="0" Width="230" Height="28" Font="2" />
+  <Button Name="cmdName" Caption="Name: " X="70" Y="0" Width="230" Height="28" />
 
-  <Button Name="cmdComment" Caption="Comment: " X="70" Y="-1" Width="230" Height="28" Font="2" />
+  <Button Name="cmdComment" Caption="Comment: " X="70" Y="-1" Width="230" Height="28" />
 
   <Edit Name="prpLongitudeSign" Caption="Longitude" X="2" Y="70" Width="115" Height="28" CaptionWidth="75" Font="2">
     <DataField name="" DataType="enum" Min="0" Max="1" Step="1"/>

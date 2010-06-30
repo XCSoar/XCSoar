@@ -5,10 +5,10 @@
 
   <Label Name="frmInfo" X="90" Y="-90" Width="130" Height="88" Font="2"/>
 
-  <Button Name="cmdCalc" Caption="Calc" X="5" Y="-90" Width="80" Height="28" Font="2" OnClick="OnCalcClicked" />
+  <Button Name="cmdCalc" Caption="Calc" X="5" Y="-90" Width="80" Height="28" OnClick="OnCalcClicked" />
 
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="-60" Width="37" Height="28" Font="3" OnClick="OnPrevClicked" />
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="48" Y="-60" Width="37" Height="28" Font="3" OnClick="OnNextClicked" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="-60" Width="37" Height="28" OnClick="OnPrevClicked" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="48" Y="-60" Width="37" Height="28" OnClick="OnNextClicked" />
 
-  <Button Name="cmdClose" Caption="Close" X="5" Y="-30" Width="80" Height="28" Font="2" />
+  <Button Name="cmdClose" Caption="Close" X="5" Y="-30" Width="80" Height="28" />
 </Form>

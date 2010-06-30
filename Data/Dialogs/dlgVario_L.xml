@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Name="frmVario" Width="240" Height="320" Caption="Vario Configuration">
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="35" Y="240" Width="35" Height="28" Font="3" OnClick="OnNextClicked" />
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="240" Width="35" Height="28" Font="3" OnClick="OnPrevClicked" />
-  <Button Name="cmdClose" Caption="Close" X="5" Y="270" Width="60" Height="28" Font="2" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="35" Y="240" Width="35" Height="28" OnClick="OnNextClicked" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="240" Width="35" Height="28" OnClick="OnPrevClicked" />
+  <Button Name="cmdClose" Caption="Close" X="5" Y="270" Width="60" Height="28" />
 
-  <Button Name="cmdDemo" Caption="Demo" X="70" Y="270" Width="60" Height="28" Font="2" OnClick="OnDemoClicked" />
-  <Button Name="cmdSave" Caption="Save" X="140" Y="270" Width="60" Height="28" Font="2" OnClick="OnSaveClicked" />
+  <Button Name="cmdDemo" Caption="Demo" X="70" Y="270" Width="60" Height="28" OnClick="OnDemoClicked" />
+  <Button Name="cmdSave" Caption="Save" X="140" Y="270" Width="60" Height="28" OnClick="OnSaveClicked" />
 
   <Tabbed Name="tabbed" X="0" Y="0" Width="235" Height="222">
     <Panel Name="frmHardware" X="0" Y="0" Width="0" Height="0" Font="2">
@@ -434,10 +434,10 @@
     </Panel>
   
     <Panel Name="frmSchemes" X="0" Y="0" Width="0" Height="0" Font="2">
-      <Button Name="cmdSchemeVega" Caption="Vega" X="50" Y="-1" Width="90" Height="28" Font="2" OnClick="OnSchemeVegaClicked" />
-      <Button Name="cmdSchemeBorgelt" Caption="Borgelt" X="50" Y="-1" Width="90" Height="28" Font="2" OnClick="OnSchemeBorgeltClicked" />
-      <Button Name="cmdSchemeCambridge" Caption="Cambridge" X="50" Y="-1" Width="90" Height="28" Font="2" OnClick="OnSchemeCambridgeClicked" />
-      <Button Name="cmdSchemeZander" Caption="Zander" X="50" Y="-1" Width="90" Height="28" Font="2" OnClick="OnSchemeZanderClicked" />
+      <Button Name="cmdSchemeVega" Caption="Vega" X="50" Y="-1" Width="90" Height="28" OnClick="OnSchemeVegaClicked" />
+      <Button Name="cmdSchemeBorgelt" Caption="Borgelt" X="50" Y="-1" Width="90" Height="28" OnClick="OnSchemeBorgeltClicked" />
+      <Button Name="cmdSchemeCambridge" Caption="Cambridge" X="50" Y="-1" Width="90" Height="28" OnClick="OnSchemeCambridgeClicked" />
+      <Button Name="cmdSchemeZander" Caption="Zander" X="50" Y="-1" Width="90" Height="28" OnClick="OnSchemeZanderClicked" />
     </Panel>
   
     <Panel Name="frmDisplay" X="0" Y="0" Width="0" Height="0" Font="2">

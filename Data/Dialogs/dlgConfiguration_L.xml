@@ -3,13 +3,13 @@
 <Form Name="frmConfiguration" Width="320" Height="240" Caption="Configuration">
   <Custom X="5" Y="5" Width="60" Height="25" OnCreate="OnCreateUserLevel"/>
 
-  <Button Name="cmdCopy" Caption="Copy" X="5" Y="40" Width="60" Height="28" Font="2" />
+  <Button Name="cmdCopy" Caption="Copy" X="5" Y="40" Width="60" Height="28"/>
 
-  <Button Name="cmdPaste" Caption="Paste" X="5" Y="70" Width="60" Height="28" Font="2" />
+  <Button Name="cmdPaste" Caption="Paste" X="5" Y="70" Width="60" Height="28"/>
 
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="160" Width="29" Height="28" Font="3" OnClick="OnPrevClicked" />
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="36" Y="160" Width="29" Height="28" Font="3" OnClick="OnNextClicked" />
-  <Button Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28" Font="2" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="160" Width="29" Height="28" OnClick="OnPrevClicked" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="36" Y="160" Width="29" Height="28" OnClick="OnNextClicked" />
+  <Button Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28"/>
 
   <Tabbed Name="tabbed" X="70" Y="0" Width="0" Height="222">
     <Panel Name="frmSite" X="0" Y="0" Width="0" Height="222" Font="2">
@@ -57,8 +57,8 @@
     </Panel>
   
     <Panel Name="frmAirspace" X="0" Y="0" Width="0" Height="222" Font="2">
-      <Button Name="cmdAirspaceColours" Caption="Colours" X="100" Y="2" Width="70" Height="22" Font="2" OnClick="OnAirspaceColoursClicked" />
-      <Button Name="cmdAirspaceMode" Caption="Filter" X="170" Y="2" Width="70" Height="22" Font="2" OnClick="OnAirspaceModeClicked" />
+      <Button Name="cmdAirspaceColours" Caption="Colours" X="100" Y="2" Width="70" Height="22" OnClick="OnAirspaceColoursClicked" />
+      <Button Name="cmdAirspaceMode" Caption="Filter" X="170" Y="2" Width="70" Height="22" OnClick="OnAirspaceModeClicked" />
   
       <Edit Name="prpAirspaceDisplay" Caption="Airspace display" X="2" Y="-1" Width="-2" Height="22" CaptionWidth="150" Font="2" Help="Controls filtering of airspace for display and warnings.  The airspace filter button also allows filtering of display and warnings independently for each airspace class.
 [All on] All is displayed.
@@ -283,7 +283,7 @@
           <DataField name="" DataType="enum" Min="0" Max="50" Step="1" />
         </Edit>
   
-        <Button Name="cmdSetupDeviceA" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" Font="2" OnClick="OnSetupDeviceAClicked" />
+        <Button Name="cmdSetupDeviceA" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" OnClick="OnSetupDeviceAClicked" />
       </Panel>
   
       <Panel Name="frmComm2" X="0" Y="69" Width="0" Height="68" Font="2" Border="30">
@@ -302,7 +302,7 @@
           <DataField name="" DataType="enum" Min="0" Max="50" Step="1" />
         </Edit>
   
-        <Button Name="cmdSetupDeviceB" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" Font="2" OnClick="OnSetupDeviceBClicked" />
+        <Button Name="cmdSetupDeviceB" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" OnClick="OnSetupDeviceBClicked" />
       </Panel>
   
       <Edit Name="prpSetSystemTimeFromGPS" Caption="Use GPS time" X="2" Y="-1" Width="-2" Height="22" CaptionWidth="150" Font="2"
@@ -459,28 +459,28 @@
       </Edit>
     
       <Edit Name="prpTitleWindowFont" Caption="Info box titles" X="2" Y="25" Width="180" Height="22" CaptionWidth="180" Font="2" ReadOnly="1" />
-      <Button Name="cmdTitleWindowFont" Caption="Edit" X="185" Y="25" Width="50" Height="22" Font="2" OnClick="OnEditTitleWindowFontClicked" />
+      <Button Name="cmdTitleWindowFont" Caption="Edit" X="185" Y="25" Width="50" Height="22" OnClick="OnEditTitleWindowFontClicked" />
     
       <Edit Name="prpInfoWindowFont" Caption="Info box values" X="2" Y="49" width="180" Height="22" Captionwidth="180" Font="2" ReadOnly="1" />
-      <Button Name="cmdInfoWindowFont" Caption="Edit" X="185" Y="49" Width="50" Height="22" Font="2" OnClick="OnEditInfoWindowFontClicked" />
+      <Button Name="cmdInfoWindowFont" Caption="Edit" X="185" Y="49" Width="50" Height="22" OnClick="OnEditInfoWindowFontClicked" />
     
       <Edit Name="prpMapWindowFont" Caption="Map waypoints" X="2" Y="73" width="180" Height="22" Captionwidth="180" Font="2" ReadOnly="1" />
-      <Button Name="cmdMapWindowFont" Caption="Edit" X="185" Y="73" Width="50" Height="22" Font="2" OnClick="OnEditMapWindowFontClicked" />
+      <Button Name="cmdMapWindowFont" Caption="Edit" X="185" Y="73" Width="50" Height="22" OnClick="OnEditMapWindowFontClicked" />
     
       <Edit Name="prpMapLabelFont" Caption="Topology labels" X="2" Y="97" width="180" Height="22" Captionwidth="180" Font="2" ReadOnly="1" />
-      <Button Name="cmdMapLabelFont" Caption="Edit" X="185" Y="97" Width="50" Height="22" Font="2" OnClick="OnEditMapLabelFontClicked" />
+      <Button Name="cmdMapLabelFont" Caption="Edit" X="185" Y="97" Width="50" Height="22" OnClick="OnEditMapLabelFontClicked" />
     
       <Edit Name="prpMapWindowBoldFont" Caption="Dialog boxes" X="2" Y="121" width="180" Height="22" Captionwidth="180" Font="2" ReadOnly="1" />
-      <Button Name="cmdMapWindowBoldFont" Caption="Edit" X="185" Y="121" Width="50" Height="22" Font="2" OnClick="OnEditMapWindowBoldFontClicked" />
+      <Button Name="cmdMapWindowBoldFont" Caption="Edit" X="185" Y="121" Width="50" Height="22" OnClick="OnEditMapWindowBoldFontClicked" />
     
       <Edit Name="prpStatisticsFont" Caption="Statistics screens" X="2" Y="145" width="180" Height="22" Captionwidth="180" Font="2" ReadOnly="1" />
-      <Button Name="cmdStatisticsFont" Caption="Edit" X="185" Y="145" Width="50" Height="22" Font="2" OnClick="OnEditStatisticsFontClicked" />
+      <Button Name="cmdStatisticsFont" Caption="Edit" X="185" Y="145" Width="50" Height="22" OnClick="OnEditStatisticsFontClicked" />
     
       <Edit Name="prpCDIWindowFont" Caption="Gauges" X="2" Y="169" width="180" Height="22" Captionwidth="180" Font="2" ReadOnly="1" />
-      <Button Name="cmdCDIWindowFont" Caption="Edit" X="185" Y="169" Width="50" Height="22" Font="2" OnClick="OnEditCDIWindowFontClicked" />
+      <Button Name="cmdCDIWindowFont" Caption="Edit" X="185" Y="169" Width="50" Height="22" OnClick="OnEditCDIWindowFontClicked" />
     
       <Edit Name="prpTitleSmallWindowFont" Caption="Info box values small" X="2" Y="192" width="180" Height="22" CaptionWidth="180" Font="2" ReadOnly="1" />
-      <Button Name="cmdTitleSmallWindowFont" Caption="Edit" X="185" Y="192" Width="50" Height="22" Font="2" OnClick="OnEditTitleSmallWindowFontClicked" />
+      <Button Name="cmdTitleSmallWindowFont" Caption="Edit" X="185" Y="192" Width="50" Height="22" OnClick="OnEditTitleSmallWindowFontClicked" />
     </Panel>
   
     <Panel Name="frmVarioAppearance" X="0" Y="0" Width="0" Height="222" Font="2">
@@ -707,13 +707,13 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
         <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="1" Max="30" Step="1" />
       </Edit>
     
-      <Button Name="cmdPilotName" Caption="Pilot name: " X="2" Y="-1" Width="-2" Height="22" Font="2" />
+      <Button Name="cmdPilotName" Caption="Pilot name: " X="2" Y="-1" Width="-2" Height="22"/>
     
-      <Button Name="cmdAircraftType" Caption="Aircraft type: " X="2" Y="-1" Width="-2" Height="22" Font="2" />
+      <Button Name="cmdAircraftType" Caption="Aircraft type: " X="2" Y="-1" Width="-2" Height="22"/>
     
-      <Button Name="cmdAircraftRego" Caption="Competition Id: " X="2" Y="-1" Width="-2" Height="22" Font="2" />
+      <Button Name="cmdAircraftRego" Caption="Competition Id: " X="2" Y="-1" Width="-2" Height="22"/>
     
-      <Button Name="cmdLoggerID" Caption="Logger ID: " X="2" Y="-1" Width="-2" Height="22" Font="2" />
+      <Button Name="cmdLoggerID" Caption="Logger ID: " X="2" Y="-1" Width="-2" Height="22"/>
     
       <Edit Name="prpLoggerShortName" Caption="Short file name" X="2" Y="-1" Width="-2" Height="22" CaptionWidth="150" Font="2"
         Help="This determines whether the logger uses the short IGC file name or the long IGC file name. Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-ABC-01.IGC).">
@@ -727,13 +727,13 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
     </Panel>
   
     <Panel Name="frmWaypointEdit" X="0" Y="0" Width="0" Height="222" Font="2">
-      <Button Name="cmdWaypointNew" Caption="New" X="50" Y="-1" Width="100" Height="28" Font="2" OnClick="OnWaypointNewClicked" />
+      <Button Name="cmdWaypointNew" Caption="New" X="50" Y="-1" Width="100" Height="28" OnClick="OnWaypointNewClicked" />
   
-      <Button Name="cmdWaypointEdit" Caption="Edit" X="50" Y="-1" Width="100" Height="28" Font="2" OnClick="OnWaypointEditClicked" />
+      <Button Name="cmdWaypointEdit" Caption="Edit" X="50" Y="-1" Width="100" Height="28" OnClick="OnWaypointEditClicked" />
     
-      <Button Name="cmdWaypointSave" Caption="Save" X="50" Y="-1" Width="100" Height="28" Font="2" OnClick="OnWaypointSaveClicked" />
+      <Button Name="cmdWaypointSave" Caption="Save" X="50" Y="-1" Width="100" Height="28" OnClick="OnWaypointSaveClicked" />
     
-      <Button Name="cmdWaypointDelete" Caption="Delete" X="50" Y="-1" Width="100" Height="28" Font="2" OnClick="OnWaypointDeleteClicked" />
+      <Button Name="cmdWaypointDelete" Caption="Delete" X="50" Y="-1" Width="100" Height="28" OnClick="OnWaypointDeleteClicked" />
     </Panel>
   
     <Panel Name="frmSpecials" X="0" Y="0" Width="0" Height="222" Font="2">

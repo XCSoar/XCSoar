@@ -20,7 +20,6 @@
     <DataField name="" DataType="boolean"/>
   </Edit>
   
-  <Button Caption="Save" X="2" Y="90" Width="66" Height="22" Font="2" OnClick="OnSaveClicked"/>
-  
-  <Button Caption="Close" X="74" Y="90" Width="66" Height="22" Font="2" OnClick="OnCloseClicked"/>
+  <Button Caption="Save" X="2" Y="90" Width="66" Height="22" OnClick="OnSaveClicked"/>
+  <Button Caption="Close" X="74" Y="90" Width="66" Height="22" OnClick="OnCloseClicked"/>
 </Form>

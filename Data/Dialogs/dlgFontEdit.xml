@@ -27,7 +27,7 @@
 
   <Edit Name="prpFontSample" Caption="my sample" X="2" Y="-1" Width="235" Height="40" CaptionWidth="235" Font="2" readonly="1" Help="" />
 
-  <Button Caption="Ok" X="2" Y="185" Width="70" Height="22" Font="2" OnClick="OnCloseClicked" />
-  <Button Caption="Reset" X="77" Y="185" Width="70" Height="22" Font="2" OnClick="OnResetClicked" />
-  <Button Caption="Cancel" X="154" Y="185" Width="70" Height="22" Font="2" OnClick="OnCancelClicked" />
+  <Button Caption="Ok" X="2" Y="185" Width="70" Height="22" OnClick="OnCloseClicked" />
+  <Button Caption="Reset" X="77" Y="185" Width="70" Height="22" OnClick="OnResetClicked" />
+  <Button Caption="Cancel" X="154" Y="185" Width="70" Height="22" OnClick="OnCancelClicked" />
 </Form>

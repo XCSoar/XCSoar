@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Name="frmFlarmTrafficDetails" Width="320" Height="240" Caption="FLARM Traffic Details">
-  <Button Name="cmdSetAsTeamMate" Caption="Team" X="3" Y="163" Width="58" Height="28" Font="2" />
-  <Button Name="cmdClose" Caption="Close" X="3" Y="193" Width="58" Height="28" Font="2" />
+  <Button Name="cmdSetAsTeamMate" Caption="Team" X="3" Y="163" Width="58" Height="28" />
+  <Button Name="cmdClose" Caption="Close" X="3" Y="193" Width="58" Height="28" />
 
-  <Button Name="cmdCallsign" Caption="..." X="259" Y="20" Width="36" Height="22" Font="2" />
+  <Button Name="cmdCallsign" Caption="..." X="259" Y="20" Width="36" Height="22" />
 
   <Edit Name="prpCallsign" Caption="Comp. ID" X="65" Y="20" Width=210 Height="22" CaptionWidth=90 ReadOnly=1 />
   <Edit Name="prpDirectionH" Caption=" " X="229" Y="50" Width=83 Height="22" CaptionWidth=1 ReadOnly=1 />

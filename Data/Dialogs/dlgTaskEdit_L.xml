@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Name="frmTaskEdit" Width="320" Height="240" Caption="Edit Task">
-  <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="98" Height="22" Font="2" OnClick="OnCloseClicked"/>
+  <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="98" Height="22" OnClick="OnCloseClicked"/>
 
   <Canvas Name="frmTaskView" X="0" Y="26" Width="100" Height="100" Font="0" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
 
-  <Button Name="cmdNew" Caption="New" X="2" Y="128" Width="98" Height="22" Font="2" OnClick="OnNewClicked"/>
-  <Button Name="cmdProperties" Caption="Properties" X="2" Y="-1" Width="98" Height="22" Font="2" OnClick="OnPropertiesClicked"/>
-  <Button Name="cmdSave" Caption="Save" X="2" Y="-1" Width="98" Height="22" Font="2" OnClick="OnSaveClicked"/>
-  <Button Name="cmdDeclare" Caption="Declare" X="2" Y="-1" Width="98" Height="22" Font="2" OnClick="OnDeclareClicked"/>
+  <Button Name="cmdNew" Caption="New" X="2" Y="128" Width="98" Height="22" OnClick="OnNewClicked"/>
+  <Button Name="cmdProperties" Caption="Properties" X="2" Y="-1" Width="98" Height="22" OnClick="OnPropertiesClicked"/>
+  <Button Name="cmdSave" Caption="Save" X="2" Y="-1" Width="98" Height="22" OnClick="OnSaveClicked"/>
+  <Button Name="cmdDeclare" Caption="Declare" X="2" Y="-1" Width="98" Height="22" OnClick="OnDeclareClicked"/>
 
   <List Name="frmTaskPoints" X="102" Y="0" Width="-2" Height="162" ItemHeight="18" Border="1"/>
 
