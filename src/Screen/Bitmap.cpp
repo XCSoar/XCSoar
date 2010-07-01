@@ -75,11 +75,11 @@ Bitmap::load(unsigned id)
   reset();
 
 #ifdef ENABLE_SDL
-#ifdef WIN32
   ResourceLoader::Data data = ResourceLoader::Load(id);
   if (data.first == NULL)
     return false;
 
+#ifdef WIN32
   const BITMAPINFO *info = (const BITMAPINFO *)data.first;
   if (data.second < sizeof(*info))
     return false;
@@ -102,22 +102,21 @@ Bitmap::load(unsigned id)
   header->bfOffBits = sizeof(BITMAPFILEHEADER) + size - data_size;
   memcpy(header + 1, data.first, data.second);
 
-  SDL_RWops *rw = SDL_RWFromMem(header, sizeof(*header) + size);
+  const void *bmp_data = header;
+  size_t bmp_size = sizeof(*header) + size;
+#else
+  const void *bmp_data = data.first;
+  size_t bmp_size = data.second;
+#endif
+
+  SDL_RWops *rw = SDL_RWFromConstMem(bmp_data, bmp_size);
   surface = SDL_LoadBMP_RW(rw, 1);
 
+#ifdef WIN32
   free(header);
+#endif
 
   return true;
-#else
-  TCHAR name[32];
-  _stprintf(name, _T("resources/%u"), (unsigned)id);
-
-  TCHAR path[MAX_PATH];
-  LocalPath(path, name);
-
-  surface = ::SDL_LoadBMP(path);
-  return surface != NULL;
-#endif
 #else /* !ENABLE_SDL */
   bitmap = ResourceLoader::LoadBitmap2(id);
   return bitmap != NULL;

@@ -54,7 +54,11 @@ ResourceLoader::Init(HINSTANCE hInstance)
   ResourceLoaderInstance = hInstance;
 }
 
-#endif
+#else /* !WIN32 */
+
+#include "resource_data.h"
+
+#endif /* !WIN32 */
 
 ResourceLoader::Data
 ResourceLoader::Load(unsigned id)
@@ -82,7 +86,10 @@ ResourceLoader::Load(unsigned id)
 
   return std::pair<const void *, size_t>(data, size);
 #else
-  // XXX
+
+  for (unsigned i = 0; numeric_resources[i].data != NULL; ++i)
+    if (numeric_resources[i].id == id)
+      return Data(numeric_resources[i].data, numeric_resources[i].size);
 
   return Data(NULL, 0);
 #endif
