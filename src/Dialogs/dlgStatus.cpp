@@ -233,7 +233,7 @@ static void UpdateValuesSystem() {
   wp = (WndProperty*)wf->FindByName(_T("prpBattery"));
   if (wp) {
     _stprintf(Temp,_T("\0"));
-#if !defined(GNAV) && !defined(WINDOWSPC) && !defined(HAVE_POSIX)
+#ifdef HAVE_BATTERY
     _stprintf(Temp2,_T("%d%% "), PDABatteryPercent);
     _tcscat(Temp, Temp2);
 #endif

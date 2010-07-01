@@ -39,7 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_HARDWARE_BATTERY_H
 #define XCSOAR_HARDWARE_BATTERY_H
 
-#if !defined(GNAV) && !defined(WINDOWSPC) && !defined(HAVE_POSIX)
+#if defined(_WIN32_WCE) && !defined(GNAV)
+#define HAVE_BATTERY
 
 extern int PDABatteryTemperature;
 extern int PDABatteryPercent;
@@ -91,13 +92,13 @@ DWORD GetBatteryInfo(BATTERYINFO* pBatteryInfo);
 }
 #endif
 
-#else /* GNAV || WINDOWSPC */
+#else /* !HAVE_BATTERY */
 
 enum {
   PDABatteryPercent = 100,
   PDABatteryTemperature = 0,
 };
 
-#endif
+#endif /* !HAVE_BATTERY */
 
 #endif
