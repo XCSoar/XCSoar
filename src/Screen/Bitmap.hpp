@@ -92,7 +92,7 @@ public:
 
   bool load(const TCHAR *name);
 
-#ifdef ENABLE_SDL
+#if !defined(WIN32)
   bool load(unsigned id);
 #else
   bool load(unsigned id) {

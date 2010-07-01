@@ -130,18 +130,12 @@ Bitmap::load(const TCHAR *name)
 #endif /* !ENABLE_SDL */
 }
 
-#ifdef ENABLE_SDL
+#ifndef WIN32
 bool
 Bitmap::load(unsigned id)
 {
   // XXX
 
-#ifdef WIN32
-  TCHAR name[10];
-
-  _stprintf(name, _T("%u"), (unsigned)id);
-  return load(name);
-#else
   TCHAR name[32];
 
   _stprintf(name, _T("resources/%u"), (unsigned)id);
@@ -151,9 +145,8 @@ Bitmap::load(unsigned id)
   LocalPath(path, name);
 
   return load(path);
-#endif
 }
-#endif /* !ENABLE_SDL */
+#endif /* !WIN32 */
 
 bool
 Bitmap::load_stretch(unsigned id, unsigned zoom)
