@@ -76,24 +76,7 @@ BlankDisplay(bool doblank)
 {
   static bool oldblank = false;
 
-  BATTERYINFO BatteryInfo;
-  BatteryInfo.acStatus = 0;
-
-  if (GetBatteryInfo(&BatteryInfo)) {
-    PDABatteryPercent = BatteryInfo.BatteryLifePercent;
-    PDABatteryTemperature = BatteryInfo.BatteryTemperature;
-
-    // All you need to display extra Battery informations...
-    /*
-    TCHAR vtemp[1000];
-    _stprintf(vtemp,_T("Battpercent=%d Volt=%d Curr=%d AvCurr=%d mAhC=%d Temp=%d Lifetime=%d Fulllife=%d"),
-      BatteryInfo.BatteryLifePercent, BatteryInfo.BatteryVoltage,
-      BatteryInfo.BatteryCurrent, BatteryInfo.BatteryAverageCurrent,
-      BatteryInfo.BatterymAHourConsumed,
-      BatteryInfo.BatteryTemperature, BatteryInfo.BatteryLifeTime, BatteryInfo.BatteryFullLifeTime);
-    LogStartUp( vtemp );
-    */
-  }
+  UpdateBatteryInfo();
 
   if (!XCSoarInterface::SettingsMap().EnableAutoBlank)
     return;
@@ -126,7 +109,7 @@ BlankDisplay(bool doblank)
     // JMW, maybe this should be active always...
     // we don't want the PDA to be completely depleted.
 
-    if (BatteryInfo.acStatus == 0) {
+    if (!PDABatteryAC) {
       if (is_simulator() && (PDABatteryPercent < BATTERY_EXIT)) {
         LogStartUp(TEXT("Battery low exit..."));
         // TODO feature: Warning message on battery shutdown
@@ -145,7 +128,7 @@ BlankDisplay(bool doblank)
       }
     }
 
-    if (BatteryInfo.acStatus == 0) {
+    if (!PDABatteryAC) {
       // Power off the display
       vpm.PowerState = VideoPowerOff;
       ExtEscape(gdc, SETPOWERMANAGEMENT, vpm.Length, (LPCSTR)&vpm, 0, NULL);
