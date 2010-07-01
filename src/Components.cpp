@@ -81,6 +81,7 @@ Copyright_License {
 #include "CalculationThread.hpp"
 #include "InstrumentThread.hpp"
 #include "Replay/Replay.hpp"
+#include "ResourceLoader.hpp"
 #include "Compiler.h"
 
 #include "Waypoint/Waypoints.hpp"
@@ -219,6 +220,10 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   TCHAR szTitle[] = _T("XCSoar");
 
   // Store instance handle in our global variable
+#ifdef WIN32
+  ResourceLoader::Init(hInstance);
+#endif
+
   hInst = hInstance;
 
   //If "XCSoar" is already running, stop this instance

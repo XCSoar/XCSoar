@@ -40,6 +40,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "wcecompat/ts_string.h"
 #include "Screen/Layout.hpp"
+#include "ResourceLoader.hpp"
 #include "InputEvents.h"
 #include "MapWindow.hpp"
 #include "StatusMessage.hpp"
@@ -136,6 +137,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   LPWSTR* argv = CommandLineToArgvW(lpCmdLine, &argc);
 #endif
 
+  ResourceLoader::Init(hInstance);
   CommonInterface::hInst = hInstance;
 
   PaintWindow::register_class(hInstance);

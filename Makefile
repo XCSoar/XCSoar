@@ -339,6 +339,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \
 	$(SRC)/Screen/ProgressWindow.cpp \
+	$(SRC)/ResourceLoader.cpp \
 	\
 	$(SRC)/Polar/Polar.cpp \
 	$(SRC)/Polar/Loader.cpp \

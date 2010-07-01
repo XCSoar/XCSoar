@@ -372,6 +372,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
+	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/TaskClient.cpp \
@@ -429,6 +430,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/dlgComboPicker.cpp \
 	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/UtilsText.cpp \
@@ -472,6 +474,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/AirspaceParser.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Registry.cpp \

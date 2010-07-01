@@ -43,6 +43,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
+#include "ResourceLoader.hpp"
 #include "Interface.hpp"
 #include "InfoBoxLayout.hpp"
 #include "Logger/Logger.hpp"
@@ -335,6 +336,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   LoadFiles();
 
 #ifdef WIN32
+  ResourceLoader::Init(hInstance);
   CommonInterface::hInst = hInstance;
 
   TestWindow::register_class(hInstance);

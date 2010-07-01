@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Screen/Bitmap.hpp"
-#include "Interface.hpp"
+#include "ResourceLoader.hpp"
 
 #if defined(ENABLE_SDL) && !defined(WIN32)
 #include "LocalPath.hpp"
@@ -76,26 +76,12 @@ Bitmap::load(unsigned id)
 
 #ifdef ENABLE_SDL
 #ifdef WIN32
-  const TCHAR *name = MAKEINTRESOURCE(id);
-
-  HRSRC resource = FindResource(CommonInterface::hInst, name, RT_BITMAP);
-  if (resource == NULL)
+  ResourceLoader::Data data = ResourceLoader::Load(id);
+  if (data.first == NULL)
     return false;
 
-  DWORD size = ::SizeofResource(CommonInterface::hInst, resource);
-  if (size == 0)
-    return false;
-
-  HGLOBAL handle = ::LoadResource(CommonInterface::hInst, resource);
-  if (handle == NULL)
-    return false;
-
-  LPVOID data = ::LockResource(handle);
-  if (data == NULL)
-    return false;
-
-  const BITMAPINFO *info = (const BITMAPINFO *)data;
-  if (size < sizeof(*info))
+  const BITMAPINFO *info = (const BITMAPINFO *)data.first;
+  if (data.second < sizeof(*info))
     return false;
 
   int pitch = (((info->bmiHeader.biWidth * info->bmiHeader.biBitCount) / 8 - 1) | 3) + 1;
@@ -114,7 +100,7 @@ Bitmap::load(unsigned id)
   header->bfReserved1 = 0;
   header->bfReserved2 = 0;
   header->bfOffBits = sizeof(BITMAPFILEHEADER) + size - data_size;
-  memcpy(header + 1, data, size);
+  memcpy(header + 1, data.first, data.second);
 
   SDL_RWops *rw = SDL_RWFromMem(header, sizeof(*header) + size);
   surface = SDL_LoadBMP_RW(rw, 1);
@@ -133,7 +119,7 @@ Bitmap::load(unsigned id)
   return surface != NULL;
 #endif
 #else /* !ENABLE_SDL */
-  bitmap = LoadBitmap(XCSoarInterface::hInst, MAKEINTRESOURCE(id));
+  bitmap = ResourceLoader::LoadBitmap2(id);
   return bitmap != NULL;
 #endif /* !ENABLE_SDL */
 }

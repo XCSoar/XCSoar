@@ -53,6 +53,7 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 #include "InfoBoxLayout.hpp"
 #include "Screen/Layout.hpp"
+#include "ResourceLoader.hpp"
 #include "SettingsUser.hpp"
 #include "IO/FileLineReader.hpp"
 
@@ -120,6 +121,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 {
 #ifdef WIN32
+  ResourceLoader::Init(hInstance);
   CommonInterface::hInst = hInstance;
   PaintWindow::register_class(hInstance);
 #endif
