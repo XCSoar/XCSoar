@@ -150,7 +150,6 @@ extern const TCHAR szProfileEnableFLARMGauge[];
 extern const TCHAR szProfileSnailTrail[];
 extern const TCHAR szProfileTrailDrift[];
 extern const TCHAR szProfileGliderScreenPosition[];
-extern const TCHAR szProfileAnimation[];
 extern const TCHAR szProfileSetSystemTimeFromGPS[];
 
 extern const TCHAR szProfileVoiceClimbRate[];

@@ -1446,7 +1446,6 @@ static void setVariables(void) {
   }
 
   LoadFormProperty(*wf, _T("prpRiskGamma"), XCSoarInterface::SettingsComputer().risk_gamma);
-  LoadFormProperty(*wf, _T("prpAnimation"), XCSoarInterface::EnableAnimation);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTrail"));
   if (wp) {
@@ -2192,9 +2191,6 @@ void dlgConfigurationShowModal(void)
   changed |= SetValueRegistryOnChange(wf, _T("prpSetSystemTimeFromGPS"),
                                       szProfileSetSystemTimeFromGPS,
                                       XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS);
-  changed |= SetValueRegistryOnChange(wf, _T("prpEnableAnimation"),
-                                      szProfileAnimation,
-                                      XCSoarInterface::EnableAnimation);
   changed |= SetValueRegistryOnChange(wf, _T("prpTrailDrift"),
                                       szProfileTrailDrift,
                                       XCSoarInterface::SetSettingsMap().EnableTrailDrift);

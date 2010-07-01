@@ -313,8 +313,6 @@ Profile::Use()
   Get(szProfileTrailDrift,
       XCSoarInterface::SetSettingsMap().EnableTrailDrift);
 
-  Get(szProfileAnimation, XCSoarInterface::EnableAnimation);
-
   Get(szProfileDrawTopology,
       XCSoarInterface::SetSettingsMap().EnableTopology);
 

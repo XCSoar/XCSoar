@@ -83,10 +83,3 @@ ButtonLabel::IsEnabled(unsigned i)
 {
   return bar->IsButtonEnabled(i);
 }
-
-void
-ButtonLabel::AnimateButton(unsigned i)
-{
-  if (EnableAnimation)
-    bar->AnimateButton(i);
-}

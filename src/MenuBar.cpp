@@ -204,12 +204,3 @@ MenuBar::HideButton(unsigned i)
 
   buttons[i].hide();
 }
-
-void
-MenuBar::AnimateButton(unsigned i)
-{
-  assert(i < MAX_BUTTONS);
-
-  if (!buttons[i].is_visible())
-    return;
-}

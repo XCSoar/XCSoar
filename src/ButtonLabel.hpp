@@ -52,7 +52,6 @@ protected:
 
 public:
   static void CreateButtonLabels(ContainerWindow &parent);
-  static void AnimateButton(unsigned i);
   static void SetFont(const Font &Font);
   static void Destroy();
   static void SetLabelText(unsigned i, const TCHAR *text);

@@ -702,7 +702,6 @@ InputEvents::processButton(int bindex)
   if (!Debounce()) return true;
   */
 
-  ButtonLabel::AnimateButton(bindex);
   processGo(item.event);
 
   // experimental: update button text, macro may change the label
@@ -763,8 +762,6 @@ InputEvents::processKey(int dWord)
   if (i >= 0 && menu[i].location > 0) {
     bindex = menu[i].location;
     pLabelText = menu[i].label;
-    if (bindex > 0)
-      ButtonLabel::AnimateButton(bindex);
   }
 
   if (bindex < 0 || ButtonLabel::IsEnabled(bindex))

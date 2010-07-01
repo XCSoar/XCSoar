@@ -96,8 +96,6 @@ public:
   bool IsButtonEnabled(unsigned i) const {
     return buttons[i].is_enabled();
   }
-
-  void AnimateButton(unsigned i);
 };
 
 #endif
