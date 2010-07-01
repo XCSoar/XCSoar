@@ -39,7 +39,7 @@ Copyright_License {
 #include "Formatter/Base.hpp"
 #include "Math/FastMath.h"
 #include "Atmosphere.h"
-#include "Battery.h"
+#include "Hardware/Battery.h"
 #include "Units.hpp"
 #include "Interface.hpp"
 #include <stdio.h>

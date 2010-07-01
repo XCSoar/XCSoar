@@ -60,7 +60,7 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
 #include "Interface.hpp"
-#include "Battery.h"
+#include "Hardware/Battery.h"
 #include "FlarmCalculations.h"
 #include "UtilsSystem.hpp"
 #include "MainWindow.hpp"

@@ -41,7 +41,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Blackboard.hpp"
 #include "Math/Earth.hpp"
-#include "Battery.h"
+#include "Hardware/Battery.h"
 #include "Units.hpp"
 #include "Logger/Logger.hpp"
 #include "Math/FastMath.h"

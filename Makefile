@@ -295,7 +295,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Asset.cpp \
 	$(SRC)/Appearance.cpp \
-	$(SRC)/Battery.c 		\
+	$(SRC)/Hardware/Battery.c \
 	$(SRC)/Language.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Interface.cpp \
