@@ -516,7 +516,7 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
           assert(h_buf+row_plus_offset < hBuf+width_sub*height_sub);
 
           const int p32 = 
-            h_buf[-row_minus_offset]-
+            h_buf[-(int)row_minus_offset]-
             h_buf[row_plus_offset];
 
           // X direction
@@ -535,7 +535,7 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
 
           const int p22 = 
             h_buf[column_plus_index]-
-            h_buf[-column_minus_index];
+            h_buf[-(int)column_minus_index];
 
           const unsigned p20 = column_plus_index + column_minus_index;
 
