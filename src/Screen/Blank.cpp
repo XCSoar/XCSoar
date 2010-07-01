@@ -42,7 +42,7 @@ Copyright_License {
 
 #include "Interface.hpp"
 #include "Hardware/Battery.h"
-#include "Hardware/VideoPower.h"
+#include "Hardware/Display.hpp"
 #include "Dialogs.h"
 #include "LogFile.hpp"
 #include "Message.hpp"
@@ -63,17 +63,9 @@ BlankDisplay(bool doblank)
   if (doblank == oldblank)
     return;
 
-  HDC gdc;
-  int iESC = SETPOWERMANAGEMENT;
-
-  gdc = ::GetDC(NULL);
-  if (ExtEscape(gdc, QUERYESCSUPPORT, sizeof(int), (LPCSTR)&iESC, 0, NULL) == 0)
+  if (!Display::BlankSupported())
     // can't do it, not supported
     return;
-
-  VIDEO_POWER_MANAGEMENT vpm;
-  vpm.Length = sizeof(VIDEO_POWER_MANAGEMENT);
-  vpm.DPMSVersion = 0x0001;
 
   // TODO feature: Trigger a GCE (Glide Computer Event) when
   // switching to battery mode This can be used to warn users that
@@ -109,8 +101,7 @@ BlankDisplay(bool doblank)
 
     if (!PDABatteryAC) {
       // Power off the display
-      vpm.PowerState = VideoPowerOff;
-      ExtEscape(gdc, SETPOWERMANAGEMENT, vpm.Length, (LPCSTR)&vpm, 0, NULL);
+      Display::Blank(true);
       oldblank = true;
       XCSoarInterface::SetSettingsMap().ScreenBlanked = true;
     } else {
@@ -119,13 +110,10 @@ BlankDisplay(bool doblank)
   } else if (oldblank) {
     // was blanked
     // Power on the display
-    vpm.PowerState = VideoPowerOn;
-    ExtEscape(gdc, SETPOWERMANAGEMENT, vpm.Length, (LPCSTR) &vpm,
-              0, NULL);
+    Display::Blank(false);
     oldblank = false;
     XCSoarInterface::SetSettingsMap().ScreenBlanked = false;
   }
-  ::ReleaseDC(NULL, gdc);
 }
 
 void
