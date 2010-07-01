@@ -539,10 +539,10 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
 
           const unsigned p20 = column_plus_index + column_minus_index;
 
-          const long dd0 = p22 * p31;
-          const long dd1 = p20 * p32;
-          const long dd2 = p20 * p31 * height_slope_factor;
-          const long mag = (dd0 * dd0 + dd1 * dd1 + dd2 * dd2);
+          const int dd0 = p22 * p31;
+          const int dd1 = p20 * p32;
+          const int dd2 = p20 * p31 * height_slope_factor;
+          const int mag = (dd0 * dd0 + dd1 * dd1 + dd2 * dd2);
           if (mag>0) {
             const long num = (dd2 * sz + dd0 * sx + dd1 * sy);
             const int sval = num/(int)sqrt((fixed)mag);
