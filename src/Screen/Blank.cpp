@@ -47,12 +47,6 @@ Copyright_License {
 #include "Message.hpp"
 #include "Simulator.hpp"
 
-// GDI Escapes for ExtEscape()
-#define QUERYESCSUPPORT    8
-// The following are unique to CE
-#define GETVFRAMEPHYSICAL    6144
-#define GETVFRAMELEN         6145
-#define DBGDRIVERSTAT        6146
 #define SETPOWERMANAGEMENT   6147
 #define GETPOWERMANAGEMENT   6148
 
