@@ -38,15 +38,12 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Units.hpp"
-#include "Protection.hpp"
-#include "Math/FastMath.h"
 #include "Components.hpp"
 #include "Screen/Layout.hpp"
 #include "Compatibility/vk.h"
 #include "AirspaceClientUI.hpp"
 #include <assert.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceList=NULL;
