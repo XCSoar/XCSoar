@@ -42,26 +42,11 @@ Copyright_License {
 
 #include "Interface.hpp"
 #include "Hardware/Battery.h"
+#include "Hardware/VideoPower.h"
 #include "Dialogs.h"
 #include "LogFile.hpp"
 #include "Message.hpp"
 #include "Simulator.hpp"
-
-#define SETPOWERMANAGEMENT   6147
-#define GETPOWERMANAGEMENT   6148
-
-typedef enum _VIDEO_POWER_STATE {
-  VideoPowerOn = 1,
-  VideoPowerStandBy,
-  VideoPowerSuspend,
-  VideoPowerOff
-} VIDEO_POWER_STATE, *PVIDEO_POWER_STATE;
-
-typedef struct _VIDEO_POWER_MANAGEMENT {
-  ULONG Length;
-  ULONG DPMSVersion;
-  ULONG PowerState;
-} VIDEO_POWER_MANAGEMENT, *PVIDEO_POWER_MANAGEMENT;
 
 int DisplayTimeOut = 0;
 
