@@ -90,14 +90,15 @@ IgcReplayGlue::ScanBuffer(const TCHAR *buffer, fixed *Time,
 bool
 IgcReplayGlue::update_time(const fixed mintime)
 {
-  const fixed t_simulation_last = t_simulation;
+  if (!clock.check(1000))
+    return false;
 
   t_simulation += TimeScale * max(clock.elapsed(), 0) / 1000;
   clock.update();
 
   t_simulation = std::max(mintime, t_simulation);
 
-  return (t_simulation > t_simulation_last);
+  return true;
 }
 
 void
