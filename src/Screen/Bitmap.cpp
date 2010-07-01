@@ -70,12 +70,14 @@ Bitmap::~Bitmap()
 }
 
 bool
-Bitmap::load(const TCHAR *name)
+Bitmap::load(unsigned id)
 {
   reset();
 
 #ifdef ENABLE_SDL
 #ifdef WIN32
+  const TCHAR *name = MAKEINTRESOURCE(id);
+
   HRSRC resource = FindResource(CommonInterface::hInst, name, RT_BITMAP);
   if (resource == NULL)
     return false;
@@ -121,32 +123,20 @@ Bitmap::load(const TCHAR *name)
 
   return true;
 #else
-  surface = ::SDL_LoadBMP(name);
-  return surface != NULL;
-#endif
-#else /* !ENABLE_SDL */
-  bitmap = LoadBitmap(XCSoarInterface::hInst, name);
-  return bitmap != NULL;
-#endif /* !ENABLE_SDL */
-}
-
-#ifndef WIN32
-bool
-Bitmap::load(unsigned id)
-{
-  // XXX
-
   TCHAR name[32];
-
   _stprintf(name, _T("resources/%u"), (unsigned)id);
-  load(name);
 
   TCHAR path[MAX_PATH];
   LocalPath(path, name);
 
-  return load(path);
+  surface = ::SDL_LoadBMP(path);
+  return surface != NULL;
+#endif
+#else /* !ENABLE_SDL */
+  bitmap = LoadBitmap(XCSoarInterface::hInst, MAKEINTRESOURCE(id));
+  return bitmap != NULL;
+#endif /* !ENABLE_SDL */
 }
-#endif /* !WIN32 */
 
 bool
 Bitmap::load_stretch(unsigned id, unsigned zoom)

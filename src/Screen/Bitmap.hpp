@@ -64,17 +64,11 @@ protected:
 public:
 #ifdef ENABLE_SDL
   Bitmap():surface(NULL) {}
-  explicit Bitmap(const TCHAR *name):surface(NULL) {
-    load(name);
-  }
   explicit Bitmap(unsigned id):surface(NULL) {
     load(id);
   }
 #else
   Bitmap():bitmap(NULL) {}
-  explicit Bitmap(const TCHAR *name):bitmap(NULL) {
-    load(name);
-  }
   explicit Bitmap(unsigned id):bitmap(NULL) {
     load(id);
   }
@@ -90,15 +84,7 @@ public:
 #endif
   }
 
-  bool load(const TCHAR *name);
-
-#if !defined(WIN32)
   bool load(unsigned id);
-#else
-  bool load(unsigned id) {
-    return load(MAKEINTRESOURCE(id));
-  }
-#endif
 
   /**
    * Load a bitmap and stretch it by the specified zoom factor.
