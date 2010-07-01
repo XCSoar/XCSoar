@@ -117,9 +117,7 @@ XShapeLabel::XShapeLabel(shapefileObj *shpfile, int i, int field)
       (strcmp(src,"UNK") != 0) &&
       (strcmp(src,"RAILWAY STATION") != 0) &&
       (strcmp(src,"RAILROAD STATION") != 0)) {
-    label = (char*)malloc(strlen(src) + 1);
-    if (label)
-      strcpy(label, src);
+    label = strdup(src);
   } else {
     hide = true;
   }
