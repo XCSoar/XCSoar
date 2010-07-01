@@ -2,9 +2,6 @@
 // (see http://msdn.microsoft.com/en-us/library/ms889982.aspx)
 HI_RES_AWARE CEUX {1}
 
-#include <afxres.h>
-#include <commctrl.h>
-
 #include "resource.h"
 
 
