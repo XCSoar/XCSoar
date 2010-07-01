@@ -238,14 +238,8 @@ public:
   }
 
   void polyline(const POINT *lppt, unsigned cPoints) {
-    Sint16 vx[cPoints], vy[cPoints];
-
-    for (unsigned i = 0; i < cPoints; ++i) {
-      vx[i] = lppt[i].x;
-      vy[i] = lppt[i].y;
-    }
-
-    ::polygonColor(surface, vx, vy, cPoints, pen.get_color().gfx_color());
+    for (unsigned i = 1; i < cPoints; ++i)
+      line(lppt[i - 1].x, lppt[i - 1].y, lppt[i].x, lppt[i].y);
   }
 
   void polygon(const POINT* lppt, unsigned cPoints) {
