@@ -116,7 +116,7 @@ Bitmap::load(const TCHAR *name)
 
   SDL_RWops *rw = SDL_RWFromMem(header, sizeof(*header) + size);
   surface = SDL_LoadBMP_RW(rw, 1);
-  SDL_FreeRW(rw);
+
   free(header);
 
   return true;
