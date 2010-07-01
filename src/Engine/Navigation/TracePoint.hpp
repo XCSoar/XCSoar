@@ -34,7 +34,9 @@ public:
 
   unsigned time; /**< Time of sample */
   unsigned last_time; /**< Time of sample prior to this */
-  fixed drift_factor; /**< Thermal drift factor */
+  fixed drift_factor; /**< Thermal drift factor: 1 indicates drift
+                       * rate equal to wind speed, 0 indicates no
+                       * drift.*/
 
   /** 
    * Calculate approximate squared (flat projected) distance between this point

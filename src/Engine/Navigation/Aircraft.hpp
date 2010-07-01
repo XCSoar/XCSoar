@@ -103,7 +103,8 @@ struct ALTITUDE_STATE
   /** Altitude over terrain */
   fixed AltitudeAGL;
 
-  /** Thermal drift factor */
+  /** Thermal drift factor: 1 indicates drift rate equal to wind speed,
+   0 indicates no drift. */
   fixed thermal_drift_factor() const;
 };
 
