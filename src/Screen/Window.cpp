@@ -66,7 +66,7 @@ Window::~Window()
 void
 Window::assert_thread() const
 {
-#ifdef WIN32
+#ifndef ENABLE_SDL
   assert(hWnd != NULL);
   assert(!::IsWindow(hWnd) ||
          ::GetWindowThreadProcessId(hWnd, NULL) == ::GetCurrentThreadId());

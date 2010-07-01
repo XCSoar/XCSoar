@@ -56,7 +56,7 @@ WndButton::WndButton(ContainerWindow &parent,
   // copy the buttons initial caption to the mCaption field
   _tcscpy(mCaption, Caption);
 
-#if defined(WIN32) && !defined(NDEBUG)
+#if !defined(ENABLE_SDL) && !defined(NDEBUG)
   ::SetWindowText(hWnd, Caption);
 #endif
 

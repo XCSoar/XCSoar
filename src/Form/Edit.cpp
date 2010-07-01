@@ -197,7 +197,7 @@ WndProperty::WndProperty(ContainerControl &parent,
 
   edit.set_font(*GetFont());
 
-#if defined(WIN32) && !defined(NDEBUG)
+#if !defined(ENABLE_SDL) && !defined(NDEBUG)
   ::SetWindowText(hWnd, Caption);
 #endif
 

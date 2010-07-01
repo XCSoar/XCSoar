@@ -107,7 +107,7 @@ WndForm::WndForm(SingleWindow &_main_window,
   if (Caption != NULL)
     _tcscpy(mCaption, Caption);
 
-#if defined(WIN32) && !defined(NDEBUG)
+#if !defined(ENABLE_SDL) && !defined(NDEBUG)
   ::SetWindowText(hWnd, Caption);
 #endif
 }
