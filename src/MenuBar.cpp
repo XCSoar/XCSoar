@@ -39,7 +39,6 @@ Copyright_License {
 #include "MenuBar.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Animation.hpp"
 
 #include <assert.h>
 
@@ -213,16 +212,4 @@ MenuBar::AnimateButton(unsigned i)
 
   if (!buttons[i].is_visible())
     return;
-
-  RECT mRc, aniRect;
-  mRc = buttons[i].get_screen_position();
-
-  aniRect.top = (mRc.top * 5 + mRc.bottom) / 6;
-  aniRect.left = (mRc.left * 5 + mRc.right) / 6;
-  aniRect.right = (mRc.left + mRc.right * 5) / 6;
-  aniRect.bottom = (mRc.top + mRc.bottom * 5) / 6;
-  SetSourceRectangle(aniRect);
-  DrawWireRects(true, &mRc, 5);
-
-  SetSourceRectangle(mRc);
 }

@@ -51,7 +51,6 @@ Copyright_License {
 #include "Device/Register.hpp"
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
-#include "Screen/Animation.hpp"
 #include "Screen/Busy.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/CheckBox.hpp"

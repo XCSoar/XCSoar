@@ -42,7 +42,6 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Interface.hpp"
 #include "MapWindow.hpp"
-#include "Screen/Animation.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
@@ -261,9 +260,6 @@ int WndForm::ShowModal(bool bEnableMap) {
   if (is_embedded() && !is_altair())
     enter_clock.update();
 
-  RECT mRc = get_screen_position();
-  DrawWireRects(XCSoarInterface::EnableAnimation,&mRc, 5);
-
   show_on_top();
 
   mModalResult = 0;
@@ -376,18 +372,6 @@ int WndForm::ShowModal(bool bEnableMap) {
 
   // static.  this is current open/close or child open/close
   WndForm::timeAnyOpenClose.update();
-
-  //  SetSourceRectangle(mRc);
-  //  DrawWireRects(&aniRect, 5);
-
-  /*
-  // reset to center?
-  aniRect.top = (mRc.top+mRc.bottom)/2;;
-  aniRect.left = (mRc.left+mRc.right)/2;
-  aniRect.right = (mRc.left+mRc.right)/2;
-  aniRect.bottom = (mRc.top+mRc.bottom)/2;
-  SetSourceRectangle(aniRect);
-  */
 
 #ifndef ENABLE_SDL
   SetFocus(oldFocusHwnd);

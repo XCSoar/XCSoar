@@ -41,7 +41,6 @@ Copyright_License {
 #include "InfoBox.hpp"
 #include "LogFile.hpp"
 #include "SettingsUser.hpp"
-#include "Screen/Animation.hpp"
 #include "Screen/Layout.hpp"
 #include "Profile.hpp"
 

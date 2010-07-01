@@ -366,7 +366,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Terrain/TerrainRenderer.cpp \
 	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
 	$(SRC)/Registry.cpp \
-	$(SRC)/Screen/Animation.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/Graphics.cpp \
@@ -429,7 +428,6 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/dlgComboPicker.cpp \
-	$(SRC)/Screen/Animation.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -472,7 +470,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/Dialogs/dlgAirspaceWarning.cpp \
 	$(SRC)/AirspaceParser.cpp \
-	$(SRC)/Screen/Animation.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Thread/Debug.cpp \
@@ -532,7 +529,6 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Math/SunEphemeris.cpp \
 	$(SRC)/LocalTime.cpp \
 	$(SRC)/AirspaceParser.cpp \
-	$(SRC)/Screen/Animation.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/TaskClient.cpp \

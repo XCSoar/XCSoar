@@ -270,8 +270,6 @@ WndListFrame::on_key_check(unsigned key_code)
 bool
 WndListFrame::on_key_down(unsigned key_code)
 {
-  // XXX SetSourceRectangle(mRc);
-
   scroll_bar.drag_end(this);
 
   switch (key_code) {

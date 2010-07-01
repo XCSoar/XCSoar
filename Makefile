@@ -330,7 +330,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
 	\
-	$(SRC)/Screen/Animation.cpp \
 	$(SRC)/Screen/Blank.cpp \
 	$(SRC)/Screen/Chart.cpp \
 	$(SRC)/Screen/Fonts.cpp \

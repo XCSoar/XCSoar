@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "Form/Button.hpp"
 #include "Form/Control.hpp"
-#include "Screen/Animation.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
 #include "Interface.hpp"
@@ -106,10 +105,6 @@ WndButton::on_mouse_up(int x, int y)
 
   // Repainting needed
   invalidate();
-
-  // Save the button coordinates for possible animation
-  RECT mRc = get_screen_position();
-  SetSourceRectangle(mRc);
 
   on_click();
 
@@ -208,10 +203,6 @@ WndButton::on_key_up(unsigned key_code)
     // Return if button was not pressed long enough
     if (!XCSoarInterface::Debounce())
       return true; // prevent false trigger
-
-    // Save the button coordinates for possible animation
-    RECT mRc = get_screen_position();
-    SetSourceRectangle(mRc);
 
     on_click();
 

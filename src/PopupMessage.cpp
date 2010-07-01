@@ -109,12 +109,6 @@ void PopupMessage::Resize() {
 
   if (*msgText == _T('\0')) {
     hide();
-
-    // animation
-    //      GetWindowRect(hWndMessageWindow, &mRc);
-    //      SetSourceRectangle(mRc);
-    //      mRc.top=0; mRc.bottom=0;
-    //      DrawWireRects(&mRc, 5);
   } else {
     set_text(msgText);
 
@@ -146,16 +140,6 @@ void PopupMessage::Resize() {
       rthis.top = midy-h1;
       rthis.bottom = midy+h2;
     }
-    /*
-    if (!is_visible) {
-      RECT bigrect;
-      GetWindowRect(hWndMapWindow, &bigrect);
-      GetWindowRect(hWndMessageWindow, &mRc);
-      bigrect.bottom= bigrect.top;
-      SetSourceRectangle(mRc);
-      DrawWireRects(&mRc, 10);
-    }
-    */
 
     move(rthis.left, rthis.top,
          rthis.right - rthis.left,
