@@ -77,7 +77,7 @@ public:
     return DrawScale;
   }
 
-  unsigned DistanceMetersToScreen(const fixed x) {
+  unsigned DistanceMetersToScreen(const fixed x) const {
     return iround(m_scale_meters_to_screen * x);
   }
 
