@@ -5,6 +5,8 @@
   <Button Name="cmdEdit" Caption="Edit" X="2" Y="-1" Width="98" Height="22" OnClick="OnEditClicked"/>
   <Button Name="cmdList" Caption="Browse" X="2" Y="-1" Width="98" Height="22" OnClick="OnListClicked"/>
 
+  <Button Name="cmdDeclare" Caption="Declare" X="2" Y="201" Width="98" Height="22" OnClick="OnDeclareClicked"/>
+
   <Canvas Name="frmTaskView" X="102" Y="2" Width="215" Height="220" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
 
 </Form>

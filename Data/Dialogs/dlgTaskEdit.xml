@@ -9,8 +9,6 @@
   <Button Name="cmdNew" Caption="New" X="92" Y="202" Width="70" Height="22" OnClick="OnNewClicked"/>
   <Button Name="cmdProperties" Caption="Properties" X="162" Y="202" Width="76" Height="22" OnClick="OnPropertiesClicked"/>
   <Button Name="cmdSave" Caption="Save" X="92" Y="226" Width="70" Height="22" OnClick="OnSaveClicked"/>
-  <Button Name="cmdDeclare" Caption="Declare" X="162" Y="226" Width="76" Height="22" OnClick="OnDeclareClicked"/>
-
-  <Button Name="cmdClose" Caption="Close" X="162" Y="250" Width="76" Height="22" OnClick="OnCloseClicked"/>
+  <Button Name="cmdClose" Caption="Close" X="162" Y="226" Width="76" Height="22" OnClick="OnCloseClicked"/>
 
 </Form>

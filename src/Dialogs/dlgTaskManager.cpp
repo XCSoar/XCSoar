@@ -55,6 +55,7 @@ Copyright_License {
 #include "Screen/Chart.hpp"
 #include "ChartProjection.hpp"
 #include "BackgroundDrawHelper.hpp"
+#include "Logger/Logger.hpp"
 
 #include <assert.h>
 
@@ -118,6 +119,14 @@ static void OnListClicked(WindowControl * Sender)
 }
 
 static void
+OnDeclareClicked(WindowControl * Sender)
+{
+  (void)Sender;
+  logger.LoggerDeviceDeclare(*ordered_task);
+}
+
+
+static void
 OnTaskPaint(WindowControl *Sender, Canvas &canvas)
 {
   RECT rc = Sender->get_client_rect();
@@ -149,6 +158,7 @@ static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnEditClicked),
   DeclareCallBackEntry(OnListClicked),
+  DeclareCallBackEntry(OnDeclareClicked),
   DeclareCallBackEntry(OnTaskPaint),
   DeclareCallBackEntry(NULL)
 };

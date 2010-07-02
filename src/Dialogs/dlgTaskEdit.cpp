@@ -41,7 +41,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
-#include "Logger/Logger.hpp"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
 #include "LocalPath.hpp"
@@ -181,13 +180,6 @@ OnTaskListEnter(unsigned ItemIndex)
 }
 
 static void
-OnDeclareClicked(WindowControl * Sender)
-{
-  (void)Sender;
-  logger.LoggerDeviceDeclare(*ordered_task);
-}
-
-static void
 OnSaveClicked(WindowControl * Sender)
 {
   (void)Sender;
@@ -209,7 +201,6 @@ static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnNewClicked),
   DeclareCallBackEntry(OnSaveClicked),
   DeclareCallBackEntry(OnTaskPaint),
-  DeclareCallBackEntry(OnDeclareClicked),
   DeclareCallBackEntry(NULL)
 };
 
