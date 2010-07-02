@@ -280,6 +280,8 @@ MapWindow::DrawWaypoints(Canvas &canvas)
 
   MapWaypointLabelClear();
 
+  canvas.set_text_color(Color::BLACK);
+
   WaypointVisitorMap v(*this, canvas, get_glide_polar());
   way_points->visit_within_range(PanLocation,
                                  fixed(GetScreenDistanceMeters()), v);
