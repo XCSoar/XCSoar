@@ -357,5 +357,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   window.event_loop();
 
+  delete topology;
+
   return 0;
 }
