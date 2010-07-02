@@ -39,6 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_RENDERER_HPP
 #define XCSOAR_TERRAIN_RENDERER_HPP
 
+#include "Terrain/HeightMatrix.hpp"
 #include "Navigation/GeoPoint.hpp"
 
 #include <windef.h>
@@ -96,7 +97,7 @@ private:
   int oversampling;
   int blursize;
 
-  unsigned short *hBuf;
+  HeightMatrix height_matrix;
   BGRColor *colorBuf;
   RasterRounding *rounding;
 

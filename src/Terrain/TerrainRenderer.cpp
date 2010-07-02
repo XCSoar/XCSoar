@@ -257,8 +257,6 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
   width_sub = sbuf->GetCorrectedWidth() / oversampling;
   height_sub = sbuf->GetHeight() / oversampling;
 
-  hBuf = (unsigned short*)malloc(sizeof(unsigned short) * width_sub * height_sub);
-
   colorBuf = (BGRColor*)malloc(256 * 128 * sizeof(BGRColor));
 
   rounding = new RasterRounding();
@@ -267,9 +265,6 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
 
 TerrainRenderer::~TerrainRenderer()
 {
-  if (hBuf)
-    free(hBuf);
-
   if (colorBuf)
     free(colorBuf);
 
@@ -379,9 +374,8 @@ TerrainRenderer::ScanSpotHeights(const RECT& rect)
   spot_max_val = -1;
   spot_min_val = 32767;
 
-  const unsigned short* h_buf = hBuf;
-
   for (int y = rect.top; y < rect.bottom; y += quantisation_pixels) {
+    const unsigned short *h_buf = height_matrix.GetRow(y);
     for (int x = rect.left; x < rect.right; x += quantisation_pixels, ++h_buf) {
       const short val = *h_buf;
       if (val > spot_max_val) {
@@ -403,54 +397,8 @@ void
 TerrainRenderer::FillHeightBuffer(const Projection &map_projection,
                                   const RECT& rect)
 {
-  const int width = (rect.right-rect.left)/quantisation_pixels;
-
-  #ifndef SLOW_TERRAIN_STUFF
-  // This code is quickest (by a little) but not so readable
-
-  const GEOPOINT PanLocation = map_projection.GetPanLocation();
-  const fixed InvDrawScale = map_projection.GetScreenScaleToLonLat();
-  const POINT Orig_Screen = map_projection.GetOrigScreen();
-  const int cost = map_projection.GetDisplayAngle().ifastcosine();
-  const int sint = map_projection.GetDisplayAngle().ifastsine();
-
-  GEOPOINT gp;
-  for (int y = rect.top; y < rect.bottom; y += quantisation_pixels) {
-    const int dy = y-Orig_Screen.y;
-    const int dycost = dy * cost+512;
-    const int dysint = dy * sint-512;
-
-    unsigned short* h_buf = hBuf+width*y/quantisation_pixels+rect.left/quantisation_pixels;
-
-    for (int x = rect.left; x < rect.right; x += quantisation_pixels, ++h_buf) {
-      const int dx = x-Orig_Screen.x;
-      const POINT r = { (dx*cost - dysint)/1024,
-                        (dycost + dx*sint)/1024 };
-      gp.Latitude = PanLocation.Latitude 
-        - Angle::native(r.y*InvDrawScale);
-      gp.Longitude = PanLocation.Longitude + Angle::native(r.x*InvDrawScale)
-        *gp.Latitude.invfastcosine();
-      
-      *h_buf = max((short)0, DisplayMap->GetField(gp, *rounding));
-    }
-  }
-
-  #else
-
-  // This code is marginally slower but readable
-
-  for (int y = rect.top; y < rect.bottom; y += quantisation_pixels) {
-
-    unsigned short* h_buf = hBuf+width*y/quantisation_pixels+rect.left/quantisation_pixels;
-
-    for (int x = rect.left; x < rect.right; x += quantisation_pixels, ++h_buf) {
-      GEOPOINT gp;
-      map_projection.Screen2LonLat(x, y, gp);
-      *h_buf = max((short)0, DisplayMap->GetField(gp, *rounding));
-    }
-  }
-
-  #endif
+  height_matrix.Fill(*DisplayMap, *rounding, map_projection, rect,
+                     quantisation_pixels);
 }
 
 const RECT 
@@ -475,8 +423,6 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
   const unsigned height_slope_factor = max(1, (int)pixelsize_d);
   const int terrain_contrast = TerrainContrast;
   const unsigned width_q = (rect_quantised.right-rect_quantised.left);
-
-  const unsigned short* h_buf = hBuf;
 
   const BGRColor* oColorBuf = colorBuf + 64 * 256;
   BGRColor* imageBuf = sbuf->GetBuffer();
@@ -511,6 +457,7 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
       imageBuf -= width_sub;
 #endif
       
+      const unsigned short * h_buf = height_matrix.GetRow(y);
       for (int x = rect_quantised.left; x < rect_quantised.right; ++x, ++h_buf) {
         if (short h = *h_buf) {
           h = min(255, h >> height_scale);
@@ -518,10 +465,10 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
           // no need to calculate slope if undefined height or sea level
 
           // Y direction
-          assert(h_buf-row_minus_offset >= hBuf);
-          assert(h_buf+row_plus_offset >= hBuf);
-          assert(h_buf-row_minus_offset < hBuf+width_sub*height_sub);
-          assert(h_buf+row_plus_offset < hBuf+width_sub*height_sub);
+          assert(h_buf-row_minus_offset >= height_matrix.GetData());
+          assert(h_buf+row_plus_offset >= height_matrix.GetData());
+          assert(h_buf-row_minus_offset < height_matrix.GetData()+width_sub*height_sub);
+          assert(h_buf+row_plus_offset < height_matrix.GetData()+width_sub*height_sub);
 
           const int p32 = 
             h_buf[-(int)row_minus_offset]-
@@ -536,10 +483,10 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
             ? quantisation_effective
             : (unsigned)(x - rect_quantised.left);
 
-          assert(h_buf-column_minus_index >= hBuf);
-          assert(h_buf+column_plus_index >= hBuf);
-          assert(h_buf-column_minus_index < hBuf+width_sub*height_sub);
-          assert(h_buf+column_plus_index < hBuf+width_sub*height_sub);
+          assert(h_buf-column_minus_index >= height_matrix.GetData());
+          assert(h_buf+column_plus_index >= height_matrix.GetData());
+          assert(h_buf-column_minus_index < height_matrix.GetData()+width_sub*height_sub);
+          assert(h_buf+column_plus_index < height_matrix.GetData()+width_sub*height_sub);
 
           const int p22 = 
             h_buf[column_plus_index]-
@@ -575,6 +522,7 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
       imageBuf -= width_sub;
 #endif
 
+      const unsigned short* h_buf = height_matrix.GetRow(y);
       for (int x = rect_quantised.left; x < rect_quantised.right; ++x) {
         if (short h = *h_buf++) {
           h = min(255, h >> height_scale);
