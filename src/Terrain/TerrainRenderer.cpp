@@ -484,6 +484,8 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
   if (!imageBuf)
     return;
 
+  imageBuf += rect_quantised.top * width_sub + rect_quantised.left;
+
   if (do_shading) {
     for (int y = rect_quantised.top; y < rect_quantised.bottom; ++y) {
       const unsigned row_plus_index = y < border.bottom
@@ -498,12 +500,10 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
       
       const unsigned p31 = row_plus_index + row_minus_index;
       
-      BGRColor* i_buf = imageBuf+rect_quantised.left+y*width_sub;
+      BGRColor *i_buf = imageBuf;
+      imageBuf += width_sub;
       
       for (int x = rect_quantised.left; x < rect_quantised.right; ++x, ++h_buf) {
-
-        assert(i_buf < imageBuf+width_sub*height_sub); 
-        
         if (short h = *h_buf) {
           h = min(255, h >> height_scale);
           
@@ -560,7 +560,9 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
     }
   } else {
     for (int y = rect_quantised.top; y < rect_quantised.bottom; ++y) {
-      BGRColor* i_buf = imageBuf+rect_quantised.left+y*width_sub;
+      BGRColor *i_buf = imageBuf;
+      imageBuf += width_sub;
+
       for (int x = rect_quantised.left; x < rect_quantised.right; ++x) {
         if (short h = *h_buf++) {
           h = min(255, h >> height_scale);
