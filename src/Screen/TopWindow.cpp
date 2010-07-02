@@ -271,6 +271,8 @@ TopWindow::event_loop()
       on_event(event);
   }
 
+  SDL_Quit();
+
   return 0;
 
 #else /* !ENABLE_SDL */
