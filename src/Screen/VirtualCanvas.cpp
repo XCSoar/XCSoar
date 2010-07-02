@@ -80,25 +80,15 @@ VirtualCanvas::set(unsigned _width, unsigned _height)
   reset();
 
 #ifdef ENABLE_SDL
-  Uint32 rmask, gmask, bmask, amask;
+  const SDL_Surface *video = ::SDL_GetVideoSurface();
+  assert(video != NULL);
+  const SDL_PixelFormat *format = video->format;
+
   SDL_Surface *surface;
-
-  /* SDL interprets each pixel as a 32-bit number, so our masks must depend
-     on the endianness (byte order) of the machine */
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-  rmask = 0xff000000;
-  gmask = 0x00ff0000;
-  bmask = 0x0000ff00;
-  amask = 0;
-#else
-  rmask = 0x000000ff;
-  gmask = 0x0000ff00;
-  bmask = 0x00ff0000;
-  amask = 0;
-#endif
-
-  surface = ::SDL_CreateRGBSurface(SDL_SWSURFACE, _width, _height, 32,
-                                   rmask, gmask, bmask, amask);
+  surface = ::SDL_CreateRGBSurface(SDL_SWSURFACE, _width, _height,
+                                   format->BitsPerPixel,
+                                   format->Rmask, format->Gmask,
+                                   format->Bmask, format->Amask);
   if (surface != NULL)
     Canvas::set(surface);
 #else /* !ENABLE_SDL */
