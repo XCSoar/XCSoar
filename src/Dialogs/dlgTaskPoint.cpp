@@ -369,23 +369,6 @@ OnRemoveClicked(WindowControl * Sender)
   wf->SetModalResult(mrCancel);
 }
 
-
-static void OnMoveAfterClicked(WindowControl * Sender){
-  (void)Sender;
-  if (!ordered_task->get_factory().swap(active_index, true))
-    return;
-  task_modified = true;
-  wf->SetModalResult(mrOK);
-}
-
-static void OnMoveBeforeClicked(WindowControl * Sender){
-  (void)Sender;
-  if (!ordered_task->get_factory().swap(active_index-1, true))
-    return;
-  task_modified = true;
-  wf->SetModalResult(mrOK);
-}
-
 static void OnDetailsClicked(WindowControl * Sender) {
   OrderedTaskPoint* task_point = ordered_task->get_tp(active_index);
   if (task_point) {
@@ -419,8 +402,6 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnDetailsClicked),
   DeclareCallBackEntry(OnTypeClicked),
   DeclareCallBackEntry(OnTaskPaint),
-  DeclareCallBackEntry(OnMoveAfterClicked),
-  DeclareCallBackEntry(OnMoveBeforeClicked),
   DeclareCallBackEntry(NULL)
 };
 

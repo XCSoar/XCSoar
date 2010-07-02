@@ -7,8 +7,6 @@
 
   <Button Name="butRemove" Caption="Remove" X="2" Y="-1" Width="70" Height="22" OnClick="OnRemoveClicked"/>
   <Button Name="butRelocate" Caption="Relocate" X="2" Y="-1" Width="70" Height="22" OnClick="OnRelocateClicked"/>
-  <Button Name="butDown" Caption="Move down" X="2" Y="-1" Width="70" Height="22" OnClick="OnMoveAfterClicked"/>
-  <Button Name="butUp" Caption="Move up" X="2" Y="-1" Width="70" Height="22" OnClick="OnMoveBeforeClicked"/>
 
   <Panel Name="frmPointCommon" X="80" Y="0" Width="240" Height="80">
   <Button Name="butDetails" Caption="Details" X="10" Y="-1" Width="220" Height="22" OnClick="OnDetailsClicked"/>
