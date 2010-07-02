@@ -48,7 +48,8 @@ Copyright_License {
 
 #include <assert.h>
 
-const TCHAR* OrderedTaskFactoryName(OrderedTask::Factory_t type)
+const TCHAR*
+OrderedTaskFactoryName(OrderedTask::Factory_t type)
 {
   switch(type) {
   case OrderedTask::FACTORY_RT:
@@ -69,11 +70,12 @@ const TCHAR* OrderedTaskFactoryName(OrderedTask::Factory_t type)
     return _T("Touring");
   default:
     assert(1);
-  };
+  }
   return NULL;
 }
 
-const TCHAR* OrderedTaskFactoryDescription(OrderedTask::Factory_t type)
+const TCHAR*
+OrderedTaskFactoryDescription(OrderedTask::Factory_t type)
 {
   switch(type) {
   case OrderedTask::FACTORY_RT:
@@ -92,11 +94,12 @@ const TCHAR* OrderedTaskFactoryDescription(OrderedTask::Factory_t type)
     return _T("Casual touring task");
   default:
     assert(1);
-  };
+  }
   return NULL;
 }
 
-void OrderedTaskSummary(OrderedTask* task, TCHAR* text)
+void
+OrderedTaskSummary(OrderedTask* task, TCHAR* text)
 {
   const TaskStats &stats = task->get_stats();
 
@@ -104,7 +107,7 @@ void OrderedTaskSummary(OrderedTask* task, TCHAR* text)
     _stprintf(text, _T("%s\nTask is empty"),
               OrderedTaskFactoryName(task->get_factory_type()));
   } else {
-    if (task->has_targets()) {
+    if (task->has_targets())
       _stprintf(text, _T("%s\nNominal dist: %.0f %s\nMax dist: %.0f %s\nMin dist: %.0f %s"), 
                 OrderedTaskFactoryName(task->get_factory_type()),
                 (double)Units::ToUserDistance(stats.distance_nominal),
@@ -112,51 +115,53 @@ void OrderedTaskSummary(OrderedTask* task, TCHAR* text)
                 (double)Units::ToUserDistance(stats.distance_max),
                 Units::GetDistanceName(),
                 (double)Units::ToUserDistance(stats.distance_min),
-                Units::GetDistanceName()
-        );
-    } else {
+                Units::GetDistanceName());
+    else
       _stprintf(text, _T("%s\nDistance: %.0f %s"), 
                 OrderedTaskFactoryName(task->get_factory_type()),
                 (double)Units::ToUserDistance(stats.distance_nominal),
                 Units::GetDistanceName());
-    }
   }
 }
-
 
 class LabelObservationZone
 {
 public:
   LabelObservationZone(TCHAR* buff): text(buff) {}
 
-  void Visit(const FAISectorZone& oz) 
-    {
-      _stprintf(text, _T("FAI Sector"));
-    }
+  void
+  Visit(const FAISectorZone& oz)
+  {
+    _stprintf(text, _T("FAI Sector"));
+  }
 
-  void Visit(const KeyholeZone& oz) 
-    {
-      _stprintf(text, _T("Keyhole"));
-    }
+  void
+  Visit(const KeyholeZone& oz)
+  {
+    _stprintf(text, _T("Keyhole"));
+  }
 
-  void Visit(const SectorZone& oz) 
-    {
-      _stprintf(text, _T("Sector"));
-    }
+  void
+  Visit(const SectorZone& oz)
+  {
+    _stprintf(text, _T("Sector"));
+  }
 
-  void Visit(const LineSectorZone& oz) 
-    {
-      _stprintf(text, _T("Line"));
-    }
+  void
+  Visit(const LineSectorZone& oz)
+  {
+    _stprintf(text, _T("Line"));
+  }
 
-  void Visit(const CylinderZone& oz) 
-    {
-      _stprintf(text, _T("Cylinder"));
-    }
+  void
+  Visit(const CylinderZone& oz)
+  {
+    _stprintf(text, _T("Cylinder"));
+  }
+
 private:
   TCHAR *text;
 };
-
 
 class LabelTaskPoint:
   public TaskPointConstVisitor
@@ -169,30 +174,38 @@ public:
     text[0] = NULL;
   }
 
-  void Visit(const UnorderedTaskPoint& tp) {
-  }
-  void Visit(const StartPoint& tp) {    
-    if (found()) {
+  void Visit(const UnorderedTaskPoint& tp) {}
+
+  void
+  Visit(const StartPoint& tp)
+  {
+    if (found())
       _stprintf(text, _T("S:  %s"), tp.get_waypoint().Name.c_str());
-    }
+
     inc_index();
   }
-  void Visit(const FinishPoint& tp) {
-    if (found()) {
+  void
+  Visit(const FinishPoint& tp)
+  {
+    if (found())
       _stprintf(text, _T("F:  %s"), tp.get_waypoint().Name.c_str());
-    }
+
     inc_index();
   }
-  void Visit(const AATPoint& tp) {
-    if (found()) {
+  void
+  Visit(const AATPoint& tp)
+  {
+    if (found())
       _stprintf(text, _T("A%d: %s"), m_index, tp.get_waypoint().Name.c_str());
-    }
+
     inc_index();
   }
-  void Visit(const ASTPoint& tp) {
-    if (found()) {
+  void
+  Visit(const ASTPoint& tp)
+  {
+    if (found())
       _stprintf(text, _T("T%d: %s"), m_index, tp.get_waypoint().Name.c_str());
-    }
+
     inc_index();
   }
 
@@ -200,24 +213,27 @@ private:
   bool found() {
     return (m_index == m_active_index);
   }
+
   void inc_index() {
     m_index++;
   }
+
   unsigned m_index;
   const unsigned m_active_index;
   TCHAR* text;
 };
 
-void OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* text)
+void
+OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* text)
 {
   LabelTaskPoint tpv(index, text);
   task->tp_CAccept(tpv);
 }
 
-
-const TCHAR* OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type)
+const TCHAR*
+OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type)
 {
-  switch(type) {
+  switch (type) {
   case AbstractTaskFactory::START_SECTOR:
     return _T("Cross corner edge from inside area to start");
   case AbstractTaskFactory::START_LINE:
@@ -242,13 +258,14 @@ const TCHAR* OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t t
     return _T("Enter area to finish");
   default:
     assert(1);
-  };
+  }
   return NULL;
 }
 
-const TCHAR* OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
+const TCHAR*
+OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
 {
-  switch(type) {
+  switch (type) {
   case AbstractTaskFactory::START_SECTOR:
     return _T("Start sector");
   case AbstractTaskFactory::START_LINE:
@@ -273,15 +290,16 @@ const TCHAR* OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
     return _T("Finish cylinder");
   default:
     assert(1);
-  };
+  }
   return NULL;
 }
 
-bool OrderedTaskSave(const OrderedTask& task, bool noask)
+bool
+OrderedTaskSave(const OrderedTask& task, bool noask)
 {
-  if (!noask && MessageBoxX(gettext(_T("Save task?")),
-                           gettext(_T("Task Selection")),
-                           MB_YESNO|MB_ICONQUESTION) != IDYES)
+  if (!noask
+      && MessageBoxX(gettext(_T("Save task?")), gettext(_T("Task Selection")),
+                     MB_YESNO | MB_ICONQUESTION) != IDYES)
     return false;
 
   tstring fname;
