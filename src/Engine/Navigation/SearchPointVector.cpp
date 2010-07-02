@@ -67,9 +67,9 @@ project(SearchPointVector& spv, const TaskProjection& tp)
   }
 }
 
-FLAT_GEOPOINT nearest_point(const FLAT_GEOPOINT &p1,
-                            const FLAT_GEOPOINT &p2,
-                            const FLAT_GEOPOINT &p3)
+static FLAT_GEOPOINT
+nearest_point(const FLAT_GEOPOINT &p1, const FLAT_GEOPOINT &p2,
+              const FLAT_GEOPOINT &p3)
 {
   const FLAT_GEOPOINT p12 = p2-p1;
   const fixed rsq(p12.dot(p12));
@@ -89,9 +89,10 @@ FLAT_GEOPOINT nearest_point(const FLAT_GEOPOINT &p1,
   }
 }
 
-FLAT_GEOPOINT segment_nearest_point(const SearchPointVector& spv, 
-                                    const SearchPointVector::const_iterator i1,
-                                    const FLAT_GEOPOINT &p3)
+static FLAT_GEOPOINT
+segment_nearest_point(const SearchPointVector& spv,
+                      const SearchPointVector::const_iterator i1,
+                      const FLAT_GEOPOINT &p3)
 {
   if (i1+1 == spv.end()) {
     return nearest_point(i1->get_flatLocation(),
@@ -104,9 +105,8 @@ FLAT_GEOPOINT segment_nearest_point(const SearchPointVector& spv,
   }
 }
 
-
-FLAT_GEOPOINT nearest_point_nonconvex(const SearchPointVector& spv, 
-                                      const FLAT_GEOPOINT &p3)
+static FLAT_GEOPOINT
+nearest_point_nonconvex(const SearchPointVector& spv, const FLAT_GEOPOINT &p3)
 {
   unsigned distance_min = 0-1;
   SearchPointVector::const_iterator i_best = spv.end();
@@ -123,10 +123,8 @@ FLAT_GEOPOINT nearest_point_nonconvex(const SearchPointVector& spv,
   return i_best->get_flatLocation();
 }
 
-
-
-FLAT_GEOPOINT nearest_point_convex(const SearchPointVector& spv, 
-                                   const FLAT_GEOPOINT &p3)
+static FLAT_GEOPOINT
+nearest_point_convex(const SearchPointVector& spv, const FLAT_GEOPOINT &p3)
 {
   unsigned distance_min = 0-1;
 
