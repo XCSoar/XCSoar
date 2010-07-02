@@ -5,9 +5,9 @@
 
   <Canvas Name="frmTaskView" X="0" Y="26" Width="100" Height="100" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
 
-  <Button Name="cmdNew" Caption="New" X="2" Y="128" Width="98" Height="22" OnClick="OnNewClicked"/>
+  <Button Name="cmdNew" Caption="Clear" X="2" Y="128" Width="98" Height="22" OnClick="OnNewClicked"/>
   <Button Name="cmdProperties" Caption="Properties" X="2" Y="-1" Width="98" Height="22" OnClick="OnPropertiesClicked"/>
-  <Button Name="cmdSave" Caption="Save" X="2" Y="-1" Width="98" Height="22" OnClick="OnSaveClicked"/>
+  <Button Name="cmdSave" Caption="Save as" X="2" Y="-1" Width="98" Height="22" OnClick="OnSaveClicked"/>
   <SymbolButton Name="cmdUp" Caption="^" X="2" Y="194" Width="48" Height="22" OnClick="OnMoveUpClicked"/>
   <SymbolButton Name="cmdDown" Caption="v" X="52" Y="194" Width="48" Height="22" OnClick="OnMoveDownClicked"/>
 
