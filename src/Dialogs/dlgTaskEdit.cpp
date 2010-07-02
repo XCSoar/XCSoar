@@ -195,11 +195,49 @@ OnSaveClicked(WindowControl * Sender)
   }
 }
 
+static void
+OnMoveUpClicked(WindowControl * Sender)
+{
+  if (!wTaskPoints)
+    return;
+
+  unsigned index = wTaskPoints->GetCursorIndex();
+  if (index == 0)
+    return;
+
+  if (!ordered_task->get_factory().swap(index - 1, true))
+    return;
+
+  wTaskPoints->SetCursorIndex(index - 1);
+  task_modified = true;
+  RefreshView();
+}
+
+static void
+OnMoveDownClicked(WindowControl * Sender)
+{
+  if (!wTaskPoints)
+    return;
+
+  unsigned index = wTaskPoints->GetCursorIndex();
+  if (index >= ordered_task->task_size())
+    return;
+
+  if (!ordered_task->get_factory().swap(index, true))
+    return;
+
+  wTaskPoints->SetCursorIndex(index + 1);
+  task_modified = true;
+  RefreshView();
+}
+
 static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnPropertiesClicked),
   DeclareCallBackEntry(OnNewClicked),
   DeclareCallBackEntry(OnSaveClicked),
+  DeclareCallBackEntry(OnMoveUpClicked),
+  DeclareCallBackEntry(OnMoveDownClicked),
   DeclareCallBackEntry(OnTaskPaint),
   DeclareCallBackEntry(NULL)
 };
