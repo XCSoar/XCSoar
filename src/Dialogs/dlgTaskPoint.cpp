@@ -334,7 +334,6 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
   RECT rc = Sender->get_client_rect();
 
   Chart chart(canvas, rc);
-
   OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
 
   if (!tp) {
@@ -342,18 +341,11 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
     return;
   }
 
-  BufferCanvas buffer;
-  BufferCanvas stencil;
-
-  buffer.set(canvas);
-  stencil.set(canvas);
-
   ChartProjection proj(rc, *tp, tp->get_location());
 
-  MapDrawHelper helper(canvas, buffer, stencil, proj, rc,
-                       XCSoarInterface::SettingsMap());
-  RenderObservationZone ozv(helper);
-  RenderTaskPoint tpv(helper, ozv, false, XCSoarInterface::Basic().Location);
+  RenderObservationZone ozv(canvas, proj, XCSoarInterface::SettingsMap());
+  RenderTaskPoint tpv(canvas, proj, XCSoarInterface::SettingsMap(),
+                      ozv, false, XCSoarInterface::Basic().Location);
   ::RenderTask dv(tpv);
   ordered_task->CAccept(dv); 
 }

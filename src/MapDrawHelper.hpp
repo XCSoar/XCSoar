@@ -71,8 +71,9 @@ public:
   bool m_buffer_drawn;
   bool m_use_stencil;
 
-protected:
   const SETTINGS_MAP& m_settings_map;
+
+protected:
 
   void draw_great_circle(Canvas& the_canvas, const GEOPOINT &from,
                          const GEOPOINT &to);

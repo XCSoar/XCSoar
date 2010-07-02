@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "RenderTaskPoint.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
 #include "Projection.hpp"
 #include "Task/TaskPoints/AATIsolineSegment.hpp"
 #include "Math/Screen.hpp"
@@ -45,11 +46,14 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "SettingsUser.hpp"
 
-RenderTaskPoint::RenderTaskPoint(MapDrawHelper &_helper,
+RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
+                                 const Projection &_projection,
+                                 const SETTINGS_MAP &_settings_map,
                                  RenderObservationZone &_ozv,
                                  const bool draw_bearing,
                                  const GEOPOINT location)
-  :MapDrawHelper(_helper),
+  :m_canvas(_canvas), m_buffer(_canvas), m_proj(_projection),
+   m_settings_map(_settings_map),
    m_draw_bearing(draw_bearing),
    pen_leg_active(Pen::DASH, IBLSCALE(2), MapGfx.TaskColor),
    pen_leg_inactive(Pen::DASH, IBLSCALE(1), MapGfx.TaskColor),
@@ -73,8 +77,6 @@ RenderTaskPoint::set_layer(unsigned set)
 void 
 RenderTaskPoint::Visit(const UnorderedTaskPoint& tp) 
 {
-  buffer_render_start();
-  
   if (m_layer == 1) {
     draw_task_line(m_location, tp.get_location_remaining());
   }
@@ -88,8 +90,6 @@ RenderTaskPoint::Visit(const UnorderedTaskPoint& tp)
 void 
 RenderTaskPoint::draw_ordered(const OrderedTaskPoint& tp) 
 {
-  buffer_render_start();
-
   if (m_layer == 0) {
     draw_oz_background(tp);
     draw_samples(tp);
@@ -215,10 +215,9 @@ RenderTaskPoint::draw_bearing(const TaskPoint &tp)
 {
   if (!do_draw_bearing(tp)) 
     return;
-  
+
   m_buffer.select(MapGfx.hpBearing);
-  draw_great_circle(m_buffer, m_location,
-                    tp.get_location_remaining());
+  draw_great_circle(m_location, tp.get_location_remaining());
 }
 
 void 
@@ -243,7 +242,7 @@ RenderTaskPoint::draw_task_line(const GEOPOINT& start, const GEOPOINT& end)
   } else {
     m_buffer.select(pen_leg_inactive);
   }
-  draw_great_circle(m_buffer, start, end);
+  draw_great_circle(start, end);
   
   // draw small arrow along task direction
   POINT p_p;
@@ -313,7 +312,7 @@ RenderTaskPoint::draw_samples(const OrderedTaskPoint& tp)
     m_buffer.white_brush();
     m_buffer.white_pen();
     
-    draw_search_point_vector(m_buffer, tp.get_sample_points());
+    draw_search_point_vector(tp.get_sample_points());
 }
 
 void 
@@ -338,4 +337,30 @@ void
 RenderTaskPoint::draw_off_track(const TaskPoint &tp) 
 {
 
+}
+
+void
+RenderTaskPoint::draw_great_circle(const GEOPOINT &a, const GEOPOINT &b)
+{
+  POINT pts[2];
+  m_proj.LonLat2Screen(a, pts[0]);
+  m_proj.LonLat2Screen(b, pts[1]);
+
+  m_buffer.polyline(pts, 2);
+}
+
+void
+RenderTaskPoint::draw_search_point_vector(const SearchPointVector &points)
+{
+  const size_t size = points.size();
+  if (size < 3)
+    return;
+
+  POINT pts[size];
+  unsigned i = 0;
+  for (SearchPointVector::const_iterator it = points.begin();
+       it != points.end(); ++it)
+    m_proj.LonLat2Screen(it->get_location(), pts[i++]);
+
+  m_buffer.clipped_polygon(pts, size, m_proj.GetMapRect());
 }

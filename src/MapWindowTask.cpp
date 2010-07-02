@@ -54,14 +54,16 @@ Copyright_License {
 class RenderTaskPointMap: public RenderTaskPoint
 {
 public:
-  RenderTaskPointMap(MapDrawHelper &_helper, 
+  RenderTaskPointMap(Canvas &_canvas, const Projection &_projection,
+                     const SETTINGS_MAP &_settings_map,
                      RenderObservationZone &_ozv,
                      const bool draw_bearing,
                      const GEOPOINT location,
                      MapWindow& map,
                      const Angle bearing,
                      const bool do_draw_off_track):
-    RenderTaskPoint(_helper, _ozv, draw_bearing, location),
+    RenderTaskPoint(_canvas, _projection, _settings_map,
+                    _ozv, draw_bearing, location),
     m_map(map),
     m_bearing(bearing),
     m_draw_off_track(do_draw_off_track) {};
@@ -74,7 +76,7 @@ protected:
 
     POINT sc;
     if (m_map.LonLat2ScreenIfVisible(tp.get_location_remaining(), &sc))
-      MapGfx.hBmpTarget.draw(m_canvas, m_map.get_bitmap_canvas(), sc.x, sc.y);
+      MapGfx.hBmpTarget.draw(m_buffer, m_map.get_bitmap_canvas(), sc.x, sc.y);
   }
 
   void draw_off_track(const TaskPoint &tp) 
@@ -151,10 +153,9 @@ MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
   const bool draw_bearing = Basic().gps.Connected;
 
   {
-    MapDrawHelper helper(canvas, buffer, stencil_canvas, *this, rc,
-                         SettingsMap());
-    RenderObservationZone ozv(helper);
-    RenderTaskPointMap tpv(helper, ozv, draw_bearing,
+    RenderObservationZone ozv(canvas, *this, SettingsMap());
+    RenderTaskPointMap tpv(canvas, *this, SettingsMap(),
+                           ozv, draw_bearing,
                            Basic().Location, *this, 
                            Basic().TrackBearing,
                            !Calculated().Circling);

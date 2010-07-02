@@ -39,16 +39,24 @@ Copyright_License {
 #define XCSOAR_RENDER_TASK_POINT_HPP
 
 #include "Task/Visitors/TaskPointVisitor.hpp"
-#include "MapDrawHelper.hpp"
+#include "Screen/Pen.hpp"
 
+class Canvas;
+class Projection;
 class RenderObservationZone;
+struct SETTINGS_MAP;
 
 class RenderTaskPoint:
-  public TaskPointConstVisitor,
-  public MapDrawHelper
+  public TaskPointConstVisitor
 {
+protected:
+  Canvas &m_canvas, &m_buffer;
+  const Projection &m_proj;
+  const SETTINGS_MAP &m_settings_map;
+
 public:
-  RenderTaskPoint(MapDrawHelper &_helper, 
+  RenderTaskPoint(Canvas &_canvas, const Projection &_projection,
+                  const SETTINGS_MAP &_settings_map,
                   RenderObservationZone &_ozv,
                   const bool draw_bearing,
                   const GEOPOINT location);
@@ -88,6 +96,9 @@ protected:
   unsigned m_active_index;
   unsigned m_layer;
   const GEOPOINT m_location;
+
+  void draw_great_circle(const GEOPOINT &a, const GEOPOINT &b);
+  void draw_search_point_vector(const SearchPointVector &points);
 };
 
 

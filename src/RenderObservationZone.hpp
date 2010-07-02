@@ -39,17 +39,28 @@ Copyright_License {
 #define XCSOAR_RENDER_OBSERVATION_ZONE_HPP
 
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
-#include "MapDrawHelper.hpp"
+#include "Screen/Pen.hpp"
+
+#include <windef.h>
+
+class Canvas;
+class Projection;
+struct SETTINGS_MAP;
 
 /**
  * Utility class to render an ObzervationZonePoint to a canvas
  */
 class RenderObservationZone: 
-  public ObservationZoneConstVisitor, 
-  public MapDrawHelper
+  public ObservationZoneConstVisitor
 {
+protected:
+  Canvas &m_buffer;
+  const Projection &m_proj;
+  const SETTINGS_MAP &m_settings_map;
+
 public:
-  RenderObservationZone(MapDrawHelper &_draw);
+  RenderObservationZone(Canvas &_canvas, const Projection &_projection,
+                        const SETTINGS_MAP &_settings_map);
 
   void Visit(const FAISectorZone& oz);
 

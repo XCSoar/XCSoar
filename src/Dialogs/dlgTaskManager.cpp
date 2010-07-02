@@ -132,24 +132,15 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
   RECT rc = Sender->get_client_rect();
 
   Chart chart(canvas, rc);
-
-  BufferCanvas buffer;
-  BufferCanvas stencil;
-
-  buffer.set(canvas);
-  stencil.set(canvas);
-
   ChartProjection proj(rc, *ordered_task, XCSoarInterface::Basic().Location);
-
-  MapDrawHelper helper(canvas, buffer, stencil, proj, rc,
-                       XCSoarInterface::SettingsMap());
 
   BackgroundDrawHelper background;
   background.set_terrain(&terrain);
   background.Draw(canvas, rc, proj, XCSoarInterface::SettingsMap());
 
-  RenderObservationZone ozv(helper);
-  RenderTaskPoint tpv(helper, ozv, false, XCSoarInterface::Basic().Location);
+  RenderObservationZone ozv(canvas, proj, XCSoarInterface::SettingsMap());
+  RenderTaskPoint tpv(canvas, proj, XCSoarInterface::SettingsMap(),
+                      ozv, false, XCSoarInterface::Basic().Location);
   ::RenderTask dv(tpv);
   ordered_task->CAccept(dv); 
 }

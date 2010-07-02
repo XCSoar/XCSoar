@@ -2,9 +2,13 @@
 #include "Screen/Graphics.hpp"
 #include "Projection.hpp"
 #include "SettingsUser.hpp"
+#include "Screen/Layout.hpp"
 
-RenderObservationZone::RenderObservationZone(MapDrawHelper &_draw)
-  :MapDrawHelper(_draw),
+RenderObservationZone::RenderObservationZone(Canvas &_canvas,
+                                             const Projection &_projection,
+                                             const SETTINGS_MAP &_settings_map)
+  :m_buffer(_canvas), m_proj(_projection),
+   m_settings_map(_settings_map),
    pen_boundary_current(Pen::SOLID, IBLSCALE(2), MapGfx.TaskColor),
    pen_boundary_active(Pen::SOLID, IBLSCALE(1), MapGfx.TaskColor),
    pen_boundary_inactive(Pen::SOLID, IBLSCALE(1), Color(127, 127, 127)),
@@ -18,6 +22,8 @@ bool
 RenderObservationZone::draw_style(bool is_boundary_active) 
 {
   if (m_background) {
+    m_buffer.mix_mask();
+
     // this color is used as the black bit
     m_buffer.set_text_color(MapGfx.Colours[m_settings_map.
                                            iAirspaceColour[AATASK]]);
@@ -28,6 +34,8 @@ RenderObservationZone::draw_style(bool is_boundary_active)
     
     return !m_past;
   } else {
+    m_buffer.mix_copy();
+
     m_buffer.hollow_brush();
     if (is_boundary_active) {
       if (m_current) {
@@ -56,7 +64,7 @@ void
 RenderObservationZone::draw_segment(const Angle start_radial, 
                                     const Angle end_radial) 
 {
-  m_buffer.segment(p_center.x, p_center.y, p_radius, m_rc, 
+  m_buffer.segment(p_center.x, p_center.y, p_radius, m_proj.GetMapRect(),
                    start_radial-m_proj.GetDisplayAngle(), 
                    end_radial-m_proj.GetDisplayAngle());
 }
@@ -64,7 +72,6 @@ RenderObservationZone::draw_segment(const Angle start_radial,
 void 
 RenderObservationZone::parms_oz(const CylinderZone& oz) 
 {
-  buffer_render_start();
   p_radius = m_proj.DistanceMetersToScreen(oz.getRadius());
   m_proj.LonLat2Screen(oz.get_location(), p_center);
 }
@@ -87,6 +94,8 @@ RenderObservationZone::Visit(const FAISectorZone& oz)
   if (draw_style(!m_past)) {
     draw_two_lines();
   }
+
+  m_buffer.mix_copy();
 }
 
 void 
@@ -101,6 +110,8 @@ RenderObservationZone::Visit(const KeyholeZone& oz)
   if (draw_style(!m_past)) {
     draw_two_lines();
   }
+
+  m_buffer.mix_copy();
 }
 
 void 
@@ -111,6 +122,8 @@ RenderObservationZone::Visit(const SectorZone& oz)
     draw_segment(oz.getStartRadial(), oz.getEndRadial());
     draw_two_lines();
   }
+
+  m_buffer.mix_copy();
 }
 
 void 
@@ -123,6 +136,8 @@ RenderObservationZone::Visit(const LineSectorZone& oz)
   if (draw_style(!m_past)) {
     draw_two_lines();
   }
+
+  m_buffer.mix_copy();
 }
 
 void 
@@ -132,4 +147,6 @@ RenderObservationZone::Visit(const CylinderZone& oz)
   if (draw_style(!m_past)) {
     draw_circle();
   }
+
+  m_buffer.mix_copy();
 }

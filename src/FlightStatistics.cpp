@@ -41,7 +41,6 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/BufferCanvas.hpp"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Math/Constants.h"
@@ -60,7 +59,6 @@ Copyright_License {
 #include "RenderTask.hpp"
 #include "RenderTaskPoint.hpp"
 #include "RenderObservationZone.hpp"
-#include "MapDrawHelper.hpp"
 
 #include <algorithm>
 
@@ -415,18 +413,11 @@ FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
     return;
   }
 
-  BufferCanvas buffer;
-  BufferCanvas stencil;
-
-  buffer.set(canvas);
-  stencil.set(canvas);
-
   ChartProjection proj(rc, task, nmea_info.Location);
 
-  MapDrawHelper helper(canvas, buffer, stencil, proj, rc,
-                       settings_map);
-  RenderObservationZone ozv(helper);
-  RenderTaskPoint tpv(helper, ozv, false, nmea_info.Location);
+  RenderObservationZone ozv(canvas, proj, settings_map);
+  RenderTaskPoint tpv(canvas, proj, settings_map,
+                      ozv, false, nmea_info.Location);
   ::RenderTask dv(tpv);
   task.CAccept(dv); 
 }
