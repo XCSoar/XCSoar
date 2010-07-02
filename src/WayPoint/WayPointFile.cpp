@@ -176,9 +176,9 @@ WayPointFile::checkWaypointInTerrainRange(const Waypoint &way_point,
     return false;
 
   // Open Dialogbox
-  _stprintf(sTmp, gettext(_T(
-      "Waypoint #%d \"%s\" \r\nout of Terrain bounds\r\n\r\nLoad anyway?")),
-      way_point.id, way_point.Name.c_str());
+  _stprintf(sTmp,
+            gettext(_T("Waypoint \"%s\" \r\nout of Terrain bounds\r\n\r\nLoad anyway?")),
+            way_point.Name.c_str());
 
   WaypointOutOfTerrainRangeDialogResult = dlgWaypointOutOfTerrain(sTmp);
 
