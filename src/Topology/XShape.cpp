@@ -40,6 +40,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "Units.hpp"
+#include "UtilsText.hpp"
 
 #include <tchar.h>
 #include <ctype.h>
@@ -74,7 +75,8 @@ XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y
     return;
 
   TCHAR Temp[100];
-  _stprintf(Temp, _T("%S"), label);
+  ConvertCToT(Temp, label);
+
   canvas.background_transparent();
 
   // TODO code: JMW asks, what does this do?
