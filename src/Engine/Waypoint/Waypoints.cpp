@@ -372,6 +372,7 @@ Waypoints::end() const
 void
 Waypoints::clear()
 {
+  m_home = NULL;
   name_tree.clear();
   waypoint_tree.clear();
   next_id = 1;
@@ -393,6 +394,9 @@ Waypoints::empty() const
 void
 Waypoints::erase(const Waypoint& wp)
 {
+  if (m_home != NULL && m_home->id == wp.id)
+    m_home = NULL;
+
   WaypointEnvelope w(wp);
   w.project(task_projection);
 
