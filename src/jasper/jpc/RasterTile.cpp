@@ -49,7 +49,7 @@ void
 RasterTile::Disable()
 {
   if (ImageBuffer) {
-    free(ImageBuffer);
+    delete[] ImageBuffer;
     ImageBuffer = NULL;
   }
 }
@@ -60,7 +60,7 @@ RasterTile::Enable()
   if (!width || !height) {
     Disable();
   } else {
-    ImageBuffer = (short*)malloc((width + 1) * (height + 1) * sizeof(short));
+    ImageBuffer = new short[(width + 1) * (height + 1)];
   }
 }
 
@@ -345,7 +345,7 @@ RasterTileCache::SetSize(int _width, int _height)
     overview_width_fine = width * 256;
     overview_height_fine = height * 256;
 
-    Overview = (short*)malloc(overview_width * overview_height * sizeof(short));
+    Overview = new short[overview_width * overview_height];
   }
 }
 
@@ -371,7 +371,7 @@ RasterTileCache::Reset()
   scan_overview = true;
 
   if (Overview) {
-    free(Overview);
+    delete[] Overview;
     Overview = 0;
   }
 
