@@ -92,6 +92,27 @@ WndSymbolButton::on_paint(Canvas &canvas)
     canvas.polygon(Arrow, 4);
   }
 
+  // Draw arrow symbols instead of v and ^
+ if (!_tcscmp(mCaption, _T("^")) || !_tcscmp(mCaption, _T("v"))) {
+    int size = min(rc.right - rc.left, rc.bottom - rc.top) / 5;
+
+    static POINT Arrow[4];
+    Arrow[0].x = (rc.left + rc.right) / 2 +
+                 size;
+    Arrow[0].y = (rc.top + rc.bottom) / 2 +
+                 (!_tcscmp(mCaption, _T("^")) ? size : -size);
+    Arrow[1].x = (rc.left + rc.right) / 2;
+    Arrow[1].y = (rc.top + rc.bottom) / 2 +
+                 (!_tcscmp(mCaption, _T("^")) ? -size : size);
+    Arrow[2].x = (rc.left + rc.right) / 2 - size;
+    Arrow[2].y = (rc.top + rc.bottom) / 2 +
+                 (!_tcscmp(mCaption, _T("^")) ? size : -size);
+    Arrow[3].x = Arrow[0].x;
+    Arrow[3].y = Arrow[0].y;
+
+    canvas.polygon(Arrow, 4);
+  }
+
   // Draw symbols instead of + and -
   if (!_tcscmp(mCaption, _T("+")) || !_tcscmp(mCaption, _T("-"))) {
     int size = min(rc.right - rc.left, rc.bottom - rc.top) / 5;
