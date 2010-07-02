@@ -63,13 +63,14 @@ Copyright_License {
 #include <assert.h>
 
 static SingleWindow *parent_window;
-static WndForm *wf=NULL;
-static WndFrame* wTaskView= NULL;
-static OrderedTask* ordered_task= NULL;
+static WndForm *wf = NULL;
+static WndFrame* wTaskView = NULL;
+static OrderedTask* ordered_task = NULL;
 static bool task_modified = false;
 static unsigned active_index = 0;
 
-static void OnCloseClicked(WindowControl * Sender)
+static void
+OnCloseClicked(WindowControl * Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrOK);
@@ -80,105 +81,108 @@ class TPLabelObservationZone:
   public ObservationZoneConstVisitor
 {
 public:
+  void
+  Visit(const FAISectorZone& oz)
+  {
+    hide_all();
+    WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZFAISector")));
+    if (wp)
+      wp->show();
+  }
+  void
+  Visit(const KeyholeZone& oz)
+  {
+    hide_all();
+    WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZKeyhole")));
+    if (wp)
+      wp->show();
+  }
 
-  void Visit(const FAISectorZone& oz) 
-    {
-      hide_all();
-      WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZFAISector")));
-      if (wp) {
-        wp->show();
-      }
-    }
-  void Visit(const KeyholeZone& oz) 
-    {
-      hide_all();
-      WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZKeyhole")));
-      if (wp) {
-        wp->show();
-      }
-    }
+  void
+  Visit(const SectorZone& oz)
+  {
+    hide_all();
+    WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZSector")));
+    if (wp)
+      wp->show();
 
-  void Visit(const SectorZone& oz) 
-    {
-      hide_all();
-      WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZSector")));
-      if (wp) {
-        wp->show();
-      }
-      WndProperty* wv;
-      wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorRadius")));
-      if (wv) {
-        wv->GetDataField()->SetAsFloat(Units::ToUserDistance(oz.getRadius()));
-        wv->GetDataField()->SetUnits(Units::GetDistanceName());
-        wv->RefreshDisplay();
-      }
-      wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorStartRadial")));
-      if (wv) {
-        wv->GetDataField()->SetAsFloat(oz.getStartRadial().value_degrees());
-        wv->RefreshDisplay();
-      }
-      wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorFinishRadial")));
-      if (wv) {
-        wv->GetDataField()->SetAsFloat(oz.getEndRadial().value_degrees());
-        wv->RefreshDisplay();
-      }
+    WndProperty* wv;
+    wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorRadius")));
+    if (wv) {
+      wv->GetDataField()->SetAsFloat(Units::ToUserDistance(oz.getRadius()));
+      wv->GetDataField()->SetUnits(Units::GetDistanceName());
+      wv->RefreshDisplay();
     }
+    wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorStartRadial")));
+    if (wv) {
+      wv->GetDataField()->SetAsFloat(oz.getStartRadial().value_degrees());
+      wv->RefreshDisplay();
+    }
+    wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorFinishRadial")));
+    if (wv) {
+      wv->GetDataField()->SetAsFloat(oz.getEndRadial().value_degrees());
+      wv->RefreshDisplay();
+    }
+  }
 
-  void Visit(const LineSectorZone& oz) 
-    {
-      hide_all();
-      WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZLine")));
-      if (wp) {
-        wp->show();
-      }
-      WndProperty* wv;
-      wv = ((WndProperty*)wf->FindByName(_T("prpOZLineLength")));
-      if (wv) {
-        wv->GetDataField()->SetAsFloat(Units::ToUserDistance(oz.getLength()));
-        wv->GetDataField()->SetUnits(Units::GetDistanceName());
-        wv->RefreshDisplay();
-      }
-    }
+  void
+  Visit(const LineSectorZone& oz)
+  {
+    hide_all();
+    WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZLine")));
+    if (wp)
+      wp->show();
 
-  void Visit(const CylinderZone& oz) 
-    {
-      hide_all();
-      WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZCylinder")));
-      if (wp) {
-        wp->show();
-      }
-      WndProperty* wv;
-      wv = ((WndProperty*)wf->FindByName(_T("prpOZCylinderRadius")));
-      if (wv) {
-        wv->GetDataField()->SetAsFloat(Units::ToUserDistance(oz.getRadius()));
-        wv->GetDataField()->SetUnits(Units::GetDistanceName());
-        wv->RefreshDisplay();
-      }
+    WndProperty* wv;
+    wv = ((WndProperty*)wf->FindByName(_T("prpOZLineLength")));
+    if (wv) {
+      wv->GetDataField()->SetAsFloat(Units::ToUserDistance(oz.getLength()));
+      wv->GetDataField()->SetUnits(Units::GetDistanceName());
+      wv->RefreshDisplay();
     }
+  }
+
+  void
+  Visit(const CylinderZone& oz)
+  {
+    hide_all();
+    WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZCylinder")));
+    if (wp)
+      wp->show();
+
+    WndProperty* wv;
+    wv = ((WndProperty*)wf->FindByName(_T("prpOZCylinderRadius")));
+    if (wv) {
+      wv->GetDataField()->SetAsFloat(Units::ToUserDistance(oz.getRadius()));
+      wv->GetDataField()->SetUnits(Units::GetDistanceName());
+      wv->RefreshDisplay();
+    }
+  }
 
 private:
-  void hide_all() {
+  void
+  hide_all()
+  {
     WndFrame* wp;
     wp = ((WndFrame *)wf->FindByName(_T("frmOZFAISector")));
-    if (wp) {
+    if (wp)
       wp->hide();
-    }
+
     wp = ((WndFrame *)wf->FindByName(_T("frmOZKeyhole")));
-    if (wp) {
+    if (wp)
       wp->hide();
-    }
+
     wp = ((WndFrame *)wf->FindByName(_T("frmOZLine")));
-    if (wp) {
+    if (wp)
       wp->hide();
-    }
+
     wp = ((WndFrame *)wf->FindByName(_T("frmOZSector")));
-    if (wp) {
+    if (wp)
       wp->hide();
-    }
+
     wp = ((WndFrame *)wf->FindByName(_T("frmOZCylinder")));
-    if (wp) {
+    if (wp)
       wp->hide();
-    }
   }
 };
 
@@ -190,70 +194,74 @@ class TPReadObservationZone:
   public ObservationZoneVisitor
 {
 public:
-  void Visit(FAISectorZone& oz) 
-    {
-    }
-  void Visit(KeyholeZone& oz) 
-    {
-    }
-  void Visit(SectorZone& oz) 
-    {
-      WndProperty* wv;
-      wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorRadius")));
-      if (wv) {
-        fixed val = Units::ToSysDistance(wv->GetDataField()->GetAsFixed());
-        if (val != oz.getRadius()) {
-          oz.setRadius((fixed)val);
-          task_modified = true;
-        }
-      }
-
-      wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorStartRadial")));
-      if (wv) {
-        fixed val = wv->GetDataField()->GetAsFixed();
-        if (val != oz.getStartRadial().value_degrees()) {
-          oz.setStartRadial(Angle::degrees((fixed)val));
-          task_modified = true;
-        }
-      }
-
-      wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorFinishRadial")));
-      if (wv) {
-        fixed val = wv->GetDataField()->GetAsFixed();
-        if (val != oz.getEndRadial().value_degrees()) {
-          oz.setEndRadial(Angle::degrees((fixed)val));
-          task_modified = true;
-        }
+  void
+  Visit(FAISectorZone& oz)
+  {
+  }
+  void
+  Visit(KeyholeZone& oz)
+  {
+  }
+  void
+  Visit(SectorZone& oz)
+  {
+    WndProperty* wv;
+    wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorRadius")));
+    if (wv) {
+      fixed val = Units::ToSysDistance(wv->GetDataField()->GetAsFixed());
+      if (val != oz.getRadius()) {
+        oz.setRadius((fixed)val);
+        task_modified = true;
       }
     }
 
-  void Visit(LineSectorZone& oz) 
-    {
-      WndProperty* wv;
-      wv = ((WndProperty*)wf->FindByName(_T("prpOZLineLength")));
-      if (wv) {
-        fixed val = Units::ToSysDistance(wv->GetDataField()->GetAsFixed());
-        if (val != oz.getLength()) {
-          oz.setLength((fixed)val);
-          task_modified = true;
-        }
+    wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorStartRadial")));
+    if (wv) {
+      fixed val = wv->GetDataField()->GetAsFixed();
+      if (val != oz.getStartRadial().value_degrees()) {
+        oz.setStartRadial(Angle::degrees((fixed)val));
+        task_modified = true;
       }
     }
 
-  void Visit(CylinderZone& oz) 
-    {
-      WndProperty* wv;
-      wv = ((WndProperty*)wf->FindByName(_T("prpOZCylinderRadius")));
-      if (wv) {
-        fixed val = Units::ToSysDistance(wv->GetDataField()->GetAsFixed());
-        if (val != oz.getRadius()) {
-          oz.setRadius((fixed)val);
-          task_modified = true;
-        }
+    wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorFinishRadial")));
+    if (wv) {
+      fixed val = wv->GetDataField()->GetAsFixed();
+      if (val != oz.getEndRadial().value_degrees()) {
+        oz.setEndRadial(Angle::degrees((fixed)val));
+        task_modified = true;
       }
     }
+  }
+
+  void
+  Visit(LineSectorZone& oz)
+  {
+    WndProperty* wv;
+    wv = ((WndProperty*)wf->FindByName(_T("prpOZLineLength")));
+    if (wv) {
+      fixed val = Units::ToSysDistance(wv->GetDataField()->GetAsFixed());
+      if (val != oz.getLength()) {
+        oz.setLength((fixed)val);
+        task_modified = true;
+      }
+    }
+  }
+
+  void
+  Visit(CylinderZone& oz)
+  {
+    WndProperty* wv;
+    wv = ((WndProperty*)wf->FindByName(_T("prpOZCylinderRadius")));
+    if (wv) {
+      fixed val = Units::ToSysDistance(wv->GetDataField()->GetAsFixed());
+      if (val != oz.getRadius()) {
+        oz.setRadius((fixed)val);
+        task_modified = true;
+      }
+    }
+  }
 };
-
 
 /**
  * Utility class to find labels for the task point
@@ -267,8 +275,8 @@ public:
   {
     text[0] = NULL;
   }
-  void Visit(const UnorderedTaskPoint& tp) {
-  }
+
+  void Visit(const UnorderedTaskPoint& tp) {}
   void Visit(const StartPoint& tp) {    
     _stprintf(text, _T("Start point: %s"), tp.get_waypoint().Name.c_str());
   }
@@ -284,38 +292,32 @@ public:
   TCHAR* text;
 };
 
-
 static void
 RefreshView()
 {
   wTaskView->invalidate();
 
   OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
-
-  if (!tp) {
+  if (!tp)
     return;
-  }
 
   TPLabelObservationZone ozv;
   tp->CAccept_oz(ozv);
 
   WndButton* wb;
   wb = ((WndButton*)wf->FindByName(_T("butType")));
-  if (wb) {
+  if (wb)
     wb->SetCaption(OrderedTaskPointName(ordered_task->get_factory().getType(tp)));
-  }
   
   wb = ((WndButton*)wf->FindByName(_T("butDetails")));
-  if (wb) {
+  if (wb)
     wb->SetCaption(tp->get_waypoint().Name.c_str());
-  }
 
   TCHAR buf[100];
   TPLabelTaskPoint tpv(buf);
   tp->CAccept(tpv);
   wf->SetCaption(tpv.text);
 }
-
 
 static void
 ReadValues()
@@ -324,7 +326,6 @@ ReadValues()
   OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
   tp->Accept_oz(tpv);
 }
-
 
 static void
 OnTaskPaint(WindowControl *Sender, Canvas &canvas)
@@ -356,7 +357,6 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
   ordered_task->CAccept(dv); 
 }
 
-
 static void 
 OnRemoveClicked(WindowControl * Sender) 
 {
@@ -369,14 +369,17 @@ OnRemoveClicked(WindowControl * Sender)
   wf->SetModalResult(mrCancel);
 }
 
-static void OnDetailsClicked(WindowControl * Sender) {
+static void
+OnDetailsClicked(WindowControl * Sender)
+{
   OrderedTaskPoint* task_point = ordered_task->get_tp(active_index);
-  if (task_point) {
+  if (task_point)
     dlgWayPointDetailsShowModal(*parent_window, task_point->get_waypoint());
-  }
 }
 
-static void OnRelocateClicked(WindowControl * Sender) {
+static void
+OnRelocateClicked(WindowControl *Sender)
+{
   const Waypoint *wp = dlgWayPointSelect(*parent_window,
                                          XCSoarInterface::Basic().Location);
   if (wp == NULL)
@@ -387,15 +390,16 @@ static void OnRelocateClicked(WindowControl * Sender) {
   RefreshView();
 }
 
-
-static void OnTypeClicked(WindowControl * Sender) {
+static void
+OnTypeClicked(WindowControl * Sender)
+{
   if (dlgTaskPointType(*parent_window, &ordered_task, active_index)) {
     task_modified = true;
     RefreshView();
   }
 }
 
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnRemoveClicked),
   DeclareCallBackEntry(OnRelocateClicked),
@@ -406,37 +410,34 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 bool
-dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task, const unsigned index)
+dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task,
+                      const unsigned index)
 {
   ordered_task = *task;
   parent_window = &parent;
   task_modified = false;
   active_index = index;
 
-  wf = NULL;
-
-  if (!Layout::landscape) {
+  if (!Layout::landscape)
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgTaskPoint_L.xml"),
                         parent,
                         _T("IDR_XML_TASKPOINT_L"));
-  } else {
+  else
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgTaskPoint.xml"),
                         parent,
                         _T("IDR_XML_TASKPOINT"));
-  }
-  if (!wf) return false;
-  assert(wf!=NULL);
+  if (!wf)
+    return false;
 
   wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView"));
-  assert(wTaskView!=NULL);
+  assert(wTaskView != NULL);
 
   RefreshView();
 
-  if (wf->ShowModal() == mrOK) {
+  if (wf->ShowModal() == mrOK)
     ReadValues();
-  }
 
   delete wf;
   wf = NULL;
