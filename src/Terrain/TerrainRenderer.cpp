@@ -484,7 +484,12 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
   if (!imageBuf)
     return;
 
+#ifdef ENABLE_SDL
   imageBuf += rect_quantised.top * width_sub + rect_quantised.left;
+#else
+  /* in WIN32 bitmaps, the bottom-most row comes first */
+  imageBuf += (sbuf->GetHeight() - 1) * width_sub + rect_quantised.left;
+#endif
 
   if (do_shading) {
     for (int y = rect_quantised.top; y < rect_quantised.bottom; ++y) {
@@ -501,7 +506,11 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
       const unsigned p31 = row_plus_index + row_minus_index;
       
       BGRColor *i_buf = imageBuf;
+#ifdef ENABLE_SDL
       imageBuf += width_sub;
+#else
+      imageBuf -= width_sub;
+#endif
       
       for (int x = rect_quantised.left; x < rect_quantised.right; ++x, ++h_buf) {
         if (short h = *h_buf) {
@@ -561,7 +570,11 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
   } else {
     for (int y = rect_quantised.top; y < rect_quantised.bottom; ++y) {
       BGRColor *i_buf = imageBuf;
+#ifdef ENABLE_SDL
       imageBuf += width_sub;
+#else
+      imageBuf -= width_sub;
+#endif
 
       for (int x = rect_quantised.left; x < rect_quantised.right; ++x) {
         if (short h = *h_buf++) {
