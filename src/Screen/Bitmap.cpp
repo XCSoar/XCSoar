@@ -179,13 +179,13 @@ Bitmap::create(unsigned width, unsigned height)
   Uint32 rmask, gmask, bmask, amask;
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-  rmask = 0xff000000;
-  gmask = 0x00ff0000;
-  bmask = 0x0000ff00;
-#else
   rmask = 0x000000ff;
   gmask = 0x0000ff00;
   bmask = 0x00ff0000;
+#else
+  rmask = 0x00ff0000;
+  gmask = 0x0000ff00;
+  bmask = 0x000000ff;
 #endif
   amask = 0x00000000;
 
