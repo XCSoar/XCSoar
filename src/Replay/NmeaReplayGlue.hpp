@@ -40,13 +40,19 @@ Copyright_License {
 #define NMEA_REPLAY_GLUE_HPP
 
 #include "Replay/NmeaReplay.hpp"
+#include "PeriodClock.hpp"
 
 class NmeaReplayGlue:
   public NmeaReplay
 {
 protected:
+  virtual bool update_time();
+  virtual void reset_time();
   virtual void on_bad_file();
   virtual void on_sentence(TCHAR* line);
+
+private:
+  PeriodClock clock;
 };
 
 #endif

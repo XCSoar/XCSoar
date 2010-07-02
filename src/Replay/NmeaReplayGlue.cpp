@@ -55,3 +55,15 @@ NmeaReplayGlue::on_bad_file()
   MessageBoxX(gettext(TEXT("Could not open NMEA file!")),
               gettext(TEXT("Flight replay")), MB_OK | MB_ICONINFORMATION);
 }
+
+bool
+NmeaReplayGlue::update_time()
+{
+  return clock.check_update(1000);
+}
+
+void
+NmeaReplayGlue::reset_time()
+{
+  clock.reset();
+}
