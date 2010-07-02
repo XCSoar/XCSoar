@@ -80,7 +80,6 @@ protected:
 
 private:
   const RasterTerrain *terrain;
-  const RECT rect_big;
 
   const RECT BorderSlope(const RECT& rect_quantised, const int edge) const;
 

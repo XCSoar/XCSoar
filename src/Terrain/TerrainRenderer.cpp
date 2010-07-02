@@ -211,8 +211,7 @@ TerrainShading(const short illum, BYTE &r, BYTE &g, BYTE &b)
 TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
                                  const RECT &rc) :
   last_color_ramp(NULL),
-  terrain(_terrain),
-  rect_big(rc)
+  terrain(_terrain)
 {
   TerrainContrast = 150;
   TerrainBrightness = 36;
