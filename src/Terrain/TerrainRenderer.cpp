@@ -631,9 +631,9 @@ TerrainRenderer::Draw(Canvas &canvas, RECT src_rect, RECT dest_rect)
                  dest_rect.right - dest_rect.left,
                  dest_rect.bottom - dest_rect.top,
                  bitmap_canvas,
-                 src_rect.left, src_rect.top,
-                 src_rect.right - src_rect.left,
-                 src_rect.bottom - src_rect.top);
+                 src_rect.left * oversampling, src_rect.top * oversampling,
+                 (src_rect.right - src_rect.left) * oversampling,
+                 (src_rect.bottom - src_rect.top) * oversampling);
 }
 
 /**
