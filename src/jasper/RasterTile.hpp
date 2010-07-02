@@ -12,6 +12,9 @@ public:
     :xstart(0), ystart(0), xend(0), yend(0),
      width(0), height(0),
      ImageBuffer(NULL) {}
+  ~RasterTile() {
+    Disable();
+  }
 
   unsigned int xstart, ystart, xend, yend;
   unsigned int width, height;
