@@ -64,6 +64,10 @@ public:
     TerrainMap(NULL) {
   };
 
+  ~RasterTerrain() {
+    CloseTerrain();
+  }
+
 /** 
  * Load the terrain.  Determines the file to load from profile settings.
  * 
