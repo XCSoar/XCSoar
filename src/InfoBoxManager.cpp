@@ -1037,7 +1037,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
 #ifdef HAVE_BATTERY
   case 65:
     if (PDABatteryTemperature > 0) {
-      _stprintf(sTmp, _T("%1.0d%SC"), (int)PDABatteryTemperature, _T(DEG));
+      _stprintf(sTmp, _T("%1.0d%sC"), (int)PDABatteryTemperature, _T(DEG));
       info_box.SetComment(sTmp);
     } else
       info_box.SetComment(_T(""));
