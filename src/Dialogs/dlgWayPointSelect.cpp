@@ -185,8 +185,7 @@ static void PrepareData(void){
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wpType->GetDataField();
     for (unsigned i=0; i < sizeof(TypeFilter) / sizeof(TypeFilter[0]); i++) {
-      _stprintf(sTmp, TEXT("%s"), TypeFilter[i]);
-      dfe->addEnumText(sTmp);
+      dfe->addEnumText(TypeFilter[i]);
     }
     dfe->SetAsInteger(filter_data.type_index);
     wpType->RefreshDisplay();

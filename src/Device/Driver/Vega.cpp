@@ -394,14 +394,7 @@ VegaDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
 
   if(_tcsncmp(_T("$PDVSD"), String, 6)==0)
     {
-      TCHAR cptext[80];
-      _stprintf(cptext,_T("%s"), &String[7]);
-      // TODO code: JMW (from Scott)
-      // 	Either use something like
-      // 		DoStatusMessage(_T("Vario Message"), cptext);
-      // 		(then you can assign time and sound to Vario Message)
-      // 	or	Message::AddMessage
-      Message::AddMessage(cptext);
+      Message::AddMessage(String + 7);
       return false;
     }
   if(_tcsncmp(_T("$PDTSM"), String, 6)==0)

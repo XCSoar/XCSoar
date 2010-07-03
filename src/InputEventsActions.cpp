@@ -1670,10 +1670,8 @@ InputEvents::sub_TerrainTopology(int vswitch)
     else
       _stprintf(buf, TEXT("\r\n%s / "), gettext(TEXT("OFF")));
 
-    if (SettingsMap().EnableTerrain)
-      _stprintf(buf + _tcslen(buf), TEXT("%s"), gettext(TEXT("ON")));
-    else
-      _stprintf(buf + _tcslen(buf), TEXT("%s"), gettext(TEXT("OFF")));
+    _tcscat(buf, SettingsMap().EnableTerrain
+            ? gettext(_T("ON")) : gettext(TEXT("OFF")));
 
     Message::AddMessage(TEXT("Topology / Terrain"), buf);
   }

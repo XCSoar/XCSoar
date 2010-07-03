@@ -155,11 +155,11 @@ public:
       switch (pDisplayTextType) {
       case DISPLAYNAMEIFINTASK:
         if (in_task)
-          _stprintf(Buffer, _T("%s"), way_point.Name.c_str());
+          _tcscpy(Buffer, way_point.Name.c_str());
         break;
         
       case DISPLAYNAME:
-        _stprintf(Buffer, _T("%s"), way_point.Name.c_str());
+        _tcscpy(Buffer, way_point.Name.c_str());
         break;
         
       case DISPLAYNUMBER:
@@ -181,7 +181,7 @@ public:
         break;
         
       case DISPLAYUNTILSPACE:
-        _stprintf(Buffer, _T("%s"), way_point.Name.c_str());
+        _tcscpy(Buffer, way_point.Name.c_str());
         TCHAR *tmp;
         tmp = _tcsstr(Buffer, _T(" "));
         if (tmp != NULL)

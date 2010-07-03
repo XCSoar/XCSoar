@@ -90,7 +90,7 @@ OnNameClicked(gcc_unused WndButton &button)
 {
   if (buttonName) {
     TCHAR buff[NAME_SIZE+1];
-    _stprintf(buff, TEXT("%s"), global_wpt->Name.c_str());
+    _tcscpy(buff, global_wpt->Name.c_str());
     dlgTextEntryShowModal(buff, NAME_SIZE);
     global_wpt->Name = buff;
   }
@@ -102,7 +102,7 @@ OnCommentClicked(gcc_unused WndButton &button)
 {
   if (buttonComment) {
     TCHAR buff[COMMENT_SIZE+1];
-    _stprintf(buff, TEXT("%s"), global_wpt->Comment.c_str());
+    _tcscpy(buff, global_wpt->Comment.c_str());
     dlgTextEntryShowModal(buff, COMMENT_SIZE);
     global_wpt->Comment = buff;
   }

@@ -217,8 +217,7 @@ Chart::DrawLabel(const TCHAR *text, const double xv, const double yv)
 void
 Chart::DrawNoData()
 {
-  TCHAR text[80];
-  _stprintf(text, TEXT("%s"), gettext(TEXT("No data")));
+  const TCHAR *text = gettext(TEXT("No data"));
 
   SIZE tsize = canvas.text_size(text);
 

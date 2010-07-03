@@ -303,9 +303,6 @@ static void OnFilterDirection(DataField *Sender,
 
 static void OnFilterType(DataField *Sender,
                          DataField::DataAccessKind_t Mode) {
-
-  TCHAR sTmp[20];
-
   switch(Mode){
     case DataField::daGet:
       Sender->Set(_T("*"));
@@ -331,10 +328,7 @@ static void OnFilterType(DataField *Sender,
     break;
   }
 
-  _stprintf(sTmp, _T("%s"), TypeFilter[TypeFilterIdx]);
-
-  Sender->Set(sTmp);
-
+  Sender->Set(TypeFilter[TypeFilterIdx]);
 }
 
 static void

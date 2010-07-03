@@ -138,16 +138,16 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
     if (traffic.HasName())
       TextInBox(hDC, traffic.Name, sc.x + IBLSCALE(3), sc.y, 0, displaymode, true);
 #else
-    TCHAR label_name[100];
+    const TCHAR *label_name;
     TCHAR label_avg[100];
 
     sc_av.x += IBLSCALE(3);
 
     if (traffic.HasName()) {
       sc_name.y -= IBLSCALE(8);
-      _stprintf(label_name, TEXT("%s"), traffic.Name);
+      label_name = traffic.Name;
     } else {
-      label_name[0] = _T('\0');
+      label_name = NULL;
     }
 
     if (traffic.Average30s >= 0.1) {
@@ -170,7 +170,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       canvas.set_text_color(Color(0, 0, 0));
 
       // If FLARM callsign/name available draw it to the canvas
-      if (!string_is_empty(label_name))
+      if (label_name != NULL && !string_is_empty(label_name))
         canvas.text_opaque(sc_name.x, sc_name.y, label_name);
 
       // If average climb data available draw it to the canvas
