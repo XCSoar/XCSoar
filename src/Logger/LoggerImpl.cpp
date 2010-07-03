@@ -51,6 +51,8 @@
 #include "Device/Descriptor.hpp"
 #include "Device/List.hpp"
 #include "Compatibility/path.h"
+#include "Compatibility/string.h"
+#include "Compatibility/dirent.h"
 #include "SettingsComputer.hpp"
 #include "NMEA/Info.hpp"
 #include "Simulator.hpp"
@@ -59,7 +61,6 @@
 #include <unistd.h>
 #endif
 #include <time.h>
-#include <dirent.h>
 #include <sys/types.h>
 #include <tchar.h>
 #include <algorithm>
