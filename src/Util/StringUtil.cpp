@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "StringUtil.hpp"
+#include "Compatibility/string.h"
 
 #include <assert.h>
 #include <string.h>
