@@ -46,6 +46,8 @@ Copyright_License {
 
 #include <algorithm>
 
+#include <stdio.h>
+
 #ifdef HAVE_BLANK
 int DisplayTimeOut;
 #endif

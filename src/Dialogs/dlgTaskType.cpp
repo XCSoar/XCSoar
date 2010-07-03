@@ -43,6 +43,7 @@ Copyright_License {
 #include "Task/Tasks/OrderedTask.hpp"
 
 #include <assert.h>
+#include <stdio.h>
 
 static SingleWindow *parent_window;
 static WndForm *wf=NULL;

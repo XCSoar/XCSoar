@@ -45,6 +45,8 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Components.hpp"
 
+#include <stdio.h>
+
 static WndForm *wf=NULL;
 
 static void OnCloseClicked(WindowControl * Sender){

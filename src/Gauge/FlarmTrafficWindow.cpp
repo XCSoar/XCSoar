@@ -43,6 +43,7 @@
 #include "Math/Screen.hpp"
 
 #include <assert.h>
+#include <stdio.h>
 
 const Color FlarmTrafficWindow::hcWarning(0xFF, 0xA2, 0x00);
 const Color FlarmTrafficWindow::hcAlarm(0xFF, 0x00, 0x00);

@@ -64,6 +64,8 @@ Copyright_License {
 
 #include <algorithm>
 
+#include <stdio.h>
+
 using std::min;
 using std::max;
 

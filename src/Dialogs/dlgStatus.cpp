@@ -55,6 +55,8 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <assert.h>
+#include <stdio.h>
+
 #include <algorithm>
 
 using std::min;

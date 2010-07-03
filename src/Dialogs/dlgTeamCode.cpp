@@ -47,6 +47,8 @@
 #include "TeamCodeCalculation.h"
 #include "Compiler.h"
 
+#include <stdio.h>
+
 static WndForm *wf = NULL;
 
 static void

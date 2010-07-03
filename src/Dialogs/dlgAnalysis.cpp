@@ -53,6 +53,8 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Compiler.h"
 
+#include <stdio.h>
+
 enum analysis_page {
   ANALYSIS_PAGE_BAROGRAPH,
   ANALYSIS_PAGE_CLIMB,

@@ -54,6 +54,7 @@
 #include "Components.hpp"
 
 #include <math.h>
+#include <stdio.h>
 
 static WndForm *wf = NULL;
 static FlarmId target_id;

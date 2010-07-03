@@ -45,6 +45,8 @@ Copyright_License {
 #include "Math/FastRotation.hpp"
 #include "Asset.hpp"
 
+#include <stdio.h>
+
 #define BORDER_X 24
 #define BORDER_Y 19
 

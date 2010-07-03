@@ -47,6 +47,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 
 #include <assert.h>
+#include <stdio.h>
 
 const TCHAR*
 OrderedTaskFactoryName(OrderedTask::Factory_t type)

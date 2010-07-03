@@ -48,6 +48,7 @@ Copyright_License {
 #include "Navigation/Geometry/GeoVector.hpp"
 
 #include <assert.h>
+#include <stdio.h>
 
 static const AbstractAirspace* airspace;
 static WndForm *wf = NULL;

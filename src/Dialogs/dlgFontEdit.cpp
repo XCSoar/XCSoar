@@ -44,6 +44,8 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "MainWindow.hpp"
 
+#include <stdio.h>
+
 extern Font InfoWindowFont;
 extern Font TitleWindowFont;
 extern Font MapWindowFont;

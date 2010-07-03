@@ -61,6 +61,7 @@ Copyright_License {
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
 
 #include <assert.h>
+#include <stdio.h>
 
 static SingleWindow *parent_window;
 static WndForm *wf = NULL;
