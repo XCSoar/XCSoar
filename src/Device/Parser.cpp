@@ -1080,6 +1080,7 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
     flarm_slot->ID = ID;
 
     flarm.NewTraffic = true;
+    InputEvents::processGlideComputer(GCE_FLARM_NEWTRAFFIC);
   }
 
   // set time of fix to current time
