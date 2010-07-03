@@ -82,7 +82,7 @@
 #if defined(HAVE_UNISTD_H)
 #include <unistd.h>
 #endif
-#if defined(WIN32) || defined(HAVE_IO_H)
+#if !defined(__WINE__) && (defined(WIN32) || defined(HAVE_IO_H))
 #include <io.h>
 #endif
 
