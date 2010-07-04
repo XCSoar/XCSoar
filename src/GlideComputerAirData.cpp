@@ -559,9 +559,10 @@ GlideComputerAirData::BallastDump()
     fixed_one / max(10, SettingsComputer().BallastSecsToEmpty);
 
   ballast -= dt * percent_per_second;
-  if (negative(ballast))
-    /// TODO SettingsComputer().BallastTimerActive = false;
+  if (negative(ballast)) {
+    XCSoarInterface::SetSettingsComputer().BallastTimerActive = false;
     ballast = fixed_zero;
+  }
 
   glide_polar.set_ballast(ballast);
   m_task.set_glide_polar(glide_polar);
