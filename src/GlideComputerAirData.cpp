@@ -554,16 +554,16 @@ GlideComputerAirData::BallastDump()
     return;
 
   GlidePolar glide_polar = m_task.get_glide_polar();
-  fixed BALLAST = glide_polar.get_ballast();
+  fixed ballast = glide_polar.get_ballast();
   fixed percent_per_second =
     fixed_one / max(10, SettingsComputer().BallastSecsToEmpty);
 
-  BALLAST -= dt * percent_per_second;
-  if (negative(BALLAST))
+  ballast -= dt * percent_per_second;
+  if (negative(ballast))
     /// TODO SettingsComputer().BallastTimerActive = false;
-    BALLAST = fixed_zero;
+    ballast = fixed_zero;
 
-  glide_polar.set_ballast((fixed)BALLAST);
+  glide_polar.set_ballast(ballast);
   m_task.set_glide_polar(glide_polar);
 }
 
