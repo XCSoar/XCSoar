@@ -419,7 +419,7 @@ dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task,
   task_modified = false;
   active_index = index;
 
-  if (!Layout::landscape)
+  if (Layout::landscape)
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgTaskPoint_L.xml"),
                         parent,
