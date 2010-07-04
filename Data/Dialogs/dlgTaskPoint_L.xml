@@ -9,8 +9,8 @@
   <Button Name="butRelocate" Caption="Relocate" X="2" Y="-1" Width="70" Height="22" OnClick="OnRelocateClicked"/>
 
   <Panel Name="frmPointCommon" X="80" Y="0" Width="240" Height="80">
-  <Button Name="butDetails" Caption="Details" X="10" Y="-1" Width="220" Height="22" OnClick="OnDetailsClicked"/>
-  <Button Name="butType" Caption="Type" X="10" Y="-1" Width="220" Height="22" OnClick="OnTypeClicked"/>
+    <Button Name="butDetails" Caption="Details" X="10" Y="-1" Width="220" Height="22" OnClick="OnDetailsClicked"/>
+    <Button Name="butType" Caption="Type" X="10" Y="-1" Width="220" Height="22" OnClick="OnTypeClicked"/>
   </Panel>
 
   <Panel Name="frmOZLine" X="80" Y="80" Width="240" Height="142">
@@ -39,7 +39,5 @@
     </Edit>
   </Panel>
 
-  <Panel Name="frmOZFAISector" X="80" Y="80" Width="240" Height="142">
-  </Panel>
-
+  <Panel Name="frmOZFAISector" X="80" Y="80" Width="240" Height="142" />
 </Form>
