@@ -186,6 +186,14 @@ public:
     background_mode = TRANSPARENT;
   }
 
+  void mix_copy() {
+    // XXX
+  }
+
+  void mix_mask() {
+    // XXX
+  }
+
   void rectangle(int left, int top, int right, int bottom) {
     fill_rectangle(left, top, right, bottom, brush);
 
@@ -613,6 +621,14 @@ public:
 
   void background_transparent() {
     ::SetBkMode(dc, TRANSPARENT);
+  }
+
+  void mix_copy() {
+    ::SetROP2(dc, R2_COPYPEN);
+  }
+
+  void mix_mask() {
+    ::SetROP2(dc, R2_MASKPEN);
   }
 
 #ifdef HAVE_VIEWPORT
