@@ -67,10 +67,6 @@ static FLARM_Names_t FLARM_Names[MAXFLARMNAMES];
 void
 CloseFLARMDetails()
 {
-  int i;
-  for (i = 0; i < NumberOfFLARMNames; i++) {
-    // free(FLARM_Names[i]);
-  }
   NumberOfFLARMNames = 0;
 }
 
