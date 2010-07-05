@@ -63,7 +63,7 @@ public:
    */
   KeyboardControl(WndForm &form, ContainerWindow &parent, int x, int y,
                   unsigned width, unsigned height,
-                  Color background_color, const Font *font,
+                  Color background_color,
                   OnCharacterCallback_t function,
                   const WindowStyle _style = WindowStyle());
 
@@ -101,8 +101,7 @@ private:
 
   bool is_landscape();
 
-  void add_button(WndForm &form, const TCHAR* name,
-                  const TCHAR* caption, const Font *font);
+  void add_button(WndForm &form, const TCHAR* name, const TCHAR* caption);
 
   OnCharacterCallback_t mOnCharacter;
 };

@@ -804,7 +804,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     KeyboardControl *kb =
       new KeyboardControl(form, Parent.GetClientAreaWindow(),
                           X, Y, Width, Height, Parent.GetBackColor(),
-                          FontMap[Font], CharacterCallback, style);
+                          CharacterCallback, style);
 
     window = kb;
   // DrawControl (WndOwnerDrawFrame)

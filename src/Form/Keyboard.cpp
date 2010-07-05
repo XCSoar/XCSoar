@@ -37,9 +37,9 @@ Copyright_License {
 */
 
 #include "Form/Keyboard.hpp"
-
 #include "StringUtil.hpp"
 #include "Screen/ButtonWindow.hpp"
+#include "Screen/Fonts.hpp"
 #include "Form/Form.hpp"
 
 static const TCHAR keyboard_letters[] =
@@ -47,7 +47,7 @@ static const TCHAR keyboard_letters[] =
 
 KeyboardControl::KeyboardControl(WndForm &form, ContainerWindow &parent,
                                  int x, int y, unsigned width, unsigned height,
-                                 Color background_color, const Font *font,
+                                 Color background_color,
                                  OnCharacterCallback_t function,
                                  const WindowStyle _style) :
   background_brush(background_color),
@@ -65,13 +65,13 @@ KeyboardControl::KeyboardControl(WndForm &form, ContainerWindow &parent,
     caption[0] = *i;
     name[3] = *i;
 
-    add_button(form, name, caption, font);
+    add_button(form, name, caption);
   }
 
-  add_button(form, _T("cmdSpace"), _T(" Space "), font);
-  add_button(form, _T("cmdPeriod"), _T("."), font);
-  add_button(form, _T("cmdComma"), _T(","), font);
-  add_button(form, _T("cmdMinus"), _T("-"), font);
+  add_button(form, _T("cmdSpace"), _T(" Space "));
+  add_button(form, _T("cmdPeriod"), _T("."));
+  add_button(form, _T("cmdComma"), _T(","));
+  add_button(form, _T("cmdMinus"), _T("-"));
 
   move_buttons();
 }
@@ -245,12 +245,12 @@ KeyboardControl::is_landscape() {
 
 void
 KeyboardControl::add_button(WndForm &form, const TCHAR* name,
-                            const TCHAR* caption, const Font *font)
+                            const TCHAR* caption)
 {
   ButtonWindow *button = new ButtonWindow();
   button->set(*this, caption, (unsigned)caption[0],
               0, 0, button_width, button_height);
-  button->set_font(*font);
+  button->set_font(MapWindowBoldFont);
   form.AddNamed(name, button);
   form.AddDestruct(button);
 }
