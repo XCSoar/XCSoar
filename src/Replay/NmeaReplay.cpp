@@ -149,6 +149,7 @@ NmeaReplay::CloseFile()
     return;
 
   delete reader;
+  reader = NULL;
 }
 
 bool

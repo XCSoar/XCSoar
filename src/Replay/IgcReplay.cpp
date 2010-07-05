@@ -223,4 +223,5 @@ IgcReplay::CloseFile()
     return;
 
   delete reader;
+  reader = NULL;
 }
