@@ -107,8 +107,6 @@ OpenFLARMDetails()
     delete reader;
   }
 
-  delete reader;
-
   Source<char> *source = OpenDataFile(_T("data.fln"));
   if (source != NULL) {
     LineSplitter splitter(*source);
