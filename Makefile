@@ -41,7 +41,7 @@ include $(topdir)/build/options.mk
 include $(topdir)/build/sdl.mk
 include $(topdir)/build/gconf.mk
 
-CPPFLAGS += -DFLARM_AVERAGE -DDRAWLOAD
+CPPFLAGS += -DFLARM_AVERAGE
 
 ifeq ($(HAVE_WIN32),n)
 ifneq ($(TARGET),CYGWIN)

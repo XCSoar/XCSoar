@@ -21,4 +21,10 @@ ifeq ($(PROFILE_NO_FILE),y)
 TARGET_CPPFLAGS += -DPROFILE_NO_FILE
 endif
 
+# show render timings on the map?
+DRAW_LOAD ?= n
+ifeq ($(DRAW_LOAD),y)
+TARGET_CPPFLAGS += -DDRAWLOAD
+endif
+
 TARGET_CPPFLAGS += -DDISABLEAUDIOVARIO
