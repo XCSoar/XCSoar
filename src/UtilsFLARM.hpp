@@ -35,8 +35,8 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#if !defined(XCSOAR_UTILS_FLARM_H)
-#define XCSOAR_UTILS_FLARM_H
+#ifndef XCSOAR_UTILS_FLARM_HPP
+#define XCSOAR_UTILS_FLARM_HPP
 
 #include "FLARM/Traffic.hpp"
 #include "FLARM/FLARMNet.hpp"
