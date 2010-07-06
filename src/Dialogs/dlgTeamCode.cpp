@@ -159,8 +159,8 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
     return;
   }
 
-  FlarmId flarmId =
-    LookupFLARMDetails(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
+  FlarmId flarmId = FlarmDetails::LookupFLARMDetails(
+      XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
 
   if (!flarmId.defined()) {
     MessageBoxX(gettext(_T("Unknown Competition Number")),

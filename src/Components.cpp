@@ -346,7 +346,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   airspace_warning.reset(aircraft_state);
 
   // Read the FLARM details file
-  OpenFLARMDetails();
+  FlarmDetails::OpenFLARMDetails();
 
 #ifndef DISABLEAUDIOVARIO
   /*
@@ -528,7 +528,7 @@ XCSoarInterface::Shutdown(void)
   }
 
   // Clear the FLARM database
-  CloseFLARMDetails();
+  FlarmDetails::CloseFLARMDetails();
 
   // Kill windows
   LogStartUp(TEXT("Destroy Info Boxes"));

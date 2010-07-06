@@ -62,7 +62,7 @@ typedef struct {
 static FLARM_Names_t FLARM_Names[MAXFLARMNAMES];
 
 void
-CloseFLARMDetails()
+FlarmDetails::CloseFLARMDetails()
 {
   NumberOfFLARMNames = 0;
 }
@@ -78,14 +78,14 @@ LoadFLARMDetails(TLineReader &reader)
     if (endptr > line && endptr[0] == _T('=') && endptr[1] != _T('\0')) {
       TCHAR *Name = endptr + 1;
       TrimRight(Name);
-      if (!AddFlarmLookupItem(id, Name, false))
+      if (!FlarmDetails::AddFlarmLookupItem(id, Name, false))
         break; // cant add anymore items !
     }
   }
 }
 
 void
-OpenFLARMDetails()
+FlarmDetails::OpenFLARMDetails()
 {
   LogStartUp(_T("OpenFLARMDetails"));
 
@@ -111,7 +111,7 @@ OpenFLARMDetails()
 }
 
 void
-SaveFLARMDetails()
+FlarmDetails::SaveFLARMDetails()
 {
   TextWriter *writer = CreateDataTextFile(_T("xcsoar-flarm.txt"));
   if (writer == NULL)
@@ -126,7 +126,7 @@ SaveFLARMDetails()
 }
 
 int
-LookupSecondaryFLARMId(FlarmId id)
+FlarmDetails::LookupSecondaryFLARMId(FlarmId id)
 {
   for (int i = 0; i < NumberOfFLARMNames; i++)
     if (FLARM_Names[i].ID == id)
@@ -136,7 +136,7 @@ LookupSecondaryFLARMId(FlarmId id)
 }
 
 int
-LookupSecondaryFLARMId(const TCHAR *cn)
+FlarmDetails::LookupSecondaryFLARMId(const TCHAR *cn)
 {
   for (int i = 0; i < NumberOfFLARMNames; i++)
     if (_tcscmp(FLARM_Names[i].Name, cn) == 0)
@@ -146,7 +146,7 @@ LookupSecondaryFLARMId(const TCHAR *cn)
 }
 
 const FLARMNetRecord *
-LookupFLARMRecord(FlarmId id)
+FlarmDetails::LookupFLARMRecord(FlarmId id)
 {
   // try to find flarm from FLARMNet.org File
   const FLARMNetRecord *record = flarm_net.Find(id);
@@ -157,7 +157,7 @@ LookupFLARMRecord(FlarmId id)
 }
 
 const TCHAR *
-LookupFLARMDetails(FlarmId id)
+FlarmDetails::LookupFLARMDetails(FlarmId id)
 {
   // try to find flarm from userFile
   int index = LookupSecondaryFLARMId(id);
@@ -173,7 +173,7 @@ LookupFLARMDetails(FlarmId id)
 }
 
 FlarmId
-LookupFLARMDetails(const TCHAR *cn)
+FlarmDetails::LookupFLARMDetails(const TCHAR *cn)
 {
   // try to find flarm from userFile
   int index = LookupSecondaryFLARMId(cn);
@@ -191,7 +191,7 @@ LookupFLARMDetails(const TCHAR *cn)
 }
 
 bool
-AddFlarmLookupItem(FlarmId id, const TCHAR *name, bool saveFile)
+FlarmDetails::AddFlarmLookupItem(FlarmId id, const TCHAR *name, bool saveFile)
 {
   int index = LookupSecondaryFLARMId(id);
 

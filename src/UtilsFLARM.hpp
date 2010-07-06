@@ -43,82 +43,85 @@ Copyright_License {
 
 #include <tchar.h>
 
-/**
- * Opens XCSoars own FLARM details file, parses it and
- * adds its entries as FlarmLookupItems
- * @see AddFlarmLookupItem
- */
-void
-OpenFLARMDetails();
+namespace FlarmDetails
+{
+  /**
+   * Opens XCSoars own FLARM details file, parses it and
+   * adds its entries as FlarmLookupItems
+   * @see AddFlarmLookupItem
+   */
+  void
+  OpenFLARMDetails();
 
-/**
- * Deletes all known FLARM names
- */
-void
-CloseFLARMDetails();
+  /**
+   * Deletes all known FLARM names
+   */
+  void
+  CloseFLARMDetails();
 
-/**
- * Saves XCSoars own FLARM details into the
- * corresponding file (xcsoar-flarm.txt)
- */
-void
-SaveFLARMDetails();
+  /**
+   * Saves XCSoars own FLARM details into the
+   * corresponding file (xcsoar-flarm.txt)
+   */
+  void
+  SaveFLARMDetails();
 
-/**
- * Looks up the FLARM id in the FLARMNet Database
- * and returns the FLARMNet Record
- * @param id FLARM id
- * @return The corresponding FLARMNet Record if found, otherwise NULL
- */
-const FLARMNetRecord *
-LookupFLARMRecord(FlarmId id);
+  /**
+   * Looks up the FLARM id in the FLARMNet Database
+   * and returns the FLARMNet Record
+   * @param id FLARM id
+   * @return The corresponding FLARMNet Record if found, otherwise NULL
+   */
+  const FLARMNetRecord *
+  LookupFLARMRecord(FlarmId id);
 
-/**
- * Looks up the FLARM id in the FLARM details array
- * and the FLARMnet file and returns the callsign
- * @param id FLARM id
- * @return The corresponding callsign if found, otherwise NULL
- */
-const TCHAR *
-LookupFLARMDetails(FlarmId id);
+  /**
+   * Looks up the FLARM id in the FLARM details array
+   * and the FLARMnet file and returns the callsign
+   * @param id FLARM id
+   * @return The corresponding callsign if found, otherwise NULL
+   */
+  const TCHAR *
+  LookupFLARMDetails(FlarmId id);
 
-/**
- * Looks up the callsign in the FLARM details array
- * and the FLARMnet file and returns the FLARM id
- * @param cn Callsign
- * @return The corresponding FLARM id if found, otherwise 0
- */
-FlarmId
-LookupFLARMDetails(const TCHAR *cn);
+  /**
+   * Looks up the callsign in the FLARM details array
+   * and the FLARMnet file and returns the FLARM id
+   * @param cn Callsign
+   * @return The corresponding FLARM id if found, otherwise 0
+   */
+  FlarmId
+  LookupFLARMDetails(const TCHAR *cn);
 
-/**
- * Adds a FLARM details couple (callsign + FLARM id)
- * to the FLARM details array and saves it to the
- * user file (if necessary)
- * @param id FLARM id
- * @param name Callsign
- * @param saveFile True = FLARM details file is saved after update
- * @return True if successfully added, False otherwise
- */
-bool
-AddFlarmLookupItem(FlarmId id, const TCHAR *name, bool saveFile);
+  /**
+   * Adds a FLARM details couple (callsign + FLARM id)
+   * to the FLARM details array and saves it to the
+   * user file (if necessary)
+   * @param id FLARM id
+   * @param name Callsign
+   * @param saveFile True = FLARM details file is saved after update
+   * @return True if successfully added, False otherwise
+   */
+  bool
+  AddFlarmLookupItem(FlarmId id, const TCHAR *name, bool saveFile);
 
-/**
- * Looks up the FLARM callsign in the FLARM details array
- * and returns the array id
- * @param cn Callsign
- * @return Array id if found, otherwise -1
- */
-int
-LookupSecondaryFLARMId(const TCHAR *cn);
+  /**
+   * Looks up the FLARM callsign in the FLARM details array
+   * and returns the array id
+   * @param cn Callsign
+   * @return Array id if found, otherwise -1
+   */
+  int
+  LookupSecondaryFLARMId(const TCHAR *cn);
 
-/**
- * Looks up the FLARM id in the FLARM details array
- * and returns the array id
- * @param id FLARM id
- * @return Array id if found, otherwise -1
- */
-int
-LookupSecondaryFLARMId(FlarmId id);
+  /**
+   * Looks up the FLARM id in the FLARM details array
+   * and returns the array id
+   * @param id FLARM id
+   * @return Array id if found, otherwise -1
+   */
+  int
+  LookupSecondaryFLARMId(FlarmId id);
+}
 
 #endif
