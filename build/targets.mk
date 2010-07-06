@@ -210,7 +210,7 @@ ifeq ($(HAVE_WIN32),y)
 endif
 
 ifeq ($(CONFIG_PNA),y)
-  TARGET_CPPFLAGS += -DCECORE -DPNA
+  TARGET_CPPFLAGS += -DPNA
   TARGET_CPPFLAGS += -DNOLINETO
 endif
 
@@ -220,10 +220,6 @@ endif
 
 ifeq ($(TARGET),PPC2002)
   TARGET_CPPFLAGS += -DNOLINETO -DNOCLEARTYPE
-endif
-
-ifeq ($(CONFIG_PC),y)
-  TARGET_CPPFLAGS += -DCECORE
 endif
 
 ifeq ($(CONFIG_WINE),y)
