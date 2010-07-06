@@ -117,7 +117,7 @@ public:
   /** returns true if messages have changed */
   bool Render();
 
-  void AddMessage(DWORD tshow, int type, TCHAR *Text);
+  void AddMessage(DWORD tshow, int type, const TCHAR *Text);
   void AddMessage(const TCHAR* text, const TCHAR *data=NULL);
 
   /**

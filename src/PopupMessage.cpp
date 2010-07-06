@@ -254,7 +254,9 @@ int PopupMessage::GetEmptySlot() {
 }
 
 
-void PopupMessage::AddMessage(DWORD tshow, int type, TCHAR* Text) {
+void
+PopupMessage::AddMessage(DWORD tshow, int type, const TCHAR *Text)
+{
   ScopeLock protect(mutex);
 
   int i;
