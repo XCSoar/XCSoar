@@ -137,7 +137,7 @@ TopWindow::full_screen()
 #ifdef WINDOWSPC
   show_on_top();
 #else
-#if !defined(CECORE) && !defined(GNAV)
+#ifdef HAVE_AYGSHELL_DLL
   ::SHFullScreen(hWnd, SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
 #endif
   ::SetWindowPos(hWnd, HWND_TOP, 0, 0,
