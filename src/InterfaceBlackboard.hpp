@@ -43,6 +43,7 @@ Copyright_License {
 #include "SettingsComputerBlackboard.hpp"
 #include "SettingsMapBlackboard.hpp"
 #include "MapProjectionBlackboard.hpp"
+#include "Compiler.h"
 
 class InterfaceBlackboard:
   public BaseBlackboard,
@@ -53,8 +54,13 @@ class InterfaceBlackboard:
 public:
   void ReadBlackboardBasic(const NMEA_INFO &nmea_info);
   void ReadBlackboardCalculated(const DERIVED_INFO &derived_info);
+
+  gcc_const
   SETTINGS_COMPUTER& SetSettingsComputer() { return settings_computer; }
+
+  gcc_const
   SETTINGS_MAP& SetSettingsMap() { return settings_map; }
+
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
 };
 

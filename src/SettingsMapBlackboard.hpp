@@ -40,6 +40,7 @@ Copyright_License {
 #define SETTINGS_MAP_BLACKBOARD_H
 
 #include "SettingsUser.hpp"
+#include "Compiler.h"
 
 /**
  * Blackboard for clients requiring read access to map settings
@@ -48,6 +49,8 @@ class SettingsMapBlackboard
 {
 public:
   SettingsMapBlackboard();
+
+  gcc_const
   const SETTINGS_MAP& SettingsMap() const
   { return settings_map; };
 protected:

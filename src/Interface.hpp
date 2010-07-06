@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_INTERFACE_HPP
 
 #include "InterfaceBlackboard.hpp"
+#include "Compiler.h"
 
 class MainWindow;
 class StatusMessageList;
@@ -62,18 +63,21 @@ public:
    * Returns InterfaceBlackboard.Basic (NMEA_INFO) (read-only)
    * @return InterfaceBlackboard.Basic
    */
+  gcc_const
   static const NMEA_INFO& Basic() { return blackboard.Basic(); }
 
   /**
    * Returns InterfaceBlackboard.Calculated (DERIVED_INFO) (read-only)
    * @return InterfaceBlackboard.Calculated
    */
+  gcc_const
   static const DERIVED_INFO& Calculated() { return blackboard.Calculated(); }
 
   /**
    * Returns InterfaceBlackboard.MapProjection (MapWindowProjection) (read-only)
    * @return InterfaceBlackboard.MapProjection
    */
+  gcc_const
   static const MapWindowProjection& MapProjection()
   { return blackboard.MapProjection(); }
 
@@ -81,6 +85,7 @@ public:
    * Returns the InterfaceBlackboard.SettingsComputer (read-only)
    * @return The InterfaceBlackboard.SettingsComputer
    */
+  gcc_const
   static const SETTINGS_COMPUTER& SettingsComputer()
   { return blackboard.SettingsComputer(); }
 
@@ -88,6 +93,7 @@ public:
    * Returns the InterfaceBlackboard.SettingsComputer (read-write)
    * @return The InterfaceBlackboard.SettingsComputer
    */
+  gcc_const
   static SETTINGS_COMPUTER& SetSettingsComputer()
   { return blackboard.SetSettingsComputer(); }
 
@@ -95,6 +101,7 @@ public:
    * Returns the InterfaceBlackboard.SettingsMap (read-only)
    * @return The InterfaceBlackboard.SettingsMap
    */
+  gcc_const
   static const SETTINGS_MAP& SettingsMap()
   { return blackboard.SettingsMap(); }
 
@@ -102,6 +109,7 @@ public:
    * Returns the InterfaceBlackboard.SettingsMap (read-write)
    * @return The InterfaceBlackboard.SettingsMap
    */
+  gcc_const
   static SETTINGS_MAP& SetSettingsMap()
   { return blackboard.SetSettingsMap(); }
 
