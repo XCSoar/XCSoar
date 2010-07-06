@@ -400,7 +400,7 @@ DeviceBlackboard::FLARM_ScanTraffic()
     // and if (Target currently without name)
     if (traffic.defined() && !traffic.HasName()) {
       // need to lookup name for this target
-      const TCHAR *fname = FlarmDetails::LookupFLARMDetails(traffic.ID);
+      const TCHAR *fname = FlarmDetails::LookupCallsign(traffic.ID);
       if (fname != NULL)
         _tcscpy(traffic.Name, fname);
     }

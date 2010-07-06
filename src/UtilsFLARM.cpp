@@ -102,7 +102,7 @@ LoadFLARMDetails(TLineReader &reader)
     if (endptr > line && endptr[0] == _T('=') && endptr[1] != _T('\0')) {
       TCHAR *Name = endptr + 1;
       TrimRight(Name);
-      if (!FlarmDetails::AddFlarmLookupItem(id, Name, false))
+      if (!FlarmDetails::AddSecondaryItem(id, Name, false))
         break; // cant add anymore items !
     }
   }
@@ -140,7 +140,7 @@ FlarmDetails::SaveSecondary()
 }
 
 int
-FlarmDetails::LookupSecondaryFLARMId(FlarmId id)
+FlarmDetails::LookupSecondaryIndex(FlarmId id)
 {
   for (int i = 0; i < NumberOfFLARMNames; i++)
     if (FLARM_Names[i].ID == id)
@@ -150,7 +150,7 @@ FlarmDetails::LookupSecondaryFLARMId(FlarmId id)
 }
 
 int
-FlarmDetails::LookupSecondaryFLARMId(const TCHAR *cn)
+FlarmDetails::LookupSecondaryIndex(const TCHAR *cn)
 {
   for (int i = 0; i < NumberOfFLARMNames; i++)
     if (_tcscmp(FLARM_Names[i].Name, cn) == 0)
@@ -160,7 +160,7 @@ FlarmDetails::LookupSecondaryFLARMId(const TCHAR *cn)
 }
 
 const FLARMNetRecord *
-FlarmDetails::LookupFLARMRecord(FlarmId id)
+FlarmDetails::LookupRecord(FlarmId id)
 {
   // try to find flarm from FLARMNet.org File
   const FLARMNetRecord *record = flarm_net.Find(id);
@@ -171,10 +171,10 @@ FlarmDetails::LookupFLARMRecord(FlarmId id)
 }
 
 const TCHAR *
-FlarmDetails::LookupFLARMDetails(FlarmId id)
+FlarmDetails::LookupCallsign(FlarmId id)
 {
   // try to find flarm from userFile
-  int index = LookupSecondaryFLARMId(id);
+  int index = LookupSecondaryIndex(id);
   if (index != -1)
     return FLARM_Names[index].Name;
 
@@ -187,10 +187,10 @@ FlarmDetails::LookupFLARMDetails(FlarmId id)
 }
 
 FlarmId
-FlarmDetails::LookupFLARMDetails(const TCHAR *cn)
+FlarmDetails::LookupId(const TCHAR *cn)
 {
   // try to find flarm from userFile
-  int index = LookupSecondaryFLARMId(cn);
+  int index = LookupSecondaryIndex(cn);
   if (index != -1)
     return FLARM_Names[index].ID;
 
@@ -205,9 +205,9 @@ FlarmDetails::LookupFLARMDetails(const TCHAR *cn)
 }
 
 bool
-FlarmDetails::AddFlarmLookupItem(FlarmId id, const TCHAR *name, bool saveFile)
+FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name, bool saveFile)
 {
-  int index = LookupSecondaryFLARMId(id);
+  int index = LookupSecondaryIndex(id);
 
   if (index == -1) {
     if (NumberOfFLARMNames < MAXFLARMNAMES - 1) {

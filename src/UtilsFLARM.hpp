@@ -60,7 +60,7 @@ namespace FlarmDetails
   /**
    * Opens XCSoars own FLARM details file, parses it and
    * adds its entries as FlarmLookupItems
-   * @see AddFlarmLookupItem
+   * @see AddSecondaryItem
    */
   void
   LoadSecondary();
@@ -85,7 +85,7 @@ namespace FlarmDetails
    * @return The corresponding FLARMNet Record if found, otherwise NULL
    */
   const FLARMNetRecord *
-  LookupFLARMRecord(FlarmId id);
+  LookupRecord(FlarmId id);
 
   /**
    * Looks up the FLARM id in the FLARM details array
@@ -94,7 +94,7 @@ namespace FlarmDetails
    * @return The corresponding callsign if found, otherwise NULL
    */
   const TCHAR *
-  LookupFLARMDetails(FlarmId id);
+  LookupCallsign(FlarmId id);
 
   /**
    * Looks up the callsign in the FLARM details array
@@ -103,7 +103,7 @@ namespace FlarmDetails
    * @return The corresponding FLARM id if found, otherwise 0
    */
   FlarmId
-  LookupFLARMDetails(const TCHAR *cn);
+  LookupId(const TCHAR *cn);
 
   /**
    * Adds a FLARM details couple (callsign + FLARM id)
@@ -115,7 +115,7 @@ namespace FlarmDetails
    * @return True if successfully added, False otherwise
    */
   bool
-  AddFlarmLookupItem(FlarmId id, const TCHAR *name, bool saveFile);
+  AddSecondaryItem(FlarmId id, const TCHAR *name, bool saveFile);
 
   /**
    * Looks up the FLARM callsign in the FLARM details array
@@ -124,7 +124,7 @@ namespace FlarmDetails
    * @return Array id if found, otherwise -1
    */
   int
-  LookupSecondaryFLARMId(const TCHAR *cn);
+  LookupSecondaryIndex(const TCHAR *cn);
 
   /**
    * Looks up the FLARM id in the FLARM details array
@@ -133,7 +133,7 @@ namespace FlarmDetails
    * @return Array id if found, otherwise -1
    */
   int
-  LookupSecondaryFLARMId(FlarmId id);
+  LookupSecondaryIndex(FlarmId id);
 }
 
 #endif

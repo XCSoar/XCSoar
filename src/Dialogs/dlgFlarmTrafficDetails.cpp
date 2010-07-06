@@ -134,7 +134,7 @@ void Update() {
 
   // Try to find the target in the FLARMnet database
   /// @todo: make this code a little more usable
-  const FLARMNetRecord *record = FlarmDetails::LookupFLARMRecord(target_id);
+  const FLARMNetRecord *record = FlarmDetails::LookupRecord(target_id);
   if (record) {
     // Fill the pilot name field
     _tcscpy(tmp, record->name);
@@ -173,7 +173,7 @@ void Update() {
   // Fill the callsign field (+ registration)
   // note: don't use target->Name here since it is not updated
   //       yet if it was changed
-  const TCHAR* cs = FlarmDetails::LookupFLARMDetails(target_id);
+  const TCHAR* cs = FlarmDetails::LookupCallsign(target_id);
   if (cs != NULL && cs[0] != 0) {
     _tcscpy(tmp, cs);
     if (record) {
@@ -191,7 +191,7 @@ void Update() {
     ((WndButton *)wf->FindByName(_T("cmdCallsign")))->set_enabled(true);
   } else {
     // the callsign exists - is it from secondary list ?
-    if (FlarmDetails::LookupSecondaryFLARMId(target->ID) != -1)
+    if (FlarmDetails::LookupSecondaryIndex(target->ID) != -1)
       ((WndButton *)wf->FindByName(_T("cmdCallsign")))->set_enabled(true);
     else
       ((WndButton *)wf->FindByName(_T("cmdCallsign")))->set_enabled(false);
@@ -270,7 +270,7 @@ OnCallsignClicked(WndButton &Sender)
   TCHAR newName[21];
   newName[0] = 0;
   if (dlgTextEntryShowModal(newName, 4))
-    FlarmDetails::AddFlarmLookupItem(target_id, newName, true);
+    FlarmDetails::AddSecondaryItem(target_id, newName, true);
 
   Update();
 }

@@ -159,7 +159,7 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
     return;
   }
 
-  FlarmId flarmId = FlarmDetails::LookupFLARMDetails(
+  FlarmId flarmId = FlarmDetails::LookupId(
       XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
 
   if (!flarmId.defined()) {
