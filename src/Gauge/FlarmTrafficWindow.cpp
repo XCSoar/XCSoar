@@ -429,7 +429,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 #ifdef FLARM_AVERAGE
   if (side_display_type == 1) {
     // if vertical speed to small or negative -> skip this one
-    if (traffic.Average30s < 0.5
+    if (traffic.Average30s < fixed(0.5)
         || (traffic.Type != FLARM_TRAFFIC::acGlider
             && traffic.Type != FLARM_TRAFFIC::acHangGlider
             && traffic.Type != FLARM_TRAFFIC::acParaGlider))

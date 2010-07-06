@@ -73,13 +73,13 @@ struct FLARM_TRAFFIC {
   /** TrackBearing of the FLARM target */
   Angle TrackBearing;
   /** Speed of the FLARM target */
-  double Speed;
+  fixed Speed;
   /** Altitude of the FLARM target */
-  double Altitude;
+  fixed Altitude;
   /** Turnrate of the FLARM target */
-  double TurnRate;
+  fixed TurnRate;
   /** Climbrate of the FLARM target */
-  double ClimbRate;
+  fixed ClimbRate;
   /** Latitude-based distance of the FLARM target */
   fixed RelativeNorth;
   /** Longitude-based distance of the FLARM target */
@@ -96,7 +96,7 @@ struct FLARM_TRAFFIC {
   fixed Time_Fix;
   AircraftType Type;
 #ifdef FLARM_AVERAGE
-  double Average30s;
+  fixed Average30s;
 #endif
 
   bool defined() const {
