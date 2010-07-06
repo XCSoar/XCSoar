@@ -46,25 +46,11 @@ Copyright_License {
 #include "Profile.hpp"
 
 #ifdef PNA
-#include "LogFile.hpp"
 #include "SettingsUser.hpp"
-#include "Audio/WaveThread.h"
-#endif
-
-#if defined(WIN32) && !defined(__GNUC__)
-#if defined(CECORE)
-#include "winbase.h"
-#endif
-#ifndef WINDOWSPC
-#include "projects.h"
-#endif
-#endif
-
-#ifdef WIN32
 #include <shlobj.h>
+#include <mmsystem.h>
 #endif
 
-#include <assert.h>
 #include <tchar.h>
 
 #ifdef HAVE_POSIX
