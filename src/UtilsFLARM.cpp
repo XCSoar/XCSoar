@@ -208,30 +208,27 @@ bool
 FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name, bool saveFile)
 {
   int index = LookupSecondaryIndex(id);
-
-  if (index == -1) {
-    if (NumberOfFLARMNames < MAXFLARMNAMES - 1) {
-      // create new record
-      FLARM_Names[NumberOfFLARMNames].ID = id;
-      _tcsncpy(FLARM_Names[NumberOfFLARMNames].Name, name, 20);
-      FLARM_Names[NumberOfFLARMNames].Name[20] = 0;
-      NumberOfFLARMNames++;
-
-      if (saveFile)
-        SaveSecondary();
-
-      return true;
-    }
-  } else {
+  if (index != -1) {
     // modify existing record
     FLARM_Names[index].ID = id;
     _tcsncpy(FLARM_Names[index].Name, name, 20);
     FLARM_Names[index].Name[20] = 0;
-
     if (saveFile)
       SaveSecondary();
 
     return true;
   }
-  return false;
+
+  if (NumberOfFLARMNames >= MAXFLARMNAMES - 1)
+    return false;
+
+  // create new record
+  FLARM_Names[NumberOfFLARMNames].ID = id;
+  _tcsncpy(FLARM_Names[NumberOfFLARMNames].Name, name, 20);
+  FLARM_Names[NumberOfFLARMNames].Name[20] = 0;
+  NumberOfFLARMNames++;
+  if (saveFile)
+    SaveSecondary();
+
+  return true;
 }
