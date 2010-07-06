@@ -139,8 +139,8 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
     // changed and more then 70px from last direction change)...
     if (string_is_empty(gesture)
         || (direction[0] != gesture[_tcslen(gesture) - 1]
-        && hypot(gesture_corner.x - x, gesture_corner.y - y)
-           > Layout::Scale(70))) {
+            && hypot(gesture_corner.x - x, gesture_corner.y - y)
+               > Layout::Scale(70))) {
       // Append current direction to the gesture string
       _tcsncat(gesture, direction, 10);
       // Save position of the direction change
