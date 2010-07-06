@@ -39,18 +39,20 @@ Copyright_License {
 #ifndef CLIMBAVERAGECALCULATOR_HPP
 #define CLIMBAVERAGECALCULATOR_HPP
 
+#include "Engine/Math/fixed.hpp"
+
 class ClimbAverageCalculator
 {
 public:
 	ClimbAverageCalculator();
-	double GetAverage(double curTime, double curAltitude, int averageTime);
+	fixed GetAverage(fixed curTime, fixed curAltitude, fixed averageTime);
 
 private:
 	static int const MAX_HISTORY = 40;
 	struct flarmAltHistoryItem
 	{
-		double time;
-		double altitude;
+		fixed time;
+		fixed altitude;
 	};
 
 	flarmAltHistoryItem history[MAX_HISTORY];

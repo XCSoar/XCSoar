@@ -54,7 +54,7 @@ FlarmCalculations::Average30s(FlarmId flarmId, double curTime,
     averageCalculatorMap[flarmId] = itemTemp;
   }
 
-  return itemTemp->GetAverage(curTime, curAltitude, 30);
+  return itemTemp->GetAverage(fixed(curTime), fixed(curAltitude), fixed(30));
 }
 
 #endif

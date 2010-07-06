@@ -43,15 +43,15 @@ ClimbAverageCalculator::ClimbAverageCalculator()
 	newestValIndex = -1;
 
 	for (int i = 0; i < MAX_HISTORY; i++) {
-    history[i].altitude = -99999;
-    history[i].time = -99999;
+    history[i].altitude = fixed(-99999);
+    history[i].time = fixed(-99999);
 	}
 }
 
-double
-ClimbAverageCalculator::GetAverage(double curTime,
-                                   double curAltitude,
-                                   int averageTime)
+fixed
+ClimbAverageCalculator::GetAverage(fixed curTime,
+                                   fixed curAltitude,
+                                   fixed averageTime)
 {
   int bestHistory;
 
@@ -66,7 +66,7 @@ ClimbAverageCalculator::GetAverage(double curTime,
 
   // now run through the history and find the best sample for average period within the average time period
   for (int i = 0; i < MAX_HISTORY; i++) {
-    if (history[i].time == -99999)
+    if (history[i].time == fixed(-99999))
       continue;
 
     // inside the period ?
@@ -83,5 +83,5 @@ ClimbAverageCalculator::GetAverage(double curTime,
     return (curAltitude - history[bestHistory].altitude) /
            (curTime - history[bestHistory].time);
 
-  return 0;
+  return fixed_zero;
 }
