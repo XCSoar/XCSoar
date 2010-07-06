@@ -93,7 +93,7 @@ struct FLARM_TRAFFIC {
   unsigned short IDType;
   unsigned short AlarmLevel;
   /** Last time the FLARM target was seen */
-  double Time_Fix;
+  fixed Time_Fix;
   AircraftType Type;
 #ifdef FLARM_AVERAGE
   double Average30s;
