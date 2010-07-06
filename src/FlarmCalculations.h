@@ -52,7 +52,7 @@ struct FLARM_STATE;
 class FlarmCalculations
 {
 public:
-  double Average30s(FlarmId flarmId, double curTime, double curAltitude);
+  fixed Average30s(FlarmId flarmId, fixed curTime, fixed curAltitude);
 
 private:
   typedef std::map<FlarmId, ClimbAverageCalculator*> AverageCalculatorMap;

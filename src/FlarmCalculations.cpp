@@ -40,9 +40,8 @@ Copyright_License {
 #include "FlarmCalculations.h"
 #include "FLARM/State.hpp"
 
-double
-FlarmCalculations::Average30s(FlarmId flarmId, double curTime,
-                              double curAltitude)
+fixed
+FlarmCalculations::Average30s(FlarmId flarmId, fixed curTime, fixed curAltitude)
 {
   ClimbAverageCalculator *itemTemp = NULL;
   AverageCalculatorMap::iterator iterFind = averageCalculatorMap.find(flarmId);
@@ -54,7 +53,7 @@ FlarmCalculations::Average30s(FlarmId flarmId, double curTime,
     averageCalculatorMap[flarmId] = itemTemp;
   }
 
-  return itemTemp->GetAverage(fixed(curTime), fixed(curAltitude), fixed(30));
+  return itemTemp->GetAverage(curTime, curAltitude, fixed(30));
 }
 
 #endif

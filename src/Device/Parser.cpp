@@ -1113,7 +1113,7 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
 #ifdef FLARM_AVERAGE
   flarm_slot->Average30s = flarmCalculations.Average30s(flarm_slot->ID,
                                                         GPS_INFO->Time,
-                                                        flarm_slot->Altitude);
+                                                        fixed(flarm_slot->Altitude));
 #endif
 
   // QUESTION TB: never returns true?!
