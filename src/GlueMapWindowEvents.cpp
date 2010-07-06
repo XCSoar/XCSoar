@@ -49,13 +49,14 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Dialogs.h"
 #include "UtilsSystem.hpp"
+#include "Compiler.h"
 
 #include <algorithm>
 
 using std::min;
 using std::max;
 
-const TCHAR*
+static gcc_const const TCHAR*
 getDirection(int X1, int Y1, int X2, int Y2)
 {
   int dx = X2 - X1;
