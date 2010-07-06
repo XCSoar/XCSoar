@@ -42,7 +42,7 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 
 #ifdef HAVE_AYGSHELL_DLL
-#include <aygshell.h>
+#include "OS/AYGShellDLL.hpp"
 #endif
 
 #ifdef ENABLE_SDL
@@ -71,6 +71,11 @@ class TopWindow : public ContainerWindow {
   SHACTIVATEINFO s_sai;
 #endif
 #endif /* !ENABLE_SDL */
+
+public:
+#ifdef HAVE_AYGSHELL_DLL
+  const AYGShellDLL ayg_shell_dll;
+#endif
 
 public:
   TopWindow();

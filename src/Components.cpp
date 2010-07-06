@@ -282,17 +282,18 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   main_window.map.show();
 
 #ifdef HAVE_AYGSHELL_DLL
-  SHSetAppKeyWndAssoc(VK_APP1, main_window);
-  SHSetAppKeyWndAssoc(VK_APP2, main_window);
-  SHSetAppKeyWndAssoc(VK_APP3, main_window);
-  SHSetAppKeyWndAssoc(VK_APP4, main_window);
+  const AYGShellDLL &ayg = main_window.ayg_shell_dll;
+  ayg.SHSetAppKeyWndAssoc(VK_APP1, main_window);
+  ayg.SHSetAppKeyWndAssoc(VK_APP2, main_window);
+  ayg.SHSetAppKeyWndAssoc(VK_APP3, main_window);
+  ayg.SHSetAppKeyWndAssoc(VK_APP4, main_window);
   // Typical Record Button
   //	Why you can't always get this to work
   //	http://forums.devbuzz.com/m_1185/mpage_1/key_/tm.htm
   //	To do with the fact it is a global hotkey, but you can with code above
   //	Also APPA is record key on some systems
-  SHSetAppKeyWndAssoc(VK_APP5, main_window);
-  SHSetAppKeyWndAssoc(VK_APP6, main_window);
+  ayg.SHSetAppKeyWndAssoc(VK_APP5, main_window);
+  ayg.SHSetAppKeyWndAssoc(VK_APP6, main_window);
 #endif
 
   // Initialize main blackboard data

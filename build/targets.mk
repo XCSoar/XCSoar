@@ -324,8 +324,6 @@ ifeq ($(HAVE_CE),y)
 
   ifeq ($(findstring $(TARGET),PNA ALTAIR ALTAIRPORTRAIT),)
     TARGET_CPPFLAGS += -DHAVE_NOTE_PRJ_DLL
-
-    TARGET_LDLIBS += -laygshell
     TARGET_CPPFLAGS += -DHAVE_AYGSHELL_DLL
 
     TARGET_LDLIBS += -limgdecmp

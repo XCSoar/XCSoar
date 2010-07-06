@@ -138,7 +138,8 @@ TopWindow::full_screen()
   show_on_top();
 #else
 #ifdef HAVE_AYGSHELL_DLL
-  ::SHFullScreen(hWnd, SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
+  ayg_shell_dll.SHFullScreen(hWnd, SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|
+                             SHFS_HIDESTARTICON);
 #endif
   ::SetWindowPos(hWnd, HWND_TOP, 0, 0,
                  GetSystemMetrics(SM_CXSCREEN),
@@ -234,7 +235,7 @@ LRESULT TopWindow::on_message(HWND _hWnd, UINT message,
   switch (message) {
   case WM_ACTIVATE:
 #ifdef HAVE_AYGSHELL_DLL
-    SHHandleWMActivate(_hWnd, wParam, lParam, &s_sai, FALSE);
+    ayg_shell_dll.SHHandleWMActivate(_hWnd, wParam, lParam, &s_sai, FALSE);
 #endif
 
     if (wParam == WA_INACTIVE ? on_deactivate() : on_activate())
@@ -243,7 +244,7 @@ LRESULT TopWindow::on_message(HWND _hWnd, UINT message,
 
   case WM_SETTINGCHANGE:
 #ifdef HAVE_AYGSHELL_DLL
-    SHHandleWMSettingChange(_hWnd, wParam, lParam, &s_sai);
+    ayg_shell_dll.SHHandleWMSettingChange(_hWnd, wParam, lParam, &s_sai);
 #endif
     break;
   };
