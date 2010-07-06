@@ -138,14 +138,6 @@ public:
 
   virtual bool on_mouse_down(int x, int y);
 
-  void Lock() {
-    mutex.Lock();
-  }
-
-  void Unlock() {
-    mutex.Unlock();
-  }
-
   /** returns true if messages have changed */
   bool Render();
 

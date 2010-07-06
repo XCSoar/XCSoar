@@ -198,9 +198,9 @@ void PopupMessage::Resize() {
 bool PopupMessage::Render() {
   if (!globalRunningEvent.test()) return false;
 
-  Lock();
+  mutex.Lock();
   if (parent.has_dialog()) {
-    Unlock();
+    mutex.Unlock();
     return false;
   }
 
@@ -220,7 +220,7 @@ bool PopupMessage::Render() {
   static bool doresize= false;
 
   if (!changed) {
-    Unlock();
+    mutex.Unlock();
 
     if (doresize) {
       doresize = false;
@@ -241,7 +241,7 @@ bool PopupMessage::Render() {
     if (messages[i].AppendTo(msgText, fpsTime))
       nvisible++;
 
-  Unlock();
+  mutex.Unlock();
 
   Resize();
 
@@ -285,7 +285,7 @@ void PopupMessage::Repeat(int type) {
   DWORD tmax=0;
   int imax= -1;
 
-  Lock();
+  mutex.Lock();
 
   DWORD	fpsTime = ::GetTickCount() - startTime;
 
@@ -307,7 +307,7 @@ void PopupMessage::Repeat(int type) {
     messages[imax].texpiry = messages[imax].tstart;
   }
 
-  Unlock();
+  mutex.Unlock();
 }
 
 bool PopupMessage::Acknowledge(int type) {
