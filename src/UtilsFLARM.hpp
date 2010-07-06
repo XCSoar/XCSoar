@@ -76,7 +76,7 @@ namespace FlarmDetails
    * corresponding file (xcsoar-flarm.txt)
    */
   void
-  SaveFLARMDetails();
+  SaveSecondary();
 
   /**
    * Looks up the FLARM id in the FLARMNet Database
