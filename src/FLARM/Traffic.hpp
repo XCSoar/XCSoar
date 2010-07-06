@@ -50,7 +50,7 @@ struct FLARM_TRAFFIC {
    * @see http://www.flarm.com/support/manual/FLARM_DataportManual_v4.06E.pdf
    * Page 8
    */
-  typedef enum {
+  enum AircraftType {
     acUnknown = 0,         //!< unknown
     acGlider = 1,          //!< glider / motor-glider
     acTowPlane = 2,        //!< tow / tug plane
@@ -66,7 +66,7 @@ struct FLARM_TRAFFIC {
     acAirship = 12,        //!< airship
     acUAV = 13,            //!< unmanned aerial vehicle
     acStaticObject = 15    //!< static object
-  } AircraftType;
+  };
 
   /** Location of the FLARM target */
   GEOPOINT Location;
