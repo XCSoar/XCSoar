@@ -1097,7 +1097,7 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
   flarm_slot->TurnRate = _tcstod(params[7], NULL);
   flarm_slot->Speed = _tcstod(params[8], NULL);
   flarm_slot->ClimbRate = _tcstod(params[9], NULL);
-  flarm_slot->Type = _ttoi(params[10]);
+  flarm_slot->Type = (FLARM_TRAFFIC::AircraftType)_ttoi(params[10]);
 
   // 1 relativenorth, meters
   flarm_slot->Location.Latitude = Angle::degrees(flarm_slot->RelativeNorth

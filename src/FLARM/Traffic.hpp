@@ -45,6 +45,29 @@ Copyright_License {
 #include <tchar.h>
 
 struct FLARM_TRAFFIC {
+  /**
+   * FLARM aircraft types
+   * @see http://www.flarm.com/support/manual/FLARM_DataportManual_v4.06E.pdf
+   * Page 8
+   */
+  typedef enum {
+    acUnknown = 0,         //!< unknown
+    acGlider = 1,          //!< glider / motor-glider
+    acTowPlane = 2,        //!< tow / tug plane
+    acHelicopter = 3,      //!< helicopter / rotorcraft
+    acParachute = 4,       //!< parachute
+    acDropPlane = 5,       //!< drop plane for parachutes
+    acHangGlider = 6,      //!< hang-glider (hard)
+    acParaGlider = 7,      //!< para-glider (soft)
+    acPoweredAircraft = 8, //!< powered aircraft
+    acJetAircraft = 9,     //!< jet aircraft
+    acFlyingSaucer = 10,   //!< flying saucer (UFO)
+    acBalloon = 11,        //!< balloon
+    acAirship = 12,        //!< airship
+    acUAV = 13,            //!< unmanned aerial vehicle
+    acStaticObject = 15    //!< static object
+  } AircraftType;
+
   /** Location of the FLARM target */
   GEOPOINT Location;
   /** TrackBearing of the FLARM target */
@@ -71,7 +94,7 @@ struct FLARM_TRAFFIC {
   unsigned short AlarmLevel;
   /** Last time the FLARM target was seen */
   double Time_Fix;
-  unsigned short Type;
+  AircraftType Type;
 #ifdef FLARM_AVERAGE
   double Average30s;
 #endif
