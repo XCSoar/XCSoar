@@ -75,6 +75,24 @@ Font::reset()
 #include "Asset.hpp"
 
 bool
+Font::set(const TCHAR* facename, int height, int bold, bool italic,
+          bool variable_pitch, int width)
+{
+  LOGFONT font;
+  memset((char *)&font, 0, sizeof(LOGFONT));
+
+  _tcscpy(font.lfFaceName, facename);
+  font.lfPitchAndFamily = (variable_pitch ? VARIABLE_PITCH : FIXED_PITCH)
+                          | FF_DONTCARE;
+  font.lfHeight = (long)height;
+  font.lfWidth = (long)width;
+  font.lfWeight = (long)bold;
+  font.lfItalic = italic;
+  font.lfQuality = ANTIALIASED_QUALITY;
+  return Font::set(&font);
+}
+
+bool
 Font::set(const LOGFONT *lplf)
 {
   reset();
