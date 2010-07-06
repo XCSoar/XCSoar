@@ -185,18 +185,6 @@ void Update() {
     _tcscpy(tmp, _T("--"));
   ((WndProperty *)wf->FindByName(_T("prpCallsign")))->SetText(tmp);
 
-  // Enable/Disable callsign button
-  if (!target->HasName()) {
-    // callsign not existing
-    ((WndButton *)wf->FindByName(_T("cmdCallsign")))->set_enabled(true);
-  } else {
-    // the callsign exists - is it from secondary list ?
-    if (FlarmDetails::LookupSecondaryIndex(target->ID) != -1)
-      ((WndButton *)wf->FindByName(_T("cmdCallsign")))->set_enabled(true);
-    else
-      ((WndButton *)wf->FindByName(_T("cmdCallsign")))->set_enabled(false);
-  }
-
   // Update the frequently changing fields too
   UpdateChanging();
 }
