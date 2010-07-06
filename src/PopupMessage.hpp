@@ -82,6 +82,38 @@ private:
     DWORD tstart; // time message was created
     DWORD texpiry; // time message will expire
     DWORD tshow; // time message is visible for
+
+    singleMessage()
+      :type(MSG_UNKNOWN), tstart(0), texpiry(0) {
+      text[0] = _T('\0');
+    }
+
+    bool IsUnknown() const {
+      return type == MSG_UNKNOWN;
+    }
+
+    bool IsNew() const {
+      return texpiry == tstart;
+    }
+
+    /**
+     * Expired for the first time?
+     */
+    bool IsNewlyExpired(DWORD now) const {
+      return texpiry <= now && texpiry > tstart;
+    }
+
+    void Set(int type, DWORD tshow, const TCHAR *text, DWORD now);
+
+    /**
+     * @return true if something was changed
+     */
+    bool Update(DWORD now);
+
+    /**
+     * @return true if a message has been appended
+     */
+    bool AppendTo(TCHAR *buffer, DWORD now);
   };
 
   const DWORD startTime;

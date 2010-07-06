@@ -60,18 +60,63 @@ Copyright_License {
 using std::min;
 using std::max;
 
+void
+PopupMessage::singleMessage::Set(int _type, DWORD _tshow, const TCHAR *_text,
+                                 DWORD now)
+{
+  type = _type;
+  tshow = _tshow;
+  tstart = now;
+  texpiry = now;
+  _tcscpy(text, _text);
+}
+
+bool
+PopupMessage::singleMessage::Update(DWORD now)
+{
+  if (IsUnknown())
+    // ignore unknown messages
+    return false;
+
+  if (IsNewlyExpired(now))
+    // this message has expired for first time
+    return true;
+
+  // new message has been added
+  if (IsNew()) {
+    // set new expiry time.
+    texpiry = now + tshow;
+    // this is a new message..
+    return true;
+  }
+
+  return false;
+}
+
+bool
+PopupMessage::singleMessage::AppendTo(TCHAR *buffer, DWORD now)
+{
+  if (IsUnknown())
+    // ignore unknown messages
+    return false;
+
+  if (texpiry < now) {
+    texpiry = tstart - 1;
+    // reset expiry so we don't refresh
+    return false;
+  }
+
+  _tcscat(buffer, text);
+  _tcscat(buffer, _T("\r\n"));
+  return true;
+}
+
 PopupMessage::PopupMessage(const StatusMessageList &_status_messages,
                            SingleWindow &_parent)
   :startTime(::GetTickCount()), status_messages(_status_messages),
    parent(_parent),
    nvisible(0)
 {
-  for (unsigned i = 0; i < MAXMESSAGES; i++) {
-    messages[i].text[0]= _T('\0');
-    messages[i].tstart = 0;
-    messages[i].texpiry = 0;
-    messages[i].type = 0;
-  }
 }
 
 void
@@ -169,28 +214,8 @@ bool PopupMessage::Render() {
   // new messages
 
   bool changed = false;
-  int i;
-  for (i=0; i<MAXMESSAGES; i++) {
-    if (messages[i].type==0) continue; // ignore unknown messages
-
-    if (
-	(messages[i].texpiry <= fpsTime)
-	&&(messages[i].texpiry> messages[i].tstart)
-	) {
-      // this message has expired for first time
-      changed = true;
-      continue;
-    }
-
-    // new message has been added
-    if (messages[i].texpiry== messages[i].tstart) {
-      // set new expiry time.
-      messages[i].texpiry = fpsTime + messages[i].tshow;
-      // this is a new message..
-      changed = true;
-    }
-
-  }
+  for (unsigned i = 0; i < MAXMESSAGES; ++i)
+    changed = messages[i].Update(fpsTime) || changed;
 
   static bool doresize= false;
 
@@ -212,20 +237,9 @@ bool PopupMessage::Render() {
   doresize = true;
   msgText[0]= 0;
   nvisible=0;
-  for (i=0; i<MAXMESSAGES; i++) {
-    if (messages[i].type==0) continue; // ignore unknown messages
-
-    if (messages[i].texpiry< fpsTime) {
-      messages[i].texpiry = messages[i].tstart-1;
-      // reset expiry so we don't refresh
-      continue;
-    }
-
-    _tcscat(msgText, messages[i].text);
-    _tcscat(msgText, TEXT("\r\n"));
-    nvisible++;
-
-  }
+  for (unsigned i = 0; i < MAXMESSAGES; ++i)
+    if (messages[i].AppendTo(msgText, fpsTime))
+      nvisible++;
 
   Unlock();
 
@@ -263,12 +277,7 @@ PopupMessage::AddMessage(DWORD tshow, int type, const TCHAR *Text)
   DWORD	fpsTime = ::GetTickCount() - startTime;
   i = GetEmptySlot();
 
-  messages[i].type = type;
-  messages[i].tshow = tshow;
-  messages[i].tstart = fpsTime;
-  messages[i].texpiry = fpsTime;
-  _tcscpy(messages[i].text, Text);
-
+  messages[i].Set(type, tshow, Text, fpsTime);
 }
 
 void PopupMessage::Repeat(int type) {
