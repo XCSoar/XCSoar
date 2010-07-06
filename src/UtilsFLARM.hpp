@@ -46,6 +46,18 @@ class FLARMNetRecord;
 namespace FlarmDetails
 {
   /**
+   * Loads XCSoar's own FLARM details file and the FLARMnet file
+   */
+  void
+  Load();
+
+  /**
+   * Loads the FLARMnet file
+   */
+  void
+  LoadFLARMnet();
+
+  /**
    * Opens XCSoars own FLARM details file, parses it and
    * adds its entries as FlarmLookupItems
    * @see AddFlarmLookupItem

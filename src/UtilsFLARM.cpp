@@ -62,6 +62,30 @@ typedef struct {
 static FLARM_Names_t FLARM_Names[MAXFLARMNAMES];
 
 void
+FlarmDetails::Load()
+{
+  LogStartUp(_T("FlarmDetails::Load"));
+
+  OpenFLARMDetails();
+  LoadFLARMnet();
+}
+
+void
+FlarmDetails::LoadFLARMnet()
+{
+  Source<char> *source = OpenDataFile(_T("data.fln"));
+  if (!source)
+    return;
+
+  LineSplitter splitter(*source);
+  unsigned num_records = flarm_net.LoadFile(splitter);
+  delete source;
+
+  if (num_records > 0)
+    LogStartUp(_T("%u FLARMnet ids found"), num_records);
+}
+
+void
 FlarmDetails::CloseFLARMDetails()
 {
   NumberOfFLARMNames = 0;
@@ -97,16 +121,6 @@ FlarmDetails::OpenFLARMDetails()
   if (reader != NULL) {
     LoadFLARMDetails(*reader);
     delete reader;
-  }
-
-  Source<char> *source = OpenDataFile(_T("data.fln"));
-  if (source != NULL) {
-    LineSplitter splitter(*source);
-    unsigned num_records = flarm_net.LoadFile(splitter);
-    delete source;
-
-    if (num_records > 0)
-      LogStartUp(_T("%u FLARMnet ids found"), num_records);
   }
 }
 

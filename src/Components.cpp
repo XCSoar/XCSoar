@@ -346,7 +346,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   airspace_warning.reset(aircraft_state);
 
   // Read the FLARM details file
-  FlarmDetails::OpenFLARMDetails();
+  FlarmDetails::Load();
 
 #ifndef DISABLEAUDIOVARIO
   /*
