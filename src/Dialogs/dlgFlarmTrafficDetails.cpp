@@ -46,6 +46,7 @@
 
 #include "Dialogs/Internal.hpp"
 #include "FLARM/FLARMNet.hpp"
+#include "FLARM/Traffic.hpp"
 #include "UtilsFLARM.hpp"
 #include "Screen/Layout.hpp"
 #include "Engine/Math/Earth.hpp"
@@ -162,7 +163,11 @@ void Update() {
     ((WndProperty *)wf->FindByName(_T("prpAirport")))->SetText(_T("--"));
 
     // Fill the plane type field
-    ((WndProperty *)wf->FindByName(_T("prpPlaneType")))->SetText(_T("--"));
+    const TCHAR* actype = FLARM_TRAFFIC::GetTypeString(target->Type);
+    if (!actype)
+      ((WndProperty *)wf->FindByName(_T("prpPlaneType")))->SetText(_T("--"));
+    else
+      ((WndProperty *)wf->FindByName(_T("prpPlaneType")))->SetText(actype);
   }
 
   // Fill the callsign field (+ registration)
