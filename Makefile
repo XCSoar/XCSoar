@@ -177,6 +177,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/FLARM/FLARMNet.cpp \
+	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FlarmCalculations.cpp \
 	$(SRC)/GlideComputer.cpp \
 	$(SRC)/GlideComputerBlackboard.cpp \

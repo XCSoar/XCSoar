@@ -151,6 +151,8 @@ struct FLARM_TRAFFIC {
       return true;
     }
   }
+
+  static const TCHAR* GetTypeString(AircraftType type);
 };
 
 #endif
