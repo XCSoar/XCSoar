@@ -38,10 +38,10 @@ Copyright_License {
 #ifndef XCSOAR_UTILS_FLARM_HPP
 #define XCSOAR_UTILS_FLARM_HPP
 
-#include "FLARM/Traffic.hpp"
-#include "FLARM/FLARMNet.hpp"
-
 #include <tchar.h>
+
+class FlarmId;
+class FLARMNetRecord;
 
 namespace FlarmDetails
 {
