@@ -375,7 +375,7 @@ InitialiseLogFonts()
                     (int)(FontHeight * 0.507), 0, true, false);
 
   InitialiseLogfont(&TitleSmallWindowLogFont, _T("Tahoma"), true,
-                    Layout::Scale(20), Layout::Scale(8), false, false);
+                    Layout::Scale(20), 0, false, false);
 }
 
 void
