@@ -323,7 +323,6 @@ ifeq ($(HAVE_CE),y)
   TARGET_LDLIBS := -lcommctrl -lstdc++
 
   ifeq ($(findstring $(TARGET),PNA ALTAIR ALTAIRPORTRAIT),)
-    TARGET_LDLIBS += -lnote_prj
     TARGET_CPPFLAGS += -DHAVE_NOTE_PRJ_DLL
 
     TARGET_LDLIBS += -laygshell

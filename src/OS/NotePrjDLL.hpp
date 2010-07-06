@@ -36,70 +36,37 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLASH_CARD_ENUMERATOR_HPP
-#define XCSOAR_FLASH_CARD_ENUMERATOR_HPP
+#ifndef XCSOAR_NOTEPRJDLL_HPP
+#define XCSOAR_NOTEPRJDLL_HPP
 
-#ifdef HAVE_NOTE_PRJ_DLL
-#include "NotePrjDLL.hpp"
-#endif
+#include "DynamicLibrary.hpp"
 
-#include <windows.h>
+class NotePrjDLL : public DynamicLibrary {
+protected:
+  typedef HANDLE WINAPI (*FindFirstFlashCard_t)(LPWIN32_FIND_DATA lpFindFlashData);
+  typedef BOOL WINAPI (*FindNextFlashCard_t)(HANDLE hFlashCard,
+                                      LPWIN32_FIND_DATA lpFindFlashData);
 
-class FlashCardEnumerator {
-#ifdef HAVE_NOTE_PRJ_DLL
-  const NotePrjDLL note_prj;
-#endif
-
-  HANDLE handle;
-  WIN32_FIND_DATA data;
-  bool first;
+  FindFirstFlashCard_t FindFirstFlashCard_p;
+  FindNextFlashCard_t FindNextFlashCard_p;
 
 public:
-#ifdef HAVE_NOTE_PRJ_DLL
-  FlashCardEnumerator()
-    :handle(note_prj.defined()
-            ? note_prj.FindFirstFlashCard(&data)
-            : ::FindFirstFile(_T("/*"), &data)),
-     first(true) {}
-#else
-  FlashCardEnumerator()
-    :handle(::FindFirstFile(_T("/*"), &data)), first(true) {}
-#endif
+  NotePrjDLL()
+    :DynamicLibrary(_T("note_prj")),
+     FindFirstFlashCard_p((FindFirstFlashCard_t)lookup(_T("FindFirstFlashCard"))),
+     FindNextFlashCard_p((FindNextFlashCard_t)lookup(_T("FindNextFlashCard"))) {}
 
-  ~FlashCardEnumerator() {
-    if (handle != INVALID_HANDLE_VALUE)
-      ::FindClose(handle);
+  HANDLE FindFirstFlashCard(LPWIN32_FIND_DATA lpFindFlashData) const {
+    return FindFirstFlashCard_p != NULL
+      ? FindFirstFlashCard_p(lpFindFlashData)
+      : NULL;
   }
 
-  const TCHAR *next() {
-    if (handle == INVALID_HANDLE_VALUE)
-      return NULL;
-
-#ifdef HAVE_NOTE_PRJ_DLL
-    if (note_prj.defined()) {
-      if (first)
-        first = false;
-      else if (!note_prj.FindNextFlashCard(handle, &data))
-        return NULL;
-      return data.cFileName;
-    }
-#endif
-
-    enum {
-      /* Directories with the "TEMPORARY" flag set seem to be
-         mountable flash drives - use this trick on platforms where
-         note_prj.dll is unavailable */
-      FLASH = FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_TEMPORARY,
-    };
-
-    do {
-      if (first)
-        first = false;
-      else if (!::FindNextFile(handle, &data))
-        return NULL;
-    } while ((data.dwFileAttributes & FLASH) != FLASH);
-
-    return data.cFileName;
+  BOOL FindNextFlashCard(HANDLE hFlashCard,
+                          LPWIN32_FIND_DATA lpFindFlashData) const {
+    return FindNextFlashCard_p != NULL
+      ? FindNextFlashCard_p(hFlashCard, lpFindFlashData)
+      : NULL;
   }
 };
 
