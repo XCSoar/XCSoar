@@ -92,7 +92,7 @@ FlarmDetails::Reset()
 }
 
 static void
-LoadFLARMDetails(TLineReader &reader)
+LoadSecondaryFile(TLineReader &reader)
 {
   TCHAR *line;
   while ((line = reader.read()) != NULL) {
@@ -119,7 +119,7 @@ FlarmDetails::LoadSecondary()
 
   TLineReader *reader = OpenDataTextFile(_T("xcsoar-flarm.txt"));
   if (reader != NULL) {
-    LoadFLARMDetails(*reader);
+    LoadSecondaryFile(*reader);
     delete reader;
   }
 }
