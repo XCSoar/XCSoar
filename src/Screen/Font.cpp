@@ -60,6 +60,14 @@ Font::set(const char *file, int ptsize, int bold, bool italic,
     style |= TTF_STYLE_ITALIC;
   TTF_SetFontStyle(font, style);
 
+  calculate_heights();
+
+  return true;
+}
+
+void
+Font::calculate_heights()
+{
   height = TTF_FontHeight(font);
   ascent_height = TTF_FontAscent(font);
 
@@ -67,8 +75,6 @@ Font::set(const char *file, int ptsize, int bold, bool italic,
   TTF_GlyphMetrics(font, 'M', NULL, NULL, &miny, &maxy, NULL);
 
   capital_height = maxy - miny + 1;
-
-  return true;
 }
 
 void
@@ -117,6 +123,14 @@ Font::set(const LOGFONT *lplf)
     return false;
   }
 
+  calculate_heights();
+
+  return true;
+}
+
+void
+Font::calculate_heights()
+{
   VirtualCanvas canvas(1, 1);
   canvas.select(*this);
 
@@ -162,8 +176,6 @@ Font::set(const LOGFONT *lplf)
     // This works for PPC
     capital_height = tm.tmAscent - 1 - tm.tmHeight / 10;
   }
-
-  return true;
 }
 
 void

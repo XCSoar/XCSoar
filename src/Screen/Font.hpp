@@ -60,6 +60,8 @@ protected:
 
   unsigned height, ascent_height, capital_height;
 
+  void calculate_heights();
+
 public:
   Font():font(NULL) {}
   ~Font() { reset(); }
