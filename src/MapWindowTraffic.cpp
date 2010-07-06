@@ -150,13 +150,10 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       label_name = NULL;
     }
 
-    if (traffic.Average30s >= fixed(0.1)) {
-      _stprintf(label_avg, TEXT("%.1f"),
-                (double)Units::ToUserUnit(traffic.Average30s,
-                                          Units::VerticalSpeedUnit));
-    } else {
+    if (traffic.Average30s >= fixed(0.1))
+      Units::FormatUserVSpeed(traffic.Average30s, label_avg, 100, false);
+    else
       label_avg[0] = _T('\0');
-    }
 
     // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
 
