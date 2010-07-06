@@ -41,8 +41,12 @@ Copyright_License {
 #ifdef ENABLE_SDL
 
 bool
-Font::set(const char *file, int ptsize, bool bold, bool italic)
+Font::set(const char *file, int ptsize, int bold, bool italic,
+          bool variable_pitch, int width)
 {
+  (void)variable_pitch;
+  (void)width;
+
   reset();
 
   font = TTF_OpenFont(file, ptsize);
@@ -50,7 +54,7 @@ Font::set(const char *file, int ptsize, bool bold, bool italic)
     return false;
 
   int style = TTF_STYLE_NORMAL;
-  if (bold)
+  if (bold >= 600)
     style |= TTF_STYLE_BOLD;
   if (italic)
     style |= TTF_STYLE_ITALIC;
