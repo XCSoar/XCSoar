@@ -216,7 +216,10 @@ FlarmDetails::AddFlarmLookupItem(FlarmId id, const TCHAR *name, bool saveFile)
       _tcsncpy(FLARM_Names[NumberOfFLARMNames].Name, name, 20);
       FLARM_Names[NumberOfFLARMNames].Name[20] = 0;
       NumberOfFLARMNames++;
-      SaveSecondary();
+
+      if (saveFile)
+        SaveSecondary();
+
       return true;
     }
   } else {
@@ -224,9 +227,9 @@ FlarmDetails::AddFlarmLookupItem(FlarmId id, const TCHAR *name, bool saveFile)
     FLARM_Names[index].ID = id;
     _tcsncpy(FLARM_Names[index].Name, name, 20);
     FLARM_Names[index].Name[20] = 0;
-    if (saveFile) {
+
+    if (saveFile)
       SaveSecondary();
-    }
 
     return true;
   }
