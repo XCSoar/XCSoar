@@ -309,7 +309,12 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
         canvas.select(hbSelection);
       } else {
         canvas.hollow_brush();
-        canvas.select(hpStandard);
+        if (traffic.Type != FLARM_TRAFFIC::acGlider
+            && traffic.Type != FLARM_TRAFFIC::acHangGlider
+            && traffic.Type != FLARM_TRAFFIC::acParaGlider)
+          canvas.select(hpPassive);
+        else
+          canvas.select(hpStandard);
       }
       if (settings.TeamFlarmTracking &&
           traffic.ID == settings.TeamFlarmIdTarget) {
