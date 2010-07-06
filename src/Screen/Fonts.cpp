@@ -93,7 +93,7 @@ IsNullLogFont(LOGFONT logfont)
 
 static void
 InitialiseLogfont(LOGFONT* font, const TCHAR* facename, bool variable_pitch,
-                  int height, int width, int bold, bool italic)
+                  int height, int bold, bool italic)
 {
 #ifndef ENABLE_SDL
   memset((char *)font, 0, sizeof(LOGFONT));
@@ -102,7 +102,6 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, bool variable_pitch,
   font->lfPitchAndFamily = (variable_pitch ? VARIABLE_PITCH : FIXED_PITCH)
                           | FF_DONTCARE;
   font->lfHeight = (long)height;
-  font->lfWidth = (long)width;
   font->lfWeight = (long)bold;
   font->lfItalic = italic;
   font->lfQuality = ANTIALIASED_QUALITY;
@@ -111,10 +110,10 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, bool variable_pitch,
 
 static void
 InitialiseLogfont(LOGFONT* font, const TCHAR* facename, bool variable_pitch,
-                  int height, int width, bool bold, bool italic)
+                  int height, bool bold, bool italic)
 {
 #ifndef ENABLE_SDL
-  InitialiseLogfont(font, facename, variable_pitch, height, width,
+  InitialiseLogfont(font, facename, variable_pitch, height,
                     (bold ? FW_BOLD : FW_MEDIUM), italic);
 #endif /* !ENABLE_SDL */
 }
@@ -185,21 +184,21 @@ InitialiseFontsPNA(const struct Appearance &appearance, RECT rc)
   if (ScreenSize == (ScreenSize_t)ss480x272) {
     // WQVGA  e.g. MIO
     InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
-                      true, 28, 0, 800, false);
+                      true, 28, 800, false);
     InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
-                      true, 16, 0, 500, false);
+                      true, 16, 500, false);
     InitialiseLogfont(&TitleSmallWindowLogFont, _T("Tahoma"),
-                      true, 16, 0, 100, true);
+                      true, 16, 100, true);
     InitialiseLogfont(&CDIWindowLogFont, _T("TahomaBD"),
-                      true, 28, 0, 400, false);
+                      true, 28, 400, false);
     InitialiseLogfont(&MapLabelLogFont, _T("Tahoma"),
-                      true, 14, 0, 100, true);
+                      true, 14, 100, true);
     InitialiseLogfont(&StatisticsLogFont, _T("Tahoma"),
-                      true, 20, 0, 400, false);
+                      true, 20, 400, false);
     InitialiseLogfont(&MapWindowLogFont, _T("Tahoma"),
-                      true, 18, 0, 400, false);
+                      true, 18, 400, false);
     InitialiseLogfont(&MapWindowBoldLogFont, _T("TahomaBD"),
-                      true, 16, 0, 500, false);
+                      true, 16, 500, false);
 
     if (InfoBoxLayout::InfoBoxGeometry == InfoBoxLayout::ibRight8)
       // We don't use vario gauge in landscape geo5 anymore.. but doesn't hurt.
@@ -209,21 +208,21 @@ InitialiseFontsPNA(const struct Appearance &appearance, RECT rc)
   } else if (ScreenSize == (ScreenSize_t)ss480x234) {
     // e.g. Messada 2440
     InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
-                      true, 22, 0, 400, false);
+                      true, 22, 400, false);
     InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
-                      true, 18, 0, 500, false);
+                      true, 18, 500, false);
     InitialiseLogfont(&TitleSmallWindowLogFont, _T("Tahoma"),
-                      true, 20, 0, 400, true);
+                      true, 20, 400, true);
     InitialiseLogfont(&CDIWindowLogFont, _T("TahomaBD"),
-                      true, 28, 0, 400, false);
+                      true, 28, 400, false);
     InitialiseLogfont(&MapLabelLogFont, _T("Tahoma"),
-                      true, 14, 0, 100, true);
+                      true, 14, 100, true);
     InitialiseLogfont(&StatisticsLogFont, _T("Tahoma"),
-                      true, 20, 0, 400, false);
+                      true, 20, 400, false);
     InitialiseLogfont(&MapWindowLogFont, _T("Tahoma"),
-                      true, 18, 0, 400, false);
+                      true, 18, 400, false);
     InitialiseLogfont(&MapWindowBoldLogFont, _T("TahomaBD"),
-                      true, 16, 0, 500, false);
+                      true, 16, 500, false);
 
     SetGlobalEllipse(1.1f); // to be checked, TODO
   } else if (ScreenSize == (ScreenSize_t)ss800x480) {// e.g. ipaq 31x {
@@ -234,48 +233,48 @@ InitialiseFontsPNA(const struct Appearance &appearance, RECT rc)
     case InfoBoxLayout::ibLeft4Right4:
     case InfoBoxLayout::ibGNav: // standard landscape
       InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
-                        true, 56, 0, 600, false);
+                        true, 56, 600, false);
       InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
-                        true, 20, 0, 200, false);
+                        true, 20, 200, false);
       SetGlobalEllipse(1.1f);
       break;
     case InfoBoxLayout::ibLeft8:
     case InfoBoxLayout::ibRight8:
       InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
-                        true, 64, 0, 600, false);
+                        true, 64, 600, false);
       InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
-                        true, 26, 0, 600, false);
+                        true, 26, 600, false);
       SetGlobalEllipse(1.32f);
       break;
     case InfoBoxLayout::ibSquare:
       InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
-                        true, 66, 0, 600, false);
+                        true, 66, 600, false);
       InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
-                        true, 23, 0, 400, false);
+                        true, 23, 400, false);
       break;
 
       // This is a failsafe with an impossible setting so that you know
       // something is going very wrong.
     default:
       InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
-                        true, 30, 0, 600, false);
+                        true, 30, 600, false);
       InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
-                        true, 10, 0, 200, false);
+                        true, 10, 200, false);
       break;
     } // special geometry cases for 31x
 
     InitialiseLogfont(&TitleSmallWindowLogFont, _T("Tahoma"),
-                      true, 16, 0, 100, true);
+                      true, 16, 100, true);
     InitialiseLogfont(&CDIWindowLogFont, _T("Tahoma"),
-                      true, 36, 0, 400, false);
+                      true, 36, 400, false);
     InitialiseLogfont(&MapLabelLogFont, _T("Tahoma"),
-                      true, 28, 0, 100, true);
+                      true, 28, 100, true);
     InitialiseLogfont(&StatisticsLogFont, _T("Tahoma"),
-                      true, 48, 0, 400, false);
+                      true, 48, 400, false);
     InitialiseLogfont(&MapWindowLogFont, _T("Tahoma"),
-                      true, 36, 0, 400, false);
+                      true, 36, 400, false);
     InitialiseLogfont(&MapWindowBoldLogFont, _T("TahomaBD"),
-                      true, 32, 0, 600, false);
+                      true, 32, 600, false);
   }
 }
 
@@ -286,21 +285,21 @@ InitialiseFontsAltair()
     return;
 
   InitialiseLogfont(&InfoWindowLogFont, _T("RasterGothicTwentyFourCond"),
-                    true, 24, 0, 700, false);
+                    true, 24, 700, false);
   InitialiseLogfont(&TitleWindowLogFont, _T("RasterGothicNineCond"),
-                    true, 10, 0, 500, false);
+                    true, 10, 500, false);
   InitialiseLogfont(&CDIWindowLogFont, _T("RasterGothicEighteenCond"),
-                    true, 19, 0, 700, false);
+                    true, 19, 700, false);
   InitialiseLogfont(&MapLabelLogFont, _T("RasterGothicTwelveCond"),
-                    true, 13, 0, 500, false);
+                    true, 13, 500, false);
   InitialiseLogfont(&StatisticsLogFont, _T("RasterGothicFourteenCond"),
-                    true, 15, 0, 500, false);
+                    true, 15, 500, false);
   InitialiseLogfont(&MapWindowLogFont, _T("RasterGothicFourteenCond"),
-                    true, 15, 0, 500, false);
+                    true, 15, 500, false);
   InitialiseLogfont(&MapWindowBoldLogFont, _T("RasterGothicFourteenCond"),
-                    true, 15, 0, 700, false);
+                    true, 15, 700, false);
   InitialiseLogfont(&TitleSmallWindowLogFont, _T("RasterGothicEighteenCond"),
-                    true, 19, 0, 700, false);
+                    true, 19, 700, false);
 }
 
 static void
@@ -319,7 +318,7 @@ InitialiseLogFonts()
   LOGFONT logfont;
   InitialiseLogfont(&logfont,
                     (!is_pna() ? _T("Tahoma") : _T("DejaVu Sans Condensed")),
-                    true, iFontHeight, 0, true, false);
+                    true, iFontHeight, true, false);
   logfont.lfCharSet = ANSI_CHARSET;
 
   // JMW algorithm to auto-size info window font.
@@ -352,30 +351,30 @@ InitialiseLogFonts()
 #endif /* !ENABLE_SDL */
 
   InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"), true,
-                    (int)(FontHeight * 0.333), 0, true, false);
+                    (int)(FontHeight * 0.333), true, false);
 
   // new font for CDI Scale
   InitialiseLogfont(&CDIWindowLogFont, _T("Tahoma"), false,
-                    (int)(FontHeight * 0.6), 0, false, false);
+                    (int)(FontHeight * 0.6), false, false);
 
   // new font for map labels
   InitialiseLogfont(&MapLabelLogFont, _T("Tahoma"), true,
-                    (int)(FontHeight * 0.39), 0, false, true);
+                    (int)(FontHeight * 0.39), false, true);
 
   // Font for map other text
   InitialiseLogfont(&StatisticsLogFont, _T("Tahoma"), true,
-                    (int)(FontHeight * 0.7), 0, false, false);
+                    (int)(FontHeight * 0.7), false, false);
 
   // new font for map labels
   InitialiseLogfont(&MapWindowLogFont, _T("Tahoma"), true,
-                    (int)(FontHeight * 0.507), 0, false, false);
+                    (int)(FontHeight * 0.507), false, false);
 
   // Font for map bold text
   InitialiseLogfont(&MapWindowBoldLogFont, _T("Tahoma"), true,
-                    (int)(FontHeight * 0.507), 0, true, false);
+                    (int)(FontHeight * 0.507), true, false);
 
   InitialiseLogfont(&TitleSmallWindowLogFont, _T("Tahoma"), true,
-                    Layout::Scale(20), 0, false, false);
+                    Layout::Scale(20), false, false);
 }
 
 void
