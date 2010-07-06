@@ -62,7 +62,8 @@ void
 MapWindow::DrawFLARMTraffic(Canvas &canvas)
 {
   // Return if FLARM icons on moving map are disabled
-  if (!SettingsMap().EnableFLARMMap) return;
+  if (!SettingsMap().EnableFLARMMap)
+    return;
 
   // Return if FLARM data is not available
   const FLARM_STATE &flarm = Basic().flarm;
@@ -109,12 +110,10 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       fixed distance;
       Angle bearing;
 
-      DistanceBearing(Basic().Location, target_loc,
-                      &distance, &bearing);
+      DistanceBearing(Basic().Location, target_loc, &distance, &bearing);
 
       FindLatitudeLongitude(Basic().Location, bearing,
-                            distance * scalefact,
-                            &target_loc);
+                            distance * scalefact, &target_loc);
     }
 
     // TODO feature: draw direction, rel height?
@@ -215,10 +214,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 #endif
 
     // If FLARM alarm draw alarm icon below corresponding target
-    if ((traffic.AlarmLevel > 0) && (traffic.AlarmLevel < 4)) {
-      MapGfx.hFLARMTraffic.draw(canvas, 
-                                  get_bitmap_canvas(), sc.x, sc.y);
-    }
+    if ((traffic.AlarmLevel > 0) && (traffic.AlarmLevel < 4))
+      MapGfx.hFLARMTraffic.draw(canvas, get_bitmap_canvas(), sc.x, sc.y);
 
     // Fill the Arrow array with a normal arrow pointing north
     Arrow[0].x = -4;
@@ -231,8 +228,6 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
     Arrow[3].y = 2;
     Arrow[4].x = -4;
     Arrow[4].y = 5;
-
-    // double vmag = max(1.0,min(15.0,traffic.Speed/5.0))*2;
 
     // Select brush depending on AlarmLevel
     switch (traffic.AlarmLevel) {
@@ -271,9 +266,7 @@ MapWindow::DrawTeammate(Canvas &canvas)
 {
   if (SettingsComputer().TeammateCodeValid) {
     POINT sc;
-    if (LonLat2ScreenIfVisible(Calculated().TeammateLocation, &sc)) {
-      MapGfx.hBmpTeammatePosition.draw(canvas, 
-                                       get_bitmap_canvas(), sc.x, sc.y);
-    }
+    if (LonLat2ScreenIfVisible(Calculated().TeammateLocation, &sc))
+      MapGfx.hBmpTeammatePosition.draw(canvas, get_bitmap_canvas(), sc.x, sc.y);
   }
 }
