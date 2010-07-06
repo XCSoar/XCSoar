@@ -62,19 +62,19 @@ compare_squared(int a, int b, int c)
   return 0;
 }
 
-static gcc_const const TCHAR *
+static gcc_const TCHAR
 getDirection(int dx, int dy)
 {
   if (dy < 0 && -dy >= abs(dx) * 2)
-    return _T("U");
+    return _T('U');
   if (dy > 0 && dy >= abs(dx) * 2)
-    return _T("D");
+    return _T('D');
   if (dx > 0 && dx >= abs(dy) * 2)
-    return _T("R");
+    return _T('R');
   if (dx < 0 && -dx >= abs(dy) * 2)
-    return _T("L");
+    return _T('L');
 
-  return NULL;
+  return _T('\0');
 }
 
 void
@@ -96,19 +96,19 @@ GestureManager::AddPoint(int x, int y)
   drag_last.y = y;
 
   // Get current dragging direction
-  const TCHAR* direction = getDirection(dx, dy);
+  TCHAR direction = getDirection(dx, dy);
 
   // Return if we are in an unclear direction
-  if (!direction)
+  if (direction == _T('\0'))
     return;
 
   // Return if we are still in the same direction
-  if (direction[0] == gesture[_tcslen(gesture) - 1])
-    return;
-
-  // If the gesture isn't too long, append the current direction
-  if (_tcslen(gesture) < 10)
-    _tcscat(gesture, direction);
+  size_t length = _tcslen(gesture);
+  if (length < sizeof(gesture) / sizeof(gesture[0]) - 1 &&
+      gesture[length - 1] != direction) {
+    gesture[length] = direction;
+    gesture[length + 1] = _T('\0');
+  }
 }
 
 void
