@@ -61,9 +61,6 @@ typedef struct {
 
 static FLARM_Names_t FLARM_Names[MAXFLARMNAMES];
 
-/**
- * Deletes all known FLARM names
- */
 void
 CloseFLARMDetails()
 {
@@ -87,11 +84,6 @@ LoadFLARMDetails(TLineReader &reader)
   }
 }
 
-/**
- * Opens XCSoars own FLARM details file, parses it and
- * adds its entries as FlarmLookupItems
- * @see AddFlarmLookupItem
- */
 void
 OpenFLARMDetails()
 {
@@ -137,12 +129,6 @@ SaveFLARMDetails(void)
   delete writer;
 }
 
-/**
- * Looks up the FLARM id in the FLARM details array
- * and returns the array id
- * @param id FLARM id
- * @return Array id if found, otherwise -1
- */
 int
 LookupSecondaryFLARMId(FlarmId id)
 {
@@ -169,12 +155,6 @@ LookupSecondaryFLARMId(const TCHAR *cn)
   return -1;
 }
 
-/**
- * Looks up the FLARM id in the FLARMNet Database
- * and returns the FLARMNet Record
- * @param id FLARM id
- * @return The corresponding FLARMNet Record if found, otherwise NULL
- */
 const FLARMNetRecord *
 LookupFLARMRecord(FlarmId id)
 {
@@ -186,12 +166,6 @@ LookupFLARMRecord(FlarmId id)
   return NULL;
 }
 
-/**
- * Looks up the FLARM id in the FLARM details array
- * and the FLARMnet file and returns the callsign
- * @param id FLARM id
- * @return The corresponding callsign if found, otherwise NULL
- */
 const TCHAR *
 LookupFLARMDetails(FlarmId id)
 {
@@ -208,12 +182,6 @@ LookupFLARMDetails(FlarmId id)
   return NULL;
 }
 
-/**
- * Looks up the callsign in the FLARM details array
- * and the FLARMnet file and returns the FLARM id
- * @param cn Callsign
- * @return The corresponding FLARM id if found, otherwise 0
- */
 FlarmId
 LookupFLARMDetails(const TCHAR *cn)
 {
@@ -232,15 +200,6 @@ LookupFLARMDetails(const TCHAR *cn)
   return id;
 }
 
-/**
- * Adds a FLARM details couple (callsign + FLARM id)
- * to the FLARM details array and saves it to the
- * user file (if necessary)
- * @param id FLARM id
- * @param name Callsign
- * @param saveFile True = FLARM details file is saved after update
- * @return True if successfully added, False otherwise
- */
 bool
 AddFlarmLookupItem(FlarmId id, const TCHAR *name, bool saveFile)
 {
