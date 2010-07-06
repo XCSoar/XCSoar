@@ -63,7 +63,7 @@ namespace FlarmDetails
    * @see AddFlarmLookupItem
    */
   void
-  OpenFLARMDetails();
+  LoadSecondary();
 
   /**
    * Deletes all known FLARM names

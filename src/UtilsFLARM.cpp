@@ -66,7 +66,7 @@ FlarmDetails::Load()
 {
   LogStartUp(_T("FlarmDetails::Load"));
 
-  OpenFLARMDetails();
+  LoadSecondary();
   LoadFLARMnet();
 }
 
@@ -109,7 +109,7 @@ LoadFLARMDetails(TLineReader &reader)
 }
 
 void
-FlarmDetails::OpenFLARMDetails()
+FlarmDetails::LoadSecondary()
 {
   LogStartUp(_T("OpenFLARMDetails"));
 
