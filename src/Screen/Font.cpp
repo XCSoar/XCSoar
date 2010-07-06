@@ -41,13 +41,20 @@ Copyright_License {
 #ifdef ENABLE_SDL
 
 bool
-Font::set(const char *file, int ptsize)
+Font::set(const char *file, int ptsize, bool bold, bool italic)
 {
   reset();
 
   font = TTF_OpenFont(file, ptsize);
   if (font == NULL)
     return false;
+
+  int style = TTF_STYLE_NORMAL;
+  if (bold)
+    style |= TTF_STYLE_BOLD;
+  if (italic)
+    style |= TTF_STYLE_ITALIC;
+  TTF_SetFontStyle(font, style);
 
   height = TTF_FontHeight(font);
   ascent_height = TTF_FontAscent(font);
