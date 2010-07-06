@@ -58,6 +58,13 @@ void
 CloseFLARMDetails();
 
 /**
+ * Saves XCSoars own FLARM details into the
+ * corresponding file (xcsoar-flarm.txt)
+ */
+void
+SaveFLARMDetails();
+
+/**
  * Looks up the FLARM id in the FLARMNet Database
  * and returns the FLARMNet Record
  * @param id FLARM id
@@ -95,6 +102,15 @@ LookupFLARMDetails(const TCHAR *cn);
  */
 bool
 AddFlarmLookupItem(FlarmId id, const TCHAR *name, bool saveFile);
+
+/**
+ * Looks up the FLARM callsign in the FLARM details array
+ * and returns the array id
+ * @param cn Callsign
+ * @return Array id if found, otherwise -1
+ */
+int
+LookupSecondaryFLARMId(const TCHAR *cn);
 
 /**
  * Looks up the FLARM id in the FLARM details array

@@ -110,12 +110,8 @@ OpenFLARMDetails()
   }
 }
 
-/**
- * Saves XCSoars own FLARM details into the
- * corresponding file (xcsoar-flarm.txt)
- */
 void
-SaveFLARMDetails(void)
+SaveFLARMDetails()
 {
   TextWriter *writer = CreateDataTextFile(_T("xcsoar-flarm.txt"));
   if (writer == NULL)
@@ -139,12 +135,6 @@ LookupSecondaryFLARMId(FlarmId id)
   return -1;
 }
 
-/**
- * Looks up the FLARM callsign in the FLARM details array
- * and returns the array id
- * @param cn Callsign
- * @return Array id if found, otherwise -1
- */
 int
 LookupSecondaryFLARMId(const TCHAR *cn)
 {
