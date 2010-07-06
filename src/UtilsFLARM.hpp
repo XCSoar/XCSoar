@@ -69,7 +69,7 @@ namespace FlarmDetails
    * Deletes all known FLARM names
    */
   void
-  CloseFLARMDetails();
+  Reset();
 
   /**
    * Saves XCSoars own FLARM details into the

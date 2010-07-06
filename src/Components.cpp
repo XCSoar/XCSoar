@@ -528,7 +528,7 @@ XCSoarInterface::Shutdown(void)
   }
 
   // Clear the FLARM database
-  FlarmDetails::CloseFLARMDetails();
+  FlarmDetails::Reset();
 
   // Kill windows
   LogStartUp(TEXT("Destroy Info Boxes"));
