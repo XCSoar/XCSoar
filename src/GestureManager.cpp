@@ -69,11 +69,8 @@ compare_squared(int a, int b, int c)
 }
 
 gcc_const const TCHAR*
-getDirection(int X1, int Y1, int X2, int Y2)
+getDirection(int dx, int dy)
 {
-  int dx = X2 - X1;
-  int dy = Y2 - Y1;
-
   if (dy < 0 && -dy >= abs(dx))
     return _T("U");
   if (dy > 0 && dy >= abs(dx))
@@ -83,7 +80,7 @@ getDirection(int X1, int Y1, int X2, int Y2)
   if (dx < 0 && -dx >= abs(dy))
     return _T("L");
 
-  return _T("");
+  return NULL;
 }
 
 void
@@ -92,33 +89,26 @@ GestureManager::AddPoint(int x, int y)
   if (!active)
     return;
 
-  if (is_gesture
-      || compare_squared(drag_start.x - x, drag_start.y - y,
-                         Layout::Scale(70)) == 1) {
-    // Set is_gesture = true to save us one square-root operation each call
-    is_gesture = true;
+  // Get current dragging direction
+  int dx = x - drag_last.x;
+  int dy = y - drag_last.y;
 
-    // Get current dragging direction
-    const TCHAR* direction = getDirection(drag_last.x, drag_last.y, x, y);
+  if (compare_squared(dx, dy, Layout::Scale(20)) != 1)
+    return;
 
-    // If no gesture yet or (the direction has
-    // changed and more then 70px from last direction change)...
-    if (string_is_empty(gesture)
-        || (direction[0] != gesture[_tcslen(gesture) - 1]
-            && _tcslen(gesture) < 10
-            && compare_squared(gesture_corner.x - x, gesture_corner.y - y,
-                               Layout::Scale(70)) == 1)) {
-      // Append current direction to the gesture string
-      _tcscat(gesture, direction);
-      // Save position of the direction change
-      gesture_corner.x = x;
-      gesture_corner.y = y;
-    }
+  // Save position for next direction query
+  drag_last.x = x;
+  drag_last.y = y;
 
-    // Save position for next direction query
-    drag_last.x = x;
-    drag_last.y = y;
-  }
+  const TCHAR* direction = getDirection(dx, dy);
+  if (!direction)
+    return;
+
+  if (direction[0] == gesture[_tcslen(gesture) - 1])
+    return;
+
+  if (_tcslen(gesture) < 10)
+    _tcscat(gesture, direction);
 }
 
 void
@@ -141,10 +131,5 @@ GestureManager::Finish()
 {
   active = false;
 
-  if (!is_gesture)
-    return NULL;
-
-  // Finish gesture
-  is_gesture = false;
   return gesture;
 }
