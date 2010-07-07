@@ -37,24 +37,9 @@ Copyright_License {
 */
 
 #include "GestureManager.hpp"
-#include "Message.hpp"
-#include "InputEvents.h"
 #include "Screen/Layout.hpp"
-#include "Appearance.hpp"
-#include "Defines.h"
-#include "Simulator.hpp"
-#include "TaskClientUI.hpp"
-#include "DeviceBlackboard.hpp"
-#include "Math/Earth.hpp"
-#include "Protection.hpp"
-#include "Dialogs.h"
-#include "UtilsSystem.hpp"
-#include "Compiler.h"
 
 #include <algorithm>
-
-using std::min;
-using std::max;
 
 int
 compare_squared(int a, int b, int c)
@@ -116,11 +101,8 @@ GestureManager::Start(int x, int y)
 {
   active = true;
 
-  drag_start.x = x;
-  drag_start.y = y;
-
-  is_gesture = false;
-  gesture_corner = drag_last = drag_start;
+  drag_last.x = x;
+  drag_last.y = y;
 
   // Reset gesture
   _tcscpy(gesture, _T(""));

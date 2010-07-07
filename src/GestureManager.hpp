@@ -54,13 +54,8 @@ public:
 
 protected:
   bool active;
-  POINT drag_start;
-  /** True if a gesture movement has been detected */
-  bool is_gesture;
   /** Position of the last mouse_move event */
   POINT drag_last;
-  /** Position of the last direction change */
-  POINT gesture_corner;
   /** The gesture string */
   TCHAR gesture[11];
 };
