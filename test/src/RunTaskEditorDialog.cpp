@@ -60,11 +60,6 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-#if defined(PNA) || defined(FIVV)
-int GlobalModelType = MODELTYPE_UNKNOWN;
-bool needclipping = false;
-#endif
-
 #ifdef HAVE_BLANK
 int DisplayTimeOut = 0;
 #endif
