@@ -46,10 +46,6 @@ Copyright_License {
 #include "Screen/PaintCanvas.hpp"
 #endif /* !ENABLE_SDL */
 
-#ifdef PNA
-#include "Appearance.hpp" // for GlobalModelType
-#endif
-
 #include <assert.h>
 
 #ifndef ENABLE_SDL
