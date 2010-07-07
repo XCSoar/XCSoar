@@ -56,6 +56,18 @@ Copyright_License {
 using std::min;
 using std::max;
 
+static int
+compare_squared(int a, int b, int c)
+{
+  int a2b2 = a*a+b*b;
+  int c2 = c*c;
+  if (a2b2 > c2)
+    return 1;
+  if (a2b2 < c2)
+    return -1;
+  return 0;
+}
+
 static gcc_const const TCHAR*
 getDirection(int X1, int Y1, int X2, int Y2)
 {
@@ -128,7 +140,8 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
   // If we are dragging already or starting to drag now...
   if (XCSoarInterface::SettingsComputer().EnableGestures
       && (is_gesture
-          || hypot(drag_start.x - x, drag_start.y - y) > Layout::Scale(70))) {
+          || compare_squared(drag_start.x - x, drag_start.y - y,
+                             Layout::Scale(70)) == 1)) {
     // Set is_gesture = true to save us one square-root operation each call
     is_gesture = true;
 
@@ -140,8 +153,8 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
     if (string_is_empty(gesture)
         || (direction[0] != gesture[_tcslen(gesture) - 1]
             && _tcslen(gesture) < 10
-            && hypot(gesture_corner.x - x, gesture_corner.y - y)
-               > Layout::Scale(70))) {
+            && compare_squared(gesture_corner.x - x, gesture_corner.y - y,
+                               Layout::Scale(70)) == 1)) {
       // Append current direction to the gesture string
       _tcscat(gesture, direction);
       // Save position of the direction change
