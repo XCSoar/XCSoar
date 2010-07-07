@@ -63,7 +63,7 @@ Copyright_License {
 #include <assert.h>
 
 #ifdef HAVE_IMGDECMP_DLL
-    #include "Screen/VOIMAGE.h"
+    #include "Screen/VOIMAGE.hpp"
 #endif
 
 static int page = 0;

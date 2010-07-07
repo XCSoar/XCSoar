@@ -21,8 +21,8 @@
 // by this code. Use it at your own risk.
 //-------------------------------------------------------------------
 
-#if !defined(AFX_VOIMAGE_H__B83C4202_DB1E_48BE_92A5_21019F9EE6FC__INCLUDED_)
-#define AFX_VOIMAGE_H__B83C4202_DB1E_48BE_92A5_21019F9EE6FC__INCLUDED_
+#ifndef XCSOAR_SCREEN_VOIMAGE_HPP
+#define XCSOAR_SCREEN_VOIMAGE_HPP
 
 #include "imgdecmp.h"
 
@@ -49,4 +49,4 @@ protected:
 	static HDC	g_hdc;
 };
 
-#endif // !defined(AFX_VOIMAGE_H__B83C4202_DB1E_48BE_92A5_21019F9EE6FC__INCLUDED_)
+#endif
