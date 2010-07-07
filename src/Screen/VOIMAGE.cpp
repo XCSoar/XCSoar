@@ -63,8 +63,7 @@ Copyright_License {
 */
 
 #include "Screen/VOIMAGE.hpp"
-
-#include "imgdecmp.h"
+#include "OS/ImgDeCmpDLL.hpp"
 
 // Construction/Destruction
 
@@ -97,6 +96,10 @@ BOOL CVOImage::Load(HDC hdc, const TCHAR *pcszFileName)
 	BYTE    szBuffer[1024] = {0};
 	HANDLE hFile = INVALID_HANDLE_VALUE;
 
+	ImgDeCmpDLL imgdecmp_dll;
+	if (!imgdecmp_dll.defined())
+		return FALSE;
+
 	DecompressImageInfo	dii;
 
 	hFile = CreateFile(pcszFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
@@ -122,7 +125,7 @@ BOOL CVOImage::Load(HDC hdc, const TCHAR *pcszFileName)
 													// transparent color in the image with this color. (GIF ONLY)
 
 	// Process and decompress the image data
-	hr = DecompressImageIndirect( &dii );
+	hr = imgdecmp_dll.DecompressImageIndirect( &dii );
 
 	// Clean up
 	CloseHandle( hFile );
