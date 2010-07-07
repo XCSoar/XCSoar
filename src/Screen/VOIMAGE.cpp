@@ -64,8 +64,6 @@ Copyright_License {
 
 #include "Screen/VOIMAGE.hpp"
 
-#if defined(_WIN32_WCE) && !defined(GNAV) && !defined(PNA)
-
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[]=__FILE__;
@@ -191,5 +189,3 @@ void CALLBACK CVOImage::ImageProgress(IImageRender *pRender, BOOL bComplete, LPA
 		;// (Optional) add code here for completion processing
 	}
 }
-
-#endif
