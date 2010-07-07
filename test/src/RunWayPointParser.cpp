@@ -76,12 +76,6 @@ dlgWaypointOutOfTerrain(const TCHAR *Message)
   return -1;
 }
 
-double
-Units::ToSysUnit(double Value, Units_t Unit)
-{
-  return Value;
-}
-
 int main(int argc, char **argv)
 {
   if (argc != 2) {

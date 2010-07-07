@@ -269,13 +269,14 @@ tstring
 WayPointFileWinPilot::composeAngle(const Angle& src, const bool lat)
 {
   TCHAR buffer[20];
-  bool is_negative = negative(src.value_degrees());
 
   // Calculate degrees, minutes and seconds
-  fixed smag = src.magnitude_degrees();
-  int deg = smag;
-  int min = ((int)smag - deg) * 60;
-  int sec = ((((int)smag - deg) * 60) - min) * 60;
+  int deg, min, sec;
+  bool is_positive;
+  if (lat)
+    Units::LatitudeToDMS(src, &deg, &min, &sec, &is_positive);
+  else
+    Units::LongitudeToDMS(src, &deg, &min, &sec, &is_positive);
 
   // Save them into the buffer string
   _stprintf(buffer, (lat ? _T("%02d:%02d:%02d") : _T("%03d:%02d:%02d")),
@@ -284,9 +285,9 @@ WayPointFileWinPilot::composeAngle(const Angle& src, const bool lat)
   // Attach the buffer string to the output
   tstring dest = buffer;
   if (lat)
-    dest += (is_negative ? _T("S") : _T("N"));
+    dest += (is_positive ? _T("N") : _T("S"));
   else
-    dest += (is_negative ? _T("W") : _T("E"));
+    dest += (is_positive ? _T("E") : _T("W"));
 
   return dest;
 }
