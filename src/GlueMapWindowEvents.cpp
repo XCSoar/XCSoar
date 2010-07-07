@@ -264,6 +264,9 @@ GlueMapWindow::on_mouse_gesture(const TCHAR* gesture)
   if (!XCSoarInterface::SettingsComputer().EnableGestures)
     return false;
 
+  if (is_debug())
+    Message::AddMessage(_T("Gesture: "), gesture);
+
   if (_tcscmp(gesture, _T("U")) == 0) {
     InputEvents::processKey(VK_UP);
     return true;
@@ -290,9 +293,6 @@ GlueMapWindow::on_mouse_gesture(const TCHAR* gesture)
     InputEvents::eventGotoLookup(_T(""));
     return true;
   }
-
-  if (is_debug())
-    Message::AddMessage(gesture);
 
   return false;
 }
