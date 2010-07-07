@@ -24,12 +24,11 @@
 #ifndef XCSOAR_SCREEN_VOIMAGE_HPP
 #define XCSOAR_SCREEN_VOIMAGE_HPP
 
-#include "imgdecmp.h"
+#include <windef.h>
 
 class CVOImage
 {
 public:
-	static void CALLBACK ImageProgress( IImageRender *, BOOL, LPARAM);
 	static DWORD CALLBACK GetImageData( LPSTR, DWORD, LPARAM);
 	BOOL Draw(HDC hdc, int x, int y, int cx = -1, int cy = -1);
 	BOOL Load(HDC hdc, const TCHAR *pcszFileName);

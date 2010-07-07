@@ -64,6 +64,8 @@ Copyright_License {
 
 #include "Screen/VOIMAGE.hpp"
 
+#include "imgdecmp.h"
+
 // Construction/Destruction
 
 HDC		CVOImage::g_hdc;
@@ -115,7 +117,7 @@ BOOL CVOImage::Load(HDC hdc, const TCHAR *pcszFileName)
 	dii.iMaxWidth = g_iMaxWidth;					// Maximum width of the output image
 	dii.iMaxHeight = g_iMaxHeight;					// Maxumum height of the output image
 	dii.pfnGetData = GetImageData;					// Callback function to get image data
-	dii.pfnImageProgress = ImageProgress;			// Callback function to notify caller of progress decoding the image
+	dii.pfnImageProgress = NULL; // Callback function to notify caller of progress decoding the image
 	dii.crTransparentOverride = ( UINT ) -1;		// If this color is not (UINT)-1, it will override the
 													// transparent color in the image with this color. (GIF ONLY)
 
@@ -172,14 +174,4 @@ DWORD CALLBACK CVOImage::GetImageData(LPSTR szBuffer, DWORD dwBufferMax, LPARAM 
 
 	// Return number of bytes read
 	return dwNumberOfBytesRead;
-}
-
-void CALLBACK CVOImage::ImageProgress(IImageRender *pRender, BOOL bComplete, LPARAM lParam )
-{
-	(void)lParam;
-	(void)pRender;
-	if( bComplete )
-	{
-		;// (Optional) add code here for completion processing
-	}
 }
