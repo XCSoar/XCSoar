@@ -50,7 +50,6 @@ void ReadAssetNumber(void);
 
 #if defined(PNA) || defined(FIVV)  // VENTA2- ADD GlobalEllipse
 extern int GlobalModelType;
-extern TCHAR GlobalModelName[];
 extern float GlobalEllipse;
 extern short InstallFonts();
 

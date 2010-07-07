@@ -226,55 +226,9 @@ SetModelType()
   int Temp = 0;
 
   Profile::Get(szProfileInfoBoxModel, Temp);
+  GlobalModelType = Temp;
 
-  if (SetModelName(Temp) != true) {
-    LogStartUp(_T("SetModelType ERROR! ModelName returned")
-               _T("invalid value <%d> from Registry!"), Temp);
-    GlobalModelType = MODELTYPE_PNA_PNA;
-  } else {
-    GlobalModelType = Temp;
-  }
-
-  LogStartUp(_T("SetModelType: Name=<%s> Type=%d"), GlobalModelName,
-             GlobalModelType);
-}
-
-// Parse a MODELTYPE value and set the equivalent model name.
-// If the modeltype is invalid or not yet handled, assume that
-// the user changed it in the registry or in the profile, and
-// correct the error returning false: this will force a Generic Type.
-bool
-SetModelName(DWORD Temp)
-{
-  switch (Temp) {
-  case MODELTYPE_PNA_PNA:
-    _tcscpy(GlobalModelName, _T("GENERIC"));
-    return true;
-
-  case MODELTYPE_PNA_HP31X:
-    _tcscpy(GlobalModelName, _T("HP31X"));
-    return true;
-
-  case MODELTYPE_PNA_PN6000:
-    _tcscpy(GlobalModelName, _T("PN6000"));
-    return true;
-
-  case MODELTYPE_PNA_MIO:
-    _tcscpy(GlobalModelName, _T("MIO"));
-    return true;
-
-  case MODELTYPE_PNA_MEDION_P5:
-    _tcscpy(GlobalModelName, _T("MEDION P5"));
-    return true;
-
-  case MODELTYPE_PNA_NOKIA_500:
-    _tcscpy(GlobalModelName, _T("NOKIA500"));
-    return true;
-
-  default:
-    _tcscpy(GlobalModelName, _T("UNKNOWN"));
-    return false;
-  }
+  LogStartUp(_T("SetModelType: Type=%d"), GlobalModelType);
 }
 
 #endif

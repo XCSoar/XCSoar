@@ -47,7 +47,6 @@ bool SetSoundVolume(); // VENTA4-ADDON for PNA
 
 #if defined(PNA) || defined(FIVV)  // VENTA-ADDON
 void SetModelType();
-bool SetModelName(DWORD Temp);
 #endif
 
 void ParseCommandLine(LPCTSTR CommandLine);
