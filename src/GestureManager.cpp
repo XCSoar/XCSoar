@@ -71,13 +71,13 @@ compare_squared(int a, int b, int c)
 gcc_const const TCHAR*
 getDirection(int dx, int dy)
 {
-  if (dy < 0 && -dy >= abs(dx))
+  if (dy < 0 && -dy >= abs(dx) * 2)
     return _T("U");
-  if (dy > 0 && dy >= abs(dx))
+  if (dy > 0 && dy >= abs(dx) * 2)
     return _T("D");
-  if (dx > 0 && dx >= abs(dy))
+  if (dx > 0 && dx >= abs(dy) * 2)
     return _T("R");
-  if (dx < 0 && -dx >= abs(dy))
+  if (dx < 0 && -dx >= abs(dy) * 2)
     return _T("L");
 
   return NULL;
