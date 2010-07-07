@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "UtilsSystem.hpp"
-#include "UtilsText.hpp"
 #include "Interface.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
@@ -215,40 +214,6 @@ RotateScreen()
 
 
 #ifdef PNA
-// VENTA-ADDON MODELTYPE
-//
-//	Check if the model type is encoded in the executable file name
-//
-//  GlobalModelName is a global variable, shown during startup and used for printouts only.
-//  In order to know what model you are using, GlobalModelType is used.
-//
-//  This "smartname" facility is used to override the registry/config Model setup to force
-//  a model type to be used, just in case. The model types may not follow strictly those in
-//  config menu, nor be updated. Does'nt hurt though.
-//
-void
-SmartGlobalModelType()
-{
-  GlobalModelType = MODELTYPE_PNA; // default for ifdef PNA by now!
-
-	if (GetGlobalModelName()) {
-    ConvToUpper(GlobalModelName);
-
-    if (!_tcscmp(GlobalModelName, _T("PNA"))) {
-      GlobalModelType = MODELTYPE_PNA_PNA;
-      _tcscpy(GlobalModelName, _T("GENERIC"));
-    } else if (!_tcscmp(GlobalModelName, _T("HP31X"))) {
-      GlobalModelType = MODELTYPE_PNA_HP31X;
-    } else if (!_tcscmp(GlobalModelName, _T("PN6000"))) {
-      GlobalModelType = MODELTYPE_PNA_PN6000;
-    } else if (!_tcscmp(GlobalModelName, _T("MIO"))) {
-      GlobalModelType = MODELTYPE_PNA_MIO;
-    } else
-      _tcscpy(GlobalModelName, _T("UNKNOWN"));
-  } else
-    _tcscpy(GlobalModelName, _T("UNKNOWN"));
-}
-
 //
 // Retrieve from the registry the previous set model type
 // This value is defined in xcsoar.h , example> MODELTYPE_PNA_HP31X
@@ -313,67 +278,6 @@ SetModelName(DWORD Temp)
 }
 
 #endif
-
-
-#if defined(PNA) || defined(FIVV)  // VENTA-ADDON gmfpathname & C.
-
-/*
- *	A little hack in the executable filename: if it contains an
- *	underscore, then the following chars up to the .exe is
- *	considered a modelname
- *  Returns 0 if failed, 1 if name found
- */
-int
-GetGlobalModelName()
-{
-  TCHAR modelname_buffer[MAX_PATH];
-  TCHAR *p, *lp, *np;
-
-  _tcscpy(GlobalModelName, _T(""));
-
-  if (GetModuleFileName(NULL, modelname_buffer, MAX_PATH) <= 0)
-    return 0;
-
-  if (modelname_buffer[0] != '\\' )
-    return 0;
-
-  for (p = modelname_buffer + 1, lp = NULL; *p != '\0'; p++) {
-    if (*p == '\\')
-      lp = ++p;
-  }
-  // assuming \sd\path\xcsoar_pna.exe  we are now at \xcsoar..
-
-  for (p = lp, np = NULL; *p != '\0'; p++) {
-    if (*p == '_') {
-      np = ++p;
-      break;
-    }
-  }
-  // assuming xcsoar_pna.exe we are now at _pna..
-
-  if (np == NULL)
-    return 0;
-
-  for (p = np, lp = NULL; *p != '\0'; p++) {
-    if (*p == '.') {
-      lp = p;
-      break;
-    }
-  } // we found the . in pna.exe
-
-  if (lp == NULL)
-    return 0;
-
-  // we cut .exe
-  *lp = '\0';
-
-  _tcscpy(GlobalModelName, np);
-
-  return 1;  // we say ok
-}
-
-#endif   // PNA
-
 
 #ifdef PNA
 /**

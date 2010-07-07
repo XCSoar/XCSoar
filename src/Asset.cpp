@@ -310,12 +310,7 @@ InitAsset()
   BEFORE calling LocalPath. This was critical.
    */
 
-  SmartGlobalModelType(); // First we check the exec filename, which
-                          // has priority over registry values
-
-  if (!_tcscmp(GlobalModelName, _T("UNKNOWN"))) // Then if there is no smart name...
-    SetModelType();                             // get the modeltype from
-                                                // the registry as usual
+  SetModelType();
   #endif
 
   // VENTA2- TODO fix these directories are not used always!
