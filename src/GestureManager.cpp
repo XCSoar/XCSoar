@@ -113,5 +113,8 @@ GestureManager::Finish()
 {
   active = false;
 
+  if (string_is_empty(gesture))
+    return NULL;
+
   return gesture;
 }
