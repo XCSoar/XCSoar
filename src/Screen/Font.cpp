@@ -42,10 +42,9 @@ Copyright_License {
 
 bool
 Font::set(const char *file, int ptsize, int bold, bool italic,
-          bool variable_pitch, int width)
+          bool variable_pitch)
 {
   (void)variable_pitch;
-  (void)width;
 
   reset();
 
@@ -93,7 +92,7 @@ Font::reset()
 
 bool
 Font::set(const TCHAR* facename, int height, int bold, bool italic,
-          bool variable_pitch, int width)
+          bool variable_pitch)
 {
   LOGFONT font;
   memset((char *)&font, 0, sizeof(LOGFONT));
@@ -102,7 +101,6 @@ Font::set(const TCHAR* facename, int height, int bold, bool italic,
   font.lfPitchAndFamily = (variable_pitch ? VARIABLE_PITCH : FIXED_PITCH)
                           | FF_DONTCARE;
   font.lfHeight = (long)height;
-  font.lfWidth = (long)width;
   font.lfWeight = (long)bold;
   font.lfItalic = italic;
   font.lfQuality = ANTIALIASED_QUALITY;
