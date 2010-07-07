@@ -56,36 +56,6 @@ Copyright_License {
 using std::min;
 using std::max;
 
-static int
-compare_squared(int a, int b, int c)
-{
-  int a2b2 = a*a+b*b;
-  int c2 = c*c;
-  if (a2b2 > c2)
-    return 1;
-  if (a2b2 < c2)
-    return -1;
-  return 0;
-}
-
-static gcc_const const TCHAR*
-getDirection(int X1, int Y1, int X2, int Y2)
-{
-  int dx = X2 - X1;
-  int dy = Y2 - Y1;
-
-  if (dy < 0 && -dy >= abs(dx))
-    return _T("U");
-  if (dy > 0 && dy >= abs(dx))
-    return _T("D");
-  if (dx > 0 && dx >= abs(dy))
-    return _T("R");
-  if (dx < 0 && -dx >= abs(dy))
-    return _T("L");
-
-  return _T("");
-}
-
 bool
 GlueMapWindow::on_setfocus()
 {
@@ -138,34 +108,8 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
 #endif
 
   // If we are dragging already or starting to drag now...
-  if (XCSoarInterface::SettingsComputer().EnableGestures
-      && (is_gesture
-          || compare_squared(drag_start.x - x, drag_start.y - y,
-                             Layout::Scale(70)) == 1)) {
-    // Set is_gesture = true to save us one square-root operation each call
-    is_gesture = true;
-
-    // Get current dragging direction
-    const TCHAR* direction = getDirection(drag_last.x, drag_last.y, x, y);
-
-    // If no gesture yet or (the direction has
-    // changed and more then 70px from last direction change)...
-    if (string_is_empty(gesture)
-        || (direction[0] != gesture[_tcslen(gesture) - 1]
-            && _tcslen(gesture) < 10
-            && compare_squared(gesture_corner.x - x, gesture_corner.y - y,
-                               Layout::Scale(70)) == 1)) {
-      // Append current direction to the gesture string
-      _tcscat(gesture, direction);
-      // Save position of the direction change
-      gesture_corner.x = x;
-      gesture_corner.y = y;
-    }
-
-    // Save position for next direction query
-    drag_last.x = x;
-    drag_last.y = y;
-  }
+  if (XCSoarInterface::SettingsComputer().EnableGestures)
+    gestures.AddPoint(x, y);
 
   return MapWindow::on_mouse_move(x, y, keys);
 }
@@ -185,13 +129,8 @@ GlueMapWindow::on_mouse_down(int x, int y)
   drag_start.y = y;
   Screen2LonLat(x, y, drag_start_geopoint);
 
-  if (XCSoarInterface::SettingsComputer().EnableGestures) {
-    is_gesture = false;
-    gesture_corner = drag_last = drag_start;
-
-    // Reset gesture
-    _tcscpy(gesture, _T(""));
-  }
+  if (XCSoarInterface::SettingsComputer().EnableGestures)
+    gestures.Start(x, y);
 
 #ifdef OLD_TASK // target control
   if (task != NULL &&
@@ -282,10 +221,9 @@ GlueMapWindow::on_mouse_up(int x, int y)
     return true;
   }
 
-  if (XCSoarInterface::SettingsComputer().EnableGestures && is_gesture) {
-    // Finish gesture
-    is_gesture = false;
-    if (on_mouse_gesture(gesture))
+  if (XCSoarInterface::SettingsComputer().EnableGestures) {
+    const TCHAR* gesture = gestures.Finish();
+    if (gesture && on_mouse_gesture(gesture))
       return true;
   }
 
@@ -321,7 +259,7 @@ GlueMapWindow::on_mouse_wheel(int delta)
 }
 
 bool
-GlueMapWindow::on_mouse_gesture(TCHAR* gesture)
+GlueMapWindow::on_mouse_gesture(const TCHAR* gesture)
 {
   if (!XCSoarInterface::SettingsComputer().EnableGestures)
     return false;

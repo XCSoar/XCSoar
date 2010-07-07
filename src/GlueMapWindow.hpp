@@ -41,6 +41,7 @@ Copyright_License {
 
 #include "MapWindow.hpp"
 #include "PeriodClock.hpp"
+#include "GestureManager.hpp"
 
 class GlueMapWindow : public MapWindow {
   unsigned idle_robin;
@@ -61,14 +62,7 @@ public:
 private:
   GEOPOINT drag_start_geopoint;
   POINT drag_start;
-  /** True if a gesture movement has been detected */
-  bool is_gesture;
-  /** Position of the last mouse_move event */
-  POINT drag_last;
-  /** Position of the last direction change */
-  POINT gesture_corner;
-  /** The gesture string */
-  TCHAR gesture[11];
+  GestureManager gestures;
   bool ignore_single_click;
 
   // display management
@@ -90,7 +84,7 @@ protected:
    * @return True if the gesture was handled by the
    * event handler, False otherwise
    */
-  bool on_mouse_gesture(TCHAR* gesture);
+  bool on_mouse_gesture(const TCHAR* gesture);
 
 #if defined(GNAV) || defined(PNA)
   virtual bool on_key_down(unsigned key_code);
