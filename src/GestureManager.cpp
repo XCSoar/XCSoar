@@ -38,9 +38,17 @@ Copyright_License {
 
 #include "GestureManager.hpp"
 #include "Screen/Layout.hpp"
+#include "StringUtil.hpp"
 
 #include <algorithm>
 
+/**
+ * Compares a^2 + b^2 against c^2
+ * Use this instead of hypot when comparing
+ * @return 1 if a^2 + b^2 > c^2,
+ *         0 if a^2 + b^2 = c^2,
+ *        -1 if a^2 + b^2 < c^2,
+ */
 int
 compare_squared(int a, int b, int c)
 {
@@ -74,24 +82,30 @@ GestureManager::AddPoint(int x, int y)
   if (!active)
     return;
 
-  // Get current dragging direction
+  // Calculate deltas
   int dx = x - drag_last.x;
   int dy = y - drag_last.y;
 
+  // See if we've reached the threshold already
   if (compare_squared(dx, dy, Layout::Scale(20)) != 1)
     return;
 
-  // Save position for next direction query
+  // Save position for next call
   drag_last.x = x;
   drag_last.y = y;
 
+  // Get current dragging direction
   const TCHAR* direction = getDirection(dx, dy);
+
+  // Return if we are in an unclear direction
   if (!direction)
     return;
 
+  // Return if we are still in the same direction
   if (direction[0] == gesture[_tcslen(gesture) - 1])
     return;
 
+  // If the gesture isn't too long, append the current direction
   if (_tcslen(gesture) < 10)
     _tcscat(gesture, direction);
 }
@@ -101,6 +115,7 @@ GestureManager::Start(int x, int y)
 {
   active = true;
 
+  // Reset last position
   drag_last.x = x;
   drag_last.y = y;
 

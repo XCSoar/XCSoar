@@ -48,8 +48,18 @@ public:
   GestureManager():
     active(false) {}
 
+  /**
+   * Stops the GestureManager and returns the recognized gesture
+   * @return NULL or recognized gesture string
+   */
   const TCHAR* Finish();
+  /**
+   * Starts the GestureManager at the given coordinates
+   */
   void Start(int x, int y);
+  /**
+   * Adds new coordinates to the GestureManager
+   */
   void AddPoint(int x, int y);
 
 protected:
