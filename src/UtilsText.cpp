@@ -407,17 +407,3 @@ TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines)
 
   return nTextLines;
 }
-
-/**
- * Converts a TCHAR array to uppercase
- * @param str String (TCHAR array) to convert
- */
-void
-ConvToUpper(TCHAR *str)
-{
-  if (!str)
-    return;
-
-  for (; *str; ++str)
-    *str = _totupper(*str);
-}
