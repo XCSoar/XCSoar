@@ -427,67 +427,45 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     return;
 
 #ifdef FLARM_AVERAGE
-  if (side_display_type == 1) {
-    // if vertical speed to small or negative -> skip this one
-    if (traffic.Average30s < fixed(0.5)
+  // if vertical speed to small or negative -> skip this one
+  if (side_display_type == 1 && (traffic.Average30s < fixed(0.5)
         || (traffic.Type != FLARM_TRAFFIC::acGlider
             && traffic.Type != FLARM_TRAFFIC::acHangGlider
-            && traffic.Type != FLARM_TRAFFIC::acParaGlider))
+            && traffic.Type != FLARM_TRAFFIC::acParaGlider)))
       return;
-
-    // Select font
-    canvas.background_transparent();
-    canvas.select(MapWindowBoldFont);
-
-    // Format string
-    TCHAR tmp[10];
-    Units::FormatUserVSpeed(traffic.Average30s, tmp, 10, false);
-    SIZE sz = canvas.text_size(tmp);
-
-    // Draw vertical speed shadow
-    canvas.set_text_color(Color::WHITE);
-    canvas.text(sc[i].x + Layout::FastScale(11) + 1,
-                sc[i].y - sz.cy * 0.5 + 1, tmp);
-    canvas.text(sc[i].x + Layout::FastScale(11) - 1,
-                sc[i].y - sz.cy * 0.5 - 1, tmp);
-
-    // Select color
-    if (static_cast<unsigned> (selection) == i)
-      canvas.set_text_color(hcSelection);
-    else
-      canvas.set_text_color(hcStandard);
-
-    // Draw vertical speed
-    canvas.text(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy * 0.5, tmp);
-  } else if (side_display_type == 2) {
 #endif
-    // Select font
-    canvas.background_transparent();
-    canvas.select(MapWindowBoldFont);
 
-    // Format string
-    TCHAR tmp[10];
-    Units::FormatUserArrival(traffic.RelativeAltitude, tmp, 10, true);
-    SIZE sz = canvas.text_size(tmp);
+  // Select font
+  canvas.background_transparent();
+  canvas.select(MapWindowBoldFont);
 
-    // Draw vertical speed shadow
-    canvas.set_text_color(Color::WHITE);
-    canvas.text(sc[i].x + Layout::FastScale(11) + 1,
-                sc[i].y - sz.cy * 0.5 + 1, tmp);
-    canvas.text(sc[i].x + Layout::FastScale(11) - 1,
-                sc[i].y - sz.cy * 0.5 - 1, tmp);
+  // Format string
+  TCHAR tmp[10];
 
-    // Select color
-    if (static_cast<unsigned> (selection) == i)
-      canvas.set_text_color(hcSelection);
-    else
-      canvas.set_text_color(hcStandard);
-
-    // Draw vertical speed
-    canvas.text(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy * 0.5, tmp);
 #ifdef FLARM_AVERAGE
-  }
+  if (side_display_type == 1)
+    Units::FormatUserVSpeed(traffic.Average30s, tmp, 10, false);
+  else
 #endif
+    Units::FormatUserArrival(traffic.RelativeAltitude, tmp, 10, true);
+
+  SIZE sz = canvas.text_size(tmp);
+
+  // Draw vertical speed shadow
+  canvas.set_text_color(Color::WHITE);
+  canvas.text(sc[i].x + Layout::FastScale(11) + 1,
+              sc[i].y - sz.cy * 0.5 + 1, tmp);
+  canvas.text(sc[i].x + Layout::FastScale(11) - 1,
+              sc[i].y - sz.cy * 0.5 - 1, tmp);
+
+  // Select color
+  if (static_cast<unsigned> (selection) == i)
+    canvas.set_text_color(hcSelection);
+  else
+    canvas.set_text_color(hcStandard);
+
+  // Draw vertical speed
+  canvas.text(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy * 0.5, tmp);
 }
 
 /**
