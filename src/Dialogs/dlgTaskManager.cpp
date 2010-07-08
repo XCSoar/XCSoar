@@ -177,6 +177,8 @@ dlgTaskManagerShowModal(SingleWindow &parent)
   task_modified = false;
 
   wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView"));
+  if (!wTaskView)
+    return;
 
   wf->ShowModal();
 
