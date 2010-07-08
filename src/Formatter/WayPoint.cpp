@@ -106,10 +106,6 @@ const TCHAR *FormatterAlternate::RenderTitle(int *color) {
   return(Text);
 }
 
-
-/*
- * Currently even if set for FIVV, colors are not used.
- */
 const TCHAR *
 FormatterAlternate::Render(int *color)
 {
@@ -123,18 +119,10 @@ FormatterAlternate::Render(int *color)
       *color = 5;
       break;
     case 1:
-#ifdef FIVV
-      *color = 0; // green
-#else
       *color = 0; // blue
-#endif
       break;
     case 2:
-#ifdef FIVV
-      *color = 0; // yellow 4
-#else
       *color = 0; // normale white
-#endif
       break;
     case 3:
       *color = 1; // red
