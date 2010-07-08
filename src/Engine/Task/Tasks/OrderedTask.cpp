@@ -67,22 +67,19 @@ OrderedTask::update_geometry()
 {
   scan_start_finish();
 
-  if (!has_start() || !tps[0]) {
+  if (!has_start() || !tps[0])
     return;
-  }
 
-  for (unsigned i=0; i<tps.size(); ++i) {
-    if (i==0) {
+  for (unsigned i = 0; i < tps.size(); ++i) {
+    if (i == 0)
       task_projection.reset(tps[i]->get_location());
-    }
 
     tps[i]->scan_projection(task_projection);
   }
   task_projection.update_fast();
 
-  for (OrderedTaskPointVector::iterator it = tps.begin(); it!= tps.end(); it++) {
+  for (OrderedTaskPointVector::iterator it = tps.begin(); it!= tps.end(); it++)
     (*it)->update_oz();
-  }
 
   if (has_start()) {
     // update stats so data can be used during task construction
@@ -103,21 +100,19 @@ OrderedTask::update_geometry()
 fixed 
 OrderedTask::scan_total_start_time(const AIRCRAFT_STATE &)
 {
-  if (ts) {
+  if (ts)
     return ts->get_state_entered().Time;
-  } else {
-    return fixed_zero;
-  }
+
+  return fixed_zero;
 }
 
 fixed 
 OrderedTask::scan_leg_start_time(const AIRCRAFT_STATE &)
 {
-  if (activeTaskPoint) {
+  if (activeTaskPoint)
     return tps[activeTaskPoint-1]->get_state_entered().Time;
-  } else {
-    return -fixed_one;
-  }
+
+  return -fixed_one;
 }
 
 // DISTANCES
@@ -160,67 +155,60 @@ OrderedTask::scan_distance_minmax(const GEOPOINT &location,
                                   bool force,
                                   fixed *dmin, fixed *dmax)
 {
-  if (!ts) {
+  if (!ts)
     return;
-  }
 
-  if (force) {
+  if (force)
     *dmax = scan_distance_max();
-  }
 
-  bool force_min = distance_is_significant(location, m_location_min_last) || force;
+  bool force_min = distance_is_significant(location, m_location_min_last)
+                   || force;
   *dmin = scan_distance_min(location, force_min);
 }
-
 
 fixed
 OrderedTask::scan_distance_nominal()
 {
-  if (ts) {
+  if (ts)
     return ts->scan_distance_nominal();
-  } else {
-    return fixed_zero;
-  }
+
+  return fixed_zero;
 }
 
 fixed
 OrderedTask::scan_distance_scored(const GEOPOINT &location)
 {
-  if (ts) {
+  if (ts)
     return ts->scan_distance_scored(location);
-  } else {
-    return fixed_zero;
-  }
+
+  return fixed_zero;
 }
 
 fixed
 OrderedTask::scan_distance_remaining(const GEOPOINT &location)
 {
-  if (ts) {
+  if (ts)
     return ts->scan_distance_remaining(location);
-  } else {
-    return fixed_zero;
-  }
+
+  return fixed_zero;
 }
 
 fixed
 OrderedTask::scan_distance_travelled(const GEOPOINT &location)
 {
-  if (ts) {
+  if (ts)
     return ts->scan_distance_travelled(location);
-  } else {
-    return fixed_zero;
-  }
+
+  return fixed_zero;
 }
 
 fixed
 OrderedTask::scan_distance_planned()
 {
-  if (ts) {
+  if (ts)
     return ts->scan_distance_planned();
-  } else {
-    return fixed_zero;
-  }
+
+  return fixed_zero;
 }
 
 // TRANSITIONS
@@ -229,69 +217,64 @@ bool
 OrderedTask::check_transitions(const AIRCRAFT_STATE &state, 
                                const AIRCRAFT_STATE &state_last)
 {
-  if (!ts) {
+  if (!ts)
     return false;
-  }
+
   ts->scan_active(tps[activeTaskPoint]);
 
-  if (!state.Flying) {
+  if (!state.Flying)
     return false;
-  }
 
   const int n_task = tps.size();
 
-  if (!n_task) {
+  if (!n_task)
     return false;
-  }
 
   bool last_started = task_started();
   const bool last_finished = task_finished();
 
-  const int t_min = max(0,(int)activeTaskPoint-1);
-  const int t_max = min(n_task-1, (int)activeTaskPoint+1);
+  const int t_min = max(0, (int)activeTaskPoint - 1);
+  const int t_max = min(n_task - 1, (int)activeTaskPoint + 1);
   bool full_update = false;
-  
-  for (int i=t_min; i<=t_max; i++) {
+
+  for (int i = t_min; i <= t_max; i++) {
     bool transition_enter = false;
     if (tps[i]->transition_enter(state, state_last)) {
       transition_enter = true;
       task_events.transition_enter(*tps[i]);
     }
+
     bool transition_exit = false;
     if (tps[i]->transition_exit(state, state_last)) {
       transition_exit = true;
       task_events.transition_exit(*tps[i]);
       
       // detect restart
-      if ((i==0) && last_started) {
+      if ((i == 0) && last_started)
         last_started = false;
-      }
     }
-    if ((activeTaskPoint==0) && (i==0)) {
+
+    if ((activeTaskPoint == 0) && (i == 0))
       update_start_transition(state);
-    }
-    if (tps[i]->update_sample(state, task_events)) {
+
+    if (tps[i]->update_sample(state, task_events))
       full_update = true;
-    }
 
-    if (i==(int)activeTaskPoint) {
-
+    if (i == (int)activeTaskPoint) {
       const bool last_request_armed = task_advance.request_armed();
 
-      if (task_advance.ready_to_advance(*tps[i],
-                                        state,
+      if (task_advance.ready_to_advance(*tps[i], state,
                                         transition_enter,
                                         transition_exit)) {
         task_advance.set_armed(false);
         
-        if (i+1<n_task) {
-          
+        if (i + 1 < n_task) {
           i++;
           setActiveTaskPoint(i);
           ts->scan_active(tps[activeTaskPoint]);
           
-          task_events.active_advanced(*tps[i],i);
-          
+          task_events.active_advanced(*tps[i], i);
+
           // on sector exit, must update samples since start sector
           // exit transition clears samples
           full_update = true;
@@ -307,17 +290,14 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
   stats.task_finished = task_finished();
   stats.task_started = task_started();
 
-  if (stats.task_started) {
+  if (stats.task_started)
     tf->set_fai_finish_height(get_start_state().NavAltitude - fixed(1000));
-  }
 
-  if (stats.task_started && !last_started) {
+  if (stats.task_started && !last_started)
     task_events.task_start();
-  }
 
-  if (stats.task_finished && !last_finished) {
+  if (stats.task_finished && !last_finished)
     task_events.task_finish();
-  }
 
   return full_update;
 }
@@ -331,18 +311,16 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
 
   if (has_start()
       && (task_behaviour.optimise_targets_range)
-      && (get_ordered_task_behaviour().aat_min_time>fixed_zero)) {
+      && (get_ordered_task_behaviour().aat_min_time > fixed_zero)) {
 
-    if (activeTaskPoint>0) {
-
+    if (activeTaskPoint > 0) {
       fixed p = calc_min_target(state, get_ordered_task_behaviour().aat_min_time);
       (void)p;
 
       if (task_behaviour.optimise_targets_bearing) {
         if (AATPoint* ap = dynamic_cast<AATPoint*>(tps[activeTaskPoint])) {
           // very nasty hack
-          TaskOptTarget tot(tps, activeTaskPoint, state, glide_polar,
-                            *ap, ts);
+          TaskOptTarget tot(tps, activeTaskPoint, state, glide_polar, *ap, ts);
           tot.search(fixed(0.5));
         }
       }
@@ -352,7 +330,6 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
   
   return retval;
 }
-
 
 bool 
 OrderedTask::update_sample(const AIRCRAFT_STATE &state, 
@@ -366,28 +343,25 @@ OrderedTask::update_sample(const AIRCRAFT_STATE &state,
 void
 OrderedTask::set_neighbours(unsigned position)
 {
-  OrderedTaskPoint* prev=NULL;
-  OrderedTaskPoint* next=NULL;
+  OrderedTaskPoint* prev = NULL;
+  OrderedTaskPoint* next = NULL;
 
-  if (!tps[position]) {
+  if (!tps[position])
     // nothing to do if this is deleted
     return;
-  }
 
-  if (position>=tps.size()) {
+  if (position >= tps.size())
     // nothing to do
     return;
-  }
 
-  if (position>0) {
-    prev = tps[position-1];
-  }
-  if (position+1<tps.size()) {
-    next = tps[position+1];
-  }
+  if (position > 0)
+    prev = tps[position - 1];
+
+  if (position + 1 < tps.size())
+    next = tps[position + 1];
+
   tps[position]->set_neighbours(prev, next);
 }
-
 
 bool
 OrderedTask::check_task() const
@@ -407,63 +381,60 @@ OrderedTask::check_task() const
   return true;
 }
 
-
 bool 
 OrderedTask::scan_start_finish()
 {
   /// @todo also check there are not more than one start/finish point
-
   if (!tps.size()) {
     ts = NULL;
     tf = NULL;
     return false;
   }
+
   ts = dynamic_cast<StartPoint*>(tps[0]);
-  if (tps.size()>1) {
-    tf = dynamic_cast<FinishPoint*>(tps[tps.size()-1]);
-  } else {
+  if (tps.size() > 1)
+    tf = dynamic_cast<FinishPoint*> (tps[tps.size() - 1]);
+  else
     tf = NULL;
-  }
+
   return has_start() && has_finish();
 }
 
 void
 OrderedTask::erase(const unsigned index)
 {
-  delete tps[index]; tps[index] = NULL;
-  tps.erase(tps.begin()+index);
+  delete tps[index];
+  tps[index] = NULL;
+  tps.erase(tps.begin() + index);
 }
 
 bool
 OrderedTask::remove(const unsigned position)
 {
-  if (position>= tps.size()) {
+  if (position >= tps.size())
     return false;
-  }
 
-  if (activeTaskPoint>position) {
+  if (activeTaskPoint > position)
     activeTaskPoint--;
-  }
 
   erase(position);
 
   set_neighbours(position);
-  if (position) {
-    set_neighbours(position-1);
-  }
+  if (position)
+    set_neighbours(position - 1);
+
   update_geometry();
   return true;
 }
-
 
 bool 
 OrderedTask::append(OrderedTaskPoint* new_tp)
 {
   tps.push_back(new_tp);
-  if (tps.size()>1) {
-    set_neighbours(tps.size()-2);
-  }
-  set_neighbours(tps.size()-1);
+  if (tps.size() > 1)
+    set_neighbours(tps.size() - 2);
+
+  set_neighbours(tps.size() - 1);
   update_geometry();
   return true;
 }
@@ -472,21 +443,20 @@ bool
 OrderedTask::insert(OrderedTaskPoint* new_tp, 
                     const unsigned position)
 {
-  if (activeTaskPoint>=position) {
+  if (activeTaskPoint >= position)
     activeTaskPoint++;
-  }
 
-  if (position<tps.size()) {
-    tps.insert(tps.begin()+position, new_tp);
-  } else {
+  if (position < tps.size())
+    tps.insert(tps.begin() + position, new_tp);
+  else
     return append(new_tp);
-  }
-  if (position) {
-    set_neighbours(position-1);
-  }
+
+  if (position)
+    set_neighbours(position - 1);
+
   set_neighbours(position);
-  set_neighbours(position+1);
-  
+  set_neighbours(position + 1);
+
   update_geometry();
   return true;
 }
@@ -495,37 +465,34 @@ bool
 OrderedTask::replace(OrderedTaskPoint* new_tp, 
                      const unsigned position)
 {
-  if (position>=tps.size()) {
+  if (position >= tps.size())
     return false;
-  }
-  if (tps[position]->equals(new_tp)) {
+
+  if (tps[position]->equals(new_tp))
     // nothing to do
     return true;
-  }
 
   delete tps[position];
   tps[position] = new_tp;
 
-  if (position) {
-    set_neighbours(position-1);
-  }
+  if (position)
+    set_neighbours(position - 1);
+
   set_neighbours(position);
-  if (position+1<tps.size()) {
-    set_neighbours(position+1);
-  }
+  if (position + 1 < tps.size())
+    set_neighbours(position + 1);
 
   update_geometry();
   return true;
 }
 
-
 void 
 OrderedTask::setActiveTaskPoint(unsigned index)
 {
-  if (index<tps.size()) {
-    if (activeTaskPoint != index) {
+  if (index < tps.size()) {
+    if (activeTaskPoint != index)
       task_advance.set_armed(false);
-    }
+
     activeTaskPoint = index;
   } else if (tps.empty()) {
     activeTaskPoint = 0;
@@ -535,18 +502,17 @@ OrderedTask::setActiveTaskPoint(unsigned index)
 TaskPoint* 
 OrderedTask::getActiveTaskPoint() const
 {
-  if (activeTaskPoint<tps.size()) {
+  if (activeTaskPoint < tps.size())
     return tps[activeTaskPoint];
-  } else {
-    return NULL;
-  }
+
+  return NULL;
 }
 
 bool 
 OrderedTask::validTaskPoint(const int index_offset) const
 {
-  unsigned index = activeTaskPoint+index_offset;
-  return (index<tps.size());
+  unsigned index = activeTaskPoint + index_offset;
+  return (index < tps.size());
 }
 
 
@@ -556,12 +522,11 @@ OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft,
                                       GlideResult &total,
                                       GlideResult &leg)
 {
-  TaskMacCreadyRemaining tm(tps,activeTaskPoint, polar);
+  TaskMacCreadyRemaining tm(tps, activeTaskPoint, polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution(aircraft);
-  if (activeTaskPoint==0) {
+  if (activeTaskPoint == 0)
     leg.Vector = GeoVector(aircraft.Location, ts->get_location_remaining());
-  }
 }
 
 void
@@ -569,7 +534,7 @@ OrderedTask::glide_solution_travelled(const AIRCRAFT_STATE &aircraft,
                                       GlideResult &total,
                                       GlideResult &leg)
 {
-  TaskMacCreadyTravelled tm(tps,activeTaskPoint,glide_polar);
+  TaskMacCreadyTravelled tm(tps, activeTaskPoint, glide_polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution(aircraft);
 }
@@ -583,15 +548,15 @@ OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft,
                                     const fixed total_t_elapsed,
                                     const fixed leg_t_elapsed)
 {
-  TaskMacCreadyTotal tm(tps,activeTaskPoint,glide_polar);
+  TaskMacCreadyTotal tm(tps, activeTaskPoint, glide_polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution(aircraft);
 
-  total_remaining_effective.
-    set_distance(tm.effective_distance(fixed(total_t_elapsed)));
+  total_remaining_effective.set_distance(
+      tm.effective_distance(fixed(total_t_elapsed)));
 
-  leg_remaining_effective.
-    set_distance(tm.effective_leg_distance(fixed(leg_t_elapsed)));
+  leg_remaining_effective.set_distance(
+      tm.effective_leg_distance(fixed(leg_t_elapsed)));
 }
 
 // Auxiliary glide functions
@@ -615,23 +580,23 @@ OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft)
 fixed
 OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft)
 {
-  if (activeTaskPoint>0) {
-    TaskCruiseEfficiency bce(tps,activeTaskPoint, aircraft, glide_polar);
+  if (activeTaskPoint > 0) {
+    TaskCruiseEfficiency bce(tps, activeTaskPoint, aircraft, glide_polar);
     return bce.search(fixed_one);
-  } else {
-    return fixed_one;
   }
+
+  return fixed_one;
 }
 
 fixed 
 OrderedTask::calc_effective_mc(const AIRCRAFT_STATE &aircraft) 
 {
-  if (activeTaskPoint>0) {
+  if (activeTaskPoint > 0) {
     TaskEffectiveMacCready bce(tps,activeTaskPoint, aircraft, glide_polar);
     return bce.search(glide_polar.get_mc());
-  } else {
-    return glide_polar.get_mc();
   }
+
+  return glide_polar.get_mc();
 }
 
 
@@ -639,16 +604,16 @@ fixed
 OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft, 
                              const fixed t_target)
 {
-  if (stats.distance_max>stats.distance_min) {
+  if (stats.distance_max > stats.distance_min) {
     // only perform scan if modification is possible
-    const fixed t_rem = max(fixed_zero, t_target-stats.total.TimeElapsed);
+    const fixed t_rem = max(fixed_zero, t_target - stats.total.TimeElapsed);
 
     TaskMinTarget bmt(tps, activeTaskPoint, aircraft, glide_polar, t_rem, ts);
     fixed p = bmt.search(fixed_zero);
     return p;
-  } else {
-    return fixed_zero;
   }
+
+  return fixed_zero;
 }
 
 
@@ -659,34 +624,30 @@ OrderedTask::calc_gradient(const AIRCRAFT_STATE &state)
   fixed d_acc = fixed_zero;
   fixed h_this = state.NavAltitude;
 
-  for (unsigned i=activeTaskPoint; i< tps.size(); i++) {
+  for (unsigned i = activeTaskPoint; i < tps.size(); i++) {
     d_acc += tps[i]->get_vector_remaining(state).Distance;
-    if (!d_acc) {
+    if (!d_acc)
       continue;
-    }
-    const fixed g_this = (h_this-tps[i]->get_elevation())/d_acc;
-    if (i==activeTaskPoint) {
+
+    const fixed g_this = (h_this - tps[i]->get_elevation()) / d_acc;
+    if (i == activeTaskPoint)
       g_best = g_this;
-    } else {
+    else
       g_best = min(g_best, g_this);
-    }
   }
   return g_best;
 }
-
 
 // Constructors/destructors
 
 OrderedTask::~OrderedTask()
 {
-  for (OrderedTaskPointVector::iterator v=tps.begin();
-       v != tps.end(); ) {
+  for (OrderedTaskPointVector::iterator v = tps.begin(); v != tps.end();) {
     delete *v;
     tps.erase(v);
   }
   delete active_factory;
 }
-
 
 OrderedTask::OrderedTask(TaskEvents &te, 
                          const TaskBehaviour &tb,
@@ -708,14 +669,12 @@ OrderedTask::tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) cons
 {
   if (!reverse) {
     for (OrderedTaskPointVector::const_iterator it = tps.begin(); 
-         it!= tps.end(); ++it) {
+         it!= tps.end(); ++it)
       (*it)->CAccept(visitor);
-    }
   } else {
     for (OrderedTaskPointVector::const_reverse_iterator it = tps.rbegin(); 
-         it!= tps.rend(); ++it) {
+         it!= tps.rend(); ++it)
       (*it)->CAccept(visitor);
-    }
   }
 }
 
@@ -724,25 +683,22 @@ OrderedTask::tp_Accept(TaskPointVisitor& visitor, const bool reverse)
 {
   if (!reverse) {
     for (OrderedTaskPointVector::iterator it = tps.begin(); 
-         it!= tps.end(); ++it) {
+         it!= tps.end(); ++it)
       (*it)->Accept(visitor);
-    }
   } else {
     for (OrderedTaskPointVector::reverse_iterator it = tps.rbegin(); 
-         it!= tps.rend(); ++it) {
+         it!= tps.rend(); ++it)
       (*it)->Accept(visitor);
-    }
   }
 }
-
 
 void
 OrderedTask::reset()
 {  
   /// @todo also reset data in this class e.g. stats?
-  for (OrderedTaskPointVector::iterator it = tps.begin(); it!= tps.end(); it++) {
+  for (OrderedTaskPointVector::iterator it = tps.begin(); it!= tps.end(); it++)
     (*it)->reset();
-  }
+
   AbstractTask::reset();
   stats.task_finished = false;
   stats.task_started = false;
@@ -750,17 +706,14 @@ OrderedTask::reset()
   setActiveTaskPoint(0);
 }
 
-
 const OrderedTaskPoint* 
 OrderedTask::getTaskPoint(const unsigned index) const
 {
-  if (index>=tps.size()) {
+  if (index >= tps.size())
     return NULL;
-  } else {
-    return tps[index];
-  }
-}
 
+  return tps[index];
+}
 
 bool 
 OrderedTask::has_start() const
@@ -774,22 +727,21 @@ OrderedTask::has_finish() const
   return (tf != NULL);
 }
 
-
 bool 
 OrderedTask::task_finished() const
 {
-  if (tf) {
+  if (tf)
     return (tf->has_entered());
-  }
+
   return false;
 }
 
 bool 
 OrderedTask::task_started() const
 {
-  if (ts) {
+  if (ts)
     return (ts->has_exited());
-  }
+
   return false;
 }
 
@@ -822,9 +774,8 @@ OrderedTask::set_tp_search_min(unsigned tp, const SearchPoint &sol)
 void 
 OrderedTask::set_tp_search_achieved(unsigned tp, const SearchPoint &sol) 
 {
-  if (tps[tp]->has_sampled()) {
+  if (tps[tp]->has_sampled())
     set_tp_search_min(tp, sol);
-  }
 }
 
 void 
@@ -832,7 +783,6 @@ OrderedTask::set_tp_search_max(unsigned tp, const SearchPoint &sol)
 {
   tps[tp]->set_search_max(sol);
 }
-
 
 unsigned 
 OrderedTask::task_size() const 
@@ -852,13 +802,11 @@ OrderedTask::get_task_projection()
   return task_projection;
 }
 
-
 void
 OrderedTask::update_start_transition(const AIRCRAFT_STATE &state)
 {
-  if (ts->has_exited()) {
+  if (ts->has_exited())
     return;
-  }
 
   if (ts->isInSector(state)) {
     // @todo find boundary point that produces shortest
@@ -871,16 +819,14 @@ OrderedTask::update_start_transition(const AIRCRAFT_STATE &state)
   }
 }
 
-
 AIRCRAFT_STATE 
 OrderedTask::get_start_state() const
 {
   if (has_start() && task_started()) 
     return ts->get_state_entered();
-  else {
-    AIRCRAFT_STATE null_state;
-    return null_state;
-  }
+
+  AIRCRAFT_STATE null_state;
+  return null_state;
 }
 
 AIRCRAFT_STATE 
@@ -888,52 +834,47 @@ OrderedTask::get_finish_state() const
 {
   if (has_finish() && task_finished()) 
     return tf->get_state_entered();
-  else {
-    AIRCRAFT_STATE null_state;
-    return null_state;
-  }
+
+  AIRCRAFT_STATE null_state;
+  return null_state;
 }
 
 bool
 OrderedTask::has_targets() const
 {
-  for (unsigned i=0; i<tps.size(); ++i) {
-    if (tps[i]->has_target()) return true;
-  }
+  for (unsigned i = 0; i < tps.size(); ++i)
+    if (tps[i]->has_target())
+      return true;
+
   return false;
 }
 
 fixed
 OrderedTask::get_finish_height() const
 {
-  if (tf) {
+  if (tf)
     return tf->get_elevation();
-  } else {
-    return fixed_zero;
-  }
-}
 
+  return fixed_zero;
+}
 
 GEOPOINT 
 OrderedTask::get_task_center(const GEOPOINT& fallback_location) const
 {
-  if (!has_start() || !tps[0]) {
+  if (!has_start() || !tps[0])
     return fallback_location;
-  } else {
-    return task_projection.get_center();
-  }
+
+  return task_projection.get_center();
 }
 
 fixed 
 OrderedTask::get_task_radius(const GEOPOINT& fallback_location) const
 { 
-  if (!has_start() || !tps[0]) {
+  if (!has_start() || !tps[0])
     return fixed_zero;
-  } else {
-    return task_projection.get_radius();
-  }
-}
 
+  return task_projection.get_radius();
+}
 
 OrderedTask* 
 OrderedTask::clone(TaskEvents &te, 
@@ -945,9 +886,8 @@ OrderedTask::clone(TaskEvents &te,
   new_task->m_ordered_behaviour = m_ordered_behaviour;
 
   new_task->set_factory(factory_mode);
-  for (unsigned i=0; i<tps.size(); ++i) {
-    new_task->append(tps[i]->clone(tb,
-                                   new_task->m_ordered_behaviour,
+  for (unsigned i = 0; i < tps.size(); ++i) {
+    new_task->append(tps[i]->clone(tb, new_task->m_ordered_behaviour,
                                    new_task->get_task_projection()));
   }
   new_task->update_geometry();
@@ -958,20 +898,18 @@ bool
 OrderedTask::check_duplicate_waypoints(Waypoints& waypoints)
 {
   bool changed = false;
-  for (unsigned i=0; i<task_size(); ++i) {
+  for (unsigned i = 0; i < task_size(); ++i) {
     Waypoint wp(tps[i]->get_waypoint());
     bool this_changed = !waypoints.find_duplicate(wp);
     changed |= this_changed;
-    if (this_changed) {
-      replace(tps[i]->clone(task_behaviour,
-                            m_ordered_behaviour,
-                            get_task_projection(),
-                            &wp), i);
-    }
+    if (this_changed)
+      replace(tps[i]->clone(task_behaviour, m_ordered_behaviour,
+                            get_task_projection(), &wp), i);
   }
-  if (changed) {
+
+  if (changed)
     waypoints.optimise();
-  }
+
   return changed;
 }
 
@@ -988,32 +926,29 @@ OrderedTask::commit(const OrderedTask& that)
 
   // remove if that task is smaller than this one
   while (task_size() > that.task_size()) {
-    remove(task_size()-1);
+    remove(task_size() - 1);
     modified = true;
   }
 
-  for (unsigned i=0; i<that.task_size(); ++i) {
-    if (i>= task_size()) {
+  for (unsigned i = 0; i < that.task_size(); ++i) {
+    if (i >= task_size()) {
       // that task is larger than this
-      append(that.tps[i]->clone(task_behaviour,
-                                m_ordered_behaviour,
+      append(that.tps[i]->clone(task_behaviour, m_ordered_behaviour,
                                 get_task_projection()));
       modified = true;
     } else if (!tps[i]->equals(that.tps[i])) {
       // that task point is changed
-      replace(that.tps[i]->clone(task_behaviour,
-                                 m_ordered_behaviour,
-                                 get_task_projection()),
-              i);
+      replace(that.tps[i]->clone(task_behaviour, m_ordered_behaviour,
+                                 get_task_projection()), i);
       modified = true;
     }
   }
 
-  if (modified) {
+  if (modified)
     update_geometry();
     // @todo also re-scan task sample state,
     // potentially resetting task
-  }
+
   return modified;
 }
 
@@ -1021,7 +956,8 @@ OrderedTask::commit(const OrderedTask& that)
 bool
 OrderedTask::relocate(const unsigned position, const Waypoint& waypoint) 
 {
-  if (position>= task_size()) return false;
+  if (position >= task_size())
+    return false;
 
   OrderedTaskPoint *new_tp = tps[position]->clone(task_behaviour,
                                                   m_ordered_behaviour,
@@ -1042,9 +978,8 @@ OrderedTask::Factory_t
 OrderedTask::set_factory(const Factory_t the_factory)
 {
   // detect no change
-  if (factory_mode == the_factory) {
+  if (factory_mode == the_factory)
     return factory_mode;
-  }
 
   if (the_factory != FACTORY_MIXED) {
     // can switch from anything to mixed, otherwise need reset
@@ -1088,13 +1023,11 @@ OrderedTask::set_factory(const Factory_t the_factory)
   return factory_mode;
 }
 
-
 const OrderedTaskBehaviour& 
 OrderedTask::get_ordered_task_behaviour() const
 {
   return m_ordered_behaviour;
 }
-
 
 OrderedTaskBehaviour& 
 OrderedTask::get_ordered_task_behaviour() 
@@ -1133,36 +1066,33 @@ OrderedTask::get_factory_types(bool all) const
 void 
 OrderedTask::clear()
 {
-  while (tps.size()) {
+  while (tps.size())
     erase(0);
-  }
+
   reset();
   m_ordered_behaviour = task_behaviour.ordered_defaults;
 }
 
-
 OrderedTaskPoint* 
 OrderedTask::get_tp(const unsigned position)
 {
-  if (position>= task_size()) {
+  if (position >= task_size())
     return NULL;
-  } else {
-    return tps[position];
-  }
+
+  return tps[position];
 }
 
 const OrderedTaskPoint* 
 OrderedTask::get_tp(const unsigned position) const
 {
-  if (position>= task_size()) {
+  if (position >= task_size())
     return NULL;
-  } else {
-    return tps[position];
-  }
+
+  return tps[position];
 }
 
 bool 
 OrderedTask::is_max_size() const
 {
-  return (task_size()== m_ordered_behaviour.max_points);
+  return (task_size() == m_ordered_behaviour.max_points);
 }
