@@ -42,7 +42,6 @@ Copyright_License {
 #include "InfoBoxLayout.hpp"
 #include "ButtonLabel.hpp"
 #include "Profile.hpp"
-#include "Asset.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/VirtualCanvas.hpp"
 #include "Appearance.hpp"
@@ -150,135 +149,6 @@ LoadCustomFont(Font *theFont, const TCHAR FontRegKey[], LOGFONT * LogFontUsed)
 }
 
 static void
-InitialiseFontsPNA(const struct Appearance &appearance, RECT rc)
-{
-  if (!is_pna())
-    return;
-
-  int ScreenSize = 0;
-
-  int iWidth = rc.right - rc.left;
-  int iHeight = rc.bottom - rc.top;
-
-  if (iWidth == 240 && iHeight == 320)
-    ScreenSize = (ScreenSize_t)ss240x320; // QVGA portrait
-  else if (iWidth == 480 && iHeight == 640)
-    ScreenSize = (ScreenSize_t)ss480x640; //  VGA
-  else if (iWidth == 480 && iHeight == 800)
-    ScreenSize = (ScreenSize_t)ss480x800;
-  else if (iWidth == 480 && iHeight == 272)
-    ScreenSize = (ScreenSize_t)ss480x272; // WQVGA  landscape
-  else if (iWidth == 320 && iHeight == 240)
-    ScreenSize = (ScreenSize_t)ss320x240; //  QVGA
-  else if (iWidth == 480 && iHeight == 234)
-    ScreenSize = (ScreenSize_t)ss480x234; //   iGo
-  else if (iWidth == 640 && iHeight == 480)
-    ScreenSize = (ScreenSize_t)ss640x480; //   VGA
-  else if (iWidth == 800 && iHeight == 480)
-    ScreenSize = (ScreenSize_t)ss800x480; //  WVGA
-  else {
-    LogStartUp(_T("--- ERROR UNKNOWN RESOLUTION %dx%d !"), iWidth, iHeight);
-    return;
-  }
-
-  if (ScreenSize == (ScreenSize_t)ss480x272) {
-    // WQVGA  e.g. MIO
-    InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
-                      true, 28, 800, false);
-    InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
-                      true, 16, 500, false);
-    InitialiseLogfont(&TitleSmallWindowLogFont, _T("Tahoma"),
-                      true, 16, 100, true);
-    InitialiseLogfont(&CDIWindowLogFont, _T("TahomaBD"),
-                      true, 28, 400, false);
-    InitialiseLogfont(&MapLabelLogFont, _T("Tahoma"),
-                      true, 14, 100, true);
-    InitialiseLogfont(&StatisticsLogFont, _T("Tahoma"),
-                      true, 20, 400, false);
-    InitialiseLogfont(&MapWindowLogFont, _T("Tahoma"),
-                      true, 18, 400, false);
-    InitialiseLogfont(&MapWindowBoldLogFont, _T("TahomaBD"),
-                      true, 16, 500, false);
-
-    if (InfoBoxLayout::InfoBoxGeometry == InfoBoxLayout::ibRight8)
-      // We don't use vario gauge in landscape geo5 anymore.. but doesn't hurt.
-      SetGlobalEllipse(1.32f);
-    else
-      SetGlobalEllipse(1.1f);
-  } else if (ScreenSize == (ScreenSize_t)ss480x234) {
-    // e.g. Messada 2440
-    InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
-                      true, 22, 400, false);
-    InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
-                      true, 18, 500, false);
-    InitialiseLogfont(&TitleSmallWindowLogFont, _T("Tahoma"),
-                      true, 20, 400, true);
-    InitialiseLogfont(&CDIWindowLogFont, _T("TahomaBD"),
-                      true, 28, 400, false);
-    InitialiseLogfont(&MapLabelLogFont, _T("Tahoma"),
-                      true, 14, 100, true);
-    InitialiseLogfont(&StatisticsLogFont, _T("Tahoma"),
-                      true, 20, 400, false);
-    InitialiseLogfont(&MapWindowLogFont, _T("Tahoma"),
-                      true, 18, 400, false);
-    InitialiseLogfont(&MapWindowBoldLogFont, _T("TahomaBD"),
-                      true, 16, 500, false);
-
-    SetGlobalEllipse(1.1f); // to be checked, TODO
-  } else if (ScreenSize == (ScreenSize_t)ss800x480) {// e.g. ipaq 31x {
-    switch (InfoBoxLayout::InfoBoxGeometry) {
-    case InfoBoxLayout::ibTop4Bottom4:
-    case InfoBoxLayout::ibBottom8:
-    case InfoBoxLayout::ibTop8:
-    case InfoBoxLayout::ibLeft4Right4:
-    case InfoBoxLayout::ibGNav: // standard landscape
-      InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
-                        true, 56, 600, false);
-      InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
-                        true, 20, 200, false);
-      SetGlobalEllipse(1.1f);
-      break;
-    case InfoBoxLayout::ibLeft8:
-    case InfoBoxLayout::ibRight8:
-      InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
-                        true, 64, 600, false);
-      InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
-                        true, 26, 600, false);
-      SetGlobalEllipse(1.32f);
-      break;
-    case InfoBoxLayout::ibSquare:
-      InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
-                        true, 66, 600, false);
-      InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
-                        true, 23, 400, false);
-      break;
-
-      // This is a failsafe with an impossible setting so that you know
-      // something is going very wrong.
-    default:
-      InitialiseLogfont(&InfoWindowLogFont, _T("TahomaBD"),
-                        true, 30, 600, false);
-      InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
-                        true, 10, 200, false);
-      break;
-    } // special geometry cases for 31x
-
-    InitialiseLogfont(&TitleSmallWindowLogFont, _T("Tahoma"),
-                      true, 16, 100, true);
-    InitialiseLogfont(&CDIWindowLogFont, _T("Tahoma"),
-                      true, 36, 400, false);
-    InitialiseLogfont(&MapLabelLogFont, _T("Tahoma"),
-                      true, 28, 100, true);
-    InitialiseLogfont(&StatisticsLogFont, _T("Tahoma"),
-                      true, 48, 400, false);
-    InitialiseLogfont(&MapWindowLogFont, _T("Tahoma"),
-                      true, 36, 400, false);
-    InitialiseLogfont(&MapWindowBoldLogFont, _T("TahomaBD"),
-                      true, 32, 600, false);
-  }
-}
-
-static void
 InitialiseFontsAltair()
 {
   if (!is_altair())
@@ -316,8 +186,7 @@ InitialiseLogFonts()
   int iFontHeight = (int)(FontHeight * 1.4);
 
   LOGFONT logfont;
-  InitialiseLogfont(&logfont,
-                    (!is_pna() ? _T("Tahoma") : _T("DejaVu Sans Condensed")),
+  InitialiseLogfont(&logfont, _T("Tahoma"),
                     true, iFontHeight, true, false);
   logfont.lfCharSet = ANSI_CHARSET;
 
@@ -385,7 +254,6 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
 
   InitialiseLogFonts();
 
-  InitialiseFontsPNA(appearance, rc);
   InitialiseFontsAltair();
 
   InitializeFont(&InfoWindowFont, InfoWindowLogFont);
