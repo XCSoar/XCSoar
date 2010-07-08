@@ -225,10 +225,9 @@ RotateScreen()
 void
 SetModelType()
 {
-  TCHAR szProfileInfoBoxModel[] = _T("AppInfoBoxModel");
   int Temp = 0;
 
-  Profile::Get(szProfileInfoBoxModel, Temp);
+  Profile::Get(szProfileAppInfoBoxModel, Temp);
   GlobalModelType = Temp;
 
   LogStartUp(_T("SetModelType: Type=%d"), GlobalModelType);
