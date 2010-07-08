@@ -65,7 +65,7 @@ class FlarmTrafficControl : public FlarmTrafficWindow {
 protected:
   bool enable_auto_zoom;
   unsigned zoom;
-  Font hfInfoValues, hfCallSign;
+  Font hfInfoValues, hfInfoLabels, hfCallSign;
 
 public:
   FlarmTrafficControl()
@@ -114,6 +114,7 @@ FlarmTrafficControl::on_create()
 {
   FlarmTrafficWindow::on_create();
 
+  hfInfoLabels.set(_T("Tahoma"), Layout::FastScale(10), true);
   hfInfoValues.set(_T("Tahoma"), Layout::FastScale(20));
   hfCallSign.set(_T("Tahoma"), Layout::FastScale(28), true);
 
@@ -266,7 +267,6 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
     canvas.set_text_color(hcStandard);
     break;
   }
-  canvas.select(hfInfoValues);
   canvas.background_transparent();
 
   // Climb Rate
@@ -276,20 +276,38 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
 #else
     Units::FormatUserVSpeed(traffic.ClimbRate, tmp, 20);
 #endif
+    canvas.select(hfInfoValues);
     sz = canvas.text_size(tmp);
-    canvas.text(rc.right - sz.cx, rc.top, tmp);
+    canvas.text(rc.right - sz.cx, rc.top + hfInfoLabels.get_height(), tmp);
+
+    canvas.select(hfInfoLabels);
+    sz = canvas.text_size(_T("Vario:"));
+    canvas.text(rc.right - sz.cx, rc.top, _T("Vario:"));
   }
 
   // Distance
   Units::FormatUserDistance(sqrt(traffic.RelativeEast * traffic.RelativeEast
       + traffic.RelativeNorth * traffic.RelativeNorth), tmp, 20);
+  canvas.select(hfInfoValues);
   sz = canvas.text_size(tmp);
   canvas.text(rc.left, rc.bottom - sz.cy, tmp);
 
+  canvas.select(hfInfoLabels);
+  canvas.text(rc.left,
+              rc.bottom - hfInfoValues.get_height() - hfInfoLabels.get_height(),
+              _T("Distance:"));
+
   // Relative Height
   Units::FormatUserArrival(traffic.RelativeAltitude, tmp, 20);
+  canvas.select(hfInfoValues);
   sz = canvas.text_size(tmp);
   canvas.text(rc.right - sz.cx, rc.bottom - sz.cy, tmp);
+
+  canvas.select(hfInfoLabels);
+  sz = canvas.text_size(_T("Rel. Alt.:"));
+  canvas.text(rc.right - sz.cx,
+              rc.bottom - hfInfoValues.get_height() - hfInfoLabels.get_height(),
+              _T("Rel. Alt.:"));
 
   // ID / Name
   if (traffic.HasName()) {
