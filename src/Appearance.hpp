@@ -112,7 +112,7 @@ typedef enum{
   apIbTab
 }InfoBoxBorderAppearance_t;
 
-#if defined(PNA) || defined(FIVV)
+#if defined(PNA)
 // VENTA-ADDON MODEL
 typedef enum{
 	apImPnaGeneric=0,
@@ -151,7 +151,7 @@ struct Appearance {
   GaugeVarioNeedleStyle_t GaugeVarioNeedleStyle;
   bool InfoBoxColors;
   InfoBoxBorderAppearance_t InfoBoxBorder;
-#if defined(PNA) || defined(FIVV)
+#if defined(PNA)
   InfoBoxModelAppearance_t InfoBoxModel; // VENTA-ADDON model change
 #endif
   bool InverseAircraft;

@@ -1761,18 +1761,6 @@ static void setVariables(void) {
     dfe->Set(iTmp);
     wp->RefreshDisplay();
   }
-#elif defined FIVV
-  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-// VENTA2- PC model
-    dfe->addEnumText(gettext(is_embedded()
-                             ? _T("PDA/normal") : _T("PC/normal")));
-    wp->set_visible(is_fivv());
-        dfe->Set(0);
-    wp->RefreshDisplay();
-  }
 #endif
 
   wp = (WndProperty*)wf->FindByName(_T("prpExtendedVisualGlide"));
@@ -2114,6 +2102,8 @@ PrepareConfigurationDialog()
     if (wp) {
       wp->hide();
     }
+  }
+  if (!is_pna()) {
     wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
     if (wp) {
       wp->hide();

@@ -69,7 +69,7 @@ struct Appearance Appearance = {
   gvnsLongNeedle,
   true,
   apIbBox,
-#if defined(PNA) || defined(FIVV)  // VENTA-ADDON Model type
+#if defined(PNA)
   apImPnaGeneric,
 #endif
   false,

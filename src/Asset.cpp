@@ -52,7 +52,7 @@ Copyright_License {
 TCHAR strAssetNumber[MAX_LOADSTRING] = TEXT(""); //4G17DW31L0HY");
 TCHAR strRegKey[MAX_LOADSTRING] = TEXT("");
 
-#if defined(PNA) || defined(FIVV)  // we call it model and not PNA for possible future usage even for custom PDAs
+#if defined(PNA) // we call it model and not PNA for possible future usage even for custom PDAs
 int	GlobalModelType = 0;	// see XCSoar.h for modeltype definitions
 float	GlobalEllipse = 1.1f;	// default ellipse type
 #endif

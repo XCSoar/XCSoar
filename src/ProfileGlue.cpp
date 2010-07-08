@@ -460,7 +460,7 @@ Profile::Use()
   // depending on infobox geometry and model type
   // I had to move here the font setting because I needed first to
   // know the screen geometry, in the registry!
-#if defined(PNA) || defined(FIVV)
+#if defined(PNA)
   // VENTA-ADDON Model change
   Temp = Appearance.InfoBoxModel;
   Get(szProfileAppInfoBoxModel, Temp);

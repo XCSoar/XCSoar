@@ -48,7 +48,7 @@ void ReadAssetNumber(void);
 
 // model info
 
-#if defined(PNA) || defined(FIVV)  // VENTA2- ADD GlobalEllipse
+#if defined(PNA)
 extern int GlobalModelType;
 extern float GlobalEllipse;
 
@@ -85,7 +85,7 @@ SetGlobalEllipse(float value)
     types over 100000	are reserved and should not be used
  */
 
-#if defined(PNA) || defined(FIVV)
+#if defined(PNA)
 #define MODELTYPE_UNKNOWN 0
 #define MODELTYPE_GENERIC 0
 
@@ -166,7 +166,7 @@ is_pna()
 static inline bool
 model_is_hp31x()
 {
-#if defined(PNA) || defined(FIVV)
+#if defined(PNA)
   return GlobalModelType == MODELTYPE_PNA_HP31X;
 #else
   return false;
@@ -180,7 +180,7 @@ model_is_hp31x()
 static inline bool
 model_is_medion_p5()
 {
-#if defined(PNA) || defined(FIVV)
+#if defined(PNA)
   return GlobalModelType == MODELTYPE_PNA_MEDION_P5;
 #else
   return false;

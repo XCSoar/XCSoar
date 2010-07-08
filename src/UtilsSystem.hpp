@@ -45,7 +45,7 @@ bool SetBacklight(); // VENTA4-ADDON for PNA
 bool SetSoundVolume(); // VENTA4-ADDON for PNA
 #endif
 
-#if defined(PNA) || defined(FIVV)  // VENTA-ADDON
+#if defined(PNA)
 void SetModelType();
 #endif
 
