@@ -60,7 +60,9 @@ int SCREENWIDTH = 640;
 int SCREENHEIGHT = 480;
 #endif
 
-long CheckFreeRam(void) {
+static long
+CheckFreeRam()
+{
 #ifdef WIN32
   MEMORYSTATUS memInfo;
   // Program memory
