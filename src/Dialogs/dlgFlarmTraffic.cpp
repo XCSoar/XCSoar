@@ -65,6 +65,7 @@ class FlarmTrafficControl : public FlarmTrafficWindow {
 protected:
   bool enable_auto_zoom;
   unsigned zoom;
+  Font hfInfoValues, hfCallSign;
 
 public:
   FlarmTrafficControl()
@@ -112,6 +113,9 @@ bool
 FlarmTrafficControl::on_create()
 {
   FlarmTrafficWindow::on_create();
+
+  hfInfoValues.set(_T("Tahoma"), Layout::FastScale(20));
+  hfCallSign.set(_T("Tahoma"), Layout::FastScale(28), 700);
 
   Profile::Get(szProfileFlarmSideData, side_display_type);
   Profile::Get(szProfileFlarmAutoZoom, enable_auto_zoom);
@@ -262,7 +266,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
     canvas.set_text_color(hcStandard);
     break;
   }
-  canvas.select(TitleSmallWindowFont);
+  canvas.select(hfInfoValues);
   canvas.background_transparent();
 
   // Climb Rate
@@ -289,7 +293,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
 
   // ID / Name
   if (traffic.HasName()) {
-    canvas.select(InfoWindowFont);
+    canvas.select(hfCallSign);
     if (!traffic.HasAlarm()) {
       if (settings.TeamFlarmTracking &&
           traffic.ID == settings.TeamFlarmIdTarget)
