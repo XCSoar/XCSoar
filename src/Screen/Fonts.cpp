@@ -155,21 +155,21 @@ InitialiseFontsAltair()
     return;
 
   InitialiseLogfont(&InfoWindowLogFont, _T("RasterGothicTwentyFourCond"),
-                    true, 24, 700, false);
+                    true, 24, true, false);
   InitialiseLogfont(&TitleWindowLogFont, _T("RasterGothicNineCond"),
-                    true, 10, 500, false);
+                    true, 10, false, false);
   InitialiseLogfont(&CDIWindowLogFont, _T("RasterGothicEighteenCond"),
-                    true, 19, 700, false);
+                    true, 19, true, false);
   InitialiseLogfont(&MapLabelLogFont, _T("RasterGothicTwelveCond"),
-                    true, 13, 500, false);
+                    true, 13, false, false);
   InitialiseLogfont(&StatisticsLogFont, _T("RasterGothicFourteenCond"),
-                    true, 15, 500, false);
+                    true, 15, false, false);
   InitialiseLogfont(&MapWindowLogFont, _T("RasterGothicFourteenCond"),
-                    true, 15, 500, false);
+                    true, 15, false, false);
   InitialiseLogfont(&MapWindowBoldLogFont, _T("RasterGothicFourteenCond"),
-                    true, 15, 700, false);
+                    true, 15, true, false);
   InitialiseLogfont(&TitleSmallWindowLogFont, _T("RasterGothicEighteenCond"),
-                    true, 19, 700, false);
+                    true, 19, true, false);
 }
 
 static void
