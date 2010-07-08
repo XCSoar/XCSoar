@@ -54,6 +54,14 @@ namespace Display {
   }
 #endif
 
+#ifdef _WIN32_WCE
+  bool SetBacklight();
+#else
+  static inline bool SetBacklight() {
+    return false;
+  }
+#endif
+
   /**
    * Change the orientation of the screen.
    */
