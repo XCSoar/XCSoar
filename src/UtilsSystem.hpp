@@ -44,11 +44,6 @@ Copyright_License {
 bool SetBacklight(); // VENTA4-ADDON for PNA
 #endif
 
-#ifdef _WIN32_WCE
-short
-InstallFonts();
-#endif
-
 void ParseCommandLine(LPCTSTR CommandLine);
 void MyCompactHeaps();
 unsigned long FindFreeSpace(const TCHAR *path);

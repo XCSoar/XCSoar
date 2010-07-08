@@ -44,10 +44,6 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Profile.hpp"
 
-#ifdef _WIN32_WCE
-#include <shlobj.h>
-#endif
-
 #include <tchar.h>
 
 #ifdef HAVE_POSIX
@@ -215,63 +211,6 @@ SetBacklight()
 }
 
 #endif
-
-#ifdef _WIN32_WCE
-/*
- * Get the localpath, enter XCSoarData/Config, see if there are fonts to copy,
- * check that they have not already been copied in \Windows\Fonts,
- * and eventually copy everything in place.
- *
- * Returns: 0 if OK .
- * 1 - n other errors not really needed to handle. See below
- *
- * These are currently fonts used by PDA:
- *
- * DejaVuSansCondensed2.ttf
- * DejaVuSansCondensed-Bold2.ttf
- * DejaVuSansCondensed-BoldOblique2.ttf
- * DejaVuSansCondensed-Oblique2.ttf
- */
-short
-InstallFonts()
-{
-  TCHAR srcdir[MAX_PATH];
-  TCHAR dstdir[MAX_PATH];
-  TCHAR srcfile[MAX_PATH];
-  TCHAR dstfile[MAX_PATH];
-
-  LocalPath(srcdir, _T("Fonts"));
-  if (GetFileAttributes(srcdir) != FILE_ATTRIBUTE_DIRECTORY)
-    return 1;
-
-  if (!SHGetSpecialFolderPath(NULL, dstdir, CSIDL_FONTS, true) ||
-      GetFileAttributes(dstdir) != FILE_ATTRIBUTE_DIRECTORY)
-    return 2;
-
-  _stprintf(srcfile,_T("%s\\DejaVuSansCondensed2.ttf"), srcdir);
-  _stprintf(dstfile,_T("%s\\DejaVuSansCondensed2.ttf"), dstdir);
-  if (GetFileAttributes(dstfile) != 0xffffffff)
-    return 4;
-  if (!CopyFile(srcfile, dstfile, true))
-    return 5;
-
-  // From now on we attempt to copy without overwriting
-  _stprintf(srcfile,_T("%s\\DejaVuSansCondensed-Bold2.ttf"), srcdir);
-  _stprintf(dstfile,_T("%s\\DejaVuSansCondensed-Bold2.ttf"), dstdir);
-  CopyFile(srcfile, dstfile, true);
-
-  _stprintf(srcfile,_T("%s\\DejaVuSansCondensed-BoldOblique2.ttf"), srcdir);
-  _stprintf(dstfile,_T("%s\\DejaVuSansCondensed-BoldOblique2.ttf"), dstdir);
-  CopyFile(srcfile, dstfile, true);
-
-  _stprintf(srcfile,_T("%s\\DejaVuSansCondensed-Oblique2.ttf"), srcdir);
-  _stprintf(dstfile,_T("%s\\DejaVuSansCondensed-Oblique2.ttf"), dstdir);
-  CopyFile(srcfile, dstfile, true);
-
-  return 0;
-}
-#endif
-
 
 /**
  * Reads and parses arguments/options from the command line
