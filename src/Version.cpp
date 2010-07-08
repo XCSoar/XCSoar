@@ -47,8 +47,6 @@ Copyright_License {
 
 #ifdef GNAV
   #define TARGET "Altair"
-#elif defined(PNA)
-  #define TARGET "PNA"
 #elif defined(WINDOWSPC)
   #define TARGET "PC"
 #elif !defined(WIN32)
