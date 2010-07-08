@@ -2631,11 +2631,8 @@ void dlgConfigurationShowModal(void)
   // VENTA-ADDON MODEL CHANGE
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
   if (wp) {
-    if (Appearance.InfoBoxModel != (InfoBoxModelAppearance_t)
-        (wp->GetDataField()->GetAsInteger())) {
-      Appearance.InfoBoxModel = (InfoBoxModelAppearance_t)
-        (wp->GetDataField()->GetAsInteger());
-      GlobalModelType = (ModelType)Appearance.InfoBoxModel;
+    if (GlobalModelType != (ModelType)wp->GetDataField()->GetAsInteger()) {
+      GlobalModelType = (ModelType)wp->GetDataField()->GetAsInteger();
       Profile::Set(szProfileAppInfoBoxModel,
                     GlobalModelType);
       changed = true;

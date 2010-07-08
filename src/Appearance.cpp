@@ -69,9 +69,6 @@ struct Appearance Appearance = {
   gvnsLongNeedle,
   true,
   apIbBox,
-#if defined(PNA)
-  apImPnaGeneric,
-#endif
   false,
   true,
   false,

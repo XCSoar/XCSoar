@@ -456,17 +456,6 @@ Profile::Use()
   Get(szProfileAppInfoBoxBorder, Temp);
   Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)Temp;
 
-  // VENTA2-ADDON Geometry change and PNA custom font settings
-  // depending on infobox geometry and model type
-  // I had to move here the font setting because I needed first to
-  // know the screen geometry, in the registry!
-#if defined(PNA)
-  // VENTA-ADDON Model change
-  Temp = Appearance.InfoBoxModel;
-  Get(szProfileAppInfoBoxModel, Temp);
-  Appearance.InfoBoxModel = (InfoBoxModelAppearance_t)Temp;
-#endif
-
   Temp = Appearance.StateMessageAlign;
   Get(szProfileAppStatusMessageAlignment, Temp);
   Appearance.StateMessageAlign = (StateMessageAlign_t)Temp;
