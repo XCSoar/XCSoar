@@ -1701,23 +1701,21 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  if (is_pna() || is_fivv()) {
-    wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxGeom"));
-    if (wp) {
-      DataFieldEnum* dfe;
-      dfe = (DataFieldEnum*)wp->GetDataField();
+  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxGeom"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
 
-      dfe->addEnumText(gettext(_T("8 Top + Bottom (Portrait)"))); // 0
-      dfe->addEnumText(gettext(_T("8 Top (Portrait)")));  // 1
-      dfe->addEnumText(gettext(_T("8 Bottom (Portrait)")));  // 2
-      dfe->addEnumText(gettext(_T("8 Left + Right (Landscape)")));  // 3
-      dfe->addEnumText(gettext(_T("8 Left (Landscape)")));  // 4
-      dfe->addEnumText(gettext(_T("8 Right (Landscape)"))); // 5
-      dfe->addEnumText(gettext(_T("9 Right + Vario (Landscape)")));  // 6
-      dfe->addEnumText(gettext(_T("5 Right (Square)"))); // 7
-      dfe->Set(InfoBoxLayout::InfoBoxGeometry);
-      wp->RefreshDisplay();
-    }
+    dfe->addEnumText(gettext(_T("8 Top + Bottom (Portrait)"))); // 0
+    dfe->addEnumText(gettext(_T("8 Top (Portrait)")));  // 1
+    dfe->addEnumText(gettext(_T("8 Bottom (Portrait)")));  // 2
+    dfe->addEnumText(gettext(_T("8 Left + Right (Landscape)")));  // 3
+    dfe->addEnumText(gettext(_T("8 Left (Landscape)")));  // 4
+    dfe->addEnumText(gettext(_T("8 Right (Landscape)"))); // 5
+    dfe->addEnumText(gettext(_T("9 Right + Vario (Landscape)")));  // 6
+    dfe->addEnumText(gettext(_T("5 Right (Square)"))); // 7
+    dfe->Set(InfoBoxLayout::InfoBoxGeometry);
+    wp->RefreshDisplay();
   }
 
 #ifdef PNA
@@ -2061,13 +2059,6 @@ PrepareConfigurationDialog()
 
   wf->FilterAdvanced(XCSoarInterface::UserLevel>0);
 
-  if (!is_pna() && !is_fivv()) {
-    // JMW we don't want these for non-PDA platforms yet
-    wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxGeom"));
-    if (wp) {
-      wp->hide();
-    }
-  }
   if (!is_pna()) {
     wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
     if (wp) {
@@ -2605,8 +2596,6 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-
-#if defined(PNA) || defined(FIVV)
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxGeom"));
   if (wp) {
     if (InfoBoxLayout::InfoBoxGeometry != (unsigned)wp->GetDataField()->GetAsInteger()) {
@@ -2616,7 +2605,6 @@ void dlgConfigurationShowModal(void)
       requirerestart = true;
     }
   }
-#endif
 
 #if defined(PNA)
   // VENTA-ADDON MODEL CHANGE
