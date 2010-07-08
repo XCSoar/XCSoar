@@ -304,7 +304,7 @@ Units::SetCoordinateFormat(CoordinateFormats_t NewFormat)
 }
 
 Units_t
-Units::GetUserDistanceUnit(void)
+Units::GetUserDistanceUnit()
 {
   return DistanceUnit;
 }
@@ -319,7 +319,7 @@ Units::SetUserDistanceUnit(Units_t NewUnit)
 }
 
 Units_t
-Units::GetUserAltitudeUnit(void)
+Units::GetUserAltitudeUnit()
 {
   return AltitudeUnit;
 }
@@ -334,7 +334,7 @@ Units::SetUserAltitudeUnit(Units_t NewUnit)
 }
 
 Units_t
-Units::GetUserSpeedUnit(void)
+Units::GetUserSpeedUnit()
 {
   return SpeedUnit;
 }
@@ -349,7 +349,7 @@ Units::SetUserSpeedUnit(Units_t NewUnit)
 }
 
 Units_t
-Units::GetUserTaskSpeedUnit(void)
+Units::GetUserTaskSpeedUnit()
 {
   return TaskSpeedUnit;
 }
@@ -364,7 +364,7 @@ Units::SetUserTaskSpeedUnit(Units_t NewUnit)
 }
 
 Units_t
-Units::GetUserVerticalSpeedUnit(void)
+Units::GetUserVerticalSpeedUnit()
 {
   return VerticalSpeedUnit;
 }
@@ -379,7 +379,7 @@ Units::SetUserVerticalSpeedUnit(Units_t NewUnit)
 }
 
 Units_t
-Units::GetUserWindSpeedUnit(void)
+Units::GetUserWindSpeedUnit()
 {
   return WindSpeedUnit;
 }
