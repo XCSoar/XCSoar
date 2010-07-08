@@ -289,21 +289,12 @@ InputEvents::eventScreenModes(const TCHAR *misc)
     InfoBoxLayout::fullscreen = !InfoBoxLayout::fullscreen;
   } else {
     if (SettingsMap().EnableAuxiliaryInfo) {
-      if (SettingsComputer().EnableSoundModes)
-        PlayResource(TEXT("IDR_WAV_CLICK"));
-
       main_window.map.SetFullScreen(!main_window.map.GetFullScreen());
       SetSettingsMap().EnableAuxiliaryInfo = false;
     } else {
       if (main_window.map.GetFullScreen()) {
         main_window.map.SetFullScreen(false);
-
-        if (is_pna() && SettingsComputer().EnableSoundModes)
-          PlayResource(TEXT("IDR_WAV_BELL"));
       } else {
-        if (is_pna() && SettingsComputer().EnableSoundModes)
-          PlayResource(TEXT("IDR_WAV_CLICK"));
-
         SetSettingsMap().EnableAuxiliaryInfo = true;
       }
     }
