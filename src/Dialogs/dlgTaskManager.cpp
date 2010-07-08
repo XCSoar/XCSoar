@@ -172,7 +172,6 @@ dlgTaskManagerShowModal(SingleWindow &parent)
 
   if (!wf)
     return;
-  assert(wf != NULL);
 
   ordered_task = task_ui.task_clone();
   task_modified = false;
