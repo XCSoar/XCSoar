@@ -225,10 +225,10 @@ RotateScreen()
 void
 SetModelType()
 {
-  int Temp = 0;
+  int Temp = (int)MODELTYPE_PNA_PNA;
 
   Profile::Get(szProfileAppInfoBoxModel, Temp);
-  GlobalModelType = Temp;
+  GlobalModelType = (ModelType)Temp;
 
   LogStartUp(_T("SetModelType: Type=%d"), GlobalModelType);
 }

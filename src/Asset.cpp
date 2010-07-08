@@ -53,7 +53,7 @@ TCHAR strAssetNumber[MAX_LOADSTRING] = TEXT(""); //4G17DW31L0HY");
 TCHAR strRegKey[MAX_LOADSTRING] = TEXT("");
 
 #if defined(PNA) // we call it model and not PNA for possible future usage even for custom PDAs
-int	GlobalModelType = 0;	// see XCSoar.h for modeltype definitions
+ModelType GlobalModelType = MODELTYPE_PNA_PNA;
 float	GlobalEllipse = 1.1f;	// default ellipse type
 #endif
 

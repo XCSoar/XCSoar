@@ -41,7 +41,7 @@ Copyright_License {
 
 #if defined(PNA)
 
-int GlobalModelType = MODELTYPE_PNA_PNA;
+ModelType GlobalModelType = MODELTYPE_PNA_PNA;
 float GlobalEllipse = 1.1f;
 
 #endif

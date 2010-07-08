@@ -1732,7 +1732,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(_T("MIO")));
     dfe->addEnumText(gettext(_T("Nokia500"))); // VENTA3
     dfe->addEnumText(gettext(_T("PN6000")));
-    dfe->Set(GlobalModelType);
+    dfe->Set((int)GlobalModelType);
     wp->RefreshDisplay();
   }
 #endif

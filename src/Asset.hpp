@@ -59,7 +59,7 @@ enum ModelType {
   MODELTYPE_PNA_PN6000,
 };
 
-extern int GlobalModelType;
+extern ModelType GlobalModelType;
 extern float GlobalEllipse;
 
 static inline void
