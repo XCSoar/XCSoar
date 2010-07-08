@@ -42,7 +42,6 @@ Copyright_License {
 
 #ifdef PNA
 bool SetBacklight(); // VENTA4-ADDON for PNA
-bool SetSoundVolume(); // VENTA4-ADDON for PNA
 #endif
 
 #if defined(PNA)

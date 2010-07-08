@@ -44,11 +44,6 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Profile.hpp"
 
-#ifdef PNA
-#include "SettingsUser.hpp"
-#include <mmsystem.h>
-#endif
-
 #ifdef _WIN32_WCE
 #include <shlobj.h>
 #endif
@@ -297,47 +292,6 @@ SetBacklight()
     CloseHandle(BLEvent);
 
   return doevent;
-}
-
-bool
-SetSoundVolume()
-{
-  if (CommonInterface::EnableAutoSoundVolume == false)
-    return false;
-
-/*
- * This does not work, dunno why
- *
-  HKEY    hKey;
-  DWORD   Disp=0;
-  HRESULT hRes;
-
-  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, _T("ControlPanel\\Volume"), 0,  0, &hKey);
-  if (hRes != ERROR_SUCCESS) return false;
-  switch (GlobalModelType)
-  {
-	case MODELTYPE_PNA_HP31X:
-		Disp=0xFFFFFFFF; // max volume
-		hRes = RegSetValueEx(hKey, _T("Volume"),0,REG_DWORD, (LPBYTE)&Disp, sizeof(DWORD));
-		Disp=65538;
-		hRes = RegSetValueEx(hKey, _T("Screen"),0,REG_DWORD, (LPBYTE)&Disp, sizeof(DWORD));
-		Disp=0;
-		hRes = RegSetValueEx(hKey, _T("Key"),0,REG_DWORD, (LPBYTE)&Disp, sizeof(DWORD));
-		Disp=7;
-		hRes = RegSetValueEx(hKey, _T("Mute"),0,REG_DWORD, (LPBYTE)&Disp, sizeof(DWORD));
-		SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0xF2, 0);
-	        RegCloseKey(hKey);
-		break;
-
-	default:
-		break;
-  }
- */
-
-  // should we enter critical section ?  probably...
-  waveOutSetVolume(0, 0xffff); // this is working for all platforms
-
-  return true;
 }
 
 #endif
