@@ -92,7 +92,7 @@ IsNullLogFont(LOGFONT logfont)
 
 static void
 InitialiseLogfont(LOGFONT* font, const TCHAR* facename, bool variable_pitch,
-                  int height, int bold, bool italic)
+                  int height, bool bold, bool italic)
 {
 #ifndef ENABLE_SDL
   memset((char *)font, 0, sizeof(LOGFONT));
@@ -101,19 +101,9 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, bool variable_pitch,
   font->lfPitchAndFamily = (variable_pitch ? VARIABLE_PITCH : FIXED_PITCH)
                           | FF_DONTCARE;
   font->lfHeight = (long)height;
-  font->lfWeight = (long)bold;
+  font->lfWeight = (long)(bold ? FW_BOLD : FW_MEDIUM);
   font->lfItalic = italic;
   font->lfQuality = ANTIALIASED_QUALITY;
-#endif /* !ENABLE_SDL */
-}
-
-static void
-InitialiseLogfont(LOGFONT* font, const TCHAR* facename, bool variable_pitch,
-                  int height, bool bold, bool italic)
-{
-#ifndef ENABLE_SDL
-  InitialiseLogfont(font, facename, variable_pitch, height,
-                    (bold ? FW_BOLD : FW_MEDIUM), italic);
 #endif /* !ENABLE_SDL */
 }
 
