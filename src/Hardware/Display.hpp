@@ -53,6 +53,11 @@ namespace Display {
     return false;
   }
 #endif
+
+  /**
+   * Change the orientation of the screen.
+   */
+  bool Rotate();
 }
 
 #endif

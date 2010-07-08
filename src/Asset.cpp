@@ -43,6 +43,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "Sizes.h"
+#include "Hardware/Display.hpp"
 
 #if defined(WIN32) && !(defined(__GNUC__) && defined(WINDOWSPC))
 #include "uniqueid.h"
@@ -296,7 +297,7 @@ InitAsset()
   if (is_altair()) {
     #ifdef FORCEPORTRAIT
     // JMW testing only for portrait mode of Altair
-    RotateScreen();
+    Display::Rotate();
     #endif
   }
 

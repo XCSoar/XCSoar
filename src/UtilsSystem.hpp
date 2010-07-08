@@ -59,8 +59,6 @@ void MyCompactHeaps();
 unsigned long FindFreeSpace(const TCHAR *path);
 void CreateDirectoryIfAbsent(const TCHAR *filename);
 
-bool RotateScreen(void);
-
 void StartupLogFreeRamAndStorage();
 
 WPARAM TranscodeKey(WPARAM wParam);

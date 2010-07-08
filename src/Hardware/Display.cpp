@@ -38,11 +38,13 @@ Copyright_License {
 
 #include "Display.hpp"
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 #ifdef HAVE_HARDWARE_BLANK
 
 #include "Hardware/VideoPower.h"
-
-#include <windows.h>
 
 bool
 Display::BlankSupported()
@@ -73,3 +75,20 @@ Display::Blank(bool blank)
 }
 
 #endif /* HAVE_HARDWARE_BLANK */
+
+bool
+Display::Rotate()
+{
+#ifdef DM_DISPLAYORIENTATION
+  DEVMODE DeviceMode;
+  memset(&DeviceMode, 0, sizeof(DeviceMode));
+  DeviceMode.dmSize = sizeof(DeviceMode);
+  DeviceMode.dmFields = DM_DISPLAYORIENTATION;
+  DeviceMode.dmDisplayOrientation = DMDO_90;
+
+  return ChangeDisplaySettingsEx(NULL, &DeviceMode, NULL,
+                                 CDS_RESET, NULL) == DISP_CHANGE_SUCCESSFUL;
+#else
+  return false;
+#endif
+}
