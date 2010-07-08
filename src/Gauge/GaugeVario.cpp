@@ -439,10 +439,6 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average, bool clear)
   dirty = true;
   bool colorfull = false;
 
-#ifdef FIVV
-  colorfull = Appearance.InfoBoxColors;
-#endif
-
   if (clear || !colorfull) {
     // legacy behaviour
     if (clear ^ Appearance.InverseInfoBox) {

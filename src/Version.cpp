@@ -55,11 +55,7 @@ Copyright_License {
   #define TARGET "PPC"
 #endif
 
-#ifdef FIVV
-  #define VERSION_SUFFIX "F"
-#else
-  #define VERSION_SUFFIX ""
-#endif
+#define VERSION_SUFFIX ""
 
 #define GIT_SUFFIX "~git#" GIT_COMMIT_ID
 

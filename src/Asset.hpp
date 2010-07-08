@@ -143,21 +143,6 @@ is_altair()
 }
 
 /**
- * Returns whether the application is compiled in "FIVV" mode
- * (enables old experimental code)
- * @return True if compiled in "FIVV" mode, False otherwise
- */
-static inline bool
-is_fivv()
-{
-#if defined(FIVV)
-  return true;
-#else
-  return false;
-#endif
-}
-
-/**
  * Flag to activate extra clipping for some PNAs.
  * @return True if extra clipping needs to be done, False otherwise
  */
