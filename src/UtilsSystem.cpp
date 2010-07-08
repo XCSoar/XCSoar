@@ -150,7 +150,7 @@ void CreateDirectoryIfAbsent(const TCHAR *filename) {
 #endif /* !HAVE_POSIX */
 }
 
-#ifdef PNA
+#ifdef _WIN32_WCE
 /**
  * SetBacklight for PNA devices. There is no standard way of managing backlight on CE,
  * and every device may have different value names and settings. Microsoft did not set
@@ -398,7 +398,6 @@ StartupLogFreeRamAndStorage()
 WPARAM
 TranscodeKey(WPARAM wParam)
 {
-#ifdef PNA
   // VENTA-ADDON HARDWARE KEYS TRANSCODING
 
   if (GlobalModelType == MODELTYPE_PNA_HP31X) {
@@ -466,7 +465,6 @@ TranscodeKey(WPARAM wParam)
       break;
     }
   }
-#endif
 
   return wParam;
 }

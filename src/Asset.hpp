@@ -48,8 +48,6 @@ void ReadAssetNumber(void);
 
 // model info
 
-#if defined(PNA)
-
 enum ModelType {
   MODELTYPE_PNA_PNA,
   MODELTYPE_PNA_HP31X,
@@ -58,6 +56,8 @@ enum ModelType {
   MODELTYPE_PNA_NOKIA_500,
   MODELTYPE_PNA_PN6000,
 };
+
+#if defined(PNA)
 
 extern ModelType GlobalModelType;
 extern float GlobalEllipse;
@@ -70,6 +70,7 @@ SetGlobalEllipse(float value)
 
 #else
 
+#define GlobalModelType MODELTYPE_PNA_PNA
 #define GlobalEllipse 1.1f
 
 static inline void
@@ -128,11 +129,7 @@ is_pna()
 static inline bool
 model_is_hp31x()
 {
-#if defined(PNA)
   return GlobalModelType == MODELTYPE_PNA_HP31X;
-#else
-  return false;
-#endif
 }
 
 /**
@@ -142,11 +139,7 @@ model_is_hp31x()
 static inline bool
 model_is_medion_p5()
 {
-#if defined(PNA)
   return GlobalModelType == MODELTYPE_PNA_MEDION_P5;
-#else
-  return false;
-#endif
 }
 
 /**

@@ -40,7 +40,7 @@ Copyright_License {
 
 #include <windef.h>
 
-#ifdef PNA
+#ifdef _WIN32_WCE
 bool SetBacklight(); // VENTA4-ADDON for PNA
 #endif
 
