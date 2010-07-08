@@ -165,7 +165,7 @@ InitialiseFontsAltair()
 static void
 InitialiseLogFonts()
 {
-  int FontHeight = (Layout::square ? Layout::Scale(26) : Layout::Scale(35));
+  int FontHeight = Layout::Scale(Layout::square ? 26 : 35);
 
 #ifdef WINDOWSPC
   FontHeight = (int)(FontHeight / 1.35);
