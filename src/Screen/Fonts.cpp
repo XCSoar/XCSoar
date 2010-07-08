@@ -92,7 +92,8 @@ IsNullLogFont(LOGFONT logfont)
 
 static void
 InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
-                  bool bold, bool italic, bool variable_pitch)
+                  bool bold = false, bool italic = false,
+                  bool variable_pitch = true)
 {
 #ifndef ENABLE_SDL
   memset((char *)font, 0, sizeof(LOGFONT));
@@ -145,21 +146,21 @@ InitialiseFontsAltair()
     return;
 
   InitialiseLogfont(&InfoWindowLogFont, _T("RasterGothicTwentyFourCond"),
-                    24, true, false, true);
+                    24, true);
   InitialiseLogfont(&TitleWindowLogFont, _T("RasterGothicNineCond"),
-                    10, false, false, true);
+                    10);
   InitialiseLogfont(&CDIWindowLogFont, _T("RasterGothicEighteenCond"),
-                    19, true, false, true);
+                    19, true);
   InitialiseLogfont(&MapLabelLogFont, _T("RasterGothicTwelveCond"),
-                    13, false, false, true);
+                    13);
   InitialiseLogfont(&StatisticsLogFont, _T("RasterGothicFourteenCond"),
-                    15, false, false, true);
+                    15);
   InitialiseLogfont(&MapWindowLogFont, _T("RasterGothicFourteenCond"),
-                    15, false, false, true);
+                    15);
   InitialiseLogfont(&MapWindowBoldLogFont, _T("RasterGothicFourteenCond"),
-                    15, true, false, true);
+                    15, true);
   InitialiseLogfont(&InfoWindowSmallLogFont, _T("RasterGothicEighteenCond"),
-                    19, true, false, true);
+                    19, true);
 }
 
 static void
@@ -209,7 +210,7 @@ InitialiseLogFonts()
 #endif /* !ENABLE_SDL */
 
   InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
-                    (int)(FontHeight * 0.333), true, false, true);
+                    (int)(FontHeight * 0.333), true);
 
   // new font for CDI Scale
   InitialiseLogfont(&CDIWindowLogFont, _T("Tahoma"),
@@ -217,22 +218,22 @@ InitialiseLogFonts()
 
   // new font for map labels
   InitialiseLogfont(&MapLabelLogFont, _T("Tahoma"),
-                    (int)(FontHeight * 0.39), false, true, true);
+                    (int)(FontHeight * 0.39), false, true);
 
   // Font for map other text
   InitialiseLogfont(&StatisticsLogFont, _T("Tahoma"),
-                    (int)(FontHeight * 0.7), false, false, true);
+                    (int)(FontHeight * 0.7));
 
   // new font for map labels
   InitialiseLogfont(&MapWindowLogFont, _T("Tahoma"),
-                    (int)(FontHeight * 0.507), false, false, true);
+                    (int)(FontHeight * 0.507));
 
   // Font for map bold text
   InitialiseLogfont(&MapWindowBoldLogFont, _T("Tahoma"),
-                    (int)(FontHeight * 0.507), true, false, true);
+                    (int)(FontHeight * 0.507), true);
 
   InitialiseLogfont(&InfoWindowSmallLogFont, _T("Tahoma"),
-                    Layout::Scale(20), false, false, true);
+                    Layout::Scale(20));
 }
 
 void
