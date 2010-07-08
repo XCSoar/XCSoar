@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Version.hpp"
-#include "Language.hpp"
 
 #ifndef GIT_COMMIT_ID
 #define GIT_COMMIT_ID
