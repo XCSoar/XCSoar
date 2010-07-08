@@ -115,7 +115,7 @@ FlarmTrafficControl::on_create()
   FlarmTrafficWindow::on_create();
 
   hfInfoValues.set(_T("Tahoma"), Layout::FastScale(20));
-  hfCallSign.set(_T("Tahoma"), Layout::FastScale(28), 700);
+  hfCallSign.set(_T("Tahoma"), Layout::FastScale(28), true);
 
   Profile::Get(szProfileFlarmSideData, side_display_type);
   Profile::Get(szProfileFlarmAutoZoom, enable_auto_zoom);

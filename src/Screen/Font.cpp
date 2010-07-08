@@ -41,7 +41,7 @@ Copyright_License {
 #ifdef ENABLE_SDL
 
 bool
-Font::set(const char *file, int ptsize, int bold, bool italic,
+Font::set(const char *file, int ptsize, bool bold, bool italic,
           bool variable_pitch)
 {
   (void)variable_pitch;
@@ -53,7 +53,7 @@ Font::set(const char *file, int ptsize, int bold, bool italic,
     return false;
 
   int style = TTF_STYLE_NORMAL;
-  if (bold >= 600)
+  if (bold)
     style |= TTF_STYLE_BOLD;
   if (italic)
     style |= TTF_STYLE_ITALIC;
@@ -91,7 +91,7 @@ Font::reset()
 #include "Asset.hpp"
 
 bool
-Font::set(const TCHAR* facename, int height, int bold, bool italic,
+Font::set(const TCHAR* facename, int height, bool bold, bool italic,
           bool variable_pitch)
 {
   LOGFONT font;
@@ -101,7 +101,7 @@ Font::set(const TCHAR* facename, int height, int bold, bool italic,
   font.lfPitchAndFamily = (variable_pitch ? VARIABLE_PITCH : FIXED_PITCH)
                           | FF_DONTCARE;
   font.lfHeight = (long)height;
-  font.lfWeight = (long)bold;
+  font.lfWeight = (long)(bold ? FW_BOLD : FW_MEDIUM);
   font.lfItalic = italic;
   font.lfQuality = ANTIALIASED_QUALITY;
   return Font::set(&font);

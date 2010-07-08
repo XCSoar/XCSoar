@@ -99,9 +99,9 @@ FlarmTrafficWindow::on_create()
   hfNoTraffic.set(_T("Tahoma"), Layout::FastScale(24));
   hfLabels.set(_T("Tahoma"), Layout::FastScale(14));
   if (small)
-    hfSideInfo.set(_T("Tahoma"), Layout::FastScale(12), 700);
+    hfSideInfo.set(_T("Tahoma"), Layout::FastScale(12), true);
   else
-    hfSideInfo.set(_T("Tahoma"), Layout::FastScale(18), 700);
+    hfSideInfo.set(_T("Tahoma"), Layout::FastScale(18), true);
 
   return true;
 }
