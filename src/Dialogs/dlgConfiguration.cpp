@@ -1732,33 +1732,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(_T("MIO")));
     dfe->addEnumText(gettext(_T("Nokia500"))); // VENTA3
     dfe->addEnumText(gettext(_T("PN6000")));
-
-    int iTmp;
-    switch (GlobalModelType) {
-    case MODELTYPE_PNA_PNA:
-      iTmp=(InfoBoxModelAppearance_t)apImPnaGeneric;
-      break;
-    case MODELTYPE_PNA_HP31X:
-      iTmp=(InfoBoxModelAppearance_t)apImPnaHp31x;
-      break;
-    case MODELTYPE_PNA_PN6000:
-      iTmp=(InfoBoxModelAppearance_t)apImPnaPn6000;
-      break;
-    case MODELTYPE_PNA_MIO:
-      iTmp=(InfoBoxModelAppearance_t)apImPnaMio;
-      break;
-    case MODELTYPE_PNA_NOKIA_500:
-      iTmp=(InfoBoxModelAppearance_t)apImPnaNokia500;
-      break;
-    case MODELTYPE_PNA_MEDION_P5:
-      iTmp=(InfoBoxModelAppearance_t)apImPnaMedionP5;
-      break;
-    default:
-      iTmp=(InfoBoxModelAppearance_t)apImPnaGeneric;
-      break;
-    }
-
-    dfe->Set(iTmp);
+    dfe->Set(GlobalModelType);
     wp->RefreshDisplay();
   }
 #endif
@@ -2661,31 +2635,7 @@ void dlgConfigurationShowModal(void)
         (wp->GetDataField()->GetAsInteger())) {
       Appearance.InfoBoxModel = (InfoBoxModelAppearance_t)
         (wp->GetDataField()->GetAsInteger());
-
-      switch (Appearance.InfoBoxModel) {
-      case apImPnaGeneric:
-        GlobalModelType = MODELTYPE_PNA_PNA;
-        break;
-      case apImPnaHp31x:
-        GlobalModelType = MODELTYPE_PNA_HP31X;
-        break;
-      case apImPnaPn6000:
-        GlobalModelType = MODELTYPE_PNA_PN6000;
-        break;
-      case apImPnaMio:
-        GlobalModelType = MODELTYPE_PNA_MIO;
-        break;
-      case apImPnaNokia500:
-        GlobalModelType = MODELTYPE_PNA_NOKIA_500;
-        break;
-      case apImPnaMedionP5:
-        GlobalModelType = MODELTYPE_PNA_MEDION_P5;
-        break;
-      default:
-        GlobalModelType = MODELTYPE_UNKNOWN; // Can't happen, troubles ..
-        break;
-
-      }
+      GlobalModelType = (ModelType)Appearance.InfoBoxModel;
       Profile::Set(szProfileAppInfoBoxModel,
                     GlobalModelType);
       changed = true;
