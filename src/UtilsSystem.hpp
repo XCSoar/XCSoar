@@ -49,6 +49,11 @@ bool SetSoundVolume(); // VENTA4-ADDON for PNA
 void SetModelType();
 #endif
 
+#if defined(PNA) || defined(FIVV)
+short
+InstallFonts();
+#endif
+
 void ParseCommandLine(LPCTSTR CommandLine);
 long CheckFreeRam(void);
 void MemCheckPoint();
