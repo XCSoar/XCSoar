@@ -38,7 +38,6 @@
 
 #include "FlarmTrafficWindow.hpp"
 #include "FLARM/Traffic.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Units.hpp"
 #include "Math/Screen.hpp"
@@ -96,6 +95,13 @@ FlarmTrafficWindow::on_create()
 
   hpPlane.set(width, hcRadar);
   hpRadar.set(1, hcRadar);
+
+  hfNoTraffic.set(_T("Tahoma"), Layout::FastScale(24));
+  hfLabels.set(_T("Tahoma"), Layout::FastScale(14));
+  if (small)
+    hfSideInfo.set(_T("Tahoma"), Layout::FastScale(12), 700);
+  else
+    hfSideInfo.set(_T("Tahoma"), Layout::FastScale(18), 700);
 
   return true;
 }
@@ -234,7 +240,7 @@ FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const
     return;
 
   static const TCHAR str[] = _T("No Traffic");
-  canvas.select(StatisticsFont);
+  canvas.select(hfNoTraffic);
   SIZE ts = canvas.text_size(str);
   canvas.set_text_color(hcStandard);
   canvas.text(radar_mid.x - (ts.cx / 2), radar_mid.y - (radius / 2), str);
@@ -374,7 +380,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
     // Select font
     canvas.background_transparent();
-    canvas.select(TitleWindowFont);
+    canvas.select(hfSideInfo);
     canvas.set_text_color(Color::BLACK);
 
     // Calculate size of the output string
@@ -437,7 +443,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   // Select font
   canvas.background_transparent();
-  canvas.select(MapWindowBoldFont);
+  canvas.select(hfSideInfo);
 
   // Format string
   TCHAR tmp[10];
@@ -545,7 +551,7 @@ FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
   canvas.select(hpRadar);
   canvas.select(hbRadar);
   canvas.background_transparent();
-  canvas.select(MapWindowFont);
+  canvas.select(hfLabels);
 
   SIZE s = canvas.text_size(_T("N"));
   canvas.circle(radar_mid.x + iround(x * radius),
@@ -575,7 +581,7 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
     return;
 
   // Paint zoom strings
-  canvas.select(MapWindowFont);
+  canvas.select(hfLabels);
   canvas.background_opaque();
 
   TCHAR distance_string[10];

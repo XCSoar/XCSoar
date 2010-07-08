@@ -72,6 +72,8 @@ protected:
 
   Pen hpPlane, hpRadar;
 
+  Font hfLabels, hfSideInfo, hfNoTraffic;
+
   /**
    * The distance of the biggest circle in meters.
    */
