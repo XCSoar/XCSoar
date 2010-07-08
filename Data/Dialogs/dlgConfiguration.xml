@@ -737,11 +737,6 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
         <DataField name="" DataType="boolean"/>
       </Edit>
   
-      <Edit Name="prpGPSAltitudeOffset" Caption="GPS alt offset*" X="2" Y="-1" Width="-2" Height="22" CaptionWidth="150"
-        Help="Adjust GPS height with a fixed offset. Be careful with this setting: your offset will modify gps height permanently during the flight!  This value will NOT be saved to the registry, so you should manually set it each time.">
-        <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="-1000" Max="1000" Step="1"/>
-      </Edit>
-  
       <Edit Name="prpAutoBacklight" Caption="Auto Backlight" X="2" Y="-1" Width="-2" Height="22" CaptionWidth="150" Help="Set automatic backlight for this device. Max brightness and no timeout if on external power, otherwise max brightneess and a 5 minutes timeout on batteries. After timeout screen blanks to save energy.">
         <DataField name="" DataType="boolean"/>
       </Edit>

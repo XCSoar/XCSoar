@@ -1944,15 +1944,6 @@ static void setVariables(void) {
   LoadFormProperty(*wf, _T("prpSnailWidthScale"),
                    XCSoarInterface::SettingsMap().SnailWidthScale);
 
-#ifdef FIVV
-  wp = (WndProperty*)wf->FindByName(_T("prpGPSAltitudeOffset")); // VENTA3 GPSAltitudeOffset
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(GPSAltitudeOffset);
-    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
-    wp->RefreshDisplay();
-  }
-#endif
-
   for (unsigned i = 0; i < 4; i++) {
     for (unsigned j=0; j<numInfoWindows; j++) {
       SetInfoBoxSelector(j, i);
