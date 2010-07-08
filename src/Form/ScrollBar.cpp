@@ -64,9 +64,7 @@ ScrollBar::set(const SIZE size)
 
   // if the device has a pointer (mouse/touchscreen/etc.)
   if (has_pointer()) {
-    // shrink width factor.  Range .1 to 1 where 1 is very "fat"
-    double ShrinkFactor = is_pna() ? 1.0 : 0.75;
-    width = (unsigned)Layout::Scale(SCROLLBARWIDTH_INITIAL * ShrinkFactor);
+    width = (unsigned)Layout::Scale(SCROLLBARWIDTH_INITIAL);
   } else {
     // thin for ALTAIR b/c no touch screen
     width = SELECTORWIDTH * 2;

@@ -56,7 +56,7 @@ protected:
 
 public:
   enum {
-    SCROLLBARWIDTH_INITIAL = 32,
+    SCROLLBARWIDTH_INITIAL = 24,
   };
 
   /** Constructor of the ScrollBar class */
