@@ -151,11 +151,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 3
   { ugNone, _T("Bearing"), _T("Bearing"),
-#ifdef FIVV
-    new InfoBoxFormatter(_T("%2.0f")_T(DEG)),
-#else
     new InfoBoxFormatter(_T("%2.0f")_T(DEG)_T("T")),
-#endif
     ActionInterface::on_key_None,
     6, 54,
   },
@@ -275,11 +271,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 23
   { ugNone, _T("Track"), _T("Track"),
-#ifdef FIVV
-    new InfoBoxFormatter(_T("%2.0f")_T(DEG)),
-#else
     new InfoBoxFormatter(_T("%2.0f")_T(DEG)_T("T")),
-#endif
     ActionInterface::on_key_Direction,
     32, 6,
   },
@@ -297,11 +289,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 26
   { ugNone, _T("Wind Bearing"), _T("Wind B"),
-#ifdef FIVV
-    new InfoBoxFormatter(_T("%2.0f")_T(DEG)),
-#else
     new InfoBoxFormatter(_T("%2.0f")_T(DEG)_T("T")),
-#endif
     ActionInterface::on_key_WindDirection,
     48, 25,
   },
@@ -481,11 +469,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 56
   { ugNone, _T("Team Bearing"), _T("Tm Brng"),
-#ifdef FIVV
-    new InfoBoxFormatter(_T("%2.0f")_T(DEG)),
-#else
     new InfoBoxFormatter(_T("%2.0f")_T(DEG)_T("T")),
-#endif
     ActionInterface::on_key_None,
     57, 55,
   },
