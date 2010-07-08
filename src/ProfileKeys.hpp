@@ -132,9 +132,7 @@ extern const TCHAR szProfileAppStatusMessageAlignment[];
 extern const TCHAR szProfileAppTextInputStyle[];
 extern const TCHAR szProfileAppDialogStyle[];
 extern const TCHAR szProfileAppInfoBoxBorder[];
-#if defined(PNA)
 extern const TCHAR szProfileAppInfoBoxModel[]; // VENTA-ADDON MODEL CHANGE
-#endif
 extern const TCHAR szProfileAppAveNeedle[];
 extern const TCHAR szProfileAutoAdvance[];
 extern const TCHAR szProfileUTCOffset[];

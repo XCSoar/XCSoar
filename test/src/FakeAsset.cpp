@@ -39,7 +39,7 @@ Copyright_License {
 
 #include <windef.h> // for MAX_PATH
 
-#if defined(PNA)
+#if defined(_WIN32_WCE) && !defined(GNAV)
 
 ModelType GlobalModelType = MODELTYPE_PNA_PNA;
 float GlobalEllipse = 1.1f;

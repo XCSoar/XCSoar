@@ -53,7 +53,7 @@ Copyright_License {
 TCHAR strAssetNumber[MAX_LOADSTRING] = TEXT(""); //4G17DW31L0HY");
 TCHAR strRegKey[MAX_LOADSTRING] = TEXT("");
 
-#if defined(PNA) // we call it model and not PNA for possible future usage even for custom PDAs
+#if defined(_WIN32_WCE) && !defined(GNAV)
 ModelType GlobalModelType = MODELTYPE_PNA_PNA;
 float	GlobalEllipse = 1.1f;	// default ellipse type
 #endif
@@ -301,8 +301,7 @@ InitAsset()
     #endif
   }
 
-  #ifdef PNA
-  // VENTA2-ADDON MODEL TYPE
+#if defined(_WIN32_WCE) && !defined(GNAV)
   /*
   LocalPath is called for the very first time by CreateDirectoryIfAbsent.
   In order to be able in the future to behave differently for each PNA device

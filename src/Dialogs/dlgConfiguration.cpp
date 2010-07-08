@@ -1718,7 +1718,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-#ifdef PNA
+#if defined(_WIN32_WCE) && !defined(GNAV)
 // VENTA-ADDON Model change config menu 11
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
   if (wp) {
@@ -2059,7 +2059,7 @@ PrepareConfigurationDialog()
 
   wf->FilterAdvanced(XCSoarInterface::UserLevel>0);
 
-  if (!is_pna()) {
+  if (!is_embedded() || !is_altair()) {
     wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
     if (wp) {
       wp->hide();
@@ -2606,7 +2606,7 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-#if defined(PNA)
+#if defined(_WIN32_WCE) && !defined(GNAV)
   // VENTA-ADDON MODEL CHANGE
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
   if (wp) {

@@ -57,7 +57,7 @@ enum ModelType {
   MODELTYPE_PNA_PN6000,
 };
 
-#if defined(PNA)
+#if defined(_WIN32_WCE) && !defined(GNAV)
 
 extern ModelType GlobalModelType;
 extern float GlobalEllipse;

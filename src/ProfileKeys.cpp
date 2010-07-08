@@ -218,9 +218,7 @@ const TCHAR szProfileAppDefaultMapWidth[] = CONF("AppDefaultMapWidth");
 const TCHAR szProfileTeamcodeRefWaypoint[] = CONF("TeamcodeRefWaypoint");
 const TCHAR szProfileAppInfoBoxBorder[] = CONF("AppInfoBoxBorder");
 
-#if defined(PNA)
 const TCHAR szProfileAppInfoBoxModel[] = CONF("AppInfoBoxModel"); // VENTA-ADDON MODEL CONFIG
-#endif
 
 const TCHAR szProfileAppAveNeedle[] = CONF("AppAveNeedle");
 
