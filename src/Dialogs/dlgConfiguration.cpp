@@ -133,7 +133,7 @@ static Font TempUseCustomFontsFont;
 extern LOGFONT InfoWindowLogFont;
 extern LOGFONT TitleWindowLogFont;
 extern LOGFONT MapWindowLogFont;
-extern LOGFONT TitleSmallWindowLogFont;
+extern LOGFONT InfoWindowSmallLogFont;
 extern LOGFONT MapWindowBoldLogFont;
 extern LOGFONT CDIWindowLogFont; // New
 extern LOGFONT MapLabelLogFont;
@@ -341,7 +341,7 @@ ResetFonts(bool bUseCustom)
   InitializeFont(&TempInfoWindowFont, InfoWindowLogFont);
   InitializeFont(&TempTitleWindowFont, TitleWindowLogFont);
   InitializeFont(&TempMapWindowFont, MapWindowLogFont);
-  InitializeFont(&TempTitleSmallWindowFont, TitleSmallWindowLogFont);
+  InitializeFont(&TempTitleSmallWindowFont, InfoWindowSmallLogFont);
   InitializeFont(&TempMapWindowBoldFont, MapWindowBoldLogFont);
   InitializeFont(&TempCDIWindowFont, CDIWindowLogFont);
   InitializeFont(&TempMapLabelFont, MapLabelLogFont);
@@ -515,7 +515,7 @@ OnEditTitleSmallWindowFontClicked(gcc_unused WndButton &button)
   GetFontDescription(FontDesc, _T("prpTitleSmallWindowFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
                            szProfileFontTitleSmallWindowFont,
-                           TitleSmallWindowLogFont)) {
+                           InfoWindowSmallLogFont)) {
     FontRegistryChanged=true;
     RefreshFonts();
   }

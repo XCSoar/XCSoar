@@ -68,7 +68,7 @@ Font StatisticsFont;
 LOGFONT InfoWindowLogFont;
 LOGFONT TitleWindowLogFont;
 LOGFONT MapWindowLogFont;
-LOGFONT TitleSmallWindowLogFont;
+LOGFONT InfoWindowSmallLogFont;
 LOGFONT MapWindowBoldLogFont;
 LOGFONT CDIWindowLogFont;
 LOGFONT MapLabelLogFont;
@@ -158,7 +158,7 @@ InitialiseFontsAltair()
                     true, 15, false, false);
   InitialiseLogfont(&MapWindowBoldLogFont, _T("RasterGothicFourteenCond"),
                     true, 15, true, false);
-  InitialiseLogfont(&TitleSmallWindowLogFont, _T("RasterGothicEighteenCond"),
+  InitialiseLogfont(&InfoWindowSmallLogFont, _T("RasterGothicEighteenCond"),
                     true, 19, true, false);
 }
 
@@ -232,7 +232,7 @@ InitialiseLogFonts()
   InitialiseLogfont(&MapWindowBoldLogFont, _T("Tahoma"), true,
                     (int)(FontHeight * 0.507), true, false);
 
-  InitialiseLogfont(&TitleSmallWindowLogFont, _T("Tahoma"), true,
+  InitialiseLogfont(&InfoWindowSmallLogFont, _T("Tahoma"), true,
                     Layout::Scale(20), false, false);
 }
 
@@ -247,7 +247,7 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
   InitialiseFontsAltair();
 
   InitializeFont(&InfoWindowFont, InfoWindowLogFont);
-  InitializeFont(&InfoWindowSmallFont, TitleSmallWindowLogFont);
+  InitializeFont(&InfoWindowSmallFont, InfoWindowSmallLogFont);
   InitializeFont(&TitleWindowFont, TitleWindowLogFont);
   InitializeFont(&CDIWindowFont, CDIWindowLogFont);
   InitializeFont(&MapLabelFont, MapLabelLogFont);
