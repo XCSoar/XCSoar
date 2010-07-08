@@ -86,7 +86,7 @@ protected:
    */
   bool on_mouse_gesture(const TCHAR* gesture);
 
-#if defined(GNAV) || defined(PNA)
+#if defined(GNAV)
   virtual bool on_key_down(unsigned key_code);
 #else
   virtual bool on_key_up(unsigned key_code);

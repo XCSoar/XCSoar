@@ -297,7 +297,7 @@ GlueMapWindow::on_mouse_gesture(const TCHAR* gesture)
   return false;
 }
 
-#if defined(GNAV) || defined(PNA)
+#if defined(GNAV)
 
 bool
 GlueMapWindow::on_key_down(unsigned key_code)
