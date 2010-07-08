@@ -372,13 +372,13 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     TCHAR Buffer[10];
     _stprintf(Buffer, TEXT("%d"), abs(relalt));
 
-    // Calculate size of the output string
-    SIZE tsize = canvas.text_size(Buffer);
-
     // Select font
     canvas.background_transparent();
     canvas.select(TitleWindowFont);
     canvas.set_text_color(Color::BLACK);
+
+    // Calculate size of the output string
+    SIZE tsize = canvas.text_size(Buffer);
 
     int dist = Layout::FastScale(traffic.HasAlarm() ? 12 : 8);
 
