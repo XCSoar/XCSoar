@@ -310,7 +310,9 @@ InitAsset()
   BEFORE calling LocalPath. This was critical.
    */
 
-  SetModelType();
+  int Temp = (int)MODELTYPE_PNA_PNA;
+  Profile::Get(szProfileAppInfoBoxModel, Temp);
+  GlobalModelType = (ModelType)Temp;
   #endif
 
   // VENTA2- TODO fix these directories are not used always!

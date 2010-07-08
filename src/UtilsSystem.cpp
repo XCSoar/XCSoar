@@ -151,25 +151,6 @@ void CreateDirectoryIfAbsent(const TCHAR *filename) {
 }
 
 #ifdef PNA
-//
-// Retrieve from the registry the previous set model type
-// This value is defined in xcsoar.h , example> MODELTYPE_PNA_HP31X
-// is equivalent to a value=10201 (defined in the header file)
-//
-void
-SetModelType()
-{
-  int Temp = (int)MODELTYPE_PNA_PNA;
-
-  Profile::Get(szProfileAppInfoBoxModel, Temp);
-  GlobalModelType = (ModelType)Temp;
-
-  LogStartUp(_T("SetModelType: Type=%d"), GlobalModelType);
-}
-
-#endif
-
-#ifdef PNA
 /**
  * SetBacklight for PNA devices. There is no standard way of managing backlight on CE,
  * and every device may have different value names and settings. Microsoft did not set

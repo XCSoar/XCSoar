@@ -44,10 +44,6 @@ Copyright_License {
 bool SetBacklight(); // VENTA4-ADDON for PNA
 #endif
 
-#if defined(PNA)
-void SetModelType();
-#endif
-
 #ifdef _WIN32_WCE
 short
 InstallFonts();
