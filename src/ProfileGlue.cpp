@@ -461,26 +461,6 @@ Profile::Use()
   // I had to move here the font setting because I needed first to
   // know the screen geometry, in the registry!
 #if defined(PNA) || defined(FIVV)
-  if (GlobalModelType == MODELTYPE_PNA_HP31X ) {
-    // key transcoding for this one
-    LogStartUp(_T("Loading HP31X settings"));
-  } else if (GlobalModelType == MODELTYPE_PNA_PN6000 ) {
-    LogStartUp(_T("Loading PN6000 settings"));
-    // key transcoding for this one
-  } else if (GlobalModelType == MODELTYPE_PNA_MIO ) {
-    LogStartUp(_T("Loading MIO settings"));
-    // currently no special settings from MIO but need to handle hw keys
-  } else if (GlobalModelType == MODELTYPE_PNA_NOKIA_500 ) {
-    LogStartUp(_T("Loading Nokia500 settings"));
-    // key transcoding is made
-  } else if (GlobalModelType == MODELTYPE_PNA_MEDION_P5 ) {
-    LogStartUp(_T("Loading Medion settings"));
-  } else if (GlobalModelType == MODELTYPE_PNA_PNA ) {
-    LogStartUp(_T("Loading default PNA settings"));
-  } else {
-    LogStartUp(_T("No special regsets for this PDA"));
-  }
-
   // VENTA-ADDON Model change
   Temp = Appearance.InfoBoxModel;
   Get(szProfileAppInfoBoxModel, Temp);
