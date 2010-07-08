@@ -1263,7 +1263,7 @@ InfoBoxManager::Create(RECT rc)
   info_box_look.value.font = &InfoWindowFont;
   info_box_look.title.font = &TitleWindowFont;
   info_box_look.comment.font = &TitleWindowFont;
-  info_box_look.small_font = &TitleSmallWindowFont;
+  info_box_look.small_font = &InfoWindowSmallFont;
 
   info_box_look.colors[0] = border_color;
   info_box_look.colors[1] = Appearance.InverseInfoBox

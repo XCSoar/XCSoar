@@ -51,11 +51,11 @@ Copyright_License {
 
 /// values inside infoboxes  like numbers, etc.
 Font InfoWindowFont;
+Font InfoWindowSmallFont;
 /// Titles of infoboxes like Next, WP L/D etc.
 Font TitleWindowFont;
 /// text names on the map
 Font MapWindowFont;
-Font TitleSmallWindowFont;
 /// menu buttons, waypoint selection, messages, etc.
 Font MapWindowBoldFont;
 /// vario display, runway informations
@@ -247,23 +247,23 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
   InitialiseFontsAltair();
 
   InitializeFont(&InfoWindowFont, InfoWindowLogFont);
+  InitializeFont(&InfoWindowSmallFont, TitleSmallWindowLogFont);
   InitializeFont(&TitleWindowFont, TitleWindowLogFont);
   InitializeFont(&CDIWindowFont, CDIWindowLogFont);
   InitializeFont(&MapLabelFont, MapLabelLogFont);
   InitializeFont(&StatisticsFont, StatisticsLogFont);
   InitializeFont(&MapWindowFont, MapWindowLogFont);
   InitializeFont(&MapWindowBoldFont, MapWindowBoldLogFont);
-  InitializeFont(&TitleSmallWindowFont, TitleSmallWindowLogFont);
 
   if (appearance.UseCustomFonts) {
     LoadCustomFont(&InfoWindowFont, szProfileFontInfoWindowFont);
+    LoadCustomFont(&InfoWindowSmallFont, szProfileFontTitleSmallWindowFont);
     LoadCustomFont(&TitleWindowFont, szProfileFontTitleWindowFont);
     LoadCustomFont(&CDIWindowFont, szProfileFontCDIWindowFont);
     LoadCustomFont(&MapLabelFont, szProfileFontMapLabelFont);
     LoadCustomFont(&StatisticsFont, szProfileFontStatisticsFont);
     LoadCustomFont(&MapWindowFont, szProfileFontMapWindowFont);
     LoadCustomFont(&MapWindowBoldFont, szProfileFontMapWindowBoldFont);
-    LoadCustomFont(&TitleSmallWindowFont, szProfileFontTitleSmallWindowFont);
   }
 }
 
@@ -271,11 +271,11 @@ void
 ResetFonts()
 {
   InfoWindowFont.reset();
+  InfoWindowSmallFont.reset();
   TitleWindowFont.reset();
   CDIWindowFont.reset();
   MapLabelFont.reset();
   MapWindowFont.reset();
   MapWindowBoldFont.reset();
   StatisticsFont.reset();
-  TitleSmallWindowFont.reset();
 }

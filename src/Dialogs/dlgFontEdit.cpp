@@ -47,9 +47,9 @@ Copyright_License {
 #include <stdio.h>
 
 extern Font InfoWindowFont;
+extern Font InfoWindowSmallFont;
 extern Font TitleWindowFont;
 extern Font MapWindowFont;
-extern Font TitleSmallWindowFont;
 extern Font MapWindowBoldFont;
 extern Font CDIWindowFont; // New
 extern Font MapLabelFont;

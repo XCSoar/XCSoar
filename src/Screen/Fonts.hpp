@@ -57,7 +57,7 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc);
 extern Font InfoWindowFont;
 extern Font TitleWindowFont;
 extern Font MapWindowFont;
-extern Font TitleSmallWindowFont;
+extern Font InfoWindowSmallFont;
 extern Font MapWindowBoldFont;
 extern Font CDIWindowFont;
 extern Font MapLabelFont;
