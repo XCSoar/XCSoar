@@ -55,8 +55,6 @@ InstallFonts();
 
 void ParseCommandLine(LPCTSTR CommandLine);
 long CheckFreeRam(void);
-void MemCheckPoint();
-void MemLeakCheck();
 void MyCompactHeaps();
 unsigned long FindFreeSpace(const TCHAR *path);
 void CreateDirectoryIfAbsent(const TCHAR *filename);

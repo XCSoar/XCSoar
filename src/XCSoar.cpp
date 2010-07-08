@@ -102,17 +102,3 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   return CommonInterface::main_window.event_loop();
 }
-
-/*
-#if _DEBUG
- // _crtBreakAlloc = -1;     // Set this to the number in {} brackets to
-                             // break on a memory leak
-#endif
-#ifdef WINDOWSPC
-#if _DEBUG
-  _CrtCheckMemory();
-  _CrtDumpMemoryLeaks();
-#endif
-#endif
-
-*/

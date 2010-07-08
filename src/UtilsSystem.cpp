@@ -77,39 +77,6 @@ long CheckFreeRam(void) {
 #endif /* !WIN32 */
 }
 
-#ifdef WINDOWSPC
-#ifdef _DEBUG
-_CrtMemState memstate_s1;
-#endif
-#endif
-
-void MemCheckPoint()
-{
-#ifdef WINDOWSPC
-#ifdef _DEBUG
-  _CrtMemCheckpoint(&memstate_s1);
-#endif
-#endif
-}
-
-void MemLeakCheck() {
-#ifdef WINDOWSPC
-#ifdef _DEBUG
-  _CrtMemState memstate_s2, memstate_s3;
-
-   // Store a 2nd memory checkpoint in s2
-   _CrtMemCheckpoint(&memstate_s2);
-
-   if ( _CrtMemDifference(&memstate_s3, &memstate_s1, &memstate_s2)) {
-     _CrtMemDumpStatistics(&memstate_s3);
-     _CrtMemDumpAllObjectsSince(&memstate_s1);
-   }
-
-  _CrtCheckMemory();
-#endif
-#endif
-}
-
 // This is necessary to be called periodically to get rid of
 // memory defragmentation, since on pocket pc platforms there is no
 // automatic defragmentation.
