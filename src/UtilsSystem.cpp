@@ -46,8 +46,11 @@ Copyright_License {
 
 #ifdef PNA
 #include "SettingsUser.hpp"
-#include <shlobj.h>
 #include <mmsystem.h>
+#endif
+
+#ifdef _WIN32_WCE
+#include <shlobj.h>
 #endif
 
 #include <tchar.h>
@@ -340,8 +343,7 @@ SetSoundVolume()
 
 #endif
 
-#if defined(FIVV) || defined(PNA)
-// VENTA2-ADDON fonts install
+#ifdef _WIN32_WCE
 /*
  * Get the localpath, enter XCSoarData/Config, see if there are fonts to copy,
  * check that they have not already been copied in \Windows\Fonts,

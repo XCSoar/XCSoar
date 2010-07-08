@@ -49,7 +49,7 @@ bool SetSoundVolume(); // VENTA4-ADDON for PNA
 void SetModelType();
 #endif
 
-#if defined(PNA) || defined(FIVV)
+#ifdef _WIN32_WCE
 short
 InstallFonts();
 #endif
