@@ -34,7 +34,7 @@ else
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/PaintCanvas.cpp
-ifeq ($(HAVE_CE)$(findstring $(TARGET),PNA ALTAIR ALTAIRPORTRAIT),y)
+ifeq ($(HAVE_CE)$(findstring $(TARGET),ALTAIR ALTAIRPORTRAIT),y)
 SCREEN_SOURCES += $(SCREEN_SRC_DIR)/VOIMAGE.cpp
 endif
 endif

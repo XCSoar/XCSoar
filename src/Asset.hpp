@@ -109,20 +109,6 @@ is_embedded()
 }
 
 /**
- * Returns whether the application is running on a PNA
- * @return True if host hardware is a PNA, False otherwise
- */
-static inline bool
-is_pna()
-{
-#if defined(PNA)
-  return true;
-#else
-  return false;
-#endif
-}
-
-/**
  * Returns whether the application is running on a HP31x
  * @return True if host hardware is a HP31x, False otherwise
  */

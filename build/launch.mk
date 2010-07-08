@@ -1,6 +1,6 @@
 # Rules for XCSoarLaunch.dll, the launcher for the PocketPC shell
 
-ifeq ($(HAVE_CE)$(findstring $(TARGET),PNA ALTAIR ALTAIRPORTRAIT),y)
+ifeq ($(HAVE_CE)$(findstring $(TARGET),ALTAIR ALTAIRPORTRAIT),y)
 
 XCSOARLAUNCH_DLL = $(TARGET_BIN_DIR)/XCSoarLaunch.dll
 XCSOARLAUNCH_SOURCES = \

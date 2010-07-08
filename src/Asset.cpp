@@ -322,7 +322,6 @@ InitAsset()
 
   // VENTA2-ADDON install fonts on PDAs and check XCSoarData existance
 #if defined(FIVV) && defined(_WIN32_WCE)
-  //#ifndef PNA
   LogStartUp(TEXT("Check for installing fonts"));
   short didfonts = InstallFonts();  // check if really did it, and maybe restart
   LogStartUp(_T("InstallFonts() result=%d (0=installed >0 not installed)"), didfonts);
