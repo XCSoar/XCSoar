@@ -91,8 +91,8 @@ IsNullLogFont(LOGFONT logfont)
 #endif /* !ENABLE_SDL */
 
 static void
-InitialiseLogfont(LOGFONT* font, const TCHAR* facename, bool variable_pitch,
-                  int height, bool bold, bool italic)
+InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
+                  bool bold, bool italic, bool variable_pitch)
 {
 #ifndef ENABLE_SDL
   memset((char *)font, 0, sizeof(LOGFONT));
@@ -145,21 +145,21 @@ InitialiseFontsAltair()
     return;
 
   InitialiseLogfont(&InfoWindowLogFont, _T("RasterGothicTwentyFourCond"),
-                    true, 24, true, false);
+                    24, true, false, true);
   InitialiseLogfont(&TitleWindowLogFont, _T("RasterGothicNineCond"),
-                    true, 10, false, false);
+                    10, false, false, true);
   InitialiseLogfont(&CDIWindowLogFont, _T("RasterGothicEighteenCond"),
-                    true, 19, true, false);
+                    19, true, false, true);
   InitialiseLogfont(&MapLabelLogFont, _T("RasterGothicTwelveCond"),
-                    true, 13, false, false);
+                    13, false, false, true);
   InitialiseLogfont(&StatisticsLogFont, _T("RasterGothicFourteenCond"),
-                    true, 15, false, false);
+                    15, false, false, true);
   InitialiseLogfont(&MapWindowLogFont, _T("RasterGothicFourteenCond"),
-                    true, 15, false, false);
+                    15, false, false, true);
   InitialiseLogfont(&MapWindowBoldLogFont, _T("RasterGothicFourteenCond"),
-                    true, 15, true, false);
+                    15, true, false, true);
   InitialiseLogfont(&InfoWindowSmallLogFont, _T("RasterGothicEighteenCond"),
-                    true, 19, true, false);
+                    19, true, false, true);
 }
 
 static void
@@ -176,8 +176,7 @@ InitialiseLogFonts()
   int iFontHeight = (int)(FontHeight * 1.4);
 
   LOGFONT logfont;
-  InitialiseLogfont(&logfont, _T("Tahoma"),
-                    true, iFontHeight, true, false);
+  InitialiseLogfont(&logfont, _T("Tahoma"), iFontHeight, true, false, true);
   logfont.lfCharSet = ANSI_CHARSET;
 
   // JMW algorithm to auto-size info window font.
@@ -209,31 +208,31 @@ InitialiseLogFonts()
   // XXX implement
 #endif /* !ENABLE_SDL */
 
-  InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"), true,
-                    (int)(FontHeight * 0.333), true, false);
+  InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
+                    (int)(FontHeight * 0.333), true, false, true);
 
   // new font for CDI Scale
-  InitialiseLogfont(&CDIWindowLogFont, _T("Tahoma"), false,
-                    (int)(FontHeight * 0.6), false, false);
+  InitialiseLogfont(&CDIWindowLogFont, _T("Tahoma"),
+                    (int)(FontHeight * 0.6), false, false, false);
 
   // new font for map labels
-  InitialiseLogfont(&MapLabelLogFont, _T("Tahoma"), true,
-                    (int)(FontHeight * 0.39), false, true);
+  InitialiseLogfont(&MapLabelLogFont, _T("Tahoma"),
+                    (int)(FontHeight * 0.39), false, true, true);
 
   // Font for map other text
-  InitialiseLogfont(&StatisticsLogFont, _T("Tahoma"), true,
-                    (int)(FontHeight * 0.7), false, false);
+  InitialiseLogfont(&StatisticsLogFont, _T("Tahoma"),
+                    (int)(FontHeight * 0.7), false, false, true);
 
   // new font for map labels
-  InitialiseLogfont(&MapWindowLogFont, _T("Tahoma"), true,
-                    (int)(FontHeight * 0.507), false, false);
+  InitialiseLogfont(&MapWindowLogFont, _T("Tahoma"),
+                    (int)(FontHeight * 0.507), false, false, true);
 
   // Font for map bold text
-  InitialiseLogfont(&MapWindowBoldLogFont, _T("Tahoma"), true,
-                    (int)(FontHeight * 0.507), true, false);
+  InitialiseLogfont(&MapWindowBoldLogFont, _T("Tahoma"),
+                    (int)(FontHeight * 0.507), true, false, true);
 
-  InitialiseLogfont(&InfoWindowSmallLogFont, _T("Tahoma"), true,
-                    Layout::Scale(20), false, false);
+  InitialiseLogfont(&InfoWindowSmallLogFont, _T("Tahoma"),
+                    Layout::Scale(20), false, false, true);
 }
 
 void
