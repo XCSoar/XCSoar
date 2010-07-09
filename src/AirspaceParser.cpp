@@ -406,6 +406,8 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
 static bool
 ReadCoords(const TCHAR *Text, GEOPOINT &point)
 {
+  // Format: 53:20:41 N 010:24:41 E
+
   double Ydeg = 0, Ymin = 0, Ysec = 0;
   double Xdeg = 0, Xmin = 0, Xsec = 0;
   TCHAR *Stop;
@@ -418,9 +420,6 @@ ReadCoords(const TCHAR *Text, GEOPOINT &point)
 
   Stop++;
   Ymin = (double)_tcstod(Stop, &Stop);
-  if (Ymin < 0 || Ymin >= 60) {
-    // ToDo
-  }
   if (*Stop == '\0')
     return false;
 
