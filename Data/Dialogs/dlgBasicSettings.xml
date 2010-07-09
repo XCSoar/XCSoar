@@ -30,6 +30,6 @@
   </Edit>
 
   <Edit Name="prpTemperature" Caption="Max Temp" X="2" Y="-1" Width="-2" Height="22" CaptionWidth="78" Help="Set to forecast ground temperature.  Used by convection estimator (temperature trace page of Analysis dialog)">
-    <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="0" Max="50" Step="1" OnDataAccess="OnTempData"/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" OnDataAccess="OnTempData"/>
   </Edit>
 </Form>

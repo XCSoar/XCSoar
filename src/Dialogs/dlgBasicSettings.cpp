@@ -46,6 +46,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "Atmosphere.h"
 #include "DataField/Base.hpp"
+#include "DataField/Float.hpp"
 #include "MainWindow.hpp"
 #include "Components.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
@@ -182,11 +183,24 @@ SetBallast(void)
   }
 }
 
+static void
+SetTemperature()
+{
+    WndProperty* wp;
+    wp = (WndProperty*)wf->FindByName(_T("prpTemperature"));
+    if (wp) {
+      wp->GetDataField()->SetMin(Units::ToUserTemperature(-50));
+      wp->GetDataField()->SetMax(Units::ToUserTemperature(60));
+      wp->GetDataField()->SetUnits(Units::GetTemperatureName());
+      wp->RefreshDisplay();
+    }
+}
+
 static int
 OnTimerNotify(WindowControl * Sender)
 {
   (void)Sender;
-
+  SetTemperature();
   SetBallast();
   SetAltitude();
 
@@ -250,21 +264,22 @@ static void
 OnTempData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   static double lastRead = -1;
-
   switch (Mode) {
   case DataField::daGet:
     lastRead = CuSonde::maxGroundTemperature;
-    Sender->Set(CuSonde::maxGroundTemperature);
+    Sender->Set(Units::ToUserTemperature(CuSonde::maxGroundTemperature));
     break;
   case DataField::daChange:
   case DataField::daPut:
     if (fabs(lastRead - Sender->GetAsFloat()) >= 1.0) {
-      lastRead = Sender->GetAsFloat();
-      CuSonde::setForecastTemperature(Sender->GetAsFloat());
+      lastRead = Units::ToSysTemperature(Sender->GetAsFloat());
+      CuSonde::setForecastTemperature(Units::ToSysTemperature(Sender->GetAsFloat()));
     }
     break;
   }
 }
+
+
 
 static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnBugsData),
