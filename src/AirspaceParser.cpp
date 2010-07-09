@@ -58,17 +58,16 @@ static int LineCount;
 
 enum line_type {
   /** special value: end of file */
-  k_nLtEOF,
-
-  k_nLtAC,
-  k_nLtAN,
-  k_nLtAL,
-  k_nLtAH,
-  k_nLtV,
-  k_nLtDP,
-  k_nLtDB,
-  k_nLtDA,
-  k_nLtDC,
+  ltEOF,
+  ltClass,
+  ltName,
+  ltBase,
+  ltTop,
+  ltAttribute,
+  ltDPoint,
+  ltDArc,
+  ltDSector,
+  ltDCircle,
 };
 
 static const int k_nAreaCount = 12;
@@ -157,7 +156,7 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
 {
   TCHAR *Comment;
   int nSize;
-  enum line_type nLineType = k_nLtEOF;
+  enum line_type nLineType = ltEOF;
   TCHAR sTmp[READLINE_LENGTH];
 
   while ((Text = reader.read()) != NULL) {
@@ -180,19 +179,19 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
     case _T('A'):
       switch (sTmp[1]) {
       case _T('C'):
-        nLineType = k_nLtAC;
+        nLineType = ltClass;
         break;
 
       case _T('N'):
-        nLineType = k_nLtAN;
+        nLineType = ltName;
         break;
 
       case _T('L'):
-        nLineType = k_nLtAL;
+        nLineType = ltBase;
         break;
 
       case _T('H'):
-        nLineType = k_nLtAH;
+        nLineType = ltTop;
         break;
 
       case _T('T'):
@@ -205,7 +204,7 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
                   LineCount, Text,
                   gettext(_T("Line skipped.")));
         if (MessageBoxX(sTmp, gettext(_T("Airspace")), MB_OKCANCEL) == IDCANCEL)
-          return k_nLtEOF;
+          return ltEOF;
 
         continue;
       }
@@ -215,19 +214,19 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
     case _T('D'):
       switch (sTmp[1]) {
       case _T('A'):
-        nLineType = k_nLtDA;
+        nLineType = ltDSector;
         break;
 
       case _T('B'):
-        nLineType = k_nLtDB;
+        nLineType = ltDArc;
         break;
 
       case _T('C'):
-        nLineType = k_nLtDC;
+        nLineType = ltDCircle;
         break;
 
       case _T('P'):
-        nLineType = k_nLtDP;
+        nLineType = ltDPoint;
         break;
 
         // todo DY airway segment
@@ -241,14 +240,14 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
         if (MessageBoxX(sTmp,
                         gettext(_T("Airspace")),
                         MB_OKCANCEL) == IDCANCEL)
-          return k_nLtEOF;
+          return ltEOF;
         continue;
       }
 
       break;
 
     case _T('V'):
-      nLineType = k_nLtV;
+      nLineType = ltAttribute;
       break;
 
     case _T('S'):  // ignore the SB,SP ...
@@ -264,11 +263,11 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
                 gettext(_T("Line skipped.")));
       if (MessageBoxX(sTmp, gettext(_T("Airspace")),
                       MB_OKCANCEL) == IDCANCEL)
-        return k_nLtEOF;
+        return ltEOF;
       continue;
     }
 
-    if (nLineType != k_nLtEOF) {
+    if (nLineType != ltEOF) {
       // Valid line found
       // Strip comments and newline chars from end of line
       Comment = _tcschr(Text, _T('*'));
@@ -555,7 +554,7 @@ ParseLine(Airspaces &airspace_database, enum line_type nLineType,
   GEOPOINT TempPoint;
 
   switch (nLineType) {
-  case k_nLtAC:
+  case ltClass:
     if (!temp_area.Waiting)
       temp_area.AddPolygon(airspace_database);
 
@@ -570,19 +569,19 @@ ParseLine(Airspaces &airspace_database, enum line_type nLineType,
     temp_area.Waiting = false;
     break;
 
-  case k_nLtAN:
+  case ltName:
     temp_area.Name = &TempString[3];
     break;
 
-  case k_nLtAL:
+  case ltBase:
     ReadAltitude(&TempString[3], &temp_area.Base);
     break;
 
-  case k_nLtAH:
+  case ltTop:
     ReadAltitude(&TempString[3],&temp_area.Top);
     break;
 
-  case k_nLtV:
+  case ltAttribute:
     // Need to set these while in count mode, or DB/DA will crash
     if (StartsWith(&TempString[2], _T("X=")) ||
         StartsWith(&TempString[2], _T("x="))) {
@@ -611,22 +610,22 @@ ParseLine(Airspaces &airspace_database, enum line_type nLineType,
     }
     goto OnError;
 
-  case k_nLtDP:
+  case ltDPoint:
     if (!ReadCoords(&TempString[3],TempPoint))
       goto OnError;
 
     temp_area.points.push_back(TempPoint);
     break;
 
-  case k_nLtDB:
+  case ltDArc:
     CalculateArc(TempString);
     break;
 
-  case k_nLtDA:
+  case ltDSector:
     CalculateSector(TempString);
     break;
 
-  case k_nLtDC:
+  case ltDCircle:
     temp_area.Radius = Units::ToSysUnit(_tcstod(&TempString[2], NULL),
         unNauticalMiles);
     temp_area.AddCircle(airspace_database);
@@ -666,7 +665,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
   temp_area.reset();
 
   TCHAR *line;
-  while ((nLineType = GetNextLine(reader, line)) != k_nLtEOF) {
+  while ((nLineType = GetNextLine(reader, line)) != ltEOF) {
     if (!ParseLine(airspace_database, nLineType, line))
       return false;
 
