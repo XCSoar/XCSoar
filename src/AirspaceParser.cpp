@@ -513,6 +513,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
 
   LineCount = 0;
 
+  // Create and init ProgressDialog
   XCSoarInterface::CreateProgressDialog(gettext(
       TEXT("Loading Airspace File...")));
   XCSoarInterface::SetProgressDialogMaxValue(1024);
@@ -522,7 +523,9 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
 
   TCHAR *line;
   TCHAR *comment;
+  // Iterate through the lines
   while ((line = reader.read()) != NULL) {
+    // Increase line counter
     LineCount++;
 
     // Strip comments
@@ -530,18 +533,20 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
     if (comment != NULL)
       *comment = _T('\0');
 
-    // Skip empty lines
+    // Skip empty line
     unsigned linelength = _tcslen(line);
     if (linelength < 1)
       continue;
 
+    // Parse the line
     if (!ParseLine(airspace_database, line, temp_area))
       return false;
 
+    // Update the ProgressDialog
     XCSoarInterface::SetProgressDialogValue(reader.tell() * 1024 / file_size);
   }
 
-  // Process final area (if any). bFillMode is true.  JG 10-Nov-2005
+  // Process final area (if any)
   if (!temp_area.Waiting)
     temp_area.AddPolygon(airspace_database);
 
