@@ -47,6 +47,7 @@ Copyright_License {
 #endif
 
 #include <windows.h>
+#include <assert.h>
 #include <stdlib.h>
 
 #ifdef HAVE_POSIX
@@ -101,11 +102,14 @@ DataFieldFileReader::DataFieldFileReader(const TCHAR *EditFormat,
    // Number of choosable files is now 1
    nFiles(1),
    // Set selection to zero
-   mValue(0)
+   mValue(0),
+   loaded(false), postponed_sort(false), num_postponed_patterns(0)
 {
   // Fill first entry -> always exists and is blank
   fields[0].mTextFile = NULL;
   fields[0].mTextPathFile = NULL;
+
+  postponed_value[0] = _T('\0');
 
   // This type of DataField supports the combolist
   SupportCombo = true;
@@ -126,12 +130,17 @@ DataFieldFileReader::~DataFieldFileReader()
 bool
 DataFieldFileReader::GetAsBoolean() const
 {
-  return mValue > 0;
+  return loaded
+    ? mValue > 0
+    : !string_is_empty(postponed_value);
 }
 
 int
 DataFieldFileReader::GetAsInteger(void) const
 {
+  if (!string_is_empty(postponed_value))
+    EnsureLoadedDeconst();
+
   return mValue;
 }
 
@@ -145,6 +154,15 @@ DataFieldFileReader::SetAsInteger(int Value)
 void
 DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
 {
+  if (!loaded) {
+    if (num_postponed_patterns < sizeof(postponed_patterns) / sizeof(postponed_patterns[0]) &&
+        _tcslen(filter) < sizeof(postponed_patterns[0]) / sizeof(postponed_patterns[0][0])) {
+      _tcscpy(postponed_patterns[num_postponed_patterns++], filter);
+      return;
+    } else
+      EnsureLoaded();
+  }
+
   const TCHAR *data_path = GetPrimaryDataPath();
   ScanDirectories(data_path, filter);
 
@@ -355,6 +373,14 @@ DataFieldFileReader::ScanFiles(const TCHAR* sPath, const TCHAR* filter)
 void
 DataFieldFileReader::Lookup(const TCHAR *Text)
 {
+  if (!loaded) {
+    if (_tcslen(Text) < sizeof(postponed_value) / sizeof(postponed_value[0])) {
+      _tcscpy(postponed_value, Text);
+      return;
+    } else
+      EnsureLoaded();
+  }
+
   int i = 0;
   mValue = 0;
   // Iterate through the filelist
@@ -370,12 +396,17 @@ DataFieldFileReader::Lookup(const TCHAR *Text)
 int
 DataFieldFileReader::GetNumFiles(void) const
 {
+  EnsureLoadedDeconst();
+
   return nFiles;
 }
 
 const TCHAR *
 DataFieldFileReader::GetPathFile(void) const
 {
+  if (!loaded)
+    return postponed_value;
+
   if ((mValue <= nFiles) && (mValue)) {
     return fields[mValue].mTextPathFile;
   }
@@ -433,6 +464,8 @@ DataFieldFileReader::checkFilter(const TCHAR *filename, const TCHAR *filter)
 void
 DataFieldFileReader::addFile(const TCHAR *Text, const TCHAR *PText)
 {
+  assert(loaded);
+
   // TODO enhancement: remove duplicates?
 
   // if too many files -> cancel
@@ -454,6 +487,16 @@ DataFieldFileReader::addFile(const TCHAR *Text, const TCHAR *PText)
 const TCHAR *
 DataFieldFileReader::GetAsString(void) const
 {
+  if (!loaded) {
+    /* get basename from postponed_value */
+    const TCHAR *p = postponed_value + _tcslen(postponed_value);
+    while (p-- > postponed_value)
+      if (is_dir_separator(*p))
+        return p + 1;
+
+    return postponed_value;
+  }
+
   if (mValue < nFiles)
     return (fields[mValue].mTextFile);
   else
@@ -463,6 +506,11 @@ DataFieldFileReader::GetAsString(void) const
 void
 DataFieldFileReader::Set(int Value)
 {
+  if (Value > 0)
+    EnsureLoaded();
+  else
+    postponed_value[0] = _T('\0');
+
   if (Value <= (int)nFiles)
     mValue = Value;
   if (Value < 0)
@@ -472,6 +520,8 @@ DataFieldFileReader::Set(int Value)
 void
 DataFieldFileReader::Inc(void)
 {
+  EnsureLoaded();
+
   if (mValue < nFiles - 1) {
     mValue++;
     (mOnDataAccess)(this, daChange);
@@ -498,6 +548,11 @@ DataFieldFileReaderCompare(const void *elem1, const void *elem2)
 void
 DataFieldFileReader::Sort(void)
 {
+  if (!loaded) {
+    postponed_sort = true;
+    return;
+  }
+
   // Sort the filelist (except for the first (empty) element)
   qsort(fields + 1, nFiles - 1, sizeof(DataFieldFileReaderEntry),
         DataFieldFileReaderCompare);
@@ -506,6 +561,8 @@ DataFieldFileReader::Sort(void)
 int
 DataFieldFileReader::CreateComboList(void)
 {
+  EnsureLoaded();
+
   unsigned int i = 0;
   for (i = 0; i < nFiles; i++) {
     mComboList.ComboPopupItemList[i] =
@@ -521,11 +578,33 @@ DataFieldFileReader::CreateComboList(void)
 unsigned
 DataFieldFileReader::size() const
 {
+  EnsureLoadedDeconst();
+
   return nFiles;
 }
 
 const DataFieldFileReaderEntry&
 DataFieldFileReader::getItem(unsigned index) const
 {
+  EnsureLoadedDeconst();
+
   return fields[index];
+}
+
+void
+DataFieldFileReader::EnsureLoaded()
+{
+  if (loaded)
+    return;
+
+  loaded = true;
+
+  for (unsigned i = 0; i < num_postponed_patterns; ++i)
+    ScanDirectoryTop(postponed_patterns[i]);
+
+  if (postponed_sort)
+    Sort();
+
+  if (!string_is_empty(postponed_value))
+    Lookup(postponed_value);
 }

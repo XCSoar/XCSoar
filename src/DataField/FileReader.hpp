@@ -68,6 +68,30 @@ private:
   /** FileList item array */
   DataFieldFileReaderEntry fields[DFE_MAX_FILES];
 
+  /**
+   * Has the file list already been loaded?  This class tries to
+   * postpone disk access for as long as possible, to reduce UI
+   * latency.
+   */
+  bool loaded;
+
+  /**
+   * Set to true if Sort() has been called before the file list was
+   * loaded.  It will trigger a call to Sort() after loading.
+   */
+  bool postponed_sort;
+
+  /**
+   * Used to store the value while !loaded.
+   */
+  TCHAR postponed_value[512];
+
+  /**
+   * Stores the patterns while !loaded.
+   */
+  TCHAR postponed_patterns[32][8];
+  unsigned num_postponed_patterns;
+
 public:
   /**
    * Constructor of the DataFieldFileReader class
@@ -174,6 +198,15 @@ public:
  protected:
   bool ScanFiles(const TCHAR *pattern, const TCHAR *filter);
   bool ScanDirectories(const TCHAR *pattern, const TCHAR *filter);
+
+  void EnsureLoaded();
+
+  /**
+   * Hack for our "const" methods, to allow them to load on demand.
+   */
+  void EnsureLoadedDeconst() const {
+    const_cast<DataFieldFileReader *>(this)->EnsureLoaded();
+  }
 };
 
 #endif
