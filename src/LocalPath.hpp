@@ -57,10 +57,6 @@ GetPrimaryDataPath();
  */
 void LocalPath(TCHAR* buf, const TCHAR *file);
 
-#ifndef HAVE_POSIX
-void LocalPath(char* buf, const TCHAR *file);
-#endif
-
 /**
  * Converts a file path by replacing %LOCAL_PATH% with the full pathname to
  * the XCSoarData folder

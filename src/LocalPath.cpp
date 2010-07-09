@@ -78,16 +78,6 @@ LocalPath(TCHAR *buffer, const TCHAR *file)
   _tcscpy(buffer + data_path_length + 1, file);
 }
 
-#ifndef HAVE_POSIX
-void
-LocalPath(char *buffer, const TCHAR *file)
-{
-  TCHAR wbuffer[MAX_PATH];
-  LocalPath(wbuffer, file);
-  sprintf(buffer, "%S", wbuffer);
-}
-#endif
-
 /**
  * Convert backslashes to slashes on platforms where it matters.
  * @param p Pointer to the string to normalize
