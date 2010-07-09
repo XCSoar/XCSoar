@@ -73,40 +73,43 @@ enum line_type {
 
 static const int k_nAreaCount = 12;
 static const TCHAR* k_strAreaStart[k_nAreaCount] = {
-					_T("R"),
-					_T("Q"),
-					_T("P"),
-					_T("CTR"),
-					_T("A"),
-					_T("B"),
-					_T("C"),
-					_T("D"),
-					_T("GP"),
-					_T("W"),
-					_T("E"),
-					_T("F")
+  _T("R"),
+  _T("Q"),
+  _T("P"),
+  _T("CTR"),
+  _T("A"),
+  _T("B"),
+  _T("C"),
+  _T("D"),
+  _T("GP"),
+  _T("W"),
+  _T("E"),
+  _T("F")
 };
 
 static const int k_nAreaType[k_nAreaCount] = {
-					RESTRICT,
-					DANGER,
-					PROHIBITED,
-					CTR,
-					CLASSA,
-					CLASSB,
-					CLASSC,
-					CLASSD,
-					NOGLIDER,
-					WAVE,
-					CLASSE,
-					CLASSF};
+  RESTRICT,
+  DANGER,
+  PROHIBITED,
+  CTR,
+  CLASSA,
+  CLASSB,
+  CLASSC,
+  CLASSD,
+  NOGLIDER,
+  WAVE,
+  CLASSE,
+  CLASSF
+};
 
 // this can now be called multiple times to load several airspaces.
 
-struct TempAirspaceType {
+struct TempAirspaceType
+{
   TempAirspaceType() {
     reset();
   }
+
   tstring Name;
   std::vector<GEOPOINT> points;
   int Rotation;
@@ -117,7 +120,9 @@ struct TempAirspaceType {
   AIRSPACE_ALT Top;
   bool Waiting;
 
-  void reset() {
+  void
+  reset()
+  {
     Type = OTHER;
     points.erase(points.begin(), points.end());
     Center.Longitude = Angle();
@@ -127,13 +132,17 @@ struct TempAirspaceType {
     Waiting = true;
   }
 
-  void AddPolygon(Airspaces &airspace_database) {
+  void
+  AddPolygon(Airspaces &airspace_database)
+  {
     AbstractAirspace *as = new AirspacePolygon(points);
     as->set_properties(Name, Type, Base, Top);
     airspace_database.insert(as);
   }
-  
-  void AddCircle(Airspaces &airspace_database) {
+
+  void
+  AddCircle(Airspaces &airspace_database)
+  {
     AbstractAirspace *as = new AirspaceCircle(Center, Radius);
     as->set_properties(Name, Type, Base, Top);
     airspace_database.insert(as);
@@ -158,12 +167,12 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
 
     // Ignore lines less than 3 characters
     // or starting with comment char
-    if((nSize < 3) || (Text[0] == _T('*')))
+    if ((nSize < 3) || (Text[0] == _T('*')))
       continue;
 
     // build a upercase copy of the tags
-    _tcsncpy(sTmp, Text, sizeof(sTmp)/sizeof(sTmp[0]));
-    sTmp[sizeof(sTmp)/sizeof(sTmp[0])-1] = '\0';
+    _tcsncpy(sTmp, Text, sizeof(sTmp) / sizeof(sTmp[0]));
+    sTmp[sizeof(sTmp) / sizeof(sTmp[0]) - 1] = '\0';
     _tcsupr(sTmp);
 
     // Only return expected lines
@@ -186,7 +195,7 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
         nLineType = k_nLtAH;
         break;
 
-      case _T('T'): // ignore airspace lables
+      case _T('T'):
         // ToDo: adding airspace labels
         continue;
 
@@ -195,10 +204,9 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
                   gettext(_T("Parse Error at Line")),
                   LineCount, Text,
                   gettext(_T("Line skipped.")));
-        if (MessageBoxX(sTmp,
-                        gettext(_T("Airspace")),
-                        MB_OKCANCEL) == IDCANCEL)
+        if (MessageBoxX(sTmp, gettext(_T("Airspace")), MB_OKCANCEL) == IDCANCEL)
           return k_nLtEOF;
+
         continue;
       }
 
@@ -260,19 +268,23 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
       continue;
     }
 
-    if (nLineType != k_nLtEOF) {// Valid line found
+    if (nLineType != k_nLtEOF) {
+      // Valid line found
       // Strip comments and newline chars from end of line
       Comment = _tcschr(Text, _T('*'));
       if (Comment != NULL) {
-        *Comment = _T('\0');		// Truncate line
-        nSize = Comment - Text;		// Reset size
+        // Truncate line
+        *Comment = _T('\0');
+        // Reset size
+        nSize = Comment - Text;
         if (nSize < 3)
-          continue;				// Ensure newline removal won't fail
+          // Ensure newline removal won't fail
+          continue;
       }
 
-      if(Text[nSize-1] == _T('\n'))
+      if (Text[nSize - 1] == _T('\n'))
         Text[--nSize] = _T('\0');
-      if(Text[nSize-1] == _T('\r'))
+      if (Text[nSize - 1] == _T('\r'))
         Text[--nSize] = _T('\0');
 
       break;
@@ -285,10 +297,15 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
 static bool
 StartsWith(const TCHAR *Text, const TCHAR *LookFor)
 {
-  while(1) {
-    if (!(*LookFor)) return TRUE;
-    if (*Text != *LookFor) return FALSE;
-    Text++; LookFor++;
+  while (true) {
+    if (!(*LookFor))
+      return TRUE;
+
+    if (*Text != *LookFor)
+      return FALSE;
+
+    Text++;
+    LookFor++;
   }
 }
 
@@ -299,10 +316,10 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
   TCHAR Text[128];
   TCHAR *pWClast = NULL;
   const TCHAR *pToken;
-  bool  fHasUnit=false;
+  bool fHasUnit = false;
 
-  _tcsncpy(Text, Text_, sizeof(Text)/sizeof(Text[0]));
-  Text[sizeof(Text)/sizeof(Text[0])-1] = '\0';
+  _tcsncpy(Text, Text_, sizeof(Text) / sizeof(Text[0]));
+  Text[sizeof(Text) / sizeof(Text[0]) - 1] = '\0';
 
   _tcsupr(Text);
 
@@ -313,86 +330,67 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
   Alt->AGL = 0;
   Alt->Base = abUndef;
 
-  while((pToken != NULL) && (*pToken != '\0')){
-
+  while ((pToken != NULL) && (*pToken != '\0')) {
     if (isdigit(*pToken)) {
       double d = (double)_tcstod(pToken, &Stop);
-      if (Alt->Base == abFL) {
+
+      if (Alt->Base == abFL)
         Alt->FL = d;
-      } else if (Alt->Base == abAGL) {
-	Alt->AGL = d;
-      } else {
+      else if (Alt->Base == abAGL)
+        Alt->AGL = d;
+      else
         Alt->Altitude = d;
-      }
-      if (*Stop != '\0'){
+
+      if (*Stop != '\0') {
         pToken = Stop;
         continue;
       }
-
-    }
-
-    else if (_tcscmp(pToken, TEXT("GND")) == 0) {
+    } else if (_tcscmp(pToken, TEXT("GND")) == 0) {
       // JMW support XXXGND as valid, equivalent to XXXAGL
       Alt->Base = abAGL;
       if (Alt->Altitude > fixed_zero) {
-	Alt->AGL = Alt->Altitude;
-	Alt->Altitude = 0;
+        Alt->AGL = Alt->Altitude;
+        Alt->Altitude = 0;
       } else {
-	Alt->FL = 0;
-	Alt->Altitude = 0;
-	Alt->AGL = -1;
-	fHasUnit = true;
+        Alt->FL = 0;
+        Alt->Altitude = 0;
+        Alt->AGL = -1;
+        fHasUnit = true;
       }
-    }
-
-    else if (_tcscmp(pToken, TEXT("SFC")) == 0) {
+    } else if (_tcscmp(pToken, TEXT("SFC")) == 0) {
       Alt->Base = abAGL;
       Alt->FL = 0;
       Alt->Altitude = 0;
       Alt->AGL = -1;
       fHasUnit = true;
-    }
-
-    else if (_tcsstr(pToken, TEXT("FL")) == pToken){
+    } else if (_tcsstr(pToken, TEXT("FL")) == pToken) {
       // this parses "FL=150" and "FL150"
       Alt->Base = abFL;
       fHasUnit = true;
-      if (pToken[2] != '\0'){// no separator between FL and number
-	pToken = &pToken[2];
-	continue;
+      if (pToken[2] != '\0') {// no separator between FL and number
+        pToken = &pToken[2];
+        continue;
       }
-    }
-
-    else if ((_tcscmp(pToken, TEXT("FT")) == 0)
-             || (_tcscmp(pToken, TEXT("F")) == 0)){
+    } else if ((_tcscmp(pToken, TEXT("FT")) == 0) ||
+               (_tcscmp(pToken, TEXT("F")) == 0)) {
       Alt->Altitude = Units::ToSysUnit(Alt->Altitude, unFeet);
       fHasUnit = true;
-    }
-
-    else if (_tcscmp(pToken, TEXT("MSL")) == 0){
+    } else if (_tcscmp(pToken, TEXT("MSL")) == 0) {
       Alt->Base = abMSL;
-    }
-
-    else if (_tcscmp(pToken, TEXT("M")) == 0){
+    } else if (_tcscmp(pToken, TEXT("M")) == 0) {
       // JMW must scan for MSL before scanning for M
       fHasUnit = true;
-    }
-
-    else if (_tcscmp(pToken, TEXT("AGL")) == 0){
+    } else if (_tcscmp(pToken, TEXT("AGL")) == 0) {
       Alt->Base = abAGL;
       Alt->AGL = Alt->Altitude;
       Alt->Altitude = 0;
-    }
-
-    else if (_tcscmp(pToken, TEXT("STD")) == 0){
+    } else if (_tcscmp(pToken, TEXT("STD")) == 0) {
       if (Alt->Base != abUndef) {
         // warning! multiple base tags
       }
       Alt->Base = abFL;
       Alt->FL = Units::ToUserUnit(Alt->Altitude, unFlightLevel);
-    }
-
-    else if (_tcscmp(pToken, TEXT("UNL")) == 0) {
+    } else if (_tcscmp(pToken, TEXT("UNL")) == 0) {
       // JMW added Unlimited (used by WGC2008)
       Alt->Base = abMSL;
       Alt->AGL = -1;
@@ -400,7 +398,6 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
     }
 
     pToken = _tcstok_r(NULL, TEXT(" \t"), &pWClast);
-
   }
 
   if (!fHasUnit && (Alt->Base != abFL)) {
@@ -410,74 +407,77 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
     Alt->AGL = Units::ToSysUnit(Alt->AGL, unFeet);
   }
 
-  if (Alt->Base == abUndef) {
+  if (Alt->Base == abUndef)
     // ToDo warning! no base defined use MSL
     Alt->Base = abMSL;
-  }
 }
 
 static bool
 ReadCoords(const TCHAR *Text, GEOPOINT &point)
 {
-  double Ydeg=0, Ymin=0, Ysec=0;
-  double Xdeg=0, Xmin=0, Xsec=0;
+  double Ydeg = 0, Ymin = 0, Ysec = 0;
+  double Xdeg = 0, Xmin = 0, Xsec = 0;
   TCHAR *Stop;
 
   // ToDo, add more error checking and making it more tolerant/robust
 
   Ydeg = (double)_tcstod(Text, &Stop);
-  if ((Text == Stop) || (*Stop =='\0')) goto OnError;
+  if ((Text == Stop) || (*Stop == '\0'))
+    goto OnError;
   Stop++;
   Ymin = (double)_tcstod(Stop, &Stop);
-  if (Ymin<0 || Ymin >=60){
+  if (Ymin < 0 || Ymin >= 60) {
     // ToDo
   }
-  if (*Stop =='\0') goto OnError;
-  if(*Stop == ':'){
+  if (*Stop == '\0')
+    goto OnError;
+  if (*Stop == ':') {
     Stop++;
-    if (*Stop =='\0')
+    if (*Stop == '\0')
       goto OnError;
     Ysec = (double)_tcstod(Stop, &Stop);
-    if (Ysec<0 || Ysec >=60) {
+    if (Ysec < 0 || Ysec >= 60) {
       // ToDo
     }
   }
 
-  point.Latitude = Angle::degrees(fixed(Ysec/3600 + Ymin/60 + Ydeg));
+  point.Latitude = Angle::degrees(fixed(Ysec / 3600 + Ymin / 60 + Ydeg));
 
   if (*Stop == ' ')
     Stop++;
 
-  if (*Stop =='\0') goto OnError;
+  if (*Stop == '\0')
+    goto OnError;
   if ((*Stop == 'S') || (*Stop == 's'))
     point.Latitude.flip();
 
   Stop++;
-  if (*Stop =='\0') goto OnError;
+  if (*Stop == '\0')
+    goto OnError;
 
   Xdeg = (double)_tcstod(Stop, &Stop);
   Stop++;
   Xmin = (double)_tcstod(Stop, &Stop);
-  if(*Stop == ':'){
+  if (*Stop == ':') {
     Stop++;
-    if (*Stop =='\0')
+    if (*Stop == '\0')
       goto OnError;
     Xsec = (double)_tcstod(Stop, &Stop);
   }
 
-  point.Longitude = Angle::degrees(fixed(Xsec/3600 + Xmin/60 + Xdeg));
+  point.Longitude = Angle::degrees(fixed(Xsec / 3600 + Xmin / 60 + Xdeg));
 
   if (*Stop == ' ')
     Stop++;
-  if (*Stop =='\0') goto OnError;
-  if((*Stop == 'W') || (*Stop == 'w'))
+  if (*Stop == '\0')
+    goto OnError;
+  if ((*Stop == 'W') || (*Stop == 'w'))
     point.Longitude.flip();
   point.Longitude = point.Longitude.as_bearing();
-  return(true);
+  return true;
 
 OnError:
-  return(false);
-
+  return false;
 }
 
 static void
@@ -495,19 +495,17 @@ CalculateSector(const TCHAR *Text)
   StartBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop)));
   EndBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop)));
 
-  if (EndBearing<StartBearing) {
+  if (EndBearing < StartBearing)
     EndBearing += Angle::degrees(fixed_360);
-  }
 
-  while((EndBearing-StartBearing).magnitude_degrees() > fixed_75) {
+  while ((EndBearing - StartBearing).magnitude_degrees() > fixed_75) {
     StartBearing = StartBearing.as_bearing();
-    FindLatitudeLongitude(temp_area.Center, StartBearing, Radius,
-                          &TempPoint);
+    FindLatitudeLongitude(temp_area.Center, StartBearing, Radius, &TempPoint);
     temp_area.points.push_back(TempPoint);
     StartBearing += Angle::degrees(temp_area.Rotation * fixed_5);
   }
-  FindLatitudeLongitude(temp_area.Center, EndBearing, Radius,
-                        &TempPoint);
+
+  FindLatitudeLongitude(temp_area.Center, EndBearing, Radius, &TempPoint);
   temp_area.points.push_back(TempPoint);
 }
 
@@ -524,29 +522,28 @@ CalculateArc(const TCHAR *Text)
   static const fixed fixed_75 = fixed(7.5);
   static const fixed fixed_5 = fixed(5);
 
-  ReadCoords(&Text[3],Start);
+  ReadCoords(&Text[3], Start);
 
-  Comma = _tcschr(Text,',');
-  if(!Comma)
+  Comma = _tcschr(Text, ',');
+  if (!Comma)
     return;
 
-  ReadCoords(&Comma[1],End);
+  ReadCoords(&Comma[1], End);
 
   DistanceBearing(temp_area.Center, Start, &Radius, &StartBearing);
   EndBearing = Bearing(temp_area.Center, End);
-  TempPoint.Latitude  = Start.Latitude;
+  TempPoint.Latitude = Start.Latitude;
   TempPoint.Longitude = Start.Longitude;
   temp_area.points.push_back(TempPoint);
 
-  while((EndBearing-StartBearing).magnitude_degrees() > fixed_75) {
-    StartBearing += Angle::degrees(temp_area.Rotation *fixed_5);
+  while ((EndBearing - StartBearing).magnitude_degrees() > fixed_75) {
+    StartBearing += Angle::degrees(temp_area.Rotation * fixed_5);
     StartBearing = StartBearing.as_bearing();
-    FindLatitudeLongitude(temp_area.Center, StartBearing, Radius,
-                          &TempPoint);
+    FindLatitudeLongitude(temp_area.Center, StartBearing, Radius, &TempPoint);
     temp_area.points.push_back(TempPoint);
   }
 
-  TempPoint  = End;
+  TempPoint = End;
   temp_area.points.push_back(TempPoint);
 }
 
@@ -559,9 +556,9 @@ ParseLine(Airspaces &airspace_database, enum line_type nLineType,
 
   switch (nLineType) {
   case k_nLtAC:
-    if (!temp_area.Waiting) {
+    if (!temp_area.Waiting)
       temp_area.AddPolygon(airspace_database);
-    }
+
     temp_area.reset();
     
     for (nIndex = 0; nIndex < k_nAreaCount; nIndex++) {
@@ -576,12 +573,15 @@ ParseLine(Airspaces &airspace_database, enum line_type nLineType,
   case k_nLtAN:
     temp_area.Name = &TempString[3];
     break;
+
   case k_nLtAL:
     ReadAltitude(&TempString[3], &temp_area.Base);
     break;
+
   case k_nLtAH:
     ReadAltitude(&TempString[3],&temp_area.Top);
     break;
+
   case k_nLtV:
     // Need to set these while in count mode, or DB/DA will crash
     if (StartsWith(&TempString[2], _T("X=")) ||
@@ -614,6 +614,7 @@ ParseLine(Airspaces &airspace_database, enum line_type nLineType,
   case k_nLtDP:
     if (!ReadCoords(&TempString[3],TempPoint))
       goto OnError;
+
     temp_area.points.push_back(TempPoint);
     break;
 
@@ -626,13 +627,14 @@ ParseLine(Airspaces &airspace_database, enum line_type nLineType,
     break;
 
   case k_nLtDC:
-    temp_area.Radius = Units::ToSysUnit(_tcstod(&TempString[2], NULL), unNauticalMiles);
+    temp_area.Radius = Units::ToSysUnit(_tcstod(&TempString[2], NULL),
+        unNauticalMiles);
     temp_area.AddCircle(airspace_database);
     temp_area.reset();
     break;
   }
 
-  return(true);
+  return true;
 
 OnError:
 
@@ -641,13 +643,11 @@ OnError:
             gettext(TEXT("Parse Error at Line")),
             LineCount, TempString,
             gettext(TEXT("Line skipped.")));
-  if (MessageBoxX(sTmp, gettext(TEXT("Airspace")),
-                  MB_OKCANCEL) == IDCANCEL){
-    return(false);
-  }
+  if (MessageBoxX(sTmp, gettext(TEXT("Airspace")), MB_OKCANCEL) == IDCANCEL)
+    return false;
 
-  return(true);
 
+  return true;
 }
 
 bool
@@ -658,14 +658,15 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
 
   LineCount = 0;
 
-  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Airspace File...")));
+  XCSoarInterface::CreateProgressDialog(gettext(
+      TEXT("Loading Airspace File...")));
   XCSoarInterface::SetProgressDialogMaxValue(1024);
   long file_size = reader.size();
 
   temp_area.reset();
 
   TCHAR *line;
-  while((nLineType = GetNextLine(reader, line)) != k_nLtEOF) {
+  while ((nLineType = GetNextLine(reader, line)) != k_nLtEOF) {
     if (!ParseLine(airspace_database, nLineType, line))
       return false;
 
@@ -673,7 +674,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
   }
 
   // Process final area (if any). bFillMode is true.  JG 10-Nov-2005
-  if (!temp_area.Waiting) 
+  if (!temp_area.Waiting)
     temp_area.AddPolygon(airspace_database);
 
   return true;
