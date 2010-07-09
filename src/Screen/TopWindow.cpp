@@ -38,9 +38,7 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 
-#ifdef ENABLE_SDL
-#include <wcecompat/ts_string.h>
-#else /* !ENABLE_SDL */
+#ifndef ENABLE_SDL
 #include "Interface.hpp" /* for XCSoarInterface::hInst */
 #if defined(GNAV) && !defined(PCGNAV)
 #include "resource.h" /* for IDI_XCSOAR */
@@ -109,8 +107,14 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
   screen.set();
   ContainerWindow::set(NULL, cls, 0, 0, width, height, style);
 
-  char text2[512];
-  unicode2ascii(text, text2);
+#ifdef _UNICODE
+  char text2[_tcslen(text) * 4];
+  ::WideCharToMultiByte(CP_UTF8, 0, text, -1, text2, sizeof(text2),
+                        NULL, NULL);
+#else
+  const char *text2 = text;
+#endif
+
   ::SDL_WM_SetCaption(text2, NULL);
 #else /* !ENABLE_SDL */
   Window::set(NULL, cls, text, left, top, width, height, style);
