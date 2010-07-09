@@ -58,31 +58,29 @@ ReadAirspace(AirspaceClientUI &airspace,
   TLineReader *reader =
     OpenConfiguredTextFile(szProfileAirspaceFile, _T("airspace.txt"));
   if (reader != NULL) {
-    if (!airspace.read(*reader)) {
+    if (!airspace.read(*reader))
       LogStartUp(_T("No airspace file 1"));
-    } else {
+    else
       airspace_ok =  true;
-    }
 
     delete reader;
   }
 
   reader = OpenConfiguredTextFile(szProfileAdditionalAirspaceFile);
   if (reader != NULL) {
-    if (!airspace.read(*reader)) {
+    if (!airspace.read(*reader))
       LogStartUp(_T("No airspace file 2"));
-    } else {
+    else
       airspace_ok = true;
-    }
 
     delete reader;
   }
 
-  if (airspace_ok) {
+  if (airspace_ok)
     airspace.finalise_after_loading(terrain, press);
-  } else {
-    airspace.clear(); // there was a problem
-  }
+  else
+    // there was a problem
+    airspace.clear();
 }
 
 void 
