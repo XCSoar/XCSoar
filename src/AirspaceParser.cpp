@@ -110,15 +110,23 @@ struct TempAirspaceType
     reset();
   }
 
+  bool Waiting;
+
+  // General
   tstring Name;
-  std::vector<GEOPOINT> points;
-  int Rotation;
-  GEOPOINT Center;
   AirspaceClass_t Type;
-  fixed Radius;
   AIRSPACE_ALT Base;
   AIRSPACE_ALT Top;
-  bool Waiting;
+
+  // Polygon
+  std::vector<GEOPOINT> points;
+
+  // Circle or Arc
+  GEOPOINT Center;
+  fixed Radius;
+
+  // Arc
+  int Rotation;
 
   void
   reset()
