@@ -179,11 +179,15 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
   while ((Text = reader.read()) != NULL) {
     LineCount++;
 
-    nSize = _tcslen(Text);
+    // Strip comments and newline chars from end of line
+    Comment = _tcschr(Text, _T('*'));
+    if (Comment != NULL)
+      // Truncate line
+      *Comment = _T('\0');
 
     // Ignore lines less than 3 characters
-    // or starting with comment char
-    if ((nSize < 3) || (Text[0] == _T('*')))
+    nSize = _tcslen(Text);
+    if (nSize < 3)
       continue;
 
     // Only return expected lines
@@ -280,22 +284,8 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
       continue;
     }
 
-    if (nLineType != ltEOF) {
-      // Valid line found
-      // Strip comments and newline chars from end of line
-      Comment = _tcschr(Text, _T('*'));
-      if (Comment != NULL) {
-        // Truncate line
-        *Comment = _T('\0');
-        // Reset size
-        nSize = Comment - Text;
-        if (nSize < 3)
-          // Ensure newline removal won't fail
-          continue;
-      }
-
+    if (nLineType != ltEOF)
       break;
-    }
   }
 
   return nLineType;
