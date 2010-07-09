@@ -47,6 +47,14 @@ string_is_empty(const TCHAR *string)
   return *string == 0;
 }
 
+#ifdef _UNICODE
+static inline bool
+string_is_empty(const char *string)
+{
+  return *string == 0;
+}
+#endif
+
 /**
  * Returns the portion of the string after a prefix.  If the string
  * does not begin with the specified prefix, this function returns
