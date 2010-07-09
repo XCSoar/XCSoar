@@ -55,6 +55,7 @@ extern const TCHAR *szProfileAirspaceMode[];
 extern const TCHAR szProfileSpeedUnitsValue[];
 extern const TCHAR szProfileDistanceUnitsValue[];
 extern const TCHAR szProfileAltitudeUnitsValue[];
+extern const TCHAR szProfileTemperatureUnitsValue[];
 extern const TCHAR szProfileLiftUnitsValue[];
 extern const TCHAR szProfileTaskSpeedUnitsValue[];
 extern const TCHAR szProfileDisplayUpValue[];

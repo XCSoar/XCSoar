@@ -137,6 +137,7 @@ const TCHAR szProfileAirspaceBlackOutline[] = CONF("AirspaceBlackOutline");
 const TCHAR szProfileAltMargin[] = CONF("AltMargin");
 const TCHAR szProfileAltMode[] = CONF("AltitudeMode");
 const TCHAR szProfileAltitudeUnitsValue[] = CONF("Altitude");
+const TCHAR szProfileTemperatureUnitsValue[] = CONF("Temperature");
 const TCHAR szProfileCircleZoom[] = CONF("CircleZoom");
 const TCHAR szProfileClipAlt[] = CONF("ClipAlt");
 const TCHAR szProfileDisplayText[] = CONF("DisplayText");
