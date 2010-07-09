@@ -406,18 +406,21 @@ ReadCoords(const TCHAR *Text, GEOPOINT &point)
 
   Ydeg = (double)_tcstod(Text, &Stop);
   if ((Text == Stop) || (*Stop == '\0'))
-    goto OnError;
+    return false;
+
   Stop++;
   Ymin = (double)_tcstod(Stop, &Stop);
   if (Ymin < 0 || Ymin >= 60) {
     // ToDo
   }
   if (*Stop == '\0')
-    goto OnError;
+    return false;
+
   if (*Stop == ':') {
     Stop++;
     if (*Stop == '\0')
-      goto OnError;
+      return false;
+
     Ysec = (double)_tcstod(Stop, &Stop);
     if (Ysec < 0 || Ysec >= 60) {
       // ToDo
@@ -430,13 +433,14 @@ ReadCoords(const TCHAR *Text, GEOPOINT &point)
     Stop++;
 
   if (*Stop == '\0')
-    goto OnError;
+    return false;
+
   if ((*Stop == 'S') || (*Stop == 's'))
     point.Latitude.flip();
 
   Stop++;
   if (*Stop == '\0')
-    goto OnError;
+    return false;
 
   Xdeg = (double)_tcstod(Stop, &Stop);
   Stop++;
@@ -444,7 +448,8 @@ ReadCoords(const TCHAR *Text, GEOPOINT &point)
   if (*Stop == ':') {
     Stop++;
     if (*Stop == '\0')
-      goto OnError;
+      return false;
+
     Xsec = (double)_tcstod(Stop, &Stop);
   }
 
@@ -452,15 +457,14 @@ ReadCoords(const TCHAR *Text, GEOPOINT &point)
 
   if (*Stop == ' ')
     Stop++;
+
   if (*Stop == '\0')
-    goto OnError;
+    return false;
+
   if ((*Stop == 'W') || (*Stop == 'w'))
     point.Longitude.flip();
   point.Longitude = point.Longitude.as_bearing();
   return true;
-
-OnError:
-  return false;
 }
 
 static void
@@ -596,11 +600,11 @@ ParseLine(Airspaces &airspace_database, enum line_type nLineType,
       // ----- JMW THIS IS REQUIRED FOR LEGACY FILES
       break;
     }
-    goto OnError;
+    return ShowParseWarning(LineCount, TempString);
 
   case ltDPoint:
     if (!ReadCoords(&TempString[3],TempPoint))
-      goto OnError;
+      return ShowParseWarning(LineCount, TempString);
 
     temp_area.points.push_back(TempPoint);
     break;
@@ -622,9 +626,6 @@ ParseLine(Airspaces &airspace_database, enum line_type nLineType,
   }
 
   return true;
-
-OnError:
-  return ShowParseWarning(LineCount, TempString);
 }
 
 bool
