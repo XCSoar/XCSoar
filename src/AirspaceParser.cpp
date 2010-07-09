@@ -55,8 +55,6 @@ Copyright_License {
 #include <ctype.h>
 #include <assert.h>
 
-static int LineCount;
-
 static const int k_nAreaCount = 12;
 static const TCHAR* k_strAreaStart[k_nAreaCount] = {
   _T("R"),
@@ -406,7 +404,7 @@ ParseType(const TCHAR* text)
 
 static bool
 ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
-          TempAirspaceType &temp_area)
+          int LineCount, TempAirspaceType &temp_area)
 {
   int nSize;
 
@@ -511,7 +509,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
 {
   LogStartUp(TEXT("ReadAirspace"));
 
-  LineCount = 0;
+  int LineCount = 0;
 
   // Create and init ProgressDialog
   XCSoarInterface::CreateProgressDialog(gettext(
@@ -539,7 +537,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
       continue;
 
     // Parse the line
-    if (!ParseLine(airspace_database, line, temp_area))
+    if (!ParseLine(airspace_database, line, LineCount, temp_area))
       return false;
 
     // Update the ProgressDialog
