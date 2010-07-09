@@ -42,6 +42,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "UtilsText.hpp"
+#include "Util/StringUtil.hpp"
 #include "LogFile.hpp"
 #include "Math/Earth.hpp"
 #include "IO/LineReader.hpp"
@@ -296,16 +297,7 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
 static bool
 StartsWith(const TCHAR *Text, const TCHAR *LookFor)
 {
-  while (true) {
-    if (!(*LookFor))
-      return TRUE;
-
-    if (*Text != *LookFor)
-      return FALSE;
-
-    Text++;
-    LookFor++;
-  }
+  return (string_after_prefix(Text, LookFor) != NULL);
 }
 
 static void
