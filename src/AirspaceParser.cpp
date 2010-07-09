@@ -294,12 +294,6 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
   return nLineType;
 }
 
-static bool
-StartsWith(const TCHAR *Text, const TCHAR *LookFor)
-{
-  return (string_after_prefix(Text, LookFor) != NULL);
-}
-
 static void
 ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
 {
@@ -553,7 +547,7 @@ ParseLine(Airspaces &airspace_database, enum line_type nLineType,
     temp_area.reset();
     
     for (nIndex = 0; nIndex < k_nAreaCount; nIndex++) {
-      if (StartsWith(&TempString[3], k_strAreaStart[nIndex])) {
+      if (string_after_prefix(&TempString[3], k_strAreaStart[nIndex])) {
         temp_area.Type = (AirspaceClass_t)k_nAreaType[nIndex];
         break;
       }
@@ -575,28 +569,28 @@ ParseLine(Airspaces &airspace_database, enum line_type nLineType,
 
   case ltAttribute:
     // Need to set these while in count mode, or DB/DA will crash
-    if (StartsWith(&TempString[2], _T("X=")) ||
-        StartsWith(&TempString[2], _T("x="))) {
+    if (string_after_prefix(&TempString[2], _T("X=")) ||
+        string_after_prefix(&TempString[2], _T("x="))) {
       if (ReadCoords(&TempString[4],temp_area.Center))
         break;
-    } else if (StartsWith(&TempString[2], _T("D=-")) ||
-               StartsWith(&TempString[2], _T("d=-"))) {
+    } else if (string_after_prefix(&TempString[2], _T("D=-")) ||
+               string_after_prefix(&TempString[2], _T("d=-"))) {
       temp_area.Rotation = -1;
       break;
-    } else if (StartsWith(&TempString[2], _T("D=+")) ||
-             StartsWith(&TempString[2], _T("d=+"))) {
+    } else if (string_after_prefix(&TempString[2], _T("D=+")) ||
+               string_after_prefix(&TempString[2], _T("d=+"))) {
       temp_area.Rotation = +1;
       break;
-    } else if (StartsWith(&TempString[2], _T("Z")) ||
-               StartsWith(&TempString[2], _T("z"))) {
+    } else if (string_after_prefix(&TempString[2], _T("Z")) ||
+               string_after_prefix(&TempString[2], _T("z"))) {
       // ToDo Display Zool Level
       break;
-    } else if (StartsWith(&TempString[2], _T("W")) ||
-               StartsWith(&TempString[2], _T("w"))) {
+    } else if (string_after_prefix(&TempString[2], _T("W")) ||
+               string_after_prefix(&TempString[2], _T("w"))) {
       // ToDo width of an airway
       break;
-    } else if (StartsWith(&TempString[2], _T("T")) ||
-               StartsWith(&TempString[2], _T("t"))) {
+    } else if (string_after_prefix(&TempString[2], _T("T")) ||
+               string_after_prefix(&TempString[2], _T("t"))) {
       // ----- JMW THIS IS REQUIRED FOR LEGACY FILES
       break;
     }
