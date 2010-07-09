@@ -41,8 +41,8 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Dialogs.h"
 #include "DeviceBlackboard.hpp"
-#include "wcecompat/ts_string.h"
 #include "Units.hpp"
+#include "OS/PathName.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -83,12 +83,10 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  TCHAR path[MAX_PATH];
   Waypoints way_points;
 
-  ascii2unicode(argv[1], path);
-
   WayPointFile* parser = NULL;
+  PathName path(argv[1]);
   parser = WayPointFile::create(path, 0);
   if (!parser) {
     fprintf(stderr, "WayPointParser::SetFile() has failed\n");

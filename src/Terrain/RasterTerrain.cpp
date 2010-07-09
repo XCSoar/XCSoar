@@ -41,7 +41,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "RasterMapJPG2000.hpp"
 #include "StringUtil.hpp"
-#include "wcecompat/ts_string.h"
+#include "OS/PathName.hpp"
 
 // General, open/close
 
@@ -59,13 +59,10 @@ void RasterTerrain::OpenTerrain(void)
 
   ExpandLocalPath(szFile);
 
-  char zfilename[MAX_PATH];
-  unicode2ascii(szFile, zfilename, MAX_PATH);
-
   // TODO code: Check locking, especially when reloading a file.
   // TODO bug: Fix cache method
 
-  CreateTerrainMap(zfilename);
+  CreateTerrainMap(NarrowPathName(szFile));
 }
 
 bool

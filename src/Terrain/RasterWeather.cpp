@@ -42,6 +42,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "LocalPath.hpp"
 #include "LocalTime.hpp"
+#include "OS/PathName.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -119,8 +120,9 @@ bool RasterWeather::isWeatherAvailable(unsigned t) {
   return weather_available[min((unsigned)MAX_WEATHER_TIMES, t - 1)];
 }
 
-void RasterWeather::RASP_filename(char* rasp_filename,
-                                  const TCHAR* name) {
+void
+RasterWeather::RASP_filename(TCHAR *rasp_filename, const TCHAR* name)
+{
   TCHAR fname[MAX_PATH];
   _stprintf(fname,
             TEXT("xcsoar-rasp.dat/%s.curr.%04dlst.d2.jp2"),
@@ -129,9 +131,9 @@ void RasterWeather::RASP_filename(char* rasp_filename,
 }
 
 bool RasterWeather::LoadItem(int item, const TCHAR* name) {
-  char rasp_filename[MAX_PATH];
+  TCHAR rasp_filename[MAX_PATH];
   RASP_filename(rasp_filename, name);
-  weather_map[item] = RasterMapJPG2000::LoadFile(rasp_filename);
+  weather_map[item] = RasterMapJPG2000::LoadFile(NarrowPathName(rasp_filename));
   return weather_map[item] != NULL;
 }
 

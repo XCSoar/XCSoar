@@ -36,8 +36,8 @@
  */
 
 #include "DataNodeXML.hpp"
+#include "OS/PathName.hpp"
 #include "xmlParser.h"
-#include "wcecompat/ts_string.h"
 
 #include <stdio.h>
 
@@ -62,9 +62,7 @@ DataNodeXML::~DataNodeXML()
 DataNode* 
 DataNodeXML::load(const TCHAR* path)
 {
-  char buf[_tcslen(path) + 1];
-  unicode2ascii(path,buf);
-
+  NarrowPathName buf(path);
   XMLNode child = XMLNode::openFileHelper(buf);
   if (child.isEmpty()) {
     return NULL;
@@ -145,10 +143,7 @@ bool
 DataNodeXML::save(const TCHAR* path)
 {
   /// @todo make xml writing portable (unicode etc)
-
-  char buf[_tcslen(path) + 1];
-  unicode2ascii(path,buf);
-
+  NarrowPathName buf(path);
   FILE* file = fopen(buf, "wt");
   if (file == NULL)
     return false;

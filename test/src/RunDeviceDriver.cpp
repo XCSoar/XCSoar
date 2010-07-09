@@ -46,7 +46,7 @@ Copyright_License {
 #include "Thread/Trigger.hpp"
 #include "DeviceBlackboard.hpp"
 #include "MapWindowProjection.hpp"
-#include "wcecompat/ts_string.h"
+#include "OS/PathName.hpp"
 
 #include <stdio.h>
 
@@ -269,9 +269,7 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  TCHAR driver_name[64];
-  ascii2unicode(argv[1], driver_name);
-
+  PathName driver_name(argv[1]);
   device.Driver = devGetDriver(driver_name);
   if (device.Driver == NULL) {
     fprintf(stderr, "No such driver: %s\n", argv[1]);

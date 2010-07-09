@@ -88,7 +88,7 @@ public:
   unsigned _parameter; // was terrain.render_weather
   unsigned _weather_time;
   RasterMap* weather_map[MAX_WEATHER_MAP];
-  void RASP_filename(char* rasp_filename, const TCHAR* name);
+  void RASP_filename(TCHAR *rasp_filename, const TCHAR *name);
   bool LoadItem(int item, const TCHAR* name);
   void ServiceFullReload(const GEOPOINT &location);
   bool weather_available[MAX_WEATHER_TIMES];

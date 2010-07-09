@@ -63,6 +63,7 @@ Copyright_License {
 #include "Form/Panel.hpp"
 #include "Form/Keyboard.hpp"
 #include "StringUtil.hpp"
+#include "OS/PathName.hpp"
 
 #include <stdio.h>    // for _stprintf
 #include <tchar.h>
@@ -360,8 +361,9 @@ load_xml_file_or_resource(const TCHAR *name, const TCHAR* resource)
   XMLNode xMainNode;
 
   // Get filepath
-  char FileName[MAX_PATH];
-  LocalPath(FileName, name);
+  TCHAR TFileName[MAX_PATH];
+  LocalPath(TFileName, name);
+  NarrowPathName FileName(TFileName);
 
   // If file exists -> Load XML from file
   if (FileExists(FileName))
