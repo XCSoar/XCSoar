@@ -169,7 +169,6 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
   TCHAR *Comment;
   int nSize;
   enum line_type nLineType = ltEOF;
-  TCHAR sTmp[READLINE_LENGTH];
 
   while ((Text = reader.read()) != NULL) {
     LineCount++;
@@ -181,32 +180,33 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
     if ((nSize < 3) || (Text[0] == _T('*')))
       continue;
 
-    // build a upercase copy of the tags
-    _tcsncpy(sTmp, Text, sizeof(sTmp) / sizeof(sTmp[0]));
-    sTmp[sizeof(sTmp) / sizeof(sTmp[0]) - 1] = '\0';
-    _tcsupr(sTmp);
-
     // Only return expected lines
-    switch (sTmp[0]) {
+    switch (Text[0]) {
     case _T('A'):
-      switch (sTmp[1]) {
+    case _T('a'):
+      switch (Text[1]) {
       case _T('C'):
+      case _T('c'):
         nLineType = ltClass;
         break;
 
       case _T('N'):
+      case _T('n'):
         nLineType = ltName;
         break;
 
       case _T('L'):
+      case _T('l'):
         nLineType = ltBase;
         break;
 
       case _T('H'):
+      case _T('h'):
         nLineType = ltTop;
         break;
 
       case _T('T'):
+      case _T('t'):
         // ToDo: adding airspace labels
         continue;
 
@@ -220,20 +220,25 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
       break;
 
     case _T('D'):
-      switch (sTmp[1]) {
+    case _T('d'):
+      switch (Text[1]) {
       case _T('A'):
+      case _T('a'):
         nLineType = ltDSector;
         break;
 
       case _T('B'):
+      case _T('b'):
         nLineType = ltDArc;
         break;
 
       case _T('C'):
+      case _T('c'):
         nLineType = ltDCircle;
         break;
 
       case _T('P'):
+      case _T('p'):
         nLineType = ltDPoint;
         break;
 
@@ -250,13 +255,16 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
       break;
 
     case _T('V'):
+    case _T('v'):
       nLineType = ltAttribute;
       break;
 
-    case _T('S'):  // ignore the SB,SP ...
-      if (sTmp[1] == _T('B'))
+    case _T('S'):
+    case _T('s'):
+      // ignore the SB,SP ...
+      if (Text[1] == _T('B') || Text[1] == _T('b'))
         continue;
-      if (sTmp[1] == _T('P'))
+      if (Text[1] == _T('P') || Text[1] == _T('p'))
         continue;
 
     default:
