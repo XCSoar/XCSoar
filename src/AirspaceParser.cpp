@@ -408,18 +408,17 @@ ReadCoords(const TCHAR *Text, GEOPOINT &point)
 {
   // Format: 53:20:41 N 010:24:41 E
 
-  double Ydeg = 0, Ymin = 0, Ysec = 0;
-  double Xdeg = 0, Xmin = 0, Xsec = 0;
+  double deg = 0, min = 0, sec = 0;
   TCHAR *Stop;
 
   // ToDo, add more error checking and making it more tolerant/robust
 
-  Ydeg = (double)_tcstod(Text, &Stop);
+  deg = (double)_tcstod(Text, &Stop);
   if ((Text == Stop) || (*Stop == '\0'))
     return false;
 
   Stop++;
-  Ymin = (double)_tcstod(Stop, &Stop);
+  min = (double)_tcstod(Stop, &Stop);
   if (*Stop == '\0')
     return false;
 
@@ -428,13 +427,13 @@ ReadCoords(const TCHAR *Text, GEOPOINT &point)
     if (*Stop == '\0')
       return false;
 
-    Ysec = (double)_tcstod(Stop, &Stop);
-    if (Ysec < 0 || Ysec >= 60) {
+    sec = (double)_tcstod(Stop, &Stop);
+    if (sec < 0 || sec >= 60) {
       // ToDo
     }
   }
 
-  point.Latitude = Angle::degrees(fixed(Ysec / 3600 + Ymin / 60 + Ydeg));
+  point.Latitude = Angle::degrees(fixed(sec / 3600 + min / 60 + deg));
 
   if (*Stop == ' ')
     Stop++;
@@ -449,18 +448,18 @@ ReadCoords(const TCHAR *Text, GEOPOINT &point)
   if (*Stop == '\0')
     return false;
 
-  Xdeg = (double)_tcstod(Stop, &Stop);
+  deg = (double)_tcstod(Stop, &Stop);
   Stop++;
-  Xmin = (double)_tcstod(Stop, &Stop);
+  min = (double)_tcstod(Stop, &Stop);
   if (*Stop == ':') {
     Stop++;
     if (*Stop == '\0')
       return false;
 
-    Xsec = (double)_tcstod(Stop, &Stop);
+    sec = (double)_tcstod(Stop, &Stop);
   }
 
-  point.Longitude = Angle::degrees(fixed(Xsec / 3600 + Xmin / 60 + Xdeg));
+  point.Longitude = Angle::degrees(fixed(sec / 3600 + min / 60 + deg));
 
   if (*Stop == ' ')
     Stop++;
