@@ -83,6 +83,7 @@ const UnitDescriptor_t Units::UnitDescriptors[] = {
 
 Units_t Units::DistanceUnit = unKiloMeter;
 Units_t Units::AltitudeUnit = unMeter;
+Units_t Units::TemperatureUnit = unGradCelcius;
 Units_t Units::SpeedUnit = unKiloMeterPerHour;
 Units_t Units::VerticalSpeedUnit = unMeterPerSecond;
 Units_t Units::WindSpeedUnit = unKiloMeterPerHour;
@@ -334,6 +335,21 @@ Units::SetUserAltitudeUnit(Units_t NewUnit)
 }
 
 Units_t
+Units::GetUserTemperatureUnit()
+{
+  return TemperatureUnit;
+}
+
+Units_t
+Units::SetUserTemperatureUnit(Units_t NewUnit)
+{
+  Units_t last = TemperatureUnit;
+  if (TemperatureUnit != NewUnit)
+    TemperatureUnit = NewUnit;
+  return last;
+}
+
+Units_t
 Units::GetUserSpeedUnit()
 {
   return SpeedUnit;
@@ -403,6 +419,8 @@ Units::GetUserUnitByGroup(UnitGroup_t UnitGroup)
     return GetUserDistanceUnit();
   case ugAltitude:
     return GetUserAltitudeUnit();
+  case ugTemperature:
+    return GetUserTemperatureUnit();
   case ugHorizontalSpeed:
     return GetUserSpeedUnit();
   case ugVerticalSpeed:
@@ -438,6 +456,12 @@ const TCHAR *
 Units::GetAltitudeName()
 {
   return GetUnitName(GetUserAltitudeUnit());
+}
+
+const TCHAR *
+Units::GetTemperatureName()
+{
+  return GetUnitName(GetUserTemperatureUnit());
 }
 
 const TCHAR *

@@ -84,6 +84,7 @@ typedef enum {
   ugNone,
   ugDistance,
   ugAltitude,
+  ugTemperature,
   ugHorizontalSpeed,
   ugVerticalSpeed,
   ugWindSpeed,
@@ -109,6 +110,7 @@ private:
 public:
   static Units_t DistanceUnit;  /**< Unit for distances */
   static Units_t AltitudeUnit; /**< Unit for altitudes, heights */
+  static Units_t TemperatureUnit; /**< Unit for temperature */
   static Units_t SpeedUnit; /**< Unit for aircraft speeds */
   static Units_t VerticalSpeedUnit; /**< Unit for vertical speeds, varios */
   static Units_t WindSpeedUnit; /**< Unit for wind speeds */
@@ -156,6 +158,19 @@ public:
    * @return The old unit
    */
   static Units_t SetUserAltitudeUnit(Units_t NewUnit);
+
+  /**
+   * Returns the user-specified unit for a temperature
+   * @return The user-specified unit for a temperature
+   */
+  static Units_t GetUserTemperatureUnit();
+
+  /**
+   * Sets the user-specified unit for a temperature
+   * @param NewUnit The new unit
+   * @return The old unit
+   */
+  static Units_t SetUserTemperatureUnit(Units_t NewUnit);
 
   /**
    * Returns the user-specified unit for a horizontal speed
@@ -251,6 +266,7 @@ public:
   static const TCHAR *GetVerticalSpeedName();
   static const TCHAR *GetDistanceName();
   static const TCHAR *GetAltitudeName();
+  static const TCHAR *GetTemperatureName();
   static const TCHAR *GetTaskSpeedName();
 
   /**
@@ -365,6 +381,26 @@ public:
 #ifdef FIXED_MATH
   static fixed ToSysAltitude(fixed Value) {
     return ToSysUnit(Value, AltitudeUnit);
+  }
+#endif
+
+  static double ToUserTemperature(double Value) {
+    return ToUserUnit(Value, TemperatureUnit);
+  }
+
+#ifdef FIXED_MATH
+  static fixed ToUserTemperature(fixed Value) {
+    return ToUserUnit(Value, TemperatureUnit);
+  }
+#endif
+
+  static double ToSysTemperature(double Value) {
+    return ToSysUnit(Value, TemperatureUnit);
+  }
+
+#ifdef FIXED_MATH
+  static fixed ToSysTemperature(fixed Value) {
+    return ToSysUnit(Value, TemperatureUnit);
   }
 #endif
 
