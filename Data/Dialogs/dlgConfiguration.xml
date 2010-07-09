@@ -330,6 +330,11 @@
         Help="Units used for altitude and heights.">
         <DataField name="" DataType="enum" Min="0" Max="50" Step="1"/>
       </Edit>
+
+      <Edit Name="prpUnitsTemperature" Caption="Temperature" X="2" Y="-1" Width="-2" Height="22" CaptionWidth="150"
+        Help="Units used for temperature.">
+        <DataField name="" DataType="enum" Min="0" Max="50" Step="1"/>
+      </Edit>
   
       <Edit Name="prpUnitsTaskSpeed" Caption="Task Speed" X="2" Y="-1" Width="-2" Height="22" CaptionWidth="150"
         Help="Units used for task speeds.">

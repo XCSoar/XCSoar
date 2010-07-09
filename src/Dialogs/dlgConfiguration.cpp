@@ -1022,6 +1022,7 @@ static int TaskSpeed = 2; // default is kph
 static int Distance = 2; // default is km
 static int Lift = 0;
 static int Altitude = 0; //default ft
+static int Temperature = 0; //default is celcius
 static  TCHAR temptext[MAX_PATH];
 
 static void
@@ -1411,6 +1412,20 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(_T("Feet")));
     dfe->addEnumText(gettext(_T("Meters")));
     dfe->Set(Altitude);
+    wp->RefreshDisplay();
+  }
+
+  if(!Profile::Get(szProfileTemperatureUnitsValue,Temperature)) {
+    Profile::Set(szProfileTemperatureUnitsValue, Temperature);
+    changed = true;
+  }
+  wp = (WndProperty*)wf->FindByName(_T("prpUnitsTemperature"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(_T("C")));
+    dfe->addEnumText(gettext(_T("F")));
+    dfe->Set(Temperature);
     wp->RefreshDisplay();
   }
 
@@ -2454,6 +2469,25 @@ void dlgConfigurationShowModal(void)
       case 1:
       default:
         Units::SetUserAltitudeUnit(unMeter);
+        break;
+      }
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpUnitsTemperature"));
+  if (wp) {
+    if ((int)Temperature != wp->GetDataField()->GetAsInteger()) {
+      Temperature = wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileTemperatureUnitsValue, Temperature);
+      changed = true;
+
+      switch (Temperature) {
+      case 0:
+        Units::SetUserTemperatureUnit(unGradCelcius);
+        break;
+      case 1:
+      default:
+        Units::SetUserTemperatureUnit(unGradFahrenheit);
         break;
       }
     }
