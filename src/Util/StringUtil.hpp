@@ -64,6 +64,15 @@ const TCHAR *
 string_after_prefix(const TCHAR *string, const TCHAR *prefix);
 
 /**
+ * Returns the portion of the string after a prefix.  If the string
+ * does not begin with the specified prefix, this function returns
+ * NULL.
+ * This function is case-independent.
+ */
+const TCHAR *
+string_after_prefix_ci(const TCHAR *string, const TCHAR *prefix);
+
+/**
  * Normalize a string for searching.  This strips all characters
  * except letters and digits, folds case to a neutral form.  It is
  * possible to do this in-place (src==dest).

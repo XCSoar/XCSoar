@@ -55,6 +55,19 @@ string_after_prefix(const TCHAR *string, const TCHAR *prefix)
     : NULL;
 }
 
+
+const TCHAR *
+string_after_prefix_ci(const TCHAR *string, const TCHAR *prefix)
+{
+  assert(string != NULL);
+  assert(prefix != NULL);
+
+  size_t prefix_length = _tcslen(prefix);
+  return _tcsnicmp(string, prefix, prefix_length) == 0
+    ? string + prefix_length
+    : NULL;
+}
+
 TCHAR *
 normalize_search_string(TCHAR *dest, const TCHAR *src)
 {
