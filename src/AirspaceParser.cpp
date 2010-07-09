@@ -554,8 +554,6 @@ static bool
 ParseLine(Airspaces &airspace_database, enum line_type nLineType,
           const TCHAR *TempString)
 {
-  GEOPOINT TempPoint;
-
   switch (nLineType) {
   case ltClass:
     if (!temp_area.Waiting)
@@ -609,12 +607,15 @@ ParseLine(Airspaces &airspace_database, enum line_type nLineType,
     return ShowParseWarning(LineCount, TempString);
 
   case ltDPoint:
+  {
+    GEOPOINT TempPoint;
+
     if (!ReadCoords(&TempString[3],TempPoint))
       return ShowParseWarning(LineCount, TempString);
 
     temp_area.points.push_back(TempPoint);
     break;
-
+  }
   case ltDArc:
     CalculateArc(TempString);
     break;
