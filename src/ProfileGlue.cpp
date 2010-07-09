@@ -109,6 +109,7 @@ Profile::Use()
   unsigned TaskSpeed = 0;
   unsigned Lift = 0;
   unsigned Altitude = 0;
+  unsigned Temperature = 0;
   unsigned Temp = 0;
   int i;
 
@@ -200,6 +201,17 @@ Profile::Use()
   case 1:
   default:
     Units::SetUserAltitudeUnit(unMeter);
+    break;
+  }
+
+  Get(szProfileTemperatureUnitsValue, Temperature);
+  switch (Temperature) {
+  default:
+  case 0:
+    Units::SetUserTemperatureUnit(unGradCelcius);
+    break;
+  case 1:
+    Units::SetUserTemperatureUnit(unGradFahrenheit);
     break;
   }
 
