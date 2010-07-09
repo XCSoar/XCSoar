@@ -67,18 +67,6 @@ FileExists(const char *FileName)
 #endif
 
 bool
-FileExistsZipped(const char *FileName)
-{
-  ZZIP_FILE *file = zzip_fopen(FileName, "r");
-  if (file == NULL)
-    return false;
-
-  zzip_fclose(file);
-
-  return true;
-}
-
-bool
 MatchesExtension(const TCHAR *filename, const TCHAR* extension)
 {
   size_t filename_length = _tcslen(filename);

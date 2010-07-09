@@ -49,8 +49,6 @@ bool
 FileExists(const char *FileName);
 #endif
 
-bool FileExistsZipped(const char *FileName);
-
 /**
  * Checks whether the given filename matches the given extension
  * @param filename Filename to check
