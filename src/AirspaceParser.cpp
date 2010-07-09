@@ -334,7 +334,7 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
   TCHAR *Stop;
   GEOPOINT TempPoint;
   static const fixed fixed_75 = fixed(7.5);
-  static const fixed fixed_5 = fixed(5);
+  const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
 
   Radius = Units::ToSysUnit(_tcstod(&Text[2], &Stop), unNauticalMiles);
   StartBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop)));
@@ -347,7 +347,7 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
     StartBearing = StartBearing.as_bearing();
     FindLatitudeLongitude(temp_area.Center, StartBearing, Radius, &TempPoint);
     temp_area.points.push_back(TempPoint);
-    StartBearing += Angle::degrees(temp_area.Rotation * fixed_5);
+    StartBearing += BearingStep;
   }
 
   FindLatitudeLongitude(temp_area.Center, EndBearing, Radius, &TempPoint);
@@ -365,7 +365,7 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
   const TCHAR *Comma = NULL;
   GEOPOINT TempPoint;
   static const fixed fixed_75 = fixed(7.5);
-  static const fixed fixed_5 = fixed(5);
+  const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
 
   ReadCoords(&Text[3], Start);
 
@@ -382,7 +382,7 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
   temp_area.points.push_back(TempPoint);
 
   while ((EndBearing - StartBearing).magnitude_degrees() > fixed_75) {
-    StartBearing += Angle::degrees(temp_area.Rotation * fixed_5);
+    StartBearing += BearingStep;
     StartBearing = StartBearing.as_bearing();
     FindLatitudeLongitude(temp_area.Center, StartBearing, Radius, &TempPoint);
     temp_area.points.push_back(TempPoint);
