@@ -532,11 +532,20 @@ CalculateArc(const TCHAR *Text)
   temp_area.points.push_back(TempPoint);
 }
 
+static AirspaceClass_t
+ParseType(const TCHAR* text)
+{
+  for (int i = 0; i < k_nAreaCount; i++)
+    if (string_after_prefix(text, k_strAreaStart[i]))
+      return (AirspaceClass_t)k_nAreaType[i];
+
+  return OTHER;
+}
+
 static bool
 ParseLine(Airspaces &airspace_database, enum line_type nLineType,
           const TCHAR *TempString)
 {
-  int nIndex;
   GEOPOINT TempPoint;
 
   switch (nLineType) {
@@ -546,12 +555,7 @@ ParseLine(Airspaces &airspace_database, enum line_type nLineType,
 
     temp_area.reset();
     
-    for (nIndex = 0; nIndex < k_nAreaCount; nIndex++) {
-      if (string_after_prefix(&TempString[3], k_strAreaStart[nIndex])) {
-        temp_area.Type = (AirspaceClass_t)k_nAreaType[nIndex];
-        break;
-      }
-    }
+    temp_area.Type = ParseType(&TempString[3]);
     temp_area.Waiting = false;
     break;
 
