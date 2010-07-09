@@ -678,20 +678,3 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
 
   return true;
 }
-
-/*
-OLD_TASK boundary wrap 180
-    // JMW detect airspace that wraps across 180
-    if ((area.bounds.minx< -90) && (area.bounds.maxx>90)) {
-      double tmp = area.bounds.minx;
-      area.bounds.minx = area.bounds.maxx;
-      area.bounds.maxx = tmp;
-      for (unsigned j = area.FirstPoint;
-           j < area.FirstPoint + area.NumPoints; ++j) {
-        AIRSPACE_POINT &point = airspace_database.AirspacePoint[j];
-        if (point.Longitude < 0)
-          point.Longitude += 360;
-      }
-    }
-  }
-*/
