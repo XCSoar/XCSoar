@@ -149,8 +149,6 @@ struct TempAirspaceType
   }
 };
 
-static TempAirspaceType temp_area;
-
 static bool
 ShowParseWarning(int line, const TCHAR* str)
 {
@@ -474,7 +472,7 @@ ReadCoords(const TCHAR *Text, GEOPOINT &point)
 }
 
 static void
-CalculateSector(const TCHAR *Text)
+CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
 {
   fixed Radius;
   Angle StartBearing;
@@ -503,7 +501,7 @@ CalculateSector(const TCHAR *Text)
 }
 
 static void
-CalculateArc(const TCHAR *Text)
+CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
 {
   GEOPOINT Start;
   GEOPOINT End;
@@ -552,7 +550,7 @@ ParseType(const TCHAR* text)
 
 static bool
 ParseLine(Airspaces &airspace_database, enum line_type nLineType,
-          const TCHAR *TempString)
+          const TCHAR *TempString, TempAirspaceType &temp_area)
 {
   switch (nLineType) {
   case ltClass:
@@ -617,11 +615,11 @@ ParseLine(Airspaces &airspace_database, enum line_type nLineType,
     break;
   }
   case ltDArc:
-    CalculateArc(TempString);
+    CalculateArc(TempString, temp_area);
     break;
 
   case ltDSector:
-    CalculateSector(TempString);
+    CalculateSector(TempString, temp_area);
     break;
 
   case ltDCircle:
@@ -648,11 +646,11 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
   XCSoarInterface::SetProgressDialogMaxValue(1024);
   long file_size = reader.size();
 
-  temp_area.reset();
+  TempAirspaceType temp_area;
 
   TCHAR *line;
   while ((nLineType = GetNextLine(reader, line)) != ltEOF) {
-    if (!ParseLine(airspace_database, nLineType, line))
+    if (!ParseLine(airspace_database, nLineType, line, temp_area))
       return false;
 
     XCSoarInterface::SetProgressDialogValue(reader.tell() * 1024 / file_size);
