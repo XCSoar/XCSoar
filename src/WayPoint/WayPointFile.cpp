@@ -52,8 +52,6 @@ Copyright_License {
 #include "IO/ZipLineReader.hpp"
 #include "IO/TextWriter.hpp"
 
-#include "wcecompat/ts_string.h"
-
 int WayPointFile::WaypointsOutOfRangeSetting = 0;
 int WayPointFile::WaypointOutOfTerrainRangeDialogResult = 0;
 bool WayPointFile::initialised_range_setting = false;
@@ -306,13 +304,10 @@ WayPointFile::create(const TCHAR* filename, int the_filenum)
   // and convert it to filepath
   ExpandLocalPath(file);
 
-  // Convert the filepath from unicode to ascii for zzip files
-  char path_ascii[MAX_PATH];
-  unicode2ascii(file, path_ascii, sizeof(path_ascii));
-
   // check existence of file
   if (!FileExists(file)) {
-    if (!FileExistsZipped(path_ascii)) {
+    ZipSource zip(file);
+    if (zip.error()) {
       // File does not exist, fail
       return NULL;
     } else {
