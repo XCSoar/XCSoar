@@ -294,11 +294,6 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
           continue;
       }
 
-      if (Text[nSize - 1] == _T('\n'))
-        Text[--nSize] = _T('\0');
-      if (Text[nSize - 1] == _T('\r'))
-        Text[--nSize] = _T('\0');
-
       break;
     }
   }
