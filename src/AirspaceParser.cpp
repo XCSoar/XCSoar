@@ -124,7 +124,7 @@ struct TempAirspaceType
   reset()
   {
     Type = OTHER;
-    points.erase(points.begin(), points.end());
+    points.clear();
     Center.Longitude = Angle();
     Center.Latitude = Angle();
     Rotation = 1;
