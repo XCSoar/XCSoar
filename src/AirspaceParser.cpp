@@ -151,6 +151,17 @@ struct TempAirspaceType
 
 static TempAirspaceType temp_area;
 
+static bool
+ShowParseWarning(int line, const TCHAR* str)
+{
+  TCHAR sTmp[MAX_PATH];
+  _stprintf(sTmp, TEXT("%s: %d\r\n\"%s\"\r\n%s."),
+            gettext(TEXT("Parse Error at Line")), line, str,
+            gettext(TEXT("Line skipped.")));
+  return (MessageBoxX(sTmp, gettext(TEXT("Airspace")), MB_OKCANCEL) == IDOK);
+
+}
+
 // Returns index of line type found, or -1 if end of file reached
 static enum line_type
 GetNextLine(TLineReader &reader, TCHAR *&Text)
@@ -200,11 +211,7 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
         continue;
 
       default:
-        _stprintf(sTmp, _T("%s: %d\r\n\"%s\"\r\n%s."),
-                  gettext(_T("Parse Error at Line")),
-                  LineCount, Text,
-                  gettext(_T("Line skipped.")));
-        if (MessageBoxX(sTmp, gettext(_T("Airspace")), MB_OKCANCEL) == IDCANCEL)
+        if (!ShowParseWarning(LineCount, Text))
           return ltEOF;
 
         continue;
@@ -234,14 +241,9 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
         // what about 'V T=' ?
 
       default:
-        _stprintf(sTmp, _T("%s: %d\r\n\"%s\"\r\n%s."),
-                  gettext(_T("Parse Error at Line")),
-                  LineCount, Text,
-                  gettext(_T("Line skipped.")));
-        if (MessageBoxX(sTmp,
-                        gettext(_T("Airspace")),
-                        MB_OKCANCEL) == IDCANCEL)
+        if (!ShowParseWarning(LineCount, Text))
           return ltEOF;
+
         continue;
       }
 
@@ -258,13 +260,9 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
         continue;
 
     default:
-      _stprintf(sTmp, _T("%s: %d\r\n\"%s\"\r\n%s."),
-                gettext(_T("Parse Error at Line")),
-                LineCount, Text,
-                gettext(_T("Line skipped.")));
-      if (MessageBoxX(sTmp, gettext(_T("Airspace")),
-                      MB_OKCANCEL) == IDCANCEL)
+      if (!ShowParseWarning(LineCount, Text))
         return ltEOF;
+
       continue;
     }
 
@@ -626,17 +624,7 @@ ParseLine(Airspaces &airspace_database, enum line_type nLineType,
   return true;
 
 OnError:
-
-  TCHAR sTmp[MAX_PATH];
-  _stprintf(sTmp, TEXT("%s: %d\r\n\"%s\"\r\n%s."),
-            gettext(TEXT("Parse Error at Line")),
-            LineCount, TempString,
-            gettext(TEXT("Line skipped.")));
-  if (MessageBoxX(sTmp, gettext(TEXT("Airspace")), MB_OKCANCEL) == IDCANCEL)
-    return false;
-
-
-  return true;
+  return ShowParseWarning(LineCount, TempString);
 }
 
 bool
