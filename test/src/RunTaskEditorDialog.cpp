@@ -43,7 +43,6 @@ Copyright_License {
 #include "InputEvents.h"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
-#include "wcecompat/ts_string.h"
 #include "WayPointParser.h"
 #include "AirspaceClientUI.hpp"
 #include "TaskClientUI.hpp"

@@ -38,7 +38,6 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "wcecompat/ts_string.h"
 #include "Screen/Layout.hpp"
 #include "ResourceLoader.hpp"
 #include "InputEvents.h"

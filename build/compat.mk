@@ -1,6 +1,5 @@
 COMPATSRC:=$(SRC)/wcecompat
-COMPAT	:=\
-	$(COMPATSRC)/ts_string.cpp
+COMPAT :=
 
 ifeq ($(HAVE_POSIX)$(CONFIG_PC),nn)
 COMPAT += $(COMPATSRC)/errno.cpp
