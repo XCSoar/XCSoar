@@ -408,16 +408,7 @@ static bool
 ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
           TempAirspaceType &temp_area)
 {
-  TCHAR *Comment;
   int nSize;
-
-  LineCount++;
-
-  // Strip comments and newline chars from end of line
-  Comment = _tcschr(TempString, _T('*'));
-  if (Comment != NULL)
-    // Truncate line
-    *Comment = _T('\0');
 
   // Ignore lines less than 3 characters
   nSize = _tcslen(TempString);
@@ -530,7 +521,20 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
   TempAirspaceType temp_area;
 
   TCHAR *line;
+  TCHAR *comment;
   while ((line = reader.read()) != NULL) {
+    LineCount++;
+
+    // Strip comments
+    comment = _tcschr(line, _T('*'));
+    if (comment != NULL)
+      *comment = _T('\0');
+
+    // Skip empty lines
+    unsigned linelength = _tcslen(line);
+    if (linelength < 1)
+      continue;
+
     if (!ParseLine(airspace_database, line, temp_area))
       return false;
 
