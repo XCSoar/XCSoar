@@ -215,15 +215,7 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
         nLineType = ltTop;
         break;
 
-      case _T('T'):
-      case _T('t'):
-        // ToDo: adding airspace labels
-        continue;
-
       default:
-        if (!ShowParseWarning(LineCount, Text))
-          return ltEOF;
-
         continue;
       }
 
@@ -256,9 +248,6 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
         // what about 'V T=' ?
 
       default:
-        if (!ShowParseWarning(LineCount, Text))
-          return ltEOF;
-
         continue;
       }
 
@@ -269,18 +258,7 @@ GetNextLine(TLineReader &reader, TCHAR *&Text)
       nLineType = ltAttribute;
       break;
 
-    case _T('S'):
-    case _T('s'):
-      // ignore the SB,SP ...
-      if (Text[1] == _T('B') || Text[1] == _T('b'))
-        continue;
-      if (Text[1] == _T('P') || Text[1] == _T('p'))
-        continue;
-
     default:
-      if (!ShowParseWarning(LineCount, Text))
-        return ltEOF;
-
       continue;
     }
 
