@@ -580,28 +580,22 @@ ParseLine(Airspaces &airspace_database, enum line_type nLineType,
 
   case ltAttribute:
     // Need to set these while in count mode, or DB/DA will crash
-    if (string_after_prefix(&TempString[2], _T("X=")) ||
-        string_after_prefix(&TempString[2], _T("x="))) {
+    if (string_after_prefix_ci(&TempString[2], _T("X="))) {
       if (ReadCoords(&TempString[4],temp_area.Center))
         break;
-    } else if (string_after_prefix(&TempString[2], _T("D=-")) ||
-               string_after_prefix(&TempString[2], _T("d=-"))) {
+    } else if (string_after_prefix_ci(&TempString[2], _T("D=-"))) {
       temp_area.Rotation = -1;
       break;
-    } else if (string_after_prefix(&TempString[2], _T("D=+")) ||
-               string_after_prefix(&TempString[2], _T("d=+"))) {
+    } else if (string_after_prefix_ci(&TempString[2], _T("D=+"))) {
       temp_area.Rotation = +1;
       break;
-    } else if (string_after_prefix(&TempString[2], _T("Z")) ||
-               string_after_prefix(&TempString[2], _T("z"))) {
+    } else if (string_after_prefix_ci(&TempString[2], _T("Z"))) {
       // ToDo Display Zool Level
       break;
-    } else if (string_after_prefix(&TempString[2], _T("W")) ||
-               string_after_prefix(&TempString[2], _T("w"))) {
+    } else if (string_after_prefix_ci(&TempString[2], _T("W"))) {
       // ToDo width of an airway
       break;
-    } else if (string_after_prefix(&TempString[2], _T("T")) ||
-               string_after_prefix(&TempString[2], _T("t"))) {
+    } else if (string_after_prefix_ci(&TempString[2], _T("T"))) {
       // ----- JMW THIS IS REQUIRED FOR LEGACY FILES
       break;
     }
