@@ -97,15 +97,15 @@ IsInternalFile(const TCHAR* str)
 DataFieldFileReader::DataFieldFileReader(const TCHAR *EditFormat,
                                          const TCHAR *DisplayFormat,
                                          DataAccessCallback_t OnDataAccess)
-  :DataField(EditFormat, DisplayFormat, OnDataAccess)
+  :DataField(EditFormat, DisplayFormat, OnDataAccess),
+   // Number of choosable files is now 1
+   nFiles(1),
+   // Set selection to zero
+   mValue(0)
 {
-  // Set selection to zero
-  mValue = 0;
   // Fill first entry -> always exists and is blank
   fields[0].mTextFile = NULL;
   fields[0].mTextPathFile = NULL;
-  // Number of choosable files is now 1
-  nFiles = 1;
 
   // This type of DataField supports the combolist
   SupportCombo = true;
