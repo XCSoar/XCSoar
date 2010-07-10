@@ -168,107 +168,6 @@ ShowParseWarning(int line, const TCHAR* str)
 
 }
 
-// Returns index of line type found, or -1 if end of file reached
-static enum line_type
-GetNextLine(TLineReader &reader, TCHAR *&Text)
-{
-  TCHAR *Comment;
-  int nSize;
-  enum line_type nLineType = ltEOF;
-
-  while ((Text = reader.read()) != NULL) {
-    LineCount++;
-
-    // Strip comments and newline chars from end of line
-    Comment = _tcschr(Text, _T('*'));
-    if (Comment != NULL)
-      // Truncate line
-      *Comment = _T('\0');
-
-    // Ignore lines less than 3 characters
-    nSize = _tcslen(Text);
-    if (nSize < 3)
-      continue;
-
-    // Only return expected lines
-    switch (Text[0]) {
-    case _T('A'):
-    case _T('a'):
-      switch (Text[1]) {
-      case _T('C'):
-      case _T('c'):
-        nLineType = ltClass;
-        break;
-
-      case _T('N'):
-      case _T('n'):
-        nLineType = ltName;
-        break;
-
-      case _T('L'):
-      case _T('l'):
-        nLineType = ltBase;
-        break;
-
-      case _T('H'):
-      case _T('h'):
-        nLineType = ltTop;
-        break;
-
-      default:
-        continue;
-      }
-
-      break;
-
-    case _T('D'):
-    case _T('d'):
-      switch (Text[1]) {
-      case _T('A'):
-      case _T('a'):
-        nLineType = ltDSector;
-        break;
-
-      case _T('B'):
-      case _T('b'):
-        nLineType = ltDArc;
-        break;
-
-      case _T('C'):
-      case _T('c'):
-        nLineType = ltDCircle;
-        break;
-
-      case _T('P'):
-      case _T('p'):
-        nLineType = ltDPoint;
-        break;
-
-        // todo DY airway segment
-        // what about 'V T=' ?
-
-      default:
-        continue;
-      }
-
-      break;
-
-    case _T('V'):
-    case _T('v'):
-      nLineType = ltAttribute;
-      break;
-
-    default:
-      continue;
-    }
-
-    if (nLineType != ltEOF)
-      break;
-  }
-
-  return nLineType;
-}
-
 static void
 ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
 {
@@ -520,9 +419,99 @@ ParseType(const TCHAR* text)
 }
 
 static bool
-ParseLine(Airspaces &airspace_database, enum line_type nLineType,
-          const TCHAR *TempString, TempAirspaceType &temp_area)
+ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
+          TempAirspaceType &temp_area)
 {
+  enum line_type nLineType = ltEOF;
+
+  TCHAR *Comment;
+  int nSize;
+
+  LineCount++;
+
+  // Strip comments and newline chars from end of line
+  Comment = _tcschr(TempString, _T('*'));
+  if (Comment != NULL)
+    // Truncate line
+    *Comment = _T('\0');
+
+  // Ignore lines less than 3 characters
+  nSize = _tcslen(TempString);
+  if (nSize < 3)
+    return true;
+
+  // Only return expected lines
+  switch (TempString[0]) {
+  case _T('A'):
+  case _T('a'):
+    switch (TempString[1]) {
+    case _T('C'):
+    case _T('c'):
+      nLineType = ltClass;
+      break;
+
+    case _T('N'):
+    case _T('n'):
+      nLineType = ltName;
+      break;
+
+    case _T('L'):
+    case _T('l'):
+      nLineType = ltBase;
+      break;
+
+    case _T('H'):
+    case _T('h'):
+      nLineType = ltTop;
+      break;
+
+    default:
+      return true;
+    }
+
+    break;
+
+  case _T('D'):
+  case _T('d'):
+    switch (TempString[1]) {
+    case _T('A'):
+    case _T('a'):
+      nLineType = ltDSector;
+      break;
+
+    case _T('B'):
+    case _T('b'):
+      nLineType = ltDArc;
+      break;
+
+    case _T('C'):
+    case _T('c'):
+      nLineType = ltDCircle;
+      break;
+
+    case _T('P'):
+    case _T('p'):
+      nLineType = ltDPoint;
+      break;
+
+      // todo DY airway segment
+      // what about 'V T=' ?
+
+    default:
+      return true;
+    }
+
+    break;
+
+  case _T('V'):
+  case _T('v'):
+    nLineType = ltAttribute;
+    break;
+
+  default:
+    return true;
+  }
+
   switch (nLineType) {
   case ltClass:
     if (!temp_area.Waiting)
@@ -602,7 +591,6 @@ bool
 ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
 {
   LogStartUp(TEXT("ReadAirspace"));
-  enum line_type nLineType;
 
   LineCount = 0;
 
@@ -614,8 +602,8 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
   TempAirspaceType temp_area;
 
   TCHAR *line;
-  while ((nLineType = GetNextLine(reader, line)) != ltEOF) {
-    if (!ParseLine(airspace_database, nLineType, line, temp_area))
+  while ((line = reader.read()) != NULL) {
+    if (!ParseLine(airspace_database, line, temp_area))
       return false;
 
     XCSoarInterface::SetProgressDialogValue(reader.tell() * 1024 / file_size);
