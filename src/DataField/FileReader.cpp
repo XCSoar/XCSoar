@@ -94,6 +94,35 @@ IsInternalFile(const TCHAR* str)
   return false;
 }
 
+DataFieldFileReader::DataFieldFileReader(const TCHAR *EditFormat,
+                                         const TCHAR *DisplayFormat,
+                                         DataAccessCallback_t OnDataAccess)
+  :DataField(EditFormat, DisplayFormat, OnDataAccess)
+{
+  // Set selection to zero
+  mValue = 0;
+  // Fill first entry -> always exists and is blank
+  fields[0].mTextFile = NULL;
+  fields[0].mTextPathFile = NULL;
+  // Number of choosable files is now 1
+  nFiles = 1;
+
+  // This type of DataField supports the combolist
+  SupportCombo = true;
+  (mOnDataAccess)(this, daGet);
+}
+
+/** Deconstructor */
+DataFieldFileReader::~DataFieldFileReader()
+{
+  // Iterate through the file array and delete
+  // everything except the first entry
+  for (unsigned int i = 1; i < nFiles; i++) {
+    free(fields[i].mTextFile);
+    free(fields[i].mTextPathFile);
+  }
+}
+
 bool
 DataFieldFileReader::GetAsBoolean() const
 {

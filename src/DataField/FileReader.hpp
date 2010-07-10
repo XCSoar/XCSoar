@@ -41,8 +41,6 @@ Copyright_License {
 
 #include "DataField/Base.hpp"
 
-#include <stdlib.h>
-
 /** Maximum of files in the list */
 #define DFE_MAX_FILES 100
 
@@ -77,33 +75,11 @@ public:
    * @param DisplayFormat
    * @param OnDataAccess
    */
-  DataFieldFileReader(const TCHAR *EditFormat,
-		      const TCHAR *DisplayFormat,
-		      DataAccessCallback_t OnDataAccess):
-    DataField(EditFormat, DisplayFormat, OnDataAccess) {
-    // Set selection to zero
-    mValue = 0;
-    // Fill first entry -> always exists and is blank
-    fields[0].mTextFile = NULL;
-    fields[0].mTextPathFile = NULL;
-    // Number of choosable files is now 1
-    nFiles = 1;
-
-    // This type of DataField supports the combolist
-    SupportCombo = true;
-    (mOnDataAccess)(this, daGet);
-  }
+  DataFieldFileReader(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
+                      DataAccessCallback_t OnDataAccess);
 
   /** Deconstructor */
-  ~DataFieldFileReader()
-  {
-    // Iterate through the file array and delete
-    // everything except the first entry
-    for (unsigned int i = 1; i < nFiles; i++) {
-      free(fields[i].mTextFile);
-      free(fields[i].mTextPathFile);
-    }
-  }
+  virtual ~DataFieldFileReader();
 
   /** Move the selection up (+1) */
   void Inc(void);
