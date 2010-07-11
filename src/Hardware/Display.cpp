@@ -40,6 +40,7 @@ Copyright_License {
 #include "Asset.hpp"
 
 #ifdef WIN32
+#include "Config/Registry.hpp"
 #include "OS/GlobalEvent.hpp"
 
 #include <windows.h>
@@ -84,33 +85,17 @@ Display::Blank(bool blank)
 static bool
 SetHP31XBacklight()
 {
-  HKEY hKey;
-  DWORD Disp = 0;
-  HRESULT hRes;
+  const DWORD max_level = 20;
+  const DWORD use_ext = 0;
 
-  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, _T("ControlPanel\\Backlight"), 0, 0, &hKey);
-  if (hRes != ERROR_SUCCESS)
-    return false;
-
-  // max backlight
-  Disp = 20;
-
-  // currently we ignore hres, if registry entries are
-  // spoiled out user is already in deep troubles
-  hRes = RegSetValueEx(hKey, _T("BackLightCurrentACLevel"), 0, REG_DWORD,
-                       (LPBYTE) & Disp, sizeof(DWORD));
-  hRes = RegSetValueEx(hKey, _T("BackLightCurrentBatteryLevel"), 0,
-                       REG_DWORD, (LPBYTE) & Disp, sizeof(DWORD));
-  hRes = RegSetValueEx(hKey, _T("TotalLevels"), 0, REG_DWORD,
-                       (LPBYTE) & Disp, sizeof(DWORD));
-
-  Disp = 0;
-  hRes = RegSetValueEx(hKey, _T("UseExt"), 0, REG_DWORD,
-                       (LPBYTE) & Disp, sizeof(DWORD));
-
-  RegDeleteValue(hKey, _T("ACTimeout"));
-
-  return TriggerGlobalEvent(_T("BacklightChangeEvent"));
+  RegistryKey key(HKEY_CURRENT_USER, _T("ControlPanel\\Backlight"), false);
+  return !key.error() &&
+    key.set_value(_T("BackLightCurrentACLevel"), max_level) &&
+    key.set_value(_T("BackLightCurrentBatteryLevel"), max_level) &&
+    key.set_value(_T("TotalLevels"), max_level) &&
+    key.set_value(_T("UseExt"), use_ext) &&
+    key.delete_value(_T("ACTimeout")) &&
+    TriggerGlobalEvent(_T("BacklightChangeEvent"));
 }
 
 /**
