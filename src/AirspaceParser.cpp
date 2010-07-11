@@ -477,7 +477,7 @@ ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
       GEOPOINT TempPoint;
 
       if (!ReadCoords(&TempString[3],TempPoint))
-        return ShowParseWarning(LineCount, TempString);
+        return false;
 
       temp_area.points.push_back(TempPoint);
       break;
@@ -493,7 +493,7 @@ ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
     // Need to set these while in count mode, or DB/DA will crash
     if (string_after_prefix_ci(&TempString[2], _T("X="))) {
       if (!ReadCoords(&TempString[4],temp_area.Center))
-        return ShowParseWarning(LineCount, TempString);
+        return false;
     } else if (string_after_prefix_ci(&TempString[2], _T("D=-"))) {
       temp_area.Rotation = -1;
     } else if (string_after_prefix_ci(&TempString[2], _T("D=+"))) {
@@ -537,7 +537,8 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
       continue;
 
     // Parse the line
-    if (!ParseLine(airspace_database, line, LineCount, temp_area))
+    if (!ParseLine(airspace_database, line, LineCount, temp_area) &&
+        !ShowParseWarning(LineCount, line))
       return false;
 
     // Update the ProgressDialog
