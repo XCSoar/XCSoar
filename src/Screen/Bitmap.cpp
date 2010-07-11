@@ -231,6 +231,12 @@ load_imgdecmp_file(const TCHAR *path)
 bool
 Bitmap::load_file(const TCHAR *path)
 {
+#ifdef ENABLE_SDL
+  surface = ::SDL_LoadBMP(path);
+  if (surface != NULL)
+    return true;
+#endif
+
 #ifdef HAVE_IMGDECMP_DLL
   bitmap = load_imgdecmp_file(path);
   if (bitmap != NULL)
