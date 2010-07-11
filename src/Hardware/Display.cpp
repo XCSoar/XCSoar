@@ -40,6 +40,8 @@ Copyright_License {
 #include "Asset.hpp"
 
 #ifdef WIN32
+#include "OS/GlobalEvent.hpp"
+
 #include <windows.h>
 #endif
 
@@ -129,13 +131,7 @@ Display::SetBacklight()
   if (doevent == false)
     return false;
 
-  HANDLE BLEvent = CreateEvent(NULL, false, false, _T("BacklightChangeEvent"));
-  if (SetEvent(BLEvent) == 0)
-    doevent = false;
-  else
-    CloseHandle(BLEvent);
-
-  return doevent;
+  return TriggerGlobalEvent(_T("BacklightChangeEvent"));
 }
 #endif
 
