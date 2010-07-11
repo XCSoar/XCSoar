@@ -39,6 +39,11 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "ResourceLoader.hpp"
 
+#ifdef HAVE_IMGDECMP_DLL
+#include "Screen/RootCanvas.hpp"
+#include "OS/ImgDeCmpDLL.hpp"
+#endif
+
 #ifdef ENABLE_SDL
 #include <SDL/SDL_endian.h>
 
@@ -166,6 +171,73 @@ Bitmap::load_stretch(unsigned id, unsigned zoom)
 
   return true;
 #endif
+}
+
+#ifdef HAVE_IMGDECMP_DLL
+
+static DWORD CALLBACK
+imgdecmp_get_data(LPSTR szBuffer, DWORD dwBufferMax, LPARAM lParam)
+{
+  HANDLE file = (HANDLE)lParam;
+  DWORD nbytes = 0;
+  return ReadFile(file, szBuffer, dwBufferMax, &nbytes, NULL)
+    ? nbytes
+    : 0;
+}
+
+static HBITMAP
+load_imgdecmp_file(const TCHAR *path)
+{
+  ImgDeCmpDLL imgdecmp_dll;
+  if (!imgdecmp_dll.defined())
+    return false;
+
+  HANDLE file = ::CreateFile(path, GENERIC_READ, FILE_SHARE_READ, NULL,
+                             OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+  if (file == INVALID_HANDLE_VALUE)
+    return false;
+
+  BYTE buffer[1024];
+  HBITMAP bitmap;
+  RootCanvas canvas;
+
+  DecompressImageInfo dii;
+  dii.dwSize = sizeof(dii);
+  dii.pbBuffer = buffer;
+  dii.dwBufferMax = sizeof(buffer);
+  dii.dwBufferCurrent = 0;
+  dii.phBM = &bitmap;
+  dii.ppImageRender = NULL;
+  dii.iBitDepth = GetDeviceCaps(canvas, BITSPIXEL);
+  dii.lParam = (LPARAM)file;
+  dii.hdc = canvas;
+  dii.iScale = 100;
+  dii.iMaxWidth = 10000;
+  dii.iMaxHeight = 10000;
+  dii.pfnGetData = imgdecmp_get_data;
+  dii.pfnImageProgress = NULL;
+  dii.crTransparentOverride = (UINT)-1;
+
+  HRESULT result = imgdecmp_dll.DecompressImageIndirect(&dii);
+  ::CloseHandle(file);
+
+  return SUCCEEDED(result)
+    ? bitmap
+    : NULL;
+}
+
+#endif /* HAVE_IMGDECMP_DLL */
+
+bool
+Bitmap::load_file(const TCHAR *path)
+{
+#ifdef HAVE_IMGDECMP_DLL
+  bitmap = load_imgdecmp_file(path);
+  if (bitmap != NULL)
+    return true;
+#endif
+
+  return false;
 }
 
 void *

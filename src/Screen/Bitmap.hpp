@@ -91,6 +91,8 @@ public:
    */
   bool load_stretch(unsigned id, unsigned zoom);
 
+  bool load_file(const TCHAR *path);
+
   void *create(unsigned width, unsigned height);
 
   void reset();
