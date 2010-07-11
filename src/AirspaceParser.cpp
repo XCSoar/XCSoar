@@ -511,29 +511,6 @@ ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
 
   case _T('V'):
   case _T('v'):
-    nLineType = ltAttribute;
-    break;
-
-  default:
-    return true;
-  }
-
-  switch (nLineType) {
-  case ltClass:
-    break;
-
-  case ltName:
-    break;
-
-  case ltBase:
-
-    break;
-
-  case ltTop:
-
-    break;
-
-  case ltAttribute:
     // Need to set these while in count mode, or DB/DA will crash
     if (string_after_prefix_ci(&TempString[2], _T("X="))) {
       if (ReadCoords(&TempString[4],temp_area.Center))
@@ -555,7 +532,9 @@ ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
       break;
     }
     return ShowParseWarning(LineCount, TempString);
+  }
 
+  switch (nLineType) {
   case ltDPoint:
   {
     GEOPOINT TempPoint;
