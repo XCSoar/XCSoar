@@ -80,6 +80,39 @@ Display::Blank(bool blank)
 #endif /* HAVE_HARDWARE_BLANK */
 
 #ifdef _WIN32_WCE
+
+static bool
+SetHP31XBacklight()
+{
+  HKEY hKey;
+  DWORD Disp = 0;
+  HRESULT hRes;
+
+  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, _T("ControlPanel\\Backlight"), 0, 0, &hKey);
+  if (hRes != ERROR_SUCCESS)
+    return false;
+
+  // max backlight
+  Disp = 20;
+
+  // currently we ignore hres, if registry entries are
+  // spoiled out user is already in deep troubles
+  hRes = RegSetValueEx(hKey, _T("BackLightCurrentACLevel"), 0, REG_DWORD,
+                       (LPBYTE) & Disp, sizeof(DWORD));
+  hRes = RegSetValueEx(hKey, _T("BackLightCurrentBatteryLevel"), 0,
+                       REG_DWORD, (LPBYTE) & Disp, sizeof(DWORD));
+  hRes = RegSetValueEx(hKey, _T("TotalLevels"), 0, REG_DWORD,
+                       (LPBYTE) & Disp, sizeof(DWORD));
+
+  Disp = 0;
+  hRes = RegSetValueEx(hKey, _T("UseExt"), 0, REG_DWORD,
+                       (LPBYTE) & Disp, sizeof(DWORD));
+
+  RegDeleteValue(hKey, _T("ACTimeout"));
+
+  return TriggerGlobalEvent(_T("BacklightChangeEvent"));
+}
+
 /**
  * SetBacklight for PNA devices. There is no standard way of managing backlight on CE,
  * and every device may have different value names and settings. Microsoft did not set
@@ -91,47 +124,13 @@ Display::Blank(bool blank)
 bool
 Display::SetBacklight()
 {
-  HKEY hKey;
-  DWORD Disp = 0;
-  HRESULT hRes;
-  bool doevent = false;
-
-  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, _T("ControlPanel\\Backlight"), 0, 0, &hKey);
-  if (hRes != ERROR_SUCCESS)
-    return false;
-
   switch (GlobalModelType) {
   case MODELTYPE_PNA_HP31X:
-    // max backlight
-    Disp = 20;
-
-    // currently we ignore hres, if registry entries are
-    // spoiled out user is already in deep troubles
-    hRes = RegSetValueEx(hKey, _T("BackLightCurrentACLevel"), 0, REG_DWORD,
-                         (LPBYTE) & Disp, sizeof(DWORD));
-    hRes = RegSetValueEx(hKey, _T("BackLightCurrentBatteryLevel"), 0,
-                         REG_DWORD, (LPBYTE) & Disp, sizeof(DWORD));
-    hRes = RegSetValueEx(hKey, _T("TotalLevels"), 0, REG_DWORD,
-                         (LPBYTE) & Disp, sizeof(DWORD));
-
-    Disp = 0;
-    hRes = RegSetValueEx(hKey, _T("UseExt"), 0, REG_DWORD,
-                         (LPBYTE) & Disp, sizeof(DWORD));
-
-    RegDeleteValue(hKey, _T("ACTimeout"));
-    doevent = true;
-    break;
+    return SetHP31XBacklight();
 
   default:
-    doevent = false;
-    break;
-  }
-
-  RegCloseKey(hKey);
-  if (doevent == false)
     return false;
-
-  return TriggerGlobalEvent(_T("BacklightChangeEvent"));
+  }
 }
 #endif
 
