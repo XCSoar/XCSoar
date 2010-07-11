@@ -41,6 +41,7 @@ Copyright_License {
 
 #include "Interface.hpp"
 #include "Thread/Mutex.hpp"
+#include "PeriodClock.hpp"
 #include "Screen/EditWindow.hpp"
 
 #include <tchar.h>
@@ -79,9 +80,9 @@ private:
   struct singleMessage {
     TCHAR text[1000];
     int type;
-    DWORD tstart; // time message was created
-    DWORD texpiry; // time message will expire
-    DWORD tshow; // time message is visible for
+    int tstart; // time message was created
+    int texpiry; // time message will expire
+    int tshow; // time message is visible for
 
     singleMessage()
       :type(MSG_UNKNOWN), tstart(0), texpiry(0) {
@@ -99,24 +100,24 @@ private:
     /**
      * Expired for the first time?
      */
-    bool IsNewlyExpired(DWORD now) const {
+    bool IsNewlyExpired(int now) const {
       return texpiry <= now && texpiry > tstart;
     }
 
-    void Set(int type, DWORD tshow, const TCHAR *text, DWORD now);
+    void Set(int type, int tshow, const TCHAR *text, int now);
 
     /**
      * @return true if something was changed
      */
-    bool Update(DWORD now);
+    bool Update(int now);
 
     /**
      * @return true if a message has been appended
      */
-    bool AppendTo(TCHAR *buffer, DWORD now);
+    bool AppendTo(TCHAR *buffer, int now);
   };
 
-  const DWORD startTime;
+  PeriodClock clock;
 
   const StatusMessageList &status_messages;
 
@@ -141,7 +142,7 @@ public:
   /** returns true if messages have changed */
   bool Render();
 
-  void AddMessage(DWORD tshow, int type, const TCHAR *Text);
+  void AddMessage(int tshow, int type, const TCHAR *Text);
   void AddMessage(const TCHAR* text, const TCHAR *data=NULL);
 
   /**

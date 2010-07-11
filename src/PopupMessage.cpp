@@ -61,8 +61,8 @@ using std::min;
 using std::max;
 
 void
-PopupMessage::singleMessage::Set(int _type, DWORD _tshow, const TCHAR *_text,
-                                 DWORD now)
+PopupMessage::singleMessage::Set(int _type, int _tshow, const TCHAR *_text,
+                                 int now)
 {
   type = _type;
   tshow = _tshow;
@@ -72,7 +72,7 @@ PopupMessage::singleMessage::Set(int _type, DWORD _tshow, const TCHAR *_text,
 }
 
 bool
-PopupMessage::singleMessage::Update(DWORD now)
+PopupMessage::singleMessage::Update(int now)
 {
   if (IsUnknown())
     // ignore unknown messages
@@ -94,7 +94,7 @@ PopupMessage::singleMessage::Update(DWORD now)
 }
 
 bool
-PopupMessage::singleMessage::AppendTo(TCHAR *buffer, DWORD now)
+PopupMessage::singleMessage::AppendTo(TCHAR *buffer, int now)
 {
   if (IsUnknown())
     // ignore unknown messages
@@ -113,10 +113,11 @@ PopupMessage::singleMessage::AppendTo(TCHAR *buffer, DWORD now)
 
 PopupMessage::PopupMessage(const StatusMessageList &_status_messages,
                            SingleWindow &_parent)
-  :startTime(::GetTickCount()), status_messages(_status_messages),
+  :status_messages(_status_messages),
    parent(_parent),
    nvisible(0)
 {
+  clock.update();
 }
 
 void
@@ -204,7 +205,7 @@ bool PopupMessage::Render() {
     return false;
   }
 
-  DWORD	fpsTime = ::GetTickCount() - startTime;
+  int fpsTime = clock.elapsed();
 
   // this has to be done quickly, since it happens in GUI thread
   // at subsecond interval
@@ -256,7 +257,7 @@ int PopupMessage::GetEmptySlot() {
   // todo: make this more robust with respect to message types and if can't
   // find anything to remove..
   int i;
-  DWORD tmin=0;
+  int tmin=0;
   int imin=0;
   for (i=0; i<MAXMESSAGES; i++) {
     if ((i==0) || (messages[i].tstart<tmin)) {
@@ -269,12 +270,12 @@ int PopupMessage::GetEmptySlot() {
 
 
 void
-PopupMessage::AddMessage(DWORD tshow, int type, const TCHAR *Text)
+PopupMessage::AddMessage(int tshow, int type, const TCHAR *Text)
 {
   ScopeLock protect(mutex);
 
   int i;
-  DWORD	fpsTime = ::GetTickCount() - startTime;
+  int fpsTime = clock.elapsed();
   i = GetEmptySlot();
 
   messages[i].Set(type, tshow, Text, fpsTime);
@@ -282,12 +283,12 @@ PopupMessage::AddMessage(DWORD tshow, int type, const TCHAR *Text)
 
 void PopupMessage::Repeat(int type) {
   int i;
-  DWORD tmax=0;
+  int tmax=0;
   int imax= -1;
 
   mutex.Lock();
 
-  DWORD	fpsTime = ::GetTickCount() - startTime;
+  int fpsTime = clock.elapsed();
 
   // find most recent non-visible message
 
@@ -313,7 +314,7 @@ void PopupMessage::Repeat(int type) {
 bool PopupMessage::Acknowledge(int type) {
   ScopeLock protect(mutex);
   int i;
-  DWORD	fpsTime = ::GetTickCount() - startTime;
+  int fpsTime = clock.elapsed();
 
   for (i=0; i<MAXMESSAGES; i++) {
     if ((messages[i].texpiry> messages[i].tstart)
