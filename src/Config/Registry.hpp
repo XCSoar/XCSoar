@@ -121,6 +121,10 @@ public:
     return set_value(name, REG_DWORD,
                      (const BYTE *)&value, sizeof(value));
   }
+
+  bool delete_value(const TCHAR *name) {
+    return ::RegDeleteValue(hKey, name) == ERROR_SUCCESS;
+  }
 };
 
 #endif
