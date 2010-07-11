@@ -1540,6 +1540,8 @@ static void setVariables(void) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(_T("*.txt"));
+    dfe->ScanDirectoryTop(_T("*.air"));
+    dfe->ScanDirectoryTop(_T("*.sua"));
     dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
@@ -1553,6 +1555,8 @@ static void setVariables(void) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(_T("*.txt"));
+    dfe->ScanDirectoryTop(_T("*.air"));
+    dfe->ScanDirectoryTop(_T("*.sua"));
     dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
