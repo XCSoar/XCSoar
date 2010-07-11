@@ -422,8 +422,6 @@ static bool
 ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
           TempAirspaceType &temp_area)
 {
-  enum line_type nLineType = ltEOF;
-
   TCHAR *Comment;
   int nSize;
 
@@ -482,27 +480,33 @@ ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
     switch (TempString[1]) {
     case _T('A'):
     case _T('a'):
-      nLineType = ltDSector;
+      CalculateSector(TempString, temp_area);
       break;
 
     case _T('B'):
     case _T('b'):
-      nLineType = ltDArc;
+      CalculateArc(TempString, temp_area);
       break;
 
     case _T('C'):
     case _T('c'):
-      nLineType = ltDCircle;
+      temp_area.Radius = Units::ToSysUnit(_tcstod(&TempString[2], NULL),
+                                          unNauticalMiles);
+      temp_area.AddCircle(airspace_database);
+      temp_area.reset();
       break;
 
     case _T('P'):
     case _T('p'):
-      nLineType = ltDPoint;
+    {
+      GEOPOINT TempPoint;
+
+      if (!ReadCoords(&TempString[3],TempPoint))
+        return ShowParseWarning(LineCount, TempString);
+
+      temp_area.points.push_back(TempPoint);
       break;
-
-      // todo DY airway segment
-      // what about 'V T=' ?
-
+    }
     default:
       return true;
     }
@@ -532,33 +536,6 @@ ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
       break;
     }
     return ShowParseWarning(LineCount, TempString);
-  }
-
-  switch (nLineType) {
-  case ltDPoint:
-  {
-    GEOPOINT TempPoint;
-
-    if (!ReadCoords(&TempString[3],TempPoint))
-      return ShowParseWarning(LineCount, TempString);
-
-    temp_area.points.push_back(TempPoint);
-    break;
-  }
-  case ltDArc:
-    CalculateArc(TempString, temp_area);
-    break;
-
-  case ltDSector:
-    CalculateSector(TempString, temp_area);
-    break;
-
-  case ltDCircle:
-    temp_area.Radius = Units::ToSysUnit(_tcstod(&TempString[2], NULL),
-        unNauticalMiles);
-    temp_area.AddCircle(airspace_database);
-    temp_area.reset();
-    break;
   }
 
   return true;
