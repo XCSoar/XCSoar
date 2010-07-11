@@ -447,22 +447,28 @@ ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
     switch (TempString[1]) {
     case _T('C'):
     case _T('c'):
-      nLineType = ltClass;
+      if (!temp_area.Waiting)
+        temp_area.AddPolygon(airspace_database);
+
+      temp_area.reset();
+
+      temp_area.Type = ParseType(&TempString[3]);
+      temp_area.Waiting = false;
       break;
 
     case _T('N'):
     case _T('n'):
-      nLineType = ltName;
+      temp_area.Name = &TempString[3];
       break;
 
     case _T('L'):
     case _T('l'):
-      nLineType = ltBase;
+      ReadAltitude(&TempString[3], &temp_area.Base);
       break;
 
     case _T('H'):
     case _T('h'):
-      nLineType = ltTop;
+      ReadAltitude(&TempString[3],&temp_area.Top);
       break;
 
     default:
@@ -514,25 +520,17 @@ ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
 
   switch (nLineType) {
   case ltClass:
-    if (!temp_area.Waiting)
-      temp_area.AddPolygon(airspace_database);
-
-    temp_area.reset();
-    
-    temp_area.Type = ParseType(&TempString[3]);
-    temp_area.Waiting = false;
     break;
 
   case ltName:
-    temp_area.Name = &TempString[3];
     break;
 
   case ltBase:
-    ReadAltitude(&TempString[3], &temp_area.Base);
+
     break;
 
   case ltTop:
-    ReadAltitude(&TempString[3],&temp_area.Top);
+
     break;
 
   case ltAttribute:
