@@ -185,21 +185,6 @@ has_colors()
   return true;
 }
 
-// This could be also used for PDA in landscape..
-typedef enum
-{
-  ssnone = 0,
-  ss240x320,
-  ss480x640,
-  ss480x800,
-  sslandscape, //  <landscape=portrait modes, >landscape=landscape modes
-  ss320x240,
-  ss480x234,
-  ss480x272,
-  ss640x480,
-  ss800x480
-} ScreenSize_t;
-
 #ifdef WINDOWSPC
 extern int SCREENWIDTH;
 extern int SCREENHEIGHT;
