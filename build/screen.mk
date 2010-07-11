@@ -34,9 +34,6 @@ else
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/PaintCanvas.cpp
-ifeq ($(HAVE_CE)$(findstring $(TARGET),ALTAIR ALTAIRPORTRAIT),y)
-SCREEN_SOURCES += $(SCREEN_SRC_DIR)/VOIMAGE.cpp
-endif
 endif
 
 SCREEN_OBJS = $(call SRC_TO_OBJ,$(SCREEN_SOURCES))
