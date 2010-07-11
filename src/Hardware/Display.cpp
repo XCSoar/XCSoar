@@ -48,34 +48,30 @@ Copyright_License {
 
 #ifdef HAVE_HARDWARE_BLANK
 
+#include "Screen/RootCanvas.hpp"
 #include "Hardware/VideoPower.h"
 
 bool
 Display::BlankSupported()
 {
-  HDC dc = GetDC(NULL);
+  RootCanvas canvas;
   int i = SETPOWERMANAGEMENT;
-  int result = ExtEscape(dc, QUERYESCSUPPORT, sizeof(i), (LPCSTR)&i, 0, NULL);
-  ReleaseDC(NULL, dc);
-
-  return result > 0;
+  return ExtEscape(canvas, QUERYESCSUPPORT,
+                   sizeof(i), (LPCSTR)&i, 0, NULL) > 0;
 }
 
 bool
 Display::Blank(bool blank)
 {
-  HDC dc = GetDC(NULL);
+  RootCanvas canvas;
 
   VIDEO_POWER_MANAGEMENT vpm;
   vpm.Length = sizeof(vpm);
   vpm.DPMSVersion = 0x0001;
   vpm.PowerState = blank ? VideoPowerOff : VideoPowerOn;
 
-  int result = ExtEscape(dc, SETPOWERMANAGEMENT,
-                         sizeof(vpm), (LPCSTR)&vpm, 0, NULL);
-  ReleaseDC(NULL, dc);
-
-  return result > 0;
+  return ExtEscape(canvas, SETPOWERMANAGEMENT,
+                   sizeof(vpm), (LPCSTR)&vpm, 0, NULL) > 0;
 }
 
 #endif /* HAVE_HARDWARE_BLANK */
