@@ -57,20 +57,6 @@ Copyright_License {
 
 static int LineCount;
 
-enum line_type {
-  /** special value: end of file */
-  ltEOF,
-  ltClass,
-  ltName,
-  ltBase,
-  ltTop,
-  ltAttribute,
-  ltDPoint,
-  ltDArc,
-  ltDSector,
-  ltDCircle,
-};
-
 static const int k_nAreaCount = 12;
 static const TCHAR* k_strAreaStart[k_nAreaCount] = {
   _T("R"),
