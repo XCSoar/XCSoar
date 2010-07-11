@@ -406,10 +406,8 @@ static bool
 ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
           TempAirspaceType &temp_area)
 {
-  int nSize;
-
   // Ignore lines less than 3 characters
-  nSize = _tcslen(TempString);
+  int nSize = _tcslen(TempString);
   if (nSize < 3)
     return true;
 
