@@ -55,6 +55,12 @@ Copyright_License {
 #include <ctype.h>
 #include <assert.h>
 
+enum asFileType {
+  ftUnknown,
+  ftOpenAir,
+  ftTNP
+};
+
 static const int k_nAreaCount = 12;
 static const TCHAR* k_strAreaStart[k_nAreaCount] = {
   _T("R"),
@@ -502,12 +508,250 @@ ParseLine(Airspaces &airspace_database, const TCHAR *line,
   return true;
 }
 
+static AirspaceClass_t
+ParseClassTNP(const TCHAR* text)
+{
+  if (text[0] == _T('A'))
+    return CLASSA;
+
+  if (text[0] == _T('B'))
+    return CLASSB;
+
+  if (text[0] == _T('C'))
+    return CLASSC;
+
+  if (text[0] == _T('D'))
+    return CLASSD;
+
+  if (text[0] == _T('E'))
+    return CLASSE;
+
+  if (text[0] == _T('F'))
+    return CLASSF;
+
+  return OTHER;
+}
+
+static AirspaceClass_t
+ParseTypeTNP(const TCHAR* text)
+{
+  if (_tcsicmp(text, _T("C")) == 0 ||
+      _tcsicmp(text, _T("CTA")) == 0 ||
+      _tcsicmp(text, _T("CTA")) == 0 ||
+      _tcsicmp(text, _T("CTA/CTR")) == 0)
+    return CTR;
+
+  if (_tcsicmp(text, _T("R")) == 0 ||
+      _tcsicmp(text, _T("RESTRICTED")) == 0)
+    return RESTRICT;
+
+  if (_tcsicmp(text, _T("P")) == 0 ||
+      _tcsicmp(text, _T("PROHIBITED")) == 0)
+    return RESTRICT;
+
+  if (_tcsicmp(text, _T("D")) == 0 ||
+      _tcsicmp(text, _T("DANGER")) == 0)
+    return RESTRICT;
+
+  if (_tcsicmp(text, _T("G")) == 0 ||
+      _tcsicmp(text, _T("GSEC")) == 0)
+    return WAVE;
+
+  return OTHER;
+}
+
+static bool
+ParseCoordsTNP(const TCHAR *Text, GEOPOINT &point)
+{
+  // Format: N542500 E0105000
+  bool negative = false;
+  double deg = 0, min = 0, sec = 0;
+  TCHAR *ptr;
+
+  if (Text[0] == _T('S') || Text[0] == _T('s'))
+    negative = true;
+
+  sec = (double)_tcstod(&Text[1], &ptr);
+  deg = abs(sec / 10000);
+  min = abs((sec - deg * 10000) / 100);
+  sec = sec - min * 100 - deg * 10000;
+
+  point.Latitude = Angle::degrees(fixed(sec / 3600 + min / 60 + deg));
+  if (negative)
+    point.Latitude.flip();
+
+  negative = false;
+
+  if (ptr[0] == _T(' '))
+    ptr++;
+
+  if (ptr[0] == _T('W') || ptr[0] == _T('w'))
+    negative = true;
+
+  sec = (double)_tcstod(&ptr[1], &ptr);
+  deg = abs(sec / 10000);
+  min = abs((sec - deg * 10000) / 100);
+  sec = sec - min * 100 - deg * 10000;
+
+  point.Longitude = Angle::degrees(fixed(sec / 3600 + min / 60 + deg));
+  if (negative)
+    point.Longitude.flip();
+
+  point.Longitude = point.Longitude.as_bearing();
+
+  return true;
+}
+
+static bool
+ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
+{
+  if (temp_area.points.empty())
+    return false;
+
+  // (ANTI-)CLOCKWISE RADIUS=34.95 CENTRE=N523333 E0131603 TO=N522052 E0122236
+
+  GEOPOINT from = temp_area.points.back();
+
+  const TCHAR* parameter;
+  if ((parameter = _tcsstr(Text, _T(" "))) == NULL)
+    return false;
+  if ((parameter = string_after_prefix_ci(parameter, _T(" CENTRE="))) == NULL)
+    return false;
+  ParseCoordsTNP(parameter, temp_area.Center);
+
+  GEOPOINT to;
+  if ((parameter = _tcsstr(parameter, _T(" "))) == NULL)
+    return false;
+  parameter++;
+  if ((parameter = _tcsstr(parameter, _T(" "))) == NULL)
+    return false;
+  if ((parameter = string_after_prefix_ci(parameter, _T(" TO="))) == NULL)
+    return false;
+  ParseCoordsTNP(parameter, to);
+
+  Angle bearing_from;
+  Angle bearing_to;
+  fixed radius;
+
+  static const fixed fixed_75 = fixed(7.5);
+  const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
+
+  DistanceBearing(temp_area.Center, from, &radius, &bearing_from);
+  bearing_to = Bearing(temp_area.Center, to);
+
+  GEOPOINT TempPoint;
+  while ((bearing_to - bearing_from).magnitude_degrees() > fixed_75) {
+    bearing_from += BearingStep;
+    bearing_from = bearing_from.as_bearing();
+    FindLatitudeLongitude(temp_area.Center, bearing_from, radius, &TempPoint);
+    temp_area.points.push_back(TempPoint);
+  }
+
+  return true;
+}
+
+static bool
+ParseCircleTNP(const TCHAR *Text, TempAirspaceType &temp_area)
+{
+  // CIRCLE RADIUS=17.00 CENTRE=N533813 E0095943
+
+  const TCHAR* parameter;
+  if ((parameter = string_after_prefix_ci(Text, _T("RADIUS="))) == NULL)
+    return false;
+  temp_area.Radius = Units::ToSysUnit(_tcstod(parameter, NULL),
+                                      unNauticalMiles);
+
+  if ((parameter = _tcsstr(parameter, _T(" "))) == NULL)
+    return false;
+  if ((parameter = string_after_prefix_ci(parameter, _T(" CENTRE="))) == NULL)
+    return false;
+  ParseCoordsTNP(parameter, temp_area.Center);
+
+  return true;
+}
+
+static bool
+ParseLineTNP(Airspaces &airspace_database, const TCHAR *line,
+             TempAirspaceType &temp_area, bool &ignore)
+{
+  const TCHAR* parameter;
+  if ((parameter = string_after_prefix_ci(line, _T("INCLUDE="))) != NULL) {
+    if (_tcsicmp(parameter, _T("YES")) == 0)
+      ignore = false;
+    else if (_tcsicmp(parameter, _T("NO")) == 0)
+      ignore = true;
+
+    return true;
+  }
+
+  if (ignore)
+    return true;
+
+  if ((parameter = string_after_prefix_ci(line, _T("TITLE="))) != NULL) {
+    temp_area.Name = parameter;
+  } else if ((parameter = string_after_prefix_ci(line, _T("TYPE="))) != NULL) {
+    if (!temp_area.Waiting)
+      temp_area.AddPolygon(airspace_database);
+
+    temp_area.reset();
+
+    temp_area.Type = ParseTypeTNP(parameter);
+    temp_area.Waiting = false;
+  } else if ((parameter = string_after_prefix_ci(line, _T("CLASS="))) != NULL) {
+    if (temp_area.Type == OTHER)
+      temp_area.Type = ParseClassTNP(parameter);
+  } else if ((parameter = string_after_prefix_ci(line, _T("TOPS="))) != NULL) {
+    ReadAltitude(parameter, &temp_area.Top);
+  } else if ((parameter = string_after_prefix_ci(line, _T("BASE="))) != NULL) {
+    ReadAltitude(parameter, &temp_area.Base);
+  } else if ((parameter = string_after_prefix_ci(line, _T("POINT="))) != NULL) {
+    GEOPOINT TempPoint;
+
+    if (!ParseCoordsTNP(parameter, TempPoint))
+      return false;
+
+    temp_area.points.push_back(TempPoint);
+  } else if ((parameter =
+      string_after_prefix_ci(line, _T("CIRCLE "))) != NULL) {
+    if (!ParseCircleTNP(parameter, temp_area))
+      return false;
+
+    temp_area.AddCircle(airspace_database);
+  } else if ((parameter =
+      string_after_prefix_ci(line, _T("CLOCKWISE "))) != NULL) {
+    temp_area.Rotation = 1;
+    if (!ParseArcTNP(parameter, temp_area))
+      return false;
+  } else if ((parameter =
+      string_after_prefix_ci(line, _T("ANTI-CLOCKWISE "))) != NULL) {
+    temp_area.Rotation = -1;
+    if (!ParseArcTNP(parameter, temp_area))
+      return false;
+  }
+
+  return true;
+}
+
+static asFileType
+DetectFileType(const TCHAR *line)
+{
+  if (string_after_prefix_ci(line, _T("INCLUDE=")) ||
+      string_after_prefix_ci(line, _T("TYPE=")))
+    return ftTNP;
+
+  if (string_after_prefix_ci(line, _T("AC ")))
+    return ftOpenAir;
+
+  return ftUnknown;
+}
+
 bool
 ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
 {
   LogStartUp(TEXT("ReadAirspace"));
 
   int LineCount = 0;
+  bool ignore = false;
 
   // Create and init ProgressDialog
   XCSoarInterface::CreateProgressDialog(gettext(
@@ -516,6 +760,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
   long file_size = reader.size();
 
   TempAirspaceType temp_area;
+  asFileType filetype = ftUnknown;
 
   TCHAR *line;
   TCHAR *comment;
@@ -534,13 +779,30 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
     if (linelength < 1)
       continue;
 
+    if (filetype == ftUnknown) {
+      filetype = DetectFileType(line);
+      if (filetype == ftUnknown)
+        continue;
+    }
+
     // Parse the line
-    if (!ParseLine(airspace_database, line, temp_area) &&
-        !ShowParseWarning(LineCount, line))
-      return false;
+    if (filetype == ftOpenAir)
+      if (!ParseLine(airspace_database, line, temp_area) &&
+          !ShowParseWarning(LineCount, line))
+        return false;
+
+    if (filetype == ftTNP)
+      if (!ParseLineTNP(airspace_database, line, temp_area, ignore) &&
+          !ShowParseWarning(LineCount, line))
+        return false;
 
     // Update the ProgressDialog
     XCSoarInterface::SetProgressDialogValue(reader.tell() * 1024 / file_size);
+  }
+
+  if (filetype == ftUnknown) {
+    MessageBoxX(_T("Unknown Filetype."), gettext(TEXT("Airspace")), MB_OK);
+    return false;
   }
 
   // Process final area (if any)
