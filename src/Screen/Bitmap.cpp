@@ -39,6 +39,10 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "ResourceLoader.hpp"
 
+#ifdef HAVE_AYGSHELL_DLL
+#include "OS/AYGShellDLL.hpp"
+#endif
+
 #ifdef HAVE_IMGDECMP_DLL
 #include "Screen/RootCanvas.hpp"
 #include "OS/ImgDeCmpDLL.hpp"
@@ -234,6 +238,13 @@ Bitmap::load_file(const TCHAR *path)
 #ifdef ENABLE_SDL
   surface = ::SDL_LoadBMP(path);
   if (surface != NULL)
+    return true;
+#endif
+
+#ifdef HAVE_AYGSHELL_DLL
+  AYGShellDLL ayg;
+  bitmap = ayg.SHLoadImageFile(path);
+  if (bitmap != NULL)
     return true;
 #endif
 
