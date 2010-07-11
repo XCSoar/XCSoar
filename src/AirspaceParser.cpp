@@ -403,19 +403,19 @@ ParseType(const TCHAR* text)
 }
 
 static bool
-ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
+ParseLine(Airspaces &airspace_database, const TCHAR *line,
           TempAirspaceType &temp_area)
 {
   // Ignore lines less than 3 characters
-  int nSize = _tcslen(TempString);
+  int nSize = _tcslen(line);
   if (nSize < 3)
     return true;
 
   // Only return expected lines
-  switch (TempString[0]) {
+  switch (line[0]) {
   case _T('A'):
   case _T('a'):
-    switch (TempString[1]) {
+    switch (line[1]) {
     case _T('C'):
     case _T('c'):
       if (!temp_area.Waiting)
@@ -423,23 +423,23 @@ ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
 
       temp_area.reset();
 
-      temp_area.Type = ParseType(&TempString[3]);
+      temp_area.Type = ParseType(&line[3]);
       temp_area.Waiting = false;
       break;
 
     case _T('N'):
     case _T('n'):
-      temp_area.Name = &TempString[3];
+      temp_area.Name = &line[3];
       break;
 
     case _T('L'):
     case _T('l'):
-      ReadAltitude(&TempString[3], &temp_area.Base);
+      ReadAltitude(&line[3], &temp_area.Base);
       break;
 
     case _T('H'):
     case _T('h'):
-      ReadAltitude(&TempString[3],&temp_area.Top);
+      ReadAltitude(&line[3],&temp_area.Top);
       break;
 
     default:
@@ -450,20 +450,20 @@ ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
 
   case _T('D'):
   case _T('d'):
-    switch (TempString[1]) {
+    switch (line[1]) {
     case _T('A'):
     case _T('a'):
-      CalculateSector(TempString, temp_area);
+      CalculateSector(line, temp_area);
       break;
 
     case _T('B'):
     case _T('b'):
-      CalculateArc(TempString, temp_area);
+      CalculateArc(line, temp_area);
       break;
 
     case _T('C'):
     case _T('c'):
-      temp_area.Radius = Units::ToSysUnit(_tcstod(&TempString[2], NULL),
+      temp_area.Radius = Units::ToSysUnit(_tcstod(&line[2], NULL),
                                           unNauticalMiles);
       temp_area.AddCircle(airspace_database);
       temp_area.reset();
@@ -474,7 +474,7 @@ ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
     {
       GEOPOINT TempPoint;
 
-      if (!ReadCoords(&TempString[3],TempPoint))
+      if (!ReadCoords(&line[3],TempPoint))
         return false;
 
       temp_area.points.push_back(TempPoint);
@@ -489,12 +489,12 @@ ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
   case _T('V'):
   case _T('v'):
     // Need to set these while in count mode, or DB/DA will crash
-    if (string_after_prefix_ci(&TempString[2], _T("X="))) {
-      if (!ReadCoords(&TempString[4],temp_area.Center))
+    if (string_after_prefix_ci(&line[2], _T("X="))) {
+      if (!ReadCoords(&line[4],temp_area.Center))
         return false;
-    } else if (string_after_prefix_ci(&TempString[2], _T("D=-"))) {
+    } else if (string_after_prefix_ci(&line[2], _T("D=-"))) {
       temp_area.Rotation = -1;
-    } else if (string_after_prefix_ci(&TempString[2], _T("D=+"))) {
+    } else if (string_after_prefix_ci(&line[2], _T("D=+"))) {
       temp_area.Rotation = +1;
     }
   }
