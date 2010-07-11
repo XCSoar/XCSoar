@@ -55,6 +55,10 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Profile.hpp"
 
+#ifdef _WIN32_WCE
+#include "Config/Registry.hpp"
+#endif
+
 #include <assert.h>
 
 Mutex mutexComm;
@@ -120,18 +124,9 @@ detect_gps(TCHAR *path, size_t path_max_size)
     _T("System\\CurrentControlSet\\GPS Intermediate Driver\\Multiplexer");
   static const TCHAR *const gps_idm_value = _T("DriverInterface");
 
-  HKEY hKey;
-  long result;
-
-  result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, gps_idm_key, 0, KEY_READ, &hKey);
-  if (result != ERROR_SUCCESS)
-    return false;
-
-  DWORD type, size = path_max_size;
-  result = RegQueryValueEx(hKey, gps_idm_value, 0, &type, (LPBYTE)path, &size);
-  RegCloseKey(hKey);
-
-  return result == ERROR_SUCCESS && type == REG_SZ;
+  RegistryKey key(HKEY_LOCAL_MACHINE, gps_idm_key, true);
+  return !key.error() &&
+    key.get_value(gps_idm_value, path, path_max_size);
 #else
   return false;
 #endif
