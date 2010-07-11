@@ -39,7 +39,6 @@ Copyright_License {
 #ifndef XCSOAR_POPUP_MESSAGE_H
 #define XCSOAR_POPUP_MESSAGE_H
 
-#include "Interface.hpp"
 #include "Thread/Mutex.hpp"
 #include "PeriodClock.hpp"
 #include "Screen/EditWindow.hpp"
@@ -64,7 +63,7 @@ class StatusMessageList;
  * - Optional logging of all messages to file
  * - Thread locking so available from any thread
  */
-class PopupMessage : public EditWindow, protected CommonInterface {
+class PopupMessage : public EditWindow {
 public:
   enum {
     MSG_UNKNOWN=0,
