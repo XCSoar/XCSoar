@@ -404,7 +404,7 @@ ParseType(const TCHAR* text)
 
 static bool
 ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
-          int LineCount, TempAirspaceType &temp_area)
+          TempAirspaceType &temp_area)
 {
   int nSize;
 
@@ -537,7 +537,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
       continue;
 
     // Parse the line
-    if (!ParseLine(airspace_database, line, LineCount, temp_area) &&
+    if (!ParseLine(airspace_database, line, temp_area) &&
         !ShowParseWarning(LineCount, line))
       return false;
 
