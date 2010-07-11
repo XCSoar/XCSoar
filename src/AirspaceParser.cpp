@@ -503,25 +503,13 @@ ParseLine(Airspaces &airspace_database, const TCHAR *TempString,
   case _T('v'):
     // Need to set these while in count mode, or DB/DA will crash
     if (string_after_prefix_ci(&TempString[2], _T("X="))) {
-      if (ReadCoords(&TempString[4],temp_area.Center))
-        break;
+      if (!ReadCoords(&TempString[4],temp_area.Center))
+        return ShowParseWarning(LineCount, TempString);
     } else if (string_after_prefix_ci(&TempString[2], _T("D=-"))) {
       temp_area.Rotation = -1;
-      break;
     } else if (string_after_prefix_ci(&TempString[2], _T("D=+"))) {
       temp_area.Rotation = +1;
-      break;
-    } else if (string_after_prefix_ci(&TempString[2], _T("Z"))) {
-      // ToDo Display Zool Level
-      break;
-    } else if (string_after_prefix_ci(&TempString[2], _T("W"))) {
-      // ToDo width of an airway
-      break;
-    } else if (string_after_prefix_ci(&TempString[2], _T("T"))) {
-      // ----- JMW THIS IS REQUIRED FOR LEGACY FILES
-      break;
     }
-    return ShowParseWarning(LineCount, TempString);
   }
 
   return true;
