@@ -48,6 +48,7 @@ Copyright_License {
 #include "Math/SunEphemeris.hpp"
 #include "Blackboard.hpp"
 #include "SettingsComputer.hpp"
+#include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
@@ -62,10 +63,6 @@ Copyright_License {
 
 #include <assert.h>
 
-#ifdef HAVE_IMGDECMP_DLL
-    #include "Screen/VOIMAGE.hpp"
-#endif
-
 static int page = 0;
 static WndForm *wf = NULL;
 static WndListFrame *wDetails = NULL;
@@ -77,10 +74,7 @@ static BOOL hasimage1 = false;
 static BOOL hasimage2 = false;
 static const Waypoint *selected_waypoint = NULL;
 
-#ifdef HAVE_IMGDECMP_DLL
-    static CVOImage jpgimage1;
-    static CVOImage jpgimage2;
-#endif
+static Bitmap jpgimage1, jpgimage2;
 
 static TCHAR path_modis[MAX_PATH];
 static TCHAR path_google[MAX_PATH];
@@ -354,13 +348,13 @@ OnImagePaint(WindowControl *Sender, Canvas &canvas)
 {
   (void)Sender;
 
-#ifdef HAVE_IMGDECMP_DLL
-  if (page == 4)
-    jpgimage1.Draw(canvas, 0, 0, -1, -1);
-
-  if (page == 5)
-    jpgimage2.Draw(canvas, 0, 0, -1, -1);
-#endif
+  if (page == 4) {
+    BitmapCanvas bitmap_canvas(canvas, jpgimage1);
+    canvas.copy(bitmap_canvas);
+  } else if (page == 5) {
+    BitmapCanvas bitmap_canvas(canvas, jpgimage2);
+    canvas.copy(bitmap_canvas);
+  }
 }
 
 static CallBackTableEntry_t CallBackTable[] = {
@@ -563,11 +557,8 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   if (wb)
     wb->SetOnClickNotify(OnRemoveFromTaskClicked);
 
-#ifdef HAVE_IMGDECMP_DLL
-  VirtualCanvas reference_canvas;
-  hasimage1 = jpgimage1.Load(reference_canvas, path_modis);
-  hasimage2 = jpgimage2.Load(reference_canvas, path_google);
-#endif
+  hasimage1 = jpgimage1.load_file(path_modis);
+  hasimage2 = jpgimage2.load_file(path_google);
 
   page = 0;
 
