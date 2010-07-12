@@ -265,11 +265,14 @@ std::ostream& operator<< (std::ostream& f,
 std::ostream& operator<< (std::ostream& f, 
                           const AbstractAirspace& as)
 {
-  if (const AirspaceCircle* ac = dynamic_cast<const AirspaceCircle*>(&as)) {
-    f << *ac;
-  }
-  if (const AirspacePolygon* ac = dynamic_cast<const AirspacePolygon*>(&as)) {
-    f << *ac;
+  switch (as.shape) {
+  case AbstractAirspace::CIRCLE:
+    f << (const AirspaceCircle &)as;
+    break;
+
+  case AbstractAirspace::POLYGON:
+    f << (const AirspacePolygon &)as;
+    break;
   }
   return f;
 }

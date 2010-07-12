@@ -42,6 +42,7 @@
 
 AirspacePolygon::AirspacePolygon(const std::vector<GEOPOINT>& pts,
   const bool prune)
+  :AbstractAirspace(POLYGON)
 {
   if (pts.size()<2) {
     m_is_convex = true;

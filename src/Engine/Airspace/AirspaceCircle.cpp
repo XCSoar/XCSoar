@@ -42,6 +42,7 @@
 
 AirspaceCircle::AirspaceCircle(const GEOPOINT &loc, 
                                const fixed _radius):
+  AbstractAirspace(CIRCLE),
   m_center(loc), 
   m_radius(_radius)
 {

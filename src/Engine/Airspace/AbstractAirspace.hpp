@@ -63,6 +63,15 @@ class AbstractAirspace:
 {
 public:
 
+  enum shape {
+    CIRCLE,
+    POLYGON,
+  };
+
+  const enum shape shape;
+
+  AbstractAirspace(enum shape _shape):shape(_shape) {}
+
   /** 
    * Compute bounding box enclosing the airspace.  Rounds up/down
    * so discretisation ensures bounding box is indeed enclosing.
