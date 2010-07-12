@@ -62,7 +62,6 @@ class TaskVisitor;
  *  of navigation tasks.  Hides details of these AbstractTasks behind a facade.
  */
 class TaskManager: 
-  public TaskInterface,
   public Serialisable,
   private NonCopyable
 {
@@ -111,15 +110,6 @@ public:
    */
   gcc_pure
   TaskPoint* getActiveTaskPoint() const;
-
-  /**
-   * Determine whether active task point optionally shifted points to
-   * a valid task point.
-   *
-   * @param index_offset offset (default 0)
-   */
-  gcc_pure
-  bool validTaskPoint(const int index_offset = 0) const;
 
   /**
    * Get a random point in the task OZ (for testing simulation route)

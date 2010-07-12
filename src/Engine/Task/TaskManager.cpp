@@ -123,16 +123,6 @@ TaskManager::getActiveTaskPoint() const
 }
 
 
-bool 
-TaskManager::validTaskPoint(const int index_offset) const
-{
-  if (active_task) 
-    return active_task->validTaskPoint(index_offset);
-  else 
-    return false;
-}
-
-
 void
 TaskManager::update_common_stats_times(const AIRCRAFT_STATE &state)
 {
