@@ -44,7 +44,7 @@ FinishPoint::FinishPoint(ObservationZonePoint* _oz,
                          const Waypoint & wp,
                          const TaskBehaviour& tb,
                          const OrderedTaskBehaviour& to) : 
-  OrderedTaskPoint(_oz,tp,wp,tb,to),
+  OrderedTaskPoint(FINISH, _oz, tp, wp, tb, to),
   fai_finish_height(fixed_zero)
 { 
 }
@@ -83,16 +83,6 @@ FinishPoint::set_neighbours(OrderedTaskPoint* _prev,
   assert(_next==NULL);
   // should not ever have an outbound leg
   OrderedTaskPoint::set_neighbours(_prev, _next);
-}
-
-bool 
-FinishPoint::equals(const OrderedTaskPoint* other) const
-{
-  if (dynamic_cast<const FinishPoint*>(other)) {
-    return OrderedTaskPoint::equals(other);
-  } else {
-    return false;
-  }
 }
 
 void 

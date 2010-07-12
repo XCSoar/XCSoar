@@ -61,7 +61,8 @@ TaskAdvanceSmart::ready_to_advance(const TaskPoint &tp,
     m_request_armed = false;
   }
 
-  if (const StartPoint* sp = dynamic_cast<const StartPoint*>(&tp)) {
+  if (tp.type == TaskPoint::START) {
+    const StartPoint *sp = (const StartPoint *)&tp;
     if (m_task_behaviour.start_requires_arm) {
       if (m_armed) {
         m_state = TaskAdvance::START_ARMED;
@@ -76,7 +77,7 @@ TaskAdvanceSmart::ready_to_advance(const TaskPoint &tp,
       m_state = TaskAdvance::AUTO;
       return m_state_ready;
     }
-  } else if (dynamic_cast<const AATPoint*>(&tp)) {
+  } else if (tp.type == TaskPoint::AAT) {
     if (m_armed) {
       m_state = TaskAdvance::TURN_ARMED;
     } else {
@@ -86,7 +87,7 @@ TaskAdvanceSmart::ready_to_advance(const TaskPoint &tp,
       }
     }
     return m_armed && m_state_ready;
-  } else if (dynamic_cast<const IntermediatePoint*>(&tp)) {
+  } else if (tp.is_intermediate()) {
     m_state = TaskAdvance::AUTO;
     return m_state_ready;
   } 

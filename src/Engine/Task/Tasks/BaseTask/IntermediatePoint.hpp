@@ -65,13 +65,13 @@ public:
  * @return Partially-initialised object
  */
 
-  IntermediatePoint(ObservationZonePoint* _oz,
+  IntermediatePoint(enum type _type, ObservationZonePoint* _oz,
                     const TaskProjection& tp,
                     const Waypoint & wp, 
                     const TaskBehaviour& tb,
                     const OrderedTaskBehaviour& to,
                     const bool b_scored=false): 
-    OrderedTaskPoint(_oz, tp, wp, tb, to, b_scored) 
+    OrderedTaskPoint(_type, _oz, tp, wp, tb, to, b_scored)
     {};
 
 /** 

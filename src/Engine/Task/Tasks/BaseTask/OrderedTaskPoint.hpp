@@ -74,7 +74,7 @@ public:
  * 
  * @return Partially initialised object 
  */
-  OrderedTaskPoint(ObservationZonePoint* _oz,
+  OrderedTaskPoint(enum type _type, ObservationZonePoint* _oz,
                    const TaskProjection& tp,
                    const Waypoint & wp, 
                    const TaskBehaviour &tb,

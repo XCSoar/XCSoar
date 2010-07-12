@@ -69,7 +69,7 @@ public:
            const Waypoint & wp,
            const TaskBehaviour &tb,
            const OrderedTaskBehaviour& to) : 
-    IntermediatePoint(_oz,tp,wp,tb,to,true), 
+    IntermediatePoint(AAT, _oz, tp, wp, tb, to, true),
     m_target_location(wp.Location),
     m_target_save(wp.Location),
     m_target_locked(false)

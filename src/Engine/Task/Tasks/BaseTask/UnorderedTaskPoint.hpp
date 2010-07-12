@@ -56,7 +56,8 @@ public:
    * @param tb Task Behaviour defining options (esp safety heights)
    */
   UnorderedTaskPoint(const Waypoint & wp,
-                     const TaskBehaviour &tb) : TaskPoint(wp,tb) {};
+                     const TaskBehaviour &tb)
+    :TaskPoint(UNORDERED, wp, tb) {}
 
   const GeoVector get_vector_remaining(const AIRCRAFT_STATE &) const;
 

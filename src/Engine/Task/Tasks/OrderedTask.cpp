@@ -318,7 +318,8 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
       (void)p;
 
       if (task_behaviour.optimise_targets_bearing) {
-        if (AATPoint* ap = dynamic_cast<AATPoint*>(tps[activeTaskPoint])) {
+        if (tps[activeTaskPoint]->type == TaskPoint::AAT) {
+          AATPoint *ap = (AATPoint *)tps[activeTaskPoint];
           // very nasty hack
           TaskOptTarget tot(tps, activeTaskPoint, state, glide_polar, *ap, ts);
           tot.search(fixed(0.5));
@@ -391,11 +392,13 @@ OrderedTask::scan_start_finish()
     return false;
   }
 
-  ts = dynamic_cast<StartPoint*>(tps[0]);
-  if (tps.size() > 1)
-    tf = dynamic_cast<FinishPoint*> (tps[tps.size() - 1]);
-  else
-    tf = NULL;
+  ts = tps[0]->type == TaskPoint::START
+    ? (StartPoint *)tps[0]
+    : NULL;
+
+  tf = tps.size() > 1 && tps[tps.size() - 1]->type == TaskPoint::FINISH
+    ? (FinishPoint *)tps[tps.size() - 1]
+    : NULL;
 
   return has_start() && has_finish();
 }

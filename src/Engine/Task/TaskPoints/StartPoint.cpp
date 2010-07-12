@@ -46,7 +46,7 @@ StartPoint::StartPoint(ObservationZonePoint* _oz,
                        const Waypoint & wp,
                        const TaskBehaviour& tb,
                        const OrderedTaskBehaviour& to): 
-  OrderedTaskPoint(_oz,tp,wp,tb,to), 
+  OrderedTaskPoint(START, _oz, tp, wp, tb, to),
   enabled(true) 
 {
 }
@@ -81,18 +81,6 @@ StartPoint::update_sample(const AIRCRAFT_STATE& state,
   }
   return OrderedTaskPoint::update_sample(state, task_events);
 }
-
-
-bool 
-StartPoint::equals(const OrderedTaskPoint* other) const
-{
-  if (dynamic_cast<const StartPoint*>(other)) {
-    return OrderedTaskPoint::equals(other);
-  } else {
-    return false;
-  }
-}
-
 
 void 
 StartPoint::find_best_start(const AIRCRAFT_STATE &state,

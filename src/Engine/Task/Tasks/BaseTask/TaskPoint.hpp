@@ -59,6 +59,20 @@ class TaskPoint :
 {
 
 public:
+  enum type {
+    UNORDERED,
+    START,
+    AST,
+    AAT,
+    FINISH,
+  };
+
+  const enum type type;
+
+  bool is_intermediate() const {
+    return type == AST || type == AAT;
+  }
+
 /** 
  * Constructor.  Location and elevation of waypoint is used
  * as the task point's reference values; a copy of the waypoint
@@ -69,8 +83,10 @@ public:
  * 
  * @return Initialised object
  */
-  TaskPoint(const Waypoint & wp,
+  TaskPoint(enum type _type,
+            const Waypoint & wp,
             const TaskBehaviour &tb) : ReferencePoint(wp.Location),
+                                       type(_type),
                                        m_elevation(wp.Altitude),
                                        m_task_behaviour(tb),
                                        m_waypoint(wp)

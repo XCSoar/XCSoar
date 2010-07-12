@@ -109,7 +109,8 @@ AbstractTaskFactory::getType(const OrderedTaskPoint* point) const
 {
   const ObservationZonePoint* oz = point->get_oz();
 
-  if (dynamic_cast<const StartPoint*>(point) != NULL) {
+  switch (point->type) {
+  case TaskPoint::START:
     if (dynamic_cast<const FAISectorZone*>(oz) != NULL) {
       return START_SECTOR;
     } else
@@ -119,16 +120,18 @@ AbstractTaskFactory::getType(const OrderedTaskPoint* point) const
     if (dynamic_cast<const CylinderZone*>(oz) != NULL) {
       return START_CYLINDER;
     } 
-  } else 
-  if (dynamic_cast<const AATPoint*>(point) != NULL) {
+    break;
+
+  case TaskPoint::AAT:
     if (dynamic_cast<const SectorZone*>(oz) != NULL) {
       return AAT_SEGMENT;
     } else
     if (dynamic_cast<const CylinderZone*>(oz) != NULL) {
       return AAT_CYLINDER;
     } 
-  } else
-  if (dynamic_cast<const ASTPoint*>(point) != NULL) {
+    break;
+
+  case TaskPoint::AST:
     if (dynamic_cast<const FAISectorZone*>(oz) != NULL) {
       return FAI_SECTOR;
     } else
@@ -138,8 +141,9 @@ AbstractTaskFactory::getType(const OrderedTaskPoint* point) const
     if (dynamic_cast<const CylinderZone*>(oz) != NULL) {
       return AST_CYLINDER;
     } 
-  } else
-  if (dynamic_cast<const FinishPoint*>(point) != NULL) {
+    break;
+
+  case TaskPoint::FINISH:
     if (dynamic_cast<const FAISectorZone*>(oz) != NULL) {
       return FINISH_SECTOR;
     } else
@@ -149,6 +153,7 @@ AbstractTaskFactory::getType(const OrderedTaskPoint* point) const
     if (dynamic_cast<const CylinderZone*>(oz) != NULL) {
       return FINISH_CYLINDER;
     } 
+    break;
   } 
 
   // fail, should never get here
@@ -340,7 +345,7 @@ AbstractTaskFactory::insert(OrderedTaskPoint *new_tp, const unsigned position,
         return m_task.insert(sp, 0);
       }
     } else {
-      if (dynamic_cast<IntermediatePoint*>(new_tp) != NULL) {
+      if (new_tp->is_intermediate()) {
         // candidate ok for direct insertion
         return m_task.insert(new_tp, position);
       } else {
@@ -524,18 +529,14 @@ AbstractTaskFactory::validType(OrderedTaskPoint *new_tp, unsigned position) cons
 {
   /// @todo also check OZ type is legal?
 
-  if (NULL != dynamic_cast<StartPoint*>(new_tp)) {
-    return validAbstractType(POINT_START, position);
+  switch (new_tp->type) {
+  case TaskPoint::START:
+  case TaskPoint::AST:
+  case TaskPoint::AAT:
+  case TaskPoint::FINISH:
+    return true;
   }
-  if (NULL != dynamic_cast<FinishPoint*>(new_tp)) {
-    return validAbstractType(POINT_FINISH, position);
-  }
-  if (NULL != dynamic_cast<AATPoint*>(new_tp)) {
-    return validAbstractType(POINT_AAT, position);
-  }
-  if (NULL != dynamic_cast<ASTPoint*>(new_tp)) {
-    return validAbstractType(POINT_AST, position);
-  }
+
   return false;
 }
 

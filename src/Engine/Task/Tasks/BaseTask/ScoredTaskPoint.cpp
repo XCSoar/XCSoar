@@ -36,11 +36,11 @@
  */
 #include "ScoredTaskPoint.hpp"
 
-ScoredTaskPoint::ScoredTaskPoint(const TaskProjection& tp,
+ScoredTaskPoint::ScoredTaskPoint(enum type _type, const TaskProjection& tp,
                                  const Waypoint & wp, 
                                  const TaskBehaviour &tb,
                                  const bool b_scored): 
-  SampledTaskPoint(tp, wp, tb, b_scored)
+  SampledTaskPoint(_type, tp, wp, tb, b_scored)
 {
   reset();
 }

@@ -45,14 +45,14 @@
 #include <math.h>
 
 
-OrderedTaskPoint::OrderedTaskPoint(ObservationZonePoint* _oz,
+OrderedTaskPoint::OrderedTaskPoint(enum type _type, ObservationZonePoint* _oz,
                                    const TaskProjection& tp,
                                    const Waypoint & wp, 
                                    const TaskBehaviour &tb,
                                    const OrderedTaskBehaviour& to,
                                    const bool b_scored): 
   TaskLeg(*this),
-  ScoredTaskPoint(tp, wp, tb, b_scored),
+  ScoredTaskPoint(_type, tp, wp, tb, b_scored),
   ObservationZoneClient(_oz),
   m_ordered_task_behaviour(to),
   m_active_state(NOTFOUND_ACTIVE),
@@ -160,6 +160,7 @@ bool
 OrderedTaskPoint::equals(const OrderedTaskPoint* other) const
 {
   return (get_waypoint() == other->get_waypoint()) &&
+    type == other->type &&
     get_oz()->equals(other->get_oz()) &&
     other->get_oz()->equals(get_oz());
 }

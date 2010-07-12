@@ -37,11 +37,11 @@
 #include "SampledTaskPoint.hpp"
 #include "Navigation/ConvexHull/PolygonInterior.hpp"
 
-SampledTaskPoint::SampledTaskPoint(const TaskProjection& tp,
+SampledTaskPoint::SampledTaskPoint(enum type _type, const TaskProjection& tp,
                                    const Waypoint & wp,
                                    const TaskBehaviour &tb,
                                    const bool b_scored):
-    TaskPoint(wp,tb),
+    TaskPoint(_type, wp, tb),
     m_boundary_scored(b_scored),
     m_task_projection(tp),
     m_search_max(get_location(),tp),

@@ -175,11 +175,9 @@ AATPoint::set_target(const GEOPOINT &loc, const bool override_lock)
 bool
 AATPoint::equals(const OrderedTaskPoint* other) const
 {
-  if (const AATPoint* tp = dynamic_cast<const AATPoint*>(other)) {
-    if ((m_target_locked == tp->m_target_locked)
-        && (m_target_location == tp->m_target_location)) {
-      return OrderedTaskPoint::equals(other);
-    }
-  } 
-  return false;
+  const AATPoint &tp = (const AATPoint &)*other;
+
+  return OrderedTaskPoint::equals(other) &&
+    m_target_locked == tp.m_target_locked &&
+    m_target_location == tp.m_target_location;
 }

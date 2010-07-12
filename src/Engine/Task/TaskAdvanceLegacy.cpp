@@ -92,11 +92,7 @@ TaskAdvanceLegacy::mode_ready(const TaskPoint &tp) const
   case ADVANCE_ARM:
     return m_armed;
   case ADVANCE_ARMSTART:
-    if (dynamic_cast<const StartPoint*>(&tp)) {
-      return m_armed;
-    } else {
-      return true;
-    }
+    return m_armed || tp.type != TaskPoint::START;
   };
   return false;
 }

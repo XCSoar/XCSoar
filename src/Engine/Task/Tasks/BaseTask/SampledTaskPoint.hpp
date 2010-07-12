@@ -74,7 +74,7 @@ public:
  * 
  * @return Partially initialised object 
  */
-  SampledTaskPoint(const TaskProjection& tp,
+  SampledTaskPoint(enum type _type, const TaskProjection& tp,
                    const Waypoint & wp, 
                    const TaskBehaviour &tb,
                    const bool b_scored);

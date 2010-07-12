@@ -126,15 +126,6 @@ public:
   fixed get_elevation() const;
 
 /** 
- * Test whether a taskpoint is equivalent to this one
- * 
- * @param other Taskpoint to compare to
- * 
- * @return True if same WP, type and OZ
- */
-  bool equals(const OrderedTaskPoint* other) const;
-
-/** 
  * Search for the min point on the boundary from
  * the aircraft state to the next point.  Should only
  * be performed when the aircraft state is inside the sector

@@ -112,15 +112,6 @@ public:
  */
   fixed get_elevation() const;
 
-/** 
- * Test whether a taskpoint is equivalent to this one
- * 
- * @param other Taskpoint to compare to
- * 
- * @return True if same WP, type and OZ
- */
-  bool equals(const OrderedTaskPoint* other) const;
-
   /** 
    * Set FAI finish height
    * 

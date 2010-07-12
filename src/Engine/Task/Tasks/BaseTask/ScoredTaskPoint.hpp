@@ -63,7 +63,7 @@ public:
  * 
  * @return Partially initialised object
  */
-  ScoredTaskPoint(const TaskProjection& tp,
+  ScoredTaskPoint(enum type _type, const TaskProjection& tp,
                   const Waypoint & wp, 
                   const TaskBehaviour &tb,
                   const bool b_scored);

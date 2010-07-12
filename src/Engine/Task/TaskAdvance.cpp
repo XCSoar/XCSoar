@@ -60,13 +60,14 @@ TaskAdvance::state_ready(const TaskPoint &tp,
                          const bool x_enter, 
                          const bool x_exit) const
 {
-  if (dynamic_cast<const StartPoint*>(&tp)) {
+  if (tp.type == TaskPoint::START)
     return x_exit;
-  }
-  if (const AATPoint* ap = dynamic_cast<const AATPoint*>(&tp)) {
+
+  if (tp.type == TaskPoint::AAT) {
+    const AATPoint *ap = (const AATPoint *)&tp;
     return aat_state_ready(ap->has_entered(), ap->close_to_target(state));
-  } else if (const IntermediatePoint* ip = 
-      dynamic_cast<const IntermediatePoint*>(&tp)) {
+  } else if (tp.is_intermediate()) {
+    const IntermediatePoint *ip = (const IntermediatePoint *)&tp;
     return ip->has_entered();
   }
   return false;
