@@ -38,6 +38,9 @@
 #include "Serialiser.hpp"
 #include "Task/OrderedTaskBehaviour.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
+#include "Task/ObservationZones/LineSectorZone.hpp"
+#include "Task/ObservationZones/FAISectorZone.hpp"
+#include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "DataNode.hpp"
 #include <assert.h>
