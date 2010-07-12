@@ -58,7 +58,8 @@ public:
    * @return Initialised object
    */
   FAISectorZone(const GEOPOINT loc, const bool is_turnpoint=true):
-    SymmetricSectorZone(loc, fixed(1000.0*(is_turnpoint? 10:1)), 
+    SymmetricSectorZone(FAI_SECTOR, loc,
+                        fixed(1000.0 * (is_turnpoint ? 10 : 1)),
                         Angle::radians(fixed_half_pi)),
     m_is_turnpoint(is_turnpoint)
     {}
@@ -70,16 +71,6 @@ public:
       return new FAISectorZone(get_location(), m_is_turnpoint);
     }
   }
-
-/** 
- * Test whether an OZ is equivalent to this one
- * 
- * @param other OZ to compare to
- * 
- * @return True if same type and OZ parameters
- */
-
-  bool equals(const ObservationZonePoint* other) const;
 
 private:
   const bool m_is_turnpoint;

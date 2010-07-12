@@ -58,10 +58,10 @@ protected:
  * 
  * @return Initialised object
  */
-  SymmetricSectorZone(const GEOPOINT &loc,
+  SymmetricSectorZone(enum shape _shape, const GEOPOINT &loc,
                       const fixed radius=fixed(10000.0),
                       const Angle angle=Angle::radians(fixed_half_pi)):
-    SectorZone(loc,radius),
+    SectorZone(_shape, loc, radius),
     SectorAngle(angle) {}
 
 public:

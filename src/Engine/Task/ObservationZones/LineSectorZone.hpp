@@ -60,7 +60,8 @@ public:
  * @return Initialised object
  */
   LineSectorZone(const GEOPOINT loc, const fixed length=fixed(1000.0)):
-    SymmetricSectorZone(loc, length * fixed_half, Angle::radians(fixed_pi))
+    SymmetricSectorZone(LINE, loc, length * fixed_half,
+                        Angle::radians(fixed_pi))
   {};
 
   ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
@@ -112,15 +113,6 @@ public:
     return getRadius()*fixed_two;
   }
 
-/** 
- * Test whether an OZ is equivalent to this one
- * 
- * @param other OZ to compare to
- * 
- * @return True if same type and OZ parameters
- */
-
-  bool equals(const ObservationZonePoint* other) const;
 public:
   DEFINE_VISITABLE();
 };

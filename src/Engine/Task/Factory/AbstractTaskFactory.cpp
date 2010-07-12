@@ -111,46 +111,59 @@ AbstractTaskFactory::getType(const OrderedTaskPoint* point) const
 
   switch (point->type) {
   case TaskPoint::START:
-    if (dynamic_cast<const FAISectorZone*>(oz) != NULL) {
+    switch (oz->shape) {
+    case ObservationZonePoint::FAI_SECTOR:
       return START_SECTOR;
-    } else
-    if (dynamic_cast<const LineSectorZone*>(oz) != NULL) {
+
+    case ObservationZonePoint::LINE:
       return START_LINE;
-    } else
-    if (dynamic_cast<const CylinderZone*>(oz) != NULL) {
+
+    case ObservationZonePoint::CYLINDER:
+    case ObservationZonePoint::SECTOR:
+    case ObservationZonePoint::KEYHOLE:
       return START_CYLINDER;
-    } 
+    }
     break;
 
   case TaskPoint::AAT:
-    if (dynamic_cast<const SectorZone*>(oz) != NULL) {
+    switch (oz->shape) {
+    case ObservationZonePoint::SECTOR:
+    case ObservationZonePoint::FAI_SECTOR:
+    case ObservationZonePoint::KEYHOLE:
+    case ObservationZonePoint::LINE:
       return AAT_SEGMENT;
-    } else
-    if (dynamic_cast<const CylinderZone*>(oz) != NULL) {
+
+    case ObservationZonePoint::CYLINDER:
       return AAT_CYLINDER;
     } 
     break;
 
   case TaskPoint::AST:
-    if (dynamic_cast<const FAISectorZone*>(oz) != NULL) {
+    switch (oz->shape) {
+    case ObservationZonePoint::FAI_SECTOR:
       return FAI_SECTOR;
-    } else
-    if (dynamic_cast<const KeyholeZone*>(oz) != NULL) {
+
+    case ObservationZonePoint::KEYHOLE:
       return KEYHOLE_SECTOR;
-    } else
-    if (dynamic_cast<const CylinderZone*>(oz) != NULL) {
+
+    case ObservationZonePoint::CYLINDER:
+    case ObservationZonePoint::SECTOR:
+    case ObservationZonePoint::LINE:
       return AST_CYLINDER;
     } 
     break;
 
   case TaskPoint::FINISH:
-    if (dynamic_cast<const FAISectorZone*>(oz) != NULL) {
+    switch (oz->shape) {
+    case ObservationZonePoint::FAI_SECTOR:
       return FINISH_SECTOR;
-    } else
-    if (dynamic_cast<const LineSectorZone*>(oz) != NULL) {
+
+    case ObservationZonePoint::LINE:
       return FINISH_LINE;
-    } else
-    if (dynamic_cast<const CylinderZone*>(oz) != NULL) {
+
+    case ObservationZonePoint::CYLINDER:
+    case ObservationZonePoint::SECTOR:
+    case ObservationZonePoint::KEYHOLE:
       return FINISH_CYLINDER;
     } 
     break;

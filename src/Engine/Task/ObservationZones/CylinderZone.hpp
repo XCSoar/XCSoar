@@ -47,6 +47,14 @@
  * radius from a center point
  */
 class CylinderZone : public ObservationZonePoint {
+protected:
+  CylinderZone(enum shape _shape, const GEOPOINT &loc,
+               const fixed _radius=fixed(10000.0)):
+    ObservationZonePoint(_shape, loc),
+    Radius(_radius)
+  {
+  };
+
 public:
 /** 
  * Constructor.
@@ -57,7 +65,7 @@ public:
  * @return Initialised object
  */
   CylinderZone(const GEOPOINT &loc, const fixed _radius=fixed(10000.0)):
-    ObservationZonePoint(loc),
+    ObservationZonePoint(CYLINDER, loc),
     Radius(_radius)
   {
   };

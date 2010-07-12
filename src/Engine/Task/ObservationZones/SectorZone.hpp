@@ -47,6 +47,17 @@
 class SectorZone: 
   public CylinderZone 
 {
+protected:
+  SectorZone(enum shape _shape, const GEOPOINT &loc,
+             const fixed _radius=fixed(10000.0),
+             const Angle _startRadial=Angle(),
+             const Angle _endRadial=Angle::radians(fixed_two_pi)):
+    CylinderZone(_shape, loc, _radius),
+    StartRadial(_startRadial),
+    EndRadial(_endRadial) 
+    {
+    };
+
 public:
 /** 
  * Constructor
@@ -62,7 +73,7 @@ public:
              const fixed _radius=fixed(10000.0),
              const Angle _startRadial=Angle(),
              const Angle _endRadial=Angle::radians(fixed_two_pi)):
-    CylinderZone(loc,_radius),
+    CylinderZone(SECTOR, loc, _radius),
     StartRadial(_startRadial),
     EndRadial(_endRadial) 
     {

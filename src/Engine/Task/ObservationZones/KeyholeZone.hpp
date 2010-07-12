@@ -57,7 +57,8 @@ public:
    * @return Initialised object
    */
   KeyholeZone(const GEOPOINT loc):
-    SymmetricSectorZone(loc, fixed(10000.0), Angle::radians(fixed_half_pi))
+    SymmetricSectorZone(KEYHOLE, loc, fixed(10000.0),
+                        Angle::radians(fixed_half_pi))
     {}
 
   ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
@@ -67,16 +68,6 @@ public:
       return new KeyholeZone(get_location());
     }
   }
-
-/** 
- * Test whether an OZ is equivalent to this one
- * 
- * @param other OZ to compare to
- * 
- * @return True if same type and OZ parameters
- */
-
-  bool equals(const ObservationZonePoint* other) const;
 
   /** 
    * Check whether observer is within OZ

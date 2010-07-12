@@ -59,6 +59,16 @@ class ObservationZonePoint : public ReferencePoint,
 public:
   friend class Serialiser;
 
+  enum shape {
+    LINE,
+    CYLINDER,
+    SECTOR,
+    FAI_SECTOR,
+    KEYHOLE,
+  };
+
+  const enum shape shape;
+
 /** 
  * Constructor
  * 
@@ -66,10 +76,8 @@ public:
  * 
  * @return Initialised object
  */
-  ObservationZonePoint(const GEOPOINT & _location) : 
-    ReferencePoint(_location) {
-
-    };
+  ObservationZonePoint(enum shape _shape, const GEOPOINT & _location)
+    :ReferencePoint(_location), shape(_shape) {}
 
 /** 
  * Update geometry when previous/next legs are modified.

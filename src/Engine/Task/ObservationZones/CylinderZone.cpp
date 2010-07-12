@@ -55,12 +55,9 @@ CylinderZone::get_boundary_parametric(fixed t) const
 bool
 CylinderZone::equals(const ObservationZonePoint* other) const
 {
-  if (ObservationZonePoint::equals(other)) {
-    if (const CylinderZone* z = dynamic_cast<const CylinderZone*>(other)) {
-      return Radius == z->getRadius();
-    }
-  }
-  return false;
+  const CylinderZone *z = (const CylinderZone *)other;
+
+  return ObservationZonePoint::equals(other) && Radius == z->getRadius();
 }
 
 GEOPOINT

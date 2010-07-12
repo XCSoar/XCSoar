@@ -111,11 +111,9 @@ SectorZone::angleInSector(const Angle b) const
 bool
 SectorZone::equals(const ObservationZonePoint* other) const
 {
-  if (CylinderZone::equals(other)) {
-    if (const SectorZone* z = dynamic_cast<const SectorZone*>(other)) {
-      return (StartRadial == z->getStartRadial()) &&
-        (EndRadial == z->getEndRadial());
-    }
-  }
-  return false;
+  const SectorZone *z = (const SectorZone *)other;
+
+  return CylinderZone::equals(other) &&
+    StartRadial == z->getStartRadial() &&
+    EndRadial == z->getEndRadial();
 }

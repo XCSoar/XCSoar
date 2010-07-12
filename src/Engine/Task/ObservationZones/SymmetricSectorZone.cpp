@@ -65,11 +65,7 @@ void SymmetricSectorZone::set_legs(const TaskPoint *previous,
 bool
 SymmetricSectorZone::equals(const ObservationZonePoint* other) const
 {
-  if (CylinderZone::equals(other)) {
-    if (const SymmetricSectorZone* z = 
-        dynamic_cast<const SymmetricSectorZone*>(other)) {
-      return (SectorAngle == z->getSectorAngle());
-    }
-  }
-  return false;
+  const SymmetricSectorZone* z = (const SymmetricSectorZone *)other;
+
+  return CylinderZone::equals(other) && SectorAngle == z->getSectorAngle();
 }

@@ -37,17 +37,6 @@
 
 #include "KeyholeZone.hpp"
 
-bool
-KeyholeZone::equals(const ObservationZonePoint* other) const
-{
-  if (SymmetricSectorZone::equals(other)) {
-    if (dynamic_cast<const KeyholeZone*>(other)) {
-      return true;
-    }
-  }
-  return false;
-}
-
 GEOPOINT 
 KeyholeZone::get_boundary_parametric(fixed t) const
 { 

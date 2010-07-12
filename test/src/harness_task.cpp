@@ -229,7 +229,8 @@ bool test_task_mixed(TaskManager& task_manager,
   wp = waypoints.lookup_id(1);
   if (wp) {
     tp = fact.createStart(AbstractTaskFactory::START_LINE,*wp);
-    if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
+    if (tp->get_oz()->shape == ObservationZonePoint::CYLINDER) {
+      CylinderZone *cz = (CylinderZone *)tp->get_oz();
       cz->setRadius(fixed(5000.0));
       tp->update_oz();
     }
@@ -254,7 +255,8 @@ bool test_task_mixed(TaskManager& task_manager,
   wp = waypoints.lookup_id(3);
   if (wp) {
     tp = fact.createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
-    if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
+    if (tp->get_oz()->shape == ObservationZonePoint::CYLINDER) {
+      CylinderZone *cz = (CylinderZone *)tp->get_oz();
       cz->setRadius(fixed(30000.0));
       tp->update_oz();
     }
@@ -276,7 +278,8 @@ bool test_task_mixed(TaskManager& task_manager,
   wp = waypoints.lookup_id(5);
   if (wp) {
     tp = fact.createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
-    if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
+    if (tp->get_oz()->shape == ObservationZonePoint::CYLINDER) {
+      CylinderZone *cz = (CylinderZone *)tp->get_oz();
       cz->setRadius(fixed(30000.0));
       tp->update_oz();
     }
@@ -382,7 +385,8 @@ bool test_task_aat(TaskManager& task_manager,
   wp = waypoints.lookup_id(2);
   if (wp) {
     OrderedTaskPoint* tp = fact.createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
-    if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
+    if (tp->get_oz()->shape == ObservationZonePoint::CYLINDER) {
+      CylinderZone *cz = (CylinderZone *)tp->get_oz();
       cz->setRadius(fixed(30000.0));
       tp->update_oz();
     }
@@ -395,7 +399,8 @@ bool test_task_aat(TaskManager& task_manager,
   wp = waypoints.lookup_id(3);
   if (wp) {
     OrderedTaskPoint* tp = fact.createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
-    if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
+    if (tp->get_oz()->shape == ObservationZonePoint::CYLINDER) {
+      CylinderZone *cz = (CylinderZone *)tp->get_oz();
       cz->setRadius(fixed(40000.0));
       tp->update_oz();
     }
