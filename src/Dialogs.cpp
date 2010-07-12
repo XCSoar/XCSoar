@@ -51,6 +51,9 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Interface.hpp"
 #include "Asset.hpp"
+#include "Interface.hpp"
+#include "MapWindow.hpp"
+#include "Waypoint/Waypoints.hpp"
 
 ProgressWindow *XCSoarInterface::progress_window = NULL;
 
@@ -128,11 +131,6 @@ PopupAnalysis()
 {
   dlgAnalysisShowModal();
 }
-
-
-#include "Interface.hpp"
-#include "MapWindow.hpp"
-#include "Waypoint/Waypoints.hpp"
 
 /**
  * Opens up the WaypointDetails window of the nearest
