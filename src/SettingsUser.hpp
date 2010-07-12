@@ -44,8 +44,6 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "SettingsAirspace.hpp"
 
-extern struct Appearance Appearance;
-
 typedef enum {
   TRACKUP=0,
   NORTHUP=1,

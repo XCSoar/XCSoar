@@ -145,4 +145,6 @@ struct Appearance {
   bool UseCustomFonts;
 };
 
+extern struct Appearance Appearance;
+
 #endif

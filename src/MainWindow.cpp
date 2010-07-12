@@ -16,7 +16,7 @@
 #include "Gauge/GaugeCDI.hpp"
 #include "MenuBar.hpp"
 #include "InputEvents.h"
-#include "SettingsUser.hpp"
+#include "Appearance.hpp"
 
 #ifdef WINDOWSPC
 #include "Asset.hpp" /* for SCREENWIDTH and SCREENHEIGHT */

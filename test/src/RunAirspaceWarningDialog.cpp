@@ -54,7 +54,7 @@ Copyright_License {
 #include "InfoBoxLayout.hpp"
 #include "Screen/Layout.hpp"
 #include "ResourceLoader.hpp"
-#include "SettingsUser.hpp"
+#include "Appearance.hpp"
 #include "IO/FileLineReader.hpp"
 
 #include <tchar.h>
