@@ -45,6 +45,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
+#include "Interface.hpp"
 
 #include <assert.h>
 #include <limits.h>

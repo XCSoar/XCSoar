@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "Message.hpp"
 #include "MainWindow.hpp"
+#include "Interface.hpp"
 
 void
 Message::AddMessage(const TCHAR* text, const TCHAR *data)
