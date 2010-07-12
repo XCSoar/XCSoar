@@ -55,30 +55,6 @@ CuSondeLevel CuSonde::cslevels[CUSONDE_NUMLEVELS];
 
 // TODO accuracy: recalculate thermal index etc if maxGroundTemp changes
 
-void
-CuSonde::test()
-{
-  /*
-  CALCULATED_INFO.Flying = true;
-  GPS_INFO.TemperatureAvailable = true;
-  GPS_INFO.HumidityAvailable = true;
-
-  int i;
-  for (i = 0; i < 3000; i += 50) {
-    GPS_INFO.Altitude = i + 50;
-    GPS_INFO.OutsideAirTemperature = 20.0 + DALR * 0.5 * i;
-    GPS_INFO.RelativeHumidity = 50;
-    updateMeasurements(&GPS_INFO, &CALCULATED_INFO);
-  }
-  for (i = 3000; i > 0; i -= 50) {
-    GPS_INFO.Altitude = i + 50;
-    GPS_INFO.OutsideAirTemperature = 20.0 + DALR * 0.5 * i;
-    GPS_INFO.RelativeHumidity = 50;
-    updateMeasurements(&GPS_INFO, &CALCULATED_INFO);
-  }
-  */
-}
-
 /**
  * Sets the predicted maximum ground temperature to val
  * @param val New predicted maximum ground temperature in degrees C

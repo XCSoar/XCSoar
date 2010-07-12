@@ -40,7 +40,6 @@ Copyright_License {
 #define ATMOSPHERE_H
 
 struct NMEA_INFO;
-struct DERIVED_INFO;
 
 class CuSondeLevel {
 public:
@@ -109,8 +108,6 @@ public:
   static double thermalHeight;
   /** Estimated CloudBase */
   static double cloudBase;
-
-  static void test();
 };
 
 #endif
