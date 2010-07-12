@@ -1189,11 +1189,12 @@ InputEvents::eventNearestWaypointDetails(const TCHAR *misc)
   if (_tcscmp(misc, TEXT("aircraft")) == 0)
     // big range..
     PopupNearestWaypointDetails(way_points, Basic().Location,
-                                1.0e5, false);
+                                1.0e5);
   else if (_tcscmp(misc, TEXT("pan")) == 0)
     // big range..
-    PopupNearestWaypointDetails(way_points, Basic().Location,
-                                1.0e5, true);
+    PopupNearestWaypointDetails(way_points,
+                                XCSoarInterface::main_window.map.GetPanLocation(),
+                                1.0e5);
 }
 
 // Null

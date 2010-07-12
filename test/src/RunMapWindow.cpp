@@ -147,7 +147,7 @@ propGetScaleList(fixed *List, size_t Size)
 
 bool
 PopupNearestWaypointDetails(const Waypoints &way_points,
-                            const GEOPOINT &location, double range, bool pan)
+                            const GEOPOINT &location, double range)
 {
   return false;
 }
