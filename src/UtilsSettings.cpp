@@ -107,20 +107,6 @@ SettingsLeave()
 
   SuspendAllThreads();
 
-/*
-  if (MapFileChanged) { printf("MapFileChanged\n"); }
-  if (AirspaceFileChanged) { printf("AirspaceFileChanged\n"); }
-  if (AirfieldFileChanged) { printf("AirfieldFileChanged\n"); }
-  if (WaypointFileChanged) { printf("WaypointFileChanged\n"); }
-  if (TerrainFileChanged) { printf("TerrainFileChanged\n"); }
-  if (TopologyFileChanged) { printf("TopologyFileChanged\n"); }
-  if (PolarFileChanged) { printf("PolarFileChanged\n"); }
-  if (LanguageFileChanged) { printf("LanguageFileChanged\n"); }
-  if (StatusFileChanged) { printf("StatusFileChanged\n"); }
-  if (InputFileChanged) { printf("InputFileChanged\n"); }
-  if (DevicePortChanged) { printf("DevicePortChanged\n"); }
-*/
-
   if (MapFileChanged) {
     AirspaceFileChanged = true;
     AirfieldFileChanged = true;
