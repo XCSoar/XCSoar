@@ -37,39 +37,41 @@
 #ifndef OBSERVATION_POINT_VISITOR_HPP
 #define OBSERVATION_POINT_VISITOR_HPP
 
-#include "Task/ObservationZones/LineSectorZone.hpp"
-#include "Task/ObservationZones/SectorZone.hpp"
-#include "Task/ObservationZones/FAISectorZone.hpp"
-#include "Task/ObservationZones/CylinderZone.hpp"
-#include "Task/ObservationZones/KeyholeZone.hpp"
-#include "Task/Tasks/BaseTask/ObservationZonePoint.hpp"
+class ObservationZonePoint;
+class FAISectorZone;
+class SectorZone;
+class LineSectorZone;
+class CylinderZone;
+class KeyholeZone;
 
 /**
  * Generic const visitor for observation zones (for double-dispatch)
  */
-class ObservationZoneConstVisitor:
-  virtual public BaseVisitor,
-  public ConstVisitor<FAISectorZone>,
-  public ConstVisitor<SectorZone>,
-  public ConstVisitor<LineSectorZone>,
-  public ConstVisitor<CylinderZone>,
-  public ConstVisitor<KeyholeZone>
-{
+class ObservationZoneConstVisitor {
+protected:
+  virtual void Visit(const FAISectorZone &z) = 0;
+  virtual void Visit(const SectorZone &z) = 0;
+  virtual void Visit(const LineSectorZone &z) = 0;
+  virtual void Visit(const CylinderZone &z) = 0;
+  virtual void Visit(const KeyholeZone &z) = 0;
 
+public:
+  void Visit(const ObservationZonePoint &ozp);
 };
 
 /**
  * Generic visitor for observation zones (for double-dispatch)
  */
-class ObservationZoneVisitor:
-  virtual public BaseVisitor,
-  public Visitor<FAISectorZone>,
-  public Visitor<SectorZone>,
-  public Visitor<LineSectorZone>,
-  public Visitor<CylinderZone>,
-  public Visitor<KeyholeZone>
-{
+class ObservationZoneVisitor {
+protected:
+  virtual void Visit(FAISectorZone &z) = 0;
+  virtual void Visit(SectorZone &z) = 0;
+  virtual void Visit(LineSectorZone &z) = 0;
+  virtual void Visit(CylinderZone &z) = 0;
+  virtual void Visit(KeyholeZone &z) = 0;
 
+public:
+  void Visit(ObservationZonePoint &ozp);
 };
 
 #endif

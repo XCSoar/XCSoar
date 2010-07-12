@@ -305,7 +305,7 @@ RefreshView()
     return;
 
   TPLabelObservationZone ozv;
-  tp->CAccept_oz(ozv);
+  ((ObservationZoneConstVisitor &)ozv).Visit(*tp->get_oz());
 
   WndButton* wb;
   wb = ((WndButton*)wf->FindByName(_T("butType")));
@@ -327,7 +327,7 @@ ReadValues()
 {
   TPReadObservationZone tpv;
   OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
-  tp->Accept_oz(tpv);
+  ((ObservationZoneConstVisitor &)tpv).Visit(*tp->get_oz());
 }
 
 static void

@@ -326,7 +326,7 @@ RenderTaskPoint::draw_oz_background(const OrderedTaskPoint& tp)
   ozv.set_past(point_past());
   ozv.set_current(point_current());
   ozv.set_background(true);
-  tp.CAccept_oz(ozv);
+  ((ObservationZoneConstVisitor &)ozv).Visit(*tp.get_oz());
 }
 
 void 
@@ -335,7 +335,7 @@ RenderTaskPoint::draw_oz_foreground(const OrderedTaskPoint& tp)
   ozv.set_past(point_past());
   ozv.set_current(point_current());
   ozv.set_background(false);
-  tp.CAccept_oz(ozv);
+  ((ObservationZoneConstVisitor &)ozv).Visit(*tp.get_oz());
 }
 
 void 

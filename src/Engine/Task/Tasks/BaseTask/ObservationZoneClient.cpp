@@ -44,16 +44,3 @@ ObservationZoneClient::set_legs(const TaskPoint *previous,
 {
   m_oz->set_legs(previous, current, next);
 }
-
-
-void 
-ObservationZoneClient::CAccept_oz(ObservationZoneConstVisitor& visitor) const 
-{
-  m_oz->CAccept(visitor);
-}
-
-void 
-ObservationZoneClient::Accept_oz(ObservationZoneVisitor& visitor) 
-{
-  m_oz->Accept(visitor);
-}

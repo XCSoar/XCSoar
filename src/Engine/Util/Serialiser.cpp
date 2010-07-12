@@ -218,7 +218,7 @@ Serialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
 void 
 Serialiser::serialise(const ObservationZonePoint& data) 
 {
-  data.CAccept(*(ObservationZoneConstVisitor*)this);
+  ObservationZoneConstVisitor::Visit(data);
 } 
 
 

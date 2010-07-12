@@ -26,6 +26,10 @@ public:
   virtual void Visit(const CylinderZone& oz) {
     printf("# cylinder zone\n");
   }
+
+  void Visit(const ObservationZonePoint &oz) {
+    ObservationZoneConstVisitor::Visit(oz);
+  }
 };
 
 class TaskPointVisitorPrint: public TaskPointConstVisitor
@@ -36,23 +40,23 @@ public:
   }
   virtual void Visit(const OrderedTaskPoint& tp) {
     printf("# got an otp\n");
-    tp.CAccept_oz(ozv);
+    ozv.Visit(*tp.get_oz());
   }
   virtual void Visit(const FinishPoint& tp) {
     printf("# got an ftp\n");
-    tp.CAccept_oz(ozv);
+    ozv.Visit(*tp.get_oz());
   }
   virtual void Visit(const StartPoint& tp) {
     printf("# got an stp\n");
-    tp.CAccept_oz(ozv);
+    ozv.Visit(*tp.get_oz());
   }
   virtual void Visit(const AATPoint& tp) {
     printf("# got an aat\n");
-    tp.CAccept_oz(ozv);
+    ozv.Visit(*tp.get_oz());
   }
   virtual void Visit(const ASTPoint& tp) {
     printf("# got an ast\n");
-    tp.CAccept_oz(ozv);
+    ozv.Visit(*tp.get_oz());
   }
 private:
   ObservationZoneVisitorPrint ozv;

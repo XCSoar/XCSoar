@@ -204,8 +204,6 @@ private:
 
   Angle StartRadial;
   Angle EndRadial;
-public:
-  DEFINE_VISITABLE();
 };
 
 #endif

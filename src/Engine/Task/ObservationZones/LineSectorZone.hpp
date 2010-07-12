@@ -112,9 +112,6 @@ public:
   fixed getLength() const {
     return getRadius()*fixed_two;
   }
-
-public:
-  DEFINE_VISITABLE();
 };
 
 #endif

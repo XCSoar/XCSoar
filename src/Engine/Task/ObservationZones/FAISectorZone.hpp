@@ -74,12 +74,6 @@ public:
 
 private:
   const bool m_is_turnpoint;
-
-public:
-/**
- * Defines as a visitor 
- */
-  DEFINE_VISITABLE();
 };
 
 #endif

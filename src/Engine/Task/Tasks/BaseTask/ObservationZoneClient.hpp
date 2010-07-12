@@ -103,20 +103,6 @@ public:
   }
 
 /** 
- * Visit the OZ (const)
- * 
- * @param visitor Visitor to apply
- */
-  void CAccept_oz(ObservationZoneConstVisitor& visitor) const;
-
-/** 
- * Visit the OZ
- * 
- * @param visitor Visitor to apply
- */
-  void Accept_oz(ObservationZoneVisitor& visitor);
-
-/** 
  * Calculate boundary point from parametric border
  * 
  * @param t t value (0,1) of parameter

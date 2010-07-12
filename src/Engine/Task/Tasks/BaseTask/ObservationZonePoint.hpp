@@ -40,7 +40,6 @@
 #define OBSERVATIONZONEPOINT_HPP
 #include "Navigation/ReferencePoint.hpp"
 #include "ObservationZone.hpp"
-#include "Util/GenericVisitor.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/Serialisable.hpp"
 
@@ -53,8 +52,7 @@ class TaskPoint;
  */
 class ObservationZonePoint : public ReferencePoint, 
                              public ObservationZone,
-                             public NonCopyable,
-                             public BaseVisitable<>
+                             public NonCopyable
 {
 public:
   friend class Serialiser;
@@ -116,12 +114,6 @@ public:
  * @return Cloned object
  */
   virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const = 0;
-
-public:
-/**
- * Defines as a visitor 
- */
-  DEFINE_VISITABLE();
 };
 
 #endif

@@ -1,5 +1,4 @@
-/*
-  Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
@@ -34,63 +33,64 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
-
-#ifndef KEYHOLEZONE_HPP
-#define KEYHOLEZONE_HPP
-
-#include "SymmetricSectorZone.hpp"
-
-/**
- *  A 90 degree 10km sector centered at the bisector of incoming/outgoing legs,
- *  with 500m cylinder
  */
-class KeyholeZone: 
-  public SymmetricSectorZone 
+
+#include "ObservationZoneVisitor.hpp"
+#include "Task/ObservationZones/LineSectorZone.hpp"
+#include "Task/ObservationZones/SectorZone.hpp"
+#include "Task/ObservationZones/FAISectorZone.hpp"
+#include "Task/ObservationZones/CylinderZone.hpp"
+#include "Task/ObservationZones/KeyholeZone.hpp"
+#include "Task/Tasks/BaseTask/ObservationZonePoint.hpp"
+
+void
+ObservationZoneConstVisitor::Visit(const ObservationZonePoint &ozp)
 {
-public:  
-  /** 
-   * Constructor
-   * 
-   * @param loc Tip point of sector
-   * 
-   * @return Initialised object
-   */
-  KeyholeZone(const GEOPOINT loc):
-    SymmetricSectorZone(KEYHOLE, loc, fixed(10000.0),
-                        Angle::radians(fixed_half_pi))
-    {}
+  switch (ozp.shape) {
+  case ObservationZonePoint::FAI_SECTOR:
+    Visit((const FAISectorZone &)ozp);
+    break;
 
-  ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
-    if (_location) {
-      return new KeyholeZone(*_location);
-    } else {
-      return new KeyholeZone(get_location());
-    }
+  case ObservationZonePoint::SECTOR:
+    Visit((const SectorZone &)ozp);
+    break;
+
+  case ObservationZonePoint::LINE:
+    Visit((const LineSectorZone &)ozp);
+    break;
+
+  case ObservationZonePoint::CYLINDER:
+    Visit((const CylinderZone &)ozp);
+    break;
+
+  case ObservationZonePoint::KEYHOLE:
+    Visit((const KeyholeZone &)ozp);
+    break;
   }
+}
 
-  /** 
-   * Check whether observer is within OZ
-   *
-   * @return True if reference point is inside sector
-   */
-  virtual bool isInSector(const AIRCRAFT_STATE &ref) const;
+void
+ObservationZoneVisitor::Visit(ObservationZonePoint &ozp)
+{
+  switch (ozp.shape) {
+  case ObservationZonePoint::FAI_SECTOR:
+    Visit((FAISectorZone &)ozp);
+    break;
 
-/** 
- * Get point on boundary from parametric representation
- * 
- * @param t T value [0,1]
- * 
- * @return Point on boundary
- */
-  GEOPOINT get_boundary_parametric(fixed t) const;  
+  case ObservationZonePoint::SECTOR:
+    Visit((SectorZone &)ozp);
+    break;
 
-/** 
- * Distance reduction for scoring when outside this OZ
- * 
- * @return Distance (m) to subtract from score
- */
-  virtual fixed score_adjustment() const;
-};
+  case ObservationZonePoint::LINE:
+    Visit((LineSectorZone &)ozp);
+    break;
 
-#endif
+  case ObservationZonePoint::CYLINDER:
+    Visit((CylinderZone &)ozp);
+    break;
+
+  case ObservationZonePoint::KEYHOLE:
+    Visit((KeyholeZone &)ozp);
+    break;
+  }
+}
