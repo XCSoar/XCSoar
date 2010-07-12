@@ -125,9 +125,8 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic)
                                           / CUSONDE_HEIGHTSTEP);
 
   // if (level out of range) cancel update
-  if (level >= CUSONDE_NUMLEVELS) {
+  if (level >= CUSONDE_NUMLEVELS)
     return;
-  }
 
   // if (level skipped) cancel update
   if (abs(level - last_level) > 1) {
@@ -136,9 +135,8 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic)
   }
 
   // if (no level transition yet) wait for transition
-  if (abs(level - last_level) == 0) {
+  if (abs(level - last_level) == 0)
     return;
-  }
 
   // calculate ground height
   hGround = basic.AltitudeAGL;
@@ -158,7 +156,7 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic)
   } else {
     // we round up (level+1) because of potential lag of temp sensor
     cslevels[level + 1].updateTemps(basic.RelativeHumidity,
-        basic.OutsideAirTemperature);
+                                    basic.OutsideAirTemperature);
     cslevels[level + 1].updateThermalIndex((unsigned short)(level + 1));
 
     if (level < CUSONDE_NUMLEVELS - 1) {
@@ -315,10 +313,9 @@ CuSondeLevel::updateThermalIndex(unsigned short level, bool newdata)
   thermalIndex = airTemp - tempDry;
 
 #ifdef DEBUG_CUSONDE
-  if (newdata) {
+  if (newdata)
     LogDebug(_T("%g %g %g %g # temp measurement \r\n"),
-        hlevel, airTemp, dewpoint, thermalIndex);
-  }
+             hlevel, airTemp, dewpoint, thermalIndex);
 #endif
 }
 
