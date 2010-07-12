@@ -39,6 +39,7 @@ Copyright_License {
 #include "GestureManager.hpp"
 #include "Screen/Layout.hpp"
 #include "StringUtil.hpp"
+#include "Compiler.h"
 
 #include <algorithm>
 
@@ -49,7 +50,7 @@ Copyright_License {
  *         0 if a^2 + b^2 = c^2,
  *        -1 if a^2 + b^2 < c^2,
  */
-int
+static gcc_const int
 compare_squared(int a, int b, int c)
 {
   int a2b2 = a*a+b*b;
@@ -61,7 +62,7 @@ compare_squared(int a, int b, int c)
   return 0;
 }
 
-gcc_const const TCHAR*
+static gcc_const const TCHAR *
 getDirection(int dx, int dy)
 {
   if (dy < 0 && -dy >= abs(dx) * 2)
