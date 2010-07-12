@@ -49,6 +49,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Dialogs.h"
 #include "UtilsSystem.hpp"
+#include "Engine/Math/FastMath.h"
 #include "Compiler.h"
 
 #include <algorithm>
@@ -165,8 +166,6 @@ GlueMapWindow::on_mouse_up(int x, int y)
   int click_time = mouse_down_clock.elapsed();
   mouse_down_clock.reset();
 
-  double distance = hypot(drag_start.x - x, drag_start.y - y);
-
   if (SettingsMap().TargetPan) {
 #ifdef OLD_TASK // target control
     if (task != NULL &&
@@ -184,7 +183,9 @@ GlueMapWindow::on_mouse_up(int x, int y)
 #endif
   }
 
-  if (SettingsMap().EnablePan && (distance > Layout::Scale(36))) {
+  if (SettingsMap().EnablePan &&
+      compare_squared(drag_start.x - x, drag_start.y - y,
+                      Layout::Scale(36)) == 1) {
     GEOPOINT G;
     Screen2LonLat(x, y, G);
 
@@ -195,10 +196,13 @@ GlueMapWindow::on_mouse_up(int x, int y)
     return true;
   }
 
-  if (is_simulator() && !Basic().gps.Replay
-      && click_time > 50 && distance > Layout::Scale(36)) {
+  if (is_simulator() && !Basic().gps.Replay && click_time > 50 &&
+      compare_squared(drag_start.x - x, drag_start.y - y,
+                      Layout::Scale(36)) == 1) {
     GEOPOINT G;
     Screen2LonLat(x, y, G);
+
+    double distance = hypot(drag_start.x - x, drag_start.y - y);
 
     // This drag moves the aircraft (changes speed and direction)
     const Angle oldbearing = Basic().TrackBearing;
