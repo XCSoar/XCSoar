@@ -37,7 +37,6 @@
 #ifndef ABSTRACTAIRSPACE_HPP
 #define ABSTRACTAIRSPACE_HPP
 
-#include "Util/GenericVisitor.hpp"
 #include "Util/tstring.hpp"
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "Navigation/Aircraft.hpp"
@@ -58,9 +57,7 @@ typedef std::vector< std::pair<GEOPOINT,GEOPOINT> > AirspaceIntersectionVector;
 /**
  * Abstract base class for airspace regions
  */
-class AbstractAirspace:
-  public BaseConstVisitable<>
-{
+class AbstractAirspace {
 public:
 
   enum shape {
@@ -341,9 +338,6 @@ private:
                                                  const fixed& distance_start,
                                                  const fixed& distance_end,
                                                  const bool lower=true) const;
-
-public:
-  DEFINE_CONSTVISITABLE()
 };
 
 #endif

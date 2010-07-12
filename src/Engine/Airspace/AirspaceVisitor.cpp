@@ -45,3 +45,23 @@ AirspaceVisitor::condition (const Airspace& as) const {
     return true;
   }
 }
+
+void
+AirspaceVisitor::Visit(const AbstractAirspace &aa)
+{
+  switch (aa.shape) {
+  case AbstractAirspace::CIRCLE:
+    Visit((const AirspaceCircle &)aa);
+    break;
+
+  case AbstractAirspace::POLYGON:
+    Visit((const AirspacePolygon &)aa);
+    break;
+  }
+}
+
+void
+AirspaceVisitor::Visit(const Airspace &as)
+{
+  Visit(*as.get_airspace());
+}

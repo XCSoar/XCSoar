@@ -37,7 +37,6 @@
 #ifndef AIRSPACE_VISITOR_HPP
 #define AIRSPACE_VISITOR_HPP
 
-#include "Util/GenericVisitor.hpp"
 #include "AirspacePredicate.hpp"
 
 class Airspace;
@@ -48,11 +47,7 @@ class AirspaceCircle;
 /**
  * Generic visitor for objects in the Airspaces container
  */
-class AirspaceVisitor:
-  public TreeVisitor<Airspace>,
-  public ConstVisitor<AirspacePolygon>, 
-  public ConstVisitor<AirspaceCircle>
-{
+class AirspaceVisitor {
 public:
 
   /** 
@@ -68,6 +63,22 @@ public:
    * @return True if condition satisfied
    */
   bool condition (const Airspace& as) const;
+
+protected:
+  virtual void Visit(const AirspaceCircle &as) = 0;
+  virtual void Visit(const AirspacePolygon &as) = 0;
+
+public:
+  void Visit(const AbstractAirspace &aa);
+  void Visit(const Airspace &as);
+
+  /**
+   * Utility accessor to visit an item by calling the visitor with () operator
+   * as used by libkdtree++
+   */
+  void operator()(const Airspace &as) {
+    Visit(as);
+  }
 
 protected:
   const AirspacePredicate* m_predicate; /**< Predicate to be used by callers */

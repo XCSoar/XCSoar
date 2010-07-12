@@ -95,15 +95,6 @@ Airspace::intersects(const GEOPOINT& g1,
   }
 }
 
-
-void
-Airspace::CAccept(BaseVisitor &visitor) const
-{
-  if (pimpl_airspace) {
-    pimpl_airspace->CAccept(visitor);
-  }
-}
-
 void 
 Airspace::set_ground_level(const fixed alt) const
 {

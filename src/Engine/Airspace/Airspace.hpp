@@ -39,7 +39,6 @@
 
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "AbstractAirspace.hpp"
-#include "Util/GenericVisitor.hpp"
 
 class AtmosphericPressure;
 
@@ -54,8 +53,7 @@ class AtmosphericPressure;
  * 
  */
 class Airspace: 
-  public FlatBoundingBox,
-  public BaseConstVisitable<>
+  public FlatBoundingBox
 {
 public:
 
@@ -187,13 +185,6 @@ public:
   friend std::ostream& operator<< (std::ostream& f, 
                                    const Airspace& ts);
 #endif
-  
-  /** 
-   * Accepts a visitor and directs it to the contained concrete airspace.
-   * 
-   * @param v Visitor to accept
-   */
-  void CAccept(BaseVisitor &v) const;
 };
 
 #endif

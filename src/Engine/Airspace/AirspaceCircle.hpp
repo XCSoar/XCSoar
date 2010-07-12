@@ -117,7 +117,6 @@ public:
   friend std::ostream& operator<< (std::ostream& f, 
                                    const AirspaceCircle& as);
 #endif
-  DEFINE_CONSTVISITABLE()
 };
 
 

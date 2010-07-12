@@ -125,8 +125,6 @@ public:
   friend std::ostream& operator<< (std::ostream& f, 
                                    const AirspacePolygon& as);
 #endif
-
-  DEFINE_CONSTVISITABLE()
 };
 
 #endif
