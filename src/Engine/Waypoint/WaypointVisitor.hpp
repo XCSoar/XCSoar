@@ -37,17 +37,18 @@
 #ifndef Waypoint_VISITOR_HPP
 #define Waypoint_VISITOR_HPP
 
-#include "Waypoint.hpp"
-#include "Util/GenericVisitor.hpp"
+class Waypoint;
 
 /**
  * Generic visitor for objects in the Waypoints container
  */
-class WaypointVisitor:
-  public TreeVisitor<Waypoint>,
-  public ConstVisitor<Waypoint> 
-{
-private:    
+class WaypointVisitor {
+public:
+  virtual void Visit(const Waypoint &wp) = 0;
+
+  void operator()(const Waypoint &wp) {
+    Visit(wp);
+  }
 };
 
 #endif

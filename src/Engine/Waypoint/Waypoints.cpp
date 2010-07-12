@@ -46,8 +46,7 @@ extern long count_intersections;
 /**
  * Container accessor to allow a WaypointVisitor to visit WaypointEnvelopes 
  */
-class WaypointEnvelopeVisitor: public ConstVisitor<WaypointEnvelope>
-{
+class WaypointEnvelopeVisitor {
 public:
   /**
    * Constructor
@@ -73,7 +72,7 @@ public:
   void
   Visit(const WaypointEnvelope& as)
   {
-    as.get_waypoint().CAccept(*waypoint_visitor);
+    waypoint_visitor->Visit(as.get_waypoint());
   }
 
 private:
@@ -302,7 +301,7 @@ Waypoints::visit_within_range(const GEOPOINT &loc, const fixed range,
  * Forwards a visited way point to another visitor if it is within the
  * specified radius.
  */
-class RadiusVisitor : public ConstVisitor<WaypointEnvelope> {
+class RadiusVisitor {
   FLAT_GEOPOINT location;
   unsigned mrange;
   WaypointVisitor *visitor;

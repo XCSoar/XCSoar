@@ -43,8 +43,6 @@
 #include <iostream>
 #endif
 
-#include "Util/GenericVisitor.hpp"
-
 class TaskProjection;
 
 /** 
@@ -79,9 +77,7 @@ struct WaypointFlags {
  * - consider having a static factory method provide the ID automatically
  *   so we know they will be unique.
  */
-class Waypoint: 
-  public BaseConstVisitable<>
-{
+class Waypoint {
 public:
   friend class Serialiser;
 
@@ -139,8 +135,6 @@ public:
   is_close_to(const GEOPOINT &location, const fixed range) const;
 
 public:
-  DEFINE_CONSTVISITABLE()
-
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, const Waypoint& wp);
 #endif
