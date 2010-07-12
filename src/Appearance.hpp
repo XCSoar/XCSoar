@@ -152,6 +152,4 @@ typedef enum{
 	evgExtended,
 } ExtendedVisualGlide_t;
 
-extern short ScreenSize; // VENTA6
-
 #endif
