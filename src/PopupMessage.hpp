@@ -131,6 +131,8 @@ private:
 
   unsigned nvisible;
 
+  bool enable_sound;
+
 public:
   PopupMessage(const StatusMessageList &_status_messages,
                SingleWindow &_parent);

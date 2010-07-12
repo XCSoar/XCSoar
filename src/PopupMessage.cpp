@@ -115,7 +115,8 @@ PopupMessage::PopupMessage(const StatusMessageList &_status_messages,
                            SingleWindow &_parent)
   :status_messages(_status_messages),
    parent(_parent),
-   nvisible(0)
+   nvisible(0),
+   enable_sound(true)
 {
   clock.update();
 }
@@ -348,7 +349,7 @@ void PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data) {
   if (found != NULL)
     LocalMessage = *found;
 
-  if (SettingsComputer().EnableSoundModes && LocalMessage.doSound)
+  if (enable_sound && LocalMessage.doSound)
     PlayResource(LocalMessage.sound);
 
   // TODO code: consider what is a sensible size?
