@@ -261,9 +261,9 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
     // we are using two draws so borders go on top of everything
     
     v.set_border(false);
-    m_airspace->visit_within_range(PanLocation, fixed(GetScreenDistanceMeters()), v);
+    m_airspace->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
     v.set_border(true);
-    m_airspace->visit_within_range(PanLocation, fixed(GetScreenDistanceMeters()), v);
+    m_airspace->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
     v.draw_intercepts();
 
     m_airspace_intersections = awc.get_locations();
