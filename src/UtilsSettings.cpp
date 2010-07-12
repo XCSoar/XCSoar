@@ -164,6 +164,7 @@ SettingsLeave()
       || TopologyFileChanged) {
     ProgressGlue::Close();
     XCSoarInterface::main_window.map.set_focus();
+    draw_thread->trigger_redraw();
   }
 
   if (DevicePortChanged)
