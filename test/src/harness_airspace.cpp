@@ -264,10 +264,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
   const std::vector<Airspace> vn = airspaces.scan_nearest(state.Location);
   AirspaceVisitorPrint pvn("results/res-bb-nearest.txt",
                            do_report);
-  pvn.for_each(vn);
-
-//  std::for_each(vn.begin(), vn.end(), pvn);
-// (will work for simple cases where visitor is stateless)
+  std::for_each(vn.begin(), vn.end(), pvn);
 
   {
     AirspaceVisitorPrint pvisitor("results/res-bb-range.txt",
@@ -285,7 +282,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
     const std::vector<Airspace> vi = airspaces.find_inside(state);
     AirspaceVisitorPrint pvi("results/res-bb-inside.txt",
                              do_report);
-    pvi.for_each(vi);
+    std::for_each(vi.begin(), vi.end(), pvi);
   }
   
   {
