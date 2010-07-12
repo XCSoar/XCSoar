@@ -330,7 +330,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Math/FastRotation.cpp \
 	$(SRC)/Math/leastsqs.cpp \
 	$(SRC)/Math/LowPassFilter.cpp \
-	$(SRC)/Math/NavFunctions.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
 	\

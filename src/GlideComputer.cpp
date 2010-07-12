@@ -47,7 +47,6 @@ Copyright_License {
 #include "Components.hpp"
 #include "PeriodClock.hpp"
 #include "GlideComputerInterface.hpp"
-#include "Math/NavFunctions.hpp"
 #include "InputEvents.h"
 #include "SettingsComputer.hpp"
 #include "Math/Earth.hpp"
