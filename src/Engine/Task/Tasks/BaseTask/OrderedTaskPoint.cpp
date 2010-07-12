@@ -36,6 +36,10 @@
  */
 #include "OrderedTaskPoint.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
+#include "Task/TaskPoints/StartPoint.hpp"
+#include "Task/TaskPoints/ASTPoint.hpp"
+#include "Task/TaskPoints/AATPoint.hpp"
+#include "Task/TaskPoints/FinishPoint.hpp"
 #include "Math/Earth.hpp"
 #include <assert.h>
 #include <math.h>
