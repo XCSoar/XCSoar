@@ -231,7 +231,8 @@ GlueMapWindow::on_mouse_up(int x, int y)
     // click less then one second -> open nearest waypoint details
     if (way_points != NULL &&
         PopupNearestWaypointDetails(*way_points, drag_start_geopoint,
-                                    DistancePixelsToMeters(Layout::Scale(10))))
+                                    DistancePixelsToMeters(Layout::Scale(10)),
+                                    true))
       return true;
   } else {
     // click more then one second -> open nearest airspace details

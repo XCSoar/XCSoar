@@ -145,12 +145,14 @@ PopupAnalysis()
 bool
 PopupNearestWaypointDetails(const Waypoints &way_points,
                             const GEOPOINT &location,
-                            double range)
+                            double range, bool scalefilter)
 {
   const Waypoint *way_point;
   way_point = way_points.lookup_location(location, fixed(range));
 
-  if (way_point) {
+  if (way_point &&
+      (!scalefilter ||
+       XCSoarInterface::main_window.map.WaypointInScaleFilter(*way_point))) {
     dlgWayPointDetailsShowModal(XCSoarInterface::main_window, *way_point);
     return true;
   }

@@ -160,7 +160,7 @@ int dlgComboPicker(SingleWindow &parent, WndProperty *theProperty);
 void PopupAnalysis();
 
 bool PopupNearestWaypointDetails(const Waypoints &way_points,
-    const GEOPOINT &location, double range);
+    const GEOPOINT &location, double range, bool scalefilter = false);
 
 #define mrOK             2
 #define mrCancel         3
