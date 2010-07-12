@@ -401,7 +401,7 @@ void AbortTask::print(const AIRCRAFT_STATE &state)
   std::ofstream f1("results/res-abort-task.txt");
   f1 << "#### Task points\n";
   for (unsigned i=0; i<tps.size(); i++) {
-    GEOPOINT l = tps[i]->get_location();
+    GEOPOINT l = tps[i].first->get_location();
     f1 << "## point " << i << " ###################\n";
     if (i==activeTaskPoint) {
       f1 << state.Location.Longitude << " " << state.Location.Latitude << "\n";
