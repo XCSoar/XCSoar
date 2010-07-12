@@ -61,7 +61,7 @@ public:
 
 private:
   GEOPOINT drag_start_geopoint;
-  POINT drag_start;
+  POINT drag_start, drag_last;
   GestureManager gestures;
   bool ignore_single_click;
 

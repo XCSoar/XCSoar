@@ -108,6 +108,23 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
   }
 #endif
 
+  if (SettingsMap().EnablePan && (keys & MK_LBUTTON)) {
+    GEOPOINT end, start;
+    Screen2LonLat(drag_last.x, drag_last.y, start);
+    Screen2LonLat(x, y, end);
+
+    XCSoarInterface::SetSettingsMap().PanLocation.Longitude +=
+        start.Longitude - end.Longitude;
+    XCSoarInterface::SetSettingsMap().PanLocation.Latitude +=
+        start.Latitude - end.Latitude;
+    RefreshMap();
+
+    drag_last.x = x;
+    drag_last.y = y;
+
+    return true;
+  }
+
   // If we are dragging already or starting to drag now...
   if (XCSoarInterface::SettingsComputer().EnableGestures)
     gestures.AddPoint(x, y);
@@ -128,7 +145,7 @@ GlueMapWindow::on_mouse_down(int x, int y)
 
   drag_start.x = x;
   drag_start.y = y;
-  Screen2LonLat(x, y, drag_start_geopoint);
+  drag_last = drag_start;
 
   if (XCSoarInterface::SettingsComputer().EnableGestures)
     gestures.Start(x, y);
@@ -185,16 +202,8 @@ GlueMapWindow::on_mouse_up(int x, int y)
 
   if (SettingsMap().EnablePan &&
       compare_squared(drag_start.x - x, drag_start.y - y,
-                      Layout::Scale(36)) == 1) {
-    GEOPOINT G;
-    Screen2LonLat(x, y, G);
-
-    // JMW broken!
-    XCSoarInterface::SetSettingsMap().PanLocation.Longitude += drag_start_geopoint.Longitude - G.Longitude;
-    XCSoarInterface::SetSettingsMap().PanLocation.Latitude += drag_start_geopoint.Latitude - G.Latitude;
-    RefreshMap();
+                      Layout::Scale(10)) == 1)
     return true;
-  }
 
   if (is_simulator() && !Basic().gps.Replay && click_time > 50 &&
       compare_squared(drag_start.x - x, drag_start.y - y,
