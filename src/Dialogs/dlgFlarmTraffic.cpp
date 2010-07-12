@@ -286,8 +286,8 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   }
 
   // Distance
-  Units::FormatUserDistance(sqrt(traffic.RelativeEast * traffic.RelativeEast
-      + traffic.RelativeNorth * traffic.RelativeNorth), tmp, 20);
+  Units::FormatUserDistance(hypot(traffic.RelativeEast, traffic.RelativeNorth),
+                            tmp, 20);
   canvas.select(hfInfoValues);
   sz = canvas.text_size(tmp);
   canvas.text(rc.left, rc.bottom - sz.cy, tmp);
