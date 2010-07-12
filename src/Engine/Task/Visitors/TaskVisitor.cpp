@@ -34,47 +34,24 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef TASKCLIENT_HPP
-#define TASKCLIENT_HPP
 
-#include "Thread/Mutex.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
-#include "Task/TaskManager.hpp"
+#include "TaskVisitor.hpp"
+#include "Task/Tasks/TaskInterface.hpp"
 
-
-/**
- * Facade to task/airspace/waypoints as used by threads,
- * to manage locking
- */
-class TaskClient 
+void
+TaskVisitor::Visit(const TaskInterface &t)
 {
-public:
-  TaskClient(TaskManager& tm);
+  switch (t.type) {
+  case TaskInterface::ORDERED:
+    Visit((const OrderedTask &)t);
+    break;
 
-// common accessors for ui and calc clients
-  GlidePolar get_glide_polar() const;
-  void set_glide_polar(const GlidePolar& glide_polar);
+  case TaskInterface::ABORT:
+    Visit((const AbortTask &)t);
+    break;
 
-  static void lock();
-  static void unlock();
-
-  bool check_task() const;
-  TaskManager::TaskMode_t get_mode() const;
-
-  // trace points
-  TracePointVector find_trace_points(const GEOPOINT &loc, 
-                                     const fixed range,
-                                     const unsigned mintime, 
-                                     const fixed resolution) const;
-
-  void CAccept(TaskVisitor &visitor) const;
-  void ordered_CAccept(TaskVisitor &visitor) const;
-  const OrderedTaskBehaviour get_ordered_task_behaviour() const;
-
-protected:
-  TaskManager& task_manager;
-  static Mutex mutex;
-};
-
-
-#endif
+  case TaskInterface::GOTO:
+    Visit((const GotoTask &)t);
+    break;
+  }
+}

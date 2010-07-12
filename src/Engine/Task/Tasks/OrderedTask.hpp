@@ -739,8 +739,6 @@ public:
    * @param reverse Visit task points in reverse order
    */
   void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false);
-
-  DEFINE_VISITABLE()
 };
 
 #endif //ORDEREDTASK_H

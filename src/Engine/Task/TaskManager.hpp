@@ -477,27 +477,27 @@ public:
    *
    * @param visitor Visitor to accept into the active task
    */
-  void CAccept(BaseVisitor& visitor) const;
+  void CAccept(TaskVisitor &visitor) const;
 
   /**
    * Allow a (const) visitor to visit the active task
    *
    * @param visitor Visitor to accept into the active task
    */
-  void Accept(BaseVisitor& visitor);
+  void Accept(TaskVisitor &visitor);
 
   /**
    * Allow a (const) visitor to visit the ordered task
    *
    * @param visitor Visitor to accept into the ordered task
    */
-  void ordered_CAccept(BaseVisitor& visitor) const;
+  void ordered_CAccept(TaskVisitor &visitor) const;
 
   /**
    * Allow a visitor to visit the ordered task
    *
    * @param visitor Visitor to accept into the ordered task
    */
-  void ordered_Accept(BaseVisitor& visitor);
+  void ordered_Accept(TaskVisitor &visitor);
 };
 #endif //TASKMANAGER_H

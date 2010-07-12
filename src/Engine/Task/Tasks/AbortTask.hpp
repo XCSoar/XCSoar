@@ -266,8 +266,6 @@ public:
  *
  */
   void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false) {};
-
-  DEFINE_VISITABLE()
 };
 
 #endif //ABORTTASK_H

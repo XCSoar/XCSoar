@@ -37,7 +37,7 @@
 #ifndef TASK_VISITOR_HPP
 #define TASK_VISITOR_HPP
 
-#include "Util/GenericVisitor.hpp"
+class TaskInterface;
 class OrderedTask;
 class AbortTask;
 class GotoTask;
@@ -46,12 +46,13 @@ class GotoTask;
  * Generic visitor to achieve double-dispatch of an AbstractTask
  * (e.g. the active task in the TaskManager)
  */
-class TaskVisitor:
-  virtual public BaseVisitor,
-  public ConstVisitor<OrderedTask>,
-  public ConstVisitor<AbortTask>,
-  public ConstVisitor<GotoTask>
-{
+class TaskVisitor {
+public:
+  virtual void Visit(const OrderedTask &t) = 0;
+  virtual void Visit(const AbortTask &t) = 0;
+  virtual void Visit(const GotoTask &t) = 0;
+
+  void Visit(const TaskInterface &t);
 };
 
 #endif

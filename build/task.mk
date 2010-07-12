@@ -116,6 +116,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/TaskStats/TaskVario.cpp \
 	$(ENGINE_SRC_DIR)/Task/Visitors/ObservationZoneVisitor.cpp \
 	$(ENGINE_SRC_DIR)/Task/Visitors/TaskPointVisitor.cpp \
+	$(ENGINE_SRC_DIR)/Task/Visitors/TaskVisitor.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/WaypointEnvelope.cpp \

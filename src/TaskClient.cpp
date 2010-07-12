@@ -63,14 +63,14 @@ TaskClient::find_trace_points(const GEOPOINT &loc,
 
 
 void 
-TaskClient::CAccept(BaseVisitor& visitor) const
+TaskClient::CAccept(TaskVisitor &visitor) const
 {
   ScopeLock lock(mutex);
   task_manager.CAccept(visitor);
 }
 
 void 
-TaskClient::ordered_CAccept(BaseVisitor& visitor) const
+TaskClient::ordered_CAccept(TaskVisitor &visitor) const
 {
   ScopeLock lock(mutex);
   task_manager.ordered_CAccept(visitor);

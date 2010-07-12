@@ -132,7 +132,7 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
   RenderTaskPoint tpv(canvas, proj, XCSoarInterface::SettingsMap(),
                       ozv, false, XCSoarInterface::Basic().Location);
   ::RenderTask dv(tpv);
-  ordered_task->CAccept(dv);
+  dv.Visit(*ordered_task);
 }
 
 static void

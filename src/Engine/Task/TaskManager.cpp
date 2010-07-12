@@ -352,27 +352,29 @@ TaskManager::check_ordered_task() const
 }
 
 void
-TaskManager::CAccept(BaseVisitor& visitor) const
+TaskManager::CAccept(TaskVisitor &visitor) const
 {
-  if (active_task) active_task->CAccept(visitor);
+  if (active_task != NULL)
+    visitor.Visit(*active_task);
 }
 
 void
-TaskManager::ordered_CAccept(BaseVisitor& visitor) const
+TaskManager::ordered_CAccept(TaskVisitor &visitor) const
 {
-  task_ordered.CAccept(visitor);
+  visitor.Visit(task_ordered);
 }
 
 void
-TaskManager::Accept(BaseVisitor& visitor) 
+TaskManager::Accept(TaskVisitor &visitor)
 {
-  if (active_task) active_task->Accept(visitor);
+  if (active_task != NULL)
+    visitor.Visit(*active_task);
 }
 
 void
-TaskManager::ordered_Accept(BaseVisitor& visitor) 
+TaskManager::ordered_Accept(TaskVisitor &visitor)
 {
-  task_ordered.Accept(visitor);
+  visitor.Visit(task_ordered);
 }
 
 void
