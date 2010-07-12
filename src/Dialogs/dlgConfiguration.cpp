@@ -2596,10 +2596,8 @@ void dlgConfigurationShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpExtendedVisualGlide")); // VENTA4
   if (wp) {
-    if (XCSoarInterface::SettingsMap().ExtendedVisualGlide != (ExtendedVisualGlide_t)
-        (wp->GetDataField()->GetAsInteger())) {
-      XCSoarInterface::SetSettingsMap().ExtendedVisualGlide = (ExtendedVisualGlide_t)
-        (wp->GetDataField()->GetAsInteger());
+    if (XCSoarInterface::SettingsMap().ExtendedVisualGlide != wp->GetDataField()->GetAsInteger()) {
+      XCSoarInterface::SetSettingsMap().ExtendedVisualGlide = wp->GetDataField()->GetAsInteger();
       Profile::Set(szProfileExtendedVisualGlide,
                     XCSoarInterface::SettingsMap().ExtendedVisualGlide);
       changed = true;

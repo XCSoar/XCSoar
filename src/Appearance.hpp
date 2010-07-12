@@ -145,11 +145,4 @@ struct Appearance {
   bool UseCustomFonts;
 };
 
-// Specials
-
-typedef enum{
-	evgNormal=0,
-	evgExtended,
-} ExtendedVisualGlide_t;
-
 #endif
