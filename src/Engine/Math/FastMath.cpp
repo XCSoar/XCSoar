@@ -41,6 +41,18 @@ Copyright_License {
 
 #include "MathTables.h"
 
+int
+compare_squared(int a, int b, int c)
+{
+  int a2b2 = a*a+b*b;
+  int c2 = c*c;
+  if (a2b2 > c2)
+    return 1;
+  if (a2b2 < c2)
+    return -1;
+  return 0;
+}
+
 extern "C"
 {
 

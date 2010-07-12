@@ -47,6 +47,15 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
+/**
+ * Compares a^2 + b^2 against c^2
+ * Use this instead of hypot when comparing
+ * @return 1 if a^2 + b^2 > c^2,
+ *         0 if a^2 + b^2 = c^2,
+ *        -1 if a^2 + b^2 < c^2,
+ */
+gcc_const int compare_squared(int a, int b, int c);
+
 // =================================================================================
 // Real2Int
 // =================================================================================

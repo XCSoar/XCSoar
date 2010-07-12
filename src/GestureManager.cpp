@@ -39,28 +39,10 @@ Copyright_License {
 #include "GestureManager.hpp"
 #include "Screen/Layout.hpp"
 #include "StringUtil.hpp"
+#include "Engine/Math/FastMath.h"
 #include "Compiler.h"
 
 #include <algorithm>
-
-/**
- * Compares a^2 + b^2 against c^2
- * Use this instead of hypot when comparing
- * @return 1 if a^2 + b^2 > c^2,
- *         0 if a^2 + b^2 = c^2,
- *        -1 if a^2 + b^2 < c^2,
- */
-static gcc_const int
-compare_squared(int a, int b, int c)
-{
-  int a2b2 = a*a+b*b;
-  int c2 = c*c;
-  if (a2b2 > c2)
-    return 1;
-  if (a2b2 < c2)
-    return -1;
-  return 0;
-}
 
 static gcc_const TCHAR
 getDirection(int dx, int dy)
