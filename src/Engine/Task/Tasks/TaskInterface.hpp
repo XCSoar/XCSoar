@@ -56,6 +56,15 @@ class TaskInterface:
   public BaseVisitable<> 
 {
 public:
+  enum type {
+    ORDERED,
+    ABORT,
+    GOTO,
+  };
+
+  const enum type type;
+
+  TaskInterface(const enum type _type):type(_type) {}
 
 /** 
  * Size of task

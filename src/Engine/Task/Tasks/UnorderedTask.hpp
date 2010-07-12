@@ -54,7 +54,7 @@ public:
    * @param gp Global glide polar used for navigation calculations
    * 
    */
-  UnorderedTask(TaskEvents &te, 
+  UnorderedTask(const enum type _type, TaskEvents &te,
                 const TaskBehaviour &tb,
                 GlidePolar &gp);
 

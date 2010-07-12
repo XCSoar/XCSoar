@@ -42,9 +42,10 @@
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/TaskEvents.hpp"
 
-AbstractTask::AbstractTask(TaskEvents &te,
+AbstractTask::AbstractTask(enum type _type, TaskEvents &te,
                            const TaskBehaviour &tb,
                            GlidePolar &gp): 
+  TaskInterface(_type),
   activeTaskPoint(0),
   activeTaskPoint_last(0-1),
   task_events(te),

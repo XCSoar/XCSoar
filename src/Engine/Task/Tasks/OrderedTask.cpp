@@ -655,7 +655,7 @@ OrderedTask::~OrderedTask()
 OrderedTask::OrderedTask(TaskEvents &te, 
                          const TaskBehaviour &tb,
                          GlidePolar &gp):
-  AbstractTask(te, tb, gp),
+  AbstractTask(ORDERED, te, tb, gp),
   ts(NULL),
   tf(NULL),
   factory_mode(FACTORY_FAI_GENERAL),

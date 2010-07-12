@@ -46,7 +46,7 @@ AbortTask::AbortTask(TaskEvents &te,
                      const TaskBehaviour &tb,
                      GlidePolar &gp,
                      const Waypoints &wps):
-  UnorderedTask(te, tb, gp), 
+  UnorderedTask(ABORT, te, tb, gp),
   active_waypoint(0),
   waypoints(wps),
   polar_safety(gp)

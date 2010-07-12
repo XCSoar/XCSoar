@@ -40,10 +40,10 @@
 #include "TaskSolvers/TaskGlideRequired.hpp"
 #include "TaskSolvers/TaskSolution.hpp"
 
-UnorderedTask::UnorderedTask(TaskEvents &te, 
+UnorderedTask::UnorderedTask(const enum type _type, TaskEvents &te,
                              const TaskBehaviour &tb,
                              GlidePolar &gp):
-  AbstractTask(te, tb, gp) 
+  AbstractTask(_type, te, tb, gp)
 {
 }
 

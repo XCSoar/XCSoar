@@ -67,7 +67,7 @@ public:
    * 
    * @return Initialised object
    */
-  AbstractTask(TaskEvents &te,
+  AbstractTask(enum type _type, TaskEvents &te,
                const TaskBehaviour &tb,
                GlidePolar &gp);
   /** 
