@@ -1,5 +1,4 @@
-/*
-  Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
@@ -34,43 +33,63 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
-
-
-#ifndef ASTPOINT_HPP
-#define ASTPOINT_HPP
-
-#include "Task/Tasks/BaseTask/IntermediatePoint.hpp"
-
-/**
- * An ASTPoint is an abstract IntermediatePoint,
- * in which the observation zone area is not used for
- * scored distance calculations (the aircraft merely has
- * to enter the observation zone)
- * but does not yet have an observation zone.
  */
-class ASTPoint : public IntermediatePoint 
+
+#include "TaskPointVisitor.hpp"
+#include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
+#include "Task/TaskPoints/StartPoint.hpp"
+#include "Task/TaskPoints/FinishPoint.hpp"
+#include "Task/TaskPoints/ASTPoint.hpp"
+#include "Task/TaskPoints/AATPoint.hpp"
+
+void
+TaskPointConstVisitor::Visit(const TaskPoint &tp)
 {
-public:
-/** 
- * Constructor.
- * Ownership of oz is transferred to this object.  Note that AST boundaries are not scored.
- * 
- * @param _oz Observation zone for this task point
- * @param tp Projection used for internal representations
- * @param wp Waypoint associated with this task point
- * @param tb Task Behaviour defining options (esp safety heights)
- * @param to OrderedTask Behaviour defining options 
- * 
- * @return Partially initialised object 
- */
-  ASTPoint(ObservationZonePoint* _oz,
-           const TaskProjection&tp,
-           const Waypoint & wp,
-           const TaskBehaviour &tb,
-           const OrderedTaskBehaviour& to) 
-    : IntermediatePoint(AST, _oz, tp, wp, tb, to)
-    { };
-};
+  switch (tp.type) {
+  case TaskPoint::UNORDERED:
+    Visit((const UnorderedTaskPoint &)tp);
+    break;
 
-#endif
+  case TaskPoint::START:
+    Visit((const StartPoint &)tp);
+    break;
+
+  case TaskPoint::AST:
+    Visit((const ASTPoint &)tp);
+    break;
+
+  case TaskPoint::AAT:
+    Visit((const AATPoint &)tp);
+    break;
+
+  case TaskPoint::FINISH:
+    Visit((const FinishPoint &)tp);
+    break;
+  }
+}
+
+void
+TaskPointVisitor::Visit(TaskPoint &tp)
+{
+  switch (tp.type) {
+  case TaskPoint::UNORDERED:
+    Visit((UnorderedTaskPoint &)tp);
+    break;
+
+  case TaskPoint::START:
+    Visit((StartPoint &)tp);
+    break;
+
+  case TaskPoint::AST:
+    Visit((ASTPoint &)tp);
+    break;
+
+  case TaskPoint::AAT:
+    Visit((AATPoint &)tp);
+    break;
+
+  case TaskPoint::FINISH:
+    Visit((FinishPoint &)tp);
+    break;
+  }
+}

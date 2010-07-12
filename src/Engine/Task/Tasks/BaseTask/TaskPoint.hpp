@@ -45,7 +45,6 @@
 #include "Waypoint/Waypoint.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
-#include "Util/GenericVisitor.hpp"
 #include "Task/TaskBehaviour.hpp"
 
 /**
@@ -54,8 +53,7 @@
  */
 
 class TaskPoint : 
-  public ReferencePoint, 
-  public BaseVisitable<>
+  public ReferencePoint
 {
 
 public:
@@ -205,8 +203,6 @@ protected:
   const TaskBehaviour &m_task_behaviour; /**< Reference to task behaviour (for options) */
 private:
   const Waypoint m_waypoint; /**< local copy of waypoint */
-public:
-  DEFINE_VISITABLE()
 };
 
 #endif

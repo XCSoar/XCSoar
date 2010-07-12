@@ -673,11 +673,11 @@ OrderedTask::tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) cons
   if (!reverse) {
     for (OrderedTaskPointVector::const_iterator it = tps.begin(); 
          it!= tps.end(); ++it)
-      (*it)->CAccept(visitor);
+      visitor.Visit(**it);
   } else {
     for (OrderedTaskPointVector::const_reverse_iterator it = tps.rbegin(); 
          it!= tps.rend(); ++it)
-      (*it)->CAccept(visitor);
+      visitor.Visit(**it);
   }
 }
 
@@ -687,11 +687,11 @@ OrderedTask::tp_Accept(TaskPointVisitor& visitor, const bool reverse)
   if (!reverse) {
     for (OrderedTaskPointVector::iterator it = tps.begin(); 
          it!= tps.end(); ++it)
-      (*it)->Accept(visitor);
+      visitor.Visit(**it);
   } else {
     for (OrderedTaskPointVector::reverse_iterator it = tps.rbegin(); 
          it!= tps.rend(); ++it)
-      (*it)->Accept(visitor);
+      visitor.Visit(**it);
   }
 }
 

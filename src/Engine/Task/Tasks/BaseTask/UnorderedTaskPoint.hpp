@@ -72,9 +72,6 @@ public:
   const AIRCRAFT_STATE& get_state_entered() const;
 
   fixed get_elevation() const;
-
-public:
-  DEFINE_VISITABLE()
 };
 
 #endif

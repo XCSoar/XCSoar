@@ -37,37 +37,41 @@
 #ifndef TASKPOINTVISITOR_HPP
 #define TASKPOINTVISITOR_HPP
 
-#include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
-#include "Task/TaskPoints/StartPoint.hpp"
-#include "Task/TaskPoints/FinishPoint.hpp"
-#include "Task/TaskPoints/ASTPoint.hpp"
-#include "Task/TaskPoints/AATPoint.hpp"
-
-#include "Util/GenericVisitor.hpp"
+class TaskPoint;
+class UnorderedTaskPoint;
+class StartPoint;
+class ASTPoint;
+class AATPoint;
+class FinishPoint;
 
 /**
  * Generic visitor for const task points (for double-dispatch)
  */
-class TaskPointConstVisitor:
-  virtual public BaseVisitor,
-  public ConstVisitor<UnorderedTaskPoint>,
-  public ConstVisitor<StartPoint>,
-  public ConstVisitor<ASTPoint>,
-  public ConstVisitor<AATPoint>,
-  public ConstVisitor<FinishPoint>
-{
+class TaskPointConstVisitor {
+protected:
+  virtual void Visit(const UnorderedTaskPoint &p) = 0;
+  virtual void Visit(const StartPoint &p) = 0;
+  virtual void Visit(const ASTPoint &p) = 0;
+  virtual void Visit(const AATPoint &p) = 0;
+  virtual void Visit(const FinishPoint &p) = 0;
+
+public:
+  void Visit(const TaskPoint &tp);
 };
 
 /**
  * Generic visitor for task points (for double-dispatch)
  */
-class TaskPointVisitor:
-  virtual public BaseVisitor,
-  public Visitor<StartPoint>,
-  public Visitor<ASTPoint>,
-  public Visitor<AATPoint>,
-  public Visitor<FinishPoint>
-{
+class TaskPointVisitor {
+protected:
+  virtual void Visit(UnorderedTaskPoint &p) = 0;
+  virtual void Visit(StartPoint &p) = 0;
+  virtual void Visit(ASTPoint &p) = 0;
+  virtual void Visit(AATPoint &p) = 0;
+  virtual void Visit(FinishPoint &p) = 0;
+
+public:
+  void Visit(TaskPoint &tp);
 };
 
 

@@ -318,7 +318,7 @@ RefreshView()
 
   TCHAR buf[100];
   TPLabelTaskPoint tpv(buf);
-  tp->CAccept(tpv);
+  ((TaskPointConstVisitor &)tpv).Visit(*tp);
   wf->SetCaption(tpv.text);
 }
 

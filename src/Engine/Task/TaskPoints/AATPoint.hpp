@@ -229,9 +229,6 @@ private:
  * @return True if same WP, type and OZ
  */
   bool equals(const OrderedTaskPoint* other) const;
-
-public:
-  DEFINE_VISITABLE()
 };
 
 #endif

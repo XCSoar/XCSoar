@@ -142,8 +142,6 @@ private:
   bool score_last_exit() const {
     return true;
   }
-public:
-  DEFINE_VISITABLE()
 };
 
 #endif

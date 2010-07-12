@@ -321,12 +321,12 @@ AbortTask::tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) const
   if (!reverse) {
     for (AlternateTaskVector::const_iterator 
            i= tps.begin(); i!= tps.end(); ++i) {
-      (i->first)->CAccept(visitor);
+      visitor.Visit(*i->first);
     }
   } else {
     for (AlternateTaskVector::const_reverse_iterator 
            i= tps.rbegin(); i!= tps.rend(); ++i) {
-      (i->first)->CAccept(visitor);
+      visitor.Visit(*i->first);
     }
   }
 }

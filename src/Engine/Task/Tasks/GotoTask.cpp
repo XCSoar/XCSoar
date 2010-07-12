@@ -108,7 +108,7 @@ void
 GotoTask::tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) const
 {
   if (tp) {
-    tp->CAccept(visitor);
+    visitor.Visit(*tp);
   }
 }
 
