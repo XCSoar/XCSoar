@@ -54,11 +54,16 @@ protected:
                                                    LPARAM lParam,
                                                    SHACTIVATEINFO *psai);
   typedef BOOL WINAPI (*SHSetAppKeyWndAssoc_t)(BYTE bVk, HWND hwnd);
+  typedef HBITMAP WINAPI (*SHLoadImageFile_t)(LPCTSTR pszFileName);
+  typedef HBITMAP WINAPI (*SHLoadImageResource_t)(HINSTANCE hinst,
+                                                  UINT uIdImageFile);
 
   SHFullScreen_t SHFullScreen_p;
   SHHandleWMActivate_t SHHandleWMActivate_p;
   SHHandleWMSettingChange_t SHHandleWMSettingChange_p;
   SHSetAppKeyWndAssoc_t SHSetAppKeyWndAssoc_p;
+  SHLoadImageFile_t SHLoadImageFile_p;
+  SHLoadImageResource_t SHLoadImageResource_p;
 
 public:
   AYGShellDLL()
@@ -66,7 +71,9 @@ public:
      SHFullScreen_p((SHFullScreen_t)lookup(_T("SHFullScreen"))),
      SHHandleWMActivate_p((SHHandleWMActivate_t)lookup(_T("SHHandleWMActivate"))),
      SHHandleWMSettingChange_p((SHHandleWMSettingChange_t)lookup(_T("SHHandleWMSettingChange"))),
-     SHSetAppKeyWndAssoc_p((SHSetAppKeyWndAssoc_t)lookup(_T("SHSetAppKeyWndAssoc"))) {}
+     SHSetAppKeyWndAssoc_p((SHSetAppKeyWndAssoc_t)lookup(_T("SHSetAppKeyWndAssoc"))),
+     SHLoadImageFile_p((SHLoadImageFile_t)lookup(_T("SHLoadImageFile"))),
+     SHLoadImageResource_p((SHLoadImageResource_t)lookup(_T("SHLoadImageResource"))) {}
 
   BOOL SHFullScreen(HWND hWnd, DWORD flags) const {
     return SHFullScreen_p != NULL
@@ -92,6 +99,18 @@ public:
     return SHSetAppKeyWndAssoc_p != NULL
       ? SHSetAppKeyWndAssoc_p(bVk, hwnd)
       : false;
+  }
+
+  HBITMAP SHLoadImageFile(LPCTSTR pszFileName) const {
+    return SHLoadImageFile_p != NULL
+      ? SHLoadImageFile_p(pszFileName)
+      : NULL;
+  }
+
+  HBITMAP SHLoadImageResource(HINSTANCE hinst, UINT uIdImageFile) const {
+    return SHLoadImageResource_p != NULL
+      ? SHLoadImageResource_p(hinst, uIdImageFile)
+      : NULL;
   }
 };
 
