@@ -47,7 +47,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "UtilsFile.hpp"
-#include "Interface.hpp"
+#include "ProgressGlue.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "IO/TextWriter.hpp"
@@ -212,7 +212,8 @@ WayPointFile::Parse(Waypoints &way_points,
   if (file[0] == 0)
     return false;
 
-  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Waypoints...")));
+  ProgressGlue::Create(gettext(_T("Loading Waypoints...")));
+  ProgressGlue::SetRange(100);
 
   // If normal file
   if (!compressed) {
@@ -222,7 +223,6 @@ WayPointFile::Parse(Waypoints &way_points,
       return false;
 
     double filesize = std::max(reader.size(), 1l);
-    XCSoarInterface::SetProgressDialogMaxValue(100);
 
     // Read through the lines of the file
     TCHAR *line;
@@ -231,7 +231,7 @@ WayPointFile::Parse(Waypoints &way_points,
       parseLine(line, i, way_points, terrain);
 
       unsigned status = reader.tell() * 100 / filesize;
-      XCSoarInterface::SetProgressDialogValue(status);
+      ProgressGlue::SetValue(status);
     }
   // If compressed file inside map file
   } else {
@@ -241,7 +241,6 @@ WayPointFile::Parse(Waypoints &way_points,
       return false;
 
     double filesize = std::max(reader.size(), 1l);
-    XCSoarInterface::SetProgressDialogMaxValue(100);
 
     // Read through the lines of the file
     TCHAR *line;
@@ -250,7 +249,7 @@ WayPointFile::Parse(Waypoints &way_points,
       parseLine(line, i, way_points, terrain);
 
       unsigned status = reader.tell() * 100 / filesize;
-      XCSoarInterface::SetProgressDialogValue(status);
+      ProgressGlue::SetValue(status);
     }
   }
 

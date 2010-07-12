@@ -47,6 +47,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "IO/ConfiguredFile.hpp"
+#include "ProgressGlue.hpp"
 
 static const Waypoint *
 find_waypoint(Waypoints &way_points, const TCHAR *name)
@@ -104,7 +105,7 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader)
   int i;
 
   long filesize = std::max(reader.size(), 1l);
-  XCSoarInterface::SetProgressDialogMaxValue(100);
+  ProgressGlue::SetRange(100);
 
   TCHAR *TempString;
   while ((TempString = reader.read()) != NULL) {
@@ -125,7 +126,7 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader)
 
       inDetails = true;
 
-      XCSoarInterface::SetProgressDialogValue(reader.tell() * 100 / filesize);
+      ProgressGlue::SetValue(reader.tell() * 100 / filesize);
     } else {
       // append text to details string
       if (!string_is_empty(TempString)) {
@@ -154,8 +155,7 @@ ReadAirfieldFile(Waypoints &way_points)
   if (reader == NULL)
     return;
 
-  XCSoarInterface::CreateProgressDialog(
-      gettext(TEXT("Loading Airfield Details File...")));
+  ProgressGlue::Create(gettext(_T("Loading Airfield Details File...")));
 
   ParseAirfieldDetails(way_points, *reader);
   delete reader;

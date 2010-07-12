@@ -48,8 +48,8 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
 #include "SettingsUser.hpp" // for EnableTopology
-#include "Interface.hpp"
 #include "IO/ZipLineReader.hpp"
+#include "ProgressGlue.hpp"
 
 #include <assert.h>
 
@@ -141,7 +141,7 @@ TopologyStore::Open()
 {
   LogStartUp(TEXT("OpenTopology"));
 
-  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Topology File...")));
+  ProgressGlue::Create(gettext(_T("Loading Topology File...")));
 
   Poco::ScopedRWLock protect(lock, true);
 

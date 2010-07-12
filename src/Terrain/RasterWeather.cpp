@@ -43,7 +43,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "LocalTime.hpp"
 #include "OS/PathName.hpp"
-#include "Interface.hpp"
+#include "ProgressGlue.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -142,9 +142,9 @@ bool RasterWeather::LoadItem(int item, const TCHAR* name) {
 void RasterWeather::ScanAll(const GEOPOINT &location) {
   Poco::ScopedRWLock protect(lock, true);
 
-  XCSoarInterface::SetProgressDialogMaxValue(MAX_WEATHER_TIMES);
+  ProgressGlue::SetRange(MAX_WEATHER_TIMES);
   for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++) {
-    XCSoarInterface::SetProgressDialogValue(i);
+    ProgressGlue::SetValue(i);
     _weather_time = i;
     weather_available[i] = LoadItem(0,TEXT("wstar"));
     if (!weather_available[i]) {

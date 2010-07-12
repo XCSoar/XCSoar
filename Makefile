@@ -303,6 +303,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Language.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Interface.cpp \
+	$(SRC)/ProgressGlue.cpp \
 	$(SRC)/LocalTime.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/UtilsFLARM.cpp \

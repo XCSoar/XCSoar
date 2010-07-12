@@ -38,7 +38,8 @@ Copyright_License {
 */
 
 #include "Airspace/Airspaces.hpp"
-#include "Interface.hpp"
+#include "ProgressGlue.hpp"
+#include "Units.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "UtilsText.hpp"
@@ -754,9 +755,9 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
   bool ignore = false;
 
   // Create and init ProgressDialog
-  XCSoarInterface::CreateProgressDialog(gettext(
-      TEXT("Loading Airspace File...")));
-  XCSoarInterface::SetProgressDialogMaxValue(1024);
+  ProgressGlue::Create(gettext(_T("Loading Airspace File...")));
+  ProgressGlue::SetRange(1024);
+
   long file_size = reader.size();
 
   TempAirspaceType temp_area;
@@ -797,7 +798,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
         return false;
 
     // Update the ProgressDialog
-    XCSoarInterface::SetProgressDialogValue(reader.tell() * 1024 / file_size);
+    ProgressGlue::SetValue(reader.tell() * 1024 / file_size);
   }
 
   if (filetype == ftUnknown) {

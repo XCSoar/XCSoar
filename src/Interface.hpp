@@ -44,7 +44,6 @@ Copyright_License {
 
 class MainWindow;
 class StatusMessageList;
-class ProgressWindow;
 
 /** 
  * Class to hold data/methods accessible by all interface subsystems
@@ -193,21 +192,12 @@ public:
   static void Shutdown();
   static bool Startup(HINSTANCE, LPCTSTR lpCmdLine);
 
-  static void CreateProgressDialog(const TCHAR *text);
-  static void CloseProgressDialog();
-  static void StepProgressDialog();
-  static void SetProgressDialogText(const TCHAR *text);
-  static void SetProgressDialogValue(unsigned value);
-  static void SetProgressDialogMaxValue(unsigned value);
-  static bool SetProgressStepSize(int nSize);
-
   static void ExchangeBlackboard();
   static void ReceiveMapProjection();
   static void ReceiveBlackboard();
 
 private:
   static void PreloadInitialisation(bool ask);
-  static ProgressWindow *progress_window;
 };
 
 #endif

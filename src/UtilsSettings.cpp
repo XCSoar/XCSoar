@@ -54,6 +54,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "DrawThread.hpp"
 #include "AirspaceGlue.hpp"
+#include "ProgressGlue.hpp"
 #include "TaskClientUI.hpp"
 #include "WayPoint/WayPointGlue.hpp"
 
@@ -129,7 +130,7 @@ SettingsLeave()
   }
 
   if ((WaypointFileChanged) || (TerrainFileChanged) || (AirfieldFileChanged)) {
-    XCSoarInterface::CreateProgressDialog(gettext(_T("Loading Terrain File...")));
+    ProgressGlue::Create(gettext(_T("Loading Terrain File...")));
 
     XCSoarInterface::main_window.map.set_terrain(NULL);
 
@@ -175,7 +176,7 @@ SettingsLeave()
       || WaypointFileChanged
       || TerrainFileChanged
       || TopologyFileChanged) {
-    XCSoarInterface::CloseProgressDialog();
+    ProgressGlue::Close();
     XCSoarInterface::main_window.map.set_focus();
   }
 

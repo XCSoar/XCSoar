@@ -44,7 +44,7 @@ Copyright_License {
 #include "Device/Driver/Volkslogger.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Internal.hpp"
-#include "Interface.hpp"
+#include "ProgressGlue.hpp"
 #include "Language.hpp"
 #include "UtilsText.hpp"
 #include "Device/Volkslogger/vlapi2.h"
@@ -138,7 +138,7 @@ VLDeclAddWayPoint(const Waypoint &way_point);
 bool
 VolksloggerDevice::Declare(const Declaration *decl)
 {
-  XCSoarInterface::CreateProgressDialog(gettext(_T("Comms with Volkslogger")));
+  ProgressGlue::Create(gettext(_T("Comms with Volkslogger")));
 
   vl.set_port(port);
   nturnpoints = 0;
@@ -270,7 +270,7 @@ VolksloggerDevice::Declare(const Declaration *decl)
 
   vl.close(1);
 
-  XCSoarInterface::CloseProgressDialog();
+  ProgressGlue::Close();
 
   return ok;
 }

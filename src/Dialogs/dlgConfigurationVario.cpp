@@ -44,6 +44,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
 #include "Simulator.hpp"
+#include "ProgressGlue.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -90,7 +91,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
 
 #ifndef WINDOWSPC
   if (first)
-    XCSoarInterface::StepProgressDialog();
+    ProgressGlue::Step();
 #endif
 
   _stprintf(updatename, _T("Vega%sUpdated"), name);
@@ -961,11 +962,11 @@ dlgConfigurationVarioShowModal(void)
 
   FillEnums();
 
-  XCSoarInterface::CreateProgressDialog(gettext(_T("Reading vario settings...")));
+  ProgressGlue::Create(gettext(_T("Reading vario settings...")));
   // Need step size finer than default 10
-  XCSoarInterface::SetProgressStepSize(20);
+  ProgressGlue::SetStep(20);
   UpdateParameters(true);
-  XCSoarInterface::CloseProgressDialog();
+  ProgressGlue::Close();
 
   wf->ShowModal();
 

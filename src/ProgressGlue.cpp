@@ -34,59 +34,63 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-
 */
 
-#include "Dialogs.h"
-#include "Language.hpp"
-#include "Version.hpp"
-#include "LogFile.hpp"
-#include "MapWindowProjection.hpp"
+#include "ProgressGlue.hpp"
+#include "Screen/ProgressWindow.hpp"
+#include "Interface.hpp"
 #include "MainWindow.hpp"
-#include "UtilsText.hpp"
-#include "UtilsSystem.hpp"
-#include "LocalPath.hpp"
-#include "SettingsUser.hpp"
-#include "InputEvents.h"
-#include "Interface.hpp"
-#include "Asset.hpp"
-#include "Interface.hpp"
-#include "MapWindow.hpp"
-#include "Waypoint/Waypoints.hpp"
 
-/**
- * Opens the Analysis window
- */
+static ProgressWindow *global_progress_window;
+
 void
-PopupAnalysis()
+ProgressGlue::Create(const TCHAR *text)
 {
-  dlgAnalysisShowModal();
+  if (global_progress_window == NULL)
+    global_progress_window = new ProgressWindow(XCSoarInterface::main_window);
+
+  global_progress_window->set_message(text);
+  global_progress_window->set_pos(0);
 }
 
-/**
- * Opens up the WaypointDetails window of the nearest
- * waypoint to location
- * @param way_points Waypoints including all possible
- * waypoints for the calculation
- * @param location Location where to search
- * @param range Maximum range to search
- * @param pan True if in Pan mode
- * @return True if a waypoint was found
- */
-bool
-PopupNearestWaypointDetails(const Waypoints &way_points,
-                            const GEOPOINT &location,
-                            double range, bool scalefilter)
+void
+ProgressGlue::Close()
 {
-  const Waypoint *way_point;
-  way_point = way_points.lookup_location(location, fixed(range));
-
-  if (way_point &&
-      (!scalefilter ||
-       XCSoarInterface::main_window.map.WaypointInScaleFilter(*way_point))) {
-    dlgWayPointDetailsShowModal(XCSoarInterface::main_window, *way_point);
-    return true;
-  }
-  return false;
+  delete global_progress_window;
+  global_progress_window = NULL;
 }
 
+void
+ProgressGlue::Step()
+{
+  if (global_progress_window != NULL)
+    global_progress_window->step();
+}
+
+void
+ProgressGlue::SetText(const TCHAR *text)
+{
+  if (global_progress_window != NULL)
+    global_progress_window->set_message(text);
+}
+
+void
+ProgressGlue::SetValue(unsigned value)
+{
+  if (global_progress_window != NULL)
+    global_progress_window->set_pos(value);
+}
+
+void
+ProgressGlue::SetRange(unsigned value)
+{
+  if (global_progress_window != NULL)
+    global_progress_window->set_range(0, value);
+}
+
+void
+ProgressGlue::SetStep(int step)
+{
+  if (global_progress_window != NULL)
+    global_progress_window->set_step(step);
+}

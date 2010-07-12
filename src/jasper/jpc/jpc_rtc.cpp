@@ -1,15 +1,15 @@
 #include "jasper/jpc_rtc.h"
 #include "jasper/RasterTile.hpp"
-#include "Interface.hpp"
+#include "ProgressGlue.hpp"
 
 RasterTileCache *raster_tile_current = 0;
 
 static void StepProgressDialog(void) {
-  XCSoarInterface::StepProgressDialog();
+  ProgressGlue::Step();
 }
 
 static void SetNumTiles(unsigned num) {
-  XCSoarInterface::SetProgressStepSize(1000/(num+MAX_ACTIVE_TILES));
+  ProgressGlue::SetStep(1000 / (num + MAX_ACTIVE_TILES));
 }
 
 extern "C" {

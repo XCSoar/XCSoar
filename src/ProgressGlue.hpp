@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -35,26 +36,32 @@ Copyright_License {
 }
 */
 
-#include "Interface.hpp"
+#ifndef XCSOAR_PROGRESS_GLUE_HPP
+#define XCSOAR_PROGRESS_GLUE_HPP
 
-#include <stdio.h>
+#include <tchar.h>
 
-void
-XCSoarInterface::CreateProgressDialog(const TCHAR *text)
-{
-  _ftprintf(stderr, _T("%s\n"), text);
+namespace ProgressGlue {
+  /**
+   * Creates or updates the ProgressWindow
+   * @param text the text inside the progress bar
+   */
+  void Create(const TCHAR *text);
+
+  /**
+   * Closes the ProgressWindow
+   */
+  void Close();
+
+  /**
+   * Updates the ProgressWindow to go up one step
+   */
+  void Step();
+
+  void SetText(const TCHAR *text);
+  void SetValue(unsigned value);
+  void SetRange(unsigned value);
+  void SetStep(int step);
 }
 
-void
-XCSoarInterface::CloseProgressDialog()
-{
-}
-
-void
-XCSoarInterface::StepProgressDialog(void)
-{
-}
-
-bool XCSoarInterface::SetProgressStepSize(int nSize) {
-  return false;
-}
+#endif

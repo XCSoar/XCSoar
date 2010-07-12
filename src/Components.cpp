@@ -99,6 +99,7 @@ Copyright_License {
 #include "TaskClientCalc.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideComputerInterface.hpp"
+#include "ProgressGlue.hpp"
 
 Marks *marks;
 TopologyStore *topology;
@@ -158,7 +159,7 @@ XCSoarInterface::PreloadInitialisation(bool ask)
     Profile::Load();
     Profile::Use();
 
-    CreateProgressDialog(gettext(TEXT("Initialising")));
+    ProgressGlue::Create(gettext(_T("Initialising")));
   }
 }
 
@@ -194,7 +195,7 @@ XCSoarInterface::AfterStartup()
   task_manager.resume();
 
   LogStartUp(TEXT("CloseProgressDialog"));
-  CloseProgressDialog();
+  ProgressGlue::Close();
 
   main_window.full_screen();
   InfoBoxManager::SetDirty(true);
@@ -314,7 +315,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   topology->Open();
 
   // Read the terrain file
-  CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
+  ProgressGlue::Create(gettext(_T("Loading Terrain File...")));
   LogStartUp(TEXT("OpenTerrain"));
   terrain.OpenTerrain();
 
@@ -331,11 +332,11 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   // ReSynchronise the blackboards here since SetHome touches them
   ReadBlackboardBasic(device_blackboard.Basic());
 
-  CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
+  ProgressGlue::Create(gettext(_T("Loading Terrain File...")));
   terrain.ServiceFullReload(Basic().Location);
 
   // Scan for weather forecast
-  CreateProgressDialog(gettext(TEXT("Scanning weather forecast")));
+  ProgressGlue::Create(gettext(_T("Scanning weather forecast")));
   LogStartUp(TEXT("RASP load"));
   RASP.ScanAll(Basic().Location);
 
@@ -360,7 +361,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 #endif
 
   // Start the device thread(s)
-  CreateProgressDialog(gettext(TEXT("Starting devices")));
+  ProgressGlue::Create(gettext(_T("Starting devices")));
   devStartup(lpCmdLine);
 
 /*
@@ -371,7 +372,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   This should be done inside devStartup if it is really required
 */
 
-  CreateProgressDialog(gettext(TEXT("Initialising display")));
+  ProgressGlue::Create(gettext(_T("Initialising display")));
 
   main_window.map.set_way_points(&way_points);
   main_window.map.set_task(&task_ui);
@@ -429,7 +430,7 @@ XCSoarInterface::Shutdown(void)
   gcc_unused ScopeBusyIndicator busy;
 
   // Show progress dialog
-  CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
+  ProgressGlue::Create(gettext(_T("Shutdown, please wait...")));
 
   // Log shutdown information
   LogStartUp(TEXT("Entering shutdown..."));
@@ -439,11 +440,11 @@ XCSoarInterface::Shutdown(void)
   globalRunningEvent.reset();
 
   // Stop logger and save igc file
-  CreateProgressDialog(gettext(TEXT("Shutdown, saving logs...")));
+  ProgressGlue::Create(gettext(_T("Shutdown, saving logs...")));
   logger.guiStopLogger(Basic(), true);
 
   // Save settings to profile
-  CreateProgressDialog(gettext(TEXT("Shutdown, saving profile...")));
+  ProgressGlue::Create(gettext(_T("Shutdown, saving profile...")));
   Profile::Save();
 
   // Stop sound
@@ -455,7 +456,7 @@ XCSoarInterface::Shutdown(void)
   //  VarioSound_Close();
 #endif
 
-  CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
+  ProgressGlue::Create(gettext(_T("Shutdown, please wait...")));
 
   // Stop threads
   LogStartUp(TEXT("CloseDrawingThread"));
@@ -485,7 +486,7 @@ XCSoarInterface::Shutdown(void)
   dlgAirspaceWarningDeInit();
 
   // Save the task for the next time
-  CreateProgressDialog(gettext(TEXT("Shutdown, saving task...")));
+  ProgressGlue::Create(gettext(_T("Shutdown, saving task...")));
 
   LogStartUp(TEXT("Save default task"));
   task_ui.task_save_default();
@@ -498,7 +499,7 @@ XCSoarInterface::Shutdown(void)
   LogStartUp(TEXT("Close waypoints"));
   way_points.clear();
 
-  CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
+  ProgressGlue::Create(gettext(_T("Shutdown, please wait...")));
 
   // Clear weather database
   LogStartUp(TEXT("CloseRASP"));
@@ -544,7 +545,7 @@ XCSoarInterface::Shutdown(void)
 
   // Close the progress dialog
   LogStartUp(TEXT("Close Progress Dialog"));
-  CloseProgressDialog();
+  ProgressGlue::Close();
 
   // Clear the EGM96 database
   CloseGeoid();

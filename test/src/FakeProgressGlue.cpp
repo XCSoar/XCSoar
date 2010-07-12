@@ -35,17 +35,42 @@ Copyright_License {
 }
 */
 
-#include "Interface.hpp"
+#include "ProgressGlue.hpp"
 
-HINSTANCE CommonInterface::hInst;
-bool CommonInterface::EnableAutoBacklight;
-bool CommonInterface::EnableAutoSoundVolume;
+#include <stdio.h>
 
 void
-ActionInterface::SignalShutdown(bool force)
+ProgressGlue::Create(const TCHAR *text)
 {
-  // XXX
+  _ftprintf(stderr, _T("%s\n"), text);
 }
 
-bool XCSoarInterface::Debounce() { return false; }
-void XCSoarInterface::InterfaceTimeoutReset(void) {}
+void
+ProgressGlue::Close()
+{
+}
+
+void
+ProgressGlue::Step()
+{
+}
+
+void
+ProgressGlue::SetText(const TCHAR *text)
+{
+}
+
+void
+ProgressGlue::SetValue(unsigned value)
+{
+}
+
+void
+ProgressGlue::SetRange(unsigned value)
+{
+}
+
+void
+ProgressGlue::SetStep(int step)
+{
+}

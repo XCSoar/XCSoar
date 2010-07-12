@@ -17,7 +17,7 @@
 
 #include "Device/Volkslogger/vla_support.h"
 #include "Device/Port.hpp"
-#include "Interface.hpp"
+#include "ProgressGlue.hpp"
 
 #include <stdio.h>
 #ifdef WINDOWSPC
@@ -67,7 +67,7 @@ VLA_ERROR VLA_SYS::serial_open_port()
   lLastBaudrate = port->SetBaudrate(9600L); // change to IO
                                                    // Mode baudrate
 
-  XCSoarInterface::SetProgressStepSize(1);
+  ProgressGlue::SetStep(1);
 
   return VLA_ERR_NOERR;
 }
@@ -176,7 +176,7 @@ void VLA_SYS::progress_reset()
 
 void VLA_SYS::progress_set(VLS_TXT_ID txtid)
 {
-  XCSoarInterface::StepProgressDialog();
+  ProgressGlue::Step();
 
   if(noninteractive)  return;
 }
