@@ -38,9 +38,9 @@
 #define AIRSPACE_VISITOR_HPP
 
 #include "Util/GenericVisitor.hpp"
-#include "Airspace.hpp"
 #include "AirspacePredicate.hpp"
 
+class Airspace;
 class AbstractAirspace;
 class AirspacePolygon;
 class AirspaceCircle;
