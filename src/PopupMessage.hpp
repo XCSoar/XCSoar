@@ -123,7 +123,6 @@ private:
 
   SingleWindow &parent;
   RECT rc; // maximum message size
-  EditWindow window;
 
   Mutex mutex;
   struct singleMessage messages[MAXMESSAGES];
