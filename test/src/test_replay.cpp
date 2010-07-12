@@ -28,6 +28,10 @@ public:
   bool started;
 
 protected:
+  virtual void on_reset() {}
+  virtual void on_stop() {}
+  virtual void on_bad_file() {}
+
   void on_advance(const GEOPOINT &loc,
                   const fixed speed, const Angle bearing,
                   const fixed alt, const fixed baroalt, const fixed t) {
