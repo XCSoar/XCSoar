@@ -39,10 +39,6 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "ResourceLoader.hpp"
 
-#if defined(ENABLE_SDL) && !defined(WIN32)
-#include "LocalPath.hpp"
-#endif
-
 #ifdef ENABLE_SDL
 #include <SDL/SDL_endian.h>
 
