@@ -78,7 +78,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 
 // Sensible maximums
 enum {
-  MAX_MODE = 100,
+  MAX_MODE = 64,
   MAX_MODE_STRING = 24,
   MAX_KEY = 255,
   MAX_EVENTS = 2048,
