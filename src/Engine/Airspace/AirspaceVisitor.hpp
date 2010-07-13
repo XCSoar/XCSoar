@@ -37,8 +37,6 @@
 #ifndef AIRSPACE_VISITOR_HPP
 #define AIRSPACE_VISITOR_HPP
 
-#include "AirspacePredicate.hpp"
-
 class Airspace;
 class AbstractAirspace;
 class AirspacePolygon;
@@ -48,22 +46,6 @@ class AirspaceCircle;
  * Generic visitor for objects in the Airspaces container
  */
 class AirspaceVisitor {
-public:
-
-  /** 
-   * Default constructor, sets predicate to always true condition
-   */
-  AirspaceVisitor(const AirspacePredicate &pred= AirspacePredicate::always_true):
-    m_predicate(&pred) {};
-
-  /**
-   * Predicate adaptor (forwards to predicate condition)
-   *
-   * @param as Airspace containing item to test
-   * @return True if condition satisfied
-   */
-  bool condition (const Airspace& as) const;
-
 protected:
   virtual void Visit(const AirspaceCircle &as) = 0;
   virtual void Visit(const AirspacePolygon &as) = 0;
@@ -71,10 +53,6 @@ protected:
 public:
   void Visit(const AbstractAirspace &aa);
   void Visit(const Airspace &as);
-
-protected:
-  const AirspacePredicate* m_predicate; /**< Predicate to be used by callers */
-private:
 };
 
 #endif

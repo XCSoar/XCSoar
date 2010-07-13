@@ -38,6 +38,7 @@
 #define AIRSPACES_HPP
 
 #include "AirspacesInterface.hpp"
+#include "AirspacePredicate.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include <deque>
@@ -133,7 +134,9 @@ public:
    */
   void visit_within_range(const GEOPOINT &loc, 
                           const fixed range,
-                          AirspaceVisitor& visitor) const;
+                          AirspaceVisitor& visitor,
+                          const AirspacePredicate &predicate
+                          =AirspacePredicate::always_true) const;
 
   /** 
    * Call visitor class on airspaces intersected by vector.

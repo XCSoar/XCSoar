@@ -63,7 +63,9 @@ public:
 
   void visit_within_range(const GEOPOINT &loc, 
                           const fixed range,
-                          AirspaceVisitor& visitor) const;
+                          AirspaceVisitor &visitor,
+                          const AirspacePredicate &predicate
+                          =AirspacePredicate::always_true) const;
 
   void visit_intersecting(const GEOPOINT &loc, 
                           const GeoVector &vec,

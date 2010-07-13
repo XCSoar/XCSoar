@@ -132,21 +132,14 @@ class AirspaceVisitorMap:
   public MapDrawHelper
 {
 public:
-  AirspaceVisitorMap(MapDrawHelper &_helper, const AirspaceWarningCopy& warnings,
-                     const SETTINGS_COMPUTER& settings_computer,
-                     const NMEA_INFO& state):
+  AirspaceVisitorMap(MapDrawHelper &_helper,
+                     const AirspaceWarningCopy& warnings):
     MapDrawHelper(_helper),
     m_warnings(warnings),
     pen_thick(Pen::SOLID, IBLSCALE(10), Color(0x00, 0x00, 0x00)),
     pen_medium(Pen::SOLID, IBLSCALE(3), Color(0x00, 0x00, 0x00)),
-    visible(settings_computer,
-            state.GetAltitudeBaroPreferred(),
-            m_border,
-            warnings),
     m_border(false)
-    {
-      m_predicate = &visible;
-    };
+    {}
 
   void Visit(const AirspaceCircle& airspace) {
     buffer_render_start();
@@ -219,7 +212,6 @@ private:
   const AirspaceWarningCopy& m_warnings;
   Pen pen_thick;
   Pen pen_medium;
-  AirspaceMapVisible visible;
   bool m_border;
 };
 
@@ -255,15 +247,20 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
 
     MapDrawHelper helper (canvas, buffer, stencil_canvas, *this, 
                           GetMapRect(), SettingsMap());
-    AirspaceVisitorMap v(helper, awc, SettingsComputer(), Basic());
+    AirspaceVisitorMap v(helper, awc);
+    const AirspaceMapVisible visible(SettingsComputer(),
+                                     Basic().GetAltitudeBaroPreferred(),
+                                     false, awc);
 
     // JMW TODO wasteful to draw twice, can't it be drawn once?
     // we are using two draws so borders go on top of everything
     
     v.set_border(false);
-    m_airspace->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
+    m_airspace->visit_within_range(PanLocation, GetScreenDistanceMeters(),
+                                   v, visible);
     v.set_border(true);
-    m_airspace->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
+    m_airspace->visit_within_range(PanLocation, GetScreenDistanceMeters(),
+                                   v, visible);
     v.draw_intercepts();
 
     m_airspace_intersections = awc.get_locations();

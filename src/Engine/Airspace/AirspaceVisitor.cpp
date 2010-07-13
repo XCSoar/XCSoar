@@ -37,15 +37,6 @@
 #include "AirspaceVisitor.hpp"
 #include "Airspace.hpp"
 
-bool 
-AirspaceVisitor::condition (const Airspace& as) const {
-  if (m_predicate) {
-    return m_predicate->condition(*(as.get_airspace()));
-  } else {
-    return true;
-  }
-}
-
 void
 AirspaceVisitor::Visit(const AbstractAirspace &aa)
 {

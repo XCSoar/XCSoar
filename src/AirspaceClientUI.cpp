@@ -22,9 +22,10 @@ AirspaceClientUI::visit_warnings(AirspaceWarningVisitor& visitor) const
 void 
 AirspaceClientUI::visit_within_range(const GEOPOINT &loc, 
                                      const fixed range,
-                                     AirspaceVisitor& visitor) const
+                                     AirspaceVisitor &visitor,
+                                     const AirspacePredicate &predicate) const
 {
-  return airspaces.visit_within_range(loc, range, visitor);
+  return airspaces.visit_within_range(loc, range, visitor, predicate);
 }
 
 void 

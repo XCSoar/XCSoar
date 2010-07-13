@@ -48,7 +48,8 @@ extern long count_intersections;
 void 
 Airspaces::visit_within_range(const GEOPOINT &loc, 
                               const fixed range,
-                              AirspaceVisitor& visitor) const
+                              AirspaceVisitor& visitor,
+                              const AirspacePredicate &predicate) const
 {
   Airspace bb_target(loc, task_projection);
   int mrange = task_projection.project_range(loc, range);
@@ -60,7 +61,7 @@ Airspaces::visit_within_range(const GEOPOINT &loc,
 #endif
 
   for (std::deque<Airspace>::iterator v = vectors.begin(); v != vectors.end(); ++v) {
-    if (!visitor.condition(*v))
+    if (!predicate.condition(*v->get_airspace()))
       continue;
 
     visitor.Visit(*v);
@@ -86,9 +87,6 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
 #endif
 
   for (std::deque<Airspace>::iterator v = vectors.begin(); v != vectors.end(); ++v) {
-    if (!visitor.condition(*v))
-      continue;
-
     if (!v->intersects(ray))
       continue;
 
