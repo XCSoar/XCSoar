@@ -45,12 +45,12 @@ main(int argc, char **argv)
   puts("#endif");
   puts("};");
 
-  puts("const int ISINETABLE[4096] = {");
+  puts("const short ISINETABLE[4096] = {");
   for (unsigned i = 0; i < 4096; i++)
     printf("  %d,\n", iround(sin(INT_TO_DEG(i)) * 1024));
   puts("};");
 
-  puts("const int ICOSTABLE[4096] = {");
+  puts("const short ICOSTABLE[4096] = {");
   for (unsigned i = 0; i < 4096; i++)
     printf("  %d,\n", iround(cos(INT_TO_DEG(i)) * 1024));
   puts("};");

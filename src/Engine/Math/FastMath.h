@@ -106,8 +106,8 @@ extern const fixed SINETABLE[4096];
 extern const fixed INVCOSINETABLE[4096];
 #endif
 
-extern const int ISINETABLE[4096];
-extern const int ICOSTABLE[4096];
+extern const short ISINETABLE[4096];
+extern const short ICOSTABLE[4096];
 
 gcc_const
 static inline int
