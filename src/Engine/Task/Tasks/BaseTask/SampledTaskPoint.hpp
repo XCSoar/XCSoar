@@ -38,6 +38,7 @@
 #ifndef SAMPLEDTASKPOINT_H
 #define SAMPLEDTASKPOINT_H
 
+#include "Navigation/GeoPoint.hpp"
 #include "Navigation/SearchPointVector.hpp"
 #include "ObservationZone.hpp"
 #include "TaskPoint.hpp"
