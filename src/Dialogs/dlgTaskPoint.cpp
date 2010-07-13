@@ -50,6 +50,8 @@ Copyright_License {
 
 #include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/TaskPoints/FinishPoint.hpp"
+#include "Task/ObservationZones/LineSectorZone.hpp"
+#include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/Visitors/TaskVisitor.hpp"
 
 #include "RenderTask.hpp"
