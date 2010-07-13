@@ -1,17 +1,14 @@
 #ifndef AIRSPACE_WARNING_VISITOR_HPP
 #define AIRSPACE_WARNING_VISITOR_HPP
 
-#include "AirspaceWarning.hpp"
+class AirspaceWarning;
 
 /**
  * Generic visitor for AirspaceWarning system
  */
-class AirspaceWarningVisitor:
-  public BaseVisitor,
-  public ConstVisitor<AirspaceWarning>
-{
+class AirspaceWarningVisitor {
 public:
-
+  virtual void Visit(const AirspaceWarning &w) = 0;
 };
 
 

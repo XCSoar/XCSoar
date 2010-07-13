@@ -38,16 +38,13 @@
 #define AIRSPACE_WARNING_HPP
 
 #include "AbstractAirspace.hpp"
-#include "Util/GenericVisitor.hpp"
 
 /**
  * Class to hold information about active airspace warnings
  * \todo
  * - use settings for acknowledgement time
  */
-class AirspaceWarning: 
-  public BaseConstVisitable<>
-{
+class AirspaceWarning {
 public:
 
   /**
@@ -204,8 +201,6 @@ public:
   friend std::ostream& operator<< (std::ostream& f, 
                                    const AirspaceWarning& aw);
 #endif
-
-  DEFINE_CONSTVISITABLE()
 };
 
 #endif

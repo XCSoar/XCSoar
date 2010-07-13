@@ -360,7 +360,7 @@ AirspaceWarningManager::visit_warnings(AirspaceWarningVisitor& visitor) const
 {
   for (AirspaceWarningList::const_iterator it = m_warnings.begin();
        it != m_warnings.end(); ++it) {
-    it->CAccept(visitor);
+    visitor.Visit(*it);
   }
 }
 
