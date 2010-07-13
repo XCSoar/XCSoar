@@ -143,7 +143,7 @@ public:
     visit_general(as);
   };
   void visit_general(const AbstractAirspace& as) {
-    if (m_predicate->condition(as) && as.inside(m_location)) {
+    if (as.inside(m_location)) {
       m_airspace = &as;
     }
   };
