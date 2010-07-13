@@ -140,7 +140,8 @@ bool RasterWeather::LoadItem(int item, const TCHAR* name) {
 
 
 void RasterWeather::ScanAll(const GEOPOINT &location) {
-  Poco::ScopedRWLock protect(lock, true);
+  /* not holding the lock here, because this method is only called
+     during startup, when the other threads aren't running yet */
 
   ProgressGlue::SetRange(MAX_WEATHER_TIMES);
   for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++) {
