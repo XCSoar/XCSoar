@@ -367,5 +367,5 @@ RenderTaskPoint::draw_search_point_vector(const SearchPointVector &points)
        it != points.end(); ++it)
     m_proj.LonLat2Screen(it->get_location(), pts[i++]);
 
-  m_buffer.clipped_polygon(pts, size, m_proj.GetMapRect());
+  m_buffer.autoclip_polygon(pts, size, m_proj.GetMapRect());
 }

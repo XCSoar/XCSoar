@@ -129,7 +129,7 @@ MapDrawHelper::draw_great_circle(Canvas& the_canvas, const GEOPOINT &from,
   std::vector<POINT> screen;
   add(screen, from);
   add(screen, to);
-  the_canvas.clipped_polyline(&screen[0], screen.size(), m_rc);
+  the_canvas.autoclip_polyline(&screen[0], screen.size(), m_rc);
 }
 
 void 
