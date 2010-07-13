@@ -303,6 +303,8 @@ static void UpdateList(void)
 
   UpLimit = WayPointSelectInfo.size();
   wWayPointList->SetLength(UpLimit);
+  wWayPointList->SetOrigin(0);
+  wWayPointList->SetCursorIndex(0);
   wWayPointList->invalidate();
 }
 
