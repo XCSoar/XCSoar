@@ -39,6 +39,7 @@ Copyright_License {
 #define XCSOAR_RENDER_OBSERVATION_ZONE_HPP
 
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
+#include "Math/Angle.hpp"
 #include "Screen/Pen.hpp"
 
 #include <windef.h>

@@ -1,4 +1,8 @@
 #include "RenderObservationZone.hpp"
+#include "Task/ObservationZones/LineSectorZone.hpp"
+#include "Task/ObservationZones/FAISectorZone.hpp"
+#include "Task/ObservationZones/KeyholeZone.hpp"
+#include "Task/ObservationZones/CylinderZone.hpp"
 #include "Screen/Graphics.hpp"
 #include "Projection.hpp"
 #include "SettingsUser.hpp"
