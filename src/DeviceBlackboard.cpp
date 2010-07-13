@@ -668,7 +668,7 @@ DeviceBlackboard::WorkingBand()
  
   SetBasic().working_band_height = working_band_height;
   
-  if (negative(SetBasic().working_band_height)) {
+  if (negative(Basic().working_band_height)) {
     SetBasic().working_band_fraction = fixed_zero;
     return;
   }
