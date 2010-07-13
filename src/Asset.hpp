@@ -101,10 +101,10 @@ is_debug()
 static inline bool
 is_embedded()
 {
-#if defined(WINDOWSPC) || !defined(WIN32)
-  return false;
-#else
+#ifdef _WIN32_WCE
   return true;
+#else
+  return false;
 #endif
 }
 
