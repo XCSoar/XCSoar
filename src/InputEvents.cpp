@@ -77,10 +77,12 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include <tchar.h>
 
 // Sensible maximums
-#define MAX_MODE 100
-#define MAX_MODE_STRING 25
-#define MAX_KEY 255
-#define MAX_EVENTS 2048
+enum {
+  MAX_MODE = 100,
+  MAX_MODE_STRING = 24,
+  MAX_KEY = 255,
+  MAX_EVENTS = 2048,
+};
 
 /*
   TODO code - All of this input_Errors code needs to be removed and
