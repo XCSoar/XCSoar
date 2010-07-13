@@ -1,7 +1,6 @@
 #ifndef ONLINE_CONTEST_HPP
 #define ONLINE_CONTEST_HPP
 
-#include "Util/GenericVisitor.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Navigation/TracePoint.hpp"
 #include "Navigation/TaskProjection.hpp"
@@ -14,8 +13,6 @@
 class TaskPoint;
 class TaskEvents;
 class TaskBehaviour;
-class TaskPointVisitor;
-class TaskPointConstVisitor;
 class GlidePolar;
 class CommonStats;
 class Trace;
@@ -23,9 +20,7 @@ class Trace;
 /**
  * Special task holder for Online Contest calculations
  */
-class OnlineContest:
-  public BaseVisitable<> 
-{
+class OnlineContest {
 public:
 
   /** 
@@ -118,30 +113,6 @@ public:
 #ifdef DO_PRINT
   void print() const;
 #endif
-
-/** 
- * Accept a const task point visitor; makes the visitor visit
- * all TaskPoint in the task
- * 
- * @param visitor Visitor to accept
- * @param reverse Visit task points in reverse order 
- *
- * \todo reverse not implemented yet
- */
-  void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
-
-/** 
- * Accept a task point visitor; makes the visitor visit
- * all TaskPoint in the task
- * 
- * @param visitor Visitor to accept
- * @param reverse Visit task points in reverse order 
- *
- * \todo reverse not implemented yet
- */
-  void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false) {};
-
-  DEFINE_VISITABLE()
 };
 
 #endif

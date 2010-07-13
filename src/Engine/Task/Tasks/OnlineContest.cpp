@@ -150,15 +150,6 @@ OnlineContest::get_olc_points() const
   return m_solution;
 }
 
-
-void 
-OnlineContest::tp_CAccept(TaskPointConstVisitor& visitor, 
-                       const bool reverse) const
-{
-  /// \todo - visit "OLCPoint"
-}
-
-
 /*
 
 - SearchPointVector find self intersections (for OLC-FAI)
