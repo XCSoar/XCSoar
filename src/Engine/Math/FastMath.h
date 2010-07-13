@@ -96,9 +96,16 @@ iround(const fixed &x)
 }
 #endif
 
+#ifdef FIXED_MATH
+extern const int COSTABLE[4096];
+extern const int SINETABLE[4096];
+extern const fixed::value_t INVCOSINETABLE[4096];
+#else
 extern const fixed COSTABLE[4096];
 extern const fixed SINETABLE[4096];
 extern const fixed INVCOSINETABLE[4096];
+#endif
+
 extern const int ISINETABLE[4096];
 extern const int ICOSTABLE[4096];
 
@@ -117,7 +124,11 @@ gcc_const
 static inline fixed
 invfastcosine(fixed x)
 {
+#ifdef FIXED_MATH
+  return fixed(fixed::internal(), INVCOSINETABLE[NATIVE_TO_INT(x)]);
+#else
   return INVCOSINETABLE[NATIVE_TO_INT(x)];
+#endif
 }
 
 gcc_const
@@ -138,14 +149,22 @@ gcc_const
 static inline fixed
 fastsine(fixed x)
 {
+#ifdef FIXED_MATH
+  return fixed(fixed::internal(), SINETABLE[NATIVE_TO_INT(x)]);
+#else
   return SINETABLE[NATIVE_TO_INT(x)];
+#endif
 }
 
 gcc_const
 static inline fixed
 fastcosine(fixed x)
 {
+#ifdef FIXED_MATH
+  return fixed(fixed::internal(), COSTABLE[NATIVE_TO_INT(x)]);
+#else
   return COSTABLE[NATIVE_TO_INT(x)];
+#endif
 }
 
 inline unsigned int
