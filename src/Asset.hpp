@@ -109,6 +109,21 @@ is_embedded()
 }
 
 /**
+ * Returns whether the application is running on an old version of
+ * Windows CE (pre 5.0).  Starting with version 5.0, several bug
+ * workarounds are disabled at compile time.
+ */
+static inline bool
+is_old_ce()
+{
+#if defined(_WIN32_WCE) && _WIN32_WCE < 0x0500
+  return true;
+#else
+  return false;
+#endif
+}
+
+/**
  * Returns whether the application is running on a HP31x
  * @return True if host hardware is a HP31x, False otherwise
  */
@@ -149,6 +164,9 @@ is_altair()
 static inline bool
 need_clipping()
 {
+  if (!is_old_ce())
+    return false;
+
   return model_is_hp31x() || model_is_medion_p5();
 }
 
