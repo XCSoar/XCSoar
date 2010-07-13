@@ -142,7 +142,7 @@ InfoBoxFormatter::AssignValue(int i)
     break;
 
   case 8:
-    Value = Units::ToUserVSpeed(Calculated().LastThermalGain);
+    Value = Units::ToUserAltitude(Calculated().LastThermalGain);
     break;
 
   case 10:
