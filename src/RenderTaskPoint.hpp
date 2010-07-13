@@ -38,12 +38,15 @@ Copyright_License {
 #if !defined(XCSOAR_RENDER_TASK_POINT_HPP)
 #define XCSOAR_RENDER_TASK_POINT_HPP
 
+#include "Navigation/GeoPoint.hpp"
+#include "Navigation/SearchPointVector.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Screen/Pen.hpp"
 
 class Canvas;
 class Projection;
 class RenderObservationZone;
+class OrderedTaskPoint;
 struct SETTINGS_MAP;
 
 class RenderTaskPoint:
