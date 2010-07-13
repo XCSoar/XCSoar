@@ -252,6 +252,20 @@ private:
   const AirspaceAircraftPerformance &m_perf;
 };
 
+/**
+ * Adapter between an AirspaceVisitor and a function class.
+ */
+template<typename V>
+struct CallVisitor {
+  V &visitor;
+
+  CallVisitor(V &_visitor):visitor(_visitor) {}
+
+  template<typename T>
+  void operator()(const T &t) {
+    return visitor.Visit(t);
+  }
+};
 
 void scan_airspaces(const AIRCRAFT_STATE state, 
                     const Airspaces& airspaces,
@@ -264,7 +278,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
   const std::vector<Airspace> vn = airspaces.scan_nearest(state.Location);
   AirspaceVisitorPrint pvn("results/res-bb-nearest.txt",
                            do_report);
-  std::for_each(vn.begin(), vn.end(), pvn);
+  std::for_each(vn.begin(), vn.end(), CallVisitor<AirspaceVisitor>(pvn));
 
   {
     AirspaceVisitorPrint pvisitor("results/res-bb-range.txt",
@@ -282,7 +296,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
     const std::vector<Airspace> vi = airspaces.find_inside(state);
     AirspaceVisitorPrint pvi("results/res-bb-inside.txt",
                              do_report);
-    std::for_each(vi.begin(), vi.end(), pvi);
+    std::for_each(vi.begin(), vi.end(), CallVisitor<AirspaceVisitor>(pvi));
   }
   
   {

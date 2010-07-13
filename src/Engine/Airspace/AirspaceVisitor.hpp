@@ -72,14 +72,6 @@ public:
   void Visit(const AbstractAirspace &aa);
   void Visit(const Airspace &as);
 
-  /**
-   * Utility accessor to visit an item by calling the visitor with () operator
-   * as used by libkdtree++
-   */
-  void operator()(const Airspace &as) {
-    Visit(as);
-  }
-
 protected:
   const AirspacePredicate* m_predicate; /**< Predicate to be used by callers */
 private:
