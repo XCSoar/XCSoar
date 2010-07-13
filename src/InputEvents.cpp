@@ -156,14 +156,22 @@ typedef struct {
   pt2Event event;
 } Text2EventSTRUCT;
 
-Text2EventSTRUCT Text2Event[256];  // why 256?
-int Text2Event_count;
+static const Text2EventSTRUCT Text2Event[] = {
+#include "InputEvents_Text2Event.cpp"
+  { NULL, NULL }
+};
 
 // Mapping text names of events to the real thing
-const TCHAR *Text2GCE[GCE_COUNT+1];
+static const TCHAR *const Text2GCE[] = {
+#include "InputEvents_Text2GCE.cpp"
+  NULL
+};
 
 // Mapping text names of events to the real thing
-const TCHAR *Text2NE[NE_COUNT+1];
+static const TCHAR *const Text2NE[] = {
+#include "InputEvents_Text2NE.cpp"
+  NULL
+};
 
 Mutex InputEvents::mutexEventQueue;
 
@@ -194,7 +202,6 @@ InputEvents::readFile()
       #include "InputEvents_default.cpp"
     }
 
-    #include "InputEvents_Text2Event.cpp"
     InitONCE = true;
   }
 
@@ -527,11 +534,9 @@ InputEvents::findKey(const TCHAR *data)
 pt2Event
 InputEvents::findEvent(const TCHAR *data)
 {
-  int i;
-  for (i = 0; i < Text2Event_count; i++) {
+  for (unsigned i = 0; Text2Event[0].text != NULL; ++i)
     if (_tcscmp(data, Text2Event[i].text) == 0)
       return Text2Event[i].event;
-  }
 
   return NULL;
 }

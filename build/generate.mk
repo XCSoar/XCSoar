@@ -9,9 +9,21 @@ $(OUT)/include/MathTables.h: $(HOST_OUTPUT_DIR)/tools/GenerateSineTables$(HOST_E
 $(call SRC_TO_OBJ,$(ENGINE_SRC_DIR)/Math/FastMath.c): $(OUT)/include/MathTables.h
 
 $(OUT)/include/InputEvents_Text2Event.cpp: $(SRC)/InputEvents.h \
-	$(topdir)/Data/Input/h2cpp.pl $(OUT)/include/dirstamp
+	$(topdir)/tools/Text2Event.pl | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
-	$(Q)$(PERL) $(topdir)/Data/Input/h2cpp.pl $< >$@.tmp
+	$(Q)$(PERL) $(topdir)/tools/Text2Event.pl $< >$@.tmp
+	@mv $@.tmp $@
+
+$(OUT)/include/InputEvents_Text2GCE.cpp: $(SRC)/InputEvents.h \
+	$(topdir)/tools/Text2GCE.pl | $(OUT)/include/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(PERL) $(topdir)/tools/Text2GCE.pl $< >$@.tmp
+	@mv $@.tmp $@
+
+$(OUT)/include/InputEvents_Text2NE.cpp: $(SRC)/InputEvents.h \
+	$(topdir)/tools/Text2NE.pl | $(OUT)/include/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(PERL) $(topdir)/tools/Text2NE.pl $< >$@.tmp
 	@mv $@.tmp $@
 
 XCI_LIST = pc altair default
@@ -25,7 +37,7 @@ $(XCI_HEADERS): $(OUT)/include/InputEvents_%.cpp: \
 	@mv $@.tmp $@
 
 T2E_OBJ = $(call SRC_TO_OBJ,$(SRC)/InputEvents.cpp)
-$(T2E_OBJ): $(XCI_HEADERS) $(OUT)/include/InputEvents_Text2Event.cpp
+$(T2E_OBJ): $(XCI_HEADERS) $(OUT)/include/InputEvents_Text2Event.cpp $(OUT)/include/InputEvents_Text2GCE.cpp $(OUT)/include/InputEvents_Text2NE.cpp
 
 $(OUT)/include/Status_defaults.cpp: Data/Status/default.xcs \
 	Data/Status/xcs2cpp.pl $(OUT)/include/dirstamp
