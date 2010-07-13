@@ -48,7 +48,7 @@
 class SymmetricSectorZone: 
   public SectorZone 
 {
-public:
+protected:
 /** 
  * Constructor.
  * 
@@ -64,13 +64,8 @@ public:
     SectorZone(loc,radius),
     SectorAngle(angle) {}
 
-  virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
-    if (_location) {
-      return new SymmetricSectorZone(*_location, Radius, SectorAngle);
-    } else {
-      return new SymmetricSectorZone(get_location(), Radius, SectorAngle);
-    }
-  }
+public:
+  virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const = 0;
 
 /** 
  * Update radials when previous/next legs are modified.
