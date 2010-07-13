@@ -59,6 +59,7 @@ WndListFrame::WndListFrame(ContainerWindow &parent,
   item_height(_item_height),
   length(0), origin(0), items_visible(Height / item_height),
   relative_cursor(0),
+  dragging(false),
   ActivateCallback(NULL),
   CursorCallback(NULL),
   PaintItemCallback(NULL)
