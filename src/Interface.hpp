@@ -156,7 +156,6 @@ protected:
 
 public:
   // ideally these should be protected
-  static void on_key_None(InfoBoxKeyCodes UpDown);
   static void on_key_WindSpeed(InfoBoxKeyCodes UpDown);
   static void on_key_WindDirection(InfoBoxKeyCodes UpDown);
   static void on_key_MacCready(InfoBoxKeyCodes UpDown);

@@ -140,31 +140,31 @@ static const SCREEN_INFO Data_Options[] = {
   // 1
   { ugAltitude, _T("Height AGL"), _T("H AGL"),
     new FormatterLowWarning(_T("%2.0f"),0.0),
-    ActionInterface::on_key_None,
+    NULL,
     20, 0,
   },
   // 2
   { ugVerticalSpeed, _T("Thermal last 30 sec"), _T("TC 30s"),
     new FormatterLowWarning(_T("%-2.1f"),0.0),
-    ActionInterface::on_key_None,
+    NULL,
     7, 44,
   },
   // 3
   { ugNone, _T("Bearing"), _T("Bearing"),
     new InfoBoxFormatter(_T("%2.0f")_T(DEG)_T("T")),
-    ActionInterface::on_key_None,
+    NULL,
     6, 54,
   },
   // 4
   { ugNone, _T("L/D instantaneous"), _T("L/D Inst"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     5, 38,
   },
   // 5
   { ugNone, _T("L/D cruise"), _T("L/D Cru"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     19, 4,
   },
   // 6
@@ -176,19 +176,19 @@ static const SCREEN_INFO Data_Options[] = {
   // 7
   { ugVerticalSpeed, _T("Last Thermal Average"), _T("TL Avg"),
     new InfoBoxFormatter(_T("%-2.1f")),
-    ActionInterface::on_key_None,
+    NULL,
     8, 2,
   },
   // 8
   { ugAltitude, _T("Last Thermal Gain"), _T("TL Gain"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     9, 7,
   },
   // 9
   { ugNone, _T("Last Thermal Time"), _T("TL Time"),
     new FormatterTime(_T("%04.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     21, 8,
   },
   // 10
@@ -200,19 +200,19 @@ static const SCREEN_INFO Data_Options[] = {
   // 11
   { ugDistance, _T("Next Distance"), _T("WP Dist"),
     new InfoBoxFormatter(_T("%2.1f")),
-    ActionInterface::on_key_None,
+    NULL,
     12, 31,
   },
   // 12
   { ugAltitude, _T("Next Altitude Difference"), _T("WP AltD"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     13, 11,
   },
   // 13
   { ugAltitude, _T("Next Altitude Required"), _T("WP AltR"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     15, 12,
   },
   // 14
@@ -224,49 +224,49 @@ static const SCREEN_INFO Data_Options[] = {
   // 15
   { ugAltitude, _T("Final Altitude Difference"), _T("Fin AltD"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     16, 13,
   },
   // 16
   { ugAltitude, _T("Final Altitude Required"), _T("Fin AltR"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     17, 15,
   },
   // 17
   { ugTaskSpeed, _T("Speed Task Average"), _T("V Task Av"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     18, 16,
   },
   // 18
   { ugDistance, _T("Final Distance"), _T("Fin Dis"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     27, 17,
   },
   // 19
   { ugNone, _T("Final LD"), _T("Fin LD"),
     new InfoBoxFormatter(_T("%1.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     38, 5,
   },
   // 20
   { ugAltitude, _T("Terrain Elevation"), _T("H Gnd"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     33, 1,
   },
   // 21
   { ugVerticalSpeed, _T("Thermal Average"), _T("TC Avg"),
     new FormatterLowWarning(_T("%-2.1f"),0.0),
-    ActionInterface::on_key_None,
+    NULL,
     22, 9,
   },
   // 22
   { ugAltitude, _T("Thermal Gain"), _T("TC Gain"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     24, 21,
   },
   // 23
@@ -278,7 +278,7 @@ static const SCREEN_INFO Data_Options[] = {
   // 24
   { ugVerticalSpeed, _T("Vario"), _T("Vario"),
     new InfoBoxFormatter(_T("%-2.1f")),
-    ActionInterface::on_key_None,
+    NULL,
     44, 22,
   },
   // 25
@@ -296,31 +296,31 @@ static const SCREEN_INFO Data_Options[] = {
   // 27
   { ugNone, _T("AA Time"), _T("AA Time"),
     new FormatterAATTime(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     28, 18,
   },
   // 28
   { ugDistance, _T("AA Distance Max"), _T("AA Dmax"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     29, 27,
   },
   // 29
   { ugDistance, _T("AA Distance Min"), _T("AA Dmin"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     30, 28,
   },
   // 30
   { ugTaskSpeed, _T("AA Speed Max"), _T("AA Vmax"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     31, 29,
   },
   // 31
   { ugTaskSpeed, _T("AA Speed Min"), _T("AA Vmin"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     51, 30,
   },
   // 32
@@ -332,25 +332,25 @@ static const SCREEN_INFO Data_Options[] = {
   // 33
   { ugAltitude, _T("Pressure Altitude"), _T("H Baro"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     0, 20,
   },
   // 34
   { ugHorizontalSpeed, _T("Speed MacCready"), _T("V Mc"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     35, 10,
   },
   // 35
   { ugNone, _T("Percentage climb"), _T("% Climb"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     43, 34,
   },
   // 36
   { ugNone, _T("Time of flight"), _T("Time flt"),
     new FormatterTime(_T("%04.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     39, 14,
   },
   // 37
@@ -362,73 +362,73 @@ static const SCREEN_INFO Data_Options[] = {
   // 38
   { ugNone, _T("Next LD"), _T("WP LD"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     53, 19,
   },
   // 39
   { ugNone, _T("Time local"), _T("Time loc"),
     new FormatterTime(_T("%04.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     40, 36,
   },
   // 40
   { ugNone, _T("Time UTC"), _T("Time UTC"),
     new FormatterTime(_T("%04.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     41, 39,
   },
   // 41
   { ugNone, _T("Task Time To Go"), _T("Fin ETE"),
     new FormatterAATTime(_T("%04.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     42, 40,
   },
   // 42
   { ugNone, _T("Next Time To Go"), _T("WP ETE"),
     new FormatterAATTime(_T("%04.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     45, 41,
   },
   // 43
   { ugHorizontalSpeed, _T("Speed Dolphin"), _T("V Opt"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     10, 35,
   },
   // 44
   { ugVerticalSpeed, _T("Netto Vario"), _T("Netto"),
     new InfoBoxFormatter(_T("%-2.1f")),
-    ActionInterface::on_key_None,
+    NULL,
     2, 24,
   },
   // 45
   { ugNone, _T("Task Arrival Time"), _T("Fin ETA"),
     new FormatterAATTime(_T("%04.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     46, 42,
   },
   // 46
   { ugNone, _T("Next Arrival Time"), _T("WP ETA"),
     new FormatterTime(_T("%04.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     14, 45,
   },
   // 47
   { ugNone, _T("Bearing Difference"), _T("Brng D"),
     new FormatterDiffBearing(_T("")),
-    ActionInterface::on_key_None,
+    NULL,
     54, 37,
   },
   // 48
   { ugNone, _T("Outside Air Temperature"), _T("OAT"),
     new InfoBoxFormatter(_T("%2.1f")_T(DEG)),
-    ActionInterface::on_key_None,
+    NULL,
     49, 26,
   },
   // 49
   { ugNone, _T("Relative Humidity"), _T("RelHum"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     50, 48,
   },
   // 50
@@ -440,19 +440,19 @@ static const SCREEN_INFO Data_Options[] = {
   // 51
   { ugDistance, _T("AA Distance Tgt"), _T("AA Dtgt"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     52, 31,
   },
   // 52
   { ugTaskSpeed, _T("AA Speed Tgt"), _T("AA Vtgt"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     11, 51,
   },
   // 53
   { ugNone, _T("L/D vario"), _T("L/D vario"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     4, 38,
   },
   // 54
@@ -470,68 +470,68 @@ static const SCREEN_INFO Data_Options[] = {
   // 56
   { ugNone, _T("Team Bearing"), _T("Tm Brng"),
     new InfoBoxFormatter(_T("%2.0f")_T(DEG)_T("T")),
-    ActionInterface::on_key_None,
+    NULL,
     57, 55,
   },
   // 57
   { ugNone, _T("Team Bearing Diff"), _T("Team Bd"),
     new FormatterDiffTeamBearing(_T("")),
-    ActionInterface::on_key_None,
+    NULL,
     58, 56,
   },
   // 58
   { ugNone, _T("Team Range"), _T("Team Dis"),
     new InfoBoxFormatter(_T("%2.1f")),
-    ActionInterface::on_key_None,
+    NULL,
     55, 57,
   },
   // 59
   { ugTaskSpeed, _T("Speed Task Instantaneous"), _T("V Tsk Ins"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     18, 16,
   },
   // 60
   { ugDistance, _T("Distance Home"), _T("Home Dis"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     18, 16,
   },
   // 61
   { ugTaskSpeed, _T("Speed Task Achieved"), _T("V Tsk Ach"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     18, 16,
   },
   // 62
   { ugNone, _T("AA Delta Time"), _T("AA dT"),
     new FormatterAATTime(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     28, 18,
   },
   // 63
   { ugVerticalSpeed, _T("Thermal All"), _T("TC All"),
     new InfoBoxFormatter(_T("%-2.1f")),
-    ActionInterface::on_key_None,
+    NULL,
     8, 2,
   },
   // 64
   { ugVerticalSpeed, _T("Distance Vario"), _T("D Vario"),
     new InfoBoxFormatter(_T("%-2.1f")),
-    ActionInterface::on_key_None,
+    NULL,
     8, 2,
   },
   // 65
 #ifndef GNAV
   { ugNone, _T("Battery Percent"), _T("Battery"),
     new InfoBoxFormatter(_T("%2.0f%%")),
-    ActionInterface::on_key_None,
+    NULL,
     49, 26,
   },
 #else
   { ugNone, _T("Battery Voltage"), _T("Battery"),
     new InfoBoxFormatter(_T("%2.1fV")),
-    ActionInterface::on_key_None,
+    NULL,
     49, 26,
   },
 #endif
@@ -539,7 +539,7 @@ static const SCREEN_INFO Data_Options[] = {
   // VENTA-TODO: fix those 38,5 numbers to point correctly menu items
   { ugNone, _T("Final GR"), _T("Fin GR"),
     new InfoBoxFormatter(_T("%1.1f")),
-    ActionInterface::on_key_None,
+    NULL,
     38, 5,
   },
 
@@ -564,31 +564,31 @@ static const SCREEN_INFO Data_Options[] = {
   // 70
   { ugAltitude, _T("QFE GPS"), _T("QFE GPS"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     1, 33,
   },
   // 71 TODO FIX those 19,4 values
   { ugNone, _T("L/D Average"), _T("L/D Avg"),
     new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_None,
+    NULL,
     19, 4,
   },
   // 72 //
   { ugNone, _T("Experimental1"), _T("Exp1"),
     new InfoBoxFormatter(_T("%-2.1f")),
-    ActionInterface::on_key_None,
+    NULL,
     8, 2,
   },
   // 73 //
   { ugDistance, _T("Online Contest Distance"), _T("OLC"),
     new InfoBoxFormatter(_T("%2.1f")),
-    ActionInterface::on_key_None,
+    NULL,
     8, 2,
   },
   // 74 //
   { ugNone, _T("Experimental2"), _T("Exp2"),
     new InfoBoxFormatter(_T("%-2.1f")),
-    ActionInterface::on_key_None,
+    NULL,
     8, 2,
   },
 };
@@ -1112,7 +1112,8 @@ InfoBoxManager::ProcessKey(InfoBoxKeyCodes keycode)
   InputEvents::HideMenu();
 
   i = getType(InfoFocus);
-  Data_Options[min(NUMSELECTSTRINGS - 1, i)].Process(keycode);
+  if (Data_Options[min(NUMSELECTSTRINGS - 1, i)].Process)
+    Data_Options[min(NUMSELECTSTRINGS - 1, i)].Process(keycode);
 
   InfoBoxesDirty = true;
 

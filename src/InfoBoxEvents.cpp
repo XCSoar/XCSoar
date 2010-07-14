@@ -278,8 +278,3 @@ ActionInterface::on_key_Waypoint(InfoBoxKeyCodes UpDown)
       dlgWayPointDetailsShowModal(main_window, *wp);
   }
 }
-
-void
-ActionInterface::on_key_None(InfoBoxKeyCodes UpDown)
-{
-}
