@@ -145,6 +145,7 @@ GlueMapWindow::on_mouse_down(int x, int y)
 
   drag_start.x = x;
   drag_start.y = y;
+  Screen2LonLat(x, y, drag_start_geopoint);
   drag_last = drag_start;
 
   if (XCSoarInterface::SettingsComputer().EnableGestures)
