@@ -581,15 +581,15 @@ InputEvents::eventArmAdvance(const TCHAR *misc)
 //    infobox section in the reference guide
 void InputEvents::eventDoInfoKey(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("up")) == 0)
-    InfoBoxManager::ProcessKey(1);
+    InfoBoxManager::ProcessKey(ibkUp);
   if (_tcscmp(misc, TEXT("down")) == 0)
-    InfoBoxManager::ProcessKey(-1);
+    InfoBoxManager::ProcessKey(ibkDown);
   if (_tcscmp(misc, TEXT("left")) == 0)
-    InfoBoxManager::ProcessKey(-2);
+    InfoBoxManager::ProcessKey(ibkLeft);
   if (_tcscmp(misc, TEXT("right")) == 0)
-    InfoBoxManager::ProcessKey(2);
+    InfoBoxManager::ProcessKey(ibkRight);
   if (_tcscmp(misc, TEXT("return")) == 0)
-    InfoBoxManager::ProcessKey(0);
+    InfoBoxManager::ProcessKey(ibkEnter);
 }
 
 // Mode
@@ -736,15 +736,15 @@ void
 InputEvents::eventMacCready(const TCHAR *misc)
 {
   if (_tcscmp(misc, TEXT("up")) == 0)
-    on_key_MacCready(1);
+    on_key_MacCready(ibkUp);
   else if (_tcscmp(misc, TEXT("down")) == 0)
-    on_key_MacCready(-1);
+    on_key_MacCready(ibkDown);
   else if (_tcscmp(misc, TEXT("auto toggle")) == 0)
-    on_key_MacCready(0);
+    on_key_MacCready(ibkEnter);
   else if (_tcscmp(misc, TEXT("auto on")) == 0)
-    on_key_MacCready(+2);
+    on_key_MacCready(ibkRight);
   else if (_tcscmp(misc, TEXT("auto off")) == 0)
-    on_key_MacCready(-2);
+    on_key_MacCready(ibkLeft);
   else if (_tcscmp(misc, TEXT("auto show")) == 0) {
     if (SettingsComputer().auto_mc) {
       Message::AddMessage(TEXT("Auto MacCready ON"));
@@ -774,15 +774,15 @@ void
 InputEvents::eventWind(const TCHAR *misc)
 {
   if (_tcscmp(misc, TEXT("up")) == 0)
-    on_key_WindSpeed(1);
+    on_key_WindSpeed(ibkUp);
   else if (_tcscmp(misc, TEXT("down")) == 0)
-    on_key_WindSpeed(-1);
+    on_key_WindSpeed(ibkDown);
   else if (_tcscmp(misc, TEXT("left")) == 0)
-    on_key_WindSpeed(-2);
+    on_key_WindSpeed(ibkLeft);
   else if (_tcscmp(misc, TEXT("right")) == 0)
-    on_key_WindSpeed(2);
+    on_key_WindSpeed(ibkRight);
   else if (_tcscmp(misc, TEXT("save")) == 0)
-    on_key_WindSpeed(0);
+    on_key_WindSpeed(ibkEnter);
 }
 
 int jmw_demo=0;
@@ -943,13 +943,13 @@ void
 InputEvents::eventAdjustWaypoint(const TCHAR *misc)
 {
   if (_tcscmp(misc, TEXT("next")) == 0)
-    on_key_Waypoint(1); // next
+    on_key_Waypoint(ibkUp); // next
   else if (_tcscmp(misc, TEXT("nextwrap")) == 0)
-    on_key_Waypoint(2); // next - with wrap
+    on_key_Waypoint(ibkRight); // next - with wrap
   else if (_tcscmp(misc, TEXT("previous")) == 0)
-    on_key_Waypoint(-1); // previous
+    on_key_Waypoint(ibkDown); // previous
   else if (_tcscmp(misc, TEXT("previouswrap")) == 0)
-    on_key_Waypoint(-2); // previous with wrap
+    on_key_Waypoint(ibkLeft); // previous with wrap
 }
 
 // AbortTask

@@ -116,7 +116,7 @@ typedef struct _SCREEN_INFO
   const TCHAR *Description;
   const TCHAR *Title;
   InfoBoxFormatter *Formatter;
-  void (*Process)(int UpDown);
+  void (*Process)(ActionInterface::InfoBoxKeyCodes UpDown);
   char next_screen;
   char prev_screen;
 } SCREEN_INFO;
@@ -1101,7 +1101,7 @@ InfoBoxManager::DisplayInfoBox()
 }
 
 void
-InfoBoxManager::ProcessKey(int keycode)
+InfoBoxManager::ProcessKey(InfoBoxKeyCodes keycode)
 {
   unsigned i;
 

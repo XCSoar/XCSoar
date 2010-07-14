@@ -62,17 +62,10 @@ Copyright_License {
 
 using std::max;
 
-// JMW added key codes,
-// so -1 down
-//     1 up
-//     0 enter
-//
-// TODO: make a proper class
-
 void
-ActionInterface::on_key_Airspeed(int UpDown)
+ActionInterface::on_key_Airspeed(InfoBoxKeyCodes UpDown)
 {
-  if (UpDown == 0) {
+  if (UpDown == ibkEnter) {
     SetSettingsComputer().EnableCalibration =
       !SettingsComputer().EnableCalibration;
 
@@ -83,14 +76,14 @@ ActionInterface::on_key_Airspeed(int UpDown)
 }
 
 void
-ActionInterface::on_key_TeamCode(int UpDown)
+ActionInterface::on_key_TeamCode(InfoBoxKeyCodes UpDown)
 {
   const FLARM_STATE &flarm = Basic().flarm;
   const FLARM_TRAFFIC *traffic = SettingsComputer().TeamFlarmIdTarget.defined()
     ? flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget)
     : NULL;
 
-  if (UpDown == 1)
+  if (UpDown == ibkUp)
     traffic = (traffic == NULL ?
                flarm.FirstTraffic() : flarm.NextTraffic(traffic));
   else
@@ -118,29 +111,29 @@ ActionInterface::on_key_TeamCode(int UpDown)
 }
 
 void
-ActionInterface::on_key_Altitude(int UpDown)
+ActionInterface::on_key_Altitude(InfoBoxKeyCodes UpDown)
 {
   if (!is_simulator())
     return;
 
   fixed fixed_step = (fixed)Units::ToSysUnit(100, Units::AltitudeUnit);
 
-  if (UpDown == 1)
+  if (UpDown == ibkUp)
     device_blackboard.SetAltitude(Basic().GPSAltitude + fixed_step);
-  else if (UpDown == -1)
+  else if (UpDown == ibkDown)
     device_blackboard.SetAltitude(max(fixed_zero,
                                       Basic().GPSAltitude - fixed_step));
-  else if (UpDown == -2)
-    on_key_Direction(-1);
-  else if (UpDown == 2)
-    on_key_Direction(1);
+  else if (UpDown == ibkLeft)
+    on_key_Direction(ibkDown);
+  else if (UpDown == ibkRight)
+    on_key_Direction(ibkUp);
 }
 
 void
-ActionInterface::on_key_Alternate1(int UpDown)
+ActionInterface::on_key_Alternate1(InfoBoxKeyCodes UpDown)
 {
 #ifdef OLD_TASK // alternates
-  if (UpDown == 0) {
+  if (UpDown == ibkEnter) {
     if (SettingsComputer().Alternate1 < 0)
       return;
 
@@ -151,10 +144,10 @@ ActionInterface::on_key_Alternate1(int UpDown)
 }
 
 void
-ActionInterface::on_key_Alternate2(int UpDown)
+ActionInterface::on_key_Alternate2(InfoBoxKeyCodes UpDown)
 {
 #ifdef OLD_TASK // alternates
-  if (UpDown == 0) {
+  if (UpDown == ibkEnter) {
     if (SettingsComputer().Alternate2 < 0)
       return;
 
@@ -165,10 +158,10 @@ ActionInterface::on_key_Alternate2(int UpDown)
 }
 
 void
-ActionInterface::on_key_BestAlternate(int UpDown)
+ActionInterface::on_key_BestAlternate(InfoBoxKeyCodes UpDown)
 {
 #ifdef OLD_TASK // alternates
-  if (UpDown == 0) {
+  if (UpDown == ibkEnter) {
     if (Calculated().BestAlternate < 0)
       return;
 
@@ -179,27 +172,27 @@ ActionInterface::on_key_BestAlternate(int UpDown)
 }
 
 void
-ActionInterface::on_key_Speed(int UpDown)
+ActionInterface::on_key_Speed(InfoBoxKeyCodes UpDown)
 {
   if (!is_simulator())
     return;
 
   fixed fixed_step = (fixed)Units::ToSysUnit(10, Units::SpeedUnit);
 
-  if (UpDown == 1)
+  if (UpDown == ibkUp)
     device_blackboard.SetSpeed(Basic().GroundSpeed + fixed_step);
-  else if (UpDown == -1)
+  else if (UpDown == ibkDown)
     device_blackboard.SetSpeed(max(fixed_zero,
                                    Basic().GroundSpeed - fixed_step));
-  else if (UpDown == -2)
-    on_key_Direction(-1);
-  else if (UpDown == 2)
-    on_key_Direction(1);
+  else if (UpDown == ibkLeft)
+    on_key_Direction(ibkDown);
+  else if (UpDown == ibkRight)
+    on_key_Direction(ibkUp);
 }
 
 
 void
-ActionInterface::on_key_Accelerometer(int UpDown)
+ActionInterface::on_key_Accelerometer(InfoBoxKeyCodes UpDown)
 {
   if (UpDown==0) {
     /* JMW broken
@@ -215,7 +208,7 @@ ActionInterface::on_key_Accelerometer(int UpDown)
 }
 
 void
-ActionInterface::on_key_WindDirection(int UpDown)
+ActionInterface::on_key_WindDirection(InfoBoxKeyCodes UpDown)
 {
 /* JMW ILLEGAL/incomplete
   if(UpDown==1)
@@ -233,7 +226,7 @@ ActionInterface::on_key_WindDirection(int UpDown)
 	{
 	  Calculated().WindBearing  += 360;
 	}
-    } else if (UpDown == 0) {
+    } else if (UpDown == ibkEnter) {
     glide_computer.SetWindEstimate(Calculated().WindSpeed,
 				   Calculated().WindBearing);
     Profile::SetWind();
@@ -242,7 +235,7 @@ ActionInterface::on_key_WindDirection(int UpDown)
 */
 }
 
-void	ActionInterface::on_key_WindSpeed(int UpDown)
+void	ActionInterface::on_key_WindSpeed(InfoBoxKeyCodes UpDown)
 {
 /* JMW ILLEGAL/incomplete
 	if(UpDown==1)
@@ -258,7 +251,7 @@ void	ActionInterface::on_key_WindSpeed(int UpDown)
 		on_key_WindDirection(-1);
 	} else if (UpDown== 2) {
 		on_key_WindDirection(1);
-	} else if (UpDown == 0) {
+	} else if (UpDown == ibkEnter) {
           glide_computer.SetWindEstimate(Calculated().WindSpeed,
 					 Calculated().WindBearing);
 	  Profile::SetWind();
@@ -268,40 +261,40 @@ void	ActionInterface::on_key_WindSpeed(int UpDown)
 }
 
 void
-ActionInterface::on_key_Direction(int UpDown)
+ActionInterface::on_key_Direction(InfoBoxKeyCodes UpDown)
 {
   static const Angle a5 = Angle::degrees(fixed(5));
 
   if (is_simulator()) {
-    if (UpDown == 1)
+    if (UpDown == ibkUp)
       device_blackboard.SetTrackBearing(Basic().TrackBearing + a5);
-    else if (UpDown == -1)
+    else if (UpDown == ibkDown)
       device_blackboard.SetTrackBearing(Basic().TrackBearing - a5);
   }
 }
 
 void
-ActionInterface::on_key_MacCready(int UpDown)
+ActionInterface::on_key_MacCready(InfoBoxKeyCodes UpDown)
 {
   GlidePolar polar = task_ui.get_glide_polar();
   double MACCREADY = polar.get_mc();
-  if (UpDown == 1) {
+  if (UpDown == ibkUp) {
     MACCREADY += (double)0.1;
     if (MACCREADY > 5.0) {
       MACCREADY = 5.0;
     }
     polar.set_mc(fixed(MACCREADY));
     task_ui.set_glide_polar(polar);
-  } else if (UpDown == -1) {
+  } else if (UpDown == ibkDown) {
     MACCREADY -= (double)0.1;
     if (MACCREADY < 0) {
       MACCREADY = 0;
     }
     polar.set_mc(fixed(MACCREADY));
     task_ui.set_glide_polar(polar);
-  } else if (UpDown == 0) {
+  } else if (UpDown == ibkEnter) {
     SetSettingsComputer().auto_mc = !SettingsComputer().auto_mc;
-  } else if (UpDown == -2) {
+  } else if (UpDown == ibkLeft) {
     SetSettingsComputer().auto_mc = false;
   } else if (UpDown == +2) {
     SetSettingsComputer().auto_mc = true;
@@ -311,11 +304,11 @@ ActionInterface::on_key_MacCready(int UpDown)
 }
 
 void
-ActionInterface::on_key_ForecastTemperature(int UpDown)
+ActionInterface::on_key_ForecastTemperature(InfoBoxKeyCodes UpDown)
 {
-  if (UpDown == 1)
+  if (UpDown == ibkUp)
     CuSonde::adjustForecastTemperature(0.5);
-  else if (UpDown == -1)
+  else if (UpDown == ibkDown)
     CuSonde::adjustForecastTemperature(-0.5);
 }
 
@@ -327,13 +320,13 @@ ActionInterface::on_key_ForecastTemperature(int UpDown)
 	-2	Previous waypoint with wrap around
 */
 void
-ActionInterface::on_key_Waypoint(int UpDown)
+ActionInterface::on_key_Waypoint(InfoBoxKeyCodes UpDown)
 {
   if (UpDown > 0) {
     task_ui.incrementActiveTaskPoint(1);
   } else if (UpDown < 0) {
     task_ui.incrementActiveTaskPoint(-1);
-  } else if (UpDown == 0) {
+  } else if (UpDown == ibkEnter) {
     const Waypoint *wp = task_ui.getActiveWaypoint();
     if (wp)
       dlgWayPointDetailsShowModal(main_window, *wp);
@@ -341,7 +334,7 @@ ActionInterface::on_key_Waypoint(int UpDown)
 }
 
 void
-ActionInterface::on_key_None(int UpDown)
+ActionInterface::on_key_None(InfoBoxKeyCodes UpDown)
 {
   (void)UpDown;
   return;

@@ -141,6 +141,14 @@ public:
   // settings
   static int  MenuTimeoutMax;
 
+  enum InfoBoxKeyCodes {
+    ibkLeft = -2,
+    ibkDown = -1,
+    ibkEnter = 0,
+    ibkUp = 1,
+    ibkRight = 2
+  };
+
 protected:
   static void DisplayModes();
   static void SendSettingsComputer();
@@ -148,21 +156,21 @@ protected:
 
 public:
   // ideally these should be protected
-  static void on_key_None(int UpDown);
-  static void on_key_WindSpeed(int UpDown);
-  static void on_key_WindDirection(int UpDown);
-  static void on_key_MacCready(int UpDown);
-  static void on_key_Accelerometer(int UpDown);
-  static void on_key_Waypoint(int UpDown);
-  static void on_key_Speed(int UpDown);
-  static void on_key_Direction(int UpDown);
-  static void on_key_Altitude(int UpDown);
-  static void on_key_Alternate1(int UpDown);
-  static void on_key_Alternate2(int UpDown);
-  static void on_key_BestAlternate(int UpDown);
-  static void on_key_Airspeed(int UpDown);
-  static void on_key_TeamCode(int UpDown);
-  static void on_key_ForecastTemperature(int UpDown);
+  static void on_key_None(InfoBoxKeyCodes UpDown);
+  static void on_key_WindSpeed(InfoBoxKeyCodes UpDown);
+  static void on_key_WindDirection(InfoBoxKeyCodes UpDown);
+  static void on_key_MacCready(InfoBoxKeyCodes UpDown);
+  static void on_key_Accelerometer(InfoBoxKeyCodes UpDown);
+  static void on_key_Waypoint(InfoBoxKeyCodes UpDown);
+  static void on_key_Speed(InfoBoxKeyCodes UpDown);
+  static void on_key_Direction(InfoBoxKeyCodes UpDown);
+  static void on_key_Altitude(InfoBoxKeyCodes UpDown);
+  static void on_key_Alternate1(InfoBoxKeyCodes UpDown);
+  static void on_key_Alternate2(InfoBoxKeyCodes UpDown);
+  static void on_key_BestAlternate(InfoBoxKeyCodes UpDown);
+  static void on_key_Airspeed(InfoBoxKeyCodes UpDown);
+  static void on_key_TeamCode(InfoBoxKeyCodes UpDown);
+  static void on_key_ForecastTemperature(InfoBoxKeyCodes UpDown);
   static void SignalShutdown(bool force);
   static bool LockSettingsInFlight;
   static unsigned UserLevel;

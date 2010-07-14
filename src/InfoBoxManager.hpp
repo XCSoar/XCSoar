@@ -76,7 +76,7 @@ public:
 
   static const TCHAR *GetTypeDescription(unsigned i);
 
-  static void ProcessKey(int keycode);
+  static void ProcessKey(InfoBoxKeyCodes keycode);
   static bool Click(InfoBox &ib);
 
   static bool Defocus();
