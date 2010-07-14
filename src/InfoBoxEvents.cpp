@@ -76,10 +76,9 @@ ActionInterface::on_key_Airspeed(int UpDown)
     SetSettingsComputer().EnableCalibration =
       !SettingsComputer().EnableCalibration;
 
-    if (SettingsComputer().EnableCalibration)
-      Message::AddMessage(TEXT("Calibrate ON"));
-    else
-      Message::AddMessage(TEXT("Calibrate OFF"));
+    Message::AddMessage(SettingsComputer().EnableCalibration ?
+                        _T("Calibrate ON") :
+                        _T("Calibrate OFF"));
   }
 }
 
