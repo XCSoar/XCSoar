@@ -90,29 +90,22 @@ ActionInterface::on_key_TeamCode(int UpDown)
     ? flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget)
     : NULL;
 
-  if (UpDown == 1) {
-    if (traffic != NULL)
-      traffic = flarm.NextTraffic(traffic);
-    if (traffic == NULL)
-      traffic = flarm.FirstTraffic();
-  } else {
-    if (traffic != NULL)
-      traffic = flarm.PreviousTraffic(traffic);
-    if (traffic == NULL)
-      traffic = flarm.LastTraffic();
-  }
+  if (UpDown == 1)
+    traffic = (traffic == NULL ?
+               flarm.FirstTraffic() : flarm.NextTraffic(traffic));
+  else
+    traffic = (traffic == NULL ?
+               flarm.LastTraffic() : flarm.PreviousTraffic(traffic));
 
   if (traffic != NULL) {
     SetSettingsComputer().TeamFlarmIdTarget = traffic->ID;
 
     if (traffic->HasName()) {
       // copy the 3 first chars from the name to TeamFlarmCNTarget
-      for (int z = 0; z < 3; z++) {
-        if (traffic->Name[z] != 0)
-          SetSettingsComputer().TeamFlarmCNTarget[z] = traffic->Name[z];
-        else
-          SetSettingsComputer().TeamFlarmCNTarget[z] = 32; // add space char
-      }
+      for (int z = 0; z < 3; z++)
+        SetSettingsComputer().TeamFlarmCNTarget[z] =
+            (traffic->Name[z] != 0 ? traffic->Name[z] : 32);
+
       SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
     } else {
       SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
@@ -121,7 +114,6 @@ ActionInterface::on_key_TeamCode(int UpDown)
     // no flarm traffic to select!
     SetSettingsComputer().TeamFlarmIdTarget.clear();
     SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
-    return;
   }
 }
 
