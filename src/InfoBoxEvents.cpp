@@ -194,70 +194,16 @@ ActionInterface::on_key_Speed(InfoBoxKeyCodes UpDown)
 void
 ActionInterface::on_key_Accelerometer(InfoBoxKeyCodes UpDown)
 {
-  if (UpDown==0) {
-    /* JMW broken
-    DWORD Temp;
-    AccelerometerZero*= Basic().Gload;
-    if (AccelerometerZero<1) {
-      AccelerometerZero = 100;
-    }
-    Temp = (int)AccelerometerZero;
-    Profile::Set(szProfileAccelerometerZero,Temp);
-    */
-  }
 }
 
 void
 ActionInterface::on_key_WindDirection(InfoBoxKeyCodes UpDown)
 {
-/* JMW ILLEGAL/incomplete
-  if(UpDown==1)
-    {
-      Calculated().WindBearing  += 5;
-      while (Calculated().WindBearing  >= 360)
-	{
-	  Calculated().WindBearing  -= 360;
-	}
-    }
-  else if (UpDown==-1)
-    {
-      Calculated().WindBearing  -= 5;
-      while (Calculated().WindBearing  < 0)
-	{
-	  Calculated().WindBearing  += 360;
-	}
-    } else if (UpDown == ibkEnter) {
-    glide_computer.SetWindEstimate(Calculated().WindSpeed,
-				   Calculated().WindBearing);
-    Profile::SetWind();
-  }
-  return;
-*/
 }
 
-void	ActionInterface::on_key_WindSpeed(InfoBoxKeyCodes UpDown)
+void
+ActionInterface::on_key_WindSpeed(InfoBoxKeyCodes UpDown)
 {
-/* JMW ILLEGAL/incomplete
-	if(UpDown==1)
-		Calculated().WindSpeed += Units::ToSysUnit(1, Units::SpeedUnit);
-	else if (UpDown== -1)
-	{
-		Calculated().WindSpeed -= Units::ToSysUnit(1, Units::SpeedUnit);
-		if(Calculated().WindSpeed < 0)
-			Calculated().WindSpeed = 0;
-	}
-	// JMW added faster way of changing wind direction
-	else if (UpDown== -2) {
-		on_key_WindDirection(-1);
-	} else if (UpDown== 2) {
-		on_key_WindDirection(1);
-	} else if (UpDown == ibkEnter) {
-          glide_computer.SetWindEstimate(Calculated().WindSpeed,
-					 Calculated().WindBearing);
-	  Profile::SetWind();
-	}
-*/
-	return;
 }
 
 void
@@ -336,6 +282,4 @@ ActionInterface::on_key_Waypoint(InfoBoxKeyCodes UpDown)
 void
 ActionInterface::on_key_None(InfoBoxKeyCodes UpDown)
 {
-  (void)UpDown;
-  return;
 }
