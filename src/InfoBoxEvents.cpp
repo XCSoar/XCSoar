@@ -72,7 +72,7 @@ using std::max;
 void
 ActionInterface::on_key_Airspeed(int UpDown)
 {
-  if (UpDown==0) {
+  if (UpDown == 0) {
     SetSettingsComputer().EnableCalibration =
       !SettingsComputer().EnableCalibration;
 
@@ -109,11 +109,10 @@ ActionInterface::on_key_TeamCode(int UpDown)
     if (traffic->HasName()) {
       // copy the 3 first chars from the name to TeamFlarmCNTarget
       for (int z = 0; z < 3; z++) {
-        if (traffic->Name[z] != 0) {
+        if (traffic->Name[z] != 0)
           SetSettingsComputer().TeamFlarmCNTarget[z] = traffic->Name[z];
-	} else {
-	  SetSettingsComputer().TeamFlarmCNTarget[z] = 32; // add space char
-	}
+        else
+          SetSettingsComputer().TeamFlarmCNTarget[z] = 32; // add space char
       }
       SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
     } else {
@@ -126,7 +125,6 @@ ActionInterface::on_key_TeamCode(int UpDown)
     return;
   }
 }
-
 
 void
 ActionInterface::on_key_Altitude(int UpDown)
@@ -147,16 +145,16 @@ ActionInterface::on_key_Altitude(int UpDown)
     on_key_Direction(1);
 }
 
-// VENTA3 Alternates processing updown
 void
 ActionInterface::on_key_Alternate1(int UpDown)
 {
 #ifdef OLD_TASK // alternates
-   if (UpDown==0) {
-     if ( SettingsComputer().Alternate1 <0 ) return;
-     task.setSelected(SettingsComputer().Alternate1);
+  if (UpDown == 0) {
+    if (SettingsComputer().Alternate1 < 0)
+      return;
 
-     dlgWayPointDetailsShowModal(main_window, way_point);
+    task.setSelected(SettingsComputer().Alternate1);
+    dlgWayPointDetailsShowModal(main_window, way_point);
   }
 #endif
 }
@@ -165,12 +163,12 @@ void
 ActionInterface::on_key_Alternate2(int UpDown)
 {
 #ifdef OLD_TASK // alternates
-   if (UpDown==0) {
-     if ( SettingsComputer().Alternate2 <0 )
-       return;
-     task.setSelected(SettingsComputer().Alternate2);
+  if (UpDown == 0) {
+    if (SettingsComputer().Alternate2 < 0)
+      return;
 
-     dlgWayPointDetailsShowModal(way_point);
+    task.setSelected(SettingsComputer().Alternate2);
+    dlgWayPointDetailsShowModal( way_point);
   }
 #endif
 }
@@ -179,12 +177,12 @@ void
 ActionInterface::on_key_BestAlternate(int UpDown)
 {
 #ifdef OLD_TASK // alternates
-   if (UpDown==0) {
-     if ( Calculated().BestAlternate <0 )
-       return;
-     task.setSelected(Calculated().BestAlternate);
+  if (UpDown == 0) {
+    if (Calculated().BestAlternate < 0)
+      return;
 
-     dlgWayPointDetailsShowModal(way_point);
+    task.setSelected(Calculated().BestAlternate);
+    dlgWayPointDetailsShowModal( way_point);
   }
 #endif
 }
@@ -284,67 +282,51 @@ ActionInterface::on_key_Direction(int UpDown)
   static const Angle a5 = Angle::degrees(fixed(5));
 
   if (is_simulator()) {
-    if(UpDown==1) {
+    if (UpDown == 1)
       device_blackboard.SetTrackBearing(Basic().TrackBearing + a5);
-    } else if (UpDown==-1) {
+    else if (UpDown == -1)
       device_blackboard.SetTrackBearing(Basic().TrackBearing - a5);
-    }
   }
-  return;
 }
-
 
 void
 ActionInterface::on_key_MacCready(int UpDown)
 {
   GlidePolar polar = task_ui.get_glide_polar();
   double MACCREADY = polar.get_mc();
-  if(UpDown==1) {
+  if (UpDown == 1) {
     MACCREADY += (double)0.1;
-    if (MACCREADY>5.0) { // JMW added sensible limit
-      MACCREADY=5.0;
+    if (MACCREADY > 5.0) {
+      MACCREADY = 5.0;
     }
     polar.set_mc(fixed(MACCREADY));
     task_ui.set_glide_polar(polar);
-  }
-  else if(UpDown==-1) {
+  } else if (UpDown == -1) {
     MACCREADY -= (double)0.1;
-    if(MACCREADY < 0) {
+    if (MACCREADY < 0) {
       MACCREADY = 0;
     }
     polar.set_mc(fixed(MACCREADY));
     task_ui.set_glide_polar(polar);
+  } else if (UpDown == 0) {
+    SetSettingsComputer().auto_mc = !SettingsComputer().auto_mc;
+  } else if (UpDown == -2) {
+    SetSettingsComputer().auto_mc = false;
+  } else if (UpDown == +2) {
+    SetSettingsComputer().auto_mc = true;
   }
- else if (UpDown==0)
-    {
-      SetSettingsComputer().auto_mc
-	= !SettingsComputer().auto_mc;
-    }
-  else if (UpDown==-2)
-    {
-      SetSettingsComputer().auto_mc = false;  // SDP on auto maccready
-
-    }
-  else if (UpDown==+2)
-    {
-      SetSettingsComputer().auto_mc = true;	// SDP off auto maccready
-    }
 
   device_blackboard.SetMC(fixed(MACCREADY));
 }
 
-
 void
 ActionInterface::on_key_ForecastTemperature(int UpDown)
 {
-  if (UpDown==1) {
+  if (UpDown == 1)
     CuSonde::adjustForecastTemperature(0.5);
-  }
-  if (UpDown== -1) {
+  else if (UpDown == -1)
     CuSonde::adjustForecastTemperature(-0.5);
-  }
 }
-
 
 /*
 	1	Next waypoint
@@ -356,18 +338,16 @@ ActionInterface::on_key_ForecastTemperature(int UpDown)
 void
 ActionInterface::on_key_Waypoint(int UpDown)
 {
-  if (UpDown>0) {
+  if (UpDown > 0) {
     task_ui.incrementActiveTaskPoint(1);
-  } else if (UpDown<0){
+  } else if (UpDown < 0) {
     task_ui.incrementActiveTaskPoint(-1);
-  } else if (UpDown==0) {
+  } else if (UpDown == 0) {
     const Waypoint *wp = task_ui.getActiveWaypoint();
-    if (wp) {
+    if (wp)
       dlgWayPointDetailsShowModal(main_window, *wp);
-    }
   }
 }
-
 
 void
 ActionInterface::on_key_None(int UpDown)
