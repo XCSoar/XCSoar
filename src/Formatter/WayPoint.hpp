@@ -45,8 +45,9 @@ Copyright_License {
  * Formatter for waypoints
  */
 class FormatterWaypoint: public InfoBoxFormatter {
- public:
-  FormatterWaypoint(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
+public:
+  FormatterWaypoint(const TCHAR *theformat) :
+    InfoBoxFormatter(theformat) {}
 
   virtual const TCHAR *Render(int *color);
 };
@@ -55,20 +56,21 @@ class FormatterWaypoint: public InfoBoxFormatter {
  * Formatter differential bearings
  */
 class FormatterDiffBearing: public InfoBoxFormatter {
- public:
-  FormatterDiffBearing(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
+public:
+  FormatterDiffBearing(const TCHAR *theformat) :
+    InfoBoxFormatter(theformat) {}
 
   virtual const TCHAR *Render(int *color);
 };
 
-
-// VENTA3 / alternates
 /** 
  * Formatter for alternate waypoints
  */
-class FormatterAlternate: public InfoBoxFormatter {
- public:
-  FormatterAlternate(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
+class FormatterAlternate: public InfoBoxFormatter
+{
+public:
+  FormatterAlternate(const TCHAR *theformat) :
+    InfoBoxFormatter(theformat) {}
 
   virtual const TCHAR *Render(int *color);
   virtual const TCHAR *RenderTitle(int *color);

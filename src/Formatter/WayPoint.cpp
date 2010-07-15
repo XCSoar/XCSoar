@@ -48,69 +48,62 @@ Copyright_License {
 
 #include "TaskClientUI.hpp"
 
-const TCHAR *FormatterWaypoint::Render(int *color) {
-
+const TCHAR *
+FormatterWaypoint::Render(int *color)
+{
   if (const Waypoint* way_point = task_ui.getActiveWaypoint()) {
-
-    if (Calculated().task_stats.current_leg.solution_remaining.is_final_glide()) {
+    if (Calculated().task_stats.current_leg.solution_remaining.is_final_glide())
       *color = 2; // blue text
-    } else {
-      *color = 0; // black text
-    }
-    if ( SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE)
-    {
-      _tcsncpy(Text, way_point->Name.c_str(),3);
-      Text[3] = '\0';
-    }
-    else if( SettingsMap().DisplayTextType == DISPLAYNUMBER)
-    {
-      _stprintf(Text,_T("%d"), way_point->id );
-    }
     else
-    {
+      *color = 0; // black text
+
+    if (SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE) {
+      _tcsncpy(Text, way_point->Name.c_str(), 3);
+      Text[3] = '\0';
+    } else if (SettingsMap().DisplayTextType == DISPLAYNUMBER) {
+      _stprintf(Text, _T("%d"), way_point->id);
+    } else {
       _tcsncpy(Text, way_point->Name.c_str(),
-               (sizeof(Text)/sizeof(TCHAR))-1);
-      Text[(sizeof(Text)/sizeof(TCHAR))-1] = '\0';
+               (sizeof(Text) / sizeof(TCHAR)) - 1);
+      Text[(sizeof(Text) / sizeof(TCHAR)) - 1] = '\0';
     }
-  }
-  else
-  {
+  } else {
     Valid = false;
     RenderInvalid(color);
   }
-  return(Text);
+
+  return Text;
 }
 
-// VENTA3 Alternate destinations
-const TCHAR *FormatterAlternate::RenderTitle(int *color) {
+const TCHAR *
+FormatterAlternate::RenderTitle(int *color)
+{
 #ifdef OLD_TASK
-  if(way_points.verify_index(ActiveAlternate)) {
+  if (way_points.verify_index(ActiveAlternate)) {
     const WAYPOINT &way_point = way_points.get(ActiveAlternate);
 
-    if ( SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE)
-    {
-      _tcsncpy(Text, way_point.Name,3);
+    if (SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE) {
+      _tcsncpy(Text, way_point.Name, 3);
       Text[3] = '\0';
-    } else if( SettingsMap().DisplayTextType == DISPLAYNUMBER) {
+    } else if (SettingsMap().DisplayTextType == DISPLAYNUMBER) {
       _stprintf(Text, _T("%d"), way_point.Number);
     } else {
-      _tcsncpy(Text, way_point.Name,
-               (sizeof(Text)/sizeof(TCHAR))-1);
-      Text[(sizeof(Text)/sizeof(TCHAR))-1] = '\0';
+      _tcsncpy(Text, way_point.Name, (sizeof(Text) / sizeof(TCHAR)) - 1);
+      Text[(sizeof(Text) / sizeof(TCHAR)) - 1] = '\0';
     }
   } else {
     Valid = false;
     RenderInvalid(color);
   }
 #endif
-  return(Text);
+  return Text;
 }
 
 const TCHAR *
 FormatterAlternate::Render(int *color)
 {
 #ifdef OLD_TASK
-  if(Valid && way_points.verify_index(ActiveAlternate)) {
+  if (Valid && way_points.verify_index(ActiveAlternate)) {
     const WPCALC &wpcalc = way_points.get_calc(ActiveAlternate);
 
     switch (wpcalc.VGR) {
@@ -141,82 +134,84 @@ FormatterAlternate::Render(int *color)
     RenderInvalid(color);
   }
 #endif
-  return(Text);
+  return Text;
 }
 
-
-void FormatterAlternate::AssignValue(int i) {
+void
+FormatterAlternate::AssignValue(int i)
+{
   switch (i) {
   case 67:
     if (!SettingsComputer().EnableAlternate1) {
       // first run, activate calculations
       SetSettingsComputer().EnableAlternate1 = true;
-      Value=INVALID_GR;
+      Value = INVALID_GR;
     } else {
 #ifdef OLD_TASK
-      if ( way_points.verify_index(SettingsComputer().Alternate1) )
+      if (way_points.verify_index(SettingsComputer().Alternate1))
         Value = way_points.get_calc(SettingsComputer().Alternate1).GR;
       else
-        Value=INVALID_GR;
+        Value = INVALID_GR;
 #endif
     }
     break;
-    /*
-      if ( way_points.verify_index(Alternate1) ) Value=WayPointCalc[Alternate1].GR;
-      else Value=INVALID_GR;
-      break;
-    */
+
   case 68:
-    if (!SettingsComputer().EnableAlternate2) { // first run, activate calculations
+    if (!SettingsComputer().EnableAlternate2) {
+      // first run, activate calculations
       SetSettingsComputer().EnableAlternate2 = true;
-      Value=INVALID_GR;
+      Value = INVALID_GR;
     } else {
 #ifdef OLD_TASK
-      if ( way_points.verify_index(SettingsComputer().Alternate2) )
+      if (way_points.verify_index(SettingsComputer().Alternate2))
         Value = way_points.get_calc(SettingsComputer().Alternate2).GR;
-      else Value=INVALID_GR;
+      else
+        Value = INVALID_GR;
 #endif
      }
     break;
+
   case 69:
     if (!SettingsComputer().EnableBestAlternate) {
       // first run, waiting for slowcalculation loop
-      SetSettingsComputer().EnableBestAlternate = true;	  // activate it
-      Value=INVALID_GR;
+      SetSettingsComputer().EnableBestAlternate = true;
+      Value = INVALID_GR;
     } else {
 #ifdef OLD_TASK
-      if ( way_points.verify_index(Calculated().BestAlternate))
+      if (way_points.verify_index(Calculated().BestAlternate))
         Value = way_points.get_calc(Calculated().BestAlternate).GR;
       else
-        Value=INVALID_GR;
+        Value = INVALID_GR;
 #endif
     }
     break;
+
   default:
-    Value=66.6; // something evil to notice..
+    Value = 66.6;
     break;
   }
 
-  Valid=false;
+  Valid = false;
   if (Value < INVALID_GR) {
     Valid = true;
-    if (Value >= 100 ) {
+    if (Value >= 100)
       _tcscpy(Format, _T("%1.0f"));
-    } else {
+    else
       _tcscpy(Format, _T("%1.1f"));
-    }
   }
 }
 
-
-const TCHAR *FormatterDiffBearing::Render(int *color) {
-
-  if (Calculated().task_stats.task_valid
-      && (Calculated().task_stats.current_leg.solution_remaining.Vector.Distance > fixed(10))) {
+const TCHAR *
+FormatterDiffBearing::Render(int *color)
+{
+  if (Calculated().task_stats.task_valid &&
+      Calculated().task_stats.current_leg.solution_remaining.Vector.Distance >
+      fixed(10)) {
     Valid = true;
 
-    Value = (Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing 
-             -  Basic().TrackBearing).as_delta().value_degrees();
+    Value =
+      (Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing -
+       Basic().TrackBearing).as_delta().value_degrees();
 
 #ifndef __MINGW32__
     if (Value > 1)
@@ -233,11 +228,12 @@ const TCHAR *FormatterDiffBearing::Render(int *color) {
     else
       _tcscpy(Text, _T("«»"));
 #endif
+
     *color = 0;
   } else {
     Valid = false;
     RenderInvalid(color);
   }
-  return(Text);
+  return Text;
 }
 
