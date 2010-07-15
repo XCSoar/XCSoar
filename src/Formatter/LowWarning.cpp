@@ -44,7 +44,9 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-void FormatterLowWarning::AssignValue(int i) {
+void
+FormatterLowWarning::AssignValue(int i)
+{
   InfoBoxFormatter::AssignValue(i);
   switch (i) {
   case 1:
@@ -52,18 +54,21 @@ void FormatterLowWarning::AssignValue(int i) {
                                 Units::AltitudeUnit);
     break;
   case 2:
-    minimum = Units::ToUserUnit(fixed_half * Calculated().common_stats.current_risk_mc,
+    minimum = Units::ToUserUnit(fixed_half *
+                                Calculated().common_stats.current_risk_mc,
                                 Units::VerticalSpeedUnit);
     break;
   case 21:
-    minimum = Units::ToUserUnit(fixed(0.667) * Calculated().common_stats.current_risk_mc,
+    minimum = Units::ToUserUnit(fixed(0.667) *
+                                Calculated().common_stats.current_risk_mc,
                                 Units::VerticalSpeedUnit);
     break;
   }
 }
 
-
-const TCHAR *FormatterLowWarning::Render(int *color) {
+const TCHAR *
+FormatterLowWarning::Render(int *color)
+{
   if (Valid) {
     _stprintf(Text, Format, Value);
     if (Value < minimum)
@@ -76,4 +81,3 @@ const TCHAR *FormatterLowWarning::Render(int *color) {
   }
   return Text;
 }
-

@@ -45,10 +45,8 @@ class FormatterLowWarning: public InfoBoxFormatter {
  public:
   FormatterLowWarning(const TCHAR *theformat, double the_minimum)
     :InfoBoxFormatter(theformat) {
-
     minimum = the_minimum;
-
-  };
+  }
 
   virtual const TCHAR *Render(int *color);
   double minimum;
