@@ -42,40 +42,37 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Components.hpp"
 
-const TCHAR *FormatterTeamCode::Render(int *color) {
-
+const TCHAR *
+FormatterTeamCode::Render(int *color)
+{
 #ifdef OLD_TASK
-  if(way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint))
-    {
-      *color = 0; // black text
-       _tcsncpy(Text,Calculated().OwnTeamCode,5);
-       Text[5] = '\0';
-    }
-  else
-    {
-      RenderInvalid(color);
-    }
+  if (way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint)) {
+    *color = 0; // black text
+    _tcsncpy(Text, Calculated().OwnTeamCode, 5);
+    Text[5] = '\0';
+  } else {
+    RenderInvalid(color);
+  }
 #else
-      RenderInvalid(color);
+  RenderInvalid(color);
 #endif
-  return(Text);
+  return Text;
 }
 
-
-const TCHAR *FormatterDiffTeamBearing::Render(int *color) {
-
+const TCHAR *
+FormatterDiffTeamBearing::Render(int *color)
+{
 #ifdef OLD_TASK
-  if(way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint)
-     && SettingsComputer().TeammateCodeValid) {
+  if (way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint)
+      && SettingsComputer().TeammateCodeValid) {
     Valid = true;
 
-    Value = Calculated().TeammateBearing -  Basic().TrackBearing;
+    Value = Calculated().TeammateBearing - Basic().TrackBearing;
 
     if (Value < -180.0)
       Value += 360.0;
-    else
-      if (Value > 180.0)
-        Value -= 360.0;
+    else if (Value > 180.0)
+      Value -= 360.0;
 
 #ifndef __MINGW32__
     if (Value > 1)
@@ -93,7 +90,6 @@ const TCHAR *FormatterDiffTeamBearing::Render(int *color) {
       _tcscpy(Text, TEXT("Â«Â»"));
 #endif
     *color = 0;
-
   } else {
     Valid = false;
     RenderInvalid(color);
@@ -101,7 +97,5 @@ const TCHAR *FormatterDiffTeamBearing::Render(int *color) {
 #else
   RenderInvalid(color);
 #endif
-  return(Text);
+  return Text;
 }
-
-

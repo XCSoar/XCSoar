@@ -42,16 +42,18 @@ Copyright_License {
 #include "Formatter/Base.hpp"
 
 class FormatterTeamCode: public InfoBoxFormatter {
- public:
-  FormatterTeamCode(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
+public:
+  FormatterTeamCode(const TCHAR *theformat) :
+    InfoBoxFormatter(theformat) {}
 
   virtual const TCHAR *Render(int *color);
 };
 
 
 class FormatterDiffTeamBearing: public InfoBoxFormatter {
- public:
-  FormatterDiffTeamBearing(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
+public:
+  FormatterDiffTeamBearing(const TCHAR *theformat) :
+    InfoBoxFormatter(theformat) {}
 
   virtual const TCHAR *Render(int *color);
 };
