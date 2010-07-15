@@ -1,11 +1,46 @@
-#Sat Jun 12 11:20:18 CEST 2010
+#Thu Jul 15 21:19:48 CEST 2010
 eclipse.preferences.version=1
-environment/project/0.697445322=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<environment append\="true" appendContributed\="true">\r\n<variable delimiter\=";" name\="PATH" operation\="append" value\="C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin"/>\r\n</environment>\r\n
-environment/project/0.697445322.381966687=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<environment append\="true" appendContributed\="true">\r\n<variable delimiter\=";" name\="PATH" operation\="append" value\="C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin"/>\r\n</environment>\r\n
-environment/project/0.697445322.381966687.128822708=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<environment append\="true" appendContributed\="true">\r\n<variable delimiter\=";" name\="PATH" operation\="append" value\="C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin"/>\r\n</environment>\r\n
-environment/project/0.697445322.381966687.1829290776=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<environment append\="true" appendContributed\="true">\r\n<variable delimiter\=";" name\="PATH" operation\="append" value\="C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin"/>\r\n</environment>\r\n
-environment/project/0.697445322.381966687.1829290776.1755796292=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<environment append\="true" appendContributed\="true">\r\n<variable delimiter\=";" name\="PATH" operation\="append" value\="C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin"/>\r\n</environment>\r\n
-environment/project/0.697445322.381966687.1829290776.1755796292.339025141=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<environment append\="true" appendContributed\="true">\r\n<variable delimiter\=";" name\="PATH" operation\="append" value\="C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin"/>\r\n</environment>\r\n
+environment/project/0.697445322=
+environment/project/0.697445322.381966687=
+environment/project/0.697445322.381966687.128822708=
+environment/project/0.697445322.381966687.128822708/PATH/delimiter=;
+environment/project/0.697445322.381966687.128822708/PATH/operation=append
+environment/project/0.697445322.381966687.128822708/PATH/value=C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin
+environment/project/0.697445322.381966687.128822708/append=true
+environment/project/0.697445322.381966687.128822708/appendContributed=true
+environment/project/0.697445322.381966687.1829290776=
+environment/project/0.697445322.381966687.1829290776.1755796292=
+environment/project/0.697445322.381966687.1829290776.1755796292.339025141=
+environment/project/0.697445322.381966687.1829290776.1755796292.339025141/PATH/delimiter=;
+environment/project/0.697445322.381966687.1829290776.1755796292.339025141/PATH/operation=append
+environment/project/0.697445322.381966687.1829290776.1755796292.339025141/PATH/value=C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin
+environment/project/0.697445322.381966687.1829290776.1755796292.339025141/append=true
+environment/project/0.697445322.381966687.1829290776.1755796292.339025141/appendContributed=true
+environment/project/0.697445322.381966687.1829290776.1755796292.9913320/PATH/delimiter=;
+environment/project/0.697445322.381966687.1829290776.1755796292.9913320/PATH/operation=append
+environment/project/0.697445322.381966687.1829290776.1755796292.9913320/PATH/value=C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin
+environment/project/0.697445322.381966687.1829290776.1755796292.9913320/append=true
+environment/project/0.697445322.381966687.1829290776.1755796292.9913320/appendContributed=true
+environment/project/0.697445322.381966687.1829290776.1755796292/PATH/delimiter=;
+environment/project/0.697445322.381966687.1829290776.1755796292/PATH/operation=append
+environment/project/0.697445322.381966687.1829290776.1755796292/PATH/value=C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin
+environment/project/0.697445322.381966687.1829290776.1755796292/append=true
+environment/project/0.697445322.381966687.1829290776.1755796292/appendContributed=true
+environment/project/0.697445322.381966687.1829290776/PATH/delimiter=;
+environment/project/0.697445322.381966687.1829290776/PATH/operation=append
+environment/project/0.697445322.381966687.1829290776/PATH/value=C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin
+environment/project/0.697445322.381966687.1829290776/append=true
+environment/project/0.697445322.381966687.1829290776/appendContributed=true
+environment/project/0.697445322.381966687/PATH/delimiter=;
+environment/project/0.697445322.381966687/PATH/operation=append
+environment/project/0.697445322.381966687/PATH/value=C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin
+environment/project/0.697445322.381966687/append=true
+environment/project/0.697445322.381966687/appendContributed=true
+environment/project/0.697445322/PATH/delimiter=;
+environment/project/0.697445322/PATH/operation=append
+environment/project/0.697445322/PATH/value=C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin
+environment/project/0.697445322/append=true
+environment/project/0.697445322/appendContributed=true
 org.eclipse.cdt.core.formatter.alignment_for_arguments_in_method_invocation=16
 org.eclipse.cdt.core.formatter.alignment_for_base_clause_in_type_declaration=80
 org.eclipse.cdt.core.formatter.alignment_for_compact_if=0
