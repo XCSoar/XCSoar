@@ -45,17 +45,14 @@ Copyright_License {
 const TCHAR *
 FormatterTeamCode::Render(int *color)
 {
-#ifdef OLD_TASK
-  if (way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint)) {
+  if (XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint) {
     *color = 0; // black text
     _tcsncpy(Text, Calculated().OwnTeamCode, 5);
     Text[5] = '\0';
   } else {
     RenderInvalid(color);
   }
-#else
-  RenderInvalid(color);
-#endif
+
   return Text;
 }
 
