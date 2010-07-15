@@ -480,7 +480,7 @@ static const SCREEN_INFO Data_Options[] = {
     58, 56,
   },
   // 58
-  { ugNone, _T("Team Range"), _T("Team Dis"),
+  { ugDistance, _T("Team Range"), _T("Team Dis"),
     new InfoBoxFormatter(_T("%2.1f")),
     NULL,
     55, 57,
