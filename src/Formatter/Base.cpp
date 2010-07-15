@@ -351,6 +351,7 @@ InfoBoxFormatter::AssignValue(int i)
   case 56: // team bearing
     Value = Calculated().TeammateBearing.value_degrees();
     Valid = true;
+    break;
 
   case 58: // team range
     if (SettingsComputer().TeammateCodeValid) {
