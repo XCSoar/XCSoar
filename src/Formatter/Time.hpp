@@ -42,8 +42,9 @@ Copyright_License {
 #include "Formatter/Base.hpp"
 
 class FormatterTime: public InfoBoxFormatter {
- public:
-  FormatterTime(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
+public:
+  FormatterTime(const TCHAR *theformat) :
+    InfoBoxFormatter(theformat) {}
 
   virtual const TCHAR *Render(int *color);
   virtual void AssignValue(int i);
@@ -53,10 +54,10 @@ class FormatterTime: public InfoBoxFormatter {
   void SecsToDisplayTime(int i);
 };
 
-
 class FormatterAATTime: public FormatterTime {
- public:
-  FormatterAATTime(const TCHAR *theformat):FormatterTime(theformat) {};
+public:
+  FormatterAATTime(const TCHAR *theformat) :
+    FormatterTime(theformat) {}
 
   virtual const TCHAR *Render(int *color);
   virtual void AssignValue(int i);

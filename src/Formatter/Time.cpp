@@ -43,71 +43,82 @@ Copyright_License {
 
 #include <stdio.h>
 
-void FormatterTime::SecsToDisplayTime(int d) {
-  bool negative = (d<0);
-  int dd = abs(d) % (3600*24);
+void
+FormatterTime::SecsToDisplayTime(int d)
+{
+  bool negative = (d < 0);
+  int dd = abs(d) % (3600 * 24);
 
-  hours = (dd/3600);
-  mins = (dd/60-hours*60);
-  seconds = (dd-mins*60-hours*3600);
+  hours = (dd / 3600);
+  mins = (dd / 60 - hours * 60);
+  seconds = (dd - mins * 60 - hours * 3600);
   hours = hours % 24;
   if (negative) {
-    if (hours>0) {
+    if (hours > 0)
       hours = -hours;
-    } else if (mins>0) {
+    else if (mins > 0)
       mins = -mins;
-    } else {
+    else
       seconds = -seconds;
-    }
   }
   Valid = true;
 }
 
-
-void FormatterTime::AssignValue(int i) {
+void
+FormatterTime::AssignValue(int i)
+{
   switch (i) {
   case 9:
     SecsToDisplayTime((int)Calculated().LastThermalTime);
     break;
+
   case 36:
     SecsToDisplayTime((int)Basic().flight.FlightTime);
     break;
+
   case 39:
     SecsToDisplayTime(DetectCurrentTime(&Basic()));
     break;
+
   case 40:
     SecsToDisplayTime((int)Basic().Time);
     break;
+
   case 46:
-    SecsToDisplayTime((int)(Calculated().task_stats.current_leg.solution_remaining.TimeElapsed
-                            + fixed(DetectCurrentTime(&Basic()))));
+    SecsToDisplayTime(
+      (int)(Calculated().task_stats.current_leg.solution_remaining.TimeElapsed
+            + fixed(DetectCurrentTime(&Basic()))));
     Valid = Calculated().task_stats.current_leg.achievable();
     break;
+
   default:
     break;
   }
 }
 
-
-void FormatterAATTime::AssignValue(int i) {
+void
+FormatterAATTime::AssignValue(int i)
+{
   status = 0;
 #ifdef OLD_TASK
-  double dd=0;
-  if (task.getSettings().AATEnabled && task.ValidTaskPoint(task.getActiveIndex())) {
+  double dd = 0;
+  if (task.getSettings().AATEnabled
+      && task.ValidTaskPoint(task.getActiveIndex())) {
     dd = Calculated().TaskTimeToGo;
-    if ((Calculated().TaskStartTime>0.0) && (Basic().Flying)
-        &&(task.getActiveIndex()>0)) {
-      dd += Basic().Time-Calculated().TaskStartTime;
-    }
-    dd= max(0,min(24.0*3600.0,dd))-task.getSettings().AATTaskLength*60;
-    if (dd<0) {
+
+    if (Calculated().TaskStartTime > 0.0
+        && Basic().Flying && task.getActiveIndex() > 0)
+      dd += Basic().Time - Calculated().TaskStartTime;
+
+    dd = max(0, min(24.0 * 3600.0, dd)) - task.getSettings().AATTaskLength * 60;
+    if (dd < 0) {
       status = 1; // red
     } else {
-      if (Calculated().TaskTimeToGoTurningNow > (task.getSettings().AATTaskLength+5)*60) {
+      if (Calculated().TaskTimeToGoTurningNow >
+          (task.getSettings().AATTaskLength + 5) * 60)
         status = 2; // blue
-      } else {
-        status = 0;  // black
-      }
+      else
+        status = 0; // black
     }
   } else {
     dd = 0;
@@ -118,132 +129,111 @@ void FormatterAATTime::AssignValue(int i) {
   switch (i) {
   case 27:
     SecsToDisplayTime((int)Calculated().common_stats.aat_time_remaining);
-    Valid = Calculated().task_stats.task_valid 
-      && positive(Calculated().common_stats.aat_time_remaining)
-      && Calculated().task_stats.total.achievable();
+    Valid = Calculated().task_stats.task_valid &&
+            positive(Calculated().common_stats.aat_time_remaining) &&
+            Calculated().task_stats.total.achievable();
     break;
+
   case 41:
     SecsToDisplayTime((int)Calculated().task_stats.total.TimeRemaining);
-    Valid = Calculated().task_stats.task_valid && Calculated().task_stats.total.achievable();
+    Valid = Calculated().task_stats.task_valid &&
+            Calculated().task_stats.total.achievable();
     break;
+
   case 42:
     SecsToDisplayTime((int)Calculated().task_stats.current_leg.TimeRemaining);
-    Valid = Calculated().task_stats.task_valid && Calculated().task_stats.current_leg.achievable();
+    Valid = Calculated().task_stats.task_valid &&
+            Calculated().task_stats.current_leg.achievable();
     break;
+
   case 45:
     SecsToDisplayTime((int)(Calculated().task_stats.total.TimeRemaining
                             + fixed(DetectCurrentTime(&Basic()))));
-    Valid = Calculated().task_stats.task_valid && Calculated().task_stats.total.achievable();
+    Valid = Calculated().task_stats.task_valid &&
+            Calculated().task_stats.total.achievable();
     break;
+
   case 62:
 #ifdef OLD_TASK
-    if (task.getSettings().AATEnabled && task.ValidTaskPoint(task.getActiveIndex())) {
+    if (task.getSettings().AATEnabled &&
+        task.ValidTaskPoint(task.getActiveIndex())) {
       SecsToDisplayTime((int)dd);
-      Valid = (dd< 0.9*ERROR_TIME);
+      Valid = (dd < 0.9*ERROR_TIME);
     } else {
       SecsToDisplayTime(0);
       Valid = false;
     }
 #endif
     break;
-  default:
-    break;
   }
 }
 
-const TCHAR *FormatterTime::Render(int *color) {
+const TCHAR *
+FormatterTime::Render(int *color)
+{
   if (!Valid) {
     RenderInvalid(color);
     _stprintf(Text,_T("--:--"));
   } else {
-    if ((hours<0) || (mins<0) || (seconds<0)) {
+    if ((hours < 0) || (mins < 0) || (seconds < 0)) {
       // Time is negative
       *color = 1; // red!
-      if (hours<0) { // hh:mm, ss
-        _stprintf(Text,
-                  _T("%02d:%02d"),
-                  hours, mins );
-        _stprintf(CommentText,
-                  _T("%02d"),
-                  seconds);
-      } else if (mins<0) { // mm:ss
-        _stprintf(Text,
-                  _T("%02d:%02d"),
-                  mins, seconds );
+      if (hours < 0) { // hh:mm, ss
+        _stprintf(Text, _T("%02d:%02d"), hours, mins);
+        _stprintf(CommentText, _T("%02d"), seconds);
+      } else if (mins < 0) { // mm:ss
+        _stprintf(Text, _T("%02d:%02d"), mins, seconds);
         _tcscpy(CommentText, _T(""));
       } else {
-        _stprintf(Text,
-                  _T("-00:%02d"),
-                  abs(seconds));
+        _stprintf(Text, _T("-00:%02d"), abs(seconds));
         _tcscpy(CommentText, _T(""));
       }
     } else {
       // Time is positive
       *color = 0; // black
-      if (hours>0) { // hh:mm, ss
-        _stprintf(Text,
-                  _T("%02d:%02d"),
-                  hours, mins );
-        _stprintf(CommentText,
-                  _T("%02d"),
-                  seconds);
+      if (hours > 0) { // hh:mm, ss
+        _stprintf(Text, _T("%02d:%02d"), hours, mins);
+        _stprintf(CommentText, _T("%02d"), seconds);
       } else { // mm:ss
-        _stprintf(Text,
-                  _T("%02d:%02d"),
-                  mins, seconds );
+        _stprintf(Text, _T("%02d:%02d"), mins, seconds);
         _tcscpy(CommentText, _T(""));
       }
     }
   }
-  return(Text);
+  return Text;
 }
 
-
-const TCHAR *FormatterAATTime::Render(int *color) {
+const TCHAR *
+FormatterAATTime::Render(int *color)
+{
   if (!Valid) {
     RenderInvalid(color);
-    _stprintf(Text,_T("--:--"));
+    _stprintf(Text, _T("--:--"));
   } else {
-
     *color = status;
 
-    if ((hours<0) || (mins<0) || (seconds<0)) {
+    if ((hours < 0) || (mins < 0) || (seconds < 0)) {
       // Time is negative
-      if (hours<0) { // hh:mm, ss
-        _stprintf(Text,
-                  _T("%02d:%02d"),
-                  hours, mins );
-        _stprintf(CommentText,
-                  _T("%02d"),
-                  seconds);
-      } else if (mins<0) { // mm:ss
-        _stprintf(Text,
-                  _T("%02d:%02d"),
-                  mins, seconds );
+      if (hours < 0) { // hh:mm, ss
+        _stprintf(Text, _T("%02d:%02d"), hours, mins);
+        _stprintf(CommentText, _T("%02d"), seconds);
+      } else if (mins < 0) { // mm:ss
+        _stprintf(Text, _T("%02d:%02d"), mins, seconds);
         _tcscpy(CommentText, _T(""));
       } else {
-        _stprintf(Text,
-                  _T("-00:%02d"),
-                  abs(seconds));
+        _stprintf(Text, _T("-00:%02d"), abs(seconds));
         _tcscpy(CommentText, _T(""));
       }
     } else {
       // Time is positive
-      if (hours>0) { // hh:mm, ss
-        _stprintf(Text,
-                  _T("%02d:%02d"),
-                  hours, mins );
-        _stprintf(CommentText,
-                  _T("%02d"),
-                  seconds);
+      if (hours > 0) { // hh:mm, ss
+        _stprintf(Text, _T("%02d:%02d"), hours, mins);
+        _stprintf(CommentText, _T("%02d"), seconds);
       } else { // mm:ss
-        _stprintf(Text,
-                  _T("%02d:%02d"),
-                  mins, seconds );
+        _stprintf(Text, _T("%02d:%02d"), mins, seconds);
         _tcscpy(CommentText, _T(""));
       }
     }
   }
-  return(Text);
+  return Text;
 }
-
