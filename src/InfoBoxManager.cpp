@@ -82,6 +82,9 @@ static bool InfoBoxesDirty = false;
 static bool InfoBoxesHidden = false;
 
 InfoBox *InfoBoxes[MAXINFOWINDOWS];
+const unsigned NUMSELECTSTRINGS = 75;
+
+static InfoBoxLook info_box_look;
 
 static const int InfoTypeDefault[MAXINFOWINDOWS] = {
   921102,
@@ -590,10 +593,6 @@ static const SCREEN_INFO Data_Options[] = {
     8, 2,
   },
 };
-
-const unsigned NUMSELECTSTRINGS = 75;
-
-static InfoBoxLook info_box_look;
 
 // TODO locking
 void
