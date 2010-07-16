@@ -1070,13 +1070,6 @@ InfoBoxManager::DisplayInfoBox()
   static int DisplayType[MAXINFOWINDOWS];
   static bool first = true;
   static int DisplayTypeLast[MAXINFOWINDOWS];
-  static bool FlipBoxValue = false;
-
-  // Dynamic box values
-  if (LastFlipBoxTime > DYNABOXTIME) {
-    FlipBoxValue = (FlipBoxValue == false);
-    LastFlipBoxTime = 0;
-  }
 
   // JMW note: this is updated every GPS time step
 
