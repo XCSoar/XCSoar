@@ -97,7 +97,7 @@ public:
   static bool IsEmpty(unsigned mode);
   static bool IsEmpty();
 
-  static bool IsFocus();
+  static bool HasFocus();
 };
 
 #endif

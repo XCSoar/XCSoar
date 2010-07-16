@@ -1096,7 +1096,7 @@ InfoBoxManager::DestroyInfoBoxFormatters()
 }
 
 bool
-InfoBoxManager::IsFocus()
+InfoBoxManager::HasFocus()
 {
   return GetFocused() >= 0;
 }
