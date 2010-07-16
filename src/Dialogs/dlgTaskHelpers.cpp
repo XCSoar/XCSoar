@@ -172,7 +172,7 @@ public:
     m_index(0),
     m_active_index(index),
     text(buff) {
-    text[0] = NULL;
+    text[0] = _T('\0');
   }
 
   void Visit(const UnorderedTaskPoint& tp) {}
