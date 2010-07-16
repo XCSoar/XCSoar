@@ -80,7 +80,6 @@ BufferWindow InfoBoxManager::full_window;
 
 static bool InfoBoxesDirty = false;
 static bool InfoBoxesHidden = false;
-unsigned numInfoWindows = 8;
 
 InfoBox *InfoBoxes[MAXINFOWINDOWS];
 
@@ -602,7 +601,7 @@ InfoBoxManager::Hide()
 {
   InfoBoxesHidden = true;
 
-  for (unsigned i = 0; i < numInfoWindows; i++)
+  for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++)
     InfoBoxes[i]->hide();
 
   full_window.hide();
@@ -613,14 +612,14 @@ InfoBoxManager::Show()
 {
   InfoBoxesHidden = false;
 
-  for (unsigned i = 0; i < numInfoWindows; i++)
+  for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++)
     InfoBoxes[i]->show();
 }
 
 int
 InfoBoxManager::GetFocused()
 {
-  for (unsigned i = 0; i < numInfoWindows; i++)
+  for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++)
     if (InfoBoxes[i]->has_focus())
       return i;
 
@@ -633,11 +632,11 @@ InfoBoxManager::Event_Select(int i)
   int InfoFocus = GetFocused();
 
   if (InfoFocus < 0) {
-    InfoFocus = (i >= 0 ? 0 : numInfoWindows - 1);
+    InfoFocus = (i >= 0 ? 0 : InfoBoxLayout::numInfoWindows - 1);
   } else {
     InfoFocus += i;
 
-    if (InfoFocus < 0 || (unsigned)InfoFocus >= numInfoWindows)
+    if (InfoFocus < 0 || (unsigned)InfoFocus >= InfoBoxLayout::numInfoWindows)
       InfoFocus = -1;
   }
 
@@ -1045,7 +1044,7 @@ InfoBoxManager::DisplayInfoBox()
 
   // JMW note: this is updated every GPS time step
 
-  for (unsigned i = 0; i < numInfoWindows; i++) {
+  for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++) {
     // All calculations are made in a separate thread. Slow calculations
     // should apply to the function DoCalculationsSlow()
     // Do not put calculations here!
@@ -1151,7 +1150,7 @@ InfoBoxManager::Paint()
   if (!InfoBoxLayout::fullscreen) {
     full_window.hide();
 
-    for (unsigned i = 0; i < numInfoWindows; i++)
+    for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++)
       InfoBoxes[i]->invalidate();
   } else {
     Canvas &canvas = full_window.get_canvas();
@@ -1160,7 +1159,7 @@ InfoBoxManager::Paint()
     canvas.white_pen();
     canvas.clear();
 
-    for (unsigned i = 0; i < numInfoWindows; i++) {
+    for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++) {
       // JMW TODO: make these calculated once only.
       int x, y;
       int rx, ry;
@@ -1248,7 +1247,7 @@ InfoBoxManager::Create(RECT rc)
                   rc.right - rc.left, rc.bottom - rc.top);
 
   // create infobox windows
-  for (unsigned i = 0; i < numInfoWindows; i++) {
+  for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++) {
     int xoff, yoff, sizex, sizey;
     InfoBoxLayout::GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
 
@@ -1280,7 +1279,7 @@ InfoBoxManager::Create(RECT rc)
 void
 InfoBoxManager::Destroy()
 {
-  for (unsigned i = 0; i < numInfoWindows; i++)
+  for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++)
     delete (InfoBoxes[i]);
 
   full_window.reset();

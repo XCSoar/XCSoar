@@ -63,6 +63,8 @@ int InfoBoxLayout::ControlWidth;
 int InfoBoxLayout::ControlHeight;
 int InfoBoxLayout::TitleHeight;
 bool InfoBoxLayout::fullscreen = false;
+unsigned InfoBoxLayout::numInfoWindows = 8;
+
 
 void
 InfoBoxLayout::Init(RECT rc)

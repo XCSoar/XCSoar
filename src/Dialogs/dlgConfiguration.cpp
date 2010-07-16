@@ -695,7 +695,7 @@ OnCopy(gcc_unused WndButton &button)
     return;
   }
 
-  for (unsigned item = 0; item < numInfoWindows; item++) {
+  for (unsigned item = 0; item < InfoBoxLayout::numInfoWindows; item++) {
     WndProperty *wp = FindInfoBoxField(mode, item);
     if (wp) {
       cpyInfoBox[item] = wp->GetDataField()->GetAsInteger();
@@ -716,7 +716,7 @@ OnPaste(gcc_unused WndButton &button)
                  MB_YESNO|MB_ICONQUESTION) != IDYES)
     return;
 
-  for (unsigned item = 0; item < numInfoWindows; item++) {
+  for (unsigned item = 0; item < InfoBoxLayout::numInfoWindows; item++) {
     WndProperty *wp = FindInfoBoxField(mode, item);
     if (wp && (cpyInfoBox[item] >=0 ) &&
         ((unsigned)cpyInfoBox[item] < NUMSELECTSTRINGS)) {
@@ -1962,7 +1962,7 @@ static void setVariables(void) {
                    XCSoarInterface::SettingsMap().SnailWidthScale);
 
   for (unsigned i = 0; i < 4; i++) {
-    for (unsigned j=0; j<numInfoWindows; j++) {
+    for (unsigned j = 0; j < InfoBoxLayout::numInfoWindows; j++) {
       SetInfoBoxSelector(j, i);
     }
   }
@@ -2977,7 +2977,7 @@ void dlgConfigurationShowModal(void)
   }
 
   for (unsigned i = 0; i < 4; ++i) {
-    for (unsigned j = 0; j < numInfoWindows; ++j) {
+    for (unsigned j = 0; j < InfoBoxLayout::numInfoWindows; ++j) {
       GetInfoBoxSelector(j, i);
     }
   }
