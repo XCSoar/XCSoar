@@ -292,7 +292,7 @@ ReadCoords(const TCHAR *Text, GEOPOINT &point)
     }
   }
 
-  point.Latitude = Angle::degrees(fixed(sec / 3600 + min / 60 + deg));
+  point.Latitude = Angle::dms(fixed(deg), fixed(min), fixed(sec));
 
   if (*Stop == ' ')
     Stop++;
@@ -318,7 +318,7 @@ ReadCoords(const TCHAR *Text, GEOPOINT &point)
     sec = (double)_tcstod(Stop, &Stop);
   }
 
-  point.Longitude = Angle::degrees(fixed(sec / 3600 + min / 60 + deg));
+  point.Longitude = Angle::dms(fixed(deg), fixed(min), fixed(sec));
 
   if (*Stop == ' ')
     Stop++;
@@ -577,7 +577,7 @@ ParseCoordsTNP(const TCHAR *Text, GEOPOINT &point)
   min = abs((sec - deg * 10000) / 100);
   sec = sec - min * 100 - deg * 10000;
 
-  point.Latitude = Angle::degrees(fixed(sec / 3600 + min / 60 + deg));
+  point.Latitude = Angle::dms(fixed(deg), fixed(min), fixed(sec));
   if (negative)
     point.Latitude.flip();
 
@@ -594,7 +594,7 @@ ParseCoordsTNP(const TCHAR *Text, GEOPOINT &point)
   min = abs((sec - deg * 10000) / 100);
   sec = sec - min * 100 - deg * 10000;
 
-  point.Longitude = Angle::degrees(fixed(sec / 3600 + min / 60 + deg));
+  point.Longitude = Angle::dms(fixed(deg), fixed(min), fixed(sec));
   if (negative)
     point.Longitude.flip();
 
