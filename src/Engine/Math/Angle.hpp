@@ -86,6 +86,9 @@ public:
     return m_value*fixed_deg_to_rad;
   }
 #endif
+  static Angle dms(const fixed& d, const fixed& m, const fixed& s) {
+    return Angle::degrees(d + m / fixed(60) + s / fixed(3600));
+  }
 
   inline fixed sin() const {
     return ::sin(value_radians());
