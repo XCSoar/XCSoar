@@ -63,8 +63,6 @@ Copyright_License {
  *   > DCI                virtual key
  */
 #define DOUBLECLICKINTERVAL 350
-/** interval to look only for airspace and not WP (IF NOT USING VK) */
-#define AIRSPACECLICK 1000
 
 /** over this, show INVALID_GR */
 #define MAXEFFICIENCYSHOW 200
