@@ -80,7 +80,6 @@ BufferWindow InfoBoxManager::full_window;
 
 static bool InfoBoxesDirty = false;
 static bool InfoBoxesHidden = false;
-static double LastFlipBoxTime = 0;
 unsigned numInfoWindows = 8;
 
 InfoBox *InfoBoxes[MAXINFOWINDOWS];
@@ -1159,7 +1158,6 @@ InfoBoxManager::ProcessTimer()
   }
 
   InfoBoxDrawIfDirty();
-  LastFlipBoxTime++;
 }
 
 void InfoBoxManager::ResetInfoBoxes() {
