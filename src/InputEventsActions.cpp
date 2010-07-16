@@ -301,7 +301,7 @@ InputEvents::eventScreenModes(const TCHAR *misc)
   }
 
   // refresh display
-  InfoBoxManager::SetDirty(true);
+  InfoBoxManager::SetDirty();
   SendSettingsMap(true);
 }
 

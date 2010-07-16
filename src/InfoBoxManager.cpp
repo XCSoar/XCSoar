@@ -1080,7 +1080,7 @@ InfoBoxManager::ProcessKey(InfoBoxKeyCodes keycode)
   if (Data_Options[min(NUMSELECTSTRINGS - 1, i)].Process)
     Data_Options[min(NUMSELECTSTRINGS - 1, i)].Process(keycode);
 
-  SetDirty(true);
+  SetDirty();
 
   // emulate update to trigger calculations
   TriggerGPSUpdate();
@@ -1115,9 +1115,9 @@ InfoBoxManager::InfoBoxDrawIfDirty()
 }
 
 void
-InfoBoxManager::SetDirty(bool is_dirty)
+InfoBoxManager::SetDirty()
 {
-  InfoBoxesDirty = is_dirty;
+  InfoBoxesDirty = true;
 }
 
 void
@@ -1126,7 +1126,7 @@ InfoBoxManager::ProcessTimer()
   static fixed lasttime;
 
   if (Basic().Time != lasttime) {
-    SetDirty(true);
+    SetDirty();
     lasttime = Basic().Time;
   }
 

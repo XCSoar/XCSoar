@@ -198,7 +198,7 @@ XCSoarInterface::AfterStartup()
   ProgressGlue::Close();
 
   main_window.full_screen();
-  InfoBoxManager::SetDirty(true);
+  InfoBoxManager::SetDirty();
 
   TriggerGPSUpdate();
 

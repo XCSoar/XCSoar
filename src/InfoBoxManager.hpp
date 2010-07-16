@@ -82,7 +82,7 @@ public:
   static bool Defocus();
 
   static void ProcessTimer();
-  static void SetDirty(bool is_dirty);
+  static void SetDirty();
 
   static void Create(RECT rc);
   static void Destroy();
