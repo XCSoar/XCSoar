@@ -54,9 +54,4 @@ Copyright_License {
 #define M_HALFPI 1.5707963268
 #endif
 
-/** Diameter of earth in meters */
-#define EARTH_DIAMETER 12733426.0
-/** Diameter of earth in meters (squared) (EARTH_DIAMETER * EARTH_DIAMETER) */
-#define SQUARED_EARTH_DIAMETER 162140137697476.0
-
 #endif
