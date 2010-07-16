@@ -120,9 +120,9 @@ private:
   RECT   recValue;
   RECT   recComment;
 
-  int color;
-  int colorBottom;
-  int colorTop;
+  int colorValue;
+  int colorComment;
+  int colorTitle;
   bool mSmallerFont;
 
   /**

@@ -65,9 +65,9 @@ InfoBox::InfoBox(ContainerWindow &_parent, int X, int Y, int Width, int Height,
 {
   mSmallerFont = false;
 
-  color = 0;
-  colorTop = 0;
-  colorBottom = 0;
+  colorValue = 0;
+  colorTitle = 0;
+  colorComment = 0;
 
   WindowStyle style;
   style.enable_double_clicks();
@@ -118,9 +118,9 @@ void
 InfoBox::SetColor(int value)
 {
   if (Appearance.InfoBoxColors)
-    color = value;
+    colorValue = value;
   else
-    color = 0;
+    colorValue = 0;
 
   invalidate(recValue);
 }
@@ -129,9 +129,9 @@ void
 InfoBox::SetColorBottom(int value)
 {
   if (Appearance.InfoBoxColors)
-    colorBottom = value;
+    colorComment = value;
   else
-    colorBottom = 0;
+    colorComment = 0;
 
   invalidate(recComment);
 }
@@ -140,9 +140,9 @@ void
 InfoBox::SetColorTop(int value)
 {
   if (Appearance.InfoBoxColors)
-    colorTop = value;
+    colorTitle = value;
   else
-    colorTop = 0;
+    colorTitle = 0;
 
   invalidate(recTitle);
 }
@@ -172,7 +172,7 @@ InfoBox::PaintTitle(Canvas &canvas)
   int halftextwidth;
 
   canvas.set_background_color(look.title.bg_color);
-  canvas.set_text_color(look.get_title_color(colorTop));
+  canvas.set_text_color(look.get_title_color(colorTitle));
 
   const Font &font = *look.title.font;
   canvas.select(font);
@@ -217,7 +217,7 @@ InfoBox::PaintValue(Canvas &canvas)
   int x, y;
 
   canvas.set_background_color(look.value.bg_color);
-  canvas.set_text_color(look.get_value_color(color));
+  canvas.set_text_color(look.get_value_color(colorValue));
 
   const Font &font = mSmallerFont ? *look.small_font : *look.value.font;
   canvas.select(font);
@@ -241,7 +241,7 @@ InfoBox::PaintValue(Canvas &canvas)
 
   canvas.text_opaque(x, y, &recValue, mValue);
 
-  if (unit_symbol != NULL && color >= 0) {
+  if (unit_symbol != NULL && colorValue >= 0) {
     POINT origin = unit_symbol->get_origin(Appearance.InverseInfoBox
                                            ? UnitSymbol::INVERSE
                                            : UnitSymbol::NORMAL);
@@ -264,7 +264,7 @@ InfoBox::PaintComment(Canvas &canvas)
   int x, y;
 
   canvas.set_background_color(look.comment.bg_color);
-  canvas.set_text_color(look.get_comment_color(colorBottom));
+  canvas.set_text_color(look.get_comment_color(colorComment));
 
   const Font &font = *look.comment.font;
   canvas.select(font);
