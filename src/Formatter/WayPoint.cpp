@@ -78,6 +78,22 @@ FormatterWaypoint::Render(int *color)
 const TCHAR *
 FormatterAlternate::RenderTitle(int *color)
 {
+  int ActiveAlternate = -1;
+  switch (AlternateType) {
+  case at1:
+    ActiveAlternate = XCSoarInterface::SettingsComputer().Alternate1;
+    break;
+  case at2:
+    ActiveAlternate = XCSoarInterface::SettingsComputer().Alternate2;
+    break;
+  case atBest:
+  default:
+#ifdef OLD_TASK
+    ActiveAlternate = XCSoarInterface::Calculated().BestAlternate;
+#endif
+    break;
+  }
+
 #ifdef OLD_TASK
   if (way_points.verify_index(ActiveAlternate)) {
     const WAYPOINT &way_point = way_points.get(ActiveAlternate);
@@ -102,6 +118,22 @@ FormatterAlternate::RenderTitle(int *color)
 const TCHAR *
 FormatterAlternate::Render(int *color)
 {
+  int ActiveAlternate = -1;
+  switch (AlternateType) {
+  case at1:
+    ActiveAlternate = XCSoarInterface::SettingsComputer().Alternate1;
+    break;
+  case at2:
+    ActiveAlternate = XCSoarInterface::SettingsComputer().Alternate2;
+    break;
+  case atBest:
+  default:
+#ifdef OLD_TASK
+    ActiveAlternate = XCSoarInterface::Calculated().BestAlternate;
+#endif
+    break;
+  }
+
 #ifdef OLD_TASK
   if (Valid && way_points.verify_index(ActiveAlternate)) {
     const WPCALC &wpcalc = way_points.get_calc(ActiveAlternate);

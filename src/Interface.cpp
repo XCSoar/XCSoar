@@ -66,7 +66,6 @@ unsigned XCSoarInterface::debounceTimeout = 200;
 int ActionInterface::MenuTimeoutMax = MENUTIMEOUTMAX;
 bool CommonInterface::EnableAutoBacklight = true;
 bool CommonInterface::EnableAutoSoundVolume = true;
-int CommonInterface::ActiveAlternate = -1;
 
 #include "LogFile.hpp"
 #include "Protection.hpp"

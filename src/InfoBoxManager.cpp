@@ -795,33 +795,11 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
   case 67: // VENTA3 alternate1 and 2
   case 68:
   case 69:
-    if (type == 67)
-      ActiveAlternate = SettingsComputer().Alternate1;
-    else if (type == 68)
-      ActiveAlternate = SettingsComputer().Alternate2;
-#ifdef OLD_TASK // alternates
-    else
-      ActiveAlternate = Calculated().BestAlternate;
-#endif
-
     info_box.SetSmallerFont(false);
 
-    if (ActiveAlternate != -1) {
-      info_box.SetTitle(Data_Options[type].Formatter->RenderTitle(&color));
-      info_box.SetColor(color);
-      info_box.SetValue(Data_Options[type].Formatter->Render(&color));
-      info_box.SetColor(color);
-    } else {
-      if (type == 67)
-        info_box.SetTitle(_T("Altern1"));
-      else if (type == 68)
-        info_box.SetTitle(_T("Altern2"));
-      else
-        info_box.SetTitle(_T("BestAltr"));
-
-      info_box.SetValue(_T("---"));
-      info_box.SetColor(-1);
-    }
+    info_box.SetTitle(Data_Options[type].Formatter->RenderTitle(&color));
+    info_box.SetValue(Data_Options[type].Formatter->Render(&color));
+    info_box.SetColor(color);
 
     if (needupdate)
       info_box.SetValueUnit(Units::GetUserUnitByGroup(Data_Options[type].UnitGroup));
@@ -1031,11 +1009,6 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
   case 67:
   case 68:
   case 69:
-    if (ActiveAlternate == -1) {
-      // should be redundant
-      info_box.SetComment(_T(""));
-      break;
-    }
 #ifdef OLD_TASK // alternates
     if (FlipBoxValue == true) {
       Units::FormatUserDistance(way_points.get_calc(ActiveAlternate).Distance,
