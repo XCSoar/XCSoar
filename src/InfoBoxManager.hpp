@@ -79,8 +79,6 @@ public:
   static void ProcessKey(InfoBoxKeyCodes keycode);
   static bool Click(InfoBox &ib);
 
-  static bool Defocus();
-
   static void ProcessTimer();
   static void SetDirty();
 
