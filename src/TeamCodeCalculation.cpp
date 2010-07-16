@@ -60,15 +60,8 @@ int GetValueFromTeamCode(const TCHAR *code, int maxCount);
 void
 GetTeamCode(TCHAR *code, Angle bearing, fixed range)
 {
+  // Clear teamcode
 	memset(code, 0, sizeof(TCHAR) * 10);
-
-	// trim to seeyou
-	// double trim = cos(bearing*DEG_TO_RAD)*range/8500;
-	// bearing+= 1.2;
-
-	// if (bearing > 360)
-	//	bearing -= 360;
-
 	// Calculate bearing part of the teamcode
 	ConvertBearingToTeamCode(bearing, code);
 	// Calculate distance part of the teamcode
