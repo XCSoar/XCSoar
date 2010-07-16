@@ -69,8 +69,15 @@ public:
 class FormatterAlternate: public InfoBoxFormatter
 {
 public:
-  FormatterAlternate(const TCHAR *theformat) :
-    InfoBoxFormatter(theformat) {}
+  enum AlternateTypes {
+    atBest,
+    at1,
+    at2
+  } AlternateType;
+
+  FormatterAlternate(const TCHAR *theformat, AlternateTypes at) :
+    InfoBoxFormatter(theformat),
+    AlternateType(at) {}
 
   virtual const TCHAR *Render(int *color);
   virtual const TCHAR *RenderTitle(int *color);

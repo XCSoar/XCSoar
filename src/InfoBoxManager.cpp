@@ -544,19 +544,19 @@ static const SCREEN_INFO Data_Options[] = {
 
   // 67 VENTA3-ADDON Alternate1 destinations infoboxes  TODO> fix 36 46 to something correct
   { ugNone, _T("Alternate1 GR"), _T("Altern 1"),
-    new FormatterAlternate(_T("\0")),
+    new FormatterAlternate(_T("\0"), FormatterAlternate::at1),
     ActionInterface::on_key_Alternate1,
     36, 46,
   },
   // 68 Alternate 2
   { ugNone, _T("Alternate2 GR"), _T("Altern 2"),
-    new FormatterAlternate(_T("\0")),
+    new FormatterAlternate(_T("\0"), FormatterAlternate::at2),
     ActionInterface::on_key_Alternate2,
     36, 46,
   },
   // 69 BestAlternate aka BestLanding
   { ugNone, _T("Best Alternate"), _T("BestAltn"),
-    new FormatterAlternate(_T("\0")),
+    new FormatterAlternate(_T("\0"), FormatterAlternate::atBest),
     ActionInterface::on_key_BestAlternate,
     36, 46,
   },
