@@ -1107,7 +1107,7 @@ InfoBoxManager::ProcessKey(InfoBoxKeyCodes keycode)
   if (Data_Options[min(NUMSELECTSTRINGS - 1, i)].Process)
     Data_Options[min(NUMSELECTSTRINGS - 1, i)].Process(keycode);
 
-  InfoBoxesDirty = true;
+  SetDirty(true);
 
   // emulate update to trigger calculations
   TriggerGPSUpdate();
