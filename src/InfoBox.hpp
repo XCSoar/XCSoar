@@ -145,9 +145,6 @@ private:
    * @param canvas The canvas to paint on
    */
   void PaintSelector(Canvas &canvas);
-
-  // LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
   /**
    * Paints the InfoBox with borders, title, comment and value
    */
