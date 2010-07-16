@@ -47,9 +47,6 @@ Copyright_License {
  */
 #define ALTERNATE_MAXVALIDGR 200
 
-/** seconds between infobox dynamic flipping */
-#define DYNABOXTIME 3.0
-
 /**
  * DOUBLECLICKINTERVAL is a general purpose timing, used by both VK and synthetic double click
  *
@@ -66,8 +63,6 @@ Copyright_License {
  *   > DCI                virtual key
  */
 #define DOUBLECLICKINTERVAL 350
-/** must be < than DCI/2 to have a chance to make airspace click recon!!! */
-#define VKSHORTCLICK 120
 /** interval to look only for airspace and not WP (IF NOT USING VK) */
 #define AIRSPACECLICK 1000
 
