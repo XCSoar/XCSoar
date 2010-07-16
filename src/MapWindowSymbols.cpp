@@ -344,11 +344,12 @@ MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
   static const fixed fixed_89(89);
 
   int radius = IBLSCALE(17);
-  fixed phi = max(-fixed_89, min(fixed_89, Basic().acceleration.BankAngle));
+  fixed phi = max(-fixed_89,
+                  min(fixed_89, Basic().acceleration.BankAngle.value_degrees()));
   fixed alpha = fixed_rad_to_deg *
                 acos(max(-fixed_one,
                      min(fixed_one,
-                         Basic().acceleration.PitchAngle * fixed_div)));
+                         Basic().acceleration.PitchAngle.value_degrees() * fixed_div)));
   fixed sphi = fixed_180 - phi;
   Angle alpha1 = Angle::degrees(sphi - alpha);
   Angle alpha2 = Angle::degrees(sphi + alpha);

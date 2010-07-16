@@ -141,9 +141,9 @@ struct ACCELERATION_STATE
   //##################
 
   /** Estimated bank angle */
-  fixed BankAngle;
+  Angle BankAngle;
   /** Estimated pitch angle */
-  fixed PitchAngle;
+  Angle PitchAngle;
 
   /**
    * Is G-load information available?

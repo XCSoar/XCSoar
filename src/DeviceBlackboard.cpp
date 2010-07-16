@@ -621,20 +621,20 @@ DeviceBlackboard::Dynamics()
     const fixed angle = atan(fixed_deg_to_rad * Basic().TurnRateWind
         * Basic().TrueAirspeed * fixed_inv_g);
 
-    SetBasic().acceleration.BankAngle = fixed_rad_to_deg * angle;
+    SetBasic().acceleration.BankAngle = Angle::radians(angle);
 
     if (!Basic().acceleration.Available)
       SetBasic().acceleration.Gload = fixed_one
         / max(fixed_small, fabs(cos(angle)));
 
     // estimate pitch angle (assuming balanced turn)
-    SetBasic().acceleration.PitchAngle = fixed_rad_to_deg *
+    SetBasic().acceleration.PitchAngle = Angle::degrees(fixed_rad_to_deg *
       atan2(Basic().GPSVario - Basic().TotalEnergyVario,
-            Basic().TrueAirspeed);
+            Basic().TrueAirspeed));
 
   } else {
-    SetBasic().acceleration.BankAngle = fixed_zero;
-    SetBasic().acceleration.PitchAngle = fixed_zero;
+    SetBasic().acceleration.BankAngle = Angle::degrees(fixed_zero);
+    SetBasic().acceleration.PitchAngle = Angle::degrees(fixed_zero);
     SetBasic().TurnRateWind = fixed_zero;
 
     if (!Basic().acceleration.Available)
