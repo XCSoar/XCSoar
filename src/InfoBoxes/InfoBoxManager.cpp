@@ -61,7 +61,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Interface.hpp"
 #include "Hardware/Battery.h"
-#include "FlarmCalculations.h"
+#include "FLARM/FlarmCalculations.h"
 #include "UtilsSystem.hpp"
 #include "MainWindow.hpp"
 #include "MapWindow.hpp"

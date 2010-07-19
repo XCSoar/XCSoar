@@ -56,7 +56,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 
 #include <stdlib.h>
-#include "FlarmCalculations.h"
+#include "FLARM/FlarmCalculations.h"
 
 #include <algorithm>
 

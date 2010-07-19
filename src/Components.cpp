@@ -56,7 +56,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Math/FastMath.h"
 #include "UtilsSystem.hpp"
-#include "FlarmDetails.hpp"
+#include "FLARM/FlarmDetails.hpp"
 #include "SettingsUser.hpp"
 #include "Logger/Logger.hpp"
 #include "Logger/NMEALogger.hpp"

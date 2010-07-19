@@ -41,7 +41,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "UtilsSystem.hpp"
 #include "TeamCodeCalculation.h"
-#include "FlarmDetails.hpp"
+#include "FLARM/FlarmDetails.hpp"
 #include "Asset.hpp"
 #include "Device/Parser.hpp"
 #include "Device/List.hpp"

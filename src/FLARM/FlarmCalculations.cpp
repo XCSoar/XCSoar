@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #ifdef FLARM_AVERAGE
-#include "FlarmCalculations.h"
+#include "FLARM/FlarmCalculations.h"
 #include "FLARM/State.hpp"
 
 fixed

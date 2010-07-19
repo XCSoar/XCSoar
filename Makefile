@@ -178,7 +178,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/FLARM/FLARMNet.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
-	$(SRC)/FlarmCalculations.cpp \
+	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/GlideComputer.cpp \
 	$(SRC)/GlideComputerBlackboard.cpp \
 	$(SRC)/GlideComputerAirData.cpp \
@@ -306,7 +306,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/ProgressGlue.cpp \
 	$(SRC)/LocalTime.cpp \
 	$(SRC)/Units.cpp \
-	$(SRC)/FlarmDetails.cpp \
+	$(SRC)/FLARM/FlarmDetails.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsSettings.cpp \

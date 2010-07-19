@@ -61,7 +61,7 @@ using std::min;
 using std::max;
 
 #ifdef FLARM_AVERAGE
-#include "FlarmCalculations.h"
+#include "FLARM/FlarmCalculations.h"
 FlarmCalculations flarmCalculations;
 #endif
 

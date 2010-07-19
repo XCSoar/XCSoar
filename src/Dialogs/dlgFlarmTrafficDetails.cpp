@@ -47,7 +47,7 @@
 #include "Dialogs/Internal.hpp"
 #include "FLARM/FLARMNet.hpp"
 #include "FLARM/Traffic.hpp"
-#include "FlarmDetails.hpp"
+#include "FLARM/FlarmDetails.hpp"
 #include "Screen/Layout.hpp"
 #include "Engine/Math/Earth.hpp"
 #include "LocalPath.hpp"

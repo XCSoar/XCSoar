@@ -37,7 +37,7 @@
 */
 
 #include "Dialogs/Internal.hpp"
-#include "FlarmDetails.hpp"
+#include "FLARM/FlarmDetails.hpp"
 #include "SettingsComputer.hpp"
 #include "Blackboard.hpp"
 #include "Screen/Layout.hpp"
