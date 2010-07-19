@@ -46,7 +46,7 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 #include "SettingsUser.hpp"
 #include "UtilsSystem.hpp"
-#include "InfoBoxManager.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 #include "MapWindow.hpp"
 #include "Math/Earth.hpp"
 #include "DeviceBlackboard.hpp"

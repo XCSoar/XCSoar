@@ -36,26 +36,32 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FORMATTER_TEAM_CODE_HPP
-#define XCSOAR_FORMATTER_TEAM_CODE_HPP
+#ifndef XCSOAR_FORMATTER_TIME_HPP
+#define XCSOAR_FORMATTER_TIME_HPP
 
-#include "Formatter/Base.hpp"
+#include "InfoBoxes/Formatter/Base.hpp"
 
-class FormatterTeamCode: public InfoBoxFormatter {
+class FormatterTime: public InfoBoxFormatter {
 public:
-  FormatterTeamCode(const TCHAR *theformat) :
+  FormatterTime(const TCHAR *theformat) :
     InfoBoxFormatter(theformat) {}
 
   virtual const TCHAR *Render(int *color);
+  virtual void AssignValue(int i);
+  int hours;
+  int mins;
+  int seconds;
+  void SecsToDisplayTime(int i);
 };
 
-
-class FormatterDiffTeamBearing: public InfoBoxFormatter {
+class FormatterAATTime: public FormatterTime {
 public:
-  FormatterDiffTeamBearing(const TCHAR *theformat) :
-    InfoBoxFormatter(theformat) {}
+  FormatterAATTime(const TCHAR *theformat) :
+    FormatterTime(theformat) {}
 
   virtual const TCHAR *Render(int *color);
+  virtual void AssignValue(int i);
+  int status;
 };
 
 #endif

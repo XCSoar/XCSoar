@@ -36,20 +36,26 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FORMATTER_LOW_WARNING_HPP
-#define XCSOAR_FORMATTER_LOW_WARNING_HPP
+#ifndef XCSOAR_FORMATTER_TEAM_CODE_HPP
+#define XCSOAR_FORMATTER_TEAM_CODE_HPP
 
-#include "Formatter/Base.hpp"
+#include "InfoBoxes/Formatter/Base.hpp"
 
-class FormatterLowWarning: public InfoBoxFormatter {
- public:
-  FormatterLowWarning(const TCHAR *theformat, double the_minimum) :
-    InfoBoxFormatter(theformat),
-    minimum(the_minimum) {}
+class FormatterTeamCode: public InfoBoxFormatter {
+public:
+  FormatterTeamCode(const TCHAR *theformat) :
+    InfoBoxFormatter(theformat) {}
 
   virtual const TCHAR *Render(int *color);
-  double minimum;
-  virtual void AssignValue(int i);
+};
+
+
+class FormatterDiffTeamBearing: public InfoBoxFormatter {
+public:
+  FormatterDiffTeamBearing(const TCHAR *theformat) :
+    InfoBoxFormatter(theformat) {}
+
+  virtual const TCHAR *Render(int *color);
 };
 
 #endif

@@ -36,32 +36,48 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FORMATTER_TIME_HPP
-#define XCSOAR_FORMATTER_TIME_HPP
+#include "InfoBoxes/Formatter/LowWarning.hpp"
+#include "SettingsComputer.hpp"
+#include "Units.hpp"
+#include "Interface.hpp"
 
-#include "Formatter/Base.hpp"
+#include <tchar.h>
+#include <stdio.h>
 
-class FormatterTime: public InfoBoxFormatter {
-public:
-  FormatterTime(const TCHAR *theformat) :
-    InfoBoxFormatter(theformat) {}
+void
+FormatterLowWarning::AssignValue(int i)
+{
+  InfoBoxFormatter::AssignValue(i);
+  switch (i) {
+  case 1:
+    minimum = Units::ToUserUnit(SettingsComputer().safety_height_terrain,
+                                Units::AltitudeUnit);
+    break;
+  case 2:
+    minimum = Units::ToUserUnit(fixed_half *
+                                Calculated().common_stats.current_risk_mc,
+                                Units::VerticalSpeedUnit);
+    break;
+  case 21:
+    minimum = Units::ToUserUnit(fixed(0.667) *
+                                Calculated().common_stats.current_risk_mc,
+                                Units::VerticalSpeedUnit);
+    break;
+  }
+}
 
-  virtual const TCHAR *Render(int *color);
-  virtual void AssignValue(int i);
-  int hours;
-  int mins;
-  int seconds;
-  void SecsToDisplayTime(int i);
-};
-
-class FormatterAATTime: public FormatterTime {
-public:
-  FormatterAATTime(const TCHAR *theformat) :
-    FormatterTime(theformat) {}
-
-  virtual const TCHAR *Render(int *color);
-  virtual void AssignValue(int i);
-  int status;
-};
-
-#endif
+const TCHAR *
+FormatterLowWarning::Render(int *color)
+{
+  if (Valid) {
+    _stprintf(Text, Format, Value);
+    if (Value < minimum)
+      // red
+      *color = 1;
+    else
+      *color = 0;
+  } else {
+    RenderInvalid(color);
+  }
+  return Text;
+}

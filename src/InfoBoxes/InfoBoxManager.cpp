@@ -37,16 +37,16 @@ Copyright_License {
 
 */
 
-#include "InfoBoxManager.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 #include "TaskClientUI.hpp"
-#include "InfoBox.hpp"
-#include "InfoBoxLayout.hpp"
+#include "InfoBoxes/InfoBox.hpp"
+#include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Form/Control.hpp"
 #include "Protection.hpp"
-#include "Formatter/TeamCode.hpp"
-#include "Formatter/WayPoint.hpp"
-#include "Formatter/LowWarning.hpp"
-#include "Formatter/Time.hpp"
+#include "InfoBoxes/Formatter/TeamCode.hpp"
+#include "InfoBoxes/Formatter/WayPoint.hpp"
+#include "InfoBoxes/Formatter/LowWarning.hpp"
+#include "InfoBoxes/Formatter/Time.hpp"
 #include "Dialogs.h"
 #include "InputEvents.h"
 #include "Compatibility/string.h"

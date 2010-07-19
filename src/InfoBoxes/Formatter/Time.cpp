@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "Formatter/Time.hpp"
+#include "InfoBoxes/Formatter/Time.hpp"
 #include "LocalTime.hpp"
 #include <stdlib.h>
 #include "Interface.hpp"

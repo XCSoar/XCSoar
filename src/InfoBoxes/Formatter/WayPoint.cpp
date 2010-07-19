@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "Formatter/WayPoint.hpp"
+#include "InfoBoxes/Formatter/WayPoint.hpp"
 #include "Defines.h"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp" // for auto-setting of alternates.  Dangerous!

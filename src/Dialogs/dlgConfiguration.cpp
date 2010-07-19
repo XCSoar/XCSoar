@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
-#include "InfoBoxManager.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 #include "Blackboard.hpp"
 #include "SettingsAirspace.hpp"
 #include "SettingsComputer.hpp"
@@ -75,7 +75,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Simulator.hpp"
 #include "Compiler.h"
-#include "InfoBoxLayout.hpp"
+#include "InfoBoxes/InfoBoxLayout.hpp"
 
 #include <assert.h>
 

@@ -39,7 +39,7 @@ Copyright_License {
 
 #include "Gauge/GaugeCDI.hpp"
 #include "Math/FastMath.h"
-#include "InfoBoxLayout.hpp"
+#include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Screen/Fonts.hpp"
 
 #include <tchar.h>

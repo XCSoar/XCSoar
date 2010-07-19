@@ -45,7 +45,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "ResourceLoader.hpp"
 #include "Interface.hpp"
-#include "InfoBoxLayout.hpp"
+#include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Logger/Logger.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Terrain/RasterTerrain.hpp"

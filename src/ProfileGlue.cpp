@@ -39,7 +39,7 @@ Copyright_License {
 #include "Profile.hpp"
 #include "LogFile.hpp"
 #include "Appearance.hpp"
-#include "InfoBoxManager.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 #include "GlideRatio.hpp"
 #include "Screen/Fonts.hpp"
 #include "Asset.hpp"
@@ -47,7 +47,7 @@ Copyright_License {
 #include "WayPointFile.hpp"
 #include "UtilsText.hpp"
 #include "UtilsFont.hpp"
-#include "InfoBoxLayout.hpp"
+#include "InfoBoxes/InfoBoxLayout.hpp"
 
 #include <assert.h>
 

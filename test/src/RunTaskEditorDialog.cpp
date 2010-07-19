@@ -48,7 +48,7 @@ Copyright_License {
 #include "TaskClientUI.hpp"
 #include "Task/TaskManager.hpp"
 #include "Screen/Blank.hpp"
-#include "InfoBoxLayout.hpp"
+#include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Screen/Layout.hpp"
 #include "Interface.hpp"
 #include "DeviceBlackboard.hpp"

@@ -225,15 +225,15 @@ XCSOAR_SOURCES := \
 	$(SRC)/ButtonLabel.cpp \
 	$(SRC)/Dialogs.cpp \
 	$(SRC)/ExpandMacros.cpp \
-	$(SRC)/Formatter/Base.cpp \
-	$(SRC)/Formatter/TeamCode.cpp \
-	$(SRC)/Formatter/WayPoint.cpp \
-	$(SRC)/Formatter/LowWarning.cpp \
-	$(SRC)/Formatter/Time.cpp \
-	$(SRC)/InfoBox.cpp \
-	$(SRC)/InfoBoxLayout.cpp \
-	$(SRC)/InfoBoxEvents.cpp \
-	$(SRC)/InfoBoxManager.cpp \
+	$(SRC)/InfoBoxes/Formatter/Base.cpp \
+	$(SRC)/InfoBoxes/Formatter/TeamCode.cpp \
+	$(SRC)/InfoBoxes/Formatter/WayPoint.cpp \
+	$(SRC)/InfoBoxes/Formatter/LowWarning.cpp \
+	$(SRC)/InfoBoxes/Formatter/Time.cpp \
+	$(SRC)/InfoBoxes/InfoBox.cpp \
+	$(SRC)/InfoBoxes/InfoBoxLayout.cpp \
+	$(SRC)/InfoBoxes/InfoBoxEvents.cpp \
+	$(SRC)/InfoBoxes/InfoBoxManager.cpp \
 	$(SRC)/InputEvents.cpp \
 	$(SRC)/InputEventsActions.cpp \
 	$(SRC)/StatusMessage.cpp \

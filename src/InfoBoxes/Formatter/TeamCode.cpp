@@ -36,52 +36,63 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FORMATTER_WAYPOINT_HPP
-#define XCSOAR_FORMATTER_WAYPOINT_HPP
+#include "InfoBoxes/Formatter/TeamCode.hpp"
+#include "SettingsComputer.hpp"
+#include "Blackboard.hpp"
+#include "Interface.hpp"
+#include "Components.hpp"
 
-#include "Formatter/Base.hpp"
-
-/** 
- * Formatter for waypoints
- */
-class FormatterWaypoint: public InfoBoxFormatter {
-public:
-  FormatterWaypoint(const TCHAR *theformat) :
-    InfoBoxFormatter(theformat) {}
-
-  virtual const TCHAR *Render(int *color);
-};
-
-/** 
- * Formatter differential bearings
- */
-class FormatterDiffBearing: public InfoBoxFormatter {
-public:
-  FormatterDiffBearing(const TCHAR *theformat) :
-    InfoBoxFormatter(theformat) {}
-
-  virtual const TCHAR *Render(int *color);
-};
-
-/** 
- * Formatter for alternate waypoints
- */
-class FormatterAlternate: public InfoBoxFormatter
+const TCHAR *
+FormatterTeamCode::Render(int *color)
 {
-public:
-  enum AlternateTypes {
-    atBest,
-    at1,
-    at2
-  } AlternateType;
+  if (XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint) {
+    *color = 0; // black text
+    _tcsncpy(Text, Calculated().OwnTeamCode, 5);
+    Text[5] = '\0';
+  } else {
+    RenderInvalid(color);
+  }
 
-  FormatterAlternate(const TCHAR *theformat, AlternateTypes at) :
-    InfoBoxFormatter(theformat),
-    AlternateType(at) {}
+  return Text;
+}
 
-  virtual const TCHAR *Render(int *color);
-  virtual const TCHAR *RenderTitle(int *color);
-  virtual void AssignValue(int i);
-};
+const TCHAR *
+FormatterDiffTeamBearing::Render(int *color)
+{
+#ifdef OLD_TASK
+  if (way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint)
+      && SettingsComputer().TeammateCodeValid) {
+    Valid = true;
 
+    Value = Calculated().TeammateBearing - Basic().TrackBearing;
+
+    if (Value < -180.0)
+      Value += 360.0;
+    else if (Value > 180.0)
+      Value -= 360.0;
+
+#ifndef __MINGW32__
+    if (Value > 1)
+      _stprintf(Text, TEXT("%2.0f°»"), Value);
+    else if (Value < -1)
+      _stprintf(Text, TEXT("«%2.0f°"), -Value);
+    else
+      _tcscpy(Text, TEXT("«»"));
+#else
+    if (Value > 1)
+      _stprintf(Text, TEXT("%2.0fÂ°Â»"), Value);
+    else if (Value < -1)
+      _stprintf(Text, TEXT("Â«%2.0fÂ°"), -Value);
+    else
+      _tcscpy(Text, TEXT("Â«Â»"));
 #endif
+    *color = 0;
+  } else {
+    Valid = false;
+    RenderInvalid(color);
+  }
+#else
+  RenderInvalid(color);
+#endif
+  return Text;
+}

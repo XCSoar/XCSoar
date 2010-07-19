@@ -35,6 +35,6 @@ Copyright_License {
 }
 */
 
-#include "InfoBoxLayout.hpp"
+#include "InfoBoxes/InfoBoxLayout.hpp"
 
 unsigned InfoBoxLayout::InfoBoxGeometry = ibTop4Bottom4;

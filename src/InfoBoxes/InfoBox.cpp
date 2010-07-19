@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "InfoBox.hpp"
+#include "InfoBoxes/InfoBox.hpp"
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"

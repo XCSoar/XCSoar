@@ -36,48 +36,52 @@ Copyright_License {
 }
 */
 
-#include "Formatter/LowWarning.hpp"
-#include "SettingsComputer.hpp"
-#include "Units.hpp"
-#include "Interface.hpp"
+#ifndef XCSOAR_FORMATTER_WAYPOINT_HPP
+#define XCSOAR_FORMATTER_WAYPOINT_HPP
 
-#include <tchar.h>
-#include <stdio.h>
+#include "InfoBoxes/Formatter/Base.hpp"
 
-void
-FormatterLowWarning::AssignValue(int i)
+/** 
+ * Formatter for waypoints
+ */
+class FormatterWaypoint: public InfoBoxFormatter {
+public:
+  FormatterWaypoint(const TCHAR *theformat) :
+    InfoBoxFormatter(theformat) {}
+
+  virtual const TCHAR *Render(int *color);
+};
+
+/** 
+ * Formatter differential bearings
+ */
+class FormatterDiffBearing: public InfoBoxFormatter {
+public:
+  FormatterDiffBearing(const TCHAR *theformat) :
+    InfoBoxFormatter(theformat) {}
+
+  virtual const TCHAR *Render(int *color);
+};
+
+/** 
+ * Formatter for alternate waypoints
+ */
+class FormatterAlternate: public InfoBoxFormatter
 {
-  InfoBoxFormatter::AssignValue(i);
-  switch (i) {
-  case 1:
-    minimum = Units::ToUserUnit(SettingsComputer().safety_height_terrain,
-                                Units::AltitudeUnit);
-    break;
-  case 2:
-    minimum = Units::ToUserUnit(fixed_half *
-                                Calculated().common_stats.current_risk_mc,
-                                Units::VerticalSpeedUnit);
-    break;
-  case 21:
-    minimum = Units::ToUserUnit(fixed(0.667) *
-                                Calculated().common_stats.current_risk_mc,
-                                Units::VerticalSpeedUnit);
-    break;
-  }
-}
+public:
+  enum AlternateTypes {
+    atBest,
+    at1,
+    at2
+  } AlternateType;
 
-const TCHAR *
-FormatterLowWarning::Render(int *color)
-{
-  if (Valid) {
-    _stprintf(Text, Format, Value);
-    if (Value < minimum)
-      // red
-      *color = 1;
-    else
-      *color = 0;
-  } else {
-    RenderInvalid(color);
-  }
-  return Text;
-}
+  FormatterAlternate(const TCHAR *theformat, AlternateTypes at) :
+    InfoBoxFormatter(theformat),
+    AlternateType(at) {}
+
+  virtual const TCHAR *Render(int *color);
+  virtual const TCHAR *RenderTitle(int *color);
+  virtual void AssignValue(int i);
+};
+
+#endif

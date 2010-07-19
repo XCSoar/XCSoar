@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "Formatter/Base.hpp"
+#include "InfoBoxes/Formatter/Base.hpp"
 #include "Math/FastMath.h"
 #include "Atmosphere.h"
 #include "Hardware/Battery.h"

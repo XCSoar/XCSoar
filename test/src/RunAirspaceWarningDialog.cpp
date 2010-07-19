@@ -51,7 +51,7 @@ Copyright_License {
 #include "GlideComputerInterface.hpp"
 #include "Task/TaskManager.hpp"
 #include "Screen/Blank.hpp"
-#include "InfoBoxLayout.hpp"
+#include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Screen/Layout.hpp"
 #include "ResourceLoader.hpp"
 #include "Appearance.hpp"
