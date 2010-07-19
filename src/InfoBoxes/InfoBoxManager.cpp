@@ -793,8 +793,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
   case 67: // VENTA3 alternate1 and 2
   case 68:
   case 69:
-    info_box.SetSmallerFont(false);
-
     info_box.SetTitle(Data_Options[type].Formatter->RenderTitle(&color));
     info_box.SetValue(Data_Options[type].Formatter->Render(&color));
     info_box.SetColor(color);
@@ -805,8 +803,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
     break;
 
   case 55:
-    info_box.SetSmallerFont(true);
-
     if (needupdate)
       info_box.SetTitle(Data_Options[type].Title);
 
@@ -821,8 +817,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
     break;
 
   case 14: // Next waypoint
-    info_box.SetSmallerFont(false);
-
     if (Calculated().task_stats.task_valid) {
       info_box.SetTitle(
                               Data_Options[type].Formatter-> Render(&color));
@@ -840,8 +834,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
     break;
 
   default:
-    info_box.SetSmallerFont(false);
-
     if (needupdate)
       info_box.SetTitle(Data_Options[type].Title);
 

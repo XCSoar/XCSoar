@@ -123,7 +123,6 @@ private:
   int colorValue;
   int colorComment;
   int colorTitle;
-  bool mSmallerFont;
 
   /**
    * Paints the InfoBox title to the given canvas
@@ -173,7 +172,6 @@ public:
    * @param Value New value of the InfoBox comment
    */
   void SetComment(const TCHAR *Value);
-  void SetSmallerFont(bool smallerFont);
 
   /**
    * Sets the color of the InfoBox value to the given value

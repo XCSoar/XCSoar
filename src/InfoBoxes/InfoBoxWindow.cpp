@@ -63,8 +63,6 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent, int X, int Y, int Width, 
    mBorderKind(border_flags),
    focus_timer(0)
 {
-  mSmallerFont = false;
-
   colorValue = 0;
   colorTitle = 0;
   colorComment = 0;
@@ -158,13 +156,6 @@ InfoBoxWindow::SetComment(const TCHAR *Value)
 }
 
 void
-InfoBoxWindow::SetSmallerFont(bool smallerFont)
-{
-  this->mSmallerFont = smallerFont;
-  invalidate(recValue);
-}
-
-void
 InfoBoxWindow::PaintTitle(Canvas &canvas)
 {
   SIZE tsize;
@@ -219,10 +210,17 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   canvas.set_background_color(look.value.bg_color);
   canvas.set_text_color(look.get_value_color(colorValue));
 
-  const Font &font = mSmallerFont ? *look.small_font : *look.value.font;
-  canvas.select(font);
+  canvas.select(*look.value.font);
+  unsigned ascent_height = look.value.font->get_ascent_height();
+  unsigned capital_height = look.value.font->get_capital_height();
 
   tsize = canvas.text_size(mValue);
+  if (tsize.cx > recValue.right - recValue.left) {
+    canvas.select(*look.small_font);
+    ascent_height = look.small_font->get_ascent_height();
+    capital_height = look.small_font->get_capital_height();
+    tsize = canvas.text_size(mValue);
+  }
 
   SIZE unit_size;
   const UnitSymbol *unit_symbol = GetUnitSymbol(mValueUnit);
@@ -236,8 +234,8 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   x = max(1, (int)(recValue.left + recValue.right - tsize.cx
                    - Layout::FastScale(unit_size.cx)) / 2);
 
-  y = recValue.top + 1 - font.get_ascent_height() +
-    (recValue.bottom - recValue.top + font.get_capital_height()) / 2;
+  y = recValue.top + 1 - ascent_height +
+    (recValue.bottom - recValue.top + capital_height) / 2;
 
   canvas.text_opaque(x, y, &recValue, mValue);
 
@@ -249,7 +247,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
     BitmapCanvas temp(canvas, *unit_symbol);
 
     canvas.scale_copy(x + tsize.cx,
-                      y + font.get_ascent_height()
+                      y + ascent_height
                       - Layout::FastScale(unit_size.cy),
                       temp,
                       origin.x, origin.y,
