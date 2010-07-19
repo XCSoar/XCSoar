@@ -316,9 +316,11 @@ InitAsset()
 
   // VENTA2- TODO fix these directories are not used always!
   CreateDirectoryIfAbsent(TEXT(""));  // RLD make sure the LocalPath folder actually exists
-  CreateDirectoryIfAbsent(TEXT("persist"));
   CreateDirectoryIfAbsent(TEXT("logs"));
   CreateDirectoryIfAbsent(TEXT("config"));
+
+  if (is_altair())
+    CreateDirectoryIfAbsent(TEXT("persist"));
 
   StartupLogFreeRamAndStorage();
 }
