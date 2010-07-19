@@ -55,7 +55,7 @@ using std::max;
 
 #define SELECTORWIDTH IBLSCALE(5)
 
-InfoBox::InfoBox(ContainerWindow &_parent, int X, int Y, int Width, int Height,
+InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent, int X, int Y, int Width, int Height,
                  int border_flags,
                  const InfoBoxLook &_look)
   :parent(_parent),
@@ -81,14 +81,14 @@ InfoBox::InfoBox(ContainerWindow &_parent, int X, int Y, int Width, int Height,
 }
 
 void
-InfoBox::SetValueUnit(Units_t Value)
+InfoBoxWindow::SetValueUnit(Units_t Value)
 {
   mValueUnit = Value;
   invalidate(recValue);
 }
 
 void
-InfoBox::SetTitle(const TCHAR *Value)
+InfoBoxWindow::SetTitle(const TCHAR *Value)
 {
   TCHAR sTmp[TITLESIZE + 1];
 
@@ -105,7 +105,7 @@ InfoBox::SetTitle(const TCHAR *Value)
 }
 
 void
-InfoBox::SetValue(const TCHAR *Value)
+InfoBoxWindow::SetValue(const TCHAR *Value)
 {
   if (_tcscmp(mValue, Value) != 0) {
     _tcsncpy(mValue, Value, VALUESIZE);
@@ -115,7 +115,7 @@ InfoBox::SetValue(const TCHAR *Value)
 }
 
 void
-InfoBox::SetColor(int value)
+InfoBoxWindow::SetColor(int value)
 {
   if (Appearance.InfoBoxColors)
     colorValue = value;
@@ -126,7 +126,7 @@ InfoBox::SetColor(int value)
 }
 
 void
-InfoBox::SetColorBottom(int value)
+InfoBoxWindow::SetColorBottom(int value)
 {
   if (Appearance.InfoBoxColors)
     colorComment = value;
@@ -137,7 +137,7 @@ InfoBox::SetColorBottom(int value)
 }
 
 void
-InfoBox::SetColorTop(int value)
+InfoBoxWindow::SetColorTop(int value)
 {
   if (Appearance.InfoBoxColors)
     colorTitle = value;
@@ -148,7 +148,7 @@ InfoBox::SetColorTop(int value)
 }
 
 void
-InfoBox::SetComment(const TCHAR *Value)
+InfoBoxWindow::SetComment(const TCHAR *Value)
 {
   if (_tcscmp(mComment, Value) != 0) {
     _tcsncpy(mComment, Value, COMMENTSIZE);
@@ -158,14 +158,14 @@ InfoBox::SetComment(const TCHAR *Value)
 }
 
 void
-InfoBox::SetSmallerFont(bool smallerFont)
+InfoBoxWindow::SetSmallerFont(bool smallerFont)
 {
   this->mSmallerFont = smallerFont;
   invalidate(recValue);
 }
 
 void
-InfoBox::PaintTitle(Canvas &canvas)
+InfoBoxWindow::PaintTitle(Canvas &canvas)
 {
   SIZE tsize;
   int x, y;
@@ -211,7 +211,7 @@ InfoBox::PaintTitle(Canvas &canvas)
 }
 
 void
-InfoBox::PaintValue(Canvas &canvas)
+InfoBoxWindow::PaintValue(Canvas &canvas)
 {
   SIZE tsize;
   int x, y;
@@ -258,7 +258,7 @@ InfoBox::PaintValue(Canvas &canvas)
 }
 
 void
-InfoBox::PaintComment(Canvas &canvas)
+InfoBoxWindow::PaintComment(Canvas &canvas)
 {
   SIZE tsize;
   int x, y;
@@ -279,7 +279,7 @@ InfoBox::PaintComment(Canvas &canvas)
 }
 
 void
-InfoBox::PaintSelector(Canvas &canvas)
+InfoBoxWindow::PaintSelector(Canvas &canvas)
 {
   canvas.select(look.selector_pen);
 
@@ -303,7 +303,7 @@ InfoBox::PaintSelector(Canvas &canvas)
 }
 
 void
-InfoBox::Paint(Canvas &canvas)
+InfoBoxWindow::Paint(Canvas &canvas)
 {
   canvas.background_opaque();
 
@@ -335,7 +335,7 @@ InfoBox::Paint(Canvas &canvas)
 }
 
 void
-InfoBox::PaintInto(Canvas &dest, int xoff, int yoff, int width, int height)
+InfoBoxWindow::PaintInto(Canvas &dest, int xoff, int yoff, int width, int height)
 {
   SIZE size = get_size();
   BufferCanvas buffer(dest, size.cx, size.cy);
@@ -345,7 +345,7 @@ InfoBox::PaintInto(Canvas &dest, int xoff, int yoff, int width, int height)
 }
 
 bool
-InfoBox::on_resize(unsigned width, unsigned height)
+InfoBoxWindow::on_resize(unsigned width, unsigned height)
 {
   PaintWindow::on_resize(width, height);
 
@@ -378,7 +378,7 @@ InfoBox::on_resize(unsigned width, unsigned height)
 }
 
 bool
-InfoBox::on_key_down(unsigned key_code)
+InfoBoxWindow::on_key_down(unsigned key_code)
 {
   // Get the input event_id of the event
   unsigned event_id = InputEvents::key_to_event(InputEvents::MODE_INFOBOX,
@@ -399,7 +399,7 @@ InfoBox::on_key_down(unsigned key_code)
 }
 
 bool
-InfoBox::on_mouse_down(int x, int y)
+InfoBoxWindow::on_mouse_down(int x, int y)
 {
   // synthetic double click detection with no proximity , good for infoboxes
   static PeriodClock double_click;
@@ -410,13 +410,13 @@ InfoBox::on_mouse_down(int x, int y)
     return true;
   }
 
-  // if single clicked -> focus the InfoBox
+  // if single clicked -> focus the InfoBoxWindow
   set_focus();
   return true;
 }
 
 bool
-InfoBox::on_mouse_double(int x, int y)
+InfoBoxWindow::on_mouse_double(int x, int y)
 {
   if (!is_altair()) {
     // JMW capture double click, so infoboxes double clicked also bring up menu
@@ -429,7 +429,7 @@ InfoBox::on_mouse_double(int x, int y)
 }
 
 void
-InfoBox::on_paint(Canvas &canvas)
+InfoBoxWindow::on_paint(Canvas &canvas)
 {
   // Call the parent function
   Paint(canvas);
@@ -440,7 +440,7 @@ InfoBox::on_paint(Canvas &canvas)
 }
 
 bool
-InfoBox::on_setfocus()
+InfoBoxWindow::on_setfocus()
 {
   // Call the parent function
   PaintWindow::on_setfocus();
@@ -456,7 +456,7 @@ InfoBox::on_setfocus()
 }
 
 bool
-InfoBox::on_killfocus()
+InfoBoxWindow::on_killfocus()
 {
   // Call the parent function
   PaintWindow::on_killfocus();
@@ -474,7 +474,7 @@ InfoBox::on_killfocus()
 }
 
 bool
-InfoBox::on_timer(timer_t id)
+InfoBoxWindow::on_timer(timer_t id)
 {
   if (id != focus_timer)
     return PaintWindow::on_timer(id);

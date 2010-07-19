@@ -91,7 +91,7 @@ struct InfoBoxLook {
   }
 };
 
-class InfoBox : public PaintWindow
+class InfoBoxWindow : public PaintWindow
 {
 public:
   enum {
@@ -192,14 +192,14 @@ public:
   void SetColorTop(int Value);
 
   /**
-   * Constructor of the InfoBox class
+   * Constructor of the InfoBoxWindow class
    * @param Parent The parent ContainerWindow (usually MainWindow)
    * @param X x-Coordinate of the InfoBox
    * @param Y y-Coordinate of the InfoBox
    * @param Width Width of the InfoBox
    * @param Height Height of the InfoBox
    */
-  InfoBox(ContainerWindow &Parent, int X, int Y, int Width, int Height,
+  InfoBoxWindow(ContainerWindow &Parent, int X, int Y, int Width, int Height,
           int border_flags,
           const InfoBoxLook &_look);
 

@@ -81,7 +81,7 @@ BufferWindow InfoBoxManager::full_window;
 static bool InfoBoxesDirty = false;
 static bool InfoBoxesHidden = false;
 
-InfoBox *InfoBoxes[MAXINFOWINDOWS];
+InfoBoxWindow *InfoBoxes[MAXINFOWINDOWS];
 const unsigned NUMSELECTSTRINGS = 75;
 
 static InfoBoxLook info_box_look;
@@ -781,7 +781,7 @@ InfoBoxManager::Event_Change(int i)
 }
 
 void
-InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
+InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
 {
   TCHAR sTmp[32];
   int color = 0;
@@ -1219,7 +1219,7 @@ InfoBoxManager::Create(RECT rc)
     = Appearance.InverseInfoBox ? Color::BLACK : Color::WHITE;
 
   Color border_color = Color(80, 80, 80);
-  info_box_look.border_pen.set(InfoBox::BORDER_WIDTH, border_color);
+  info_box_look.border_pen.set(InfoBoxWindow::BORDER_WIDTH, border_color);
   info_box_look.selector_pen.set(IBLSCALE(1) + 2,
                                  info_box_look.value.fg_color);
 
@@ -1270,7 +1270,7 @@ InfoBoxManager::Create(RECT rc)
     } else
       Border = BORDERRIGHT | BORDERBOTTOM;
 
-    InfoBoxes[i] = new InfoBox(main_window, xoff, yoff, sizex, sizey,
+    InfoBoxes[i] = new InfoBoxWindow(main_window, xoff, yoff, sizex, sizey,
                                Border, info_box_look);
   }
 }

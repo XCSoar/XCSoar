@@ -47,7 +47,7 @@ Copyright_License {
 extern unsigned numInfoWindows;
 extern const unsigned NUMSELECTSTRINGS;
 
-class InfoBox;
+class InfoBoxWindow;
 
 class InfoBoxManager: public ActionInterface
 {
@@ -61,9 +61,9 @@ private:
   static void FocusOnWindow(unsigned i, bool selected);
 
   /**
-   * Updates the layout and the displayed values of the #InfoBox.
+   * Updates the layout and the displayed values of the #InfoBoxWindow.
    */
-  static void Update(InfoBox &info_box, unsigned type, bool needupdate);
+  static void Update(InfoBoxWindow &info_box, unsigned type, bool needupdate);
 
   static void DisplayInfoBox();
   static void InfoBoxDrawIfDirty();
@@ -77,7 +77,7 @@ public:
   static const TCHAR *GetTypeDescription(unsigned i);
 
   static void ProcessKey(InfoBoxKeyCodes keycode);
-  static bool Click(InfoBox &ib);
+  static bool Click(InfoBoxWindow &ib);
 
   static void ProcessTimer();
   static void SetDirty();
