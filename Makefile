@@ -230,7 +230,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/Formatter/WayPoint.cpp \
 	$(SRC)/InfoBoxes/Formatter/LowWarning.cpp \
 	$(SRC)/InfoBoxes/Formatter/Time.cpp \
-	$(SRC)/InfoBoxes/InfoBox.cpp \
+	$(SRC)/InfoBoxes/InfoBoxWindow.cpp \
 	$(SRC)/InfoBoxes/InfoBoxLayout.cpp \
 	$(SRC)/InfoBoxes/InfoBoxEvents.cpp \
 	$(SRC)/InfoBoxes/InfoBoxManager.cpp \

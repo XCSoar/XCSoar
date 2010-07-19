@@ -42,7 +42,7 @@ Copyright_License {
 #include "ProfileKeys.hpp"
 #include "Asset.hpp"
 #include "Simulator.hpp"
-#include "InfoBoxes/InfoBox.hpp"
+#include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"

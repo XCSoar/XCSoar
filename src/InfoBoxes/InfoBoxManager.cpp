@@ -39,7 +39,7 @@ Copyright_License {
 
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "TaskClientUI.hpp"
-#include "InfoBoxes/InfoBox.hpp"
+#include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Form/Control.hpp"
 #include "Protection.hpp"
