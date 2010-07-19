@@ -37,7 +37,7 @@ Copyright_License {
 
 */
 
-#include "WindZigZag.h"
+#include "Wind/WindZigZag.h"
 #include "LogFile.hpp"
 #include "Math/FastMath.h"
 #include "NMEA/Info.hpp"

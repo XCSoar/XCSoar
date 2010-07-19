@@ -19,7 +19,7 @@
 #define WINDANALYSER_H
 
 #include "Vector.hpp"
-#include "WindStore.hpp"
+#include "Wind/WindStore.hpp"
 #include "Navigation/GeoPoint.hpp"
 
 /**

@@ -49,7 +49,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterMap.hpp"
-#include "WindStore.hpp"
+#include "Wind/WindStore.hpp"
 #include "Language.hpp"
 #include "Atmosphere.h"
 #include "SettingsComputer.hpp"

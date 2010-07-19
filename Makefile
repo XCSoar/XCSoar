@@ -209,10 +209,10 @@ XCSOAR_SOURCES := \
 	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
 	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
 	$(SRC)/WayPoint/WayPointFileZander.cpp \
-	$(SRC)/WindAnalyser.cpp \
-	$(SRC)/WindMeasurementList.cpp \
-	$(SRC)/WindStore.cpp \
-	$(SRC)/WindZigZag.cpp \
+	$(SRC)/Wind/WindAnalyser.cpp \
+	$(SRC)/Wind/WindMeasurementList.cpp \
+	$(SRC)/Wind/WindStore.cpp \
+	$(SRC)/Wind/WindZigZag.cpp \
 	\
 	$(SRC)/Gauge/FlarmTrafficWindow.cpp \
 	$(SRC)/Gauge/GaugeCDI.cpp \

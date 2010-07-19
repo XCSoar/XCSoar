@@ -42,7 +42,7 @@ Copyright_License {
 #include "GlideComputerBlackboard.hpp"
 #include "GlideRatio.hpp"
 #include "ThermalLocator.h"
-#include "WindAnalyser.hpp"
+#include "Wind/WindAnalyser.hpp"
 #include "GPSClock.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "Util/WindowFilter.hpp"
