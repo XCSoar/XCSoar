@@ -42,7 +42,7 @@ Copyright_License {
 #include "LineReader.hpp"
 
 #ifdef _UNICODE
-#include "ReusableArray.hpp"
+#include "Util/ReusableArray.hpp"
 #endif
 
 /**

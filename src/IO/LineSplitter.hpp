@@ -41,7 +41,7 @@ Copyright_License {
 
 #include "LineReader.hpp"
 #include "Source.hpp"
-#include "ReusableArray.hpp"
+#include "Util/ReusableArray.hpp"
 
 #include <utility>
 

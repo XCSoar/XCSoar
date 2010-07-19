@@ -40,7 +40,7 @@ Copyright_License {
 #define XCSOAR_IO_TEXT_WRITER_HPP
 
 #include "Compiler.h"
-#include "ReusableArray.hpp"
+#include "Util/ReusableArray.hpp"
 
 #include <stddef.h>
 #include <stdarg.h>
