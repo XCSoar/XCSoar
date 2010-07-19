@@ -306,7 +306,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/ProgressGlue.cpp \
 	$(SRC)/LocalTime.cpp \
 	$(SRC)/Units.cpp \
-	$(SRC)/UtilsFLARM.cpp \
+	$(SRC)/FlarmDetails.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsSettings.cpp \

@@ -36,7 +36,8 @@ Copyright_License {
 }
 */
 
-#include "UtilsFLARM.hpp"
+#include "FlarmDetails.hpp"
+
 #include "UtilsText.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
