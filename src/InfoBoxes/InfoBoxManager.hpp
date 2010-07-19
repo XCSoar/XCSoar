@@ -70,6 +70,8 @@ private:
   static void DestroyInfoBoxFormatters();
   static int GetFocused();
 
+  static int GetInfoBoxBorder(unsigned i);
+
 public:
   static void Event_Select(int i);
   static void Event_Change(int i);

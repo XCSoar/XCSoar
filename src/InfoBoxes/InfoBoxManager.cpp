@@ -1196,6 +1196,29 @@ InfoBoxManager::Paint()
   }
 }
 
+int
+InfoBoxManager::GetInfoBoxBorder(unsigned i)
+{
+  if (Appearance.InfoBoxBorder == apIbTab)
+    return 0;
+
+  if (InfoBoxLayout::InfoBoxGeometry == InfoBoxLayout::ibGNav) {
+    if (i < 6)
+      return BORDERTOP | BORDERRIGHT;
+    else
+      return BORDERTOP;
+  }
+
+  if (!Layout::landscape) {
+    if (i < 4)
+      return BORDERBOTTOM | BORDERRIGHT;
+    else
+      return BORDERTOP | BORDERRIGHT;
+  }
+
+  return BORDERRIGHT | BORDERBOTTOM;
+}
+
 void
 InfoBoxManager::Create(RECT rc)
 {
@@ -1241,26 +1264,7 @@ InfoBoxManager::Create(RECT rc)
   for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++) {
     int xoff, yoff, sizex, sizey;
     InfoBoxLayout::GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
-
-    int Border;
-    if (Appearance.InfoBoxBorder == apIbTab)
-      Border = 0;
-    else if (InfoBoxLayout::InfoBoxGeometry == InfoBoxLayout::ibGNav) {
-      Border = 0;
-      if (i > 0)
-        Border |= BORDERTOP;
-      if (i < 6)
-        Border |= BORDERRIGHT;
-    } else if (!Layout::landscape) {
-      Border = 0;
-      if (i < 4)
-        Border |= BORDERBOTTOM;
-      else
-        Border |= BORDERTOP;
-
-      Border |= BORDERRIGHT;
-    } else
-      Border = BORDERRIGHT | BORDERBOTTOM;
+    int Border = GetInfoBoxBorder(i);
 
     InfoBoxes[i] = new InfoBoxWindow(main_window, xoff, yoff, sizex, sizey,
                                Border, info_box_look);
