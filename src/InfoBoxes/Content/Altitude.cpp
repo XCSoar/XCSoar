@@ -65,3 +65,57 @@ InfoBoxContentAltitudeGPS::Update(InfoBoxWindow &infobox)
   // Set Unit
   infobox.SetValueUnit(Units::AltitudeUnit);
 }
+
+void
+InfoBoxContentAltitudeAGL::Update(InfoBoxWindow &infobox)
+{
+  TCHAR sTmp[32];
+
+  // Set Title
+  infobox.SetTitle(_T("H AGL"));
+
+  if (!XCSoarInterface::Calculated().TerrainValid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  Units::FormatUserAltitude(XCSoarInterface::Basic().AltitudeAGL, sTmp,
+                            sizeof(sTmp) / sizeof(sTmp[0]), false);
+  infobox.SetValue(sTmp);
+
+  // Set Comment
+  Units::FormatAlternateUserAltitude(XCSoarInterface::Basic().AltitudeAGL, sTmp,
+                                     sizeof(sTmp) / sizeof(sTmp[0]));
+  infobox.SetComment(sTmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::AltitudeUnit);
+}
+
+void
+InfoBoxContentAltitudeBaro::Update(InfoBoxWindow &infobox)
+{
+  TCHAR sTmp[32];
+
+  // Set Title
+  infobox.SetTitle(_T("H Baro"));
+
+  if (!XCSoarInterface::Basic().BaroAltitudeAvailable) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  Units::FormatUserAltitude(XCSoarInterface::Basic().BaroAltitude, sTmp,
+                            sizeof(sTmp) / sizeof(sTmp[0]), false);
+  infobox.SetValue(sTmp);
+
+  // Set Comment
+  Units::FormatAlternateUserAltitude(XCSoarInterface::Basic().BaroAltitude, sTmp,
+                                     sizeof(sTmp) / sizeof(sTmp[0]));
+  infobox.SetComment(sTmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::AltitudeUnit);
+}

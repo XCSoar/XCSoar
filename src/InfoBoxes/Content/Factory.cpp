@@ -49,6 +49,10 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
   switch (InfoBoxType) {
   case 0:
     return new InfoBoxContentAltitudeGPS();
+  case 1:
+    return new InfoBoxContentAltitudeAGL();
+  case 33:
+    return new InfoBoxContentAltitudeBaro();
   }
 
   return NULL;

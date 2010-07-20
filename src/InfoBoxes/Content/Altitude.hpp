@@ -47,4 +47,16 @@ public:
   virtual void Update(InfoBoxWindow &infobox);
 };
 
+class InfoBoxContentAltitudeAGL : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
+class InfoBoxContentAltitudeBaro : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
 #endif
