@@ -190,6 +190,12 @@ public:
   void SetColorTop(int Value);
 
   /**
+   * This function will reset the value to ---, clear the comment
+   * line and remove the unit
+   */
+  void SetInvalid();
+
+  /**
    * Constructor of the InfoBoxWindow class
    * @param Parent The parent ContainerWindow (usually MainWindow)
    * @param X x-Coordinate of the InfoBox

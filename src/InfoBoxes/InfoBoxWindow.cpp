@@ -156,6 +156,14 @@ InfoBoxWindow::SetComment(const TCHAR *Value)
 }
 
 void
+InfoBoxWindow::SetInvalid()
+{
+  SetValue(_T("---"));
+  SetComment(_T(""));
+  SetValueUnit(unUndef);
+}
+
+void
 InfoBoxWindow::PaintTitle(Canvas &canvas)
 {
   SIZE tsize;
