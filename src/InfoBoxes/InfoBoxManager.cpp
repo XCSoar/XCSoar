@@ -866,24 +866,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
       info_box.SetComment(_T("MANUAL"));
     break;
 
-  case 0: // GPS Alt
-    Units::FormatAlternateUserAltitude(Basic().GPSAltitude, sTmp,
-                                       sizeof(sTmp) / sizeof(sTmp[0]));
-    info_box.SetComment(sTmp);
-    break;
-
-  case 1: // AGL
-    Units::FormatAlternateUserAltitude(Basic().AltitudeAGL, sTmp,
-                                       sizeof(sTmp) / sizeof(sTmp[0]));
-    info_box.SetComment(sTmp);
-    break;
-
-  case 33:
-    Units::FormatAlternateUserAltitude(Basic().BaroAltitude, sTmp,
-                                       sizeof(sTmp) / sizeof(sTmp[0]));
-    info_box.SetComment(sTmp);
-    break;
-
   case 27: // AAT time to go
   case 36: // flight time
   case 39: // current time
