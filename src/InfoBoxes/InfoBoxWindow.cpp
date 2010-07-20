@@ -58,7 +58,8 @@ using std::max;
 InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent, int X, int Y, int Width, int Height,
                  int border_flags,
                  const InfoBoxLook &_look)
-  :parent(_parent),
+  :content(NULL),
+   parent(_parent),
    look(_look),
    mBorderKind(border_flags),
    focus_timer(0)
@@ -348,6 +349,20 @@ InfoBoxWindow::PaintInto(Canvas &dest, int xoff, int yoff, int width, int height
 
   Paint(buffer);
   dest.stretch(xoff, yoff, width, height, buffer, 0, 0, size.cx, size.cy);
+}
+
+void
+InfoBoxWindow::SetContentProvider(InfoBoxContent *_content)
+{
+  delete content;
+  content = _content;
+}
+
+void
+InfoBoxWindow::UpdateContent()
+{
+  if (content != NULL)
+    content->Update(*this);
 }
 
 bool

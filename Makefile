@@ -225,6 +225,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/ButtonLabel.cpp \
 	$(SRC)/Dialogs.cpp \
 	$(SRC)/ExpandMacros.cpp \
+	$(SRC)/InfoBoxes/Content/Factory.cpp \
 	$(SRC)/InfoBoxes/Formatter/Base.cpp \
 	$(SRC)/InfoBoxes/Formatter/TeamCode.cpp \
 	$(SRC)/InfoBoxes/Formatter/WayPoint.cpp \

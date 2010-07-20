@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_INFO_BOX_HPP
 
 #include "Units.hpp"
+#include "InfoBoxes/Content/Base.hpp"
 #include "Screen/PaintWindow.hpp"
 
 typedef enum {
@@ -103,6 +104,7 @@ public:
   };
 
 private:
+  InfoBoxContent *content;
   ContainerWindow &parent;
   const InfoBoxLook &look;
 
@@ -206,6 +208,11 @@ public:
   InfoBoxWindow(ContainerWindow &Parent, int X, int Y, int Width, int Height,
           int border_flags,
           const InfoBoxLook &_look);
+
+  ~InfoBoxWindow() { delete content; }
+
+  void SetContentProvider(InfoBoxContent *_content);
+  void UpdateContent();
 
 protected:
   /**

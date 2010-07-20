@@ -43,6 +43,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Form/Control.hpp"
 #include "Protection.hpp"
+#include "InfoBoxes/Content/Factory.hpp"
 #include "InfoBoxes/Formatter/TeamCode.hpp"
 #include "InfoBoxes/Formatter/WayPoint.hpp"
 #include "InfoBoxes/Formatter/LowWarning.hpp"
@@ -1021,6 +1022,8 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
   default:
     info_box.SetComment(_T(""));
   }
+
+  info_box.UpdateContent();
 }
 
 void
@@ -1044,6 +1047,9 @@ InfoBoxManager::DisplayInfoBox()
     Data_Options[DisplayType[i]].Formatter->AssignValue(DisplayType[i]);
 
     bool needupdate = ((DisplayType[i] != DisplayTypeLast[i]) || first);
+
+    if (needupdate)
+      InfoBoxes[i]->SetContentProvider(InfoBoxFactory::Create(DisplayType[i]));
 
     Update(*InfoBoxes[i], DisplayType[i], needupdate);
 
