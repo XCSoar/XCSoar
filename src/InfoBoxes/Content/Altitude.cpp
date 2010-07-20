@@ -119,3 +119,32 @@ InfoBoxContentAltitudeBaro::Update(InfoBoxWindow &infobox)
   // Set Unit
   infobox.SetValueUnit(Units::AltitudeUnit);
 }
+
+void
+InfoBoxContentAltitudeQFE::Update(InfoBoxWindow &infobox)
+{
+  TCHAR sTmp[32];
+
+  // Set Title
+  infobox.SetTitle(_T("QFE GPS"));
+
+  /// @todo fix QFE infobox
+#ifdef OLD_TASK
+  fixed Value = Units::ToUserAltitude(XCSoarInterface::Basic().GPSAltitude - QFEAltitudeOffset);
+#else
+  fixed Value = Units::ToUserAltitude(XCSoarInterface::Basic().GPSAltitude);
+#endif
+
+  // Set Value
+  Units::FormatUserAltitude(Value, sTmp,
+                            sizeof(sTmp) / sizeof(sTmp[0]), false);
+  infobox.SetValue(sTmp);
+
+  // Set Comment
+  Units::FormatAlternateUserAltitude(Value, sTmp,
+                                     sizeof(sTmp) / sizeof(sTmp[0]));
+  infobox.SetComment(sTmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::AltitudeUnit);
+}

@@ -1013,12 +1013,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
 #endif
     break;
 
-  case 70: // QFE
-    Units::FormatUserAltitude(Basic().GPSAltitude,
-                              sTmp, sizeof(sTmp) / sizeof(sTmp[0]));
-    info_box.SetComment(sTmp);
-    break;
-
   default:
     info_box.SetComment(_T(""));
   }

@@ -422,14 +422,6 @@ InfoBoxFormatter::AssignValue(int i)
 #endif      
     break;
 
-  case 70:	// QFE
-#ifdef OLD_TASK
-    Value = Units::ToUserAltitude(Basic().GPSAltitude - QFEAltitudeOffset);
-#else
-    Value = Units::ToUserAltitude(Basic().GPSAltitude);
-#endif
-    break;
-
   case 71:
     if (Calculated().AverageLD == 0) {
       Valid = false;

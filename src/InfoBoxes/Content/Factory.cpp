@@ -53,6 +53,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentAltitudeAGL();
   case 33:
     return new InfoBoxContentAltitudeBaro();
+  case 70:
+    return new InfoBoxContentAltitudeQFE();
   }
 
   return NULL;
