@@ -36,31 +36,15 @@ Copyright_License {
 }
 */
 
-#include "InfoBoxes/Content/Factory.hpp"
+#ifndef XCSOAR_INFOBOX_CONTENT_TEAM_HPP
+#define XCSOAR_INFOBOX_CONTENT_TEAM_HPP
 
 #include "InfoBoxes/Content/Base.hpp"
-#include "InfoBoxes/Content/Altitude.hpp"
-#include "InfoBoxes/Content/Team.hpp"
 
-#include <stddef.h>
-
-InfoBoxContent*
-InfoBoxFactory::Create(unsigned InfoBoxType)
+class InfoBoxContentTeamCode : public InfoBoxContent
 {
-  switch (InfoBoxType) {
-  case 0:
-    return new InfoBoxContentAltitudeGPS();
-  case 1:
-    return new InfoBoxContentAltitudeAGL();
-  case 20:
-    return new InfoBoxContentTerrainHeight();
-  case 33:
-    return new InfoBoxContentAltitudeBaro();
-  case 55:
-    return new InfoBoxContentTeamCode();
-  case 70:
-    return new InfoBoxContentAltitudeQFE();
-  }
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
 
-  return NULL;
-}
+#endif

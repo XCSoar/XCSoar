@@ -803,20 +803,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
 
     break;
 
-  case 55:
-    if (needupdate)
-      info_box.SetTitle(Data_Options[type].Title);
-
-    info_box.SetValue(Data_Options[type].Formatter->Render(&color));
-
-    // to be optimized!
-    if (needupdate)
-      info_box.SetValueUnit(Units::GetUserUnitByGroup(Data_Options[type].UnitGroup));
-
-    info_box.SetColor(color);
-
-    break;
-
   case 14: // Next waypoint
     if (Calculated().task_stats.task_valid) {
       info_box.SetTitle(
@@ -887,18 +873,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
       info_box.SetComment(_T("BLOCK"));
     else
       info_box.SetComment(_T("DOLPHIN"));
-
-    break;
-
-  case 55: // own team code
-    info_box.SetComment(SettingsComputer().TeammateCode);
-
-    if (!SettingsComputer().TeamFlarmTracking)
-      info_box.SetColorBottom(0);
-    else if (Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget) != NULL)
-      info_box.SetColorBottom(2);
-    else
-      info_box.SetColorBottom(1);
 
     break;
 

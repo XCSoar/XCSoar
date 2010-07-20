@@ -36,31 +36,38 @@ Copyright_License {
 }
 */
 
-#include "InfoBoxes/Content/Factory.hpp"
-
-#include "InfoBoxes/Content/Base.hpp"
-#include "InfoBoxes/Content/Altitude.hpp"
 #include "InfoBoxes/Content/Team.hpp"
 
-#include <stddef.h>
+#include "InfoBoxes/InfoBoxWindow.hpp"
+#include "Interface.hpp"
 
-InfoBoxContent*
-InfoBoxFactory::Create(unsigned InfoBoxType)
+#include <tchar.h>
+
+void
+InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
 {
-  switch (InfoBoxType) {
-  case 0:
-    return new InfoBoxContentAltitudeGPS();
-  case 1:
-    return new InfoBoxContentAltitudeAGL();
-  case 20:
-    return new InfoBoxContentTerrainHeight();
-  case 33:
-    return new InfoBoxContentAltitudeBaro();
-  case 55:
-    return new InfoBoxContentTeamCode();
-  case 70:
-    return new InfoBoxContentAltitudeQFE();
+  // Set Title
+  infobox.SetTitle(_T("TeamCode"));
+
+  if (!XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint) {
+    infobox.SetInvalid();
   }
 
-  return NULL;
+  // Set Value
+  infobox.SetValue(XCSoarInterface::Calculated().OwnTeamCode);
+
+  // Set Comment
+  infobox.SetComment(XCSoarInterface::SettingsComputer().TeammateCode);
+
+  // Set Unit
+  infobox.SetValueUnit(unUndef);
+
+  // Set Comment Color
+  if (!XCSoarInterface::SettingsComputer().TeamFlarmTracking)
+    infobox.SetColorBottom(0);
+  else if (XCSoarInterface::Basic().flarm.FindTraffic(
+      XCSoarInterface::SettingsComputer().TeamFlarmIdTarget) != NULL)
+    infobox.SetColorBottom(2);
+  else
+    infobox.SetColorBottom(1);
 }
