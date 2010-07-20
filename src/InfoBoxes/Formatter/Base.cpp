@@ -95,15 +95,6 @@ void
 InfoBoxFormatter::AssignValue(int i)
 {
   switch (i) {
-  case 0:
-    Value = Units::ToUserAltitude(Basic().GPSAltitude);
-    break;
-
-  case 1:
-    Value = Units::ToUserAltitude(Basic().AltitudeAGL);
-    Valid = Calculated().TerrainValid;
-    break;
-
   case 2:
     Value = Units::ToUserVSpeed(Calculated().Average30s);
     break;
@@ -271,11 +262,6 @@ InfoBoxFormatter::AssignValue(int i)
   case 32:
     Valid = Basic().AirspeedAvailable;
     Value = Units::ToUserSpeed(Basic().IndicatedAirspeed);
-    break;
-
-  case 33:
-    Valid = Basic().BaroAltitudeAvailable;
-    Value = Units::ToUserAltitude(Basic().BaroAltitude);
     break;
 
   case 34:
