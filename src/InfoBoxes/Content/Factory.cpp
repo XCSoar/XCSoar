@@ -51,6 +51,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentAltitudeGPS();
   case 1:
     return new InfoBoxContentAltitudeAGL();
+  case 20:
+    return new InfoBoxContentTerrainHeight();
   case 33:
     return new InfoBoxContentAltitudeBaro();
   case 70:

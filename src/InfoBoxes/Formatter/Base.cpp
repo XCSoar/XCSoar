@@ -208,11 +208,6 @@ InfoBoxFormatter::AssignValue(int i)
 #endif
     break;
 
-  case 20:
-    Value = Units::ToUserAltitude(Calculated().TerrainAlt);
-    Valid = Calculated().TerrainValid;
-    break;
-
   case 21:
     Value = Units::ToUserVSpeed(Calculated().AverageThermal);
     break;

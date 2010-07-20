@@ -148,3 +148,30 @@ InfoBoxContentAltitudeQFE::Update(InfoBoxWindow &infobox)
   // Set Unit
   infobox.SetValueUnit(Units::AltitudeUnit);
 }
+
+void
+InfoBoxContentTerrainHeight::Update(InfoBoxWindow &infobox)
+{
+  TCHAR sTmp[32];
+
+  // Set Title
+  infobox.SetTitle(_T("H GND"));
+
+  if (!XCSoarInterface::Calculated().TerrainValid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  Units::FormatUserAltitude(XCSoarInterface::Calculated().TerrainAlt, sTmp,
+                            sizeof(sTmp) / sizeof(sTmp[0]), false);
+  infobox.SetValue(sTmp);
+
+  // Set Comment
+  Units::FormatAlternateUserAltitude(XCSoarInterface::Calculated().TerrainAlt, sTmp,
+                                     sizeof(sTmp) / sizeof(sTmp[0]));
+  infobox.SetComment(sTmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::AltitudeUnit);
+}
