@@ -36,20 +36,15 @@ Copyright_License {
 }
 */
 
-#include "InfoBoxes/Content/Factory.hpp"
+#ifndef XCSOAR_INFOBOX_CONTENT_ALTITUDE_HPP
+#define XCSOAR_INFOBOX_CONTENT_ALTITUDE_HPP
 
 #include "InfoBoxes/Content/Base.hpp"
-#include "InfoBoxes/Content/Altitude.hpp"
 
-#include <stddef.h>
-
-InfoBoxContent*
-InfoBoxFactory::Create(unsigned InfoBoxType)
+class InfoBoxContentAltitudeGPS : public InfoBoxContent
 {
-  switch (InfoBoxType) {
-  case 0:
-    return new InfoBoxContentAltitudeGPS();
-  }
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
 
-  return NULL;
-}
+#endif

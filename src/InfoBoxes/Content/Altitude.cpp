@@ -36,20 +36,32 @@ Copyright_License {
 }
 */
 
-#include "InfoBoxes/Content/Factory.hpp"
-
-#include "InfoBoxes/Content/Base.hpp"
 #include "InfoBoxes/Content/Altitude.hpp"
 
-#include <stddef.h>
+#include "InfoBoxes/InfoBoxWindow.hpp"
+#include "Units.hpp"
+#include "Interface.hpp"
 
-InfoBoxContent*
-InfoBoxFactory::Create(unsigned InfoBoxType)
+#include <tchar.h>
+
+void
+InfoBoxContentAltitudeGPS::Update(InfoBoxWindow &infobox)
 {
-  switch (InfoBoxType) {
-  case 0:
-    return new InfoBoxContentAltitudeGPS();
-  }
+  TCHAR sTmp[32];
 
-  return NULL;
+  // Set Title
+  infobox.SetTitle(_T("H GPS"));
+
+  // Set Value
+  Units::FormatUserAltitude(XCSoarInterface::Basic().GPSAltitude, sTmp,
+                            sizeof(sTmp) / sizeof(sTmp[0]), false);
+  infobox.SetValue(sTmp);
+
+  // Set Comment
+  Units::FormatAlternateUserAltitude(XCSoarInterface::Basic().GPSAltitude, sTmp,
+                                     sizeof(sTmp) / sizeof(sTmp[0]));
+  infobox.SetComment(sTmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::AltitudeUnit);
 }

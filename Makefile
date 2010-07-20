@@ -226,6 +226,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Dialogs.cpp \
 	$(SRC)/ExpandMacros.cpp \
 	$(SRC)/InfoBoxes/Content/Factory.cpp \
+	$(SRC)/InfoBoxes/Content/Altitude.cpp \
 	$(SRC)/InfoBoxes/Formatter/Base.cpp \
 	$(SRC)/InfoBoxes/Formatter/TeamCode.cpp \
 	$(SRC)/InfoBoxes/Formatter/WayPoint.cpp \
