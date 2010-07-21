@@ -225,70 +225,48 @@ InfoBoxLayout::CalcInfoBoxSizes(RECT rc)
 RECT
 InfoBoxLayout::GetRemainingRect(RECT rc)
 {
-  RECT MapRect;
+  RECT MapRect = rc;
 
   switch (InfoBoxGeometry) {
   case ibTop4Bottom4:
     // calculate small map screen size
     MapRect.top = rc.top + ControlHeight;
-    MapRect.left = rc.left;
     MapRect.bottom = rc.bottom - ControlHeight;
-    MapRect.right = rc.right;
     break;
 
   case ibBottom8:
     // calculate small map screen size
-    MapRect.top = rc.top;
-    MapRect.left = rc.left;
     MapRect.bottom = rc.bottom - ControlHeight * 2;
-    MapRect.right = rc.right;
     break;
 
   case ibTop8:
     // calculate small map screen size
     MapRect.top = rc.top + ControlHeight * 2;
-    MapRect.left = rc.left;
-    MapRect.bottom = rc.bottom;
-    MapRect.right = rc.right;
     break;
 
   case ibLeft4Right4:
     // calculate small map screen size
-    MapRect.top = rc.top;
     MapRect.left = rc.left + ControlWidth;
-    MapRect.bottom = rc.bottom;
     MapRect.right = rc.right - ControlWidth;
     break;
 
   case ibLeft8:
     // calculate small map screen size
-    MapRect.top = rc.top;
     MapRect.left = rc.left + ControlWidth * 2;
-    MapRect.bottom = rc.bottom;
-    MapRect.right = rc.right;
     break;
 
   case ibRight8:
     // calculate small map screen size
-    MapRect.top = rc.top;
-    MapRect.left = rc.left;
-    MapRect.bottom = rc.bottom;
     MapRect.right = rc.right - ControlWidth * 2;
     break;
 
   case ibGNav:
     // calculate small map screen size
-    MapRect.top = rc.top;
-    MapRect.left = rc.left;
-    MapRect.bottom = rc.bottom;
     MapRect.right = rc.right - ControlWidth * 2;
     break;
 
   case ibSquare:
     // calculate small map screen size
-    MapRect.top = rc.top;
-    MapRect.left = rc.left;
-    MapRect.bottom = rc.bottom;
     MapRect.right = rc.right - ControlWidth;
     break;
   }
