@@ -41,7 +41,6 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/Exception.h"
 #include <pthread.h>
 #include <errno.h>
 

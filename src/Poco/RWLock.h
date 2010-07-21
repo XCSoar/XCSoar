@@ -39,7 +39,6 @@
 #define Foundation_RWLock_INCLUDED
 
 #include "Poco/Foundation.h"
-#include "Poco/Exception.h"
 
 #ifdef _WIN32_WCE
 #include "Poco/RWLock_Mutex.hpp"
