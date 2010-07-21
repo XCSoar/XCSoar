@@ -2,6 +2,20 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Changes from 5.2.4:
+Max Kellermann:
+- Moved the compilation suite from Visual C++ to gcc
+- Code cleanup
+Tobias Bieniek:
+- FLARM Radar screen
+- Support for SeeYou waypoint files
+- Support for Zander waypoint files
+- Support for TNP airspace files
+- Mouse Gestures
+John Wharington:
+- Calculation engine rewrite
+- New task editor
+
 Changes from 5.2.2:
 PAOLO:
 - colorful vario gauge by Paolo (for FIVV only)
