@@ -48,6 +48,10 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Components.hpp"
 #include "DrawThread.hpp"
+#include "Gauge/GaugeVario.hpp"
+#include "Gauge/GaugeFLARM.hpp"
+#include "PeriodClock.hpp"
+#include "Screen/Blank.hpp"
 
 static Mutex mutexInterfaceTimeout;
 static int interface_timeout;
@@ -191,9 +195,6 @@ XCSoarInterface::CheckShutdown(void)
 // VNT 090702 FIX Careful here: synthetic double clicks and virtual keys require some timing.
 // See Defines.h DOUBLECLICKINTERVAL . Not sure they are 100% independent.
 
-#include "PeriodClock.hpp"
-#include "Screen/Blank.hpp"
-
 bool
 XCSoarInterface::Debounce(void)
 {
@@ -232,9 +233,6 @@ vario_visible()
 
   return true;
 }
-
-#include "Gauge/GaugeVario.hpp"
-#include "Gauge/GaugeFLARM.hpp"
 
 /**
  * Determine whether vario gauge, FLARM radar and infoboxes should be drawn
