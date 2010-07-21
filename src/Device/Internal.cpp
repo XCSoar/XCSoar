@@ -62,10 +62,8 @@ ExpectString(ComPort *port, const TCHAR *token)
 {
   int i = 0, ch;
 
+  assert(port != NULL);
   assert(token != NULL);
-
-  if (port == NULL)
-    return false;
 
   while ((ch = port->GetChar()) != EOF) {
     if (token[i] == ch)
