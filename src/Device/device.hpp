@@ -68,7 +68,7 @@ HaveCondorDevice();
 
 void devConnectionMonitor();
 
-void devStartup(const TCHAR *lpCmdLine);
+void devStartup();
 void devShutdown();
 void devRestart(void);
 

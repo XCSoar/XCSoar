@@ -196,7 +196,7 @@ public:
 
   static void AfterStartup();
   static void Shutdown();
-  static bool Startup(HINSTANCE, LPCTSTR lpCmdLine);
+  static bool Startup(HINSTANCE);
 
   static void ExchangeBlackboard();
   static void ReceiveMapProjection();

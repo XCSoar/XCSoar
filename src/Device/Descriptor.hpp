@@ -53,7 +53,6 @@ struct DeviceRegister;
 
 class DeviceDescriptor : public ComPort::Handler {
 public:
-  FILE  *fhLogFile;
   ComPort *Com;
   DeviceDescriptor *pDevPipeTo;
   const struct DeviceRegister *Driver;
@@ -75,9 +74,6 @@ public:
 
   bool Open();
   void Close();
-
-  bool OpenLog(const TCHAR *FileName);
-  void CloseLog();
 
   const TCHAR *GetName() const;
 

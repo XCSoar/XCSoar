@@ -49,7 +49,7 @@ Copyright_License {
 #include <assert.h>
 
 DeviceDescriptor::DeviceDescriptor()
-  :fhLogFile(NULL), Com(NULL), pDevPipeTo(NULL),
+  :Com(NULL), pDevPipeTo(NULL),
    Driver(NULL), device(NULL),
    enable_baro(false),
    ticker(false)
@@ -60,7 +60,6 @@ void
 DeviceDescriptor::Clear()
 {
   /* must be closed already */
-  assert(fhLogFile == NULL);
   assert(device == NULL);
   assert(Com == NULL);
 
@@ -105,23 +104,6 @@ DeviceDescriptor::Close()
 
   if (OldCom != NULL)
     delete OldCom;
-}
-
-bool
-DeviceDescriptor::OpenLog(const TCHAR *FileName)
-{
-  fhLogFile = _tfopen(FileName, _T("a+b"));
-  return fhLogFile != NULL;
-}
-
-void
-DeviceDescriptor::CloseLog()
-{
-  if (fhLogFile == NULL)
-    return;
-
-  fclose(fhLogFile);
-  fhLogFile = NULL;
 }
 
 const TCHAR *
@@ -174,30 +156,6 @@ DeviceDescriptor::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   assert(String != NULL);
   assert(GPS_INFO != NULL);
-
-  if (fhLogFile != NULL && String != NULL && !string_is_empty(String)) {
-    char sTmp[500]; // temp multibyte buffer
-    const TCHAR *pWC = String;
-    char *pC = sTmp;
-    //    static DWORD lastFlush = 0;
-
-    sprintf(pC, "%9u <", (unsigned)GetTickCount());
-    pC = sTmp + strlen(sTmp);
-
-    while (*pWC) {
-      if (*pWC != '\r') {
-        *pC = (char)*pWC;
-        pC++;
-      }
-      pWC++;
-    }
-    *pC++ = '>';
-    *pC++ = '\r';
-    *pC++ = '\n';
-    *pC++ = '\0';
-
-    fputs(sTmp, fhLogFile);
-  }
 
   if (pDevPipeTo && pDevPipeTo->Com) {
     // stream pipe, pass nmea to other device (NmeaOut)

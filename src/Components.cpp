@@ -215,7 +215,7 @@ XCSoarInterface::AfterStartup()
  * @return True if bootup successful, False otherwise
  */
 bool
-XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
+XCSoarInterface::Startup(HINSTANCE hInstance)
 {
   // Set the application title to "XCSoar"
   TCHAR szTitle[] = _T("XCSoar");
@@ -362,7 +362,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 
   // Start the device thread(s)
   ProgressGlue::Create(gettext(_T("Starting devices")));
-  devStartup(lpCmdLine);
+  devStartup();
 
 /*
   -- Reset polar in case devices need the data

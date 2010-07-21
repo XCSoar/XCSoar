@@ -97,7 +97,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   LogStartUp(TEXT("Initialise application instance"));
 
   // Perform application initialization and run loop
-  if (!XCSoarInterface::Startup(hInstance, lpCmdLine))
+  if (!XCSoarInterface::Startup(hInstance))
     return 0;
 
   return CommonInterface::main_window.event_loop();

@@ -186,53 +186,6 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
 }
 
 static void
-ParseLogOption(DeviceDescriptor &device, const TCHAR *CommandLine,
-               const TCHAR *option)
-{
-  assert(CommandLine != NULL);
-  assert(option != NULL);
-
-  const TCHAR *start = _tcsstr(CommandLine, option);
-  if (start == NULL)
-    return;
-
-  start += _tcslen(option);
-
-  const TCHAR *end;
-  if (*start == '"') {
-    start++;
-
-    end = _tcschr(start, _T('"'));
-    if (end == NULL)
-      /* ignoring the parser error (missing double quote) */
-      return;
-  } else {
-    end = _tcschr(start, _T(' '));
-    if (end == NULL)
-      end = start + _tcslen(start);
-  }
-
-  if (start >= end)
-    return;
-
-  TCHAR path[MAX_PATH];
-  _tcsncpy(path, start, end - start);
-  path[end - start] = '\0';
-
-  if (device.OpenLog(path)) {
-    TCHAR msg[512];
-    _stprintf(msg, _T("Device %s logs to\r\n%s"),
-              device.GetName(), path);
-    MessageBoxX(msg, gettext(_T("Information")), MB_OK | MB_ICONINFORMATION);
-  } else {
-    TCHAR msg[512];
-    _stprintf(msg, _T("Unable to open log\r\non device %s\r\n%s"),
-              device.GetName(), path);
-    MessageBoxX(msg, gettext(_T("Error")), MB_OK | MB_ICONWARNING);
-  }
-}
-
-static void
 SetPipeTo(DeviceDescriptor &out)
 {
   for (unsigned i = 0; i < NUMDEV; ++i) {
@@ -242,9 +195,11 @@ SetPipeTo(DeviceDescriptor &out)
   }
 }
 
-static bool
-devInit(const TCHAR *CommandLine)
+void
+devStartup()
 {
+  LogStartUp(_T("Register serial devices"));
+
   DeviceDescriptor *pDevNmeaOut = NULL;
 
   for (unsigned i = 0; i < NUMDEV; i++)
@@ -271,15 +226,8 @@ devInit(const TCHAR *CommandLine)
   if (config[0].port_index != config[1].port_index)
     devInitOne(DeviceList[1], config[1], pDevNmeaOut);
 
-  if (CommandLine != NULL) {
-    ParseLogOption(DeviceList[0], CommandLine, _T("-logA="));
-    ParseLogOption(DeviceList[1], CommandLine, _T("-logB="));
-  }
-
   if (pDevNmeaOut != NULL)
     SetPipeTo(*pDevNmeaOut);
-
-  return true;
 }
 
 bool
@@ -370,14 +318,6 @@ devVarioFindVega(void)
 }
 
 void
-devStartup(const TCHAR *lpCmdLine)
-{
-  LogStartUp(_T("Register serial devices"));
-
-  devInit(lpCmdLine);
-}
-
-void
 devShutdown()
 {
   int i;
@@ -387,7 +327,6 @@ devShutdown()
 
   for (i = 0; i < NUMDEV; i++) {
     DeviceList[i].Close();
-    DeviceList[i].CloseLog();
   }
 }
 
@@ -413,7 +352,7 @@ devRestart()
 
   devShutdown();
 
-  devInit(_T(""));
+  devStartup();
 }
 
 void devConnectionMonitor()
