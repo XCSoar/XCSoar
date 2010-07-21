@@ -39,6 +39,7 @@ Copyright_License {
 // 20070413:sgi add NmeaOut support, allow nmea chaining an double port platforms
 
 #include "Device/device.hpp"
+#include "Device/Internal.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/List.hpp"
@@ -50,7 +51,6 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
-#include "NMEA/Checksum.h"
 #include "Asset.hpp"
 #include "Simulator.hpp"
 #include "Profile.hpp"
@@ -273,38 +273,24 @@ HaveCondorDevice()
   return false;
 }
 
-static void
-devFormatNMEAString(TCHAR *dst, size_t sz, const TCHAR *text)
-{
-  _sntprintf(dst, sz, _T("$%s*%02X\r\n"), text, NMEAChecksum(text));
-}
-
 void
 devWriteNMEAString(DeviceDescriptor &d, const TCHAR *text)
 {
-  TCHAR tmp[512];
-
   if (d.Com == NULL)
     return;
 
-  devFormatNMEAString(tmp, 512, text);
-
   ScopeLock protect(mutexComm);
-  d.Com->Write(tmp);
+  PortWriteNMEA(d.Com, text);
 }
 
 void
 VarioWriteNMEA(const TCHAR *text)
 {
-  TCHAR tmp[512];
-
-  devFormatNMEAString(tmp, 512, text);
-
   ScopeLock protect(mutexComm);
   for (int i = 0; i < NUMDEV; i++)
     if (DeviceList[i].IsVega())
       if (DeviceList[i].Com)
-        DeviceList[i].Com->Write(tmp);
+        PortWriteNMEA(DeviceList[i].Com, text);
 }
 
 DeviceDescriptor *
