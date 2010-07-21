@@ -10,8 +10,7 @@ InstallDir = "%CE1%\%AppName%"
 
 [Strings]
 reg_path = Software\OpenSource\XCSoar
-LinkFilename1 = "XCSoar FLY"
-LinkFilename2 SIM"
+LinkFilename = "XCSoar"
 
 [CEDevice.ARM]
 ProcessorType=2577
@@ -125,4 +124,4 @@ HKLM,%reg_path%,InstallDir,0x00000000,%InstallDir%
 
 [Links]
 ; shortcut to a file, created in the standard destination path %CE11% (/Windows/Start Menu/)
-%LinkFilename1%,0,"XCSoar.exe",%CE11%
+%LinkFilename%,0,"XCSoar.exe",%CE11%
