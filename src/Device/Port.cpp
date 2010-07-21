@@ -347,26 +347,6 @@ ComPort::Write(const char *s)
   Write(s, strlen(s));
 }
 
-#ifdef _UNICODE
-void
-ComPort::Write(const TCHAR *Text)
-{
-  char tmp[512];
-
-  if (hPort == INVALID_HANDLE_VALUE)
-    return;
-
-  int len = ::WideCharToMultiByte(CP_ACP, 0, Text, -1, tmp, sizeof(tmp),
-                                  NULL, NULL);
-
-  // don't write trailing '\0' to device
-  if (--len <= 0)
-    return;
-
-  Write(tmp, len);
-}
-#endif
-
 // Stop Rx Thread
 // return: true on success, false on error
 bool
@@ -568,7 +548,7 @@ ComPort::Read(void *Buffer, size_t Size)
 void
 ComPort::ProcessChar(char c)
 {
-  FifoBuffer<TCHAR>::Range range = buffer.write();
+  FifoBuffer<char>::Range range = buffer.write();
   if (range.second == 0) {
     // overflow, so reset buffer
     buffer.clear();
@@ -583,7 +563,7 @@ ComPort::ProcessChar(char c)
     handler.LineReceived(range.first);
     buffer.clear();
   } else if (c != '\r') {
-    range.first[0] = (TCHAR)c;
+    range.first[0] = c;
     buffer.append(1);
   }
 }

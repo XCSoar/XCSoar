@@ -136,14 +136,6 @@ ComPort::Write(const char *text)
   fputs(text, stdout);
 }
 
-#ifdef _UNICODE
-void
-ComPort::Write(const TCHAR *Text)
-{
-  _fputts(Text, stdout);
-}
-#endif
-
 void
 ComPort::Flush()
 {
@@ -293,8 +285,8 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  TCHAR buffer[1024];
-  while (_fgetts(buffer, sizeof(buffer) / sizeof(buffer[0]), stdin) != NULL)
+  char buffer[1024];
+  while (fgets(buffer, sizeof(buffer), stdin) != NULL)
     device.LineReceived(buffer);
 
   Dump(device_blackboard.Basic());

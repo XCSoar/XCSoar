@@ -37,7 +37,8 @@
 */
 
 #include "Replay/NmeaReplay.hpp"
-#include "IO/FileLineReader.hpp"
+#include "IO/FileSource.hpp"
+#include "IO/LineSplitter.hpp"
 
 #include <algorithm>
 
@@ -47,7 +48,7 @@
 NmeaReplay::NmeaReplay() :
   TimeScale(1.0),
   Enabled(false),
-  reader(NULL)
+  source(NULL), reader(NULL)
 {
   FileName[0] = _T('\0');
 }
@@ -93,13 +94,13 @@ NmeaReplay::SetFilename(const TCHAR *name)
 bool
 NmeaReplay::ReadUntilRMC(bool ignore)
 {
-  TCHAR* buffer;
+  char *buffer;
 
   while ((buffer = reader->read()) != NULL) {
     if (!ignore)
       on_sentence(buffer);
 
-    if (_tcsstr(buffer, _T("$GPRMC")) == buffer)
+    if (strstr(buffer, "$GPRMC") == buffer)
       return true;
   }
 
@@ -137,12 +138,13 @@ NmeaReplay::OpenFile()
   if (string_is_empty(FileName))
     return false;
 
-  reader = new FileLineReader(FileName);
-  if (reader->error()) {
+  source = new FileSource(FileName);
+  if (source->error()) {
     CloseFile();
     return false;
   }
 
+  reader = new LineSplitter(*source);
   return true;
 }
 

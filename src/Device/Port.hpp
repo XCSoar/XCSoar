@@ -61,7 +61,7 @@ public:
    */
   class Handler {
   public:
-    virtual void LineReceived(const TCHAR *line) = 0;
+    virtual void LineReceived(const char *line) = 0;
   };
 
 protected:
@@ -88,10 +88,6 @@ public:
 
   void Write(const void *data, unsigned length);
   void Write(const char *s);
-
-#ifdef _UNICODE
-  void Write(const TCHAR *);
-#endif
 
   void Write(char ch) {
     Write(&ch, sizeof(ch));
@@ -127,7 +123,7 @@ private:
 
   Trigger stop_trigger;
 
-  FifoBuffer<TCHAR> buffer;
+  FifoBuffer<char> buffer;
 };
 
 #endif

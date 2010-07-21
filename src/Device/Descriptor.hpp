@@ -96,7 +96,7 @@ public:
   }
 
 private:
-  bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info);
+  bool ParseNMEA(const char *line, struct NMEA_INFO *info);
 
 public:
   bool PutMacCready(double MacCready);
@@ -113,7 +113,7 @@ public:
 
   void OnSysTicker();
 
-  virtual void LineReceived(const TCHAR *line);
+  virtual void LineReceived(const char *line);
 };
 
 #endif
