@@ -192,9 +192,6 @@ XCSoarInterface::CheckShutdown(void)
 }
 
 // Debounce input buttons (does not matter which button is pressed)
-// VNT 090702 FIX Careful here: synthetic double clicks and virtual keys require some timing.
-// See Defines.h DOUBLECLICKINTERVAL . Not sure they are 100% independent.
-
 bool
 XCSoarInterface::Debounce(void)
 {
