@@ -176,9 +176,8 @@ bool
 CAI302Device::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
                         bool enable_baro)
 {
-  if (!NMEAParser::NMEAChecksum(String) || (GPS_INFO == NULL)){
+  if (!NMEAParser::NMEAChecksum(String))
     return false;
-  }
 
   if(_tcsstr(String, _T("$PCAIB")) == String){
     return cai_PCAIB(&String[7], GPS_INFO);

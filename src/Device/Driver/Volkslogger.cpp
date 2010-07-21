@@ -116,9 +116,8 @@ bool
 VolksloggerDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
                              bool enable_baro)
 {
-  if (!NMEAParser::NMEAChecksum(String) || (GPS_INFO == NULL)){
+  if (!NMEAParser::NMEAChecksum(String))
     return false;
-  }
 
   if(_tcsstr(String, _T("$PGCS,")) == String){
     return vl_PGCS1(&String[6], GPS_INFO, enable_baro);
