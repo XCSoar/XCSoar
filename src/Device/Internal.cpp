@@ -43,8 +43,6 @@ Copyright_License {
 
 #include <assert.h>
 
-#define debugIGNORERESPONCE 0
-
 void
 PortWriteNMEA(ComPort *port, const TCHAR *line)
 {
@@ -78,10 +76,6 @@ ExpectString(ComPort *port, const TCHAR *token)
     if ((unsigned)i == _tcslen(token))
       return true;
   }
-
-  #if debugIGNORERESPONCE > 0
-  return true;
-  #endif
 
   return false;
 }

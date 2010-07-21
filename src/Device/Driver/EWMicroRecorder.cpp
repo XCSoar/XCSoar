@@ -51,8 +51,6 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-#define debugIGNORERESPONCE 0
-
 // Additional sentance for EW support
 
 class EWMicroRecorderDevice : public AbstractDevice {
@@ -97,9 +95,6 @@ ExpectStringWait(ComPort *port, const TCHAR *token)
     j++;
   }
 
-  #if debugIGNORERESPONCE > 0
-  return true;
-  #endif
   return false;
 }
 
