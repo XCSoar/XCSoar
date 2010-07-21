@@ -145,9 +145,6 @@ NmeaReplay::OpenFile()
 void
 NmeaReplay::CloseFile()
 {
-  if (!reader)
-    return;
-
   delete reader;
   reader = NULL;
 }
