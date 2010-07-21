@@ -60,20 +60,19 @@ PortWriteNMEA(ComPort *port, const TCHAR *line)
 bool
 ExpectString(ComPort *port, const TCHAR *token)
 {
-  int i = 0, ch;
-
   assert(port != NULL);
   assert(token != NULL);
 
-  while ((ch = port->GetChar()) != EOF) {
-    if (token[i] == ch)
-      i++;
-    else
-      i = 0;
+  const TCHAR *p = token;
+  while (*p != _T('\0')) {
+    int ch = port->GetChar();
+    if (ch == EOF)
+      return false;
 
-    if ((unsigned)i == _tcslen(token))
-      return true;
+    if (ch != *p++)
+      /* retry */
+      p = token;
   }
 
-  return false;
+  return true;
 }

@@ -49,6 +49,7 @@ Copyright_License {
 #include "Waypoint/Waypoint.hpp"
 
 #include <tchar.h>
+#include <assert.h>
 #include <stdio.h>
 
 // Additional sentance for EW support
@@ -75,27 +76,25 @@ public:
 static bool
 ExpectStringWait(ComPort *port, const TCHAR *token)
 {
-  int i=0, ch;
-  int j=0;
+  assert(port != NULL);
+  assert(token != NULL);
 
-  while (j<500) {
+  unsigned j = 0;
+  const TCHAR *p = token;
+  while (*p != '\0') {
+    int ch = port->GetChar();
+    if (ch == EOF)
+      return false;
 
-    ch = port->GetChar();
+    if (ch != *p++)
+      /* retry */
+      p = token;
 
-    if (ch != EOF) {
-
-      if (token[i] == ch)
-        i++;
-      else
-        i=0;
-
-      if ((unsigned)i == _tcslen(token))
-        return true;
-    }
-    j++;
+    if (++j >= 500)
+      return false;
   }
 
-  return false;
+  return true;
 }
 
 bool
