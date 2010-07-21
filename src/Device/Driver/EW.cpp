@@ -77,13 +77,13 @@ public:
 };
 
 static void
-appendCheckSum(TCHAR *String)
+WriteWithChecksum(ComPort *port, const TCHAR *String)
 {
+  port->Write(String);
+
   TCHAR sTmp[4];
-
   _stprintf(sTmp, _T("%02X\r\n"), NMEAChecksum(String));
-	_tcscat(String, sTmp);
-
+  port->Write(sTmp);
 }
 
 bool
@@ -124,9 +124,7 @@ EWDevice::Declare(const struct Declaration *decl)
   if (!TryConnect())
     return false;
 
-  _stprintf(sTmp, _T("#SPI"));                  // send SetPilotInfo
-  appendCheckSum(sTmp);
-  port->Write(sTmp);
+  WriteWithChecksum(port, _T("#SPI")); // send SetPilotInfo
   Sleep(50);
 
   _tcsncpy(sPilot, decl->PilotName, 12);               // copy and strip fields
@@ -158,8 +156,7 @@ EWDevice::Declare(const struct Declaration *decl)
 
   /*
   _stprintf(sTmp, _T("#SUI%02d"), 0);           // send pilot name
-  appendCheckSum(sTmp);
-  port->Write(sTmp);
+  WriteWithChecksum(port, sTmp);
   Sleep(50);
   port->Write(PilotsName);
   port->Write(_T("\r"));
@@ -170,8 +167,7 @@ EWDevice::Declare(const struct Declaration *decl)
   };
 
   _stprintf(sTmp, _T("#SUI%02d"), 1);           // send type of aircraft
-  appendCheckSum(sTmp);
-  port->Write(sTmp);
+  WriteWithChecksum(port, sTmp);
   Sleep(50);
   port->Write(Class);
   port->Write(_T("\r"));
@@ -182,8 +178,7 @@ EWDevice::Declare(const struct Declaration *decl)
   };
 
   _stprintf(sTmp, _T("#SUI%02d"), 2);           // send aircraft ID
-  appendCheckSum(sTmp);
-  port->Write(sTmp);
+  WriteWithChecksum(port, sTmp);
   Sleep(50);
   port->Write(ID);
   port->Write(_T("\r"));
@@ -196,8 +191,7 @@ EWDevice::Declare(const struct Declaration *decl)
 
   for (int i=0; i<6; i++){                        // clear all 6 TP's
     _stprintf(sTmp, _T("#CTP%02d"), i);
-    appendCheckSum(sTmp);
-    port->Write(sTmp);
+    WriteWithChecksum(port, sTmp);
     if (!ExpectString(port, _T("OK\r"))){
       nDeclErrorCode = 1;
       return false;
@@ -307,10 +301,7 @@ EWDevice::AddWayPoint(const Waypoint &way_point)
                       EW_Flags,
                       DegLat, (int)MinLat/10,
                       DegLon, (int)MinLon/10);
-
-  appendCheckSum(EWRecord);                       // complete package with CS and CRLF
-
-  port->Write(EWRecord);                 // put it to the logger
+  WriteWithChecksum(port, EWRecord);
 
   if (!ExpectString(port, _T("OK\r"))){            // wait for response
     nDeclErrorCode = 1;
