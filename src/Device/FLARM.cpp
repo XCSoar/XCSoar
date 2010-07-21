@@ -55,7 +55,7 @@ FlarmDeclareSetGet(ComPort *port, TCHAR *Buffer)
 
   _sntprintf(tmp, 512, _T("$%s\r\n"), Buffer);
 
-  port->WriteString(tmp);
+  port->Write(tmp);
 
   Buffer[6] = _T('A');
   return ExpectString(port, Buffer);

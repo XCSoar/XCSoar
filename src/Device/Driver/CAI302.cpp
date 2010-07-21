@@ -203,7 +203,7 @@ CAI302Device::PutMacCready(double MacCready)
   _stprintf(szTmp, _T("!g,m%d\r\n"), int(Units::ToUserUnit(
       MacCready * 10, unKnots) + 0.5));
 
-  port->WriteString(szTmp);
+  port->Write(szTmp);
 
   MacCreadyUpdateTimeout = 2;
 
@@ -217,7 +217,7 @@ CAI302Device::PutBugs(double Bugs)
 
   _stprintf(szTmp, _T("!g,u%d\r\n"), int((Bugs * 100) + 0.5));
 
-  port->WriteString(szTmp);
+  port->Write(szTmp);
 
   BugsUpdateTimeout = 2;
 
@@ -231,7 +231,7 @@ CAI302Device::PutBallast(double Ballast)
 
   _stprintf(szTmp, _T("!g,b%d\r\n"), int((Ballast * 10) + 0.5));
 
-  port->WriteString(szTmp);
+  port->Write(szTmp);
 
   BallastUpdateTimeout = 2;
 
@@ -241,8 +241,8 @@ CAI302Device::PutBallast(double Ballast)
 bool
 CAI302Device::Open()
 {
-  port->WriteString(_T("\x03"));
-  port->WriteString(_T("LOG 0\r"));
+  port->Write(_T("\x03"));
+  port->Write(_T("LOG 0\r"));
 
   return true;
 }
@@ -265,17 +265,17 @@ CAI302Device::Declare(const Declaration *decl)
   port->StopRxThread();
 
   port->SetRxTimeout(500);
-  port->WriteString(_T("\x03"));
+  port->Write(_T("\x03"));
   ExpectString(port, _T("$$$"));  // empty rx buffer (searching for
                                  // pattern that never occure)
 
-  port->WriteString(_T("\x03"));
+  port->Write(_T("\x03"));
   if (!ExpectString(port, _T("cmd>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
-  port->WriteString(_T("upl 1\r"));
+  port->Write(_T("upl 1\r"));
   if (!ExpectString(port, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
@@ -283,14 +283,14 @@ CAI302Device::Declare(const Declaration *decl)
 
   ExpectString(port, _T("$$$"));
 
-  port->WriteString(_T("O\r"));
+  port->Write(_T("O\r"));
   port->Read(&cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs));
   if (!ExpectString(port, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
-  port->WriteString(_T("O 0\r"));  // 0=active pilot
+  port->Write(_T("O 0\r"));  // 0=active pilot
   Sleep(1000); // some params come up 0 if we don't wait!
   port->Read(&cai302_OdataPilot, min(sizeof(cai302_OdataPilot),
                                        (size_t)cai302_OdataNoArgs.PilotRecordSize+3));
@@ -308,14 +308,14 @@ CAI302Device::Declare(const Declaration *decl)
   swap(cai302_OdataPilot.UnitWord);
   swap(cai302_OdataPilot.MarginHeight);
 
-  port->WriteString(_T("G\r"));
+  port->Write(_T("G\r"));
   port->Read(&cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs));
   if (!ExpectString(port, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
-  port->WriteString(_T("G 0\r"));
+  port->Write(_T("G 0\r"));
   Sleep(1000);
   port->Read(&cai302_Gdata, cai302_GdataNoArgs.GliderRecordSize + 3);
   if (!ExpectString(port, _T("up>"))){
@@ -330,13 +330,13 @@ CAI302Device::Declare(const Declaration *decl)
 
   port->SetRxTimeout(1500);
 
-  port->WriteString(_T("\x03"));
+  port->Write(_T("\x03"));
   if (!ExpectString(port, _T("cmd>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
-  port->WriteString(_T("dow 1\r"));
+  port->Write(_T("dow 1\r"));
   if (!ExpectString(port, _T("dn>"))){
     nDeclErrorCode = 1;
     return false;
@@ -370,7 +370,7 @@ CAI302Device::Declare(const Declaration *decl)
   );
 
 
-  port->WriteString(szTmp);
+  port->Write(szTmp);
   if (!ExpectString(port, _T("dn>"))){
     nDeclErrorCode = 1;
     return false;
@@ -389,7 +389,7 @@ CAI302Device::Declare(const Declaration *decl)
     cai302_Gdata.WingArea
   );
 
-  port->WriteString(szTmp);
+  port->Write(szTmp);
   if (!ExpectString(port, _T("dn>"))){
     nDeclErrorCode = 1;
     return false;
@@ -403,7 +403,7 @@ CAI302Device::Declare(const Declaration *decl)
   if (nDeclErrorCode == 0){
 
     _stprintf(szTmp, _T("D,%d\r"), 255 /* end of declaration */);
-    port->WriteString(szTmp);
+    port->Write(szTmp);
 
     port->SetRxTimeout(1500);            // D,255 takes more than 800ms
 
@@ -416,10 +416,10 @@ CAI302Device::Declare(const Declaration *decl)
 
   port->SetRxTimeout(500);
 
-  port->WriteString(_T("\x03"));
+  port->Write(_T("\x03"));
   ExpectString(port, _T("cmd>"));
 
-  port->WriteString(_T("LOG 0\r"));
+  port->Write(_T("LOG 0\r"));
 
   port->SetRxTimeout(0);
   port->StartRxThread();
@@ -474,7 +474,7 @@ cai302DeclAddWayPoint(ComPort *port, const Waypoint &way_point)
 
   DeclIndex++;
 
-  port->WriteString(szTmp);
+  port->Write(szTmp);
 
   if (!ExpectString(port, _T("dn>"))){
     nDeclErrorCode = 1;

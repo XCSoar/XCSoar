@@ -61,7 +61,7 @@ XCOM760Device::PutVolume(int Volume)
 {
   TCHAR  szTmp[32];
   _stprintf(szTmp, _T("$RVOL=%d\r\n"), Volume);
-  port->WriteString(szTmp);
+  port->Write(szTmp);
   return true;
 }
 
@@ -70,7 +70,7 @@ XCOM760Device::PutActiveFrequency(double Freq)
 {
   TCHAR  szTmp[32];
   _stprintf(szTmp, _T("$TXAF=%.3f\r\n"), Freq);
-  port->WriteString(szTmp);
+  port->Write(szTmp);
   return true;
 }
 
@@ -79,7 +79,7 @@ XCOM760Device::PutStandbyFrequency(double Freq)
 {
   TCHAR  szTmp[32];
   _stprintf(szTmp, _T("$TXSF=%.3f\r\n"), Freq);
-  port->WriteString(szTmp);
+  port->Write(szTmp);
   return true;
 }
 

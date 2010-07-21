@@ -52,12 +52,12 @@ PortWriteNMEA(ComPort *port, const TCHAR *line)
   assert(line != NULL);
 
   TCHAR dollar[2] = _T("$");
-  port->WriteString(dollar);
-  port->WriteString(line);
+  port->Write(dollar);
+  port->Write(line);
 
   TCHAR checksum[16];
   _sntprintf(checksum, sizeof(checksum), _T("*%02X\r\n"), NMEAChecksum(line));
-  port->WriteString(checksum);
+  port->Write(checksum);
 }
 
 bool

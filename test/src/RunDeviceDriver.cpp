@@ -125,13 +125,13 @@ bool ComPort::StopRxThread() { return true; }
 bool ComPort::StartRxThread() { return true; }
 
 void
-ComPort::PutChar(BYTE b)
+ComPort::Write(BYTE b)
 {
   putc(b, stdout);
 }
 
 void
-ComPort::WriteString(const TCHAR *Text)
+ComPort::Write(const TCHAR *Text)
 {
   _fputts(Text, stdout);
 }

@@ -86,8 +86,8 @@ public:
     Close();
   }
 
-  void PutChar(BYTE);
-  void WriteString(const TCHAR *);
+  void Write(BYTE);
+  void Write(const TCHAR *);
   void Flush();
 
   bool Open();

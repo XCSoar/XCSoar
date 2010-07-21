@@ -90,7 +90,7 @@ EWDevice::TryConnect()
   int retries=10;
   while (--retries){
 
-    port->WriteString(_T("##\r\n"));         // send IO Mode command
+    port->Write(_T("##\r\n"));         // send IO Mode command
     if (ExpectString(port, _T("IO Mode.\r")))
       return true;
 
@@ -124,7 +124,7 @@ EWDevice::Declare(const struct Declaration *decl)
 
   _stprintf(sTmp, _T("#SPI"));                  // send SetPilotInfo
   appendCheckSum(sTmp);
-  port->WriteString(sTmp);
+  port->Write(sTmp);
   Sleep(50);
 
   _tcsncpy(sPilot, decl->PilotName, 12);               // copy and strip fields
@@ -146,7 +146,7 @@ EWDevice::Declare(const struct Declaration *decl)
                                                   // left blank (GPS
                                                   // has a RTC)
   );
-  port->WriteString(sTmp);
+  port->Write(sTmp);
 
   if (!ExpectString(port, _T("OK\r"))){
     nDeclErrorCode = 1;
@@ -157,10 +157,10 @@ EWDevice::Declare(const struct Declaration *decl)
   /*
   _stprintf(sTmp, _T("#SUI%02d"), 0);           // send pilot name
   appendCheckSum(sTmp);
-  port->WriteString(sTmp);
+  port->Write(sTmp);
   Sleep(50);
-  port->WriteString(PilotsName);
-  port->WriteString(_T("\r"));
+  port->Write(PilotsName);
+  port->Write(_T("\r"));
 
   if (!ExpectString(port, _T("OK\r"))){
     nDeclErrorCode = 1;
@@ -169,10 +169,10 @@ EWDevice::Declare(const struct Declaration *decl)
 
   _stprintf(sTmp, _T("#SUI%02d"), 1);           // send type of aircraft
   appendCheckSum(sTmp);
-  port->WriteString(sTmp);
+  port->Write(sTmp);
   Sleep(50);
-  port->WriteString(Class);
-  port->WriteString(_T("\r"));
+  port->Write(Class);
+  port->Write(_T("\r"));
 
   if (!ExpectString(port, _T("OK\r"))){
     nDeclErrorCode = 1;
@@ -181,10 +181,10 @@ EWDevice::Declare(const struct Declaration *decl)
 
   _stprintf(sTmp, _T("#SUI%02d"), 2);           // send aircraft ID
   appendCheckSum(sTmp);
-  port->WriteString(sTmp);
+  port->Write(sTmp);
   Sleep(50);
-  port->WriteString(ID);
-  port->WriteString(_T("\r"));
+  port->Write(ID);
+  port->Write(_T("\r"));
 
   if (!ExpectString(port, _T("OK\r"))){
     nDeclErrorCode = 1;
@@ -195,7 +195,7 @@ EWDevice::Declare(const struct Declaration *decl)
   for (int i=0; i<6; i++){                        // clear all 6 TP's
     _stprintf(sTmp, _T("#CTP%02d"), i);
     appendCheckSum(sTmp);
-    port->WriteString(sTmp);
+    port->Write(sTmp);
     if (!ExpectString(port, _T("OK\r"))){
       nDeclErrorCode = 1;
       return false;
@@ -204,7 +204,7 @@ EWDevice::Declare(const struct Declaration *decl)
   for (unsigned j = 0; j < decl->size(); ++j)
     AddWayPoint(decl->waypoints[j]);
 
-  port->WriteString(_T("NMEA\r\n"));         // switch to NMEA mode
+  port->Write(_T("NMEA\r\n"));         // switch to NMEA mode
 
   port->SetBaudrate(lLastBaudrate);            // restore baudrate
 
@@ -308,7 +308,7 @@ EWDevice::AddWayPoint(const Waypoint &way_point)
 
   appendCheckSum(EWRecord);                       // complete package with CS and CRLF
 
-  port->WriteString(EWRecord);                 // put it to the logger
+  port->Write(EWRecord);                 // put it to the logger
 
   if (!ExpectString(port, _T("OK\r"))){            // wait for response
     nDeclErrorCode = 1;
@@ -325,7 +325,7 @@ void
 EWDevice::LinkTimeout()
 {
   if (!fDeclarationPending)
-    port->WriteString(_T("NMEA\r\n"));
+    port->Write(_T("NMEA\r\n"));
 }
 
 static Device *

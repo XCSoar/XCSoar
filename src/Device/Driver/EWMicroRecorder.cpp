@@ -135,7 +135,7 @@ EWMicroRecorderDevice::TryConnect()
 
   while (--retries){
 
-    port->WriteString(_T("\x02"));         // send IO Mode command
+    port->Write(_T("\x02"));         // send IO Mode command
 
     unsigned user_size = 0;
     bool started = false;
@@ -148,7 +148,7 @@ EWMicroRecorderDevice::TryConnect()
       }
       if (started) {
         if (ch == 0x13) {
-          port->WriteString(_T("\x16"));
+          port->Write(_T("\x16"));
           user_data[user_size] = 0;
           // found end of file
           return true;
@@ -177,7 +177,7 @@ EWMicroRecorderPrintf(ComPort *port, const TCHAR *fmt, ...)
   _vstprintf(EWStr, fmt, ap);
   va_end(ap);
 
-  port->WriteString(EWStr);
+  port->Write(EWStr);
 }
 
 static void
@@ -234,15 +234,15 @@ EWMicroRecorderDevice::Declare(const Declaration *decl)
   if (!TryConnect())
     return false;
 
-  port->WriteString(_T("\x18"));         // start to upload file
-  port->WriteString(user_data);
+  port->Write(_T("\x18"));         // start to upload file
+  port->Write(user_data);
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                _T("Pilot Name:"), decl->PilotName);
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                _T("Competition ID:"), decl->AircraftRego);
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                _T("Aircraft Type:"), decl->AircraftType);
-  port->WriteString(_T("Description:      Declaration\r\n"));
+  port->Write(_T("Description:      Declaration\r\n"));
 
   for (unsigned i = 0; i < 11; i++) {
     if (i+1>= decl->size()) {
@@ -263,11 +263,11 @@ EWMicroRecorderDevice::Declare(const Declaration *decl)
   EWMicroRecorderWriteWayPoint(port, wp, _T("Finish LatLon:"));
   EWMicroRecorderWriteWayPoint(port, wp, _T("Land LatLon:"));
 
-  port->WriteString(_T("\x03"));         // finish sending user file
+  port->Write(_T("\x03"));         // finish sending user file
 
   bool success = ExpectStringWait(port, _T("uploaded successfully"));
 
-  port->WriteString(_T("!!\r\n"));         // go back to NMEA mode
+  port->Write(_T("!!\r\n"));         // go back to NMEA mode
 
   port->SetRxTimeout(0);                       // clear timeout
   port->StartRxThread();                       // restart RX thread

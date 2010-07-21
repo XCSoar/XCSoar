@@ -342,7 +342,7 @@ devWriteNMEAString(DeviceDescriptor &d, const TCHAR *text)
   devFormatNMEAString(tmp, 512, text);
 
   ScopeLock protect(mutexComm);
-  d.Com->WriteString(tmp);
+  d.Com->Write(tmp);
 }
 
 void
@@ -356,7 +356,7 @@ VarioWriteNMEA(const TCHAR *text)
   for (int i = 0; i < NUMDEV; i++)
     if (DeviceList[i].IsVega())
       if (DeviceList[i].Com)
-        DeviceList[i].Com->WriteString(tmp);
+        DeviceList[i].Com->Write(tmp);
 }
 
 DeviceDescriptor *

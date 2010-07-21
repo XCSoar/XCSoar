@@ -213,7 +213,7 @@ ComPort::Open()
   PortWrite (BYTE Byte)
 ********************************************************************** */
 void
-ComPort::PutChar(BYTE Byte)
+ComPort::Write(BYTE Byte)
 {
 #ifdef HAVE_POSIX
   if (fd < 0)
@@ -358,7 +358,7 @@ ComPort::Close()
 }
 
 void
-ComPort::WriteString(const TCHAR *Text)
+ComPort::Write(const TCHAR *Text)
 {
 #ifdef HAVE_POSIX
   if (fd < 0)
