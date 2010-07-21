@@ -286,8 +286,8 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
   }
 }
 
-void
-ScreenGraphics::Destroy()
+
+ScreenGraphics::~ScreenGraphics()
 {
   int i;
 

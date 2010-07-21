@@ -553,9 +553,6 @@ XCSoarInterface::Shutdown(void)
   LogStartUp(TEXT("Close Windows - main "));
   main_window.reset();
 
-  LogStartUp(TEXT("Close Graphics"));
-  MapGfx.Destroy();
-
 #ifdef DEBUG_TRANSLATIONS
   LogStartUp(TEXT("Writing missing translations"));
   WriteMissingTranslations();
