@@ -86,8 +86,17 @@ public:
     Close();
   }
 
-  void Write(char ch);
+  void Write(const void *data, unsigned length);
+  void Write(const char *s);
+
+#ifdef _UNICODE
   void Write(const TCHAR *);
+#endif
+
+  void Write(char ch) {
+    Write(&ch, sizeof(ch));
+  }
+
   void Flush();
 
   bool Open();

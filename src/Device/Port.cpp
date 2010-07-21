@@ -208,27 +208,6 @@ ComPort::Open()
   return true;
 }
 
-
-/* **********************************************************************
-  PortWrite (BYTE Byte)
-********************************************************************** */
-void
-ComPort::Write(char Byte)
-{
-#ifdef HAVE_POSIX
-  if (fd < 0)
-    return;
-
-  write(fd, &Byte, sizeof(Byte));
-#else /* !HAVE_POSIX */
-  if (hPort == INVALID_HANDLE_VALUE)
-    return;
-
-  ::WriteFile(hPort, &Byte, sizeof(Byte), NULL, NULL);
-#endif /* !HAVE_POSIX */
-}
-
-
 void
 ComPort::Flush(void)
 {
@@ -347,35 +326,46 @@ ComPort::Close()
 }
 
 void
-ComPort::Write(const TCHAR *Text)
+ComPort::Write(const void *data, unsigned length)
 {
 #ifdef HAVE_POSIX
   if (fd < 0)
     return;
 
-  write(fd, Text, _tcslen(Text) * sizeof(Text[0]));
+  write(fd, data, length);
 #else /* !HAVE_POSIX */
+  if (hPort == INVALID_HANDLE_VALUE)
+    return;
+
+  ::WriteFile(hPort, data, length, NULL, NULL);
+#endif /* !HAVE_POSIX */
+}
+
+void
+ComPort::Write(const char *s)
+{
+  Write(s, strlen(s));
+}
+
+#ifdef _UNICODE
+void
+ComPort::Write(const TCHAR *Text)
+{
   char tmp[512];
 
   if (hPort == INVALID_HANDLE_VALUE)
     return;
 
   int len = _tcslen(Text);
-
-#ifdef _UNICODE
   len = WideCharToMultiByte(CP_ACP, 0, Text, len + 1, tmp, sizeof(tmp), NULL, NULL);
-#else
-  strcpy(tmp, Text);
-  len = strlen(tmp);
-#endif
 
   // don't write trailing '\0' to device
   if (--len <= 0)
     return;
 
-  WriteFile(hPort, tmp, len, NULL, NULL);
-#endif /* !HAVE_POSIX */
+  Write(tmp, len);
 }
+#endif
 
 // Stop Rx Thread
 // return: true on success, false on error

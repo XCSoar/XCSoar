@@ -125,16 +125,24 @@ bool ComPort::StopRxThread() { return true; }
 bool ComPort::StartRxThread() { return true; }
 
 void
-ComPort::Write(char b)
+ComPort::Write(const void *data, unsigned length)
 {
-  putc(b, stdout);
+  fwrite(data, length, 1, stdout);
 }
 
+void
+ComPort::Write(const char *text)
+{
+  fputs(text, stdout);
+}
+
+#ifdef _UNICODE
 void
 ComPort::Write(const TCHAR *Text)
 {
   _fputts(Text, stdout);
 }
+#endif
 
 void
 ComPort::Flush()
