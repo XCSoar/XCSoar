@@ -219,7 +219,7 @@ InfoBoxLayout::CalcInfoBoxSizes(RECT rc)
     break;
   }
 
-  TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
+  TitleHeight = (unsigned)(ControlHeight / 3.1);
 }
 
 RECT

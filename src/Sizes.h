@@ -26,7 +26,6 @@
 #define MAX_LOADSTRING 100
 
 #define CONTROLHEIGHTRATIO 7.4
-#define TITLEHEIGHTRATIO 3.1
 
 // number of points along final glide to scan for terrain
 #define NUMFINALGLIDETERRAIN 30
