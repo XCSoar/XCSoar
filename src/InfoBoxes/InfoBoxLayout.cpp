@@ -194,58 +194,52 @@ InfoBoxLayout::CalcInfoBoxSizes(RECT rc)
     // calculate control dimensions
     ControlWidth = 2 * (rc.right - rc.left) / numInfoWindows;
     ControlHeight = (unsigned)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
-    TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
     break;
 
   case ibBottom8:
     // calculate control dimensions
     ControlWidth = 2 * (rc.right - rc.left) / numInfoWindows;
     ControlHeight = (unsigned)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
-    TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
     break;
 
   case ibTop8:
     // calculate control dimensions
     ControlWidth = 2 * (rc.right - rc.left) / numInfoWindows;
     ControlHeight = (unsigned)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
-    TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
     break;
 
   case ibLeft4Right4:
     // calculate control dimensions
     ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3);
     ControlHeight = (unsigned)(2 * (rc.bottom - rc.top) / numInfoWindows);
-    TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
     break;
 
   case ibLeft8:
     // calculate control dimensions
     ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3);
     ControlHeight = (unsigned)(2 * (rc.bottom - rc.top) / numInfoWindows);
-    TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
     break;
 
   case ibRight8:
     // calculate control dimensions
     ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3);
     ControlHeight = (unsigned)(2 * (rc.bottom - rc.top) / numInfoWindows);
-    TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
     break;
 
   case ibGNav:
     // calculate control dimensions
     ControlHeight = (unsigned)((rc.bottom - rc.top) / 6);
     ControlWidth = (unsigned)(ControlHeight * 1.44); // preserve relative shape
-    TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
     break;
 
   case ibSquare:
     // calculate control dimensions
     ControlWidth = (unsigned)((rc.right - rc.left) * 0.2);
     ControlHeight = (unsigned)((rc.bottom - rc.top) / 5);
-    TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
     break;
   }
+
+  TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
 }
 
 RECT
