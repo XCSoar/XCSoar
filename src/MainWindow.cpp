@@ -84,8 +84,7 @@ MainWindow::set(LPCTSTR text,
   RECT map_rect = InfoBoxLayout::GetRemainingRect(rc);
 
   // color/pattern chart (must have infobox geometry before this)
-  MapGfx.Initialise(XCSoarInterface::hInst,
-		    XCSoarInterface::SettingsMap());
+  MapGfx.Initialise(XCSoarInterface::SettingsMap());
 
   LogStartUp(TEXT("Initialise fonts"));
   InitialiseFonts(Appearance, rc);

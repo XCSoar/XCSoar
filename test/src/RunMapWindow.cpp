@@ -343,11 +343,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   MapWindow::register_class(hInstance);
 #endif
 
-#ifndef WIN32
-  HINSTANCE hInstance = NULL;
-#endif
-
-  MapGfx.Initialise(hInstance, blackboard.SettingsMap());
+  MapGfx.Initialise(blackboard.SettingsMap());
 
   TestWindow window;
   GenerateBlackboard(window.map);

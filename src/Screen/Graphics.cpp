@@ -126,8 +126,7 @@ const Color ScreenGraphics::Colours[] = {
 #include "LogFile.hpp"  // debug
 
 void
-ScreenGraphics::Initialise(HINSTANCE hInstance,
-    const SETTINGS_MAP &settings_map)
+ScreenGraphics::Initialise(const SETTINGS_MAP &settings_map)
 {
   /// @todo enhancement: support red/green color blind pilots with adjusted colour scheme
 
