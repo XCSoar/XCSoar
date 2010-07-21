@@ -356,8 +356,8 @@ ComPort::Write(const TCHAR *Text)
   if (hPort == INVALID_HANDLE_VALUE)
     return;
 
-  int len = _tcslen(Text);
-  len = WideCharToMultiByte(CP_ACP, 0, Text, len + 1, tmp, sizeof(tmp), NULL, NULL);
+  int len = ::WideCharToMultiByte(CP_ACP, 0, Text, -1, tmp, sizeof(tmp),
+                                  NULL, NULL);
 
   // don't write trailing '\0' to device
   if (--len <= 0)
