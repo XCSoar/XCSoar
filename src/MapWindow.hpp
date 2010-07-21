@@ -52,11 +52,11 @@ Copyright_License {
 
 #include <vector>
 
-typedef struct _THERMAL_SOURCE_VIEW
+struct THERMAL_SOURCE_VIEW
 {
   POINT Screen;
   bool Visible;
-} THERMAL_SOURCE_VIEW;
+};
 
 struct ZoomClimb_t
 {
