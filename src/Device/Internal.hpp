@@ -56,8 +56,18 @@ class ComPort;
  * @param port the port to write to
  * @param line the line without asterisk, checksum and newline
  */
-void PortWriteNMEA(ComPort *port, const TCHAR *line);
+void
+PortWriteNMEA(ComPort *port, const char *line);
 
+#ifdef _UNICODE
+void PortWriteNMEA(ComPort *port, const TCHAR *line);
+#endif
+
+bool
+ExpectString(ComPort *port, const char *token);
+
+#ifdef _UNICODE
 bool ExpectString(ComPort *port, const TCHAR *token);
+#endif
 
 #endif
