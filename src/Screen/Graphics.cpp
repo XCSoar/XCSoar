@@ -289,8 +289,6 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
 
 ScreenGraphics::~ScreenGraphics()
 {
-  int i;
-
   hCruise.reset();
   hClimb.reset();
   hFinalGlide.reset();
@@ -303,46 +301,6 @@ ScreenGraphics::~ScreenGraphics()
   hLogger.reset();
   hLoggerOff.reset();
 
-  hpAircraft.reset();
-  hpAircraftBorder.reset();
-  hpWind.reset();
-  hpWindThick.reset();
-  hpBearing.reset();
-  hpBestCruiseTrack.reset();
-  hpCompass.reset();
-  hpThermalBand.reset();
-  hpThermalBandGlider.reset();
-  hpFinalGlideAbove.reset();
-  hpFinalGlideBelow.reset();
-  hpFinalGlideBelowLandable.reset();
-  hpMapScale.reset();
-  hpTerrainLine.reset();
-  hpTerrainLineBg.reset();
-  hpSpeedFast.reset();
-  hpSpeedSlow.reset();
-  hpStartFinishThick.reset();
-  hpStartFinishThin.reset();
-
-  hpVisualGlideLightBlack.reset();
-  hpVisualGlideLightRed.reset();
-  hpVisualGlideHeavyRed.reset();
-  hpVisualGlideHeavyBlack.reset();
-
-  hbCompass.reset();
-  hbThermalBand.reset();
-  hbBestCruiseTrack.reset();
-  hbFinalGlideBelow.reset();
-  hbFinalGlideBelowLandable.reset();
-  hbFinalGlideAbove.reset();
-  hbWind.reset();
-
-  hBmpMapScale.reset();
-  hBackgroundBrush.reset();
-  hBmpClimbeAbort.reset();
-
-  hpCompassBorder.reset();
-  hBrushFlyingModeAbort.reset();
-
   SmallIcon.reset();
   TurnPointIcon.reset();
 
@@ -354,29 +312,7 @@ ScreenGraphics::~ScreenGraphics()
   hBmpTarget.reset();
   hBmpTeammatePosition.reset();
 
-  for (i = 0; i < NUMAIRSPACEBRUSHES; i++) {
-    hAirspaceBrushes[i].reset();
-    hAirspaceBitmap[i].reset();
-  }
   hAirspaceInterceptBitmap.reset();
-
-  hAboveTerrainBitmap.reset();
-  hAboveTerrainBrush.reset();
-
-  for (i = 0; i < AIRSPACECLASSCOUNT; i++) {
-    hAirspacePens[i].reset();
-  }
-
-  for (i = 0; i < NUMSNAILCOLORS; i++) {
-    hSnailPens[i].reset();
-  }
-
-  TrafficBrush.reset();
-  WarningBrush.reset();
-  AlarmBrush.reset();
-
-  infoSelectedBrush.reset();
-  infoUnselectedBrush.reset();
 
   UnloadUnitSymbols();
 }
