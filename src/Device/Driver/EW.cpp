@@ -76,7 +76,9 @@ public:
   virtual bool Declare(const struct Declaration *declaration);
 };
 
-void appendCheckSum(TCHAR *String){
+static void
+appendCheckSum(TCHAR *String)
+{
   TCHAR sTmp[4];
 
   _stprintf(sTmp, _T("%02X\r\n"), NMEAChecksum(String));
