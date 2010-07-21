@@ -49,7 +49,7 @@ protected:
   virtual bool update_time();
   virtual void reset_time();
   virtual void on_bad_file();
-  virtual void on_sentence(TCHAR* line);
+  virtual void on_sentence(const TCHAR *line);
 
 private:
   PeriodClock clock;

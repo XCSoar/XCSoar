@@ -64,7 +64,7 @@ protected:
   virtual bool update_time();
   virtual void reset_time() = 0;
   virtual void on_bad_file() = 0;
-  virtual void on_sentence(TCHAR* line) = 0;
+  virtual void on_sentence(const TCHAR *line) = 0;
 
   bool Enabled;
 

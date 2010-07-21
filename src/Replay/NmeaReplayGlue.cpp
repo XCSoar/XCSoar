@@ -44,7 +44,7 @@
 #include "Dialogs/Message.hpp"
 
 void
-NmeaReplayGlue::on_sentence(TCHAR* line)
+NmeaReplayGlue::on_sentence(const TCHAR *line)
 {
   DeviceList[0].LineReceived(line);
 }
