@@ -224,18 +224,7 @@ ComPort::Write(char Byte)
   if (hPort == INVALID_HANDLE_VALUE)
     return;
 
-  DWORD dwError, dwNumBytesWritten;
-
-  if (!WriteFile(hPort,               // Port handle
-                 &Byte,               // Pointer to the data to write
-                 1,                   // Number of bytes to write
-                 &dwNumBytesWritten,  // Pointer to the number of bytes
-                                      // written
-                 (OVERLAPPED *)NULL)) // Must be NULL for Windows CE
-  {
-    // WriteFile failed. Report error.
-    dwError = GetLastError();
-  }
+  ::WriteFile(hPort, &Byte, sizeof(Byte), NULL, NULL);
 #endif /* !HAVE_POSIX */
 }
 
@@ -367,7 +356,6 @@ ComPort::Write(const TCHAR *Text)
   write(fd, Text, _tcslen(Text) * sizeof(Text[0]));
 #else /* !HAVE_POSIX */
   char tmp[512];
-  DWORD written, error;
 
   if (hPort == INVALID_HANDLE_VALUE)
     return;
@@ -382,9 +370,10 @@ ComPort::Write(const TCHAR *Text)
 #endif
 
   // don't write trailing '\0' to device
-  if (--len <= 0 || !WriteFile(hPort, tmp, len, &written, NULL))
-    // WriteFile failed, report error
-    error = GetLastError();
+  if (--len <= 0)
+    return;
+
+  WriteFile(hPort, tmp, len, NULL, NULL);
 #endif /* !HAVE_POSIX */
 }
 
