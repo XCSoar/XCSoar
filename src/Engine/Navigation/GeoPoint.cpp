@@ -102,3 +102,10 @@ GEOPOINT::intermediate_point(const GEOPOINT &destination,
   }
   */
 }
+
+bool
+GEOPOINT::is_null() const
+{
+  return (Longitude.value_degrees() == fixed_zero) &&
+         (Latitude.value_degrees() == fixed_zero);
+}

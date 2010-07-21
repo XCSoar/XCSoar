@@ -225,6 +225,13 @@ struct GEOPOINT {
    * @return True if this point is further left (or if equal, lower) than the other
    */
   bool sort (const GEOPOINT &other) const;
+
+  /**
+   * Test whether the point is exactly at (0, 0)
+   *
+   * @return True if Lat = Lon = 0
+   */
+  bool is_null() const;
 };
 
 #endif
