@@ -197,10 +197,10 @@ CAI302Device::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
 bool
 CAI302Device::PutMacCready(double MacCready)
 {
-  TCHAR  szTmp[32];
+  char szTmp[32];
 
-  _stprintf(szTmp, _T("!g,m%d\r\n"), int(Units::ToUserUnit(
-      MacCready * 10, unKnots) + 0.5));
+  sprintf(szTmp, "!g,m%d\r\n",
+          int(Units::ToUserUnit(MacCready * 10, unKnots) + 0.5));
 
   port->Write(szTmp);
 
@@ -212,9 +212,8 @@ CAI302Device::PutMacCready(double MacCready)
 bool
 CAI302Device::PutBugs(double Bugs)
 {
-  TCHAR  szTmp[32];
-
-  _stprintf(szTmp, _T("!g,u%d\r\n"), int((Bugs * 100) + 0.5));
+  char szTmp[32];
+  sprintf(szTmp, "!g,u%d\r\n", int((Bugs * 100) + 0.5));
 
   port->Write(szTmp);
 
@@ -226,9 +225,9 @@ CAI302Device::PutBugs(double Bugs)
 bool
 CAI302Device::PutBallast(double Ballast)
 {
-  TCHAR  szTmp[32];
+  char szTmp[32];
 
-  _stprintf(szTmp, _T("!g,b%d\r\n"), int((Ballast * 10) + 0.5));
+  sprintf(szTmp, "!g,b%d\r\n", int((Ballast * 10) + 0.5));
 
   port->Write(szTmp);
 
@@ -240,8 +239,8 @@ CAI302Device::PutBallast(double Ballast)
 bool
 CAI302Device::Open()
 {
-  port->Write(_T("\x03"));
-  port->Write(_T("LOG 0\r"));
+  port->Write('\x03');
+  port->Write("LOG 0\r");
 
   return true;
 }
@@ -252,48 +251,64 @@ static int nDeclErrorCode;
 static bool
 cai302DeclAddWayPoint(ComPort *port, const Waypoint &way_point);
 
+static void
+convert_string(char *dest, size_t size, const TCHAR *src)
+{
+#ifdef _UNICODE
+  size_t length = _tcslen(src);
+  if (length >= size)
+    length = size - 1;
+
+  int length2 = ::WideCharToMultiByte(CP_ACP, 0, src, length, dest, size,
+                                      NULL, NULL);
+  if (length2 < 0)
+    length2 = 0;
+  dest[length2] = '\0';
+#else
+  strncpy(dest, src, size - 1);
+  dest[size - 1] = '\0';
+#endif
+}
+
 bool
 CAI302Device::Declare(const Declaration *decl)
 {
-  TCHAR PilotName[25];
-  TCHAR GliderType[13];
-  TCHAR GliderID[13];
-  TCHAR szTmp[255];
   nDeclErrorCode = 0;
 
   port->StopRxThread();
 
   port->SetRxTimeout(500);
-  port->Write(_T("\x03"));
-  ExpectString(port, _T("$$$"));  // empty rx buffer (searching for
-                                 // pattern that never occure)
+  port->Write('\x03');
 
-  port->Write(_T("\x03"));
-  if (!ExpectString(port, _T("cmd>"))){
+  /* empty rx buffer (searching for pattern that never occur) */
+  ExpectString(port, "$$$");
+
+  port->Write('\x03');
+  if (!ExpectString(port, "cmd>")) {
     nDeclErrorCode = 1;
     return false;
   }
 
-  port->Write(_T("upl 1\r"));
-  if (!ExpectString(port, _T("up>"))){
+  port->Write("upl 1\r");
+  if (!ExpectString(port, "up>")) {
     nDeclErrorCode = 1;
     return false;
   }
 
-  ExpectString(port, _T("$$$"));
+  ExpectString(port, "$$$");
 
-  port->Write(_T("O\r"));
+  port->Write("O\r");
   port->Read(&cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs));
-  if (!ExpectString(port, _T("up>"))){
+  if (!ExpectString(port, "up>")) {
     nDeclErrorCode = 1;
     return false;
   }
 
-  port->Write(_T("O 0\r"));  // 0=active pilot
+  port->Write("O 0\r"); // 0=active pilot
   Sleep(1000); // some params come up 0 if we don't wait!
   port->Read(&cai302_OdataPilot, min(sizeof(cai302_OdataPilot),
                                        (size_t)cai302_OdataNoArgs.PilotRecordSize+3));
-  if (!ExpectString(port, _T("up>"))){
+  if (!ExpectString(port, "up>")) {
     nDeclErrorCode = 1;
     return false;
   }
@@ -307,17 +322,17 @@ CAI302Device::Declare(const Declaration *decl)
   swap(cai302_OdataPilot.UnitWord);
   swap(cai302_OdataPilot.MarginHeight);
 
-  port->Write(_T("G\r"));
+  port->Write("G\r");
   port->Read(&cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs));
-  if (!ExpectString(port, _T("up>"))){
+  if (!ExpectString(port, "up>")) {
     nDeclErrorCode = 1;
     return false;
   }
 
-  port->Write(_T("G 0\r"));
+  port->Write("G 0\r");
   Sleep(1000);
   port->Read(&cai302_Gdata, cai302_GdataNoArgs.GliderRecordSize + 3);
-  if (!ExpectString(port, _T("up>"))){
+  if (!ExpectString(port, "up>")) {
     nDeclErrorCode = 1;
     return false;
   }
@@ -329,26 +344,25 @@ CAI302Device::Declare(const Declaration *decl)
 
   port->SetRxTimeout(1500);
 
-  port->Write(_T("\x03"));
-  if (!ExpectString(port, _T("cmd>"))){
+  port->Write('\x03');
+  if (!ExpectString(port, "cmd>")) {
     nDeclErrorCode = 1;
     return false;
   }
 
-  port->Write(_T("dow 1\r"));
-  if (!ExpectString(port, _T("dn>"))){
+  port->Write("dow 1\r");
+  if (!ExpectString(port, "dn>")) {
     nDeclErrorCode = 1;
     return false;
   }
 
-  _tcsncpy(PilotName, decl->PilotName, 24);
-  PilotName[24] = '\0';
-  _tcsncpy(GliderType, decl->AircraftType, 12);
-  GliderType[12] = '\0';
-  _tcsncpy(GliderID, decl->AircraftRego, 12);
-  GliderID[12] = '\0';
+  char PilotName[25], GliderType[13], GliderID[13];
+  convert_string(PilotName, sizeof(PilotName), decl->PilotName);
+  convert_string(GliderType, sizeof(GliderType), decl->AircraftType);
+  convert_string(GliderID, sizeof(GliderID), decl->AircraftRego);
 
-  _stprintf(szTmp, _T("O,%-24s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r"),
+  char szTmp[255];
+  sprintf(szTmp, "O,%-24s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r",
     PilotName,
     cai302_OdataPilot.OldUnit,
     cai302_OdataPilot.OldTemperaturUnit,
@@ -370,12 +384,12 @@ CAI302Device::Declare(const Declaration *decl)
 
 
   port->Write(szTmp);
-  if (!ExpectString(port, _T("dn>"))){
+  if (!ExpectString(port, "dn>")) {
     nDeclErrorCode = 1;
     return false;
   }
 
-  _stprintf(szTmp, _T("G,%-12s,%-12s,%d,%d,%d,%d,%d,%d,%d,%d\r"),
+  sprintf(szTmp, "G,%-12s,%-12s,%d,%d,%d,%d,%d,%d,%d,%d\r",
     GliderType,
     GliderID,
     cai302_Gdata.bestLD,
@@ -389,7 +403,7 @@ CAI302Device::Declare(const Declaration *decl)
   );
 
   port->Write(szTmp);
-  if (!ExpectString(port, _T("dn>"))){
+  if (!ExpectString(port, "dn>")) {
     nDeclErrorCode = 1;
     return false;
   }
@@ -400,13 +414,11 @@ CAI302Device::Declare(const Declaration *decl)
     cai302DeclAddWayPoint(port, decl->waypoints[i]);
 
   if (nDeclErrorCode == 0){
-
-    _stprintf(szTmp, _T("D,%d\r"), 255 /* end of declaration */);
-    port->Write(szTmp);
+    port->Write("D,255\r");
 
     port->SetRxTimeout(1500);            // D,255 takes more than 800ms
 
-    if (!ExpectString(port, _T("dn>"))){
+    if (!ExpectString(port, "dn>")) {
       nDeclErrorCode = 1;
     }
 
@@ -415,10 +427,10 @@ CAI302Device::Declare(const Declaration *decl)
 
   port->SetRxTimeout(500);
 
-  port->Write(_T("\x03"));
-  ExpectString(port, _T("cmd>"));
+  port->Write('\x03');
+  ExpectString(port, "cmd>");
 
-  port->Write(_T("LOG 0\r"));
+  port->Write("LOG 0\r");
 
   port->SetRxTimeout(0);
   port->StartRxThread();
@@ -430,17 +442,12 @@ CAI302Device::Declare(const Declaration *decl)
 static bool
 cai302DeclAddWayPoint(ComPort *port, const Waypoint &way_point)
 {
-  TCHAR Name[13];
-  TCHAR  szTmp[128];
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
   char NoS, EoW;
 
   if (nDeclErrorCode != 0)
     return false;
-
-  _tcsncpy(Name, way_point.Name.c_str(), 12);
-  Name[12] = '\0';
 
   tmp = way_point.Location.Latitude.value_degrees();
   NoS = 'N';
@@ -463,7 +470,11 @@ cai302DeclAddWayPoint(ComPort *port, const Waypoint &way_point)
   DegLon = (int)tmp;
   MinLon = (tmp - DegLon) * 60;
 
-  _stprintf(szTmp, _T("D,%d,%02d%07.4f%c,%03d%07.4f%c,%s,%d\r"),
+  char Name[13];
+  convert_string(Name, sizeof(Name), way_point.Name.c_str());
+
+  char szTmp[128];
+  sprintf(szTmp, "D,%d,%02d%07.4f%c,%03d%07.4f%c,%s,%d\r",
     DeclIndex,
     DegLat, MinLat, NoS,
     DegLon, MinLon, EoW,
@@ -475,7 +486,7 @@ cai302DeclAddWayPoint(ComPort *port, const Waypoint &way_point)
 
   port->Write(szTmp);
 
-  if (!ExpectString(port, _T("dn>"))){
+  if (!ExpectString(port, "dn>")) {
     nDeclErrorCode = 1;
     return false;
   }

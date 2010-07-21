@@ -77,12 +77,12 @@ public:
 };
 
 static void
-WriteWithChecksum(ComPort *port, const TCHAR *String)
+WriteWithChecksum(ComPort *port, const char *String)
 {
   port->Write(String);
 
-  TCHAR sTmp[4];
-  _stprintf(sTmp, _T("%02X\r\n"), NMEAChecksum(String));
+  char sTmp[4];
+  sprintf(sTmp, "%02X\r\n", ::NMEAChecksum(String));
   port->Write(sTmp);
 }
 
@@ -92,24 +92,40 @@ EWDevice::TryConnect()
   int retries=10;
   while (--retries){
 
-    port->Write(_T("##\r\n"));         // send IO Mode command
-    if (ExpectString(port, _T("IO Mode.\r")))
+    port->Write("##\r\n");         // send IO Mode command
+    if (ExpectString(port, "IO Mode.\r"))
       return true;
 
-    ExpectString(port, _T("$$$"));                 // empty imput buffer
+    ExpectString(port, "$$$"); // empty input buffer
   }
 
   nDeclErrorCode = 1;
   return false;
 }
 
+static void
+convert_string(char *dest, size_t size, const TCHAR *src)
+{
+#ifdef _UNICODE
+  size_t length = _tcslen(src);
+  if (length >= size)
+    length = size - 1;
+
+  int length2 = ::WideCharToMultiByte(CP_ACP, 0, src, length, dest, size,
+                                      NULL, NULL);
+  if (length2 < 0)
+    length2 = 0;
+  dest[length2] = '\0';
+#else
+  strncpy(dest, src, size - 1);
+  dest[size - 1] = '\0';
+#endif
+}
+
 bool
 EWDevice::Declare(const struct Declaration *decl)
 {
-  TCHAR sTmp[72];
-  TCHAR sPilot[13];
-  TCHAR sGliderType[9];
-  TCHAR sGliderID[9];
+  char sTmp[72];
 
   nDeclErrorCode = 0;
   ewDecelTpIndex = 0;
@@ -124,75 +140,73 @@ EWDevice::Declare(const struct Declaration *decl)
   if (!TryConnect())
     return false;
 
-  WriteWithChecksum(port, _T("#SPI")); // send SetPilotInfo
+  WriteWithChecksum(port, "#SPI"); // send SetPilotInfo
   Sleep(50);
 
-  _tcsncpy(sPilot, decl->PilotName, 12);               // copy and strip fields
-  sPilot[12] = '\0';
-  _tcsncpy(sGliderType, decl->AircraftType, 8);
-  sGliderType[8] = '\0';
-  _tcsncpy(sGliderID, decl->AircraftRego, 8);
-  sGliderID[8] = '\0';
+  char sPilot[13], sGliderType[9], sGliderID[9];
+  convert_string(sPilot, sizeof(sPilot), decl->PilotName);
+  convert_string(sGliderType, sizeof(sGliderType), decl->AircraftType);
+  convert_string(sGliderID, sizeof(sGliderID), decl->AircraftRego);
 
   // build string (field 4-5 are GPS info, no idea what to write)
-  _stprintf(sTmp, _T("%-12s%-8s%-8s%-12s%-12s%-6s\r"),
-           sPilot,
-           sGliderType,
-           sGliderID,
-           _T(""),                              // GPS Model
-           _T(""),                              // GPS Serial No.
-           _T("")                               // Flight Date,
+  sprintf(sTmp, "%-12s%-8s%-8s%-12s%-12s%-6s\r",
+          sPilot,
+          sGliderType,
+          sGliderID,
+          "", // GPS Model
+          "", // GPS Serial No.
+          "" // Flight Date,
                                                   // format unknown,
                                                   // left blank (GPS
                                                   // has a RTC)
   );
   port->Write(sTmp);
 
-  if (!ExpectString(port, _T("OK\r"))){
+  if (!ExpectString(port, "OK\r")){
     nDeclErrorCode = 1;
     return false;
   };
 
 
   /*
-  _stprintf(sTmp, _T("#SUI%02d"), 0);           // send pilot name
+  sprintf(sTmp, "#SUI%02d", 0);           // send pilot name
   WriteWithChecksum(port, sTmp);
   Sleep(50);
   port->Write(PilotsName);
-  port->Write(_T("\r"));
+  port->Write('\r');
 
-  if (!ExpectString(port, _T("OK\r"))){
+  if (!ExpectString(port, "OK\r")) {
     nDeclErrorCode = 1;
     return false;
   };
 
-  _stprintf(sTmp, _T("#SUI%02d"), 1);           // send type of aircraft
+  sprintf(sTmp, "#SUI%02d", 1);           // send type of aircraft
   WriteWithChecksum(port, sTmp);
   Sleep(50);
   port->Write(Class);
-  port->Write(_T("\r"));
+  port->Write('\r');
 
-  if (!ExpectString(port, _T("OK\r"))){
+  if (!ExpectString(port, "OK\r")) {
     nDeclErrorCode = 1;
     return false;
   };
 
-  _stprintf(sTmp, _T("#SUI%02d"), 2);           // send aircraft ID
+  sprintf(sTmp, "#SUI%02d", 2);           // send aircraft ID
   WriteWithChecksum(port, sTmp);
   Sleep(50);
   port->Write(ID);
-  port->Write(_T("\r"));
+  port->Write('\r');
 
-  if (!ExpectString(port, _T("OK\r"))){
+  if (!ExpectString(port, "OK\r")) {
     nDeclErrorCode = 1;
     return false;
   };
   */
 
   for (int i=0; i<6; i++){                        // clear all 6 TP's
-    _stprintf(sTmp, _T("#CTP%02d"), i);
+    sprintf(sTmp, "#CTP%02d", i);
     WriteWithChecksum(port, sTmp);
-    if (!ExpectString(port, _T("OK\r"))){
+    if (!ExpectString(port, "OK\r")) {
       nDeclErrorCode = 1;
       return false;
     };
@@ -200,7 +214,7 @@ EWDevice::Declare(const struct Declaration *decl)
   for (unsigned j = 0; j < decl->size(); ++j)
     AddWayPoint(decl->waypoints[j]);
 
-  port->Write(_T("NMEA\r\n"));         // switch to NMEA mode
+  port->Write("NMEA\r\n"); // switch to NMEA mode
 
   port->SetBaudrate(lLastBaudrate);            // restore baudrate
 
@@ -217,7 +231,7 @@ EWDevice::Declare(const struct Declaration *decl)
 bool
 EWDevice::AddWayPoint(const Waypoint &way_point)
 {
-  TCHAR EWRecord[100];
+  char EWRecord[100];
   TCHAR IDString[12];
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
@@ -290,7 +304,7 @@ EWDevice::AddWayPoint(const Waypoint &way_point)
   EW_Flags = (short)(EoW_Flag | NoS_Flag);
 
                                                   // setup command string
-  _stprintf(EWRecord, _T("#STP%02X%02X%02X%02X%02X%02X%02X%02X%02X%04X%02X%04X"),
+  sprintf(EWRecord, "#STP%02X%02X%02X%02X%02X%02X%02X%02X%02X%04X%02X%04X",
                       ewDecelTpIndex,
                       IDString[0],
                       IDString[1],
@@ -303,7 +317,7 @@ EWDevice::AddWayPoint(const Waypoint &way_point)
                       DegLon, (int)MinLon/10);
   WriteWithChecksum(port, EWRecord);
 
-  if (!ExpectString(port, _T("OK\r"))){            // wait for response
+  if (!ExpectString(port, "OK\r")) { // wait for response
     nDeclErrorCode = 1;
     return false;
   }
@@ -318,7 +332,7 @@ void
 EWDevice::LinkTimeout()
 {
   if (!fDeclarationPending)
-    port->Write(_T("NMEA\r\n"));
+    port->Write("NMEA\r\n");
 }
 
 static Device *

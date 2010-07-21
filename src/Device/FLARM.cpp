@@ -45,21 +45,32 @@ Copyright_License {
 #include <tchar.h>
 
 static bool
-FlarmDeclareSetGet(ComPort *port, TCHAR *Buffer)
+FlarmDeclareSetGet(ComPort *port, char *Buffer)
 {
   assert(port != NULL);
+  assert(Buffer != NULL);
 
-  //PortWriteNMEA(d->Com, Buffer);
-
-  TCHAR tmp[512];
-
-  _sntprintf(tmp, 512, _T("$%s\r\n"), Buffer);
-
-  port->Write(tmp);
+  port->Write('$');
+  port->Write(Buffer);
+  port->Write("\r\n");
 
   Buffer[6] = _T('A');
   return ExpectString(port, Buffer);
 }
+
+#ifdef _UNICODE
+static bool
+FlarmDeclareSetGet(ComPort *port, TCHAR *s)
+{
+  assert(port != NULL);
+  assert(s != NULL);
+
+  char buffer[_tcslen(s) * 4 + 1];
+  return ::WideCharToMultiByte(CP_ACP, 0, s, -1, buffer, sizeof(buffer),
+                               NULL, NULL) > 0 &&
+    FlarmDeclareSetGet(port, buffer);
+}
+#endif
 
 bool
 FlarmDeclare(ComPort *port, const Declaration *decl)

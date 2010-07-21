@@ -66,14 +66,14 @@ public:
 bool
 CaiGpsNavDevice::Open()
 {
-  port->Write(_T("\x03"));
+  port->Write('\x03');
   Sleep(50);
-  port->Write(_T("NMEA\r"));
+  port->Write("NMEA\r");
 
   // This is for a slightly different mode, that
   // apparently outputs pressure info too...
-  //(d->Com.Write)(_T("PNP\r\n"));
-  //(d->Com.Write)(_T("LOG 0\r\n"));
+  //port->Write("PNP\r\n");
+  //port->Write("LOG 0\r\n");
 
   return true;
 }

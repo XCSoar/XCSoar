@@ -40,7 +40,6 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "Device/Port.hpp"
 
-#include <tchar.h>
 #include <stdio.h>
 
 class XCOM760Device : public AbstractDevice {
@@ -59,8 +58,8 @@ public:
 bool
 XCOM760Device::PutVolume(int Volume)
 {
-  TCHAR  szTmp[32];
-  _stprintf(szTmp, _T("$RVOL=%d\r\n"), Volume);
+  char szTmp[32];
+  sprintf(szTmp, "$RVOL=%d\r\n", Volume);
   port->Write(szTmp);
   return true;
 }
@@ -68,8 +67,8 @@ XCOM760Device::PutVolume(int Volume)
 bool
 XCOM760Device::PutActiveFrequency(double Freq)
 {
-  TCHAR  szTmp[32];
-  _stprintf(szTmp, _T("$TXAF=%.3f\r\n"), Freq);
+  char szTmp[32];
+  sprintf(szTmp, "$TXAF=%.3f\r\n", Freq);
   port->Write(szTmp);
   return true;
 }
@@ -77,8 +76,8 @@ XCOM760Device::PutActiveFrequency(double Freq)
 bool
 XCOM760Device::PutStandbyFrequency(double Freq)
 {
-  TCHAR  szTmp[32];
-  _stprintf(szTmp, _T("$TXSF=%.3f\r\n"), Freq);
+  char szTmp[32];
+  sprintf(szTmp, "$TXSF=%.3f\r\n", Freq);
   port->Write(szTmp);
   return true;
 }

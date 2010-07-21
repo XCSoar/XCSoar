@@ -67,8 +67,8 @@ PortWriteNMEA(ComPort *port, const TCHAR *line)
   port->Write('$');
   port->Write(line);
 
-  TCHAR checksum[16];
-  _sntprintf(checksum, sizeof(checksum), _T("*%02X\r\n"), NMEAChecksum(line));
+  char checksum[16];
+  sprintf(checksum, "*%02X\r\n", NMEAChecksum(line));
   port->Write(checksum);
 }
 #endif

@@ -58,7 +58,7 @@ class EWMicroRecorderDevice : public AbstractDevice {
 protected:
   ComPort *port;
 
-  TCHAR user_data[2500];
+  char user_data[2500];
 
 public:
   EWMicroRecorderDevice(ComPort *_port)
@@ -74,13 +74,13 @@ public:
 };
 
 static bool
-ExpectStringWait(ComPort *port, const TCHAR *token)
+ExpectStringWait(ComPort *port, const char *token)
 {
   assert(port != NULL);
   assert(token != NULL);
 
   unsigned j = 0;
-  const TCHAR *p = token;
+  const char *p = token;
   while (*p != '\0') {
     int ch = port->GetChar();
     if (ch == EOF)
@@ -129,7 +129,7 @@ EWMicroRecorderDevice::TryConnect()
 
   while (--retries){
 
-    port->Write(_T("\x02"));         // send IO Mode command
+    port->Write('\x02');         // send IO Mode command
 
     unsigned user_size = 0;
     bool started = false;
@@ -142,7 +142,7 @@ EWMicroRecorderDevice::TryConnect()
       }
       if (started) {
         if (ch == 0x13) {
-          port->Write(_T("\x16"));
+          port->Write('\x16');
           user_data[user_size] = 0;
           // found end of file
           return true;
@@ -171,7 +171,16 @@ EWMicroRecorderPrintf(ComPort *port, const TCHAR *fmt, ...)
   _vstprintf(EWStr, fmt, ap);
   va_end(ap);
 
-  port->Write(EWStr);
+#ifdef _UNICODE
+  char buffer[256];
+  if (::WideCharToMultiByte(CP_ACP, 0, EWStr, -1, buffer, sizeof(buffer),
+                            NULL, NULL) <= 0)
+    return;
+#else
+  const char *buffer = EWStr;
+#endif
+
+  port->Write(buffer);
 }
 
 static void
@@ -228,7 +237,7 @@ EWMicroRecorderDevice::Declare(const Declaration *decl)
   if (!TryConnect())
     return false;
 
-  port->Write(_T("\x18"));         // start to upload file
+  port->Write('\x18');         // start to upload file
   port->Write(user_data);
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                _T("Pilot Name:"), decl->PilotName);
@@ -236,7 +245,7 @@ EWMicroRecorderDevice::Declare(const Declaration *decl)
                _T("Competition ID:"), decl->AircraftRego);
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                _T("Aircraft Type:"), decl->AircraftType);
-  port->Write(_T("Description:      Declaration\r\n"));
+  port->Write("Description:      Declaration\r\n");
 
   for (unsigned i = 0; i < 11; i++) {
     if (i+1>= decl->size()) {
@@ -257,11 +266,11 @@ EWMicroRecorderDevice::Declare(const Declaration *decl)
   EWMicroRecorderWriteWayPoint(port, wp, _T("Finish LatLon:"));
   EWMicroRecorderWriteWayPoint(port, wp, _T("Land LatLon:"));
 
-  port->Write(_T("\x03"));         // finish sending user file
+  port->Write('\x03');         // finish sending user file
 
-  bool success = ExpectStringWait(port, _T("uploaded successfully"));
+  bool success = ExpectStringWait(port, "uploaded successfully");
 
-  port->Write(_T("!!\r\n"));         // go back to NMEA mode
+  port->Write("!!\r\n");         // go back to NMEA mode
 
   port->SetRxTimeout(0);                       // clear timeout
   port->StartRxThread();                       // restart RX thread

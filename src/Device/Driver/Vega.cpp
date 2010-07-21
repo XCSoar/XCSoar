@@ -46,6 +46,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "LogFile.hpp"
 
+#include <windows.h>
 #include <tchar.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -419,7 +420,16 @@ VegaDevice::Declare(const struct Declaration *decl)
 bool
 VegaDevice::PutVoice(const TCHAR *Sentence)
 {
-  PortWriteNMEA(port, Sentence);
+#ifdef _UNICODE
+  char buffer[_tcslen(Sentence) * 4 + 1];
+  if (::WideCharToMultiByte(CP_ACP, 0, Sentence, -1, buffer, sizeof(buffer),
+                            NULL, NULL) <= 0)
+    return false;
+#else
+  const char *buffer = Sentence;
+#endif
+
+  PortWriteNMEA(port, buffer);
   return true;
 }
 
@@ -428,14 +438,14 @@ VegaDevice::PutVoice(const TCHAR *Sentence)
 static void
 _VarioWriteSettings(ComPort *port)
 {
-    TCHAR mcbuf[100];
+    char mcbuf[100];
 
-    _stprintf(mcbuf, _T("PDVMC,%d,%d,%d,%d,%d"),
-              iround(device_blackboard.Calculated().common_stats.current_mc*10),
-              iround(device_blackboard.Calculated().V_stf*10),
-              device_blackboard.Calculated().Circling,
-              iround(device_blackboard.Calculated().TerrainAlt),
-              10132); // JMW 20080716 bug
+    sprintf(mcbuf, "PDVMC,%d,%d,%d,%d,%d",
+            iround(device_blackboard.Calculated().common_stats.current_mc*10),
+            iround(device_blackboard.Calculated().V_stf*10),
+            device_blackboard.Calculated().Circling,
+            iround(device_blackboard.Calculated().TerrainAlt),
+            10132); // JMW 20080716 bug
               // iround(QNH*10));
 
     PortWriteNMEA(port, mcbuf);
@@ -458,13 +468,13 @@ VegaDevice::OnSysTicker()
     _VarioWriteSettings(port);
 
   THERMAL_LOCATOR_INFO t = device_blackboard.Calculated();
-  TCHAR tbuf[100];
-  _stprintf(tbuf, _T("PTLOC,%d,%g,%g,%g,%g"),
-            (int)(positive(t.ThermalEstimate_R)),
-            (double)t.ThermalEstimate_Location.Longitude.value_degrees(), 
-            (double)t.ThermalEstimate_Location.Latitude.value_degrees(), 
-            (double)t.ThermalEstimate_W, 
-            (double)t.ThermalEstimate_R);
+  char tbuf[100];
+  sprintf(tbuf, "PTLOC,%d,%g,%g,%g,%g",
+          (int)(positive(t.ThermalEstimate_R)),
+          (double)t.ThermalEstimate_Location.Longitude.value_degrees(),
+          (double)t.ThermalEstimate_Location.Latitude.value_degrees(),
+          (double)t.ThermalEstimate_W,
+          (double)t.ThermalEstimate_R);
 
   PortWriteNMEA(port, tbuf);
 }
