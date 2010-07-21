@@ -138,10 +138,12 @@ NmeaReplay::OpenFile()
     return false;
 
   reader = new FileLineReader(FileName);
-  if (!reader->error())
-    return true;
+  if (reader->error()) {
+    CloseFile();
+    return false;
+  }
 
-  return false;
+  return true;
 }
 
 void
