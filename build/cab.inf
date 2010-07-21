@@ -64,10 +64,6 @@ VersionMax = 32767.0
 XCSoar.exe = 1
 XCSoarLaunch.dll = 3
 XCSoarSetup.dll = 4
-DejaVuSansCondensed-BoldOblique2.ttf = 5
-DejaVuSansCondensed2.ttf = 5
-DejaVuSansCondensed-Bold2.ttf = 5
-DejaVuSansCondensed-Oblique2.ttf = 5
 default.xci = 6
 english.xcl = 7
 italian.xcl = 7
@@ -83,7 +79,6 @@ CESetupDLL=XCSoarSetup.dll
 
 [DestinationDirs]
 Files.Windows = 0,%CE2% ; "\Windows" directory
-Files.Fonts = 0,%CE15% ; "\Windows\Fonts" directory
 TheFiles = 0, %InstallDir%
 Files.Language = 0, "%CE5%\XCSoarData"
 Files.Input = 0, "%CE5%\XCSoarData"
@@ -96,12 +91,6 @@ XCSoarSetup.dll
 
 [Files.Windows]
 XCSoarLaunch.dll, XCSoarLaunch.dll,,0x40000000
-
-[Files.Fonts]
-DejaVuSansCondensed-Bold2.ttf,,,0x00000010
-DejaVuSansCondensed-BoldOblique2.ttf,,,0x00000010
-DejaVuSansCondensed-Oblique2.ttf,,,0x00000010
-DejaVuSansCondensed2.ttf,,,0x00000010
 
 [Files.Input]
 default.xci
