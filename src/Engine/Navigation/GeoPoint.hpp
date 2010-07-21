@@ -41,6 +41,7 @@ Copyright_License {
 #define XCSOAR_GEOPOINT_HPP
 
 #include "Math/Angle.hpp"
+#include "Compiler.h"
 
 /**
  * Geodetic coordinate expressed as Longitude and Latitude in degrees.
@@ -88,6 +89,7 @@ struct GEOPOINT {
    *
    * @return Location of point
    */
+  gcc_pure
   GEOPOINT parametric(const GEOPOINT &delta, const fixed t) const;
 
   /**
@@ -98,6 +100,7 @@ struct GEOPOINT {
    *
    * @return Location of point
    */
+  gcc_pure
   GEOPOINT interpolate(const GEOPOINT &end, const fixed t) const;
 
   /**
@@ -107,6 +110,7 @@ struct GEOPOINT {
    *
    * @return Modified point
    */
+  gcc_pure
   GEOPOINT operator* (const fixed x) const {
     GEOPOINT res = *this;
     res.Longitude *= x;
@@ -121,6 +125,7 @@ struct GEOPOINT {
    *
    * @return Modified point
    */
+  gcc_pure
   GEOPOINT operator+ (const GEOPOINT &delta) const {
     GEOPOINT res = *this;
     res.Longitude += delta.Longitude;
@@ -148,6 +153,7 @@ struct GEOPOINT {
    *
    * @return Modified point
    */
+  gcc_pure
   GEOPOINT operator- (const GEOPOINT &delta) const {
     GEOPOINT res = *this;
     res.Longitude -= delta.Longitude;
@@ -162,6 +168,7 @@ struct GEOPOINT {
    *
    * @return Distance (m)
    */
+  gcc_pure
   fixed distance(const GEOPOINT &other) const;
 
   /**
@@ -171,6 +178,7 @@ struct GEOPOINT {
    *
    * @return Bearing (deg)
    */
+  gcc_pure
   Angle bearing(const GEOPOINT &other) const;
 
   /**
@@ -182,6 +190,7 @@ struct GEOPOINT {
    *
    * @return Distance (m) along from-to line
    */
+  gcc_pure
   fixed projected_distance(const GEOPOINT &from,
                            const GEOPOINT &to) const;
 
@@ -194,6 +203,7 @@ struct GEOPOINT {
    *
    * @return Location of point
    */
+  gcc_pure
   GEOPOINT intermediate_point(const GEOPOINT &destination, 
                               const fixed distance) const;
 
@@ -204,6 +214,7 @@ struct GEOPOINT {
    *
    * @return True if coincident
    */
+  gcc_pure
   bool equals(const GEOPOINT &other) const;
 
   /**
@@ -213,6 +224,7 @@ struct GEOPOINT {
    *
    * @return True if coincident
    */
+  gcc_pure
   bool operator== (const GEOPOINT &other) const {
     return equals(other);
   }
@@ -231,6 +243,7 @@ struct GEOPOINT {
    *
    * @return True if Lat = Lon = 0
    */
+  gcc_pure
   bool is_null() const;
 };
 
