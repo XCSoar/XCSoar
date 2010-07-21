@@ -337,7 +337,6 @@ ScreenGraphics::Destroy()
   hbWind.reset();
 
   hBmpMapScale.reset();
-  hBmpCompassBg.reset();
   hBackgroundBrush.reset();
   hBmpClimbeAbort.reset();
 

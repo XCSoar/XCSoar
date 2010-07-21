@@ -152,7 +152,6 @@ public:
   MaskedIcon hBmpTeammatePosition;
 
   Bitmap hBmpMapScale;
-  Bitmap hBmpCompassBg;
   Bitmap hBmpClimbeAbort;
   Bitmap hBmpUnitKm;
   Bitmap hBmpUnitSm;
