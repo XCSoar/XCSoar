@@ -58,25 +58,6 @@ NMEAChecksum(const char *p)
   return checksum;
 }
 
-#ifdef _UNICODE
-/**
- * Calculates the checksum for the specified line (without the
- * asterisk and the newline character).
- *
- * @param p a NULL terminated string
- */
-static inline unsigned char
-NMEAChecksum(const TCHAR *p)
-{
-  unsigned char checksum = 0;
-
-  while (*p != 0)
-    checksum ^= *p++;
-
-  return checksum;
-}
-#endif
-
 /**
  * Calculates the checksum for the specified line (without the
  * asterisk and the newline character).

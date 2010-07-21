@@ -59,15 +59,7 @@ class ComPort;
 void
 PortWriteNMEA(ComPort *port, const char *line);
 
-#ifdef _UNICODE
-void PortWriteNMEA(ComPort *port, const TCHAR *line);
-#endif
-
 bool
 ExpectString(ComPort *port, const char *token);
-
-#ifdef _UNICODE
-bool ExpectString(ComPort *port, const TCHAR *token);
-#endif
 
 #endif

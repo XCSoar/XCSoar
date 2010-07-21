@@ -57,22 +57,6 @@ PortWriteNMEA(ComPort *port, const char *line)
   port->Write(checksum);
 }
 
-#ifdef _UNICODE
-void
-PortWriteNMEA(ComPort *port, const TCHAR *line)
-{
-  assert(port != NULL);
-  assert(line != NULL);
-
-  port->Write('$');
-  port->Write(line);
-
-  char checksum[16];
-  sprintf(checksum, "*%02X\r\n", NMEAChecksum(line));
-  port->Write(checksum);
-}
-#endif
-
 bool
 ExpectString(ComPort *port, const char *token)
 {
@@ -92,25 +76,3 @@ ExpectString(ComPort *port, const char *token)
 
   return true;
 }
-
-#ifdef _UNICODE
-bool
-ExpectString(ComPort *port, const TCHAR *token)
-{
-  assert(port != NULL);
-  assert(token != NULL);
-
-  const TCHAR *p = token;
-  while (*p != _T('\0')) {
-    int ch = port->GetChar();
-    if (ch == EOF)
-      return false;
-
-    if (ch != *p++)
-      /* retry */
-      p = token;
-  }
-
-  return true;
-}
-#endif

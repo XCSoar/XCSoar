@@ -273,6 +273,22 @@ HaveCondorDevice()
   return false;
 }
 
+#ifdef _UNICODE
+static void
+PortWriteNMEA(ComPort *port, const TCHAR *line)
+{
+  assert(port != NULL);
+  assert(line != NULL);
+
+  char buffer[_tcslen(line) * 4 + 1];
+  if (::WideCharToMultiByte(CP_ACP, 0, line, -1, buffer, sizeof(buffer),
+                            NULL, NULL) <= 0)
+    return;
+
+  PortWriteNMEA(port, buffer);
+}
+#endif
+
 void
 devWriteNMEAString(DeviceDescriptor &d, const TCHAR *text)
 {
