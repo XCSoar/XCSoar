@@ -208,8 +208,6 @@ GlideComputer::CalculateTeammateBearingRange()
 
   fixed ownDistance;
   Angle ownBearing;
-  fixed mateDistance;
-  Angle mateBearing;
 
   // Get bearing and distance to the reference waypoint
   const Waypoint *wp =
@@ -235,11 +233,11 @@ GlideComputer::CalculateTeammateBearingRange()
 
     // Hysteresis for GlideComputerEvent
     // If (closer than 100m to the teammates last position and "event" not reset)
-    if (mateDistance < fixed(100) && InTeamSector == false) {
+    if (Calculated().TeammateRange < fixed(100) && InTeamSector == false) {
       InTeamSector = true;
       // Raise GCE_TEAM_POS_REACHED event
       InputEvents::processGlideComputer(GCE_TEAM_POS_REACHED);
-    } else if (mateDistance > fixed(300)) {
+    } else if (Calculated().TeammateRange > fixed(300)) {
       // Reset "event" when distance is greater than 300m again
       InTeamSector = false;
     }
