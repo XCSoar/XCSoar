@@ -191,17 +191,7 @@ InfoBoxLayout::CalcInfoBoxSizes(RECT rc)
 {
   switch (InfoBoxGeometry) {
   case ibTop4Bottom4:
-    // calculate control dimensions
-    ControlWidth = 2 * (rc.right - rc.left) / numInfoWindows;
-    ControlHeight = (unsigned)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
-    break;
-
   case ibBottom8:
-    // calculate control dimensions
-    ControlWidth = 2 * (rc.right - rc.left) / numInfoWindows;
-    ControlHeight = (unsigned)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
-    break;
-
   case ibTop8:
     // calculate control dimensions
     ControlWidth = 2 * (rc.right - rc.left) / numInfoWindows;
@@ -209,17 +199,7 @@ InfoBoxLayout::CalcInfoBoxSizes(RECT rc)
     break;
 
   case ibLeft4Right4:
-    // calculate control dimensions
-    ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3);
-    ControlHeight = (unsigned)(2 * (rc.bottom - rc.top) / numInfoWindows);
-    break;
-
   case ibLeft8:
-    // calculate control dimensions
-    ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3);
-    ControlHeight = (unsigned)(2 * (rc.bottom - rc.top) / numInfoWindows);
-    break;
-
   case ibRight8:
     // calculate control dimensions
     ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3);
