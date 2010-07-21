@@ -59,9 +59,9 @@ leaving 220 = 110 control width
 
 
 unsigned InfoBoxLayout::InfoBoxGeometry = ibTop4Bottom4;
-int InfoBoxLayout::ControlWidth;
-int InfoBoxLayout::ControlHeight;
-int InfoBoxLayout::TitleHeight;
+unsigned InfoBoxLayout::ControlWidth;
+unsigned InfoBoxLayout::ControlHeight;
+unsigned InfoBoxLayout::TitleHeight;
 bool InfoBoxLayout::fullscreen = false;
 unsigned InfoBoxLayout::numInfoWindows = 8;
 
@@ -195,31 +195,31 @@ InfoBoxLayout::CalcInfoBoxSizes(RECT rc)
   case ibTop8:
     // calculate control dimensions
     ControlWidth = 2 * (rc.right - rc.left) / numInfoWindows;
-    ControlHeight = (unsigned)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
+    ControlHeight = (rc.bottom - rc.top) / CONTROLHEIGHTRATIO;
     break;
 
   case ibLeft4Right4:
   case ibLeft8:
   case ibRight8:
     // calculate control dimensions
-    ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3);
-    ControlHeight = (unsigned)(2 * (rc.bottom - rc.top) / numInfoWindows);
+    ControlWidth = (rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3;
+    ControlHeight = 2 * (rc.bottom - rc.top) / numInfoWindows;
     break;
 
   case ibGNav:
     // calculate control dimensions
-    ControlHeight = (unsigned)((rc.bottom - rc.top) / 6);
-    ControlWidth = (unsigned)(ControlHeight * 1.44); // preserve relative shape
+    ControlHeight = (rc.bottom - rc.top) / 6;
+    ControlWidth = ControlHeight * 1.44; // preserve relative shape
     break;
 
   case ibSquare:
     // calculate control dimensions
-    ControlWidth = (unsigned)((rc.right - rc.left) * 0.2);
-    ControlHeight = (unsigned)((rc.bottom - rc.top) / 5);
+    ControlWidth = (rc.right - rc.left) * 0.2;
+    ControlHeight = (rc.bottom - rc.top) / 5;
     break;
   }
 
-  TitleHeight = (unsigned)(ControlHeight / 3.1);
+  TitleHeight = ControlHeight / 3.1;
 }
 
 RECT

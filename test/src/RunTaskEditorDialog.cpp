@@ -63,7 +63,7 @@ Copyright_License {
 int DisplayTimeOut = 0;
 #endif
 
-int InfoBoxLayout::ControlWidth = 100;
+unsigned InfoBoxLayout::ControlWidth = 100;
 
 pt2Event
 InputEvents::findEvent(const TCHAR *)

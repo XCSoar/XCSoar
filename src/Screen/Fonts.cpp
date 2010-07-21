@@ -198,7 +198,7 @@ InitialiseLogFonts()
     // unselect it before deleting it
     SelectObject(canvas, hfOld);
     DeleteObject(TempWindowFont);
-  } while (tsize.cx > InfoBoxLayout::ControlWidth);
+  } while ((unsigned)tsize.cx > InfoBoxLayout::ControlWidth);
 
   iFontHeight++;
   logfont.lfHeight = iFontHeight;

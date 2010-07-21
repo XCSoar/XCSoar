@@ -120,7 +120,7 @@ static TopologyStore *topology;
 static RasterTerrain terrain;
 Logger logger;
 
-int InfoBoxLayout::ControlWidth;
+unsigned InfoBoxLayout::ControlWidth;
 
 InterfaceBlackboard CommonInterface::blackboard;
 

@@ -64,7 +64,7 @@ namespace InfoBoxLayout
 
   extern bool fullscreen;
   extern unsigned InfoBoxGeometry;
-  extern int ControlWidth, ControlHeight, TitleHeight;
+  extern unsigned ControlWidth, ControlHeight, TitleHeight;
   extern unsigned numInfoWindows;
 
   void Init(RECT rc);
