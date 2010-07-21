@@ -48,7 +48,7 @@ Copyright_License {
  * @param p a NULL terminated string
  */
 static inline unsigned char
-NMEAChecksum(const TCHAR *p)
+NMEAChecksum(const char *p)
 {
   unsigned char checksum = 0;
 
@@ -58,6 +58,44 @@ NMEAChecksum(const TCHAR *p)
   return checksum;
 }
 
+#ifdef _UNICODE
+/**
+ * Calculates the checksum for the specified line (without the
+ * asterisk and the newline character).
+ *
+ * @param p a NULL terminated string
+ */
+static inline unsigned char
+NMEAChecksum(const TCHAR *p)
+{
+  unsigned char checksum = 0;
+
+  while (*p != 0)
+    checksum ^= *p++;
+
+  return checksum;
+}
+#endif
+
+/**
+ * Calculates the checksum for the specified line (without the
+ * asterisk and the newline character).
+ *
+ * @param p a string
+ * @param length the number of characters in the string
+ */
+static inline unsigned char
+NMEAChecksum(const char *p, unsigned length)
+{
+  unsigned char checksum = 0;
+
+  for (unsigned i = 0; i < length; ++i)
+    checksum ^= *p++;
+
+  return checksum;
+}
+
+#ifdef _UNICODE
 /**
  * Calculates the checksum for the specified line (without the
  * asterisk and the newline character).
@@ -75,5 +113,6 @@ NMEAChecksum(const TCHAR *p, unsigned length)
 
   return checksum;
 }
+#endif
 
 #endif
