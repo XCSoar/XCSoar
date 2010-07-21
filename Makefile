@@ -423,8 +423,6 @@ install: XCSoar.exe
 	@echo Copying to device...
 	$(SYNCE_PCP) -f XCSoar.exe ':/Program Files/XCSoar/XCSoar.exe'
 
-#	wine ezsetup.exe -l english -i XCSoar$(TARGET).ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$(TARGET).exe
-
 ifneq ($(NOSTRIP_SUFFIX),)
 $(TARGET_BIN_DIR)/XCSoar$(TARGET_EXEEXT): $(TARGET_BIN_DIR)/XCSoar$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
 	@$(NQ)echo "  STRIP   $@"
