@@ -37,11 +37,11 @@ Copyright_License {
 */
 
 #include "Device/Internal.hpp"
-#include "Device/device.hpp"
 #include "Device/Port.hpp"
 #include "NMEA/Checksum.h"
 
 #include <assert.h>
+#include <stdio.h>
 
 void
 PortWriteNMEA(ComPort *port, const TCHAR *line)
