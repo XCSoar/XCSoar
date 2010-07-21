@@ -125,7 +125,7 @@ bool ComPort::StopRxThread() { return true; }
 bool ComPort::StartRxThread() { return true; }
 
 void
-ComPort::Write(BYTE b)
+ComPort::Write(char b)
 {
   putc(b, stdout);
 }

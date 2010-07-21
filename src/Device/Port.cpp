@@ -213,7 +213,7 @@ ComPort::Open()
   PortWrite (BYTE Byte)
 ********************************************************************** */
 void
-ComPort::Write(BYTE Byte)
+ComPort::Write(char Byte)
 {
 #ifdef HAVE_POSIX
   if (fd < 0)
