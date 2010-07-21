@@ -37,6 +37,8 @@
 */
 
 #include "Replay/NmeaReplay.hpp"
+#include "IO/FileLineReader.hpp"
+
 #include <algorithm>
 
 #include "Navigation/GeoPoint.hpp"

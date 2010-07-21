@@ -40,11 +40,11 @@ Copyright_License {
 #define NMEA_REPLAY_HPP
 
 #include "Engine/Math/fixed.hpp"
-#include "IO/FileLineReader.hpp"
 
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
-#include <stdio.h>
+
+class FileLineReader;
 
 class NmeaReplay
 {
