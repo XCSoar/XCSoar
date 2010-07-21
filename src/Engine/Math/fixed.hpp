@@ -7,6 +7,8 @@
 //
 // Extensions and bug/compilation fixes by John Wharington 2009
 
+#include "Compiler.h"
+
 #include <algorithm>
 #include "Constants.h"
 using std::max;
@@ -116,78 +118,97 @@ public:
     return *this;
   }
 
+  gcc_pure
   friend bool operator==(fixed const& lhs,fixed const& rhs) {
     return lhs.m_nVal==rhs.m_nVal;
   }
 
+  gcc_pure
   friend bool operator!=(fixed const& lhs,fixed const& rhs) {
     return lhs.m_nVal!=rhs.m_nVal;
   }
 
+  gcc_pure
   friend bool operator<(fixed const& lhs,fixed const& rhs) {
     return lhs.m_nVal<rhs.m_nVal;
   }
 
+  gcc_pure
   friend bool operator>(fixed const& lhs,fixed const& rhs) {
     return lhs.m_nVal>rhs.m_nVal;
   }
 
+  gcc_pure
   friend bool operator<=(fixed const& lhs,fixed const& rhs) {
     return lhs.m_nVal<=rhs.m_nVal;
   }
 
+  gcc_pure
   friend bool operator>=(fixed const& lhs,fixed const& rhs) {
     return lhs.m_nVal>=rhs.m_nVal;
   }
 
+  gcc_pure
   operator bool() const {
     return m_nVal != 0;
   }
 
+  gcc_pure
   inline operator double() const {
     return as_double();
   }
 
+  gcc_pure
   inline operator short() const {
     return as_short();
   }
 
+  gcc_pure
   inline operator int() const {
     return as_int();
   }
 
+  gcc_pure
   inline operator unsigned() const {
     return (unsigned)as_int();
   }
 
+  gcc_pure
   inline operator unsigned short() const {
     return as_unsigned_short();
   }
 
+  gcc_pure
   inline operator long() const {
     return as_long();
   }
 
+  gcc_pure
   float as_float() const {
     return m_nVal/(float)resolution;
   }
 
+  gcc_pure
   double as_double() const {
     return m_nVal/(double)resolution;
   }
 
+  gcc_pure
   long as_long() const {
     return (long)(m_nVal/resolution);
   }
 
+  gcc_pure
   int64_t as_int64() const {
     return m_nVal/resolution;
   }
 
+  gcc_pure
   int as_int() const {
     return (int)(m_nVal/resolution);
   }
 
+  gcc_pure
   unsigned long as_unsigned_long() const {
     return (unsigned long)(m_nVal/resolution);
   }
@@ -198,14 +219,17 @@ public:
   }
   */
 
+  gcc_pure
   unsigned int as_unsigned_int() const {
     return (unsigned int)(m_nVal/resolution);
   }
 
+  gcc_pure
   short as_short() const {
     return (short)(m_nVal/resolution);
   }
 
+  gcc_pure
   unsigned short as_unsigned_short() const {
     return (unsigned short)(m_nVal/resolution);
   }
@@ -220,14 +244,27 @@ public:
     return *this;
   }
 
+  gcc_pure
   bool positive() const;
+
+  gcc_pure
   bool negative() const;
 
+  gcc_pure
   fixed floor() const;
+
+  gcc_pure
   fixed ceil() const;
+
+  gcc_pure
   fixed sqrt() const;
+
+  gcc_pure
   fixed exp() const;
+
+  gcc_pure
   fixed log() const;
+
   fixed& operator%=(fixed const& other);
   fixed& operator*=(fixed const& val);
   fixed& operator/=(fixed const divisor);
@@ -357,18 +394,34 @@ public:
     return m_nVal==0;
   }
 
+  gcc_pure
   fixed modf(fixed* integral_part) const;
+
+  gcc_pure
   fixed atan() const;
 
   static void sin_cos(fixed const& theta,fixed* s,fixed*c);
   static void to_polar(fixed const& x,fixed const& y,fixed* r,fixed*theta);
+
+  gcc_pure
   static fixed atan2(fixed const& y,fixed const& x);
+
+  gcc_pure
   static fixed sigmoid(fixed const& x);
 
+  gcc_pure
   fixed sin() const;
+
+  gcc_pure
   fixed cos() const;
+
+  gcc_pure
   fixed tan() const;
+
+  gcc_pure
   fixed operator-() const;
+
+  gcc_pure
   fixed abs() const;
 };
 
@@ -387,180 +440,210 @@ inline bool fixed::negative() const
   return (m_nVal<0);
 }
 
+gcc_pure
 inline fixed operator-(fixed const& a,fixed const& b)
 {
   fixed temp(a);
   return temp-=b;
 }
 
+gcc_pure
 inline fixed operator%(fixed const& a,fixed const& b)
 {
   fixed temp(a);
   return temp%=b;
 }
 
+gcc_pure
 inline fixed operator+(fixed const& a,fixed const& b)
 {
   fixed temp(a);
   return temp+=b;
 }
 
+gcc_pure
 inline fixed operator*(unsigned long a, fixed const& b)
 {
   fixed temp(b);
   return temp*=a;
 }
 
+gcc_pure
 inline fixed operator*(long a, fixed const& b)
 {
   fixed temp(b);
   return temp*=a;
 }
 
+gcc_pure
 inline fixed operator*(unsigned a, fixed const& b)
 {
   fixed temp(b);
   return temp*=a;
 }
 
+gcc_pure
 inline fixed operator*(int a, fixed const& b)
 {
   fixed temp(b);
   return temp*=a;
 }
 
+gcc_pure
 inline fixed operator*(unsigned short a, fixed const& b)
 {
   fixed temp(b);
   return temp*=a;
 }
 
+gcc_pure
 inline fixed operator*(short a, fixed const& b)
 {
   fixed temp(b);
   return temp*=a;
 }
 
+gcc_pure
 inline fixed operator*(unsigned char a, fixed const& b)
 {
   fixed temp(b);
   return temp*=a;
 }
 
+gcc_pure
 inline fixed operator*(char a, fixed const& b)
 {
   fixed temp(b);
   return temp*=a;
 }
 
+gcc_pure
 inline fixed operator*(fixed const& a,unsigned long b)
 {
   fixed temp(a);
   return temp *= fixed(b);
 }
 
+gcc_pure
 inline fixed operator*(fixed const& a,long b)
 {
   fixed temp(a);
   return temp *= fixed(b);
 }
 
+gcc_pure
 inline fixed operator*(fixed const& a,unsigned b)
 {
   fixed temp(a);
   return temp *= fixed(b);
 }
 
+gcc_pure
 inline fixed operator*(fixed const& a,int b)
 {
   fixed temp(a);
   return temp *= fixed(b);
 }
 
+gcc_pure
 inline fixed operator*(fixed const& a,unsigned short b)
 {
   fixed temp(a);
   return temp *= fixed(b);
 }
 
+gcc_pure
 inline fixed operator*(fixed const& a,short b)
 {
   fixed temp(a);
   return temp *= fixed(b);
 }
 
+gcc_pure
 inline fixed operator*(fixed const& a,unsigned char b)
 {
   fixed temp(a);
   return temp *= fixed(b);
 }
 
+gcc_pure
 inline fixed operator*(fixed const& a,char b)
 {
   fixed temp(a);
   return temp *= fixed(b);
 }
 
+gcc_pure
 inline fixed operator*(fixed const& a,fixed const& b)
 {
   fixed temp(a);
   return temp*=b;
 }
 
+gcc_pure
 inline fixed operator/(fixed const& a,unsigned long b)
 {
   fixed temp(a);
   return temp /= fixed(b);
 }
 
+gcc_pure
 inline fixed operator/(fixed const& a,long b)
 {
   fixed temp(a);
   return temp /= fixed(b);
 }
 
+gcc_pure
 inline fixed operator/(fixed const& a,unsigned b)
 {
   fixed temp(a);
   return temp /= fixed(b);
 }
 
+gcc_pure
 inline fixed operator/(fixed const& a,int b)
 {
   fixed temp(a);
   return temp /= fixed(b);
 }
 
+gcc_pure
 inline fixed operator/(fixed const& a,unsigned short b)
 {
   fixed temp(a);
   return temp /= fixed(b);
 }
 
+gcc_pure
 inline fixed operator/(fixed const& a,short b)
 {
   fixed temp(a);
   return temp /= fixed(b);
 }
 
+gcc_pure
 inline fixed operator/(fixed const& a,unsigned char b)
 {
   fixed temp(a);
   return temp /= fixed(b);
 }
 
+gcc_pure
 inline fixed operator/(fixed const& a,char b)
 {
   fixed temp(a);
   return temp /= fixed(b);
 }
 
+gcc_pure
 inline fixed operator/(fixed const& a,fixed const& b)
 {
   fixed temp(a);
   return temp/=b;
 }
 
+gcc_pure
 static inline fixed pow(fixed x, fixed y)
 {
   return fixed(pow((double)x, (double)y));
@@ -594,36 +677,43 @@ inline fixed atan(fixed const& x)
     return x.atan();
 }
 
+gcc_pure
 inline fixed max(fixed const& x, fixed const& y)
 {
   return (x>y? x:y);
 }
 
+gcc_pure
 inline fixed min(fixed const& x, fixed const& y)
 {
   return (x<y? x:y);
 }
 
+gcc_pure
 inline fixed atan2(fixed const& y, fixed const& x)
 {
   return fixed::atan2(y,x);
 }
 
+gcc_pure
 inline fixed sqrt(fixed const& x)
 {
   return x.sqrt();
 }
 
+gcc_const
 inline fixed hypot(fixed x, fixed y)
 {
   return sqrt(x * x + y * y);
 }
 
+gcc_pure
 inline fixed exp(fixed const& x)
 {
   return x.exp();
 }
 
+gcc_pure
 inline fixed log(fixed const& x)
 {
   return x.log();
@@ -634,26 +724,31 @@ inline fixed floor(fixed const& x)
   return x.floor();
 }
 
+gcc_pure
 inline fixed ceil(fixed const& x)
 {
   return x.ceil();
 }
 
+gcc_pure
 inline fixed abs(fixed const& x)
 {
   return x.abs();
 }
 
+gcc_pure
 inline fixed fabs(fixed const& x)
 {
   return x.abs();
 }
 
+gcc_pure
 inline fixed modf(fixed const& x,fixed*integral_part)
 {
   return x.modf(integral_part);
 }
 
+gcc_pure
 static inline fixed fmod(fixed x, fixed y)
 {
   return fixed(fmod((double)x, (double)y));
@@ -727,6 +822,7 @@ inline void sin_cos(fixed const& theta,fixed* s,fixed*c)
   ::fixed::sin_cos(theta, s, c);
 }
 
+gcc_pure
 inline fixed sigmoid(fixed const& x)
 {
   return ::fixed::sigmoid(x);
@@ -772,10 +868,12 @@ inline fixed fixed::sigmoid(const fixed&x) {
   return fixed_two/(fixed_one+(-x).exp())-fixed_one;
 }
 
+gcc_pure
 inline bool positive(const fixed&f) {
   return f.positive();
 }
 
+gcc_pure
 inline bool negative(const fixed&f) {
   return f.negative();
 }
