@@ -36,43 +36,37 @@ const fixed fixed_90(90);
 
 fixed& fixed::operator%=(fixed const& other)
 {
-    m_nVal = m_nVal%other.m_nVal;
-    return *this;
+  m_nVal = m_nVal%other.m_nVal;
+  return *this;
 }
 
 fixed& fixed::operator*=(fixed const& val)
 {
-    bool const val_negative=val.m_nVal<0;
-    bool const this_negative=m_nVal<0;
-    bool const negate=val_negative ^ this_negative;
-    uvalue_t const other=val_negative?-val.m_nVal:val.m_nVal;
-    uvalue_t const self=this_negative?-m_nVal:m_nVal;
-    
-    if(uvalue_t const self_upper=(self>>32))
-    {
-        m_nVal=(self_upper*other)<<(32-resolution_shift);
-    }
-    else
-    {
-        m_nVal=0;
-    }
-    if(uvalue_t const self_lower=(self&0xffffffff))
-    {
-      unsigned long const other_upper=static_cast<unsigned long>(other>>32);
-      unsigned long const other_lower=static_cast<unsigned long>(other&0xffffffff);
-      uvalue_t const lower_self_upper_other_res=self_lower*other_upper;
-      uvalue_t const lower_self_lower_other_res=self_lower*other_lower;
-        m_nVal+=(lower_self_upper_other_res<<(32-resolution_shift))
-            + (lower_self_lower_other_res>>resolution_shift);
-    }
-    
-    if(negate)
-    {
-        m_nVal=-m_nVal;
-    }
-    return *this;
-}
+  bool const val_negative=val.m_nVal<0;
+  bool const this_negative=m_nVal<0;
+  bool const negate=val_negative ^ this_negative;
+  uvalue_t const other=val_negative?-val.m_nVal:val.m_nVal;
+  uvalue_t const self=this_negative?-m_nVal:m_nVal;
 
+  if (uvalue_t const self_upper=(self>>32))
+    m_nVal = (self_upper * other) << (32 - resolution_shift);
+  else
+    m_nVal = 0;
+
+  if (uvalue_t const self_lower = (self&0xffffffff)) {
+    unsigned long const other_upper=static_cast<unsigned long>(other>>32);
+    unsigned long const other_lower=static_cast<unsigned long>(other&0xffffffff);
+    uvalue_t const lower_self_upper_other_res=self_lower*other_upper;
+    uvalue_t const lower_self_lower_other_res=self_lower*other_lower;
+    m_nVal+=(lower_self_upper_other_res<<(32-resolution_shift))
+      + (lower_self_lower_other_res>>resolution_shift);
+  }
+
+  if (negate)
+    m_nVal = -m_nVal;
+
+  return *this;
+}
 
 fixed& fixed::operator/=(fixed const divisor)
 {
@@ -112,271 +106,235 @@ fixed& fixed::operator/=(fixed const divisor)
   return *this;
 }
 
-
 fixed fixed::sqrt() const
 {
-    unsigned const max_shift=62;
-    uvalue_t a_squared=1LL<<max_shift;
-    unsigned b_shift=(max_shift+resolution_shift)/2;
-    uvalue_t a=1LL<<b_shift;
-    
-    uvalue_t x=m_nVal;
-    
-    while(b_shift && a_squared>x)
+  unsigned const max_shift=62;
+  uvalue_t a_squared=1LL<<max_shift;
+  unsigned b_shift=(max_shift+resolution_shift)/2;
+  uvalue_t a=1LL<<b_shift;
+
+  uvalue_t x=m_nVal;
+
+  while(b_shift && a_squared>x)
     {
-        a>>=1;
-        a_squared>>=2;
-        --b_shift;
+      a>>=1;
+      a_squared>>=2;
+      --b_shift;
     }
 
-    uvalue_t remainder=x-a_squared;
-    --b_shift;
-    
-    while(remainder && b_shift)
-    {
-        uvalue_t b_squared=1LL<<(2*b_shift-resolution_shift);
-        int const two_a_b_shift=b_shift+1-resolution_shift;
-        uvalue_t two_a_b=(two_a_b_shift>0)?(a<<two_a_b_shift):(a>>-two_a_b_shift);
-        
-        while(b_shift && remainder<(b_squared+two_a_b))
-        {
-            b_squared>>=2;
-            two_a_b>>=1;
-            --b_shift;
-        }
-        uvalue_t const delta=b_squared+two_a_b;
-        if((2*remainder)>delta)
-        {
-            a+=(1LL<<b_shift);
-            remainder-=delta;
-            if(b_shift)
-            {
-                --b_shift;
-            }
-        }
+  uvalue_t remainder=x-a_squared;
+  --b_shift;
+
+  while(remainder && b_shift) {
+    uvalue_t b_squared=1LL<<(2*b_shift-resolution_shift);
+    int const two_a_b_shift=b_shift+1-resolution_shift;
+    uvalue_t two_a_b=(two_a_b_shift>0)?(a<<two_a_b_shift):(a>>-two_a_b_shift);
+
+    while (b_shift && remainder<(b_squared+two_a_b)) {
+      b_squared>>=2;
+      two_a_b>>=1;
+      --b_shift;
     }
-    return fixed(internal(),a);
+
+    uvalue_t const delta=b_squared+two_a_b;
+    if ((2 * remainder) > delta) {
+      a += 1LL << b_shift;
+      remainder -= delta;
+      if (b_shift)
+        --b_shift;
+    }
+  }
+
+  return fixed(internal(), a);
 }
 
 namespace
 {
   int const max_power=63-fixed::resolution_shift;
   fixed::value_t const log_two_power_n_reversed[]={
-        0x18429946ELL,0x1791272EFLL,0x16DFB516FLL,0x162E42FF0LL,0x157CD0E70LL,0x14CB5ECF1LL,0x1419ECB71LL,0x13687A9F2LL,
-        0x12B708872LL,0x1205966F3LL,0x115424573LL,0x10A2B23F4LL,0xFF140274LL,0xF3FCE0F5LL,0xE8E5BF75LL,0xDDCE9DF6LL,
-        0xD2B77C76LL,0xC7A05AF7LL,0xBC893977LL,0xB17217F8LL,0xA65AF679LL,0x9B43D4F9LL,0x902CB379LL,0x851591FaLL,
-        0x79FE707bLL,0x6EE74EFbLL,0x63D02D7BLL,0x58B90BFcLL,0x4DA1EA7CLL,0x428AC8FdLL,0x3773A77DLL,0x2C5C85FeLL,
-        0x2145647ELL,0x162E42FfLL,0xB17217FLL
-    };
-    
+    0x18429946ELL,0x1791272EFLL,0x16DFB516FLL,0x162E42FF0LL,0x157CD0E70LL,0x14CB5ECF1LL,0x1419ECB71LL,0x13687A9F2LL,
+    0x12B708872LL,0x1205966F3LL,0x115424573LL,0x10A2B23F4LL,0xFF140274LL,0xF3FCE0F5LL,0xE8E5BF75LL,0xDDCE9DF6LL,
+    0xD2B77C76LL,0xC7A05AF7LL,0xBC893977LL,0xB17217F8LL,0xA65AF679LL,0x9B43D4F9LL,0x902CB379LL,0x851591FaLL,
+    0x79FE707bLL,0x6EE74EFbLL,0x63D02D7BLL,0x58B90BFcLL,0x4DA1EA7CLL,0x428AC8FdLL,0x3773A77DLL,0x2C5C85FeLL,
+    0x2145647ELL,0x162E42FfLL,0xB17217FLL
+  };
+
   fixed::value_t const log_one_plus_two_power_minus_n[]={
-        0x67CC8FBLL,0x391FEF9LL,0x1E27077LL,0xF85186LL,
-        0x7E0A6CLL,0x3F8151LL,0x1FE02ALL,0xFF805LL,0x7FE01LL,0x3FF80LL,0x1FFE0LL,0xFFF8LL,
-        0x7FFELL,0x4000LL,0x2000LL,0x1000LL,0x800LL,0x400LL,0x200LL,0x100LL,
-        0x80LL,0x40LL,0x20LL,0x10LL,0x8LL,0x4LL,0x2LL,0x1LL
-    };
+    0x67CC8FBLL,0x391FEF9LL,0x1E27077LL,0xF85186LL,
+    0x7E0A6CLL,0x3F8151LL,0x1FE02ALL,0xFF805LL,0x7FE01LL,0x3FF80LL,0x1FFE0LL,0xFFF8LL,
+    0x7FFELL,0x4000LL,0x2000LL,0x1000LL,0x800LL,0x400LL,0x200LL,0x100LL,
+    0x80LL,0x40LL,0x20LL,0x10LL,0x8LL,0x4LL,0x2LL,0x1LL
+  };
 
   fixed::value_t const log_one_over_one_minus_two_power_minus_n[]={
-        0xB172180LL,0x49A5884LL,0x222F1D0LL,0x108598BLL,
-        0x820AECLL,0x408159LL,0x20202BLL,0x100805LL,0x80201LL,0x40080LL,0x20020LL,0x10008LL,
-        0x8002LL,0x4001LL,0x2000LL,0x1000LL,0x800LL,0x400LL,0x200LL,0x100LL,
-        0x80LL,0x40LL,0x20LL,0x10LL,0x8LL,0x4LL,0x2LL,0x1LL
-    };
+    0xB172180LL,0x49A5884LL,0x222F1D0LL,0x108598BLL,
+    0x820AECLL,0x408159LL,0x20202BLL,0x100805LL,0x80201LL,0x40080LL,0x20020LL,0x10008LL,
+    0x8002LL,0x4001LL,0x2000LL,0x1000LL,0x800LL,0x400LL,0x200LL,0x100LL,
+    0x80LL,0x40LL,0x20LL,0x10LL,0x8LL,0x4LL,0x2LL,0x1LL
+  };
 }
 
 
 fixed fixed::exp() const
 {
     if(m_nVal>=log_two_power_n_reversed[0])
-    {
         return fixed_max;
-    }
+
     if(m_nVal<-log_two_power_n_reversed[63-2*resolution_shift])
-    {
         return fixed(internal(),0);
-    }
+
     if(!m_nVal)
-    {
         return fixed(internal(),resolution);
-    }
 
     value_t res=resolution;
 
-    if(m_nVal>0)
-    {
-        int power=max_power;
-        value_t const* log_entry=log_two_power_n_reversed;
-        value_t temp=m_nVal;
-        while(temp && power>(-(int)resolution_shift))
-        {
-            while(!power || (temp<*log_entry))
-            {
-                if(!power)
-                {
-                    log_entry=log_one_plus_two_power_minus_n;
-                }
-                else
-                {
-                    ++log_entry;
-                }
-                --power;
-            }
-            temp-=*log_entry;
-            if(power<0)
-            {
-                res+=(res>>(-power));
-            }
-            else
-            {
-                res<<=power;
-            }
+    if(m_nVal>0) {
+      int power=max_power;
+      value_t const* log_entry=log_two_power_n_reversed;
+      value_t temp=m_nVal;
+      while (temp && power>(-(int)resolution_shift)) {
+        while (!power || (temp<*log_entry)) {
+          if(!power)
+            log_entry=log_one_plus_two_power_minus_n;
+          else
+            ++log_entry;
+          --power;
         }
-    }
-    else
-    {
-        int power=resolution_shift;
-        value_t const* log_entry=log_two_power_n_reversed+(max_power-power);
-        value_t temp=m_nVal;
+        temp -= *log_entry;
+        if (power < 0)
+          res+=(res>>(-power));
+        else
+          res<<=power;
+      }
+    } else {
+      int power=resolution_shift;
+      value_t const* log_entry=log_two_power_n_reversed+(max_power-power);
+      value_t temp=m_nVal;
 
-        while(temp && power>(-(int)resolution_shift))
-        {
-            while(!power || (temp>(-*log_entry)))
-            {
-                if(!power)
-                {
-                    log_entry=log_one_over_one_minus_two_power_minus_n;
-                }
-                else
-                {
-                    ++log_entry;
-                }
-                --power;
-            }
-            temp+=*log_entry;
-            if(power<0)
-            {
-                res-=(res>>(-power));
-            }
-            else
-            {
-                res>>=power;
-            }
+      while (temp && power>(-(int)resolution_shift)) {
+        while (!power || (temp>(-*log_entry))) {
+          if (!power)
+            log_entry=log_one_over_one_minus_two_power_minus_n;
+          else
+            ++log_entry;
+
+          --power;
         }
+        temp+=*log_entry;
+        if (power < 0)
+          res-=(res>>(-power));
+        else
+          res>>=power;
+      }
     }
-    
-    return fixed(internal(),res);
+
+    return fixed(internal(), res);
 }
 
 fixed fixed::log() const
 {
-    if(m_nVal<=0)
-    {
-        return -fixed_max;
-    }
-    if(m_nVal==resolution)
-    {
-        return fixed_zero;
-    }
-    uvalue_t temp=m_nVal;
-    int left_shift=0;
-    uvalue_t const scale_position=0x8000000000000000LL;
-    while(temp<scale_position)
-    {
-        ++left_shift;
-        temp<<=1;
-    }
-    
-    value_t res=(left_shift<max_power)?
-        log_two_power_n_reversed[left_shift]:
-        -log_two_power_n_reversed[2*max_power-left_shift];
-    unsigned right_shift=1;
-    uvalue_t shifted_temp=temp>>1;
-    while(temp && (right_shift<resolution_shift))
-    {
-        while((right_shift<resolution_shift) && (temp<(shifted_temp+scale_position)))
-        {
-            shifted_temp>>=1;
-            ++right_shift;
-        }
-        
-        temp-=shifted_temp;
-        shifted_temp=temp>>right_shift;
-        res+=log_one_over_one_minus_two_power_minus_n[right_shift-1];
-    }
-    return fixed(fixed::internal(),res);
-}
+  if (m_nVal <= 0)
+      return -fixed_max;
 
+  if (m_nVal == resolution)
+      return fixed_zero;
+
+  uvalue_t temp=m_nVal;
+  int left_shift=0;
+  uvalue_t const scale_position=0x8000000000000000LL;
+  while (temp < scale_position) {
+    ++left_shift;
+    temp<<=1;
+  }
+
+  value_t res=(left_shift<max_power)?
+    log_two_power_n_reversed[left_shift]:
+    -log_two_power_n_reversed[2*max_power-left_shift];
+  unsigned right_shift=1;
+  uvalue_t shifted_temp=temp>>1;
+  while (temp && (right_shift<resolution_shift)) {
+    while (right_shift < resolution_shift &&
+           temp < shifted_temp + scale_position) {
+      shifted_temp>>=1;
+      ++right_shift;
+    }
+
+    temp-=shifted_temp;
+    shifted_temp=temp>>right_shift;
+    res+=log_one_over_one_minus_two_power_minus_n[right_shift-1];
+  }
+
+  return fixed(fixed::internal(), res);
+}
 
 namespace
 {
-    const long arctantab[32] = {
-        297197971, 210828714, 124459457, 65760959, 33381290, 16755422, 8385879,
-        4193963, 2097109, 1048571, 524287, 262144, 131072, 65536, 32768, 16384,
-        8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0, 0,
-    };
+  const long arctantab[32] = {
+    297197971, 210828714, 124459457, 65760959, 33381290, 16755422, 8385879,
+    4193963, 2097109, 1048571, 524287, 262144, 131072, 65536, 32768, 16384,
+    8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0, 0,
+  };
 
 
-    long scale_cordic_result(long a)
-    {
-        long const cordic_scale_factor=0x22C2DD1C; /* 0.271572 * 2^31*/
-        return (long)((((fixed::value_t)a)*cordic_scale_factor)>>31);
-    }
-    
-    long right_shift(long val,int shift)
-    {
-        return (shift<0)?(val<<-shift):(val>>shift);
-    }
-    
-    void perform_cordic_rotation(long&px, long&py, long theta)
-    {
-        long x = px, y = py;
-        long const *arctanptr = arctantab;
-        for (int i = -1; i <= (int)fixed::resolution_shift; ++i) {
-            long const yshift=right_shift(y,i);
-            long const xshift=right_shift(x,i);
+  long scale_cordic_result(long a)
+  {
+    long const cordic_scale_factor=0x22C2DD1C; /* 0.271572 * 2^31*/
+    return (long)((((fixed::value_t)a)*cordic_scale_factor)>>31);
+  }
 
-            if (theta < 0)
-            {
-                x += yshift;
-                y -= xshift;
-                theta += *arctanptr++;
-            }
-            else
-            {
-                x -= yshift;
-                y += xshift;
-                theta -= *arctanptr++;
-            }
-        }
-        px = scale_cordic_result(x);
-        py = scale_cordic_result(y);
+  long right_shift(long val,int shift)
+  {
+    return (shift<0)?(val<<-shift):(val>>shift);
+  }
+
+  void perform_cordic_rotation(long&px, long&py, long theta)
+  {
+    long x = px, y = py;
+    long const *arctanptr = arctantab;
+
+    for (int i = -1; i <= (int)fixed::resolution_shift; ++i) {
+      long const yshift=right_shift(y,i);
+      long const xshift=right_shift(x,i);
+
+      if (theta < 0) {
+        x += yshift;
+        y -= xshift;
+        theta += *arctanptr++;
+      } else {
+        x -= yshift;
+        y += xshift;
+        theta -= *arctanptr++;
+      }
     }
 
+    px = scale_cordic_result(x);
+    py = scale_cordic_result(y);
+  }
 
-    void perform_cordic_polarization(long& argx, long&argy)
-    {
-        long theta=0;
-        long x = argx, y = argy;
-        long const *arctanptr = arctantab;
-        for (int i = -1; i <= (int)fixed::resolution_shift; ++i) {
-            long const yshift=right_shift(y,i);
-            long const xshift=right_shift(x,i);
-            if(y < 0)
-            {
-                y += xshift;
-                x -= yshift;
-                theta -= *arctanptr++;
-            }
-            else
-            {
-                y -= xshift;
-                x += yshift;
-                theta += *arctanptr++;
-            }
-        }
-        argx = scale_cordic_result(x);
-        argy = theta;
+
+  void perform_cordic_polarization(long& argx, long&argy)
+  {
+    long theta=0;
+    long x = argx, y = argy;
+    long const *arctanptr = arctantab;
+
+    for (int i = -1; i <= (int)fixed::resolution_shift; ++i) {
+      long const yshift=right_shift(y,i);
+      long const xshift=right_shift(x,i);
+      if (y < 0) {
+        y += xshift;
+        x -= yshift;
+        theta -= *arctanptr++;
+      } else {
+        y -= xshift;
+        x += yshift;
+        theta += *arctanptr++;
+      }
     }
+
+    argx = scale_cordic_result(x);
+    argy = theta;
+  }
 }
 
 void fixed::sin_cos(fixed const& theta,fixed* s,fixed*c)
