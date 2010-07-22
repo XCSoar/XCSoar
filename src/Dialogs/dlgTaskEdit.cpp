@@ -61,7 +61,7 @@ Copyright_License {
 
 static SingleWindow *parent_window;
 static WndForm *wf = NULL;
-static WndFrame* wTaskView = NULL;
+static WndOwnerDrawFrame* wTaskView = NULL;
 static WndListFrame* wTaskPoints = NULL;
 static OrderedTask* ordered_task = NULL;
 static bool task_modified = false;
@@ -256,7 +256,7 @@ dlgTaskEditShowModal(SingleWindow &parent, OrderedTask** task)
   wTaskPoints = (WndListFrame*)wf->FindByName(_T("frmTaskPoints"));
   assert(wTaskPoints != NULL);
 
-  wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView"));
+  wTaskView = (WndOwnerDrawFrame*)wf->FindByName(_T("frmTaskView"));
   assert(wTaskView != NULL);
 
   wTaskPoints->SetActivateCallback(OnTaskListEnter);
