@@ -239,3 +239,72 @@ InfoBoxContentNextAltitudeRequire::Update(InfoBoxWindow &infobox)
   // Set Unit
   infobox.SetValueUnit(Units::AltitudeUnit);
 }
+
+void
+InfoBoxContentFinalDistance::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Fin Dis"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  double Value = (XCSoarInterface::Calculated().common_stats.task_finished ?
+                  Units::ToUserDistance(XCSoarInterface::Calculated().
+                    task_stats.current_leg.solution_remaining.Vector.Distance) :
+                  Units::ToUserDistance(XCSoarInterface::Calculated().
+                    task_stats.total.remaining.get_distance()));
+  _stprintf(tmp, _T("%2.0f"), Value);
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::DistanceUnit);
+}
+
+void
+InfoBoxContentFinalAltitudeDiff::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Fin AltD"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f"),
+            (double)Units::ToUserAltitude(XCSoarInterface::Calculated().
+                task_stats.total.solution_remaining.AltitudeDifference));
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::AltitudeUnit);
+}
+
+void
+InfoBoxContentFinalAltitudeRequire::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Fin AltR"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f"),
+            (double)Units::ToUserAltitude(XCSoarInterface::Calculated().
+                task_stats.total.solution_remaining.AltitudeRequired));
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::AltitudeUnit);
+}

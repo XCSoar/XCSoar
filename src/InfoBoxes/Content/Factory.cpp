@@ -76,6 +76,12 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentNextAltitudeRequire();
   case 14:
     return new InfoBoxContentNextWaypoint();
+  case 15:
+    return new InfoBoxContentFinalAltitudeDiff();
+  case 16:
+    return new InfoBoxContentFinalAltitudeRequire();
+  case 18:
+    return new InfoBoxContentFinalDistance();
   case 20:
     return new InfoBoxContentTerrainHeight();
   case 21:

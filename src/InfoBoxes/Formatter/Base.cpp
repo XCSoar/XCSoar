@@ -117,32 +117,9 @@ InfoBoxFormatter::AssignValue(int i)
     Value = Units::ToUserSpeed(Basic().GroundSpeed);
     break;
 
-  case 15:
-    Value = Units::ToUserAltitude(Calculated().task_stats.total.
-                                  solution_remaining.AltitudeDifference);
-    Valid = Calculated().task_stats.task_valid;
-    break;
-
-  case 16:
-    Value = Units::ToUserAltitude(Calculated().task_stats.total.
-                                  solution_remaining.AltitudeRequired);
-    Valid = Calculated().task_stats.task_valid;
-    break;
-
   case 17:
     Value = Units::ToUserTaskSpeed(Calculated().task_stats.total.
                                    remaining.get_speed());
-    Valid = Calculated().task_stats.task_valid;
-    break;
-
-  case 18:
-    if (Calculated().common_stats.task_finished)
-      Value = Units::ToUserDistance(Calculated().task_stats.current_leg.
-                                    solution_remaining.Vector.Distance);
-    else
-      Value = Units::ToUserDistance(Calculated().task_stats.total.
-                                    remaining.get_distance());
-
     Valid = Calculated().task_stats.task_valid;
     break;
 

@@ -208,13 +208,13 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 15
   { ugAltitude, _T("Final Altitude Difference"), _T("Fin AltD"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     NULL,
     16, 13,
   },
   // 16
   { ugAltitude, _T("Final Altitude Required"), _T("Fin AltR"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     NULL,
     17, 15,
   },
@@ -226,7 +226,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 18
   { ugDistance, _T("Final Distance"), _T("Fin Dis"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     NULL,
     27, 17,
   },
