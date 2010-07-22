@@ -921,12 +921,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
 
     break;
 
-  case 25:
-    _stprintf(sTmp, _T("%d%s"), (int)Basic().wind.bearing.value_degrees(), 
-              _T(DEG));
-    info_box.SetComment(sTmp);
-    break;
-
   case 60:
     _stprintf(sTmp, _T("%d%s"),
               (int)Calculated().common_stats.vector_home.Bearing.value_degrees(), 

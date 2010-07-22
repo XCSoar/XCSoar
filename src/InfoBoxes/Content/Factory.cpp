@@ -60,6 +60,10 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentTerrainHeight();
   case 23:
     return new InfoBoxContentTrack();
+  case 25:
+    return new InfoBoxContentWindSpeed();
+  case 26:
+    return new InfoBoxContentWindBearing();
   case 33:
     return new InfoBoxContentAltitudeBaro();
   case 47:

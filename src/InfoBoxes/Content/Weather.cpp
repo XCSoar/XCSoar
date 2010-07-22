@@ -80,3 +80,37 @@ InfoBoxContentTemperatureForecast::Update(InfoBoxWindow &infobox)
   _stprintf(tmp, _T("%2.1f")_T(DEG), CuSonde::maxGroundTemperature);
   infobox.SetValue(tmp);
 }
+
+void
+InfoBoxContentWindSpeed::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Wind V"));
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f"),
+            Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::WindSpeedUnit);
+
+  // Set Comment
+  _stprintf(tmp, _T("%2.0f")_T(DEG)_T("T"),
+            (double)XCSoarInterface::Basic().wind.bearing.value_degrees());
+  infobox.SetComment(tmp);
+}
+
+void
+InfoBoxContentWindBearing::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Wind B"));
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f")_T(DEG)_T("T"),
+            (double)XCSoarInterface::Basic().wind.bearing.value_degrees());
+  infobox.SetValue(tmp);
+}

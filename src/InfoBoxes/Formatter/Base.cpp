@@ -213,14 +213,6 @@ InfoBoxFormatter::AssignValue(int i)
     Value = Units::ToUserVSpeed(Basic().TotalEnergyVario);
     break;
 
-  case 25:
-    Value = Units::ToUserWindSpeed(Basic().wind.norm);
-    break;
-
-  case 26:
-    Value = Basic().wind.bearing.value_degrees();
-    break;
-
   case 28:
     Value = Units::ToUserDistance(Calculated().task_stats.distance_max);
     Valid = Calculated().task_stats.task_valid;
