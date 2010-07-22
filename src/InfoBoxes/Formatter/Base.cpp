@@ -303,17 +303,6 @@ InfoBoxFormatter::AssignValue(int i)
     Valid = Calculated().task_stats.task_valid;
     break;
 
-  case 63:
-    if (positive(Calculated().timeCircling)) {
-      Value = Units::ToUserVSpeed(Calculated().TotalHeightClimb /
-                                  Calculated().timeCircling);
-      Valid = true;
-    } else {
-      Value = 0.0;
-      Valid = false;
-    }
-    break;
-
   case 64:
     Value = Units::ToUserVSpeed(Calculated().task_stats.total.vario.get_value());
     Valid = Calculated().task_stats.task_valid;

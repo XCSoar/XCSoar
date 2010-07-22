@@ -96,6 +96,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentTeamBearingDiff();
   case 58:
     return new InfoBoxContentTeamDistance();
+  case 63:
+    return new InfoBoxContentThermalAllAvg();
   case 70:
     return new InfoBoxContentAltitudeQFE();
   }

@@ -147,3 +147,25 @@ InfoBoxContentThermalLastTime::Update(InfoBoxWindow &infobox)
     infobox.SetComment(_T(""));
   }
 }
+
+void
+InfoBoxContentThermalAllAvg::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("TC All"));
+
+  if (!positive(XCSoarInterface::Calculated().timeCircling)) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR sTmp[32];
+  _stprintf(sTmp, _T("%-2.1f"), Units::ToUserVSpeed(
+      XCSoarInterface::Calculated().TotalHeightClimb /
+      XCSoarInterface::Calculated().timeCircling));
+  infobox.SetValue(sTmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::VerticalSpeedUnit);
+}

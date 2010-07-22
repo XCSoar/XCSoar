@@ -71,4 +71,10 @@ public:
   virtual void Update(InfoBoxWindow &infobox);
 };
 
+class InfoBoxContentThermalAllAvg : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
 #endif

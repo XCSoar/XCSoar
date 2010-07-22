@@ -513,7 +513,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 63
   { ugVerticalSpeed, _T("Thermal All"), _T("TC All"),
-    new InfoBoxFormatter(_T("%-2.1f")),
+    NULL,
     NULL,
     8, 2,
   },
