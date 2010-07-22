@@ -836,12 +836,10 @@ NMEAParser::RMZ(const TCHAR *String, const TCHAR **params, size_t nparams,
   //JMW?  RMZAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(RMZAltitude);
   RMZAvailable = true;
 
-  if (!devHasBaroSource()) {
+  if (!devHasBaroSource() && !GPS_INFO->gps.Replay) {
     // JMW no in-built baro sources, so use this generic one
-    if (!GPS_INFO->gps.Replay) {
-      GPS_INFO->BaroAltitudeAvailable = true;
-      GPS_INFO->BaroAltitude = RMZAltitude;
-    }
+    GPS_INFO->BaroAltitudeAvailable = true;
+    GPS_INFO->BaroAltitude = RMZAltitude;
   }
 
   return false;
@@ -876,18 +874,14 @@ bool
 NMEAParser::RMA(const TCHAR *String, const TCHAR **params, size_t nparams,
     NMEA_INFO *GPS_INFO)
 {
-  (void)GPS_INFO;
-
   RMAAltitude = ParseAltitude(params[0], params[1]);
   //JMW?  RMAAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(RMAAltitude);
   RMAAvailable = true;
 
-  if (!devHasBaroSource()) {
-    if (!GPS_INFO->gps.Replay) {
-      // JMW no in-built baro sources, so use this generic one
-      GPS_INFO->BaroAltitudeAvailable = true;
-      GPS_INFO->BaroAltitude = RMAAltitude;
-    }
+  if (!devHasBaroSource() && !GPS_INFO->gps.Replay) {
+    // JMW no in-built baro sources, so use this generic one
+    GPS_INFO->BaroAltitudeAvailable = true;
+    GPS_INFO->BaroAltitude = RMAAltitude;
   }
 
   return false;
