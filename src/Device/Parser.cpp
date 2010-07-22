@@ -45,6 +45,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Checksum.h"
+#include "NMEA/InputLine.hpp"
 #include "StringUtil.hpp"
 #include "InputEvents.h"
 #include "Compatibility/string.h" /* for _ttoi() */
@@ -63,9 +64,6 @@ using std::max;
 #include "FLARM/FlarmCalculations.h"
 static FlarmCalculations flarmCalculations;
 #endif
-
-#define MAX_NMEA_LEN	90
-#define MAX_NMEA_PARAMS 18
 
 int NMEAParser::StartDay = -1;
 
@@ -167,53 +165,53 @@ NMEAParser::ValidateAndExtract(const TCHAR *src, TCHAR *dst, size_t dstsz,
 bool
 NMEAParser::ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
-  TCHAR ctemp[MAX_NMEA_LEN];
-  const TCHAR *params[MAX_NMEA_PARAMS];
-  size_t n_params;
+  if (!NMEAChecksum(String))
+    return false;
 
-  n_params = ValidateAndExtract(String, ctemp, MAX_NMEA_LEN, params,
-      MAX_NMEA_PARAMS);
+  NMEAInputLine line(String);
 
-  // if (not enough parameters  or  first parameter invalid) cancel method;
-  if (n_params < 1 || params[0][0] != '$')
+  TCHAR type[16];
+  line.read(type, 16);
+
+  if (type[0] != _T('$'))
     return false;
 
   // if (proprietary sentence) ...
-  if (params[0][1] == 'P') {
+  if (type[1] == 'P') {
     // Airspeed and vario sentence
-    if (_tcscmp(params[0] + 1, _T("PTAS1")) == 0)
-      return PTAS1(&String[7], params + 1, n_params, GPS_INFO);
+    if (_tcscmp(type + 1, _T("PTAS1")) == 0)
+      return PTAS1(line, GPS_INFO);
 
     // FLARM sentences
-    if (_tcscmp(params[0] + 1, _T("PFLAA")) == 0)
-      return PFLAA(&String[7], params + 1, n_params, GPS_INFO);
+    if (_tcscmp(type + 1, _T("PFLAA")) == 0)
+      return PFLAA(line, GPS_INFO);
 
-    if (_tcscmp(params[0] + 1, _T("PFLAU")) == 0)
-      return PFLAU(&String[7], params + 1, n_params, GPS_INFO->flarm);
+    if (_tcscmp(type + 1, _T("PFLAU")) == 0)
+      return PFLAU(line, GPS_INFO->flarm);
 
     // Garmin altitude sentence
-    if (_tcscmp(params[0] + 1, _T("PGRMZ")) == 0)
-      return RMZ(&String[7], params + 1, n_params, GPS_INFO);
+    if (_tcscmp(type + 1, _T("PGRMZ")) == 0)
+      return RMZ(line, GPS_INFO);
 
     return false;
   }
 
-  if (_tcscmp(params[0] + 3, _T("GSA")) == 0)
-    return GSA(&String[7], params + 1, n_params, GPS_INFO);
+  if (_tcscmp(type + 3, _T("GSA")) == 0)
+    return GSA(line, GPS_INFO);
 
-  if (_tcscmp(params[0] + 3, _T("GLL")) == 0)
-    //    return GLL(&String[7], params + 1, n_params, GPS_INFO);
+  if (_tcscmp(type + 3, _T("GLL")) == 0)
+    //    return GLL(line, GPS_INFO);
     return false;
 
-  if (_tcscmp(params[0] + 3, _T("RMB")) == 0)
-    //return RMB(&String[7], params + 1, n_params, GPS_INFO);
+  if (_tcscmp(type + 3, _T("RMB")) == 0)
+    //return RMB(line, GPS_INFO);
     return false;
 
-  if (_tcscmp(params[0] + 3, _T("RMC")) == 0)
-    return RMC(&String[7], params + 1, n_params, GPS_INFO);
+  if (_tcscmp(type + 3, _T("RMC")) == 0)
+    return RMC(line, GPS_INFO);
 
-  if (_tcscmp(params[0] + 3, _T("GGA")) == 0)
-    return GGA(&String[7], params + 1, n_params, GPS_INFO);
+  if (_tcscmp(type + 3, _T("GGA")) == 0)
+    return GGA(line, GPS_INFO);
 
   return false;
 }
@@ -347,6 +345,80 @@ MixedFormatToDegrees(double mixed)
   return degrees + mins;
 }
 
+static bool
+ReadDoubleAndChar(NMEAInputLine &line, double &d, TCHAR &ch)
+{
+  bool success = line.read_checked(d);
+  ch = line.read_first_char();
+  return success;
+}
+
+static bool
+ReadFixedAndChar(NMEAInputLine &line, fixed &d, TCHAR &ch)
+{
+  bool success = line.read_checked(d);
+  ch = line.read_first_char();
+  return success;
+}
+
+#include <stdio.h>
+static bool
+ReadLatitude(NMEAInputLine &line, Angle &value_r)
+{
+  double value;
+  TCHAR ch;
+
+  if (!ReadDoubleAndChar(line, value, ch))
+    return false;
+
+  value = NorthOrSouth(MixedFormatToDegrees(value), ch);
+  value_r = Angle::degrees(fixed(value));
+  return true;
+}
+
+static bool
+ReadLongitude(NMEAInputLine &line, Angle &value_r)
+{
+  double value;
+  TCHAR ch;
+
+  if (!ReadDoubleAndChar(line, value, ch))
+    return false;
+
+  value = EastOrWest(MixedFormatToDegrees(value), ch);
+  value_r = Angle::degrees(fixed(value));
+  return true;
+}
+
+static bool
+ReadGeoPoint(NMEAInputLine &line, GEOPOINT &value_r)
+{
+  GEOPOINT value;
+
+  bool latitude_valid = ReadLatitude(line, value.Latitude);
+  bool longitude_valid = ReadLongitude(line, value.Longitude);
+  if (latitude_valid && longitude_valid) {
+    value_r = value;
+    return true;
+  } else
+    return false;
+}
+
+bool
+NMEAParser::ReadAltitude(NMEAInputLine &line, fixed &value_r)
+{
+  fixed value;
+  TCHAR format;
+  if (!ReadFixedAndChar(line, value, format))
+    return false;
+
+  if (format == _T('f') || format == _T('F'))
+    value = Units::ToSysUnit(value, unFeet);
+
+  value_r = value;
+  return true;
+}
+
 /**
  * Calculates a seconds-based FixTime and corrects it
  * in case over passing the UTC midnight mark
@@ -440,20 +512,16 @@ NMEAParser::TimeHasAdvanced(double ThisTime, NMEA_INFO *GPS_INFO)
  * @return Parsing success
  */
 bool
-NMEAParser::GSA(const TCHAR *String, const TCHAR **params, size_t nparams,
-    NMEA_INFO *GPS_INFO)
+NMEAParser::GSA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   if (GPS_INFO->gps.Replay)
     return true;
 
+  line.skip(2);
+
   // satellites are in items 4-15 of GSA string (4-15 is 1-indexed)
-  // but 1st item in string is not passed, so start at item 3
-  for (int i = 0; i < MAXSATELLITES; i++) {
-    if (3 + i < (int)nparams) {
-      // 2 because params is 0-index
-      GPS_INFO->gps.SatelliteIDs[i] = _ttoi(params[2 + i]);
-    }
-  }
+  for (unsigned i = 0; i < MAXSATELLITES; i++)
+    GPS_INFO->gps.SatelliteIDs[i] = line.read(0);
 
   GSAAvailable = true;
   return true;
@@ -480,10 +548,14 @@ NMEAParser::GSA(const TCHAR *String, const TCHAR **params, size_t nparams,
  * @return Parsing success
  */
 bool
-NMEAParser::GLL(const TCHAR *String, const TCHAR **params, size_t nparams,
-    NMEA_INFO *GPS_INFO)
+NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  gpsValid = !NAVWarn(params[5][0]);
+  GEOPOINT location;
+  bool valid_location = ReadGeoPoint(line, location);
+
+  double ThisTime = TimeModify(line.read(0.0), GPS_INFO->DateTime);
+
+  gpsValid = !NAVWarn(line.read_first_char());
 
   if (!activeGPS)
     return true;
@@ -494,26 +566,13 @@ NMEAParser::GLL(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   GPS_INFO->gps.NAVWarning = !gpsValid;
 
-  double ThisTime = TimeModify(_tcstod(params[4], NULL), GPS_INFO->DateTime);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return false;
 
-  double tmplat;
-  double tmplon;
-
-  tmplat = MixedFormatToDegrees(_tcstod(params[0], NULL));
-  tmplat = NorthOrSouth(tmplat, params[1][0]);
-
-  tmplon = MixedFormatToDegrees(_tcstod(params[2], NULL));
-  tmplon = EastOrWest(tmplon, params[3][0]);
-
-  if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Location.Latitude = Angle::degrees((fixed)tmplat);
-    GPS_INFO->Location.Longitude = Angle::degrees((fixed)tmplon);
-  }
-  else {
+  if (valid_location)
+    GPS_INFO->Location = location;
+  else
     GPS_INFO->gps.NAVWarning = true;
-  }
 
   return true;
 }
@@ -547,13 +606,10 @@ NMEAParser::GLL(const TCHAR *String, const TCHAR **params, size_t nparams,
  * @return Parsing success
  */
 bool
-NMEAParser::RMB(const TCHAR *String, const TCHAR **params, size_t nparams,
-    NMEA_INFO *GPS_INFO)
+NMEAParser::RMB(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
+  (void)line;
   (void)GPS_INFO;
-  (void)String;
-  (void)params;
-  (void)nparams;
 
   /* we calculate all this stuff now
   TCHAR ctemp[MAX_NMEA_LEN];
@@ -601,12 +657,16 @@ NMEAParser::RMB(const TCHAR *String, const TCHAR **params, size_t nparams,
  * @return Parsing success
  */
 bool
-NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
-    NMEA_INFO *GPS_INFO)
+NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
+  double ThisTime = TimeModify(line.read(0.0), GPS_INFO->DateTime);
+
   TCHAR *Stop;
 
-  gpsValid = !NAVWarn(params[1][0]);
+  gpsValid = !NAVWarn(line.read_first_char());
+
+  GEOPOINT location;
+  bool valid_location = ReadGeoPoint(line, location);
 
   GPS_STATE &gps = GPS_INFO->gps;
 
@@ -615,7 +675,7 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (!activeGPS)
     return true;
 
-  fixed speed(_tcstod(params[6], NULL));
+  fixed speed = line.read(fixed_zero);
   gps.MovementDetected = speed > fixed_two;
 
   if (gps.Replay)
@@ -624,10 +684,11 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   gps.NAVWarning = !gpsValid;
 
+  fixed TrackBearing = line.read(fixed_zero);
+
   // JMW get date info first so TimeModify is accurate
   TCHAR date_buffer[9];
-  _tcsncpy(date_buffer, params[8], sizeof(date_buffer) - 1);
-  date_buffer[(sizeof(date_buffer) / sizeof(date_buffer[0])) - 1] = 0;
+  line.read(date_buffer, 9);
 
   GPS_INFO->DateTime.year = _tcstol(&date_buffer[4], &Stop, 10) + 2000;
   date_buffer[4] = '\0';
@@ -635,32 +696,19 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   date_buffer[2] = '\0';
   GPS_INFO->DateTime.day = _tcstol(&date_buffer[0], &Stop, 10);
 
-  double ThisTime = TimeModify(_tcstod(params[0], NULL), GPS_INFO->DateTime);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return false;
 
-  double tmplat;
-  double tmplon;
-
-  tmplat = MixedFormatToDegrees(_tcstod(params[2], NULL));
-  tmplat = NorthOrSouth(tmplat, params[3][0]);
-
-  tmplon = MixedFormatToDegrees(_tcstod(params[4], NULL));
-  tmplon = EastOrWest(tmplon, params[5][0]);
-
-  if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Location.Latitude = Angle::degrees(fixed(tmplat));
-    GPS_INFO->Location.Longitude = Angle::degrees(fixed(tmplon));
-  }
-  else {
+  if (valid_location)
+    GPS_INFO->Location = location;
+  else
     GPS_INFO->gps.NAVWarning = true;
-  }
 
   GPS_INFO->GroundSpeed = Units::ToSysUnit(speed, unKnots);
 
   if (GPS_INFO->GroundSpeed > fixed_one) {
     // JMW don't update bearing unless we're moving
-    GPS_INFO->TrackBearing = Angle::degrees(fixed(_tcstod(params[7], NULL))).as_bearing();
+    GPS_INFO->TrackBearing = Angle::degrees(TrackBearing).as_bearing();
   }
 
   if (!gps.Replay) {
@@ -731,8 +779,7 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
  * @return Parsing success
  */
 bool
-NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
-    NMEA_INFO *GPS_INFO)
+NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   GPS_STATE &gps = GPS_INFO->gps;
 
@@ -741,11 +788,16 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   GGAAvailable = true;
 
-  gps.FixQuality = _ttoi(params[5]);
+  double ThisTime = TimeModify(line.read(0.0), GPS_INFO->DateTime);
+
+  GEOPOINT location;
+  bool valid_location = ReadGeoPoint(line, location);
+
+  gps.FixQuality = line.read(0);
   if (gps.FixQuality != 1 && gps.FixQuality != 2)
     gpsValid = false;
 
-  int nSatellites = min(16, _ttoi(params[6]));
+  int nSatellites = min(16, line.read(0));
   if (nSatellites == 0)
     gpsValid = false;
 
@@ -754,28 +806,15 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   gps.SatellitesUsed = nSatellites;
 
-  double ThisTime = TimeModify(_tcstod(params[0], NULL), GPS_INFO->DateTime);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return false;
 
-  double tmplat;
-  double tmplon;
-
-  tmplat = MixedFormatToDegrees(_tcstod(params[1], NULL));
-  tmplat = NorthOrSouth(tmplat, params[2][0]);
-
-  tmplon = MixedFormatToDegrees(_tcstod(params[3], NULL));
-  tmplon = EastOrWest(tmplon, params[4][0]);
-
-  if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Location.Latitude = Angle::degrees(fixed(tmplat));
-    GPS_INFO->Location.Longitude = Angle::degrees(fixed(tmplon));
-  }
-  else {
+  if (valid_location)
+    GPS_INFO->Location = location;
+  else
     GPS_INFO->gps.NAVWarning = true;
-  }
 
-  gps.HDOP = (double)(_tcstod(params[7], NULL));
+  gps.HDOP = line.read(0.0);
 
   if (RMZAvailable) {
     GPS_INFO->BaroAltitudeAvailable = true;
@@ -787,13 +826,13 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   // VENTA3 CONDOR ALTITUDE
   // "Altitude" should always be GPS Altitude.
-  GPS_INFO->GPSAltitude = ParseAltitude(params[8], params[9]);
+  if (!ReadAltitude(line, GPS_INFO->GPSAltitude))
+    GPS_INFO->GPSAltitude = fixed_zero;
 
   fixed GeoidSeparation;
-  if (!string_is_empty(params[10])) {
+  if (ReadAltitude(line, GeoidSeparation)) {
     // No real need to parse this value,
     // but we do assume that no correction is required in this case
-    GeoidSeparation = ParseAltitude(params[10], params[11]);
   } else {
     // need to estimate Geoid Separation internally (optional)
     // FLARM uses MSL altitude
@@ -822,14 +861,12 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
  * @return Parsing success
  */
 bool
-NMEAParser::RMZ(const TCHAR *String, const TCHAR **params, size_t nparams,
-    NMEA_INFO *GPS_INFO)
+NMEAParser::RMZ(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  RMZAltitude = ParseAltitude(params[0], params[1]);
   //JMW?  RMZAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(RMZAltitude);
-  RMZAvailable = true;
+  RMZAvailable = ReadAltitude(line, RMZAltitude);
 
-  if (!devHasBaroSource() && !GPS_INFO->gps.Replay) {
+  if (RMZAvailable && !devHasBaroSource() && !GPS_INFO->gps.Replay) {
     // JMW no in-built baro sources, so use this generic one
     GPS_INFO->BaroAltitudeAvailable = true;
     GPS_INFO->BaroAltitude = RMZAltitude;
@@ -864,14 +901,12 @@ NMEAParser::RMZ(const TCHAR *String, const TCHAR **params, size_t nparams,
  * @return Parsing success
  */
 bool
-NMEAParser::RMA(const TCHAR *String, const TCHAR **params, size_t nparams,
-    NMEA_INFO *GPS_INFO)
+NMEAParser::RMA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  RMAAltitude = ParseAltitude(params[0], params[1]);
   //JMW?  RMAAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(RMAAltitude);
-  RMAAvailable = true;
+  RMAAvailable = ReadAltitude(line, RMAAltitude);
 
-  if (!devHasBaroSource() && !GPS_INFO->gps.Replay) {
+  if (RMAAvailable && !devHasBaroSource() && !GPS_INFO->gps.Replay) {
     // JMW no in-built baro sources, so use this generic one
     GPS_INFO->BaroAltitudeAvailable = true;
     GPS_INFO->BaroAltitude = RMAAltitude;
@@ -933,24 +968,39 @@ NMEAParser::NMEAChecksum(const TCHAR *String)
  * @return Parsing success
  */
 bool
-NMEAParser::PTAS1(const TCHAR *String, const TCHAR **params, size_t nparams,
-    NMEA_INFO *GPS_INFO)
+NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  fixed wnet, baralt, vtas;
+  fixed wnet;
+  if (line.read_checked(wnet)) {
+    GPS_INFO->TotalEnergyVario = Units::ToSysUnit((wnet - fixed(200)) / 10,
+                                                  unKnots);
+    GPS_INFO->TotalEnergyVarioAvailable = true;
+  }
 
-  wnet = Units::ToSysUnit((_tcstod(params[0], NULL) - 200) * 0.1, unKnots);
-  baralt = max(0.0, Units::ToSysUnit(_tcstod(params[2], NULL) - 2000, unFeet));
-  vtas = Units::ToSysUnit(_tcstod(params[3], NULL), unKnots);
+  line.skip(); // average vario +200
 
-  GPS_INFO->AirspeedAvailable = true;
-  GPS_INFO->TrueAirspeed = vtas;
-  GPS_INFO->TotalEnergyVarioAvailable = true;
-  GPS_INFO->TotalEnergyVario = wnet;
-  GPS_INFO->BaroAltitudeAvailable = true;
-  GPS_INFO->BaroAltitude =
-      GPS_INFO->pressure.AltitudeToQNHAltitude(fixed(baralt));
-  GPS_INFO->IndicatedAirspeed =
-      vtas / GPS_INFO->pressure.AirDensityRatio(fixed(baralt));
+  fixed baralt;
+  bool valid_baralt = false;
+  if (line.read_checked(baralt)) {
+    baralt = max(fixed_zero, Units::ToSysUnit(baralt - fixed(2000), unFeet));
+    valid_baralt = true;
+
+    GPS_INFO->BaroAltitudeAvailable = true;
+    GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(baralt);
+  }
+
+  fixed vtas;
+  bool valid_vtas = false;
+  if (line.read_checked(vtas)) {
+    vtas = Units::ToSysUnit(vtas, unKnots);
+
+    GPS_INFO->AirspeedAvailable = true;
+    GPS_INFO->TrueAirspeed = vtas;
+  }
+
+  if (valid_baralt && valid_vtas)
+    GPS_INFO->IndicatedAirspeed =
+      vtas / GPS_INFO->pressure.AirDensityRatio(baralt);
 
   TriggerVarioUpdate();
 
@@ -968,8 +1018,7 @@ NMEAParser::PTAS1(const TCHAR *String, const TCHAR **params, size_t nparams,
  * @see http://flarm.com/support/manual/FLARM_DataportManual_v4.06E.pdf
  */
 bool
-NMEAParser::PFLAU(const TCHAR *String, const TCHAR **params, size_t nparams,
-                  FLARM_STATE &flarm)
+NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm)
 {
   static int old_flarm_rx = 0;
 
@@ -978,10 +1027,10 @@ NMEAParser::PFLAU(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
-  flarm.FLARM_RX = _ttoi(params[0]);
-  flarm.FLARM_TX = _ttoi(params[1]);
-  flarm.FLARM_GPS = _ttoi(params[2]);
-  flarm.FLARM_AlarmLevel = _ttoi(params[4]);
+  flarm.FLARM_RX = line.read(0);
+  flarm.FLARM_TX = line.read(0);
+  flarm.FLARM_GPS = line.read(0);
+  flarm.FLARM_AlarmLevel = line.read(0);
 
   // process flarm updates
 
@@ -1011,8 +1060,7 @@ NMEAParser::PFLAU(const TCHAR *String, const TCHAR **params, size_t nparams,
  * @see http://flarm.com/support/manual/FLARM_DataportManual_v4.06E.pdf
  */
 bool
-NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
-    NMEA_INFO *GPS_INFO)
+NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   FLARM_STATE &flarm = GPS_INFO->flarm;
 
@@ -1039,18 +1087,34 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
     FLARM_EastingToLongitude = delta_lon.value_degrees() / dlon;
   }
 
-  // 5 id, 6 digit hex
-  FlarmId ID;
-  ID.parse(params[5], NULL);
+  // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
+  //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
+  FLARM_TRAFFIC traffic;
+  traffic.AlarmLevel = line.read(0);
+  traffic.RelativeNorth = line.read(fixed_zero);
+  traffic.RelativeEast = line.read(fixed_zero);
+  traffic.RelativeAltitude = line.read(fixed_zero);
+  traffic.IDType = line.read(0);
 
-  FLARM_TRAFFIC *flarm_slot = flarm.FindTraffic(ID);
+  // 5 id, 6 digit hex
+  TCHAR id_string[16];
+  line.read(id_string, 16);
+  traffic.ID.parse(id_string, NULL);
+
+  traffic.TrackBearing = Angle::degrees(line.read(fixed_zero));
+  traffic.TurnRate = line.read(fixed_zero);
+  traffic.Speed = line.read(fixed_zero);
+  traffic.ClimbRate = line.read(fixed_zero);
+  traffic.Type = (FLARM_TRAFFIC::AircraftType)line.read(0);
+
+  FLARM_TRAFFIC *flarm_slot = flarm.FindTraffic(traffic.ID);
   if (flarm_slot == NULL) {
     flarm_slot = flarm.AllocateTraffic();
     if (flarm_slot == NULL)
       // no more slots available
       return false;
 
-    flarm_slot->ID = ID;
+    flarm_slot->ID = traffic.ID;
 
     flarm.NewTraffic = true;
     InputEvents::processGlideComputer(GCE_FLARM_NEWTRAFFIC);
@@ -1061,16 +1125,16 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
-  flarm_slot->AlarmLevel = _ttoi(params[0]);
-  flarm_slot->RelativeNorth = fixed(_tcstod(params[1], NULL));
-  flarm_slot->RelativeEast = fixed(_tcstod(params[2], NULL));
-  flarm_slot->RelativeAltitude = fixed(_tcstod(params[3], NULL));
-  flarm_slot->IDType = _ttoi(params[4]);
-  flarm_slot->TrackBearing = Angle::degrees(fixed(_tcstod(params[6], NULL)));
-  flarm_slot->TurnRate = _tcstod(params[7], NULL);
-  flarm_slot->Speed = _tcstod(params[8], NULL);
-  flarm_slot->ClimbRate = _tcstod(params[9], NULL);
-  flarm_slot->Type = (FLARM_TRAFFIC::AircraftType)_ttoi(params[10]);
+  flarm_slot->AlarmLevel = traffic.AlarmLevel;
+  flarm_slot->RelativeNorth = traffic.RelativeNorth;
+  flarm_slot->RelativeEast = traffic.RelativeEast;
+  flarm_slot->RelativeAltitude = traffic.RelativeAltitude;
+  flarm_slot->IDType = traffic.IDType;
+  flarm_slot->TrackBearing = traffic.TrackBearing;
+  flarm_slot->TurnRate = traffic.TurnRate;
+  flarm_slot->Speed = traffic.Speed;
+  flarm_slot->ClimbRate = traffic.ClimbRate;
+  flarm_slot->Type = traffic.Type;
 
   // 1 relativenorth, meters
   flarm_slot->Location.Latitude = Angle::degrees(flarm_slot->RelativeNorth
@@ -1145,13 +1209,13 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   _stprintf(t_lau, _T("2,1,2,1,%d"), l);
 
   GPS_INFO->flarm.FLARM_Available = true;
-  TCHAR ctemp[MAX_NMEA_LEN];
-  const TCHAR *params[MAX_NMEA_PARAMS];
-  size_t nr;
-  nr = ExtractParameters(t_lau, ctemp, params, MAX_NMEA_PARAMS);
-  PFLAU(t_lau, params, nr, GPS_INFO->flarm);
-  nr = ExtractParameters(t_laa1, ctemp, params, MAX_NMEA_PARAMS);
-  PFLAA(t_laa1, params, nr, GPS_INFO);
-  nr = ExtractParameters(t_laa2, ctemp, params, MAX_NMEA_PARAMS);
-  PFLAA(t_laa2, params, nr, GPS_INFO);
+
+  NMEAInputLine line(t_lau);
+  PFLAU(line, GPS_INFO->flarm);
+
+  line = NMEAInputLine(t_laa1);
+  PFLAA(line, GPS_INFO);
+
+  line = NMEAInputLine(t_laa2);
+  PFLAA(line, GPS_INFO);
 }

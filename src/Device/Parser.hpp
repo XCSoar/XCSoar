@@ -46,6 +46,7 @@ Copyright_License {
 struct FLARM_STATE;
 struct NMEA_INFO;
 struct BrokenDateTime;
+class NMEAInputLine;
 
 class NMEAParser
 {
@@ -65,6 +66,12 @@ public:
   void TestRoutine(NMEA_INFO *GPS_INFO);
 
   // these routines can be used by other parsers.
+
+  /**
+   * Reads an altitude value, and the unit from a second volumn.
+   */
+  static bool ReadAltitude(NMEAInputLine &line, fixed &value_r);
+
   static double ParseAltitude(const TCHAR *, const TCHAR *);
   static size_t ValidateAndExtract(const TCHAR *src, TCHAR *dst, size_t dstsz,
                                    const TCHAR **arr, size_t arrsz);
@@ -88,24 +95,24 @@ private:
   bool TimeHasAdvanced(double ThisTime, NMEA_INFO *GPS_INFO);
   static double TimeModify(double FixTime, BrokenDateTime &date_time);
 
-  bool GLL(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
-  bool GGA(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
-  bool GSA(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
-  bool RMC(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
-  bool RMB(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
-  bool RMA(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
-  bool RMZ(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  bool GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+  bool GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+  bool GSA(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+  bool RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+  bool RMB(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+  bool RMA(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+  bool RMZ(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 
-  bool WP0(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
-  bool WP1(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
-  bool WP2(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  bool WP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+  bool WP1(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+  bool WP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 
   // Additional sentences
-  bool PTAS1(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);  // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
+  bool PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO); // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
 
   // FLARM sentences
-  bool PFLAU(const TCHAR *String, const TCHAR **, size_t, FLARM_STATE &flarm);
-  bool PFLAA(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  bool PFLAU(NMEAInputLine &line, FLARM_STATE &flarm);
+  bool PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 };
 
 #endif
