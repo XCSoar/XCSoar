@@ -74,10 +74,8 @@ RasterTerrain::CreateTerrainMap(const char *zfilename)
 
 void RasterTerrain::CloseTerrain(void)
 {
-  if (TerrainMap != NULL) {
-    delete TerrainMap;
-    TerrainMap = NULL;
-  }
+  delete TerrainMap;
+  TerrainMap = NULL;
 }
 
 void RasterTerrain::Lock(void) {
