@@ -84,37 +84,20 @@ RasterMap::GetEffectivePixelSize(fixed &pixel_D,
 }
 
 void
-RasterMap::SetFieldRounding(const GEOPOINT& delta,
-                            RasterRounding &rounding) const
+RasterMap::SetFieldRounding(RasterRounding &rounding) const
 {
   if (!isMapLoaded()) {
     return;
   }
 
-  rounding.Xrounding = iround(delta.Longitude.value_native()
-                              /TerrainInfo.StepSize.value_native());
-  rounding.Yrounding = iround(delta.Latitude.value_native()
-                              /TerrainInfo.StepSize.value_native());
-  if (rounding.Xrounding<1) {
-    rounding.Xrounding = 1;
-  }
-  if (rounding.Yrounding<1) {
-    rounding.Yrounding = 1;
-  }
-
   // use double here for maximum accuracy, since we are dealing with
   // numbers close to the lower range of the fixed type
 
-  const double fx = rounding.Xrounding*(double)TerrainInfo.StepSize.value_native();
-  const double fy = rounding.Yrounding*(double)TerrainInfo.StepSize.value_native();
+  const double fx = (double)TerrainInfo.StepSize.value_native();
+  const double fy = (double)TerrainInfo.StepSize.value_native();
 
-  rounding.fXrounding = fixed(1.0/fx);
   rounding.fXroundingFine = fixed(256.0/fx);
-
-  rounding.fYrounding = fixed(1.0/fy);
   rounding.fYroundingFine = fixed(256.0/fy);
-
-  rounding.DirectFine = false;
 }
 
 // Map general
@@ -126,22 +109,11 @@ short RasterMap::GetField(const GEOPOINT &location,
   const RasterRounding &rounding)
 {
   if(isMapLoaded()) {
-    if (rounding.DirectFine) {
-      return _GetFieldAtXY((int)(location.Longitude.value_native() *
-                                 rounding.fXroundingFine) - rounding.xlleft,
-                           rounding.xlltop -
-                           (int)(location.Latitude.value_native() *
-                                 rounding.fYroundingFine));
-    } else {
-      unsigned int ix =
-        Real2Int((location.Longitude - TerrainInfo.TopLeft.Longitude).value_native() *
-                 rounding.fXrounding) * rounding.Xrounding;
-      unsigned int iy =
-        Real2Int((TerrainInfo.TopLeft.Latitude - location.Latitude).value_native() *
-                 rounding.fYrounding) * rounding.Yrounding;
-
-      return _GetFieldAtXY(ix<<8, iy<<8);
-    }
+    return _GetFieldAtXY((int)(location.Longitude.value_native() *
+                               rounding.fXroundingFine) - rounding.xlleft,
+                         rounding.xlltop -
+                         (int)(location.Latitude.value_native() *
+                               rounding.fYroundingFine));
   } else {
     return TERRAIN_INVALID;
   }

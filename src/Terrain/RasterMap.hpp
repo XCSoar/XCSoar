@@ -80,8 +80,7 @@ public:
   int GetEffectivePixelSize(fixed &pixel_D,
                             const GEOPOINT &location) const;
 
-  virtual void SetFieldRounding(const GEOPOINT& delta,
-                                RasterRounding &rounding) const;
+  virtual void SetFieldRounding(RasterRounding &rounding) const;
 
   short GetField(const GEOPOINT &location,
     const RasterRounding &rounding);
@@ -115,31 +114,19 @@ class RasterRounding {
 public:
   RasterRounding() {};
 
-  RasterRounding(const RasterMap &map,
-                 const GEOPOINT& delta):
-    DirectFine(false)
+  RasterRounding(const RasterMap &map)
   {
-    Set(map, delta);
+    Set(map);
   };
 
-  RasterRounding(const RasterMap &map):
-    DirectFine(false)
+  void Set(const RasterMap &map)
   {
-    Set(map, GEOPOINT());
-  };
-
-  void Set(const RasterMap &map,
-           const GEOPOINT& delta)
-  {
-    map.SetFieldRounding(delta,*this);
+    map.SetFieldRounding(*this);
   }
 
-  bool DirectFine;
   int xlleft;
   int xlltop;
-  fixed fXrounding, fYrounding;
   fixed fXroundingFine, fYroundingFine;
-  int Xrounding, Yrounding;
 };
 
 

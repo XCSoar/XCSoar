@@ -45,20 +45,15 @@ Copyright_License {
 #include "jasper/jasper.h"
 
 void
-RasterMapJPG2000::SetFieldRounding(const GEOPOINT& delta,
-                                   RasterRounding &rounding) const
+RasterMapJPG2000::SetFieldRounding(RasterRounding &rounding) const
 {
-  RasterMap::SetFieldRounding(delta, rounding);
+  RasterMap::SetFieldRounding(rounding);
   if (!isMapLoaded()) {
     return;
   }
-  if ((rounding.Xrounding==1)&&(rounding.Yrounding==1)) {
-    rounding.DirectFine = true;
-    rounding.xlleft = (int)(TerrainInfo.TopLeft.Longitude.value_native() * rounding.fXroundingFine) + 128;
-    rounding.xlltop  = (int)(TerrainInfo.TopLeft.Latitude.value_native() * rounding.fYroundingFine) - 128;
-  } else {
-    rounding.DirectFine = false;
-  }
+
+  rounding.xlleft = (int)(TerrainInfo.TopLeft.Longitude.value_native() * rounding.fXroundingFine) + 128;
+  rounding.xlltop  = (int)(TerrainInfo.TopLeft.Latitude.value_native() * rounding.fYroundingFine) - 128;
 }
 
 // Field access

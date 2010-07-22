@@ -313,19 +313,15 @@ TerrainRenderer::Height(const Projection &map_projection)
 
   const int dstep = (int)lround(quantisation_pixels);
 
-  GEOPOINT delta_rounding;
-
   x = (rect_visible.left + rect_visible.right) / 2 + dstep;
   y = (rect_visible.top + rect_visible.bottom) / 2;
   map_projection.Screen2LonLat(x, y, Gx);
-  delta_rounding.Longitude = (Gx.Longitude - Gmid.Longitude);
 
   const fixed pixelDX = Distance(Gmid, Gx);
 
   x = (rect_visible.left + rect_visible.right) / 2;
   y = (rect_visible.top + rect_visible.bottom) / 2 + dstep;
   map_projection.Screen2LonLat(x, y, Gy);
-  delta_rounding.Latitude = (Gy.Latitude - Gmid.Latitude);
 
   const fixed pixelDY = Distance(Gmid, Gy);
 
@@ -335,12 +331,8 @@ TerrainRenderer::Height(const Projection &map_projection)
 
   DisplayMap->LockRead();
 
-  if (DisplayMap->IsDirectAccess()) {
-    delta_rounding = GEOPOINT();
-  }
-
   // set resolution
-  rounding->Set(*DisplayMap, delta_rounding);
+  rounding->Set(*DisplayMap);
 
   quantisation_effective = DisplayMap->GetEffectivePixelSize(pixelsize_d, Gmid);
 
