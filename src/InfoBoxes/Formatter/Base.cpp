@@ -220,10 +220,6 @@ InfoBoxFormatter::AssignValue(int i)
     Value = Units::ToUserSpeed(Calculated().common_stats.V_block);
     break;
 
-  case 35:
-    Value = Calculated().PercentCircling;
-    break;
-
   case 37:
     Valid = Basic().acceleration.Available;
     Value = Basic().acceleration.Gload;

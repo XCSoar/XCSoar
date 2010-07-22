@@ -328,7 +328,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 35
   { ugNone, _T("Percentage climb"), _T("% Climb"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     NULL,
     43, 34,
   },

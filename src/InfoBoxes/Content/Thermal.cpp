@@ -242,3 +242,16 @@ InfoBoxContentThermalGain::Update(InfoBoxWindow &infobox)
   // Set Unit
   infobox.SetValueUnit(Units::AltitudeUnit);
 }
+
+void
+InfoBoxContentThermalRatio::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("% Climb"));
+
+  // Set Value
+  TCHAR sTmp[32];
+  _stprintf(sTmp, _T("%2.0f%%"),
+            (double)XCSoarInterface::Calculated().PercentCircling);
+  infobox.SetValue(sTmp);
+}
