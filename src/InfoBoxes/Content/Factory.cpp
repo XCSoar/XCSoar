@@ -72,6 +72,10 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentNextWaypoint();
   case 20:
     return new InfoBoxContentTerrainHeight();
+  case 21:
+    return new InfoBoxContentThermalAvg();
+  case 22:
+    return new InfoBoxContentThermalGain();
   case 23:
     return new InfoBoxContentTrack();
   case 25:

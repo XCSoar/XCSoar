@@ -189,14 +189,6 @@ InfoBoxFormatter::AssignValue(int i)
 #endif
     break;
 
-  case 21:
-    Value = Units::ToUserVSpeed(Calculated().AverageThermal);
-    break;
-
-  case 22:
-    Value = Units::ToUserAltitude(Calculated().ThermalGain);
-    break;
-
   case 24:
     Value = Units::ToUserVSpeed(Basic().TotalEnergyVario);
     break;

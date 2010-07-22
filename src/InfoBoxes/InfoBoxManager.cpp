@@ -261,13 +261,13 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 21
   { ugVerticalSpeed, _T("Thermal Average"), _T("TC Avg"),
-    new FormatterLowWarning(_T("%-2.1f"),0.0),
+    NULL,
     NULL,
     22, 9,
   },
   // 22
   { ugAltitude, _T("Thermal Gain"), _T("TC Gain"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     NULL,
     24, 21,
   },
