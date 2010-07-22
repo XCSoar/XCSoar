@@ -52,6 +52,7 @@ InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
 
   if (!XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint) {
     infobox.SetInvalid();
+    return;
   }
 
   // Set Value
