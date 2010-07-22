@@ -41,14 +41,15 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "Protection.hpp"
 #include "NMEA/Info.hpp"
+#include "NMEA/InputLine.hpp"
 
 #include <stdlib.h>
 
 static bool
-PZAN1(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro);
+PZAN1(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro);
 
 static bool
-PZAN2(const TCHAR *String, NMEA_INFO *GPS_INFO);
+PZAN2(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 
 class ZanderDevice : public AbstractDevice {
   virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
@@ -59,15 +60,16 @@ bool
 ZanderDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
                         bool enable_baro)
 {
-  if(_tcsncmp(_T("$PZAN1"), String, 6)==0)
-    return PZAN1(&String[7], GPS_INFO, enable_baro);
-  if(_tcsncmp(_T("$PZAN2"), String, 6)==0)
-    {
-      return PZAN2(&String[7], GPS_INFO);
-    }
+  NMEAInputLine line(String);
+  TCHAR type[16];
+  line.read(type, 16);
 
-  return false;
-
+  if (_tcscmp(type, _T("$PZAN1")) == 0)
+    return PZAN1(line, GPS_INFO, enable_baro);
+  else if (_tcscmp(type, _T("$PZAN2")) == 0)
+    return PZAN2(line, GPS_INFO);
+  else
+    return false;
 }
 
 static Device *
@@ -86,44 +88,41 @@ const struct DeviceRegister zanderDevice = {
 // local stuff
 
 static bool
-PZAN1(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
+PZAN1(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   if (!enable_baro)
     return true;
 
-  TCHAR ctemp[80];
-  GPS_INFO->BaroAltitudeAvailable = true;
-  NMEAParser::ExtractParameter(String,ctemp,0);
-  GPS_INFO->BaroAltitude = 
-    GPS_INFO->pressure.AltitudeToQNHAltitude(fixed(_tcstod(ctemp, NULL)));
+  fixed baro_altitude;
+  if (line.read_checked(baro_altitude)) {
+    GPS_INFO->BaroAltitudeAvailable = true;
+    GPS_INFO->BaroAltitude =
+      GPS_INFO->pressure.AltitudeToQNHAltitude(baro_altitude);
+  }
+
   return true;
 }
 
 
 static bool
-PZAN2(const TCHAR *String, NMEA_INFO *GPS_INFO)
+PZAN2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  TCHAR ctemp[80];
-  fixed vtas, wnet, vias;
+  fixed vtas, wnet;
 
-  NMEAParser::ExtractParameter(String,ctemp,0);
-  vtas = _tcstod(ctemp, NULL) / 3.6;
-  // JMW 20080721 fixed km/h->m/s conversion
+  if (line.read_checked(vtas)) {
+    vtas /= fixed(3.6); // km/h -> m/s
 
-  NMEAParser::ExtractParameter(String,ctemp,1);
-  wnet = (_tcstod(ctemp, NULL) - 10000) / 100; // cm/s
-  GPS_INFO->TotalEnergyVario = wnet;
-  GPS_INFO->TotalEnergyVarioAvailable = true;
-
-  if (GPS_INFO->BaroAltitudeAvailable) {
-    vias = vtas/AtmosphericPressure::AirDensityRatio(GPS_INFO->BaroAltitude);
-  } else {
-    vias = 0.0;
+    GPS_INFO->TrueAirspeed = vtas;
+    GPS_INFO->IndicatedAirspeed = GPS_INFO->BaroAltitudeAvailable
+      ? vtas / AtmosphericPressure::AirDensityRatio(GPS_INFO->BaroAltitude)
+      : fixed_zero;
+    GPS_INFO->AirspeedAvailable = true;
   }
 
-  GPS_INFO->AirspeedAvailable = true;
-  GPS_INFO->TrueAirspeed = vtas;
-  GPS_INFO->IndicatedAirspeed = vias;
+  if (line.read_checked(wnet)) {
+    GPS_INFO->TotalEnergyVario = (wnet - fixed(10000)) / 100;
+    GPS_INFO->TotalEnergyVarioAvailable = true;
+  }
 
   TriggerVarioUpdate();
 
