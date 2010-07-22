@@ -449,8 +449,6 @@ bool
 NMEAParser::GSA(const TCHAR *String, const TCHAR **params, size_t nparams,
     NMEA_INFO *GPS_INFO)
 {
-  int iSatelliteCount = 0;
-
   if (GPS_INFO->gps.Replay)
     return true;
 
@@ -460,8 +458,6 @@ NMEAParser::GSA(const TCHAR *String, const TCHAR **params, size_t nparams,
     if (3 + i < (int)nparams) {
       // 2 because params is 0-index
       GPS_INFO->gps.SatelliteIDs[i] = (int)(_tcstod(params[2 + i], NULL));
-      if (GPS_INFO->gps.SatelliteIDs[i] > 0)
-        iSatelliteCount++;
     }
   }
 
