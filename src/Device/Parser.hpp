@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_PARSER_HPP
 #define XCSOAR_DEVICE_PARSER_HPP
 
+#include "Math/fixed.hpp"
+
 #include <tchar.h>
 
 struct FLARM_STATE;
@@ -79,8 +81,8 @@ private:
   bool GGAAvailable;
   bool RMZAvailable;
   bool RMAAvailable;
-  double RMZAltitude;
-  double RMAAltitude;
+  fixed RMZAltitude;
+  fixed RMAAltitude;
   double LastTime;
 
   bool TimeHasAdvanced(double ThisTime, NMEA_INFO *GPS_INFO);
