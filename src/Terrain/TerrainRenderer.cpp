@@ -219,17 +219,11 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
   TerrainBrightness = 36;
   TerrainRamp = 0;
 
-  if (!terrain->IsDirectAccess()) {
-    quantisation_pixels = 6;
-  } else {
-    // SAM: experiment with quantisation_pixels between 2 and 4
-    quantisation_pixels = 2;
-
+  quantisation_pixels = 2;
     // on my PDA (600MhZ, 320x240 screen):
     // quantisation_pixels=2, latency=170 ms
     // quantisation_pixels=3, latency=136 ms
     // quantisation_pixels=4, latency= 93 ms
-  }
 
   blursize = (quantisation_pixels - 1) / 2;
   oversampling = max(1, (blursize + 1) / 2 + 1);

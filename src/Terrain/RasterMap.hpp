@@ -60,10 +60,8 @@ public:
   static const short TERRAIN_INVALID = -1000;
 
  public:
-  RasterMap():
-    terrain_valid(false),
-    DirectAccess(false)
-    {}
+  RasterMap()
+    :terrain_valid(false) {}
   virtual ~RasterMap() {};
 
   inline bool isMapLoaded() const {
@@ -87,10 +85,6 @@ public:
 
   virtual void ServiceFullReload(const GEOPOINT &location) = 0;
 
-  bool IsDirectAccess(void) const {
-    return DirectAccess;
-  };
-
   void LockRead() {
     lock.readLock();
   }
@@ -103,8 +97,6 @@ public:
   Poco::RWLock lock;
 
   bool terrain_valid;
-
-  bool DirectAccess;
 
   virtual short _GetFieldAtXY(unsigned int lx,
                               unsigned int ly) = 0;

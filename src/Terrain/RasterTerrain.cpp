@@ -101,14 +101,6 @@ RasterTerrain::GetTerrainHeight(const GEOPOINT &Location,
   }
 }
 
-bool RasterTerrain::IsDirectAccess(void) const {
-  if (TerrainMap) {
-    return TerrainMap->IsDirectAccess();
-  } else {
-    return false;
-  }
-}
-
 void RasterTerrain::ServiceTerrainCenter(const GEOPOINT &location) {
   if (TerrainMap) {
     TerrainMap->SetViewCenter(location);

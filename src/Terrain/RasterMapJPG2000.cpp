@@ -74,7 +74,6 @@ RasterMapJPG2000::RasterMapJPG2000(const char *_path)
   :path(_path), FullJPGReload(true)
 {
   TriggerJPGReload = false;
-  DirectAccess = true;
   if (ref_count==0) {
     jas_init();
   }
