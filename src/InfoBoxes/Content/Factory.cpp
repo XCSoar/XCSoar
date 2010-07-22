@@ -41,6 +41,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Base.hpp"
 #include "InfoBoxes/Content/Altitude.hpp"
 #include "InfoBoxes/Content/Direction.hpp"
+#include "InfoBoxes/Content/Task.hpp"
 #include "InfoBoxes/Content/Team.hpp"
 #include "InfoBoxes/Content/Thermal.hpp"
 #include "InfoBoxes/Content/Weather.hpp"
@@ -65,6 +66,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentThermalLastGain();
   case 9:
     return new InfoBoxContentThermalLastTime();
+  case 14:
+    return new InfoBoxContentNextWaypoint();
   case 20:
     return new InfoBoxContentTerrainHeight();
   case 23:

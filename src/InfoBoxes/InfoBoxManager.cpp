@@ -808,23 +808,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
 
     break;
 
-  case 14: // Next waypoint
-    if (Calculated().task_stats.task_valid) {
-      info_box.SetTitle(
-                              Data_Options[type].Formatter-> Render(&color));
-      info_box.SetColor(color);
-      info_box.SetValue(Data_Options[47].Formatter->Render(&color));
-    } else {
-      info_box.SetTitle(_T("Next"));
-      info_box.SetValue(_T("---"));
-      info_box.SetColor(-1);
-    }
-
-    if (needupdate)
-      info_box.SetValueUnit(Units::GetUserUnitByGroup(Data_Options[type].UnitGroup));
-
-    break;
-
   default:
     if (needupdate)
       info_box.SetTitle(Data_Options[type].Title);
@@ -842,13 +825,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
   // Infobox bottom line
   //
   switch (type) {
-  case 14: // Next waypoint
-    if (const Waypoint* way_point = task_ui.getActiveWaypoint())
-      info_box.SetComment(way_point->Comment.c_str());
-    else
-      info_box.SetComment(_T(""));
-
-    break;
 
   case 10:
     if (SettingsComputer().auto_mc)
