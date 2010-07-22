@@ -71,13 +71,11 @@ EstimateThermalBase(const GEOPOINT Thermal_Location,
                           &loc);
 
     fixed hthermal = altitude - wthermal * t;
-    fixed hground = fixed_zero;
+    short hground = terrain.GetTerrainHeight(loc);
+    if (hground == RasterTerrain::TERRAIN_INVALID)
+      hground = 0;
 
-    if (terrain.GetMap()) {
-      hground = terrain.GetTerrainHeight(loc);
-    }
-
-    fixed dh = hthermal - hground;
+    fixed dh = hthermal - fixed(hground);
     if (negative(dh)) {
       t = t + dh / wthermal;
       FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * t,
@@ -86,10 +84,9 @@ EstimateThermalBase(const GEOPOINT Thermal_Location,
     }
   }
 
-  fixed hground = fixed_zero;
-  if (terrain.GetMap()) {
-    hground = terrain.GetTerrainHeight(loc);
-  }
+  short hground = terrain.GetTerrainHeight(loc);
+  if (hground == RasterTerrain::TERRAIN_INVALID)
+    hground = 0;
 
   terrain.Unlock();
 

@@ -98,18 +98,7 @@ short
 WayPointFile::AltitudeFromTerrain(GEOPOINT &location,
                                   const RasterTerrain &terrain)
 {
-  // If terrain not loaded yet -> return INVALID
-  if (!terrain.GetMap())
-    return RasterTerrain::TERRAIN_INVALID;
-
-  // Get terrain height
-  short alt = terrain.GetTerrainHeight(location);
-
-  // If terrain altitude okay -> return terrain altitude
-  if (alt > RasterTerrain::TERRAIN_INVALID)
-    return alt;
-
-  return RasterTerrain::TERRAIN_INVALID;
+  return terrain.GetTerrainHeight(location);
 }
 
 

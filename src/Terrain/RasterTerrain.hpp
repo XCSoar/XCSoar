@@ -92,9 +92,6 @@ public:
   void Lock(void); // should be protected, friend of TerrainDataClient
   void Unlock(void); // should be protected, friend of TerrainDataClient
 
-  const RasterMap* GetMap() const {
-    return TerrainMap;
-  }
   RasterMap* get_map() const {
     return TerrainMap;
   }

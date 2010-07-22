@@ -41,7 +41,8 @@
 void 
 Airspaces::set_ground_levels(const RasterTerrain &terrain)
 {
-  if (!terrain.GetMap()) return;
+  if (!terrain.isTerrainLoaded())
+    return;
 
   for (AirspaceTree::iterator v = airspace_tree.begin();
        v != airspace_tree.end(); ++v) {

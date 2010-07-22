@@ -395,13 +395,8 @@ GlideComputerAirData::CruiseLD()
 void
 GlideComputerAirData::TerrainHeight()
 {
-  short Alt = RasterTerrain::TERRAIN_INVALID;
-
   terrain.Lock();
-  if (terrain.GetMap()) {
-    // want most accurate rounding here
-    Alt = terrain.GetTerrainHeight(Basic().Location);
-  }
+  short Alt = terrain.GetTerrainHeight(Basic().Location);
   terrain.Unlock();
 
   SetCalculated().TerrainValid = Alt > RasterTerrain::TERRAIN_INVALID;

@@ -675,7 +675,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
   terrain.Lock();
 
   // draw terrain
-  if (terrain.GetMap()) {
+  if (terrain.isTerrainLoaded()) {
     std::vector<POINT> points;
     POINT pf0, pf1;
     pf0.x = chart.screenX(range);
