@@ -86,7 +86,6 @@ public:
   short GetField(const GEOPOINT &location,
     const RasterRounding &rounding);
 
-  virtual void ServiceCache() {};
   virtual void ServiceFullReload(const GEOPOINT &location) = 0;
 
   bool IsDirectAccess(void) const {

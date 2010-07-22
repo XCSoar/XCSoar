@@ -109,12 +109,6 @@ bool RasterTerrain::IsDirectAccess(void) const {
   }
 }
 
-void RasterTerrain::ServiceCache(void) {
-  if (TerrainMap) {
-    TerrainMap->ServiceCache();
-  }
-}
-
 void RasterTerrain::ServiceTerrainCenter(const GEOPOINT &location) {
   if (TerrainMap) {
     TerrainMap->SetViewCenter(location);

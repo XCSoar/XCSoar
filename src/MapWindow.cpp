@@ -152,10 +152,8 @@ MapWindow::UpdateTerrain()
 
   // always service terrain even if it's not used by the map,
   // because it's used by other calculations
-  if (terrain != NULL) {
+  if (terrain != NULL)
     terrain->ServiceTerrainCenter(Basic().Location);
-    terrain->ServiceCache();
-  }
 
   terrain_dirty = false;
 }

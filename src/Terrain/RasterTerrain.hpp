@@ -102,7 +102,6 @@ public:
   short GetTerrainHeight(const GEOPOINT &location,
                          const RasterRounding &rounding) const;
   bool IsDirectAccess(void) const;
-  void ServiceCache();
   void ServiceTerrainCenter(const GEOPOINT &location);
   void ServiceFullReload(const GEOPOINT &location);
   int GetEffectivePixelSize(fixed &pixel_D, const GEOPOINT &location) const;
