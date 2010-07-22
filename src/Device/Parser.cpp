@@ -453,7 +453,7 @@ NMEAParser::GSA(const TCHAR *String, const TCHAR **params, size_t nparams,
   for (int i = 0; i < MAXSATELLITES; i++) {
     if (3 + i < (int)nparams) {
       // 2 because params is 0-index
-      GPS_INFO->gps.SatelliteIDs[i] = (int)(_tcstod(params[2 + i], NULL));
+      GPS_INFO->gps.SatelliteIDs[i] = _ttoi(params[2 + i]);
     }
   }
 
@@ -750,11 +750,11 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   GGAAvailable = true;
 
-  gps.FixQuality = (int)(_tcstod(params[5], NULL));
+  gps.FixQuality = _ttoi(params[5]);
   if (gps.FixQuality != 1 && gps.FixQuality != 2)
     gpsValid = false;
 
-  int nSatellites = (int)(min(16.0, _tcstod(params[6], NULL)));
+  int nSatellites = min(16, _ttoi(params[6]));
   if (nSatellites == 0)
     gpsValid = false;
 
