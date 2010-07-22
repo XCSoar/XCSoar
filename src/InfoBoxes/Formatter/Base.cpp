@@ -117,14 +117,6 @@ InfoBoxFormatter::AssignValue(int i)
     Value = Units::ToUserSpeed(Basic().GroundSpeed);
     break;
 
-  case 7:
-    Value = Units::ToUserVSpeed(Calculated().LastThermalAverage);
-    break;
-
-  case 8:
-    Value = Units::ToUserAltitude(Calculated().LastThermalGain);
-    break;
-
   case 10:
     Value = (int)Units::ToUserVSpeed(Calculated().common_stats.
                                      current_risk_mc * 10) / 10.0;

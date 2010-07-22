@@ -67,3 +67,60 @@ InfoBoxContentThermal30s::Update(InfoBoxWindow &infobox)
   else
     infobox.SetColor(0);
 }
+
+void
+InfoBoxContentThermalLastAvg::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("TL Avg"));
+
+  // Set Value
+  TCHAR sTmp[32];
+  _stprintf(sTmp, _T("%-2.1f"),
+            (double)XCSoarInterface::Calculated().LastThermalAverage);
+  infobox.SetValue(sTmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::VerticalSpeedUnit);
+}
+
+void
+InfoBoxContentThermalLastGain::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("TL Gain"));
+
+  // Set Value
+  TCHAR sTmp[32];
+  _stprintf(sTmp, _T("%2.0f"),
+            (double)XCSoarInterface::Calculated().LastThermalGain);
+  infobox.SetValue(sTmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::AltitudeUnit);
+}
+
+void
+InfoBoxContentThermalLastTime::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("TL Time"));
+
+  // Set Value
+  TCHAR sTmp[32];
+  int dd = (int)abs(XCSoarInterface::Calculated().LastThermalTime) % (3600 * 24);
+  int hours = dd / 3600;
+  int mins = dd / 60 - hours * 60;
+  int seconds = dd - mins * 60 - hours * 3600;
+
+  if (hours > 0) { // hh:mm, ss
+    _stprintf(sTmp, _T("%02d:%02d"), hours, mins);
+    infobox.SetValue(sTmp);
+    _stprintf(sTmp, _T("%02d"), seconds);
+    infobox.SetComment(sTmp);
+  } else { // mm:ss
+    _stprintf(sTmp, _T("%02d:%02d"), mins, seconds);
+    infobox.SetValue(sTmp);
+    infobox.SetComment(_T(""));
+  }
+}

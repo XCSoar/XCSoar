@@ -59,6 +59,12 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentThermal30s();
   case 3:
     return new InfoBoxContentBearing();
+  case 7:
+    return new InfoBoxContentThermalLastAvg();
+  case 8:
+    return new InfoBoxContentThermalLastGain();
+  case 9:
+    return new InfoBoxContentThermalLastTime();
   case 20:
     return new InfoBoxContentTerrainHeight();
   case 23:
