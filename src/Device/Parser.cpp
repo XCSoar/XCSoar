@@ -881,7 +881,6 @@ NMEAParser::RMA(const TCHAR *String, const TCHAR **params, size_t nparams,
   RMAAltitude = ParseAltitude(params[0], params[1]);
   //JMW?  RMAAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(RMAAltitude);
   RMAAvailable = true;
-  GPS_INFO->BaroAltitudeAvailable = true;
 
   if (!devHasBaroSource()) {
     if (!GPS_INFO->gps.Replay) {
