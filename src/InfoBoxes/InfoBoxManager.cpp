@@ -796,31 +796,16 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
   //
   // Set Infobox title and middle value. Bottom line comes next
   //
-  switch (type) {
-  case 67: // VENTA3 alternate1 and 2
-  case 68:
-  case 69:
-    info_box.SetTitle(Data_Options[type].Formatter->RenderTitle(&color));
-    info_box.SetValue(Data_Options[type].Formatter->Render(&color));
-    info_box.SetColor(color);
+  if (needupdate)
+    info_box.SetTitle(Data_Options[type].Title);
 
-    if (needupdate)
-      info_box.SetValueUnit(Units::GetUserUnitByGroup(Data_Options[type].UnitGroup));
+  info_box.SetValue(Data_Options[type].Formatter->Render(&color));
 
-    break;
+  // to be optimized!
+  if (needupdate)
+    info_box.SetValueUnit(Units::GetUserUnitByGroup(Data_Options[type].UnitGroup));
 
-  default:
-    if (needupdate)
-      info_box.SetTitle(Data_Options[type].Title);
-
-    info_box.SetValue(Data_Options[type].Formatter->Render(&color));
-
-    // to be optimized!
-    if (needupdate)
-      info_box.SetValueUnit(Units::GetUserUnitByGroup(Data_Options[type].UnitGroup));
-
-    info_box.SetColor(color);
-  }
+  info_box.SetColor(color);
 
   //
   // Infobox bottom line
@@ -882,23 +867,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
       info_box.SetComment(_T(""));
     break;
 #endif
-
-    // VENTA3 alternates
-  case 67:
-  case 68:
-  case 69:
-#ifdef OLD_TASK // alternates
-    if (FlipBoxValue == true) {
-      Units::FormatUserDistance(way_points.get_calc(ActiveAlternate).Distance,
-                                sTmp, sizeof(sTmp) / sizeof(sTmp[0]));
-      info_box.SetComment(sTmp);
-    } else {
-      Units::FormatUserArrival(way_points.get_calc(ActiveAlternate).AltArrival,
-                               sTmp, sizeof(sTmp) / sizeof(sTmp[0]));
-      info_box.SetComment(sTmp);
-    }
-#endif
-    break;
 
   default:
     info_box.SetComment(_T(""));
