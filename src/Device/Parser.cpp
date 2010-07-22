@@ -88,9 +88,7 @@ NMEAParser::Reset(void)
   activeGPS = true;
   GGAAvailable = false;
   RMZAvailable = false;
-  RMZAltitude = 0;
   RMAAvailable = false;
-  RMAAltitude = 0;
   LastTime = 0;
 }
 
