@@ -790,6 +790,8 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
   TCHAR sTmp[32];
   int color = 0;
 
+  Data_Options[type].Formatter->AssignValue(type);
+
   //
   // Set Infobox title and middle value. Bottom line comes next
   //
@@ -944,7 +946,6 @@ InfoBoxManager::DisplayInfoBox()
     // Do not put calculations here!
 
     DisplayType[i] = getType(i);
-    Data_Options[DisplayType[i]].Formatter->AssignValue(DisplayType[i]);
 
     bool needupdate = ((DisplayType[i] != DisplayTypeLast[i]) || first);
 
