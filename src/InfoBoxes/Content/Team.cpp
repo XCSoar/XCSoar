@@ -40,6 +40,8 @@ Copyright_License {
 
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Interface.hpp"
+#include "Units.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <tchar.h>
 
@@ -62,6 +64,129 @@ InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
   if (!XCSoarInterface::SettingsComputer().TeamFlarmTracking)
     infobox.SetColorBottom(0);
   else if (XCSoarInterface::Basic().flarm.FindTraffic(
+      XCSoarInterface::SettingsComputer().TeamFlarmIdTarget) != NULL)
+    infobox.SetColorBottom(2);
+  else
+    infobox.SetColorBottom(1);
+}
+
+void
+InfoBoxContentTeamBearing::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Tm Brng"));
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f")_T(DEG)_T("T"), (double)
+            XCSoarInterface::Calculated().TeammateBearing.value_degrees());
+  infobox.SetValue(tmp);
+
+  // Set Comment
+  if (!XCSoarInterface::SettingsComputer().TeamFlarmIdTarget.defined())
+    infobox.SetComment(_T("---"));
+  else if (!string_is_empty(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget))
+    infobox.SetComment(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
+  else
+    infobox.SetComment(_T("???"));
+
+  if (XCSoarInterface::Basic().flarm.FindTraffic(
+      XCSoarInterface::SettingsComputer().TeamFlarmIdTarget) != NULL)
+    infobox.SetColorBottom(2);
+  else
+    infobox.SetColorBottom(1);
+}
+
+void
+InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Team Bd"));
+
+#ifndef OLD_TASK
+  infobox.SetInvalid();
+  return;
+#else
+  if (!way_points.verify_index(XCSoarInterface::SettingsComputer().
+      TeamCodeRefWaypoint)
+      || !XCSoarInterface::SettingsComputer().TeammateCodeValid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  double Value = XCSoarInterface::Calculated().TeammateBearing -
+                 XCSoarInterface::Basic().TrackBearing;
+
+  if (Value < -180.0)
+    Value += 360.0;
+  else if (Value > 180.0)
+    Value -= 360.0;
+
+#ifndef __MINGW32__
+  if (Value > 1)
+    _stprintf(tmp, TEXT("%2.0f°»"), Value);
+  else if (Value < -1)
+    _stprintf(tmp, TEXT("«%2.0f°"), -Value);
+  else
+    _tcscpy(tmp, TEXT("«»"));
+#else
+  if (Value > 1)
+    _stprintf(tmp, TEXT("%2.0fÂ°Â»"), Value);
+  else if (Value < -1)
+    _stprintf(tmp, TEXT("Â«%2.0fÂ°"), -Value);
+  else
+    _tcscpy(tmp, TEXT("Â«Â»"));
+#endif
+  infobox.SetValue(tmp);
+#endif
+
+  // Set Comment
+  if (!XCSoarInterface::SettingsComputer().TeamFlarmIdTarget.defined())
+    infobox.SetComment(_T("---"));
+  else if (!string_is_empty(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget))
+    infobox.SetComment(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
+  else
+    infobox.SetComment(_T("???"));
+
+  if (XCSoarInterface::Basic().flarm.FindTraffic(
+      XCSoarInterface::SettingsComputer().TeamFlarmIdTarget) != NULL)
+    infobox.SetColorBottom(2);
+  else
+    infobox.SetColorBottom(1);
+}
+
+void
+InfoBoxContentTeamDistance::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Team Dis"));
+
+  if (!XCSoarInterface::SettingsComputer().TeammateCodeValid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  double Value = Units::ToUserDistance(
+      XCSoarInterface::Calculated().TeammateRange);
+  TCHAR tmp[32];
+  _stprintf(tmp, (Value > 100 ? _T("%.0lf") : _T("%.1lf")), Value);
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::DistanceUnit);
+
+  // Set Comment
+  if (!XCSoarInterface::SettingsComputer().TeamFlarmIdTarget.defined())
+    infobox.SetComment(_T("---"));
+  else if (!string_is_empty(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget))
+    infobox.SetComment(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
+  else
+    infobox.SetComment(_T("???"));
+
+  if (XCSoarInterface::Basic().flarm.FindTraffic(
       XCSoarInterface::SettingsComputer().TeamFlarmIdTarget) != NULL)
     infobox.SetColorBottom(2);
   else

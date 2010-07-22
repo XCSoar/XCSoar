@@ -76,6 +76,12 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentTemperatureForecast();
   case 55:
     return new InfoBoxContentTeamCode();
+  case 56:
+    return new InfoBoxContentTeamBearing();
+  case 57:
+    return new InfoBoxContentTeamBearingDiff();
+  case 58:
+    return new InfoBoxContentTeamDistance();
   case 70:
     return new InfoBoxContentAltitudeQFE();
   }

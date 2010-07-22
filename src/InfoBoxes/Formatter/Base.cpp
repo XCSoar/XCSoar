@@ -298,23 +298,6 @@ InfoBoxFormatter::AssignValue(int i)
     Value = Units::ToUserSpeed(Basic().TrueAirspeed);
     break;
 
-  case 56: // team bearing
-    Value = Calculated().TeammateBearing.value_degrees();
-    Valid = true;
-    break;
-
-  case 58: // team range
-    if (SettingsComputer().TeammateCodeValid) {
-      Value = Units::ToUserDistance(Calculated().TeammateRange);
-      if (Value > 100)
-        _tcscpy(Format, _T("%.0lf"));
-      else
-        _tcscpy(Format, _T("%.1lf"));
-      Valid = true;
-    } else
-      Valid = false;
-    break;
-
   case 59:
     Value = Units::ToUserTaskSpeed(Calculated().task_stats.total.
                                    remaining_effective.get_speed_incremental());

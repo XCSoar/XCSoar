@@ -876,51 +876,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
 
     break;
 
-  case 56: // team bearing
-    if (!SettingsComputer().TeamFlarmIdTarget.defined())
-      info_box.SetComment(_T("---"));
-    else if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget))
-      info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
-    else
-      info_box.SetComment(_T("???"));
-
-    if (Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget) != NULL)
-      info_box.SetColorBottom(2);
-    else
-      info_box.SetColorBottom(1);
-
-    break;
-
-  case 57: // team bearing dif
-    if (!SettingsComputer().TeamFlarmIdTarget.defined())
-      info_box.SetComment(_T("---"));
-    else if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget))
-      info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
-    else
-      info_box.SetComment(_T("???"));
-
-    if (Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget) != NULL)
-      info_box.SetColorBottom(2);
-    else
-      info_box.SetColorBottom(1);
-
-    break;
-
-  case 58: // team range
-    if (SettingsComputer().TeamFlarmIdTarget.defined())
-      info_box.SetComment(_T("---"));
-    else if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget))
-      info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
-    else
-      info_box.SetComment(_T("???"));
-
-    if (Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget) != NULL)
-      info_box.SetColorBottom(2);
-    else
-      info_box.SetColorBottom(1);
-
-    break;
-
   case 60:
     _stprintf(sTmp, _T("%d%s"),
               (int)Calculated().common_stats.vector_home.Bearing.value_degrees(), 
