@@ -45,6 +45,29 @@ Copyright_License {
 #include <tchar.h>
 
 void
+InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)
+{
+  TCHAR sTmp[32];
+
+  // Set Title
+  infobox.SetTitle(_T("MacCready"));
+
+  // Set Value
+  _stprintf(sTmp, _T("%2.1f"), Units::ToUserVSpeed(
+      XCSoarInterface::Calculated().common_stats.current_risk_mc));
+  infobox.SetValue(sTmp);
+
+  // Set Comment
+  if (XCSoarInterface::SettingsComputer().auto_mc)
+    infobox.SetComment(_T("AUTO"));
+  else
+    infobox.SetComment(_T("MANUAL"));
+
+  // Set Unit
+  infobox.SetValueUnit(Units::VerticalSpeedUnit);
+}
+
+void
 InfoBoxContentThermal30s::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];

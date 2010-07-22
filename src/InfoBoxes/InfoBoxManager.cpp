@@ -195,7 +195,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 10
   { ugVerticalSpeed, _T("MacCready Setting"), _T("MacCready"),
-    new InfoBoxFormatter(_T("%2.1f")),
+    NULL,
     ActionInterface::on_key_MacCready,
     34, 43,
   },
@@ -811,13 +811,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
   // Infobox bottom line
   //
   switch (type) {
-
-  case 10:
-    if (SettingsComputer().auto_mc)
-      info_box.SetComment(_T("AUTO"));
-    else
-      info_box.SetComment(_T("MANUAL"));
-    break;
 
   case 27: // AAT time to go
   case 36: // flight time

@@ -41,6 +41,12 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Base.hpp"
 
+class InfoBoxContentMacCready : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
 class InfoBoxContentThermal30s : public InfoBoxContent
 {
 public:

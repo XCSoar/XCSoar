@@ -66,6 +66,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentThermalLastGain();
   case 9:
     return new InfoBoxContentThermalLastTime();
+  case 10:
+    return new InfoBoxContentMacCready();
   case 14:
     return new InfoBoxContentNextWaypoint();
   case 20:
