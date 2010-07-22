@@ -934,7 +934,7 @@ InfoBoxManager::DisplayInfoBox()
   if (InfoBoxesHidden)
     return;
 
-  static int DisplayType[MAXINFOWINDOWS];
+  int DisplayType[MAXINFOWINDOWS];
   static bool first = true;
   static int DisplayTypeLast[MAXINFOWINDOWS];
 
