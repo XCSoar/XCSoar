@@ -92,9 +92,13 @@ public:
     return DirectAccess;
   };
 
-  // export methods to global, take care!
-  virtual void LockRead();
-  virtual void Unlock();
+  void LockRead() {
+    lock.readLock();
+  }
+
+  void Unlock() {
+    lock.unlock();
+  };
 
  protected:
   Poco::RWLock lock;

@@ -39,10 +39,6 @@ Copyright_License {
 #include "Terrain/RasterMap.hpp"
 #include "Math/Earth.hpp"
 
-// export methods to global, take care!
-void RasterMap::LockRead() { lock.readLock(); };
-void RasterMap::Unlock() { lock.unlock(); };
-
 // Rounding control
 
 
