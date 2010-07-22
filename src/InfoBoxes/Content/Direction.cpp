@@ -36,34 +36,29 @@ Copyright_License {
 }
 */
 
-#include "InfoBoxes/Content/Factory.hpp"
-
-#include "InfoBoxes/Content/Base.hpp"
-#include "InfoBoxes/Content/Altitude.hpp"
 #include "InfoBoxes/Content/Direction.hpp"
-#include "InfoBoxes/Content/Team.hpp"
 
-#include <stddef.h>
+#include "InfoBoxes/InfoBoxWindow.hpp"
+#include "Interface.hpp"
 
-InfoBoxContent*
-InfoBoxFactory::Create(unsigned InfoBoxType)
+#include <tchar.h>
+
+void
+InfoBoxContentBearing::Update(InfoBoxWindow &infobox)
 {
-  switch (InfoBoxType) {
-  case 0:
-    return new InfoBoxContentAltitudeGPS();
-  case 1:
-    return new InfoBoxContentAltitudeAGL();
-  case 3:
-    return new InfoBoxContentBearing();
-  case 20:
-    return new InfoBoxContentTerrainHeight();
-  case 33:
-    return new InfoBoxContentAltitudeBaro();
-  case 55:
-    return new InfoBoxContentTeamCode();
-  case 70:
-    return new InfoBoxContentAltitudeQFE();
+  // Set Title
+  infobox.SetTitle(_T("Bearing"));
+
+  if (XCSoarInterface::Calculated().task_stats.current_leg.
+      solution_remaining.Vector.Distance <= fixed(10)) {
+    infobox.SetInvalid();
+    return;
   }
 
-  return NULL;
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f")_T(DEG)_T("T"),
+            (double)XCSoarInterface::Calculated().task_stats.current_leg.
+            solution_remaining.Vector.Bearing.value_degrees());
+  infobox.SetValue(tmp);
 }

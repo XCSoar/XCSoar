@@ -99,13 +99,6 @@ InfoBoxFormatter::AssignValue(int i)
     Value = Units::ToUserVSpeed(Calculated().Average30s);
     break;
 
-  case 3:
-    Value = Calculated().task_stats.current_leg.
-      solution_remaining.Vector.Bearing.value_degrees();
-    Valid = Calculated().task_stats.current_leg.
-      solution_remaining.Vector.Distance > fixed(10);
-    break;
-
   case 4:
     if (Calculated().LD == fixed(999)) {
       Valid = false;
