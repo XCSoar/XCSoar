@@ -51,6 +51,6 @@ RawLoggerShutdown();
  * @param text
  */
 void
-LogNMEA(const TCHAR *text);
+LogNMEA(const char *line);
 
 #endif

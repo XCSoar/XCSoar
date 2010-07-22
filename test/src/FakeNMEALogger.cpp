@@ -38,6 +38,6 @@ Copyright_License {
 #include "Logger/NMEALogger.hpp"
 
 void
-LogNMEA(const TCHAR* text)
+LogNMEA(const char *text)
 {
 }

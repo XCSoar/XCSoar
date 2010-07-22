@@ -45,6 +45,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Thread/Mutex.hpp"
 #include "StringUtil.hpp"
+#include "Logger/NMEALogger.hpp"
 
 #include <assert.h>
 
@@ -270,6 +271,8 @@ DeviceDescriptor::OnSysTicker()
 void
 DeviceDescriptor::LineReceived(const char *line)
 {
+  LogNMEA(line);
+
   ScopeLock protect(mutexBlackboard);
   ParseNMEA(line, &device_blackboard.SetBasic());
 }

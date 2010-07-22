@@ -47,7 +47,6 @@ Copyright_License {
 #include "NMEA/Checksum.h"
 #include "StringUtil.hpp"
 #include "InputEvents.h"
-#include "Logger/NMEALogger.hpp"
 #include "Compatibility/string.h" /* for _ttoi() */
 
 #include <math.h>
@@ -181,9 +180,6 @@ NMEAParser::ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_INFO)
   // if (not enough parameters  or  first parameter invalid) cancel method;
   if (n_params < 1 || params[0][0] != '$')
     return false;
-
-  // if (logging enabled) log;
-  LogNMEA(String);
 
   // if (proprietary sentence) ...
   if (params[0][1] == 'P') {

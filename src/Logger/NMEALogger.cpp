@@ -68,7 +68,7 @@ RawLoggerShutdown()
 }
 
 void
-LogNMEA(const TCHAR* text)
+LogNMEA(const char *text)
 {
   if (!EnableLogNMEA)
     return;
