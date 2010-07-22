@@ -117,15 +117,6 @@ InfoBoxFormatter::AssignValue(int i)
     Value = Units::ToUserSpeed(Basic().GroundSpeed);
     break;
 
-  case 10:
-    Value = (int)Units::ToUserVSpeed(Calculated().common_stats.
-                                     current_risk_mc * 10) / 10.0;
-    break;
-
-  case 14:
-    Value = 0; // Next Waypoint Text
-    break;
-
   case 15:
     Value = Units::ToUserAltitude(Calculated().task_stats.total.
                                   solution_remaining.AltitudeDifference);
