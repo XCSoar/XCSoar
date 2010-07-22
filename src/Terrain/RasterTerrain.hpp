@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_TERRAIN_RASTER_TERRAIN_HPP
 
 #include "Navigation/GeoPoint.hpp"
+#include "Compiler.h"
 
 class RasterMap;
 
@@ -98,10 +99,13 @@ public:
     return TerrainMap;
   }
 
+  gcc_pure
   short GetTerrainHeight(const GEOPOINT &location) const;
   void ServiceTerrainCenter(const GEOPOINT &location);
   void ServiceFullReload(const GEOPOINT &location);
   int GetEffectivePixelSize(fixed &pixel_D, const GEOPOINT &location) const;
+
+  gcc_pure
   bool WaypointIsInTerrainRange(const GEOPOINT &location) const;
   bool GetTerrainCenter(GEOPOINT *location) const;
 

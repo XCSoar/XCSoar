@@ -41,6 +41,7 @@ Copyright_License {
 
 #include "Poco/RWLock.h"
 #include "Navigation/GeoPoint.hpp"
+#include "Compiler.h"
 
 typedef struct _TERRAIN_INFO
 {
@@ -82,6 +83,7 @@ protected:
   int GetEffectivePixelSize(fixed &pixel_D,
                             const GEOPOINT &location) const;
 
+  gcc_pure
   short GetField(const GEOPOINT &location);
 
   virtual void ServiceFullReload(const GEOPOINT &location) = 0;
@@ -99,6 +101,7 @@ protected:
 
   bool terrain_valid;
 
+  gcc_pure
   virtual short _GetFieldAtXY(unsigned int lx,
                               unsigned int ly) = 0;
 };
