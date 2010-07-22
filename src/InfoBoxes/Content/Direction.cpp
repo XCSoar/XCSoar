@@ -75,3 +75,42 @@ InfoBoxContentTrack::Update(InfoBoxWindow &infobox)
             (double)XCSoarInterface::Basic().TrackBearing.value_degrees());
   infobox.SetValue(tmp);
 }
+
+void
+InfoBoxContentBearingDiff::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Brng D"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
+      XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining.
+      Vector.Distance <= fixed(10)) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  double Value =
+      (XCSoarInterface::Calculated().task_stats.current_leg.
+       solution_remaining.Vector.Bearing - XCSoarInterface::Basic().
+       TrackBearing).as_delta().value_degrees();
+
+#ifndef __MINGW32__
+  if (Value > 1)
+    _stprintf(tmp, _T("%2.0f°»"), Value);
+  else if (Value < -1)
+    _stprintf(tmp, _T("«%2.0f°"), -Value);
+  else
+    _tcscpy(tmp, _T("«»"));
+#else
+  if (Value > 1)
+    _stprintf(tmp, _T("%2.0fÂ°Â»"), Value);
+  else if (Value < -1)
+    _stprintf(tmp, _T("Â«%2.0fÂ°"), -Value);
+  else
+    _tcscpy(tmp, _T("Â«Â»"));
+#endif
+
+  infobox.SetValue(tmp);
+}

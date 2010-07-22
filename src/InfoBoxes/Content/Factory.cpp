@@ -61,6 +61,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentTrack();
   case 33:
     return new InfoBoxContentAltitudeBaro();
+  case 47:
+    return new InfoBoxContentBearingDiff();
   case 55:
     return new InfoBoxContentTeamCode();
   case 70:
