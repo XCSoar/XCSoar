@@ -209,10 +209,6 @@ InfoBoxFormatter::AssignValue(int i)
     Value = Units::ToUserAltitude(Calculated().ThermalGain);
     break;
 
-  case 23:
-    Value = Basic().TrackBearing.value_degrees();
-    break;
-
   case 24:
     Value = Units::ToUserVSpeed(Basic().TotalEnergyVario);
     break;
