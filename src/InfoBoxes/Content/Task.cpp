@@ -46,6 +46,65 @@ Copyright_License {
 #include <tchar.h>
 
 void
+InfoBoxContentBearing::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Bearing"));
+
+  if (XCSoarInterface::Calculated().task_stats.current_leg.
+      solution_remaining.Vector.Distance <= fixed(10)) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f")_T(DEG)_T("T"),
+            (double)XCSoarInterface::Calculated().task_stats.current_leg.
+            solution_remaining.Vector.Bearing.value_degrees());
+  infobox.SetValue(tmp);
+}
+
+void
+InfoBoxContentBearingDiff::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Brng D"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
+      XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining.
+      Vector.Distance <= fixed(10)) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  double Value =
+      (XCSoarInterface::Calculated().task_stats.current_leg.
+       solution_remaining.Vector.Bearing - XCSoarInterface::Basic().
+       TrackBearing).as_delta().value_degrees();
+
+#ifndef __MINGW32__
+  if (Value > 1)
+    _stprintf(tmp, _T("%2.0f°»"), Value);
+  else if (Value < -1)
+    _stprintf(tmp, _T("«%2.0f°"), -Value);
+  else
+    _tcscpy(tmp, _T("«»"));
+#else
+  if (Value > 1)
+    _stprintf(tmp, _T("%2.0fÂ°Â»"), Value);
+  else if (Value < -1)
+    _stprintf(tmp, _T("Â«%2.0fÂ°"), -Value);
+  else
+    _tcscpy(tmp, _T("Â«Â»"));
+#endif
+
+  infobox.SetValue(tmp);
+}
+
+void
 InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
 {
   const Waypoint* way_point = task_ui.getActiveWaypoint();

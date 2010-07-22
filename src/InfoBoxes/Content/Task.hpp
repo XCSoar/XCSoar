@@ -41,6 +41,18 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Base.hpp"
 
+class InfoBoxContentBearing : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
+class InfoBoxContentBearingDiff : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
 class InfoBoxContentNextWaypoint : public InfoBoxContent
 {
 public:
