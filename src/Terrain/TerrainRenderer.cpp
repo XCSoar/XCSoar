@@ -213,11 +213,13 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
   last_color_ramp(NULL),
   terrain(_terrain)
 {
+  assert(terrain != NULL);
+
   TerrainContrast = 150;
   TerrainBrightness = 36;
   TerrainRamp = 0;
 
-  if (terrain == NULL || !terrain->IsDirectAccess()) {
+  if (!terrain->IsDirectAccess()) {
     quantisation_pixels = 6;
   } else {
     // SAM: experiment with quantisation_pixels between 2 and 4
@@ -282,7 +284,7 @@ TerrainRenderer::SetMap()
   is_terrain = true;
   do_water = true;
   height_scale = 4;
-  DisplayMap = terrain != NULL ? terrain->get_map() : NULL;
+  DisplayMap = terrain->get_map();
   color_ramp = &terrain_colors[TerrainRamp][0];
 
   if (is_terrain)
