@@ -40,6 +40,7 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/Internal.hpp"
 #include "NMEA/Info.hpp"
+#include "NMEA/InputLine.hpp"
 #include "Protection.hpp"
 #include "Units.hpp"
 
@@ -60,35 +61,19 @@ public:
 };
 
 static bool
-ColumnIsEmpty(const TCHAR *line, unsigned column)
+ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
-  TCHAR buffer[80];
-  NMEAParser::ExtractParameter(line, buffer, column);
-  return buffer[0] == _T('\0');
-}
+  fixed norm, bearing;
 
-#ifdef FIXED_MATH
-static bool
-ParseNumber(const TCHAR *line, unsigned column, fixed &value_r)
-{
-  TCHAR buffer[80];
-  NMEAParser::ExtractParameter(line, buffer, column);
+  bool bearing_valid = line.read_checked(bearing);
+  bool norm_valid = line.read_checked(norm);
 
-  TCHAR *endptr;
-  value_r = _tcstol(buffer, &endptr, 10);
-  return endptr > buffer && *endptr == '\0';
-}
-#endif
-
-static bool
-ParseNumber(const TCHAR *line, unsigned column, double &value_r)
-{
-  TCHAR buffer[80];
-  NMEAParser::ExtractParameter(line, buffer, column);
-
-  TCHAR *endptr;
-  value_r = _tcstol(buffer, &endptr, 10);
-  return endptr > buffer && *endptr == '\0';
+  if (bearing_valid && norm_valid) {
+    value_r.norm = Units::ToSysUnit(norm, unKiloMeterPerHour);
+    value_r.bearing = Angle::degrees(bearing);
+    return true;
+  } else
+    return false;
 }
 
 /**
@@ -97,46 +82,43 @@ ParseNumber(const TCHAR *line, unsigned column, double &value_r)
  * Example: "$C,+2025,-7,+18,+25,+29,122,314,314,0,-356,+25,45,T*3D"
  */
 static bool
-LeonardoParseC(const TCHAR *line, NMEA_INFO &info, bool enable_baro)
+LeonardoParseC(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
 {
+  fixed value;
+
   // 0 = altitude [m]
-  if (enable_baro)
-    info.BaroAltitudeAvailable = ParseNumber(line, 0, info.BaroAltitude);
+  if (line.read_checked(value) && enable_baro) {
+    info.BaroAltitude = value;
+    info.BaroAltitudeAvailable = true;
+  }
 
   // 1 = vario [dm/s]
-  info.TotalEnergyVarioAvailable = ParseNumber(line, 1, info.TotalEnergyVario);
+  info.TotalEnergyVarioAvailable = line.read_checked(value);
   if (info.TotalEnergyVarioAvailable)
-    info.TotalEnergyVario /= 10;
+    info.TotalEnergyVario = value / 10;
 
   // 2 = airspeed [km/h]
   /* XXX is that TAS or IAS? */
-  info.AirspeedAvailable = ParseNumber(line, 2, info.TrueAirspeed);
+  info.AirspeedAvailable = line.read_checked(value);
   if (info.AirspeedAvailable) {
-    info.TrueAirspeed = Units::ToSysUnit(info.TrueAirspeed, unKiloMeterPerHour);
+    info.TrueAirspeed = Units::ToSysUnit(value, unKiloMeterPerHour);
     info.IndicatedAirspeed = info.TrueAirspeed; // XXX convert properly
   }
 
-  if (ColumnIsEmpty(line, 3))
+  // 3 = netto vario [dm/s]
+  if (line.read_checked(value)) {
+    info.NettoVario = value / 10;
+    info.NettoVarioAvailable = true;
+  } else
     /* short "$C" sentence ends after airspeed */
     return true;
 
-  // 3 = netto vario [dm/s]
-  info.NettoVarioAvailable = ParseNumber(line, 3, info.NettoVario);
-  if (info.NettoVarioAvailable)
-    info.NettoVario /= 10;
-
   // 4 = temperature [deg C]
-  info.TemperatureAvailable = ParseNumber(line, 4, info.OutsideAirTemperature);
+  info.TemperatureAvailable = line.read_checked(info.OutsideAirTemperature);
 
   // 10 = wind speed [km/h]
   // 11 = wind direction [degrees]
-  fixed windb;
-  info.ExternalWindAvailable = ParseNumber(line, 10, info.wind.norm)
-    && ParseNumber(line, 11, windb);
-  if (info.ExternalWindAvailable) {
-    info.wind.bearing = Angle::degrees(windb);
-    info.wind.norm = Units::ToSysUnit(info.wind.norm, unKiloMeterPerHour);
-  }
+  info.ExternalWindAvailable = ReadSpeedVector(line, info.wind);
 
   TriggerVarioUpdate();
 
@@ -149,34 +131,36 @@ LeonardoParseC(const TCHAR *line, NMEA_INFO &info, bool enable_baro)
  * Example: "$D,+0,100554,+25,18,+31,,0,-356,+25,+11,115,96*6A"
  */
 static bool
-LeonardoParseD(const TCHAR *line, NMEA_INFO &info, bool enable_baro)
+LeonardoParseD(NMEAInputLine &line, NMEA_INFO &info)
 {
-  // 0 = vario [dm/s]
-  info.TotalEnergyVarioAvailable = ParseNumber(line, 0, info.TotalEnergyVario);
-  if (info.TotalEnergyVarioAvailable)
-    info.TotalEnergyVario /= 10;
+  fixed value;
 
-  if (ColumnIsEmpty(line, 1))
-    /* short "$D" sentence ends after airspeed */
-    return true;
+  // 0 = vario [dm/s]
+  info.TotalEnergyVarioAvailable = line.read_checked(value);
+  if (info.TotalEnergyVarioAvailable)
+    info.TotalEnergyVario = value / 10;
 
   // 1 = air pressure [Pa]
+  if (line.skip() == 0)
+    /* short "$C" sentence ends after airspeed */
+    return true;
 
   // 2 = netto vario [dm/s]
-  info.NettoVarioAvailable = ParseNumber(line, 2, info.NettoVario);
-  if (info.NettoVarioAvailable)
-    info.NettoVario /= 10;
+  if (line.read_checked(value)) {
+    info.NettoVario = value / 10;
+    info.NettoVarioAvailable = true;
+  }
 
   // 3 = airspeed [km/h]
   /* XXX is that TAS or IAS? */
-  info.AirspeedAvailable = ParseNumber(line, 3, info.TrueAirspeed) / 3.6;
+  info.AirspeedAvailable = line.read_checked(value);
   if (info.AirspeedAvailable) {
-    info.TrueAirspeed = Units::ToSysUnit(info.TrueAirspeed, unKiloMeterPerHour);
+    info.TrueAirspeed = Units::ToSysUnit(value, unKiloMeterPerHour);
     info.IndicatedAirspeed = info.TrueAirspeed; // XXX convert properly
   }
 
   // 4 = temperature [deg C]
-  info.TemperatureAvailable = ParseNumber(line, 4, info.OutsideAirTemperature);
+  info.TemperatureAvailable = line.read_checked(info.OutsideAirTemperature);
 
   // 5 = compass [degrees]
   /* XXX unsupported by XCSoar */
@@ -197,15 +181,18 @@ LeonardoParseD(const TCHAR *line, NMEA_INFO &info, bool enable_baro)
 }
 
 bool
-LeonardoDevice::ParseNMEA(const TCHAR *line, NMEA_INFO *info, bool enable_baro)
+LeonardoDevice::ParseNMEA(const TCHAR *_line, NMEA_INFO *info, bool enable_baro)
 {
-  if (_tcsncmp(_T("$C,"), line, 3) == 0 || _tcsncmp(_T("$c,"), line, 3) == 0)
-    return LeonardoParseC(line + 3, *info, enable_baro);
+  NMEAInputLine line(_line);
+  TCHAR type[16];
+  line.read(type, 16);
 
-  if (_tcsncmp(_T("$D,"), line, 3) == 0 || _tcsncmp(_T("$d,"), line, 3) == 0)
-    return LeonardoParseD(line + 3, *info, enable_baro);
-
-  return false;
+  if (_tcscmp(type, _T("$C")) == 0 || _tcscmp(type, _T("$c")) == 0)
+    return LeonardoParseC(line, *info, enable_baro);
+  else if (_tcscmp(type, _T("$D")) == 0 || _tcscmp(type, _T("$D")) == 0)
+    return LeonardoParseD(line, *info);
+  else
+    return false;
 }
 
 static Device *
