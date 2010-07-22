@@ -122,25 +122,6 @@ InfoBoxFormatter::AssignValue(int i)
                                      current_risk_mc * 10) / 10.0;
     break;
 
-  case 11:
-    /// @todo this produces 0 if task not started! (bug)
-    Value = Units::ToUserDistance(Calculated().task_stats.current_leg.
-                                  solution_remaining.Vector.Distance);
-    Valid = Calculated().task_stats.task_valid;
-    break;
-
-  case 12:
-    Value = Units::ToUserAltitude(Calculated().task_stats.current_leg.
-                                  solution_remaining.AltitudeDifference);
-    Valid = Calculated().task_stats.task_valid;
-    break;
-
-  case 13:
-    Value = Units::ToUserAltitude(Calculated().task_stats.current_leg.
-                                  solution_remaining.AltitudeRequired);
-    Valid = Calculated().task_stats.task_valid;
-    break;
-
   case 14:
     Value = 0; // Next Waypoint Text
     break;

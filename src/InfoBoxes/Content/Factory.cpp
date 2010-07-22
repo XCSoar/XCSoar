@@ -68,6 +68,12 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentThermalLastTime();
   case 10:
     return new InfoBoxContentMacCready();
+  case 11:
+    return new InfoBoxContentNextDistance();
+  case 12:
+    return new InfoBoxContentNextAltitudeDiff();
+  case 13:
+    return new InfoBoxContentNextAltitudeRequire();
   case 14:
     return new InfoBoxContentNextWaypoint();
   case 20:

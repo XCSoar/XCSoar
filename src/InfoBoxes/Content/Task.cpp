@@ -173,3 +173,69 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
     // black
     infobox.SetColor(0);
 }
+
+void
+InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("WP Dist"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.1f"),
+            (double)Units::ToUserDistance(XCSoarInterface::Calculated().
+                task_stats.current_leg.solution_remaining.Vector.Distance));
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::DistanceUnit);
+}
+
+void
+InfoBoxContentNextAltitudeDiff::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("WP AltD"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f"),
+            (double)Units::ToUserAltitude(XCSoarInterface::Calculated().
+                task_stats.current_leg.solution_remaining.AltitudeDifference));
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::AltitudeUnit);
+}
+
+void
+InfoBoxContentNextAltitudeRequire::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("WP AltR"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f"),
+            (double)Units::ToUserAltitude(XCSoarInterface::Calculated().
+                task_stats.current_leg.solution_remaining.AltitudeRequired));
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::AltitudeUnit);
+}

@@ -184,19 +184,19 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 11
   { ugDistance, _T("Next Distance"), _T("WP Dist"),
-    new InfoBoxFormatter(_T("%2.1f")),
+    NULL,
     NULL,
     12, 31,
   },
   // 12
   { ugAltitude, _T("Next Altitude Difference"), _T("WP AltD"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     NULL,
     13, 11,
   },
   // 13
   { ugAltitude, _T("Next Altitude Required"), _T("WP AltR"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     NULL,
     15, 12,
   },
