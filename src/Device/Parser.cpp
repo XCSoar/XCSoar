@@ -761,7 +761,7 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (!activeGPS)
     return true;
 
-  gps.SatellitesUsed = (int)(min(16.0, _tcstod(params[6], NULL)));
+  gps.SatellitesUsed = nSatellites;
 
   double ThisTime = TimeModify(_tcstod(params[0], NULL), GPS_INFO->DateTime);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
