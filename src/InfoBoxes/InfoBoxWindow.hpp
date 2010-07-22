@@ -212,7 +212,7 @@ public:
   ~InfoBoxWindow() { delete content; }
 
   void SetContentProvider(InfoBoxContent *_content);
-  void UpdateContent();
+  bool UpdateContent();
 
 protected:
   /**
