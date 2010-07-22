@@ -76,8 +76,8 @@ InfoBoxContentThermal30s::Update(InfoBoxWindow &infobox)
   infobox.SetTitle(_T("TC 30s"));
 
   // Set Value
-  _stprintf(sTmp, _T("%-2.1f"),
-            (double)XCSoarInterface::Calculated().Average30s);
+  _stprintf(sTmp, _T("%-2.1f"), Units::ToUserVSpeed(
+            XCSoarInterface::Calculated().Average30s));
   infobox.SetValue(sTmp);
 
   // Set Unit
@@ -99,8 +99,8 @@ InfoBoxContentThermalLastAvg::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR sTmp[32];
-  _stprintf(sTmp, _T("%-2.1f"),
-            (double)XCSoarInterface::Calculated().LastThermalAverage);
+  _stprintf(sTmp, _T("%-2.1f"), Units::ToUserVSpeed(
+      XCSoarInterface::Calculated().LastThermalAverage));
   infobox.SetValue(sTmp);
 
   // Set Unit
@@ -115,8 +115,8 @@ InfoBoxContentThermalLastGain::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR sTmp[32];
-  _stprintf(sTmp, _T("%2.0f"),
-            (double)XCSoarInterface::Calculated().LastThermalGain);
+  _stprintf(sTmp, _T("%2.0f"), (double)Units::ToUserAltitude(
+      XCSoarInterface::Calculated().LastThermalGain));
   infobox.SetValue(sTmp);
 
   // Set Unit
