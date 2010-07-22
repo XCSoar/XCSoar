@@ -36,58 +36,15 @@ Copyright_License {
 }
 */
 
-#include "InfoBoxes/Content/Factory.hpp"
+#ifndef XCSOAR_INFOBOX_CONTENT_THERMAL_HPP
+#define XCSOAR_INFOBOX_CONTENT_THERMAL_HPP
 
 #include "InfoBoxes/Content/Base.hpp"
-#include "InfoBoxes/Content/Altitude.hpp"
-#include "InfoBoxes/Content/Direction.hpp"
-#include "InfoBoxes/Content/Team.hpp"
-#include "InfoBoxes/Content/Thermal.hpp"
-#include "InfoBoxes/Content/Weather.hpp"
 
-#include <stddef.h>
-
-InfoBoxContent*
-InfoBoxFactory::Create(unsigned InfoBoxType)
+class InfoBoxContentThermal30s : public InfoBoxContent
 {
-  switch (InfoBoxType) {
-  case 0:
-    return new InfoBoxContentAltitudeGPS();
-  case 1:
-    return new InfoBoxContentAltitudeAGL();
-  case 2:
-    return new InfoBoxContentThermal30s();
-  case 3:
-    return new InfoBoxContentBearing();
-  case 20:
-    return new InfoBoxContentTerrainHeight();
-  case 23:
-    return new InfoBoxContentTrack();
-  case 25:
-    return new InfoBoxContentWindSpeed();
-  case 26:
-    return new InfoBoxContentWindBearing();
-  case 33:
-    return new InfoBoxContentAltitudeBaro();
-  case 47:
-    return new InfoBoxContentBearingDiff();
-  case 48:
-    return new InfoBoxContentTemperature();
-  case 49:
-    return new InfoBoxContentHumidity();
-  case 50:
-    return new InfoBoxContentTemperatureForecast();
-  case 55:
-    return new InfoBoxContentTeamCode();
-  case 56:
-    return new InfoBoxContentTeamBearing();
-  case 57:
-    return new InfoBoxContentTeamBearingDiff();
-  case 58:
-    return new InfoBoxContentTeamDistance();
-  case 70:
-    return new InfoBoxContentAltitudeQFE();
-  }
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
 
-  return NULL;
-}
+#endif

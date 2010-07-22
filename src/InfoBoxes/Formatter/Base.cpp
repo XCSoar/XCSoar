@@ -95,10 +95,6 @@ void
 InfoBoxFormatter::AssignValue(int i)
 {
   switch (i) {
-  case 2:
-    Value = Units::ToUserVSpeed(Calculated().Average30s);
-    break;
-
   case 4:
     if (Calculated().LD == fixed(999)) {
       Valid = false;
