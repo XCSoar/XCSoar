@@ -80,8 +80,12 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentFinalAltitudeDiff();
   case 16:
     return new InfoBoxContentFinalAltitudeRequire();
+  case 17:
+    return new InfoBoxContentTaskSpeed();
   case 18:
     return new InfoBoxContentFinalDistance();
+  case 19:
+    return new InfoBoxContentFinalLD();
   case 20:
     return new InfoBoxContentTerrainHeight();
   case 21:

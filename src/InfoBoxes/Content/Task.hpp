@@ -95,4 +95,16 @@ public:
   virtual void Update(InfoBoxWindow &infobox);
 };
 
+class InfoBoxContentFinalLD: public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
+class InfoBoxContentTaskSpeed : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
 #endif

@@ -308,3 +308,57 @@ InfoBoxContentFinalAltitudeRequire::Update(InfoBoxWindow &infobox)
   // Set Unit
   infobox.SetValueUnit(Units::AltitudeUnit);
 }
+
+void
+InfoBoxContentTaskSpeed::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("V Task Av"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f"),
+            (double)Units::ToUserTaskSpeed(XCSoarInterface::Calculated().
+                task_stats.total.remaining.get_speed()));
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::TaskSpeedUnit);
+}
+
+void
+InfoBoxContentFinalLD::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Fin LD"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+#ifdef OLD_TASK
+  if (XCSoarInterface::Calculated().LDFinish != 999) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  double Value;
+  if (XCSoarInterface::Calculated().ValidFinish)
+    Value = 0;
+  else
+    Value = XCSoarInterface::Calculated().LDFinish;
+
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%1.0f"), Value);
+  infobox.SetValue(tmp);
+#else
+  infobox.SetInvalid();
+#endif
+}

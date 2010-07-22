@@ -117,27 +117,6 @@ InfoBoxFormatter::AssignValue(int i)
     Value = Units::ToUserSpeed(Basic().GroundSpeed);
     break;
 
-  case 17:
-    Value = Units::ToUserTaskSpeed(Calculated().task_stats.total.
-                                   remaining.get_speed());
-    Valid = Calculated().task_stats.task_valid;
-    break;
-
-  case 19:
-#ifdef OLD_TASK
-    if (Calculated().LDFinish== 999) {
-      Valid = false;
-    } else {
-      Valid = Calculated().task_stats.task_valid;
-      if (Calculated().ValidFinish) {
-        Value = 0;
-      } else {
-        Value = Calculated().LDFinish;
-      }
-    }
-#endif
-    break;
-
   case 28:
     Value = Units::ToUserDistance(Calculated().task_stats.distance_max);
     Valid = Calculated().task_stats.task_valid;

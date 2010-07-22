@@ -220,7 +220,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 17
   { ugTaskSpeed, _T("Speed Task Average"), _T("V Task Av"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     NULL,
     18, 16,
   },
@@ -232,7 +232,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 19
   { ugNone, _T("Final LD"), _T("Fin LD"),
-    new InfoBoxFormatter(_T("%1.0f")),
+    NULL,
     NULL,
     38, 5,
   },
