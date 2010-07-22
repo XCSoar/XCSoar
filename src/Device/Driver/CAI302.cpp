@@ -50,6 +50,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Units.hpp"
 #include "NMEA/Info.hpp"
+#include "NMEA/InputLine.hpp"
 #include "Waypoint/Waypoint.hpp"
 
 #include <tchar.h>
@@ -160,13 +161,13 @@ static cai302_Gdata_t cai302_Gdata;
 
 // Additional sentance for CAI302 support
 static bool
-cai_w(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro);
+cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro);
 
 static bool
-cai_PCAIB(const TCHAR *String, NMEA_INFO *GPS_INFO);
+cai_PCAIB(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 
 static bool
-cai_PCAID(const TCHAR *String, NMEA_INFO *GPS_INFO);
+cai_PCAID(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 
 static int  MacCreadyUpdateTimeout = 0;
 static int  BugsUpdateTimeout = 0;
@@ -179,19 +180,18 @@ CAI302Device::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
   if (!NMEAParser::NMEAChecksum(String))
     return false;
 
-  if(_tcsstr(String, _T("$PCAIB")) == String){
-    return cai_PCAIB(&String[7], GPS_INFO);
-  }
+  NMEAInputLine line(String);
+  TCHAR type[16];
+  line.read(type, 16);
 
-  if(_tcsstr(String, _T("$PCAID")) == String){
-    return cai_PCAID(&String[7], GPS_INFO);
-  }
-
-  if(_tcsstr(String, _T("!w")) == String){
-    return cai_w(&String[3], GPS_INFO, enable_baro);
-  }
-
-  return false;
+  if (_tcscmp(type, _T("$PCAIB")) == 0)
+    return cai_PCAIB(line, GPS_INFO);
+  else if (_tcscmp(type, _T("$PCAID")) == 0)
+    return cai_PCAID(line, GPS_INFO);
+  else if (_tcscmp(type, _T("!w")) == 0)
+    return cai_w(line, GPS_INFO, enable_baro);
+  else
+    return false;
 }
 
 bool
@@ -515,10 +515,10 @@ $PCAIB,<1>,<2>,<CR><LF>
 */
 
 static bool
-cai_PCAIB(const TCHAR *String, NMEA_INFO *GPS_INFO)
+cai_PCAIB(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
+  (void)line;
   (void)GPS_INFO;
-  (void)String;
   return true;
 }
 
@@ -532,11 +532,27 @@ $PCAID,<1>,<2>,<3>,<4>*hh<CR><LF>
 */
 
 static bool
-cai_PCAID(const TCHAR *String, NMEA_INFO *GPS_INFO)
+cai_PCAID(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
+  (void)line;
 	(void)GPS_INFO;
-	(void)String;
   return true;
+}
+
+static bool
+ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
+{
+  fixed bearing, norm;
+
+  bool bearing_valid = line.read_checked(bearing);
+  bool norm_valid = line.read_checked(norm);
+
+  if (bearing_valid && norm_valid) {
+    value_r.bearing = Angle::degrees(bearing);
+    value_r.norm = norm / 10;
+    return true;
+  } else
+    return false;
 }
 
 /*
@@ -558,68 +574,63 @@ cai_PCAID(const TCHAR *String, NMEA_INFO *GPS_INFO)
 */
 
 static bool
-cai_w(const TCHAR *String, NMEA_INFO *GPS_INFO,
-      bool enable_baro)
+cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
+  GPS_INFO->ExternalWindAvailable = ReadSpeedVector(line, GPS_INFO->wind);
 
-  TCHAR ctemp[80];
+  line.skip(2);
 
-
-  NMEAParser::ExtractParameter(String,ctemp,1);
-  GPS_INFO->ExternalWindAvailable = true;
-  GPS_INFO->wind.norm = _tcstod(ctemp, NULL) / 10.0;
-  NMEAParser::ExtractParameter(String,ctemp,0);
-  GPS_INFO->wind.bearing = Angle::degrees(fixed(_tcstod(ctemp, NULL)));
-
-
-  NMEAParser::ExtractParameter(String,ctemp,4);
-
-  if (enable_baro){
-
+  fixed value;
+  if (line.read_checked(value) && enable_baro) {
+    GPS_INFO->BaroAltitude = value - fixed(1000);
     GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = _tcstod(ctemp, NULL) - 1000;
-
   }
 
-  // ExtractParameter(String,ctemp,5);
+  line.skip();
   // GPS_INFO->pressure.set_QNH(_tcstod(ctemp, NULL) - 1000); ?
 
-  NMEAParser::ExtractParameter(String,ctemp,6);
-  GPS_INFO->AirspeedAvailable = true;
-  GPS_INFO->TrueAirspeed = _tcstod(ctemp, NULL) / 100.0;
+  if (line.read_checked(value)) {
+    GPS_INFO->TrueAirspeed = value / 100;
+    GPS_INFO->AirspeedAvailable = true;
+  }
 
-  NMEAParser::ExtractParameter(String,ctemp,7);
-  GPS_INFO->TotalEnergyVarioAvailable = true;
-  GPS_INFO->TotalEnergyVario = Units::ToSysUnit(
-      (_tcstod(ctemp, NULL) - 200.0) / 10.0, unKnots);
+  if (line.read_checked(value)) {
+    GPS_INFO->TotalEnergyVario = Units::ToSysUnit((value - fixed(200)) / 10,
+                                                  unKnots);
+    GPS_INFO->TotalEnergyVarioAvailable = true;
+  }
 
-  NMEAParser::ExtractParameter(String,ctemp,10);
-  GPS_INFO->MacCready = Units::ToSysUnit(_tcstod(ctemp, NULL) / 10.0, unKnots);
+  line.skip(2);
+
+  if (line.read_checked(value)) {
+    GPS_INFO->MacCready = Units::ToSysUnit(value / 10, unKnots);
   if (MacCreadyUpdateTimeout <= 0) {
-  /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
-  ///    oldGlidePolar::SetMacCready(GPS_INFO->MacCready);
-  } else
-    MacCreadyUpdateTimeout--;
+      /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
+      ///    oldGlidePolar::SetMacCready(GPS_INFO->MacCready);
+    } else
+      MacCreadyUpdateTimeout--;
+  }
 
-  NMEAParser::ExtractParameter(String,ctemp,11);
-  GPS_INFO->Ballast = _tcstod(ctemp, NULL) / 100.0;
-  if (BugsUpdateTimeout <= 0) {
-  /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
-///    oldGlidePolar::SetBallast(GPS_INFO->Ballast);
-  } else
-    BallastUpdateTimeout--;
+  if (line.read_checked(value)) {
+    GPS_INFO->Ballast = value / 100;
+    if (BugsUpdateTimeout <= 0) {
+      /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
+      ///    oldGlidePolar::SetBallast(GPS_INFO->Ballast);
+    } else
+      BallastUpdateTimeout--;
+  }
 
-  NMEAParser::ExtractParameter(String,ctemp,12);
-  GPS_INFO->Bugs = _tcstod(ctemp, NULL) / 100.0;
-  if (BugsUpdateTimeout <= 0) {
-  /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
-///    oldGlidePolar::SetBugs(GPS_INFO->Bugs);
-  } else
-    BugsUpdateTimeout--;
+  if (line.read_checked(value)) {
+    GPS_INFO->Bugs = value / 100;
+    if (BugsUpdateTimeout <= 0) {
+      /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
+      /// oldGlidePolar::SetBugs(GPS_INFO->Bugs);
+    } else
+      BugsUpdateTimeout--;
+  }
 
   // JMW update audio functions etc.
   TriggerVarioUpdate();
 
   return true;
 }
-
