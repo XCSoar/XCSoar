@@ -68,6 +68,40 @@ InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)
 }
 
 void
+InfoBoxContentVario::Update(InfoBoxWindow &infobox)
+{
+  TCHAR sTmp[32];
+
+  // Set Title
+  infobox.SetTitle(_T("Vario"));
+
+  // Set Value
+  _stprintf(sTmp, _T("%-2.1f"), Units::ToUserVSpeed(
+            XCSoarInterface::Basic().TotalEnergyVario));
+  infobox.SetValue(sTmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::VerticalSpeedUnit);
+}
+
+void
+InfoBoxContentVarioNetto::Update(InfoBoxWindow &infobox)
+{
+  TCHAR sTmp[32];
+
+  // Set Title
+  infobox.SetTitle(_T("Netto"));
+
+  // Set Value
+  _stprintf(sTmp, _T("%-2.1f"), Units::ToUserVSpeed(
+            XCSoarInterface::Basic().NettoVario));
+  infobox.SetValue(sTmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::VerticalSpeedUnit);
+}
+
+void
 InfoBoxContentThermal30s::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];

@@ -189,10 +189,6 @@ InfoBoxFormatter::AssignValue(int i)
 #endif
     break;
 
-  case 24:
-    Value = Units::ToUserVSpeed(Basic().TotalEnergyVario);
-    break;
-
   case 28:
     Value = Units::ToUserDistance(Calculated().task_stats.distance_max);
     Valid = Calculated().task_stats.task_valid;
@@ -246,10 +242,6 @@ InfoBoxFormatter::AssignValue(int i)
 
   case 43:
     Value = Units::ToUserSpeed(Calculated().V_stf);
-    break;
-
-  case 44:
-    Value = Units::ToUserVSpeed(Basic().NettoVario);
     break;
 
   case 51:

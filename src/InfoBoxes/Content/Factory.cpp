@@ -78,12 +78,16 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentThermalGain();
   case 23:
     return new InfoBoxContentTrack();
+  case 24:
+    return new InfoBoxContentVario();
   case 25:
     return new InfoBoxContentWindSpeed();
   case 26:
     return new InfoBoxContentWindBearing();
   case 33:
     return new InfoBoxContentAltitudeBaro();
+  case 44:
+    return new InfoBoxContentVarioNetto();
   case 47:
     return new InfoBoxContentBearingDiff();
   case 48:

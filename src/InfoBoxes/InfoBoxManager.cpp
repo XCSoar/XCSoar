@@ -262,7 +262,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 24
   { ugVerticalSpeed, _T("Vario"), _T("Vario"),
-    new InfoBoxFormatter(_T("%-2.1f")),
+    NULL,
     NULL,
     44, 22,
   },
@@ -382,7 +382,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 44
   { ugVerticalSpeed, _T("Netto Vario"), _T("Netto"),
-    new InfoBoxFormatter(_T("%-2.1f")),
+    NULL,
     NULL,
     2, 24,
   },
