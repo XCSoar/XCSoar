@@ -71,26 +71,26 @@ const unsigned NUMSELECTSTRINGS = 75;
 static InfoBoxLook info_box_look;
 
 static const int InfoTypeDefault[MAXINFOWINDOWS] = {
-  921102,
-  725525,
-  262144,
-  74518,
-  657930,
-  2236963,
-  394758,
-  1644825
+  0x0E0E0E,
+  0x0B1215,
+  0x040000,
+  0x012316,
+  0x0A0A0A,
+  0x222223,
+  0x060606,
+  0x191919
 };
 
 static const int InfoTypeAltairDefault[MAXINFOWINDOWS] = {
-  873336334,
-  856820491,
-  822280982,
-  2829105,
-  103166000,
-  421601569,
-  657002759,
-  621743887,
-  439168301
+  0x340E0E0E,
+  0x33120B0B,
+  0x31030316,
+  0x002B2B31,
+  0x06263030,
+  0x19212121,
+  0x27291107,
+  0x250F0F0F,
+  0x1A2D2D2D
 };
 
 static int InfoType[MAXINFOWINDOWS];
