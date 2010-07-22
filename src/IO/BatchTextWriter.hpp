@@ -42,6 +42,8 @@ Copyright_License {
 #include "Util/BatchBuffer.hpp"
 #include "Util/tstring.hpp"
 
+#include <string>
+
 /**
  * A wrapper for #TextWriter which collects 256 lines, and writes them
  * in a one batch.
@@ -49,7 +51,7 @@ Copyright_License {
 class BatchTextWriter {
   tstring path;
   bool append;
-  BatchBuffer<tstring,256> buffer;
+  BatchBuffer<std::string,256> buffer;
 
 public:
   BatchTextWriter(const TCHAR *_path, bool _append=false)
@@ -58,7 +60,10 @@ public:
     flush();
   }
 
+  bool writeln(const char *line);
+#ifdef _UNICODE
   bool writeln(const TCHAR *line);
+#endif
   bool flush();
 };
 

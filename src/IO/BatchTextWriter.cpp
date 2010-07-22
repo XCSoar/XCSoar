@@ -39,8 +39,12 @@ Copyright_License {
 #include "BatchTextWriter.hpp"
 #include "TextWriter.hpp"
 
+#ifdef _UNICODE
+#include <windows.h>
+#endif
+
 bool
-BatchTextWriter::writeln(const TCHAR *line)
+BatchTextWriter::writeln(const char *line)
 {
   if (buffer.full() && !flush())
     return false;
@@ -48,6 +52,26 @@ BatchTextWriter::writeln(const TCHAR *line)
   buffer.append() = line;
   return true;
 }
+
+#ifdef _UNICODE
+bool
+BatchTextWriter::writeln(const TCHAR *line)
+{
+  if (buffer.full() && !flush())
+    return false;
+
+  size_t wide_length = _tcslen(line);
+  char narrow[wide_length * 4 + 1];
+  int narrow_length = ::WideCharToMultiByte(CP_UTF8, 0, line, wide_length,
+                                            narrow, sizeof(narrow),
+                                            NULL, NULL);
+  if (narrow_length == 0 && wide_length > 0)
+    return false;
+
+  buffer.append().assign(narrow, narrow_length);
+  return true;
+}
+#endif
 
 bool
 BatchTextWriter::flush()
