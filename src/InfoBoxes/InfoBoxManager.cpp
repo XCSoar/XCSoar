@@ -784,6 +784,9 @@ InfoBoxManager::Event_Change(int i)
 void
 InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
 {
+  if (info_box.UpdateContent())
+    return;
+
   TCHAR sTmp[32];
   int color = 0;
 
@@ -921,8 +924,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
   default:
     info_box.SetComment(_T(""));
   }
-
-  info_box.UpdateContent();
 }
 
 void
