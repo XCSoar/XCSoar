@@ -356,6 +356,12 @@ InfoBoxWindow::SetContentProvider(InfoBoxContent *_content)
 {
   delete content;
   content = _content;
+
+  SetColor(0);
+  SetColorTop(0);
+  SetColorBottom(0);
+
+  SetInvalid();
 }
 
 void

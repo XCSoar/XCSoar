@@ -51,19 +51,16 @@ InfoBoxContentAltitudeGPS::Update(InfoBoxWindow &infobox)
 
   // Set Title
   infobox.SetTitle(_T("H GPS"));
-  infobox.SetColorTop(0);
 
   // Set Value
   Units::FormatUserAltitude(XCSoarInterface::Basic().GPSAltitude, sTmp,
                             sizeof(sTmp) / sizeof(sTmp[0]), false);
   infobox.SetValue(sTmp);
-  infobox.SetColor(0);
 
   // Set Comment
   Units::FormatAlternateUserAltitude(XCSoarInterface::Basic().GPSAltitude, sTmp,
                                      sizeof(sTmp) / sizeof(sTmp[0]));
   infobox.SetComment(sTmp);
-  infobox.SetColorBottom(0);
 
   // Set Unit
   infobox.SetValueUnit(Units::AltitudeUnit);
@@ -76,7 +73,6 @@ InfoBoxContentAltitudeAGL::Update(InfoBoxWindow &infobox)
 
   // Set Title
   infobox.SetTitle(_T("H AGL"));
-  infobox.SetColorTop(0);
 
   if (!XCSoarInterface::Calculated().TerrainValid) {
     infobox.SetInvalid();
@@ -87,13 +83,11 @@ InfoBoxContentAltitudeAGL::Update(InfoBoxWindow &infobox)
   Units::FormatUserAltitude(XCSoarInterface::Basic().AltitudeAGL, sTmp,
                             sizeof(sTmp) / sizeof(sTmp[0]), false);
   infobox.SetValue(sTmp);
-  infobox.SetColor(0);
 
   // Set Comment
   Units::FormatAlternateUserAltitude(XCSoarInterface::Basic().AltitudeAGL, sTmp,
                                      sizeof(sTmp) / sizeof(sTmp[0]));
   infobox.SetComment(sTmp);
-  infobox.SetColorBottom(0);
 
   // Set Unit
   infobox.SetValueUnit(Units::AltitudeUnit);
@@ -106,7 +100,6 @@ InfoBoxContentAltitudeBaro::Update(InfoBoxWindow &infobox)
 
   // Set Title
   infobox.SetTitle(_T("H Baro"));
-  infobox.SetColorTop(0);
 
   if (!XCSoarInterface::Basic().BaroAltitudeAvailable) {
     infobox.SetInvalid();
@@ -117,13 +110,11 @@ InfoBoxContentAltitudeBaro::Update(InfoBoxWindow &infobox)
   Units::FormatUserAltitude(XCSoarInterface::Basic().BaroAltitude, sTmp,
                             sizeof(sTmp) / sizeof(sTmp[0]), false);
   infobox.SetValue(sTmp);
-  infobox.SetColor(0);
 
   // Set Comment
   Units::FormatAlternateUserAltitude(XCSoarInterface::Basic().BaroAltitude, sTmp,
                                      sizeof(sTmp) / sizeof(sTmp[0]));
   infobox.SetComment(sTmp);
-  infobox.SetColorBottom(0);
 
   // Set Unit
   infobox.SetValueUnit(Units::AltitudeUnit);
@@ -136,7 +127,6 @@ InfoBoxContentAltitudeQFE::Update(InfoBoxWindow &infobox)
 
   // Set Title
   infobox.SetTitle(_T("QFE GPS"));
-  infobox.SetColorTop(0);
 
   /// @todo fix QFE infobox
 #ifdef OLD_TASK
@@ -149,13 +139,11 @@ InfoBoxContentAltitudeQFE::Update(InfoBoxWindow &infobox)
   Units::FormatUserAltitude(Value, sTmp,
                             sizeof(sTmp) / sizeof(sTmp[0]), false);
   infobox.SetValue(sTmp);
-  infobox.SetColor(0);
 
   // Set Comment
   Units::FormatAlternateUserAltitude(Value, sTmp,
                                      sizeof(sTmp) / sizeof(sTmp[0]));
   infobox.SetComment(sTmp);
-  infobox.SetColorBottom(0);
 
   // Set Unit
   infobox.SetValueUnit(Units::AltitudeUnit);
@@ -168,7 +156,6 @@ InfoBoxContentTerrainHeight::Update(InfoBoxWindow &infobox)
 
   // Set Title
   infobox.SetTitle(_T("H GND"));
-  infobox.SetColorTop(0);
 
   if (!XCSoarInterface::Calculated().TerrainValid) {
     infobox.SetInvalid();
@@ -179,13 +166,11 @@ InfoBoxContentTerrainHeight::Update(InfoBoxWindow &infobox)
   Units::FormatUserAltitude(XCSoarInterface::Calculated().TerrainAlt, sTmp,
                             sizeof(sTmp) / sizeof(sTmp[0]), false);
   infobox.SetValue(sTmp);
-  infobox.SetColor(0);
 
   // Set Comment
   Units::FormatAlternateUserAltitude(XCSoarInterface::Calculated().TerrainAlt, sTmp,
                                      sizeof(sTmp) / sizeof(sTmp[0]));
   infobox.SetComment(sTmp);
-  infobox.SetColorBottom(0);
 
   // Set Unit
   infobox.SetValueUnit(Units::AltitudeUnit);

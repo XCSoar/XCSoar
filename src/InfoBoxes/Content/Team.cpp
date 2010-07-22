@@ -48,7 +48,6 @@ InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
 {
   // Set Title
   infobox.SetTitle(_T("TeamCode"));
-  infobox.SetColorTop(0);
 
   if (!XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint) {
     infobox.SetInvalid();
@@ -57,10 +56,6 @@ InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
 
   // Set Value
   infobox.SetValue(XCSoarInterface::Calculated().OwnTeamCode);
-  infobox.SetColor(0);
-
-  // Set Unit
-  infobox.SetValueUnit(unUndef);
 
   // Set Comment
   infobox.SetComment(XCSoarInterface::SettingsComputer().TeammateCode);
