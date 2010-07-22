@@ -3,7 +3,7 @@
 <Form Name="frmTaskEdit" Width="320" Height="240" Caption="Edit Task">
   <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="98" Height="22" OnClick="OnCloseClicked"/>
 
-  <Canvas Name="frmTaskView" X="0" Y="26" Width="100" Height="100" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
+  <Canvas Name="frmTaskView" X="4" Y="26" Width="94" Height="100" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
 
   <Button Name="cmdNew" Caption="Clear" X="2" Y="128" Width="98" Height="22" OnClick="OnNewClicked"/>
   <Button Name="cmdProperties" Caption="Properties" X="2" Y="-1" Width="98" Height="22" OnClick="OnPropertiesClicked"/>
