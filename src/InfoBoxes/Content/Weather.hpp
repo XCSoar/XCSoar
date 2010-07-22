@@ -36,45 +36,27 @@ Copyright_License {
 }
 */
 
-#include "InfoBoxes/Content/Factory.hpp"
+#ifndef XCSOAR_INFOBOX_CONTENT_WEATHER_HPP
+#define XCSOAR_INFOBOX_CONTENT_WEATHER_HPP
 
 #include "InfoBoxes/Content/Base.hpp"
-#include "InfoBoxes/Content/Altitude.hpp"
-#include "InfoBoxes/Content/Direction.hpp"
-#include "InfoBoxes/Content/Team.hpp"
-#include "InfoBoxes/Content/Weather.hpp"
 
-#include <stddef.h>
-
-InfoBoxContent*
-InfoBoxFactory::Create(unsigned InfoBoxType)
+class InfoBoxContentHumidity : public InfoBoxContent
 {
-  switch (InfoBoxType) {
-  case 0:
-    return new InfoBoxContentAltitudeGPS();
-  case 1:
-    return new InfoBoxContentAltitudeAGL();
-  case 3:
-    return new InfoBoxContentBearing();
-  case 20:
-    return new InfoBoxContentTerrainHeight();
-  case 23:
-    return new InfoBoxContentTrack();
-  case 33:
-    return new InfoBoxContentAltitudeBaro();
-  case 47:
-    return new InfoBoxContentBearingDiff();
-  case 48:
-    return new InfoBoxContentTemperature();
-  case 49:
-    return new InfoBoxContentHumidity();
-  case 50:
-    return new InfoBoxContentTemperatureForecast();
-  case 55:
-    return new InfoBoxContentTeamCode();
-  case 70:
-    return new InfoBoxContentAltitudeQFE();
-  }
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
 
-  return NULL;
-}
+class InfoBoxContentTemperature : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
+class InfoBoxContentTemperatureForecast : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
+#endif

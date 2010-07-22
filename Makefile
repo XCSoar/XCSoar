@@ -229,6 +229,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/Content/Altitude.cpp \
 	$(SRC)/InfoBoxes/Content/Direction.cpp \
 	$(SRC)/InfoBoxes/Content/Team.cpp \
+	$(SRC)/InfoBoxes/Content/Weather.cpp \
 	$(SRC)/InfoBoxes/Formatter/Base.cpp \
 	$(SRC)/InfoBoxes/Formatter/TeamCode.cpp \
 	$(SRC)/InfoBoxes/Formatter/WayPoint.cpp \

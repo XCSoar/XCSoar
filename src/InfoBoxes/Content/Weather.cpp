@@ -36,45 +36,47 @@ Copyright_License {
 }
 */
 
-#include "InfoBoxes/Content/Factory.hpp"
-
-#include "InfoBoxes/Content/Base.hpp"
-#include "InfoBoxes/Content/Altitude.hpp"
-#include "InfoBoxes/Content/Direction.hpp"
-#include "InfoBoxes/Content/Team.hpp"
 #include "InfoBoxes/Content/Weather.hpp"
 
-#include <stddef.h>
+#include "InfoBoxes/InfoBoxWindow.hpp"
+#include "Interface.hpp"
+#include "Atmosphere.h"
 
-InfoBoxContent*
-InfoBoxFactory::Create(unsigned InfoBoxType)
+#include <tchar.h>
+
+void
+InfoBoxContentHumidity::Update(InfoBoxWindow &infobox)
 {
-  switch (InfoBoxType) {
-  case 0:
-    return new InfoBoxContentAltitudeGPS();
-  case 1:
-    return new InfoBoxContentAltitudeAGL();
-  case 3:
-    return new InfoBoxContentBearing();
-  case 20:
-    return new InfoBoxContentTerrainHeight();
-  case 23:
-    return new InfoBoxContentTrack();
-  case 33:
-    return new InfoBoxContentAltitudeBaro();
-  case 47:
-    return new InfoBoxContentBearingDiff();
-  case 48:
-    return new InfoBoxContentTemperature();
-  case 49:
-    return new InfoBoxContentHumidity();
-  case 50:
-    return new InfoBoxContentTemperatureForecast();
-  case 55:
-    return new InfoBoxContentTeamCode();
-  case 70:
-    return new InfoBoxContentAltitudeQFE();
-  }
+  // Set Title
+  infobox.SetTitle(_T("RelHum"));
 
-  return NULL;
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f"), XCSoarInterface::Basic().RelativeHumidity);
+  infobox.SetValue(tmp);
+}
+
+void
+InfoBoxContentTemperature::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("OAT"));
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.1f")_T(DEG),
+            XCSoarInterface::Basic().OutsideAirTemperature);
+  infobox.SetValue(tmp);
+}
+
+void
+InfoBoxContentTemperatureForecast::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("MaxTemp"));
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.1f")_T(DEG), CuSonde::maxGroundTemperature);
+  infobox.SetValue(tmp);
 }

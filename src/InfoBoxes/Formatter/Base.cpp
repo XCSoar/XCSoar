@@ -280,18 +280,6 @@ InfoBoxFormatter::AssignValue(int i)
     Value = Units::ToUserVSpeed(Basic().NettoVario);
     break;
 
-  case 48:
-    Value = Basic().OutsideAirTemperature;
-    break;
-
-  case 49:
-    Value = Basic().RelativeHumidity;
-    break;
-
-  case 50:
-    Value = CuSonde::maxGroundTemperature;
-    break;
-
   case 51:
     Value = Units::ToUserDistance(Calculated().task_stats.total.
                                   planned.get_distance());
