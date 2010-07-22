@@ -83,7 +83,6 @@ NMEAParser::NMEAParser() {
 void
 NMEAParser::Reset(void)
 {
-  nSatellites = 0;
   gpsValid = false;
   isFlarm = false;
   activeGPS = true;
@@ -755,7 +754,7 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (gps.FixQuality != 1 && gps.FixQuality != 2)
     gpsValid = false;
 
-  nSatellites = (int)(min(16.0, _tcstod(params[6], NULL)));
+  int nSatellites = (int)(min(16.0, _tcstod(params[6], NULL)));
   if (nSatellites == 0)
     gpsValid = false;
 

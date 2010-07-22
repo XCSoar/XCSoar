@@ -53,7 +53,6 @@ public:
 
   bool ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_INFO);
   bool gpsValid;
-  int nSatellites;
 
   bool activeGPS;
   bool isFlarm;
