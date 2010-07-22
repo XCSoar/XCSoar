@@ -61,7 +61,7 @@ using std::max;
 
 #ifdef FLARM_AVERAGE
 #include "FLARM/FlarmCalculations.h"
-FlarmCalculations flarmCalculations;
+static FlarmCalculations flarmCalculations;
 #endif
 
 #define MAX_NMEA_LEN	90
@@ -266,7 +266,7 @@ NMEAParser::ExtractParameter(const TCHAR *Source, TCHAR *Destination,
  * @param EoW Input direction
  * @return Signed value
  */
-double
+static double
 EastOrWest(double in, TCHAR EoW)
 {
   if (EoW == 'W')
@@ -281,7 +281,7 @@ EastOrWest(double in, TCHAR EoW)
  * @param NoS Input direction
  * @return Signed value
  */
-double
+static double
 NorthOrSouth(double in, TCHAR NoS)
 {
   if (NoS == 'S')
@@ -291,7 +291,8 @@ NorthOrSouth(double in, TCHAR NoS)
 }
 
 /*
-double LeftOrRight(double in, TCHAR LoR)
+static double
+LeftOrRight(double in, TCHAR LoR)
 {
   if(LoR == 'L')
     return -in;
@@ -305,7 +306,7 @@ double LeftOrRight(double in, TCHAR LoR)
  * @param c GPS status
  * @return True if GPS fix not found or invalid
  */
-int
+static int
 NAVWarn(TCHAR c)
 {
   if (c == 'A')
@@ -341,7 +342,7 @@ NMEAParser::ParseAltitude(const TCHAR *value, const TCHAR *format)
  * @param mixed Mixed formated string
  * @return Degrees
  */
-double
+static double
 MixedFormatToDegrees(double mixed)
 {
   double mins, degrees;
