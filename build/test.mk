@@ -287,6 +287,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/Device/Descriptor.cpp \
 	$(SRC)/Device/FLARM.cpp \
 	$(SRC)/Device/Declaration.cpp \
+	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
