@@ -44,7 +44,6 @@ Copyright_License {
 
 #include "Terrain/GlideTerrain.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Terrain/RasterMap.hpp"
 #include "SettingsComputer.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Sizes.h"
@@ -64,19 +63,8 @@ GlideTerrain::GlideTerrain(const SETTINGS_COMPUTER &settings,
   m_terrain(terrain),
   safety_height_terrain(settings.safety_height_terrain),
   TerrainBase(fixed_zero),
-  max_range(-fixed_one),
-  rounding(NULL)
+  max_range(-fixed_one)
 {
-  if (const RasterMap *map = m_terrain.GetMap()) {
-    rounding = new RasterRounding(*map);
-  }
-}
-
-GlideTerrain::~GlideTerrain() 
-{
-  if (rounding) {
-    delete rounding;
-  }
 }
 
 void 
@@ -94,7 +82,7 @@ GlideTerrain::get_terrain_base() const
 bool 
 GlideTerrain::valid() const 
 {
-  return (rounding!=NULL);
+  return m_terrain.isTerrainLoaded();
 }
 
 TerrainIntersection 
@@ -204,7 +192,7 @@ fixed
 GlideTerrain::h_terrain(const GEOPOINT& loc) 
 {
   return max(fixed_zero, 
-             fixed(m_terrain.GetTerrainHeight(loc, *rounding)))
+             fixed(m_terrain.GetTerrainHeight(loc)))
     +safety_height_terrain;
 }
 

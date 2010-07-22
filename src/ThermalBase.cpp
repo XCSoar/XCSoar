@@ -74,8 +74,7 @@ EstimateThermalBase(const GEOPOINT Thermal_Location,
     fixed hground = fixed_zero;
 
     if (terrain.GetMap()) {
-      RasterRounding rounding(*terrain.GetMap());
-      hground = terrain.GetTerrainHeight(loc, rounding);
+      hground = terrain.GetTerrainHeight(loc);
     }
 
     fixed dh = hthermal - hground;
@@ -89,8 +88,7 @@ EstimateThermalBase(const GEOPOINT Thermal_Location,
 
   fixed hground = fixed_zero;
   if (terrain.GetMap()) {
-    RasterRounding rounding(*terrain.GetMap());
-    hground = terrain.GetTerrainHeight(loc, rounding);
+    hground = terrain.GetTerrainHeight(loc);
   }
 
   terrain.Unlock();

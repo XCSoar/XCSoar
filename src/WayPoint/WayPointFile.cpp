@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "WayPointFile.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Terrain/RasterMap.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Dialogs.h"
 #include "Profile.hpp"
@@ -104,8 +103,7 @@ WayPointFile::AltitudeFromTerrain(GEOPOINT &location,
     return RasterTerrain::TERRAIN_INVALID;
 
   // Get terrain height
-  RasterRounding rounding(*terrain.GetMap());
-  short alt = terrain.GetTerrainHeight(location, rounding);
+  short alt = terrain.GetTerrainHeight(location);
 
   // If terrain altitude okay -> return terrain altitude
   if (alt > RasterTerrain::TERRAIN_INVALID)

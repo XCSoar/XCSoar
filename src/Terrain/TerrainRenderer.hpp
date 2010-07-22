@@ -52,7 +52,6 @@ struct BGRColor;
 class RasterMap;
 class Projection;
 class RasterTerrain;
-class RasterRounding;
 struct COLORRAMP;
 
 class TerrainRenderer {
@@ -99,7 +98,6 @@ private:
 
   HeightMatrix height_matrix;
   BGRColor *colorBuf;
-  RasterRounding *rounding;
 
   short TerrainRamp;
   short TerrainContrast;

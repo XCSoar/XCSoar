@@ -51,13 +51,17 @@ typedef struct _TERRAIN_INFO
   long Columns;
 } TERRAIN_INFO;
 
-class RasterRounding;
-
-
 class RasterMap {
 public:
   /** invalid value for terrain */
   static const short TERRAIN_INVALID = -1000;
+
+protected:
+  struct {
+    int xlleft;
+    int xlltop;
+    fixed fXroundingFine, fYroundingFine;
+  } rounding;
 
  public:
   RasterMap()
@@ -78,10 +82,7 @@ public:
   int GetEffectivePixelSize(fixed &pixel_D,
                             const GEOPOINT &location) const;
 
-  virtual void SetFieldRounding(RasterRounding &rounding) const;
-
-  short GetField(const GEOPOINT &location,
-    const RasterRounding &rounding);
+  short GetField(const GEOPOINT &location);
 
   virtual void ServiceFullReload(const GEOPOINT &location) = 0;
 
@@ -100,25 +101,6 @@ public:
 
   virtual short _GetFieldAtXY(unsigned int lx,
                               unsigned int ly) = 0;
-};
-
-class RasterRounding {
-public:
-  RasterRounding() {};
-
-  RasterRounding(const RasterMap &map)
-  {
-    Set(map);
-  };
-
-  void Set(const RasterMap &map)
-  {
-    map.SetFieldRounding(*this);
-  }
-
-  int xlleft;
-  int xlltop;
-  fixed fXroundingFine, fYroundingFine;
 };
 
 

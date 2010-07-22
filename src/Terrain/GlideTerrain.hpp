@@ -67,8 +67,6 @@ public:
   GlideTerrain(const SETTINGS_COMPUTER &settings,
                RasterTerrain &terrain);
 
-  ~GlideTerrain();
-
   void set_max_range(const fixed set);
 
   fixed get_terrain_base() const;
@@ -115,7 +113,6 @@ private:
   const fixed safety_height_terrain;
   fixed TerrainBase;
   fixed max_range;
-  RasterRounding *rounding;
 };
 
 #endif

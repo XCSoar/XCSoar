@@ -91,11 +91,10 @@ void RasterTerrain::Unlock(void) {
 }
 
 short
-RasterTerrain::GetTerrainHeight(const GEOPOINT &Location,
-                                const RasterRounding &rounding) const
+RasterTerrain::GetTerrainHeight(const GEOPOINT &Location) const
 {
   if (TerrainMap) {
-    return TerrainMap->GetField(Location, rounding);
+    return TerrainMap->GetField(Location);
   } else {
     return TERRAIN_INVALID;
   }

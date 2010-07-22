@@ -48,7 +48,6 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Units.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Terrain/RasterMap.hpp"
 #include "Wind/WindStore.hpp"
 #include "Language.hpp"
 #include "Atmosphere.h"
@@ -677,9 +676,6 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
 
   // draw terrain
   if (terrain.GetMap()) {
-    // want most accurate rounding here
-    RasterRounding rounding(*terrain.GetMap());
-
     std::vector<POINT> points;
     POINT pf0, pf1;
     pf0.x = chart.screenX(range);
@@ -695,7 +691,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
 
       POINT p;
       p.x = chart.screenX(t_this * range);
-      p.y = chart.screenY(terrain.GetTerrainHeight(p_this, rounding));
+      p.y = chart.screenY(terrain.GetTerrainHeight(p_this));
 
       points.push_back(p);
     }

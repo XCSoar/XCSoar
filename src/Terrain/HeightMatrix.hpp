@@ -44,7 +44,6 @@ Copyright_License {
 #include <windef.h>
 
 class RasterMap;
-class RasterRounding;
 class Projection;
 
 class HeightMatrix : private NonCopyable {
@@ -64,8 +63,7 @@ protected:
   void SetSize(unsigned width, unsigned height, unsigned quantisation_pixels);
 
 public:
-  void Fill(RasterMap &map, const RasterRounding &rounding,
-            const Projection &map_projection,
+  void Fill(RasterMap &map, const Projection &map_projection,
             RECT rc, unsigned quantisation_pixels);
 
   const unsigned short *GetData() const {

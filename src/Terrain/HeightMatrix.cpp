@@ -71,8 +71,7 @@ HeightMatrix::SetSize(unsigned width, unsigned height,
 }
 
 void
-HeightMatrix::Fill(RasterMap &map, const RasterRounding &rounding,
-                   const Projection &projection,
+HeightMatrix::Fill(RasterMap &map, const Projection &projection,
                    RECT rc, unsigned quantisation_pixels)
 {
   SetSize((rc.right - rc.left + quantisation_pixels - 1) / quantisation_pixels,
@@ -104,7 +103,7 @@ HeightMatrix::Fill(RasterMap &map, const RasterRounding &rounding,
       gp.Longitude = PanLocation.Longitude + Angle::native(r.x * InvDrawScale)
         * gp.Latitude.invfastcosine();
 
-      *p++ = max((short)0, map.GetField(gp, rounding));
+      *p++ = max((short)0, map.GetField(gp));
     }
 
     assert(p <= data + size);
@@ -119,7 +118,7 @@ HeightMatrix::Fill(RasterMap &map, const RasterRounding &rounding,
     for (int x = rc.left; x < rc.right; x += quantisation_pixels) {
       GEOPOINT gp;
       projection.Screen2LonLat(x, y, gp);
-      *p++ = max((short)0, map.GetField(gp, rounding));
+      *p++ = max((short)0, map.GetField(gp));
     }
 
     assert(p <= data + size);

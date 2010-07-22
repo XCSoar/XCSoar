@@ -83,30 +83,10 @@ RasterMap::GetEffectivePixelSize(fixed &pixel_D,
   return epx;
 }
 
-void
-RasterMap::SetFieldRounding(RasterRounding &rounding) const
-{
-  if (!isMapLoaded()) {
-    return;
-  }
-
-  // use double here for maximum accuracy, since we are dealing with
-  // numbers close to the lower range of the fixed type
-
-  const double fx = (double)TerrainInfo.StepSize.value_native();
-  const double fy = (double)TerrainInfo.StepSize.value_native();
-
-  rounding.fXroundingFine = fixed(256.0/fx);
-  rounding.fYroundingFine = fixed(256.0/fy);
-}
-
-// Map general
-
-
 // JMW rounding further reduces data as required to speed up terrain
 // display on low zoom levels
-short RasterMap::GetField(const GEOPOINT &location,
-  const RasterRounding &rounding)
+short
+RasterMap::GetField(const GEOPOINT &location)
 {
   if(isMapLoaded()) {
     return _GetFieldAtXY((int)(location.Longitude.value_native() *

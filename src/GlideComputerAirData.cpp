@@ -48,7 +48,6 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Math/Constants.h"
 #include "Terrain/RasterTerrain.hpp"
-#include "Terrain/RasterMap.hpp"
 #include "Terrain/GlideTerrain.hpp"
 #include "Calibration.hpp"
 #include "LocalTime.hpp"
@@ -401,8 +400,7 @@ GlideComputerAirData::TerrainHeight()
   terrain.Lock();
   if (terrain.GetMap()) {
     // want most accurate rounding here
-    RasterRounding rounding(*terrain.GetMap());
-    Alt = terrain.GetTerrainHeight(Basic().Location, rounding);
+    Alt = terrain.GetTerrainHeight(Basic().Location);
   }
   terrain.Unlock();
 

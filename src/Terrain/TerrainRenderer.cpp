@@ -254,8 +254,6 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
   height_sub = sbuf->GetHeight() / oversampling;
 
   colorBuf = (BGRColor*)malloc(256 * 128 * sizeof(BGRColor));
-
-  rounding = new RasterRounding();
 }
 
 
@@ -266,9 +264,6 @@ TerrainRenderer::~TerrainRenderer()
 
   if (sbuf)
     delete sbuf;
-
-  if (rounding)
-    delete rounding;
 }
 
 bool
@@ -326,7 +321,6 @@ TerrainRenderer::Height(const Projection &map_projection)
   DisplayMap->LockRead();
 
   // set resolution
-  rounding->Set(*DisplayMap);
 
   quantisation_effective = DisplayMap->GetEffectivePixelSize(pixelsize_d, Gmid);
 
@@ -385,7 +379,7 @@ void
 TerrainRenderer::FillHeightBuffer(const Projection &map_projection,
                                   const RECT& rect)
 {
-  height_matrix.Fill(*DisplayMap, *rounding, map_projection, rect,
+  height_matrix.Fill(*DisplayMap, map_projection, rect,
                      quantisation_pixels);
 }
 

@@ -37,20 +37,17 @@
 
 #include "Airspaces.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Terrain/RasterMap.hpp"
 
 void 
 Airspaces::set_ground_levels(const RasterTerrain &terrain)
 {
   if (!terrain.GetMap()) return;
 
-  const RasterRounding rounding(*terrain.GetMap());
-
   for (AirspaceTree::iterator v = airspace_tree.begin();
        v != airspace_tree.end(); ++v) {
     FLAT_GEOPOINT c_flat = v->get_center();
     GEOPOINT g = task_projection.unproject(c_flat);
-    short h = terrain.GetTerrainHeight(g, rounding);
+    short h = terrain.GetTerrainHeight(g);
     if (h > RasterTerrain::TERRAIN_INVALID)
       v->set_ground_level((fixed)h);
   }

@@ -42,7 +42,6 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 
 class RasterMap;
-class RasterRounding;
 
 /**
  * Class to manage raster terrain database, potentially with 
@@ -99,8 +98,7 @@ public:
     return TerrainMap;
   }
 
-  short GetTerrainHeight(const GEOPOINT &location,
-                         const RasterRounding &rounding) const;
+  short GetTerrainHeight(const GEOPOINT &location) const;
   void ServiceTerrainCenter(const GEOPOINT &location);
   void ServiceFullReload(const GEOPOINT &location);
   int GetEffectivePixelSize(fixed &pixel_D, const GEOPOINT &location) const;

@@ -47,8 +47,7 @@ RasterTerrain::GetTerrainCenter(GEOPOINT *location) const
 }
 
 short
-RasterTerrain::GetTerrainHeight(const GEOPOINT &location,
-                                const RasterRounding &rounding) const
+RasterTerrain::GetTerrainHeight(const GEOPOINT &location) const
 {
   return 0;
 }

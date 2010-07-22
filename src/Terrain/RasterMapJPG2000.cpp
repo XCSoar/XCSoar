@@ -44,18 +44,6 @@ Copyright_License {
 
 #include "jasper/jasper.h"
 
-void
-RasterMapJPG2000::SetFieldRounding(RasterRounding &rounding) const
-{
-  RasterMap::SetFieldRounding(rounding);
-  if (!isMapLoaded()) {
-    return;
-  }
-
-  rounding.xlleft = (int)(TerrainInfo.TopLeft.Longitude.value_native() * rounding.fXroundingFine) + 128;
-  rounding.xlltop  = (int)(TerrainInfo.TopLeft.Latitude.value_native() * rounding.fYroundingFine) - 128;
-}
-
 // Field access
 short RasterMapJPG2000::_GetFieldAtXY(unsigned int lx,
                                       unsigned int ly) {
@@ -117,6 +105,18 @@ void RasterMapJPG2000::_ReloadJPG2000() {
   TerrainInfo.StepSize = Angle::degrees((fixed)(raster_tile_cache.lon_max -
                                                 raster_tile_cache.lon_min)
                                         / raster_tile_cache.GetWidth());
+
+  // use double here for maximum accuracy, since we are dealing with
+  // numbers close to the lower range of the fixed type
+
+  const double fx = (double)TerrainInfo.StepSize.value_native();
+  const double fy = (double)TerrainInfo.StepSize.value_native();
+
+  rounding.fXroundingFine = fixed(256.0/fx);
+  rounding.fYroundingFine = fixed(256.0/fy);
+
+  rounding.xlleft = (int)(TerrainInfo.TopLeft.Longitude.value_native() * rounding.fXroundingFine) + 128;
+  rounding.xlltop = (int)(TerrainInfo.TopLeft.Latitude.value_native() * rounding.fYroundingFine) - 128;
 }
 
 void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
