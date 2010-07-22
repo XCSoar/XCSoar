@@ -306,13 +306,10 @@ LeftOrRight(double in, TCHAR LoR)
  * @param c GPS status
  * @return True if GPS fix not found or invalid
  */
-static int
+static bool
 NAVWarn(TCHAR c)
 {
-  if (c == 'A')
-    return false;
-  else
-    return true;
+  return c != 'A';
 }
 
 /**
