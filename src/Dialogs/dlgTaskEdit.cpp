@@ -62,6 +62,8 @@ Copyright_License {
 static SingleWindow *parent_window;
 static WndForm *wf = NULL;
 static WndOwnerDrawFrame* wTaskView = NULL;
+static RECT TaskViewRect;
+static bool fullscreen;
 static WndListFrame* wTaskPoints = NULL;
 static OrderedTask* ordered_task = NULL;
 static bool task_modified = false;
@@ -224,6 +226,22 @@ OnMoveDownClicked(WindowControl * Sender)
   RefreshView();
 }
 
+static bool
+OnTaskViewClick(WindowControl *Sender, int x, int y)
+{
+  if (!fullscreen) {
+    wTaskView->move(0, 0, wf->GetClientAreaWindow().get_width(),
+                    wf->GetClientAreaWindow().get_height());
+    fullscreen = true;
+  } else {
+    wTaskView->move(TaskViewRect.left, TaskViewRect.top,
+                    TaskViewRect.right - TaskViewRect.left,
+                    TaskViewRect.bottom - TaskViewRect.top);
+    fullscreen = false;
+  }
+  return true;
+}
+
 static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnPropertiesClicked),
@@ -258,6 +276,10 @@ dlgTaskEditShowModal(SingleWindow &parent, OrderedTask** task)
 
   wTaskView = (WndOwnerDrawFrame*)wf->FindByName(_T("frmTaskView"));
   assert(wTaskView != NULL);
+
+  TaskViewRect = wTaskView->get_position();
+  wTaskView->SetOnMouseDownNotify(OnTaskViewClick);
+  fullscreen = false;
 
   wTaskPoints->SetActivateCallback(OnTaskListEnter);
   wTaskPoints->SetPaintItemCallback(OnTaskPaintListItem);

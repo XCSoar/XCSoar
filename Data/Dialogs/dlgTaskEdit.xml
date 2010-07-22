@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Name="frmTaskEdit" Width="240" Height="320" Caption="Edit Task">
+  <Canvas Name="frmTaskView" X="2" Y="184" Width="115" Height="118" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
+
   <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="77" Height="22" OnClick="OnCloseClicked"/>
   <SymbolButton Name="cmdDown" Caption="v" X="176" Y="2" Width="30" Height="22" OnClick="OnMoveDownClicked"/>
   <SymbolButton Name="cmdUp" Caption="^" X="206" Y="2" Width="30" Height="22" OnClick="OnMoveUpClicked"/>
@@ -11,6 +13,5 @@
   <Button Name="cmdProperties" Caption="Properties" X="81" Y="158" Width="77" Height="22" OnClick="OnPropertiesClicked"/>
   <Button Name="cmdSave" Caption="Save as" X="160" Y="158" Width="77" Height="22" OnClick="OnSaveClicked"/>
 
-  <Canvas Name="frmTaskView" X="2" Y="184" Width="115" Height="118" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
   <Label Name="frmSummary" X="119" Y="184" Width="-2" Height="118" Font="2" Border="1"/>
 </Form>
