@@ -790,6 +790,7 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
   TCHAR sTmp[32];
   int color = 0;
 
+  assert(Data_Options[type].Formatter != NULL);
   Data_Options[type].Formatter->AssignValue(type);
 
   //
