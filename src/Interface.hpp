@@ -157,7 +157,6 @@ public:
   // ideally these should be protected
   static void on_key_MacCready(InfoBoxKeyCodes UpDown);
   static void on_key_Waypoint(InfoBoxKeyCodes UpDown);
-  static void on_key_Direction(InfoBoxKeyCodes UpDown);
   static void SignalShutdown(bool force);
   static bool LockSettingsInFlight;
   static unsigned UserLevel;

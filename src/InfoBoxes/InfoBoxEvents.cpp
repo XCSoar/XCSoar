@@ -63,19 +63,6 @@ Copyright_License {
 using std::max;
 
 void
-ActionInterface::on_key_Direction(InfoBoxKeyCodes UpDown)
-{
-  static const Angle a5 = Angle::degrees(fixed(5));
-
-  if (is_simulator()) {
-    if (UpDown == ibkUp)
-      device_blackboard.SetTrackBearing(Basic().TrackBearing + a5);
-    else if (UpDown == ibkDown)
-      device_blackboard.SetTrackBearing(Basic().TrackBearing - a5);
-  }
-}
-
-void
 ActionInterface::on_key_MacCready(InfoBoxKeyCodes UpDown)
 {
   GlidePolar polar = task_ui.get_glide_polar();
