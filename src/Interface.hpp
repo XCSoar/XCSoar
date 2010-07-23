@@ -162,9 +162,6 @@ public:
   static void on_key_Waypoint(InfoBoxKeyCodes UpDown);
   static void on_key_Speed(InfoBoxKeyCodes UpDown);
   static void on_key_Direction(InfoBoxKeyCodes UpDown);
-  static void on_key_Alternate1(InfoBoxKeyCodes UpDown);
-  static void on_key_Alternate2(InfoBoxKeyCodes UpDown);
-  static void on_key_BestAlternate(InfoBoxKeyCodes UpDown);
   static void on_key_Airspeed(InfoBoxKeyCodes UpDown);
   static void SignalShutdown(bool force);
   static bool LockSettingsInFlight;

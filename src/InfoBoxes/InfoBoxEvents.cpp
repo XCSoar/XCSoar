@@ -76,48 +76,6 @@ ActionInterface::on_key_Airspeed(InfoBoxKeyCodes UpDown)
 }
 
 void
-ActionInterface::on_key_Alternate1(InfoBoxKeyCodes UpDown)
-{
-#ifdef OLD_TASK // alternates
-  if (UpDown == ibkEnter) {
-    if (SettingsComputer().Alternate1 < 0)
-      return;
-
-    task.setSelected(SettingsComputer().Alternate1);
-    dlgWayPointDetailsShowModal(main_window, way_point);
-  }
-#endif
-}
-
-void
-ActionInterface::on_key_Alternate2(InfoBoxKeyCodes UpDown)
-{
-#ifdef OLD_TASK // alternates
-  if (UpDown == ibkEnter) {
-    if (SettingsComputer().Alternate2 < 0)
-      return;
-
-    task.setSelected(SettingsComputer().Alternate2);
-    dlgWayPointDetailsShowModal( way_point);
-  }
-#endif
-}
-
-void
-ActionInterface::on_key_BestAlternate(InfoBoxKeyCodes UpDown)
-{
-#ifdef OLD_TASK // alternates
-  if (UpDown == ibkEnter) {
-    if (Calculated().BestAlternate < 0)
-      return;
-
-    task.setSelected(Calculated().BestAlternate);
-    dlgWayPointDetailsShowModal( way_point);
-  }
-#endif
-}
-
-void
 ActionInterface::on_key_Speed(InfoBoxKeyCodes UpDown)
 {
   if (!is_simulator())
