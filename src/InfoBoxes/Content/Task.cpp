@@ -554,6 +554,45 @@ InfoBoxContentFinalLD::Update(InfoBoxWindow &infobox)
 }
 
 void
+InfoBoxContentTaskAATime::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("AA Time"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
+      !XCSoarInterface::Calculated().task_stats.total.achievable() ||
+      !positive(XCSoarInterface::Calculated().common_stats.aat_time_remaining)) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  TCHAR tmp[32];
+  int dd = abs((int)XCSoarInterface::Calculated().
+               common_stats.aat_time_remaining) % (3600 * 24);
+  int hours = (dd / 3600);
+  int mins = (dd / 60 - hours * 60);
+  int seconds = (dd - mins * 60 - hours * 3600);
+  hours = hours % 24;
+
+  if (hours > 0) { // hh:mm, ss
+    // Set Value
+    _stprintf(tmp, _T("%02d:%02d"), hours, mins);
+    infobox.SetValue(tmp);
+
+    // Set Comment
+    _stprintf(tmp, _T("%02d"), seconds);
+    infobox.SetComment(tmp);
+  } else { // mm:ss
+    // Set Value
+    _stprintf(tmp, _T("%02d:%02d"), mins, seconds);
+    infobox.SetValue(tmp);
+
+    // Set Comment
+    infobox.SetComment(_T(""));
+  }
+}
+
+void
 InfoBoxContentTaskAADistance::Update(InfoBoxWindow &infobox)
 {
   // Set Title

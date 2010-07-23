@@ -105,6 +105,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentWindSpeed();
   case 26:
     return new InfoBoxContentWindBearing();
+  case 27:
+    return new InfoBoxContentTaskAATime();
   case 28:
     return new InfoBoxContentTaskAADistanceMax();
   case 29:

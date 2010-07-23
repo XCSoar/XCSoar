@@ -108,13 +108,6 @@ FormatterAATTime::AssignValue(int i)
 #endif
 
   switch (i) {
-  case 27:
-    SecsToDisplayTime((int)Calculated().common_stats.aat_time_remaining);
-    Valid = Calculated().task_stats.task_valid &&
-            positive(Calculated().common_stats.aat_time_remaining) &&
-            Calculated().task_stats.total.achievable();
-    break;
-
   case 62:
 #ifdef OLD_TASK
     if (task.getSettings().AATEnabled &&

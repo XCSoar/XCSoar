@@ -251,7 +251,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 27
   { ugNone, _T("AA Time"), _T("AA Time"),
-    new FormatterAATTime(_T("%2.0f")),
+    NULL,
     28, 18,
   },
   // 28
