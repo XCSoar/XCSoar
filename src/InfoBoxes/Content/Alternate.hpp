@@ -36,30 +36,27 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FORMATTER_WAYPOINT_HPP
-#define XCSOAR_FORMATTER_WAYPOINT_HPP
+#ifndef XCSOAR_INFOBOX_CONTENT_ALTERNATE_HPP
+#define XCSOAR_INFOBOX_CONTENT_ALTERNATE_HPP
 
-#include "InfoBoxes/Formatter/Base.hpp"
+#include "InfoBoxes/Content/Base.hpp"
 
-/** 
- * Formatter for alternate waypoints
- */
-class FormatterAlternate: public InfoBoxFormatter
+class InfoBoxContentAlternateBest : public InfoBoxContent
 {
 public:
-  enum AlternateTypes {
-    atBest,
-    at1,
-    at2
-  } AlternateType;
+  virtual void Update(InfoBoxWindow &infobox);
+};
 
-  FormatterAlternate(const TCHAR *theformat, AlternateTypes at) :
-    InfoBoxFormatter(theformat),
-    AlternateType(at) {}
+class InfoBoxContentAlternate1 : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
 
-  virtual const TCHAR *Render(int *color);
-  virtual const TCHAR *RenderTitle(int *color);
-  virtual void AssignValue(int i);
+class InfoBoxContentAlternate2 : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
 };
 
 #endif

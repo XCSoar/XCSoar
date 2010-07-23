@@ -39,6 +39,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Factory.hpp"
 
 #include "InfoBoxes/Content/Base.hpp"
+#include "InfoBoxes/Content/Alternate.hpp"
 #include "InfoBoxes/Content/Altitude.hpp"
 #include "InfoBoxes/Content/Direction.hpp"
 #include "InfoBoxes/Content/Speed.hpp"
@@ -145,6 +146,12 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentTaskSpeedAchieved();
   case 63:
     return new InfoBoxContentThermalAllAvg();
+  case 67:
+    return new InfoBoxContentAlternate1();
+  case 68:
+    return new InfoBoxContentAlternate2();
+  case 69:
+    return new InfoBoxContentAlternateBest();
   case 70:
     return new InfoBoxContentAltitudeQFE();
   }

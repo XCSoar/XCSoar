@@ -227,6 +227,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Dialogs.cpp \
 	$(SRC)/ExpandMacros.cpp \
 	$(SRC)/InfoBoxes/Content/Factory.cpp \
+	$(SRC)/InfoBoxes/Content/Alternate.cpp \
 	$(SRC)/InfoBoxes/Content/Altitude.cpp \
 	$(SRC)/InfoBoxes/Content/Direction.cpp \
 	$(SRC)/InfoBoxes/Content/Speed.cpp \
@@ -235,7 +236,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/Content/Thermal.cpp \
 	$(SRC)/InfoBoxes/Content/Weather.cpp \
 	$(SRC)/InfoBoxes/Formatter/Base.cpp \
-	$(SRC)/InfoBoxes/Formatter/WayPoint.cpp \
 	$(SRC)/InfoBoxes/Formatter/Time.cpp \
 	$(SRC)/InfoBoxes/InfoBoxWindow.cpp \
 	$(SRC)/InfoBoxes/InfoBoxLayout.cpp \
