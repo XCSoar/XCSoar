@@ -416,6 +416,9 @@ InfoBoxWindow::on_key_down(unsigned key_code)
       kill_timer(focus_timer);
 
     focus_timer = set_timer(100, FOCUSTIMEOUTMAX * 500);
+
+    UpdateContent();
+
     return true;
   }
 
