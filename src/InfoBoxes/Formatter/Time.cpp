@@ -76,14 +76,6 @@ FormatterTime::AssignValue(int i)
     SecsToDisplayTime((int)Basic().flight.FlightTime);
     break;
 
-  case 39:
-    SecsToDisplayTime(DetectCurrentTime(&Basic()));
-    break;
-
-  case 40:
-    SecsToDisplayTime((int)Basic().Time);
-    break;
-
   case 46:
     SecsToDisplayTime(
       (int)(Calculated().task_stats.current_leg.solution_remaining.TimeElapsed

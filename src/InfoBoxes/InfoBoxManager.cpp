@@ -311,12 +311,12 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 39
   { ugNone, _T("Time local"), _T("Time loc"),
-    new FormatterTime(_T("%04.0f")),
+    NULL,
     40, 36,
   },
   // 40
   { ugNone, _T("Time UTC"), _T("Time UTC"),
-    new FormatterTime(_T("%04.0f")),
+    NULL,
     41, 39,
   },
   // 41
@@ -719,8 +719,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
 
   case 27: // AAT time to go
   case 36: // flight time
-  case 39: // current time
-  case 40: // gps time
   case 41: // task time to go
   case 42: // task time to go
   case 45: // ete

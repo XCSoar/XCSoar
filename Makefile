@@ -234,6 +234,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/Content/Task.cpp \
 	$(SRC)/InfoBoxes/Content/Team.cpp \
 	$(SRC)/InfoBoxes/Content/Thermal.cpp \
+	$(SRC)/InfoBoxes/Content/Time.cpp \
 	$(SRC)/InfoBoxes/Content/Weather.cpp \
 	$(SRC)/InfoBoxes/Formatter/Base.cpp \
 	$(SRC)/InfoBoxes/Formatter/Time.cpp \
