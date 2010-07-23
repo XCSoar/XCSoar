@@ -248,7 +248,9 @@ RenderTaskPoint::draw_task_line(const GEOPOINT& start, const GEOPOINT& end)
   } else {
     m_buffer.select(pen_leg_inactive);
   }
+  m_buffer.background_transparent();
   map_canvas.line(start, end);
+  m_buffer.background_opaque();
   
   // draw small arrow along task direction
   POINT p_p;
