@@ -389,3 +389,89 @@ InfoBoxContentFinalLD::Update(InfoBoxWindow &infobox)
   infobox.SetInvalid();
 #endif
 }
+
+void
+InfoBoxContentTaskAADistanceMax::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("AA Dmax"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserDistance(
+      XCSoarInterface::Calculated().task_stats.distance_max));
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::DistanceUnit);
+}
+
+void
+InfoBoxContentTaskAADistanceMin::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("AA Dmin"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserDistance(
+      XCSoarInterface::Calculated().task_stats.distance_min));
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::DistanceUnit);
+}
+
+void
+InfoBoxContentTaskAASpeedMax::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("AA Vmax"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
+      !positive(XCSoarInterface::Calculated().common_stats.aat_speed_max)) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f"), Units::ToUserTaskSpeed(
+      XCSoarInterface::Calculated().common_stats.aat_speed_max));
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::TaskSpeedUnit);
+}
+
+void
+InfoBoxContentTaskAASpeedMin::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("AA Vmin"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
+      !positive(XCSoarInterface::Calculated().common_stats.aat_speed_min)) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f"), Units::ToUserTaskSpeed(
+      XCSoarInterface::Calculated().common_stats.aat_speed_min));
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::TaskSpeedUnit);
+}

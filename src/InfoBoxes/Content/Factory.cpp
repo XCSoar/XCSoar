@@ -100,6 +100,14 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentWindSpeed();
   case 26:
     return new InfoBoxContentWindBearing();
+  case 28:
+    return new InfoBoxContentTaskAADistanceMax();
+  case 29:
+    return new InfoBoxContentTaskAADistanceMin();
+  case 30:
+    return new InfoBoxContentTaskAASpeedMax();
+  case 31:
+    return new InfoBoxContentTaskAASpeedMin();
   case 33:
     return new InfoBoxContentAltitudeBaro();
   case 35:

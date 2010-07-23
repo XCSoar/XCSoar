@@ -117,28 +117,6 @@ InfoBoxFormatter::AssignValue(int i)
     Value = Units::ToUserSpeed(Basic().GroundSpeed);
     break;
 
-  case 28:
-    Value = Units::ToUserDistance(Calculated().task_stats.distance_max);
-    Valid = Calculated().task_stats.task_valid;
-    break;
-
-  case 29:
-    Value = Units::ToUserDistance(Calculated().task_stats.distance_min);
-    Valid = Calculated().task_stats.task_valid;
-    break;
-
-  case 30:
-    Value = Units::ToUserTaskSpeed(Calculated().common_stats.aat_speed_max);
-    Valid = Calculated().task_stats.task_valid &&
-            positive(Calculated().common_stats.aat_speed_max);
-    break;
-
-  case 31:
-    Value = Units::ToUserTaskSpeed(Calculated().common_stats.aat_speed_min);
-    Valid = Calculated().task_stats.task_valid &&
-            positive(Calculated().common_stats.aat_speed_min);
-    break;
-
   case 32:
     Valid = Basic().AirspeedAvailable;
     Value = Units::ToUserSpeed(Basic().IndicatedAirspeed);
