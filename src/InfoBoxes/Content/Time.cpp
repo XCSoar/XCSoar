@@ -59,22 +59,13 @@ InfoBoxContentTimeLocal::Update(InfoBoxWindow &infobox)
   int seconds = (dd - mins * 60 - hours * 3600);
   hours = hours % 24;
 
-  if (hours > 0) { // hh:mm, ss
-    // Set Value
-    _stprintf(sTmp, _T("%02d:%02d"), hours, mins);
-    infobox.SetValue(sTmp);
+  // Set Value
+  _stprintf(sTmp, _T("%02d:%02d"), hours, mins);
+  infobox.SetValue(sTmp);
 
-    // Set Comment
-    _stprintf(sTmp, _T("%02d"), seconds);
-    infobox.SetComment(sTmp);
-  } else { // mm:ss
-    // Set Value
-    _stprintf(sTmp, _T("%02d:%02d"), mins, seconds);
-    infobox.SetValue(sTmp);
-
-    // Set Comment
-    infobox.SetComment(_T(""));
-  }
+  // Set Comment
+  _stprintf(sTmp, _T("%02d"), seconds);
+  infobox.SetComment(sTmp);
 }
 
 void
@@ -92,22 +83,13 @@ InfoBoxContentTimeUTC::Update(InfoBoxWindow &infobox)
   int seconds = (dd - mins * 60 - hours * 3600);
   hours = hours % 24;
 
-  if (hours > 0) { // hh:mm, ss
-    // Set Value
-    _stprintf(sTmp, _T("%02d:%02d"), hours, mins);
-    infobox.SetValue(sTmp);
+  // Set Value
+  _stprintf(sTmp, _T("%02d:%02d"), hours, mins);
+  infobox.SetValue(sTmp);
 
-    // Set Comment
-    _stprintf(sTmp, _T("%02d"), seconds);
-    infobox.SetComment(sTmp);
-  } else { // mm:ss
-    // Set Value
-    _stprintf(sTmp, _T("%02d:%02d"), mins, seconds);
-    infobox.SetValue(sTmp);
-
-    // Set Comment
-    infobox.SetComment(_T(""));
-  }
+  // Set Comment
+  _stprintf(sTmp, _T("%02d"), seconds);
+  infobox.SetComment(sTmp);
 }
 
 void
