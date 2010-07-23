@@ -213,7 +213,7 @@ Chart::DrawLabel(const TCHAR *text, const double xv, const double yv)
   int y = (int)((y_max - yv) * yscale) + rc.top - tsize.cy / 2;
 
   canvas.background_transparent();
-  canvas.text_opaque(x, y, text);
+  canvas.text(x, y, text);
 }
 
 void
@@ -227,7 +227,7 @@ Chart::DrawNoData()
   int y = (int)(rc.top + rc.bottom - tsize.cy) / 2;
 
   canvas.background_transparent();
-  canvas.text_opaque(x, y, text);
+  canvas.text(x, y, text);
 }
 
 void
@@ -240,7 +240,7 @@ Chart::DrawXLabel(const TCHAR *text)
   int y = rc.bottom - tsize.cy;
 
   canvas.background_transparent();
-  canvas.text_opaque(x, y, text);
+  canvas.text(x, y, text);
 }
 
 void
@@ -253,7 +253,7 @@ Chart::DrawYLabel(const TCHAR *text)
   int y = rc.top;
 
   canvas.background_transparent();
-  canvas.text_opaque(x, y, text);
+  canvas.text(x, y, text);
 }
 
 void
@@ -426,7 +426,7 @@ Chart::DrawXGrid(const double tic_step, const double zero, const int Style,
         FormatTicText(unit_text, xval * unit_step / tic_step, unit_step);
 
         canvas.background_transparent();
-        canvas.text_opaque(xmin, ymax - IBLSCALE(17), unit_text);
+        canvas.text(xmin, ymax - IBLSCALE(17), unit_text);
       }
     }
   }
@@ -451,7 +451,7 @@ Chart::DrawXGrid(const double tic_step, const double zero, const int Style,
         FormatTicText(unit_text, xval * unit_step / tic_step, unit_step);
 
         canvas.background_transparent();
-        canvas.text_opaque(xmin, ymax - IBLSCALE(17), unit_text);
+        canvas.text(xmin, ymax - IBLSCALE(17), unit_text);
       }
     }
   }
@@ -488,7 +488,7 @@ Chart::DrawYGrid(const double tic_step, const double zero, const int Style,
         FormatTicText(unit_text, yval * unit_step / tic_step, unit_step);
 
         canvas.background_transparent();
-        canvas.text_opaque(xmin + IBLSCALE(8), ymin, unit_text);
+        canvas.text(xmin + IBLSCALE(8), ymin, unit_text);
       }
     }
   }
@@ -512,7 +512,7 @@ Chart::DrawYGrid(const double tic_step, const double zero, const int Style,
         FormatTicText(unit_text, yval * unit_step / tic_step, unit_step);
 
         canvas.background_transparent();
-        canvas.text_opaque(xmin + IBLSCALE(8), ymin, unit_text);
+        canvas.text(xmin + IBLSCALE(8), ymin, unit_text);
       }
     }
   }
