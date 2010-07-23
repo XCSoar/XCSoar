@@ -91,72 +91,6 @@ NMEAParser::Reset(void)
 }
 
 /**
- * Copies a provided string into the supplied buffer, terminates on
- * the checksum separator, splits into an array of parameters,
- * and returns the number of parameters found.
- * @param src Source string
- * @param dst Buffer string
- * @param arr Parameter array
- * @param sz Parameter array size
- * @see ValidateAndExtract
- * @return Number of extracted parameters
- */
-size_t
-NMEAParser::ExtractParameters(const TCHAR *src, TCHAR *dst, const TCHAR **arr,
-    size_t sz)
-{
-  TCHAR c, *p;
-  size_t i = 0;
-
-  _tcscpy(dst, src);
-  p = _tcschr(dst, _T('*'));
-  if (p)
-    *p = _T('\0');
-
-  p = dst;
-
-  do {
-    arr[i++] = p;
-    p = _tcschr(p, _T(','));
-    if (!p)
-      break;
-    c = *p;
-    *p++ = _T('\0');
-  } while (i != sz && c != _T('\0'));
-
-  return i;
-}
-
-/**
- * Same as ExtractParameters, but also validate the length of
- * the string and the NMEA checksum.
- * @param src Source string
- * @param dst Buffer string
- * @param dstsz Buffer size
- * @param arr Parameter array
- * @param arrsz Parameter array size
- * @see ExtractParameters
- * @return Number of extracted parameters
- */
-size_t
-NMEAParser::ValidateAndExtract(const TCHAR *src, TCHAR *dst, size_t dstsz,
-    const TCHAR **arr, size_t arrsz)
-{
-  // len = Length of the source string
-  int len = _tcslen(src);
-
-  // if (len <= 6 characters  or  len >= buffer size) cancel method;
-  if (len <= 6 || len >= (int)dstsz)
-    return 0;
-
-  // if (checksum of the source string is incorrect) cancel method;
-  if (!NMEAChecksum(src))
-    return 0;
-
-  return ExtractParameters(src, dst, arr, arrsz);
-}
-
-/**
  * Parses a provided NMEA String into a GPS_INFO struct
  * @param String NMEA string
  * @param GPS_INFO GPS_INFO output struct
@@ -217,45 +151,6 @@ NMEAParser::ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_INFO)
 }
 
 /**
- * Extracts a certain parameter out of a NMEA string
- * @param Source NMEA string
- * @param Destination Buffer string
- * @param DesiredFieldNumber Parameter id
- * @see ExtractParameters
- */
-void
-NMEAParser::ExtractParameter(const TCHAR *Source, TCHAR *Destination,
-    int DesiredFieldNumber)
-{
-  int dest_index = 0;
-  int CurrentFieldNumber = 0;
-  int StringLength = _tcslen(Source);
-  const TCHAR *sptr = Source;
-  const TCHAR *eptr = Source + StringLength;
-
-  if (!Destination)
-    return;
-
-  while ((CurrentFieldNumber < DesiredFieldNumber) && (sptr < eptr)) {
-    if (*sptr == ',' || *sptr == '*') {
-      CurrentFieldNumber++;
-    }
-    ++sptr;
-  }
-
-  Destination[0] = '\0'; // set to blank in case it's not found..
-
-  if (CurrentFieldNumber == DesiredFieldNumber) {
-    while ((sptr < eptr) && (*sptr != ',') && (*sptr != '*') && (*sptr != '\0')) {
-      Destination[dest_index] = *sptr;
-      ++sptr;
-      ++dest_index;
-    }
-    Destination[dest_index] = '\0';
-  }
-}
-
-/**
  * Converts a given double and 'E' and 'W' to the appropriate signed double
  * @param in Input value
  * @param EoW Input direction
@@ -305,23 +200,6 @@ static bool
 NAVWarn(TCHAR c)
 {
   return c != 'A';
-}
-
-/**
- * Parses an altitude into the metric system if necessary
- * @param value Altitude value
- * @param format Altitude unit
- * @return Altitude in meters
- */
-double
-NMEAParser::ParseAltitude(const TCHAR *value, const TCHAR *format)
-{
-  double alt = _tcstod(value, NULL);
-
-  if (format[0] == _T('f') || format[0] == _T('F'))
-    alt = Units::ToSysUnit(alt, unFeet);
-
-  return alt;
 }
 
 /**

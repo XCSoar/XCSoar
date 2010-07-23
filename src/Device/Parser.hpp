@@ -72,16 +72,7 @@ public:
    */
   static bool ReadAltitude(NMEAInputLine &line, fixed &value_r);
 
-  static double ParseAltitude(const TCHAR *, const TCHAR *);
-  static size_t ValidateAndExtract(const TCHAR *src, TCHAR *dst, size_t dstsz,
-                                   const TCHAR **arr, size_t arrsz);
-  static size_t ExtractParameters(const TCHAR *src, TCHAR *dst,
-                                  const TCHAR **arr, size_t sz);
   static bool NMEAChecksum(const TCHAR *String);
-
-  static void ExtractParameter(const TCHAR *Source,
-			       TCHAR *Destination,
-			       int DesiredFieldNumber);
 
 private:
   bool GSAAvailable;
