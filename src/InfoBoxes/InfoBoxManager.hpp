@@ -41,6 +41,7 @@ Copyright_License {
 
 #include "Interface.hpp"
 #include "Screen/BufferWindow.hpp"
+#include "InfoBoxes/Content/Base.hpp"
 
 #include <windef.h>
 
@@ -78,7 +79,7 @@ public:
 
   static const TCHAR *GetTypeDescription(unsigned i);
 
-  static void ProcessKey(InfoBoxKeyCodes keycode);
+  static void ProcessKey(InfoBoxContent::InfoBoxKeyCodes keycode);
   static bool Click(InfoBoxWindow &ib);
 
   static void ProcessTimer();

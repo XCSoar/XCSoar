@@ -807,7 +807,7 @@ InfoBoxManager::DisplayInfoBox()
 }
 
 void
-InfoBoxManager::ProcessKey(InfoBoxKeyCodes keycode)
+InfoBoxManager::ProcessKey(InfoBoxContent::InfoBoxKeyCodes keycode)
 {
   if (GetFocused() < 0)
     return;

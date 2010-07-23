@@ -581,15 +581,15 @@ InputEvents::eventArmAdvance(const TCHAR *misc)
 //    infobox section in the reference guide
 void InputEvents::eventDoInfoKey(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("up")) == 0)
-    InfoBoxManager::ProcessKey(ibkUp);
+    InfoBoxManager::ProcessKey(InfoBoxContent::ibkUp);
   if (_tcscmp(misc, TEXT("down")) == 0)
-    InfoBoxManager::ProcessKey(ibkDown);
+    InfoBoxManager::ProcessKey(InfoBoxContent::ibkDown);
   if (_tcscmp(misc, TEXT("left")) == 0)
-    InfoBoxManager::ProcessKey(ibkLeft);
+    InfoBoxManager::ProcessKey(InfoBoxContent::ibkLeft);
   if (_tcscmp(misc, TEXT("right")) == 0)
-    InfoBoxManager::ProcessKey(ibkRight);
+    InfoBoxManager::ProcessKey(InfoBoxContent::ibkRight);
   if (_tcscmp(misc, TEXT("return")) == 0)
-    InfoBoxManager::ProcessKey(ibkEnter);
+    InfoBoxManager::ProcessKey(InfoBoxContent::ibkEnter);
 }
 
 // Mode

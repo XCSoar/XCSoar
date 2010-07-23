@@ -140,14 +140,6 @@ public:
   // settings
   static int  MenuTimeoutMax;
 
-  enum InfoBoxKeyCodes {
-    ibkLeft = -2,
-    ibkDown = -1,
-    ibkEnter = 0,
-    ibkUp = 1,
-    ibkRight = 2
-  };
-
 protected:
   static void DisplayModes();
   static void SendSettingsComputer();
