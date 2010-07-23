@@ -42,7 +42,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Protection.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
-#include "InfoBoxes/Formatter/Time.hpp"
+#include "InfoBoxes/Formatter/Base.hpp"
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "Screen/Blank.hpp"

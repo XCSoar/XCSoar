@@ -237,7 +237,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/Content/Time.cpp \
 	$(SRC)/InfoBoxes/Content/Weather.cpp \
 	$(SRC)/InfoBoxes/Formatter/Base.cpp \
-	$(SRC)/InfoBoxes/Formatter/Time.cpp \
 	$(SRC)/InfoBoxes/InfoBoxWindow.cpp \
 	$(SRC)/InfoBoxes/InfoBoxLayout.cpp \
 	$(SRC)/InfoBoxes/InfoBoxManager.cpp \
