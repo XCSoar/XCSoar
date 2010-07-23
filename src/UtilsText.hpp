@@ -62,6 +62,5 @@ void ConvertTToC(char *pszDest, const TCHAR *pszSrc);
 void ConvertCToT(TCHAR *pszDest, const char *pszSrc);
 
 int TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines);
-double HexStrToDouble(TCHAR *Source, TCHAR **Stop);
 
 #endif

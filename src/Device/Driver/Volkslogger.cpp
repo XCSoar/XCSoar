@@ -76,24 +76,17 @@ vl_PGCS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   GPS_STATE &gps = GPS_INFO->gps;
 
-  TCHAR ctemp[80];
-  line.read(ctemp, 80);
-
   // four characers, hex, barometric altitude
-  fixed InternalAltitude(HexStrToDouble(ctemp, NULL));
+  long altitude = line.read_hex(0L);
 
   if (enable_baro) {
-    if (InternalAltitude > fixed(60000))
-      GPS_INFO->BaroAltitude =
-        GPS_INFO->pressure.AltitudeToQNHAltitude(InternalAltitude -
-                                                 fixed(65535));
-    // Assuming that altitude has wrapped around.  60 000 m occurs at
-    // QNH ~2000 hPa
-    else
-      GPS_INFO->BaroAltitude =
-        GPS_INFO->pressure.AltitudeToQNHAltitude(InternalAltitude);
-    // typo corrected 21.04.07
-    // Else the altitude is good enough.
+    if (altitude > 60000)
+      /* Assuming that altitude has wrapped around.  60 000 m occurs
+         at QNH ~2000 hPa */
+      altitude -= 65535;
+
+    GPS_INFO->BaroAltitude =
+      GPS_INFO->pressure.AltitudeToQNHAltitude(fixed(altitude));
 
     GPS_INFO->BaroAltitudeAvailable = true;
   }
