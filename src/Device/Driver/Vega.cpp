@@ -80,7 +80,7 @@ public:
   VegaDevice(ComPort *_port):port(_port) {}
 
 public:
-  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
   virtual bool PutQNH(const AtmosphericPressure& pres);
   virtual bool PutVoice(const TCHAR *sentence);
@@ -216,21 +216,21 @@ PDVSC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   (void)GPS_INFO;
 
-  TCHAR responsetype[10];
+  char responsetype[10];
   line.read(responsetype, 10);
 
-  TCHAR name[80];
+  char name[80];
   line.read(name, 80);
 
-  if (_tcscmp(name, _T("ERROR")) == 0)
+  if (strcmp(name, "ERROR") == 0)
     // ignore error responses...
     return true;
 
   long value = line.read(0L);
 
-  if (_tcscmp(name, _T("ToneDeadbandCruiseLow")) == 0)
+  if (strcmp(name, "ToneDeadbandCruiseLow") == 0)
     value = max(value, -value);
-  if (_tcscmp(name, _T("ToneDeadbandCirclingLow")) == 0)
+  if (strcmp(name, "ToneDeadbandCirclingLow") == 0)
     value = max(value, -value);
 
   TCHAR regname[100];
@@ -334,40 +334,60 @@ PDTSM(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   (void)GPS_INFO;
 
   /*
-  int duration = (int)_tcstol(String, NULL, 10);
+  int duration = (int)strtol(String, NULL, 10);
   */
   line.skip();
 
+  const char *message = line.rest();
+#ifdef _UNICODE
+  TCHAR buffer[strlen(message)];
+  if (MultiByteToWideChar(CP_ACP, 0, message, -1,
+                          buffer, sizeof(buffer) / sizeof(buffer[0])) <= 0)
+    return false;
+#else
+  const char *buffer = message;
+#endif
+
   // todo duration handling
-  Message::AddMessage(_T("VEGA:"), line.rest());
+  Message::AddMessage(_T("VEGA:"), buffer);
 
   return true;
 }
 
 bool
-VegaDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
+VegaDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
                       bool enable_baro)
 {
   NMEAInputLine line(String);
-  TCHAR type[16];
+  char type[16];
   line.read(type, 16);
 
-  if (_tcscmp(type, _T("$PDSWC")) == 0)
+  if (strcmp(type, "$PDSWC") == 0)
     return PDSWC(line, GPS_INFO);
-  else if (_tcscmp(type, _T("$PDAAV")) == 0)
+  else if (strcmp(type, "$PDAAV") == 0)
     return PDAAV(line, GPS_INFO);
-  else if (_tcscmp(type, _T("$PDVSC")) == 0)
+  else if (strcmp(type, "$PDVSC") == 0)
     return PDVSC(line, GPS_INFO);
-  else if (_tcscmp(type, _T("$PDVDV")) == 0)
+  else if (strcmp(type, "$PDVDV") == 0)
     return PDVDV(line, GPS_INFO, enable_baro);
-  else if (_tcscmp(type, _T("$PDVDS")) == 0)
+  else if (strcmp(type, "$PDVDS") == 0)
     return PDVDS(line, GPS_INFO);
-  else if (_tcscmp(type, _T("$PDVVT")) == 0)
+  else if (strcmp(type, "$PDVVT") == 0)
     return PDVVT(line, GPS_INFO);
-  else if (_tcscmp(type, _T("$PDVSD")) == 0) {
-    Message::AddMessage(line.rest());
+  else if (strcmp(type, "$PDVSD") == 0) {
+    const char *message = line.rest();
+#ifdef _UNICODE
+    TCHAR buffer[strlen(message)];
+    if (MultiByteToWideChar(CP_ACP, 0, message, -1,
+                            buffer, sizeof(buffer) / sizeof(buffer[0])) <= 0)
+      return false;
+#else
+    const char *buffer = message;
+#endif
+
+    Message::AddMessage(buffer);
     return true;
-  } else if (_tcscmp(type, _T("$PDTSM")) == 0)
+  } else if (strcmp(type, "$PDTSM") == 0)
     return PDTSM(line, GPS_INFO);
   else
     return false;

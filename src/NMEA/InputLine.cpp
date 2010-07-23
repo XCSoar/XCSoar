@@ -41,23 +41,23 @@ Copyright_License {
 #include <assert.h>
 #include <string.h>
 
-static const TCHAR *
-end_of_line(const TCHAR *line)
+static const char *
+end_of_line(const char *line)
 {
-  const TCHAR *asterisk = _tcschr(line, '*');
+  const char *asterisk = strchr(line, '*');
   return asterisk != NULL
     ? asterisk
-    : line + _tcslen(line);
+    : line + strlen(line);
 }
 
-NMEAInputLine::NMEAInputLine(const TCHAR *line)
+NMEAInputLine::NMEAInputLine(const char *line)
   :data(line), end(end_of_line(line)) {
 }
 
 size_t
 NMEAInputLine::skip()
 {
-  const TCHAR *comma = _tcschr(data, ',');
+  const char *comma = strchr(data, ',');
   if (comma != NULL && comma < end) {
     size_t length = comma - data;
     data = comma + 1;
@@ -69,47 +69,47 @@ NMEAInputLine::skip()
   }
 }
 
-TCHAR
+char
 NMEAInputLine::read_first_char()
 {
-  TCHAR ch = *data;
-  return skip() > 0 ? ch : _T('\0');
+  char ch = *data;
+  return skip() > 0 ? ch : '\0';
 }
 
 void
-NMEAInputLine::read(TCHAR *dest, size_t size)
+NMEAInputLine::read(char *dest, size_t size)
 {
-  const TCHAR *src = data;
+  const char *src = data;
   size_t length = skip();
   if (length >= size)
     length = size - 1;
-  _tcsncpy(dest, src, length);
-  dest[length] = _T('\0');
+  strncpy(dest, src, length);
+  dest[length] = '\0';
 }
 
 bool
-NMEAInputLine::read_compare(const TCHAR *value)
+NMEAInputLine::read_compare(const char *value)
 {
-  size_t length = _tcslen(value);
-  TCHAR buffer[length + 2];
+  size_t length = strlen(value);
+  char buffer[length + 2];
   read(buffer, length + 2);
-  return _tcscmp(buffer, value) == 0;
+  return strcmp(buffer, value) == 0;
 }
 
 static bool
-is_end_of_line(TCHAR ch)
+is_end_of_line(char ch)
 {
-  return ch == _T('\0') || ch == _T('*');
+  return ch == '\0' || ch == '*';
 }
 
 long
 NMEAInputLine::read(long default_value)
 {
-  TCHAR *endptr;
-  long value = _tcstol(data, &endptr, 0);
+  char *endptr;
+  long value = strtol(data, &endptr, 0);
   assert(endptr >= data && endptr <= end);
   if (is_end_of_line(*endptr)) {
-    data = _T("");
+    data = "";
     return value;
   } else if (*endptr == ',') {
     data = endptr + 1;
@@ -124,11 +124,11 @@ NMEAInputLine::read(long default_value)
 long
 NMEAInputLine::read_hex(long default_value)
 {
-  TCHAR *endptr;
-  long value = _tcstol(data, &endptr, 16);
+  char *endptr;
+  long value = strtol(data, &endptr, 16);
   assert(endptr >= data && endptr <= end);
   if (is_end_of_line(*endptr)) {
-    data = _T("");
+    data = "";
     return value;
   } else if (*endptr == ',') {
     data = endptr + 1;
@@ -143,11 +143,11 @@ NMEAInputLine::read_hex(long default_value)
 double
 NMEAInputLine::read(double default_value)
 {
-  TCHAR *endptr;
-  double value = _tcstod(data, &endptr);
+  char *endptr;
+  double value = strtod(data, &endptr);
   assert(endptr >= data && endptr <= end);
   if (is_end_of_line(*endptr)) {
-    data = _T("");
+    data = "";
     return value;
   } else if (*endptr == ',') {
     data = endptr + 1;
@@ -162,11 +162,11 @@ NMEAInputLine::read(double default_value)
 bool
 NMEAInputLine::read_checked(double &value_r)
 {
-  TCHAR *endptr;
-  double value = _tcstod(data, &endptr);
+  char *endptr;
+  double value = strtod(data, &endptr);
   assert(endptr >= data && endptr <= end);
   if (is_end_of_line(*endptr)) {
-    data = _T("");
+    data = "";
     value_r = value;
     return true;
   } else if (*endptr == ',') {
@@ -205,7 +205,7 @@ NMEAInputLine::read_checked(fixed &value_r)
 #endif /* FIXED_MATH */
 
 bool
-NMEAInputLine::read_checked_compare(fixed &value_r, const TCHAR *string)
+NMEAInputLine::read_checked_compare(fixed &value_r, const char *string)
 {
   fixed value;
   if (read_checked(value)) {

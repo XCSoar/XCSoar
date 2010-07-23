@@ -44,13 +44,12 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 
-#include <tchar.h>
 #include <stdlib.h>
 #include <math.h>
 
 class B50Device : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
 };
 
@@ -58,14 +57,14 @@ static bool
 PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 
 bool
-B50Device::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
+B50Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
                      bool enable_baro)
 {
   NMEAInputLine line(String);
-  TCHAR type[16];
+  char type[16];
   line.read(type, 16);
 
-  if (_tcscmp(type, _T("$PBB50")) == 0)
+  if (strcmp(type, "$PBB50") == 0)
     return PBB50(line, GPS_INFO);
   else
     return false;

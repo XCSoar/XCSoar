@@ -70,7 +70,7 @@ AbstractDevice::IsBaroSource()
 }
 
 bool
-AbstractDevice::ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+AbstractDevice::ParseNMEA(const char *line, struct NMEA_INFO *info,
                           bool enable_baro)
 {
   return false;

@@ -41,8 +41,6 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
-#include <tchar.h>
-
 struct FLARM_STATE;
 struct NMEA_INFO;
 struct BrokenDateTime;
@@ -54,7 +52,7 @@ public:
   NMEAParser();
   void Reset(void);
 
-  bool ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_INFO);
+  bool ParseNMEAString_Internal(const char *line, NMEA_INFO *GPS_INFO);
   bool gpsValid;
 
   bool activeGPS;
@@ -72,7 +70,7 @@ public:
    */
   static bool ReadAltitude(NMEAInputLine &line, fixed &value_r);
 
-  static bool NMEAChecksum(const TCHAR *String);
+  static bool NMEAChecksum(const char *String);
 
 private:
   bool GSAAvailable;

@@ -44,12 +44,11 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 
-#include <tchar.h>
 #include <stdlib.h>
 
 class CondorDevice : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
 };
 
@@ -63,20 +62,20 @@ static bool
 cLXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 
 bool
-CondorDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
+CondorDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
                         bool enable_baro)
 {
   GPS_INFO->gps.Simulator=true;
 
   NMEAInputLine line(String);
-  TCHAR type[16];
+  char type[16];
   line.read(type, 16);
 
-  if (_tcscmp(type, _T("$LXWP0")) == 0)
+  if (strcmp(type, "$LXWP0") == 0)
     return cLXWP0(line, GPS_INFO, enable_baro);
-  else if (_tcscmp(type, _T("$LXWP1")) == 0)
+  else if (strcmp(type, "$LXWP1") == 0)
     return cLXWP1(line, GPS_INFO);
-  else if (_tcscmp(type, _T("$LXWP2")) == 0)
+  else if (strcmp(type, "$LXWP2") == 0)
     return cLXWP2(line, GPS_INFO);
   else
     return false;
@@ -100,7 +99,6 @@ const struct DeviceRegister condorDevice = {
 static bool
 cLXWP1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  //  TCHAR ctemp[80];
   (void)GPS_INFO;
   // do nothing!
   return true;

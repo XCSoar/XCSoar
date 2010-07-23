@@ -145,7 +145,7 @@ public:
 
 public:
   virtual bool Open();
-  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
   virtual bool PutMacCready(double MacCready);
   virtual bool PutBugs(double bugs);
@@ -174,21 +174,21 @@ static int  BugsUpdateTimeout = 0;
 static int  BallastUpdateTimeout = 0;
 
 bool
-CAI302Device::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
+CAI302Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
                         bool enable_baro)
 {
   if (!NMEAParser::NMEAChecksum(String))
     return false;
 
   NMEAInputLine line(String);
-  TCHAR type[16];
+  char type[16];
   line.read(type, 16);
 
-  if (_tcscmp(type, _T("$PCAIB")) == 0)
+  if (strcmp(type, "$PCAIB") == 0)
     return cai_PCAIB(line, GPS_INFO);
-  else if (_tcscmp(type, _T("$PCAID")) == 0)
+  else if (strcmp(type, "$PCAID") == 0)
     return cai_PCAID(line, GPS_INFO);
-  else if (_tcscmp(type, _T("!w")) == 0)
+  else if (strcmp(type, "!w") == 0)
     return cai_w(line, GPS_INFO, enable_baro);
   else
     return false;

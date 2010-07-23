@@ -44,7 +44,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Units.hpp"
 
-#include <tchar.h>
 #include <stdlib.h>
 #include <math.h>
 
@@ -56,7 +55,7 @@ public:
   FlytecDevice(ComPort *_port):port(_port) {}
 
 public:
-  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
 };
 
@@ -72,7 +71,7 @@ FlytecParseBRSF(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
 
   // 0 = indicated or true airspeed [km/h]
   // XXX is that TAS or IAS?  Documentation isn't clear.
-  info.AirspeedAvailable = line.read_checked_compare(value, _T("KH"));
+  info.AirspeedAvailable = line.read_checked_compare(value, "KH");
   if (info.AirspeedAvailable) {
     info.TrueAirspeed = Units::ToSysUnit(value, unKiloMeterPerHour);
     info.IndicatedAirspeed = info.TrueAirspeed;
@@ -100,10 +99,10 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
   fixed value;
 
   // 0,1 = GPS altitude, unit
-  line.read_checked_compare(info.GPSAltitude, _T("M"));
+  line.read_checked_compare(info.GPSAltitude, "M");
 
   // 2,3 = baro altitude, unit
-  bool available = line.read_checked_compare(value, _T("M"));
+  bool available = line.read_checked_compare(value, "M");
   if (enable_baro) {
     if (available)
       info.BaroAltitude = value;
@@ -114,7 +113,7 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
   line.skip(4);
 
   // 8,9 = indicated or true airspeed, unit
-  info.AirspeedAvailable = line.read_checked_compare(value, _T("KH"));
+  info.AirspeedAvailable = line.read_checked_compare(value, "KH");
   if (info.AirspeedAvailable) {
     // XXX is that TAS or IAS?  Documentation isn't clear.
     info.TrueAirspeed = Units::ToSysUnit(value, unKiloMeterPerHour);
@@ -123,7 +122,7 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
 
   // 10,11 = temperature, unit
   info.TemperatureAvailable =
-    line.read_checked_compare(value, _T("C"));
+    line.read_checked_compare(value, "C");
   if (info.TemperatureAvailable)
     info.OutsideAirTemperature = value;
 
@@ -131,15 +130,15 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
 }
 
 bool
-FlytecDevice::ParseNMEA(const TCHAR *_line, NMEA_INFO *info, bool enable_baro)
+FlytecDevice::ParseNMEA(const char *_line, NMEA_INFO *info, bool enable_baro)
 {
   NMEAInputLine line(_line);
-  TCHAR type[16];
+  char type[16];
   line.read(type, 16);
 
-  if (_tcscmp(type, _T("$BRSF")) == 0)
+  if (strcmp(type, "$BRSF") == 0)
     return FlytecParseBRSF(line, *info, enable_baro);
-  else if (_tcscmp(type, _T("$VMVABD")) == 0)
+  else if (strcmp(type, "$VMVABD") == 0)
     return FlytecParseVMVABD(line, *info, enable_baro);
   else
     return false;

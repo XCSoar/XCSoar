@@ -44,7 +44,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Units.hpp"
 
-#include <tchar.h>
 #include <stdlib.h>
 #include <math.h>
 
@@ -56,7 +55,7 @@ public:
   LeonardoDevice(ComPort *_port):port(_port) {}
 
 public:
-  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
 };
 
@@ -181,15 +180,15 @@ LeonardoParseD(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 bool
-LeonardoDevice::ParseNMEA(const TCHAR *_line, NMEA_INFO *info, bool enable_baro)
+LeonardoDevice::ParseNMEA(const char *_line, NMEA_INFO *info, bool enable_baro)
 {
   NMEAInputLine line(_line);
-  TCHAR type[16];
+  char type[16];
   line.read(type, 16);
 
-  if (_tcscmp(type, _T("$C")) == 0 || _tcscmp(type, _T("$c")) == 0)
+  if (strcmp(type, "$C") == 0 || strcmp(type, "$c") == 0)
     return LeonardoParseC(line, *info, enable_baro);
-  else if (_tcscmp(type, _T("$D")) == 0 || _tcscmp(type, _T("$D")) == 0)
+  else if (strcmp(type, "$D") == 0 || strcmp(type, "$D") == 0)
     return LeonardoParseD(line, *info);
   else
     return false;

@@ -97,54 +97,54 @@ NMEAParser::Reset(void)
  * @return Parsing success
  */
 bool
-NMEAParser::ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_INFO)
+NMEAParser::ParseNMEAString_Internal(const char *String, NMEA_INFO *GPS_INFO)
 {
   if (!NMEAChecksum(String))
     return false;
 
   NMEAInputLine line(String);
 
-  TCHAR type[16];
+  char type[16];
   line.read(type, 16);
 
-  if (type[0] != _T('$'))
+  if (type[0] != '$')
     return false;
 
   // if (proprietary sentence) ...
   if (type[1] == 'P') {
     // Airspeed and vario sentence
-    if (_tcscmp(type + 1, _T("PTAS1")) == 0)
+    if (strcmp(type + 1, "PTAS1") == 0)
       return PTAS1(line, GPS_INFO);
 
     // FLARM sentences
-    if (_tcscmp(type + 1, _T("PFLAA")) == 0)
+    if (strcmp(type + 1, "PFLAA") == 0)
       return PFLAA(line, GPS_INFO);
 
-    if (_tcscmp(type + 1, _T("PFLAU")) == 0)
+    if (strcmp(type + 1, "PFLAU") == 0)
       return PFLAU(line, GPS_INFO->flarm);
 
     // Garmin altitude sentence
-    if (_tcscmp(type + 1, _T("PGRMZ")) == 0)
+    if (strcmp(type + 1, "PGRMZ") == 0)
       return RMZ(line, GPS_INFO);
 
     return false;
   }
 
-  if (_tcscmp(type + 3, _T("GSA")) == 0)
+  if (strcmp(type + 3, "GSA") == 0)
     return GSA(line, GPS_INFO);
 
-  if (_tcscmp(type + 3, _T("GLL")) == 0)
+  if (strcmp(type + 3, "GLL") == 0)
     //    return GLL(line, GPS_INFO);
     return false;
 
-  if (_tcscmp(type + 3, _T("RMB")) == 0)
+  if (strcmp(type + 3, "RMB") == 0)
     //return RMB(line, GPS_INFO);
     return false;
 
-  if (_tcscmp(type + 3, _T("RMC")) == 0)
+  if (strcmp(type + 3, "RMC") == 0)
     return RMC(line, GPS_INFO);
 
-  if (_tcscmp(type + 3, _T("GGA")) == 0)
+  if (strcmp(type + 3, "GGA") == 0)
     return GGA(line, GPS_INFO);
 
   return false;
@@ -157,7 +157,7 @@ NMEAParser::ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_INFO)
  * @return Signed value
  */
 static double
-EastOrWest(double in, TCHAR EoW)
+EastOrWest(double in, char EoW)
 {
   if (EoW == 'W')
     return -in;
@@ -172,7 +172,7 @@ EastOrWest(double in, TCHAR EoW)
  * @return Signed value
  */
 static double
-NorthOrSouth(double in, TCHAR NoS)
+NorthOrSouth(double in, char NoS)
 {
   if (NoS == 'S')
     return -in;
@@ -182,7 +182,7 @@ NorthOrSouth(double in, TCHAR NoS)
 
 /*
 static double
-LeftOrRight(double in, TCHAR LoR)
+LeftOrRight(double in, char LoR)
 {
   if(LoR == 'L')
     return -in;
@@ -197,7 +197,7 @@ LeftOrRight(double in, TCHAR LoR)
  * @return True if GPS fix not found or invalid
  */
 static bool
-NAVWarn(TCHAR c)
+NAVWarn(char c)
 {
   return c != 'A';
 }
@@ -224,7 +224,7 @@ MixedFormatToDegrees(double mixed)
 }
 
 static bool
-ReadDoubleAndChar(NMEAInputLine &line, double &d, TCHAR &ch)
+ReadDoubleAndChar(NMEAInputLine &line, double &d, char &ch)
 {
   bool success = line.read_checked(d);
   ch = line.read_first_char();
@@ -232,7 +232,7 @@ ReadDoubleAndChar(NMEAInputLine &line, double &d, TCHAR &ch)
 }
 
 static bool
-ReadFixedAndChar(NMEAInputLine &line, fixed &d, TCHAR &ch)
+ReadFixedAndChar(NMEAInputLine &line, fixed &d, char &ch)
 {
   bool success = line.read_checked(d);
   ch = line.read_first_char();
@@ -244,7 +244,7 @@ static bool
 ReadLatitude(NMEAInputLine &line, Angle &value_r)
 {
   double value;
-  TCHAR ch;
+  char ch;
 
   if (!ReadDoubleAndChar(line, value, ch))
     return false;
@@ -258,7 +258,7 @@ static bool
 ReadLongitude(NMEAInputLine &line, Angle &value_r)
 {
   double value;
-  TCHAR ch;
+  char ch;
 
   if (!ReadDoubleAndChar(line, value, ch))
     return false;
@@ -286,11 +286,11 @@ bool
 NMEAParser::ReadAltitude(NMEAInputLine &line, fixed &value_r)
 {
   fixed value;
-  TCHAR format;
+  char format;
   if (!ReadFixedAndChar(line, value, format))
     return false;
 
-  if (format == _T('f') || format == _T('F'))
+  if (format == 'f' || format == 'F')
     value = Units::ToSysUnit(value, unFeet);
 
   value_r = value;
@@ -490,20 +490,20 @@ NMEAParser::RMB(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   (void)GPS_INFO;
 
   /* we calculate all this stuff now
-  TCHAR ctemp[MAX_NMEA_LEN];
+  char ctemp[MAX_NMEA_LEN];
 
   GPS_INFO->NAVWarning = NAVWarn(params[0][0]);
 
-  GPS_INFO->CrossTrackError = NAUTICALMILESTOMETRES * _tcstod(params[1], NULL);
+  GPS_INFO->CrossTrackError = NAUTICALMILESTOMETRES * strtod(params[1], NULL);
   GPS_INFO->CrossTrackError = LeftOrRight(GPS_INFO->CrossTrackError,params[2][0]);
 
-  _tcscpy(ctemp, params[4]);
+  strcpy(ctemp, params[4]);
   ctemp[WAY_POINT_ID_SIZE] = '\0';
-  _tcscpy(GPS_INFO->WaypointID,ctemp);
+  strcpy(GPS_INFO->WaypointID,ctemp);
 
-  GPS_INFO->WaypointDistance = NAUTICALMILESTOMETRES * _tcstod(params[9], NULL);
-  GPS_INFO->WaypointBearing = _tcstod(params[10], NULL);
-  GPS_INFO->WaypointSpeed =  Units::ToSysUnit(_tcstod(params[11], NULL), unKnots);
+  GPS_INFO->WaypointDistance = NAUTICALMILESTOMETRES * strtod(params[9], NULL);
+  GPS_INFO->WaypointBearing = strtod(params[10], NULL);
+  GPS_INFO->WaypointSpeed =  Units::ToSysUnit(strtod(params[11], NULL), unKnots);
   */
 
   return true;
@@ -539,8 +539,6 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   double ThisTime = TimeModify(line.read(0.0), GPS_INFO->DateTime);
 
-  TCHAR *Stop;
-
   gpsValid = !NAVWarn(line.read_first_char());
 
   GEOPOINT location;
@@ -565,14 +563,14 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   fixed TrackBearing = line.read(fixed_zero);
 
   // JMW get date info first so TimeModify is accurate
-  TCHAR date_buffer[9];
+  char date_buffer[9];
   line.read(date_buffer, 9);
 
-  GPS_INFO->DateTime.year = _tcstol(&date_buffer[4], &Stop, 10) + 2000;
+  GPS_INFO->DateTime.year = atoi(&date_buffer[4]) + 2000;
   date_buffer[4] = '\0';
-  GPS_INFO->DateTime.month = _tcstol(&date_buffer[2], &Stop, 10);
+  GPS_INFO->DateTime.month = atoi(&date_buffer[2]);
   date_buffer[2] = '\0';
-  GPS_INFO->DateTime.day = _tcstol(&date_buffer[0], &Stop, 10);
+  GPS_INFO->DateTime.day = atoi(&date_buffer[0]);
 
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return false;
@@ -800,18 +798,18 @@ NMEAParser::RMA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
  * @return True if checksum correct
  */
 bool
-NMEAParser::NMEAChecksum(const TCHAR *String)
+NMEAParser::NMEAChecksum(const char *String)
 {
   unsigned char ReadCheckSum, CalcCheckSum;
-  TCHAR c1, c2;
+  char c1, c2;
   unsigned char v1 = 0, v2 = 0;
-  const TCHAR *pEnd;
+  const char *pEnd;
 
-  pEnd = _tcschr(String,'*');
+  pEnd = strchr(String, '*');
   if(pEnd == NULL)
     return false;
 
-  if (_tcslen(pEnd) < 3)
+  if (strlen(pEnd) < 3)
     return false;
 
   c1 = pEnd[1], c2 = pEnd[2];
@@ -975,7 +973,7 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   traffic.IDType = line.read(0);
 
   // 5 id, 6 digit hex
-  TCHAR id_string[16];
+  char id_string[16];
   line.read(id_string, 16);
   traffic.ID.parse(id_string, NULL);
 
@@ -1078,13 +1076,13 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
-  TCHAR t_laa1[50];
-  _stprintf(t_laa1, _T("%d,%d,%d,%d,2,DDA85C,%d,0,0,0,1"), l, n1, e1, h1, t1);
-  TCHAR t_laa2[50];
-  _stprintf(t_laa2, _T("0,%d,%d,%d,2,AA9146,%d,0,0,0,1"), n2, e2, h2, t2);
+  char t_laa1[50];
+  sprintf(t_laa1, "%d,%d,%d,%d,2,DDA85C,%d,0,0,0,1", l, n1, e1, h1, t1);
+  char t_laa2[50];
+  sprintf(t_laa2, "0,%d,%d,%d,2,AA9146,%d,0,0,0,1", n2, e2, h2, t2);
 
-  TCHAR t_lau[50];
-  _stprintf(t_lau, _T("2,1,2,1,%d"), l);
+  char t_lau[50];
+  sprintf(t_lau, "2,1,2,1,%d", l);
 
   GPS_INFO->flarm.FLARM_Available = true;
 

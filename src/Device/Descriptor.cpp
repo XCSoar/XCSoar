@@ -164,22 +164,13 @@ DeviceDescriptor::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
     pDevPipeTo->Com->Write(String);
   }
 
-#ifdef _UNICODE
-  TCHAR buffer[strlen(String) * 2 + 1];
-  if (::MultiByteToWideChar(CP_ACP, 0, String, -1,
-                            buffer, sizeof(buffer) / sizeof(buffer[0])) <= 0)
-    return false;
-#else
-  const char *buffer = String;
-#endif
-
-  if (device != NULL && device->ParseNMEA(buffer, GPS_INFO, enable_baro)) {
+  if (device != NULL && device->ParseNMEA(String, GPS_INFO, enable_baro)) {
     GPS_INFO->gps.Connected = 2;
     return true;
   }
 
   if (String[0] == '$') { // Additional "if" to find GPS strings
-    if (parser.ParseNMEAString_Internal(buffer, GPS_INFO)) {
+    if (parser.ParseNMEAString_Internal(String, GPS_INFO)) {
       GPS_INFO->gps.Connected = 2;
       return true;
     }

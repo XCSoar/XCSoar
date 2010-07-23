@@ -41,18 +41,16 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
-#include <tchar.h>
-
 /**
  * A helper class which can dissect a NMEA input line.
  */
 class NMEAInputLine {
-  const TCHAR *data, *end;
+  const char *data, *end;
 
 public:
-  NMEAInputLine(const TCHAR *line);
+  NMEAInputLine(const char *line);
 
-  const TCHAR *rest() const {
+  const char *rest() const {
     return data;
   }
 
@@ -71,10 +69,10 @@ public:
       skip();
   }
 
-  TCHAR read_first_char();
+  char read_first_char();
 
-  void read(TCHAR *dest, size_t size);
-  bool read_compare(const TCHAR *value);
+  void read(char *dest, size_t size);
+  bool read_compare(const char *value);
 
   long read(long default_value);
   long read_hex(long default_value);
@@ -98,7 +96,7 @@ public:
   /**
    * Read a #fixed only if the unit string which follows matches.
    */
-  bool read_checked_compare(fixed &value_r, const TCHAR *string);
+  bool read_checked_compare(fixed &value_r, const char *string);
 };
 
 #endif

@@ -69,7 +69,11 @@ public:
     return value < other.value;
   }
 
+  void parse(const char *input, char **endptr_r);
+#ifdef _UNICODE
   void parse(const TCHAR *input, TCHAR **endptr_r);
+#endif
+
   const TCHAR *format(TCHAR *buffer) const;
 };
 

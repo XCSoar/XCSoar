@@ -70,7 +70,7 @@ protected:
   bool TryConnect();
 
 public:
-  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
   virtual bool Declare(const Declaration *declaration);
 };
@@ -104,7 +104,7 @@ ReadAltitude(NMEAInputLine &line, fixed &value_r)
 {
   fixed value;
   bool available = line.read_checked(value);
-  TCHAR unit = line.read_first_char();
+  char unit = line.read_first_char();
   if (!available)
     return false;
 
@@ -116,17 +116,17 @@ ReadAltitude(NMEAInputLine &line, fixed &value_r)
 }
 
 bool
-EWMicroRecorderDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
+EWMicroRecorderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
                                  bool enable_baro)
 {
   if (!NMEAParser::NMEAChecksum(String))
     return false;
 
   NMEAInputLine line(String);
-  TCHAR type[16];
+  char type[16];
   line.read(type, 16);
 
-  if (_tcscmp(type, _T("$PGRMZ")) == 0) {
+  if (strcmp(type, "$PGRMZ") == 0) {
     if (enable_baro)
       GPS_INFO->BaroAltitudeAvailable =
         ReadAltitude(line, GPS_INFO->BaroAltitude);

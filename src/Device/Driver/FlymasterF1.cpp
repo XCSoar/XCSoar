@@ -43,13 +43,12 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 
-#include <tchar.h>
 #include <stdlib.h>
 #include <math.h>
 
 class FlymasterF1Device : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
 };
 
@@ -57,14 +56,14 @@ static bool
 VARIO(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 
 bool
-FlymasterF1Device::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
+FlymasterF1Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
                              bool enable_baro)
 {
   NMEAInputLine line(String);
-  TCHAR type[16];
+  char type[16];
   line.read(type, 16);
 
-  if (_tcscmp(type, _T("$VARIO")) == 0)
+  if (strcmp(type, "$VARIO") == 0)
     return VARIO(line, GPS_INFO);
   else
     return false;

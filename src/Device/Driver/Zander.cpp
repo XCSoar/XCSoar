@@ -52,21 +52,21 @@ static bool
 PZAN2(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 
 class ZanderDevice : public AbstractDevice {
-  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
 };
 
 bool
-ZanderDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
+ZanderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
                         bool enable_baro)
 {
   NMEAInputLine line(String);
-  TCHAR type[16];
+  char type[16];
   line.read(type, 16);
 
-  if (_tcscmp(type, _T("$PZAN1")) == 0)
+  if (strcmp(type, "$PZAN1") == 0)
     return PZAN1(line, GPS_INFO, enable_baro);
-  else if (_tcscmp(type, _T("$PZAN2")) == 0)
+  else if (strcmp(type, "$PZAN2") == 0)
     return PZAN2(line, GPS_INFO);
   else
     return false;

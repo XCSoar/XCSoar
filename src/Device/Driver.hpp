@@ -62,7 +62,7 @@ public:
   virtual bool IsGPSSource() = 0;
   virtual bool IsBaroSource() = 0;
 
-  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro) = 0;
 
   virtual bool PutMacCready(double MacCready) = 0;
@@ -92,7 +92,7 @@ class AbstractDevice : public Device {
   virtual bool IsGPSSource();
   virtual bool IsBaroSource();
 
-  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
 
   virtual bool PutMacCready(double MacCready);

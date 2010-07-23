@@ -62,7 +62,7 @@ public:
   VolksloggerDevice(ComPort *_port):port(_port) {}
 
 public:
-  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
   virtual bool Declare(const Declaration *declaration);
 };
@@ -107,17 +107,17 @@ vl_PGCS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 }
 
 bool
-VolksloggerDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
+VolksloggerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
                              bool enable_baro)
 {
   if (!NMEAParser::NMEAChecksum(String))
     return false;
 
   NMEAInputLine line(String);
-  TCHAR type[16];
+  char type[16];
   line.read(type, 16);
 
-  if (_tcscmp(type, _T("$PGCS")) == 0)
+  if (strcmp(type, "$PGCS") == 0)
     return vl_PGCS1(line, GPS_INFO, enable_baro);
   else
     return false;

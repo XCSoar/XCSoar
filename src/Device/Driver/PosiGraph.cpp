@@ -52,12 +52,11 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 
-#include <tchar.h>
-#include <stdlib.h>
+#include <string.h>
 
 class PGDevice : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
   virtual bool Declare(const struct Declaration *declaration);
 };
@@ -66,15 +65,15 @@ static bool
 GPWIN(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro);
 
 bool
-PGDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
+PGDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   NMEAInputLine line(String);
-  TCHAR type[16];
+  char type[16];
   line.read(type, 16);
 
   // $GPWIN ... Winpilot proprietary sentance includinh baro altitude
   // $GPWIN ,01900 , 0 , 5159 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 * 6 B , 0 7 * 6 0 E
-  if (_tcscmp(type, _T("$GPWIN")) == 0)
+  if (strcmp(type, "$GPWIN") == 0)
     return GPWIN(line, GPS_INFO, enable_baro);
   else
     return false;
