@@ -257,7 +257,7 @@ static const SCREEN_INFO Data_Options[] = {
   // 23
   { ugNone, _T("Track"), _T("Track"),
     NULL,
-    ActionInterface::on_key_Direction,
+    NULL,
     32, 6,
   },
   // 24

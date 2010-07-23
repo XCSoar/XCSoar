@@ -41,6 +41,9 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Interface.hpp"
 
+#include "Simulator.hpp"
+#include "DeviceBlackboard.hpp"
+
 #include <tchar.h>
 
 void
@@ -54,4 +57,26 @@ InfoBoxContentTrack::Update(InfoBoxWindow &infobox)
   _stprintf(tmp, _T("%2.0f")_T(DEG)_T("T"),
             (double)XCSoarInterface::Basic().TrackBearing.value_degrees());
   infobox.SetValue(tmp);
+}
+
+bool
+InfoBoxContentTrack::HandleKey(unsigned keycode)
+{
+  if (!is_simulator())
+    return false;
+
+  const Angle a5 = Angle::degrees(fixed(5));
+  switch (keycode) {
+  case VK_UP:
+    device_blackboard.SetTrackBearing(
+        XCSoarInterface::Basic().TrackBearing + a5);
+    return true;
+
+  case VK_DOWN:
+    device_blackboard.SetTrackBearing(
+        XCSoarInterface::Basic().TrackBearing - a5);
+    return true;
+  }
+
+  return false;
 }
