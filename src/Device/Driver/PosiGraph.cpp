@@ -50,7 +50,7 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "Math/FastMath.h"
 #include "NMEA/Info.hpp"
-
+#include "NMEA/InputLine.hpp"
 
 #include <tchar.h>
 #include <stdlib.h>
@@ -63,22 +63,21 @@ public:
 };
 
 static bool
-GPWIN(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro);
+GPWIN(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro);
 
 bool
 PGDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
-  (void)String;
-  (void)GPS_INFO;
+  NMEAInputLine line(String);
+  TCHAR type[16];
+  line.read(type, 16);
 
   // $GPWIN ... Winpilot proprietary sentance includinh baro altitude
   // $GPWIN ,01900 , 0 , 5159 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 * 6 B , 0 7 * 6 0 E
-  if(_tcsncmp(_T("$GPWIN"), String, 6)==0)
-    {
-      return GPWIN(&String[7], GPS_INFO, enable_baro);
-    }
-
-  return false;
+  if (_tcscmp(type, _T("$GPWIN")) == 0)
+    return GPWIN(line, GPS_INFO, enable_baro);
+  else
+    return false;
 
 }
 
@@ -106,15 +105,14 @@ const struct DeviceRegister pgDevice = {
 // local stuff
 
 static bool
-GPWIN(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
+GPWIN(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
-  TCHAR ctemp[80];
+  line.skip(2);
 
-  NMEAParser::ExtractParameter(String, ctemp, 2);
-
-  if (enable_baro) {
+  fixed value;
+  if (enable_baro && line.read_checked(value)) {
+    GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(value / 10);
     GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(fixed(_tcstod(ctemp, NULL)) / 10);
   }
 
   return false;
