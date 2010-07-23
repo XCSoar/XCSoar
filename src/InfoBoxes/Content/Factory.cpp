@@ -163,6 +163,10 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentTeamBearingDiff();
   case 58:
     return new InfoBoxContentTeamDistance();
+  case 59:
+    return new InfoBoxContentTaskSpeedInstant();
+  case 60:
+    return new InfoBoxContentHomeDistance();
   case 61:
     return new InfoBoxContentTaskSpeedAchieved();
   case 62:
@@ -177,6 +181,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentAlternateBest();
   case 70:
     return new InfoBoxContentAltitudeQFE();
+  case 73:
+    return new InfoBoxContentOLC();
   }
 
   return NULL;

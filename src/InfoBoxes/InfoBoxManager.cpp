@@ -411,12 +411,12 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 59
   { ugTaskSpeed, _T("Speed Task Instantaneous"), _T("V Tsk Ins"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     18, 16,
   },
   // 60
   { ugDistance, _T("Distance Home"), _T("Home Dis"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     18, 16,
   },
   // 61
@@ -490,7 +490,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 73 //
   { ugDistance, _T("Online Contest Distance"), _T("OLC"),
-    new InfoBoxFormatter(_T("%2.1f")),
+    NULL,
     8, 2,
   },
   // 74 //

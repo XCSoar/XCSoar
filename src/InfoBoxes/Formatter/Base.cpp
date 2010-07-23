@@ -138,17 +138,6 @@ InfoBoxFormatter::AssignValue(int i)
     }
     break;
 
-  case 59:
-    Value = Units::ToUserTaskSpeed(Calculated().task_stats.total.
-                                   remaining_effective.get_speed_incremental());
-    Valid = Calculated().task_stats.task_valid;
-    break;
-
-  case 60:
-    Value = Units::ToUserDistance(Calculated().common_stats.vector_home.Distance);
-    Valid = true;
-    break;
-
   case 64:
     Value = Units::ToUserVSpeed(Calculated().task_stats.total.vario.get_value());
     Valid = Calculated().task_stats.task_valid;
@@ -210,12 +199,6 @@ InfoBoxFormatter::AssignValue(int i)
   case 72:
     Value = Calculated().Experimental;
     Valid = true;
-    break;
-
-  case 73:
-    /// @todo this produces 0 if task not started! (bug)
-    Value = Units::ToUserDistance(Calculated().common_stats.distance_olc);
-    Valid = SettingsComputer().enable_olc;
     break;
 
   /* TODO feature: add extra infoboxes from Lars

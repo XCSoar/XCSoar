@@ -126,6 +126,18 @@ public:
   virtual void Update(InfoBoxWindow &infobox);
 };
 
+class InfoBoxContentHomeDistance: public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
+class InfoBoxContentOLC: public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
 class InfoBoxContentTaskSpeed : public InfoBoxContent
 {
 public:
@@ -133,6 +145,12 @@ public:
 };
 
 class InfoBoxContentTaskSpeedAchieved : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
+class InfoBoxContentTaskSpeedInstant : public InfoBoxContent
 {
 public:
   virtual void Update(InfoBoxWindow &infobox);
