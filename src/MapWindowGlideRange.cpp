@@ -63,10 +63,8 @@ void MapWindow::DrawTerrainAbove(Canvas &canvas, const RECT rc, Canvas &buffer)
   buffer.background_transparent();
   buffer.set_background_color(Color::WHITE);
 
-  buffer.white_pen();
   buffer.set_text_color(Color(0xf0,0xf0,0xf0));
-  buffer.select(MapGfx.hAboveTerrainBrush); // hAirspaceBrushes[3] or 6
-  buffer.rectangle(rc.left, rc.top, rc.right, rc.bottom);
+  buffer.clear(MapGfx.hAboveTerrainBrush);
 
   buffer.white_pen();
   buffer.white_brush();
