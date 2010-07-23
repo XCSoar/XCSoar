@@ -186,6 +186,9 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
                 rc.bottom - MapWindowBoldFont.get_ascent_height() - IBLSCALE(1),
                 ScaleInfo);
 
+    if (ScaleChangeFeedback)
+      canvas.background_opaque();
+
     draw_bitmap(canvas, get_bitmap_canvas(), MapGfx.hBmpMapScale,
                 0, rc.bottom - Height, 0, 0, 6, 11);
     draw_bitmap(canvas, get_bitmap_canvas(), MapGfx.hBmpMapScale,
