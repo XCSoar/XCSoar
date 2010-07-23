@@ -90,16 +90,16 @@ private:
   bool GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
   bool GSA(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
   bool RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
-  bool RMB(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+  static bool RMB(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
   bool RMA(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
   bool RMZ(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 
-  bool WP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
-  bool WP1(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
-  bool WP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+  static bool WP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+  static bool WP1(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+  static bool WP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 
   // Additional sentences
-  bool PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO); // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
+  static bool PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO); // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
 
   // FLARM sentences
   bool PFLAU(NMEAInputLine &line, FLARM_STATE &flarm);
