@@ -60,9 +60,7 @@ void MapWindow::DrawTerrainAbove(Canvas &canvas, const RECT rc, Canvas &buffer)
   if (!Basic().flight.Flying)
     return;
 
-  buffer.background_transparent();
   buffer.set_background_color(Color::WHITE);
-
   buffer.set_text_color(Color(0xf0,0xf0,0xf0));
   buffer.clear(MapGfx.hAboveTerrainBrush);
 
@@ -70,13 +68,7 @@ void MapWindow::DrawTerrainAbove(Canvas &canvas, const RECT rc, Canvas &buffer)
   buffer.white_brush();
   buffer.polygon(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1);
 
-  // need to do this to prevent drawing of colored outline
-  buffer.white_pen();
-
   canvas.copy_transparent_white(buffer, rc);
-
-  // restore original color
-  buffer.background_opaque();
 }
 
 
