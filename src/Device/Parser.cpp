@@ -615,8 +615,8 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (!activeGPS)
     return true;
 
-  double speed = _tcstod(params[6], NULL);
-  gps.MovementDetected = speed > 2.0;
+  fixed speed(_tcstod(params[6], NULL));
+  gps.MovementDetected = speed > fixed_two;
 
   if (gps.Replay)
     // block actual GPS signal if not moving and a log is being replayed
