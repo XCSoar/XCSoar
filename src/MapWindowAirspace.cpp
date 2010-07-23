@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
+#include "MapCanvas.hpp"
 #include "AirspaceClientUI.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
@@ -137,11 +138,14 @@ public:
     MapDrawHelper(_helper),
     m_warnings(warnings),
     pen_thick(Pen::SOLID, IBLSCALE(10), Color(0x00, 0x00, 0x00)),
-    pen_medium(Pen::SOLID, IBLSCALE(3), Color(0x00, 0x00, 0x00)),
-    m_border(false)
-    {}
+    pen_medium(Pen::SOLID, IBLSCALE(3), Color(0x00, 0x00, 0x00)) {
+    m_use_stencil = true;
+  }
 
   void Visit(const AirspaceCircle& airspace) {
+    if (m_warnings.is_acked(airspace))
+      return;
+
     buffer_render_start();
     set_buffer_pens(airspace);
 
@@ -152,69 +156,74 @@ public:
   }
 
   void Visit(const AirspacePolygon& airspace) {
+    if (m_warnings.is_acked(airspace))
+      return;
+
     buffer_render_start();
     set_buffer_pens(airspace);
     draw_search_point_vector(m_buffer, airspace.get_points());
   }
 
-  void set_border(bool set) {
-    m_border = set;
-    m_use_stencil = !m_border;
-  }
-
   void draw_intercepts() {
-    set_border(false);
     buffer_render_finish();
   }
 
 private:
 
   void set_buffer_pens(const AbstractAirspace &airspace) {
-    if (m_border) {
-      if (m_settings_map.bAirspaceBlackOutline)
-        m_buffer.black_pen();
-      else
-        m_buffer.select(MapGfx.hAirspacePens[airspace.get_type()]);
+    // this color is used as the black bit
+    m_buffer.set_text_color(MapGfx.Colours[m_settings_map.
+                                           iAirspaceColour[airspace.get_type()]]);
 
-      m_buffer.hollow_brush();
+    // get brush, can be solid or a 1bpp bitmap
+    m_buffer.select(MapGfx.hAirspaceBrushes[m_settings_map.
+                                            iAirspaceBrush[airspace.get_type()]]);
+    m_buffer.white_pen();
 
+    if (m_warnings.is_warning(airspace) || m_warnings.is_inside(airspace)) {
+      m_stencil.black_brush();
+      m_stencil.select(pen_medium);
     } else {
-
-      /// @todo stop drawing border for acked outside airspaces     
-
-      if (m_warnings.is_acked(airspace)) {
-
-        m_buffer.hollow_brush();
-
-      } else {
-
-        // this color is used as the black bit
-        m_buffer.set_text_color(MapGfx.Colours[m_settings_map.
-                                               iAirspaceColour[airspace.get_type()]]);
-        // get brush, can be solid or a 1bpp bitmap
-        m_buffer.select(MapGfx.hAirspaceBrushes[m_settings_map.
-                                                iAirspaceBrush[airspace.get_type()]]);
-        m_buffer.white_pen();
-
-      }
-
-      if (m_warnings.is_warning(airspace) || m_warnings.is_inside(airspace)) {
-        m_stencil.black_brush();
-        m_stencil.select(pen_medium);
-      } else {
-        m_stencil.select(pen_thick);
-        m_stencil.hollow_brush();
-      }
-
+      m_stencil.select(pen_thick);
+      m_stencil.hollow_brush();
     }
+
   }
 
   const AirspaceWarningCopy& m_warnings;
   Pen pen_thick;
   Pen pen_medium;
-  bool m_border;
 };
 
+class AirspaceOutlineRenderer : public AirspaceVisitor, protected MapCanvas {
+  bool black;
+
+public:
+  AirspaceOutlineRenderer(Canvas &_canvas, const Projection &_projection,
+                          bool _black)
+    :MapCanvas(_canvas, _projection), black(_black) {
+    if (black)
+      canvas.black_pen();
+    canvas.hollow_brush();
+  }
+
+protected:
+  void setup_canvas(const AbstractAirspace &airspace) {
+    if (!black)
+      canvas.select(MapGfx.hAirspacePens[airspace.get_type()]);
+  }
+
+public:
+  void Visit(const AirspaceCircle& airspace) {
+    setup_canvas(airspace);
+    circle(airspace.get_center(), airspace.get_radius());
+  }
+
+  void Visit(const AirspacePolygon& airspace) {
+    setup_canvas(airspace);
+    draw(airspace.get_points());
+  }
+};
 
 void
 MapWindow::DrawAirspaceIntersections(Canvas &canvas)
@@ -255,13 +264,14 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
     // JMW TODO wasteful to draw twice, can't it be drawn once?
     // we are using two draws so borders go on top of everything
     
-    v.set_border(false);
-    m_airspace->visit_within_range(PanLocation, GetScreenDistanceMeters(),
-                                   v, visible);
-    v.set_border(true);
     m_airspace->visit_within_range(PanLocation, GetScreenDistanceMeters(),
                                    v, visible);
     v.draw_intercepts();
+
+    AirspaceOutlineRenderer outline_renderer(canvas, *this,
+                                             SettingsMap().bAirspaceBlackOutline);
+    m_airspace->visit_within_range(PanLocation, GetScreenDistanceMeters(),
+                                   outline_renderer, visible);
 
     m_airspace_intersections = awc.get_locations();
   }
