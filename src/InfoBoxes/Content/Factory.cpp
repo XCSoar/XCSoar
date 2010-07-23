@@ -173,6 +173,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentTaskAATimeDelta();
   case 63:
     return new InfoBoxContentThermalAllAvg();
+  case 64:
+    return new InfoBoxContentVarioDistance();
   case 67:
     return new InfoBoxContentAlternate1();
   case 68:

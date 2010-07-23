@@ -436,7 +436,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 64
   { ugVerticalSpeed, _T("Distance Vario"), _T("D Vario"),
-    new InfoBoxFormatter(_T("%-2.1f")),
+    NULL,
     8, 2,
   },
   // 65

@@ -296,3 +296,32 @@ InfoBoxContentThermalRatio::Update(InfoBoxWindow &infobox)
             (double)XCSoarInterface::Calculated().PercentCircling);
   infobox.SetValue(sTmp);
 }
+
+void
+InfoBoxContentVarioDistance::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("D Vario"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR sTmp[32];
+  _stprintf(sTmp, _T("%-2.1f"), Units::ToUserVSpeed(
+      XCSoarInterface::Calculated().task_stats.total.vario.get_value()));
+  infobox.SetValue(sTmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::VerticalSpeedUnit);
+
+  // Set Color
+  if (XCSoarInterface::Calculated().task_stats.total.vario.get_value() < 0)
+    // Red
+    infobox.SetColor(1);
+  else
+    // Black
+    infobox.SetColor(0);
+}

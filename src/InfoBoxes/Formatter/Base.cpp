@@ -138,11 +138,6 @@ InfoBoxFormatter::AssignValue(int i)
     }
     break;
 
-  case 64:
-    Value = Units::ToUserVSpeed(Calculated().task_stats.total.vario.get_value());
-    Valid = Calculated().task_stats.task_valid;
-    break;
-
   case 65: // battery voltage
 #if !defined(WINDOWSPC) && !defined(HAVE_POSIX)
     if (!is_altair()) {
