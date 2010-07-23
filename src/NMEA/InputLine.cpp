@@ -121,6 +121,25 @@ NMEAInputLine::read(long default_value)
   }
 }
 
+long
+NMEAInputLine::read_hex(long default_value)
+{
+  TCHAR *endptr;
+  long value = _tcstol(data, &endptr, 16);
+  assert(endptr >= data && endptr <= end);
+  if (is_end_of_line(*endptr)) {
+    data = _T("");
+    return value;
+  } else if (*endptr == ',') {
+    data = endptr + 1;
+    return value;
+  } else {
+    data = endptr;
+    skip();
+    return default_value;
+  }
+}
+
 double
 NMEAInputLine::read(double default_value)
 {

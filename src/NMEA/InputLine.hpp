@@ -52,6 +52,10 @@ class NMEAInputLine {
 public:
   NMEAInputLine(const TCHAR *line);
 
+  const TCHAR *rest() const {
+    return data;
+  }
+
   /**
    * Skip the next column.
    *
@@ -73,6 +77,7 @@ public:
   bool read_compare(const TCHAR *value);
 
   long read(long default_value);
+  long read_hex(long default_value);
 
   int read(int default_value) {
     return (int)read((long)default_value);

@@ -45,6 +45,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "InputEvents.h"
 #include "LogFile.hpp"
+#include "NMEA/InputLine.hpp"
 
 #include <windows.h>
 #include <tchar.h>
@@ -88,23 +89,17 @@ public:
 };
 
 static bool
-PDSWC(const TCHAR *String, NMEA_INFO *GPS_INFO)
+PDSWC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   static long last_switchinputs;
   static long last_switchoutputs;
   double MACCREADY;
   /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
 
-  unsigned long uswitchinputs, uswitchoutputs;
-  _stscanf(String,
-	  _T("%lf,%lx,%lx,%lf"),
-	  &MACCREADY,
-	  &uswitchinputs,
-	  &uswitchoutputs,
-	  &GPS_INFO->SupplyBatteryVoltage);
-
-  long switchinputs = uswitchinputs;
-  long switchoutputs = uswitchoutputs;
+  MACCREADY = line.read(0.0);
+  long switchinputs = line.read_hex(0L);
+  long switchoutputs = line.read_hex(0L);
+  GPS_INFO->SupplyBatteryVoltage = line.read(0.0);
 
   MACCREADY /= 10;
 //  oldGlidePolar::SetMacCready(MACCREADY);
@@ -199,41 +194,39 @@ PDSWC(const TCHAR *String, NMEA_INFO *GPS_INFO)
 //#include "Audio/VarioSound.h"
 
 static bool
-PDAAV(const TCHAR *String, NMEA_INFO *GPS_INFO)
+PDAAV(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  TCHAR ctemp[80];
   (void)GPS_INFO;
 
-  NMEAParser::ExtractParameter(String,ctemp,0);
-  //unsigned short beepfrequency = (unsigned short)_tcstol(ctemp, NULL, 10);
-  NMEAParser::ExtractParameter(String,ctemp,1);
-  //unsigned short soundfrequency = (unsigned short)_tcstol(ctemp, NULL, 10);
-  NMEAParser::ExtractParameter(String,ctemp,2);
-  //unsigned char soundtype = (unsigned char)_tcstol(ctemp, NULL, 10);
+  unsigned short beepfrequency = line.read(0);
+  unsigned short soundfrequency = line.read(0);
+  unsigned char soundtype = line.read(0);
 
   // Temporarily commented out - function as yet undefined
   //  audio_setconfig(beepfrequency, soundfrequency, soundtype);
+  (void)beepfrequency;
+  (void)soundfrequency;
+  (void)soundtype;
 
   return true;
 }
 
 static bool
-PDVSC(const TCHAR *String, NMEA_INFO *GPS_INFO)
+PDVSC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  TCHAR ctemp[80];
-  TCHAR name[80];
-  TCHAR responsetype[10];
   (void)GPS_INFO;
 
-  NMEAParser::ExtractParameter(String, responsetype, 0);
-  NMEAParser::ExtractParameter(String, name, 1);
+  TCHAR responsetype[10];
+  line.read(responsetype, 10);
+
+  TCHAR name[80];
+  line.read(name, 80);
 
   if (_tcscmp(name, _T("ERROR")) == 0)
     // ignore error responses...
     return true;
 
-  NMEAParser::ExtractParameter(String, ctemp, 2);
-  long value = _tcstol(ctemp, NULL, 10);
+  long value = line.read(0L);
 
   if (_tcscmp(name, _T("ToneDeadbandCruiseLow")) == 0)
     value = max(value, -value);
@@ -255,30 +248,25 @@ PDVSC(const TCHAR *String, NMEA_INFO *GPS_INFO)
 // $PDVDV,vario,ias,densityratio,altitude,staticpressure
 
 static bool
-PDVDV(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
+PDVDV(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
-  TCHAR ctemp[80];
+  fixed value;
 
-  NMEAParser::ExtractParameter(String,ctemp,0);
-  GPS_INFO->TotalEnergyVario = _tcstod(ctemp, NULL) / 10.0;
-  GPS_INFO->TotalEnergyVarioAvailable = true;
+  GPS_INFO->TotalEnergyVarioAvailable = line.read_checked(value);
+  if (GPS_INFO->TotalEnergyVarioAvailable)
+    GPS_INFO->TotalEnergyVario = value / 10;
 
-  NMEAParser::ExtractParameter(String,ctemp,1);
-  GPS_INFO->IndicatedAirspeed = _tcstod(ctemp, NULL) / 10.0;
-
-  NMEAParser::ExtractParameter(String,ctemp,2);
-  GPS_INFO->TrueAirspeed = fixed(_tcstod(ctemp, NULL)) *
+  GPS_INFO->IndicatedAirspeed = line.read(fixed_zero) / 10;
+  GPS_INFO->TrueAirspeed = line.read(fixed_zero) *
     GPS_INFO->IndicatedAirspeed / 1024;
 
   //hasVega = true;
   GPS_INFO->AirspeedAvailable = true;
 
   if (enable_baro){
-    NMEAParser::ExtractParameter(String,ctemp,3);
-    fixed alt(_tcstod(ctemp, NULL));
     GPS_INFO->BaroAltitudeAvailable = true;
     GPS_INFO->BaroAltitude = GPS_INFO->pressure.
-      AltitudeToQNHAltitude(alt);
+      AltitudeToQNHAltitude(line.read(fixed_zero));
     // JMW 20080716 bug
       // was alt;    // ToDo check if QNH correction is needed!
   }
@@ -291,34 +279,26 @@ PDVDV(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 
 // $PDVDS,nx,nz,flap,stallratio,netto
 static bool
-PDVDS(const TCHAR *String, NMEA_INFO *GPS_INFO)
+PDVDS(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  TCHAR ctemp[80];
-
-  NMEAParser::ExtractParameter(String,ctemp,0);
-  double AccelX = _tcstod(ctemp, NULL) / 100.0;
-  NMEAParser::ExtractParameter(String,ctemp,1);
-  double AccelZ = _tcstod(ctemp, NULL) / 100.0;
+  double AccelX = line.read(0.0);
+  double AccelZ = line.read(0.0);
 
   int mag = isqrt4((int)((AccelX * AccelX + AccelZ * AccelZ) * 10000));
   GPS_INFO->acceleration.Gload = mag/100.0;
   GPS_INFO->acceleration.Available = true;
 
   /*
-  NMEAParser::ExtractParameter(String,ctemp,2);
-  double flap = _tcstod(ctemp, NULL);
+  double flap = line.read(0.0);
   */
+  line.skip();
 
-  NMEAParser::ExtractParameter(String,ctemp,3);
-  GPS_INFO->StallRatio = _tcstod(ctemp, NULL) / 100.0;
+  GPS_INFO->StallRatio = line.read(0.0);
 
-  NMEAParser::ExtractParameter(String,ctemp,4);
-  if (ctemp[0] != '\0') {
-    GPS_INFO->NettoVarioAvailable = true;
-    GPS_INFO->NettoVario = _tcstod(ctemp, NULL) / 10.0;
-  } else {
-    GPS_INFO->NettoVarioAvailable = false;
-  }
+  fixed value;
+  GPS_INFO->NettoVarioAvailable = line.read_checked(value);
+  if (GPS_INFO->NettoVarioAvailable)
+    GPS_INFO->NettoVario = value / 10;
 
   if (device_blackboard.SettingsComputer().EnableCalibration) {
     LogDebug(_T("%g %g %g %g %g %g #te net"),
@@ -335,38 +315,31 @@ PDVDS(const TCHAR *String, NMEA_INFO *GPS_INFO)
 }
 
 static bool
-PDVVT(const TCHAR *String, NMEA_INFO *GPS_INFO)
+PDVVT(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  TCHAR ctemp[80];
+  fixed value;
+  GPS_INFO->TemperatureAvailable = line.read_checked(value);
+  if (GPS_INFO->TemperatureAvailable)
+    GPS_INFO->OutsideAirTemperature = (double)(value / 10) - 273.0;
 
-  NMEAParser::ExtractParameter(String,ctemp,0);
-  GPS_INFO->OutsideAirTemperature = _tcstod(ctemp, NULL) / 10.0 - 273.0;
-  GPS_INFO->TemperatureAvailable = true;
-
-  NMEAParser::ExtractParameter(String,ctemp,1);
-  GPS_INFO->RelativeHumidity = _tcstod(ctemp, NULL); // %
-  GPS_INFO->HumidityAvailable = true;
+  GPS_INFO->HumidityAvailable = line.read_checked(GPS_INFO->RelativeHumidity);
 
   return true;
 }
 
 // PDTSM,duration_ms,"free text"
 static bool
-PDTSM(const TCHAR *String, NMEA_INFO *GPS_INFO)
+PDTSM(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   (void)GPS_INFO;
 
   /*
   int duration = (int)_tcstol(String, NULL, 10);
   */
-
-  String = _tcschr(String, ',');
-  if (String == NULL)
-    return false;
-  ++String;
+  line.skip();
 
   // todo duration handling
-  Message::AddMessage(_T("VEGA:"), String);
+  Message::AddMessage(_T("VEGA:"), line.rest());
 
   return true;
 }
@@ -375,36 +348,29 @@ bool
 VegaDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
                       bool enable_baro)
 {
-  if(_tcsncmp(_T("$PDSWC"), String, 6)==0)
-    return PDSWC(&String[7], GPS_INFO);
+  NMEAInputLine line(String);
+  TCHAR type[16];
+  line.read(type, 16);
 
-  if(_tcsncmp(_T("$PDAAV"), String, 6)==0)
-    return PDAAV(&String[7], GPS_INFO);
-
-  if(_tcsncmp(_T("$PDVSC"), String, 6)==0)
-    return PDVSC(&String[7], GPS_INFO);
-
-  if(_tcsncmp(_T("$PDVDV"), String, 6)==0)
-    return PDVDV(&String[7], GPS_INFO, enable_baro);
-
-  if(_tcsncmp(_T("$PDVDS"), String, 6)==0)
-    return PDVDS(&String[7], GPS_INFO);
-
-  if(_tcsncmp(_T("$PDVVT"), String, 6)==0)
-    return PDVVT(&String[7], GPS_INFO);
-
-  if(_tcsncmp(_T("$PDVSD"), String, 6)==0)
-    {
-      Message::AddMessage(String + 7);
-      return false;
-    }
-  if(_tcsncmp(_T("$PDTSM"), String, 6)==0)
-    {
-      return PDTSM(&String[7], GPS_INFO);
-    }
-
-  return false;
-
+  if (_tcscmp(type, _T("$PDSWC")) == 0)
+    return PDSWC(line, GPS_INFO);
+  else if (_tcscmp(type, _T("$PDAAV")) == 0)
+    return PDAAV(line, GPS_INFO);
+  else if (_tcscmp(type, _T("$PDVSC")) == 0)
+    return PDVSC(line, GPS_INFO);
+  else if (_tcscmp(type, _T("$PDVDV")) == 0)
+    return PDVDV(line, GPS_INFO, enable_baro);
+  else if (_tcscmp(type, _T("$PDVDS")) == 0)
+    return PDVDS(line, GPS_INFO);
+  else if (_tcscmp(type, _T("$PDVVT")) == 0)
+    return PDVVT(line, GPS_INFO);
+  else if (_tcscmp(type, _T("$PDVSD")) == 0) {
+    Message::AddMessage(line.rest());
+    return true;
+  } else if (_tcscmp(type, _T("$PDTSM")) == 0)
+    return PDTSM(line, GPS_INFO);
+  else
+    return false;
 }
 
 bool
