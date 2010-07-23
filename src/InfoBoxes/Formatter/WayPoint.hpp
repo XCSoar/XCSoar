@@ -42,28 +42,6 @@ Copyright_License {
 #include "InfoBoxes/Formatter/Base.hpp"
 
 /** 
- * Formatter for waypoints
- */
-class FormatterWaypoint: public InfoBoxFormatter {
-public:
-  FormatterWaypoint(const TCHAR *theformat) :
-    InfoBoxFormatter(theformat) {}
-
-  virtual const TCHAR *Render(int *color);
-};
-
-/** 
- * Formatter differential bearings
- */
-class FormatterDiffBearing: public InfoBoxFormatter {
-public:
-  FormatterDiffBearing(const TCHAR *theformat) :
-    InfoBoxFormatter(theformat) {}
-
-  virtual const TCHAR *Render(int *color);
-};
-
-/** 
  * Formatter for alternate waypoints
  */
 class FormatterAlternate: public InfoBoxFormatter

@@ -49,33 +49,6 @@ Copyright_License {
 #include "TaskClientUI.hpp"
 
 const TCHAR *
-FormatterWaypoint::Render(int *color)
-{
-  if (const Waypoint* way_point = task_ui.getActiveWaypoint()) {
-    if (Calculated().task_stats.current_leg.solution_remaining.is_final_glide())
-      *color = 2; // blue text
-    else
-      *color = 0; // black text
-
-    if (SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE) {
-      _tcsncpy(Text, way_point->Name.c_str(), 3);
-      Text[3] = '\0';
-    } else if (SettingsMap().DisplayTextType == DISPLAYNUMBER) {
-      _stprintf(Text, _T("%d"), way_point->id);
-    } else {
-      _tcsncpy(Text, way_point->Name.c_str(),
-               (sizeof(Text) / sizeof(TCHAR)) - 1);
-      Text[(sizeof(Text) / sizeof(TCHAR)) - 1] = '\0';
-    }
-  } else {
-    Valid = false;
-    RenderInvalid(color);
-  }
-
-  return Text;
-}
-
-const TCHAR *
 FormatterAlternate::RenderTitle(int *color)
 {
   int ActiveAlternate = -1;
@@ -232,40 +205,3 @@ FormatterAlternate::AssignValue(int i)
       _tcscpy(Format, _T("%1.1f"));
   }
 }
-
-const TCHAR *
-FormatterDiffBearing::Render(int *color)
-{
-  if (Calculated().task_stats.task_valid &&
-      Calculated().task_stats.current_leg.solution_remaining.Vector.Distance >
-      fixed(10)) {
-    Valid = true;
-
-    Value =
-      (Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing -
-       Basic().TrackBearing).as_delta().value_degrees();
-
-#ifndef __MINGW32__
-    if (Value > 1)
-      _stprintf(Text, _T("%2.0f°»"), Value);
-    else if (Value < -1)
-      _stprintf(Text, _T("«%2.0f°"), -Value);
-    else
-      _tcscpy(Text, _T("«»"));
-#else
-    if (Value > 1)
-      _stprintf(Text, _T("%2.0fÂ°Â»"), Value);
-    else if (Value < -1)
-      _stprintf(Text, _T("Â«%2.0fÂ°"), -Value);
-    else
-      _tcscpy(Text, _T("Â«Â»"));
-#endif
-
-    *color = 0;
-  } else {
-    Valid = false;
-    RenderInvalid(color);
-  }
-  return Text;
-}
-
