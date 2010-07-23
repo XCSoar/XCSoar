@@ -321,12 +321,12 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 41
   { ugNone, _T("Task Time To Go"), _T("Fin ETE"),
-    new FormatterAATTime(_T("%04.0f")),
+    NULL,
     42, 40,
   },
   // 42
   { ugNone, _T("Next Time To Go"), _T("WP ETE"),
-    new FormatterAATTime(_T("%04.0f")),
+    NULL,
     45, 41,
   },
   // 43
@@ -341,12 +341,12 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 45
   { ugNone, _T("Task Arrival Time"), _T("Fin ETA"),
-    new FormatterAATTime(_T("%04.0f")),
+    NULL,
     46, 42,
   },
   // 46
   { ugNone, _T("Next Arrival Time"), _T("WP ETA"),
-    new FormatterTime(_T("%04.0f")),
+    NULL,
     14, 45,
   },
   // 47

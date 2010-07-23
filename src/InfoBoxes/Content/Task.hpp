@@ -66,6 +66,18 @@ public:
   virtual void Update(InfoBoxWindow &infobox);
 };
 
+class InfoBoxContentNextETE : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
+class InfoBoxContentNextETA : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
 class InfoBoxContentNextAltitudeDiff : public InfoBoxContent
 {
 public:
@@ -79,6 +91,18 @@ public:
 };
 
 class InfoBoxContentFinalDistance : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
+class InfoBoxContentFinalETE : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
+class InfoBoxContentFinalETA : public InfoBoxContent
 {
 public:
   virtual void Update(InfoBoxWindow &infobox);

@@ -72,13 +72,6 @@ FormatterTime::AssignValue(int i)
     SecsToDisplayTime((int)Calculated().LastThermalTime);
     break;
 
-  case 46:
-    SecsToDisplayTime(
-      (int)(Calculated().task_stats.current_leg.solution_remaining.TimeElapsed
-            + fixed(DetectCurrentTime(&Basic()))));
-    Valid = Calculated().task_stats.current_leg.achievable();
-    break;
-
   default:
     break;
   }
@@ -119,25 +112,6 @@ FormatterAATTime::AssignValue(int i)
     SecsToDisplayTime((int)Calculated().common_stats.aat_time_remaining);
     Valid = Calculated().task_stats.task_valid &&
             positive(Calculated().common_stats.aat_time_remaining) &&
-            Calculated().task_stats.total.achievable();
-    break;
-
-  case 41:
-    SecsToDisplayTime((int)Calculated().task_stats.total.TimeRemaining);
-    Valid = Calculated().task_stats.task_valid &&
-            Calculated().task_stats.total.achievable();
-    break;
-
-  case 42:
-    SecsToDisplayTime((int)Calculated().task_stats.current_leg.TimeRemaining);
-    Valid = Calculated().task_stats.task_valid &&
-            Calculated().task_stats.current_leg.achievable();
-    break;
-
-  case 45:
-    SecsToDisplayTime((int)(Calculated().task_stats.total.TimeRemaining
-                            + fixed(DetectCurrentTime(&Basic()))));
-    Valid = Calculated().task_stats.task_valid &&
             Calculated().task_stats.total.achievable();
     break;
 

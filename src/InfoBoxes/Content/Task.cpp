@@ -44,6 +44,7 @@ Copyright_License {
 #include "TaskClientUI.hpp"
 #include "Dialogs.h"
 #include "MainWindow.hpp"
+#include "LocalTime.hpp"
 
 #include <tchar.h>
 
@@ -224,6 +225,85 @@ InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
 }
 
 void
+InfoBoxContentNextETE::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("WP ETE"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
+      !XCSoarInterface::Calculated().task_stats.current_leg.achievable() ||
+      !positive(XCSoarInterface::Calculated().task_stats.
+                current_leg.TimeRemaining)) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  TCHAR tmp[32];
+  int dd = abs((int)XCSoarInterface::Calculated().
+               task_stats.current_leg.TimeRemaining) % (3600 * 24);
+  int hours = (dd / 3600);
+  int mins = (dd / 60 - hours * 60);
+  int seconds = (dd - mins * 60 - hours * 3600);
+  hours = hours % 24;
+
+  if (hours > 0) { // hh:mm, ss
+    // Set Value
+    _stprintf(tmp, _T("%02d:%02d"), hours, mins);
+    infobox.SetValue(tmp);
+
+    // Set Comment
+    _stprintf(tmp, _T("%02d"), seconds);
+    infobox.SetComment(tmp);
+  } else { // mm:ss
+    // Set Value
+    _stprintf(tmp, _T("%02d:%02d"), mins, seconds);
+    infobox.SetValue(tmp);
+
+    // Set Comment
+    infobox.SetComment(_T(""));
+  }
+}
+
+void
+InfoBoxContentNextETA::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("WP ETA"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
+      !XCSoarInterface::Calculated().task_stats.current_leg.achievable()) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  TCHAR tmp[32];
+  int dd = abs((int)(XCSoarInterface::Calculated().task_stats.current_leg.
+      solution_remaining.TimeElapsed +
+      fixed(DetectCurrentTime(&XCSoarInterface::Basic())))) % (3600 * 24);
+  int hours = (dd / 3600);
+  int mins = (dd / 60 - hours * 60);
+  int seconds = (dd - mins * 60 - hours * 3600);
+  hours = hours % 24;
+
+  if (hours > 0) { // hh:mm, ss
+    // Set Value
+    _stprintf(tmp, _T("%02d:%02d"), hours, mins);
+    infobox.SetValue(tmp);
+
+    // Set Comment
+    _stprintf(tmp, _T("%02d"), seconds);
+    infobox.SetComment(tmp);
+  } else { // mm:ss
+    // Set Value
+    _stprintf(tmp, _T("%02d:%02d"), mins, seconds);
+    infobox.SetValue(tmp);
+
+    // Set Comment
+    infobox.SetComment(_T(""));
+  }
+}
+
+void
 InfoBoxContentNextAltitudeDiff::Update(InfoBoxWindow &infobox)
 {
   // Set Title
@@ -290,6 +370,85 @@ InfoBoxContentFinalDistance::Update(InfoBoxWindow &infobox)
 
   // Set Unit
   infobox.SetValueUnit(Units::DistanceUnit);
+}
+
+void
+InfoBoxContentFinalETE::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Fin ETE"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
+      !XCSoarInterface::Calculated().task_stats.total.achievable() ||
+      !positive(XCSoarInterface::Calculated().task_stats.
+                total.TimeRemaining)) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  TCHAR tmp[32];
+  int dd = abs((int)XCSoarInterface::Calculated().
+               task_stats.total.TimeRemaining) % (3600 * 24);
+  int hours = (dd / 3600);
+  int mins = (dd / 60 - hours * 60);
+  int seconds = (dd - mins * 60 - hours * 3600);
+  hours = hours % 24;
+
+  if (hours > 0) { // hh:mm, ss
+    // Set Value
+    _stprintf(tmp, _T("%02d:%02d"), hours, mins);
+    infobox.SetValue(tmp);
+
+    // Set Comment
+    _stprintf(tmp, _T("%02d"), seconds);
+    infobox.SetComment(tmp);
+  } else { // mm:ss
+    // Set Value
+    _stprintf(tmp, _T("%02d:%02d"), mins, seconds);
+    infobox.SetValue(tmp);
+
+    // Set Comment
+    infobox.SetComment(_T(""));
+  }
+}
+
+void
+InfoBoxContentFinalETA::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Fin ETA"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
+      !XCSoarInterface::Calculated().task_stats.total.achievable()) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  TCHAR tmp[32];
+  int dd = abs((int)(XCSoarInterface::Calculated().task_stats.total.
+      solution_remaining.TimeElapsed +
+      fixed(DetectCurrentTime(&XCSoarInterface::Basic())))) % (3600 * 24);
+  int hours = (dd / 3600);
+  int mins = (dd / 60 - hours * 60);
+  int seconds = (dd - mins * 60 - hours * 3600);
+  hours = hours % 24;
+
+  if (hours > 0) { // hh:mm, ss
+    // Set Value
+    _stprintf(tmp, _T("%02d:%02d"), hours, mins);
+    infobox.SetValue(tmp);
+
+    // Set Comment
+    _stprintf(tmp, _T("%02d"), seconds);
+    infobox.SetComment(tmp);
+  } else { // mm:ss
+    // Set Value
+    _stprintf(tmp, _T("%02d:%02d"), mins, seconds);
+    infobox.SetValue(tmp);
+
+    // Set Comment
+    infobox.SetComment(_T(""));
+  }
 }
 
 void

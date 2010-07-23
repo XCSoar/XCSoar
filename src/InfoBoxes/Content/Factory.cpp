@@ -127,10 +127,18 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentTimeLocal();
   case 40:
     return new InfoBoxContentTimeUTC();
+  case 41:
+    return new InfoBoxContentFinalETE();
+  case 42:
+    return new InfoBoxContentNextETE();
   case 43:
     return new InfoBoxContentSpeedDolphin();
   case 44:
     return new InfoBoxContentVarioNetto();
+  case 45:
+    return new InfoBoxContentFinalETA();
+  case 46:
+    return new InfoBoxContentNextETA();
   case 47:
     return new InfoBoxContentBearingDiff();
   case 48:
