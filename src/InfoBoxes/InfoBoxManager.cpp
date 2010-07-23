@@ -179,7 +179,7 @@ static const SCREEN_INFO Data_Options[] = {
   // 10
   { ugVerticalSpeed, _T("MacCready Setting"), _T("MacCready"),
     NULL,
-    ActionInterface::on_key_MacCready,
+    NULL,
     34, 43,
   },
   // 11

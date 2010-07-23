@@ -42,6 +42,10 @@ Copyright_License {
 #include "Units.hpp"
 #include "Interface.hpp"
 
+#include "Components.hpp"
+#include "TaskClientUI.hpp"
+#include "DeviceBlackboard.hpp"
+
 #include <tchar.h>
 
 void
@@ -65,6 +69,43 @@ InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)
 
   // Set Unit
   infobox.SetValueUnit(Units::VerticalSpeedUnit);
+}
+
+bool
+InfoBoxContentMacCready::HandleKey(unsigned keycode)
+{
+  GlidePolar polar = task_ui.get_glide_polar();
+  double mc = polar.get_mc();
+
+  switch (keycode) {
+  case VK_UP:
+    mc = std::min(mc + (double)0.1, 5.0);
+    polar.set_mc(fixed(mc));
+    task_ui.set_glide_polar(polar);
+    device_blackboard.SetMC(fixed(mc));
+    return true;
+
+  case VK_DOWN:
+    mc = std::max(mc - (double)0.1, 0.0);
+    polar.set_mc(fixed(mc));
+    task_ui.set_glide_polar(polar);
+    device_blackboard.SetMC(fixed(mc));
+    return true;
+
+  case VK_LEFT:
+    XCSoarInterface::SetSettingsComputer().auto_mc = false;
+    return true;
+
+  case VK_RIGHT:
+    XCSoarInterface::SetSettingsComputer().auto_mc = true;
+    return true;
+
+  case VK_RETURN:
+    XCSoarInterface::SetSettingsComputer().auto_mc =
+        !XCSoarInterface::SettingsComputer().auto_mc;
+    return true;
+  }
+  return false;
 }
 
 void
