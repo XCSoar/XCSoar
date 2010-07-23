@@ -480,12 +480,9 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       canvas.round_rectangle(brect.left, brect.top, brect.right, brect.bottom,
           IBLSCALE(8), IBLSCALE(8));
 
-      if (is_embedded()) {
-        canvas.text_opaque(x, y, Value);
-      } else {
-        canvas.background_transparent();
-        canvas.text(x, y, Value);
-      }
+      canvas.background_transparent();
+      canvas.text(x, y, Value);
+      canvas.background_opaque();
 
       drawn = true;
     }
@@ -529,28 +526,17 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     if (notoverlapping) {
       canvas.set_text_color(Color::WHITE);
 
-      if (is_embedded()) {
-        canvas.text_opaque(x + 2, y, Value);
-        canvas.text_opaque(x + 1, y, Value);
-        canvas.text_opaque(x - 1, y, Value);
-        canvas.text_opaque(x - 2, y, Value);
-        canvas.text_opaque(x, y + 1, Value);
-        canvas.text_opaque(x, y - 1, Value);
-        canvas.set_text_color(Color::BLACK);
+      canvas.text(x + 1, y, Value);
+      canvas.text(x + 2, y, Value);
+      canvas.text(x - 1, y, Value);
+      canvas.text(x - 2, y, Value);
+      canvas.text(x, y + 1, Value);
+      canvas.text(x, y - 1, Value);
 
-        canvas.text_opaque(x, y, Value);
-      } else {
-        canvas.background_transparent();
-        canvas.text(x + 1, y, Value);
-        canvas.text(x + 2, y, Value);
-        canvas.text(x - 1, y, Value);
-        canvas.text(x - 2, y, Value);
-        canvas.text(x, y + 1, Value);
-        canvas.text(x, y - 1, Value);
-        canvas.set_text_color(Color::BLACK);
-
-        canvas.text(x, y, Value);
-      }
+      canvas.background_transparent();
+      canvas.set_text_color(Color::BLACK);
+      canvas.text(x, y, Value);
+      canvas.background_opaque();
 
       drawn = true;
     }
@@ -566,12 +552,9 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       notoverlapping = true;
 
     if (notoverlapping) {
-      if (is_embedded()) {
-        canvas.text_opaque(x, y, Value);
-      } else {
-        canvas.background_transparent();
-        canvas.text(x, y, Value);
-      }
+      canvas.background_transparent();
+      canvas.text(x, y, Value);
+      canvas.background_opaque();
 
       drawn = true;
     }

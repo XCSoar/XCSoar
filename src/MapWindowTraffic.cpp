@@ -202,13 +202,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
                                brect.right, brect.bottom,
                                IBLSCALE(8), IBLSCALE(8));
 
-#ifdef WINDOWSPC
         canvas.background_transparent();
         canvas.text(sc_av.x, sc_av.y, label_avg);
-#else
-        // Draw the average climb value on top
-        canvas.text_opaque(sc_av.x, sc_av.y, label_avg);
-#endif
       }
     }
 #endif
