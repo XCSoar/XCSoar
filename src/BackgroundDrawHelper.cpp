@@ -91,11 +91,11 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
   if (!m_terrain || !m_terrain->isTerrainLoaded()) {
     // terrain may have been re-set, so may need new renderer
     reset();
-    canvas.fill_rectangle(rc, MapGfx.hBackgroundBrush);
+    canvas.clear(MapGfx.hBackgroundBrush);
     return;
   }
   if (!settings_map.EnableTerrain) {
-    canvas.fill_rectangle(rc, MapGfx.hBackgroundBrush);
+    canvas.clear(MapGfx.hBackgroundBrush);
     return;
   }
 

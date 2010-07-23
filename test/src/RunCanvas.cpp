@@ -177,12 +177,10 @@ private:
   }
 
   void update() {
-    RECT rc = get_client_rect();
-
     if (buffered) {
       buffer.white_brush();
       buffer.white_pen();
-      buffer.rectangle(rc.left, rc.top, rc.right, rc.bottom);
+      buffer.clear();
 
       paint(buffer);
     }
