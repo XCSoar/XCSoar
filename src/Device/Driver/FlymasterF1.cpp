@@ -41,6 +41,7 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Protection.hpp"
 #include "NMEA/Info.hpp"
+#include "NMEA/InputLine.hpp"
 
 #include <tchar.h>
 #include <stdlib.h>
@@ -53,18 +54,20 @@ public:
 };
 
 static bool
-VARIO(const TCHAR *String, NMEA_INFO *GPS_INFO);
+VARIO(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 
 bool
 FlymasterF1Device::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
                              bool enable_baro)
 {
-  if(_tcsncmp(_T("$VARIO"), String, 6)==0)
-    {
-      return VARIO(&String[7], GPS_INFO);
-    }
+  NMEAInputLine line(String);
+  TCHAR type[16];
+  line.read(type, 16);
 
-  return false;
+  if (_tcscmp(type, _T("$VARIO")) == 0)
+    return VARIO(line, GPS_INFO);
+  else
+    return false;
 }
 
 static Device *
@@ -83,20 +86,22 @@ const struct DeviceRegister flymasterf1Device = {
 // local stuff
 
 static bool
-VARIO(const TCHAR *String, NMEA_INFO *GPS_INFO)
+VARIO(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   // $VARIO,fPressure,fVario,Bat1Volts,Bat2Volts,BatBank,TempSensor1,TempSensor2*CS
 
-  TCHAR ctemp[80];
-  NMEAParser::ExtractParameter(String,ctemp,0);
-  fixed ps(_tcstod(ctemp, NULL));
-  GPS_INFO->BaroAltitude = GPS_INFO->pressure.StaticPressureToQNHAltitude(ps*100);
-  NMEAParser::ExtractParameter(String,ctemp,1);
-  GPS_INFO->TotalEnergyVario = _tcstod(ctemp, NULL) / 10.0;
-  GPS_INFO->TotalEnergyVarioAvailable = true;
-  // JMW vario is in dm/s
+  fixed value;
+  if (line.read_checked(value)) {
+    GPS_INFO->BaroAltitude =
+      GPS_INFO->pressure.StaticPressureToQNHAltitude(value * 100);
+    GPS_INFO->BaroAltitudeAvailable = true;
+  }
 
-  GPS_INFO->BaroAltitudeAvailable = true;
+  if (line.read_checked(value)) {
+    // vario is in dm/s
+    GPS_INFO->TotalEnergyVario = value / 10;
+    GPS_INFO->TotalEnergyVarioAvailable = true;
+  }
 
   TriggerVarioUpdate();
 
