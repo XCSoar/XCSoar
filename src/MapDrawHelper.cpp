@@ -162,14 +162,10 @@ MapDrawHelper::clear_buffer() {
   m_buffer.background_transparent();
   m_buffer.set_background_color(whitecolor);
   m_buffer.set_text_color(whitecolor);
-  m_buffer.white_pen();
-  m_buffer.white_brush();
-  m_buffer.clear();
+  m_buffer.clear_white();
   
   m_stencil.background_transparent();
   m_stencil.set_background_color(whitecolor);
   m_stencil.set_text_color(whitecolor);
-  m_stencil.white_pen();
-  m_stencil.white_brush(); 
-  m_stencil.clear();
+  m_stencil.clear_white();
 }

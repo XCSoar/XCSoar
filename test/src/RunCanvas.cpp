@@ -178,9 +178,7 @@ private:
 
   void update() {
     if (buffered) {
-      buffer.white_brush();
-      buffer.white_pen();
-      buffer.clear();
+      buffer.clear_white();
 
       paint(buffer);
     }

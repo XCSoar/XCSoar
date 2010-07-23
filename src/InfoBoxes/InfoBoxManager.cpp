@@ -890,9 +890,7 @@ InfoBoxManager::Paint()
   } else {
     Canvas &canvas = full_window.get_canvas();
 
-    canvas.white_brush();
-    canvas.white_pen();
-    canvas.clear();
+    canvas.clear_white();
 
     for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++) {
       // JMW TODO: make these calculated once only.

@@ -616,9 +616,7 @@ FlarmTrafficWindow::on_paint(Canvas &canvas)
   assert(warning < 0 || data.FLARM_Traffic[warning].defined());
   assert(warning < 0 || data.FLARM_Traffic[warning].HasAlarm());
 
-  canvas.white_pen();
-  canvas.white_brush();
-  canvas.clear();
+  canvas.clear_white();
 
   PaintRadarBackground(canvas);
   PaintRadarTraffic(canvas);

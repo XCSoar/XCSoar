@@ -223,6 +223,10 @@ public:
     fill_rectangle(0, 0, surface->w, surface->h, brush);
   }
 
+  void clear_white() {
+    clear(Brush(Color::WHITE));
+  }
+
   void round_rectangle(int left, int top, int right, int bottom,
                        unsigned ellipse_width, unsigned ellipse_height) {
     rectangle(left, top, right, bottom); // XXX
@@ -677,6 +681,10 @@ public:
 
   void clear(const Brush &brush) {
     fill_rectangle(0, 0, width, height, brush);
+  }
+
+  void clear_white() {
+    ::BitBlt(dc, 0, 0, width, height, NULL, 0, 0, WHITENESS);
   }
 
   void round_rectangle(int left, int top, int right, int bottom,
