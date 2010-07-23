@@ -51,6 +51,7 @@ Copyright_License {
 #include "Device/Volkslogger/vlapihlp.h"
 #include "Components.hpp"
 #include "NMEA/Info.hpp"
+#include "NMEA/InputLine.hpp"
 #include "Waypoint/Waypoint.hpp"
 
 class VolksloggerDevice : public AbstractDevice {
@@ -71,13 +72,13 @@ public:
 // $PGCS,1,0EC0,FFF9,0C6E,02*61
 // $PGCS,1,0EC0,FFFA,0C6E,03*18
 static bool
-vl_PGCS1(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
+vl_PGCS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   GPS_STATE &gps = GPS_INFO->gps;
 
   TCHAR ctemp[80];
+  line.read(ctemp, 80);
 
-  NMEAParser::ExtractParameter(String,ctemp,2);
   // four characers, hex, barometric altitude
   fixed InternalAltitude(HexStrToDouble(ctemp, NULL));
 
@@ -119,12 +120,14 @@ VolksloggerDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
   if (!NMEAParser::NMEAChecksum(String))
     return false;
 
-  if(_tcsstr(String, _T("$PGCS,")) == String){
-    return vl_PGCS1(&String[6], GPS_INFO, enable_baro);
-  }
+  NMEAInputLine line(String);
+  TCHAR type[16];
+  line.read(type, 16);
 
-  return false;
-
+  if (_tcscmp(type, _T("$PGCS")) == 0)
+    return vl_PGCS1(line, GPS_INFO, enable_baro);
+  else
+    return false;
 }
 
 static VLAPI vl;
