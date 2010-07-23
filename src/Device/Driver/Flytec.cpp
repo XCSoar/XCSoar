@@ -40,6 +40,7 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/Internal.hpp"
 #include "NMEA/Info.hpp"
+#include "NMEA/InputLine.hpp"
 #include "Protection.hpp"
 #include "Units.hpp"
 
@@ -59,43 +60,21 @@ public:
                          bool enable_baro);
 };
 
-#ifdef FIXED_MATH
-static bool
-ParseNumber(const TCHAR *line, unsigned column, fixed &value_r)
-{
-  TCHAR buffer[80];
-  NMEAParser::ExtractParameter(line, buffer, column);
-
-  TCHAR *endptr;
-  value_r = _tcstod(buffer, &endptr);
-  return endptr > buffer && *endptr == '\0';
-}
-#endif
-
-static bool
-ParseNumber(const TCHAR *line, unsigned column, double &value_r)
-{
-  TCHAR buffer[80];
-  NMEAParser::ExtractParameter(line, buffer, column);
-
-  TCHAR *endptr;
-  value_r = _tcstod(buffer, &endptr);
-  return endptr > buffer && *endptr == '\0';
-}
-
 /**
  * Parse a "$BRSF" sentence.
  *
  * Example: "$BRSF,063,-013,-0035,1,193,00351,535,485*38"
  */
 static bool
-FlytecParseBRSF(const TCHAR *line, NMEA_INFO &info, bool enable_baro)
+FlytecParseBRSF(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
 {
+  fixed value;
+
   // 0 = indicated or true airspeed [km/h]
   // XXX is that TAS or IAS?  Documentation isn't clear.
-  info.AirspeedAvailable = ParseNumber(line, 0, info.TrueAirspeed);
+  info.AirspeedAvailable = line.read_checked_compare(value, _T("KH"));
   if (info.AirspeedAvailable) {
-    info.TrueAirspeed = Units::ToSysUnit(info.TrueAirspeed, unKiloMeterPerHour);
+    info.TrueAirspeed = Units::ToSysUnit(value, unKiloMeterPerHour);
     info.IndicatedAirspeed = info.TrueAirspeed;
   }
 
@@ -116,59 +95,54 @@ FlytecParseBRSF(const TCHAR *line, NMEA_INFO &info, bool enable_baro)
  * Example: "$VMVABD,0000.0,M,0547.0,M,-0.0,,,MS,0.0,KH,22.4,C*65"
  */
 static bool
-FlytecParseVMVABD(const TCHAR *line, NMEA_INFO &info, bool enable_baro)
+FlytecParseVMVABD(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
 {
-  TCHAR unit[20];
+  fixed value;
 
   // 0,1 = GPS altitude, unit
-  NMEAParser::ExtractParameter(line, unit, 1);
-  if (_tcscmp(unit, _T("M")) == 0) {
-    // XXX is that TAS or IAS?  Documentation isn't clear.
-    ParseNumber(line, 0, info.GPSAltitude);
-  }
+  line.read_checked_compare(info.GPSAltitude, _T("M"));
 
   // 2,3 = baro altitude, unit
+  bool available = line.read_checked_compare(value, _T("M"));
   if (enable_baro) {
-    NMEAParser::ExtractParameter(line, unit, 3);
-    if (_tcscmp(unit, _T("M")) == 0) {
-      // XXX is that TAS or IAS?  Documentation isn't clear.
-      info.BaroAltitudeAvailable = ParseNumber(line, 2, info.BaroAltitude);
-    }
+    if (available)
+      info.BaroAltitude = value;
+    info.BaroAltitudeAvailable = available;
   }
 
   // 4-7 = integrated vario, unit
+  line.skip(4);
 
   // 8,9 = indicated or true airspeed, unit
-  NMEAParser::ExtractParameter(line, unit, 9);
-  if (_tcscmp(unit, _T("KH")) == 0) {
+  info.AirspeedAvailable = line.read_checked_compare(value, _T("KH"));
+  if (info.AirspeedAvailable) {
     // XXX is that TAS or IAS?  Documentation isn't clear.
-    info.AirspeedAvailable = ParseNumber(line, 8, info.TrueAirspeed);
-    if (info.AirspeedAvailable) {
-      info.TrueAirspeed = Units::ToSysUnit(info.TrueAirspeed,
-                                           unKiloMeterPerHour);
-      info.IndicatedAirspeed = info.TrueAirspeed;
-    }
+    info.TrueAirspeed = Units::ToSysUnit(value, unKiloMeterPerHour);
+    info.IndicatedAirspeed = info.TrueAirspeed;
   }
 
   // 10,11 = temperature, unit
-  NMEAParser::ExtractParameter(line, unit, 11);
-  if (_tcscmp(unit, _T("C")) == 0)
-    info.TemperatureAvailable = ParseNumber(line, 10,
-                                            info.OutsideAirTemperature);
+  info.TemperatureAvailable =
+    line.read_checked_compare(value, _T("C"));
+  if (info.TemperatureAvailable)
+    info.OutsideAirTemperature = value;
 
   return true;
 }
 
 bool
-FlytecDevice::ParseNMEA(const TCHAR *line, NMEA_INFO *info, bool enable_baro)
+FlytecDevice::ParseNMEA(const TCHAR *_line, NMEA_INFO *info, bool enable_baro)
 {
-  if (_tcsncmp(_T("$BRSF,"), line, 6) == 0)
-    return FlytecParseBRSF(line + 6, *info, enable_baro);
+  NMEAInputLine line(_line);
+  TCHAR type[16];
+  line.read(type, 16);
 
-  if (_tcsncmp(_T("$VMVABD,"), line, 8) == 0)
-    return FlytecParseVMVABD(line + 8, *info, enable_baro);
-
-  return false;
+  if (_tcscmp(type, _T("$BRSF")) == 0)
+    return FlytecParseBRSF(line, *info, enable_baro);
+  else if (_tcscmp(type, _T("$VMVABD")) == 0)
+    return FlytecParseVMVABD(line, *info, enable_baro);
+  else
+    return false;
 }
 
 static Device *
