@@ -71,6 +71,10 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Asset.hpp"
 #include "MenuData.hpp"
 #include "IO/FileLineReader.hpp"
+#include "SettingsUser.hpp"
+#include "Screen/Blank.hpp"
+#include "MapWindowProjection.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -952,9 +956,6 @@ InputEvents::processGo(int eventid)
   }
 }
 
-#include "SettingsUser.hpp"
-#include "Screen/Blank.hpp"
-
 int InputEvents::MenuTimeOut = 0;
 
 void
@@ -985,9 +986,6 @@ InputEvents::ShowMenu()
   MenuTimeOut = 0;
   ProcessMenuTimer();
 }
-
-#include "MapWindowProjection.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
 
 void
 InputEvents::ProcessMenuTimer()
