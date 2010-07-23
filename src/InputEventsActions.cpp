@@ -95,6 +95,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "AirspaceClientUI.hpp"
 #include "DrawThread.hpp"
 #include "Replay/Replay.hpp"
+#include "DeviceBlackboard.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -735,17 +736,26 @@ InputEvents::eventPlaySound(const TCHAR *misc)
 void
 InputEvents::eventMacCready(const TCHAR *misc)
 {
-  if (_tcscmp(misc, TEXT("up")) == 0)
-    on_key_MacCready(ibkUp);
-  else if (_tcscmp(misc, TEXT("down")) == 0)
-    on_key_MacCready(ibkDown);
-  else if (_tcscmp(misc, TEXT("auto toggle")) == 0)
-    on_key_MacCready(ibkEnter);
-  else if (_tcscmp(misc, TEXT("auto on")) == 0)
-    on_key_MacCready(ibkRight);
-  else if (_tcscmp(misc, TEXT("auto off")) == 0)
-    on_key_MacCready(ibkLeft);
-  else if (_tcscmp(misc, TEXT("auto show")) == 0) {
+  GlidePolar polar = task_ui.get_glide_polar();
+  double mc = polar.get_mc();
+
+  if (_tcscmp(misc, TEXT("up")) == 0) {
+    mc = std::min(mc + (double)0.1, 5.0);
+    polar.set_mc(fixed(mc));
+    task_ui.set_glide_polar(polar);
+    device_blackboard.SetMC(fixed(mc));
+  } else if (_tcscmp(misc, TEXT("down")) == 0) {
+    mc = std::max(mc - (double)0.1, 0.0);
+    polar.set_mc(fixed(mc));
+    task_ui.set_glide_polar(polar);
+    device_blackboard.SetMC(fixed(mc));
+  } else if (_tcscmp(misc, TEXT("auto toggle")) == 0) {
+    SetSettingsComputer().auto_mc = !SettingsComputer().auto_mc;
+  } else if (_tcscmp(misc, TEXT("auto on")) == 0) {
+    SetSettingsComputer().auto_mc = true;
+  } else if (_tcscmp(misc, TEXT("auto off")) == 0) {
+    SetSettingsComputer().auto_mc = false;
+  } else if (_tcscmp(misc, TEXT("auto show")) == 0) {
     if (SettingsComputer().auto_mc) {
       Message::AddMessage(TEXT("Auto MacCready ON"));
     } else {
@@ -933,13 +943,13 @@ void
 InputEvents::eventAdjustWaypoint(const TCHAR *misc)
 {
   if (_tcscmp(misc, TEXT("next")) == 0)
-    on_key_Waypoint(ibkUp); // next
+    task_ui.incrementActiveTaskPoint(1); // next
   else if (_tcscmp(misc, TEXT("nextwrap")) == 0)
-    on_key_Waypoint(ibkRight); // next - with wrap
+    task_ui.incrementActiveTaskPoint(1); // next - with wrap
   else if (_tcscmp(misc, TEXT("previous")) == 0)
-    on_key_Waypoint(ibkDown); // previous
+    task_ui.incrementActiveTaskPoint(-1); // previous
   else if (_tcscmp(misc, TEXT("previouswrap")) == 0)
-    on_key_Waypoint(ibkLeft); // previous with wrap
+    task_ui.incrementActiveTaskPoint(-1); // previous with wrap
 }
 
 // AbortTask

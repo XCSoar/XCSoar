@@ -239,7 +239,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/Formatter/Time.cpp \
 	$(SRC)/InfoBoxes/InfoBoxWindow.cpp \
 	$(SRC)/InfoBoxes/InfoBoxLayout.cpp \
-	$(SRC)/InfoBoxes/InfoBoxEvents.cpp \
 	$(SRC)/InfoBoxes/InfoBoxManager.cpp \
 	$(SRC)/InputEvents.cpp \
 	$(SRC)/InputEventsActions.cpp \
