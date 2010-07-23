@@ -119,7 +119,7 @@ static const SCREEN_INFO Data_Options[] = {
   // 0
   { ugAltitude, _T("Height GPS"), _T("H GPS"),
     NULL,
-    ActionInterface::on_key_Altitude,
+    NULL,
     1, 33,
   },
   // 1

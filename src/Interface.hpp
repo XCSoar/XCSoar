@@ -162,7 +162,6 @@ public:
   static void on_key_Waypoint(InfoBoxKeyCodes UpDown);
   static void on_key_Speed(InfoBoxKeyCodes UpDown);
   static void on_key_Direction(InfoBoxKeyCodes UpDown);
-  static void on_key_Altitude(InfoBoxKeyCodes UpDown);
   static void on_key_Alternate1(InfoBoxKeyCodes UpDown);
   static void on_key_Alternate2(InfoBoxKeyCodes UpDown);
   static void on_key_BestAlternate(InfoBoxKeyCodes UpDown);

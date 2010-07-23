@@ -42,6 +42,9 @@ Copyright_License {
 #include "Units.hpp"
 #include "Interface.hpp"
 
+#include "DeviceBlackboard.hpp"
+#include "Simulator.hpp"
+
 #include <tchar.h>
 
 void
@@ -64,6 +67,40 @@ InfoBoxContentAltitudeGPS::Update(InfoBoxWindow &infobox)
 
   // Set Unit
   infobox.SetValueUnit(Units::AltitudeUnit);
+}
+
+bool
+InfoBoxContentAltitudeGPS::HandleKey(const unsigned keycode)
+{
+  if (!is_simulator())
+    return false;
+
+  fixed fixed_step = (fixed)Units::ToSysUnit(100, Units::AltitudeUnit);
+  const Angle a5 = Angle::degrees(fixed(5));
+
+  switch (keycode) {
+  case VK_UP:
+    device_blackboard.SetAltitude(
+        XCSoarInterface::Basic().GPSAltitude + fixed_step);
+    return true;
+
+  case VK_DOWN:
+    device_blackboard.SetAltitude(
+        max(fixed_zero, XCSoarInterface::Basic().GPSAltitude - fixed_step));
+    return true;
+
+  case VK_LEFT:
+    device_blackboard.SetTrackBearing(
+        XCSoarInterface::Basic().TrackBearing - a5);
+    return true;
+
+  case VK_RIGHT:
+    device_blackboard.SetTrackBearing(
+        XCSoarInterface::Basic().TrackBearing + a5);
+    return true;
+  }
+
+  return false;
 }
 
 void

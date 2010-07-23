@@ -111,25 +111,6 @@ ActionInterface::on_key_TeamCode(InfoBoxKeyCodes UpDown)
 }
 
 void
-ActionInterface::on_key_Altitude(InfoBoxKeyCodes UpDown)
-{
-  if (!is_simulator())
-    return;
-
-  fixed fixed_step = (fixed)Units::ToSysUnit(100, Units::AltitudeUnit);
-
-  if (UpDown == ibkUp)
-    device_blackboard.SetAltitude(Basic().GPSAltitude + fixed_step);
-  else if (UpDown == ibkDown)
-    device_blackboard.SetAltitude(max(fixed_zero,
-                                      Basic().GPSAltitude - fixed_step));
-  else if (UpDown == ibkLeft)
-    on_key_Direction(ibkDown);
-  else if (UpDown == ibkRight)
-    on_key_Direction(ibkUp);
-}
-
-void
 ActionInterface::on_key_Alternate1(InfoBoxKeyCodes UpDown)
 {
 #ifdef OLD_TASK // alternates
