@@ -716,14 +716,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
   // Infobox bottom line
   //
   switch (type) {
-  case 43:
-    if (SettingsComputer().EnableBlockSTF)
-      info_box.SetComment(_T("BLOCK"));
-    else
-      info_box.SetComment(_T("DOLPHIN"));
-
-    break;
-
   case 60:
     _stprintf(sTmp, _T("%d%s"),
               (int)Calculated().common_stats.vector_home.Bearing.value_degrees(), 
