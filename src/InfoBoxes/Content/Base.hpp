@@ -45,6 +45,9 @@ class InfoBoxContent
 {
 public:
   virtual void Update(InfoBoxWindow &infobox) = 0;
+  virtual bool HandleKey(const unsigned keycode) {
+    return false;
+  }
 };
 
 #endif
