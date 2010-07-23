@@ -616,18 +616,11 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
     return true;
 
   double speed = _tcstod(params[6], NULL);
+  gps.MovementDetected = speed > 2.0;
 
-  if (speed > 2.0) {
-    gps.MovementDetected = true;
-    if (gps.Replay) {
-      return true;
-    }
-  } else {
-    gps.MovementDetected = false;
-    if (gps.Replay)
-      // block actual GPS signal if not moving and a log is being replayed
-      return true;
-  }
+  if (gps.Replay)
+    // block actual GPS signal if not moving and a log is being replayed
+    return true;
 
   gps.NAVWarning = !gpsValid;
 
