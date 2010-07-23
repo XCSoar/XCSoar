@@ -46,7 +46,9 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/Port.hpp"
 #include "NMEA/Info.hpp"
+#include "NMEA/InputLine.hpp"
 #include "Waypoint/Waypoint.hpp"
+#include "Units.hpp"
 
 #include <tchar.h>
 #include <assert.h>
@@ -97,28 +99,41 @@ ExpectStringWait(ComPort *port, const char *token)
   return true;
 }
 
+static bool
+ReadAltitude(NMEAInputLine &line, fixed &value_r)
+{
+  fixed value;
+  bool available = line.read_checked(value);
+  TCHAR unit = line.read_first_char();
+  if (!available)
+    return false;
+
+  if (unit == _T('f') || unit == _T('F'))
+    value = Units::ToSysUnit(value, unFeet);
+
+  value_r = value;
+  return true;
+}
+
 bool
 EWMicroRecorderDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
                                  bool enable_baro)
 {
-  TCHAR ctemp[80];
-  const TCHAR *params[5];
-  int nparams = NMEAParser::ValidateAndExtract(String, ctemp, 80, params, 5);
-  if (nparams < 1)
+  if (!NMEAParser::NMEAChecksum(String))
     return false;
 
-  if (!_tcscmp(params[0], _T("$PGRMZ")) && nparams >= 3) {
-    if (enable_baro) {
-      fixed altitude(NMEAParser::ParseAltitude(params[1], params[2]));
+  NMEAInputLine line(String);
+  TCHAR type[16];
+  line.read(type, 16);
 
-      GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(altitude);
-      GPS_INFO->BaroAltitudeAvailable = true;
-    }
+  if (_tcscmp(type, _T("$PGRMZ")) == 0) {
+    if (enable_baro)
+      GPS_INFO->BaroAltitudeAvailable =
+        ReadAltitude(line, GPS_INFO->BaroAltitude);
 
     return true;
-  }
-
-  return false;
+  } else
+    return false;
 }
 
 bool
