@@ -716,21 +716,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
   // Infobox bottom line
   //
   switch (type) {
-
-  case 27: // AAT time to go
-  case 36: // flight time
-  case 41: // task time to go
-  case 42: // task time to go
-  case 45: // ete
-  case 46: // leg ete
-  case 62: // ete
-    if (Data_Options[type].Formatter->isValid())
-      info_box.SetComment(Data_Options[type].Formatter->GetCommentText());
-    else
-      info_box.SetComment(_T(""));
-
-    break;
-
   case 43:
     if (SettingsComputer().EnableBlockSTF)
       info_box.SetComment(_T("BLOCK"));
