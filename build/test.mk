@@ -361,6 +361,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/MapWindowTraffic.cpp \
 	$(SRC)/MapWindowTrail.cpp \
 	$(SRC)/MapWindowWaypoints.cpp \
+	$(SRC)/MapCanvas.cpp \
 	$(SRC)/MapDrawHelper.cpp \
 	$(SRC)/RenderTask.cpp \
 	$(SRC)/RenderTaskPoint.cpp \

@@ -39,9 +39,9 @@ Copyright_License {
 #define XCSOAR_RENDER_TASK_POINT_HPP
 
 #include "Navigation/GeoPoint.hpp"
-#include "Navigation/SearchPointVector.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Screen/Pen.hpp"
+#include "MapCanvas.hpp"
 
 class Canvas;
 class Projection;
@@ -55,6 +55,7 @@ class RenderTaskPoint:
 protected:
   Canvas &m_canvas, &m_buffer;
   const Projection &m_proj;
+  MapCanvas map_canvas;
   const SETTINGS_MAP &m_settings_map;
 
 public:
@@ -99,9 +100,6 @@ protected:
   unsigned m_active_index;
   unsigned m_layer;
   const GEOPOINT m_location;
-
-  void draw_great_circle(const GEOPOINT &a, const GEOPOINT &b);
-  void draw_search_point_vector(const SearchPointVector &points);
 };
 
 

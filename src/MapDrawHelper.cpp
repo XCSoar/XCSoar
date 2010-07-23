@@ -38,6 +38,7 @@ Copyright_License {
 #include "MapDrawHelper.hpp"
 #include "Projection.hpp"
 #include "SettingsUser.hpp"
+#include "MapCanvas.hpp"
 
 MapDrawHelper::MapDrawHelper(Canvas &_canvas, 
                              Canvas &_buffer, 
@@ -95,41 +96,8 @@ void
 MapDrawHelper::draw_great_circle(Canvas& the_canvas, const GEOPOINT &from,
                                  const GEOPOINT &to) 
 {
-  const fixed distance = from.distance(to);
-  if (!positive(distance)) {
-    return;
-  }
-/*
-  const fixed sc_distance = min(m_proj.GetScreenDistanceMeters()/2, distance/4);
-  std::vector<POINT> screen;
-  bool visible = add_if_visible(screen, from);
-  GEOPOINT p_last = from;
-  for (fixed t=sc_distance; t<= distance; t+= sc_distance) {
-    const GEOPOINT p =  from.interpolate(to, t/distance); 
-//          from.intermediate_point(to, t);
-    
-    if (m_proj.LonLatVisible(p)) {
-      if (!visible) {
-        add(screen, p_last);
-      }
-      add(screen, p);
-      visible = true;
-    } else {
-      if (visible) {
-        add(screen, p);
-      } 
-      visible = false;
-    }
-    p_last = p;
-  }
-  if (screen.size()>1) {
-    the_canvas.polygon(&screen[0], screen.size());
-  }
-*/
-  std::vector<POINT> screen;
-  add(screen, from);
-  add(screen, to);
-  the_canvas.autoclip_polyline(&screen[0], screen.size(), m_rc);
+  MapCanvas map_canvas(the_canvas, m_proj);
+  map_canvas.line(from, to);
 }
 
 void 
@@ -140,12 +108,11 @@ MapDrawHelper::draw_search_point_vector(Canvas& the_canvas,
   if (size<3) {
     return;
   }
-  std::vector<POINT> screen; 
-  screen.reserve(size);
-  for (SearchPointVector::const_iterator it = points.begin();
-       it!= points.end(); ++it) {
-    add(screen, it->get_location());
-  }
+
+  MapCanvas map_canvas(the_canvas, m_proj);
+  POINT screen[size];
+  map_canvas.project(points, screen);
+
   the_canvas.polygon(&screen[0], size);
   if (m_use_stencil) {
     m_stencil.polygon(&screen[0], size);
