@@ -419,7 +419,7 @@ static const SCREEN_INFO Data_Options[] = {
   // 50
   { ugNone, _T("Forecast Temperature"), _T("MaxTemp"),
     NULL,
-    ActionInterface::on_key_ForecastTemperature, 
+    NULL,
     49, 25,
   },
   // 51

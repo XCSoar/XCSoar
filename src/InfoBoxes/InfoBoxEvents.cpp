@@ -230,15 +230,6 @@ ActionInterface::on_key_MacCready(InfoBoxKeyCodes UpDown)
   device_blackboard.SetMC(fixed(MACCREADY));
 }
 
-void
-ActionInterface::on_key_ForecastTemperature(InfoBoxKeyCodes UpDown)
-{
-  if (UpDown == ibkUp)
-    CuSonde::adjustForecastTemperature(0.5);
-  else if (UpDown == ibkDown)
-    CuSonde::adjustForecastTemperature(-0.5);
-}
-
 /*
 	1	Next waypoint
 	0	Show waypoint details

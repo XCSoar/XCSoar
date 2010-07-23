@@ -81,6 +81,22 @@ InfoBoxContentTemperatureForecast::Update(InfoBoxWindow &infobox)
   infobox.SetValue(tmp);
 }
 
+bool
+InfoBoxContentTemperatureForecast::HandleKey(const unsigned keycode)
+{
+  switch(keycode) {
+  case VK_UP:
+    CuSonde::adjustForecastTemperature(0.5);
+    return true;
+
+  case VK_DOWN:
+    CuSonde::adjustForecastTemperature(-0.5);
+    return true;
+  }
+
+  return false;
+}
+
 void
 InfoBoxContentWindSpeed::Update(InfoBoxWindow &infobox)
 {
