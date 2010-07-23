@@ -339,6 +339,32 @@ InfoBoxContentNextAltitudeRequire::Update(InfoBoxWindow &infobox)
 }
 
 void
+InfoBoxContentNextLD::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Fin LD"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+#ifdef OLD_TASK
+  if (XCSoarInterface::Calculated().LDNext != 999) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f"), XCSoarInterface::Calculated().LDNext);
+  infobox.SetValue(tmp);
+#else
+  infobox.SetInvalid();
+#endif
+}
+
+void
 InfoBoxContentFinalDistance::Update(InfoBoxWindow &infobox)
 {
   // Set Title

@@ -133,6 +133,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentTimeFlight();
   case 37:
     return new InfoBoxContentGLoad();
+  case 38:
+    return new InfoBoxContentNextLD();
   case 39:
     return new InfoBoxContentTimeLocal();
   case 40:

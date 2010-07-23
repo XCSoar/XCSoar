@@ -95,17 +95,6 @@ void
 InfoBoxFormatter::AssignValue(int i)
 {
   switch (i) {
-  case 38:
-#ifdef OLD_TASK
-    if (Calculated().LDNext== 999) {
-      Valid = false;
-    } else {
-      Valid = Calculated().task_stats.task_valid;
-      Value = Calculated().LDNext;
-    }
-#endif
-    break;
-
   case 65: // battery voltage
 #if !defined(WINDOWSPC) && !defined(HAVE_POSIX)
     if (!is_altair()) {

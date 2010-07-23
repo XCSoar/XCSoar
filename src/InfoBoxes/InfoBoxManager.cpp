@@ -306,7 +306,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 38
   { ugNone, _T("Next LD"), _T("WP LD"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     53, 19,
   },
   // 39
