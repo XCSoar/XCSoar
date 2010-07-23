@@ -113,10 +113,6 @@ InfoBoxFormatter::AssignValue(int i)
     }
     break;
 
-  case 34:
-    Value = Units::ToUserSpeed(Calculated().common_stats.V_block);
-    break;
-
   case 37:
     Valid = Basic().acceleration.Available;
     Value = Basic().acceleration.Gload;
@@ -131,10 +127,6 @@ InfoBoxFormatter::AssignValue(int i)
       Value = Calculated().LDNext;
     }
 #endif
-    break;
-
-  case 43:
-    Value = Units::ToUserSpeed(Calculated().V_stf);
     break;
 
   case 53:

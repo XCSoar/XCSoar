@@ -62,4 +62,16 @@ public:
   virtual bool HandleKey(const InfoBoxKeyCodes keycode);
 };
 
+class InfoBoxContentSpeedMacCready : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
+class InfoBoxContentSpeedDolphin : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
 #endif

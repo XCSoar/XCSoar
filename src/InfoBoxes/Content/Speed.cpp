@@ -172,3 +172,36 @@ InfoBoxContentSpeed::HandleKey(const InfoBoxKeyCodes keycode)
 
   return false;
 }
+
+void
+InfoBoxContentSpeedMacCready::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("V Mc"));
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserSpeed(
+      XCSoarInterface::Calculated().common_stats.V_block));
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::SpeedUnit);
+}
+
+void
+InfoBoxContentSpeedDolphin::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("V Opt"));
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserSpeed(
+      XCSoarInterface::Calculated().V_stf));
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::SpeedUnit);
+}
+

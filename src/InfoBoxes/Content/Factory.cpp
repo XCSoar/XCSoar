@@ -117,6 +117,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentSpeedIndicated();
   case 33:
     return new InfoBoxContentAltitudeBaro();
+  case 34:
+    return new InfoBoxContentSpeedMacCready();
   case 35:
     return new InfoBoxContentThermalRatio();
   case 36:
@@ -125,6 +127,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentTimeLocal();
   case 40:
     return new InfoBoxContentTimeUTC();
+  case 43:
+    return new InfoBoxContentSpeedDolphin();
   case 44:
     return new InfoBoxContentVarioNetto();
   case 47:

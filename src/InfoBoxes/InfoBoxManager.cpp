@@ -286,7 +286,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 34
   { ugHorizontalSpeed, _T("Speed MacCready"), _T("V Mc"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     35, 10,
   },
   // 35
@@ -331,7 +331,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 43
   { ugHorizontalSpeed, _T("Speed Dolphin"), _T("V Opt"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     10, 35,
   },
   // 44
