@@ -70,7 +70,7 @@ InfoBoxContentAltitudeGPS::Update(InfoBoxWindow &infobox)
 }
 
 bool
-InfoBoxContentAltitudeGPS::HandleKey(const unsigned keycode)
+InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
 {
   if (!is_simulator())
     return false;
@@ -79,22 +79,22 @@ InfoBoxContentAltitudeGPS::HandleKey(const unsigned keycode)
   const Angle a5 = Angle::degrees(fixed(5));
 
   switch (keycode) {
-  case VK_UP:
+  case ibkUp:
     device_blackboard.SetAltitude(
         XCSoarInterface::Basic().GPSAltitude + fixed_step);
     return true;
 
-  case VK_DOWN:
+  case ibkDown:
     device_blackboard.SetAltitude(
         max(fixed_zero, XCSoarInterface::Basic().GPSAltitude - fixed_step));
     return true;
 
-  case VK_LEFT:
+  case ibkLeft:
     device_blackboard.SetTrackBearing(
         XCSoarInterface::Basic().TrackBearing - a5);
     return true;
 
-  case VK_RIGHT:
+  case ibkRight:
     device_blackboard.SetTrackBearing(
         XCSoarInterface::Basic().TrackBearing + a5);
     return true;

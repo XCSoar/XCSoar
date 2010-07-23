@@ -375,6 +375,16 @@ InfoBoxWindow::UpdateContent()
 }
 
 bool
+InfoBoxWindow::HandleKey(InfoBoxContent::InfoBoxKeyCodes keycode)
+{
+  if (content != NULL && content->HandleKey(keycode)) {
+    UpdateContent();
+    return true;
+  }
+  return false;
+}
+
+bool
 InfoBoxWindow::on_resize(unsigned width, unsigned height)
 {
   PaintWindow::on_resize(width, height);
@@ -410,18 +420,6 @@ InfoBoxWindow::on_resize(unsigned width, unsigned height)
 bool
 InfoBoxWindow::on_key_down(unsigned key_code)
 {
-  if (content != NULL && content->HandleKey(key_code)) {
-    // restart focus timer if not idle
-    if (focus_timer != 0)
-      kill_timer(focus_timer);
-
-    focus_timer = set_timer(100, FOCUSTIMEOUTMAX * 500);
-
-    UpdateContent();
-
-    return true;
-  }
-
   // Get the input event_id of the event
   unsigned event_id = InputEvents::key_to_event(InputEvents::MODE_INFOBOX,
                                                 key_code);

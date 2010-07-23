@@ -72,35 +72,35 @@ InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)
 }
 
 bool
-InfoBoxContentMacCready::HandleKey(unsigned keycode)
+InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
 {
   GlidePolar polar = task_ui.get_glide_polar();
   double mc = polar.get_mc();
 
   switch (keycode) {
-  case VK_UP:
+  case ibkUp:
     mc = std::min(mc + (double)0.1, 5.0);
     polar.set_mc(fixed(mc));
     task_ui.set_glide_polar(polar);
     device_blackboard.SetMC(fixed(mc));
     return true;
 
-  case VK_DOWN:
+  case ibkDown:
     mc = std::max(mc - (double)0.1, 0.0);
     polar.set_mc(fixed(mc));
     task_ui.set_glide_polar(polar);
     device_blackboard.SetMC(fixed(mc));
     return true;
 
-  case VK_LEFT:
+  case ibkLeft:
     XCSoarInterface::SetSettingsComputer().auto_mc = false;
     return true;
 
-  case VK_RIGHT:
+  case ibkRight:
     XCSoarInterface::SetSettingsComputer().auto_mc = true;
     return true;
 
-  case VK_RETURN:
+  case ibkEnter:
     XCSoarInterface::SetSettingsComputer().auto_mc =
         !XCSoarInterface::SettingsComputer().auto_mc;
     return true;

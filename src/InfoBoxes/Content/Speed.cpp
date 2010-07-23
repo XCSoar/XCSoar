@@ -64,7 +64,7 @@ InfoBoxContentSpeedGround::Update(InfoBoxWindow &infobox)
 }
 
 bool
-InfoBoxContentSpeedGround::HandleKey(unsigned keycode)
+InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
 {
   if (!is_simulator())
     return false;
@@ -73,22 +73,22 @@ InfoBoxContentSpeedGround::HandleKey(unsigned keycode)
   const Angle a5 = Angle::degrees(fixed(5));
 
   switch (keycode) {
-  case VK_UP:
+  case ibkUp:
     device_blackboard.SetSpeed(
         XCSoarInterface::Basic().GroundSpeed + fixed_step);
     return true;
 
-  case VK_DOWN:
+  case ibkDown:
     device_blackboard.SetSpeed(
         max(fixed_zero, XCSoarInterface::Basic().GroundSpeed - fixed_step));
     return true;
 
-  case VK_LEFT:
+  case ibkLeft:
     device_blackboard.SetTrackBearing(
         XCSoarInterface::Basic().TrackBearing - a5);
     return true;
 
-  case VK_RIGHT:
+  case ibkRight:
     device_blackboard.SetTrackBearing(
         XCSoarInterface::Basic().TrackBearing + a5);
     return true;
@@ -119,10 +119,10 @@ InfoBoxContentSpeedIndicated::Update(InfoBoxWindow &infobox)
 }
 
 bool
-InfoBoxContentSpeedIndicated::HandleKey(unsigned keycode)
+InfoBoxContentSpeedIndicated::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
-  case VK_RETURN:
+  case ibkEnter:
     XCSoarInterface::SetSettingsComputer().EnableCalibration
         = !XCSoarInterface::SettingsComputer().EnableCalibration;
 
@@ -157,10 +157,10 @@ InfoBoxContentSpeed::Update(InfoBoxWindow &infobox)
 }
 
 bool
-InfoBoxContentSpeed::HandleKey(unsigned keycode)
+InfoBoxContentSpeed::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
-  case VK_RETURN:
+  case ibkEnter:
     XCSoarInterface::SetSettingsComputer().EnableCalibration
         = !XCSoarInterface::SettingsComputer().EnableCalibration;
 

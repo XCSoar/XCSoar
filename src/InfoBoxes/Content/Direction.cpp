@@ -60,19 +60,19 @@ InfoBoxContentTrack::Update(InfoBoxWindow &infobox)
 }
 
 bool
-InfoBoxContentTrack::HandleKey(unsigned keycode)
+InfoBoxContentTrack::HandleKey(const InfoBoxKeyCodes keycode)
 {
   if (!is_simulator())
     return false;
 
   const Angle a5 = Angle::degrees(fixed(5));
   switch (keycode) {
-  case VK_UP:
+  case ibkUp:
     device_blackboard.SetTrackBearing(
         XCSoarInterface::Basic().TrackBearing + a5);
     return true;
 
-  case VK_DOWN:
+  case ibkDown:
     device_blackboard.SetTrackBearing(
         XCSoarInterface::Basic().TrackBearing - a5);
     return true;

@@ -213,6 +213,7 @@ public:
 
   void SetContentProvider(InfoBoxContent *_content);
   bool UpdateContent();
+  bool HandleKey(InfoBoxContent::InfoBoxKeyCodes keycode);
 
 protected:
   /**

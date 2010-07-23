@@ -45,7 +45,7 @@ class InfoBoxContentTrack : public InfoBoxContent
 {
 public:
   virtual void Update(InfoBoxWindow &infobox);
-  virtual bool HandleKey(unsigned keycode);
+  virtual bool HandleKey(const InfoBoxKeyCodes keycode);
 };
 
 #endif

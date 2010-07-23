@@ -177,20 +177,20 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
 }
 
 bool
-InfoBoxContentNextWaypoint::HandleKey(unsigned keycode)
+InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
-  case VK_RIGHT:
-  case VK_DOWN:
+  case ibkRight:
+  case ibkDown:
     task_ui.incrementActiveTaskPoint(1);
     return true;
 
-  case VK_LEFT:
-  case VK_UP:
+  case ibkLeft:
+  case ibkUp:
     task_ui.incrementActiveTaskPoint(-1);
     return true;
 
-  case VK_RETURN:
+  case ibkEnter:
     const Waypoint *wp = task_ui.getActiveWaypoint();
     if (wp) {
       dlgWayPointDetailsShowModal(XCSoarInterface::main_window, *wp);

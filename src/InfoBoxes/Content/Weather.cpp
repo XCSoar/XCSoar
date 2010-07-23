@@ -82,14 +82,14 @@ InfoBoxContentTemperatureForecast::Update(InfoBoxWindow &infobox)
 }
 
 bool
-InfoBoxContentTemperatureForecast::HandleKey(const unsigned keycode)
+InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch(keycode) {
-  case VK_UP:
+  case ibkUp:
     CuSonde::adjustForecastTemperature(0.5);
     return true;
 
-  case VK_DOWN:
+  case ibkDown:
     CuSonde::adjustForecastTemperature(-0.5);
     return true;
   }

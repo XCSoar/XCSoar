@@ -71,7 +71,7 @@ InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
 }
 
 bool
-InfoBoxContentTeamCode::HandleKey(unsigned keycode)
+InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
 {
   const FLARM_STATE &flarm = XCSoarInterface::Basic().flarm;
   const FLARM_TRAFFIC *traffic =
@@ -79,10 +79,10 @@ InfoBoxContentTeamCode::HandleKey(unsigned keycode)
       flarm.FindTraffic(XCSoarInterface::SettingsComputer().TeamFlarmIdTarget) :
       NULL;
 
-  if (keycode == VK_UP)
+  if (keycode == ibkUp)
     traffic = (traffic == NULL ?
                flarm.FirstTraffic() : flarm.NextTraffic(traffic));
-  else if (keycode == VK_DOWN)
+  else if (keycode == ibkDown)
     traffic = (traffic == NULL ?
                flarm.LastTraffic() : flarm.PreviousTraffic(traffic));
   else
