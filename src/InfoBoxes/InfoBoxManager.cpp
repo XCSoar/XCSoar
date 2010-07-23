@@ -442,19 +442,16 @@ static const SCREEN_INFO Data_Options[] = {
   // 65
 #ifndef GNAV
   { ugNone, _T("Battery Percent"), _T("Battery"),
-    new InfoBoxFormatter(_T("%2.0f%%")),
-    49, 26,
-  },
 #else
   { ugNone, _T("Battery Voltage"), _T("Battery"),
-    new InfoBoxFormatter(_T("%2.1fV")),
+#endif
+    NULL,
     49, 26,
   },
-#endif
   // 66  VENTA-ADDON added Final GR
   // VENTA-TODO: fix those 38,5 numbers to point correctly menu items
   { ugNone, _T("Final GR"), _T("Fin GR"),
-    new InfoBoxFormatter(_T("%1.1f")),
+    NULL,
     38, 5,
   },
 
@@ -485,7 +482,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 72 //
   { ugNone, _T("Experimental1"), _T("Exp1"),
-    new InfoBoxFormatter(_T("%-2.1f")),
+    NULL,
     8, 2,
   },
   // 73 //
@@ -495,7 +492,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 74 //
   { ugNone, _T("Experimental2"), _T("Exp2"),
-    new InfoBoxFormatter(_T("%-2.1f")),
+    NULL,
     8, 2,
   },
 };

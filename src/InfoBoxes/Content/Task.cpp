@@ -603,6 +603,38 @@ InfoBoxContentFinalLD::Update(InfoBoxWindow &infobox)
 }
 
 void
+InfoBoxContentFinalGR::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Fin GR"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+#ifdef OLD_TASK
+  if (XCSoarInterface::Calculated().GRFinish == 999) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  double Value;
+  if (XCSoarInterface::Calculated().ValidFinish)
+    Value = 0;
+  else
+    Value = XCSoarInterface::Calculated().GRFinish;
+
+  TCHAR tmp[32];
+  _stprintf(tmp, (Value > 100 ? _T("%1.0f") : _T("%1.1f")), Value);
+  infobox.SetValue(tmp);
+#else
+  infobox.SetInvalid();
+#endif
+}
+
+void
 InfoBoxContentHomeDistance::Update(InfoBoxWindow &infobox)
 {
   // Set Title

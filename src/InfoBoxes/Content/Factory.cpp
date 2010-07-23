@@ -187,6 +187,10 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentThermalAllAvg();
   case 64:
     return new InfoBoxContentVarioDistance();
+  case 65:
+    return new InfoBoxContentBattery();
+  case 66:
+    return new InfoBoxContentFinalGR();
   case 67:
     return new InfoBoxContentAlternate1();
   case 68:
@@ -197,8 +201,12 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentAltitudeQFE();
   case 71:
     return new InfoBoxContentLDAvg();
+  case 72:
+    return new InfoBoxContentExperimental1();
   case 73:
     return new InfoBoxContentOLC();
+  case 74:
+    return new InfoBoxContentExperimental2();
   }
 
   return NULL;

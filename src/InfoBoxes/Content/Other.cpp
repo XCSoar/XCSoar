@@ -40,6 +40,8 @@ Copyright_License {
 
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Interface.hpp"
+#include "Hardware/Battery.h"
+#include "Asset.hpp"
 
 #include <tchar.h>
 
@@ -59,4 +61,51 @@ InfoBoxContentGLoad::Update(InfoBoxWindow &infobox)
   _stprintf(tmp, _T("%2.2f"),
             (double)XCSoarInterface::Basic().acceleration.Gload);
   infobox.SetValue(tmp);
+}
+
+void
+InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Battery"));
+
+  // Set Value
+#if !defined(WINDOWSPC) && !defined(HAVE_POSIX)
+  TCHAR tmp[32];
+  if (!is_altair()) {
+    _stprintf(tmp, _T("%2.1fV"), PDABatteryPercent);
+  } else {
+    if (XCSoarInterface::Basic().SupplyBatteryVoltage < 0) {
+      infobox.SetInvalid();
+      return;
+    }
+    _stprintf(tmp, _T("%2.0f%%"), XCSoarInterface::Basic().SupplyBatteryVoltage);
+  }
+  infobox.SetValue(tmp);
+#else
+  infobox.SetInvalid();
+#endif
+}
+
+void
+InfoBoxContentExperimental1::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Exp1"));
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%-2.1f"),
+            (double)XCSoarInterface::Calculated().Experimental);
+  infobox.SetValue(tmp);
+}
+
+void
+InfoBoxContentExperimental2::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("Exp2"));
+
+  // Set Value
+  infobox.SetInvalid();
 }
