@@ -692,7 +692,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
   if (info_box.UpdateContent())
     return;
 
-  TCHAR sTmp[32];
   int color = 0;
 
   assert(Data_Options[type].Formatter != NULL);
@@ -716,13 +715,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
   // Infobox bottom line
   //
   switch (type) {
-  case 60:
-    _stprintf(sTmp, _T("%d%s"),
-              (int)Calculated().common_stats.vector_home.Bearing.value_degrees(), 
-              _T(DEG));
-    info_box.SetComment(sTmp);
-    break;
-
     // VENTA3 battery temperature under voltage. There is a good
     // reason to see the temperature, if available: many PNA/PDA
     // will switch OFF during flight under direct sunlight for
@@ -734,6 +726,7 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
 #ifdef HAVE_BATTERY
   case 65:
     if (PDABatteryTemperature > 0) {
+      TCHAR sTmp[32];
       _stprintf(sTmp, _T("%1.0d%sC"), (int)PDABatteryTemperature, _T(DEG));
       info_box.SetComment(sTmp);
     } else

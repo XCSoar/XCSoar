@@ -591,6 +591,11 @@ InfoBoxContentHomeDistance::Update(InfoBoxWindow &infobox)
 
   // Set Unit
   infobox.SetValueUnit(Units::DistanceUnit);
+
+  _stprintf(tmp, _T("%d%s")_T(DEG),
+            (int)XCSoarInterface::Calculated().common_stats.vector_home.
+            Bearing.value_degrees());
+  infobox.SetComment(tmp);
 }
 
 void
