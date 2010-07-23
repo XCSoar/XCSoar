@@ -243,11 +243,7 @@ RenderTaskPoint::draw_target(const TaskPoint &tp)
 void 
 RenderTaskPoint::draw_task_line(const GEOPOINT& start, const GEOPOINT& end) 
 {
-  if (leg_active()) {
-    m_buffer.select(pen_leg_active);
-  } else {
-    m_buffer.select(pen_leg_inactive);
-  }
+  m_buffer.select(leg_active() ? pen_leg_active : pen_leg_inactive);
   m_buffer.background_transparent();
   map_canvas.line(start, end);
   m_buffer.background_opaque();
