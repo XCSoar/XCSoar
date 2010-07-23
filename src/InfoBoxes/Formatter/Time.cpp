@@ -81,46 +81,6 @@ void
 FormatterAATTime::AssignValue(int i)
 {
   status = 0;
-#ifdef OLD_TASK
-  double dd = 0;
-  if (task.getSettings().AATEnabled
-      && task.ValidTaskPoint(task.getActiveIndex())) {
-    dd = Calculated().TaskTimeToGo;
-
-    if (Calculated().TaskStartTime > 0.0
-        && Basic().Flying && task.getActiveIndex() > 0)
-      dd += Basic().Time - Calculated().TaskStartTime;
-
-    dd = max(0, min(24.0 * 3600.0, dd)) - task.getSettings().AATTaskLength * 60;
-    if (dd < 0) {
-      status = 1; // red
-    } else {
-      if (Calculated().TaskTimeToGoTurningNow >
-          (task.getSettings().AATTaskLength + 5) * 60)
-        status = 2; // blue
-      else
-        status = 0; // black
-    }
-  } else {
-    dd = 0;
-    status = 0; // black
-  }
-#endif
-
-  switch (i) {
-  case 62:
-#ifdef OLD_TASK
-    if (task.getSettings().AATEnabled &&
-        task.ValidTaskPoint(task.getActiveIndex())) {
-      SecsToDisplayTime((int)dd);
-      Valid = (dd < 0.9*ERROR_TIME);
-    } else {
-      SecsToDisplayTime(0);
-      Valid = false;
-    }
-#endif
-    break;
-  }
 }
 
 const TCHAR *

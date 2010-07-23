@@ -593,6 +593,62 @@ InfoBoxContentTaskAATime::Update(InfoBoxWindow &infobox)
 }
 
 void
+InfoBoxContentTaskAATimeDelta::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("AA dT"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
+      !XCSoarInterface::Calculated().task_stats.total.achievable() ||
+      !positive(XCSoarInterface::Calculated().task_stats.total.TimeRemaining) ||
+      !positive(XCSoarInterface::Calculated().common_stats.aat_time_remaining)) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  TCHAR tmp[32];
+  fixed diff = XCSoarInterface::Calculated().task_stats.total.TimeRemaining -
+               XCSoarInterface::Calculated().common_stats.aat_time_remaining;
+  int dd = abs((int)diff) % (3600 * 24);
+  int hours = (dd / 3600);
+  int mins = (dd / 60 - hours * 60);
+  int seconds = (dd - mins * 60 - hours * 3600);
+  hours = hours % 24;
+
+  if (hours > 0) { // hh:mm, ss
+    // Set Value
+    _stprintf(tmp, negative(diff) ? _T("-%02d:%02d") : _T("%02d:%02d"),
+              hours, mins);
+    infobox.SetValue(tmp);
+
+    // Set Comment
+    _stprintf(tmp, _T("%02d"), seconds);
+    infobox.SetComment(tmp);
+  } else { // mm:ss
+    // Set Value
+    _stprintf(tmp, negative(diff) ? _T("-%02d:%02d") : _T("%02d:%02d"),
+              mins, seconds);
+    infobox.SetValue(tmp);
+
+    // Set Comment
+    infobox.SetComment(_T(""));
+  }
+
+  // Set Color
+  if (negative(diff))
+    // Red
+    infobox.SetColor(1);
+  else if (XCSoarInterface::Calculated().task_stats.total.TimeRemaining <
+           XCSoarInterface::Calculated().common_stats.aat_time_remaining +
+           fixed(5))
+    // Blue
+    infobox.SetColor(2);
+  else
+    // Black
+    infobox.SetColor(0);
+}
+
+void
 InfoBoxContentTaskAADistance::Update(InfoBoxWindow &infobox)
 {
   // Set Title
