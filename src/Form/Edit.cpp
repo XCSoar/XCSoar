@@ -422,10 +422,10 @@ WndProperty::on_paint(Canvas &canvas)
   /* background and selector */
   if (edit.has_focus()) {
     const Brush brush(GetBackColor().highlight());
-    canvas.fill_rectangle(get_client_rect(), brush);
+    canvas.clear(brush);
     PaintSelector(canvas, get_client_rect());
   } else
-    canvas.fill_rectangle(get_client_rect(), GetBackBrush());
+    canvas.clear(GetBackBrush());
 
   SIZE tsize;
   POINT org;

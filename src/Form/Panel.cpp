@@ -50,7 +50,7 @@ PanelControl::PanelControl(ContainerControl &parent,
 void
 PanelControl::on_paint(Canvas &canvas)
 {
-  canvas.fill_rectangle(get_client_rect(), GetBackBrush());
+  canvas.clear(GetBackBrush());
 
   ContainerControl::on_paint(canvas);
 }

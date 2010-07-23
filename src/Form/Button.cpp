@@ -217,13 +217,13 @@ void
 WndButton::on_paint(Canvas &canvas)
 {
   /* background and selector */
-  RECT rc = get_client_rect();
-  canvas.fill_rectangle(rc, background_brush);
+  canvas.clear(background_brush);
 
   if (has_focus())
     WindowControl::PaintSelector(canvas, get_client_rect());
 
   // Get button RECT and shrink it to make room for the selector/focus
+  RECT rc = get_client_rect();
   InflateRect(&rc, -2, -2); // todo border width
 
   // JMW todo: add icons?

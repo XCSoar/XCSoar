@@ -64,7 +64,7 @@ WndForm::ClientAreaWindow::on_color(Window &window, Canvas &canvas)
 void
 WndForm::ClientAreaWindow::on_paint(Canvas &canvas)
 {
-  canvas.fill_rectangle(get_client_rect(), background_brush);
+  canvas.clear(background_brush);
 
   ContainerWindow::on_paint(canvas);
 }
