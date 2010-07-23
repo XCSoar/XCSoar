@@ -72,10 +72,6 @@ FormatterTime::AssignValue(int i)
     SecsToDisplayTime((int)Calculated().LastThermalTime);
     break;
 
-  case 36:
-    SecsToDisplayTime((int)Basic().flight.FlightTime);
-    break;
-
   case 46:
     SecsToDisplayTime(
       (int)(Calculated().task_stats.current_leg.solution_remaining.TimeElapsed

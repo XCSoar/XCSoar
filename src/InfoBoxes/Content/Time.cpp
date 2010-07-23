@@ -109,3 +109,41 @@ InfoBoxContentTimeUTC::Update(InfoBoxWindow &infobox)
     infobox.SetComment(_T(""));
   }
 }
+
+void
+InfoBoxContentTimeFlight::Update(InfoBoxWindow &infobox)
+{
+  TCHAR sTmp[32];
+
+  // Set Title
+  infobox.SetTitle(_T("Time flt"));
+
+  if (!positive(XCSoarInterface::Basic().flight.FlightTime)) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  int dd = abs((int)XCSoarInterface::Basic().flight.FlightTime) % (3600 * 24);
+  int hours = (dd / 3600);
+  int mins = (dd / 60 - hours * 60);
+  int seconds = (dd - mins * 60 - hours * 3600);
+  hours = hours % 24;
+
+  if (hours > 0) { // hh:mm, ss
+    // Set Value
+    _stprintf(sTmp, _T("%02d:%02d"), hours, mins);
+    infobox.SetValue(sTmp);
+
+    // Set Comment
+    _stprintf(sTmp, _T("%02d"), seconds);
+    infobox.SetComment(sTmp);
+  } else { // mm:ss
+    // Set Value
+    _stprintf(sTmp, _T("%02d:%02d"), mins, seconds);
+    infobox.SetValue(sTmp);
+
+    // Set Comment
+    infobox.SetComment(_T(""));
+  }
+}

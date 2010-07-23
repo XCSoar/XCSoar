@@ -119,6 +119,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentAltitudeBaro();
   case 35:
     return new InfoBoxContentThermalRatio();
+  case 36:
+    return new InfoBoxContentTimeFlight();
   case 39:
     return new InfoBoxContentTimeLocal();
   case 40:

@@ -296,7 +296,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 36
   { ugNone, _T("Time of flight"), _T("Time flt"),
-    new FormatterTime(_T("%04.0f")),
+    NULL,
     39, 14,
   },
   // 37
