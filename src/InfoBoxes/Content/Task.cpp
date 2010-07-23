@@ -391,6 +391,27 @@ InfoBoxContentFinalLD::Update(InfoBoxWindow &infobox)
 }
 
 void
+InfoBoxContentTaskAADistance::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("AA Dtgt"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserDistance(
+      XCSoarInterface::Calculated().task_stats.total.planned.get_distance()));
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::DistanceUnit);
+}
+
+void
 InfoBoxContentTaskAADistanceMax::Update(InfoBoxWindow &infobox)
 {
   // Set Title
@@ -430,6 +451,28 @@ InfoBoxContentTaskAADistanceMin::Update(InfoBoxWindow &infobox)
 
   // Set Unit
   infobox.SetValueUnit(Units::DistanceUnit);
+}
+
+void
+InfoBoxContentTaskAASpeed::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("AA Vtgt"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
+      !positive(XCSoarInterface::Calculated().common_stats.aat_speed_remaining)) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f"), Units::ToUserTaskSpeed(
+      XCSoarInterface::Calculated().common_stats.aat_speed_remaining));
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::TaskSpeedUnit);
 }
 
 void

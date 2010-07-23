@@ -108,6 +108,12 @@ public:
   virtual void Update(InfoBoxWindow &infobox);
 };
 
+class InfoBoxContentTaskAADistance : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
 class InfoBoxContentTaskAADistanceMax : public InfoBoxContent
 {
 public:
@@ -115,6 +121,12 @@ public:
 };
 
 class InfoBoxContentTaskAADistanceMin : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
+class InfoBoxContentTaskAASpeed : public InfoBoxContent
 {
 public:
   virtual void Update(InfoBoxWindow &infobox);

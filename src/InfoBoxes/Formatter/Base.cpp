@@ -137,18 +137,6 @@ InfoBoxFormatter::AssignValue(int i)
     Value = Units::ToUserSpeed(Calculated().V_stf);
     break;
 
-  case 51:
-    Value = Units::ToUserDistance(Calculated().task_stats.total.
-                                  planned.get_distance());
-    Valid = Calculated().task_stats.task_valid;
-    break;
-
-  case 52:
-    Value = Units::ToUserTaskSpeed(Calculated().common_stats.aat_speed_remaining);
-    Valid = Calculated().task_stats.task_valid &&
-            positive(Calculated().common_stats.aat_speed_remaining);
-    break;
-
   case 53:
     if (Calculated().LDvario == fixed(999)) {
       Valid = false;

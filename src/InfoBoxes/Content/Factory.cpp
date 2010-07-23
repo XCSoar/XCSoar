@@ -127,6 +127,10 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentHumidity();
   case 50:
     return new InfoBoxContentTemperatureForecast();
+  case 51:
+    return new InfoBoxContentTaskAADistance();
+  case 52:
+    return new InfoBoxContentTaskAASpeed();
   case 54:
     return new InfoBoxContentSpeed();
   case 55:

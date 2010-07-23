@@ -372,12 +372,12 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 51
   { ugDistance, _T("AA Distance Tgt"), _T("AA Dtgt"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     52, 31,
   },
   // 52
   { ugTaskSpeed, _T("AA Speed Tgt"), _T("AA Vtgt"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     11, 51,
   },
   // 53
