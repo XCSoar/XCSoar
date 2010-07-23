@@ -95,29 +95,6 @@ void
 InfoBoxFormatter::AssignValue(int i)
 {
   switch (i) {
-  case 4:
-    if (Calculated().LD == fixed(999)) {
-      Valid = false;
-    } else {
-      Valid = true;
-      Value = Calculated().LD;
-    }
-    break;
-
-  case 5:
-    if (Calculated().CruiseLD == fixed(999)) {
-      Valid = false;
-    } else {
-      Valid = true;
-      Value = Calculated().CruiseLD;
-    }
-    break;
-
-  case 37:
-    Valid = Basic().acceleration.Available;
-    Value = Basic().acceleration.Gload;
-    break;
-
   case 38:
 #ifdef OLD_TASK
     if (Calculated().LDNext== 999) {
@@ -127,15 +104,6 @@ InfoBoxFormatter::AssignValue(int i)
       Value = Calculated().LDNext;
     }
 #endif
-    break;
-
-  case 53:
-    if (Calculated().LDvario == fixed(999)) {
-      Valid = false;
-    } else {
-      Valid = Basic().TotalEnergyVarioAvailable && Basic().AirspeedAvailable;
-      Value = Calculated().LDvario;
-    }
     break;
 
   case 65: // battery voltage
@@ -174,21 +142,6 @@ InfoBoxFormatter::AssignValue(int i)
       }
     }
 #endif      
-    break;
-
-  case 71:
-    if (Calculated().AverageLD == 0) {
-      Valid = false;
-    } else {
-      Valid = true;
-      Value = Calculated().AverageLD;
-      if (Value < 0)
-        _tcscpy(Format, _T("^^^"));
-      else if (Value >= 999)
-        _tcscpy(Format, _T("+++"));
-      else
-        _tcscpy(Format, _T("%2.0f"));
-    }
     break;
 
   case 72:

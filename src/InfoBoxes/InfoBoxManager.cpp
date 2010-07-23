@@ -136,12 +136,12 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 4
   { ugNone, _T("L/D instantaneous"), _T("L/D Inst"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     5, 38,
   },
   // 5
   { ugNone, _T("L/D cruise"), _T("L/D Cru"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     19, 4,
   },
   // 6
@@ -301,7 +301,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 37
   { ugNone, _T("G load"), _T("G"),
-    new InfoBoxFormatter(_T("%2.2f")),
+    NULL,
     47, 32,
   },
   // 38
@@ -381,7 +381,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 53
   { ugNone, _T("L/D vario"), _T("L/D vario"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     4, 38,
   },
   // 54
@@ -480,7 +480,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 71 TODO FIX those 19,4 values
   { ugNone, _T("L/D Average"), _T("L/D Avg"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     19, 4,
   },
   // 72 //

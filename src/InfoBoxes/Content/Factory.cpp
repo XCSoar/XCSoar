@@ -42,6 +42,8 @@ Copyright_License {
 #include "InfoBoxes/Content/Alternate.hpp"
 #include "InfoBoxes/Content/Altitude.hpp"
 #include "InfoBoxes/Content/Direction.hpp"
+#include "InfoBoxes/Content/Glide.hpp"
+#include "InfoBoxes/Content/Other.hpp"
 #include "InfoBoxes/Content/Speed.hpp"
 #include "InfoBoxes/Content/Task.hpp"
 #include "InfoBoxes/Content/Team.hpp"
@@ -63,6 +65,10 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentThermal30s();
   case 3:
     return new InfoBoxContentBearing();
+  case 4:
+    return new InfoBoxContentLDInstant();
+  case 5:
+    return new InfoBoxContentLDCruise();
   case 6:
     return new InfoBoxContentSpeedGround();
   case 7:
@@ -125,6 +131,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentThermalRatio();
   case 36:
     return new InfoBoxContentTimeFlight();
+  case 37:
+    return new InfoBoxContentGLoad();
   case 39:
     return new InfoBoxContentTimeLocal();
   case 40:
@@ -153,6 +161,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentTaskAADistance();
   case 52:
     return new InfoBoxContentTaskAASpeed();
+  case 53:
+    return new InfoBoxContentLDVario();
   case 54:
     return new InfoBoxContentSpeed();
   case 55:
@@ -183,6 +193,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentAlternateBest();
   case 70:
     return new InfoBoxContentAltitudeQFE();
+  case 71:
+    return new InfoBoxContentLDAvg();
   case 73:
     return new InfoBoxContentOLC();
   }
