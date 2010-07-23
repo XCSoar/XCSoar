@@ -154,8 +154,8 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 6
   { ugHorizontalSpeed, _T("Speed ground"), _T("V Gnd"),
-    new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_Speed,
+    NULL,
+    NULL,
     23, 3,
   },
   // 7
@@ -310,8 +310,8 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 32
   { ugHorizontalSpeed, _T("Airspeed IAS"), _T("V IAS"),
-    new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_Airspeed,
+    NULL,
+    NULL,
     37, 23,
   },
   // 33
@@ -442,8 +442,8 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 54
   { ugHorizontalSpeed, _T("Airspeed TAS"), _T("V TAS"),
-    new InfoBoxFormatter(_T("%2.0f")),
-    ActionInterface::on_key_Airspeed,
+    NULL,
+    NULL,
     3, 47,
   },
   // 55

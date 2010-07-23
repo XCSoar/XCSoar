@@ -63,38 +63,6 @@ Copyright_License {
 using std::max;
 
 void
-ActionInterface::on_key_Airspeed(InfoBoxKeyCodes UpDown)
-{
-  if (UpDown == ibkEnter) {
-    SetSettingsComputer().EnableCalibration =
-      !SettingsComputer().EnableCalibration;
-
-    Message::AddMessage(SettingsComputer().EnableCalibration ?
-                        _T("Calibrate ON") :
-                        _T("Calibrate OFF"));
-  }
-}
-
-void
-ActionInterface::on_key_Speed(InfoBoxKeyCodes UpDown)
-{
-  if (!is_simulator())
-    return;
-
-  fixed fixed_step = (fixed)Units::ToSysUnit(10, Units::SpeedUnit);
-
-  if (UpDown == ibkUp)
-    device_blackboard.SetSpeed(Basic().GroundSpeed + fixed_step);
-  else if (UpDown == ibkDown)
-    device_blackboard.SetSpeed(max(fixed_zero,
-                                   Basic().GroundSpeed - fixed_step));
-  else if (UpDown == ibkLeft)
-    on_key_Direction(ibkDown);
-  else if (UpDown == ibkRight)
-    on_key_Direction(ibkUp);
-}
-
-void
 ActionInterface::on_key_Direction(InfoBoxKeyCodes UpDown)
 {
   static const Angle a5 = Angle::degrees(fixed(5));

@@ -41,6 +41,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Base.hpp"
 #include "InfoBoxes/Content/Altitude.hpp"
 #include "InfoBoxes/Content/Direction.hpp"
+#include "InfoBoxes/Content/Speed.hpp"
 #include "InfoBoxes/Content/Task.hpp"
 #include "InfoBoxes/Content/Team.hpp"
 #include "InfoBoxes/Content/Thermal.hpp"
@@ -60,6 +61,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentThermal30s();
   case 3:
     return new InfoBoxContentBearing();
+  case 6:
+    return new InfoBoxContentSpeedGround();
   case 7:
     return new InfoBoxContentThermalLastAvg();
   case 8:
@@ -108,6 +111,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentTaskAASpeedMax();
   case 31:
     return new InfoBoxContentTaskAASpeedMin();
+  case 32:
+    return new InfoBoxContentSpeedIndicated();
   case 33:
     return new InfoBoxContentAltitudeBaro();
   case 35:
@@ -122,6 +127,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentHumidity();
   case 50:
     return new InfoBoxContentTemperatureForecast();
+  case 54:
+    return new InfoBoxContentSpeed();
   case 55:
     return new InfoBoxContentTeamCode();
   case 56:

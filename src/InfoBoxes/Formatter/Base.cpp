@@ -113,15 +113,6 @@ InfoBoxFormatter::AssignValue(int i)
     }
     break;
 
-  case 6:
-    Value = Units::ToUserSpeed(Basic().GroundSpeed);
-    break;
-
-  case 32:
-    Valid = Basic().AirspeedAvailable;
-    Value = Units::ToUserSpeed(Basic().IndicatedAirspeed);
-    break;
-
   case 34:
     Value = Units::ToUserSpeed(Calculated().common_stats.V_block);
     break;
@@ -165,11 +156,6 @@ InfoBoxFormatter::AssignValue(int i)
       Valid = Basic().TotalEnergyVarioAvailable && Basic().AirspeedAvailable;
       Value = Calculated().LDvario;
     }
-    break;
-
-  case 54:
-    Valid = Basic().AirspeedAvailable;
-    Value = Units::ToUserSpeed(Basic().TrueAirspeed);
     break;
 
   case 59:

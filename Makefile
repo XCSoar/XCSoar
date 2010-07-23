@@ -229,6 +229,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/Content/Factory.cpp \
 	$(SRC)/InfoBoxes/Content/Altitude.cpp \
 	$(SRC)/InfoBoxes/Content/Direction.cpp \
+	$(SRC)/InfoBoxes/Content/Speed.cpp \
 	$(SRC)/InfoBoxes/Content/Task.cpp \
 	$(SRC)/InfoBoxes/Content/Team.cpp \
 	$(SRC)/InfoBoxes/Content/Thermal.cpp \
