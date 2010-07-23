@@ -42,6 +42,8 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "TaskClientUI.hpp"
+#include "Dialogs.h"
+#include "MainWindow.hpp"
 
 #include <tchar.h>
 
@@ -172,6 +174,31 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
   else
     // black
     infobox.SetColor(0);
+}
+
+bool
+InfoBoxContentNextWaypoint::HandleKey(unsigned keycode)
+{
+  switch (keycode) {
+  case VK_RIGHT:
+  case VK_DOWN:
+    task_ui.incrementActiveTaskPoint(1);
+    return true;
+
+  case VK_LEFT:
+  case VK_UP:
+    task_ui.incrementActiveTaskPoint(-1);
+    return true;
+
+  case VK_RETURN:
+    const Waypoint *wp = task_ui.getActiveWaypoint();
+    if (wp) {
+      dlgWayPointDetailsShowModal(XCSoarInterface::main_window, *wp);
+      return true;
+    }
+  }
+
+  return false;
 }
 
 void

@@ -203,7 +203,7 @@ static const SCREEN_INFO Data_Options[] = {
   // 14
   { ugNone, _T("Next Waypoint"), _T("Next"),
     NULL,
-    ActionInterface::on_key_Waypoint,
+    NULL,
     36, 46,
   },
   // 15

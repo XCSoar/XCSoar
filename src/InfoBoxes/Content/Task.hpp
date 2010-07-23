@@ -57,6 +57,7 @@ class InfoBoxContentNextWaypoint : public InfoBoxContent
 {
 public:
   virtual void Update(InfoBoxWindow &infobox);
+  virtual bool HandleKey(unsigned keycode);
 };
 
 class InfoBoxContentNextDistance : public InfoBoxContent
