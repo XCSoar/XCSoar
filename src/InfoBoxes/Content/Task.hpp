@@ -108,6 +108,12 @@ public:
   virtual void Update(InfoBoxWindow &infobox);
 };
 
+class InfoBoxContentTaskSpeedAchieved : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
 class InfoBoxContentTaskAADistance : public InfoBoxContent
 {
 public:

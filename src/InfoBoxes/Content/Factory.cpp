@@ -141,6 +141,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentTeamBearingDiff();
   case 58:
     return new InfoBoxContentTeamDistance();
+  case 61:
+    return new InfoBoxContentTaskSpeedAchieved();
   case 63:
     return new InfoBoxContentThermalAllAvg();
   case 70:

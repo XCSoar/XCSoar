@@ -359,6 +359,28 @@ InfoBoxContentTaskSpeed::Update(InfoBoxWindow &infobox)
 }
 
 void
+InfoBoxContentTaskSpeedAchieved::Update(InfoBoxWindow &infobox)
+{
+  // Set Title
+  infobox.SetTitle(_T("V Tsk Ach"));
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%2.0f"),
+            (double)Units::ToUserTaskSpeed(XCSoarInterface::Calculated().
+                task_stats.total.remaining_effective.get_speed()));
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::TaskSpeedUnit);
+}
+
+void
 InfoBoxContentFinalLD::Update(InfoBoxWindow &infobox)
 {
   // Set Title

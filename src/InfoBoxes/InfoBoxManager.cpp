@@ -422,7 +422,7 @@ static const SCREEN_INFO Data_Options[] = {
   },
   // 61
   { ugTaskSpeed, _T("Speed Task Achieved"), _T("V Tsk Ach"),
-    new InfoBoxFormatter(_T("%2.0f")),
+    NULL,
     18, 16,
   },
   // 62

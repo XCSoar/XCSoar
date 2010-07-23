@@ -157,12 +157,6 @@ InfoBoxFormatter::AssignValue(int i)
     Valid = true;
     break;
 
-  case 61:
-    Value = Units::ToUserTaskSpeed(Calculated().task_stats.total.
-                                   remaining_effective.get_speed());
-    Valid = Calculated().task_stats.task_valid;
-    break;
-
   case 64:
     Value = Units::ToUserVSpeed(Calculated().task_stats.total.vario.get_value());
     Valid = Calculated().task_stats.task_valid;
