@@ -166,7 +166,6 @@ public:
   static void on_key_Alternate2(InfoBoxKeyCodes UpDown);
   static void on_key_BestAlternate(InfoBoxKeyCodes UpDown);
   static void on_key_Airspeed(InfoBoxKeyCodes UpDown);
-  static void on_key_TeamCode(InfoBoxKeyCodes UpDown);
   static void SignalShutdown(bool force);
   static bool LockSettingsInFlight;
   static unsigned UserLevel;

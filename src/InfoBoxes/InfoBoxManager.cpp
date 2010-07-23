@@ -449,7 +449,7 @@ static const SCREEN_INFO Data_Options[] = {
   // 55
   { ugNone, _T("Own Team Code"), _T("TeamCode"),
     NULL,
-    ActionInterface::on_key_TeamCode,
+    NULL,
     56, 54,
   },
   // 56

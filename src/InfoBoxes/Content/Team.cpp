@@ -70,6 +70,45 @@ InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
     infobox.SetColorBottom(1);
 }
 
+bool
+InfoBoxContentTeamCode::HandleKey(unsigned keycode)
+{
+  const FLARM_STATE &flarm = XCSoarInterface::Basic().flarm;
+  const FLARM_TRAFFIC *traffic =
+      XCSoarInterface::SettingsComputer().TeamFlarmIdTarget.defined() ?
+      flarm.FindTraffic(XCSoarInterface::SettingsComputer().TeamFlarmIdTarget) :
+      NULL;
+
+  if (keycode == VK_UP)
+    traffic = (traffic == NULL ?
+               flarm.FirstTraffic() : flarm.NextTraffic(traffic));
+  else if (keycode == VK_DOWN)
+    traffic = (traffic == NULL ?
+               flarm.LastTraffic() : flarm.PreviousTraffic(traffic));
+  else
+    return false;
+
+  if (traffic != NULL) {
+    XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = traffic->ID;
+
+    if (traffic->HasName()) {
+      // copy the 3 first chars from the name to TeamFlarmCNTarget
+      for (int z = 0; z < 3; z++)
+        XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[z] =
+            (traffic->Name[z] != 0 ? traffic->Name[z] : 32);
+
+      XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
+    } else {
+      XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
+    }
+  } else {
+    // no flarm traffic to select!
+    XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget.clear();
+    XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
+  }
+  return true;
+}
+
 void
 InfoBoxContentTeamBearing::Update(InfoBoxWindow &infobox)
 {
