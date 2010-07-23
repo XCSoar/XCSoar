@@ -113,6 +113,9 @@ MapDrawHelper::draw_search_point_vector(Canvas& the_canvas,
   POINT screen[size];
   map_canvas.project(points, screen);
 
+  if (!map_canvas.visible(screen, size))
+    return;
+
   the_canvas.polygon(&screen[0], size);
   if (m_use_stencil) {
     m_stencil.polygon(&screen[0], size);

@@ -71,6 +71,43 @@ MapCanvas::project(const SearchPointVector &points, POINT *screen) const
     projection.LonLat2Screen(it->get_location(), *screen++);
 }
 
+static bool
+between(int value, int minimum, int maximum)
+{
+  return value >= minimum && value < maximum;
+}
+
+static void
+update_bounds(RECT &bounds, const POINT &pt)
+{
+  if (pt.x < bounds.left)
+    bounds.left = pt.x;
+  if (pt.x >= bounds.right)
+    bounds.right = pt.x + 1;
+  if (pt.y < bounds.top)
+    bounds.top = pt.y;
+  if (pt.y >= bounds.bottom)
+    bounds.bottom = pt.y + 1;
+}
+
+bool
+MapCanvas::visible(const POINT *screen, unsigned num)
+{
+  RECT bounds;
+  bounds.left = 0x7fff;
+  bounds.top = 0x7fff;
+  bounds.right = -1;
+  bounds.bottom = -1;
+
+  for (unsigned i = 0; i < num; ++i)
+    update_bounds(bounds, screen[i]);
+
+  return (between(bounds.left, 0, canvas.get_width()) ||
+          between(0, bounds.left, bounds.right)) &&
+    (between(bounds.top, 0, canvas.get_height()) ||
+     between(0, bounds.top, bounds.bottom));
+}
+
 void
 MapCanvas::draw(const SearchPointVector &points)
 {
@@ -81,5 +118,6 @@ MapCanvas::draw(const SearchPointVector &points)
   POINT pts[num_points];
   project(points, pts);
 
-  canvas.autoclip_polygon(pts, num_points, projection.GetMapRect());
+  if (visible(pts, num_points))
+    canvas.autoclip_polygon(pts, num_points, projection.GetMapRect());
 }

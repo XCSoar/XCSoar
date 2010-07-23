@@ -71,6 +71,17 @@ public:
    * to hold all points of the #SearchPointVector
    */
   void project(const SearchPointVector &points, POINT *screen) const;
+
+  /**
+   * Determines whether the polygon is visible, or off-screen.
+   *
+   * Calling Canvas::polygon() is a very expensive operation on
+   * Windows CE, even if no single pixel of the polygon is visible,
+   * and this function aims to reduce the overhead for off-screen
+   * airspaces.
+   */
+  bool visible(const POINT *screen, unsigned num);
+
   void draw(const SearchPointVector &points);
 };
 
