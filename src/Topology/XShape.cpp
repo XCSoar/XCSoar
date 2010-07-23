@@ -77,8 +77,6 @@ XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y
   TCHAR Temp[100];
   ConvertCToT(Temp, label);
 
-  canvas.background_transparent();
-
   // TODO code: JMW asks, what does this do?
   if (ispunct(Temp[0])) {
     double dTemp;
@@ -106,8 +104,10 @@ XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y
   if (!label_block.check(brect))
     return;
 
+  canvas.background_transparent();
   canvas.set_text_color(Color(0x20, 0x20, 0x20));
   canvas.text(x, y, Temp);
+  canvas.background_opaque();
 }
 
 XShapeLabel::XShapeLabel(shapefileObj *shpfile, int i, int field)
