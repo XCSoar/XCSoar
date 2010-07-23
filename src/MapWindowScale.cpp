@@ -179,8 +179,10 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
     if (ScaleChangeFeedback) {
       canvas.background_transparent();
       canvas.set_text_color(Color(0xff, 0, 0));
-    } else
+    } else {
       canvas.set_text_color(Color(0, 0, 0));
+      canvas.set_background_color(Color::WHITE);
+    }
 
     canvas.text(IBLSCALE(7),
                 rc.bottom - MapWindowBoldFont.get_ascent_height() - IBLSCALE(1),

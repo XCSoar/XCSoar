@@ -166,8 +166,10 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       canvas.set_text_color(Color(0, 0, 0));
 
       // If FLARM callsign/name available draw it to the canvas
-      if (label_name != NULL && !string_is_empty(label_name))
+      if (label_name != NULL && !string_is_empty(label_name)) {
+        canvas.set_background_color(Color::WHITE);
         canvas.text_opaque(sc_name.x, sc_name.y, label_name);
+      }
 
       // If average climb data available draw it to the canvas
       if (!string_is_empty(label_avg)) {
