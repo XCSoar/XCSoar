@@ -42,6 +42,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Units.hpp"
 #include "NMEA/Info.hpp"
+#include "NMEA/InputLine.hpp"
 
 #include <tchar.h>
 #include <stdlib.h>
@@ -54,18 +55,20 @@ public:
 };
 
 static bool
-PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO);
+PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 
 bool
 B50Device::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
                      bool enable_baro)
 {
-  if(_tcsncmp(_T("$PBB50"), String, 6)==0)
-    {
-      return PBB50(&String[7], GPS_INFO);
-    }
+  NMEAInputLine line(String);
+  TCHAR type[16];
+  line.read(type, 16);
 
-  return false;
+  if (_tcscmp(type, _T("$PBB50")) == 0)
+    return PBB50(line, GPS_INFO);
+  else
+    return false;
 }
 
 static Device *
@@ -112,47 +115,39 @@ CHK = standard NMEA checksum
 */
 
 static bool
-PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO)
+PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   // $PBB50,100,0,10,1,10000,0,1,0,20*4A..
   // $PBB50,0,.0,.0,0,0,1.07,0,-228*58
   // $PBB50,14,-.2,.0,196,0,.92,0,-228*71
 
   double vtas, vias, wnet;
-  TCHAR ctemp[80];
 
-  NMEAParser::ExtractParameter(String,ctemp,0);
-  vtas = Units::ToSysUnit(_tcstod(ctemp, NULL), unKnots);
-
-  NMEAParser::ExtractParameter(String,ctemp,1);
-  wnet = Units::ToSysUnit(_tcstod(ctemp, NULL), unKnots);
-
-  NMEAParser::ExtractParameter(String,ctemp,2);
-  GPS_INFO->MacCready = Units::ToSysUnit(_tcstod(ctemp, NULL), unKnots);
+  vtas = Units::ToSysUnit(line.read(fixed_zero), unKnots);
+  wnet = Units::ToSysUnit(line.read(fixed_zero), unKnots);
+  GPS_INFO->MacCready = Units::ToSysUnit(line.read(fixed_zero), unKnots);
 
   /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
   ///  oldGlidePolar::SetMacCready(GPS_INFO->MacCready);
 
-  NMEAParser::ExtractParameter(String,ctemp,3);
-  vias = Units::ToSysUnit(sqrt(_tcstod(ctemp, NULL)), unKnots);
+  vias = Units::ToSysUnit(line.read(fixed_zero), unKnots);
 
   // RMN: Changed bugs-calculation, swapped ballast and bugs to suit
   // the B50-string for Borgelt, it's % degradation, for us, it is %
   // of max performance
+  line.skip(2);
   /*
 
   JMW disabled bugs/ballast due to problems with test b50
 
-  NMEAParser::ExtractParameter(String,ctemp,4);
-  GPS_INFO->Bugs = 1.0 - max(0, min(30, _tcstod(ctemp, NULL))) / 100.0;
+  GPS_INFO->Bugs = 1.0 - max(0, min(30, line.read(0.0))) / 100.0;
   BUGS = GPS_INFO->Bugs;
 
   // for Borgelt it's % of empty weight,
   // for us, it's % of ballast capacity
   // RMN: Borgelt ballast->XCSoar ballast
 
-  NMEAParser::ExtractParameter(String,ctemp,5);
-  double bal = max(1.0, min(1.60, _tcstod(ctemp, NULL))) - 1.0;
+  double bal = max(1.0, min(1.60, line.read(0.0))) - 1.0;
   if (WEIGHTS[2]>0) {
     GPS_INFO->Ballast = min(1.0, max(0.0,
                                      bal*(WEIGHTS[0]+WEIGHTS[1])/WEIGHTS[2]));
@@ -165,12 +160,8 @@ PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO)
   */
 
   // inclimb/incruise 1=cruise,0=climb, OAT
-  NMEAParser::ExtractParameter(String,ctemp,6);
-  int climb = lround(_tcstod(ctemp, NULL));
-
-  GPS_INFO->SwitchState.VarioCircling = (climb==1);
-
-  if (climb) {
+  GPS_INFO->SwitchState.VarioCircling = line.read(false);
+  if (GPS_INFO->SwitchState.VarioCircling) {
     triggerClimbEvent.trigger();
   } else {
     triggerClimbEvent.reset();
