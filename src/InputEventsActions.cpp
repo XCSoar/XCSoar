@@ -773,16 +773,6 @@ InputEvents::eventMacCready(const TCHAR *misc)
 void
 InputEvents::eventWind(const TCHAR *misc)
 {
-  if (_tcscmp(misc, TEXT("up")) == 0)
-    on_key_WindSpeed(ibkUp);
-  else if (_tcscmp(misc, TEXT("down")) == 0)
-    on_key_WindSpeed(ibkDown);
-  else if (_tcscmp(misc, TEXT("left")) == 0)
-    on_key_WindSpeed(ibkLeft);
-  else if (_tcscmp(misc, TEXT("right")) == 0)
-    on_key_WindSpeed(ibkRight);
-  else if (_tcscmp(misc, TEXT("save")) == 0)
-    on_key_WindSpeed(ibkEnter);
 }
 
 int jmw_demo=0;

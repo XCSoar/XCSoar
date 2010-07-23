@@ -94,22 +94,6 @@ ActionInterface::on_key_Speed(InfoBoxKeyCodes UpDown)
     on_key_Direction(ibkUp);
 }
 
-
-void
-ActionInterface::on_key_Accelerometer(InfoBoxKeyCodes UpDown)
-{
-}
-
-void
-ActionInterface::on_key_WindDirection(InfoBoxKeyCodes UpDown)
-{
-}
-
-void
-ActionInterface::on_key_WindSpeed(InfoBoxKeyCodes UpDown)
-{
-}
-
 void
 ActionInterface::on_key_Direction(InfoBoxKeyCodes UpDown)
 {

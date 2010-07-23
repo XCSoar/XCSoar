@@ -269,13 +269,13 @@ static const SCREEN_INFO Data_Options[] = {
   // 25
   { ugWindSpeed, _T("Wind Speed"), _T("Wind V"),
     NULL,
-    ActionInterface::on_key_WindSpeed,
+    NULL,
     26, 50,
   },
   // 26
   { ugNone, _T("Wind Bearing"), _T("Wind B"),
     NULL,
-    ActionInterface::on_key_WindDirection,
+    NULL,
     48, 25,
   },
   // 27
@@ -341,7 +341,7 @@ static const SCREEN_INFO Data_Options[] = {
   // 37
   { ugNone, _T("G load"), _T("G"),
     new InfoBoxFormatter(_T("%2.2f")),
-    ActionInterface::on_key_Accelerometer,
+    NULL,
     47, 32,
   },
   // 38
