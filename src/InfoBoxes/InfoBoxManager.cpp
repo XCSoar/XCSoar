@@ -95,7 +95,6 @@ static int InfoType[MAXINFOWINDOWS];
 
 typedef struct _SCREEN_INFO
 {
-  UnitGroup_t UnitGroup;
   const TCHAR *Description;
   char next_screen;
   char prev_screen;
@@ -112,309 +111,309 @@ typedef struct _SCREEN_INFO
 //   Waypoint 14,36,39,40,41,42,45,46
 static const SCREEN_INFO Data_Options[] = {
   // 0
-  { ugAltitude, _T("Height GPS"),
+  { _T("Height GPS"),
     1, 33,
   },
   // 1
-  { ugAltitude, _T("Height AGL"),
+  { _T("Height AGL"),
     20, 0,
   },
   // 2
-  { ugVerticalSpeed, _T("Thermal last 30 sec"),
+  { _T("Thermal last 30 sec"),
     7, 44,
   },
   // 3
-  { ugNone, _T("Bearing"),
+  { _T("Bearing"),
     6, 54,
   },
   // 4
-  { ugNone, _T("L/D instantaneous"),
+  { _T("L/D instantaneous"),
     5, 38,
   },
   // 5
-  { ugNone, _T("L/D cruise"),
+  { _T("L/D cruise"),
     19, 4,
   },
   // 6
-  { ugHorizontalSpeed, _T("Speed ground"),
+  { _T("Speed ground"),
     23, 3,
   },
   // 7
-  { ugVerticalSpeed, _T("Last Thermal Average"),
+  { _T("Last Thermal Average"),
     8, 2,
   },
   // 8
-  { ugAltitude, _T("Last Thermal Gain"),
+  { _T("Last Thermal Gain"),
     9, 7,
   },
   // 9
-  { ugNone, _T("Last Thermal Time"),
+  { _T("Last Thermal Time"),
     21, 8,
   },
   // 10
-  { ugVerticalSpeed, _T("MacCready Setting"),
+  { _T("MacCready Setting"),
     34, 43,
   },
   // 11
-  { ugDistance, _T("Next Distance"),
+  { _T("Next Distance"),
     12, 31,
   },
   // 12
-  { ugAltitude, _T("Next Altitude Difference"),
+  { _T("Next Altitude Difference"),
     13, 11,
   },
   // 13
-  { ugAltitude, _T("Next Altitude Required"),
+  { _T("Next Altitude Required"),
     15, 12,
   },
   // 14
-  { ugNone, _T("Next Waypoint"),
+  { _T("Next Waypoint"),
     36, 46,
   },
   // 15
-  { ugAltitude, _T("Final Altitude Difference"),
+  { _T("Final Altitude Difference"),
     16, 13,
   },
   // 16
-  { ugAltitude, _T("Final Altitude Required"),
+  { _T("Final Altitude Required"),
     17, 15,
   },
   // 17
-  { ugTaskSpeed, _T("Speed Task Average"),
+  { _T("Speed Task Average"),
     18, 16,
   },
   // 18
-  { ugDistance, _T("Final Distance"),
+  { _T("Final Distance"),
     27, 17,
   },
   // 19
-  { ugNone, _T("Final LD"),
+  { _T("Final LD"),
     38, 5,
   },
   // 20
-  { ugAltitude, _T("Terrain Elevation"),
+  { _T("Terrain Elevation"),
     33, 1,
   },
   // 21
-  { ugVerticalSpeed, _T("Thermal Average"),
+  { _T("Thermal Average"),
     22, 9,
   },
   // 22
-  { ugAltitude, _T("Thermal Gain"),
+  { _T("Thermal Gain"),
     24, 21,
   },
   // 23
-  { ugNone, _T("Track"),
+  { _T("Track"),
     32, 6,
   },
   // 24
-  { ugVerticalSpeed, _T("Vario"),
+  { _T("Vario"),
     44, 22,
   },
   // 25
-  { ugWindSpeed, _T("Wind Speed"),
+  { _T("Wind Speed"),
     26, 50,
   },
   // 26
-  { ugNone, _T("Wind Bearing"),
+  { _T("Wind Bearing"),
     48, 25,
   },
   // 27
-  { ugNone, _T("AA Time"),
+  { _T("AA Time"),
     28, 18,
   },
   // 28
-  { ugDistance, _T("AA Distance Max"),
+  { _T("AA Distance Max"),
     29, 27,
   },
   // 29
-  { ugDistance, _T("AA Distance Min"),
+  { _T("AA Distance Min"),
     30, 28,
   },
   // 30
-  { ugTaskSpeed, _T("AA Speed Max"),
+  { _T("AA Speed Max"),
     31, 29,
   },
   // 31
-  { ugTaskSpeed, _T("AA Speed Min"),
+  { _T("AA Speed Min"),
     51, 30,
   },
   // 32
-  { ugHorizontalSpeed, _T("Airspeed IAS"),
+  { _T("Airspeed IAS"),
     37, 23,
   },
   // 33
-  { ugAltitude, _T("Pressure Altitude"),
+  { _T("Pressure Altitude"),
     0, 20,
   },
   // 34
-  { ugHorizontalSpeed, _T("Speed MacCready"),
+  { _T("Speed MacCready"),
     35, 10,
   },
   // 35
-  { ugNone, _T("Percentage climb"),
+  { _T("Percentage climb"),
     43, 34,
   },
   // 36
-  { ugNone, _T("Time of flight"),
+  { _T("Time of flight"),
     39, 14,
   },
   // 37
-  { ugNone, _T("G load"),
+  { _T("G load"),
     47, 32,
   },
   // 38
-  { ugNone, _T("Next LD"),
+  { _T("Next LD"),
     53, 19,
   },
   // 39
-  { ugNone, _T("Time local"),
+  { _T("Time local"),
     40, 36,
   },
   // 40
-  { ugNone, _T("Time UTC"),
+  { _T("Time UTC"),
     41, 39,
   },
   // 41
-  { ugNone, _T("Task Time To Go"),
+  { _T("Task Time To Go"),
     42, 40,
   },
   // 42
-  { ugNone, _T("Next Time To Go"),
+  { _T("Next Time To Go"),
     45, 41,
   },
   // 43
-  { ugHorizontalSpeed, _T("Speed Dolphin"),
+  { _T("Speed Dolphin"),
     10, 35,
   },
   // 44
-  { ugVerticalSpeed, _T("Netto Vario"),
+  { _T("Netto Vario"),
     2, 24,
   },
   // 45
-  { ugNone, _T("Task Arrival Time"),
+  { _T("Task Arrival Time"),
     46, 42,
   },
   // 46
-  { ugNone, _T("Next Arrival Time"),
+  { _T("Next Arrival Time"),
     14, 45,
   },
   // 47
-  { ugNone, _T("Bearing Difference"),
+  { _T("Bearing Difference"),
     54, 37,
   },
   // 48
-  { ugNone, _T("Outside Air Temperature"),
+  { _T("Outside Air Temperature"),
     49, 26,
   },
   // 49
-  { ugNone, _T("Relative Humidity"),
+  { _T("Relative Humidity"),
     50, 48,
   },
   // 50
-  { ugNone, _T("Forecast Temperature"),
+  { _T("Forecast Temperature"),
     49, 25,
   },
   // 51
-  { ugDistance, _T("AA Distance Tgt"),
+  { _T("AA Distance Tgt"),
     52, 31,
   },
   // 52
-  { ugTaskSpeed, _T("AA Speed Tgt"),
+  { _T("AA Speed Tgt"),
     11, 51,
   },
   // 53
-  { ugNone, _T("L/D vario"),
+  { _T("L/D vario"),
     4, 38,
   },
   // 54
-  { ugHorizontalSpeed, _T("Airspeed TAS"),
+  { _T("Airspeed TAS"),
     3, 47,
   },
   // 55
-  { ugNone, _T("Own Team Code"),
+  { _T("Own Team Code"),
     56, 54,
   },
   // 56
-  { ugNone, _T("Team Bearing"),
+  { _T("Team Bearing"),
     57, 55,
   },
   // 57
-  { ugNone, _T("Team Bearing Diff"),
+  { _T("Team Bearing Diff"),
     58, 56,
   },
   // 58
-  { ugDistance, _T("Team Range"),
+  { _T("Team Range"),
     55, 57,
   },
   // 59
-  { ugTaskSpeed, _T("Speed Task Instantaneous"),
+  { _T("Speed Task Instantaneous"),
     18, 16,
   },
   // 60
-  { ugDistance, _T("Distance Home"),
+  { _T("Distance Home"),
     18, 16,
   },
   // 61
-  { ugTaskSpeed, _T("Speed Task Achieved"),
+  { _T("Speed Task Achieved"),
     18, 16,
   },
   // 62
-  { ugNone, _T("AA Delta Time"),
+  { _T("AA Delta Time"),
     28, 18,
   },
   // 63
-  { ugVerticalSpeed, _T("Thermal All"),
+  { _T("Thermal All"),
     8, 2,
   },
   // 64
-  { ugVerticalSpeed, _T("Distance Vario"),
+  { _T("Distance Vario"),
     8, 2,
   },
   // 65
 #ifndef GNAV
-  { ugNone, _T("Battery Percent"),
+  { _T("Battery Percent"),
 #else
-  { ugNone, _T("Battery Voltage"),
+  { _T("Battery Voltage"),
 #endif
     49, 26,
   },
   // 66  VENTA-ADDON added Final GR
   // VENTA-TODO: fix those 38,5 numbers to point correctly menu items
-  { ugNone, _T("Final GR"),
+  { _T("Final GR"),
     38, 5,
   },
 
   // 67 VENTA3-ADDON Alternate1 destinations infoboxes  TODO> fix 36 46 to something correct
-  { ugNone, _T("Alternate1 GR"),
+  { _T("Alternate1 GR"),
     36, 46,
   },
   // 68 Alternate 2
-  { ugNone, _T("Alternate2 GR"),
+  { _T("Alternate2 GR"),
     36, 46,
   },
   // 69 BestAlternate aka BestLanding
-  { ugNone, _T("Best Alternate"),
+  { _T("Best Alternate"),
     36, 46,
   },
   // 70
-  { ugAltitude, _T("QFE GPS"),
+  { _T("QFE GPS"),
     1, 33,
   },
   // 71 TODO FIX those 19,4 values
-  { ugNone, _T("L/D Average"),
+  { _T("L/D Average"),
     19, 4,
   },
   // 72 //
-  { ugNone, _T("Experimental1"),
+  { _T("Experimental1"),
     8, 2,
   },
   // 73 //
-  { ugDistance, _T("Online Contest Distance"),
+  { _T("Online Contest Distance"),
     8, 2,
   },
   // 74 //
-  { ugNone, _T("Experimental2"),
+  { _T("Experimental2"),
     8, 2,
   },
 };
