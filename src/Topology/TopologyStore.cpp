@@ -151,85 +151,86 @@ TopologyStore::Open()
   }
 
   // Ready to open the file now..
-  ZipLineReader reader(szFile);
+  ZipSource reader(szFile);
   if (reader.error()) {
     LogStartUp(TEXT("No topology file: %s"), szFile);
     return;
   }
 
+  LineSplitter splitter(reader);
+
   TCHAR Directory[MAX_PATH];
   ExtractDirectory(Directory, szFile);
 
-  Load(reader, Directory);
+  Load(splitter, Directory);
 }
 
 void
-TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
+TopologyStore::Load(NLineReader &reader, const TCHAR* Directory)
 {
   Reset();
 
   double ShapeRange;
   long ShapeIcon;
   long ShapeField;
-  TCHAR wShapeFilename[MAX_PATH];
   int numtopo = 0;
   char ShapeFilename[MAX_PATH];
 
-  _tcscpy(wShapeFilename, Directory);
-  TCHAR *wShapeFilenameEnd = wShapeFilename + _tcslen(wShapeFilename);
+#ifdef _UNICODE
+  if (WideCharToMultiByte(CP_ACP, 0, Directory, -1, ShapeFilename, MAX_PATH,
+                          NULL, NULL) <= 0)
+    return;
+#else
+  strcpy(ShapeFilename, Directory);
+#endif
 
-  TCHAR *line;
+  char *ShapeFilenameEnd = ShapeFilename + strlen(ShapeFilename);
+
+  char *line;
   while ((line = reader.read()) != NULL) {
     // Look For Comment
-    if (string_is_empty(line) || line[0] == _T('*'))
+    if (string_is_empty(line) || line[0] == '*')
       continue;
 
     BYTE red, green, blue;
     // filename,range,icon,field
 
     // File name
-    TCHAR *p = _tcschr(line, ',');
+    char *p = strchr(line, ',');
     if (p == NULL || p == line)
       continue;
 
-    _tcsncpy(wShapeFilenameEnd, line, p - line);
-    _tcscpy(wShapeFilenameEnd + (p - line), TEXT(".shp"));
-
-#ifdef _UNICODE
-    WideCharToMultiByte(CP_ACP, 0, wShapeFilename,
-        _tcslen(wShapeFilename) + 1, ShapeFilename, 200, NULL, NULL);
-#else
-    strcpy(ShapeFilename, wShapeFilename);
-#endif
+    memcpy(ShapeFilenameEnd, line, p - line);
+    strcpy(ShapeFilenameEnd + (p - line), ".shp");
 
     // Shape range
-    ShapeRange = _tcstod(p + 1, &p);
+    ShapeRange = strtod(p + 1, &p);
     if (*p != _T(','))
       continue;
 
     // Shape icon
-    ShapeIcon = _tcstol(p + 1, &p, 10);
+    ShapeIcon = strtol(p + 1, &p, 10);
     if (*p != _T(','))
       continue;
 
     // Shape field for text display
     // sjt 02NOV05 - field parameter enabled
-    ShapeField = _tcstol(p + 1, &p, 10) - 1;
+    ShapeField = strtol(p + 1, &p, 10) - 1;
     if (*p != _T(','))
       continue;
 
     // Red component of line / shading colour
-    red = (BYTE)_tcstol(p + 1, &p, 10);
+    red = (BYTE)strtol(p + 1, &p, 10);
     if (*p != _T(','))
       continue;
 
     // Green component of line / shading colour
-    green = (BYTE)_tcstol(p + 1, &p, 10);
+    green = (BYTE)strtol(p + 1, &p, 10);
     if (*p != _T(','))
       continue;
 
     // Blue component of line / shading colour
-    blue = (BYTE)_tcstol(p + 1, NULL, 10);
+    blue = (BYTE)strtol(p + 1, NULL, 10);
 
     if ((red == 64) && (green == 96) && (blue == 240)) {
       // JMW update colours to ICAO standard
