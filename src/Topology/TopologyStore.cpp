@@ -150,7 +150,7 @@ TopologyStore::Open()
   TCHAR Directory[MAX_PATH];
 
   for (int z = 0; z < MAXTOPOLOGY; z++) {
-    topology_store[z] = 0;
+    topology_store[z] = NULL;
   }
 
   Profile::Get(szProfileTopologyFile, szFile, MAX_PATH);
