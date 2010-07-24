@@ -143,15 +143,9 @@ TopologyStore::Open()
 
   ProgressGlue::Create(gettext(_T("Loading Topology File...")));
 
-  Poco::ScopedRWLock protect(lock, true);
-
   // Start off by getting the names and paths
   TCHAR szFile[MAX_PATH];
   TCHAR Directory[MAX_PATH];
-
-  for (int z = 0; z < MAXTOPOLOGY; z++) {
-    topology_store[z] = NULL;
-  }
 
   Profile::Get(szProfileTopologyFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
@@ -184,6 +178,12 @@ TopologyStore::Open()
 void
 TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
 {
+  Poco::ScopedRWLock protect(lock, true);
+
+  for (int z = 0; z < MAXTOPOLOGY; z++) {
+    topology_store[z] = NULL;
+  }
+
   TCHAR ctemp[80];
   TCHAR *TempString;
   TCHAR ShapeName[50];
