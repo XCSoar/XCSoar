@@ -109,12 +109,7 @@ TopologyStore::Close()
 {
   LogStartUp(TEXT("CloseTopology"));
 
-  Poco::ScopedRWLock protect(lock, true);
-
-  for (int z = 0; z < MAXTOPOLOGY; z++) {
-    if (topology_store[z])
-      delete topology_store[z];
-  }
+  Reset();
 }
 
 /**
