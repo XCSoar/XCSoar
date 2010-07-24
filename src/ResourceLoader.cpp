@@ -61,14 +61,12 @@ ResourceLoader::Init(HINSTANCE hInstance)
 #endif /* !WIN32 */
 
 ResourceLoader::Data
-ResourceLoader::Load(unsigned id)
+ResourceLoader::Load(const TCHAR *name, const TCHAR *type)
 {
 #ifdef WIN32
   assert(ResourceLoaderInstance != NULL);
 
-  const TCHAR *name = MAKEINTRESOURCE(id);
-
-  HRSRC resource = ::FindResource(ResourceLoaderInstance, name, RT_BITMAP);
+  HRSRC resource = ::FindResource(ResourceLoaderInstance, name, type);
   if (resource == NULL)
     return Data(NULL, 0);
 
@@ -85,6 +83,21 @@ ResourceLoader::Load(unsigned id)
     return Data(NULL, 0);
 
   return std::pair<const void *, size_t>(data, size);
+#else
+
+  for (unsigned i = 0; named_resources[i].data != NULL; ++i)
+    if (_tcscmp(named_resources[i].name, name) == 0)
+      return Data(named_resources[i].data, named_resources[i].size);
+
+  return Data(NULL, 0);
+#endif
+}
+
+ResourceLoader::Data
+ResourceLoader::Load(unsigned id)
+{
+#ifdef WIN32
+  return Load(MAKEINTRESOURCE(id), RT_BITMAP);
 #else
 
   for (unsigned i = 0; numeric_resources[i].data != NULL; ++i)

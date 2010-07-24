@@ -43,6 +43,7 @@ Copyright_License {
 #include <windef.h>
 #endif
 
+#include <tchar.h>
 #include <stddef.h>
 #include <utility>
 
@@ -53,6 +54,9 @@ namespace ResourceLoader {
 #endif
 
   typedef std::pair<const void *, size_t> Data;
+
+  Data
+  Load(const TCHAR *name, const TCHAR *type);
 
   Data
   Load(unsigned id);
