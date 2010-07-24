@@ -180,6 +180,12 @@ TopologyStore::Open()
     return;
   }
 
+  Load(reader, Directory);
+}
+
+void
+TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
+{
   TCHAR ctemp[80];
   TCHAR *TempString;
   TCHAR ShapeName[50];

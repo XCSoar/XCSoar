@@ -50,6 +50,7 @@ class Projection;
 class LabelBlock;
 class Topology;
 struct SETTINGS_MAP;
+class ZipLineReader;
 
 /**
  * Class used to manage and render vector topology layers
@@ -68,6 +69,7 @@ public:
       rectObj &_bounds_active, const bool force = false);
   void TriggerUpdateCaches(Projection &m_projection);
   void Open();
+  void Load(ZipLineReader &reader, const TCHAR* Directory);
   void Close();
   void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
             const Projection &projection, LabelBlock &label_block,
