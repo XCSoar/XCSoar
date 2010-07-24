@@ -56,8 +56,6 @@ Copyright_License {
 void
 TopologyStore::TriggerUpdateCaches(Projection &m_projection)
 {
-  Poco::ScopedRWLock protect(lock, true);
-
   for (int z = 0; z < MAXTOPOLOGY; z++) {
     if (topology_store[z])
       topology_store[z]->triggerUpdateCache = true;
@@ -74,8 +72,6 @@ bool
 TopologyStore::ScanVisibility(Projection &m_projection,
     rectObj &_bounds_active, const bool force)
 {
-  Poco::ScopedRWLock protect(lock, true);
-
   // check if any needs to have cache updates because wasnt
   // visible previously when bounds moved
   bool first = true;
@@ -122,8 +118,6 @@ TopologyStore::Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
                     const Projection &projection, LabelBlock &label_block,
                     const SETTINGS_MAP &settings_map)
 {
-  Poco::ScopedRWLock protect(lock, false);
-
   for (int z = 0; z < MAXTOPOLOGY; z++) {
     if (topology_store[z])
       topology_store[z]->Paint(canvas, bitmap_canvas, projection,
@@ -173,8 +167,6 @@ void
 TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
 {
   Reset();
-
-  Poco::ScopedRWLock protect(lock, true);
 
   TCHAR ctemp[80];
   TCHAR *TempString;
@@ -270,8 +262,6 @@ TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
 void
 TopologyStore::Reset()
 {
-  Poco::ScopedRWLock protect(lock, true);
-
   for (int z = 0; z < MAXTOPOLOGY; z++) {
     delete topology_store[z];
     topology_store[z] = NULL;

@@ -39,7 +39,6 @@ Copyright_License {
 #ifndef TOPOLOGY_STORE_H
 #define TOPOLOGY_STORE_H
 
-#include "Poco/RWLock.h"
 #include "shapelib/mapshape.h"
 
 #include <windef.h> /* for RECT */
@@ -78,7 +77,6 @@ public:
 
 private:
   Topology* topology_store[MAXTOPOLOGY];
-  Poco::RWLock lock;
 };
 
 #endif
