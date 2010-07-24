@@ -205,7 +205,7 @@ Topology::addShape(const int i)
 void
 Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
                 const Projection &map_projection, LabelBlock &label_block,
-                const SETTINGS_MAP &settings_map)
+                const SETTINGS_MAP &settings_map) const
 {
   if (!shapefileopen)
     return;
@@ -248,7 +248,7 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
   const bool render_labels = settings_map.DeclutterLabels < 2;
 
   for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
-    XShape *cshape = shpCache[ixshp];
+    const XShape *cshape = shpCache[ixshp];
 
     if (!cshape || cshape->hide)
       continue;

@@ -66,7 +66,7 @@ public:
 		   const rectObj &thebounds, bool purgeonly = false);
   void Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
              const Projection &projection, LabelBlock &label_block,
-             const SETTINGS_MAP &settings_map);
+             const SETTINGS_MAP &settings_map) const;
 
   double scaleThreshold;
   void loadIcon(const int);

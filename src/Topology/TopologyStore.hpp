@@ -73,7 +73,7 @@ public:
   void Reset();
   void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
             const Projection &projection, LabelBlock &label_block,
-            const SETTINGS_MAP &settings_map);
+            const SETTINGS_MAP &settings_map) const;
 
 private:
   Topology* topology_store[MAXTOPOLOGY];

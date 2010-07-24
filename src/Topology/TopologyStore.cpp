@@ -116,7 +116,7 @@ TopologyStore::Close()
 void
 TopologyStore::Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
                     const Projection &projection, LabelBlock &label_block,
-                    const SETTINGS_MAP &settings_map)
+                    const SETTINGS_MAP &settings_map) const
 {
   for (int z = 0; z < MAXTOPOLOGY; z++) {
     if (topology_store[z])

@@ -69,7 +69,8 @@ XShape::~XShape()
 }
 
 void
-XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y)
+XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block,
+                           int x, int y) const
 {
   if (!label)
     return;
