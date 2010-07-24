@@ -177,11 +177,9 @@ TopologyStore::Open()
 void
 TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
 {
-  Poco::ScopedRWLock protect(lock, true);
+  Reset();
 
-  for (int z = 0; z < MAXTOPOLOGY; z++) {
-    topology_store[z] = NULL;
-  }
+  Poco::ScopedRWLock protect(lock, true);
 
   TCHAR ctemp[80];
   TCHAR *TempString;
@@ -272,5 +270,16 @@ TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
     topology_store[numtopo]->scaleThreshold = ShapeRange;
 
     numtopo++;
+  }
+}
+
+void
+TopologyStore::Reset()
+{
+  Poco::ScopedRWLock protect(lock, true);
+
+  for (int z = 0; z < MAXTOPOLOGY; z++) {
+    delete topology_store[z];
+    topology_store[z] = NULL;
   }
 }

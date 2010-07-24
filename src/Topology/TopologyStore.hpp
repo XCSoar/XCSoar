@@ -71,6 +71,7 @@ public:
   void Open();
   void Load(ZipLineReader &reader, const TCHAR* Directory);
   void Close();
+  void Reset();
   void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
             const Projection &projection, LabelBlock &label_block,
             const SETTINGS_MAP &settings_map);
