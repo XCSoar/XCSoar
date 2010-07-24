@@ -255,7 +255,7 @@ InputEvents::readFile()
   //   Better way is to separate the check for # and the scanf
   TCHAR *buffer;
   while ((buffer = reader.read()) != NULL
-         && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)) {
+         && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) == 2)) {
 
     line++;
 
