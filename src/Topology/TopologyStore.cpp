@@ -169,7 +169,6 @@ TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
   Reset();
 
   TCHAR ctemp[80];
-  TCHAR ShapeName[50];
   double ShapeRange;
   long ShapeIcon;
   long ShapeField;
@@ -177,6 +176,9 @@ TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
   TCHAR *Stop;
   int numtopo = 0;
   char ShapeFilename[MAX_PATH];
+
+  _tcscpy(wShapeFilename, Directory);
+  TCHAR *wShapeFilenameEnd = wShapeFilename + _tcslen(wShapeFilename);
 
   TCHAR *line;
   while ((line = reader.read()) != NULL) {
@@ -188,11 +190,7 @@ TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
     // filename,range,icon,field
 
     // File name
-    PExtractParameter(line, ctemp, 0);
-    _tcscpy(ShapeName, ctemp);
-
-    _tcscpy(wShapeFilename, Directory);
-    _tcscat(wShapeFilename, ShapeName);
+    PExtractParameter(line, wShapeFilenameEnd, 0);
     _tcscat(wShapeFilename, TEXT(".shp"));
 
 #ifdef _UNICODE
