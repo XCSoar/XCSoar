@@ -44,13 +44,11 @@ MapDrawHelper::MapDrawHelper(Canvas &_canvas,
                              Canvas &_buffer, 
                              Canvas &_stencil, 
                              Projection &_proj,
-                             const RECT &_rc,
                              const SETTINGS_MAP& settings_map):
   m_canvas(_canvas),
   m_buffer(_buffer),
   m_stencil(_stencil),
   m_proj(_proj),
-  m_rc(_rc),
   m_buffer_drawn(false),
   m_use_stencil(false),
   m_settings_map(settings_map)
@@ -62,7 +60,6 @@ MapDrawHelper::MapDrawHelper(MapDrawHelper &_that):
   m_buffer(_that.m_buffer),
   m_stencil(_that.m_stencil),
   m_proj(_that.m_proj),
-  m_rc(_that.m_rc),
   m_buffer_drawn(_that.m_buffer_drawn),
   m_use_stencil(_that.m_use_stencil),
   m_settings_map(_that.m_settings_map)
@@ -139,9 +136,9 @@ MapDrawHelper::buffer_render_finish()
     m_buffer.white_pen();
     
     if (m_use_stencil) {
-      m_buffer.copy_transparent_black(m_stencil, m_rc);
+      m_buffer.copy_transparent_black(m_stencil);
     }
-    m_canvas.copy_transparent_white(m_buffer, m_rc);
+    m_canvas.copy_transparent_white(m_buffer);
     m_buffer.background_opaque();
     m_buffer_drawn = false;
   }

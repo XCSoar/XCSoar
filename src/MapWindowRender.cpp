@@ -73,7 +73,7 @@ MapWindow::RenderStart(Canvas &canvas, const RECT rc)
  * @param rc The area to draw in
  */
 void
-MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
+MapWindow::RenderMapLayer(Canvas &canvas)
 {
   m_background.sun_from_wind(*this, Basic().wind);
   m_background.Draw(canvas, MapRectBig, *this, SettingsMap());
@@ -87,7 +87,7 @@ MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
     if ((SettingsComputer().FinalGlideTerrain == 2) && 
         Calculated().TerrainValid)
       // Draw the groundline (and shading)
-      DrawTerrainAbove(canvas, rc, buffer_canvas);
+      DrawTerrainAbove(canvas, buffer_canvas);
     BigZoom = false;
   }
 
@@ -238,7 +238,7 @@ MapWindow::Render(Canvas &canvas, const RECT rc)
   RenderStart(canvas, rc);
 
   // Render terrain, groundline and topology and reset pen, brush and font
-  RenderMapLayer(canvas, rc);
+  RenderMapLayer(canvas);
 
   // Render the AAT areas and airspace
   RenderAreas(canvas, rc);

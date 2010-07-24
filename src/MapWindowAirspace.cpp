@@ -246,7 +246,7 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
     m_airspace->visit_warnings(awc);
 
     MapDrawHelper helper (canvas, buffer, stencil_canvas, *this, 
-                          GetMapRect(), SettingsMap());
+                          SettingsMap());
     AirspaceVisitorMap v(helper, awc);
     const AirspaceMapVisible visible(SettingsComputer(),
                                      Basic().GetAltitudeBaroPreferred(),

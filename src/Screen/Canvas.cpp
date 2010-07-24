@@ -224,7 +224,7 @@ Canvas::copy(const Canvas &src)
 }
 
 void
-Canvas::copy_transparent_white(const Canvas &src, const RECT &rc)
+Canvas::copy_transparent_white(const Canvas &src)
 {
   assert(src.surface != NULL);
 
@@ -234,7 +234,7 @@ Canvas::copy_transparent_white(const Canvas &src, const RECT &rc)
 }
 
 void
-Canvas::copy_transparent_black(const Canvas &src, const RECT &rc)
+Canvas::copy_transparent_black(const Canvas &src)
 {
   assert(src.surface != NULL);
 
@@ -762,45 +762,29 @@ Canvas::copy(const Canvas &src)
 }
 
 void
-Canvas::copy_transparent_black(const Canvas &src, const RECT &rc)
+Canvas::copy_transparent_black(const Canvas &src)
 {
 #if !defined(WINDOWSPC)
-  ::TransparentImage(dc,
-                     rc.left, rc.top,
-                     rc.right - rc.left, rc.bottom - rc.top,
-                     src.dc,
-                     rc.left, rc.top,
-                     rc.right - rc.left, rc.bottom - rc.top,
+  ::TransparentImage(dc, 0, 0, get_width(), get_height(),
+                     src.dc, 0, 0, get_width(), get_height(),
                      Color::BLACK);
 #else
-  ::TransparentBlt(dc,
-                   rc.left, rc.top,
-                   rc.right - rc.left, rc.bottom - rc.top,
-                   src.dc,
-                   rc.left, rc.top,
-                   rc.right - rc.left, rc.bottom - rc.top,
+  ::TransparentBlt(dc, 0, 0, get_width(), get_height(),
+                   src.dc, 0, 0, get_width(), get_height(),
                    Color::BLACK);
 #endif
 }
 
 void
-Canvas::copy_transparent_white(const Canvas &src, const RECT &rc)
+Canvas::copy_transparent_white(const Canvas &src)
 {
 #if !defined(WINDOWSPC)
-  ::TransparentImage(dc,
-                     rc.left, rc.top,
-                     rc.right - rc.left, rc.bottom - rc.top,
-                     src.dc,
-                     rc.left, rc.top,
-                     rc.right - rc.left, rc.bottom - rc.top,
+  ::TransparentImage(dc, 0, 0, get_width(), get_height(),
+                     src.dc, 0, 0, get_width(), get_height(),
                      Color::WHITE);
 #else
-  ::TransparentBlt(dc,
-                   rc.left, rc.top,
-                   rc.right - rc.left, rc.bottom - rc.top,
-                   src.dc,
-                   rc.left, rc.top,
-                   rc.right - rc.left, rc.bottom - rc.top,
+  ::TransparentBlt(dc, 0, 0, get_width(), get_height(),
+                   src.dc, 0, 0, get_width(), get_height(),
                    Color::WHITE);
 #endif
 }

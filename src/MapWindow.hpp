@@ -222,7 +222,7 @@ private:
   void DrawFinalGlide(Canvas &canvas, const RECT rc);
   void DrawThermalBand(Canvas &canvas, const RECT rc);
   void DrawGlideThroughTerrain(Canvas &canvas);
-  void DrawTerrainAbove(Canvas &hDC, const RECT rc, Canvas &buffer);
+  void DrawTerrainAbove(Canvas &hDC, Canvas &buffer);
   void DrawCDI();
 
   //  void DrawSpeedToFly(HDC hDC, RECT rc);
@@ -278,7 +278,7 @@ private:
   GlidePolar get_glide_polar() const;
 
   void RenderStart(Canvas &canvas, const RECT rc);
-  void RenderMapLayer(Canvas &canvas, const RECT rc);
+  void RenderMapLayer(Canvas &canvas);
   void RenderAreas(Canvas &canvas, const RECT rc);
   void RenderTrail(Canvas &canvas, const RECT rc);
   void RenderTaskElements(Canvas &canvas, const RECT rc);

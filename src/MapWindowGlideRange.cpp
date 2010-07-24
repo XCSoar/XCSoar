@@ -55,7 +55,8 @@ void MapWindow::CalculateScreenPositionsGroundline(void) {
  * @param rc The area to draw in
  * @param buffer The drawing buffer
  */
-void MapWindow::DrawTerrainAbove(Canvas &canvas, const RECT rc, Canvas &buffer) 
+void
+MapWindow::DrawTerrainAbove(Canvas &canvas, Canvas &buffer)
 {
   if (!Basic().flight.Flying)
     return;
@@ -68,7 +69,7 @@ void MapWindow::DrawTerrainAbove(Canvas &canvas, const RECT rc, Canvas &buffer)
   buffer.white_brush();
   buffer.polygon(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1);
 
-  canvas.copy_transparent_white(buffer, rc);
+  canvas.copy_transparent_white(buffer);
 }
 
 
