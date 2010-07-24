@@ -409,9 +409,17 @@ public:
                unsigned dest_width, unsigned dest_height,
                const Canvas &src, int src_x, int src_y);
 
+  void copy_or(const Canvas &src) {
+    copy_or(0, 0, get_width(), get_height(), src, 0, 0);
+  }
+
   void copy_and(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
                 const Canvas &src, int src_x, int src_y);
+
+  void copy_and(const Canvas &src) {
+    copy_and(0, 0, get_width(), get_height(), src, 0, 0);
+  }
 
   void stretch_or(int dest_x, int dest_y,
                   unsigned dest_width, unsigned dest_height,
@@ -798,9 +806,17 @@ public:
                unsigned dest_width, unsigned dest_height,
                const Canvas &src, int src_x, int src_y);
 
+  void copy_or(const Canvas &src) {
+    copy_or(0, 0, get_width(), get_height(), src, 0, 0);
+  }
+
   void copy_and(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
                 const Canvas &src, int src_x, int src_y);
+
+  void copy_and(const Canvas &src) {
+    copy_and(0, 0, get_width(), get_height(), src, 0, 0);
+  }
 
   void stretch_or(int dest_x, int dest_y,
                   unsigned dest_width, unsigned dest_height,
