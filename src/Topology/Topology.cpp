@@ -56,7 +56,8 @@ Topology::loadIcon(const int res_id)
   icon.load(res_id);
 }
 
-Topology::Topology(const char* shpname, const Color thecolor) :
+Topology::Topology(const char* shpname, const Color thecolor, int _label_field)
+  :label_field(_label_field),
   scaleThreshold(0),
   triggerUpdateCache(false),
   shpCache(NULL),
@@ -185,7 +186,7 @@ Topology::updateCache(Projection &map_projection,
     if (msGetBit(shpfile.status, i)) {
       if (shpCache[i] == NULL) {
         // shape is now in range, and wasn't before
-        shpCache[i] = addShape(i);
+        shpCache[i] = new XShape(&shpfile, i, label_field);
       }
       shapes_visible_count++;
     } else {
@@ -193,12 +194,6 @@ Topology::updateCache(Projection &map_projection,
       shpCache[i] = NULL;
     }
   }
-}
-
-XShape*
-Topology::addShape(const int i)
-{
-  return new XShape(&shpfile, i);
 }
 
 void
@@ -325,18 +320,4 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
       break;
     }
   }
-}
-
-TopologyLabel::TopologyLabel(const char* shpname,
-                             const Color thecolor,
-                             int _field) :
-  Topology(shpname, thecolor),
-  field(max(0, _field))
-{
-}
-
-XShape*
-TopologyLabel::addShape(const int i)
-{
-  return new XShapeLabel(&shpfile, i, field);
 }

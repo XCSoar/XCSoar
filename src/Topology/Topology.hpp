@@ -54,9 +54,11 @@ class XShape;
 
 class Topology
 {
+  int label_field;
+
 public:
-  Topology(const char* shpname, const Color thecolor);
-  virtual ~Topology();
+  Topology(const char* shpname, const Color thecolor, int label_field);
+  ~Topology();
 
   void Open();
   void Close();
@@ -85,8 +87,6 @@ private:
 
   XShape** shpCache;
 
-  virtual XShape* addShape(const int i);
-
 protected:
   char filename[MAX_PATH];
 
@@ -98,16 +98,6 @@ protected:
   MaskedIcon icon;
   shapefileObj shpfile;
   bool shapefileopen;
-};
-
-class TopologyLabel: public Topology
-{
-public:
-  TopologyLabel(const char* shpname, const Color thecolor, int _field);
-  virtual XShape* addShape(const int i);
-
-private:
-  int field;
 };
 
 #endif

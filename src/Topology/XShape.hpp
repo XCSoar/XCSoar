@@ -47,27 +47,17 @@ class LabelBlock;
 
 class XShape
 {
-public:
-  XShape(shapefileObj *shpfile, int i);
-  virtual ~XShape();
+  char *label;
 
-  virtual void
-  renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y) const {}
+public:
+  XShape(shapefileObj *shpfile, int i, int label_field=-1);
+  ~XShape();
+
+  void renderSpecial(Canvas &canvas, LabelBlock &label_block,
+                     int x, int y) const;
 
   bool hide;
   shapeObj shape;
-};
-
-class XShapeLabel: public XShape
-{
-public:
-  XShapeLabel(shapefileObj *shpfile, int i, int field);
-  virtual ~XShapeLabel();
-
-  char *label;
-
-  virtual void
-  renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y) const;
 };
 
 #endif

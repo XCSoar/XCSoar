@@ -47,8 +47,8 @@ Copyright_License {
 #include <string.h>
 #include <stdio.h>
 
-XShape::XShape(shapefileObj *shpfile, int i)
-  :hide(false)
+XShape::XShape(shapefileObj *shpfile, int i, int label_field)
+  :label(NULL), hide(false)
 {
   msInitShape(&shape);
   msSHPReadShape(shpfile->hSHP, i, &shape);
@@ -61,16 +61,29 @@ XShape::XShape(shapefileObj *shpfile, int i)
     }
   }
 #endif
+
+  if (label_field >= 0) {
+    const char *src = msDBFReadStringAttribute(shpfile->hDBF, i, label_field);
+    if (src &&
+        (strcmp(src,"UNK") != 0) &&
+        (strcmp(src,"RAILWAY STATION") != 0) &&
+        (strcmp(src,"RAILROAD STATION") != 0)) {
+      label = strdup(src);
+    } else {
+      hide = true;
+    }
+  }
 }
 
 XShape::~XShape()
 {
+  free(label);
   msFreeShape(&shape);
 }
 
 void
-XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block,
-                           int x, int y) const
+XShape::renderSpecial(Canvas &canvas, LabelBlock &label_block,
+                      int x, int y) const
 {
   if (!label)
     return;
@@ -109,22 +122,4 @@ XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block,
   canvas.set_text_color(Color(0x20, 0x20, 0x20));
   canvas.text(x, y, Temp);
   canvas.background_opaque();
-}
-
-XShapeLabel::XShapeLabel(shapefileObj *shpfile, int i, int field)
-  :XShape(shpfile, i), label(NULL) {
-  const char *src = msDBFReadStringAttribute(shpfile->hDBF, i, field);
-  if (src &&
-      (strcmp(src,"UNK") != 0) &&
-      (strcmp(src,"RAILWAY STATION") != 0) &&
-      (strcmp(src,"RAILROAD STATION") != 0)) {
-    label = strdup(src);
-  } else {
-    hide = true;
-  }
-}
-
-XShapeLabel::~XShapeLabel()
-{
-  free(label);
 }
