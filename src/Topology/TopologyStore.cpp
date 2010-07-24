@@ -169,7 +169,6 @@ TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
   Reset();
 
   TCHAR ctemp[80];
-  TCHAR *TempString;
   TCHAR ShapeName[50];
   double ShapeRange;
   long ShapeIcon;
@@ -179,16 +178,17 @@ TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
   int numtopo = 0;
   char ShapeFilename[MAX_PATH];
 
-  while ((TempString = reader.read()) != NULL) {
+  TCHAR *line;
+  while ((line = reader.read()) != NULL) {
     // Look For Comment
-    if (string_is_empty(TempString) || TempString[0] == _T('*'))
+    if (string_is_empty(line) || line[0] == _T('*'))
       continue;
 
     BYTE red, green, blue;
     // filename,range,icon,field
 
     // File name
-    PExtractParameter(TempString, ctemp, 0);
+    PExtractParameter(line, ctemp, 0);
     _tcscpy(ShapeName, ctemp);
 
     _tcscpy(wShapeFilename, Directory);
@@ -203,16 +203,16 @@ TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
 #endif
 
     // Shape range
-    PExtractParameter(TempString, ctemp, 1);
+    PExtractParameter(line, ctemp, 1);
     ShapeRange = _tcstod(ctemp, NULL);
 
     // Shape icon
-    PExtractParameter(TempString, ctemp, 2);
+    PExtractParameter(line, ctemp, 2);
     ShapeIcon = _tcstol(ctemp, &Stop, 10);
 
     // Shape field for text display
     // sjt 02NOV05 - field parameter enabled
-    PExtractParameter(TempString, ctemp, 3);
+    PExtractParameter(line, ctemp, 3);
     if (_istalnum(ctemp[0])) {
       ShapeField = _tcstol(ctemp, &Stop, 10);
       ShapeField--;
@@ -221,15 +221,15 @@ TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
     }
 
     // Red component of line / shading colour
-    PExtractParameter(TempString, ctemp, 4);
+    PExtractParameter(line, ctemp, 4);
     red = (BYTE)_tcstol(ctemp, &Stop, 10);
 
     // Green component of line / shading colour
-    PExtractParameter(TempString, ctemp, 5);
+    PExtractParameter(line, ctemp, 5);
     green = (BYTE)_tcstol(ctemp, &Stop, 10);
 
     // Blue component of line / shading colour
-    PExtractParameter(TempString, ctemp, 6);
+    PExtractParameter(line, ctemp, 6);
     blue = (BYTE)_tcstol(ctemp, &Stop, 10);
 
     if ((red == 64) && (green == 96) && (blue == 240)) {
