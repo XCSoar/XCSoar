@@ -145,8 +145,6 @@ TopologyStore::Open()
 
   // Start off by getting the names and paths
   TCHAR szFile[MAX_PATH];
-  TCHAR Directory[MAX_PATH];
-
   Profile::Get(szProfileTopologyFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
 
@@ -163,14 +161,15 @@ TopologyStore::Open()
     _tcscat(szFile, TEXT("topology.tpl"));
   }
 
-  ExtractDirectory(Directory, szFile);
-
   // Ready to open the file now..
   ZipLineReader reader(szFile);
   if (reader.error()) {
     LogStartUp(TEXT("No topology file: %s"), szFile);
     return;
   }
+
+  TCHAR Directory[MAX_PATH];
+  ExtractDirectory(Directory, szFile);
 
   Load(reader, Directory);
 }
