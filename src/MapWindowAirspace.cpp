@@ -44,6 +44,7 @@ Copyright_License {
 #include "Airspace/AirspaceVisitor.hpp"
 #include "AirspaceVisibility.hpp"
 #include "Airspace/AirspaceWarningVisitor.hpp"
+#include "MapDrawHelper.hpp"
 
 class AirspaceWarningCopy: 
   public AirspaceWarningVisitor
@@ -118,8 +119,6 @@ private:
   const bool &m_border;
   const AirspaceWarningCopy& m_warnings;
 };
-
-#include "MapDrawHelper.hpp"
 
 /**
  * Class to render airspaces onto map in two passes,
