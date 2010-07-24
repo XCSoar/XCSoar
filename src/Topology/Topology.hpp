@@ -80,7 +80,7 @@ private:
   XShape** shpCache;
 
 protected:
-  void flushCache();
+  void ClearCache();
 
   bool in_scale;
   Pen hPen;

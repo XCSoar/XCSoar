@@ -94,7 +94,7 @@ Topology::Close()
     return;
 
   if (shpCache) {
-    flushCache();
+    ClearCache();
     free(shpCache);
     shpCache = NULL;
   }
@@ -122,7 +122,7 @@ Topology::TriggerIfScaleNowVisible(const Projection &map_projection)
 }
 
 void
-Topology::flushCache()
+Topology::ClearCache()
 {
   for (int i = 0; i < shpfile.numshapes; i++) {
     delete shpCache[i];
@@ -146,7 +146,7 @@ Topology::updateCache(Projection &map_projection,
   if (!in_scale) {
     // not visible, so flush the cache
     // otherwise we waste time on looking up which shapes are in bounds
-    flushCache();
+    ClearCache();
     triggerUpdateCache = false;
     return;
   }
@@ -169,7 +169,7 @@ Topology::updateCache(Projection &map_projection,
   if (!shpfile.status) {
     // this happens if entire shape is out of range
     // so clear buffer.
-    flushCache();
+    ClearCache();
     return;
   }
 
