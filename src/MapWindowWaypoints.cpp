@@ -132,10 +132,7 @@ public:
 
     } else {
       // non landable turnpoint
-
-      if (map.GetMapScaleKM() > fixed_four)
-        icon = &MapGfx.SmallIcon;
-      else
+      if (map.GetMapScaleKM() <= fixed_four)
         icon = &MapGfx.TurnPointIcon;
     }
 
