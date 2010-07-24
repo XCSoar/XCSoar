@@ -45,7 +45,6 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Dialogs/XML.hpp"
 #include "WayPointFile.hpp"
-#include "UtilsText.hpp"
 #include "UtilsFont.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 
@@ -644,7 +643,6 @@ Profile::GetScaleList(fixed *List, size_t Size)
 {
   static const TCHAR Name[] = TEXT("ScaleList");
   TCHAR Buffer[128];
-  TCHAR *pWClast, *pToken;
   int Idx = 0;
   double vlast = 0;
   double val;
@@ -657,10 +655,10 @@ Profile::GetScaleList(fixed *List, size_t Size)
   if (!Get(Name, Buffer, sizeof(Buffer) / sizeof(TCHAR)))
     return 0;
 
-  pToken = _tcstok_r(Buffer, TEXT(","), &pWClast);
-
-  while (Idx < (int)Size && pToken != NULL) {
-    val = _tcstod(pToken, NULL);
+  const TCHAR *p = Buffer;
+  while (Idx < (int)Size) {
+    TCHAR *endptr;
+    val = _tcstod(p, &endptr);
     if (Idx > 0) {
       List[Idx] = (val + vlast) / 2;
       Idx++;
@@ -668,7 +666,15 @@ Profile::GetScaleList(fixed *List, size_t Size)
     List[Idx] = val;
     Idx++;
     vlast = val;
-    pToken = _tcstok_r(NULL, TEXT(","), &pWClast);
+
+    if (endptr == p)
+      return 0;
+    else if (*endptr == _T('\0'))
+      break;
+    else if (*endptr != _T(','))
+      return 0;
+
+    p = endptr + 1;
   }
 
   return Idx;
