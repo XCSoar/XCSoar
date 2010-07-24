@@ -74,16 +74,8 @@ public:
   void loadIcon(const int);
   bool triggerUpdateCache;
 
-  int
-  getNumVisible() const
-  {
-    return shapes_visible_count;
-  }
-
 private:
   bool CheckScale(const double map_scale) const;
-
-  int shapes_visible_count;
 
   XShape** shpCache;
 

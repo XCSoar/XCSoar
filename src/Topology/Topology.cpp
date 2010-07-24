@@ -133,8 +133,6 @@ Topology::flushCache()
     delete shpCache[i];
     shpCache[i] = NULL;
   }
-
-  shapes_visible_count = 0;
 }
 
 void
@@ -180,15 +178,12 @@ Topology::updateCache(Projection &map_projection,
     return;
   }
 
-  shapes_visible_count = 0;
-
   for (int i = 0; i < shpfile.numshapes; i++) {
     if (msGetBit(shpfile.status, i)) {
       if (shpCache[i] == NULL) {
         // shape is now in range, and wasn't before
         shpCache[i] = new XShape(&shpfile, i, label_field);
       }
-      shapes_visible_count++;
     } else {
       delete shpCache[i];
       shpCache[i] = NULL;
