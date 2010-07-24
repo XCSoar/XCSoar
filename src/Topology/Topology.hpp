@@ -85,9 +85,6 @@ private:
 
   XShape** shpCache;
 
-  bool checkVisible(const shapeObj& shape, const rectObj &screenRect) const;
-
-  virtual void removeShape(const int i);
   virtual XShape* addShape(const int i);
 
 protected:

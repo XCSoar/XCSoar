@@ -129,8 +129,10 @@ Topology::TriggerIfScaleNowVisible(const Projection &map_projection)
 void
 Topology::flushCache()
 {
-  for (int i = 0; i < shpfile.numshapes; i++)
-    removeShape(i);
+  for (int i = 0; i < shpfile.numshapes; i++) {
+    delete shpCache[i];
+    shpCache[i] = NULL;
+  }
 
   shapes_visible_count = 0;
 }
@@ -188,7 +190,8 @@ Topology::updateCache(Projection &map_projection,
       }
       shapes_visible_count++;
     } else {
-      removeShape(i);
+      delete shpCache[i];
+      shpCache[i] = NULL;
     }
   }
 }
@@ -197,23 +200,6 @@ XShape*
 Topology::addShape(const int i)
 {
   return new XShape(&shpfile, i);
-}
-
-void
-Topology::removeShape(const int i)
-{
-  if (!shpCache[i])
-    return;
-
-  delete shpCache[i];
-  shpCache[i] = NULL;
-}
-
-bool
-Topology::checkVisible(const shapeObj& shape, 
-                       const rectObj &screenRect) const
-{
-  return (msRectOverlap(&shape.bounds, &screenRect) == MS_TRUE);
 }
 
 void
@@ -269,7 +255,7 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 
     const shapeObj *shape = &(cshape->shape);
 
-    if (!checkVisible(*shape, screenRect))
+    if (!msRectOverlap(&shape->bounds, &screenRect))
       continue;
 
     switch (shape->type) {
