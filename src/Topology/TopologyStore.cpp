@@ -168,12 +168,10 @@ TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
 {
   Reset();
 
-  TCHAR ctemp[80];
   double ShapeRange;
   long ShapeIcon;
   long ShapeField;
   TCHAR wShapeFilename[MAX_PATH];
-  TCHAR *Stop;
   int numtopo = 0;
   char ShapeFilename[MAX_PATH];
 
@@ -190,8 +188,12 @@ TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
     // filename,range,icon,field
 
     // File name
-    PExtractParameter(line, wShapeFilenameEnd, 0);
-    _tcscat(wShapeFilename, TEXT(".shp"));
+    TCHAR *p = _tcschr(line, ',');
+    if (p == NULL || p == line)
+      continue;
+
+    _tcsncpy(wShapeFilenameEnd, line, p - line);
+    _tcscpy(wShapeFilenameEnd + (p - line), TEXT(".shp"));
 
 #ifdef _UNICODE
     WideCharToMultiByte(CP_ACP, 0, wShapeFilename,
@@ -201,34 +203,33 @@ TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
 #endif
 
     // Shape range
-    PExtractParameter(line, ctemp, 1);
-    ShapeRange = _tcstod(ctemp, NULL);
+    ShapeRange = _tcstod(p + 1, &p);
+    if (*p != _T(','))
+      continue;
 
     // Shape icon
-    PExtractParameter(line, ctemp, 2);
-    ShapeIcon = _tcstol(ctemp, &Stop, 10);
+    ShapeIcon = _tcstol(p + 1, &p, 10);
+    if (*p != _T(','))
+      continue;
 
     // Shape field for text display
     // sjt 02NOV05 - field parameter enabled
-    PExtractParameter(line, ctemp, 3);
-    if (_istalnum(ctemp[0])) {
-      ShapeField = _tcstol(ctemp, &Stop, 10);
-      ShapeField--;
-    } else {
-      ShapeField = -1;
-    }
+    ShapeField = _tcstol(p + 1, &p, 10) - 1;
+    if (*p != _T(','))
+      continue;
 
     // Red component of line / shading colour
-    PExtractParameter(line, ctemp, 4);
-    red = (BYTE)_tcstol(ctemp, &Stop, 10);
+    red = (BYTE)_tcstol(p + 1, &p, 10);
+    if (*p != _T(','))
+      continue;
 
     // Green component of line / shading colour
-    PExtractParameter(line, ctemp, 5);
-    green = (BYTE)_tcstol(ctemp, &Stop, 10);
+    green = (BYTE)_tcstol(p + 1, &p, 10);
+    if (*p != _T(','))
+      continue;
 
     // Blue component of line / shading colour
-    PExtractParameter(line, ctemp, 6);
-    blue = (BYTE)_tcstol(ctemp, &Stop, 10);
+    blue = (BYTE)_tcstol(p + 1, NULL, 10);
 
     if ((red == 64) && (green == 96) && (blue == 240)) {
       // JMW update colours to ICAO standard
