@@ -125,9 +125,5 @@ XShapeLabel::XShapeLabel(shapefileObj *shpfile, int i, int field)
 
 XShapeLabel::~XShapeLabel()
 {
-  if (!label)
-    return;
-
   free(label);
-  label = NULL;
 }
