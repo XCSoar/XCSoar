@@ -42,7 +42,6 @@ Copyright_License {
 #include "Units.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
-#include "UtilsText.hpp"
 #include "Util/StringUtil.hpp"
 #include "LogFile.hpp"
 #include "Math/Earth.hpp"
@@ -162,10 +161,7 @@ ShowParseWarning(int line, const TCHAR* str)
 static void
 ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
 {
-  TCHAR *Stop;
   TCHAR Text[128];
-  TCHAR *pWClast = NULL;
-  const TCHAR *pToken;
   bool fHasUnit = false;
 
   _tcsncpy(Text, Text_, sizeof(Text) / sizeof(Text[0]));
@@ -173,16 +169,19 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
 
   _tcsupr(Text);
 
-  pToken = _tcstok_r(Text, TEXT(" "), &pWClast);
-
   Alt->Altitude = 0;
   Alt->FL = 0;
   Alt->AGL = 0;
   Alt->Base = abUndef;
 
-  while ((pToken != NULL) && (*pToken != '\0')) {
-    if (isdigit(*pToken)) {
-      double d = (double)_tcstod(pToken, &Stop);
+  const TCHAR *p = Text;
+  while (true) {
+    while (*p == _T(' '))
+      ++p;
+
+    if (_istdigit(*p)) {
+      TCHAR *endptr;
+      double d = _tcstod(p, &endptr);
 
       if (Alt->Base == abFL)
         Alt->FL = d;
@@ -191,11 +190,8 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
       else
         Alt->Altitude = d;
 
-      if (*Stop != '\0') {
-        pToken = Stop;
-        continue;
-      }
-    } else if (_tcscmp(pToken, TEXT("GND")) == 0) {
+      p = endptr;
+    } else if (_tcsncmp(p, _T("GND"), 3) == 0) {
       // JMW support XXXGND as valid, equivalent to XXXAGL
       Alt->Base = abAGL;
       if (Alt->Altitude > fixed_zero) {
@@ -207,47 +203,63 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
         Alt->AGL = -1;
         fHasUnit = true;
       }
-    } else if (_tcscmp(pToken, TEXT("SFC")) == 0) {
+
+      p += 3;
+    } else if (_tcsncmp(p, _T("SFC"), 3) == 0) {
       Alt->Base = abAGL;
       Alt->FL = 0;
       Alt->Altitude = 0;
       Alt->AGL = -1;
       fHasUnit = true;
-    } else if (_tcsstr(pToken, TEXT("FL")) == pToken) {
+
+      p += 3;
+    } else if (_tcsncmp(p, TEXT("FL"), 2) == 0) {
       // this parses "FL=150" and "FL150"
       Alt->Base = abFL;
       fHasUnit = true;
-      if (pToken[2] != '\0') {// no separator between FL and number
-        pToken = &pToken[2];
-        continue;
-      }
-    } else if ((_tcscmp(pToken, TEXT("FT")) == 0) ||
-               (_tcscmp(pToken, TEXT("F")) == 0)) {
+
+      p += 2;
+    } else if (*p == _T('F')) {
       Alt->Altitude = Units::ToSysUnit(Alt->Altitude, unFeet);
       fHasUnit = true;
-    } else if (_tcscmp(pToken, TEXT("MSL")) == 0) {
+
+      ++p;
+      if (*p == _T('T'))
+        ++p;
+    } else if (_tcsncmp(p, _T("MSL"), 3) == 0) {
       Alt->Base = abMSL;
-    } else if (_tcscmp(pToken, TEXT("M")) == 0) {
+
+      p += 3;
+    } else if (*p == _T('M')) {
       // JMW must scan for MSL before scanning for M
       fHasUnit = true;
-    } else if (_tcscmp(pToken, TEXT("AGL")) == 0) {
+
+      ++p;
+    } else if (_tcsncmp(p, _T("AGL"), 3) == 0) {
       Alt->Base = abAGL;
       Alt->AGL = Alt->Altitude;
       Alt->Altitude = 0;
-    } else if (_tcscmp(pToken, TEXT("STD")) == 0) {
+
+      p += 3;
+    } else if (_tcsncmp(p, _T("STD"), 3) == 0) {
       if (Alt->Base != abUndef) {
         // warning! multiple base tags
       }
       Alt->Base = abFL;
       Alt->FL = Units::ToUserUnit(Alt->Altitude, unFlightLevel);
-    } else if (_tcscmp(pToken, TEXT("UNL")) == 0) {
+
+      p += 3;
+    } else if (_tcsncmp(p, _T("UNL"), 3) == 0) {
       // JMW added Unlimited (used by WGC2008)
       Alt->Base = abMSL;
       Alt->AGL = -1;
       Alt->Altitude = 50000;
-    }
 
-    pToken = _tcstok_r(NULL, TEXT(" \t"), &pWClast);
+      p += 3;
+    } else if (*p == _T('\0'))
+      break;
+    else
+      ++p;
   }
 
   if (!fHasUnit && (Alt->Base != abFL)) {
