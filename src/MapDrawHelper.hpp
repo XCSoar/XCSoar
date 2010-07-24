@@ -60,8 +60,6 @@ public:
 
   MapDrawHelper(MapDrawHelper &_that);
 
-  ~MapDrawHelper();
-
   Canvas &m_canvas;
   Canvas &m_buffer;
   Canvas &m_stencil;

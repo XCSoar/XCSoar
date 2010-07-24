@@ -66,10 +66,6 @@ MapDrawHelper::MapDrawHelper(MapDrawHelper &_that):
 {
 }
 
-MapDrawHelper::~MapDrawHelper() {
-  buffer_render_finish();
-}
-
 void 
 MapDrawHelper::add(std::vector<POINT>& screen, const GEOPOINT& pt) const
 {
