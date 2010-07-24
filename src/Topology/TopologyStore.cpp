@@ -165,13 +165,11 @@ TopologyStore::Open()
     ExpandLocalPath(szFile);
 
     // Look for the file within the map zip file...
-    _tcscpy(Directory, szFile);
-    _tcscat(Directory, TEXT("/"));
     _tcscat(szFile, TEXT("/"));
     _tcscat(szFile, TEXT("topology.tpl"));
-  } else {
-    ExtractDirectory(Directory, szFile);
   }
+
+  ExtractDirectory(Directory, szFile);
 
   // Ready to open the file now..
   ZipLineReader reader(szFile);
