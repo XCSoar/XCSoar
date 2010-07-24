@@ -42,6 +42,7 @@ Copyright_License {
 #include "Interface.hpp"
 
 #include <tchar.h>
+#include <stdio.h>
 
 void
 InfoBoxContentLDInstant::Update(InfoBoxWindow &infobox)

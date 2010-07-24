@@ -62,6 +62,7 @@ Copyright_License {
 #include "Compatibility/path.h"
 
 #include <assert.h>
+#include <stdio.h>
 
 static int page = 0;
 static WndForm *wf = NULL;

@@ -47,6 +47,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 
 #include <tchar.h>
+#include <stdio.h>
 
 void
 InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)

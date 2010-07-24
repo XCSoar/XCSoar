@@ -43,6 +43,7 @@ Copyright_License {
 #include "LocalTime.hpp"
 
 #include <tchar.h>
+#include <stdio.h>
 
 void
 InfoBoxContentTimeLocal::Update(InfoBoxWindow &infobox)

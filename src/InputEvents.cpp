@@ -79,6 +79,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include <assert.h>
 #include <ctype.h>
 #include <tchar.h>
+#include <stdio.h>
 
 // Sensible maximums
 enum {

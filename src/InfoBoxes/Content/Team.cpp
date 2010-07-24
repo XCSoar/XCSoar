@@ -44,6 +44,7 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 
 #include <tchar.h>
+#include <stdio.h>
 
 void
 InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)

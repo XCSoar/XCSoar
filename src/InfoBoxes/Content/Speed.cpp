@@ -46,6 +46,7 @@ Copyright_License {
 #include "Message.hpp"
 
 #include <tchar.h>
+#include <stdio.h>
 
 void
 InfoBoxContentSpeedGround::Update(InfoBoxWindow &infobox)

@@ -50,6 +50,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 
 #include <assert.h>
+#include <stdio.h>
 
 static void
 SetAltairDefaults()

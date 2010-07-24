@@ -43,6 +43,7 @@ Copyright_License {
 #include "Atmosphere.h"
 
 #include <tchar.h>
+#include <stdio.h>
 
 void
 InfoBoxContentHumidity::Update(InfoBoxWindow &infobox)

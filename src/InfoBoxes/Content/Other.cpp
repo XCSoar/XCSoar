@@ -44,6 +44,7 @@ Copyright_License {
 #include "Asset.hpp"
 
 #include <tchar.h>
+#include <stdio.h>
 
 void
 InfoBoxContentGLoad::Update(InfoBoxWindow &infobox)
