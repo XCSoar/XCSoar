@@ -47,7 +47,6 @@ Copyright_License {
 #include "DataField/Float.hpp"
 #include "DataField/Integer.hpp"
 #include "DataField/String.hpp"
-#include "UtilsFile.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
@@ -63,7 +62,7 @@ Copyright_License {
 #include "Form/Panel.hpp"
 #include "Form/Keyboard.hpp"
 #include "StringUtil.hpp"
-#include "OS/PathName.hpp"
+#include "ResourceLoader.hpp"
 
 #include <stdio.h>    // for _stprintf
 #include <tchar.h>
@@ -243,18 +242,11 @@ static Font *FontMap[5] = {
   &InfoWindowFont
 };
 
-#ifdef WIN32
-
 static XMLNode
 xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
 {
-  HRSRC hResInfo;
-  HGLOBAL hRes;
-
-  // Find the xml resource.
-  hResInfo = FindResource(XCSoarInterface::hInst, lpName, _T("XMLDialog"));
-
-  if (hResInfo == NULL) {
+  ResourceLoader::Data data = ResourceLoader::Load(lpName, _T("XMLDialog"));
+  if (data.first == NULL) {
     MessageBoxX(gettext(_T("Can't find resource")), gettext(_T("Dialog error")),
                 MB_OK | MB_ICONEXCLAMATION);
 
@@ -262,45 +254,25 @@ xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
     return XMLNode::emptyXMLNode;
   }
 
-  // Load the wave resource.
-  hRes = LoadResource(XCSoarInterface::hInst, hResInfo);
+  const char *buffer = (const char *)data.first;
 
-  if (hRes == NULL) {
-    MessageBoxX(gettext(_T("Can't load resource")), gettext(_T("Dialog error")),
-                MB_OK | MB_ICONEXCLAMATION);
-
-    // unable to load the resource
-    return XMLNode::emptyXMLNode;
-  }
-
-  // Lock the wave resource and do something with it.
-  const char *lpRes = (const char *)LockResource(hRes);
-
-  if (lpRes) {
-    int l = SizeofResource(XCSoarInterface::hInst, hResInfo);
-    if (l > 0) {
 #ifdef _UNICODE
-      LPTSTR b2 = (LPTSTR)malloc(l * 2 + 2);
-      l = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, lpRes, l, b2, l);
-      b2[l] = _T('\0');
+  int length = data.second;
+  TCHAR *buffer2 = new TCHAR[length + 1];
+  length = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, buffer, length,
+                               buffer2, length);
+  buffer2[length] = _T('\0');
 #else
-      const char *b2 = lpRes;
+  const char *buffer2 = buffer;
 #endif
 
-      XMLNode x = XMLNode::parseString(b2, pResults);
+  XMLNode x = XMLNode::parseString(buffer2, pResults);
 
 #ifdef _UNICODE
-      free(b2);
+  delete[] buffer2;
 #endif
 
-      return x;
-    }
-  }
-
-  MessageBoxX(gettext(_T("Can't lock resource")), gettext(_T("Dialog error")),
-              MB_OK | MB_ICONEXCLAMATION);
-
-  return XMLNode::emptyXMLNode;
+  return x;
 }
 
 /**
@@ -327,43 +299,6 @@ xmlOpenResourceHelper(const TCHAR *lpszXML)
                 MB_OK | MB_ICONEXCLAMATION);
   }
   return xnode;
-}
-
-#endif /* WIN32 */
-
-/**
- * This function searches for the given (file)name and if not found
- * resource and returns the main XMLNode
- * @param name File to search for
- * @param resource Resource to search for
- * @return The main XMLNode
- */
-static const XMLNode
-load_xml_file_or_resource(const TCHAR *name, const TCHAR* resource)
-{
-  XMLNode xMainNode;
-
-  // Get filepath
-  TCHAR TFileName[MAX_PATH];
-  LocalPath(TFileName, name);
-  NarrowPathName FileName(TFileName);
-
-  // If file exists -> Load XML from file
-  if (FileExists(FileName))
-    xMainNode = XMLNode::openFileHelper(FileName);
-
-#ifdef WIN32
-  // If XML file hasn't been loaded
-  if (xMainNode.isEmpty()) {
-
-    // and resource exists
-    if (resource)
-      // -> Load XML from resource
-      xMainNode = xmlOpenResourceHelper(resource);
-  }
-#endif
-
-  return xMainNode;
 }
 
 /**
@@ -416,7 +351,7 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const TCHAR *FileName,
   // everything.  See changes regarding RequestAirspaceDialog in AirspaceWarning.cpp
 
   // Find XML file or resource and load XML data out of it
-  XMLNode xMainNode = load_xml_file_or_resource(FileName, resource);
+  XMLNode xMainNode = xmlOpenResourceHelper(resource);
 
   // TODO code: put in error checking here and get rid of exits in xmlParser
   // If XML error occurred -> Error messagebox + cancel
