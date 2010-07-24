@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "UtilsFont.hpp"
-#include "UtilsText.hpp"
 
 #include <assert.h>
 #include <stdlib.h> /* for strtol() */
@@ -49,29 +48,26 @@ GetFontFromString(const TCHAR *Buffer1, LOGFONT* lplf)
   // typical font entry
   // 26,0,0,0,700,1,0,0,0,0,0,4,2,<fontname>
 
-  #define propGetFontSettingsMAX_SIZE 128
-  // RLD need a buffer (not sz) for _tcstok_r w/ gcc optimized ARM920
-  TCHAR Buffer[propGetFontSettingsMAX_SIZE];
-
-  TCHAR *pWClast, *pToken;
   LOGFONT lfTmp;
-  _tcsncpy(Buffer, Buffer1, propGetFontSettingsMAX_SIZE);
 
   assert(lplf != NULL);
   memset((void *)&lfTmp, 0, sizeof(LOGFONT));
-  if ((pToken = _tcstok_r(Buffer, TEXT(","), &pWClast)) == NULL)
+
+  TCHAR *p;
+  lfTmp.lfHeight = _tcstol(Buffer1, &p, 10);
+  if (*p != _T(','))
     return false;
-  lfTmp.lfHeight = _tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+
+  lfTmp.lfWidth = _tcstol(p + 1, &p, 10);
+  if (*p != _T(','))
     return false;
-  lfTmp.lfWidth = _tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+
+  lfTmp.lfEscapement = _tcstol(p + 1, &p, 10);
+  if (*p != _T(','))
     return false;
-  lfTmp.lfEscapement = _tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
-    return false;
-  lfTmp.lfOrientation = _tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+
+  lfTmp.lfOrientation = _tcstol(p + 1, &p, 10);
+  if (*p != _T(','))
     return false;
 
   //FW_THIN   100
@@ -80,25 +76,33 @@ GetFontFromString(const TCHAR *Buffer1, LOGFONT* lplf)
   //FW_BOLD   700
   //FW_HEAVY  900
 
-  lfTmp.lfWeight = _tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+  lfTmp.lfWeight = _tcstol(p + 1, &p, 10);
+  if (*p != _T(','))
     return false;
-  lfTmp.lfItalic = (unsigned char)_tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+
+  lfTmp.lfItalic = (unsigned char)_tcstol(p + 1, &p, 10);
+  if (*p != _T(','))
     return false;
-  lfTmp.lfUnderline = (unsigned char)_tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+
+  lfTmp.lfUnderline = (unsigned char)_tcstol(p + 1, &p, 10);
+  if (*p != _T(','))
     return false;
-  lfTmp.lfStrikeOut = (unsigned char)_tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+
+  lfTmp.lfStrikeOut = (unsigned char)_tcstol(p + 1, &p, 10);
+  if (*p != _T(','))
     return false;
-  lfTmp.lfCharSet = (unsigned char)_tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+
+  lfTmp.lfCharSet = (unsigned char)_tcstol(p + 1, &p, 10);
+  if (*p != _T(','))
     return false;
-  lfTmp.lfOutPrecision = (unsigned char)_tcstol(pToken, NULL, 10);
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+
+  lfTmp.lfOutPrecision = (unsigned char)_tcstol(p + 1, &p, 10);
+  if (*p != _T(','))
     return false;
-  lfTmp.lfClipPrecision = (unsigned char)_tcstol(pToken, NULL, 10);
+
+  lfTmp.lfClipPrecision = (unsigned char)_tcstol(p + 1, &p, 10);
+  if (*p != _T(','))
+    return false;
 
   // DEFAULT_QUALITY			   0
   // RASTER_FONTTYPE			   0x0001
@@ -108,18 +112,15 @@ GetFontFromString(const TCHAR *Buffer1, LOGFONT* lplf)
   // CLEARTYPE_QUALITY       5
   // CLEARTYPE_COMPAT_QUALITY 6
 
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
-    return false;
-  lfTmp.lfQuality = (unsigned char)_tcstol(pToken, NULL, 10);
-
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
-    return false;
-  lfTmp.lfPitchAndFamily = (unsigned char)_tcstol(pToken, NULL, 10);
-
-  if ((pToken = _tcstok_r(NULL, TEXT(","), &pWClast)) == NULL)
+  lfTmp.lfQuality = (unsigned char)_tcstol(p + 1, &p, 10);
+  if (*p != _T(','))
     return false;
 
-  _tcscpy(lfTmp.lfFaceName, pToken);
+  lfTmp.lfPitchAndFamily = (unsigned char)_tcstol(p + 1, &p, 10);
+  if (*p != _T(','))
+    return false;
+
+  _tcscpy(lfTmp.lfFaceName, p + 1);
 
   memcpy((void *)lplf, (void *)&lfTmp, sizeof(LOGFONT));
   return true;
