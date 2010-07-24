@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "Polar/WinPilot.hpp"
 #include "Polar/Polar.hpp"
-#include "UtilsText.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "ProfileKeys.hpp"
 #include "Sizes.h"
@@ -99,31 +98,42 @@ ReadWinPilotPolar(Polar &polar, const TCHAR *line)
     /* a comment */
     return false;
 
-  TCHAR ctemp[80];
+  TCHAR *p;
   double POLARV[3];
   double POLARW[3];
   double ww[2];
 
-  PExtractParameter(line, ctemp, 0);
-  ww[0] = _tcstod(ctemp, NULL);
+  ww[0] = _tcstod(line, &p);
+  if (*p != _T(','))
+    return false;
 
-  PExtractParameter(line, ctemp, 1);
-  ww[1] = _tcstod(ctemp, NULL);
+  ww[1] = _tcstod(p + 1, &p);
+  if (*p != _T(','))
+    return false;
 
-  PExtractParameter(line, ctemp, 2);
-  POLARV[0] = _tcstod(ctemp, NULL);
-  PExtractParameter(line, ctemp, 3);
-  POLARW[0] = _tcstod(ctemp, NULL);
+  POLARV[0] = _tcstod(p + 1, &p);
+  if (*p != _T(','))
+    return false;
 
-  PExtractParameter(line, ctemp, 4);
-  POLARV[1] = _tcstod(ctemp, NULL);
-  PExtractParameter(line, ctemp, 5);
-  POLARW[1] = _tcstod(ctemp, NULL);
+  POLARW[0] = _tcstod(p + 1, &p);
+  if (*p != _T(','))
+    return false;
 
-  PExtractParameter(line, ctemp, 6);
-  POLARV[2] = _tcstod(ctemp, NULL);
-  PExtractParameter(line, ctemp, 7);
-  POLARW[2] = _tcstod(ctemp, NULL);
+  POLARV[1] = _tcstod(p + 1, &p);
+  if (*p != _T(','))
+    return false;
+
+  POLARW[1] = _tcstod(p + 1, &p);
+  if (*p != _T(','))
+    return false;
+
+  POLARV[2] = _tcstod(p + 1, &p);
+  if (*p != _T(','))
+    return false;
+
+  POLARW[2] = _tcstod(p + 1, NULL);
+  if (*p != _T(','))
+    return false;
 
   PolarWinPilot2XCSoar(polar, POLARV, POLARW, ww);
   return true;
