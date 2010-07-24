@@ -189,8 +189,7 @@ TopologyStore::Load(ZipLineReader &reader, const TCHAR* Directory)
 
   while ((TempString = reader.read()) != NULL) {
     // Look For Comment
-    if (string_is_empty(TempString)
-        || (_tcsstr(TempString, TEXT("*")) == TempString))
+    if (string_is_empty(TempString) || TempString[0] == _T('*'))
       continue;
 
     BYTE red, green, blue;
