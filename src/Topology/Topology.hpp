@@ -55,7 +55,7 @@ class XShape;
 class Topology
 {
 public:
-  Topology(const char* shpname, const Color thecolor, bool doappend = false);
+  Topology(const char* shpname, const Color thecolor);
   virtual ~Topology();
 
   void Open();
@@ -92,7 +92,6 @@ protected:
 
   void flushCache();
 
-  bool append;
   bool in_scale;
   Pen hPen;
   Brush hbBrush;

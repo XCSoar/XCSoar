@@ -56,11 +56,10 @@ Topology::loadIcon(const int res_id)
   icon.load(res_id);
 }
 
-Topology::Topology(const char* shpname, const Color thecolor, bool doappend) :
+Topology::Topology(const char* shpname, const Color thecolor) :
   scaleThreshold(0),
   triggerUpdateCache(false),
   shpCache(NULL),
-  append(doappend),
   in_scale(false),
   hPen(1, thecolor),
   hbBrush(thecolor),
@@ -77,7 +76,7 @@ Topology::Open()
 {
   shapefileopen = false;
 
-  if (msSHPOpenFile(&shpfile, (append ? "rb+" : "rb"), filename) == -1)
+  if (msSHPOpenFile(&shpfile, "rb", filename) == -1)
     return;
 
   scaleThreshold = 1000.0;
