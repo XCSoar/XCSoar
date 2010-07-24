@@ -39,26 +39,17 @@ Copyright_License {
 #define XCSOAR_UTILS_TEXT_H
 
 #include <tchar.h>
-#include <stdio.h>
 
 /**
  * Strips trailing whitespace.
  */
 void TrimRight(TCHAR *p);
 
-void
-PExtractParameter(const TCHAR *Source, TCHAR *Destination,
-                  unsigned DesiredFieldNumber);
-
 void ExtractDirectory(TCHAR *Dest, const TCHAR *Source);
-
-void *bsearch(void *key, void *base0, size_t nmemb, size_t size, int (*compar)(const void *elem1, const void *elem2));
-TCHAR *_tcstok_r(TCHAR *s, const TCHAR *delim, TCHAR **lasts);
 
 // Parse string (new lines etc) and malloc the string
 TCHAR* StringMallocParse(const TCHAR* old_string);
 
-void ConvertTToC(char *pszDest, const TCHAR *pszSrc);
 void ConvertCToT(TCHAR *pszDest, const char *pszSrc);
 
 int TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines);
