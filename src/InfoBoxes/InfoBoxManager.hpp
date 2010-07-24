@@ -68,7 +68,6 @@ private:
 
   static void DisplayInfoBox();
   static void InfoBoxDrawIfDirty();
-  static void DestroyInfoBoxFormatters();
   static int GetFocused();
 
   static int GetInfoBoxBorder(unsigned i);

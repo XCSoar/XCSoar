@@ -42,7 +42,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Protection.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
-#include "InfoBoxes/Formatter/Base.hpp"
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "Screen/Blank.hpp"
@@ -99,7 +98,6 @@ typedef struct _SCREEN_INFO
   UnitGroup_t UnitGroup;
   const TCHAR *Description;
   const TCHAR *Title;
-  InfoBoxFormatter *Formatter;
   char next_screen;
   char prev_screen;
 } SCREEN_INFO;
@@ -116,327 +114,262 @@ typedef struct _SCREEN_INFO
 static const SCREEN_INFO Data_Options[] = {
   // 0
   { ugAltitude, _T("Height GPS"), _T("H GPS"),
-    NULL,
     1, 33,
   },
   // 1
   { ugAltitude, _T("Height AGL"), _T("H AGL"),
-    NULL,
     20, 0,
   },
   // 2
   { ugVerticalSpeed, _T("Thermal last 30 sec"), _T("TC 30s"),
-    NULL,
     7, 44,
   },
   // 3
   { ugNone, _T("Bearing"), _T("Bearing"),
-    NULL,
     6, 54,
   },
   // 4
   { ugNone, _T("L/D instantaneous"), _T("L/D Inst"),
-    NULL,
     5, 38,
   },
   // 5
   { ugNone, _T("L/D cruise"), _T("L/D Cru"),
-    NULL,
     19, 4,
   },
   // 6
   { ugHorizontalSpeed, _T("Speed ground"), _T("V Gnd"),
-    NULL,
     23, 3,
   },
   // 7
   { ugVerticalSpeed, _T("Last Thermal Average"), _T("TL Avg"),
-    NULL,
     8, 2,
   },
   // 8
   { ugAltitude, _T("Last Thermal Gain"), _T("TL Gain"),
-    NULL,
     9, 7,
   },
   // 9
   { ugNone, _T("Last Thermal Time"), _T("TL Time"),
-    NULL,
     21, 8,
   },
   // 10
   { ugVerticalSpeed, _T("MacCready Setting"), _T("MacCready"),
-    NULL,
     34, 43,
   },
   // 11
   { ugDistance, _T("Next Distance"), _T("WP Dist"),
-    NULL,
     12, 31,
   },
   // 12
   { ugAltitude, _T("Next Altitude Difference"), _T("WP AltD"),
-    NULL,
     13, 11,
   },
   // 13
   { ugAltitude, _T("Next Altitude Required"), _T("WP AltR"),
-    NULL,
     15, 12,
   },
   // 14
   { ugNone, _T("Next Waypoint"), _T("Next"),
-    NULL,
     36, 46,
   },
   // 15
   { ugAltitude, _T("Final Altitude Difference"), _T("Fin AltD"),
-    NULL,
     16, 13,
   },
   // 16
   { ugAltitude, _T("Final Altitude Required"), _T("Fin AltR"),
-    NULL,
     17, 15,
   },
   // 17
   { ugTaskSpeed, _T("Speed Task Average"), _T("V Task Av"),
-    NULL,
     18, 16,
   },
   // 18
   { ugDistance, _T("Final Distance"), _T("Fin Dis"),
-    NULL,
     27, 17,
   },
   // 19
   { ugNone, _T("Final LD"), _T("Fin LD"),
-    NULL,
     38, 5,
   },
   // 20
   { ugAltitude, _T("Terrain Elevation"), _T("H Gnd"),
-    NULL,
     33, 1,
   },
   // 21
   { ugVerticalSpeed, _T("Thermal Average"), _T("TC Avg"),
-    NULL,
     22, 9,
   },
   // 22
   { ugAltitude, _T("Thermal Gain"), _T("TC Gain"),
-    NULL,
     24, 21,
   },
   // 23
   { ugNone, _T("Track"), _T("Track"),
-    NULL,
     32, 6,
   },
   // 24
   { ugVerticalSpeed, _T("Vario"), _T("Vario"),
-    NULL,
     44, 22,
   },
   // 25
   { ugWindSpeed, _T("Wind Speed"), _T("Wind V"),
-    NULL,
     26, 50,
   },
   // 26
   { ugNone, _T("Wind Bearing"), _T("Wind B"),
-    NULL,
     48, 25,
   },
   // 27
   { ugNone, _T("AA Time"), _T("AA Time"),
-    NULL,
     28, 18,
   },
   // 28
   { ugDistance, _T("AA Distance Max"), _T("AA Dmax"),
-    NULL,
     29, 27,
   },
   // 29
   { ugDistance, _T("AA Distance Min"), _T("AA Dmin"),
-    NULL,
     30, 28,
   },
   // 30
   { ugTaskSpeed, _T("AA Speed Max"), _T("AA Vmax"),
-    NULL,
     31, 29,
   },
   // 31
   { ugTaskSpeed, _T("AA Speed Min"), _T("AA Vmin"),
-    NULL,
     51, 30,
   },
   // 32
   { ugHorizontalSpeed, _T("Airspeed IAS"), _T("V IAS"),
-    NULL,
     37, 23,
   },
   // 33
   { ugAltitude, _T("Pressure Altitude"), _T("H Baro"),
-    NULL,
     0, 20,
   },
   // 34
   { ugHorizontalSpeed, _T("Speed MacCready"), _T("V Mc"),
-    NULL,
     35, 10,
   },
   // 35
   { ugNone, _T("Percentage climb"), _T("% Climb"),
-    NULL,
     43, 34,
   },
   // 36
   { ugNone, _T("Time of flight"), _T("Time flt"),
-    NULL,
     39, 14,
   },
   // 37
   { ugNone, _T("G load"), _T("G"),
-    NULL,
     47, 32,
   },
   // 38
   { ugNone, _T("Next LD"), _T("WP LD"),
-    NULL,
     53, 19,
   },
   // 39
   { ugNone, _T("Time local"), _T("Time loc"),
-    NULL,
     40, 36,
   },
   // 40
   { ugNone, _T("Time UTC"), _T("Time UTC"),
-    NULL,
     41, 39,
   },
   // 41
   { ugNone, _T("Task Time To Go"), _T("Fin ETE"),
-    NULL,
     42, 40,
   },
   // 42
   { ugNone, _T("Next Time To Go"), _T("WP ETE"),
-    NULL,
     45, 41,
   },
   // 43
   { ugHorizontalSpeed, _T("Speed Dolphin"), _T("V Opt"),
-    NULL,
     10, 35,
   },
   // 44
   { ugVerticalSpeed, _T("Netto Vario"), _T("Netto"),
-    NULL,
     2, 24,
   },
   // 45
   { ugNone, _T("Task Arrival Time"), _T("Fin ETA"),
-    NULL,
     46, 42,
   },
   // 46
   { ugNone, _T("Next Arrival Time"), _T("WP ETA"),
-    NULL,
     14, 45,
   },
   // 47
   { ugNone, _T("Bearing Difference"), _T("Brng D"),
-    NULL,
     54, 37,
   },
   // 48
   { ugNone, _T("Outside Air Temperature"), _T("OAT"),
-    NULL,
     49, 26,
   },
   // 49
   { ugNone, _T("Relative Humidity"), _T("RelHum"),
-    NULL,
     50, 48,
   },
   // 50
   { ugNone, _T("Forecast Temperature"), _T("MaxTemp"),
-    NULL,
     49, 25,
   },
   // 51
   { ugDistance, _T("AA Distance Tgt"), _T("AA Dtgt"),
-    NULL,
     52, 31,
   },
   // 52
   { ugTaskSpeed, _T("AA Speed Tgt"), _T("AA Vtgt"),
-    NULL,
     11, 51,
   },
   // 53
   { ugNone, _T("L/D vario"), _T("L/D vario"),
-    NULL,
     4, 38,
   },
   // 54
   { ugHorizontalSpeed, _T("Airspeed TAS"), _T("V TAS"),
-    NULL,
     3, 47,
   },
   // 55
   { ugNone, _T("Own Team Code"), _T("TeamCode"),
-    NULL,
     56, 54,
   },
   // 56
   { ugNone, _T("Team Bearing"), _T("Tm Brng"),
-    NULL,
     57, 55,
   },
   // 57
   { ugNone, _T("Team Bearing Diff"), _T("Team Bd"),
-    NULL,
     58, 56,
   },
   // 58
   { ugDistance, _T("Team Range"), _T("Team Dis"),
-    NULL,
     55, 57,
   },
   // 59
   { ugTaskSpeed, _T("Speed Task Instantaneous"), _T("V Tsk Ins"),
-    NULL,
     18, 16,
   },
   // 60
   { ugDistance, _T("Distance Home"), _T("Home Dis"),
-    NULL,
     18, 16,
   },
   // 61
   { ugTaskSpeed, _T("Speed Task Achieved"), _T("V Tsk Ach"),
-    NULL,
     18, 16,
   },
   // 62
   { ugNone, _T("AA Delta Time"), _T("AA dT"),
-    NULL,
     28, 18,
   },
   // 63
   { ugVerticalSpeed, _T("Thermal All"), _T("TC All"),
-    NULL,
     8, 2,
   },
   // 64
   { ugVerticalSpeed, _T("Distance Vario"), _T("D Vario"),
-    NULL,
     8, 2,
   },
   // 65
@@ -445,54 +378,44 @@ static const SCREEN_INFO Data_Options[] = {
 #else
   { ugNone, _T("Battery Voltage"), _T("Battery"),
 #endif
-    NULL,
     49, 26,
   },
   // 66  VENTA-ADDON added Final GR
   // VENTA-TODO: fix those 38,5 numbers to point correctly menu items
   { ugNone, _T("Final GR"), _T("Fin GR"),
-    NULL,
     38, 5,
   },
 
   // 67 VENTA3-ADDON Alternate1 destinations infoboxes  TODO> fix 36 46 to something correct
   { ugNone, _T("Alternate1 GR"), _T("Altern 1"),
-    NULL,
     36, 46,
   },
   // 68 Alternate 2
   { ugNone, _T("Alternate2 GR"), _T("Altern 2"),
-    NULL,
     36, 46,
   },
   // 69 BestAlternate aka BestLanding
   { ugNone, _T("Best Alternate"), _T("BestAltn"),
-    NULL,
     36, 46,
   },
   // 70
   { ugAltitude, _T("QFE GPS"), _T("QFE GPS"),
-    NULL,
     1, 33,
   },
   // 71 TODO FIX those 19,4 values
   { ugNone, _T("L/D Average"), _T("L/D Avg"),
-    NULL,
     19, 4,
   },
   // 72 //
   { ugNone, _T("Experimental1"), _T("Exp1"),
-    NULL,
     8, 2,
   },
   // 73 //
   { ugDistance, _T("Online Contest Distance"), _T("OLC"),
-    NULL,
     8, 2,
   },
   // 74 //
   { ugNone, _T("Experimental2"), _T("Exp2"),
-    NULL,
     8, 2,
   },
 };
@@ -688,52 +611,6 @@ InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
 {
   if (info_box.UpdateContent())
     return;
-
-  int color = 0;
-
-  assert(Data_Options[type].Formatter != NULL);
-  Data_Options[type].Formatter->AssignValue(type);
-
-  //
-  // Set Infobox title and middle value. Bottom line comes next
-  //
-  if (needupdate)
-    info_box.SetTitle(Data_Options[type].Title);
-
-  info_box.SetValue(Data_Options[type].Formatter->Render(&color));
-
-  // to be optimized!
-  if (needupdate)
-    info_box.SetValueUnit(Units::GetUserUnitByGroup(Data_Options[type].UnitGroup));
-
-  info_box.SetColor(color);
-
-  //
-  // Infobox bottom line
-  //
-  switch (type) {
-    // VENTA3 battery temperature under voltage. There is a good
-    // reason to see the temperature, if available: many PNA/PDA
-    // will switch OFF during flight under direct sunlight for
-    // several hours due to battery temperature too high!! The 314
-    // does!
-
-    // TODO: check temperature too high and set a warning flag to
-    // be used by an event or something
-#ifdef HAVE_BATTERY
-  case 65:
-    if (PDABatteryTemperature > 0) {
-      TCHAR sTmp[32];
-      _stprintf(sTmp, _T("%1.0d%sC"), (int)PDABatteryTemperature, _T(DEG));
-      info_box.SetComment(sTmp);
-    } else
-      info_box.SetComment(_T(""));
-    break;
-#endif
-
-  default:
-    info_box.SetComment(_T(""));
-  }
 }
 
 void
@@ -788,13 +665,6 @@ InfoBoxManager::ProcessKey(InfoBoxContent::InfoBoxKeyCodes keycode)
   TriggerGPSUpdate();
 
   ResetDisplayTimeOut();
-}
-
-void
-InfoBoxManager::DestroyInfoBoxFormatters()
-{
-  for (unsigned i = 0; i < NUMSELECTSTRINGS; i++)
-    delete Data_Options[i].Formatter;
 }
 
 bool
@@ -988,5 +858,4 @@ InfoBoxManager::Destroy()
     delete (InfoBoxes[i]);
 
   full_window.reset();
-  DestroyInfoBoxFormatters();
 }
