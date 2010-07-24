@@ -82,12 +82,11 @@ TopologyStore::ScanVisibility(Projection &m_projection,
   for (int z = 0; z < MAXTOPOLOGY; z++) {
     if (topology_store[z]) {
       bool update = force || first;
-      bool purge_only = !update;
 
       if (topology_store[z]->triggerUpdateCache)
         first = false;
 
-      topology_store[z]->updateCache(m_projection, _bounds_active, purge_only);
+      topology_store[z]->updateCache(m_projection, _bounds_active, !update);
       remaining |= (topology_store[z]->triggerUpdateCache);
     }
   }
