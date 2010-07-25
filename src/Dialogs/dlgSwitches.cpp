@@ -98,7 +98,6 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgSwitchesShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
-                      _T("dlgSwitches.xml"),
 		      XCSoarInterface::main_window,
 		      _T("IDR_XML_SWITCHES"));
   if (wf == NULL)

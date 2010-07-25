@@ -376,10 +376,10 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   WndProperty *wp;
 
   if (Layout::landscape)
-    wf = dlgLoadFromXML(CallBackTable, _T("dlgWayPointDetails_L.xml"),
+    wf = dlgLoadFromXML(CallBackTable,
                         parent, _T("IDR_XML_WAYPOINTDETAILS_L"));
   else
-    wf = dlgLoadFromXML(CallBackTable, _T("dlgWayPointDetails.xml"),
+    wf = dlgLoadFromXML(CallBackTable,
                         parent, _T("IDR_XML_WAYPOINTDETAILS"));
 
   nTextLines = 0;

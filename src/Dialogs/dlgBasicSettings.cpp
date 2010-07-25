@@ -298,7 +298,7 @@ dlgBasicSettingsShowModal()
   GlidePolar gp_copy = task_ui.get_glide_polar();
   glide_polar = &gp_copy;
 
-  wf = dlgLoadFromXML(CallBackTable, _T("dlgBasicSettings.xml"),
+  wf = dlgLoadFromXML(CallBackTable,
       XCSoarInterface::main_window, _T("IDR_XML_BASICSETTINGS"));
   if (wf == NULL)
     return;

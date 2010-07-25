@@ -316,7 +316,7 @@ dlgFontEditShowModal(const TCHAR * FontDescription,
 
   IsInitialized = false;
 
-  wf = dlgLoadFromXML(CallBackTable, _T("dlgFontEdit.xml"),
+  wf = dlgLoadFromXML(CallBackTable,
                       XCSoarInterface::main_window, _T("IDR_XML_FONTEDIT"));
   if (wf == NULL)
     return false;

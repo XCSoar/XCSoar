@@ -67,12 +67,10 @@ dlgHelpShowModal(SingleWindow &parent,
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgHelp_L.xml"),
                         parent,
                         _T("IDR_XML_HELP_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgHelp.xml"),
                         parent,
                         _T("IDR_XML_HELP"));
   }

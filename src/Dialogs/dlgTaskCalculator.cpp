@@ -297,7 +297,7 @@ static CallBackTableEntry_t CallBackTable[] = {
 void
 dlgTaskCalculatorShowModal(SingleWindow &parent)
 {
-  wf = dlgLoadFromXML(CallBackTable, _T("dlgTaskCalculator.xml"),
+  wf = dlgLoadFromXML(CallBackTable,
 		                  XCSoarInterface::main_window, _T("IDR_XML_TASKCALCULATOR"));
 
   if (!wf)

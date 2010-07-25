@@ -104,7 +104,6 @@ SaveFromForm(const WndForm &form, SETTINGS_COMPUTER &settings)
 
 void dlgVoiceShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
-                      _T("dlgVoice.xml"),
 		      XCSoarInterface::main_window,
 		      _T("IDR_XML_VOICE"));
 

@@ -98,7 +98,7 @@ static CallBackTableEntry_t CallBackTable[] = {
 void
 dlgLoggerReplayShowModal(void)
 {
-  wf = dlgLoadFromXML(CallBackTable, _T("dlgLoggerReplay.xml"),
+  wf = dlgLoadFromXML(CallBackTable,
                       XCSoarInterface::main_window, _T("IDR_XML_LOGGERREPLAY"));
   if (!wf)
     return;

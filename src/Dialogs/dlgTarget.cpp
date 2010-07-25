@@ -543,12 +543,10 @@ void dlgTarget(void) {
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgTarget_L.xml"),
                         XCSoarInterface::main_window,
                         _T("IDR_XML_TARGET_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgTarget.xml"),
                         XCSoarInterface::main_window,
                         _T("IDR_XML_TARGET"));
   }

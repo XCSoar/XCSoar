@@ -76,8 +76,8 @@ typedef Window *(*CreateWindowCallback_t)(ContainerWindow &parent,
 
 extern DialogStyle_t g_eDialogStyle;
 
-WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
-                        const TCHAR *FileName, SingleWindow &Parent,
-                        const TCHAR *resource = NULL);
+WndForm *
+dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
+               const TCHAR *resource);
 
 #endif

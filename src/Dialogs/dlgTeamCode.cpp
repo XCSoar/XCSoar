@@ -204,10 +204,10 @@ dlgTeamCodeShowModal(void)
   WndButton *buttonCode = NULL;
 
   if (Layout::landscape)
-    wf = dlgLoadFromXML(CallBackTable, _T("dlgTeamCode_L.xml"),
+    wf = dlgLoadFromXML(CallBackTable,
         XCSoarInterface::main_window, _T("IDR_XML_TEAMCODE_L"));
   else
-    wf = dlgLoadFromXML(CallBackTable, _T("dlgTeamCode.xml"),
+    wf = dlgLoadFromXML(CallBackTable,
         XCSoarInterface::main_window, _T("IDR_XML_TEAMCODE"));
 
   if (!wf)

@@ -84,12 +84,10 @@ static CallBackTableEntry_t CallBackTable[]={
 int dlgAirspacePatternsShowModal(void){
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgAirspacePatterns_L.xml"),
                         XCSoarInterface::main_window,
                         _T("IDR_XML_AIRSPACEPATTERNS_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgAirspacePatterns.xml"),
                         XCSoarInterface::main_window,
                         _T("IDR_XML_AIRSPACEPATTERNS"));
   }

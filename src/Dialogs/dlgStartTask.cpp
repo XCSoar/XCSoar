@@ -70,7 +70,6 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgStartTaskShowModal(bool *validStart, double Time, double Speed, double Altitude){
   wf = dlgLoadFromXML(CallBackTable,
-                      _T("dlgStartTask.xml"),
 		      XCSoarInterface::main_window,
 		      _T("IDR_XML_STARTTASK"));
   if (wf == NULL)

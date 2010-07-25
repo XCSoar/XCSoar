@@ -75,12 +75,10 @@ void dlgSimulatorPromptShowModal(void){
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgSimulatorPrompt.xml"),
                         XCSoarInterface::main_window,
                         _T("IDR_XML_SIMULATORPROMPT"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgSimulatorPrompt_L.xml"),
                         XCSoarInterface::main_window,
                         _T("IDR_XML_SIMULATORPROMPT_L"));
   }

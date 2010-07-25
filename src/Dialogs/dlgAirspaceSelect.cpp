@@ -448,12 +448,10 @@ PrepareAirspaceSelectDialog()
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgAirspaceSelect_L.xml"),
                         XCSoarInterface::main_window,
                         _T("IDR_XML_AIRSPACESELECT_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgAirspaceSelect.xml"),
                         XCSoarInterface::main_window,
                         _T("IDR_XML_AIRSPACESELECT"));
   }

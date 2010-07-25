@@ -130,10 +130,10 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
     wComboPopupWndProperty = theProperty;
 
     if (!Layout::landscape) {
-      wf = dlgLoadFromXML(CallBackTable, _T("dlgComboPicker_L.xml"), parent,
+      wf = dlgLoadFromXML(CallBackTable, parent,
                           _T("IDR_XML_COMBOPICKER_L"));
     } else {
-      wf = dlgLoadFromXML(CallBackTable, _T("dlgWayComboPicker.xml"), parent,
+      wf = dlgLoadFromXML(CallBackTable, parent,
                           _T("IDR_XML_COMBOPICKER"));
     }
 

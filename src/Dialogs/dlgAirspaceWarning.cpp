@@ -451,7 +451,6 @@ void
 dlgAirspaceWarningInit(SingleWindow &parent)
 {
   wf = dlgLoadFromXML(CallBackTable,
-                      _T("dlgAirspaceWarning.xml"),
                       parent,
                       _T("IDR_XML_AIRSPACEWARNING"));
   if (wf == NULL)

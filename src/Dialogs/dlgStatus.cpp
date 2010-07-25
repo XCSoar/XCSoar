@@ -553,7 +553,6 @@ void dlgStatusShowModal(int start_page){
   first = true;
 
   wf = dlgLoadFromXML(CallBackTable,
-                      _T("dlgStatus.xml"),
                       XCSoarInterface::main_window,
                       _T("IDR_XML_STATUS"));
 

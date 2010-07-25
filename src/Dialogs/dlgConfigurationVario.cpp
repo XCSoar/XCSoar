@@ -940,10 +940,10 @@ dlgConfigurationVarioShowModal(void)
   }
 
   if (!Layout::landscape)
-    wf = dlgLoadFromXML(CallBackTable, _T("dlgVario_L.xml"),
+    wf = dlgLoadFromXML(CallBackTable,
                         XCSoarInterface::main_window, _T("IDR_XML_VARIO_L"));
   else
-    wf = dlgLoadFromXML(CallBackTable, _T("dlgVario.xml"),
+    wf = dlgLoadFromXML(CallBackTable,
                         XCSoarInterface::main_window, _T("IDR_XML_VARIO"));
 
   if (!wf)

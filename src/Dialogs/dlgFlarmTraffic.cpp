@@ -535,10 +535,10 @@ dlgFlarmTrafficShowModal()
 {
   // Load dialog from XML
   if (Layout::landscape)
-    wf = dlgLoadFromXML(CallBackTable, _T("dlgFlarmTraffic_L.xml"),
+    wf = dlgLoadFromXML(CallBackTable,
         XCSoarInterface::main_window, _T("IDR_XML_FLARMTRAFFIC_L"));
   else
-    wf = dlgLoadFromXML(CallBackTable, _T("dlgFlarmTraffic.xml"),
+    wf = dlgLoadFromXML(CallBackTable,
         XCSoarInterface::main_window, _T("IDR_XML_FLARMTRAFFIC"));
 
   if (!wf)

@@ -558,12 +558,10 @@ dlgWayPointSelect(SingleWindow &parent,
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgWayPointSelect_L.xml"),
                         parent,
                         _T("IDR_XML_WAYPOINTSELECT_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgWayPointSelect.xml"),
                         parent,
                         _T("IDR_XML_WAYPOINTSELECT"));
   }

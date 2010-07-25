@@ -247,12 +247,10 @@ dlgChecklistShowModal(void)
   /// @todo: check the files loaded here (L != landscape)
   if (!Layout::landscape)
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgChecklist_L.xml"),
                         XCSoarInterface::main_window,
                         _T("IDR_XML_CHECKLIST_L"));
   else
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgChecklist.xml"),
                         XCSoarInterface::main_window,
                         _T("IDR_XML_CHECKLIST"));
   if (!wf)

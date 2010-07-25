@@ -252,12 +252,10 @@ dlgTaskPropertiesShowModal(SingleWindow &parent, OrderedTask** task)
 
   if (Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgTaskProperties_L.xml"),
                         parent,
                         _T("IDR_XML_TASKPROPERTIES_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgTaskProperties.xml"),
                         parent,
                         _T("IDR_XML_TASKPROPERTIES"));
   }

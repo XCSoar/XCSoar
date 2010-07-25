@@ -126,7 +126,6 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgVegaDemoShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
-                      _T("dlgVegaDemo.xml"),
 		      XCSoarInterface::main_window,
 		      _T("IDR_XML_VEGADEMO"));
 

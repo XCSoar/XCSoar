@@ -234,12 +234,10 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
 
   if (Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgTaskPointType_L.xml"),
                         parent,
                         _T("IDR_XML_TASKPOINTTYPE_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgTaskPointType.xml"),
                         parent,
                         _T("IDR_XML_TASKPOINTTYPE"));
   }
