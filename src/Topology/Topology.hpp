@@ -65,8 +65,11 @@ public:
   void updateCache(Projection &map_projection,
 		   const rectObj &thebounds, bool purgeonly = false);
   void Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-             const Projection &projection, LabelBlock &label_block,
-             const SETTINGS_MAP &settings_map) const;
+             const Projection &projection) const;
+
+  void PaintLabels(Canvas &canvas,
+                   const Projection &projection, LabelBlock &label_block,
+                   const SETTINGS_MAP &settings_map) const;
 
   double scaleThreshold;
   void loadIcon(const int);

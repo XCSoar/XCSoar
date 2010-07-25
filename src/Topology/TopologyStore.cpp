@@ -113,14 +113,23 @@ TopologyStore::Close()
  */
 void
 TopologyStore::Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-                    const Projection &projection, LabelBlock &label_block,
-                    const SETTINGS_MAP &settings_map) const
+                    const Projection &projection) const
 {
   for (int z = 0; z < MAXTOPOLOGY; z++) {
     if (topology_store[z])
-      topology_store[z]->Paint(canvas, bitmap_canvas, projection,
-                               label_block, settings_map);
+      topology_store[z]->Paint(canvas, bitmap_canvas, projection);
   }
+}
+
+void
+TopologyStore::DrawLabels(Canvas &canvas, const Projection &projection,
+                          LabelBlock &label_block,
+                          const SETTINGS_MAP &settings_map) const
+{
+  for (unsigned i = 0; i < MAXTOPOLOGY; i++)
+    if (topology_store[i] != NULL)
+      topology_store[i]->PaintLabels(canvas, projection,
+                                     label_block, settings_map);
 }
 
 void

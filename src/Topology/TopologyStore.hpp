@@ -72,8 +72,10 @@ public:
   void Close();
   void Reset();
   void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-            const Projection &projection, LabelBlock &label_block,
-            const SETTINGS_MAP &settings_map) const;
+            const Projection &projection) const;
+  void DrawLabels(Canvas &canvas,
+                  const Projection &projection, LabelBlock &label_block,
+                  const SETTINGS_MAP &settings_map) const;
 
 private:
   Topology* topology_store[MAXTOPOLOGY];

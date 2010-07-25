@@ -173,8 +173,7 @@ Topology::updateCache(Projection &map_projection,
 
 void
 Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-                const Projection &projection, LabelBlock &label_block,
-                const SETTINGS_MAP &settings_map) const
+                const Projection &projection) const
 {
   if (!shapefileopen)
     return;
@@ -190,6 +189,96 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 
   canvas.select(hPen);
   canvas.select(hbBrush);
+
+  // get drawing info
+
+  int iskip = 1;
+
+  if (map_scale > 0.25 * scaleThreshold)
+    iskip = 2;
+  if (map_scale > 0.5 * scaleThreshold)
+    iskip = 3;
+  if (map_scale > 0.75 * scaleThreshold)
+    iskip = 4;
+
+  rectObj screenRect = projection.CalculateScreenBounds(fixed_zero);
+
+#ifdef RADIANS
+  screenRect.minx *= RAD_TO_DEG;
+  screenRect.miny *= RAD_TO_DEG;
+  screenRect.maxx *= RAD_TO_DEG;
+  screenRect.maxy *= RAD_TO_DEG;
+#endif
+
+  static POINT pt[MAXCLIPPOLYGON];
+
+  for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
+    const XShape *cshape = shpCache[ixshp];
+    if (!cshape || !cshape->is_visible(label_field))
+      continue;
+
+    const shapeObj &shape = cshape->shape;
+
+    if (!msRectOverlap(&shape.bounds, &screenRect))
+      continue;
+
+    switch (shape.type) {
+    case MS_SHAPE_POINT:
+      for (int tt = 0; tt < shape.numlines; ++tt) {
+        const lineObj &line = shape.line[tt];
+
+        for (int jj = 0; jj < line.numpoints; ++jj) {
+          POINT sc;
+          const GEOPOINT l = projection.point2GeoPoint(line.point[jj]);
+
+          if (projection.LonLat2ScreenIfVisible(l, &sc))
+            icon.draw(canvas, bitmap_canvas, sc.x, sc.y);
+        }
+      }
+      break;
+
+    case MS_SHAPE_LINE:
+      for (int tt = 0; tt < shape.numlines; ++tt) {
+        const lineObj &line = shape.line[tt];
+        int msize = min(line.numpoints, (int)MAXCLIPPOLYGON);
+
+        projection.LonLat2Screen(line.point, pt, msize, 1);
+
+        canvas.polyline(pt, msize);
+      }
+      break;
+
+    case MS_SHAPE_POLYGON:
+      for (int tt = 0; tt < shape.numlines; ++tt) {
+        const lineObj &line = shape.line[tt];
+        int msize = min(line.numpoints / iskip, (int)MAXCLIPPOLYGON);
+
+        projection.LonLat2Screen(line.point, pt, msize * iskip, iskip);
+
+        canvas.polygon(pt, msize);
+      }
+      break;
+    }
+  }
+}
+
+void
+Topology::PaintLabels(Canvas &canvas,
+                      const Projection &projection, LabelBlock &label_block,
+                      const SETTINGS_MAP &settings_map) const
+{
+  if (!shapefileopen || settings_map.DeclutterLabels >= 2)
+    return;
+
+  double map_scale = projection.GetMapScaleUser();
+  if (map_scale > scaleThreshold)
+    return;
+
+  // TODO code: only draw inside screen!
+  // this will save time with rendering pixmaps especially
+  // we already do an outer visibility test, but may need a test
+  // in screen coords
+
   canvas.select(MapLabelFont);
 
   // get drawing info
@@ -213,7 +302,6 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 #endif
 
   static POINT pt[MAXCLIPPOLYGON];
-  const bool render_labels = settings_map.DeclutterLabels < 2;
 
   for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
     const XShape *cshape = shpCache[ixshp];
@@ -225,71 +313,22 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
     if (!msRectOverlap(&shape.bounds, &screenRect))
       continue;
 
-    switch (shape.type) {
-    case MS_SHAPE_POINT:
-      for (int tt = 0; tt < shape.numlines; ++tt) {
-        const lineObj &line = shape.line[tt];
+    for (int tt = 0; tt < shape.numlines; ++tt) {
+      const lineObj &line = shape.line[tt];
+      int msize = min(line.numpoints / iskip, (int)MAXCLIPPOLYGON);
 
-        for (int jj = 0; jj < line.numpoints; ++jj) {
-          POINT sc;
-          const GEOPOINT l = projection.point2GeoPoint(line.point[jj]);
+      projection.LonLat2Screen(line.point, pt, msize * iskip, iskip);
 
-          if (projection.LonLat2ScreenIfVisible(l, &sc)) {
-            icon.draw(canvas, bitmap_canvas, sc.x, sc.y);
-            if (render_labels)
-              cshape->DrawLabel(canvas, label_block, sc.x, sc.y);
-          }
+      int minx = canvas.get_width();
+      int miny = canvas.get_height();
+      for (int jj = 0; jj < msize; ++jj) {
+        if (pt[jj].x <= minx) {
+          minx = pt[jj].x;
+          miny = pt[jj].y;
         }
       }
-      break;
 
-    case MS_SHAPE_LINE:
-      for (int tt = 0; tt < shape.numlines; ++tt) {
-        const lineObj &line = shape.line[tt];
-        int msize = min(line.numpoints, (int)MAXCLIPPOLYGON);
-
-        projection.LonLat2Screen(line.point, pt, msize, 1);
-
-        canvas.polyline(pt, msize);
-
-        if (render_labels) {
-          int minx = canvas.get_width();
-          int miny = canvas.get_height();
-          for (int jj = 0; jj < msize; ++jj) {
-            if (pt[jj].x <= minx) {
-              minx = pt[jj].x;
-              miny = pt[jj].y;
-            }
-          }
-
-          cshape->DrawLabel(canvas, label_block, minx, miny);
-        }
-      }
-      break;
-
-    case MS_SHAPE_POLYGON:
-      for (int tt = 0; tt < shape.numlines; ++tt) {
-        const lineObj &line = shape.line[tt];
-        int msize = min(line.numpoints / iskip, (int)MAXCLIPPOLYGON);
-
-        projection.LonLat2Screen(line.point, pt, msize * iskip, iskip);
-
-        canvas.polygon(pt, msize);
-
-        if (render_labels) {
-          int minx = canvas.get_width();
-          int miny = canvas.get_height();
-          for (int jj = 0; jj < msize; ++jj) {
-            if (pt[jj].x <= minx) {
-              minx = pt[jj].x;
-              miny = pt[jj].y;
-            }
-          }
-
-          cshape->DrawLabel(canvas, label_block, minx, miny);
-        }
-      }
-      break;
+      cshape->DrawLabel(canvas, label_block, minx, miny);
     }
   }
 }

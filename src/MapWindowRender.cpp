@@ -91,9 +91,11 @@ MapWindow::RenderMapLayer(Canvas &canvas)
     BigZoom = false;
   }
 
-  if (topology != NULL && SettingsMap().EnableTopology)
+  if (topology != NULL && SettingsMap().EnableTopology) {
     // Draw the topology
-    topology->Draw(canvas, bitmap_canvas, *this, label_block, SettingsMap());
+    topology->Draw(canvas, bitmap_canvas, *this);
+    topology->DrawLabels(canvas, *this, label_block, SettingsMap());
+  }
 
   // reset label over-write preventer
   label_block.reset();
