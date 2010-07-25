@@ -52,13 +52,13 @@ class LabelBlock;
 struct SETTINGS_MAP;
 class XShape;
 
-class Topology
+class TopologyFile
 {
   int label_field;
 
 public:
-  Topology(const char* shpname, const Color thecolor, int label_field);
-  ~Topology();
+  TopologyFile(const char* shpname, const Color thecolor, int label_field);
+  ~TopologyFile();
 
   void TriggerIfScaleNowVisible(const Projection &map_projection);
 

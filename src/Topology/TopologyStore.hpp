@@ -47,7 +47,7 @@ class Canvas;
 class BitmapCanvas;
 class Projection;
 class LabelBlock;
-class Topology;
+class TopologyFile;
 struct SETTINGS_MAP;
 class NLineReader;
 
@@ -78,7 +78,7 @@ public:
                   const SETTINGS_MAP &settings_map) const;
 
 private:
-  Topology* topology_store[MAXTOPOLOGY];
+  TopologyFile* topology_store[MAXTOPOLOGY];
 };
 
 #endif

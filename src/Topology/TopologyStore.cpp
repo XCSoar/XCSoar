@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Topology/TopologyStore.hpp"
-#include "Topology/Topology.hpp"
+#include "Topology/TopologyFile.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Compatibility/string.h"
@@ -246,9 +246,9 @@ TopologyStore::Load(NLineReader &reader, const TCHAR* Directory)
       blue = 255;
     }
 
-    topology_store[numtopo] = new Topology(ShapeFilename,
-                                           Color(red, green, blue),
-                                           ShapeField);
+    topology_store[numtopo] = new TopologyFile(ShapeFilename,
+                                               Color(red, green, blue),
+                                               ShapeField);
 
     if (ShapeIcon != 0)
       topology_store[numtopo]->loadIcon(ShapeIcon);

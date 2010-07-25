@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "Topology/Topology.hpp"
+#include "Topology/TopologyFile.hpp"
 #include "Topology/XShape.hpp"
 #include <ctype.h> // needed for Wine
 #include "Screen/Util.hpp"
@@ -51,12 +51,12 @@ Copyright_License {
 #include <tchar.h>
 
 void
-Topology::loadIcon(const int res_id)
+TopologyFile::loadIcon(const int res_id)
 {
   icon.load(res_id);
 }
 
-Topology::Topology(const char *filename, const Color thecolor,
+TopologyFile::TopologyFile(const char *filename, const Color thecolor,
                    int _label_field)
   :label_field(_label_field),
   scaleThreshold(1000.0),
@@ -79,7 +79,7 @@ Topology::Topology(const char *filename, const Color thecolor,
     shpCache[i] = NULL;
 }
 
-Topology::~Topology()
+TopologyFile::~TopologyFile()
 {
   if (!shapefileopen)
     return;
@@ -94,20 +94,20 @@ Topology::~Topology()
 }
 
 bool
-Topology::CheckScale(const double map_scale) const
+TopologyFile::CheckScale(const double map_scale) const
 {
   return (map_scale <= scaleThreshold);
 }
 
 void
-Topology::TriggerIfScaleNowVisible(const Projection &map_projection)
+TopologyFile::TriggerIfScaleNowVisible(const Projection &map_projection)
 {
   triggerUpdateCache |=
       (CheckScale(map_projection.GetMapScaleUser()) != in_scale);
 }
 
 void
-Topology::ClearCache()
+TopologyFile::ClearCache()
 {
   for (int i = 0; i < shpfile.numshapes; i++) {
     delete shpCache[i];
@@ -116,7 +116,7 @@ Topology::ClearCache()
 }
 
 void
-Topology::updateCache(Projection &map_projection, 
+TopologyFile::updateCache(Projection &map_projection, 
                       const rectObj &thebounds,
                       bool purgeonly)
 {
@@ -172,7 +172,7 @@ Topology::updateCache(Projection &map_projection,
 }
 
 void
-Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
+TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
                 const Projection &projection) const
 {
   if (!shapefileopen)
@@ -263,7 +263,7 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 }
 
 void
-Topology::PaintLabels(Canvas &canvas,
+TopologyFile::PaintLabels(Canvas &canvas,
                       const Projection &projection, LabelBlock &label_block,
                       const SETTINGS_MAP &settings_map) const
 {

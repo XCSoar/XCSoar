@@ -389,7 +389,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/TaskClientUI.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
-	$(SRC)/Topology/Topology.cpp \
+	$(SRC)/Topology/TopologyFile.cpp \
 	$(SRC)/Topology/TopologyStore.cpp \
 	$(SRC)/Topology/XShape.cpp \
 	$(SRC)/Units.cpp \
