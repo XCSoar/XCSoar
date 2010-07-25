@@ -83,7 +83,7 @@ import_label(const char *src)
 }
 
 XShape::XShape(shapefileObj *shpfile, int i, int label_field)
-  :label(NULL), hide(false)
+  :label(NULL)
 {
   msInitShape(&shape);
   msSHPReadShape(shpfile->hSHP, i, &shape);
@@ -100,8 +100,6 @@ XShape::XShape(shapefileObj *shpfile, int i, int label_field)
   if (label_field >= 0) {
     const char *src = msDBFReadStringAttribute(shpfile->hDBF, i, label_field);
     label = import_label(src);
-    if (label == NULL)
-      hide = true;
   }
 }
 

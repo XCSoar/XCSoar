@@ -55,10 +55,13 @@ public:
   XShape(shapefileObj *shpfile, int i, int label_field=-1);
   ~XShape();
 
+  bool is_visible(int label_field) const {
+    return label_field < 0 || label != NULL;
+  }
+
   void renderSpecial(Canvas &canvas, LabelBlock &label_block,
                      int x, int y) const;
 
-  bool hide;
   shapeObj shape;
 };
 

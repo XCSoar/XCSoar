@@ -219,7 +219,7 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
   for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
     const XShape *cshape = shpCache[ixshp];
 
-    if (!cshape || cshape->hide)
+    if (!cshape || !cshape->is_visible(label_field))
       continue;
 
     const shapeObj *shape = &(cshape->shape);
