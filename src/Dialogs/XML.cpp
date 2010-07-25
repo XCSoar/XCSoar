@@ -251,7 +251,6 @@ xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
   LPTSTR lpRes;
   HRSRC hResInfo;
   HGLOBAL hRes;
-  int l, len;
 
   // Find the xml resource.
   hResInfo = FindResource(XCSoarInterface::hInst, lpName, _T("XMLDialog"));
@@ -279,7 +278,7 @@ xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
   lpRes = (LPTSTR)LockResource(hRes);
 
   if (lpRes) {
-    l = SizeofResource(XCSoarInterface::hInst, hResInfo);
+    int l = SizeofResource(XCSoarInterface::hInst, hResInfo);
     if (l > 0) {
       char *buf = (char*)malloc(l + 2);
       if (!buf) {
@@ -291,7 +290,6 @@ xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
       strncpy(buf, (char*)lpRes, l);
       buf[l] = 0; // need to explicitly null-terminate.
       buf[l + 1] = 0;
-      len = l;
 
 #ifdef _UNICODE
       LPTSTR b2 = (LPTSTR)malloc(l * 2 + 2);
