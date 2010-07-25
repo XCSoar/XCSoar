@@ -274,7 +274,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   // Initialize Marks
   marks = new Marks();
-  topology = new TopologyStore();
 
   // Show the main and map windows
   LogStartUp(TEXT("Create map window"));
@@ -311,6 +310,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
     task_manager.set_glide_polar(gp);
 
   // Read the topology file(s)
+  topology = new TopologyStore();
   topology->Open();
 
   // Read the terrain file
