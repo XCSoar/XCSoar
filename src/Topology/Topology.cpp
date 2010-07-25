@@ -238,7 +238,7 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
           if (map_projection.LonLat2ScreenIfVisible(l, &sc)) {
             icon.draw(canvas, bitmap_canvas, sc.x, sc.y);
             if (render_labels)
-              cshape->renderSpecial(canvas, label_block, sc.x, sc.y);
+              cshape->DrawLabel(canvas, label_block, sc.x, sc.y);
           }
         }
       }
@@ -262,7 +262,7 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
             }
           }
 
-          cshape->renderSpecial(canvas, label_block, minx, miny);
+          cshape->DrawLabel(canvas, label_block, minx, miny);
         }
       }
       break;
@@ -286,7 +286,7 @@ Topology::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
             }
           }
 
-          cshape->renderSpecial(canvas, label_block, minx, miny);
+          cshape->DrawLabel(canvas, label_block, minx, miny);
         }
       }
       break;

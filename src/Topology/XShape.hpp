@@ -59,7 +59,7 @@ public:
     return label_field < 0 || label != NULL;
   }
 
-  void renderSpecial(Canvas &canvas, LabelBlock &label_block,
+  void DrawLabel(Canvas &canvas, LabelBlock &label_block,
                      int x, int y) const;
 
   shapeObj shape;
