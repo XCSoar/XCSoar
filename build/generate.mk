@@ -30,10 +30,10 @@ XCI_LIST = pc altair default
 XCI_HEADERS = $(patsubst %,$(OUT)/include/InputEvents_%.cpp,$(XCI_LIST))
 
 $(XCI_HEADERS): $(OUT)/include/InputEvents_%.cpp: \
-	$(topdir)/Data/Input/%.xci $(topdir)/Data/Input/xci2cpp.pl \
+	$(topdir)/Data/Input/%.xci $(topdir)/tools/xci2cpp.pl \
 	$(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
-	$(Q)$(PERL) $(topdir)/Data/Input/xci2cpp.pl $< >$@.tmp
+	$(Q)$(PERL) $(topdir)/tools/xci2cpp.pl $< >$@.tmp
 	@mv $@.tmp $@
 
 T2E_OBJ = $(call SRC_TO_OBJ,$(SRC)/InputEvents.cpp)
