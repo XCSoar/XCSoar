@@ -42,12 +42,14 @@ Copyright_License {
 
 #include "shapelib/mapshape.h"
 
+#include <tchar.h>
+
 class Canvas;
 class LabelBlock;
 
 class XShape
 {
-  char *label;
+  TCHAR *label;
 
 public:
   XShape(shapefileObj *shpfile, int i, int label_field=-1);

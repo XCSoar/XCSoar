@@ -47,7 +47,7 @@ Copyright_License {
 #include <string.h>
 #include <stdio.h>
 
-static char *
+static TCHAR *
 import_label(const char *src)
 {
   if (src == NULL || strcmp(src, "UNK") == 0 ||
@@ -59,16 +59,27 @@ import_label(const char *src)
     double value = strtod(src + 1, NULL);
     value = Units::ToUserUnit(value, Units::AltitudeUnit);
 
-    char buffer[32];
+    TCHAR buffer[32];
     if (value > 999)
-      sprintf(buffer, "%.1f", (value / 1000));
+      _stprintf(buffer, _T("%.1f"), (value / 1000));
     else
-      sprintf(buffer, "%d", (int)value);
+      _stprintf(buffer, _T("%d"), (int)value);
 
-    return strdup(buffer);
+    return _tcsdup(buffer);
   }
 
+#ifdef _UNICODE
+  size_t length = strlen(src);
+  TCHAR *dest = new TCHAR[length + 1];
+  if (::MultiByteToWideChar(CP_ACP, 0, src, -1, dest, length + 1) <= 0) {
+    delete[] dest;
+    return NULL;
+  }
+
+  return dest;
+#else
   return strdup(src);
+#endif
 }
 
 XShape::XShape(shapefileObj *shpfile, int i, int label_field)
@@ -107,10 +118,7 @@ XShape::renderSpecial(Canvas &canvas, LabelBlock &label_block,
   if (!label)
     return;
 
-  TCHAR Temp[100];
-  ConvertCToT(Temp, label);
-
-  SIZE tsize = canvas.text_size(Temp);
+  SIZE tsize = canvas.text_size(label);
 
   x += 2;
   y += 2;
@@ -126,6 +134,6 @@ XShape::renderSpecial(Canvas &canvas, LabelBlock &label_block,
 
   canvas.background_transparent();
   canvas.set_text_color(Color(0x20, 0x20, 0x20));
-  canvas.text(x, y, Temp);
+  canvas.text(x, y, label);
   canvas.background_opaque();
 }
