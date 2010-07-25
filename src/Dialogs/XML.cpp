@@ -248,7 +248,6 @@ static Font *FontMap[5] = {
 static XMLNode
 xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
 {
-  LPTSTR lpRes;
   HRSRC hResInfo;
   HGLOBAL hRes;
 
@@ -275,7 +274,7 @@ xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
   }
 
   // Lock the wave resource and do something with it.
-  lpRes = (LPTSTR)LockResource(hRes);
+  const char *lpRes = (const char *)LockResource(hRes);
 
   if (lpRes) {
     int l = SizeofResource(XCSoarInterface::hInst, hResInfo);
@@ -287,7 +286,7 @@ xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
         // unable to allocate memory
         return XMLNode::emptyXMLNode;
       }
-      strncpy(buf, (char*)lpRes, l);
+      strncpy(buf, lpRes, l);
       buf[l] = 0; // need to explicitly null-terminate.
       buf[l + 1] = 0;
 
