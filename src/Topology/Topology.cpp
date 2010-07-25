@@ -75,8 +75,6 @@ Topology::Topology(const char* shpname, const Color thecolor, int _label_field)
 void
 Topology::Open()
 {
-  shapefileopen = false;
-
   if (msSHPOpenFile(&shpfile, "rb", filename) == -1)
     return;
 
