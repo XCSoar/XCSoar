@@ -60,8 +60,6 @@ public:
   Topology(const char* shpname, const Color thecolor, int label_field);
   ~Topology();
 
-  void Open(const char* filename);
-  void Close();
   void TriggerIfScaleNowVisible(const Projection &map_projection);
 
   void updateCache(Projection &map_projection,

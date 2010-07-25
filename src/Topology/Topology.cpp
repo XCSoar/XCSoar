@@ -56,21 +56,15 @@ Topology::loadIcon(const int res_id)
   icon.load(res_id);
 }
 
-Topology::Topology(const char* shpname, const Color thecolor, int _label_field)
+Topology::Topology(const char *filename, const Color thecolor,
+                   int _label_field)
   :label_field(_label_field),
   scaleThreshold(1000.0),
   triggerUpdateCache(false),
-  shpCache(NULL),
   in_scale(false),
   hPen(1, thecolor),
   hbBrush(thecolor),
   shapefileopen(false)
-{
-  Open(shpname);
-}
-
-void
-Topology::Open(const char* filename)
 {
   if (msSHPOpenFile(&shpfile, "rb", filename) == -1)
     return;
@@ -85,8 +79,7 @@ Topology::Open(const char* filename)
     shpCache[i] = NULL;
 }
 
-void
-Topology::Close()
+Topology::~Topology()
 {
   if (!shapefileopen)
     return;
@@ -98,12 +91,6 @@ Topology::Close()
   }
 
   msSHPCloseFile(&shpfile);
-  shapefileopen = false;
-}
-
-Topology::~Topology()
-{
-  Close();
 }
 
 bool
