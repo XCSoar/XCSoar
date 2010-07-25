@@ -47,6 +47,17 @@ Copyright_License {
 #include <string.h>
 #include <stdio.h>
 
+static char *
+import_label(const char *src)
+{
+  if (src == NULL || strcmp(src, "UNK") == 0 ||
+      strcmp(src, "RAILWAY STATION") == 0 ||
+      strcmp(src, "RAILROAD STATION") == 0)
+    return NULL;
+
+  return strdup(src);
+}
+
 XShape::XShape(shapefileObj *shpfile, int i, int label_field)
   :label(NULL), hide(false)
 {
@@ -64,14 +75,9 @@ XShape::XShape(shapefileObj *shpfile, int i, int label_field)
 
   if (label_field >= 0) {
     const char *src = msDBFReadStringAttribute(shpfile->hDBF, i, label_field);
-    if (src &&
-        (strcmp(src,"UNK") != 0) &&
-        (strcmp(src,"RAILWAY STATION") != 0) &&
-        (strcmp(src,"RAILROAD STATION") != 0)) {
-      label = strdup(src);
-    } else {
+    label = import_label(src);
+    if (label == NULL)
       hide = true;
-    }
   }
 }
 
