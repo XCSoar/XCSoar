@@ -292,16 +292,10 @@ xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
 
 #ifdef _UNICODE
       LPTSTR b2 = (LPTSTR)malloc(l * 2 + 2);
-      MultiByteToWideChar(CP_ACP,          // code page
-                          MB_PRECOMPOSED,  // character-type options
-                          buf,             // string to map
-                          l,               // number of bytes in string
-                          b2,              // wide-character buffer
-                          l * 2 + 2);      // size of buffer
+      l = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, buf, l, b2, l);
+      b2[l] = _T('\0');
       free(buf);
       buf = (char*)b2;
-      buf[l * 2] = 0;
-      buf[l * 2 + 1] = 0;
 #endif
 
       XMLNode x = XMLNode::parseString((LPTSTR)buf, pResults);
