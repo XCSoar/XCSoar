@@ -68,9 +68,7 @@ public:
       rectObj &_bounds_active, const bool force = false);
   void TriggerUpdateCaches(Projection &m_projection);
   void Open();
-  void Load(NLineReader &reader, const TCHAR* Directory);
   void Close();
-  void Reset();
   void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
             const Projection &projection) const;
   void DrawLabels(Canvas &canvas,
@@ -78,6 +76,9 @@ public:
                   const SETTINGS_MAP &settings_map) const;
 
 private:
+  void Load(NLineReader &reader, const TCHAR* Directory);
+  void Reset();
+
   TopologyFile* topology_store[MAXTOPOLOGY];
 };
 
