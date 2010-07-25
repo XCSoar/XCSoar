@@ -1611,7 +1611,6 @@ static void setVariables(void) {
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(_T("*.dat"));
     dfe->ScanDirectoryTop(_T("*.jp2"));
     dfe->Lookup(temptext);
     wp->RefreshDisplay();
