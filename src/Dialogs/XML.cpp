@@ -279,28 +279,20 @@ xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
   if (lpRes) {
     int l = SizeofResource(XCSoarInterface::hInst, hResInfo);
     if (l > 0) {
-      char *buf = (char*)malloc(l + 2);
-      if (!buf) {
-        MessageBoxX(gettext(_T("Can't allocate memory")), gettext(
-            _T("Dialog error")), MB_OK | MB_ICONEXCLAMATION);
-        // unable to allocate memory
-        return XMLNode::emptyXMLNode;
-      }
-      strncpy(buf, lpRes, l);
-      buf[l] = 0; // need to explicitly null-terminate.
-      buf[l + 1] = 0;
-
 #ifdef _UNICODE
       LPTSTR b2 = (LPTSTR)malloc(l * 2 + 2);
-      l = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, buf, l, b2, l);
+      l = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, lpRes, l, b2, l);
       b2[l] = _T('\0');
-      free(buf);
-      buf = (char*)b2;
+#else
+      const char *b2 = lpRes;
 #endif
 
-      XMLNode x = XMLNode::parseString((LPTSTR)buf, pResults);
+      XMLNode x = XMLNode::parseString(b2, pResults);
 
-      free(buf);
+#ifdef _UNICODE
+      free(b2);
+#endif
+
       return x;
     }
   }
