@@ -57,7 +57,7 @@ bool LabelBlock::check(const RECT rc)
 {
   bool ok = true;
 
-  for (int i=0; i<num_blocks; i++) {
+  for (unsigned i = 0; i < num_blocks; i++) {
     if (CheckRectOverlap(block_coords[i],rc)) {
       ok = false;
       continue;

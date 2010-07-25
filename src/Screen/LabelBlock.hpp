@@ -52,8 +52,8 @@ public:
   bool check(const RECT rc);
   void reset();
 private:
+  unsigned num_blocks;
   RECT block_coords[MAXLABELBLOCKS];
-  int num_blocks;
 };
 
 #endif
