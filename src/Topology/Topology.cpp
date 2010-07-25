@@ -66,8 +66,6 @@ Topology::Topology(const char* shpname, const Color thecolor, int _label_field)
   hbBrush(thecolor),
   shapefileopen(false)
 {
-  memset((void*)&shpfile, 0, sizeof(shpfile));
-
   Open(shpname);
 }
 
