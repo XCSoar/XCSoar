@@ -140,7 +140,13 @@ typedef struct {
 
 static EventSTRUCT Events[MAX_EVENTS];
 // How many have we defined
-static int Events_count;
+/**
+ * How many have we defined.
+ *
+ * This is initialized with 1 because event 0 is reserved - it stands
+ * for "no event".
+ */
+static int Events_count = 1;
 
 static Menu menus[MAX_MODE];
 
@@ -265,7 +271,7 @@ InputEvents::readFile()
       memset(&Key2Event, 0, sizeof(Key2Event));
       memset(&GC2Event, 0, sizeof(GC2Event));
       memset(&Events, 0, sizeof(Events));
-      Events_count = 0;
+      Events_count = 1;
     }
 
     // Check valid line? If not valid, assume next record (primative, but works ok!)
