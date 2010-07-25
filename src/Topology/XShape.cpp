@@ -55,6 +55,19 @@ import_label(const char *src)
       strcmp(src, "RAILROAD STATION") == 0)
     return NULL;
 
+  if (ispunct(src[0])) {
+    double value = strtod(src + 1, NULL);
+    value = Units::ToUserUnit(value, Units::AltitudeUnit);
+
+    char buffer[32];
+    if (value > 999)
+      sprintf(buffer, "%.1f", (value / 1000));
+    else
+      sprintf(buffer, "%d", (int)value);
+
+    return strdup(buffer);
+  }
+
   return strdup(src);
 }
 
@@ -96,19 +109,6 @@ XShape::renderSpecial(Canvas &canvas, LabelBlock &label_block,
 
   TCHAR Temp[100];
   ConvertCToT(Temp, label);
-
-  // TODO code: JMW asks, what does this do?
-  if (ispunct(Temp[0])) {
-    double dTemp;
-
-    Temp[0] = '0';
-    dTemp = _tcstod(Temp, NULL);
-    dTemp = Units::ToUserUnit(dTemp, Units::AltitudeUnit);
-    if (dTemp > 999)
-      _stprintf(Temp, _T("%.1f"), (dTemp / 1000));
-    else
-      _stprintf(Temp, _T("%d"), int(dTemp));
-  }
 
   SIZE tsize = canvas.text_size(Temp);
 
