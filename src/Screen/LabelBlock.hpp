@@ -52,7 +52,6 @@ public:
   bool check(const RECT rc);
   void reset();
 private:
-  gcc_const bool CheckRectOverlap(const RECT& rc1, const RECT& rc2) const;
   RECT block_coords[MAXLABELBLOCKS];
   int num_blocks;
 };
