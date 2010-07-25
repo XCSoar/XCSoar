@@ -71,12 +71,6 @@ MapCanvas::project(const SearchPointVector &points, POINT *screen) const
     projection.LonLat2Screen(it->get_location(), *screen++);
 }
 
-static bool
-between(int value, int minimum, int maximum)
-{
-  return value >= minimum && value < maximum;
-}
-
 static void
 update_bounds(RECT &bounds, const POINT &pt)
 {
@@ -102,10 +96,8 @@ MapCanvas::visible(const POINT *screen, unsigned num)
   for (unsigned i = 0; i < num; ++i)
     update_bounds(bounds, screen[i]);
 
-  return (between(bounds.left, 0, canvas.get_width()) ||
-          between(0, bounds.left, bounds.right)) &&
-    (between(bounds.top, 0, canvas.get_height()) ||
-     between(0, bounds.top, bounds.bottom));
+  return bounds.left < (int)canvas.get_width() && bounds.right >= 0 &&
+    bounds.top < (int)canvas.get_height() && bounds.bottom >= 0;
 }
 
 void
