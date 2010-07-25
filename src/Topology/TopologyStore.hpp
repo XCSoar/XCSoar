@@ -41,7 +41,7 @@ Copyright_License {
 
 #include "shapelib/mapshape.h"
 
-#include <windef.h> /* for RECT */
+#include <tchar.h>
 
 class Canvas;
 class BitmapCanvas;
