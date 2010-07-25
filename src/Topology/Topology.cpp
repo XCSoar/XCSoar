@@ -67,13 +67,12 @@ Topology::Topology(const char* shpname, const Color thecolor, int _label_field)
   shapefileopen(false)
 {
   memset((void*)&shpfile, 0, sizeof(shpfile));
-  strcpy(filename, shpname);
 
-  Open();
+  Open(shpname);
 }
 
 void
-Topology::Open()
+Topology::Open(const char* filename)
 {
   if (msSHPOpenFile(&shpfile, "rb", filename) == -1)
     return;

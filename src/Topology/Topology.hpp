@@ -60,7 +60,7 @@ public:
   Topology(const char* shpname, const Color thecolor, int label_field);
   ~Topology();
 
-  void Open();
+  void Open(const char* filename);
   void Close();
   void TriggerIfScaleNowVisible(const Projection &map_projection);
 
@@ -80,8 +80,6 @@ private:
   XShape** shpCache;
 
 protected:
-  char filename[MAX_PATH];
-
   void flushCache();
 
   bool in_scale;
