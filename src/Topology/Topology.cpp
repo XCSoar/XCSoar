@@ -58,7 +58,7 @@ Topology::loadIcon(const int res_id)
 
 Topology::Topology(const char* shpname, const Color thecolor, int _label_field)
   :label_field(_label_field),
-  scaleThreshold(0),
+  scaleThreshold(1000.0),
   triggerUpdateCache(false),
   shpCache(NULL),
   in_scale(false),
@@ -76,8 +76,6 @@ Topology::Open(const char* filename)
 {
   if (msSHPOpenFile(&shpfile, "rb", filename) == -1)
     return;
-
-  scaleThreshold = 1000.0;
 
   shpCache = (XShape**)malloc(sizeof(XShape*) * shpfile.numshapes);
   if (!shpCache)
