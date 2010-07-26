@@ -132,7 +132,7 @@ TopologyFile::ConvertRect(const rectObj &src)
 
 void
 TopologyFile::updateCache(Projection &map_projection, 
-                      const rectObj &thebounds,
+                      const rectObj &bounds,
                       bool purgeonly)
 {
   if (!triggerUpdateCache || !shapefileopen)
@@ -153,11 +153,11 @@ TopologyFile::updateCache(Projection &map_projection,
 
   triggerUpdateCache = false;
 
-  rectObj thebounds_deg = ConvertRect(thebounds);
+  rectObj deg_bounds = ConvertRect(bounds);
 
   // Test which shapes are inside the given bounds and save the
   // status to shpfile.status
-  msSHPWhichShapes(&shpfile, thebounds_deg, 0);
+  msSHPWhichShapes(&shpfile, deg_bounds, 0);
 
   // If not a single shape is inside the bounds
   if (!shpfile.status) {
