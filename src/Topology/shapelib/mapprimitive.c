@@ -55,7 +55,7 @@ typedef enum {CLIP_LEFT, CLIP_MIDDLE, CLIP_RIGHT} CLIP_STATE;
 #define NEARZERO	(1.0e-30)	/* 1/INFINITY */
 
 void msFree(void *p) {
-  if(p) free(p);
+  free(p);
 }
 
 /*

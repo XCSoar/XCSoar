@@ -421,8 +421,8 @@ void msSHPClose(SHPHandle psSHP )
   free( psSHP->panRecOffset );
   free( psSHP->panRecSize );
 
-  if(psSHP->pabyRec) free(psSHP->pabyRec);
-  if(psSHP->panParts) free(psSHP->panParts);
+  free(psSHP->pabyRec);
+  free(psSHP->panParts);
 
   if (psSHP->zfpSHX)
     zzip_fclose( psSHP->zfpSHX );
@@ -1292,7 +1292,7 @@ void msSHPCloseFile(shapefileObj *shpfile)
   if (shpfile) { // Silently return if called with NULL shpfile by freeLayer()
     if(shpfile->hSHP) msSHPClose(shpfile->hSHP);
     if(shpfile->hDBF) msDBFClose(shpfile->hDBF);
-    if(shpfile->status) free(shpfile->status);
+    free(shpfile->status);
   }
 }
 
@@ -1303,10 +1303,8 @@ int msSHPWhichShapes(shapefileObj *shpfile, rectObj rect, int debug)
   rectObj shaperect;
   char *filename;
 
-  if(shpfile->status) {
-    free(shpfile->status);
-    shpfile->status = NULL;
-  }
+  free(shpfile->status);
+  shpfile->status = NULL;
 
   shpfile->statusbounds = rect; // save the search extent
 
