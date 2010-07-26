@@ -50,19 +50,19 @@ Copyright_License {
 #include <stdio.h>
 
 /// values inside infoboxes  like numbers, etc.
-Font Fonts::InfoWindowFont;
-Font Fonts::InfoWindowSmallFont;
+Font Fonts::InfoBox;
+Font Fonts::InfoBoxSmall;
 /// Titles of infoboxes like Next, WP L/D etc.
-Font Fonts::TitleWindowFont;
+Font Fonts::Title;
 /// text names on the map
-Font Fonts::MapWindowFont;
+Font Fonts::Map;
 /// menu buttons, waypoint selection, messages, etc.
-Font Fonts::MapWindowBoldFont;
+Font Fonts::MapBold;
 /// vario display, runway informations
-Font Fonts::CDIWindowFont;
+Font Fonts::CDI;
 /// Flarm Traffic draweing and stats, map labels in italic
-Font Fonts::MapLabelFont;
-Font Fonts::StatisticsFont;
+Font Fonts::MapLabel;
+Font Fonts::Statistics;
 
 // these are the non-custom parameters
 LOGFONT InfoWindowLogFont;
@@ -247,38 +247,38 @@ Fonts::Initialize(const struct Appearance &appearance, RECT rc)
 
   InitialiseFontsAltair();
 
-  InitializeFont(&InfoWindowFont, InfoWindowLogFont);
-  InitializeFont(&InfoWindowSmallFont, InfoWindowSmallLogFont);
-  InitializeFont(&TitleWindowFont, TitleWindowLogFont);
-  InitializeFont(&CDIWindowFont, CDIWindowLogFont);
-  InitializeFont(&MapLabelFont, MapLabelLogFont);
-  InitializeFont(&StatisticsFont, StatisticsLogFont);
-  InitializeFont(&MapWindowFont, MapWindowLogFont);
-  InitializeFont(&MapWindowBoldFont, MapWindowBoldLogFont);
+  InitializeFont(&InfoBox, InfoWindowLogFont);
+  InitializeFont(&InfoBoxSmall, InfoWindowSmallLogFont);
+  InitializeFont(&Title, TitleWindowLogFont);
+  InitializeFont(&CDI, CDIWindowLogFont);
+  InitializeFont(&MapLabel, MapLabelLogFont);
+  InitializeFont(&Statistics, StatisticsLogFont);
+  InitializeFont(&Map, MapWindowLogFont);
+  InitializeFont(&MapBold, MapWindowBoldLogFont);
 
   if (appearance.UseCustomFonts) {
-    LoadCustomFont(&InfoWindowFont, szProfileFontInfoWindowFont);
-    LoadCustomFont(&InfoWindowSmallFont, szProfileFontTitleSmallWindowFont);
-    LoadCustomFont(&TitleWindowFont, szProfileFontTitleWindowFont);
-    LoadCustomFont(&CDIWindowFont, szProfileFontCDIWindowFont);
-    LoadCustomFont(&MapLabelFont, szProfileFontMapLabelFont);
-    LoadCustomFont(&StatisticsFont, szProfileFontStatisticsFont);
-    LoadCustomFont(&MapWindowFont, szProfileFontMapWindowFont);
-    LoadCustomFont(&MapWindowBoldFont, szProfileFontMapWindowBoldFont);
+    LoadCustomFont(&InfoBox, szProfileFontInfoWindowFont);
+    LoadCustomFont(&InfoBoxSmall, szProfileFontTitleSmallWindowFont);
+    LoadCustomFont(&Title, szProfileFontTitleWindowFont);
+    LoadCustomFont(&CDI, szProfileFontCDIWindowFont);
+    LoadCustomFont(&MapLabel, szProfileFontMapLabelFont);
+    LoadCustomFont(&Statistics, szProfileFontStatisticsFont);
+    LoadCustomFont(&Map, szProfileFontMapWindowFont);
+    LoadCustomFont(&MapBold, szProfileFontMapWindowBoldFont);
   }
 }
 
 void
 Fonts::Reset()
 {
-  InfoWindowFont.reset();
-  InfoWindowSmallFont.reset();
-  TitleWindowFont.reset();
-  CDIWindowFont.reset();
-  MapLabelFont.reset();
-  MapWindowFont.reset();
-  MapWindowBoldFont.reset();
-  StatisticsFont.reset();
+  InfoBox.reset();
+  InfoBoxSmall.reset();
+  Title.reset();
+  CDI.reset();
+  MapLabel.reset();
+  Map.reset();
+  MapBold.reset();
+  Statistics.reset();
 }
 
 const TCHAR*

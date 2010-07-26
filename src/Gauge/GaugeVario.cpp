@@ -180,8 +180,8 @@ GaugeVario::Render()
   Canvas &canvas = get_canvas();
 
   if (!InitDone){
-    ValueHeight = 4 + Fonts::CDIWindowFont.get_capital_height()
-                    + Fonts::TitleWindowFont.get_capital_height();
+    ValueHeight = 4 + Fonts::CDI.get_capital_height()
+                    + Fonts::Title.get_capital_height();
 
     orgMiddle.y = yoffset - ValueHeight / 2;
     orgMiddle.x = get_right();
@@ -502,17 +502,17 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
 
     diValue->recBkg.right = x - Layout::Scale(5);
     diValue->recBkg.top = y + Layout::Scale(3)
-                            + Fonts::TitleWindowFont.get_capital_height();
+                            + Fonts::Title.get_capital_height();
 
     diValue->recBkg.left = diValue->recBkg.right;
     // update back rect with max label size
     diValue->recBkg.bottom = diValue->recBkg.top
-                             + Fonts::CDIWindowFont.get_capital_height();
+                             + Fonts::CDI.get_capital_height();
 
     diValue->orgText.x = diValue->recBkg.left;
     diValue->orgText.y = diValue->recBkg.top
-                         + Fonts::CDIWindowFont.get_capital_height()
-                         - Fonts::CDIWindowFont.get_ascent_height();
+                         + Fonts::CDI.get_capital_height()
+                         - Fonts::CDI.get_ascent_height();
 
     diValue->lastValue = -9999;
     diValue->lastText[0] = '\0';
@@ -528,12 +528,12 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
     diLabel->recBkg.left = diLabel->recBkg.right;
     // update back rect with max label size
     diLabel->recBkg.bottom = diLabel->recBkg.top
-                             + Fonts::TitleWindowFont.get_capital_height();
+                             + Fonts::Title.get_capital_height();
 
     diLabel->orgText.x = diLabel->recBkg.left;
     diLabel->orgText.y = diLabel->recBkg.top
-                         + Fonts::TitleWindowFont.get_capital_height()
-                         - Fonts::TitleWindowFont.get_ascent_height();
+                         + Fonts::Title.get_capital_height()
+                         - Fonts::Title.get_ascent_height();
 
     diLabel->lastValue = -9999;
     diLabel->lastText[0] = '\0';
@@ -546,7 +546,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
   if (dirty && (_tcscmp(diLabel->lastText, Label) != 0)) {
     canvas.set_background_color(colTextBackgnd);
     canvas.set_text_color(colTextGray);
-    canvas.select(Fonts::TitleWindowFont);
+    canvas.select(Fonts::Title);
     tsize = canvas.text_size(Label);
     diLabel->orgText.x = diLabel->recBkg.right - tsize.cx;
     canvas.text_opaque(diLabel->orgText.x, diLabel->orgText.y,
@@ -560,7 +560,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
     canvas.set_background_color(colTextBackgnd);
     canvas.set_text_color(colText);
     _stprintf(Temp, _T("%.1f"), Value);
-    canvas.select(Fonts::CDIWindowFont);
+    canvas.select(Fonts::CDI);
     tsize = canvas.text_size(Temp);
     diValue->orgText.x = diValue->recBkg.right - tsize.cx;
 
@@ -740,35 +740,35 @@ GaugeVario::RenderBallast(Canvas &canvas)
     // position of ballast label
     orgLabel.x = 1;
     orgLabel.y = get_top() + 2
-                 + Fonts::TitleWindowFont.get_capital_height() * 2
-                 - Fonts::TitleWindowFont.get_ascent_height();
+                 + Fonts::Title.get_capital_height() * 2
+                 - Fonts::Title.get_ascent_height();
 
     // position of ballast value
     orgValue.x = 1;
     orgValue.y = get_top() + 1
-                 + Fonts::TitleWindowFont.get_capital_height()
-                 - Fonts::TitleWindowFont.get_ascent_height();
+                 + Fonts::Title.get_capital_height()
+                 - Fonts::Title.get_ascent_height();
 
     // set upper left corner
     recLabelBk.left = orgLabel.x;
     recLabelBk.top = orgLabel.y
-                     + Fonts::TitleWindowFont.get_ascent_height()
-                     - Fonts::TitleWindowFont.get_capital_height();
+                     + Fonts::Title.get_ascent_height()
+                     - Fonts::Title.get_capital_height();
 
     // set upper left corner
     recValueBk.left = orgValue.x;
     recValueBk.top = orgValue.y
-                     + Fonts::TitleWindowFont.get_ascent_height()
-                     - Fonts::TitleWindowFont.get_capital_height();
+                     + Fonts::Title.get_ascent_height()
+                     - Fonts::Title.get_capital_height();
 
     // get max label size
-    canvas.select(Fonts::TitleWindowFont);
+    canvas.select(Fonts::Title);
     tSize = canvas.text_size(TextBal);
 
     // update back rect with max label size
     recLabelBk.right = recLabelBk.left + tSize.cx;
     recLabelBk.bottom = recLabelBk.top +
-                        Fonts::TitleWindowFont.get_capital_height();
+                        Fonts::Title.get_capital_height();
 
     // get max value size
     tSize = canvas.text_size(_T("100%"));
@@ -776,7 +776,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
     recValueBk.right = recValueBk.left + tSize.cx;
     // update back rect with max label size
     recValueBk.bottom = recValueBk.top +
-                        Fonts::TitleWindowFont.get_capital_height();
+                        Fonts::Title.get_capital_height();
   }
 
   double BALLAST = Calculated().common_stats.current_ballast;
@@ -786,7 +786,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
 
     TCHAR Temp[18];
 
-    canvas.select(Fonts::TitleWindowFont);
+    canvas.select(Fonts::Title);
     canvas.set_background_color(colTextBackgnd);
 
     if (lastBallast < 0.001 || BALLAST < 0.001) {
@@ -833,43 +833,43 @@ GaugeVario::RenderBugs(Canvas &canvas)
 
     orgLabel.x = 1;
     orgLabel.y = get_bottom() - 2
-                 - Fonts::TitleWindowFont.get_capital_height()
-                 - Fonts::TitleWindowFont.get_ascent_height();
+                 - Fonts::Title.get_capital_height()
+                 - Fonts::Title.get_ascent_height();
 
     orgValue.x = 1;
     orgValue.y = get_bottom() - 1
-                 - Fonts::TitleWindowFont.get_ascent_height();
+                 - Fonts::Title.get_ascent_height();
 
     recLabelBk.left = orgLabel.x;
     recLabelBk.top = orgLabel.y
-                     + Fonts::TitleWindowFont.get_ascent_height()
-                     - Fonts::TitleWindowFont.get_capital_height();
+                     + Fonts::Title.get_ascent_height()
+                     - Fonts::Title.get_capital_height();
     recValueBk.left = orgValue.x;
     recValueBk.top = orgValue.y
-                     + Fonts::TitleWindowFont.get_ascent_height()
-                     - Fonts::TitleWindowFont.get_capital_height();
+                     + Fonts::Title.get_ascent_height()
+                     - Fonts::Title.get_capital_height();
 
-    canvas.select(Fonts::TitleWindowFont);
+    canvas.select(Fonts::Title);
     tSize = canvas.text_size(TextBug);
 
     recLabelBk.right = recLabelBk.left + tSize.cx;
     recLabelBk.bottom = recLabelBk.top
-                        + Fonts::TitleWindowFont.get_capital_height()
-                        + Fonts::TitleWindowFont.get_height()
-                        - Fonts::TitleWindowFont.get_ascent_height();
+                        + Fonts::Title.get_capital_height()
+                        + Fonts::Title.get_height()
+                        - Fonts::Title.get_ascent_height();
 
     tSize = canvas.text_size(_T("100%"));
 
     recValueBk.right = recValueBk.left + tSize.cx;
     recValueBk.bottom = recValueBk.top +
-                        Fonts::TitleWindowFont.get_capital_height();
+                        Fonts::Title.get_capital_height();
   }
 
   double BUGS = Calculated().common_stats.current_bugs;
   if (BUGS != lastBugs) {
     TCHAR Temp[18];
 
-    canvas.select(Fonts::TitleWindowFont);
+    canvas.select(Fonts::Title);
     canvas.set_background_color(colTextBackgnd);
 
     if (lastBugs > 0.999 || BUGS > 0.999) {

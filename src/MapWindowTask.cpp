@@ -102,7 +102,7 @@ protected:
     GEOPOINT start = m_location;
     GEOPOINT target = tp.get_location_remaining();
 
-    m_canvas.select(Fonts::TitleWindowFont);
+    m_canvas.select(Fonts::Title);
     m_canvas.set_text_color(Color(0x0, 0x0, 0x0));
 
     GEOPOINT dloc;

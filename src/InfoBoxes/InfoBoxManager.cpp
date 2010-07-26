@@ -665,10 +665,10 @@ InfoBoxManager::Create(RECT rc)
   info_box_look.selector_pen.set(IBLSCALE(1) + 2,
                                  info_box_look.value.fg_color);
 
-  info_box_look.value.font = &Fonts::InfoWindowFont;
-  info_box_look.title.font = &Fonts::TitleWindowFont;
-  info_box_look.comment.font = &Fonts::TitleWindowFont;
-  info_box_look.small_font = &Fonts::InfoWindowSmallFont;
+  info_box_look.value.font = &Fonts::InfoBox;
+  info_box_look.title.font = &Fonts::Title;
+  info_box_look.comment.font = &Fonts::Title;
+  info_box_look.small_font = &Fonts::InfoBoxSmall;
 
   info_box_look.colors[0] = border_color;
   info_box_look.colors[1] = Appearance.InverseInfoBox

@@ -92,8 +92,8 @@ WndForm::WndForm(SingleWindow &_main_window,
   // Create ClientWindow
 
   SetBackColor(Color(0xDA, 0xDB, 0xAB));
-  SetFont(Fonts::MapWindowBoldFont);
-  SetTitleFont(Fonts::MapWindowBoldFont);
+  SetFont(Fonts::MapBold);
+  SetTitleFont(Fonts::MapBold);
 
   WindowStyle client_style;
   client_style.control_parent();

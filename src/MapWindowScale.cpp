@@ -163,13 +163,13 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
     else
       MapWidth = DistancePixelsToMeters(rc.right-rc.left);
 
-    canvas.select(Fonts::MapWindowBoldFont);
+    canvas.select(Fonts::MapBold);
     Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,
                               sizeof(ScaleInfo)/sizeof(TCHAR), false);
     SIZE TextSize = canvas.text_size(ScaleInfo);
     LastMapWidth = (int)MapWidth;
 
-    Height = Fonts::MapWindowBoldFont.get_capital_height() + IBLSCALE(2);
+    Height = Fonts::MapBold.get_capital_height() + IBLSCALE(2);
     // 2: add 1pix border
 
     canvas.white_brush();
@@ -185,7 +185,7 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
     }
 
     canvas.text(IBLSCALE(7),
-                rc.bottom - Fonts::MapWindowBoldFont.get_ascent_height() - IBLSCALE(1),
+                rc.bottom - Fonts::MapBold.get_ascent_height() - IBLSCALE(1),
                 ScaleInfo);
 
     if (ScaleChangeFeedback)
@@ -205,7 +205,7 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
     }
 
     int y = rc.bottom - Height -
-            (Fonts::TitleWindowFont.get_ascent_height() + IBLSCALE(2));
+            (Fonts::Title.get_ascent_height() + IBLSCALE(2));
 
     if (!ScaleChangeFeedback) {
       // bool FontSelected = false;
@@ -239,15 +239,15 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
       }
 
       if (ScaleInfo[0]) {
-        canvas.select(Fonts::TitleWindowFont);
+        canvas.select(Fonts::Title);
         // FontSelected = true;
         canvas.text(IBLSCALE(1), y, ScaleInfo);
-        y -= (Fonts::TitleWindowFont.get_capital_height() + IBLSCALE(1));
+        y -= (Fonts::Title.get_capital_height() + IBLSCALE(1));
       }
     }
 
     #ifdef DRAWLOAD
-    canvas.select(Fonts::MapWindowFont);
+    canvas.select(Fonts::Map);
     _stprintf(ScaleInfo,_T("draw %d gps %d idle %d"),
               GetAverageTime(),
               Calculated().time_process_gps,

@@ -91,11 +91,11 @@ StatusMessageList::StatusMessageList() {}
 
 static const StatusMessageList messages;
 
-Font Fonts::MapWindowFont;
-Font Fonts::MapWindowBoldFont;
-Font Fonts::TitleWindowFont;
-Font Fonts::CDIWindowFont;
-Font Fonts::InfoWindowFont;
+Font Fonts::Map;
+Font Fonts::MapBold;
+Font Fonts::Title;
+Font Fonts::CDI;
+Font Fonts::InfoBox;
 
 #ifndef WIN32
 int main(int argc, char **argv)

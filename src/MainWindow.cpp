@@ -95,10 +95,10 @@ MainWindow::set(LPCTSTR text,
   LogStartUp(_T("Create button labels"));
   ButtonLabel::CreateButtonLabels(*this);
   ButtonLabel::SetLabelText(0,_T("MODE"));
-  ButtonLabel::SetFont(Fonts::MapWindowBoldFont);
+  ButtonLabel::SetFont(Fonts::MapBold);
 
   map.set(*this, map_rect, rc);
-  map.set_font(Fonts::MapWindowFont);
+  map.set_font(Fonts::Map);
   map.SetMapRect(map_rect);
 
   vario = new GaugeVario(*this,

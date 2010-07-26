@@ -435,7 +435,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
   // landable waypoint label inside white box
   if (!Mode.AsFlag.NoSetFont) {
     // VENTA5 predefined font from calling function
-    canvas.select(Mode.AsFlag.Border ? Fonts::MapWindowBoldFont : Fonts::MapWindowFont);
+    canvas.select(Mode.AsFlag.Border ? Fonts::MapBold : Fonts::Map);
   }
 
   SIZE tsize = canvas.text_size(Value);

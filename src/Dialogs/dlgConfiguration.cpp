@@ -275,7 +275,7 @@ OnCreateUserLevel(ContainerWindow &parent, int left, int top,
   user_level = new CheckBox();
   user_level->set(parent, gettext(_T("Expert")), ID_USER_LEVEL,
                   left, top, width, height, style);
-  user_level->set_font(Fonts::MapWindowFont);
+  user_level->set_font(Fonts::Map);
   user_level->set_checked(XCSoarInterface::UserLevel > 0);
   return user_level;
 }

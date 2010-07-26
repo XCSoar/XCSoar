@@ -45,14 +45,14 @@ class Font;
 
 namespace Fonts
 {
-  extern Font InfoWindowFont;
-  extern Font TitleWindowFont;
-  extern Font MapWindowFont;
-  extern Font InfoWindowSmallFont;
-  extern Font MapWindowBoldFont;
-  extern Font CDIWindowFont;
-  extern Font MapLabelFont;
-  extern Font StatisticsFont;
+  extern Font InfoBox;
+  extern Font Title;
+  extern Font Map;
+  extern Font InfoBoxSmall;
+  extern Font MapBold;
+  extern Font CDI;
+  extern Font MapLabel;
+  extern Font Statistics;
 
   void Reset();
 

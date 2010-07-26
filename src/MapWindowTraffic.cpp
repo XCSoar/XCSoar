@@ -162,7 +162,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
     // only draw labels if not close to aircraft
     if (dx * dx + dy * dy > IBLSCALE(30) * IBLSCALE(30)) {
       // Select the MapLabelFont and black color
-      canvas.select(Fonts::MapLabelFont);
+      canvas.select(Fonts::MapLabel);
       canvas.set_text_color(Color(0, 0, 0));
 
       // If FLARM callsign/name available draw it to the canvas

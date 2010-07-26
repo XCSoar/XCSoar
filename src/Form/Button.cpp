@@ -240,7 +240,7 @@ WndButton::on_paint(Canvas &canvas)
   canvas.background_transparent();
 
   // Set drawing font
-  canvas.select(Fonts::MapWindowBoldFont);
+  canvas.select(Fonts::MapBold);
 
   if (mLastDrawTextHeight < 0) {
     // Calculate the text height and save it for the future

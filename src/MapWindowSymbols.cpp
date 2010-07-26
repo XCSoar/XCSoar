@@ -269,7 +269,7 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
     return;
 
   if (tsize.cx == 0) {
-    canvas.select(Fonts::MapWindowBoldFont);
+    canvas.select(Fonts::MapBold);
     tsize = canvas.text_size(_T("99"));
     tsize.cx = tsize.cx / 2;
   }
@@ -550,17 +550,17 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
       Units::FormatUserAltitude(Calculated().task_stats.total.solution_remaining.AltitudeDifference,
                                 Value, sizeof(Value) / sizeof(Value[0]), false);
 
-      canvas.select(Fonts::MapWindowBoldFont);
+      canvas.select(Fonts::MapBold);
       TextSize = canvas.text_size(Value);
 
       canvas.white_brush();
       canvas.white_pen();
       canvas.rectangle(x, y, x + IBLSCALE(1) + TextSize.cx,
-                       y + Fonts::MapWindowBoldFont.get_capital_height() + IBLSCALE(2));
+                       y + Fonts::MapBold.get_capital_height() + IBLSCALE(2));
 
       canvas.text(x + IBLSCALE(1),
-                  y + Fonts::MapWindowBoldFont.get_capital_height() -
-                  Fonts::MapWindowBoldFont.get_ascent_height() + IBLSCALE(1), Value);
+                  y + Fonts::MapBold.get_capital_height() -
+                  Fonts::MapBold.get_ascent_height() + IBLSCALE(1), Value);
 
       const UnitSymbol *unit_symbol = GetUnitSymbol(
         Units::GetUserAltitudeUnit());

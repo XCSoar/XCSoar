@@ -279,7 +279,7 @@ TopologyFile::PaintLabels(Canvas &canvas,
   // we already do an outer visibility test, but may need a test
   // in screen coords
 
-  canvas.select(Fonts::MapLabelFont);
+  canvas.select(Fonts::MapLabel);
 
   // get drawing info
 

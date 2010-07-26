@@ -77,7 +77,7 @@ WindowControl::WindowControl(ContainerWindow *Parent,
     mColorBack(Color::WHITE),
     mColorFore(Color::BLACK),
     mhBrushBk(mColorBack),
-    mhFont(&Fonts::MapWindowFont),
+    mhFont(&Fonts::Map),
     mHelpText(NULL),
     mOnHelpCallback(NULL)
 {

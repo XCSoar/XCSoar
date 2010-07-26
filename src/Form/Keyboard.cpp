@@ -250,7 +250,7 @@ KeyboardControl::add_button(WndForm &form, const TCHAR* name,
   ButtonWindow *button = new ButtonWindow();
   button->set(*this, caption, (unsigned)caption[0],
               0, 0, button_width, button_height);
-  button->set_font(Fonts::MapWindowBoldFont);
+  button->set_font(Fonts::MapBold);
   form.AddNamed(name, button);
   form.AddDestruct(button);
 }
