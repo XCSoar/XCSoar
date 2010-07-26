@@ -115,6 +115,21 @@ TopologyFile::ClearCache()
   }
 }
 
+rectObj
+TopologyFile::ConvertRect(const rectObj &src)
+{
+  rectObj dest = src;
+
+#ifdef RADIANS
+  dest.minx *= RAD_TO_DEG;
+  dest.miny *= RAD_TO_DEG;
+  dest.maxx *= RAD_TO_DEG;
+  dest.maxy *= RAD_TO_DEG;
+#endif
+
+  return dest;
+}
+
 void
 TopologyFile::updateCache(Projection &map_projection, 
                       const rectObj &thebounds,
@@ -138,14 +153,7 @@ TopologyFile::updateCache(Projection &map_projection,
 
   triggerUpdateCache = false;
 
-  rectObj thebounds_deg = thebounds;
-
-  #ifdef RADIANS
-  thebounds_deg.minx *= RAD_TO_DEG;
-  thebounds_deg.miny *= RAD_TO_DEG;
-  thebounds_deg.maxx *= RAD_TO_DEG;
-  thebounds_deg.maxy *= RAD_TO_DEG;
-#endif  
+  rectObj thebounds_deg = ConvertRect(thebounds);
 
   msSHPWhichShapes(&shpfile, thebounds_deg, 0);
   if (!shpfile.status) {

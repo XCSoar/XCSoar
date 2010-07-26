@@ -122,6 +122,7 @@ private:
   XShape** shpCache;
 
   unsigned GetSkipSteps(double map_scale) const;
+  rectObj ConvertRect(const rectObj &src);
 
 protected:
   void ClearCache();
