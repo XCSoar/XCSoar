@@ -160,8 +160,6 @@ InitGUI(const TCHAR * FontDescription)
 void
 LoadGUI()
 {
-#define MAX_ENUM 10
-  int i = 0;
   WndProperty* wp;
 
   wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
@@ -171,7 +169,7 @@ LoadGUI()
       dfe->Set(0);
 
       bool bFound = false;
-      for (i = 0; i < MAX_ENUM; i++) {
+      for (unsigned i = 0; i < dfe->Count(); i++) {
         if (_tcsncmp(dfe->GetAsString(), NewLogFont.lfFaceName, LF_FACESIZE)
             == 0) {
           bFound = true;

@@ -94,6 +94,8 @@ public:
 
   int SetAsInteger(int Value);
   void Sort(int startindex = 0);
+
+  unsigned Count() { return nEnums; }
 };
 
 #endif
