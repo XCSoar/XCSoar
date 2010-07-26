@@ -57,25 +57,66 @@ class TopologyFile
   int label_field;
 
 public:
+  /**
+   * The constructor opens the given shapefile and clears the cache
+   * @param shpname The shapefile to open (*.shp)
+   * @param thecolor The color to use for drawing
+   * @param label_field The field in which the labels should be searched
+   * @return
+   */
   TopologyFile(const char* shpname, const Color thecolor, int label_field);
+
+  /**
+   * The destructor clears the cache and closes the shapefile
+   */
   ~TopologyFile();
 
   void TriggerIfScaleNowVisible(const Projection &map_projection);
 
   void updateCache(Projection &map_projection,
 		   const rectObj &thebounds, bool purgeonly = false);
+
+  /**
+   * Paints the polygons, lines and points/icons in the TopologyFile
+   * @param canvas The canvas to paint on
+   * @param bitmap_canvas Temporary canvas for the icon
+   * @param projection
+   */
   void Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
              const Projection &projection) const;
 
+  /**
+   * Paints a topology label if the space is available in the LabelBlock
+   * @param canvas The canvas to paint on
+   * @param projection
+   * @param label_block The LabelBlock class to use for decluttering
+   * @param settings_map
+   */
   void PaintLabels(Canvas &canvas,
                    const Projection &projection, LabelBlock &label_block,
                    const SETTINGS_MAP &settings_map) const;
 
+  /**
+   * The threshold value for the visibility check. If the current scale
+   * is below this value the contents of this TopologyFile will be drawn.
+   */
   double scaleThreshold;
+
+  /**
+   * This function loads an icon from the resource file that
+   * will be drawn at each MS_SHAPE_POINT of the TopologyFile
+   * @param
+   */
   void loadIcon(const int);
   bool triggerUpdateCache;
 
 private:
+  /**
+   * This returns whether the content of this TopologyFile is
+   * visible at the given map_scale
+   * @param map_scale The scale to check
+   * @return True if visible, False if not
+   */
   bool CheckScale(const double map_scale) const;
 
   XShape** shpCache;
