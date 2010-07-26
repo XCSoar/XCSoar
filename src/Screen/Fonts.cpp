@@ -240,9 +240,6 @@ InitialiseLogFonts()
 void
 Fonts::Initialize(bool use_custom)
 {
-  //this routine must be called only at start/restart of XCSoar b/c there are many pointers to these fonts
-  Reset();
-
   InitialiseLogFonts();
 
   InitialiseFontsAltair();
