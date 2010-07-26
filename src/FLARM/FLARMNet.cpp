@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "FLARM/FLARMNet.hpp"
-#include "UtilsText.hpp"
+#include "Util/StringUtil.hpp"
 #include "IO/LineReader.hpp"
 #include "IO/FileLineReader.hpp"
 

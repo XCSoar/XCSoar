@@ -68,6 +68,17 @@ string_after_prefix_ci(const TCHAR *string, const TCHAR *prefix)
     : NULL;
 }
 
+void
+TrimRight(TCHAR *p)
+{
+  size_t length = _tcslen(p);
+
+  while (length > 0 && _istspace(p[length - 1]))
+    --length;
+
+  p[length] = 0;
+}
+
 TCHAR *
 normalize_search_string(TCHAR *dest, const TCHAR *src)
 {

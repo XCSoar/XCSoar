@@ -73,6 +73,11 @@ const TCHAR *
 string_after_prefix_ci(const TCHAR *string, const TCHAR *prefix);
 
 /**
+ * Strips trailing whitespace.
+ */
+void TrimRight(TCHAR *p);
+
+/**
  * Normalize a string for searching.  This strips all characters
  * except letters and digits, folds case to a neutral form.  It is
  * possible to do this in-place (src==dest).

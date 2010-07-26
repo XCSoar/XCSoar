@@ -40,11 +40,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-/**
- * Strips trailing whitespace.
- */
-void TrimRight(TCHAR *p);
-
 void ExtractDirectory(TCHAR *Dest, const TCHAR *Source);
 
 // Parse string (new lines etc) and malloc the string

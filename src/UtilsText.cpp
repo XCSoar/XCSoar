@@ -46,17 +46,6 @@ Copyright_License {
 #include <windef.h>
 
 void
-TrimRight(TCHAR *p)
-{
-  size_t length = _tcslen(p);
-
-  while (length > 0 && _istspace(p[length - 1]))
-    --length;
-
-  p[length] = 0;
-}
-
-void
 ExtractDirectory(TCHAR *Dest, const TCHAR *Source)
 {
   int len = _tcslen(Source);
