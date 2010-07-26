@@ -168,17 +168,15 @@ TopologyFile::updateCache(Projection &map_projection,
 
   // Iterate through the shapefile entries
   for (int i = 0; i < shpfile.numshapes; i++) {
-    // If the shape is inside the bounds
-    if (msGetBit(shpfile.status, i)) {
-      // ... and if the shape isn't cached yet
-      if (shpCache[i] == NULL) {
-        // ... cache the shape
-        shpCache[i] = new XShape(&shpfile, i, label_field);
-      }
-    } else {
-      // delete the shape from the cache if it's outside the bounds
+    if (!msGetBit(shpfile.status, i)) {
+      // If the shape is outside the bounds
+      // delete the shape from the cache
       delete shpCache[i];
       shpCache[i] = NULL;
+    } else if (shpCache[i] == NULL) {
+      // If the shape is inside the bounds and if the
+      // shape isn't cached yet -> cache the shape
+      shpCache[i] = new XShape(&shpfile, i, label_field);
     }
   }
 }
