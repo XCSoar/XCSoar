@@ -150,17 +150,19 @@ static bool utcchanged = false;
 static bool waypointneedsave = false;
 static bool FontRegistryChanged=false;
 static unsigned config_page;
-static WndForm *wf=NULL;
+static WndForm *wf = NULL;
 static CheckBox *user_level;
 TabbedControl *configuration_tabbed;
-static WndButton *buttonPilotName=NULL;
-static WndButton *buttonAircraftType=NULL;
-static WndButton *buttonAircraftRego=NULL;
-static WndButton *buttonLoggerID=NULL;
-static WndButton *buttonCopy=NULL;
-static WndButton *buttonPaste=NULL;
+static WndButton *buttonPilotName = NULL;
+static WndButton *buttonAircraftType = NULL;
+static WndButton *buttonAircraftRego = NULL;
+static WndButton *buttonLoggerID = NULL;
+static WndButton *buttonCopy = NULL;
+static WndButton *buttonPaste = NULL;
 
-static void UpdateButtons(void) {
+static void
+UpdateButtons(void)
+{
   TCHAR text[120];
   TCHAR val[100];
   if (buttonPilotName) {
@@ -168,7 +170,7 @@ static void UpdateButtons(void) {
     if (string_is_empty(val))
       _tcscpy(val, gettext(_T("(blank)")));
 
-    _stprintf(text,_T("%s: %s"), gettext(_T("Pilot name")), val);
+    _stprintf(text, _T("%s: %s"), gettext(_T("Pilot name")), val);
     buttonPilotName->SetCaption(text);
   }
   if (buttonAircraftType) {
@@ -176,7 +178,7 @@ static void UpdateButtons(void) {
     if (string_is_empty(val))
       _tcscpy(val, gettext(_T("(blank)")));
 
-    _stprintf(text,_T("%s: %s"), gettext(_T("Aircraft type")), val);
+    _stprintf(text, _T("%s: %s"), gettext(_T("Aircraft type")), val);
     buttonAircraftType->SetCaption(text);
   }
   if (buttonAircraftRego) {
@@ -184,7 +186,7 @@ static void UpdateButtons(void) {
     if (string_is_empty(val))
       _tcscpy(val, gettext(_T("(blank)")));
 
-    _stprintf(text,_T("%s: %s"), gettext(_T("Competition ID")), val);
+    _stprintf(text, _T("%s: %s"), gettext(_T("Competition ID")), val);
     buttonAircraftRego->SetCaption(text);
   }
   if (buttonLoggerID) {
@@ -192,7 +194,7 @@ static void UpdateButtons(void) {
     if (string_is_empty(val))
       _tcscpy(val, gettext(_T("(blank)")));
 
-    _stprintf(text,_T("%s: %s"), gettext(_T("Logger ID")), val);
+    _stprintf(text, _T("%s: %s"), gettext(_T("Logger ID")), val);
     buttonLoggerID->SetCaption(text);
   }
 }
@@ -296,10 +298,10 @@ OnCommand(unsigned id)
   }
 }
 
-
-static void OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t Mode){
-
-  switch(Mode){
+static void
+OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  switch (Mode) {
   case DataField::daGet:
     break;
   case DataField::daPut:
@@ -307,12 +309,12 @@ static void OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t Mode){
     UpdateDeviceSetupButton(0, Sender->GetAsString());
     break;
   }
-
 }
 
-static void OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t Mode){
-
-  switch(Mode){
+static void
+OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  switch (Mode) {
   case DataField::daGet:
     break;
   case DataField::daPut:
@@ -320,7 +322,6 @@ static void OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t Mode){
     UpdateDeviceSetupButton(1, Sender->GetAsString());
     break;
   }
-
 }
 
 static void
@@ -330,14 +331,16 @@ ResetFonts(bool bUseCustom)
     Fonts::LoadCustomFont(&TempInfoWindowFont, szProfileFontInfoWindowFont);
     Fonts::LoadCustomFont(&TempTitleWindowFont, szProfileFontTitleWindowFont);
     Fonts::LoadCustomFont(&TempMapWindowFont, szProfileFontMapWindowFont);
-    Fonts::LoadCustomFont(&TempTitleSmallWindowFont, szProfileFontTitleSmallWindowFont);
-    Fonts::LoadCustomFont(&TempMapWindowBoldFont, szProfileFontMapWindowBoldFont);
+    Fonts::LoadCustomFont(&TempTitleSmallWindowFont,
+        szProfileFontTitleSmallWindowFont);
+    Fonts::LoadCustomFont(&TempMapWindowBoldFont,
+        szProfileFontMapWindowBoldFont);
     Fonts::LoadCustomFont(&TempCDIWindowFont, szProfileFontCDIWindowFont);
     Fonts::LoadCustomFont(&TempMapLabelFont, szProfileFontMapLabelFont);
     Fonts::LoadCustomFont(&TempStatisticsFont, szProfileFontStatisticsFont);
   }
 
-  Fonts::InitializeFont (&TempUseCustomFontsFont, MapWindowLogFont);
+  Fonts::InitializeFont(&TempUseCustomFontsFont, MapWindowLogFont);
   Fonts::InitializeFont(&TempInfoWindowFont, InfoWindowLogFont);
   Fonts::InitializeFont(&TempTitleWindowFont, TitleWindowLogFont);
   Fonts::InitializeFont(&TempMapWindowFont, MapWindowLogFont);
@@ -348,103 +351,99 @@ ResetFonts(bool bUseCustom)
   Fonts::InitializeFont(&TempStatisticsFont, StatisticsLogFont);
 }
 
-static void ShowFontEditButtons(bool bVisible) {
+static void
+ShowFontEditButtons(bool bVisible)
+{
   WndProperty * wp;
   wp = (WndProperty*)wf->FindByName(_T("cmdInfoWindowFont"));
-  if (wp) {
+  if (wp)
     wp->set_visible(bVisible);
-  }
+
   wp = (WndProperty*)wf->FindByName(_T("cmdTitleWindowFont"));
-  if (wp) {
+  if (wp)
     wp->set_visible(bVisible);
-  }
+
   wp = (WndProperty*)wf->FindByName(_T("cmdMapWindowFont"));
-  if (wp) {
+  if (wp)
     wp->set_visible(bVisible);
-  }
+
   wp = (WndProperty*)wf->FindByName(_T("cmdTitleSmallWindowFont"));
-  if (wp) {
+  if (wp)
     wp->set_visible(bVisible);
-  }
+
   wp = (WndProperty*)wf->FindByName(_T("cmdMapWindowBoldFont"));
-  if (wp) {
+  if (wp)
     wp->set_visible(bVisible);
-  }
+
   wp = (WndProperty*)wf->FindByName(_T("cmdCDIWindowFont"));
-  if (wp) {
+  if (wp)
     wp->set_visible(bVisible);
-  }
+
   wp = (WndProperty*)wf->FindByName(_T("cmdMapLabelFont"));
-  if (wp) {
+  if (wp)
     wp->set_visible(bVisible);
-  }
+
   wp = (WndProperty*)wf->FindByName(_T("cmdStatisticsFont"));
-  if (wp) {
+  if (wp)
     wp->set_visible(bVisible);
-  }
 }
 
-
-static void RefreshFonts(void) {
-
+static void
+RefreshFonts(void)
+{
   WndProperty * wp;
 
   wp = (WndProperty*)wf->FindByName(_T("prpUseCustomFonts"));
   if (wp) {
-    bool bUseCustomFonts= ((DataFieldBoolean*)(wp->GetDataField()))->GetAsBoolean();
+    bool bUseCustomFonts =
+        ((DataFieldBoolean*)(wp->GetDataField()))->GetAsBoolean();
     ResetFonts(bUseCustomFonts);
     wp->SetFont(TempUseCustomFontsFont); // this font is never customized
     ShowFontEditButtons(bUseCustomFonts);
-
   }
 
-// now set SampleTexts on the Fonts frame
+  // now set SampleTexts on the Fonts frame
   wp = (WndProperty*)wf->FindByName(_T("prpInfoWindowFont"));
-  if (wp) {
+  if (wp)
     wp->SetFont(TempInfoWindowFont);
-  }
 
   wp = (WndProperty*)wf->FindByName(_T("prpTitleWindowFont"));
-  if (wp) {
+  if (wp)
     wp->SetFont(TempTitleWindowFont);
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpMapWindowFont"));
-  if (wp) {
-    wp->SetFont(TempMapWindowFont);
-  }
 
+  wp = (WndProperty*)wf->FindByName(_T("prpMapWindowFont"));
+  if (wp)
+    wp->SetFont(TempMapWindowFont);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTitleSmallWindowFont"));
-  if (wp) {
+  if (wp)
     wp->SetFont(TempTitleSmallWindowFont);
-  }
+
   wp = (WndProperty*)wf->FindByName(_T("prpMapWindowBoldFont"));
-  if (wp) {
+  if (wp)
     wp->SetFont(TempMapWindowBoldFont);
-  }
+
   wp = (WndProperty*)wf->FindByName(_T("prpCDIWindowFont"));
-  if (wp) {
+  if (wp)
     wp->SetFont(TempCDIWindowFont);
-  }
+
   wp = (WndProperty*)wf->FindByName(_T("prpMapLabelFont"));
-  if (wp) {
+  if (wp)
     wp->SetFont(TempMapLabelFont);
-  }
+
   wp = (WndProperty*)wf->FindByName(_T("prpStatisticsFont"));
-  if (wp) {
+  if (wp)
     wp->SetFont(TempStatisticsFont);
-  }
 
   // now fix the rest of the dlgConfiguration fonts:
   wf->SetFont(TempMapWindowBoldFont);
   wf->SetTitleFont(TempMapWindowBoldFont);
 }
 
-
-
-static void OnUseCustomFontData(DataField *Sender, DataField::DataAccessKind_t Mode) {
-
-  switch(Mode){
+static void
+OnUseCustomFontData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  switch (Mode) {
   case DataField::daGet:
     break;
 
@@ -458,13 +457,13 @@ static void OnUseCustomFontData(DataField *Sender, DataField::DataAccessKind_t M
   }
 }
 
-static void GetFontDescription(TCHAR Description[], const TCHAR * prpName, int iMaxLen)
+static void
+GetFontDescription(TCHAR Description[], const TCHAR * prpName, int iMaxLen)
 {
   WndProperty * wp;
   wp = (WndProperty*)wf->FindByName(prpName);
-  if (wp) {
-    _tcsncpy(Description, wp->GetCaption(), iMaxLen-1);
-  }
+  if (wp)
+    _tcsncpy(Description, wp->GetCaption(), iMaxLen - 1);
 }
 
 static void
@@ -474,10 +473,9 @@ OnEditInfoWindowFontClicked(gcc_unused WndButton &button)
 #define MAX_EDITFONT_DESC_LEN 100
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpInfoWindowFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc,
-                            szProfileFontInfoWindowFont,
-                            InfoWindowLogFont)) {
-    FontRegistryChanged=true;
+  if (dlgFontEditShowModal(FontDesc, szProfileFontInfoWindowFont,
+                           InfoWindowLogFont)) {
+    FontRegistryChanged = true;
     RefreshFonts();
   }
 }
@@ -487,10 +485,9 @@ OnEditTitleWindowFontClicked(gcc_unused WndButton &button)
 {
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpTitleWindowFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc,
-                           szProfileFontTitleWindowFont,
+  if (dlgFontEditShowModal(FontDesc, szProfileFontTitleWindowFont,
                            TitleWindowLogFont)) {
-    FontRegistryChanged=true;
+    FontRegistryChanged = true;
     RefreshFonts();
   }
 }
@@ -500,10 +497,9 @@ OnEditMapWindowFontClicked(gcc_unused WndButton &button)
 {
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpMapWindowFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc,
-                           szProfileFontMapWindowFont,
+  if (dlgFontEditShowModal(FontDesc, szProfileFontMapWindowFont,
                            MapWindowLogFont)) {
-    FontRegistryChanged=true;
+    FontRegistryChanged = true;
     RefreshFonts();
   }
 }
@@ -513,10 +509,9 @@ OnEditTitleSmallWindowFontClicked(gcc_unused WndButton &button)
 {
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpTitleSmallWindowFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc,
-                           szProfileFontTitleSmallWindowFont,
+  if (dlgFontEditShowModal(FontDesc, szProfileFontTitleSmallWindowFont,
                            InfoWindowSmallLogFont)) {
-    FontRegistryChanged=true;
+    FontRegistryChanged = true;
     RefreshFonts();
   }
 }
@@ -526,10 +521,9 @@ OnEditMapWindowBoldFontClicked(gcc_unused WndButton &button)
 {
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpMapWindowBoldFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc,
-                           szProfileFontMapWindowBoldFont,
+  if (dlgFontEditShowModal(FontDesc, szProfileFontMapWindowBoldFont,
                            MapWindowBoldLogFont)) {
-    FontRegistryChanged=true;
+    FontRegistryChanged = true;
     RefreshFonts();
   }
 }
@@ -539,10 +533,9 @@ OnEditCDIWindowFontClicked(gcc_unused WndButton &button)
 {
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpCDIWindowFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc,
-                           szProfileFontCDIWindowFont,
+  if (dlgFontEditShowModal(FontDesc, szProfileFontCDIWindowFont,
                            CDIWindowLogFont)) {
-    FontRegistryChanged=true;
+    FontRegistryChanged = true;
     RefreshFonts();
   }
 }
@@ -552,10 +545,9 @@ OnEditMapLabelFontClicked(gcc_unused WndButton &button)
 {
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpMapLabelFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc,
-                           szProfileFontMapLabelFont,
+  if (dlgFontEditShowModal(FontDesc, szProfileFontMapLabelFont,
                            MapLabelLogFont)) {
-    FontRegistryChanged=true;
+    FontRegistryChanged = true;
     RefreshFonts();
   }
 }
@@ -565,10 +557,9 @@ OnEditStatisticsFontClicked(gcc_unused WndButton &button)
 {
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpStatisticsFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc,
-                           szProfileFontStatisticsFont,
+  if (dlgFontEditShowModal(FontDesc, szProfileFontStatisticsFont,
                            StatisticsLogFont)) {
-    FontRegistryChanged=true;
+    FontRegistryChanged = true;
     RefreshFonts();
   }
 }
@@ -578,9 +569,9 @@ OnAircraftRegoClicked(gcc_unused WndButton &button)
 {
   TCHAR Temp[100];
   if (buttonAircraftRego) {
-    Profile::Get(szProfileAircraftRego,Temp,100);
-    if (dlgTextEntryShowModal(Temp,100)) {
-      Profile::Set(szProfileAircraftRego,Temp);
+    Profile::Get(szProfileAircraftRego, Temp, 100);
+    if (dlgTextEntryShowModal(Temp, 100)) {
+      Profile::Set(szProfileAircraftRego, Temp);
       changed = true;
     }
   }
@@ -592,9 +583,9 @@ OnAircraftTypeClicked(gcc_unused WndButton &button)
 {
   TCHAR Temp[100];
   if (buttonAircraftType) {
-    Profile::Get(szProfileAircraftType,Temp,100);
-    if (dlgTextEntryShowModal(Temp,100)){
-      Profile::Set(szProfileAircraftType,Temp);
+    Profile::Get(szProfileAircraftType, Temp, 100);
+    if (dlgTextEntryShowModal(Temp, 100)) {
+      Profile::Set(szProfileAircraftType, Temp);
       changed = true;
     }
   }
@@ -606,9 +597,9 @@ OnPilotNameClicked(gcc_unused WndButton &button)
 {
   TCHAR Temp[100];
   if (buttonPilotName) {
-    Profile::Get(szProfilePilotName,Temp,100);
-    if (dlgTextEntryShowModal(Temp,100)){
-      Profile::Set(szProfilePilotName,Temp);
+    Profile::Get(szProfilePilotName, Temp, 100);
+    if (dlgTextEntryShowModal(Temp, 100)) {
+      Profile::Set(szProfilePilotName, Temp);
       changed = true;
     }
   }
@@ -620,9 +611,9 @@ OnLoggerIDClicked(gcc_unused WndButton &button)
 {
   TCHAR Temp[100];
   if (buttonLoggerID) {
-    Profile::Get(szProfileLoggerID,Temp,100);
-    if(dlgTextEntryShowModal(Temp,100)){
-      Profile::Set(szProfileLoggerID,Temp);
+    Profile::Get(szProfileLoggerID, Temp, 100);
+    if (dlgTextEntryShowModal(Temp, 100)) {
+      Profile::Set(szProfileLoggerID, Temp);
       changed = true;
     }
     ReadAssetNumber();
@@ -664,7 +655,9 @@ OnCloseClicked(gcc_unused WndButton &button)
 
 static int cpyInfoBox[10];
 
-static int page2mode(void) {
+static int
+page2mode(void)
+{
   return configuration_tabbed->GetCurrentPage() - 14;
 }
 
@@ -691,15 +684,13 @@ static void
 OnCopy(gcc_unused WndButton &button)
 {
   int mode = page2mode();
-  if ((mode<0)||(mode>3)) {
+  if ((mode < 0) || (mode > 3))
     return;
-  }
 
   for (unsigned item = 0; item < InfoBoxLayout::numInfoWindows; item++) {
     WndProperty *wp = FindInfoBoxField(mode, item);
-    if (wp) {
+    if (wp)
       cpyInfoBox[item] = wp->GetDataField()->GetAsInteger();
-    }
   }
 }
 
@@ -707,19 +698,19 @@ static void
 OnPaste(gcc_unused WndButton &button)
 {
   int mode = page2mode();
-  if ((mode<0)||(mode>3)||(cpyInfoBox[0]<0)) {
+  if ((mode < 0) || (mode > 3) || (cpyInfoBox[0] < 0))
     return;
-  }
 
   if(MessageBoxX(gettext(_T("Overwrite?")),
                  gettext(_T("InfoBox paste")),
-                 MB_YESNO|MB_ICONQUESTION) != IDYES)
+                 MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
   for (unsigned item = 0; item < InfoBoxLayout::numInfoWindows; item++) {
     WndProperty *wp = FindInfoBoxField(mode, item);
-    if (wp && (cpyInfoBox[item] >=0 ) &&
-        ((unsigned)cpyInfoBox[item] < NUMSELECTSTRINGS)) {
+    if (wp &&
+        cpyInfoBox[item] >= 0 &&
+        (unsigned)cpyInfoBox[item] < NUMSELECTSTRINGS) {
       wp->GetDataField()->Set(cpyInfoBox[item]);
       wp->RefreshDisplay();
     }
@@ -751,11 +742,12 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   }
 }
 
-static void SetLocalTime(void) {
+static void
+SetLocalTime(void)
+{
   WndProperty* wp;
   TCHAR temp[20];
-  Units::TimeToText(temp,
-                    (int)TimeLocal((int)(XCSoarInterface::Basic().Time)));
+  Units::TimeToText(temp, (int)TimeLocal((int)(XCSoarInterface::Basic().Time)));
 
   wp = (WndProperty*)wf->FindByName(_T("prpLocalTime"));
   if (wp) {
@@ -764,7 +756,9 @@ static void SetLocalTime(void) {
   }
 }
 
-static void OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode){
+static void
+OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
   //  WndProperty* wp;
   int ival;
 
@@ -781,12 +775,13 @@ static void OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode){
     SetLocalTime();
     break;
   }
-
 }
 
 static int lastSelectedPolarFile = -1;
 
-static void OnPolarFileData(DataField *Sender, DataField::DataAccessKind_t Mode){
+static void
+OnPolarFileData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
   WndProperty* wp;
 
   switch(Mode){
@@ -796,22 +791,19 @@ static void OnPolarFileData(DataField *Sender, DataField::DataAccessKind_t Mode)
   case DataField::daChange:
     if (Sender->GetAsString() != NULL && _tcscmp(Sender->GetAsString(), _T("")) != 0){
       // then ... set Polar Tape to Winpilot
-
       wp = (WndProperty *)wf->FindByName(_T("prpPolarType"));
-
       if (wp != NULL){
         wp->GetDataField()->SetAsInteger(POLARUSEWINPILOTFILE);
         wp->RefreshDisplay();
       }
-
     }
     break;
   }
-
 }
 
-
-static void OnPolarTypeData(DataField *Sender, DataField::DataAccessKind_t Mode){
+static void
+OnPolarTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
   WndProperty* wp;
 
   switch(Mode){
@@ -823,29 +815,26 @@ static void OnPolarTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 
     if (Sender->GetAsInteger() != POLARUSEWINPILOTFILE){
       // then ... clear Winpilot File if Polar Type is not WinpilotFile
-
       if (wp != NULL && wp->GetDataField()->GetAsBoolean()) {
         lastSelectedPolarFile = wp->GetDataField()->GetAsInteger();
         wp->GetDataField()->SetAsInteger(-1);
         wp->RefreshDisplay();
       }
-
     } else {
       if (wp != NULL && wp->GetDataField()->GetAsInteger() <= 0 && lastSelectedPolarFile > 0){
         wp->GetDataField()->SetAsInteger(lastSelectedPolarFile);
         wp->RefreshDisplay();
       }
-
     }
     break;
   }
-
 }
-
 
 extern void OnInfoBoxHelp(WindowControl * Sender);
 
-static void OnWaypointNewClicked(WindowControl * Sender){
+static void
+OnWaypointNewClicked(WindowControl * Sender)
+{
   (void)Sender;
 
   Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().Location);
@@ -857,8 +846,9 @@ static void OnWaypointNewClicked(WindowControl * Sender){
   }
 }
 
-
-static void OnWaypointEditClicked(WindowControl * Sender){
+static void
+OnWaypointEditClicked(WindowControl * Sender)
+{
   (void)Sender;
 
   const Waypoint *way_point = dlgWayPointSelect(XCSoarInterface::main_window,
@@ -871,18 +861,19 @@ static void OnWaypointEditClicked(WindowControl * Sender){
         way_points.replace(*way_point, wp_copy);
       }
     } else {
-      MessageBoxX(gettext(_T("Waypoint not editable")),
-                  _T("Error"), MB_OK);
+      MessageBoxX(gettext(_T("Waypoint not editable")), _T("Error"), MB_OK);
     }
   }
 }
 
-static void AskWaypointSave(void) {
+static void
+AskWaypointSave(void)
+{
   /// @todo terrain check???
   if (WayPointFile::WaypointsOutOfRangeSetting != 2 ||
       MessageBoxX(gettext(_T("Waypoints excluded, save anyway?")),
-                   gettext(_T("Waypoints outside terrain")),
-                   MB_YESNO | MB_ICONQUESTION) == IDYES) {
+                  gettext(_T("Waypoints outside terrain")),
+                  MB_YESNO | MB_ICONQUESTION) == IDYES) {
     WayPointGlue::SaveWaypoints(way_points);
     WaypointFileChanged= true;
     changed = true;
@@ -891,15 +882,17 @@ static void AskWaypointSave(void) {
   waypointneedsave = false;
 }
 
-
-static void OnWaypointSaveClicked(WindowControl * Sender){
+static void
+OnWaypointSaveClicked(WindowControl * Sender)
+{
   (void)Sender;
 
   AskWaypointSave();
 }
 
-
-static void OnWaypointDeleteClicked(WindowControl * Sender){
+static void
+OnWaypointDeleteClicked(WindowControl * Sender)
+{
   (void)Sender;
 #ifdef OLD_TASK
   int res;
@@ -916,8 +909,7 @@ static void OnWaypointDeleteClicked(WindowControl * Sender){
 #endif
 }
 
-
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnAirspaceColoursClicked),
   DeclareCallBackEntry(OnAirspaceModeClicked),
   DeclareCallBackEntry(OnUTCData),
@@ -930,13 +922,10 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnWaypointDeleteClicked),
   DeclareCallBackEntry(OnWaypointEditClicked),
   DeclareCallBackEntry(OnWaypointSaveClicked),
-
   DeclareCallBackEntry(OnPolarFileData),
   DeclareCallBackEntry(OnPolarTypeData),
-
   DeclareCallBackEntry(OnDeviceAData),
   DeclareCallBackEntry(OnDeviceBData),
-
   DeclareCallBackEntry(OnUseCustomFontData),
   DeclareCallBackEntry(OnEditInfoWindowFontClicked),
   DeclareCallBackEntry(OnEditTitleWindowFontClicked),
@@ -946,9 +935,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnEditCDIWindowFontClicked),
   DeclareCallBackEntry(OnEditMapLabelFontClicked),
   DeclareCallBackEntry(OnEditStatisticsFontClicked),
-
   DeclareCallBackEntry(OnCreateUserLevel),
-
   DeclareCallBackEntry(NULL)
 };
 
@@ -965,8 +952,8 @@ page_mode_to_ibm_mode(unsigned page_mode)
   return table[page_mode];
 }
 
-
-static void SetInfoBoxSelector(unsigned item, int mode)
+static void
+SetInfoBoxSelector(unsigned item, int mode)
 {
   WndProperty *wp = FindInfoBoxField(mode, item);
   if (wp == NULL)
@@ -974,16 +961,17 @@ static void SetInfoBoxSelector(unsigned item, int mode)
 
   DataFieldEnum* dfe;
   dfe = (DataFieldEnum*)wp->GetDataField();
-  for (unsigned i = 0; i < NUMSELECTSTRINGS; i++) {
+  for (unsigned i = 0; i < NUMSELECTSTRINGS; i++)
     dfe->addEnumText(gettext(InfoBoxManager::GetTypeDescription(i)));
-  }
+
   dfe->Sort(0);
 
   dfe->Set(InfoBoxManager::getType(item, page_mode_to_ibm_mode(mode)));
   wp->RefreshDisplay();
 }
 
-static void GetInfoBoxSelector(unsigned item, int mode)
+static void
+GetInfoBoxSelector(unsigned item, int mode)
 {
   WndProperty *wp = FindInfoBoxField(mode, item);
   if (wp == NULL)
@@ -1000,7 +988,6 @@ static void GetInfoBoxSelector(unsigned item, int mode)
   Profile::SetInfoBoxes(item, InfoBoxManager::getTypeAll(item));
 }
 
-
 static TCHAR szPolarFile[MAX_PATH];
 static TCHAR szAirspaceFile[MAX_PATH];
 static TCHAR szAdditionalAirspaceFile[MAX_PATH];
@@ -1014,15 +1001,15 @@ static TCHAR szStatusFile[MAX_PATH];
 static TCHAR szInputFile[MAX_PATH];
 static TCHAR szMapFile[MAX_PATH];
 static DeviceConfig device_config[NUMDEV];
-static  int dwDeviceIndex1=0;
-static  int dwDeviceIndex2=0;
+static int dwDeviceIndex1 = 0;
+static int dwDeviceIndex2 = 0;
 static int Speed = 1; // default is knots
 static int TaskSpeed = 2; // default is kph
 static int Distance = 2; // default is km
 static int Lift = 0;
 static int Altitude = 0; //default ft
 static int Temperature = 0; //default is celcius
-static  TCHAR temptext[MAX_PATH];
+static TCHAR temptext[MAX_PATH];
 
 static void
 SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
@@ -1100,38 +1087,36 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
                               : device.IsVega());
 }
 
-static void setVariables(void) {
+static void
+setVariables()
+{
   WndProperty *wp;
 
   buttonPilotName = ((WndButton *)wf->FindByName(_T("cmdPilotName")));
-  if (buttonPilotName) {
+  if (buttonPilotName)
     buttonPilotName->SetOnClickNotify(OnPilotNameClicked);
-  }
+
   buttonAircraftType = ((WndButton *)wf->FindByName(_T("cmdAircraftType")));
-  if (buttonAircraftType) {
+  if (buttonAircraftType)
     buttonAircraftType->SetOnClickNotify(OnAircraftTypeClicked);
-  }
+
   buttonAircraftRego = ((WndButton *)wf->FindByName(_T("cmdAircraftRego")));
-  if (buttonAircraftRego) {
+  if (buttonAircraftRego)
     buttonAircraftRego->SetOnClickNotify(OnAircraftRegoClicked);
-  }
+
   buttonLoggerID = ((WndButton *)wf->FindByName(_T("cmdLoggerID")));
-  if (buttonLoggerID) {
+  if (buttonLoggerID)
     buttonLoggerID->SetOnClickNotify(OnLoggerIDClicked);
-  }
 
   buttonCopy = ((WndButton *)wf->FindByName(_T("cmdCopy")));
-  if (buttonCopy) {
+  if (buttonCopy)
     buttonCopy->SetOnClickNotify(OnCopy);
-  }
+
   buttonPaste = ((WndButton *)wf->FindByName(_T("cmdPaste")));
-  if (buttonPaste) {
+  if (buttonPaste)
     buttonPaste->SetOnClickNotify(OnPaste);
-  }
 
   UpdateButtons();
-
-  //  DWORD dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     Profile::GetDeviceConfig(i, device_config[i]);
@@ -1161,7 +1146,7 @@ static void setVariables(void) {
   }
 
   LoadFormProperty(*wf, _T("prpUTCOffset"),
-                   iround(XCSoarInterface::SettingsComputer().UTCOffset/1800.0)/2.0);
+      iround(XCSoarInterface::SettingsComputer().UTCOffset / 1800.0) / 2.0);
 
   SetLocalTime();
 
