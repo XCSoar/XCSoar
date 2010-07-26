@@ -52,7 +52,6 @@ static LOGFONT NewLogFont;
 static LOGFONT resetLogFont;
 static Font NewFont;
 const static TCHAR * OriginalFontRegKey;
-static bool IsInitialized = false;
 
 void LoadGUI();
 
@@ -81,9 +80,6 @@ OnResetClicked(WindowControl * Sender)
 
 static void RedrawSampleFont(void)
 {
-  if (!IsInitialized)
-    return;
-
   WndProperty* wp;
 
   wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
@@ -165,7 +161,6 @@ void
 LoadGUI()
 {
 #define MAX_ENUM 10
-  IsInitialized = false;
   int i = 0;
   WndProperty* wp;
 
@@ -228,8 +223,6 @@ LoadGUI()
     wp->RefreshDisplay();
   }
 
-  IsInitialized = true;
-
   RedrawSampleFont();
 }
 
@@ -240,8 +233,6 @@ dlgFontEditShowModal(const TCHAR * FontDescription,
                      LOGFONT autoLogFont)
 {
   bool bRetVal = false;
-
-  IsInitialized = false;
 
   wf = dlgLoadFromXML(CallBackTable,
                       XCSoarInterface::main_window, _T("IDR_XML_FONTEDIT"));
