@@ -43,18 +43,21 @@ Copyright_License {
 struct Appearance;
 class Font;
 
-void ResetFonts();
+namespace Fonts
+{
+  void ResetFonts();
 
-void LoadCustomFont(Font *theFont, const TCHAR FontRegKey[],
-                    LOGFONT *LogFontUsed = NULL);
+  void LoadCustomFont(Font *theFont, const TCHAR FontRegKey[],
+                      LOGFONT *LogFontUsed = NULL);
 
-void InitializeFont(Font *theFont, LOGFONT autoLogFont,
-                    LOGFONT *LogFontUsed = NULL);
+  void InitializeFont(Font *theFont, LOGFONT autoLogFont,
+                      LOGFONT *LogFontUsed = NULL);
 
-void
-InitialiseFonts(const struct Appearance &appearance, RECT rc);
+  void
+  InitialiseFonts(const struct Appearance &appearance, RECT rc);
 
-const TCHAR* GetStandardFontFace();
+  const TCHAR* GetStandardFontFace();
+}
 
 extern Font InfoWindowFont;
 extern Font TitleWindowFont;

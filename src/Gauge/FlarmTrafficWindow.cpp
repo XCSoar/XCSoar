@@ -97,12 +97,12 @@ FlarmTrafficWindow::on_create()
   hpPlane.set(width, hcRadar);
   hpRadar.set(1, hcRadar);
 
-  hfNoTraffic.set(GetStandardFontFace(), Layout::FastScale(24));
-  hfLabels.set(GetStandardFontFace(), Layout::FastScale(14));
+  hfNoTraffic.set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
+  hfLabels.set(Fonts::GetStandardFontFace(), Layout::FastScale(14));
   if (small)
-    hfSideInfo.set(GetStandardFontFace(), Layout::FastScale(12), true);
+    hfSideInfo.set(Fonts::GetStandardFontFace(), Layout::FastScale(12), true);
   else
-    hfSideInfo.set(GetStandardFontFace(), Layout::FastScale(18), true);
+    hfSideInfo.set(Fonts::GetStandardFontFace(), Layout::FastScale(18), true);
 
   return true;
 }

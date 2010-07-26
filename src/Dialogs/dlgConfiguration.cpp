@@ -327,25 +327,25 @@ static void
 ResetFonts(bool bUseCustom)
 {
   if (bUseCustom) {
-    LoadCustomFont(&TempInfoWindowFont, szProfileFontInfoWindowFont);
-    LoadCustomFont(&TempTitleWindowFont, szProfileFontTitleWindowFont);
-    LoadCustomFont(&TempMapWindowFont, szProfileFontMapWindowFont);
-    LoadCustomFont(&TempTitleSmallWindowFont, szProfileFontTitleSmallWindowFont);
-    LoadCustomFont(&TempMapWindowBoldFont, szProfileFontMapWindowBoldFont);
-    LoadCustomFont(&TempCDIWindowFont, szProfileFontCDIWindowFont);
-    LoadCustomFont(&TempMapLabelFont, szProfileFontMapLabelFont);
-    LoadCustomFont(&TempStatisticsFont, szProfileFontStatisticsFont);
+    Fonts::LoadCustomFont(&TempInfoWindowFont, szProfileFontInfoWindowFont);
+    Fonts::LoadCustomFont(&TempTitleWindowFont, szProfileFontTitleWindowFont);
+    Fonts::LoadCustomFont(&TempMapWindowFont, szProfileFontMapWindowFont);
+    Fonts::LoadCustomFont(&TempTitleSmallWindowFont, szProfileFontTitleSmallWindowFont);
+    Fonts::LoadCustomFont(&TempMapWindowBoldFont, szProfileFontMapWindowBoldFont);
+    Fonts::LoadCustomFont(&TempCDIWindowFont, szProfileFontCDIWindowFont);
+    Fonts::LoadCustomFont(&TempMapLabelFont, szProfileFontMapLabelFont);
+    Fonts::LoadCustomFont(&TempStatisticsFont, szProfileFontStatisticsFont);
   }
 
-  InitializeFont (&TempUseCustomFontsFont, MapWindowLogFont);
-  InitializeFont(&TempInfoWindowFont, InfoWindowLogFont);
-  InitializeFont(&TempTitleWindowFont, TitleWindowLogFont);
-  InitializeFont(&TempMapWindowFont, MapWindowLogFont);
-  InitializeFont(&TempTitleSmallWindowFont, InfoWindowSmallLogFont);
-  InitializeFont(&TempMapWindowBoldFont, MapWindowBoldLogFont);
-  InitializeFont(&TempCDIWindowFont, CDIWindowLogFont);
-  InitializeFont(&TempMapLabelFont, MapLabelLogFont);
-  InitializeFont(&TempStatisticsFont, StatisticsLogFont);
+  Fonts::InitializeFont (&TempUseCustomFontsFont, MapWindowLogFont);
+  Fonts::InitializeFont(&TempInfoWindowFont, InfoWindowLogFont);
+  Fonts::InitializeFont(&TempTitleWindowFont, TitleWindowLogFont);
+  Fonts::InitializeFont(&TempMapWindowFont, MapWindowLogFont);
+  Fonts::InitializeFont(&TempTitleSmallWindowFont, InfoWindowSmallLogFont);
+  Fonts::InitializeFont(&TempMapWindowBoldFont, MapWindowBoldLogFont);
+  Fonts::InitializeFont(&TempCDIWindowFont, CDIWindowLogFont);
+  Fonts::InitializeFont(&TempMapLabelFont, MapLabelLogFont);
+  Fonts::InitializeFont(&TempStatisticsFont, StatisticsLogFont);
 }
 
 static void ShowFontEditButtons(bool bVisible) {

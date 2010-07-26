@@ -109,7 +109,7 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
 }
 
 void
-InitializeFont(Font *theFont, LOGFONT autoLogFont,
+Fonts::InitializeFont(Font *theFont, LOGFONT autoLogFont,
                   LOGFONT * LogFontUsed)
 {
 #ifdef ENABLE_SDL
@@ -124,7 +124,7 @@ InitializeFont(Font *theFont, LOGFONT autoLogFont,
 }
 
 void
-LoadCustomFont(Font *theFont, const TCHAR FontRegKey[], LOGFONT * LogFontUsed)
+Fonts::LoadCustomFont(Font *theFont, const TCHAR FontRegKey[], LOGFONT * LogFontUsed)
 {
 #ifdef ENABLE_SDL
   // XXX
@@ -177,7 +177,8 @@ InitialiseLogFonts()
   int iFontHeight = (int)(FontHeight * 1.4);
 
   LOGFONT logfont;
-  InitialiseLogfont(&logfont, GetStandardFontFace(), iFontHeight, true, false, true);
+  InitialiseLogfont(&logfont, Fonts::GetStandardFontFace(),
+                    iFontHeight, true, false, true);
   logfont.lfCharSet = ANSI_CHARSET;
 
   // JMW algorithm to auto-size info window font.
@@ -209,35 +210,35 @@ InitialiseLogFonts()
   // XXX implement
 #endif /* !ENABLE_SDL */
 
-  InitialiseLogfont(&TitleWindowLogFont, GetStandardFontFace(),
+  InitialiseLogfont(&TitleWindowLogFont, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.333), true);
 
   // new font for CDI Scale
-  InitialiseLogfont(&CDIWindowLogFont, GetStandardFontFace(),
+  InitialiseLogfont(&CDIWindowLogFont, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.6), false, false, false);
 
   // new font for map labels
-  InitialiseLogfont(&MapLabelLogFont, GetStandardFontFace(),
+  InitialiseLogfont(&MapLabelLogFont, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.39), false, true);
 
   // Font for map other text
-  InitialiseLogfont(&StatisticsLogFont, GetStandardFontFace(),
+  InitialiseLogfont(&StatisticsLogFont, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.7));
 
   // new font for map labels
-  InitialiseLogfont(&MapWindowLogFont, GetStandardFontFace(),
+  InitialiseLogfont(&MapWindowLogFont, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.507));
 
   // Font for map bold text
-  InitialiseLogfont(&MapWindowBoldLogFont, GetStandardFontFace(),
+  InitialiseLogfont(&MapWindowBoldLogFont, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.507), true);
 
-  InitialiseLogfont(&InfoWindowSmallLogFont, GetStandardFontFace(),
+  InitialiseLogfont(&InfoWindowSmallLogFont, Fonts::GetStandardFontFace(),
                     Layout::Scale(20));
 }
 
 void
-InitialiseFonts(const struct Appearance &appearance, RECT rc)
+Fonts::InitialiseFonts(const struct Appearance &appearance, RECT rc)
 {
   //this routine must be called only at start/restart of XCSoar b/c there are many pointers to these fonts
   ResetFonts();
@@ -268,7 +269,7 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
 }
 
 void
-ResetFonts()
+Fonts::ResetFonts()
 {
   InfoWindowFont.reset();
   InfoWindowSmallFont.reset();
@@ -281,7 +282,7 @@ ResetFonts()
 }
 
 const TCHAR*
-GetStandardFontFace()
+Fonts::GetStandardFontFace()
 {
   if (is_altair())
     return _T("RasterGothicFourteenCond");

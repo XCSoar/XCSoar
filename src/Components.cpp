@@ -540,7 +540,7 @@ XCSoarInterface::Shutdown(void)
 
   // Kill graphics objects
   LogStartUp(_T("Delete Objects"));
-  ResetFonts();
+  Fonts::ResetFonts();
 
   // Close the progress dialog
   LogStartUp(_T("Close Progress Dialog"));
