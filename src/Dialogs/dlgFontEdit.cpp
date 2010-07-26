@@ -154,9 +154,9 @@ InitGUI(const TCHAR * FontDescription)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Tahoma")));
-    dfe->addEnumText(gettext(_T("TahomaBD")));
-    dfe->addEnumText(gettext(_T("DejaVu Sans Condensed")));
+    dfe->addEnumText(_T("Tahoma"));
+    dfe->addEnumText(_T("TahomaBD"));
+    dfe->addEnumText(_T("DejaVu Sans Condensed"));
     // RLD ToDo code: add more font faces, and validate their availabiliy
   }
 }
