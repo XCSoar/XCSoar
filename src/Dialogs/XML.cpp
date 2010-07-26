@@ -247,7 +247,7 @@ xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
 {
   ResourceLoader::Data data = ResourceLoader::Load(lpName, _T("XMLDialog"));
   if (data.first == NULL) {
-    MessageBoxX(gettext(_T("Can't find resource")), gettext(_T("Dialog error")),
+    MessageBoxX(_T("Can't find resource"), _T("Dialog error"),
                 MB_OK | MB_ICONEXCLAMATION);
 
     // unable to find the resource
@@ -295,8 +295,7 @@ xmlOpenResourceHelper(const TCHAR *lpszXML)
     _stprintf(errortext,_T("%s %i %i"), XMLNode::getError(pResults.error),
               pResults.nLine, pResults.nColumn);
 
-    MessageBoxX(errortext, gettext(_T("Dialog error")),
-                MB_OK | MB_ICONEXCLAMATION);
+    MessageBoxX(errortext, _T("Dialog error"), MB_OK | MB_ICONEXCLAMATION);
   }
   return xnode;
 }
@@ -356,8 +355,8 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   // TODO code: put in error checking here and get rid of exits in xmlParser
   // If XML error occurred -> Error messagebox + cancel
   if (xMainNode.isEmpty()) {
-    MessageBoxX(gettext(_T("Error in loading XML dialog")),
-                gettext(_T("Dialog error")), MB_OK | MB_ICONEXCLAMATION);
+    MessageBoxX(_T("Error in loading XML dialog"),
+                _T("Dialog error"), MB_OK | MB_ICONEXCLAMATION);
 
     return NULL;
   }
@@ -381,8 +380,8 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
 
   // If Node does not exists -> Error messagebox + cancel
   if (xNode.isEmpty()) {
-    MessageBoxX(gettext(_T("Error in loading XML dialog")),
-                gettext(_T("Dialog error")), MB_OK | MB_ICONEXCLAMATION);
+    MessageBoxX(_T("Error in loading XML dialog"),
+                _T("Dialog error"), MB_OK | MB_ICONEXCLAMATION);
 
     return NULL;
   }
@@ -443,8 +442,8 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
 
   // If XML error occurred -> Error messagebox + cancel
   if (XMLNode::GlobalError) {
-    MessageBoxX(gettext(_T("Error in loading XML dialog")),
-                gettext(_T("Dialog error")), MB_OK | MB_ICONEXCLAMATION);
+    MessageBoxX(_T("Error in loading XML dialog"),
+                _T("Dialog error"), MB_OK | MB_ICONEXCLAMATION);
 
     delete theForm;
     return NULL;
