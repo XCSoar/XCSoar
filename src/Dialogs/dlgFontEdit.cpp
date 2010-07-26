@@ -46,15 +46,6 @@ Copyright_License {
 
 #include <stdio.h>
 
-extern Font Fonts::InfoBox;
-extern Font Fonts::InfoBoxSmall;
-extern Font Fonts::Title;
-extern Font Fonts::Map;
-extern Font Fonts::MapBold;
-extern Font Fonts::CDI; // New
-extern Font Fonts::MapLabel;
-extern Font Fonts::Statistics;
-
 static WndForm *wf = NULL;
 static LOGFONT OriginalLogFont;
 static LOGFONT NewLogFont;
