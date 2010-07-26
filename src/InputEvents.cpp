@@ -245,6 +245,21 @@ apply_defaults(const TCHAR *const* default_modes,
   }
 }
 
+static bool
+parse_assignment(TCHAR *buffer, const TCHAR *&key, const TCHAR *&value)
+{
+  TCHAR *separator = _tcschr(buffer, '=');
+  if (separator == NULL || separator == buffer)
+    return false;
+
+  *separator = _T('\0');
+
+  key = buffer;
+  value = separator + 1;
+
+  return true;
+}
+
 // Read the data files
 void
 InputEvents::readFile()
@@ -306,12 +321,7 @@ InputEvents::readFile()
 
   // TODO code - Safer sizes, strings etc - use C++ (can scanf restrict length?)
 
-  // key from scanf
-  TCHAR key[2049];
-  // value from scanf
-  TCHAR value[2049];
   TCHAR *new_label = NULL;
-  int found;
 
   // Init first entry
 
@@ -338,19 +348,17 @@ InputEvents::readFile()
     TrimRight(buffer);
     line++;
 
+    const TCHAR *key, *value;
+
     // experimental: if the first line is "#CLEAR" then the whole default config is cleared
     //               and can be overwritten by file
-    if ((line == 1) && (_tcsstr(buffer, TEXT("#CLEAR")))) {
+    if (line == 1 && _tcscmp(buffer, _T("#CLEAR")) == 0) {
       memset(&Key2Event, 0, sizeof(Key2Event));
       memset(&GC2Event, 0, sizeof(GC2Event));
       memset(&Events, 0, sizeof(Events));
       Events_count = 1;
-    }
-
-    found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value);
-
-    // Check valid line? If not valid, assume next record (primative, but works ok!)
-    if (buffer[0] == _T('\0')) {
+    } else if (buffer[0] == _T('\0')) {
+      // Check valid line? If not valid, assume next record (primative, but works ok!)
       // General checks before continue...
       if (some_data && (d_mode != NULL) && (_tcscmp(d_mode, TEXT("")) != 0)) {
 
@@ -452,12 +460,12 @@ InputEvents::readFile()
       d_location = 0;
       new_label = NULL;
 
-    } else if ((found != 2) || key[0] == 0 || value[0] == 0) {
+    } else if (string_is_empty(buffer) || buffer[0] == _T('#')) {
       // Do nothing - we probably just have a comment line
       // JG removed "void;" - causes warning (void is declaration and needs variable)
       // NOTE: Do NOT display buffer to user as it may contain an invalid stirng !
 
-    } else {
+    } else if (parse_assignment(buffer, key, value)) {
       if (_tcscmp(key, TEXT("mode")) == 0) {
         if (_tcslen(value) < 1024) {
           some_data = true; // Success, we have a real entry
@@ -534,6 +542,11 @@ InputEvents::readFile()
       #endif
 
       }
+#ifdef _INPUTDEBUG_
+    } else if (input_errors_count < MAX_INPUT_ERRORS) {
+      _stprintf(input_errors[input_errors_count++],
+                _T("Invalid line at %i"), line);
+#endif
     }
 
   } // end while
