@@ -167,22 +167,6 @@ static CallBackTableEntry_t CallBackTable[] = {
 };
 
 void
-SaveValues(const TCHAR * FontRegKey)
-{
-  // update reg key for font
-  TCHAR sValue [256];
-  _stprintf(sValue,_T("%d,%d,0,0,%d,%d,0,0,0,0,0,%d,%d,%s"),
-                      NewLogFont.lfHeight,
-                      NewLogFont.lfWidth,
-                      NewLogFont.lfWeight,
-                      NewLogFont.lfItalic,
-                      NewLogFont.lfQuality,
-                      NewLogFont.lfPitchAndFamily,
-                      NewLogFont.lfFaceName);
-  Profile::Set(FontRegKey, sValue);
-}
-
-void
 InitGUI(const TCHAR * FontDescription)
 {
   #define FONTEDIT_GUI_MAX_TITLE 128
@@ -332,7 +316,7 @@ dlgFontEditShowModal(const TCHAR * FontDescription,
   LoadGUI();
 
   if (wf->ShowModal() == mrOK) {
-    SaveValues(FontRegKey);
+    Profile::SetFont(FontRegKey, NewLogFont);
     bRetVal = true;
   }
 

@@ -834,3 +834,17 @@ Profile::GetFont(const TCHAR *key, LOGFONT* lplf)
 
   return false;
 }
+
+void
+Profile::SetFont(const TCHAR *key, LOGFONT &logfont)
+{
+  TCHAR Buffer[256];
+
+  assert(key != NULL);
+  assert(key[0] != '\0');
+
+  _stprintf(Buffer, _T("%d,%d,0,0,%d,%d,0,0,0,0,0,%d,%d,%s"),
+            logfont.lfHeight, logfont.lfWidth, logfont.lfWeight, logfont.lfItalic,
+            logfont.lfQuality, logfont.lfPitchAndFamily, logfont.lfFaceName);
+  Profile::Set(key, Buffer);
+}

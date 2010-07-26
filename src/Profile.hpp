@@ -168,6 +168,7 @@ namespace Profile
   void SetDeviceConfig(unsigned n, const DeviceConfig &config);
 
   bool GetFont(const TCHAR *key, LOGFONT* lplf);
+  void SetFont(const TCHAR *key, LOGFONT &logfont);
 };
 
 #endif
