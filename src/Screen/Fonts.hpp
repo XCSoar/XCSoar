@@ -63,7 +63,7 @@ namespace Fonts
                       LOGFONT *LogFontUsed = NULL);
 
   void
-  Initialize(const struct Appearance &appearance);
+  Initialize(bool use_custom);
 
   const TCHAR* GetStandardFontFace();
 }

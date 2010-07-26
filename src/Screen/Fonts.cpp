@@ -238,7 +238,7 @@ InitialiseLogFonts()
 }
 
 void
-Fonts::Initialize(const struct Appearance &appearance)
+Fonts::Initialize(bool use_custom)
 {
   //this routine must be called only at start/restart of XCSoar b/c there are many pointers to these fonts
   Reset();
@@ -256,7 +256,7 @@ Fonts::Initialize(const struct Appearance &appearance)
   InitializeFont(&Map, MapWindowLogFont);
   InitializeFont(&MapBold, MapWindowBoldLogFont);
 
-  if (appearance.UseCustomFonts) {
+  if (use_custom) {
     LoadCustomFont(&InfoBox, szProfileFontInfoWindowFont);
     LoadCustomFont(&InfoBoxSmall, szProfileFontTitleSmallWindowFont);
     LoadCustomFont(&Title, szProfileFontTitleWindowFont);

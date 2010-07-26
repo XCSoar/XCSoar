@@ -141,7 +141,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   main_window.show();
 
   Layout::Initialize(640, 480);
-  Fonts::Initialize(Appearance);
+  Fonts::Initialize(Appearance.UseCustomFonts);
 
   dlgAirspaceWarningInit(main_window);
   dlgAirspaceWarningShowDlg();
