@@ -69,7 +69,6 @@ typedef wchar_t TCHAR;
 #define _tcschr wcschr
 #define _tcscat wcscat
 #define _tcsncat wcsncat
-#define TEXT(x) (L ## x)
 #define _T(x) (L ## x)
 
 #define _TEOF EOF
@@ -119,7 +118,6 @@ typedef char TCHAR;
 #define _tcschr strchr
 #define _tcscat strcat
 #define _tcsncat strncat
-#define TEXT(x) x
 #define _T(x) x
 #define _TDIR DIR
 #define _topendir opendir
