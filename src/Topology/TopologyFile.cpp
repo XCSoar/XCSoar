@@ -174,15 +174,14 @@ TopologyFile::updateCache(Projection &map_projection,
 unsigned
 TopologyFile::GetSkipSteps(double map_scale) const
 {
-  int iskip = 1;
-  if (map_scale > 0.25 * scaleThreshold)
-    iskip = 2;
-  if (map_scale > 0.5 * scaleThreshold)
-    iskip = 3;
   if (map_scale > 0.75 * scaleThreshold)
-    iskip = 4;
+    return 4;
+  if (map_scale > 0.5 * scaleThreshold)
+    return 3;
+  if (map_scale > 0.25 * scaleThreshold)
+    return 2;
 
-  return iskip;
+  return 1;
 }
 
 void
