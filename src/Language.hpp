@@ -39,10 +39,13 @@ Copyright_License {
 #if !defined(XCSOAR_LANGUAGE_HPP)
 #define XCSOAR_LANGUAGE_HPP
 
+#include "Compiler.h"
+
 #include <tchar.h>
 
 void ReadLanguageFile(void);
 
+gcc_const
 const TCHAR* gettext(const TCHAR* text);
 
 #if defined(WINDOWSPC) && !defined(NDEBUG) && defined(_MSC_VER)
