@@ -179,17 +179,9 @@ LoadGUI()
         }
         dfe->Inc();
       }
-      if (!bFound) {
-        dfe->addEnumText(NewLogFont.lfFaceName);
-        dfe->Set(0);
-        for (i = 0; i < MAX_ENUM; i++) {
-          if (_tcsncmp(dfe->GetAsString(), NewLogFont.lfFaceName, LF_FACESIZE)
-              == 0) {
-            break;
-          }
-          dfe->Inc();
-        }
-      }
+
+      if (!bFound)
+        dfe->Set(dfe->addEnumText(NewLogFont.lfFaceName));
     }
     wp->RefreshDisplay();
   }
