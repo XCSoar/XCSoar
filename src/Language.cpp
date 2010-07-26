@@ -95,13 +95,13 @@ void WriteMissingTranslations() {
       if (p) {
         while (*p) {
           if (*p != _T('\n')) {
-            fwprintf(fp, TEXT("%c"), *p);
+            _ftprintf(fp, _T("%c"), *p);
           } else {
-            fwprintf(fp, TEXT("\\n"));
+            _ftprintf(fp, _T("\\n"));
           }
           p++;
         }
-        fwprintf(fp, TEXT("=\n"));
+        _ftprintf(fp, _T("=\n"));
       }
       s++;
     }
