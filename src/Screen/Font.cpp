@@ -98,8 +98,7 @@ Font::set(const TCHAR* facename, int height, bool bold, bool italic,
   memset((char *)&font, 0, sizeof(LOGFONT));
 
   _tcscpy(font.lfFaceName, facename);
-  font.lfPitchAndFamily = (variable_pitch ? VARIABLE_PITCH : FIXED_PITCH)
-                          | FF_DONTCARE;
+  font.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE;
   font.lfHeight = (long)height;
   font.lfWeight = (long)(bold ? FW_BOLD : FW_MEDIUM);
   font.lfItalic = italic;

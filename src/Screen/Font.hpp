@@ -75,10 +75,10 @@ public:
 
   #ifdef ENABLE_SDL
   bool set(const char *file, int ptsize, bool bold = false,
-           bool italic = false, bool variable_pitch = true);
+           bool italic = false);
   #else
   bool set(const TCHAR* facename, int height, bool bold = false,
-           bool italic = false, bool variable_pitch = true);
+           bool italic = false);
   bool set(const LOGFONT *lplf);
   #endif
   void reset();
