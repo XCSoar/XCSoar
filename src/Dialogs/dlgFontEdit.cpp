@@ -166,8 +166,7 @@ LoadGUI()
 
   wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
   if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
+    DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     if (dfe) {
       dfe->Set(0);
 
@@ -197,8 +196,7 @@ LoadGUI()
 
   wp = (WndProperty*)wf->FindByName(_T("prpFontHeight"));
   if (wp) {
-    DataFieldInteger * dfi;
-    dfi = (DataFieldInteger*)wp->GetDataField();
+    DataFieldInteger* dfi = (DataFieldInteger*)wp->GetDataField();
     if (dfi)
       dfi->Set(NewLogFont.lfHeight);
 
@@ -206,8 +204,7 @@ LoadGUI()
   }
   wp = (WndProperty*)wf->FindByName(_T("prpFontWeight"));
   if (wp) {
-    DataFieldBoolean* dfi;
-    dfi = (DataFieldBoolean*)wp->GetDataField();
+    DataFieldBoolean* dfi = (DataFieldBoolean*)wp->GetDataField();
     if (dfi)
       dfi->Set(NewLogFont.lfWeight > 500);
 
@@ -215,8 +212,7 @@ LoadGUI()
   }
   wp = (WndProperty*)wf->FindByName(_T("prpFontItalic"));
   if (wp) {
-    DataFieldBoolean* dfb;
-    dfb = (DataFieldBoolean*)wp->GetDataField();
+    DataFieldBoolean* dfb = (DataFieldBoolean*)wp->GetDataField();
     if (dfb)
       dfb->Set(NewLogFont.lfItalic);
 
