@@ -168,17 +168,16 @@ LoadGUI()
     if (dfe) {
       dfe->Set(0);
 
-      bool bFound = false;
-      for (unsigned i = 0; i < dfe->Count(); i++) {
+      unsigned i;
+      for (i = 0; i < dfe->Count(); i++) {
         if (_tcsncmp(dfe->GetAsString(), NewLogFont.lfFaceName, LF_FACESIZE)
-            == 0) {
-          bFound = true;
+            == 0)
           break;
-        }
+
         dfe->Inc();
       }
 
-      if (!bFound)
+      if (i == dfe->Count())
         dfe->Set(dfe->addEnumText(NewLogFont.lfFaceName));
     }
     wp->RefreshDisplay();
