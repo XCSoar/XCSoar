@@ -61,15 +61,12 @@ private:
 public:
   DataFieldEnum(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
                 int Default, DataAccessCallback_t OnDataAccess) :
-    DataField(EditFormat, DisplayFormat, OnDataAccess) {
+    DataField(EditFormat, DisplayFormat, OnDataAccess),
+    nEnums(0),
+    mValue(Default >= 0 ? Default : 0)
+  {
     SupportCombo = true;
 
-    if (Default >= 0)
-      mValue = Default;
-    else
-      mValue = 0;
-
-    nEnums = 0;
     if (mOnDataAccess)
       (mOnDataAccess)(this, daGet);
   }
@@ -96,7 +93,7 @@ public:
   #endif
 
   int SetAsInteger(int Value);
-  void Sort(int startindex=0);
+  void Sort(int startindex = 0);
 };
 
 #endif
