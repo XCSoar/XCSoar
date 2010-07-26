@@ -538,10 +538,6 @@ XCSoarInterface::Shutdown(void)
   LogStartUp(_T("Destroy Button Labels"));
   ButtonLabel::Destroy();
 
-  // Kill graphics objects
-  LogStartUp(_T("Delete Objects"));
-  Fonts::Reset();
-
   // Close the progress dialog
   LogStartUp(_T("Close Progress Dialog"));
   ProgressGlue::Close();
