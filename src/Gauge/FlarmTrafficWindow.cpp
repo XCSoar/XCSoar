@@ -39,6 +39,7 @@
 #include "FlarmTrafficWindow.hpp"
 #include "FLARM/Traffic.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Fonts.hpp"
 #include "Units.hpp"
 #include "Math/Screen.hpp"
 
@@ -96,12 +97,12 @@ FlarmTrafficWindow::on_create()
   hpPlane.set(width, hcRadar);
   hpRadar.set(1, hcRadar);
 
-  hfNoTraffic.set(_T("Tahoma"), Layout::FastScale(24));
-  hfLabels.set(_T("Tahoma"), Layout::FastScale(14));
+  hfNoTraffic.set(GetStandardFontFace(), Layout::FastScale(24));
+  hfLabels.set(GetStandardFontFace(), Layout::FastScale(14));
   if (small)
-    hfSideInfo.set(_T("Tahoma"), Layout::FastScale(12), true);
+    hfSideInfo.set(GetStandardFontFace(), Layout::FastScale(12), true);
   else
-    hfSideInfo.set(_T("Tahoma"), Layout::FastScale(18), true);
+    hfSideInfo.set(GetStandardFontFace(), Layout::FastScale(18), true);
 
   return true;
 }

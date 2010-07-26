@@ -54,6 +54,8 @@ void InitializeFont(Font *theFont, LOGFONT autoLogFont,
 void
 InitialiseFonts(const struct Appearance &appearance, RECT rc);
 
+const TCHAR* GetStandardFontFace();
+
 extern Font InfoWindowFont;
 extern Font TitleWindowFont;
 extern Font MapWindowFont;

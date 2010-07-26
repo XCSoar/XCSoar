@@ -114,9 +114,9 @@ FlarmTrafficControl::on_create()
 {
   FlarmTrafficWindow::on_create();
 
-  hfInfoLabels.set(_T("Tahoma"), Layout::FastScale(10), true);
-  hfInfoValues.set(_T("Tahoma"), Layout::FastScale(20));
-  hfCallSign.set(_T("Tahoma"), Layout::FastScale(28), true);
+  hfInfoLabels.set(GetStandardFontFace(), Layout::FastScale(10), true);
+  hfInfoValues.set(GetStandardFontFace(), Layout::FastScale(20));
+  hfCallSign.set(GetStandardFontFace(), Layout::FastScale(28), true);
 
   Profile::Get(szProfileFlarmSideData, side_display_type);
   Profile::Get(szProfileFlarmAutoZoom, enable_auto_zoom);

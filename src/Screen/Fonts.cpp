@@ -177,7 +177,7 @@ InitialiseLogFonts()
   int iFontHeight = (int)(FontHeight * 1.4);
 
   LOGFONT logfont;
-  InitialiseLogfont(&logfont, _T("Tahoma"), iFontHeight, true, false, true);
+  InitialiseLogfont(&logfont, GetStandardFontFace(), iFontHeight, true, false, true);
   logfont.lfCharSet = ANSI_CHARSET;
 
   // JMW algorithm to auto-size info window font.
@@ -209,30 +209,30 @@ InitialiseLogFonts()
   // XXX implement
 #endif /* !ENABLE_SDL */
 
-  InitialiseLogfont(&TitleWindowLogFont, _T("Tahoma"),
+  InitialiseLogfont(&TitleWindowLogFont, GetStandardFontFace(),
                     (int)(FontHeight * 0.333), true);
 
   // new font for CDI Scale
-  InitialiseLogfont(&CDIWindowLogFont, _T("Tahoma"),
+  InitialiseLogfont(&CDIWindowLogFont, GetStandardFontFace(),
                     (int)(FontHeight * 0.6), false, false, false);
 
   // new font for map labels
-  InitialiseLogfont(&MapLabelLogFont, _T("Tahoma"),
+  InitialiseLogfont(&MapLabelLogFont, GetStandardFontFace(),
                     (int)(FontHeight * 0.39), false, true);
 
   // Font for map other text
-  InitialiseLogfont(&StatisticsLogFont, _T("Tahoma"),
+  InitialiseLogfont(&StatisticsLogFont, GetStandardFontFace(),
                     (int)(FontHeight * 0.7));
 
   // new font for map labels
-  InitialiseLogfont(&MapWindowLogFont, _T("Tahoma"),
+  InitialiseLogfont(&MapWindowLogFont, GetStandardFontFace(),
                     (int)(FontHeight * 0.507));
 
   // Font for map bold text
-  InitialiseLogfont(&MapWindowBoldLogFont, _T("Tahoma"),
+  InitialiseLogfont(&MapWindowBoldLogFont, GetStandardFontFace(),
                     (int)(FontHeight * 0.507), true);
 
-  InitialiseLogfont(&InfoWindowSmallLogFont, _T("Tahoma"),
+  InitialiseLogfont(&InfoWindowSmallLogFont, GetStandardFontFace(),
                     Layout::Scale(20));
 }
 
@@ -278,4 +278,13 @@ ResetFonts()
   MapWindowFont.reset();
   MapWindowBoldFont.reset();
   StatisticsFont.reset();
+}
+
+const TCHAR*
+GetStandardFontFace()
+{
+  if (is_altair())
+    return _T("RasterGothicFourteenCond");
+
+  return _T("Tahoma");
 }
