@@ -83,14 +83,6 @@ void OnInfoBoxHelp(WindowControl * Sender){
   }
 
   switch(type) {
-  case 0:
-    dlgHelpShowModal(XCSoarInterface::main_window,
-                     caption, _T("[Height GPS]\r\nThis is the height above mean sea level reported by the GPS.\r\n Touchscreen/PC only: in simulation mode, this value is adjustable with the up/down arrow keys and the right/left arrow keys also cause the glider to turn."));
-    break;
-  case 1:
-    dlgHelpShowModal(XCSoarInterface::main_window,
-                     caption, _T("[Height AGL]\r\nThis is the navigation altitude minus the terrain height obtained from the terrain file.  The value is coloured red when the glider is below the terrain safety clearance height."));
-    break;
   case 2:
     dlgHelpShowModal(XCSoarInterface::main_window,
                      caption, _T("[Thermal last 30 sec]\r\nA 30 second rolling average climb rate based of the reported GPS altitude, or vario if available."));
@@ -163,10 +155,6 @@ void OnInfoBoxHelp(WindowControl * Sender){
     dlgHelpShowModal(XCSoarInterface::main_window,
                      caption, _T("[Final L/D]\r\nThe required glide ratio to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival altitude.  Negative values indicate a climb is necessary to finish. If the height required is close to zero, the displayed value is '---'.  Note that this calculation may be optimistic because it reduces the height required to finish by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds."));
     break;
-  case 20:
-    dlgHelpShowModal(XCSoarInterface::main_window,
-                     caption, _T("[Terrain Elevation]\r\nThis is the elevation of the terrain above mean sea level, obtained from the terrain file at the current GPS location."));
-    break;
   case 21:
     dlgHelpShowModal(XCSoarInterface::main_window,
                      caption, _T("[Thermal Average]\r\nAltitude gained/lost in the current thermal, divided by time spent thermaling."));
@@ -214,10 +202,6 @@ void OnInfoBoxHelp(WindowControl * Sender){
   case 32:
     dlgHelpShowModal(XCSoarInterface::main_window,
                      caption, _T("[Airspeed IAS]\r\nIndicated Airspeed reported by a supported external intelligent vario."));
-    break;
-  case 33:
-    dlgHelpShowModal(XCSoarInterface::main_window,
-                     caption, _T("[Pressure Altitude]\r\nThis is the barometric altitude obtained from a GPS equipped with pressure sensor, or a supported external intelligent vario."));
     break;
   case 34:
     dlgHelpShowModal(XCSoarInterface::main_window,
@@ -355,10 +339,6 @@ void OnInfoBoxHelp(WindowControl * Sender){
   case 69:
     dlgHelpShowModal(XCSoarInterface::main_window,
                      caption, _T("[BestAlternate]\r\nAutomatic search for the best landing option available. Top line is name of landpoint, middle is LD required, bottom line hold distance and arrival altitude over safety, swapped every few seconds. Please read the full manual document about the BestAlternate and how you can customise its behaviour. This is still experimental so be careful. If you select BestAlternate by clicking on the infobox and the PRESS ENTER either with a real key or virtual key then the waypoint detail page will come up and you will be able to perform actions on this Alternate such as goto, inserti in task etc."));
-    break;
-  case 70:
-    dlgHelpShowModal(XCSoarInterface::main_window,
-                     caption, _T("[QFE]\r\nAutomatic QFE. This altitude value is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground. During flight you can change QFE with up and down keys. Bottom line shows QNH altitude. \r\nChanging QFE does not affect QNH altitude."));
     break;
   case 71:
     dlgHelpShowModal(XCSoarInterface::main_window,
