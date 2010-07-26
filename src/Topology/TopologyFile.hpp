@@ -121,6 +121,8 @@ private:
 
   XShape** shpCache;
 
+  unsigned GetSkipSteps(double map_scale) const;
+
 protected:
   void ClearCache();
 

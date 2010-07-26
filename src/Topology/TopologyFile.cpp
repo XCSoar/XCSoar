@@ -171,6 +171,20 @@ TopologyFile::updateCache(Projection &map_projection,
   }
 }
 
+unsigned
+TopologyFile::GetSkipSteps(double map_scale) const
+{
+  int iskip = 1;
+  if (map_scale > 0.25 * scaleThreshold)
+    iskip = 2;
+  if (map_scale > 0.5 * scaleThreshold)
+    iskip = 3;
+  if (map_scale > 0.75 * scaleThreshold)
+    iskip = 4;
+
+  return iskip;
+}
+
 void
 TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
                 const Projection &projection) const
@@ -192,14 +206,7 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 
   // get drawing info
 
-  int iskip = 1;
-
-  if (map_scale > 0.25 * scaleThreshold)
-    iskip = 2;
-  if (map_scale > 0.5 * scaleThreshold)
-    iskip = 3;
-  if (map_scale > 0.75 * scaleThreshold)
-    iskip = 4;
+  int iskip = GetSkipSteps(map_scale);
 
   rectObj screenRect = projection.CalculateScreenBounds(fixed_zero);
 
@@ -283,14 +290,7 @@ TopologyFile::PaintLabels(Canvas &canvas,
 
   // get drawing info
 
-  int iskip = 1;
-
-  if (map_scale > 0.25 * scaleThreshold)
-    iskip = 2;
-  if (map_scale > 0.5 * scaleThreshold)
-    iskip = 3;
-  if (map_scale > 0.75 * scaleThreshold)
-    iskip = 4;
+  int iskip = GetSkipSteps(map_scale);
 
   rectObj screenRect = projection.CalculateScreenBounds(fixed_zero);
 
