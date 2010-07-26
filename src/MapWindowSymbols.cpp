@@ -170,10 +170,10 @@ MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc, const GPS_STATE &gps)
 
   if (!gps.Connected) {
     icon = &MapGfx.hGPSStatus2;
-    txt = gettext(_T("GPS not connected"));
+    txt = _("GPS not connected");
   } else if (gps.NAVWarning || (gps.SatellitesUsed == 0)) {
     icon = &MapGfx.hGPSStatus1;
-    txt = gettext(_T("GPS waiting for fix"));
+    txt = _("GPS waiting for fix");
   } else {
     return; // early exit
   }

@@ -133,7 +133,7 @@ VLDeclAddWayPoint(const Waypoint &way_point);
 bool
 VolksloggerDevice::Declare(const Declaration *decl)
 {
-  ProgressGlue::Create(gettext(_T("Comms with Volkslogger")));
+  ProgressGlue::Create(_("Comms with Volkslogger"));
 
   vl.set_port(port);
   nturnpoints = 0;

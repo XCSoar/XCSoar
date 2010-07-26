@@ -299,7 +299,7 @@ bool
 OrderedTaskSave(const OrderedTask& task, bool noask)
 {
   if (!noask
-      && MessageBoxX(gettext(_T("Save task?")), gettext(_T("Task Selection")),
+      && MessageBoxX(_("Save task?"), _("Task Selection"),
                      MB_YESNO | MB_ICONQUESTION) != IDYES)
     return false;
 

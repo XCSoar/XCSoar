@@ -847,17 +847,17 @@ FlightStatistics::CaptionBarograph(TCHAR *sTmp)
     _stprintf(sTmp, _T("\0"));
   } else if (Altitude_Ceiling.sum_n<4) {
     _stprintf(sTmp, _T("%s:\r\n  %.0f-%.0f %s"),
-              gettext(_T("Working band")),
+              _("Working band"),
               Units::ToUserUnit(Altitude_Base.y_ave, Units::AltitudeUnit),
               Units::ToUserUnit(Altitude_Ceiling.y_ave, Units::AltitudeUnit),
               Units::GetAltitudeName());
   } else {
     _stprintf(sTmp, _T("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr"),
-              gettext(_T("Working band")),
+              _("Working band"),
               Units::ToUserUnit(Altitude_Base.y_ave, Units::AltitudeUnit),
               Units::ToUserUnit(Altitude_Ceiling.y_ave, Units::AltitudeUnit),
               Units::GetAltitudeName(),
-              gettext(_T("Ceiling trend")),
+              _("Ceiling trend"),
               Units::ToUserUnit(Altitude_Ceiling.m, Units::AltitudeUnit),
               Units::GetAltitudeName());
   }
@@ -872,16 +872,16 @@ FlightStatistics::CaptionClimb(TCHAR* sTmp)
     _stprintf(sTmp, _T("\0"));
   } else if (ThermalAverage.sum_n==1) {
     _stprintf(sTmp, _T("%s:\r\n  %3.1f %s"),
-	      gettext(_T("Av climb")),
+	      _("Av climb"),
 	      Units::ToUserUnit(ThermalAverage.y_ave, Units::VerticalSpeedUnit),
 	      Units::GetVerticalSpeedName()
 	      );
   } else {
     _stprintf(sTmp, _T("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s"),
-	      gettext(_T("Av climb")),
+	      _("Av climb"),
 	      Units::ToUserUnit(ThermalAverage.y_ave, Units::VerticalSpeedUnit),
 	      Units::GetVerticalSpeedName(),
-	      gettext(_T("Climb trend")),
+	      _("Climb trend"),
 	      Units::ToUserUnit(ThermalAverage.m, Units::VerticalSpeedUnit),
 	      Units::GetVerticalSpeedName()
 	      );
@@ -894,12 +894,12 @@ FlightStatistics::CaptionPolar(TCHAR *sTmp, const GlidePolar& glide_polar) const
 {
   if (Layout::landscape) {
     _stprintf(sTmp, _T("%s:\r\n  %d\r\n  at %d %s\r\n\r\n%s:\r\n%3.2f %s\r\n  at %d %s"),
-	      gettext(_T("Best LD")),
+	      _("Best LD"),
 	      (int)glide_polar.get_bestLD(),
         (int)(Units::ToUserUnit(glide_polar.get_VbestLD(),
                                 Units::SpeedUnit)),
 	      Units::GetSpeedName(),
-	      gettext(_T("Min sink")),
+	      _("Min sink"),
               (double)Units::ToUserUnit(glide_polar.get_Smin(), Units::VerticalSpeedUnit),
 	      Units::GetVerticalSpeedName(),
         (int)(Units::ToUserUnit(glide_polar.get_Vmin(),
@@ -908,12 +908,12 @@ FlightStatistics::CaptionPolar(TCHAR *sTmp, const GlidePolar& glide_polar) const
 	      );
   } else {
     _stprintf(sTmp, _T("%s:\r\n  %d at %d %s\r\n%s:\r\n  %3.2f %s at %d %s"),
-	      gettext(_T("Best LD")),
+	      _("Best LD"),
         (int)glide_polar.get_bestLD(),
         (int)(Units::ToUserUnit(glide_polar.get_VbestLD(),
                                 Units::SpeedUnit)),
 	      Units::GetSpeedName(),
-	      gettext(_T("Min sink")),
+	      _("Min sink"),
               (double)Units::ToUserUnit(glide_polar.get_Smin(), Units::VerticalSpeedUnit),
 	      Units::GetVerticalSpeedName(),
         (int)(Units::ToUserUnit(glide_polar.get_Vmin(),
@@ -926,10 +926,10 @@ void
 FlightStatistics::CaptionTempTrace(TCHAR *sTmp) const
 {
   _stprintf(sTmp, _T("%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n"),
-	    gettext(_T("Thermal height")),
+	    _("Thermal height"),
 	    Units::ToUserUnit(CuSonde::thermalHeight, Units::AltitudeUnit),
 	    Units::GetAltitudeName(),
-	    gettext(_T("Cloud base")),
+	    _("Cloud base"),
 	    Units::ToUserUnit(CuSonde::cloudBase, Units::AltitudeUnit),
 	    Units::GetAltitudeName());
 }
@@ -941,7 +941,7 @@ FlightStatistics::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const
   double d_remaining  = derived.task_stats.total.remaining.get_distance();
 
   if (!common.ordered_valid) {
-    _tcscpy(sTmp, gettext(_T("No task")));
+    _tcscpy(sTmp, _("No task"));
   } else {
     TCHAR timetext1[100];
     TCHAR timetext2[100];
@@ -952,28 +952,28 @@ FlightStatistics::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const
       if (Layout::landscape) {
 	_stprintf(sTmp,
 		  _T("%s:\r\n  %s\r\n%s:\r\n  %s\r\n%s:\r\n  %5.0f %s\r\n%s:\r\n  %5.0f %s\r\n"),
-		  gettext(_T("Task to go")),
+		  _("Task to go"),
 		  timetext1,
-                    gettext(_T("AAT to go")),
+                    _("AAT to go"),
 		  timetext2,
-		  gettext(_T("Distance to go")),
+		  _("Distance to go"),
                   (double)Units::ToUserUnit(d_remaining, Units::DistanceUnit),
 		  Units::GetDistanceName(),
-		  gettext(_T("Target speed")),
+		  _("Target speed"),
                   (double)Units::ToUserUnit(common.aat_speed_remaining, Units::TaskSpeedUnit),
 		  Units::GetTaskSpeedName()
 		  );
       } else {
 	_stprintf(sTmp,
 		  _T("%s: %s\r\n%s: %s\r\n%s: %5.0f %s\r\n%s: %5.0f %s\r\n"),
-		  gettext(_T("Task to go")),
+		  _("Task to go"),
 		  timetext1,
-		  gettext(_T("AAT to go")),
+		  _("AAT to go"),
 		  timetext2,
-		  gettext(_T("Distance to go")),
+		  _("Distance to go"),
                   (double)Units::ToUserUnit(d_remaining, Units::DistanceUnit),
 		  Units::GetDistanceName(),
-		  gettext(_T("Target speed")),
+		  _("Target speed"),
                   (double)Units::ToUserUnit(common.aat_speed_remaining, Units::TaskSpeedUnit),
 		  Units::GetTaskSpeedName()
 		  );
@@ -981,9 +981,9 @@ FlightStatistics::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const
     } else {
       Units::TimeToText(timetext1, (int)common.task_time_remaining);
       _stprintf(sTmp, _T("%s: %s\r\n%s: %5.0f %s\r\n"),
-		gettext(_T("Task to go")),
+		_("Task to go"),
 		timetext1,
-		gettext(_T("Distance to go")),
+		_("Distance to go"),
 		(double)Units::ToUserUnit(d_remaining, Units::DistanceUnit),
 		Units::GetDistanceName());
     }

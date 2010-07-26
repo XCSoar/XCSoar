@@ -155,7 +155,7 @@ ReadAirfieldFile(Waypoints &way_points)
   if (reader == NULL)
     return;
 
-  ProgressGlue::Create(gettext(_T("Loading Airfield Details File...")));
+  ProgressGlue::Create(_("Loading Airfield Details File..."));
 
   ParseAirfieldDetails(way_points, *reader);
   delete reader;

@@ -151,10 +151,10 @@ void dlgWindSettingsShowModal(void){
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Manual")));
-    dfe->addEnumText(gettext(_T("Circling")));
-    dfe->addEnumText(gettext(_T("ZigZag")));
-    dfe->addEnumText(gettext(_T("Both")));
+    dfe->addEnumText(_("Manual"));
+    dfe->addEnumText(_("Circling"));
+    dfe->addEnumText(_("ZigZag"));
+    dfe->addEnumText(_("Both"));
     wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().AutoWindMode);
     wp->RefreshDisplay();
 

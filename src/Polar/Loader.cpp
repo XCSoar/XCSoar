@@ -84,8 +84,8 @@ LoadPolarById_internal(Polar& polar, const SETTINGS_POLAR &settings)
   if (LoadPolarById2(settings.POLARID, polar))
     return true;
 
-  MessageBoxX(gettext(_T("Error loading Polar file!\r\nUse LS8 Polar.")),
-              gettext(_T("Warning")),
+  MessageBoxX(_("Error loading Polar file!\r\nUse LS8 Polar."),
+              _("Warning"),
               MB_OK|MB_ICONERROR);
   return LoadHistoricalPolar(2, polar);
 }

@@ -121,7 +121,7 @@ void dlgVoiceShowModal(void){
   if (changed) {
     Profile::Save();
 
-    MessageBoxX(gettext(_T("Changes to configuration saved.")),
+    MessageBoxX(_("Changes to configuration saved."),
 		 _T(""), MB_OK);
   }
     

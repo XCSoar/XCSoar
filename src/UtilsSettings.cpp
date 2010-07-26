@@ -116,7 +116,7 @@ SettingsLeave()
   }
 
   if ((WaypointFileChanged) || (TerrainFileChanged) || (AirfieldFileChanged)) {
-    ProgressGlue::Create(gettext(_T("Loading Terrain File...")));
+    ProgressGlue::Create(_("Loading Terrain File..."));
 
     XCSoarInterface::main_window.map.set_terrain(NULL);
 
@@ -180,7 +180,7 @@ SystemConfiguration()
   if (!is_simulator() &&
       XCSoarInterface::LockSettingsInFlight &&
       XCSoarInterface::Basic().flight.Flying) {
-    Message::AddMessage(_T("Settings locked in flight"));
+    Message::AddMessage(_("Settings locked in flight"));
     return;
   }
 

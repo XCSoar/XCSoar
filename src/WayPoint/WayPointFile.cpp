@@ -162,7 +162,7 @@ WayPointFile::checkWaypointInTerrainRange(const Waypoint &way_point,
 
   // Open Dialogbox
   _stprintf(sTmp,
-            gettext(_T("Waypoint \"%s\" \r\nout of Terrain bounds\r\n\r\nLoad anyway?")),
+            _("Waypoint \"%s\" \r\nout of Terrain bounds\r\n\r\nLoad anyway?"),
             way_point.Name.c_str());
 
   WaypointOutOfTerrainRangeDialogResult = dlgWaypointOutOfTerrain(sTmp);
@@ -199,7 +199,7 @@ WayPointFile::Parse(Waypoints &way_points,
   if (file[0] == 0)
     return false;
 
-  ProgressGlue::Create(gettext(_T("Loading Waypoints...")));
+  ProgressGlue::Create(_("Loading Waypoints..."));
   ProgressGlue::SetRange(100);
 
   // If normal file

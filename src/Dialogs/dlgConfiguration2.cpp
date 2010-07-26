@@ -53,19 +53,19 @@ void OnInfoBoxHelp(WindowControl * Sender){
   TCHAR mode[100];
   switch (configuration_tabbed->GetCurrentPage()) {
   case 15:
-    _tcscpy(mode,gettext(_T("circling")));
+    _tcscpy(mode,_("circling"));
     break;
   case 16:
-    _tcscpy(mode,gettext(_T("cruise")));
+    _tcscpy(mode,_("cruise"));
     break;
   case 17:
-    _tcscpy(mode,gettext(_T("final glide")));
+    _tcscpy(mode,_("final glide"));
     break;
   case 18:
-    _tcscpy(mode,gettext(_T("auxiliary")));
+    _tcscpy(mode,_("auxiliary"));
     break;
   default:
-    _tcscpy(mode,gettext(_T("Error")));
+    _tcscpy(mode,_("Error"));
     return;
   }
   _stprintf(caption, _T("InfoBox %s in %s mode"),

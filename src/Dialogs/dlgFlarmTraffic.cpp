@@ -514,7 +514,7 @@ OnCreateAutoZoom(ContainerWindow &parent, int left, int top,
   CheckBoxStyle style(_style);
   style.tab_stop();
   auto_zoom = new CheckBox();
-  auto_zoom->set(parent, gettext(_T("A. Zoom")), ID_AUTO_ZOOM,
+  auto_zoom->set(parent, _("A. Zoom"), ID_AUTO_ZOOM,
                  left, top, width, height, style);
   auto_zoom->set_font(Fonts::Map);
   return auto_zoom;

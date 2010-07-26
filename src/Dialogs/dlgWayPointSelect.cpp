@@ -483,8 +483,8 @@ OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
   else if (i == 0)
     canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
                 filter_data.defined() || way_points.empty()
-                ? gettext(_T("No Match!"))
-                : gettext(_T("Choose a filter")));
+                ? _("No Match!")
+                : _("Choose a filter"));
 }
 static void
 OnWPSSelectClicked(gcc_unused WndButton &button){

@@ -89,7 +89,7 @@ SetCalcCaption(const TCHAR* caption)
   if (!wCalc)
     return;
 
-  wCalc->SetCaption(gettext(caption));
+  wCalc->SetCaption(caption);
   SetCalcVisibility(!string_is_empty(caption));
 }
 
@@ -165,70 +165,70 @@ Update(void)
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
-    _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
-              gettext(_T("Barograph")));
+    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
+              _("Barograph"));
     wf->SetCaption(sTmp);
     fs.CaptionBarograph(sTmp);
     wInfo->SetCaption(sTmp);
-    SetCalcCaption(_T("Settings"));
+    SetCalcCaption(_("Settings"));
     break;
 
   case ANALYSIS_PAGE_CLIMB:
-    _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
-              gettext(_T("Climb")));
+    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
+              _("Climb"));
     wf->SetCaption(sTmp);
     fs.CaptionClimb(sTmp);
     wInfo->SetCaption(sTmp);
-    SetCalcCaption(_T("Task calc"));
+    SetCalcCaption(_("Task calc"));
     break;
 
   case ANALYSIS_PAGE_WIND:
-    _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
-              gettext(_T("Wind at Altitude")));
+    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
+              _("Wind at Altitude"));
     wf->SetCaption(sTmp);
     wInfo->SetCaption(_T(""));
-    SetCalcCaption(_T("Set wind"));
+    SetCalcCaption(_("Set wind"));
     break;
 
   case ANALYSIS_PAGE_POLAR:
-    _stprintf(sTmp, _T("%s: %s (Mass %d kg)"), gettext(_T("Analysis")),
-              gettext(_T("Glide Polar")),
+    _stprintf(sTmp, _T("%s: %s (Mass %d kg)"), _("Analysis"),
+              _("Glide Polar"),
               (int)polar.get_all_up_weight());
     wf->SetCaption(sTmp);
     fs.CaptionPolar(sTmp, polar);
     wInfo->SetCaption(sTmp);
-    SetCalcCaption(_T("Settings"));
+    SetCalcCaption(_("Settings"));
    break;
 
   case ANALYSIS_PAGE_TEMPTRACE:
-    _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
-              gettext(_T("Temp trace")));
+    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
+              _("Temp trace"));
     wf->SetCaption(sTmp);
     fs.CaptionTempTrace(sTmp);
     wInfo->SetCaption(sTmp);
-    SetCalcCaption(_T("Settings"));
+    SetCalcCaption(_("Settings"));
     break;
 
   case ANALYSIS_PAGE_TASK_SPEED:
-    _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
-              gettext(_T("Task speed")));
+    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
+              _("Task speed"));
     wf->SetCaption(sTmp);
     wInfo->SetCaption(_T(""));
-    SetCalcCaption(_T("Task calc"));
+    SetCalcCaption(_("Task calc"));
     break;
 
   case ANALYSIS_PAGE_TASK:
-    _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
-              gettext(_T("Task")));
+    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
+              _("Task"));
     wf->SetCaption(sTmp);
     fs.CaptionTask(sTmp, XCSoarInterface::Calculated());
     wInfo->SetCaption(sTmp);
-    SetCalcCaption(_T("Task calc"));
+    SetCalcCaption(_("Task calc"));
     break;
 
   case ANALYSIS_PAGE_OLC:
-    _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
-              gettext(_T("OnLine Contest")));
+    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
+              _("OnLine Contest"));
     wf->SetCaption(sTmp);
 
     TCHAR timetext1[100];
@@ -237,12 +237,12 @@ Update(void)
               (Layout::landscape
               ? _T("%s:\r\n  %d %s\r\n%s: %s\r\n%s: %d %s\r\n")
               : _T("%s: %d %s\r\n%s: %s\r\n%s: %d %s\r\n")),
-              gettext(_T("Distance")),
+              _("Distance"),
               (int)Units::ToUserUnit(stats.distance_olc, Units::DistanceUnit),
               Units::GetDistanceName(),
-              gettext(_T("Time")),
+              _("Time"),
               timetext1,
-              gettext(_T("Speed")),
+              _("Speed"),
               (int)Units::ToUserUnit(stats.speed_olc, Units::TaskSpeedUnit),
               Units::GetTaskSpeedName());
     wInfo->SetCaption(sTmp);
@@ -250,11 +250,11 @@ Update(void)
     break;
 
   case ANALYSIS_PAGE_AIRSPACE:
-    _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
-              gettext(_T("Airspace")));
+    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
+              _("Airspace"));
     wf->SetCaption(sTmp);
     wInfo->SetCaption(_T(""));
-    SetCalcCaption(_T("Warnings"));
+    SetCalcCaption(_("Warnings"));
     break;
   }
 

@@ -62,7 +62,7 @@ OnAcknowledgeClicked(WindowControl * Sender)
 
   UINT answer;
   answer = MessageBoxX(airspace->get_name_text(true).c_str(), 
-                       gettext(_T("Acknowledge for day?")),
+                       _("Acknowledge for day?"),
                        MB_YESNOCANCEL | MB_ICONQUESTION);
 
   if (answer == IDYES) {

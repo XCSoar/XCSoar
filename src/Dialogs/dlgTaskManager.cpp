@@ -72,7 +72,7 @@ CommitTaskChanges()
     return true;
 
   if (!ordered_task->task_size() || ordered_task->check_task()) {
-    MessageBoxX(gettext(_T("Active task modified")),
+    MessageBoxX(_("Active task modified"),
                 _T("Task Manager"), MB_OK);
 
     task_ui.check_duplicate_waypoints(*ordered_task, way_points);
@@ -81,8 +81,8 @@ CommitTaskChanges()
 
     task_modified = false;
     return true;
-  } else if (MessageBoxX(gettext(_T("Task not valid. Changes will be lost.")),
-                         gettext(_T("Task Manager")),
+  } else if (MessageBoxX(_("Task not valid. Changes will be lost."),
+                         _("Task Manager"),
                          MB_YESNO | MB_ICONQUESTION) == IDYES) {
     return true;
   }

@@ -135,15 +135,15 @@ Logger::guiStartLogger(const NMEA_INFO& gps_info,
         _tcscat(TaskMessage, _T("None"));
       }
       
-      if (MessageBoxX(TaskMessage, gettext(_T("Start Logger")),
+      if (MessageBoxX(TaskMessage, _("Start Logger"),
                       MB_YESNO | MB_ICONQUESTION) != IDYES)
         return;
     }
   }
 
   if (!LoggerClearFreeSpace(gps_info)) {
-    MessageBoxX(gettext(_T("Logger inactive, insufficient storage!")),
-                gettext(_T("Logger Error")), MB_OK| MB_ICONERROR);
+    MessageBoxX(_("Logger inactive, insufficient storage!"),
+                _("Logger Error"), MB_OK| MB_ICONERROR);
     LogStartUp(_T("Logger not started: Insufficient Storage"));
     return;
   }
@@ -171,8 +171,8 @@ Logger::guiStopLogger(const NMEA_INFO &gps_info,
   if (!isLoggerActive())
     return;
 
-  if (noAsk || (MessageBoxX(gettext(_T("Stop Logger")),
-                            gettext(_T("Stop Logger")),
+  if (noAsk || (MessageBoxX(_("Stop Logger"),
+                            _("Stop Logger"),
                             MB_YESNO | MB_ICONQUESTION) == IDYES)) {
     Poco::ScopedRWLock protect(lock, true);
     _logger->StopLogger(gps_info);

@@ -158,7 +158,7 @@ XCSoarInterface::PreloadInitialisation(bool ask)
     Profile::Load();
     Profile::Use();
 
-    ProgressGlue::Create(gettext(_T("Initialising")));
+    ProgressGlue::Create(_("Initialising"));
   }
 }
 
@@ -314,7 +314,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   topology->Open();
 
   // Read the terrain file
-  ProgressGlue::Create(gettext(_T("Loading Terrain File...")));
+  ProgressGlue::Create(_("Loading Terrain File..."));
   LogStartUp(_T("OpenTerrain"));
   terrain.OpenTerrain();
 
@@ -331,11 +331,11 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   // ReSynchronise the blackboards here since SetHome touches them
   ReadBlackboardBasic(device_blackboard.Basic());
 
-  ProgressGlue::Create(gettext(_T("Loading Terrain File...")));
+  ProgressGlue::Create(_("Loading Terrain File..."));
   terrain.ServiceFullReload(Basic().Location);
 
   // Scan for weather forecast
-  ProgressGlue::Create(gettext(_T("Scanning weather forecast")));
+  ProgressGlue::Create(_("Scanning weather forecast"));
   LogStartUp(_T("RASP load"));
   RASP.ScanAll(Basic().Location);
 
@@ -360,7 +360,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 #endif
 
   // Start the device thread(s)
-  ProgressGlue::Create(gettext(_T("Starting devices")));
+  ProgressGlue::Create(_("Starting devices"));
   devStartup();
 
 /*
@@ -371,7 +371,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   This should be done inside devStartup if it is really required
 */
 
-  ProgressGlue::Create(gettext(_T("Initialising display")));
+  ProgressGlue::Create(_("Initialising display"));
 
   main_window.map.set_way_points(&way_points);
   main_window.map.set_task(&task_ui);
@@ -429,7 +429,7 @@ XCSoarInterface::Shutdown(void)
   gcc_unused ScopeBusyIndicator busy;
 
   // Show progress dialog
-  ProgressGlue::Create(gettext(_T("Shutdown, please wait...")));
+  ProgressGlue::Create(_("Shutdown, please wait..."));
 
   // Log shutdown information
   LogStartUp(_T("Entering shutdown..."));
@@ -439,11 +439,11 @@ XCSoarInterface::Shutdown(void)
   globalRunningEvent.reset();
 
   // Stop logger and save igc file
-  ProgressGlue::Create(gettext(_T("Shutdown, saving logs...")));
+  ProgressGlue::Create(_("Shutdown, saving logs..."));
   logger.guiStopLogger(Basic(), true);
 
   // Save settings to profile
-  ProgressGlue::Create(gettext(_T("Shutdown, saving profile...")));
+  ProgressGlue::Create(_("Shutdown, saving profile..."));
   Profile::Save();
 
   // Stop sound
@@ -455,7 +455,7 @@ XCSoarInterface::Shutdown(void)
   //  VarioSound_Close();
 #endif
 
-  ProgressGlue::Create(gettext(_T("Shutdown, please wait...")));
+  ProgressGlue::Create(_("Shutdown, please wait..."));
 
   // Stop threads
   LogStartUp(_T("CloseDrawingThread"));
@@ -485,7 +485,7 @@ XCSoarInterface::Shutdown(void)
   dlgAirspaceWarningDeInit();
 
   // Save the task for the next time
-  ProgressGlue::Create(gettext(_T("Shutdown, saving task...")));
+  ProgressGlue::Create(_("Shutdown, saving task..."));
 
   LogStartUp(_T("Save default task"));
   task_ui.task_save_default();
@@ -498,7 +498,7 @@ XCSoarInterface::Shutdown(void)
   LogStartUp(_T("Close waypoints"));
   way_points.clear();
 
-  ProgressGlue::Create(gettext(_T("Shutdown, please wait...")));
+  ProgressGlue::Create(_("Shutdown, please wait..."));
 
   // Clear weather database
   LogStartUp(_T("CloseRASP"));

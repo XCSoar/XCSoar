@@ -120,7 +120,7 @@ void OnWeatherHelp(WindowControl * Sender){
   WndProperty *wp = (WndProperty*)Sender;
   int type = wp->GetDataField()->GetAsInteger();
   TCHAR caption[80];
-  _tcscpy(caption, gettext(_T("Weather parameters")));
+  _tcscpy(caption, _("Weather parameters"));
 
   switch(type) {
   case 0:
@@ -211,7 +211,7 @@ void dlgWeatherShowModal(void){
   DataFieldEnum* dfe;
   if (wp) {
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Terrain")));
+    dfe->addEnumText(_("Terrain"));
 
     TCHAR Buffer[20];
     for (int i=1; i<=15; i++) {

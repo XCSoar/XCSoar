@@ -44,6 +44,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Message.hpp"
+#include "Language.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -127,9 +128,9 @@ InfoBoxContentSpeedIndicated::HandleKey(const InfoBoxKeyCodes keycode)
     XCSoarInterface::SetSettingsComputer().EnableCalibration
         = !XCSoarInterface::SettingsComputer().EnableCalibration;
 
-    Message::AddMessage(XCSoarInterface::SettingsComputer().EnableCalibration ?
-                        _T("Calibrate ON") :
-                        _T("Calibrate OFF"));
+    Message::AddMessage(XCSoarInterface::SettingsComputer().EnableCalibration
+                        ? _("Calibrate ON")
+                        : _("Calibrate OFF"));
     return true;
   }
 

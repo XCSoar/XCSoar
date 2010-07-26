@@ -76,8 +76,8 @@ InitView()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("AGL")));
-    dfe->addEnumText(gettext(_T("MSL")));
+    dfe->addEnumText(_("AGL"));
+    dfe->addEnumText(_("MSL"));
   }
 }
 

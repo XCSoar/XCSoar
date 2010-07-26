@@ -109,8 +109,8 @@ OnSelect()
   if (!ordered_task->task_size()) {
     apply = true;
     // empty task, don't ask confirmation
-  } else if (MessageBoxX(gettext(_T("Change task type?")),
-                  gettext(_T("Task Type")),
+  } else if (MessageBoxX(_("Change task type?"),
+                  _("Task Type"),
                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
     apply = true;
   }

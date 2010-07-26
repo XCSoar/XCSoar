@@ -157,9 +157,9 @@ InputEvents::eventSounds(const TCHAR *misc)
     SetSettingsComputer().EnableSoundVario = false;
   else if (_tcscmp(misc, _T("show")) == 0) {
     if (SettingsComputer().EnableSoundVario)
-      Message::AddMessage(_T("Vario Sounds ON"));
+      Message::AddMessage(_("Vario Sounds ON"));
     else
-      Message::AddMessage(_T("Vario Sounds OFF"));
+      Message::AddMessage(_("Vario Sounds OFF"));
   }
   /*
   if (EnableSoundVario != OldEnableSoundVario) {
@@ -186,13 +186,13 @@ InputEvents::eventSnailTrail(const TCHAR *misc)
     SetSettingsMap().TrailActive = 3;
   else if (_tcscmp(misc, _T("show")) == 0) {
     if (SettingsMap().TrailActive == 0)
-      Message::AddMessage(_T("SnailTrail OFF"));
+      Message::AddMessage(_("SnailTrail OFF"));
     if (SettingsMap().TrailActive == 1)
-      Message::AddMessage(_T("SnailTrail ON Long"));
+      Message::AddMessage(_("SnailTrail ON Long"));
     if (SettingsMap().TrailActive == 2)
-      Message::AddMessage(_T("SnailTrail ON Short"));
+      Message::AddMessage(_("SnailTrail ON Short"));
     if (SettingsMap().TrailActive == 3)
-      Message::AddMessage(_T("SnailTrail ON Full"));
+      Message::AddMessage(_("SnailTrail ON Full"));
   }
 }
 
@@ -217,11 +217,11 @@ InputEvents::eventVisualGlide(const TCHAR *misc)
     SetSettingsMap().VisualGlide = 2;
   else if (_tcscmp(misc, _T("show")) == 0) {
     if (SettingsMap().VisualGlide == 0)
-      Message::AddMessage(_T("VisualGlide OFF"));
+      Message::AddMessage(_("VisualGlide OFF"));
     if (SettingsMap().VisualGlide == 1)
-      Message::AddMessage(_T("VisualGlide Steady"));
+      Message::AddMessage(_("VisualGlide Steady"));
     if (SettingsMap().VisualGlide == 2)
-      Message::AddMessage(_T("VisualGlide Moving"));
+      Message::AddMessage(_("VisualGlide Moving"));
   }
 }
 
@@ -251,9 +251,9 @@ InputEvents::eventAirSpace(const TCHAR *misc)
     SetSettingsMap().OnAirSpace = 1;
   else if (_tcscmp(misc, _T("show")) == 0) {
     if (SetSettingsMap().OnAirSpace == 0)
-      Message::AddMessage(_T("Show Airspace OFF"));
+      Message::AddMessage(_("Show Airspace OFF"));
     if (SetSettingsMap().OnAirSpace == 1)
-      Message::AddMessage(_T("Show Airspace ON"));
+      Message::AddMessage(_("Show Airspace ON"));
   }
 }
 
@@ -281,11 +281,11 @@ InputEvents::eventScreenModes(const TCHAR *misc)
     main_window.map.SetFullScreen(!main_window.map.GetFullScreen());
   } else if (_tcscmp(misc, _T("show")) == 0) {
     if (main_window.map.GetFullScreen())
-      Message::AddMessage(_T("Screen Mode Full"));
+      Message::AddMessage(_("Screen Mode Full"));
     else if (SettingsMap().EnableAuxiliaryInfo)
-      Message::AddMessage(_T("Screen Mode Auxiliary"));
+      Message::AddMessage(_("Screen Mode Auxiliary"));
     else
-      Message::AddMessage(_T("Screen Mode Normal"));
+      Message::AddMessage(_("Screen Mode Normal"));
   } else if (_tcscmp(misc, _T("togglebiginfo")) == 0) {
     InfoBoxLayout::fullscreen = !InfoBoxLayout::fullscreen;
   } else {
@@ -336,9 +336,9 @@ InputEvents::eventZoom(const TCHAR* misc)
     sub_AutoZoom(0);
   else if (_tcscmp(misc, _T("auto show")) == 0) {
     if (SettingsMap().AutoZoom)
-      Message::AddMessage(_T("AutoZoom ON"));
+      Message::AddMessage(_("AutoZoom ON"));
     else
-      Message::AddMessage(_T("AutoZoom OFF"));
+      Message::AddMessage(_("AutoZoom OFF"));
   } else if (_tcscmp(misc, _T("slowout")) == 0)
     sub_ScaleZoom(-4);
   else if (_tcscmp(misc, _T("slowin")) == 0)
@@ -366,9 +366,9 @@ InputEvents::eventZoom(const TCHAR* misc)
     SetSettingsMap().CircleZoom = false;
   } else if (_tcscmp(misc, _T("circlezoom show")) == 0) {
     if (SettingsMap().CircleZoom)
-      Message::AddMessage(_T("Circling Zoom ON"));
+      Message::AddMessage(_("Circling Zoom ON"));
     else
-      Message::AddMessage(_T("Circling Zoom OFF"));
+      Message::AddMessage(_("Circling Zoom OFF"));
   }
 
   SendSettingsMap(true);
@@ -426,9 +426,9 @@ InputEvents::eventPan(const TCHAR *misc)
 
   else if (_tcscmp(misc, _T("show")) == 0) {
     if (SettingsMap().EnablePan)
-      Message::AddMessage(_T("Pan mode ON"));
+      Message::AddMessage(_("Pan mode ON"));
     else
-      Message::AddMessage(_T("Pan mode OFF"));
+      Message::AddMessage(_("Pan mode OFF"));
   }
 
   SendSettingsMap(true);
@@ -553,22 +553,22 @@ InputEvents::eventArmAdvance(const TCHAR *misc)
   } else if (_tcscmp(misc, _T("show")) == 0) {
     switch (mode) {
     case TaskAdvance::MANUAL:
-      Message::AddMessage(_T("Advance: Manual"));
+      Message::AddMessage(_("Advance: Manual"));
       break;
     case TaskAdvance::AUTO:
-      Message::AddMessage(_T("Advance: Automatic"));
+      Message::AddMessage(_("Advance: Automatic"));
       break;
     case TaskAdvance::START_ARMED:
-      Message::AddMessage(_T("Advance: Ready to start"));
+      Message::AddMessage(_("Advance: Ready to start"));
       break;
     case TaskAdvance::START_DISARMED:
-      Message::AddMessage(_T("Advance: Hold start"));
+      Message::AddMessage(_("Advance: Hold start"));
       break;
     case TaskAdvance::TURN_ARMED:
-      Message::AddMessage(_T("Advance: Ready to turn"));
+      Message::AddMessage(_("Advance: Ready to turn"));
       break;
     case TaskAdvance::TURN_DISARMED:
-      Message::AddMessage(_T("Advance: Hold turn"));
+      Message::AddMessage(_("Advance: Hold turn"));
       break;
     }
   }
@@ -693,7 +693,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
 
     wp = task_ui.getActiveWaypoint();
     if (!wp) {
-      Message::AddMessage(_T("No Active Waypoint!"));
+      Message::AddMessage(_("No Active Waypoint!"));
       return;
     }
   } else if (_tcscmp(misc, _T("select")) == 0) {
@@ -757,16 +757,16 @@ InputEvents::eventMacCready(const TCHAR *misc)
     SetSettingsComputer().auto_mc = false;
   } else if (_tcscmp(misc, _T("auto show")) == 0) {
     if (SettingsComputer().auto_mc) {
-      Message::AddMessage(_T("Auto MacCready ON"));
+      Message::AddMessage(_("Auto MacCready ON"));
     } else {
-      Message::AddMessage(_T("Auto MacCready OFF"));
+      Message::AddMessage(_("Auto MacCready OFF"));
     }
   } else if (_tcscmp(misc, _T("show")) == 0) {
     TCHAR Temp[100];
     Units::FormatUserVSpeed(task_ui.get_glide_polar().get_mc(),
                             Temp, sizeof(Temp) / sizeof(Temp[0]),
                             false);
-    Message::AddMessage(_T("MacCready "), Temp);
+    Message::AddMessage(_("MacCready "), Temp);
   }
 }
 
@@ -968,16 +968,16 @@ InputEvents::eventAbortTask(const TCHAR *misc)
   else if (_tcscmp(misc, _T("show")) == 0) {
     switch (task_ui.get_mode()) {
     case TaskManager::MODE_ABORT:
-      Message::AddMessage(_T("Task Aborted"));
+      Message::AddMessage(_("Task Aborted"));
       break;
     case TaskManager::MODE_GOTO:
-      Message::AddMessage(_T("Task Goto"));
+      Message::AddMessage(_("Task Goto"));
       break;
     case TaskManager::MODE_ORDERED:
-      Message::AddMessage(_T("Task Ordered"));
+      Message::AddMessage(_("Task Ordered"));
       break;
     default:
-      Message::AddMessage(_T("No Task"));    
+      Message::AddMessage(_("No Task"));
     }
   } else {
     // toggle
@@ -1027,7 +1027,7 @@ InputEvents::eventBugs(const TCHAR *misc)
   else if (_tcscmp(misc, _T("show")) == 0) {
     TCHAR Temp[100];
     _stprintf(Temp, _T("%d"), iround(BUGS * 100));
-    Message::AddMessage(_T("Bugs Performance"), Temp);
+    Message::AddMessage(_("Bugs Performance"), Temp);
   }
 
   if (BUGS != oldBugs) {
@@ -1062,7 +1062,7 @@ InputEvents::eventBallast(const TCHAR *misc)
   else if (_tcscmp(misc, _T("show")) == 0) {
     TCHAR Temp[100];
     _stprintf(Temp, _T("%d"), iround(BALLAST * 100));
-    Message::AddMessage(_T("Ballast %"), Temp);
+    Message::AddMessage(_("Ballast %"), Temp);
   }
 
   if (BALLAST != oldBallast) {
@@ -1111,15 +1111,15 @@ InputEvents::eventLogger(const TCHAR *misc)
   else if (_tcscmp(misc, _T("nmea")) == 0) {
     EnableLogNMEA = !EnableLogNMEA;
     if (EnableLogNMEA) {
-      Message::AddMessage(_T("NMEA Log ON"));
+      Message::AddMessage(_("NMEA Log ON"));
     } else {
-      Message::AddMessage(_T("NMEA Log OFF"));
+      Message::AddMessage(_("NMEA Log OFF"));
     }
   } else if (_tcscmp(misc, _T("show")) == 0)
     if (logger.isLoggerActive()) {
-      Message::AddMessage(_T("Logger ON"));
+      Message::AddMessage(_("Logger ON"));
     } else {
-      Message::AddMessage(_T("Logger OFF"));
+      Message::AddMessage(_("Logger OFF"));
     }
   else if (_tcsncmp(misc, _T("note"), 4) == 0)
     // add note to logger file if available..
@@ -1446,7 +1446,7 @@ InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
   else if (_tcscmp(misc, _T("show")) == 0) {
     TCHAR Temp[100];
     _stprintf(Temp, _T("%f"), CuSonde::maxGroundTemperature);
-    Message::AddMessage(_T("Forecast temperature"), Temp);
+    Message::AddMessage(_("Forecast temperature"), Temp);
   }
 }
 
@@ -1483,11 +1483,11 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
     SetSettingsMap().DeclutterLabels = 1;
   else if (_tcscmp(misc, _T("show")) == 0) {
     if (SettingsMap().DeclutterLabels == 0)
-      Message::AddMessage(_T("Map labels ON"));
+      Message::AddMessage(_("Map labels ON"));
     else if (SettingsMap().DeclutterLabels == 1)
-      Message::AddMessage(_T("Map labels MID"));
+      Message::AddMessage(_("Map labels MID"));
     else
-      Message::AddMessage(_T("Map labels OFF"));
+      Message::AddMessage(_("Map labels OFF"));
   }
 }
 
@@ -1519,7 +1519,7 @@ InputEvents::eventUserDisplayModeForce(const TCHAR *misc)
   else if (_tcscmp(misc, _T("forcefinal")) == 0)
     SetSettingsMap().UserForceDisplayMode = dmFinalGlide;
   else if (_tcscmp(misc, _T("show")) == 0)
-    Message::AddMessage(_T("Map labels ON"));
+    Message::AddMessage(_("Map labels ON"));
 }
 
 void
@@ -1658,14 +1658,14 @@ InputEvents::sub_TerrainTopology(int vswitch)
     TCHAR buf[128];
 
     if (SettingsMap().EnableTopology)
-      _stprintf(buf, _T("\r\n%s / "), gettext(_T("ON")));
+      _stprintf(buf, _T("\r\n%s / "), _("ON"));
     else
-      _stprintf(buf, _T("\r\n%s / "), gettext(_T("OFF")));
+      _stprintf(buf, _T("\r\n%s / "), _("OFF"));
 
     _tcscat(buf, SettingsMap().EnableTerrain
-            ? gettext(_T("ON")) : gettext(_T("OFF")));
+            ? _("ON") : _("OFF"));
 
-    Message::AddMessage(_T("Topology / Terrain"), buf);
+    Message::AddMessage(_("Topology / Terrain"), buf);
   }
 }
 
@@ -1802,12 +1802,12 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     TCHAR TempAll[120];
     _stprintf(TempAll, _T("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"),
               TempAlt, TempSpeed, TempTime);
-    Message::AddMessage(_T("Task Start"), TempAll);
+    Message::AddMessage(_("Task Start"), TempAll);
   } else if (_tcscmp(misc, _T("tp")) == 0) {
-    Message::AddMessage(_T("Next turnpoint"));
+    Message::AddMessage(_("Next turnpoint"));
   } else if (_tcscmp(misc, _T("finish")) == 0) {
-    Message::AddMessage(_T("Task Finish"));
+    Message::AddMessage(_("Task Finish"));
   } else if (_tcscmp(misc, _T("ready")) == 0) {
-    Message::AddMessage(_T("In sector, arm advance when ready"));
+    Message::AddMessage(_("In sector, arm advance when ready"));
   }
 }

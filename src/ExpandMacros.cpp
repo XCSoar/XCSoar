@@ -364,7 +364,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
       break;
     case 3:
       ReplaceInString(OutBuffer, _T("$(TerrainTopologyToggleName)"),
-                      gettext(_T("Terrain\nOff")), Size);
+                      _("Terrain\nOff"), Size);
       break;
     }
   }

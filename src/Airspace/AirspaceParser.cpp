@@ -152,9 +152,9 @@ ShowParseWarning(int line, const TCHAR* str)
 {
   TCHAR sTmp[MAX_PATH];
   _stprintf(sTmp, _T("%s: %d\r\n\"%s\"\r\n%s."),
-            gettext(_T("Parse Error at Line")), line, str,
-            gettext(_T("Line skipped.")));
-  return (MessageBoxX(sTmp, gettext(_T("Airspace")), MB_OKCANCEL) == IDOK);
+            _("Parse Error at Line"), line, str,
+            _("Line skipped."));
+  return (MessageBoxX(sTmp, _("Airspace"), MB_OKCANCEL) == IDOK);
 
 }
 
@@ -767,7 +767,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
   bool ignore = false;
 
   // Create and init ProgressDialog
-  ProgressGlue::Create(gettext(_T("Loading Airspace File...")));
+  ProgressGlue::Create(_("Loading Airspace File..."));
   ProgressGlue::SetRange(1024);
 
   long file_size = reader.size();
@@ -814,7 +814,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
   }
 
   if (filetype == ftUnknown) {
-    MessageBoxX(_T("Unknown Filetype."), gettext(_T("Airspace")), MB_OK);
+    MessageBoxX(_T("Unknown Filetype."), _("Airspace"), MB_OK);
     return false;
   }
 

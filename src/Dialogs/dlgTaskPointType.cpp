@@ -126,8 +126,8 @@ SetPointType(AbstractTaskFactory::LegalPointType_t type) {
       // no change
       return true;
     }
-    if (MessageBoxX(gettext(_T("Change point type?")),
-                    gettext(_T("Task Point")),
+    if (MessageBoxX(_("Change point type?"),
+                    _("Task Point"),
                     MB_YESNO|MB_ICONQUESTION) == IDYES) {
       apply = true;
     }

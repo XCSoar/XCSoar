@@ -108,8 +108,8 @@ OnNewClicked(WindowControl * Sender)
   (void)Sender;
 
   if ((ordered_task->task_size() < 2) ||
-      (MessageBoxX(gettext(_T("Clear task?")),
-                   gettext(_T("Task edit")),
+      (MessageBoxX(_("Clear task?"),
+                   _("Task edit"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
     task_modified = true;
     ordered_task->clear();
@@ -147,7 +147,7 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 
   if (DrawListIndex == ordered_task->task_size()) {
     if (!ordered_task->is_max_size()) {
-      _stprintf(sTmp, _T("  (%s)"), gettext(_T("add waypoint")));
+      _stprintf(sTmp, _T("  (%s)"), _("add waypoint"));
       canvas.text(rc.left + Layout::FastScale(2),
                   rc.top + Layout::FastScale(2), sTmp);
     }
@@ -179,13 +179,13 @@ OnSaveClicked(WindowControl * Sender)
 {
   (void)Sender;
   if (!ordered_task->check_task()) {
-    MessageBoxX (gettext(_T("Task invalid.  Not saved.")),
+    MessageBoxX (_("Task invalid.  Not saved."),
                  _T("Task Edit"), MB_OK);
     return;
   }
 
   if (OrderedTaskSave(*ordered_task, true)) {
-    MessageBoxX (gettext(_T("Task saved")),
+    MessageBoxX (_("Task saved"),
                  _T("Task Edit"), MB_OK);
   }
 }

@@ -356,7 +356,7 @@ void PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data) {
   TCHAR msgcache[1024];
   if (LocalMessage.doStatus) {
 
-    _tcscpy(msgcache, gettext(text));
+    _tcscpy(msgcache, text);
     if (data != NULL) {
       _tcscat(msgcache, _T(" "));
       _tcscat(msgcache, data);

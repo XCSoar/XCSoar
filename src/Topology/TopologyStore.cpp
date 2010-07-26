@@ -137,7 +137,7 @@ TopologyStore::Open()
 {
   LogStartUp(_T("OpenTopology"));
 
-  ProgressGlue::Create(gettext(_T("Loading Topology File...")));
+  ProgressGlue::Create(_("Loading Topology File..."));
 
   // Start off by getting the names and paths
   TCHAR szFile[MAX_PATH];

@@ -166,12 +166,12 @@ static void UpdateValuesSystem() {
   if (wp) {
     if (gps.Connected) {
       if (gps.NAVWarning) {
-        wp->SetText(gettext(_T("Fix invalid")));
+        wp->SetText(_("Fix invalid"));
       } else {
         if (gps.SatellitesUsed == 0) {
-          wp->SetText(gettext(_T("No fix")));
+          wp->SetText(_("No fix"));
         } else {
-          wp->SetText(gettext(_T("3D fix")));
+          wp->SetText(_("3D fix"));
         }
       }
       wp->RefreshDisplay();
@@ -187,7 +187,7 @@ static void UpdateValuesSystem() {
         wp->RefreshDisplay();
       }
     } else {
-      wp->SetText(gettext(_T("Disconnected")));
+      wp->SetText(_("Disconnected"));
       wp->RefreshDisplay();
     }
   }
@@ -195,9 +195,9 @@ static void UpdateValuesSystem() {
   wp = (WndProperty*)wf->FindByName(_T("prpVario"));
   if (wp) {
     if (XCSoarInterface::Basic().TotalEnergyVarioAvailable) {
-      wp->SetText(gettext(_T("Connected")));
+      wp->SetText(_("Connected"));
     } else {
-      wp->SetText(gettext(_T("Disconnected")));
+      wp->SetText(_("Disconnected"));
     }
     wp->RefreshDisplay();
   }
@@ -205,9 +205,9 @@ static void UpdateValuesSystem() {
   if (wp) {
     wp = (WndProperty*)wf->FindByName(_T("prpFLARM"));
     if (XCSoarInterface::Basic().flarm.FLARM_Available) {
-      wp->SetText(gettext(_T("Connected")));
+      wp->SetText(_("Connected"));
     } else {
-      wp->SetText(gettext(_T("Disconnected")));
+      wp->SetText(_("Disconnected"));
     }
     wp->RefreshDisplay();
   }
@@ -215,9 +215,9 @@ static void UpdateValuesSystem() {
   wp = (WndProperty*)wf->FindByName(_T("prpLogger"));
   if (wp) {
     if (logger.isLoggerActive()) {
-      wp->SetText(gettext(_T("ON")));
+      wp->SetText(_("ON"));
     } else {
-      wp->SetText(gettext(_T("OFF")));
+      wp->SetText(_("OFF"));
     }
     wp->RefreshDisplay();
   }
@@ -225,9 +225,9 @@ static void UpdateValuesSystem() {
   wp = (WndProperty*)wf->FindByName(_T("prpDeclared"));
   if (wp) {
     if (logger.isTaskDeclared()) {
-      wp->SetText(gettext(_T("YES")));
+      wp->SetText(_("YES"));
     } else {
-      wp->SetText(gettext(_T("NO")));
+      wp->SetText(_("NO"));
     }
     wp->RefreshDisplay();
   }
@@ -395,18 +395,18 @@ static void UpdateValuesRules(void) {
   if (wp) {
     if (XCSoarInterface::Calculated().common_stats.task_started) {
       /// @todo proper task validity check
-      wp->SetText(gettext(_T("TRUE")));
+      wp->SetText(_("TRUE"));
     } else {
-      wp->SetText(gettext(_T("FALSE")));
+      wp->SetText(_("FALSE"));
     }
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpValidFinish"));
   if (wp) {
     if (XCSoarInterface::Calculated().common_stats.task_finished) {
-      wp->SetText(gettext(_T("TRUE")));
+      wp->SetText(_("TRUE"));
     } else {
-      wp->SetText(gettext(_T("FALSE")));
+      wp->SetText(_("FALSE"));
     }
   }
 

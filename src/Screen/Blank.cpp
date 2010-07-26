@@ -47,6 +47,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Message.hpp"
 #include "Simulator.hpp"
+#include "Language.hpp"
 
 int DisplayTimeOut = 0;
 
@@ -91,7 +92,7 @@ BlankDisplay(bool doblank)
           if ((LocalWarningTime - BatteryWarningTime) > BATTERY_REMINDER) {
             BatteryWarningTime = LocalWarningTime;
             // TODO feature: Show the user what the batt status is.
-            Message::AddMessage(TEXT("Organiser Battery Low"));
+            Message::AddMessage(_("Organiser Battery Low"));
           }
         } else {
           BatteryWarningTime = 0;

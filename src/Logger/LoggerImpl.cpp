@@ -542,14 +542,14 @@ LoggerImpl::LoggerDeclare(DeviceDescriptor *dev, const Declaration &decl)
   if (!devIsLogger(*dev))
     return false;
 
-  if (MessageBoxX(gettext(_T("Declare Task?")),
+  if (MessageBoxX(_("Declare Task?"),
                   dev->GetName(), MB_YESNO| MB_ICONQUESTION) == IDYES) {
     if (devDeclare(*dev, &decl)) {
-      MessageBoxX(gettext(_T("Task Declared!")),
+      MessageBoxX(_("Task Declared!"),
                   dev->GetName(), MB_OK| MB_ICONINFORMATION);
       DeclaredToDevice = true;
     } else {
-      MessageBoxX(gettext(_T("Error occured,\r\nTask NOT Declared!")),
+      MessageBoxX(_("Error occured,\r\nTask NOT Declared!"),
                   dev->GetName(), MB_OK| MB_ICONERROR);
     }
   }
@@ -574,8 +574,8 @@ LoggerImpl::LoggerDeviceDeclare(const OrderedTask& task)
       found_logger = true;
 
   if (!found_logger)
-    MessageBoxX(gettext(_T("No logger connected")),
-                gettext(_T("Declare task")), MB_OK | MB_ICONINFORMATION);
+    MessageBoxX(_("No logger connected"),
+                _("Declare task"), MB_OK | MB_ICONINFORMATION);
 }
 
 /**
@@ -590,8 +590,8 @@ LoggerImpl::CheckDeclaration(void)
   if (!isTaskDeclared())
     return true;
 
-  if (MessageBoxX(gettext(_T("OK to invalidate declaration?")),
-                  gettext(_T("Task declared")),
+  if (MessageBoxX(_("OK to invalidate declaration?"),
+                  _("Task declared"),
      MB_YESNO| MB_ICONQUESTION) == IDYES){
     DeclaredToDevice = false;
     return true;

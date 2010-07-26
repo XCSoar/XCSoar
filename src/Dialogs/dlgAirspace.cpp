@@ -62,8 +62,8 @@ OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
   int w1, w2, x0;
   int w0 = rc.right - rc.left - Layout::FastScale(4);
 
-  w1 = canvas.text_width(gettext(_T("Warn"))) + Layout::FastScale(10);
-  w2 = canvas.text_width(gettext(_T("Display"))) + Layout::FastScale(10);
+  w1 = canvas.text_width(_("Warn")) + Layout::FastScale(10);
+  w2 = canvas.text_width(_("Display")) + Layout::FastScale(10);
   x0 = w0 - w1 - w2;
 
   if (colormode) {
@@ -84,11 +84,11 @@ OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 
     if (iswarn) {
       canvas.text(rc.left + w0 - w1 - w2, rc.top + Layout::FastScale(2),
-          gettext(_T("Warn")));
+                  _("Warn"));
     }
     if (isdisplay) {
       canvas.text(rc.left + w0 - w2, rc.top + Layout::FastScale(2),
-          gettext(_T("Display")));
+                  _("Display"));
     }
   }
 
@@ -180,7 +180,7 @@ dlgAirspaceShowModal(bool coloredit)
   // now retrieve back the properties...
   if (changed) {
     Profile::Save();
-    Message::AddMessage(_T("Configuration saved"));
+    Message::AddMessage(_("Configuration saved"));
   }
 
   delete wf;

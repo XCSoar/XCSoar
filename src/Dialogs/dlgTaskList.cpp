@@ -203,12 +203,12 @@ OnLoad()
     return;
 
   tstring fname = get_cursor_name();
-  tstring text = gettext(_T("Load the selected task?"));
+  tstring text = _("Load the selected task?");
   text += _T("\n(");
   text += fname;
   text += _T(")");
 
-  if (MessageBoxX(text.c_str(), gettext(_T("Task Browser")),
+  if (MessageBoxX(text.c_str(), _("Task Browser"),
                   MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
@@ -236,12 +236,12 @@ OnDelete()
     return;
 
   tstring fname = get_cursor_name();
-  tstring text = gettext(_T("Delete the selected task?"));
+  tstring text = _("Delete the selected task?");
   text += _T("\n(");
   text += fname;
   text += _T(")");
 
-  if (MessageBoxX(text.c_str(), gettext(_T("Task Browser")),
+  if (MessageBoxX(text.c_str(), _("Task Browser"),
                   MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 

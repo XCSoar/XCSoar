@@ -337,7 +337,7 @@ OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
   if ((i >= UpLimit) || (i>=AirspaceSelectInfo.size())) {
     if (!i) {
       canvas.text(rc.left + Layout::FastScale(2),
-                  rc.top + Layout::FastScale(2), gettext(_T("No Match!")));
+                  rc.top + Layout::FastScale(2), _("No Match!"));
     }
     return;
   }

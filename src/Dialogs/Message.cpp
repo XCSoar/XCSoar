@@ -145,7 +145,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   uType = uType & 0x000f;
   if (uType == MB_OK || uType == MB_OKCANCEL) {
     wButtons[ButtonCount] =
-      new ModalResultButton(wf, gettext(_T("OK")), 0, y, w, h,
+      new ModalResultButton(wf, _("OK"), 0, y, w, h,
                             button_style, wf, IDOK);
 
     ButtonCount++;
@@ -153,13 +153,13 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   if (uType == MB_YESNO || uType == MB_YESNOCANCEL) {
     wButtons[ButtonCount] =
-      new ModalResultButton(wf, gettext(_T("Yes")), 0, y, w, h,
+      new ModalResultButton(wf, _("Yes"), 0, y, w, h,
                             button_style, wf, IDYES);
 
     ButtonCount++;
 
     wButtons[ButtonCount] =
-      new ModalResultButton(wf, gettext(_T("No")), 0, y, w, h,
+      new ModalResultButton(wf, _("No"), 0, y, w, h,
                             button_style, wf, IDNO);
 
     ButtonCount++;
@@ -167,7 +167,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   if (uType == MB_ABORTRETRYIGNORE || uType == MB_RETRYCANCEL) {
     wButtons[ButtonCount] =
-      new ModalResultButton(wf, gettext(_T("Retry")), 0, y, w, h,
+      new ModalResultButton(wf, _("Retry"), 0, y, w, h,
                             button_style, wf, IDRETRY);
 
     ButtonCount++;
@@ -175,7 +175,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   if (uType == MB_OKCANCEL || uType == MB_RETRYCANCEL || uType == MB_YESNOCANCEL) {
     wButtons[ButtonCount] =
-      new ModalResultButton(wf, gettext(_T("Cancel")), 0, y, w, h,
+      new ModalResultButton(wf, _("Cancel"), 0, y, w, h,
                             button_style, wf, IDCANCEL);
 
     ButtonCount++;
@@ -183,13 +183,13 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   if (uType == MB_ABORTRETRYIGNORE) {
     wButtons[ButtonCount] =
-      new ModalResultButton(wf, gettext(_T("Abort")), 0, y, w, h,
+      new ModalResultButton(wf, _("Abort"), 0, y, w, h,
                             button_style, wf, IDABORT);
 
     ButtonCount++;
 
     wButtons[ButtonCount] =
-      new ModalResultButton(wf, gettext(_T("Ignore")), 0, y, w, h,
+      new ModalResultButton(wf, _("Ignore"), 0, y, w, h,
                             button_style, wf, IDIGNORE);
 
     ButtonCount++;

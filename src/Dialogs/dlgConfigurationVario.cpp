@@ -328,8 +328,8 @@ VEGA_SCHEME VegaSchemes[4]= {
 static void
 SetParametersScheme(int schemetype)
 {
-  if(MessageBoxX(gettext(_T("Set new audio scheme?  Old values will be lost.")),
-                 gettext(_T("Vega Audio")),
+  if(MessageBoxX(_("Set new audio scheme?  Old values will be lost."),
+                 _("Vega Audio"),
                  MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
@@ -405,8 +405,8 @@ SetParametersScheme(int schemetype)
   VegaConfigurationUpdated(_T("ToneCirclingDescendingPeriodScale"), false, true,
                            VegaSchemes[schemetype].ToneCirclingDescendingPeriodScale);
 
-  MessageBoxX(gettext(_T("Audio scheme updated.")),
-              gettext(_T("Vega Audio")), MB_OK);
+  MessageBoxX(_("Audio scheme updated."),
+              _("Vega Audio"), MB_OK);
 }
 
 static void
@@ -934,8 +934,8 @@ dlgConfigurationVarioShowModal(void)
   changed = false;
 
   if (!is_simulator() && devVarioFindVega() == NULL) {
-    MessageBoxX (gettext(_T("No communication with Vega.")),
-                 gettext(_T("Vega error")), MB_OK);
+    MessageBoxX (_("No communication with Vega."),
+                 _("Vega error"), MB_OK);
     return false;
   }
 
@@ -962,7 +962,7 @@ dlgConfigurationVarioShowModal(void)
 
   FillEnums();
 
-  ProgressGlue::Create(gettext(_T("Reading vario settings...")));
+  ProgressGlue::Create(_("Reading vario settings..."));
   // Need step size finer than default 10
   ProgressGlue::SetStep(20);
   UpdateParameters(true);

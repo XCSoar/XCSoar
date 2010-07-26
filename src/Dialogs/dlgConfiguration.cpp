@@ -84,27 +84,27 @@ enum {
 };
 
 static const TCHAR *const captions[] = {
-  _T("1 Site"),
-  _T("2 Airspace"),
-  _T("3 Map Display"),
-  _T("4 Terrain Display"),
-  _T("5 Glide Computer"),
-  _T("6 Safety factors"),
-  _T("7 Polar"),
-  _T("8 Devices"),
-  _T("9 Units"),
-  _T("10 Interface"),
-  _T("11 Appearance"),
-  _T("12 Fonts"),
-  _T("13 Vario Gauge and FLARM"),
-  _T("14 Default task rules"),
-  _T("15 InfoBox Cruise"),
-  _T("16 InfoBox Circling"),
-  _T("17 InfoBox Final Glide"),
-  _T("18 InfoBox Auxiliary"),
-  _T("19 Logger"),
-  _T("20 Waypoint Edit"),
-  _T("21 Experimental features"),
+  N_("Site"),
+  N_("Airspace"),
+  N_("Map Display"),
+  N_("Terrain Display"),
+  N_("Glide Computer"),
+  N_("Safety factors"),
+  N_("Polar"),
+  N_("Devices"),
+  N_("Units"),
+  N_("Interface"),
+  N_("Appearance"),
+  N_("Fonts"),
+  N_("Vario Gauge and FLARM"),
+  N_("Default task rules"),
+  N_("InfoBox Cruise"),
+  N_("InfoBox Circling"),
+  N_("InfoBox Final Glide"),
+  N_("InfoBox Auxiliary"),
+  N_("Logger"),
+  N_("Waypoint Edit"),
+  N_("Experimental features"),
 };
 
 static const struct {
@@ -112,7 +112,7 @@ static const struct {
   const TCHAR *label;
 } port_types[] = {
 #ifdef _WIN32_WCE
-  { DeviceConfig::AUTO, _T("GPS Intermediate Driver") },
+  { DeviceConfig::AUTO, N_("GPS Intermediate Driver") },
 #endif
   { DeviceConfig::SERIAL, NULL } /* sentinel */
 };
@@ -168,33 +168,33 @@ UpdateButtons(void)
   if (buttonPilotName) {
     Profile::Get(szProfilePilotName, val, 100);
     if (string_is_empty(val))
-      _tcscpy(val, gettext(_T("(blank)")));
+      _tcscpy(val, _("(blank)"));
 
-    _stprintf(text, _T("%s: %s"), gettext(_T("Pilot name")), val);
+    _stprintf(text, _T("%s: %s"), _("Pilot name"), val);
     buttonPilotName->SetCaption(text);
   }
   if (buttonAircraftType) {
     Profile::Get(szProfileAircraftType, val, 100);
     if (string_is_empty(val))
-      _tcscpy(val, gettext(_T("(blank)")));
+      _tcscpy(val, _("(blank)"));
 
-    _stprintf(text, _T("%s: %s"), gettext(_T("Aircraft type")), val);
+    _stprintf(text, _T("%s: %s"), _("Aircraft type"), val);
     buttonAircraftType->SetCaption(text);
   }
   if (buttonAircraftRego) {
     Profile::Get(szProfileAircraftRego, val, 100);
     if (string_is_empty(val))
-      _tcscpy(val, gettext(_T("(blank)")));
+      _tcscpy(val, _("(blank)"));
 
-    _stprintf(text, _T("%s: %s"), gettext(_T("Competition ID")), val);
+    _stprintf(text, _T("%s: %s"), _("Competition ID"), val);
     buttonAircraftRego->SetCaption(text);
   }
   if (buttonLoggerID) {
     Profile::Get(szProfileLoggerID, val, 100);
     if (string_is_empty(val))
-      _tcscpy(val, gettext(_T("(blank)")));
+      _tcscpy(val, _("(blank)"));
 
-    _stprintf(text, _T("%s: %s"), gettext(_T("Logger ID")), val);
+    _stprintf(text, _T("%s: %s"), _("Logger ID"), val);
     buttonLoggerID->SetCaption(text);
   }
 }
@@ -204,7 +204,10 @@ PageSwitched()
 {
   config_page = configuration_tabbed->GetCurrentPage();
 
-  wf->SetCaption(gettext(captions[config_page]));
+  TCHAR caption[64];
+  _sntprintf(caption, 64, _T("%u %s"),
+             config_page + 1, gettext(captions[config_page]));
+  wf->SetCaption(caption);
 
   if (buttonCopy != NULL)
     buttonCopy->set_visible(config_page >= 14 && config_page <= 17);
@@ -273,7 +276,7 @@ OnCreateUserLevel(ContainerWindow &parent, int left, int top,
   CheckBoxStyle style(_style);
   style.tab_stop();
   user_level = new CheckBox();
-  user_level->set(parent, gettext(_T("Expert")), ID_USER_LEVEL,
+  user_level->set(parent, _("Expert"), ID_USER_LEVEL,
                   left, top, width, height, style);
   user_level->set_font(Fonts::Map);
   user_level->set_checked(XCSoarInterface::UserLevel > 0);
@@ -701,8 +704,8 @@ OnPaste(gcc_unused WndButton &button)
   if ((mode < 0) || (mode > 3) || (cpyInfoBox[0] < 0))
     return;
 
-  if(MessageBoxX(gettext(_T("Overwrite?")),
-                 gettext(_T("InfoBox paste")),
+  if(MessageBoxX(_("Overwrite?"),
+                 _("InfoBox paste"),
                  MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
@@ -861,7 +864,7 @@ OnWaypointEditClicked(WindowControl * Sender)
         way_points.replace(*way_point, wp_copy);
       }
     } else {
-      MessageBoxX(gettext(_T("Waypoint not editable")), _T("Error"), MB_OK);
+      MessageBoxX(_("Waypoint not editable"), _T("Error"), MB_OK);
     }
   }
 }
@@ -871,8 +874,8 @@ AskWaypointSave(void)
 {
   /// @todo terrain check???
   if (WayPointFile::WaypointsOutOfRangeSetting != 2 ||
-      MessageBoxX(gettext(_T("Waypoints excluded, save anyway?")),
-                  gettext(_T("Waypoints outside terrain")),
+      MessageBoxX(_("Waypoints excluded, save anyway?"),
+                  _("Waypoints outside terrain"),
                   MB_YESNO | MB_ICONQUESTION) == IDYES) {
     WayPointGlue::SaveWaypoints(way_points);
     WaypointFileChanged= true;
@@ -899,7 +902,7 @@ OnWaypointDeleteClicked(WindowControl * Sender)
   res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
   if (res != -1){
     if(MessageBoxX(way_points.get(res).Name,
-                   gettext(_T("Delete Waypoint?")),
+                   _("Delete Waypoint?"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
 
       way_points.set(res).FileNum = -1;
@@ -1137,10 +1140,10 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("All on")));
-    dfe->addEnumText(gettext(_T("Clip")));
-    dfe->addEnumText(gettext(_T("Auto")));
-    dfe->addEnumText(gettext(_T("All below")));
+    dfe->addEnumText(_("All on"));
+    dfe->addEnumText(_("Clip"));
+    dfe->addEnumText(_("Auto"));
+    dfe->addEnumText(_("All below"));
     dfe->Set(XCSoarInterface::SetSettingsComputer().AltitudeMode);
     wp->RefreshDisplay();
   }
@@ -1181,9 +1184,9 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("OFF")));
-    dfe->addEnumText(gettext(_T("ON/Fixed")));
-    dfe->addEnumText(gettext(_T("ON/Scaled")));
+    dfe->addEnumText(_("OFF"));
+    dfe->addEnumText(_("ON/Fixed"));
+    dfe->addEnumText(_("ON/Scaled"));
     dfe->Set(XCSoarInterface::SettingsMap().EnableFLARMMap);
     wp->RefreshDisplay();
   }
@@ -1201,13 +1204,13 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Names")));
-    dfe->addEnumText(gettext(_T("Numbers")));
-    dfe->addEnumText(gettext(_T("First 5")));
-    dfe->addEnumText(gettext(_T("None")));
-    dfe->addEnumText(gettext(_T("First 3")));
-    dfe->addEnumText(gettext(_T("Names in task")));
-    dfe->addEnumText(gettext(_T("First word")));
+    dfe->addEnumText(_("Names"));
+    dfe->addEnumText(_("Numbers"));
+    dfe->addEnumText(_("First 5"));
+    dfe->addEnumText(_("None"));
+    dfe->addEnumText(_("First 3"));
+    dfe->addEnumText(_("Names in task"));
+    dfe->addEnumText(_("First word"));
     dfe->Set(XCSoarInterface::SettingsMap().DisplayTextType);
     wp->RefreshDisplay();
   }
@@ -1223,11 +1226,11 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Track up")));
-    dfe->addEnumText(gettext(_T("North up")));
-    dfe->addEnumText(gettext(_T("North circling")));
-    dfe->addEnumText(gettext(_T("Target circling")));
-    dfe->addEnumText(gettext(_T("North/track")));
+    dfe->addEnumText(_("Track up"));
+    dfe->addEnumText(_("North up"));
+    dfe->addEnumText(_("North circling"));
+    dfe->addEnumText(_("Target circling"));
+    dfe->addEnumText(_("North/track"));
     dfe->Set(XCSoarInterface::SettingsMap().DisplayOrientation);
     wp->RefreshDisplay();
   }
@@ -1255,9 +1258,9 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("OFF")));
-    dfe->addEnumText(gettext(_T("Line")));
-    dfe->addEnumText(gettext(_T("Shade")));
+    dfe->addEnumText(_("OFF"));
+    dfe->addEnumText(_("Line"));
+    dfe->addEnumText(_("Shade"));
     dfe->Set(XCSoarInterface::SettingsComputer().FinalGlideTerrain);
     wp->RefreshDisplay();
   }
@@ -1269,8 +1272,8 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Arrow head")));
-    dfe->addEnumText(gettext(_T("Full arrow")));
+    dfe->addEnumText(_("Arrow head"));
+    dfe->addEnumText(_("Full arrow"));
     wp->GetDataField()->Set(XCSoarInterface::SettingsMap().WindArrowStyle);
     wp->RefreshDisplay();
   }
@@ -1279,10 +1282,10 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Manual")));
-    dfe->addEnumText(gettext(_T("Circling")));
-    dfe->addEnumText(gettext(_T("ZigZag")));
-    dfe->addEnumText(gettext(_T("Both")));
+    dfe->addEnumText(_("Manual"));
+    dfe->addEnumText(_("Circling"));
+    dfe->addEnumText(_("ZigZag"));
+    dfe->addEnumText(_("Both"));
     wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().AutoWindMode);
     wp->RefreshDisplay();
   }
@@ -1291,9 +1294,9 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Final glide")));
-    dfe->addEnumText(gettext(_T("Average climb")));
-    dfe->addEnumText(gettext(_T("Both")));
+    dfe->addEnumText(_("Final glide"));
+    dfe->addEnumText(_("Average climb"));
+    dfe->addEnumText(_("Both"));
     wp->GetDataField()->Set((int)XCSoarInterface::SettingsComputer().auto_mc_mode);
     wp->RefreshDisplay();
   }
@@ -1302,9 +1305,9 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Ask")));
-    dfe->addEnumText(gettext(_T("Include")));
-    dfe->addEnumText(gettext(_T("Exclude")));
+    dfe->addEnumText(_("Ask"));
+    dfe->addEnumText(_("Include"));
+    dfe->addEnumText(_("Exclude"));
     wp->GetDataField()->Set(WayPointFile::WaypointsOutOfRangeSetting);
     wp->RefreshDisplay();
   }
@@ -1336,9 +1339,9 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Statue")));
-    dfe->addEnumText(gettext(_T("Nautical")));
-    dfe->addEnumText(gettext(_T("Metric")));
+    dfe->addEnumText(_("Statue"));
+    dfe->addEnumText(_("Nautical"));
+    dfe->addEnumText(_("Metric"));
     dfe->Set(Speed);
     wp->RefreshDisplay();
   }
@@ -1363,9 +1366,9 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Statute")));
-    dfe->addEnumText(gettext(_T("Nautical")));
-    dfe->addEnumText(gettext(_T("Metric")));
+    dfe->addEnumText(_("Statute"));
+    dfe->addEnumText(_("Nautical"));
+    dfe->addEnumText(_("Metric"));
     dfe->Set(TaskSpeed);
     wp->RefreshDisplay();
   }
@@ -1378,9 +1381,9 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Statute")));
-    dfe->addEnumText(gettext(_T("Nautical")));
-    dfe->addEnumText(gettext(_T("Metric")));
+    dfe->addEnumText(_("Statute"));
+    dfe->addEnumText(_("Nautical"));
+    dfe->addEnumText(_("Metric"));
     dfe->Set(Distance);
     wp->RefreshDisplay();
   }
@@ -1393,8 +1396,8 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Feet")));
-    dfe->addEnumText(gettext(_T("Meters")));
+    dfe->addEnumText(_("Feet"));
+    dfe->addEnumText(_("Meters"));
     dfe->Set(Altitude);
     wp->RefreshDisplay();
   }
@@ -1407,8 +1410,8 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("C")));
-    dfe->addEnumText(gettext(_T("F")));
+    dfe->addEnumText(_("C"));
+    dfe->addEnumText(_("F"));
     dfe->Set(Temperature);
     wp->RefreshDisplay();
   }
@@ -1421,8 +1424,8 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Knots")));
-    dfe->addEnumText(gettext(_T("M/s")));
+    dfe->addEnumText(_("Knots"));
+    dfe->addEnumText(_("M/s"));
     dfe->Set(Lift);
     wp->RefreshDisplay();
   }
@@ -1450,10 +1453,10 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Off")));
-    dfe->addEnumText(gettext(_T("Long")));
-    dfe->addEnumText(gettext(_T("Short")));
-    dfe->addEnumText(gettext(_T("Full")));
+    dfe->addEnumText(_("Off"));
+    dfe->addEnumText(_("Long"));
+    dfe->addEnumText(_("Short"));
+    dfe->addEnumText(_("Full"));
     dfe->Set(XCSoarInterface::SettingsMap().TrailActive);
     wp->RefreshDisplay();
   }
@@ -1463,9 +1466,9 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Off")));
-    dfe->addEnumText(gettext(_T("Steady")));
-    dfe->addEnumText(gettext(_T("Moving")));
+    dfe->addEnumText(_("Off"));
+    dfe->addEnumText(_("Steady"));
+    dfe->addEnumText(_("Moving"));
     dfe->Set(XCSoarInterface::SettingsMap().VisualGlide);
     wp->RefreshDisplay();
   }
@@ -1664,8 +1667,8 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Center")));
-    dfe->addEnumText(gettext(_T("Topleft")));
+    dfe->addEnumText(_("Center"));
+    dfe->addEnumText(_("Topleft"));
     dfe->Set(Appearance.StateMessageAlign);
     wp->RefreshDisplay();
   }
@@ -1674,9 +1677,9 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Default")));
-    dfe->addEnumText(gettext(_T("Keyboard")));
-    dfe->addEnumText(gettext(_T("HighScore Style")));
+    dfe->addEnumText(_("Default"));
+    dfe->addEnumText(_("Keyboard"));
+    dfe->addEnumText(_("HighScore Style"));
     dfe->Set(Appearance.TextInputStyle);
     wp->RefreshDisplay();
   }
@@ -1685,10 +1688,10 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Full width")));
-    dfe->addEnumText(gettext(_T("Scaled")));
-    dfe->addEnumText(gettext(_T("Scaled centered")));
-    dfe->addEnumText(gettext(_T("Fixed")));
+    dfe->addEnumText(_("Full width"));
+    dfe->addEnumText(_("Scaled"));
+    dfe->addEnumText(_("Scaled centered"));
+    dfe->addEnumText(_("Fixed"));
     dfe->Set(g_eDialogStyle);
     wp->RefreshDisplay();
   }
@@ -1697,8 +1700,8 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Box")));
-    dfe->addEnumText(gettext(_T("Tab")));
+    dfe->addEnumText(_("Box"));
+    dfe->addEnumText(_("Tab"));
     dfe->Set(Appearance.InfoBoxBorder);
     wp->RefreshDisplay();
   }
@@ -1708,14 +1711,14 @@ setVariables()
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
 
-    dfe->addEnumText(gettext(_T("8 Top + Bottom (Portrait)"))); // 0
-    dfe->addEnumText(gettext(_T("8 Top (Portrait)")));  // 1
-    dfe->addEnumText(gettext(_T("8 Bottom (Portrait)")));  // 2
-    dfe->addEnumText(gettext(_T("8 Left + Right (Landscape)")));  // 3
-    dfe->addEnumText(gettext(_T("8 Left (Landscape)")));  // 4
-    dfe->addEnumText(gettext(_T("8 Right (Landscape)"))); // 5
-    dfe->addEnumText(gettext(_T("9 Right + Vario (Landscape)")));  // 6
-    dfe->addEnumText(gettext(_T("5 Right (Square)"))); // 7
+    dfe->addEnumText(_("8 Top + Bottom (Portrait)")); // 0
+    dfe->addEnumText(_("8 Top (Portrait)"));  // 1
+    dfe->addEnumText(_("8 Bottom (Portrait)"));  // 2
+    dfe->addEnumText(_("8 Left + Right (Landscape)"));  // 3
+    dfe->addEnumText(_("8 Left (Landscape)"));  // 4
+    dfe->addEnumText(_("8 Right (Landscape)")); // 5
+    dfe->addEnumText(_("9 Right + Vario (Landscape)"));  // 6
+    dfe->addEnumText(_("5 Right (Square)")); // 7
     dfe->Set(InfoBoxLayout::InfoBoxGeometry);
     wp->RefreshDisplay();
   }
@@ -1726,12 +1729,12 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Generic")));
-    dfe->addEnumText(gettext(_T("HP31x")));
-    dfe->addEnumText(gettext(_T("MedionP5")));
-    dfe->addEnumText(gettext(_T("MIO")));
-    dfe->addEnumText(gettext(_T("Nokia500"))); // VENTA3
-    dfe->addEnumText(gettext(_T("PN6000")));
+    dfe->addEnumText(_("Generic"));
+    dfe->addEnumText(_("HP31x"));
+    dfe->addEnumText(_("MedionP5"));
+    dfe->addEnumText(_("MIO"));
+    dfe->addEnumText(_("Nokia500")); // VENTA3
+    dfe->addEnumText(_("PN6000"));
     dfe->Set((int)GlobalModelType);
     wp->RefreshDisplay();
   }
@@ -1741,8 +1744,8 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Normal")));
-    dfe->addEnumText(gettext(_T("Extended")));
+    dfe->addEnumText(_("Normal"));
+    dfe->addEnumText(_("Extended"));
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->Set(XCSoarInterface::SettingsMap().ExtendedVisualGlide);
     wp->RefreshDisplay();
@@ -1752,8 +1755,8 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Disabled")));
-    dfe->addEnumText(gettext(_T("Enabled")));
+    dfe->addEnumText(_("Disabled"));
+    dfe->addEnumText(_("Enabled"));
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->Set(XCSoarInterface::SettingsComputer().EnableGestures);
     wp->RefreshDisplay();
@@ -1763,12 +1766,12 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("15 seconds")));
-    dfe->addEnumText(gettext(_T("30 seconds")));
-    dfe->addEnumText(gettext(_T("60 seconds")));
-    dfe->addEnumText(gettext(_T("90 seconds")));
-    dfe->addEnumText(gettext(_T("2 minutes")));
-    dfe->addEnumText(gettext(_T("3 minutes")));
+    dfe->addEnumText(_("15 seconds"));
+    dfe->addEnumText(_("30 seconds"));
+    dfe->addEnumText(_("60 seconds"));
+    dfe->addEnumText(_("90 seconds"));
+    dfe->addEnumText(_("2 minutes"));
+    dfe->addEnumText(_("3 minutes"));
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->Set(XCSoarInterface::SettingsComputer().AverEffTime);
     wp->RefreshDisplay();
@@ -1792,8 +1795,8 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Normal")));
-    dfe->addEnumText(gettext(_T("White outline")));
+    dfe->addEnumText(_("Normal"));
+    dfe->addEnumText(_("White outline"));
     dfe->Set(Appearance.CompassAppearance);
     wp->RefreshDisplay();
   }
@@ -1802,8 +1805,8 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Default")));
-    dfe->addEnumText(gettext(_T("Alternate")));
+    dfe->addEnumText(_("Default"));
+    dfe->addEnumText(_("Alternate"));
     dfe->Set(Appearance.IndFinalGlide);
     wp->RefreshDisplay();
   }
@@ -1812,9 +1815,9 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Winpilot")));
-    dfe->addEnumText(gettext(_T("Alternate")));
-    dfe->addEnumText(gettext(_T("Green/Orange")));
+    dfe->addEnumText(_("Winpilot"));
+    dfe->addEnumText(_("Alternate"));
+    dfe->addEnumText(_("Green/Orange"));
     dfe->Set(Appearance.IndLandable);
     wp->RefreshDisplay();
   }
@@ -1823,9 +1826,9 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("OFF")));
-    dfe->addEnumText(gettext(_T("Flap")));
-    dfe->addEnumText(gettext(_T("SC")));
+    dfe->addEnumText(_("OFF"));
+    dfe->addEnumText(_("Flap"));
+    dfe->addEnumText(_("SC"));
     dfe->Set(XCSoarInterface::SettingsComputer().EnableExternalTriggerCruise);
     wp->RefreshDisplay();
   }
@@ -1845,14 +1848,14 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Low lands")));
-    dfe->addEnumText(gettext(_T("Mountainous")));
-    dfe->addEnumText(gettext(_T("Imhof 7")));
-    dfe->addEnumText(gettext(_T("Imhof 4")));
-    dfe->addEnumText(gettext(_T("Imhof 12")));
-    dfe->addEnumText(gettext(_T("Imhof Atlas")));
-    dfe->addEnumText(gettext(_T("ICAO")));
-    dfe->addEnumText(gettext(_T("Grey")));
+    dfe->addEnumText(_("Low lands"));
+    dfe->addEnumText(_("Mountainous"));
+    dfe->addEnumText(_("Imhof 7"));
+    dfe->addEnumText(_("Imhof 4"));
+    dfe->addEnumText(_("Imhof 12"));
+    dfe->addEnumText(_("Imhof Atlas"));
+    dfe->addEnumText(_("ICAO"));
+    dfe->addEnumText(_("Grey"));
     dfe->Set(XCSoarInterface::SettingsMap().TerrainRamp);
     wp->RefreshDisplay();
   }
@@ -1917,8 +1920,8 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("AGL")));
-    dfe->addEnumText(gettext(_T("MSL")));
+    dfe->addEnumText(_("AGL"));
+    dfe->addEnumText(_("MSL"));
     dfe->Set(XCSoarInterface::SettingsComputer().ordered_defaults.start_max_height_ref);
     wp->RefreshDisplay();
   }
@@ -2965,8 +2968,8 @@ void dlgConfigurationShowModal(void)
 
   if (waypointneedsave) {
     way_points.optimise();
-    if(MessageBoxX(gettext(_T("Save changes to waypoint file?")),
-                   gettext(_T("Waypoints edited")),
+    if(MessageBoxX(_("Save changes to waypoint file?"),
+                   _("Waypoints edited"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
 
       AskWaypointSave();
@@ -2986,11 +2989,11 @@ void dlgConfigurationShowModal(void)
     Profile::Save();
 
     if (!requirerestart) {
-      MessageBoxX(gettext(_T("Changes to configuration saved.")),
+      MessageBoxX(_("Changes to configuration saved."),
                   _T(""), MB_OK);
     } else {
 
-      MessageBoxX(gettext(_T("Changes to configuration saved.  Restart XCSoar to apply changes.")),
+      MessageBoxX(_("Changes to configuration saved.  Restart XCSoar to apply changes."),
                   _T(""), MB_OK);
     }
   }

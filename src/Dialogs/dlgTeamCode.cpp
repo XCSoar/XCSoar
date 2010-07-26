@@ -163,8 +163,8 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
       XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
 
   if (!flarmId.defined()) {
-    MessageBoxX(gettext(_T("Unknown Competition Number")),
-                gettext(_T("Not Found")), MB_OK | MB_ICONINFORMATION);
+    MessageBoxX(_("Unknown Competition Number"),
+                _("Not Found"), MB_OK | MB_ICONINFORMATION);
 
     XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = false;
     XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget.clear();

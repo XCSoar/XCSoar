@@ -204,7 +204,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   if (!_warning) {
     if (i == 0)
       canvas.text(paint_rc.left + IBLSCALE(2),
-                  paint_rc.top + IBLSCALE(2), gettext(_T("No Warnings")));
+                  paint_rc.top + IBLSCALE(2), _("No Warnings"));
     return;
   }
   const AirspaceWarning warning = *_warning;

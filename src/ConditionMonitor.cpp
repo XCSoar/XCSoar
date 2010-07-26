@@ -45,6 +45,7 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "InputEvents.h"
 #include "GlideComputer.hpp"
+#include "Language.hpp"
 
 #include <math.h>
 
@@ -172,7 +173,7 @@ protected:
   void
   Notify(void)
   {
-    Message::AddMessage(_T("Significant wind change"));
+    Message::AddMessage(_("Significant wind change"));
   }
 
   void
@@ -288,7 +289,7 @@ protected:
   void
   Notify(void)
   {
-    Message::AddMessage(_T("Expect arrival past sunset"));
+    Message::AddMessage(_("Expect arrival past sunset"));
   }
 
   void
@@ -333,7 +334,7 @@ protected:
   void
   Notify(void)
   {
-    Message::AddMessage(_T("Expect early task arrival"));
+    Message::AddMessage(_("Expect early task arrival"));
   }
 
   void
@@ -387,9 +388,9 @@ protected:
   Notify(void)
   {
     if (withinMargin)
-      Message::AddMessage(_T("Start rules slightly violated\r\nbut within margin"));
+      Message::AddMessage(_("Start rules slightly violated\r\nbut within margin"));
     else
-      Message::AddMessage(_T("Start rules violated"));
+      Message::AddMessage(_("Start rules violated"));
   }
 
   void

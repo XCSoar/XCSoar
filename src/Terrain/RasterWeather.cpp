@@ -271,31 +271,31 @@ void RasterWeather::ItemLabel(int i, TCHAR* Buffer) {
   case 0:
     return;
   case 1: // wstar
-    _tcscpy(Buffer, gettext(_T("W*")));
+    _tcscpy(Buffer, _("W*"));
     return;
   case 2: // blwindspd
-    _tcscpy(Buffer, gettext(_T("BL Wind spd")));
+    _tcscpy(Buffer, _("BL Wind spd"));
     return;
   case 3: // hbl
-    _tcscpy(Buffer, gettext(_T("H bl")));
+    _tcscpy(Buffer, _("H bl"));
     return;
   case 4: // dwcrit
-    _tcscpy(Buffer, gettext(_T("dwcrit")));
+    _tcscpy(Buffer, _("dwcrit"));
     return;
   case 5: // blcloudpct
-    _tcscpy(Buffer, gettext(_T("bl cloud")));
+    _tcscpy(Buffer, _("bl cloud"));
     return;
   case 6: // sfctemp
-    _tcscpy(Buffer, gettext(_T("Sfc temp")));
+    _tcscpy(Buffer, _("Sfc temp"));
     return;
   case 7: // hwcrit
-    _tcscpy(Buffer, gettext(_T("hwcrit")));
+    _tcscpy(Buffer, _("hwcrit"));
     return;
   case 8: // wblmaxmin
-    _tcscpy(Buffer, gettext(_T("wblmaxmin")));
+    _tcscpy(Buffer, _("wblmaxmin"));
     return;
   case 9: // blcwbase
-    _tcscpy(Buffer, gettext(_T("blcwbase")));
+    _tcscpy(Buffer, _("blcwbase"));
     return;
   default:
     // error!
