@@ -62,7 +62,6 @@ Font Fonts::MapBold;
 Font Fonts::CDI;
 /// Flarm Traffic draweing and stats, map labels in italic
 Font Fonts::MapLabel;
-Font Fonts::Statistics;
 
 // these are the non-custom parameters
 LOGFONT LogInfoBox;
@@ -72,7 +71,6 @@ LOGFONT LogInfoBoxSmall;
 LOGFONT LogMapBold;
 LOGFONT LogCDI;
 LOGFONT LogMapLabel;
-LOGFONT LogStatistics;
 
 #ifndef ENABLE_SDL
 
@@ -153,8 +151,6 @@ InitialiseFontsAltair()
                     19, true);
   InitialiseLogfont(&LogMapLabel, _T("RasterGothicTwelveCond"),
                     13);
-  InitialiseLogfont(&LogStatistics, _T("RasterGothicFourteenCond"),
-                    15);
   InitialiseLogfont(&LogMap, _T("RasterGothicFourteenCond"),
                     15);
   InitialiseLogfont(&LogMapBold, _T("RasterGothicFourteenCond"),
@@ -221,10 +217,6 @@ InitialiseLogFonts()
   InitialiseLogfont(&LogMapLabel, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.39), false, true);
 
-  // Font for map other text
-  InitialiseLogfont(&LogStatistics, Fonts::GetStandardFontFace(),
-                    (int)(FontHeight * 0.7));
-
   // new font for map labels
   InitialiseLogfont(&LogMap, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.507));
@@ -249,7 +241,6 @@ Fonts::Initialize(bool use_custom)
   InitializeFont(&Title, LogTitle);
   InitializeFont(&CDI, LogCDI);
   InitializeFont(&MapLabel, LogMapLabel);
-  InitializeFont(&Statistics, LogStatistics);
   InitializeFont(&Map, LogMap);
   InitializeFont(&MapBold, LogMapBold);
 
@@ -259,7 +250,6 @@ Fonts::Initialize(bool use_custom)
     LoadCustomFont(&Title, szProfileFontTitleWindowFont);
     LoadCustomFont(&CDI, szProfileFontCDIWindowFont);
     LoadCustomFont(&MapLabel, szProfileFontMapLabelFont);
-    LoadCustomFont(&Statistics, szProfileFontStatisticsFont);
     LoadCustomFont(&Map, szProfileFontMapWindowFont);
     LoadCustomFont(&MapBold, szProfileFontMapWindowBoldFont);
   }

@@ -127,7 +127,6 @@ static Font TempTitleSmallWindowFont;
 static Font TempMapWindowBoldFont;
 static Font TempCDIWindowFont; // New
 static Font TempMapLabelFont;
-static Font TempStatisticsFont;
 static Font TempUseCustomFontsFont;
 
 extern LOGFONT LogInfoBox;
@@ -137,7 +136,6 @@ extern LOGFONT LogInfoBoxSmall;
 extern LOGFONT LogMapBold;
 extern LOGFONT LogCDI; // New
 extern LOGFONT LogMapLabel;
-extern LOGFONT LogStatistics;
 
 extern bool dlgFontEditShowModal(const TCHAR * FontDescription,
                           const TCHAR * FontRegKey,
@@ -340,7 +338,6 @@ ResetFonts(bool bUseCustom)
         szProfileFontMapWindowBoldFont);
     Fonts::LoadCustomFont(&TempCDIWindowFont, szProfileFontCDIWindowFont);
     Fonts::LoadCustomFont(&TempMapLabelFont, szProfileFontMapLabelFont);
-    Fonts::LoadCustomFont(&TempStatisticsFont, szProfileFontStatisticsFont);
   }
 
   Fonts::InitializeFont(&TempUseCustomFontsFont, LogMap);
@@ -351,7 +348,6 @@ ResetFonts(bool bUseCustom)
   Fonts::InitializeFont(&TempMapWindowBoldFont, LogMapBold);
   Fonts::InitializeFont(&TempCDIWindowFont, LogCDI);
   Fonts::InitializeFont(&TempMapLabelFont, LogMapLabel);
-  Fonts::InitializeFont(&TempStatisticsFont, LogStatistics);
 }
 
 static void
@@ -383,10 +379,6 @@ ShowFontEditButtons(bool bVisible)
     wp->set_visible(bVisible);
 
   wp = (WndProperty*)wf->FindByName(_T("cmdMapLabelFont"));
-  if (wp)
-    wp->set_visible(bVisible);
-
-  wp = (WndProperty*)wf->FindByName(_T("cmdStatisticsFont"));
   if (wp)
     wp->set_visible(bVisible);
 }
@@ -433,10 +425,6 @@ RefreshFonts(void)
   wp = (WndProperty*)wf->FindByName(_T("prpMapLabelFont"));
   if (wp)
     wp->SetFont(TempMapLabelFont);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpStatisticsFont"));
-  if (wp)
-    wp->SetFont(TempStatisticsFont);
 
   // now fix the rest of the dlgConfiguration fonts:
   wf->SetFont(TempMapWindowBoldFont);
@@ -550,18 +538,6 @@ OnEditMapLabelFontClicked(gcc_unused WndButton &button)
   GetFontDescription(FontDesc, _T("prpMapLabelFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc, szProfileFontMapLabelFont,
                            LogMapLabel)) {
-    FontRegistryChanged = true;
-    RefreshFonts();
-  }
-}
-
-static void
-OnEditStatisticsFontClicked(gcc_unused WndButton &button)
-{
-  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
-  GetFontDescription(FontDesc, _T("prpStatisticsFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc, szProfileFontStatisticsFont,
-                           LogStatistics)) {
     FontRegistryChanged = true;
     RefreshFonts();
   }
@@ -937,7 +913,6 @@ static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnEditMapWindowBoldFontClicked),
   DeclareCallBackEntry(OnEditCDIWindowFontClicked),
   DeclareCallBackEntry(OnEditMapLabelFontClicked),
-  DeclareCallBackEntry(OnEditStatisticsFontClicked),
   DeclareCallBackEntry(OnCreateUserLevel),
   DeclareCallBackEntry(NULL)
 };
@@ -2664,8 +2639,6 @@ void dlgConfigurationShowModal(void)
   TempMapWindowBoldFont.reset();
   TempCDIWindowFont.reset();
   TempMapLabelFont.reset();
-  TempStatisticsFont.reset();
-
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppStatusMessageAlignment"));
   if (wp) {

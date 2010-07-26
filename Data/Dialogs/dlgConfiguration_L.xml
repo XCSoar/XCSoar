@@ -473,14 +473,11 @@
       <Edit Name="prpMapWindowBoldFont" Caption="Dialog boxes" X="2" Y="121" width="180" Height="22" Captionwidth="180" ReadOnly="1" />
       <Button Name="cmdMapWindowBoldFont" Caption="Edit" X="185" Y="121" Width="50" Height="22" OnClick="OnEditMapWindowBoldFontClicked" />
     
-      <Edit Name="prpStatisticsFont" Caption="Statistics screens" X="2" Y="145" width="180" Height="22" Captionwidth="180" ReadOnly="1" />
-      <Button Name="cmdStatisticsFont" Caption="Edit" X="185" Y="145" Width="50" Height="22" OnClick="OnEditStatisticsFontClicked" />
+      <Edit Name="prpTitleSmallWindowFont" Caption="Info box values small" X="2" Y="145" width="180" Height="22" CaptionWidth="180" ReadOnly="1" />
+      <Button Name="cmdTitleSmallWindowFont" Caption="Edit" X="185" Y="145" Width="50" Height="22" OnClick="OnEditTitleSmallWindowFontClicked" />
     
       <Edit Name="prpCDIWindowFont" Caption="Gauges" X="2" Y="169" width="180" Height="22" Captionwidth="180" ReadOnly="1" />
       <Button Name="cmdCDIWindowFont" Caption="Edit" X="185" Y="169" Width="50" Height="22" OnClick="OnEditCDIWindowFontClicked" />
-    
-      <Edit Name="prpTitleSmallWindowFont" Caption="Info box values small" X="2" Y="192" width="180" Height="22" CaptionWidth="180" ReadOnly="1" />
-      <Button Name="cmdTitleSmallWindowFont" Caption="Edit" X="185" Y="192" Width="50" Height="22" OnClick="OnEditTitleSmallWindowFontClicked" />
     </Panel>
   
     <Panel Name="frmVarioAppearance" X="0" Y="0" Width="0" Height="222">
