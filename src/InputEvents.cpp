@@ -335,6 +335,7 @@ InputEvents::readFile()
   //   Better way is to separate the check for # and the scanf
   TCHAR *buffer;
   while ((buffer = reader.read()) != NULL) {
+    TrimRight(buffer);
     line++;
 
     // experimental: if the first line is "#CLEAR" then the whole default config is cleared
