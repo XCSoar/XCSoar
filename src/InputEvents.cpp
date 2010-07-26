@@ -334,9 +334,7 @@ InputEvents::readFile()
   // TODO code: Note that ^# does not allow # in key - might be required (probably not)
   //   Better way is to separate the check for # and the scanf
   TCHAR *buffer;
-  while ((buffer = reader.read()) != NULL
-         && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) == 2)) {
-
+  while ((buffer = reader.read()) != NULL) {
     line++;
 
     // experimental: if the first line is "#CLEAR" then the whole default config is cleared
@@ -347,6 +345,8 @@ InputEvents::readFile()
       memset(&Events, 0, sizeof(Events));
       Events_count = 1;
     }
+
+    found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value);
 
     // Check valid line? If not valid, assume next record (primative, but works ok!)
     if (buffer[0] == _T('\0')) {
