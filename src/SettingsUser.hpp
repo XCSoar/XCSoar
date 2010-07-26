@@ -82,6 +82,11 @@ struct SETTINGS_MAP {
   bool  EnableTopology;
   /** Map will show terrain */
   bool  EnableTerrain;
+  /**
+   * 0: show all labels
+   * 1: show decluttered labels
+   * 2: show no labels
+   */
   unsigned char  DeclutterLabels;
   /** Snailtrail wind drifting in circling mode */
   bool  EnableTrailDrift;
