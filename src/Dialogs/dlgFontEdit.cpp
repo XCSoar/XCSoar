@@ -321,8 +321,8 @@ dlgFontEditShowModal(const TCHAR * FontDescription,
   if (wf == NULL)
     return false;
 
-  Fonts::LoadCustomFont(&NewFont, FontRegKey, &OriginalLogFont);
   Fonts::InitializeFont(&NewFont, autoLogFont, &OriginalLogFont);
+  Fonts::LoadCustomFont(&NewFont, FontRegKey, &OriginalLogFont);
 
   OriginalFontRegKey = FontRegKey;
   NewLogFont = OriginalLogFont;
