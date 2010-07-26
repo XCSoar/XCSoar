@@ -155,21 +155,28 @@ TopologyFile::updateCache(Projection &map_projection,
 
   rectObj thebounds_deg = ConvertRect(thebounds);
 
+  // Test which shapes are inside the given bounds and save the
+  // status to shpfile.status
   msSHPWhichShapes(&shpfile, thebounds_deg, 0);
+
+  // If not a single shape is inside the bounds
   if (!shpfile.status) {
-    // this happens if entire shape is out of range
-    // so clear buffer.
+    // ... clear the whole buffer
     ClearCache();
     return;
   }
 
+  // Iterate through the shapefile entries
   for (int i = 0; i < shpfile.numshapes; i++) {
+    // If the shape is inside the bounds
     if (msGetBit(shpfile.status, i)) {
+      // ... and if the shape isn't cached yet
       if (shpCache[i] == NULL) {
-        // shape is now in range, and wasn't before
+        // ... cache the shape
         shpCache[i] = new XShape(&shpfile, i, label_field);
       }
     } else {
+      // delete the shape from the cache if it's outside the bounds
       delete shpCache[i];
       shpCache[i] = NULL;
     }
