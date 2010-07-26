@@ -73,7 +73,7 @@ public:
     if (mOnDataAccess)
       (mOnDataAccess)(this, daGet);
   }
-  ~DataFieldEnum();
+  virtual ~DataFieldEnum();
 
   void Inc(void);
   void Dec(void);
