@@ -9,8 +9,8 @@
     <DataField name="" DataType="double" DisplayFormat="%.0f" Min="1" Max="200" EditFormat="%.0f" OnDataAccess="OnData"/>
   </Edit>
 
-  <Edit Name="prpFontWeight" Caption="Weight" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Help="Weight of the font.  700 is heavy bold, 100 normal.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="100" Max="900" Step="100" OnDataAccess="OnData"/>
+  <Edit Name="prpFontWeight" Caption="Bold" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Help="Bold font">
+    <DataField name="" DataType="boolean" OnDataAccess="OnData"/>
   </Edit>
 
   <Edit Name="prpFontItalic" Caption="Italic" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Help="Italic font">
