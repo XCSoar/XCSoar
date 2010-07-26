@@ -120,10 +120,7 @@ TopologyFile::updateCache(Projection &map_projection,
                       const rectObj &thebounds,
                       bool purgeonly)
 {
-  if (!triggerUpdateCache)
-    return;
-
-  if (!shapefileopen)
+  if (!triggerUpdateCache || !shapefileopen)
     return;
 
   in_scale = CheckScale(map_projection.GetMapScaleUser());
