@@ -87,7 +87,7 @@ MainWindow::set(LPCTSTR text,
   MapGfx.Initialise(XCSoarInterface::SettingsMap());
 
   LogStartUp(_T("Initialise fonts"));
-  Fonts::Initialize(Appearance, rc);
+  Fonts::Initialize(Appearance);
 
   LogStartUp(_T("Create info boxes"));
   InfoBoxManager::Create(rc);

@@ -238,7 +238,7 @@ InitialiseLogFonts()
 }
 
 void
-Fonts::Initialize(const struct Appearance &appearance, RECT rc)
+Fonts::Initialize(const struct Appearance &appearance)
 {
   //this routine must be called only at start/restart of XCSoar b/c there are many pointers to these fonts
   Reset();
