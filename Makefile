@@ -60,6 +60,7 @@ include $(topdir)/build/tools.mk
 include $(topdir)/build/resource.mk
 include $(topdir)/build/generate.mk
 include $(topdir)/build/doco.mk
+include $(topdir)/build/gettext.mk
 
 # Create libraries for zzip, jasper and compatibility stuff
 include $(topdir)/build/libutil.mk
