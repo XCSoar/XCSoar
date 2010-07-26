@@ -265,19 +265,6 @@ Fonts::Initialize(bool use_custom)
   }
 }
 
-void
-Fonts::Reset()
-{
-  InfoBox.reset();
-  InfoBoxSmall.reset();
-  Title.reset();
-  CDI.reset();
-  MapLabel.reset();
-  Map.reset();
-  MapBold.reset();
-  Statistics.reset();
-}
-
 const TCHAR*
 Fonts::GetStandardFontFace()
 {

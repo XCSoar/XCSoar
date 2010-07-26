@@ -54,8 +54,6 @@ namespace Fonts
   extern Font MapLabel;
   extern Font Statistics;
 
-  void Reset();
-
   void LoadCustomFont(Font *theFont, const TCHAR FontRegKey[],
                       LOGFONT *LogFontUsed = NULL);
 
