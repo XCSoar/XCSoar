@@ -164,18 +164,16 @@ MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc, const GPS_STATE &gps)
     // nothing to do, all OK
     return;
 
-  TCHAR gpswarningtext1[] = _T("GPS not connected");
-  TCHAR gpswarningtext2[] = _T("GPS waiting for fix");
   TextInBoxMode_t TextInBoxMode = { 2 };
-  TCHAR *txt = NULL;
+  const TCHAR *txt;
   MaskedIcon *icon = NULL;
 
   if (!gps.Connected) {
     icon = &MapGfx.hGPSStatus2;
-    txt = gpswarningtext1;
+    txt = gettext(_T("GPS not connected"));
   } else if (gps.NAVWarning || (gps.SatellitesUsed == 0)) {
     icon = &MapGfx.hGPSStatus1;
-    txt = gpswarningtext2;
+    txt = gettext(_T("GPS waiting for fix"));
   } else {
     return; // early exit
   }
@@ -184,7 +182,7 @@ MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc, const GPS_STATE &gps)
              rc.left + IBLSCALE(2),
             rc.bottom + IBLSCALE(Appearance.GPSStatusOffset.y - 22));
 
-  TextInBox(canvas, gettext(txt),
+  TextInBox(canvas, txt,
             rc.left + IBLSCALE(24),
             rc.bottom + IBLSCALE(Appearance.GPSStatusOffset.y - 19),
             TextInBoxMode, rc);
