@@ -137,7 +137,7 @@ PopupMessage::set(const RECT _rc)
                   rc.right - rc.left, rc.bottom - rc.top,
                   style);
 
-  set_font(MapWindowBoldFont);
+  set_font(Fonts::MapWindowBoldFont);
   install_wndproc();
 }
 
@@ -160,7 +160,7 @@ void PopupMessage::Resize() {
     set_text(msgText);
 
     VirtualCanvas canvas(1, 1);
-    canvas.select(MapWindowBoldFont);
+    canvas.select(Fonts::MapWindowBoldFont);
     SIZE tsize = canvas.text_size(msgText);
 
     int linecount = max((unsigned)nvisible, max((unsigned)1, get_row_count()));

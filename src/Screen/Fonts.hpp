@@ -45,6 +45,15 @@ class Font;
 
 namespace Fonts
 {
+  extern Font InfoWindowFont;
+  extern Font TitleWindowFont;
+  extern Font MapWindowFont;
+  extern Font InfoWindowSmallFont;
+  extern Font MapWindowBoldFont;
+  extern Font CDIWindowFont;
+  extern Font MapLabelFont;
+  extern Font StatisticsFont;
+
   void Reset();
 
   void LoadCustomFont(Font *theFont, const TCHAR FontRegKey[],
@@ -58,14 +67,5 @@ namespace Fonts
 
   const TCHAR* GetStandardFontFace();
 }
-
-extern Font InfoWindowFont;
-extern Font TitleWindowFont;
-extern Font MapWindowFont;
-extern Font InfoWindowSmallFont;
-extern Font MapWindowBoldFont;
-extern Font CDIWindowFont;
-extern Font MapLabelFont;
-extern Font StatisticsFont;
 
 #endif

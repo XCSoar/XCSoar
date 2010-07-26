@@ -84,7 +84,7 @@ MapWindow::RenderMapLayer(Canvas &canvas)
   // Select black brush/pen and the MapWindowFont
   canvas.black_brush();
   canvas.black_pen();
-  canvas.select(MapWindowFont);
+  canvas.select(Fonts::MapWindowFont);
 
   if (terrain != NULL) {
     if ((SettingsComputer().FinalGlideTerrain == 2) && 
@@ -194,7 +194,7 @@ MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
   // overlays
   DrawCDI();
 
-  canvas.select(MapWindowFont);
+  canvas.select(Fonts::MapWindowFont);
   DrawMapScale(canvas, rc, BigZoom);
   DrawMapScale2(canvas, rc);
   DrawCompass(canvas, rc);
@@ -261,7 +261,7 @@ MapWindow::Render(Canvas &canvas, const RECT rc)
   RenderGlide(canvas, rc);
 
   // Render weather/terrain max/min values
-  canvas.select(TitleWindowFont);
+  canvas.select(Fonts::TitleWindowFont);
   m_background.DrawSpotHeights(canvas, *this, label_block);
 
   // Render lower symbology

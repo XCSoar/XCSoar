@@ -39,6 +39,7 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Fonts.hpp"
 #include "ResourceLoader.hpp"
 #include "InputEvents.h"
 #include "MapWindow.hpp"
@@ -90,11 +91,11 @@ StatusMessageList::StatusMessageList() {}
 
 static const StatusMessageList messages;
 
-Font MapWindowFont;
-Font MapWindowBoldFont;
-Font TitleWindowFont;
-Font CDIWindowFont;
-Font InfoWindowFont;
+Font Fonts::MapWindowFont;
+Font Fonts::MapWindowBoldFont;
+Font Fonts::TitleWindowFont;
+Font Fonts::CDIWindowFont;
+Font Fonts::InfoWindowFont;
 
 #ifndef WIN32
 int main(int argc, char **argv)

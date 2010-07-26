@@ -120,7 +120,7 @@ WndListFrame::on_paint(Canvas &canvas)
     canvas.set_text_color(text_color);
     canvas.set_background_color(background_color);
     canvas.background_transparent();
-    canvas.select(MapWindowBoldFont);
+    canvas.select(Fonts::MapWindowBoldFont);
 
     for (unsigned i = 0; i < items_visible + 1; i++) {
       if (has_focus() && i == relative_cursor) {

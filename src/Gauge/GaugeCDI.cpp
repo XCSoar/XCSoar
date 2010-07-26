@@ -58,7 +58,7 @@ GaugeCDI::GaugeCDI(ContainerWindow &parent)
       (int)(InfoBoxLayout::ControlWidth * 2.8),
       (int)(InfoBoxLayout::TitleHeight * 1.4),
       style);
-  set_font(CDIWindowFont);
+  set_font(Fonts::CDIWindowFont);
 }
 
 void GaugeCDI::Update(Angle TrackBearing, Angle WaypointBearing)

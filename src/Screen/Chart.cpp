@@ -233,7 +233,7 @@ Chart::DrawNoData()
 void
 Chart::DrawXLabel(const TCHAR *text)
 {
-  canvas.select(MapLabelFont);
+  canvas.select(Fonts::MapLabelFont);
 
   SIZE tsize = canvas.text_size(text);
   int x = rc.right - tsize.cx - IBLSCALE(3);
@@ -246,7 +246,7 @@ Chart::DrawXLabel(const TCHAR *text)
 void
 Chart::DrawYLabel(const TCHAR *text)
 {
-  canvas.select(MapLabelFont);
+  canvas.select(Fonts::MapLabelFont);
 
   SIZE tsize = canvas.text_size(text);
   int x = max(2, (int)(rc.left - tsize.cx));

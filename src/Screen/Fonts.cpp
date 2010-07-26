@@ -50,19 +50,19 @@ Copyright_License {
 #include <stdio.h>
 
 /// values inside infoboxes  like numbers, etc.
-Font InfoWindowFont;
-Font InfoWindowSmallFont;
+Font Fonts::InfoWindowFont;
+Font Fonts::InfoWindowSmallFont;
 /// Titles of infoboxes like Next, WP L/D etc.
-Font TitleWindowFont;
+Font Fonts::TitleWindowFont;
 /// text names on the map
-Font MapWindowFont;
+Font Fonts::MapWindowFont;
 /// menu buttons, waypoint selection, messages, etc.
-Font MapWindowBoldFont;
+Font Fonts::MapWindowBoldFont;
 /// vario display, runway informations
-Font CDIWindowFont; // New
+Font Fonts::CDIWindowFont;
 /// Flarm Traffic draweing and stats, map labels in italic
-Font MapLabelFont;
-Font StatisticsFont;
+Font Fonts::MapLabelFont;
+Font Fonts::StatisticsFont;
 
 // these are the non-custom parameters
 LOGFONT InfoWindowLogFont;

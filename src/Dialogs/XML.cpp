@@ -235,11 +235,11 @@ LoadChildrenFromXML(WndForm &form, ContainerControl &parent,
                     XMLNode *Node, int Font, const DialogStyle_t eDialogStyle);
 
 static Font *FontMap[5] = {
-  &TitleWindowFont,
-  &MapWindowFont,
-  &MapWindowBoldFont,
-  &CDIWindowFont,
-  &InfoWindowFont
+  &Fonts::TitleWindowFont,
+  &Fonts::MapWindowFont,
+  &Fonts::MapWindowBoldFont,
+  &Fonts::CDIWindowFont,
+  &Fonts::InfoWindowFont
 };
 
 static XMLNode
@@ -373,11 +373,11 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
     // and save it as the dialog node
     xNode = xMainNode.getChildNode(_T("Form"));
 
-  FontMap[0] = &TitleWindowFont;
-  FontMap[1] = &MapWindowFont;
-  FontMap[2] = &MapWindowBoldFont;
-  FontMap[3] = &CDIWindowFont;
-  FontMap[4] = &InfoWindowFont;
+  FontMap[0] = &Fonts::TitleWindowFont;
+  FontMap[1] = &Fonts::MapWindowFont;
+  FontMap[2] = &Fonts::MapWindowBoldFont;
+  FontMap[3] = &Fonts::CDIWindowFont;
+  FontMap[4] = &Fonts::InfoWindowFont;
 
   // If Node does not exists -> Error messagebox + cancel
   if (xNode.isEmpty()) {

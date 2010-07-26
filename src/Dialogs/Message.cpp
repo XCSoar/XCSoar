@@ -117,15 +117,15 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   WndForm wf(XCSoarInterface::main_window,
              lpCaption, X, Y, Width, Height,
              style);
-  wf.SetFont(MapWindowBoldFont);
-  wf.SetTitleFont(MapWindowBoldFont);
+  wf.SetFont(Fonts::MapWindowBoldFont);
+  wf.SetTitleFont(Fonts::MapWindowBoldFont);
   wf.SetBackColor(Color(0xDA, 0xDB, 0xAB));
 
   // Create text element
   wText = new WndFrame(wf, 0, Layout::Scale(5), Width, Height);
 
   wText->SetCaption(lpText);
-  wText->SetFont(MapWindowBoldFont);
+  wText->SetFont(Fonts::MapWindowBoldFont);
   wText->SetCaptionStyle(DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
   // | DT_VCENTER
 
