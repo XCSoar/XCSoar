@@ -95,8 +95,8 @@ ComPort::Open()
 #ifdef HAVE_POSIX
   fd = open(sPortName, O_RDWR|O_NOCTTY);
   if (fd < 0) {
-    ComPort_StatusMessage(MB_OK|MB_ICONINFORMATION, NULL, _T("%s %s"),
-                          gettext(_T("Unable to open port")), sPortName);
+    ComPort_StatusMessage(MB_OK|MB_ICONINFORMATION, NULL,
+                          gettext(_T("Unable to open port %s")), sPortName);
     return false;
   }
 #else /* !HAVE_POSIX */
@@ -123,8 +123,8 @@ ComPort::Open()
     // Could not open the port.
     // TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
-    ComPort_StatusMessage(MB_OK|MB_ICONINFORMATION, NULL, _T("%s %s"),
-              gettext(_T("Unable to open port")), sPortName);
+    ComPort_StatusMessage(MB_OK|MB_ICONINFORMATION, NULL,
+                          gettext(_T("Unable to open port %s")), sPortName);
 
     return false;
   }
@@ -172,8 +172,9 @@ ComPort::Open()
 
     // TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
-    ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"),
-              gettext(_T("Unable to Change Settings on Port")), sPortName);
+    ComPort_StatusMessage(MB_OK, _T("Error"),
+                          gettext(_T("Unable to change settings on port %s")),
+                          sPortName);
     dwError = GetLastError();
     return false;
   }
@@ -482,8 +483,9 @@ ComPort::SetRxTimeout(int Timeout)
     if (!is_embedded())
       Sleep(2000); // needed for windows bug
 
-    ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"),
-                 gettext(_T("Unable to Set Serial Port Timers")), sPortName);
+    ComPort_StatusMessage(MB_OK, _T("Error"),
+                          gettext(_T("Unable to set serial port timers %s")),
+                          sPortName);
     dwError = GetLastError();
     return -1;
   }
