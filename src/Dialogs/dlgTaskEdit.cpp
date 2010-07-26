@@ -179,14 +179,14 @@ OnSaveClicked(WindowControl * Sender)
 {
   (void)Sender;
   if (!ordered_task->check_task()) {
-    MessageBoxX (gettext(TEXT("Task invalid.  Not saved.")),
-                 TEXT("Task Edit"), MB_OK);
+    MessageBoxX (gettext(_T("Task invalid.  Not saved.")),
+                 _T("Task Edit"), MB_OK);
     return;
   }
 
   if (OrderedTaskSave(*ordered_task, true)) {
-    MessageBoxX (gettext(TEXT("Task saved")),
-                 TEXT("Task Edit"), MB_OK);
+    MessageBoxX (gettext(_T("Task saved")),
+                 _T("Task Edit"), MB_OK);
   }
 }
 

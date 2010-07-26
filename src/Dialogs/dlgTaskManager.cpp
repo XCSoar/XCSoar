@@ -72,8 +72,8 @@ CommitTaskChanges()
     return true;
 
   if (!ordered_task->task_size() || ordered_task->check_task()) {
-    MessageBoxX (gettext(TEXT("Active task modified")),
-                 TEXT("Task Manager"), MB_OK);
+    MessageBoxX(gettext(_T("Active task modified")),
+                _T("Task Manager"), MB_OK);
 
     task_ui.check_duplicate_waypoints(*ordered_task, way_points);
     task_ui.task_commit(*ordered_task);

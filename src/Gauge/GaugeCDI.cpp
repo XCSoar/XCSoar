@@ -66,8 +66,8 @@ void GaugeCDI::Update(Angle TrackBearing, Angle WaypointBearing)
   // JMW changed layout here to fit reorganised display
   // insert waypoint bearing ".<|>." into CDIScale string"
 
-  TCHAR CDIScale[] = TEXT("330..340..350..000..010..020..030..040..050..060..070..080..090..100..110..120..130..140..150..160..170..180..190..200..210..220..230..240..250..260..270..280..290..300..310..320..330..340..350..000..010..020..030..040.");
-  TCHAR CDIDisplay[25] = TEXT("");
+  TCHAR CDIScale[] = _T("330..340..350..000..010..020..030..040..050..060..070..080..090..100..110..120..130..140..150..160..170..180..190..200..210..220..230..240..250..260..270..280..290..300..310..320..330..340..350..000..010..020..030..040.");
+  TCHAR CDIDisplay[25] = _T("");
   int j;
   int CDI_WP_Bearing = (int)WaypointBearing.value_degrees()/2;
   CDIScale[CDI_WP_Bearing + 9] = 46;

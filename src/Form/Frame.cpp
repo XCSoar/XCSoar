@@ -51,7 +51,7 @@ WndFrame::WndFrame(ContainerControl &parent,
 
 void WndFrame::SetCaption(const TCHAR *Value){
   if (Value == NULL)
-    Value = TEXT("");
+    Value = _T("");
 
   if (_tcscmp(mCaption, Value) != 0){
     _tcscpy(mCaption, Value);  // todo size check

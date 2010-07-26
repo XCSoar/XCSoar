@@ -408,7 +408,7 @@ WndForm::on_paint(Canvas &canvas)
 
 void WndForm::SetCaption(const TCHAR *Value){
   if (Value == NULL)
-    Value = TEXT("");
+    Value = _T("");
 
   if (_tcscmp(mCaption, Value) != 0){
     _tcscpy(mCaption, Value);

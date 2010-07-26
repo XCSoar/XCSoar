@@ -871,9 +871,8 @@ static void OnWaypointEditClicked(WindowControl * Sender){
         way_points.replace(*way_point, wp_copy);
       }
     } else {
-      MessageBoxX (
-                   gettext(TEXT("Waypoint not editable")),
-                   TEXT("Error"), MB_OK);
+      MessageBoxX(gettext(_T("Waypoint not editable")),
+                  _T("Error"), MB_OK);
     }
   }
 }
@@ -2116,7 +2115,7 @@ void dlgConfigurationShowModal(void)
                                       XCSoarInterface::SetSettingsComputer().safety_mc_use_current);
 
   WndProperty *wp;
-  wp = (WndProperty*)wf->FindByName(TEXT("prpDisableAutoLogger"));
+  wp = (WndProperty*)wf->FindByName(_T("prpDisableAutoLogger"));
   if (wp) { // GUI label is "Enable Auto Logger"
     if (!XCSoarInterface::SetSettingsComputer().DisableAutoLogger
         != wp->GetDataField()->GetAsBoolean()) {

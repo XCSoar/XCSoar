@@ -101,7 +101,7 @@ TopologyStore::~TopologyStore()
 void
 TopologyStore::Close()
 {
-  LogStartUp(TEXT("CloseTopology"));
+  LogStartUp(_T("CloseTopology"));
 
   Reset();
 }
@@ -135,7 +135,7 @@ TopologyStore::DrawLabels(Canvas &canvas, const Projection &projection,
 void
 TopologyStore::Open()
 {
-  LogStartUp(TEXT("OpenTopology"));
+  LogStartUp(_T("OpenTopology"));
 
   ProgressGlue::Create(gettext(_T("Loading Topology File...")));
 
@@ -153,14 +153,14 @@ TopologyStore::Open()
     ExpandLocalPath(szFile);
 
     // Look for the file within the map zip file...
-    _tcscat(szFile, TEXT("/"));
-    _tcscat(szFile, TEXT("topology.tpl"));
+    _tcscat(szFile, _T("/"));
+    _tcscat(szFile, _T("topology.tpl"));
   }
 
   // Ready to open the file now..
   ZipSource reader(szFile);
   if (reader.error()) {
-    LogStartUp(TEXT("No topology file: %s"), szFile);
+    LogStartUp(_T("No topology file: %s"), szFile);
     return;
   }
 

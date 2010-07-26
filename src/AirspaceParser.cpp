@@ -151,10 +151,10 @@ static bool
 ShowParseWarning(int line, const TCHAR* str)
 {
   TCHAR sTmp[MAX_PATH];
-  _stprintf(sTmp, TEXT("%s: %d\r\n\"%s\"\r\n%s."),
-            gettext(TEXT("Parse Error at Line")), line, str,
-            gettext(TEXT("Line skipped.")));
-  return (MessageBoxX(sTmp, gettext(TEXT("Airspace")), MB_OKCANCEL) == IDOK);
+  _stprintf(sTmp, _T("%s: %d\r\n\"%s\"\r\n%s."),
+            gettext(_T("Parse Error at Line")), line, str,
+            gettext(_T("Line skipped.")));
+  return (MessageBoxX(sTmp, gettext(_T("Airspace")), MB_OKCANCEL) == IDOK);
 
 }
 
@@ -213,7 +213,7 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
       fHasUnit = true;
 
       p += 3;
-    } else if (_tcsncmp(p, TEXT("FL"), 2) == 0) {
+    } else if (_tcsncmp(p, _T("FL"), 2) == 0) {
       // this parses "FL=150" and "FL150"
       Alt->Base = abFL;
       fHasUnit = true;
@@ -761,7 +761,7 @@ DetectFileType(const TCHAR *line)
 bool
 ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
 {
-  LogStartUp(TEXT("ReadAirspace"));
+  LogStartUp(_T("ReadAirspace"));
 
   int LineCount = 0;
   bool ignore = false;
@@ -814,7 +814,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
   }
 
   if (filetype == ftUnknown) {
-    MessageBoxX(_T("Unknown Filetype."), gettext(TEXT("Airspace")), MB_OK);
+    MessageBoxX(_T("Unknown Filetype."), gettext(_T("Airspace")), MB_OK);
     return false;
   }
 

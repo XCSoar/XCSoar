@@ -7,8 +7,8 @@ my $line = 0;
 
 =head1 DEMO
 
-	StatusMessageData[StatusMessageData_Size].key = TEXT("blah");
-	StatusMessageData[StatusMessageData_Size].sound = TEXT("blah");
+	StatusMessageData[StatusMessageData_Size].key = _T("blah");
+	StatusMessageData[StatusMessageData_Size].sound = _T("blah");
 	StatusMessageData[StatusMessageData_Size].do_sound = true;
 	StatusMessageData[StatusMessageData_Size].delay_ms = nn;
 	StatusMessageData[StatusMessageData_Size].doStatus = false;
@@ -29,9 +29,9 @@ while (<>) {
 	if (/^\s*$/) {
 		if ($rec{key}) {
 			print qq{_init_Status(StatusMessageData_Size);\n};
-			print q{StatusMessageData[StatusMessageData_Size].key = TEXT("} . $rec{key} . qq{");\n};
+			print q{StatusMessageData[StatusMessageData_Size].key = _T("} . $rec{key} . qq{");\n};
 			if ($rec{sound}) {
-				print q{StatusMessageData[StatusMessageData_Size].sound = TEXT("}
+				print q{StatusMessageData[StatusMessageData_Size].sound = _T("}
 					. $rec{sound}
 					. qq{");\n};
 				print qq{StatusMessageData[StatusMessageData_Size].doSound = true;\n};

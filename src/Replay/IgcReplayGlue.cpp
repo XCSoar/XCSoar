@@ -80,7 +80,7 @@ IgcReplayGlue::ScanBuffer(const TCHAR *buffer, fixed *Time,
         fevent(mmisc);
         free(mmisc);
       } else {
-        fevent(TEXT("\0"));
+        fevent(_T("\0"));
       }
     }
   }
@@ -127,8 +127,8 @@ IgcReplayGlue::on_stop()
 void
 IgcReplayGlue::on_bad_file()
 {
-  MessageBoxX(gettext(TEXT("Could not open IGC file!")),
-              gettext(TEXT("Flight replay")), MB_OK | MB_ICONINFORMATION);
+  MessageBoxX(gettext(_T("Could not open IGC file!")),
+              gettext(_T("Flight replay")), MB_OK | MB_ICONINFORMATION);
 }
 
 void

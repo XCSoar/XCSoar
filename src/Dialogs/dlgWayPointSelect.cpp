@@ -170,7 +170,7 @@ static void PrepareData(void){
     dfe = (DataFieldEnum*)wpDistance->GetDataField();
     dfe->addEnumText(_T("*"));
     for (unsigned i = 1; i < sizeof(DistanceFilter) / sizeof(DistanceFilter[0]); i++) {
-      _stprintf(sTmp, TEXT("%.0f%s"),
+      _stprintf(sTmp, _T("%.0f%s"),
                 (double)DistanceFilter[i],
                 Units::GetDistanceName());
       dfe->addEnumText(sTmp);
@@ -340,7 +340,7 @@ OnFilterNameButton(gcc_unused WndButton &button){
   if (wbName) {
 
     if (string_is_empty(filter_data.name))
-      SetNameCaptionFlushLeft(TEXT("*"));
+      SetNameCaptionFlushLeft(_T("*"));
     else {
       SetNameCaptionFlushLeft(filter_data.name);
     }
@@ -373,12 +373,12 @@ GetDirectionData(int DirectionFilterIdx){
   static TCHAR sTmp[12];
 
   if (DirectionFilterIdx == 0)
-    _stprintf(sTmp, TEXT("%c"), '*');
+    _stprintf(sTmp, _T("%c"), '*');
   else if (DirectionFilterIdx == 1){
     int a = iround(XCSoarInterface::Basic().Heading.as_bearing().value_degrees());
-    _stprintf(sTmp, TEXT("HDG(%d")TEXT(DEG)TEXT(")"), a);
+    _stprintf(sTmp, _T("HDG(%d")_T(DEG)_T(")"), a);
   }else
-    _stprintf(sTmp, TEXT("%d")TEXT(DEG), DirectionFilter[DirectionFilterIdx]);
+    _stprintf(sTmp, _T("%d")_T(DEG), DirectionFilter[DirectionFilterIdx]);
 
   return sTmp;
 
@@ -389,7 +389,7 @@ OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mode){
 
   switch (Mode) {
   case DataField::daGet:
-    Sender->Set(TEXT("*"));
+    Sender->Set(_T("*"));
     break;
 
   case DataField::daPut:
@@ -592,7 +592,7 @@ dlgWayPointSelect(SingleWindow &parent,
   wbName = (WndButton*)wf->FindByName(_T("cmdFltName"));
   wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
   wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
-  wpType = ((WndProperty *)wf->FindByName(TEXT("prpFltType")));
+  wpType = ((WndProperty *)wf->FindByName(_T("prpFltType")));
 
   if (type > -1){
     filter_data.type_index = type;

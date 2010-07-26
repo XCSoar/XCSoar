@@ -126,7 +126,7 @@ RasterWeather::RASP_filename(TCHAR *rasp_filename, const TCHAR* name)
 {
   TCHAR fname[MAX_PATH];
   _stprintf(fname,
-            TEXT("xcsoar-rasp.dat/%s.curr.%04dlst.d2.jp2"),
+            _T("xcsoar-rasp.dat/%s.curr.%04dlst.d2.jp2"),
             name, IndexToTime(_weather_time));
   LocalPath(rasp_filename, fname);
 }
@@ -147,9 +147,9 @@ void RasterWeather::ScanAll(const GEOPOINT &location) {
   for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++) {
     ProgressGlue::SetValue(i);
     _weather_time = i;
-    weather_available[i] = LoadItem(0,TEXT("wstar"));
+    weather_available[i] = LoadItem(0,_T("wstar"));
     if (!weather_available[i]) {
-      weather_available[i] = LoadItem(0,TEXT("wstar_bsratio"));
+      weather_available[i] = LoadItem(0,_T("wstar_bsratio"));
       if (weather_available[i]) {
         bsratio = true;
       }
@@ -203,18 +203,18 @@ RasterWeather::Reload(const GEOPOINT &location, int day_time)
 
         Close();
         if (bsratio) {
-          LoadItem(0,TEXT("wstar_bsratio"));
+          LoadItem(0,_T("wstar_bsratio"));
         } else {
-          LoadItem(0,TEXT("wstar"));
+          LoadItem(0,_T("wstar"));
         }
-        LoadItem(1,TEXT("blwindspd"));
-        LoadItem(2,TEXT("hbl"));
-        LoadItem(3,TEXT("dwcrit"));
-        LoadItem(4,TEXT("blcloudpct"));
-        LoadItem(5,TEXT("sfctemp"));
-        LoadItem(6,TEXT("hwcrit"));
-        LoadItem(7,TEXT("wblmaxmin"));
-        LoadItem(8,TEXT("blcwbase"));
+        LoadItem(1,_T("blwindspd"));
+        LoadItem(2,_T("hbl"));
+        LoadItem(3,_T("dwcrit"));
+        LoadItem(4,_T("blcloudpct"));
+        LoadItem(5,_T("sfctemp"));
+        LoadItem(6,_T("hwcrit"));
+        LoadItem(7,_T("wblmaxmin"));
+        LoadItem(8,_T("blcwbase"));
       }
     }
 
@@ -265,7 +265,7 @@ void RasterWeather::ServiceFullReload(const GEOPOINT &location) {
 
 
 void RasterWeather::ItemLabel(int i, TCHAR* Buffer) {
-  _stprintf(Buffer, TEXT("\0"));
+  _stprintf(Buffer, _T("\0"));
 
   switch (i) {
   case 0:
@@ -310,43 +310,43 @@ void RasterWeather::ValueToText(TCHAR* Buffer, short val) {
   case 0:
     return;
   case 1: // wstar
-    _stprintf(Buffer, TEXT("%.1f%s"),
+    _stprintf(Buffer, _T("%.1f%s"),
               Units::ToUserUnit((val - 200) / 100.0, Units::VerticalSpeedUnit),
               Units::GetVerticalSpeedName());
     return;
   case 2: // blwindspd
-    _stprintf(Buffer, TEXT("%.0f%s"),
+    _stprintf(Buffer, _T("%.0f%s"),
               Units::ToUserUnit(val / 100.0, Units::SpeedUnit),
               Units::GetSpeedName());
     return;
   case 3: // hbl
-    _stprintf(Buffer, TEXT("%.0f%s"),
+    _stprintf(Buffer, _T("%.0f%s"),
               Units::ToUserUnit(val, Units::AltitudeUnit),
               Units::GetAltitudeName());
     return;
   case 4: // dwcrit
-    _stprintf(Buffer, TEXT("%.0f%s"),
+    _stprintf(Buffer, _T("%.0f%s"),
               Units::ToUserUnit(val, Units::AltitudeUnit),
               Units::GetAltitudeName());
     return;
   case 5: // blcloudpct
-    _stprintf(Buffer, TEXT("%d%%"), (int)max(0, min(100, (int)val)));
+    _stprintf(Buffer, _T("%d%%"), (int)max(0, min(100, (int)val)));
     return;
   case 6: // sfctemp
-    _stprintf(Buffer, TEXT("%d")TEXT(DEG), iround(val * 0.5 - 20.0));
+    _stprintf(Buffer, _T("%d")_T(DEG), iround(val * 0.5 - 20.0));
     return;
   case 7: // hwcrit
-    _stprintf(Buffer, TEXT("%.0f%s"),
+    _stprintf(Buffer, _T("%.0f%s"),
               Units::ToUserUnit(val, Units::AltitudeUnit),
               Units::GetAltitudeName());
     return;
   case 8: // wblmaxmin
-    _stprintf(Buffer, TEXT("%.1f%s"),
+    _stprintf(Buffer, _T("%.1f%s"),
               Units::ToUserUnit(((val-200)/100.0), Units::VerticalSpeedUnit),
               Units::GetVerticalSpeedName());
     return;
   case 9: // blcwbase
-    _stprintf(Buffer, TEXT("%.0f%s"),
+    _stprintf(Buffer, _T("%.0f%s"),
               Units::ToUserUnit(val, Units::AltitudeUnit),
               Units::GetAltitudeName());
     return;

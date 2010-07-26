@@ -97,7 +97,7 @@ Profile::GetScaleList(fixed *List, size_t Size)
   return 0;
 }
 
-Trigger targetManipEvent(TEXT("targetManip"));
+Trigger targetManipEvent(_T("targetManip"));
 
 static Waypoints way_points;
 
@@ -273,7 +273,7 @@ LoadFiles()
 
     FileLineReader reader(tpath);
     if (reader.error() || !ReadAirspace(airspace_database, reader))
-      LogStartUp(TEXT("No airspace file 1"));
+      LogStartUp(_T("No airspace file 1"));
 
     airspace_database.optimise();
   }

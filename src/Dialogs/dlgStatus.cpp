@@ -425,7 +425,7 @@ static void UpdateValuesRules(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpStartSpeed"));
   if (wp) {
     if (XCSoarInterface::Calculated().common_stats.task_started) {
-      _stprintf(Temp, TEXT("%d %s"),
+      _stprintf(Temp, _T("%d %s"),
                 (int)Units::ToUserTaskSpeed(start_state.Speed),
                 Units::GetTaskSpeedName());
       wp->SetText(Temp);

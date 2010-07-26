@@ -148,7 +148,7 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader)
 void
 ReadAirfieldFile(Waypoints &way_points)
 {
-  LogStartUp(TEXT("ReadAirfieldFile"));
+  LogStartUp(_T("ReadAirfieldFile"));
 
   TLineReader *reader =
     OpenConfiguredTextFile(szProfileAirfieldFile, _T("airfields.txt"));

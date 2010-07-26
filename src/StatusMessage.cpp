@@ -50,10 +50,10 @@ StatusMessageList::StatusMessageList()
   :StatusMessageData_Size(0), olddelay(2000)
 {
   // DEFAULT - 0 is loaded as default, and assumed to exist
-  StatusMessageData[0].key = TEXT("DEFAULT");
+  StatusMessageData[0].key = _T("DEFAULT");
   StatusMessageData[0].doStatus = true;
   StatusMessageData[0].doSound = true;
-  StatusMessageData[0].sound = TEXT("IDR_WAV_DRIP");
+  StatusMessageData[0].sound = _T("IDR_WAV_DRIP");
   StatusMessageData[0].delay_ms = 2500; // 2.5 s
   StatusMessageData_Size=1;
 
@@ -64,7 +64,7 @@ StatusMessageList::StatusMessageList()
 void
 StatusMessageList::LoadFile()
 {
-  LogStartUp(TEXT("Loading status file"));
+  LogStartUp(_T("Loading status file"));
 
   TCHAR szFile1[MAX_PATH];
 
@@ -97,7 +97,7 @@ StatusMessageList::LoadFile()
   while (
 	 (StatusMessageData_Size < MAXSTATUSMESSAGECACHE)
          && (buffer = reader.read()) != NULL
-	 && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
+	 && ((found = _stscanf(buffer, _T("%[^#=]=%[^\n]\n"), key, value)) != EOF)
 	 ) {
     // Check valid line? If not valid, assume next record (primative, but works ok!)
     if ((found != 2) || key[0] == 0 || value[0] == 0) {
@@ -113,22 +113,22 @@ StatusMessageList::LoadFile()
 
       location = NULL;
 
-      if (_tcscmp(key, TEXT("key")) == 0) {
+      if (_tcscmp(key, _T("key")) == 0) {
 	some_data = true;	// Success, we have a real entry
 	location = &StatusMessageData[StatusMessageData_Size].key;
-      } else if (_tcscmp(key, TEXT("sound")) == 0) {
+      } else if (_tcscmp(key, _T("sound")) == 0) {
 	StatusMessageData[StatusMessageData_Size].doSound = true;
 	location = &StatusMessageData[StatusMessageData_Size].sound;
-      } else if (_tcscmp(key, TEXT("delay")) == 0) {
-	if (_stscanf(value, TEXT("%d"), &ms) == 1)
+      } else if (_tcscmp(key, _T("delay")) == 0) {
+	if (_stscanf(value, _T("%d"), &ms) == 1)
 	  StatusMessageData[StatusMessageData_Size].delay_ms = ms;
-      } else if (_tcscmp(key, TEXT("hide")) == 0) {
-	if (_tcscmp(value, TEXT("yes")) == 0)
+      } else if (_tcscmp(key, _T("hide")) == 0) {
+	if (_tcscmp(value, _T("yes")) == 0)
 	  StatusMessageData[StatusMessageData_Size].doStatus = false;
       }
 
       // Do we have somewhere to put this && is it currently empty ? (prevent lost at startup)
-      if (location && (_tcscmp(*location, TEXT("")) == 0)) {
+      if (location && (_tcscmp(*location, _T("")) == 0)) {
 	// TODO code: this picks up memory lost from no entry, but not duplicates - fix.
 	if (*location) {
 	  // JMW fix memory leak
@@ -171,9 +171,9 @@ StatusMessageList::Find(const TCHAR *key) const
 void
 StatusMessageList::_init_Status(int num)
 {
-  StatusMessageData[num].key = TEXT("");
+  StatusMessageData[num].key = _T("");
   StatusMessageData[num].doStatus = true;
   StatusMessageData[num].doSound = false;
-  StatusMessageData[num].sound = TEXT("");
+  StatusMessageData[num].sound = _T("");
   StatusMessageData[num].delay_ms = 2500;  // 2.5 s
 }

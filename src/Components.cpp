@@ -146,7 +146,7 @@ GlideComputer glide_computer(task_calc,
 void
 XCSoarInterface::PreloadInitialisation(bool ask)
 {
-  Profile::Set(TEXT("XCV"), 1);
+  Profile::Set(_T("XCV"), 1);
 
   if (!ask) {
     Profile::Load();
@@ -171,21 +171,21 @@ XCSoarInterface::AfterStartup()
 
   first = false;
 
-  LogStartUp(TEXT("ProgramStarted = 3"));
+  LogStartUp(_T("ProgramStarted = 3"));
   StartupLogFreeRamAndStorage();
 
   status_messages.Startup(true);
 
   if (is_simulator()) {
-    LogStartUp(TEXT("GCE_STARTUP_SIMULATOR"));
+    LogStartUp(_T("GCE_STARTUP_SIMULATOR"));
     InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
   } else {
-    LogStartUp(TEXT("GCE_STARTUP_REAL"));
+    LogStartUp(_T("GCE_STARTUP_REAL"));
     InputEvents::processGlideComputer(GCE_STARTUP_REAL);
   }
 
   // Create default task if none exists
-  LogStartUp(TEXT("Create default task"));
+  LogStartUp(_T("Create default task"));
   task_manager.default_task(Basic().Location);
 
   SetSettingsComputer().enable_olc = true;
@@ -193,7 +193,7 @@ XCSoarInterface::AfterStartup()
 
   task_manager.resume();
 
-  LogStartUp(TEXT("CloseProgressDialog"));
+  LogStartUp(_T("CloseProgressDialog"));
   ProgressGlue::Close();
 
   main_window.full_screen();
@@ -244,7 +244,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   SendSettingsMap();
 
   // Creates the main window
-  LogStartUp(TEXT("Create main window"));
+  LogStartUp(_T("Create main window"));
   RECT WindowSize = SystemWindowSize();
   main_window.set(szTitle,
                   WindowSize.left, WindowSize.top,
@@ -276,7 +276,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   marks = new Marks();
 
   // Show the main and map windows
-  LogStartUp(TEXT("Create map window"));
+  LogStartUp(_T("Create map window"));
   main_window.show();
   main_window.map.show();
 
@@ -315,7 +315,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   // Read the terrain file
   ProgressGlue::Create(gettext(_T("Loading Terrain File...")));
-  LogStartUp(TEXT("OpenTerrain"));
+  LogStartUp(_T("OpenTerrain"));
   terrain.OpenTerrain();
 
   // Read the waypoint files
@@ -336,7 +336,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   // Scan for weather forecast
   ProgressGlue::Create(gettext(_T("Scanning weather forecast")));
-  LogStartUp(TEXT("RASP load"));
+  LogStartUp(_T("RASP load"));
   RASP.ScanAll(Basic().Location);
 
   // Reads the airspace files
@@ -365,7 +365,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
 /*
   -- Reset polar in case devices need the data
-  LogStartUp(TEXT("GlidePolar::UpdatePolar"));
+  LogStartUp(_T("GlidePolar::UpdatePolar"));
   GlidePolar::UpdatePolar(true, SettingsComputer());
 
   This should be done inside devStartup if it is really required
@@ -385,26 +385,26 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   // Finally ready to go.. all structures must be present before this.
 
   // Create the drawing thread
-  LogStartUp(TEXT("CreateDrawingThread"));
+  LogStartUp(_T("CreateDrawingThread"));
   draw_thread = new DrawThread(main_window.map, main_window.flarm);
   draw_thread->start();
 
   // Show the infoboxes
-  LogStartUp(TEXT("ShowInfoBoxes"));
+  LogStartUp(_T("ShowInfoBoxes"));
   InfoBoxManager::Show();
 
   // Create the calculation thread
-  LogStartUp(TEXT("CreateCalculationThread"));
+  LogStartUp(_T("CreateCalculationThread"));
   CreateCalculationThread();
 
   // Initialise the airspace warning dialog
-  LogStartUp(TEXT("dlgAirspaceWarningInit"));
+  LogStartUp(_T("dlgAirspaceWarningInit"));
   dlgAirspaceWarningInit(main_window);
 
   // Find unique ID of this PDA
   ReadAssetNumber();
 
-  LogStartUp(TEXT("ProgramStarted"));
+  LogStartUp(_T("ProgramStarted"));
 
   // Give focus to the map
   main_window.map.set_focus();
@@ -432,7 +432,7 @@ XCSoarInterface::Shutdown(void)
   ProgressGlue::Create(gettext(_T("Shutdown, please wait...")));
 
   // Log shutdown information
-  LogStartUp(TEXT("Entering shutdown..."));
+  LogStartUp(_T("Entering shutdown..."));
   StartupLogFreeRamAndStorage();
 
   // Turn off all displays
@@ -447,7 +447,7 @@ XCSoarInterface::Shutdown(void)
   Profile::Save();
 
   // Stop sound
-  LogStartUp(TEXT("SaveSoundSettings"));
+  LogStartUp(_T("SaveSoundSettings"));
   Profile::SetSoundSettings();
 
 #ifndef DISABLEAUDIOVARIO
@@ -458,7 +458,7 @@ XCSoarInterface::Shutdown(void)
   ProgressGlue::Create(gettext(_T("Shutdown, please wait...")));
 
   // Stop threads
-  LogStartUp(TEXT("CloseDrawingThread"));
+  LogStartUp(_T("CloseDrawingThread"));
   closeTriggerEvent.trigger();
   draw_thread->stop();
   calculation_thread->stop();
@@ -468,44 +468,44 @@ XCSoarInterface::Shutdown(void)
 
   // Wait for the calculations thread to finish
   calculation_thread->join();
-  LogStartUp(TEXT("- calculation thread returned"));
+  LogStartUp(_T("- calculation thread returned"));
 
   //  Wait for the instruments thread to finish
   if (instrument_thread != NULL)
     instrument_thread->join();
-  LogStartUp(TEXT("- instrument thread returned"));
+  LogStartUp(_T("- instrument thread returned"));
 
   //  Wait for the drawing thread to finish
   draw_thread->join();
-  LogStartUp(TEXT("- draw thread returned"));
+  LogStartUp(_T("- draw thread returned"));
   delete draw_thread;
 
   // Close the AirspaceWarning dialog if still open
-  LogStartUp(TEXT("dlgAirspaceWarningDeInit"));
+  LogStartUp(_T("dlgAirspaceWarningDeInit"));
   dlgAirspaceWarningDeInit();
 
   // Save the task for the next time
   ProgressGlue::Create(gettext(_T("Shutdown, saving task...")));
 
-  LogStartUp(TEXT("Save default task"));
+  LogStartUp(_T("Save default task"));
   task_ui.task_save_default();
 
   // Clear airspace database
-  LogStartUp(TEXT("Close airspace"));
+  LogStartUp(_T("Close airspace"));
   CloseAirspace(airspace_ui);
 
   // Clear waypoint database
-  LogStartUp(TEXT("Close waypoints"));
+  LogStartUp(_T("Close waypoints"));
   way_points.clear();
 
   ProgressGlue::Create(gettext(_T("Shutdown, please wait...")));
 
   // Clear weather database
-  LogStartUp(TEXT("CloseRASP"));
+  LogStartUp(_T("CloseRASP"));
   RASP.Close();
 
   // Clear terrain database
-  LogStartUp(TEXT("CloseTerrain"));
+  LogStartUp(_T("CloseTerrain"));
   terrain.CloseTerrain();
 
   delete topology;
@@ -521,9 +521,9 @@ XCSoarInterface::Shutdown(void)
   //  CalibrationSave();
 
   if (is_altair()) {
-    LogStartUp(TEXT("Altair shutdown"));
+    LogStartUp(_T("Altair shutdown"));
     Sleep(2500);
-    InputEvents::eventDLLExecute(TEXT("altairplatform.dll SetShutdown 1"));
+    InputEvents::eventDLLExecute(_T("altairplatform.dll SetShutdown 1"));
     while (true)
       Sleep(100); // free time up for processor to perform shutdown
   }
@@ -532,32 +532,32 @@ XCSoarInterface::Shutdown(void)
   FlarmDetails::Reset();
 
   // Kill windows
-  LogStartUp(TEXT("Destroy Info Boxes"));
+  LogStartUp(_T("Destroy Info Boxes"));
   InfoBoxManager::Destroy();
 
-  LogStartUp(TEXT("Destroy Button Labels"));
+  LogStartUp(_T("Destroy Button Labels"));
   ButtonLabel::Destroy();
 
   // Kill graphics objects
-  LogStartUp(TEXT("Delete Objects"));
+  LogStartUp(_T("Delete Objects"));
   ResetFonts();
 
   // Close the progress dialog
-  LogStartUp(TEXT("Close Progress Dialog"));
+  LogStartUp(_T("Close Progress Dialog"));
   ProgressGlue::Close();
 
   // Clear the EGM96 database
   CloseGeoid();
 
-  LogStartUp(TEXT("Close Windows - main "));
+  LogStartUp(_T("Close Windows - main "));
   main_window.reset();
 
 #ifdef DEBUG_TRANSLATIONS
-  LogStartUp(TEXT("Writing missing translations"));
+  LogStartUp(_T("Writing missing translations"));
   WriteMissingTranslations();
 #endif
 
   StartupLogFreeRamAndStorage();
 
-  LogStartUp(TEXT("Finished shutdown"));
+  LogStartUp(_T("Finished shutdown"));
 }

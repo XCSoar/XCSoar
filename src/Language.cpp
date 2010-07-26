@@ -83,11 +83,11 @@ void WriteMissingTranslations() {
   std::map<TCHAR*, TCHAR*, lessTCHAR<TCHAR*> >::iterator
     s = unusedTranslations.begin(), e = unusedTranslations.end();
 
-  TCHAR szFile1[MAX_PATH] = TEXT("%LOCAL_PATH%\\\\localization_todo.xcl\0");
+  TCHAR szFile1[MAX_PATH] = _T("%LOCAL_PATH%\\\\localization_todo.xcl\0");
   FILE *fp = NULL;
 
   ExpandLocalPath(szFile1);
-  fp = _tfopen(szFile1, TEXT("w+"));
+  fp = _tfopen(szFile1, _T("w+"));
 
   if (fp != NULL) {
     while (s != e) {
@@ -191,7 +191,7 @@ ReadLanguageFile(TLineReader &reader)
 void
 ReadLanguageFile()
 {
-  LogStartUp(TEXT("Loading language file"));
+  LogStartUp(_T("Loading language file"));
 
   TCHAR szFile1[MAX_PATH];
 
@@ -201,7 +201,7 @@ ReadLanguageFile()
 
   // If the language file is not set use the default one
   if (string_is_empty(szFile1))
-    _tcscpy(szFile1, TEXT("default.xcl"));
+    _tcscpy(szFile1, _T("default.xcl"));
 
   // Open the language file
   FileLineReader reader(szFile1, ConvertLineReader::ISO_LATIN_1);

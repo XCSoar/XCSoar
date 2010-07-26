@@ -50,8 +50,8 @@ Copyright_License {
 #endif
 
 // Registration Data
-TCHAR strAssetNumber[MAX_LOADSTRING] = TEXT(""); //4G17DW31L0HY");
-TCHAR strRegKey[MAX_LOADSTRING] = TEXT("");
+TCHAR strAssetNumber[MAX_LOADSTRING] = _T(""); //4G17DW31L0HY");
+TCHAR strRegKey[MAX_LOADSTRING] = _T("");
 
 #if defined(_WIN32_WCE) && !defined(GNAV)
 ModelType GlobalModelType = MODELTYPE_PNA_PNA;
@@ -130,12 +130,12 @@ ReadCompaqID(void)
   if(strAssetNumber[0] != '\0')
     return;
 
-  CreateProcess(TEXT("\\windows\\CreateAssetFile.exe"), NULL, NULL, NULL,
+  CreateProcess(_T("\\windows\\CreateAssetFile.exe"), NULL, NULL, NULL,
                      FALSE, 0, NULL, NULL, NULL, &pi);
 
-  FILE *file = _tfopen(TEXT("\\windows\\cpqAssetData.dat"), TEXT("rb"));
+  FILE *file = _tfopen(_T("\\windows\\cpqAssetData.dat"), _T("rb"));
   if (file == NULL) {
-    // MessageBoxX(hWnd, TEXT("Unable to open asset data file."), TEXT("Error!"), MB_OK);
+    // MessageBoxX(hWnd, _T("Unable to open asset data file."), _T("Error!"), MB_OK);
     return;
   }
   fseek(file, 976, SEEK_SET);
@@ -217,7 +217,7 @@ ReadUUID(void)
 
 	  Asset = Asset ^ temp;
 
-	  _stprintf(strAssetNumber, TEXT("%08X%08X"), Asset, Guid.Data1);
+	  _stprintf(strAssetNumber, _T("%08X%08X"), Asset, Guid.Data1);
 #endif
 }
 
@@ -245,12 +245,12 @@ InitAsset()
   #endif
 
   // VENTA2- TODO fix these directories are not used always!
-  CreateDirectoryIfAbsent(TEXT(""));  // RLD make sure the LocalPath folder actually exists
-  CreateDirectoryIfAbsent(TEXT("logs"));
-  CreateDirectoryIfAbsent(TEXT("config"));
+  CreateDirectoryIfAbsent(_T(""));  // RLD make sure the LocalPath folder actually exists
+  CreateDirectoryIfAbsent(_T("logs"));
+  CreateDirectoryIfAbsent(_T("config"));
 
   if (is_altair())
-    CreateDirectoryIfAbsent(TEXT("persist"));
+    CreateDirectoryIfAbsent(_T("persist"));
 
   StartupLogFreeRamAndStorage();
 }

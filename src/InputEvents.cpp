@@ -264,7 +264,7 @@ parse_assignment(TCHAR *buffer, const TCHAR *&key, const TCHAR *&value)
 void
 InputEvents::readFile()
 {
-  LogStartUp(TEXT("Loading input events file"));
+  LogStartUp(_T("Loading input events file"));
 
   // clear the GCE and NMEA queues
   mutexEventQueue.Lock();
@@ -328,14 +328,14 @@ InputEvents::readFile()
   // Did we find some in the last loop...
   bool some_data = false;
   // Multiple modes (so large string)
-  TCHAR d_mode[1024] = TEXT("");
-  TCHAR d_type[256] = TEXT("");
-  TCHAR d_data[256] = TEXT("");
+  TCHAR d_mode[1024] = _T("");
+  TCHAR d_type[256] = _T("");
+  TCHAR d_data[256] = _T("");
   int event_id = 0;
-  TCHAR d_label[256] = TEXT("");
+  TCHAR d_label[256] = _T("");
   int d_location = 0;
-  TCHAR d_event[256] = TEXT("");
-  TCHAR d_misc[256] = TEXT("");
+  TCHAR d_event[256] = _T("");
+  TCHAR d_misc[256] = _T("");
 
   int line = 0;
 
@@ -360,12 +360,12 @@ InputEvents::readFile()
     } else if (buffer[0] == _T('\0')) {
       // Check valid line? If not valid, assume next record (primative, but works ok!)
       // General checks before continue...
-      if (some_data && (d_mode != NULL) && (_tcscmp(d_mode, TEXT("")) != 0)) {
+      if (some_data && (d_mode != NULL) && (_tcscmp(d_mode, _T("")) != 0)) {
 
         TCHAR *token;
 
         // For each mode
-        token = _tcstok(d_mode, TEXT(" "));
+        token = _tcstok(d_mode, _T(" "));
 
         // General errors - these should be true
         assert(d_location >= 0);
@@ -398,7 +398,7 @@ InputEvents::readFile()
 
           // Make key (Keyboard input)
           // key - Hardware key or keyboard
-          if (_tcscmp(d_type, TEXT("key")) == 0) {
+          if (_tcscmp(d_type, _T("key")) == 0) {
             // Get the int key (eg: APP1 vs 'a')
             int key = findKey(d_data);
             if (key > 0)
@@ -406,12 +406,12 @@ InputEvents::readFile()
 
             #ifdef _INPUTDEBUG_
             else if (input_errors_count < MAX_INPUT_ERRORS)
-            _stprintf(input_errors[input_errors_count++], TEXT("Invalid key data: %s at %i"), d_data, line);
+            _stprintf(input_errors[input_errors_count++], _T("Invalid key data: %s at %i"), d_data, line);
             #endif
 
           // Make gce (Glide Computer Event)
           // GCE - Glide Computer Event
-          } else if (_tcscmp(d_type, TEXT("gce")) == 0) {
+          } else if (_tcscmp(d_type, _T("gce")) == 0) {
             // Get the int key (eg: APP1 vs 'a')
             int key = findGCE(d_data);
             if (key >= 0)
@@ -419,12 +419,12 @@ InputEvents::readFile()
 
             #ifdef _INPUTDEBUG_
             else if (input_errors_count < MAX_INPUT_ERRORS)
-            _stprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
+            _stprintf(input_errors[input_errors_count++], _T("Invalid GCE data: %s at %i"), d_data, line);
             #endif
 
           // Make ne (NMEA Event)
           // NE - NMEA Event
-          } else if (_tcscmp(d_type, TEXT("ne")) == 0) {
+          } else if (_tcscmp(d_type, _T("ne")) == 0) {
             // Get the int key (eg: APP1 vs 'a')
             int key = findNE(d_data);
             if (key >= 0)
@@ -432,31 +432,31 @@ InputEvents::readFile()
 
             #ifdef _INPUTDEBUG_
             else if (input_errors_count < MAX_INPUT_ERRORS)
-            _stprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
+            _stprintf(input_errors[input_errors_count++], _T("Invalid GCE data: %s at %i"), d_data, line);
             #endif
 
           // label only - no key associated (label can still be touch screen)
-          } else if (_tcscmp(d_type, TEXT("label")) == 0) {
+          } else if (_tcscmp(d_type, _T("label")) == 0) {
             // Nothing to do here...
 
           #ifdef _INPUTDEBUG_
           } else if (input_errors_count < MAX_INPUT_ERRORS) {
-            _stprintf(input_errors[input_errors_count++], TEXT("Invalid type: %s at %i"), d_type, line);
+            _stprintf(input_errors[input_errors_count++], _T("Invalid type: %s at %i"), d_type, line);
           #endif
 
           }
 
-          token = _tcstok(NULL, TEXT(" "));
+          token = _tcstok(NULL, _T(" "));
         }
       }
 
       // Clear all data.
       some_data = false;
-      _tcscpy(d_mode, TEXT(""));
-      _tcscpy(d_type, TEXT(""));
-      _tcscpy(d_data, TEXT(""));
+      _tcscpy(d_mode, _T(""));
+      _tcscpy(d_type, _T(""));
+      _tcscpy(d_data, _T(""));
       event_id = 0;
-      _tcscpy(d_label, TEXT(""));
+      _tcscpy(d_label, _T(""));
       d_location = 0;
       new_label = NULL;
 
@@ -466,21 +466,21 @@ InputEvents::readFile()
       // NOTE: Do NOT display buffer to user as it may contain an invalid stirng !
 
     } else if (parse_assignment(buffer, key, value)) {
-      if (_tcscmp(key, TEXT("mode")) == 0) {
+      if (_tcscmp(key, _T("mode")) == 0) {
         if (_tcslen(value) < 1024) {
           some_data = true; // Success, we have a real entry
           _tcscpy(d_mode, value);
         }
-      } else if (_tcscmp(key, TEXT("type")) == 0) {
+      } else if (_tcscmp(key, _T("type")) == 0) {
         if (_tcslen(value) < 256)
           _tcscpy(d_type, value);
-      } else if (_tcscmp(key, TEXT("data")) == 0) {
+      } else if (_tcscmp(key, _T("data")) == 0) {
         if (_tcslen(value) < 256)
           _tcscpy(d_data, value);
-      } else if (_tcscmp(key, TEXT("event")) == 0) {
+      } else if (_tcscmp(key, _T("event")) == 0) {
         if (_tcslen(value) < 256) {
-          _tcscpy(d_event, TEXT(""));
-          _tcscpy(d_misc, TEXT(""));
+          _tcscpy(d_event, _T(""));
+          _tcscpy(d_misc, _T(""));
           int ef;
 
           #if defined(__BORLANDC__)
@@ -491,7 +491,7 @@ InputEvents::readFile()
           } else {
           #endif
 
-          ef = _stscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\/().,]"), d_event,
+          ef = _stscanf(value, _T("%[^ ] %[A-Za-z0-9 \\/().,]"), d_event,
               d_misc);
 
           #if defined(__BORLANDC__)
@@ -503,9 +503,9 @@ InputEvents::readFile()
           // C++ String class ?
 
           // TCHAR *eventtoken;
-          // eventtoken = _tcstok(value, TEXT(" "));
+          // eventtoken = _tcstok(value, _T(" "));
           // d_event = token;
-          // eventtoken = _tcstok(value, TEXT(" "));
+          // eventtoken = _tcstok(value, _T(" "));
 
           if ((ef == 1) || (ef == 2)) {
 
@@ -518,7 +518,7 @@ InputEvents::readFile()
             #ifdef _INPUTDEBUG_
             } else if (input_errors_count < MAX_INPUT_ERRORS) {
               _stprintf(input_errors[input_errors_count++],
-                  TEXT("Invalid event type: %s at %i"), d_event, line);
+                  _T("Invalid event type: %s at %i"), d_event, line);
             #endif
 
             }
@@ -526,19 +526,19 @@ InputEvents::readFile()
           #ifdef _INPUTDEBUG_
           } else if (input_errors_count < MAX_INPUT_ERRORS) {
             _stprintf(input_errors[input_errors_count++],
-                TEXT("Invalid event type at %i"), line);
+                _T("Invalid event type at %i"), line);
           #endif
 
           }
         }
-      } else if (_tcscmp(key, TEXT("label")) == 0) {
+      } else if (_tcscmp(key, _T("label")) == 0) {
         _tcscpy(d_label, value);
-      } else if (_tcscmp(key, TEXT("location")) == 0) {
-        _stscanf(value, TEXT("%d"), &d_location);
+      } else if (_tcscmp(key, _T("location")) == 0) {
+        _stscanf(value, _T("%d"), &d_location);
 
       #ifdef _INPUTDEBUG_
       } else if (input_errors_count < MAX_INPUT_ERRORS) {
-        _stprintf(input_errors[input_errors_count++], TEXT("Invalid key/value pair %s=%s at %i"), key, value, line);
+        _stprintf(input_errors[input_errors_count++], _T("Invalid key/value pair %s=%s at %i"), key, value, line);
       #endif
 
       }
@@ -559,8 +559,8 @@ InputEvents::showErrors()
   TCHAR buffer[2048];
   int i;
   for (i = 0; i < input_errors_count; i++) {
-    _stprintf(buffer, TEXT("%i of %i\r\n%s"), i + 1, input_errors_count, input_errors[i]);
-    DoStatusMessage(TEXT("XCI Error"), buffer);
+    _stprintf(buffer, _T("%i of %i\r\n%s"), i + 1, input_errors_count, input_errors[i]);
+    DoStatusMessage(_T("XCI Error"), buffer);
   }
   input_errors_count = 0;
 }
@@ -569,57 +569,57 @@ InputEvents::showErrors()
 int
 InputEvents::findKey(const TCHAR *data)
 {
-  if (_tcscmp(data, TEXT("APP1")) == 0)
+  if (_tcscmp(data, _T("APP1")) == 0)
     return VK_APP1;
-  else if (_tcscmp(data, TEXT("APP2")) == 0)
+  else if (_tcscmp(data, _T("APP2")) == 0)
     return VK_APP2;
-  else if (_tcscmp(data, TEXT("APP3")) == 0)
+  else if (_tcscmp(data, _T("APP3")) == 0)
     return VK_APP3;
-  else if (_tcscmp(data, TEXT("APP4")) == 0)
+  else if (_tcscmp(data, _T("APP4")) == 0)
     return VK_APP4;
-  else if (_tcscmp(data, TEXT("APP5")) == 0)
+  else if (_tcscmp(data, _T("APP5")) == 0)
     return VK_APP5;
-  else if (_tcscmp(data, TEXT("APP6")) == 0)
+  else if (_tcscmp(data, _T("APP6")) == 0)
     return VK_APP6;
 
-  else if (_tcscmp(data, TEXT("F1")) == 0)
+  else if (_tcscmp(data, _T("F1")) == 0)
     return VK_F1;
-  else if (_tcscmp(data, TEXT("F2")) == 0)
+  else if (_tcscmp(data, _T("F2")) == 0)
     return VK_F2;
-  else if (_tcscmp(data, TEXT("F3")) == 0)
+  else if (_tcscmp(data, _T("F3")) == 0)
     return VK_F3;
-  else if (_tcscmp(data, TEXT("F4")) == 0)
+  else if (_tcscmp(data, _T("F4")) == 0)
     return VK_F4;
-  else if (_tcscmp(data, TEXT("F5")) == 0)
+  else if (_tcscmp(data, _T("F5")) == 0)
     return VK_F5;
-  else if (_tcscmp(data, TEXT("F6")) == 0)
+  else if (_tcscmp(data, _T("F6")) == 0)
     return VK_F6;
-  else if (_tcscmp(data, TEXT("F7")) == 0)
+  else if (_tcscmp(data, _T("F7")) == 0)
     return VK_F7;
-  else if (_tcscmp(data, TEXT("F8")) == 0)
+  else if (_tcscmp(data, _T("F8")) == 0)
     return VK_F8;
-  else if (_tcscmp(data, TEXT("F9")) == 0)
+  else if (_tcscmp(data, _T("F9")) == 0)
     return VK_F9;
-  else if (_tcscmp(data, TEXT("F10")) == 0)
+  else if (_tcscmp(data, _T("F10")) == 0)
     return VK_F10;
 // VENTA-TEST HANDLING EXTRA HW KEYS ON HX4700 and HP31X
-// else if (_tcscmp(data, TEXT("F11")) == 0)
+// else if (_tcscmp(data, _T("F11")) == 0)
 //  return VK_F11;
-// else if (_tcscmp(data, TEXT("F12")) == 0)
+// else if (_tcscmp(data, _T("F12")) == 0)
 //    return VK_F12;
 
-  else if (_tcscmp(data, TEXT("LEFT")) == 0)
+  else if (_tcscmp(data, _T("LEFT")) == 0)
     return VK_LEFT;
-  else if (_tcscmp(data, TEXT("RIGHT")) == 0)
+  else if (_tcscmp(data, _T("RIGHT")) == 0)
     return VK_RIGHT;
-  else if (_tcscmp(data, TEXT("UP")) == 0)
+  else if (_tcscmp(data, _T("UP")) == 0)
     return VK_UP;
-  else if (_tcscmp(data, TEXT("DOWN")) == 0)
+  else if (_tcscmp(data, _T("DOWN")) == 0)
     return VK_DOWN;
 
-  else if (_tcscmp(data, TEXT("RETURN")) == 0)
+  else if (_tcscmp(data, _T("RETURN")) == 0)
     return VK_RETURN;
-  else if (_tcscmp(data, TEXT("ESCAPE")) == 0)
+  else if (_tcscmp(data, _T("ESCAPE")) == 0)
     return VK_ESCAPE;
 
   else if (_tcslen(data) == 1)
@@ -1065,7 +1065,7 @@ InputEvents::ShowMenu()
 {
   #if !defined(GNAV) && !defined(PCGNAV)
   // Popup exit button if in .xci
-  // setMode(TEXT("Exit"));
+  // setMode(_T("Exit"));
   setMode(MODE_MENU); // VENTA3
   #endif
 

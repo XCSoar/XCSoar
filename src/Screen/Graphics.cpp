@@ -132,7 +132,7 @@ ScreenGraphics::Initialise(const SETTINGS_MAP &settings_map)
 
   int i;
 
-  LogStartUp(TEXT("Initialise graphics"));
+  LogStartUp(_T("Initialise graphics"));
 
   LoadUnitSymbols();
 

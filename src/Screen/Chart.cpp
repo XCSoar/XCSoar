@@ -219,7 +219,7 @@ Chart::DrawLabel(const TCHAR *text, const double xv, const double yv)
 void
 Chart::DrawNoData()
 {
-  const TCHAR *text = gettext(TEXT("No data"));
+  const TCHAR *text = gettext(_T("No data"));
 
   SIZE tsize = canvas.text_size(text);
 
@@ -387,9 +387,9 @@ void
 Chart::FormatTicText(TCHAR *text, const double val, const double step)
 {
   if (step < 1.0) {
-    _stprintf(text, TEXT("%.1f"), val);
+    _stprintf(text, _T("%.1f"), val);
   } else {
-    _stprintf(text, TEXT("%.0f"), val);
+    _stprintf(text, _T("%.0f"), val);
   }
 }
 

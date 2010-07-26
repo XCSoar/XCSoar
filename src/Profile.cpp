@@ -70,7 +70,7 @@ Profile::LoadFile(const TCHAR *szFile)
   if (string_is_empty(szFile))
     return;
 
-  LogStartUp(TEXT("Loading profile from %s"), szFile);
+  LogStartUp(_T("Loading profile from %s"), szFile);
   Registry::Import(szFile);
 }
 
@@ -93,7 +93,7 @@ Profile::SaveFile(const TCHAR *szFile)
   if (string_is_empty(szFile))
     return;
 
-  LogStartUp(TEXT("Saving profile to %s"), szFile);
+  LogStartUp(_T("Saving profile to %s"), szFile);
   Registry::Export(szFile);
 }
 

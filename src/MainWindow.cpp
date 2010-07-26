@@ -79,22 +79,22 @@ MainWindow::set(LPCTSTR text,
 
   Layout::Initialize(rc.right - rc.left, rc.bottom - rc.top);
 
-  LogStartUp(TEXT("InfoBox geometry"));
+  LogStartUp(_T("InfoBox geometry"));
   InfoBoxLayout::Init(rc);
   RECT map_rect = InfoBoxLayout::GetRemainingRect(rc);
 
   // color/pattern chart (must have infobox geometry before this)
   MapGfx.Initialise(XCSoarInterface::SettingsMap());
 
-  LogStartUp(TEXT("Initialise fonts"));
+  LogStartUp(_T("Initialise fonts"));
   InitialiseFonts(Appearance, rc);
 
-  LogStartUp(TEXT("Create info boxes"));
+  LogStartUp(_T("Create info boxes"));
   InfoBoxManager::Create(rc);
 
-  LogStartUp(TEXT("Create button labels"));
+  LogStartUp(_T("Create button labels"));
   ButtonLabel::CreateButtonLabels(*this);
-  ButtonLabel::SetLabelText(0,TEXT("MODE"));
+  ButtonLabel::SetLabelText(0,_T("MODE"));
   ButtonLabel::SetFont(MapWindowBoldFont);
 
   map.set(*this, map_rect, rc);
@@ -113,7 +113,7 @@ MainWindow::set(LPCTSTR text,
                          InfoBoxLayout::ControlHeight * 2 - 1);
   flarm->bring_to_top();
 
-  LogStartUp(TEXT("Initialise message system"));
+  LogStartUp(_T("Initialise message system"));
   popup.set(rc);
 }
 

@@ -117,7 +117,7 @@ protected:
 
       if ((idist != ilast) && (idist > 0) && (idist < 1000)) {
         TCHAR Buffer[5];
-        _stprintf(Buffer, TEXT("%d"), idist);
+        _stprintf(Buffer, _T("%d"), idist);
         POINT sc;
         RECT brect;
         m_map.LonLat2Screen(dloc, sc);

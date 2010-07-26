@@ -144,7 +144,7 @@ Registry::Import(const TCHAR *szFile)
   if (string_is_empty(szFile))
     return;
 
-  LogStartUp(TEXT("Loading registry from %s"), szFile);
+  LogStartUp(_T("Loading registry from %s"), szFile);
   FileLineReader reader(szFile);
   if (reader.error())
     return;
@@ -155,16 +155,16 @@ Registry::Import(const TCHAR *szFile)
   int j;
 
   while ((winval = reader.read()) != NULL) {
-    if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"),
+    if (_stscanf(winval, _T("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"),
                  wname, wvalue) == 2) {
       if (!string_is_empty(wname))
         Set(wname, wvalue);
-    } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=%d[\r\n]"), wname, &j) == 2) {
+    } else if (_stscanf(winval, _T("%[^#=\r\n ]=%d[\r\n]"), wname, &j) == 2) {
       if (!string_is_empty(wname))
         Set(wname, j);
-    } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"\"[\r\n]"), wname) == 1) {
+    } else if (_stscanf(winval, _T("%[^#=\r\n ]=\"\"[\r\n]"), wname) == 1) {
       if (!string_is_empty(wname))
-        Set(wname, TEXT(""));
+        Set(wname, _T(""));
     } else {
       // assert(false); // Invalid line reached
     }

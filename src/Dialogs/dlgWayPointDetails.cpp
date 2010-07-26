@@ -394,27 +394,27 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   _stprintf(path_modis, _T("%s" DIR_SEPARATOR_S "modis-%03d.jpg"),
            Directory,
            selected_waypoint->id+1);
-  _stprintf(path_google,TEXT("%s" DIR_SEPARATOR_S "google-%03d.jpg"),
+  _stprintf(path_google,_T("%s" DIR_SEPARATOR_S "google-%03d.jpg"),
            Directory,
            selected_waypoint->id+1);
 
-  _stprintf(sTmp, TEXT("%s: '%s'"), wf->GetCaption(), selected_waypoint->Name.c_str());
+  _stprintf(sTmp, _T("%s: '%s'"), wf->GetCaption(), selected_waypoint->Name.c_str());
   wf->SetCaption(sTmp);
 
-  wp = ((WndProperty *)wf->FindByName(TEXT("prpWpComment")));
+  wp = ((WndProperty *)wf->FindByName(_T("prpWpComment")));
   wp->SetText(selected_waypoint->Comment.c_str());
   wp->SetButtonSize(16);
 
   Units::LongitudeToString(selected_waypoint->Location.Longitude, sTmp, sizeof(sTmp)-1);
-  ((WndProperty *)wf->FindByName(TEXT("prpLongitude")))
+  ((WndProperty *)wf->FindByName(_T("prpLongitude")))
     ->SetText(sTmp);
 
   Units::LatitudeToString(selected_waypoint->Location.Latitude, sTmp, sizeof(sTmp)-1);
-  ((WndProperty *)wf->FindByName(TEXT("prpLatitude")))
+  ((WndProperty *)wf->FindByName(_T("prpLatitude")))
     ->SetText(sTmp);
 
   Units::FormatUserAltitude(selected_waypoint->Altitude, sTmp, sizeof(sTmp)-1);
-  ((WndProperty *)wf->FindByName(TEXT("prpAltitude")))
+  ((WndProperty *)wf->FindByName(_T("prpAltitude")))
     ->SetText(sTmp);
 
   SunEphemeris sun;

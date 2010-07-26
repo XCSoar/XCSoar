@@ -74,9 +74,9 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent, int X, int Y, int Width, 
 
   mValueUnit = unUndef;
 
-  _tcscpy(mTitle, TEXT(""));
-  _tcscpy(mValue, TEXT(""));
-  _tcscpy(mComment, TEXT(""));
+  _tcscpy(mTitle, _T(""));
+  _tcscpy(mValue, _T(""));
+  _tcscpy(mComment, _T(""));
 }
 
 void

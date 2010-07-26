@@ -50,7 +50,7 @@ Copyright_License {
 
 Marks::Marks()
 {
-  LogStartUp(TEXT("Initialise marks"));
+  LogStartUp(_T("Initialise marks"));
   icon.load(IDB_MARK);
   Reset();
 }
@@ -67,7 +67,7 @@ Marks::~Marks()
 {
   Poco::ScopedRWLock protect(lock, true);
 
-  LogStartUp(TEXT("CloseMarks"));
+  LogStartUp(_T("CloseMarks"));
   marker_store.clear();
 }
 
@@ -79,7 +79,7 @@ Marks::MarkLocation(const GEOPOINT &loc,
   Poco::ScopedRWLock protect(lock, true);
 
   if (play_sound)
-    PlayResource(TEXT("IDR_WAV_CLEAR"));
+    PlayResource(_T("IDR_WAV_CLEAR"));
 
   marker_store.push_back(loc);
 

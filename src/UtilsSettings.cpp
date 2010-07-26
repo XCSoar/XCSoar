@@ -180,7 +180,7 @@ SystemConfiguration()
   if (!is_simulator() &&
       XCSoarInterface::LockSettingsInFlight &&
       XCSoarInterface::Basic().flight.Flying) {
-    Message::AddMessage(TEXT("Settings locked in flight"));
+    Message::AddMessage(_T("Settings locked in flight"));
     return;
   }
 

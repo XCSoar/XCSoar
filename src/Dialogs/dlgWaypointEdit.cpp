@@ -64,20 +64,20 @@ static void UpdateButtons(void) {
   TCHAR text[MAX_PATH];
   if (buttonName) {
     if (!global_wpt->Name.size()) {
-      _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Name")),
-                gettext(TEXT("(blank)")));
+      _stprintf(text,_T("%s: %s"), gettext(_T("Name")),
+                gettext(_T("(blank)")));
     } else {
-      _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Name")),
+      _stprintf(text,_T("%s: %s"), gettext(_T("Name")),
                 global_wpt->Name.c_str());
     }
     buttonName->SetCaption(text);
   }
   if (buttonComment) {
     if (!global_wpt->Comment.size()) {
-      _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Comment")),
-                gettext(TEXT("(blank)")));
+      _stprintf(text,_T("%s: %s"), gettext(_T("Comment")),
+                gettext(_T("(blank)")));
     } else {
-      _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Comment")),
+      _stprintf(text,_T("%s: %s"), gettext(_T("Comment")),
                 global_wpt->Comment.c_str());
     }
     buttonComment->SetCaption(text);

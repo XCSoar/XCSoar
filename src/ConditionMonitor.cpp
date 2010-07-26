@@ -172,7 +172,7 @@ protected:
   void
   Notify(void)
   {
-    Message::AddMessage(TEXT("Significant wind change"));
+    Message::AddMessage(_T("Significant wind change"));
   }
 
   void
@@ -288,7 +288,7 @@ protected:
   void
   Notify(void)
   {
-    Message::AddMessage(TEXT("Expect arrival past sunset"));
+    Message::AddMessage(_T("Expect arrival past sunset"));
   }
 
   void
@@ -333,7 +333,7 @@ protected:
   void
   Notify(void)
   {
-    Message::AddMessage(TEXT("Expect early task arrival"));
+    Message::AddMessage(_T("Expect early task arrival"));
   }
 
   void
@@ -387,9 +387,9 @@ protected:
   Notify(void)
   {
     if (withinMargin)
-      Message::AddMessage(TEXT("Start rules slightly violated\r\nbut within margin"));
+      Message::AddMessage(_T("Start rules slightly violated\r\nbut within margin"));
     else
-      Message::AddMessage(TEXT("Start rules violated"));
+      Message::AddMessage(_T("Start rules violated"));
   }
 
   void

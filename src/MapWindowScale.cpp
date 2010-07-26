@@ -212,21 +212,21 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
       // TODO code: gettext these
       ScaleInfo[0] = 0;
       if (SettingsMap().AutoZoom)
-        _tcscat(ScaleInfo, TEXT("AUTO "));
+        _tcscat(ScaleInfo, _T("AUTO "));
 
       if (SettingsMap().TargetPan)
-        _tcscat(ScaleInfo, TEXT("TARGET "));
+        _tcscat(ScaleInfo, _T("TARGET "));
       else if (SettingsMap().EnablePan)
-        _tcscat(ScaleInfo, TEXT("PAN "));
+        _tcscat(ScaleInfo, _T("PAN "));
 
       if (SettingsMap().EnableAuxiliaryInfo)
-        _tcscat(ScaleInfo, TEXT("AUX "));
+        _tcscat(ScaleInfo, _T("AUX "));
 
       if (Basic().gps.Replay)
-        _tcscat(ScaleInfo, TEXT("REPLAY "));
+        _tcscat(ScaleInfo, _T("REPLAY "));
 
       if (task != NULL && SettingsComputer().BallastTimerActive) {
-        _stprintf(TEMP,TEXT("BALLAST %d LITERS"),
+        _stprintf(TEMP,_T("BALLAST %d LITERS"),
                   (int)task->get_glide_polar().get_ballast_litres());
         _tcscat(ScaleInfo, TEMP);
       }
@@ -248,7 +248,7 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
 
     #ifdef DRAWLOAD
     canvas.select(MapWindowFont);
-    _stprintf(ScaleInfo,TEXT("draw %d gps %d idle %d"),
+    _stprintf(ScaleInfo,_T("draw %d gps %d idle %d"),
               GetAverageTime(),
               Calculated().time_process_gps,
               Calculated().time_process_idle);

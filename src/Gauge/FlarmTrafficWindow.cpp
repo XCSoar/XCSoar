@@ -376,7 +376,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
     // Write the relativ altitude devided by 100 to the Buffer
     TCHAR Buffer[10];
-    _stprintf(Buffer, TEXT("%d"), abs(relalt));
+    _stprintf(Buffer, _T("%d"), abs(relalt));
 
     // Select font
     canvas.background_transparent();

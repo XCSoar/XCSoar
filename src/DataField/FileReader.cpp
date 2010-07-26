@@ -66,7 +66,7 @@ Copyright_License {
 static bool
 IsDots(const TCHAR* str)
 {
-  if (_tcscmp(str, TEXT(".")) && _tcscmp(str, TEXT("..")))
+  if (_tcscmp(str, _T(".")) && _tcscmp(str, _T("..")))
     return false;
   return true;
 }
@@ -410,7 +410,7 @@ DataFieldFileReader::GetPathFile(void) const
   if ((mValue <= nFiles) && (mValue)) {
     return fields[mValue].mTextPathFile;
   }
-  return TEXT("\0");
+  return _T("");
 }
 
 #ifndef HAVE_POSIX /* we use fnmatch() on POSIX */

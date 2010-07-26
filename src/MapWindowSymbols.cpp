@@ -164,8 +164,8 @@ MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc, const GPS_STATE &gps)
     // nothing to do, all OK
     return;
 
-  TCHAR gpswarningtext1[] = TEXT("GPS not connected");
-  TCHAR gpswarningtext2[] = TEXT("GPS waiting for fix");
+  TCHAR gpswarningtext1[] = _T("GPS not connected");
+  TCHAR gpswarningtext2[] = _T("GPS waiting for fix");
   TextInBoxMode_t TextInBoxMode = { 2 };
   TCHAR *txt = NULL;
   MaskedIcon *icon = NULL;
@@ -270,7 +270,7 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
 
   if (tsize.cx == 0) {
     canvas.select(MapWindowBoldFont);
-    tsize = canvas.text_size(TEXT("99"));
+    tsize = canvas.text_size(_T("99"));
     tsize.cx = tsize.cx / 2;
   }
 
@@ -317,7 +317,7 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
     canvas.line(Tail[0], Tail[1]);
   }
 
-  _stprintf(sTmp, TEXT("%i"),
+  _stprintf(sTmp, _T("%i"),
             iround(Units::ToUserUnit(wind.norm, Units::WindSpeedUnit)));
 
   TextInBoxMode_t TextInBoxMode = { 16 | 32 };

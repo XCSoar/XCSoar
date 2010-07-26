@@ -80,7 +80,7 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
   diLabelMiddle.InitDone = false;
   diLabelBottom.InitDone = false;
 
-  LogStartUp(TEXT("Create Vario"));
+  LogStartUp(_T("Create Vario"));
 
   WindowStyle style;
   style.hide();
@@ -207,11 +207,11 @@ GaugeVario::Render()
     if (!Calculated().Circling) {
       RenderValue(canvas, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
                   Units::ToUserUnit(Calculated().NettoAverage30s,
-                                    Units::VerticalSpeedUnit), TEXT("NetAvg"));
+                                    Units::VerticalSpeedUnit), _T("NetAvg"));
     } else {
       RenderValue(canvas, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
                   Units::ToUserUnit(Calculated().Average30s,
-                                    Units::VerticalSpeedUnit), TEXT("Avg"));
+                                    Units::VerticalSpeedUnit), _T("Avg"));
     }
   }
 
@@ -221,11 +221,11 @@ GaugeVario::Render()
     if (SettingsComputer().auto_mc)
       RenderValue(canvas, orgBottom.x, orgBottom.y,
 		  &diValueBottom, &diLabelBottom,
-		  mc, TEXT("Auto Mc"));
+		  mc, _T("Auto Mc"));
     else
       RenderValue(canvas, orgBottom.x, orgBottom.y,
 		  &diValueBottom, &diLabelBottom,
-		  mc, TEXT("Mc"));
+		  mc, _T("Mc"));
   }
 
   if (Appearance.GaugeVarioSpeedToFly)
@@ -285,7 +285,7 @@ GaugeVario::Render()
     RenderValue(canvas, orgMiddle.x, orgMiddle.y,
                 &diValueMiddle, &diLabelMiddle,
                 vvaldisplay,
-                TEXT("Gross"));
+                _T("Gross"));
 
   RenderZero(canvas);
 
@@ -559,7 +559,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
     TCHAR Temp[18];
     canvas.set_background_color(colTextBackgnd);
     canvas.set_text_color(colText);
-    _stprintf(Temp, TEXT("%.1f"), Value);
+    _stprintf(Temp, _T("%.1f"), Value);
     canvas.select(CDIWindowFont);
     tsize = canvas.text_size(Temp);
     diValue->orgText.x = diValue->recBkg.right - tsize.cx;
@@ -720,7 +720,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 void
 GaugeVario::RenderBallast(Canvas &canvas)
 {
-  #define TextBal TEXT("Bal")
+  #define TextBal _T("Bal")
 
   static double lastBallast = 1;
   static RECT recLabelBk = {-1,-1,-1,-1};
@@ -770,7 +770,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
     recLabelBk.bottom = recLabelBk.top + TitleWindowFont.get_capital_height();
 
     // get max value size
-    tSize = canvas.text_size(TEXT("100%"));
+    tSize = canvas.text_size(_T("100%"));
 
     recValueBk.right = recValueBk.left + tSize.cx;
     // update back rect with max label size
@@ -790,7 +790,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
     if (lastBallast < 0.001 || BALLAST < 0.001) {
       // new ballast is 0, hide label
       if (BALLAST < 0.001)
-        canvas.text_opaque(orgLabel.x, orgLabel.y, &recLabelBk, TEXT(""));
+        canvas.text_opaque(orgLabel.x, orgLabel.y, &recLabelBk, _T(""));
       else {
         canvas.set_text_color(colTextGray);
         // ols ballast was 0, show label
@@ -800,9 +800,9 @@ GaugeVario::RenderBallast(Canvas &canvas)
 
     // new ballast 0, hide value
     if (BALLAST < 0.001)
-      _stprintf(Temp, TEXT(""));
+      _stprintf(Temp, _T(""));
     else
-      _stprintf(Temp, TEXT("%.0f%%"), BALLAST * 100);
+      _stprintf(Temp, _T("%.0f%%"), BALLAST * 100);
 
     canvas.set_text_color(colText);
     canvas.text_opaque(orgValue.x, orgValue.y, &recValueBk, Temp);
@@ -814,7 +814,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
 void
 GaugeVario::RenderBugs(Canvas &canvas)
 {
-  #define TextBug TEXT("Bug")
+  #define TextBug _T("Bug")
   static double lastBugs = 1;
   static RECT recLabelBk = {-1,-1,-1,-1};
   static RECT recValueBk = {-1,-1,-1,-1};
@@ -856,7 +856,7 @@ GaugeVario::RenderBugs(Canvas &canvas)
                         + TitleWindowFont.get_height()
                         - TitleWindowFont.get_ascent_height();
 
-    tSize = canvas.text_size(TEXT("100%"));
+    tSize = canvas.text_size(_T("100%"));
 
     recValueBk.right = recValueBk.left + tSize.cx;
     recValueBk.bottom = recValueBk.top + TitleWindowFont.get_capital_height();
@@ -871,7 +871,7 @@ GaugeVario::RenderBugs(Canvas &canvas)
 
     if (lastBugs > 0.999 || BUGS > 0.999) {
       if (BUGS > 0.999)
-        canvas.text_opaque(orgLabel.x, orgLabel.y, &recLabelBk, TEXT(""));
+        canvas.text_opaque(orgLabel.x, orgLabel.y, &recLabelBk, _T(""));
       else {
         canvas.set_text_color(colTextGray);
         canvas.text_opaque(orgLabel.x, orgLabel.y, &recLabelBk, TextBug);
@@ -879,9 +879,9 @@ GaugeVario::RenderBugs(Canvas &canvas)
     }
 
     if (BUGS > 0.999)
-      _stprintf(Temp, TEXT(""));
+      _stprintf(Temp, _T(""));
     else
-      _stprintf(Temp, TEXT("%.0f%%"), (1 - BUGS) * 100);
+      _stprintf(Temp, _T("%.0f%%"), (1 - BUGS) * 100);
 
     canvas.set_text_color(colText);
     canvas.text_opaque(orgLabel.x, orgLabel.y, &recValueBk, Temp);

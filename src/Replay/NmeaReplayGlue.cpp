@@ -52,8 +52,8 @@ NmeaReplayGlue::on_sentence(const char *line)
 void
 NmeaReplayGlue::on_bad_file()
 {
-  MessageBoxX(gettext(TEXT("Could not open NMEA file!")),
-              gettext(TEXT("Flight replay")), MB_OK | MB_ICONINFORMATION);
+  MessageBoxX(gettext(_T("Could not open NMEA file!")),
+              gettext(_T("Flight replay")), MB_OK | MB_ICONINFORMATION);
 }
 
 bool
