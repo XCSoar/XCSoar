@@ -55,8 +55,6 @@ typedef	struct {
     double	adBoundsMin[4];
     double	adBoundsMax[4];
 
-    int		bUpdated;
-
     int         nBufSize; // these used static vars in shape readers, moved to be thread-safe
     uchar       *pabyRec;
     int         nPartMax;
@@ -71,7 +69,6 @@ typedef	struct
 #ifdef SWIG
 %immutable;
 #endif
-    FILE	*fp;
   ZZIP_FILE	*zfp; // JMW Zip
 
     int         nRecords;
@@ -87,11 +84,7 @@ typedef	struct
     char	*pszHeader;
 
     int		nCurrentRecord;
-    int		bCurrentRecordModified;
     char	*pszCurrentRecord;
-
-    int		bNoHeader;
-    int		bUpdated;
 
     char 	*pszStringField;
     int		nStringFieldLen;
@@ -145,19 +138,15 @@ typedef struct {
 
 // shapefileObj function prototypes
 int msSHPOpenFile(shapefileObj *shpfile, const char *mode, const char *filename);
-int msSHPCreateFile(shapefileObj *shpfile, const char *filename, int type);
 void msSHPCloseFile(shapefileObj *shpfile);
 int msSHPWhichShapes(shapefileObj *shpfile, rectObj rect, int debug);
 
 // SHP/SHX function prototypes
 SHPHandle msSHPOpen( const char * pszShapeFile, const char * pszAccess );
-SHPHandle msSHPCreate( const char * pszShapeFile, int nShapeType );
 void msSHPClose( SHPHandle hSHP );
 void msSHPGetInfo( SHPHandle hSHP, int * pnEntities, int * pnShapeType );
 int msSHPReadBounds( SHPHandle psSHP, int hEntity, rectObj *padBounds );
 void msSHPReadShape( SHPHandle psSHP, int hEntity, shapeObj *shape );
-int msSHPWriteShape( SHPHandle psSHP, shapeObj *shape );
-int msSHPWritePoint(SHPHandle psSHP, pointObj *point );
 
 // tiledShapefileObj function prototypes are in map.h
 #endif
@@ -165,21 +154,15 @@ int msSHPWritePoint(SHPHandle psSHP, pointObj *point );
 // XBase function prototypes
 DBFHandle msDBFOpen( const char * pszDBFFile, const char * pszAccess );
 void msDBFClose( DBFHandle hDBF );
-DBFHandle msDBFCreate( const char * pszDBFFile );
 
 int msDBFGetFieldCount( DBFHandle psDBF );
 int msDBFGetRecordCount( DBFHandle psDBF );
-int msDBFAddField( DBFHandle hDBF, const char * pszFieldName, DBFFieldType eType, int nWidth, int nDecimals );
 
 DBFFieldType msDBFGetFieldInfo( DBFHandle psDBF, int iField, char * pszFieldName, int * pnWidth, int * pnDecimals );
 
 int msDBFReadIntegerAttribute( DBFHandle hDBF, int iShape, int iField );
 double msDBFReadDoubleAttribute( DBFHandle hDBF, int iShape, int iField );
 const char *msDBFReadStringAttribute( DBFHandle hDBF, int iShape, int iField );
-
-int msDBFWriteIntegerAttribute( DBFHandle hDBF, int iShape, int iField, int nFieldValue );
-int msDBFWriteDoubleAttribute( DBFHandle hDBF, int iShape, int iField, double dFieldValue );
-int msDBFWriteStringAttribute( DBFHandle hDBF, int iShape, int iField, const char * pszFieldValue );
 
 char **msDBFGetItems(DBFHandle dbffile);
 char **msDBFGetValues(DBFHandle dbffile, int record);

@@ -93,39 +93,10 @@ extern "C" {
 
 void msFreeShape(shapeObj *shape); // in mapprimative.c
 void msInitShape(shapeObj *shape);
-int msCopyShape(const shapeObj *from, shapeObj *to);
-void msComputeBounds(shapeObj *shape);
-void msRectToPolygon(const rectObj rect, shapeObj *poly);
-void msClipPolylineRect(shapeObj *shape, rectObj rect);
-void msClipPolygonRect(shapeObj *shape, rectObj rect);
-//void msTransformShape(shapeObj *shape, rectObj extent, double cellsize, imageObj *image);
-void msTransformShapeToPixel(shapeObj *shape, rectObj extent, double cellsize);
-void msTransformPixelToShape(shapeObj *shape, rectObj extent, double cellsize);
-//void msImageCartographicPolyline(gdImagePtr im, shapeObj *p, styleObj *style, symbolObj *symbol, int c, double size, double scalefactor);
-int msPolylineLabelPoint(shapeObj *p, pointObj *lp, int min_length, double *angle, double *length);
-int msPolygonLabelPoint(shapeObj *p, pointObj *lp, int min_dimension);
-int msAddLine(shapeObj *p, lineObj *new_line);
 
 int msPointInRect(const pointObj *p, const rectObj *rect); // in mapsearch.c
 int msRectOverlap(const rectObj *a, const rectObj *b);
 int msRectContained(const rectObj *a, const rectObj *b);
-void msMergeRect(rectObj *a, const rectObj *b);
-double msDistancePointToPoint(const pointObj *a, const pointObj *b);
-double msDistancePointToSegment(const pointObj *p, const pointObj *a,
-                                const pointObj *b);
-double msDistancePointToShape(const pointObj *p, const shapeObj *shape);
-double msDistanceSegmentToSegment(const pointObj *pa, const pointObj *pb,
-                                  const pointObj *pc, const pointObj *pd);
-double msDistanceShapeToShape(const shapeObj *shape1, const shapeObj *shape2);
-int msIntersectSegments(const pointObj *a, const pointObj *b,
-                        const pointObj *c, const pointObj *d);
-int msPointInPolygon(const pointObj *p, const lineObj *c);
-int msIntersectMultipointPolygon(const multipointObj *points,
-                                 const shapeObj *polygon);
-int msIntersectPointPolygon(const pointObj *p, const shapeObj *polygon);
-int msIntersectPolylinePolygon(const shapeObj *line, const shapeObj *poly);
-int msIntersectPolygons(const shapeObj *p1, const shapeObj *p2);
-int msIntersectPolylines(const shapeObj *line1, const shapeObj *line2);
 
 size_t msGetBitArraySize(int numbits); // in mapbits.c
 char *msAllocBitArray(int numbits);
