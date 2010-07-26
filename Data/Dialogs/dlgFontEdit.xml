@@ -17,10 +17,6 @@
     <DataField name="" DataType="boolean"  OnDataAccess="OnData"/>
   </Edit>
 
-  <Edit Name="prpFontPitchAndFamily" Caption="Pitch" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Help="Variable or fixed pitch">
-    <DataField name="" DataType="enum"  OnDataAccess="OnData"/>
-  </Edit>
-
   <Edit Name="prpFontTrueType" Caption="True Type" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Help="Use True type font">
     <DataField name="" DataType="boolean"  OnDataAccess="OnData"/>
   </Edit>

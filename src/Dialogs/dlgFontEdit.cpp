@@ -111,10 +111,6 @@ static void RedrawSampleFont(void)
   if (wp)
     NewLogFont.lfItalic = wp->GetDataField()->GetAsBoolean();
 
-  wp = (WndProperty*)wf->FindByName(_T("prpFontPitchAndFamily"));
-  if (wp)
-    NewLogFont.lfPitchAndFamily = wp->GetDataField()->GetAsInteger();
-
 #ifndef ENABLE_SDL
   wp = (WndProperty*)wf->FindByName(_T("prpFontTrueType"));
   if (wp) {
@@ -182,15 +178,6 @@ InitGUI(const TCHAR * FontDescription)
     dfe->addEnumText(gettext(_T("DejaVu Sans Condensed")));
     // RLD ToDo code: add more font faces, and validate their availabiliy
   }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFontPitchAndFamily"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Default")));
-    dfe->addEnumText(gettext(_T("Fixed")));
-    dfe->addEnumText(gettext(_T("Variable")));
-  }
 }
 
 void
@@ -256,15 +243,6 @@ LoadGUI()
     dfb = (DataFieldBoolean*)wp->GetDataField();
     if (dfb)
       dfb->Set(NewLogFont.lfItalic);
-
-    wp->RefreshDisplay();
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpFontPitchAndFamily"));
-  if (wp) {
-    DataFieldEnum * dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    if (dfe)
-      dfe->SetAsInteger(NewLogFont.lfPitchAndFamily);
 
     wp->RefreshDisplay();
   }
