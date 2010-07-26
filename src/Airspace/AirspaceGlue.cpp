@@ -36,9 +36,9 @@ Copyright_License {
 }
 */
 
-#include "AirspaceGlue.hpp"
-#include "AirspaceParser.hpp"
-#include "AirspaceClientUI.hpp"
+#include "Airspace/AirspaceGlue.hpp"
+#include "Airspace/AirspaceParser.hpp"
+#include "Airspace/AirspaceClientUI.hpp"
 #include "ProfileKeys.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "LogFile.hpp"

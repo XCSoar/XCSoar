@@ -154,9 +154,9 @@ DIALOG_SOURCES = \
 XCSOAR_SOURCES := \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(IO_SRC_DIR)/DataFile.cpp \
-	$(SRC)/AirspaceClient.cpp \
-	$(SRC)/AirspaceClientUI.cpp \
-	$(SRC)/AirspaceClientCalc.cpp \
+	$(SRC)/Airspace/AirspaceClient.cpp \
+	$(SRC)/Airspace/AirspaceClientUI.cpp \
+	$(SRC)/Airspace/AirspaceClientCalc.cpp \
 	$(SRC)/TaskClient.cpp \
 	$(SRC)/TaskClientMap.cpp \
 	$(SRC)/TaskClientUI.cpp \
@@ -165,9 +165,9 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Poco/RWLock.cpp \
 	\
-	$(SRC)/AirspaceGlue.cpp \
-	$(SRC)/AirspaceParser.cpp \
-	$(SRC)/AirspaceVisibility.cpp \
+	$(SRC)/Airspace/AirspaceGlue.cpp \
+	$(SRC)/Airspace/AirspaceParser.cpp \
+	$(SRC)/Airspace/AirspaceVisibility.cpp \
 	\
 	$(SRC)/Atmosphere.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \

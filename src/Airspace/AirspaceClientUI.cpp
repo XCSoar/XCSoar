@@ -1,7 +1,7 @@
-#include "AirspaceClientUI.hpp"
+#include "Airspace/AirspaceClientUI.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
-#include "AirspaceParser.hpp"
+#include "Airspace/AirspaceParser.hpp"
 #include "Terrain/RasterTerrain.hpp"
 
 const AirspacesInterface::AirspaceVector 

@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
@@ -34,58 +33,31 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
+ */
+#ifndef AIRSPACECLIENTCALC_HPP
+#define AIRSPACECLIENTCALC_HPP
 
-*/
+#include "Airspace/AirspaceClient.hpp"
 
-#include "AirspaceVisibility.hpp"
-#include "Airspace/AbstractAirspace.hpp"
-#include "SettingsComputer.hpp"
+struct AIRCRAFT_STATE;
+class AtmosphericPressure;
 
-bool
-AirspaceVisible::type_visible(const AbstractAirspace& airspace) const
+class AirspaceClientCalc:
+  public AirspaceClient
 {
-  return m_settings.iAirspaceMode[airspace.get_type()]%2==1;
-}
+public:
+  AirspaceClientCalc(Airspaces& as, 
+                     AirspaceWarningManager& awm):
+    AirspaceClient(as, awm) {};
 
-bool
-AirspaceVisible::altitude_visible(const AbstractAirspace& airspace) const
-{
-  /// @todo airspace visibility did use ToMSL(..., map.Calculated().TerrainAlt); 
+  // manager
+  void reset_warning(const AIRCRAFT_STATE& as);
+  bool update_warning(const AIRCRAFT_STATE &state);
 
-  switch (m_settings.AltitudeMode) {
+  // airspace
+  void set_flight_levels(const AtmosphericPressure &press);
 
-  case ALLON:
-    return true;
+};
 
-  case CLIP:
-    if (airspace.get_base_altitude() <= fixed(m_settings.ClipAltitude))
-      return true;
-    else
-      return false;
 
-  case AUTO:
-
-    if ((m_altitude >= (airspace.get_base_altitude() - fixed(m_settings.AltWarningMargin)))
-        && (m_altitude <= (airspace.get_top_altitude() + fixed(m_settings.AltWarningMargin))))
-      return true;
-    else
-      return false;
-
-  case ALLBELOW:
-    if (m_altitude >= (airspace.get_base_altitude() - fixed(m_settings.AltWarningMargin)))
-      return true;
-    else
-      return false;
-
-  case INSIDE:
-    if ((m_altitude >= airspace.get_base_altitude()) 
-        && (m_altitude <= airspace.get_top_altitude()))
-      return true;
-    else
-      return false;
-
-  case ALLOFF:
-    return false;
-  }
-  return true;
-}
+#endif

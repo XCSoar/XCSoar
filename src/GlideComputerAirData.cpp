@@ -60,7 +60,7 @@ Copyright_License {
 #include "ThermalBase.hpp"
 #include "TaskClientCalc.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "AirspaceClientCalc.hpp"
+#include "Airspace/AirspaceClientCalc.hpp"
 #include "Defines.h"
 
 #include <algorithm>

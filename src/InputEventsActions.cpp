@@ -92,7 +92,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Logger/NMEALogger.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "TaskClientUI.hpp"
-#include "AirspaceClientUI.hpp"
+#include "Airspace/AirspaceClientUI.hpp"
 #include "DrawThread.hpp"
 #include "Replay/Replay.hpp"
 #include "DeviceBlackboard.hpp"
@@ -1145,7 +1145,7 @@ InputEvents::eventRepeatStatusMessage(const TCHAR *misc)
 // If the aircraft is within airspace, this displays the distance and bearing
 // to the nearest exit to the airspace.
 
-#include "AirspaceVisibility.hpp"
+#include "Airspace/AirspaceVisibility.hpp"
 #include "Airspace/AirspaceSoonestSort.hpp"
 
 void 

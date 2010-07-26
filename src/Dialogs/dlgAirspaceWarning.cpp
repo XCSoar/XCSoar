@@ -41,7 +41,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Screen/Layout.hpp"
 #include "Compatibility/vk.h"
-#include "AirspaceClientUI.hpp"
+#include "Airspace/AirspaceClientUI.hpp"
 
 #include <assert.h>
 #include <stdlib.h>

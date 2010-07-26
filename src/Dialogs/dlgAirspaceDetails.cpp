@@ -39,7 +39,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/Message.hpp"
 #include "Blackboard.hpp"
-#include "AirspaceClientUI.hpp"
+#include "Airspace/AirspaceClientUI.hpp"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "MainWindow.hpp"

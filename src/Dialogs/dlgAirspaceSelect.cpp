@@ -46,7 +46,7 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "MapWindow.hpp"
 #include "Components.hpp"
-#include "AirspaceClientUI.hpp"
+#include "Airspace/AirspaceClientUI.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Busy.hpp"
 #include "Compiler.h"

@@ -336,10 +336,10 @@ $(RUN_CANVAS_BIN): $(RUN_CANVAS_OBJS) $(RUN_CANVAS_LDADD) | $(TARGET_BIN_DIR)/di
 RUN_MAP_WINDOW_SOURCES = \
 	$(IO_SRC_DIR)/DataFile.cpp \
 	$(SRC)/Poco/RWLock.cpp \
-	$(SRC)/AirspaceClient.cpp \
-	$(SRC)/AirspaceClientUI.cpp \
-	$(SRC)/AirspaceParser.cpp \
-	$(SRC)/AirspaceVisibility.cpp \
+	$(SRC)/Airspace/AirspaceClient.cpp \
+	$(SRC)/Airspace/AirspaceClientUI.cpp \
+	$(SRC)/Airspace/AirspaceParser.cpp \
+	$(SRC)/Airspace/AirspaceVisibility.cpp \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Projection.cpp \
@@ -473,15 +473,15 @@ $(RUN_DIALOG_BIN): $(RUN_DIALOG_OBJS) $(RUN_DIALOG_LDADD) | $(TARGET_BIN_DIR)/di
 RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/xmlParser.cpp \
-	$(SRC)/AirspaceClient.cpp \
-	$(SRC)/AirspaceClientUI.cpp \
+	$(SRC)/Airspace/AirspaceClient.cpp \
+	$(SRC)/Airspace/AirspaceClientUI.cpp \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/dlgComboPicker.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/Dialogs/dlgAirspaceWarning.cpp \
-	$(SRC)/AirspaceParser.cpp \
+	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/ResourceLoader.cpp \
@@ -529,8 +529,8 @@ $(RUN_AIRSPACE_WARNING_DIALOG_BIN): $(RUN_AIRSPACE_WARNING_DIALOG_OBJS) $(RUN_AI
 RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/xmlParser.cpp \
-	$(SRC)/AirspaceClient.cpp \
-	$(SRC)/AirspaceClientUI.cpp \
+	$(SRC)/Airspace/AirspaceClient.cpp \
+	$(SRC)/Airspace/AirspaceClientUI.cpp \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/dlgComboPicker.cpp \
@@ -541,7 +541,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgTaskWaypoint.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
 	$(SRC)/LocalTime.cpp \
-	$(SRC)/AirspaceParser.cpp \
+	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/TaskClient.cpp \

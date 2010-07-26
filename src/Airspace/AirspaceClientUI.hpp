@@ -37,7 +37,7 @@
 #ifndef AIRSPACECLIENTUI_HPP
 #define AIRSPACECLIENTUI_HPP
 
-#include "AirspaceClient.hpp"
+#include "Airspace/AirspaceClient.hpp"
 #include "Airspace/AirspacesInterface.hpp"
 #include "Airspace/AirspaceWarning.hpp"
 

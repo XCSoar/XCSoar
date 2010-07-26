@@ -88,9 +88,9 @@ Copyright_License {
 
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/Airspaces.hpp"
-#include "AirspaceClientUI.hpp"
-#include "AirspaceClientCalc.hpp"
-#include "AirspaceGlue.hpp"
+#include "Airspace/AirspaceClientUI.hpp"
+#include "Airspace/AirspaceClientCalc.hpp"
+#include "Airspace/AirspaceGlue.hpp"
 
 #include "Task/TaskManager.hpp"
 #include "TaskClientUI.hpp"

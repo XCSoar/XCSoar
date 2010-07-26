@@ -570,7 +570,7 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
 }
 
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
-#include "AirspaceClientUI.hpp"
+#include "Airspace/AirspaceClientUI.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 

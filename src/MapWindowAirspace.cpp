@@ -38,11 +38,11 @@ Copyright_License {
 
 #include "MapWindow.hpp"
 #include "MapCanvas.hpp"
-#include "AirspaceClientUI.hpp"
+#include "Airspace/AirspaceClientUI.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspaceVisitor.hpp"
-#include "AirspaceVisibility.hpp"
+#include "Airspace/AirspaceVisibility.hpp"
 #include "Airspace/AirspaceWarningVisitor.hpp"
 #include "MapDrawHelper.hpp"
 

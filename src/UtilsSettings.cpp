@@ -53,7 +53,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Simulator.hpp"
 #include "DrawThread.hpp"
-#include "AirspaceGlue.hpp"
+#include "Airspace/AirspaceGlue.hpp"
 #include "ProgressGlue.hpp"
 #include "TaskClientUI.hpp"
 #include "WayPoint/WayPointGlue.hpp"

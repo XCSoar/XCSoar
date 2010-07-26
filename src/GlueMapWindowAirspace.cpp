@@ -42,8 +42,8 @@ Copyright_License {
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspaceVisitor.hpp"
 #include "Airspace/AirspaceWarningVisitor.hpp"
-#include "AirspaceVisibility.hpp"
-#include "AirspaceClientUI.hpp"
+#include "Airspace/AirspaceVisibility.hpp"
+#include "Airspace/AirspaceClientUI.hpp"
 
 class AirspaceWarningCopy: 
   public AirspaceWarningVisitor

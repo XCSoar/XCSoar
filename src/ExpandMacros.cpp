@@ -48,7 +48,7 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "Simulator.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "AirspaceClientUI.hpp"
+#include "Airspace/AirspaceClientUI.hpp"
 #include "TaskClientUI.hpp"
 #include "Replay/Replay.hpp"
 

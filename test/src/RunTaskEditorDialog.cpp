@@ -44,7 +44,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "WayPointParser.h"
-#include "AirspaceClientUI.hpp"
+#include "Airspace/AirspaceClientUI.hpp"
 #include "TaskClientUI.hpp"
 #include "Task/TaskManager.hpp"
 #include "Screen/Blank.hpp"
