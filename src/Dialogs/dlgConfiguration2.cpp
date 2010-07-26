@@ -40,6 +40,9 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
+#include "InfoBoxes/Content/Factory.hpp"
+#include "InfoBoxes/Content/Base.hpp"
+#include "Util/StringUtil.hpp"
 
 extern TabbedControl *configuration_tabbed;
 
@@ -67,6 +70,18 @@ void OnInfoBoxHelp(WindowControl * Sender){
   }
   _stprintf(caption, _T("InfoBox %s in %s mode"),
 	    wp->GetCaption(), mode);
+
+  InfoBoxContent* ibc = InfoBoxFactory::Create(type);
+  if (ibc) {
+    const TCHAR* text = ibc->GetHelpText();
+    delete ibc;
+
+    if (!string_is_empty(text)) {
+      dlgHelpShowModal(XCSoarInterface::main_window, caption, text);
+      return;
+    }
+  }
+
   switch(type) {
   case 0:
     dlgHelpShowModal(XCSoarInterface::main_window,

@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_INFOBOX_CONTENT_HPP
 #define XCSOAR_INFOBOX_CONTENT_HPP
 
+#include <tchar.h>
+
 class InfoBoxWindow;
 
 class InfoBoxContent
@@ -56,6 +58,8 @@ public:
   virtual bool HandleKey(const InfoBoxKeyCodes keycode) {
     return false;
   }
+
+  virtual const TCHAR* GetHelpText() { return _T(""); }
 };
 
 #endif
