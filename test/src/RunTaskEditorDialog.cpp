@@ -221,7 +221,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   main_window.show();
 
   Layout::Initialize(640, 480);
-  Fonts::InitialiseFonts(Appearance, main_window.get_client_rect());
+  Fonts::Initialize(Appearance, main_window.get_client_rect());
 
   dlgTaskOverviewShowModal(main_window);
 

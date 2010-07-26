@@ -45,7 +45,7 @@ class Font;
 
 namespace Fonts
 {
-  void ResetFonts();
+  void Reset();
 
   void LoadCustomFont(Font *theFont, const TCHAR FontRegKey[],
                       LOGFONT *LogFontUsed = NULL);
@@ -54,7 +54,7 @@ namespace Fonts
                       LOGFONT *LogFontUsed = NULL);
 
   void
-  InitialiseFonts(const struct Appearance &appearance, RECT rc);
+  Initialize(const struct Appearance &appearance, RECT rc);
 
   const TCHAR* GetStandardFontFace();
 }
