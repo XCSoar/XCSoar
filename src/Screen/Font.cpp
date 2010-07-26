@@ -41,11 +41,8 @@ Copyright_License {
 #ifdef ENABLE_SDL
 
 bool
-Font::set(const char *file, int ptsize, bool bold, bool italic,
-          bool variable_pitch)
+Font::set(const char *file, int ptsize, bool bold, bool italic)
 {
-  (void)variable_pitch;
-
   reset();
 
   font = TTF_OpenFont(file, ptsize);
@@ -91,14 +88,13 @@ Font::reset()
 #include "Asset.hpp"
 
 bool
-Font::set(const TCHAR* facename, int height, bool bold, bool italic,
-          bool variable_pitch)
+Font::set(const TCHAR* facename, int height, bool bold, bool italic)
 {
   LOGFONT font;
   memset((char *)&font, 0, sizeof(LOGFONT));
 
   _tcscpy(font.lfFaceName, facename);
-  font.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE;
+  font.lfPitchAndFamily = DEFAULT_PITCH | FF_DONTCARE;
   font.lfHeight = (long)height;
   font.lfWeight = (long)(bold ? FW_BOLD : FW_MEDIUM);
   font.lfItalic = italic;
