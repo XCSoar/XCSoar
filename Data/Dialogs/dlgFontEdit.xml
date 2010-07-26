@@ -17,10 +17,6 @@
     <DataField name="" DataType="boolean"  OnDataAccess="OnData"/>
   </Edit>
 
-  <Edit Name="prpFontTrueType" Caption="True Type" X="2" Y="-1" Width="235" Height="22" CaptionWidth="78" Help="Use True type font">
-    <DataField name="" DataType="boolean"  OnDataAccess="OnData"/>
-  </Edit>
-
   <Edit Name="prpFontSample" Caption="my sample" X="2" Y="-1" Width="235" Height="40" CaptionWidth="235" readonly="1" Help="" />
 
   <Button Caption="Ok" X="2" Y="185" Width="70" Height="22" OnClick="OnCloseClicked" />

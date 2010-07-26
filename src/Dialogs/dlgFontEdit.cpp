@@ -111,16 +111,6 @@ static void RedrawSampleFont(void)
   if (wp)
     NewLogFont.lfItalic = wp->GetDataField()->GetAsBoolean();
 
-#ifndef ENABLE_SDL
-  wp = (WndProperty*)wf->FindByName(_T("prpFontTrueType"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean())
-      NewLogFont.lfQuality = ANTIALIASED_QUALITY;
-    else
-      NewLogFont.lfQuality = NONANTIALIASED_QUALITY;
-  }
-#endif /* !ENABLE_SDL */
-
 #ifdef ENABLE_SDL
   // XXX
 #else /* !ENABLE_SDL */
@@ -246,18 +236,6 @@ LoadGUI()
 
     wp->RefreshDisplay();
   }
-
-#ifndef ENABLE_SDL
-  wp = (WndProperty*)wf->FindByName(_T("prpFontTrueType"));
-  if (wp) {
-    DataFieldBoolean* dfb;
-    dfb = (DataFieldBoolean*)wp->GetDataField();
-    if (dfb)
-      dfb->Set(NewLogFont.lfQuality == ANTIALIASED_QUALITY);
-
-    wp->RefreshDisplay();
-  }
-#endif /* !ENABLE_SDL */
 
   IsInitialized = true;
 
