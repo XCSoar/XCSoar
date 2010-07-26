@@ -65,14 +65,14 @@ Font Fonts::MapLabel;
 Font Fonts::Statistics;
 
 // these are the non-custom parameters
-LOGFONT InfoWindowLogFont;
-LOGFONT TitleWindowLogFont;
-LOGFONT MapWindowLogFont;
-LOGFONT InfoWindowSmallLogFont;
-LOGFONT MapWindowBoldLogFont;
-LOGFONT CDIWindowLogFont;
-LOGFONT MapLabelLogFont;
-LOGFONT StatisticsLogFont;
+LOGFONT LogInfoBox;
+LOGFONT LogTitle;
+LOGFONT LogMap;
+LOGFONT LogInfoBoxSmall;
+LOGFONT LogMapBold;
+LOGFONT LogCDI;
+LOGFONT LogMapLabel;
+LOGFONT LogStatistics;
 
 #ifndef ENABLE_SDL
 
@@ -145,21 +145,21 @@ InitialiseFontsAltair()
   if (!is_altair())
     return;
 
-  InitialiseLogfont(&InfoWindowLogFont, _T("RasterGothicTwentyFourCond"),
+  InitialiseLogfont(&LogInfoBox, _T("RasterGothicTwentyFourCond"),
                     24, true);
-  InitialiseLogfont(&TitleWindowLogFont, _T("RasterGothicNineCond"),
+  InitialiseLogfont(&LogTitle, _T("RasterGothicNineCond"),
                     10);
-  InitialiseLogfont(&CDIWindowLogFont, _T("RasterGothicEighteenCond"),
+  InitialiseLogfont(&LogCDI, _T("RasterGothicEighteenCond"),
                     19, true);
-  InitialiseLogfont(&MapLabelLogFont, _T("RasterGothicTwelveCond"),
+  InitialiseLogfont(&LogMapLabel, _T("RasterGothicTwelveCond"),
                     13);
-  InitialiseLogfont(&StatisticsLogFont, _T("RasterGothicFourteenCond"),
+  InitialiseLogfont(&LogStatistics, _T("RasterGothicFourteenCond"),
                     15);
-  InitialiseLogfont(&MapWindowLogFont, _T("RasterGothicFourteenCond"),
+  InitialiseLogfont(&LogMap, _T("RasterGothicFourteenCond"),
                     15);
-  InitialiseLogfont(&MapWindowBoldLogFont, _T("RasterGothicFourteenCond"),
+  InitialiseLogfont(&LogMapBold, _T("RasterGothicFourteenCond"),
                     15, true);
-  InitialiseLogfont(&InfoWindowSmallLogFont, _T("RasterGothicEighteenCond"),
+  InitialiseLogfont(&LogInfoBoxSmall, _T("RasterGothicEighteenCond"),
                     19, true);
 }
 
@@ -203,37 +203,37 @@ InitialiseLogFonts()
 
   iFontHeight++;
   logfont.lfHeight = iFontHeight;
-  memset(&InfoWindowLogFont, 0, sizeof(LOGFONT));
-  memcpy(&InfoWindowLogFont, &logfont, sizeof(LOGFONT));
+  memset(&LogInfoBox, 0, sizeof(LOGFONT));
+  memcpy(&LogInfoBox, &logfont, sizeof(LOGFONT));
 
 #else /* !ENABLE_SDL */
   // XXX implement
 #endif /* !ENABLE_SDL */
 
-  InitialiseLogfont(&TitleWindowLogFont, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&LogTitle, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.333), true);
 
   // new font for CDI Scale
-  InitialiseLogfont(&CDIWindowLogFont, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&LogCDI, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.6), false, false, false);
 
   // new font for map labels
-  InitialiseLogfont(&MapLabelLogFont, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&LogMapLabel, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.39), false, true);
 
   // Font for map other text
-  InitialiseLogfont(&StatisticsLogFont, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&LogStatistics, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.7));
 
   // new font for map labels
-  InitialiseLogfont(&MapWindowLogFont, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&LogMap, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.507));
 
   // Font for map bold text
-  InitialiseLogfont(&MapWindowBoldLogFont, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&LogMapBold, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.507), true);
 
-  InitialiseLogfont(&InfoWindowSmallLogFont, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&LogInfoBoxSmall, Fonts::GetStandardFontFace(),
                     Layout::Scale(20));
 }
 
@@ -247,14 +247,14 @@ Fonts::Initialize(bool use_custom)
 
   InitialiseFontsAltair();
 
-  InitializeFont(&InfoBox, InfoWindowLogFont);
-  InitializeFont(&InfoBoxSmall, InfoWindowSmallLogFont);
-  InitializeFont(&Title, TitleWindowLogFont);
-  InitializeFont(&CDI, CDIWindowLogFont);
-  InitializeFont(&MapLabel, MapLabelLogFont);
-  InitializeFont(&Statistics, StatisticsLogFont);
-  InitializeFont(&Map, MapWindowLogFont);
-  InitializeFont(&MapBold, MapWindowBoldLogFont);
+  InitializeFont(&InfoBox, LogInfoBox);
+  InitializeFont(&InfoBoxSmall, LogInfoBoxSmall);
+  InitializeFont(&Title, LogTitle);
+  InitializeFont(&CDI, LogCDI);
+  InitializeFont(&MapLabel, LogMapLabel);
+  InitializeFont(&Statistics, LogStatistics);
+  InitializeFont(&Map, LogMap);
+  InitializeFont(&MapBold, LogMapBold);
 
   if (use_custom) {
     LoadCustomFont(&InfoBox, szProfileFontInfoWindowFont);
