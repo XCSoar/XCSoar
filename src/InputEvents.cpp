@@ -932,9 +932,11 @@ InputEvents::DoQueuedEvents(void)
   mutexEventQueue.Lock();
   for (i = 0; i < MAX_GCE_QUEUE; i++) {
     GCE_Queue_copy[i] = GCE_Queue[i];
+    GCE_Queue[i] = -1;
   }
   for (i = 0; i < MAX_NMEA_QUEUE; i++) {
     NMEA_Queue_copy[i] = NMEA_Queue[i];
+    NMEA_Queue[i] = -1;
   }
   mutexEventQueue.Unlock();
 
@@ -949,16 +951,6 @@ InputEvents::DoQueuedEvents(void)
       processNmea_real(NMEA_Queue_copy[i]);
     }
   }
-
-  // now flush the queue, again blocking
-  mutexEventQueue.Lock();
-  for (i = 0; i < MAX_GCE_QUEUE; i++) {
-    GCE_Queue[i] = -1;
-  }
-  for (i = 0; i < MAX_NMEA_QUEUE; i++) {
-    NMEA_Queue[i] = -1;
-  }
-  mutexEventQueue.Unlock();
 }
 
 bool
