@@ -108,12 +108,8 @@ static void RedrawSampleFont(void)
     NewLogFont.lfWeight = wp->GetDataField()->GetAsBoolean() ? 700 : 500;
 
   wp = (WndProperty*)wf->FindByName(_T("prpFontItalic"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsInteger())
-      NewLogFont.lfItalic = 1;
-    else
-      NewLogFont.lfItalic = 0;
-  }
+  if (wp)
+    NewLogFont.lfItalic = wp->GetDataField()->GetAsBoolean();
 
   wp = (WndProperty*)wf->FindByName(_T("prpFontPitchAndFamily"));
   if (wp)
