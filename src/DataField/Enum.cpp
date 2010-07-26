@@ -74,7 +74,7 @@ DataFieldEnum::replaceEnumText(unsigned int i, const TCHAR *Text) {
  }
 }
 
-void
+unsigned
 DataFieldEnum::addEnumText(const TCHAR *Text)
 {
   if (nEnums < DFE_MAX_ENUMS - 1) {
@@ -82,7 +82,9 @@ DataFieldEnum::addEnumText(const TCHAR *Text)
     _tcscpy(mEntries[nEnums].mText, Text);
     mEntries[nEnums].index = nEnums;
     nEnums++;
+    return (nEnums - 1);
   }
+  return 0;
 }
 
 const TCHAR *

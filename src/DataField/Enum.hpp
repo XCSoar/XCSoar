@@ -77,7 +77,7 @@ public:
   int CreateComboList(void);
 
   void replaceEnumText(unsigned int i, const TCHAR *Text);
-  void addEnumText(const TCHAR *Text);
+  unsigned addEnumText(const TCHAR *Text);
 
   virtual int GetAsInteger(void) const;
   virtual const TCHAR *GetAsString(void) const;
