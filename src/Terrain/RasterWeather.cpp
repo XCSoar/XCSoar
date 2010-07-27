@@ -131,7 +131,7 @@ RasterWeather::isWeatherAvailable(unsigned t)
 }
 
 void
-RasterWeather::RASP_filename(TCHAR *rasp_filename, const TCHAR* name)
+RasterWeather::GetFilename(TCHAR *rasp_filename, const TCHAR* name)
 {
   TCHAR fname[MAX_PATH];
   _stprintf(fname, _T("xcsoar-rasp.dat/%s.curr.%04dlst.d2.jp2"), name,
@@ -143,7 +143,7 @@ bool
 RasterWeather::LoadItem(int item, const TCHAR* name)
 {
   TCHAR rasp_filename[MAX_PATH];
-  RASP_filename(rasp_filename, name);
+  GetFilename(rasp_filename, name);
   weather_map[item] = RasterMapJPG2000::LoadFile(NarrowPathName(rasp_filename));
   return weather_map[item] != NULL;
 }
