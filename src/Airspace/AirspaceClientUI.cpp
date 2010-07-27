@@ -66,11 +66,8 @@ AirspaceClientUI::finalise_after_loading(RasterTerrain* terrain,
   airspaces.optimise();
   airspaces.set_flight_levels(press);
     
-  if (terrain != NULL) {
-    terrain->Lock();
+  if (terrain != NULL)
     airspaces.set_ground_levels(*terrain);
-    terrain->Unlock();
-  }
 }
 
 
