@@ -123,16 +123,6 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
                m_sun_elevation);
 }
 
-
-void
-BackgroundDrawHelper::set_sun(const Angle& sun_azimuth,
-                              const Angle& sun_elevation)
-{
-  m_sun_azimuth = sun_azimuth;
-  m_sun_elevation = sun_elevation;
-}
-
-
 void
 BackgroundDrawHelper::default_sun()
 {
