@@ -158,7 +158,7 @@ static void
 DrawSpotHeight_Internal(Canvas &canvas, 
                         const Projection &map_projection,
                         LabelBlock &block, 
-                        TCHAR *Buffer, POINT pt)
+                        const TCHAR *Buffer, POINT pt)
 {
   if (_tcslen(Buffer) == 0)
     return;
