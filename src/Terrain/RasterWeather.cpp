@@ -277,7 +277,7 @@ RasterWeather::ServiceFullReload(const GEOPOINT &location)
 void
 RasterWeather::ItemLabel(int i, TCHAR* Buffer)
 {
-  _stprintf(Buffer, _T("\0"));
+  *Buffer = _T('\0');
 
   switch (i) {
   case 0:
@@ -318,7 +318,8 @@ RasterWeather::ItemLabel(int i, TCHAR* Buffer)
 void
 RasterWeather::ValueToText(TCHAR* Buffer, short val)
 {
-  Buffer[0] = 0;
+  *Buffer = _T('\0');
+
   switch (_parameter) {
   case 0:
     return;
