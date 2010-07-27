@@ -35,10 +35,11 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "Terrain/WeatherTerrainRenderer.hpp"
+
 #include "Terrain/RasterWeather.hpp"
 #include "Screen/Ramp.hpp"
-
 
 const COLORRAMP weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
   { // Blue to red       // vertical speed
@@ -241,10 +242,3 @@ WeatherTerrainRenderer::do_scan_spot()
 {
   return (weather != NULL && weather->GetParameter());
 }
-
-
-WeatherTerrainRenderer::~WeatherTerrainRenderer()
-{
-
-}
-
