@@ -78,25 +78,31 @@ OnResetClicked(WindowControl * Sender)
   LoadGUI();
 }
 
-static void RedrawSampleFont(void)
+static void
+GetLogFont(LOGFONT &logfont)
 {
   WndProperty* wp;
-
   wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
-  if(wp)
-    _tcsncpy(NewLogFont.lfFaceName,wp->GetDataField()->GetAsString(), LF_FACESIZE-1);
+  if (wp)
+    _tcsncpy(logfont.lfFaceName,
+             wp->GetDataField()->GetAsString(), LF_FACESIZE - 1);
 
   wp = (WndProperty*)wf->FindByName(_T("prpFontHeight"));
-  if(wp)
-    NewLogFont.lfHeight = wp->GetDataField()->GetAsInteger();
+  if (wp)
+    logfont.lfHeight = wp->GetDataField()->GetAsInteger();
 
   wp = (WndProperty*)wf->FindByName(_T("prpFontWeight"));
-  if(wp)
-    NewLogFont.lfWeight = wp->GetDataField()->GetAsBoolean() ? 700 : 500;
+  if (wp)
+    logfont.lfWeight = wp->GetDataField()->GetAsBoolean() ? 700 : 500;
 
   wp = (WndProperty*)wf->FindByName(_T("prpFontItalic"));
   if (wp)
-    NewLogFont.lfItalic = wp->GetDataField()->GetAsBoolean();
+    logfont.lfItalic = wp->GetDataField()->GetAsBoolean();
+}
+
+static void RedrawSampleFont(void)
+{
+  GetLogFont(NewLogFont);
 
 #ifdef ENABLE_SDL
   // XXX
@@ -109,6 +115,7 @@ static void RedrawSampleFont(void)
     wf->SetTitleFont(NewFont);
   }
 
+  WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(_T("prpFontSample"));
   if (wp) {
     if (NewFont.defined()) {
