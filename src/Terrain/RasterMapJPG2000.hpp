@@ -42,8 +42,6 @@ Copyright_License {
 #include "Terrain/RasterMap.hpp"
 #include "jasper/RasterTile.hpp"
 
-#include <string>
-
 class RasterMapJPG2000: public RasterMap {
  public:
   RasterMapJPG2000(const char *path);
@@ -60,7 +58,7 @@ class RasterMapJPG2000: public RasterMap {
   static RasterMapJPG2000 *LoadFile(const char *path);
 
  protected:
-  std::string path;
+  char *path;
 
   virtual short _GetFieldAtXY(unsigned int lx,
                               unsigned int ly);

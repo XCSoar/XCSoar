@@ -44,6 +44,8 @@ Copyright_License {
 
 #include "jasper/jasper.h"
 
+#include <string.h>
+
 // Field access
 short RasterMapJPG2000::_GetFieldAtXY(unsigned int lx,
                                       unsigned int ly) {
@@ -59,7 +61,7 @@ void RasterMapJPG2000::ServiceFullReload(const GEOPOINT &location) {
 }
 
 RasterMapJPG2000::RasterMapJPG2000(const char *_path)
-  :path(_path), FullJPGReload(true)
+  :path(strdup(_path)), FullJPGReload(true)
 {
   TriggerJPGReload = false;
   if (ref_count==0) {
@@ -79,6 +81,8 @@ RasterMapJPG2000::~RasterMapJPG2000() {
   if (ref_count==0) {
     jas_cleanup();
   }
+
+  free(path);
 }
 
 int RasterMapJPG2000::ref_count = 0;
@@ -86,7 +90,7 @@ int RasterMapJPG2000::ref_count = 0;
 void RasterMapJPG2000::_ReloadJPG2000() {
   TriggerJPGReload = false;
 
-  raster_tile_cache.LoadJPG2000(path.c_str(), FullJPGReload);
+  raster_tile_cache.LoadJPG2000(path, FullJPGReload);
   FullJPGReload = false;
 
   if (!raster_tile_cache.GetInitialised())
