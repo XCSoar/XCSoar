@@ -46,7 +46,6 @@ ComboListEntry_t * ComboList::CreateItem(int ItemIndex,
                                         const TCHAR *StringValue,
                                         const TCHAR *StringValueFormatted)
 {
-  int iLen = -1;
   ComboListEntry_t * theItem;
 
   // Copy current strings into structure
@@ -62,35 +61,9 @@ ComboListEntry_t * ComboList::CreateItem(int ItemIndex,
     theItem->DataFieldIndex=DataFieldIndex;
   }
 
-  if (StringValue == NULL)
-  {
-    theItem->StringValue = (TCHAR*)malloc((1) * sizeof(TCHAR));
-    assert(theItem->StringValue != NULL);
-    theItem->StringValue[0]='\0';
-  }
-  else
-  {
-    iLen = _tcslen(StringValue);
-    theItem->StringValue = (TCHAR*)malloc((iLen + 1) * sizeof(TCHAR));
-    assert(theItem->StringValue != NULL);
-    _tcscpy(theItem->StringValue, StringValue);
-  }
-
-
-  // copy formatted display string
-  if (StringValueFormatted == NULL)
-  {
-    theItem->StringValueFormatted = (TCHAR*)malloc((1) * sizeof(TCHAR));
-    assert(theItem->StringValueFormatted != NULL);
-    theItem->StringValueFormatted[0]='\0';
-  }
-  else
-  {
-    iLen = _tcslen(StringValueFormatted);
-    theItem->StringValueFormatted = (TCHAR*)malloc((iLen + 1) * sizeof(TCHAR));
-    assert(theItem->StringValueFormatted != NULL);
-    _tcscpy(theItem->StringValueFormatted, StringValueFormatted);
-  }
+  theItem->StringValue = _tcsdup(StringValue != NULL ? StringValue : _T(""));
+  theItem->StringValueFormatted = _tcsdup(StringValueFormatted != NULL
+                                          ? StringValueFormatted : _T(""));
 
   return theItem;
 }

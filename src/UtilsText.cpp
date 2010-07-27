@@ -79,7 +79,6 @@ TCHAR *
 StringMallocParse(const TCHAR* old_string)
 {
   TCHAR buffer[2048]; // Note - max size of any string we cope with here !
-  TCHAR* new_string;
 
   unsigned int used = 0;
 
@@ -106,10 +105,7 @@ StringMallocParse(const TCHAR* old_string)
 
   buffer[used++] = _T('\0');
 
-  new_string = (TCHAR *)malloc((_tcslen(buffer) + 1) * sizeof(TCHAR));
-  _tcscpy(new_string, buffer);
-
-  return new_string;
+  return _tcsdup(buffer);
 }
 
 /**

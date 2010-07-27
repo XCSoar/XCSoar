@@ -98,22 +98,8 @@ WindowControl::~WindowControl(void)
 void
 WindowControl::SetHelpText(const TCHAR *Value)
 {
-  if (mHelpText) {
-    free(mHelpText);
-    mHelpText = NULL;
-  }
-
-  if (Value == NULL)
-    return;
-
-  int len = _tcslen(Value);
-
-  if (len == 0)
-    return;
-
-  mHelpText = (TCHAR*)malloc((len + 1) * sizeof(TCHAR));
-  if (mHelpText != NULL)
-    _tcscpy(mHelpText, Value);
+  free(mHelpText);
+  mHelpText = Value != NULL ? _tcsdup(Value) : NULL;
 }
 
 void

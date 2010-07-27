@@ -472,13 +472,8 @@ DataFieldFileReader::addFile(const TCHAR *Text, const TCHAR *PText)
   if (nFiles >= DFE_MAX_FILES)
     return;
 
-  // Allocate memory for the filename and copy it from Text
-  fields[nFiles].mTextFile = (TCHAR*)malloc((_tcslen(Text) + 1) * sizeof(TCHAR));
-  _tcscpy(fields[nFiles].mTextFile, Text);
-
-  // Allocate memory for the filepath and copy it from PText
-  fields[nFiles].mTextPathFile = (TCHAR*)malloc((_tcslen(PText) + 1) * sizeof(TCHAR));
-  _tcscpy(fields[nFiles].mTextPathFile, PText);
+  fields[nFiles].mTextFile = _tcsdup(Text);
+  fields[nFiles].mTextPathFile = _tcsdup(PText);
 
   // Increment the number of files in the list
   nFiles++;

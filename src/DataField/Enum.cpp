@@ -69,8 +69,7 @@ void
 DataFieldEnum::replaceEnumText(unsigned int i, const TCHAR *Text) {
  if (i<=nEnums ) {
     free(mEntries[i].mText);
-    mEntries[i].mText = (TCHAR*)malloc((_tcslen(Text)+1)*sizeof(TCHAR));
-    _tcscpy(mEntries[i].mText, Text);
+    mEntries[i].mText = _tcsdup(Text);
  }
 }
 
@@ -78,8 +77,7 @@ unsigned
 DataFieldEnum::addEnumText(const TCHAR *Text)
 {
   if (nEnums < DFE_MAX_ENUMS - 1) {
-    mEntries[nEnums].mText = (TCHAR*)malloc((_tcslen(Text) + 1) * sizeof(TCHAR));
-    _tcscpy(mEntries[nEnums].mText, Text);
+    mEntries[nEnums].mText = _tcsdup(Text);
     mEntries[nEnums].index = nEnums;
     nEnums++;
     return (nEnums - 1);
