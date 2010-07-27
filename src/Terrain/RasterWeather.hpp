@@ -83,7 +83,7 @@ public:
   bool isWeatherAvailable(unsigned t);
   unsigned GetTime();
   void SetTime(unsigned i);
-  int IndexToTime(int x);
+  static int IndexToTime(int index);
 
 private:
   unsigned _parameter;

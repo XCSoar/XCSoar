@@ -71,12 +71,12 @@ RasterWeather::~RasterWeather()
 }
 
 int
-RasterWeather::IndexToTime(int x)
+RasterWeather::IndexToTime(int index)
 {
-  if (x % 2 == 0) {
-    return (x / 2) * 100;
+  if (index % 2 == 0) {
+    return (index / 2) * 100;
   } else {
-    return (x / 2) * 100 + 30;
+    return (index / 2) * 100 + 30;
   }
 }
 
