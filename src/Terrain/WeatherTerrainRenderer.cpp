@@ -134,81 +134,61 @@ const COLORRAMP weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
   },
 };
 
-
 bool
 WeatherTerrainRenderer::SetMap()
 {
   interp_levels = 5;
+  do_water = false;
+  is_terrain = false;
+  do_shading = false;
+
+  if (weather != NULL)
+    DisplayMap = weather->GetMap();
+
   switch (weather != NULL ? weather->GetParameter() : 0) {
   case 1: // wstar
-    is_terrain = false;
-    do_water = false;
     height_scale = 2; // max range 256*(2**2) = 1024 cm/s = 10 m/s
-    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[0][0];
     break;
 
   case 2: // bl wind spd
-    is_terrain = false;
-    do_water = false;
     height_scale = 3;
-    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[1][0];
     break;
 
   case 3: // hbl
-    is_terrain = false;
-    do_water = false;
     height_scale = 4;
-    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[2][0];
     break;
 
   case 4: // dwcrit
-    is_terrain = false;
-    do_water = false;
     height_scale = 4;
-    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[2][0];
     break;
 
   case 5: // blcloudpct
-    is_terrain = false;
     do_water = true;
     height_scale = 0;
-    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[3][0];
     break;
 
   case 6: // sfctemp
-    is_terrain = false;
-    do_water = false;
     height_scale = 0;
-    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[4][0];
     break;
 
   case 7: // hwcrit
-    is_terrain = false;
-    do_water = false;
     height_scale = 4;
-    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[2][0];
     break;
 
   case 8: // wblmaxmin
-    is_terrain = false;
-    do_water = false;
     height_scale = 1; // max range 256*(1**2) = 512 cm/s = 5.0 m/s
-    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[5][0];
     break;
 
   case 9: // blcwbase
-    is_terrain = false;
-    do_water = false;
     height_scale = 4;
-    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[2][0];
     break;
 
@@ -216,15 +196,7 @@ WeatherTerrainRenderer::SetMap()
     return TerrainRenderer::SetMap();
   }
 
-  if (is_terrain)
-    do_shading = true;
-  else
-    do_shading = false;
-
-  if (DisplayMap)
-    return true;
-  else
-    return false;
+  return (DisplayMap != NULL);
 }
 
 WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain *_terrain,
