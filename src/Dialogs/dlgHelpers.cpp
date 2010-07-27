@@ -83,18 +83,6 @@ bool SetValueRegistryOnChange(WndForm* wfm,
 bool SetValueRegistryOnChange(WndForm* wfm,
 			      const TCHAR* field,
 			      const TCHAR* reg,
-			      DisplayTextType_t &value) {
-  if (SetValueOnChange(wfm, field, value)) {
-    Profile::Set(reg, value);
-    return true;
-  } else {
-    return false;
-  }
-}
-
-bool SetValueRegistryOnChange(WndForm* wfm,
-			      const TCHAR* field,
-			      const TCHAR* reg,
 			      short &value) {
   if (SetValueOnChange(wfm, field, value)) {
     Profile::Set(reg, value);
@@ -136,18 +124,6 @@ bool SetValueOnChange(WndForm* wfm, const TCHAR* field, int &value)
   if (wp) {
     if (value != wp->GetDataField()->GetAsInteger()) {
       value = wp->GetDataField()->GetAsInteger();
-      return true;
-    }
-  }
-  return false;
-}
-
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field, DisplayTextType_t &value)
-{
-  WndProperty* wp = (WndProperty*)wfm->FindByName(field);
-  if (wp) {
-    if ((int)value != wp->GetDataField()->GetAsInteger()) {
-      value = (DisplayTextType_t)wp->GetDataField()->GetAsInteger();
       return true;
     }
   }

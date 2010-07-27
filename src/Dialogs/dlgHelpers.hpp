@@ -39,8 +39,6 @@ Copyright_License {
 #ifndef DIALOG_HELPERS_HPP
 #define DIALOG_HELPERS_HPP
 
-#include "SettingsUser.hpp"
-
 #include <tchar.h>
 
 class WndForm;
@@ -52,8 +50,6 @@ bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
 bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
 			      const TCHAR* reg, int &value);
 bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, DisplayTextType_t &value);
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
 			      const TCHAR* reg, short &value);
 
 bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
@@ -62,8 +58,6 @@ bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
 		      unsigned int &value);
 bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
 		      int &value);
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      DisplayTextType_t &value);
 bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
 		      short &value);
 
