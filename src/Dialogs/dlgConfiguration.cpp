@@ -1398,6 +1398,8 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpSetSystemTimeFromGPS"),
                    XCSoarInterface::SettingsMap().SetSystemTimeFromGPS);
+  LoadFormProperty(*wf, _T("prpIgnoreNMEAChecksum"),
+                   NMEAParser::ignore_checksum);
   LoadFormProperty(*wf, _T("prpAbortSafetyUseCurrent"),
                    settings_computer.safety_mc_use_current);
   LoadFormProperty(*wf, _T("prpDisableAutoLogger"),
@@ -2098,6 +2100,11 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(wf, _T("prpSetSystemTimeFromGPS"),
                               szProfileSetSystemTimeFromGPS,
                               XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS);
+
+  changed |= SaveFormProperty(wf, _T("prpIgnoreNMEAChecksum"),
+                              szProfileIgnoreNMEAChecksum,
+                              NMEAParser::ignore_checksum);
+
   changed |= SaveFormProperty(wf, _T("prpTrailDrift"),
                               szProfileTrailDrift,
                               XCSoarInterface::SetSettingsMap().EnableTrailDrift);

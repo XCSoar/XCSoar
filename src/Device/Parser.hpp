@@ -49,6 +49,9 @@ class NMEAInputLine;
 class NMEAParser
 {
 public:
+  static bool ignore_checksum;
+
+public:
   NMEAParser();
   void Reset(void);
 

@@ -218,6 +218,8 @@ devStartup()
     config[1].speed_index = 2;
   }
 
+  Profile::Get(szProfileIgnoreNMEAChecksum, NMEAParser::ignore_checksum);
+
   for (unsigned i = 0; i < NUMDEV; ++i)
     Profile::GetDeviceConfig(i, config[i]);
 

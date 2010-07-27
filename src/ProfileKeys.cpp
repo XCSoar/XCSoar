@@ -286,3 +286,5 @@ const TCHAR szProfileInfoBoxGeometry[] = CONF("InfoBoxGeometry");
 
 const TCHAR szProfileFlarmSideData[] = CONF("FlarmRadarSideData");
 const TCHAR szProfileFlarmAutoZoom[] = CONF("FlarmRadarAutoZoom");
+
+const TCHAR szProfileIgnoreNMEAChecksum[] = CONF("IgnoreNMEAChecksum");

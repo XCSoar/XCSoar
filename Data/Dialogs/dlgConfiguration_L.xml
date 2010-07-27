@@ -309,6 +309,11 @@
         Help="option, if enabled sets the clock of the computer to the GPS time once a fix is set.  This is only necessary if your computer does not have a real-time clock with battery backup or your computer frequently runs out of battery power or otherwise loses time.">
         <DataField name="" DataType="boolean" />
       </Edit>
+
+      <Edit Name="prpIgnoreNMEAChecksum" Caption="Ignore checksum*"
+            X="2" Y="-1" Width="-2" Height="22" CaptionWidth="150">
+        <DataField name="" DataType="boolean"/>
+      </Edit>
     </Panel>
   
     <Panel Name="frmUnits" X="0" Y="0" Width="0" Height="222">

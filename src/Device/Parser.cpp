@@ -65,6 +65,8 @@ using std::max;
 static FlarmCalculations flarmCalculations;
 #endif
 
+bool NMEAParser::ignore_checksum;
+
 int NMEAParser::StartDay = -1;
 
 /**
@@ -800,6 +802,9 @@ NMEAParser::RMA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 bool
 NMEAParser::NMEAChecksum(const char *String)
 {
+  if (ignore_checksum)
+    return true;
+
   unsigned char ReadCheckSum, CalcCheckSum;
   char c1, c2;
   unsigned char v1 = 0, v2 = 0;
