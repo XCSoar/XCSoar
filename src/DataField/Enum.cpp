@@ -79,8 +79,7 @@ DataFieldEnum::addEnumText(const TCHAR *Text)
   if (nEnums < DFE_MAX_ENUMS - 1) {
     mEntries[nEnums].mText = _tcsdup(Text);
     mEntries[nEnums].index = nEnums;
-    nEnums++;
-    return (nEnums - 1);
+    return nEnums++;
   }
   return 0;
 }
