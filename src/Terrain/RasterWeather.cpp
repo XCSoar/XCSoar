@@ -99,15 +99,13 @@ RasterWeather::GetMap()
 {
   // JMW this is not safe in TerrainRenderer's use
   Poco::ScopedRWLock protect(lock, false);
-  RasterMap* retval;
   if (_parameter) {
     assert(_parameter <= MAX_WEATHER_MAP);
-    retval = weather_map[min((unsigned)MAX_WEATHER_MAP, _parameter) - 1];
-  } else {
-    assert(1);
-    retval = NULL;
+    return weather_map[min((unsigned)MAX_WEATHER_MAP, _parameter) - 1];
   }
-  return retval;
+
+  assert(1);
+  return NULL;
 }
 
 unsigned
