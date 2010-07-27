@@ -158,16 +158,14 @@ RasterWeather::ScanAll(const GEOPOINT &location)
   ProgressGlue::SetRange(MAX_WEATHER_TIMES);
   for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++) {
     ProgressGlue::SetValue(i);
-    _weather_time = i;
-    weather_available[i] = LoadItem(0, _T("wstar"), _weather_time);
+    weather_available[i] = LoadItem(0, _T("wstar"), i);
     if (!weather_available[i]) {
-      weather_available[i] = LoadItem(0, _T("wstar_bsratio"), _weather_time);
+      weather_available[i] = LoadItem(0, _T("wstar_bsratio"), i);
       if (weather_available[i])
         bsratio = true;
     }
     _Close();
   }
-  _weather_time = 0;
 }
 
 void
