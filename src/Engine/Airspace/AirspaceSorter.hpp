@@ -1,9 +1,14 @@
 #ifndef AIRSPACE_SORTER_HPP
 #define AIRSPACE_SORTER_HPP
 
-#include "Airspace/AirspacesInterface.hpp"
+#include "Math/Angle.hpp"
 #include "Airspace/AirspaceClass.hpp"
+
 #include <vector>
+
+class AbstractAirspace;
+class AirspacesInterface;
+struct GEOPOINT;
 
 /**
  * Structure to hold Airspace sorting information

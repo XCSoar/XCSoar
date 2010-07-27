@@ -1,6 +1,5 @@
 #include "AirspaceSorter.hpp"
 #include <algorithm>
-#include "Navigation/Geometry/GeoVector.hpp"
 #include "Airspace/Airspaces.hpp"
 
 AirspaceSorter::AirspaceSorter(const AirspacesInterface &airspaces,
