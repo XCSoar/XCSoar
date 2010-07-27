@@ -79,11 +79,7 @@ IsNullLogFont(LOGFONT logfont)
 {
   LOGFONT LogFontBlank;
   memset((char *)&LogFontBlank, 0, sizeof(LOGFONT));
-
-  if (memcmp(&logfont, &LogFontBlank, sizeof(LOGFONT)) == 0)
-    return true;
-
-  return false;
+  return (memcmp(&logfont, &LogFontBlank, sizeof(LOGFONT)) == 0);
 }
 
 #endif /* !ENABLE_SDL */
