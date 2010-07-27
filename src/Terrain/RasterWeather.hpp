@@ -91,7 +91,7 @@ private:
   RasterMap* weather_map[MAX_WEATHER_MAP];
   static void GetFilename(TCHAR *rasp_filename, const TCHAR *name,
                           unsigned time_index);
-  bool LoadItem(int item, const TCHAR* name);
+  bool LoadItem(int item, const TCHAR* name, unsigned time_index);
   void ServiceFullReload(const GEOPOINT &location);
   bool weather_available[MAX_WEATHER_TIMES];
   bool bsratio;

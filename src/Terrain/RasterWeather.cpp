@@ -141,10 +141,10 @@ RasterWeather::GetFilename(TCHAR *rasp_filename, const TCHAR* name,
 }
 
 bool
-RasterWeather::LoadItem(int item, const TCHAR* name)
+RasterWeather::LoadItem(int item, const TCHAR* name, unsigned time_index)
 {
   TCHAR rasp_filename[MAX_PATH];
-  GetFilename(rasp_filename, name, _weather_time);
+  GetFilename(rasp_filename, name, time_index);
   weather_map[item] = RasterMapJPG2000::LoadFile(NarrowPathName(rasp_filename));
   return weather_map[item] != NULL;
 }
@@ -159,9 +159,9 @@ RasterWeather::ScanAll(const GEOPOINT &location)
   for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++) {
     ProgressGlue::SetValue(i);
     _weather_time = i;
-    weather_available[i] = LoadItem(0, _T("wstar"));
+    weather_available[i] = LoadItem(0, _T("wstar"), _weather_time);
     if (!weather_available[i]) {
-      weather_available[i] = LoadItem(0, _T("wstar_bsratio"));
+      weather_available[i] = LoadItem(0, _T("wstar_bsratio"), _weather_time);
       if (weather_available[i])
         bsratio = true;
     }
@@ -213,18 +213,18 @@ RasterWeather::Reload(const GEOPOINT &location, int day_time)
 
         Close();
         if (bsratio)
-          LoadItem(0, _T("wstar_bsratio"));
+          LoadItem(0, _T("wstar_bsratio"), _weather_time);
         else
-          LoadItem(0, _T("wstar"));
+          LoadItem(0, _T("wstar"), _weather_time);
 
-        LoadItem(1,_T("blwindspd"));
-        LoadItem(2,_T("hbl"));
-        LoadItem(3,_T("dwcrit"));
-        LoadItem(4,_T("blcloudpct"));
-        LoadItem(5,_T("sfctemp"));
-        LoadItem(6,_T("hwcrit"));
-        LoadItem(7,_T("wblmaxmin"));
-        LoadItem(8,_T("blcwbase"));
+        LoadItem(1,_T("blwindspd"), _weather_time);
+        LoadItem(2,_T("hbl"), _weather_time);
+        LoadItem(3,_T("dwcrit"), _weather_time);
+        LoadItem(4,_T("blcloudpct"), _weather_time);
+        LoadItem(5,_T("sfctemp"), _weather_time);
+        LoadItem(6,_T("hwcrit"), _weather_time);
+        LoadItem(7,_T("wblmaxmin"), _weather_time);
+        LoadItem(8,_T("blcwbase"), _weather_time);
       }
     }
 
