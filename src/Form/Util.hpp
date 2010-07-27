@@ -65,14 +65,17 @@ void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value);
 #endif
 
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      bool &value);
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      unsigned int &value);
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      int &value);
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      short &value);
+bool
+SaveFormProperty(WndForm* wfm, const TCHAR* field, bool &value);
+
+bool
+SaveFormProperty(WndForm* wfm, const TCHAR* field, unsigned int &value);
+
+bool
+SaveFormProperty(WndForm* wfm, const TCHAR* field, int &value);
+
+bool
+SaveFormProperty(WndForm* wfm, const TCHAR* field, short &value);
 
 /**
  * Saves a form value into a variable and into the registry.
@@ -87,13 +90,20 @@ bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
                  bool &value, const TCHAR *registry_name);
 
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, bool &value);
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, unsigned int &value);
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, int &value);
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, short &value);
+bool
+SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
+                 bool &value);
+
+bool
+SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
+                 unsigned int &value);
+
+bool
+SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
+                 int &value);
+
+bool
+SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
+                 short &value);
 
 #endif

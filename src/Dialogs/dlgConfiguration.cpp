@@ -1935,7 +1935,7 @@ setVariables()
 }
 
 static bool
-SetValueOnChange(WndForm *wfm, const TCHAR *field, DisplayTextType_t &value)
+SaveFormProperty(WndForm *wfm, const TCHAR *field, DisplayTextType_t &value)
 {
   WndProperty* wp = (WndProperty*)wfm->FindByName(field);
   if (wp) {
@@ -1948,9 +1948,9 @@ SetValueOnChange(WndForm *wfm, const TCHAR *field, DisplayTextType_t &value)
 }
 
 static bool
-SetValueRegistryOnChange(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
                          DisplayTextType_t &value) {
-  if (SetValueOnChange(wfm, field, value)) {
+  if (SaveFormProperty(wfm, field, value)) {
     Profile::Set(reg, value);
     return true;
   } else {
@@ -2105,9 +2105,9 @@ void dlgConfigurationShowModal(void)
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpAbortSafetyUseCurrent"),
-                                      szProfileAbortSafetyUseCurrent,
-                                      settings_computer.safety_mc_use_current);
+  changed |= SaveFormProperty(wf, _T("prpAbortSafetyUseCurrent"),
+                              szProfileAbortSafetyUseCurrent,
+                              settings_computer.safety_mc_use_current);
 
   WndProperty *wp;
   wp = (WndProperty*)wf->FindByName(_T("prpDisableAutoLogger"));
@@ -2144,16 +2144,16 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpSetSystemTimeFromGPS"),
-                                      szProfileSetSystemTimeFromGPS,
-                                      XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS);
-  changed |= SetValueRegistryOnChange(wf, _T("prpTrailDrift"),
-                                      szProfileTrailDrift,
-                                      XCSoarInterface::SetSettingsMap().EnableTrailDrift);
+  changed |= SaveFormProperty(wf, _T("prpSetSystemTimeFromGPS"),
+                              szProfileSetSystemTimeFromGPS,
+                              XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS);
+  changed |= SaveFormProperty(wf, _T("prpTrailDrift"),
+                              szProfileTrailDrift,
+                              XCSoarInterface::SetSettingsMap().EnableTrailDrift);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpTrail"),
-                                      szProfileSnailTrail,
-                                      XCSoarInterface::SetSettingsMap().TrailActive);
+  changed |= SaveFormProperty(wf, _T("prpTrail"),
+                              szProfileSnailTrail,
+                              XCSoarInterface::SetSettingsMap().TrailActive);
 
 // VENTA3: do not save VisualGlide to registry or profile
 
@@ -2168,25 +2168,25 @@ void dlgConfigurationShowModal(void)
   }
 
   short tmp = settings_computer.AltitudeMode;
-  changed |= SetValueRegistryOnChange(wf, _T("prpAirspaceDisplay"),
-                                      szProfileAltMode, tmp);
+  changed |= SaveFormProperty(wf, _T("prpAirspaceDisplay"),
+                              szProfileAltMode, tmp);
   settings_computer.AltitudeMode = (AirspaceDisplayMode_t)tmp;
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpLockSettingsInFlight"),
-                                      szProfileLockSettingsInFlight,
-                                      XCSoarInterface::LockSettingsInFlight);
+  changed |= SaveFormProperty(wf, _T("prpLockSettingsInFlight"),
+                              szProfileLockSettingsInFlight,
+                              XCSoarInterface::LockSettingsInFlight);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpLoggerShortName"),
-                                      szProfileLoggerShort,
-                                      settings_computer.LoggerShortName);
+  changed |= SaveFormProperty(wf, _T("prpLoggerShortName"),
+                              szProfileLoggerShort,
+                              settings_computer.LoggerShortName);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpEnableFLARMMap"),
-                                      szProfileEnableFLARMMap,
-                                      XCSoarInterface::SetSettingsMap().EnableFLARMMap);
+  changed |= SaveFormProperty(wf, _T("prpEnableFLARMMap"),
+                              szProfileEnableFLARMMap,
+                              XCSoarInterface::SetSettingsMap().EnableFLARMMap);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpEnableFLARMGauge"),
-                                      szProfileEnableFLARMGauge,
-                                      XCSoarInterface::SetSettingsMap().EnableFLARMGauge);
+  changed |= SaveFormProperty(wf, _T("prpEnableFLARMGauge"),
+                              szProfileEnableFLARMGauge,
+                              XCSoarInterface::SetSettingsMap().EnableFLARMGauge);
 
   wp = (WndProperty*)wf->FindByName(_T("prpDebounceTimeout"));
   if (wp) {
@@ -2197,13 +2197,13 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpAirspaceOutline"),
-                                      szProfileAirspaceBlackOutline,
-                                      XCSoarInterface::SetSettingsMap().bAirspaceBlackOutline);
+  changed |= SaveFormProperty(wf, _T("prpAirspaceOutline"),
+                              szProfileAirspaceBlackOutline,
+                              XCSoarInterface::SetSettingsMap().bAirspaceBlackOutline);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpAutoZoom"),
-                                      szProfileAutoZoom,
-                                      XCSoarInterface::SetSettingsMap().AutoZoom);
+  changed |= SaveFormProperty(wf, _T("prpAutoZoom"),
+                              szProfileAutoZoom,
+                              XCSoarInterface::SetSettingsMap().AutoZoom);
 
   int ival;
 
@@ -2241,33 +2241,33 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpAirspaceWarnings"),
-                                      szProfileAirspaceWarning,
-                                      settings_computer.EnableAirspaceWarnings);
+  changed |= SaveFormProperty(wf, _T("prpAirspaceWarnings"),
+                              szProfileAirspaceWarning,
+                              settings_computer.EnableAirspaceWarnings);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpWarningTime"),
-                                      szProfileWarningTime,
-                                      settings_computer.WarningTime);
+  changed |= SaveFormProperty(wf, _T("prpWarningTime"),
+                              szProfileWarningTime,
+                              settings_computer.WarningTime);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpAcknowledgementTime"),
-                                      szProfileAcknowledgementTime,
-                                      settings_computer.AcknowledgementTime);
+  changed |= SaveFormProperty(wf, _T("prpAcknowledgementTime"),
+                              szProfileAcknowledgementTime,
+                              settings_computer.AcknowledgementTime);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpWaypointLabels"),
-                                      szProfileDisplayText,
-                                      XCSoarInterface::SetSettingsMap().DisplayTextType);
+  changed |= SaveFormProperty(wf, _T("prpWaypointLabels"),
+                              szProfileDisplayText,
+                              XCSoarInterface::SetSettingsMap().DisplayTextType);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpEnableTerrain"),
-                                      szProfileDrawTerrain,
-                                      XCSoarInterface::SetSettingsMap().EnableTerrain);
+  changed |= SaveFormProperty(wf, _T("prpEnableTerrain"),
+                              szProfileDrawTerrain,
+                              XCSoarInterface::SetSettingsMap().EnableTerrain);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpEnableTopology"),
-                                      szProfileDrawTopology,
-                                      XCSoarInterface::SetSettingsMap().EnableTopology);
+  changed |= SaveFormProperty(wf, _T("prpEnableTopology"),
+                              szProfileDrawTopology,
+                              XCSoarInterface::SetSettingsMap().EnableTopology);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpCirclingZoom"),
-                                      szProfileCircleZoom,
-                                      XCSoarInterface::SetSettingsMap().CircleZoom);
+  changed |= SaveFormProperty(wf, _T("prpCirclingZoom"),
+                              szProfileCircleZoom,
+                              XCSoarInterface::SetSettingsMap().CircleZoom);
 
   wp = (WndProperty*)wf->FindByName(_T("prpOrientation"));
   if (wp) {
@@ -2310,18 +2310,16 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpAutoWind"),
-                                      szProfileAutoWind,
-                                      settings_computer.AutoWindMode);
+  changed |= SaveFormProperty(wf, _T("prpAutoWind"), szProfileAutoWind,
+                              settings_computer.AutoWindMode);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpWindArrowStyle"),
-                                      szProfileWindArrowStyle,
-                                      XCSoarInterface::SetSettingsMap().WindArrowStyle);
+  changed |= SaveFormProperty(wf, _T("prpWindArrowStyle"),
+                              szProfileWindArrowStyle,
+                              XCSoarInterface::SetSettingsMap().WindArrowStyle);
 
   int auto_mc_mode = (int)settings_computer.auto_mc_mode;
-  changed |= SetValueRegistryOnChange(wf, _T("prpAutoMcMode"),
-                                      szProfileAutoMcMode,
-                                      auto_mc_mode);
+  changed |= SaveFormProperty(wf, _T("prpAutoMcMode"), szProfileAutoMcMode,
+                              auto_mc_mode);
   settings_computer.auto_mc_mode = (TaskBehaviour::AutoMCMode_t)auto_mc_mode;
 
   wp = (WndProperty*)wf->FindByName(_T("prpWaypointsOutOfRange"));
@@ -2332,24 +2330,24 @@ void dlgConfigurationShowModal(void)
         wp->GetDataField()->GetAsInteger();
 
       Profile::Set(szProfileWaypointsOutOfRange,
-                    WayPointFile::WaypointsOutOfRangeSetting);
+                   WayPointFile::WaypointsOutOfRangeSetting);
 
       WaypointFileChanged = true;
       changed = true;
     }
   }
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpEnableNavBaroAltitude"),
-                                      szProfileEnableNavBaroAltitude,
-                                      settings_computer.EnableNavBaroAltitude);
+  changed |= SaveFormProperty(wf, _T("prpEnableNavBaroAltitude"),
+                              szProfileEnableNavBaroAltitude,
+                              settings_computer.EnableNavBaroAltitude);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpFinalGlideTerrain"),
-                                      szProfileFinalGlideTerrain,
-                                      settings_computer.FinalGlideTerrain);
+  changed |= SaveFormProperty(wf, _T("prpFinalGlideTerrain"),
+                              szProfileFinalGlideTerrain,
+                              settings_computer.FinalGlideTerrain);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpBlockSTF"),
-                                      szProfileBlockSTF,
-                                      settings_computer.EnableBlockSTF);
+  changed |= SaveFormProperty(wf, _T("prpBlockSTF"),
+                              szProfileBlockSTF,
+                              settings_computer.EnableBlockSTF);
 
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsSpeed"));
   if (wp) {
@@ -2489,15 +2487,13 @@ void dlgConfigurationShowModal(void)
 
   {
     unsigned t= settings_computer.olc_rules;
-    changed |= SetValueRegistryOnChange(wf, _T("prpOLCRules"),
-                                        szProfileOLCRules,
-                                        t);
+    changed |= SaveFormProperty(wf, _T("prpOLCRules"), szProfileOLCRules,
+                                t);
     settings_computer.olc_rules = (OLCRules)t;
   }
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpHandicap"),
-                                      szProfileHandicap,
-                                      settings_computer.olc_handicap);
+  changed |= SaveFormProperty(wf, _T("prpHandicap"), szProfileHandicap,
+                              settings_computer.olc_handicap);
 
   PolarFileChanged = FinishFileField(*wf, _T("prpPolarFile"),
                                      szProfilePolarFile, szPolarFile);
@@ -2538,9 +2534,9 @@ void dlgConfigurationShowModal(void)
                       szProfileInputFile, szInputFile))
     requirerestart = true;
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpBallastSecsToEmpty"),
-                                      szProfileBallastSecsToEmpty,
-                                      settings_computer.BallastSecsToEmpty);
+  changed |= SaveFormProperty(wf, _T("prpBallastSecsToEmpty"),
+                              szProfileBallastSecsToEmpty,
+                              settings_computer.BallastSecsToEmpty);
 
   wp = (WndProperty*)wf->FindByName(_T("prpMaxManoeuveringSpeed"));
   if (wp) {
@@ -2712,9 +2708,9 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpEnableExternalTriggerCruise"),
-                                      szProfileEnableExternalTriggerCruise,
-                                      settings_computer.EnableExternalTriggerCruise);
+  changed |= SaveFormProperty(wf, _T("prpEnableExternalTriggerCruise"),
+                              szProfileEnableExternalTriggerCruise,
+                              settings_computer.EnableExternalTriggerCruise);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppInverseInfoBox"));
   if (wp) {
@@ -2726,9 +2722,9 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpGliderScreenPosition"),
-                                      szProfileGliderScreenPosition,
-                                      XCSoarInterface::SetSettingsMap().GliderScreenPosition);
+  changed |= SaveFormProperty(wf, _T("prpGliderScreenPosition"),
+                              szProfileGliderScreenPosition,
+                              XCSoarInterface::SetSettingsMap().GliderScreenPosition);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppDefaultMapWidth"));
   if (wp) {
@@ -2791,17 +2787,17 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpAppGaugeVarioMc"),
-                                      szProfileAppGaugeVarioMc,
-                                      Appearance.GaugeVarioMc);
+  changed |= SaveFormProperty(wf, _T("prpAppGaugeVarioMc"),
+                              szProfileAppGaugeVarioMc,
+                              Appearance.GaugeVarioMc);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpAppGaugeVarioBugs"),
-                                      szProfileAppGaugeVarioBugs,
-                                      Appearance.GaugeVarioBugs);
+  changed |= SaveFormProperty(wf, _T("prpAppGaugeVarioBugs"),
+                              szProfileAppGaugeVarioBugs,
+                              Appearance.GaugeVarioBugs);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpAppGaugeVarioBallast"),
-                                      szProfileAppGaugeVarioBallast,
-                                      Appearance.GaugeVarioBallast);
+  changed |= SaveFormProperty(wf, _T("prpAppGaugeVarioBallast"),
+                              szProfileAppGaugeVarioBallast,
+                              Appearance.GaugeVarioBallast);
 
 #ifdef HAVE_BLANK
   wp = (WndProperty*)wf->FindByName(_T("prpAutoBlank"));
@@ -2814,13 +2810,13 @@ void dlgConfigurationShowModal(void)
   }
 #endif
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpAutoBacklight"), // VENTA4
-                                      szProfileAutoBacklight,
-                                      CommonInterface::EnableAutoBacklight);
+  changed |= SaveFormProperty(wf, _T("prpAutoBacklight"),
+                              szProfileAutoBacklight,
+                              CommonInterface::EnableAutoBacklight);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpAutoSoundVolume"), // VENTA4
-                                      szProfileAutoSoundVolume,
-                                      CommonInterface::EnableAutoSoundVolume);
+  changed |= SaveFormProperty(wf, _T("prpAutoSoundVolume"),
+                              szProfileAutoSoundVolume,
+                              CommonInterface::EnableAutoSoundVolume);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainContrast"));
   if (wp) {
@@ -2843,10 +2839,8 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  changed |= SetValueRegistryOnChange(wf,
-                                      _T("prpTerrainRamp"),
-                                      szProfileTerrainRamp,
-                                      XCSoarInterface::SetSettingsMap().TerrainRamp);
+  changed |= SaveFormProperty(wf, _T("prpTerrainRamp"), szProfileTerrainRamp,
+                              XCSoarInterface::SetSettingsMap().TerrainRamp);
 
   wp = (WndProperty*)wf->FindByName(_T("prpFinishMinHeight"));
   if (wp) {
@@ -2920,13 +2914,13 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpLoggerTimeStepCruise"),
-                                      szProfileLoggerTimeStepCruise,
-                                      settings_computer.LoggerTimeStepCruise);
+  changed |= SaveFormProperty(wf, _T("prpLoggerTimeStepCruise"),
+                              szProfileLoggerTimeStepCruise,
+                              settings_computer.LoggerTimeStepCruise);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpLoggerTimeStepCircling"),
-                                      szProfileLoggerTimeStepCircling,
-                                      settings_computer.LoggerTimeStepCircling);
+  changed |= SaveFormProperty(wf, _T("prpLoggerTimeStepCircling"),
+                              szProfileLoggerTimeStepCircling,
+                              settings_computer.LoggerTimeStepCircling);
 
   DevicePortChanged =
     FinishDeviceFields(device_config[0], dwDeviceIndex1,

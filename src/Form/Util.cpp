@@ -111,7 +111,8 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value)
 }
 #endif /* FIXED_MATH */
 
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field, bool &value)
+bool
+SaveFormProperty(WndForm *wfm, const TCHAR *field, bool &value)
 {
   WndProperty* wp = (WndProperty*)wfm->FindByName(field);
   if (wp) {
@@ -123,7 +124,8 @@ bool SetValueOnChange(WndForm* wfm, const TCHAR* field, bool &value)
   return false;
 }
 
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field, unsigned int &value)
+bool
+SaveFormProperty(WndForm *wfm, const TCHAR *field, unsigned int &value)
 {
   WndProperty* wp = (WndProperty*)wfm->FindByName(field);
   if (wp) {
@@ -135,8 +137,8 @@ bool SetValueOnChange(WndForm* wfm, const TCHAR* field, unsigned int &value)
   return false;
 }
 
-
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field, int &value)
+bool
+SaveFormProperty(WndForm *wfm, const TCHAR *field, int &value)
 {
   WndProperty* wp = (WndProperty*)wfm->FindByName(field);
   if (wp) {
@@ -148,7 +150,8 @@ bool SetValueOnChange(WndForm* wfm, const TCHAR* field, int &value)
   return false;
 }
 
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field, short &value)
+bool
+SaveFormProperty(WndForm *wfm, const TCHAR *field, short &value)
 {
   WndProperty* wp = (WndProperty*)wfm->FindByName(field);
   if (wp) {
@@ -180,11 +183,11 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
   return true;
 }
 
-bool SetValueRegistryOnChange(WndForm* wfm,
-			      const TCHAR* field,
-			      const TCHAR* reg,
-			      bool &value) {
-  if (SetValueOnChange(wfm, field, value)) {
+bool
+SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
+                 bool &value)
+{
+  if (SaveFormProperty(wfm, field, value)) {
     Profile::Set(reg, value);
     return true;
   } else {
@@ -192,12 +195,11 @@ bool SetValueRegistryOnChange(WndForm* wfm,
   }
 }
 
-
-bool SetValueRegistryOnChange(WndForm* wfm,
-			      const TCHAR* field,
-			      const TCHAR* reg,
-			      unsigned int &value) {
-  if (SetValueOnChange(wfm, field, value)) {
+bool
+SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
+                 unsigned int &value)
+{
+  if (SaveFormProperty(wfm, field, value)) {
     Profile::Set(reg, value);
     return true;
   } else {
@@ -205,12 +207,11 @@ bool SetValueRegistryOnChange(WndForm* wfm,
   }
 }
 
-
-bool SetValueRegistryOnChange(WndForm* wfm,
-			      const TCHAR* field,
-			      const TCHAR* reg,
-			      int &value) {
-  if (SetValueOnChange(wfm, field, value)) {
+bool
+SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
+                 int &value)
+{
+  if (SaveFormProperty(wfm, field, value)) {
     Profile::Set(reg, value);
     return true;
   } else {
@@ -218,11 +219,11 @@ bool SetValueRegistryOnChange(WndForm* wfm,
   }
 }
 
-bool SetValueRegistryOnChange(WndForm* wfm,
-			      const TCHAR* field,
-			      const TCHAR* reg,
-			      short &value) {
-  if (SetValueOnChange(wfm, field, value)) {
+bool
+SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
+                 short &value)
+{
+  if (SaveFormProperty(wfm, field, value)) {
     Profile::Set(reg, value);
     return true;
   } else {
