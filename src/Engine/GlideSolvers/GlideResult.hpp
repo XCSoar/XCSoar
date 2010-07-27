@@ -37,8 +37,11 @@
 #ifndef GLIDERESULT_HPP
 #define GLIDERESULT_HPP
 
-#include <iostream>
 #include "Navigation/Geometry/GeoVector.hpp"
+
+#ifdef DO_PRINT
+#include <iostream>
+#endif
 
 struct GlideState;
 struct AIRCRAFT_STATE;

@@ -43,7 +43,10 @@ void sin_cos(const double&theta, double*s, double*c);
 #define FIXED_DOUBLE(x) x.as_double()
 #define FIXED_INT(x) x.as_int()
 
+#ifdef DO_PRINT
 #include <ostream>
+#endif
+
 #include <complex>
 #include <climits>
 
@@ -425,10 +428,12 @@ public:
   fixed abs() const;
 };
 
+#ifdef DO_PRINT
 inline std::ostream& operator<<(std::ostream& os,fixed const& value)
 {
   return os<<value.as_double();
 }
+#endif
 
 inline bool fixed::positive() const
 {
