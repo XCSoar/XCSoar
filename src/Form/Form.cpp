@@ -217,10 +217,6 @@ WndForm::SetTitleFont(const Font &font)
 
 }
 
-int WndForm::ShowModal(void){
-  return ShowModal(false);
-}
-
 #ifndef ENABLE_SDL
 
 static bool

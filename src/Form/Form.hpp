@@ -222,8 +222,7 @@ public:
   /** Set the font of the titlebar */
   const Font *SetTitleFont(const Font &font);
 
-  int ShowModal(bool bEnableMap);
-  int ShowModal(void);
+  int ShowModal(bool bEnableMap = false);
 
   /** Set the titlebar text */
   void SetCaption(const TCHAR *Value);
