@@ -38,13 +38,8 @@
 #define AIRSPACESINTERFACE_HPP
 
 #include "Airspace.hpp"
-#include "AirspacePredicate.hpp"
-#include "Navigation/TaskProjection.hpp"
+
 #include <kdtree++/kdtree.hpp>
-
-class AirspaceVisitor;
-class AirspaceIntersectionVisitor;
-
 
 /**
  * Abstract class for interface to #Airspaces database.
@@ -63,51 +58,6 @@ public:
                          FlatBoundingBox::kd_get_bounds,
                          FlatBoundingBox::kd_distance
                          > AirspaceTree;
-
-
-  /** 
-   * Search for airspaces within range of the aircraft.
-   * 
-   * @param location location of aircraft, from which to search
-   * @param range distance in meters of search radius
-   * @param condition condition to be applied to matches
-   * 
-   * @return vector of airspaces intersecting search radius
-   */
-  virtual const AirspaceVector scan_range(const GEOPOINT location,
-                                          const fixed range,
-                                          const AirspacePredicate &condition
-                                          =AirspacePredicate::always_true) const = 0;
-
-/** 
- * Lock the airspace database
- * 
- */
-  virtual void lock() const = 0;
-
-/** 
- * Unlock the airspace database
- * 
- */
-  virtual void unlock() const = 0;
-
-/** 
- * Number of items in database
- * @return size
- */
-  virtual unsigned size() const = 0;
-
-/** 
- * Iterator to start of database
- * @return start element
- */
-  virtual AirspaceTree::const_iterator begin() const = 0;
-
-/** 
- * Iterator to end of database
- * @return end element
- */
-  virtual AirspaceTree::const_iterator end() const = 0;
 };
 
 #endif

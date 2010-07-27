@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "Airspace/Airspaces.hpp"
 
-AirspaceSorter::AirspaceSorter(const AirspacesInterface &airspaces,
+AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
                                const GEOPOINT &Location,
                                const fixed distance_factor)
 {

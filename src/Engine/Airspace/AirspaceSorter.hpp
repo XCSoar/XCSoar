@@ -7,7 +7,7 @@
 #include <vector>
 
 class AbstractAirspace;
-class AirspacesInterface;
+class Airspaces;
 struct GEOPOINT;
 
 /**
@@ -38,7 +38,7 @@ public:
  * @param Location Location of aircraft at time of query
  * @param distance_factor Units factor to apply to distance calculations
  */
-  AirspaceSorter(const AirspacesInterface &_airspaces, 
+  AirspaceSorter(const Airspaces &_airspaces,
                  const GEOPOINT &Location,
                  const fixed distance_factor);
 

@@ -4,14 +4,6 @@
 #include "Airspace/AirspaceParser.hpp"
 #include "Terrain/RasterTerrain.hpp"
 
-const AirspacesInterface::AirspaceVector 
-AirspaceClientUI::scan_range(const GEOPOINT location,
-                             const fixed range,
-                             const AirspacePredicate &condition) const
-{
-  return airspaces.scan_range(location, range, condition);
-}
-
 void 
 AirspaceClientUI::visit_warnings(AirspaceWarningVisitor& visitor) const
 {
@@ -28,14 +20,6 @@ AirspaceClientUI::visit_within_range(const GEOPOINT &loc,
   return airspaces.visit_within_range(loc, range, visitor, predicate);
 }
 
-void 
-AirspaceClientUI::visit_intersecting(const GEOPOINT &loc, 
-                                     const GeoVector &vec,
-                                     AirspaceIntersectionVisitor& visitor) const
-{
-  return airspaces.visit_intersecting(loc, vec, visitor);
-}
-
 void
 AirspaceClientUI::clear()
 {
@@ -49,37 +33,6 @@ AirspaceClientUI::clear_warnings()
 {
   Poco::ScopedRWLock lock(mutex, true);
   airspace_warning.acknowledge_all();
-}
-
-void 
-AirspaceClientUI::lock() const
-{
-  mutex.readLock();
-}
-
-void 
-AirspaceClientUI::unlock() const
-{
-  mutex.unlock();
-}
-
-unsigned 
-AirspaceClientUI::size() const
-{
-  return airspaces.size();
-}
-
-
-AirspacesInterface::AirspaceTree::const_iterator 
-AirspaceClientUI::begin() const
-{
-  return airspaces.begin();
-}
-
-AirspacesInterface::AirspaceTree::const_iterator 
-AirspaceClientUI::end() const
-{
-  return airspaces.end();
 }
 
 AirspaceWarning& 

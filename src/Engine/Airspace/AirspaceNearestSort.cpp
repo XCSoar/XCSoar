@@ -1,9 +1,9 @@
 #include "AirspaceNearestSort.hpp"
-#include "AirspacesInterface.hpp"
+#include "Airspaces.hpp"
 #include "AirspaceVisitor.hpp"
 
 void 
-AirspaceNearestSort::populate_queue(const AirspacesInterface &airspaces,
+AirspaceNearestSort::populate_queue(const Airspaces &airspaces,
                                     const fixed range)
 {
   AirspacesInterface::AirspaceVector vectors = 
@@ -47,7 +47,7 @@ AirspaceNearestSort::metric(const AirspaceInterceptSolution& sol) const
 
 
 const AbstractAirspace*
-AirspaceNearestSort::find_nearest(const AirspacesInterface &airspaces,
+AirspaceNearestSort::find_nearest(const Airspaces &airspaces,
                                   const fixed range)
 {
   populate_queue(airspaces, range);
@@ -61,7 +61,7 @@ AirspaceNearestSort::find_nearest(const AirspacesInterface &airspaces,
 
 
 void
-AirspaceNearestSort::visit_sorted(const AirspacesInterface &airspaces,
+AirspaceNearestSort::visit_sorted(const Airspaces &airspaces,
                                   AirspaceVisitor &visitor,
                                   const fixed range) 
 {

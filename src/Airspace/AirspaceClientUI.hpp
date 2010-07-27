@@ -40,10 +40,13 @@
 #include "Airspace/AirspaceClient.hpp"
 #include "Airspace/AirspacesInterface.hpp"
 #include "Airspace/AirspaceWarning.hpp"
+#include "Airspace/AirspacePredicate.hpp"
 
 class TLineReader;
 class RasterTerrain;
 class AirspaceWarningVisitor;
+class AirspaceVisitor;
+class AirspaceIntersectionVisitor;
 
 class AirspaceClientUI: 
   public AirspaceClient,
@@ -54,34 +57,16 @@ public:
                    AirspaceWarningManager& awm):
     AirspaceClient(as, awm) {};
 
-  // airspaces
-  const AirspacesInterface::AirspaceVector 
-  scan_range(const GEOPOINT location,
-             const fixed range,
-             const AirspacePredicate &condition
-             =AirspacePredicate::always_true) const;
+  void
+  visit_within_range(const GEOPOINT &loc,
+                     const fixed range,
+                     AirspaceVisitor &visitor,
+                     const AirspacePredicate &predicate) const;
 
-  void visit_within_range(const GEOPOINT &loc, 
-                          const fixed range,
-                          AirspaceVisitor &visitor,
-                          const AirspacePredicate &predicate
-                          =AirspacePredicate::always_true) const;
-
-  void visit_intersecting(const GEOPOINT &loc, 
-                          const GeoVector &vec,
-                          AirspaceIntersectionVisitor& visitor) const;
-
-  AirspaceTree::const_iterator begin() const;
-  AirspaceTree::const_iterator end() const;
-
-  unsigned size() const;
   bool airspace_empty() const;
 
   void clear();
   void clear_warnings();
-
-  void lock() const;
-  void unlock() const;
 
   // warning manager
   void visit_warnings(AirspaceWarningVisitor& visitor) const;

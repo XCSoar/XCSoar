@@ -45,6 +45,8 @@
 
 class RasterTerrain;
 class AtmosphericPressure;
+class AirspaceVisitor;
+class AirspaceIntersectionVisitor;
 
 /**
  * Container for airspaces using kd-tree representation internally for fast 
