@@ -175,64 +175,63 @@ RasterWeather::Reload(const GEOPOINT &location, int day_time)
   bool found = false;
   bool now = false;
 
-  if (_parameter == 0) {
+  if (_parameter == 0)
     // will be drawing terrain
     return;
-  } else {
-    Poco::ScopedRWLock protect(lock, true);
-    if (_weather_time == 0) {
-      // "Now" time, so find time in half hours
-      unsigned dsecs = (int)TimeLocal(day_time);
-      unsigned half_hours = (dsecs / 1800) % 48;
-      _weather_time = max(_weather_time, half_hours);
-      now = true;
-    }
 
-    // limit values, for safety
-    _weather_time = min((unsigned)(MAX_WEATHER_TIMES - 1), _weather_time);
+  Poco::ScopedRWLock protect(lock, true);
+  if (_weather_time == 0) {
+    // "Now" time, so find time in half hours
+    unsigned dsecs = (int)TimeLocal(day_time);
+    unsigned half_hours = (dsecs / 1800) % 48;
+    _weather_time = max(_weather_time, half_hours);
+    now = true;
+  }
 
-    if (_weather_time == last_weather_time) {
-      // no change, quick exit.
-      if (now)
-        // must return to 0 = Now time on exit
-        _weather_time = 0;
+  // limit values, for safety
+  _weather_time = min((unsigned)(MAX_WEATHER_TIMES - 1), _weather_time);
 
-      return;
-    } else {
-      last_weather_time = _weather_time;
-    }
-
-    // scan forward to next valid time
-    while ((_weather_time < MAX_WEATHER_TIMES) && (!found)) {
-      if (!weather_available[_weather_time]) {
-        _weather_time++;
-      } else {
-        found = true;
-
-        Close();
-        if (bsratio)
-          LoadItem(0, _T("wstar_bsratio"), _weather_time);
-        else
-          LoadItem(0, _T("wstar"), _weather_time);
-
-        LoadItem(1,_T("blwindspd"), _weather_time);
-        LoadItem(2,_T("hbl"), _weather_time);
-        LoadItem(3,_T("dwcrit"), _weather_time);
-        LoadItem(4,_T("blcloudpct"), _weather_time);
-        LoadItem(5,_T("sfctemp"), _weather_time);
-        LoadItem(6,_T("hwcrit"), _weather_time);
-        LoadItem(7,_T("wblmaxmin"), _weather_time);
-        LoadItem(8,_T("blcwbase"), _weather_time);
-      }
-    }
-
-    // can't find valid time, so reset to zero
-    if (!found || now)
+  if (_weather_time == last_weather_time) {
+    // no change, quick exit.
+    if (now)
+      // must return to 0 = Now time on exit
       _weather_time = 0;
 
-    SetViewCenter(location);
-    ServiceFullReload(location);
+    return;
   }
+
+  last_weather_time = _weather_time;
+
+  // scan forward to next valid time
+  while ((_weather_time < MAX_WEATHER_TIMES) && (!found)) {
+    if (!weather_available[_weather_time]) {
+      _weather_time++;
+    } else {
+      found = true;
+
+      Close();
+      if (bsratio)
+        LoadItem(0, _T("wstar_bsratio"), _weather_time);
+      else
+        LoadItem(0, _T("wstar"), _weather_time);
+
+      LoadItem(1,_T("blwindspd"), _weather_time);
+      LoadItem(2,_T("hbl"), _weather_time);
+      LoadItem(3,_T("dwcrit"), _weather_time);
+      LoadItem(4,_T("blcloudpct"), _weather_time);
+      LoadItem(5,_T("sfctemp"), _weather_time);
+      LoadItem(6,_T("hwcrit"), _weather_time);
+      LoadItem(7,_T("wblmaxmin"), _weather_time);
+      LoadItem(8,_T("blcwbase"), _weather_time);
+    }
+  }
+
+  // can't find valid time, so reset to zero
+  if (!found || now)
+    _weather_time = 0;
+
+  SetViewCenter(location);
+  ServiceFullReload(location);
 }
 
 void
