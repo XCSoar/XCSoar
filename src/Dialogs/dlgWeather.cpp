@@ -47,82 +47,86 @@ Copyright_License {
 
 #include <stdio.h>
 
-static WndForm *wf=NULL;
+static WndForm *wf = NULL;
 
-static void OnCloseClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnCloseClicked(WindowControl * Sender)
+{
+  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
-
-static void OnDisplayItemData(DataField *Sender,
-                              DataField::DataAccessKind_t Mode){
-
-  switch(Mode){
-    case DataField::daGet:
-      Sender->Set((int)RASP.GetParameter());
+static void
+OnDisplayItemData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  switch (Mode) {
+  case DataField::daGet:
+    Sender->Set((int)RASP.GetParameter());
     break;
-    case DataField::daPut:
-    case DataField::daChange:
-      RASP.SetParameter(Sender->GetAsInteger());
+  case DataField::daPut:
+  case DataField::daChange:
+    RASP.SetParameter(Sender->GetAsInteger());
     break;
   }
 }
 
-
-static void RASPGetTime(DataField *Sender) {
+static void
+RASPGetTime(DataField *Sender)
+{
   DataFieldEnum* dfe;
   dfe = (DataFieldEnum*)Sender;
-  int index=0;
+  int index = 0;
   for (unsigned i = 0; i < RasterWeather::MAX_WEATHER_TIMES; i++) {
     if (RASP.isWeatherAvailable(i)) {
-      if (RASP.GetTime() == i) {
+      if (RASP.GetTime() == i)
         Sender->Set(index);
-      }
+
       index++;
     }
   }
 }
 
-static void RASPSetTime(DataField *Sender) {
+static void
+RASPSetTime(DataField *Sender)
+{
   int index = 0;
-  if (Sender->GetAsInteger()<=0) {
+  if (Sender->GetAsInteger() <= 0) {
     RASP.SetTime(0);
     return;
   }
   for (unsigned i = 0; i < RasterWeather::MAX_WEATHER_TIMES; i++) {
     if (RASP.isWeatherAvailable(i)) {
-      if (index == Sender->GetAsInteger()) {
+      if (index == Sender->GetAsInteger())
         RASP.SetTime(i);
-      }
+
       index++;
     }
   }
 }
 
-static void OnTimeData(DataField *Sender,
-                       DataField::DataAccessKind_t Mode){
-
-  switch(Mode){
-    case DataField::daGet:
-      RASPGetTime(Sender);
+static void
+OnTimeData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  switch (Mode) {
+  case DataField::daGet:
+    RASPGetTime(Sender);
     break;
-    case DataField::daPut:
-    case DataField::daChange:
-      RASPSetTime(Sender);
+  case DataField::daPut:
+  case DataField::daChange:
+    RASPSetTime(Sender);
     break;
   }
-
 }
 
-
-void OnWeatherHelp(WindowControl * Sender){
+void
+OnWeatherHelp(WindowControl * Sender)
+{
   WndProperty *wp = (WndProperty*)Sender;
   int type = wp->GetDataField()->GetAsInteger();
   TCHAR caption[80];
   _tcscpy(caption, _("Weather parameters"));
 
-  switch(type) {
+  switch (type) {
   case 0:
     dlgHelpShowModal(XCSoarInterface::main_window,
                      caption, _T("[Terrain]\r\nDisplay terrain on map, no weather data displayed."));
@@ -162,8 +166,7 @@ void OnWeatherHelp(WindowControl * Sender){
   };
 }
 
-
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnTimeData),
   DeclareCallBackEntry(OnDisplayItemData),
   DeclareCallBackEntry(OnCloseClicked),
@@ -171,19 +174,13 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
+void
+dlgWeatherShowModal(void)
+{
 
-void dlgWeatherShowModal(void){
-
-  if (!Layout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable,
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_WEATHER_L"));
-  } else {
-    wf = dlgLoadFromXML(CallBackTable,
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_WEATHER"));
-  }
-
+  wf = dlgLoadFromXML(CallBackTable, XCSoarInterface::main_window,
+                      !Layout::landscape ?
+                      _T("IDR_XML_WEATHER_L") : _T("IDR_XML_WEATHER"));
   if (wf == NULL)
     return;
 
@@ -197,7 +194,7 @@ void dlgWeatherShowModal(void){
     for (unsigned i = 1; i < RasterWeather::MAX_WEATHER_TIMES; i++) {
       if (RASP.isWeatherAvailable(i)) {
         TCHAR timetext[10];
-        _stprintf(timetext,_T("%04d"), RASP.IndexToTime(i));
+        _stprintf(timetext, _T("%04d"), RASP.IndexToTime(i));
         dfe->addEnumText(timetext);
       }
     }
@@ -214,11 +211,10 @@ void dlgWeatherShowModal(void){
     dfe->addEnumText(_("Terrain"));
 
     const TCHAR* Buffer;
-    for (int i=1; i<=15; i++) {
+    for (int i = 1; i <= 15; i++) {
       Buffer = RASP.ItemLabel(i);
-      if (_tcslen(Buffer)) {
+      if (_tcslen(Buffer))
         dfe->addEnumText(Buffer);
-      }
     }
     dfe->Set(RASP.GetParameter());
     wp->RefreshDisplay();
@@ -234,13 +230,11 @@ void dlgWeatherShowModal(void){
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpDisplayItem"));
-  if (wp) {
+  if (wp)
     RASP.SetParameter(wp->GetDataField()->GetAsInteger());
-  }
 
   delete wf;
 }
-
 
 /*
   Todo:
