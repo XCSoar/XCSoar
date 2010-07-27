@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_TERRAIN_RASTER_WEATHER_HPP
 
 #include "Poco/RWLock.h"
+#include "Compiler.h"
 
 #include <tchar.h>
 
@@ -67,7 +68,7 @@ public:
 
   void ValueToText(TCHAR* Buffer, short val);
   void SetViewCenter(const GEOPOINT &location);
-  const TCHAR* ItemLabel(int i);
+  gcc_const static const TCHAR* ItemLabel(int i);
   RasterMap* GetMap();
   unsigned GetParameter();
   void SetParameter(unsigned i);
