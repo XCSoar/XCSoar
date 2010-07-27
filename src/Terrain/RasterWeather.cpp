@@ -182,14 +182,13 @@ RasterWeather::Reload(const GEOPOINT &location, int day_time)
   Poco::ScopedRWLock protect(lock, true);
   if (_weather_time == 0) {
     // "Now" time, so find time in half hours
-    unsigned dsecs = (int)TimeLocal(day_time);
-    unsigned half_hours = (dsecs / 1800) % 48;
+    unsigned half_hours = (TimeLocal(day_time) / 1800) % 48;
     _weather_time = max(_weather_time, half_hours);
     now = true;
   }
 
   // limit values, for safety
-  _weather_time = min((unsigned)(MAX_WEATHER_TIMES - 1), _weather_time);
+  _weather_time = min(MAX_WEATHER_TIMES - 1, _weather_time);
 
   if (_weather_time == last_weather_time) {
     // no change, quick exit.
