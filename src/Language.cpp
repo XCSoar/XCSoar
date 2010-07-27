@@ -46,6 +46,12 @@ Copyright_License {
 #include "Sizes.h"
 #include "IO/FileLineReader.hpp"
 
+#ifdef HAVE_POSIX
+
+#include <locale.h>
+
+#else
+
 /**
  * A struct that saves a translation (key + text)
  */
@@ -185,6 +191,8 @@ ReadLanguageFile(TLineReader &reader)
   }
 }
 
+#endif /* !HAVE_POSIX */
+
 /**
  * Reads the selected LanguageFile into the cache
  */
@@ -192,6 +200,14 @@ void
 ReadLanguageFile()
 {
   LogStartUp(_T("Loading language file"));
+
+#ifdef HAVE_POSIX
+
+  setlocale(LC_ALL, "");
+  bindtextdomain("xcsoar", "/usr/share/locale");
+  textdomain("xcsoar");
+
+#else /* !HAVE_POSIX */
 
   TCHAR szFile1[MAX_PATH];
 
@@ -212,4 +228,6 @@ ReadLanguageFile()
 
   // Read from the file
   ReadLanguageFile(reader);
+
+#endif /* !HAVE_POSIX */
 }

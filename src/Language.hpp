@@ -39,11 +39,23 @@ Copyright_License {
 #if !defined(XCSOAR_LANGUAGE_HPP)
 #define XCSOAR_LANGUAGE_HPP
 
+#ifdef HAVE_POSIX
+
+#include <libintl.h>
+
+#define _(x) gettext(x)
+
+#ifdef gettext_noop
+#define N_(x) gettext_noop(x)
+#else
+#define N_(x) (x)
+#endif
+
+#else
+
 #include "Compiler.h"
 
 #include <tchar.h>
-
-void ReadLanguageFile(void);
 
 gcc_const
 const TCHAR* gettext(const TCHAR* text);
@@ -60,5 +72,9 @@ const TCHAR* gettext(const TCHAR* text);
 #endif
 
 void WriteMissingTranslations(void);
+
+#endif
+
+void ReadLanguageFile(void);
 
 #endif

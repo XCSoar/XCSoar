@@ -37,8 +37,12 @@ Copyright_License {
 
 #include "Language.hpp"
 
+#ifndef HAVE_POSIX
+
 const TCHAR *
 gettext(const TCHAR *text)
 {
   return text;
 }
+
+#endif
