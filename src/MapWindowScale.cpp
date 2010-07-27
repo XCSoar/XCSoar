@@ -232,8 +232,8 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
       }
 
       if (weather != NULL) {
-        TCHAR Buffer[20];
-        weather->ItemLabel(weather->GetParameter(), Buffer);
+        const TCHAR* Buffer;
+        Buffer = weather->ItemLabel(weather->GetParameter());
         if (_tcslen(Buffer))
           _tcscat(ScaleInfo, Buffer);
       }

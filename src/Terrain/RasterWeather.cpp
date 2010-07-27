@@ -274,45 +274,31 @@ RasterWeather::ServiceFullReload(const GEOPOINT &location)
       weather_map[i]->ServiceFullReload(location);
 }
 
-void
-RasterWeather::ItemLabel(int i, TCHAR* Buffer)
+const TCHAR*
+RasterWeather::ItemLabel(int i)
 {
-  *Buffer = _T('\0');
-
   switch (i) {
-  case 0:
-    return;
   case 1: // wstar
-    _tcscpy(Buffer, _("W*"));
-    return;
+    return _("W*");
   case 2: // blwindspd
-    _tcscpy(Buffer, _("BL Wind spd"));
-    return;
+    return _("BL Wind spd");
   case 3: // hbl
-    _tcscpy(Buffer, _("H bl"));
-    return;
+    return _("H bl");
   case 4: // dwcrit
-    _tcscpy(Buffer, _("dwcrit"));
-    return;
+    return _("dwcrit");
   case 5: // blcloudpct
-    _tcscpy(Buffer, _("bl cloud"));
-    return;
+    return _("bl cloud");
   case 6: // sfctemp
-    _tcscpy(Buffer, _("Sfc temp"));
-    return;
+    return _("Sfc temp");
   case 7: // hwcrit
-    _tcscpy(Buffer, _("hwcrit"));
-    return;
+    return _("hwcrit");
   case 8: // wblmaxmin
-    _tcscpy(Buffer, _("wblmaxmin"));
-    return;
+    return _("wblmaxmin");
   case 9: // blcwbase
-    _tcscpy(Buffer, _("blcwbase"));
-    return;
-  default:
-    // error!
-    break;
+    return _("blcwbase");
   }
+
+  return _T("\0");
 }
 
 void

@@ -213,9 +213,9 @@ void dlgWeatherShowModal(void){
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Terrain"));
 
-    TCHAR Buffer[20];
+    const TCHAR* Buffer;
     for (int i=1; i<=15; i++) {
-      RASP.ItemLabel(i, Buffer);
+      Buffer = RASP.ItemLabel(i);
       if (_tcslen(Buffer)) {
         dfe->addEnumText(Buffer);
       }

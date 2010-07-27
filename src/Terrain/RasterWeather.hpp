@@ -67,7 +67,7 @@ public:
 
   void ValueToText(TCHAR* Buffer, short val);
   void SetViewCenter(const GEOPOINT &location);
-  void ItemLabel(int i, TCHAR* Buffer);
+  const TCHAR* ItemLabel(int i);
   RasterMap* GetMap();
   unsigned GetParameter();
   void SetParameter(unsigned i);
