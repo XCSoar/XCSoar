@@ -276,15 +276,9 @@ TerrainRenderer::SetMap()
   DisplayMap = terrain->get_map();
   color_ramp = &terrain_colors[TerrainRamp][0];
 
-  if (is_terrain)
-    do_shading = true;
-  else
-    do_shading = false;
+  do_shading = is_terrain;
 
-  if (DisplayMap)
-    return true;
-  else
-    return false;
+  return (DisplayMap != NULL);
 }
 
 
