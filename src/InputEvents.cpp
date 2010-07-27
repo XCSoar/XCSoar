@@ -633,7 +633,7 @@ InputEvents::findKey(const TCHAR *data)
 pt2Event
 InputEvents::findEvent(const TCHAR *data)
 {
-  for (unsigned i = 0; Text2Event[0].text != NULL; ++i)
+  for (unsigned i = 0; Text2Event[i].text != NULL; ++i)
     if (_tcscmp(data, Text2Event[i].text) == 0)
       return Text2Event[i].event;
 
