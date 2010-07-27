@@ -38,32 +38,41 @@
 #include "AbstractAirspace.hpp"
 #include "Units.hpp"
 
+#include <stdio.h>
+
 const tstring 
 AIRSPACE_ALT::get_as_text_units(const bool concise) const
 {
-  tstringstream oss;
+  TCHAR buffer[64];
+
   switch (Base) {
   case abAGL:
     if (!positive(AGL)) {
-      oss << _T("GND");
+      _tcscpy(buffer, _T("GND"));
     } else {
-      oss << (int)Units::ToUserAltitude(AGL) << _T(" ") << Units::GetAltitudeName() << _T(" AGL");
+      _stprintf(buffer, _T("%d %s AGL"),
+                (int)Units::ToUserAltitude(AGL), Units::GetAltitudeName());
     }
     break;
   case abFL:
-    oss << _T("FL") << (int)FL;
+    _stprintf(buffer, _T("FL%d"), (int)FL);
     break;
   case abMSL:
-    oss << (int)Units::ToUserAltitude(Altitude) << _T(" ") << Units::GetAltitudeName();
+    _stprintf(buffer, _T("%d %s"),
+              (int)Units::ToUserAltitude(Altitude), Units::GetAltitudeName());
     break;
   case abUndef:
   default:
+    buffer[0] = _T('\0');
     break;
   };
   if (!concise && Base!=abMSL && positive(Altitude)) {
-    oss << _T(" ") << (int)Units::ToUserAltitude(Altitude) << _T(" ") << Units::GetAltitudeName();
-  }
-  return oss.str();
+    TCHAR second[64];
+    _stprintf(second, _T(" %d %s"),
+              (int)Units::ToUserAltitude(Altitude), Units::GetAltitudeName());
+    return tstring(buffer) + second;
+  } else
+    return tstring(buffer);
 }
 
 

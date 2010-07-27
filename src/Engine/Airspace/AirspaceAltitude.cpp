@@ -37,6 +37,8 @@
 #include "AirspaceAltitude.hpp"
 #include "Atmosphere/Pressure.hpp"
 
+#include <stdio.h>
+
 void 
 AIRSPACE_ALT::set_flight_level(const AtmosphericPressure &press)
 {
@@ -55,27 +57,31 @@ AIRSPACE_ALT::set_ground_level(const fixed alt)
 const tstring 
 AIRSPACE_ALT::get_as_text(const bool concise) const
 {
-  tstringstream oss;
+  TCHAR buffer[64];
+
   switch (Base) {
   case abAGL:
     if (!positive(AGL)) {
-      oss << _T("GND");
+      _tcscpy(buffer, _T("GND"));
     } else {
-      oss << (int)AGL << _T(" AGL");
+      _stprintf(buffer, _T("%d AGL"), (int)AGL);
     }
     break;
   case abFL:
-    oss << _T("FL") << (int)FL;
+    _stprintf(buffer, _T("FL%d"), (int)FL);
     break;
   case abMSL:
-    oss << (int)Altitude;
+    _stprintf(buffer, _T("%d"), (int)Altitude);
     break;
   case abUndef:
   default:
+    buffer[0] = _T('\0');
     break;
   };
   if (!concise && Base!=abMSL && positive(Altitude)) {
-    oss << _T(" ") << (int)Altitude;
-  }
-  return oss.str();
+    TCHAR second[64];
+    _stprintf(second, _T(" %d"), (int)Altitude);
+    return tstring(buffer) + second;
+  } else
+    return tstring(buffer);
 }
