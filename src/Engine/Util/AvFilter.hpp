@@ -38,8 +38,6 @@
 #ifndef AV_FILTER_HPP
 #define AV_FILTER_HPP
 
-#include <vector>
-
 /**
  * Average/bucket filter.  When filter is full, can return samples
  */
@@ -51,10 +49,14 @@ public:
    *
    * @param _n_max Number of elements in bucket
    */
-  AvFilter(const unsigned _n_max) : n_max(_n_max)
+  AvFilter(const unsigned _n_max)
+    :x(new double[_n_max]), n_max(_n_max)
   {
-    x.reserve(n_max);
     reset();
+  }
+
+  ~AvFilter() {
+    delete[] x;
   }
 
   /**
@@ -80,7 +82,7 @@ public:
   virtual void reset();
 
 protected:
-  std::vector<double> x; /**< Values stored */
+  double *x; /**< Values stored */
   unsigned n; /**< Number of taps */
   unsigned n_max; /**< Maximum number of taps (ideally const but then non-copyable) */
 };
