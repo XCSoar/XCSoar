@@ -1111,6 +1111,12 @@ setVariables()
                     (WndProperty*)wf->FindByName(_T("prpComDevice2")),
                     (WndButton *)wf->FindByName(_T("cmdSetupDeviceB")));
 
+  const SETTINGS_COMPUTER &settings_computer =
+    XCSoarInterface::SettingsComputer();
+
+  const SETTINGS_MAP &settings_map =
+    XCSoarInterface::SettingsMap();
+
   wp = (WndProperty*)wf->FindByName(_T("prpAirspaceDisplay"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1119,19 +1125,19 @@ setVariables()
     dfe->addEnumText(_("Clip"));
     dfe->addEnumText(_("Auto"));
     dfe->addEnumText(_("All below"));
-    dfe->Set(XCSoarInterface::SetSettingsComputer().AltitudeMode);
+    dfe->Set(settings_computer.AltitudeMode);
     wp->RefreshDisplay();
   }
 
   LoadFormProperty(*wf, _T("prpUTCOffset"),
-      iround(XCSoarInterface::SettingsComputer().UTCOffset / 1800.0) / 2.0);
+      iround(settings_computer.UTCOffset / 1800.0) / 2.0);
 
   SetLocalTime();
 
   wp = (WndProperty*)wf->FindByName(_T("prpClipAltitude"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(
-        XCSoarInterface::SetSettingsComputer().ClipAltitude)));
+        settings_computer.ClipAltitude)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
@@ -1139,19 +1145,18 @@ setVariables()
   wp = (WndProperty*)wf->FindByName(_T("prpAltWarningMargin"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(
-        XCSoarInterface::SetSettingsComputer().AltWarningMargin)));
+        settings_computer.AltWarningMargin)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
-  LoadFormProperty(*wf, _T("prpAutoZoom"),
-                   XCSoarInterface::SettingsMap().AutoZoom);
+  LoadFormProperty(*wf, _T("prpAutoZoom"), settings_map.AutoZoom);
   LoadFormProperty(*wf, _T("prpAirspaceOutline"),
-                   XCSoarInterface::SettingsMap().bAirspaceBlackOutline);
+                   settings_map.bAirspaceBlackOutline);
   LoadFormProperty(*wf, _T("prpLockSettingsInFlight"),
                    XCSoarInterface::LockSettingsInFlight);
   LoadFormProperty(*wf, _T("prpLoggerShortName"),
-                   XCSoarInterface::SettingsComputer().LoggerShortName);
+                   settings_computer.LoggerShortName);
   LoadFormProperty(*wf, _T("prpDebounceTimeout"),
                    XCSoarInterface::debounceTimeout);
 
@@ -1169,11 +1174,11 @@ setVariables()
   LoadFormProperty(*wf, _T("prpEnableFLARMGauge"),
                    XCSoarInterface::SettingsMap().EnableFLARMGauge);
   LoadFormProperty(*wf, _T("prpAirspaceWarnings"),
-                   XCSoarInterface::SettingsComputer().EnableAirspaceWarnings);
+                   settings_computer.EnableAirspaceWarnings);
   LoadFormProperty(*wf, _T("prpWarningTime"),
-                   XCSoarInterface::SetSettingsComputer().WarningTime);
+                   settings_computer.WarningTime);
   LoadFormProperty(*wf, _T("prpAcknowledgementTime"),
-                   XCSoarInterface::SetSettingsComputer().AcknowledgementTime);
+                   settings_computer.AcknowledgementTime);
 
   wp = (WndProperty*)wf->FindByName(_T("prpWaypointLabels"));
   if (wp) {
@@ -1216,7 +1221,7 @@ setVariables()
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeArrival"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(
-        XCSoarInterface::SettingsComputer().safety_height_arrival)));
+        settings_computer.safety_height_arrival)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
@@ -1224,7 +1229,7 @@ setVariables()
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeTerrain"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(
-        XCSoarInterface::SettingsComputer().safety_height_terrain)));
+        settings_computer.safety_height_terrain)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
@@ -1236,12 +1241,12 @@ setVariables()
     dfe->addEnumText(_("OFF"));
     dfe->addEnumText(_("Line"));
     dfe->addEnumText(_("Shade"));
-    dfe->Set(XCSoarInterface::SettingsComputer().FinalGlideTerrain);
+    dfe->Set(settings_computer.FinalGlideTerrain);
     wp->RefreshDisplay();
   }
 
   LoadFormProperty(*wf, _T("prpEnableNavBaroAltitude"),
-                   XCSoarInterface::SettingsComputer().EnableNavBaroAltitude);
+                   settings_computer.EnableNavBaroAltitude);
 
   wp = (WndProperty*)wf->FindByName(_T("prpWindArrowStyle"));
   if (wp) {
@@ -1261,7 +1266,7 @@ setVariables()
     dfe->addEnumText(_("Circling"));
     dfe->addEnumText(_("ZigZag"));
     dfe->addEnumText(_("Both"));
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().AutoWindMode);
+    wp->GetDataField()->Set(settings_computer.AutoWindMode);
     wp->RefreshDisplay();
   }
 
@@ -1272,7 +1277,7 @@ setVariables()
     dfe->addEnumText(_("Final glide"));
     dfe->addEnumText(_("Average climb"));
     dfe->addEnumText(_("Both"));
-    wp->GetDataField()->Set((int)XCSoarInterface::SettingsComputer().auto_mc_mode);
+    wp->GetDataField()->Set((int)settings_computer.auto_mc_mode);
     wp->RefreshDisplay();
   }
 
@@ -1288,9 +1293,9 @@ setVariables()
   }
 
   LoadFormProperty(*wf, _T("prpBlockSTF"),
-                   XCSoarInterface::SettingsComputer().EnableBlockSTF);
+                   settings_computer.EnableBlockSTF);
   LoadFormProperty(*wf, _T("prpFAIFinishHeight"),
-                   XCSoarInterface::SettingsComputer().ordered_defaults.fai_finish);
+                   settings_computer.ordered_defaults.fai_finish);
 
   wp = (WndProperty*)wf->FindByName(_T("prpOLCRules"));
   if (wp) {
@@ -1299,12 +1304,12 @@ setVariables()
     dfe->addEnumText(gettext(rule_as_text((OLCRules)0).c_str()));
     dfe->addEnumText(gettext(rule_as_text((OLCRules)1).c_str()));
     dfe->addEnumText(gettext(rule_as_text((OLCRules)2).c_str()));
-    dfe->Set(XCSoarInterface::SettingsComputer().olc_rules);
+    dfe->Set(settings_computer.olc_rules);
     wp->RefreshDisplay();
   }
 
   LoadFormProperty(*wf, _T("prpHandicap"),
-                   XCSoarInterface::SettingsComputer().olc_handicap);
+                   settings_computer.olc_handicap);
 
   if(!Profile::Get(szProfileSpeedUnitsValue,Speed)) {
     Profile::Set(szProfileSpeedUnitsValue, Speed);
@@ -1411,18 +1416,18 @@ setVariables()
   LoadFormProperty(*wf, _T("prpSetSystemTimeFromGPS"),
                    XCSoarInterface::SettingsMap().SetSystemTimeFromGPS);
   LoadFormProperty(*wf, _T("prpAbortSafetyUseCurrent"),
-                   XCSoarInterface::SettingsComputer().safety_mc_use_current);
+                   settings_computer.safety_mc_use_current);
   LoadFormProperty(*wf, _T("prpDisableAutoLogger"),
-                   !XCSoarInterface::SettingsComputer().DisableAutoLogger);
+                   !settings_computer.DisableAutoLogger);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
   if (wp) {
-    wp->GetDataField()->Set(Units::ToUserVSpeed(XCSoarInterface::SettingsComputer().safety_mc));
+    wp->GetDataField()->Set(Units::ToUserVSpeed(settings_computer.safety_mc));
     wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
     wp->RefreshDisplay();
   }
 
-  LoadFormProperty(*wf, _T("prpRiskGamma"), XCSoarInterface::SettingsComputer().risk_gamma);
+  LoadFormProperty(*wf, _T("prpRiskGamma"), settings_computer.risk_gamma);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTrail"));
   if (wp) {
@@ -1450,13 +1455,13 @@ setVariables()
 
   wp = (WndProperty*)wf->FindByName(_T("prpMaxManoeuveringSpeed"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserSpeed(XCSoarInterface::SettingsComputer().SafetySpeed)));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserSpeed(settings_computer.SafetySpeed)));
     wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }
 
   LoadFormProperty(*wf, _T("prpBallastSecsToEmpty"),
-                   XCSoarInterface::SettingsComputer().BallastSecsToEmpty);
+                   settings_computer.BallastSecsToEmpty);
 
   wp = (WndProperty*)wf->FindByName(_T("prpPolarType"));
   if (wp) {
@@ -1478,7 +1483,7 @@ setVariables()
       i++;
     }
     dfe->Sort();
-    dfe->Set(XCSoarInterface::SettingsComputer().POLARID);
+    dfe->Set(settings_computer.POLARID);
     wp->RefreshDisplay();
   }
 
@@ -1733,7 +1738,7 @@ setVariables()
     dfe->addEnumText(_("Disabled"));
     dfe->addEnumText(_("Enabled"));
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->Set(XCSoarInterface::SettingsComputer().EnableGestures);
+    dfe->Set(settings_computer.EnableGestures);
     wp->RefreshDisplay();
   }
 
@@ -1748,7 +1753,7 @@ setVariables()
     dfe->addEnumText(_("2 minutes"));
     dfe->addEnumText(_("3 minutes"));
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->Set(XCSoarInterface::SettingsComputer().AverEffTime);
+    dfe->Set(settings_computer.AverEffTime);
     wp->RefreshDisplay();
   }
 
@@ -1804,7 +1809,7 @@ setVariables()
     dfe->addEnumText(_("OFF"));
     dfe->addEnumText(_("Flap"));
     dfe->addEnumText(_("SC"));
-    dfe->Set(XCSoarInterface::SettingsComputer().EnableExternalTriggerCruise);
+    dfe->Set(settings_computer.EnableExternalTriggerCruise);
     wp->RefreshDisplay();
   }
 
@@ -1872,21 +1877,21 @@ setVariables()
 
   wp = (WndProperty*)wf->FindByName(_T("prpFinishMinHeight"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(XCSoarInterface::SettingsComputer().ordered_defaults.finish_min_height)));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(settings_computer.ordered_defaults.finish_min_height)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeight"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(XCSoarInterface::SettingsComputer().ordered_defaults.start_max_height)));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(settings_computer.ordered_defaults.start_max_height)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeightMargin"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(XCSoarInterface::SettingsComputer().start_max_height_margin)));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(settings_computer.start_max_height_margin)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
@@ -1897,28 +1902,28 @@ setVariables()
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("AGL"));
     dfe->addEnumText(_("MSL"));
-    dfe->Set(XCSoarInterface::SettingsComputer().ordered_defaults.start_max_height_ref);
+    dfe->Set(settings_computer.ordered_defaults.start_max_height_ref);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserSpeed(XCSoarInterface::SettingsComputer().ordered_defaults.start_max_speed)));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserSpeed(settings_computer.ordered_defaults.start_max_speed)));
     wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeedMargin"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserSpeed(XCSoarInterface::SettingsComputer().start_max_speed_margin)));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserSpeed(settings_computer.start_max_speed_margin)));
     wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }
 
   LoadFormProperty(*wf, _T("prpLoggerTimeStepCruise"),
-                   XCSoarInterface::SettingsComputer().LoggerTimeStepCruise);
+                   settings_computer.LoggerTimeStepCruise);
   LoadFormProperty(*wf, _T("prpLoggerTimeStepCircling"),
-                   XCSoarInterface::SettingsComputer().LoggerTimeStepCircling);
+                   settings_computer.LoggerTimeStepCircling);
   LoadFormProperty(*wf, _T("prpSnailWidthScale"),
                    XCSoarInterface::SettingsMap().SnailWidthScale);
 
@@ -2073,19 +2078,22 @@ void dlgConfigurationShowModal(void)
   // TODO enhancement: implement a cancel button that skips all this
   // below after exit.
 
+  SETTINGS_COMPUTER &settings_computer =
+    XCSoarInterface::SetSettingsComputer();
+
   changed |= SetValueRegistryOnChange(wf, _T("prpAbortSafetyUseCurrent"),
                                       szProfileAbortSafetyUseCurrent,
-                                      XCSoarInterface::SetSettingsComputer().safety_mc_use_current);
+                                      settings_computer.safety_mc_use_current);
 
   WndProperty *wp;
   wp = (WndProperty*)wf->FindByName(_T("prpDisableAutoLogger"));
   if (wp) { // GUI label is "Enable Auto Logger"
-    if (!XCSoarInterface::SetSettingsComputer().DisableAutoLogger
+    if (!settings_computer.DisableAutoLogger
         != wp->GetDataField()->GetAsBoolean()) {
-      XCSoarInterface::SetSettingsComputer().DisableAutoLogger =
+      settings_computer.DisableAutoLogger =
         !(wp->GetDataField()->GetAsBoolean());
       Profile::Set(szProfileDisableAutoLogger,
-                    XCSoarInterface::SetSettingsComputer().DisableAutoLogger);
+                    settings_computer.DisableAutoLogger);
       changed = true;
     }
   }
@@ -2093,10 +2101,10 @@ void dlgConfigurationShowModal(void)
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
   if (wp) {
     fixed val = Units::ToSysVSpeed(wp->GetDataField()->GetAsFixed());
-    if (XCSoarInterface::SettingsComputer().safety_mc != val) {
-      XCSoarInterface::SetSettingsComputer().safety_mc = val;
+    if (settings_computer.safety_mc != val) {
+      settings_computer.safety_mc = val;
       Profile::Set(szProfileSafetyMacCready,
-                    iround(XCSoarInterface::SettingsComputer().safety_mc*10));
+                    iround(settings_computer.safety_mc*10));
       changed = true;
     }
   }
@@ -2104,10 +2112,10 @@ void dlgConfigurationShowModal(void)
   wp = (WndProperty*)wf->FindByName(_T("prpRiskGamma"));
   if (wp) {
     fixed val = wp->GetDataField()->GetAsFixed();
-    if (XCSoarInterface::SettingsComputer().risk_gamma != val) {
-      XCSoarInterface::SetSettingsComputer().risk_gamma = val;
+    if (settings_computer.risk_gamma != val) {
+      settings_computer.risk_gamma = val;
       Profile::Set(szProfileRiskGamma,
-                    iround(XCSoarInterface::SettingsComputer().risk_gamma*10));
+                    iround(settings_computer.risk_gamma*10));
       changed = true;
     }
   }
@@ -2127,18 +2135,18 @@ void dlgConfigurationShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpPolarType"));
   if (wp) {
-    if (XCSoarInterface::SettingsComputer().POLARID != (unsigned)wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsComputer().POLARID = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfilePolarID, (int &)XCSoarInterface::SettingsComputer().POLARID);
+    if (settings_computer.POLARID != (unsigned)wp->GetDataField()->GetAsInteger()) {
+      settings_computer.POLARID = wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfilePolarID, (int &)settings_computer.POLARID);
       PolarFileChanged = true;
       changed = true;
     }
   }
 
-  short tmp = XCSoarInterface::SetSettingsComputer().AltitudeMode;
+  short tmp = settings_computer.AltitudeMode;
   changed |= SetValueRegistryOnChange(wf, _T("prpAirspaceDisplay"),
                                       szProfileAltMode, tmp);
-  XCSoarInterface::SetSettingsComputer().AltitudeMode = (AirspaceDisplayMode_t)tmp;
+  settings_computer.AltitudeMode = (AirspaceDisplayMode_t)tmp;
 
   changed |= SetValueRegistryOnChange(wf, _T("prpLockSettingsInFlight"),
                                       szProfileLockSettingsInFlight,
@@ -2146,7 +2154,7 @@ void dlgConfigurationShowModal(void)
 
   changed |= SetValueRegistryOnChange(wf, _T("prpLoggerShortName"),
                                       szProfileLoggerShort,
-                                      XCSoarInterface::SetSettingsComputer().LoggerShortName);
+                                      settings_computer.LoggerShortName);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpEnableFLARMMap"),
                                       szProfileEnableFLARMMap,
@@ -2178,11 +2186,11 @@ void dlgConfigurationShowModal(void)
   wp = (WndProperty*)wf->FindByName(_T("prpUTCOffset"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsFloat()*3600.0);
-    if ((XCSoarInterface::SettingsComputer().UTCOffset != ival)||(utcchanged)) {
-      XCSoarInterface::SetSettingsComputer().UTCOffset = ival;
+    if ((settings_computer.UTCOffset != ival)||(utcchanged)) {
+      settings_computer.UTCOffset = ival;
 
       // have to do this because registry variables can't be negative!
-      int lival = XCSoarInterface::SettingsComputer().UTCOffset;
+      int lival = settings_computer.UTCOffset;
       if (lival<0) { lival+= 24*3600; }
       Profile::Set(szProfileUTCOffset, lival);
       changed = true;
@@ -2192,9 +2200,9 @@ void dlgConfigurationShowModal(void)
   wp = (WndProperty*)wf->FindByName(_T("prpClipAltitude"));
   if (wp) {
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if ((int)XCSoarInterface::SetSettingsComputer().ClipAltitude != ival) {
-      XCSoarInterface::SetSettingsComputer().ClipAltitude = ival;
-      Profile::Set(szProfileClipAlt,XCSoarInterface::SetSettingsComputer().ClipAltitude);  // fixed 20060430/sgi was szProfileAltMode
+    if ((int)settings_computer.ClipAltitude != ival) {
+      settings_computer.ClipAltitude = ival;
+      Profile::Set(szProfileClipAlt,settings_computer.ClipAltitude);  // fixed 20060430/sgi was szProfileAltMode
       changed = true;
     }
   }
@@ -2202,24 +2210,24 @@ void dlgConfigurationShowModal(void)
   wp = (WndProperty*)wf->FindByName(_T("prpAltWarningMargin"));
   if (wp) {
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if ((int)XCSoarInterface::SetSettingsComputer().AltWarningMargin != ival) {
-      XCSoarInterface::SetSettingsComputer().AltWarningMargin = ival;
-      Profile::Set(szProfileAltMargin,XCSoarInterface::SetSettingsComputer().AltWarningMargin);
+    if ((int)settings_computer.AltWarningMargin != ival) {
+      settings_computer.AltWarningMargin = ival;
+      Profile::Set(szProfileAltMargin,settings_computer.AltWarningMargin);
       changed = true;
     }
   }
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAirspaceWarnings"),
                                       szProfileAirspaceWarning,
-                                      XCSoarInterface::SetSettingsComputer().EnableAirspaceWarnings);
+                                      settings_computer.EnableAirspaceWarnings);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpWarningTime"),
                                       szProfileWarningTime,
-                                      XCSoarInterface::SetSettingsComputer().WarningTime);
+                                      settings_computer.WarningTime);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAcknowledgementTime"),
                                       szProfileAcknowledgementTime,
-                                      XCSoarInterface::SetSettingsComputer().AcknowledgementTime);
+                                      settings_computer.AcknowledgementTime);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpWaypointLabels"),
                                       szProfileDisplayText,
@@ -2259,10 +2267,10 @@ void dlgConfigurationShowModal(void)
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeArrival"));
   if (wp) {
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if ((int)XCSoarInterface::SettingsComputer().safety_height_arrival != ival) {
-      XCSoarInterface::SetSettingsComputer().safety_height_arrival = ival;
+    if ((int)settings_computer.safety_height_arrival != ival) {
+      settings_computer.safety_height_arrival = ival;
       Profile::Set(szProfileSafetyAltitudeArrival,
-                   (int)XCSoarInterface::SettingsComputer().safety_height_arrival);
+                   (int)settings_computer.safety_height_arrival);
       changed = true;
     }
   }
@@ -2270,28 +2278,27 @@ void dlgConfigurationShowModal(void)
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeTerrain"));
   if (wp) {
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if ((int)XCSoarInterface::SettingsComputer().safety_height_terrain != ival) {
-      XCSoarInterface::SetSettingsComputer().safety_height_terrain = ival;
+    if ((int)settings_computer.safety_height_terrain != ival) {
+      settings_computer.safety_height_terrain = ival;
       Profile::Set(szProfileSafetyAltitudeTerrain,
-                   (int)XCSoarInterface::SettingsComputer().safety_height_terrain);
+                   (int)settings_computer.safety_height_terrain);
       changed = true;
     }
   }
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAutoWind"),
                                       szProfileAutoWind,
-                                      XCSoarInterface::SetSettingsComputer().AutoWindMode);
+                                      settings_computer.AutoWindMode);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpWindArrowStyle"),
                                       szProfileWindArrowStyle,
                                       XCSoarInterface::SetSettingsMap().WindArrowStyle);
 
-  int auto_mc_mode = (int)XCSoarInterface::SettingsComputer().auto_mc_mode;
+  int auto_mc_mode = (int)settings_computer.auto_mc_mode;
   changed |= SetValueRegistryOnChange(wf, _T("prpAutoMcMode"),
                                       szProfileAutoMcMode,
                                       auto_mc_mode);
-  XCSoarInterface::SetSettingsComputer().auto_mc_mode = 
-    (TaskBehaviour::AutoMCMode_t)auto_mc_mode;
+  settings_computer.auto_mc_mode = (TaskBehaviour::AutoMCMode_t)auto_mc_mode;
 
   wp = (WndProperty*)wf->FindByName(_T("prpWaypointsOutOfRange"));
   if (wp) {
@@ -2310,15 +2317,15 @@ void dlgConfigurationShowModal(void)
 
   changed |= SetValueRegistryOnChange(wf, _T("prpEnableNavBaroAltitude"),
                                       szProfileEnableNavBaroAltitude,
-                                      XCSoarInterface::SetSettingsComputer().EnableNavBaroAltitude);
+                                      settings_computer.EnableNavBaroAltitude);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpFinalGlideTerrain"),
                                       szProfileFinalGlideTerrain,
-                                      XCSoarInterface::SetSettingsComputer().FinalGlideTerrain);
+                                      settings_computer.FinalGlideTerrain);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpBlockSTF"),
                                       szProfileBlockSTF,
-                                      XCSoarInterface::SetSettingsComputer().EnableBlockSTF);
+                                      settings_computer.EnableBlockSTF);
 
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsSpeed"));
   if (wp) {
@@ -2457,16 +2464,16 @@ void dlgConfigurationShowModal(void)
   }
 
   {
-    unsigned t= XCSoarInterface::SettingsComputer().olc_rules;
+    unsigned t= settings_computer.olc_rules;
     changed |= SetValueRegistryOnChange(wf, _T("prpOLCRules"),
                                         szProfileOLCRules,
                                         t);
-    XCSoarInterface::SetSettingsComputer().olc_rules = (OLCRules)t;
+    settings_computer.olc_rules = (OLCRules)t;
   }
 
   changed |= SetValueRegistryOnChange(wf, _T("prpHandicap"),
                                       szProfileHandicap,
-                                      XCSoarInterface::SetSettingsComputer().olc_handicap);
+                                      settings_computer.olc_handicap);
 
   PolarFileChanged = FinishFileField(*wf, _T("prpPolarFile"),
                                      szProfilePolarFile, szPolarFile);
@@ -2509,15 +2516,15 @@ void dlgConfigurationShowModal(void)
 
   changed |= SetValueRegistryOnChange(wf, _T("prpBallastSecsToEmpty"),
                                       szProfileBallastSecsToEmpty,
-                                      XCSoarInterface::SetSettingsComputer().BallastSecsToEmpty);
+                                      settings_computer.BallastSecsToEmpty);
 
   wp = (WndProperty*)wf->FindByName(_T("prpMaxManoeuveringSpeed"));
   if (wp) {
     ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
-    if (XCSoarInterface::SettingsComputer().SafetySpeed != ival) {
-      XCSoarInterface::SetSettingsComputer().SafetySpeed = ival;
+    if (settings_computer.SafetySpeed != ival) {
+      settings_computer.SafetySpeed = ival;
       Profile::Set(szProfileSafteySpeed,
-                    XCSoarInterface::SettingsComputer().SafetySpeed);
+                    settings_computer.SafetySpeed);
       changed = true;
     }
   }
@@ -2568,24 +2575,21 @@ void dlgConfigurationShowModal(void)
   }
   wp = (WndProperty*)wf->FindByName(_T("prpGestures")); // VENTA6
   if (wp) {
-    if (XCSoarInterface::SettingsComputer().EnableGestures
-        != wp->GetDataField()->GetAsBoolean()) {
-      XCSoarInterface::SetSettingsComputer().EnableGestures =
-          !XCSoarInterface::SettingsComputer().EnableGestures;
+    if (settings_computer.EnableGestures != wp->GetDataField()->GetAsBoolean()) {
+      settings_computer.EnableGestures =
+          !settings_computer.EnableGestures;
       Profile::Set(szProfileGestures,
-                   XCSoarInterface::SettingsComputer().EnableGestures);
+                   settings_computer.EnableGestures);
       changed = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAverEffTime")); // VENTA6
   if (wp) {
-    if (XCSoarInterface::SettingsComputer().AverEffTime !=
-        (wp->GetDataField()->GetAsInteger())) {
-      XCSoarInterface::SetSettingsComputer().AverEffTime =
-        (wp->GetDataField()->GetAsInteger());
+    if (settings_computer.AverEffTime != wp->GetDataField()->GetAsInteger()) {
+      settings_computer.AverEffTime = wp->GetDataField()->GetAsInteger();
       Profile::Set(szProfileAverEffTime,
-                    XCSoarInterface::SettingsComputer().AverEffTime);
+                   settings_computer.AverEffTime);
       changed = true;
       requirerestart = true;
     }
@@ -2686,7 +2690,7 @@ void dlgConfigurationShowModal(void)
 
   changed |= SetValueRegistryOnChange(wf, _T("prpEnableExternalTriggerCruise"),
                                       szProfileEnableExternalTriggerCruise,
-                                      XCSoarInterface::SetSettingsComputer().EnableExternalTriggerCruise);
+                                      settings_computer.EnableExternalTriggerCruise);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppInverseInfoBox"));
   if (wp) {
@@ -2823,8 +2827,8 @@ void dlgConfigurationShowModal(void)
   wp = (WndProperty*)wf->FindByName(_T("prpFinishMinHeight"));
   if (wp) {
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if ((int)XCSoarInterface::SettingsComputer().ordered_defaults.finish_min_height != ival) {
-      XCSoarInterface::SetSettingsComputer().ordered_defaults.finish_min_height = ival;
+    if ((int)settings_computer.ordered_defaults.finish_min_height != ival) {
+      settings_computer.ordered_defaults.finish_min_height = ival;
       Profile::Set(szProfileFinishMinHeight,ival);
       changed = true;
       taskchanged = true;
@@ -2834,10 +2838,10 @@ void dlgConfigurationShowModal(void)
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeight"));
   if (wp) {
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if ((int)XCSoarInterface::SettingsComputer().ordered_defaults.start_max_height != ival) {
-      XCSoarInterface::SetSettingsComputer().ordered_defaults.start_max_height = ival;
+    if ((int)settings_computer.ordered_defaults.start_max_height != ival) {
+      settings_computer.ordered_defaults.start_max_height = ival;
       Profile::Set(szProfileStartMaxHeight, 
-                    XCSoarInterface::SettingsComputer().ordered_defaults.start_max_height);
+                    settings_computer.ordered_defaults.start_max_height);
       changed = true;
       taskchanged = true;
     }
@@ -2846,23 +2850,23 @@ void dlgConfigurationShowModal(void)
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeightMargin"));
   if (wp) {
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if ((int)XCSoarInterface::SettingsComputer().start_max_height_margin != ival) {
-      XCSoarInterface::SetSettingsComputer().start_max_height_margin = ival;
+    if ((int)settings_computer.start_max_height_margin != ival) {
+      settings_computer.start_max_height_margin = ival;
       Profile::Set(szProfileStartMaxHeightMargin,
-                    XCSoarInterface::SettingsComputer().start_max_height_margin);
+                    settings_computer.start_max_height_margin);
       changed = true;
       taskchanged = true;
     }
   }
   wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
   if (wp) {
-    if (XCSoarInterface::SettingsComputer().ordered_defaults.start_max_height_ref 
+    if (settings_computer.ordered_defaults.start_max_height_ref 
         != (unsigned)wp->GetDataField()->GetAsInteger()) {
 
-      XCSoarInterface::SetSettingsComputer().ordered_defaults.start_max_height_ref = 
+      settings_computer.ordered_defaults.start_max_height_ref = 
         wp->GetDataField()->GetAsInteger();
       Profile::Set(szProfileStartHeightRef, 
-                    XCSoarInterface::SettingsComputer().ordered_defaults.start_max_height_ref);
+                    settings_computer.ordered_defaults.start_max_height_ref);
       changed = true;
       taskchanged = true;
     }
@@ -2871,10 +2875,10 @@ void dlgConfigurationShowModal(void)
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
   if (wp) {
     ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
-    if ((int)XCSoarInterface::SetSettingsComputer().ordered_defaults.start_max_speed != ival) {
-      XCSoarInterface::SetSettingsComputer().ordered_defaults.start_max_speed = ival;
+    if ((int)settings_computer.ordered_defaults.start_max_speed != ival) {
+      settings_computer.ordered_defaults.start_max_speed = ival;
       Profile::Set(szProfileStartMaxSpeed,
-                    (int)XCSoarInterface::SettingsComputer().ordered_defaults.start_max_speed);
+                    (int)settings_computer.ordered_defaults.start_max_speed);
       changed = true;
       taskchanged = true;
     }
@@ -2883,10 +2887,10 @@ void dlgConfigurationShowModal(void)
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeedMargin"));
   if (wp) {
     ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
-    if ((int)XCSoarInterface::SettingsComputer().start_max_speed_margin != ival) {
-      XCSoarInterface::SetSettingsComputer().start_max_speed_margin = ival;
+    if ((int)settings_computer.start_max_speed_margin != ival) {
+      settings_computer.start_max_speed_margin = ival;
       Profile::Set(szProfileStartMaxSpeedMargin,
-                    (int)XCSoarInterface::SettingsComputer().start_max_speed_margin);
+                    (int)settings_computer.start_max_speed_margin);
       changed = true;
       taskchanged = true;
     }
@@ -2894,11 +2898,11 @@ void dlgConfigurationShowModal(void)
 
   changed |= SetValueRegistryOnChange(wf, _T("prpLoggerTimeStepCruise"),
                                       szProfileLoggerTimeStepCruise,
-                                      XCSoarInterface::SetSettingsComputer().LoggerTimeStepCruise);
+                                      settings_computer.LoggerTimeStepCruise);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpLoggerTimeStepCircling"),
                                       szProfileLoggerTimeStepCircling,
-                                      XCSoarInterface::SetSettingsComputer().LoggerTimeStepCircling);
+                                      settings_computer.LoggerTimeStepCircling);
 
   DevicePortChanged =
     FinishDeviceFields(device_config[0], dwDeviceIndex1,
