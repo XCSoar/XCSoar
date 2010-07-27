@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATA_FIELD_ENUM_HPP
-#define XCSOAR_DATA_FIELD_ENUM_HPP
+#ifndef XCSOAR_DATA_FIELD_BOOLEAN_HPP
+#define XCSOAR_DATA_FIELD_BOOLEAN_HPP
 
 #include "DataField/Base.hpp"
 
