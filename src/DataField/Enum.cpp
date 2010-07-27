@@ -56,18 +56,18 @@ DataFieldEnum::~DataFieldEnum()
 }
 
 int
-DataFieldEnum::GetAsInteger(void) const
+DataFieldEnum::GetAsInteger() const
 {
-  if (mValue < nEnums) {
+  if (mValue < nEnums)
     return mEntries[mValue].index;
-  } else {
-    return 0; // JMW shouldn't get here
-  }
+
+  return 0;
 }
 
 void
-DataFieldEnum::replaceEnumText(unsigned int i, const TCHAR *Text) {
- if (i<=nEnums ) {
+DataFieldEnum::replaceEnumText(unsigned int i, const TCHAR *Text)
+{
+  if (i <= nEnums) {
     free(mEntries[i].mText);
     mEntries[i].mText = _tcsdup(Text);
  }
@@ -95,22 +95,21 @@ DataFieldEnum::addEnumTexts(const TCHAR *const*list)
 }
 
 const TCHAR *
-DataFieldEnum::GetAsString(void) const
+DataFieldEnum::GetAsString() const
 {
-  if (mValue < nEnums) {
+  if (mValue < nEnums)
     return (mEntries[mValue].mText);
-  } else {
-    return NULL;
-  }
+
+  return NULL;
 }
 
 void
 DataFieldEnum::Set(int Value)
 {
   // first look it up
-  if (Value < 0) {
+  if (Value < 0)
     Value = 0;
-  }
+
   for (unsigned int i = 0; i < nEnums; i++) {
     if (mEntries[i].index == (unsigned int)Value) {
       int lastValue = mValue;
@@ -172,16 +171,14 @@ DataFieldEnum::Sort(int startindex)
 int
 DataFieldEnum::CreateComboList(void)
 {
-  unsigned int i = 0;
+  unsigned int i;
   for (i = 0; i < nEnums; i++) {
     mComboList.ComboPopupItemList[i] =
         mComboList.CreateItem(i, mEntries[i].index, mEntries[i].mText,
                               mEntries[i].mText);
-    // if (mEntries[i].index == mValue) {
-    //   mComboList.ComboPopupItemSavedIndex=i;
-    // }
   }
   mComboList.ComboPopupItemSavedIndex = mValue;
   mComboList.ComboPopupItemCount = i;
+
   return mComboList.ComboPopupItemCount;
 }

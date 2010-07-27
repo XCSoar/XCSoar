@@ -80,8 +80,8 @@ public:
   unsigned addEnumText(const TCHAR *Text);
   void addEnumTexts(const TCHAR *const*list);
 
-  virtual int GetAsInteger(void) const;
-  virtual const TCHAR *GetAsString(void) const;
+  virtual int GetAsInteger() const;
+  virtual const TCHAR *GetAsString() const;
 
   #if defined(__BORLANDC__)
   #pragma warn -hid
