@@ -38,12 +38,27 @@
 #include "AirspaceVisitor.hpp"
 #include "AirspaceIntersectionVisitor.hpp"
 #include "Atmosphere/Pressure.hpp"
-#include <deque>
 
 #ifdef INSTRUMENT_TASK
 extern unsigned n_queries;
 extern long count_intersections;
 #endif
+
+class AirspacePredicateVisitorAdapter {
+  const AirspacePredicate *predicate;
+  AirspaceVisitor *visitor;
+
+public:
+  AirspacePredicateVisitorAdapter(const AirspacePredicate &_predicate,
+                                  AirspaceVisitor &_visitor)
+    :predicate(&_predicate), visitor(&_visitor) {}
+
+  void operator()(Airspace as) {
+    AbstractAirspace &aas = *as.get_airspace();
+    if (predicate->condition(aas))
+      visitor->Visit(as);
+  }
+};
 
 void 
 Airspaces::visit_within_range(const GEOPOINT &loc, 
@@ -53,20 +68,28 @@ Airspaces::visit_within_range(const GEOPOINT &loc,
 {
   Airspace bb_target(loc, task_projection);
   int mrange = task_projection.project_range(loc, range);
-  std::deque< Airspace > vectors;
-  airspace_tree.find_within_range(bb_target, -mrange, std::back_inserter(vectors));
+  AirspacePredicateVisitorAdapter adapter(predicate, visitor);
+  airspace_tree.visit_within_range(bb_target, -mrange, adapter);
 
 #ifdef INSTRUMENT_TASK
   n_queries++;
 #endif
-
-  for (std::deque<Airspace>::iterator v = vectors.begin(); v != vectors.end(); ++v) {
-    if (!predicate.condition(*v->get_airspace()))
-      continue;
-
-    visitor.Visit(*v);
-  }
 }
+
+class IntersectingAirspaceVisitorAdapter {
+  const FlatRay *ray;
+  AirspaceVisitor *visitor;
+
+public:
+  IntersectingAirspaceVisitorAdapter(const FlatRay &_ray,
+                                     AirspaceVisitor &_visitor)
+    :ray(&_ray), visitor(&_visitor) {}
+
+  void operator()(Airspace as) {
+    if (as.intersects(*ray))
+      visitor->Visit(as);
+  }
+};
 
 void 
 Airspaces::visit_intersecting(const GEOPOINT &loc, 
@@ -79,20 +102,12 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
   GEOPOINT c = vec.mid_point(loc);
   Airspace bb_target(c, task_projection);
   int mrange = task_projection.project_range(c, vec.Distance / 2);
-  std::deque< Airspace > vectors;
-  airspace_tree.find_within_range(bb_target, -mrange, std::back_inserter(vectors));
+  IntersectingAirspaceVisitorAdapter adapter(ray, visitor);
+  airspace_tree.visit_within_range(bb_target, -mrange, adapter);
 
 #ifdef INSTRUMENT_TASK
   n_queries++;
 #endif
-
-  for (std::deque<Airspace>::iterator v = vectors.begin(); v != vectors.end(); ++v) {
-    if (!v->intersects(ray))
-      continue;
-
-    if (visitor.set_intersections(v->intersects(loc, vec)))
-      visitor.Visit(*v);
-  }
 }
 
 // SCAN METHODS
