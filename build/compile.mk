@@ -1,9 +1,14 @@
 ######## tools
 
+CCACHE := 
+ifeq ($(USE_CCACHE),y)
+  CCACHE := ccache$(EXE)
+endif
+
 EXE := $(findstring .exe,$(MAKE))
 AR = $(TCPATH)ar$(EXE)
-CXX = $(TCPATH)g++$(EXE)
-CC = $(TCPATH)gcc$(EXE)
+CXX = $(CCACHE) $(TCPATH)g++$(EXE)
+CC = $(CCACHE) $(TCPATH)gcc$(EXE)
 DLLTOOL = $(TCPATH)dlltool$(EXE)
 SIZE = $(TCPATH)size$(EXE)
 STRIP = $(TCPATH)strip$(EXE)
