@@ -48,12 +48,14 @@ class DrawThread;
 class CalculationThread;
 class InstrumentThread;
 class Waypoints;
+class Airspaces;
 class AirspaceClientUI;
 class TaskClientUI;
 class TaskBehaviour;
 class Replay;
 
 // other global objects
+extern Airspaces airspace_database;
 extern AirspaceClientUI airspace_ui;
 extern Waypoints way_points;
 extern TaskClientUI task_ui;

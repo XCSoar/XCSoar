@@ -93,6 +93,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Waypoint/Waypoints.hpp"
 #include "TaskClientUI.hpp"
 #include "Airspace/AirspaceClientUI.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
 #include "DrawThread.hpp"
 #include "Replay/Replay.hpp"
 #include "DeviceBlackboard.hpp"
@@ -1164,7 +1165,7 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
   AirspaceAircraftPerformanceSimple perf;
   AirspaceSoonestSort ans(aircraft_state, perf, fixed(1800), visible);
 
-  const AbstractAirspace* as = ans.find_nearest(airspace_ui);
+  const AbstractAirspace* as = ans.find_nearest(airspace_database);
   if (!as) {
     return;
   } 

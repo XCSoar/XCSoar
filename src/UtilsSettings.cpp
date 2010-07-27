@@ -147,7 +147,8 @@ SettingsLeave()
 
   if (AirspaceFileChanged) {
     CloseAirspace(airspace_ui);
-    ReadAirspace(airspace_ui, &terrain, XCSoarInterface::Basic().pressure);
+    ReadAirspace(airspace_database, &terrain,
+                 XCSoarInterface::Basic().pressure);
   }
 
   if (PolarFileChanged) {

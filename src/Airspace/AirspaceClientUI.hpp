@@ -47,7 +47,7 @@ class AirspaceWarningVisitor;
 
 class AirspaceClientUI: 
   public AirspaceClient,
-  public AirspacesInterface
+  private AirspacesInterface
 {
 public:
   AirspaceClientUI(Airspaces& as, 
@@ -82,10 +82,6 @@ public:
 
   void lock() const;
   void unlock() const;
-
-  bool read(TLineReader &reader);
-  void finalise_after_loading(RasterTerrain* terrain,
-                              const AtmosphericPressure &press);
 
   // warning manager
   void visit_warnings(AirspaceWarningVisitor& visitor) const;

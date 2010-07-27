@@ -340,7 +340,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   RASP.ScanAll(Basic().Location);
 
   // Reads the airspace files
-  ReadAirspace(airspace_ui, &terrain, Basic().pressure);
+  ReadAirspace(airspace_database, &terrain, Basic().pressure);
 
   const AIRCRAFT_STATE aircraft_state =
     ToAircraftState(device_blackboard.Basic());

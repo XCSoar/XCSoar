@@ -46,7 +46,7 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "MapWindow.hpp"
 #include "Components.hpp"
-#include "Airspace/AirspaceClientUI.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Busy.hpp"
 #include "Compiler.h"
@@ -484,7 +484,7 @@ dlgAirspaceSelect()
   PrepareAirspaceSelectDialog();
 
   GEOPOINT Location = XCSoarInterface::Basic().Location;
-  AirspaceSorter g_airspace_sorter(airspace_ui, Location, fixed(
+  AirspaceSorter g_airspace_sorter(airspace_database, Location, fixed(
       Units::ToUserUnit(1, Units::DistanceUnit)));
   airspace_sorter = &g_airspace_sorter;
 

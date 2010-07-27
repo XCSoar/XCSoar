@@ -39,13 +39,14 @@ Copyright_License {
 #include "Airspace/AirspaceGlue.hpp"
 #include "Airspace/AirspaceParser.hpp"
 #include "Airspace/AirspaceClientUI.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
 #include "ProfileKeys.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "LogFile.hpp"
 #include "IO/ConfiguredFile.hpp"
 
 void
-ReadAirspace(AirspaceClientUI &airspace, 
+ReadAirspace(Airspaces &airspaces,
              RasterTerrain *terrain,
              const AtmosphericPressure &press)
 {
@@ -58,7 +59,7 @@ ReadAirspace(AirspaceClientUI &airspace,
   TLineReader *reader =
     OpenConfiguredTextFile(szProfileAirspaceFile, _T("airspace.txt"));
   if (reader != NULL) {
-    if (!airspace.read(*reader))
+    if (!ReadAirspace(airspaces, *reader))
       LogStartUp(_T("No airspace file 1"));
     else
       airspace_ok =  true;
@@ -68,7 +69,7 @@ ReadAirspace(AirspaceClientUI &airspace,
 
   reader = OpenConfiguredTextFile(szProfileAdditionalAirspaceFile);
   if (reader != NULL) {
-    if (!airspace.read(*reader))
+    if (!ReadAirspace(airspaces, *reader))
       LogStartUp(_T("No airspace file 2"));
     else
       airspace_ok = true;
@@ -76,11 +77,15 @@ ReadAirspace(AirspaceClientUI &airspace,
     delete reader;
   }
 
-  if (airspace_ok)
-    airspace.finalise_after_loading(terrain, press);
-  else
+  if (airspace_ok) {
+    airspaces.optimise();
+    airspaces.set_flight_levels(press);
+
+    if (terrain != NULL)
+      airspaces.set_ground_levels(*terrain);
+  } else
     // there was a problem
-    airspace.clear();
+    airspaces.clear();
 }
 
 void 

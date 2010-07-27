@@ -41,13 +41,14 @@ Copyright_License {
 
 class RasterTerrain;
 class AtmosphericPressure;
+class Airspaces;
 class AirspaceClientUI;
 
 /**
  * Reads the airspace files into the memory
  */
 void
-ReadAirspace(AirspaceClientUI &airspace, 
+ReadAirspace(Airspaces &airspaces,
              RasterTerrain *terrain,
              const AtmosphericPressure &press);
 

@@ -570,9 +570,9 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
 }
 
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
-#include "Airspace/AirspaceClientUI.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspacePolygon.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
 
 
 class AirspaceIntersectionVisitorSlice: public AirspaceIntersectionVisitor
@@ -651,7 +651,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
                                  const NMEA_INFO &nmea_info, 
                                  const DERIVED_INFO &derived,
                                  const SETTINGS_MAP &settings_map, 
-                                 const AirspaceClientUI &airspace_database,
+                                 const Airspaces &airspace_database,
                                  RasterTerrain &terrain) const
 {
   static const fixed range(50000); // 50 km

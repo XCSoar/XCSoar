@@ -51,26 +51,6 @@ AirspaceClientUI::clear_warnings()
   airspace_warning.acknowledge_all();
 }
 
-
-bool
-AirspaceClientUI::read(TLineReader &reader)
-{
-  return ReadAirspace(airspaces, reader);
-}
-
-
-void
-AirspaceClientUI::finalise_after_loading(RasterTerrain* terrain,
-                                         const AtmosphericPressure &press)
-{
-  airspaces.optimise();
-  airspaces.set_flight_levels(press);
-    
-  if (terrain != NULL)
-    airspaces.set_ground_levels(*terrain);
-}
-
-
 void 
 AirspaceClientUI::lock() const
 {
