@@ -111,6 +111,55 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value)
 }
 #endif /* FIXED_MATH */
 
+bool SetValueOnChange(WndForm* wfm, const TCHAR* field, bool &value)
+{
+  WndProperty* wp = (WndProperty*)wfm->FindByName(field);
+  if (wp) {
+    if (value != wp->GetDataField()->GetAsBoolean()) {
+      value = wp->GetDataField()->GetAsBoolean();
+      return true;
+    }
+  }
+  return false;
+}
+
+bool SetValueOnChange(WndForm* wfm, const TCHAR* field, unsigned int &value)
+{
+  WndProperty* wp = (WndProperty*)wfm->FindByName(field);
+  if (wp) {
+    if ((int)value != wp->GetDataField()->GetAsInteger()) {
+      value = wp->GetDataField()->GetAsInteger();
+      return true;
+    }
+  }
+  return false;
+}
+
+
+bool SetValueOnChange(WndForm* wfm, const TCHAR* field, int &value)
+{
+  WndProperty* wp = (WndProperty*)wfm->FindByName(field);
+  if (wp) {
+    if (value != wp->GetDataField()->GetAsInteger()) {
+      value = wp->GetDataField()->GetAsInteger();
+      return true;
+    }
+  }
+  return false;
+}
+
+bool SetValueOnChange(WndForm* wfm, const TCHAR* field, short &value)
+{
+  WndProperty* wp = (WndProperty*)wfm->FindByName(field);
+  if (wp) {
+    if (value != wp->GetDataField()->GetAsInteger()) {
+      value = wp->GetDataField()->GetAsInteger();
+      return true;
+    }
+  }
+  return false;
+}
+
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
                  bool &value, const TCHAR *registry_name)
@@ -129,4 +178,54 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
   value = new_value;
   Profile::Set(registry_name, new_value);
   return true;
+}
+
+bool SetValueRegistryOnChange(WndForm* wfm,
+			      const TCHAR* field,
+			      const TCHAR* reg,
+			      bool &value) {
+  if (SetValueOnChange(wfm, field, value)) {
+    Profile::Set(reg, value);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+bool SetValueRegistryOnChange(WndForm* wfm,
+			      const TCHAR* field,
+			      const TCHAR* reg,
+			      unsigned int &value) {
+  if (SetValueOnChange(wfm, field, value)) {
+    Profile::Set(reg, value);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+bool SetValueRegistryOnChange(WndForm* wfm,
+			      const TCHAR* field,
+			      const TCHAR* reg,
+			      int &value) {
+  if (SetValueOnChange(wfm, field, value)) {
+    Profile::Set(reg, value);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool SetValueRegistryOnChange(WndForm* wfm,
+			      const TCHAR* field,
+			      const TCHAR* reg,
+			      short &value) {
+  if (SetValueOnChange(wfm, field, value)) {
+    Profile::Set(reg, value);
+    return true;
+  } else {
+    return false;
+  }
 }
