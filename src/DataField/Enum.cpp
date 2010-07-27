@@ -85,6 +85,16 @@ DataFieldEnum::addEnumText(const TCHAR *Text)
   return 0;
 }
 
+void
+DataFieldEnum::addEnumTexts(const TCHAR *const*list)
+{
+  while (*list != NULL && nEnums < DFE_MAX_ENUMS - 1) {
+    mEntries[nEnums].mText = _tcsdup(*list++);
+    mEntries[nEnums].index = nEnums;
+    nEnums++;
+  }
+}
+
 const TCHAR *
 DataFieldEnum::GetAsString(void) const
 {

@@ -71,6 +71,87 @@ static const TCHAR *const captions[] = {
   _T("19 Display"),
 };
 
+static const TCHAR *const beep_types[] = {
+  _T("Silence"),
+  _T("Short"),
+  _T("Medium"),
+  _T("Long"),
+  _T("Continuous"),
+  _T("Short double"),
+  NULL
+};
+
+static const TCHAR *const pitch_schemes[] = {
+  _T("Constant high"),
+  _T("Constant medium"),
+  _T("Constant low"),
+  _T("Speed percent"),
+  _T("Speed error"),
+  _T("Vario gross"),
+  _T("Vario net"),
+  _T("Vario relative"),
+  _T("Vario gross/relative"),
+  NULL
+};
+
+static const TCHAR *const period_schemes[] = {
+  _T("Constant high"),
+  _T("Constant medium"),
+  _T("Constant low"),
+  _T("Speed percent"),
+  _T("Speed error"),
+  _T("Vario gross"),
+  _T("Vario net"),
+  _T("Vario relative"),
+  _T("Vario gross/relative"),
+  _T("Intermittent"),
+  NULL
+};
+
+static const TCHAR *const scales[] = {
+  _T("+Linear"),
+  _T("+Low end"),
+  _T("+High end"),
+  _T("-Linear"),
+  _T("-Low end"),
+  _T("-High end"),
+  NULL
+};
+
+static const TCHAR *const flarm_user_interfaces[] = {
+  _T("LED+Buzzer"),
+  _T("None"),
+  _T("Buzzer"),
+  _T("LED"),
+  NULL
+};
+
+static const TCHAR *const flarm_aircraft_types[] = {
+  _T("Undefined"),
+  _T("Glider"),
+  _T("Tow plane"),
+  _T("Helicopter"),
+  _T("Parachute"),
+  _T("Drop plane"),
+  _T("Fixed hangglider"),
+  _T("Soft paraglider"),
+  _T("Powered aircraft"),
+  _T("Jet aircraft"),
+  _T("UFO"),
+  _T("Baloon"),
+  _T("Blimp, Zeppelin"),
+  _T("UAV (Drone)"),
+  _T("Static"),
+  NULL
+};
+
+static const TCHAR *const needle_gauge_types[] = {
+  _T("None"),
+  _T("LX"),
+  _T("Analog"),
+  NULL
+};
+
 static bool changed = false;
 static WndForm *wf = NULL;
 static TabbedControl *tabbed;
@@ -666,12 +747,7 @@ FillAudioEnums(const TCHAR* name)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("Silence"));
-    dfe->addEnumText(_T("Short"));
-    dfe->addEnumText(_T("Medium"));
-    dfe->addEnumText(_T("Long"));
-    dfe->addEnumText(_T("Continuous"));
-    dfe->addEnumText(_T("Short double"));
+    dfe->addEnumTexts(beep_types);
     wp->RefreshDisplay();
   }
 
@@ -680,15 +756,7 @@ FillAudioEnums(const TCHAR* name)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("Constant high"));
-    dfe->addEnumText(_T("Constant medium"));
-    dfe->addEnumText(_T("Constant low"));
-    dfe->addEnumText(_T("Speed percent"));
-    dfe->addEnumText(_T("Speed error"));
-    dfe->addEnumText(_T("Vario gross"));
-    dfe->addEnumText(_T("Vario net"));
-    dfe->addEnumText(_T("Vario relative"));
-    dfe->addEnumText(_T("Vario gross/relative"));
+    dfe->addEnumTexts(pitch_schemes);
     wp->RefreshDisplay();
   }
 
@@ -697,16 +765,7 @@ FillAudioEnums(const TCHAR* name)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("Constant high"));
-    dfe->addEnumText(_T("Constant medium"));
-    dfe->addEnumText(_T("Constant low"));
-    dfe->addEnumText(_T("Speed percent"));
-    dfe->addEnumText(_T("Speed error"));
-    dfe->addEnumText(_T("Vario gross"));
-    dfe->addEnumText(_T("Vario net"));
-    dfe->addEnumText(_T("Vario relative"));
-    dfe->addEnumText(_T("Vario gross/relative"));
-    dfe->addEnumText(_T("Intermittent"));
+    dfe->addEnumTexts(period_schemes);
     wp->RefreshDisplay();
   }
 
@@ -715,12 +774,7 @@ FillAudioEnums(const TCHAR* name)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("+Linear"));
-    dfe->addEnumText(_T("+Low end"));
-    dfe->addEnumText(_T("+High end"));
-    dfe->addEnumText(_T("-Linear"));
-    dfe->addEnumText(_T("-Low end"));
-    dfe->addEnumText(_T("-High end"));
+    dfe->addEnumTexts(scales);
     wp->RefreshDisplay();
   }
 
@@ -729,12 +783,7 @@ FillAudioEnums(const TCHAR* name)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("+Linear"));
-    dfe->addEnumText(_T("+Low end"));
-    dfe->addEnumText(_T("+High end"));
-    dfe->addEnumText(_T("-Linear"));
-    dfe->addEnumText(_T("-Low end"));
-    dfe->addEnumText(_T("-High end"));
+    dfe->addEnumTexts(scales);
     wp->RefreshDisplay();
   }
 }
@@ -883,10 +932,7 @@ FillEnums(void)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("LED+Buzzer"));
-    dfe->addEnumText(_T("None"));
-    dfe->addEnumText(_T("Buzzer"));
-    dfe->addEnumText(_T("LED"));
+    dfe->addEnumTexts(flarm_user_interfaces);
     dfe->Set(0);
     wp->RefreshDisplay();
   }
@@ -895,21 +941,7 @@ FillEnums(void)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("Undefined"));
-    dfe->addEnumText(_T("Glider"));
-    dfe->addEnumText(_T("Tow plane"));
-    dfe->addEnumText(_T("Helicopter"));
-    dfe->addEnumText(_T("Parachute"));
-    dfe->addEnumText(_T("Drop plane"));
-    dfe->addEnumText(_T("Fixed hangglider"));
-    dfe->addEnumText(_T("Soft paraglider"));
-    dfe->addEnumText(_T("Powered aircraft"));
-    dfe->addEnumText(_T("Jet aircraft"));
-    dfe->addEnumText(_T("UFO"));
-    dfe->addEnumText(_T("Baloon"));
-    dfe->addEnumText(_T("Blimp, Zeppelin"));
-    dfe->addEnumText(_T("UAV (Drone)"));
-    dfe->addEnumText(_T("Static"));
+    dfe->addEnumTexts(flarm_aircraft_types);
     dfe->Set(0);
     wp->RefreshDisplay();
   }
@@ -918,9 +950,7 @@ FillEnums(void)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("None"));
-    dfe->addEnumText(_T("LX"));
-    dfe->addEnumText(_T("Analog"));
+    dfe->addEnumTexts(needle_gauge_types);
     dfe->Set(0);
     wp->RefreshDisplay();
   }

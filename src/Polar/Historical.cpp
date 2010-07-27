@@ -52,6 +52,7 @@ const TCHAR *PolarLabels[] = {
   _T("18M - LS6C"),
   _T("Open - ASW22"),
   _T("WinPilot File"),
+  NULL
 };
 
 static const Polar historical_polars[] = {

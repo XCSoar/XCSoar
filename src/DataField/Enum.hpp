@@ -78,6 +78,7 @@ public:
 
   void replaceEnumText(unsigned int i, const TCHAR *Text);
   unsigned addEnumText(const TCHAR *Text);
+  void addEnumTexts(const TCHAR *const*list);
 
   virtual int GetAsInteger(void) const;
   virtual const TCHAR *GetAsString(void) const;

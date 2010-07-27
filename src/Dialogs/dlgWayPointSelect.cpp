@@ -119,8 +119,11 @@ static int DirectionFilter[] = {0, DirHDG, 360, 30, 60, 90, 120, 150, 180, 210, 
 
 static Angle last_heading = Angle::native(fixed_zero);
 
-static const TCHAR *TypeFilter[] = {_T("*"), _T("Airport"), _T("Landable"),
-				    _T("Turnpoint"), _T("File 1"), _T("File 2")};
+static const TCHAR *const TypeFilter[] = {
+  _T("*"), _T("Airport"), _T("Landable"),
+  _T("Turnpoint"), _T("File 1"), _T("File 2"),
+  NULL
+};
 
 static TCHAR * GetDirectionData(int DirectionFilterIdx);
 
@@ -184,9 +187,7 @@ static void PrepareData(void){
   if (wpType) {  // initialize datafieldenum for Type
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wpType->GetDataField();
-    for (unsigned i=0; i < sizeof(TypeFilter) / sizeof(TypeFilter[0]); i++) {
-      dfe->addEnumText(TypeFilter[i]);
-    }
+    dfe->addEnumTexts(TypeFilter);
     dfe->SetAsInteger(filter_data.type_index);
     wpType->RefreshDisplay();
   }

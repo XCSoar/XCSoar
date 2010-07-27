@@ -998,12 +998,14 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
   static const TCHAR *const COMMPort[] = {
     _T("COM1"), _T("COM2"), _T("COM3"), _T("COM4"),
     _T("COM5"), _T("COM6"), _T("COM7"), _T("COM8"),
-    _T("COM9"), _T("COM10"), _T("COM0")
+    _T("COM9"), _T("COM10"), _T("COM0"),
+    NULL
   };
 
   static const TCHAR *const tSpeed[] = {
     _T("1200"), _T("2400"), _T("4800"), _T("9600"),
-    _T("19200"), _T("38400"), _T("57600"), _T("115200")
+    _T("19200"), _T("38400"), _T("57600"), _T("115200"),
+    NULL
   };
 
   if (port_field != NULL) {
@@ -1016,8 +1018,7 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
         dfe->Set(i);
     }
 
-    for (unsigned i = 0; i < 11; i++)
-      dfe->addEnumText(COMMPort[i]);
+    dfe->addEnumTexts(COMMPort);
 
     switch (config.port_type) {
     case DeviceConfig::SERIAL:
@@ -1030,8 +1031,7 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
 
   if (speed_field != NULL) {
     DataFieldEnum *dfe = (DataFieldEnum *)speed_field->GetDataField();
-    for (unsigned i = 0; i < 8; i++)
-      dfe->addEnumText(tSpeed[i]);
+    dfe->addEnumTexts(tSpeed);
 
     dfe->Set(config.speed_index);
     speed_field->RefreshDisplay();
@@ -1308,10 +1308,15 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("DDMMSS"));
-    dfe->addEnumText(_T("DDMMSS.ss"));
-    dfe->addEnumText(_T("DDMM.mmm"));
-    dfe->addEnumText(_T("DD.dddd"));
+    const TCHAR *const units_lat_lon[] = {
+      _T("DDMMSS"),
+      _T("DDMMSS.ss"),
+      _T("DDMM.mmm"),
+      _T("DD.dddd"),
+      NULL
+    };
+
+    dfe->addEnumTexts(units_lat_lon);
     dfe->Set(Units::GetCoordinateFormat());
     wp->RefreshDisplay();
   }
@@ -1437,9 +1442,8 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    for (unsigned i = 0; i < NUMPOLARS; i++) {
-      dfe->addEnumText(PolarLabels[i]);
-    }
+    dfe->addEnumTexts(PolarLabels);
+
     unsigned i = 0;
     bool ok = true;
     while (ok) {
