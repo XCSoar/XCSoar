@@ -111,6 +111,41 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value)
 }
 #endif /* FIXED_MATH */
 
+void
+LoadFormProperty(WndForm &form, const TCHAR *control_name,
+                 UnitGroup_t unit_group, int value)
+{
+  assert(control_name != NULL);
+
+  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
+  if (ctl == NULL)
+    return;
+
+  Units_t unit = Units::GetUserUnitByGroup(unit_group);
+  DataField *df = ctl->GetDataField();
+  df->SetUnits(Units::GetUnitName(unit));
+  df->SetAsFloat(iround(Units::ToUserUnit(fixed(value), unit)));
+  ctl->RefreshDisplay();
+}
+
+void
+LoadFormProperty(WndForm &form, const TCHAR *control_name,
+                 UnitGroup_t unit_group, fixed value)
+{
+  assert(control_name != NULL);
+
+  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
+  if (ctl == NULL)
+    return;
+
+  Units_t unit = Units::GetUserUnitByGroup(unit_group);
+
+  DataField *df = ctl->GetDataField();
+  df->SetUnits(Units::GetUnitName(unit));
+  df->SetAsFloat(Units::ToUserUnit(value, unit));
+  ctl->RefreshDisplay();
+}
+
 bool
 SaveFormProperty(WndForm *wfm, const TCHAR *field, bool &value)
 {
@@ -230,3 +265,70 @@ SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
     return false;
   }
 }
+
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 UnitGroup_t unit_group, int &value,
+                 const TCHAR *registry_name)
+{
+  assert(control_name != NULL);
+  assert(registry_name != NULL);
+
+  const WndProperty *ctl = (const WndProperty *)form.FindByName(control_name);
+  if (ctl == NULL)
+    return false;
+
+  Units_t unit = Units::GetUserUnitByGroup(unit_group);
+  int new_value = ctl->GetDataField()->GetAsInteger();
+  new_value = iround(Units::ToSysUnit(new_value, unit));
+  if (new_value == value)
+    return false;
+
+  value = new_value;
+  Profile::Set(registry_name, new_value);
+  return true;
+}
+
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 UnitGroup_t unit_group, unsigned &value,
+                 const TCHAR *registry_name)
+{
+  int value2 = value;
+  if (SaveFormProperty(form, control_name, unit_group, value2,
+                       registry_name)) {
+    value = value2;
+    return true;
+  } else
+    return false;
+}
+
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 UnitGroup_t unit_group, fixed &value,
+                 const TCHAR *registry_name)
+{
+  int value2 = value;
+  if (SaveFormProperty(form, control_name, unit_group, value2,
+                       registry_name)) {
+    value = value2;
+    return true;
+  } else
+    return false;
+}
+
+#ifdef FIXED_MATH
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 UnitGroup_t unit_group, double &value,
+                 const TCHAR *registry_name)
+{
+  int value2 = value;
+  if (SaveFormProperty(form, control_name, unit_group, value2,
+                       registry_name)) {
+    value = value2;
+    return true;
+  } else
+    return false;
+}
+#endif

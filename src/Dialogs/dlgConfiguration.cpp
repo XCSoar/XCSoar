@@ -1134,21 +1134,10 @@ setVariables()
 
   SetLocalTime();
 
-  wp = (WndProperty*)wf->FindByName(_T("prpClipAltitude"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(
-        settings_computer.ClipAltitude)));
-    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAltWarningMargin"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(
-        settings_computer.AltWarningMargin)));
-    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpClipAltitude"), ugAltitude,
+                   settings_computer.ClipAltitude);
+  LoadFormProperty(*wf, _T("prpAltWarningMargin"), ugAltitude,
+                   settings_computer.AltWarningMargin);
 
   LoadFormProperty(*wf, _T("prpAutoZoom"), settings_map.AutoZoom);
   LoadFormProperty(*wf, _T("prpAirspaceOutline"),
@@ -1218,21 +1207,10 @@ setVariables()
   LoadFormProperty(*wf, _T("prpMenuTimeout"),
                    XCSoarInterface::MenuTimeoutMax / 2);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeArrival"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(
-        settings_computer.safety_height_arrival)));
-    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeTerrain"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(
-        settings_computer.safety_height_terrain)));
-    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpSafetyAltitudeArrival"), ugAltitude,
+                   settings_computer.safety_height_arrival);
+  LoadFormProperty(*wf, _T("prpSafetyAltitudeTerrain"), ugAltitude,
+                   settings_computer.safety_height_terrain);
 
   wp = (WndProperty*)wf->FindByName(_T("prpFinalGlideTerrain"));
   if (wp) {
@@ -1420,12 +1398,8 @@ setVariables()
   LoadFormProperty(*wf, _T("prpDisableAutoLogger"),
                    !settings_computer.DisableAutoLogger);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
-  if (wp) {
-    wp->GetDataField()->Set(Units::ToUserVSpeed(settings_computer.safety_mc));
-    wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpSafetyMacCready"), ugVerticalSpeed,
+                   settings_computer.safety_mc);
 
   LoadFormProperty(*wf, _T("prpRiskGamma"), settings_computer.risk_gamma);
 
@@ -1453,12 +1427,8 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpMaxManoeuveringSpeed"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserSpeed(settings_computer.SafetySpeed)));
-    wp->GetDataField()->SetUnits(Units::GetSpeedName());
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
+                   settings_computer.SafetySpeed);
 
   LoadFormProperty(*wf, _T("prpBallastSecsToEmpty"),
                    settings_computer.BallastSecsToEmpty);
@@ -1875,26 +1845,12 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpFinishMinHeight"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(settings_computer.ordered_defaults.finish_min_height)));
-    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeight"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(settings_computer.ordered_defaults.start_max_height)));
-    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeightMargin"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(settings_computer.start_max_height_margin)));
-    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
+                   settings_computer.ordered_defaults.finish_min_height);
+  LoadFormProperty(*wf, _T("prpStartMaxHeight"), ugAltitude,
+                   settings_computer.ordered_defaults.start_max_height);
+  LoadFormProperty(*wf, _T("prpStartMaxHeightMargin"), ugAltitude,
+                   settings_computer.start_max_height_margin);
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
   if (wp) {
@@ -1906,19 +1862,10 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserSpeed(settings_computer.ordered_defaults.start_max_speed)));
-    wp->GetDataField()->SetUnits(Units::GetSpeedName());
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeedMargin"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserSpeed(settings_computer.start_max_speed_margin)));
-    wp->GetDataField()->SetUnits(Units::GetSpeedName());
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpStartMaxSpeed"), ugHorizontalSpeed,
+                   settings_computer.ordered_defaults.start_max_speed);
+  LoadFormProperty(*wf, _T("prpStartMaxSpeedMargin"), ugHorizontalSpeed,
+                   settings_computer.start_max_speed_margin);
 
   LoadFormProperty(*wf, _T("prpLoggerTimeStepCruise"),
                    settings_computer.LoggerTimeStepCruise);
@@ -2221,25 +2168,13 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpClipAltitude"));
-  if (wp) {
-    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if ((int)settings_computer.ClipAltitude != ival) {
-      settings_computer.ClipAltitude = ival;
-      Profile::Set(szProfileClipAlt,settings_computer.ClipAltitude);  // fixed 20060430/sgi was szProfileAltMode
-      changed = true;
-    }
-  }
+  changed |= SaveFormProperty(*wf, _T("prpClipAltitude"), ugAltitude,
+                              settings_computer.ClipAltitude,
+                              szProfileClipAlt);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAltWarningMargin"));
-  if (wp) {
-    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if ((int)settings_computer.AltWarningMargin != ival) {
-      settings_computer.AltWarningMargin = ival;
-      Profile::Set(szProfileAltMargin,settings_computer.AltWarningMargin);
-      changed = true;
-    }
-  }
+  changed |= SaveFormProperty(*wf, _T("prpAltWarningMargin"),
+                              ugAltitude, settings_computer.AltWarningMargin,
+                              szProfileAltMargin);
 
   changed |= SaveFormProperty(wf, _T("prpAirspaceWarnings"),
                               szProfileAirspaceWarning,
@@ -2288,27 +2223,13 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeArrival"));
-  if (wp) {
-    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if ((int)settings_computer.safety_height_arrival != ival) {
-      settings_computer.safety_height_arrival = ival;
-      Profile::Set(szProfileSafetyAltitudeArrival,
-                   (int)settings_computer.safety_height_arrival);
-      changed = true;
-    }
-  }
+  changed |= SaveFormProperty(*wf, _T("prpSafetyAltitudeArrival"), ugAltitude,
+                              settings_computer.safety_height_arrival,
+                              szProfileSafetyAltitudeArrival);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeTerrain"));
-  if (wp) {
-    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if ((int)settings_computer.safety_height_terrain != ival) {
-      settings_computer.safety_height_terrain = ival;
-      Profile::Set(szProfileSafetyAltitudeTerrain,
-                   (int)settings_computer.safety_height_terrain);
-      changed = true;
-    }
-  }
+  changed |= SaveFormProperty(*wf, _T("prpSafetyAltitudeTerrain"), ugAltitude,
+                              settings_computer.safety_height_terrain,
+                              szProfileSafetyAltitudeTerrain);
 
   changed |= SaveFormProperty(wf, _T("prpAutoWind"), szProfileAutoWind,
                               settings_computer.AutoWindMode);
@@ -2538,16 +2459,9 @@ void dlgConfigurationShowModal(void)
                               szProfileBallastSecsToEmpty,
                               settings_computer.BallastSecsToEmpty);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpMaxManoeuveringSpeed"));
-  if (wp) {
-    ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
-    if (settings_computer.SafetySpeed != ival) {
-      settings_computer.SafetySpeed = ival;
-      Profile::Set(szProfileSafteySpeed,
-                    settings_computer.SafetySpeed);
-      changed = true;
-    }
-  }
+  changed |= SaveFormProperty(*wf, _T("prpMaxManoeuveringSpeed"),
+                              ugHorizontalSpeed, settings_computer.SafetySpeed,
+                              szProfileSafteySpeed);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppIndFinalGlide"));
   if (wp) {
@@ -2842,77 +2756,33 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(wf, _T("prpTerrainRamp"), szProfileTerrainRamp,
                               XCSoarInterface::SetSettingsMap().TerrainRamp);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpFinishMinHeight"));
-  if (wp) {
-    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if ((int)settings_computer.ordered_defaults.finish_min_height != ival) {
-      settings_computer.ordered_defaults.finish_min_height = ival;
-      Profile::Set(szProfileFinishMinHeight,ival);
-      changed = true;
-      taskchanged = true;
-    }
-  }
+  taskchanged |= SaveFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
+                                  settings_computer.ordered_defaults.finish_min_height,
+                                  szProfileFinishMinHeight);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeight"));
-  if (wp) {
-    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if ((int)settings_computer.ordered_defaults.start_max_height != ival) {
-      settings_computer.ordered_defaults.start_max_height = ival;
-      Profile::Set(szProfileStartMaxHeight, 
-                    settings_computer.ordered_defaults.start_max_height);
-      changed = true;
-      taskchanged = true;
-    }
-  }
+  taskchanged |= SaveFormProperty(*wf, _T("prpStartMaxHeight"), ugAltitude,
+                                  settings_computer.ordered_defaults.start_max_height,
+                                  szProfileStartMaxHeight);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeightMargin"));
-  if (wp) {
-    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if ((int)settings_computer.start_max_height_margin != ival) {
-      settings_computer.start_max_height_margin = ival;
-      Profile::Set(szProfileStartMaxHeightMargin,
-                    settings_computer.start_max_height_margin);
-      changed = true;
-      taskchanged = true;
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
-  if (wp) {
-    if (settings_computer.ordered_defaults.start_max_height_ref 
-        != (unsigned)wp->GetDataField()->GetAsInteger()) {
+  taskchanged |= SaveFormProperty(*wf, _T("prpStartMaxHeightMargin"), ugAltitude,
+                                  settings_computer.start_max_height_margin,
+                                  szProfileStartMaxHeightMargin);
 
-      settings_computer.ordered_defaults.start_max_height_ref = 
-        wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileStartHeightRef, 
-                    settings_computer.ordered_defaults.start_max_height_ref);
-      changed = true;
-      taskchanged = true;
-    }
-  }
+  taskchanged |= SaveFormProperty(*wf, _T("prpStartHeightRef"), ugAltitude,
+                                  settings_computer.ordered_defaults.start_max_height_ref,
+                                  szProfileStartHeightRef);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
-  if (wp) {
-    ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
-    if ((int)settings_computer.ordered_defaults.start_max_speed != ival) {
-      settings_computer.ordered_defaults.start_max_speed = ival;
-      Profile::Set(szProfileStartMaxSpeed,
-                    (int)settings_computer.ordered_defaults.start_max_speed);
-      changed = true;
-      taskchanged = true;
-    }
-  }
+  taskchanged |= SaveFormProperty(*wf, _T("prpStartMaxSpeed"),
+                                  ugHorizontalSpeed,
+                                  settings_computer.ordered_defaults.start_max_speed,
+                                  szProfileStartMaxSpeed);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeedMargin"));
-  if (wp) {
-    ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
-    if ((int)settings_computer.start_max_speed_margin != ival) {
-      settings_computer.start_max_speed_margin = ival;
-      Profile::Set(szProfileStartMaxSpeedMargin,
-                    (int)settings_computer.start_max_speed_margin);
-      changed = true;
-      taskchanged = true;
-    }
-  }
+  taskchanged |= SaveFormProperty(*wf, _T("prpStartMaxSpeedMargin"),
+                                  ugHorizontalSpeed,
+                                  settings_computer.start_max_speed_margin,
+                                  szProfileStartMaxSpeedMargin);
+
+  changed |= taskchanged;
 
   changed |= SaveFormProperty(wf, _T("prpLoggerTimeStepCruise"),
                               szProfileLoggerTimeStepCruise,

@@ -39,8 +39,9 @@ Copyright_License {
 #ifndef XCSOAR_FORM_UTIL_HPP
 #define XCSOAR_FORM_UTIL_HPP
 
+#include "Units.hpp"
+
 #include <tchar.h>
-#include "Math/fixed.hpp"
 
 class WndForm;
 
@@ -63,6 +64,30 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, double value);
 #ifdef FIXED_MATH
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value);
+#endif
+
+void
+LoadFormProperty(WndForm &form, const TCHAR *control_name,
+                 UnitGroup_t unit_group, int value);
+
+static inline void
+LoadFormProperty(WndForm &form, const TCHAR *control_name,
+                 UnitGroup_t unit_group, unsigned value)
+{
+  LoadFormProperty(form, control_name, unit_group, (int)value);
+}
+
+void
+LoadFormProperty(WndForm &form, const TCHAR *control_name,
+                 UnitGroup_t unit_group, fixed value);
+
+#ifdef FIXED_MATH
+static inline void
+LoadFormProperty(WndForm &form, const TCHAR *control_name,
+                 UnitGroup_t unit_group, double value)
+{
+  LoadFormProperty(form, control_name, unit_group, fixed(value));
+}
 #endif
 
 bool
@@ -105,5 +130,27 @@ SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
 bool
 SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
                  short &value);
+
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 UnitGroup_t unit_group, int &value,
+                 const TCHAR *registry_name);
+
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 UnitGroup_t unit_group, unsigned &value,
+                 const TCHAR *registry_name);
+
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 UnitGroup_t unit_group, fixed &value,
+                 const TCHAR *registry_name);
+
+#ifdef FIXED_MATH
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 UnitGroup_t unit_group, double &value,
+                 const TCHAR *registry_name);
+#endif
 
 #endif
