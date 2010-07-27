@@ -79,6 +79,10 @@ public:
   void set_weather(RasterWeather* weather);
 
 private:
+  static void DrawSpotHeight(Canvas &canvas, const Projection &map_projection,
+                             LabelBlock &block, const TCHAR *Buffer, POINT pt);
+
+private:
   TerrainRenderer* m_rend;
   RasterTerrain* m_terrain;
   RasterWeather* m_weather;
