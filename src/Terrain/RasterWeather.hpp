@@ -84,8 +84,8 @@ public:
   void SetTime(unsigned i);
   int IndexToTime(int x);
 
- private:
-  unsigned _parameter; // was terrain.render_weather
+private:
+  unsigned _parameter;
   unsigned _weather_time;
   RasterMap* weather_map[MAX_WEATHER_MAP];
   void RASP_filename(TCHAR *rasp_filename, const TCHAR *name);

@@ -53,18 +53,16 @@ Copyright_License {
 const unsigned RasterWeather::MAX_WEATHER_MAP;
 const unsigned RasterWeather::MAX_WEATHER_TIMES;
 
-RasterWeather::RasterWeather() 
+RasterWeather::RasterWeather() :
+    _parameter(0),
+    _weather_time(0),
+    bsratio(false)
 {
-  unsigned i;
-  bsratio = false;
-  for (i=0; i<MAX_WEATHER_MAP; i++) {
-    weather_map[i]= 0;
-  }
-  for (i=0; i<MAX_WEATHER_TIMES; i++) {
-    weather_available[i]= false;
-  }
-  _weather_time = 0;
-  _parameter = 0;
+  for (unsigned i = 0; i < MAX_WEATHER_MAP; i++)
+    weather_map[i] = NULL;
+
+  for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++)
+    weather_available[i] = false;
 }
 
 RasterWeather::~RasterWeather() 
@@ -72,31 +70,38 @@ RasterWeather::~RasterWeather()
   Close();
 }
 
-
-int RasterWeather::IndexToTime(int x) {
+int
+RasterWeather::IndexToTime(int x)
+{
   if (x % 2 == 0) {
-    return (x/2)*100;
+    return (x / 2) * 100;
   } else {
-    return (x/2)*100+30;
+    return (x / 2) * 100 + 30;
   }
 }
 
-void RasterWeather::SetParameter(unsigned i) {
+void
+RasterWeather::SetParameter(unsigned i)
+{
   Poco::ScopedRWLock protect(lock, true);
-  _parameter=i;
+  _parameter = i;
 }
 
-void RasterWeather::SetTime(unsigned i) {
+void
+RasterWeather::SetTime(unsigned i)
+{
   Poco::ScopedRWLock protect(lock, true);
-  _weather_time=i;
+  _weather_time = i;
 }
 
-RasterMap* RasterWeather::GetMap() {
+RasterMap*
+RasterWeather::GetMap()
+{
   // JMW this is not safe in TerrainRenderer's use
   Poco::ScopedRWLock protect(lock, false);
   RasterMap* retval;
   if (_parameter) {
-    assert(_parameter<=MAX_WEATHER_MAP);
+    assert(_parameter <= MAX_WEATHER_MAP);
     retval = weather_map[min((unsigned)MAX_WEATHER_MAP, _parameter) - 1];
   } else {
     assert(1);
@@ -105,19 +110,25 @@ RasterMap* RasterWeather::GetMap() {
   return retval;
 }
 
-unsigned RasterWeather::GetParameter() {
+unsigned
+RasterWeather::GetParameter()
+{
   Poco::ScopedRWLock protect(lock, false);
   return _parameter;
 }
 
-unsigned RasterWeather::GetTime() {
+unsigned
+RasterWeather::GetTime()
+{
   Poco::ScopedRWLock protect(lock, false);
   return _weather_time;
 }
 
-bool RasterWeather::isWeatherAvailable(unsigned t) {
+bool
+RasterWeather::isWeatherAvailable(unsigned t)
+{
   Poco::ScopedRWLock protect(lock, false);
-  assert(t<MAX_WEATHER_TIMES);
+  assert(t < MAX_WEATHER_TIMES);
   return weather_available[min((unsigned)MAX_WEATHER_TIMES, t - 1)];
 }
 
@@ -125,21 +136,23 @@ void
 RasterWeather::RASP_filename(TCHAR *rasp_filename, const TCHAR* name)
 {
   TCHAR fname[MAX_PATH];
-  _stprintf(fname,
-            _T("xcsoar-rasp.dat/%s.curr.%04dlst.d2.jp2"),
-            name, IndexToTime(_weather_time));
+  _stprintf(fname, _T("xcsoar-rasp.dat/%s.curr.%04dlst.d2.jp2"), name,
+            IndexToTime(_weather_time));
   LocalPath(rasp_filename, fname);
 }
 
-bool RasterWeather::LoadItem(int item, const TCHAR* name) {
+bool
+RasterWeather::LoadItem(int item, const TCHAR* name)
+{
   TCHAR rasp_filename[MAX_PATH];
   RASP_filename(rasp_filename, name);
   weather_map[item] = RasterMapJPG2000::LoadFile(NarrowPathName(rasp_filename));
   return weather_map[item] != NULL;
 }
 
-
-void RasterWeather::ScanAll(const GEOPOINT &location) {
+void
+RasterWeather::ScanAll(const GEOPOINT &location)
+{
   /* not holding the lock here, because this method is only called
      during startup, when the other threads aren't running yet */
 
@@ -147,18 +160,16 @@ void RasterWeather::ScanAll(const GEOPOINT &location) {
   for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++) {
     ProgressGlue::SetValue(i);
     _weather_time = i;
-    weather_available[i] = LoadItem(0,_T("wstar"));
+    weather_available[i] = LoadItem(0, _T("wstar"));
     if (!weather_available[i]) {
-      weather_available[i] = LoadItem(0,_T("wstar_bsratio"));
-      if (weather_available[i]) {
+      weather_available[i] = LoadItem(0, _T("wstar_bsratio"));
+      if (weather_available[i])
         bsratio = true;
-      }
     }
     _Close();
   }
   _weather_time = 0;
 }
-
 
 void
 RasterWeather::Reload(const GEOPOINT &location, int day_time)
@@ -172,41 +183,41 @@ RasterWeather::Reload(const GEOPOINT &location, int day_time)
     return;
   } else {
     Poco::ScopedRWLock protect(lock, true);
-    if (_weather_time== 0) {
+    if (_weather_time == 0) {
       // "Now" time, so find time in half hours
       unsigned dsecs = (int)TimeLocal(day_time);
-      unsigned half_hours = (dsecs/1800) % 48;
+      unsigned half_hours = (dsecs / 1800) % 48;
       _weather_time = max(_weather_time, half_hours);
       now = true;
     }
 
     // limit values, for safety
-    _weather_time = min((unsigned)(MAX_WEATHER_TIMES-1), _weather_time);
+    _weather_time = min((unsigned)(MAX_WEATHER_TIMES - 1), _weather_time);
 
     if (_weather_time == last_weather_time) {
       // no change, quick exit.
-      if (now) {
+      if (now)
         // must return to 0 = Now time on exit
         _weather_time = 0;
-      }
+
       return;
     } else {
       last_weather_time = _weather_time;
     }
 
     // scan forward to next valid time
-    while ((_weather_time<MAX_WEATHER_TIMES) && (!found)) {
+    while ((_weather_time < MAX_WEATHER_TIMES) && (!found)) {
       if (!weather_available[_weather_time]) {
         _weather_time++;
       } else {
         found = true;
 
         Close();
-        if (bsratio) {
-          LoadItem(0,_T("wstar_bsratio"));
-        } else {
-          LoadItem(0,_T("wstar"));
-        }
+        if (bsratio)
+          LoadItem(0, _T("wstar_bsratio"));
+        else
+          LoadItem(0, _T("wstar"));
+
         LoadItem(1,_T("blwindspd"));
         LoadItem(2,_T("hbl"));
         LoadItem(3,_T("dwcrit"));
@@ -219,52 +230,53 @@ RasterWeather::Reload(const GEOPOINT &location, int day_time)
     }
 
     // can't find valid time, so reset to zero
-    if (!found || now) {
+    if (!found || now)
       _weather_time = 0;
-    }
 
     SetViewCenter(location);
     ServiceFullReload(location);
   }
 }
 
-
-void RasterWeather::Close() {
+void
+RasterWeather::Close()
+{
   Poco::ScopedRWLock protect(lock, true);
   _Close();
 }
 
-void RasterWeather::_Close() {
+void
+RasterWeather::_Close()
+{
   for (unsigned i = 0; i < MAX_WEATHER_MAP; i++) {
     if (weather_map[i]) {
       delete weather_map[i];
-      weather_map[i]=0;
+      weather_map[i] = NULL;
     }
   }
 }
 
-
-void RasterWeather::SetViewCenter(const GEOPOINT &location) {
+void
+RasterWeather::SetViewCenter(const GEOPOINT &location)
+{
   Poco::ScopedRWLock protect(lock, true);
 
-  for (unsigned i = 0; i < MAX_WEATHER_MAP; i++) {
-    if (weather_map[i]) {
+  for (unsigned i = 0; i < MAX_WEATHER_MAP; i++)
+    if (weather_map[i])
       weather_map[i]->SetViewCenter(location);
-    }
-  }
 }
 
-
-void RasterWeather::ServiceFullReload(const GEOPOINT &location) {
-  for (unsigned i = 0; i < MAX_WEATHER_MAP; i++) {
-    if (weather_map[i]) {
+void
+RasterWeather::ServiceFullReload(const GEOPOINT &location)
+{
+  for (unsigned i = 0; i < MAX_WEATHER_MAP; i++)
+    if (weather_map[i])
       weather_map[i]->ServiceFullReload(location);
-    }
-  }
 }
 
-
-void RasterWeather::ItemLabel(int i, TCHAR* Buffer) {
+void
+RasterWeather::ItemLabel(int i, TCHAR* Buffer)
+{
   _stprintf(Buffer, _T("\0"));
 
   switch (i) {
@@ -303,9 +315,10 @@ void RasterWeather::ItemLabel(int i, TCHAR* Buffer) {
   }
 }
 
-
-void RasterWeather::ValueToText(TCHAR* Buffer, short val) {
-  Buffer[0]=0;
+void
+RasterWeather::ValueToText(TCHAR* Buffer, short val)
+{
+  Buffer[0] = 0;
   switch (_parameter) {
   case 0:
     return;
@@ -355,5 +368,3 @@ void RasterWeather::ValueToText(TCHAR* Buffer, short val) {
     break;
   }
 }
-
-
