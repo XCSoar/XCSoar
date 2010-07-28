@@ -46,4 +46,9 @@ namespace Directory
   bool Exists(const TCHAR* path);
 }
 
+namespace File
+{
+  bool Exists(const TCHAR* path);
+}
+
 #endif

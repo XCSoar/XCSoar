@@ -52,3 +52,13 @@ Directory::Exists(const TCHAR* path)
 
   return (st.st_mode & S_IFDIR);
 }
+
+bool
+File::Exists(const TCHAR* path)
+{
+  struct stat st;
+  if (stat(NarrowPathName(path), &st) != 0)
+    return false;
+
+  return (st.st_mode & S_IFREG);
+}
