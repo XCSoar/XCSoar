@@ -67,7 +67,9 @@ static CallBackTableEntry_t CallBackTable[]={
 
 #endif
 
-void dlgSimulatorPromptShowModal(void){
+bool
+dlgSimulatorPromptShowModal()
+{
 #ifdef SIMULATOR_AVAILABLE
   LogStartUp(_T("PromptSimulator dialog"));
 
@@ -75,7 +77,7 @@ void dlgSimulatorPromptShowModal(void){
                       Layout::landscape ? _T("IDR_XML_SIMULATORPROMPT_L") :
                       _T("IDR_XML_SIMULATORPROMPT"));
   if (!wf)
-    return;
+    return false;
 
   WndButton* wb;
   wb = ((WndButton *)wf->FindByName(_T("cmdSimulator")));
@@ -86,9 +88,13 @@ void dlgSimulatorPromptShowModal(void){
   if (wb)
     wb->SetOnClickNotify(OnFlyClicked);
 
-  global_simulator_flag = (wf->ShowModal() == mrOK);
+  bool retval = (wf->ShowModal() == mrOK);
 
   delete wf;
+
+  return retval;
+#else
+  return false;
 #endif
 }
 

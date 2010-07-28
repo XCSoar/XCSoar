@@ -252,9 +252,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
 #ifdef SIMULATOR_AVAILABLE
   // prompt for simulator if not set by command line argument "-simulator" or "-fly"
-  if (!sim_set_in_cmd_line_flag) {
-    dlgSimulatorPromptShowModal();
-  }
+  if (!sim_set_in_cmd_line_flag)
+    global_simulator_flag = dlgSimulatorPromptShowModal();
 #endif
 
   PreloadInitialisation(true);

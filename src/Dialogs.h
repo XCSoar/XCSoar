@@ -89,7 +89,7 @@ void dlgVegaDemoShowModal();
 bool dlgConfigurationVarioShowModal();
 void dlgLoggerReplayShowModal();
 void dlgStartupShowModal();
-void dlgSimulatorPromptShowModal();
+bool dlgSimulatorPromptShowModal();
 
 
 void
