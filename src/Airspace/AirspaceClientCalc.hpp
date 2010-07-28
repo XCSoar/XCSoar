@@ -46,9 +46,8 @@ class AirspaceClientCalc:
   public AirspaceClient
 {
 public:
-  AirspaceClientCalc(Airspaces& as, 
-                     AirspaceWarningManager& awm):
-    AirspaceClient(as, awm) {};
+  AirspaceClientCalc(AirspaceWarningManager& awm):
+    AirspaceClient(awm) {};
 
   // manager
   void reset_warning(const AIRCRAFT_STATE& as);

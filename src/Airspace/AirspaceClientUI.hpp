@@ -53,15 +53,8 @@ class AirspaceClientUI:
   private AirspacesInterface
 {
 public:
-  AirspaceClientUI(Airspaces& as, 
-                   AirspaceWarningManager& awm):
-    AirspaceClient(as, awm) {};
-
-  void
-  visit_within_range(const GEOPOINT &loc,
-                     const fixed range,
-                     AirspaceVisitor &visitor,
-                     const AirspacePredicate &predicate) const;
+  AirspaceClientUI(AirspaceWarningManager& awm):
+    AirspaceClient(awm) {};
 
   void clear();
   void clear_warnings();

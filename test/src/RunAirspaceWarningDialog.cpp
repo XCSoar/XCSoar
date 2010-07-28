@@ -90,7 +90,7 @@ static AIRCRAFT_STATE ac_state; // dummy
 static AirspaceWarningManager airspace_warning(airspace_database,
                                                ac_state, task_manager);
 
-AirspaceClientUI airspace_ui(airspace_database, airspace_warning);
+AirspaceClientUI airspace_ui(airspace_warning);
 
 static void
 LoadFiles()

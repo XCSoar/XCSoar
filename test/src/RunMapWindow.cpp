@@ -114,7 +114,7 @@ static AIRCRAFT_STATE ac_state; // dummy
 static AirspaceWarningManager airspace_warning(airspace_database, ac_state,
                                                task_manager);
 
-static AirspaceClientUI airspace_ui(airspace_database, airspace_warning);
+static AirspaceClientUI airspace_ui(airspace_warning);
 
 static TopologyStore *topology;
 static RasterTerrain terrain;

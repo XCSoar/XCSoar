@@ -38,20 +38,16 @@
 #define AIRSPACECLIENT_HPP
 
 #include "Poco/RWLock.h"
-class Airspaces;
-class AirspaceWarningManager;
 
+class AirspaceWarningManager;
 
 class AirspaceClient 
 {
 public:
-  AirspaceClient(Airspaces& as, 
-                 AirspaceWarningManager& awm):
-    airspaces(as), 
+  AirspaceClient(AirspaceWarningManager& awm):
     airspace_warning(awm) {};
 
 protected:
-  Airspaces& airspaces;
   AirspaceWarningManager& airspace_warning;
 
   static Poco::RWLock mutex;

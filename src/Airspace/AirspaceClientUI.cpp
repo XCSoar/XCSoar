@@ -1,5 +1,4 @@
 #include "Airspace/AirspaceClientUI.hpp"
-#include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/AirspaceParser.hpp"
 #include "Terrain/RasterTerrain.hpp"
@@ -9,15 +8,6 @@ AirspaceClientUI::visit_warnings(AirspaceWarningVisitor& visitor) const
 {
   Poco::ScopedRWLock lock(mutex);
   return airspace_warning.visit_warnings(visitor);
-}
-
-void 
-AirspaceClientUI::visit_within_range(const GEOPOINT &loc, 
-                                     const fixed range,
-                                     AirspaceVisitor &visitor,
-                                     const AirspacePredicate &predicate) const
-{
-  return airspaces.visit_within_range(loc, range, visitor, predicate);
 }
 
 void
