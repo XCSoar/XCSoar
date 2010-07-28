@@ -39,7 +39,6 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "resource.h"
 #include "Screen/Layout.hpp"
-#include "LogFile.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "Compiler.h"
@@ -71,8 +70,6 @@ bool
 dlgSimulatorPromptShowModal()
 {
 #ifdef SIMULATOR_AVAILABLE
-  LogStartUp(_T("PromptSimulator dialog"));
-
   wf = dlgLoadFromXML(CallBackTable, XCSoarInterface::main_window,
                       Layout::landscape ? _T("IDR_XML_SIMULATORPROMPT_L") :
                       _T("IDR_XML_SIMULATORPROMPT"));
