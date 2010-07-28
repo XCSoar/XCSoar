@@ -244,15 +244,9 @@ dlgChecklistShowModal(void)
     first = false;
   }
 
-  /// @todo: check the files loaded here (L != landscape)
-  if (!Layout::landscape)
-    wf = dlgLoadFromXML(CallBackTable,
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_CHECKLIST_L"));
-  else
-    wf = dlgLoadFromXML(CallBackTable,
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_CHECKLIST"));
+  wf = dlgLoadFromXML(CallBackTable, XCSoarInterface::main_window,
+                      Layout::landscape ?
+                      _T("IDR_XML_CHECKLIST_L") : _T("IDR_XML_CHECKLIST"));
   if (!wf)
     return;
 
