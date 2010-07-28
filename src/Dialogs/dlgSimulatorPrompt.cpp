@@ -52,15 +52,13 @@ static WndForm *wf=NULL;
 static void
 OnSimulatorClicked(gcc_unused WndButton &button)
 {
-  global_simulator_flag=true;
   wf->SetModalResult(mrOK);
 }
 
 static void
 OnFlyClicked(gcc_unused WndButton &button)
 {
-  global_simulator_flag=false;
-  wf->SetModalResult(mrOK);
+  wf->SetModalResult(mrCancel);
 }
 
 static CallBackTableEntry_t CallBackTable[]={
@@ -88,7 +86,7 @@ void dlgSimulatorPromptShowModal(void){
   if (wb)
     wb->SetOnClickNotify(OnFlyClicked);
 
-  wf->ShowModal();
+  global_simulator_flag = (wf->ShowModal() == mrOK);
 
   delete wf;
 #endif
