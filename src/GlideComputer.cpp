@@ -50,6 +50,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "SettingsComputer.hpp"
 #include "Math/Earth.hpp"
+#include "Logger/Logger.hpp"
 
 static PeriodClock last_team_code_update;
 
@@ -329,12 +330,14 @@ GlideComputer::OnStartTask()
 {
   GlideComputerBlackboard::StartTask();
   GlideComputerStats::StartTask();
+  logger.LogStartEvent(Basic());
 }
 
 void 
 GlideComputer::OnFinishTask()
 {
   SaveFinish();
+  logger.LogFinishEvent(Basic());
 }
 
 void

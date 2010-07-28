@@ -113,6 +113,8 @@ public:
 
 public:
   void LogPoint(const NMEA_INFO &gps_info);
+  void LogEvent(const NMEA_INFO &gps_info, const char* event);
+
   bool CheckDeclaration(void);
   bool isTaskDeclared() const;
   bool isLoggerActive() const;

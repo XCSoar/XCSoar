@@ -76,6 +76,33 @@ Logger::LogPoint(const NMEA_INFO &gps_info)
   }
 }
 
+void
+Logger::LogEvent(const NMEA_INFO &gps_info, const char* event)
+{
+  if (lock.tryWriteLock()) {
+    _logger->LogEvent(gps_info, event);
+    lock.unlock();
+  }
+
+}
+
+void Logger::LogStartEvent(const NMEA_INFO &gps_info) {
+  LogEvent(gps_info, "STA");
+}
+
+void Logger::LogFinishEvent(const NMEA_INFO &gps_info) {
+  LogEvent(gps_info, "FIN");
+}
+
+void Logger::LogPilotEvent(const NMEA_INFO &gps_info) {
+  LogEvent(gps_info, "PEV");
+}
+
+void Logger::LogTurnpointEvent(const NMEA_INFO &gps_info) {
+  LogEvent(gps_info, "TPC");
+}
+
+
 /**
  * Checks whether a Task is declared to the Logger.
  * If so, asks whether to invalidate the declaration.
