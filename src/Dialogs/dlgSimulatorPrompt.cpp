@@ -79,11 +79,14 @@ void dlgSimulatorPromptShowModal(void){
   if (!wf)
     return;
 
-  ((WndButton *)wf->FindByName(_T("cmdSimulator")))
-    ->SetOnClickNotify(OnSimulatorClicked);
+  WndButton* wb;
+  wb = ((WndButton *)wf->FindByName(_T("cmdSimulator")));
+  if (wb)
+    wb->SetOnClickNotify(OnSimulatorClicked);
 
-  ((WndButton *)wf->FindByName(_T("cmdFly")))
-    ->SetOnClickNotify(OnFlyClicked);
+  wb = ((WndButton *)wf->FindByName(_T("cmdFly")));
+  if (wb)
+    wb->SetOnClickNotify(OnFlyClicked);
 
   wf->ShowModal();
 
