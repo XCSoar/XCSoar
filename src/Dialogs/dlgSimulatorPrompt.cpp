@@ -91,8 +91,6 @@ void dlgSimulatorPromptShowModal(void){
   wf->ShowModal();
 
   delete wf;
-
-  wf = NULL;
 #endif
 }
 
