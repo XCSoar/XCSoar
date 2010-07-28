@@ -261,29 +261,27 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
   if (m_airspace == NULL)
     return;
 
-  {
-    AirspaceWarningCopy awc;
-    m_airspace->visit_warnings(awc);
+  AirspaceWarningCopy awc;
+  m_airspace->visit_warnings(awc);
 
-    MapDrawHelper helper (canvas, buffer, stencil_canvas, *this, 
-                          SettingsMap());
-    AirspaceVisitorMap v(helper, awc);
-    const AirspaceMapVisible visible(SettingsComputer(),
-                                     Basic().GetAltitudeBaroPreferred(),
-                                     false, awc);
+  MapDrawHelper helper (canvas, buffer, stencil_canvas, *this,
+                        SettingsMap());
+  AirspaceVisitorMap v(helper, awc);
+  const AirspaceMapVisible visible(SettingsComputer(),
+                                   Basic().GetAltitudeBaroPreferred(),
+                                   false, awc);
 
-    // JMW TODO wasteful to draw twice, can't it be drawn once?
-    // we are using two draws so borders go on top of everything
-    
-    m_airspace->visit_within_range(PanLocation, GetScreenDistanceMeters(),
-                                   v, visible);
-    v.draw_intercepts();
+  // JMW TODO wasteful to draw twice, can't it be drawn once?
+  // we are using two draws so borders go on top of everything
 
-    AirspaceOutlineRenderer outline_renderer(canvas, *this,
-                                             SettingsMap().bAirspaceBlackOutline);
-    m_airspace->visit_within_range(PanLocation, GetScreenDistanceMeters(),
-                                   outline_renderer, visible);
+  m_airspace->visit_within_range(PanLocation, GetScreenDistanceMeters(),
+                                 v, visible);
+  v.draw_intercepts();
 
-    m_airspace_intersections = awc.get_locations();
-  }
+  AirspaceOutlineRenderer outline_renderer(canvas, *this,
+                                           SettingsMap().bAirspaceBlackOutline);
+  m_airspace->visit_within_range(PanLocation, GetScreenDistanceMeters(),
+                                 outline_renderer, visible);
+
+  m_airspace_intersections = awc.get_locations();
 }
