@@ -53,9 +53,7 @@ protected:
 	}
 
 	bool tryReadLockImpl() {
-		// XXX we have no Mutex::TryLock()
-		Lock();
-		return true;
+		return TryLock();
 	}
 
 	void writeLockImpl() {
@@ -63,9 +61,7 @@ protected:
 	}
 
 	bool tryWriteLockImpl() {
-		// XXX we have no Mutex::TryLock()
-		Lock();
-		return true;
+	  return TryLock();
 	}
 
 	void unlockImpl() {
