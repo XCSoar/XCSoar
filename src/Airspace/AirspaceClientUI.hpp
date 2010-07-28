@@ -63,8 +63,6 @@ public:
                      AirspaceVisitor &visitor,
                      const AirspacePredicate &predicate) const;
 
-  bool airspace_empty() const;
-
   void clear();
   void clear_warnings();
 

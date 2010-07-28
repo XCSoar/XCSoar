@@ -93,9 +93,3 @@ AirspaceClientUI::acknowledge_inside(const AbstractAirspace& airspace,
   Poco::ScopedRWLock lock(mutex, true);
   airspace_warning.acknowledge_inside(airspace, set);
 }
-
-bool 
-AirspaceClientUI::airspace_empty() const
-{
-  return airspaces.empty();
-}
