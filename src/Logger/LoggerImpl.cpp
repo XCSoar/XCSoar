@@ -56,6 +56,7 @@
 #include "SettingsComputer.hpp"
 #include "NMEA/Info.hpp"
 #include "Simulator.hpp"
+#include "Interface.hpp"
 
 #ifdef HAVE_POSIX
 #include <unistd.h>
@@ -262,6 +263,19 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
           (int)gps_info.BaroAltitude, p.GPSAltitude, (int)dEPE, iSIU);
 
   IGCWriteRecord(szBRecord, szLoggerFileName);
+}
+
+void
+LoggerImpl::LogEvent(const NMEA_INFO& gps_info, const char* event)
+{
+  char szBRecord[30];
+  sprintf(szBRecord,"E%02d%02d%02d%s\r\n",
+          gps_info.DateTime.hour, gps_info.DateTime.minute,
+          gps_info.DateTime.second, event);
+
+  IGCWriteRecord(szBRecord, szLoggerFileName);
+  // tech_spec_gnss.pdf says we need a B record immediately after an E record
+  LogPointToFile(gps_info);
 }
 
 void

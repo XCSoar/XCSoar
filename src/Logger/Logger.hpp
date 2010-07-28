@@ -53,11 +53,17 @@ class Logger {
 private:
   LoggerImpl* _logger;
   Poco::RWLock lock;
+  void LogEvent(const NMEA_INFO &gps_info, const char*);
 public:
   Logger();
   ~Logger();
 
   void LogPoint(const NMEA_INFO &gps_info);
+  void LogStartEvent(const NMEA_INFO &gps_info);
+  void LogFinishEvent(const NMEA_INFO &gps_info);
+  void LogTurnpointEvent(const NMEA_INFO &gps_info);
+  void LogOnTaskEvent(const NMEA_INFO &gps_info);
+  void LogPilotEvent(const NMEA_INFO &gps_info);
   bool CheckDeclaration(void);
   bool isTaskDeclared();
   bool isLoggerActive();
