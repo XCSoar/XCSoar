@@ -43,6 +43,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "LocalTime.hpp"
 #include "OS/PathName.hpp"
+#include "OS/FileUtil.hpp"
 #include "ProgressGlue.hpp"
 
 #include <assert.h>
@@ -154,6 +155,11 @@ RasterWeather::ScanAll(const GEOPOINT &location)
 {
   /* not holding the lock here, because this method is only called
      during startup, when the other threads aren't running yet */
+
+  TCHAR fname[MAX_PATH];
+  LocalPath(fname, _T("xcsoar-rasp.dat"));
+  if (!File::Exists(fname))
+    return;
 
   ProgressGlue::SetRange(MAX_WEATHER_TIMES);
   for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++) {
