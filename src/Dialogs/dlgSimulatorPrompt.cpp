@@ -40,8 +40,6 @@ Copyright_License {
 #include "resource.h"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
-#include "Compatibility/string.h"
-#include "Compiler.h"
 #include "Simulator.hpp"
 
 #ifdef SIMULATOR_AVAILABLE
