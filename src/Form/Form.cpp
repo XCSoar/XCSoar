@@ -45,6 +45,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
+#include "Util/StringUtil.hpp"
 
 bool
 WndForm::ClientAreaWindow::on_command(unsigned id, unsigned code)
@@ -130,7 +131,8 @@ WndForm::UpdateLayout()
   RECT rc = get_client_rect();
 
   mTitleRect = rc;
-  mTitleRect.bottom = rc.top + mhTitleFont->get_height();
+  mTitleRect.bottom = rc.top +
+      (string_is_empty(mCaption) ? 0 : mhTitleFont->get_height());
 
   mClientRect = rc;
   mClientRect.top = mTitleRect.bottom;
