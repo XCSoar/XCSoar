@@ -141,6 +141,7 @@ $(TARGET_BIN_DIR)/RunTextWriter$(TARGET_EXEEXT): $(RUN_TEXT_WRITER_OBJS) $(RUN_T
 
 READ_PROFILE_STRING_SOURCES = \
 	$(SRC)/LocalPath.cpp \
+	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
 	$(SRC)/ProfileKeys.cpp \
@@ -154,6 +155,7 @@ $(TARGET_BIN_DIR)/ReadProfileString$(TARGET_EXEEXT): $(READ_PROFILE_STRING_OBJS)
 
 READ_PROFILE_INT_SOURCES = \
 	$(SRC)/LocalPath.cpp \
+	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
 	$(SRC)/ProfileKeys.cpp \
@@ -167,6 +169,7 @@ $(TARGET_BIN_DIR)/ReadProfileInt$(TARGET_EXEEXT): $(READ_PROFILE_INT_OBJS) $(REA
 
 WRITE_PROFILE_STRING_SOURCES = \
 	$(SRC)/LocalPath.cpp \
+	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
 	$(SRC)/ProfileKeys.cpp \
@@ -180,6 +183,7 @@ $(TARGET_BIN_DIR)/WriteProfileString$(TARGET_EXEEXT): $(WRITE_PROFILE_STRING_OBJ
 
 WRITE_PROFILE_INT_SOURCES = \
 	$(SRC)/LocalPath.cpp \
+	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
 	$(SRC)/ProfileKeys.cpp \
@@ -251,6 +255,7 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/LocalPath.cpp \
+	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/Units.cpp \
@@ -342,6 +347,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Airspace/AirspaceVisibility.cpp \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/LocalPath.cpp \
+	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Projection.cpp \
 	$(SRC)/RenderObservationZone.cpp \
 	$(SRC)/BackgroundDrawHelper.cpp \
@@ -489,6 +495,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Registry.cpp \
 	$(SRC)/LocalPath.cpp \
+	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
@@ -551,6 +558,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Registry.cpp \
 	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/LocalPath.cpp \
+	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \

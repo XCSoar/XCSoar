@@ -52,6 +52,7 @@ Copyright_License {
 
 #ifdef _WIN32_WCE
 #include "OS/FlashCardEnumerator.hpp"
+#include "OS/FileUtil.hpp"
 #endif
 
 /**
@@ -189,7 +190,8 @@ FindDataPath()
     if (ModuleInFlash(NULL, buffer) != NULL) {
       _tcscat(buffer, _T(DIR_SEPARATOR_S));
       _tcscat(buffer, XCSDATADIR);
-      return _tcsdup(buffer);
+      if (Directory::Exists(buffer))
+        return _tcsdup(buffer);
     }
   }
 #endif
