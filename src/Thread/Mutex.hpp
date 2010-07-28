@@ -119,6 +119,24 @@ public:
   };
 
   /**
+   * Tries to lock the Mutex
+   */
+  bool TryLock() {
+#ifdef HAVE_POSIX
+    if (pthread_mutex_trylock(&mutex) != 0)
+      return false;
+#else
+    if (TryEnterCriticalSection(&handle) == 0)
+      return false;
+#endif
+
+#ifndef NDEBUG
+    ++thread_locks_held;
+#endif
+    return true;
+  };
+
+  /**
    * Unlocks the Mutex
    */
   void Unlock() {
