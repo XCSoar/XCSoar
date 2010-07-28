@@ -73,16 +73,11 @@ void dlgSimulatorPromptShowModal(void){
 #ifdef SIMULATOR_AVAILABLE
   LogStartUp(_T("PromptSimulator dialog"));
 
-  if (!Layout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable,
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_SIMULATORPROMPT"));
-  } else {
-    wf = dlgLoadFromXML(CallBackTable,
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_SIMULATORPROMPT_L"));
-  }
-  if (!wf) return;
+  wf = dlgLoadFromXML(CallBackTable, XCSoarInterface::main_window,
+                      Layout::landscape ? _T("IDR_XML_SIMULATORPROMPT_L") :
+                      _T("IDR_XML_SIMULATORPROMPT"));
+  if (!wf)
+    return;
 
   ((WndButton *)wf->FindByName(_T("cmdSimulator")))
     ->SetOnClickNotify(OnSimulatorClicked);
