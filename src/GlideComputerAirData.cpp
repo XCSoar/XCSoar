@@ -61,6 +61,7 @@ Copyright_License {
 #include "TaskClientCalc.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Airspace/AirspaceClientCalc.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
 #include "Defines.h"
 
 #include <algorithm>
@@ -488,7 +489,7 @@ GlideComputerAirData::OnTakeoff()
 void
 GlideComputerAirData::AirspaceWarning()
 {
-  m_airspace.set_flight_levels(Basic().pressure);
+  airspace_database.set_flight_levels(Basic().pressure);
 
   const AIRCRAFT_STATE as = ToAircraftState(Basic());
   if (m_airspace.update_warning(as))

@@ -19,11 +19,3 @@ AirspaceClientCalc::update_warning(const AIRCRAFT_STATE& as)
   TaskClient::unlock();
   return retval;
 }
-
-void 
-AirspaceClientCalc::set_flight_levels(const AtmosphericPressure &press)
-{
-  Poco::ScopedRWLock lock(mutex, true);
-  airspaces.set_flight_levels(press);
-}
-

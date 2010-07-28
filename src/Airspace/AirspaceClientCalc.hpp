@@ -53,10 +53,6 @@ public:
   // manager
   void reset_warning(const AIRCRAFT_STATE& as);
   bool update_warning(const AIRCRAFT_STATE &state);
-
-  // airspace
-  void set_flight_levels(const AtmosphericPressure &press);
-
 };
 
 
