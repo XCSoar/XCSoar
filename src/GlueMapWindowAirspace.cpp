@@ -44,6 +44,7 @@ Copyright_License {
 #include "Airspace/AirspaceWarningVisitor.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
 #include "Airspace/AirspaceClientUI.hpp"
+#include "Airspace/Airspaces.hpp"
 
 class AirspaceWarningCopy: 
   public AirspaceWarningVisitor
@@ -157,19 +158,20 @@ private:
 bool
 GlueMapWindow::AirspaceDetailsAtPoint(const GEOPOINT &location) const
 {
-  if (m_airspace == NULL)
+  if (airspace_database == NULL)
     return false;
 
   AirspaceWarningCopy awc;
-  m_airspace->visit_warnings(awc);
+  if (m_airspace != NULL)
+    m_airspace->visit_warnings(awc);
 
   AirspaceDetailsDialogVisitor airspace_copy_popup(location);
   const AirspaceMapVisible visible(SettingsComputer(),
                                    Basic().GetAltitudeBaroPreferred(),
                                    false, awc);
 
-  m_airspace->visit_within_range(location, fixed(100.0),
-                                 airspace_copy_popup, visible);
+  airspace_database->visit_within_range(location, fixed(100.0),
+                                        airspace_copy_popup, visible);
 
   airspace_copy_popup.display();
 

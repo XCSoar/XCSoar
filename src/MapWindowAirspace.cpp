@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "MapWindow.hpp"
 #include "MapCanvas.hpp"
+#include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceClientUI.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
@@ -258,11 +259,12 @@ MapWindow::DrawAirspaceIntersections(Canvas &canvas)
 void
 MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
 {
-  if (m_airspace == NULL)
+  if (airspace_database == NULL)
     return;
 
   AirspaceWarningCopy awc;
-  m_airspace->visit_warnings(awc);
+  if (m_airspace != NULL)
+    m_airspace->visit_warnings(awc);
 
   MapDrawHelper helper (canvas, buffer, stencil_canvas, *this,
                         SettingsMap());
@@ -274,14 +276,14 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
   // JMW TODO wasteful to draw twice, can't it be drawn once?
   // we are using two draws so borders go on top of everything
 
-  m_airspace->visit_within_range(PanLocation, GetScreenDistanceMeters(),
-                                 v, visible);
+  airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(),
+                                        v, visible);
   v.draw_intercepts();
 
   AirspaceOutlineRenderer outline_renderer(canvas, *this,
                                            SettingsMap().bAirspaceBlackOutline);
-  m_airspace->visit_within_range(PanLocation, GetScreenDistanceMeters(),
-                                 outline_renderer, visible);
+  airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(),
+                                        outline_renderer, visible);
 
   m_airspace_intersections = awc.get_locations();
 }

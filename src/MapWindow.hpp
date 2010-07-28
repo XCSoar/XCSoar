@@ -73,6 +73,7 @@ class Marks;
 class GaugeCDI;
 class Waypoints;
 class Waypoint;
+class Airspaces;
 class AirspaceClientUI;
 class TaskClientUI;
 class GlidePolar;
@@ -92,6 +93,7 @@ protected:
   bool topology_dirty, terrain_dirty, weather_dirty;
 
   BackgroundDrawHelper m_background;
+  Airspaces *airspace_database;
   AirspaceClientUI *m_airspace;
   TaskClientUI *task;
 
@@ -124,7 +126,9 @@ public:
     task = _task;
   }
 
-  void set_airspaces(AirspaceClientUI *_airspace) {
+  void set_airspaces(Airspaces *_airspace_database,
+                     AirspaceClientUI *_airspace) {
+    airspace_database = _airspace_database;
     m_airspace = _airspace;
   }
 

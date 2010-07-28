@@ -375,7 +375,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   main_window.map.set_way_points(&way_points);
   main_window.map.set_task(&task_ui);
-  main_window.map.set_airspaces(&airspace_ui);
+  main_window.map.set_airspaces(&airspace_database, &airspace_ui);
 
   main_window.map.set_topology(topology);
   main_window.map.set_terrain(&terrain);
