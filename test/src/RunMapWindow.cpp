@@ -64,7 +64,6 @@ Copyright_License {
 #include "Audio/Sound.hpp"
 #include "ButtonLabel.hpp"
 #include "DeviceBlackboard.hpp"
-#include "Airspace/AirspaceClientUI.hpp"
 #include "Airspace/AirspaceParser.hpp"
 #include "Profile.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"

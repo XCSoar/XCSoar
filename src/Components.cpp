@@ -88,9 +88,8 @@ Copyright_License {
 
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/Airspaces.hpp"
-#include "Airspace/AirspaceClientUI.hpp"
-#include "Airspace/AirspaceClientCalc.hpp"
 #include "Airspace/AirspaceGlue.hpp"
+#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 
 #include "Task/TaskManager.hpp"
 #include "TaskClientUI.hpp"
@@ -133,12 +132,9 @@ AirspaceWarningManager airspace_warning(airspace_database,
                                         ac_state,
                                         task_manager);
 
-AirspaceClientUI airspace_ui(airspace_warning);
-AirspaceClientCalc airspace_calc(airspace_warning);
+ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
 
-GlideComputer glide_computer(task_calc,
-                             airspace_calc,
-                             task_events);
+GlideComputer glide_computer(task_calc, airspace_warnings, task_events);
 
 void
 XCSoarInterface::PreloadInitialisation(bool ask)
@@ -371,7 +367,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   main_window.map.set_way_points(&way_points);
   main_window.map.set_task(&task_ui);
-  main_window.map.set_airspaces(&airspace_database, &airspace_ui);
+  main_window.map.set_airspaces(&airspace_database, &airspace_warnings);
 
   main_window.map.set_topology(topology);
   main_window.map.set_terrain(&terrain);
@@ -488,7 +484,7 @@ XCSoarInterface::Shutdown(void)
 
   // Clear airspace database
   LogStartUp(_T("Close airspace"));
-  airspace_ui.clear();
+  airspace_warnings.clear();
   airspace_database.clear();
 
   // Clear waypoint database

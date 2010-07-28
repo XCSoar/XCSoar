@@ -44,7 +44,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "Profile.hpp"
-#include "Airspace/AirspaceClientUI.hpp"
+#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceParser.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -56,6 +56,7 @@ Copyright_License {
 #include "ResourceLoader.hpp"
 #include "Appearance.hpp"
 #include "IO/FileLineReader.hpp"
+#include "TaskClient.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -90,7 +91,10 @@ static AIRCRAFT_STATE ac_state; // dummy
 static AirspaceWarningManager airspace_warning(airspace_database,
                                                ac_state, task_manager);
 
-AirspaceClientUI airspace_ui(airspace_warning);
+ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
+
+void TaskClient::lock() {}
+void TaskClient::unlock() {}
 
 static void
 LoadFiles()

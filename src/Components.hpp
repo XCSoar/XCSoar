@@ -49,14 +49,14 @@ class CalculationThread;
 class InstrumentThread;
 class Waypoints;
 class Airspaces;
-class AirspaceClientUI;
+class ProtectedAirspaceWarningManager;
 class TaskClientUI;
 class TaskBehaviour;
 class Replay;
 
 // other global objects
 extern Airspaces airspace_database;
-extern AirspaceClientUI airspace_ui;
+extern ProtectedAirspaceWarningManager airspace_warnings;
 extern Waypoints way_points;
 extern TaskClientUI task_ui;
 extern Replay replay;

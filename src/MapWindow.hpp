@@ -74,7 +74,7 @@ class GaugeCDI;
 class Waypoints;
 class Waypoint;
 class Airspaces;
-class AirspaceClientUI;
+class ProtectedAirspaceWarningManager;
 class TaskClientUI;
 class GlidePolar;
 class ContainerWindow;
@@ -94,7 +94,7 @@ protected:
 
   BackgroundDrawHelper m_background;
   Airspaces *airspace_database;
-  AirspaceClientUI *m_airspace;
+  ProtectedAirspaceWarningManager *airspace_warnings;
   TaskClientUI *task;
 
   Marks *marks;
@@ -127,9 +127,9 @@ public:
   }
 
   void set_airspaces(Airspaces *_airspace_database,
-                     AirspaceClientUI *_airspace) {
+                     ProtectedAirspaceWarningManager *_airspace_warnings) {
     airspace_database = _airspace_database;
-    m_airspace = _airspace;
+    airspace_warnings = _airspace_warnings;
   }
 
   void set_topology(TopologyStore *_topology);

@@ -56,7 +56,7 @@ class GlideComputer:
 {
 public:
   GlideComputer(TaskClientCalc& task,
-                AirspaceClientCalc& airspace,
+                ProtectedAirspaceWarningManager &_awm,
                 GlideComputerTaskEvents& events);
 
   void ResetFlight(const bool full=true);

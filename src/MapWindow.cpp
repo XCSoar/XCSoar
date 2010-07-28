@@ -58,7 +58,7 @@ MapWindow::MapWindow()
    way_points(NULL),
    topology(NULL), terrain(NULL), weather(NULL),
    topology_dirty(true), terrain_dirty(true), weather_dirty(true),
-   airspace_database(NULL), m_airspace(NULL), task(NULL),
+   airspace_database(NULL), airspace_warnings(NULL), task(NULL),
    marks(NULL), 
    cdi(NULL),
    TargetDrag_State(0),

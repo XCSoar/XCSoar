@@ -39,12 +39,13 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "MapCanvas.hpp"
 #include "Airspace/Airspaces.hpp"
-#include "Airspace/AirspaceClientUI.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspaceVisitor.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
+#include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/AirspaceWarningVisitor.hpp"
+#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "MapDrawHelper.hpp"
 
 class AirspaceWarningCopy: 
@@ -263,8 +264,8 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
     return;
 
   AirspaceWarningCopy awc;
-  if (m_airspace != NULL)
-    m_airspace->visit_warnings(awc);
+  if (airspace_warnings != NULL)
+    airspace_warnings->visit_warnings(awc);
 
   MapDrawHelper helper (canvas, buffer, stencil_canvas, *this,
                         SettingsMap());

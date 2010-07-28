@@ -39,7 +39,8 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/Message.hpp"
 #include "Blackboard.hpp"
-#include "Airspace/AirspaceClientUI.hpp"
+#include "Airspace/AbstractAirspace.hpp"
+#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "MainWindow.hpp"
@@ -66,10 +67,10 @@ OnAcknowledgeClicked(WindowControl * Sender)
                        MB_YESNOCANCEL | MB_ICONQUESTION);
 
   if (answer == IDYES) {
-    airspace_ui.acknowledge_day(*airspace, true);
+    airspace_warnings.acknowledge_day(*airspace, true);
     wf->SetModalResult(mrOK);
   } else if (answer == IDNO) {
-    airspace_ui.acknowledge_day(*airspace, false);
+    airspace_warnings.acknowledge_day(*airspace, false);
     wf->SetModalResult(mrOK);
   }
 }

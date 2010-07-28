@@ -54,7 +54,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "DrawThread.hpp"
 #include "Airspace/AirspaceGlue.hpp"
-#include "Airspace/AirspaceClientUI.hpp"
+#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "ProgressGlue.hpp"
 #include "TaskClientUI.hpp"
@@ -147,7 +147,7 @@ SettingsLeave()
   }
 
   if (AirspaceFileChanged) {
-    airspace_ui.clear();
+    airspace_warnings.clear();
     airspace_database.clear();
     ReadAirspace(airspace_database, &terrain,
                  XCSoarInterface::Basic().pressure);

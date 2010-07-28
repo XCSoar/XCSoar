@@ -41,7 +41,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "Screen/Layout.hpp"
 #include "Compatibility/vk.h"
-#include "Airspace/AirspaceClientUI.hpp"
+#include "Airspace/AirspaceWarning.hpp"
+#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -60,7 +61,7 @@ static const AbstractAirspace* FocusAirspace = NULL;  // Current action airspace
 static void
 AirspaceWarningCursorCallback(unsigned i)
 {
-  const AirspaceWarning *warning = airspace_ui.get_warning(i);
+  const AirspaceWarning *warning = airspace_warnings.get_warning(i);
   CursorAirspace = (warning != NULL)
     ? &warning->get_airspace()
     : NULL;
@@ -83,8 +84,8 @@ GetSelectedAirspace()
 static bool
 HasWarning()
 {
-  for (unsigned i = 0; i < airspace_ui.warning_size(); ++i) {
-    const AirspaceWarning *warning = airspace_ui.get_warning(i);
+  for (unsigned i = 0; i < airspace_warnings.warning_size(); ++i) {
+    const AirspaceWarning *warning = airspace_warnings.get_warning(i);
     if (warning != NULL && warning->get_ack_expired())
       return true;
   }
@@ -107,7 +108,7 @@ static void OnAckClicked(WindowControl * Sender){
 
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
-    airspace_ui.acknowledge_inside(*airspace, true);
+    airspace_warnings.acknowledge_inside(*airspace, true);
     wAirspaceList->invalidate();
     AutoHide();
   }
@@ -119,7 +120,7 @@ static void OnAck1Clicked(WindowControl * Sender){
 
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
-    airspace_ui.acknowledge_warning(*airspace, true);
+    airspace_warnings.acknowledge_warning(*airspace, true);
     wAirspaceList->invalidate();
     AutoHide();
   }
@@ -131,7 +132,7 @@ static void OnAck2Clicked(WindowControl * Sender){
 
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
-    airspace_ui.acknowledge_day(*airspace, true);
+    airspace_warnings.acknowledge_day(*airspace, true);
     wAirspaceList->invalidate();
     AutoHide();
   }
@@ -143,8 +144,8 @@ static void OnEnableClicked(WindowControl * Sender) {
 
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
-    airspace_ui.acknowledge_warning(*airspace, false);
-    airspace_ui.acknowledge_day(*airspace, false);
+    airspace_warnings.acknowledge_warning(*airspace, false);
+    airspace_warnings.acknowledge_day(*airspace, false);
     wAirspaceList->invalidate();
   }
 }
@@ -199,7 +200,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 {
   TCHAR sTmp[128];
 
-  const AirspaceWarning* _warning = airspace_ui.get_warning(i);
+  const AirspaceWarning* _warning = airspace_warnings.get_warning(i);
 
   if (!_warning) {
     if (i == 0)
@@ -368,13 +369,13 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 static bool
 update_list()
 {
-  unsigned Count = airspace_ui.warning_size();
+  unsigned Count = airspace_warnings.warning_size();
   if (Count > 0) {
     wAirspaceList->SetLength(Count);
 
     int i = -1;
     if (CursorAirspace != NULL) {
-      i = airspace_ui.get_warning_index(*CursorAirspace);
+      i = airspace_warnings.get_warning_index(*CursorAirspace);
       if (i >= 0)
         wAirspaceList->SetCursorIndex(i);
     }
@@ -416,7 +417,7 @@ bool dlgAirspaceWarningVisible()
 
 bool dlgAirspaceWarningIsEmpty() 
 {
-  return airspace_ui.warning_empty();
+  return airspace_warnings.warning_empty();
 }
 
 

@@ -41,10 +41,11 @@ Copyright_License {
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspaceVisitor.hpp"
+#include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/AirspaceWarningVisitor.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
-#include "Airspace/AirspaceClientUI.hpp"
 #include "Airspace/Airspaces.hpp"
+#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 
 class AirspaceWarningCopy: 
   public AirspaceWarningVisitor
@@ -162,8 +163,8 @@ GlueMapWindow::AirspaceDetailsAtPoint(const GEOPOINT &location) const
     return false;
 
   AirspaceWarningCopy awc;
-  if (m_airspace != NULL)
-    m_airspace->visit_warnings(awc);
+  if (airspace_warnings != NULL)
+    airspace_warnings->visit_warnings(awc);
 
   AirspaceDetailsDialogVisitor airspace_copy_popup(location);
   const AirspaceMapVisible visible(SettingsComputer(),

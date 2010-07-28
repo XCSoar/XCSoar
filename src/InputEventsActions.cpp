@@ -92,7 +92,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Logger/NMEALogger.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "TaskClientUI.hpp"
-#include "Airspace/AirspaceClientUI.hpp"
+#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "DrawThread.hpp"
 #include "Replay/Replay.hpp"
@@ -465,8 +465,8 @@ InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc)
 {
   (void)misc;
 
-  if (!airspace_ui.warning_empty()) {
-    airspace_ui.clear_warnings();
+  if (!airspace_warnings.warning_empty()) {
+    airspace_warnings.clear_warnings();
     return;
   }
   // Else toggle TerrainTopology - and show the results
@@ -480,7 +480,7 @@ InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc)
 void
 InputEvents::eventClearAirspaceWarnings(const TCHAR *misc)
 {
-  airspace_ui.clear_warnings();
+  airspace_warnings.clear_warnings();
 }
 
 // ClearStatusMessages

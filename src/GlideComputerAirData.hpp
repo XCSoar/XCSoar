@@ -48,7 +48,7 @@ Copyright_License {
 #include "Util/WindowFilter.hpp"
 
 class GlidePolar;
-class AirspaceClientCalc;
+class ProtectedAirspaceWarningManager;
 
 // TODO: replace copy constructors so copies of these structures
 // do not replicate the large items or items that should be singletons
@@ -58,7 +58,7 @@ class TaskClientCalc;
 
 class GlideComputerAirData: virtual public GlideComputerBlackboard {
 public:
-  GlideComputerAirData(AirspaceClientCalc& airspace,
+  GlideComputerAirData(ProtectedAirspaceWarningManager &_awm,
                        TaskClientCalc& _task);
 
   GlideRatioCalculator rotaryLD;
@@ -75,7 +75,7 @@ public:
 private:
   ThermalLocator thermallocator;
 protected:
-  AirspaceClientCalc &m_airspace;
+  ProtectedAirspaceWarningManager &m_airspace;
 
   void ResetFlight(const bool full=true);
   void Initialise();

@@ -59,7 +59,7 @@ static PeriodClock last_team_code_update;
  * @return
  */
 GlideComputer::GlideComputer(TaskClientCalc &task,
-                             AirspaceClientCalc& airspace,
+                             ProtectedAirspaceWarningManager &airspace,
                              GlideComputerTaskEvents& events):
   GlideComputerBlackboard(task),
   GlideComputerAirData(airspace, task),

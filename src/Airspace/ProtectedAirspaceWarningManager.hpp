@@ -33,24 +33,50 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
-#ifndef AIRSPACECLIENT_HPP
-#define AIRSPACECLIENT_HPP
+*/
+
+#ifndef XCSOAR_PROTECTED_AIRSPACE_WARNING_MANAGER_HPP
+#define XCSOAR_PROTECTED_AIRSPACE_WARNING_MANAGER_HPP
 
 #include "Poco/RWLock.h"
 
+struct AIRCRAFT_STATE;
+class AirspaceWarning;
 class AirspaceWarningManager;
+class AirspaceWarningVisitor;
+class AbstractAirspace;
+class AtmosphericPressure;
 
-class AirspaceClient 
-{
+class ProtectedAirspaceWarningManager {
+  AirspaceWarningManager &airspace_warning;
+  mutable Poco::RWLock mutex;
+
 public:
-  AirspaceClient(AirspaceWarningManager& awm):
-    airspace_warning(awm) {};
+  ProtectedAirspaceWarningManager(AirspaceWarningManager &awm):
+    airspace_warning(awm) {}
 
-protected:
-  AirspaceWarningManager& airspace_warning;
+  void clear();
+  void clear_warnings();
 
-  static Poco::RWLock mutex;
+  // warning manager
+  void visit_warnings(AirspaceWarningVisitor& visitor) const;
+
+  void acknowledge_day(const AbstractAirspace& airspace,
+                       const bool set=true);
+  void acknowledge_warning(const AbstractAirspace& airspace,
+                           const bool set=true);
+  void acknowledge_inside(const AbstractAirspace& airspace,
+                          const bool set=true);
+
+  AirspaceWarning& get_warning(const AbstractAirspace& airspace);
+  const AirspaceWarning* get_warning(const unsigned index) const;
+
+  size_t warning_size() const;
+  bool warning_empty() const;
+  int get_warning_index(const AbstractAirspace& airspace) const;
+
+  void reset_warning(const AIRCRAFT_STATE& as);
+  bool update_warning(const AIRCRAFT_STATE &state);
 };
 
 
