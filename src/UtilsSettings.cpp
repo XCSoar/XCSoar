@@ -55,13 +55,13 @@ Copyright_License {
 #include "DrawThread.hpp"
 #include "Airspace/AirspaceGlue.hpp"
 #include "Airspace/AirspaceClientUI.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
 #include "ProgressGlue.hpp"
 #include "TaskClientUI.hpp"
 #include "WayPoint/WayPointGlue.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "Waypoint/Waypoints.hpp"
-  #include "Airspace/Airspaces.hpp"
   #include "Polar/Polar.hpp"
 #endif
 
@@ -148,6 +148,7 @@ SettingsLeave()
 
   if (AirspaceFileChanged) {
     airspace_ui.clear();
+    airspace_database.clear();
     ReadAirspace(airspace_database, &terrain,
                  XCSoarInterface::Basic().pressure);
   }

@@ -25,7 +25,6 @@ AirspaceClientUI::clear()
 {
   Poco::ScopedRWLock lock(mutex, true);
   airspace_warning.clear();
-  airspaces.clear();
 }
 
 void
