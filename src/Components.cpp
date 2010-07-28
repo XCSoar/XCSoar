@@ -492,7 +492,7 @@ XCSoarInterface::Shutdown(void)
 
   // Clear airspace database
   LogStartUp(_T("Close airspace"));
-  CloseAirspace(airspace_ui);
+  airspace_ui.clear();
 
   // Clear waypoint database
   LogStartUp(_T("Close waypoints"));

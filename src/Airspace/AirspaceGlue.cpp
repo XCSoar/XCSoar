@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "Airspace/AirspaceGlue.hpp"
 #include "Airspace/AirspaceParser.hpp"
-#include "Airspace/AirspaceClientUI.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "ProfileKeys.hpp"
 #include "Terrain/RasterTerrain.hpp"
@@ -86,10 +85,4 @@ ReadAirspace(Airspaces &airspaces,
   } else
     // there was a problem
     airspaces.clear();
-}
-
-void 
-CloseAirspace(AirspaceClientUI &airspace) 
-{
-  airspace.clear();
 }
