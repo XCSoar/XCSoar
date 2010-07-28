@@ -40,14 +40,14 @@
 bool
 WindowFilter::update(const double x0) 
 {
-  assert(i < n_max);
+  assert(i < x.size());
 
   x[i]= x0;
-  i = (i+1)% n_max;
-  if (n<n_max) {
+  i = (i + 1) % x.size();
+  if (n < x.size()) {
     n++;
   }
-  return (n>=n_max);
+  return n >= x.size();
 }
 
 

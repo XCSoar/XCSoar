@@ -35,17 +35,19 @@
 }
  */
 #include "AvFilter.hpp"
+
 #include <assert.h>
+#include <string.h>
 
 bool
 AvFilter::update(const double x0)
 {
-  if (n < n_max) {
+  if (n < x.size()) {
     x[n] = x0;
     n++;
   }
 
-  return (n >= n_max);
+  return (n >= x.size());
 }
 
 double
