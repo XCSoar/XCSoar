@@ -117,13 +117,6 @@ OnWindDirectionData(DataField *Sender, DataField::DataAccessKind_t Mode)
   case DataField::daPut:
     UpdateWind(false);
     break;
-  case DataField::daChange:
-    lastWind = Sender->GetAsFloat();
-    if (lastWind < 0.5)
-      Sender->Set(360.0);
-    if (lastWind > 360.5)
-      Sender->Set(1.0);
-    break;
   }
 }
 
