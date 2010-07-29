@@ -43,6 +43,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Dialogs.h"
 #include "PeriodClock.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <stdlib.h>
 
@@ -183,7 +184,7 @@ WindowControl::OnHelp()
 #ifdef ALTAIRSYNC
   return 0; // undefined. return 1 if defined
 #else
-  if (mHelpText) {
+  if (mHelpText && !string_is_empty(mHelpText)) {
     dlgHelpShowModal(*(SingleWindow *)get_root_owner(), mCaption, mHelpText);
     return 1;
   }
