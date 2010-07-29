@@ -105,11 +105,10 @@ WndForm::WndForm(SingleWindow &_main_window,
 
   cbTimerID = set_timer(1001, 500);
 
-  if (Caption != NULL)
-    _tcscpy(mCaption, Caption);
+  SetCaption(Caption);
 
 #if !defined(ENABLE_SDL) && !defined(NDEBUG)
-  ::SetWindowText(hWnd, Caption);
+  ::SetWindowText(hWnd, mCaption);
 #endif
 }
 
