@@ -279,7 +279,10 @@ MapWindow::DrawWaypoints(Canvas &canvas)
 
   canvas.set_text_color(Color::BLACK);
 
-  WaypointVisitorMap v(*this, canvas, get_glide_polar());
+  GlidePolar polar = get_glide_polar();
+  polar.set_mc(min(Calculated().common_stats.current_risk_mc,
+                   SettingsComputer().safety_mc));
+  WaypointVisitorMap v(*this, canvas, polar);
   way_points->visit_within_range(PanLocation,
                                  fixed(GetScreenDistanceMeters()), v);
   if (task != NULL && SettingsMap().DisplayTextType == DISPLAYNAMEIFINTASK)

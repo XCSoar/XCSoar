@@ -511,6 +511,8 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
   // search minimum is required
 
   GlidePolar glide_polar = m_task.get_glide_polar();
+  glide_polar.set_mc(min(Calculated().common_stats.current_risk_mc,
+                         SettingsComputer().safety_mc));
 
   terrain.Lock();
   GlideTerrain g_terrain(SettingsComputer(), terrain);
