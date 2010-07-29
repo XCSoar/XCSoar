@@ -111,7 +111,6 @@ OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
-// TODO bug: Check, this isn't updating properly?
 static void
 OnAltitudeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
