@@ -96,15 +96,14 @@ OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode)
 
   switch (Mode) {
   case DataField::daGet:
-    Sender->Set(FIXED_DOUBLE(XCSoarInterface::Basic().pressure.get_QNH()));
+    Sender->Set(XCSoarInterface::Basic().pressure.get_QNH());
     break;
   case DataField::daPut:
   case DataField::daChange:
-    fixed QNH(Sender->GetAsFloat());
-    device_blackboard.SetQNH(QNH);
+    device_blackboard.SetQNH(fixed(Sender->GetAsFloat()));
     wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
     if (wp) {
-      wp->GetDataField()-> SetAsFloat(Units::ToUserUnit(
+      wp->GetDataField()->SetAsFloat(Units::ToUserUnit(
           XCSoarInterface::Basic().BaroAltitude, Units::AltitudeUnit));
       wp->RefreshDisplay();
     }
