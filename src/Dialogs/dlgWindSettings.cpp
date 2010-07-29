@@ -105,14 +105,9 @@ OnWindSpeedData(DataField *Sender, DataField::DataAccessKind_t Mode)
 static void
 OnWindDirectionData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  double lastWind;
-
   switch (Mode) {
   case DataField::daGet:
-    lastWind = XCSoarInterface::Basic().wind.bearing.value_degrees();
-    if (lastWind < 0.5)
-      lastWind = 360.0;
-    Sender->Set(lastWind);
+    Sender->Set(XCSoarInterface::Basic().wind.bearing.value_degrees());
     break;
   case DataField::daPut:
     UpdateWind(false);
