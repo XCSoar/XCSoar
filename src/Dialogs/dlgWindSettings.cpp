@@ -91,8 +91,6 @@ OnWindSpeedData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
   case DataField::daGet:
-    Sender->SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(200.0,
-        unKiloMeterPerHour)));
     Sender->Set(Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
     break;
   case DataField::daPut:
@@ -149,6 +147,8 @@ dlgWindSettingsShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
   if (wp) {
+    wp->GetDataField()->SetMax(Units::ToUserWindSpeed(
+        Units::ToSysUnit(200.0, unKiloMeterPerHour)));
     wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }
