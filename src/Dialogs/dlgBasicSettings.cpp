@@ -182,24 +182,10 @@ SetBallast(void)
   }
 }
 
-static void
-SetTemperature()
-{
-  WndProperty* wp;
-  wp = (WndProperty*)wf->FindByName(_T("prpTemperature"));
-  if (wp) {
-    wp->GetDataField()->SetMin(Units::ToUserTemperature(-50));
-    wp->GetDataField()->SetMax(Units::ToUserTemperature(60));
-    wp->GetDataField()->SetUnits(Units::GetTemperatureName());
-    wp->RefreshDisplay();
-  }
-}
-
 static int
 OnTimerNotify(WindowControl * Sender)
 {
   (void)Sender;
-  SetTemperature();
   SetBallast();
   SetAltitude();
 
@@ -305,6 +291,15 @@ dlgBasicSettingsShowModal()
   OnTimerNotify(NULL);
 
   SetButtons();
+
+  WndProperty* wp;
+  wp = (WndProperty*)wf->FindByName(_T("prpTemperature"));
+  if (wp) {
+    wp->GetDataField()->SetMin(Units::ToUserTemperature(-50));
+    wp->GetDataField()->SetMax(Units::ToUserTemperature(60));
+    wp->GetDataField()->SetUnits(Units::GetTemperatureName());
+    wp->RefreshDisplay();
+  }
 
   if ((wf->ShowModal() == mrOK) && changed)
     task_ui.set_glide_polar(gp_copy);
