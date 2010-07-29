@@ -51,7 +51,7 @@ static void
 OnCloseClicked(WindowControl * Sender)
 {
   (void)Sender;
-  wf->SetModalResult(mrOK);
+  wf->SetModalResult(mrCancel);
 }
 
 static void
@@ -83,7 +83,6 @@ static void
 OnSaveClicked(WindowControl * Sender)
 {
   (void)Sender;
-  UpdateWind(true);
   wf->SetModalResult(mrOK);
 }
 
@@ -172,7 +171,8 @@ dlgWindSettingsShowModal(void)
     }
   }
 
-  wf->ShowModal();
+  if (wf->ShowModal() == mrOK)
+    UpdateWind(true);
 
   SaveFormProperty(wf, _T("prpAutoWind"), szProfileAutoWind,
                    XCSoarInterface::SetSettingsComputer().AutoWindMode);
