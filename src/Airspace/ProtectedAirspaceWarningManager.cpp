@@ -60,20 +60,6 @@ ProtectedAirspaceWarningManager::clear_warnings()
   lease->acknowledge_all();
 }
 
-AirspaceWarning&
-ProtectedAirspaceWarningManager::get_warning(const AbstractAirspace& airspace)
-{
-  ExclusiveLease lease(*this);
-  return lease->get_warning(airspace);
-}
-
-const AirspaceWarning*
-ProtectedAirspaceWarningManager::get_warning(const unsigned index) const
-{
-  Lease lease(*this);
-  return lease->get_warning(index);
-}
-
 size_t
 ProtectedAirspaceWarningManager::warning_size() const
 {

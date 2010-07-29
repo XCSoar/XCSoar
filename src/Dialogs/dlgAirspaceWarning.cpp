@@ -43,6 +43,7 @@ Copyright_License {
 #include "Compatibility/vk.h"
 #include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Airspace/AirspaceWarningManager.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -61,7 +62,8 @@ static const AbstractAirspace* FocusAirspace = NULL;  // Current action airspace
 static void
 AirspaceWarningCursorCallback(unsigned i)
 {
-  const AirspaceWarning *warning = airspace_warnings.get_warning(i);
+  ProtectedAirspaceWarningManager::Lease lease(airspace_warnings);
+  const AirspaceWarning *warning = lease->get_warning(i);
   CursorAirspace = (warning != NULL)
     ? &warning->get_airspace()
     : NULL;
@@ -84,8 +86,9 @@ GetSelectedAirspace()
 static bool
 HasWarning()
 {
+  ProtectedAirspaceWarningManager::Lease lease(airspace_warnings);
   for (unsigned i = 0; i < airspace_warnings.warning_size(); ++i) {
-    const AirspaceWarning *warning = airspace_warnings.get_warning(i);
+    const AirspaceWarning *warning = lease->get_warning(i);
     if (warning != NULL && warning->get_ack_expired())
       return true;
   }
@@ -200,7 +203,8 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 {
   TCHAR sTmp[128];
 
-  const AirspaceWarning* _warning = airspace_warnings.get_warning(i);
+  ProtectedAirspaceWarningManager::Lease lease(airspace_warnings);
+  const AirspaceWarning* _warning = lease->get_warning(i);
 
   if (!_warning) {
     if (i == 0)
