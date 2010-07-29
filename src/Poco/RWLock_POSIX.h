@@ -40,6 +40,7 @@
 #define Foundation_RWLock_POSIX_INCLUDED
 
 
+#include "Util/NonCopyable.hpp"
 #include "Poco/Foundation.h"
 #include <pthread.h>
 #include <errno.h>
@@ -48,7 +49,7 @@
 namespace Poco {
 
 
-class Foundation_API RWLockImpl
+class Foundation_API RWLockImpl : private NonCopyable
 {
 protected:
 	RWLockImpl();

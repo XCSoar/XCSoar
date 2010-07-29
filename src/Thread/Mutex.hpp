@@ -51,6 +51,8 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_MUTEX_HXX
 #define XCSOAR_THREAD_MUTEX_HXX
 
+#include "Util/NonCopyable.hpp"
+
 #ifdef HAVE_POSIX
 #include <pthread.h>
 #else
@@ -66,7 +68,7 @@ extern ThreadLocalInteger thread_locks_held;
  * This class wraps an OS specific mutex.  It is an object which one
  * thread can wait for, and another thread can wake it up.
  */
-class Mutex {
+class Mutex : private NonCopyable {
 #ifdef HAVE_POSIX
   pthread_mutex_t mutex;
 #else
@@ -163,7 +165,7 @@ public:
  * and unlock the Mutex again.
  * @author JMW
  */
-class ScopeLock {
+class ScopeLock : private NonCopyable {
 public:
   ScopeLock(Mutex& the_mutex):scope_mutex(the_mutex) {
     scope_mutex.Lock();

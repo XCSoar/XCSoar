@@ -42,12 +42,13 @@
 
 #include "Poco/Foundation.h"
 #include "Poco/UnWindows.h"
+#include "Util/NonCopyable.hpp"
 
 
 namespace Poco {
 
 
-class Foundation_API RWLockImpl
+class Foundation_API RWLockImpl : private NonCopyable
 {
 protected:
 	RWLockImpl();

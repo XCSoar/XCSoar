@@ -38,6 +38,8 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_LOCAL_HXX
 #define XCSOAR_THREAD_LOCAL_HXX
 
+#include "Util/NonCopyable.hpp"
+
 #ifdef HAVE_POSIX
 #include <pthread.h>
 #else
@@ -47,7 +49,7 @@ Copyright_License {
 /**
  * This class provides an interface to Thread Local Storage (TLS).
  */
-class ThreadLocal {
+class ThreadLocal : private NonCopyable {
 #ifdef HAVE_POSIX
 private:
   pthread_key_t key;

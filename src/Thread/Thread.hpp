@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_THREAD_HPP
 #define XCSOAR_THREAD_THREAD_HPP
 
+#include "Util/NonCopyable.hpp"
+
 #ifdef HAVE_POSIX
 #include <pthread.h>
 #else
@@ -48,7 +50,7 @@ Copyright_License {
 /**
  * This class provides an OS independent view on a thread.
  */
-class Thread {
+class Thread : private NonCopyable {
 #ifdef HAVE_POSIX
   pthread_t handle;
   bool m_defined;
