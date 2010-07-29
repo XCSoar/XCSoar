@@ -50,7 +50,7 @@ class InstrumentThread;
 class Waypoints;
 class Airspaces;
 class ProtectedAirspaceWarningManager;
-class TaskClientUI;
+class ProtectedTaskManager;
 class TaskBehaviour;
 class Replay;
 
@@ -58,7 +58,7 @@ class Replay;
 extern Airspaces airspace_database;
 extern ProtectedAirspaceWarningManager airspace_warnings;
 extern Waypoints way_points;
-extern TaskClientUI task_ui;
+extern ProtectedTaskManager protected_task_manager;
 extern Replay replay;
 extern Marks *marks;
 extern TopologyStore *topology;

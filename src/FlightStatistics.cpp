@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "FlightStatistics.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
@@ -60,6 +60,7 @@ Copyright_License {
 #include "RenderTask.hpp"
 #include "RenderTaskPoint.hpp"
 #include "RenderObservationZone.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 
 #include <algorithm>
 
@@ -154,7 +155,7 @@ private:
 
 
 static void DrawLegs(Chart& chart,
-                     const TaskClientUI& task,
+                     const ProtectedTaskManager &task,
                      const NMEA_INFO& basic,
                      const DERIVED_INFO& calculated,
                      const bool task_relative)
@@ -176,7 +177,7 @@ void
 FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
                                   const NMEA_INFO &nmea_info,
                                   const DERIVED_INFO &derived_info,
-                                  const TaskClientUI& task) const
+                                  const ProtectedTaskManager &task) const
 {
   Chart chart(canvas, rc);
 
@@ -219,7 +220,7 @@ void
 FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc,
                               const NMEA_INFO &nmea_info,
                               const DERIVED_INFO &derived_info,
-                              const TaskClientUI& task) const
+                              const ProtectedTaskManager &task) const
 {
   Chart chart(canvas, rc);
 
@@ -404,7 +405,7 @@ FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
                              const NMEA_INFO &nmea_info, 
                              const SETTINGS_COMPUTER &settings_computer,
                              const SETTINGS_MAP &settings_map, 
-                             const TaskClientUI& task,
+                             const ProtectedTaskManager &task,
                              const TracePointVector& trace) const
 {
   Chart chart(canvas, rc);

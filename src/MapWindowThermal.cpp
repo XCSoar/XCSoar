@@ -36,12 +36,12 @@ Copyright_License {
 }
 */
 
-#include "TaskClientUI.hpp"
 #include "MapWindow.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 
 void
 MapWindow::CalculateScreenPositionsThermalSources()

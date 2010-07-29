@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "TaskStore.hpp"
 #include "DataField/FileReader.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Components.hpp"
 
@@ -102,7 +102,7 @@ TaskStore::TaskStoreItem::get_task()
     return task;
 
   if (valid)
-    task = task_ui.task_create(filename.c_str());
+    task = protected_task_manager.task_create(filename.c_str());
 
   if (task == NULL)
     valid = false;

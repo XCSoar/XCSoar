@@ -45,6 +45,7 @@ Copyright_License {
 #include "GlideComputerStats.hpp"
 #include "GlideComputerTask.hpp"
 
+class ProtectedTaskManager;
 class GlideComputerTaskEvents;
 
 // TODO: replace copy constructors so copies of these structures
@@ -55,7 +56,7 @@ class GlideComputer:
     public GlideComputerAirData, GlideComputerTask, GlideComputerStats
 {
 public:
-  GlideComputer(TaskClientCalc& task,
+  GlideComputer(ProtectedTaskManager& task,
                 ProtectedAirspaceWarningManager &_awm,
                 GlideComputerTaskEvents& events);
 

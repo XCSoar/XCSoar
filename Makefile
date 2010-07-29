@@ -149,9 +149,7 @@ XCSOAR_SOURCES := \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(IO_SRC_DIR)/DataFile.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
-	$(SRC)/TaskClient.cpp \
-	$(SRC)/TaskClientUI.cpp \
-	$(SRC)/TaskClientCalc.cpp \
+	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/TaskStore.cpp \
 	\
 	$(SRC)/Poco/RWLock.cpp \

@@ -58,9 +58,9 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "GPSClock.hpp"
 #include "ThermalBase.hpp"
-#include "TaskClientCalc.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Defines.h"
 
@@ -75,7 +75,7 @@ static const fixed ClimbCruiseSwitch(10);
 static const fixed THERMAL_TIME_MIN(45);
 
 GlideComputerAirData::GlideComputerAirData(ProtectedAirspaceWarningManager &awm,
-                                           TaskClientCalc& _task):
+                                           ProtectedTaskManager& _task):
   GlideComputerBlackboard(_task),
   m_airspace(awm),
   // scan airspace every 2 seconds

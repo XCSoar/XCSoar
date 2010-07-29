@@ -44,7 +44,7 @@
 #include "Dialogs/Message.hpp"
 #include "Components.hpp"
 #include "LogFile.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "Asset.hpp"
 
 /**
@@ -143,7 +143,7 @@ Logger::guiStartLogger(const NMEA_INFO& gps_info,
   if (isLoggerActive() || gps_info.gps.Replay)
     return;
 
-  OrderedTask* task = task_ui.task_clone();
+  OrderedTask* task = protected_task_manager.task_clone();
   const Declaration decl(task);
 
   if (task) {

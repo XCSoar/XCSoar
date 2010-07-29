@@ -51,6 +51,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Math/Earth.hpp"
 #include "Logger/Logger.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 
 static PeriodClock last_team_code_update;
 
@@ -58,7 +59,7 @@ static PeriodClock last_team_code_update;
  * Constructor of the GlideComputer class
  * @return
  */
-GlideComputer::GlideComputer(TaskClientCalc &task,
+GlideComputer::GlideComputer(ProtectedTaskManager &task,
                              ProtectedAirspaceWarningManager &airspace,
                              GlideComputerTaskEvents& events):
   GlideComputerBlackboard(task),

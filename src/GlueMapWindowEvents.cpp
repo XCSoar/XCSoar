@@ -43,7 +43,7 @@ Copyright_License {
 #include "Appearance.hpp"
 #include "Defines.h"
 #include "Simulator.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Math/Earth.hpp"
 #include "Protection.hpp"

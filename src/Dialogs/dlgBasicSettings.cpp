@@ -36,8 +36,6 @@ Copyright_License {
 }
 */
 
-#include "TaskClientUI.hpp"
-
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
@@ -50,6 +48,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Components.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 
 #include <math.h>
 
@@ -282,7 +281,7 @@ static CallBackTableEntry_t CallBackTable[] = {
 void
 dlgBasicSettingsShowModal()
 {
-  GlidePolar gp_copy = task_ui.get_glide_polar();
+  GlidePolar gp_copy = protected_task_manager.get_glide_polar();
   glide_polar = &gp_copy;
 
   wf = dlgLoadFromXML(CallBackTable, XCSoarInterface::main_window,
@@ -312,7 +311,7 @@ dlgBasicSettingsShowModal()
   }
 
   if ((wf->ShowModal() == mrOK) && changed)
-    task_ui.set_glide_polar(gp_copy);
+    protected_task_manager.set_glide_polar(gp_copy);
 
   delete wf;
 }

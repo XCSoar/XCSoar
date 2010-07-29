@@ -91,7 +91,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Asset.hpp"
 #include "Logger/NMEALogger.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "DrawThread.hpp"
@@ -543,14 +543,14 @@ void
 InputEvents::eventArmAdvance(const TCHAR *misc)
 {
   const TaskAdvance::TaskAdvanceState_t mode = 
-    task_ui.get_advance_state();
+    protected_task_manager.get_advance_state();
   
   if (_tcscmp(misc, _T("on")) == 0) {
-    task_ui.set_advance_armed(true);
+    protected_task_manager.set_advance_armed(true);
   } else if (_tcscmp(misc, _T("off")) == 0) {
-    task_ui.set_advance_armed(false);
+    protected_task_manager.set_advance_armed(false);
   } else if (_tcscmp(misc, _T("toggle")) == 0) {
-    task_ui.toggle_advance_armed();
+    protected_task_manager.toggle_advance_armed();
   } else if (_tcscmp(misc, _T("show")) == 0) {
     switch (mode) {
     case TaskAdvance::MANUAL:
@@ -692,7 +692,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
 
   if (_tcscmp(misc, _T("current")) == 0) {
 
-    wp = task_ui.getActiveWaypoint();
+    wp = protected_task_manager.getActiveWaypoint();
     if (!wp) {
       Message::AddMessage(_("No Active Waypoint!"));
       return;
@@ -710,7 +710,7 @@ InputEvents::eventGotoLookup(const TCHAR *misc)
 {
   const Waypoint* wp = dlgWayPointSelect(main_window, Basic().Location);
   if (wp) {
-    task_ui.do_goto(*wp);
+    protected_task_manager.do_goto(*wp);
   }
 }
 
@@ -737,18 +737,18 @@ InputEvents::eventPlaySound(const TCHAR *misc)
 void
 InputEvents::eventMacCready(const TCHAR *misc)
 {
-  GlidePolar polar = task_ui.get_glide_polar();
+  GlidePolar polar = protected_task_manager.get_glide_polar();
   double mc = polar.get_mc();
 
   if (_tcscmp(misc, _T("up")) == 0) {
     mc = std::min(mc + (double)0.1, 5.0);
     polar.set_mc(fixed(mc));
-    task_ui.set_glide_polar(polar);
+    protected_task_manager.set_glide_polar(polar);
     device_blackboard.SetMC(fixed(mc));
   } else if (_tcscmp(misc, _T("down")) == 0) {
     mc = std::max(mc - (double)0.1, 0.0);
     polar.set_mc(fixed(mc));
-    task_ui.set_glide_polar(polar);
+    protected_task_manager.set_glide_polar(polar);
     device_blackboard.SetMC(fixed(mc));
   } else if (_tcscmp(misc, _T("auto toggle")) == 0) {
     SetSettingsComputer().auto_mc = !SettingsComputer().auto_mc;
@@ -764,7 +764,7 @@ InputEvents::eventMacCready(const TCHAR *misc)
     }
   } else if (_tcscmp(misc, _T("show")) == 0) {
     TCHAR Temp[100];
-    Units::FormatUserVSpeed(task_ui.get_glide_polar().get_mc(),
+    Units::FormatUserVSpeed(protected_task_manager.get_glide_polar().get_mc(),
                             Temp, sizeof(Temp) / sizeof(Temp[0]),
                             false);
     Message::AddMessage(_("MacCready "), Temp);
@@ -944,13 +944,13 @@ void
 InputEvents::eventAdjustWaypoint(const TCHAR *misc)
 {
   if (_tcscmp(misc, _T("next")) == 0)
-    task_ui.incrementActiveTaskPoint(1); // next
+    protected_task_manager.incrementActiveTaskPoint(1); // next
   else if (_tcscmp(misc, _T("nextwrap")) == 0)
-    task_ui.incrementActiveTaskPoint(1); // next - with wrap
+    protected_task_manager.incrementActiveTaskPoint(1); // next - with wrap
   else if (_tcscmp(misc, _T("previous")) == 0)
-    task_ui.incrementActiveTaskPoint(-1); // previous
+    protected_task_manager.incrementActiveTaskPoint(-1); // previous
   else if (_tcscmp(misc, _T("previouswrap")) == 0)
-    task_ui.incrementActiveTaskPoint(-1); // previous with wrap
+    protected_task_manager.incrementActiveTaskPoint(-1); // previous with wrap
 }
 
 // AbortTask
@@ -963,11 +963,11 @@ void
 InputEvents::eventAbortTask(const TCHAR *misc)
 {
   if (_tcscmp(misc, _T("abort")) == 0)
-    task_ui.abort();
+    protected_task_manager.abort();
   else if (_tcscmp(misc, _T("resume")) == 0)
-    task_ui.resume();
+    protected_task_manager.resume();
   else if (_tcscmp(misc, _T("show")) == 0) {
-    switch (task_ui.get_mode()) {
+    switch (protected_task_manager.get_mode()) {
     case TaskManager::MODE_ABORT:
       Message::AddMessage(_("Task Aborted"));
       break;
@@ -982,20 +982,20 @@ InputEvents::eventAbortTask(const TCHAR *misc)
     }
   } else {
     // toggle
-    switch (task_ui.get_mode()) {
+    switch (protected_task_manager.get_mode()) {
     case TaskManager::MODE_NULL:
     case TaskManager::MODE_ORDERED:
-      task_ui.abort();
+      protected_task_manager.abort();
       break;
     case TaskManager::MODE_GOTO:
-      if (task_ui.check_ordered_task()) {
-        task_ui.resume();
+      if (protected_task_manager.check_ordered_task()) {
+        protected_task_manager.resume();
       } else {
-        task_ui.abort();
+        protected_task_manager.abort();
       }
       break;
     case TaskManager::MODE_ABORT:
-      task_ui.resume();
+      protected_task_manager.resume();
       break;
     default:
       break;
@@ -1013,7 +1013,7 @@ InputEvents::eventAbortTask(const TCHAR *misc)
 void
 InputEvents::eventBugs(const TCHAR *misc)
 {
-  GlidePolar polar = task_ui.get_glide_polar();
+  GlidePolar polar = protected_task_manager.get_glide_polar();
   double BUGS = polar.get_bugs();
   double oldBugs = BUGS;
 
@@ -1034,7 +1034,7 @@ InputEvents::eventBugs(const TCHAR *misc)
   if (BUGS != oldBugs) {
     BUGS = min(1.0, max(0.5, BUGS));
     polar.set_bugs(fixed(BUGS));
-    task_ui.set_glide_polar(polar);
+    protected_task_manager.set_glide_polar(polar);
   }
 }
 
@@ -1048,7 +1048,7 @@ InputEvents::eventBugs(const TCHAR *misc)
 void
 InputEvents::eventBallast(const TCHAR *misc)
 {
-  GlidePolar polar = task_ui.get_glide_polar();
+  GlidePolar polar = protected_task_manager.get_glide_polar();
   double BALLAST = polar.get_ballast();
   double oldBallast = BALLAST;
 
@@ -1069,7 +1069,7 @@ InputEvents::eventBallast(const TCHAR *misc)
   if (BALLAST != oldBallast) {
     BALLAST = min(1.0,max(0.0,BALLAST));
     polar.set_ballast(fixed(BALLAST));
-    task_ui.set_glide_polar(polar);
+    protected_task_manager.set_glide_polar(polar);
   }
 }
 
@@ -1217,7 +1217,7 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
 
   if (!string_is_empty(misc)) {
     LocalPath(buffer, misc);
-    task_ui.task_load(buffer);
+    protected_task_manager.task_load(buffer);
   }
 }
 
@@ -1230,7 +1230,7 @@ InputEvents::eventTaskSave(const TCHAR *misc)
 
   if (!string_is_empty(misc)) {
     LocalPath(buffer, misc);
-    task_ui.task_save(buffer);
+    protected_task_manager.task_save(buffer);
   }
 }
 
@@ -1788,7 +1788,7 @@ void
 InputEvents::eventTaskTransition(const TCHAR *misc)
 {
   if (_tcscmp(misc, _T("start")) == 0) {
-    AIRCRAFT_STATE start_state = task_ui.get_start_state();
+    AIRCRAFT_STATE start_state = protected_task_manager.get_start_state();
 
     TCHAR TempTime[40];
     TCHAR TempAlt[40];

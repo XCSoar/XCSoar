@@ -57,7 +57,7 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "ProgressGlue.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "WayPoint/WayPointGlue.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
@@ -152,9 +152,9 @@ SettingsLeave()
   }
 
   if (PolarFileChanged) {
-    GlidePolar gp = task_ui.get_glide_polar();
+    GlidePolar gp = protected_task_manager.get_glide_polar();
     if (LoadPolarById(XCSoarInterface::SettingsComputer(), gp)) {
-      task_ui.set_glide_polar(gp);
+      protected_task_manager.set_glide_polar(gp);
     }
   }
 

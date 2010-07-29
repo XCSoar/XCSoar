@@ -391,8 +391,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \
-	$(SRC)/TaskClient.cpp \
-	$(SRC)/TaskClientUI.cpp \
+	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Topology/TopologyFile.cpp \
@@ -551,8 +550,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
-	$(SRC)/TaskClient.cpp \
-	$(SRC)/TaskClientUI.cpp \
+	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Registry.cpp \

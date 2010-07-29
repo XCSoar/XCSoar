@@ -41,7 +41,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "Dialogs.h"
 #include "MainWindow.hpp"
 #include "LocalTime.hpp"
@@ -111,7 +111,7 @@ InfoBoxContentBearingDiff::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
 {
-  const Waypoint* way_point = task_ui.getActiveWaypoint();
+  const Waypoint* way_point = protected_task_manager.getActiveWaypoint();
 
   if (!way_point) {
     // Set Title
@@ -184,16 +184,16 @@ InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
   switch (keycode) {
   case ibkRight:
   case ibkDown:
-    task_ui.incrementActiveTaskPoint(1);
+    protected_task_manager.incrementActiveTaskPoint(1);
     return true;
 
   case ibkLeft:
   case ibkUp:
-    task_ui.incrementActiveTaskPoint(-1);
+    protected_task_manager.incrementActiveTaskPoint(-1);
     return true;
 
   case ibkEnter:
-    const Waypoint *wp = task_ui.getActiveWaypoint();
+    const Waypoint *wp = protected_task_manager.getActiveWaypoint();
     if (wp) {
       dlgWayPointDetailsShowModal(XCSoarInterface::main_window, *wp);
       return true;

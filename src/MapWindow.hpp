@@ -75,7 +75,7 @@ class Waypoints;
 class Waypoint;
 class Airspaces;
 class ProtectedAirspaceWarningManager;
-class TaskClientUI;
+class ProtectedTaskManager;
 class GlidePolar;
 class ContainerWindow;
 
@@ -95,7 +95,7 @@ protected:
   BackgroundDrawHelper m_background;
   Airspaces *airspace_database;
   ProtectedAirspaceWarningManager *airspace_warnings;
-  TaskClientUI *task;
+  ProtectedTaskManager *task;
 
   Marks *marks;
 
@@ -122,7 +122,7 @@ public:
     way_points = _way_points;
   }
 
-  void set_task(TaskClientUI *_task) {
+  void set_task(ProtectedTaskManager *_task) {
     task = _task;
   }
 

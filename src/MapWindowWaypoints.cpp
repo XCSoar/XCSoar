@@ -47,7 +47,7 @@ Copyright_License {
 #include "Task/TaskPoints/ASTPoint.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Visitors/TaskVisitor.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 
 #include <assert.h>
 #include <stdio.h>

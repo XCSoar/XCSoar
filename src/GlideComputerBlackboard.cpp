@@ -45,7 +45,7 @@ Copyright_License {
 #include "GlideRatio.hpp"
 #include "Defines.h"
 
-GlideComputerBlackboard::GlideComputerBlackboard(TaskClientCalc& task):
+GlideComputerBlackboard::GlideComputerBlackboard(ProtectedTaskManager &task):
   m_task(task)
 {
 }

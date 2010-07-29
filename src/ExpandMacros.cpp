@@ -49,7 +49,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "Replay/Replay.hpp"
 
 #include <stdlib.h>
@@ -195,7 +195,8 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   }
 
   if (_tcsstr(OutBuffer, _T("$(AdvanceArmed)"))) {
-    TaskAdvance::TaskAdvanceState_t s = task_ui.get_advance_state();
+    TaskAdvance::TaskAdvanceState_t s =
+      protected_task_manager.get_advance_state();
     switch (s) {
     case TaskAdvance::MANUAL:
       ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"), 

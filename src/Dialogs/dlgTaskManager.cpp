@@ -45,7 +45,7 @@ Copyright_License {
 #include "DataField/FileReader.hpp"
 #include "Components.hpp"
 #include "StringUtil.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/TaskPoints/FinishPoint.hpp"
 #include "Task/Visitors/TaskVisitor.hpp"
@@ -75,9 +75,9 @@ CommitTaskChanges()
     MessageBoxX(_("Active task modified"),
                 _T("Task Manager"), MB_OK);
 
-    task_ui.check_duplicate_waypoints(*ordered_task, way_points);
-    task_ui.task_commit(*ordered_task);
-    task_ui.task_save_default();
+    protected_task_manager.check_duplicate_waypoints(*ordered_task, way_points);
+    protected_task_manager.task_commit(*ordered_task);
+    protected_task_manager.task_save_default();
 
     task_modified = false;
     return true;
@@ -171,7 +171,7 @@ dlgTaskManagerShowModal(SingleWindow &parent)
   if (!wf)
     return;
 
-  ordered_task = task_ui.task_clone();
+  ordered_task = protected_task_manager.task_clone();
   task_modified = false;
 
   wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView"));

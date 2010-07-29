@@ -36,7 +36,6 @@ Copyright_License {
 }
 */
 
-#include "TaskClientUI.hpp"
 #include "MapWindow.hpp"
 #include "Appearance.hpp"
 #include "Screen/Graphics.hpp"
@@ -44,6 +43,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Terrain/RasterWeather.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 
 #include <math.h>
 #include <stdio.h>

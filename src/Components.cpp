@@ -92,8 +92,7 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 
 #include "Task/TaskManager.hpp"
-#include "TaskClientUI.hpp"
-#include "TaskClientCalc.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideComputerInterface.hpp"
 #include "ProgressGlue.hpp"
@@ -116,12 +115,9 @@ GlideComputerTaskEvents task_events;
 
 static TaskManager task_manager(task_events, way_points);
 
-TaskClientCalc task_calc(task_manager);
-
-TaskClientUI task_ui(task_manager, 
-                     XCSoarInterface::SettingsComputer(),
-                     task_events);
-/// @todo JMW have ui-specific task_events! Don't use glide computer's events
+ProtectedTaskManager protected_task_manager(task_manager,
+                                            XCSoarInterface::SettingsComputer(),
+                                            task_events);
 
 AIRCRAFT_STATE ac_state;
 
@@ -133,7 +129,8 @@ AirspaceWarningManager airspace_warning(airspace_database,
 
 ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
 
-GlideComputer glide_computer(task_calc, airspace_warnings, task_events);
+GlideComputer glide_computer(protected_task_manager, airspace_warnings,
+                             task_events);
 
 void
 XCSoarInterface::PreloadInitialisation(bool ask)
@@ -181,7 +178,7 @@ XCSoarInterface::AfterStartup()
   task_manager.default_task(Basic().Location);
 
   SetSettingsComputer().enable_olc = true;
-  task_ui.task_load_default();
+  protected_task_manager.task_load_default();
 
   task_manager.resume();
 
@@ -365,7 +362,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   ProgressGlue::Create(_("Initialising display"));
 
   main_window.map.set_way_points(&way_points);
-  main_window.map.set_task(&task_ui);
+  main_window.map.set_task(&protected_task_manager);
   main_window.map.set_airspaces(&airspace_database, &airspace_warnings);
 
   main_window.map.set_topology(topology);
@@ -479,7 +476,7 @@ XCSoarInterface::Shutdown(void)
   ProgressGlue::Create(_("Shutdown, saving task..."));
 
   LogStartUp(_T("Save default task"));
-  task_ui.task_save_default();
+  protected_task_manager.task_save_default();
 
   // Clear airspace database
   LogStartUp(_T("Close airspace"));

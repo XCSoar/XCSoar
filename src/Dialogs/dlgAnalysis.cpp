@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "SettingsComputer.hpp"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
@@ -101,14 +101,14 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
   // background is painted in the base-class
 
   const FlightStatistics &fs = glide_computer.GetFlightStats();
-  const TracePointVector trace = task_ui.get_trace_points();
-  const TracePointVector olc = task_ui.get_olc_points();
-  const GlidePolar glide_polar = task_ui.get_glide_polar();
+  const TracePointVector trace = protected_task_manager.get_trace_points();
+  const TracePointVector olc = protected_task_manager.get_olc_points();
+  const GlidePolar glide_polar = protected_task_manager.get_glide_polar();
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
     fs.RenderBarograph(canvas, rcgfx, XCSoarInterface::Basic(), 
-                       XCSoarInterface::Calculated(), task_ui);
+                       XCSoarInterface::Calculated(), protected_task_manager);
     break;
   case ANALYSIS_PAGE_CLIMB:
     fs.RenderClimb(canvas, rcgfx, glide_polar);
@@ -129,7 +129,7 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     fs.RenderTask(canvas, rcgfx, XCSoarInterface::Basic(),
                   XCSoarInterface::SettingsComputer(),
                   XCSoarInterface::SettingsMap(),
-                  task_ui,
+                  protected_task_manager,
                   trace);
     break;
   case ANALYSIS_PAGE_OLC:
@@ -146,7 +146,7 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
     fs.RenderSpeed(canvas, rcgfx, XCSoarInterface::Basic(), 
-                   XCSoarInterface::Calculated(), task_ui);
+                   XCSoarInterface::Calculated(), protected_task_manager);
     break;
   default:
     // should never get here!
@@ -160,7 +160,7 @@ Update(void)
   TCHAR sTmp[1000];
 
   FlightStatistics &fs = glide_computer.GetFlightStats();
-  GlidePolar polar = task_ui.get_glide_polar();
+  GlidePolar polar = protected_task_manager.get_glide_polar();
   const CommonStats& stats = XCSoarInterface::Calculated().common_stats;
 
   switch (page) {

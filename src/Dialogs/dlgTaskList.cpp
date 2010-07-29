@@ -53,7 +53,7 @@ Copyright_License {
 #include "Screen/Chart.hpp"
 #include "ChartProjection.hpp"
 #include "TaskStore.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
 
@@ -213,7 +213,7 @@ OnLoad()
     return;
 
   delete active_task;
-  active_task = task_ui.task_copy(*orig);
+  active_task = protected_task_manager.task_copy(*orig);
   RefreshView();
   task_modified = true;
 

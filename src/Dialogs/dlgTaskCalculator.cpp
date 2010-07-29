@@ -43,7 +43,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 
 #include <math.h>
@@ -96,7 +96,7 @@ RefreshCalculator(void)
   if (wp) {
     if (XCSoarInterface::Calculated().task_stats.has_targets) {
       wp->GetDataField()->SetAsFloat(
-          task_ui.get_ordered_task_behaviour().aat_min_time / 60);
+          protected_task_manager.get_ordered_task_behaviour().aat_min_time / 60);
       wp->RefreshDisplay();
     } else {
       wp->hide();
@@ -208,7 +208,7 @@ OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
     }
     break;
   case DataField::daGet:
-    Sender->Set(Units::ToUserVSpeed(task_ui.get_glide_polar().get_mc()));
+    Sender->Set(Units::ToUserVSpeed(protected_task_manager.get_glide_polar().get_mc()));
     break;
   case DataField::daPut:
   case DataField::daChange:
@@ -249,7 +249,7 @@ OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 static void
 OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  double clast = task_ui.get_glide_polar().get_cruise_efficiency();
+  double clast = protected_task_manager.get_glide_polar().get_cruise_efficiency();
   (void)clast; // unused for now
 
   switch (Mode) {
@@ -303,7 +303,7 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
   if (!wf)
     return;
 
-  GlidePolar polar = task_ui.get_glide_polar();
+  GlidePolar polar = protected_task_manager.get_glide_polar();
   double MACCREADY_enter = polar.get_mc();
   (void)MACCREADY_enter; // unused for now
 

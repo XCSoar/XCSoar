@@ -43,7 +43,7 @@ Copyright_License {
 #include "Interface.hpp"
 
 #include "Components.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "DeviceBlackboard.hpp"
 
 #include <tchar.h>
@@ -75,21 +75,21 @@ InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)
 bool
 InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
 {
-  GlidePolar polar = task_ui.get_glide_polar();
+  GlidePolar polar = protected_task_manager.get_glide_polar();
   double mc = polar.get_mc();
 
   switch (keycode) {
   case ibkUp:
     mc = std::min(mc + (double)0.1, 5.0);
     polar.set_mc(fixed(mc));
-    task_ui.set_glide_polar(polar);
+    protected_task_manager.set_glide_polar(polar);
     device_blackboard.SetMC(fixed(mc));
     return true;
 
   case ibkDown:
     mc = std::max(mc - (double)0.1, 0.0);
     polar.set_mc(fixed(mc));
-    task_ui.set_glide_polar(polar);
+    protected_task_manager.set_glide_polar(polar);
     device_blackboard.SetMC(fixed(mc));
     return true;
 

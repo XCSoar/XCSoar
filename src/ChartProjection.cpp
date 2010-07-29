@@ -37,10 +37,10 @@ Copyright_License {
 */
 
 #include "ChartProjection.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 
 ChartProjection::ChartProjection(const RECT &rc,
-                                 const TaskClientUI& task,
+                                 const ProtectedTaskManager &task,
                                  const GEOPOINT &fallback_loc) 
 {
   const GEOPOINT center = task.get_task_center(fallback_loc);

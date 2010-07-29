@@ -34,30 +34,59 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef TASKCLIENTUI_HPP
-#define TASKCLIENTUI_HPP
 
-#include "TaskClient.hpp"
+#ifndef XCSOAR_PROTECTED_TASK_MANAGER_HPP
+#define XCSOAR_PROTECTED_TASK_MANAGER_HPP
+
+#include "Thread/Mutex.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
+#include "Task/TaskManager.hpp"
 #include "Task/TaskAdvance.hpp"
 
-#include <tchar.h>
-
-struct Declaration;
-class Waypoint;
+class TaskStats;
+class CommonStats;
 class RasterTerrain;
-struct SETTINGS_COMPUTER;
 
-/** Facade class for protected access to task data by GUI/user threads */
-class TaskClientUI: public TaskClient
+/**
+ * Facade to task/airspace/waypoints as used by threads,
+ * to manage locking
+ */
+class ProtectedTaskManager
 {
+protected:
+  TaskManager& task_manager;
+  static Mutex mutex;
+
+  const TaskBehaviour &task_behaviour;
+  TaskEvents &task_events;
+  GlidePolar glide_polar;
+
+  static const TCHAR default_task_path[];
+
 public:
-  TaskClientUI(TaskManager& tm,
-               const TaskBehaviour& tb,
-               TaskEvents& te):
-    TaskClient(tm),
-    task_behaviour(tb),
-    task_events(te),
-    glide_polar(tm.get_glide_polar()) {}
+  ProtectedTaskManager(TaskManager &_task_manager, const TaskBehaviour& tb,
+                       TaskEvents& te)
+    :task_manager(_task_manager),
+     task_behaviour(tb), task_events(te),
+     glide_polar(_task_manager.get_glide_polar()) {}
+
+// common accessors for ui and calc clients
+  GlidePolar get_glide_polar() const;
+  void set_glide_polar(const GlidePolar& glide_polar);
+
+  bool check_task() const;
+  TaskManager::TaskMode_t get_mode() const;
+
+  // trace points
+  TracePointVector find_trace_points(const GEOPOINT &loc, 
+                                     const fixed range,
+                                     const unsigned mintime, 
+                                     const fixed resolution) const;
+
+  void CAccept(TaskVisitor &visitor) const;
+  void ordered_CAccept(TaskVisitor &visitor) const;
+  const OrderedTaskBehaviour get_ordered_task_behaviour() const;
+
 
   TaskAdvance::TaskAdvanceState_t get_advance_state() const;
 
@@ -117,12 +146,25 @@ public:
   OrderedTask* task_create(const TCHAR* path);
   bool task_save(const TCHAR* path, const OrderedTask& task);
 
-protected:
-  const TaskBehaviour &task_behaviour;
-  TaskEvents &task_events;
-  GlidePolar glide_polar;
 
-  static const TCHAR default_task_path[];
+
+  /** Reset the tasks (as if never flown) */
+  void reset();
+
+  bool update(const AIRCRAFT_STATE &state_now, 
+              const AIRCRAFT_STATE &state_last);
+
+  bool update_idle(const AIRCRAFT_STATE &state);
+
+  bool update_auto_mc(const AIRCRAFT_STATE& state_now,
+                      const fixed fallback_mc);
+
+  void set_task_behaviour(const TaskBehaviour& behaviour);
+
+  const TaskStats& get_stats() const;
+  const CommonStats& get_common_stats() const;
+
+
 };
 
 

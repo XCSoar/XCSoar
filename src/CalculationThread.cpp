@@ -43,6 +43,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "DrawThread.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
 
 /**
  * Constructor of the CalculationThread class

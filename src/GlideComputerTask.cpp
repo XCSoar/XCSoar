@@ -38,7 +38,7 @@ Copyright_License {
 */
 
 #include "GlideComputerTask.hpp"
-#include "TaskClientCalc.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/GlideTerrain.hpp"
 #include "Components.hpp"
@@ -51,7 +51,7 @@ using std::max;
 // call any event
 
 
-GlideComputerTask::GlideComputerTask(TaskClientCalc& task): 
+GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task): 
   GlideComputerBlackboard(task) 
 {
 

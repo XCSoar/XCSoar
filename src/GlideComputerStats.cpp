@@ -46,7 +46,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "GPSClock.hpp"
 
-GlideComputerStats::GlideComputerStats(TaskClientCalc &task) :
+GlideComputerStats::GlideComputerStats(ProtectedTaskManager &task) :
   GlideComputerBlackboard(task),
   log_clock(fixed(5)),
   stats_clock(fixed(60))

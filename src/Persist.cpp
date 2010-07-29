@@ -48,7 +48,8 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Components.hpp"
 #include "Asset.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
+
 #include <stdio.h>
 
 #include <algorithm>
@@ -127,7 +128,7 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
     fclose(file);
     return;
   }
-  GlidePolar polar = task_ui.get_glide_polar();
+  GlidePolar polar = protected_task_manager.get_glide_polar();
 
   double MACCREADY = polar.get_mc();
   double BUGS = polar.get_bugs();
@@ -151,7 +152,7 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
   polar.set_mc(fixed(MACCREADY));
   polar.set_bugs(fixed(BUGS));
   polar.set_ballast(fixed(BALLAST));
-  task_ui.set_glide_polar(polar);
+  protected_task_manager.set_glide_polar(polar);
 
   LogStartUp(_T("LoadCalculationsPersist OK"));
 
@@ -199,7 +200,7 @@ SaveCalculationsPersist(const NMEA_INFO &gps_info,
 
   /// @todo persistence for OLC data
 
-  GlidePolar polar = task_ui.get_glide_polar();
+  GlidePolar polar = protected_task_manager.get_glide_polar();
   double MACCREADY = polar.get_mc();
   double BUGS = polar.get_bugs();
   double BALLAST = polar.get_ballast();

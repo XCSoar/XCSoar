@@ -41,13 +41,13 @@ Copyright_License {
 
 #include "GlideComputerBlackboard.hpp"
 
-class TaskClientCalc;
+class ProtectedTaskManager;
 
 class GlideComputerTask: 
   virtual public GlideComputerBlackboard 
 {
 public:
-  GlideComputerTask(TaskClientCalc& task);
+  GlideComputerTask(ProtectedTaskManager& task);
 
 protected:
   void Initialise() {}

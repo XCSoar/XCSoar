@@ -44,7 +44,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
 
@@ -312,6 +312,6 @@ OrderedTaskSave(const OrderedTask& task, bool noask)
   TCHAR path[MAX_PATH];
   fname += _T(".tsk");
   LocalPath(path, fname.c_str());
-  task_ui.task_save(path, task);
+  protected_task_manager.task_save(path, task);
   return true;
 }

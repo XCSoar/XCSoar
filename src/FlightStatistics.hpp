@@ -56,7 +56,7 @@ class Airspaces;
 class RasterTerrain;
 class GlidePolar;
 class Chart;
-class TaskClientUI;
+class ProtectedTaskManager;
 
 class FlightStatistics {
 public:
@@ -81,7 +81,7 @@ public:
   void RenderBarograph(Canvas &canvas, const RECT rc,
                        const NMEA_INFO &nmea_info,
                        const DERIVED_INFO &derived_info,
-                       const TaskClientUI& task) const;
+                       const ProtectedTaskManager &task) const;
 
   void RenderClimb(Canvas &canvas, const RECT rc,
                    const GlidePolar& glide_polar) const;
@@ -114,13 +114,13 @@ public:
                   const NMEA_INFO &nmea_info,
                   const SETTINGS_COMPUTER &settings_computer,
                   const SETTINGS_MAP &settings_map,
-                  const TaskClientUI& task,
+                  const ProtectedTaskManager &task,
                   const TracePointVector& trace) const;
 
   void RenderSpeed(Canvas &canvas, const RECT rc,
                    const NMEA_INFO &nmea_info,
                    const DERIVED_INFO &derived_info,
-                   const TaskClientUI& task) const;
+                   const ProtectedTaskManager &task) const;
 
   void CaptionBarograph(TCHAR *sTmp);
   void CaptionClimb(TCHAR* sTmp);

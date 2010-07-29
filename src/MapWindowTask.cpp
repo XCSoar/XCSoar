@@ -36,20 +36,19 @@ Copyright_License {
 }
 */
 
-#include "TaskClientUI.hpp"
 #include "MapWindow.hpp"
 #include "Protection.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Earth.hpp"
-#include <math.h>
-
+#include "Task/ProtectedTaskManager.hpp"
 #include "RenderTask.hpp"
 #include "RenderTaskPoint.hpp"
 #include "RenderObservationZone.hpp"
 
 #include <stdio.h>
+#include <math.h>
 
 class RenderTaskPointMap: public RenderTaskPoint
 {

@@ -49,6 +49,7 @@ Copyright_License {
 
 class GlidePolar;
 class ProtectedAirspaceWarningManager;
+class ProtectedTaskManager;
 
 // TODO: replace copy constructors so copies of these structures
 // do not replicate the large items or items that should be singletons
@@ -59,7 +60,7 @@ class TaskClientCalc;
 class GlideComputerAirData: virtual public GlideComputerBlackboard {
 public:
   GlideComputerAirData(ProtectedAirspaceWarningManager &_awm,
-                       TaskClientCalc& _task);
+                       ProtectedTaskManager &_task);
 
   GlideRatioCalculator rotaryLD;
   SunEphemeris sun;

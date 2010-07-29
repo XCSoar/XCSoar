@@ -36,7 +36,6 @@ Copyright_License {
 }
 */
 
-#include "TaskClientUI.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
@@ -50,7 +49,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "GlideComputer.hpp"
 #include "Components.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Compiler.h"
 
@@ -410,7 +409,7 @@ static void UpdateValuesRules(void) {
     }
   }
 
-  AIRCRAFT_STATE start_state = task_ui.get_start_state();
+  AIRCRAFT_STATE start_state = protected_task_manager.get_start_state();
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartTime"));
   if (wp) {
@@ -450,7 +449,7 @@ static void UpdateValuesRules(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpFinishAlt"));
   if (wp) {
     _stprintf(Temp, _T("%.0f %s"),
-              (double)Units::ToUserAltitude(task_ui.get_finish_height()),
+              (double)Units::ToUserAltitude(protected_task_manager.get_finish_height()),
               Units::GetAltitudeName());
     wp->SetText(Temp);
   }
@@ -475,7 +474,7 @@ static void UpdateValuesTask(void) {
   TCHAR Temp[80];
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskTime"));
-  Units::TimeToText(Temp, task_ui.get_ordered_task_behaviour().aat_min_time);
+  Units::TimeToText(Temp, protected_task_manager.get_ordered_task_behaviour().aat_min_time);
   if (wp) {
     if (XCSoarInterface::Calculated().task_stats.has_targets) {
       wp->SetText(Temp);
