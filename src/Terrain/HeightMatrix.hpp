@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_TERRAIN_HEIGHT_MATRIX_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Util/AllocatedArray.hpp"
 
 #include <windef.h>
 
@@ -47,15 +48,11 @@ class RasterMap;
 class Projection;
 
 class HeightMatrix : private NonCopyable {
-  unsigned short *data;
+  AllocatedArray<unsigned short> data;
   unsigned width;
-  size_t size;
 
 public:
-  HeightMatrix():data(NULL), width(0), size(0) {}
-  ~HeightMatrix() {
-    delete[] data;
-  }
+  HeightMatrix():width(0) {}
 
 protected:
   void SetSize(size_t _size);
@@ -67,11 +64,11 @@ public:
             RECT rc, unsigned quantisation_pixels);
 
   const unsigned short *GetData() const {
-    return data;
+    return data.begin();
   }
 
   const unsigned short *GetRow(unsigned y) const {
-    return data + y * width;
+    return data.begin() + y * width;
   }
 };
 

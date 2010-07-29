@@ -47,12 +47,7 @@ HeightMatrix::SetSize(size_t _size)
 {
   assert(_size > 0);
 
-  if (_size <= size)
-    return;
-
-  delete data;
-  size = _size;
-  data = new unsigned short[size];
+  data.grow_discard(_size);
 }
 
 void
@@ -91,7 +86,7 @@ HeightMatrix::Fill(RasterMap &map, const Projection &projection,
     const int dycost = dy * cost+512;
     const int dysint = dy * sint-512;
 
-    unsigned short *p = data + (y * width + rc.left) / quantisation_pixels;
+    unsigned short *p = data.begin() + (y * width + rc.left) / quantisation_pixels;
 
     for (int x = rc.left; x < rc.right; x += quantisation_pixels) {
       const int dx = x - Orig_Screen.x;
@@ -106,7 +101,7 @@ HeightMatrix::Fill(RasterMap &map, const Projection &projection,
       *p++ = max((short)0, map.GetField(gp));
     }
 
-    assert(p <= data + size);
+    assert(p <= data.end());
   }
 
 #else
