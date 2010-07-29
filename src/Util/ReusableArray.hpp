@@ -30,55 +30,32 @@
 #ifndef XCSOAR_REUSABLE_ARRAY_HPP
 #define XCSOAR_REUSABLE_ARRAY_HPP
 
+#include "Util/AllocatedArray.hpp"
 #include "Util/NonCopyable.hpp"
-
-#include <algorithm>
-#include <stddef.h>
 
 template<class T>
 class ReusableArray : private NonCopyable {
 protected:
-  T *data;
-  unsigned length;
+  AllocatedArray<T> array;
 
 public:
-  ReusableArray():data(NULL), length(0) {}
-  ReusableArray(unsigned _length):data(new T[_length]), length(_length) {}
-
-  ~ReusableArray() {
-    if (data != NULL)
-      delete[] data;
-  }
+  ReusableArray() {}
+  ReusableArray(unsigned _length):array(_length) {}
 
   /**
    * Obtains an array.  Its values are undefined.
    */
   T *get(unsigned _length) {
-    if (_length > length) {
-      delete[] data;
-      length = _length;
-      data = new T[length];
-    }
-
-    return data;
+    array.grow_discard(_length);
+    return array.begin();
   }
 
   /**
    * Grows an existing array, preserving data.
    */
   T *grow(unsigned old_length, unsigned new_length) {
-    if (new_length >= length) {
-      T *new_data = new T[new_length];
-      if (new_data == NULL)
-        return NULL;
-
-      std::copy(data, data + old_length, new_data);
-      delete[] data;
-      data = new_data;
-      length = new_length;
-    }
-
-    return data;
+    array.grow_preserve(new_length, old_length);
+    return array.begin();
   }
 };
 
