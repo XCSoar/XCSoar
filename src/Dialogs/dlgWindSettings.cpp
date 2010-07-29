@@ -55,21 +55,6 @@ OnCancel(WindowControl * Sender)
 }
 
 static void
-UpdateWind()
-{
-  WndProperty *wp;
-  wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
-  if (wp)
-    XCSoarInterface::SetSettingsComputer().ManualWind.norm =
-        Units::ToSysSpeed(wp->GetDataField()->GetAsFixed());
-
-  wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
-  if (wp)
-    XCSoarInterface::SetSettingsComputer().ManualWind.bearing =
-            Angle::degrees(wp->GetDataField()->GetAsFixed());
-}
-
-static void
 OnOkay(WindowControl * Sender)
 {
   (void)Sender;
@@ -150,8 +135,20 @@ dlgWindSettingsShowModal(void)
     }
   }
 
-  if (wf->ShowModal() == mrOK)
-    UpdateWind();
+  if (wf->ShowModal() != mrOK) {
+    delete wf;
+    return;
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
+  if (wp)
+    XCSoarInterface::SetSettingsComputer().ManualWind.norm =
+        Units::ToSysSpeed(wp->GetDataField()->GetAsFixed());
+
+  wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
+  if (wp)
+    XCSoarInterface::SetSettingsComputer().ManualWind.bearing =
+            Angle::degrees(wp->GetDataField()->GetAsFixed());
 
   SaveFormProperty(wf, _T("prpAutoWind"), szProfileAutoWind,
                    XCSoarInterface::SetSettingsComputer().AutoWindMode);
