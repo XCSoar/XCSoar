@@ -44,10 +44,10 @@ protected:
 
 public:
   AllocatedArray():the_size(0), data(NULL) {}
-  AllocatedArray(unsigned _size):the_size(_size), data(new T[the_size]) {
+  explicit AllocatedArray(unsigned _size):the_size(_size), data(new T[the_size]) {
     assert(size() == 0 || data != NULL);
   }
-  AllocatedArray(const AllocatedArray &other)
+  explicit AllocatedArray(const AllocatedArray &other)
     :the_size(other.size), data(new T[the_size]) {
     assert(size() == 0 || data != NULL);
     assert(other.size() == 0 || other.data != NULL);
