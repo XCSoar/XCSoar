@@ -94,10 +94,8 @@ OnWindSpeedData(DataField *Sender, DataField::DataAccessKind_t Mode)
     Sender->Set(Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
     break;
   case DataField::daPut:
-    UpdateWind(false);
-    break;
   case DataField::daChange:
-    // calc alt...
+    UpdateWind(false);
     break;
   }
 }
@@ -110,6 +108,7 @@ OnWindDirectionData(DataField *Sender, DataField::DataAccessKind_t Mode)
     Sender->Set(XCSoarInterface::Basic().wind.bearing.value_degrees());
     break;
   case DataField::daPut:
+  case DataField::daChange:
     UpdateWind(false);
     break;
   }
