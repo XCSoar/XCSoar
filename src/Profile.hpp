@@ -137,15 +137,6 @@ namespace Profile
    */
   void SetSoundSettings();
 
-  /**
-   * Loads the wind settings from the profile
-   */
-  void GetWind();
-  /**
-   * Saves the wind settings to the profile
-   */
-  void SetWind();
-
   int GetScaleList(fixed *List, size_t Size);
 
   /**

@@ -611,33 +611,6 @@ Profile::SetSoundSettings()
       XCSoarInterface::SettingsComputer().EnableSoundModes);
 }
 
-void
-Profile::GetWind()
-{
-  LogStartUp(_T("Load wind from registry"));
-
-  /* JMW incomplete
-  DWORD Temp;
-  Temp=0;
-  Get(szProfileWindSpeed,&Temp);
-  Calculated().WindSpeed = Temp;
-  Temp=0;
-  Get(szProfileWindBearing,&Temp);
-  Calculated().WindBearing = Temp;
-  */
-}
-
-void
-Profile::SetWind()
-{
-  int Temp;
-  Temp = iround(XCSoarInterface::Basic().wind.norm);
-  Set(szProfileWindSpeed, Temp);
-  Temp = iround(XCSoarInterface::Basic().wind.bearing.value_degrees());
-  Set(szProfileWindBearing, Temp);
-  //TODO  SetWindEstimate(Calculated().WindSpeed, Calculated().WindBearing);
-}
-
 int
 Profile::GetScaleList(fixed *List, size_t Size)
 {

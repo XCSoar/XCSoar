@@ -84,7 +84,6 @@ OnSaveClicked(WindowControl * Sender)
 {
   (void)Sender;
   UpdateWind(true);
-  Profile::SetWind();
   wf->SetModalResult(mrOK);
 }
 

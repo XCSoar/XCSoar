@@ -295,8 +295,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   // Load the EGM96 geoid data
   OpenGeoid();
 
-  Profile::GetWind();
-
   GlidePolar gp = task_manager.get_glide_polar();
   if (LoadPolarById(SettingsComputer(), gp))
     task_manager.set_glide_polar(gp);
