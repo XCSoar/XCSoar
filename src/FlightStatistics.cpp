@@ -53,6 +53,8 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "SettingsComputer.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
+#include "Task/TaskPoints/AATPoint.hpp"
+#include "Task/TaskPoints/ASTPoint.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "ChartProjection.hpp"
 #include "RenderTask.hpp"

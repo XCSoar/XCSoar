@@ -43,6 +43,8 @@ Copyright_License {
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/Tasks/TaskSolvers/TaskSolution.hpp"
 #include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
+#include "Task/TaskPoints/AATPoint.hpp"
+#include "Task/TaskPoints/ASTPoint.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Visitors/TaskVisitor.hpp"
 #include "TaskClientUI.hpp"

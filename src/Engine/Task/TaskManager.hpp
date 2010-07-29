@@ -40,7 +40,6 @@
 
 #include "Compiler.h"
 #include "Util/NonCopyable.hpp"
-#include "Tasks/TaskInterface.hpp"
 #include "Tasks/AbortTask.hpp"
 #include "Tasks/GotoTask.hpp"
 #include "Tasks/OrderedTask.hpp"
@@ -48,15 +47,16 @@
 #include "TaskStats/TaskStats.hpp"
 #include "TaskStats/CommonStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "TaskEvents.hpp"
 #include "TaskBehaviour.hpp"
 #include "Trace/Trace.hpp"
-#include "Factory/AbstractTaskFactory.hpp"
 #include "Util/Serialisable.hpp"
 
+class AbstractTaskFactory;
+class TaskEvents;
 class TaskAdvance;
 class Waypoints;
 class TaskVisitor;
+
 /**
  *  Main interface exposed to clients for providing access to common types
  *  of navigation tasks.  Hides details of these AbstractTasks behind a facade.

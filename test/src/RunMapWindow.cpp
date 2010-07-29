@@ -69,6 +69,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Task/TaskManager.hpp"
+#include "Engine/Task/TaskEvents.hpp"
 #include "LogFile.hpp"
 #include "IO/FileLineReader.hpp"
 
