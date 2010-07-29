@@ -58,21 +58,15 @@ static void
 UpdateWind()
 {
   WndProperty *wp;
-  fixed speed = fixed_zero, direction = fixed_zero;
   wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
   if (wp)
-    speed = Units::ToSysSpeed(wp->GetDataField()->GetAsFixed());
+    XCSoarInterface::SetSettingsComputer().ManualWind.norm =
+        Units::ToSysSpeed(wp->GetDataField()->GetAsFixed());
 
   wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
   if (wp)
-    direction = wp->GetDataField()->GetAsFixed();
-
-  if ((speed != XCSoarInterface::Basic().wind.norm)
-      ||(direction != XCSoarInterface::Basic().wind.bearing.value_degrees())) {
-    XCSoarInterface::SetSettingsComputer().ManualWind.norm = speed;
     XCSoarInterface::SetSettingsComputer().ManualWind.bearing =
-        Angle::degrees(direction);
-  }
+            Angle::degrees(wp->GetDataField()->GetAsFixed());
 }
 
 static void
