@@ -66,7 +66,7 @@ typedef enum {
   unKnots,
   unStatuteMilesPerHour,
   unMeterPerSecond,
-  unFeetPerMinutes,
+  unFeetPerMinute,
   unMeter,
   unFeet,
   unFlightLevel,

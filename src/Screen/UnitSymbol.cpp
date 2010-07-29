@@ -65,7 +65,7 @@ LoadUnitSymbols()
   unit_symbols[unKnots].load(IDB_UNIT_KT, 5, 11);
   unit_symbols[unStatuteMilesPerHour].load(IDB_UNIT_MPH, 10, 11);
   unit_symbols[unMeterPerSecond].load(IDB_UNIT_MS, 5, 11);
-  unit_symbols[unFeetPerMinutes].load(IDB_UNIT_FPM, 5, 11);
+  unit_symbols[unFeetPerMinute].load(IDB_UNIT_FPM, 5, 11);
   unit_symbols[unMeter].load(IDB_UNIT_M, 5, 11);
   unit_symbols[unFeet].load(IDB_UNIT_FT, 5, 11);
   unit_symbols[unFlightLevel].load(IDB_UNIT_FL, 5, 11);
