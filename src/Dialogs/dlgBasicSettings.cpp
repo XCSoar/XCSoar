@@ -154,30 +154,30 @@ SetBallast(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpBallastPercent"));
   if (wp) {
-    if (glide_polar->is_ballastable()) {
+    if (glide_polar->is_ballastable())
       wp->GetDataField()->SetAsFloat(glide_polar->get_ballast() * 100);
-    } else {
+    else
       wp->hide();
-    }
+
     wp->RefreshDisplay();
   }
   wp = (WndProperty*)wf->FindByName(_T("prpBallastLitres"));
   if (wp) {
-    if (glide_polar->is_ballastable()) {
+    if (glide_polar->is_ballastable())
       wp->GetDataField()->SetAsFloat(glide_polar->get_ballast_litres());
-    } else {
+    else
       wp->hide();
-    }
+
     wp->RefreshDisplay();
   }
   wp = (WndProperty*)wf->FindByName(_T("prpWingLoading"));
   if (wp) {
     const fixed wl = glide_polar->get_wing_loading();
-    if (wl > fixed_zero) {
+    if (wl > fixed_zero)
       wp->GetDataField()->SetAsFloat(wl);
-    } else {
+    else
       wp->hide();
-    }
+
     wp->RefreshDisplay();
   }
 }
@@ -185,14 +185,14 @@ SetBallast(void)
 static void
 SetTemperature()
 {
-    WndProperty* wp;
-    wp = (WndProperty*)wf->FindByName(_T("prpTemperature"));
-    if (wp) {
-      wp->GetDataField()->SetMin(Units::ToUserTemperature(-50));
-      wp->GetDataField()->SetMax(Units::ToUserTemperature(60));
-      wp->GetDataField()->SetUnits(Units::GetTemperatureName());
-      wp->RefreshDisplay();
-    }
+  WndProperty* wp;
+  wp = (WndProperty*)wf->FindByName(_T("prpTemperature"));
+  if (wp) {
+    wp->GetDataField()->SetMin(Units::ToUserTemperature(-50));
+    wp->GetDataField()->SetMax(Units::ToUserTemperature(60));
+    wp->GetDataField()->SetUnits(Units::GetTemperatureName());
+    wp->RefreshDisplay();
+  }
 }
 
 static int
@@ -213,12 +213,12 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
 
   switch (Mode) {
   case DataField::daSpecial:
-    if (glide_polar->get_ballast() > fixed(0.01)) {
+    if (glide_polar->get_ballast() > fixed(0.01))
       XCSoarInterface::SetSettingsComputer().BallastTimerActive =
           !XCSoarInterface::SettingsComputer().BallastTimerActive;
-    } else {
+    else
       XCSoarInterface::SetSettingsComputer().BallastTimerActive = false;
-    }
+
     SetButtons();
     break;
   case DataField::daGet:
@@ -256,7 +256,6 @@ OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode)
     }
     break;
   }
-
 }
 
 static void
@@ -278,8 +277,6 @@ OnTempData(DataField *Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
-
-
 static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnBugsData),
   DeclareCallBackEntry(OnTempData),
@@ -297,24 +294,20 @@ dlgBasicSettingsShowModal()
   GlidePolar gp_copy = task_ui.get_glide_polar();
   glide_polar = &gp_copy;
 
-  wf = dlgLoadFromXML(CallBackTable,
-      XCSoarInterface::main_window, _T("IDR_XML_BASICSETTINGS"));
+  wf = dlgLoadFromXML(CallBackTable, XCSoarInterface::main_window,
+                      _T("IDR_XML_BASICSETTINGS"));
   if (wf == NULL)
     return;
 
   changed = false;
 
   wf->SetTimerNotify(OnTimerNotify);
-
   OnTimerNotify(NULL);
 
   SetButtons();
 
-  if ((wf->ShowModal() == mrOK) && changed) {
+  if ((wf->ShowModal() == mrOK) && changed)
     task_ui.set_glide_polar(gp_copy);
-  }
 
   delete wf;
-  wf = NULL;
 }
-
