@@ -72,10 +72,11 @@ UpdateWind(bool set)
     /* JMW illegal
     if (set) {
       SetWindEstimate(ws, wb);
-    }
-    XCSoarInterface::Calculated().WindSpeed = ws;
-    XCSoarInterface::Calculated().WindBearing = wb;
-    */
+    }*/
+
+    XCSoarInterface::SetSettingsComputer().ManualWind.norm = speed;
+    XCSoarInterface::SetSettingsComputer().ManualWind.bearing =
+        Angle::degrees(direction);
   }
 }
 

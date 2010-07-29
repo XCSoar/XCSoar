@@ -44,6 +44,7 @@ Copyright_License {
 #include <tchar.h>
 
 #include "Task/TaskBehaviour.hpp"
+#include "Engine/Navigation/SpeedVector.hpp"
 
 #include "SettingsAirspace.hpp"
 
@@ -78,6 +79,8 @@ struct SETTINGS_WIND {
  * 3: Both
  */
   int AutoWindMode; 
+
+  SpeedVector ManualWind;
 };
 
 /**
