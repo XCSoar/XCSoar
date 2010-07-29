@@ -182,10 +182,16 @@ SetBallast(void)
   }
 }
 
+/**
+ * This function is called repeatedly by the timer and updates the
+ * current altitude and ballast. The ballast can change without user
+ * input due to the dump function.
+ */
 static int
 OnTimerNotify(WindowControl * Sender)
 {
   (void)Sender;
+
   SetBallast();
   SetAltitude();
 
