@@ -1389,6 +1389,7 @@ setVariables()
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Knots"));
     dfe->addEnumText(_("M/s"));
+    dfe->addEnumText(_("ft/min"));
     dfe->Set(Lift);
     wp->RefreshDisplay();
   }
@@ -2374,6 +2375,9 @@ void dlgConfigurationShowModal(void)
       case 1:
       default:
         Units::SetUserVerticalSpeedUnit(unMeterPerSecond);
+        break;
+      case 2:
+        Units::SetUserVerticalSpeedUnit(unFeetPerMinute);
         break;
       }
     }
