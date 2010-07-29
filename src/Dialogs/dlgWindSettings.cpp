@@ -91,7 +91,8 @@ OnWindSpeedData(DataField *Sender, DataField::DataAccessKind_t Mode)
     break;
   case DataField::daPut:
   case DataField::daChange:
-    UpdateWind();
+    XCSoarInterface::SetSettingsComputer().ManualWind.norm =
+        Units::ToSysWindSpeed(Sender->GetAsFixed());
     break;
   }
 }
@@ -105,7 +106,8 @@ OnWindDirectionData(DataField *Sender, DataField::DataAccessKind_t Mode)
     break;
   case DataField::daPut:
   case DataField::daChange:
-    UpdateWind();
+    XCSoarInterface::SetSettingsComputer().ManualWind.bearing =
+        Angle::degrees(Sender->GetAsFixed());
     break;
   }
 }
