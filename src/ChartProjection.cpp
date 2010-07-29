@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "ChartProjection.hpp"
+#include "TaskClientUI.hpp"
 
 ChartProjection::ChartProjection(const RECT &rc,
                                  const TaskClientUI& task,

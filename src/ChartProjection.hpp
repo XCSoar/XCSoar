@@ -36,8 +36,12 @@ Copyright_License {
 }
 */
 
-#include "TaskClientUI.hpp"
 #include "Projection.hpp"
+#include "Engine/Navigation/TracePoint.hpp"
+
+class TaskClientUI;
+class OrderedTask;
+class OrderedTaskPoint;
 
 /**
  * Utility class to determine projection for a chart from task data,
