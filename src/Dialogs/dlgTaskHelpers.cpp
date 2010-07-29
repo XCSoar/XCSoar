@@ -39,6 +39,8 @@ Copyright_License {
 #include "dlgTaskHelpers.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
+#include "Task/TaskPoints/AATPoint.hpp"
+#include "Task/TaskPoints/ASTPoint.hpp"
 #include "Units.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Visitors/ObservationZoneVisitor.hpp"

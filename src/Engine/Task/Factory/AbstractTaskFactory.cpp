@@ -35,11 +35,16 @@
 }
  */
 #include "AbstractTaskFactory.hpp"
-
+#include "Task/Tasks/OrderedTask.hpp"
+#include "Task/TaskPoints/StartPoint.hpp"
+#include "Task/TaskPoints/AATPoint.hpp"
+#include "Task/TaskPoints/ASTPoint.hpp"
+#include "Task/TaskPoints/FinishPoint.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
+
 #include <algorithm>
 
 StartPoint* 

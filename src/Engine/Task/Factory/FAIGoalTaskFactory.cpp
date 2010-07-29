@@ -34,7 +34,9 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "FAIGoalTaskFactory.hpp"
+#include "Task/OrderedTaskBehaviour.hpp"
 
 FAIGoalTaskFactory::FAIGoalTaskFactory(OrderedTask& _task,
                                const TaskBehaviour &tb):

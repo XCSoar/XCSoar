@@ -34,7 +34,9 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "FAITriangleTaskFactory.hpp"
+#include "Task/Tasks/OrderedTask.hpp"
 
 FAITriangleTaskFactory::FAITriangleTaskFactory(OrderedTask& _task,
                                const TaskBehaviour &tb):

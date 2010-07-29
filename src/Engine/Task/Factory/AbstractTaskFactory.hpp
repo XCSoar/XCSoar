@@ -38,15 +38,20 @@
 #define ABSTRACT_TASK_FACTORY_HPP
 
 #include "Util/NonCopyable.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
-#include "Task/TaskBehaviour.hpp"
-#include "Task/TaskPoints/StartPoint.hpp"
-#include "Task/Tasks/BaseTask/IntermediatePoint.hpp"
-#include "Task/TaskPoints/AATPoint.hpp"
-#include "Task/TaskPoints/ASTPoint.hpp"
-#include "Task/TaskPoints/FinishPoint.hpp"
 
 #include <vector>
+
+class AATPoint;
+class StartPoint;
+class IntermediatePoint;
+class ASTPoint;
+class FinishPoint;
+class OrderedTask;
+class TaskBehaviour;
+class OrderedTaskBehaviour;
+class OrderedTaskPoint;
+class ObservationZonePoint;
+class Waypoint;
 
 /**
  * AbstractTaskFactory is a class used as a sort of wizard

@@ -38,6 +38,8 @@
 #include "Serialiser.hpp"
 #include "Task/OrderedTaskBehaviour.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
+#include "Task/TaskPoints/AATPoint.hpp"
+#include "Task/TaskPoints/ASTPoint.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
