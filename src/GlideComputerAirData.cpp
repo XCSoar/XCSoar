@@ -78,9 +78,10 @@ GlideComputerAirData::GlideComputerAirData(ProtectedAirspaceWarningManager &awm,
                                            TaskClientCalc& _task):
   GlideComputerBlackboard(_task),
   m_airspace(awm),
-  airspace_clock(fixed_two), // scan airspace every 2 seconds
-  ballast_clock(fixed(5)), // only update every 5 seconds to stop flooding
-		    // the devices
+  // scan airspace every 2 seconds
+  airspace_clock(fixed_two),
+  // only update every 5 seconds to stop flooding the devices
+  ballast_clock(fixed(5)),
   vario_30s_filter(30),
   netto_30s_filter(30)
 {
@@ -89,7 +90,6 @@ GlideComputerAirData::GlideComputerAirData(ProtectedAirspaceWarningManager &awm,
   // JMW TODO enhancement: seed initial wind store with start conditions
   // SetWindEstimate(Calculated().WindSpeed, Calculated().WindBearing, 1);
 }
-
 
 void
 GlideComputerAirData::ResetFlight(const bool full)
@@ -107,7 +107,6 @@ GlideComputerAirData::Initialise()
   CalibrationInit();
 }
 
-
 /**
  * Calculates some basic values
  */
@@ -118,9 +117,8 @@ GlideComputerAirData::ProcessBasic()
   ProcessSun();
   SetCalculated().AdjustedAverageThermal = GetAverageThermal();
 
-  if (Basic().TotalEnergyVarioAvailable && !Basic().gps.Replay) {
+  if (Basic().TotalEnergyVarioAvailable && !Basic().gps.Replay)
     CalibrationUpdate(&Basic());
-  }
 }
 
 /**
@@ -142,9 +140,8 @@ GlideComputerAirData::ProcessVertical()
   LD();
   CruiseLD();
 
-  if (!Basic().flight.OnGround && !Calculated().Circling) {
+  if (!Basic().flight.OnGround && !Calculated().Circling)
     SetCalculated().AverageLD = rotaryLD.calculate();
-  }
 
   Average30s();
   AverageClimbRate();
@@ -231,18 +228,14 @@ GlideComputerAirData::AverageClimbRate()
       && (!Calculated().Circling)) {
 
     int vi = iround(Basic().IndicatedAirspeed);
-
-    if ((vi <= 0) || (vi >= SettingsComputer().SafetySpeed)) {
+    if ((vi <= 0) || (vi >= SettingsComputer().SafetySpeed))
       // out of range
       return;
-    }
 
-    if (Basic().acceleration.Available) {
-      if (fabs(fabs(Basic().acceleration.Gload) - fixed_one) > fixed(0.25)) {
+    if (Basic().acceleration.Available)
+      if (fabs(fabs(Basic().acceleration.Gload) - fixed_one) > fixed(0.25))
         // G factor too high
         return;
-      }
-    }
 
     if (positive(Basic().TrueAirspeed)) {
       // TODO: Check this is correct for TAS/IAS
@@ -279,25 +272,21 @@ GlideComputerAirData::Average30s()
     SetCalculated().NettoAverage30s = Basic().NettoVario;
   }
 
-  if (!time_advanced()) {
+  if (!time_advanced())
     return;
-  }
 
-  const unsigned Elapsed = (unsigned)(Basic().Time -
-                                      LastBasic().Time);
+  const unsigned Elapsed = (unsigned)(Basic().Time - LastBasic().Time);
   for (unsigned i = 0; i < Elapsed; ++i) {
-    if (vario_30s_filter.update(Basic().TotalEnergyVario)) {
+    if (vario_30s_filter.update(Basic().TotalEnergyVario))
       SetCalculated().Average30s =
         LowPassFilter(Calculated().Average30s, vario_30s_filter.average(), 0.8);
-    }
-    if (netto_30s_filter.update(Basic().NettoVario)) {
+
+    if (netto_30s_filter.update(Basic().NettoVario))
       SetCalculated().NettoAverage30s =
         LowPassFilter(Calculated().NettoAverage30s, netto_30s_filter.average(), 0.8);
-    }
   }
 }
 #endif
-
 
 void
 GlideComputerAirData::AverageThermal()
@@ -346,23 +335,19 @@ GlideComputerAirData::LD()
     fixed DistanceFlown = Distance(Basic().Location, LastBasic().Location);
 
     SetCalculated().LD =
-      UpdateLD(Calculated().LD,
-	       DistanceFlown,
-	       Basic().NavAltitude - LastBasic().NavAltitude,
-               0.1);
+      UpdateLD(Calculated().LD, DistanceFlown,
+               Basic().NavAltitude - LastBasic().NavAltitude, 0.1);
 
-    if (!Basic().flight.OnGround && !Calculated().Circling) {
+    if (!Basic().flight.OnGround && !Calculated().Circling)
       rotaryLD.add((int)DistanceFlown, (int)Basic().NavAltitude);
-    }
   }
 
   // LD instantaneous from vario, updated every reading..
   if (Basic().TotalEnergyVarioAvailable && Basic().AirspeedAvailable &&
       Basic().flight.Flying) {
-    SetCalculated().LDvario = UpdateLD(Calculated().LDvario,
-				       Basic().IndicatedAirspeed,
-                                       -Basic().TotalEnergyVario,
-				       0.3);
+    SetCalculated().LDvario =
+      UpdateLD(Calculated().LDvario, Basic().IndicatedAirspeed,
+               -Basic().TotalEnergyVario, 0.3);
   } else {
     SetCalculated().LDvario = INVALID_GR;
   }
@@ -380,15 +365,11 @@ GlideComputerAirData::CruiseLD()
       fixed DistanceFlown = Distance(Basic().Location,
                                      Calculated().CruiseStartLocation);
       SetCalculated().CruiseLD =
-          UpdateLD(Calculated().CruiseLD,
-                   DistanceFlown,
-                   Calculated().CruiseStartAlt - Basic().NavAltitude,
-                   0.5);
+          UpdateLD(Calculated().CruiseLD, DistanceFlown,
+                   Calculated().CruiseStartAlt - Basic().NavAltitude, 0.5);
     }
   }
 }
-
-
 
 /**
  * Reads the current terrain height
@@ -404,7 +385,6 @@ GlideComputerAirData::TerrainHeight()
   SetCalculated().TerrainAlt = std::max((short)0, Alt);
 }
 
-
 /**
  * 1. Detects time retreat and calls ResetFlight if GPS lost
  * 2. Detects change in replay status and calls ResetFlight if so
@@ -414,18 +394,17 @@ GlideComputerAirData::TerrainHeight()
 bool
 GlideComputerAirData::FlightTimes()
 {
-  if (Basic().gps.Replay != LastBasic().gps.Replay) {
+  if (Basic().gps.Replay != LastBasic().gps.Replay)
     // reset flight before/after replay logger
     ResetFlight(Basic().gps.Replay);
-  }
 
   if (positive(Basic().Time) && time_retreated()) {
     // 20060519:sgi added (Basic().Time != 0) due to always return here
     // if no GPS time available
-    if (!Basic().gps.NAVWarning) {
+    if (!Basic().gps.NAVWarning)
       // Reset statistics.. (probably due to being in IGC replay mode)
       ResetFlight(false);
-    }
+
     return false;
   }
 
@@ -440,9 +419,8 @@ GlideComputerAirData::ProcessIdle()
   BallastDump();
   TerrainFootprint(MapProjection().GetScreenDistanceMeters());
   if (airspace_clock.check_advance(Basic().Time)
-      && SettingsComputer().EnableAirspaceWarnings) {
+      && SettingsComputer().EnableAirspaceWarnings)
     AirspaceWarning();
-  }
 }
 
 /**
@@ -451,16 +429,14 @@ GlideComputerAirData::ProcessIdle()
 void
 GlideComputerAirData::TakeoffLanding()
 {
-  if (Basic().GroundSpeed > fixed_one) {
+  if (Basic().GroundSpeed > fixed_one)
     // stop system from shutting down if moving
     XCSoarInterface::InterfaceTimeoutReset();
-  }
 
-  if (Basic().flight.Flying && !LastBasic().flight.Flying) {
+  if (Basic().flight.Flying && !LastBasic().flight.Flying)
     OnTakeoff();
-  } else if (!Basic().flight.Flying && LastBasic().flight.Flying) {
+  else if (!Basic().flight.Flying && LastBasic().flight.Flying)
     OnLanding();
-  }
 }
 
 void
@@ -469,9 +445,8 @@ GlideComputerAirData::OnLanding()
   // JMWX  restore data calculated at finish so
   // user can review flight as at finish line
 
-  if (Calculated().common_stats.task_finished) {
+  if (Calculated().common_stats.task_finished)
     RestoreFinish();
-  }
 }
 
 void
@@ -484,8 +459,6 @@ GlideComputerAirData::OnTakeoff()
   SaveFinish();
 }
 
-
-
 void
 GlideComputerAirData::AirspaceWarning()
 {
@@ -496,12 +469,11 @@ GlideComputerAirData::AirspaceWarning()
     airspaceWarningEvent.trigger();
 }
 
-
 void
 GlideComputerAirData::TerrainFootprint(double screen_range)
 {
   if (!SettingsComputer().FinalGlideTerrain)
-     return;
+    return;
 
   // initialise base
   SetCalculated().TerrainBase = Calculated().TerrainAlt;
@@ -521,13 +493,9 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
   
   const fixed d_bearing = fixed_360 / TERRAIN_ALT_INFO::NUMTERRAINSWEEPS;
 
-  unsigned i=0;
-
+  unsigned i = 0;
   AIRCRAFT_STATE state = ToAircraftState(Basic());
-  for (fixed ang = fixed_zero;
-       ang<= fixed_360;
-       ang+= d_bearing, i++) {
-
+  for (fixed ang = fixed_zero; ang <= fixed_360; ang += d_bearing, i++) {
     state.TrackBearing = Angle::degrees(ang);
 
     TerrainIntersection its = g_terrain.find_intersection(state, glide_polar);
@@ -604,12 +572,11 @@ GlideComputerAirData::PercentCircling(const fixed Rate)
   }
 
   // Calculate the circling percentage
-  if (Calculated().timeCruising + Calculated().timeCircling > fixed_one) {
+  if (Calculated().timeCruising + Calculated().timeCircling > fixed_one)
     SetCalculated().PercentCircling = 100 * (Calculated().timeCircling) /
         (Calculated().timeCruising + Calculated().timeCircling);
-  } else {
+  else
     SetCalculated().PercentCircling = fixed_zero;
-  }
 }
 
 /**
@@ -645,7 +612,7 @@ GlideComputerAirData::Turning()
   // Determine which direction we are circling
   bool LEFT = false;
   if (negative(Rate)) {
-    LEFT= true;
+    LEFT = true;
     Rate *= -1;
   }
 
@@ -671,9 +638,8 @@ GlideComputerAirData::Turning()
       SetCalculated().TurnStartEnergyHeight = Basic().EnergyHeight;
       SetCalculated().TurnMode = WAITCLIMB;
     }
-    if (!forcecircling) {
+    if (!forcecircling)
       break;
-    }
 
   case WAITCLIMB:
     if (forcecruise) {
@@ -722,9 +688,8 @@ GlideComputerAirData::Turning()
       // JMW Transition to cruise, due to not properly turning
       SetCalculated().TurnMode = WAITCRUISE;
     }
-    if (!forcecruise) {
+    if (!forcecruise)
       break;
-    }
 
   case WAITCRUISE:
     if (forcecircling) {
@@ -753,6 +718,7 @@ GlideComputerAirData::Turning()
       SetCalculated().TurnMode = CLIMB;
     }
     break;
+
   default:
     // error, go to cruise
     SetCalculated().TurnMode = CRUISE;
@@ -801,14 +767,14 @@ GlideComputerAirData::LastThermalStats()
   if((Calculated().Circling == false) && (LastCalculated().Circling == true)
      && positive(Calculated().ClimbStartTime)) {
 
-    fixed ThermalTime = Calculated().CruiseStartTime - Calculated().ClimbStartTime;
+    fixed ThermalTime =
+        Calculated().CruiseStartTime - Calculated().ClimbStartTime;
 
     if (positive(ThermalTime)) {
       fixed ThermalGain = Calculated().CruiseStartAlt
           + Basic().EnergyHeight - Calculated().ClimbStartAlt;
 
       if (positive(ThermalGain) && (ThermalTime > THERMAL_TIME_MIN)) {
-
         SetCalculated().LastThermalAverage = ThermalGain / ThermalTime;
         SetCalculated().LastThermalGain = ThermalGain;
         SetCalculated().LastThermalTime = ThermalTime;
@@ -836,11 +802,8 @@ GlideComputerAirData::ThermalBand()
 
   const fixed dheight = Basic().working_band_height;
 
-  int i;
-
-  if (!positive(Basic().working_band_height)) {
+  if (!positive(Basic().working_band_height))
     return; // nothing to do.
-  }
 
   ThermalBandInfo &tbi = SetCalculated().thermal_band;
   if (tbi.MaxThermalHeight == fixed_zero)
@@ -864,7 +827,7 @@ GlideComputerAirData::ThermalBand()
     }
 
     // shift data into new buckets
-    for (i = 0; i < NUMTHERMALBUCKETS; i++) {
+    for (unsigned i = 0; i < NUMTHERMALBUCKETS; i++) {
       fixed h = tbi.bucket_height(i);
       // height of center of bucket
       unsigned j = new_tbi.bucket_for_height(h);
@@ -880,7 +843,6 @@ GlideComputerAirData::ThermalBand()
   tbi.add(dheight, Basic().TotalEnergyVario);
 }
 
-
 void
 GlideComputerAirData::ProcessSun()
 {
@@ -888,7 +850,6 @@ GlideComputerAirData::ProcessSun()
                    GetUTCOffset() / 3600);
   SetCalculated().TimeSunset = sun.TimeOfSunSet;
 }
-
 
 GlidePolar 
 GlideComputerAirData::get_glide_polar() const
