@@ -56,7 +56,6 @@ Copyright_License {
 #include "ResourceLoader.hpp"
 #include "Appearance.hpp"
 #include "IO/FileLineReader.hpp"
-#include "TaskClient.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -92,9 +91,6 @@ static AirspaceWarningManager airspace_warning(airspace_database,
                                                ac_state, task_manager);
 
 ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
-
-void TaskClient::lock() {}
-void TaskClient::unlock() {}
 
 static void
 LoadFiles()

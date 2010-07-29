@@ -37,7 +37,6 @@
 
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
-#include "TaskClient.hpp"
 
 void
 ProtectedAirspaceWarningManager::visit_warnings(AirspaceWarningVisitor& visitor) const
@@ -116,8 +115,5 @@ bool
 ProtectedAirspaceWarningManager::update_warning(const AIRCRAFT_STATE &as)
 {
   ExclusiveLease lease(*this);
-  TaskClient::lock();
-  bool retval = lease->update(as);
-  TaskClient::unlock();
-  return retval;
+  return lease->update(as);
 }
