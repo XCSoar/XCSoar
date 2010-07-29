@@ -169,7 +169,7 @@ GlideComputerAirData::Wind()
   DoWindCirclingAltitude();
 
   // update zigzag wind
-  if (((SettingsComputer().AutoWindMode & D_AUTOWIND_ZIGZAG) == D_AUTOWIND_ZIGZAG)
+  if ((SettingsComputer().AutoWindMode & D_AUTOWIND_ZIGZAG)
       && !Basic().gps.Replay
       && (Basic().TrueAirspeed > m_task.get_glide_polar().get_Vtakeoff())) {
     fixed zz_wind_speed;
@@ -190,7 +190,7 @@ GlideComputerAirData::Wind()
 void
 GlideComputerAirData::DoWindCirclingMode(const bool left)
 {
-  if ((SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING) == D_AUTOWIND_CIRCLING)
+  if (SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING)
     windanalyser.slot_newFlightMode(Basic(), Calculated(), left, 0);
 }
 
@@ -200,7 +200,7 @@ GlideComputerAirData::DoWindCirclingMode(const bool left)
 void
 GlideComputerAirData::DoWindCirclingSample()
 {
-  if ((SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING) == D_AUTOWIND_CIRCLING)
+  if (SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING)
     windanalyser.slot_newSample(Basic(), SetCalculated());
 }
 
@@ -210,7 +210,7 @@ GlideComputerAirData::DoWindCirclingSample()
 void
 GlideComputerAirData::DoWindCirclingAltitude()
 {
-  if (SettingsComputer().AutoWindMode > 0)
+  if (SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING)
     windanalyser.slot_Altitude(Basic(), SetCalculated());
 }
 
