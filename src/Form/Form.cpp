@@ -403,15 +403,17 @@ WndForm::on_paint(Canvas &canvas)
       mTitleRect.top, &mTitleRect, mCaption);
 }
 
-void WndForm::SetCaption(const TCHAR *Value){
+void
+WndForm::SetCaption(const TCHAR *Value)
+{
   if (Value == NULL)
     Value = _T("");
 
   if (_tcscmp(mCaption, Value) != 0){
     _tcscpy(mCaption, Value);
+    UpdateLayout();
     invalidate(mTitleRect);
   }
-
 }
 
 Color WndForm::SetBackColor(Color Value)
