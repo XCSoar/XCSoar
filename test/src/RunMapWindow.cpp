@@ -69,7 +69,6 @@ Copyright_License {
 #include "Profile.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
-#include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "LogFile.hpp"
 #include "IO/FileLineReader.hpp"
@@ -110,11 +109,6 @@ static TaskManager task_manager(task_events,
 static Airspaces airspace_database;
 
 static AIRCRAFT_STATE ac_state; // dummy
-
-static AirspaceWarningManager airspace_warning(airspace_database, ac_state,
-                                               task_manager);
-
-static AirspaceClientUI airspace_ui(airspace_warning);
 
 static TopologyStore *topology;
 static RasterTerrain terrain;
@@ -221,7 +215,7 @@ public:
     RECT rc = get_client_rect();
     map.set(*this, rc, rc);
     map.set_way_points(&way_points);
-    map.set_airspaces(&airspace_database, &airspace_ui);
+    map.set_airspaces(&airspace_database, NULL);
     map.set_topology(topology);
     map.set_terrain(&terrain);
 
