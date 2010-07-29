@@ -45,24 +45,28 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
 
-static WndForm *wf=NULL;
+static WndForm *wf = NULL;
 
-static void OnCloseClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnCloseClicked(WindowControl * Sender)
+{
+  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
-static void UpdateWind(bool set) {
+static void
+UpdateWind(bool set)
+{
   WndProperty *wp;
   fixed ws = fixed_zero, wb = fixed_zero;
   wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
-  if (wp) {
+  if (wp)
     ws = Units::ToSysSpeed(wp->GetDataField()->GetAsFixed());
-  }
+
   wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
-  if (wp) {
+  if (wp)
     wb = wp->GetDataField()->GetAsFixed();
-  }
+
   if ((ws != XCSoarInterface::Basic().wind.norm)
       ||(wb != XCSoarInterface::Basic().wind.bearing.value_degrees())) {
     /* JMW illegal
@@ -75,56 +79,59 @@ static void UpdateWind(bool set) {
   }
 }
 
-
-static void OnSaveClicked(WindowControl * Sender){
+static void
+OnSaveClicked(WindowControl * Sender)
+{
   (void)Sender;
   UpdateWind(true);
   Profile::SetWind();
   wf->SetModalResult(mrOK);
 }
 
-
-static void OnWindSpeedData(DataField *Sender, DataField::DataAccessKind_t Mode){
-
-  switch(Mode){
-    case DataField::daGet:
-      Sender->SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(200.0, unKiloMeterPerHour)));
-      Sender->Set(Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
+static void
+OnWindSpeedData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  switch (Mode) {
+  case DataField::daGet:
+    Sender->SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(200.0,
+        unKiloMeterPerHour)));
+    Sender->Set(Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
     break;
-    case DataField::daPut:
-      UpdateWind(false);
+  case DataField::daPut:
+    UpdateWind(false);
     break;
-    case DataField::daChange:
-      // calc alt...
+  case DataField::daChange:
+    // calc alt...
     break;
   }
 }
 
-static void OnWindDirectionData(DataField *Sender, DataField::DataAccessKind_t Mode){
-
+static void
+OnWindDirectionData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
   double lastWind;
 
-  switch(Mode){
-    case DataField::daGet:
-      lastWind = XCSoarInterface::Basic().wind.bearing.value_degrees();
-      if (lastWind < 0.5)
-        lastWind = 360.0;
-      Sender->Set(lastWind);
+  switch (Mode) {
+  case DataField::daGet:
+    lastWind = XCSoarInterface::Basic().wind.bearing.value_degrees();
+    if (lastWind < 0.5)
+      lastWind = 360.0;
+    Sender->Set(lastWind);
     break;
-    case DataField::daPut:
-      UpdateWind(false);
+  case DataField::daPut:
+    UpdateWind(false);
     break;
-    case DataField::daChange:
-      lastWind = Sender->GetAsFloat();
-      if (lastWind < 0.5)
-        Sender->Set(360.0);
-      if (lastWind > 360.5)
-        Sender->Set(1.0);
+  case DataField::daChange:
+    lastWind = Sender->GetAsFloat();
+    if (lastWind < 0.5)
+      Sender->Set(360.0);
+    if (lastWind > 360.5)
+      Sender->Set(1.0);
     break;
   }
 }
 
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnWindSpeedData),
   DeclareCallBackEntry(OnWindDirectionData),
   DeclareCallBackEntry(OnSaveClicked),
@@ -132,10 +139,11 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-void dlgWindSettingsShowModal(void){
-  wf = dlgLoadFromXML(CallBackTable,
-		      XCSoarInterface::main_window,
-		      _T("IDR_XML_WINDSETTINGS"));
+void
+dlgWindSettingsShowModal(void)
+{
+  wf = dlgLoadFromXML(CallBackTable, XCSoarInterface::main_window,
+		                  _T("IDR_XML_WINDSETTINGS"));
   if (wf == NULL)
     return;
 
