@@ -46,83 +46,96 @@ Copyright_License {
 static bool DataFieldKeyUp = false;
 
 bool
-DataFieldFloat::GetAsBoolean(void) const
+DataFieldFloat::GetAsBoolean() const
 {
-  return(mValue != 0.0);
+  return (mValue != 0.0);
 }
 
 int
-DataFieldFloat::GetAsInteger(void) const
+DataFieldFloat::GetAsInteger() const
 {
   return iround(mValue);
 }
 
 double
-DataFieldFloat::GetAsFloat(void) const
+DataFieldFloat::GetAsFloat() const
 {
-  return(mValue);
+  return mValue;
 }
 
 const TCHAR *
-DataFieldFloat::GetAsString(void) const
+DataFieldFloat::GetAsString() const
 {
   TCHAR *mOutBuf = const_cast<TCHAR *>(this->mOutBuf);
   _stprintf(mOutBuf, mEditFormat, mValue);
-  return(mOutBuf);
+  return mOutBuf;
 }
 
 const TCHAR *
-DataFieldFloat::GetAsDisplayString(void) const
+DataFieldFloat::GetAsDisplayString() const
 {
   TCHAR *mOutBuf = const_cast<TCHAR *>(this->mOutBuf);
   _stprintf(mOutBuf, mDisplayFormat, mValue, mUnits);
-  return(mOutBuf);
+  return mOutBuf;
 }
 
-void DataFieldFloat::Set(double Value){
+void
+DataFieldFloat::Set(double Value)
+{
   mValue = Value;
 }
 
-double DataFieldFloat::SetMin(double Value){
+double
+DataFieldFloat::SetMin(double Value)
+{
   double res = mMin;
   mMin = Value;
-  return(res);
+  return res;
 }
 
-double DataFieldFloat::SetMax(double Value){
+double
+DataFieldFloat::SetMax(double Value)
+{
   double res = mMax;
   mMax = Value;
-  return(res);
+  return res;
 }
 
-bool DataFieldFloat::SetAsBoolean(bool Value){
+bool
+DataFieldFloat::SetAsBoolean(bool Value)
+{
   bool res = GetAsBoolean();
-  if (res != Value){
+  if (res != Value) {
     if (Value)
       SetAsFloat(1.0);
     else
       SetAsFloat(0.0);
   }
-  return(res);
+  return res;
 }
 
-int DataFieldFloat::SetAsInteger(int Value){
+int
+DataFieldFloat::SetAsInteger(int Value)
+{
   int res = GetAsInteger();
   SetAsFloat(Value);
-  return(res);
+  return res;
 }
 
-double DataFieldFloat::SetAsFloat(double Value){
+double
+DataFieldFloat::SetAsFloat(double Value)
+{
   double res = mValue;
   if (Value < mMin)
     Value = mMin;
   if (Value > mMax)
     Value = mMax;
-  if (res != Value){
+  if (res != Value) {
     mValue = Value;
-    if (!GetDetachGUI()) (mOnDataAccess)(this, daChange);
+    if (!GetDetachGUI())
+      (mOnDataAccess)(this, daChange);
   }
-  return(res);
+  return res;
 }
 
 const TCHAR *
@@ -130,31 +143,33 @@ DataFieldFloat::SetAsString(const TCHAR *Value)
 {
   const TCHAR *res = GetAsString();
   SetAsFloat(_tcstod(Value, NULL));
-  return(res);
+  return res;
 }
 
-void DataFieldFloat::Inc(void){
+void
+DataFieldFloat::Inc(void)
+{
   // no keypad, allow user to scroll small values
-  if(mFine && (mValue < 0.95) && (mStep>=0.5) && (mMin>=0.0))
-    {
-      SetAsFloat(mValue + 0.1);
-    }
+  if (mFine && (mValue < 0.95) && (mStep >= 0.5) && (mMin >= 0.0))
+    SetAsFloat(mValue + 0.1);
   else
-    SetAsFloat(mValue + mStep*SpeedUp(true));
+    SetAsFloat(mValue + mStep * SpeedUp(true));
 }
 
-void DataFieldFloat::Dec(void){
+void
+DataFieldFloat::Dec(void)
+{
   // no keypad, allow user to scroll small values
-  if(mFine && (mValue <= 1.0) && (mStep>=0.5) && (mMin>=0.0))
-    {
-      SetAsFloat(mValue - 0.1);
-    }
+  if (mFine && (mValue <= 1.0) && (mStep >= 0.5) && (mMin >= 0.0))
+    SetAsFloat(mValue - 0.1);
   else
-    SetAsFloat(mValue - mStep*SpeedUp(false));
+    SetAsFloat(mValue - mStep * SpeedUp(false));
 }
 
-double DataFieldFloat::SpeedUp(bool keyup){
-  double res=1.0;
+double
+DataFieldFloat::SpeedUp(bool keyup)
+{
+  double res = 1.0;
 
   if (is_altair())
     return res;
@@ -171,27 +186,28 @@ double DataFieldFloat::SpeedUp(bool keyup){
 
   if (!last_step.check(200)) {
     mSpeedup++;
-
-    if (mSpeedup > 5){
+    if (mSpeedup > 5) {
       res = 10;
-
       last_step.update_offset(350);
-      return(res);
-
+      return res;
     }
   } else
     mSpeedup = 0;
 
   last_step.update();
 
-  return(res);
+  return res;
 }
 
-int DataFieldFloat::SetFromCombo(int iDataFieldIndex, TCHAR *sValue) {
+int
+DataFieldFloat::SetFromCombo(int iDataFieldIndex, TCHAR *sValue)
+{
   SetAsString(sValue);
   return 0;
 }
 
-int DataFieldFloat::CreateComboList(void) {
+int
+DataFieldFloat::CreateComboList(void)
+{
   return CreateComboListStepping();
 }
