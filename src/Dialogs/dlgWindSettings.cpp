@@ -55,7 +55,7 @@ OnCancel(WindowControl * Sender)
 }
 
 static void
-UpdateWind(bool set)
+UpdateWind()
 {
   WndProperty *wp;
   fixed speed = fixed_zero, direction = fixed_zero;
@@ -69,11 +69,6 @@ UpdateWind(bool set)
 
   if ((speed != XCSoarInterface::Basic().wind.norm)
       ||(direction != XCSoarInterface::Basic().wind.bearing.value_degrees())) {
-    /* JMW illegal
-    if (set) {
-      SetWindEstimate(ws, wb);
-    }*/
-
     XCSoarInterface::SetSettingsComputer().ManualWind.norm = speed;
     XCSoarInterface::SetSettingsComputer().ManualWind.bearing =
         Angle::degrees(direction);
@@ -96,7 +91,7 @@ OnWindSpeedData(DataField *Sender, DataField::DataAccessKind_t Mode)
     break;
   case DataField::daPut:
   case DataField::daChange:
-    UpdateWind(false);
+    UpdateWind();
     break;
   }
 }
@@ -110,7 +105,7 @@ OnWindDirectionData(DataField *Sender, DataField::DataAccessKind_t Mode)
     break;
   case DataField::daPut:
   case DataField::daChange:
-    UpdateWind(false);
+    UpdateWind();
     break;
   }
 }
@@ -160,7 +155,7 @@ dlgWindSettingsShowModal(void)
   }
 
   if (wf->ShowModal() == mrOK)
-    UpdateWind(true);
+    UpdateWind();
 
   SaveFormProperty(wf, _T("prpAutoWind"), szProfileAutoWind,
                    XCSoarInterface::SetSettingsComputer().AutoWindMode);
