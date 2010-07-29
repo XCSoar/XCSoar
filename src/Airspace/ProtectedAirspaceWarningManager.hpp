@@ -38,7 +38,7 @@
 #ifndef XCSOAR_PROTECTED_AIRSPACE_WARNING_MANAGER_HPP
 #define XCSOAR_PROTECTED_AIRSPACE_WARNING_MANAGER_HPP
 
-#include "Poco/RWLock.h"
+#include "Thread/Guard.hpp"
 
 struct AIRCRAFT_STATE;
 class AirspaceWarning;
@@ -47,13 +47,10 @@ class AirspaceWarningVisitor;
 class AbstractAirspace;
 class AtmosphericPressure;
 
-class ProtectedAirspaceWarningManager {
-  AirspaceWarningManager &airspace_warning;
-  mutable Poco::RWLock mutex;
-
+class ProtectedAirspaceWarningManager : public Guard<AirspaceWarningManager> {
 public:
   ProtectedAirspaceWarningManager(AirspaceWarningManager &awm):
-    airspace_warning(awm) {}
+    Guard<AirspaceWarningManager>(awm) {}
 
   void clear();
   void clear_warnings();

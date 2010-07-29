@@ -42,96 +42,96 @@
 void
 ProtectedAirspaceWarningManager::visit_warnings(AirspaceWarningVisitor& visitor) const
 {
-  Poco::ScopedRWLock lock(mutex);
-  return airspace_warning.visit_warnings(visitor);
+  Lease lease(*this);
+  lease->visit_warnings(visitor);
 }
 
 void
 ProtectedAirspaceWarningManager::clear()
 {
-  Poco::ScopedRWLock lock(mutex, true);
-  airspace_warning.clear();
+  ExclusiveLease lease(*this);
+  lease->clear();
 }
 
 void
 ProtectedAirspaceWarningManager::clear_warnings()
 {
-  Poco::ScopedRWLock lock(mutex, true);
-  airspace_warning.acknowledge_all();
+  ExclusiveLease lease(*this);
+  lease->acknowledge_all();
 }
 
 AirspaceWarning&
 ProtectedAirspaceWarningManager::get_warning(const AbstractAirspace& airspace)
 {
-  Poco::ScopedRWLock lock(mutex, true);
-  return airspace_warning.get_warning(airspace);
+  ExclusiveLease lease(*this);
+  return lease->get_warning(airspace);
 }
 
 const AirspaceWarning*
 ProtectedAirspaceWarningManager::get_warning(const unsigned index) const
 {
-  Poco::ScopedRWLock lock(mutex);
-  return airspace_warning.get_warning(index);
+  Lease lease(*this);
+  return lease->get_warning(index);
 }
 
 size_t
 ProtectedAirspaceWarningManager::warning_size() const
 {
-  Poco::ScopedRWLock lock(mutex);
-  return airspace_warning.size();
+  Lease lease(*this);
+  return lease->size();
 }
 
 bool
 ProtectedAirspaceWarningManager::warning_empty() const
 {
-  Poco::ScopedRWLock lock(mutex);
-  return airspace_warning.empty();
+  Lease lease(*this);
+  return lease->empty();
 }
 
 int
 ProtectedAirspaceWarningManager::get_warning_index(const AbstractAirspace& airspace) const
 {
-  Poco::ScopedRWLock lock(mutex);
-  return airspace_warning.get_warning_index(airspace);
+  Lease lease(*this);
+  return lease->get_warning_index(airspace);
 }
 
 void
 ProtectedAirspaceWarningManager::acknowledge_day(const AbstractAirspace& airspace,
                                                  const bool set)
 {
-  Poco::ScopedRWLock lock(mutex, true);
-  airspace_warning.acknowledge_day(airspace, set);
+  ExclusiveLease lease(*this);
+  lease->acknowledge_day(airspace, set);
 }
 
 void
 ProtectedAirspaceWarningManager::acknowledge_warning(const AbstractAirspace& airspace,
                                                      const bool set)
 {
-  Poco::ScopedRWLock lock(mutex, true);
-  airspace_warning.acknowledge_warning(airspace, set);
+  ExclusiveLease lease(*this);
+  lease->acknowledge_warning(airspace, set);
 }
 
 void
 ProtectedAirspaceWarningManager::acknowledge_inside(const AbstractAirspace& airspace,
                                                     const bool set)
 {
-  Poco::ScopedRWLock lock(mutex, true);
-  airspace_warning.acknowledge_inside(airspace, set);
+  ExclusiveLease lease(*this);
+  lease->acknowledge_inside(airspace, set);
 }
 
 void
 ProtectedAirspaceWarningManager::reset_warning(const AIRCRAFT_STATE &as)
 {
-  Poco::ScopedRWLock lock(mutex, true);
-  airspace_warning.reset(as);
+  ExclusiveLease lease(*this);
+  lease->reset(as);
 }
 
 bool
 ProtectedAirspaceWarningManager::update_warning(const AIRCRAFT_STATE &as)
 {
-  Poco::ScopedRWLock lock(mutex, true);
+  ExclusiveLease lease(*this);
   TaskClient::lock();
-  bool retval = airspace_warning.update(as);
+  bool retval = lease->update(as);
   TaskClient::unlock();
   return retval;
 }
