@@ -58,17 +58,17 @@ static void
 UpdateWind(bool set)
 {
   WndProperty *wp;
-  fixed ws = fixed_zero, wb = fixed_zero;
+  fixed speed = fixed_zero, direction = fixed_zero;
   wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
   if (wp)
-    ws = Units::ToSysSpeed(wp->GetDataField()->GetAsFixed());
+    speed = Units::ToSysSpeed(wp->GetDataField()->GetAsFixed());
 
   wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
   if (wp)
-    wb = wp->GetDataField()->GetAsFixed();
+    direction = wp->GetDataField()->GetAsFixed();
 
-  if ((ws != XCSoarInterface::Basic().wind.norm)
-      ||(wb != XCSoarInterface::Basic().wind.bearing.value_degrees())) {
+  if ((speed != XCSoarInterface::Basic().wind.norm)
+      ||(direction != XCSoarInterface::Basic().wind.bearing.value_degrees())) {
     /* JMW illegal
     if (set) {
       SetWindEstimate(ws, wb);
