@@ -39,6 +39,7 @@ Copyright_License {
 #ifndef TOPOLOGY_STORE_H
 #define TOPOLOGY_STORE_H
 
+#include "Util/NonCopyable.hpp"
 #include "shapelib/mapshape.h"
 
 #include <tchar.h>
@@ -54,8 +55,7 @@ class NLineReader;
 /**
  * Class used to manage and render vector topology layers
  */
-class TopologyStore
-{
+class TopologyStore : private NonCopyable {
   enum {
     /** maximum number of topologies */
     MAXTOPOLOGY = 20,

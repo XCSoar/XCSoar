@@ -40,6 +40,7 @@ Copyright_License {
 #ifndef TOPOLOGY_XSHAPE_HPP
 #define TOPOLOGY_XSHAPE_HPP
 
+#include "Util/NonCopyable.hpp"
 #include "shapelib/mapshape.h"
 
 #include <tchar.h>
@@ -47,8 +48,7 @@ Copyright_License {
 class Canvas;
 class LabelBlock;
 
-class XShape
-{
+class XShape : private NonCopyable {
   TCHAR *label;
 
 public:

@@ -44,6 +44,7 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Icon.hpp"
+#include "Util/NonCopyable.hpp"
 
 struct GEOPOINT;
 class Canvas;
@@ -52,8 +53,7 @@ class LabelBlock;
 struct SETTINGS_MAP;
 class XShape;
 
-class TopologyFile
-{
+class TopologyFile : private NonCopyable {
   int label_field;
 
 public:
