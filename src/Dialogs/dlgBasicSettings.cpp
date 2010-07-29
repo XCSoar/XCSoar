@@ -306,6 +306,11 @@ dlgBasicSettingsShowModal()
     wp->GetDataField()->SetUnits(Units::GetTemperatureName());
     wp->RefreshDisplay();
   }
+  wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
+  if (wp) {
+    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
+    wp->RefreshDisplay();
+  }
 
   if ((wf->ShowModal() == mrOK) && changed)
     task_ui.set_glide_polar(gp_copy);
