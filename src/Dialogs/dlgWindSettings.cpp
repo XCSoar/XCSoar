@@ -48,7 +48,7 @@ Copyright_License {
 static WndForm *wf = NULL;
 
 static void
-OnCloseClicked(WindowControl * Sender)
+OnCancel(WindowControl * Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrCancel);
@@ -80,7 +80,7 @@ UpdateWind(bool set)
 }
 
 static void
-OnSaveClicked(WindowControl * Sender)
+OnOkay(WindowControl * Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrOK);
@@ -132,8 +132,8 @@ OnWindDirectionData(DataField *Sender, DataField::DataAccessKind_t Mode)
 static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnWindSpeedData),
   DeclareCallBackEntry(OnWindDirectionData),
-  DeclareCallBackEntry(OnSaveClicked),
-  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnOkay),
+  DeclareCallBackEntry(OnCancel),
   DeclareCallBackEntry(NULL)
 };
 
