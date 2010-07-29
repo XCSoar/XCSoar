@@ -37,7 +37,7 @@
 */
 
 #include "Logger/LoggerImpl.hpp"
-#include "TaskClientUI.hpp"
+#include "Task/Tasks/OrderedTask.hpp"
 #include "Version.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
