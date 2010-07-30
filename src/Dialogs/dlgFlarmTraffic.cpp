@@ -53,6 +53,7 @@
 #include "Profile.hpp"
 #include "Compiler.h"
 #include "Gauge/FlarmTrafficWindow.hpp"
+#include "Language.hpp"
 
 enum {
   ID_AUTO_ZOOM = 100,
@@ -281,8 +282,8 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
     canvas.text(rc.right - sz.cx, rc.top + hfInfoLabels.get_height(), tmp);
 
     canvas.select(hfInfoLabels);
-    sz = canvas.text_size(_T("Vario:"));
-    canvas.text(rc.right - sz.cx, rc.top, _T("Vario:"));
+    sz = canvas.text_size(_("Vario:"));
+    canvas.text(rc.right - sz.cx, rc.top, _("Vario:"));
   }
 
   // Distance
@@ -295,7 +296,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   canvas.select(hfInfoLabels);
   canvas.text(rc.left,
               rc.bottom - hfInfoValues.get_height() - hfInfoLabels.get_height(),
-              _T("Distance:"));
+              _("Distance:"));
 
   // Relative Height
   Units::FormatUserArrival(traffic.RelativeAltitude, tmp, 20);
@@ -304,10 +305,10 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   canvas.text(rc.right - sz.cx, rc.bottom - sz.cy, tmp);
 
   canvas.select(hfInfoLabels);
-  sz = canvas.text_size(_T("Rel. Alt.:"));
+  sz = canvas.text_size(_("Rel. Alt.:"));
   canvas.text(rc.right - sz.cx,
               rc.bottom - hfInfoValues.get_height() - hfInfoLabels.get_height(),
-              _T("Rel. Alt.:"));
+              _("Rel. Alt.:"));
 
   // ID / Name
   if (traffic.HasName()) {
