@@ -128,12 +128,12 @@ dlgWindSettingsShowModal(void)
     dfe->addEnumText(_("Both"));
     wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().AutoWindMode);
     wp->RefreshDisplay();
+  }
 
-    wp = (WndProperty*)wf->FindByName(_T("prpTrailDrift"));
-    if (wp) {
-      wp->GetDataField()->Set(XCSoarInterface::SettingsMap().EnableTrailDrift);
-      wp->RefreshDisplay();
-    }
+  wp = (WndProperty*)wf->FindByName(_T("prpTrailDrift"));
+  if (wp) {
+    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().EnableTrailDrift);
+    wp->RefreshDisplay();
   }
 
   SpeedVector OriginalWind = XCSoarInterface::SettingsComputer().ManualWind;
