@@ -38,8 +38,6 @@ Copyright_License {
 
 // simple code to prevent text writing over map city names
 #include "Screen/LabelBlock.hpp"
-#include "Math/Screen.hpp"
-
 
 void LabelBlock::reset()
 {
