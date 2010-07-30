@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_LANGUAGE_HPP)
+#ifndef XCSOAR_LANGUAGE_HPP
 #define XCSOAR_LANGUAGE_HPP
 
 #ifdef HAVE_POSIX
@@ -51,7 +51,7 @@ Copyright_License {
 #define N_(x) (x)
 #endif
 
-#else
+#else // !HAVE_POSIX
 
 #include "Compiler.h"
 
@@ -73,7 +73,7 @@ const TCHAR* gettext(const TCHAR* text);
 
 void WriteMissingTranslations(void);
 
-#endif
+#endif // !HAVE_POSIX
 
 void ReadLanguageFile(void);
 
