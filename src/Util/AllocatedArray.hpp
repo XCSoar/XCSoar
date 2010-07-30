@@ -48,7 +48,7 @@ public:
     assert(size() == 0 || data != NULL);
   }
   explicit AllocatedArray(const AllocatedArray &other)
-    :the_size(other.size), data(new T[the_size]) {
+    :the_size(other.size()), data(new T[the_size]) {
     assert(size() == 0 || data != NULL);
     assert(other.size() == 0 || other.data != NULL);
 
