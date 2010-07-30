@@ -1,6 +1,7 @@
-
 #include "harness_aircraft.hpp"
 #include "test_debug.hpp"
+
+#include "Task/Factory/AbstractTaskFactory.hpp"
 
 void print_mode(const char* mode) {
   if (verbose>1) {

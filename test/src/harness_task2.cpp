@@ -2,6 +2,8 @@
 #include "test_debug.hpp"
 #include "harness_waypoints.hpp"
 
+#include "Task/Factory/AbstractTaskFactory.hpp"
+
 
 bool test_task_bad(TaskManager& task_manager,
                    const Waypoints& waypoints)
