@@ -53,6 +53,10 @@ Copyright_License {
 #include <sys/param.h>
 #include <stdbool.h>
 
+#ifdef ANDROID
+#include <sys/endian.h>
+#endif
+
 #if UINT_MAX == 65535
 typedef long          int32;
 #else

@@ -45,7 +45,9 @@ Copyright_License {
 #include "Profile.hpp"
 #include "Sizes.h"
 
-#ifdef HAVE_POSIX
+#ifdef ANDROID
+
+#elif defined(HAVE_POSIX)
 
 #include <locale.h>
 
@@ -126,7 +128,9 @@ ReadLanguageFile()
 {
   LogStartUp(_T("Loading language file"));
 
-#ifdef HAVE_POSIX
+#ifdef ANDROID
+
+#elif defined(HAVE_POSIX)
 
   setlocale(LC_ALL, "");
   bindtextdomain("xcsoar", "/usr/share/locale");

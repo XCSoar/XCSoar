@@ -1,4 +1,4 @@
-TARGETS = PC PPC2000 PPC2003 PPC2003X WM5 ALTAIR ALTAIRPORTRAIT WINE UNIX
+TARGETS = PC PPC2000 PPC2003 PPC2003X WM5 ALTAIR ALTAIRPORTRAIT WINE UNIX ANDROID
 
 # These targets are built when you don't specify the TARGET variable.
 DEFAULT_TARGETS = PC PPC2000 PPC2003 WM5 ALTAIR WINE
@@ -96,6 +96,14 @@ ifeq ($(TARGET),UNIX)
   TCPATH :=
 endif
 
+ifeq ($(TARGET),ANDROID)
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r4-crystax
+  ANDROID_NDK_PLATFORM ?= $(ANDROID_NDK)/build/platforms/android-8
+  TCPATH = $(ANDROID_NDK)/build/prebuilt/linux-x86/arm-eabi-4.4.0/bin/arm-eabi-
+
+  MCPU := -march=armv5te -mtune=xscale -msoft-float -fpic -mthumb-interwork -ffunction-sections -funwind-tables -fstack-protector -fno-short-enums
+endif
+
 ifeq ($(TARGET),CYGWIN)
   TCPATH :=
 endif
@@ -112,6 +120,13 @@ ifeq ($(TARGET),WINE)
 endif
 
 ifeq ($(TARGET),UNIX)
+  HAVE_POSIX := y
+  HAVE_WIN32 := n
+  HAVE_MSVCRT := n
+  HAVE_VASPRINTF := y
+endif
+
+ifeq ($(TARGET),ANDROID)
   HAVE_POSIX := y
   HAVE_WIN32 := n
   HAVE_MSVCRT := n
@@ -234,6 +249,17 @@ ifeq ($(TARGET),UNIX)
   TARGET_LDLIBS += $(shell pkg-config --libs gconf-2.0)
 endif
 
+ifeq ($(TARGET),ANDROID)
+  TARGET_CPPFLAGS += -I$(ANDROID_NDK_PLATFORM)/arch-arm/usr/include
+  TARGET_CPPFLAGS += -DANDROID
+  TARGET_CPPFLAGS += -D__ARM_ARCH_5__ -D__ARM_ARCH_5T__ -D__ARM_ARCH_5E__ -D__ARM_ARCH_5TE__
+  TARGET_CPPFLAGS += -D__ISO_C_VISIBLE=1999 -D__POSIX_VISIBLE=0 -D__XPG_VISIBLE=0
+  CXXFLAGS += -D__STDC_VERSION__=199901L
+  TARGET_CPPFLAGS += -DDISABLEAUDIO
+  TARGET_CPPFLAGS += $(shell pkg-config --cflags gconf-2.0)
+  TARGET_LDLIBS += $(shell pkg-config --libs gconf-2.0)
+endif
+
 ####### compiler target
 
 TARGET_ARCH := $(MCPU)
@@ -281,8 +307,10 @@ ifeq ($(HAVE_WIN32),y)
 endif
 
 ifeq ($(HAVE_POSIX),y)
+ifneq ($(TARGET),ANDROID)
   TARGET_LDFLAGS += -lpthread
   TARGET_LDFLAGS += -lrt # for clock_gettime()
+endif
 endif
 
 ifeq ($(CONFIG_PC),y)
@@ -303,6 +331,10 @@ ifeq ($(TARGET),UNIX)
   TARGET_LDLIBS := -lstdc++ -lm
 endif
 
+ifeq ($(TARGET),ANDROID)
+  TARGET_LDLIBS := -lstdc++
+endif
+
 ######## output files
 
 TARGET_EXEEXT = .exe
@@ -316,4 +348,9 @@ endif
 ifeq ($(TARGET),UNIX)
   TARGET_EXEEXT :=
   NOSTRIP_SUFFIX :=
+endif
+
+ifeq ($(TARGET),ANDROID)
+  TARGET_EXEEXT := .so
+  TARGET_LDFLAGS += -nostdlib -Wl,-shared,-Bsymbolic
 endif

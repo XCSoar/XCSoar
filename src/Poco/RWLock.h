@@ -40,7 +40,7 @@
 
 #include "Poco/Foundation.h"
 
-#ifdef _WIN32_WCE
+#if defined(_WIN32_WCE) || defined(ANDROID)
 #include "Poco/RWLock_Mutex.hpp"
 #else /* !_WIN32_WCE */
 #if defined(POCO_OS_FAMILY_WINDOWS)

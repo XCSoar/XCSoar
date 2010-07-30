@@ -46,7 +46,9 @@ Copyright_License {
 #include <tchar.h>
 
 #ifdef HAVE_POSIX
+#ifndef ANDROID
 #include <sys/statvfs.h>
+#endif
 #include <sys/stat.h>
 #endif
 
@@ -103,10 +105,14 @@ void MyCompactHeaps() {
  */
 unsigned long FindFreeSpace(const TCHAR *path) {
 #ifdef HAVE_POSIX
+#ifdef ANDROID
+  return 64 * 1024 * 1024;
+#else
   struct statvfs s;
   if (statvfs(path, &s) < 0)
     return 0;
   return s.f_bsize * s.f_bavail;
+#endif
 #else /* !HAVE_POSIX */
   ULARGE_INTEGER FreeBytesAvailableToCaller;
   ULARGE_INTEGER TotalNumberOfBytes;

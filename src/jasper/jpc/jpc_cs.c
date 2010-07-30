@@ -84,7 +84,9 @@
 * Types.
 \******************************************************************************/
 
+#ifndef ANDROID
 typedef unsigned int uint;
+#endif
 
 /* Marker segment table entry. */
 typedef struct {

@@ -1,6 +1,10 @@
 WARNINGS = -Wall -Wextra
 WARNINGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
-WARNINGS += -Wundef -Wredundant-decls
+WARNINGS += -Wundef
+
+ifneq ($(TARGET),ANDROID)
+WARNINGS += -Wredundant-decls
+endif
 
 CXXFLAGS += $(WARNINGS)
 CXXFLAGS += -Wmissing-noreturn

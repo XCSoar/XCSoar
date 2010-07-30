@@ -35,7 +35,7 @@
 
 #include "Poco/RWLock.h"
 
-#ifndef _WIN32_WCE
+#if !defined(_WIN32_WCE) && !defined(ANDROID)
 #if defined(POCO_OS_FAMILY_WINDOWS)
 #include "RWLock_WIN32.cpp"
 #else

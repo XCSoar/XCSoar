@@ -48,6 +48,10 @@ Copyright_License {
 #include <sys/param.h>
 #include <stdbool.h>
 
+#ifdef ANDROID
+#include <sys/endian.h>
+#endif
+
 static const bool bBigEndian = BYTE_ORDER == BIG_ENDIAN;
 
 /* -------------------------------------------------------------------- */

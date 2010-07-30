@@ -39,7 +39,14 @@ Copyright_License {
 #ifndef XCSOAR_LANGUAGE_HPP
 #define XCSOAR_LANGUAGE_HPP
 
-#ifdef HAVE_POSIX
+#ifdef ANDROID
+
+/* disable i18n on Android for now */
+#define _(x) (x)
+#define N_(x) (x)
+#define gettext(x) (x)
+
+#elif defined(HAVE_POSIX)
 
 #include <libintl.h>
 

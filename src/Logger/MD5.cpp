@@ -37,8 +37,8 @@
 
 #include "Logger/MD5.hpp"
 
-#include <memory.h>
 #include <stdio.h>
+#include <string.h>
 
 static const uint32_t k[64] = {
   //k[i] := floor(abs(sin(i)) × (2 pow 32))
