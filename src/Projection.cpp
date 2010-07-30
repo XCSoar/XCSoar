@@ -120,8 +120,8 @@ Projection::LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
   const GEOPOINT *ptend = ptin + n;
 
   while (p < ptend) {
-    int Y = Real2Int((mPan.Latitude - p->Latitude).value_native() * mDrawScale);
-    int X = Real2Int((mPan.Longitude - p->Longitude).value_native()
+    int Y = (int)((mPan.Latitude - p->Latitude).value_native() * mDrawScale);
+    int X = (int)((mPan.Longitude - p->Longitude).value_native()
                      * p->Latitude.fastcosine() * mDrawScale);
     ptout->x = (xxs - X * cost + Y * sint) / 1024;
     ptout->y = (Y * cost + X * sint + yys) / 1024;
@@ -163,10 +163,10 @@ Projection::LonLat2Screen(const pointObj* const ptin,
   while (p < ptend) {
     const GEOPOINT g = point2GeoPoint(*p);
 
-    const int Y = Real2Int((mPan.Latitude - g.Latitude).value_native()
-                           * mDrawScale);
-    const int X = Real2Int((mPan.Longitude - g.Longitude).value_native()
-                           * g.Latitude.fastcosine() * mDrawScale);
+    const int Y = (int)((mPan.Latitude - g.Latitude).value_native()
+                        * mDrawScale);
+    const int X = (int)((mPan.Longitude - g.Longitude).value_native()
+                        * g.Latitude.fastcosine() * mDrawScale);
 
     ptout->x = (xxs - X * cost + Y * sint) / 1024;
     ptout->y = (Y * cost + X * sint + yys) / 1024;

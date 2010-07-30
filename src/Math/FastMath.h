@@ -56,36 +56,10 @@ Copyright_License {
  */
 gcc_const int compare_squared(int a, int b, int c);
 
-// =================================================================================
-// Real2Int
-// =================================================================================
-// 2^36 * 1.5,  (52-_shiftamt=36) uses limited precisicion to floor
-// 16.16 fixed point representation,
-
-gcc_const static inline int
-Real2Int(double val)
-{
-  #if defined(WINDOWSPC) && defined(BROKEN)
-  // JMW this is broken?
-  val += 68719476736.0*1.5;
-  return *((long*)&val) >> 16;
-  #else
-  return (int)val;
-  #endif
-}
-
-#ifdef FIXED_MATH
-gcc_const static inline int
-Real2Int(const fixed& val)
-{
-  return val.as_int();
-}
-#endif
-
 gcc_const static inline int
 iround(double i)
 {
-  return Real2Int(floor(i + 0.5));
+  return (int)floor(i + 0.5);
 }
 
 #ifdef FIXED_MATH
