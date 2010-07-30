@@ -42,6 +42,7 @@
 #include "Screen/Fonts.hpp"
 #include "Units.hpp"
 #include "Math/Screen.hpp"
+#include "Language.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -240,7 +241,7 @@ FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const
   if (small)
     return;
 
-  static const TCHAR str[] = _T("No Traffic");
+  const TCHAR* str = _("No Traffic");
   canvas.select(hfNoTraffic);
   SIZE ts = canvas.text_size(str);
   canvas.set_text_color(hcStandard);
