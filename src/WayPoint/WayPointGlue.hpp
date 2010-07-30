@@ -39,8 +39,6 @@ Copyright_License {
 #ifndef XCSOAR_WAY_POINT_GLUE_HPP
 #define XCSOAR_WAY_POINT_GLUE_HPP
 
-#include "Engine/Math/fixed.hpp"
-
 class Waypoints;
 class RasterTerrain;
 struct SETTINGS_COMPUTER;

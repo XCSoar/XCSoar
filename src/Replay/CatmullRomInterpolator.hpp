@@ -36,7 +36,7 @@
 }
 */
 
-#include "Engine/Math/fixed.hpp"
+#include "Math/fixed.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 
 typedef struct _LOGGER_INTERP_POINT

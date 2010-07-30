@@ -39,8 +39,7 @@ Copyright_License {
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-#include "Engine/Math/Constants.h"
-#include "Engine/Math/fixed.hpp"
+#include "Math/fixed.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
 
 struct Vector {

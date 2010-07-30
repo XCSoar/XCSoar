@@ -39,7 +39,6 @@ Copyright_License {
 #ifndef GEOID_H
 #define GEOID_H
 
-#include "Engine/Math/fixed.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 
 void OpenGeoid(void);

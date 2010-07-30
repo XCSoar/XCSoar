@@ -39,8 +39,8 @@ Copyright_License {
 #ifndef	TEAMCALCULATION_H
 #define	TEAMCALCULATION_H
 
-#include "Engine/Math/fixed.hpp"
-#include "Engine/Math/Angle.hpp"
+#include "Math/fixed.hpp"
+#include "Math/Angle.hpp"
 
 #include <tchar.h>
 

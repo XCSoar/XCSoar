@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_GPS_CLOCK_HPP
 #define XCSOAR_GPS_CLOCK_HPP
 
-#include "Engine/Math/fixed.hpp"
+#include "Math/fixed.hpp"
 
 /**
  * Class for GPS-time based time intervals

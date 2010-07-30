@@ -39,7 +39,7 @@ Copyright_License {
 #include "GestureManager.hpp"
 #include "Screen/Layout.hpp"
 #include "StringUtil.hpp"
-#include "Engine/Math/FastMath.h"
+#include "Math/FastMath.h"
 #include "Compiler.h"
 
 #include <algorithm>

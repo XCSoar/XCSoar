@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef WINDZIGZAG_H
 #define WINDZIGZAG_H
 
-#include "Engine/Math/fixed.hpp"
+#include "Math/fixed.hpp"
 
 struct NMEA_INFO;
 struct DERIVED_INFO;

@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef CLIMBAVERAGECALCULATOR_HPP
 #define CLIMBAVERAGECALCULATOR_HPP
 
-#include "Engine/Math/fixed.hpp"
+#include "Math/fixed.hpp"
 
 class ClimbAverageCalculator
 {

@@ -6,7 +6,7 @@ $(OUT)/include/MathTables.h: $(HOST_OUTPUT_DIR)/tools/GenerateSineTables$(HOST_E
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(HOST_OUTPUT_DIR)/tools/GenerateSineTables$(HOST_EXEEXT) >$@
 
-$(call SRC_TO_OBJ,$(ENGINE_SRC_DIR)/Math/FastMath.c): $(OUT)/include/MathTables.h
+$(call SRC_TO_OBJ,$(SRC)/Math/FastMath.c): $(OUT)/include/MathTables.h
 
 $(OUT)/include/InputEvents_Text2Event.cpp: $(SRC)/InputEvents.h \
 	$(topdir)/tools/Text2Event.pl | $(OUT)/include/dirstamp

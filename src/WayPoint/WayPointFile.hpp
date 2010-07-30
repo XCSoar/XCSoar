@@ -40,7 +40,6 @@ Copyright_License {
 #ifndef WAYPOINTFILE_HPP
 #define WAYPOINTFILE_HPP
 
-#include "Engine/Math/fixed.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 
 #include <tchar.h>

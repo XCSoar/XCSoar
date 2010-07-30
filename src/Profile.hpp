@@ -40,9 +40,9 @@ Copyright_License {
 #define XCSOAR_PROFILE_HPP
 
 #include "ProfileKeys.hpp"
-#include "Engine/Math/fixed.hpp"
+#include "Math/fixed.hpp"
+
 #include <tchar.h>
-#include <windef.h>
 #include <windows.h>
 
 /**
