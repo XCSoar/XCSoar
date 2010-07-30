@@ -44,6 +44,7 @@ Copyright_License {
 #include "Profile.hpp"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
+#include "Engine/Navigation/SpeedVector.hpp"
 
 static WndForm *wf = NULL;
 
@@ -135,7 +136,9 @@ dlgWindSettingsShowModal(void)
     }
   }
 
+  SpeedVector OriginalWind = XCSoarInterface::SettingsComputer().ManualWind;
   if (wf->ShowModal() != mrOK) {
+    XCSoarInterface::SetSettingsComputer().ManualWind = OriginalWind;
     delete wf;
     return;
   }
