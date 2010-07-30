@@ -64,7 +64,7 @@ public:
    *
    * @return True if buffer is full
    */
-  virtual bool update(const double x0);
+  bool update(const double x0);
 
   /**
    * Calculate average from samples
@@ -77,7 +77,7 @@ public:
    * Resets filter (zero samples)
    *
    */
-  virtual void reset();
+  void reset();
 
 protected:
   AllocatedArray<double> x; /**< Values stored */
