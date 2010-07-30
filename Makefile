@@ -64,6 +64,7 @@ include $(topdir)/build/gettext.mk
 
 # Create libraries for zzip, jasper and compatibility stuff
 include $(topdir)/build/libutil.mk
+include $(topdir)/build/libmath.mk
 include $(topdir)/build/zzip.mk
 include $(topdir)/build/jasper.mk
 include $(topdir)/build/compat.mk
@@ -334,9 +335,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	\
-	$(SRC)/Math/FastRotation.cpp \
-	$(SRC)/Math/leastsqs.cpp \
-	$(SRC)/Math/LowPassFilter.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
 	\
@@ -395,6 +393,7 @@ XCSOAR_LDADD = \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS) \
 	$(UTIL_LIBS) \
+	$(MATH_LIBS) \
 	$(RESOURCE_BINARY)
 
 all: all-$(TARGET)

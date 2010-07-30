@@ -371,7 +371,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/RenderTask.cpp \
 	$(SRC)/RenderTaskPoint.cpp \
 	$(SRC)/Marks.cpp \
-	$(SRC)/Math/FastRotation.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Terrain/RasterMapJPG2000.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
@@ -432,6 +431,7 @@ RUN_MAP_WINDOW_LDADD = \
 	$(IO_LIBS) \
 	$(ZZIP_LIBS) \
 	$(UTIL_LIBS) \
+	$(MATH_LIBS) \
 	$(COMPAT_LIBS) \
 	$(RESOURCE_BINARY)
 $(RUN_MAP_WINDOW_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
