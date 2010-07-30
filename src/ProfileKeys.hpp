@@ -68,8 +68,6 @@ extern const TCHAR szProfileWayPointFile[];
 extern const TCHAR szProfileAdditionalWayPointFile[];
 extern const TCHAR szProfileAirspaceFile[];
 extern const TCHAR szProfileAdditionalAirspaceFile[];
-extern const TCHAR szProfileWindSpeed[];
-extern const TCHAR szProfileWindBearing[];
 extern const TCHAR szProfileAirfieldFile[];
 extern const TCHAR szProfileTopologyFile[];
 extern const TCHAR szProfilePolarFile[];
