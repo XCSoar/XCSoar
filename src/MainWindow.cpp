@@ -62,7 +62,7 @@ MainWindow::register_class(HINSTANCE hInstance)
 }
 
 void
-MainWindow::set(LPCTSTR text,
+MainWindow::set(const TCHAR* text,
                 int left, int top, unsigned width, unsigned height)
 {
   SingleWindow::set(_T("XCSoarMain"), text, left, top, width, height);
