@@ -39,8 +39,6 @@ Copyright_License {
 #ifndef APPEARANCE_H
 #define APPEARANCE_H
 
-#include "Screen/Font.hpp"
-
 #include <windef.h>
 
 typedef enum {
