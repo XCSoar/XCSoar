@@ -115,7 +115,6 @@ typedef enum{
 struct Appearance {
   int DefaultMapWidth;
   CompassAppearance_t CompassAppearance;
-  bool DontShowSpeedToFly;
   IndFinalGlide_t IndFinalGlide;
   IndLandable_t IndLandable;
   bool InverseInfoBox;
