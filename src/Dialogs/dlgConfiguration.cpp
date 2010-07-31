@@ -2849,9 +2849,6 @@ void dlgConfigurationShowModal(void)
       AskWaypointSave();
   }
 
-  if (taskchanged)
-    changed = true;
-
   if (!is_embedded() && DevicePortChanged)
     requirerestart = true;
 
