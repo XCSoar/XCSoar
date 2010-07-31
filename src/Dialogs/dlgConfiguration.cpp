@@ -340,14 +340,14 @@ ResetFonts(bool bUseCustom)
     Fonts::LoadCustomFont(&TempMapLabelFont, szProfileFontMapLabelFont);
   }
 
-  Fonts::InitializeFont(&TempUseCustomFontsFont, LogMap);
-  Fonts::InitializeFont(&TempInfoWindowFont, LogInfoBox);
-  Fonts::InitializeFont(&TempTitleWindowFont, LogTitle);
-  Fonts::InitializeFont(&TempMapWindowFont, LogMap);
-  Fonts::InitializeFont(&TempTitleSmallWindowFont, LogInfoBoxSmall);
-  Fonts::InitializeFont(&TempMapWindowBoldFont, LogMapBold);
-  Fonts::InitializeFont(&TempCDIWindowFont, LogCDI);
-  Fonts::InitializeFont(&TempMapLabelFont, LogMapLabel);
+  Fonts::SetFont(&TempUseCustomFontsFont, LogMap);
+  Fonts::SetFont(&TempInfoWindowFont, LogInfoBox);
+  Fonts::SetFont(&TempTitleWindowFont, LogTitle);
+  Fonts::SetFont(&TempMapWindowFont, LogMap);
+  Fonts::SetFont(&TempTitleSmallWindowFont, LogInfoBoxSmall);
+  Fonts::SetFont(&TempMapWindowBoldFont, LogMapBold);
+  Fonts::SetFont(&TempCDIWindowFont, LogCDI);
+  Fonts::SetFont(&TempMapLabelFont, LogMapLabel);
 }
 
 static void

@@ -103,7 +103,7 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
 }
 
 void
-Fonts::InitializeFont(Font *theFont, LOGFONT autoLogFont,
+Fonts::SetFont(Font *theFont, LOGFONT autoLogFont,
                   LOGFONT * LogFontUsed)
 {
 #ifdef ENABLE_SDL
@@ -232,13 +232,13 @@ Fonts::Initialize(bool use_custom)
 
   InitialiseFontsAltair();
 
-  InitializeFont(&InfoBox, LogInfoBox);
-  InitializeFont(&InfoBoxSmall, LogInfoBoxSmall);
-  InitializeFont(&Title, LogTitle);
-  InitializeFont(&CDI, LogCDI);
-  InitializeFont(&MapLabel, LogMapLabel);
-  InitializeFont(&Map, LogMap);
-  InitializeFont(&MapBold, LogMapBold);
+  SetFont(&InfoBox, LogInfoBox);
+  SetFont(&InfoBoxSmall, LogInfoBoxSmall);
+  SetFont(&Title, LogTitle);
+  SetFont(&CDI, LogCDI);
+  SetFont(&MapLabel, LogMapLabel);
+  SetFont(&Map, LogMap);
+  SetFont(&MapBold, LogMapBold);
 
   if (use_custom) {
     LoadCustomFont(&InfoBox, szProfileFontInfoWindowFont);
