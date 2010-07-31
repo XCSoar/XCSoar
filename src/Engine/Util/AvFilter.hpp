@@ -39,6 +39,7 @@
 #define AV_FILTER_HPP
 
 #include "Util/AllocatedArray.hpp"
+#include "Compiler.h"
 
 /**
  * Average/bucket filter.  When filter is full, can return samples
@@ -71,6 +72,7 @@ public:
    *
    * @return Average value in buffer
    */
+  gcc_pure
   double average();
 
   /**

@@ -28,7 +28,6 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/GlideSolvers/MacCready.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/ReferencePoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPointVector.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/TracePoint.cpp \

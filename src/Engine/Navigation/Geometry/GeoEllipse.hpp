@@ -39,6 +39,7 @@
 
 #include "Navigation/TaskProjection.hpp"
 #include "Navigation/Flat/FlatEllipse.hpp"
+#include "Compiler.h"
 
 /**
  * Ellipse in geodesic coordinates, defined by two foci and
@@ -66,6 +67,7 @@ public:
  * 
  * @return Location of point on ellipse
  */
+  gcc_pure
   GEOPOINT parametric(const fixed t) const;
 
 /** 

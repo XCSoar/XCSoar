@@ -39,6 +39,7 @@
 
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
+#include "Compiler.h"
 
 /**
  * Memento object to store results of previous distance calculations. 
@@ -55,6 +56,7 @@ public:
    * Returns the distance from the origin to destination in meters, 
    * from previously saved value if input arguments are identical. 
    */
+  gcc_pure
   fixed Distance(const GEOPOINT& _origin,
                  const GEOPOINT& _destination) const;
 private:

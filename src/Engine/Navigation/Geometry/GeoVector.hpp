@@ -38,9 +38,11 @@
 #define GEO_VECTOR_HPP
 
 #include "Math/Angle.hpp"
+#include "Compiler.h"
 
 struct GEOPOINT;
 
+gcc_pure
 bool operator != (const GEOPOINT&g1, const GEOPOINT &g2);
 
 /**
@@ -91,6 +93,7 @@ struct GeoVector {
    * Returns the end point of the geovector projected from the start point.  
    * Assumes constant bearing. 
    */
+  gcc_pure
   GEOPOINT end_point(const GEOPOINT &source) const;
 
   /**
@@ -109,6 +112,7 @@ struct GeoVector {
    * @param distance Great circle distance (m) from source at which to find intermediate point
    * @return location of point
    */
+  gcc_pure
   GEOPOINT intermediate_point(const GEOPOINT &source, const fixed distance) const;
 
 /** 
@@ -119,6 +123,7 @@ struct GeoVector {
  * 
  * @return Distance (m)
  */
+  gcc_pure
   fixed minimum_distance(const GEOPOINT &source,
                          const GEOPOINT &ref) const;
 

@@ -38,6 +38,8 @@ Copyright_License {
 #ifndef SUN_EPHEMERIS_HPP
 #define SUN_EPHEMERIS_HPP
 
+#include "Compiler.h"
+
 struct NMEA_INFO;
 struct DERIVED_INFO;
 struct GEOPOINT;
@@ -49,11 +51,20 @@ struct BrokenDateTime;
 class SunEphemeris {
   double L, g, DayLength;
 
-  double FNday (int y, int m, int d, float h);
-  double FNrange (double x);
-  double f0(double lat, double declin);
-  double f1(double lat, double declin);
-  double FNsun (double d);
+  gcc_const
+  static double FNday(int y, int m, int d, float h);
+
+  gcc_const
+  static double FNrange (double x);
+
+  gcc_const
+  static double f0(double lat, double declin);
+
+  gcc_const
+  static double f1(double lat, double declin);
+
+  gcc_pure
+  double FNsun(double d);
 
  public:
   double MorningTwilight, altmax, TimeOfNoon, TimeOfSunSet, TimeOfSunRise, EveningTwilight;

@@ -39,6 +39,7 @@
 
 #include "FlatGeoPoint.hpp"
 #include "Math/fixed.hpp"
+#include "Compiler.h"
 
 /**
  * Projected ray (a point and vector) in 2-d cartesian integer coordinates
@@ -69,6 +70,7 @@ public:
  * 
  * @return Parameter [0,1] of vector on this ray that intersection occurs (or -1 if fail)
  */
+  gcc_pure
   fixed intersects(const FlatRay &oray) const;
 
 /** 
@@ -78,6 +80,7 @@ public:
  * 
  * @return Location of end point
  */
+  gcc_pure
   FLAT_GEOPOINT parametric(const fixed t) const;
 };
 

@@ -39,6 +39,7 @@
 
 #include "GeoPoint.hpp"
 #include "SpeedVector.hpp"
+#include "Compiler.h"
 
 /**
  * @file
@@ -105,6 +106,7 @@ struct ALTITUDE_STATE
 
   /** Thermal drift factor: 1 indicates drift rate equal to wind speed,
    0 indicates no drift. */
+  gcc_pure
   fixed thermal_drift_factor() const;
 };
 
@@ -223,6 +225,7 @@ struct AIRCRAFT_STATE:
  * @param in_time Time step for extrapolation (s)
  * @return Predicted aircraft state in in_time seconds
  */
+  gcc_pure
   AIRCRAFT_STATE get_predicted_state(const fixed& in_time) const;
 };
 

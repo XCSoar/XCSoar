@@ -93,7 +93,10 @@ public:
  * 
  * @return True if points coincident
  */
-  bool equals(const SearchPoint& sp) const;
+  gcc_pure
+  bool equals(const SearchPoint& sp) const {
+    return sp.get_location() == get_location();
+  }
 
 /** 
  * Calculate flat earth distance between two points
@@ -102,7 +105,10 @@ public:
  * 
  * @return Distance in projected units
  */
-  unsigned flat_distance(const SearchPoint& sp) const;
+  gcc_pure
+  unsigned flat_distance(const SearchPoint& sp) const {
+    return flatLocation.distance_to(sp.flatLocation);
+  }
 
 /** 
  * Rank two points according to longitude, then latitude
@@ -111,7 +117,10 @@ public:
  * 
  * @return True if this point is further left (or if equal, lower) than the other
  */
-  bool sort (const SearchPoint &other) const;
+  gcc_pure
+  bool sort (const SearchPoint &other) const {
+    return get_location().sort(other.get_location());
+  }
 
 private:
   FLAT_GEOPOINT flatLocation;

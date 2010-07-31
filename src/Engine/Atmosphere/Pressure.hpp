@@ -38,7 +38,9 @@ Copyright_License {
 
 #ifndef XCSOAR_ATMOSPHERE_PRESSURE_H
 #define XCSOAR_ATMOSPHERE_PRESSURE_H
+
 #include "Math/fixed.hpp"
+#include "Compiler.h"
 
 /**
  * ICAO Standard Atmosphere calculations (valid in Troposphere, alt<11000m)
@@ -90,6 +92,7 @@ public:
  * @param alt 1013.25-based altitude (m)
  * @return QNH-based altitude (m)
  */
+  gcc_pure
   fixed AltitudeToQNHAltitude(const fixed alt) const;
 
   /**
@@ -97,6 +100,7 @@ public:
    * @param altitude QNH-based altitude (m)
    * @return Air density (kg/m^3)
    */
+  gcc_pure
   static fixed AirDensity(const fixed altitude);
 
   /**
@@ -104,6 +108,7 @@ public:
    * @param altitude QNH-based altitude (m)
    * @return Ratio of TAS to IAS
    */
+  gcc_pure
   static fixed AirDensityRatio(const fixed altitude);
 
 /**
@@ -117,6 +122,7 @@ public:
  * @param ps Air pressure (Pa)
  * @return Altitude over QNH-based zero (m)
  */
+  gcc_pure
   fixed StaticPressureToQNHAltitude(const fixed ps) const;
 
 /**
@@ -130,6 +136,7 @@ public:
  * @param alt Altitude over QNH-based zero (m)
  * @return Air pressure at given altitude (Pa)
  */
+  gcc_pure
   fixed QNHAltitudeToStaticPressure(const fixed alt) const;
 
 private:

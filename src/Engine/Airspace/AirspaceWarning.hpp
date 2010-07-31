@@ -38,6 +38,7 @@
 #define AIRSPACE_WARNING_HPP
 
 #include "AbstractAirspace.hpp"
+#include "Compiler.h"
 
 /**
  * Class to hold information about active airspace warnings
@@ -86,6 +87,7 @@ public:
  * 
  * @param state New warning state
  */
+  gcc_pure
   bool state_accepted(const AirspaceWarningState state) const;
 
 /** 
@@ -94,6 +96,7 @@ public:
  * 
  * @return True if state upgraded/downgraded
  */
+  gcc_pure
   bool changed_state() const;
 
 /** 
@@ -145,6 +148,7 @@ public:
  * 
  * @return True if acknowledgement is expired
  */
+  gcc_pure
   bool get_ack_expired() const;
 
 /** 
@@ -152,6 +156,7 @@ public:
  * 
  * @return True if acknowledged
  */
+  gcc_pure
   bool get_ack_day() const;
 
 /** 
@@ -180,6 +185,7 @@ public:
  * 
  * @return True if this is more severe than that
  */
+  gcc_pure
   bool operator < (const AirspaceWarning& that);
 
 private:

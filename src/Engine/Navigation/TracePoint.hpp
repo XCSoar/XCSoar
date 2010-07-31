@@ -3,6 +3,8 @@
 
 #include "SearchPoint.hpp"
 #include "Aircraft.hpp"
+#include "Compiler.h"
+
 #include <vector>
 
 /**
@@ -46,6 +48,7 @@ public:
    * 
    * @return Approximate squared distance
    */
+  gcc_pure
   unsigned approx_sq_dist(const TracePoint& tp) const {
     return dsqr(get_flatLocation().Longitude-tp.get_flatLocation().Longitude)+
       dsqr(get_flatLocation().Latitude-tp.get_flatLocation().Latitude);
@@ -59,6 +62,7 @@ public:
    * 
    * @return Approximate distance
    */
+  gcc_pure
   unsigned approx_dist(const TracePoint& tp) const {
     return (unsigned)sqrt(approx_sq_dist(tp));
   }
@@ -68,6 +72,7 @@ public:
    * 
    * @return Time step (s)
    */
+  gcc_pure
   unsigned dt() const {
     return time-last_time;
   }
@@ -121,7 +126,8 @@ public:
   }
 
 private:
-  unsigned dsqr(const int d) const {
+  gcc_const
+  static inline unsigned dsqr(const int d) {
     return d*d;
   }
 };
@@ -130,6 +136,7 @@ typedef std::vector<TracePoint> TracePointVector;
 
 class TaskProjection;
 
+gcc_pure
 TaskProjection get_bounds(const TracePointVector& vec,
                           const GEOPOINT &fallback_location);
 

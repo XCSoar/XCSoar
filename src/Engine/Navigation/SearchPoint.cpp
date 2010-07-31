@@ -54,27 +54,3 @@ SearchPoint::project(const TaskProjection& tp)
 {
   flatLocation = tp.project(get_location());
 }
-
-
-bool 
-SearchPoint::equals(const SearchPoint& sp) const 
-{
-  if (sp.get_location() == get_location()) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-bool 
-SearchPoint::sort(const SearchPoint& sp) const 
-{
-  return get_location().sort(sp.get_location());
-}
-
-
-unsigned
-SearchPoint::flat_distance(const SearchPoint& sp) const
-{
-  return flatLocation.distance_to(sp.flatLocation);
-}

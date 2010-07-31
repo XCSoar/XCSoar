@@ -38,6 +38,7 @@
 #define FLAT_GEOPOINT_HPP
 
 #include "Math/FastMath.h"
+#include "Compiler.h"
 
 /**
  * Integer projected (flat-earth) version of Geodetic coordinates
@@ -72,6 +73,7 @@ struct FLAT_GEOPOINT {
  * 
  * @return Distance in projected units
  */
+  gcc_pure
   unsigned distance_to(const FLAT_GEOPOINT &sp) const;
 
 /** 
@@ -81,6 +83,7 @@ struct FLAT_GEOPOINT {
  * 
  * @return Squared distance in projected units
  */
+  gcc_pure
   unsigned distance_sq_to(const FLAT_GEOPOINT &sp) const;
 
 /** 
@@ -90,6 +93,7 @@ struct FLAT_GEOPOINT {
  * 
  * @return Added value
  */
+  gcc_pure
   FLAT_GEOPOINT operator+ (const FLAT_GEOPOINT &p2) const {
     FLAT_GEOPOINT res= *this;
     res.Longitude += p2.Longitude;
@@ -104,6 +108,7 @@ struct FLAT_GEOPOINT {
  * 
  * @return Subtracted value
  */
+  gcc_pure
   FLAT_GEOPOINT operator- (const FLAT_GEOPOINT &p2) const {
     FLAT_GEOPOINT res= *this;
     res.Longitude -= p2.Longitude;
@@ -118,6 +123,7 @@ struct FLAT_GEOPOINT {
  * 
  * @return Scaled value
  */
+  gcc_pure
   FLAT_GEOPOINT operator* (const double t) const {
     FLAT_GEOPOINT res= *this;
     res.Longitude = (int)(res.Longitude*t);
@@ -132,6 +138,7 @@ struct FLAT_GEOPOINT {
  * 
  * @return Cross product
  */
+  gcc_pure
   int cross(const FLAT_GEOPOINT &other) const {
     return Longitude*other.Latitude-Latitude*other.Longitude;
   }
@@ -143,6 +150,7 @@ struct FLAT_GEOPOINT {
  * 
  * @return Dot product
  */
+  gcc_pure
   int dot(const FLAT_GEOPOINT &other) const {
     return Longitude*other.Longitude+Latitude*other.Latitude;
   }
@@ -154,6 +162,7 @@ struct FLAT_GEOPOINT {
  * 
  * @return True if coincident
  */
+  gcc_pure
   bool operator== (const FLAT_GEOPOINT &other) const {
     return (Longitude == other.Longitude) && (Latitude == other.Latitude);
   };
@@ -162,6 +171,7 @@ struct FLAT_GEOPOINT {
  * With this as a vector, and other as a vector, compute
  * the projected distance of this along other.
  */
+  gcc_pure
   unsigned projected_distance(const FLAT_GEOPOINT &other) const;
 };
 

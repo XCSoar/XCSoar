@@ -41,6 +41,7 @@
 #include "FlatRay.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Navigation/Geometry/BoundingBoxDistance.hpp"
+#include "Compiler.h"
 
 /**
  * Structure defining 2-d integer projected coordinates defining
@@ -82,6 +83,7 @@ public:
  * 
  * @return Distance in projected units (or zero if overlapping)
  */
+  gcc_pure
   unsigned distance(const FlatBoundingBox &f) const;
 
   /** 
@@ -149,6 +151,7 @@ public:
  * 
  * @return True if ray intersects with this bounding box
  */
+  gcc_pure
   bool intersects(const FlatRay& ray) const;
 
 /**
@@ -156,6 +159,7 @@ public:
  *
  * @return Center in flat coordinates
  */
+  gcc_pure
   FLAT_GEOPOINT get_center() const;
 
 private:

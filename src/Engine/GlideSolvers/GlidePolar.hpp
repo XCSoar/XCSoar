@@ -42,6 +42,7 @@ struct GlideResult;
 struct AIRCRAFT_STATE;
 
 #include "Math/fixed.hpp"
+#include "Compiler.h"
 
 class Polar;
 
@@ -193,7 +194,9 @@ public:
    * Retrieve bugs 
    * @return Cleanliness of glider (0-1]
    */
-  fixed get_bugs() const;
+  fixed get_bugs() const {
+    return bugs;
+  }
 
   /**
    * Set ballast value.
@@ -298,6 +301,7 @@ public:
    *
    * @return Sink rate plus MC setting (m/s, positive down)
    */
+  gcc_pure
   fixed MSinkRate(const fixed V) const;
 
   /**

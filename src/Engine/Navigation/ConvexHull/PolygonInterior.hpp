@@ -39,8 +39,9 @@
 
 #include <vector>
 #include "Navigation/SearchPoint.hpp"
+#include "Compiler.h"
 
-bool
+gcc_pure bool
 PolygonInterior( const GEOPOINT &P, const std::vector<SearchPoint>& V);
 
 #endif

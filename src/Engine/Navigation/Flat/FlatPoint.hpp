@@ -39,6 +39,7 @@
 
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
+#include "Compiler.h"
 
 /**
  * 2-d Cartesian projected real-valued point
@@ -72,6 +73,7 @@ struct FlatPoint
  * 
  * @return Cross product
  */
+  gcc_pure
   fixed cross(const FlatPoint& p2) const;
 
 /** 
@@ -109,18 +111,21 @@ struct FlatPoint
  * 
  * @return Distance
  */
+  gcc_pure
   fixed d(const FlatPoint &p) const;
 
 /** 
  * Find dx*dx+dy*dy
  * @return Magnitude squared
  */
+  gcc_pure
   fixed mag_sq() const;
 
 /** 
  * Find sqrt(dx*dx+dy*dy)
  * @return Magnitude 
  */
+  gcc_pure
   fixed mag() const;
 
 /** 
@@ -152,6 +157,7 @@ struct FlatPoint
  * 
  * @return Scaled point
  */
+  gcc_pure
   FlatPoint operator* (const fixed &p) const {
     FlatPoint res= *this;
     res.x *= p;
@@ -166,6 +172,7 @@ struct FlatPoint
  * 
  * @return Added value
  */
+  gcc_pure
   FlatPoint operator+ (const FlatPoint &p2) const {
     FlatPoint res= *this;
     res.x += p2.x;
@@ -180,6 +187,7 @@ struct FlatPoint
  * 
  * @return Subtracted value
  */
+  gcc_pure
   FlatPoint operator- (const FlatPoint &p2) const {
     FlatPoint res= *this;
     res.x -= p2.x;

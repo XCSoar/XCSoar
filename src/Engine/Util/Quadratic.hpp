@@ -38,6 +38,7 @@
 #define QUADRATIC_HPP
 
 #include "Math/fixed.hpp"
+#include "Compiler.h"
 
 /**
  * Utility class for efficient solution of quadratic equations
@@ -72,7 +73,7 @@ public:
    *
    * @return True if quadratic has at least one real solution
    */
-  bool
+  gcc_pure bool
   check() const
   {
     if (negative(denom))
@@ -89,7 +90,7 @@ public:
    *
    * @return greater x value of solutions
    */
-  fixed
+  gcc_pure fixed
   solution_max() const
   {
     return positive(da) ? solution(true) : solution(false);
@@ -100,7 +101,7 @@ public:
    *
    * @return smallest x value of solutions
    */
-  fixed
+  gcc_pure fixed
   solution_min() const
   {
     return positive(da) ? solution(false) : solution(true);
@@ -115,7 +116,7 @@ private:
    *
    * @return x value of solution
    */
-  fixed
+  gcc_pure fixed
   solution(const bool positive) const
   {
     return (-b + (positive ? sqrt(denom) : -sqrt(denom))) / da;

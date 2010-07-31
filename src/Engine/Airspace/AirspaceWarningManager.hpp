@@ -41,6 +41,8 @@
 #include "Airspaces.hpp"
 #include "AirspaceWarning.hpp"
 #include "AirspaceWarningVisitor.hpp"
+#include "Compiler.h"
+
 #include <list>
 
 class TaskManager;
@@ -126,6 +128,7 @@ public:
  * 
  * @return Pointer to airspace warning item (or NULL if not found)
  */
+  gcc_pure
   const AirspaceWarning* get_warning(const unsigned index) const;
 
 /** 
@@ -144,6 +147,7 @@ public:
  * 
  * @return Index of warning item in list or -1 if not found
  */
+  gcc_pure
   int get_warning_index(const AbstractAirspace& airspace) const;
 
 /** 
@@ -151,6 +155,7 @@ public:
  * 
  * @return True if no warnings in list
  */
+  gcc_pure
   bool empty() const {
     return m_warnings.empty();
   }

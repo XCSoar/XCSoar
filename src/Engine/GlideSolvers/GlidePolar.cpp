@@ -92,12 +92,6 @@ GlidePolar::set_bugs(const fixed clean)
   update();
 }
 
-fixed
-GlidePolar::get_bugs() const
-{
-  return bugs;
-}
-
 void
 GlidePolar::set_ballast(const fixed bal)
 {

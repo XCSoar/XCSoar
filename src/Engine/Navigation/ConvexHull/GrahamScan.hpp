@@ -41,6 +41,7 @@
 
 #include "Util/NonCopyable.hpp"
 #include "Navigation/SearchPointVector.hpp"
+#include "Compiler.h"
 
 /**
  * Class used to build convex hulls from vector.  This ensures
@@ -64,15 +65,19 @@ public :
  * @return Vector representing convex hull of input
  */
   SearchPointVector prune_interior(bool *changed=NULL);
+
 private :
   void partition_points();
   void build_hull();
   void build_half_hull( std::vector< SearchPoint* > input,
                         std::vector< SearchPoint* > &output,
                         int factor );
-  int direction( const GEOPOINT& p0,
-                 const GEOPOINT& p1,
-                 const GEOPOINT& p2 );
+
+  gcc_pure
+  static int direction(const GEOPOINT& p0,
+                       const GEOPOINT& p1,
+                       const GEOPOINT& p2);
+
   std::list< SearchPoint > raw_points;
   SearchPoint *left;
   SearchPoint *right;

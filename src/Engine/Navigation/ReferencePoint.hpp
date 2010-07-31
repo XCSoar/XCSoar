@@ -59,11 +59,15 @@ public:
 
   /** bearing from this to the reference
    */
-  Angle bearing(const GEOPOINT & ref) const;
+  Angle bearing(const GEOPOINT & ref) const {
+    return m_location.bearing(ref);
+  }
 
   /** distance from this to the reference
    */
-  fixed distance(const GEOPOINT & ref) const;
+  fixed distance(const GEOPOINT & ref) const {
+    return m_location.distance(ref);
+  }
 
   /** The actual location
    */

@@ -38,6 +38,7 @@
 #define FLATLINE_HPP
 
 #include "FlatPoint.hpp"
+#include "Compiler.h"
 
 /**
  * Defines a line in real-valued cartesian coordinates, with intersection
@@ -95,6 +96,7 @@ struct FlatLine
  * 
  * @return Center point
  */
+  gcc_pure
   FlatPoint ave() const;
 
 /** 
@@ -102,6 +104,7 @@ struct FlatLine
  * 
  * @return Angle (deg)
  */
+  gcc_pure
   Angle angle() const;
 
 /** 
@@ -109,6 +112,7 @@ struct FlatLine
  * 
  * @return Squared length
  */
+  gcc_pure
   fixed dsq() const;
 
 /** 
@@ -116,6 +120,7 @@ struct FlatLine
  * 
  * @return Length
  */
+  gcc_pure
   fixed d() const;
 
 /** 
@@ -151,20 +156,27 @@ struct FlatLine
  * @param that other line to take dot product of 
  * @return Dot product
  */
+  gcc_pure
   fixed dot(const FlatLine& that) const;
 
 /**
  * Return magnitude squared of this line
  * @return distance of line squared
  */
+  gcc_pure
   fixed mag_sq() const;
 
 private:
   FlatPoint p1;
   FlatPoint p2;
 
+  gcc_pure
   fixed dx() const;
+
+  gcc_pure
   fixed dy() const;
+
+  gcc_pure
   fixed cross() const;
 };
 

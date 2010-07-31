@@ -236,6 +236,7 @@ struct GEOPOINT {
    *
    * @return True if this point is further left (or if equal, lower) than the other
    */
+  gcc_pure
   bool sort (const GEOPOINT &other) const;
 
   /**

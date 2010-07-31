@@ -39,6 +39,7 @@
 
 #include "FlatPoint.hpp"
 #include "FlatLine.hpp"
+#include "Compiler.h"
 
 /**
  * 2-d ellipse in real-valued projected coordinates, with methods for
@@ -81,6 +82,7 @@ struct FlatEllipse
  * 
  * @return Location on ellipse
  */
+  gcc_pure
   FlatPoint parametric(const fixed t) const;
 
 /** 
@@ -105,7 +107,10 @@ private:
 
   Angle theta_initial;
 
+  gcc_pure
   fixed ab() const;
+
+  gcc_pure
   fixed ba() const;
 
   bool intersect(const FlatLine &line, 

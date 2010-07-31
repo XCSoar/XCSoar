@@ -41,6 +41,7 @@
 #include "GeoPoint.hpp"
 #include "Flat/FlatGeoPoint.hpp"
 #include "Flat/FlatPoint.hpp"
+#include "Compiler.h"
 
 #ifdef DO_PRINT
 #include <iostream>
@@ -88,6 +89,7 @@ public:
  * 
  * @return Projected point
  */
+  gcc_pure
   FLAT_GEOPOINT project(const GEOPOINT& tp) const;
 
 /** 
@@ -97,6 +99,7 @@ public:
  * 
  * @return Projected point
  */
+  gcc_pure
   GEOPOINT unproject(const FLAT_GEOPOINT& tp) const;
 
 /** 
@@ -106,6 +109,7 @@ public:
  * 
  * @return Projected point
  */
+  gcc_pure
   FlatPoint fproject(const GEOPOINT& tp) const;
 
 /** 
@@ -115,6 +119,7 @@ public:
  * 
  * @return Projected point
  */
+  gcc_pure
   GEOPOINT funproject(const FlatPoint& tp) const;
 
 /** 
@@ -126,6 +131,7 @@ public:
  * 
  * @return Distance in flat earth projected units
  */
+  gcc_pure
   unsigned project_range(const GEOPOINT &tp, const fixed range) const;
 
 /** 
@@ -137,6 +143,7 @@ public:
  * 
  * @return Distance in flat earth projected units
  */
+  gcc_pure
   fixed fproject_range(const GEOPOINT &tp, const fixed range) const;
 
   /** 
@@ -144,13 +151,17 @@ public:
    * 
    * @return Center point of task projection
    */
-  const GEOPOINT& get_center() const;
+  gcc_pure
+  const GEOPOINT& get_center() const {
+    return location_mid;
+  }
   
   /** 
    * Calculate radius of points used in task projection
    * 
    * @return Radius (m) from center to edge
    */
+  gcc_pure
   fixed get_radius() const; 
 
 #ifdef DO_PRINT

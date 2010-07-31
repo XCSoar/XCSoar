@@ -41,6 +41,8 @@
 #include <kdtree++/kdtree.hpp>
 #include "Navigation/TracePoint.hpp"
 #include "Navigation/TaskProjection.hpp"
+#include "Compiler.h"
+
 #include <set>
 #include <list>
 #include <map>
@@ -142,6 +144,7 @@ public:
    *
    * @return Vector of trace points within square range
    */
+  gcc_pure
   TracePointVector
   find_within_range(const GEOPOINT &loc, const fixed range, const unsigned mintime=0,
                     const fixed resolution = -fixed_one) const;
@@ -153,6 +156,7 @@ public:
    * 
    * @return Vector of trace points
    */
+  gcc_pure
   TracePointVector get_trace_points(const unsigned max_points) const;
 
 private:
@@ -162,8 +166,13 @@ private:
   void trim_point_delta();
   void trim_point_time();
 
+  gcc_pure
   unsigned lowest_delta() const;
+
+  gcc_pure
   bool inside_recent_time(unsigned time) const;
+
+  gcc_pure
   bool inside_time_window(unsigned time) const;
 
   TraceTree trace_tree;
@@ -187,6 +196,7 @@ private:
    *
    * @return Iterator to item
    */
+  gcc_pure
   TraceTree::const_iterator find_prev(const TracePoint& tp) const;
 
   /**
@@ -194,6 +204,7 @@ private:
    *
    * @return Iterator to item
    */
+  gcc_pure
   TraceTree::const_iterator find_next(const TracePoint& tp) const;
 
   void update_delta(TraceTree::const_iterator it_prev,
