@@ -282,31 +282,6 @@ ScreenGraphics::Initialise(const SETTINGS_MAP &settings_map)
 
 ScreenGraphics::~ScreenGraphics()
 {
-  hCruise.reset();
-  hClimb.reset();
-  hFinalGlide.reset();
-  hAutoMacCready.reset();
-  hFLARMTraffic.reset();
-  hTerrainWarning.reset();
-  hGPSStatus1.reset();
-  hGPSStatus2.reset();
-  hAbort.reset();
-  hLogger.reset();
-  hLoggerOff.reset();
-
-  SmallIcon.reset();
-  TurnPointIcon.reset();
-
-  AirportReachableIcon.reset();
-  AirportUnreachableIcon.reset();
-  FieldReachableIcon.reset();
-  FieldUnreachableIcon.reset();
-  hBmpThermalSource.reset();
-  hBmpTarget.reset();
-  hBmpTeammatePosition.reset();
-
-  hAirspaceInterceptBitmap.reset();
-
   UnloadUnitSymbols();
 }
 
