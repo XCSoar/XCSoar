@@ -143,29 +143,27 @@ MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
   static bool lastLoggerActive = false;
   int offset = -1;
 
-  if (!Appearance.DontShowLoggerIndicator) {
-    // has GPS time advanced?
-    if (Basic().Time <= LastTime) {
-      LastTime = Basic().Time;
-    } else {
-      flip = !flip;
+  // has GPS time advanced?
+  if (Basic().Time <= LastTime) {
+    LastTime = Basic().Time;
+  } else {
+    flip = !flip;
 
-      // don't bother drawing logger if not active for more than one second
-      if ((!logger.isLoggerActive()) && (!lastLoggerActive))
-        drawlogger = false;
+    // don't bother drawing logger if not active for more than one second
+    if ((!logger.isLoggerActive()) && (!lastLoggerActive))
+      drawlogger = false;
 
-      lastLoggerActive = logger.isLoggerActive();
-    }
+    lastLoggerActive = logger.isLoggerActive();
+  }
 
-    if (drawlogger) {
-      offset -= 7;
-      MaskedIcon &icon = (logger.isLoggerActive() && flip) ?
-                         MapGfx.hLogger : MapGfx.hLoggerOff;
+  if (drawlogger) {
+    offset -= 7;
+    MaskedIcon &icon = (logger.isLoggerActive() && flip) ?
+                       MapGfx.hLogger : MapGfx.hLoggerOff;
 
-      icon.draw(canvas, get_bitmap_canvas(),
-                rc.right + IBLSCALE(offset + Appearance.FlightModeOffset.x),
-                rc.bottom + IBLSCALE(-7 + Appearance.FlightModeOffset.y));
-    }
+    icon.draw(canvas, get_bitmap_canvas(),
+              rc.right + IBLSCALE(offset + Appearance.FlightModeOffset.x),
+              rc.bottom + IBLSCALE(-7 + Appearance.FlightModeOffset.y));
   }
 
   if (Appearance.FlightModeIcon == apFlightModeIconDefault) {

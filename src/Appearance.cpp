@@ -45,7 +45,6 @@ Copyright_License {
 struct Appearance Appearance = {
   apMsAltA, // mapscale
   MapScale2,
-  false, // don't show logger indicator
   206,
   {0,-13},
   apFlightModeIconDefault,

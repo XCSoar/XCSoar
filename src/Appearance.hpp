@@ -115,7 +115,6 @@ typedef enum{
 struct Appearance {
   MapScaleAppearance_t MapScale;
   MapScale2Appearance_t MapScale2;
-  bool DontShowLoggerIndicator;
   int DefaultMapWidth;
   POINT GPSStatusOffset;
   FlightModeIconAppearance_t FlightModeIcon;
