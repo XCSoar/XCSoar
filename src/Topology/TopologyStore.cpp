@@ -135,6 +135,10 @@ TopologyStore::DrawLabels(Canvas &canvas, const Projection &projection,
 
 TopologyStore::TopologyStore()
 {
+  for (int z = 0; z < MAXTOPOLOGY; z++) {
+    topology_store[z] = NULL;
+  }
+
   Open();
 }
 
