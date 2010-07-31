@@ -47,16 +47,17 @@ Copyright_License {
 #include "Screen/LabelBlock.hpp"
 #include "resource.h"
 #include "Asset.hpp"
+#include "LogFile.hpp"
 
 #define NUMSNAILRAMP 6
 
 const COLORRAMP snail_colors[] = {
-  {0,         0xff, 0x3e, 0x00},
-  {50,        0xcd, 0x4f, 0x27},
-  {100,       0x8f, 0x8f, 0x8f},
-  {150,       0x27, 0xcd, 0x4f},
-  {201,       0x00, 0xff, 0x3e},
-  {501,       0x00, 0xff, 0x3e}
+  {0,   0xff, 0x3e, 0x00},
+  {50,  0xcd, 0x4f, 0x27},
+  {100, 0x8f, 0x8f, 0x8f},
+  {150, 0x27, 0xcd, 0x4f},
+  {201, 0x00, 0xff, 0x3e},
+  {501, 0x00, 0xff, 0x3e}
 };
 
 // airspace brushes/colours
@@ -99,7 +100,7 @@ const Color ScreenGraphics::inv_yellowColor = Color::YELLOW;
 const Color ScreenGraphics::inv_greenColor = Color::GREEN;
 const Color ScreenGraphics::inv_magentaColor = Color::MAGENTA;
 
-const Color ScreenGraphics::TaskColor = Color(0, 120, 0); // was 255
+const Color ScreenGraphics::TaskColor = Color(0, 120, 0);
 const Color ScreenGraphics::BackgroundColor = Color::WHITE;
 
 const Color ScreenGraphics::Colours[] = {
@@ -122,8 +123,6 @@ const Color ScreenGraphics::Colours[] = {
 };
 
 // JMW TODO: some of these should be loaded after settings are loaded
-
-#include "LogFile.hpp"  // debug
 
 void
 ScreenGraphics::Initialise(const SETTINGS_MAP &settings_map)
@@ -172,9 +171,9 @@ ScreenGraphics::Initialise(const SETTINGS_MAP &settings_map)
 
   hAboveTerrainBitmap.load(IDB_ABOVETERRAIN);
 
-  for (i = 0; i < NUMAIRSPACEBRUSHES; i++) {
+  for (i = 0; i < NUMAIRSPACEBRUSHES; i++)
     hAirspaceBrushes[i].set(hAirspaceBitmap[i]);
-  }
+
   hAboveTerrainBrush.set(hAboveTerrainBitmap);
 
   hbWind.set(Color::GRAY);
@@ -185,9 +184,7 @@ ScreenGraphics::Initialise(const SETTINGS_MAP &settings_map)
   hBmpThermalSource.load(IDB_THERMALSOURCE);
   hBmpTarget.load(IDB_TARGET);
 
-  hbCompass.set(has_colors()
-                ? Color(0x40, 0x40, 0xFF)
-                : Color::WHITE);
+  hbCompass.set(has_colors() ? Color(0x40, 0x40, 0xFF) : Color::WHITE);
 
   hbThermalBand.set(Color(0x80, 0x80, 0xFF));
   hbBestCruiseTrack.set(Color::BLUE);
@@ -207,12 +204,11 @@ ScreenGraphics::Initialise(const SETTINGS_MAP &settings_map)
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
     ColorRampLookup(ih, Red, Green, Blue, snail_colors, NUMSNAILRAMP, 6);
 
-    if (i < NUMSNAILCOLORS / 2) {
+    if (i < NUMSNAILCOLORS / 2)
       iwidth = minwidth;
-    } else {
+    else
       iwidth = max(minwidth, (i - NUMSNAILCOLORS / 2)
           * IBLSCALE(settings_map.SnailWidthScale) / NUMSNAILCOLORS);
-    }
 
     hSnailColours[i] = Color((BYTE)Red, (BYTE)Green, (BYTE)Blue);
     hSnailPens[i].set(iwidth, hSnailColours[i]);
@@ -280,11 +276,9 @@ ScreenGraphics::Initialise(const SETTINGS_MAP &settings_map)
     FieldUnreachableIcon.load(IDB_OUTFIELD_UNREACHABLE2);
   }
 
-  for (int i = 0; i < AIRSPACECLASSCOUNT; i++) {
+  for (int i = 0; i < AIRSPACECLASSCOUNT; i++)
     hAirspacePens[i].set(IBLSCALE(2), GetAirspaceColourByClass(i, settings_map));
-  }
 }
-
 
 ScreenGraphics::~ScreenGraphics()
 {
@@ -426,17 +420,14 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
 
   canvas.white_brush();
 
-  if (Mode.AsFlag.Reachable) {
-    if (Appearance.IndLandable == wpLandableDefault)
-      // make space for the green circle
-      x += 5;
-  }
+  if (Mode.AsFlag.Reachable && Appearance.IndLandable == wpLandableDefault)
+    // make space for the green circle
+    x += 5;
 
   // landable waypoint label inside white box
-  if (!Mode.AsFlag.NoSetFont) {
+  if (!Mode.AsFlag.NoSetFont)
     // VENTA5 predefined font from calling function
     canvas.select(Mode.AsFlag.Border ? Fonts::MapBold : Fonts::Map);
-  }
 
   SIZE tsize = canvas.text_size(Value);
 
