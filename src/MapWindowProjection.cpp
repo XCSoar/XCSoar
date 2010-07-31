@@ -59,7 +59,7 @@ MapWindowProjection::MapWindowProjection():
   _RequestedMapScale(fixed(5)),
   _origin_centered(false),
   ScaleListCount (0),
-  smart_range_active(fixed_one)
+  smart_range_active(Angle::native(fixed_one))
 {
 }
 
@@ -377,7 +377,7 @@ MapWindowProjection::ExchangeBlackboard(const DERIVED_INFO &derived_info,
   // done here to avoid double latency due to locks
 }
 
-static const fixed MINRANGE(0.2);
+static const Angle MINRANGE = Angle::degrees(fixed(0.2));
 
 static bool
 RectangleIsInside(rectObj r_exterior, rectObj r_interior)
@@ -405,26 +405,27 @@ MapWindowProjection::SmartBounds(const bool force)
     recompute = true;
 
   // also trigger if the scale has changed heaps
-  const fixed range_real = fixed(max((bounds_screen.maxx - bounds_screen.minx),
-                                     (bounds_screen.maxy - bounds_screen.miny)));
-  const fixed range = max(fixed(MINRANGE), range_real);
+  const Angle range_real =
+    Angle::native(fixed(max(bounds_screen.maxx - bounds_screen.minx,
+                            bounds_screen.maxy - bounds_screen.miny))).as_delta();
+  const Angle range = max(MINRANGE, range_real);
 
-  fixed scale = range / smart_range_active;
+  fixed scale = range.value_native() / smart_range_active.value_native();
   if (max(scale, fixed_one / scale) > fixed(4))
     recompute = true;
 
   if (recompute || force) {
     // make bounds bigger than screen
     if (range_real < MINRANGE)
-      scale = BORDERFACTOR * MINRANGE / range_real;
+      scale = BORDERFACTOR * MINRANGE.value_native() / range_real.value_native();
     else
       scale = BORDERFACTOR;
 
     smart_bounds_active = CalculateScreenBounds(scale);
 
-    smart_range_active = max((smart_bounds_active.maxx
-        - smart_bounds_active.minx), (smart_bounds_active.maxy
-        - smart_bounds_active.miny));
+    smart_range_active =
+      Angle::native(fixed(max(smart_bounds_active.maxx - smart_bounds_active.minx,
+                              smart_bounds_active.maxy - smart_bounds_active.miny))).as_delta();
 
     // now update visibility of objects in the map window
     return true;

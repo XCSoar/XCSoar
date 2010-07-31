@@ -160,7 +160,7 @@ private:
   int ScaleListCount;
 
   rectObj smart_bounds_active;
-  fixed smart_range_active;
+  Angle smart_range_active;
 };
 
 #endif
