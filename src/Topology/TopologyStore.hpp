@@ -68,8 +68,6 @@ public:
   bool ScanVisibility(Projection &m_projection,
       rectObj &_bounds_active, const bool force = false);
   void TriggerUpdateCaches(Projection &m_projection);
-  void Open();
-  void Close();
   void Reload();
   void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
             const Projection &projection) const;
@@ -78,6 +76,8 @@ public:
                   const SETTINGS_MAP &settings_map) const;
 
 private:
+  void Open();
+  void Close();
   void Load(NLineReader &reader, const TCHAR* Directory);
   void Reset();
 
