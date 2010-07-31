@@ -44,8 +44,6 @@ Copyright_License {
 bool
 RasterMap::GetMapCenter(GEOPOINT *loc) const
 {
-  assert(isMapLoaded());
-
   *loc = TerrainInfo.TopLeft.interpolate(TerrainInfo.BottomRight,
                                          fixed_half);
   return true;
@@ -86,8 +84,6 @@ RasterMap::GetEffectivePixelSize(fixed &pixel_D,
 short
 RasterMap::GetField(const GEOPOINT &location)
 {
-  assert(isMapLoaded());
-
   return _GetFieldAtXY((int)(location.Longitude.value_native() *
                              rounding.fXroundingFine) - rounding.xlleft,
                        rounding.xlltop -

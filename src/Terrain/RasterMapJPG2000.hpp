@@ -47,6 +47,10 @@ class RasterMapJPG2000: public RasterMap {
   RasterMapJPG2000(const char *path);
   ~RasterMapJPG2000();
 
+  bool isMapLoaded() const {
+    return raster_tile_cache.GetInitialised();
+  }
+
   void SetViewCenter(const GEOPOINT &location);
   void ServiceFullReload(const GEOPOINT &location);
 

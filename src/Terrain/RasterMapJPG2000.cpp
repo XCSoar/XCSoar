@@ -48,8 +48,8 @@ Copyright_License {
 
 // Field access
 short RasterMapJPG2000::_GetFieldAtXY(unsigned int lx,
-                                      unsigned int ly) {
-
+                                      unsigned int ly)
+{
   return raster_tile_cache.GetField(lx,ly);
 }
 
@@ -71,8 +71,7 @@ RasterMapJPG2000::RasterMapJPG2000(const char *_path)
 
   _ReloadJPG2000();
 
-  terrain_valid = raster_tile_cache.GetInitialised();
-  if (!terrain_valid)
+  if (!raster_tile_cache.GetInitialised())
     raster_tile_cache.Reset();
 }
 

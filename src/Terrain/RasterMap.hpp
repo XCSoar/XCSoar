@@ -62,13 +62,7 @@ protected:
   } rounding;
 
  public:
-  RasterMap()
-    :terrain_valid(false) {}
   virtual ~RasterMap() {};
-
-  inline bool isMapLoaded() const {
-    return terrain_valid;
-  }
 
   TERRAIN_INFO TerrainInfo;
 
