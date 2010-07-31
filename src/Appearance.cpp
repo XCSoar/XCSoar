@@ -47,7 +47,6 @@ struct Appearance Appearance = {
   MapScale2,
   206,
   {0,-13},
-  {0,0},
   apCompassAltA,
   ctBestCruiseTrackAltA,
   true, // don't show speed to fly

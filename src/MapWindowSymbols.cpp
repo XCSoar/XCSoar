@@ -162,8 +162,8 @@ MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
                        MapGfx.hLogger : MapGfx.hLoggerOff;
 
     icon.draw(canvas, get_bitmap_canvas(),
-              rc.right + IBLSCALE(offset + Appearance.FlightModeOffset.x),
-              rc.bottom + IBLSCALE(-7 + Appearance.FlightModeOffset.y));
+              rc.right + IBLSCALE(offset),
+              rc.bottom + IBLSCALE(-7));
   }
 
   MaskedIcon *bmp;
@@ -180,8 +180,8 @@ MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
   offset -= 24;
 
   bmp->draw(canvas, get_bitmap_canvas(),
-            rc.right + IBLSCALE(offset - 1 + Appearance.FlightModeOffset.x),
-            rc.bottom + IBLSCALE(-20 - 1 + Appearance.FlightModeOffset.y));
+            rc.right + IBLSCALE(offset - 1),
+            rc.bottom + IBLSCALE(-21));
 }
 
 void
