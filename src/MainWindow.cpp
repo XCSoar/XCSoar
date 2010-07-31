@@ -66,7 +66,11 @@ MainWindow::set(const TCHAR* text,
                 int left, int top, unsigned width, unsigned height)
 {
   SingleWindow::set(_T("XCSoarMain"), text, left, top, width, height);
+}
 
+void
+MainWindow::initialise()
+{
   RECT rc;
 #ifdef WINDOWSPC
   rc.left = 0;

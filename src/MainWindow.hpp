@@ -74,6 +74,8 @@ public:
   void set(LPCTSTR text,
            int left, int top, unsigned width, unsigned height);
 
+  void initialise();
+
   void reset() {
     map.reset();
     TopWindow::reset();

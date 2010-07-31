@@ -242,9 +242,10 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   main_window.set(szTitle,
                   WindowSize.left, WindowSize.top,
                   WindowSize.right, WindowSize.bottom);
-
   if (!main_window.defined())
     return false;
+
+  main_window.initialise();
 
 #ifdef SIMULATOR_AVAILABLE
   // prompt for simulator if not set by command line argument "-simulator" or "-fly"
