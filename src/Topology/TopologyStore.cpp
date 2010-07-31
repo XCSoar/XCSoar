@@ -49,6 +49,7 @@ Copyright_License {
 #include "SettingsUser.hpp" // for EnableTopology
 #include "IO/ZipLineReader.hpp"
 #include "ProgressGlue.hpp"
+#include "OS/FileUtil.hpp"
 
 #include <assert.h>
 
@@ -141,16 +142,17 @@ TopologyStore::Open()
 
   // Start off by getting the names and paths
   TCHAR szFile[MAX_PATH];
+
   Profile::Get(szProfileTopologyFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
 
-  if (string_is_empty(szFile)) {
+  if (string_is_empty(szFile) || !File::Exists(szFile)) {
     // file is blank, so look for it in a map file
     Profile::Get(szProfileMapFile, szFile, MAX_PATH);
-    if (string_is_empty(szFile))
-      return;
-
     ExpandLocalPath(szFile);
+
+    if (string_is_empty(szFile) || !File::Exists(szFile))
+      return;
 
     // Look for the file within the map zip file...
     _tcscat(szFile, _T("/"));
