@@ -139,20 +139,13 @@ InitialiseFontsAltair()
   if (!is_altair())
     return;
 
-  InitialiseLogfont(&LogInfoBox, _T("RasterGothicTwentyFourCond"),
-                    24, true);
-  InitialiseLogfont(&LogTitle, _T("RasterGothicNineCond"),
-                    10);
-  InitialiseLogfont(&LogCDI, _T("RasterGothicEighteenCond"),
-                    19, true);
-  InitialiseLogfont(&LogMapLabel, _T("RasterGothicTwelveCond"),
-                    13);
-  InitialiseLogfont(&LogMap, _T("RasterGothicFourteenCond"),
-                    15);
-  InitialiseLogfont(&LogMapBold, _T("RasterGothicFourteenCond"),
-                    15, true);
-  InitialiseLogfont(&LogInfoBoxSmall, _T("RasterGothicEighteenCond"),
-                    19, true);
+  InitialiseLogfont(&LogInfoBox, _T("RasterGothicTwentyFourCond"), 24, true);
+  InitialiseLogfont(&LogTitle, _T("RasterGothicNineCond"), 10);
+  InitialiseLogfont(&LogCDI, _T("RasterGothicEighteenCond"), 19, true);
+  InitialiseLogfont(&LogMapLabel, _T("RasterGothicTwelveCond"), 13);
+  InitialiseLogfont(&LogMap, _T("RasterGothicFourteenCond"), 15);
+  InitialiseLogfont(&LogMapBold, _T("RasterGothicFourteenCond"), 15, true);
+  InitialiseLogfont(&LogInfoBoxSmall, _T("RasterGothicEighteenCond"), 19, true);
 }
 
 static void
