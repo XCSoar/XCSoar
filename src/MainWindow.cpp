@@ -127,7 +127,6 @@ MainWindow::initialise()
 
   // color/pattern chart (must have infobox geometry before this)
   MapGfx.Initialise();
-  MapGfx.InitialiseConfigured(XCSoarInterface::SettingsMap());
 
   LogStartUp(_T("Initialise fonts"));
   Fonts::Initialize(Appearance.UseCustomFonts);

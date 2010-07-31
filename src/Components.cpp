@@ -255,6 +255,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   PreloadInitialisation(true);
 
+  MapGfx.InitialiseConfigured(SettingsMap());
+
 #ifndef DEBUG_TRANSLATIONS
   ReadLanguageFile();
 #endif
