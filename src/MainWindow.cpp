@@ -88,7 +88,8 @@ MainWindow::initialise()
   RECT map_rect = InfoBoxLayout::GetRemainingRect(rc);
 
   // color/pattern chart (must have infobox geometry before this)
-  MapGfx.Initialise(XCSoarInterface::SettingsMap());
+  MapGfx.Initialise();
+  MapGfx.InitialiseConfigured(XCSoarInterface::SettingsMap());
 
   LogStartUp(_T("Initialise fonts"));
   Fonts::Initialize(Appearance.UseCustomFonts);

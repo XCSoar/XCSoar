@@ -125,7 +125,7 @@ const Color ScreenGraphics::Colours[] = {
 // JMW TODO: some of these should be loaded after settings are loaded
 
 void
-ScreenGraphics::Initialise(const SETTINGS_MAP &settings_map)
+ScreenGraphics::Initialise()
 {
   /// @todo enhancement: support red/green color blind pilots with adjusted colour scheme
 
@@ -228,8 +228,6 @@ ScreenGraphics::Initialise(const SETTINGS_MAP &settings_map)
 
   SmallIcon.load(IDB_SMALL);
   TurnPointIcon.load(IDB_TURNPOINT);
-
-  InitialiseConfigured(settings_map);
 }
 
 void

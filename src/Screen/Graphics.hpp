@@ -77,7 +77,7 @@ typedef union
 
 class ScreenGraphics {
 public:
-  void Initialise(const SETTINGS_MAP &settings_map);
+  void Initialise();
   void InitialiseConfigured(const SETTINGS_MAP &settings_map);
 
   // airspace brushes/colours
