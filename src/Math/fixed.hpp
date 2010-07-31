@@ -852,13 +852,14 @@ inline fixed sigmoid(fixed const& x)
    }
  }
 
-fixed const fixed_max(fixed::internal(),0x7fffffffffffffffLL);
-fixed const fixed_one(fixed::internal(),1<<(fixed::resolution_shift));
-fixed const fixed_minus_one(fixed::internal(), ((fixed::value_t)-1) << fixed::resolution_shift);
-fixed const fixed_two(fixed::internal(),1<<(fixed::resolution_shift+1));
-fixed const fixed_four(fixed::internal(),1<<(fixed::resolution_shift+2));
-fixed const fixed_zero(fixed::internal(),0);
-fixed const fixed_half(fixed::internal(),1<<(fixed::resolution_shift-1));
+#define fixed_max fixed(fixed::internal(), 0x7fffffffffffffffLL)
+#define fixed_one fixed(fixed::internal(), 1 << fixed::resolution_shift)
+#define fixed_minus_one fixed(fixed::internal(), ((fixed::value_t)-1) << fixed::resolution_shift)
+#define fixed_two fixed(fixed::internal(), 1 << (fixed::resolution_shift + 1))
+#define fixed_four fixed(fixed::internal(), 1 << (fixed::resolution_shift + 2))
+#define fixed_zero fixed(fixed::internal(), 0)
+#define fixed_half fixed(fixed::internal(), 1 << (fixed::resolution_shift - 1))
+
 extern fixed const fixed_pi;
 extern fixed const fixed_two_pi;
 extern fixed const fixed_half_pi;
