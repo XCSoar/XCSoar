@@ -47,7 +47,6 @@ struct Appearance Appearance = {
   MapScale2,
   206,
   {0,-13},
-  apFlightModeIconDefault,
   {0,0},
   apCompassAltA,
   ctBestCruiseTrackAltA,

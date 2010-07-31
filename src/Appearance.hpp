@@ -117,7 +117,6 @@ struct Appearance {
   MapScale2Appearance_t MapScale2;
   int DefaultMapWidth;
   POINT GPSStatusOffset;
-  FlightModeIconAppearance_t FlightModeIcon;
   POINT FlightModeOffset;
   CompassAppearance_t CompassAppearance;
   BestCruiseTrack_t BestCruiseTrack;

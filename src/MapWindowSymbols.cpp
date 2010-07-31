@@ -166,25 +166,22 @@ MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
               rc.bottom + IBLSCALE(-7 + Appearance.FlightModeOffset.y));
   }
 
-  if (Appearance.FlightModeIcon == apFlightModeIconDefault) {
-    MaskedIcon *bmp;
+  MaskedIcon *bmp;
 
-    if (task != NULL && (task->get_mode() == TaskManager::MODE_ABORT))
-      bmp = &MapGfx.hAbort;
-    else if (DisplayMode == dmCircling)
-      bmp = &MapGfx.hClimb;
-    else if (DisplayMode == dmFinalGlide)
-      bmp = &MapGfx.hFinalGlide;
-    else
-      bmp = &MapGfx.hCruise;
+  if (task != NULL && (task->get_mode() == TaskManager::MODE_ABORT))
+    bmp = &MapGfx.hAbort;
+  else if (DisplayMode == dmCircling)
+    bmp = &MapGfx.hClimb;
+  else if (DisplayMode == dmFinalGlide)
+    bmp = &MapGfx.hFinalGlide;
+  else
+    bmp = &MapGfx.hCruise;
 
-    offset -= 24;
+  offset -= 24;
 
-    bmp->draw(canvas, get_bitmap_canvas(),
-              rc.right + IBLSCALE(offset - 1 + Appearance.FlightModeOffset.x),
-              rc.bottom + IBLSCALE(-20 - 1 + Appearance.FlightModeOffset.y));
-
-  }
+  bmp->draw(canvas, get_bitmap_canvas(),
+            rc.right + IBLSCALE(offset - 1 + Appearance.FlightModeOffset.x),
+            rc.bottom + IBLSCALE(-20 - 1 + Appearance.FlightModeOffset.y));
 }
 
 void
