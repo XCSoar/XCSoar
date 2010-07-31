@@ -187,15 +187,6 @@ MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
               rc.bottom + IBLSCALE(-20 - 1 + Appearance.FlightModeOffset.y));
 
   }
-
-  if (!Appearance.DontShowAutoMacCready && SettingsComputer().auto_mc) {
-    offset -= 24;
-
-    //changed draw mode & icon for higher opacity 12aug -st
-    MapGfx.hAutoMacCready.draw(canvas, get_bitmap_canvas(),
-                               rc.right + IBLSCALE(offset - 3 + Appearance.FlightModeOffset.x),
-                               rc.bottom + IBLSCALE(-20 - 3 + Appearance.FlightModeOffset.y));
-  }
 }
 
 void

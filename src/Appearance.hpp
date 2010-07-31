@@ -125,7 +125,6 @@ struct Appearance {
   bool DontShowSpeedToFly;
   IndFinalGlide_t IndFinalGlide;
   IndLandable_t IndLandable;
-  bool DontShowAutoMacCready;
   bool InverseInfoBox;
   bool InfoTitelCapital;
   StateMessageAlign_t StateMessageAlign;

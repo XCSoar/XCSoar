@@ -55,7 +55,6 @@ struct Appearance Appearance = {
   true, // don't show speed to fly
   fgFinalGlideDefault,
   wpLandableDefault,
-  true,
   false,
   true,
   smAlignCenter,
