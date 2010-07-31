@@ -43,74 +43,41 @@ Copyright_License {
 
 #include <windef.h>
 
-typedef enum{
-  apMsDefault=0,
-  apMsNone,
-  apMsAltA
-}MapScaleAppearance_t;
-
-typedef enum{
-  apMs2Default=0,
-  apMs2None,
-  apMs2AltA
-}MapScale2Appearance_t;
-
-typedef enum{
-  apFlightModeIconDefault=0,
-  apFlightModeIconAltA
-}FlightModeIconAppearance_t;
-
-typedef enum{
-  apCompassDefault=0,
+typedef enum {
+  apCompassDefault = 0,
   apCompassAltA
-}CompassAppearance_t;
+} CompassAppearance_t;
 
-typedef enum{
-  ctBestCruiseTrackDefault=0,
-  ctBestCruiseTrackAltA,
-}BestCruiseTrack_t;
-
-typedef enum{
-  afAircraftDefault=0,
-  afAircraftAltA
-}Aircraft_t;
-
-typedef enum{
-  fgFinalGlideDefault=0,
+typedef enum {
+  fgFinalGlideDefault = 0,
   fgFinalGlideAltA,
-}IndFinalGlide_t;
+} IndFinalGlide_t;
 
-typedef enum{
-  wpLandableDefault=0,
+typedef enum {
+  wpLandableDefault = 0,
   wpLandableAltA,
   wpLandableAltB,
-}IndLandable_t;
+} IndLandable_t;
 
-typedef enum{
-  smAlignCenter=0,
+typedef enum {
+  smAlignCenter = 0,
   smAlignTopLeft,
-}StateMessageAlign_t;
+} StateMessageAlign_t;
 
-typedef enum{
+typedef enum {
   /**
    * Use the platform default - i.e. keyboard if the device has a
    * pointing device.
    */
   tiDefault,
-
   tiKeyboard,
   tiHighScore,
-}TextInputStyle_t;
+} TextInputStyle_t;
 
-typedef enum{
-  gvnsDefault=0,
-  gvnsLongNeedle,
-}GaugeVarioNeedleStyle_t;
-
-typedef enum{
-  apIbBox=0,
+typedef enum {
+  apIbBox = 0,
   apIbTab
-}InfoBoxBorderAppearance_t;
+} InfoBoxBorderAppearance_t;
 
 struct Appearance {
   int DefaultMapWidth;
