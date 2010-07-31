@@ -70,6 +70,7 @@ public:
   void TriggerUpdateCaches(Projection &m_projection);
   void Open();
   void Close();
+  void Reload();
   void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
             const Projection &projection) const;
   void DrawLabels(Canvas &canvas,

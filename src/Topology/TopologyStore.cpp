@@ -139,6 +139,13 @@ TopologyStore::TopologyStore()
 }
 
 void
+TopologyStore::Reload()
+{
+  Close();
+  Open();
+}
+
+void
 TopologyStore::Open()
 {
   LogStartUp(_T("OpenTopology"));
