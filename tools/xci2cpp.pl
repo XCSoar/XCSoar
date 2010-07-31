@@ -123,6 +123,7 @@ print "};\n";
 print "static const EventSTRUCT default_events[] = {\n";
 foreach my $e (@events) {
     my ($handler, $misc, $next_id) = @$e;
+    $misc = '' unless defined $misc;
     $misc = c_string($misc);
     print "  { InputEvents::event$handler, $misc, $next_id },\n";
 }
