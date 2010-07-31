@@ -253,13 +253,8 @@ ScreenGraphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
     hSnailPens[i].set(iwidth, hSnailColours[i]);
   }
 
-  if (Appearance.InverseAircraft) {
-    hpAircraft.set(IBLSCALE(3), Color::BLACK);
-    hpAircraftBorder.set(IBLSCALE(1), Color::WHITE);
-  } else {
-    hpAircraft.set(IBLSCALE(3), Color::WHITE);
-    hpAircraftBorder.set(IBLSCALE(1), Color::BLACK);
-  }
+  hpAircraft.set(IBLSCALE(3), Color::WHITE);
+  hpAircraftBorder.set(IBLSCALE(1), Color::BLACK);
 
   if (Appearance.IndLandable == wpLandableDefault) {
     AirportReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_BIG);

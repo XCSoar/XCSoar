@@ -139,7 +139,6 @@ struct Appearance {
   GaugeVarioNeedleStyle_t GaugeVarioNeedleStyle;
   bool InfoBoxColors;
   InfoBoxBorderAppearance_t InfoBoxBorder;
-  bool InverseAircraft;
   bool GaugeVarioGross;
   bool GaugeVarioAveNeedle;
   bool UseCustomFonts;

@@ -89,10 +89,8 @@ MapWindow::DrawAircraft(Canvas &canvas)
 
     Brush hbAircraftSolid, hbAircraftSolidBg;
 
-    hbAircraftSolid.set(Appearance.InverseAircraft
-                        ? Color::WHITE : Color::BLACK);
-    hbAircraftSolidBg.set(Appearance.InverseAircraft
-                          ? Color::BLACK : Color::WHITE);
+    hbAircraftSolid.set(Color::BLACK);
+    hbAircraftSolidBg.set(Color::WHITE);
 
     canvas.select(hbAircraftSolidBg);
     canvas.select(MapGfx.hpAircraft);
@@ -147,10 +145,7 @@ MapWindow::DrawAircraft(Canvas &canvas)
     canvas.select(MapGfx.hpAircraft);
     canvas.polygon(Aircraft, n);
 
-    if (Appearance.InverseAircraft)
-      canvas.white_brush();
-    else
-      canvas.black_brush();
+    canvas.black_brush();
 
     canvas.select(MapGfx.hpAircraftBorder);
     canvas.polygon(Aircraft, n);
