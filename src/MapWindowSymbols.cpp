@@ -569,25 +569,14 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas)
   const Angle angle = Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing
                     - GetDisplayAngle();
 
-  if (Appearance.BestCruiseTrack == ctBestCruiseTrackDefault) {
-    POINT Arrow[] = { { -1, -40 }, {  1, -40 }, {  1, -70 }, { 6, -62 },
-                      { -6, -62 }, { -1, -70 }, { -1, -40 } };
+  POINT Arrow[] = { { -1, -40 }, { -1, -62 }, { -6, -62 }, {  0, -70 },
+                    {  6, -62 }, {  1, -62 }, {  1, -40 }, { -1, -40 } };
 
-    PolygonRotateShift(Arrow, sizeof(Arrow) / sizeof(Arrow[0]),
-                       GetOrigAircraft().x, GetOrigAircraft().y,
-                       angle);
+  PolygonRotateShift(Arrow, sizeof(Arrow) / sizeof(Arrow[0]),
+                     GetOrigAircraft().x, GetOrigAircraft().y,
+                     angle);
 
-    canvas.polygon(Arrow, sizeof(Arrow) / sizeof(Arrow[0]));
-  } else if (Appearance.BestCruiseTrack == ctBestCruiseTrackAltA) {
-    POINT Arrow[] = { { -1, -40 }, { -1, -62 }, { -6, -62 }, {  0, -70 },
-                      {  6, -62 }, {  1, -62 }, {  1, -40 }, { -1, -40 } };
-
-    PolygonRotateShift(Arrow, sizeof(Arrow) / sizeof(Arrow[0]),
-                       GetOrigAircraft().x, GetOrigAircraft().y,
-                       angle);
-
-    canvas.polygon(Arrow, sizeof(Arrow) / sizeof(Arrow[0]));
-  }
+  canvas.polygon(Arrow, sizeof(Arrow) / sizeof(Arrow[0]));
 }
 
 #include "Gauge/GaugeCDI.hpp"
