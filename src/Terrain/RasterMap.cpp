@@ -39,14 +39,12 @@ Copyright_License {
 #include "Terrain/RasterMap.hpp"
 #include "Math/Earth.hpp"
 
-// Rounding control
-
+#include <assert.h>
 
 bool
 RasterMap::GetMapCenter(GEOPOINT *loc) const
 {
-  if(!isMapLoaded())
-    return false;
+  assert(isMapLoaded());
 
   *loc = TerrainInfo.TopLeft.interpolate(TerrainInfo.BottomRight,
                                          fixed_half);
@@ -88,13 +86,11 @@ RasterMap::GetEffectivePixelSize(fixed &pixel_D,
 short
 RasterMap::GetField(const GEOPOINT &location)
 {
-  if(isMapLoaded()) {
-    return _GetFieldAtXY((int)(location.Longitude.value_native() *
-                               rounding.fXroundingFine) - rounding.xlleft,
-                         rounding.xlltop -
-                         (int)(location.Latitude.value_native() *
-                               rounding.fYroundingFine));
-  } else {
-    return TERRAIN_INVALID;
-  }
+  assert(isMapLoaded());
+
+  return _GetFieldAtXY((int)(location.Longitude.value_native() *
+                             rounding.fXroundingFine) - rounding.xlleft,
+                       rounding.xlltop -
+                       (int)(location.Latitude.value_native() *
+                             rounding.fYroundingFine));
 }
