@@ -192,37 +192,7 @@ ScreenGraphics::Initialise(const SETTINGS_MAP &settings_map)
   hbFinalGlideBelowLandable.set(Color(0xFF, 180, 0x00));
   hbFinalGlideAbove.set(Color::GREEN);
 
-  // all below depend on settings!
-
-  BYTE Red, Green, Blue;
-
-  int iwidth;
-  int minwidth;
-  minwidth = max(IBLSCALE(2), IBLSCALE(settings_map.SnailWidthScale) / 16);
-
-  for (i = 0; i < NUMSNAILCOLORS; i++) {
-    short ih = i * 200 / (NUMSNAILCOLORS - 1);
-    ColorRampLookup(ih, Red, Green, Blue, snail_colors, NUMSNAILRAMP, 6);
-
-    if (i < NUMSNAILCOLORS / 2)
-      iwidth = minwidth;
-    else
-      iwidth = max(minwidth, (i - NUMSNAILCOLORS / 2)
-          * IBLSCALE(settings_map.SnailWidthScale) / NUMSNAILCOLORS);
-
-    hSnailColours[i] = Color((BYTE)Red, (BYTE)Green, (BYTE)Blue);
-    hSnailPens[i].set(iwidth, hSnailColours[i]);
-  }
-
   hpCompassBorder.set(IBLSCALE(3), Color::WHITE);
-
-  if (Appearance.InverseAircraft) {
-    hpAircraft.set(IBLSCALE(3), Color::BLACK);
-    hpAircraftBorder.set(IBLSCALE(1), Color::WHITE);
-  } else {
-    hpAircraft.set(IBLSCALE(3), Color::WHITE);
-    hpAircraftBorder.set(IBLSCALE(1), Color::BLACK);
-  }
 
   hpWind.set(IBLSCALE(2), Color::BLACK);
 
@@ -258,6 +228,40 @@ ScreenGraphics::Initialise(const SETTINGS_MAP &settings_map)
 
   SmallIcon.load(IDB_SMALL);
   TurnPointIcon.load(IDB_TURNPOINT);
+
+  InitialiseConfigured(settings_map);
+}
+
+void
+ScreenGraphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
+{
+  BYTE Red, Green, Blue;
+
+  int iwidth;
+  int minwidth;
+  minwidth = max(IBLSCALE(2), IBLSCALE(settings_map.SnailWidthScale) / 16);
+
+  for (int i = 0; i < NUMSNAILCOLORS; i++) {
+    short ih = i * 200 / (NUMSNAILCOLORS - 1);
+    ColorRampLookup(ih, Red, Green, Blue, snail_colors, NUMSNAILRAMP, 6);
+
+    if (i < NUMSNAILCOLORS / 2)
+      iwidth = minwidth;
+    else
+      iwidth = max(minwidth, (i - NUMSNAILCOLORS / 2)
+          * IBLSCALE(settings_map.SnailWidthScale) / NUMSNAILCOLORS);
+
+    hSnailColours[i] = Color((BYTE)Red, (BYTE)Green, (BYTE)Blue);
+    hSnailPens[i].set(iwidth, hSnailColours[i]);
+  }
+
+  if (Appearance.InverseAircraft) {
+    hpAircraft.set(IBLSCALE(3), Color::BLACK);
+    hpAircraftBorder.set(IBLSCALE(1), Color::WHITE);
+  } else {
+    hpAircraft.set(IBLSCALE(3), Color::WHITE);
+    hpAircraftBorder.set(IBLSCALE(1), Color::BLACK);
+  }
 
   if (Appearance.IndLandable == wpLandableDefault) {
     AirportReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_BIG);
