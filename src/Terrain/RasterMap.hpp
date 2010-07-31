@@ -39,7 +39,6 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_RASTER_MAP_HPP
 #define XCSOAR_TERRAIN_RASTER_MAP_HPP
 
-#include "Poco/RWLock.h"
 #include "Navigation/GeoPoint.hpp"
 #include "Compiler.h"
 
@@ -94,17 +93,7 @@ protected:
 
   virtual void ServiceFullReload(const GEOPOINT &location) = 0;
 
-  void LockRead() {
-    lock.readLock();
-  }
-
-  void Unlock() {
-    lock.unlock();
-  };
-
  protected:
-  Poco::RWLock lock;
-
   bool terrain_valid;
 
   gcc_pure

@@ -37,9 +37,6 @@ Copyright_License {
 
 #include "Terrain/RasterTerrain.hpp"
 
-void RasterTerrain::Lock(void) {}
-void RasterTerrain::Unlock(void) {}
-
 bool
 RasterTerrain::GetTerrainCenter(GEOPOINT *location) const
 {

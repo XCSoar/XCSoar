@@ -56,7 +56,7 @@ short RasterMapJPG2000::_GetFieldAtXY(unsigned int lx,
 void RasterMapJPG2000::ServiceFullReload(const GEOPOINT &location) {
   TriggerJPGReload = true;
   FullJPGReload= true;
-  _SetViewCenter(location);
+  SetViewCenter(location);
   FullJPGReload= false;
 }
 
@@ -122,12 +122,6 @@ void RasterMapJPG2000::_ReloadJPG2000() {
 }
 
 void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
-{
-  Poco::ScopedRWLock protect(lock, true);
-  _SetViewCenter(location);
-}
-
-void RasterMapJPG2000::_SetViewCenter(const GEOPOINT &location)
 {
   int x = 0, y = 0; /* initalize to work around bogus gcc warning */
   bool do_poll = false;

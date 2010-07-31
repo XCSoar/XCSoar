@@ -78,18 +78,6 @@ void RasterTerrain::CloseTerrain(void)
   TerrainMap = NULL;
 }
 
-void RasterTerrain::Lock(void) {
-  if (TerrainMap) {
-    TerrainMap->LockRead();
-  }
-}
-
-void RasterTerrain::Unlock(void) {
-  if (TerrainMap) {
-    TerrainMap->Unlock();
-  }
-}
-
 short
 RasterTerrain::GetTerrainHeight(const GEOPOINT &Location) const
 {
@@ -102,6 +90,7 @@ RasterTerrain::GetTerrainHeight(const GEOPOINT &Location) const
 
 void RasterTerrain::ServiceTerrainCenter(const GEOPOINT &location) {
   if (TerrainMap) {
+    Poco::ScopedRWLock protect(lock, true);
     TerrainMap->SetViewCenter(location);
   }
 }

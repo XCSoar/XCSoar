@@ -47,11 +47,6 @@ class RasterMapJPG2000: public RasterMap {
   RasterMapJPG2000(const char *path);
   ~RasterMapJPG2000();
 
-  /**
-   * Lockless version opf SetViewCenter().
-   */
-  void _SetViewCenter(const GEOPOINT &location);
-
   void SetViewCenter(const GEOPOINT &location);
   void ServiceFullReload(const GEOPOINT &location);
 

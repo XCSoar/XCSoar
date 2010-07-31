@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_TERRAIN_RASTER_TERRAIN_HPP
 
 #include "Navigation/GeoPoint.hpp"
+#include "Poco/RWLock.h"
 #include "Compiler.h"
 
 class RasterMap;
@@ -53,6 +54,9 @@ class RasterTerrain {
 public:
   /** invalid value for terrain */
   static const short TERRAIN_INVALID = -1000;
+
+protected:
+  mutable Poco::RWLock lock;
 
 public:
 
@@ -89,8 +93,13 @@ public:
     return TerrainMap != NULL;
   }
 
-  void Lock(void); // should be protected, friend of TerrainDataClient
-  void Unlock(void); // should be protected, friend of TerrainDataClient
+  void Lock() const {
+    lock.readLock();
+  }
+
+  void Unlock() const {
+    lock.unlock();
+  }
 
   RasterMap* get_map() const {
     return TerrainMap;

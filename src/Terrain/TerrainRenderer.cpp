@@ -312,7 +312,7 @@ TerrainRenderer::Height(const Projection &map_projection)
 
   // OK, ready to start loading height
 
-  DisplayMap->LockRead();
+  terrain->Lock();
 
   // set resolution
 
@@ -332,7 +332,7 @@ TerrainRenderer::Height(const Projection &map_projection)
 
   FillHeightBuffer(map_projection, rect_visible);
 
-  DisplayMap->Unlock();
+  terrain->Unlock();
 
   if (do_scan_spot())
     ScanSpotHeights(rect_visible);
