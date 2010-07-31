@@ -75,6 +75,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Simulator.hpp"
 #include "Compiler.h"
+#include "Screen/Graphics.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 
 #include <assert.h>
@@ -2633,7 +2634,7 @@ void dlgConfigurationShowModal(void)
       Appearance.IndLandable = (IndLandable_t)(wp->GetDataField()->GetAsInteger());
       Profile::Set(szProfileAppIndLandable, Appearance.IndLandable);
       changed = true;
-      requirerestart = true;
+      MapGfx.InitialiseConfigured(XCSoarInterface::SettingsMap());
     }
   }
 
@@ -2830,7 +2831,7 @@ void dlgConfigurationShowModal(void)
       Profile::Set(szProfileSnailWidthScale,
                     XCSoarInterface::SettingsMap().SnailWidthScale);
       changed = true;
-      requirerestart = true;
+      MapGfx.InitialiseConfigured(XCSoarInterface::SettingsMap());
     }
   }
 
