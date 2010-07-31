@@ -58,7 +58,6 @@ struct Appearance Appearance = {
   false,
   false,
   false,
-  gvnsLongNeedle,
   true,
   apIbBox,
   true,

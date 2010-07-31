@@ -128,7 +128,6 @@ struct Appearance {
   bool GaugeVarioSpeedToFly;
   bool GaugeVarioBallast;
   bool GaugeVarioBugs;
-  GaugeVarioNeedleStyle_t GaugeVarioNeedleStyle;
   bool InfoBoxColors;
   InfoBoxBorderAppearance_t InfoBoxBorder;
   bool GaugeVarioGross;

@@ -66,8 +66,7 @@ static Color colTextBackgnd;
 
 GaugeVario::GaugeVario(ContainerWindow &parent,
                        int left, int top, unsigned width, unsigned height)
-  :nlength0(Layout::Scale(Appearance.GaugeVarioNeedleStyle == gvnsLongNeedle
-                          ? 15 : 13)),
+  :nlength0(Layout::Scale(15)),
    nlength1(Layout::Scale(6)),
    nwidth(Layout::Scale(4)),
    nline(Layout::Scale(8)),
