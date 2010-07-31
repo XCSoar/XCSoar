@@ -54,7 +54,6 @@ class SunEphemeris {
   double f0(double lat, double declin);
   double f1(double lat, double declin);
   double FNsun (double d);
-  void showhrmn(double dhr);
 
  public:
   double MorningTwilight, altmax, TimeOfNoon, TimeOfSunSet, TimeOfSunRise, EveningTwilight;

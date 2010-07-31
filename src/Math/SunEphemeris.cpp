@@ -257,34 +257,6 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location,
   if (TimeOfSunSet > 24.0)
     TimeOfSunSet -= 24.0;
 
-  /*
-      puts("\n Sunrise and set");
-      puts("===============");
-
-      printf("  year  : %d \n",(int)y);
-      printf("  month : %d \n",(int)m);
-      printf("  day   : %d \n\n",(int)day);
-      printf("Days since Y2K :  %d \n",(int)d);
-
-      printf("Latitude :  %3.1f, longitude: %3.1f, timezone: %3.1f \n",(float)latit,(float)longit,(float)tzone);
-      printf("Declination   :  %.2f \n",delta * RAD_TO_DEG);
-      printf("Daylength     : "); showhrmn(DayLength); puts(" hours \n");
-      printf("Civil twilight: ");
-      showhrmn(MorningTwilight); puts("");
-      printf("Sunrise       : ");
-      showhrmn(TimeOfSunRise); puts("");
-
-      printf("Sun altitude ");
-      // Amendment by D. Smith
-      printf(" %.2f degr",altmax);
-      printf(latit>=0.0 ? " South" : " North");
-      printf(" at noontime "); showhrmn(TimeOfNoon); puts("");
-      printf("Sunset        : ");
-      showhrmn(TimeOfSunSet);  puts("");
-      printf("Civil twilight: ");
-      showhrmn(EveningTwilight);  puts("\n");
-  */
-
   // return TimeOfSunSet since this is most commonly what is requested
   return TimeOfSunSet;
 }
