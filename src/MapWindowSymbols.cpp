@@ -126,11 +126,11 @@ MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc, const GPS_STATE &gps)
 
   icon->draw(canvas, get_bitmap_canvas(),
              rc.left + IBLSCALE(2),
-            rc.bottom + IBLSCALE(Appearance.GPSStatusOffset.y - 22));
+            rc.bottom + IBLSCALE(-35));
 
   TextInBox(canvas, txt,
             rc.left + IBLSCALE(24),
-            rc.bottom + IBLSCALE(Appearance.GPSStatusOffset.y - 19),
+            rc.bottom + IBLSCALE(-32),
             TextInBoxMode, rc);
 }
 
