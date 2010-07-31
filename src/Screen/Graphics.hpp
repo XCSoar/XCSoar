@@ -78,7 +78,6 @@ typedef union
 class ScreenGraphics {
 public:
   void Initialise(const SETTINGS_MAP &settings_map);
-  ~ScreenGraphics();
 
   // airspace brushes/colours
   const Color GetAirspaceColour(const int i);

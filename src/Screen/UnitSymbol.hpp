@@ -94,9 +94,6 @@ public:
 void
 LoadUnitSymbols();
 
-void
-UnloadUnitSymbols();
-
 const UnitSymbol *
 GetUnitSymbol(Units_t unit);
 

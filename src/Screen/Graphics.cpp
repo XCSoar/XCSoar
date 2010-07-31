@@ -280,11 +280,6 @@ ScreenGraphics::Initialise(const SETTINGS_MAP &settings_map)
     hAirspacePens[i].set(IBLSCALE(2), GetAirspaceColourByClass(i, settings_map));
 }
 
-ScreenGraphics::~ScreenGraphics()
-{
-  UnloadUnitSymbols();
-}
-
 bool
 TextInBoxMoveInView(POINT *offset, RECT *brect, const RECT &MapRect)
 {
