@@ -87,10 +87,8 @@ MapWindow::DrawAircraft(Canvas &canvas)
       {-1, -6}
     };
 
-    Brush hbAircraftSolid, hbAircraftSolidBg;
-
-    hbAircraftSolid.set(Color::BLACK);
-    hbAircraftSolidBg.set(Color::WHITE);
+    Brush hbAircraftSolid(Color::BLACK);
+    Brush hbAircraftSolidBg(Color::WHITE);
 
     canvas.select(hbAircraftSolidBg);
     canvas.select(MapGfx.hpAircraft);
