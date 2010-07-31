@@ -68,7 +68,7 @@ italian.xcl = 7
 german.xcl = 7
 
 [DefaultInstall]
-CopyFiles = TheFiles,Files.Windows,Files.Fonts,Files.Language,Files.Input,Files.Polar
+CopyFiles = TheFiles,Files.Windows,Files.Language,Files.Input
 CEShortcuts = Links
 AddReg = AddRegistry
 CESetupDLL=XCSoarSetup.dll
