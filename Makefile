@@ -38,18 +38,11 @@ include $(topdir)/build/targets.mk
 include $(topdir)/build/debug.mk
 include $(topdir)/build/coverage.mk
 include $(topdir)/build/options.mk
+include $(topdir)/build/boost.mk
 include $(topdir)/build/sdl.mk
 include $(topdir)/build/gconf.mk
 
 CPPFLAGS += -DFLARM_AVERAGE
-
-ifeq ($(HAVE_WIN32),n)
-ifneq ($(TARGET),CYGWIN)
-  CPPFLAGS += -DHAVE_BOOST
-else
-  CPPFLAGS += -D__STDC_VERSION__=199901L
-endif
-endif
 
 include $(topdir)/build/flags.mk
 include $(topdir)/build/charset.mk
