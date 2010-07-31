@@ -48,8 +48,6 @@ typedef struct _TERRAIN_INFO
   GEOPOINT TopLeft;
   GEOPOINT BottomRight;
   Angle StepSize;
-  long Rows;
-  long Columns;
 } TERRAIN_INFO;
 
 class RasterMap {

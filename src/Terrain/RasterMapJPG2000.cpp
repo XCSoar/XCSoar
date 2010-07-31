@@ -104,8 +104,6 @@ void RasterMapJPG2000::_ReloadJPG2000() {
     Angle::degrees((fixed)raster_tile_cache.lat_max);
   TerrainInfo.BottomRight.Latitude =
     Angle::degrees((fixed)raster_tile_cache.lat_min);
-  TerrainInfo.Columns = raster_tile_cache.GetWidth();
-  TerrainInfo.Rows = raster_tile_cache.GetHeight();
   TerrainInfo.StepSize = Angle::degrees((fixed)(raster_tile_cache.lon_max -
                                                 raster_tile_cache.lon_min)
                                         / raster_tile_cache.GetWidth());
@@ -135,9 +133,11 @@ void RasterMapJPG2000::_SetViewCenter(const GEOPOINT &location)
   bool do_poll = false;
   if (raster_tile_cache.GetInitialised()) {
     do_poll = true;
-    x = lround((location.Longitude-TerrainInfo.TopLeft.Longitude).value_native()*TerrainInfo.Columns
+    x = lround((location.Longitude - TerrainInfo.TopLeft.Longitude).value_native() *
+               raster_tile_cache.GetWidth()
                    /(TerrainInfo.BottomRight.Longitude-TerrainInfo.TopLeft.Longitude).value_native());
-    y = lround((TerrainInfo.TopLeft.Latitude-location.Latitude).value_native()*TerrainInfo.Rows
+    y = lround((TerrainInfo.TopLeft.Latitude - location.Latitude).value_native() *
+               raster_tile_cache.GetHeight()
                    /(TerrainInfo.TopLeft.Latitude-TerrainInfo.BottomRight.Latitude).value_native());
     TriggerJPGReload |= raster_tile_cache.PollTiles(x, y);
   }
