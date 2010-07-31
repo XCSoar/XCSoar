@@ -50,8 +50,6 @@ while (<>) {
                 }
             }
 
-            next unless $event_id > 0;
-
             my $mode = $rec{mode} || die "Invalid entry near $line - no mode\n";
             foreach my $m (split(/ /, $mode)) {
                 my $mode_id = get_mode($m);
