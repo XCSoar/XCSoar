@@ -153,7 +153,7 @@ MapWindow::UpdateTerrain()
   // always service terrain even if it's not used by the map,
   // because it's used by other calculations
   if (terrain != NULL)
-    terrain->ServiceTerrainCenter(Basic().Location);
+    terrain->ServiceTerrainCenter(PanLocation);
 
   terrain_dirty = false;
 }
@@ -168,7 +168,7 @@ MapWindow::UpdateWeather()
   // because it's potentially used by other calculations
 
   if (weather != NULL)
-    weather->SetViewCenter(Basic().Location);
+    weather->SetViewCenter(PanLocation);
 
   weather_dirty = false;
 }
