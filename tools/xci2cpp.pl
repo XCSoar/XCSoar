@@ -60,6 +60,8 @@ while (<>) {
                 push @labels, [ $mode_id, $label, $location, $event_id ]
                   if defined $location;
 
+                next unless $event_id > 0;
+
 				# Key output
                 if ($rec{type} eq "key") {
                     my $data = $rec{data} ;
