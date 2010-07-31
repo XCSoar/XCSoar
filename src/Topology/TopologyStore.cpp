@@ -133,6 +133,11 @@ TopologyStore::DrawLabels(Canvas &canvas, const Projection &projection,
                                      label_block, settings_map);
 }
 
+TopologyStore::TopologyStore()
+{
+  Open();
+}
+
 void
 TopologyStore::Open()
 {

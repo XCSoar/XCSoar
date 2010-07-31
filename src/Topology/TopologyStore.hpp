@@ -62,6 +62,7 @@ class TopologyStore : private NonCopyable {
   };
 
 public:
+  TopologyStore();
   ~TopologyStore();
 
   bool ScanVisibility(Projection &m_projection,

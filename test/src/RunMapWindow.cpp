@@ -254,7 +254,6 @@ static void
 LoadFiles()
 {
   topology = new TopologyStore();
-  topology->Open();
 
   terrain.OpenTerrain();
 

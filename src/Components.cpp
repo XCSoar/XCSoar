@@ -301,7 +301,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   // Read the topology file(s)
   topology = new TopologyStore();
-  topology->Open();
 
   // Read the terrain file
   ProgressGlue::Create(_("Loading Terrain File..."));
