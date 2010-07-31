@@ -48,10 +48,8 @@ using std::max;
 void
 RasterTile::Disable()
 {
-  if (ImageBuffer) {
-    delete[] ImageBuffer;
-    ImageBuffer = NULL;
-  }
+  delete[] ImageBuffer;
+  ImageBuffer = NULL;
 }
 
 void
