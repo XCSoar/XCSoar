@@ -52,7 +52,6 @@ struct Appearance Appearance = {
   fgFinalGlideDefault,
   wpLandableDefault,
   false,
-  true,
   smAlignCenter,
   tiHighScore,
   false,

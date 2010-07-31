@@ -94,8 +94,7 @@ InfoBoxWindow::SetTitle(const TCHAR *Value)
   _tcsncpy(sTmp, Value, TITLESIZE);
   sTmp[TITLESIZE] = '\0';
 
-  if (Appearance.InfoTitelCapital)
-    _tcsupr(sTmp);
+  _tcsupr(sTmp);
 
   if (_tcscmp(mTitle, sTmp) != 0) {
     _tcscpy(mTitle, sTmp);

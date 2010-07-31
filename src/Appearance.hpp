@@ -122,7 +122,6 @@ struct Appearance {
   IndFinalGlide_t IndFinalGlide;
   IndLandable_t IndLandable;
   bool InverseInfoBox;
-  bool InfoTitelCapital;
   StateMessageAlign_t StateMessageAlign;
   TextInputStyle_t TextInputStyle;
   bool GaugeVarioAvgText;
