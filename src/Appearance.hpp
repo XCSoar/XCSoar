@@ -122,7 +122,6 @@ struct Appearance {
   POINT FlightModeOffset;
   CompassAppearance_t CompassAppearance;
   BestCruiseTrack_t BestCruiseTrack;
-  Aircraft_t Aircraft;
   bool DontShowSpeedToFly;
   IndFinalGlide_t IndFinalGlide;
   IndLandable_t IndLandable;

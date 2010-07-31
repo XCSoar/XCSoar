@@ -66,88 +66,41 @@ MapWindow::DrawCrossHairs(Canvas &canvas)
 void
 MapWindow::DrawAircraft(Canvas &canvas)
 {
-  if (Appearance.Aircraft == afAircraftDefault) {
-    #define NUMAIRCRAFTPOINTS 16
-    POINT Aircraft[NUMAIRCRAFTPOINTS] = {
-      {1, -6},
-      {2, -1},
-      {15, 0},
-      {15, 2},
-      {1, 2},
-      {0, 10},
-      {4, 11},
-      {4, 12},
-      {-4, 12},
-      {-4, 11},
-      {0, 10},
-      {-1, 2},
-      {-15, 2},
-      {-15, 0},
-      {-2, -1},
-      {-1, -6}
-    };
+  POINT Aircraft[] = {
+    {1, -5},
+    {1, 0},
+    {14, 0},
+    {14, 1},
+    {1, 1},
+    {1, 8},
+    {4, 8},
+    {4, 9},
+    {-3, 9},
+    {-3, 8},
+    {0, 8},
+    {0, 1},
+    {-13, 1},
+    {-13, 0},
+    {0, 0},
+    {0, -5},
+    {1, -5},
+  };
 
-    Brush hbAircraftSolid(Color::BLACK);
-    Brush hbAircraftSolidBg(Color::WHITE);
+  int n = sizeof(Aircraft) / sizeof(Aircraft[0]);
 
-    canvas.select(hbAircraftSolidBg);
-    canvas.select(MapGfx.hpAircraft);
+  const Angle angle = DisplayAircraftAngle +
+                      (Basic().Heading - Basic().TrackBearing);
 
-    PolygonRotateShift(Aircraft, NUMAIRCRAFTPOINTS, GetOrigAircraft().x+1,
-                       GetOrigAircraft().y+1, 
-                       DisplayAircraftAngle +
-                       Basic().Heading - Basic().TrackBearing);
+  PolygonRotateShift(Aircraft, n, GetOrigAircraft().x - 1,
+                     GetOrigAircraft().y, angle);
 
-    canvas.polygon(Aircraft, NUMAIRCRAFTPOINTS);
+  canvas.select(MapGfx.hpAircraft);
+  canvas.polygon(Aircraft, n);
 
-    // draw it again so can get white border
-    canvas.select(MapGfx.hpAircraftBorder);
-    canvas.select(hbAircraftSolid);
+  canvas.black_brush();
 
-    for (int i = 0; i < NUMAIRCRAFTPOINTS; i++) {
-      Aircraft[i].x -= 1;
-      Aircraft[i].y -= 1;
-    }
-
-    canvas.polygon(Aircraft, NUMAIRCRAFTPOINTS);
-  } else if (Appearance.Aircraft == afAircraftAltA) {
-
-    POINT Aircraft[] = {
-      {1, -5},
-      {1, 0},
-      {14, 0},
-      {14, 1},
-      {1, 1},
-      {1, 8},
-      {4, 8},
-      {4, 9},
-      {-3, 9},
-      {-3, 8},
-      {0, 8},
-      {0, 1},
-      {-13, 1},
-      {-13, 0},
-      {0, 0},
-      {0, -5},
-      {1, -5},
-    };
-
-    int n = sizeof(Aircraft) / sizeof(Aircraft[0]);
-
-    const Angle angle = DisplayAircraftAngle +
-                        (Basic().Heading - Basic().TrackBearing);
-
-    PolygonRotateShift(Aircraft, n, GetOrigAircraft().x - 1, 
-                       GetOrigAircraft().y, angle);
-
-    canvas.select(MapGfx.hpAircraft);
-    canvas.polygon(Aircraft, n);
-
-    canvas.black_brush();
-
-    canvas.select(MapGfx.hpAircraftBorder);
-    canvas.polygon(Aircraft, n);
-  }
+  canvas.select(MapGfx.hpAircraftBorder);
+  canvas.polygon(Aircraft, n);
 }
 
 void

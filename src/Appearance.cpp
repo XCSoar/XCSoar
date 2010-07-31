@@ -52,7 +52,6 @@ struct Appearance Appearance = {
   {0,0},
   apCompassAltA,
   ctBestCruiseTrackAltA,
-  afAircraftAltA,
   true, // don't show speed to fly
   fgFinalGlideDefault,
   wpLandableDefault,
