@@ -2834,52 +2834,38 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  if (DevicePortChanged) {
-    for (unsigned i = 0; i < NUMDEV; ++i) {
+  if (DevicePortChanged)
+    for (unsigned i = 0; i < NUMDEV; ++i)
       Profile::SetDeviceConfig(i, device_config[i]);
-    }
-  }
 
-  for (unsigned i = 0; i < 4; ++i) {
-    for (unsigned j = 0; j < InfoBoxLayout::numInfoWindows; ++j) {
+  for (unsigned i = 0; i < 4; ++i)
+    for (unsigned j = 0; j < InfoBoxLayout::numInfoWindows; ++j)
       GetInfoBoxSelector(j, i);
-    }
-  }
 
   if (waypointneedsave) {
     way_points.optimise();
-    if(MessageBoxX(_("Save changes to waypoint file?"),
-                   _("Waypoints edited"),
-                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
-
+    if (MessageBoxX(_("Save changes to waypoint file?"), _("Waypoints edited"),
+                    MB_YESNO | MB_ICONQUESTION) == IDYES)
       AskWaypointSave();
-
-    }
   }
 
-  if (taskchanged) {
+  if (taskchanged)
     changed = true;
-  }
 
-  if (!is_embedded() && DevicePortChanged) {
+  if (!is_embedded() && DevicePortChanged)
     requirerestart = true;
-  }
 
   if (changed) {
     Profile::Save();
 
-    if (!requirerestart) {
+    if (!requirerestart)
       MessageBoxX(_("Changes to configuration saved."),
                   _T(""), MB_OK);
-    } else {
-
+    else
       MessageBoxX(_("Changes to configuration saved.  Restart XCSoar to apply changes."),
                   _T(""), MB_OK);
-    }
   }
 
   delete wf;
-
   wf = NULL;
-
 }
