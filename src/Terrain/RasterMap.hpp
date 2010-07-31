@@ -75,6 +75,14 @@ protected:
 
   TERRAIN_INFO TerrainInfo;
 
+  gcc_pure
+  bool inside(const GEOPOINT &pt) const {
+    return pt.Latitude <= TerrainInfo.TopLeft.Latitude &&
+      pt.Latitude >= TerrainInfo.BottomRight.Latitude &&
+      pt.Longitude <= TerrainInfo.BottomRight.Longitude &&
+      pt.Longitude >= TerrainInfo.TopLeft.Longitude;
+  }
+
   virtual void SetViewCenter(const GEOPOINT &location) = 0;
 
   bool GetMapCenter(GEOPOINT *loc) const;

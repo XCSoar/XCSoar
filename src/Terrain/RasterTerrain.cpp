@@ -124,29 +124,11 @@ int RasterTerrain::GetEffectivePixelSize(fixed &pixel_D,
 bool
 RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location) const
 {
-  if (TerrainMap) {
-    if ((location.Latitude<= TerrainMap->TerrainInfo.TopLeft.Latitude)&&
-        (location.Latitude>= TerrainMap->TerrainInfo.BottomRight.Latitude)&&
-        (location.Longitude<= TerrainMap->TerrainInfo.BottomRight.Longitude)&&
-        (location.Longitude>= TerrainMap->TerrainInfo.TopLeft.Longitude)) {
-      return true;
-    } else {
-      return false;
-    }
-  } else {
-    return true;
-  }
+  return TerrainMap == NULL || TerrainMap->inside(location);
 }
 
 bool
 RasterTerrain::GetTerrainCenter(GEOPOINT *location) const
 {
-  if (TerrainMap) {
-    *location = TerrainMap->TerrainInfo.TopLeft.interpolate(
-      TerrainMap->TerrainInfo.BottomRight,
-      fixed_half);
-    return true;
-  } else {
-    return false;
-  }
+  return TerrainMap != NULL && TerrainMap->GetMapCenter(location);
 }
