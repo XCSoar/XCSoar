@@ -113,8 +113,6 @@ typedef enum{
 }InfoBoxBorderAppearance_t;
 
 struct Appearance {
-  MapScaleAppearance_t MapScale;
-  MapScale2Appearance_t MapScale2;
   int DefaultMapWidth;
   CompassAppearance_t CompassAppearance;
   bool DontShowSpeedToFly;

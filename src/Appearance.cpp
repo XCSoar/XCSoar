@@ -38,13 +38,7 @@ Copyright_License {
 
 #include "Appearance.hpp"
 
-#if !defined(MapScale2)
-  #define MapScale2  apMs2Default
-#endif
-
 struct Appearance Appearance = {
-  apMsAltA, // mapscale
-  MapScale2,
   206,
   apCompassAltA,
   true, // don't show speed to fly

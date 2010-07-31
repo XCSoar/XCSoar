@@ -74,10 +74,6 @@ MapWindow::findMapScaleBarSize(const RECT rc)
 void
 MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc)
 {
-
-  if (Appearance.MapScale2 == apMs2None)
-    return;
-
   canvas.select(MapGfx.hpMapScale);
 
   bool color = false;
@@ -149,111 +145,109 @@ void
 MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
                         const bool ScaleChangeFeedback)
 {
-  if (Appearance.MapScale == apMsAltA) {
-    static int LastMapWidth = 0;
-    double MapWidth;
-    TCHAR ScaleInfo[80];
-    TCHAR TEMP[20];
+  static int LastMapWidth = 0;
+  double MapWidth;
+  TCHAR ScaleInfo[80];
+  TCHAR TEMP[20];
 
-    int Height;
-    Units_t Unit;
+  int Height;
+  Units_t Unit;
 
-    if (ScaleChangeFeedback)
-      MapWidth = RequestDistancePixelsToMeters(rc.right-rc.left);
-    else
-      MapWidth = DistancePixelsToMeters(rc.right-rc.left);
+  if (ScaleChangeFeedback)
+    MapWidth = RequestDistancePixelsToMeters(rc.right-rc.left);
+  else
+    MapWidth = DistancePixelsToMeters(rc.right-rc.left);
 
-    canvas.select(Fonts::MapBold);
-    Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,
-                              sizeof(ScaleInfo)/sizeof(TCHAR), false);
-    SIZE TextSize = canvas.text_size(ScaleInfo);
-    LastMapWidth = (int)MapWidth;
+  canvas.select(Fonts::MapBold);
+  Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,
+                            sizeof(ScaleInfo)/sizeof(TCHAR), false);
+  SIZE TextSize = canvas.text_size(ScaleInfo);
+  LastMapWidth = (int)MapWidth;
 
-    Height = Fonts::MapBold.get_capital_height() + IBLSCALE(2);
-    // 2: add 1pix border
+  Height = Fonts::MapBold.get_capital_height() + IBLSCALE(2);
+  // 2: add 1pix border
 
-    canvas.white_brush();
-    canvas.white_pen();
-    canvas.rectangle(0, rc.bottom - Height,
-                     TextSize.cx + IBLSCALE(21), rc.bottom);
-    if (ScaleChangeFeedback) {
-      canvas.background_transparent();
-      canvas.set_text_color(Color(0xff, 0, 0));
-    } else {
-      canvas.set_text_color(Color(0, 0, 0));
-      canvas.set_background_color(Color::WHITE);
-    }
-
-    canvas.text(IBLSCALE(7),
-                rc.bottom - Fonts::MapBold.get_ascent_height() - IBLSCALE(1),
-                ScaleInfo);
-
-    if (ScaleChangeFeedback)
-      canvas.background_opaque();
-
-    draw_bitmap(canvas, get_bitmap_canvas(), MapGfx.hBmpMapScale,
-                0, rc.bottom - Height, 0, 0, 6, 11);
-    draw_bitmap(canvas, get_bitmap_canvas(), MapGfx.hBmpMapScale,
-                IBLSCALE(14) + TextSize.cx, rc.bottom - Height, 6, 0, 8, 11);
-
-    if (!ScaleChangeFeedback) {
-      const UnitSymbol *symbol = GetUnitSymbol(Unit);
-
-      if (symbol != NULL)
-        symbol->draw(canvas, get_bitmap_canvas(), IBLSCALE(8) + TextSize.cx,
-                     rc.bottom - Height);
-    }
-
-    int y = rc.bottom - Height -
-            (Fonts::Title.get_ascent_height() + IBLSCALE(2));
-
-    if (!ScaleChangeFeedback) {
-      // bool FontSelected = false;
-      // TODO code: gettext these
-      ScaleInfo[0] = 0;
-      if (SettingsMap().AutoZoom)
-        _tcscat(ScaleInfo, _T("AUTO "));
-
-      if (SettingsMap().TargetPan)
-        _tcscat(ScaleInfo, _T("TARGET "));
-      else if (SettingsMap().EnablePan)
-        _tcscat(ScaleInfo, _T("PAN "));
-
-      if (SettingsMap().EnableAuxiliaryInfo)
-        _tcscat(ScaleInfo, _T("AUX "));
-
-      if (Basic().gps.Replay)
-        _tcscat(ScaleInfo, _T("REPLAY "));
-
-      if (task != NULL && SettingsComputer().BallastTimerActive) {
-        _stprintf(TEMP,_T("BALLAST %d LITERS"),
-                  (int)task->get_glide_polar().get_ballast_litres());
-        _tcscat(ScaleInfo, TEMP);
-      }
-
-      if (weather != NULL) {
-        const TCHAR* Buffer;
-        Buffer = weather->ItemLabel(weather->GetParameter());
-        if (_tcslen(Buffer))
-          _tcscat(ScaleInfo, Buffer);
-      }
-
-      if (ScaleInfo[0]) {
-        canvas.select(Fonts::Title);
-        // FontSelected = true;
-        canvas.text(IBLSCALE(1), y, ScaleInfo);
-        y -= (Fonts::Title.get_capital_height() + IBLSCALE(1));
-      }
-    }
-
-    #ifdef DRAWLOAD
-    canvas.select(Fonts::Map);
-    _stprintf(ScaleInfo,_T("draw %d gps %d idle %d"),
-              GetAverageTime(),
-              Calculated().time_process_gps,
-              Calculated().time_process_idle);
-
-    canvas.text(rc.left, rc.top, ScaleInfo);
-    #endif
+  canvas.white_brush();
+  canvas.white_pen();
+  canvas.rectangle(0, rc.bottom - Height,
+                   TextSize.cx + IBLSCALE(21), rc.bottom);
+  if (ScaleChangeFeedback) {
+    canvas.background_transparent();
+    canvas.set_text_color(Color(0xff, 0, 0));
+  } else {
+    canvas.set_text_color(Color(0, 0, 0));
+    canvas.set_background_color(Color::WHITE);
   }
+
+  canvas.text(IBLSCALE(7),
+              rc.bottom - Fonts::MapBold.get_ascent_height() - IBLSCALE(1),
+              ScaleInfo);
+
+  if (ScaleChangeFeedback)
+    canvas.background_opaque();
+
+  draw_bitmap(canvas, get_bitmap_canvas(), MapGfx.hBmpMapScale,
+              0, rc.bottom - Height, 0, 0, 6, 11);
+  draw_bitmap(canvas, get_bitmap_canvas(), MapGfx.hBmpMapScale,
+              IBLSCALE(14) + TextSize.cx, rc.bottom - Height, 6, 0, 8, 11);
+
+  if (!ScaleChangeFeedback) {
+    const UnitSymbol *symbol = GetUnitSymbol(Unit);
+
+    if (symbol != NULL)
+      symbol->draw(canvas, get_bitmap_canvas(), IBLSCALE(8) + TextSize.cx,
+                   rc.bottom - Height);
+  }
+
+  int y = rc.bottom - Height -
+          (Fonts::Title.get_ascent_height() + IBLSCALE(2));
+
+  if (!ScaleChangeFeedback) {
+    // bool FontSelected = false;
+    // TODO code: gettext these
+    ScaleInfo[0] = 0;
+    if (SettingsMap().AutoZoom)
+      _tcscat(ScaleInfo, _T("AUTO "));
+
+    if (SettingsMap().TargetPan)
+      _tcscat(ScaleInfo, _T("TARGET "));
+    else if (SettingsMap().EnablePan)
+      _tcscat(ScaleInfo, _T("PAN "));
+
+    if (SettingsMap().EnableAuxiliaryInfo)
+      _tcscat(ScaleInfo, _T("AUX "));
+
+    if (Basic().gps.Replay)
+      _tcscat(ScaleInfo, _T("REPLAY "));
+
+    if (task != NULL && SettingsComputer().BallastTimerActive) {
+      _stprintf(TEMP,_T("BALLAST %d LITERS"),
+                (int)task->get_glide_polar().get_ballast_litres());
+      _tcscat(ScaleInfo, TEMP);
+    }
+
+    if (weather != NULL) {
+      const TCHAR* Buffer;
+      Buffer = weather->ItemLabel(weather->GetParameter());
+      if (_tcslen(Buffer))
+        _tcscat(ScaleInfo, Buffer);
+    }
+
+    if (ScaleInfo[0]) {
+      canvas.select(Fonts::Title);
+      // FontSelected = true;
+      canvas.text(IBLSCALE(1), y, ScaleInfo);
+      y -= (Fonts::Title.get_capital_height() + IBLSCALE(1));
+    }
+  }
+
+  #ifdef DRAWLOAD
+  canvas.select(Fonts::Map);
+  _stprintf(ScaleInfo,_T("draw %d gps %d idle %d"),
+            GetAverageTime(),
+            Calculated().time_process_gps,
+            Calculated().time_process_idle);
+
+  canvas.text(rc.left, rc.top, ScaleInfo);
+  #endif
 }
