@@ -150,17 +150,16 @@ GlideRatioCalculator::calculate() const
 static double
 LimitLD(double LD)
 {
-  if (fabs(LD) > INVALID_GR) {
+  if (fabs(LD) > INVALID_GR)
     return INVALID_GR;
-  } else {
-    if ((LD >= 0.0) && (LD < 1.0))
-      LD = 1.0;
 
-    if ((LD < 0.0) && (LD > -1.0))
-      LD = -1.0;
+  if ((LD >= 0.0) && (LD < 1.0))
+    return 1.0;
 
-    return LD;
-  }
+  if ((LD < 0.0) && (LD > -1.0))
+    return -1.0;
+
+  return LD;
 }
 
 double
