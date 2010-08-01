@@ -170,18 +170,18 @@ UpdateLD(double LD, double leg_distance, double height_above_leg,
     return LD;
 
   double glideangle;
-  if (LD != 0) {
+  if (LD != 0)
     glideangle = 1.0 / LD;
-  } else {
+  else
     glideangle = 1.0;
-  }
 
   glideangle = LowPassFilter(1.0 / LD, height_above_leg / leg_distance,
                              filter_factor);
-  if (fabs(glideangle) > 1.0 / INVALID_GR) {
+
+  if (fabs(glideangle) > 1.0 / INVALID_GR)
     LD = LimitLD(1.0 / glideangle);
-  } else {
+  else
     LD = INVALID_GR;
-  }
+
   return LD;
 }
