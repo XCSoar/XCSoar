@@ -46,6 +46,7 @@ Copyright_License {
 #include "Math/FastRotation.hpp"
 #include "Appearance.hpp"
 #include "resource.h"
+#include "LogFile.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -63,6 +64,13 @@ static Color colTextBackgnd;
 #define NARROWS 3
 #define ARROWYSIZE Layout::Scale(3)
 #define ARROWXSIZE Layout::Scale(7)
+#define GAUGEVARIORANGE 5.0 // 5 m/s
+#define GAUGEVARIOSWEEP 180 // degrees total sweep
+#define YOFFSET 36
+#define DeltaVstep 4
+#define DeltaVlimit 16.0
+#define TextBug _T("Bug")
+#define TextBal _T("Bal")
 
 GaugeVario::GaugeVario(ContainerWindow &parent,
                        int left, int top, unsigned width, unsigned height)
@@ -159,11 +167,6 @@ GaugeVario::~GaugeVario()
     lines = NULL;
   }
 }
-
-#define GAUGEVARIORANGE 5.0 // 5 m/s
-#define GAUGEVARIOSWEEP 180 // degrees total sweep
-
-#include "LogFile.hpp"
 
 void
 GaugeVario::Render()
@@ -590,10 +593,6 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
 void
 GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 {
-  #define  YOFFSET     36
-  #define  DeltaVstep  4
-  #define  DeltaVlimit 16.0
-
   if (!Basic().gps.Simulator && !(Basic().AirspeedAvailable &&
                                   Basic().TotalEnergyVarioAvailable))
     return;
@@ -719,8 +718,6 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 void
 GaugeVario::RenderBallast(Canvas &canvas)
 {
-  #define TextBal _T("Bal")
-
   static double lastBallast = 1;
   static RECT recLabelBk = {-1,-1,-1,-1};
   static RECT recValueBk = {-1,-1,-1,-1};
@@ -815,7 +812,6 @@ GaugeVario::RenderBallast(Canvas &canvas)
 void
 GaugeVario::RenderBugs(Canvas &canvas)
 {
-  #define TextBug _T("Bug")
   static double lastBugs = 1;
   static RECT recLabelBk = {-1,-1,-1,-1};
   static RECT recValueBk = {-1,-1,-1,-1};
