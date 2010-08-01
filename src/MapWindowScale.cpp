@@ -80,10 +80,7 @@ MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc)
   End.x = rc.right - 1;
   End.y = GetOrigAircraft().y;
   Start = End;
-  for (Start.y += barsize;
-       Start.y < rc.bottom + barsize;
-       Start.y += barsize) {
-
+  for (Start.y += barsize; Start.y < rc.bottom + barsize; Start.y += barsize) {
     if (color)
       canvas.white_pen();
     else
@@ -98,10 +95,7 @@ MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc)
   color = true;
   End.y = GetOrigAircraft().y;
   Start = End;
-  for (Start.y -= barsize;
-       Start.y > rc.top - barsize;
-       Start.y -= barsize) {
-
+  for (Start.y -= barsize; Start.y > rc.top - barsize; Start.y -= barsize) {
     if (color)
       canvas.white_pen();
     else
@@ -115,14 +109,10 @@ MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc)
 }
 
 static void
-draw_bitmap(Canvas &canvas, 
-            BitmapCanvas &bitmap_canvas, 
-            const Bitmap &bitmap,
+draw_bitmap(Canvas &canvas, BitmapCanvas &bitmap_canvas, const Bitmap &bitmap,
             const int x, const int y,
-            const unsigned src_x_offset,
-            const unsigned src_y_offset,
-            const unsigned src_width,
-            const unsigned src_height)
+            const unsigned src_x_offset, const unsigned src_y_offset,
+            const unsigned src_width, const unsigned src_height)
 {
   bitmap_canvas.background_opaque();
   bitmap_canvas.set_text_color(Color::WHITE);
@@ -132,7 +122,7 @@ draw_bitmap(Canvas &canvas,
 }
 
 void
-MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
+MapWindow::DrawMapScale(Canvas &canvas, const RECT rc,
                         const bool ScaleChangeFeedback)
 {
   static int LastMapWidth = 0;
@@ -144,13 +134,13 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
   Units_t Unit;
 
   if (ScaleChangeFeedback)
-    MapWidth = RequestDistancePixelsToMeters(rc.right-rc.left);
+    MapWidth = RequestDistancePixelsToMeters(rc.right - rc.left);
   else
-    MapWidth = DistancePixelsToMeters(rc.right-rc.left);
+    MapWidth = DistancePixelsToMeters(rc.right - rc.left);
 
   canvas.select(Fonts::MapBold);
   Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,
-                            sizeof(ScaleInfo)/sizeof(TCHAR), false);
+                            sizeof(ScaleInfo) / sizeof(TCHAR), false);
   SIZE TextSize = canvas.text_size(ScaleInfo);
   LastMapWidth = (int)MapWidth;
 
@@ -159,8 +149,7 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
 
   canvas.white_brush();
   canvas.white_pen();
-  canvas.rectangle(0, rc.bottom - Height,
-                   TextSize.cx + IBLSCALE(21), rc.bottom);
+  canvas.rectangle(0, rc.bottom - Height, TextSize.cx + IBLSCALE(21), rc.bottom);
   if (ScaleChangeFeedback) {
     canvas.background_transparent();
     canvas.set_text_color(Color(0xff, 0, 0));
@@ -189,12 +178,9 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
                    rc.bottom - Height);
   }
 
-  int y = rc.bottom - Height -
-          (Fonts::Title.get_ascent_height() + IBLSCALE(2));
+  int y = rc.bottom - Height - Fonts::Title.get_ascent_height() + IBLSCALE(2);
 
   if (!ScaleChangeFeedback) {
-    // bool FontSelected = false;
-    // TODO code: gettext these
     ScaleInfo[0] = 0;
     if (SettingsMap().AutoZoom)
       _tcscat(ScaleInfo, _T("AUTO "));
@@ -211,7 +197,7 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
       _tcscat(ScaleInfo, _T("REPLAY "));
 
     if (task != NULL && SettingsComputer().BallastTimerActive) {
-      _stprintf(TEMP,_T("BALLAST %d LITERS"),
+      _stprintf(TEMP, _T("BALLAST %d LITERS"),
                 (int)task->get_glide_polar().get_ballast_litres());
       _tcscat(ScaleInfo, TEMP);
     }
