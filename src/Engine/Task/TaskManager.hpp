@@ -308,13 +308,6 @@ public:
   bool is_mode(const TaskMode_t the_mode) const;
 
   /**
-   * Retrieve copy of glide polar used by task system
-   *
-   * @return Copy of glide polar
-   */
-  GlidePolar get_glide_polar();
-
-  /**
    * Retrieves glide polar used by task system
    *
    * @return Reference to glide polar

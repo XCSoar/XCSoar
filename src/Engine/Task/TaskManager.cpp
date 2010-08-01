@@ -432,12 +432,6 @@ TaskManager::is_mode(const TaskMode_t the_mode) const
   return mode == the_mode;
 }
 
-GlidePolar 
-TaskManager::get_glide_polar()  
-{
-  return m_glide_polar;
-}
-
 const GlidePolar& 
 TaskManager::get_glide_polar() const 
 {
