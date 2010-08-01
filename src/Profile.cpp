@@ -163,7 +163,7 @@ Profile::Get(const TCHAR *key, fixed &value)
 #endif
 
 bool
-Profile::Get(const TCHAR *key, TCHAR *value, DWORD dwSize)
+Profile::Get(const TCHAR *key, TCHAR *value, size_t dwSize)
 {
   if (Registry::Get(key, value, dwSize))
     return true;

@@ -102,7 +102,7 @@ Registry::Set(const TCHAR *szRegValue, DWORD Pos)
  * @param dwSize Maximum size of the output buffer
  */
 bool
-Registry::Get(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
+Registry::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
 {
 #ifdef WIN32
 

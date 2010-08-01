@@ -84,7 +84,7 @@ Profile::Get(const TCHAR *szRegValue, double &pPos)
 }
 
 bool
-Profile::Get(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
+Profile::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
 {
   pPos[0] = _T('\0');
   return false;

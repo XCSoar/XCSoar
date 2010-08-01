@@ -135,7 +135,7 @@ namespace Registry {
   }
   #endif
 
-  bool Get(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
+  bool Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize);
   bool Set(const TCHAR *szRegValue, const TCHAR *Pos);
 
   void Export(const TCHAR* szFile);

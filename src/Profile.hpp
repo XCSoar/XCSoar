@@ -42,6 +42,7 @@ Copyright_License {
 #include "ProfileKeys.hpp"
 #include "Math/fixed.hpp"
 
+#include <stddef.h>
 #include <tchar.h>
 #include <windows.h>
 
@@ -115,7 +116,7 @@ namespace Profile
 #ifdef FIXED_MATH
   bool Get(const TCHAR *key, fixed &value);
 #endif
-  bool Get(const TCHAR *key, TCHAR *value, DWORD dwSize);
+  bool Get(const TCHAR *key, TCHAR *value, size_t dwSize);
 
   bool Set(const TCHAR *key, int value);
   bool Set(const TCHAR *key, short value);
