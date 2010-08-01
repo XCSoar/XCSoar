@@ -74,12 +74,13 @@ MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc)
 
   bool color = false;
   POINT Start, End = { 0, 0 };
-  bool first = true;
 
   int barsize = iround(findMapScaleBarSize(rc));
 
-  Start.x = rc.right - 1;
-  for (Start.y = GetOrigAircraft().y;
+  End.x = rc.right - 1;
+  End.y = GetOrigAircraft().y;
+  Start = End;
+  for (Start.y += barsize;
        Start.y < rc.bottom + barsize;
        Start.y += barsize) {
 
@@ -88,18 +89,16 @@ MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc)
     else
       canvas.black_pen();
 
-    if (!first)
-      canvas.line(Start, End);
-    else
-      first = false;
+    canvas.line(Start, End);
 
     End = Start;
     color = !color;
   }
 
   color = true;
-  first = true;
-  for (Start.y = GetOrigAircraft().y;
+  End.y = GetOrigAircraft().y;
+  Start = End;
+  for (Start.y -= barsize;
        Start.y > rc.top - barsize;
        Start.y -= barsize) {
 
@@ -108,16 +107,11 @@ MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc)
     else
       canvas.black_pen();
 
-    if (!first)
-      canvas.line(Start, End);
-    else
-      first = false;
+    canvas.line(Start, End);
 
     End = Start;
     color = !color;
   }
-
-  // draw text as before
 }
 
 static void
