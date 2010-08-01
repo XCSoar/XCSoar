@@ -35,13 +35,10 @@ Copyright_License {
 }
 */
 
-#include "Dialogs.h"
 #include "Dialogs/Message.hpp"
 
-#include <windows.h>
-
 int WINAPI
-MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
+MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, unsigned uType)
 {
   return -1;
 }

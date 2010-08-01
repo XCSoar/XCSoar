@@ -78,7 +78,7 @@ protected:
  * @return
  */
 int WINAPI
-MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
+MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, unsigned uType)
 {
   WndFrame *wText = NULL;
   int X, Y, Width, Height;

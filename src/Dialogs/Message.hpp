@@ -43,6 +43,6 @@ Copyright_License {
 
 int
 WINAPI
-MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType);
+MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, unsigned uType);
 
 #endif
