@@ -92,7 +92,7 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
   // Debug Log
   LogStartUp(_T("LoadCalculationsPersist"));
 
-  DWORD sizein;
+  unsigned sizein;
 
   // Try to open the persistent memory file
   FILE *file = _tfopen(szCalculationsPersistFileName, _T("rb"));
@@ -167,7 +167,7 @@ void
 SaveCalculationsPersist(const NMEA_INFO &gps_info,
     const DERIVED_INFO &Calculated)
 {
-  DWORD size;
+  unsigned size;
 
   logger.LoggerClearFreeSpace(gps_info);
 
