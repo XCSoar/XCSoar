@@ -20,7 +20,7 @@
 #include "ProgressGlue.hpp"
 
 #include <stdio.h>
-#ifdef WINDOWSPC
+#if defined(HAVE_POSIX) || !defined(_WIN32_WCE)
 #include <time.h>
 #endif
 
@@ -42,7 +42,7 @@ void VLA_SYS::wait_ms(const int32 t)  {
 
 /** read value of a continous running seconds-timer */
 int32 VLA_SYS::get_timer_s()  {
-#ifdef WINDOWSPC
+#if defined(HAVE_POSIX) || !defined(_WIN32_WCE)
   return time(NULL);
 #else
   return GetTickCount()/1000;
