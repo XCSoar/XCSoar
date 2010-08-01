@@ -73,6 +73,52 @@ public:
   }
 
   void
+  FormatTitle(TCHAR* Buffer, const Waypoint way_point, bool in_task)
+  {
+    switch (pDisplayTextType) {
+    case DISPLAYNAMEIFINTASK:
+      if (in_task)
+        _tcscpy(Buffer, way_point.Name.c_str());
+      break;
+
+    case DISPLAYNAME:
+      _tcscpy(Buffer, way_point.Name.c_str());
+      break;
+
+    case DISPLAYNUMBER:
+      _stprintf(Buffer, _T("%d"), way_point.id);
+      break;
+
+    case DISPLAYFIRSTFIVE:
+      _tcsncpy(Buffer, way_point.Name.c_str(), 5);
+      Buffer[5] = '\0';
+      break;
+
+    case DISPLAYFIRSTTHREE:
+      _tcsncpy(Buffer, way_point.Name.c_str(), 3);
+      Buffer[3] = '\0';
+      break;
+
+    case DISPLAYNONE:
+      Buffer[0] = '\0';
+      break;
+
+    case DISPLAYUNTILSPACE:
+      _tcscpy(Buffer, way_point.Name.c_str());
+      TCHAR *tmp;
+      tmp = _tcsstr(Buffer, _T(" "));
+      if (tmp != NULL)
+        tmp[0] = '\0';
+
+      break;
+
+    default:
+      assert(0);
+      break;
+    }
+  }
+
+  void
   DrawWaypoint(const Waypoint& way_point, bool in_task = false)
   {
     POINT sc;
@@ -149,52 +195,10 @@ public:
 
     TCHAR Buffer[32];
 
-    if (do_write_label) {
-
-      switch (pDisplayTextType) {
-      case DISPLAYNAMEIFINTASK:
-        if (in_task)
-          _tcscpy(Buffer, way_point.Name.c_str());
-        break;
-        
-      case DISPLAYNAME:
-        _tcscpy(Buffer, way_point.Name.c_str());
-        break;
-        
-      case DISPLAYNUMBER:
-        _stprintf(Buffer, _T("%d"), way_point.id);
-        break;
-        
-      case DISPLAYFIRSTFIVE:
-        _tcsncpy(Buffer, way_point.Name.c_str(), 5);
-        Buffer[5] = '\0';
-        break;
-        
-      case DISPLAYFIRSTTHREE:
-        _tcsncpy(Buffer, way_point.Name.c_str(), 3);
-        Buffer[3] = '\0';
-        break;
-        
-      case DISPLAYNONE:
-        Buffer[0] = '\0';
-        break;
-        
-      case DISPLAYUNTILSPACE:
-        _tcscpy(Buffer, way_point.Name.c_str());
-        TCHAR *tmp;
-        tmp = _tcsstr(Buffer, _T(" "));
-        if (tmp != NULL)
-          tmp[0] = '\0';
-        
-        break;
-        
-      default:
-        assert(0);
-        break;
-      }
-    } else {
+    if (do_write_label)
+      FormatTitle(Buffer, way_point, in_task);
+    else
       Buffer[0] = '\0';
-    }
 
     if (do_write_alt) {
       size_t length = _tcslen(Buffer);
