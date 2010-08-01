@@ -614,25 +614,16 @@ InfoBoxContentFinalGR::Update(InfoBoxWindow &infobox)
     return;
   }
 
-#ifdef OLD_TASK
-  if (XCSoarInterface::Calculated().GRFinish == 999) {
-    infobox.SetInvalid();
+  fixed gradient = XCSoarInterface::Calculated().task_stats.total.gradient;
+
+  if (!positive(gradient) || gradient > fixed(500)) {
+    infobox.SetValue(_T("+++"));
     return;
   }
 
-  // Set Value
-  double Value;
-  if (XCSoarInterface::Calculated().ValidFinish)
-    Value = 0;
-  else
-    Value = XCSoarInterface::Calculated().GRFinish;
-
   TCHAR tmp[32];
-  _stprintf(tmp, (Value > 100 ? _T("%1.0f") : _T("%1.1f")), Value);
+  _stprintf(tmp, _T("%1.0f"), (double)gradient);
   infobox.SetValue(tmp);
-#else
-  infobox.SetInvalid();
-#endif
 }
 
 void
