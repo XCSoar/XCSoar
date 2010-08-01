@@ -405,8 +405,6 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     y -= tsize.cy / 2;
   }
 
-  bool notoverlapping = true;
-
   if (Mode.AsFlag.Border || Mode.AsFlag.WhiteBorder) {
     POINT offset;
 
@@ -423,12 +421,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       y += offset.y;
     }
 
-    if (label_block)
-      notoverlapping = label_block->check(brect);
-    else
-      notoverlapping = true;
-
-    if (notoverlapping) {
+    if (label_block ? label_block->check(brect) : true) {
       if (Mode.AsFlag.Border)
         canvas.select(MapGfx.hpMapScale);
       else
@@ -460,12 +453,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       y += offset.y;
     }
 
-    if (label_block)
-      notoverlapping = label_block->check(brect);
-    else
-      notoverlapping = true;
-
-    if (notoverlapping) {
+    if (label_block ? label_block->check(brect) : true) {
       canvas.set_background_color(Color::WHITE);
       canvas.text_opaque(x, y, &brect, Value);
       drawn = true;
@@ -476,12 +464,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     brect.top = y + ((tsize.cy + 4) >> 3) - 2;
     brect.bottom = brect.top + 3 + tsize.cy - ((tsize.cy + 4) >> 3);
 
-    if (label_block)
-      notoverlapping = label_block->check(brect);
-    else
-      notoverlapping = true;
-
-    if (notoverlapping) {
+    if (label_block ? label_block->check(brect) : true) {
       canvas.set_text_color(Color::WHITE);
 
       canvas.text(x + 1, y, Value);
@@ -504,12 +487,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     brect.top = y + ((tsize.cy + 4) >> 3) - 2;
     brect.bottom = brect.top + 3 + tsize.cy - ((tsize.cy + 4) >> 3);
 
-    if (label_block)
-      notoverlapping = label_block->check(brect);
-    else
-      notoverlapping = true;
-
-    if (notoverlapping) {
+    if (label_block ? label_block->check(brect) : true) {
       canvas.background_transparent();
       canvas.text(x, y, Value);
       canvas.background_opaque();
