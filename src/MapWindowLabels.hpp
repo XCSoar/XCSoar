@@ -47,7 +47,7 @@ void
 MapWaypointLabelAdd(TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
                     int AltArivalAGL,
                     bool inTask, bool isLandable, bool isAirport,
-                    bool isExcluded, RECT MapRect);
+                    RECT MapRect);
 
 void
 MapWaypointLabelClear();

@@ -51,7 +51,6 @@ typedef struct
   bool inTask;
   bool isLandable;
   bool isAirport;
-  bool isExcluded;
 } MapWaypointLabel_t;
 
 int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2);
@@ -82,7 +81,7 @@ MapWaypointLabelListCompare(const void *elem1, const void *elem2)
 void
 MapWaypointLabelAdd(TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
     int AltArivalAGL, bool inTask, bool isLandable, bool isAirport,
-    bool isExcluded, RECT MapRect)
+    RECT MapRect)
 {
   MapWaypointLabel_t *E;
 
@@ -107,7 +106,6 @@ MapWaypointLabelAdd(TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
   E->inTask = inTask;
   E->isLandable = isLandable;
   E->isAirport  = isAirport;
-  E->isExcluded = isExcluded;
 
   MapWaypointLabelListCount++;
 }
