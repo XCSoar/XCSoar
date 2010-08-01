@@ -110,6 +110,17 @@ public:
   }
 
   /**
+   * Determine if waypoint is marked as an airport
+   *
+   * @return True if waypoint is landable
+   */
+  bool
+  is_airport() const
+  {
+    return Flags.Airport;
+  }
+
+  /**
    * Equality operator (by id)
    * 
    * @param wp Waypoint object to match against
