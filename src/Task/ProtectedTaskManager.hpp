@@ -51,7 +51,8 @@ class RasterTerrain;
  * Facade to task/airspace/waypoints as used by threads,
  * to manage locking
  */
-class ProtectedTaskManager : public Guard<TaskManager> {
+class ProtectedTaskManager: public Guard<TaskManager>
+{
 protected:
   const TaskBehaviour &task_behaviour;
   TaskEvents &task_events;
@@ -66,7 +67,7 @@ public:
      task_behaviour(tb), task_events(te),
      glide_polar(_task_manager.get_glide_polar()) {}
 
-// common accessors for ui and calc clients
+  // common accessors for ui and calc clients
   GlidePolar get_glide_polar() const;
   void set_glide_polar(const GlidePolar& glide_polar);
 
@@ -82,7 +83,6 @@ public:
   void CAccept(TaskVisitor &visitor) const;
   void ordered_CAccept(TaskVisitor &visitor) const;
   const OrderedTaskBehaviour get_ordered_task_behaviour() const;
-
 
   TaskAdvance::TaskAdvanceState_t get_advance_state() const;
 
@@ -112,7 +112,6 @@ public:
   bool check_duplicate_waypoints(OrderedTask& ordered_task,
                                  Waypoints &way_points);
 
-  // 
   OrderedTask* task_clone();
   OrderedTask* task_blank();
 
@@ -132,8 +131,6 @@ public:
   OrderedTask* task_create(const TCHAR* path);
   bool task_save(const TCHAR* path, const OrderedTask& task);
 
-
-
   /** Reset the tasks (as if never flown) */
   void reset();
 
@@ -149,9 +146,6 @@ public:
 
   const TaskStats& get_stats() const;
   const CommonStats& get_common_stats() const;
-
-
 };
-
 
 #endif

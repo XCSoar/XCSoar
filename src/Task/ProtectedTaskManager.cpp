@@ -74,14 +74,13 @@ ProtectedTaskManager::get_mode() const
 
 TracePointVector 
 ProtectedTaskManager::find_trace_points(const GEOPOINT &loc, 
-                              const fixed range,
-                              const unsigned mintime, 
-                              const fixed resolution) const
+                                        const fixed range,
+                                        const unsigned mintime,
+                                        const fixed resolution) const
 {
   Lease lease(*this);
   return lease->find_trace_points(loc, range, mintime, resolution);
 }
-
 
 void 
 ProtectedTaskManager::CAccept(TaskVisitor &visitor) const
@@ -104,8 +103,6 @@ ProtectedTaskManager::get_ordered_task_behaviour() const
   return lease->get_ordered_task_behaviour();
 }
 
-
-
 TaskAdvance::TaskAdvanceState_t 
 ProtectedTaskManager::get_advance_state() const
 {
@@ -120,19 +117,16 @@ ProtectedTaskManager::get_safety_polar() const
   return lease->get_safety_polar();
 }
 
-
 const Waypoint* 
 ProtectedTaskManager::getActiveWaypoint() const
 {
   Lease lease(*this);
   const TaskPoint *tp = lease->getActiveTaskPoint();
-  if (tp) {
+  if (tp)
     return &tp->get_waypoint();
-  } else {
-    return NULL;
-  }
-}
 
+  return NULL;
+}
 
 void 
 ProtectedTaskManager::incrementActiveTaskPoint(int offset)
@@ -140,7 +134,6 @@ ProtectedTaskManager::incrementActiveTaskPoint(int offset)
   ExclusiveLease lease(*this);
   lease->incrementActiveTaskPoint(offset);
 }
-
 
 bool 
 ProtectedTaskManager::do_goto(const Waypoint & wp)
@@ -163,7 +156,6 @@ ProtectedTaskManager::get_finish_height() const
   return lease->get_finish_height();
 }
 
-
 const TracePointVector 
 ProtectedTaskManager::get_trace_points()
 {
@@ -178,14 +170,12 @@ ProtectedTaskManager::get_olc_points()
   return lease->get_olc_points();
 }
 
-
 bool 
 ProtectedTaskManager::check_ordered_task() const
 {
   Lease lease(*this);
   return lease->check_ordered_task();
 }
-
 
 GEOPOINT 
 ProtectedTaskManager::get_task_center(const GEOPOINT& fallback_location) const
@@ -200,7 +190,6 @@ ProtectedTaskManager::get_task_radius(const GEOPOINT& fallback_location) const
   Lease lease(*this);
   return lease->get_task_radius(fallback_location);
 }
-
 
 OrderedTask*
 ProtectedTaskManager::task_clone()
@@ -223,11 +212,8 @@ ProtectedTaskManager::task_blank()
 {
   ExclusiveLease lease(*this);
   glide_polar = lease->get_glide_polar();
-  return new OrderedTask(task_events,
-                         task_behaviour,
-                         glide_polar);
+  return new OrderedTask(task_events, task_behaviour, glide_polar);
 }
-
 
 bool
 ProtectedTaskManager::task_commit(const OrderedTask& that)
@@ -235,7 +221,6 @@ ProtectedTaskManager::task_commit(const OrderedTask& that)
   ExclusiveLease lease(*this);
   return lease->commit(that);
 }
-
 
 bool 
 ProtectedTaskManager::task_save(const TCHAR* path, const OrderedTask& task)
@@ -254,7 +239,6 @@ ProtectedTaskManager::task_save(const TCHAR* path, const OrderedTask& task)
   return retval;
 }
 
-
 bool 
 ProtectedTaskManager::task_save(const TCHAR* path)
 {
@@ -264,14 +248,13 @@ ProtectedTaskManager::task_save(const TCHAR* path)
   return retval;
 }
 
-
 OrderedTask* 
 ProtectedTaskManager::task_create(const TCHAR* path)
 {
   DataNode* root = DataNodeXML::load(path);
-  if (!root) {
+  if (!root)
     return NULL;
-  }
+
   if (_tcscmp(root->get_name().c_str(),_T("Task"))==0) {
     OrderedTask* task = task_blank();
     Serialiser des(*root);
@@ -279,11 +262,10 @@ ProtectedTaskManager::task_create(const TCHAR* path)
     if (task->check_task()) {
       delete root;
       return task;
-    } else {
-      delete task;
-      delete root;
-      return NULL;
     }
+    delete task;
+    delete root;
+    return NULL;
   }
   delete root;
   return NULL;
@@ -321,10 +303,9 @@ ProtectedTaskManager::task_save_default()
   return task_save(path);
 }
 
-
 bool
 ProtectedTaskManager::check_duplicate_waypoints(OrderedTask& ordered_task,
-                                        Waypoints &way_points)
+                                                Waypoints &way_points)
 {
   ExclusiveLease lease(*this);
   return ordered_task.check_duplicate_waypoints(way_points);
@@ -339,7 +320,7 @@ ProtectedTaskManager::reset()
 
 bool 
 ProtectedTaskManager::update(const AIRCRAFT_STATE &state_now, 
-                       const AIRCRAFT_STATE &state_last) 
+                             const AIRCRAFT_STATE &state_last)
 {
   ExclusiveLease lease(*this);
   return lease->update(state_now, state_last);
@@ -359,7 +340,6 @@ ProtectedTaskManager::update_auto_mc(const AIRCRAFT_STATE& state_now,
   ExclusiveLease lease(*this);
   return lease->update_auto_mc(state_now, fallback_mc);
 }
-
 
 const TaskStats& 
 ProtectedTaskManager::get_stats() const
