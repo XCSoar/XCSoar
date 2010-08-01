@@ -54,7 +54,7 @@ public:
   unsigned GetTextHeight();
 
 protected:
-  UINT mCaptionStyle;
+  unsigned mCaptionStyle;
 
   /** from class PaintWindow */
   virtual void on_paint(Canvas &canvas);
