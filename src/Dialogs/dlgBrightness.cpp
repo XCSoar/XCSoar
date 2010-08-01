@@ -43,6 +43,7 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
+#include "PeriodClock.hpp"
 
 static WndForm *wf=NULL;
 
@@ -56,12 +57,9 @@ bool EnableAutoBrightness=true;
 int BrightnessValue=0;
 
 static void UpdateValues() {
-  static DWORD fpsTimeLast = 0;
-  DWORD fpsTime = ::GetTickCount();
-  if (fpsTime-fpsTimeLast<200) {
+  static PeriodClock last_time;
+  if (!last_time.check_update(200))
     return;
-  }
-  fpsTimeLast = fpsTime;
 
   TCHAR text[100];
   if (EnableAutoBrightness) {

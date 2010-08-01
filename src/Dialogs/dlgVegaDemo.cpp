@@ -42,6 +42,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
+#include "PeriodClock.hpp"
 
 static WndForm *wf=NULL;
 
@@ -56,13 +57,9 @@ static bool VegaDemoAudioClimb = true;
 
 
 static void VegaWriteDemo(void) {
-  static DWORD fpsTime = 0;
-  DWORD fpsTimeNew = ::GetTickCount();
-  if (fpsTimeNew-fpsTime>250) {
-    fpsTime = fpsTimeNew;
-  } else {
+  static PeriodClock last_time;
+  if (!last_time.check_update(250))
     return;
-  }
 
   TCHAR dbuf[100];
   _stprintf(dbuf, _T("PDVDD,%d,%d"),
