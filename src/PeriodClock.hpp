@@ -120,7 +120,7 @@ public:
    * Updates the time stamp, setting it to the current clock plus the
    * specified offset.
    */
-  void update_offset(unsigned offset) {
+  void update_offset(int offset) {
     update();
     last += offset;
   }

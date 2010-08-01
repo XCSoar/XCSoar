@@ -38,7 +38,7 @@ Copyright_License {
 #ifndef MAP_WINDOW_TIMER_HPP
 #define MAP_WINDOW_TIMER_HPP
 
-#include <windows.h>
+#include "PeriodClock.hpp"
 
 /**
  * This class is used for drawing time calculations
@@ -62,8 +62,7 @@ protected:
   void InterruptTimer();
 
 private:
-  DWORD timestamp_newdata;
-  DWORD timestamp_draw;
+  PeriodClock timestamp_newdata;
   int timestats_av;
   bool timestats_dirty;
   long tottime;

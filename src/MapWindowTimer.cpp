@@ -57,7 +57,7 @@ void
 MapWindowTimer::StartTimer()
 {
   // Saves the current tick count (time) as start time
-  timestamp_newdata = ::GetTickCount();
+  timestamp_newdata.update();
   timestats_dirty = false;
 }
 
@@ -70,8 +70,7 @@ MapWindowTimer::StartTimer()
 bool
 MapWindowTimer::RenderTimeAvailable()
 {
-  DWORD fpsTime = ::GetTickCount();
-  if (fpsTime - timestamp_newdata < 700)
+  if (!timestamp_newdata.check(700))
     // it's been less than 700 ms since last data
     // was posted
     return true;
@@ -87,22 +86,18 @@ MapWindowTimer::InterruptTimer()
 {
   timestats_dirty = true;
   // cause to expire
-  timestamp_newdata = ::GetTickCount() - 700;
+  timestamp_newdata.update_offset(-700);
 }
 
 /**
- * "Stops" the timer by saving the stop time in timestamp_draw
- * and calculating the total drawing time.
+ * "Stops" the timer by calculating the total drawing time.
  */
 void
 MapWindowTimer::StopTimer()
 {
-  // Saves the current tick count (time) as stop time
-  timestamp_draw = ::GetTickCount();
-
   if (!timestats_dirty) {
     // Calculates the drawing time with low pass filter
-    tottime = (2 * tottime + (timestamp_draw - timestamp_newdata)) / 3;
+    tottime = (2 * tottime + timestamp_newdata.elapsed()) / 3;
     timestats_av = tottime;
   }
 
