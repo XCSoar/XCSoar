@@ -200,24 +200,3 @@ GlideComputerTask::LDNext()
   // END VENTA-ADDON
 #endif
 }
-
-/*
-    // v1 = actual task speed achieved so far
-    // d1 = distance travelled
-    double konst;
-    if (logger.isTaskDeclared()) {
-      konst = 1.0;
-    } else {
-      konst = 1.1;
-    }
-
-    double termikLigaPoints = 0;
-    if (d1 > 0) {
-      termikLigaPoints = konst * (0.015 * 0.001 * d1 - (400.0 / (0.001 * d1)) + 12.0)
-        * v1 * 3.6 * 100.0 / (double) SettingsComputer().Handicap;
-    }
-
-    SetCalculated().TermikLigaPoints = termikLigaPoints;
-*/
-
-/////////////////////////////////
