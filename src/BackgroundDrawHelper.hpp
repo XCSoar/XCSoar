@@ -69,8 +69,6 @@ public:
                        const Projection &proj,
                        LabelBlock& block);
 
-  void set_sun(const Angle& sun_azimuth,
-               const Angle& sun_elevation);
   void default_sun();
   void sun_from_wind(const Projection& proj,
                      const SpeedVector& wind);
