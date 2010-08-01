@@ -64,10 +64,6 @@ MapWindow::findMapScaleBarSize(const RECT rc)
   if (half_displaysize > 1.0)
     return 1.0 / pixelsize;
 
-  if (half_displaysize > 0.1)
-    return 0.1 / pixelsize;
-
-  // this is as far as is reasonable
   return 0.1 / pixelsize;
 }
 
