@@ -663,6 +663,15 @@ private:
   TaskAdvanceSmart task_advance;
 
 public:
+  /**
+   * Retrieve TaskAdvance mechanism
+   *
+   * @return Reference to TaskAdvance used by this task
+   */
+  const TaskAdvance &get_task_advance() const {
+    return task_advance;
+  }
+
   /** 
    * Retrieve TaskAdvance mechanism
    * 

@@ -299,6 +299,15 @@ public:
    *
    * @return Task advance mechanism
    */
+  const TaskAdvance &get_task_advance() const {
+    return task_ordered.get_task_advance();
+  }
+
+  /**
+   * Accessor for task advance system
+   *
+   * @return Task advance mechanism
+   */
   TaskAdvance& get_task_advance() {
     return task_ordered.get_task_advance();
   }
