@@ -61,50 +61,12 @@ enum {
 	TRUE = true,
 };
 
-typedef char CHAR;
 typedef uint8_t BYTE;
-typedef int64_t __int64;
-typedef int64_t _int64;
 typedef uint32_t DWORD;
-typedef DWORD *LPDWORD;
 typedef int32_t LONG;
-typedef uint32_t ULONG;
-typedef uint32_t WORD;
-typedef unsigned int UINT;
-typedef int INT;
-typedef int32_t WPARAM;
-typedef int32_t LPARAM;
-typedef int32_t LRESULT;
-typedef void *LPVOID;
 
 typedef struct w32_handle *HANDLE;
-typedef DWORD HRESULT;
 typedef HANDLE HINSTANCE;
-typedef HANDLE HBRUSH;
-typedef HANDLE HPEN;
-typedef HANDLE HBITMAP;
-typedef HANDLE HFONT;
-typedef HANDLE HCURSOR;
-typedef HANDLE HICON;
-typedef HANDLE ATOM;
-typedef struct w32_wnd *HWND;
-typedef struct w32_dc *HDC;
-
-#define INVALID_HANDLE_VALUE NULL
-#define HWND_TOP NULL
-
-enum {
-  ERROR_SUCCESS = 0,
-};
-
-typedef DWORD COLORREF;
-typedef DWORD* LPCOLORREF;
-
-static inline COLORREF
-RGB(int r, int g, int b)
-{
-  return (r & 0xff) | ((g & 0xff) << 8) | ((b & 0xff) << 16);
-}
 
 typedef struct tagPOINT {
 	LONG x;
@@ -114,7 +76,7 @@ typedef struct tagPOINT {
 typedef struct tagSIZE {
   LONG cx;
   LONG cy;
-} SIZE, *PSIZE;
+} SIZE;
 
 typedef struct _RECT {
 	LONG left;
@@ -123,13 +85,7 @@ typedef struct _RECT {
 	LONG bottom;
 } RECT;
 
-typedef RECT *LPRECT;
-
-#define WINAPI
 #define _cdecl
-#define CALLBACK
-
-#define _wcsdup wcsdup
 
 #define LF_FACESIZE 256
 
@@ -149,26 +105,5 @@ typedef struct tagLOGFONT {
 	BYTE lfPitchAndFamily;
 	TCHAR lfFaceName[LF_FACESIZE];
 } LOGFONT;
-
-typedef struct {
-	HWND hwnd;
-	UINT message;
-	WPARAM wParam;
-	LPARAM lParam;
-	DWORD time;
-	POINT pt;
-} MSG, *PMSG;
-
-typedef LRESULT CALLBACK (*WNDPROC)(
-    HWND hwnd,
-    UINT uMsg,
-    WPARAM wParam,
-    LPARAM lParam
-);
-
-typedef void *LPSECURITY_ATTRIBUTES;
-
-typedef struct OVERLAPPED OVERLAPPED;
-typedef OVERLAPPED *LPOVERLAPPED;
 
 #endif

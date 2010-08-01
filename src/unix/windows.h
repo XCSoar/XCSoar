@@ -43,148 +43,14 @@ Copyright_License {
 #include <winbase.h>
 #include <winuser.h>
 
-/* GDI */
-
-LRESULT DefWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
-
-static inline DWORD
-GetTickCount(void)
-{
-  return time(NULL);
-}
-
-int MessageBox(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType);
-
-/* Debugging */
-
-#include <assert.h>
-
-#define ASSERT assert
-
-/* Memory allocation */
-
-enum {
-  LMEM_FIXED = 0,
-  LMEM_MOVEABLE = 0,
-  LMEM_ZEROINIT = 0x40,
-  LPTR = LMEM_FIXED|LMEM_ZEROINIT,
-};
-
-typedef void *HLOCAL;
-
-static inline HLOCAL
-LocalAlloc(UINT uFlags, size_t uBytes)
-{
-  void *p = malloc(uBytes);
-  if (p == NULL)
-    return NULL;
-
-  if (uFlags & LMEM_ZEROINIT)
-    memset(p, 0, uBytes);
-
-  return p;
-}
-
-static inline HLOCAL
-LocalReAlloc(HLOCAL hMem, UINT uFlags, size_t uBytes)
-{
-  // XXX
-  return LocalAlloc(uFlags, uBytes);
-}
-
-static inline HLOCAL
-LocalFree(HLOCAL h)
-{
-  free(h);
-  return NULL;
-}
-
-/* MultiThreading hacks */
-
-/*
-#include <pthread.h>
-
-typedef pthread_mutex_t CRITICAL_SECTION;
-
-static inline void
-InitializeCriticalSection(CRITICAL_SECTION *mutex)
-{
-  pthread_mutex_init(mutex, NULL);
-}
-
-static inline void
-DeleteCriticalSection(CRITICAL_SECTION *mutex)
-{
-  pthread_mutex_destroy(mutex);
-}
-
-static inline void
-EnterCriticalSection(CRITICAL_SECTION *mutex)
-{
-  pthread_mutex_lock(mutex);
-}
-
-static inline void
-LeaveCriticalSection(CRITICAL_SECTION *mutex)
-{
-  pthread_mutex_unlock(mutex);
-}
-*/
-
-/* Debugging */
-
-#include <assert.h>
-
-#define ASSERT assert
-
 /* File I/O */
 
 #define DeleteFile unlink
-
-enum {
-  GENERIC_READ = 0,
-  GENERIC_WRITE = 0,
-  CREATE_ALWAYS = 0,
-  OPEN_EXISTING = 0,
-  FILE_ATTRIBUTE_NORMAL = 0,
-};
-
-typedef struct _FILETIME {
-  DWORD dwLowDateTime;
-  DWORD dwHighDateTime;
-} FILETIME, *PFILETIME;
-
-static inline BOOL
-ReadFile(HANDLE hFile, LPVOID lpBuffer, DWORD nNumberOfBytesToRead,
-         LPDWORD lpNumberOfBytesRead, LPOVERLAPPED lpOverlapped)
-{
-  int fd = (int)(size_t)hFile;
-  ssize_t nbytes;
-
-  nbytes = read(fd, lpBuffer, nNumberOfBytesToRead);
-  if (nbytes < 0) {
-    *lpNumberOfBytesRead = 0;
-    return FALSE;
-  }
-
-  *lpNumberOfBytesRead = (DWORD)nbytes;
-  return TRUE;
-}
-
-static inline void MessageBeep(UINT uType)
-{
-}
 
 static inline void Sleep(unsigned ms)
 {
   const struct timespec ts = { ms / 1000, (long)ms % 1000000L };
   nanosleep(&ts, NULL);
 }
-
-typedef HANDLE HMENU;
-
-static inline void CheckMenuItem(HMENU h, int id, unsigned flags) {}
-
-static inline void SystemIdleTimerReset() {}
 
 #endif

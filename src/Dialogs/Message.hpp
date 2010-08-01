@@ -42,7 +42,6 @@ Copyright_License {
 #include <windows.h>
 
 int
-WINAPI
 MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, unsigned uType);
 
 #endif

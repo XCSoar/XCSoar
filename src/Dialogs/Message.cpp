@@ -77,7 +77,7 @@ protected:
  * @param uType Type of MessageBox to display (OK+Cancel, Yes+No, etc.)
  * @return
  */
-int WINAPI
+int
 MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, unsigned uType)
 {
   WndFrame *wText = NULL;
