@@ -35,6 +35,7 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "Math/LowPassFilter.hpp"
 
 /**
@@ -45,6 +46,8 @@ Copyright_License {
  * @param fact Smoothing factor (alpha)
  * @return Output value (y)
  */
-double LowPassFilter(double y_last, double x_in, double fact) {
-  return (1.0-fact)*y_last+(fact)*x_in;
+double
+LowPassFilter(double y_last, double x_in, double fact)
+{
+  return (1.0 - fact) * y_last + (fact) * x_in;
 }
