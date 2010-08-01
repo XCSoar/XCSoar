@@ -150,9 +150,6 @@ public:
   static void SignalShutdown(bool force);
   static bool LockSettingsInFlight;
   static unsigned UserLevel;
-
-private:
-  static HCURSOR oldCursor;
 };
 
 /** 
