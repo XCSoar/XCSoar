@@ -65,7 +65,6 @@ private:
   DWORD timestamp_newdata;
   DWORD timestamp_draw;
   int timestats_av;
-  int cpuload;
   bool timestats_dirty;
   long tottime;
 };

@@ -45,7 +45,6 @@ Copyright_License {
  */
 MapWindowTimer::MapWindowTimer():
   timestats_av(0),
-  cpuload(0),
   timestats_dirty(false),
   tottime(0)
 {
@@ -105,7 +104,6 @@ MapWindowTimer::StopTimer()
     // Calculates the drawing time with low pass filter
     tottime = (2 * tottime + (timestamp_draw - timestamp_newdata)) / 3;
     timestats_av = tottime;
-    cpuload = 0;
   }
 
   timestats_dirty = false;
