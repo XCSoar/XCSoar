@@ -137,6 +137,7 @@ enum {
   DT_CENTER = 0x20,
   DT_NOPREFIX = 0x40,
   DT_VCENTER = 0x80,
+  DT_RIGHT = 0x100,
 };
 
 static inline void

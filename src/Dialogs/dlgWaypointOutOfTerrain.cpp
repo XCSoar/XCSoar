@@ -94,7 +94,7 @@ dlgWaypointOutOfTerrain(const TCHAR *Message)
   wfrm = (WndFrame*)wf->FindByName(_T("frmWaypointOutOfTerrainText"));
 
   wfrm->SetCaption(Message);
-  wfrm->SetCaptionStyle(DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
+  wfrm->SetAlignCenter();
 
   res = wf->ShowModal();
   delete wf;

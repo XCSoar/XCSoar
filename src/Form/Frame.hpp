@@ -49,8 +49,7 @@ public:
 
   void SetCaption(const TCHAR *Value);
 
-  UINT GetCaptionStyle(void) { return mCaptionStyle; }
-  UINT SetCaptionStyle(UINT Value);
+  void SetAlignCenter();
 
   unsigned GetTextHeight();
 

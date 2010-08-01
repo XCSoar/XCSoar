@@ -59,13 +59,12 @@ void WndFrame::SetCaption(const TCHAR *Value){
   }
 }
 
-UINT WndFrame::SetCaptionStyle(UINT Value){
-  UINT res = mCaptionStyle;
-  if (res != Value){
-    mCaptionStyle = Value;
-    invalidate();
-  }
-  return res;
+void
+WndFrame::SetAlignCenter()
+{
+  mCaptionStyle &= ~(DT_LEFT|DT_RIGHT);
+  mCaptionStyle |= DT_CENTER;
+  invalidate();
 }
 
 unsigned

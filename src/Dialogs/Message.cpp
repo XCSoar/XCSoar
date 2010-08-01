@@ -126,7 +126,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, unsigned uType)
 
   wText->SetCaption(lpText);
   wText->SetFont(Fonts::MapBold);
-  wText->SetCaptionStyle(DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
+  wText->SetAlignCenter();
   // | DT_VCENTER
 
   /* TODO code: this doesnt work to set font height
