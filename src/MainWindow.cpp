@@ -55,10 +55,7 @@ Copyright_License {
 #include "MenuBar.hpp"
 #include "InputEvents.h"
 #include "Appearance.hpp"
-
-#ifdef WINDOWSPC
 #include "Asset.hpp" /* for SCREENWIDTH and SCREENHEIGHT */
-#endif
 
 /**
  * Destructor of the MainWindow-Class
@@ -110,7 +107,7 @@ void
 MainWindow::initialise()
 {
   RECT rc;
-#ifdef WINDOWSPC
+#if defined(WIN32) && !defined(_WIN32_WCE)
   rc.left = 0;
   rc.right = SCREENWIDTH;
   rc.top = 0;

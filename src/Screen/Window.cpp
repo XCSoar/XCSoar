@@ -158,7 +158,7 @@ Window::get_root_owner()
 
   return root;
 #else /* !ENABLE_SDL */
-#ifdef WINDOWSPC
+#ifndef _WIN32_WCE
   HWND hRoot = ::GetAncestor(hWnd, GA_ROOTOWNER);
   if (hRoot == NULL)
     return NULL;
@@ -548,7 +548,7 @@ LRESULT CALLBACK
 Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
   enum {
-#ifdef WINDOWSPC
+#ifndef _WIN32_WCE
     WM_VERY_FIRST = WM_NCCREATE,
 #else
     WM_VERY_FIRST = WM_CREATE,

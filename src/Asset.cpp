@@ -45,7 +45,7 @@ Copyright_License {
 #include "Sizes.h"
 #include "Hardware/Display.hpp"
 
-#if defined(WIN32) && !(defined(__GNUC__) && defined(WINDOWSPC))
+#if defined(WIN32) && (!defined(__GNUC__) || defined(_WIN32_WCE))
 #include "uniqueid.h"
 #endif
 
@@ -76,7 +76,7 @@ void ReadAssetNumber(void)
   memset(strAssetNumber, 0, MAX_LOADSTRING * sizeof(TCHAR));
   // JMW clear this first just to be safe.
 
-#ifdef WINDOWSPC
+#ifndef _WIN32_WCE
   return;
 #endif
 
@@ -124,7 +124,7 @@ void ReadAssetNumber(void)
 static void
 ReadCompaqID(void)
 {
-#if defined(WIN32) && !defined(WINDOWSPC)
+#if defined(_WIN32_WCE)
   PROCESS_INFORMATION pi;
 
   if(strAssetNumber[0] != '\0')
@@ -148,7 +148,7 @@ ReadCompaqID(void)
 static void
 ReadUUID(void)
 {
-#if defined(WIN32) && !(defined(__GNUC__) && defined(WINDOWSPC)) && defined(IOCTL_HAL_GET_DEVICEID) && defined(FILE_DEVICE_HAL)
+#if defined(_WIN32_WCE) && defined(IOCTL_HAL_GET_DEVICEID) && defined(FILE_DEVICE_HAL)
   BOOL fRes;
 
 #define GUIDBuffsize 100

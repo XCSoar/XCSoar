@@ -40,7 +40,6 @@ zzip_filesize(int fd)
     (void)fd;
 
 // JMW
-#if defined(WINDOWSPC) && !defined(__MINGW32__)
     struct stat st;
   if (fstat(fd, &st) < 0)
     return -1;
@@ -51,16 +50,6 @@ zzip_filesize(int fd)
 	      (long) st.st_size, (long) st.st_blocks);
 # endif
   return st.st_size;
-#else
-  // if (stat("filename",&st)<0) {
-  //    return -1;
-  // } else {
-  //    return st.st_size;
-  // }
-  // JMW TODO
-  return 0;
-#endif
-
 }
 
 #if defined(__MINGW32__) && !defined(WINDOWSPC)

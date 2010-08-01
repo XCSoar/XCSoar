@@ -197,9 +197,6 @@ endif
 ifeq ($(HAVE_WIN32),y)
   TARGET_CPPFLAGS += -DWIN32_LEAN_AND_MEAN
   TARGET_CPPFLAGS += -DNOMINMAX
-  ifeq ($(CONFIG_PC),y)
-    TARGET_CPPFLAGS += -DWINDOWSPC=1
-  endif
 endif
 
 ifeq ($(TARGET),PPC2000)

@@ -46,10 +46,10 @@ Copyright_License {
 
 #ifdef GNAV
   #define TARGET "Altair"
-#elif defined(WINDOWSPC)
-  #define TARGET "PC"
 #elif !defined(WIN32)
   #define TARGET "UNIX"
+#elif !defined(_WIN32_WCE)
+  #define TARGET "PC"
 #else
   // TODO code: consider adding PPC, 2002, 2003 (not enough room now)
   #define TARGET "PPC"

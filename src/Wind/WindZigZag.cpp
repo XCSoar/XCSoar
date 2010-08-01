@@ -525,7 +525,6 @@ public:
 ZigZag myzigzag;
 
 #ifdef DEBUG_ZIGZAG
-#ifdef WINDOWSPC
 
 void TestZigZag(fixed V_wind, fixed theta_wind) {
   fixed t, V_tas, V_gps, theta_gps, theta_glider;
@@ -575,7 +574,6 @@ void TestZigZagLoop() {
   }
 }
 
-#endif
 #endif
 
 static bool
@@ -629,10 +627,8 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
   if (!basic.AirspeedAvailable)
     return 0;
 
-  #ifdef WINDOWSPC
   #ifdef DEBUG_ZIGZAG
   TestZigZagLoop();
-  #endif
   #endif
 
   // TODO accuracy: correct TAS for vertical speed if dynamic pullup

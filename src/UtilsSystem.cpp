@@ -51,7 +51,7 @@ Copyright_License {
 #include <sys/stat.h>
 #endif
 
-#ifdef WINDOWSPC
+#if defined(WIN32) && !defined(_WIN32_WCE)
 int SCREENWIDTH = 640;
 int SCREENHEIGHT = 480;
 #endif
@@ -80,7 +80,7 @@ CheckFreeRam()
 // automatic defragmentation.
 void MyCompactHeaps() {
 #ifdef WIN32
-#if defined(WINDOWSPC) || (defined(GNAV) && !defined(__GNUC__))
+#if !defined(_WIN32_WCE) || (defined(GNAV) && !defined(__GNUC__))
   HeapCompact(GetProcessHeap(), 0);
 #else
   typedef DWORD (_stdcall *CompactAllHeapsFn) (void);
@@ -193,7 +193,7 @@ ParseCommandLine(const TCHAR *CommandLine)
 
   Profile::SetFiles(extrnProfileFile);
 
-#ifdef WINDOWSPC
+#if defined(WIN32) && !defined(_WIN32_WCE)
   SCREENWIDTH = 640;
   SCREENHEIGHT = 480;
 
@@ -349,7 +349,7 @@ TranscodeKey(unsigned wParam)
 RECT SystemWindowSize(void) {
   RECT WindowSize;
 
-#ifdef WINDOWSPC
+#if defined(WIN32) && !defined(_WIN32_WCE)
   WindowSize.right = SCREENWIDTH + 2 * GetSystemMetrics(SM_CXFIXEDFRAME);
   WindowSize.left = (GetSystemMetrics(SM_CXSCREEN) - WindowSize.right) / 2;
   WindowSize.bottom = SCREENHEIGHT + 2 * GetSystemMetrics(SM_CYFIXEDFRAME) +

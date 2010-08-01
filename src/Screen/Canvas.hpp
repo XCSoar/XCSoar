@@ -500,7 +500,7 @@ public:
 
 #else /* !ENABLE_SDL */
 
-#ifdef WINDOWSPC
+#ifndef _WIN32_WCE
 #define HAVE_VIEWPORT
 #define HAVE_OFFSET_VIEWPORT
 #elif defined(_WIN32_WCE) && _WIN32_WCE >= 0x0500

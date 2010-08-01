@@ -138,7 +138,7 @@ TopWindow::full_screen()
   screen.full_screen();
 #else /* !ENABLE_SDL */
   ::SetForegroundWindow(hWnd);
-#ifdef WINDOWSPC
+#ifndef _WIN32_WCE
   show_on_top();
 #else
 #ifdef HAVE_AYGSHELL_DLL

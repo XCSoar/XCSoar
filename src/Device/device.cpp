@@ -340,16 +340,6 @@ devRestart()
   if (is_simulator())
     return;
 
-  /*
-  #ifdef WINDOWSPC
-  static bool first = true;
-  if (!first) {
-    return;
-  }
-  first = false;
-  #endif
-  */
-
   LogStartUp(_T("RestartCommPorts"));
 
   ScopeLock protect(mutexComm);

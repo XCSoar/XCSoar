@@ -120,7 +120,7 @@ BlankDisplay(bool doblank)
 void
 CheckDisplayTimeOut(bool sticky)
 {
-#ifndef WINDOWSPC
+#if defined(WIN32) && !defined(_WIN32_WCE)
   SystemIdleTimerReset();
 #endif
 

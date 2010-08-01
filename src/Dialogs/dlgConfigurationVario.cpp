@@ -170,7 +170,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
 
   WndProperty* wp;
 
-#ifndef WINDOWSPC
+#ifdef _WIN32_WCE
   if (first)
     ProgressGlue::Step();
 #endif

@@ -356,7 +356,7 @@ DeviceBlackboard::SetSystemTime() {
     sysTime.wMilliseconds = 0;
     sysTimeInitialised = (::SetSystemTime(&sysTime)==true);
 
-#if defined(GNAV) && !defined(WINDOWSPC)
+#if defined(_WIN32_WCE) && defined(GNAV)
     TIME_ZONE_INFORMATION tzi;
     tzi.Bias = -SettingsComputer().UTCOffset/60;
     _tcscpy(tzi.StandardName,TEXT("Altair"));

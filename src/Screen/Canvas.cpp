@@ -764,7 +764,7 @@ Canvas::copy(const Canvas &src)
 void
 Canvas::copy_transparent_black(const Canvas &src)
 {
-#if !defined(WINDOWSPC)
+#ifdef _WIN32_WCE
   ::TransparentImage(dc, 0, 0, get_width(), get_height(),
                      src.dc, 0, 0, get_width(), get_height(),
                      Color::BLACK);
@@ -778,7 +778,7 @@ Canvas::copy_transparent_black(const Canvas &src)
 void
 Canvas::copy_transparent_white(const Canvas &src)
 {
-#if !defined(WINDOWSPC)
+#ifdef _WIN32_WCE
   ::TransparentImage(dc, 0, 0, get_width(), get_height(),
                      src.dc, 0, 0, get_width(), get_height(),
                      Color::WHITE);

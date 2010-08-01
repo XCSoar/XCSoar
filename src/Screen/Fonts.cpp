@@ -153,7 +153,7 @@ InitialiseLogFonts()
 {
   int FontHeight = Layout::Scale(Layout::square ? 26 : 35);
 
-#ifdef WINDOWSPC
+#ifndef _WIN32_WCE
   FontHeight = (int)(FontHeight / 1.35);
 #endif
 

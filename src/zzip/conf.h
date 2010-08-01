@@ -24,7 +24,7 @@
 #if !defined ZZIP_OMIT_CONFIG_H
 # ifdef __GNUC__
 # include <zzip/_gnuc.h>
-# elif defined _MSC_VER || defined __BORLANDC__ || defined __WATCOMC__ || defined WIN32 || defined WINDOWSPC
+# elif defined _MSC_VER || defined __BORLANDC__ || defined __WATCOMC__ || defined WIN32
 # include <zzip/_msvc.h>
 # else /* autoconf generated */
 JMW something wrong

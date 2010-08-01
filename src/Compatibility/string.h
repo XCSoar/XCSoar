@@ -68,7 +68,7 @@ _strupr(char *p)
 
 #else /* !HAVE_MSVCRT */
 
-#ifndef WINDOWSPC
+#ifdef _WIN32_WCE
 
 #ifdef __cplusplus
 extern "C" {
@@ -80,7 +80,7 @@ _CRTIMP int __cdecl     _wtoi (const wchar_t *);
 }
 #endif
 
-#endif /* !WINDOWSPC */
+#endif /* _WIN32_WCE */
 
 #endif /* HAVE_MSVCRT */
 

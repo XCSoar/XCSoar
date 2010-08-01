@@ -71,7 +71,7 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
   infobox.SetTitle(_T("Battery"));
 
   // Set Value
-#if !defined(WINDOWSPC) && !defined(HAVE_POSIX)
+#ifdef HAVE_BATTERY
   TCHAR tmp[32];
   if (!is_altair()) {
     _stprintf(tmp, _T("%2.1fV"), PDABatteryPercent);

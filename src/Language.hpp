@@ -66,7 +66,7 @@ const TCHAR* gettext(const TCHAR* text);
 #define _(x) gettext(_T(x))
 #define N_(x) _T(x)
 
-#if defined(WINDOWSPC) && !defined(NDEBUG) && defined(_MSC_VER)
+#if !defined(_WIN32_WCE) && !defined(NDEBUG) && defined(_MSC_VER)
 //#define DEBUG_TRANSLATIONS
 #pragma warning( disable : 4786 )
 #endif
