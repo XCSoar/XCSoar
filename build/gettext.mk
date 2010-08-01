@@ -2,8 +2,9 @@ XGETTEXT = xgettext
 GETTEXT_PACKAGE = xcsoar
 GETTEXT_SOURCES = $(XCSOAR_SOURCES) \
 	$(DRIVER_SOURCES)
+GETTEXT_DIALOGS = $(wildcard Data/Dialogs/*.xml)
 
-po/$(GETTEXT_PACKAGE).pot:
+$(OUT)/po/cpp.pot: $(GETTEXT_SOURCES) | $(OUT)/po/dirstamp
 	$(XGETTEXT) --default-domain=$(GETTEXT_PACKAGE) \
 	  --add-comments --keyword=_ --keyword=N_ \
 	  --from-code=utf-8 \
@@ -14,4 +15,12 @@ po/$(GETTEXT_PACKAGE).pot:
 	  --flag=NC_:2:pass-c-format \
 	  --output=$@ \
 	  --force-po \
-	  $(GETTEXT_SOURCES)
+	  $^
+
+$(OUT)/po/xml.pot: $(GETTEXT_DIALOGS) | $(OUT)/po/dirstamp
+	$(Q)$(PERL) $(topdir)/tools/xml2po.pl $^ >$@.tmp
+	$(Q)mv $@.tmp $@
+
+po/$(GETTEXT_PACKAGE).pot: $(OUT)/po/cpp.pot $(OUT)/po/xml.pot
+	@$(NQ)echo "  GEN     $@"
+	$(Q)msgcat -o $@ $^
