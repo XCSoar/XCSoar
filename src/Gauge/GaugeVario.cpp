@@ -140,7 +140,7 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
   get_canvas().set_text_color(colText);
   get_canvas().set_background_color(colTextBackgnd);
 
-  unit_symbol = GetUnitSymbol(Units::GetUserUnitByGroup(ugVerticalSpeed));
+  unit_symbol = GetUnitSymbol(Units::VerticalSpeedUnit);
 
   xoffset = get_width();
   yoffset = get_height() / 2;
