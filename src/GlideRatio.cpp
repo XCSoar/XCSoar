@@ -164,7 +164,8 @@ LimitLD(double LD)
 }
 
 double
-UpdateLD(double LD, double d, double h, double filter_factor)
+UpdateLD(double LD, double leg_distance, double height_above_leg,
+         double filter_factor)
 {
   double glideangle;
   if (LD != 0) {
@@ -172,8 +173,9 @@ UpdateLD(double LD, double d, double h, double filter_factor)
   } else {
     glideangle = 1.0;
   }
-  if (d != 0) {
-    glideangle = LowPassFilter(1.0 / LD, h / d, filter_factor);
+  if (leg_distance != 0) {
+    glideangle = LowPassFilter(1.0 / LD, height_above_leg / leg_distance,
+                               filter_factor);
     if (fabs(glideangle) > 1.0 / INVALID_GR) {
       LD = LimitLD(1.0 / glideangle);
     } else {
