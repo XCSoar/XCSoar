@@ -93,7 +93,6 @@ Copyright_License {
 
 #include "Task/TaskManager.hpp"
 #include "TaskClientUI.hpp"
-#include "TaskClientMap.hpp"
 #include "TaskClientCalc.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideComputerInterface.hpp"

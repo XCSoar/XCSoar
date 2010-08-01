@@ -150,7 +150,6 @@ XCSOAR_SOURCES := \
 	$(IO_SRC_DIR)/DataFile.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/TaskClient.cpp \
-	$(SRC)/TaskClientMap.cpp \
 	$(SRC)/TaskClientUI.cpp \
 	$(SRC)/TaskClientCalc.cpp \
 	$(SRC)/TaskStore.cpp \
