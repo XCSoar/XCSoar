@@ -79,8 +79,6 @@ public:
   TaskManager(TaskEvents &te,
               const Waypoints &wps);
 
-  ~TaskManager();
-
   /**
    * Increments active taskpoint sequence for active task
    *
@@ -136,13 +134,17 @@ public:
   void reset();
 
   /** Set active task to abort mode. */
-  void abort();
+  void abort() {
+    set_mode(MODE_ABORT);
+  }
 
   /**
    * Sets active task to ordered task (or goto if none exists) after
    * goto or aborting.
    */
-  void resume();
+  void resume() {
+    set_mode(MODE_ORDERED);
+  }
 
   /**
    * Sets active task to go to mode, to specified waypoint
@@ -209,7 +211,9 @@ public:
    * @return Statistics
    */
   gcc_pure
-  const CommonStats& get_common_stats() const;
+  const CommonStats& get_common_stats() const {
+    return common_stats;
+  }
 
   /**
    * Convenience function, determines whether stats are valid
@@ -217,7 +221,9 @@ public:
    * @return True if stats valid
    */
   gcc_pure
-  bool stats_valid() const;
+  bool stats_valid() const {
+    return get_stats().task_valid;
+  }
 
   /**
    * Size of active task
@@ -233,7 +239,9 @@ public:
    * @return True if task is valid
    */
   gcc_pure
-  bool check_ordered_task() const;
+  bool check_ordered_task() const {
+    return task_ordered.check_task();
+  }
 
   /**
    * Check whether active task is valid
@@ -249,7 +257,9 @@ public:
    * @return Factory
    */
   gcc_pure
-  AbstractTaskFactory& get_factory() const;
+  AbstractTaskFactory& get_factory() const {
+    return task_ordered.get_factory();
+  }
 
   /**
    * Set type of task factory to be used for constructing tasks
@@ -258,7 +268,9 @@ public:
    *
    * @return Type of task
    */
-  OrderedTask::Factory_t set_factory(const OrderedTask::Factory_t _factory);
+  OrderedTask::Factory_t set_factory(const OrderedTask::Factory_t _factory) {
+    return task_ordered.set_factory(_factory);
+  }
 
   /**
    * Create a clone of the task. 
@@ -287,7 +299,9 @@ public:
    *
    * @return Task advance mechanism
    */
-  TaskAdvance& get_task_advance();
+  TaskAdvance& get_task_advance() {
+    return task_ordered.get_task_advance();
+  }
 
   /**
    * Access active task mode
@@ -295,7 +309,9 @@ public:
    * @return Active task mode
    */
   gcc_pure
-  TaskMode_t get_mode() const;
+  TaskMode_t get_mode() const {
+    return mode;
+  }
 
   /**
    * Determine if the active mode is a particular mode
@@ -305,7 +321,9 @@ public:
    * @return True if modes match
    */
   gcc_pure
-  bool is_mode(const TaskMode_t the_mode) const;
+  bool is_mode(const TaskMode_t the_mode) const {
+    return mode == the_mode;
+  }
 
   /**
    * Retrieves glide polar used by task system
@@ -313,7 +331,9 @@ public:
    * @return Reference to glide polar
    */
   gcc_pure
-  const GlidePolar& get_glide_polar() const;
+  const GlidePolar& get_glide_polar() const {
+    return m_glide_polar;
+  }
 
   /**
    * Update glide polar used by task system
@@ -328,7 +348,9 @@ public:
    * @return Copy of glide polar
    */
   gcc_pure
-  GlidePolar get_safety_polar() const;
+  GlidePolar get_safety_polar() const {
+    return task_abort.get_safety_polar();
+  }
 
   /**
    * Update safety polar used by task system
@@ -350,7 +372,9 @@ public:
    * @return Vector of trace points selected for OLC
    */
   gcc_pure
-  const TracePointVector& get_olc_points() const;
+  const TracePointVector& get_olc_points() const {
+    return task_olc.get_olc_points();
+  }
 
   /**
    * Retrieve olc trace vector
@@ -358,21 +382,27 @@ public:
    * @return Vector of trace points reduced for OLC
    */
   gcc_pure
-  const TracePointVector& get_trace_points() const;
+  const TracePointVector& get_trace_points() const {
+    return task_olc.get_trace_points();
+  }
 
   /**
    * Accesses ordered task start state
    *
    * @return State at task start (or null state if not started)
    */
-  AIRCRAFT_STATE get_start_state() const;
+  AIRCRAFT_STATE get_start_state() const {
+    return task_ordered.get_start_state();
+  }
 
   /**
    * Accesses ordered task finish state
    *
    * @return State at task finish (or null state if not finished)
    */
-  AIRCRAFT_STATE get_finish_state() const;
+  AIRCRAFT_STATE get_finish_state() const {
+    return task_ordered.get_finish_state();
+  }
 
   /**
    * Return required arrival height of final point in task
@@ -406,14 +436,18 @@ public:
    * 
    * @return Read-only OrderedTaskBehaviour
    */
-  const OrderedTaskBehaviour& get_ordered_task_behaviour() const;
+  const OrderedTaskBehaviour& get_ordered_task_behaviour() const {
+    return task_ordered.get_ordered_task_behaviour();
+  }
 
   /** 
    * Retrieve the OrderedTaskBehaviour used by the OrderedTask
    * 
    * @return OrderedTaskBehaviour reference
    */
-  OrderedTaskBehaviour& get_ordered_task_behaviour();
+  OrderedTaskBehaviour& get_ordered_task_behaviour() {
+    return task_ordered.get_ordered_task_behaviour();
+  }
 
   /** 
    * Copy TaskBehaviour to this task

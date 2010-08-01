@@ -55,10 +55,6 @@ TaskManager::TaskManager(TaskEvents &te,
 {
 }
 
-TaskManager::~TaskManager()
-{
-}
-
 TaskManager::TaskMode_t 
 TaskManager::set_mode(const TaskMode_t the_mode)
 {
@@ -307,24 +303,6 @@ TaskManager::get_stats() const
   }
 }
 
-const CommonStats& 
-TaskManager::get_common_stats() const
-{
-  return common_stats;
-}
-
-void
-TaskManager::abort()
-{
-  set_mode(MODE_ABORT);
-}
-
-void
-TaskManager::resume()
-{
-  set_mode(MODE_ORDERED);
-}
-
 bool
 TaskManager::do_goto(const Waypoint & wp)
 {
@@ -343,12 +321,6 @@ TaskManager::check_task() const
     return active_task->check_task();
   else
     return false;  
-}
-
-bool 
-TaskManager::check_ordered_task() const
-{
-  return task_ordered.check_task();
 }
 
 void
@@ -417,53 +389,11 @@ TaskManager::random_point_in_task(const unsigned index, const fixed mag) const
   }
 }
 
-
-
-
-TaskManager::TaskMode_t 
-TaskManager::get_mode() const 
-{
-  return mode;
-}
-
-bool 
-TaskManager::is_mode(const TaskMode_t the_mode) const 
-{
-  return mode == the_mode;
-}
-
-const GlidePolar& 
-TaskManager::get_glide_polar() const 
-{
-  return m_glide_polar;
-}
-
 void 
 TaskManager::set_glide_polar(const GlidePolar& glide_polar) 
 {
   m_glide_polar = glide_polar;
 }
-
-GlidePolar 
-TaskManager::get_safety_polar() const 
-{
-  return task_abort.get_safety_polar();
-}
-
-
-TaskAdvance& 
-TaskManager::get_task_advance() 
-{
-  return task_ordered.get_task_advance();
-}
-
-
-bool 
-TaskManager::stats_valid() const 
-{
-  return get_stats().task_valid;
-}
-
 
 void 
 TaskManager::default_task(const GEOPOINT loc, const bool force)
@@ -471,40 +401,11 @@ TaskManager::default_task(const GEOPOINT loc, const bool force)
   /// @todo implement default_task
 }
 
-
-const TracePointVector& 
-TaskManager::get_olc_points() const
-{
-  return task_olc.get_olc_points();
-}
-
-
-const TracePointVector& 
-TaskManager::get_trace_points() const
-{
-  return task_olc.get_trace_points();
-}
-
-
 TracePointVector 
 TaskManager::find_trace_points(const GEOPOINT &loc, const fixed range,
                                const unsigned mintime, const fixed resolution) const
 {
   return trace_full.find_within_range(loc, range, mintime, resolution);
-}
-
-
-AIRCRAFT_STATE 
-TaskManager::get_start_state() const
-{
-  return task_ordered.get_start_state();
-}
-
-
-AIRCRAFT_STATE 
-TaskManager::get_finish_state() const
-{
-  return task_ordered.get_finish_state();
 }
 
 fixed 
@@ -583,32 +484,4 @@ TaskManager::commit(const OrderedTask& other)
     set_mode(MODE_ORDERED);
   }
   return retval;
-}
-
-
-//////////////////
-
-AbstractTaskFactory& 
-TaskManager::get_factory() const 
-{
-  return task_ordered.get_factory();
-}
-
-
-OrderedTask::Factory_t 
-TaskManager::set_factory(const OrderedTask::Factory_t the_factory)
-{
-  return task_ordered.set_factory(the_factory);
-}
-
-const OrderedTaskBehaviour& 
-TaskManager::get_ordered_task_behaviour() const
-{
-  return task_ordered.get_ordered_task_behaviour();
-}
-
-OrderedTaskBehaviour& 
-TaskManager::get_ordered_task_behaviour()
-{
-  return task_ordered.get_ordered_task_behaviour();
 }
