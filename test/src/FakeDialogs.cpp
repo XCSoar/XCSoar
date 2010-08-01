@@ -37,8 +37,8 @@ Copyright_License {
 
 #include "Dialogs/Message.hpp"
 
-int WINAPI
-MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, unsigned uType)
+int
+MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 {
   return -1;
 }

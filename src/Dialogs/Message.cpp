@@ -78,7 +78,7 @@ protected:
  * @return
  */
 int
-MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, unsigned uType)
+MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 {
   WndFrame *wText = NULL;
   int X, Y, Width, Height;

@@ -80,7 +80,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   // Read options from the command line
 #ifndef WIN32
   HINSTANCE hInstance = NULL;
-  LPCTSTR lpCmdLine = argc >= 2 ? argv[1] : _T("");
+  const TCHAR *lpCmdLine = argc >= 2 ? argv[1] : _T("");
 #elif !defined(_WIN32_WCE)
   /* on Windows (non-CE), the lpCmdLine argument is narrow, and we
      have to use GetCommandLine() to get the UNICODE string */

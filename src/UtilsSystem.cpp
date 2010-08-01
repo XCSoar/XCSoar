@@ -151,7 +151,7 @@ void CreateDirectoryIfAbsent(const TCHAR *filename) {
  * @param CommandLine not in use
  */
 void
-ParseCommandLine(LPCTSTR CommandLine)
+ParseCommandLine(const TCHAR *CommandLine)
 {
   TCHAR extrnProfileFile[MAX_PATH];
   extrnProfileFile[0] = 0;

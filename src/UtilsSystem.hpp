@@ -40,7 +40,7 @@ Copyright_License {
 
 #include <windef.h>
 
-void ParseCommandLine(LPCTSTR CommandLine);
+void ParseCommandLine(const TCHAR *CommandLine);
 void MyCompactHeaps();
 unsigned long FindFreeSpace(const TCHAR *path);
 void CreateDirectoryIfAbsent(const TCHAR *filename);

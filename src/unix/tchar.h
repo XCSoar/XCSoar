@@ -152,13 +152,10 @@ typedef char TCHAR;
 
 #define _tcsupr CharUpper
 
-typedef TCHAR *LPTSTR;
-typedef const TCHAR *LPCTSTR;
-
-static inline LPTSTR
-CharUpper(LPTSTR s)
+static inline TCHAR *
+CharUpper(TCHAR *s)
 {
-  LPTSTR p;
+  TCHAR *p;
   for (p = s; *p != 0; ++p)
 #ifdef UNICODE
     *p = towupper(*p);
