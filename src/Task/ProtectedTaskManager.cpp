@@ -229,12 +229,7 @@ ProtectedTaskManager::task_save(const TCHAR* path, const OrderedTask& task)
   Serialiser tser(*root);
   tser.serialise(task);
 
-  bool retval = false;
-  if (!root->save(path)) {
-//    printf("can't save\n");
-  } else {
-    retval = true;
-  }
+  bool retval = root->save(path);
   delete root;  
   return retval;
 }
