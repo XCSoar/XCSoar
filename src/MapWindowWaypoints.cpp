@@ -209,7 +209,8 @@ public:
     }
 
     MapWaypointLabelAdd(Buffer, sc.x + 5, sc.y, text_mode, AltArrivalAGL,
-                        in_task, false, false, false, map.GetMapRect());
+                        in_task, way_point.is_landable(), way_point.is_airport(),
+                        false, map.GetMapRect());
   }
 
   void
