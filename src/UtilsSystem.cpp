@@ -268,8 +268,8 @@ StartupLogFreeRamAndStorage()
   LogStartUp(_T("Free ram %d; free storage %d"), freeram, freestorage);
 }
 
-WPARAM
-TranscodeKey(WPARAM wParam)
+unsigned
+TranscodeKey(unsigned wParam)
 {
   // VENTA-ADDON HARDWARE KEYS TRANSCODING
 
