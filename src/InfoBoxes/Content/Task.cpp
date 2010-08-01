@@ -343,7 +343,7 @@ void
 InfoBoxContentNextLD::Update(InfoBoxWindow &infobox)
 {
   // Set Title
-  infobox.SetTitle(_T("Fin LD"));
+  infobox.SetTitle(_T("WP LD"));
 
   if (!XCSoarInterface::Calculated().task_stats.task_valid) {
     infobox.SetInvalid();
