@@ -59,7 +59,7 @@ protected:
   SIZE size;
 
 public:
-  void load(WORD id, unsigned width, unsigned height) {
+  void load(unsigned id, unsigned width, unsigned height) {
     bitmap.load(id);
     size.cx = width;
     size.cy = height;
