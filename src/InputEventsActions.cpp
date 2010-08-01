@@ -542,15 +542,16 @@ InputEvents::eventChangeInfoBoxType(const TCHAR *misc)
 void
 InputEvents::eventArmAdvance(const TCHAR *misc)
 {
-  const TaskAdvance::TaskAdvanceState_t mode = 
-    protected_task_manager.get_advance_state();
+  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  const TaskAdvance::TaskAdvanceState_t mode =
+    task_manager->get_task_advance().get_advance_state();
   
   if (_tcscmp(misc, _T("on")) == 0) {
-    protected_task_manager.set_advance_armed(true);
+    task_manager->get_task_advance().set_armed(true);
   } else if (_tcscmp(misc, _T("off")) == 0) {
-    protected_task_manager.set_advance_armed(false);
+    task_manager->get_task_advance().set_armed(false);
   } else if (_tcscmp(misc, _T("toggle")) == 0) {
-    protected_task_manager.toggle_advance_armed();
+    task_manager->get_task_advance().toggle_armed();
   } else if (_tcscmp(misc, _T("show")) == 0) {
     switch (mode) {
     case TaskAdvance::MANUAL:
@@ -737,18 +738,19 @@ InputEvents::eventPlaySound(const TCHAR *misc)
 void
 InputEvents::eventMacCready(const TCHAR *misc)
 {
-  GlidePolar polar = protected_task_manager.get_glide_polar();
+  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  GlidePolar polar = task_manager->get_glide_polar();
   double mc = polar.get_mc();
 
   if (_tcscmp(misc, _T("up")) == 0) {
     mc = std::min(mc + (double)0.1, 5.0);
     polar.set_mc(fixed(mc));
-    protected_task_manager.set_glide_polar(polar);
+    task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(fixed(mc));
   } else if (_tcscmp(misc, _T("down")) == 0) {
     mc = std::max(mc - (double)0.1, 0.0);
     polar.set_mc(fixed(mc));
-    protected_task_manager.set_glide_polar(polar);
+    task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(fixed(mc));
   } else if (_tcscmp(misc, _T("auto toggle")) == 0) {
     SetSettingsComputer().auto_mc = !SettingsComputer().auto_mc;
@@ -764,7 +766,7 @@ InputEvents::eventMacCready(const TCHAR *misc)
     }
   } else if (_tcscmp(misc, _T("show")) == 0) {
     TCHAR Temp[100];
-    Units::FormatUserVSpeed(protected_task_manager.get_glide_polar().get_mc(),
+    Units::FormatUserVSpeed(mc,
                             Temp, sizeof(Temp) / sizeof(Temp[0]),
                             false);
     Message::AddMessage(_("MacCready "), Temp);
@@ -943,14 +945,15 @@ InputEvents::eventAudioDeadband(const TCHAR *misc)
 void
 InputEvents::eventAdjustWaypoint(const TCHAR *misc)
 {
+  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
   if (_tcscmp(misc, _T("next")) == 0)
-    protected_task_manager.incrementActiveTaskPoint(1); // next
+    task_manager->incrementActiveTaskPoint(1); // next
   else if (_tcscmp(misc, _T("nextwrap")) == 0)
-    protected_task_manager.incrementActiveTaskPoint(1); // next - with wrap
+    task_manager->incrementActiveTaskPoint(1); // next - with wrap
   else if (_tcscmp(misc, _T("previous")) == 0)
-    protected_task_manager.incrementActiveTaskPoint(-1); // previous
+    task_manager->incrementActiveTaskPoint(-1); // previous
   else if (_tcscmp(misc, _T("previouswrap")) == 0)
-    protected_task_manager.incrementActiveTaskPoint(-1); // previous with wrap
+    task_manager->incrementActiveTaskPoint(-1); // previous with wrap
 }
 
 // AbortTask
@@ -962,12 +965,14 @@ InputEvents::eventAdjustWaypoint(const TCHAR *misc)
 void
 InputEvents::eventAbortTask(const TCHAR *misc)
 {
+  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+
   if (_tcscmp(misc, _T("abort")) == 0)
-    protected_task_manager.abort();
+    task_manager->abort();
   else if (_tcscmp(misc, _T("resume")) == 0)
-    protected_task_manager.resume();
+    task_manager->resume();
   else if (_tcscmp(misc, _T("show")) == 0) {
-    switch (protected_task_manager.get_mode()) {
+    switch (task_manager->get_mode()) {
     case TaskManager::MODE_ABORT:
       Message::AddMessage(_("Task Aborted"));
       break;
@@ -982,20 +987,20 @@ InputEvents::eventAbortTask(const TCHAR *misc)
     }
   } else {
     // toggle
-    switch (protected_task_manager.get_mode()) {
+    switch (task_manager->get_mode()) {
     case TaskManager::MODE_NULL:
     case TaskManager::MODE_ORDERED:
-      protected_task_manager.abort();
+      task_manager->abort();
       break;
     case TaskManager::MODE_GOTO:
-      if (protected_task_manager.check_ordered_task()) {
-        protected_task_manager.resume();
+      if (task_manager->check_ordered_task()) {
+        task_manager->resume();
       } else {
-        protected_task_manager.abort();
+        task_manager->abort();
       }
       break;
     case TaskManager::MODE_ABORT:
-      protected_task_manager.resume();
+      task_manager->resume();
       break;
     default:
       break;
@@ -1013,7 +1018,8 @@ InputEvents::eventAbortTask(const TCHAR *misc)
 void
 InputEvents::eventBugs(const TCHAR *misc)
 {
-  GlidePolar polar = protected_task_manager.get_glide_polar();
+  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  GlidePolar polar = task_manager->get_glide_polar();
   double BUGS = polar.get_bugs();
   double oldBugs = BUGS;
 
@@ -1034,7 +1040,7 @@ InputEvents::eventBugs(const TCHAR *misc)
   if (BUGS != oldBugs) {
     BUGS = min(1.0, max(0.5, BUGS));
     polar.set_bugs(fixed(BUGS));
-    protected_task_manager.set_glide_polar(polar);
+    task_manager->set_glide_polar(polar);
   }
 }
 
@@ -1048,7 +1054,8 @@ InputEvents::eventBugs(const TCHAR *misc)
 void
 InputEvents::eventBallast(const TCHAR *misc)
 {
-  GlidePolar polar = protected_task_manager.get_glide_polar();
+  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  GlidePolar polar = task_manager->get_glide_polar();
   double BALLAST = polar.get_ballast();
   double oldBallast = BALLAST;
 
@@ -1069,7 +1076,7 @@ InputEvents::eventBallast(const TCHAR *misc)
   if (BALLAST != oldBallast) {
     BALLAST = min(1.0,max(0.0,BALLAST));
     polar.set_ballast(fixed(BALLAST));
-    protected_task_manager.set_glide_polar(polar);
+    task_manager->set_glide_polar(polar);
   }
 }
 

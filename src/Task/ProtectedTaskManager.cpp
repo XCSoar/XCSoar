@@ -44,34 +44,32 @@ Copyright_License {
 
 #include <windef.h> // for MAX_PATH
 
-Mutex ProtectedTaskManager::mutex;
-
 GlidePolar 
 ProtectedTaskManager::get_glide_polar() const
 {
-  ScopeLock lock(mutex);
-  return task_manager.get_glide_polar();
+  Lease lease(*this);
+  return lease->get_glide_polar();
 }
 
 void 
 ProtectedTaskManager::set_glide_polar(const GlidePolar& glide_polar)
 {
-  ScopeLock lock(mutex);
-  task_manager.set_glide_polar(glide_polar);
+  ExclusiveLease lease(*this);
+  lease->set_glide_polar(glide_polar);
 }
 
 bool 
 ProtectedTaskManager::check_task() const
 {
-  ScopeLock lock(mutex);
-  return task_manager.check_task();
+  Lease lease(*this);
+  return lease->check_task();
 }
 
 TaskManager::TaskMode_t 
 ProtectedTaskManager::get_mode() const
 {
-  ScopeLock lock(mutex);
-  return task_manager.get_mode();
+  Lease lease(*this);
+  return lease->get_mode();
 }
 
 TracePointVector 
@@ -80,30 +78,30 @@ ProtectedTaskManager::find_trace_points(const GEOPOINT &loc,
                               const unsigned mintime, 
                               const fixed resolution) const
 {
-  ScopeLock lock(mutex);
-  return task_manager.find_trace_points(loc, range, mintime, resolution);
+  Lease lease(*this);
+  return lease->find_trace_points(loc, range, mintime, resolution);
 }
 
 
 void 
 ProtectedTaskManager::CAccept(TaskVisitor &visitor) const
 {
-  ScopeLock lock(mutex);
-  task_manager.CAccept(visitor);
+  Lease lease(*this);
+  return lease->CAccept(visitor);
 }
 
 void 
 ProtectedTaskManager::ordered_CAccept(TaskVisitor &visitor) const
 {
-  ScopeLock lock(mutex);
-  task_manager.ordered_CAccept(visitor);
+  Lease lease(*this);
+  return lease->ordered_CAccept(visitor);
 }
 
 const OrderedTaskBehaviour 
 ProtectedTaskManager::get_ordered_task_behaviour() const
 {
-  ScopeLock lock(mutex);
-  return task_manager.get_ordered_task_behaviour();
+  Lease lease(*this);
+  return lease->get_ordered_task_behaviour();
 }
 
 
@@ -111,61 +109,23 @@ ProtectedTaskManager::get_ordered_task_behaviour() const
 TaskAdvance::TaskAdvanceState_t 
 ProtectedTaskManager::get_advance_state() const
 {
-  ScopeLock lock(mutex);
-  return task_manager.get_task_advance().get_advance_state();
+  Lease lease(*this);
+  return lease->get_task_advance().get_advance_state();
 }
-
-/*
-TaskAdvance::TaskAdvanceMode_t 
-ProtectedTaskManager::get_advance_mode() const
-{
-  ScopeLock lock(mutex);
-  return task_manager.get_task_advance().get_mode();
-}
-
-void 
-ProtectedTaskManager::set_advance_mode(TaskAdvance::TaskAdvanceMode_t the_mode)
-{
-  ScopeLock lock(mutex);
-  task_manager.get_task_advance().set_mode(the_mode);
-}
-*/
-
-void 
-ProtectedTaskManager::set_advance_armed(const bool do_armed)
-{
-  ScopeLock lock(mutex);
-  task_manager.get_task_advance().set_armed(do_armed);
-}
-
-bool 
-ProtectedTaskManager::is_advance_armed() const
-{
-  ScopeLock lock(mutex);
-  return task_manager.get_task_advance().is_armed();
-}
-
-bool 
-ProtectedTaskManager::toggle_advance_armed()
-{
-  ScopeLock lock(mutex);
-  return task_manager.get_task_advance().toggle_armed();
-}
-
 
 GlidePolar 
 ProtectedTaskManager::get_safety_polar() const
 {
-  ScopeLock lock(mutex);
-  return task_manager.get_safety_polar();
+  Lease lease(*this);
+  return lease->get_safety_polar();
 }
 
 
 const Waypoint* 
 ProtectedTaskManager::getActiveWaypoint() const
 {
-  ScopeLock lock(mutex);
-  TaskPoint* tp = task_manager.getActiveTaskPoint();
+  Lease lease(*this);
+  const TaskPoint *tp = lease->getActiveTaskPoint();
   if (tp) {
     return &tp->get_waypoint();
   } else {
@@ -177,111 +137,92 @@ ProtectedTaskManager::getActiveWaypoint() const
 void 
 ProtectedTaskManager::incrementActiveTaskPoint(int offset)
 {
-  ScopeLock lock(mutex);
-  task_manager.incrementActiveTaskPoint(offset);
+  ExclusiveLease lease(*this);
+  lease->incrementActiveTaskPoint(offset);
 }
 
 
 bool 
 ProtectedTaskManager::do_goto(const Waypoint & wp)
 {
-  ScopeLock lock(mutex);
-  return task_manager.do_goto(wp);
+  ExclusiveLease lease(*this);
+  return lease->do_goto(wp);
 }
-
-void 
-ProtectedTaskManager::abort()
-{
-  ScopeLock lock(mutex);
-  task_manager.abort();
-}
-
-void 
-ProtectedTaskManager::resume()
-{
-  ScopeLock lock(mutex);
-  task_manager.resume();
-}
-
 
 AIRCRAFT_STATE 
 ProtectedTaskManager::get_start_state() const
 {
-  ScopeLock lock(mutex);
-  return task_manager.get_start_state();
+  Lease lease(*this);
+  return lease->get_start_state();
 }
 
 fixed 
 ProtectedTaskManager::get_finish_height() const
 {
-  ScopeLock lock(mutex);
-  return task_manager.get_finish_height();
+  Lease lease(*this);
+  return lease->get_finish_height();
 }
 
 
 const TracePointVector 
 ProtectedTaskManager::get_trace_points()
 {
-  ScopeLock lock(mutex);
-  return task_manager.get_trace_points();
+  Lease lease(*this);
+  return lease->get_trace_points();
 }
 
 const TracePointVector 
 ProtectedTaskManager::get_olc_points()
 {
-  ScopeLock lock(mutex);
-  return task_manager.get_olc_points();
+  Lease lease(*this);
+  return lease->get_olc_points();
 }
 
 
 bool 
 ProtectedTaskManager::check_ordered_task() const
 {
-  ScopeLock lock(mutex);
-  return task_manager.check_ordered_task();
+  Lease lease(*this);
+  return lease->check_ordered_task();
 }
 
 
 GEOPOINT 
 ProtectedTaskManager::get_task_center(const GEOPOINT& fallback_location) const
 {
-  ScopeLock lock(mutex);
-  return task_manager.get_task_center(fallback_location);
+  Lease lease(*this);
+  return lease->get_task_center(fallback_location);
 }
 
 fixed 
 ProtectedTaskManager::get_task_radius(const GEOPOINT& fallback_location) const
 {
-  ScopeLock lock(mutex);
-  return task_manager.get_task_radius(fallback_location);
+  Lease lease(*this);
+  return lease->get_task_radius(fallback_location);
 }
 
 
 OrderedTask*
 ProtectedTaskManager::task_clone()
 {
-  ScopeLock lock(mutex);
-  glide_polar = task_manager.get_glide_polar();
-  return task_manager.clone(task_events,
-                            task_behaviour,
-                            glide_polar);
+  ExclusiveLease lease(*this);
+  glide_polar = lease->get_glide_polar();
+  return lease->clone(task_events, task_behaviour, glide_polar);
 }
 
 OrderedTask* 
 ProtectedTaskManager::task_copy(const OrderedTask& that)
 {
-  ScopeLock lock(mutex);
-  glide_polar = task_manager.get_glide_polar();
-  return that.clone(task_events,
-                    task_behaviour,
-                    glide_polar);
+  ExclusiveLease lease(*this);
+  glide_polar = lease->get_glide_polar();
+  return that.clone(task_events, task_behaviour, glide_polar);
 }
 
 OrderedTask* 
 ProtectedTaskManager::task_blank()
 {
-  ScopeLock lock(mutex);
-  glide_polar = task_manager.get_glide_polar();
+  ExclusiveLease lease(*this);
+  glide_polar = lease->get_glide_polar();
   return new OrderedTask(task_events,
                          task_behaviour,
                          glide_polar);
@@ -291,8 +232,8 @@ ProtectedTaskManager::task_blank()
 bool
 ProtectedTaskManager::task_commit(const OrderedTask& that)
 {
-  ScopeLock lock(mutex);
-  return task_manager.commit(that);
+  ExclusiveLease lease(*this);
+  return lease->commit(that);
 }
 
 
@@ -353,8 +294,9 @@ ProtectedTaskManager::task_load(const TCHAR* path)
 {
   OrderedTask* task = task_create(path);
   if (task != NULL) {
-    task_commit(*task);
-    resume();
+    ExclusiveLease lease(*this);
+    lease->commit(*task);
+    lease->resume();
     delete task;
     return true;
   }
@@ -384,58 +326,58 @@ bool
 ProtectedTaskManager::check_duplicate_waypoints(OrderedTask& ordered_task,
                                         Waypoints &way_points)
 {
-  ScopeLock lock(mutex);
+  ExclusiveLease lease(*this);
   return ordered_task.check_duplicate_waypoints(way_points);
 }
 
 void 
 ProtectedTaskManager::reset()
 {
-  ScopeLock lock(mutex);
-  task_manager.reset();
+  ExclusiveLease lease(*this);
+  lease->reset();
 }
 
 bool 
 ProtectedTaskManager::update(const AIRCRAFT_STATE &state_now, 
                        const AIRCRAFT_STATE &state_last) 
 {
-  ScopeLock lock(mutex);
-  return task_manager.update(state_now, state_last);
+  ExclusiveLease lease(*this);
+  return lease->update(state_now, state_last);
 }
 
 bool
 ProtectedTaskManager::update_idle(const AIRCRAFT_STATE &state)
 {
-  ScopeLock lock(mutex);
-  return task_manager.update_idle(state);
+  ExclusiveLease lease(*this);
+  return lease->update_idle(state);
 }
 
 bool 
 ProtectedTaskManager::update_auto_mc(const AIRCRAFT_STATE& state_now,
                                const fixed fallback_mc)
 {
-  ScopeLock lock(mutex);
-  return task_manager.update_auto_mc(state_now, fallback_mc);
+  ExclusiveLease lease(*this);
+  return lease->update_auto_mc(state_now, fallback_mc);
 }
 
 
 const TaskStats& 
 ProtectedTaskManager::get_stats() const
 {
-  ScopeLock lock(mutex);
-  return task_manager.get_stats();
+  Lease lease(*this);
+  return lease->get_stats();
 }
 
 const CommonStats& 
 ProtectedTaskManager::get_common_stats() const
 {
-  ScopeLock lock(mutex);
-  return task_manager.get_common_stats();
+  Lease lease(*this);
+  return lease->get_common_stats();
 }
 
 void
 ProtectedTaskManager::set_task_behaviour(const TaskBehaviour& behaviour)
 {
-  ScopeLock lock(mutex);
-  task_manager.set_task_behaviour(behaviour);
+  ExclusiveLease lease(*this);
+  lease->set_task_behaviour(behaviour);
 }

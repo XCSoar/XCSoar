@@ -38,7 +38,7 @@
 #ifndef XCSOAR_PROTECTED_TASK_MANAGER_HPP
 #define XCSOAR_PROTECTED_TASK_MANAGER_HPP
 
-#include "Thread/Mutex.hpp"
+#include "Thread/Guard.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/TaskManager.hpp"
 #include "Task/TaskAdvance.hpp"
@@ -51,12 +51,8 @@ class RasterTerrain;
  * Facade to task/airspace/waypoints as used by threads,
  * to manage locking
  */
-class ProtectedTaskManager
-{
+class ProtectedTaskManager : public Guard<TaskManager> {
 protected:
-  TaskManager& task_manager;
-  static Mutex mutex;
-
   const TaskBehaviour &task_behaviour;
   TaskEvents &task_events;
   GlidePolar glide_polar;
@@ -66,7 +62,7 @@ protected:
 public:
   ProtectedTaskManager(TaskManager &_task_manager, const TaskBehaviour& tb,
                        TaskEvents& te)
-    :task_manager(_task_manager),
+    :Guard<TaskManager>(_task_manager),
      task_behaviour(tb), task_events(te),
      glide_polar(_task_manager.get_glide_polar()) {}
 
@@ -90,14 +86,6 @@ public:
 
   TaskAdvance::TaskAdvanceState_t get_advance_state() const;
 
-/*
-  TaskAdvance::TaskAdvanceMode_t get_advance_mode() const;
-  void set_advance_mode(TaskAdvance::TaskAdvanceMode_t the_mode);
-*/
-  void set_advance_armed(const bool do_armed);
-  bool is_advance_armed() const;
-  bool toggle_advance_armed();
-
   GlidePolar get_safety_polar() const;
 
   const Waypoint* getActiveWaypoint() const;
@@ -105,8 +93,6 @@ public:
   void incrementActiveTaskPoint(int offset);
 
   bool do_goto(const Waypoint & wp);
-  void abort();
-  void resume();
 
   AIRCRAFT_STATE get_start_state() const;
   fixed get_finish_height() const;

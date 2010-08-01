@@ -75,21 +75,22 @@ InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)
 bool
 InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
 {
-  GlidePolar polar = protected_task_manager.get_glide_polar();
+  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  GlidePolar polar = task_manager->get_glide_polar();
   double mc = polar.get_mc();
 
   switch (keycode) {
   case ibkUp:
     mc = std::min(mc + (double)0.1, 5.0);
     polar.set_mc(fixed(mc));
-    protected_task_manager.set_glide_polar(polar);
+    task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(fixed(mc));
     return true;
 
   case ibkDown:
     mc = std::max(mc - (double)0.1, 0.0);
     polar.set_mc(fixed(mc));
-    protected_task_manager.set_glide_polar(polar);
+    task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(fixed(mc));
     return true;
 
