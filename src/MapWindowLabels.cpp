@@ -116,21 +116,37 @@ void MapWindow::MapWaypointLabelSortAndRender(Canvas &canvas) {
         sizeof(MapWaypointLabel_t),
         MapWaypointLabelListCompare);
 
-  // now draw task/landable waypoints in order of range (closest last)
-  // writing unconditionally
-  for (int j = MapWaypointLabelListCount - 1; j >= 0; j--) {
-    MapWaypointLabel_t *E = &MapWaypointLabelList[j];
+  // now draw task waypoints
+  for (unsigned i = 0; i < MapWaypointLabelListCount; i++) {
+    MapWaypointLabel_t *E = &MapWaypointLabelList[i];
     // draws if they are in task unconditionally,
     // otherwise, does comparison
     if (E->inTask)
-      TextInBox(canvas, E->Name, E->Pos.x, E->Pos.y, E->Mode, MapRect, NULL);
+      TextInBox(canvas, E->Name, E->Pos.x, E->Pos.y, E->Mode, MapRect, &label_block);
+  }
+
+  // now draw airports in order of range (closest last)
+  for (unsigned i = 0; i < MapWaypointLabelListCount; i++) {
+    MapWaypointLabel_t *E = &MapWaypointLabelList[i];
+    // draws if they are in task unconditionally,
+    // otherwise, does comparison
+    if (!E->inTask && E->isAirport)
+      TextInBox(canvas, E->Name, E->Pos.x, E->Pos.y, E->Mode, MapRect, &label_block);
+  }
+
+  // now draw landable waypoints in order of range (closest last)
+  for (unsigned i = 0; i < MapWaypointLabelListCount; i++) {
+    MapWaypointLabel_t *E = &MapWaypointLabelList[i];
+    // draws if they are in task unconditionally,
+    // otherwise, does comparison
+    if (!E->inTask && !E->isAirport && E->isLandable)
+      TextInBox(canvas, E->Name, E->Pos.x, E->Pos.y, E->Mode, MapRect, &label_block);
   }
 
   // now draw normal waypoints in order of range (furthest away last)
-  // without writing over each other (or the task ones)
   for (unsigned i = 0; i < MapWaypointLabelListCount; i++) {
     MapWaypointLabel_t *E = &MapWaypointLabelList[i];
-    if (!E->inTask)
+    if (!E->inTask && !E->isAirport && !E->isLandable)
       TextInBox(canvas, E->Name, E->Pos.x, E->Pos.y, E->Mode, MapRect, &label_block);
   }
 }
