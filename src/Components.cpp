@@ -114,8 +114,8 @@ Waypoints way_points;
 
 GlideComputerTaskEvents task_events;
 
-TaskManager task_manager(task_events,
-                         way_points);
+static TaskManager task_manager(task_events, way_points);
+
 TaskClientCalc task_calc(task_manager);
 
 TaskClientUI task_ui(task_manager, 
