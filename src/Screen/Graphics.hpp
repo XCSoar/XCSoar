@@ -79,6 +79,9 @@ class ScreenGraphics {
 public:
   void Initialise();
   void InitialiseConfigured(const SETTINGS_MAP &settings_map);
+  void InitSnailTrail(const SETTINGS_MAP &settings_map);
+  void InitLandableIcons();
+  void InitAirspacePens(const SETTINGS_MAP &settings_map);
 
   // airspace brushes/colours
   const Color GetAirspaceColour(const int i);

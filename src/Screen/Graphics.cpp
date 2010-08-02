@@ -236,6 +236,14 @@ ScreenGraphics::Initialise()
 void
 ScreenGraphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
 {
+  InitSnailTrail(settings_map);
+  InitLandableIcons();
+  InitAirspacePens(settings_map);
+}
+
+void
+ScreenGraphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
+{
   BYTE Red, Green, Blue;
 
   int iwidth;
@@ -256,7 +264,11 @@ ScreenGraphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
     hSnailColours[i] = Color((BYTE)Red, (BYTE)Green, (BYTE)Blue);
     hSnailPens[i].set(iwidth, hSnailColours[i]);
   }
+}
 
+void
+ScreenGraphics::InitLandableIcons()
+{
   if (Appearance.IndLandable == wpLandableDefault) {
     AirportReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_BIG);
     AirportUnreachableIcon.load_big(IDB_LANDABLE, IDB_LANDABLE_BIG);
@@ -273,7 +285,11 @@ ScreenGraphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
     FieldReachableIcon.load(IDB_OUTFIELD_REACHABLE);
     FieldUnreachableIcon.load(IDB_OUTFIELD_UNREACHABLE2);
   }
+}
 
+void
+ScreenGraphics::InitAirspacePens(const SETTINGS_MAP &settings_map)
+{
   for (int i = 0; i < AIRSPACECLASSCOUNT; i++)
     hAirspacePens[i].set(Layout::Scale(2),
                          GetAirspaceColourByClass(i, settings_map));
