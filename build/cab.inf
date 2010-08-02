@@ -47,7 +47,7 @@ VersionMax = 32767.0
 4 = ,"ARM Files",,..\bin
 5 = ,"Font Files",,..\..\..\Data\Fonts
 6 = ,"Input Files",,..\..\..\Data\Input
-7 = ,"Language Files",,..\..\..\Data\Language
+7 = ,"Language Files",,..\..\po
 
 [SourceDisksNames.armv4]
 1 = ,"ARM Files",,..\bin
@@ -56,16 +56,15 @@ VersionMax = 32767.0
 4 = ,"ARM Files",,..\bin
 5 = ,"Font Files",,..\..\..\Data\Fonts
 6 = ,"Input Files",,..\..\..\Data\Input
-7 = ,"Language Files",,..\..\..\Data\Language
+7 = ,"Language Files",,..\..\po
 
 [SourceDisksFiles]
 XCSoar.exe = 1
 XCSoarLaunch.dll = 3
 XCSoarSetup.dll = 4
 default.xci = 6
-english.xcl = 7
-italian.xcl = 7
-german.xcl = 7
+de.mo = 7
+pl.mo = 7
 
 [DefaultInstall]
 CopyFiles = TheFiles,Files.Windows,Files.Language,Files.Input
@@ -91,9 +90,8 @@ XCSoarLaunch.dll, XCSoarLaunch.dll,,0x40000000
 default.xci
 
 [Files.Language]
-english.xcl
-italian.xcl
-german.xcl
+de.mo
+pl.mo
 
 [AddRegistry]
 HKLM,\Software\Microsoft\Today\Items\%AppName%,Type,0x00010001,4
