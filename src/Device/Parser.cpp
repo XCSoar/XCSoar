@@ -704,13 +704,21 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   // VENTA3 CONDOR ALTITUDE
   // "Altitude" should always be GPS Altitude.
-  if (!ReadAltitude(line, GPS_INFO->GPSAltitude))
+
+  bool altitude_available = ReadAltitude(line, GPS_INFO->GPSAltitude);
+  if (!altitude_available)
     GPS_INFO->GPSAltitude = fixed_zero;
 
   fixed GeoidSeparation;
   if (ReadAltitude(line, GeoidSeparation)) {
     // No real need to parse this value,
     // but we do assume that no correction is required in this case
+
+    if (!altitude_available)
+      /* Some devices, such as the "LG Incite Cellphone" seem to be
+         severely bugged, and report the GPS altitude in the Geoid
+         column.  That sucks! */
+      GPS_INFO->GPSAltitude = GeoidSeparation;
   } else {
     // need to estimate Geoid Separation internally (optional)
     // FLARM uses MSL altitude
