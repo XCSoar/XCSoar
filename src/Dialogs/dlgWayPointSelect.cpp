@@ -64,8 +64,6 @@ static WndProperty *wpDistance;
 static WndProperty *wpDirection;
 static WndProperty *wpType;
 
-static unsigned UpLimit = 0;
-
 static const fixed DistanceFilter[] = {
   fixed_zero, fixed(25.0), fixed(50.0),
   fixed(75.0), fixed(100.0), fixed(150.0),
@@ -312,8 +310,7 @@ UpdateList()
   FillList(WayPointSelectInfo, way_points, g_location,
            XCSoarInterface::Basic().Heading, filter_data);
 
-  UpLimit = WayPointSelectInfo.size();
-  wWayPointList->SetLength(UpLimit);
+  wWayPointList->SetLength(WayPointSelectInfo.size());
   wWayPointList->SetOrigin(0);
   wWayPointList->SetCursorIndex(0);
   wWayPointList->invalidate();
@@ -465,7 +462,7 @@ PaintWaypoint(Canvas &canvas, const RECT rc,
 static void
 OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  if (i < UpLimit)
+  if (i < WayPointSelectInfo.size())
     PaintWaypoint(canvas, rc, WayPointSelectInfo[i]);
   else if (i == 0)
     canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
@@ -543,8 +540,6 @@ static CallBackTableEntry_t CallBackTable[] = {
 const Waypoint*
 dlgWayPointSelect(SingleWindow &parent, const GEOPOINT &location)
 {
-  UpLimit = 0;
-
   wf = dlgLoadFromXML(CallBackTable, parent, Layout::landscape ?
       _T("IDR_XML_WAYPOINTSELECT_L") : _T("IDR_XML_WAYPOINTSELECT"));
 
@@ -586,7 +581,7 @@ dlgWayPointSelect(SingleWindow &parent, const GEOPOINT &location)
   }
 
   unsigned ItemIndex = wWayPointList->GetCursorIndex();
-  if (ItemIndex >= UpLimit)
+  if (ItemIndex >= WayPointSelectInfo.size())
     return NULL;
 
   delete wf;
