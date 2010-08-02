@@ -165,19 +165,21 @@ NMEAInputLine::read_checked(double &value_r)
   char *endptr;
   double value = strtod(data, &endptr);
   assert(endptr >= data && endptr <= end);
+
+  bool success = endptr > data;
   if (is_end_of_line(*endptr)) {
     data = "";
-    value_r = value;
-    return true;
   } else if (*endptr == ',') {
     data = endptr + 1;
-    value_r = value;
-    return true;
   } else {
     data = endptr;
     skip();
     return false;
   }
+
+  if (success)
+    value_r = value;
+  return success;
 }
 
 #ifdef FIXED_MATH
