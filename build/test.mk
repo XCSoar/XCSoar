@@ -81,6 +81,7 @@ check: $(TESTS)
 
 DEBUG_PROGRAM_NAMES = \
 	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
+	ReadMO \
 	ReadProfileString ReadProfileInt \
 	WriteProfileString WriteProfileInt \
 	ReadGRecord VerifyGRecord AppendGRecord \
@@ -136,6 +137,16 @@ RUN_TEXT_WRITER_LDADD = \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS)
 $(TARGET_BIN_DIR)/RunTextWriter$(TARGET_EXEEXT): $(RUN_TEXT_WRITER_OBJS) $(RUN_TEXT_WRITER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+READ_MO_SOURCES = \
+	$(SRC)/MOFile.cpp \
+	$(SRC)/OS/FileMapping.cpp \
+	$(TEST_SRC_DIR)/ReadMO.cpp
+READ_MO_OBJS = $(call SRC_TO_OBJ,$(READ_MO_SOURCES))
+READ_MO_LDADD =
+$(TARGET_BIN_DIR)/ReadMO$(TARGET_EXEEXT): $(READ_MO_OBJS) $(READ_MO_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 

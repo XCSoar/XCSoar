@@ -296,6 +296,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/Hardware/Battery.c \
 	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/MOFile.cpp \
 	$(SRC)/Language.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Interface.cpp \
