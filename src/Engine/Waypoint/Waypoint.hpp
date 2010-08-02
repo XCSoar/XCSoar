@@ -121,6 +121,17 @@ public:
   }
 
   /**
+   * Determine if waypoint is marked as a turnpoint
+   *
+   * @return True if waypoint is landable
+   */
+  bool
+  is_turnpoint() const
+  {
+    return Flags.TurnPoint;
+  }
+
+  /**
    * Equality operator (by id)
    * 
    * @param wp Waypoint object to match against
