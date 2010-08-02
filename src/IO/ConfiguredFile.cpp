@@ -74,7 +74,7 @@ OpenMapTextFile(const TCHAR *in_map_file, ConvertLineReader::charset cs)
   assert(in_map_file != NULL);
 
   TCHAR path[MAX_PATH];
-  if (Profile::Get(szProfileMapFile, path, MAX_PATH) || string_is_empty(path))
+  if (!Profile::Get(szProfileMapFile, path, MAX_PATH) || string_is_empty(path))
     return NULL;
 
   ExpandLocalPath(path);
