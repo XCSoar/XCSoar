@@ -81,6 +81,15 @@ static const TCHAR *const TypeFilter[] = {
   NULL
 };
 
+enum type_filter {
+  tfAll = 0,
+  tfAirport,
+  tfLandable,
+  tfTurnpoint,
+  tfFile1,
+  tfFile2
+};
+
 enum {
   NAMEFILTERLEN = 10,
 };
@@ -92,7 +101,7 @@ struct WayPointFilterData {
 
   int direction_index;
 
-  int type_index;
+  type_filter type_index;
 
   bool defined() const {
     return !string_is_empty(name) || distance_index > 0 ||
@@ -401,7 +410,7 @@ OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode)
   case DataField::daChange:
   case DataField::daInc:
   case DataField::daDec:
-    filter_data.type_index = Sender->GetAsInteger();
+    filter_data.type_index = (type_filter)Sender->GetAsInteger();
     UpdateList();
     break;
   }
@@ -501,19 +510,19 @@ OnTimerNotify(WindowControl * Sender)
 static bool
 FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
-  int NewIndex = filter_data.type_index;
+  type_filter NewIndex = filter_data.type_index;
 
   switch (key_code) {
   case VK_F1:
-    NewIndex = 0;
+    NewIndex = tfAll;
     break;
 
   case VK_F2:
-    NewIndex = 2;
+    NewIndex = tfLandable;
     break;
 
   case VK_F3:
-    NewIndex = 3;
+    NewIndex = tfTurnpoint;
     break;
 
   default:
