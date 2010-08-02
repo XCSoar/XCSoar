@@ -68,7 +68,8 @@ public:
     m_draw_off_track(do_draw_off_track) {};
 
 protected:
-  void draw_target(const TaskPoint &tp)
+  void
+  draw_target(const TaskPoint &tp)
   {
     if (!do_draw_target(tp))
       return;
@@ -78,10 +79,12 @@ protected:
       MapGfx.hBmpTarget.draw(m_buffer, m_map.get_bitmap_canvas(), sc.x, sc.y);
   }
 
-  void draw_off_track(const TaskPoint &tp) 
-    {
+  void
+  draw_off_track(const TaskPoint &tp)
+  {
     if (!m_draw_off_track)
       return;
+
     if (!point_current())
       return;
 
@@ -91,11 +94,11 @@ protected:
       // insignificant error
       return;
 
-    double distance_max = min(vec.Distance, m_map.GetScreenDistanceMeters()
-                              * fixed(0.7));
+    double distance_max =
+        min(vec.Distance, m_map.GetScreenDistanceMeters() * fixed(0.7));
 
+    // too short to bother
     if (distance_max < 5000.0)
-      // too short to bother
       return;
 
     GEOPOINT start = m_location;
@@ -151,16 +154,14 @@ MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
    but we can still draw targets */
   const bool draw_bearing = Basic().gps.Connected;
 
-  {
-    RenderObservationZone ozv(canvas, *this, SettingsMap());
-    RenderTaskPointMap tpv(canvas, *this, SettingsMap(),
-                           ozv, draw_bearing,
-                           Basic().Location, *this, 
-                           Basic().TrackBearing,
-                           !Calculated().Circling);
-    RenderTask dv(tpv);
-    task->CAccept(dv); 
-  }
+  RenderObservationZone ozv(canvas, *this, SettingsMap());
+  RenderTaskPointMap tpv(canvas, *this, SettingsMap(),
+                         ozv, draw_bearing,
+                         Basic().Location, *this,
+                         Basic().TrackBearing,
+                         !Calculated().Circling);
+  RenderTask dv(tpv);
+  task->CAccept(dv);
 }
 
 #ifdef OLD_TASK // projected track line
