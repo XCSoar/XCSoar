@@ -130,7 +130,21 @@ struct WaypointSelectInfoVector : public std::vector<WayPointSelectInfo> {
 
 static WaypointSelectInfoVector WayPointSelectInfo;
 
-static TCHAR * GetDirectionData(int DirectionFilterIdx);
+static TCHAR *
+GetDirectionData(int DirectionFilterIdx)
+{
+  static TCHAR sTmp[12];
+
+  if (DirectionFilterIdx == 0) {
+    _stprintf(sTmp, _T("%c"), '*');
+  } else if (DirectionFilterIdx == 1) {
+    int a = iround(XCSoarInterface::Basic().Heading.as_bearing().value_degrees());
+    _stprintf(sTmp, _T("HDG(%d")_T(DEG)_T(")"), a);
+  } else
+  _stprintf(sTmp, _T("%d")_T(DEG), DirectionFilter[DirectionFilterIdx]);
+
+  return sTmp;
+}
 
 static void
 OnWaypointListEnter(unsigned i)
@@ -357,22 +371,6 @@ OnFilterDistance(DataField *Sender, DataField::DataAccessKind_t Mode)
     UpdateList();
     break;
   }
-}
-
-static TCHAR *
-GetDirectionData(int DirectionFilterIdx)
-{
-  static TCHAR sTmp[12];
-
-  if (DirectionFilterIdx == 0) {
-    _stprintf(sTmp, _T("%c"), '*');
-  } else if (DirectionFilterIdx == 1) {
-    int a = iround(XCSoarInterface::Basic().Heading.as_bearing().value_degrees());
-    _stprintf(sTmp, _T("HDG(%d")_T(DEG)_T(")"), a);
-  } else
-  _stprintf(sTmp, _T("%d")_T(DEG), DirectionFilter[DirectionFilterIdx]);
-
-  return sTmp;
 }
 
 static void
