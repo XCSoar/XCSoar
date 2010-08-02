@@ -228,6 +228,9 @@ ScreenGraphics::Initialise()
 
   SmallIcon.load(IDB_SMALL);
   TurnPointIcon.load(IDB_TURNPOINT);
+
+  hpAircraft.set(IBLSCALE(3), Color::WHITE);
+  hpAircraftBorder.set(IBLSCALE(1), Color::BLACK);
 }
 
 void
@@ -252,9 +255,6 @@ ScreenGraphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
     hSnailColours[i] = Color((BYTE)Red, (BYTE)Green, (BYTE)Blue);
     hSnailPens[i].set(iwidth, hSnailColours[i]);
   }
-
-  hpAircraft.set(IBLSCALE(3), Color::WHITE);
-  hpAircraftBorder.set(IBLSCALE(1), Color::BLACK);
 
   if (Appearance.IndLandable == wpLandableDefault) {
     AirportReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_BIG);
