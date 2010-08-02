@@ -554,7 +554,7 @@ dlgWayPointSelect(SingleWindow &parent, const GEOPOINT &location)
 {
   UpLimit = 0;
 
-  if (!Layout::landscape)
+  if (Layout::landscape)
     wf = dlgLoadFromXML(CallBackTable, parent, _T("IDR_XML_WAYPOINTSELECT_L"));
   else
     wf = dlgLoadFromXML(CallBackTable, parent, _T("IDR_XML_WAYPOINTSELECT"));

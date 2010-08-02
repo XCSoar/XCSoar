@@ -1,23 +1,22 @@
-<Form Name="frmWayPointSelect" Width="240" Height="320" Caption="Select Waypoint">
-  <Label X="0" Y="0" Width="100" Height="20" Caption="Filter..." />
+<Form Name="frmWayPointSelect" Width="320" Height="240" Caption="Select Waypoint">
+  <Label X="0" Y="0" Width="61" Height="20" Caption="Filter..." />
 
-  <Label X="2" Y="28" Width="98" Height="18" Caption="Name" />
-  <Button Name="cmdFltName" Caption="*" X="2" Y="48" Width="98"  Height="22" />
+  <Label X="3" Y="20" Width="61" Height="16" Caption="Name" />
+  <Button Name="cmdFltName" Caption="*" X="3" Y="38" Width="63"  Height="22" />
 
-  <Edit Name="prpFltType" Caption="Type" X="100" Y="32" Width="98" Height="40" CaptionWidth="0">
-    <DataField name="" DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterType"/>
-  </Edit>
-
-  <Edit Name="prpFltDistance" Caption="Distance" X="2" Y="74" Width="98" Height="40" CaptionWidth="0">
+  <Edit Name="prpFltDistance" Caption="Distance" X="2" Y="-1" Width="63" Height="36" CaptionWidth="0">
     <DataField name="" DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDistance"/>
   </Edit>
-
-  <Edit Name="prpFltDirection" Caption="Direction" X="100" Y="74" Width="98" Height="40" CaptionWidth="0">
+  <Edit Name="prpFltDirection" Caption="Direction" X="2" Y="-1" Width="63" Height="36" CaptionWidth="0">
     <DataField name="" DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
   </Edit>
 
-  <Button Name="cmdSelect" Caption="Select" X="105" Y="2" Width="60"  Height="28" />
-  <Button Name="cmdClose" Caption="Close" X="167" Y="2" Width="60"  Height="28"  />
+  <Edit Name="prpFltType" Caption="Type" X="2" Y="-1" Width="63" Height="36" CaptionWidth="0">
+    <DataField name="" DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterType"/>
+  </Edit>
 
-  <List Name="frmWayPointList" X="1" Y="116" Width="-1" Height="-1" ItemHeight="18" Border="1"/>
+  <Button Name="cmdSelect" Caption="Select" X="2" Y="-1" Width="63"  Height="28" />
+  <Button Name="cmdClose" Caption="Close" X="2" Y="-1" Width="63"  Height="28" />
+
+  <List Name="frmWayPointList" X="65" Y="1" Width="-1" Height="-1" ItemHeight="18" Border="1"/>
 </Form>
