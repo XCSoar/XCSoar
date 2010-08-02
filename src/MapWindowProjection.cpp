@@ -76,6 +76,13 @@ MapWindowProjection::InitialiseScaleList
 bool
 MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
 {
+  return WaypointInScaleFilter(MapScale, way_point);
+}
+
+bool
+MapWindowProjection::WaypointInScaleFilter(const fixed MapScale,
+                                           const Waypoint &way_point)
+{
   static const fixed fixed_10(10.0);
   static const fixed fixed_20(20.0);
   return way_point.is_landable()? 
