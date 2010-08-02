@@ -75,6 +75,8 @@ public:
   void
   FormatTitle(TCHAR* Buffer, const Waypoint way_point, bool in_task)
   {
+    Buffer[0] = _T('\0');
+
     switch (pDisplayTextType) {
     case DISPLAYNAMEIFINTASK:
       if (in_task)
@@ -195,7 +197,7 @@ public:
     if (do_write_label)
       FormatTitle(Buffer, way_point, in_task);
     else
-      Buffer[0] = '\0';
+      Buffer[0] = _T('\0');
 
     if (AltArrivalAGL != 0) {
       size_t length = _tcslen(Buffer);
