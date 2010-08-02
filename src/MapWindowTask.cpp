@@ -106,6 +106,7 @@ protected:
 
     m_canvas.select(Fonts::Title);
     m_canvas.set_text_color(Color::BLACK);
+    m_canvas.background_transparent();
 
     GEOPOINT dloc;
     int ilast = 0;
