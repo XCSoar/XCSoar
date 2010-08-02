@@ -1627,7 +1627,7 @@ setVariables()
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(_T("*.xcl"));
+    dfe->ScanDirectoryTop(_T("*.mo"));
     dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }

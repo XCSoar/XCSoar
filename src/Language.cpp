@@ -44,7 +44,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Profile.hpp"
 #include "Sizes.h"
-#include "IO/FileLineReader.hpp"
 
 #ifdef HAVE_POSIX
 
@@ -52,69 +51,17 @@ Copyright_License {
 
 #else
 
-/**
- * A struct that saves a translation (key + text)
- */
-typedef struct {
-  /** The key describing the term in english */
-	TCHAR *key;
-	/** The translated term */
-	TCHAR *text;
-} GetTextSTRUCT;
+#include "MOFile.hpp"
 
-/** The array that holds all the translations */
-static GetTextSTRUCT GetTextData[MAXSTATUSMESSAGECACHE];
-/** The (real) array size of GetTextData */
-static int GetTextData_Size = 0;
+#include <memory>
 
-#ifdef DEBUG_TRANSLATIONS
+static std::auto_ptr<MOFile> mo_file;
+
+#ifdef _UNICODE
+#include "Util/tstring.hpp"
 #include <map>
-
-template<class _Ty>
-struct lessTCHAR: public std::binary_function<_Ty, _Ty, bool>
-{	// functor for operator<
-  bool operator()(const _Ty& _Left, const _Ty& _Right) const
-  {	// apply operator< to operands
-    return (_tcscmp(_Left, _Right) < 0);
-  }
-};
-
-std::map<TCHAR*, TCHAR*, lessTCHAR<TCHAR*> > unusedTranslations;
-
-/**
- * Writes all missing translations found during runtime to a language file
- * in the data dir
- */
-void WriteMissingTranslations() {
-  std::map<TCHAR*, TCHAR*, lessTCHAR<TCHAR*> >::iterator
-    s = unusedTranslations.begin(), e = unusedTranslations.end();
-
-  TCHAR szFile1[MAX_PATH] = _T("%LOCAL_PATH%\\\\localization_todo.xcl\0");
-  FILE *fp = NULL;
-
-  ExpandLocalPath(szFile1);
-  fp = _tfopen(szFile1, _T("w+"));
-
-  if (fp != NULL) {
-    while (s != e) {
-      TCHAR* p = (s->second);
-      if (p) {
-        while (*p) {
-          if (*p != _T('\n')) {
-            _ftprintf(fp, _T("%c"), *p);
-          } else {
-            _ftprintf(fp, _T("\\n"));
-          }
-          p++;
-        }
-        _ftprintf(fp, _T("=\n"));
-      }
-      s++;
-    }
-    fclose(fp);
-  }
-}
-
+typedef std::map<tstring,tstring> translation_map;
+static translation_map translations;
 #endif
 
 /**
@@ -134,61 +81,39 @@ void WriteMissingTranslations() {
 const TCHAR*
 gettext(const TCHAR* text)
 {
-  // TODO enhancement: Fast search of text strings
+  assert(text != NULL);
 
-  int i;
+  if (string_is_empty(text) || mo_file.get() == NULL)
+    return text;
 
-  // return if nothing to do
-  if (_tcscmp(text, _T("")) == 0)
-    return (const TCHAR*)text;
+#ifdef _UNICODE
+  const tstring text2(text);
+  translation_map::const_iterator it = translations.find(text2);
+  if (it != translations.end())
+    return it->second.c_str();
 
-  //find a translation
-  for (i = 0; i < GetTextData_Size; i++) {
-    // skip if key is empty
-    if (!text || !GetTextData[i].key)
-      continue;
-    // return translation if found
-    if (_tcscmp(text, GetTextData[i].key) == 0)
-      return GetTextData[i].text;
-  }
+  size_t wide_length = _tcslen(text);
+  char original[wide_length * 4 + 1];
 
-#ifdef DEBUG_TRANSLATIONS
-  // Log untranslated strings to unusedTranslations[]
-  TCHAR *tmp = _tcsdup(text);
-  unusedTranslations[tmp] = tmp;
+  if (::WideCharToMultiByte(CP_UTF8, 0, text, -1,
+                            original, sizeof(original), NULL, NULL) <= 0)
+    return text;
+
+  const char *translation = mo_file->lookup(original);
+  if (translation == NULL || *translation == 0 ||
+      strcmp(original, translation) == 0)
+    return text;
+
+  TCHAR translation2[strlen(translation) + 1];
+  if (::MultiByteToWideChar(CP_UTF8, 0, translation, -1, translation2,
+                            sizeof(translation2) / sizeof(translation2[0])) <= 0)
+    return text;
+
+  translations[text2] = translation2;
+  return translations[text2].c_str();
+#else
+  return mo_file->lookup(text);
 #endif
-
-  // return untranslated text if no translation is found.
-  return (const TCHAR*)text;
-}
-
-static void
-ReadLanguageFile(TLineReader &reader)
-{
-  TCHAR *buffer;
-  while ((GetTextData_Size < MAXSTATUSMESSAGECACHE) &&
-         (buffer = reader.read()) != NULL) {
-    if (*buffer == _T('#'))
-      continue;
-
-    TCHAR *equals = _tcschr(buffer, _T('='));
-    if (equals == NULL || equals == buffer)
-      continue;
-
-    *equals = 0;
-
-    const TCHAR *key = buffer;
-    const TCHAR *value = equals + 1;
-    if (string_is_empty(value))
-      continue;
-
-    // Save parsed translation to the cache
-    GetTextData[GetTextData_Size].key = StringMallocParse(key);
-    GetTextData[GetTextData_Size].text = StringMallocParse(value);
-
-    // Global counter
-    GetTextData_Size++;
-  }
 }
 
 #endif /* !HAVE_POSIX */
@@ -217,17 +142,11 @@ ReadLanguageFile()
 
   // If the language file is not set use the default one
   if (string_is_empty(szFile1))
-    _tcscpy(szFile1, _T("default.xcl"));
+    _tcscpy(szFile1, _T("default.po"));
 
-  // Open the language file
-  FileLineReader reader(szFile1, ConvertLineReader::ISO_LATIN_1);
-
-  // Return if file error
-  if (reader.error())
-    return;
-
-  // Read from the file
-  ReadLanguageFile(reader);
+  mo_file.reset(new MOFile(szFile1));
+  if (mo_file->error())
+    mo_file.reset();
 
 #endif /* !HAVE_POSIX */
 }
