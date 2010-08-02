@@ -2669,7 +2669,7 @@ void dlgConfigurationShowModal(void)
       Appearance.IndLandable = (IndLandable_t)(wp->GetDataField()->GetAsInteger());
       Profile::Set(szProfileAppIndLandable, Appearance.IndLandable);
       changed = true;
-      MapGfx.InitialiseConfigured(XCSoarInterface::SettingsMap());
+      MapGfx.InitLandableIcons();
     }
   }
 
@@ -2866,7 +2866,7 @@ void dlgConfigurationShowModal(void)
       Profile::Set(szProfileSnailWidthScale,
                     XCSoarInterface::SettingsMap().SnailWidthScale);
       changed = true;
-      MapGfx.InitialiseConfigured(XCSoarInterface::SettingsMap());
+      MapGfx.InitSnailTrail(XCSoarInterface::SettingsMap());
     }
   }
 
