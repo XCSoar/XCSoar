@@ -599,8 +599,6 @@ dlgWayPointSelect(SingleWindow &parent, const GEOPOINT &location)
 
   delete wf;
 
-  wf = NULL;
-
   return wp_selected;
 }
 
