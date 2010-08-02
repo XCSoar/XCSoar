@@ -1,4 +1,6 @@
 XGETTEXT = xgettext
+MSGCAT = msgcat
+
 GETTEXT_PACKAGE = xcsoar
 GETTEXT_SOURCES = $(XCSOAR_SOURCES) \
 	$(DRIVER_SOURCES)
@@ -23,4 +25,4 @@ $(OUT)/po/xml.pot: $(GETTEXT_DIALOGS) | $(OUT)/po/dirstamp
 
 po/$(GETTEXT_PACKAGE).pot: $(OUT)/po/cpp.pot $(OUT)/po/xml.pot
 	@$(NQ)echo "  GEN     $@"
-	$(Q)msgcat -o $@ $^
+	$(Q)$(MSGCAT) -o $@ $^
