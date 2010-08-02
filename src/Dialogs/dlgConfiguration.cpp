@@ -1580,6 +1580,7 @@ setVariables()
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(_T("*.xcm"));
+    dfe->ScanDirectoryTop(_T("*.lkm"));
     dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
