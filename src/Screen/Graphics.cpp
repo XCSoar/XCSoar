@@ -192,45 +192,45 @@ ScreenGraphics::Initialise()
   hbFinalGlideBelowLandable.set(Color(0xFF, 180, 0x00));
   hbFinalGlideAbove.set(Color::GREEN);
 
-  hpCompassBorder.set(IBLSCALE(3), Color::WHITE);
+  hpCompassBorder.set(Layout::Scale(3), Color::WHITE);
 
-  hpWind.set(IBLSCALE(2), Color::BLACK);
+  hpWind.set(Layout::Scale(2), Color::BLACK);
 
-  hpWindThick.set(IBLSCALE(4), Color(255, 220, 220));
+  hpWindThick.set(Layout::Scale(4), Color(255, 220, 220));
 
-  hpBearing.set(IBLSCALE(2), Color::BLACK);
-  hpBestCruiseTrack.set(IBLSCALE(1), Color::BLUE);
-  hpCompass.set(IBLSCALE(1), has_colors()
+  hpBearing.set(Layout::Scale(2), Color::BLACK);
+  hpBestCruiseTrack.set(Layout::Scale(1), Color::BLUE);
+  hpCompass.set(Layout::Scale(1), has_colors()
                 ? Color(0xcf, 0xcf, 0xFF) : Color::BLACK);
-  hpThermalBand.set(IBLSCALE(2), Color(0x40, 0x40, 0xFF));
-  hpThermalBandGlider.set(IBLSCALE(2), Color(0x00, 0x00, 0x30));
+  hpThermalBand.set(Layout::Scale(2), Color(0x40, 0x40, 0xFF));
+  hpThermalBandGlider.set(Layout::Scale(2), Color(0x00, 0x00, 0x30));
 
-  hpFinalGlideBelow.set(IBLSCALE(1), Color(0xFF, 0xA0, 0xA0));
-  hpFinalGlideBelowLandable.set(IBLSCALE(1), Color(255, 196, 0));
+  hpFinalGlideBelow.set(Layout::Scale(1), Color(0xFF, 0xA0, 0xA0));
+  hpFinalGlideBelowLandable.set(Layout::Scale(1), Color(255, 196, 0));
 
-  hpFinalGlideAbove.set(IBLSCALE(1), Color(0xA0, 0xFF, 0xA0));
+  hpFinalGlideAbove.set(Layout::Scale(1), Color(0xA0, 0xFF, 0xA0));
 
-  hpSpeedSlow.set(IBLSCALE(1), Color::RED);
-  hpSpeedFast.set(IBLSCALE(1), Color::GREEN);
+  hpSpeedSlow.set(Layout::Scale(1), Color::RED);
+  hpSpeedFast.set(Layout::Scale(1), Color::GREEN);
 
-  hpStartFinishThick.set(IBLSCALE(5), TaskColor);
+  hpStartFinishThick.set(Layout::Scale(5), TaskColor);
 
-  hpStartFinishThin.set(IBLSCALE(1), Color::RED);
+  hpStartFinishThin.set(Layout::Scale(1), Color::RED);
 
-  hpMapScale.set(IBLSCALE(1), Color::BLACK);
-  hpTerrainLine.set(Pen::DASH, IBLSCALE(1), Color(0x30, 0x30, 0x30));
-  hpTerrainLineBg.set(IBLSCALE(1), Color::WHITE);
+  hpMapScale.set(Layout::Scale(1), Color::BLACK);
+  hpTerrainLine.set(Pen::DASH, Layout::Scale(1), Color(0x30, 0x30, 0x30));
+  hpTerrainLineBg.set(Layout::Scale(1), Color::WHITE);
 
-  hpVisualGlideLightBlack.set(Pen::DASH, IBLSCALE(1), Color::BLACK);
-  hpVisualGlideHeavyBlack.set(Pen::DASH, IBLSCALE(2), Color::BLACK);
-  hpVisualGlideLightRed.set(Pen::DASH, IBLSCALE(1), Color::RED);
-  hpVisualGlideHeavyRed.set(Pen::DASH, IBLSCALE(2), Color::RED);
+  hpVisualGlideLightBlack.set(Pen::DASH, Layout::Scale(1), Color::BLACK);
+  hpVisualGlideHeavyBlack.set(Pen::DASH, Layout::Scale(2), Color::BLACK);
+  hpVisualGlideLightRed.set(Pen::DASH, Layout::Scale(1), Color::RED);
+  hpVisualGlideHeavyRed.set(Pen::DASH, Layout::Scale(2), Color::RED);
 
   SmallIcon.load(IDB_SMALL);
   TurnPointIcon.load(IDB_TURNPOINT);
 
-  hpAircraft.set(IBLSCALE(3), Color::WHITE);
-  hpAircraftBorder.set(IBLSCALE(1), Color::BLACK);
+  hpAircraft.set(Layout::Scale(3), Color::WHITE);
+  hpAircraftBorder.set(Layout::Scale(1), Color::BLACK);
 }
 
 void
@@ -240,7 +240,8 @@ ScreenGraphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
 
   int iwidth;
   int minwidth;
-  minwidth = max(IBLSCALE(2), IBLSCALE(settings_map.SnailWidthScale) / 16);
+  minwidth = max(Layout::Scale(2),
+                 Layout::Scale(settings_map.SnailWidthScale) / 16);
 
   for (int i = 0; i < NUMSNAILCOLORS; i++) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
@@ -250,7 +251,7 @@ ScreenGraphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
       iwidth = minwidth;
     else
       iwidth = max(minwidth, (i - NUMSNAILCOLORS / 2)
-          * IBLSCALE(settings_map.SnailWidthScale) / NUMSNAILCOLORS);
+          * Layout::Scale(settings_map.SnailWidthScale) / NUMSNAILCOLORS);
 
     hSnailColours[i] = Color((BYTE)Red, (BYTE)Green, (BYTE)Blue);
     hSnailPens[i].set(iwidth, hSnailColours[i]);
@@ -274,7 +275,8 @@ ScreenGraphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
   }
 
   for (int i = 0; i < AIRSPACECLASSCOUNT; i++)
-    hAirspacePens[i].set(IBLSCALE(2), GetAirspaceColourByClass(i, settings_map));
+    hAirspacePens[i].set(Layout::Scale(2),
+                         GetAirspaceColourByClass(i, settings_map));
 }
 
 bool
@@ -429,7 +431,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
 
 
       canvas.round_rectangle(brect.left, brect.top, brect.right, brect.bottom,
-          IBLSCALE(8), IBLSCALE(8));
+                             Layout::Scale(8), Layout::Scale(8));
 
       canvas.background_transparent();
       canvas.text(x, y, Value);
