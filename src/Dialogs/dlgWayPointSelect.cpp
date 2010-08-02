@@ -189,56 +189,6 @@ PrepareData(void)
   }
 }
 
-static bool
-compare_type(const Waypoint &wp, int type_index)
-{
-  switch (type_index) {
-  case 0:
-    return true;
-
-  case 1:
-    return wp.is_airport();
-
-  case 2:
-    return wp.is_landable();
-
-  case 3:
-    return wp.is_turnpoint();
-
-  case 4:
-  case 5:
-    return wp.FileNum == type_index - 4;
-  }
-
-  /* not reachable */
-  return false;
-}
-
-static bool
-compare_direction(const Waypoint &wp, int direction_index,
-                  GEOPOINT location, Angle heading)
-{
-  if (direction_index <= 0)
-    return true;
-
-  int a = DirectionFilter[filter_data.direction_index];
-  Angle angle = a == DirHDG
-    ? last_heading = XCSoarInterface::Basic().Heading
-    : Angle::degrees(fixed(a));
-
-  const GeoVector vec(location, wp.Location);
-  fixed DirectionErr = (vec.Bearing - heading).as_delta().magnitude_degrees();
-
-  static const fixed fixed_18(18);
-  return DirectionErr > fixed_18;
-}
-
-static bool
-compare_name(const Waypoint &wp, const TCHAR *name)
-{
-  return _tcsnicmp(wp.Name.c_str(), name, _tcslen(name)) == 0;
-}
-
 class FilterWaypointVisitor:
   public WaypointVisitor,
   private WayPointFilterData
@@ -246,6 +196,57 @@ class FilterWaypointVisitor:
   const GEOPOINT location;
   const Angle heading;
   WaypointSelectInfoVector &vector;
+
+private:
+  static bool
+  compare_type(const Waypoint &wp, int type_index)
+  {
+    switch (type_index) {
+    case 0:
+      return true;
+
+    case 1:
+      return wp.is_airport();
+
+    case 2:
+      return wp.is_landable();
+
+    case 3:
+      return wp.is_turnpoint();
+
+    case 4:
+    case 5:
+      return wp.FileNum == type_index - 4;
+    }
+
+    /* not reachable */
+    return false;
+  }
+
+  static bool
+  compare_direction(const Waypoint &wp, int direction_index,
+                    GEOPOINT location, Angle heading)
+  {
+    if (direction_index <= 0)
+      return true;
+
+    int a = DirectionFilter[filter_data.direction_index];
+    Angle angle = a == DirHDG
+      ? last_heading = XCSoarInterface::Basic().Heading
+      : Angle::degrees(fixed(a));
+
+    const GeoVector vec(location, wp.Location);
+    fixed DirectionErr = (vec.Bearing - heading).as_delta().magnitude_degrees();
+
+    static const fixed fixed_18(18);
+    return DirectionErr > fixed_18;
+  }
+
+  static bool
+  compare_name(const Waypoint &wp, const TCHAR *name)
+  {
+    return _tcsnicmp(wp.Name.c_str(), name, _tcslen(name)) == 0;
+  }
 
 public:
   FilterWaypointVisitor(const WayPointFilterData &filter,
