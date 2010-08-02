@@ -55,6 +55,34 @@ Copyright_License {
 #include <assert.h>
 #include <stdlib.h>
 
+static GEOPOINT g_location;
+
+static WndForm *wf=NULL;
+static WndListFrame *wWayPointList=NULL;
+static WndButton *wbName;
+static WndProperty *wpDistance;
+static WndProperty *wpDirection;
+static WndProperty *wpType;
+
+static unsigned UpLimit = 0;
+
+static const fixed DistanceFilter[] = {
+  fixed_zero, fixed(25.0), fixed(50.0),
+  fixed(75.0), fixed(100.0), fixed(150.0),
+  fixed(250.0), fixed(500.0), fixed(1000.0),
+};
+
+#define DirHDG -1
+static int DirectionFilter[] = {0, DirHDG, 360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330};
+
+static Angle last_heading = Angle::native(fixed_zero);
+
+static const TCHAR *const TypeFilter[] = {
+  _T("*"), _T("Airport"), _T("Landable"),
+  _T("Turnpoint"), _T("File 1"), _T("File 2"),
+  NULL
+};
+
 enum {
   NAMEFILTERLEN = 10,
 };
@@ -73,6 +101,8 @@ struct WayPointFilterData {
       direction_index > 0 || type_index > 0;
   }
 };
+
+static WayPointFilterData filter_data;
 
 /**
  * Structure to hold Waypoint sorting information
@@ -98,32 +128,7 @@ struct WaypointSelectInfoVector : public std::vector<WayPointSelectInfo> {
   }
 };
 
-static GEOPOINT g_location;
-static WayPointFilterData filter_data;
-
-static WndForm *wf=NULL;
-static WndListFrame *wWayPointList=NULL;
-static WndButton *wbName;
-static WndProperty *wpDistance;
-static WndProperty *wpDirection;
-static WndProperty *wpType;
-
-static const fixed DistanceFilter[] = {
-  fixed_zero, fixed(25.0), fixed(50.0),
-  fixed(75.0), fixed(100.0), fixed(150.0),
-  fixed(250.0), fixed(500.0), fixed(1000.0),
-};
-
-#define DirHDG -1
-static int DirectionFilter[] = {0, DirHDG, 360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330};
-
-static Angle last_heading = Angle::native(fixed_zero);
-
-static const TCHAR *const TypeFilter[] = {
-  _T("*"), _T("Airport"), _T("Landable"),
-  _T("Turnpoint"), _T("File 1"), _T("File 2"),
-  NULL
-};
+static WaypointSelectInfoVector WayPointSelectInfo;
 
 static TCHAR * GetDirectionData(int DirectionFilterIdx);
 
@@ -132,10 +137,6 @@ OnWaypointListEnter(unsigned i)
 {
   wf->SetModalResult(mrOK);
 }
-
-static WaypointSelectInfoVector WayPointSelectInfo;
-
-static unsigned UpLimit = 0;
 
 static void
 InitializeDirection(bool bOnlyHeading)
