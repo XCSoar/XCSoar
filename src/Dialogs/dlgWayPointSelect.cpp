@@ -413,17 +413,17 @@ PaintWaypoint(Canvas &canvas, const RECT rc,
 {
   const Waypoint &way_point = *info.way_point;
 
-  int w0, w1, w2, w3, x1, x2, x3;
+  int w0, w1, w2, w3, x;
   w0 = rc.right - rc.left - Layout::FastScale(4);
   w1 = canvas.text_width(_T("XXX"));
   w2 = canvas.text_width(_T(" 000km"));
   w3 = canvas.text_width(_T(" 000")_T(DEG));
 
-  x1 = w0 - w1 - w2 - w3;
+  x = w0 - w1 - w2 - w3;
 
   canvas.text_clipped(rc.left + Layout::FastScale(2),
                       rc.top + Layout::FastScale(2),
-                      x1 - Layout::FastScale(5), way_point.Name.c_str());
+                      x - Layout::FastScale(5), way_point.Name.c_str());
 
   TCHAR buffer[12];
   buffer[0] = '\0';
@@ -445,18 +445,18 @@ PaintWaypoint(Canvas &canvas, const RECT rc,
   }
 
   // left justified
-  canvas.text(rc.left + x1, rc.top + Layout::FastScale(2), buffer);
+  canvas.text(rc.left + x, rc.top + Layout::FastScale(2), buffer);
 
   // right justified after waypoint flags
   Units::FormatUserDistance(info.Distance, buffer,
                             sizeof(buffer) / sizeof(buffer[0]));
-  x2 = w0 - w3 - canvas.text_width(buffer);
-  canvas.text(rc.left + x2, rc.top + Layout::FastScale(2), buffer);
+  x = w0 - w3 - canvas.text_width(buffer);
+  canvas.text(rc.left + x, rc.top + Layout::FastScale(2), buffer);
 
   // right justified after distance
   _stprintf(buffer, _T("%d")_T(DEG), iround(info.Direction.value_degrees()));
-  x3 = w0 - canvas.text_width(buffer);
-  canvas.text(rc.left + x3, rc.top + Layout::FastScale(2), buffer);
+  x = w0 - canvas.text_width(buffer);
+  canvas.text(rc.left + x, rc.top + Layout::FastScale(2), buffer);
 }
 
 static void
