@@ -1,10 +1,13 @@
 XGETTEXT = xgettext
 MSGCAT = msgcat
+MSGFMT = msgfmt
 
 GETTEXT_PACKAGE = xcsoar
 GETTEXT_SOURCES = $(XCSOAR_SOURCES) \
 	$(DRIVER_SOURCES)
 GETTEXT_DIALOGS = $(wildcard Data/Dialogs/*.xml)
+PO_FILES = $(wildcard po/*.po)
+MO_FILES = $(patsubst po/%.po,$(OUT)/po/%.mo,$(PO_FILES))
 
 $(OUT)/po/cpp.pot: $(GETTEXT_SOURCES) | $(OUT)/po/dirstamp
 	$(XGETTEXT) --default-domain=$(GETTEXT_PACKAGE) \
@@ -26,3 +29,9 @@ $(OUT)/po/xml.pot: $(GETTEXT_DIALOGS) | $(OUT)/po/dirstamp
 po/$(GETTEXT_PACKAGE).pot: $(OUT)/po/cpp.pot $(OUT)/po/xml.pot
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(MSGCAT) -o $@ $^
+
+mo: $(MO_FILES)
+
+$(MO_FILES): $(OUT)/po/%.mo: po/%.po | $(OUT)/po/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(MSGFMT) --check -o $@ $<
