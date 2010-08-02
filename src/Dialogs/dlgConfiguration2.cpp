@@ -46,35 +46,4 @@ Copyright_License {
 
 extern TabbedControl *configuration_tabbed;
 
-void OnInfoBoxHelp(WindowControl * Sender){
-  WndProperty *wp = (WndProperty*)Sender;
-  int type = wp->GetDataField()->GetAsInteger();
-  TCHAR caption[100];
-  TCHAR mode[100];
-  switch (configuration_tabbed->GetCurrentPage()) {
-  case 15:
-    _tcscpy(mode,_("circling"));
-    break;
-  case 16:
-    _tcscpy(mode,_("cruise"));
-    break;
-  case 17:
-    _tcscpy(mode,_("final glide"));
-    break;
-  case 18:
-    _tcscpy(mode,_("auxiliary"));
-    break;
-  default:
-    _tcscpy(mode,_("Error"));
-    return;
-  }
-  _stprintf(caption, _T("InfoBox %s in %s mode"),
-	    wp->GetCaption(), mode);
 
-  const TCHAR* text = InfoBoxFactory::GetHelpText(type);
-  if (text)
-    dlgHelpShowModal(XCSoarInterface::main_window, caption, text);
-  else
-    dlgHelpShowModal(XCSoarInterface::main_window, caption,
-                     _T("No help available on this item!"));
-}
