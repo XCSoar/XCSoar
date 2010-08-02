@@ -197,13 +197,13 @@ compare_type(const Waypoint &wp, int type_index)
     return true;
 
   case 1:
-    return wp.Flags.Airport;
+    return wp.is_airport();
 
   case 2:
     return wp.is_landable();
 
   case 3:
-    return wp.Flags.TurnPoint;
+    return wp.is_turnpoint();
 
   case 4:
   case 5:
