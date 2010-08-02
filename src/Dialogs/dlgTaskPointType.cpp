@@ -141,8 +141,12 @@ SetPointType(AbstractTaskFactory::LegalPointType_t type)
           ordered_task->get_ordered_task_behaviour().is_closed)
         way_point = &(ordered_task->get_tp(0)->get_waypoint());
       else
-        way_point = dlgWayPointSelect(*parent_window,
-                                      XCSoarInterface::Basic().Location);
+        way_point =
+            dlgWayPointSelect(*parent_window,
+                              ordered_task->task_size() > 0 ?
+                              ordered_task->get_tp(ordered_task->
+                                  task_size() - 1)->get_location() :
+                              XCSoarInterface::Basic().Location);
       if (!way_point)
         return false;
 
