@@ -46,6 +46,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "UtilsFile.hpp"
+#include "OS/FileUtil.hpp"
 #include "ProgressGlue.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ZipLineReader.hpp"
@@ -291,7 +292,7 @@ WayPointFile::create(const TCHAR* filename, int the_filenum)
   ExpandLocalPath(file);
 
   // check existence of file
-  if (!FileExists(file)) {
+  if (!File::Exists(file)) {
     ZipSource zip(file);
     if (zip.error()) {
       // File does not exist, fail
