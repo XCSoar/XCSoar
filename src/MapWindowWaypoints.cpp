@@ -137,7 +137,6 @@ public:
 
     const MaskedIcon *icon = &MapGfx.SmallIcon;
 
-    bool do_write_alt = false;
     int AltArrivalAGL = 0;
 
     if (way_point.is_landable()) {
@@ -145,15 +144,13 @@ public:
       const UnorderedTaskPoint t(way_point, map.SettingsComputer());
       const GlideResult r =
         TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
-      const bool is_reachable = r.glide_reachable();
 
-      if (is_reachable) {
+      if (r.glide_reachable()) {
         text_mode.AsFlag.Reachable = 1;
 
         if ((map.SettingsMap().DeclutterLabels < 1) || in_task) {
           AltArrivalAGL = (int)Units::ToUserUnit(r.AltitudeDifference,
                                                  Units::AltitudeUnit);
-          do_write_alt = true;
 
           // show all reachable landing field altitudes unless we want a
           // decluttered screen.
@@ -200,7 +197,7 @@ public:
     else
       Buffer[0] = '\0';
 
-    if (do_write_alt) {
+    if (AltArrivalAGL != 0) {
       size_t length = _tcslen(Buffer);
       if (length > 0)
         Buffer[length++] = _T(':');
