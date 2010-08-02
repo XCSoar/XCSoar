@@ -154,12 +154,6 @@ GetDirectionData(int DirectionFilterIdx)
 }
 
 static void
-OnWaypointListEnter(unsigned i)
-{
-  wf->SetModalResult(mrOK);
-}
-
-static void
 InitializeDirection(bool bOnlyHeading)
 {
   if (wpDirection) {  // initialize datafieldenum for Direction
@@ -319,7 +313,7 @@ UpdateList()
   FillList(WayPointSelectInfo, way_points, g_location,
            XCSoarInterface::Basic().Heading, filter_data);
 
-  wWayPointList->SetLength(WayPointSelectInfo.size());
+  wWayPointList->SetLength(std::max(1, (int)WayPointSelectInfo.size()));
   wWayPointList->SetOrigin(0);
   wWayPointList->SetCursorIndex(0);
   wWayPointList->invalidate();
@@ -477,7 +471,16 @@ OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
     canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
                 filter_data.defined() || way_points.empty()
                 ? _("No Match!")
-                : _("Choose a filter"));
+                : _("Choose a filter or click here"));
+}
+
+static void
+OnWaypointListEnter(unsigned i)
+{
+  if (WayPointSelectInfo.size() > 0)
+    wf->SetModalResult(mrOK);
+  else
+    OnFilterNameButton(*wbName);
 }
 
 static void
