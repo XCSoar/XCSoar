@@ -110,7 +110,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgChecklist.cpp \
 	$(SRC)/Dialogs/dlgComboPicker.cpp \
 	$(SRC)/Dialogs/dlgConfiguration.cpp \
-	$(SRC)/Dialogs/dlgConfiguration2.cpp \
 	$(SRC)/Dialogs/dlgConfigurationVario.cpp \
 	$(SRC)/Dialogs/dlgFlarmTraffic.cpp \
 	$(SRC)/Dialogs/dlgFlarmTrafficDetails.cpp \
