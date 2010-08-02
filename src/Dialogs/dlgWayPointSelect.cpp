@@ -550,8 +550,7 @@ static CallBackTableEntry_t CallBackTable[] = {
 };
 
 const Waypoint*
-dlgWayPointSelect(SingleWindow &parent, const GEOPOINT &location,
-                  const int type, const int FilterNear)
+dlgWayPointSelect(SingleWindow &parent, const GEOPOINT &location)
 {
   UpLimit = 0;
 
@@ -585,12 +584,6 @@ dlgWayPointSelect(SingleWindow &parent, const GEOPOINT &location,
   wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
   wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
   wpType = (WndProperty *)wf->FindByName(_T("prpFltType"));
-
-  if (type > -1)
-    filter_data.type_index = type;
-
-  if (FilterNear)
-    filter_data.distance_index = 1;
 
   g_location = location;
   PrepareData();

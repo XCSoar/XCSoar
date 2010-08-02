@@ -75,8 +75,7 @@ dlgWaypointOutOfTerrain(const TCHAR *Message);
 
 const Waypoint *
 dlgWayPointSelect(SingleWindow &parent,
-                  const GEOPOINT &location,
-                  const int type=-1, const int FilterNear=0);
+                  const GEOPOINT &location);
 
 void dlgBasicSettingsShowModal();
 void dlgBrightnessShowModal();
