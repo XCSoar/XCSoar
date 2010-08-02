@@ -58,8 +58,6 @@ public:
   virtual bool HandleKey(const InfoBoxKeyCodes keycode) {
     return false;
   }
-
-  virtual const TCHAR* GetHelpText() { return _T(""); }
 };
 
 #endif

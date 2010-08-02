@@ -71,15 +71,10 @@ void OnInfoBoxHelp(WindowControl * Sender){
   _stprintf(caption, _T("InfoBox %s in %s mode"),
 	    wp->GetCaption(), mode);
 
-  InfoBoxContent* ibc = InfoBoxFactory::Create(type);
-  if (ibc) {
-    const TCHAR* text = ibc->GetHelpText();
-    delete ibc;
-
-    if (!string_is_empty(text)) {
-      dlgHelpShowModal(XCSoarInterface::main_window, caption, text);
-      return;
-    }
+  const TCHAR* text = InfoBoxFactory::GetHelpText(type);
+  if (text) {
+    dlgHelpShowModal(XCSoarInterface::main_window, caption, text);
+    return;
   }
 
   switch(type) {

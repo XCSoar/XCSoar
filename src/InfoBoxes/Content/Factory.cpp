@@ -211,3 +211,22 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
 
   return NULL;
 }
+
+const TCHAR*
+InfoBoxFactory::GetHelpText(unsigned InfoBoxType)
+{
+  switch (InfoBoxType) {
+  case 0:
+    return _T("[Height GPS]\r\nThis is the height above mean sea level reported by the GPS.\r\nTouchscreen/PC only: in simulation mode, this value is adjustable with the up/down arrow keys and the right/left arrow keys also cause the glider to turn.");
+  case 1:
+    return _T("[Height AGL]\r\nThis is the navigation altitude minus the terrain height obtained from the terrain file.  The value is coloured red when the glider is below the terrain safety clearance height.");
+  case 20:
+    return _T("[Terrain Elevation]\r\nThis is the elevation of the terrain above mean sea level, obtained from the terrain file at the current GPS location.");
+  case 33:
+    return _T("[Pressure Altitude]\r\nThis is the barometric altitude obtained from a GPS equipped with pressure sensor, or a supported external intelligent vario.");
+  case 70:
+    return _T("[QFE]\r\nAutomatic QFE. This altitude value is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground. During flight you can change QFE with up and down keys. Bottom line shows QNH altitude. \r\nChanging QFE does not affect QNH altitude.");
+  }
+
+  return NULL;
+}
