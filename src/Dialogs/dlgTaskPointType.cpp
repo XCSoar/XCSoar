@@ -53,10 +53,10 @@ Copyright_License {
 #include <stdio.h>
 
 static SingleWindow *parent_window;
-static WndForm *wf=NULL;
-static WndListFrame* wPointTypes= NULL;
+static WndForm *wf = NULL;
+static WndListFrame* wPointTypes = NULL;
 static bool task_modified = false;
-static OrderedTask* ordered_task= NULL;
+static OrderedTask* ordered_task = NULL;
 static OrderedTaskPoint* point = NULL;
 static unsigned active_index = 0;
 static const Waypoint* way_point = NULL;
@@ -97,40 +97,36 @@ static void
 OnPointPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
   TCHAR sTmp[120];
-  if (DrawListIndex >= point_types.size()) {
+  if (DrawListIndex >= point_types.size())
     return;
-  }
 
   const TCHAR* text = OrderedTaskPointName(point_types[DrawListIndex]);
 
-  if (point && (point_types[DrawListIndex] == get_point_type())) {
+  if (point && (point_types[DrawListIndex] == get_point_type()))
     _stprintf(sTmp, _T("*%s"), text);
-  } else {
+  else
     _stprintf(sTmp, _T(" %s"), text);
-  }
-  canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
-              sTmp);
+
+  canvas.text(rc.left + Layout::FastScale(2),
+              rc.top + Layout::FastScale(2), sTmp);
 }
 
-
 static bool
-SetPointType(AbstractTaskFactory::LegalPointType_t type) {
-
+SetPointType(AbstractTaskFactory::LegalPointType_t type)
+{
   bool apply = false;
 
   if (!point) {
     apply = true;
     // empty point, don't ask confirmation
   } else {
-    if (type == get_point_type()) {
+    if (type == get_point_type())
       // no change
       return true;
-    }
-    if (MessageBoxX(_("Change point type?"),
-                    _("Task Point"),
-                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
+
+    if (MessageBoxX(_("Change point type?"), _("Task Point"),
+                    MB_YESNO | MB_ICONQUESTION) == IDYES)
       apply = true;
-    }
   }
 
   if (apply) {
@@ -138,29 +134,21 @@ SetPointType(AbstractTaskFactory::LegalPointType_t type) {
 
     if (point) {
       point = factory.createPoint(type, point->get_waypoint());
-      if (factory.replace(point, active_index, true)) {
-        //fprintf(stderr, "Failed to replace turn point\n");
+      if (factory.replace(point, active_index, true))
         task_modified = true;
-      }
     } else {
-
-      if (factory.validFinishType(type) && ordered_task->get_ordered_task_behaviour().is_closed) {
+      if (factory.validFinishType(type) &&
+          ordered_task->get_ordered_task_behaviour().is_closed)
         way_point = &(ordered_task->get_tp(0)->get_waypoint());
-      } else {
+      else
         way_point = dlgWayPointSelect(*parent_window,
                                       XCSoarInterface::Basic().Location);
-      }
-      if (!way_point) {
+      if (!way_point)
         return false;
-      }
 
       point = factory.createPoint(type, *way_point);
-      if (point) {
-        if (factory.append(point, true)) {
-          //fprintf(stderr, "Failed to append turn point\n");
-          task_modified = true;
-        }
-      }
+      if (point && factory.append(point, true))
+        task_modified = true;
     }
     return true;
   }
@@ -170,14 +158,13 @@ SetPointType(AbstractTaskFactory::LegalPointType_t type) {
 static void
 OnSelect()
 {
-  if (wPointTypes->GetCursorIndex() >= point_types.size()) {
+  if (wPointTypes->GetCursorIndex() >= point_types.size())
     return;
-  }
-  if (SetPointType(get_cursor_type())) {
+
+  if (SetPointType(get_cursor_type()))
     wf->SetModalResult(mrOK);
-  } else {
+  else
     wf->SetModalResult(mrCancel);
-  }
 }
 
 static void 
@@ -186,13 +173,11 @@ OnSelectClicked(WindowControl * Sender)
   OnSelect();
 }
 
-
 static void
 OnPointListEnter(unsigned ItemIndex)
 {
   OnSelect();
 }
-
 
 static void
 OnPointCursorCallback(unsigned i)
@@ -200,20 +185,17 @@ OnPointCursorCallback(unsigned i)
   RefreshView();
 }
 
-
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnSelectClicked),
   DeclareCallBackEntry(NULL)
 };
-
 
 bool
 dlgTaskPointNew(SingleWindow &parent, OrderedTask** task, const unsigned index)
 {
   return dlgTaskPointType(parent, task, index);
 }
-
 
 bool
 dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
@@ -224,28 +206,23 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
   active_index = index;
 
   point = ordered_task->get_tp(active_index);
-  if (point) {
+  if (point)
     way_point = &point->get_waypoint();
-  } else {
+  else
     way_point = NULL;
-  }
 
-  wf = NULL;
+  if (Layout::landscape)
+    wf = dlgLoadFromXML(CallBackTable, parent, _T("IDR_XML_TASKPOINTTYPE_L"));
+  else
+    wf = dlgLoadFromXML(CallBackTable, parent, _T("IDR_XML_TASKPOINTTYPE"));
 
-  if (Layout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable,
-                        parent,
-                        _T("IDR_XML_TASKPOINTTYPE_L"));
-  } else {
-    wf = dlgLoadFromXML(CallBackTable,
-                        parent,
-                        _T("IDR_XML_TASKPOINTTYPE"));
-  }
-  if (!wf) return false;
-  assert(wf!=NULL);
+  if (!wf)
+    return false;
+
+  assert(wf != NULL);
 
   wPointTypes = (WndListFrame*)wf->FindByName(_T("frmPointTypes"));
-  assert(wPointTypes!=NULL);
+  assert(wPointTypes != NULL);
 
   point_types = ordered_task->get_factory().getValidTypes(index);
   if (point_types.empty()) {
@@ -258,21 +235,17 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
   wPointTypes->SetCursorCallback(OnPointCursorCallback);
   wPointTypes->SetLength(point_types.size());
 
-  if (point) {
-    for (unsigned i=0; i<point_types.size(); i++) {
-      if (point_types[i] == get_point_type()) {
+  if (point)
+    for (unsigned i=0; i<point_types.size(); i++)
+      if (point_types[i] == get_point_type())
         wPointTypes->SetCursorIndex(i); 
-      }
-    }
-  }
 
   RefreshView();
 
-  if (point_types.size()==1) {
+  if (point_types.size()==1)
     SetPointType(point_types[0]);
-  } else {
+  else
     wf->ShowModal();
-  }
 
   delete wf;
   wf = NULL;
