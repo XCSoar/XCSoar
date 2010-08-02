@@ -113,6 +113,7 @@ OnAirspaceListEnter(unsigned ItemIndex)
       Profile::SetAirspaceColor(ItemIndex,
           XCSoarInterface::SettingsMap().iAirspaceColour[ItemIndex]);
       changed = true;
+      MapGfx.InitAirspacePens(XCSoarInterface::SettingsMap());
     }
 
     int p = dlgAirspacePatternsShowModal();
