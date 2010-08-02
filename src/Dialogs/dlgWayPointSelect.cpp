@@ -156,22 +156,13 @@ InitializeDirection(bool bOnlyHeading)
 }
 
 static void
-SetNameCaptionFlushLeft(const TCHAR * sIn)
-{
-  // sets button with enough spaces to appear flush left
-
-  //ToDo: RLD make the text sflush left instead of centered on button
-  wbName->SetCaption(sIn);
-}
-
-static void
 PrepareData(void)
 {
   TCHAR sTmp[15];
 
   filter_data.name[0] = _T('\0');
 
-  SetNameCaptionFlushLeft(_T("*"));
+  wbName->SetCaption(_T("*"));
 
   if (wpDistance) {  // initialize datafieldenum for Distance
     DataFieldEnum* dfe;
@@ -341,9 +332,9 @@ OnFilterNameButton(gcc_unused WndButton &button)
 
   if (wbName) {
     if (string_is_empty(filter_data.name))
-      SetNameCaptionFlushLeft(_T("*"));
+      wbName->SetCaption(_T("*"));
     else
-      SetNameCaptionFlushLeft(filter_data.name);
+      wbName->SetCaption(filter_data.name);
   }
 
   UpdateList();
@@ -589,17 +580,15 @@ dlgWayPointSelect(SingleWindow &parent, const GEOPOINT &location)
 
   wf->SetTimerNotify(OnTimerNotify);
 
-  const Waypoint* wp_selected = NULL;
-
-  if (wf->ShowModal() == mrOK) {
-    unsigned ItemIndex = wWayPointList->GetCursorIndex();
-    if (ItemIndex < UpLimit)
-      wp_selected = WayPointSelectInfo[ItemIndex].way_point;
+  if (wf->ShowModal() != mrOK) {
+    delete wf;
+    return NULL;
   }
 
+  unsigned ItemIndex = wWayPointList->GetCursorIndex();
+  if (ItemIndex >= UpLimit)
+    return NULL;
+
   delete wf;
-
-  return wp_selected;
+  return WayPointSelectInfo[ItemIndex].way_point;
 }
-
-
