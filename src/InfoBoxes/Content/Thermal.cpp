@@ -256,13 +256,13 @@ InfoBoxContentThermalAvg::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR sTmp[32];
   _stprintf(sTmp, _T("%-2.1f"), Units::ToUserVSpeed(
-      XCSoarInterface::Calculated().AverageThermal));
+      XCSoarInterface::Calculated().ThermalAverage));
   infobox.SetValue(sTmp);
 
   // Set Unit
   infobox.SetValueUnit(Units::VerticalSpeedUnit);
 
-  if (XCSoarInterface::Calculated().AverageThermal <
+  if (XCSoarInterface::Calculated().ThermalAverage <
       fixed(0.667) * XCSoarInterface::Calculated().common_stats.current_risk_mc)
     // red
     infobox.SetColor(1);

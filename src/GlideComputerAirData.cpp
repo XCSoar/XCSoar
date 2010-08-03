@@ -115,7 +115,7 @@ GlideComputerAirData::ProcessBasic()
 {
   TerrainHeight();
   ProcessSun();
-  SetCalculated().AdjustedAverageThermal = GetAverageThermal();
+  SetCalculated().ThermalAverageAdjusted = GetAverageThermal();
 
   if (Basic().TotalEnergyVarioAvailable && !Basic().gps.Replay)
     CalibrationUpdate(&Basic());
@@ -293,7 +293,7 @@ GlideComputerAirData::AverageThermal()
 {
   if (positive(Calculated().ClimbStartTime) &&
       Basic().Time > Calculated().ClimbStartTime)
-    SetCalculated().AverageThermal =
+    SetCalculated().ThermalAverage =
       Calculated().ThermalGain / (Basic().Time - Calculated().ClimbStartTime);
 }
 

@@ -88,7 +88,7 @@ GlideComputerBlackboard::ResetFlight(const bool full)
     calculated_info.AverageLD = INVALID_GR;
     calculated_info.LD = INVALID_GR;
     calculated_info.LDvario = INVALID_GR;
-    calculated_info.AverageThermal = fixed_zero;
+    calculated_info.ThermalAverage = fixed_zero;
 
     for (i = 0; i < 200; i++) {
       calculated_info.AverageClimbRate[i] = fixed_zero;
@@ -164,7 +164,7 @@ GlideComputerBlackboard::RestoreFinish()
 double
 GlideComputerBlackboard::GetAverageThermal() const
 {
-  return max(fixed_zero, calculated_info.AverageThermal);
+  return max(fixed_zero, calculated_info.ThermalAverage);
 }
 
 /**
