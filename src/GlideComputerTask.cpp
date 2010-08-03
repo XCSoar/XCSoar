@@ -86,14 +86,6 @@ GlideComputerTask::ProcessBasicTask()
 
   SetCalculated().ZoomDistance = 
     Calculated().task_stats.current_leg.solution_remaining.Vector.Distance;
-
-#ifdef OLD_TASK // target control
-  if (!targetManipEvent.test()) {
-    // don't calculate these if optimise function being invoked or
-    // target is being adjusted
-    LDNext();
-  }
-#endif
 }
 
 void
@@ -131,58 +123,4 @@ GlideComputerTask::TerrainWarning()
     SetCalculated().TerrainWarningLocation = its.location;
 
   terrain.Unlock();
-}
-
-void
-GlideComputerTask::LDNext()
-{
-#ifdef OLD_TASK // LD calcs
-  if (!task.Valid()) {
-    SetCalculated().LDNext = INVALID_GR;
-    SetCalculated().LDFinish = INVALID_GR;
-    SetCalculated().GRFinish = INVALID_GR; // VENTA-ADDON
-
-    return;
-  }
-
-  const double height_above_leg = Calculated().NavAltitude
-      + Calculated().EnergyHeight - FAIFinishHeight(task.getActiveIndex());
-
-  SetCalculated().LDNext = UpdateLD(Calculated().LDNext,
-                                    Calculated().LegDistanceToGo,
-                                    height_above_leg,
-                                    0.5);
-
-  const double final_height = FAIFinishHeight(-1);
-
-  const double total_energy_height =
-      Calculated().NavAltitude + Calculated().EnergyHeight;
-
-  SetCalculated().LDFinish = UpdateLD(Calculated().LDFinish,
-                                      Calculated().TaskDistanceToGo,
-                                      total_energy_height-final_height,
-                                      0.5);
-
-  // VENTA-ADDON Classic geometric GR calculation without Total Energy
-  /*
-   * Paolo Ventafridda> adding a classic standard glide ratio
-   * computation based on a geometric path with no total energy and
-   * wind. This value is auto limited to a reasonable level which can
-   * be useful during flight, currently 200. Over 200, you are no more
-   * gliding to the final destination I am afraid, even on an ETA
-   * . The infobox value has a decimal point if it is between 1 and
-   * 99, otherwise it's a simple integer.
-   */
-  double GRsafecalc = Calculated().NavAltitude - final_height;
-  if (GRsafecalc <= 0)
-    SetCalculated().GRFinish = INVALID_GR;
-  else {
-    SetCalculated().GRFinish = Calculated().TaskDistanceToGo / GRsafecalc;
-    if (Calculated().GRFinish > ALTERNATE_MAXVALIDGR || Calculated().GRFinish < 0)
-      SetCalculated().GRFinish = INVALID_GR;
-    else if (Calculated().GRFinish < 1)
-      SetCalculated().GRFinish = 1;
-  }
-  // END VENTA-ADDON
-#endif
 }

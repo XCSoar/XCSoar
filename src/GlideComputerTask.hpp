@@ -53,9 +53,10 @@ protected:
   void Initialise() {}
   void ProcessBasicTask();
   void ResetFlight(const bool full=true);
+
 private:
   void TerrainWarning();
-  void LDNext();
+
 protected:
   virtual void ProcessIdle();
 };
