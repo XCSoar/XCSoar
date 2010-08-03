@@ -422,11 +422,8 @@ bool
 TaskManager::update_auto_mc(const AIRCRAFT_STATE& state_now,
                             const fixed fallback_mc)
 {
-  if (active_task) {
-    if (active_task->update_auto_mc(state_now, fallback_mc)) {
-      return true;
-    }
-  } 
+  if (active_task && active_task->update_auto_mc(state_now, fallback_mc))
+    return true;
 
   if (!task_behaviour.auto_mc) 
     return false;
