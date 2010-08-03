@@ -50,13 +50,8 @@ using std::max;
 // JMW TODO: abstract up to higher layer so a base copy of this won't
 // call any event
 
-
 GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task): 
-  GlideComputerBlackboard(task) 
-{
-
-}
-
+  GlideComputerBlackboard(task) {}
 
 void
 GlideComputerTask::ResetFlight(const bool full)
@@ -71,16 +66,12 @@ GlideComputerTask::ProcessBasicTask()
 
   m_task.set_task_behaviour(SettingsComputer());
 
-  if (basic.Time != LastBasic().Time) {
+  if (basic.Time != LastBasic().Time && !basic.gps.NAVWarning) {
+    const AIRCRAFT_STATE current_as = ToAircraftState(Basic());
+    const AIRCRAFT_STATE last_as = ToAircraftState(LastBasic());
 
-    if (!basic.gps.NAVWarning) {
-      const AIRCRAFT_STATE current_as = ToAircraftState(Basic());
-      const AIRCRAFT_STATE last_as = ToAircraftState(LastBasic());
-
-      m_task.update(current_as, last_as);
-      m_task.update_auto_mc(current_as,
-                            Calculated().AdjustedAverageThermal);
-    }
+    m_task.update(current_as, last_as);
+    m_task.update_auto_mc(current_as, Calculated().AdjustedAverageThermal);
   }
 
   SetCalculated().task_stats = m_task.get_stats();
@@ -88,11 +79,10 @@ GlideComputerTask::ProcessBasicTask()
 
   TerrainWarning();
 
-  if (SettingsComputer().EnableBlockSTF) {
+  if (SettingsComputer().EnableBlockSTF)
     SetCalculated().V_stf = Calculated().common_stats.V_block;
-  } else {
+  else
     SetCalculated().V_stf = Calculated().common_stats.V_dolphin;
-  }
 
   SetCalculated().ZoomDistance = 
     Calculated().task_stats.current_leg.solution_remaining.Vector.Distance;
@@ -110,10 +100,8 @@ void
 GlideComputerTask::ProcessIdle()
 {
   const AIRCRAFT_STATE as = ToAircraftState(Basic());
-
   m_task.update_idle(as);
 }
-
 
 void
 GlideComputerTask::TerrainWarning()
@@ -139,13 +127,11 @@ GlideComputerTask::TerrainWarning()
     its = g_terrain.find_intersection(state, current, polar);
   }
 
-  if (!its.out_of_range) {
+  if (!its.out_of_range)
     SetCalculated().TerrainWarningLocation = its.location;
-  }
 
   terrain.Unlock();
 }
-
 
 void
 GlideComputerTask::LDNext()
