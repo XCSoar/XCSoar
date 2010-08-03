@@ -71,8 +71,8 @@ GlideComputerTask::ProcessBasicTask()
     const AIRCRAFT_STATE last_as = ToAircraftState(LastBasic());
 
     m_task.update(current_as, last_as);
-    m_task.update_auto_mc(current_as,
-                          std::max(Calculated().LastThermalAverage, fixed_zero));
+    m_task.update_auto_mc(current_as, std::max(
+        Calculated().LastThermalAverageSmooth, fixed_zero));
   }
 
   SetCalculated().task_stats = m_task.get_stats();
