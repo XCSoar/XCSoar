@@ -71,10 +71,7 @@ public:
    */
   ~TopologyFile();
 
-  void TriggerIfScaleNowVisible(const Projection &map_projection);
-
-  void updateCache(const Projection &map_projection,
-		   const rectObj &thebounds, bool purgeonly = false);
+  void updateCache(const Projection &map_projection, const rectObj &thebounds);
 
   /**
    * Paints the polygons, lines and points/icons in the TopologyFile
@@ -111,14 +108,6 @@ public:
   bool triggerUpdateCache;
 
 private:
-  /**
-   * This returns whether the content of this TopologyFile is
-   * visible at the given map_scale
-   * @param map_scale The scale to check
-   * @return True if visible, False if not
-   */
-  bool CheckScale(const double map_scale) const;
-
   XShape** shpCache;
 
   unsigned GetSkipSteps(double map_scale) const;
@@ -127,7 +116,6 @@ private:
 protected:
   void ClearCache();
 
-  bool in_scale;
   Pen hPen;
   Brush hbBrush;
   MaskedIcon icon;

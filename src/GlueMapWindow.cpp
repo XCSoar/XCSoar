@@ -70,7 +70,7 @@ GlueMapWindow::Idle(const bool do_force)
       /// \todo bug: this will delay servicing if EnableTopology was false and then
       /// switched on, until do_force is true again
 
-      UpdateTopology(do_force);
+      UpdateTopology();
       break;
 
     case 1:

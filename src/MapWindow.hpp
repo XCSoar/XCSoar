@@ -234,14 +234,14 @@ private:
 
 protected:
   void UpdateTopologyCache();
-  void UpdateTopology(bool force);
+  void UpdateTopology();
   void UpdateTerrain();
   void UpdateWeather();
 
   void UpdateAll() {
     UpdateTopologyCache();
     while (topology_dirty)
-      UpdateTopology(true);
+      UpdateTopology();
     UpdateTerrain();
     UpdateWeather();
   }

@@ -135,13 +135,13 @@ MapWindow::UpdateTopologyCache()
 }
 
 void
-MapWindow::UpdateTopology(bool force)
+MapWindow::UpdateTopology()
 {
   if (!topology_dirty)
     return;
 
   topology_dirty = topology != NULL && SettingsMap().EnableTopology &&
-    topology->ScanVisibility(*this, *getSmartBounds(), force);
+    topology->ScanVisibility(*this, *getSmartBounds());
 }
 
 void

@@ -61,7 +61,6 @@ TopologyFile::TopologyFile(const char *filename, const Color thecolor,
   :label_field(_label_field),
   scaleThreshold(1000.0),
   triggerUpdateCache(false),
-  in_scale(false),
   hPen(1, thecolor),
   hbBrush(thecolor),
   shapefileopen(false)
@@ -93,19 +92,6 @@ TopologyFile::~TopologyFile()
   msSHPCloseFile(&shpfile);
 }
 
-bool
-TopologyFile::CheckScale(const double map_scale) const
-{
-  return (map_scale <= scaleThreshold);
-}
-
-void
-TopologyFile::TriggerIfScaleNowVisible(const Projection &map_projection)
-{
-  triggerUpdateCache |=
-      (CheckScale(map_projection.GetMapScaleUser()) != in_scale);
-}
-
 void
 TopologyFile::ClearCache()
 {
@@ -132,23 +118,13 @@ TopologyFile::ConvertRect(const rectObj &src)
 
 void
 TopologyFile::updateCache(const Projection &map_projection,
-                      const rectObj &bounds,
-                      bool purgeonly)
+                          const rectObj &bounds)
 {
   if (!triggerUpdateCache || !shapefileopen)
     return;
 
-  in_scale = CheckScale(map_projection.GetMapScaleUser());
-
-  if (!in_scale) {
-    // not visible, so flush the cache
-    // otherwise we waste time on looking up which shapes are in bounds
-    ClearCache();
-    triggerUpdateCache = false;
-    return;
-  }
-
-  if (purgeonly)
+  if (map_projection.GetMapScaleUser() > fixed(scaleThreshold))
+    /* not visible, don't update cache now */
     return;
 
   triggerUpdateCache = false;

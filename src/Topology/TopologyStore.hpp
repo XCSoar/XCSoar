@@ -66,7 +66,7 @@ public:
   ~TopologyStore();
 
   bool ScanVisibility(const Projection &m_projection,
-                      const rectObj &_bounds_active, const bool force = false);
+                      const rectObj &_bounds_active);
   void TriggerUpdateCaches(Projection &m_projection);
   void Reload();
   void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
