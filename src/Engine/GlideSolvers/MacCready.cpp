@@ -42,6 +42,8 @@
 #include "GlidePolar.hpp"
 #include "GlideResult.hpp"
 #include "Navigation/Aircraft.hpp"
+#include "Util/ZeroFinder.hpp"
+#include "Util/Tolerances.hpp"
 
 static const fixed fixed_1mil(1.0e6);
 
@@ -240,9 +242,6 @@ MacCready::solve(const GlideState &task) const
     return result_cc;
   }
 }
-
-#include "Util/ZeroFinder.hpp"
-#include "Util/Tolerances.hpp"
 
 /**
  * Class used to find VOpt for a MacCready setting, for final glide
