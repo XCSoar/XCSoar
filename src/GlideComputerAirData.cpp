@@ -779,6 +779,14 @@ GlideComputerAirData::LastThermalStats()
         SetCalculated().LastThermalGain = ThermalGain;
         SetCalculated().LastThermalTime = ThermalTime;
 
+        if (Calculated().LastThermalAverageSmooth == fixed_zero)
+          SetCalculated().LastThermalAverageSmooth =
+              Calculated().LastThermalAverage;
+        else
+          SetCalculated().LastThermalAverageSmooth =
+              LowPassFilter(Calculated().LastThermalAverageSmooth,
+                            Calculated().LastThermalAverage, 0.3);
+
         OnDepartedThermal();
       }
     }

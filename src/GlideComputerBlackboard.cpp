@@ -116,6 +116,7 @@ GlideComputerBlackboard::ResetFlight(const bool full)
 
   // If you load persistent values, you need at least these reset:
   calculated_info.LastThermalAverage = fixed_zero;
+  calculated_info.LastThermalAverageSmooth = fixed_zero;
   calculated_info.ThermalGain = fixed_zero;
 }
 

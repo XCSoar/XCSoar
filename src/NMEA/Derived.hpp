@@ -113,6 +113,9 @@ struct CLIMB_INFO
   fixed LastThermalGain;
   /** Time spend in the last thermal */
   fixed LastThermalTime;
+
+  /** Average vertical speed in the last thermals smoothed by low-pass-filter */
+  fixed LastThermalAverageSmooth;
 };
 
 
