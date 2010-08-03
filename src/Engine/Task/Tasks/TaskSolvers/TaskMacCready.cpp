@@ -94,8 +94,7 @@ TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
 
   clearance_heights(aircraft);
 
-  fixed excess_height = fixed_zero;
-  excess_height = aircraft_start.NavAltitude - m_minHs[m_end];
+  fixed excess_height = aircraft_start.NavAltitude - m_minHs[m_end];
 
   for (int i = m_end; i >= m_start; --i) {
     if (i > m_start)
