@@ -50,7 +50,6 @@ Copyright_License {
 #include <tchar.h>
 
 #define  CtrlC  0x03
-#define  swap(x)      x = ((((x<<8) & 0xff00) | ((x>>8) & 0x00ff)) & 0xffff)
 
 class CaiGpsNavDevice : public AbstractDevice {
 private:
