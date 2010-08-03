@@ -577,6 +577,8 @@ static bool
 cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   GPS_INFO->ExternalWindAvailable = ReadSpeedVector(line, GPS_INFO->wind);
+  if (GPS_INFO->ExternalWindAvailable)
+    GPS_INFO->wind.bearing = GPS_INFO->wind.bearing.Reciprocal();
 
   line.skip(2);
 
