@@ -102,11 +102,13 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                  const SETTINGS_COMPUTER &settings_computer)
 {
   bool invalid = false;
+  ProtectedTaskManager::Lease task_manager(protected_task_manager);
 
   if (_tcsstr(OutBuffer, _T("$(CheckTaskResumed)"))) {
     // TODO code: check, does this need to be set with temporary task?
-    invalid |= calculated.common_stats.mode_abort;
-    invalid |= calculated.common_stats.mode_goto;
+    if (task_manager->is_mode(TaskManager::MODE_ABORT) ||
+        task_manager->is_mode(TaskManager::MODE_GOTO))
+      invalid = true;
     ReplaceInString(OutBuffer, _T("$(CheckTaskResumed)"), _T(""), Size);
   }
 
@@ -117,8 +119,9 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
     ReplaceInString(OutBuffer, _T("$(CheckTask)"), _T(""), Size);
   }
 
-  if (!calculated.task_stats.task_valid
-      || calculated.common_stats.mode_goto) {
+  const AbstractTask *task = task_manager->get_active_task();
+  if (task == NULL || !task->get_stats().task_valid ||
+      task_manager->is_mode(TaskManager::MODE_GOTO)) {
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
       invalid = true;
@@ -131,19 +134,23 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
           _T("Previous\nTurnpoint"), Size);
     }
 
-  } else if (calculated.common_stats.mode_abort) {
+  } else if (task_manager->is_mode(TaskManager::MODE_ABORT)) {
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
-      invalid |= !calculated.common_stats.active_has_next;
-      CondReplaceInString(calculated.common_stats.next_is_last,
+      if (!task->validTaskPoint(1))
+        invalid = true;
+
+      CondReplaceInString(task->validTaskPoint(1) && !task->validTaskPoint(2),
                           OutBuffer,
                           _T("$(WaypointNext)"),
                           _T("Furthest\nLandpoint"),
                           _T("Next\nLandpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
-      invalid |= !calculated.common_stats.active_has_previous;
-      CondReplaceInString(calculated.common_stats.previous_is_first,
+      if (!task->validTaskPoint(-1))
+        invalid = true;
+
+      CondReplaceInString(task->validTaskPoint(-1) && !task->validTaskPoint(-2),
                           OutBuffer,
                           _T("$(WaypointPrevious)"),
                           _T("Closest\nLandpoint"),
@@ -153,16 +160,20 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   } else {
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
       // Waypoint\nNext
-      invalid |= !calculated.common_stats.active_has_next;
-      CondReplaceInString(calculated.common_stats.next_is_last,
+      if (!task->validTaskPoint(1))
+        invalid = true;
+
+      CondReplaceInString(task->validTaskPoint(1) && !task->validTaskPoint(2),
                           OutBuffer,
                           _T("$(WaypointNext)"),
                           _T("Finish\nTurnpoint"),
                           _T("Next\nTurnpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
-      invalid |= !calculated.common_stats.active_has_previous;
-      CondReplaceInString(calculated.common_stats.previous_is_first,
+      if (!task->validTaskPoint(-1))
+        invalid = true;
+
+      CondReplaceInString(task->validTaskPoint(-1) && !task->validTaskPoint(-2),
                           OutBuffer,
                           _T("$(WaypointPrevious)"),
                           _T("Start\nTurnpoint"),
@@ -184,9 +195,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   }
 
   if (_tcsstr(OutBuffer, _T("$(AdvanceArmed)"))) {
-    TaskAdvance::TaskAdvanceState_t s =
-      protected_task_manager.get_advance_state();
-    switch (s) {
+    switch (task_manager->get_task_advance().get_advance_state()) {
     case TaskAdvance::MANUAL:
       ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"), 
                       _T("Advance\n(manual)"), Size);
@@ -232,7 +241,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   }
 
   if (_tcsstr(OutBuffer, _T("$(TaskAbortToggleActionName)"))) {
-    if (calculated.common_stats.mode_goto) {
+    if (task_manager->is_mode(TaskManager::MODE_GOTO)) {
       CondReplaceInString(calculated.common_stats.ordered_valid,
                           OutBuffer, _T("$(TaskAbortToggleActionName)"),
                           _T("Resume"), _T("Abort"), Size);
