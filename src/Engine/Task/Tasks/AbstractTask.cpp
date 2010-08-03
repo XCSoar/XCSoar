@@ -43,8 +43,7 @@
 #include "Task/TaskEvents.hpp"
 
 AbstractTask::AbstractTask(enum type _type, TaskEvents &te,
-                           const TaskBehaviour &tb,
-                           GlidePolar &gp): 
+                           const TaskBehaviour &tb, GlidePolar &gp):
   TaskInterface(_type),
   activeTaskPoint(0),
   activeTaskPoint_last(0-1),
@@ -54,43 +53,37 @@ AbstractTask::AbstractTask(enum type _type, TaskEvents &te,
   mc_lpf(10.0),
   ce_lpf(60.0),
   em_lpf(60.0),
-  trigger_auto(false)
-{
-}
+  trigger_auto(false) {}
 
 bool 
-AbstractTask::update_auto_mc(const AIRCRAFT_STATE& state,
-                             fixed fallback_mc)
+AbstractTask::update_auto_mc(const AIRCRAFT_STATE& state, fixed fallback_mc)
 {
-  if (!positive(fallback_mc)) {
+  if (!positive(fallback_mc))
     fallback_mc = glide_polar.get_mc();
-  }
 
   if (!task_started() || !task_behaviour.auto_mc) {
     reset_auto_mc();
     return false;
   }
 
-  if (task_behaviour.auto_mc_mode==TaskBehaviour::AUTOMC_CLIMBAVERAGE) {
+  if (task_behaviour.auto_mc_mode == TaskBehaviour::AUTOMC_CLIMBAVERAGE) {
     trigger_auto = false;
   } else {
-
     const fixed mc_found = calc_mc_best(state);
-    if (mc_found > stats.mc_best) {
+    if (mc_found > stats.mc_best)
       trigger_auto = true;
-    }
+
     if (trigger_auto) {
       stats.mc_best = mc_lpf.update(mc_found);
       glide_polar.set_mc(stats.mc_best);
     }
   }
 
-  if (!trigger_auto) {
+  if (!trigger_auto)
     stats.mc_best = mc_lpf.reset(fallback_mc);
-  }
+
   return trigger_auto;
 }
-
 
 bool 
 AbstractTask::update_idle(const AIRCRAFT_STATE &state)
@@ -111,15 +104,13 @@ AbstractTask::update_idle(const AIRCRAFT_STATE &state)
     stats.effective_mc = em_lpf.reset(glide_polar.get_mc());
   }
 
-  if (task_behaviour.calc_glide_required) {
+  if (task_behaviour.calc_glide_required)
     update_stats_glide(state);
-  } else {
+  else
     stats.glide_required = fixed_zero; // error
-  }
 
   return false;
 }
-
 
 unsigned 
 AbstractTask::getActiveTaskPointIndex() const
@@ -131,44 +122,34 @@ void
 AbstractTask::update_stats_distances(const GEOPOINT &location,
                                      const bool full_update)
 {
-
   stats.total.remaining.set_distance(scan_distance_remaining(location));
 
-  if (full_update) {
+  if (full_update)
     stats.distance_nominal = scan_distance_nominal();
-  }
 
-  scan_distance_minmax(location, 
-                       full_update,
-                       &stats.distance_min,
-                       &stats.distance_max);
+  scan_distance_minmax(location, full_update,
+                       &stats.distance_min, &stats.distance_max);
 
   stats.total.travelled.set_distance(scan_distance_travelled(location));
   stats.total.planned.set_distance(scan_distance_planned());
 
-  if (is_scored()) {
+  if (is_scored())
     stats.distance_scored = scan_distance_scored(location);
-  } else {
+  else
     stats.distance_scored = 0;
-  }
 }
 
 void
 AbstractTask::update_glide_solutions(const AIRCRAFT_STATE &state)
 {
-  glide_solution_remaining(state, 
-                           glide_polar,
-                           stats.total.solution_remaining,
+  glide_solution_remaining(state, glide_polar, stats.total.solution_remaining,
                            stats.current_leg.solution_remaining);
 
   if (positive(glide_polar.get_mc())) {
     GlidePolar polar_mc0 = glide_polar;
-
     polar_mc0.set_mc(fixed_zero); 
     
-    glide_solution_remaining(state, 
-                             polar_mc0,
-                             stats.total.solution_mc0,
+    glide_solution_remaining(state, polar_mc0, stats.total.solution_mc0,
                              stats.current_leg.solution_mc0);
   } else {
     // no need to re-calculate, just copy
@@ -176,12 +157,10 @@ AbstractTask::update_glide_solutions(const AIRCRAFT_STATE &state)
     stats.current_leg.solution_mc0 = stats.current_leg.solution_remaining;
   }
 
-  glide_solution_travelled(state, 
-                           stats.total.solution_travelled,
+  glide_solution_travelled(state, stats.total.solution_travelled,
                            stats.current_leg.solution_travelled);
 
-  glide_solution_planned(state, 
-                         stats.total.solution_planned,
+  glide_solution_planned(state, stats.total.solution_planned,
                          stats.current_leg.solution_planned,
                          stats.total.remaining_effective,
                          stats.current_leg.remaining_effective,
@@ -203,7 +182,6 @@ bool
 AbstractTask::update(const AIRCRAFT_STATE &state, 
                      const AIRCRAFT_STATE &state_last)
 {
-
   stats.task_valid = check_task();
   stats.has_targets = has_targets();
 
@@ -212,15 +190,10 @@ AbstractTask::update(const AIRCRAFT_STATE &state,
     (activeTaskPoint != activeTaskPoint_last);
 
   update_stats_times(state);
-
   update_stats_distances(state.Location, full_update);
-
   update_glide_solutions(state);
-
   bool sample_updated = update_sample(state, full_update);
-
   update_stats_speeds(state, state_last);
-
   update_flight_mode();
 
   activeTaskPoint_last = activeTaskPoint;
@@ -268,7 +241,6 @@ AbstractTask::reset_auto_mc()
   trigger_auto = false;
 }
 
-
 void 
 AbstractTask::reset()
 {
@@ -277,7 +249,6 @@ AbstractTask::reset()
   ce_lpf.reset(1.0);
   stats.reset();
 }
-
 
 fixed
 AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft) 
@@ -293,13 +264,11 @@ AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft)
   return (aircraft.NavAltitude - tp->get_elevation()) / d;
 }
 
-
 fixed 
 AbstractTask::calc_effective_mc(const AIRCRAFT_STATE &state_now) 
 {
   return glide_polar.get_mc();
 }
-
 
 void
 AbstractTask::update_flight_mode()
