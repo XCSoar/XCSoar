@@ -623,29 +623,29 @@ OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft,
 fixed 
 OrderedTask::calc_gradient(const AIRCRAFT_STATE &state) 
 {
-  fixed g_best = fixed_zero;
-  fixed d_acc = fixed_zero;
-  fixed h_this = state.NavAltitude;
+  fixed gradient_best = fixed_zero;
+  fixed distance = fixed_zero;
+  fixed height = state.NavAltitude;
 
   // Iterate through remaining turnpoints
   for (unsigned i = activeTaskPoint; i < tps.size(); i++) {
     // Sum up the leg distances
-    d_acc += tps[i]->get_vector_remaining(state).Distance;
-    if (!d_acc)
+    distance += tps[i]->get_vector_remaining(state).Distance;
+    if (!distance)
       continue;
 
     // Calculate gradient to the i-th turnpoint of the remaining task
-    const fixed g_this = (h_this - tps[i]->get_elevation()) / d_acc;
+    const fixed gradient_this = (height - tps[i]->get_elevation()) / distance;
     if (i == activeTaskPoint)
       // Set best gradient to calculated gradient for first turnpoint
-      g_best = g_this;
+      gradient_best = gradient_this;
     else
       // Check if the calculated gradient is lower then the best we got yet
       // This is useful if the second last turnpoint is located far above
       // the finish
-      g_best = min(g_best, g_this);
+      gradient_best = min(gradient_best, gradient_this);
   }
-  return g_best;
+  return gradient_best;
 }
 
 // Constructors/destructors
