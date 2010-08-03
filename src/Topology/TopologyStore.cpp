@@ -69,8 +69,8 @@ TopologyStore::TriggerUpdateCaches(Projection &m_projection)
 }
 
 bool
-TopologyStore::ScanVisibility(Projection &m_projection,
-    rectObj &_bounds_active, const bool force)
+TopologyStore::ScanVisibility(const Projection &m_projection,
+                              const rectObj &_bounds_active, const bool force)
 {
   // check if any needs to have cache updates because wasnt
   // visible previously when bounds moved

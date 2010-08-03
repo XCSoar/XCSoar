@@ -73,7 +73,7 @@ public:
 
   void TriggerIfScaleNowVisible(const Projection &map_projection);
 
-  void updateCache(Projection &map_projection,
+  void updateCache(const Projection &map_projection,
 		   const rectObj &thebounds, bool purgeonly = false);
 
   /**

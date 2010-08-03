@@ -131,7 +131,7 @@ TopologyFile::ConvertRect(const rectObj &src)
 }
 
 void
-TopologyFile::updateCache(Projection &map_projection, 
+TopologyFile::updateCache(const Projection &map_projection,
                       const rectObj &bounds,
                       bool purgeonly)
 {
