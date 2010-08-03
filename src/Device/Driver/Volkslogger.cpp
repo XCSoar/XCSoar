@@ -76,6 +76,12 @@ vl_PGCS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   GPS_STATE &gps = GPS_INFO->gps;
 
+  if (line.read(1) != 1)
+    return false;
+
+  /* pressure sensor */
+  line.skip();
+
   // four characers, hex, barometric altitude
   long altitude = line.read_hex(0L);
 
