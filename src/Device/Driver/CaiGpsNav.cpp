@@ -49,7 +49,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-#define  CtrlC  0x03
+static const char CtrlC = '\x03';
 
 class CaiGpsNavDevice : public AbstractDevice {
 private:
@@ -65,7 +65,7 @@ public:
 bool
 CaiGpsNavDevice::Open()
 {
-  port->Write('\x03');
+  port->Write(CtrlC);
   Sleep(50);
   port->Write("NMEA\r");
 
