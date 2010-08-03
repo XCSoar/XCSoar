@@ -225,6 +225,11 @@ public:
     return get_stats().task_valid;
   }
 
+  gcc_pure
+  const AbstractTask *get_active_task() const {
+    return active_task;
+  }
+
   /**
    * Size of active task
    *
