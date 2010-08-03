@@ -61,13 +61,6 @@ DrawThread::ExchangeBlackboard()
   mutexBlackboard.Unlock();
 }
 
-void
-DrawThread::trigger_topology_changed()
-{
-  map.InvalidateTopology();
-  trigger.trigger();
-}
-
 /**
  * Main loop of the DrawThread
  */

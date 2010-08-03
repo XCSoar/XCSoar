@@ -156,10 +156,6 @@ public:
 
   void UpdateProjection();
 
-  void InvalidateTopology() {
-    topology_dirty = true;
-  }
-
   bool TopologyNeedsUpdate() const {
     return topology_dirty;
   }

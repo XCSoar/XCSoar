@@ -142,7 +142,7 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
                         SettingsComputer().EnableSoundModes);
   }
 
-  draw_thread->trigger_topology_changed();
+  draw_thread->trigger_redraw();
 }
 
 void
