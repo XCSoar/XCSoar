@@ -78,8 +78,8 @@ TaskMacCready::clearance_heights(const AIRCRAFT_STATE &aircraft)
       fixed dh = aircraft_predict.NavAltitude - gr.HeightGlide;
       if (m_minHs[i + 1] + fixed_tolerance < dh) {
         m_minHs[i + 1] = dh;
+        // recalculate again for remainder
         i--;
-        continue; // recalculate again for remainder
       }
     }
   }
