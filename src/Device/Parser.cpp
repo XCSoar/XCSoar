@@ -919,6 +919,7 @@ NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm)
   flarm.FLARM_RX = line.read(0);
   flarm.FLARM_TX = line.read(0);
   flarm.FLARM_GPS = line.read(0);
+  line.skip();
   flarm.FLARM_AlarmLevel = line.read(0);
 
   // process flarm updates
