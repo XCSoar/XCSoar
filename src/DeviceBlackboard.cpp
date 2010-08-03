@@ -657,44 +657,40 @@ DeviceBlackboard::EnergyHeight()
 {
   static const fixed fixed_inv_2g (1.0/(2.0*9.81));
 
-  SetBasic().EnergyHeight = (Basic().TrueAirspeed * Basic().TrueAirspeed) *
-                            fixed_inv_2g;
+  SetBasic().EnergyHeight =
+      Basic().TrueAirspeed * Basic().TrueAirspeed * fixed_inv_2g;
   SetBasic().TEAltitude = Basic().NavAltitude + Basic().EnergyHeight;
 }
-
 
 void
 DeviceBlackboard::WorkingBand()
 {
-  const fixed working_band_height = Basic().TEAltitude 
-    - SettingsComputer().safety_height_terrain 
-    - Calculated().TerrainBase;
+  const fixed working_band_height = Basic().TEAltitude -
+                                    SettingsComputer().safety_height_terrain -
+                                    Calculated().TerrainBase;
  
   SetBasic().working_band_height = working_band_height;
-  
-  if (negative(Basic().working_band_height)) {
+    if (negative(Basic().working_band_height)) {
     SetBasic().working_band_fraction = fixed_zero;
     return;
   }
+
   const fixed max_height = Calculated().thermal_band.MaxThermalHeight;
-  if (positive(max_height)) {
-    SetBasic().working_band_fraction =
-      working_band_height / max_height;
-  } else {
+  if (positive(max_height))
+    SetBasic().working_band_fraction = working_band_height / max_height;
+  else
     SetBasic().working_band_fraction = fixed_one;
-  }
 }
 
 void
 DeviceBlackboard::FlightState(const GlidePolar& glide_polar)
 {
-  if (Basic().Time < LastBasic().Time) {
+  if (Basic().Time < LastBasic().Time)
     SetBasic().flight.flying_state_reset();
-  }
-    // GPS not lost
-  if (Basic().gps.NAVWarning) {
+
+  // GPS not lost
+  if (Basic().gps.NAVWarning)
     return;
-  }
 
   // Speed too high for being on the ground
   if (Basic().GroundSpeed > glide_polar.get_Vtakeoff()) {
@@ -721,16 +717,15 @@ DeviceBlackboard::AutoQNH()
     return;
   }
 
-  if (countdown_autoqnh) {
+  if (countdown_autoqnh)
     countdown_autoqnh--;
-  }
+
   if (!countdown_autoqnh) {
     SetBasic().pressure.FindQNH(Basic().BaroAltitude, 
                                 Calculated().TerrainAlt);
     AllDevicesPutQNH(Basic().pressure);
   }
 }
-
 
 void
 DeviceBlackboard::SetQNH(fixed qnh)
