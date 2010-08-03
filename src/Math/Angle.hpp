@@ -239,6 +239,13 @@ public:
     return m_value >= x.m_value;
   }
 
+  /**
+   * Is this angle between the other two values?  If "end" is smaller
+   * than "start", then wraparound is calculated correctly.
+   */
+  gcc_pure
+  bool between(const Angle &start, const Angle &end) const;
+
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, const Angle& a);
 #endif

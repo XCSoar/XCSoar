@@ -90,6 +90,15 @@ int main(int argc, char **argv)
   assert(equals(Angle::degrees(fixed(-179)).as_delta(), -179));
   assert(equals(Angle::degrees(fixed_270).as_delta(), -90));
 
+  assert(Angle::degrees(fixed_90).between(Angle::degrees(fixed_zero),
+                                          Angle::degrees(fixed_180)));
+
+  assert(!Angle::degrees(fixed_90).between(Angle::degrees(fixed_180),
+                                           Angle::degrees(fixed_zero)));
+
+  assert(Angle::degrees(fixed_zero).between(Angle::degrees(fixed_270),
+                                            Angle::degrees(fixed_90)));
+
   assert(equals(Angle::degrees(fixed_zero).sin(), 0));
   assert(equals(Angle::degrees(fixed_90).sin(), 1));
   assert(equals(Angle::degrees(fixed_180).sin(), 0));

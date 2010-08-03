@@ -138,3 +138,13 @@ Angle::Fraction(const Angle &End, const fixed fraction) const
   Angle diff = Angle(End.m_value - m_value).as_delta();
   return Angle(m_value + diff.m_value * fraction).as_bearing();
 }
+
+gcc_pure
+bool
+Angle::between(const Angle &start, const Angle &end) const
+{
+  Angle width = (end - start).as_bearing();
+  Angle delta = (*this - start).as_bearing();
+
+  return delta <= width;
+}
