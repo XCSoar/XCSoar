@@ -283,15 +283,14 @@ fixed
 AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft) 
 {
   TaskPoint *tp = getActiveTaskPoint();
-  if (!tp) {
+  if (!tp)
     return fixed_zero;
-  }
+
   const fixed d = tp->get_vector_remaining(aircraft).Distance;
-  if (d) {
-    return (aircraft.NavAltitude-tp->get_elevation())/d;
-  } else {
+  if (!d)
     return fixed_zero;
-  }
+
+  return (aircraft.NavAltitude - tp->get_elevation()) / d;
 }
 
 
