@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
@@ -34,6 +35,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef ABSTRACT_TASK_FACTORY_HPP
 #define ABSTRACT_TASK_FACTORY_HPP
 
@@ -66,8 +68,7 @@ class Waypoint;
  *   validity of task etc.  This can also be added to saved files.
  * - check TaskBehaviour.task_scored and ask if changes are ok if task/flight is started
  */
-class AbstractTaskFactory: 
-  private NonCopyable
+class AbstractTaskFactory: private NonCopyable
 {
 public:
 /** 
@@ -76,12 +77,9 @@ public:
  * @param task Ordered task to be managed by this factory
  * @param behaviour Behaviour (options)
  */  
-  AbstractTaskFactory(OrderedTask& task,
-                      const TaskBehaviour &behaviour):
+  AbstractTaskFactory(OrderedTask& task, const TaskBehaviour &behaviour):
     m_task(task),
-    m_behaviour(behaviour)
-    {
-    }
+    m_behaviour(behaviour) {}
 
   virtual ~AbstractTaskFactory() {};
 
@@ -125,105 +123,106 @@ public:
    */
   typedef std::vector<LegalPointType_t> LegalPointVector;
 
-/** 
- * Replace taskpoint in ordered task.
- * May fail if the candidate is the wrong type.
- * Does nothing (but returns true) if replacement is equivalent
- * Ownership is transferred to this object.
- * 
- * @param tp Taskpoint to become replacement
- * @param position Index in task sequence of task point to replace
- * @param auto_mutate Modify task point types automatically to retain validity
- * 
- * @return True on success
- */
-  bool replace(OrderedTaskPoint* tp, const unsigned position, const bool auto_mutate=true);
+  /**
+   * Replace taskpoint in ordered task.
+   * May fail if the candidate is the wrong type.
+   * Does nothing (but returns true) if replacement is equivalent
+   * Ownership is transferred to this object.
+   *
+   * @param tp Taskpoint to become replacement
+   * @param position Index in task sequence of task point to replace
+   * @param auto_mutate Modify task point types automatically to retain validity
+   *
+   * @return True on success
+   */
+  bool replace(OrderedTaskPoint* tp, const unsigned position,
+               const bool auto_mutate = true);
 
-/** 
- * Add taskpoint to ordered task.  It is the
- * user's responsibility to ensure the task is
- * valid (has a start/intermediate/finish).
- * 
- * @param new_tp New taskpoint to add
- * @param auto_mutate Modify task point types automatically to retain validity
- * 
- * @return True if operation successful
- */
-  bool append(OrderedTaskPoint *new_tp, const bool auto_mutate=true);
+  /**
+   * Add taskpoint to ordered task.  It is the
+   * user's responsibility to ensure the task is
+   * valid (has a start/intermediate/finish).
+   *
+   * @param new_tp New taskpoint to add
+   * @param auto_mutate Modify task point types automatically to retain validity
+   *
+   * @return True if operation successful
+   */
+  bool append(OrderedTaskPoint *new_tp, const bool auto_mutate = true);
 
-/** 
- * Insert taskpoint to ordered task.  It is the
- * user's responsibility to ensure the task is
- * valid (has a start/intermediate/finish).
- * 
- * @param new_tp New taskpoint to insert
- * @param position Sequence before which to insert new task point
- * @param auto_mutate Modify task point types automatically to retain validity
- * 
- * @return True if operation successful
- */
+  /**
+   * Insert taskpoint to ordered task.  It is the
+   * user's responsibility to ensure the task is
+   * valid (has a start/intermediate/finish).
+   *
+   * @param new_tp New taskpoint to insert
+   * @param position Sequence before which to insert new task point
+   * @param auto_mutate Modify task point types automatically to retain validity
+   *
+   * @return True if operation successful
+   */
   bool insert(OrderedTaskPoint *new_tp, const unsigned position, 
-              const bool auto_mutate=true);
+              const bool auto_mutate = true);
 
-/** 
- * Remove taskpoint from ordered task.  It is the
- * user's responsibility to ensure the task is
- * valid (has a start/intermediate/finish).
- * 
- * @param position Sequence number of taskpoint to remove
- * @param auto_mutate Modify task point types automatically to retain validity
- * 
- * @return True if operation successful
- */
-  bool remove(const unsigned position, 
-              const bool auto_mutate=true);
+  /**
+   * Remove taskpoint from ordered task.  It is the
+   * user's responsibility to ensure the task is
+   * valid (has a start/intermediate/finish).
+   *
+   * @param position Sequence number of taskpoint to remove
+   * @param auto_mutate Modify task point types automatically to retain validity
+   *
+   * @return True if operation successful
+   */
+  bool remove(const unsigned position, const bool auto_mutate = true);
 
-/** 
- * Swap taskpoint and its successor in ordered task.
- * May fail if the candidate is the wrong type.
- * Does nothing (but returns true) if replacement is equivalent
- * Ownership is transferred to this object.
- * 
- * @param position Index in task sequence of task point to replace
- * @param auto_mutate Modify task point types automatically to retain validity
- * 
- * @return True on success
- */
-  bool swap(const unsigned position, const bool auto_mutate=true);
+  /**
+   * Swap taskpoint and its successor in ordered task.
+   * May fail if the candidate is the wrong type.
+   * Does nothing (but returns true) if replacement is equivalent
+   * Ownership is transferred to this object.
+   *
+   * @param position Index in task sequence of task point to replace
+   * @param auto_mutate Modify task point types automatically to retain validity
+   *
+   * @return True on success
+   */
+  bool swap(const unsigned position, const bool auto_mutate = true);
 
-/** 
- * Relocate a task point to a new location
- * 
- * @param position Index in task sequence of task point to replace
- * @param waypoint Waypoint of replacement
- * 
- * @return New taskpoint (or old one if failed)
- */
-  const OrderedTaskPoint& relocate(const unsigned position, const Waypoint& waypoint);
+  /**
+   * Relocate a task point to a new location
+   *
+   * @param position Index in task sequence of task point to replace
+   * @param waypoint Waypoint of replacement
+   *
+   * @return New taskpoint (or old one if failed)
+   */
+  const OrderedTaskPoint& relocate(const unsigned position,
+                                   const Waypoint& waypoint);
 
-/** 
- * Provide list of start types valid for later passing to createStart()
- * 
- * @return list of valid start types
- */
+  /**
+   * Provide list of start types valid for later passing to createStart()
+   *
+   * @return list of valid start types
+   */
   const LegalPointVector& getStartTypes() const {
     return m_start_types;
   }
 
-/** 
- * Provide list of intermediate types valid for later passing to createIntermediate()
- * 
- * @return list of valid intermediate types
- */
+  /**
+   * Provide list of intermediate types valid for later passing to createIntermediate()
+   *
+   * @return list of valid intermediate types
+   */
   const LegalPointVector& getIntermediateTypes() const {
     return m_intermediate_types;
   }
 
-/** 
- * Provide list of finish types valid for later passing to createFinish()
- * 
- * @return list of valid finish types
- */
+  /**
+   * Provide list of finish types valid for later passing to createFinish()
+   *
+   * @return list of valid finish types
+   */
   const LegalPointVector& getFinishTypes() const {
     return m_finish_types;
   }
@@ -239,132 +238,132 @@ public:
   OrderedTaskPoint* createPoint(const LegalPointType_t type,
                                 const Waypoint &wp) const;
 
-/** 
- * Create start point of specified type
- * 
- * @param type Type of start point
- * @param wp Waypoint reference
- * 
- * @return Initialised StartPoint if valid, otherwise NULL
- */
+  /**
+   * Create start point of specified type
+   *
+   * @param type Type of start point
+   * @param wp Waypoint reference
+   *
+   * @return Initialised StartPoint if valid, otherwise NULL
+   */
   StartPoint* createStart(const LegalPointType_t type,
                           const Waypoint &wp) const;
 
-/** 
- * Create intermediate point of specified type
- * 
- * @param type Type of intermediate point
- * @param wp Waypoint reference
- * 
- * @return Initialised IntermediatePoint if valid, otherwise NULL
- */
+  /**
+   * Create intermediate point of specified type
+   *
+   * @param type Type of intermediate point
+   * @param wp Waypoint reference
+   *
+   * @return Initialised IntermediatePoint if valid, otherwise NULL
+   */
   IntermediatePoint* createIntermediate(const LegalPointType_t type,
                                         const Waypoint &wp) const;
 
-/** 
- * Create finish point of specified type
- * 
- * @param type Type of finish point
- * @param wp Waypoint reference
- * 
- * @return Initialised FinishPoint if valid, otherwise NULL
- */
+  /**
+   * Create finish point of specified type
+   *
+   * @param type Type of finish point
+   * @param wp Waypoint reference
+   *
+   * @return Initialised FinishPoint if valid, otherwise NULL
+   */
   FinishPoint* createFinish(const LegalPointType_t type,
                             const Waypoint &wp) const;
 
-/** 
- * Create start point of default type
- * 
- * @param wp Waypoint reference
- * 
- * @return Initialised StartPoint if valid, otherwise NULL
- */
+  /**
+   * Create start point of default type
+   *
+   * @param wp Waypoint reference
+   *
+   * @return Initialised StartPoint if valid, otherwise NULL
+   */
   StartPoint* createStart(const Waypoint &wp) const;
 
-/** 
- * Create intermediate point of default type
- * 
- * @param wp Waypoint reference
- * 
- * @return Initialised IntermediatePoint if valid, otherwise NULL
- */
+  /**
+   * Create intermediate point of default type
+   *
+   * @param wp Waypoint reference
+   *
+   * @return Initialised IntermediatePoint if valid, otherwise NULL
+   */
   IntermediatePoint* createIntermediate(const Waypoint &wp) const;
 
-/** 
- * Create finish point of default type
- * 
- * @param wp Waypoint reference
- * 
- * @return Initialised FinishPoint if valid, otherwise NULL
- */
+  /**
+   * Create finish point of default type
+   *
+   * @param wp Waypoint reference
+   *
+   * @return Initialised FinishPoint if valid, otherwise NULL
+   */
   FinishPoint* createFinish(const Waypoint &wp) const;
 
-/** 
- * Create start point given an OZ
- * 
- * @param pt OZ to be used
- * @param wp Waypoint reference
- * 
- * @return Initialised object.  Ownership is transferred to client.
- */
+  /**
+   * Create start point given an OZ
+   *
+   * @param pt OZ to be used
+   * @param wp Waypoint reference
+   *
+   * @return Initialised object.  Ownership is transferred to client.
+   */
   StartPoint* createStart(ObservationZonePoint* pt,
                                 const Waypoint &wp) const;
 
-/** 
- * Create an AST point given an OZ
- * 
- * @param pt OZ to be used
- * @param wp Waypoint reference
- * 
- * @return Initialised object.  Ownership is transferred to client.
- */
+  /**
+   * Create an AST point given an OZ
+   *
+   * @param pt OZ to be used
+   * @param wp Waypoint reference
+   *
+   * @return Initialised object.  Ownership is transferred to client.
+   */
   ASTPoint* createAST(ObservationZonePoint* pt,
                               const Waypoint &wp) const;
 
-/** 
- * Create an AAT point given an OZ
- * 
- * @param pt OZ to be used
- * @param wp Waypoint reference
- * 
- * @return Initialised object.  Ownership is transferred to client.
- */
+  /**
+   * Create an AAT point given an OZ
+   *
+   * @param pt OZ to be used
+   * @param wp Waypoint reference
+   *
+   * @return Initialised object.  Ownership is transferred to client.
+   */
   AATPoint* createAAT(ObservationZonePoint* pt,
                                 const Waypoint &wp) const;
 
-/** 
- * Create a finish point given an OZ
- * 
- * @param pt OZ to be used
- * @param wp Waypoint reference
- * 
- * @return Initialised object.  Ownership is transferred to client.
- */
+  /**
+   * Create a finish point given an OZ
+   *
+   * @param pt OZ to be used
+   * @param wp Waypoint reference
+   *
+   * @return Initialised object.  Ownership is transferred to client.
+   */
   FinishPoint* createFinish(ObservationZonePoint* pt,
                             const Waypoint &wp) const;
 
-/** 
- * Check whether task is complete and valid according to factory rules
- * 
- * @return True if task is valid according to factory rules
- */
+  /**
+   * Check whether task is complete and valid according to factory rules
+   *
+   * @return True if task is valid according to factory rules
+   */
   virtual bool validate() = 0;
 
-/** 
- * Retrieve settings from task
- * 
- * @return settings from task
- */
+  /**
+   * Retrieve settings from task
+   *
+   * @return settings from task
+   */
   const OrderedTaskBehaviour& get_ordered_task_behaviour() const;
 
-/** 
- * Check whether an abstract type is valid in a specified position
- * 
- * @param type Type to check
- * @param position Index position in task
- * 
- * @return True if type is valid
- */
+  /**
+   * Check whether an abstract type is valid in a specified position
+   *
+   * @param type Type to check
+   * @param position Index position in task
+   *
+   * @return True if type is valid
+   */
   virtual bool validAbstractType(LegalAbstractPointType_t type, const unsigned position) const;
 
   /**
@@ -374,31 +373,31 @@ public:
    */
   bool has_entered(unsigned index) const;
 
-/** 
- * List valid intermediate types for a given position 
- * 
- * @param position Index position in task
- * 
- * @return Vector of valid types in position
- */
+  /**
+   * List valid intermediate types for a given position
+   *
+   * @param position Index position in task
+   *
+   * @return Vector of valid types in position
+   */
   LegalPointVector getValidIntermediateTypes(unsigned position) const;
 
-/** 
- * List valid types for a given position 
- * 
- * @param position Index position in task
- * 
- * @return Vector of valid types in position
- */
+  /**
+   * List valid types for a given position
+   *
+   * @param position Index position in task
+   *
+   * @return Vector of valid types in position
+   */
   LegalPointVector getValidTypes(unsigned position) const;
 
-/** 
- * Inspect the type of a point
- * 
- * @param point Point to check
- * 
- * @return Type of supplied point
- */
+  /**
+   * Inspect the type of a point
+   *
+   * @param point Point to check
+   *
+   * @return Type of supplied point
+   */
   LegalPointType_t getType(const OrderedTaskPoint* point) const;
 
   /**
@@ -414,52 +413,57 @@ public:
    */
   bool is_unique() const;
 
-/** 
- * Determine if a type is valid for a FinishPoint
- * 
- * @param type Type to check
- * 
- * @return True if type is valid
- */
+  /**
+   * Determine if a type is valid for a FinishPoint
+   *
+   * @param type Type to check
+   *
+   * @return True if type is valid
+   */
   bool validFinishType(LegalPointType_t type) const;
 
-/** 
- * Determine if a type is valid for a StartPoint
- * 
- * @param type Type to check
- * 
- * @return True if type is valid
- */
+  /**
+   * Determine if a type is valid for a StartPoint
+   *
+   * @param type Type to check
+   *
+   * @return True if type is valid
+   */
   bool validStartType(LegalPointType_t type) const;
 
-/** 
- * Determine if a type is valid for an IntermediatePoint
- * 
- * @param type Type to check
- * 
- * @return True if type is valid
- */
+  /**
+   * Determine if a type is valid for an IntermediatePoint
+   *
+   * @param type Type to check
+   *
+   * @return True if type is valid
+   */
   bool validIntermediateType(LegalPointType_t type) const;
 
 protected:
 
-/** 
- * Test whether a candidate object is of correct type to be added/replaced/etc
- * in the task.
- * 
- * @param new_tp Candidate object
- * @param position Desired task sequence index of candidate
- * 
- * @return True if candidate is valid at the position
- */
+  /**
+   * Test whether a candidate object is of correct type to be added/replaced/etc
+   * in the task.
+   *
+   * @param new_tp Candidate object
+   * @param position Desired task sequence index of candidate
+   *
+   * @return True if candidate is valid at the position
+   */
   virtual bool validType(OrderedTaskPoint *new_tp, unsigned position) const;
 
-  OrderedTask &m_task; /**< task managed by this factory */
-  const TaskBehaviour &m_behaviour; /**< behaviour (settings) */
+  /** task managed by this factory */
+  OrderedTask &m_task;
+  /** behaviour (settings) */
+  const TaskBehaviour &m_behaviour;
 
-  LegalPointVector m_start_types; /**< list of valid start types, for specialisation */
-  LegalPointVector m_intermediate_types; /**< list of valid intermediate types, for specialisation */
-  LegalPointVector m_finish_types; /**< list of valid finish types, for specialisation */
+  /** list of valid start types, for specialisation */
+  LegalPointVector m_start_types;
+  /** list of valid intermediate types, for specialisation */
+  LegalPointVector m_intermediate_types;
+  /** list of valid finish types, for specialisation */
+  LegalPointVector m_finish_types;
 
   /** 
    * Check whether the supplied position can be a StartPoint
