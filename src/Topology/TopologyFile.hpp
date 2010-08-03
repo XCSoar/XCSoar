@@ -105,9 +105,14 @@ public:
    * @param
    */
   void loadIcon(const int);
-  bool triggerUpdateCache;
 
 private:
+  /**
+   * The current scope of the shape cache.  If the screen exceeds this
+   * rectangle, then we need to update the cache.
+   */
+  rectObj cache_bounds;
+
   XShape** shpCache;
 
   unsigned GetSkipSteps(double map_scale) const;

@@ -67,7 +67,6 @@ public:
 
   void ScanVisibility(const Projection &m_projection,
                       const rectObj &_bounds_active);
-  void TriggerUpdateCaches(Projection &m_projection);
   void Reload();
   void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
             const Projection &projection) const;

@@ -90,7 +90,7 @@ protected:
   RasterTerrain *terrain;
   RasterWeather *weather;
 
-  bool topology_dirty, terrain_dirty, weather_dirty;
+  bool terrain_dirty, weather_dirty;
 
   BackgroundDrawHelper m_background;
   Airspaces *airspace_database;
@@ -155,10 +155,6 @@ public:
                       const SETTINGS_MAP &settings_map);
 
   void UpdateProjection();
-
-  bool TopologyNeedsUpdate() const {
-    return topology_dirty;
-  }
 
   const MapWindowProjection &MapProjection() const {
     return *this;
@@ -233,15 +229,12 @@ private:
   void Render(Canvas &canvas, const RECT rc);
 
 protected:
-  void UpdateTopologyCache();
   void UpdateTopology();
   void UpdateTerrain();
   void UpdateWeather();
 
   void UpdateAll() {
-    UpdateTopologyCache();
-    while (topology_dirty)
-      UpdateTopology();
+    UpdateTopology();
     UpdateTerrain();
     UpdateWeather();
   }

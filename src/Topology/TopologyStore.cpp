@@ -54,15 +54,6 @@ Copyright_License {
 #include <assert.h>
 
 void
-TopologyStore::TriggerUpdateCaches(Projection &m_projection)
-{
-  for (int z = 0; z < MAXTOPOLOGY; z++) {
-    if (topology_store[z])
-      topology_store[z]->triggerUpdateCache = true;
-  }
-}
-
-void
 TopologyStore::ScanVisibility(const Projection &m_projection,
                               const rectObj &_bounds_active)
 {

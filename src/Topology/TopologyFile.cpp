@@ -60,7 +60,6 @@ TopologyFile::TopologyFile(const char *filename, const Color thecolor,
                    int _label_field)
   :label_field(_label_field),
   scaleThreshold(1000.0),
-  triggerUpdateCache(false),
   hPen(1, thecolor),
   hbBrush(thecolor),
   shapefileopen(false)
@@ -73,6 +72,9 @@ TopologyFile::TopologyFile(const char *filename, const Color thecolor,
     return;
 
   shapefileopen = true;
+
+  cache_bounds.minx = cache_bounds.miny =
+    cache_bounds.maxx = cache_bounds.maxy = 0;
 
   for (int i = 0; i < shpfile.numshapes; i++)
     shpCache[i] = NULL;
@@ -120,14 +122,19 @@ void
 TopologyFile::updateCache(const Projection &map_projection,
                           const rectObj &bounds)
 {
-  if (!triggerUpdateCache || !shapefileopen)
+  if (!shapefileopen)
     return;
 
   if (map_projection.GetMapScaleUser() > fixed(scaleThreshold))
     /* not visible, don't update cache now */
     return;
 
-  triggerUpdateCache = false;
+  rectObj screenRect = map_projection.CalculateScreenBounds(fixed_zero);
+  if (msRectContained(&screenRect, &cache_bounds))
+    /* the cache is still fresh */
+    return;
+
+  cache_bounds = bounds;
 
   rectObj deg_bounds = ConvertRect(bounds);
 

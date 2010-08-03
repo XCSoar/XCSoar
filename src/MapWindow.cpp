@@ -57,7 +57,7 @@ MapWindow::MapWindow()
   :MapWindowProjection(),
    way_points(NULL),
    topology(NULL), terrain(NULL), weather(NULL),
-   topology_dirty(true), terrain_dirty(true), weather_dirty(true),
+   terrain_dirty(true), weather_dirty(true),
    airspace_database(NULL), airspace_warnings(NULL), task(NULL),
    marks(NULL), 
    cdi(NULL),
@@ -128,22 +128,10 @@ MapWindow::UpdateProjection()
 }
 
 void
-MapWindow::UpdateTopologyCache()
-{
-  if (topology != NULL)
-    topology->TriggerUpdateCaches(*this);
-}
-
-void
 MapWindow::UpdateTopology()
 {
-  if (!topology_dirty)
-    return;
-
   if (topology != NULL && SettingsMap().EnableTopology)
     topology->ScanVisibility(*this, *getSmartBounds());
-
-  topology_dirty = false;
 }
 
 void

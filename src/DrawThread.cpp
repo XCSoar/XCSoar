@@ -123,12 +123,8 @@ DrawThread::run()
         continue;
       }
 
-      if (map.SmartBounds(false)) {
-        // this call is quick
-        bounds_dirty = map.Idle(true);
-      } else if (map.TopologyNeedsUpdate())
-        bounds_dirty = map.Idle(false);
-    } else if (bounds_dirty || map.TopologyNeedsUpdate()) {
+      bounds_dirty = map.Idle(map.SmartBounds(false));
+    } else if (bounds_dirty) {
       // take control (or wait for the resume())
       running.wait();
 
