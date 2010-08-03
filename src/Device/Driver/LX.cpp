@@ -112,6 +112,22 @@ LXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 }
 
 static bool
+ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
+{
+  fixed bearing, norm;
+
+  bool bearing_valid = line.read_checked(bearing);
+  bool norm_valid = line.read_checked(norm);
+
+  if (bearing_valid && norm_valid) {
+    value_r.bearing = Angle::degrees(bearing);
+    value_r.norm = Units::ToSysUnit(norm, unKiloMeterPerHour);
+    return true;
+  } else
+    return false;
+}
+
+static bool
 LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   /*
@@ -137,6 +153,7 @@ LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   GPS_INFO->IndicatedAirspeed =
       airspeed / AtmosphericPressure::AirDensityRatio(alt);
   GPS_INFO->TrueAirspeed = airspeed;
+  GPS_INFO->AirspeedAvailable = true;
 
   if (enable_baro) {
     GPS_INFO->BaroAltitudeAvailable = true;
@@ -146,7 +163,9 @@ LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   GPS_INFO->TotalEnergyVario = line.read(fixed_zero);
   GPS_INFO->TotalEnergyVarioAvailable = true;
 
-  GPS_INFO->AirspeedAvailable = true;
+  line.skip(6);
+
+  GPS_INFO->ExternalWindAvailable = ReadSpeedVector(line, GPS_INFO->wind);
 
   TriggerVarioUpdate();
 
