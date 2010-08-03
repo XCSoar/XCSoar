@@ -62,24 +62,20 @@ TopologyStore::TriggerUpdateCaches(Projection &m_projection)
   }
 }
 
-bool
+void
 TopologyStore::ScanVisibility(const Projection &m_projection,
                               const rectObj &_bounds_active)
 {
   // check if any needs to have cache updates because wasnt
   // visible previously when bounds moved
-  bool remaining = false;
 
   // we will make sure we update at least one cache per call
   // to make sure eventually everything gets refreshed
   for (int z = 0; z < MAXTOPOLOGY; z++) {
     if (topology_store[z]) {
       topology_store[z]->updateCache(m_projection, _bounds_active);
-      remaining |= (topology_store[z]->triggerUpdateCache);
     }
   }
-
-  return remaining;
 }
 
 TopologyStore::~TopologyStore()

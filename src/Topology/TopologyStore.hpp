@@ -65,7 +65,7 @@ public:
   TopologyStore();
   ~TopologyStore();
 
-  bool ScanVisibility(const Projection &m_projection,
+  void ScanVisibility(const Projection &m_projection,
                       const rectObj &_bounds_active);
   void TriggerUpdateCaches(Projection &m_projection);
   void Reload();

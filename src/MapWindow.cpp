@@ -140,8 +140,10 @@ MapWindow::UpdateTopology()
   if (!topology_dirty)
     return;
 
-  topology_dirty = topology != NULL && SettingsMap().EnableTopology &&
+  if (topology != NULL && SettingsMap().EnableTopology)
     topology->ScanVisibility(*this, *getSmartBounds());
+
+  topology_dirty = false;
 }
 
 void
