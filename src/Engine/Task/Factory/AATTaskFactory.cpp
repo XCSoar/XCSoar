@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
@@ -38,8 +39,7 @@
 #include "AATTaskFactory.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 
-AATTaskFactory::AATTaskFactory(OrderedTask& _task,
-                               const TaskBehaviour &tb):
+AATTaskFactory::AATTaskFactory(OrderedTask& _task, const TaskBehaviour &tb):
   AbstractTaskFactory(_task, tb)
 {
   m_start_types.push_back(START_LINE);
@@ -54,17 +54,16 @@ bool
 AATTaskFactory::validate()
 {
   /**
-   * \todo
+   * @todo
    * warn/fail on overlap since this is required by FAI rules
    */
 
-  if (!m_task.has_start() || !m_task.has_finish()) {
+  if (!m_task.has_start() || !m_task.has_finish())
     return false;
-  }
-  if (m_task.task_size()<3) {
-    // not enough turnpoints!
+
+  // not enough turnpoints!
+  if (m_task.task_size()<3)
     return false;
-  }
 
   return true;
 }
