@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-08-01 18:12+0200\n"
-"PO-Revision-Date: 2010-08-03 07:09+0000\n"
-"Last-Translator: Folken Van Vanel <Unknown>\n"
+"PO-Revision-Date: 2010-08-03 12:50+0000\n"
+"Last-Translator: Peter Hanhart <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-08-03 07:32+0000\n"
+"X-Launchpad-Export-Date: 2010-08-03 13:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: src/Airspace/AirspaceParser.cpp:155
@@ -46,7 +46,7 @@ msgstr "Erwarte Ankunft nach Sonnenuntergang"
 
 #: src/ConditionMonitor.cpp:337
 msgid "Expect early task arrival"
-msgstr ""
+msgstr "Erwarte frühe Task Ankunft"
 
 #: src/ConditionMonitor.cpp:391
 msgid ""
@@ -128,13 +128,13 @@ msgid ""
 "\r\n"
 "Load anyway?"
 msgstr ""
-"Wegpunkt \"%s\"\r\n"
-"ausserhalb des Geländes\r\n"
-"trotzdem Laden?"
+"Wendepunkt \"%s\"\r\n"
+"ausserhalb des Geländes.\r\n"
+"Trotzdem Laden?"
 
 #: src/WayPoint/WayPointFile.cpp:202
 msgid "Loading Waypoints..."
-msgstr "Lade Wegpunkte"
+msgstr "Lade Wendepunkte..."
 
 #: src/Gauge/FlarmTrafficWindow.cpp:244
 msgid "No Traffic"
@@ -166,12 +166,12 @@ msgstr "Höhe GPS"
 #. 1
 #: src/InfoBoxes/InfoBoxManager.cpp:117
 msgid "Height AGL"
-msgstr ""
+msgstr "Höhe AGL"
 
 #. 2
 #: src/InfoBoxes/InfoBoxManager.cpp:119
 msgid "Thermal last 30 sec"
-msgstr ""
+msgstr "Steigen letzte 30 sec"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. 3
@@ -180,17 +180,17 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:18
 #: Data/Dialogs/dlgWayPointDetails_L.xml:18
 msgid "Bearing"
-msgstr ""
+msgstr "Nächster Wendepunkt - Kurs"
 
 #. 4
 #: src/InfoBoxes/InfoBoxManager.cpp:123
 msgid "L/D instantaneous"
-msgstr ""
+msgstr "Gleitzahl - Aktuell"
 
 #. 5
 #: src/InfoBoxes/InfoBoxManager.cpp:125
 msgid "L/D cruise"
-msgstr ""
+msgstr "Gleitzahl - Geradeausflug"
 
 #. 6
 #: src/InfoBoxes/InfoBoxManager.cpp:127
@@ -200,17 +200,17 @@ msgstr "Bodengeschwindigkeit"
 #. 7
 #: src/InfoBoxes/InfoBoxManager.cpp:129
 msgid "Last Thermal Average"
-msgstr ""
+msgstr "Letzte Thermik - Durchschnitt"
 
 #. 8
 #: src/InfoBoxes/InfoBoxManager.cpp:131
 msgid "Last Thermal Gain"
-msgstr ""
+msgstr "Letzte Thermik - Höhengewinn"
 
 #. 9
 #: src/InfoBoxes/InfoBoxManager.cpp:133
 msgid "Last Thermal Time"
-msgstr ""
+msgstr "Letzte Thermik - Dauer"
 
 #. 10
 #: src/InfoBoxes/InfoBoxManager.cpp:135
@@ -220,47 +220,47 @@ msgstr "MacCready Einstellung"
 #. 11
 #: src/InfoBoxes/InfoBoxManager.cpp:137
 msgid "Next Distance"
-msgstr ""
+msgstr "Nächster Wendepunkt - Distanz"
 
 #. 12
 #: src/InfoBoxes/InfoBoxManager.cpp:139
 msgid "Next Altitude Difference"
-msgstr ""
+msgstr "Nächster Wendepunkt - Ankunftshöhe"
 
 #. 13
 #: src/InfoBoxes/InfoBoxManager.cpp:141
 msgid "Next Altitude Required"
-msgstr ""
+msgstr "Nächster Wendepunkt - min. Endanflughöhe"
 
 #. 14
 #: src/InfoBoxes/InfoBoxManager.cpp:143
 msgid "Next Waypoint"
-msgstr "Nächster Wegpunkt"
+msgstr "Nächster Wendepunkt"
 
 #. 15
 #: src/InfoBoxes/InfoBoxManager.cpp:145
 msgid "Final Altitude Difference"
-msgstr ""
+msgstr "Aufgabe - Ankunftshöhe"
 
 #. 16
 #: src/InfoBoxes/InfoBoxManager.cpp:147
 msgid "Final Altitude Required"
-msgstr ""
+msgstr "Aufgabe - min. Endanflughöhe"
 
 #. 17
 #: src/InfoBoxes/InfoBoxManager.cpp:149
 msgid "Speed Task Average"
-msgstr ""
+msgstr "Aufgabe - Schnittgeschwindigkeit"
 
 #. 18
 #: src/InfoBoxes/InfoBoxManager.cpp:151
 msgid "Final Distance"
-msgstr ""
+msgstr "Aufgabe - Distanz"
 
 #. 19
 #: src/InfoBoxes/InfoBoxManager.cpp:153
 msgid "Final LD"
-msgstr ""
+msgstr "Aufgabe - nötige Gleitzahl"
 
 #. 20
 #: src/InfoBoxes/InfoBoxManager.cpp:155
@@ -270,17 +270,17 @@ msgstr "Bodenhöhe"
 #. 21
 #: src/InfoBoxes/InfoBoxManager.cpp:157
 msgid "Thermal Average"
-msgstr ""
+msgstr "Thermik - Durchschnitt"
 
 #. 22
 #: src/InfoBoxes/InfoBoxManager.cpp:159
 msgid "Thermal Gain"
-msgstr ""
+msgstr "Thermik - Höhengewinn"
 
 #. 23
 #: src/InfoBoxes/InfoBoxManager.cpp:161
 msgid "Track"
-msgstr ""
+msgstr "Richtung"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. 24
@@ -304,27 +304,27 @@ msgstr "Wind Richtung"
 #. 27
 #: src/InfoBoxes/InfoBoxManager.cpp:169
 msgid "AA Time"
-msgstr ""
+msgstr "AAT - Zeit"
 
 #. 28
 #: src/InfoBoxes/InfoBoxManager.cpp:171
 msgid "AA Distance Max"
-msgstr ""
+msgstr "AAT - max. Distanz"
 
 #. 29
 #: src/InfoBoxes/InfoBoxManager.cpp:173
 msgid "AA Distance Min"
-msgstr ""
+msgstr "AAT - min. Distanz"
 
 #. 30
 #: src/InfoBoxes/InfoBoxManager.cpp:175
 msgid "AA Speed Max"
-msgstr ""
+msgstr "AAT - max. Geschwindigkeit"
 
 #. 31
 #: src/InfoBoxes/InfoBoxManager.cpp:177
 msgid "AA Speed Min"
-msgstr ""
+msgstr "AAT - min. Geschwindigkeit"
 
 #. 32
 #: src/InfoBoxes/InfoBoxManager.cpp:179
@@ -339,7 +339,7 @@ msgstr "Druckhöhe"
 #. 34
 #: src/InfoBoxes/InfoBoxManager.cpp:183
 msgid "Speed MacCready"
-msgstr ""
+msgstr "McCready-Geschwindigkeit"
 
 #. 35
 #: src/InfoBoxes/InfoBoxManager.cpp:185
@@ -359,7 +359,7 @@ msgstr "G-Last"
 #. 38
 #: src/InfoBoxes/InfoBoxManager.cpp:191
 msgid "Next LD"
-msgstr ""
+msgstr "Nächster Wendepunkt - nötige Gleitzahl"
 
 #. 39
 #: src/InfoBoxes/InfoBoxManager.cpp:193
@@ -379,12 +379,12 @@ msgstr "Restzeit Aufgabe"
 #. 42
 #: src/InfoBoxes/InfoBoxManager.cpp:199
 msgid "Next Time To Go"
-msgstr ""
+msgstr "Nächster Wendepunkt - nötige Zeit"
 
 #. 43
 #: src/InfoBoxes/InfoBoxManager.cpp:201
 msgid "Speed Dolphin"
-msgstr ""
+msgstr "McCready-Geschwindigkeit (Delphin-Stil)"
 
 #. 44
 #: src/InfoBoxes/InfoBoxManager.cpp:203
@@ -394,17 +394,17 @@ msgstr "Netto Vario"
 #. 45
 #: src/InfoBoxes/InfoBoxManager.cpp:205
 msgid "Task Arrival Time"
-msgstr ""
+msgstr "Aufgabe - Ankunftszeit"
 
 #. 46
 #: src/InfoBoxes/InfoBoxManager.cpp:207
 msgid "Next Arrival Time"
-msgstr ""
+msgstr "Nächster Wendepunkt - Ankunftszeit"
 
 #. 47
 #: src/InfoBoxes/InfoBoxManager.cpp:209
 msgid "Bearing Difference"
-msgstr ""
+msgstr "Nächster Wendepunkt - Richtung"
 
 #. 48
 #: src/InfoBoxes/InfoBoxManager.cpp:211
@@ -449,12 +449,12 @@ msgstr "Eigener Teamcode"
 #. 56
 #: src/InfoBoxes/InfoBoxManager.cpp:227
 msgid "Team Bearing"
-msgstr ""
+msgstr "Team - Kurs"
 
 #. 57
 #: src/InfoBoxes/InfoBoxManager.cpp:229
 msgid "Team Bearing Diff"
-msgstr ""
+msgstr "Team - Richtung"
 
 #. 58
 #: src/InfoBoxes/InfoBoxManager.cpp:231
@@ -651,7 +651,7 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:697
 msgid "No Active Waypoint!"
-msgstr "Kein Wegpunkt ausgewählt!"
+msgstr "Kein Wendepunkt ausgewählt!"
 
 #: src/InputEventsActions.cpp:761
 msgid "Auto MacCready ON"
@@ -742,7 +742,7 @@ msgstr "Aufgabenstart"
 
 #: src/InputEventsActions.cpp:1808
 msgid "Next turnpoint"
-msgstr "Nächster Wegpunkt"
+msgstr "Nächster Wendepunkt"
 
 #: src/InputEventsActions.cpp:1810
 msgid "Task Finish"
@@ -1177,7 +1177,7 @@ msgstr "Logger"
 
 #: src/Dialogs/dlgConfiguration.cpp:107
 msgid "Waypoint Edit"
-msgstr "Wegpunkt editieren"
+msgstr "Wendepunkt editieren"
 
 #: src/Dialogs/dlgConfiguration.cpp:108
 msgid "Experimental features"
@@ -1224,19 +1224,19 @@ msgstr "infoBox Einfügen"
 
 #: src/Dialogs/dlgConfiguration.cpp:844
 msgid "Waypoint not editable"
-msgstr "Wegpunkt nicht editierbar"
+msgstr "Wendepunkt nicht editierbar"
 
 #: src/Dialogs/dlgConfiguration.cpp:854
 msgid "Waypoints excluded, save anyway?"
-msgstr "Wegpunkte ausgeschlossen, trotzdem speichern?"
+msgstr "Wendepunkte ausgeschlossen, trotzdem speichern?"
 
 #: src/Dialogs/dlgConfiguration.cpp:855
 msgid "Waypoints outside terrain"
-msgstr "Wegpunkte ausserhalb des Geländes"
+msgstr "Wendepunkte außerhalb des Terrains"
 
 #: src/Dialogs/dlgConfiguration.cpp:882
 msgid "Delete Waypoint?"
-msgstr "Wegpunkt löschen?"
+msgstr "Wendepunkt löschen?"
 
 #: src/Dialogs/dlgConfiguration.cpp:1125
 msgid "All on"
@@ -1648,11 +1648,11 @@ msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:2848
 msgid "Save changes to waypoint file?"
-msgstr "Änderungen in Wegpunktedatei speichern?"
+msgstr "Änderungen in Wendepunktedatei speichern?"
 
 #: src/Dialogs/dlgConfiguration.cpp:2848
 msgid "Waypoints edited"
-msgstr "Wegpunkte editiert"
+msgstr "Wendepunkte editiert"
 
 #: src/Dialogs/dlgConfiguration.cpp:2860 src/Dialogs/dlgVoice.cpp:124
 msgid "Changes to configuration saved."
@@ -1785,7 +1785,7 @@ msgstr "Aufgabe editieren"
 
 #: src/Dialogs/dlgTaskEdit.cpp:150
 msgid "add waypoint"
-msgstr "Wegpunkt hinzufügen"
+msgstr "Wendepunkt hinzufügen"
 
 #: src/Dialogs/dlgTaskEdit.cpp:182
 msgid "Task invalid.  Not saved."
@@ -1818,11 +1818,11 @@ msgstr "Aufgabentyp"
 
 #: src/Dialogs/dlgTaskPointType.cpp:129
 msgid "Change point type?"
-msgstr "Wegpunktyp ändern?"
+msgstr "Wendepunkt-Typ ändern?"
 
 #: src/Dialogs/dlgTaskPointType.cpp:130 Data/Dialogs/dlgTarget_L.xml:6
 msgid "Task Point"
-msgstr "Wegpunkt"
+msgstr "Wendepunkt"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:304
 msgid "Save task?"
@@ -1951,7 +1951,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:16 Data/Dialogs/dlgTeamCode_L.xml:16
 msgid "Rel. Bearing:"
-msgstr ""
+msgstr "Richtung:"
 
 #: Data/Dialogs/dlgConfiguration.xml:467
 #: Data/Dialogs/dlgConfiguration_L.xml:466
@@ -2049,7 +2049,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:20 Data/Dialogs/dlgConfiguration_L.xml:21
 msgid "Waypoints 1"
-msgstr "Wegpunkte 1"
+msgstr "Wendepunkte 1"
 
 #: Data/Dialogs/dlgConfiguration.xml:10 Data/Dialogs/dlgConfiguration_L.xml:6
 msgid "Copy"
@@ -2540,7 +2540,7 @@ msgstr "Onlinecontest"
 #: Data/Dialogs/dlgConfiguration.xml:473
 #: Data/Dialogs/dlgConfiguration_L.xml:472
 msgid "Map waypoints"
-msgstr ""
+msgstr "Wendepunkte der Karte"
 
 #: Data/Dialogs/dlgVario.xml:117 Data/Dialogs/dlgVario_L.xml:117
 msgid "Tone pitch scale"
@@ -2813,7 +2813,7 @@ msgstr "Luftraum 2"
 
 #: Data/Dialogs/dlgVoice.xml:14
 msgid "Waypoint Distance"
-msgstr "Wegpunkt Distanz"
+msgstr "Wendepunkt Distanz"
 
 #: Data/Dialogs/dlgVario.xml:365 Data/Dialogs/dlgVario_L.xml:365
 msgid "Interval, Caution"
@@ -2883,7 +2883,7 @@ msgstr "MacCready setzten"
 
 #: Data/Dialogs/dlgVoice.xml:26
 msgid "New Waypoint"
-msgstr "Neuer Wegpunkt"
+msgstr "Neuer Wendepunkt"
 
 #: Data/Dialogs/dlgConfiguration.xml:455
 msgid "Msg window"
@@ -3305,7 +3305,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:25 Data/Dialogs/dlgConfiguration_L.xml:26
 msgid "Waypoints 2"
-msgstr "Wegpunkte 2"
+msgstr "Wendepunkte 2"
 
 #: Data/Dialogs/dlgLoggerReplay.xml:12
 msgid "Stop"
@@ -3345,7 +3345,7 @@ msgstr "Nein Alle"
 
 #: Data/Dialogs/dlgTeamCode.xml:12 Data/Dialogs/dlgTeamCode_L.xml:12
 msgid "Bearing:"
-msgstr "Richtung:"
+msgstr "Kurs:"
 
 #: Data/Dialogs/dlgConfiguration.xml:714
 #: Data/Dialogs/dlgConfiguration_L.xml:725
