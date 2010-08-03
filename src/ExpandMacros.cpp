@@ -96,40 +96,29 @@ CondReplaceInString(bool Condition, TCHAR *Buffer, const TCHAR *Macro,
     ReplaceInString(Buffer, Macro, FalseText, Size);
 }
 
-bool
-ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
+static bool
+ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
+                 const DERIVED_INFO &calculated,
+                 const SETTINGS_COMPUTER &settings_computer)
 {
-  // ToDo, check Buffer Size
   bool invalid = false;
-  _tcsncpy(OutBuffer, In, Size);
-  OutBuffer[Size - 1] = '\0';
-
-  if (_tcsstr(OutBuffer, _T("$(")) == NULL)
-    return false;
-
-  if (_tcsstr(OutBuffer, _T("$(CheckAirspace)"))) {
-    if (airspace_database.empty())
-      invalid = true;
-
-    ReplaceInString(OutBuffer, _T("$(CheckAirspace)"), _T(""), Size);
-  }
 
   if (_tcsstr(OutBuffer, _T("$(CheckTaskResumed)"))) {
     // TODO code: check, does this need to be set with temporary task?
-    invalid |= Calculated().common_stats.mode_abort;
-    invalid |= Calculated().common_stats.mode_goto;
+    invalid |= calculated.common_stats.mode_abort;
+    invalid |= calculated.common_stats.mode_goto;
     ReplaceInString(OutBuffer, _T("$(CheckTaskResumed)"), _T(""), Size);
   }
 
   if (_tcsstr(OutBuffer, _T("$(CheckTask)"))) {
-    if (!Calculated().task_stats.task_valid)
+    if (!calculated.task_stats.task_valid)
       invalid = true;
 
     ReplaceInString(OutBuffer, _T("$(CheckTask)"), _T(""), Size);
   }
 
-  if (!Calculated().task_stats.task_valid
-      || Calculated().common_stats.mode_goto) {
+  if (!calculated.task_stats.task_valid
+      || calculated.common_stats.mode_goto) {
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
       invalid = true;
@@ -142,19 +131,19 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
           _T("Previous\nTurnpoint"), Size);
     }
 
-  } else if (Calculated().common_stats.mode_abort) {
+  } else if (calculated.common_stats.mode_abort) {
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
-      invalid |= !Calculated().common_stats.active_has_next;
-      CondReplaceInString(Calculated().common_stats.next_is_last,
+      invalid |= !calculated.common_stats.active_has_next;
+      CondReplaceInString(calculated.common_stats.next_is_last,
                           OutBuffer,
                           _T("$(WaypointNext)"),
                           _T("Furthest\nLandpoint"),
                           _T("Next\nLandpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
-      invalid |= !Calculated().common_stats.active_has_previous;
-      CondReplaceInString(Calculated().common_stats.previous_is_first,
+      invalid |= !calculated.common_stats.active_has_previous;
+      CondReplaceInString(calculated.common_stats.previous_is_first,
                           OutBuffer,
                           _T("$(WaypointPrevious)"),
                           _T("Closest\nLandpoint"),
@@ -164,16 +153,16 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   } else {
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
       // Waypoint\nNext
-      invalid |= !Calculated().common_stats.active_has_next;
-      CondReplaceInString(Calculated().common_stats.next_is_last,
+      invalid |= !calculated.common_stats.active_has_next;
+      CondReplaceInString(calculated.common_stats.next_is_last,
                           OutBuffer,
                           _T("$(WaypointNext)"),
                           _T("Finish\nTurnpoint"),
                           _T("Next\nTurnpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
-      invalid |= !Calculated().common_stats.active_has_previous;
-      CondReplaceInString(Calculated().common_stats.previous_is_first,
+      invalid |= !calculated.common_stats.active_has_previous;
+      CondReplaceInString(calculated.common_stats.previous_is_first,
                           OutBuffer,
                           _T("$(WaypointPrevious)"),
                           _T("Start\nTurnpoint"),
@@ -188,7 +177,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                           _T("StartPoint\nCycle"), _T("Waypoint\nPrevious"), Size);
     } 
     else {
-      invalid |= !Calculated().common_stats.active_has_previous;
+      invalid |= !calculated.common_stats.active_has_previous;
       ReplaceInString(OutBuffer, _T("$(WaypointPrevious)"), _T("Waypoint\nPrevious"), Size);
     }
 #endif
@@ -234,24 +223,48 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   }
 
   if (_tcsstr(OutBuffer, _T("$(CheckAutoMc)"))) {
-    if (!Calculated().task_stats.task_valid
-        && ((SettingsComputer().auto_mc_mode==TaskBehaviour::AUTOMC_FINALGLIDE)
-	          || (SettingsComputer().auto_mc_mode==TaskBehaviour::AUTOMC_BOTH)))
+    if (!calculated.task_stats.task_valid
+        && ((settings_computer.auto_mc_mode==TaskBehaviour::AUTOMC_FINALGLIDE)
+            || (settings_computer.auto_mc_mode==TaskBehaviour::AUTOMC_BOTH)))
       invalid = true;
 
     ReplaceInString(OutBuffer, _T("$(CheckAutoMc)"), _T(""), Size);
   }
 
   if (_tcsstr(OutBuffer, _T("$(TaskAbortToggleActionName)"))) {
-    if (Calculated().common_stats.mode_goto) {
-      CondReplaceInString(Calculated().common_stats.ordered_valid,
+    if (calculated.common_stats.mode_goto) {
+      CondReplaceInString(calculated.common_stats.ordered_valid,
                           OutBuffer, _T("$(TaskAbortToggleActionName)"),
                           _T("Resume"), _T("Abort"), Size);
     } else 
-      CondReplaceInString(Calculated().common_stats.mode_abort,
+      CondReplaceInString(calculated.common_stats.mode_abort,
                           OutBuffer, _T("$(TaskAbortToggleActionName)"),
                           _T("Resume"), _T("Abort"), Size);
   }
+
+  return invalid;
+}
+
+bool
+ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
+{
+  // ToDo, check Buffer Size
+  bool invalid = false;
+  _tcsncpy(OutBuffer, In, Size);
+  OutBuffer[Size - 1] = '\0';
+
+  if (_tcsstr(OutBuffer, _T("$(")) == NULL)
+    return false;
+
+  if (_tcsstr(OutBuffer, _T("$(CheckAirspace)"))) {
+    if (airspace_database.empty())
+      invalid = true;
+
+    ReplaceInString(OutBuffer, _T("$(CheckAirspace)"), _T(""), Size);
+  }
+
+  invalid |= ExpandTaskMacros(OutBuffer, Size,
+                              Calculated(), SettingsComputer());
 
   if (_tcsstr(OutBuffer, _T("$(CheckReplay)"))) {
     if (!Basic().gps.Replay
