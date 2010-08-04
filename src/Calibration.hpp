@@ -45,7 +45,6 @@ namespace Calibration
 {
   void Init();
   void Update(const NMEA_INFO *Basic);
-  void Save();
 }
 
 #endif
