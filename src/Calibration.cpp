@@ -57,7 +57,7 @@ static fixed calibration_speed_val[NUM_CAL_VSPEED];
 static unsigned int calibration_speed_num[NUM_CAL_VSPEED];
 
 void
-CalibrationInit(void)
+Calibration::Init()
 {
   for (int i = 0; i < NUM_CAL_SPEED; i++) {
     for (int j = 0; j < NUM_CAL_VARIO; j++) {
@@ -73,7 +73,7 @@ CalibrationInit(void)
 }
 
 void
-CalibrationSave(void)
+Calibration::Save()
 {
   double v, w = 0, wav;
 
@@ -104,7 +104,7 @@ CalibrationSave(void)
 }
 
 void
-CalibrationUpdate(const NMEA_INFO *Basic)
+Calibration::Update(const NMEA_INFO *Basic)
 {
   if (!Basic->flight.Flying ||
       !Basic->AirspeedAvailable ||

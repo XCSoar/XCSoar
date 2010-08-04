@@ -41,8 +41,11 @@ Copyright_License {
 
 struct NMEA_INFO;
 
-void CalibrationInit(void);
-void CalibrationUpdate(const NMEA_INFO *Basic);
-void CalibrationSave(void);
+namespace Calibration
+{
+  void Init();
+  void Update(const NMEA_INFO *Basic);
+  void Save();
+}
 
 #endif

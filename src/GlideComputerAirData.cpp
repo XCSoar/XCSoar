@@ -104,7 +104,7 @@ GlideComputerAirData::ResetFlight(const bool full)
 void
 GlideComputerAirData::Initialise()
 {
-  CalibrationInit();
+  Calibration::Init();
 }
 
 /**
@@ -118,7 +118,7 @@ GlideComputerAirData::ProcessBasic()
   SetCalculated().ThermalAverageAdjusted = GetAverageThermal();
 
   if (Basic().TotalEnergyVarioAvailable && !Basic().gps.Replay)
-    CalibrationUpdate(&Basic());
+    Calibration::Update(&Basic());
 }
 
 /**
