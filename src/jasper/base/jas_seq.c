@@ -127,14 +127,13 @@ jas_matrix_t *jas_matrix_create(int numrows, int numcols)
 			jas_matrix_destroy(matrix);
 			return 0;
 		}
+
+		memset(matrix->data_, 0,
+		       matrix->datasize_ * sizeof(jas_seqent_t));
 	}
 
 	for (i = 0; i < numrows; ++i) {
 		matrix->rows_[i] = &matrix->data_[i * matrix->numcols_];
-	}
-
-	for (i = 0; i < matrix->datasize_; ++i) {
-		matrix->data_[i] = 0;
 	}
 
 	matrix->xstart_ = 0;
