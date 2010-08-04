@@ -85,8 +85,6 @@ protected:
   gcc_pure
   short GetField(const GEOPOINT &location);
 
-  virtual void ServiceFullReload(const GEOPOINT &location) = 0;
-
  protected:
   bool terrain_valid;
 

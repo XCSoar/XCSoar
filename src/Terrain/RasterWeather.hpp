@@ -92,7 +92,6 @@ private:
   static void GetFilename(TCHAR *rasp_filename, const TCHAR *name,
                           unsigned time_index);
   bool LoadItem(int item, const TCHAR* name, unsigned time_index);
-  void ServiceFullReload(const GEOPOINT &location);
   bool weather_available[MAX_WEATHER_TIMES];
   bool bsratio;
   Poco::RWLock lock;

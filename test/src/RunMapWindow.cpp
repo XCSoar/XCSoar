@@ -293,7 +293,7 @@ GenerateBlackboard(MapWindow &map)
 
   memset(&settings_computer, 0, sizeof(settings_computer));
 
-  terrain.ServiceFullReload(nmea_info.Location);
+  terrain.ServiceTerrainCenter(nmea_info.Location);
 
   for (unsigned i = 0; i <AIRSPACECLASSCOUNT; ++i)
     settings_computer.iAirspaceMode[i] = 3;

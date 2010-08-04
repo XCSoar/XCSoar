@@ -95,12 +95,6 @@ void RasterTerrain::ServiceTerrainCenter(const GEOPOINT &location) {
   }
 }
 
-void RasterTerrain::ServiceFullReload(const GEOPOINT &location) {
-  if (TerrainMap) {
-    TerrainMap->ServiceFullReload(location);
-  }
-}
-
 int RasterTerrain::GetEffectivePixelSize(fixed &pixel_D,
                                          const GEOPOINT &location) const {
   if (TerrainMap) {

@@ -53,17 +53,9 @@ short RasterMapJPG2000::_GetFieldAtXY(unsigned int lx,
   return raster_tile_cache.GetField(lx,ly);
 }
 
-void RasterMapJPG2000::ServiceFullReload(const GEOPOINT &location) {
-  TriggerJPGReload = true;
-  FullJPGReload= true;
-  SetViewCenter(location);
-  FullJPGReload= false;
-}
-
 RasterMapJPG2000::RasterMapJPG2000(const char *_path)
-  :path(strdup(_path)), FullJPGReload(true)
+  :path(strdup(_path))
 {
-  TriggerJPGReload = false;
   if (ref_count==0) {
     jas_init();
   }
@@ -87,10 +79,7 @@ RasterMapJPG2000::~RasterMapJPG2000() {
 int RasterMapJPG2000::ref_count = 0;
 
 void RasterMapJPG2000::_ReloadJPG2000() {
-  TriggerJPGReload = false;
-
-  raster_tile_cache.LoadJPG2000(path, FullJPGReload);
-  FullJPGReload = false;
+  raster_tile_cache.LoadJPG2000(path);
 
   if (!raster_tile_cache.GetInitialised())
     return;
@@ -122,21 +111,16 @@ void RasterMapJPG2000::_ReloadJPG2000() {
 
 void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
 {
-  int x = 0, y = 0; /* initalize to work around bogus gcc warning */
-  bool do_poll = false;
+  int x, y;
   if (raster_tile_cache.GetInitialised()) {
-    do_poll = true;
     x = lround((location.Longitude - TerrainInfo.TopLeft.Longitude).value_native() *
                raster_tile_cache.GetWidth()
                    /(TerrainInfo.BottomRight.Longitude-TerrainInfo.TopLeft.Longitude).value_native());
     y = lround((TerrainInfo.TopLeft.Latitude - location.Latitude).value_native() *
                raster_tile_cache.GetHeight()
                    /(TerrainInfo.TopLeft.Latitude-TerrainInfo.BottomRight.Latitude).value_native());
-    TriggerJPGReload |= raster_tile_cache.PollTiles(x, y);
-  }
-  if (TriggerJPGReload) {
-    _ReloadJPG2000();
-    if (do_poll) {
+    if (raster_tile_cache.PollTiles(x, y)) {
+      _ReloadJPG2000();
       raster_tile_cache.PollTiles(x, y);
     }
   }

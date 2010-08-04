@@ -108,7 +108,6 @@ public:
   gcc_pure
   short GetTerrainHeight(const GEOPOINT &location) const;
   void ServiceTerrainCenter(const GEOPOINT &location);
-  void ServiceFullReload(const GEOPOINT &location);
   int GetEffectivePixelSize(fixed &pixel_D, const GEOPOINT &location) const;
 
   gcc_pure

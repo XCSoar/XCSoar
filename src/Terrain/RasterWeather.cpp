@@ -236,7 +236,6 @@ RasterWeather::Reload(const GEOPOINT &location, int day_time)
     _weather_time = 0;
 
   SetViewCenter(location);
-  ServiceFullReload(location);
 }
 
 void
@@ -263,14 +262,6 @@ RasterWeather::SetViewCenter(const GEOPOINT &location)
   for (unsigned i = 0; i < MAX_WEATHER_MAP; i++)
     if (weather_map[i])
       weather_map[i]->SetViewCenter(location);
-}
-
-void
-RasterWeather::ServiceFullReload(const GEOPOINT &location)
-{
-  for (unsigned i = 0; i < MAX_WEATHER_MAP; i++)
-    if (weather_map[i])
-      weather_map[i]->ServiceFullReload(location);
 }
 
 const TCHAR*

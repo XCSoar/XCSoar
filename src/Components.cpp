@@ -320,7 +320,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   ReadBlackboardBasic(device_blackboard.Basic());
 
   ProgressGlue::Create(_("Loading Terrain File..."));
-  terrain.ServiceFullReload(Basic().Location);
+  terrain.ServiceTerrainCenter(Basic().Location);
 
   // Scan for weather forecast
   ProgressGlue::Create(_("Scanning weather forecast"));

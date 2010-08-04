@@ -224,11 +224,7 @@ RasterTileCache::TileRequest(int index)
     if (tiles[i].IsEnabled())
       num_used++;
 
-  if (loaded_one && !load_all)
-    return false; // already loaded one
-
   if (num_used < MAX_ACTIVE_TILES) {
-    loaded_one = true;
     tiles[index].Enable();
     return true; // want to load this one!
   }
@@ -393,7 +389,6 @@ RasterTileCache::SetInitialised(bool val)
     return;
   }
   initialised = val;
-  loaded_one = false;
 }
 
 bool
@@ -426,12 +421,11 @@ RasterTileCache::GetMaxElevation(void) const
 extern RasterTileCache *raster_tile_current;
 
 void
-RasterTileCache::LoadJPG2000(const char *jp2_filename, const bool do_load_all)
+RasterTileCache::LoadJPG2000(const char *jp2_filename)
 {
   jas_stream_t *in;
 
   raster_tile_current = this;
-  load_all = do_load_all;
 
   in = jas_stream_fopen(jp2_filename, "rb");
   if (!in) {

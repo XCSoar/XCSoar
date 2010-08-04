@@ -60,7 +60,6 @@ public:
 
 private:
   bool initialised;
-  bool loaded_one;
   int view_x;
   int view_y;
   RasterTile tiles[MAX_RTC_TILES];
@@ -69,13 +68,12 @@ private:
   short* Overview;
   bool scan_overview;
   unsigned int width, height;
-  bool load_all;
 
 public:
   bool GetScanType(void) const;
   short GetField(unsigned int lx,
                  unsigned int ly);
-  void LoadJPG2000(const char *path, const bool do_load_all);
+  void LoadJPG2000(const char *path);
   bool GetInitialised(void) const;
   void Reset();
   void SetInitialised(bool val);

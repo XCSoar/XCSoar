@@ -52,7 +52,6 @@ class RasterMapJPG2000: public RasterMap {
   }
 
   void SetViewCenter(const GEOPOINT &location);
-  void ServiceFullReload(const GEOPOINT &location);
 
   static RasterMapJPG2000 *LoadFile(const char *path);
 
@@ -61,8 +60,6 @@ class RasterMapJPG2000: public RasterMap {
 
   virtual short _GetFieldAtXY(unsigned int lx,
                               unsigned int ly);
-  bool TriggerJPGReload;
-  bool FullJPGReload;
   static int ref_count;
   RasterTileCache raster_tile_cache;
   virtual void _ReloadJPG2000(void);

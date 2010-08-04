@@ -136,7 +136,7 @@ SettingsLeave()
                             WaypointFileChanged, false);
     }
 
-    terrain.ServiceFullReload(XCSoarInterface::Basic().Location);
+    terrain.ServiceTerrainCenter(XCSoarInterface::Basic().Location);
 
     XCSoarInterface::main_window.map.set_terrain(&terrain);
   }
