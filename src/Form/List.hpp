@@ -41,6 +41,7 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 #include "Form/ScrollBar.hpp"
+#include "Compiler.h"
 
 class ContainerWindow;
 
@@ -153,6 +154,16 @@ protected:
    * @param i The ListItem array id
    */
   void EnsureVisible(unsigned i);
+
+  /**
+   * Determine which list item resides at the specified pixel row.
+   * Returns -1 if there is no such list item.
+   */
+  gcc_pure
+  int ItemIndexAt(int y) const {
+    int i = y / item_height + origin;
+    return i >= 0 && (unsigned)i < length ? i : -1;
+  }
 
   /**
    * Selects the ListItem below the given coordinates

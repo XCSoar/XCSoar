@@ -336,16 +336,12 @@ WndListFrame::on_mouse_up(int x, int y)
 void
 WndListFrame::SelectItemFromScreen(int y, bool use_callback)
 {
-  // If mouse was clicked above the list items -> cancel
-  if (y < 0)
+  int index = ItemIndexAt(y);
+  // If mouse was clicked outside the list items -> cancel
+  if (index < 0)
     return;
 
-  // Calculate the item the user clicked on
-  unsigned index = y / item_height + origin;
-  if (index >= length)
-    return;
-
-  if (index == GetCursorIndex()) {
+  if ((unsigned)index == GetCursorIndex()) {
     // If item was already selected
     // -> call event handler
     if (use_callback && ActivateCallback != NULL)
