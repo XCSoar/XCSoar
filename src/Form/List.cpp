@@ -334,26 +334,6 @@ WndListFrame::on_mouse_up(int x, int y)
 }
 
 void
-WndListFrame::SelectItemFromScreen(int y, bool use_callback)
-{
-  int index = ItemIndexAt(y);
-  // If mouse was clicked outside the list items -> cancel
-  if (index < 0)
-    return;
-
-  if ((unsigned)index == GetCursorIndex()) {
-    // If item was already selected
-    // -> call event handler
-    if (use_callback && ActivateCallback != NULL)
-      ActivateCallback(index);
-  } else {
-    // If item was not selected before
-    // -> select it
-    SetCursorIndex(index);
-  }
-}
-
-void
 WndListFrame::drag_end()
 {
   if (dragging) {
@@ -421,7 +401,22 @@ WndListFrame::on_mouse_down(int x, int y)
   } else {
     // if click in ListBox area
     // -> select appropriate item
-    SelectItemFromScreen(Pos.y, had_focus);
+
+    int index = ItemIndexAt(y);
+    // If mouse was clicked outside the list items -> cancel
+    if (index < 0)
+      return false;
+
+    if ((unsigned)index == GetCursorIndex()) {
+      // If item was already selected
+      // -> call event handler
+      if (had_focus && ActivateCallback != NULL)
+        ActivateCallback(index);
+    } else {
+      // If item was not selected before
+      // -> select it
+      SetCursorIndex(index);
+    }
 
     drag_line = origin + y / item_height;
     dragging = true;

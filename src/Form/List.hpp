@@ -165,13 +165,6 @@ protected:
     return i >= 0 && (unsigned)i < length ? i : -1;
   }
 
-  /**
-   * Selects the ListItem below the given coordinates
-   * @param xPos x-Coordinate
-   * @param yPos y-Coordinate
-   */
-  void SelectItemFromScreen(int y, bool use_callback);
-
   void drag_end();
 
   /** Draws the ScrollBar */
