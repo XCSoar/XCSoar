@@ -407,20 +407,20 @@ WndListFrame::on_mouse_down(int x, int y)
     if (index < 0)
       return false;
 
-    if ((unsigned)index == GetCursorIndex()) {
+    if (had_focus && ActivateCallback != NULL &&
+        (unsigned)index == GetCursorIndex()) {
       // If item was already selected
       // -> call event handler
-      if (had_focus && ActivateCallback != NULL)
-        ActivateCallback(index);
+      ActivateCallback(index);
     } else {
       // If item was not selected before
       // -> select it
       SetCursorIndex(index);
-    }
 
-    drag_line = origin + y / item_height;
-    dragging = true;
-    set_capture();
+      drag_line = origin + y / item_height;
+      dragging = true;
+      set_capture();
+    }
   }
 
   return true;
