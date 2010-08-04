@@ -350,9 +350,6 @@ WndListFrame::SelectItemFromScreen(int y, bool use_callback)
     // -> call event handler
     if (use_callback && ActivateCallback != NULL)
       ActivateCallback(index);
-
-    // -> and redraw
-    invalidate();
   } else {
     // If item was not selected before
     // -> select it
