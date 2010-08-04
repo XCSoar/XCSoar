@@ -192,8 +192,7 @@ RasterTileCache::PollTiles(int x, int y)
   if (scan_overview)
     return false;
 
-  for (i = MAX_ACTIVE_TILES - 1; --i >= 0;)
-    ActiveTiles[i] = -1;
+  std::fill(ActiveTiles, ActiveTiles + MAX_ACTIVE_TILES, -1);
 
   for (i = MAX_RTC_TILES - 1; --i >= 0;) {
     if (tiles[i].VisibilityChanged(view_x, view_y))
@@ -375,8 +374,7 @@ RasterTileCache::Reset()
   for (i = 0; i < MAX_RTC_TILES; i++)
     tiles[i].Disable();
 
-  for (i = MAX_ACTIVE_TILES - 1; --i >= 0;)
-    ActiveTiles[i] = -1;
+  std::fill(ActiveTiles, ActiveTiles + MAX_ACTIVE_TILES, -1);
 }
 
 void
@@ -419,14 +417,10 @@ RasterTileCache::GetScanType(void) const
 short
 RasterTileCache::GetMaxElevation(void) const
 {
-  short max_elevation = 0;
-
-  if (Overview) {
-    for (int i = overview_width * overview_height - 1; --i >= 0;)
-      max_elevation = max(max_elevation, Overview[i]);
-  }
-
-  return max_elevation;
+  return Overview != NULL
+    ? *std::max_element(Overview,
+                        Overview + (overview_width * overview_height))
+    : 0;
 }
 
 extern RasterTileCache *raster_tile_current;
