@@ -79,7 +79,6 @@ protected:
   ProtectedAirspaceWarningManager &m_airspace;
 
   void ResetFlight(const bool full=true);
-  void Initialise();
   void ProcessBasic();
   void ProcessVertical();
 

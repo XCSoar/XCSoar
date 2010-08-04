@@ -90,7 +90,6 @@ void
 GlideComputer::Initialise()
 {
   GlideComputerBlackboard::Initialise();
-  GlideComputerAirData::Initialise();
   GlideComputerTask::Initialise();
   GlideComputerStats::Initialise();
   ResetFlight(true);

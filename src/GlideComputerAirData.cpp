@@ -100,11 +100,6 @@ GlideComputerAirData::ResetFlight(const bool full)
   netto_30s_filter.reset();
 }
 
-void
-GlideComputerAirData::Initialise()
-{
-}
-
 /**
  * Calculates some basic values
  */
