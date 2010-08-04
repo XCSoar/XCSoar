@@ -118,9 +118,7 @@ bool
 RasterTile::CheckTileVisibility(const int view_x, const int view_y)
 {
   if (!width || !height) {
-    if (IsEnabled())
-      Disable();
-
+    Disable();
     return false;
   }
 
@@ -375,8 +373,7 @@ RasterTileCache::Reset()
 
   int i;
   for (i = 0; i < MAX_RTC_TILES; i++)
-    if (tiles[i].IsEnabled())
-      tiles[i].Disable();
+    tiles[i].Disable();
 
   for (i = MAX_ACTIVE_TILES; i--;)
     ActiveTiles[i] = -1;
