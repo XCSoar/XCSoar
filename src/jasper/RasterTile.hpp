@@ -1,17 +1,20 @@
 #ifndef XCSOAR_RASTERTILE_HPP
 #define XCSOAR_RASTERTILE_HPP
 
+#include "Terrain/RasterBuffer.hpp"
+
 #include <stddef.h>
 
 class RasterTile {
+  RasterBuffer buffer;
+
 public:
   /** invalid value for terrain */
   static const short TERRAIN_INVALID = -1000;
 
   RasterTile()
     :xstart(0), ystart(0), xend(0), yend(0),
-     width(0), height(0),
-     ImageBuffer(NULL) {}
+     width(0), height(0) {}
   ~RasterTile() {
     Disable();
   }
@@ -19,26 +22,28 @@ public:
   unsigned int xstart, ystart, xend, yend;
   unsigned int width, height;
   bool request;
-  short *ImageBuffer;
 
   bool CheckTileVisibility(const int view_x, const int view_y);
 
-  void Disable();
+  void Disable() {
+    buffer.reset();
+  }
+
   void Enable();
   bool IsEnabled() const {
-    return (ImageBuffer != NULL);
+    return buffer.defined();
   }
   bool IsDisabled() const {
-    return (ImageBuffer == NULL);
+    return !buffer.defined();
   }
 
   short GetField(unsigned x, unsigned y, unsigned ix, unsigned iy) const;
 
   inline short* GetImageBuffer() {
-    return ImageBuffer;
+    return buffer.get_data();
   }
   const short* GetImageBuffer() const {
-    return ImageBuffer;
+    return buffer.get_data();
   }
   bool VisibilityChanged(int view_x, int view_y);
 };
@@ -51,7 +56,7 @@ public:
 class RasterTileCache {
 public:
   RasterTileCache()
-    :Overview(NULL), scan_overview(true) {
+    :scan_overview(true) {
     Reset();
   }
   ~RasterTileCache() {
@@ -63,7 +68,7 @@ private:
   RasterTile tiles[MAX_RTC_TILES];
   int tile_last;
   int ActiveTiles[MAX_ACTIVE_TILES];
-  short* Overview;
+  RasterBuffer Overview;
   bool scan_overview;
   unsigned int width, height;
 
@@ -86,7 +91,7 @@ public:
   bool TileRequest(int index);
 
   short *GetOverview() {
-    return Overview;
+    return Overview.get_data();
   }
 
   void SetSize(int width, int height);
@@ -96,18 +101,17 @@ public:
                        double lat_min, double lat_max);
   void SetTile(int index, int xstart, int ystart, int xend, int yend);
   bool PollTiles(int x, int y);
-  short GetMaxElevation(void) const;
+
+  short GetMaxElevation() const {
+    return Overview.get_max();
+  }
 
   double lat_min, lat_max, lon_min, lon_max;
   unsigned int GetWidth() { return width; }
   unsigned int GetHeight() { return height; }
 
 private:
-  unsigned int overview_width, overview_height;
   unsigned int overview_width_fine, overview_height_fine;
-
-  short GetOverviewField(unsigned int lx,
-                         unsigned int ly) const;
 };
 
 #endif

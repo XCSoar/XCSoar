@@ -385,6 +385,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/RenderTaskPoint.cpp \
 	$(SRC)/Marks.cpp \
 	$(SRC)/Math/Screen.cpp \
+	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterMapJPG2000.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterTerrain.cpp \

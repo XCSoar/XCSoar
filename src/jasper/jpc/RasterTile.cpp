@@ -46,19 +46,12 @@ using std::min;
 using std::max;
 
 void
-RasterTile::Disable()
-{
-  delete[] ImageBuffer;
-  ImageBuffer = NULL;
-}
-
-void
 RasterTile::Enable()
 {
   if (!width || !height) {
     Disable();
   } else {
-    ImageBuffer = new short[width * height];
+    buffer.resize(width, height);
   }
 }
 
@@ -79,19 +72,7 @@ RasterTile::GetField(unsigned lx, unsigned ly, unsigned ix, unsigned iy) const
   if ((ly -= ystart) >= height)
     return TERRAIN_INVALID;
 
-  // perform piecewise linear interpolation
-  const unsigned int dx = (lx == width - 1) ? 0 : 1;
-  const unsigned int dy = (ly == height - 1) ? 0 : width;
-
-  const short *tm = ImageBuffer + ly * width + lx;
-
-  if (ix > iy) {
-    // lower triangle
-    return *tm + ((ix * (tm[dx] - *tm) + iy * (tm[dx + dy] - tm[dx])) / 256);
-  } else {
-    // upper triangle
-    return *tm + ((iy * (tm[dy] - *tm) + ix * (tm[dx + dy] - tm[dy])) / 256);
-  }
+  return buffer.get_interpolated(lx, ly, ix, iy);
 }
 
 bool
@@ -238,33 +219,7 @@ RasterTileCache::GetField(unsigned int lx, unsigned int ly)
       return retval;
   }
   // still not found, so go to overview
-  if (Overview) {
-    return GetOverviewField(lx/RTC_SUBSAMPLING, ly/RTC_SUBSAMPLING);
-  }
-
-  return RasterTile::TERRAIN_INVALID;
-}
-
-short
-RasterTileCache::GetOverviewField(unsigned int lx, unsigned int ly) const
-{
-  const unsigned int ix = CombinedDivAndMod(lx);
-  const unsigned int iy = CombinedDivAndMod(ly);
-
-  assert(lx < overview_width && ly < overview_height);
-
-  // perform piecewise linear interpolation
-  const unsigned int dx = (lx == overview_width - 1) ? 0 : 1;
-  const unsigned int dy = (ly == overview_height - 1) ? 0 : overview_width;
-  const short *tm = Overview + ly * overview_width + lx;
-
-  if (ix > iy) {
-    // lower triangle
-    return *tm + ((ix * (tm[dx] - *tm) - iy * (tm[dx] - tm[dx + dy])) >> 8);
-  } else {
-    // upper triangle
-    return *tm + ((iy * (tm[dy] - *tm) - ix * (tm[dy] - tm[dx + dy])) >> 8);
-  }
+  return Overview.get_interpolated(lx / RTC_SUBSAMPLING, ly / RTC_SUBSAMPLING);
 }
 
 void
@@ -272,14 +227,10 @@ RasterTileCache::SetSize(int _width, int _height)
 {
   width = _width;
   height = _height;
-  if (!Overview) {
-    overview_width = width / RTC_SUBSAMPLING;
-    overview_height = height / RTC_SUBSAMPLING;
-    overview_width_fine = width / RTC_SUBSAMPLING * RTC_SUBSAMPLING * 256;
-    overview_height_fine = height / RTC_SUBSAMPLING * RTC_SUBSAMPLING * 256;
 
-    Overview = new short[overview_width * overview_height];
-  }
+  Overview.resize(width / RTC_SUBSAMPLING, height / RTC_SUBSAMPLING);
+  overview_width_fine = width * 256;
+  overview_height_fine = height * 256;
 }
 
 void
@@ -301,10 +252,7 @@ RasterTileCache::Reset()
   initialised = false;
   scan_overview = true;
 
-  if (Overview) {
-    delete[] Overview;
-    Overview = 0;
-  }
+  Overview.reset();
 
   int i;
   for (i = 0; i < MAX_RTC_TILES; i++)
@@ -329,15 +277,6 @@ RasterTileCache::SetInitialised(bool val)
     return;
   }
   initialised = val;
-}
-
-short
-RasterTileCache::GetMaxElevation(void) const
-{
-  return Overview != NULL
-    ? *std::max_element(Overview,
-                        Overview + (overview_width * overview_height))
-    : 0;
 }
 
 extern RasterTileCache *raster_tile_current;
