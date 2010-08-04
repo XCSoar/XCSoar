@@ -192,10 +192,10 @@ RasterTileCache::PollTiles(int x, int y)
   if (scan_overview)
     return false;
 
-  for (i = MAX_ACTIVE_TILES; --i;)
+  for (i = MAX_ACTIVE_TILES - 1; --i >= 0;)
     ActiveTiles[i] = -1;
 
-  for (i= MAX_RTC_TILES; --i; ) {
+  for (i = MAX_RTC_TILES - 1; --i >= 0;) {
     if (tiles[i].VisibilityChanged(view_x, view_y))
       retval = true;
 
@@ -251,7 +251,7 @@ RasterTileCache::GetField(unsigned int lx, unsigned int ly)
     return retval;
 
   int tile_this;
-  for (unsigned int i = MAX_ACTIVE_TILES; --i;) {
+  for (int i = MAX_ACTIVE_TILES - 1; --i >= 0;) {
     if (((tile_this = ActiveTiles[i]) >= 0)
         && (tile_this != tile_last)
         && tiles[tile_this].GetField(lx, ly, &retval)) {
@@ -307,7 +307,7 @@ RasterTileCache::StitchTile(unsigned int src_tile)
   const unsigned int ystart = tiles[src_tile].ystart;
   unsigned int i;
 
-  for (unsigned int dst_tile = MAX_RTC_TILES; dst_tile--;) {
+  for (unsigned int dst_tile = MAX_RTC_TILES - 1; dst_tile--;) {
     if (tiles[dst_tile].GetImageBuffer() && (dst_tile != src_tile)) {
       short h;
       for (i = 0; i < width; i++) {
@@ -325,7 +325,7 @@ RasterTileCache::StitchTile(unsigned int src_tile)
 void
 RasterTileCache::StitchTiles(void)
 {
-  for (unsigned int i = MAX_RTC_TILES; i--;)
+  for (int i = MAX_RTC_TILES - 1; --i >= 0;)
     if (tiles[i].GetImageBuffer())
       StitchTile(i);
 }
@@ -375,7 +375,7 @@ RasterTileCache::Reset()
   for (i = 0; i < MAX_RTC_TILES; i++)
     tiles[i].Disable();
 
-  for (i = MAX_ACTIVE_TILES; i--;)
+  for (i = MAX_ACTIVE_TILES - 1; --i >= 0;)
     ActiveTiles[i] = -1;
 }
 
@@ -422,7 +422,7 @@ RasterTileCache::GetMaxElevation(void) const
   short max_elevation = 0;
 
   if (Overview) {
-    for (unsigned int i = overview_width * overview_height; i--;)
+    for (int i = overview_width * overview_height - 1; --i >= 0;)
       max_elevation = max(max_elevation, Overview[i]);
   }
 
