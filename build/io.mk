@@ -3,6 +3,7 @@
 IO_SRC_DIR = $(SRC)/IO
 
 IO_SOURCES = \
+	$(IO_SRC_DIR)/FileCache.cpp \
 	$(IO_SRC_DIR)/FileSource.cpp \
 	$(IO_SRC_DIR)/ZipSource.cpp \
 	$(IO_SRC_DIR)/LineSplitter.cpp \

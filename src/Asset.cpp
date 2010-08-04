@@ -247,6 +247,7 @@ InitAsset()
   CreateDirectoryIfAbsent(_T(""));  // RLD make sure the LocalPath folder actually exists
   CreateDirectoryIfAbsent(_T("logs"));
   CreateDirectoryIfAbsent(_T("config"));
+  CreateDirectoryIfAbsent(_T("cache"));
 
   if (is_altair())
     CreateDirectoryIfAbsent(_T("persist"));

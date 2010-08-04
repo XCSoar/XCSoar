@@ -81,6 +81,8 @@ Copyright_License {
 #include "InstrumentThread.hpp"
 #include "Replay/Replay.hpp"
 #include "ResourceLoader.hpp"
+#include "LocalPath.hpp"
+#include "IO/FileCache.hpp"
 #include "Compiler.h"
 
 #include "Waypoint/Waypoints.hpp"
@@ -98,6 +100,7 @@ Copyright_License {
 #include "ProgressGlue.hpp"
 #include "Pages.hpp"
 
+FileCache *file_cache;
 Marks *marks;
 TopologyStore *topology;
 RasterTerrain *terrain;
@@ -249,6 +252,10 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 #endif
 
   PreloadInitialisation(true);
+
+  TCHAR path[MAX_PATH];
+  LocalPath(path, _T("cache"));
+  file_cache = new FileCache(path);
 
   MapGfx.InitialiseConfigured(SettingsMap());
 
@@ -540,6 +547,8 @@ XCSoarInterface::Shutdown(void)
 
   // Clear the EGM96 database
   CloseGeoid();
+
+  delete file_cache;
 
   LogStartUp(_T("Close Windows - main "));
   main_window.reset();

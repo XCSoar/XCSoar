@@ -36,39 +36,31 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_COMPONENTS_HPP
-#define XCSOAR_COMPONENTS_HPP
+#ifndef XCSOAR_FILE_CACHE_HPP
+#define XCSOAR_FILE_CACHE_HPP
 
-class FileCache;
-class Marks;
-class TopologyStore;
-class RasterTerrain;
-class RasterWeather;
-class GlideComputer;
-class DrawThread;
-class CalculationThread;
-class InstrumentThread;
-class Waypoints;
-class Airspaces;
-class ProtectedAirspaceWarningManager;
-class ProtectedTaskManager;
-class TaskBehaviour;
-class Replay;
+#include <stdio.h>
+#include <tchar.h>
 
-// other global objects
-extern FileCache *file_cache;
-extern Airspaces airspace_database;
-extern ProtectedAirspaceWarningManager airspace_warnings;
-extern Waypoints way_points;
-extern ProtectedTaskManager protected_task_manager;
-extern Replay replay;
-extern Marks *marks;
-extern TopologyStore *topology;
-extern RasterTerrain *terrain;
-extern RasterWeather RASP;
-extern GlideComputer glide_computer;
-extern DrawThread *draw_thread;
-extern CalculationThread *calculation_thread;
-extern InstrumentThread *instrument_thread;
+class FileCache {
+  TCHAR *cache_path;
+  size_t cache_path_length;
+
+public:
+  FileCache(const TCHAR *_cache_path);
+  ~FileCache();
+
+protected:
+  size_t path_buffer_size(const TCHAR *name) const;
+  const TCHAR *make_cache_path(TCHAR *buffer, const TCHAR *name) const;
+
+public:
+  void flush(const TCHAR *name);
+  FILE *load(const TCHAR *name, const TCHAR *original_path);
+
+  FILE *save(const TCHAR *name, const TCHAR *original_path);
+  bool commit(const TCHAR *name, FILE *file);
+  void cancel(const TCHAR *name, FILE *file);
+};
 
 #endif
