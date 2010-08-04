@@ -263,6 +263,8 @@ int WndForm::ShowModal(bool bEnableMap) {
 
 #ifndef ENABLE_SDL
   oldFocusHwnd = ::GetFocus();
+  if (oldFocusHwnd != NULL)
+    ::SendMessage(oldFocusHwnd, WM_CANCELMODE, 0, 0);
 #endif /* !ENABLE_SDL */
   set_focus();
   focus_first_control();
