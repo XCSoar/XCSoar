@@ -49,7 +49,6 @@ Copyright_License {
 #include "Math/Constants.h"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/GlideTerrain.hpp"
-#include "Calibration.hpp"
 #include "LocalTime.hpp"
 #include "MapWindowProjection.hpp"
 #include "Components.hpp"
@@ -104,7 +103,6 @@ GlideComputerAirData::ResetFlight(const bool full)
 void
 GlideComputerAirData::Initialise()
 {
-  Calibration::Init();
 }
 
 /**
@@ -116,9 +114,6 @@ GlideComputerAirData::ProcessBasic()
   TerrainHeight();
   ProcessSun();
   SetCalculated().ThermalAverageAdjusted = GetAverageThermal();
-
-  if (Basic().TotalEnergyVarioAvailable && !Basic().gps.Replay)
-    Calibration::Update(&Basic());
 }
 
 /**

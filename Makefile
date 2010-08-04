@@ -160,7 +160,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Atmosphere.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/ConditionMonitor.cpp \
-	$(SRC)/Calibration.cpp \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/State.cpp \
