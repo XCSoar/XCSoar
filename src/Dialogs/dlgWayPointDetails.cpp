@@ -200,14 +200,12 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   case '6':
     ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
     NextPage(-1);
-    //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
     return true;
 
   case VK_RIGHT:
   case '7':
     ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
     NextPage(+1);
-    //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
     return true;
 
   default:
