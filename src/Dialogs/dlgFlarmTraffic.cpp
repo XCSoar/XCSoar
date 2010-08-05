@@ -473,6 +473,14 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   return false;
 }
 
+static void
+Update()
+{
+  wdf->Update(XCSoarInterface::Basic().TrackBearing,
+              XCSoarInterface::Basic().flarm,
+              XCSoarInterface::SettingsComputer());
+}
+
 /**
  * This event handler is called when the timer is activated and triggers the
  * repainting of the radar
@@ -481,9 +489,7 @@ static int
 OnTimerNotify(WindowControl * Sender)
 {
   (void)Sender;
-  wdf->Update(XCSoarInterface::Basic().TrackBearing,
-              XCSoarInterface::Basic().flarm,
-              XCSoarInterface::SettingsComputer());
+  Update();
   return 0;
 }
 
@@ -568,9 +574,7 @@ dlgFlarmTrafficShowModal()
       SetOnClickNotify(OnSwitchDataClicked);
 
   // Update Radar and Selection for the first time
-  wdf->Update(XCSoarInterface::Basic().TrackBearing,
-              XCSoarInterface::Basic().flarm,
-              XCSoarInterface::SettingsComputer());
+  Update();
 
   // Get the last chosen Side Data configuration
   auto_zoom->set_checked(wdf->GetAutoZoom());
