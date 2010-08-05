@@ -386,13 +386,9 @@ FlarmTrafficControl::on_paint(Canvas &canvas)
   PaintTrafficInfo(canvas);
 }
 
-/**
- * This event handler is called when the "Details" button is pressed
- */
 static void
-OnDetailsClicked(gcc_unused WndButton &button)
+OpenDetails()
 {
-
   // If warning is displayed -> prevent from opening details dialog
   if (wdf->WarningMode())
     return;
@@ -404,6 +400,15 @@ OnDetailsClicked(gcc_unused WndButton &button)
 
   // Show the details dialog
   dlgFlarmTrafficDetailsShowModal(traffic->ID);
+}
+
+/**
+ * This event handler is called when the "Details" button is pressed
+ */
+static void
+OnDetailsClicked(gcc_unused WndButton &button)
+{
+  OpenDetails();
 }
 
 /**
@@ -597,6 +602,10 @@ FlarmTrafficControl::on_mouse_gesture(const TCHAR* gesture)
   }
   if (_tcscmp(gesture, _T("UD")) == 0) {
     SetAutoZoom(true);
+    return true;
+  }
+  if (_tcscmp(gesture, _T("DR")) == 0) {
+    OpenDetails();
     return true;
   }
 
