@@ -246,15 +246,10 @@ RasterTileCache::GetField(unsigned int lx, unsigned int ly)
 short
 RasterTileCache::GetOverviewField(unsigned int lx, unsigned int ly) const
 {
-  // check x in range, and decompose fraction part
   const unsigned int ix = CombinedDivAndMod(lx);
-  if (lx >= overview_width)
-    return RasterTile::TERRAIN_INVALID;
-
-  // check y in range, and decompose fraction part
   const unsigned int iy = CombinedDivAndMod(ly);
-  if (ly >= overview_height)
-    return RasterTile::TERRAIN_INVALID;
+
+  assert(lx < overview_width && ly < overview_height);
 
   // perform piecewise linear interpolation
   const unsigned int dx = (lx == overview_width - 1) ? 0 : 1;
@@ -278,8 +273,8 @@ RasterTileCache::SetSize(int _width, int _height)
   if (!Overview) {
     overview_width = width / RTC_SUBSAMPLING;
     overview_height = height / RTC_SUBSAMPLING;
-    overview_width_fine = width * 256;
-    overview_height_fine = height * 256;
+    overview_width_fine = width / RTC_SUBSAMPLING * RTC_SUBSAMPLING * 256;
+    overview_height_fine = height / RTC_SUBSAMPLING * RTC_SUBSAMPLING * 256;
 
     Overview = new short[overview_width * overview_height];
   }
