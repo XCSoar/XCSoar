@@ -31,7 +31,9 @@ public:
   bool IsDisabled() const {
     return (ImageBuffer == NULL);
   }
-  short GetField(unsigned int x, unsigned int y) const;
+
+  short GetField(unsigned x, unsigned y, unsigned ix, unsigned iy) const;
+
   inline short* GetImageBuffer() {
     return ImageBuffer;
   }

@@ -63,7 +63,7 @@ RasterTile::Enable()
 }
 
 short
-RasterTile::GetField(unsigned int lx, unsigned int ly) const
+RasterTile::GetField(unsigned lx, unsigned ly, unsigned ix, unsigned iy) const
 {
   // we want to exit out of this function as soon as possible
   // if we have the wrong tile
@@ -71,13 +71,11 @@ RasterTile::GetField(unsigned int lx, unsigned int ly) const
   if (IsDisabled())
     return TERRAIN_INVALID;
 
-  // check x in range, and decompose fraction part
-  const int ix = CombinedDivAndMod(lx);
+  // check x in range
   if ((lx -= xstart) >= width)
     return TERRAIN_INVALID;
 
-  // check y in range, and decompose fraction part
-  const int iy = CombinedDivAndMod(ly);
+  // check y in range
   if ((ly -= ystart) >= height)
     return TERRAIN_INVALID;
 
@@ -221,10 +219,14 @@ RasterTileCache::GetField(unsigned int lx, unsigned int ly)
     // outside overall bounds
     return RasterTile::TERRAIN_INVALID;
 
+  unsigned px = lx, py = ly;
+  const unsigned int ix = CombinedDivAndMod(px);
+  const unsigned int iy = CombinedDivAndMod(py);
+
   short retval;
 
   // search starting from last found tile
-  retval = tiles[tile_last].GetField(lx, ly);
+  retval = tiles[tile_last].GetField(px, py, ix, iy);
   if (retval != RasterTile::TERRAIN_INVALID)
     return retval;
 
@@ -232,7 +234,7 @@ RasterTileCache::GetField(unsigned int lx, unsigned int ly)
   for (int i = MAX_ACTIVE_TILES - 1; --i >= 0;) {
     if (((tile_this = ActiveTiles[i]) >= 0)
         && (tile_this != tile_last)
-        && (retval = tiles[tile_this].GetField(lx, ly)) != RasterTile::TERRAIN_INVALID)
+        && (retval = tiles[tile_this].GetField(px, py, ix, iy)) != RasterTile::TERRAIN_INVALID)
       return retval;
   }
   // still not found, so go to overview
