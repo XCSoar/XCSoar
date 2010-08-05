@@ -275,12 +275,13 @@ MapWindow::Render(Canvas &canvas, const RECT rc)
 
 #ifdef DRAWLOAD
   canvas.select(Fonts::Map);
-  _stprintf(ScaleInfo,_T("draw %d gps %d idle %d"),
+  TCHAR load[80];
+  _stprintf(load, _T("draw %d gps %d idle %d"),
             GetAverageTime(),
             Calculated().time_process_gps,
             Calculated().time_process_idle);
 
-  canvas.text(rc.left, rc.top, ScaleInfo);
+  canvas.text(rc.left, rc.top, load);
 #endif
 }
 
