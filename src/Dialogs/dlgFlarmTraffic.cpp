@@ -598,6 +598,14 @@ FlarmTrafficControl::on_mouse_gesture(const TCHAR* gesture)
     ZoomOut();
     return true;
   }
+  if (_tcscmp(gesture, _T("L")) == 0) {
+    PrevTarget();
+    return true;
+  }
+  if (_tcscmp(gesture, _T("R")) == 0) {
+    NextTarget();
+    return true;
+  }
   if (_tcscmp(gesture, _T("UD")) == 0) {
     SetAutoZoom(true);
     return true;
