@@ -101,7 +101,7 @@ RasterTile::GetField(unsigned int lx, unsigned int ly, short *theight) const
   const unsigned int dx = (lx == width) ? 0 : 1;
   const unsigned int dy = (ly == height) ? 0 : width + 1;
 
-  const short *tm = ImageBuffer + ly * dy + lx;
+  const short *tm = ImageBuffer + ly * (width + 1) + lx;
 
   if (ix > iy) {
     // lower triangle
