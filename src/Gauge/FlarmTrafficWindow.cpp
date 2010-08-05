@@ -605,12 +605,11 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
 }
 
 /**
- * This function is called when the Radar needs repainting.
- * @param Sender WindowControl that send the "repaint" message
+ * This function paints the TrafficRadar onto the given canvas
  * @param canvas The canvas to paint on
  */
 void
-FlarmTrafficWindow::on_paint(Canvas &canvas)
+FlarmTrafficWindow::Paint(Canvas &canvas)
 {
   assert(selection < FLARM_STATE::FLARM_MAX_TRAFFIC);
   assert(selection < 0 || data.FLARM_Traffic[selection].defined());
@@ -618,10 +617,19 @@ FlarmTrafficWindow::on_paint(Canvas &canvas)
   assert(warning < 0 || data.FLARM_Traffic[warning].defined());
   assert(warning < 0 || data.FLARM_Traffic[warning].HasAlarm());
 
-  canvas.clear_white();
-
   PaintRadarBackground(canvas);
   PaintRadarTraffic(canvas);
+}
+
+/**
+ * This function is called when the Radar needs repainting.
+ * @param canvas The canvas to paint on
+ */
+void
+FlarmTrafficWindow::on_paint(Canvas &canvas)
+{
+  canvas.clear_white();
+  Paint(canvas);
 }
 
 bool

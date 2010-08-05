@@ -133,6 +133,8 @@ public:
     invalidate();
   }
 
+  void Paint(Canvas &canvas);
+
 protected:
   fixed RangeScale(fixed d) const;
 
