@@ -108,7 +108,7 @@ protected:
 protected:
   virtual bool on_create();
   virtual void on_paint(Canvas &canvas);
-  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_up(int x, int y);
 };
 
 static WndForm *wf = NULL;
@@ -544,7 +544,7 @@ OnTimerNotify(WindowControl * Sender)
 }
 
 bool
-FlarmTrafficControl::on_mouse_down(int x, int y)
+FlarmTrafficControl::on_mouse_up(int x, int y)
 {
   if (!WarningMode())
     SelectNearTarget(x, y, Layout::Scale(15));
