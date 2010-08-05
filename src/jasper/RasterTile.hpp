@@ -68,16 +68,27 @@ private:
   unsigned int width, height;
 
 public:
-  bool GetScanType(void) const;
+  bool GetScanType() const {
+    return scan_overview;
+  }
+
   short GetField(unsigned int lx,
                  unsigned int ly);
   void LoadJPG2000(const char *path);
-  bool GetInitialised(void) const;
+
+  bool GetInitialised() const {
+    return initialised;
+  }
+
   void Reset();
   void SetInitialised(bool val);
 
   bool TileRequest(int index);
-  short* GetOverview(void);
+
+  short *GetOverview() {
+    return Overview;
+  }
+
   void SetSize(int width, int height);
   short* GetImageBuffer(int index);
   const short* GetImageBuffer(int index) const;

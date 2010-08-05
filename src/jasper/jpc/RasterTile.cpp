@@ -338,24 +338,6 @@ RasterTileCache::SetInitialised(bool val)
   initialised = val;
 }
 
-bool
-RasterTileCache::GetInitialised(void) const
-{
-  return initialised;
-}
-
-short*
-RasterTileCache::GetOverview(void)
-{
-  return Overview;
-}
-
-bool
-RasterTileCache::GetScanType(void) const
-{
-  return scan_overview;
-}
-
 short
 RasterTileCache::GetMaxElevation(void) const
 {
