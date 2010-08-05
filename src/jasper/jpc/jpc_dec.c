@@ -1288,7 +1288,6 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 						}
 						*dptr++ = d;
 					}
-					dptr++; // skip past right border
 				}
 			}
 			break;

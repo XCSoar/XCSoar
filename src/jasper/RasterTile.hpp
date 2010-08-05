@@ -22,7 +22,6 @@ public:
   short *ImageBuffer;
 
   bool CheckTileVisibility(const int view_x, const int view_y);
-  bool SetEdgeIfInRange(unsigned int x, unsigned int y, short val);
 
   void Disable();
   void Enable();
@@ -99,11 +98,6 @@ private:
 
   short GetOverviewField(unsigned int lx,
                          unsigned int ly) const;
-
-  void StitchTiles(void);
-
-private:
-  void StitchTile(unsigned int i);
 };
 
 #endif

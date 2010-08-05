@@ -58,24 +58,8 @@ RasterTile::Enable()
   if (!width || !height) {
     Disable();
   } else {
-    ImageBuffer = new short[(width + 1) * (height + 1)];
+    ImageBuffer = new short[width * height];
   }
-}
-
-bool
-RasterTile::SetEdgeIfInRange(unsigned int x, unsigned int y, short val)
-{
-  if (!ImageBuffer)
-    return false;
-
-  if ((x -= xstart) > width)
-    return false;
-
-  if ((y-= ystart)>height)
-    return false;
-
-  ImageBuffer[y*(width+1)+x]= val;
-  return true;
 }
 
 bool
@@ -98,10 +82,10 @@ RasterTile::GetField(unsigned int lx, unsigned int ly, short *theight) const
     return false;
 
   // perform piecewise linear interpolation
-  const unsigned int dx = (lx == width) ? 0 : 1;
-  const unsigned int dy = (ly == height) ? 0 : width + 1;
+  const unsigned int dx = (lx == width - 1) ? 0 : 1;
+  const unsigned int dy = (ly == height - 1) ? 0 : width;
 
-  const short *tm = ImageBuffer + ly * (width + 1) + lx;
+  const short *tm = ImageBuffer + ly * width + lx;
 
   if (ix > iy) {
     // lower triangle
@@ -290,42 +274,6 @@ RasterTileCache::GetOverviewField(unsigned int lx, unsigned int ly) const
 }
 
 void
-RasterTileCache::StitchTile(unsigned int src_tile)
-{
-  const short *h_src = tiles[src_tile].GetImageBuffer();
-  if (!h_src)
-    return;
-
-  const unsigned int width = tiles[src_tile].width;
-  const unsigned int height = tiles[src_tile].height;
-  const unsigned int xstart = tiles[src_tile].xstart;
-  const unsigned int ystart = tiles[src_tile].ystart;
-  unsigned int i;
-
-  for (unsigned int dst_tile = MAX_RTC_TILES - 1; dst_tile--;) {
-    if (tiles[dst_tile].GetImageBuffer() && (dst_tile != src_tile)) {
-      short h;
-      for (i = 0; i < width; i++) {
-        h = h_src[i];
-        tiles[dst_tile].SetEdgeIfInRange(i + xstart, ystart, h);
-      }
-      for (i = 0; i < height; i++) {
-        h = h_src[i * (width + 1)];
-        tiles[dst_tile].SetEdgeIfInRange(xstart, i + ystart, h);
-      }
-    }
-  }
-}
-
-void
-RasterTileCache::StitchTiles(void)
-{
-  for (int i = MAX_RTC_TILES - 1; --i >= 0;)
-    if (tiles[i].GetImageBuffer())
-      StitchTile(i);
-}
-
-void
 RasterTileCache::SetSize(int _width, int _height)
 {
   width = _width;
@@ -434,7 +382,4 @@ RasterTileCache::LoadJPG2000(const char *jp2_filename)
     jas_image_decode(in, -1, "xcsoar=1");
     jas_stream_close(in);
   }
-
-  if (GetInitialised())
-    StitchTiles();
 }
