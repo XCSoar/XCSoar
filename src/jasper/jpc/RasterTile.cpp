@@ -155,14 +155,16 @@ RasterTileCache::GetImageBuffer(int index) const
 void
 RasterTileCache::SetTile(int index, int xstart, int ystart, int xend, int yend)
 {
-  if (index < MAX_RTC_TILES) {
-    tiles[index].xstart = xstart;
-    tiles[index].ystart = ystart;
-    tiles[index].xend = xend;
-    tiles[index].yend = yend;
-    tiles[index].width = tiles[index].xend - tiles[index].xstart;
-    tiles[index].height = tiles[index].yend - tiles[index].ystart;
-  }
+  if (index >= MAX_RTC_TILES)
+    return;
+
+  RasterTile &tile = tiles[index];
+  tile.xstart = xstart;
+  tile.ystart = ystart;
+  tile.xend = xend;
+  tile.yend = yend;
+  tile.width = xend - xstart;
+  tile.height = yend - ystart;
 }
 
 bool
