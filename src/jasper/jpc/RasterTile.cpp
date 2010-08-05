@@ -62,24 +62,24 @@ RasterTile::Enable()
   }
 }
 
-bool
-RasterTile::GetField(unsigned int lx, unsigned int ly, short *theight) const
+short
+RasterTile::GetField(unsigned int lx, unsigned int ly) const
 {
   // we want to exit out of this function as soon as possible
   // if we have the wrong tile
 
   if (IsDisabled())
-    return false;
+    return TERRAIN_INVALID;
 
   // check x in range, and decompose fraction part
   const int ix = CombinedDivAndMod(lx);
   if ((lx -= xstart) >= width)
-    return false;
+    return TERRAIN_INVALID;
 
   // check y in range, and decompose fraction part
   const int iy = CombinedDivAndMod(ly);
   if ((ly -= ystart) >= height)
-    return false;
+    return TERRAIN_INVALID;
 
   // perform piecewise linear interpolation
   const unsigned int dx = (lx == width - 1) ? 0 : 1;
@@ -89,12 +89,10 @@ RasterTile::GetField(unsigned int lx, unsigned int ly, short *theight) const
 
   if (ix > iy) {
     // lower triangle
-    *theight = *tm + ((ix * (tm[dx] - *tm) + iy * (tm[dx + dy] - tm[dx])) / 256);
-    return true;
+    return *tm + ((ix * (tm[dx] - *tm) + iy * (tm[dx + dy] - tm[dx])) / 256);
   } else {
     // upper triangle
-    *theight = *tm + ((iy * (tm[dy] - *tm) + ix * (tm[dx + dy] - tm[dy])) / 256);
-    return true;
+    return *tm + ((iy * (tm[dy] - *tm) + ix * (tm[dx + dy] - tm[dy])) / 256);
   }
 }
 
@@ -228,17 +226,16 @@ RasterTileCache::GetField(unsigned int lx, unsigned int ly)
   short retval;
 
   // search starting from last found tile
-  if (tiles[tile_last].GetField(lx, ly, &retval))
+  retval = tiles[tile_last].GetField(lx, ly);
+  if (retval != RasterTile::TERRAIN_INVALID)
     return retval;
 
   int tile_this;
   for (int i = MAX_ACTIVE_TILES - 1; --i >= 0;) {
     if (((tile_this = ActiveTiles[i]) >= 0)
         && (tile_this != tile_last)
-        && tiles[tile_this].GetField(lx, ly, &retval)) {
-      tile_last = tile_this;
+        && (retval = tiles[tile_this].GetField(lx, ly)) != RasterTile::TERRAIN_INVALID)
       return retval;
-    }
   }
   // still not found, so go to overview
   if (Overview) {
