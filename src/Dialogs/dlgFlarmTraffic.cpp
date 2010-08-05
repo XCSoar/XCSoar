@@ -46,6 +46,7 @@
  */
 
 #include "Dialogs/Internal.hpp"
+#include "Screen.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/CheckBox.hpp"
@@ -67,12 +68,14 @@ protected:
   bool enable_auto_zoom;
   unsigned zoom;
   Font hfInfoValues, hfInfoLabels, hfCallSign;
+  Angle task_direction;
 
 public:
   FlarmTrafficControl()
     :FlarmTrafficWindow(Layout::Scale(10)),
      enable_auto_zoom(true),
-     zoom(2) {}
+     zoom(2),
+     task_direction(Angle::degrees(fixed_minus_one)) {}
 
 protected:
   void CalcAutoZoom();
@@ -80,6 +83,7 @@ protected:
 public:
   void Update(Angle new_direction, const FLARM_STATE &new_data,
               const SETTINGS_TEAMCODE &new_settings);
+  void UpdateTaskDirection(bool show_task_direction, Angle bearing);
 
   bool GetAutoZoom() const {
     return enable_auto_zoom;
@@ -99,6 +103,7 @@ public:
 
 protected:
   void PaintTrafficInfo(Canvas &canvas) const;
+  void PaintTaskDirection(Canvas &canvas) const;
 
 protected:
   virtual bool on_create();
@@ -191,6 +196,15 @@ FlarmTrafficControl::Update(Angle new_direction, const FLARM_STATE &new_data,
     CalcAutoZoom();
 }
 
+void
+FlarmTrafficControl::UpdateTaskDirection(bool show_task_direction, Angle bearing)
+{
+  if (!show_task_direction)
+    task_direction = Angle::degrees(fixed_minus_one);
+  else
+    task_direction = bearing.as_bearing();
+}
+
 /**
  * Zoom out one step
  */
@@ -219,6 +233,36 @@ FlarmTrafficControl::ZoomIn()
     SetZoom(zoom - 1);
 
   SetAutoZoom(false);
+}
+
+/**
+ * Paints an arrow into the direction of the current task leg
+ * @param canvas The canvas to paint on
+ */
+void
+FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
+{
+  if (task_direction.value_degrees() < fixed_zero)
+    return;
+
+  canvas.select(hpRadar);
+  canvas.hollow_brush();
+
+  POINT triangle[4];
+  triangle[0].x = 0;
+  triangle[0].y = -radius / Layout::FastScale(1) + 15;
+  triangle[1].x = 7;
+  triangle[1].y = triangle[0].y + 30;
+  triangle[2].x = -triangle[1].x;
+  triangle[2].y = triangle[1].y;
+  triangle[3].x = triangle[0].x;
+  triangle[3].y = triangle[0].y;
+
+  PolygonRotateShift(triangle, 4, radar_mid.x, radar_mid.y,
+                     task_direction - direction);
+
+  // Draw the arrow
+  canvas.polygon(triangle, 4);
 }
 
 /**
@@ -332,6 +376,7 @@ FlarmTrafficControl::on_paint(Canvas &canvas)
 {
   FlarmTrafficWindow::on_paint(canvas);
 
+  PaintTaskDirection(canvas);
   PaintTrafficInfo(canvas);
 }
 
@@ -479,6 +524,10 @@ Update()
   wdf->Update(XCSoarInterface::Basic().TrackBearing,
               XCSoarInterface::Basic().flarm,
               XCSoarInterface::SettingsComputer());
+
+  wdf->UpdateTaskDirection(XCSoarInterface::Calculated().task_stats.task_valid,
+                           XCSoarInterface::Calculated().task_stats.
+                           current_leg.solution_remaining.CruiseTrackBearing);
 }
 
 /**
