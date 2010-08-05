@@ -55,6 +55,7 @@
 #include "Compiler.h"
 #include "Gauge/FlarmTrafficWindow.hpp"
 #include "Language.hpp"
+#include "GestureManager.hpp"
 
 enum {
   ID_AUTO_ZOOM = 100,
@@ -69,6 +70,7 @@ protected:
   unsigned zoom;
   Font hfInfoValues, hfInfoLabels, hfCallSign;
   Angle task_direction;
+  GestureManager gestures;
 
 public:
   FlarmTrafficControl()
@@ -108,7 +110,10 @@ protected:
 protected:
   virtual bool on_create();
   virtual void on_paint(Canvas &canvas);
+  virtual bool on_mouse_move(int x, int y, unsigned keys);
+  virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
+  bool on_mouse_gesture(const TCHAR* gesture);
 };
 
 static WndForm *wf = NULL;
@@ -544,12 +549,58 @@ OnTimerNotify(WindowControl * Sender)
 }
 
 bool
+FlarmTrafficControl::on_mouse_move(int x, int y, unsigned keys)
+{
+  if (XCSoarInterface::SettingsComputer().EnableGestures)
+    gestures.AddPoint(x, y);
+
+  return true;
+}
+
+bool
+FlarmTrafficControl::on_mouse_down(int x, int y)
+{
+  if (XCSoarInterface::SettingsComputer().EnableGestures)
+    gestures.Start(x, y);
+
+  return true;
+}
+
+bool
 FlarmTrafficControl::on_mouse_up(int x, int y)
 {
+  if (XCSoarInterface::SettingsComputer().EnableGestures) {
+    const TCHAR* gesture = gestures.Finish();
+    if (gesture && on_mouse_gesture(gesture))
+      return true;
+  }
+
   if (!WarningMode())
     SelectNearTarget(x, y, Layout::Scale(15));
 
   return true;
+}
+
+bool
+FlarmTrafficControl::on_mouse_gesture(const TCHAR* gesture)
+{
+  if (!XCSoarInterface::SettingsComputer().EnableGestures)
+    return false;
+
+  if (_tcscmp(gesture, _T("U")) == 0) {
+    ZoomIn();
+    return true;
+  }
+  if (_tcscmp(gesture, _T("D")) == 0) {
+    ZoomOut();
+    return true;
+  }
+  if (_tcscmp(gesture, _T("UD")) == 0) {
+    SetAutoZoom(true);
+    return true;
+  }
+
+  return false;
 }
 
 static Window *
