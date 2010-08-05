@@ -249,10 +249,6 @@ OnNewHomeClicked(gcc_unused WndButton &button)
                           false, false);
   }
 
-#ifdef OLD_TASK
-  task.RefreshTask(XCSoarInterface::SettingsComputer(),
-                   XCSoarInterface::Basic());
-#endif
   wf->SetModalResult(mrOK);
 }
 
@@ -262,10 +258,6 @@ OnSetAlternate1Clicked(gcc_unused WndButton &button)
 {
   XCSoarInterface::SetSettingsComputer().Alternate1 = selected_waypoint->id;
   Profile::Set(szProfileAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
-#ifdef OLD_TASK
-  task.RefreshTask(XCSoarInterface::SettingsComputer(),
-                   XCSoarInterface::Basic());
-#endif
   wf->SetModalResult(mrOK);
 }
 
@@ -274,10 +266,6 @@ OnSetAlternate2Clicked(gcc_unused WndButton &button)
 {
   XCSoarInterface::SetSettingsComputer().Alternate2 = selected_waypoint->id;
   Profile::Set(szProfileAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
-#ifdef OLD_TASK
-  task.RefreshTask(XCSoarInterface::SettingsComputer(),
-                   XCSoarInterface::Basic());
-#endif
   wf->SetModalResult(mrOK);
 }
 
@@ -292,10 +280,6 @@ OnClearAlternatesClicked(gcc_unused WndButton &button)
       XCSoarInterface::SettingsComputer().Alternate1);
   Profile::Set(szProfileAlternate2,
       XCSoarInterface::SettingsComputer().Alternate2);
-#ifdef OLD_TASK
-  task.RefreshTask(XCSoarInterface::SettingsComputer(),
-      XCSoarInterface::Basic());
-#endif
 
   wf->SetModalResult(mrOK);
 }
