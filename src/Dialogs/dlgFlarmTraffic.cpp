@@ -435,10 +435,6 @@ OnZoomOutClicked(gcc_unused WndButton &button)
 static void
 OnPrevClicked(gcc_unused WndButton &button)
 {
-  // If warning is displayed -> prevent selector movement
-  if (wdf->WarningMode())
-    return;
-
   wdf->PrevTarget();
 }
 
@@ -448,10 +444,6 @@ OnPrevClicked(gcc_unused WndButton &button)
 static void
 OnNextClicked(gcc_unused WndButton &button)
 {
-  // If warning is displayed -> prevent selector movement
-  if (wdf->WarningMode())
-    return;
-
   wdf->NextTarget();
 }
 

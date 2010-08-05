@@ -140,6 +140,10 @@ FlarmTrafficWindow::SetTarget(int i)
 void
 FlarmTrafficWindow::NextTarget()
 {
+  // If warning is displayed -> prevent selector movement
+  if (WarningMode())
+    return;
+
   assert(selection < FLARM_STATE::FLARM_MAX_TRAFFIC);
 
   const FLARM_TRAFFIC *traffic;
@@ -160,6 +164,10 @@ FlarmTrafficWindow::NextTarget()
 void
 FlarmTrafficWindow::PrevTarget()
 {
+  // If warning is displayed -> prevent selector movement
+  if (WarningMode())
+    return;
+
   assert(selection < FLARM_STATE::FLARM_MAX_TRAFFIC);
 
   const FLARM_TRAFFIC *traffic;
