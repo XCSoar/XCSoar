@@ -464,17 +464,23 @@ OnCloseClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrOK);
 }
 
-/**
- * This event handler is called when the "Avg/Alt" button is pressed
- */
 static void
-OnSwitchDataClicked(gcc_unused WndButton &button)
+SwitchData()
 {
   wdf->side_display_type++;
   if (wdf->side_display_type > 2)
     wdf->side_display_type = 1;
 
   Profile::Set(szProfileFlarmSideData, wdf->side_display_type);
+}
+
+/**
+ * This event handler is called when the "Avg/Alt" button is pressed
+ */
+static void
+OnSwitchDataClicked(gcc_unused WndButton &button)
+{
+  SwitchData();
 }
 
 /**
@@ -606,6 +612,10 @@ FlarmTrafficControl::on_mouse_gesture(const TCHAR* gesture)
   }
   if (_tcscmp(gesture, _T("DR")) == 0) {
     OpenDetails();
+    return true;
+  }
+  if (_tcscmp(gesture, _T("RL")) == 0) {
+    SwitchData();
     return true;
   }
 
