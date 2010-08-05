@@ -58,8 +58,6 @@ public:
 
 private:
   bool initialised;
-  int view_x;
-  int view_y;
   RasterTile tiles[MAX_RTC_TILES];
   int tile_last;
   int ActiveTiles[MAX_ACTIVE_TILES];

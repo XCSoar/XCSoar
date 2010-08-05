@@ -170,8 +170,6 @@ RasterTileCache::PollTiles(int x, int y)
 {
   bool retval = false;
   int i, num_used = 0;
-  view_x = x;
-  view_y = y;
 
   if (scan_overview)
     return false;
@@ -179,7 +177,7 @@ RasterTileCache::PollTiles(int x, int y)
   std::fill(ActiveTiles, ActiveTiles + MAX_ACTIVE_TILES, -1);
 
   for (i = MAX_RTC_TILES - 1; --i >= 0;) {
-    if (tiles[i].VisibilityChanged(view_x, view_y))
+    if (tiles[i].VisibilityChanged(x, y))
       retval = true;
 
     if (tiles[i].IsEnabled()) {
@@ -301,8 +299,6 @@ void
 RasterTileCache::Reset()
 {
   tile_last = 0;
-  view_x = 0;
-  view_y = 0;
   width = 0;
   height = 0;
   initialised = false;
