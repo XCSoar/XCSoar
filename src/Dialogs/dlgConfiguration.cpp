@@ -2268,19 +2268,11 @@ void dlgConfigurationShowModal(void)
                               auto_mc_mode);
   settings_computer.auto_mc_mode = (TaskBehaviour::AutoMCMode_t)auto_mc_mode;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpWaypointsOutOfRange"));
-  if (wp) {
-    if (WayPointFile::WaypointsOutOfRangeSetting !=
-        wp->GetDataField()->GetAsInteger()) {
-      WayPointFile::WaypointsOutOfRangeSetting =
-        wp->GetDataField()->GetAsInteger();
-
-      Profile::Set(szProfileWaypointsOutOfRange,
-                   WayPointFile::WaypointsOutOfRangeSetting);
-
-      WaypointFileChanged = true;
-      changed = true;
-    }
+  if (SaveFormProperty(wf, _T("prpWaypointsOutOfRange"),
+                       szProfileWaypointsOutOfRange,
+                       WayPointFile::WaypointsOutOfRangeSetting)) {
+    WaypointFileChanged = true;
+    changed = true;
   }
 
   changed |= SaveFormProperty(wf, _T("prpEnableNavBaroAltitude"),
