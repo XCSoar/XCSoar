@@ -374,9 +374,10 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
 void
 FlarmTrafficControl::on_paint(Canvas &canvas)
 {
-  FlarmTrafficWindow::on_paint(canvas);
+  canvas.clear_white();
 
   PaintTaskDirection(canvas);
+  FlarmTrafficWindow::Paint(canvas);
   PaintTrafficInfo(canvas);
 }
 
