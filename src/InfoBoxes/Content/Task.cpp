@@ -350,19 +350,16 @@ InfoBoxContentNextLD::Update(InfoBoxWindow &infobox)
     return;
   }
 
-#ifdef OLD_TASK
-  if (XCSoarInterface::Calculated().LDNext != 999) {
-    infobox.SetInvalid();
+  fixed gradient = XCSoarInterface::Calculated().task_stats.current_leg.gradient;
+
+  if (!positive(gradient) || gradient > fixed(500)) {
+    infobox.SetValue(_T("+++"));
     return;
   }
 
-  // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), XCSoarInterface::Calculated().LDNext);
+  _stprintf(tmp, _T("%1.0f"), (double)gradient);
   infobox.SetValue(tmp);
-#else
-  infobox.SetInvalid();
-#endif
 }
 
 void
@@ -582,25 +579,16 @@ InfoBoxContentFinalLD::Update(InfoBoxWindow &infobox)
     return;
   }
 
-#ifdef OLD_TASK
-  if (XCSoarInterface::Calculated().LDFinish != 999) {
-    infobox.SetInvalid();
+  fixed gradient = XCSoarInterface::Calculated().task_stats.total.gradient;
+
+  if (!positive(gradient) || gradient > fixed(500)) {
+    infobox.SetValue(_T("+++"));
     return;
   }
 
-  // Set Value
-  double Value;
-  if (XCSoarInterface::Calculated().ValidFinish)
-    Value = 0;
-  else
-    Value = XCSoarInterface::Calculated().LDFinish;
-
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%1.0f"), Value);
+  _stprintf(tmp, _T("%1.0f"), (double)gradient);
   infobox.SetValue(tmp);
-#else
-  infobox.SetInvalid();
-#endif
 }
 
 void
