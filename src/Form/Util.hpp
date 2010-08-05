@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_FORM_UTIL_HPP
 
 #include "Units.hpp"
+#include "SettingsUser.hpp"
 
 #include <tchar.h>
 
@@ -152,5 +153,12 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
                  UnitGroup_t unit_group, double &value,
                  const TCHAR *registry_name);
 #endif
+
+bool
+SaveFormProperty(WndForm *wfm, const TCHAR *field, DisplayTextType_t &value);
+
+bool
+SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
+                         DisplayTextType_t &value);
 
 #endif

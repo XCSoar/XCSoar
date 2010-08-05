@@ -1926,30 +1926,6 @@ setVariables()
 }
 
 static bool
-SaveFormProperty(WndForm *wfm, const TCHAR *field, DisplayTextType_t &value)
-{
-  WndProperty* wp = (WndProperty*)wfm->FindByName(field);
-  if (wp) {
-    if ((int)value != wp->GetDataField()->GetAsInteger()) {
-      value = (DisplayTextType_t)wp->GetDataField()->GetAsInteger();
-      return true;
-    }
-  }
-  return false;
-}
-
-static bool
-SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
-                         DisplayTextType_t &value) {
-  if (SaveFormProperty(wfm, field, value)) {
-    Profile::Set(reg, value);
-    return true;
-  } else {
-    return false;
-  }
-}
-
-static bool
 FinishFileField(const WndProperty &wp, const TCHAR *profile_key,
                 const TCHAR *old_value)
 {
