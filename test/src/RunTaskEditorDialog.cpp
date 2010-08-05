@@ -123,7 +123,6 @@ Waypoints way_points;
 static TaskBehaviour task_behaviour;
 static TaskEvents task_events;
 static TaskManager task_manager(task_events, task_behaviour, way_points);
-TaskClientUI task_ui(task_manager, task_behaviour, task_events);
 
 static Airspaces airspace_database;
 
