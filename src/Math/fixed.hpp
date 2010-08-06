@@ -736,12 +736,6 @@ inline fixed ceil(fixed const& x)
 }
 
 gcc_pure
-inline fixed abs(fixed const& x)
-{
-  return x.abs();
-}
-
-gcc_pure
 inline fixed fabs(fixed const& x)
 {
   return x.abs();

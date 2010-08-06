@@ -134,7 +134,7 @@ WayPointFile::check_altitude(Waypoint &new_waypoint,
     if (!alt_ok)
       new_waypoint.Altitude = fixed_zero;
   } else { // TERRAIN_VALID
-    if (!alt_ok || abs((fixed)t_alt - new_waypoint.Altitude) > fixed(100))
+    if (!alt_ok || fabs((fixed)t_alt - new_waypoint.Altitude) > fixed(100))
     new_waypoint.Altitude = (fixed)t_alt;
   }
 }

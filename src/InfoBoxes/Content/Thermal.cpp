@@ -208,7 +208,7 @@ InfoBoxContentThermalLastTime::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR sTmp[32];
-  int dd = (int)abs(XCSoarInterface::Calculated().LastThermalTime) % (3600 * 24);
+  int dd = abs((int)XCSoarInterface::Calculated().LastThermalTime) % (3600 * 24);
   int hours = dd / 3600;
   int mins = dd / 60 - hours * 60;
   int seconds = dd - mins * 60 - hours * 3600;
