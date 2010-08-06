@@ -38,25 +38,8 @@ Copyright_License {
 */
 
 #include "Gauge/GaugeFLARM.hpp"
-#include "Math/FastMath.h"
-#include "Math/FastRotation.hpp"
-#include "Screen/Graphics.hpp"
-#include "Screen/Fonts.hpp"
-#include "Screen/Layout.hpp"
-#include "Screen/BitmapCanvas.hpp"
 #include "NMEA/Info.hpp"
-#include "Units.hpp"
-#include "resource.h"
 #include "Dialogs.h"
-
-#include <stdio.h>
-
-#include <algorithm>
-
-using std::min;
-using std::max;
-
-#define FLARMMAXRANGE 2000
 
 /**
  * Constructor of the GaugeFLARM class
@@ -102,8 +85,7 @@ GaugeFLARM::Update(bool enable, const NMEA_INFO &gps_info,
  * This function is called when the mouse is pressed on the FLARM gauge and
  * opens the FLARM Traffic dialog
  * @param x x-Coordinate of the click
- * @param y x-Coordinate of the click
- * @return
+ * @param y y-Coordinate of the click
  */
 bool
 GaugeFLARM::on_mouse_down(int x, int y)

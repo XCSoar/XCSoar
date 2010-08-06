@@ -36,14 +36,13 @@ Copyright_License {
 }
 */
 
-#ifndef GAUGE_FLARM_H
-#define GAUGE_FLARM_H
+#ifndef GAUGE_FLARM_HPP
+#define GAUGE_FLARM_HPP
 
-#include "Screen/BufferWindow.hpp"
-#include "Screen/Bitmap.hpp"
 #include "FlarmTrafficWindow.hpp"
 
 struct NMEA_INFO;
+struct SETTINGS_TEAMCODE;
 class ContainerWindow;
 
 /**
@@ -71,9 +70,6 @@ public:
 protected:
   bool on_mouse_down(int x, int y);
   virtual bool on_user(unsigned id);
-
-private:
-  int RangeScale(double d);
 };
 
 #endif
