@@ -198,43 +198,43 @@ public:
 
   gcc_pure
   long as_long() const {
-    return (long)(m_nVal/resolution);
+    return (long)(m_nVal >> resolution_shift);
   }
 
   gcc_pure
   int64_t as_int64() const {
-    return m_nVal/resolution;
+    return m_nVal >> resolution_shift;
   }
 
   gcc_pure
   int as_int() const {
-    return (int)(m_nVal/resolution);
+    return (int)(m_nVal >> resolution_shift);
   }
 
   gcc_pure
   unsigned long as_unsigned_long() const {
-    return (unsigned long)(m_nVal/resolution);
+    return (unsigned long)(m_nVal >> resolution_shift);
   }
 
   /*
   uint64_t as_unsigned_int64() const {
-    return (uint64_t)m_nVal/resolution;
+    return (uint64_t)(m_nVal >> resolution_shift);
   }
   */
 
   gcc_pure
   unsigned int as_unsigned_int() const {
-    return (unsigned int)(m_nVal/resolution);
+    return (unsigned int)(m_nVal >> resolution_shift);
   }
 
   gcc_pure
   short as_short() const {
-    return (short)(m_nVal/resolution);
+    return (short)(m_nVal >> resolution_shift);
   }
 
   gcc_pure
   unsigned short as_unsigned_short() const {
-    return (unsigned short)(m_nVal/resolution);
+    return (unsigned short)(m_nVal >> resolution_shift);
   }
 
   fixed operator++() {
