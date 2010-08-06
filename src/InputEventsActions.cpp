@@ -1020,25 +1020,28 @@ InputEvents::eventBugs(const TCHAR *misc)
 {
   ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
   GlidePolar polar = task_manager->get_glide_polar();
-  double BUGS = polar.get_bugs();
-  double oldBugs = BUGS;
+  fixed BUGS = polar.get_bugs();
+  fixed oldBugs = BUGS;
 
-  if (_tcscmp(misc, _T("up")) == 0)
-    BUGS = iround(BUGS * 100 + 10) / 100.0;
-  else if (_tcscmp(misc, _T("down")) == 0)
-    BUGS = iround(BUGS * 100 - 10) / 100.0;
-  else if (_tcscmp(misc, _T("max")) == 0)
-    BUGS = 1.0;
+  if (_tcscmp(misc, _T("up")) == 0) {
+    BUGS += fixed_one / 10;
+    if (BUGS > fixed_one)
+      BUGS = fixed_one;
+  } else if (_tcscmp(misc, _T("down")) == 0) {
+    BUGS -= fixed_one / 10;
+    if (BUGS < fixed_half)
+      BUGS = fixed_half;
+  } else if (_tcscmp(misc, _T("max")) == 0)
+    BUGS = fixed_one;
   else if (_tcscmp(misc, _T("min")) == 0)
-    BUGS = 0.0;
+    BUGS = fixed_half;
   else if (_tcscmp(misc, _T("show")) == 0) {
     TCHAR Temp[100];
-    _stprintf(Temp, _T("%d"), iround(BUGS * 100));
+    _stprintf(Temp, _T("%d"), (int)(BUGS * 100));
     Message::AddMessage(_("Bugs Performance"), Temp);
   }
 
   if (BUGS != oldBugs) {
-    BUGS = min(1.0, max(0.5, BUGS));
     polar.set_bugs(fixed(BUGS));
     task_manager->set_glide_polar(polar);
   }
@@ -1056,25 +1059,28 @@ InputEvents::eventBallast(const TCHAR *misc)
 {
   ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
   GlidePolar polar = task_manager->get_glide_polar();
-  double BALLAST = polar.get_ballast();
-  double oldBallast = BALLAST;
+  fixed BALLAST = polar.get_ballast();
+  fixed oldBallast = BALLAST;
 
-  if (_tcscmp(misc, _T("up")) == 0)
-    BALLAST = iround(BALLAST * 100.0 + 10) / 100.0;
-  else if (_tcscmp(misc, _T("down")) == 0)
-    BALLAST = iround(BALLAST * 100.0 - 10) / 100.0;
-  else if (_tcscmp(misc, _T("max")) == 0)
-    BALLAST = 1.0;
+  if (_tcscmp(misc, _T("up")) == 0) {
+    BALLAST += fixed_one / 10;
+    if (BALLAST >= fixed_one)
+      BALLAST = fixed_one;
+  } else if (_tcscmp(misc, _T("down")) == 0) {
+    BALLAST -= fixed_one / 10;
+    if (BALLAST < fixed_zero)
+      BALLAST = fixed_zero;
+  } else if (_tcscmp(misc, _T("max")) == 0)
+    BALLAST = fixed_one;
   else if (_tcscmp(misc, _T("min")) == 0)
-    BALLAST = 0.0;
+    BALLAST = fixed_zero;
   else if (_tcscmp(misc, _T("show")) == 0) {
     TCHAR Temp[100];
-    _stprintf(Temp, _T("%d"), iround(BALLAST * 100));
+    _stprintf(Temp, _T("%d"), (int)(BALLAST * 100));
     Message::AddMessage(_("Ballast %"), Temp);
   }
 
   if (BALLAST != oldBallast) {
-    BALLAST = min(1.0,max(0.0,BALLAST));
     polar.set_ballast(fixed(BALLAST));
     task_manager->set_glide_polar(polar);
   }
