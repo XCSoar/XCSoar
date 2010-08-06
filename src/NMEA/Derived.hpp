@@ -91,6 +91,12 @@ struct VARIO_INFO
   int AverageLD;
 
   fixed LDvario;
+
+  /**
+   * The lift of each ten degrees while circling.
+   * Index 1 equals 5 to 15 degrees.
+   */
+  fixed LiftDatabase[36];
 };
 
 /**

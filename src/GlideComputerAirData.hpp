@@ -95,6 +95,8 @@ private:
   void AverageClimbRate();
   void Average30s();
   void AverageThermal();
+  void ResetLiftDatabase();
+  void UpdateLiftDatabase();
   void MaxHeightGain();
   void ThermalGain();
   void LD();
