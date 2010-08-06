@@ -180,7 +180,7 @@ event=StatusMessage Final Glide Through Terrain
 # mode=default
 # ------------
 
-mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Config3 Info1 Info2 Exit Menu Vario1 Vario2 Preview
+mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Config3 Info1 Info2 Info3 Exit Menu Vario1 Vario2 Preview
 type=key
 data=ESCAPE
 event=Mode default
@@ -197,19 +197,19 @@ event=Pan supertoggle
 
 # clear main entry buttons
 
-mode=default Display1 Display2 Config1 Config2 Config3 Info1 Info2 Exit Vario1 Vario2 pan
+mode=default Display1 Display2 Config1 Config2 Config3 Info1 Info2 Info3 Exit Vario1 Vario2 pan
 type=key
 data=APP1
 label=
 location=1
 
-mode=default Nav1 Nav2 Config1 Config2 Config3 Info1 Info2 Exit Vario1 Vario2 pan Preview
+mode=default Nav1 Nav2 Config1 Config2 Config3 Info1 Info2 Info3 Exit Vario1 Vario2 pan Preview
 type=key
 data=APP2
 label=
 location=2
 
-mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 Exit pan Preview
+mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 Info3 Exit pan Preview
 type=key
 data=APP3
 label=
@@ -1028,7 +1028,7 @@ location=9
 mode=Info2
 type=key
 data=APP4
-event=Mode default
+event=Mode Info3
 label=Info
 location=4
 
@@ -1069,6 +1069,52 @@ data=0
 event=RepeatStatusMessage
 label=Message\nRepeat
 location=9
+
+# -------------
+# mode=Info3
+# -------------
+mode=Info3
+type=key
+data=APP4
+event=Mode default
+label=Info
+location=4
+
+mode=Info3
+type=key
+data=6
+event=FlarmTraffic
+label=FLARM Radar
+location=5
+
+mode=Info3
+type=key
+data=7
+event=ThermalAssistant
+label=Thermal Assistant
+location=6
+
+mode=Info3
+type=key
+data=8
+event=Null
+label=
+location=7
+
+mode=Info3
+type=key
+data=9
+event=Null
+label=
+location=8
+
+mode=Info3
+type=key
+data=0
+event=Null
+label=
+location=9
+
 
 # -------------
 # mode=Exit
