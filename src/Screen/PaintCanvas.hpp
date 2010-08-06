@@ -59,6 +59,10 @@ private:
 public:
   PaintCanvas(Window &_window);
   ~PaintCanvas();
+
+  const RECT &get_dirty() const {
+    return ps.rcPaint;
+  }
 };
 
 #endif

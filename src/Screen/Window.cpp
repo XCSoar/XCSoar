@@ -382,6 +382,12 @@ Window::on_paint(Canvas &canvas)
 {
 }
 
+void
+Window::on_paint(Canvas &canvas, const RECT &dirty)
+{
+  on_paint(canvas);
+}
+
 #ifdef ENABLE_SDL
 
 bool
@@ -527,7 +533,7 @@ Window::on_message(HWND _hWnd, UINT message,
   case WM_PAINT:
     if (custom_painting) {
       PaintCanvas canvas(*this);
-      on_paint(canvas);
+      on_paint(canvas, canvas.get_dirty());
       return 0;
     }
     break;
