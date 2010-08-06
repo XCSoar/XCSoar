@@ -118,7 +118,7 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
   canvas.select(Fonts::MapBold);
 
   for (unsigned i = start; i < end; i++) {
-    if (has_focus() && i == relative_cursor) {
+    if (i == relative_cursor) {
       Brush brush(selected_background_color);
       canvas.fill_rectangle(rc, brush);
     } else
@@ -126,7 +126,7 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 
     PaintItemCallback(canvas, rc, origin + i);
 
-    if (i == relative_cursor)
+    if (has_focus() && i == relative_cursor)
       canvas.draw_focus(rc);
 
     ::OffsetRect(&rc, 0, rc.bottom - rc.top);
