@@ -79,18 +79,18 @@ RasterMap::GetMapCenter(GEOPOINT *loc) const
 void
 RasterMap::SetViewCenter(const GEOPOINT &location)
 {
-  int x, y;
-  if (raster_tile_cache.GetInitialised()) {
-    x = lround((location.Longitude - TerrainInfo.TopLeft.Longitude).value_native() *
-               raster_tile_cache.GetWidth()
-                   /(TerrainInfo.BottomRight.Longitude-TerrainInfo.TopLeft.Longitude).value_native());
-    y = lround((TerrainInfo.TopLeft.Latitude - location.Latitude).value_native() *
-               raster_tile_cache.GetHeight()
-                   /(TerrainInfo.TopLeft.Latitude-TerrainInfo.BottomRight.Latitude).value_native());
-    if (raster_tile_cache.PollTiles(x, y)) {
-      _ReloadJPG2000();
-      raster_tile_cache.PollTiles(x, y);
-    }
+  if (!raster_tile_cache.GetInitialised())
+    return;
+
+  int x = lround((location.Longitude - TerrainInfo.TopLeft.Longitude).value_native() *
+                 raster_tile_cache.GetWidth()
+                 /(TerrainInfo.BottomRight.Longitude-TerrainInfo.TopLeft.Longitude).value_native());
+  int y = lround((TerrainInfo.TopLeft.Latitude - location.Latitude).value_native() *
+                 raster_tile_cache.GetHeight()
+                 /(TerrainInfo.TopLeft.Latitude-TerrainInfo.BottomRight.Latitude).value_native());
+  if (raster_tile_cache.PollTiles(x, y)) {
+    _ReloadJPG2000();
+    raster_tile_cache.PollTiles(x, y);
   }
 }
 
