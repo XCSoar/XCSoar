@@ -93,7 +93,7 @@ bool
 WndListFrame::on_setfocus()
 {
   PaintWindow::on_setfocus();
-  invalidate();
+  invalidate_item(relative_cursor);
   return true;
 }
 
@@ -101,7 +101,7 @@ bool
 WndListFrame::on_killfocus()
 {
   PaintWindow::on_killfocus();
-  invalidate();
+  invalidate_item(relative_cursor);
   return true;
 }
 
@@ -110,11 +110,7 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 {
   Brush background_brush(background_color);
 
-  RECT rc;
-  rc.left = 0;
-  rc.top = start * item_height;
-  rc.right = scroll_bar.get_left(get_size());
-  rc.bottom = rc.top + item_height;
+  RECT rc = item_rect(start);
 
   canvas.set_text_color(text_color);
   canvas.set_background_color(background_color);
@@ -231,8 +227,9 @@ WndListFrame::SetCursorIndex(unsigned i)
 
   EnsureVisible(i);
 
+  invalidate_item(relative_cursor);
   relative_cursor = i - origin;
-  invalidate();
+  invalidate_item(relative_cursor);
 
   if (CursorCallback != NULL)
     CursorCallback(GetCursorIndex());

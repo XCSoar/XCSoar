@@ -165,6 +165,20 @@ protected:
     return i >= 0 && (unsigned)i < length ? i : -1;
   }
 
+  gcc_const
+  RECT item_rect(unsigned i) const {
+    RECT rc;
+    rc.left = 0;
+    rc.top = i * item_height;
+    rc.right = scroll_bar.get_left(get_size());
+    rc.bottom = rc.top + item_height;
+    return rc;
+  }
+
+  void invalidate_item(unsigned i) {
+    invalidate(item_rect(i));
+  }
+
   void drag_end();
 
   void DrawItems(Canvas &canvas, unsigned start, unsigned end) const;
