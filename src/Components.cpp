@@ -374,7 +374,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   // Create the drawing thread
   LogStartUp(_T("CreateDrawingThread"));
-  draw_thread = new DrawThread(main_window.map, main_window.flarm);
+  draw_thread = new DrawThread(main_window.map, main_window.flarm,
+                               main_window.ta);
   draw_thread->start();
 
   // Show the infoboxes

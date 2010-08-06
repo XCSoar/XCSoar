@@ -39,6 +39,7 @@ Copyright_License {
 #include "DrawThread.hpp"
 #include "GlueMapWindow.hpp"
 #include "Gauge/GaugeFLARM.hpp"
+#include "Gauge/GaugeThermalAssistant.hpp"
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 
@@ -112,6 +113,9 @@ DrawThread::run()
       if (flarm != NULL)
         flarm->Update(map.SettingsMap().EnableFLARMGauge, map.Basic(),
                       map.SettingsComputer());
+
+      if (ta != NULL)
+        ta->Update(map.Basic().Heading, map.Calculated());
 
       // Draw the moving map
       map.DrawThreadLoop();

@@ -44,6 +44,7 @@ Copyright_License {
 
 class GlueMapWindow;
 class GaugeFLARM;
+class GaugeThermalAssistant;
 
 /**
  * The DrawThread handles the rendering and drawing on the screen.
@@ -79,12 +80,16 @@ class DrawThread : public Thread {
   /** Pointer to the FLARM gauge */
   GaugeFLARM *flarm;
 
+  /** Pointer to the FLARM gauge */
+  GaugeThermalAssistant *ta;
+
 public:
-  DrawThread(GlueMapWindow &_map, GaugeFLARM *_flarm)
+  DrawThread(GlueMapWindow &_map, GaugeFLARM *_flarm,
+             GaugeThermalAssistant *_ta)
     :running(_T("DrawThread::running"), true),
      trigger(_T("DrawThread::trigger"), true),
      stop_trigger(_T("WorkerThread::stop_trigger"), true),
-     map(_map), flarm(_flarm) {
+     map(_map), flarm(_flarm), ta(_ta) {
   }
 
   /** Locks the Mutex and "pauses" the drawing thread */

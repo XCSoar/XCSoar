@@ -207,6 +207,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Gauge/FlarmTrafficWindow.cpp \
 	$(SRC)/Gauge/GaugeCDI.cpp \
 	$(SRC)/Gauge/GaugeFLARM.cpp \
+	$(SRC)/Gauge/GaugeThermalAssistant.cpp \
 	$(SRC)/Gauge/GaugeVario.cpp \
 	\
 	$(SRC)/AirfieldDetails.cpp \

@@ -50,6 +50,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Screen/Fonts.hpp"
 #include "Gauge/GaugeFLARM.hpp"
+#include "Gauge/GaugeThermalAssistant.hpp"
 #include "Gauge/GaugeVario.hpp"
 #include "Gauge/GaugeCDI.hpp"
 #include "MenuBar.hpp"
@@ -67,6 +68,8 @@ MainWindow::~MainWindow()
     delete vario;
   if (flarm != NULL)
     delete flarm;
+  if (ta != NULL)
+    delete ta;
 }
 
 bool
@@ -151,6 +154,12 @@ MainWindow::initialise()
                          InfoBoxLayout::ControlWidth * 2 - 1,
                          InfoBoxLayout::ControlHeight * 2 - 1);
   flarm->bring_to_top();
+
+  unsigned sz = std::min(InfoBoxLayout::ControlHeight,
+                         InfoBoxLayout::ControlWidth) * 2;
+
+  ta = new GaugeThermalAssistant(*this, 0, rc.bottom - sz, sz, sz);
+  ta->bring_to_top();
 
   LogStartUp(_T("Initialise message system"));
   popup.set(rc);

@@ -36,61 +36,36 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MAIN_WINDOW_HXX
-#define XCSOAR_MAIN_WINDOW_HXX
+#ifndef GAUGE_THERMAL_ASSISTENT_HPP
+#define GAUGE_THERMAL_ASSISTENT_HPP
 
-#include "Screen/SingleWindow.hpp"
-#include "GlueMapWindow.hpp"
-#include "PopupMessage.hpp"
+#include "Gauge/ThermalAssistantWindow.hpp"
 
-class GaugeVario;
-class GaugeFLARM;
-class GaugeThermalAssistant;
-class StatusMessageList;
+struct DERIVED_INFO;
+class Angle;
+class ContainerWindow;
 
 /**
- * The XCSoar main window.
+ * Widget to display a FLARM gauge
  */
-class MainWindow : public SingleWindow {
-public:
-  GlueMapWindow map;
-  GaugeVario *vario;
-  GaugeFLARM *flarm;
-  GaugeThermalAssistant *ta;
-  PopupMessage popup;
-
-private:
-  timer_t timer_id;
+class GaugeThermalAssistant : public ThermalAssistantWindow {
+  /**
+   * WM_USER offsets.
+   */
+  enum msg {
+    MSG_SHOW,
+    MSG_HIDE,
+  };
 
 public:
-  MainWindow(const StatusMessageList &status_messages)
-    :vario(NULL), flarm(NULL), ta(NULL), popup(status_messages, *this) {}
-  virtual ~MainWindow();
+  GaugeThermalAssistant(ContainerWindow &parent,
+                        int left, int top, unsigned width, unsigned height);
 
-  static bool find(const TCHAR *text) {
-    return TopWindow::find(_T("XCSoarMain"), text);
-  }
-
-  static bool register_class(HINSTANCE hInstance);
-
-  void set(const TCHAR *text,
-           int left, int top, unsigned width, unsigned height);
-
-  void initialise();
-
-  void reset() {
-    map.reset();
-    TopWindow::reset();
-  }
+  void Update(const Angle direction, const DERIVED_INFO &derived);
 
 protected:
-  virtual bool on_command(unsigned id, unsigned code);
-  bool on_activate();
-  bool on_setfocus();
-  bool on_timer(timer_t id);
-  bool on_create();
-  bool on_destroy();
-  bool on_close();
+  bool on_mouse_down(int x, int y);
+  virtual bool on_user(unsigned id);
 };
 
 #endif
