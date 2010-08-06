@@ -80,12 +80,10 @@ RasterMap::SetViewCenter(const GEOPOINT &location)
   if (!raster_tile_cache.GetInitialised())
     return;
 
-  int x = angle_to_pixel(location.Longitude, TerrainInfo.TopLeft.Longitude,
-                         TerrainInfo.BottomRight.Longitude,
+  int x = angle_to_pixel(location.Longitude, bounds.west, bounds.east,
                          raster_tile_cache.GetWidth());
 
-  int y = angle_to_pixel(location.Latitude, TerrainInfo.TopLeft.Latitude,
-                         TerrainInfo.BottomRight.Latitude,
+  int y = angle_to_pixel(location.Latitude, bounds.north, bounds.south,
                          raster_tile_cache.GetHeight());
 
   if (raster_tile_cache.PollTiles(x, y)) {
@@ -140,14 +138,11 @@ RasterMap::_ReloadJPG2000()
   if (!raster_tile_cache.GetInitialised())
     return;
 
-  TerrainInfo.TopLeft.Longitude =
-    Angle::degrees((fixed)raster_tile_cache.lon_min);
-  TerrainInfo.BottomRight.Longitude =
-    Angle::degrees((fixed)raster_tile_cache.lon_max);
-  TerrainInfo.TopLeft.Latitude =
-    Angle::degrees((fixed)raster_tile_cache.lat_max);
-  TerrainInfo.BottomRight.Latitude =
-    Angle::degrees((fixed)raster_tile_cache.lat_min);
+  bounds.west = Angle::degrees((fixed)raster_tile_cache.lon_min);
+  bounds.east = Angle::degrees((fixed)raster_tile_cache.lon_max);
+  bounds.north = Angle::degrees((fixed)raster_tile_cache.lat_max);
+  bounds.south = Angle::degrees((fixed)raster_tile_cache.lat_min);
+
   TerrainInfo.StepSize = Angle::degrees((fixed)(raster_tile_cache.lon_max -
                                                 raster_tile_cache.lon_min)
                                         / raster_tile_cache.GetWidth());
@@ -161,8 +156,8 @@ RasterMap::_ReloadJPG2000()
   rounding.fXroundingFine = fixed(256.0/fx);
   rounding.fYroundingFine = fixed(256.0/fy);
 
-  rounding.xlleft = (int)(TerrainInfo.TopLeft.Longitude.value_native() * rounding.fXroundingFine) + 128;
-  rounding.xlltop = (int)(TerrainInfo.TopLeft.Latitude.value_native() * rounding.fYroundingFine) - 128;
+  rounding.xlleft = (int)(bounds.west.value_native() * rounding.fXroundingFine) + 128;
+  rounding.xlltop = (int)(bounds.north.value_native() * rounding.fYroundingFine) - 128;
 }
 
 RasterMap *

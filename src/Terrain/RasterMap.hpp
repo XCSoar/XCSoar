@@ -40,13 +40,12 @@ Copyright_License {
 #define XCSOAR_TERRAIN_RASTER_MAP_HPP
 
 #include "Navigation/GeoPoint.hpp"
+#include "Geo/BoundsRectangle.hpp"
 #include "jasper/RasterTile.hpp"
 #include "Compiler.h"
 
 typedef struct _TERRAIN_INFO
 {
-  GEOPOINT TopLeft;
-  GEOPOINT BottomRight;
   Angle StepSize;
 } TERRAIN_INFO;
 
@@ -55,6 +54,7 @@ class RasterMap {
 
   char *path;
   RasterTileCache raster_tile_cache;
+  BoundsRectangle bounds;
 
 public:
   /** invalid value for terrain */
@@ -81,15 +81,12 @@ public:
 
   gcc_pure
   bool inside(const GEOPOINT &pt) const {
-    return pt.Latitude <= TerrainInfo.TopLeft.Latitude &&
-      pt.Latitude >= TerrainInfo.BottomRight.Latitude &&
-      pt.Longitude <= TerrainInfo.BottomRight.Longitude &&
-      pt.Longitude >= TerrainInfo.TopLeft.Longitude;
+    return bounds.inside(pt);
   }
 
   gcc_pure
   GEOPOINT GetMapCenter() const {
-    return TerrainInfo.TopLeft.interpolate(TerrainInfo.BottomRight, fixed_half);
+    return bounds.center();
   }
 
   void SetViewCenter(const GEOPOINT &location);
