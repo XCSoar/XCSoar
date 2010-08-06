@@ -123,11 +123,8 @@ RasterMap::GetEffectivePixelSize(fixed &pixel_D,
 short
 RasterMap::GetField(const GEOPOINT &location)
 {
-  return raster_tile_cache.GetField((int)(location.Longitude.value_native() *
-                             rounding.fXroundingFine) - rounding.xlleft,
-                       rounding.xlltop -
-                       (int)(location.Latitude.value_native() *
-                             rounding.fYroundingFine));
+  std::pair<unsigned, unsigned> xy = projection.project(location);
+  return raster_tile_cache.GetField(xy.first, xy.second);
 }
 
 void
@@ -143,21 +140,12 @@ RasterMap::_ReloadJPG2000()
   bounds.north = Angle::degrees((fixed)raster_tile_cache.lat_max);
   bounds.south = Angle::degrees((fixed)raster_tile_cache.lat_min);
 
+  projection.set(bounds, raster_tile_cache.GetWidth() * 256,
+                 raster_tile_cache.GetHeight() * 256);
+
   TerrainInfo.StepSize = Angle::degrees((fixed)(raster_tile_cache.lon_max -
                                                 raster_tile_cache.lon_min)
                                         / raster_tile_cache.GetWidth());
-
-  // use double here for maximum accuracy, since we are dealing with
-  // numbers close to the lower range of the fixed type
-
-  const double fx = (double)TerrainInfo.StepSize.value_native();
-  const double fy = (double)TerrainInfo.StepSize.value_native();
-
-  rounding.fXroundingFine = fixed(256.0/fx);
-  rounding.fYroundingFine = fixed(256.0/fy);
-
-  rounding.xlleft = (int)(bounds.west.value_native() * rounding.fXroundingFine) + 128;
-  rounding.xlltop = (int)(bounds.north.value_native() * rounding.fYroundingFine) - 128;
 }
 
 RasterMap *

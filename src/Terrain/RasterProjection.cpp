@@ -36,66 +36,18 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TERRAIN_RASTER_MAP_HPP
-#define XCSOAR_TERRAIN_RASTER_MAP_HPP
-
 #include "RasterProjection.hpp"
-#include "Navigation/GeoPoint.hpp"
 #include "Geo/BoundsRectangle.hpp"
-#include "jasper/RasterTile.hpp"
-#include "Compiler.h"
 
-typedef struct _TERRAIN_INFO
+void
+RasterProjection::set(const BoundsRectangle &bounds,
+                      unsigned width, unsigned height)
 {
-  Angle StepSize;
-} TERRAIN_INFO;
+  x_scale = fixed(width) /
+    (bounds.east - bounds.west).as_bearing().value_native();
+  left = bounds.west.value_native() * x_scale;
 
-class RasterMap {
-  static int ref_count;
-
-  char *path;
-  RasterTileCache raster_tile_cache;
-  BoundsRectangle bounds;
-  RasterProjection projection;
-
-public:
-  /** invalid value for terrain */
-  static const short TERRAIN_INVALID = -1000;
-
-public:
-  RasterMap(const char *path);
-  ~RasterMap();
-
-  static RasterMap *LoadFile(const char *path);
-
-  TERRAIN_INFO TerrainInfo;
-
-  bool isMapLoaded() const {
-    return raster_tile_cache.GetInitialised();
-  }
-
-  gcc_pure
-  bool inside(const GEOPOINT &pt) const {
-    return bounds.inside(pt);
-  }
-
-  gcc_pure
-  GEOPOINT GetMapCenter() const {
-    return bounds.center();
-  }
-
-  void SetViewCenter(const GEOPOINT &location);
-
-  // accurate method
-  int GetEffectivePixelSize(fixed &pixel_D,
-                            const GEOPOINT &location) const;
-
-  gcc_pure
-  short GetField(const GEOPOINT &location);
-
- protected:
-  void _ReloadJPG2000(void);
-};
-
-
-#endif
+  y_scale = fixed(height) /
+    (bounds.north - bounds.south).as_bearing().value_native();
+  top = bounds.north.value_native() * y_scale;
+}

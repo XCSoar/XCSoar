@@ -36,66 +36,35 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TERRAIN_RASTER_MAP_HPP
-#define XCSOAR_TERRAIN_RASTER_MAP_HPP
+#ifndef XCSOAR_TERRAIN_RASTER_PROJECTION_HPP
+#define XCSOAR_TERRAIN_RASTER_PROJECTION_HPP
 
-#include "RasterProjection.hpp"
 #include "Navigation/GeoPoint.hpp"
-#include "Geo/BoundsRectangle.hpp"
-#include "jasper/RasterTile.hpp"
+#include "Math/fixed.hpp"
 #include "Compiler.h"
 
-typedef struct _TERRAIN_INFO
-{
-  Angle StepSize;
-} TERRAIN_INFO;
+#include <utility>
 
-class RasterMap {
-  static int ref_count;
+struct BoundsRectangle;
 
-  char *path;
-  RasterTileCache raster_tile_cache;
-  BoundsRectangle bounds;
-  RasterProjection projection;
-
-public:
-  /** invalid value for terrain */
-  static const short TERRAIN_INVALID = -1000;
+/**
+ * This class manages the projection from GEOPOINT to RasterMap
+ * coordinates.
+ */
+class RasterProjection {
+  int left, top;
+  fixed x_scale, y_scale;
 
 public:
-  RasterMap(const char *path);
-  ~RasterMap();
+  void set(const BoundsRectangle &bounds, unsigned width, unsigned height);
 
-  static RasterMap *LoadFile(const char *path);
+  gcc_const std::pair<unsigned, unsigned>
+  project(const GEOPOINT location) const {
+    unsigned x = (int)(location.Longitude.value_native() * x_scale) - left;
+    unsigned y = top - (int)(location.Latitude.value_native() * y_scale);
 
-  TERRAIN_INFO TerrainInfo;
-
-  bool isMapLoaded() const {
-    return raster_tile_cache.GetInitialised();
+    return std::pair<unsigned, unsigned>(x, y);
   }
-
-  gcc_pure
-  bool inside(const GEOPOINT &pt) const {
-    return bounds.inside(pt);
-  }
-
-  gcc_pure
-  GEOPOINT GetMapCenter() const {
-    return bounds.center();
-  }
-
-  void SetViewCenter(const GEOPOINT &location);
-
-  // accurate method
-  int GetEffectivePixelSize(fixed &pixel_D,
-                            const GEOPOINT &location) const;
-
-  gcc_pure
-  short GetField(const GEOPOINT &location);
-
- protected:
-  void _ReloadJPG2000(void);
 };
-
 
 #endif
