@@ -37,6 +37,7 @@ public:
     return !buffer.defined();
   }
 
+  gcc_pure
   short GetField(unsigned x, unsigned y, unsigned ix, unsigned iy) const;
 
   inline short* GetImageBuffer() {
@@ -77,8 +78,10 @@ public:
     return scan_overview;
   }
 
+  gcc_pure
   short GetField(unsigned int lx,
-                 unsigned int ly);
+                 unsigned int ly) const;
+
   void LoadJPG2000(const char *path);
 
   bool GetInitialised() const {
@@ -107,8 +110,8 @@ public:
   }
 
   double lat_min, lat_max, lon_min, lon_max;
-  unsigned int GetWidth() { return width; }
-  unsigned int GetHeight() { return height; }
+  unsigned int GetWidth() const { return width; }
+  unsigned int GetHeight() const { return height; }
 
 private:
   unsigned int overview_width_fine, overview_height_fine;

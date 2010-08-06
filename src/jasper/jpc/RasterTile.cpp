@@ -194,7 +194,7 @@ RasterTileCache::TileRequest(int index)
 }
 
 short
-RasterTileCache::GetField(unsigned int lx, unsigned int ly)
+RasterTileCache::GetField(unsigned int lx, unsigned int ly) const
 {
   if ((lx >= overview_width_fine) || (ly >= overview_height_fine))
     // outside overall bounds
