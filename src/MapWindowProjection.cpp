@@ -55,8 +55,8 @@ MapWindowProjection::MapWindowProjection():
   Projection(),
   DisplayMode(dmCruise),
   DisplayAircraftAngle(),
-  MapScale(fixed(5)),
-  _RequestedMapScale(fixed(5)),
+  MapScale(5),
+  _RequestedMapScale(5),
   _origin_centered(false),
   ScaleListCount (0),
   smart_range_active(Angle::native(fixed_one))
@@ -83,11 +83,8 @@ bool
 MapWindowProjection::WaypointInScaleFilter(const fixed MapScale,
                                            const Waypoint &way_point)
 {
-  static const fixed fixed_10(10.0);
-  static const fixed fixed_20(20.0);
-  return way_point.is_landable()? 
-    (MapScale <= fixed_20): 
-    (MapScale <= fixed_10);
+  return MapScale <= (way_point.is_landable()
+                      ? fixed_int_constant(20) : fixed_ten);
 }
 
 void
@@ -222,7 +219,7 @@ MapWindowProjection::LimitMapScale(fixed value,
 #endif
   }
 
-  value = max(minreasonable, min(fixed(160.0), value));
+  value = max(minreasonable, min(fixed_int_constant(160), value));
   if (ScaleListCount > 0)
     value = FindMapScale(value);
 
@@ -418,7 +415,7 @@ MapWindowProjection::SmartBounds(const bool force)
   const Angle range = max(MINRANGE, range_real);
 
   fixed scale = range.value_native() / smart_range_active.value_native();
-  if (max(scale, fixed_one / scale) > fixed(4))
+  if (max(scale, fixed_one / scale) > fixed_four)
     recompute = true;
 
   if (recompute || force) {

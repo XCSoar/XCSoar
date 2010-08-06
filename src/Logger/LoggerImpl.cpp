@@ -89,7 +89,7 @@ LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
 }
 
 LoggerImpl::LoggerImpl():
-  frecord_clock(fixed(270)), // 4.5 minutes)
+  frecord_clock(fixed_270), // 4.5 minutes)
   LoggerActive(false),
   DeclaredToDevice(false),
   Simulator(false)

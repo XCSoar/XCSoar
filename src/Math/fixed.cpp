@@ -23,17 +23,6 @@ fixed::value_t const internal_two_pi=0x6487ed51;
 fixed::value_t const internal_half_pi=0x1921fb54;
 fixed::value_t const internal_quarter_pi=0xc90fdaa;
 
-const fixed fixed_pi(fixed::internal(),internal_pi);
-const fixed fixed_two_pi(fixed::internal(),internal_two_pi);
-const fixed fixed_half_pi(fixed::internal(),internal_half_pi);
-const fixed fixed_quarter_pi(fixed::internal(),internal_quarter_pi);
-const fixed fixed_deg_to_rad(M_PI/180.0);
-const fixed fixed_rad_to_deg(180.0/M_PI);
-const fixed fixed_360(360);
-const fixed fixed_180(180);
-const fixed fixed_90(90);
-
-
 fixed& fixed::operator%=(fixed const& other)
 {
   m_nVal = m_nVal%other.m_nVal;

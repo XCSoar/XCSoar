@@ -38,11 +38,11 @@ Copyright_License {
 #include "Angle.hpp"
 
 #ifdef RADIANS
-static const fixed fixed_circle(M_2PI);
-static const fixed fixed_half_circle(M_PI);
+#define fixed_circle fixed_two_pi
+#define fixed_half_circle fixed_pi
 #else
-static const fixed fixed_circle(360);
-static const fixed fixed_half_circle(180);
+#define fixed_circle fixed_360
+#define fixed_half_circle fixed_180
 #endif
 
 int

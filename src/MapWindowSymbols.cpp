@@ -271,7 +271,7 @@ MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
   Brush hbHorizonGround(Color(157, 101, 60));
 
   static const fixed fixed_div(1.0 / 50.0);
-  static const fixed fixed_89(89);
+#define fixed_89 fixed_int_constant(89)
 
   int radius = IBLSCALE(17);
   fixed phi = max(-fixed_89,

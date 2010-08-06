@@ -14,25 +14,43 @@
 using std::max;
 using std::min;
 
+#ifdef FIXED_MATH
+#define fixed_constant(d, f) fixed(fixed::internal(), (f))
+#else
+#define fixed_constant(d, f) (d)
+#endif
+
+#define fixed_int_constant(i) fixed_constant((double)(i), ((fixed::value_t)(i)) << fixed::resolution_shift)
+
+#define fixed_zero fixed_int_constant(0)
+#define fixed_one fixed_int_constant(1)
+#define fixed_minus_one fixed_int_constant(-1)
+#define fixed_two fixed_int_constant(2)
+#define fixed_four fixed_int_constant(4)
+#define fixed_ten fixed_int_constant(10)
+
+#define fixed_half fixed_constant(0.5, 1 << (fixed::resolution_shift - 1))
+
+#define fixed_deg_to_rad fixed_constant(0.0174532925199432958, 0x477d1bLL)
+#define fixed_rad_to_deg fixed_constant(57.2957795131, 0x394bb834cLL)
+#define fixed_pi fixed_constant(M_PI, 0x3243f6a8LL)
+#define fixed_two_pi fixed_constant(M_2PI, 0x6487ed51LL)
+#define fixed_half_pi fixed_constant(M_HALFPI, 0x1921fb54LL)
+#define fixed_quarter_pi fixed_constant(M_HALFPI/2, 0xc90fdaaLL)
+
+#define fixed_90 fixed_int_constant(90)
+#define fixed_180 fixed_int_constant(180)
+#define fixed_270 fixed_int_constant(270)
+#define fixed_360 fixed_int_constant(360)
+
+#define fixed_sqrt_two fixed_constant(1.4142135623730951, 0x16a09e66LL)
+#define fixed_sqrt_half fixed_constant(0.70710678118654757, 0xb504f33LL)
+
 #ifndef FIXED_MATH
 #include <math.h>
 #define FIXED_DOUBLE(x) (x)
 #define FIXED_INT(x) ((int)x)
 typedef double fixed;
-#define fixed_zero 0.0
-#define fixed_half 0.5
-#define fixed_one 1.0
-#define fixed_minus_one -1.0
-#define fixed_two 2.0
-#define fixed_four 4.0
-#define fixed_deg_to_rad 0.0174532925199432958
-#define fixed_rad_to_deg 57.2957795131
-#define fixed_pi M_PI
-#define fixed_two_pi M_2PI
-#define fixed_half_pi M_HALFPI
-#define fixed_360 360
-#define fixed_180 180
-#define fixed_90 90
 
 void sin_cos(const double&theta, double*s, double*c);
 #define positive(x) (x > 0)
@@ -847,22 +865,6 @@ inline fixed sigmoid(fixed const& x)
  }
 
 #define fixed_max fixed(fixed::internal(), 0x7fffffffffffffffLL)
-#define fixed_one fixed(fixed::internal(), 1 << fixed::resolution_shift)
-#define fixed_minus_one fixed(fixed::internal(), ((fixed::value_t)-1) << fixed::resolution_shift)
-#define fixed_two fixed(fixed::internal(), 1 << (fixed::resolution_shift + 1))
-#define fixed_four fixed(fixed::internal(), 1 << (fixed::resolution_shift + 2))
-#define fixed_zero fixed(fixed::internal(), 0)
-#define fixed_half fixed(fixed::internal(), 1 << (fixed::resolution_shift - 1))
-
-extern fixed const fixed_pi;
-extern fixed const fixed_two_pi;
-extern fixed const fixed_half_pi;
-extern fixed const fixed_quarter_pi;
-extern fixed const fixed_deg_to_rad;
-extern fixed const fixed_rad_to_deg;
-extern fixed const fixed_360;
-extern fixed const fixed_180;
-extern fixed const fixed_90;
 
 inline fixed fixed::sigmoid(const fixed&x) {
   return fixed_two/(fixed_one+(-x).exp())-fixed_one;
