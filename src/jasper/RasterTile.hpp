@@ -67,7 +67,7 @@ public:
 private:
   bool initialised;
   RasterTile tiles[MAX_RTC_TILES];
-  int tile_last;
+  mutable int tile_last;
   int ActiveTiles[MAX_ACTIVE_TILES];
   RasterBuffer Overview;
   bool scan_overview;

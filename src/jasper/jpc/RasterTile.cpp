@@ -215,8 +215,10 @@ RasterTileCache::GetField(unsigned int lx, unsigned int ly) const
   for (int i = MAX_ACTIVE_TILES - 1; --i >= 0;) {
     if (((tile_this = ActiveTiles[i]) >= 0)
         && (tile_this != tile_last)
-        && (retval = tiles[tile_this].GetField(px, py, ix, iy)) != RasterTile::TERRAIN_INVALID)
+        && (retval = tiles[tile_this].GetField(px, py, ix, iy)) != RasterTile::TERRAIN_INVALID) {
+      tile_last = tile_this;
       return retval;
+    }
   }
   // still not found, so go to overview
   return Overview.get_interpolated(lx / RTC_SUBSAMPLING, ly / RTC_SUBSAMPLING);
