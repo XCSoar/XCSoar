@@ -167,7 +167,7 @@ protected:
 
   void drag_end();
 
-  void DrawItems(Canvas &canvas) const;
+  void DrawItems(Canvas &canvas, unsigned start, unsigned end) const;
 
   /** Draws the ScrollBar */
   void DrawScrollBar(Canvas &canvas);
@@ -218,6 +218,7 @@ protected:
    * (derived from PaintWindow)
    */
   virtual void on_paint(Canvas &canvas);
+  virtual void on_paint(Canvas &canvas, const RECT &dirty);
 };
 
 #endif

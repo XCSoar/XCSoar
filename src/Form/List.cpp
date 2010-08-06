@@ -106,12 +106,13 @@ WndListFrame::on_killfocus()
 }
 
 void
-WndListFrame::DrawItems(Canvas &canvas) const
+WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 {
   Brush background_brush(background_color);
 
   RECT rc;
-  rc.left = rc.top = 0;
+  rc.left = 0;
+  rc.top = start * item_height;
   rc.right = scroll_bar.get_left(get_size());
   rc.bottom = rc.top + item_height;
 
@@ -120,7 +121,7 @@ WndListFrame::DrawItems(Canvas &canvas) const
   canvas.background_transparent();
   canvas.select(Fonts::MapBold);
 
-  for (unsigned i = 0; i < items_visible + 1; i++) {
+  for (unsigned i = start; i < end; i++) {
     if (has_focus() && i == relative_cursor) {
       Brush brush(selected_background_color);
       canvas.fill_rectangle(rc, brush);
@@ -140,7 +141,17 @@ void
 WndListFrame::on_paint(Canvas &canvas)
 {
   if (PaintItemCallback != NULL)
-    DrawItems(canvas);
+    DrawItems(canvas, 0, items_visible + 1);
+
+  DrawScrollBar(canvas);
+}
+
+void
+WndListFrame::on_paint(Canvas &canvas, const RECT &dirty)
+{
+  if (PaintItemCallback != NULL)
+    DrawItems(canvas, dirty.top / item_height,
+              (dirty.bottom + item_height - 1) / item_height);
 
   DrawScrollBar(canvas);
 }
