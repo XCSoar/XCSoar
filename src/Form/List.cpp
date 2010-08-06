@@ -106,37 +106,41 @@ WndListFrame::on_killfocus()
 }
 
 void
-WndListFrame::on_paint(Canvas &canvas)
+WndListFrame::DrawItems(Canvas &canvas) const
 {
   Brush background_brush(background_color);
 
-  if (PaintItemCallback != NULL) {
-    // paint using the PaintItemCallback
-    RECT rc;
-    rc.left = rc.top = 0;
-    rc.right = scroll_bar.get_left(get_size());
-    rc.bottom = rc.top + item_height;
+  RECT rc;
+  rc.left = rc.top = 0;
+  rc.right = scroll_bar.get_left(get_size());
+  rc.bottom = rc.top + item_height;
 
-    canvas.set_text_color(text_color);
-    canvas.set_background_color(background_color);
-    canvas.background_transparent();
-    canvas.select(Fonts::MapBold);
+  canvas.set_text_color(text_color);
+  canvas.set_background_color(background_color);
+  canvas.background_transparent();
+  canvas.select(Fonts::MapBold);
 
-    for (unsigned i = 0; i < items_visible + 1; i++) {
-      if (has_focus() && i == relative_cursor) {
-        Brush brush(selected_background_color);
-        canvas.fill_rectangle(rc, brush);
-      } else
-        canvas.fill_rectangle(rc, background_brush);
+  for (unsigned i = 0; i < items_visible + 1; i++) {
+    if (has_focus() && i == relative_cursor) {
+      Brush brush(selected_background_color);
+      canvas.fill_rectangle(rc, brush);
+    } else
+      canvas.fill_rectangle(rc, background_brush);
 
-      PaintItemCallback(canvas, rc, origin + i);
+    PaintItemCallback(canvas, rc, origin + i);
 
-      if (i == relative_cursor)
-        canvas.draw_focus(rc);
+    if (i == relative_cursor)
+      canvas.draw_focus(rc);
 
-      ::OffsetRect(&rc, 0, rc.bottom - rc.top);
-    }
+    ::OffsetRect(&rc, 0, rc.bottom - rc.top);
   }
+}
+
+void
+WndListFrame::on_paint(Canvas &canvas)
+{
+  if (PaintItemCallback != NULL)
+    DrawItems(canvas);
 
   DrawScrollBar(canvas);
 }

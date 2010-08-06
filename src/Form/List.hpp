@@ -167,6 +167,8 @@ protected:
 
   void drag_end();
 
+  void DrawItems(Canvas &canvas) const;
+
   /** Draws the ScrollBar */
   void DrawScrollBar(Canvas &canvas);
 
