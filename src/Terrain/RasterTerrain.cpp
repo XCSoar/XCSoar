@@ -39,7 +39,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Profile.hpp"
 #include "LocalPath.hpp"
-#include "RasterMapJPG2000.hpp"
+#include "RasterMap.hpp"
 #include "StringUtil.hpp"
 #include "OS/PathName.hpp"
 
@@ -68,7 +68,7 @@ void RasterTerrain::OpenTerrain(void)
 bool
 RasterTerrain::CreateTerrainMap(const char *zfilename)
 {
-  TerrainMap = RasterMapJPG2000::LoadFile(zfilename);
+  TerrainMap = RasterMap::LoadFile(zfilename);
   return TerrainMap != NULL;
 }
 

@@ -38,8 +38,35 @@ Copyright_License {
 
 #include "Terrain/RasterMap.hpp"
 #include "Math/Earth.hpp"
+#include "jasper/jasper.h"
 
 #include <assert.h>
+#include <string.h>
+
+int RasterMap::ref_count = 0;
+
+RasterMap::RasterMap(const char *_path)
+  :path(strdup(_path))
+{
+  if (ref_count==0) {
+    jas_init();
+  }
+  ref_count++;
+
+  _ReloadJPG2000();
+
+  if (!raster_tile_cache.GetInitialised())
+    raster_tile_cache.Reset();
+}
+
+RasterMap::~RasterMap() {
+  ref_count--;
+  if (ref_count==0) {
+    jas_cleanup();
+  }
+
+  free(path);
+}
 
 bool
 RasterMap::GetMapCenter(GEOPOINT *loc) const
@@ -49,7 +76,23 @@ RasterMap::GetMapCenter(GEOPOINT *loc) const
   return true;
 }
 
-
+void
+RasterMap::SetViewCenter(const GEOPOINT &location)
+{
+  int x, y;
+  if (raster_tile_cache.GetInitialised()) {
+    x = lround((location.Longitude - TerrainInfo.TopLeft.Longitude).value_native() *
+               raster_tile_cache.GetWidth()
+                   /(TerrainInfo.BottomRight.Longitude-TerrainInfo.TopLeft.Longitude).value_native());
+    y = lround((TerrainInfo.TopLeft.Latitude - location.Latitude).value_native() *
+               raster_tile_cache.GetHeight()
+                   /(TerrainInfo.TopLeft.Latitude-TerrainInfo.BottomRight.Latitude).value_native());
+    if (raster_tile_cache.PollTiles(x, y)) {
+      _ReloadJPG2000();
+      raster_tile_cache.PollTiles(x, y);
+    }
+  }
+}
 
 // accurate method
 int
@@ -79,14 +122,60 @@ RasterMap::GetEffectivePixelSize(fixed &pixel_D,
   return epx;
 }
 
-// JMW rounding further reduces data as required to speed up terrain
-// display on low zoom levels
 short
 RasterMap::GetField(const GEOPOINT &location)
 {
-  return _GetFieldAtXY((int)(location.Longitude.value_native() *
+  return raster_tile_cache.GetField((int)(location.Longitude.value_native() *
                              rounding.fXroundingFine) - rounding.xlleft,
                        rounding.xlltop -
                        (int)(location.Latitude.value_native() *
                              rounding.fYroundingFine));
+}
+
+void
+RasterMap::_ReloadJPG2000()
+{
+  raster_tile_cache.LoadJPG2000(path);
+
+  if (!raster_tile_cache.GetInitialised())
+    return;
+
+  TerrainInfo.TopLeft.Longitude =
+    Angle::degrees((fixed)raster_tile_cache.lon_min);
+  TerrainInfo.BottomRight.Longitude =
+    Angle::degrees((fixed)raster_tile_cache.lon_max);
+  TerrainInfo.TopLeft.Latitude =
+    Angle::degrees((fixed)raster_tile_cache.lat_max);
+  TerrainInfo.BottomRight.Latitude =
+    Angle::degrees((fixed)raster_tile_cache.lat_min);
+  TerrainInfo.StepSize = Angle::degrees((fixed)(raster_tile_cache.lon_max -
+                                                raster_tile_cache.lon_min)
+                                        / raster_tile_cache.GetWidth());
+
+  // use double here for maximum accuracy, since we are dealing with
+  // numbers close to the lower range of the fixed type
+
+  const double fx = (double)TerrainInfo.StepSize.value_native();
+  const double fy = (double)TerrainInfo.StepSize.value_native();
+
+  rounding.fXroundingFine = fixed(256.0/fx);
+  rounding.fYroundingFine = fixed(256.0/fy);
+
+  rounding.xlleft = (int)(TerrainInfo.TopLeft.Longitude.value_native() * rounding.fXroundingFine) + 128;
+  rounding.xlltop = (int)(TerrainInfo.TopLeft.Latitude.value_native() * rounding.fYroundingFine) - 128;
+}
+
+RasterMap *
+RasterMap::LoadFile(const char *path)
+{
+  RasterMap *map = new RasterMap(path);
+  if (map == NULL)
+    return NULL;
+
+  if (!map->isMapLoaded()) {
+    delete map;
+    return NULL;
+  }
+
+  return map;
 }

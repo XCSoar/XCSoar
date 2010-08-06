@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_TERRAIN_RASTER_MAP_HPP
 
 #include "Navigation/GeoPoint.hpp"
+#include "jasper/RasterTile.hpp"
 #include "Compiler.h"
 
 typedef struct _TERRAIN_INFO
@@ -50,6 +51,11 @@ typedef struct _TERRAIN_INFO
 } TERRAIN_INFO;
 
 class RasterMap {
+  static int ref_count;
+
+  char *path;
+  RasterTileCache raster_tile_cache;
+
 public:
   /** invalid value for terrain */
   static const short TERRAIN_INVALID = -1000;
@@ -61,10 +67,17 @@ protected:
     fixed fXroundingFine, fYroundingFine;
   } rounding;
 
- public:
-  virtual ~RasterMap() {};
+public:
+  RasterMap(const char *path);
+  ~RasterMap();
+
+  static RasterMap *LoadFile(const char *path);
 
   TERRAIN_INFO TerrainInfo;
+
+  bool isMapLoaded() const {
+    return raster_tile_cache.GetInitialised();
+  }
 
   gcc_pure
   bool inside(const GEOPOINT &pt) const {
@@ -74,9 +87,9 @@ protected:
       pt.Longitude >= TerrainInfo.TopLeft.Longitude;
   }
 
-  virtual void SetViewCenter(const GEOPOINT &location) = 0;
-
   bool GetMapCenter(GEOPOINT *loc) const;
+
+  void SetViewCenter(const GEOPOINT &location);
 
   // accurate method
   int GetEffectivePixelSize(fixed &pixel_D,
@@ -86,11 +99,7 @@ protected:
   short GetField(const GEOPOINT &location);
 
  protected:
-  bool terrain_valid;
-
-  gcc_pure
-  virtual short _GetFieldAtXY(unsigned int lx,
-                              unsigned int ly) = 0;
+  void _ReloadJPG2000(void);
 };
 
 

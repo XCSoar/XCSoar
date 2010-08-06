@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Terrain/RasterWeather.hpp"
-#include "Terrain/RasterMapJPG2000.hpp"
+#include "Terrain/RasterMap.hpp"
 #include "Language.hpp"
 #include "Units.hpp"
 #include "LocalPath.hpp"
@@ -146,7 +146,7 @@ RasterWeather::LoadItem(int item, const TCHAR* name, unsigned time_index)
 {
   TCHAR rasp_filename[MAX_PATH];
   GetFilename(rasp_filename, name, time_index);
-  weather_map[item] = RasterMapJPG2000::LoadFile(NarrowPathName(rasp_filename));
+  weather_map[item] = RasterMap::LoadFile(NarrowPathName(rasp_filename));
   return weather_map[item] != NULL;
 }
 
