@@ -76,7 +76,7 @@ GetTeamCode(TCHAR *code, Angle bearing, fixed range)
 void
 ConvertBearingToTeamCode(const Angle bearing, TCHAR *code)
 {
-  const double bamValue = bearing.as_bearing().value_degrees() / fixed_360
+  const double bamValue = bearing.as_bearing().value_degrees() / 360
                           * TEAMCODE_COMBINATIONS;
   NumberToTeamCode(bamValue, code, 2);
 }

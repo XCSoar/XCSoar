@@ -62,8 +62,7 @@ ALTITUDE_STATE::ALTITUDE_STATE():
 fixed 
 ALTITUDE_STATE::thermal_drift_factor() const
 {
-  static const fixed fixed_100(100);
-  return sigmoid(AltitudeAGL / fixed_100);
+  return sigmoid(AltitudeAGL / 100);
 }
 
 FLYING_STATE::FLYING_STATE()

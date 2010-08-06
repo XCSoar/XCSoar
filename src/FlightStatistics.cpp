@@ -521,7 +521,7 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
 
   for (i = 0; i < numsteps; i++) {
     h = fixed(Altitude_Ceiling.y_max - Altitude_Base.y_min) *
-      i / fixed(numsteps - 1) + fixed(Altitude_Base.y_min);
+      i / (numsteps - 1) + fixed(Altitude_Base.y_min);
 
     wind = wind_store.GetWind(nmea_info.Time, h, &found);
     mag = hypot(wind.x, wind.y);
