@@ -83,15 +83,17 @@ extern const fixed INVCOSINETABLE[4096];
 extern const short ISINETABLE[4096];
 extern const short ICOSTABLE[4096];
 
+#ifdef RADIANS
+#define INT_ANGLE_MULT fixed_constant(4096.0 / M_2PI, 0x28be60db93LL)
+#else
+#define INT_ANGLE_MULT fixed_constant(4096.0 / 360, 0xb60b60b6LL)
+#endif
+
 gcc_const
 static inline int
 NATIVE_TO_INT(fixed x)
 {
-#ifdef RADIANS
-  return ((unsigned short)(x * fixed(65536.0 / (M_2PI)))) >> 4;
-#else
-  return ((unsigned short)(x * fixed(65536.0 / 360.0))) >> 4;
-#endif
+  return uround(x * INT_ANGLE_MULT) & 0xfff;
 }
 
 gcc_const
