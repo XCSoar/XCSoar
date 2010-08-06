@@ -59,9 +59,10 @@ GaugeThermalAssistant::GaugeThermalAssistant(ContainerWindow &parent,
 }
 
 void
-GaugeThermalAssistant::Update(const Angle direction, const DERIVED_INFO &derived)
+GaugeThermalAssistant::Update(const bool enabled, const Angle direction,
+                              const DERIVED_INFO &derived)
 {
-  if (derived.Circling) {
+  if (enabled && derived.Circling) {
     ThermalAssistantWindow::Update(direction, derived);
     send_user(MSG_SHOW);
   } else {

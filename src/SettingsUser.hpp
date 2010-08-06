@@ -127,6 +127,8 @@ struct SETTINGS_MAP {
   double MapScale;
   /** Show FLARM radar if traffic present */
   bool  EnableFLARMGauge;
+  /** Show ThermalAssistant if circling */
+  bool  EnableTAGauge;
   unsigned EnableFLARMMap;
   bool  ScreenBlanked;
   bool EnableAutoBlank;

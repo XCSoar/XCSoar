@@ -61,7 +61,8 @@ public:
   GaugeThermalAssistant(ContainerWindow &parent,
                         int left, int top, unsigned width, unsigned height);
 
-  void Update(const Angle direction, const DERIVED_INFO &derived);
+  void Update(const bool enabled, const Angle direction,
+              const DERIVED_INFO &derived);
 
 protected:
   bool on_mouse_down(int x, int y);

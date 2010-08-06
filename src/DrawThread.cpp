@@ -115,7 +115,8 @@ DrawThread::run()
                       map.SettingsComputer());
 
       if (ta != NULL)
-        ta->Update(map.Basic().Heading, map.Calculated());
+        ta->Update(map.SettingsMap().EnableTAGauge, map.Basic().Heading,
+                   map.Calculated());
 
       // Draw the moving map
       map.DrawThreadLoop();

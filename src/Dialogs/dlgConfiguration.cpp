@@ -44,7 +44,6 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
 #include "Appearance.hpp"
-#include "Gauge/GaugeFLARM.hpp"
 #include "LocalPath.hpp"
 #include "ProfileKeys.hpp"
 #include "Logger/Logger.hpp"
@@ -98,7 +97,7 @@ static const TCHAR *const captions[] = {
   N_("Interface"),
   N_("Appearance"),
   N_("Fonts"),
-  N_("Vario Gauge and FLARM"),
+  N_("FLARM and other gauges"),
   N_("Default task rules"),
   N_("InfoBox Cruise"),
   N_("InfoBox Circling"),
@@ -1198,6 +1197,8 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpEnableFLARMGauge"),
                    XCSoarInterface::SettingsMap().EnableFLARMGauge);
+  LoadFormProperty(*wf, _T("prpEnableTAGauge"),
+                   XCSoarInterface::SettingsMap().EnableTAGauge);
   LoadFormProperty(*wf, _T("prpAirspaceWarnings"),
                    settings_computer.EnableAirspaceWarnings);
   LoadFormProperty(*wf, _T("prpWarningTime"),
@@ -2159,6 +2160,10 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(wf, _T("prpEnableFLARMGauge"),
                               szProfileEnableFLARMGauge,
                               XCSoarInterface::SetSettingsMap().EnableFLARMGauge);
+
+  changed |= SaveFormProperty(wf, _T("prpEnableTAGauge"),
+                              szProfileEnableTAGauge,
+                              XCSoarInterface::SetSettingsMap().EnableTAGauge);
 
   wp = (WndProperty*)wf->FindByName(_T("prpDebounceTimeout"));
   if (wp) {
