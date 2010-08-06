@@ -47,7 +47,6 @@ Copyright_License {
 #include "DataField/Float.hpp"
 #include "DataField/Integer.hpp"
 #include "DataField/String.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Interface.hpp"
@@ -170,20 +169,19 @@ Scale_Dlg_Width(const int x, const DialogStyle_t eDialogStyle)
 /**
  * This function reads the following parameters from the XML Node and
  * saves them as Control properties:
- * Name, x-, y-Coordinate, Width, Height, Font and Caption
+ * Name, x-, y-Coordinate, Width, Height and Caption
  * @param Node The XML Node that represents the Control
  * @param Name Name of the Control (pointer)
  * @param X x-Coordinate of the Control (pointer)
  * @param Y y-Coordinate of the Control (pointer)
  * @param Width Width of the Control (pointer)
  * @param Height Height of the Control (pointer)
- * @param Font Font of the Control (pointer)
  * @param Caption Caption of the Control (pointer)
  * @param eDialogStyle Dialog style of the Form
  */
 static void
 GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
-                             int *Width, int *Height, int *Font,
+                             int *Width, int *Height,
                              TCHAR *Caption, const DialogStyle_t eDialogStyle)
 {
   // Calculate x- and y-Coordinate
@@ -197,9 +195,6 @@ GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
   *Width = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("Width")), 50),
                            eDialogStyle);
   *Height = Layout::Scale(StringToIntDflt(Node->getAttribute(_T("Height")), 50));
-
-  // Determine font style
-  *Font = StringToIntDflt(Node->getAttribute(_T("Font")), -1);
 
   // Determine name and caption
   _tcscpy(Name, StringToStringDflt(Node->getAttribute(_T("Name")), _T("")));
@@ -232,15 +227,7 @@ CallBackLookup(CallBackTableEntry_t *LookUpTable, const TCHAR *Name)
 static void
 LoadChildrenFromXML(WndForm &form, ContainerControl &parent,
                     CallBackTableEntry_t *LookUpTable,
-                    XMLNode *Node, int Font, const DialogStyle_t eDialogStyle);
-
-static Font *FontMap[5] = {
-  &Fonts::Title,
-  &Fonts::Map,
-  &Fonts::MapBold,
-  &Fonts::CDI,
-  &Fonts::InfoBox
-};
+                    XMLNode *Node, const DialogStyle_t eDialogStyle);
 
 static XMLNode
 xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
@@ -372,12 +359,6 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
     // and save it as the dialog node
     xNode = xMainNode.getChildNode(_T("Form"));
 
-  FontMap[0] = &Fonts::Title;
-  FontMap[1] = &Fonts::Map;
-  FontMap[2] = &Fonts::MapBold;
-  FontMap[3] = &Fonts::CDI;
-  FontMap[4] = &Fonts::InfoBox;
-
   // If Node does not exists -> Error messagebox + cancel
   if (xNode.isEmpty()) {
     MessageBoxX(_T("Error in loading XML dialog"),
@@ -386,7 +367,7 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
     return NULL;
   }
 
-  int X, Y, Width, Height, Font;
+  int X, Y, Width, Height;
   TCHAR sTmp[128];
   TCHAR Name[64];
 
@@ -399,7 +380,7 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   const RECT rc = Parent.get_client_rect();
   CalcWidthStretch(&xNode, rc, eDialogStyle);
 
-  GetDefaultWindowControlProps(&xNode, Name, &X, &Y, &Width, &Height, &Font,
+  GetDefaultWindowControlProps(&xNode, Name, &X, &Y, &Width, &Height,
                                sTmp, eDialogStyle);
 
   // Correct dialog size and position for dialog style
@@ -426,19 +407,12 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
 
   theForm = new WndForm(Parent, sTmp, X, Y, Width, Height, style);
 
-  // Sets Fonts
-  if (Font != -1)
-    theForm->SetTitleFont(*FontMap[Font]);
-
-  if (Font != -1)
-    theForm->SetFont(*FontMap[Font]);
-
   // Set fore- and background colors
   LoadColors(*theForm, xNode);
 
   // Load the children controls
   LoadChildrenFromXML(*theForm, *theForm, LookUpTable, &xNode,
-                      Font, eDialogStyle);
+                      eDialogStyle);
 
   // If XML error occurred -> Error messagebox + cancel
   if (XMLNode::GlobalError) {
@@ -515,25 +489,24 @@ LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable,
  * @param Parent The parent ContainerControl
  * @param LookUpTable The parent CallBackTable
  * @param node The XMLNode that represents the control
- * @param ParentFont The parent's font array index
  * @param eDialogStyle The parent's dialog style
  */
 static Window *
 LoadChild(WndForm &form, ContainerControl &Parent,
           CallBackTableEntry_t *LookUpTable,
-          XMLNode node, int ParentFont, const DialogStyle_t eDialogStyle)
+          XMLNode node, const DialogStyle_t eDialogStyle)
 {
-  int X, Y, Width, Height, Font;
+  int X, Y, Width, Height;
   TCHAR Caption[128];
   TCHAR Name[64];
 
   Window *window = NULL;
   WindowControl *WC = NULL;
 
-  // Determine name, coordinates, width, height,
-  // font and caption of the control
+  // Determine name, coordinates, width, height
+  // and caption of the control
   GetDefaultWindowControlProps(&node, Name, &X, &Y, &Width, &Height,
-                               &Font, Caption, eDialogStyle);
+                               Caption, eDialogStyle);
 
   if (X < -1 || Y < -1 || Width <= 0 || Height <= 0) {
     /* a non-positive width/height specifies the distance from the
@@ -548,9 +521,6 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     if (Height <= 0)
       Height += rc.bottom - Y;
   }
-
-  // Determine the control's font (default = parent's font)
-  Font = std::min(StringToIntDflt(node.getAttribute(_T("Font")), ParentFont), 4l);
 
   WindowStyle style;
 
@@ -708,8 +678,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     WC = frame;
 
     // Load children controls from the XMLNode
-    LoadChildrenFromXML(form, *frame, LookUpTable, &node,
-                        Font, eDialogStyle);
+    LoadChildrenFromXML(form, *frame, LookUpTable, &node, eDialogStyle);
 
   // KeyboardControl
   } else if (_tcscmp(node.getName(), _T("Keyboard")) == 0) {
@@ -774,7 +743,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     for (unsigned i = 0; i < n; ++i) {
       // Load each child control from the child nodes
       Window *window = LoadChild(form, *tabbed, LookUpTable,
-                                 node.getChildNode(i), ParentFont,
+                                 node.getChildNode(i),
                                  eDialogStyle);
       if (window != NULL)
         tabbed->AddClient(window);
@@ -795,10 +764,6 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
   // If WindowControl has been created
   if (WC != NULL) {
-    // Set the font style
-    if (Font != -1)
-      WC->SetFont(FontMap[Font]);
-
     // Set the fore- and background color
     LoadColors(*WC, node);
 
@@ -829,13 +794,12 @@ LoadChild(WndForm &form, ContainerControl &Parent,
  * @param Parent The parent control
  * @param LookUpTable The parents CallBackTable
  * @param Node The XMLNode that represents the parent control
- * @param ParentFont The parent's font array index
  * @param eDialogStyle The parent's dialog style
  */
 static void
 LoadChildrenFromXML(WndForm &form, ContainerControl &Parent,
                     CallBackTableEntry_t *LookUpTable,
-                    XMLNode *Node, int ParentFont, const DialogStyle_t eDialogStyle)
+                    XMLNode *Node, const DialogStyle_t eDialogStyle)
 {
   // Get the number of childnodes
   int Count = Node->nChildNode();
@@ -846,8 +810,7 @@ LoadChildrenFromXML(WndForm &form, ContainerControl &Parent,
   for (int i = 0; i < Count; i++) {
     // Load each child control from the child nodes
     Window *window = LoadChild(form, Parent, LookUpTable,
-                               Node->getChildNode(i), ParentFont,
-                               eDialogStyle);
+                               Node->getChildNode(i), eDialogStyle);
     if (window == NULL)
       continue;
 
