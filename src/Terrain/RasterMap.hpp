@@ -87,7 +87,10 @@ public:
       pt.Longitude >= TerrainInfo.TopLeft.Longitude;
   }
 
-  bool GetMapCenter(GEOPOINT *loc) const;
+  gcc_pure
+  GEOPOINT GetMapCenter() const {
+    return TerrainInfo.TopLeft.interpolate(TerrainInfo.BottomRight, fixed_half);
+  }
 
   void SetViewCenter(const GEOPOINT &location);
 

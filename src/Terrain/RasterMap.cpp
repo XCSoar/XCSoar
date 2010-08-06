@@ -68,14 +68,6 @@ RasterMap::~RasterMap() {
   free(path);
 }
 
-bool
-RasterMap::GetMapCenter(GEOPOINT *loc) const
-{
-  *loc = TerrainInfo.TopLeft.interpolate(TerrainInfo.BottomRight,
-                                         fixed_half);
-  return true;
-}
-
 static unsigned
 angle_to_pixel(Angle value, Angle start, Angle end, unsigned width)
 {

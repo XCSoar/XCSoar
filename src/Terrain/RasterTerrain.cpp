@@ -113,5 +113,6 @@ RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location) const
 bool
 RasterTerrain::GetTerrainCenter(GEOPOINT *location) const
 {
-  return TerrainMap != NULL && TerrainMap->GetMapCenter(location);
+  return TerrainMap != NULL &&
+    (*location = TerrainMap->GetMapCenter(), true);
 }
