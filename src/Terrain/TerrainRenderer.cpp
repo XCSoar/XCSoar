@@ -244,10 +244,10 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
   // scale quantisation_pixels so resolution is not too high on large displays
   quantisation_pixels = Layout::FastScale(quantisation_pixels);
 
-  const int res_x = 
-    iround((rc.right - rc.left) * oversampling / quantisation_pixels);
-  const int res_y = 
-    iround((rc.bottom - rc.top) * oversampling / quantisation_pixels);
+  const unsigned res_x =
+    (rc.right - rc.left) * oversampling / quantisation_pixels;
+  const unsigned res_y =
+    (rc.bottom - rc.top) * oversampling / quantisation_pixels;
 
   sbuf = new RawBitmap(res_x, res_y, Color::WHITE);
   width_sub = sbuf->GetCorrectedWidth() / oversampling;
