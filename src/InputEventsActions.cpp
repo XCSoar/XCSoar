@@ -511,6 +511,13 @@ InputEvents::eventFLARMRadar(const TCHAR *misc)
   // the result of this will get triggered by refreshslots
 }
 
+void
+InputEvents::eventThermalAssistant(const TCHAR *misc)
+{
+  (void)misc;
+  dlgThermalAssistantShowModal();
+}
+
 // SelectInfoBox
 // Selects the next or previous infobox
 void

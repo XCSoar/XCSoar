@@ -160,6 +160,7 @@ private:
   static void eventDeclutterLabels(const TCHAR *misc);
   static void eventExit(const TCHAR *misc);
   static void eventFLARMRadar(const TCHAR *misc);
+  static void eventThermalAssistant(const TCHAR *misc);
   static void eventBeep(const TCHAR *misc);
   static void eventUserDisplayModeForce(const TCHAR *misc);
   static void eventAirspaceDisplayMode(const TCHAR *misc);
