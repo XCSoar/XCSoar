@@ -145,8 +145,8 @@ GetDirectionData(int DirectionFilterIdx)
   if (DirectionFilterIdx == 0) {
     _stprintf(sTmp, _T("%c"), '*');
   } else if (DirectionFilterIdx == 1) {
-    int a = iround(XCSoarInterface::Basic().Heading.as_bearing().value_degrees());
-    _stprintf(sTmp, _T("HDG(%d")_T(DEG)_T(")"), a);
+    _stprintf(sTmp, _T("HDG(%u")_T(DEG)_T(")"),
+              uround(XCSoarInterface::Basic().Heading.as_bearing().value_degrees()));
   } else
   _stprintf(sTmp, _T("%d")_T(DEG), DirectionFilter[DirectionFilterIdx]);
 
@@ -457,7 +457,7 @@ PaintWaypoint(Canvas &canvas, const RECT rc,
   canvas.text(rc.left + x, rc.top + Layout::FastScale(2), buffer);
 
   // right justified after distance
-  _stprintf(buffer, _T("%d")_T(DEG), iround(info.Direction.value_degrees()));
+  _stprintf(buffer, _T("%u")_T(DEG), uround(info.Direction.value_degrees()));
   x = w0 - canvas.text_width(buffer);
   canvas.text(rc.left + x, rc.top + Layout::FastScale(2), buffer);
 }

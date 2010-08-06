@@ -127,7 +127,7 @@ static void UpdateList(void)
     sort_distance = true;
     int a = DirectionFilter[DirectionFilterIdx];
     if (a == DirHDG) {
-      a = iround(XCSoarInterface::Basic().Heading.value_degrees());
+      a = uround(XCSoarInterface::Basic().Heading.value_degrees());
       lastHeading = a;
     }
     airspace_sorter->filter_direction(AirspaceSelectInfo, 

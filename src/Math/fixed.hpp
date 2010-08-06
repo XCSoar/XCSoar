@@ -888,4 +888,13 @@ inline void limit_tolerance(fixed& f, const fixed tol_act) {
   }
 }
 
+/**
+ * Convert this number to an unsigned integer, with rounding.
+ */
+gcc_const static inline unsigned
+uround(const fixed x)
+{
+  return (unsigned)(x + fixed_half);
+}
+
 #endif

@@ -300,10 +300,8 @@ MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
   canvas.line(Start.x + radius / 2, Start.y, Start.x - radius / 2, Start.y);
   canvas.line(Start.x, Start.y - radius / 4, Start.x - radius / 2, Start.y);
 
-#define ROOT2 0.70711
-
-  int rr2p = lround(radius * ROOT2 + IBLSCALE(1));
-  int rr2n = lround(radius * ROOT2);
+  unsigned rr2p = uround(radius * fixed_sqrt_half) + IBLSCALE(1);
+  unsigned rr2n = uround(radius * fixed_sqrt_half);
 
   canvas.black_pen();
   canvas.line(Start.x + rr2p, Start.y - rr2p, Start.x + rr2n, Start.y - rr2n);
