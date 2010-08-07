@@ -442,9 +442,14 @@ GlideComputerAirData::CruiseLD()
 void
 GlideComputerAirData::TerrainHeight()
 {
-  terrain.Lock();
-  short Alt = terrain.GetTerrainHeight(Basic().Location);
-  terrain.Unlock();
+  if (terrain == NULL) {
+    SetCalculated().TerrainValid = false;
+    return;
+  }
+
+  terrain->Lock();
+  short Alt = terrain->GetTerrainHeight(Basic().Location);
+  terrain->Unlock();
 
   SetCalculated().TerrainValid = Alt > RasterTerrain::TERRAIN_INVALID;
   SetCalculated().TerrainAlt = std::max((short)0, Alt);
@@ -537,7 +542,7 @@ GlideComputerAirData::AirspaceWarning()
 void
 GlideComputerAirData::TerrainFootprint(double screen_range)
 {
-  if (!SettingsComputer().FinalGlideTerrain)
+  if (terrain == NULL || !SettingsComputer().FinalGlideTerrain)
     return;
 
   // initialise base
@@ -551,8 +556,8 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
   glide_polar.set_mc(min(Calculated().common_stats.current_risk_mc,
                          SettingsComputer().safety_mc));
 
-  terrain.Lock();
-  GlideTerrain g_terrain(SettingsComputer(), terrain);
+  terrain->Lock();
+  GlideTerrain g_terrain(SettingsComputer(), *terrain);
 
   g_terrain.set_max_range(fixed(max(20000.0, screen_range)));
   
@@ -568,7 +573,7 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
     SetCalculated().GlideFootPrint[i] = its.location;
   } 
 
-  terrain.Unlock();
+  terrain->Unlock();
 
   SetCalculated().TerrainBase = g_terrain.get_terrain_base();
   SetCalculated().Experimental = Calculated().TerrainBase;

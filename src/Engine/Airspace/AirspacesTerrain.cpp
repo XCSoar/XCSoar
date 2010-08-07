@@ -41,9 +41,6 @@
 void 
 Airspaces::set_ground_levels(const RasterTerrain &terrain)
 {
-  if (!terrain.isTerrainLoaded())
-    return;
-
   for (AirspaceTree::iterator v = airspace_tree.begin();
        v != airspace_tree.end(); ++v) {
     FLAT_GEOPOINT c_flat = v->get_center();

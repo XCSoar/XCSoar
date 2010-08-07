@@ -79,23 +79,11 @@ GlideTerrain::get_terrain_base() const
   return TerrainBase;
 }
 
-bool 
-GlideTerrain::valid() const 
-{
-  return m_terrain.isTerrainLoaded();
-}
-
 TerrainIntersection 
 GlideTerrain::find_intersection(const AIRCRAFT_STATE &state,
                                 const GlidePolar& polar) 
 {
   TerrainIntersection retval(state.Location);
-
-  if (!valid()) {
-    // no terrain!
-    retval.out_of_range = true;
-    return retval;
-  }
   
   const fixed glide_max_range = state.NavAltitude*polar.get_ld_over_ground(state);
   
@@ -202,7 +190,7 @@ GlideTerrain::find_intersection(const AIRCRAFT_STATE &state)
 {
   TerrainIntersection retval(state.Location);
 
-  if (!valid() || !positive(max_range)) {
+  if (!positive(max_range)) {
     // no terrain!
     retval.out_of_range = true;
     return retval;

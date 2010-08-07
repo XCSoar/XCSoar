@@ -62,7 +62,7 @@ extern ProtectedTaskManager protected_task_manager;
 extern Replay replay;
 extern Marks *marks;
 extern TopologyStore *topology;
-extern RasterTerrain terrain;
+extern RasterTerrain *terrain;
 extern RasterWeather RASP;
 extern GlideComputer glide_computer;
 extern DrawThread *draw_thread;

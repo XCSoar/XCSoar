@@ -424,9 +424,9 @@ static void GetValues(void) {
   if (wp) {
     ss = wp->GetDataField()->GetAsInteger();
 
-    global_wpt->Altitude = (ss == 0 ?
-        WayPointFile::AltitudeFromTerrain(global_wpt->Location, terrain) :
-        Units::ToSysUnit(ss, Units::AltitudeUnit));
+    global_wpt->Altitude = ss == 0 && terrain != NULL
+      ? WayPointFile::AltitudeFromTerrain(global_wpt->Location, *terrain)
+      : Units::ToSysUnit(ss, Units::AltitudeUnit);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));

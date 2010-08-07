@@ -122,23 +122,26 @@ SettingsLeave()
     XCSoarInterface::main_window.map.set_terrain(NULL);
 
     // re-load terrain
-    terrain.CloseTerrain();
-    terrain.OpenTerrain();
+    if (terrain != NULL) {
+      terrain->CloseTerrain();
+      terrain->OpenTerrain();
+    }
 
     // re-load waypoints
-    WayPointGlue::ReadWaypoints(way_points, &terrain);
+    WayPointGlue::ReadWaypoints(way_points, terrain);
     ReadAirfieldFile(way_points);
 
     // re-set home
     if (WaypointFileChanged || TerrainFileChanged) {
-      WayPointGlue::SetHome(way_points, &terrain,
+      WayPointGlue::SetHome(way_points, terrain,
                             XCSoarInterface::SetSettingsComputer(),
                             WaypointFileChanged, false);
     }
 
-    terrain.ServiceTerrainCenter(XCSoarInterface::Basic().Location);
+    if (terrain != NULL)
+      terrain->ServiceTerrainCenter(XCSoarInterface::Basic().Location);
 
-    XCSoarInterface::main_window.map.set_terrain(&terrain);
+    XCSoarInterface::main_window.map.set_terrain(terrain);
   }
 
   if (TopologyFileChanged)
@@ -147,7 +150,7 @@ SettingsLeave()
   if (AirspaceFileChanged) {
     airspace_warnings.clear();
     airspace_database.clear();
-    ReadAirspace(airspace_database, &terrain,
+    ReadAirspace(airspace_database, terrain,
                  XCSoarInterface::Basic().pressure);
   }
 

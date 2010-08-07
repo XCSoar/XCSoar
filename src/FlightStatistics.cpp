@@ -676,7 +676,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
   airspace_database.visit_intersecting(p_start, vec, ivisitor);
 
   // draw terrain
-  if (terrain != NULL && terrain->isTerrainLoaded()) {
+  if (terrain != NULL) {
     terrain->Lock();
 
     std::vector<POINT> points;

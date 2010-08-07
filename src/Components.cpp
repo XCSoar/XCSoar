@@ -99,7 +99,7 @@ Copyright_License {
 
 Marks *marks;
 TopologyStore *topology;
-RasterTerrain terrain;
+RasterTerrain *terrain;
 RasterWeather RASP;
 
 DrawThread *draw_thread;
@@ -304,23 +304,30 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   // Read the terrain file
   ProgressGlue::Create(_("Loading Terrain File..."));
   LogStartUp(_T("OpenTerrain"));
-  terrain.OpenTerrain();
+  terrain = new RasterTerrain();
+  terrain->OpenTerrain();
+  if (!terrain->isTerrainLoaded()) {
+    delete terrain;
+    terrain = NULL;
+  }
 
   // Read the waypoint files
-  WayPointGlue::ReadWaypoints(way_points, &terrain);
+  WayPointGlue::ReadWaypoints(way_points, terrain);
 
   // Read and parse the airfield info file
   ReadAirfieldFile(way_points);
 
   // Set the home waypoint
-  WayPointGlue::SetHome(way_points, &terrain, SetSettingsComputer(),
+  WayPointGlue::SetHome(way_points, terrain, SetSettingsComputer(),
                         false, true);
 
   // ReSynchronise the blackboards here since SetHome touches them
   ReadBlackboardBasic(device_blackboard.Basic());
 
-  ProgressGlue::Create(_("Loading Terrain File..."));
-  terrain.ServiceTerrainCenter(Basic().Location);
+  if (terrain != NULL) {
+    ProgressGlue::Create(_("Loading Terrain File..."));
+    terrain->ServiceTerrainCenter(Basic().Location);
+  }
 
   // Scan for weather forecast
   ProgressGlue::Create(_("Scanning weather forecast"));
@@ -328,7 +335,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   RASP.ScanAll(Basic().Location);
 
   // Reads the airspace files
-  ReadAirspace(airspace_database, &terrain, Basic().pressure);
+  ReadAirspace(airspace_database, terrain, Basic().pressure);
 
   const AIRCRAFT_STATE aircraft_state =
     ToAircraftState(device_blackboard.Basic());
@@ -366,7 +373,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   main_window.map.set_airspaces(&airspace_database, &airspace_warnings);
 
   main_window.map.set_topology(topology);
-  main_window.map.set_terrain(&terrain);
+  main_window.map.set_terrain(terrain);
   main_window.map.set_weather(&RASP);
   main_window.map.set_marks(marks);
 
@@ -496,8 +503,8 @@ XCSoarInterface::Shutdown(void)
 
   // Clear terrain database
   LogStartUp(_T("CloseTerrain"));
-  terrain.CloseTerrain();
 
+  delete terrain;
   delete topology;
   delete marks;
 

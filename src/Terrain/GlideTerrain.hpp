@@ -71,8 +71,6 @@ public:
 
   fixed get_terrain_base() const;
 
-  bool valid() const;
-
   /** 
    * Find intersection for pure glide
    * 

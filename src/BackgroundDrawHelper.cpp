@@ -88,7 +88,7 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
                            const Projection& proj,
                            const SETTINGS_MAP& settings_map)
 {
-  if (!m_terrain || !m_terrain->isTerrainLoaded()) {
+  if (m_terrain == NULL) {
     // terrain may have been re-set, so may need new renderer
     reset();
     canvas.clear(MapGfx.hBackgroundBrush);

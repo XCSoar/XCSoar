@@ -149,10 +149,6 @@ WayPointFile::checkWaypointInTerrainRange(const Waypoint &way_point,
   if (WaypointOutOfTerrainRangeDialogResult == wpTerrainBoundsYesAll)
     return true;
 
-  // If (No Terrain) -> include waypoint
-  if (!terrain.isTerrainLoaded())
-    return true;
-
   // If (Waypoint in Terrain range) -> include waypoint
   if (terrain.WaypointIsInTerrainRange(way_point.Location))
     return true;
