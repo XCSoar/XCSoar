@@ -39,18 +39,18 @@
 #include <algorithm>
 #include <math.h>
 
-double
-AngleToGradient(const double d)
+fixed
+AngleToGradient(const fixed d)
 {
   if (fabs(d)) {
-    return min(999.0, max(-999.0, 1.0 / d));
+    return min(fixed(999), max(fixed(-999), fixed_one / d));
   } else {
-    return 999.0;
+    return fixed(999);
   }
 }
 
 bool
-GradientValid(const double d)
+GradientValid(const fixed d)
 {
-  return (fabs(d) < 999.0);
+  return fabs(d) < fixed(999);
 }
