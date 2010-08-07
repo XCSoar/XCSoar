@@ -194,7 +194,7 @@ MapWindowProjection::CalculateOrigin(const RECT rc, const NMEA_INFO &DrawInfo,
 fixed
 MapWindowProjection::GetScreenDistanceMeters() const
 {
-  return DistancePixelsToMeters(max_dimension(MapRectBig));
+  return DistancePixelsToMeters(max_dimension(GetMapRect()));
 }
 
 fixed
