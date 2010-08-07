@@ -313,7 +313,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   ReadAirfieldFile(way_points);
 
   // Set the home waypoint
-  WayPointGlue::SetHome(way_points, terrain, SetSettingsComputer(),
+  WayPointGlue::SetHome(way_points, &terrain, SetSettingsComputer(),
                         false, true);
 
   // ReSynchronise the blackboards here since SetHome touches them

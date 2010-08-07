@@ -131,7 +131,7 @@ SettingsLeave()
 
     // re-set home
     if (WaypointFileChanged || TerrainFileChanged) {
-      WayPointGlue::SetHome(way_points, terrain,
+      WayPointGlue::SetHome(way_points, &terrain,
                             XCSoarInterface::SetSettingsComputer(),
                             WaypointFileChanged, false);
     }

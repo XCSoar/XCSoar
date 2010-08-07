@@ -49,7 +49,7 @@ class WayPointFile;
  * This class is used to parse different waypoint files
  */
 namespace WayPointGlue {
-  void SetHome(Waypoints &way_points, const RasterTerrain &terrain,
+  void SetHome(Waypoints &way_points, const RasterTerrain *terrain,
                SETTINGS_COMPUTER &settings, const bool reset,
                const bool set_location = false);
 

@@ -64,7 +64,7 @@ static WayPointFile* wp_file2 = NULL;
  * @param set_location If true, the SetStartupLocation function will be called
  */
 void
-WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain &terrain,
+WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
                       SETTINGS_COMPUTER &settings,
                       const bool reset, const bool set_location)
 {
@@ -103,10 +103,10 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain &terrain,
       // OK, passed all checks now
       LogStartUp(_T("Start at home waypoint"));
       device_blackboard.SetStartupLocation(wp->Location, wp->Altitude);
-    } else {
+    } else if (terrain != NULL && terrain->isTerrainLoaded()) {
       // no home at all, so set it from center of terrain if available
       GEOPOINT loc;
-      if (terrain.GetTerrainCenter(&loc)) {
+      if (terrain->GetTerrainCenter(&loc)) {
         LogStartUp(_T("Start at terrain center"));
         device_blackboard.SetStartupLocation(loc, 0);
       }
