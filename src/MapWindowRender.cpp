@@ -79,7 +79,7 @@ void
 MapWindow::RenderMapLayer(Canvas &canvas)
 {
   m_background.sun_from_wind(*this, Basic().wind);
-  m_background.Draw(canvas, MapRectBig, *this, SettingsMap());
+  m_background.Draw(canvas, *this, SettingsMap());
 
   // Select black brush/pen and the MapWindowFont
   canvas.black_brush();

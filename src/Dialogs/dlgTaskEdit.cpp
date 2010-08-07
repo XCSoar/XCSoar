@@ -128,7 +128,7 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
 
   BackgroundDrawHelper background;
   background.set_terrain(terrain);
-  background.Draw(canvas, rc, proj, XCSoarInterface::SettingsMap());
+  background.Draw(canvas, proj, XCSoarInterface::SettingsMap());
 
   RenderObservationZone ozv(canvas, proj, XCSoarInterface::SettingsMap());
   RenderTaskPoint tpv(canvas, proj, XCSoarInterface::SettingsMap(),

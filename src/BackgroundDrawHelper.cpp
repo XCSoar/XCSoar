@@ -84,7 +84,6 @@ BackgroundDrawHelper::set_weather(RasterWeather* weather)
 
 void 
 BackgroundDrawHelper::Draw(Canvas& canvas,
-                           const RECT& rc,
                            const Projection& proj,
                            const SETTINGS_MAP& settings_map)
 {
@@ -99,6 +98,15 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
     return;
   }
 
+  const RECT &rc = proj.GetMapRect();
+  SIZE new_size;
+  new_size.cx = rc.right - rc.left;
+  new_size.cy = rc.bottom - rc.top;
+
+  if (m_rend != NULL && (new_size.cx > buffer_size.cx ||
+                         new_size.cy > buffer_size.cy))
+    reset();
+
   if (!m_rend) {
     // defer creation until first draw because
     // the buffer size, smoothing etc is set by the
@@ -108,6 +116,8 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
     } else {
       m_rend = new TerrainRenderer(m_terrain, rc);
     }
+
+    buffer_size = new_size;
   }
 
 /** @todo

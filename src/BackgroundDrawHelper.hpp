@@ -56,12 +56,13 @@ class LabelBlock;
  */
 class BackgroundDrawHelper 
 {
+  SIZE buffer_size;
+
 public:
   BackgroundDrawHelper();
   ~BackgroundDrawHelper();
 
   void Draw(Canvas& canvas,
-            const RECT& rc,
             const Projection& proj,
             const SETTINGS_MAP& settings_map);
 
