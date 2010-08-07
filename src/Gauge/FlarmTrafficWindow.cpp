@@ -470,9 +470,9 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   // Draw vertical speed shadow
   canvas.set_text_color(Color::WHITE);
   canvas.text(sc[i].x + Layout::FastScale(11) + 1,
-              sc[i].y - sz.cy * 0.5 + 1, tmp);
+              sc[i].y - sz.cy / 2 + 1, tmp);
   canvas.text(sc[i].x + Layout::FastScale(11) - 1,
-              sc[i].y - sz.cy * 0.5 - 1, tmp);
+              sc[i].y - sz.cy / 2 - 1, tmp);
 
   // Select color
   if (static_cast<unsigned> (selection) == i)
@@ -481,7 +481,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     canvas.set_text_color(hcStandard);
 
   // Draw vertical speed
-  canvas.text(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy * 0.5, tmp);
+  canvas.text(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy / 2, tmp);
 }
 
 /**

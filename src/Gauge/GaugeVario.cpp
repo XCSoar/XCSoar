@@ -385,7 +385,7 @@ GaugeVario::ValueToNeedlePos(double Value)
   int i;
 
   if (!InitDone){
-    degrees_per_unit = (int)((GAUGEVARIOSWEEP * 0.5) /
+    degrees_per_unit = (int)((GAUGEVARIOSWEEP / 2) /
                              Units::ToUserUnit(GAUGEVARIORANGE,
                                                Units::VerticalSpeedUnit));
     gmax = max(80, (int)(degrees_per_unit *

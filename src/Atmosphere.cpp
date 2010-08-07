@@ -285,8 +285,8 @@ CuSondeLevel::updateTemps(double rh, double t)
       dewpoint = adewpoint;
       airTemp = t;
     } else {
-      dewpoint = adewpoint * 0.5 + dewpoint * 0.5;
-      airTemp = t * 0.5 + airTemp * 0.5;
+      dewpoint = (adewpoint + dewpoint) / 2;
+      airTemp = (t + airTemp) / 2;
     }
 
     nmeasurements++;
