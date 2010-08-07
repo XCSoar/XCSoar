@@ -285,26 +285,25 @@ TerrainRenderer::SetMap()
 const RECT
 TerrainRenderer::Height(const Projection &map_projection)
 {
-  GEOPOINT Gx, Gy, Gmid;
   int x, y;
 
   const RECT rect_visible = map_projection.GetMapRect();
 
   x = (rect_visible.left + rect_visible.right) / 2;
   y = (rect_visible.top + rect_visible.bottom) / 2;
-  map_projection.Screen2LonLat(x, y, Gmid);
+  GEOPOINT Gmid = map_projection.Screen2LonLat(x, y);
 
   const int dstep = (int)lround(quantisation_pixels);
 
   x = (rect_visible.left + rect_visible.right) / 2 + dstep;
   y = (rect_visible.top + rect_visible.bottom) / 2;
-  map_projection.Screen2LonLat(x, y, Gx);
+  GEOPOINT Gx = map_projection.Screen2LonLat(x, y);
 
   const fixed pixelDX = Distance(Gmid, Gx);
 
   x = (rect_visible.left + rect_visible.right) / 2;
   y = (rect_visible.top + rect_visible.bottom) / 2 + dstep;
-  map_projection.Screen2LonLat(x, y, Gy);
+  GEOPOINT Gy = map_projection.Screen2LonLat(x, y);
 
   const fixed pixelDY = Distance(Gmid, Gy);
 

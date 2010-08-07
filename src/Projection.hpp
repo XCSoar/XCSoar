@@ -42,6 +42,8 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "Topology/shapelib/mapprimitive.h"
 #include "Math/FastRotation.hpp"
+#include "Compiler.h"
+
 #include <windef.h>
 
 class Projection {
@@ -50,7 +52,8 @@ public:
 
   virtual fixed GetMapScaleUser() const;
 
-  void Screen2LonLat(int x, int y, GEOPOINT &location) const;
+  gcc_pure
+  GEOPOINT Screen2LonLat(int x, int y) const;
 
   void LonLat2Screen(const GEOPOINT &location, POINT &sc) const;
   void LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,

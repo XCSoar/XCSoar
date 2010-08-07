@@ -89,8 +89,7 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
     // target follows "finger" so easier to drop near edge of
     // sector
     if (TargetDrag_State == 1) {
-      GEOPOINT mouseMove;
-      Screen2LonLat((int)x, (int)y, mouseMove);
+      GEOPOINT mouseMove = Screen2LonLat(x, y);
       unsigned index = SettingsMap().TargetPanIndex;
       if (task->InAATTurnSector(mouseMove, index)) {
         // update waypoints so if we drag out of the cylinder, it
@@ -109,9 +108,8 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
 #endif
 
   if (SettingsMap().EnablePan && (keys & MK_LBUTTON)) {
-    GEOPOINT end, start;
-    Screen2LonLat(drag_last.x, drag_last.y, start);
-    Screen2LonLat(x, y, end);
+    const GEOPOINT start = Screen2LonLat(drag_last.x, drag_last.y);
+    const GEOPOINT end = Screen2LonLat(x, y);
 
     XCSoarInterface::SetSettingsMap().PanLocation.Longitude +=
         start.Longitude - end.Longitude;
@@ -145,7 +143,7 @@ GlueMapWindow::on_mouse_down(int x, int y)
 
   drag_start.x = x;
   drag_start.y = y;
-  Screen2LonLat(x, y, drag_start_geopoint);
+  drag_start_geopoint = Screen2LonLat(x, y);
   drag_last = drag_start;
 
   if (XCSoarInterface::SettingsComputer().EnableGestures)
@@ -209,8 +207,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
   if (is_simulator() && !Basic().gps.Replay && click_time > 50 &&
       compare_squared(drag_start.x - x, drag_start.y - y,
                       Layout::Scale(36)) == 1) {
-    GEOPOINT G;
-    Screen2LonLat(x, y, G);
+    GEOPOINT G = Screen2LonLat(x, y);
 
     double distance = hypot(drag_start.x - x, drag_start.y - y);
 

@@ -1731,13 +1731,12 @@ InputEvents::sub_PanCursor(int dx, int dy)
   RECT MapRect = MapProjection().GetMapRect();
   int X = (MapRect.right + MapRect.left) / 2;
   int Y = (MapRect.bottom + MapRect.top) / 2;
-  GEOPOINT pstart, pnew;
 
-  MapProjection().Screen2LonLat(X, Y, pstart);
+  const GEOPOINT pstart = MapProjection().Screen2LonLat(X, Y);
 
   X += (MapRect.right - MapRect.left) * dx / 4;
   Y += (MapRect.bottom - MapRect.top) * dy / 4;
-  MapProjection().Screen2LonLat(X, Y, pnew);
+  const GEOPOINT pnew = MapProjection().Screen2LonLat(X, Y);
 
   if (SettingsMap().EnablePan) {
     SetSettingsMap().PanLocation.Longitude += pstart.Longitude - pnew.Longitude;

@@ -55,19 +55,20 @@ Projection::Projection() :
  * Converts screen coordinates to a GEOPOINT
  * @param x x-Coordinate on the screen
  * @param y y-Coordinate on the screen
- * @param g Output GEOPOINT
  */
-void 
-Projection::Screen2LonLat(int x, int y, GEOPOINT &g) const
+GEOPOINT
+Projection::Screen2LonLat(int x, int y) const
 {
   const FastIntegerRotation::Pair p =
     DisplayAngle.Rotate(x - Orig_Screen.x, y - Orig_Screen.y);
   const GEOPOINT pg(Angle::native(fixed(p.first)*InvDrawScale),
                     Angle::native(fixed(p.second)*InvDrawScale));
 
+  GEOPOINT g;
   g.Latitude = PanLocation.Latitude - pg.Latitude;
   g.Longitude = PanLocation.Longitude
               + pg.Longitude * g.Latitude.invfastcosine();
+  return g;
 }
 
 /**
@@ -257,10 +258,9 @@ Projection::CalculateScreenBounds(const fixed scale) const
     for (int i = 0; i < 10; i++) {
       const Angle ang = Angle::degrees(i * fixed_360 / 10);
       POINT p;
-      GEOPOINT g;
       p.x = screen_center.x + iround(ang.fastcosine() * maxsc * scale);
       p.y = screen_center.y + iround(ang.fastsine() * maxsc * scale);
-      Screen2LonLat(p.x, p.y, g);
+      GEOPOINT g = Screen2LonLat(p.x, p.y);
       sb.minx = min((double)g.Longitude.value_native(), sb.minx);
       sb.miny = min((double)g.Latitude.value_native(), sb.miny);
       sb.maxx = max((double)g.Longitude.value_native(), sb.maxx);
@@ -269,11 +269,10 @@ Projection::CalculateScreenBounds(const fixed scale) const
   } else {
     fixed xmin, xmax, ymin, ymax;
     int x, y;
-    GEOPOINT g;
 
     x = MapRect.left;
     y = MapRect.top;
-    Screen2LonLat(x, y, g);
+    GEOPOINT g = Screen2LonLat(x, y);
     xmin = g.Longitude.value_native();
     xmax = g.Longitude.value_native();
     ymin = g.Latitude.value_native();
@@ -281,7 +280,7 @@ Projection::CalculateScreenBounds(const fixed scale) const
 
     x = MapRect.right;
     y = MapRect.top;
-    Screen2LonLat(x, y, g);
+    g = Screen2LonLat(x, y);
     xmin = min(xmin, g.Longitude.value_native());
     xmax = max(xmax, g.Longitude.value_native());
     ymin = min(ymin, g.Latitude.value_native());
@@ -289,7 +288,7 @@ Projection::CalculateScreenBounds(const fixed scale) const
 
     x = MapRect.right;
     y = MapRect.bottom;
-    Screen2LonLat(x, y, g);
+    g = Screen2LonLat(x, y);
     xmin = min(xmin, g.Longitude.value_native());
     xmax = max(xmax, g.Longitude.value_native());
     ymin = min(ymin, g.Latitude.value_native());
@@ -297,7 +296,7 @@ Projection::CalculateScreenBounds(const fixed scale) const
 
     x = MapRect.left;
     y = MapRect.bottom;
-    Screen2LonLat(x, y, g);
+    g = Screen2LonLat(x, y);
     xmin = min(xmin, g.Longitude.value_native());
     xmax = max(xmax, g.Longitude.value_native());
     ymin = min(ymin, g.Latitude.value_native());
