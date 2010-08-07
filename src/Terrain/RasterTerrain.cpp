@@ -60,7 +60,7 @@ RasterTerrain::OpenTerrain()
   ExpandLocalPath(szFile);
 
   RasterTerrain *rt = new RasterTerrain(NarrowPathName(szFile));
-  if (!rt->isTerrainLoaded()) {
+  if (!rt->map.isMapLoaded()) {
     delete rt;
     return NULL;
   }

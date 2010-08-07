@@ -75,15 +75,6 @@ public:
  */
   static RasterTerrain *OpenTerrain();
 
-/** 
- * Determine if a valid terrain is loaded
- * 
- * @return True if a terrain is loaded
- */
-  bool isTerrainLoaded() const {
-    return map.isMapLoaded();
-  }
-
   void Lock() const {
     lock.readLock();
   }
