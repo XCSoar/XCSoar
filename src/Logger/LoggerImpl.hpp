@@ -71,11 +71,11 @@ public:
   /** Buffer for points recorded before takeoff */
   struct LoggerPreTakeoffBuffer {
     GEOPOINT Location;          /**< Location of fix */
-    double Altitude;            /**< GPS Altitude (m) */
-    double BaroAltitude;        /**< Barometric altitude (m) */
+    fixed Altitude;            /**< GPS Altitude (m) */
+    fixed BaroAltitude;        /**< Barometric altitude (m) */
     BrokenDateTime DateTime;    /**< Date and time of fix */
     int SatelliteIDs[MAXSATELLITES]; /**< IDs of satellites in fix */
-    double Time;                /**< Time of fix (s) */
+    fixed Time;                /**< Time of fix (s) */
     int NAVWarning;             /**< GPS fix state */
     int FixQuality;             /**< GPS fix quality */
     int SatellitesUsed;         /**< GPS fix state */
@@ -95,8 +95,8 @@ public:
     bool Initialized;
     int DegLat;
     int DegLon;
-    double MinLat;
-    double MinLon;
+    fixed MinLat;
+    fixed MinLon;
     char NoS;
     char EoW;
     int GPSAltitude;
@@ -160,7 +160,7 @@ private:
   
 private:
   void LogFRecordToFile(const int SatelliteIDs[],
-                        const BrokenTime broken_time, double Time,
+                        const BrokenTime broken_time, fixed Time,
                         int NAVWarning);
   void ResetFRecord(void);
   int LastFRecordValid;
@@ -169,7 +169,7 @@ private:
   GPSClock frecord_clock;
   const char * GetHFFXARecord(void);
   const char * GetIRecord(void);
-  double GetEPE(const NMEA_INFO& gps_info);
+  fixed GetEPE(const NMEA_INFO& gps_info);
   int GetSIU(const NMEA_INFO& gps_info);
   void LoadGPSPointFromNMEA(const NMEA_INFO& gps_info, LogPoint_GPSPosition &p);
 

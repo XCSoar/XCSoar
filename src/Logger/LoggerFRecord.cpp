@@ -72,7 +72,7 @@ LoggerImpl::ResetFRecord(void)
 }
 void
 LoggerImpl::LogFRecordToFile(const int SatelliteIDs[],
-                             const BrokenTime broken_time, double Time,
+                             const BrokenTime broken_time, fixed Time,
                          int NAVWarning)
 { 
   char szFRecord[MAX_IGC_BUFF];

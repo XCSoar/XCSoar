@@ -198,7 +198,7 @@ LoggerImpl::LoadGPSPointFromNMEA(const NMEA_INFO& gps_info, LogPoint_GPSPosition
   p.DegLat = (int)gps_info.Location.Latitude.value_degrees();
   p.MinLat = gps_info.Location.Latitude.value_degrees() - fixed(p.DegLat);
   p.NoS = 'N';
-  if ((p.MinLat < 0) || ((p.MinLat - p.DegLat == 0) && (p.DegLat < 0))) {
+  if (negative(p.MinLat) || ((int)p.MinLat == p.DegLat && p.DegLat < 0)) {
     p.NoS = 'S';
     p.DegLat *= -1;
     p.MinLat *= -1;
@@ -209,7 +209,7 @@ LoggerImpl::LoadGPSPointFromNMEA(const NMEA_INFO& gps_info, LogPoint_GPSPosition
   p.DegLon = (int)gps_info.Location.Longitude.value_degrees();
   p.MinLon = gps_info.Location.Longitude.value_degrees() - fixed(p.DegLon);
   p.EoW = 'E';
-  if ((p.MinLon < 0) || ((p.MinLon - p.DegLon == 0) && (p.DegLon < 0))) {
+  if (negative(p.MinLon) || ((int)p.MinLon == p.DegLon && p.DegLon < 0)) {
     p.EoW = 'W';
     p.DegLon *= -1;
     p.MinLon *= -1;
@@ -224,7 +224,7 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
 {
   char szBRecord[500];
   int iSIU = GetSIU(gps_info);
-  double dEPE = GetEPE(gps_info);
+  fixed dEPE = GetEPE(gps_info);
   LogPoint_GPSPosition p;
 
   char IsValidFix;
@@ -259,7 +259,8 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
   sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%c%c%05d%05d%03d%02d\r\n",
           gps_info.DateTime.hour, gps_info.DateTime.minute,
           gps_info.DateTime.second,
-          p.DegLat, p.MinLat, p.NoS, p.DegLon, p.MinLon, p.EoW, IsValidFix,
+          p.DegLat, (double)p.MinLat, p.NoS,
+          p.DegLon, (double)p.MinLon, p.EoW, IsValidFix,
           (int)gps_info.BaroAltitude, p.GPSAltitude, (int)dEPE, iSIU);
 
   IGCWriteRecord(szBRecord, szLoggerFileName);
@@ -492,15 +493,15 @@ LoggerImpl::EndDeclaration(void)
 void
 LoggerImpl::AddDeclaration(const GEOPOINT &location, const TCHAR *ID)
 {
-  const double Latitude = location.Latitude.value_degrees();
-  const double Longitude = location.Longitude.value_degrees();
+  const fixed Latitude = location.Latitude.value_degrees();
+  const fixed Longitude = location.Longitude.value_degrees();
 
   char szCRecord[500];
   char IDString[MAX_PATH];
   int i;
 
   int DegLat, DegLon;
-  double MinLat, MinLon;
+  fixed MinLat, MinLon;
   char NoS, EoW;
 
   TCHAR tmpstring[MAX_PATH];
@@ -512,9 +513,9 @@ LoggerImpl::AddDeclaration(const GEOPOINT &location, const TCHAR *ID)
   IDString[i] = '\0';
 
   DegLat = (int)Latitude;
-  MinLat = Latitude - DegLat;
+  MinLat = Latitude - fixed(DegLat);
   NoS = 'N';
-  if ((MinLat < 0) || ((MinLat - DegLat == 0) && (DegLat < 0))) {
+  if (negative(MinLat) || (((int)MinLat - DegLat == 0) && DegLat < 0)) {
     NoS = 'S';
     DegLat *= -1;
     MinLat *= -1;
@@ -523,9 +524,9 @@ LoggerImpl::AddDeclaration(const GEOPOINT &location, const TCHAR *ID)
   MinLat *= 1000;
 
   DegLon = (int)Longitude;
-  MinLon = Longitude - DegLon;
+  MinLon = Longitude - fixed(DegLon);
   EoW = 'E';
-  if ((MinLon < 0) || ((MinLon - DegLon == 0) && (DegLon < 0))) {
+  if (negative(MinLon) || ((int)MinLon == DegLon && DegLon < 0)) {
     EoW = 'W';
     DegLon *= -1;
     MinLon *= -1;
@@ -534,7 +535,7 @@ LoggerImpl::AddDeclaration(const GEOPOINT &location, const TCHAR *ID)
   MinLon *= 1000;
 
   sprintf(szCRecord, "C%02d%05.0f%c%03d%05.0f%c%s\r\n",
-          DegLat, MinLat, NoS, DegLon, MinLon, EoW, IDString);
+          DegLat, (double)MinLat, NoS, DegLon, (double)MinLon, EoW, IDString);
 
   IGCWriteRecord(szCRecord, szLoggerFileName);
 }

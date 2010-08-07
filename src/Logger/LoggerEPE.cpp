@@ -144,19 +144,19 @@ LoggerImpl::GetIRecord(void)
  * 7 = Manual input mode
  * 8 = Simulation mode
  */
-double
+fixed
 LoggerImpl::GetEPE(const NMEA_INFO& gps_info)
 {
-  double dEPE=0.0;
+  fixed dEPE = fixed_zero;
 
   switch (gps_info.gps.FixQuality) {
 
   case 1:
-    dEPE = gps_info.gps.HDOP * 18.2;
+    dEPE = (int)gps_info.gps.HDOP * fixed(18.2);
     break;
 
   case 2:
-    dEPE = gps_info.gps.HDOP * 4.0;
+    dEPE = (int)gps_info.gps.HDOP * fixed_four;
     break;
 
   default:
