@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-08-01 18:12+0200\n"
-"PO-Revision-Date: 2010-08-04 12:48+0000\n"
-"Last-Translator: Luke Szczepaniak <Unknown>\n"
+"PO-Revision-Date: 2010-08-06 19:46+0000\n"
+"Last-Translator: Michal Jezierski <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-08-06 06:44+0000\n"
+"X-Launchpad-Export-Date: 2010-08-07 01:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: src/Airspace/AirspaceParser.cpp:155
@@ -78,7 +78,7 @@ msgstr "Zatrzymaj logger"
 
 #: src/Logger/LoggerImpl.cpp:559
 msgid "Declare Task?"
-msgstr "Zadeklarować zadanie?"
+msgstr "Zadeklarować trasę?"
 
 #: src/Logger/LoggerImpl.cpp:562
 msgid "Task Declared!"
@@ -251,7 +251,7 @@ msgstr ""
 #. 17
 #: src/InfoBoxes/InfoBoxManager.cpp:149
 msgid "Speed Task Average"
-msgstr "Średnia prędkość zadania"
+msgstr "Średnia prędkość na trasie"
 
 #. 18
 #: src/InfoBoxes/InfoBoxManager.cpp:151
@@ -395,7 +395,7 @@ msgstr ""
 #. 45
 #: src/InfoBoxes/InfoBoxManager.cpp:205
 msgid "Task Arrival Time"
-msgstr "Godzina zakończenia zadania"
+msgstr "Godzina zakończenia trasy"
 
 #. 46
 #: src/InfoBoxes/InfoBoxManager.cpp:207
@@ -465,7 +465,7 @@ msgstr ""
 #. 59
 #: src/InfoBoxes/InfoBoxManager.cpp:233
 msgid "Speed Task Instantaneous"
-msgstr "Chwilowa prędkość zadania"
+msgstr "Chwilowa prędkość na trasie"
 
 #. 60
 #: src/InfoBoxes/InfoBoxManager.cpp:235
@@ -475,7 +475,7 @@ msgstr "Odległość od macierzystego"
 #. 61
 #: src/InfoBoxes/InfoBoxManager.cpp:237
 msgid "Speed Task Achieved"
-msgstr "Uzyskana prędkość zadania"
+msgstr "Uzyskana prędkość na trasie"
 
 #. 62
 #: src/InfoBoxes/InfoBoxManager.cpp:239
@@ -668,7 +668,7 @@ msgstr "MacCready "
 
 #: src/InputEventsActions.cpp:972
 msgid "Task Aborted"
-msgstr "Przerwano zadanie"
+msgstr "Przerwano trasę"
 
 #: src/InputEventsActions.cpp:975
 msgid "Task Goto"
@@ -680,7 +680,7 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:981
 msgid "No Task"
-msgstr "Brak zadania"
+msgstr "Brak trasy"
 
 #: src/InputEventsActions.cpp:1031
 msgid "Bugs Performance"
@@ -739,7 +739,7 @@ msgstr "Topologia / Teren"
 
 #: src/InputEventsActions.cpp:1806
 msgid "Task Start"
-msgstr "Start do zadania"
+msgstr "Start trasy"
 
 #: src/InputEventsActions.cpp:1808
 msgid "Next turnpoint"
@@ -747,7 +747,7 @@ msgstr "Następny punkt"
 
 #: src/InputEventsActions.cpp:1810
 msgid "Task Finish"
-msgstr "Meta w zadaniu"
+msgstr "Meta trasy"
 
 #: src/InputEventsActions.cpp:1812
 msgid "In sector, arm advance when ready"
@@ -844,12 +844,12 @@ msgstr "Podstawa chmur"
 
 #: src/FlightStatistics.cpp:946
 msgid "No task"
-msgstr "Brak zadania"
+msgstr "Brak trasy"
 
 #: src/FlightStatistics.cpp:957 src/FlightStatistics.cpp:971
 #: src/FlightStatistics.cpp:986
 msgid "Task to go"
-msgstr "Pozostały czas zadania"
+msgstr "Pozostały czas trasy"
 
 #: src/FlightStatistics.cpp:959 src/FlightStatistics.cpp:973
 msgid "AAT to go"
@@ -941,7 +941,7 @@ msgstr "Kończenie, zapisywanie profilu..."
 #. Save the task for the next time
 #: src/Components.cpp:480
 msgid "Shutdown, saving task..."
-msgstr "Kończenie, zapisywanie zadania..."
+msgstr "Kończenie, zapisywanie trasy..."
 
 #: src/Device/Port.cpp:100 src/Device/Port.cpp:128
 #, c-format
@@ -1040,7 +1040,7 @@ msgstr "Wznoszenie"
 #: src/Dialogs/dlgAnalysis.cpp:182 src/Dialogs/dlgAnalysis.cpp:217
 #: src/Dialogs/dlgAnalysis.cpp:226
 msgid "Task calc"
-msgstr "Oblicz zadanie"
+msgstr "Oblicz trasę"
 
 #: src/Dialogs/dlgAnalysis.cpp:187
 msgid "Wind at Altitude"
@@ -1060,7 +1060,7 @@ msgstr "Tymczasowy ślad"
 
 #: src/Dialogs/dlgAnalysis.cpp:214
 msgid "Task speed"
-msgstr "Prędkość zadania"
+msgstr "Prędkość trasy"
 
 #: src/Dialogs/dlgAnalysis.cpp:222
 msgid "Task"
@@ -1153,7 +1153,7 @@ msgstr "Wariometr i FLARM"
 
 #: src/Dialogs/dlgConfiguration.cpp:101
 msgid "Default task rules"
-msgstr "Domyślne reguły zadania"
+msgstr "Domyślne reguły trasy"
 
 #: src/Dialogs/dlgConfiguration.cpp:102
 msgid "InfoBox Cruise"
@@ -1285,7 +1285,7 @@ msgstr "Pierwsze 3"
 
 #: src/Dialogs/dlgConfiguration.cpp:1182
 msgid "Names in task"
-msgstr "Nazwy w zadaniu"
+msgstr "Nazwy jak na trasie"
 
 #: src/Dialogs/dlgConfiguration.cpp:1183
 msgid "First word"
@@ -1765,23 +1765,23 @@ msgstr "FAŁSZ"
 
 #: src/Dialogs/dlgTaskManager.cpp:75
 msgid "Active task modified"
-msgstr "Zmieniono aktywne zadanie"
+msgstr "Zmieniono aktywną trasę"
 
 #: src/Dialogs/dlgTaskManager.cpp:84
 msgid "Task not valid. Changes will be lost."
-msgstr "Nieprawidłowe zadanie. Zmiany nie zostaną wprowadzone."
+msgstr "Nieprawidłowa trasa. Zmiany nie zostaną wprowadzone."
 
 #: src/Dialogs/dlgTaskManager.cpp:85
 msgid "Task Manager"
-msgstr "Menedżer zadań"
+msgstr "Menedżer tras"
 
 #: src/Dialogs/dlgTaskEdit.cpp:111
 msgid "Clear task?"
-msgstr "Skasować zadanie?"
+msgstr "Skasować trasę?"
 
 #: src/Dialogs/dlgTaskEdit.cpp:112
 msgid "Task edit"
-msgstr "Edycja zadania"
+msgstr "Edycja trasy"
 
 #: src/Dialogs/dlgTaskEdit.cpp:150
 msgid "add waypoint"
@@ -1789,7 +1789,7 @@ msgstr "dodaj punkt"
 
 #: src/Dialogs/dlgTaskEdit.cpp:182
 msgid "Task invalid.  Not saved."
-msgstr "Nieprawidłowe zadanie. Nie zostanie zapisane."
+msgstr "Nieprawidłowa trasa. Nie zostanie zapisana."
 
 #: src/Dialogs/dlgTaskEdit.cpp:188
 msgid "Task saved"
@@ -1797,11 +1797,11 @@ msgstr "Zadanie zostało zapisane"
 
 #: src/Dialogs/dlgTaskList.cpp:206
 msgid "Load the selected task?"
-msgstr "Załadować wybrane zadanie?"
+msgstr "Załadować wybraną trasę?"
 
 #: src/Dialogs/dlgTaskList.cpp:211 src/Dialogs/dlgTaskList.cpp:244
 msgid "Task Browser"
-msgstr "Lista zadań"
+msgstr "Lista tras"
 
 #: src/Dialogs/dlgTaskList.cpp:239
 msgid "Delete the selected task?"
