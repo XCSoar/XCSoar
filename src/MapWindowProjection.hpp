@@ -43,6 +43,7 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "Sizes.h"
 #include "Math/fixed.hpp"
+#include "Compiler.h"
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
@@ -56,10 +57,13 @@ class MapWindowProjection: public Projection
  public:
   MapWindowProjection();
 
+  gcc_pure
   fixed  GetScreenDistanceMeters(void) const;
 
+  gcc_pure
   virtual fixed GetMapScaleUser() const;
 
+  gcc_pure
   fixed GetMapScaleKM() const {
     return (fixed)Units::ToSysUnit(MapScale * fixed(0.001), Units::DistanceUnit);
   }
@@ -94,15 +98,20 @@ class MapWindowProjection: public Projection
   void InitialiseScaleList(const SETTINGS_MAP &settings);
 
   // 4 = x*30/1000
+  gcc_pure
   fixed DistancePixelsToMeters(const int x) const {
     return x * MapScale / Units::ToUserUnit(fixed(GetMapResolutionFactor()),
                                             Units::DistanceUnit);
   }
+
   //
+  gcc_pure
   fixed RequestDistancePixelsToMeters(const int x) const {
     return x * _RequestedMapScale / Units::ToUserUnit(fixed(GetMapResolutionFactor()),
                                                       Units::DistanceUnit);
   }
+
+  gcc_pure
   fixed DistanceScreenToUser(const int x) const {
     return x * MapScale / GetMapResolutionFactor();
   }
@@ -126,7 +135,9 @@ public:
   }
   fixed StepMapScale(int Step);
 
+  gcc_pure
   bool WaypointInScaleFilter(const Waypoint &way_point) const;
+
   static bool WaypointInScaleFilter(const fixed scale,
                                     const Waypoint &way_point);
 
