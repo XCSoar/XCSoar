@@ -58,9 +58,7 @@ Projection::Projection() :
  * @param g Output GEOPOINT
  */
 void 
-Projection::Screen2LonLat(const int &x,
-                          const int &y,
-                          GEOPOINT &g) const
+Projection::Screen2LonLat(int x, int y, GEOPOINT &g) const
 {
   const FastIntegerRotation::Pair p =
     DisplayAngle.Rotate(x - Orig_Screen.x, y - Orig_Screen.y);

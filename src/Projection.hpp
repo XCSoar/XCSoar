@@ -50,7 +50,7 @@ public:
 
   virtual fixed GetMapScaleUser() const;
 
-  void Screen2LonLat(const int &x, const int &y, GEOPOINT &location) const;
+  void Screen2LonLat(int x, int y, GEOPOINT &location) const;
 
   void LonLat2Screen(const GEOPOINT &location, POINT &sc) const;
   void LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
