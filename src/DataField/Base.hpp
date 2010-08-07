@@ -90,6 +90,12 @@ public:
   virtual double SetAsFloat(double Value);
   virtual const TCHAR *SetAsString(const TCHAR *Value);
 
+#ifdef FIXED_MATH
+  fixed SetAsFloat(fixed Value) {
+    return fixed(SetAsFloat((double)Value));
+  }
+#endif
+
   virtual void Set(bool Value){ (void)Value; }
   virtual void Set(int Value){ (void)Value; }
   virtual void Set(unsigned Value){ Set((int)Value); }
@@ -105,8 +111,21 @@ public:
   virtual int SetMin(int Value){ (void)Value; return 0; }
   virtual double SetMin(double Value){ (void)Value; return false; }
 
+#ifdef FIXED_MATH
+  void SetMin(fixed value) {
+    SetMin((double)value);
+  }
+#endif
+
   virtual int SetMax(int Value){ (void)Value; return 0; }
   virtual double SetMax(double Value){(void)Value; return 0; }
+
+#ifdef FIXED_MATH
+  void SetMax(fixed value) {
+    SetMax((double)value);
+  }
+#endif
+
   void SetUnits(const TCHAR *text) { _tcscpy(mUnits, text); }
 
   void
