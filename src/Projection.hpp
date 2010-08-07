@@ -63,6 +63,7 @@ public:
   void LonLat2Screen(const pointObj* const ptin, POINT *ptout,
                      const int n, const int skip) const;
 
+  gcc_pure
   GEOPOINT point2GeoPoint(const pointObj& p) const {
     return GEOPOINT(Angle::native(fixed(p.x)), Angle::native(fixed(p.y)));
   }
@@ -71,7 +72,11 @@ public:
   GEOPOINT GetPanLocation() const { return PanLocation; }
 
   bool LonLat2ScreenIfVisible(const GEOPOINT &loc, POINT *sc) const;
+
+  gcc_pure
   bool LonLatVisible(const GEOPOINT &loc) const;
+
+  gcc_pure
   bool PointVisible(const POINT &P) const;
 
   fixed GetScreenScaleToLonLat() const {
@@ -95,10 +100,12 @@ public:
   }
 
   // used by terrain renderer, topology and airspace
+  gcc_pure
   rectObj CalculateScreenBounds(const fixed scale) const;
 
 protected:
-  int GetMapResolutionFactor(void) const;
+  gcc_const
+  static int GetMapResolutionFactor();
 
   void SetScaleMetersToScreen(const fixed scale_meters_to_screen);
 
@@ -107,7 +114,8 @@ protected:
   FastIntegerRotation DisplayAngle;
   RECT MapRect;
 
-  long max_dimension(const RECT &rc) const;
+  gcc_pure
+  static long max_dimension(const RECT &rc);
 
   void UpdateScreenBounds();
 

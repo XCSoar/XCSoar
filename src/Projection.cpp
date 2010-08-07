@@ -311,7 +311,7 @@ Projection::CalculateScreenBounds(const fixed scale) const
 }
 
 long
-Projection::max_dimension(const RECT &rc) const
+Projection::max_dimension(const RECT &rc)
 {
   return std::max(rc.right - rc.left, rc.bottom - rc.top);
 }
@@ -324,7 +324,7 @@ Projection::GetMapScaleUser() const
 }
 
 int
-Projection::GetMapResolutionFactor(void) const
+Projection::GetMapResolutionFactor()
 {
   return IBLSCALE(30);
 }
