@@ -747,18 +747,18 @@ InputEvents::eventMacCready(const TCHAR *misc)
 {
   ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
   GlidePolar polar = task_manager->get_glide_polar();
-  double mc = polar.get_mc();
+  fixed mc = polar.get_mc();
 
   if (_tcscmp(misc, _T("up")) == 0) {
-    mc = std::min(mc + (double)0.1, 5.0);
-    polar.set_mc(fixed(mc));
+    mc = std::min(mc + fixed_one / 10, fixed(5));
+    polar.set_mc(mc);
     task_manager->set_glide_polar(polar);
-    device_blackboard.SetMC(fixed(mc));
+    device_blackboard.SetMC(mc);
   } else if (_tcscmp(misc, _T("down")) == 0) {
-    mc = std::max(mc - (double)0.1, 0.0);
-    polar.set_mc(fixed(mc));
+    mc = std::min(mc - fixed_one / 10, fixed_zero);
+    polar.set_mc(mc);
     task_manager->set_glide_polar(polar);
-    device_blackboard.SetMC(fixed(mc));
+    device_blackboard.SetMC(mc);
   } else if (_tcscmp(misc, _T("auto toggle")) == 0) {
     SetSettingsComputer().auto_mc = !SettingsComputer().auto_mc;
   } else if (_tcscmp(misc, _T("auto on")) == 0) {
