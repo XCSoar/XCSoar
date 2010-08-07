@@ -38,7 +38,7 @@
 #include "Navigation/Geometry/GeoVector.hpp"
 
 AircraftStateFilter::AircraftStateFilter(const AIRCRAFT_STATE& state,
-                                         const double cutoff_wavelength):
+                                         const fixed cutoff_wavelength):
   m_df_x(fixed_zero),
   m_df_y(fixed_zero),
   m_df_alt(fixed_zero),
@@ -65,9 +65,9 @@ AircraftStateFilter::reset(const AIRCRAFT_STATE& state)
   m_vy = 0;
   m_vz = 0;
 
-  m_lpf_x.reset(0.0);
-  m_lpf_y.reset(0.0);
-  m_lpf_alt.reset(0.0);
+  m_lpf_x.reset(fixed_zero);
+  m_lpf_y.reset(fixed_zero);
+  m_lpf_alt.reset(fixed_zero);
   m_df_x.reset(m_x, fixed_zero);
   m_df_y.reset(m_y, fixed_zero);
   m_df_alt.reset(m_alt, fixed_zero);
@@ -119,7 +119,7 @@ AircraftStateFilter::get_climb_rate() const
 
 
 bool 
-AircraftStateFilter::design(const double cutoff_wavelength)
+AircraftStateFilter::design(const fixed cutoff_wavelength)
 {
   bool ok = true;
   ok &= m_lpf_x.design(cutoff_wavelength);

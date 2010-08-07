@@ -58,7 +58,7 @@ public:
    * @param cutoff_wavelength -3db cutoff wavelength (s) of filters
    */
   AircraftStateFilter(const AIRCRAFT_STATE& state,
-                      const double cutoff_wavelength=10.0);
+                      const fixed cutoff_wavelength=fixed_ten);
 
 /** 
  * Reset filters to initial state
@@ -84,7 +84,7 @@ public:
  * 
  * @return True if design was successfull
  */
-  bool design(const double cutoff_wavelength);
+  bool design(const fixed cutoff_wavelength);
 
 /** 
  * Return filtered speed

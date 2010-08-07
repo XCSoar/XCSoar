@@ -37,6 +37,8 @@
 #ifndef FILTER_HPP
 #define FILTER_HPP
 
+#include "Math/fixed.hpp"
+
 /**
  * Basic low-pass FIR filter from 2-pole design.
  * If filter design fails, passes data straight through.
@@ -51,7 +53,7 @@ public:
    * @param bessel If true, generates Bessel filter, otherwise
    * critically damped filter
    */
-  Filter(const double cutoff_wavelength, const bool bessel = true);
+  Filter(const fixed cutoff_wavelength, const bool bessel = true);
 
   /**
    * Designs low-pass FIR filter
@@ -60,7 +62,7 @@ public:
    *
    * @return false if failed (cutoff_wavelength too low)
    */
-  bool design(const double cutoff_wavelength);
+  bool design(const fixed cutoff_wavelength);
 
   /**
    * Resets filter to produce static value
@@ -69,7 +71,7 @@ public:
    *
    * @return Filter output value
    */
-  double reset(const double x0);
+  fixed reset(const fixed x0);
 
   /**
    * Updates low-pass filter to calculate filtered output given an input sample
@@ -78,7 +80,7 @@ public:
    *
    * @return Filter output value
    */
-  double update(const double x0);
+  fixed update(const fixed x0);
 
   /**
    * Test whether filter design was successful
@@ -90,10 +92,10 @@ public:
   }
 
 private:
-  double a[3];
-  double b[2];
-  double x[3];
-  double y[2];
+  fixed a[3];
+  fixed b[2];
+  fixed x[3];
+  fixed y[2];
   bool m_bessel;
   bool ok;
 };

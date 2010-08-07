@@ -50,9 +50,9 @@ AbstractTask::AbstractTask(enum type _type, TaskEvents &te,
   task_events(te),
   task_behaviour(tb),
   glide_polar(gp),
-  mc_lpf(10.0),
-  ce_lpf(60.0),
-  em_lpf(60.0),
+  mc_lpf(fixed_ten),
+  ce_lpf(fixed(60)),
+  em_lpf(fixed(60)),
   trigger_auto(false) {}
 
 bool 
@@ -94,7 +94,7 @@ AbstractTask::update_idle(const AIRCRAFT_STATE &state)
     stats.cruise_efficiency = ce_lpf.update(calc_cruise_efficiency(state));
     retval = true;
   } else {
-    stats.cruise_efficiency = ce_lpf.reset(1.0);
+    stats.cruise_efficiency = ce_lpf.reset(fixed_one);
   }
 
   if (task_started() && task_behaviour.calc_effective_mc) {
@@ -246,7 +246,7 @@ AbstractTask::reset()
 {
   reset_auto_mc();
   activeTaskPoint_last = 0-1;
-  ce_lpf.reset(1.0);
+  ce_lpf.reset(fixed_one);
   stats.reset();
 }
 

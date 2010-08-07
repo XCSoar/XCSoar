@@ -42,60 +42,61 @@
 
 // ref http://unicorn.us.com/alex/2polefilters.html
 
-Filter::Filter(const double cutoff_wavelength, const bool bessel) :
+Filter::Filter(const fixed cutoff_wavelength, const bool bessel) :
   m_bessel(bessel)
 {
   design(cutoff_wavelength);
 }
 
 bool
-Filter::design(const double cutoff_wavelength)
+Filter::design(const fixed cutoff_wavelength)
 {
-  double sample_freq = 1.0;
-  double n = 1.0;
-  double c;
-  double g;
-  double p;
+  fixed sample_freq = fixed_one;
+  fixed n = fixed_one;
+  fixed c;
+  fixed g;
+  fixed p;
 
   if (m_bessel) {
     // Bessel
-    c = pow((sqrt(pow(2.0, 1.0 / n) - 0.75) - 0.5), -0.5) / sqrt(3.0);
+    c = pow((sqrt(pow(fixed_two, fixed_one / n) - fixed(0.75)) - fixed_half),
+            -fixed_half) / sqrt(fixed(3));
     g = 3;
     p = 3;
   } else {
     // Critically damped
-    c = pow((pow(2.0, 1.0 / (2.0 * n)) - 1), -0.5);
-    g = 1;
-    p = 2;
+    c = pow((pow(fixed_two, fixed_one / (2 * n)) - fixed_one), -fixed_half);
+    g = fixed_one;
+    p = fixed_two;
   }
 
-  double f_star = c / (sample_freq * cutoff_wavelength);
+  fixed f_star = c / (sample_freq * cutoff_wavelength);
 
-  assert(f_star < 1.0 / 8.0);
+  assert(f_star < fixed_one / 8);
 
-  if (f_star >= 1.0 / 8.0) {
+  if (f_star >= fixed_one / 8) {
     ok = false;
     return false;
   }
 
-  double omega0 = tan(3.1415926 * f_star);
-  double K1 = p * omega0;
-  double K2 = g * omega0 * omega0;
+  fixed omega0 = tan(fixed_pi * f_star);
+  fixed K1 = p * omega0;
+  fixed K2 = g * omega0 * omega0;
 
-  a[0] = K2 / (1.0 + K1 + K2);
+  a[0] = K2 / (fixed_one + K1 + K2);
   a[1] = 2 * a[0];
   a[2] = a[0];
-  b[0] = 2 * a[0] * (1.0 / K2 - 1.0);
-  b[1] = 1.0 - (a[0] + a[1] + a[2] + b[0]);
+  b[0] = 2 * a[0] * (fixed_one / K2 - fixed_one);
+  b[1] = fixed_one - (a[0] + a[1] + a[2] + b[0]);
 
-  reset(0.0);
+  reset(fixed_zero);
   ok = true;
 
   return true;
 }
 
-double
-Filter::reset(const double _x)
+fixed
+Filter::reset(const fixed _x)
 {
   x[0] = _x;
   y[0] = _x;
@@ -106,8 +107,8 @@ Filter::reset(const double _x)
   return _x;
 }
 
-double
-Filter::update(const double _x)
+fixed
+Filter::update(const fixed _x)
 {
   if (!ok)
     return _x;
@@ -116,7 +117,7 @@ Filter::update(const double _x)
   x[1] = x[0];
   x[0] = _x;
 
-  double _y = a[0] * x[0]
+  fixed _y = a[0] * x[0]
             + a[1] * x[1]
             + a[2] * x[2]
             + b[0] * y[0]

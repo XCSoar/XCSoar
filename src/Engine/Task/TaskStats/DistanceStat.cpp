@@ -44,7 +44,7 @@ DistanceStat::DistanceStat(const bool _is_positive):
   speed(0.0),
   av_dist(N_AV),
   df(fixed_zero),
-  v_lpf(600.0/N_AV,false),
+  v_lpf(fixed(600) / N_AV, false),
   is_positive(_is_positive)
 {
 
@@ -59,7 +59,7 @@ DistanceStat::calc_incremental_speed(const double dt)
       av_dist.reset();
 
       for (unsigned i=0; i<(unsigned)(dt); i++) {
-        double v = df.update(d_av)/(N_AV);
+        fixed v = df.update(d_av) / N_AV;
         double v_f = v_lpf.update(v);
         speed_incremental = (is_positive? -v_f:v_f);
       }
@@ -73,7 +73,7 @@ void
 DistanceStat::reset_incremental_speed()
 {
   df.reset(fixed(distance), (is_positive ? -1 : 1) * fixed(speed) * N_AV);
-  v_lpf.reset((is_positive? -1:1)*speed);
+  v_lpf.reset((is_positive ? -1 : 1) * fixed(speed));
   speed_incremental = speed;
   av_dist.reset();
 }
