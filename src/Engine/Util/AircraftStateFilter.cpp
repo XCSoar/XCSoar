@@ -39,9 +39,9 @@
 
 AircraftStateFilter::AircraftStateFilter(const AIRCRAFT_STATE& state,
                                          const double cutoff_wavelength):
-  m_df_x(0.0),
-  m_df_y(0.0),
-  m_df_alt(0.0),
+  m_df_x(fixed_zero),
+  m_df_y(fixed_zero),
+  m_df_alt(fixed_zero),
   m_lpf_x(cutoff_wavelength),
   m_lpf_y(cutoff_wavelength),
   m_lpf_alt(cutoff_wavelength),
@@ -68,9 +68,9 @@ AircraftStateFilter::reset(const AIRCRAFT_STATE& state)
   m_lpf_x.reset(0.0);
   m_lpf_y.reset(0.0);
   m_lpf_alt.reset(0.0);
-  m_df_x.reset(m_x,0.0);
-  m_df_y.reset(m_y,0.0);
-  m_df_alt.reset(m_alt, 0.0);
+  m_df_x.reset(m_x, fixed_zero);
+  m_df_y.reset(m_y, fixed_zero);
+  m_df_alt.reset(m_alt, fixed_zero);
 }
 
 void 

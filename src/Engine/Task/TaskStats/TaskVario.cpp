@@ -4,7 +4,7 @@
 
 TaskVario::TaskVario():
   value(0.0),
-  df(0.0),
+  df(fixed_zero),
   v_lpf(120.0,false)
 {
 
@@ -29,5 +29,5 @@ void
 TaskVario::reset(const GlideResult& solution)
 {
   v_lpf.reset(0.0);
-  df.reset(solution.AltitudeDifference, 0.0);
+  df.reset(solution.AltitudeDifference, fixed_zero);
 }

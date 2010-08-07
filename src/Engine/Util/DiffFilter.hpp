@@ -38,6 +38,8 @@
 #ifndef DIFF_FILTER_HPP
 #define DIFF_FILTER_HPP
 
+#include "Math/fixed.hpp"
+
 /**
  * Differentiating low-pass IIR filter
  * @see http://www.dsprelated.com/showarticle/35.php
@@ -50,9 +52,9 @@ public:
    *
    * @param x_default Default value of input
    */
-  DiffFilter(double x_default = 0.0)
+  DiffFilter(fixed x_default = fixed_zero)
   {
-    reset(x_default, 0);
+    reset(x_default, fixed_zero);
   }
 
   /**
@@ -63,7 +65,7 @@ public:
    *
    * @return Filter output value
    */
-  double update(const double x0);
+  fixed update(const fixed x0);
 
   /**
    * Resets filter as if fed value to produce y0
@@ -71,10 +73,10 @@ public:
    * @param x0 Steady state value of filter input
    * @param y0 Desired value of differentiated output
    */
-  void reset(const double x0, const double y0);
+  void reset(const fixed x0, const fixed y0);
 
 private:
-  double x[7];
+  fixed x[7];
 };
 
 
