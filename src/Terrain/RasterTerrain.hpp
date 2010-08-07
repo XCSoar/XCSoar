@@ -101,7 +101,7 @@ public:
     lock.unlock();
   }
 
-  RasterMap* get_map() const {
+  const RasterMap *get_map() const {
     return TerrainMap;
   }
 

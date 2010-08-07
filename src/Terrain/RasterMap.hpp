@@ -91,7 +91,7 @@ public:
                             const GEOPOINT &location) const;
 
   gcc_pure
-  short GetField(const GEOPOINT &location);
+  short GetField(const GEOPOINT &location) const;
 
  protected:
   void _ReloadJPG2000(void);

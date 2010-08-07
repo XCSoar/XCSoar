@@ -60,7 +60,7 @@ protected:
   void SetSize(unsigned width, unsigned height, unsigned quantisation_pixels);
 
 public:
-  void Fill(RasterMap &map, const Projection &map_projection,
+  void Fill(const RasterMap &map, const Projection &map_projection,
             RECT rc, unsigned quantisation_pixels);
 
   const unsigned short *GetData() const {

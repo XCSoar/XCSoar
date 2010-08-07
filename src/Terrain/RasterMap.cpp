@@ -121,7 +121,7 @@ RasterMap::GetEffectivePixelSize(fixed &pixel_D,
 }
 
 short
-RasterMap::GetField(const GEOPOINT &location)
+RasterMap::GetField(const GEOPOINT &location) const
 {
   std::pair<unsigned, unsigned> xy = projection.project(location);
   return raster_tile_cache.GetField(xy.first, xy.second);
