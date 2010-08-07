@@ -69,8 +69,7 @@ MapDrawHelper::MapDrawHelper(MapDrawHelper &_that):
 void 
 MapDrawHelper::add(std::vector<POINT>& screen, const GEOPOINT& pt) const
 {
-  POINT sc;
-  m_proj.LonLat2Screen(pt, sc);
+  POINT sc = m_proj.LonLat2Screen(pt);
   screen.push_back(sc);
 }
 

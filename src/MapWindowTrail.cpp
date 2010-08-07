@@ -115,9 +115,8 @@ MapWindow::DrawTrail(Canvas &canvas)
   for (TracePointVector::const_iterator it = trace.begin();
        it != trace.end(); ++it) {
 
-    POINT pt;
     const fixed dt = (Basic().Time - fixed(it->time)) * it->drift_factor;
-    LonLat2Screen(it->get_location().parametric(traildrift, dt), pt);
+    POINT pt = LonLat2Screen(it->get_location().parametric(traildrift, dt));
 
     if (it->last_time != last_time) {
       canvas.move_to(pt.x, pt.y);

@@ -45,8 +45,8 @@ void
 MapCanvas::line(const GEOPOINT &a, const GEOPOINT &b)
 {
   POINT pts[2];
-  projection.LonLat2Screen(a, pts[0]);
-  projection.LonLat2Screen(b, pts[1]);
+  pts[0] = projection.LonLat2Screen(a);
+  pts[1] = projection.LonLat2Screen(b);
 
   if (need_clipping())
     canvas.autoclip_polyline(pts, 2, projection.GetMapRect());
@@ -57,8 +57,7 @@ MapCanvas::line(const GEOPOINT &a, const GEOPOINT &b)
 void
 MapCanvas::circle(const GEOPOINT &center, fixed radius)
 {
-  POINT screen_center;
-  projection.LonLat2Screen(center, screen_center);
+  POINT screen_center = projection.LonLat2Screen(center);
   unsigned screen_radius = projection.DistanceMetersToScreen(radius);
   canvas.circle(screen_center.x, screen_center.y, screen_radius);
 }
@@ -68,7 +67,7 @@ MapCanvas::project(const SearchPointVector &points, POINT *screen) const
 {
   for (SearchPointVector::const_iterator it = points.begin();
        it != points.end(); ++it)
-    projection.LonLat2Screen(it->get_location(), *screen++);
+    *screen++ = projection.LonLat2Screen(it->get_location());
 }
 
 static void

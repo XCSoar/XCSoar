@@ -150,8 +150,7 @@ public:
     buffer_render_start();
     set_buffer_pens(airspace);
 
-    POINT center;
-    m_proj.LonLat2Screen(airspace.get_center(),center);
+    POINT center = m_proj.LonLat2Screen(airspace.get_center());
     unsigned radius = m_proj.DistanceMetersToScreen(airspace.get_radius());
     draw_circle(m_buffer, center, radius);
   }

@@ -121,9 +121,8 @@ protected:
       if ((idist != ilast) && (idist > 0) && (idist < 1000)) {
         TCHAR Buffer[5];
         _stprintf(Buffer, _T("%d"), idist);
-        POINT sc;
+        POINT sc = m_map.LonLat2Screen(dloc);
         RECT brect;
-        m_map.LonLat2Screen(dloc, sc);
         SIZE tsize = m_canvas.text_size(Buffer);
 
         brect.left = sc.x - 4;

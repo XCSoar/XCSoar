@@ -74,11 +74,9 @@ Projection::Screen2LonLat(int x, int y) const
 /**
  * Converts a GEOPOINT to screen coordinates
  * @param g GEOPOINT to convert
- * @param sc Output screen coordinate
  */
-void
-Projection::LonLat2Screen(const GEOPOINT &g,
-                          POINT &sc) const
+POINT
+Projection::LonLat2Screen(const GEOPOINT &g) const
 {
   const GEOPOINT d = PanLocation-g;
   const FastIntegerRotation::Pair p =
@@ -86,8 +84,10 @@ Projection::LonLat2Screen(const GEOPOINT &g,
                               * g.Latitude.fastcosine() * DrawScale),
                         (int)(d.Latitude.value_native() * DrawScale));
 
+  POINT sc;
   sc.x = Orig_Screen.x - p.first;
   sc.y = Orig_Screen.y + p.second;
+  return sc;
 }
 
 /**
@@ -191,7 +191,7 @@ Projection::LonLat2ScreenIfVisible(const GEOPOINT &loc,
                                    POINT *sc) const
 {
   if (LonLatVisible(loc)) {
-    LonLat2Screen(loc, *sc);
+    *sc = LonLat2Screen(loc);
     return PointVisible(*sc);
   }
 
@@ -234,8 +234,7 @@ Projection::CalculateScreenBounds(const fixed scale) const
   rectObj sb;
 
   if (scale >= fixed_one) {
-    POINT screen_center;
-    LonLat2Screen(PanLocation, screen_center);
+    POINT screen_center = LonLat2Screen(PanLocation);
 
     sb.minx = sb.maxx = PanLocation.Longitude.value_native();
     sb.miny = sb.maxy = PanLocation.Latitude.value_native();
