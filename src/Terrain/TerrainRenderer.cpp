@@ -329,7 +329,8 @@ TerrainRenderer::Height(const Projection &map_projection)
   rect_quantised.bottom= min(height_sub+rect_quantised.top, 
                              rect_visible.bottom/quantisation_pixels); 
 
-  FillHeightBuffer(map_projection, rect_visible);
+  height_matrix.Fill(*DisplayMap, map_projection, rect_visible,
+                     quantisation_pixels);
 
   terrain->Unlock();
 
@@ -367,14 +368,6 @@ TerrainRenderer::ScanSpotHeights(const RECT& rect)
   }
 }
 
-
-void
-TerrainRenderer::FillHeightBuffer(const Projection &map_projection,
-                                  const RECT& rect)
-{
-  height_matrix.Fill(*DisplayMap, map_projection, rect,
-                     quantisation_pixels);
-}
 
 const RECT 
 TerrainRenderer::BorderSlope(const RECT& rect_quantised, 

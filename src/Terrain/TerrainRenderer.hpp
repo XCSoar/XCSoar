@@ -105,8 +105,6 @@ private:
 
   const RECT Height(const Projection &map_projection);
   void ScanSpotHeights(const RECT& rect);
-  void FillHeightBuffer(const Projection &map_projection,
-                        const RECT& rect);
   void Slope(const RECT& rect_quantised, const int sx, const int sy, const int sz);
   void ColorTable();
   void Draw(Canvas &canvas, RECT src_rect);
