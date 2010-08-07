@@ -40,7 +40,7 @@
 #include <string.h>
 
 bool
-AvFilter::update(const double x0)
+AvFilter::update(const fixed x0)
 {
   if (n < x.size()) {
     x[n] = x0;
@@ -50,16 +50,16 @@ AvFilter::update(const double x0)
   return (n >= x.size());
 }
 
-double
+fixed
 AvFilter::average()
 {
   assert(n > 0); // should never get here..
 
   if (!n) {
-    return 0;
+    return fixed_zero;
   }
 
-  double y = 0;
+  fixed y = fixed_zero;
   for (unsigned i = 0; i < n; i++) {
     y += x[i];
   }

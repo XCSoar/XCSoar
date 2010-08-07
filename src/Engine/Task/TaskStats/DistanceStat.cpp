@@ -54,7 +54,7 @@ void
 DistanceStat::calc_incremental_speed(const double dt)
 {  
   if ((dt>0) && (distance>0)) {
-    if (av_dist.update(distance)) {
+    if (av_dist.update(fixed(distance))) {
       double d_av = av_dist.average();
       av_dist.reset();
 

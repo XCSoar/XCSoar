@@ -38,6 +38,7 @@
 #ifndef AV_FILTER_HPP
 #define AV_FILTER_HPP
 
+#include "Math/fixed.hpp"
 #include "Util/AllocatedArray.hpp"
 #include "Compiler.h"
 
@@ -65,7 +66,7 @@ public:
    *
    * @return True if buffer is full
    */
-  bool update(const double x0);
+  bool update(const fixed x0);
 
   /**
    * Calculate average from samples
@@ -73,7 +74,7 @@ public:
    * @return Average value in buffer
    */
   gcc_pure
-  double average();
+  fixed average();
 
   /**
    * Resets filter (zero samples)
@@ -82,7 +83,7 @@ public:
   void reset();
 
 protected:
-  AllocatedArray<double> x; /**< Values stored */
+  AllocatedArray<fixed> x; /**< Values stored */
   unsigned n; /**< Number of taps */
 };
 
