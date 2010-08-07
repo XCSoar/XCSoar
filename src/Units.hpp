@@ -40,6 +40,7 @@ Copyright_License {
 #define __UNITS_H
 
 #include "Math/fixed.hpp"
+#include "Compiler.h"
 
 #include <tchar.h>
 class Angle;
@@ -121,12 +122,14 @@ public:
    * Returns the name of the given Unit
    * @return The name of the given Unit (e.g. "km" or "ft")
    */
+  gcc_const
   static const TCHAR *GetUnitName(Units_t Unit);
 
   /**
    * Returns the user-specified coordinate format
    * @return The user-specified coordinate format
    */
+  gcc_const
   static CoordinateFormats_t GetCoordinateFormat();
   /**
    * Sets the user-specified coordinate format
@@ -139,6 +142,7 @@ public:
    * Returns the user-specified unit for a horizontal distance
    * @return The user-specified unit for a horizontal distance
    */
+  gcc_const
   static Units_t GetUserDistanceUnit();
   /**
    * Sets the user-specified unit for a horizontal distance
@@ -151,7 +155,9 @@ public:
    * Returns the user-specified unit for an altitude
    * @return The user-specified unit for an altitude
    */
+  gcc_const
   static Units_t GetUserAltitudeUnit();
+
   /**
    * Sets the user-specified unit for an altitude
    * @param NewUnit The new unit
@@ -163,6 +169,7 @@ public:
    * Returns the user-specified unit for a temperature
    * @return The user-specified unit for a temperature
    */
+  gcc_const
   static Units_t GetUserTemperatureUnit();
 
   /**
@@ -176,7 +183,9 @@ public:
    * Returns the user-specified unit for a horizontal speed
    * @return The user-specified unit for a horizontal speed
    */
+  gcc_const
   static Units_t GetUserSpeedUnit();
+
   /**
    * Sets the user-specified unit for a horizontal speed
    * @param NewUnit The new unit
@@ -188,7 +197,9 @@ public:
    * Returns the user-specified unit for a task speed
    * @return The user-specified unit for a task speed
    */
+  gcc_const
   static Units_t GetUserTaskSpeedUnit();
+
   /**
    * Sets the user-specified unit for a task speed
    * @param NewUnit The new unit
@@ -200,7 +211,9 @@ public:
    * Returns the user-specified unit for a vertical speed
    * @return The user-specified unit for a vertical speed
    */
+  gcc_const
   static Units_t GetUserVerticalSpeedUnit();
+
   /**
    * Sets the user-specified unit for a vertical speed
    * @param NewUnit The new unit
@@ -212,7 +225,9 @@ public:
    * Returns the user-specified unit for a wind speed
    * @return The user-specified unit for a wind speed
    */
+  gcc_const
   static Units_t GetUserWindSpeedUnit();
+
   /**
    * Sets the user-specified unit for a wind speed
    * @param NewUnit The new unit
@@ -220,6 +235,7 @@ public:
    */
   static Units_t SetUserWindSpeedUnit(Units_t NewUnit);
 
+  gcc_const
   static Units_t GetUserUnitByGroup(UnitGroup_t UnitGroup);
 
   /**
@@ -262,11 +278,23 @@ public:
 
   static void NotifyUnitChanged();
 
+  gcc_const
   static const TCHAR *GetSpeedName();
+
+  gcc_const
   static const TCHAR *GetVerticalSpeedName();
+
+  gcc_const
   static const TCHAR *GetDistanceName();
+
+  gcc_const
   static const TCHAR *GetAltitudeName();
+  gcc_const
+
+  gcc_const
   static const TCHAR *GetTemperatureName();
+
+  gcc_const
   static const TCHAR *GetTaskSpeedName();
 
   /**
@@ -334,6 +362,7 @@ public:
    * @param To The destination unit
    * @return The value in user-specified unit
    */
+  gcc_const
   static double ConvertUnits(double Value, Units_t From, Units_t To);
 
   /**
@@ -342,9 +371,11 @@ public:
    * @param Unit The destination unit
    * @return The value in user-specified unit
    */
+  gcc_const
   static double ToUserUnit(double Value, Units_t Unit);
 
 #ifdef FIXED_MATH
+  gcc_const
   static fixed ToUserUnit(fixed Value, Units_t Unit) {
     return fixed(ToUserUnit((double)Value, Unit));
   }
@@ -356,9 +387,11 @@ public:
    * @param Unit The source unit
    * @return The value in system unit
    */
+  gcc_const
   static double ToSysUnit(double Value, Units_t Unit);
 
 #ifdef FIXED_MATH
+  gcc_const
   static fixed ToSysUnit(fixed Value, Units_t Unit) {
     return fixed(ToSysUnit((double)Value, Unit));
   }
