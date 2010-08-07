@@ -103,140 +103,138 @@ typedef struct{
  * internal system units are (metric SI).
  * 
  */
-class Units
+namespace Units
 {
-private:
-  static const UnitDescriptor_t UnitDescriptors[unCount];
+  extern const UnitDescriptor_t UnitDescriptors[];
 
-public:
-  static Units_t DistanceUnit;  /**< Unit for distances */
-  static Units_t AltitudeUnit; /**< Unit for altitudes, heights */
-  static Units_t TemperatureUnit; /**< Unit for temperature */
-  static Units_t SpeedUnit; /**< Unit for aircraft speeds */
-  static Units_t VerticalSpeedUnit; /**< Unit for vertical speeds, varios */
-  static Units_t WindSpeedUnit; /**< Unit for wind speeds */
-  static Units_t TaskSpeedUnit; /**< Unit for task speeds */
-  static CoordinateFormats_t CoordinateFormat; /**< Unit for lat/lon */
+  extern Units_t DistanceUnit;  /**< Unit for distances */
+  extern Units_t AltitudeUnit; /**< Unit for altitudes, heights */
+  extern Units_t TemperatureUnit; /**< Unit for temperature */
+  extern Units_t SpeedUnit; /**< Unit for aircraft speeds */
+  extern Units_t VerticalSpeedUnit; /**< Unit for vertical speeds, varios */
+  extern Units_t WindSpeedUnit; /**< Unit for wind speeds */
+  extern Units_t TaskSpeedUnit; /**< Unit for task speeds */
+  extern CoordinateFormats_t CoordinateFormat; /**< Unit for lat/lon */
 
   /**
    * Returns the name of the given Unit
    * @return The name of the given Unit (e.g. "km" or "ft")
    */
   gcc_const
-  static const TCHAR *GetUnitName(Units_t Unit);
+  const TCHAR *GetUnitName(Units_t Unit);
 
   /**
    * Returns the user-specified coordinate format
    * @return The user-specified coordinate format
    */
   gcc_const
-  static CoordinateFormats_t GetCoordinateFormat();
+  CoordinateFormats_t GetCoordinateFormat();
   /**
    * Sets the user-specified coordinate format
    * @param NewUnit The new coordinate format
    * @return The old coordinate format
    */
-  static CoordinateFormats_t SetCoordinateFormat(CoordinateFormats_t NewFormat);
+  CoordinateFormats_t SetCoordinateFormat(CoordinateFormats_t NewFormat);
 
   /**
    * Returns the user-specified unit for a horizontal distance
    * @return The user-specified unit for a horizontal distance
    */
   gcc_const
-  static Units_t GetUserDistanceUnit();
+  Units_t GetUserDistanceUnit();
   /**
    * Sets the user-specified unit for a horizontal distance
    * @param NewUnit The new unit
    * @return The old unit
    */
-  static Units_t SetUserDistanceUnit(Units_t NewUnit);
+  Units_t SetUserDistanceUnit(Units_t NewUnit);
 
   /**
    * Returns the user-specified unit for an altitude
    * @return The user-specified unit for an altitude
    */
   gcc_const
-  static Units_t GetUserAltitudeUnit();
+  Units_t GetUserAltitudeUnit();
 
   /**
    * Sets the user-specified unit for an altitude
    * @param NewUnit The new unit
    * @return The old unit
    */
-  static Units_t SetUserAltitudeUnit(Units_t NewUnit);
+  Units_t SetUserAltitudeUnit(Units_t NewUnit);
 
   /**
    * Returns the user-specified unit for a temperature
    * @return The user-specified unit for a temperature
    */
   gcc_const
-  static Units_t GetUserTemperatureUnit();
+  Units_t GetUserTemperatureUnit();
 
   /**
    * Sets the user-specified unit for a temperature
    * @param NewUnit The new unit
    * @return The old unit
    */
-  static Units_t SetUserTemperatureUnit(Units_t NewUnit);
+  Units_t SetUserTemperatureUnit(Units_t NewUnit);
 
   /**
    * Returns the user-specified unit for a horizontal speed
    * @return The user-specified unit for a horizontal speed
    */
   gcc_const
-  static Units_t GetUserSpeedUnit();
+  Units_t GetUserSpeedUnit();
 
   /**
    * Sets the user-specified unit for a horizontal speed
    * @param NewUnit The new unit
    * @return The old unit
    */
-  static Units_t SetUserSpeedUnit(Units_t NewUnit);
+  Units_t SetUserSpeedUnit(Units_t NewUnit);
 
   /**
    * Returns the user-specified unit for a task speed
    * @return The user-specified unit for a task speed
    */
   gcc_const
-  static Units_t GetUserTaskSpeedUnit();
+  Units_t GetUserTaskSpeedUnit();
 
   /**
    * Sets the user-specified unit for a task speed
    * @param NewUnit The new unit
    * @return The old unit
    */
-  static Units_t SetUserTaskSpeedUnit(Units_t NewUnit);
+  Units_t SetUserTaskSpeedUnit(Units_t NewUnit);
 
   /**
    * Returns the user-specified unit for a vertical speed
    * @return The user-specified unit for a vertical speed
    */
   gcc_const
-  static Units_t GetUserVerticalSpeedUnit();
+  Units_t GetUserVerticalSpeedUnit();
 
   /**
    * Sets the user-specified unit for a vertical speed
    * @param NewUnit The new unit
    * @return The old unit
    */
-  static Units_t SetUserVerticalSpeedUnit(Units_t NewUnit);
+  Units_t SetUserVerticalSpeedUnit(Units_t NewUnit);
 
   /**
    * Returns the user-specified unit for a wind speed
    * @return The user-specified unit for a wind speed
    */
   gcc_const
-  static Units_t GetUserWindSpeedUnit();
+  Units_t GetUserWindSpeedUnit();
 
   /**
    * Sets the user-specified unit for a wind speed
    * @param NewUnit The new unit
    * @return The old unit
    */
-  static Units_t SetUserWindSpeedUnit(Units_t NewUnit);
+  Units_t SetUserWindSpeedUnit(Units_t NewUnit);
 
   gcc_const
-  static Units_t GetUserUnitByGroup(UnitGroup_t UnitGroup);
+  Units_t GetUserUnitByGroup(UnitGroup_t UnitGroup);
 
   /**
    * Converts a double-based Longitude to degrees, minute, seconds and a
@@ -247,8 +245,9 @@ public:
    * @param ss Seconds (pointer)
    * @param east True if East, False if West (pointer)
    */
-  static void LongitudeToDMS(Angle Longitude,
-                             int *dd, int *mm, int *ss, bool *east);
+  void LongitudeToDMS(Angle Longitude,
+                      int *dd, int *mm, int *ss, bool *east);
+
   /**
    * Converts a double-based Latitude to degrees, minute, seconds and a
    * bool-based north variable
@@ -258,8 +257,8 @@ public:
    * @param ss Seconds (pointer)
    * @param north True if North, False if South (pointer)
    */
-  static void LatitudeToDMS(Angle Latitude,
-                            int *dd, int *mm, int *ss, bool *north);
+  void LatitudeToDMS(Angle Latitude,
+                     int *dd, int *mm, int *ss, bool *north);
 
   /**
    * Converts a double-based Longitude into a formatted string
@@ -267,35 +266,36 @@ public:
    * @param Buffer Buffer string to write to (pointer)
    * @param size Size of the Buffer
    */
-  static bool LongitudeToString(Angle Longitude, TCHAR *Buffer, size_t size);
+  bool LongitudeToString(Angle Longitude, TCHAR *Buffer, size_t size);
+
   /**
    * Converts a double-based Latitude into a formatted string
    * @param Latitude The double-based Latitude
    * @param Buffer Buffer string to write to (pointer)
    * @param size Size of the Buffer
    */
-  static bool LatitudeToString(Angle Latitude, TCHAR *Buffer, size_t size);
+  bool LatitudeToString(Angle Latitude, TCHAR *Buffer, size_t size);
 
-  static void NotifyUnitChanged();
-
-  gcc_const
-  static const TCHAR *GetSpeedName();
+  void NotifyUnitChanged();
 
   gcc_const
-  static const TCHAR *GetVerticalSpeedName();
+  const TCHAR *GetSpeedName();
 
   gcc_const
-  static const TCHAR *GetDistanceName();
+  const TCHAR *GetVerticalSpeedName();
 
   gcc_const
-  static const TCHAR *GetAltitudeName();
+  const TCHAR *GetDistanceName();
+
+  gcc_const
+  const TCHAR *GetAltitudeName();
   gcc_const
 
   gcc_const
-  static const TCHAR *GetTemperatureName();
+  const TCHAR *GetTemperatureName();
 
   gcc_const
-  static const TCHAR *GetTaskSpeedName();
+  const TCHAR *GetTaskSpeedName();
 
   /**
    * Converts a double-based Altitude into a formatted string
@@ -304,8 +304,9 @@ public:
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  static bool FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size,
-                                 bool IncludeUnit = true);
+  bool FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size,
+                          bool IncludeUnit = true);
+
   /**
    * Converts a double-based Altitude into a formatted string of the alternate
    * altitude format
@@ -314,8 +315,9 @@ public:
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  static bool FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer,
-                                          size_t size, bool IncludeUnit = true);
+  bool FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer,
+                                   size_t size, bool IncludeUnit = true);
+
   /**
    * Converts a double-based Arrival Altitude into a formatted string
    * @param Altitude The double-based Arrival Altitude
@@ -323,8 +325,9 @@ public:
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  static bool FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size,
-                                bool IncludeUnit = true);
+  bool FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size,
+                         bool IncludeUnit = true);
+
   /**
    * Converts a double-based horizontal Distance into a formatted string
    * @param Distance The double-based Distance
@@ -332,10 +335,12 @@ public:
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  static bool FormatUserDistance(double Distance, TCHAR *Buffer, size_t size,
-                                 bool IncludeUnit = true);
-  static bool FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer,
-                                 size_t size, bool IncludeUnit = true);
+  bool FormatUserDistance(double Distance, TCHAR *Buffer, size_t size,
+                          bool IncludeUnit = true);
+
+  bool FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer,
+                          size_t size, bool IncludeUnit = true);
+
   /**
    * Converts a double-based Speed into a formatted string
    * @param Speed The double-based Speed
@@ -343,8 +348,9 @@ public:
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  static bool FormatUserSpeed(double Altitude, TCHAR *Buffer, size_t size,
-                              bool IncludeUnit = true);
+  bool FormatUserSpeed(double Altitude, TCHAR *Buffer, size_t size,
+                       bool IncludeUnit = true);
+
   /**
    * Converts a double-based vertical Speed into a formatted string
    * @param Speed The double-based vertical Speed
@@ -352,8 +358,8 @@ public:
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  static bool FormatUserVSpeed(double Altitude, TCHAR *Buffer, size_t size,
-                               bool IncludeUnit = true);
+  bool FormatUserVSpeed(double Altitude, TCHAR *Buffer, size_t size,
+                        bool IncludeUnit = true);
 
   /**
    * Converts a Value from the given unit "From" to the given unit "To"
@@ -363,7 +369,7 @@ public:
    * @return The value in user-specified unit
    */
   gcc_const
-  static double ConvertUnits(double Value, Units_t From, Units_t To);
+  double ConvertUnits(double Value, Units_t From, Units_t To);
 
   /**
    * Converts a Value from the system unit to the user-specified unit
@@ -372,11 +378,13 @@ public:
    * @return The value in user-specified unit
    */
   gcc_const
-  static double ToUserUnit(double Value, Units_t Unit);
+  double ToUserUnit(double Value, Units_t Unit);
 
 #ifdef FIXED_MATH
   gcc_const
-  static fixed ToUserUnit(fixed Value, Units_t Unit) {
+  static inline fixed
+  ToUserUnit(fixed Value, Units_t Unit)
+  {
     return fixed(ToUserUnit((double)Value, Unit));
   }
 #endif
@@ -388,120 +396,165 @@ public:
    * @return The value in system unit
    */
   gcc_const
-  static double ToSysUnit(double Value, Units_t Unit);
+  double ToSysUnit(double Value, Units_t Unit);
 
 #ifdef FIXED_MATH
   gcc_const
-  static fixed ToSysUnit(fixed Value, Units_t Unit) {
+  static inline fixed ToSysUnit(fixed Value, Units_t Unit)
+  {
     return fixed(ToSysUnit((double)Value, Unit));
   }
 #endif
 
-  static double ToUserAltitude(double Value) {
+  static inline double
+  ToUserAltitude(double Value)
+  {
     return ToUserUnit(Value, AltitudeUnit);
   }
 
 #ifdef FIXED_MATH
-  static fixed ToUserAltitude(fixed Value) {
+  static inline fixed
+  ToUserAltitude(fixed Value)
+  {
     return ToUserUnit(Value, AltitudeUnit);
   }
 #endif
 
-  static double ToSysAltitude(double Value) {
+  static inline double
+  ToSysAltitude(double Value)
+  {
     return ToSysUnit(Value, AltitudeUnit);
   }
 
 #ifdef FIXED_MATH
-  static fixed ToSysAltitude(fixed Value) {
+  static inline fixed
+  ToSysAltitude(fixed Value)
+  {
     return ToSysUnit(Value, AltitudeUnit);
   }
 #endif
 
-  static double ToUserTemperature(double Value) {
+  static inline double
+  ToUserTemperature(double Value)
+  {
     return ToUserUnit(Value, TemperatureUnit);
   }
 
 #ifdef FIXED_MATH
-  static fixed ToUserTemperature(fixed Value) {
+  static inline fixed
+  ToUserTemperature(fixed Value)
+  {
     return ToUserUnit(Value, TemperatureUnit);
   }
 #endif
 
-  static double ToSysTemperature(double Value) {
+  static inline double
+  ToSysTemperature(double Value)
+  {
     return ToSysUnit(Value, TemperatureUnit);
   }
 
 #ifdef FIXED_MATH
-  static fixed ToSysTemperature(fixed Value) {
+  static inline fixed
+  ToSysTemperature(fixed Value)
+  {
     return ToSysUnit(Value, TemperatureUnit);
   }
 #endif
 
-  static double ToUserDistance(double Value) {
+  static inline double
+  ToUserDistance(double Value)
+  {
     return ToUserUnit(Value, DistanceUnit);
   }
 
 #ifdef FIXED_MATH
-  static fixed ToUserDistance(fixed Value) {
+  static inline fixed
+  ToUserDistance(fixed Value)
+  {
     return ToUserUnit(Value, DistanceUnit);
   }
 #endif
 
-  static double ToSysDistance(double Value) {
+  static inline double
+  ToSysDistance(double Value)
+  {
     return ToSysUnit(Value, DistanceUnit);
   }
 
 #ifdef FIXED_MATH
-  static fixed ToSysDistance(fixed Value) {
+  static inline fixed
+  ToSysDistance(fixed Value)
+  {
     return ToSysUnit(Value, DistanceUnit);
   }
 #endif
 
-  static double ToUserSpeed(double Value) {
+  static inline double
+  ToUserSpeed(double Value)
+  {
     return ToUserUnit(Value, SpeedUnit);
   }
 
 #ifdef FIXED_MATH
-  static fixed ToUserSpeed(fixed Value) {
+  static inline fixed
+  ToUserSpeed(fixed Value)
+  {
     return ToUserUnit(Value, SpeedUnit);
   }
 #endif
 
-  static double ToSysSpeed(double Value) {
+  static inline double
+  ToSysSpeed(double Value)
+  {
     return ToSysUnit(Value, SpeedUnit);
   }
 
-  static double ToUserVSpeed(double Value) {
+  static inline double
+  ToUserVSpeed(double Value)
+  {
     return ToUserUnit(Value, VerticalSpeedUnit);
   }
 
-  static double ToSysVSpeed(double Value) {
+  static inline double
+  ToSysVSpeed(double Value)
+  {
     return ToSysUnit(Value, VerticalSpeedUnit);
   }
 
 #ifdef FIXED_MATH
-  static fixed ToSysVSpeed(fixed Value) {
+  static inline fixed
+  ToSysVSpeed(fixed Value)
+  {
     return ToSysUnit(Value, VerticalSpeedUnit);
   }
 #endif
 
-  static double ToUserTaskSpeed(double Value) {
+  static inline double
+  ToUserTaskSpeed(double Value)
+  {
     return ToUserUnit(Value, TaskSpeedUnit);
   }
 
-  static double ToSysTaskSpeed(double Value) {
+  static inline double
+  ToSysTaskSpeed(double Value)
+  {
     return ToSysUnit(Value, TaskSpeedUnit);
   }
 
-  static double ToUserWindSpeed(double Value) {
+  static inline double
+  ToUserWindSpeed(double Value)
+  {
     return ToUserUnit(Value, WindSpeedUnit);
   }
 
-  static double ToSysWindSpeed(double Value) {
+  static inline double
+  ToSysWindSpeed(double Value)
+  {
     return ToSysUnit(Value, WindSpeedUnit);
   }
 
-  static void TimeToText(TCHAR* text, int d);
+  void TimeToText(TCHAR* text, int d);
 };
 
 #endif
