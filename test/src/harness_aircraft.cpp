@@ -17,7 +17,7 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
                          double random_mag,
                          bool _goto_target):
   test_num(_test_num),
-  heading_filt(8.0),
+  heading_filt(fixed(8)),
   goto_target(_goto_target),
   speed_factor(1.0),
   climb_rate(2.0),
@@ -77,13 +77,13 @@ bool AircraftSim::far(TaskManager &task_manager) {
   if (task_manager.task_size()==1) {
     // cheat for non-ordered tasks
     const ElementStat stat = task_manager.get_stats().current_leg;
-    return (stat.remaining.get_distance()>100.0);
+    return stat.remaining.get_distance() > fixed(100);
   } else if (task_manager.task_size()==0) {
     return w[1].distance(state.Location)>state.Speed;
   }
   if (goto_target && (awp>0)) {
     const ElementStat stat = task_manager.get_stats().current_leg;
-    return (stat.remaining.get_distance()>100.0) || !entered;
+    return stat.remaining.get_distance() > fixed(100) || !entered;
   } else {
     fixed dc = w[awp].distance(state.Location);
     if (!positive(fixed(awp))) {
@@ -98,7 +98,9 @@ static const fixed fixed_1000(1000);
 static const fixed fixed_20(20);
 
 fixed AircraftSim::small_rand() {
-  return fixed(heading_filt.update(bearing_noise*(2.0*rand()/RAND_MAX)-bearing_noise));
+  return fixed(heading_filt.update(fixed(bearing_noise) *
+                                   (fixed_two * rand() / RAND_MAX) -
+                                   fixed(bearing_noise)));
 }
 
 void AircraftSim::update_bearing(TaskManager& task_manager) {
