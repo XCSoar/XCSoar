@@ -287,7 +287,7 @@ TerrainRenderer::Height(const Projection &map_projection)
 {
   int x, y;
 
-  const RECT rect_visible = map_projection.GetMapRect();
+  const RECT &rect_visible = map_projection.GetMapRect();
 
   x = (rect_visible.left + rect_visible.right) / 2;
   y = (rect_visible.top + rect_visible.bottom) / 2;

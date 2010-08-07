@@ -1728,7 +1728,7 @@ InputEvents::sub_Pan(int vswitch)
 void
 InputEvents::sub_PanCursor(int dx, int dy)
 {
-  RECT MapRect = MapProjection().GetMapRect();
+  const RECT &MapRect = MapProjection().GetMapRect();
   int X = (MapRect.right + MapRect.left) / 2;
   int Y = (MapRect.bottom + MapRect.top) / 2;
 

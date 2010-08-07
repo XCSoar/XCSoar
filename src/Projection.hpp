@@ -90,7 +90,7 @@ public:
     return DisplayAngle.GetAngle();
   }
 
-  RECT GetMapRect() const {
+  const RECT &GetMapRect() const {
     return MapRect;
   }
 
