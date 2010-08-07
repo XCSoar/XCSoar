@@ -42,9 +42,3 @@ RasterMap::GetField(const GEOPOINT &location) const
 {
   return TERRAIN_INVALID;
 }
-
-bool
-RasterTerrain::GetTerrainCenter(GEOPOINT *location) const
-{
-  return false;
-}

@@ -72,10 +72,3 @@ void RasterTerrain::ServiceTerrainCenter(const GEOPOINT &location) {
   Poco::ScopedRWLock protect(lock, true);
   map.SetViewCenter(location);
 }
-
-bool
-RasterTerrain::GetTerrainCenter(GEOPOINT *location) const
-{
-  *location = map.GetMapCenter();
-  return true;
-}

@@ -103,8 +103,9 @@ public:
     return map.inside(location);
   }
 
-  bool GetTerrainCenter(GEOPOINT *location) const;
-
+  GEOPOINT GetTerrainCenter() const {
+    return map.GetMapCenter();
+  }
 };
 
 #endif
