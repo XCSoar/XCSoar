@@ -231,7 +231,7 @@ public:
 #endif
     AirspaceInterceptSolution solution;
     GeoVector vec(state.Location, c);
-    vec.Distance = 20000; // set big distance (for testing)
+    vec.Distance = fixed(20000); // set big distance (for testing)
     if (as.intercept(state, vec, m_perf, solution)) {
 #ifdef DO_PRINT
       *fout << "# intercept in " << solution.elapsed_time << " h " << solution.altitude << "\n";

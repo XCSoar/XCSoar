@@ -136,7 +136,7 @@ AbstractTask::update_stats_distances(const GEOPOINT &location,
   if (is_scored())
     stats.distance_scored = scan_distance_scored(location);
   else
-    stats.distance_scored = 0;
+    stats.distance_scored = fixed_zero;
 }
 
 void

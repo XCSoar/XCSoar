@@ -285,7 +285,7 @@ PDVDS(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   double AccelZ = line.read(0.0);
 
   int mag = isqrt4((int)((AccelX * AccelX + AccelZ * AccelZ) * 10000));
-  GPS_INFO->acceleration.Gload = mag/100.0;
+  GPS_INFO->acceleration.Gload = fixed(mag) / 100;
   GPS_INFO->acceleration.Available = true;
 
   /*

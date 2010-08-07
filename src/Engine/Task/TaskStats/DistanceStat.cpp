@@ -60,7 +60,7 @@ DistanceStat::calc_incremental_speed(const fixed dt)
 
       for (unsigned i=0; i<(unsigned)(dt); i++) {
         fixed v = df.update(d_av) / N_AV;
-        double v_f = v_lpf.update(v);
+        fixed v_f = v_lpf.update(v);
         speed_incremental = (is_positive? -v_f:v_f);
       }
     }
@@ -90,7 +90,7 @@ DistanceRemainingStat::calc_speed(const ElementStat* es)
   if (positive(es->TimeRemaining)) {
     speed = fixed(distance) / es->TimeRemaining;
   } else {
-    speed = 0;
+    speed = fixed_zero;
   }
 }
 
@@ -100,7 +100,7 @@ DistancePlannedStat::calc_speed(const ElementStat* es)
   if (positive(es->TimePlanned)) {
     speed = fixed(distance) / es->TimePlanned;
   } else {
-    speed = 0;
+    speed = fixed_zero;
   }
 }
 
@@ -110,6 +110,6 @@ DistanceTravelledStat::calc_speed(const ElementStat* es)
   if (positive(es->TimeElapsed)) {
     speed = fixed(distance) / es->TimeElapsed;
   } else {
-    speed = 0;
+    speed = fixed_zero;
   }
 }

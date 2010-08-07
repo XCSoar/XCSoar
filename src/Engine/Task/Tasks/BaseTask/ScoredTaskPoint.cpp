@@ -99,6 +99,6 @@ void
 ScoredTaskPoint::reset()
 {
   SampledTaskPoint::reset();
-  m_state_entered.Time = -1;
-  m_state_exited.Time = -1;
+  m_state_entered.Time = fixed_minus_one;
+  m_state_exited.Time = fixed_minus_one;
 }

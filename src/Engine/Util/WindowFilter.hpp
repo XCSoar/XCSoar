@@ -61,7 +61,7 @@ public:
  * @return True if buffer is full
  * 
  */
-  bool update(const double x0);
+  bool update(const fixed x0);
 
 /** 
  * Resets filter (zero samples)

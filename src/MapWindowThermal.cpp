@@ -132,7 +132,7 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
     if (task_props.start_max_height_ref == 0) {
       hstart = fixed(task_props.start_max_height) + Calculated().TerrainAlt;
     } else {
-      hstart = task_props.start_max_height;
+      hstart = fixed(task_props.start_max_height);
     }
     hstart -= hoffset;
   }

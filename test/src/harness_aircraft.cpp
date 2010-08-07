@@ -40,11 +40,11 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
   
   state.Location = w[0];
   state_last.Location = w[0];
-  state.NavAltitude = start_alt;
-  state.Time = 0.0;
-  state.wind.norm = 0.0;
+  state.NavAltitude = fixed(start_alt);
+  state.Time = fixed_zero;
+  state.wind.norm = fixed_zero;
   state.wind.bearing = Angle();
-  state.Speed = 16.0;
+  state.Speed = fixed(16);
 
   // start with aircraft moving since this isn't a real replay (no time on ground)
   for (unsigned i=0; i<10; i++) {
@@ -289,7 +289,7 @@ fixed AircraftSim::time() {
 
 
 void 
-AircraftSim::set_wind(const double speed, const Angle direction) 
+AircraftSim::set_wind(const fixed speed, const Angle direction) 
 {
   state.wind.norm = speed;
   state.wind.bearing = direction;

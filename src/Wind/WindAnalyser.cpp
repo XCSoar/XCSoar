@@ -292,7 +292,7 @@ WindAnalyser::_calcWind(const NMEA_INFO &info, DERIVED_INFO &derived)
   int idiff;
 
   for (j = 0; j < numwindsamples; j++) {
-    rthisp = 0;
+    rthisp = fixed_zero;
     rpoint = windsamples[j].mag;
 
     for (i = 0; i < numwindsamples; i++) {

@@ -16,7 +16,7 @@ public:
     return state;
   }
   GEOPOINT get_next() const;
-  void set_wind(const double speed, const Angle direction);
+  void set_wind(const fixed speed, const Angle direction);
 
   bool far(TaskManager &task_manager);
   fixed small_rand();

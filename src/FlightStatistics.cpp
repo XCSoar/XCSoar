@@ -546,11 +546,11 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
 
   // draw direction vectors
 
-  double hfact;
+  fixed hfact;
   for (i = 0; i < numsteps; i++) {
-    hfact = (i + 1) / (double)(numsteps + 1);
-    h = (Altitude_Ceiling.y_max - Altitude_Base.y_min) * hfact
-        + Altitude_Base.y_min;
+    hfact = fixed(i + 1) / (numsteps + 1);
+    h = fixed(Altitude_Ceiling.y_max - Altitude_Base.y_min) * hfact
+      + fixed(Altitude_Base.y_min);
 
     wind = wind_store.GetWind(nmea_info.Time, h, &found);
     if (windstats_mag.x_max == 0)

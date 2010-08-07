@@ -61,9 +61,9 @@ AircraftStateFilter::reset(const AIRCRAFT_STATE& state)
   m_y = fixed_zero;
   m_alt = state.NavAltitude;
 
-  m_vx = 0;
-  m_vy = 0;
-  m_vz = 0;
+  m_vx = fixed_zero;
+  m_vy = fixed_zero;
+  m_vz = fixed_zero;
 
   m_lpf_x.reset(fixed_zero);
   m_lpf_y.reset(fixed_zero);

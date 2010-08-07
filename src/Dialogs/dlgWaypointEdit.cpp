@@ -425,7 +425,7 @@ static void GetValues(void) {
     ss = wp->GetDataField()->GetAsInteger();
 
     global_wpt->Altitude = ss == 0 && terrain != NULL
-      ? WayPointFile::AltitudeFromTerrain(global_wpt->Location, *terrain)
+      ? fixed(WayPointFile::AltitudeFromTerrain(global_wpt->Location, *terrain))
       : Units::ToSysUnit(fixed(ss), Units::AltitudeUnit);
   }
 

@@ -18,21 +18,25 @@ double time_remaining=0;
 double calc_cruise_efficiency=1.0;
 double calc_effective_mc=1.0;
 
-double aat_min_time(int test_num) {
+fixed
+aat_min_time(int test_num)
+{
   OrderedTaskBehaviour beh;
   switch (test_num) {
   case 2:
-    return 3600*3.8;
+    return fixed(3600 * 3.8);
   default:
     return beh.aat_min_time;
   }
 }
 
-int wind_to_mag(int n_wind) {
+static fixed
+wind_to_mag(int n_wind)
+{
   if (n_wind) {
-    return ((n_wind-1)/4+1)*5;
+    return (fixed(n_wind - 1) / 4 + fixed_one) * 5;
   }
-  return 0;
+  return fixed_zero;
 }
 
 Angle wind_to_dir(int n_wind) {
@@ -45,7 +49,7 @@ Angle wind_to_dir(int n_wind) {
 const char* wind_name(int n_wind) {
   static char buffer[80];
   sprintf(buffer,"%d m/s @ %d",
-          wind_to_mag(n_wind),
+          (int)wind_to_mag(n_wind),
           (int)wind_to_dir(n_wind).value_degrees());
   return buffer;
 }

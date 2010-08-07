@@ -62,7 +62,7 @@ public:
    * Resets the clock.
    */
   void reset() {
-    last = 0;
+    last = fixed_zero;
   }
 
   /**

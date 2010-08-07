@@ -187,8 +187,8 @@ private:
 
     if (west_rat < fixed(0.001)) {
       // wind speed too small
-      theta_west_1[i] = 0;
-      theta_west_2[i] = 0;
+      theta_west_1[i] = fixed_zero;
+      theta_west_2[i] = fixed_zero;
       return true;
     }
 
@@ -228,7 +228,7 @@ public:
   ZigZag()
   {
     for (int i = 0; i < NUM_SAMPLES; i++) {
-      points[i].time = -1;
+      points[i].time = fixed_minus_one;
     }
 
     for (int k = 0; k < NUM_THETA_POINTS; k++) {
@@ -247,7 +247,7 @@ public:
 
     for (i = 0; i < NUM_SAMPLES; i++) {
       if (t < points[i].time) {
-        points[i].time = -1;
+        points[i].time = fixed_minus_one;
       }
     }
 
@@ -278,7 +278,7 @@ public:
         nf++;
         if (t - points[i].time > fixed(10 * 60)) {
           // clear point so it gets filled next time
-          points[i].time = -1;
+          points[i].time = fixed_minus_one;
           return fixed_minus_one;
         }
         ctg += points[i].cos_theta_gps;
@@ -531,7 +531,7 @@ void TestZigZag(fixed V_wind, fixed theta_wind) {
 
   int i;
   for (i=0; i<=NUM_SAMPLES; i++) {
-    t = i;
+    t = fixed(i);
     V_tas = fixed(20);
     theta_glider = sin(t * fixed_pi * 2 / NUM_SAMPLES) * 30 * fixed_deg_to_rad;
     fixed V_gps_x = V_tas * sin(theta_glider) - V_wind*sin(theta_wind);

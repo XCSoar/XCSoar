@@ -52,7 +52,7 @@ ElementStat::ElementStat():
 
 
 void 
-ElementStat::set_times(const double ts, 
+ElementStat::set_times(const fixed ts,
                        const AIRCRAFT_STATE& state)
 {
   TimeStarted = ts;

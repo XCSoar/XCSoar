@@ -204,7 +204,7 @@ MapWindowProjection::LimitMapScale(fixed value,
 
   fixed minreasonable;
 
-  minreasonable = 0.05;
+  minreasonable = fixed(0.05);
 
   if (settings_map.AutoZoom && DisplayMode != dmCircling) {
 #ifdef OLD_TASK // auto zoom 
@@ -215,7 +215,7 @@ MapWindowProjection::LimitMapScale(fixed value,
       minreasonable = 0.44;
     }
 #else
-    minreasonable = 0.44;
+    minreasonable = fixed(0.44);
 #endif
   }
 
@@ -302,7 +302,7 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
 
   fixed wpd;
   if (settings_map.TargetPan)
-    wpd = settings_map.TargetZoomDistance;
+    wpd = fixed(settings_map.TargetZoomDistance);
   else
     wpd = DerivedDrawInfo.ZoomDistance;
 
@@ -323,9 +323,9 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
              || (settings_map.DisplayOrientation == TRACKCIRCLE))
             && (DisplayMode == dmCircling)))
         && !settings_map.TargetPan) {
-      AutoZoomFactor = 2.5;
+      AutoZoomFactor = fixed(2.5);
     } else {
-      AutoZoomFactor = 4;
+      AutoZoomFactor = fixed_four;
     }
 
     if ((wpd < Units::ToSysUnit(AutoZoomFactor * MapScale, Units::DistanceUnit))

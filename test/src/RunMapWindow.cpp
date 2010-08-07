@@ -88,7 +88,7 @@ void DeviceBlackboard::SetTrackBearing(Angle val) {}
 void DeviceBlackboard::SetSpeed(fixed val) {}
 
 void
-DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const double alt) {}
+DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const fixed alt) {}
 
 int
 Profile::GetScaleList(fixed *List, size_t Size)
@@ -285,8 +285,8 @@ GenerateBlackboard(MapWindow &map)
   nmea_info.Location.Latitude = Angle::degrees(fixed(51.2));
   nmea_info.Location.Longitude = Angle::degrees(fixed(7.7));
   nmea_info.TrackBearing = Angle::degrees(fixed_90);
-  nmea_info.GroundSpeed = 50;
-  nmea_info.GPSAltitude = 1500;
+  nmea_info.GroundSpeed = fixed(50);
+  nmea_info.GPSAltitude = fixed(1500);
 
   memset(&derived_info, 0, sizeof(derived_info));
   derived_info.TerrainValid = true;

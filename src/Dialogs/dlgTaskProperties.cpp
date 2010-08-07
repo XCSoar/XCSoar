@@ -196,7 +196,7 @@ ReadValues()
   if (wp) {
     int ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsFixed()));
     if ((int)p.start_max_speed != ival) {
-      p.start_max_speed = ival;
+      p.start_max_speed = fixed(ival);
       task_changed = true;
     }
   }

@@ -120,7 +120,7 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   // $PBB50,0,.0,.0,0,0,1.07,0,-228*58
   // $PBB50,14,-.2,.0,196,0,.92,0,-228*71
 
-  double vtas, vias, wnet;
+  fixed vtas, vias, wnet;
 
   vtas = Units::ToSysUnit(line.read(fixed_zero), unKnots);
   wnet = Units::ToSysUnit(line.read(fixed_zero), unKnots);

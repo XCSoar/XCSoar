@@ -68,7 +68,7 @@ public:
   {
     num = 0;
     for (int i = 0; i < 4; i++)
-      p[i].t = 0;
+      p[i].t = fixed_zero;
   }
 
   void

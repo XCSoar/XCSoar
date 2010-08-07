@@ -105,7 +105,7 @@ void
 IgcReplayGlue::reset_time()
 {
   clock.reset();
-  t_simulation = 0;
+  t_simulation = fixed_zero;
 }
 
 void

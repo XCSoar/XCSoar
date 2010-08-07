@@ -106,7 +106,7 @@ namespace Registry {
     if (!Get(key, temp))
       return false;
 
-    value = temp;
+    value = fixed(temp);
     return true;
   }
 #endif

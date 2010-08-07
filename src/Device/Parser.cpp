@@ -89,7 +89,7 @@ NMEAParser::Reset(void)
   GGAAvailable = false;
   RMZAvailable = false;
   RMAAvailable = false;
-  LastTime = 0;
+  LastTime = fixed_zero;
 }
 
 /**
@@ -306,10 +306,10 @@ NMEAParser::ReadAltitude(NMEAInputLine &line, fixed &value_r)
  * @param GPS_INFO GPS_INFO struct to parse into
  * @return Seconds-based FixTime
  */
-double
-NMEAParser::TimeModify(double FixTime, BrokenDateTime &date_time)
+fixed
+NMEAParser::TimeModify(fixed FixTime, BrokenDateTime &date_time)
 {
-  double hours, mins, secs;
+  fixed hours, mins, secs;
 
   // Calculate Hour
   hours = FixTime / 10000;
@@ -317,15 +317,15 @@ NMEAParser::TimeModify(double FixTime, BrokenDateTime &date_time)
 
   // Calculate Minute
   mins = FixTime / 100;
-  mins = mins - date_time.hour * 100;
+  mins = mins - fixed(date_time.hour) * 100;
   date_time.minute = (int)mins;
 
   // Calculate Second
-  secs = FixTime - (date_time.hour * 10000) - (date_time.minute * 100);
+  secs = FixTime - fixed(date_time.hour * 10000 - date_time.minute * 100);
   date_time.second = (int)secs;
 
   // FixTime is now seconds-based instead of mixed format
-  FixTime = secs + (date_time.minute * 60) + (date_time.hour * 3600);
+  FixTime = secs + fixed(date_time.minute * 60 + date_time.hour * 3600);
 
   // If (StartDay not yet set and available) set StartDate;
   if ((StartDay == -1) && (date_time.day != 0))
@@ -340,7 +340,7 @@ NMEAParser::TimeModify(double FixTime, BrokenDateTime &date_time)
     if (day_difference > 0)
       // Add seconds to fix time so time doesn't wrap around when
       // going past midnight in UTC
-      FixTime += day_difference * 86400;
+      FixTime += fixed(day_difference * 86400);
   }
 
   return FixTime;
@@ -354,7 +354,7 @@ NMEAParser::TimeModify(double FixTime, BrokenDateTime &date_time)
  * @return True if time has advanced since last call
  */
 bool
-NMEAParser::TimeHasAdvanced(double ThisTime, NMEA_INFO *GPS_INFO)
+NMEAParser::TimeHasAdvanced(fixed ThisTime, NMEA_INFO *GPS_INFO)
 {
   if (ThisTime < LastTime) {
     LastTime = ThisTime;
@@ -433,7 +433,7 @@ NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   GEOPOINT location;
   bool valid_location = ReadGeoPoint(line, location);
 
-  double ThisTime = TimeModify(line.read(0.0), GPS_INFO->DateTime);
+  fixed ThisTime = TimeModify(line.read(fixed_zero), GPS_INFO->DateTime);
 
   gpsValid = !NAVWarn(line.read_first_char());
 
@@ -539,7 +539,7 @@ NMEAParser::RMB(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 bool
 NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  double ThisTime = TimeModify(line.read(0.0), GPS_INFO->DateTime);
+  fixed ThisTime = TimeModify(line.read(fixed_zero), GPS_INFO->DateTime);
 
   gpsValid = !NAVWarn(line.read_first_char());
 
@@ -666,7 +666,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   GGAAvailable = true;
 
-  double ThisTime = TimeModify(line.read(0.0), GPS_INFO->DateTime);
+  fixed ThisTime = TimeModify(line.read(fixed_zero), GPS_INFO->DateTime);
 
   GEOPOINT location;
   bool valid_location = ReadGeoPoint(line, location);

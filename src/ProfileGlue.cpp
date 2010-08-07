@@ -580,13 +580,13 @@ Profile::Use()
 
   Temp = iround(XCSoarInterface::SettingsComputer().safety_mc * 10);
   Get(szProfileSafetyMacCready, Temp);
-  XCSoarInterface::SetSettingsComputer().safety_mc = Temp / 10.0;
+  XCSoarInterface::SetSettingsComputer().safety_mc = fixed(Temp) / 10;
 
   Get(szProfileUserLevel, XCSoarInterface::UserLevel);
 
   Temp = iround(XCSoarInterface::SettingsComputer().risk_gamma * 10);
   Get(szProfileRiskGamma, Temp);
-  XCSoarInterface::SetSettingsComputer().risk_gamma = Temp / 10.0;
+  XCSoarInterface::SetSettingsComputer().risk_gamma = fixed(Temp) / 10;
 
   Temp = (CompassAppearance_t)apCompassAltA;
   Get(szProfileWindArrowStyle, Temp);
@@ -633,10 +633,10 @@ Profile::GetScaleList(fixed *List, size_t Size)
     TCHAR *endptr;
     val = _tcstod(p, &endptr);
     if (Idx > 0) {
-      List[Idx] = (val + vlast) / 2;
+      List[Idx] = fixed(val + vlast) / 2;
       Idx++;
     }
-    List[Idx] = val;
+    List[Idx] = fixed(val);
     Idx++;
     vlast = val;
 

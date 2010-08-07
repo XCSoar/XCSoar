@@ -84,10 +84,10 @@ GlideComputerBlackboard::ResetFlight(const bool full)
     calculated_info.CruiseStartTime = fixed_minus_one;
     calculated_info.ClimbStartTime = fixed_minus_one;
 
-    calculated_info.CruiseLD = INVALID_GR;
-    calculated_info.AverageLD = INVALID_GR;
-    calculated_info.LD = INVALID_GR;
-    calculated_info.LDvario = INVALID_GR;
+    calculated_info.CruiseLD = fixed(INVALID_GR);
+    calculated_info.AverageLD = fixed(INVALID_GR);
+    calculated_info.LD = fixed(INVALID_GR);
+    calculated_info.LDvario = fixed(INVALID_GR);
     calculated_info.ThermalAverage = fixed_zero;
 
     for (i = 0; i < 200; i++) {

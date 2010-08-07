@@ -107,7 +107,7 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
       // no home at all, so set it from center of terrain if available
       GEOPOINT loc = terrain->GetTerrainCenter();
       LogStartUp(_T("Start at terrain center"));
-      device_blackboard.SetStartupLocation(loc, 0);
+      device_blackboard.SetStartupLocation(loc, fixed_zero);
     }
   }
 

@@ -57,7 +57,7 @@ DeviceBlackboard device_blackboard;
 
 void
 DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
-                                     const double alt)
+                                     const fixed alt)
 {
 }
 

@@ -110,7 +110,7 @@ GlideComputerAirData::ProcessBasic()
 {
   TerrainHeight();
   ProcessSun();
-  SetCalculated().ThermalAverageAdjusted = GetAverageThermal();
+  SetCalculated().ThermalAverageAdjusted = fixed(GetAverageThermal());
 }
 
 /**
@@ -394,8 +394,8 @@ void
 GlideComputerAirData::LD()
 {
   if (time_retreated()) {
-    SetCalculated().LDvario = INVALID_GR;
-    SetCalculated().LD = INVALID_GR;
+    SetCalculated().LDvario = fixed(INVALID_GR);
+    SetCalculated().LD = fixed(INVALID_GR);
   }
 
   if (time_advanced()) {
@@ -416,7 +416,7 @@ GlideComputerAirData::LD()
       UpdateLD(Calculated().LDvario, Basic().IndicatedAirspeed,
                -Basic().TotalEnergyVario, fixed(0.3));
   } else {
-    SetCalculated().LDvario = INVALID_GR;
+    SetCalculated().LDvario = fixed(INVALID_GR);
   }
 }
 
@@ -455,7 +455,7 @@ GlideComputerAirData::TerrainHeight()
   terrain->Unlock();
 
   SetCalculated().TerrainValid = Alt > RasterTerrain::TERRAIN_INVALID;
-  SetCalculated().TerrainAlt = std::max((short)0, Alt);
+  SetCalculated().TerrainAlt = fixed(std::max((short)0, Alt));
 }
 
 /**
@@ -929,7 +929,7 @@ GlideComputerAirData::ProcessSun()
 {
   sun.CalcSunTimes(Basic().Location, Basic().DateTime,
                    GetUTCOffset() / 3600);
-  SetCalculated().TimeSunset = sun.TimeOfSunSet;
+  SetCalculated().TimeSunset = fixed(sun.TimeOfSunSet);
 }
 
 GlidePolar 

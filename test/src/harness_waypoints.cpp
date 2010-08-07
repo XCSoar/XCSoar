@@ -16,39 +16,39 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
   Waypoint wp = waypoints.create(GEOPOINT(Angle::degrees(fixed_zero),
                                           Angle::degrees(fixed_zero)));
   wp.Flags.Airport = true;
-  wp.Altitude=0.25;
+  wp.Altitude = fixed(0.25);
   waypoints.append(wp);
 
   wp = waypoints.create(GEOPOINT(Angle::degrees(fixed_zero), 
                                  Angle::degrees(fixed_one)));
   wp.Flags.Airport = true;
-  wp.Altitude=0.25;
+  wp.Altitude = fixed(0.25);
   waypoints.append(wp);
 
   wp = waypoints.create(GEOPOINT(Angle::degrees(fixed_one), 
                                  Angle::degrees(fixed_one)));
   wp.Name = "Hello";
   wp.Flags.Airport = true;
-  wp.Altitude=0.5;
+  wp.Altitude = fixed_half;
   waypoints.append(wp);
 
   wp = waypoints.create(GEOPOINT(Angle::degrees(fixed(0.8)), 
                                  Angle::degrees(fixed(0.5))));
   wp.Name = "Unk";
   wp.Flags.Airport = true;
-  wp.Altitude=0.25;
+  wp.Altitude = fixed(0.25);
   waypoints.append(wp);
 
   wp = waypoints.create(GEOPOINT(Angle::degrees(fixed_one), 
                                  Angle::degrees(fixed_zero)));
   wp.Flags.Airport = true;
-  wp.Altitude=0.25;
+  wp.Altitude = fixed(0.25);
   waypoints.append(wp);
 
   wp = waypoints.create(GEOPOINT(Angle::degrees(fixed_zero), 
                                  Angle::degrees(fixed(0.23))));
   wp.Flags.Airport = true;
-  wp.Altitude=0.25;
+  wp.Altitude = fixed(0.25);
   waypoints.append(wp);
 
   for (unsigned i=0; i<(unsigned)std::max((int)n-6,0); i++) {
@@ -58,7 +58,7 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
     wp = waypoints.create(GEOPOINT(Angle::degrees(fixed(x/1000.0)), 
                                    Angle::degrees(fixed(y/1000.0))));
     wp.Flags.Airport = false;
-    wp.Altitude = z;
+    wp.Altitude = fixed(z);
     waypoints.append(wp);
   }
   waypoints.optimise();

@@ -129,11 +129,6 @@ public:
   explicit fixed(float nVal)
     :m_nVal(static_cast<value_t>(nVal*static_cast<float>(resolution))) {}
 
-  template<typename T>
-  fixed& operator=(T other) {
-    m_nVal=fixed(other).m_nVal;
-    return *this;
-  }
   fixed& operator=(fixed const& other) {
     m_nVal=other.m_nVal;
     return *this;

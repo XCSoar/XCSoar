@@ -126,7 +126,7 @@ struct TempAirspaceType
     Center.Longitude = Angle();
     Center.Latitude = Angle();
     Rotation = 1;
-    Radius = 0;
+    Radius = fixed_zero;
     Waiting = true;
   }
 
@@ -169,9 +169,9 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
 
   _tcsupr(Text);
 
-  Alt->Altitude = 0;
-  Alt->FL = 0;
-  Alt->AGL = 0;
+  Alt->Altitude = fixed_zero;
+  Alt->FL = fixed_zero;
+  Alt->AGL = fixed_zero;
   Alt->Base = abUndef;
 
   const TCHAR *p = Text;
@@ -181,7 +181,7 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
 
     if (_istdigit(*p)) {
       TCHAR *endptr;
-      double d = _tcstod(p, &endptr);
+      fixed d = fixed(_tcstod(p, &endptr));
 
       if (Alt->Base == abFL)
         Alt->FL = d;
@@ -196,20 +196,20 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
       Alt->Base = abAGL;
       if (Alt->Altitude > fixed_zero) {
         Alt->AGL = Alt->Altitude;
-        Alt->Altitude = 0;
+        Alt->Altitude = fixed_zero;
       } else {
-        Alt->FL = 0;
-        Alt->Altitude = 0;
-        Alt->AGL = -1;
+        Alt->FL = fixed_zero;
+        Alt->Altitude = fixed_zero;
+        Alt->AGL = fixed_minus_one;
         fHasUnit = true;
       }
 
       p += 3;
     } else if (_tcsncmp(p, _T("SFC"), 3) == 0) {
       Alt->Base = abAGL;
-      Alt->FL = 0;
-      Alt->Altitude = 0;
-      Alt->AGL = -1;
+      Alt->FL = fixed_zero;
+      Alt->Altitude = fixed_zero;
+      Alt->AGL = fixed_minus_one;
       fHasUnit = true;
 
       p += 3;
@@ -238,7 +238,7 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
     } else if (_tcsncmp(p, _T("AGL"), 3) == 0) {
       Alt->Base = abAGL;
       Alt->AGL = Alt->Altitude;
-      Alt->Altitude = 0;
+      Alt->Altitude = fixed_zero;
 
       p += 3;
     } else if (_tcsncmp(p, _T("STD"), 3) == 0) {
@@ -252,8 +252,8 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
     } else if (_tcsncmp(p, _T("UNL"), 3) == 0) {
       // JMW added Unlimited (used by WGC2008)
       Alt->Base = abMSL;
-      Alt->AGL = -1;
-      Alt->Altitude = 50000;
+      Alt->AGL = fixed_minus_one;
+      Alt->Altitude = fixed(50000);
 
       p += 3;
     } else if (*p == _T('\0'))

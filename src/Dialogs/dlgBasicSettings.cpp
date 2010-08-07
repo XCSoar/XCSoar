@@ -218,7 +218,7 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
   case DataField::daChange:
   case DataField::daPut:
     if (fabs(lastRead - Sender->GetAsFixed() / 100) >= fixed(0.005)) {
-      lastRead = Sender->GetAsFloat() / 100.0;
+      lastRead = Sender->GetAsFixed() / 100;
       glide_polar->set_ballast(fixed(lastRead));
       changed = true;
       SetBallast();

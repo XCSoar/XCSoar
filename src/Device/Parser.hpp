@@ -82,10 +82,10 @@ private:
   bool RMAAvailable;
   fixed RMZAltitude;
   fixed RMAAltitude;
-  double LastTime;
+  fixed LastTime;
 
-  bool TimeHasAdvanced(double ThisTime, NMEA_INFO *GPS_INFO);
-  static double TimeModify(double FixTime, BrokenDateTime &date_time);
+  bool TimeHasAdvanced(fixed ThisTime, NMEA_INFO *GPS_INFO);
+  static fixed TimeModify(fixed FixTime, BrokenDateTime &date_time);
 
   bool GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
   bool GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO);

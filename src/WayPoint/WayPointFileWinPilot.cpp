@@ -160,7 +160,7 @@ WayPointFileWinPilot::parseAltitude(const TCHAR* src, fixed& dest)
   if (_stscanf(src, _T("%lf%c"), &val, &unit) != 2)
     return false;
 
-  dest = val;
+  dest = fixed(val);
 
   // Convert to system unit if necessary
   if (unit == 'F' || unit == 'f')

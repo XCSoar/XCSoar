@@ -285,14 +285,14 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     x /= d;
     y /= d;
   } else {
-    x = 0;
-    y = 0;
+    x = fixed_zero;
+    y = fixed_zero;
   }
 
   // Rotate x and y to have a track up display
   FastRotation::Pair p = fr.Rotate(x, y);
-  x = p.first;
-  y = p.second;
+  x = fixed(p.first);
+  y = fixed(p.second);
 
   // Calculate screen coordinates
   sc[i].x = radar_mid.x + iround(x * scale);

@@ -83,7 +83,7 @@ public:
  * @param ts Start time of this element (s)
  * @param state Aircraft state (to access time)
  */
-  void set_times(const double ts, 
+  void set_times(const fixed ts, 
                  const AIRCRAFT_STATE& state);
 
 /** 

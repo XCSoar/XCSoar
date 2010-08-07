@@ -97,6 +97,6 @@ EstimateThermalBase(const GEOPOINT Thermal_Location,
     terrain->Unlock();
 
   *ground_location = loc;
-  *ground_alt = hground;
+  *ground_alt = fixed(hground);
 }
 

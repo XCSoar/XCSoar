@@ -61,8 +61,7 @@ Filter::design(const fixed cutoff_wavelength)
     // Bessel
     c = pow((sqrt(pow(fixed_two, fixed_one / n) - fixed(0.75)) - fixed_half),
             -fixed_half) / sqrt(fixed(3));
-    g = 3;
-    p = 3;
+    g = p = fixed(3);
   } else {
     // Critically damped
     c = pow((pow(fixed_two, fixed_one / (2 * n)) - fixed_one), -fixed_half);

@@ -311,7 +311,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
   int value2 = value;
   if (SaveFormProperty(form, control_name, unit_group, value2,
                        registry_name)) {
-    value = value2;
+    value = fixed(value2);
     return true;
   } else
     return false;

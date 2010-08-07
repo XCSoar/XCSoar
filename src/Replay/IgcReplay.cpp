@@ -73,16 +73,16 @@ IgcReplay::ScanBuffer(const TCHAR *buffer, fixed *Time,
   if (lfound != 10)
     return false;
 
-  *Latitude = DegLat + MinLat / 60000.0;
+  *Latitude = fixed(DegLat) + fixed(MinLat) / 60000;
   if (NoS == _T('S'))
     *Latitude *= -1;
 
-  *Longitude = DegLon + MinLon / 60000.0;
+  *Longitude = fixed(DegLon) + fixed(MinLon) / 60000;
   if (EoW == _T('W'))
     *Longitude *= -1;
 
-  *Altitude = iAltitude;
-  *Time = Hour * 3600 + Minute * 60 + Second;
+  *Altitude = fixed(iAltitude);
+  *Time = fixed(Hour * 3600 + Minute * 60 + Second);
   return true;
 }
 

@@ -86,9 +86,9 @@ DeviceBlackboard::Initialise()
 
   // Set GPS assumed time to system time
   gps_info.DateTime = BrokenDateTime::NowUTC();
-  gps_info.Time = gps_info.DateTime.hour * 3600 +
-                  gps_info.DateTime.minute * 60 +
-                  gps_info.DateTime.second;
+  gps_info.Time = fixed(gps_info.DateTime.hour * 3600 +
+                        gps_info.DateTime.minute * 60 +
+                        gps_info.DateTime.second);
 
   if (is_simulator()) {
     #ifdef _SIM_STARTUPSPEED
@@ -108,7 +108,7 @@ DeviceBlackboard::Initialise()
  * @param alt New altitude
  */
 void
-DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const double alt)
+DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const fixed alt)
 {
   ScopeLock protect(mutexBlackboard);
   SetBasic().Location = loc;
@@ -133,8 +133,9 @@ DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const double alt)
  */
 void
 DeviceBlackboard::SetLocation(const GEOPOINT &loc,
-			      const double speed, const Angle bearing,
-			      const double alt, const double baroalt, const double t)
+                              const fixed speed, const Angle bearing,
+                              const fixed alt, const fixed baroalt,
+                              const fixed t)
 {
   ScopeLock protect(mutexBlackboard);
   SetBasic().acceleration.Available = false;
@@ -507,7 +508,7 @@ DeviceBlackboard::Heading()
 
   } else {
     SetBasic().Heading = Basic().TrackBearing;
-    SetBasic().TrueAirspeedEstimated = 0.0;
+    SetBasic().TrueAirspeedEstimated = fixed_zero;
   }
 
   if (!Basic().AirspeedAvailable) {

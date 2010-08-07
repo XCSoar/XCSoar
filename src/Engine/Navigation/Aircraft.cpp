@@ -117,7 +117,7 @@ FLYING_STATE::flying_state_check(const fixed time)
     if (TimeInFlight > 10) {
       Flying = true;
       TakeOffTime = time;
-      FlightTime = 0;
+      FlightTime = fixed_zero;
     }
   } else {
     // update time of flight

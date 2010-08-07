@@ -77,7 +77,7 @@ FAITaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
   to.min_points = 3;
   to.max_points = 10;
 
-  to.start_max_speed = 0;
+  to.start_max_speed = fixed_zero;
   to.start_max_height = 0;
   to.start_max_height_ref = 0;
   to.finish_min_height = 0;

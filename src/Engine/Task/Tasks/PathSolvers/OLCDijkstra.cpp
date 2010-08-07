@@ -243,7 +243,7 @@ OLCDijkstra::save_solution()
     if (positive(best_time)) {
       best_speed = best_distance/best_time;
     } else {
-      best_speed = 0;
+      best_speed = fixed_zero;
     }
   }
 }

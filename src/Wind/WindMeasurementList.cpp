@@ -130,8 +130,8 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool *found) const
           // over-ride happened, so re-set accumulator
           override_time = timediff;
           total_quality = 0;
-          result.x = 0;
-          result.y = 0;
+          result.x = fixed_zero;
+          result.y = fixed_zero;
           overridden = true;
         } else {
           // this isn't the latest over-ride or obtained fix, so ignore
@@ -146,8 +146,8 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool *found) const
             // re-set accumulators
             overridden = false;
             total_quality = 0;
-            result.x = 0;
-            result.y = 0;
+            result.x = fixed_zero;
+            result.y = fixed_zero;
           }
         }
       }

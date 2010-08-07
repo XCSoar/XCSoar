@@ -38,7 +38,7 @@
 #include <assert.h>
 
 bool
-WindowFilter::update(const double x0) 
+WindowFilter::update(const fixed x0) 
 {
   assert(i < x.size());
 
