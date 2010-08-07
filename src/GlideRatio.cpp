@@ -147,41 +147,42 @@ GlideRatioCalculator::calculate() const
 // existing methods (moving average via low pass filter)
 
 // limit to reasonable values
-static double
-LimitLD(double LD)
+gcc_const
+static fixed
+LimitLD(fixed LD)
 {
-  if (fabs(LD) > INVALID_GR)
-    return INVALID_GR;
+  if (fabs(LD) > fixed(INVALID_GR))
+    return fixed(INVALID_GR);
 
-  if ((LD >= 0.0) && (LD < 1.0))
-    return 1.0;
+  if (LD >= fixed_zero && LD < fixed_one)
+    return fixed_one;
 
-  if ((LD < 0.0) && (LD > -1.0))
-    return -1.0;
+  if (LD < fixed_zero && LD > fixed_minus_one)
+    return fixed_minus_one;
 
   return LD;
 }
 
-double
-UpdateLD(double LD, double leg_distance, double height_above_leg,
-         double filter_factor)
+fixed
+UpdateLD(fixed LD, fixed leg_distance, fixed height_above_leg,
+         fixed filter_factor)
 {
-  if (leg_distance <= 0)
+  if (!positive(leg_distance))
     return LD;
 
-  double glideangle;
-  if (LD != 0)
-    glideangle = 1.0 / LD;
+  fixed glideangle;
+  if (LD != fixed_zero)
+    glideangle = fixed_one / LD;
   else
-    glideangle = 1.0;
+    glideangle = fixed_one;
 
-  glideangle = LowPassFilter(1.0 / LD, height_above_leg / leg_distance,
+  glideangle = LowPassFilter(fixed_one / LD, height_above_leg / leg_distance,
                              filter_factor);
 
-  if (fabs(glideangle) > 1.0 / INVALID_GR)
-    LD = LimitLD(1.0 / glideangle);
+  if (fabs(glideangle) > fixed_one / INVALID_GR)
+    LD = LimitLD(fixed_one / glideangle);
   else
-    LD = INVALID_GR;
+    LD = fixed(INVALID_GR);
 
   return LD;
 }

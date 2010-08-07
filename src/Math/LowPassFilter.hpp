@@ -39,9 +39,11 @@ Copyright_License {
 #ifndef LOW_PASS_FILTER_HPP
 #define LOW_PASS_FILTER_HPP
 
+#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 gcc_const
-double LowPassFilter(double y_last, double x_in, double fact);
+fixed
+LowPassFilter(fixed y_last, fixed x_in, fixed fact);
 
 #endif

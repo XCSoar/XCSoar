@@ -272,11 +272,13 @@ GlideComputerAirData::Average30s()
   for (unsigned i = 0; i < Elapsed; ++i) {
     if (vario_30s_filter.update(Basic().TotalEnergyVario))
       SetCalculated().Average30s =
-        LowPassFilter(Calculated().Average30s, vario_30s_filter.average(), 0.8);
+        LowPassFilter(Calculated().Average30s, vario_30s_filter.average(),
+                      fixed(0.8));
 
     if (netto_30s_filter.update(Basic().NettoVario))
       SetCalculated().NettoAverage30s =
-        LowPassFilter(Calculated().NettoAverage30s, netto_30s_filter.average(), 0.8);
+        LowPassFilter(Calculated().NettoAverage30s, netto_30s_filter.average(),
+                      fixed(0.8));
   }
 }
 #endif
@@ -401,7 +403,7 @@ GlideComputerAirData::LD()
 
     SetCalculated().LD =
       UpdateLD(Calculated().LD, DistanceFlown,
-               Basic().NavAltitude - LastBasic().NavAltitude, 0.1);
+               Basic().NavAltitude - LastBasic().NavAltitude, fixed(0.1));
 
     if (!Basic().flight.OnGround && !Calculated().Circling)
       rotaryLD.add((int)DistanceFlown, (int)Basic().NavAltitude);
@@ -412,7 +414,7 @@ GlideComputerAirData::LD()
       Basic().flight.Flying) {
     SetCalculated().LDvario =
       UpdateLD(Calculated().LDvario, Basic().IndicatedAirspeed,
-               -Basic().TotalEnergyVario, 0.3);
+               -Basic().TotalEnergyVario, fixed(0.3));
   } else {
     SetCalculated().LDvario = INVALID_GR;
   }
@@ -431,7 +433,8 @@ GlideComputerAirData::CruiseLD()
                                      Calculated().CruiseStartLocation);
       SetCalculated().CruiseLD =
           UpdateLD(Calculated().CruiseLD, DistanceFlown,
-                   Calculated().CruiseStartAlt - Basic().NavAltitude, 0.5);
+                   Calculated().CruiseStartAlt - Basic().NavAltitude,
+                   fixed_half);
     }
   }
 }
@@ -676,7 +679,7 @@ GlideComputerAirData::Turning()
   rate_ave /= 60;
 
   // Make the turn rate more smooth using the LowPassFilter
-  Rate = LowPassFilter(LastCalculated().SmoothedTurnRate, Rate, 0.3);
+  Rate = LowPassFilter(LastCalculated().SmoothedTurnRate, Rate, fixed(0.3));
   SetCalculated().SmoothedTurnRate = Rate;
 
   // Determine which direction we are circling
@@ -855,7 +858,7 @@ GlideComputerAirData::LastThermalStats()
         else
           SetCalculated().LastThermalAverageSmooth =
               LowPassFilter(Calculated().LastThermalAverageSmooth,
-                            Calculated().LastThermalAverage, 0.3);
+                            Calculated().LastThermalAverage, fixed(0.3));
 
         OnDepartedThermal();
       }

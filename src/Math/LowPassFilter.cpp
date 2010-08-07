@@ -46,8 +46,8 @@ Copyright_License {
  * @param fact Smoothing factor (alpha)
  * @return Output value (y)
  */
-double
-LowPassFilter(double y_last, double x_in, double fact)
+fixed
+LowPassFilter(fixed y_last, fixed x_in, fixed fact)
 {
-  return (1.0 - fact) * y_last + (fact) * x_in;
+  return (fixed_one - fact) * y_last + (fact) * x_in;
 }

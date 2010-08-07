@@ -40,6 +40,8 @@ Copyright_License {
 #define XCSOAR_GLIDE_RATIO_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Math/fixed.hpp"
+#include "Compiler.h"
 
 struct SETTINGS_COMPUTER;
 
@@ -85,7 +87,8 @@ public:
 
 // methods using low-pass filter
 
-double UpdateLD(double LD, double d, double h, double filter_factor);
-
+gcc_const
+fixed
+UpdateLD(fixed LD, fixed d, fixed h, fixed filter_factor);
 
 #endif
