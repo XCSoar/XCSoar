@@ -105,7 +105,6 @@ GlideComputerTask::TerrainWarning()
   const AIRCRAFT_STATE state = ToAircraftState(Basic());
   GlidePolar polar = m_task.get_glide_polar();
 
-  terrain->Lock();
   GlideTerrain g_terrain(SettingsComputer(), *terrain);
   GEOPOINT null_point;
   const TaskStats& stats = Calculated().task_stats;
@@ -125,6 +124,4 @@ GlideComputerTask::TerrainWarning()
 
   if (!its.out_of_range)
     SetCalculated().TerrainWarningLocation = its.location;
-
-  terrain->Unlock();
 }

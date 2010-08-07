@@ -73,7 +73,6 @@ protected:
   unsigned int height_scale;
   const COLORRAMP *color_ramp;
   const COLORRAMP *last_color_ramp;
-  const RasterMap *DisplayMap;
   int interp_levels;
 
   virtual bool SetMap();

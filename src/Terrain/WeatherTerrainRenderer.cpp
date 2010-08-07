@@ -142,9 +142,6 @@ WeatherTerrainRenderer::SetMap()
   is_terrain = false;
   do_shading = false;
 
-  if (weather != NULL)
-    DisplayMap = weather->GetMap();
-
   switch (weather != NULL ? weather->GetParameter() : 0) {
   case 1: // wstar
     height_scale = 2; // max range 256*(2**2) = 1024 cm/s = 10 m/s
@@ -196,7 +193,7 @@ WeatherTerrainRenderer::SetMap()
     return TerrainRenderer::SetMap();
   }
 
-  return (DisplayMap != NULL);
+  return weather != NULL;
 }
 
 WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain *_terrain,

@@ -321,7 +321,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   if (terrain != NULL) {
     ProgressGlue::Create(_("Loading Terrain File..."));
-    terrain->ServiceTerrainCenter(Basic().Location);
+    RasterTerrain::UnprotectedLease lease(*terrain);
+    lease->SetViewCenter(Basic().Location);
   }
 
   // Scan for weather forecast

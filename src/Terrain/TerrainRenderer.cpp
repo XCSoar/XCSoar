@@ -274,12 +274,11 @@ TerrainRenderer::SetMap()
   is_terrain = true;
   do_water = true;
   height_scale = 4;
-  DisplayMap = terrain->get_map();
   color_ramp = &terrain_colors[TerrainRamp][0];
 
   do_shading = is_terrain;
 
-  return (DisplayMap != NULL);
+  return true;
 }
 
 
@@ -312,11 +311,11 @@ TerrainRenderer::Height(const Projection &map_projection)
 
   // OK, ready to start loading height
 
-  terrain->Lock();
+  RasterTerrain::Lease map(*terrain);
 
   // set resolution
 
-  quantisation_effective = DisplayMap->GetEffectivePixelSize(pixelsize_d, Gmid);
+  quantisation_effective = map->GetEffectivePixelSize(pixelsize_d, Gmid);
 
   if (quantisation_effective > min(width_sub, height_sub) / 4) {
     do_shading = false;
@@ -330,9 +329,7 @@ TerrainRenderer::Height(const Projection &map_projection)
   rect_quantised.bottom= min(height_sub+rect_quantised.top, 
                              rect_visible.bottom/quantisation_pixels); 
 
-  height_matrix.Fill(*DisplayMap, map_projection, quantisation_pixels);
-
-  terrain->Unlock();
+  height_matrix.Fill(map, map_projection, quantisation_pixels);
 
   if (do_scan_spot())
     ScanSpotHeights(rect_visible);

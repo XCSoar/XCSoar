@@ -139,8 +139,10 @@ MapWindow::UpdateTerrain()
 
   // always service terrain even if it's not used by the map,
   // because it's used by other calculations
-  if (terrain != NULL)
-    terrain->ServiceTerrainCenter(PanLocation);
+  if (terrain != NULL) {
+    RasterTerrain::ExclusiveLease lease(*terrain);
+    lease->SetViewCenter(PanLocation);
+  }
 
   terrain_dirty = false;
 }

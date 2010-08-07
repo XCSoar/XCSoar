@@ -44,6 +44,7 @@ Copyright_License {
 struct AIRCRAFT_STATE;
 struct SETTINGS_COMPUTER;
 class RasterTerrain;
+class RasterMap;
 class GlidePolar;
 struct GlideResult;
 class RasterRounding;
@@ -105,7 +106,7 @@ public:
                                         const GlidePolar& polar);
 
 private:
-  fixed h_terrain(const GEOPOINT& loc);
+  fixed h_terrain(const RasterMap &map, const GEOPOINT& loc);
 
   RasterTerrain &m_terrain;
   const fixed safety_height_terrain;

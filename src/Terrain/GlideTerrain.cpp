@@ -92,9 +92,11 @@ GlideTerrain::find_intersection(const AIRCRAFT_STATE &state,
     return retval;
   }
   
+  RasterTerrain::Lease map(m_terrain);
+
   GEOPOINT loc= state.Location, last_loc = loc;
   fixed altitude = state.NavAltitude;
-  fixed h = h_terrain(loc);
+  fixed h = h_terrain(map, loc);
   fixed dh = altitude - h;
   fixed last_dh = dh;
   bool start_under = negative(dh);
@@ -130,7 +132,7 @@ GlideTerrain::find_intersection(const AIRCRAFT_STATE &state,
     loc += delta_ll;
     
     // find height over terrain
-    h = h_terrain(loc);
+    h = h_terrain(map, loc);
     dh = altitude - h;
     
     if (positive(dh) && positive(h)) {
@@ -177,10 +179,10 @@ GlideTerrain::find_intersection(const AIRCRAFT_STATE &state,
 }
 
 fixed 
-GlideTerrain::h_terrain(const GEOPOINT& loc) 
+GlideTerrain::h_terrain(const RasterMap &map, const GEOPOINT& loc)
 {
   return max(fixed_zero, 
-             fixed(m_terrain.GetTerrainHeight(loc)))
+             fixed(map.GetField(loc)))
     +safety_height_terrain;
 }
 
@@ -196,9 +198,11 @@ GlideTerrain::find_intersection(const AIRCRAFT_STATE &state)
     return retval;
   }
 
+  RasterTerrain::Lease map(m_terrain);
+
   GEOPOINT loc= state.Location, last_loc = loc;
   const fixed altitude = state.NavAltitude;
-  fixed h = h_terrain(loc);
+  fixed h = h_terrain(map, loc);
   fixed dh = altitude - h;
   fixed last_dh = dh;
 
@@ -227,7 +231,7 @@ GlideTerrain::find_intersection(const AIRCRAFT_STATE &state)
     loc += delta_ll;
     
     // find height over terrain
-    h = h_terrain(loc);
+    h = h_terrain(map, loc);
     dh = altitude - h;
     
     if (positive(dh) && positive(h)) {

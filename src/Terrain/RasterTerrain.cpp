@@ -67,8 +67,3 @@ RasterTerrain::OpenTerrain()
 
   return rt;
 }
-
-void RasterTerrain::ServiceTerrainCenter(const GEOPOINT &location) {
-  Poco::ScopedRWLock protect(lock, true);
-  map.SetViewCenter(location);
-}

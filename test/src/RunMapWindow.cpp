@@ -293,8 +293,10 @@ GenerateBlackboard(MapWindow &map)
 
   memset(&settings_computer, 0, sizeof(settings_computer));
 
-  if (terrain != NULL)
-    terrain->ServiceTerrainCenter(nmea_info.Location);
+  if (terrain != NULL) {
+    RasterTerrain::UnprotectedLease lease(*terrain);
+    lease->SetViewCenter(nmea_info.Location);
+  }
 
   for (unsigned i = 0; i <AIRSPACECLASSCOUNT; ++i)
     settings_computer.iAirspaceMode[i] = 3;

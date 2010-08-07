@@ -61,8 +61,9 @@ EstimateThermalBase(const GEOPOINT Thermal_Location,
   Tmax = (altitude / wthermal);
   fixed dt = Tmax / 10;
 
-  if (terrain != NULL)
-    terrain->Lock();
+  RasterTerrain::Lease *map = terrain != NULL
+    ? new RasterTerrain::Lease(*terrain)
+    : NULL;
 
   GEOPOINT loc;
   FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * dt, &loc);
@@ -72,8 +73,8 @@ EstimateThermalBase(const GEOPOINT Thermal_Location,
                           &loc);
 
     fixed hthermal = altitude - wthermal * t;
-    short hground = terrain != NULL
-      ? terrain->GetTerrainHeight(loc)
+    short hground = map != NULL
+      ? (*map)->GetField(loc)
       : RasterTerrain::TERRAIN_INVALID;
     if (hground == RasterTerrain::TERRAIN_INVALID)
       hground = 0;
@@ -93,8 +94,7 @@ EstimateThermalBase(const GEOPOINT Thermal_Location,
   if (hground == RasterTerrain::TERRAIN_INVALID)
     hground = 0;
 
-  if (terrain != NULL)
-    terrain->Unlock();
+  delete map;
 
   *ground_location = loc;
   *ground_alt = fixed(hground);

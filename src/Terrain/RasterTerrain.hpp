@@ -41,7 +41,7 @@ Copyright_License {
 
 #include "RasterMap.hpp"
 #include "Navigation/GeoPoint.hpp"
-#include "Poco/RWLock.h"
+#include "Thread/Guard.hpp"
 #include "Compiler.h"
 
 class RasterMap;
@@ -51,14 +51,12 @@ class RasterMap;
  * caching or demand-loading.
  * 
  */
-class RasterTerrain {
+class RasterTerrain : public Guard<RasterMap> {
 public:
   /** invalid value for terrain */
   static const short TERRAIN_INVALID = -1000;
 
 protected:
-  mutable Poco::RWLock lock;
-
   RasterMap map;
 
 public:
@@ -67,7 +65,8 @@ public:
  * Constructor.  Returns uninitialised object. 
  * 
  */
-  RasterTerrain(const char *path):map(path) {}
+  RasterTerrain(const char *path)
+    :Guard<RasterMap>(map), map(path) {}
 
 /** 
  * Load the terrain.  Determines the file to load from profile settings.
@@ -75,24 +74,11 @@ public:
  */
   static RasterTerrain *OpenTerrain();
 
-  void Lock() const {
-    lock.readLock();
-  }
-
-  void Unlock() const {
-    lock.unlock();
-  }
-
-  const RasterMap *get_map() const {
-    return &map;
-  }
-
   gcc_pure
   short GetTerrainHeight(const GEOPOINT location) const {
-    return map.GetField(location);
+    Lease lease(*this);
+    return lease->GetField(location);
   }
-
-  void ServiceTerrainCenter(const GEOPOINT &location);
 
   int GetEffectivePixelSize(fixed &pixel_D, const GEOPOINT &location) const {
     return map.GetEffectivePixelSize(pixel_D, location);
