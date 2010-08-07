@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-08-01 18:12+0200\n"
-"PO-Revision-Date: 2010-08-03 16:56+0000\n"
-"Last-Translator: Michal Jezierski <Unknown>\n"
+"PO-Revision-Date: 2010-08-04 12:48+0000\n"
+"Last-Translator: Luke Szczepaniak <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-08-04 04:52+0000\n"
+"X-Launchpad-Export-Date: 2010-08-06 06:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: src/Airspace/AirspaceParser.cpp:155
@@ -78,7 +78,7 @@ msgstr "Zatrzymaj logger"
 
 #: src/Logger/LoggerImpl.cpp:559
 msgid "Declare Task?"
-msgstr ""
+msgstr "Zadeklarować zadanie?"
 
 #: src/Logger/LoggerImpl.cpp:562
 msgid "Task Declared!"
