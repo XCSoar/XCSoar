@@ -550,7 +550,7 @@ TerrainRenderer::ColorTable()
 }
 
 void
-TerrainRenderer::Draw(Canvas &canvas, RECT src_rect, RECT dest_rect)
+TerrainRenderer::Draw(Canvas &canvas, RECT src_rect)
 {
   sbuf->Zoom(oversampling);
 
@@ -562,10 +562,7 @@ TerrainRenderer::Draw(Canvas &canvas, RECT src_rect, RECT dest_rect)
   BitmapCanvas bitmap_canvas(canvas);
   bitmap_canvas.select(*sbuf);
 
-  canvas.stretch(dest_rect.left, dest_rect.top,
-                 dest_rect.right - dest_rect.left,
-                 dest_rect.bottom - dest_rect.top,
-                 bitmap_canvas,
+  canvas.stretch(bitmap_canvas,
                  src_rect.left * oversampling, src_rect.top * oversampling,
                  (src_rect.right - src_rect.left) * oversampling,
                  (src_rect.bottom - src_rect.top) * oversampling);
@@ -603,12 +600,11 @@ TerrainRenderer::Draw(Canvas &canvas,
 
   // step 3: calculate derivatives of height buffer
   // step 4: calculate illumination and colors
-  const RECT rect_visible = map_projection.GetMapRect();
 
   Slope(rect_quantised, sx, sy, sz);
 
   // step 5: draw
-  Draw(canvas, rect_quantised, rect_visible);
+  Draw(canvas, rect_quantised);
 
   // note, not all of this really needs to be locked
   return true;

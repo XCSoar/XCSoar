@@ -109,7 +109,7 @@ private:
                         const RECT& rect);
   void Slope(const RECT& rect_quantised, const int sx, const int sy, const int sz);
   void ColorTable();
-  void Draw(Canvas &canvas, RECT src_rect, RECT dest_rect);
+  void Draw(Canvas &canvas, RECT src_rect);
 
   virtual bool do_scan_spot();
 
