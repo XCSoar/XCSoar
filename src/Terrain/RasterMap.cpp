@@ -147,18 +147,3 @@ RasterMap::_ReloadJPG2000()
                                                 raster_tile_cache.lon_min)
                                         / raster_tile_cache.GetWidth());
 }
-
-RasterMap *
-RasterMap::LoadFile(const char *path)
-{
-  RasterMap *map = new RasterMap(path);
-  if (map == NULL)
-    return NULL;
-
-  if (!map->isMapLoaded()) {
-    delete map;
-    return NULL;
-  }
-
-  return map;
-}

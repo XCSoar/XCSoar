@@ -68,8 +68,14 @@ void RasterTerrain::OpenTerrain(void)
 bool
 RasterTerrain::CreateTerrainMap(const char *zfilename)
 {
-  TerrainMap = RasterMap::LoadFile(zfilename);
-  return TerrainMap != NULL;
+  TerrainMap = new RasterMap(zfilename);
+  if (!TerrainMap->isMapLoaded()) {
+    delete TerrainMap;
+    TerrainMap = NULL;
+    return false;
+  }
+
+  return true;
 }
 
 void RasterTerrain::CloseTerrain(void)

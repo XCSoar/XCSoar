@@ -66,8 +66,6 @@ public:
   RasterMap(const char *path);
   ~RasterMap();
 
-  static RasterMap *LoadFile(const char *path);
-
   TERRAIN_INFO TerrainInfo;
 
   bool isMapLoaded() const {
