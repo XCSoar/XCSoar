@@ -129,14 +129,14 @@ RefreshView()
   wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxHeight")));
   if (wp) {
     wp->set_visible(racing_types);
-    wp->GetDataField()->SetAsFloat(Units::ToUserAltitude(p.start_max_height));
+    wp->GetDataField()->SetAsFloat(Units::ToUserAltitude(fixed(p.start_max_height)));
     wp->RefreshDisplay();
   }
 
   wp = ((WndProperty*)wf->FindByName(_T("prpFinishMinHeight")));
   if (wp) {
     wp->set_visible(racing_types);
-    wp->GetDataField()->SetAsFloat(Units::ToUserAltitude(p.finish_min_height));
+    wp->GetDataField()->SetAsFloat(Units::ToUserAltitude(fixed(p.finish_min_height)));
     wp->RefreshDisplay();
   }
 
@@ -185,7 +185,7 @@ ReadValues()
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeight"));
   if (wp) {
-    int ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
+    int ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsFixed()));
     if ((int)p.start_max_height != ival) {
       p.start_max_height = ival;
       task_changed = true;
@@ -194,7 +194,7 @@ ReadValues()
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
   if (wp) {
-    int ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
+    int ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsFixed()));
     if ((int)p.start_max_speed != ival) {
       p.start_max_speed = ival;
       task_changed = true;
@@ -203,7 +203,7 @@ ReadValues()
 
   wp = (WndProperty*)wf->FindByName(_T("prpFinishMinHeight"));
   if (wp) {
-    int ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
+    int ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsFixed()));
     if ((int)p.finish_min_height != ival) {
       p.finish_min_height = ival;
       task_changed = true;

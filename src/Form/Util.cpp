@@ -280,7 +280,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
 
   Units_t unit = Units::GetUserUnitByGroup(unit_group);
   int new_value = ctl->GetDataField()->GetAsInteger();
-  new_value = iround(Units::ToSysUnit(new_value, unit));
+  new_value = iround(Units::ToSysUnit(fixed(new_value), unit));
   if (new_value == value)
     return false;
 

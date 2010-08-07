@@ -831,7 +831,7 @@ InfoBoxContentTaskAASpeed::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), Units::ToUserTaskSpeed(
+  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserTaskSpeed(
       XCSoarInterface::Calculated().common_stats.aat_speed_remaining));
   infobox.SetValue(tmp);
 
@@ -853,7 +853,7 @@ InfoBoxContentTaskAASpeedMax::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), Units::ToUserTaskSpeed(
+  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserTaskSpeed(
       XCSoarInterface::Calculated().common_stats.aat_speed_max));
   infobox.SetValue(tmp);
 
@@ -875,7 +875,7 @@ InfoBoxContentTaskAASpeedMin::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), Units::ToUserTaskSpeed(
+  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserTaskSpeed(
       XCSoarInterface::Calculated().common_stats.aat_speed_min));
   infobox.SetValue(tmp);
 

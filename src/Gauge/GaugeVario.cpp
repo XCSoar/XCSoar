@@ -64,8 +64,8 @@ static Color colTextBackgnd;
 #define NARROWS 3
 #define ARROWYSIZE Layout::Scale(3)
 #define ARROWXSIZE Layout::Scale(7)
-#define GAUGEVARIORANGE 5.0 // 5 m/s
-#define GAUGEVARIOSWEEP 180 // degrees total sweep
+#define GAUGEVARIORANGE fixed(5) // 5 m/s
+#define GAUGEVARIOSWEEP fixed(180) // degrees total sweep
 #define YOFFSET 36
 #define DeltaVstep 4
 #define DeltaVlimit 16.0
@@ -248,7 +248,7 @@ GaugeVario::Render()
   static int sval_last = 0;
   static int ival_last = 0;
 
-  ival = ValueToNeedlePos(vval);
+  ival = ValueToNeedlePos(fixed(vval));
   sval = ValueToNeedlePos(Basic().GliderSinkRate);
   if (Appearance.GaugeVarioAveNeedle) {
     if (!Calculated().Circling)
@@ -378,7 +378,7 @@ GaugeVario::RenderZero(Canvas &canvas)
 }
 
 int
-GaugeVario::ValueToNeedlePos(double Value)
+GaugeVario::ValueToNeedlePos(fixed Value)
 {
   static bool InitDone = false;
   static int degrees_per_unit;

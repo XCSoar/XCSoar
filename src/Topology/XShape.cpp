@@ -56,12 +56,12 @@ import_label(const char *src)
     return NULL;
 
   if (ispunct(src[0])) {
-    double value = strtod(src + 1, NULL);
+    fixed value(strtod(src + 1, NULL));
     value = Units::ToUserUnit(value, Units::AltitudeUnit);
 
     TCHAR buffer[32];
-    if (value > 999)
-      _stprintf(buffer, _T("%.1f"), (value / 1000));
+    if (value > fixed(999))
+      _stprintf(buffer, _T("%.1f"), (double)(value / 1000));
     else
       _stprintf(buffer, _T("%d"), (int)value);
 

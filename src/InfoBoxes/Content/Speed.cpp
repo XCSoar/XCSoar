@@ -71,7 +71,7 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
   if (!is_simulator())
     return false;
 
-  fixed fixed_step = (fixed)Units::ToSysUnit(10, Units::SpeedUnit);
+  fixed fixed_step = (fixed)Units::ToSysUnit(fixed_ten, Units::SpeedUnit);
   const Angle a5 = Angle::degrees(fixed(5));
 
   switch (keycode) {

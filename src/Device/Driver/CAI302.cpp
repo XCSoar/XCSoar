@@ -200,7 +200,7 @@ CAI302Device::PutMacCready(double MacCready)
   char szTmp[32];
 
   sprintf(szTmp, "!g,m%d\r\n",
-          int(Units::ToUserUnit(MacCready * 10, unKnots) + 0.5));
+          int(Units::ToUserUnit(fixed(MacCready) * 10, unKnots) + fixed_half));
 
   port->Write(szTmp);
 

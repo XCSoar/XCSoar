@@ -75,7 +75,7 @@ InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
   if (!is_simulator())
     return false;
 
-  fixed fixed_step = (fixed)Units::ToSysUnit(100, Units::AltitudeUnit);
+  fixed fixed_step = (fixed)Units::ToSysUnit(fixed(100), Units::AltitudeUnit);
   const Angle a5 = Angle::degrees(fixed(5));
 
   switch (keycode) {

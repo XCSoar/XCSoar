@@ -516,7 +516,7 @@ static void UpdateValuesTask(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpEstimatedSpeed"));
   if (wp) {
-    _stprintf(Temp, _T("%.0f %s"), Units::ToUserTaskSpeed(
+    _stprintf(Temp, _T("%.0f %s"), (double)Units::ToUserTaskSpeed(
               XCSoarInterface::Calculated().task_stats.total.planned.get_speed()),
               Units::GetTaskSpeedName());
     wp->SetText(Temp);
@@ -524,7 +524,7 @@ static void UpdateValuesTask(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpAverageSpeed"));
   if (wp) {
-    _stprintf(Temp, _T("%.0f %s"), Units::ToUserTaskSpeed(
+    _stprintf(Temp, _T("%.0f %s"), (double)Units::ToUserTaskSpeed(
               XCSoarInterface::Calculated().task_stats.total.travelled.get_speed()),
               Units::GetTaskSpeedName());
     wp->SetText(Temp);

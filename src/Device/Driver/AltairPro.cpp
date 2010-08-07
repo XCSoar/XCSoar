@@ -46,11 +46,11 @@ Copyright_License {
 
 class AltairProDevice : public AbstractDevice {
 private:
-  double lastAlt;
+  fixed lastAlt;
   bool last_enable_baro;
 
 public:
-  AltairProDevice():lastAlt(0), last_enable_baro(false) {}
+  AltairProDevice():lastAlt(fixed_zero), last_enable_baro(false) {}
 
 public:
   virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
@@ -78,7 +78,7 @@ AltairProDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
 
     // get <alt>
 
-    lastAlt = _tcstod(String, NULL);
+    lastAlt = fixed(_tcstod(String, NULL));
 
     String = _tcschr(String, ',');
     if (String == NULL)
@@ -93,7 +93,7 @@ AltairProDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
 
     if (enable_baro) {
       GPS_INFO->BaroAltitudeAvailable = true;
-      GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(fixed(lastAlt));
+      GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(lastAlt);
     }
 
     last_enable_baro = enable_baro;

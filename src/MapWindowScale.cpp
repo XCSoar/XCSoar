@@ -126,7 +126,7 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT rc,
                         const bool ScaleChangeFeedback)
 {
   static int LastMapWidth = 0;
-  double MapWidth;
+  fixed MapWidth;
   TCHAR ScaleInfo[80];
   TCHAR TEMP[20];
 

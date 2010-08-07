@@ -108,7 +108,7 @@ private:
   void RenderSpeedToFly(Canvas &canvas, int x, int y);
   void RenderBallast(Canvas &canvas);
   void RenderBugs(Canvas &canvas);
-  int  ValueToNeedlePos(double Value);
+  int  ValueToNeedlePos(fixed Value);
   void RenderNeedle(Canvas &canvas, int i, bool average, bool clear);
   void RenderVarioLine(Canvas &canvas, int i, int sink, bool clear);
   void RenderClimb(Canvas &canvas);

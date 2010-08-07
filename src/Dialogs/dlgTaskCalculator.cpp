@@ -120,7 +120,7 @@ RefreshCalculator(void)
   wp = (WndProperty*)wf->FindByName(_T("prpEffectiveMacCready"));
   if (wp) {
     wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
-    wp->GetDataField()->SetAsFloat(Units::ToUserVSpeed(emc));
+    wp->GetDataField()->SetAsFloat(Units::ToUserVSpeed(fixed(emc)));
     wp->RefreshDisplay();
   }
 
@@ -194,7 +194,7 @@ OnTargetClicked(WindowControl * Sender)
 static void
 OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  double MACCREADY;
+  fixed MACCREADY;
   switch (Mode) {
   case DataField::daSpecial:
     if (positive(XCSoarInterface::Calculated().timeCircling)) {
@@ -212,7 +212,7 @@ OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
     break;
   case DataField::daPut:
   case DataField::daChange:
-    MACCREADY = Units::ToSysVSpeed(Sender->GetAsFloat());
+    MACCREADY = Units::ToSysVSpeed(Sender->GetAsFixed());
 #ifdef OLD_TASK
     GlidePolar::SetMacCready(MACCREADY);
 #endif

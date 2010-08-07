@@ -107,7 +107,7 @@ InfoBoxContentWindSpeed::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"),
-            Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
+            (double)Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
   infobox.SetValue(tmp);
 
   // Set Unit

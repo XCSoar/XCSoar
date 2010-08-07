@@ -58,7 +58,7 @@ InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)
   infobox.SetTitle(_T("MacCready"));
 
   // Set Value
-  _stprintf(sTmp, _T("%2.1f"), Units::ToUserVSpeed(
+  _stprintf(sTmp, _T("%2.1f"), (double)Units::ToUserVSpeed(
       XCSoarInterface::Calculated().common_stats.current_risk_mc));
   infobox.SetValue(sTmp);
 
@@ -119,7 +119,7 @@ InfoBoxContentVario::Update(InfoBoxWindow &infobox)
   infobox.SetTitle(_T("Vario"));
 
   // Set Value
-  _stprintf(sTmp, _T("%-2.1f"), Units::ToUserVSpeed(
+  _stprintf(sTmp, _T("%-2.1f"), (double)Units::ToUserVSpeed(
             XCSoarInterface::Basic().TotalEnergyVario));
   infobox.SetValue(sTmp);
 
@@ -136,7 +136,7 @@ InfoBoxContentVarioNetto::Update(InfoBoxWindow &infobox)
   infobox.SetTitle(_T("Netto"));
 
   // Set Value
-  _stprintf(sTmp, _T("%-2.1f"), Units::ToUserVSpeed(
+  _stprintf(sTmp, _T("%-2.1f"), (double)Units::ToUserVSpeed(
             XCSoarInterface::Basic().NettoVario));
   infobox.SetValue(sTmp);
 
@@ -153,7 +153,7 @@ InfoBoxContentThermal30s::Update(InfoBoxWindow &infobox)
   infobox.SetTitle(_T("TC 30s"));
 
   // Set Value
-  _stprintf(sTmp, _T("%-2.1f"), Units::ToUserVSpeed(
+  _stprintf(sTmp, _T("%-2.1f"), (double)Units::ToUserVSpeed(
             XCSoarInterface::Calculated().Average30s));
   infobox.SetValue(sTmp);
 
@@ -176,7 +176,7 @@ InfoBoxContentThermalLastAvg::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR sTmp[32];
-  _stprintf(sTmp, _T("%-2.1f"), Units::ToUserVSpeed(
+  _stprintf(sTmp, _T("%-2.1f"), (double)Units::ToUserVSpeed(
       XCSoarInterface::Calculated().LastThermalAverage));
   infobox.SetValue(sTmp);
 
@@ -238,7 +238,7 @@ InfoBoxContentThermalAllAvg::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR sTmp[32];
-  _stprintf(sTmp, _T("%-2.1f"), Units::ToUserVSpeed(
+  _stprintf(sTmp, _T("%-2.1f"), (double)Units::ToUserVSpeed(
       XCSoarInterface::Calculated().TotalHeightClimb /
       XCSoarInterface::Calculated().timeCircling));
   infobox.SetValue(sTmp);
@@ -255,7 +255,7 @@ InfoBoxContentThermalAvg::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR sTmp[32];
-  _stprintf(sTmp, _T("%-2.1f"), Units::ToUserVSpeed(
+  _stprintf(sTmp, _T("%-2.1f"), (double)Units::ToUserVSpeed(
       XCSoarInterface::Calculated().ThermalAverage));
   infobox.SetValue(sTmp);
 
@@ -312,7 +312,7 @@ InfoBoxContentVarioDistance::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR sTmp[32];
-  _stprintf(sTmp, _T("%-2.1f"), Units::ToUserVSpeed(
+  _stprintf(sTmp, _T("%-2.1f"), (double)Units::ToUserVSpeed(
       XCSoarInterface::Calculated().task_stats.total.vario.get_value()));
   infobox.SetValue(sTmp);
 

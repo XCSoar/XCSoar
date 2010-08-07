@@ -112,8 +112,7 @@ dlgWindSettingsShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
   if (wp) {
-    wp->GetDataField()->SetMax(Units::ToUserWindSpeed(
-        Units::ToSysUnit(200.0, unKiloMeterPerHour)));
+    wp->GetDataField()->SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), unKiloMeterPerHour)));
     wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }

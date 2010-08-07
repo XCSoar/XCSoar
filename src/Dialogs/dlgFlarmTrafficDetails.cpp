@@ -79,7 +79,7 @@ void UpdateChanging() {
       &distance, &dir);
 
   // Fill distance field
-  Units::FormatUserDistance((double)distance, tmp, 20);
+  Units::FormatUserDistance(distance, tmp, 20);
   ((WndProperty *)wf->FindByName(_T("prpDistance")))->SetText(tmp);
 
   // Fill horizontal direction field

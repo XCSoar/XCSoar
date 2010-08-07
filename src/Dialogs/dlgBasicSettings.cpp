@@ -255,13 +255,13 @@ OnTempData(DataField *Sender, DataField::DataAccessKind_t Mode)
   switch (Mode) {
   case DataField::daGet:
     lastRead = CuSonde::maxGroundTemperature;
-    Sender->Set(Units::ToUserTemperature(CuSonde::maxGroundTemperature));
+    Sender->Set(Units::ToUserTemperature(fixed(CuSonde::maxGroundTemperature)));
     break;
   case DataField::daChange:
   case DataField::daPut:
     if (fabs(lastRead - Sender->GetAsFloat()) >= 1.0) {
-      lastRead = Units::ToSysTemperature(Sender->GetAsFloat());
-      CuSonde::setForecastTemperature(Units::ToSysTemperature(Sender->GetAsFloat()));
+      lastRead = Units::ToSysTemperature(Sender->GetAsFixed());
+      CuSonde::setForecastTemperature(Units::ToSysTemperature(Sender->GetAsFixed()));
     }
     break;
   }
@@ -299,8 +299,8 @@ dlgBasicSettingsShowModal()
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(_T("prpTemperature"));
   if (wp) {
-    wp->GetDataField()->SetMin(Units::ToUserTemperature(-50));
-    wp->GetDataField()->SetMax(Units::ToUserTemperature(60));
+    wp->GetDataField()->SetMin(Units::ToUserTemperature(fixed(-50)));
+    wp->GetDataField()->SetMax(Units::ToUserTemperature(fixed(60)));
     wp->GetDataField()->SetUnits(Units::GetTemperatureName());
     wp->RefreshDisplay();
   }

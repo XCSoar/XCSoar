@@ -484,8 +484,8 @@ dlgAirspaceSelect()
   PrepareAirspaceSelectDialog();
 
   GEOPOINT Location = XCSoarInterface::Basic().Location;
-  AirspaceSorter g_airspace_sorter(airspace_database, Location, fixed(
-      Units::ToUserUnit(1, Units::DistanceUnit)));
+  AirspaceSorter g_airspace_sorter(airspace_database, Location,
+                                   Units::ToUserUnit(fixed_one, Units::DistanceUnit));
   airspace_sorter = &g_airspace_sorter;
 
   UpdateList();

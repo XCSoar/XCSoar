@@ -305,23 +305,23 @@ RasterWeather::ValueToText(TCHAR* Buffer, short val)
   case 0:
     return;
   case 1: // wstar
-    _stprintf(Buffer, _T("%.1f%s"),
-              Units::ToUserUnit((val - 200) / 100.0, Units::VerticalSpeedUnit),
+    _stprintf(Buffer, _T("%.1f%s"), (double)
+              Units::ToUserUnit(fixed(val - 200) / 100, Units::VerticalSpeedUnit),
               Units::GetVerticalSpeedName());
     return;
   case 2: // blwindspd
-    _stprintf(Buffer, _T("%.0f%s"),
-              Units::ToUserUnit(val / 100.0, Units::SpeedUnit),
+    _stprintf(Buffer, _T("%.0f%s"), (double)
+              Units::ToUserUnit(fixed(val) / 100, Units::SpeedUnit),
               Units::GetSpeedName());
     return;
   case 3: // hbl
-    _stprintf(Buffer, _T("%.0f%s"),
-              Units::ToUserUnit(val, Units::AltitudeUnit),
+    _stprintf(Buffer, _T("%.0f%s"), (double)
+              Units::ToUserUnit(fixed(val), Units::AltitudeUnit),
               Units::GetAltitudeName());
     return;
   case 4: // dwcrit
-    _stprintf(Buffer, _T("%.0f%s"),
-              Units::ToUserUnit(val, Units::AltitudeUnit),
+    _stprintf(Buffer, _T("%.0f%s"), (double)
+              Units::ToUserUnit(fixed(val), Units::AltitudeUnit),
               Units::GetAltitudeName());
     return;
   case 5: // blcloudpct
@@ -331,18 +331,18 @@ RasterWeather::ValueToText(TCHAR* Buffer, short val)
     _stprintf(Buffer, _T("%d")_T(DEG), val / 2 - 20);
     return;
   case 7: // hwcrit
-    _stprintf(Buffer, _T("%.0f%s"),
-              Units::ToUserUnit(val, Units::AltitudeUnit),
+    _stprintf(Buffer, _T("%.0f%s"), (double)
+              Units::ToUserUnit(fixed(val), Units::AltitudeUnit),
               Units::GetAltitudeName());
     return;
   case 8: // wblmaxmin
-    _stprintf(Buffer, _T("%.1f%s"),
-              Units::ToUserUnit(((val-200)/100.0), Units::VerticalSpeedUnit),
+    _stprintf(Buffer, _T("%.1f%s"), (double)
+              Units::ToUserUnit(fixed(val - 200) / 100, Units::VerticalSpeedUnit),
               Units::GetVerticalSpeedName());
     return;
   case 9: // blcwbase
-    _stprintf(Buffer, _T("%.0f%s"),
-              Units::ToUserUnit(val, Units::AltitudeUnit),
+    _stprintf(Buffer, _T("%.0f%s"), (double)
+              Units::ToUserUnit(fixed(val), Units::AltitudeUnit),
               Units::GetAltitudeName());
     return;
   default:

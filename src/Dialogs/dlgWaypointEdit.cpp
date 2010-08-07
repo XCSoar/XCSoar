@@ -426,7 +426,7 @@ static void GetValues(void) {
 
     global_wpt->Altitude = ss == 0 && terrain != NULL
       ? WayPointFile::AltitudeFromTerrain(global_wpt->Location, *terrain)
-      : Units::ToSysUnit(ss, Units::AltitudeUnit);
+      : Units::ToSysUnit(fixed(ss), Units::AltitudeUnit);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
