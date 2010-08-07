@@ -242,7 +242,8 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
   */
 
   // scale quantisation_pixels so resolution is not too high on large displays
-  quantisation_pixels = Layout::FastScale(quantisation_pixels);
+  if (is_embedded())
+    quantisation_pixels = Layout::FastScale(quantisation_pixels);
 
   const unsigned res_x =
     (rc.right - rc.left) * oversampling / quantisation_pixels;
