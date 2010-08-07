@@ -64,21 +64,22 @@ CoordinateFormats_t Units::CoordinateFormat;
 //SI to Local Units
 
 const UnitDescriptor_t Units::UnitDescriptors[] = {
-  { NULL, 1, 0 },
-  { _T("km"), 0.001, 0 },
-  { _T("nm"), 0.00053996, 0 },
-  { _T("sm"), 0.0006214, 0},
-  { _T("km/h"), 3.6, 0},
-  { _T("kt"), 1.9439, 0},
-  { _T("mph"), 2.237, 0},
-  { _T("m/s"), 1.0, 0},
-  { _T("fpm"), 196.85, 0},
-  { _T("m"), 1.0, 0},
-  { _T("ft"), 3.281, 0},
-  { _T("FL"), 0.03281, 0},
-  { _T("K"), 1, 0},
-  { _T(DEG)_T("C"), 1.0, -273.15},
-  { _T(DEG)_T("F"), 1.8, -459.67}
+  { NULL, fixed_one, fixed_zero },
+  { _T("km"), fixed_constant(0.001, 0x41893LL), fixed_zero },
+  { _T("nm"), fixed_constant(0.000539956803, 0x2362fLL), fixed_zero },
+  { _T("sm"), fixed_constant(0.000621371192, 0x28b8eLL), fixed_zero },
+  { _T("km/h"), fixed_constant(3.6, 0x39999999LL), fixed_zero },
+  { _T("kt"), fixed_constant(1.94384449, 0x1f19fcaeLL), fixed_zero },
+  { _T("mph"), fixed_constant(2.23693629, 0x23ca7db5LL), fixed_zero },
+  { _T("m/s"), fixed_one, fixed_zero },
+  { _T("fpm"), fixed_constant(196.850394, 0xc4d9b36bdLL), fixed_zero },
+  { _T("m"), fixed_one, fixed_zero },
+  { _T("ft"), fixed_constant(3.2808399, 0x347e51faLL), fixed_zero },
+  { _T("FL"), fixed_constant(0.032808399, 0x866219LL), fixed_zero },
+  { _T("K"), fixed_one, fixed_zero },
+  { _T(DEG)_T("C"), fixed_one, fixed_constant(-273.15, -73323144806LL) },
+  { _T(DEG)_T("F"), fixed_constant(1.8, 0x1cccccccLL),
+    fixed_constant(-459.67, -123391726059LL) }
 };
 
 Units_t Units::DistanceUnit = unKiloMeter;
@@ -471,7 +472,7 @@ Units::GetTaskSpeedName()
 }
 
 bool
-Units::FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size,
+Units::FormatUserAltitude(fixed Altitude, TCHAR *Buffer, size_t size,
                           bool IncludeUnit)
 {
   int prec;
@@ -486,9 +487,9 @@ Units::FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size,
   prec = 0;
 
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%.*f%s"), prec, Altitude, pU->Name);
+    _stprintf(sTmp, _T("%.*f%s"), prec, (double)Altitude, pU->Name);
   else
-    _stprintf(sTmp, _T("%.*f"), prec, Altitude);
+    _stprintf(sTmp, _T("%.*f"), prec, (double)Altitude);
 
   if (_tcslen(sTmp) < size - 1) {
     _tcscpy(Buffer, sTmp);
@@ -501,7 +502,7 @@ Units::FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size,
 }
 
 bool
-Units::FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer, size_t size,
+Units::FormatAlternateUserAltitude(fixed Altitude, TCHAR *Buffer, size_t size,
                                    bool IncludeUnit)
 {
   Units_t saveUnit = AltitudeUnit;
@@ -523,7 +524,7 @@ Units::FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer, size_t size,
 // TB: It seems to be the same as FormatUserAltitude() but it includes the
 //     sign (+/-) in the output (see _stprintf())
 bool
-Units::FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size,
+Units::FormatUserArrival(fixed Altitude, TCHAR *Buffer, size_t size,
                          bool IncludeUnit)
 {
   int prec;
@@ -537,9 +538,9 @@ Units::FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size,
   prec = 0;
 
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%+.*f%s"), prec, Altitude, pU->Name);
+    _stprintf(sTmp, _T("%+.*f%s"), prec, (double)Altitude, pU->Name);
   else
-    _stprintf(sTmp, _T("%+.*f"), prec, Altitude);
+    _stprintf(sTmp, _T("%+.*f"), prec, (double)Altitude);
 
   if (_tcslen(sTmp) < size - 1) {
     _tcscpy(Buffer, sTmp);
@@ -552,22 +553,22 @@ Units::FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size,
 }
 
 bool
-Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size,
+Units::FormatUserDistance(fixed Distance, TCHAR *Buffer, size_t size,
                           bool IncludeUnit)
 {
   int prec;
-  double value;
+  fixed value;
   TCHAR sTmp[32];
 
   const UnitDescriptor_t *pU = &UnitDescriptors[DistanceUnit];
 
   value = Distance * pU->ToUserFact; // + pU->ToUserOffset;
 
-  if (value >= 100)
+  if (value >= fixed(100))
     prec = 0;
-  else if (value > 10)
+  else if (value > fixed_ten)
     prec = 1;
-  else if (value > 1)
+  else if (value > fixed_one)
     prec = 2;
   else {
     prec = 3;
@@ -580,7 +581,7 @@ Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size,
         DistanceUnit == unStatuteMiles) {
       pU = &UnitDescriptors[unFeet];
       value = Distance * pU->ToUserFact;
-      if (value < 1000) {
+      if (value < fixed(1000)) {
         prec = 0;
       } else {
         prec = 1;
@@ -591,9 +592,9 @@ Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size,
   }
 
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%.*f%s"), prec, value, pU->Name);
+    _stprintf(sTmp, _T("%.*f%s"), prec, (double)value, pU->Name);
   else
-    _stprintf(sTmp, _T("%.*f"), prec, value);
+    _stprintf(sTmp, _T("%.*f"), prec, (double)value);
 
   if (_tcslen(sTmp) < size - 1) {
     _tcscpy(Buffer, sTmp);
@@ -606,11 +607,11 @@ Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size,
 }
 
 bool
-Units::FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer,
+Units::FormatUserMapScale(Units_t *Unit, fixed Distance, TCHAR *Buffer,
                           size_t size, bool IncludeUnit)
 {
   int prec;
-  double value;
+  fixed value;
   TCHAR sTmp[32];
 
   const UnitDescriptor_t *pU = &UnitDescriptors[DistanceUnit];
@@ -620,10 +621,10 @@ Units::FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer,
 
   value = Distance * pU->ToUserFact; // + pU->ToUserOffset;
 
-  if (value >= 9.999)
+  if (value >= fixed(9.999))
     prec = 0;
-  else if ((DistanceUnit == unKiloMeter && value >= 0.999) ||
-           (DistanceUnit != unKiloMeter && value >= 0.160))
+  else if ((DistanceUnit == unKiloMeter && value >= fixed(0.999)) ||
+           (DistanceUnit != unKiloMeter && value >= fixed(0.160)))
     prec = 1;
   else {
     prec = 2;
@@ -645,9 +646,9 @@ Units::FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer,
   }
 
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%.*f%s"), prec, value, pU->Name);
+    _stprintf(sTmp, _T("%.*f%s"), prec, (double)value, pU->Name);
   else
-    _stprintf(sTmp, _T("%.*f"), prec, value);
+    _stprintf(sTmp, _T("%.*f"), prec, (double)value);
 
   if (_tcslen(sTmp) < size - 1) {
     _tcscpy(Buffer, sTmp);
@@ -660,7 +661,7 @@ Units::FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer,
 }
 
 bool
-Units::FormatUserSpeed(double Speed, TCHAR *Buffer, size_t size,
+Units::FormatUserSpeed(fixed Speed, TCHAR *Buffer, size_t size,
                        bool IncludeUnit)
 {
   int prec;
@@ -670,13 +671,13 @@ Units::FormatUserSpeed(double Speed, TCHAR *Buffer, size_t size,
   Speed = Speed * pU->ToUserFact;
 
   prec = 0;
-  if (Speed < 100)
+  if (Speed < fixed(100))
     prec = 1;
 
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%.*f%s"), prec, Speed, pU->Name);
+    _stprintf(sTmp, _T("%.*f%s"), prec, (double)Speed, pU->Name);
   else
-    _stprintf(sTmp, _T("%.*f"), prec, Speed);
+    _stprintf(sTmp, _T("%.*f"), prec, (double)Speed);
 
   if (_tcslen(sTmp) < size - 1) {
     _tcscpy(Buffer, sTmp);
@@ -689,7 +690,7 @@ Units::FormatUserSpeed(double Speed, TCHAR *Buffer, size_t size,
 }
 
 bool
-Units::FormatUserVSpeed(double Speed, TCHAR *Buffer, size_t size,
+Units::FormatUserVSpeed(fixed Speed, TCHAR *Buffer, size_t size,
                         bool IncludeUnit)
 {
   TCHAR sTmp[32];
@@ -698,9 +699,9 @@ Units::FormatUserVSpeed(double Speed, TCHAR *Buffer, size_t size,
   Speed = Speed * pU->ToUserFact;
 
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%+.1f%s"), Speed, pU->Name);
+    _stprintf(sTmp, _T("%+.1f%s"), (double)Speed, pU->Name);
   else
-    _stprintf(sTmp, _T("%+.1f"), Speed);
+    _stprintf(sTmp, _T("%+.1f"), (double)Speed);
 
   if (_tcslen(sTmp) < size - 1) {
     _tcscpy(Buffer, sTmp);
@@ -712,22 +713,22 @@ Units::FormatUserVSpeed(double Speed, TCHAR *Buffer, size_t size,
   }
 }
 
-double
-Units::ConvertUnits(double Value, Units_t From, Units_t To)
+fixed
+Units::ConvertUnits(fixed Value, Units_t From, Units_t To)
 {
   return ToUserUnit(ToSysUnit(Value, From), To);
 }
 
-double
-Units::ToUserUnit(double Value, Units_t Unit)
+fixed
+Units::ToUserUnit(fixed Value, Units_t Unit)
 {
   const UnitDescriptor_t *pU = &UnitDescriptors[Unit];
   Value *= pU->ToUserFact; // + pU->ToUserOffset;
   return Value;
 }
 
-double
-Units::ToSysUnit(double Value, Units_t Unit)
+fixed
+Units::ToSysUnit(fixed Value, Units_t Unit)
 {
   const UnitDescriptor_t *pU = &UnitDescriptors[Unit];
   Value /= pU->ToUserFact; // + pU->ToUserOffset;

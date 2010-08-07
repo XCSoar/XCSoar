@@ -94,8 +94,8 @@ typedef enum {
 
 typedef struct{
   const TCHAR *Name;
-  double ToUserFact;
-  double ToUserOffset;
+  fixed ToUserFact;
+  fixed ToUserOffset;
 } UnitDescriptor_t;
 
 /**
@@ -304,7 +304,7 @@ namespace Units
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  bool FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size,
+  bool FormatUserAltitude(fixed Altitude, TCHAR *Buffer, size_t size,
                           bool IncludeUnit = true);
 
   /**
@@ -315,7 +315,7 @@ namespace Units
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  bool FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer,
+  bool FormatAlternateUserAltitude(fixed Altitude, TCHAR *Buffer,
                                    size_t size, bool IncludeUnit = true);
 
   /**
@@ -325,7 +325,7 @@ namespace Units
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  bool FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size,
+  bool FormatUserArrival(fixed Altitude, TCHAR *Buffer, size_t size,
                          bool IncludeUnit = true);
 
   /**
@@ -335,10 +335,10 @@ namespace Units
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  bool FormatUserDistance(double Distance, TCHAR *Buffer, size_t size,
+  bool FormatUserDistance(fixed Distance, TCHAR *Buffer, size_t size,
                           bool IncludeUnit = true);
 
-  bool FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer,
+  bool FormatUserMapScale(Units_t *Unit, fixed Distance, TCHAR *Buffer,
                           size_t size, bool IncludeUnit = true);
 
   /**
@@ -348,7 +348,7 @@ namespace Units
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  bool FormatUserSpeed(double Altitude, TCHAR *Buffer, size_t size,
+  bool FormatUserSpeed(fixed Altitude, TCHAR *Buffer, size_t size,
                        bool IncludeUnit = true);
 
   /**
@@ -358,7 +358,7 @@ namespace Units
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  bool FormatUserVSpeed(double Altitude, TCHAR *Buffer, size_t size,
+  bool FormatUserVSpeed(fixed Altitude, TCHAR *Buffer, size_t size,
                         bool IncludeUnit = true);
 
   /**
@@ -369,7 +369,7 @@ namespace Units
    * @return The value in user-specified unit
    */
   gcc_const
-  double ConvertUnits(double Value, Units_t From, Units_t To);
+  fixed ConvertUnits(fixed Value, Units_t From, Units_t To);
 
   /**
    * Converts a Value from the system unit to the user-specified unit
@@ -378,16 +378,7 @@ namespace Units
    * @return The value in user-specified unit
    */
   gcc_const
-  double ToUserUnit(double Value, Units_t Unit);
-
-#ifdef FIXED_MATH
-  gcc_const
-  static inline fixed
-  ToUserUnit(fixed Value, Units_t Unit)
-  {
-    return fixed(ToUserUnit((double)Value, Unit));
-  }
-#endif
+  fixed ToUserUnit(fixed Value, Units_t Unit);
 
   /**
    * Converts a Value from the user-specified unit to the system unit
@@ -396,160 +387,88 @@ namespace Units
    * @return The value in system unit
    */
   gcc_const
-  double ToSysUnit(double Value, Units_t Unit);
+  fixed ToSysUnit(fixed Value, Units_t Unit);
 
-#ifdef FIXED_MATH
-  gcc_const
-  static inline fixed ToSysUnit(fixed Value, Units_t Unit)
-  {
-    return fixed(ToSysUnit((double)Value, Unit));
-  }
-#endif
-
-  static inline double
-  ToUserAltitude(double Value)
-  {
-    return ToUserUnit(Value, AltitudeUnit);
-  }
-
-#ifdef FIXED_MATH
   static inline fixed
   ToUserAltitude(fixed Value)
   {
     return ToUserUnit(Value, AltitudeUnit);
   }
-#endif
 
-  static inline double
-  ToSysAltitude(double Value)
-  {
-    return ToSysUnit(Value, AltitudeUnit);
-  }
-
-#ifdef FIXED_MATH
   static inline fixed
   ToSysAltitude(fixed Value)
   {
     return ToSysUnit(Value, AltitudeUnit);
   }
-#endif
 
-  static inline double
-  ToUserTemperature(double Value)
-  {
-    return ToUserUnit(Value, TemperatureUnit);
-  }
-
-#ifdef FIXED_MATH
   static inline fixed
   ToUserTemperature(fixed Value)
   {
     return ToUserUnit(Value, TemperatureUnit);
   }
-#endif
 
-  static inline double
-  ToSysTemperature(double Value)
-  {
-    return ToSysUnit(Value, TemperatureUnit);
-  }
-
-#ifdef FIXED_MATH
   static inline fixed
   ToSysTemperature(fixed Value)
   {
     return ToSysUnit(Value, TemperatureUnit);
   }
-#endif
 
-  static inline double
-  ToUserDistance(double Value)
-  {
-    return ToUserUnit(Value, DistanceUnit);
-  }
-
-#ifdef FIXED_MATH
   static inline fixed
   ToUserDistance(fixed Value)
   {
     return ToUserUnit(Value, DistanceUnit);
   }
-#endif
 
-  static inline double
-  ToSysDistance(double Value)
-  {
-    return ToSysUnit(Value, DistanceUnit);
-  }
-
-#ifdef FIXED_MATH
   static inline fixed
   ToSysDistance(fixed Value)
   {
     return ToSysUnit(Value, DistanceUnit);
   }
-#endif
 
-  static inline double
-  ToUserSpeed(double Value)
-  {
-    return ToUserUnit(Value, SpeedUnit);
-  }
-
-#ifdef FIXED_MATH
   static inline fixed
   ToUserSpeed(fixed Value)
   {
     return ToUserUnit(Value, SpeedUnit);
   }
-#endif
 
-  static inline double
-  ToSysSpeed(double Value)
+  static inline fixed
+  ToSysSpeed(fixed Value)
   {
     return ToSysUnit(Value, SpeedUnit);
   }
 
-  static inline double
-  ToUserVSpeed(double Value)
+  static inline fixed
+  ToUserVSpeed(fixed Value)
   {
     return ToUserUnit(Value, VerticalSpeedUnit);
   }
 
-  static inline double
-  ToSysVSpeed(double Value)
-  {
-    return ToSysUnit(Value, VerticalSpeedUnit);
-  }
-
-#ifdef FIXED_MATH
   static inline fixed
   ToSysVSpeed(fixed Value)
   {
     return ToSysUnit(Value, VerticalSpeedUnit);
   }
-#endif
 
-  static inline double
-  ToUserTaskSpeed(double Value)
+  static inline fixed
+  ToUserTaskSpeed(fixed Value)
   {
     return ToUserUnit(Value, TaskSpeedUnit);
   }
 
-  static inline double
-  ToSysTaskSpeed(double Value)
+  static inline fixed
+  ToSysTaskSpeed(fixed Value)
   {
     return ToSysUnit(Value, TaskSpeedUnit);
   }
 
-  static inline double
-  ToUserWindSpeed(double Value)
+  static inline fixed
+  ToUserWindSpeed(fixed Value)
   {
     return ToUserUnit(Value, WindSpeedUnit);
   }
 
-  static inline double
-  ToSysWindSpeed(double Value)
+  static inline fixed
+  ToSysWindSpeed(fixed Value)
   {
     return ToSysUnit(Value, WindSpeedUnit);
   }
