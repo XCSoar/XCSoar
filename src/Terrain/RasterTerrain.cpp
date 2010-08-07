@@ -39,13 +39,13 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Profile.hpp"
 #include "LocalPath.hpp"
-#include "RasterMap.hpp"
 #include "StringUtil.hpp"
 #include "OS/PathName.hpp"
 
 // General, open/close
 
-void RasterTerrain::OpenTerrain(void)
+RasterTerrain *
+RasterTerrain::OpenTerrain()
 {
   TCHAR szFile[MAX_PATH];
 
@@ -55,70 +55,27 @@ void RasterTerrain::OpenTerrain(void)
              !string_is_empty(szFile)) {
     _tcscat(szFile, _T("/terrain.jp2"));
   } else
-    return;
+    return NULL;
 
   ExpandLocalPath(szFile);
 
-  // TODO code: Check locking, especially when reloading a file.
-  // TODO bug: Fix cache method
-
-  CreateTerrainMap(NarrowPathName(szFile));
-}
-
-bool
-RasterTerrain::CreateTerrainMap(const char *zfilename)
-{
-  TerrainMap = new RasterMap(zfilename);
-  if (!TerrainMap->isMapLoaded()) {
-    delete TerrainMap;
-    TerrainMap = NULL;
-    return false;
+  RasterTerrain *rt = new RasterTerrain(NarrowPathName(szFile));
+  if (!rt->isTerrainLoaded()) {
+    delete rt;
+    return NULL;
   }
 
-  return true;
-}
-
-void RasterTerrain::CloseTerrain(void)
-{
-  delete TerrainMap;
-  TerrainMap = NULL;
-}
-
-short
-RasterTerrain::GetTerrainHeight(const GEOPOINT &Location) const
-{
-  if (TerrainMap) {
-    return TerrainMap->GetField(Location);
-  } else {
-    return TERRAIN_INVALID;
-  }
+  return rt;
 }
 
 void RasterTerrain::ServiceTerrainCenter(const GEOPOINT &location) {
-  if (TerrainMap) {
-    Poco::ScopedRWLock protect(lock, true);
-    TerrainMap->SetViewCenter(location);
-  }
-}
-
-int RasterTerrain::GetEffectivePixelSize(fixed &pixel_D,
-                                         const GEOPOINT &location) const {
-  if (TerrainMap) {
-    return TerrainMap->GetEffectivePixelSize(pixel_D, location);
-  } else {
-    return 1;
-  }
-}
-
-bool
-RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location) const
-{
-  return TerrainMap == NULL || TerrainMap->inside(location);
+  Poco::ScopedRWLock protect(lock, true);
+  map.SetViewCenter(location);
 }
 
 bool
 RasterTerrain::GetTerrainCenter(GEOPOINT *location) const
 {
-  return TerrainMap != NULL &&
-    (*location = TerrainMap->GetMapCenter(), true);
+  *location = map.GetMapCenter();
+  return true;
 }

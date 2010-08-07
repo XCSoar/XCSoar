@@ -111,7 +111,7 @@ static Airspaces airspace_database;
 static AIRCRAFT_STATE ac_state; // dummy
 
 static TopologyStore *topology;
-static RasterTerrain terrain;
+static RasterTerrain *terrain;
 Logger logger;
 
 unsigned InfoBoxLayout::ControlWidth;
@@ -217,7 +217,7 @@ public:
     map.set_way_points(&way_points);
     map.set_airspaces(&airspace_database, NULL);
     map.set_topology(topology);
-    map.set_terrain(&terrain);
+    map.set_terrain(terrain);
 
     close_button.set(*this, _T("Close"), ID_CLOSE, 5, 5, 65, 25);
     close_button.bring_to_top();
@@ -255,9 +255,9 @@ LoadFiles()
 {
   topology = new TopologyStore();
 
-  terrain.OpenTerrain();
+  terrain = RasterTerrain::OpenTerrain();
 
-  WayPointGlue::ReadWaypoints(way_points, &terrain);
+  WayPointGlue::ReadWaypoints(way_points, terrain);
 
   TCHAR tpath[MAX_PATH];
   Profile::Get(szProfileAirspaceFile, tpath, MAX_PATH);
@@ -293,7 +293,8 @@ GenerateBlackboard(MapWindow &map)
 
   memset(&settings_computer, 0, sizeof(settings_computer));
 
-  terrain.ServiceTerrainCenter(nmea_info.Location);
+  if (terrain != NULL)
+    terrain->ServiceTerrainCenter(nmea_info.Location);
 
   for (unsigned i = 0; i <AIRSPACECLASSCOUNT; ++i)
     settings_computer.iAirspaceMode[i] = 3;

@@ -37,20 +37,14 @@ Copyright_License {
 
 #include "Terrain/RasterTerrain.hpp"
 
+short
+RasterMap::GetField(const GEOPOINT &location) const
+{
+  return TERRAIN_INVALID;
+}
+
 bool
 RasterTerrain::GetTerrainCenter(GEOPOINT *location) const
 {
   return false;
-}
-
-short
-RasterTerrain::GetTerrainHeight(const GEOPOINT &location) const
-{
-  return 0;
-}
-
-bool
-RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location) const
-{
-  return true;
 }

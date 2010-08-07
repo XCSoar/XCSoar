@@ -39,6 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_RASTER_TERRAIN_HPP
 #define XCSOAR_TERRAIN_RASTER_TERRAIN_HPP
 
+#include "RasterMap.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Poco/RWLock.h"
 #include "Compiler.h"
@@ -58,31 +59,21 @@ public:
 protected:
   mutable Poco::RWLock lock;
 
+  RasterMap map;
+
 public:
 
 /** 
  * Constructor.  Returns uninitialised object. 
  * 
  */
-  RasterTerrain():
-    TerrainMap(NULL) {
-  };
-
-  ~RasterTerrain() {
-    CloseTerrain();
-  }
+  RasterTerrain(const char *path):map(path) {}
 
 /** 
  * Load the terrain.  Determines the file to load from profile settings.
  * 
  */
-   void OpenTerrain();
-
-/** 
- * Unload the terrain.
- * 
- */
-   void CloseTerrain();
+  static RasterTerrain *OpenTerrain();
 
 /** 
  * Determine if a valid terrain is loaded
@@ -90,7 +81,7 @@ public:
  * @return True if a terrain is loaded
  */
   bool isTerrainLoaded() const {
-    return TerrainMap != NULL;
+    return map.isMapLoaded();
   }
 
   void Lock() const {
@@ -102,21 +93,26 @@ public:
   }
 
   const RasterMap *get_map() const {
-    return TerrainMap;
+    return &map;
   }
 
   gcc_pure
-  short GetTerrainHeight(const GEOPOINT &location) const;
+  short GetTerrainHeight(const GEOPOINT location) const {
+    return map.GetField(location);
+  }
+
   void ServiceTerrainCenter(const GEOPOINT &location);
-  int GetEffectivePixelSize(fixed &pixel_D, const GEOPOINT &location) const;
+
+  int GetEffectivePixelSize(fixed &pixel_D, const GEOPOINT &location) const {
+    return map.GetEffectivePixelSize(pixel_D, location);
+  }
 
   gcc_pure
-  bool WaypointIsInTerrainRange(const GEOPOINT &location) const;
-  bool GetTerrainCenter(GEOPOINT *location) const;
+  bool WaypointIsInTerrainRange(const GEOPOINT &location) const {
+    return map.inside(location);
+  }
 
-private:
-  RasterMap* TerrainMap;
-  bool CreateTerrainMap(const char *path);
+  bool GetTerrainCenter(GEOPOINT *location) const;
 
 };
 

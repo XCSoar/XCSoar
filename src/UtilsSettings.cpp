@@ -122,10 +122,8 @@ SettingsLeave()
     XCSoarInterface::main_window.map.set_terrain(NULL);
 
     // re-load terrain
-    if (terrain != NULL) {
-      terrain->CloseTerrain();
-      terrain->OpenTerrain();
-    }
+    delete terrain;
+    terrain = RasterTerrain::OpenTerrain();
 
     // re-load waypoints
     WayPointGlue::ReadWaypoints(way_points, terrain);
