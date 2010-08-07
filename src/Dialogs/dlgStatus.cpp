@@ -500,7 +500,7 @@ static void UpdateValuesTask(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskDistance"));
   if (wp) {
-    _stprintf(Temp, _T("%.0f %s"), Units::ToUserDistance(
+    _stprintf(Temp, _T("%.0f %s"), (double)Units::ToUserDistance(
               XCSoarInterface::Calculated().task_stats.total.planned.get_distance()),
               Units::GetDistanceName());
     wp->SetText(Temp);
@@ -508,7 +508,7 @@ static void UpdateValuesTask(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpRemainingDistance"));
   if (wp) {
-    _stprintf(Temp, _T("%.0f %s"), Units::ToUserDistance(
+    _stprintf(Temp, _T("%.0f %s"), (double)Units::ToUserDistance(
               XCSoarInterface::Calculated().task_stats.total.remaining.get_distance()),
               Units::GetDistanceName());
     wp->SetText(Temp);

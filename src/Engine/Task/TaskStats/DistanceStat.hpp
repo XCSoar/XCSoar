@@ -37,6 +37,8 @@
 #ifndef DISTANCE_STAT_HPP
 #define DISTANCE_STAT_HPP
 
+#include "Math/fixed.hpp"
+
 #ifdef DO_PRINT
 #include <iostream>
 #endif
@@ -68,7 +70,7 @@ public:
  * 
  * @param d Distance value (m)
  */
-  void set_distance(const double d) {
+  void set_distance(const fixed d) {
     distance = d;
   }
 
@@ -77,7 +79,7 @@ public:
  * 
  * @return Distance value (m)
  */
-  double get_distance() const {
+  fixed get_distance() const {
     return distance;
   };
 
@@ -85,7 +87,8 @@ public:
  * Accessor for speed
  * 
  * @return Speed (m/s)
- */  double get_speed() const {
+ */
+  fixed get_speed() const {
     return speed;
   };
 
@@ -95,7 +98,7 @@ public:
  * 
  * @return Speed incremental (m/s)
  */
-  double get_speed_incremental() const {
+  fixed get_speed_incremental() const {
     return speed_incremental;
   };
 
@@ -112,7 +115,7 @@ public:
  * 
  * @param dt Time step (s)
  */
-  void calc_incremental_speed(const double dt);
+  void calc_incremental_speed(const fixed dt);
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 
@@ -120,9 +123,9 @@ public:
 #endif
 
 protected:
-  double distance; /**< Distance (m) of metric */
-  double speed; /**< Speed (m/s) of metric */
-  double speed_incremental; /**< Incremental speed (m/s) of metric */
+  fixed distance; /**< Distance (m) of metric */
+  fixed speed; /**< Speed (m/s) of metric */
+  fixed speed_incremental; /**< Incremental speed (m/s) of metric */
 private:
   AvFilter av_dist;
   DiffFilter df;

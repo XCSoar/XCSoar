@@ -51,10 +51,10 @@ DistanceStat::DistanceStat(const bool _is_positive):
 }
 
 void 
-DistanceStat::calc_incremental_speed(const double dt)
+DistanceStat::calc_incremental_speed(const fixed dt)
 {  
-  if ((dt>0) && (distance>0)) {
-    if (av_dist.update(fixed(distance))) {
+  if (positive(dt) && positive(distance)) {
+    if (av_dist.update(distance)) {
       fixed d_av = av_dist.average();
       av_dist.reset();
 

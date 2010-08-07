@@ -66,11 +66,11 @@ ElementStat::reset()
 {
   initialised = false;
 
-  calc_speeds(0);
+  calc_speeds(fixed_zero);
 }
 
 void 
-ElementStat::calc_speeds(const double dt)
+ElementStat::calc_speeds(const fixed dt)
 {
   remaining_effective.calc_speed(this);
   remaining.calc_speed(this);
@@ -78,14 +78,14 @@ ElementStat::calc_speeds(const double dt)
   travelled.calc_speed(this);
 
   if (!initialised) {
-    if (dt > 0 && TimeElapsed > fixed(15)) {
+    if (positive(dt) && TimeElapsed > fixed(15)) {
       initialised=true;
     }
     vario.reset(solution_remaining);
-    remaining_effective.calc_incremental_speed(0.0);
-    remaining.calc_incremental_speed(0.0);
-    planned.calc_incremental_speed(0.0);
-    travelled.calc_incremental_speed(0.0);
+    remaining_effective.calc_incremental_speed(fixed_zero);
+    remaining.calc_incremental_speed(fixed_zero);
+    planned.calc_incremental_speed(fixed_zero);
+    travelled.calc_incremental_speed(fixed_zero);
   } else {
     remaining_effective.calc_incremental_speed(dt);
     remaining.calc_incremental_speed(dt);

@@ -92,7 +92,7 @@ public:
  *
  * @param dt Time step of sample (s)
  */
-  void calc_speeds(const double dt);
+  void calc_speeds(const fixed dt);
 
 /** 
  * Reset to uninitialised state, to supress calculation
