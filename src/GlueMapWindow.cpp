@@ -44,6 +44,16 @@ Copyright_License {
 GlueMapWindow::GlueMapWindow()
   :idle_robin(2), ignore_single_click(true) {}
 
+void
+GlueMapWindow::set(ContainerWindow &parent,
+                   const RECT _MapRectSmall, const RECT _MapRectBig)
+{
+  MapRectSmall = _MapRectSmall;
+  MapRectBig = _MapRectBig;
+
+  MapWindow::set(parent, MapRectBig);
+}
+
 /**
  * This idle function allows progressive scanning of visibility etc
  */

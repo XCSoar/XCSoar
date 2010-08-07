@@ -63,9 +63,6 @@ class MapWindowProjection: public Projection
   fixed GetMapScaleKM() const {
     return (fixed)Units::ToSysUnit(MapScale * fixed(0.001), Units::DistanceUnit);
   }
-  RECT GetMapRectBig() const {
-    return MapRectBig;
-  }
   POINT GetOrigAircraft(void) const {
     return Orig_Aircraft;
   }
@@ -84,9 +81,6 @@ class MapWindowProjection: public Projection
 
  protected:
   DisplayMode_t DisplayMode;
-
-  RECT   MapRectSmall;
-  RECT   MapRectBig;
 
   Angle DisplayAircraftAngle;
 

@@ -44,12 +44,17 @@ Copyright_License {
 #include "GestureManager.hpp"
 
 class GlueMapWindow : public MapWindow {
+  RECT MapRectSmall, MapRectBig;
+
   unsigned idle_robin;
 
   PeriodClock mouse_down_clock;
 
 public:
   GlueMapWindow();
+
+  void set(ContainerWindow &parent,
+           const RECT _MapRectSmall, const RECT _MapRectBig);
 
   bool Idle(const bool force=false);
 

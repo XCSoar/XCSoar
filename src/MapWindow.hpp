@@ -115,8 +115,7 @@ public:
   static bool identify(HWND hWnd);
 #endif
 
-  void set(ContainerWindow &parent,
-           const RECT _MapRectSmall, const RECT _MapRectBig);
+  void set(ContainerWindow &parent, const RECT rc);
 
   void set_way_points(const Waypoints *_way_points) {
     way_points = _way_points;

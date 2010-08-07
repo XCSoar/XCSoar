@@ -82,12 +82,9 @@ MapWindow::~MapWindow()
 }
 
 void
-MapWindow::set(ContainerWindow &parent, 
-               const RECT _MapRectSmall,
-               const RECT _MapRectBig)
+MapWindow::set(ContainerWindow &parent, const RECT rc)
 {
-  MapRectSmall = _MapRectSmall;
-  MapRect = MapRectBig = _MapRectBig;
+  MapRect = rc;
 
   WindowStyle style;
   style.enable_double_clicks();

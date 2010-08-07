@@ -213,7 +213,7 @@ public:
                       left, top, width, height);
 
     RECT rc = get_client_rect();
-    map.set(*this, rc, rc);
+    map.set(*this, rc);
     map.set_way_points(&way_points);
     map.set_airspaces(&airspace_database, NULL);
     map.set_topology(topology);
