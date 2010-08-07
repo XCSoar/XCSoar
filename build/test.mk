@@ -39,6 +39,7 @@ TESTLIBS = $(HARNESS_LIBS) \
 	   $(ZZIP_LIBS) \
 	$(ENGINE_CORE_LIBS) \
 	$(IO_LIBS) \
+	$(MATH_LIBS) \
 	$(UTIL_LIBS)
 
 ifeq ($(HAVE_WIN32),n)
