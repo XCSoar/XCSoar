@@ -320,7 +320,7 @@ InfoBoxContentVarioDistance::Update(InfoBoxWindow &infobox)
   infobox.SetValueUnit(Units::VerticalSpeedUnit);
 
   // Set Color
-  if (XCSoarInterface::Calculated().task_stats.total.vario.get_value() < 0)
+  if (negative(XCSoarInterface::Calculated().task_stats.total.vario.get_value()))
     // Red
     infobox.SetColor(1);
   else

@@ -11,7 +11,7 @@ TaskVario::TaskVario():
 }
 
 
-double 
+fixed
 TaskVario::get_value() const
 {
   return value;

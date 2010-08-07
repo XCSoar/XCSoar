@@ -24,7 +24,7 @@ public:
  * 
  * @return Current vario value (m/s, positive up)
  */
-  double get_value() const;
+  fixed get_value() const;
 
 /** 
  * Update vario, taking altitude difference from a specified glide solution
@@ -42,7 +42,7 @@ public:
   void reset(const GlideResult& solution);
 
 private:
-  double value;
+  fixed value;
 
   DiffFilter df;
   Filter v_lpf;
