@@ -142,7 +142,7 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     fs.RenderAirspace(canvas, rcgfx, XCSoarInterface::Basic(),
                       XCSoarInterface::Calculated(),
                       XCSoarInterface::SettingsMap(),
-                      airspace_database, terrain);
+                      airspace_database, &terrain);
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
     fs.RenderSpeed(canvas, rcgfx, XCSoarInterface::Basic(), 

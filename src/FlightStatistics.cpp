@@ -655,7 +655,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
                                  const DERIVED_INFO &derived,
                                  const SETTINGS_MAP &settings_map, 
                                  const Airspaces &airspace_database,
-                                 RasterTerrain &terrain) const
+                                 RasterTerrain *terrain) const
 {
   static const fixed range(50000); // 50 km
   fixed hmin = max(fixed_zero, nmea_info.GPSAltitude - fixed(3300));
@@ -675,10 +675,10 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
   AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map, p_start);
   airspace_database.visit_intersecting(p_start, vec, ivisitor);
 
-  terrain.Lock();
-
   // draw terrain
-  if (terrain.isTerrainLoaded()) {
+  if (terrain != NULL && terrain->isTerrainLoaded()) {
+    terrain->Lock();
+
     std::vector<POINT> points;
     POINT pf0, pf1;
     pf0.x = chart.screenX(range);
@@ -694,7 +694,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
 
       POINT p;
       p.x = chart.screenX(t_this * range);
-      p.y = chart.screenY(terrain.GetTerrainHeight(p_this));
+      p.y = chart.screenY(terrain->GetTerrainHeight(p_this));
 
       points.push_back(p);
     }
@@ -706,8 +706,9 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
     canvas.select(a_pen);
     canvas.select(a_brush);
     canvas.polygon(&points[0], points.size());
+
+    terrain->Unlock();
   }
-  terrain.Unlock();
 
   // draw aircraft trend line
   if (nmea_info.GroundSpeed > fixed(10)) {

@@ -76,7 +76,7 @@ public:
                       const NMEA_INFO &nmea_info, const DERIVED_INFO &derived,
                       const SETTINGS_MAP &settings_map,
                       const Airspaces &airspace_database,
-                      RasterTerrain &terrain) const;
+                      RasterTerrain *terrain) const;
 
   void RenderBarograph(Canvas &canvas, const RECT rc,
                        const NMEA_INFO &nmea_info,
