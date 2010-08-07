@@ -355,7 +355,7 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
   static const fixed fixed_75 = fixed(7.5);
   const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
 
-  Radius = Units::ToSysUnit(_tcstod(&Text[2], &Stop), unNauticalMiles);
+  Radius = Units::ToSysUnit(fixed(_tcstod(&Text[2], &Stop)), unNauticalMiles);
   StartBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop)));
   EndBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop)));
 
@@ -482,7 +482,7 @@ ParseLine(Airspaces &airspace_database, const TCHAR *line,
 
     case _T('C'):
     case _T('c'):
-      temp_area.Radius = Units::ToSysUnit(_tcstod(&line[2], NULL),
+      temp_area.Radius = Units::ToSysUnit(fixed(_tcstod(&line[2], NULL)),
                                           unNauticalMiles);
       temp_area.AddCircle(airspace_database);
       temp_area.reset();
@@ -671,7 +671,7 @@ ParseCircleTNP(const TCHAR *Text, TempAirspaceType &temp_area)
   const TCHAR* parameter;
   if ((parameter = string_after_prefix_ci(Text, _T("RADIUS="))) == NULL)
     return false;
-  temp_area.Radius = Units::ToSysUnit(_tcstod(parameter, NULL),
+  temp_area.Radius = Units::ToSysUnit(fixed(_tcstod(parameter, NULL)),
                                       unNauticalMiles);
 
   if ((parameter = _tcsstr(parameter, _T(" "))) == NULL)
