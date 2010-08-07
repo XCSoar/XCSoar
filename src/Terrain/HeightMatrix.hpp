@@ -61,7 +61,7 @@ protected:
 
 public:
   void Fill(const RasterMap &map, const Projection &map_projection,
-            RECT rc, unsigned quantisation_pixels);
+            unsigned quantisation_pixels);
 
   const unsigned short *GetData() const {
     return data.begin();

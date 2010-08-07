@@ -329,8 +329,7 @@ TerrainRenderer::Height(const Projection &map_projection)
   rect_quantised.bottom= min(height_sub+rect_quantised.top, 
                              rect_visible.bottom/quantisation_pixels); 
 
-  height_matrix.Fill(*DisplayMap, map_projection, rect_visible,
-                     quantisation_pixels);
+  height_matrix.Fill(*DisplayMap, map_projection, quantisation_pixels);
 
   terrain->Unlock();
 

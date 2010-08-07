@@ -67,8 +67,9 @@ HeightMatrix::SetSize(unsigned width, unsigned height,
 
 void
 HeightMatrix::Fill(const RasterMap &map, const Projection &projection,
-                   RECT rc, unsigned quantisation_pixels)
+                   unsigned quantisation_pixels)
 {
+  const RECT rc = projection.GetMapRect();
   SetSize((rc.right - rc.left + quantisation_pixels - 1) / quantisation_pixels,
           (rc.bottom - rc.top + quantisation_pixels - 1) / quantisation_pixels);
 
