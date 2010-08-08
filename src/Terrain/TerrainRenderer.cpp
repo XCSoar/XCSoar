@@ -416,8 +416,8 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
           // Y direction
           assert(h_buf-row_minus_offset >= height_matrix.GetData());
           assert(h_buf+row_plus_offset >= height_matrix.GetData());
-          assert(h_buf-row_minus_offset < height_matrix.GetData()+width_sub*height_sub);
-          assert(h_buf+row_plus_offset < height_matrix.GetData()+width_sub*height_sub);
+          assert(h_buf-row_minus_offset < height_matrix.GetDataEnd());
+          assert(h_buf+row_plus_offset < height_matrix.GetDataEnd());
 
           const int p32 = 
             h_buf[-(int)row_minus_offset]-
@@ -434,8 +434,8 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
 
           assert(h_buf-column_minus_index >= height_matrix.GetData());
           assert(h_buf+column_plus_index >= height_matrix.GetData());
-          assert(h_buf-column_minus_index < height_matrix.GetData()+width_sub*height_sub);
-          assert(h_buf+column_plus_index < height_matrix.GetData()+width_sub*height_sub);
+          assert(h_buf-column_minus_index < height_matrix.GetDataEnd());
+          assert(h_buf+column_plus_index < height_matrix.GetDataEnd());
 
           const int p22 = 
             h_buf[column_plus_index]-

@@ -78,6 +78,10 @@ public:
   const unsigned short *GetRow(unsigned y) const {
     return data.begin() + y * width;
   }
+
+  const unsigned short *GetDataEnd() const {
+    return GetRow(height);
+  }
 };
 
 #endif
