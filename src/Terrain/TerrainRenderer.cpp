@@ -341,6 +341,11 @@ TerrainRenderer::ScanSpotHeights(const RECT& rect)
 void
 TerrainRenderer::GenerateImage()
 {
+  const int min_height = is_terrain
+    ? min(1000, (int)height_matrix.get_minimum()) : 0;
+  const int height_factor = is_terrain
+    ? max(2000, (int)height_matrix.get_maximum()) - min_height : 0;
+
   const unsigned short *src = height_matrix.GetData();
   const BGRColor *oColorBuf = colorBuf + 64 * 256;
   BGRColor *dest = sbuf->GetTopRow();
@@ -351,7 +356,9 @@ TerrainRenderer::GenerateImage()
 
     for (unsigned x = height_matrix.get_width(); x > 0; --x) {
       if (short h = *src++) {
-        h = min(254, h >> height_scale);
+        h = height_factor > 0
+          ? (h - min_height) * 254 / height_factor
+          : min(254, h >> height_scale);
         *p++ = oColorBuf[h];
       } else {
         // we're in the water, so look up the color for water
@@ -378,6 +385,11 @@ TerrainRenderer::GenerateSlopeImage(const int sx, const int sy, const int sz)
   const unsigned height_slope_factor = max(1, (int)pixelsize_d);
   const int terrain_contrast = TerrainContrast;
 
+  const int min_height = is_terrain
+    ? min(1000, (int)height_matrix.get_minimum()) : 0;
+  const int height_factor = is_terrain
+    ? max(2000, (int)height_matrix.get_maximum()) - min_height : 0;
+
   const unsigned short *src = height_matrix.GetData();
   const BGRColor *oColorBuf = colorBuf + 64 * 256;
   BGRColor *dest = sbuf->GetTopRow();
@@ -399,7 +411,9 @@ TerrainRenderer::GenerateSlopeImage(const int sx, const int sy, const int sz)
 
     for (unsigned x = 0; x < height_matrix.get_width(); ++x, ++src) {
       if (short h = *src) {
-        h = min(254, h >> height_scale);
+        h = height_factor > 0
+          ? (h - min_height) * 254 / height_factor
+          : min(254, h >> height_scale);
 
         // no need to calculate slope if undefined height or sea level
 
