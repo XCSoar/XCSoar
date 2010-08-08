@@ -42,6 +42,7 @@ Copyright_License {
 #include "RasterProjection.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Geo/BoundsRectangle.hpp"
+#include "Util/NonCopyable.hpp"
 #include "jasper/RasterTile.hpp"
 #include "Compiler.h"
 
@@ -50,7 +51,7 @@ typedef struct _TERRAIN_INFO
   Angle StepSize;
 } TERRAIN_INFO;
 
-class RasterMap {
+class RasterMap : private NonCopyable {
   static int ref_count;
 
   char *path;

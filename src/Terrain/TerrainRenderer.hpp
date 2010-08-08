@@ -41,6 +41,7 @@ Copyright_License {
 
 #include "Terrain/HeightMatrix.hpp"
 #include "Navigation/GeoPoint.hpp"
+#include "Util/NonCopyable.hpp"
 
 #include <windef.h>
 
@@ -54,7 +55,7 @@ class Projection;
 class RasterTerrain;
 struct COLORRAMP;
 
-class TerrainRenderer {
+class TerrainRenderer : private NonCopyable {
 public:
   TerrainRenderer(const RasterTerrain *_terrain);
   virtual ~TerrainRenderer();

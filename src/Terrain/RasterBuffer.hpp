@@ -39,11 +39,12 @@ Copyright_License {
 #ifndef XCSOAR_RASTER_BUFFER_HPP
 #define XCSOAR_RASTER_BUFFER_HPP
 
+#include "Util/NonCopyable.hpp"
 #include "Compiler.h"
 
 #include <cstddef>
 
-class RasterBuffer {
+class RasterBuffer : private NonCopyable {
 public:
   /** invalid value for terrain */
   static const short TERRAIN_INVALID = -1000;

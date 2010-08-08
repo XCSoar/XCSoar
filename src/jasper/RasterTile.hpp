@@ -2,10 +2,11 @@
 #define XCSOAR_RASTERTILE_HPP
 
 #include "Terrain/RasterBuffer.hpp"
+#include "Util/NonCopyable.hpp"
 
 #include <stddef.h>
 
-class RasterTile {
+class RasterTile : private NonCopyable {
   RasterBuffer buffer;
 
 public:
@@ -54,7 +55,7 @@ public:
 #define RTC_SUBSAMPLING 16U
 #define RTC_SUBSAMPLING_FINE (16*256)
 
-class RasterTileCache {
+class RasterTileCache : private NonCopyable {
 public:
   RasterTileCache()
     :scan_overview(true) {
