@@ -208,10 +208,10 @@ TerrainShading(const short illum, BYTE &r, BYTE &g, BYTE &b)
 //  mapscale/7.5 terrain units/pixel
 //
 // this is for TerrainInfo.StepSize = 0.0025;
-TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
-                                 const RECT &rc) :
+TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain) :
   last_color_ramp(NULL),
-  terrain(_terrain)
+  terrain(_terrain),
+  sbuf(NULL)
 {
   assert(terrain != NULL);
 
@@ -228,13 +228,6 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
   // scale quantisation_pixels so resolution is not too high on large displays
   if (is_embedded())
     quantisation_pixels = Layout::FastScale(quantisation_pixels);
-
-  const unsigned res_x =
-    (rc.right - rc.left + quantisation_pixels - 1) / quantisation_pixels;
-  const unsigned res_y =
-    (rc.bottom - rc.top + quantisation_pixels - 1) / quantisation_pixels;
-
-  sbuf = new RawBitmap(res_x, res_y, Color::WHITE);
 
   colorBuf = (BGRColor*)malloc(256 * 128 * sizeof(BGRColor));
 }
@@ -538,6 +531,14 @@ TerrainRenderer::Draw(Canvas &canvas,
 
   // step 3: calculate derivatives of height buffer
   // step 4: calculate illumination and colors
+
+  if (sbuf == NULL ||
+      height_matrix.get_width() > sbuf->GetWidth() ||
+      height_matrix.get_height() > sbuf->GetHeight()) {
+    delete sbuf;
+    sbuf = new RawBitmap(height_matrix.get_width(),
+                         height_matrix.get_height(), Color::WHITE);
+  }
 
   if (do_shading) {
     GenerateSlopeImage(sx, sy, sz);

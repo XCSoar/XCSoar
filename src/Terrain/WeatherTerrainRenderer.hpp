@@ -45,8 +45,8 @@ class RasterWeather;
 
 class WeatherTerrainRenderer: public TerrainRenderer {
 public:
-  WeatherTerrainRenderer(const RasterTerrain *_terrain, RasterWeather *_weather,
-                  const RECT &rc);
+  WeatherTerrainRenderer(const RasterTerrain *_terrain,
+                         RasterWeather *_weather);
 
 protected:
   bool SetMap();

@@ -56,8 +56,7 @@ struct COLORRAMP;
 
 class TerrainRenderer {
 public:
-  TerrainRenderer(const RasterTerrain *_terrain,
-                  const RECT &rc);
+  TerrainRenderer(const RasterTerrain *_terrain);
   virtual ~TerrainRenderer();
 
 public:

@@ -56,8 +56,6 @@ class LabelBlock;
  */
 class BackgroundDrawHelper 
 {
-  SIZE buffer_size;
-
 public:
   BackgroundDrawHelper();
   ~BackgroundDrawHelper();

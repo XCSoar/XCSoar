@@ -98,26 +98,15 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
     return;
   }
 
-  const RECT &rc = proj.GetMapRect();
-  SIZE new_size;
-  new_size.cx = rc.right - rc.left;
-  new_size.cy = rc.bottom - rc.top;
-
-  if (m_rend != NULL && (new_size.cx > buffer_size.cx ||
-                         new_size.cy > buffer_size.cy))
-    reset();
-
   if (!m_rend) {
     // defer creation until first draw because
     // the buffer size, smoothing etc is set by the
     // loaded terrain properties
     if (m_weather) {
-      m_rend = new WeatherTerrainRenderer(m_terrain, m_weather, rc);
+      m_rend = new WeatherTerrainRenderer(m_terrain, m_weather);
     } else {
-      m_rend = new TerrainRenderer(m_terrain, rc);
+      m_rend = new TerrainRenderer(m_terrain);
     }
-
-    buffer_size = new_size;
   }
 
 /** @todo

@@ -197,9 +197,8 @@ WeatherTerrainRenderer::SetMap()
 }
 
 WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain *_terrain,
-                                               RasterWeather *_weather, 
-                                               const RECT &rc) : 
-  TerrainRenderer(_terrain, rc),
+                                               RasterWeather *_weather)
+  :TerrainRenderer(_terrain),
   weather(_weather)
 {
 
