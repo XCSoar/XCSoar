@@ -351,7 +351,7 @@ TerrainRenderer::GenerateImage()
 
     for (unsigned x = height_matrix.get_width(); x > 0; --x) {
       if (short h = *src++) {
-        h = min(255, h >> height_scale);
+        h = min(254, h >> height_scale);
         *p++ = oColorBuf[h];
       } else {
         // we're in the water, so look up the color for water
@@ -399,7 +399,7 @@ TerrainRenderer::GenerateSlopeImage(const int sx, const int sy, const int sz)
 
     for (unsigned x = 0; x < height_matrix.get_width(); ++x, ++src) {
       if (short h = *src) {
-        h = min(255, h >> height_scale);
+        h = min(254, h >> height_scale);
 
         // no need to calculate slope if undefined height or sea level
 
