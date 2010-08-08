@@ -59,6 +59,29 @@ public:
   }
 
   /**
+   * Returns a pointer to the top-most row.
+   */
+  BGRColor *GetTopRow() {
+#ifdef ENABLE_SDL
+    return buffer;
+#else
+  /* in WIN32 bitmaps, the bottom-most row comes first */
+    return buffer + (height - 1) * corrected_width;
+#endif
+  }
+
+  /**
+   * Returns a pointer to the row below the current one.
+   */
+  BGRColor *GetNextRow(BGRColor *row) {
+#ifdef ENABLE_SDL
+    return row + corrected_width;
+#else
+    return row - corrected_width;
+#endif
+  }
+
+  /**
    * Returns real width of the screen buffer. It could be slightly more then
    * requested width. This parameter is important only when you work with
    * points array directly (using GetPointsArray function).

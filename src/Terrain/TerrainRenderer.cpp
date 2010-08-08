@@ -356,14 +356,7 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
   const int terrain_contrast = TerrainContrast;
 
   const BGRColor* oColorBuf = colorBuf + 64 * 256;
-  BGRColor* imageBuf = sbuf->GetBuffer();
-  if (!imageBuf)
-    return;
-
-#ifndef ENABLE_SDL
-  /* in WIN32 bitmaps, the bottom-most row comes first */
-  imageBuf += (sbuf->GetHeight() - 1) * width_sub;
-#endif
+  BGRColor* imageBuf = sbuf->GetTopRow();
 
   const unsigned short *h_buf = height_matrix.GetData();
 
@@ -381,11 +374,7 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
       const unsigned p31 = row_plus_index + row_minus_index;
       
       BGRColor *i_buf = imageBuf;
-#ifdef ENABLE_SDL
-      imageBuf += width_sub;
-#else
-      imageBuf -= width_sub;
-#endif
+      imageBuf = sbuf->GetNextRow(imageBuf);
       
       for (unsigned x = 0; x < height_matrix.get_width(); ++x, ++h_buf) {
         if (short h = *h_buf) {
@@ -444,11 +433,7 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
   } else {
     for (unsigned y = height_matrix.get_height(); y > 0; --y) {
       BGRColor *i_buf = imageBuf;
-#ifdef ENABLE_SDL
-      imageBuf += width_sub;
-#else
-      imageBuf -= width_sub;
-#endif
+      imageBuf = sbuf->GetNextRow(imageBuf);
 
       for (unsigned x = height_matrix.get_width(); x > 0; --x) {
         if (short h = *h_buf++) {
