@@ -54,8 +54,7 @@ Copyright_License {
 
 RasterWeather::RasterWeather() :
     _parameter(0),
-    _weather_time(0),
-    bsratio(false)
+    _weather_time(0)
 {
   for (unsigned i = 0; i < MAX_WEATHER_MAP; i++)
     weather_map[i] = NULL;
@@ -182,12 +181,8 @@ RasterWeather::ScanAll(const GEOPOINT &location)
   ProgressGlue::SetRange(MAX_WEATHER_TIMES);
   for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++) {
     ProgressGlue::SetValue(i);
-    weather_available[i] = ExistsItem(_T("wstar"), i);
-    if (!weather_available[i]) {
-      weather_available[i] = ExistsItem(_T("wstar_bsratio"), i);
-      if (weather_available[i])
-        bsratio = true;
-    }
+    weather_available[i] = ExistsItem(_T("wstar"), i) ||
+      ExistsItem(_T("wstar_bsratio"), i);
   }
 }
 
@@ -232,10 +227,9 @@ RasterWeather::Reload(const GEOPOINT &location, int day_time)
       found = true;
 
       Close();
-      if (bsratio)
+
+      if (!LoadItem(0, _T("wstar"), _weather_time))
         LoadItem(0, _T("wstar_bsratio"), _weather_time);
-      else
-        LoadItem(0, _T("wstar"), _weather_time);
 
       LoadItem(1,_T("blwindspd"), _weather_time);
       LoadItem(2,_T("hbl"), _weather_time);

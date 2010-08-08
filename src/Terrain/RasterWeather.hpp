@@ -97,7 +97,7 @@ private:
   bool ExistsItem(const TCHAR* name, unsigned time_index);
 
   bool weather_available[MAX_WEATHER_TIMES];
-  bool bsratio;
+
   Poco::RWLock lock;
   void _Close();
 };
