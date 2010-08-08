@@ -230,9 +230,9 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
     quantisation_pixels = Layout::FastScale(quantisation_pixels);
 
   const unsigned res_x =
-    (rc.right - rc.left) / quantisation_pixels;
+    (rc.right - rc.left + quantisation_pixels - 1) / quantisation_pixels;
   const unsigned res_y =
-    (rc.bottom - rc.top) / quantisation_pixels;
+    (rc.bottom - rc.top + quantisation_pixels - 1) / quantisation_pixels;
 
   sbuf = new RawBitmap(res_x, res_y, Color::WHITE);
   width_sub = sbuf->GetCorrectedWidth();
