@@ -242,11 +242,9 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
 
 TerrainRenderer::~TerrainRenderer()
 {
-  if (colorBuf)
-    free(colorBuf);
+  free(colorBuf);
 
-  if (sbuf)
-    delete sbuf;
+  delete sbuf;
 }
 
 bool
