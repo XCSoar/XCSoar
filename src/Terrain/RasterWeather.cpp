@@ -146,6 +146,7 @@ RasterWeather::LoadItem(int item, const TCHAR* name, unsigned time_index)
   weather_map[item] = new RasterMap(NarrowPathName(rasp_filename));
   if (!weather_map[item]->isMapLoaded()) {
     delete weather_map[item];
+    weather_map[item] = NULL;
     return false;
   }
 
