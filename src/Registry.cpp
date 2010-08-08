@@ -241,6 +241,13 @@ Registry::Export(const TCHAR *szFile)
         continue;
       }
 
+      // does it contain invalid characters?
+      if (_tcspbrk((const TCHAR *)uValue.pValue, _T("\r\n\"")) != NULL) {
+        // -> write ="" to the output file an continue with the next subkey
+        writer.printfln(_T("%s=\"\""), lpstrName);
+        continue;
+      }
+
       /// @todo SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
       // Force null-termination
       uValue.pValue[nValueSize] = 0;
