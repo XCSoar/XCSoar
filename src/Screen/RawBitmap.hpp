@@ -39,7 +39,6 @@ protected:
   const unsigned int height;
   const unsigned int corrected_width;
   BGRColor *buffer;
-  BGRColor *second_buffer;
 
 public:
   /**
@@ -51,8 +50,6 @@ public:
    */
   RawBitmap(unsigned width, unsigned height, const Color color);
 
-  virtual ~RawBitmap();
-
   /**
    * Returns the Buffer
    * @return The Buffer as BGRColor array
@@ -60,10 +57,6 @@ public:
   BGRColor *GetBuffer(void) {
     return buffer;
   }
-
-  void HorizontalBlur(unsigned int boxw);
-  void VerticalBlur(unsigned int boxh);
-  void Zoom(unsigned int step);
 
   /**
    * Returns real width of the screen buffer. It could be slightly more then

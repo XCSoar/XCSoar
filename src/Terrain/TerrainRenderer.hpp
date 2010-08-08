@@ -92,7 +92,6 @@ private:
 
   fixed pixelsize_d;
 
-  int oversampling;
   int blursize;
 
   HeightMatrix height_matrix;

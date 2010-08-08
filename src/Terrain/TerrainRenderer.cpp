@@ -225,34 +225,18 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
     // quantisation_pixels=3, latency=136 ms
     // quantisation_pixels=4, latency= 93 ms
 
-  blursize = (quantisation_pixels - 1) / 2;
-  oversampling = max(1, (blursize + 1) / 2 + 1);
-  if (blursize == 0)
-    oversampling = 1;
-    // no point in oversampling,
-    // just let stretchblt do the scaling
-
-  /*
-  dtq  ovs  blur  res_x  res_y   sx  sy  terrain_loads  pixels
-  1    1    0     320    240    320 240    76800        76800
-  2    1    0     160    120    160 120    19200        19200
-  3    2    1     213    160    107  80     8560        34080
-  4    2    1     160    120     80  60     4800        19200
-  5    3    2     192    144     64  48     3072        27648
-  */
-
   // scale quantisation_pixels so resolution is not too high on large displays
   if (is_embedded())
     quantisation_pixels = Layout::FastScale(quantisation_pixels);
 
   const unsigned res_x =
-    (rc.right - rc.left) * oversampling / quantisation_pixels;
+    (rc.right - rc.left) / quantisation_pixels;
   const unsigned res_y =
-    (rc.bottom - rc.top) * oversampling / quantisation_pixels;
+    (rc.bottom - rc.top) / quantisation_pixels;
 
   sbuf = new RawBitmap(res_x, res_y, Color::WHITE);
-  width_sub = sbuf->GetCorrectedWidth() / oversampling;
-  height_sub = sbuf->GetHeight() / oversampling;
+  width_sub = sbuf->GetCorrectedWidth();
+  height_sub = sbuf->GetHeight();
 
   colorBuf = (BGRColor*)malloc(256 * 128 * sizeof(BGRColor));
 }
@@ -542,20 +526,13 @@ TerrainRenderer::ColorTable()
 void
 TerrainRenderer::Draw(Canvas &canvas, RECT src_rect)
 {
-  sbuf->Zoom(oversampling);
-
-  if (blursize > 0) {
-    sbuf->HorizontalBlur(blursize);
-    sbuf->VerticalBlur(blursize);
-  }
-
   BitmapCanvas bitmap_canvas(canvas);
   bitmap_canvas.select(*sbuf);
 
   canvas.stretch(bitmap_canvas,
-                 src_rect.left * oversampling, src_rect.top * oversampling,
-                 (src_rect.right - src_rect.left) * oversampling,
-                 (src_rect.bottom - src_rect.top) * oversampling);
+                 src_rect.left, src_rect.top,
+                 src_rect.right - src_rect.left,
+                 src_rect.bottom - src_rect.top);
 }
 
 /**

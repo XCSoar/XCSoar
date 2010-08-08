@@ -37,9 +37,6 @@ Copyright_License {
 */
 
 #include "Screen/RawBitmap.hpp"
-#include "Screen/Layout.hpp"
-
-#include <algorithm>
 
 #include <assert.h>
 
@@ -55,8 +52,7 @@ CorrectedWidth(unsigned nWidth)
 
 RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight, const Color clr)
   :width(nWidth), height(nHeight),
-   corrected_width(CorrectedWidth(nWidth)),
-   second_buffer(new BGRColor[height * corrected_width])
+   corrected_width(CorrectedWidth(nWidth))
 {
   assert(nWidth > 0);
   assert(nHeight > 0);
@@ -70,153 +66,4 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight, const Color clr)
          *end = buffer + corrected_width * height;
        p < end; ++p)
     *p++ = bgrColor;
-}
-
-RawBitmap::~RawBitmap()
-{
-  delete[](second_buffer);
-}
-
-void
-RawBitmap::Zoom(unsigned int step)
-{
-  if (step <= 1)
-    return;
-
-  const BGRColor *src = buffer;
-
-  const unsigned int smallx = corrected_width / step;
-  const unsigned int smally = height / step;
-  const unsigned int rowsize = corrected_width * sizeof(BGRColor);
-  const unsigned int wstep = corrected_width * step;
-  const unsigned int stepmo = step-1;
-
-  BGRColor *dst_end = second_buffer + smally * wstep;
-  for (BGRColor *dst_start = second_buffer; dst_start < dst_end;
-       dst_start += wstep) {
-    BGRColor *dst = dst_start;
-    for (unsigned int x = smallx; x--; src++, dst += step)
-      std::fill(dst, dst + step, *src);
-
-    // done first row, now copy each row
-    for (unsigned int k = stepmo; k--; dst += corrected_width)
-      memcpy(dst, dst_start, rowsize);
-  }
-
-  // copy it back to main buffer
-  memcpy(buffer, second_buffer, rowsize * height);
-}
-
-void
-RawBitmap::HorizontalBlur(unsigned int boxw)
-{
-  const unsigned int muli = boxw * 2 + 1;
-  const BGRColor *src = buffer;
-  BGRColor *dst = second_buffer;
-
-  const unsigned int off1 = boxw+1;
-  const unsigned int off2 = corrected_width - boxw - 1;
-  const unsigned int right = corrected_width - boxw;
-
-  for (unsigned int y = height; y--; ) {
-    unsigned int tot_r=0;
-    unsigned int tot_g=0;
-    unsigned int tot_b=0;
-    unsigned int x;
-
-    const BGRColor *c = src + boxw - 1;
-
-    for (x = boxw; x--; c--) {
-      tot_r += c->m_R;
-      tot_g += c->m_G;
-      tot_b += c->m_B;
-    }
-
-    for (x = 0; x < corrected_width; x++) {
-      unsigned int acc = muli;
-      if (x > boxw) {
-        c = src-off1;
-        tot_r -= c->m_R;
-        tot_g -= c->m_G;
-        tot_b -= c->m_B;
-      } else
-        acc += x-boxw;
-
-      if (x < right) {
-        c = src+boxw;
-        tot_r += c->m_R;
-        tot_g += c->m_G;
-        tot_b += c->m_B;
-      } else
-        acc += off2 - x;
-
-      dst->m_R = (unsigned char)(tot_r / acc);
-      dst->m_G = (unsigned char)(tot_g / acc);
-      dst->m_B = (unsigned char)(tot_b / acc);
-
-      src++;
-      dst++;
-    }
-  }
-
-  // copy it back to main buffer
-  memcpy(buffer, second_buffer, corrected_width * height * sizeof(buffer[0]));
-}
-
-void
-RawBitmap::VerticalBlur(unsigned int boxh)
-{
-  const BGRColor *src = buffer;
-  BGRColor *dst = second_buffer;
-
-  const unsigned int muli = (boxh * 2 + 1);
-  const unsigned int iboxh = corrected_width * boxh;
-  const unsigned int off1 = iboxh + corrected_width;
-  const unsigned int off2 = height - boxh - 1;
-  const unsigned int bottom = height - boxh;
-
-  for (unsigned int x = corrected_width; x--;) {
-    unsigned int tot_r = 0;
-    unsigned int tot_g = 0;
-    unsigned int tot_b = 0;
-    unsigned int y;
-
-    const BGRColor *c, *d;
-    c = d = src + x;
-    BGRColor *e = dst + x;
-
-    for (y = boxh; y--; c += corrected_width) {
-      tot_r += c->m_R;
-      tot_g += c->m_G;
-      tot_b += c->m_B;
-    }
-
-    for (y = 0; y < height; y++) {
-      unsigned int acc = muli;
-      if (y > boxh) {
-        c = d - off1;
-        tot_r -= c->m_R;
-        tot_g -= c->m_G;
-        tot_b -= c->m_B;
-      } else
-        acc += y-boxh;
-
-      if (y < bottom) {
-        c = d + iboxh;
-        tot_r += c->m_R;
-        tot_g += c->m_G;
-        tot_b += c->m_B;
-      } else
-        acc += off2- y;
-
-      e->m_R = (unsigned char)(tot_r / acc);
-      e->m_G = (unsigned char)(tot_g / acc);
-      e->m_B = (unsigned char)(tot_b / acc);
-      d += corrected_width;
-      e += corrected_width;
-    }
-  }
-
-  // copy it back to main buffer
-  memcpy(buffer, second_buffer, corrected_width * height * sizeof(buffer[0]));
 }
