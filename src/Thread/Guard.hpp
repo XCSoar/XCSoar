@@ -108,6 +108,35 @@ public:
     }
   };
 
+  /**
+   * An unprotected writable lease on the value.  This is only allowed
+   * when the other threads which might access the value are suspended
+   * (e.g. during startup).
+   */
+  class UnprotectedLease {
+    T &value;
+
+  public:
+    explicit UnprotectedLease(Guard &_guard)
+      :value(_guard.value) {}
+
+    operator const T&() const {
+      return value;
+    }
+
+    operator T&() {
+      return value;
+    }
+
+    const T *operator->() const {
+      return &value;
+    }
+
+    T *operator->() {
+      return &value;
+    }
+  };
+
 public:
   explicit Guard(T &_value):value(_value) {}
 };
