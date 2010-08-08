@@ -265,21 +265,10 @@ TerrainRenderer::Height(const Projection &map_projection)
   y = (rect_visible.top + rect_visible.bottom) / 2;
   GEOPOINT Gmid = map_projection.Screen2LonLat(x, y);
 
-  const int dstep = (int)lround(quantisation_pixels);
-
-  x = (rect_visible.left + rect_visible.right) / 2 + dstep;
-  y = (rect_visible.top + rect_visible.bottom) / 2;
-  GEOPOINT Gx = map_projection.Screen2LonLat(x, y);
-
-  const fixed pixelDX = Distance(Gmid, Gx);
-
-  x = (rect_visible.left + rect_visible.right) / 2;
-  y = (rect_visible.top + rect_visible.bottom) / 2 + dstep;
-  GEOPOINT Gy = map_projection.Screen2LonLat(x, y);
-
-  const fixed pixelDY = Distance(Gmid, Gy);
-
-  pixelsize_d = sqrt((pixelDX * pixelDX + pixelDY * pixelDY)*fixed_half);
+  pixelsize_d = fixed_sqrt_half *
+    Distance(Gmid,
+             map_projection.Screen2LonLat(x + quantisation_pixels,
+                                          y + quantisation_pixels));
 
   // OK, ready to start loading height
 
