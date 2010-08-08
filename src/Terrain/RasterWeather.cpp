@@ -45,6 +45,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"
 #include "ProgressGlue.hpp"
+#include "zzip/zzip.h"
 
 #include <assert.h>
 #include <tchar.h>
@@ -153,6 +154,20 @@ RasterWeather::LoadItem(int item, const TCHAR* name, unsigned time_index)
   return true;
 }
 
+bool
+RasterWeather::ExistsItem(const TCHAR* name, unsigned time_index)
+{
+  TCHAR rasp_filename[MAX_PATH];
+  GetFilename(rasp_filename, name, time_index);
+
+  ZZIP_FILE *zf = zzip_fopen(NarrowPathName(rasp_filename), "rb");
+  if (zf == NULL)
+    return false;
+
+  zzip_fclose(zf);
+  return true;
+}
+
 void
 RasterWeather::ScanAll(const GEOPOINT &location)
 {
@@ -167,13 +182,12 @@ RasterWeather::ScanAll(const GEOPOINT &location)
   ProgressGlue::SetRange(MAX_WEATHER_TIMES);
   for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++) {
     ProgressGlue::SetValue(i);
-    weather_available[i] = LoadItem(0, _T("wstar"), i);
+    weather_available[i] = ExistsItem(_T("wstar"), i);
     if (!weather_available[i]) {
-      weather_available[i] = LoadItem(0, _T("wstar_bsratio"), i);
+      weather_available[i] = ExistsItem(_T("wstar_bsratio"), i);
       if (weather_available[i])
         bsratio = true;
     }
-    _Close();
   }
 }
 
