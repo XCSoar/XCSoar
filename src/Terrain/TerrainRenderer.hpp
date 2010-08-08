@@ -101,7 +101,17 @@ private:
 
   void Height(const Projection &map_projection);
   void ScanSpotHeights(const RECT& rect);
-  void Slope(const int sx, const int sy, const int sz);
+
+  /**
+   * Convert the height matrix into the image, without shading.
+   */
+  void GenerateImage();
+
+  /**
+   * Convert the height matrix into the image, with slope shading.
+   */
+  void GenerateSlopeImage(const int sx, const int sy, const int sz);
+
   void ColorTable();
   void Draw(Canvas &canvas);
 

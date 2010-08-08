@@ -338,13 +338,36 @@ TerrainRenderer::ScanSpotHeights(const RECT& rect)
   }
 }
 
+void
+TerrainRenderer::GenerateImage()
+{
+  const unsigned short *src = height_matrix.GetData();
+  const BGRColor *oColorBuf = colorBuf + 64 * 256;
+  BGRColor *dest = sbuf->GetTopRow();
+
+  for (unsigned y = height_matrix.get_height(); y > 0; --y) {
+    BGRColor *p = dest;
+    dest = sbuf->GetNextRow(dest);
+
+    for (unsigned x = height_matrix.get_width(); x > 0; --x) {
+      if (short h = *src++) {
+        h = min(255, h >> height_scale);
+        *p++ = oColorBuf[h];
+      } else {
+        // we're in the water, so look up the color for water
+        *p++ = oColorBuf[255];
+      }
+    }
+  }
+}
+
 // JMW: if zoomed right in (e.g. one unit is larger than terrain
 // grid), then increase the step size to be equal to the terrain
 // grid for purposes of calculating slope, to avoid shading problems
 // (gridding of display) This is why quantisation_effective is used instead of 1
 // previously.  for large zoom levels, quantisation_effective=1
 void
-TerrainRenderer::Slope(const int sx, const int sy, const int sz)
+TerrainRenderer::GenerateSlopeImage(const int sx, const int sy, const int sz)
 {
   RECT border;
   border.left = quantisation_effective;
@@ -355,99 +378,76 @@ TerrainRenderer::Slope(const int sx, const int sy, const int sz)
   const unsigned height_slope_factor = max(1, (int)pixelsize_d);
   const int terrain_contrast = TerrainContrast;
 
-  const BGRColor* oColorBuf = colorBuf + 64 * 256;
-  BGRColor* imageBuf = sbuf->GetTopRow();
+  const unsigned short *src = height_matrix.GetData();
+  const BGRColor *oColorBuf = colorBuf + 64 * 256;
+  BGRColor *dest = sbuf->GetTopRow();
 
-  const unsigned short *h_buf = height_matrix.GetData();
+  for (unsigned y = 0; y < height_matrix.get_height(); ++y) {
+    const unsigned row_plus_index = y < (unsigned)border.bottom
+      ? quantisation_effective
+      : height_matrix.get_height() - 1 - y;
+    const unsigned row_plus_offset = height_matrix.get_width() * row_plus_index;
 
-  if (do_shading) {
-    for (unsigned y = 0; y < height_matrix.get_height(); ++y) {
-      const unsigned row_plus_index = y < (unsigned)border.bottom
-        ? quantisation_effective
-        : height_matrix.get_height() - 1 - y;
-      const unsigned row_plus_offset = height_matrix.get_width() * row_plus_index;
-      
-      const unsigned row_minus_index = y >= quantisation_effective
-        ? quantisation_effective : y;
-      const unsigned row_minus_offset = height_matrix.get_width() * row_minus_index;
-      
-      const unsigned p31 = row_plus_index + row_minus_index;
-      
-      BGRColor *i_buf = imageBuf;
-      imageBuf = sbuf->GetNextRow(imageBuf);
-      
-      for (unsigned x = 0; x < height_matrix.get_width(); ++x, ++h_buf) {
-        if (short h = *h_buf) {
-          h = min(255, h >> height_scale);
-          
-          // no need to calculate slope if undefined height or sea level
+    const unsigned row_minus_index = y >= quantisation_effective
+      ? quantisation_effective : y;
+    const unsigned row_minus_offset = height_matrix.get_width() * row_minus_index;
 
-          // Y direction
-          assert(h_buf-row_minus_offset >= height_matrix.GetData());
-          assert(h_buf+row_plus_offset >= height_matrix.GetData());
-          assert(h_buf-row_minus_offset < height_matrix.GetDataEnd());
-          assert(h_buf+row_plus_offset < height_matrix.GetDataEnd());
+    const unsigned p31 = row_plus_index + row_minus_index;
 
-          const int p32 = 
-            h_buf[-(int)row_minus_offset]-
-            h_buf[row_plus_offset];
+    BGRColor *p = dest;
+    dest = sbuf->GetNextRow(dest);
 
-          // X direction
+    for (unsigned x = 0; x < height_matrix.get_width(); ++x, ++src) {
+      if (short h = *src) {
+        h = min(255, h >> height_scale);
 
-          const unsigned column_plus_index = x < (unsigned)border.right
-            ? quantisation_effective
-            : height_matrix.get_width() - 1 - x;
-          const unsigned column_minus_index = x >= (unsigned)border.left
-            ? quantisation_effective : x;
+        // no need to calculate slope if undefined height or sea level
 
-          assert(h_buf-column_minus_index >= height_matrix.GetData());
-          assert(h_buf+column_plus_index >= height_matrix.GetData());
-          assert(h_buf-column_minus_index < height_matrix.GetDataEnd());
-          assert(h_buf+column_plus_index < height_matrix.GetDataEnd());
+        // Y direction
+        assert(src - row_minus_offset >= height_matrix.GetData());
+        assert(src + row_plus_offset >= height_matrix.GetData());
+        assert(src - row_minus_offset < height_matrix.GetDataEnd());
+        assert(src + row_plus_offset < height_matrix.GetDataEnd());
 
-          const int p22 = 
-            h_buf[column_plus_index]-
-            h_buf[-(int)column_minus_index];
+        const int p32 = src[-(int)row_minus_offset] - src[row_plus_offset];
 
-          const unsigned p20 = column_plus_index + column_minus_index;
+        // X direction
 
-          const int dd0 = p22 * p31;
-          const int dd1 = p20 * p32;
-          const int dd2 = p20 * p31 * height_slope_factor;
-          const int mag = (dd0 * dd0 + dd1 * dd1 + dd2 * dd2);
-          if (mag>0) {
-            const long num = (dd2 * sz + dd0 * sx + dd1 * sy);
-            const int sval = num/(int)sqrt((fixed)mag);
-            const int sindex = max(-64, min(63, (sval - sz) * terrain_contrast / 128));
-            *i_buf++ = oColorBuf[h + 256*sindex];
-          } else {
-            // slope is zero, so just look up the color
-            *i_buf++ = oColorBuf[h];
-          }
+        const unsigned column_plus_index = x < (unsigned)border.right
+          ? quantisation_effective
+          : height_matrix.get_width() - 1 - x;
+        const unsigned column_minus_index = x >= (unsigned)border.left
+          ? quantisation_effective : x;
+
+        assert(src - column_minus_index >= height_matrix.GetData());
+        assert(src + column_plus_index >= height_matrix.GetData());
+        assert(src - column_minus_index < height_matrix.GetDataEnd());
+        assert(src + column_plus_index < height_matrix.GetDataEnd());
+
+        const int p22 = src[column_plus_index] - src[-(int)column_minus_index];
+
+        const unsigned p20 = column_plus_index + column_minus_index;
+
+        const int dd0 = p22 * p31;
+        const int dd1 = p20 * p32;
+        const int dd2 = p20 * p31 * height_slope_factor;
+        const int mag = (dd0 * dd0 + dd1 * dd1 + dd2 * dd2);
+        if (mag>0) {
+          const long num = (dd2 * sz + dd0 * sx + dd1 * sy);
+          const int sval = num/(int)sqrt((fixed)mag);
+          const int sindex = max(-64, min(63, (sval - sz) * terrain_contrast / 128));
+          *p++ = oColorBuf[h + 256*sindex];
         } else {
-          // we're in the water, so look up the color for water
-          *i_buf++ = oColorBuf[255];
+          // slope is zero, so just look up the color
+          *p++ = oColorBuf[h];
         }
-      }
-    }
-  } else {
-    for (unsigned y = height_matrix.get_height(); y > 0; --y) {
-      BGRColor *i_buf = imageBuf;
-      imageBuf = sbuf->GetNextRow(imageBuf);
-
-      for (unsigned x = height_matrix.get_width(); x > 0; --x) {
-        if (short h = *h_buf++) {
-          h = min(255, h >> height_scale);
-          *i_buf++ = oColorBuf[h];
-        } else {
-          // we're in the water, so look up the color for water
-          *i_buf++ = oColorBuf[255];
-        }
+      } else {
+        // we're in the water, so look up the color for water
+        *p++ = oColorBuf[255];
       }
     }
   }
 }
-
 
 void
 TerrainRenderer::ColorTable()
@@ -529,7 +529,10 @@ TerrainRenderer::Draw(Canvas &canvas,
   // step 3: calculate derivatives of height buffer
   // step 4: calculate illumination and colors
 
-  Slope(sx, sy, sz);
+  if (do_shading) {
+    GenerateSlopeImage(sx, sy, sz);
+  } else
+    GenerateImage();
 
   // step 5: draw
   Draw(canvas);
