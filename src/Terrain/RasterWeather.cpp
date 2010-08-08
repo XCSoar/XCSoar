@@ -66,11 +66,10 @@ static const TCHAR *const WeatherMapNames[RasterWeather::MAX_WEATHER_MAP] = {
 
 RasterWeather::RasterWeather() :
     _parameter(0),
-    _weather_time(0)
+    _weather_time(0),
+    reload(true),
+    weather_map(NULL)
 {
-  for (unsigned i = 0; i < MAX_WEATHER_MAP; i++)
-    weather_map[i] = NULL;
-
   for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++)
     weather_available[i] = false;
 }
@@ -95,6 +94,7 @@ RasterWeather::SetParameter(unsigned i)
 {
   Poco::ScopedRWLock protect(lock, true);
   _parameter = i;
+  reload = true;
 }
 
 void
@@ -102,6 +102,7 @@ RasterWeather::SetTime(unsigned i)
 {
   Poco::ScopedRWLock protect(lock, true);
   _weather_time = i;
+  reload = true;
 }
 
 RasterMap*
@@ -109,13 +110,7 @@ RasterWeather::GetMap()
 {
   // JMW this is not safe in TerrainRenderer's use
   Poco::ScopedRWLock protect(lock, false);
-  if (_parameter) {
-    assert(_parameter <= MAX_WEATHER_MAP);
-    return weather_map[min((unsigned)MAX_WEATHER_MAP, _parameter) - 1];
-  }
-
-  assert(1);
-  return NULL;
+  return weather_map;
 }
 
 unsigned
@@ -151,7 +146,7 @@ RasterWeather::GetFilename(TCHAR *rasp_filename, const TCHAR* name,
 }
 
 bool
-RasterWeather::LoadItem(int item, const TCHAR* name, unsigned time_index)
+RasterWeather::LoadItem(const TCHAR* name, unsigned time_index)
 {
   TCHAR rasp_filename[MAX_PATH];
   GetFilename(rasp_filename, name, time_index);
@@ -161,7 +156,8 @@ RasterWeather::LoadItem(int item, const TCHAR* name, unsigned time_index)
     return false;
   }
 
-  weather_map[item] = map;
+  delete weather_map;
+  weather_map = map;
   return true;
 }
 
@@ -219,8 +215,10 @@ RasterWeather::Reload(const GEOPOINT &location, int day_time)
 
   // limit values, for safety
   _weather_time = min(MAX_WEATHER_TIMES - 1, _weather_time);
+  if (_weather_time != last_weather_time)
+    reload = true;
 
-  if (_weather_time == last_weather_time) {
+  if (!reload) {
     // no change, quick exit.
     if (now)
       // must return to 0 = Now time on exit
@@ -228,6 +226,8 @@ RasterWeather::Reload(const GEOPOINT &location, int day_time)
 
     return;
   }
+
+  reload = false;
 
   last_weather_time = _weather_time;
 
@@ -240,13 +240,9 @@ RasterWeather::Reload(const GEOPOINT &location, int day_time)
 
       _Close();
 
-      for (unsigned i = 0; i < MAX_WEATHER_MAP; ++i) {
-        if (WeatherMapNames[i] == NULL)
-          continue;
-
-        if (!LoadItem(i, WeatherMapNames[i], _weather_time) && i == 0)
-          LoadItem(i, _T("wstar_bsratio"), _weather_time);
-      }
+      if (!LoadItem(WeatherMapNames[_parameter - 1], _weather_time) &&
+          _parameter == 1)
+        LoadItem(_T("wstar_bsratio"), _weather_time);
     }
   }
 
@@ -267,10 +263,8 @@ RasterWeather::Close()
 void
 RasterWeather::_Close()
 {
-  for (unsigned i = 0; i < MAX_WEATHER_MAP; i++) {
-    delete weather_map[i];
-    weather_map[i] = NULL;
-  }
+  delete weather_map;
+  weather_map = NULL;
 }
 
 void
@@ -278,9 +272,8 @@ RasterWeather::SetViewCenter(const GEOPOINT &location)
 {
   Poco::ScopedRWLock protect(lock, true);
 
-  for (unsigned i = 0; i < MAX_WEATHER_MAP; i++)
-    if (weather_map[i])
-      weather_map[i]->SetViewCenter(location);
+  if (weather_map != NULL)
+    weather_map->SetViewCenter(location);
 }
 
 const TCHAR*

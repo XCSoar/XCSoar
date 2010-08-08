@@ -88,10 +88,13 @@ public:
 private:
   unsigned _parameter;
   unsigned _weather_time;
-  RasterMap* weather_map[MAX_WEATHER_MAP];
+  bool reload;
+  RasterMap *weather_map;
+
   static void GetFilename(TCHAR *rasp_filename, const TCHAR *name,
                           unsigned time_index);
-  bool LoadItem(int item, const TCHAR* name, unsigned time_index);
+
+  bool LoadItem(const TCHAR* name, unsigned time_index);
 
   gcc_pure
   bool ExistsItem(const TCHAR* name, unsigned time_index);
