@@ -41,6 +41,7 @@ Copyright_License {
 
 #include "Util/NonCopyable.hpp"
 #include "Util/AllocatedArray.hpp"
+#include "Compiler.h"
 
 #include <windef.h>
 
@@ -82,6 +83,18 @@ public:
   const unsigned short *GetDataEnd() const {
     return GetRow(height);
   }
+
+  /**
+   * Determine the smalles height value in this buffer.
+   */
+  gcc_pure
+  unsigned short get_minimum() const;
+
+  /**
+   * Determine the biggest height value in this buffer.
+   */
+  gcc_pure
+  unsigned short get_maximum() const;
 };
 
 #endif

@@ -40,6 +40,7 @@ Copyright_License {
 #include "RasterMap.hpp"
 #include "Projection.hpp"
 
+#include <algorithm>
 #include <assert.h>
 
 void
@@ -123,4 +124,16 @@ HeightMatrix::Fill(const RasterMap &map, const Projection &projection,
   }
 
 #endif
+}
+
+unsigned short
+HeightMatrix::get_minimum() const
+{
+  return *std::min_element(GetData(), GetDataEnd());
+}
+
+unsigned short
+HeightMatrix::get_maximum() const
+{
+  return *std::max_element(GetData(), GetDataEnd());
 }
