@@ -61,6 +61,14 @@ Copyright_License {
 using std::min;
 using std::max;
 
+static const TCHAR *const captions[] = {
+  N_("Flight"),
+  N_("System"),
+  N_("Task"),
+  N_("Task Rules"),
+  N_("Times"),
+};
+
 static WndForm *wf=NULL;
 static TabbedControl *tabbed;
 static bool multi_page = false;
@@ -97,16 +105,29 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   }
 }
 
+static void SetCaption(){
+
+  static unsigned status_page;
+  TCHAR caption[64];
+
+  status_page = tabbed->GetCurrentPage();
+  _sntprintf(caption, 64, _T("%u %s"),
+      status_page + 1, gettext(captions[status_page]));
+  wf->SetCaption(caption);
+}
+
 static void OnNextClicked(WindowControl * Sender){
   (void)Sender;
 
   tabbed->NextPage();
+  SetCaption();
 }
 
 static void OnPrevClicked(WindowControl * Sender){
   (void)Sender;
 
   tabbed->PreviousPage();
+  SetCaption();
 }
 
 static CallBackTableEntry_t CallBackTable[]={
@@ -588,6 +609,7 @@ void dlgStatusShowModal(int start_page){
   UpdateValuesTask();
   UpdateValuesRules();
   UpdateValuesTimes();
+  SetCaption();
 
   wf->ShowModal();
 
