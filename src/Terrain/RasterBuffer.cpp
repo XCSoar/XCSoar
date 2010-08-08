@@ -63,7 +63,7 @@ RasterBuffer::get_interpolated(unsigned lx, unsigned ly,
 {
   assert(defined());
   assert(lx < width);
-  assert(ly < width);
+  assert(ly < height);
   assert(ix < 0x100);
   assert(iy < 0x100);
 
