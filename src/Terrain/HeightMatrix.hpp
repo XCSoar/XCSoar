@@ -49,10 +49,10 @@ class Projection;
 
 class HeightMatrix : private NonCopyable {
   AllocatedArray<unsigned short> data;
-  unsigned width;
+  unsigned width, height;
 
 public:
-  HeightMatrix():width(0) {}
+  HeightMatrix():width(0), height(0) {}
 
 protected:
   void SetSize(size_t _size);
@@ -62,6 +62,14 @@ protected:
 public:
   void Fill(const RasterMap &map, const Projection &map_projection,
             unsigned quantisation_pixels);
+
+  unsigned get_width() const {
+    return width;
+  }
+
+  unsigned get_height() const {
+    return height;
+  }
 
   const unsigned short *GetData() const {
     return data.begin();

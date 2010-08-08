@@ -51,9 +51,11 @@ HeightMatrix::SetSize(size_t _size)
 }
 
 void
-HeightMatrix::SetSize(unsigned _width, unsigned height)
+HeightMatrix::SetSize(unsigned _width, unsigned _height)
 {
   width = _width;
+  height = _height;
+
   SetSize(width * height);
 }
 
