@@ -235,8 +235,6 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
     (rc.bottom - rc.top + quantisation_pixels - 1) / quantisation_pixels;
 
   sbuf = new RawBitmap(res_x, res_y, Color::WHITE);
-  width_sub = sbuf->GetCorrectedWidth();
-  height_sub = sbuf->GetHeight();
 
   colorBuf = (BGRColor*)malloc(256 * 128 * sizeof(BGRColor));
 }
@@ -300,11 +298,11 @@ TerrainRenderer::Height(const Projection &map_projection)
 
   quantisation_effective = map->GetEffectivePixelSize(pixelsize_d, Gmid);
 
-  if (quantisation_effective > min(width_sub, height_sub) / 4) {
-    do_shading = false;
-  }
-
   height_matrix.Fill(map, map_projection, quantisation_pixels);
+
+  if (quantisation_effective > min(height_matrix.get_width(),
+                                   height_matrix.get_height()) / 4)
+    do_shading = false;
 
   if (do_scan_spot())
     ScanSpotHeights(rect_visible);

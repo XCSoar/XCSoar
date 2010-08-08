@@ -81,7 +81,6 @@ private:
   const RasterTerrain *terrain;
 
   // screen dimensions in coarse pixels
-  unsigned int width_sub, height_sub;
   unsigned int quantisation_pixels;
   // step size used for slope calculations
   unsigned int quantisation_effective;
