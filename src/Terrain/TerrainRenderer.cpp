@@ -265,8 +265,7 @@ TerrainRenderer::SetMap()
   return true;
 }
 
-
-const RECT
+void
 TerrainRenderer::Height(const Projection &map_projection)
 {
   int x, y;
@@ -305,20 +304,10 @@ TerrainRenderer::Height(const Projection &map_projection)
     do_shading = false;
   }
 
-  RECT rect_quantised = rect_visible;
-  rect_quantised.left= rect_visible.left/quantisation_pixels; 
-  rect_quantised.right= min(width_sub+rect_quantised.left, 
-                            rect_visible.right/quantisation_pixels); 
-  rect_quantised.top= rect_visible.top/quantisation_pixels; 
-  rect_quantised.bottom= min(height_sub+rect_quantised.top, 
-                             rect_visible.bottom/quantisation_pixels); 
-
   height_matrix.Fill(map, map_projection, quantisation_pixels);
 
   if (do_scan_spot())
     ScanSpotHeights(rect_visible);
-
-  return rect_quantised;
 }
 
 void
@@ -349,53 +338,45 @@ TerrainRenderer::ScanSpotHeights(const RECT& rect)
   }
 }
 
-
-const RECT 
-TerrainRenderer::BorderSlope(const RECT& rect_quantised, 
-                             const int edge) const
-{
-  RECT border = rect_quantised;
-  InflateRect(&border, -edge, -edge);
-  return border;
-}
-
 // JMW: if zoomed right in (e.g. one unit is larger than terrain
 // grid), then increase the step size to be equal to the terrain
 // grid for purposes of calculating slope, to avoid shading problems
 // (gridding of display) This is why quantisation_effective is used instead of 1
 // previously.  for large zoom levels, quantisation_effective=1
 void
-TerrainRenderer::Slope(const RECT& rect_quantised, 
-                       const int sx, const int sy, const int sz)
+TerrainRenderer::Slope(const int sx, const int sy, const int sz)
 {
-  const RECT border = BorderSlope(rect_quantised, quantisation_effective);
+  RECT border;
+  border.left = quantisation_effective;
+  border.top = quantisation_effective;
+  border.right = height_matrix.get_width() - quantisation_effective;
+  border.bottom = height_matrix.get_height() - quantisation_effective;
+
   const unsigned height_slope_factor = max(1, (int)pixelsize_d);
   const int terrain_contrast = TerrainContrast;
-  const unsigned width_q = (rect_quantised.right-rect_quantised.left);
 
   const BGRColor* oColorBuf = colorBuf + 64 * 256;
   BGRColor* imageBuf = sbuf->GetBuffer();
   if (!imageBuf)
     return;
 
-#ifdef ENABLE_SDL
-  imageBuf += rect_quantised.top * width_sub + rect_quantised.left;
-#else
+#ifndef ENABLE_SDL
   /* in WIN32 bitmaps, the bottom-most row comes first */
-  imageBuf += (sbuf->GetHeight() - 1) * width_sub + rect_quantised.left;
+  imageBuf += (sbuf->GetHeight() - 1) * width_sub;
 #endif
 
+  const unsigned short *h_buf = height_matrix.GetData();
+
   if (do_shading) {
-    for (int y = rect_quantised.top; y < rect_quantised.bottom; ++y) {
-      const unsigned row_plus_index = y < border.bottom
+    for (unsigned y = 0; y < height_matrix.get_height(); ++y) {
+      const unsigned row_plus_index = y < (unsigned)border.bottom
         ? quantisation_effective
-        : (unsigned)(rect_quantised.bottom - 1 - y);
-      const unsigned row_plus_offset = width_q * row_plus_index;
+        : height_matrix.get_height() - 1 - y;
+      const unsigned row_plus_offset = height_matrix.get_width() * row_plus_index;
       
-      const unsigned row_minus_index = y >= border.top
-        ? quantisation_effective
-        : (unsigned)(y - rect_quantised.top);
-      const unsigned row_minus_offset = width_q * row_minus_index;
+      const unsigned row_minus_index = y >= quantisation_effective
+        ? quantisation_effective : y;
+      const unsigned row_minus_offset = height_matrix.get_width() * row_minus_index;
       
       const unsigned p31 = row_plus_index + row_minus_index;
       
@@ -406,8 +387,7 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
       imageBuf -= width_sub;
 #endif
       
-      const unsigned short * h_buf = height_matrix.GetRow(y);
-      for (int x = rect_quantised.left; x < rect_quantised.right; ++x, ++h_buf) {
+      for (unsigned x = 0; x < height_matrix.get_width(); ++x, ++h_buf) {
         if (short h = *h_buf) {
           h = min(255, h >> height_scale);
           
@@ -425,12 +405,11 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
 
           // X direction
 
-          const unsigned column_plus_index = x < border.right
+          const unsigned column_plus_index = x < (unsigned)border.right
             ? quantisation_effective
-            : (unsigned)(rect_quantised.right - 1 - x);
-          const unsigned column_minus_index = x >= border.left
-            ? quantisation_effective
-            : (unsigned)(x - rect_quantised.left);
+            : height_matrix.get_width() - 1 - x;
+          const unsigned column_minus_index = x >= (unsigned)border.left
+            ? quantisation_effective : x;
 
           assert(h_buf-column_minus_index >= height_matrix.GetData());
           assert(h_buf+column_plus_index >= height_matrix.GetData());
@@ -463,7 +442,7 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
       }
     }
   } else {
-    for (int y = rect_quantised.top; y < rect_quantised.bottom; ++y) {
+    for (unsigned y = height_matrix.get_height(); y > 0; --y) {
       BGRColor *i_buf = imageBuf;
 #ifdef ENABLE_SDL
       imageBuf += width_sub;
@@ -471,8 +450,7 @@ TerrainRenderer::Slope(const RECT& rect_quantised,
       imageBuf -= width_sub;
 #endif
 
-      const unsigned short* h_buf = height_matrix.GetRow(y);
-      for (int x = rect_quantised.left; x < rect_quantised.right; ++x) {
+      for (unsigned x = height_matrix.get_width(); x > 0; --x) {
         if (short h = *h_buf++) {
           h = min(255, h >> height_scale);
           *i_buf++ = oColorBuf[h];
@@ -524,15 +502,13 @@ TerrainRenderer::ColorTable()
 }
 
 void
-TerrainRenderer::Draw(Canvas &canvas, RECT src_rect)
+TerrainRenderer::Draw(Canvas &canvas)
 {
   BitmapCanvas bitmap_canvas(canvas);
   bitmap_canvas.select(*sbuf);
 
-  canvas.stretch(bitmap_canvas,
-                 src_rect.left, src_rect.top,
-                 src_rect.right - src_rect.left,
-                 src_rect.bottom - src_rect.top);
+  canvas.stretch(bitmap_canvas, 0, 0,
+                 height_matrix.get_width(), height_matrix.get_height());
 }
 
 /**
@@ -563,15 +539,15 @@ TerrainRenderer::Draw(Canvas &canvas,
   ColorTable();
 
   // step 2: fill height buffer
-  const RECT rect_quantised = Height(map_projection);
+  Height(map_projection);
 
   // step 3: calculate derivatives of height buffer
   // step 4: calculate illumination and colors
 
-  Slope(rect_quantised, sx, sy, sz);
+  Slope(sx, sy, sz);
 
   // step 5: draw
-  Draw(canvas, rect_quantised);
+  Draw(canvas);
 
   // note, not all of this really needs to be locked
   return true;

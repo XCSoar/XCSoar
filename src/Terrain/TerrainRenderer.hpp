@@ -80,8 +80,6 @@ protected:
 private:
   const RasterTerrain *terrain;
 
-  const RECT BorderSlope(const RECT& rect_quantised, const int edge) const;
-
   // screen dimensions in coarse pixels
   unsigned int width_sub, height_sub;
   unsigned int quantisation_pixels;
@@ -101,11 +99,11 @@ private:
   short TerrainContrast;
   short TerrainBrightness;
 
-  const RECT Height(const Projection &map_projection);
+  void Height(const Projection &map_projection);
   void ScanSpotHeights(const RECT& rect);
-  void Slope(const RECT& rect_quantised, const int sx, const int sy, const int sz);
+  void Slope(const int sx, const int sy, const int sz);
   void ColorTable();
-  void Draw(Canvas &canvas, RECT src_rect);
+  void Draw(Canvas &canvas);
 
   virtual bool do_scan_spot();
 
