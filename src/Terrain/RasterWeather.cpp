@@ -51,9 +51,6 @@ Copyright_License {
 #include <stdio.h>
 #include <windef.h> // for MAX_PATH
 
-const unsigned RasterWeather::MAX_WEATHER_MAP;
-const unsigned RasterWeather::MAX_WEATHER_TIMES;
-
 RasterWeather::RasterWeather() :
     _parameter(0),
     _weather_time(0),
