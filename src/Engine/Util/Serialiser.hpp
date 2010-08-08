@@ -82,6 +82,8 @@ public:
   void Visit(const UnorderedTaskPoint& data);
   void Visit(const FAISectorZone& data);
   void Visit(const KeyholeZone& data);
+  void Visit(const BGAFixedCourseZone& data);
+  void Visit(const BGAEnhancedOptionZone& data);
   void Visit(const SectorZone& data);
   void Visit(const LineSectorZone& data);
   void Visit(const CylinderZone& data);

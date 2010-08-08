@@ -104,6 +104,24 @@ public:
   }
 
   void
+  Visit(const BGAFixedCourseZone& oz)
+  {
+    hide_all();
+    WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZBGAFixedCourse")));
+    if (wp)
+      wp->show();
+  }
+
+  void
+  Visit(const BGAEnhancedOptionZone& oz)
+  {
+    hide_all();
+    WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZBGAEnhancedOption")));
+    if (wp)
+      wp->show();
+  }
+
+  void
   Visit(const SectorZone& oz)
   {
     hide_all();
@@ -177,6 +195,14 @@ private:
     if (wp)
       wp->hide();
 
+    wp = ((WndFrame *)wf->FindByName(_T("frmOZBGAFixedCourse")));
+    if (wp)
+      wp->hide();
+
+    wp = ((WndFrame *)wf->FindByName(_T("frmOZBGAEnhancedOption")));
+    if (wp)
+      wp->hide();
+
     wp = ((WndFrame *)wf->FindByName(_T("frmOZLine")));
     if (wp)
       wp->hide();
@@ -205,6 +231,14 @@ public:
   }
   void
   Visit(KeyholeZone& oz)
+  {
+  }
+  void
+  Visit(BGAFixedCourseZone& oz)
+  {
+  }
+  void
+  Visit(BGAEnhancedOptionZone& oz)
   {
   }
   void

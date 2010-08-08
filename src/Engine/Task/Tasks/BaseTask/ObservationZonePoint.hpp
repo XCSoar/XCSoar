@@ -63,6 +63,8 @@ public:
     SECTOR,
     FAI_SECTOR,
     KEYHOLE,
+    BGAFIXEDCOURSE,
+    BGAENHANCEDOPTION
   };
 
   const enum shape shape;

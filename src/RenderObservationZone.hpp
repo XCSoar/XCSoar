@@ -67,6 +67,10 @@ public:
 
   void Visit(const KeyholeZone& oz);
 
+  void Visit(const BGAFixedCourseZone& oz);
+
+  void Visit(const BGAEnhancedOptionZone& oz);
+
   void Visit(const SectorZone& oz);
 
   void Visit(const LineSectorZone& oz);
