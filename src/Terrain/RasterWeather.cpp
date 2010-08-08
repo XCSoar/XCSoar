@@ -52,6 +52,18 @@ Copyright_License {
 #include <stdio.h>
 #include <windef.h> // for MAX_PATH
 
+static const TCHAR *const WeatherMapNames[RasterWeather::MAX_WEATHER_MAP] = {
+  _T("wstar"),
+  _T("blwindspd"),
+  _T("hbl"),
+  _T("dwcrit"),
+  _T("blcloudpct"),
+  _T("sfctemp"),
+  _T("hwcrit"),
+  _T("wblmaxmin"),
+  _T("blcwbase"),
+};
+
 RasterWeather::RasterWeather() :
     _parameter(0),
     _weather_time(0)
@@ -228,17 +240,13 @@ RasterWeather::Reload(const GEOPOINT &location, int day_time)
 
       Close();
 
-      if (!LoadItem(0, _T("wstar"), _weather_time))
-        LoadItem(0, _T("wstar_bsratio"), _weather_time);
+      for (unsigned i = 0; i < MAX_WEATHER_MAP; ++i) {
+        if (WeatherMapNames[i] == NULL)
+          continue;
 
-      LoadItem(1,_T("blwindspd"), _weather_time);
-      LoadItem(2,_T("hbl"), _weather_time);
-      LoadItem(3,_T("dwcrit"), _weather_time);
-      LoadItem(4,_T("blcloudpct"), _weather_time);
-      LoadItem(5,_T("sfctemp"), _weather_time);
-      LoadItem(6,_T("hwcrit"), _weather_time);
-      LoadItem(7,_T("wblmaxmin"), _weather_time);
-      LoadItem(8,_T("blcwbase"), _weather_time);
+        if (!LoadItem(i, WeatherMapNames[i], _weather_time) && i == 0)
+          LoadItem(i, _T("wstar_bsratio"), _weather_time);
+      }
     }
   }
 
