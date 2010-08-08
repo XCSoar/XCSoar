@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "RasterProjection.hpp"
 #include "Geo/BoundsRectangle.hpp"
+#include "Math/Earth.hpp"
 
 void
 RasterProjection::set(const BoundsRectangle &bounds,
@@ -50,4 +51,30 @@ RasterProjection::set(const BoundsRectangle &bounds,
   y_scale = fixed(height) /
     (bounds.north - bounds.south).as_bearing().value_native();
   top = bounds.north.value_native() * y_scale;
+}
+
+fixed
+RasterProjection::pixel_distance(const GEOPOINT &location, unsigned pixels) const
+{
+  enum {
+    /**
+     * This factor is used to reduce fixed point rounding errors.
+     * x_scale and y_scale are quite large numbers, and building their
+     * reciprocals may lose a lot of precision.
+     */
+    FACTOR = 4096,
+  };
+
+  Angle distance;
+  GEOPOINT p;
+
+  distance = Angle::native(fixed_sqrt_two * FACTOR / (x_scale / pixels));
+  p = GEOPOINT(location.Longitude + distance, location.Latitude);
+  fixed x = Distance(location, p);
+
+  distance = Angle::native(fixed_sqrt_two * FACTOR / (y_scale / pixels));
+  p = GEOPOINT(location.Longitude, location.Latitude + distance);
+  fixed y = Distance(location, p);
+
+  return max(x, y) / FACTOR;
 }

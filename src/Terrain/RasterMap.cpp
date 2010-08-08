@@ -97,23 +97,12 @@ int
 RasterMap::GetEffectivePixelSize(fixed &pixel_D,
                                  const GEOPOINT &location) const
 {
-  fixed terrain_step_x, terrain_step_y;
-  Angle step_size = TerrainInfo.StepSize * sqrt(fixed_two); 
-
-  if (negative(pixel_D) || (step_size.sign()==0)) {
+  if (negative(pixel_D)) {
     pixel_D = fixed_one;
     return 1;
   }
-  GEOPOINT dloc;
-  
-  // how many steps are in the pixel size
-  dloc = location; dloc.Latitude += step_size;
-  terrain_step_x = Distance(location, dloc);
 
-  dloc = location; dloc.Longitude += step_size;
-  terrain_step_y = Distance(location, dloc);
-
-  fixed rfact = max(terrain_step_x, terrain_step_y) / pixel_D;
+  fixed rfact = projection.pixel_distance(location, 256) / pixel_D;
 
   int epx = (int)(max(fixed_one, ceil(rfact)));
   //  *pixel_D = (*pixel_D)*rfact/epx;
@@ -142,8 +131,4 @@ RasterMap::_ReloadJPG2000()
 
   projection.set(bounds, raster_tile_cache.GetWidth() * 256,
                  raster_tile_cache.GetHeight() * 256);
-
-  TerrainInfo.StepSize = Angle::degrees((fixed)(raster_tile_cache.lon_max -
-                                                raster_tile_cache.lon_min)
-                                        / raster_tile_cache.GetWidth());
 }

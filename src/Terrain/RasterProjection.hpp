@@ -65,6 +65,14 @@ public:
 
     return std::pair<unsigned, unsigned>(x, y);
   }
+
+  /**
+   * Determines the distance (in meters) of two raster pixels.
+   *
+   * @param pixels the pixel distance between two pixels
+   */
+  gcc_pure fixed
+  pixel_distance(const GEOPOINT &location, unsigned pixels) const;
 };
 
 #endif

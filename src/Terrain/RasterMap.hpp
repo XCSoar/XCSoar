@@ -46,11 +46,6 @@ Copyright_License {
 #include "jasper/RasterTile.hpp"
 #include "Compiler.h"
 
-typedef struct _TERRAIN_INFO
-{
-  Angle StepSize;
-} TERRAIN_INFO;
-
 class RasterMap : private NonCopyable {
   static int ref_count;
 
@@ -66,8 +61,6 @@ public:
 public:
   RasterMap(const char *path);
   ~RasterMap();
-
-  TERRAIN_INFO TerrainInfo;
 
   bool isMapLoaded() const {
     return raster_tile_cache.GetInitialised();
