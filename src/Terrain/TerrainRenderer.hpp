@@ -97,7 +97,7 @@ private:
   void GenerateSlopeImage(const Angle sunazimuth, const Angle sunelevation);
 
   void ColorTable();
-  void Draw(Canvas &canvas);
+  void CopyTo(Canvas &canvas);
 
   virtual bool do_scan_spot();
 

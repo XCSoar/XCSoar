@@ -230,7 +230,7 @@ TerrainRenderer::ScanSpotHeights(const RECT& rect)
 }
 
 void
-TerrainRenderer::Draw(Canvas &canvas)
+TerrainRenderer::CopyTo(Canvas &canvas)
 {
   BitmapCanvas bitmap_canvas(canvas);
   bitmap_canvas.select(raster_renderer.GetImage());
@@ -271,7 +271,7 @@ TerrainRenderer::Draw(Canvas &canvas,
                                 TerrainContrast, TerrainBrightness,
                                 sunazimuth, sunelevation);
 
-  Draw(canvas);
+  CopyTo(canvas);
 }
 
 bool 
