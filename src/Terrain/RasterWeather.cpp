@@ -155,13 +155,13 @@ RasterWeather::LoadItem(int item, const TCHAR* name, unsigned time_index)
 {
   TCHAR rasp_filename[MAX_PATH];
   GetFilename(rasp_filename, name, time_index);
-  weather_map[item] = new RasterMap(NarrowPathName(rasp_filename));
-  if (!weather_map[item]->isMapLoaded()) {
-    delete weather_map[item];
-    weather_map[item] = NULL;
+  RasterMap *map = new RasterMap(NarrowPathName(rasp_filename));
+  if (!map->isMapLoaded()) {
+    delete map;
     return false;
   }
 
+  weather_map[item] = map;
   return true;
 }
 
