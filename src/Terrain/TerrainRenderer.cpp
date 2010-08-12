@@ -509,7 +509,7 @@ TerrainRenderer::Draw(Canvas &canvas)
  * @param loc Current location
  * @return (?)
  */
-bool
+void
 TerrainRenderer::Draw(Canvas &canvas,
                       const Projection &map_projection,
                       const Angle sunazimuth, const Angle sunelevation)
@@ -539,9 +539,6 @@ TerrainRenderer::Draw(Canvas &canvas,
 
   // step 5: draw
   Draw(canvas);
-
-  // note, not all of this really needs to be locked
-  return true;
 }
 
 bool 

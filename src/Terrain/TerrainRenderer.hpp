@@ -132,7 +132,7 @@ public:
   /**
    * @param day_time the UTC time, in seconds since midnight
    */
-  bool Draw(Canvas &canvas, const Projection &map_projection,
+  void Draw(Canvas &canvas, const Projection &map_projection,
       const Angle sunazimuth, const Angle sunelevation);
 };
 
