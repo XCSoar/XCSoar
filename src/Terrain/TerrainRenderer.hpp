@@ -75,7 +75,7 @@ protected:
   const COLORRAMP *last_color_ramp;
   int interp_levels;
 
-  virtual bool SetMap();
+  virtual void SetMap();
 
 private:
   const RasterTerrain *terrain;

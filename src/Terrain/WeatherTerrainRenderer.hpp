@@ -49,7 +49,7 @@ public:
                          RasterWeather *_weather);
 
 protected:
-  bool SetMap();
+  void SetMap();
 
 private:
   RasterWeather *weather;

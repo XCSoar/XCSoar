@@ -134,7 +134,7 @@ const COLORRAMP weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
   },
 };
 
-bool
+void
 WeatherTerrainRenderer::SetMap()
 {
   interp_levels = 5;
@@ -142,7 +142,7 @@ WeatherTerrainRenderer::SetMap()
   is_terrain = false;
   do_shading = false;
 
-  switch (weather != NULL ? weather->GetParameter() : 0) {
+  switch (weather->GetParameter()) {
   case 1: // wstar
     height_scale = 2; // max range 256*(2**2) = 1024 cm/s = 10 m/s
     color_ramp = &weather_colors[0][0];
@@ -190,10 +190,8 @@ WeatherTerrainRenderer::SetMap()
     break;
 
   default:
-    return TerrainRenderer::SetMap();
+    TerrainRenderer::SetMap();
   }
-
-  return weather != NULL;
 }
 
 WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain *_terrain,
@@ -201,12 +199,12 @@ WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain *_terrain,
   :TerrainRenderer(_terrain),
   weather(_weather)
 {
-
+  assert(weather != NULL);
 }
 
 
 bool 
 WeatherTerrainRenderer::do_scan_spot()
 {
-  return (weather != NULL && weather->GetParameter());
+  return weather->GetParameter() > 0;
 }

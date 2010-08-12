@@ -240,7 +240,7 @@ TerrainRenderer::~TerrainRenderer()
   delete sbuf;
 }
 
-bool
+void
 TerrainRenderer::SetMap()
 {
   interp_levels = 2;
@@ -250,8 +250,6 @@ TerrainRenderer::SetMap()
   color_ramp = &terrain_colors[TerrainRamp][0];
 
   do_shading = is_terrain;
-
-  return true;
 }
 
 void
@@ -516,8 +514,7 @@ TerrainRenderer::Draw(Canvas &canvas,
                       const Projection &map_projection,
                       const Angle sunazimuth, const Angle sunelevation)
 {
-  if (!SetMap())
-    return false;
+  SetMap();
 
   ColorTable();
 
