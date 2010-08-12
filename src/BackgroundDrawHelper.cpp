@@ -46,6 +46,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/LabelBlock.hpp"
+#include "Util/StringUtil.hpp"
 
 BackgroundDrawHelper::BackgroundDrawHelper():
   m_rend(NULL),
@@ -148,7 +149,7 @@ BackgroundDrawHelper::DrawSpotHeight(Canvas &canvas,
                                      LabelBlock &block,
                                      const TCHAR *Buffer, POINT pt)
 {
-  if (_tcslen(Buffer) == 0)
+  if (string_is_empty(Buffer))
     return;
 
   POINT orig = map_projection.GetOrigScreen();
