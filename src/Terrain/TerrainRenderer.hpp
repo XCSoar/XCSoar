@@ -89,8 +89,6 @@ private:
 
   fixed pixelsize_d;
 
-  int blursize;
-
   HeightMatrix height_matrix;
   BGRColor *colorBuf;
 
