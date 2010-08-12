@@ -442,6 +442,20 @@ TerrainRenderer::GenerateSlopeImage(const int sx, const int sy, const int sz)
 }
 
 void
+TerrainRenderer::GenerateSlopeImage(const Angle sunazimuth,
+                                    const Angle sunelevation)
+{
+  const Angle fudgeelevation =
+    Angle::degrees(fixed(10.0 + 80.0 * TerrainBrightness / 255.0));
+
+  const int sx = (int)(255 * fudgeelevation.fastcosine() * sunazimuth.fastsine());
+  const int sy = (int)(255 * fudgeelevation.fastcosine() * sunazimuth.fastcosine());
+  const int sz = (int)(255 * fudgeelevation.fastsine());
+
+  GenerateSlopeImage(sx, sy, sz);
+}
+
+void
 TerrainRenderer::ColorTable()
 {
   if (color_ramp == last_color_ramp)
@@ -505,14 +519,6 @@ TerrainRenderer::Draw(Canvas &canvas,
   if (!SetMap())
     return false;
 
-  // step 1: calculate sunlight vector
-  const Angle fudgeelevation = 
-    Angle::degrees(fixed(10.0 + 80.0 * TerrainBrightness / 255.0));
-
-  const int sx = (int)(255 * fudgeelevation.fastcosine() * sunazimuth.fastsine());
-  const int sy = (int)(255 * fudgeelevation.fastcosine() * sunazimuth.fastcosine());
-  const int sz = (int)(255 * fudgeelevation.fastsine());
-
   ColorTable();
 
   // step 2: fill height buffer
@@ -530,7 +536,7 @@ TerrainRenderer::Draw(Canvas &canvas,
   }
 
   if (do_shading) {
-    GenerateSlopeImage(sx, sy, sz);
+    GenerateSlopeImage(sunazimuth, sunelevation);
   } else
     GenerateImage();
 

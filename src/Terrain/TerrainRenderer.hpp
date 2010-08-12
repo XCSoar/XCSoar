@@ -111,6 +111,11 @@ private:
    */
   void GenerateSlopeImage(const int sx, const int sy, const int sz);
 
+  /**
+   * Convert the height matrix into the image, with slope shading.
+   */
+  void GenerateSlopeImage(const Angle sunazimuth, const Angle sunelevation);
+
   void ColorTable();
   void Draw(Canvas &canvas);
 
