@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_RENDERER_HPP
 #define XCSOAR_TERRAIN_RENDERER_HPP
 
-#include "Terrain/HeightMatrix.hpp"
+#include "RasterRenderer.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Util/NonCopyable.hpp"
 
@@ -56,9 +56,10 @@ class RasterTerrain;
 struct COLORRAMP;
 
 class TerrainRenderer : private NonCopyable {
+  RasterRenderer raster_renderer;
+
 public:
   TerrainRenderer(const RasterTerrain *_terrain);
-  virtual ~TerrainRenderer();
 
 public:
   POINT spot_max_pt;
@@ -80,23 +81,10 @@ protected:
 private:
   const RasterTerrain *terrain;
 
-  // screen dimensions in coarse pixels
-  unsigned int quantisation_pixels;
-  // step size used for slope calculations
-  unsigned int quantisation_effective;
-
-  RawBitmap *sbuf;
-
-  fixed pixelsize_d;
-
-  HeightMatrix height_matrix;
-  BGRColor *colorBuf;
-
   short TerrainRamp;
   short TerrainContrast;
   short TerrainBrightness;
 
-  void Height(const Projection &map_projection);
   void ScanSpotHeights(const RECT& rect);
 
   /**
