@@ -67,6 +67,7 @@ ThermalAssistantWindow::on_create()
 {
   BufferWindow::on_create();
 
+  hbBackground.set(hcBackground);
   hbRadar.set(hcCircles);
   hbPolygon.set(hcPolygonBrush);
 
@@ -187,7 +188,7 @@ ThermalAssistantWindow::PaintRadarPlane(Canvas &canvas) const
 void
 ThermalAssistantWindow::PaintRadarBackground(Canvas &canvas) const
 {
-  canvas.clear(Brush(hcBackground));
+  canvas.clear(hbBackground);
   canvas.hollow_brush();
 
   canvas.select(hpInnerCircle);
