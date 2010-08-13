@@ -37,12 +37,8 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Marks.hpp"
-#include "Terrain/WeatherTerrainRenderer.hpp"
-#include "Terrain/RasterTerrain.hpp"
-#include "Terrain/RasterWeather.hpp"
 #include "Topology/TopologyStore.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 
