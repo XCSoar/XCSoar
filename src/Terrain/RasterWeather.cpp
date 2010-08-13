@@ -238,7 +238,7 @@ RasterWeather::Reload(const GEOPOINT &location, int day_time)
     } else {
       found = true;
 
-      Close();
+      _Close();
 
       for (unsigned i = 0; i < MAX_WEATHER_MAP; ++i) {
         if (WeatherMapNames[i] == NULL)
