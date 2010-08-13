@@ -232,45 +232,38 @@ WayPointFileWinPilot::saveFile(TextWriter &writer, const Waypoints &way_points)
        it != way_points.end(); it++) {
     const Waypoint& wp = it->get_waypoint();
     if (wp.FileNum == file_num)
-      writer.writeln(composeLine(wp).c_str());
+      composeLine(writer, wp);
   }
 }
 
-tstring
-WayPointFileWinPilot::composeLine(const Waypoint& wp)
+void
+WayPointFileWinPilot::composeLine(TextWriter &writer, const Waypoint& wp)
 {
-  // Prepare waypoint id
-  TCHAR buf[10];
-  _stprintf(buf, _T("%u"), wp.id);
-
   // Attach the waypoint id to the output
-  tstring dest = buf;
-  dest += _T(",");
+  writer.printf("%u,", wp.id);
   // Attach the latitude to the output
-  dest += composeAngle(wp.Location.Latitude, true);
-  dest += _T(",");
+  composeAngle(writer, wp.Location.Latitude, true);
+  writer.write(',');
   // Attach the longitude id to the output
-  dest += composeAngle(wp.Location.Longitude, false);
-  dest += _T(",");
+  composeAngle(writer, wp.Location.Longitude, false);
+  writer.write(',');
   // Attach the altitude id to the output
-  dest += composeAltitude(wp.Altitude);
-  dest += _T(",");
+  composeAltitude(writer, wp.Altitude);
+  writer.write(',');
   // Attach the waypoint flags to the output
-  dest += composeFlags(wp.Flags);
-  dest += _T(",");
+  composeFlags(writer, wp.Flags);
+  writer.write(',');
   // Attach the waypoint name to the output
-  dest += wp.Name;
-  dest += _T(",");
+  writer.write(wp.Name.c_str());
+  writer.write(',');
   // Attach the waypoint description to the output
-  dest += wp.Comment;
-  return dest;
+  writer.writeln(wp.Comment.c_str());
 }
 
-tstring
-WayPointFileWinPilot::composeAngle(const Angle& src, const bool lat)
+void
+WayPointFileWinPilot::composeAngle(TextWriter &writer,
+                                   const Angle& src, const bool lat)
 {
-  TCHAR buffer[20];
-
   // Calculate degrees, minutes and seconds
   int deg, min, sec;
   bool is_positive;
@@ -280,59 +273,47 @@ WayPointFileWinPilot::composeAngle(const Angle& src, const bool lat)
     Units::LongitudeToDMS(src, &deg, &min, &sec, &is_positive);
 
   // Save them into the buffer string
-  _stprintf(buffer, (lat ? _T("%02d:%02d:%02d") : _T("%03d:%02d:%02d")),
+  writer.printf(lat ? "%02d:%02d:%02d" : "%03d:%02d:%02d",
             deg, min, sec);
 
   // Attach the buffer string to the output
-  tstring dest = buffer;
   if (lat)
-    dest += (is_positive ? _T("N") : _T("S"));
+    writer.write(is_positive ? "N" : "S");
   else
-    dest += (is_positive ? _T("E") : _T("W"));
-
-  return dest;
+    writer.write(is_positive ? "E" : "W");
 }
 
-tstring
-WayPointFileWinPilot::composeAltitude(const fixed& src)
+void
+WayPointFileWinPilot::composeAltitude(TextWriter &writer, const fixed src)
 {
-  // Save the formatted altitude into the buffer string
-  TCHAR buf[10];
-  _stprintf(buf, _T("%d"), (int)src);
-
-  // Attach the buffer string to the output string
-  tstring dest = buf;
-  // Attach the unit to the output string
-  dest += _T("M");
-  return dest;
+  writer.printf("%dM", (int)src);
 }
 
-tstring
-WayPointFileWinPilot::composeFlags(const WaypointFlags& src)
+void
+WayPointFileWinPilot::composeFlags(TextWriter &writer,
+                                   const WaypointFlags &src)
 {
-  tstring dest = _T("");
-
   if (src.Airport)
-    dest += _T("A");
+    writer.write('A');
   if (src.TurnPoint)
-    dest += _T("T");
+    writer.write('T');
   if (src.LandPoint)
-    dest += _T("L");
+    writer.write('L');
   if (src.Home)
-    dest += _T("H");
+    writer.write('H');
   if (src.StartPoint)
-    dest += _T("S");
+    writer.write('S');
   if (src.FinishPoint)
-    dest += _T("F");
+    writer.write('F');
   if (src.Restricted)
-    dest += _T("R");
+    writer.write('R');
   if (src.WaypointFlag)
-    dest += _T("W");
+    writer.write('W');
 
   // set as turnpoint by default if nothing else
-  if (dest.length() < 1)
-    dest = _T("T");
-
-  return dest;
+  if (!src.Airport && !src.TurnPoint && !src.LandPoint && !src.Home &&
+      !src.StartPoint && !src.FinishPoint && !src.Restricted &&
+      !src.WaypointFlag)
+    writer.write('T');
 }
 

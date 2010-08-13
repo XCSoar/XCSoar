@@ -42,6 +42,8 @@ Copyright_License {
 
 #include "WayPointFile.hpp"
 
+class TextWriter;
+
 /** 
  * Waypoint file read/writer for WinPilot format
  */
@@ -67,10 +69,11 @@ private:
   bool parseAltitude(const TCHAR* src, fixed& dest);
   bool parseFlags(const TCHAR* src, WaypointFlags& dest);
 
-  tstring composeLine(const Waypoint& wp);
-  tstring composeAngle(const Angle& src, const bool lat);
-  tstring composeAltitude(const fixed& src);
-  tstring composeFlags(const WaypointFlags& src);
+  static void composeLine(TextWriter &writer, const Waypoint& wp);
+  static void composeAngle(TextWriter &writer,
+                           const Angle& src, const bool lat);
+  static void composeAltitude(TextWriter &writer, const fixed src);
+  static void composeFlags(TextWriter &writer, const WaypointFlags &src);
 };
 
 #endif
