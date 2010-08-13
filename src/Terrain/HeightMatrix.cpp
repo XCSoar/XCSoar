@@ -84,15 +84,19 @@ HeightMatrix::Fill(const RasterMap &map, const Projection &projection,
   const POINT Orig_Screen = projection.GetOrigScreen();
   const int cost = projection.GetDisplayAngle().ifastcosine();
   const int sint = projection.GetDisplayAngle().ifastsine();
+#endif
 
   for (int y = rc.top; y < rc.bottom; y += quantisation_pixels) {
+#ifndef SLOW_TERRAIN_STUFF
     const int dy = y - Orig_Screen.y;
     const int dycost = dy * cost+512;
     const int dysint = dy * sint-512;
+#endif
 
     unsigned short *p = data.begin() + (y * width + rc.left) / quantisation_pixels;
 
     for (int x = rc.left; x < rc.right; x += quantisation_pixels) {
+#ifndef SLOW_TERRAIN_STUFF
       const int dx = x - Orig_Screen.x;
       const POINT r = { (dx * cost - dysint) / 1024,
                         (dycost + dx * sint) / 1024 };
@@ -101,29 +105,15 @@ HeightMatrix::Fill(const RasterMap &map, const Projection &projection,
       gp.Latitude = PanLocation.Latitude - Angle::native(r.y * InvDrawScale);
       gp.Longitude = PanLocation.Longitude + Angle::native(r.x * InvDrawScale)
         * gp.Latitude.invfastcosine();
+#else
+      GEOPOINT gp = projection.Screen2LonLat(x, y);
+#endif
 
       *p++ = max((short)0, map.GetField(gp));
     }
 
     assert(p <= data.end());
   }
-
-#else
-
-  // This code is marginally slower but readable
-
-  for (int y = rc.top; y < rc.bottom; y += quantisation_pixels) {
-    unsigned short *p = data + (y * width + rc.left) / quantisation_pixels;
-    for (int x = rc.left; x < rc.right; x += quantisation_pixels) {
-      GEOPOINT gp;
-      projection.Screen2LonLat(x, y, gp);
-      *p++ = max((short)0, map.GetField(gp));
-    }
-
-    assert(p <= data + size);
-  }
-
-#endif
 }
 
 unsigned short
