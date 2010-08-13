@@ -128,6 +128,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   LoadFiles();
 
+  Fonts::Initialize(false);
+
   Airspaces::AirspaceTree::const_iterator it = airspace_database.begin();
 
   AirspaceInterceptSolution ais;

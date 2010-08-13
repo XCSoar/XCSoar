@@ -114,7 +114,7 @@ static TopologyStore *topology;
 static RasterTerrain *terrain;
 Logger logger;
 
-unsigned InfoBoxLayout::ControlWidth;
+unsigned InfoBoxLayout::ControlWidth = 100;
 
 InterfaceBlackboard CommonInterface::blackboard;
 
@@ -337,6 +337,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TestWindow::register_class(hInstance);
   MapWindow::register_class(hInstance);
 #endif
+
+  Fonts::Initialize(false);
 
   MapGfx.Initialise();
   MapGfx.InitialiseConfigured(blackboard.SettingsMap());
