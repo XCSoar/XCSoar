@@ -131,7 +131,7 @@ void
 MapWindow::UpdateTopology()
 {
   if (topology != NULL && SettingsMap().EnableTopology)
-    topology->ScanVisibility(*this, *getSmartBounds());
+    topology->ScanVisibility(*this);
 }
 
 void

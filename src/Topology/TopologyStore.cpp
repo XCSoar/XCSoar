@@ -54,8 +54,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-TopologyStore::ScanVisibility(const Projection &m_projection,
-                              const rectObj &_bounds_active)
+TopologyStore::ScanVisibility(const Projection &m_projection)
 {
   // check if any needs to have cache updates because wasnt
   // visible previously when bounds moved
@@ -64,7 +63,7 @@ TopologyStore::ScanVisibility(const Projection &m_projection,
   // to make sure eventually everything gets refreshed
   for (int z = 0; z < MAXTOPOLOGY; z++) {
     if (topology_store[z]) {
-      topology_store[z]->updateCache(m_projection, _bounds_active);
+      topology_store[z]->updateCache(m_projection);
     }
   }
 }

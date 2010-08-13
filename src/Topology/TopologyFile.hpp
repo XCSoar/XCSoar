@@ -71,7 +71,7 @@ public:
    */
   ~TopologyFile();
 
-  void updateCache(const Projection &map_projection, const rectObj &thebounds);
+  void updateCache(const Projection &map_projection);
 
   /**
    * Paints the polygons, lines and points/icons in the TopologyFile

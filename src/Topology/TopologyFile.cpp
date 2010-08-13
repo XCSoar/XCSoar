@@ -119,8 +119,7 @@ TopologyFile::ConvertRect(const rectObj &src)
 }
 
 void
-TopologyFile::updateCache(const Projection &map_projection,
-                          const rectObj &bounds)
+TopologyFile::updateCache(const Projection &map_projection)
 {
   if (!shapefileopen)
     return;
@@ -134,9 +133,9 @@ TopologyFile::updateCache(const Projection &map_projection,
     /* the cache is still fresh */
     return;
 
-  cache_bounds = bounds;
+  cache_bounds = map_projection.CalculateScreenBounds(fixed_two);
 
-  rectObj deg_bounds = ConvertRect(bounds);
+  rectObj deg_bounds = ConvertRect(cache_bounds);
 
   // Test which shapes are inside the given bounds and save the
   // status to shpfile.status
