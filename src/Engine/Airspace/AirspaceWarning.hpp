@@ -37,8 +37,10 @@
 #ifndef AIRSPACE_WARNING_HPP
 #define AIRSPACE_WARNING_HPP
 
-#include "AbstractAirspace.hpp"
+#include "AirspaceInterceptSolution.hpp"
 #include "Compiler.h"
+
+class AbstractAirspace;
 
 /**
  * Class to hold information about active airspace warnings

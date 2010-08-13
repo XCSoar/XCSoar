@@ -36,8 +36,12 @@
  */
 #include "AirspacePolygon.hpp"
 #include "Math/Earth.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
 #include "Navigation/ConvexHull/PolygonInterior.hpp"
+#include "Navigation/Flat/FlatBoundingBox.hpp"
+#include "Navigation/TaskProjection.hpp"
 #include "AirspaceIntersectSort.hpp"
+
 #include <assert.h>
 
 AirspacePolygon::AirspacePolygon(const std::vector<GEOPOINT>& pts,

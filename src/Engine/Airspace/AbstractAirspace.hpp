@@ -38,19 +38,19 @@
 #define ABSTRACTAIRSPACE_HPP
 
 #include "Util/tstring.hpp"
-#include "Navigation/Flat/FlatBoundingBox.hpp"
-#include "Navigation/Aircraft.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
 #include "AirspaceAltitude.hpp"
-#include "Util/tstring.hpp"
-#include "AirspaceAircraftPerformance.hpp"
 #include "AirspaceClass.hpp"
-#include "AirspaceInterceptSolution.hpp"
+#include "Navigation/GeoPoint.hpp"
 #include "Compiler.h"
 
+struct AIRCRAFT_STATE;
+class GeoVector;
 class AtmosphericPressure;
-
-
+class AirspaceAircraftPerformance;
+class AirspaceAircraftPerformanceGlide;
+class AirspaceInterceptSolution;
+class FlatBoundingBox;
+class TaskProjection;
 
 #include <vector>
 typedef std::vector< std::pair<GEOPOINT,GEOPOINT> > AirspaceIntersectionVector;

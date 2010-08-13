@@ -36,9 +36,11 @@
  */
 #include "AirspaceWarningManager.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
+#include "Airspaces.hpp"
 #include "AirspaceCircle.hpp"
 #include "AirspacePolygon.hpp"
 #include "AirspaceIntersectionVisitor.hpp"
+#include "AirspaceWarningVisitor.hpp"
 #include "Task/TaskManager.hpp"
 
 

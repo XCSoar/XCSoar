@@ -6,6 +6,7 @@
 #include <queue>
 #include "Navigation/Aircraft.hpp"
 #include "Airspace.hpp"
+#include "AirspaceInterceptSolution.hpp"
 
 class AirspaceVisitor;
 class Airspaces;

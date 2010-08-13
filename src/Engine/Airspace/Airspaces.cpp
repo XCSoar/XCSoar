@@ -38,6 +38,8 @@
 #include "AirspaceVisitor.hpp"
 #include "AirspaceIntersectionVisitor.hpp"
 #include "Atmosphere/Pressure.hpp"
+#include "Navigation/Aircraft.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
 
 #ifdef INSTRUMENT_TASK
 extern unsigned n_queries;

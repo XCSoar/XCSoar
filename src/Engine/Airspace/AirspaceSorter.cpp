@@ -1,6 +1,8 @@
 #include "AirspaceSorter.hpp"
-#include <algorithm>
 #include "Airspace/Airspaces.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
+
+#include <algorithm>
 
 AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
                                const GEOPOINT &Location,

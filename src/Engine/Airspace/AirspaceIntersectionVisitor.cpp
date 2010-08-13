@@ -1,4 +1,5 @@
 #include "AirspaceIntersectionVisitor.hpp"
+#include "AirspaceInterceptSolution.hpp"
 
 AirspaceInterceptSolution 
 AirspaceIntersectionVisitor::intercept(const AbstractAirspace& as,

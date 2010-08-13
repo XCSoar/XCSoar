@@ -36,8 +36,11 @@
 */
 
 #include "AbstractAirspace.hpp"
-#include <assert.h>
+#include "Navigation/Aircraft.hpp"
+#include "AirspaceAircraftPerformance.hpp"
+#include "AirspaceInterceptSolution.hpp"
 
+#include <assert.h>
 
 bool 
 AbstractAirspace::inside(const AIRCRAFT_STATE& state) const

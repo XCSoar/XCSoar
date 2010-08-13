@@ -1,4 +1,5 @@
 #include "AirspaceSoonestSort.hpp"
+#include "AirspaceAircraftPerformance.hpp"
 
 AirspaceInterceptSolution 
 AirspaceSoonestSort::solve_intercept(const AbstractAirspace &a) const

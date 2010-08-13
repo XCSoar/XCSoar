@@ -44,6 +44,7 @@ Copyright_License {
 #include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
+#include "Engine/Airspace/AbstractAirspace.hpp"
 
 #include <assert.h>
 #include <stdlib.h>

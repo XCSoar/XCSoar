@@ -2,7 +2,8 @@
 #define AIRSPACE_SOONEST_SORT_HPP
 
 #include "AirspaceNearestSort.hpp"
-#include "AirspaceAircraftPerformance.hpp"
+
+class AirspaceAircraftPerformance;
 
 /**
  *  Class to sort nearest airspaces according to soonest intercept

@@ -38,14 +38,15 @@
 #define AIRSPACE_WARNING_MANAGER_HPP
 
 #include "Util/NonCopyable.hpp"
-#include "Airspaces.hpp"
 #include "AirspaceWarning.hpp"
-#include "AirspaceWarningVisitor.hpp"
+#include "AirspaceAircraftPerformance.hpp"
 #include "Compiler.h"
 
 #include <list>
 
 class TaskManager;
+class Airspaces;
+class AirspaceWarningVisitor;
 
 /**
  * Class to detect and track airspace warnings

@@ -94,6 +94,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Task/ProtectedTaskManager.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
+#include "Engine/Airspace/AirspaceAircraftPerformance.hpp"
 #include "DrawThread.hpp"
 #include "Replay/Replay.hpp"
 #include "DeviceBlackboard.hpp"
