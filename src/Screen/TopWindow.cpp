@@ -100,10 +100,6 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
   if (ret != 0)
     fprintf(stderr, "SDL_Init() has failed\n");
 
-  ret = ::TTF_Init();
-  if (ret != 0)
-    fprintf(stderr, "TTF_Init() has failed: %s\n", TTF_GetError());
-
   screen.set();
   ContainerWindow::set(NULL, cls, 0, 0, width, height, style);
 
