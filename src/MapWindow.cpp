@@ -45,6 +45,7 @@ Copyright_License {
 #include "Terrain/RasterWeather.hpp"
 #include "Gauge/GaugeCDI.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Math/Earth.hpp"
 
 #include <tchar.h>
 
@@ -56,8 +57,10 @@ ScreenGraphics MapGfx;
 MapWindow::MapWindow()
   :MapWindowProjection(),
    way_points(NULL),
-   topology(NULL), terrain(NULL), weather(NULL),
-   terrain_dirty(true),
+   topology(NULL),
+   terrain(NULL),
+   terrain_center(Angle::native(fixed_zero), Angle::native(fixed_zero)),
+   weather(NULL),
    airspace_database(NULL), airspace_warnings(NULL), task(NULL),
    marks(NULL), 
    cdi(NULL),
@@ -134,17 +137,14 @@ MapWindow::UpdateTopology()
 void
 MapWindow::UpdateTerrain()
 {
-  if (!terrain_dirty)
+  if (terrain == NULL || Distance(terrain_center, PanLocation) < fixed(1000))
     return;
 
   // always service terrain even if it's not used by the map,
   // because it's used by other calculations
-  if (terrain != NULL) {
-    RasterTerrain::ExclusiveLease lease(*terrain);
-    lease->SetViewCenter(PanLocation);
-  }
-
-  terrain_dirty = false;
+  RasterTerrain::ExclusiveLease lease(*terrain);
+  lease->SetViewCenter(PanLocation);
+  terrain_center = PanLocation;
 }
 
 void
@@ -233,6 +233,8 @@ void
 MapWindow::set_terrain(RasterTerrain *_terrain)
 {
   terrain = _terrain;
+  terrain_center = GEOPOINT(Angle::native(fixed_zero),
+                            Angle::native(fixed_zero));
   m_background.set_terrain(_terrain);
 }
 

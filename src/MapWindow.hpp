@@ -87,10 +87,11 @@ class MapWindow : public PaintWindow,
 protected:
   const Waypoints *way_points;
   TopologyStore *topology;
-  RasterTerrain *terrain;
-  RasterWeather *weather;
 
-  bool terrain_dirty;
+  RasterTerrain *terrain;
+  GEOPOINT terrain_center;
+
+  RasterWeather *weather;
 
   BackgroundDrawHelper m_background;
   Airspaces *airspace_database;
