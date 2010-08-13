@@ -76,6 +76,9 @@ HeightMatrix::Fill(const RasterMap &map, const Projection &projection,
   SetSize((rc.right - rc.left + quantisation_pixels - 1) / quantisation_pixels,
           (rc.bottom - rc.top + quantisation_pixels - 1) / quantisation_pixels);
 
+  minimum = 0x7fff;
+  maximum = 0;
+
 #ifndef SLOW_TERRAIN_STUFF
   // This code is quickest (by a little) but not so readable
 
@@ -109,21 +112,15 @@ HeightMatrix::Fill(const RasterMap &map, const Projection &projection,
       GEOPOINT gp = projection.Screen2LonLat(x, y);
 #endif
 
-      *p++ = max((short)0, map.GetField(gp));
+      unsigned short h = max((short)0, map.GetField(gp));
+      if (h < minimum)
+        minimum = h;
+      if (h > maximum)
+        maximum = h;
+
+      *p++ = h;
     }
 
     assert(p <= data.end());
   }
-}
-
-unsigned short
-HeightMatrix::get_minimum() const
-{
-  return *std::min_element(GetData(), GetDataEnd());
-}
-
-unsigned short
-HeightMatrix::get_maximum() const
-{
-  return *std::max_element(GetData(), GetDataEnd());
 }

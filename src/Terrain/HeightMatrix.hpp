@@ -52,6 +52,8 @@ class HeightMatrix : private NonCopyable {
   AllocatedArray<unsigned short> data;
   unsigned width, height;
 
+  unsigned short minimum, maximum;
+
 public:
   HeightMatrix():width(0), height(0) {}
 
@@ -88,13 +90,17 @@ public:
    * Determine the smalles height value in this buffer.
    */
   gcc_pure
-  unsigned short get_minimum() const;
+  unsigned short get_minimum() const {
+    return minimum;
+  }
 
   /**
    * Determine the biggest height value in this buffer.
    */
   gcc_pure
-  unsigned short get_maximum() const;
+  unsigned short get_maximum() const {
+    return maximum;
+  }
 };
 
 #endif
