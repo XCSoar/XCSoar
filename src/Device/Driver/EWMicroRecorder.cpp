@@ -140,7 +140,6 @@ bool
 EWMicroRecorderDevice::TryConnect()
 {
   int retries=10;
-  TCHAR ch;
 
   while (--retries){
 
@@ -149,7 +148,10 @@ EWMicroRecorderDevice::TryConnect()
     unsigned user_size = 0;
     bool started = false;
 
-    while ((ch = port->GetChar()) != _TEOF) {
+    int i;
+    while ((i = port->GetChar()) != _TEOF) {
+      char ch = (char)i;
+
       if (!started) {
         if (ch == _T('-')) {
           started = true;
