@@ -39,13 +39,13 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_RASTER_WEATHER_HPP
 #define XCSOAR_TERRAIN_RASTER_WEATHER_HPP
 
+#include "Engine/Navigation/GeoPoint.hpp"
 #include "Poco/RWLock.h"
 #include "Compiler.h"
 
 #include <tchar.h>
 
 class RasterMap;
-struct GEOPOINT;
 
 /**
  * Class to manage raster weather data
@@ -54,6 +54,9 @@ class RasterWeather {
 public:
   static const unsigned MAX_WEATHER_MAP = 16; /**< Max number of items stored */
   static const unsigned MAX_WEATHER_TIMES = 48; /**< Max time segments of each item */
+
+private:
+  GEOPOINT center;
 
 public:
   /** 

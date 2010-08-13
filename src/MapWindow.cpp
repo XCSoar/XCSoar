@@ -57,7 +57,7 @@ MapWindow::MapWindow()
   :MapWindowProjection(),
    way_points(NULL),
    topology(NULL), terrain(NULL), weather(NULL),
-   terrain_dirty(true), weather_dirty(true),
+   terrain_dirty(true),
    airspace_database(NULL), airspace_warnings(NULL), task(NULL),
    marks(NULL), 
    cdi(NULL),
@@ -150,16 +150,11 @@ MapWindow::UpdateTerrain()
 void
 MapWindow::UpdateWeather()
 {
-  if (!weather_dirty)
-    return;
-
   // always service weather even if it's not used by the map,
   // because it's potentially used by other calculations
 
   if (weather != NULL)
     weather->SetViewCenter(PanLocation);
-
-  weather_dirty = false;
 }
 
 /**

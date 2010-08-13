@@ -62,13 +62,13 @@ GlueMapWindow::Idle(const bool do_force)
 {
   bool still_dirty=false;
   bool topology_dirty = true; /* scan topology in every Idle() call */
+  bool weather_dirty = true;
 
   // StartTimer();
 
   if (do_force) {
     idle_robin = 2;
     terrain_dirty = true;
-    weather_dirty = true;
   }
 
   do {
@@ -88,6 +88,7 @@ GlueMapWindow::Idle(const bool do_force)
 
     case 2:
       UpdateWeather();
+      weather_dirty = false;
       break;
     }
 

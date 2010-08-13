@@ -46,6 +46,7 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "ProgressGlue.hpp"
 #include "zzip/zzip.h"
+#include "Engine/Math/Earth.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -64,7 +65,8 @@ static const TCHAR *const WeatherMapNames[RasterWeather::MAX_WEATHER_MAP] = {
   _T("blcwbase"),
 };
 
-RasterWeather::RasterWeather() :
+RasterWeather::RasterWeather()
+  :center(Angle::native(fixed_zero), Angle::native(fixed_zero)),
     _parameter(0),
     _weather_time(0),
     reload(true),
@@ -265,12 +267,19 @@ RasterWeather::_Close()
 {
   delete weather_map;
   weather_map = NULL;
+  center = GEOPOINT(Angle::native(fixed_zero), Angle::native(fixed_zero));
 }
 
 void
 RasterWeather::SetViewCenter(const GEOPOINT &location)
 {
   Poco::ScopedRWLock protect(lock, true);
+
+  /* only update the RasterMap if the center was moved far enough */
+  if (Distance(center, location) < fixed(1000))
+    return;
+
+  center = location;
 
   if (weather_map != NULL)
     weather_map->SetViewCenter(location);

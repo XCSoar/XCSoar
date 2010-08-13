@@ -90,7 +90,7 @@ protected:
   RasterTerrain *terrain;
   RasterWeather *weather;
 
-  bool terrain_dirty, weather_dirty;
+  bool terrain_dirty;
 
   BackgroundDrawHelper m_background;
   Airspaces *airspace_database;
