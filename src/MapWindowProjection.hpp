@@ -135,7 +135,8 @@ public:
   gcc_pure
   fixed CalculateMapScale(int scale) const;
 
-  fixed StepMapScale(int Step);
+  gcc_pure
+  fixed StepMapScale(fixed scale, int Step) const;
 
   gcc_pure
   bool WaypointInScaleFilter(const Waypoint &way_point) const;
@@ -167,7 +168,6 @@ private:
   gcc_pure
   int FindMapScale(const fixed Value) const;
 
-  int ScaleCurrent;
   fixed ScaleList[SCALELISTSIZE];
   int ScaleListCount;
 };

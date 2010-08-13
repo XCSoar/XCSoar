@@ -1774,7 +1774,7 @@ InputEvents::sub_ScaleZoom(int vswitch)
 
   MapWindowProjection copy = MapProjection();
   if (copy.HaveScaleList()) {
-    value = copy.StepMapScale(-vswitch);
+    value = copy.StepMapScale(fixed(value), -vswitch);
   } else {
     if (abs(vswitch) >= 4) {
       if (vswitch == 4)

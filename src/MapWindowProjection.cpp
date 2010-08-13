@@ -230,25 +230,27 @@ MapWindowProjection::LimitMapScale(fixed value,
   value = max(minreasonable, min(fixed_int_constant(160), value));
   if (HaveScaleList()) {
     int scale = FindMapScale(value);
-    if (scale >= 0) {
-      ScaleCurrent = scale;
-      value = CalculateMapScale(ScaleCurrent);
-    }
+    if (scale >= 0)
+      value = CalculateMapScale(scale);
   }
 
   return value;
 }
 
 fixed
-MapWindowProjection::StepMapScale(int Step)
+MapWindowProjection::StepMapScale(fixed scale, int Step) const
 {
-  if (abs(Step) >= 4)
-    ScaleCurrent += Step / 4;
-  else
-    ScaleCurrent += Step;
+  int i = FindMapScale(scale);
+  if (i < 0)
+    return scale;
 
-  ScaleCurrent = max(0, min(ScaleListCount - 1, ScaleCurrent));
-  return CalculateMapScale(ScaleCurrent);
+  if (abs(Step) >= 4)
+    i += Step / 4;
+  else
+    i += Step;
+
+  i = max(0, min(ScaleListCount - 1, i));
+  return CalculateMapScale(i);
 }
 
 int
