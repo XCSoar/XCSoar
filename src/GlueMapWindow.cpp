@@ -79,6 +79,7 @@ GlueMapWindow::Idle(const bool do_force)
       /// switched on, until do_force is true again
 
       UpdateTopology();
+      topology_dirty = false;
       break;
 
     case 1:
