@@ -149,7 +149,7 @@ RasterRenderer::GenerateUnshadedImage(bool is_terrain, unsigned height_scale)
   const int height_factor = is_terrain
     ? max(2000, (int)height_matrix.get_maximum()) - min_height : 0;
 
-  const unsigned short *src = height_matrix.GetData();
+  const short *src = height_matrix.GetData();
   const BGRColor *oColorBuf = color_table + 64 * 256;
   BGRColor *dest = image->GetTopRow();
 
@@ -158,7 +158,11 @@ RasterRenderer::GenerateUnshadedImage(bool is_terrain, unsigned height_scale)
     dest = image->GetNextRow(dest);
 
     for (unsigned x = height_matrix.get_width(); x > 0; --x) {
-      if (short h = *src++) {
+      short h = *src;
+      if (h == RasterMap::TERRAIN_INVALID) {
+        /* outside the terrain file bounds: white background */
+        *p++ = BGRColor(0xff, 0xff, 0xff);
+      } else if (h != 0) {
         h = height_factor > 0
           ? (h - min_height) * 254 / height_factor
           : min(254, h >> height_scale);
@@ -169,6 +173,14 @@ RasterRenderer::GenerateUnshadedImage(bool is_terrain, unsigned height_scale)
       }
     }
   }
+}
+
+static int
+checked_height_difference(int a, int b)
+{
+  return a == RasterMap::TERRAIN_INVALID || b == RasterMap::TERRAIN_INVALID
+    ? 0
+    : a - b;
 }
 
 // JMW: if zoomed right in (e.g. one unit is larger than terrain
@@ -194,7 +206,7 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
   const int height_factor = is_terrain
     ? max(2000, (int)height_matrix.get_maximum()) - min_height : 0;
 
-  const unsigned short *src = height_matrix.GetData();
+  const short *src = height_matrix.GetData();
   const BGRColor *oColorBuf = color_table + 64 * 256;
   BGRColor *dest = image->GetTopRow();
 
@@ -214,7 +226,11 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
     dest = image->GetNextRow(dest);
 
     for (unsigned x = 0; x < height_matrix.get_width(); ++x, ++src) {
-      if (short h = *src) {
+      short h = *src;
+      if (h == RasterMap::TERRAIN_INVALID) {
+        /* outside the terrain file bounds: white background */
+        *p++ = BGRColor(0xff, 0xff, 0xff);
+      } else if (h != 0) {
         h = height_factor > 0
           ? (h - min_height) * 254 / height_factor
           : min(254, h >> height_scale);
@@ -227,7 +243,8 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
         assert(src - row_minus_offset < height_matrix.GetDataEnd());
         assert(src + row_plus_offset < height_matrix.GetDataEnd());
 
-        const int p32 = src[-(int)row_minus_offset] - src[row_plus_offset];
+        const int p32 = checked_height_difference(src[-(int)row_minus_offset],
+                                                  src[row_plus_offset]);
 
         // X direction
 
@@ -242,7 +259,8 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
         assert(src - column_minus_index < height_matrix.GetDataEnd());
         assert(src + column_plus_index < height_matrix.GetDataEnd());
 
-        const int p22 = src[column_plus_index] - src[-(int)column_minus_index];
+        const int p22 = checked_height_difference(src[column_plus_index],
+                                                  src[-(int)column_minus_index]);
 
         const unsigned p20 = column_plus_index + column_minus_index;
 

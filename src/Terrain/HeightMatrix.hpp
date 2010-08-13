@@ -49,10 +49,10 @@ class RasterMap;
 class Projection;
 
 class HeightMatrix : private NonCopyable {
-  AllocatedArray<unsigned short> data;
+  AllocatedArray<short> data;
   unsigned width, height;
 
-  unsigned short minimum, maximum;
+  short minimum, maximum;
 
 public:
   HeightMatrix():width(0), height(0) {}
@@ -74,15 +74,15 @@ public:
     return height;
   }
 
-  const unsigned short *GetData() const {
+  const short *GetData() const {
     return data.begin();
   }
 
-  const unsigned short *GetRow(unsigned y) const {
+  const short *GetRow(unsigned y) const {
     return data.begin() + y * width;
   }
 
-  const unsigned short *GetDataEnd() const {
+  const short *GetDataEnd() const {
     return GetRow(height);
   }
 
@@ -90,7 +90,7 @@ public:
    * Determine the smalles height value in this buffer.
    */
   gcc_pure
-  unsigned short get_minimum() const {
+  short get_minimum() const {
     return minimum;
   }
 
@@ -98,7 +98,7 @@ public:
    * Determine the biggest height value in this buffer.
    */
   gcc_pure
-  unsigned short get_maximum() const {
+  short get_maximum() const {
     return maximum;
   }
 };

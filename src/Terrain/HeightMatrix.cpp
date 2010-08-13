@@ -96,7 +96,7 @@ HeightMatrix::Fill(const RasterMap &map, const Projection &projection,
     const int dysint = dy * sint-512;
 #endif
 
-    unsigned short *p = data.begin() + (y * width + rc.left) / quantisation_pixels;
+    short *p = data.begin() + (y * width + rc.left) / quantisation_pixels;
 
     for (int x = rc.left; x < rc.right; x += quantisation_pixels) {
 #ifndef SLOW_TERRAIN_STUFF
@@ -112,11 +112,13 @@ HeightMatrix::Fill(const RasterMap &map, const Projection &projection,
       GEOPOINT gp = projection.Screen2LonLat(x, y);
 #endif
 
-      unsigned short h = max((short)0, map.GetField(gp));
-      if (h < minimum)
-        minimum = h;
-      if (h > maximum)
-        maximum = h;
+      short h = map.GetField(gp);
+      if (h != RasterMap::TERRAIN_INVALID) {
+        if (h < minimum)
+          minimum = h;
+        if (h > maximum)
+          maximum = h;
+      }
 
       *p++ = h;
     }
