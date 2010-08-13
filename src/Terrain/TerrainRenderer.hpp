@@ -40,17 +40,11 @@ Copyright_License {
 #define XCSOAR_TERRAIN_RENDERER_HPP
 
 #include "RasterRenderer.hpp"
-#include "Navigation/GeoPoint.hpp"
 #include "Util/NonCopyable.hpp"
 
 #include <windef.h>
 
-#define NUM_COLOR_RAMP_LEVELS 13
-
-class RawBitmap;
 class Canvas;
-struct BGRColor;
-class RasterMap;
 class Projection;
 class RasterTerrain;
 struct COLORRAMP;
