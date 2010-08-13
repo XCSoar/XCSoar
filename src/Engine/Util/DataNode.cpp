@@ -43,11 +43,6 @@ DataNode::~DataNode()
 {
 }
 
-DataNode::DataNode(const tstring &node_name)
-{
-}
-
-
 void 
 DataNode::set_attribute(const tstring &name, Angle value)
 {

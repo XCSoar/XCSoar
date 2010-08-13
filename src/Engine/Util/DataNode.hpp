@@ -48,13 +48,6 @@
  */
 class DataNode 
 {
-protected:
-/** 
- * Constructor (used by descendent classes)
- * 
- * @param node_name Name of node
- */
-  DataNode(const tstring &node_name);
 public:
   virtual ~DataNode();
 

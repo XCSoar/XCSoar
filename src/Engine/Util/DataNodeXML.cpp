@@ -46,9 +46,7 @@ static LPTSTR stringDup(const tstring text)
   return stringDup(text.c_str());
 }
 
-DataNodeXML::DataNodeXML(const tstring &node_name, 
-                         const XMLNode &the_node):
-  DataNode(node_name)
+DataNodeXML::DataNodeXML(const XMLNode &the_node)
 {
   m_xml_node = new XMLNode(the_node);
 }
@@ -67,7 +65,7 @@ DataNodeXML::load(const TCHAR* path)
   if (child.isEmpty()) {
     return NULL;
   }
-  return new DataNodeXML(child.getName(), child);
+  return new DataNodeXML(child);
 }
 
 
@@ -75,7 +73,7 @@ DataNodeXML*
 DataNodeXML::createRoot(const tstring &node_name)
 {
   XMLNode new_root = XMLNode::createRoot(stringDup(node_name));
-  return new DataNodeXML(node_name, new_root);
+  return new DataNodeXML(new_root);
 }
 
 const tstring 
@@ -96,7 +94,7 @@ DataNodeXML::get_name() const
 DataNode*
 DataNodeXML::add_child(const tstring &name)
 {
-  return new DataNodeXML(name, m_xml_node->AddChild(stringDup(name), false));
+  return new DataNodeXML(m_xml_node->AddChild(stringDup(name), false));
 }
 
 
@@ -107,7 +105,7 @@ DataNodeXML::get_child_by_name(const tstring name, const unsigned i) const
   if (child.isEmpty()) {
     return NULL;
   }
-  return new DataNodeXML(child.getName(), child);
+  return new DataNodeXML(child);
 }
 
 
@@ -118,7 +116,7 @@ DataNodeXML::get_child(unsigned i) const
   if (child.isEmpty()) {
     return NULL;
   }
-  return new DataNodeXML(child.getName(), child);
+  return new DataNodeXML(child);
 }
 
 void 

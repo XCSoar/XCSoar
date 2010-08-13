@@ -52,12 +52,11 @@ protected:
   /** 
    * Construct a node from an XMLNode
    * 
-   * @param node_name Name of node
    * @param the_node XML node reflecting this node
    * 
    * @return Initialised object
    */
-  DataNodeXML(const tstring &node_name, const XMLNode& the_node);
+  explicit DataNodeXML(const XMLNode& the_node);
 public:
   ~DataNodeXML();
 
