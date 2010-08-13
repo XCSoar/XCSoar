@@ -58,7 +58,7 @@ GlueMapWindow::set(ContainerWindow &parent,
  * This idle function allows progressive scanning of visibility etc
  */
 bool
-GlueMapWindow::Idle(const bool do_force)
+GlueMapWindow::Idle()
 {
   bool still_dirty=false;
   bool topology_dirty = true; /* scan topology in every Idle() call */
@@ -67,17 +67,10 @@ GlueMapWindow::Idle(const bool do_force)
 
   // StartTimer();
 
-  if (do_force) {
-    idle_robin = 2;
-  }
-
   do {
     idle_robin = (idle_robin + 1) % 3;
     switch (idle_robin) {
     case 0:
-      /// \todo bug: this will delay servicing if EnableTopology was false and then
-      /// switched on, until do_force is true again
-
       UpdateTopology();
       topology_dirty = false;
       break;

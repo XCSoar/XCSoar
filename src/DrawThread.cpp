@@ -85,9 +85,9 @@ DrawThread::run()
 
   map.SmartBounds(true);
 
-  bool bounds_dirty = map.Idle(true);
+  bool bounds_dirty = true;
   while (bounds_dirty)
-    bounds_dirty = map.Idle(false);
+    bounds_dirty = map.Idle();
 
   // second time draw
   map.DrawThreadLoop();
@@ -128,7 +128,8 @@ DrawThread::run()
         continue;
       }
 
-      bounds_dirty = map.Idle(map.SmartBounds(false));
+      map.SmartBounds(false);
+      bounds_dirty = map.Idle();
     } else if (bounds_dirty) {
       // take control (or wait for the resume())
       running.wait();
@@ -137,7 +138,7 @@ DrawThread::run()
       if (stop_trigger.test())
         break;
 
-      bounds_dirty = map.Idle(false);
+      bounds_dirty = map.Idle();
     }
   }
 }

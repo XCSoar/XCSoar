@@ -56,7 +56,7 @@ public:
   void set(ContainerWindow &parent,
            const RECT _MapRectSmall, const RECT _MapRectBig);
 
-  bool Idle(const bool force=false);
+  bool Idle();
 
   bool GetFullScreen() const {
     return SettingsMap().FullScreen;
