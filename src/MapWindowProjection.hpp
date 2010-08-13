@@ -163,7 +163,10 @@ private:
 
   bool _origin_centered;
   fixed LimitMapScale(fixed value, const SETTINGS_MAP &settings);
-  fixed FindMapScale(const fixed Value);
+
+  gcc_pure
+  int FindMapScale(const fixed Value) const;
+
   int ScaleCurrent;
   fixed ScaleList[SCALELISTSIZE];
   int ScaleListCount;

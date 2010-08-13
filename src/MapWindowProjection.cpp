@@ -228,8 +228,13 @@ MapWindowProjection::LimitMapScale(fixed value,
   }
 
   value = max(minreasonable, min(fixed_int_constant(160), value));
-  if (ScaleListCount > 0)
-    value = FindMapScale(value);
+  if (HaveScaleList()) {
+    int scale = FindMapScale(value);
+    if (scale >= 0) {
+      ScaleCurrent = scale;
+      value = CalculateMapScale(ScaleCurrent);
+    }
+  }
 
   return value;
 }
@@ -246,8 +251,8 @@ MapWindowProjection::StepMapScale(int Step)
   return CalculateMapScale(ScaleCurrent);
 }
 
-fixed
-MapWindowProjection::FindMapScale(const fixed Value)
+int
+MapWindowProjection::FindMapScale(const fixed Value) const
 {
 
   int i;
@@ -264,12 +269,7 @@ MapWindowProjection::FindMapScale(const fixed Value)
     }
   }
 
-  if (BestFitIdx != -1) {
-    ScaleCurrent = BestFitIdx;
-    return CalculateMapScale(ScaleCurrent);
-  }
-
-  return Value;
+  return BestFitIdx;
 }
 
 void
