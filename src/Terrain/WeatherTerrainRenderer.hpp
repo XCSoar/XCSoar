@@ -48,8 +48,8 @@ public:
   WeatherTerrainRenderer(const RasterTerrain *_terrain,
                          RasterWeather *_weather);
 
-protected:
-  void SetMap();
+  virtual void Draw(Canvas &canvas, const Projection &map_projection,
+                    const Angle sunazimuth, const Angle sunelevation);
 
 private:
   RasterWeather *weather;

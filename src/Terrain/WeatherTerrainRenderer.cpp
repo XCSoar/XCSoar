@@ -134,13 +134,32 @@ const COLORRAMP weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
   },
 };
 
-void
-WeatherTerrainRenderer::SetMap()
+WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain *_terrain,
+                                               RasterWeather *_weather)
+  :TerrainRenderer(_terrain),
+  weather(_weather)
 {
-  interp_levels = 5;
-  do_water = false;
-  is_terrain = false;
-  do_shading = false;
+  assert(weather != NULL);
+}
+
+
+bool 
+WeatherTerrainRenderer::do_scan_spot()
+{
+  return weather->GetParameter() > 0;
+}
+
+void
+WeatherTerrainRenderer::Draw(Canvas &canvas,
+                             const Projection &projection,
+                             const Angle sunazimuth, const Angle sunelevation)
+{
+  bool do_water = true;
+  unsigned height_scale;
+  const int interp_levels = 5;
+  const bool is_terrain = false;
+  const bool do_shading = is_terrain;
+  const COLORRAMP *color_ramp;
 
   switch (weather->GetParameter()) {
   case 1: // wstar
@@ -190,21 +209,27 @@ WeatherTerrainRenderer::SetMap()
     break;
 
   default:
-    TerrainRenderer::SetMap();
+    TerrainRenderer::Draw(canvas, projection, sunazimuth, sunelevation);
+    return;
   }
-}
 
-WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain *_terrain,
-                                               RasterWeather *_weather)
-  :TerrainRenderer(_terrain),
-  weather(_weather)
-{
-  assert(weather != NULL);
-}
+  const RasterMap *map = weather->GetMap();
+  if (map == NULL) {
+    TerrainRenderer::Draw(canvas, projection, sunazimuth, sunelevation);
+    return;
+  }
 
+  if (color_ramp != last_color_ramp) {
+    raster_renderer.ColorTable(color_ramp, do_water,
+                               height_scale, interp_levels);
+    last_color_ramp = color_ramp;
+  }
 
-bool 
-WeatherTerrainRenderer::do_scan_spot()
-{
-  return weather->GetParameter() > 0;
+  raster_renderer.ScanMap(*map, projection);
+
+  raster_renderer.GenerateImage(is_terrain, do_shading, height_scale,
+                                TerrainContrast, TerrainBrightness,
+                                sunazimuth, sunelevation);
+
+  CopyTo(canvas);
 }

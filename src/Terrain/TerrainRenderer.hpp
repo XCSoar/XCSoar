@@ -50,6 +50,7 @@ class RasterTerrain;
 struct COLORRAMP;
 
 class TerrainRenderer : private NonCopyable {
+protected:
   RasterRenderer raster_renderer;
 
 public:
@@ -62,19 +63,12 @@ public:
   short spot_min_val;
 
 protected:
-  bool is_terrain;
-  bool do_shading;
-  bool do_water;
-  unsigned int height_scale;
-  const COLORRAMP *color_ramp;
   const COLORRAMP *last_color_ramp;
-  int interp_levels;
-
-  virtual void SetMap();
 
 private:
   const RasterTerrain *terrain;
 
+protected:
   short TerrainRamp;
   short TerrainContrast;
   short TerrainBrightness;
@@ -111,11 +105,8 @@ public:
     TerrainBrightness = _TerrainBrightness;
   }
 
-  /**
-   * @param day_time the UTC time, in seconds since midnight
-   */
-  void Draw(Canvas &canvas, const Projection &map_projection,
-      const Angle sunazimuth, const Angle sunelevation);
+  virtual void Draw(Canvas &canvas, const Projection &map_projection,
+                    const Angle sunazimuth, const Angle sunelevation);
 };
 
 #endif

@@ -188,18 +188,6 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain) :
 }
 
 void
-TerrainRenderer::SetMap()
-{
-  interp_levels = 2;
-  is_terrain = true;
-  do_water = true;
-  height_scale = 4;
-  color_ramp = &terrain_colors[TerrainRamp][0];
-
-  do_shading = is_terrain;
-}
-
-void
 TerrainRenderer::ScanSpotHeights(const RECT& rect)
 {
   spot_max_pt.x = -1;
@@ -254,8 +242,13 @@ TerrainRenderer::Draw(Canvas &canvas,
                       const Projection &map_projection,
                       const Angle sunazimuth, const Angle sunelevation)
 {
-  SetMap();
+  const bool do_water = true;
+  const unsigned height_scale = 4;
+  const int interp_levels = 2;
+  const bool is_terrain = true;
+  const bool do_shading = is_terrain;
 
+  const COLORRAMP *const color_ramp = &terrain_colors[TerrainRamp][0];
   if (color_ramp != last_color_ramp) {
     raster_renderer.ColorTable(color_ramp, do_water,
                                height_scale, interp_levels);
