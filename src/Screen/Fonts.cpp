@@ -107,7 +107,16 @@ Fonts::SetFont(Font *theFont, LOGFONT autoLogFont,
                   LOGFONT * LogFontUsed)
 {
 #ifdef ENABLE_SDL
-  // XXX
+  if (theFont->defined())
+    return;
+
+  // XXX hard coded path
+  if (theFont->set("Data/Fonts/DejaVuSansCondensed2.ttf",
+                   autoLogFont.lfHeight > 0 ? autoLogFont.lfHeight : 10,
+                   autoLogFont.lfWeight >= 700,
+                   autoLogFont.lfItalic) &&
+      LogFontUsed != NULL)
+    *LogFontUsed = autoLogFont;
 #else /* !ENABLE_SDL */
   if (theFont->defined() || IsNullLogFont(autoLogFont))
     return;
