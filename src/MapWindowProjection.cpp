@@ -197,6 +197,15 @@ MapWindowProjection::GetScreenDistanceMeters() const
 }
 
 fixed
+MapWindowProjection::CalculateMapScale(int scale) const
+{
+  assert(scale >= 0 && scale < ScaleListCount);
+
+  return ScaleList[scale] * GetMapResolutionFactor()
+    / IBLSCALE(MapRect.right - MapRect.left);
+}
+
+fixed
 MapWindowProjection::LimitMapScale(fixed value,
     const SETTINGS_MAP& settings_map)
 {
@@ -234,8 +243,7 @@ MapWindowProjection::StepMapScale(int Step)
     ScaleCurrent += Step;
 
   ScaleCurrent = max(0, min(ScaleListCount - 1, ScaleCurrent));
-  return ((ScaleList[ScaleCurrent] * GetMapResolutionFactor())
-         / (IBLSCALE(/*Appearance.DefaultMapWidth*/MapRect.right)));
+  return CalculateMapScale(ScaleCurrent);
 }
 
 fixed
@@ -258,8 +266,7 @@ MapWindowProjection::FindMapScale(const fixed Value)
 
   if (BestFitIdx != -1) {
     ScaleCurrent = BestFitIdx;
-    return ((ScaleList[ScaleCurrent] * GetMapResolutionFactor())
-           / IBLSCALE(MapRect.right-MapRect.left));
+    return CalculateMapScale(ScaleCurrent);
   }
 
   return Value;

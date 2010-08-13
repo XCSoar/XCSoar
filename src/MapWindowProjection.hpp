@@ -128,6 +128,13 @@ public:
   bool HaveScaleList() const {
     return ScaleListCount > 0;
   }
+
+  /**
+   * Calculates a scale index.
+   */
+  gcc_pure
+  fixed CalculateMapScale(int scale) const;
+
   fixed StepMapScale(int Step);
 
   gcc_pure
