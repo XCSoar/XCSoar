@@ -189,7 +189,7 @@ AbstractAirspace::intercept(const AIRCRAFT_STATE &state,
   }
 }
 
-const tstring 
+const TCHAR *
 AbstractAirspace::get_type_text(const bool concise) const
 {
   return airspace_class_as_text(Type, concise);

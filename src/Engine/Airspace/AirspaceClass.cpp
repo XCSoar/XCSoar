@@ -1,8 +1,7 @@
 #include "AirspaceClass.hpp"
 #include <assert.h>
 
-
-const tstring 
+const TCHAR *
 airspace_class_as_text(const AirspaceClass_t item,
                        const bool concise)
 {

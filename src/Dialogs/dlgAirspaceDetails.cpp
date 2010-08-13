@@ -103,7 +103,7 @@ SetValues(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpType"));
   if (wp) {
-    wp->SetText(airspace->get_type_text().c_str());
+    wp->SetText(airspace->get_type_text());
     wp->RefreshDisplay();
   }
 

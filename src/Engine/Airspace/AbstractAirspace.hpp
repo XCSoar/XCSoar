@@ -46,6 +46,7 @@
 #include "AirspaceAircraftPerformance.hpp"
 #include "AirspaceClass.hpp"
 #include "AirspaceInterceptSolution.hpp"
+#include "Compiler.h"
 
 class AtmosphericPressure;
 
@@ -257,7 +258,8 @@ public:
  * 
  * @return Text version of class
  */
-  const tstring get_type_text(const bool concise=false) const;
+  gcc_pure
+  const TCHAR *get_type_text(const bool concise=false) const;
 
 /** 
  * Produce text version of name and airspace class.

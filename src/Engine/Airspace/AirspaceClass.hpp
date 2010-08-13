@@ -1,7 +1,9 @@
 #ifndef AIRSPACE_CLASS_HPP
 #define AIRSPACE_CLASS_HPP
 
-#include "Util/tstring.hpp"
+#include "Compiler.h"
+
+#include <tchar.h>
 
 enum AirspaceClass_t {
   OTHER= 0,
@@ -21,7 +23,9 @@ enum AirspaceClass_t {
   AIRSPACECLASSCOUNT
 };
 
-const tstring airspace_class_as_text(const AirspaceClass_t item, 
-                                     const bool consise=false);
+gcc_const
+const TCHAR *
+airspace_class_as_text(const AirspaceClass_t item,
+                       const bool consise=false);
 
 #endif

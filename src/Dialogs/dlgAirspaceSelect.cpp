@@ -358,7 +358,7 @@ OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
     
   // left justified
   canvas.text(rc.left + x1, rc.top + Layout::FastScale(2), 
-              airspace.get_type_text(true).c_str());
+              airspace.get_type_text(true));
     
   TCHAR sTmp[12];
 
