@@ -310,7 +310,6 @@ class DrawThread {
 public:
   static void Draw(MapWindow &map) {
     map.DrawThreadLoop();
-    map.SmartBounds(true);
     map.UpdateAll();
     map.DrawThreadLoop();
   }

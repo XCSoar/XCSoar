@@ -83,8 +83,6 @@ DrawThread::run()
   // first time draw
   map.DrawThreadLoop();
 
-  map.SmartBounds(true);
-
   bool bounds_dirty = true;
   while (bounds_dirty)
     bounds_dirty = map.Idle();
@@ -128,7 +126,6 @@ DrawThread::run()
         continue;
       }
 
-      map.SmartBounds(false);
       bounds_dirty = map.Idle();
     } else if (bounds_dirty) {
       // take control (or wait for the resume())

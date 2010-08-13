@@ -58,8 +58,7 @@ MapWindowProjection::MapWindowProjection():
   MapScale(5),
   _RequestedMapScale(5),
   _origin_centered(false),
-  ScaleListCount (0),
-  smart_range_active(Angle::native(fixed_one))
+  ScaleListCount (0)
 {
 }
 
@@ -379,63 +378,6 @@ MapWindowProjection::ExchangeBlackboard(const DERIVED_INFO &derived_info,
 {
   UpdateMapScale(derived_info, settings_map);
   // done here to avoid double latency due to locks
-}
-
-static const Angle MINRANGE = Angle::degrees(fixed(0.2));
-
-static bool
-RectangleIsInside(rectObj r_exterior, rectObj r_interior)
-{
-  if ((r_interior.minx >= r_exterior.minx) &&
-      (r_interior.maxx <= r_exterior.maxx) &&
-      (r_interior.miny >= r_exterior.miny) &&
-      (r_interior.maxy <= r_exterior.maxy))
-    return true;
-  else
-    return false;
-}
-
-bool
-MapWindowProjection::SmartBounds(const bool force)
-{
-  const rectObj bounds_screen = CalculateScreenBounds(fixed_one);
-  bool recompute = false;
-
-  // only recalculate which shapes when bounds change significantly
-  // need to have some trigger for this..
-
-  // trigger if the border goes outside the stored area
-  if (!RectangleIsInside(smart_bounds_active, bounds_screen))
-    recompute = true;
-
-  // also trigger if the scale has changed heaps
-  const Angle range_real =
-    Angle::native(fixed(max(bounds_screen.maxx - bounds_screen.minx,
-                            bounds_screen.maxy - bounds_screen.miny))).as_delta();
-  const Angle range = max(MINRANGE, range_real);
-
-  fixed scale = range.value_native() / smart_range_active.value_native();
-  if (max(scale, fixed_one / scale) > fixed_four)
-    recompute = true;
-
-  if (recompute || force) {
-    // make bounds bigger than screen
-    if (range_real < MINRANGE)
-      scale = BORDERFACTOR * MINRANGE.value_native() / range_real.value_native();
-    else
-      scale = BORDERFACTOR;
-
-    smart_bounds_active = CalculateScreenBounds(scale);
-
-    smart_range_active =
-      Angle::native(fixed(max(smart_bounds_active.maxx - smart_bounds_active.minx,
-                              smart_bounds_active.maxy - smart_bounds_active.miny))).as_delta();
-
-    // now update visibility of objects in the map window
-    return true;
-  }
-
-  return false;
 }
 
 fixed 

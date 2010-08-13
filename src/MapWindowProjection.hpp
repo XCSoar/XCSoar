@@ -71,10 +71,6 @@ class MapWindowProjection: public Projection
     return Orig_Aircraft;
   }
 
-  rectObj* getSmartBounds() {
-    return &smart_bounds_active;
-  }
-
   // called on receipt of new data, to trigger projection/scale change functions
   void ExchangeBlackboard(const DERIVED_INFO &derived_info,
                           const SETTINGS_MAP &settings_map);
@@ -126,7 +122,6 @@ class MapWindowProjection: public Projection
     return _origin_centered;
   }
 
-  bool SmartBounds(const bool force);
   fixed StepMapScale(int Step) const;
 
 public:
@@ -165,9 +160,6 @@ private:
   int ScaleCurrent;
   fixed ScaleList[SCALELISTSIZE];
   int ScaleListCount;
-
-  rectObj smart_bounds_active;
-  Angle smart_range_active;
 };
 
 #endif
