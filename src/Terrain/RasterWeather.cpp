@@ -197,7 +197,7 @@ RasterWeather::ScanAll(const GEOPOINT &location)
 }
 
 void
-RasterWeather::Reload(const GEOPOINT &location, int day_time)
+RasterWeather::Reload(int day_time)
 {
   static unsigned last_weather_time;
   bool found = false;
@@ -251,8 +251,6 @@ RasterWeather::Reload(const GEOPOINT &location, int day_time)
   // can't find valid time, so reset to zero
   if (!found || now)
     _weather_time = 0;
-
-  SetViewCenter(location);
 }
 
 void

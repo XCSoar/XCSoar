@@ -153,8 +153,10 @@ MapWindow::UpdateWeather()
   // always service weather even if it's not used by the map,
   // because it's potentially used by other calculations
 
-  if (weather != NULL)
+  if (weather != NULL) {
+    weather->Reload((int)Basic().Time);
     weather->SetViewCenter(PanLocation);
+  }
 }
 
 /**

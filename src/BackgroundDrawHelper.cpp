@@ -110,11 +110,6 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
     }
   }
 
-/** @todo
-      if (m_weather != NULL && m_weather->GetParameter())
-        m_weather->Reload(Basic().Location, (int)Basic().Time);
-*/
-
   m_rend->SetSettings(settings_map.TerrainRamp,
                       settings_map.TerrainContrast,
                       settings_map.TerrainBrightness);
