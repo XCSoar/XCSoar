@@ -73,15 +73,26 @@ StatusMessageList::LoadFile()
   }
 }
 
+static bool
+parse_assignment(TCHAR *buffer, const TCHAR *&key, const TCHAR *&value)
+{
+  TCHAR *separator = _tcschr(buffer, '=');
+  if (separator == NULL || separator == buffer)
+    return false;
+
+  *separator = _T('\0');
+
+  key = buffer;
+  value = separator + 1;
+
+  return true;
+}
+
 void
 StatusMessageList::LoadFile(TLineReader &reader)
 {
-  // TODO code: Safer sizes, strings etc - use C++ (can scanf restrict length?)
-  TCHAR key[2049];	// key from scanf
-  TCHAR value[2049];	// value from scanf
   int ms;				// Found ms for delay
   const TCHAR **location;	// Where to put the data
-  int found;			// Entries found from scanf
   bool some_data;		// Did we find some in the last loop...
 
   // Init first entry
@@ -89,15 +100,13 @@ StatusMessageList::LoadFile(TLineReader &reader)
   some_data = false;
 
   /* Read from the file */
-  const TCHAR *buffer;
+  TCHAR *buffer;
+  const TCHAR *key, *value;
   while (
 	 (StatusMessageData_Size < MAXSTATUSMESSAGECACHE)
-         && (buffer = reader.read()) != NULL
-	 && ((found = _stscanf(buffer, _T("%[^#=]=%[^\n]\n"), key, value)) != EOF)
-	 ) {
+         && (buffer = reader.read()) != NULL) {
     // Check valid line? If not valid, assume next record (primative, but works ok!)
-    if ((found != 2) || key[0] == 0 || value[0] == 0) {
-
+    if (*buffer == _T('#') || !parse_assignment(buffer, key, value)) {
       // Global counter (only if the last entry had some data)
       if (some_data) {
 	StatusMessageData_Size++;
@@ -116,7 +125,9 @@ StatusMessageList::LoadFile(TLineReader &reader)
 	StatusMessageData[StatusMessageData_Size].doSound = true;
 	location = &StatusMessageData[StatusMessageData_Size].sound;
       } else if (_tcscmp(key, _T("delay")) == 0) {
-	if (_stscanf(value, _T("%d"), &ms) == 1)
+        TCHAR *endptr;
+        ms = _tcstol(value, &endptr, 10);
+        if (endptr > value)
 	  StatusMessageData[StatusMessageData_Size].delay_ms = ms;
       } else if (_tcscmp(key, _T("hide")) == 0) {
 	if (_tcscmp(value, _T("yes")) == 0)
