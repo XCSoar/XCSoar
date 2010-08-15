@@ -105,19 +105,19 @@ void
 LeastSquares::Reset()
 {
   sum_n = 0;
-  sum_xi = 0;
-  sum_yi = 0;
-  sum_xi_2 = 0;
-  sum_xi_yi = 0;
-  max_error = 0;
-  sum_error = 0;
-  rms_error = 0;
-  sum_weights = 0;
-  y_max = 0;
-  y_min = 0;
-  x_min = 0;
-  x_max = 0;
-  y_ave = 0;
+  sum_xi = fixed_zero;
+  sum_yi = fixed_zero;
+  sum_xi_2 = fixed_zero;
+  sum_xi_yi = fixed_zero;
+  max_error = fixed_zero;
+  sum_error = fixed_zero;
+  rms_error = fixed_zero;
+  sum_weights = fixed_zero;
+  y_max = fixed_zero;
+  y_min = fixed_zero;
+  x_min = fixed_zero;
+  x_max = fixed_zero;
+  y_ave = fixed_zero;
 }
 
 /**
@@ -126,16 +126,16 @@ LeastSquares::Reset()
 void
 LeastSquares::LeastSquaresUpdate()
 {
-  double denom = (sum_weights * sum_xi_2 - sum_xi * sum_xi);
+  fixed denom = (sum_weights * sum_xi_2 - sum_xi * sum_xi);
 
-  if (fabs(denom) > 0.0) {
+  if (positive(fabs(denom))) {
     m = (sum_weights * sum_xi_yi - sum_xi * sum_yi) / denom;
   } else {
-    m = 0.0;
+    m = fixed_zero;
   }
   b = (sum_yi - m * sum_xi) / sum_weights;
 
-  y_ave = m * (x_max + x_min) / 2.0 + b;
+  y_ave = m * (x_max + x_min) / 2 + b;
 }
 
 /**
@@ -144,9 +144,9 @@ LeastSquares::LeastSquaresUpdate()
  * @param y y-Value of the new data point
  */
 void
-LeastSquares::LeastSquaresUpdate(double y)
+LeastSquares::LeastSquaresUpdate(fixed y)
 {
-  LeastSquaresUpdate((double)(sum_n+1), y);
+  LeastSquaresUpdate((fixed)(sum_n+1), y);
 }
 
 /**
@@ -156,7 +156,7 @@ LeastSquares::LeastSquaresUpdate(double y)
  * @param weight Weight of the new data point (optional)
  */
 void
-LeastSquares::LeastSquaresUpdate(double x, double y, double weight)
+LeastSquares::LeastSquaresUpdate(fixed x, fixed y, fixed weight)
 {
   // Add new point
   LeastSquaresAdd(x, y, weight);
@@ -164,7 +164,7 @@ LeastSquares::LeastSquaresUpdate(double x, double y, double weight)
   LeastSquaresUpdate();
 
   // Calculate error
-  double error;
+  fixed error;
   error = y - (m * x + b);
   sum_error += error * error * weight;
   if (fabs(error) > max_error) {
@@ -188,7 +188,7 @@ LeastSquares::LeastSquaresErrorUpdate()
  * @param weight Weight of the new data point (optional)
  */
 void
-LeastSquares::LeastSquaresAdd(double x, double y, double weight)
+LeastSquares::LeastSquaresAdd(fixed x, fixed y, fixed weight)
 {
   // Update maximum/minimum values
   if ((y > y_max) || (!sum_n)) {
@@ -208,9 +208,9 @@ LeastSquares::LeastSquaresAdd(double x, double y, double weight)
   // Add point
   // TODO code: really should have a circular buffer here
   if (sum_n < MAX_STATISTICS) {
-    xstore[sum_n] = (float)x;
-    ystore[sum_n] = (float)y;
-    weightstore[sum_n] = (float)weight;
+    xstore[sum_n] = x;
+    ystore[sum_n] = y;
+    weightstore[sum_n] = weight;
   }
 
   ++sum_n;
@@ -218,8 +218,8 @@ LeastSquares::LeastSquaresAdd(double x, double y, double weight)
   // Add weighted point
   sum_weights += weight;
 
-  double xw = x * weight;
-  double yw = y * weight;
+  fixed xw = x * weight;
+  fixed yw = y * weight;
 
   sum_xi += xw;
   sum_yi += yw;

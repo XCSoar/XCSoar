@@ -75,51 +75,51 @@ public:
   void DrawLineGraph(const LeastSquares &lsdata,  const int Style);
   void DrawTrend(const LeastSquares &lsdata, const int Style);
   void DrawTrendN(const LeastSquares &lsdata, const int Style);
-  void DrawLine(const double xmin, const double ymin,
-      const double xmax, const double ymax, const int Style);
+  void DrawLine(const fixed xmin, const fixed ymin,
+                const fixed xmax, const fixed ymax, const int Style);
 
   void ScaleYFromData(const LeastSquares &lsdata);
   void ScaleXFromData(const LeastSquares &lsdata);
-  void ScaleYFromValue(const double val);
-  void ScaleXFromValue(const double val);
+  void ScaleYFromValue(const fixed val);
+  void ScaleXFromValue(const fixed val);
   void ScaleMakeSquare();
 
   void StyleLine(const POINT l1, const POINT l2, const int Style);
 
   void ResetScale();
 
-  static void FormatTicText(TCHAR *text, const double val, const double step);
-  void DrawXGrid(const double tic_step, const double zero, const int Style,
-      const double unit_step, bool draw_units = false);
-  void DrawYGrid(const double tic_step, const double zero, const int Style,
-		  const double unit_step, bool draw_units = false);
+  static void FormatTicText(TCHAR *text, const fixed val, const fixed step);
+  void DrawXGrid(const fixed tic_step, const fixed zero, const int Style,
+                 const fixed unit_step, bool draw_units = false);
+  void DrawYGrid(const fixed tic_step, const fixed zero, const int Style,
+                 const fixed unit_step, bool draw_units = false);
 
   void DrawXLabel(const TCHAR *text);
   void DrawYLabel(const TCHAR *text);
-  void DrawLabel(const TCHAR *text, const double xv, const double yv);
-  void DrawArrow(const double x, const double y, const double mag,
+  void DrawLabel(const TCHAR *text, const fixed xv, const fixed yv);
+  void DrawArrow(const fixed x, const fixed y, const fixed mag,
       const Angle angle, const int Style);
   void DrawNoData();
 
-  double getYmin() const { return y_min; }
-  double getYmax() const { return y_max; }
-  double getXmin() const { return x_min; }
-  double getXmax() const { return x_max; }
+  fixed getYmin() const { return y_min; }
+  fixed getYmax() const { return y_max; }
+  fixed getXmin() const { return x_min; }
+  fixed getXmax() const { return x_max; }
 
   gcc_pure
-  long screenX(double x) const;
+  long screenX(fixed x) const;
 
   gcc_pure
-  long screenY(double y) const;
+  long screenY(fixed y) const;
 
   gcc_pure
-  long screenS(double s) const;
+  long screenS(fixed s) const;
 
 private:
-  double yscale;
-  double xscale;
-  double y_min, x_min;
-  double x_max, y_max;
+  fixed yscale;
+  fixed xscale;
+  fixed y_min, x_min;
+  fixed x_max, y_max;
   bool unscaled_x;
   bool unscaled_y;
 };

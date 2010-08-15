@@ -61,14 +61,14 @@ class ProtectedTaskManager;
 class FlightStatistics {
 public:
   void StartTask();
-  double AverageThermalAdjusted(const double wthis, const bool circling);
+  fixed AverageThermalAdjusted(const fixed wthis, const bool circling);
 
-  void AddAltitude(const double tflight, const double alt);
-  void AddAltitudeTerrain(const double tflight, const double terrainalt);
-  void AddTaskSpeed(const double tflight, const double val);
-  void AddClimbBase(const double tflight, const double alt);
-  void AddClimbCeiling(const double tflight, const double alt);
-  void AddThermalAverage(const double v);
+  void AddAltitude(const fixed tflight, const fixed alt);
+  void AddAltitudeTerrain(const fixed tflight, const fixed terrainalt);
+  void AddTaskSpeed(const fixed tflight, const fixed val);
+  void AddClimbBase(const fixed tflight, const fixed alt);
+  void AddClimbCeiling(const fixed tflight, const fixed alt);
+  void AddThermalAverage(const fixed v);
 
 public:
   void Reset();

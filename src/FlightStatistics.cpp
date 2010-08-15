@@ -93,7 +93,7 @@ class ChartLegHelper:
   public TaskPointConstVisitor
 {
 public:
-  ChartLegHelper(Chart& chart, const double start_time):
+  ChartLegHelper(Chart& chart, const fixed start_time):
     m_chart(chart),
     m_start_time(start_time)
     {
@@ -119,15 +119,14 @@ public:
   };
 private:
   void draw(const OrderedTaskPoint& tp) {
-    double x = ((double)tp.get_state_entered().Time - m_start_time) / 3600.0;
-    if (x>=0) {
+    fixed x = (tp.get_state_entered().Time - m_start_time) / 3600;
+    if (x >= fixed_zero)
       m_chart.DrawLine(x, m_chart.getYmin(),
                        x, m_chart.getYmax(),
                        Chart::STYLE_REDTHICK);
-    }
   }
   Chart& m_chart;
-  const double m_start_time;
+  const fixed m_start_time;
 };
 
 /**
@@ -137,7 +136,7 @@ class ChartTaskHelper:
   public TaskVisitor
 {
 public:
-  ChartTaskHelper(Chart& chart, const double start_time):
+  ChartTaskHelper(Chart& chart, const fixed start_time):
     m_leg_visitor(chart, start_time)
     {
     };
@@ -162,7 +161,7 @@ static void DrawLegs(Chart& chart,
 {
   if (calculated.common_stats.task_started) {
 
-    const double start_time = task_relative
+    const fixed start_time = task_relative
       ? basic.Time - calculated.common_stats.task_time_elapsed
       : basic.flight.TakeOffTime;
 
@@ -188,8 +187,8 @@ FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
 
   chart.ScaleXFromData(Altitude);
   chart.ScaleYFromData(Altitude);
-  chart.ScaleYFromValue(0);
-  chart.ScaleXFromValue(Altitude.x_min + 1.0); // in case no data
+  chart.ScaleYFromValue(fixed_zero);
+  chart.ScaleXFromValue(Altitude.x_min + fixed_one); // in case no data
   chart.ScaleXFromValue(Altitude.x_min);
 
   DrawLegs(chart, task, nmea_info, derived_info, false);
@@ -204,9 +203,11 @@ FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
   canvas.white_pen();
   canvas.white_brush();
 
-  chart.DrawXGrid(0.5, Altitude.x_min, Chart::STYLE_THINDASHPAPER, 0.5, true);
-  chart.DrawYGrid(Units::ToSysUnit(fixed(1000), Units::AltitudeUnit), 0,
-                  Chart::STYLE_THINDASHPAPER, 1000, true);
+  chart.DrawXGrid(fixed_half, Altitude.x_min, Chart::STYLE_THINDASHPAPER,
+                  fixed_half, true);
+  chart.DrawYGrid(Units::ToSysUnit(fixed(1000), Units::AltitudeUnit),
+                  fixed_zero,
+                  Chart::STYLE_THINDASHPAPER, fixed(1000), true);
   chart.DrawLineGraph(Altitude, Chart::STYLE_MEDIUMBLACK);
 
   chart.DrawTrend(Altitude_Base, Chart::STYLE_BLUETHIN);
@@ -232,16 +233,17 @@ FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc,
 
   chart.ScaleXFromData(Task_Speed);
   chart.ScaleYFromData(Task_Speed);
-  chart.ScaleYFromValue( 0);
-  chart.ScaleXFromValue(Task_Speed.x_min+1.0); // in case no data
+  chart.ScaleYFromValue(fixed_zero);
+  chart.ScaleXFromValue(Task_Speed.x_min + fixed_one); // in case no data
   chart.ScaleXFromValue(Task_Speed.x_min);
 
   DrawLegs(chart, task, nmea_info, derived_info, true);
 
-  chart.DrawXGrid(0.5, Task_Speed.x_min,
-                  Chart::STYLE_THINDASHPAPER, 0.5, true);
-  chart.DrawYGrid(Units::ToSysUnit(fixed_ten, Units::TaskSpeedUnit), 0,
-                  Chart::STYLE_THINDASHPAPER, 10, true);
+  chart.DrawXGrid(fixed_half, Task_Speed.x_min,
+                  Chart::STYLE_THINDASHPAPER, fixed_half, true);
+  chart.DrawYGrid(Units::ToSysUnit(fixed_ten, Units::TaskSpeedUnit),
+                  fixed_zero,
+                  Chart::STYLE_THINDASHPAPER, fixed(10), true);
   chart.DrawLineGraph(Task_Speed, Chart::STYLE_MEDIUMBLACK);
   chart.DrawTrend(Task_Speed, Chart::STYLE_BLUETHIN);
 
@@ -260,23 +262,24 @@ FlightStatistics::RenderClimb(Canvas &canvas, const RECT rc,
     return;
   }
 
-  double MACCREADY = glide_polar.get_mc();
+  fixed MACCREADY = glide_polar.get_mc();
 
   chart.ScaleYFromData(ThermalAverage);
-  chart.ScaleYFromValue((MACCREADY + 0.5));
-  chart.ScaleYFromValue(0);
+  chart.ScaleYFromValue(MACCREADY + fixed_half);
+  chart.ScaleYFromValue(fixed_zero);
 
-  chart.ScaleXFromValue(-1);
-  chart.ScaleXFromValue(ThermalAverage.sum_n);
+  chart.ScaleXFromValue(fixed_minus_one);
+  chart.ScaleXFromValue(fixed(ThermalAverage.sum_n));
 
-  chart.DrawYGrid(Units::ToSysUnit(fixed_one, Units::VerticalSpeedUnit), 0,
-                  Chart::STYLE_THINDASHPAPER, 1.0, true);
+  chart.DrawYGrid(Units::ToSysUnit(fixed_one, Units::VerticalSpeedUnit),
+                  fixed_zero,
+                  Chart::STYLE_THINDASHPAPER, fixed_one, true);
   chart.DrawBarChart(ThermalAverage);
 
-  chart.DrawLine(0, MACCREADY, ThermalAverage.sum_n, MACCREADY,
+  chart.DrawLine(fixed_zero, MACCREADY, fixed(ThermalAverage.sum_n), MACCREADY,
       Chart::STYLE_REDTHICK);
 
-  chart.DrawLabel(_T("MC"), max(0.5, (double)ThermalAverage.sum_n - 1.0),
+  chart.DrawLabel(_T("MC"), max(fixed_half, fixed(ThermalAverage.sum_n) - fixed_one),
       MACCREADY);
 
   chart.DrawTrendN(ThermalAverage, Chart::STYLE_BLUETHIN);
@@ -295,31 +298,33 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas,
   int i;
   Chart chart(canvas, rc);
 
-  chart.ScaleYFromValue(0);
+  chart.ScaleYFromValue(fixed_zero);
   chart.ScaleYFromValue(-glide_polar.get_Smax() * fixed(1.1));
   chart.ScaleXFromValue(glide_polar.get_Vmin() * fixed(0.8));
   chart.ScaleXFromValue(glide_polar.get_Vmax() + fixed_two);
 
-  chart.DrawXGrid(Units::ToSysUnit(fixed_ten, Units::SpeedUnit), 0,
-                  Chart::STYLE_THINDASHPAPER, 10.0, true);
-  chart.DrawYGrid(Units::ToSysUnit(fixed_one, Units::VerticalSpeedUnit), 0,
-                  Chart::STYLE_THINDASHPAPER, 1.0, true);
+  chart.DrawXGrid(Units::ToSysUnit(fixed_ten, Units::SpeedUnit), fixed_zero,
+                  Chart::STYLE_THINDASHPAPER, fixed_ten, true);
+  chart.DrawYGrid(Units::ToSysUnit(fixed_one, Units::VerticalSpeedUnit),
+                  fixed_zero,
+                  Chart::STYLE_THINDASHPAPER, fixed_one, true);
 
-  double sinkrate0, sinkrate1;
-  double v0 = 0, v1;
+  fixed sinkrate0, sinkrate1;
+  fixed v0 = fixed_zero, v1;
   bool v0valid = false;
   int i0 = 0;
 
   for (i = glide_polar.get_Vmin(); i <= (int)glide_polar.get_Vmax(); ++i) {
     sinkrate0 = -glide_polar.SinkRate(fixed(i));
     sinkrate1 = -glide_polar.SinkRate(fixed(i + 1));
-    chart.DrawLine(i, sinkrate0, i + 1, sinkrate1, Chart::STYLE_MEDIUMBLACK);
+    chart.DrawLine(fixed(i), sinkrate0, fixed(i + 1), sinkrate1,
+                   Chart::STYLE_MEDIUMBLACK);
 
     if (derived.AverageClimbRateN[i] > 0) {
       v1 = derived.AverageClimbRate[i] / derived.AverageClimbRateN[i];
 
       if (v0valid)
-        chart.DrawLine(i0, v0, i, v1, Chart::STYLE_DASHGREEN);
+        chart.DrawLine(fixed(i0), v0, fixed(i), v1, Chart::STYLE_DASHGREEN);
 
       v0 = v1;
       i0 = i;
@@ -331,7 +336,7 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas,
   fixed sb = -glide_polar.SinkRate(derived.common_stats.V_block);
   fixed ff = (sb - MACCREADY) / derived.common_stats.V_block;
 
-  chart.DrawLine(0, MACCREADY, glide_polar.get_Vmax(),
+  chart.DrawLine(fixed_zero, MACCREADY, glide_polar.get_Vmax(),
       MACCREADY + ff * glide_polar.get_Vmax(), Chart::STYLE_REDTHICK);
 
   chart.DrawXLabel(_T("V"));
@@ -430,22 +435,24 @@ FlightStatistics::RenderTemperature(Canvas &canvas, const RECT rc) const
   Chart chart(canvas, rc);
 
   int i;
-  float hmin = 10000;
-  float hmax = -10000;
-  float tmin = (float)CuSonde::maxGroundTemperature;
-  float tmax = (float)CuSonde::maxGroundTemperature;
+  int hmin = 10000;
+  int hmax = -10000;
+  fixed tmin = fixed(CuSonde::maxGroundTemperature);
+  fixed tmax = fixed(CuSonde::maxGroundTemperature);
 
   // find range for scaling of graph
   for (i = 0; i < CUSONDE_NUMLEVELS - 1; i++) {
     if (CuSonde::cslevels[i].nmeasurements) {
 
-      hmin = min(hmin, (float)i);
-      hmax = max(hmax, (float)i);
+      hmin = min(hmin, i);
+      hmax = max(hmax, i);
 
-      tmin = min(tmin, (float)min(CuSonde::cslevels[i].tempDry,
-          min(CuSonde::cslevels[i].airTemp, CuSonde::cslevels[i].dewpoint)));
-      tmax = max(tmax, (float)max(CuSonde::cslevels[i].tempDry,
-          (double)max(CuSonde::cslevels[i].airTemp, CuSonde::cslevels[i].dewpoint)));
+      tmin = min(tmin, fixed(min(CuSonde::cslevels[i].tempDry,
+                                 min(CuSonde::cslevels[i].airTemp,
+                                     CuSonde::cslevels[i].dewpoint))));
+      tmax = max(tmax, fixed(max(CuSonde::cslevels[i].tempDry,
+                                 max(CuSonde::cslevels[i].airTemp,
+                                     CuSonde::cslevels[i].dewpoint))));
     }
   }
 
@@ -454,8 +461,8 @@ FlightStatistics::RenderTemperature(Canvas &canvas, const RECT rc) const
     return;
   }
 
-  chart.ScaleYFromValue(hmin);
-  chart.ScaleYFromValue(hmax);
+  chart.ScaleYFromValue(fixed(hmin));
+  chart.ScaleYFromValue(fixed(hmax));
   chart.ScaleXFromValue(tmin);
   chart.ScaleXFromValue(tmax);
 
@@ -471,24 +478,30 @@ FlightStatistics::RenderTemperature(Canvas &canvas, const RECT rc) const
 
       ipos++;
 
-      chart.DrawLine(CuSonde::cslevels[i].tempDry, i,
-          CuSonde::cslevels[i + 1].tempDry, (i + 1), Chart::STYLE_REDTHICK);
+      chart.DrawLine(fixed(CuSonde::cslevels[i].tempDry), fixed(i),
+                     fixed(CuSonde::cslevels[i + 1].tempDry), fixed(i + 1),
+                     Chart::STYLE_REDTHICK);
 
-      chart.DrawLine(CuSonde::cslevels[i].airTemp, i,
-          CuSonde::cslevels[i + 1].airTemp, (i + 1), Chart::STYLE_MEDIUMBLACK);
+      chart.DrawLine(fixed(CuSonde::cslevels[i].airTemp), fixed(i),
+                     fixed(CuSonde::cslevels[i + 1].airTemp), fixed(i + 1),
+                     Chart::STYLE_MEDIUMBLACK);
 
-      chart.DrawLine(CuSonde::cslevels[i].dewpoint, i,
-          CuSonde::cslevels[i + 1].dewpoint, i + 1, Chart::STYLE_BLUETHIN);
+      chart.DrawLine(fixed(CuSonde::cslevels[i].dewpoint), fixed(i),
+                     fixed(CuSonde::cslevels[i + 1].dewpoint), fixed(i + 1),
+                     Chart::STYLE_BLUETHIN);
 
       if (ipos > 2) {
         if (!labelDry) {
-          chart.DrawLabel(_T("DALR"), CuSonde::cslevels[i + 1].tempDry, i);
+          chart.DrawLabel(_T("DALR"),
+                          fixed(CuSonde::cslevels[i + 1].tempDry), fixed(i));
           labelDry = true;
         } else if (!labelAir) {
-          chart.DrawLabel(_T("Air"), CuSonde::cslevels[i + 1].airTemp, i);
+          chart.DrawLabel(_T("Air"),
+                          fixed(CuSonde::cslevels[i + 1].airTemp), fixed(i));
           labelAir = true;
         } else if (!labelDew) {
-          chart.DrawLabel(_T("Dew"), CuSonde::cslevels[i + 1].dewpoint, i);
+          chart.DrawLabel(_T("Dew"),
+                          fixed(CuSonde::cslevels[i + 1].dewpoint), fixed(i));
           labelDew = true;
         }
       }
@@ -508,12 +521,12 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
   fixed h;
   Vector wind;
   bool found = true;
-  double mag;
+  fixed mag;
 
   LeastSquares windstats_mag;
   Chart chart(canvas, rc);
 
-  if (Altitude_Ceiling.y_max - Altitude_Ceiling.y_min <= 10) {
+  if (Altitude_Ceiling.y_max - Altitude_Ceiling.y_min <= fixed_ten) {
     chart.DrawNoData();
     return;
   }
@@ -529,15 +542,16 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
   }
 
   chart.ScaleXFromData(windstats_mag);
-  chart.ScaleXFromValue(0);
-  chart.ScaleXFromValue(10.0);
+  chart.ScaleXFromValue(fixed_zero);
+  chart.ScaleXFromValue(fixed_ten);
 
   chart.ScaleYFromData(windstats_mag);
 
-  chart.DrawXGrid(Units::ToSysUnit(fixed(5), Units::SpeedUnit), 0,
-                  Chart::STYLE_THINDASHPAPER, 5.0, true);
-  chart.DrawYGrid(Units::ToSysUnit(fixed(1000), Units::AltitudeUnit), 0,
-                  Chart::STYLE_THINDASHPAPER, 1000.0, true);
+  chart.DrawXGrid(Units::ToSysUnit(fixed(5), Units::SpeedUnit), fixed_zero,
+                  Chart::STYLE_THINDASHPAPER, fixed(5), true);
+  chart.DrawYGrid(Units::ToSysUnit(fixed(1000), Units::AltitudeUnit),
+                  fixed_zero,
+                  Chart::STYLE_THINDASHPAPER, fixed(1000), true);
   chart.DrawLineGraph(windstats_mag, Chart::STYLE_MEDIUMBLACK);
 
 #define WINDVECTORMAG 25
@@ -553,12 +567,12 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
       + fixed(Altitude_Base.y_min);
 
     wind = wind_store.GetWind(nmea_info.Time, h, &found);
-    if (windstats_mag.x_max == 0)
-      windstats_mag.x_max = 1; // prevent /0 problems
+    if (windstats_mag.x_max == fixed_zero)
+      windstats_mag.x_max = fixed_one; // prevent /0 problems
     wind.x /= fixed(windstats_mag.x_max);
     wind.y /= fixed(windstats_mag.x_max);
     mag = hypot(wind.x, wind.y);
-    if (mag <= 0.0)
+    if (negative(mag))
       continue;
 
     Angle angle = Angle::radians(atan2(wind.x, -wind.y));
@@ -601,7 +615,7 @@ public:
     RECT rcd;
     rcd.top = m_chart.screenY(as.get_top_altitude());
     if (as.is_base_terrain()) {
-      rcd.bottom = m_chart.screenY(0);
+      rcd.bottom = m_chart.screenY(fixed_zero);
     } else {
       rcd.bottom = m_chart.screenY(as.get_base_altitude());
     }
@@ -665,7 +679,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
 
   Chart chart(canvas, rc);
   chart.ResetScale();
-  chart.ScaleXFromValue(0);
+  chart.ScaleXFromValue(fixed_zero);
   chart.ScaleXFromValue(range);
   chart.ScaleYFromValue(hmin);
   chart.ScaleYFromValue(hmax);
@@ -681,10 +695,10 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
     std::vector<POINT> points;
     POINT pf0, pf1;
     pf0.x = chart.screenX(range);
-    pf0.y = chart.screenY(0);
+    pf0.y = chart.screenY(fixed_zero);
     points.push_back(pf0);
-    pf1.x = chart.screenX(0);
-    pf1.y = chart.screenY(0);
+    pf1.x = chart.screenX(fixed_zero);
+    pf1.y = chart.screenY(fixed_zero);
     points.push_back(pf1);
 
     for (unsigned j = 0; j < AIRSPACE_SCANSIZE_X; ++j) {
@@ -693,7 +707,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
 
       POINT p;
       p.x = chart.screenX(t_this * range);
-      p.y = chart.screenY(map->GetField(p_this));
+      p.y = chart.screenY(fixed(map->GetField(p_this)));
 
       points.push_back(p);
     }
@@ -710,7 +724,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
   // draw aircraft trend line
   if (nmea_info.GroundSpeed > fixed(10)) {
     fixed t = range / nmea_info.GroundSpeed;
-    chart.DrawLine(0, nmea_info.GPSAltitude, range,
+    chart.DrawLine(fixed_zero, nmea_info.GPSAltitude, range,
         nmea_info.GPSAltitude + derived.Average30s * t, Chart::STYLE_BLUETHIN);
   }
 
@@ -721,7 +735,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
     canvas.white_brush();
 
     POINT line[4];
-    line[0].x = chart.screenX(0.0);
+    line[0].x = chart.screenX(fixed_zero);
     line[0].y = chart.screenY(nmea_info.GPSAltitude);
     line[1].x = rc.left;
     line[1].y = line[0].y;
@@ -739,10 +753,12 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
     canvas.white_brush();
     canvas.set_text_color(Color(0xff, 0xff, 0xff));
 
-    chart.DrawXGrid(Units::ToSysUnit(fixed(5), Units::DistanceUnit), 0,
-                    Chart::STYLE_THINDASHPAPER, 5.0, true);
-    chart.DrawYGrid(Units::ToSysUnit(fixed(1000), Units::AltitudeUnit), 0,
-                    Chart::STYLE_THINDASHPAPER, 1000.0, true);
+    chart.DrawXGrid(Units::ToSysUnit(fixed(5), Units::DistanceUnit),
+                    fixed_zero,
+                    Chart::STYLE_THINDASHPAPER, fixed(5), true);
+    chart.DrawYGrid(Units::ToSysUnit(fixed(1000), Units::AltitudeUnit),
+                    fixed_zero,
+                    Chart::STYLE_THINDASHPAPER, fixed(1000), true);
 
     chart.DrawXLabel(_T("D"));
     chart.DrawYLabel(_T("h"));
@@ -760,31 +776,32 @@ FlightStatistics::StartTask()
 }
 
 void
-FlightStatistics::AddAltitudeTerrain(const double tflight,
-    const double terrainalt)
+FlightStatistics::AddAltitudeTerrain(const fixed tflight,
+                                     const fixed terrainalt)
 {
   Lock();
-  Altitude_Terrain.LeastSquaresUpdate(max(0.0, tflight / 3600.0), terrainalt);
+  Altitude_Terrain.LeastSquaresUpdate(max(fixed_zero, tflight / 3600),
+                                      terrainalt);
   Unlock();
 }
 
 void
-FlightStatistics::AddAltitude(const double tflight, const double alt)
+FlightStatistics::AddAltitude(const fixed tflight, const fixed alt)
 {
   Lock();
-  Altitude.LeastSquaresUpdate(max(0.0, tflight / 3600.0), alt);
+  Altitude.LeastSquaresUpdate(max(fixed_zero, tflight / 3600), alt);
   Unlock();
 }
 
-double
-FlightStatistics::AverageThermalAdjusted(const double mc_current,
+fixed
+FlightStatistics::AverageThermalAdjusted(const fixed mc_current,
     const bool circling)
 {
-  double mc_stats;
+  fixed mc_stats;
 
   Lock();
-  if (ThermalAverage.y_ave > 0) {
-    if ((mc_current > 0) && circling) {
+  if (ThermalAverage.y_ave > fixed_zero) {
+    if (mc_current > fixed_zero && circling) {
       mc_stats = (ThermalAverage.sum_n * ThermalAverage.y_ave + mc_current)
           / (ThermalAverage.sum_n + 1);
     } else {
@@ -799,32 +816,32 @@ FlightStatistics::AverageThermalAdjusted(const double mc_current,
 }
 
 void
-FlightStatistics::AddTaskSpeed(const double tflight, const double val)
+FlightStatistics::AddTaskSpeed(const fixed tflight, const fixed val)
 {
   Lock();
-  Task_Speed.LeastSquaresUpdate(tflight/3600.0, val);
+  Task_Speed.LeastSquaresUpdate(tflight / 3600, val);
   Unlock();
 }
 
 void
-FlightStatistics::AddClimbBase(const double tflight, const double alt)
+FlightStatistics::AddClimbBase(const fixed tflight, const fixed alt)
 {
   Lock();
 
   if (Altitude_Ceiling.sum_n > 0) {
     // only update base if have already climbed, otherwise
     // we will catch the takeoff height as the base.
-    Altitude_Base.LeastSquaresUpdate(max(0.0, tflight) / 3600.0, alt);
+    Altitude_Base.LeastSquaresUpdate(max(fixed_zero, tflight) / 3600, alt);
   }
 
   Unlock();
 }
 
 void
-FlightStatistics::AddClimbCeiling(const double tflight, const double alt)
+FlightStatistics::AddClimbCeiling(const fixed tflight, const fixed alt)
 {
   Lock();
-  Altitude_Ceiling.LeastSquaresUpdate(max(0.0, tflight) / 3600.0, alt);
+  Altitude_Ceiling.LeastSquaresUpdate(max(fixed_zero, tflight) / 3600, alt);
   Unlock();
 }
 
@@ -833,7 +850,7 @@ FlightStatistics::AddClimbCeiling(const double tflight, const double alt)
  * @param v Average climb speed of the last thermal
  */
 void
-FlightStatistics::AddThermalAverage(const double v)
+FlightStatistics::AddThermalAverage(const fixed v)
 {
   Lock();
   ThermalAverage.LeastSquaresUpdate(v);

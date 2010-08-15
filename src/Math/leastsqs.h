@@ -63,6 +63,8 @@ Copyright_License {
 #ifndef _LEASTSQS_H
 #define _LEASTSQS_H
 
+#include "Math/fixed.hpp"
+
 #ifndef __cplusplus
 # error This library requires C++
 #endif
@@ -102,37 +104,37 @@ Copyright_License {
 class LeastSquares
 {
 public:
-  double sum_xi, sum_yi, sum_xi_2, sum_xi_yi;
+  fixed sum_xi, sum_yi, sum_xi_2, sum_xi_yi;
   int sum_n;
-  double m;
-  double b;
-  double sum_error;
+  fixed m;
+  fixed b;
+  fixed sum_error;
 
-  double rms_error;
-  double max_error;
-  double sum_weights;
-  double y_max;
-  double y_min;
-  double x_min;
-  double x_max;
+  fixed rms_error;
+  fixed max_error;
+  fixed sum_weights;
+  fixed y_max;
+  fixed y_min;
+  fixed x_min;
+  fixed x_max;
 
-  double y_ave;
+  fixed y_ave;
 
-  float xstore[MAX_STATISTICS];
-  float ystore[MAX_STATISTICS];
-  float weightstore[MAX_STATISTICS];
+  fixed xstore[MAX_STATISTICS];
+  fixed ystore[MAX_STATISTICS];
+  fixed weightstore[MAX_STATISTICS];
 
   LeastSquares();
 
   void Reset();
 
   void LeastSquaresUpdate();
-  void LeastSquaresUpdate(double y);
-  void LeastSquaresUpdate(double x, double y, double weight = 1.0);
+  void LeastSquaresUpdate(fixed y);
+  void LeastSquaresUpdate(fixed x, fixed y, fixed weight = fixed_one);
 
   void LeastSquaresErrorUpdate();
 
-  void LeastSquaresAdd(double x, double y, double weight = 1.0);
+  void LeastSquaresAdd(fixed x, fixed y, fixed weight = fixed_one);
 };
 
 #endif // _LEASTSQS_H

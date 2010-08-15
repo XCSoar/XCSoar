@@ -58,12 +58,12 @@ Chart::ResetScale()
 {
   unscaled_y = true;
   unscaled_x = true;
-  xscale = 0.0;
-  yscale = 0.0;
-  x_min = 0;
-  x_max = 0;
-  y_min = 0;
-  y_max = 0;
+  xscale = fixed_zero;
+  yscale = fixed_zero;
+  x_min = fixed_zero;
+  x_max = fixed_zero;
+  y_min = fixed_zero;
+  y_max = fixed_zero;
 }
 
 Chart::Chart(Canvas &the_canvas, const RECT the_rc) :
@@ -88,19 +88,19 @@ Chart::ScaleYFromData(const LeastSquares &lsdata)
   }
 
   if (lsdata.sum_n > 1) {
-    double y0, y1;
+    fixed y0, y1;
     y0 = lsdata.x_min * lsdata.m + lsdata.b;
     y1 = lsdata.x_max * lsdata.m + lsdata.b;
     y_min = min(y_min, min(y0, y1));
     y_max = max(y_max, max(y0, y1));
   }
 
-  if (fabs(y_max - y_min) > 50) {
+  if (fabs(y_max - y_min) > fixed(50)) {
     yscale = (y_max - y_min);
-    if (yscale > 0)
-      yscale = (rc.bottom - rc.top - BORDER_Y) / yscale;
+    if (positive(yscale))
+      yscale = fixed(rc.bottom - rc.top - BORDER_Y) / yscale;
   } else {
-    yscale = 2000;
+    yscale = fixed(2000);
   }
 }
 
@@ -120,13 +120,12 @@ Chart::ScaleXFromData(const LeastSquares &lsdata)
   }
 
   xscale = (x_max - x_min);
-  if (xscale > 0) {
-    xscale = (rc.right - rc.left - BORDER_X) / xscale;
-  }
+  if (positive(xscale))
+    xscale = fixed(rc.right - rc.left - BORDER_X) / xscale;
 }
 
 void
-Chart::ScaleYFromValue(const double value)
+Chart::ScaleYFromValue(const fixed value)
 {
   if (unscaled_y) {
     y_min = value;
@@ -138,13 +137,12 @@ Chart::ScaleYFromValue(const double value)
   }
 
   yscale = (y_max - y_min);
-  if (yscale > 0) {
-    yscale = (rc.bottom - rc.top - BORDER_Y) / yscale;
-  }
+  if (positive(yscale))
+    yscale = fixed(rc.bottom - rc.top - BORDER_Y) / yscale;
 }
 
 void
-Chart::ScaleXFromValue(const double value)
+Chart::ScaleXFromValue(const fixed value)
 {
   if (unscaled_x) {
     x_min = value;
@@ -156,9 +154,8 @@ Chart::ScaleXFromValue(const double value)
   }
 
   xscale = (x_max - x_min);
-  if (xscale > 0) {
-    xscale = (rc.right - rc.left - BORDER_X) / xscale;
-  }
+  if (positive(xscale))
+    xscale = fixed(rc.right - rc.left - BORDER_X) / xscale;
 }
 
 void
@@ -206,7 +203,7 @@ Chart::StyleLine(const POINT l1, const POINT l2, const int Style)
 }
 
 void
-Chart::DrawLabel(const TCHAR *text, const double xv, const double yv)
+Chart::DrawLabel(const TCHAR *text, const fixed xv, const fixed yv)
 {
   SIZE tsize = canvas.text_size(text);
 
@@ -266,16 +263,17 @@ Chart::DrawTrend(const LeastSquares &lsdata, const int Style)
   if (unscaled_x || unscaled_y)
     return;
 
-  double xmin, xmax, ymin, ymax;
+  fixed xmin, xmax, ymin, ymax;
   xmin = lsdata.x_min;
   xmax = lsdata.x_max;
   ymin = lsdata.x_min * lsdata.m + lsdata.b;
   ymax = lsdata.x_max * lsdata.m + lsdata.b;
 
-  xmin = (int)((xmin - x_min) * xscale) + rc.left + BORDER_X;
-  xmax = (int)((xmax - x_min) * xscale) + rc.left + BORDER_X;
-  ymin = (int)((y_max - ymin) * yscale) + rc.top;
-  ymax = (int)((y_max - ymax) * yscale) + rc.top;
+  xmin = (xmin - x_min) * xscale + fixed(rc.left + BORDER_X);
+  xmax = (xmax - x_min) * xscale + fixed(rc.left + BORDER_X);
+  ymin = (y_max - ymin) * yscale + fixed(rc.top);
+  ymax = (y_max - ymax) * yscale + fixed(rc.top);
+
   POINT line[2];
   line[0].x = (int)xmin;
   line[0].y = (int)ymin;
@@ -294,16 +292,17 @@ Chart::DrawTrendN(const LeastSquares &lsdata, const int Style)
   if (unscaled_x || unscaled_y)
     return;
 
-  double xmin, xmax, ymin, ymax;
-  xmin = 0.5;
-  xmax = lsdata.sum_n + 0.5;
+  fixed xmin, xmax, ymin, ymax;
+  xmin = fixed_half;
+  xmax = fixed(lsdata.sum_n) + fixed_half;
   ymin = lsdata.x_min * lsdata.m + lsdata.b;
   ymax = lsdata.x_max * lsdata.m + lsdata.b;
 
-  xmin = (int)((xmin) * xscale) + rc.left + BORDER_X;
-  xmax = (int)((xmax) * xscale) + rc.left + BORDER_X;
-  ymin = (int)((y_max - ymin) * yscale) + rc.top;
-  ymax = (int)((y_max - ymax) * yscale) + rc.top;
+  xmin = (xmin) * xscale + fixed(rc.left + BORDER_X);
+  xmax = (xmax) * xscale + fixed(rc.left + BORDER_X);
+  ymin = (y_max - ymin * yscale) + fixed(rc.top);
+  ymax = (y_max - ymax * yscale) + fixed(rc.top);
+
   POINT line[2];
   line[0].x = (int)xmin;
   line[0].y = (int)ymin;
@@ -314,8 +313,8 @@ Chart::DrawTrendN(const LeastSquares &lsdata, const int Style)
 }
 
 void
-Chart::DrawLine(const double xmin, const double ymin,
-    const double xmax, const double ymax, const int Style)
+Chart::DrawLine(const fixed xmin, const fixed ymin,
+    const fixed xmax, const fixed ymax, const int Style)
 {
   if (unscaled_x || unscaled_y)
     return;
@@ -341,10 +340,10 @@ Chart::DrawBarChart(const LeastSquares &lsdata)
   int xmin, ymin, xmax, ymax;
 
   for (int i = 0; i < lsdata.sum_n; i++) {
-    xmin = (int)((i + 1 + 0.2) * xscale) + rc.left + BORDER_X;
-    ymin = (int)((y_max - y_min) * yscale) + rc.top;
-    xmax = (int)((i + 1 + 0.8) * xscale) + rc.left + BORDER_X;
-    ymax = (int)((y_max - lsdata.ystore[i]) * yscale) + rc.top;
+    xmin = (fixed(i) + fixed(1.2)) * xscale + fixed(rc.left + BORDER_X);
+    ymin = (y_max - y_min) * yscale + fixed(rc.top);
+    xmax = (fixed(i) + fixed(1.8)) * xscale + fixed(rc.left + BORDER_X);
+    ymax = (y_max - lsdata.ystore[i]) * yscale + fixed(rc.top);
     canvas.rectangle(xmin, ymin, xmax, ymax);
   }
 }
@@ -385,30 +384,29 @@ Chart::DrawLineGraph(const LeastSquares &lsdata, int Style)
 }
 
 void
-Chart::FormatTicText(TCHAR *text, const double val, const double step)
+Chart::FormatTicText(TCHAR *text, const fixed val, const fixed step)
 {
-  if (step < 1.0) {
-    _stprintf(text, _T("%.1f"), val);
+  if (step < fixed_one) {
+    _stprintf(text, _T("%.1f"), (double)val);
   } else {
-    _stprintf(text, _T("%.0f"), val);
+    _stprintf(text, _T("%.0f"), (double)val);
   }
 }
 
 void
-Chart::DrawXGrid(const double tic_step, const double zero, const int Style,
-    const double unit_step, bool draw_units)
+Chart::DrawXGrid(const fixed tic_step, const fixed zero, const int Style,
+                 const fixed unit_step, bool draw_units)
 {
   if (!tic_step)
     return;
 
   POINT line[2];
 
-  double xval;
   int xmin, ymin, xmax, ymax;
 
   //  bool do_units = ((x_max-zero)/tic_step)<10;
 
-  for (xval = zero; xval <= x_max; xval += tic_step) {
+  for (fixed xval = zero; xval <= x_max; xval += tic_step) {
     xmin = (int)((xval - x_min) * xscale) + rc.left + BORDER_X;
     ymin = rc.top;
     xmax = xmin;
@@ -432,7 +430,7 @@ Chart::DrawXGrid(const double tic_step, const double zero, const int Style,
     }
   }
 
-  for (xval = zero - tic_step; xval >= x_min; xval -= tic_step) {
+  for (fixed xval = zero - tic_step; xval >= x_min; xval -= tic_step) {
     xmin = (int)((xval - x_min) * xscale) + rc.left + BORDER_X;
     ymin = rc.top;
     xmax = xmin;
@@ -459,18 +457,17 @@ Chart::DrawXGrid(const double tic_step, const double zero, const int Style,
 }
 
 void
-Chart::DrawYGrid(const double tic_step, const double zero, const int Style,
-    const double unit_step, bool draw_units)
+Chart::DrawYGrid(const fixed tic_step, const fixed zero, const int Style,
+                 const fixed unit_step, bool draw_units)
 {
   if (!tic_step)
     return;
 
   POINT line[2];
 
-  double yval;
   int xmin, ymin, xmax, ymax;
 
-  for (yval = zero; yval <= y_max; yval += tic_step) {
+  for (fixed yval = zero; yval <= y_max; yval += tic_step) {
     xmin = rc.left;
     ymin = (int)((y_max - yval) * yscale) + rc.top;
     xmax = rc.right;
@@ -494,7 +491,7 @@ Chart::DrawYGrid(const double tic_step, const double zero, const int Style,
     }
   }
 
-  for (yval = zero - tic_step; yval >= y_min; yval -= tic_step) {
+  for (fixed yval = zero - tic_step; yval >= y_min; yval -= tic_step) {
     xmin = rc.left;
     ymin = (int)((y_max - yval) * yscale) + rc.top;
     xmax = rc.right;
@@ -522,63 +519,63 @@ Chart::DrawYGrid(const double tic_step, const double zero, const int Style,
 void
 Chart::ScaleMakeSquare()
 {
-  if (y_max - y_min <= 0)
+  if (y_max <= y_min)
     return;
 
   if (rc.bottom - rc.top - BORDER_Y <= 0)
     return;
 
-  double ar = ((double)(rc.right - rc.left - BORDER_X))
+  fixed ar = fixed(rc.right - rc.left - BORDER_X)
               / (rc.bottom - rc.top - BORDER_Y);
-  double ard = (x_max - x_min) / (y_max - y_min);
-  double armod = ard / ar;
+  fixed ard = (x_max - x_min) / (y_max - y_min);
+  fixed armod = ard / ar;
 
-  double delta;
+  fixed delta;
 
-  if (armod < 1.0) {
+  if (armod < fixed_one) {
     // need to expand width
-    delta = (x_max - x_min) * (1.0 / armod - 1.0);
-    x_max += delta / 2.0;
-    x_min -= delta / 2.0;
+    delta = (x_max - x_min) * (fixed_one / armod - fixed_one);
+    x_max += delta / 2;
+    x_min -= delta / 2;
   } else {
     // need to expand height
-    delta = (y_max - y_min) * (armod - 1.0);
-    y_max += delta / 2.0;
-    y_min -= delta / 2.0;
+    delta = (y_max - y_min) * (armod - fixed_one);
+    y_max += delta / 2;
+    y_min -= delta / 2;
   }
 
   // shrink both by 10%
-  delta = (x_max - x_min) * (1.1 - 1.0);
-  x_max += delta / 2.0;
-  x_min -= delta / 2.0;
-  delta = (y_max - y_min) * (1.1 - 1.0);
-  y_max += delta / 2.0;
-  y_min -= delta / 2.0;
+  delta = (x_max - x_min) / 10;
+  x_max += delta / 2;
+  x_min -= delta / 2;
+  delta = (y_max - y_min) / 10;
+  y_max += delta / 2;
+  y_min -= delta / 2;
 
-  yscale = (rc.bottom - rc.top - BORDER_Y) / (y_max - y_min);
-  xscale = (rc.right - rc.left - BORDER_X) / (x_max - x_min);
+  yscale = fixed(rc.bottom - rc.top - BORDER_Y) / (y_max - y_min);
+  xscale = fixed(rc.right - rc.left - BORDER_X) / (x_max - x_min);
 }
 
 long
-Chart::screenX(double x) const
+Chart::screenX(fixed x) const
 {
   return (long)((x - x_min) * xscale) + rc.left + BORDER_X;
 }
 
 long
-Chart::screenY(double y) const
+Chart::screenY(fixed y) const
 {
   return (long)((y_max - y) * yscale) + rc.top;
 }
 
 long
-Chart::screenS(double s) const
+Chart::screenS(fixed s) const
 {
   return (long)(s * yscale);
 }
 
 void
-Chart::DrawArrow(const double x, const double y, const double mag,
+Chart::DrawArrow(const fixed x, const fixed y, const fixed mag,
     const Angle angle, const int Style)
 {
   POINT wv[2];
@@ -589,17 +586,17 @@ Chart::DrawArrow(const double x, const double y, const double mag,
   const FastRotation r(angle);
   FastRotation::Pair p;
 
-  p = r.Rotate(fixed(mag), fixed_zero);
+  p = r.Rotate(mag, fixed_zero);
   wv[1].x = wv[0].x + (int)p.first;
   wv[1].y = wv[0].y + (int)p.second;
   StyleLine(wv[0], wv[1], Style);
 
-  p = r.Rotate(fixed(mag - 5), fixed(-3));
+  p = r.Rotate(mag - fixed(5), fixed(-3));
   wv[1].x = wv[0].x + (int)p.first;
   wv[1].y = wv[0].y + (int)p.second;
   StyleLine(wv[0], wv[1], Style);
 
-  p = r.Rotate(fixed(mag - 5), fixed(3));
+  p = r.Rotate(mag - fixed(5), fixed(3));
   wv[1].x = wv[0].x + (int)p.first;
   wv[1].y = wv[0].y + (int)p.second;
   StyleLine(wv[0], wv[1], Style);

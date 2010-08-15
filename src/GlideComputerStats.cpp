@@ -114,9 +114,7 @@ GlideComputerStats::DoLogging()
 double
 GlideComputerStats::GetAverageThermal()
 {
-  double mc_current;
-
-  mc_current = GlideComputerBlackboard::GetAverageThermal();
+  fixed mc_current(GlideComputerBlackboard::GetAverageThermal());
   return flightstats.AverageThermalAdjusted(mc_current, Calculated().Circling);
 }
 
@@ -124,7 +122,8 @@ void
 GlideComputerStats::OnClimbBase(double StartAlt)
 {
   flightstats.AddClimbBase(Calculated().ClimbStartTime
-                           - Basic().flight.TakeOffTime, StartAlt);
+                           - Basic().flight.TakeOffTime,
+                           fixed(StartAlt));
 }
 
 void
