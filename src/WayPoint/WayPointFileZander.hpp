@@ -56,10 +56,10 @@ protected:
   bool IsWritable() { return false; }
 
 private:
-  bool parseString(const TCHAR* src, tstring& dest);
-  bool parseAngle(const TCHAR* src, Angle& dest, const bool lat);
-  bool parseAltitude(const TCHAR* src, fixed& dest);
-  bool parseFlags(const TCHAR* src, WaypointFlags& dest);
+  static bool parseString(const TCHAR* src, tstring& dest);
+  static bool parseAngle(const TCHAR* src, Angle& dest, const bool lat);
+  static bool parseAltitude(const TCHAR* src, fixed& dest);
+  static bool parseFlags(const TCHAR* src, WaypointFlags& dest);
 };
 
 #endif
