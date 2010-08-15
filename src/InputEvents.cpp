@@ -77,6 +77,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Compatibility/string.h" /* for _ttoi() */
 
+#include <algorithm>
 #include <assert.h>
 #include <ctype.h>
 #include <tchar.h>
@@ -270,13 +271,8 @@ InputEvents::readFile()
 
   // clear the GCE and NMEA queues
   mutexEventQueue.Lock();
-  int i;
-  for (i = 0; i < MAX_GCE_QUEUE; i++) {
-    GCE_Queue[i] = -1;
-  }
-  for (i = 0; i < MAX_NMEA_QUEUE; i++) {
-    NMEA_Queue[i] = -1;
-  }
+  std::fill(GCE_Queue, GCE_Queue + MAX_GCE_QUEUE, -1);
+  std::fill(NMEA_Queue, NMEA_Queue + MAX_NMEA_QUEUE, -1);
   mutexEventQueue.Unlock();
 
   // Get defaults
@@ -946,14 +942,10 @@ InputEvents::DoQueuedEvents(void)
 
   // copy the queue first, blocking
   mutexEventQueue.Lock();
-  for (i = 0; i < MAX_GCE_QUEUE; i++) {
-    GCE_Queue_copy[i] = GCE_Queue[i];
-    GCE_Queue[i] = -1;
-  }
-  for (i = 0; i < MAX_NMEA_QUEUE; i++) {
-    NMEA_Queue_copy[i] = NMEA_Queue[i];
-    NMEA_Queue[i] = -1;
-  }
+  std::copy(GCE_Queue, GCE_Queue + MAX_GCE_QUEUE, GCE_Queue_copy);
+  std::fill(GCE_Queue, GCE_Queue + MAX_GCE_QUEUE, -1);
+  std::copy(NMEA_Queue, NMEA_Queue + MAX_NMEA_QUEUE, NMEA_Queue_copy);
+  std::fill(NMEA_Queue, NMEA_Queue + MAX_NMEA_QUEUE, -1);
   mutexEventQueue.Unlock();
 
   // process each item in the queue
