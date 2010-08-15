@@ -46,13 +46,8 @@ Copyright_License {
 
 DataFieldEnum::~DataFieldEnum()
 {
-  for (unsigned int i = 0; i < nEnums; i++) {
-    if (mEntries[i].mText) {
-      free(mEntries[i].mText);
-      mEntries[i].mText = NULL;
-    }
-  }
-  nEnums = 0;
+  for (unsigned int i = 0; i < nEnums; i++)
+    free(mEntries[i].mText);
 }
 
 int
