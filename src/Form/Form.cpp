@@ -57,6 +57,15 @@ WndForm::ClientAreaWindow::on_command(unsigned id, unsigned code)
 Brush *
 WndForm::ClientAreaWindow::on_color(Window &window, Canvas &canvas)
 {
+#ifdef _WIN32_WCE
+  if ((window.get_window_long(GWL_STYLE) & 0xf) == BS_PUSHBUTTON)
+    /* Windows CE allows custom background colors for push buttons,
+       while desktop Windows does not; to make push buttons retain
+       their normal background color, we're implementing this
+       exception */
+    return ContainerWindow::on_color(window, canvas);
+#endif
+
   canvas.set_text_color(Color::BLACK);
   canvas.set_background_color(background_color);
   return &background_brush;
