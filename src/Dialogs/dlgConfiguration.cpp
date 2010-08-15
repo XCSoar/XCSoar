@@ -1926,15 +1926,22 @@ setVariables()
 }
 
 static bool
-FinishFileField(const WndProperty &wp, const TCHAR *profile_key,
-                const TCHAR *old_value)
+ProfileStringModified(const TCHAR *key, const TCHAR *new_value)
+{
+  TCHAR old_value[MAX_PATH];
+  Profile::Get(key, old_value, MAX_PATH);
+  return _tcscmp(old_value, new_value) != 0;
+}
+
+static bool
+FinishFileField(const WndProperty &wp, const TCHAR *profile_key)
 {
   const DataFieldFileReader *dfe =
     (const DataFieldFileReader *)wp.GetDataField();
   _tcscpy(temptext, dfe->GetPathFile());
   ContractLocalPath(temptext);
 
-  if (_tcscmp(temptext, old_value) == 0)
+  if (!ProfileStringModified(profile_key, temptext))
     return false;
 
   Profile::Set(profile_key, temptext);
@@ -1944,10 +1951,10 @@ FinishFileField(const WndProperty &wp, const TCHAR *profile_key,
 
 static bool
 FinishFileField(WndForm &wf, const TCHAR *control_name,
-                const TCHAR *profile_key, const TCHAR *old_value)
+                const TCHAR *profile_key)
 {
   const WndProperty *wp = (const WndProperty *)wf.FindByName(control_name);
-  return wp != NULL && FinishFileField(*wp, profile_key, old_value);
+  return wp != NULL && FinishFileField(*wp, profile_key);
 }
 
 /**
@@ -2441,42 +2448,36 @@ void dlgConfigurationShowModal(void)
                               settings_computer.olc_handicap);
 
   PolarFileChanged = FinishFileField(*wf, _T("prpPolarFile"),
-                                     szProfilePolarFile, szPolarFile);
+                                     szProfilePolarFile);
 
   WaypointFileChanged =
-    FinishFileField(*wf, _T("prpWaypointFile"),
-                    szProfileWayPointFile, szWaypointFile) ||
+    FinishFileField(*wf, _T("prpWaypointFile"), szProfileWayPointFile) ||
     FinishFileField(*wf, _T("prpAdditionalWaypointFile"),
-                    szProfileAdditionalWayPointFile, szAdditionalWaypointFile);
+                    szProfileAdditionalWayPointFile);
 
   AirspaceFileChanged =
-    FinishFileField(*wf, _T("prpAirspaceFile"),
-                    szProfileAirspaceFile, szAirspaceFile) ||
+    FinishFileField(*wf, _T("prpAirspaceFile"), szProfileAirspaceFile) ||
     FinishFileField(*wf, _T("prpAdditionalAirspaceFile"),
-                    szProfileAdditionalAirspaceFile, szAdditionalAirspaceFile);
+                    szProfileAdditionalAirspaceFile);
 
-  MapFileChanged = FinishFileField(*wf, _T("prpMapFile"),
-                                   szProfileMapFile, szMapFile);
+  MapFileChanged = FinishFileField(*wf, _T("prpMapFile"), szProfileMapFile);
 
   TerrainFileChanged = FinishFileField(*wf, _T("prpTerrainFile"),
-                                       szProfileTerrainFile, szTerrainFile);
+                                       szProfileTerrainFile);
 
   TopologyFileChanged = FinishFileField(*wf, _T("prpTopologyFile"),
-                                        szProfileTopologyFile, szTopologyFile);
+                                        szProfileTopologyFile);
 
   AirfieldFileChanged = FinishFileField(*wf, _T("prpAirfieldFile"),
-                                        szProfileAirfieldFile, szAirfieldFile);
+                                        szProfileAirfieldFile);
 
-  if (FinishFileField(*wf, _T("prpLanguageFile"),
-                      szProfileLanguageFile, szLanguageFile))
+  if (FinishFileField(*wf, _T("prpLanguageFile"), szProfileLanguageFile))
     requirerestart = true;
 
-  if (FinishFileField(*wf, _T("prpStartMaxSpeedMargin"),
-                      szProfileStatusFile, szStatusFile))
+  if (FinishFileField(*wf, _T("prpStartMaxSpeedMargin"), szProfileStatusFile))
     requirerestart = true;
 
-  if (FinishFileField(*wf, _T("prpInputFile"),
-                      szProfileInputFile, szInputFile))
+  if (FinishFileField(*wf, _T("prpInputFile"), szProfileInputFile))
     requirerestart = true;
 
   changed |= SaveFormProperty(wf, _T("prpBallastSecsToEmpty"),
