@@ -51,8 +51,8 @@ static void OnCloseClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
 }
 
-static double VegaDemoW = 0.0;
-static double VegaDemoV = 0.0;
+static fixed VegaDemoW = fixed_zero;
+static fixed VegaDemoV = fixed_zero;
 static bool VegaDemoAudioClimb = true;
 
 
