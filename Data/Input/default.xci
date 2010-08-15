@@ -150,29 +150,21 @@ mode=default
 type=key
 data=APP1
 event=Mode Nav1
-label=
-location=1
 
 mode=default
 type=key
 data=APP2
 event=Mode Display1
-label=
-location=2
 
 mode=default
 type=key
 data=APP3
 event=Mode Config1
-label=
-location=3
 
 mode=default
 type=key
 data=APP4
 event=Mode Info1
-label=
-location=4
 
 # Always active buttons. (unless over-written)
 
