@@ -75,11 +75,13 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Screen/Blank.hpp"
 #include "MapWindowProjection.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "Compatibility/string.h" /* for _ttoi() */
 
 #include <assert.h>
 #include <ctype.h>
 #include <tchar.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 // Sensible maximums
 enum {
@@ -534,7 +536,7 @@ InputEvents::readFile()
       } else if (_tcscmp(key, _T("label")) == 0) {
         _tcscpy(d_label, value);
       } else if (_tcscmp(key, _T("location")) == 0) {
-        _stscanf(value, _T("%d"), &d_location);
+        d_location = _ttoi(value);
 
       #ifdef _INPUTDEBUG_
       } else if (input_errors_count < MAX_INPUT_ERRORS) {
