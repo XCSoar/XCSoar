@@ -47,8 +47,13 @@ Copyright_License {
 class MenuItem {
 public:
   const TCHAR *label;
-  int location;
   int event;
+
+  MenuItem():label(NULL), event(-1) {}
+
+  bool defined() const {
+    return event > 0;
+  }
 };
 
 /**
@@ -62,22 +67,14 @@ public:
 
 protected:
   MenuItem items[MAX_ITEMS];
-  unsigned num_items;
 
 public:
-  Menu():num_items(0) {}
-
-  unsigned Count() const {
-    return num_items;
-  }
-
   const MenuItem &operator[](unsigned i) const {
     return items[i];
   }
 
   void Add(const TCHAR *label, int location, int event_id);
 
-  int FindByLocation(int location) const;
   int FindByEvent(int event) const;
 };
 

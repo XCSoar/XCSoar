@@ -38,37 +38,26 @@ Copyright_License {
 
 #include "MenuData.hpp"
 
+#include <assert.h>
+
 void
 Menu::Add(const TCHAR *label, int location, int event_id)
 {
-  int i = FindByLocation(location);
-  if (i < 0) {
-    if (num_items >= MAX_ITEMS)
-      return;
-    i = num_items++;
-  }
+  assert(location >= 0);
 
-  MenuItem &item = items[i];
+  if (location >= MAX_ITEMS)
+    return;
+
+  MenuItem &item = items[location];
 
   item.label = label;
-  item.location = location;
   item.event = event_id;
-}
-
-int
-Menu::FindByLocation(int location) const
-{
-  for (unsigned i = 0; i < num_items; ++i)
-    if (items[i].location == location)
-      return i;
-
-  return -1;
 }
 
 int
 Menu::FindByEvent(int event) const
 {
-  for (unsigned i = 0; i < num_items; ++i)
+  for (unsigned i = 0; i < MAX_ITEMS; ++i)
     if (items[i].event == event)
       return i;
 

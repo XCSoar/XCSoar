@@ -768,11 +768,11 @@ InputEvents::drawButtons(mode Mode)
     return;
 
   const Menu &menu = menus[Mode];
-  for (unsigned i = 0; i < menu.Count(); ++i) {
+  for (unsigned i = 0; i < menu.MAX_ITEMS; ++i) {
     const MenuItem &item = menu[i];
 
-    if (item.location > 0)
-      ButtonLabel::SetLabelText(item.location, item.label);
+    if (item.defined())
+      ButtonLabel::SetLabelText(i, item.label);
   }
 }
 
@@ -793,13 +793,13 @@ InputEvents::processButton(unsigned bindex)
   if (!globalRunningEvent.test())
     return false;
 
-  mode lastMode = getModeID();
-  const Menu &menu = menus[lastMode];
-  int i = menu.FindByLocation(bindex);
-  if (i < 0)
+  if (bindex >= Menu::MAX_ITEMS)
     return false;
 
-  const MenuItem &item = menu[i];
+  mode lastMode = getModeID();
+  const MenuItem &item = menus[lastMode][bindex];
+  if (!item.defined())
+    return false;
 
   /* JMW illegal, should be done by gui handler loop
   // JMW need a debounce method here..
@@ -862,8 +862,8 @@ InputEvents::processKey(unsigned dWord)
 
   const Menu &menu = menus[mode];
   int i = menu.FindByEvent(event_id);
-  if (i >= 0 && menu[i].location > 0) {
-    bindex = menu[i].location;
+  if (i >= 0 && menu[i].defined()) {
+    bindex = i;
     pLabelText = menu[i].label;
   }
 
