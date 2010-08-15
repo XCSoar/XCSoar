@@ -208,8 +208,6 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
   screenRect.maxy *= RAD_TO_DEG;
 #endif
 
-  static POINT pt[MAXCLIPPOLYGON];
-
   for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
     const XShape *cshape = shpCache[ixshp];
     if (!cshape || !cshape->is_visible(label_field))
@@ -238,7 +236,8 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
     case MS_SHAPE_LINE:
       for (int tt = 0; tt < shape.numlines; ++tt) {
         const lineObj &line = shape.line[tt];
-        int msize = min(line.numpoints, (int)MAXCLIPPOLYGON);
+        unsigned msize = line.numpoints;
+        POINT pt[msize];
 
         projection.LonLat2Screen(line.point, pt, msize, 1);
 
@@ -249,7 +248,8 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
     case MS_SHAPE_POLYGON:
       for (int tt = 0; tt < shape.numlines; ++tt) {
         const lineObj &line = shape.line[tt];
-        int msize = min(line.numpoints / iskip, (int)MAXCLIPPOLYGON);
+        unsigned msize = line.numpoints / iskip;
+        POINT pt[msize];
 
         projection.LonLat2Screen(line.point, pt, msize * iskip, iskip);
 
@@ -292,8 +292,6 @@ TopologyFile::PaintLabels(Canvas &canvas,
   screenRect.maxy *= RAD_TO_DEG;
 #endif
 
-  static POINT pt[MAXCLIPPOLYGON];
-
   for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
     const XShape *cshape = shpCache[ixshp];
     if (!cshape || !cshape->is_visible(label_field))
@@ -306,13 +304,14 @@ TopologyFile::PaintLabels(Canvas &canvas,
 
     for (int tt = 0; tt < shape.numlines; ++tt) {
       const lineObj &line = shape.line[tt];
-      int msize = min(line.numpoints / iskip, (int)MAXCLIPPOLYGON);
+      unsigned msize = line.numpoints;
+      POINT pt[msize];
 
       projection.LonLat2Screen(line.point, pt, msize * iskip, iskip);
 
       int minx = canvas.get_width();
       int miny = canvas.get_height();
-      for (int jj = 0; jj < msize; ++jj) {
+      for (unsigned jj = 0; jj < msize; ++jj) {
         if (pt[jj].x <= minx) {
           minx = pt[jj].x;
           miny = pt[jj].y;
