@@ -149,24 +149,31 @@ Registry::Import(const TCHAR *szFile)
   if (reader.error())
     return;
 
-  const TCHAR *winval;
-  TCHAR wname[nMaxValueValueSize];
-  TCHAR wvalue[nMaxValueValueSize];
-  int j;
+  TCHAR *line;
+  while ((line = reader.read()) != NULL) {
+    if (string_is_empty(line) || *line == _T('#'))
+      continue;
 
-  while ((winval = reader.read()) != NULL) {
-    if (_stscanf(winval, _T("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"),
-                 wname, wvalue) == 2) {
-      if (!string_is_empty(wname))
-        Set(wname, wvalue);
-    } else if (_stscanf(winval, _T("%[^#=\r\n ]=%d[\r\n]"), wname, &j) == 2) {
-      if (!string_is_empty(wname))
-        Set(wname, j);
-    } else if (_stscanf(winval, _T("%[^#=\r\n ]=\"\"[\r\n]"), wname) == 1) {
-      if (!string_is_empty(wname))
-        Set(wname, _T(""));
+    TCHAR *p = _tcschr(line, _T('='));
+    if (p == line || p == NULL)
+      continue;
+
+    *p = _T('\0');
+    TCHAR *value = p + 1;
+
+    if (*value == _T('"')) {
+      ++value;
+      p = _tcschr(value, _T('"'));
+      if (p == NULL)
+        continue;
+
+      *p = _T('\0');
+
+      Set(line, value);
     } else {
-      // assert(false); // Invalid line reached
+      long l = _tcstol(value, &p, 10);
+      if (p > value)
+        Set(line, l);
     }
   }
 }
