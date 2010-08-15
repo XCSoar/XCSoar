@@ -70,7 +70,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "StringUtil.hpp"
 #include "Asset.hpp"
 #include "MenuData.hpp"
-#include "IO/FileLineReader.hpp"
+#include "IO/ConfiguredFile.hpp"
 #include "SettingsUser.hpp"
 #include "Screen/Blank.hpp"
 #include "MapWindowProjection.hpp"
@@ -305,19 +305,16 @@ InputEvents::readFile()
   }
 
   // Read in user defined configuration file
-  TCHAR szFile1[MAX_PATH];
+  TLineReader *reader = OpenConfiguredTextFile(szProfileInputFile);
+  if (reader != NULL) {
+    readFile(*reader);
+    delete reader;
+  }
+}
 
-  // Open file from registry
-  Profile::Get(szProfileInputFile, szFile1, MAX_PATH);
-  ExpandLocalPath(szFile1);
-
-  if (string_is_empty(szFile1))
-    return;
-
-  FileLineReader reader(szFile1);
-  if (reader.error())
-    return;
-
+void
+InputEvents::readFile(TLineReader &reader)
+{
   // TODO code - Safer sizes, strings etc - use C++ (can scanf restrict length?)
 
   TCHAR *new_label = NULL;

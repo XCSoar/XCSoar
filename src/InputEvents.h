@@ -43,6 +43,8 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Thread/Mutex.hpp"
 
+class TLineReader;
+
 typedef void (*pt2Event)(const TCHAR *);
 
 class InputEvents: public ActionInterface {
@@ -69,6 +71,7 @@ private:
   static void ResetMenuTimeOut();
 
   static void readFile();
+  static void readFile(TLineReader &reader);
   static mode mode2int(const TCHAR *mode, bool create);
   static void setMode(mode mode);
   static void setMode(const TCHAR *mode);
