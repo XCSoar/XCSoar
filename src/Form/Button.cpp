@@ -37,116 +37,28 @@ Copyright_License {
 */
 
 #include "Form/Button.hpp"
-#include "Form/Control.hpp"
-#include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
-#include "Interface.hpp"
 
 WndButton::WndButton(ContainerWindow &parent,
     const TCHAR *Caption, int X, int Y, int Width, int Height,
-                     const WindowStyle style,
-                     Color background_color,
+                     const ButtonWindowStyle style,
     ClickNotifyCallback_t Function) :
-  text_color(Color::BLACK),
-  background_brush(background_color),
-  mDown(false),
-  mLastDrawTextHeight(-1),
   mOnClickNotify(Function)
 {
-  // copy the buttons initial caption to the mCaption field
-  _tcscpy(mCaption, Caption);
-
-#if !defined(ENABLE_SDL) && !defined(NDEBUG)
-  ::SetWindowText(hWnd, Caption);
-#endif
-
-  set(parent, X, Y, Width, Height, style);
+  set(parent, Caption, X, Y, Width, Height, style);
+  set_font(Fonts::MapBold);
 }
 
-void
-WndButton::on_click()
+bool
+WndButton::on_clicked()
 {
   // Call the OnClick function
-  if (mOnClickNotify != NULL)
+  if (mOnClickNotify != NULL) {
     mOnClickNotify(*this);
-}
-
-bool
-WndButton::on_setfocus()
-{
-  PaintWindow::on_setfocus();
-  invalidate();
-  return true;
-}
-
-bool
-WndButton::on_killfocus()
-{
-  PaintWindow::on_killfocus();
-  invalidate();
-  return true;
-}
-
-bool
-WndButton::on_mouse_up(int x, int y)
-{
-  // If button does not have capture -> call parent function
-  if (!has_capture())
-    return PaintWindow::on_mouse_up(x, y);
-
-  release_capture();
-
-  // If button hasn't been pressed, mouse is only released over it -> return
-  if (!mDown)
     return true;
-
-  // Button is not pressed anymore
-  mDown = false;
-
-  // Repainting needed
-  invalidate();
-
-  on_click();
-
-  return true;
-}
-
-bool
-WndButton::on_mouse_down(int x, int y)
-{
-  (void)x;
-  (void)y;
-
-  // Button is now pressed
-  mDown = true;
-
-  if (has_focus())
-    // If button has focus -> repaint
-    invalidate();
-  else
-    // If button not yet focused -> give focus to the button
-    set_focus();
-
-  set_capture();
-
-  return true;
-}
-
-bool
-WndButton::on_mouse_move(int x, int y, unsigned keys)
-{
-  // If button does not have capture -> call parent function
-  if (!has_capture())
-    return PaintWindow::on_mouse_move(x, y, keys);
-
-  // If button is currently pressed and mouse cursor is moving on top of it
-  bool in = in_client_rect(x, y);
-  if (in != mDown) {
-    mDown = in;
-    invalidate();
   }
 
-  return true;
+  return false;
 }
 
 bool
@@ -170,104 +82,10 @@ WndButton::on_key_down(unsigned key_code)
   case VK_F4:
 #endif
   case VK_RETURN:
-  case VK_SPACE:
-    // "Press" the button via keys and repaint it
-    if (!mDown) {
-      mDown = true;
-      invalidate();
-    }
-    return true;
+    return on_clicked();
   }
 
-  // If key_down hasn't been handled yet -> call parent function
-  return PaintWindow::on_key_down(key_code);
+  return ButtonWindow::on_key_down(key_code);
 }
 
-bool
-WndButton::on_key_up(unsigned key_code)
-{
-  switch (key_code) {
-#ifdef GNAV
-  // JMW added this to make data entry easier
-  case VK_F4:
-#endif
-  case VK_RETURN:
-  case VK_SPACE:
-    if (!mDown)
-      return true;
-
-    // Button is not pressed anymore
-    mDown = false;
-    invalidate();
-
-    // Return if button was not pressed long enough
-    if (!XCSoarInterface::Debounce())
-      return true; // prevent false trigger
-
-    on_click();
-
-    return true;
-  }
-
-  // If key_down hasn't been handled yet -> call parent function
-  return PaintWindow::on_key_up(key_code);
-}
-
-void
-WndButton::on_paint(Canvas &canvas)
-{
-  /* background and selector */
-  canvas.clear(background_brush);
-
-  if (has_focus())
-    WindowControl::PaintSelector(canvas, get_client_rect());
-
-  // Get button RECT and shrink it to make room for the selector/focus
-  RECT rc = get_client_rect();
-  InflateRect(&rc, -2, -2); // todo border width
-
-  // JMW todo: add icons?
-
-  // Draw button to the background
-  canvas.draw_button(rc, mDown);
-
-  // If button has text on it
-  if (mCaption == NULL || mCaption[0] == '\0')
-    return;
-
-  // Set drawing colors
-  canvas.set_text_color(text_color);
-  canvas.background_transparent();
-
-  // Set drawing font
-  canvas.select(Fonts::MapBold);
-
-  if (mLastDrawTextHeight < 0) {
-    // Calculate the text height and save it for the future
-    RECT rc_t = rc;
-    canvas.formatted_text(&rc_t, mCaption,
-        DT_CALCRECT | DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
-
-    mLastDrawTextHeight = rc_t.bottom - rc_t.top;
-  }
-
-  // If button is pressed, offset the text for 3D effect
-  if (mDown)
-    OffsetRect(&rc, Layout::FastScale(1), Layout::FastScale(1));
-
-  // Vertical middle alignment
-  rc.top += (canvas.get_height() - 4 - mLastDrawTextHeight) / 2;
-
-  // Draw the button caption
-  canvas.formatted_text(&rc, mCaption,
-      DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
-}
-
-void
-WndButton::SetCaption(const TCHAR *Value)
-{
-  _tcscpy(mCaption, Value);
-  mLastDrawTextHeight = -1;
-  invalidate();
-}
 

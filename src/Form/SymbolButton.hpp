@@ -40,12 +40,20 @@ Copyright_License {
 #define XCSOAR_FORM_SYMBOLBUTTON_HPP
 
 #include "Form/Button.hpp"
+#include "Screen/Brush.hpp"
 
 /**
  * This class is used for creating buttons with symbols instead of text.
  * It is based on the WndButton class.
  */
 class WndSymbolButton : public WndButton {
+  static inline ButtonWindowStyle custom_painting(ButtonWindowStyle style) {
+    style.enable_custom_painting();
+    return style;
+  }
+
+  Brush background_brush;
+
 public:
   /**
    * Constructor of the WndSymbolButton class
@@ -60,11 +68,12 @@ public:
    * when the button is clicked
    */
   WndSymbolButton(ContainerWindow &Parent, const TCHAR *Caption,
-      int X, int Y, int Width, int Height, const WindowStyle style,
+      int X, int Y, int Width, int Height, const ButtonWindowStyle style,
                   Color background_color,
                   ClickNotifyCallback_t Function = NULL)
     :WndButton(Parent, Caption, X, Y, Width, Height,
-               style, background_color, Function) {}
+               custom_painting(style), Function),
+     background_brush(background_color) {}
 
 protected:
   /**

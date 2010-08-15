@@ -627,7 +627,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     window = new WndButton(Parent.GetClientAreaWindow(), Caption,
                            X, Y, Width, Height,
-                           style, Parent.GetBackColor(),
+                           style,
                            ClickCallback);
 
   // SymbolButtonControl (WndSymbolButton) not used yet
@@ -664,7 +664,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     window = new WndEventButton(Parent.GetClientAreaWindow(), Caption,
                                 X, Y, Width, Height,
-                                style, Parent.GetBackColor(),
+                                style,
                                 iename, ieparameters);
 #endif
 

@@ -292,17 +292,13 @@ UpdateButtons()
   if (cursor_at_active_task()) {
     wbLoadSave->SetCaption(_T("Save"));
     wbDelete->set_enabled(false);
-    wbDelete->SetForeColor(Color::GRAY);
     wbRename->set_enabled(false);
-    wbRename->SetForeColor(Color::GRAY);
     return;
   }
 
   wbLoadSave->SetCaption(_T("Load"));
   wbDelete->set_enabled(true);
-  wbDelete->SetForeColor(Color::BLACK);
   wbRename->set_enabled(true);
-  wbRename->SetForeColor(Color::BLACK);
 }
 
 static void 

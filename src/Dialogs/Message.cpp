@@ -60,12 +60,13 @@ public:
                     const WindowStyle style,
                     WndForm &_form, int _result)
     :WndButton(Parent.GetClientAreaWindow(), Caption, X, Y, Width, Height,
-               style, Parent.GetBackColor()),
+               style),
      form(_form), result(_result) {}
 
 protected:
-  virtual void on_click() {
+  virtual bool on_clicked() {
     form.SetModalResult(result);
+    return true;
   }
 };
 

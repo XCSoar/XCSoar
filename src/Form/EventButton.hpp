@@ -50,13 +50,12 @@ public:
 public:
   WndEventButton(ContainerWindow &parent, const TCHAR *Caption,
                  int X, int Y, int Width, int Height,
-                 const WindowStyle style,
-                 Color background_color,
+                 const ButtonWindowStyle style,
                  const TCHAR *ename,
                  const TCHAR *eparameters);
   ~WndEventButton();
 
-  void on_click();
+  virtual bool on_clicked();
 
 private:
   webpt2Event inputEvent;

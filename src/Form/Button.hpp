@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_FORM_BUTTON_HPP
 #define XCSOAR_FORM_BUTTON_HPP
 
-#include "Screen/PaintWindow.hpp"
+#include "Screen/ButtonWindow.hpp"
 
 class ContainerWindow;
 
@@ -47,14 +47,9 @@ class ContainerWindow;
  * This class is used for creating buttons.
  * It is based on the WindowControl class.
  */
-class WndButton : public PaintWindow {
+class WndButton : public ButtonWindow {
 public:
   typedef void (*ClickNotifyCallback_t)(WndButton &button);
-
-protected:
-  Color text_color;
-  Brush background_brush;
-  TCHAR mCaption[254];
 
 public:
   /**
@@ -70,8 +65,7 @@ public:
    */
   WndButton(ContainerWindow &parent, const TCHAR *Caption,
       int X, int Y, int Width, int Height,
-            const WindowStyle style,
-            Color background_color,
+            const ButtonWindowStyle style,
       ClickNotifyCallback_t Function = NULL);
 
   /**
@@ -89,71 +83,23 @@ public:
    * (derived from WindowControl)
    * @param Value The new Caption/Text of the Control
    */
-  void SetCaption(const TCHAR *Value);
-
-  void SetForeColor(Color color) {
-    text_color = color;
-    invalidate();
+  void SetCaption(const TCHAR *Value) {
+    set_text(Value);
   }
 
-protected:
   /**
    * Called when the button is clicked (either by mouse or by
    * keyboard).  The default implementation invokes the OnClick
    * callback.
    */
-  virtual void on_click();
+  virtual bool on_clicked();
 
-  virtual bool on_setfocus();
-  virtual bool on_killfocus();
-
-  /**
-   * The on_mouse_up event is called when the mouse is released over the button
-   * (derived from Window)
-   */
-  virtual bool on_mouse_up(int x, int y);
-  /**
-   * The on_mouse_down event is called when the mouse is pressed over the button
-   * (derived from Window)
-   */
-  virtual bool on_mouse_down(int x, int y);
-  /**
-   * The on_mouse_move event is called when the mouse is moved over the button
-   * (derived from Window)
-   */
-  virtual bool on_mouse_move(int x, int y, unsigned keys);
-
+protected:
   virtual bool on_key_check(unsigned key_code);
-
-  /**
-   * The on_key_down event is called when a key is pressed while the
-   * button is focused
-   * (derived from Window)
-   */
   virtual bool on_key_down(unsigned key_code);
-  /**
-   * The on_key_down event is called when a key is released while the
-   * button is focused
-   * (derived from Window)
-   */
-  virtual bool on_key_up(unsigned key_code);
 
-  /**
-   * The on_paint event is called when the button needs to be drawn
-   * (derived from PaintWindow)
-   */
-  virtual void on_paint(Canvas &canvas);
-
-  /** True if the button is currently pressed */
-  bool mDown;
 
 private:
-  /**
-   * Height of the drawn caption
-   * (this is used to speed up the drawing process)
-   */
-  int mLastDrawTextHeight;
-
   /**
    * The callback-function that should be called when the button is pressed
    * @see SetOnClickNotify()

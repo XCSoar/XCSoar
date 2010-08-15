@@ -43,13 +43,14 @@ Copyright_License {
 
 #ifndef ALTAIRSYNC
 
-void
-WndEventButton::on_click()
+bool
+WndEventButton::on_clicked()
 {
   if (inputEvent) {
     inputEvent(parameters);
+    return true;
   } else
-    WndButton::on_click();
+    return WndButton::on_clicked();
 }
 
 WndEventButton::~WndEventButton() {
@@ -63,12 +64,11 @@ WndEventButton::~WndEventButton() {
 WndEventButton::WndEventButton(ContainerWindow &Parent,
 			       const TCHAR *Caption,
 			       int X, int Y, int Width, int Height,
-                               const WindowStyle style,
-                               Color background_color,
+                               const ButtonWindowStyle style,
 			       const TCHAR* ename,
 			       const TCHAR* theparameters):
   WndButton(Parent, Caption, X, Y, Width, Height,
-            style, background_color,
+            style,
             NULL)
 {
   inputEvent = InputEvents::findEvent(ename);

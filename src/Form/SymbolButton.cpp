@@ -57,34 +57,32 @@ WndSymbolButton::on_paint(Canvas &canvas)
   InflateRect(&rc, -2, -2); // todo border width
 
   // Draw button to the background
-  canvas.draw_button(rc, mDown);
+  canvas.draw_button(rc, is_down());
 
   // If button has text on it
-  if (mCaption == NULL || mCaption[0] == '\0')
+  tstring caption = get_text();
+  if (caption.empty())
     return;
 
   // If button is pressed, offset the text for 3D effect
-  if (mDown)
+  if (is_down())
     OffsetRect(&rc, Layout::FastScale(1), Layout::FastScale(1));
 
-  const Pen p(0, text_color);
-  canvas.select(p);
-  const Brush b(text_color);
-  canvas.select(b);
+  canvas.black_pen();
+  canvas.black_brush();
+
+  const char ch = (char)caption[0];
 
   // Draw arrow symbols instead of < and >
-  if (!_tcscmp(mCaption, _T("<")) || !_tcscmp(mCaption, _T(">"))) {
+  if (ch == '<' || ch == '>') {
     int size = min(rc.right - rc.left, rc.bottom - rc.top) / 5;
 
     static POINT Arrow[4];
-    Arrow[0].x = (rc.left + rc.right) / 2 +
-                 (!_tcscmp(mCaption, _T("<")) ? size : -size);
+    Arrow[0].x = (rc.left + rc.right) / 2 + (ch == '<' ? size : -size);
     Arrow[0].y = (rc.top + rc.bottom) / 2 + size;
-    Arrow[1].x = (rc.left + rc.right) / 2 +
-                 (!_tcscmp(mCaption, _T("<")) ? -size : size);
+    Arrow[1].x = (rc.left + rc.right) / 2 + (ch == '<' ? -size : size);
     Arrow[1].y = (rc.top + rc.bottom) / 2;
-    Arrow[2].x = (rc.left + rc.right) / 2 +
-                 (!_tcscmp(mCaption, _T("<")) ? size : -size);
+    Arrow[2].x = (rc.left + rc.right) / 2 + (ch == '<' ? size : -size);
     Arrow[2].y = (rc.top + rc.bottom) / 2 - size;
     Arrow[3].x = Arrow[0].x;
     Arrow[3].y = Arrow[0].y;
@@ -93,20 +91,20 @@ WndSymbolButton::on_paint(Canvas &canvas)
   }
 
   // Draw arrow symbols instead of v and ^
- if (!_tcscmp(mCaption, _T("^")) || !_tcscmp(mCaption, _T("v"))) {
+  if (ch == '^' || ch == 'v') {
     int size = min(rc.right - rc.left, rc.bottom - rc.top) / 5;
 
     static POINT Arrow[4];
     Arrow[0].x = (rc.left + rc.right) / 2 +
                  size;
     Arrow[0].y = (rc.top + rc.bottom) / 2 +
-                 (!_tcscmp(mCaption, _T("^")) ? size : -size);
+                 (ch == '^' ? size : -size);
     Arrow[1].x = (rc.left + rc.right) / 2;
     Arrow[1].y = (rc.top + rc.bottom) / 2 +
-                 (!_tcscmp(mCaption, _T("^")) ? -size : size);
+                 (ch == '^' ? -size : size);
     Arrow[2].x = (rc.left + rc.right) / 2 - size;
     Arrow[2].y = (rc.top + rc.bottom) / 2 +
-                 (!_tcscmp(mCaption, _T("^")) ? size : -size);
+                 (ch == '^' ? size : -size);
     Arrow[3].x = Arrow[0].x;
     Arrow[3].y = Arrow[0].y;
 
@@ -114,7 +112,7 @@ WndSymbolButton::on_paint(Canvas &canvas)
   }
 
   // Draw symbols instead of + and -
-  if (!_tcscmp(mCaption, _T("+")) || !_tcscmp(mCaption, _T("-"))) {
+  if (ch == '+' || ch == '-') {
     int size = min(rc.right - rc.left, rc.bottom - rc.top) / 5;
 
     canvas.rectangle((rc.left + rc.right) / 2 - size,
@@ -122,7 +120,7 @@ WndSymbolButton::on_paint(Canvas &canvas)
                      (rc.left + rc.right) / 2 + size,
                      (rc.top + rc.bottom) / 2 + size / 3);
 
-    if (!_tcscmp(mCaption, _T("+")))
+    if (ch == '+')
       canvas.rectangle((rc.left + rc.right) / 2 - size / 3,
                        (rc.top + rc.bottom) / 2 - size,
                        (rc.left + rc.right) / 2 + size / 3,
@@ -130,16 +128,14 @@ WndSymbolButton::on_paint(Canvas &canvas)
   }
 
   // Draw Fly bitmap
-  if (!_tcscmp(mCaption, _T("Fly"))) {
-
+  if (caption == _T("Fly")) {
     Bitmap launcher1_bitmap(IDB_LAUNCHER1);
     BitmapCanvas bitmap_canvas(canvas, launcher1_bitmap);
     canvas.stretch(bitmap_canvas, 0, 0, 112, 30);
   }
 
   // Draw Simulator bitmap
-  if (!_tcscmp(mCaption, _T("Simulator"))) {
-
+  if (caption == _T("Simulator")) {
     Bitmap launcher2_bitmap(IDB_LAUNCHER2);
     BitmapCanvas bitmap_canvas(canvas, launcher2_bitmap);
     canvas.stretch(bitmap_canvas, 0, 0, 112, 30);
