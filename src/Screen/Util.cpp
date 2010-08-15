@@ -271,9 +271,6 @@ SutherlandHodgmanPolygoClip (POINT* inVertexArray,
   return outLength;
 }
 
-static POINT clip_ptout[MAXCLIPPOLYGON];
-static POINT clip_ptin[MAXCLIPPOLYGON];
-
 /**
  * Clips a polygon (m_ptin) to the given rect (rc)
  * @param canvas
@@ -295,6 +292,7 @@ ClipPolygon(Canvas &canvas, const POINT *m_ptin, unsigned int inLength,
     return;
   }
 
+  POINT clip_ptin[inLength + 1];
   memcpy((void*)clip_ptin, (void*)m_ptin, inLength * sizeof(POINT));
 
   // add extra point for final point if it doesn't equal the first
@@ -322,6 +320,7 @@ ClipPolygon(Canvas &canvas, const POINT *m_ptin, unsigned int inLength,
                    {rc.right, rc.top},
                    {rc.left, rc.top}};
   //steps left_edge, bottom_edge, right_edge, top_edge
+  POINT clip_ptout[inLength + 1];
   for (int step = 0; step < 4; step++) {
     outLength = SutherlandHodgmanPolygoClip(clip_ptin, clip_ptout, inLength,
         edge + step, fill, step);
