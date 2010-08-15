@@ -94,11 +94,11 @@ protected:
       // insignificant error
       return;
 
-    double distance_max =
+    fixed distance_max =
         min(vec.Distance, m_map.GetScreenDistanceMeters() * fixed(0.7));
 
     // too short to bother
-    if (distance_max < 5000.0)
+    if (distance_max < fixed(5000))
       return;
 
     GEOPOINT start = m_location;
@@ -110,13 +110,13 @@ protected:
 
     GEOPOINT dloc;
     int ilast = 0;
-    for (double d = 0.25; d <= 1.0; d += 0.25) {
-      FindLatitudeLongitude(start, m_bearing, (fixed)(distance_max * d), &dloc);
+    for (fixed d = fixed_one / 4; d <= fixed_one; d += fixed_one / 4) {
+      FindLatitudeLongitude(start, m_bearing, distance_max * d, &dloc);
 
-      double distance0 = Distance(start, dloc);
-      double distance1 = Distance(dloc, target);
-      double distance = fixed(distance0 + distance1) / vec.Distance;
-      int idist = iround((distance - 1.0) * 100);
+      fixed distance0 = Distance(start, dloc);
+      fixed distance1 = Distance(dloc, target);
+      fixed distance = fixed(distance0 + distance1) / vec.Distance;
+      int idist = iround((distance - fixed_one) * 100);
 
       if ((idist != ilast) && (idist > 0) && (idist < 1000)) {
         TCHAR Buffer[5];
