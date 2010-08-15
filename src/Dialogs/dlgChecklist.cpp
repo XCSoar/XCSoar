@@ -62,7 +62,7 @@ static WndListFrame *wDetails = NULL;
 static int LineOffsets[MAXLINES];
 static unsigned nTextLines;
 static int nLists = 0;
-static TCHAR *ChecklistText[MAXDETAILS];
+static TCHAR *ChecklistText[MAXTITLE];
 static TCHAR *ChecklistTitle[MAXTITLE];
 
 static void
