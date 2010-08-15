@@ -245,12 +245,6 @@ MapWindow::set_weather(RasterWeather *_weather)
   m_background.set_weather(_weather);
 }
 
-bool
-MapWindow::checkLabelBlock(const RECT brect)
-{
-  return label_block.check(brect);
-}
-
 void
 MapWindow::SwitchZoomClimb(void)
 {

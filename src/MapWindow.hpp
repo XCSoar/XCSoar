@@ -255,7 +255,6 @@ private:
 public:
   BitmapCanvas& get_bitmap_canvas() { return bitmap_canvas; };
 
-  bool checkLabelBlock(RECT rc);
   LabelBlock &getLabelBlock() {
     return label_block;
   }
