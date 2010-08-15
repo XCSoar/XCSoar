@@ -560,19 +560,19 @@ Chart::ScaleMakeSquare()
 }
 
 long
-Chart::screenX(double x)
+Chart::screenX(double x) const
 {
   return (long)((x - x_min) * xscale) + rc.left + BORDER_X;
 }
 
 long
-Chart::screenY(double y)
+Chart::screenY(double y) const
 {
   return (long)((y_max - y) * yscale) + rc.top;
 }
 
 long
-Chart::screenS(double s)
+Chart::screenS(double s) const
 {
   return (long)(s * yscale);
 }

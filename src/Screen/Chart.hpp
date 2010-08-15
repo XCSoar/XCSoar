@@ -42,6 +42,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 #include "Screen/Color.hpp"
+#include "Compiler.h"
 
 #include <windef.h>
 
@@ -87,7 +88,7 @@ public:
 
   void ResetScale();
 
-  void FormatTicText(TCHAR *text, const double val, const double step);
+  static void FormatTicText(TCHAR *text, const double val, const double step);
   void DrawXGrid(const double tic_step, const double zero, const int Style,
       const double unit_step, bool draw_units = false);
   void DrawYGrid(const double tic_step, const double zero, const int Style,
@@ -100,14 +101,19 @@ public:
       const Angle angle, const int Style);
   void DrawNoData();
 
-  double getYmin() { return y_min; }
-  double getYmax() { return y_max; }
-  double getXmin() { return x_min; }
-  double getXmax() { return x_max; }
+  double getYmin() const { return y_min; }
+  double getYmax() const { return y_max; }
+  double getXmin() const { return x_min; }
+  double getXmax() const { return x_max; }
 
-  long screenX(double x);
-  long screenY(double y);
-  long screenS(double s);
+  gcc_pure
+  long screenX(double x) const;
+
+  gcc_pure
+  long screenY(double y) const;
+
+  gcc_pure
+  long screenS(double s) const;
 
 private:
   double yscale;
