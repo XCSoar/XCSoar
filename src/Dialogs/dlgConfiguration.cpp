@@ -1009,7 +1009,6 @@ static int Distance = 2; // default is km
 static int Lift = 0;
 static int Altitude = 0; //default ft
 static int Temperature = 0; //default is celcius
-static TCHAR temptext[MAX_PATH];
 
 static void
 InitFileField(WndProperty &wp, const TCHAR *profile_key, const TCHAR *filters)
@@ -1821,13 +1820,14 @@ FinishFileField(const WndProperty &wp, const TCHAR *profile_key)
 {
   const DataFieldFileReader *dfe =
     (const DataFieldFileReader *)wp.GetDataField();
-  _tcscpy(temptext, dfe->GetPathFile());
-  ContractLocalPath(temptext);
+  TCHAR new_value[MAX_PATH];
+  _tcscpy(new_value, dfe->GetPathFile());
+  ContractLocalPath(new_value);
 
-  if (!ProfileStringModified(profile_key, temptext))
+  if (!ProfileStringModified(profile_key, new_value))
     return false;
 
-  Profile::Set(profile_key, temptext);
+  Profile::Set(profile_key, new_value);
   changed = true;
   return true;
 }
