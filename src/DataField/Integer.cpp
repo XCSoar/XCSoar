@@ -58,10 +58,10 @@ DataFieldInteger::GetAsInteger(void) const
   return mValue;
 }
 
-double
-DataFieldInteger::GetAsFloat(void) const
+fixed
+DataFieldInteger::GetAsFixed() const
 {
-  return mValue;
+  return fixed(mValue);
 }
 
 const TCHAR *

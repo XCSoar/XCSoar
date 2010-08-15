@@ -78,7 +78,7 @@ public DataField
 
   virtual bool GetAsBoolean(void) const;
   virtual int GetAsInteger(void) const;
-  virtual double GetAsFloat(void) const;
+  virtual fixed GetAsFixed() const;
   virtual const TCHAR *GetAsString(void) const;
   virtual const TCHAR *GetAsDisplayString(void) const;
 

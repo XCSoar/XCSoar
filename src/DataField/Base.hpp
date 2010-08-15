@@ -77,13 +77,9 @@ public:
 
   virtual bool GetAsBoolean() const;
   virtual int GetAsInteger() const;
-  virtual double GetAsFloat() const;
+  virtual fixed GetAsFixed() const;
   virtual const TCHAR *GetAsString() const;
   virtual const TCHAR *GetAsDisplayString() const;
-
-  fixed GetAsFixed() const {
-    return fixed(GetAsFloat());
-  }
 
   virtual void SetAsBoolean(bool Value);
   virtual void SetAsInteger(int Value);

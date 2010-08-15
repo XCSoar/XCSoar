@@ -85,10 +85,10 @@ DataField::GetAsInteger() const
   return 0;
 }
 
-double
-DataField::GetAsFloat() const
+fixed
+DataField::GetAsFixed() const
 {
-  return 0;
+  return fixed_zero;
 }
 
 const TCHAR *
@@ -179,18 +179,18 @@ DataField::CreateComboListStepping(void)
   // builds ComboPopupItemList[] by calling CreateItem for each item in list
   // sets ComboPopupItemSavedIndex (global)
   // returns ComboPopupItemCount
-#define ComboListInitValue -99999
-#define ComboFloatPrec 0.0000001 //rounds float errors to this precision
+  const fixed ComboListInitValue(-99999);
+  const fixed ComboFloatPrec(0.0000001); //rounds float errors to this precision
 
-  double fNext = ComboListInitValue;
-  double fCurrent = ComboListInitValue;
-  double fLast = ComboListInitValue;
+  fixed fNext = ComboListInitValue;
+  fixed fCurrent = ComboListInitValue;
+  fixed fLast = ComboListInitValue;
   TCHAR sTemp[ComboPopupITEMMAX];
 
   int iListCount = 0;
   int iSelectedIndex = -1;
   int iStepDirection = 1; // for integer & float step may be negative
-  double fBeforeDec = 0.0, fAfterDec = 0.0, fSavedValue = 0.0;
+  fixed fBeforeDec = fixed_zero, fAfterDec = fixed_zero, fSavedValue = fixed_zero;
 
   fNext = ComboListInitValue;
   fCurrent = ComboListInitValue;
@@ -203,11 +203,11 @@ DataField::CreateComboListStepping(void)
   CopyString(mComboList.PropertyValueSaved, false);
   CopyString(mComboList.PropertyValueSavedFormatted, true);
 
-  fSavedValue = GetAsFloat();
+  fSavedValue = GetAsFixed();
   Inc();
-  fBeforeDec = GetAsFloat();
+  fBeforeDec = GetAsFixed();
   Dec();
-  fAfterDec = GetAsFloat();
+  fAfterDec = GetAsFixed();
 
   if (fAfterDec < fBeforeDec)
     iStepDirection = 1;
@@ -219,7 +219,7 @@ DataField::CreateComboListStepping(void)
   for (iListCount = 0; iListCount < ComboPopupLISTMAX / 2; iListCount++) {
     // for floats, go half way down only
     Dec();
-    fNext = GetAsFloat();
+    fNext = GetAsFixed();
 
     if (fNext == fCurrent) // we're at start of the list
       break;
@@ -234,7 +234,7 @@ DataField::CreateComboListStepping(void)
   fCurrent = ComboListInitValue;
   fLast = ComboListInitValue;
 
-  fCurrent = GetAsFloat();
+  fCurrent = GetAsFixed();
   mComboList.ComboPopupItemCount = 0;
 
   // if we stopped before hitting start of list create <<Less>> value at top of list
@@ -255,7 +255,7 @@ DataField::CreateComboListStepping(void)
     // test if we've stepped over the selected value which was not a multiple of the "step"
     if (iSelectedIndex == -1) {
       // not found yet
-      if (((double)iStepDirection) * GetAsFloat() >
+      if (iStepDirection * GetAsFixed() >
           (fSavedValue + ComboFloatPrec * iStepDirection)) {
         // step was too large, we skipped the selected value, so add it now
         mComboList.ComboPopupItemList[mComboList.ComboPopupItemCount]
@@ -281,7 +281,7 @@ DataField::CreateComboListStepping(void)
     mComboList.ComboPopupItemCount += 1;
 
     Inc();
-    fNext = GetAsFloat();
+    fNext = GetAsFixed();
 
     if (fNext == fCurrent)
       // we're at start of the list

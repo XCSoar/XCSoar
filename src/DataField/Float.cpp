@@ -57,10 +57,10 @@ DataFieldFloat::GetAsInteger() const
   return iround(mValue);
 }
 
-double
-DataFieldFloat::GetAsFloat() const
+fixed
+DataFieldFloat::GetAsFixed() const
 {
-  return mValue;
+  return fixed(mValue);
 }
 
 const TCHAR *

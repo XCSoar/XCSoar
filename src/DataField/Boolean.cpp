@@ -69,13 +69,10 @@ DataFieldBoolean::GetAsInteger(void) const
     return 0;
 }
 
-double
-DataFieldBoolean::GetAsFloat(void) const
+fixed
+DataFieldBoolean::GetAsFixed() const
 {
-  if (mValue)
-    return 1.0;
-  else
-    return 0.0;
+  return mValue ? fixed_one : fixed_zero;
 }
 
 const TCHAR *
@@ -112,10 +109,11 @@ DataFieldBoolean::SetAsInteger(int Value)
 }
 
 void
-DataFieldBoolean::SetAsFloat(double Value)
+DataFieldBoolean::SetAsFloat(double _Value)
 {
-  if (GetAsFloat() != Value) {
-    SetAsBoolean(!(Value == 0.0));
+  fixed Value(_Value);
+  if (GetAsFixed() != Value) {
+    SetAsBoolean(Value != fixed_zero);
   }
 }
 
