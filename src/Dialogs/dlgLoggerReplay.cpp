@@ -82,7 +82,7 @@ OnRateData(DataField *Sender, DataField::DataAccessKind_t Mode)
     break;
   case DataField::daPut:
   case DataField::daChange:
-    replay.SetTimeScale(fixed(Sender->GetAsFloat()));
+    replay.SetTimeScale(Sender->GetAsFixed());
     break;
   }
 }

@@ -99,7 +99,7 @@ OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode)
     break;
   case DataField::daPut:
   case DataField::daChange:
-    device_blackboard.SetQNH(fixed(Sender->GetAsFloat()));
+    device_blackboard.SetQNH(Sender->GetAsFixed());
     wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
     if (wp) {
       wp->GetDataField()->SetAsFloat(Units::ToUserUnit(
@@ -230,7 +230,7 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
 static void
 OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  static double lastRead = -1;
+  static fixed lastRead = fixed_minus_one;
 
   switch (Mode) {
   case DataField::daGet:
@@ -239,9 +239,9 @@ OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode)
     break;
   case DataField::daChange:
   case DataField::daPut:
-    if (fabs(lastRead - Sender->GetAsFloat() / 100.0) >= 0.005) {
-      lastRead = Sender->GetAsFloat() / 100.0;
-      glide_polar->set_bugs(fixed(lastRead));
+    if (fabs(lastRead - Sender->GetAsFixed() / 100) >= fixed_one / 200) {
+      lastRead = Sender->GetAsFixed() / 100;
+      glide_polar->set_bugs(lastRead);
       changed = true;
     }
     break;
@@ -251,15 +251,15 @@ OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode)
 static void
 OnTempData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  static double lastRead = -1;
+  static fixed lastRead = fixed_minus_one;
   switch (Mode) {
   case DataField::daGet:
-    lastRead = CuSonde::maxGroundTemperature;
-    Sender->Set(Units::ToUserTemperature(fixed(CuSonde::maxGroundTemperature)));
+    lastRead = fixed(CuSonde::maxGroundTemperature);
+    Sender->Set(Units::ToUserTemperature(lastRead));
     break;
   case DataField::daChange:
   case DataField::daPut:
-    if (fabs(lastRead - Sender->GetAsFloat()) >= 1.0) {
+    if (fabs(lastRead - Sender->GetAsFixed()) >= fixed_one) {
       lastRead = Units::ToSysTemperature(Sender->GetAsFixed());
       CuSonde::setForecastTemperature(Units::ToSysTemperature(Sender->GetAsFixed()));
     }
