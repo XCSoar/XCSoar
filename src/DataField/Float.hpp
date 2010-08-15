@@ -63,14 +63,10 @@ public DataField
   public:
     DataFieldFloat(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
                    double Min, double Max, double Default,
-                   double Step, int Fine, DataAccessCallback_t OnDataAccess):
-      DataField(EditFormat, DisplayFormat, OnDataAccess){
-      mMin = Min;
-      mMax = Max;
-      mValue = Default;
-      mStep = Step;
-      mFine = Fine;
-
+                   double Step, int Fine, DataAccessCallback_t OnDataAccess)
+      :DataField(EditFormat, DisplayFormat, OnDataAccess),
+       mValue(Default), mMin(Min), mMax(Max), mStep(Step), mFine(Fine)
+  {
       SupportCombo=true;
      (mOnDataAccess)(this, daGet);
 
