@@ -54,8 +54,8 @@ using std::max;
 
 static WndForm *wf = NULL;
 
-static double emc = 0.0;
-static double cruise_efficiency = 1.0;
+static fixed emc;
+static fixed cruise_efficiency;
 
 static void
 OnCancelClicked(WindowControl * Sender)
@@ -120,7 +120,7 @@ RefreshCalculator(void)
   wp = (WndProperty*)wf->FindByName(_T("prpEffectiveMacCready"));
   if (wp) {
     wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
-    wp->GetDataField()->SetAsFloat(Units::ToUserVSpeed(fixed(emc)));
+    wp->GetDataField()->SetAsFloat(Units::ToUserVSpeed(emc));
     wp->RefreshDisplay();
   }
 
@@ -134,7 +134,7 @@ RefreshCalculator(void)
     wp->RefreshDisplay();
   }
 
-  double v1;
+  fixed v1;
   if (XCSoarInterface::Calculated().TaskTimeToGo>0) {
     v1 = XCSoarInterface::Calculated().TaskDistanceToGo/
       XCSoarInterface::Calculated().TaskTimeToGo;
@@ -161,7 +161,7 @@ RefreshCalculator(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpCruiseEfficiency"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(cruise_efficiency*100.0);
+    wp->GetDataField()->SetAsFloat(cruise_efficiency * 100);
     wp->RefreshDisplay();
   }
 }
@@ -224,7 +224,7 @@ OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 static void
 OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  double rthis;
+  fixed rthis;
   switch (Mode) {
   case DataField::daSpecial:
     DoOptimise();
@@ -234,9 +234,9 @@ OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
     break;
   case DataField::daPut:
   case DataField::daChange:
-    rthis = Sender->GetAsFloat()/100.0;
+    rthis = Sender->GetAsFixed() / 100;
 #ifdef OLD_TASK
-    if (fabs(Range - rthis) > 0.01) {
+    if (fabs(Range - rthis) > fixed_one / 100) {
       Range = rthis;
       task.AdjustAATTargets(Range);
       RefreshCalculator();
@@ -249,7 +249,7 @@ OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 static void
 OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  double clast = protected_task_manager.get_glide_polar().get_cruise_efficiency();
+  fixed clast = protected_task_manager.get_glide_polar().get_cruise_efficiency();
   (void)clast; // unused for now
 
   switch (Mode) {
@@ -259,17 +259,17 @@ OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
     GetCruiseEfficiency();
 #ifdef OLD_TASK
     GlidePolar::SetCruiseEfficiency(cruise_efficiency);
-    if (fabs(cruise_efficiency-clast)>0.01) {
+    if (fabs(cruise_efficiency-clast) > fixed_one / 100) {
       RefreshCalculator();
     }
 #endif
     break;
   case DataField::daPut:
   case DataField::daChange:
-    cruise_efficiency = Sender->GetAsFloat()/100.0;
+    cruise_efficiency = Sender->GetAsFixed() / 100;
 #ifdef OLD_TASK
     GlidePolar::SetCruiseEfficiency(cruise_efficiency);
-    if (fabs(cruise_efficiency-clast)>0.01) {
+    if (fabs(cruise_efficiency-clast) > fixed_one / 100) {
       RefreshCalculator();
     }
 #endif
@@ -304,10 +304,8 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
     return;
 
   GlidePolar polar = protected_task_manager.get_glide_polar();
-  double MACCREADY_enter = polar.get_mc();
-  (void)MACCREADY_enter; // unused for now
 
-  double CRUISE_EFFICIENCY_enter = polar.get_cruise_efficiency();
+  fixed CRUISE_EFFICIENCY_enter = polar.get_cruise_efficiency();
 
   emc = XCSoarInterface::Calculated().task_stats.effective_mc;
 
