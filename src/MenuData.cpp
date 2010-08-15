@@ -41,10 +41,14 @@ Copyright_License {
 void
 Menu::Add(const TCHAR *label, int location, int event_id)
 {
-  if (num_items >= MAX_ITEMS)
-    return;
+  int i = FindByLocation(location);
+  if (i < 0) {
+    if (num_items >= MAX_ITEMS)
+      return;
+    i = num_items++;
+  }
 
-  MenuItem &item = items[num_items++];
+  MenuItem &item = items[i];
 
   item.label = label;
   item.location = location;
