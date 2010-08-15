@@ -153,12 +153,6 @@ public:
   virtual bool Declare(const Declaration *declaration);
 };
 
-//static cai302_Wdata_t cai302_Wdata;
-static cai302_OdataNoArgs_t cai302_OdataNoArgs;
-static cai302_OdataPilot_t cai302_OdataPilot;
-static cai302_GdataNoArgs_t cai302_GdataNoArgs;
-static cai302_Gdata_t cai302_Gdata;
-
 // Additional sentance for CAI302 support
 static bool
 cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro);
@@ -298,6 +292,8 @@ CAI302Device::Declare(const Declaration *decl)
   ExpectString(port, "$$$");
 
   port->Write("O\r");
+
+  cai302_OdataNoArgs_t cai302_OdataNoArgs;
   port->Read(&cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs));
   if (!ExpectString(port, "up>")) {
     nDeclErrorCode = 1;
@@ -306,6 +302,7 @@ CAI302Device::Declare(const Declaration *decl)
 
   port->Write("O 0\r"); // 0=active pilot
   Sleep(1000); // some params come up 0 if we don't wait!
+  cai302_OdataPilot_t cai302_OdataPilot;
   port->Read(&cai302_OdataPilot, min(sizeof(cai302_OdataPilot),
                                        (size_t)cai302_OdataNoArgs.PilotRecordSize+3));
   if (!ExpectString(port, "up>")) {
@@ -323,6 +320,7 @@ CAI302Device::Declare(const Declaration *decl)
   swap(cai302_OdataPilot.MarginHeight);
 
   port->Write("G\r");
+  cai302_GdataNoArgs_t cai302_GdataNoArgs;
   port->Read(&cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs));
   if (!ExpectString(port, "up>")) {
     nDeclErrorCode = 1;
@@ -331,6 +329,7 @@ CAI302Device::Declare(const Declaration *decl)
 
   port->Write("G 0\r");
   Sleep(1000);
+  cai302_Gdata_t cai302_Gdata;
   port->Read(&cai302_Gdata, cai302_GdataNoArgs.GliderRecordSize + 3);
   if (!ExpectString(port, "up>")) {
     nDeclErrorCode = 1;
