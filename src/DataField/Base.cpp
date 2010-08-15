@@ -116,7 +116,7 @@ DataField::SetAsInteger(int Value)
 }
 
 void
-DataField::SetAsFloat(double Value)
+DataField::SetAsFloat(fixed Value)
 {
   (void)Value;
 }

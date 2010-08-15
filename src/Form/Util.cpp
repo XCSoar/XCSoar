@@ -84,7 +84,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, unsigned int value)
 }
 
 void
-LoadFormProperty(WndForm &form, const TCHAR *control_name, double value)
+LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value)
 {
   assert(control_name != NULL);
 
@@ -95,21 +95,6 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, double value)
   ctl->GetDataField()->Set(value);
   ctl->RefreshDisplay();
 }
-
-#ifdef FIXED_MATH
-void
-LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value)
-{
-  assert(control_name != NULL);
-
-  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  if (ctl == NULL)
-    return;
-
-  ctl->GetDataField()->Set(value.as_double());
-  ctl->RefreshDisplay();
-}
-#endif /* FIXED_MATH */
 
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name,

@@ -109,9 +109,8 @@ DataFieldBoolean::SetAsInteger(int Value)
 }
 
 void
-DataFieldBoolean::SetAsFloat(double _Value)
+DataFieldBoolean::SetAsFloat(fixed Value)
 {
-  fixed Value(_Value);
   if (GetAsFixed() != Value) {
     SetAsBoolean(Value != fixed_zero);
   }

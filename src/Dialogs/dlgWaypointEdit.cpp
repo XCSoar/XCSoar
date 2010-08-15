@@ -224,14 +224,14 @@ static void SetValues(void) {
     }
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudemmm"));
     if (wp) {
-      wp->GetDataField()->SetAsFloat(1000.0*ss/60.0);
+      wp->GetDataField()->SetAsFloat(1000 * fixed(ss) / 60);
       wp->RefreshDisplay();
     }
     break;
   case 3: // ("DD.dddd");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
     if (wp) {
-      wp->GetDataField()->SetAsFloat(10000.0*(mm+ss/60.0)/60.0);
+      wp->GetDataField()->SetAsFloat(10000 * (fixed)(mm + ss) / 3600);
       wp->RefreshDisplay();
     }
     break;
@@ -277,14 +277,14 @@ static void SetValues(void) {
     }
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudemmm"));
     if (wp) {
-      wp->GetDataField()->SetAsFloat(1000.0*ss/60.0);
+      wp->GetDataField()->SetAsFloat(1000 * fixed(ss) / 60);
       wp->RefreshDisplay();
     }
     break;
   case 3: // ("DD.dddd");
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeDDDD"));
     if (wp) {
-      wp->GetDataField()->SetAsFloat(10000.0*(mm+ss/60.0)/60.0);
+      wp->GetDataField()->SetAsFloat(10000 * fixed(mm + ss) / 3600);
       wp->RefreshDisplay();
     }
     break;

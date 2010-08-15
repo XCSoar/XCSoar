@@ -110,7 +110,7 @@ DataFieldInteger::SetAsInteger(int Value)
 }
 
 void
-DataFieldInteger::SetAsFloat(double Value)
+DataFieldInteger::SetAsFloat(fixed Value)
 {
   SetAsInteger(iround(Value));
 }

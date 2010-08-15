@@ -59,13 +59,9 @@ void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, int value);
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, unsigned int value);
-void
-LoadFormProperty(WndForm &form, const TCHAR *control_name, double value);
 
-#ifdef FIXED_MATH
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value);
-#endif
 
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name,

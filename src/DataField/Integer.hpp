@@ -89,7 +89,7 @@ public:
 
   virtual void SetAsBoolean(bool Value);
   virtual void SetAsInteger(int Value);
-  virtual void SetAsFloat(double Value);
+  virtual void SetAsFloat(fixed Value);
   virtual void SetAsString(const TCHAR *Value);
 };
 

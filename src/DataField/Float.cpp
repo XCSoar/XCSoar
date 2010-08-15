@@ -78,7 +78,7 @@ DataFieldFloat::GetAsDisplayString() const
 }
 
 void
-DataFieldFloat::Set(double Value)
+DataFieldFloat::Set(fixed Value)
 {
   mValue = Value;
 }
@@ -104,22 +104,20 @@ DataFieldFloat::SetAsBoolean(bool Value)
 {
   bool res = GetAsBoolean();
   if (res != Value) {
-    if (Value)
-      SetAsFloat(1.0);
-    else
-      SetAsFloat(0.0);
+    SetAsFloat(Value ? fixed_one : fixed_zero);
   }
 }
 
 void
 DataFieldFloat::SetAsInteger(int Value)
 {
-  SetAsFloat(Value);
+  SetAsFloat(fixed(Value));
 }
 
 void
-DataFieldFloat::SetAsFloat(double Value)
+DataFieldFloat::SetAsFloat(fixed _Value)
 {
+  double Value = _Value;
   if (Value < mMin)
     Value = mMin;
   if (Value > mMax)
@@ -134,7 +132,7 @@ DataFieldFloat::SetAsFloat(double Value)
 void
 DataFieldFloat::SetAsString(const TCHAR *Value)
 {
-  SetAsFloat(_tcstod(Value, NULL));
+  SetAsFloat(fixed(_tcstod(Value, NULL)));
 }
 
 void
@@ -142,9 +140,9 @@ DataFieldFloat::Inc(void)
 {
   // no keypad, allow user to scroll small values
   if (mFine && (mValue < 0.95) && (mStep >= 0.5) && (mMin >= 0.0))
-    SetAsFloat(mValue + 0.1);
+    SetAsFloat(fixed(mValue + 0.1));
   else
-    SetAsFloat(mValue + mStep * SpeedUp(true));
+    SetAsFloat(fixed(mValue + mStep * SpeedUp(true)));
 }
 
 void
@@ -152,9 +150,9 @@ DataFieldFloat::Dec(void)
 {
   // no keypad, allow user to scroll small values
   if (mFine && (mValue <= 1.0) && (mStep >= 0.5) && (mMin >= 0.0))
-    SetAsFloat(mValue - 0.1);
+    SetAsFloat(fixed(mValue - 0.1));
   else
-    SetAsFloat(mValue - mStep * SpeedUp(false));
+    SetAsFloat(fixed(mValue - mStep * SpeedUp(false)));
 }
 
 double

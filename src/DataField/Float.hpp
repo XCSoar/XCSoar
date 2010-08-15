@@ -87,7 +87,7 @@ public DataField
   #if defined(__BORLANDC__)
   #pragma warn -hid
   #endif
-  void Set(double Value);
+  void Set(fixed Value);
   double SetMin(double Value);
   double SetMax(double Value);
   #if defined(__BORLANDC__)
@@ -95,7 +95,7 @@ public DataField
   #endif
   virtual void SetAsBoolean(bool Value);
   virtual void SetAsInteger(int Value);
-  virtual void SetAsFloat(double Value);
+  virtual void SetAsFloat(fixed Value);
   virtual void SetAsString(const TCHAR *Value);
 };
 

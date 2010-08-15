@@ -83,26 +83,14 @@ public:
 
   virtual void SetAsBoolean(bool Value);
   virtual void SetAsInteger(int Value);
-  virtual void SetAsFloat(double Value);
+  virtual void SetAsFloat(fixed Value);
   virtual void SetAsString(const TCHAR *Value);
-
-#ifdef FIXED_MATH
-  void SetAsFloat(fixed Value) {
-    SetAsFloat((double)Value);
-  }
-#endif
 
   virtual void Set(bool Value){ (void)Value; }
   virtual void Set(int Value){ (void)Value; }
   virtual void Set(unsigned Value){ Set((int)Value); }
-  virtual void Set(double Value){ (void)Value; }
+  virtual void Set(fixed Value){ (void)Value; }
   virtual void Set(const TCHAR *Value){ (void)Value; }
-
-#ifdef FIXED_MATH
-  void Set(fixed Value) {
-    Set((double)Value);
-  }
-#endif
 
   void SetUnits(const TCHAR *text) { _tcscpy(mUnits, text); }
 
