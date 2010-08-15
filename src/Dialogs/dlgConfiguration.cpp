@@ -747,7 +747,7 @@ OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode)
     break;
   case DataField::daPut:
   case DataField::daChange:
-    ival = iround(Sender->GetAsFloat()*3600.0);
+    ival = iround(Sender->GetAsFixed() * 3600);
     if (XCSoarInterface::SettingsComputer().UTCOffset != ival) {
       XCSoarInterface::SetSettingsComputer().UTCOffset = ival;
       utcchanged = true;
@@ -1165,7 +1165,7 @@ setVariables()
   }
 
   LoadFormProperty(*wf, _T("prpUTCOffset"),
-      iround(settings_computer.UTCOffset / 1800.0) / 2.0);
+                   fixed(iround(fixed(settings_computer.UTCOffset) / 1800)) / 2);
 
   SetLocalTime();
 
@@ -1833,11 +1833,11 @@ setVariables()
   LoadFormProperty(*wf, _T("prpAppDefaultMapWidth"),
                    Appearance.DefaultMapWidth);
   LoadFormProperty(*wf, _T("prpGliderScreenPosition"),
-                   iround(XCSoarInterface::SettingsMap().GliderScreenPosition));
+                   XCSoarInterface::SettingsMap().GliderScreenPosition);
   LoadFormProperty(*wf, _T("prpTerrainContrast"),
-                   iround(XCSoarInterface::SettingsMap().TerrainContrast*100/255));
+                   XCSoarInterface::SettingsMap().TerrainContrast * 100 / 255);
   LoadFormProperty(*wf, _T("prpTerrainBrightness"),
-                   iround(XCSoarInterface::SettingsMap().TerrainBrightness*100/255));
+                   XCSoarInterface::SettingsMap().TerrainBrightness * 100 / 255);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainRamp"));
   if (wp) {
@@ -2186,7 +2186,7 @@ void dlgConfigurationShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpUTCOffset"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsFloat()*3600.0);
+    ival = iround(wp->GetDataField()->GetAsFixed() * 3600);
     if ((settings_computer.UTCOffset != ival)||(utcchanged)) {
       settings_computer.UTCOffset = ival;
 
@@ -2759,9 +2759,9 @@ void dlgConfigurationShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainContrast"));
   if (wp) {
-    if (iround(XCSoarInterface::SettingsMap().TerrainContrast*100/255) !=
+    if (XCSoarInterface::SettingsMap().TerrainContrast * 100 / 255 !=
         wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().TerrainContrast = (short)iround(wp->GetDataField()->GetAsInteger()*255.0/100);
+      XCSoarInterface::SetSettingsMap().TerrainContrast = (short)(wp->GetDataField()->GetAsInteger() * 255 / 100);
       Profile::Set(szProfileTerrainContrast,XCSoarInterface::SettingsMap().TerrainContrast);
       changed = true;
     }
@@ -2769,9 +2769,9 @@ void dlgConfigurationShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainBrightness"));
   if (wp) {
-    if (iround(XCSoarInterface::SettingsMap().TerrainBrightness*100/255) !=
+    if (XCSoarInterface::SettingsMap().TerrainBrightness * 100 / 255 !=
         wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().TerrainBrightness = (short)iround(wp->GetDataField()->GetAsInteger()*255.0/100);
+      XCSoarInterface::SetSettingsMap().TerrainBrightness = (short)(wp->GetDataField()->GetAsInteger() * 255 / 100);
       Profile::Set(szProfileTerrainBrightness,
                     XCSoarInterface::SettingsMap().TerrainBrightness);
       changed = true;
