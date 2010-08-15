@@ -115,40 +115,44 @@ WayPointFileZander::parseString(const TCHAR* src, tstring& dest)
 bool
 WayPointFileZander::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
 {
-  double val;
-  char sign = 0;
+  TCHAR *endptr;
 
-  // Parse string
-  int s =_stscanf(src, _T("%lf%c"), &val, &sign);
-  // Hack: the E sign for east is interpreted as exponential sign
-  if (!(s == 2 || (s == 1 && sign == 0)))
+  long min = _tcstol(src, &endptr, 10);
+  if (endptr == src || *endptr != _T('.') || min < 0)
     return false;
 
-  // Calculate angle
-  unsigned deg = (int)(val * 0.0001);
-  unsigned min = (int)((val - deg * 10000) * 0.01);
-  unsigned sec = iround((int)val % 100);
-  val = fixed(deg) + ((fixed)min / 60) + ((fixed)sec / 3600);
+  src = endptr + 1;
+
+  long deg = min / 100;
+  min = min % 100;
+  if (min >= 60)
+    return false;
 
   // Limit angle to +/- 90 degrees for Latitude or +/- 180 degrees for Longitude
-  val = std::min(val, (lat ? 90.0 : 180.0));
+  deg = std::min(deg, lat ? 90L : 180L);
 
-  // Make angle negative if southern/western hemisphere
+  long l = _tcstol(src, &endptr, 10);
+  if (endptr != src + 3 || l < 0 || l >= 1000)
+    return false;
+
+  fixed value = fixed(deg) + fixed(min) / 60 + fixed(l) / 6000;
+
+  TCHAR sign = *src;
   if (sign == 'W' || sign == 'w' || sign == 'S' || sign == 's')
-    val *= -1;
+    value = -value;
 
   // Save angle
-  dest = Angle::degrees((fixed)val);
+  dest = Angle::degrees(value);
   return true;
 }
 
 bool
 WayPointFileZander::parseAltitude(const TCHAR* src, fixed& dest)
 {
-  double val;
-
   // Parse string
-  if (_stscanf(src, _T("%lf"), &val) != 1)
+  TCHAR *endptr;
+  double val = _tcstod(src, &endptr);
+  if (endptr == src)
     return false;
 
   // Save altitude
