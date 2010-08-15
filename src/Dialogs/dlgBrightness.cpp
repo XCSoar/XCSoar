@@ -95,11 +95,11 @@ static void OnBrightnessData(DataField *Sender,
 			     DataField::DataAccessKind_t Mode){
   switch(Mode){
     case DataField::daGet:
-      Sender->SetAsFloat(BrightnessValue);
+      Sender->SetAsInteger(BrightnessValue);
     break;
     case DataField::daPut:
     case DataField::daChange:
-      BrightnessValue = iround(Sender->GetAsFloat());
+      BrightnessValue = Sender->GetAsInteger();
       UpdateValues();
     break;
   }
@@ -126,7 +126,7 @@ void dlgBrightnessShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpBrightness"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(BrightnessValue);
+    wp->GetDataField()->SetAsInteger(BrightnessValue);
     wp->RefreshDisplay();
   }
   wp = (WndProperty*)wf->FindByName(_T("prpAuto"));
