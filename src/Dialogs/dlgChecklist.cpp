@@ -174,7 +174,7 @@ addChecklist(const TCHAR *name, const TCHAR *details)
   nLists++;
 }
 
-void
+static void
 LoadChecklist(void)
 {
   nLists = 0;
