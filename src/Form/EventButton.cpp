@@ -43,17 +43,13 @@ Copyright_License {
 
 #ifndef ALTAIRSYNC
 
-static void
-WndEventButton_OnClickNotify(WndButton &button)
+void
+WndEventButton::on_click()
 {
-  WndEventButton &wb = (WndEventButton &)button;
-  wb.CallEvent();
-}
-
-void WndEventButton::CallEvent() {
   if (inputEvent) {
     inputEvent(parameters);
-  }
+  } else
+    WndButton::on_click();
 }
 
 WndEventButton::~WndEventButton() {
@@ -73,7 +69,7 @@ WndEventButton::WndEventButton(ContainerWindow &Parent,
 			       const TCHAR* theparameters):
   WndButton(Parent, Caption, X, Y, Width, Height,
             style, background_color,
-	    WndEventButton_OnClickNotify)
+            NULL)
 {
   inputEvent = InputEvents::findEvent(ename);
   if (theparameters) {

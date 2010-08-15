@@ -56,7 +56,7 @@ public:
                  const TCHAR *eparameters);
   ~WndEventButton();
 
-  void CallEvent(void);
+  void on_click();
 
 private:
   webpt2Event inputEvent;
