@@ -67,8 +67,8 @@ static Color colTextBackgnd;
 #define GAUGEVARIORANGE fixed(5) // 5 m/s
 #define GAUGEVARIOSWEEP fixed(180) // degrees total sweep
 #define YOFFSET 36
-#define DeltaVstep 4
-#define DeltaVlimit 16.0
+#define DeltaVstep fixed_four
+#define DeltaVlimit fixed(16)
 #define TextBug _T("Bug")
 #define TextBal _T("Bal")
 
@@ -177,7 +177,7 @@ GaugeVario::Render()
   static int ValueHeight;
   static bool InitDone = false;
 
-  double vval;
+  fixed vval;
 
   Canvas &canvas = get_canvas();
 
@@ -202,7 +202,7 @@ GaugeVario::Render()
 
   vval = Units::ToUserUnit(Basic().TotalEnergyVario, Units::VerticalSpeedUnit);
 
-  double vvaldisplay = min(99.9, max(-99.9, vval));
+  fixed vvaldisplay = min(fixed(99.9), max(fixed(-99.9), vval));
 
   if (Appearance.GaugeVarioAvgText) {
     // JMW averager now displays netto average if not circling
@@ -218,8 +218,8 @@ GaugeVario::Render()
   }
 
   if (Appearance.GaugeVarioMc) {
-    double mc = Units::ToUserUnit(Calculated().common_stats.current_mc,
-                                  Units::VerticalSpeedUnit);
+    fixed mc = Units::ToUserUnit(Calculated().common_stats.current_mc,
+                                 Units::VerticalSpeedUnit);
     if (SettingsComputer().auto_mc)
       RenderValue(canvas, orgBottom.x, orgBottom.y,
 		  &diValueBottom, &diLabelBottom,
@@ -496,11 +496,13 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average, bool clear)
 // TODO code: Optimise vario rendering, this is slow
 void
 GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
-                        DrawInfo_t *diLabel, double Value, const TCHAR *Label)
+                        DrawInfo_t *diLabel, fixed Value, const TCHAR *Label)
 {
   SIZE tsize;
 
+#ifndef FIXED_MATH
   Value = (double)iround(Value * 10) / 10; // prevent the -0.0 case
+#endif
 
   if (!diValue->InitDone) {
 
@@ -518,7 +520,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
                          + Fonts::CDI.get_capital_height()
                          - Fonts::CDI.get_ascent_height();
 
-    diValue->lastValue = -9999;
+    diValue->lastValue = fixed(-9999);
     diValue->lastText[0] = '\0';
     diValue->last_unit_symbol = NULL;
     diValue->InitDone = true;
@@ -539,7 +541,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
                          + Fonts::Title.get_capital_height()
                          - Fonts::Title.get_ascent_height();
 
-    diLabel->lastValue = -9999;
+    diLabel->lastValue = fixed(-9999);
     diLabel->lastText[0] = '\0';
     diLabel->last_unit_symbol = NULL;
     diLabel->InitDone = true;
@@ -563,7 +565,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
     TCHAR Temp[18];
     canvas.set_background_color(colTextBackgnd);
     canvas.set_text_color(colText);
-    _stprintf(Temp, _T("%.1f"), Value);
+    _stprintf(Temp, _T("%.1f"), (double)Value);
     canvas.select(Fonts::CDI);
     tsize = canvas.text_size(Temp);
     diValue->orgText.x = diValue->recBkg.right - tsize.cx;
@@ -599,8 +601,8 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
                                   Basic().TotalEnergyVarioAvailable))
     return;
 
-  static double lastVdiff;
-  double vdiff;
+  static fixed lastVdiff;
+  fixed vdiff;
 
   int nary = NARROWS * ARROWYSIZE;
   int ytop = get_top() + YOFFSET + nary; // JMW
@@ -619,7 +621,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
     vdiff = max(-DeltaVlimit, min(DeltaVlimit, vdiff)); // limit it
     vdiff = iround(vdiff/DeltaVstep) * DeltaVstep;
   } else
-    vdiff = 0;
+    vdiff = fixed_zero;
 
   if ((lastVdiff != vdiff) || (dirty)) {
     lastVdiff = vdiff;
@@ -652,7 +654,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
       canvas.black_pen();
 
     if (Appearance.InfoBoxColors) {
-      if (vdiff > 0) {
+      if (positive(vdiff)) {
         // too slow
         canvas.select(redBrush);
         canvas.select(redPen);
@@ -667,12 +669,12 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
         canvas.black_brush();
     }
 
-    if (vdiff > 0) {
+    if (positive(vdiff)) {
       // too slow
       y = ybottom;
       y += YOFFSET;
 
-      while (vdiff > 0) {
+      while (positive(vdiff)) {
         if (vdiff > DeltaVstep) {
           canvas.rectangle(x, y, x + ARROWXSIZE * 2 + 1, y + ARROWYSIZE - 1);
         } else {
@@ -690,12 +692,12 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
         vdiff -= DeltaVstep;
         y += ARROWYSIZE;
       }
-    } else if (vdiff < 0) {
+    } else if (negative(vdiff)) {
       // too fast
       y = ytop;
       y -= YOFFSET;
 
-      while (vdiff < 0) {
+      while (negative(vdiff)) {
         if (vdiff < -DeltaVstep) {
           canvas.rectangle(x, y + 1, x + ARROWXSIZE * 2 + 1, y - ARROWYSIZE + 2);
         } else {

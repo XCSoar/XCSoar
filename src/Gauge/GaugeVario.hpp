@@ -51,7 +51,7 @@ typedef struct {
   int     maxLabelSize;
   RECT    recBkg;
   POINT   orgText;
-  double  lastValue;
+  fixed lastValue;
   TCHAR   lastText[32];
   const UnitSymbol *last_unit_symbol;
 } DrawInfo_t;
@@ -104,7 +104,7 @@ private:
   void RenderZero(Canvas &canvas);
   void RenderValue(Canvas &canvas, int x, int y,
                    DrawInfo_t *diValue, DrawInfo_t *diLabel,
-                   double Value, const TCHAR *Label);
+                   fixed Value, const TCHAR *Label);
   void RenderSpeedToFly(Canvas &canvas, int x, int y);
   void RenderBallast(Canvas &canvas);
   void RenderBugs(Canvas &canvas);
