@@ -50,6 +50,12 @@ public:
 #endif
   }
 
+  ButtonWindowStyle(const WindowStyle other):WindowStyle(other) {
+#ifndef ENABLE_SDL
+    style |= BS_PUSHBUTTON | BS_CENTER | BS_VCENTER;
+#endif
+  }
+
   void multiline() {
 #ifndef ENABLE_SDL
     style |= BS_MULTILINE;

@@ -49,6 +49,12 @@ public:
 #endif
   }
 
+  EditWindowStyle(const WindowStyle other):WindowStyle(other) {
+#ifndef ENABLE_SDL
+    style |= ES_LEFT | ES_AUTOHSCROLL;
+#endif
+  }
+
   void read_only() {
 #ifndef ENABLE_SDL
     style |= ES_READONLY;
