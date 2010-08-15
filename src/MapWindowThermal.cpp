@@ -69,21 +69,19 @@ MapWindow::CalculateScreenPositionsThermalSources()
 }
 
 void
-MapWindow::DrawThermalEstimate(Canvas &canvas)
+MapWindow::DrawThermalEstimate(Canvas &canvas) const
 {
   if (DisplayMode == dmCircling) {
     if (positive(Calculated().ThermalEstimate_R)) {
       POINT sc;
       if (LonLat2ScreenIfVisible(Calculated().ThermalEstimate_Location, &sc)) {
-        MapGfx.hBmpThermalSource.draw(canvas, 
-                                      get_bitmap_canvas(), sc.x, sc.y);
+        MapGfx.hBmpThermalSource.draw(canvas, bitmap_canvas, sc.x, sc.y);
       }
     }
   } else if (GetMapScaleKM() <= fixed_four) {
     for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
       if (ThermalSources[i].Visible) 
-        MapGfx.hBmpThermalSource.draw(canvas, 
-                                      get_bitmap_canvas(), 
+        MapGfx.hBmpThermalSource.draw(canvas, bitmap_canvas,
                                       ThermalSources[i].Screen.x,
                                       ThermalSources[i].Screen.y);
     }
@@ -91,7 +89,7 @@ MapWindow::DrawThermalEstimate(Canvas &canvas)
 }
 
 void
-MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
+MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc) const
 {
   POINT GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };
 

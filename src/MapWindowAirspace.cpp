@@ -238,15 +238,14 @@ public:
 };
 
 void
-MapWindow::DrawAirspaceIntersections(Canvas &canvas)
+MapWindow::DrawAirspaceIntersections(Canvas &canvas) const
 {
   for (std::vector<GEOPOINT>::const_iterator it = m_airspace_intersections.begin();
        it != m_airspace_intersections.end(); ++it) {
     
     POINT sc;
     if (LonLat2ScreenIfVisible(*it, &sc)) {
-      MapGfx.hAirspaceInterceptBitmap.draw(canvas, 
-                                           get_bitmap_canvas(), sc.x, sc.y);
+      MapGfx.hAirspaceInterceptBitmap.draw(canvas, bitmap_canvas, sc.x, sc.y);
     }
   }
 }

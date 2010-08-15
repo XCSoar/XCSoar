@@ -49,7 +49,7 @@ Copyright_License {
 #include <stdio.h>
 
 double
-MapWindow::findMapScaleBarSize(const RECT rc)
+MapWindow::findMapScaleBarSize(const RECT rc) const
 {
   double pixelsize = DistanceScreenToUser(1); // units/pixel
   double half_displaysize = DistanceScreenToUser((rc.bottom - rc.top) / 2); // units
@@ -68,7 +68,7 @@ MapWindow::findMapScaleBarSize(const RECT rc)
 }
 
 void
-MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc)
+MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc) const
 {
   canvas.select(MapGfx.hpMapScale);
 
@@ -123,7 +123,7 @@ draw_bitmap(Canvas &canvas, BitmapCanvas &bitmap_canvas, const Bitmap &bitmap,
 
 void
 MapWindow::DrawMapScale(Canvas &canvas, const RECT rc,
-                        const bool ScaleChangeFeedback)
+                        const bool ScaleChangeFeedback) const
 {
   static int LastMapWidth = 0;
   fixed MapWidth;
@@ -165,16 +165,16 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT rc,
   if (ScaleChangeFeedback)
     canvas.background_opaque();
 
-  draw_bitmap(canvas, get_bitmap_canvas(), MapGfx.hBmpMapScale,
+  draw_bitmap(canvas, bitmap_canvas, MapGfx.hBmpMapScale,
               0, rc.bottom - Height, 0, 0, 6, 11);
-  draw_bitmap(canvas, get_bitmap_canvas(), MapGfx.hBmpMapScale,
+  draw_bitmap(canvas, bitmap_canvas, MapGfx.hBmpMapScale,
               IBLSCALE(14) + TextSize.cx, rc.bottom - Height, 6, 0, 8, 11);
 
   if (!ScaleChangeFeedback) {
     const UnitSymbol *symbol = GetUnitSymbol(Unit);
 
     if (symbol != NULL)
-      symbol->draw(canvas, get_bitmap_canvas(), IBLSCALE(8) + TextSize.cx,
+      symbol->draw(canvas, bitmap_canvas, IBLSCALE(8) + TextSize.cx,
                    rc.bottom - Height);
   }
 

@@ -43,7 +43,7 @@ Copyright_License {
 MapDrawHelper::MapDrawHelper(Canvas &_canvas, 
                              Canvas &_buffer, 
                              Canvas &_stencil, 
-                             Projection &_proj,
+                             const Projection &_proj,
                              const SETTINGS_MAP& settings_map):
   m_canvas(_canvas),
   m_buffer(_buffer),

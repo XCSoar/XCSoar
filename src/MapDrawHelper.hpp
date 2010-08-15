@@ -55,7 +55,7 @@ public:
   MapDrawHelper(Canvas &_canvas, 
                 Canvas &_buffer, 
                 Canvas &_stencil, 
-                Projection &_proj,
+                const Projection &_proj,
                 const SETTINGS_MAP& settings_map);
 
   MapDrawHelper(MapDrawHelper &_that);
@@ -63,7 +63,7 @@ public:
   Canvas &m_canvas;
   Canvas &m_buffer;
   Canvas &m_stencil;
-  Projection& m_proj;
+  const Projection& m_proj;
   bool m_buffer_drawn;
   bool m_use_stencil;
 

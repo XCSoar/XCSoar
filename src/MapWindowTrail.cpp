@@ -48,6 +48,7 @@ Copyright_License {
 using std::min;
 using std::max;
 
+gcc_const
 static int
 fSnailColour(fixed cv)
 {
@@ -56,7 +57,7 @@ fSnailColour(fixed cv)
 }
 
 void
-MapWindow::DrawTrail(Canvas &canvas)
+MapWindow::DrawTrail(Canvas &canvas) const
 {
   if (!SettingsMap().TrailActive || task == NULL)
     return;

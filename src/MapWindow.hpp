@@ -49,6 +49,7 @@ Copyright_License {
 #include "MapWindowBlackboard.hpp"
 #include "NMEA/Derived.hpp"
 #include "BackgroundDrawHelper.hpp"
+#include "Compiler.h"
 
 #include <vector>
 
@@ -194,36 +195,39 @@ private:
   void MapWaypointLabelSortAndRender(Canvas &canvas);
 
   // display renderers
-  void DrawAircraft(Canvas &canvas);
-  void DrawCrossHairs(Canvas &canvas);
-  void DrawBestCruiseTrack(Canvas &canvas);
-  void DrawCompass(Canvas &canvas, const RECT rc);
-  void DrawHorizon(Canvas &canvas, const RECT rc);
-  void DrawWindAtAircraft2(Canvas &canvas, POINT Orig, RECT rc);
+  void DrawAircraft(Canvas &canvas) const;
+  void DrawCrossHairs(Canvas &canvas) const;
+  void DrawBestCruiseTrack(Canvas &canvas) const;
+  void DrawCompass(Canvas &canvas, const RECT rc) const;
+  void DrawHorizon(Canvas &canvas, const RECT rc) const;
+  void DrawWindAtAircraft2(Canvas &canvas, POINT Orig, RECT rc) const;
   void DrawAirspace(Canvas &canvas, Canvas &buffer);
-  void DrawAirspaceIntersections(Canvas &canvas);
+  void DrawAirspaceIntersections(Canvas &canvas) const;
   void DrawWaypoints(Canvas &canvas);
 
-  void DrawFlightMode(Canvas &canvas, const RECT rc);
-  void DrawGPSStatus(Canvas &canvas, const RECT rc, const GPS_STATE &gps);
-  void DrawTrail(Canvas &canvas);
-  void DrawTeammate(Canvas &canvas);
-  void DrawProjectedTrack(Canvas &canvas);
+  void DrawFlightMode(Canvas &canvas, const RECT rc) const;
+  void DrawGPSStatus(Canvas &canvas, const RECT rc,
+                     const GPS_STATE &gps) const;
+  void DrawTrail(Canvas &canvas) const;
+  void DrawTeammate(Canvas &canvas) const;
+  void DrawProjectedTrack(Canvas &canvas) const;
   void DrawTask(Canvas &canvas, RECT rc, Canvas &buffer);
-  void DrawThermalEstimate(Canvas &canvas);
+  void DrawThermalEstimate(Canvas &canvas) const;
 
   void DrawMapScale(Canvas &canvas, const RECT rc,
-			   const bool ScaleChangeFeedback);
-  void DrawMapScale2(Canvas &canvas, const RECT rc);
-  void DrawFinalGlide(Canvas &canvas, const RECT rc);
-  void DrawThermalBand(Canvas &canvas, const RECT rc);
-  void DrawGlideThroughTerrain(Canvas &canvas);
+                    const bool ScaleChangeFeedback) const;
+  void DrawMapScale2(Canvas &canvas, const RECT rc) const;
+  void DrawFinalGlide(Canvas &canvas, const RECT rc) const;
+  void DrawThermalBand(Canvas &canvas, const RECT rc) const;
+  void DrawGlideThroughTerrain(Canvas &canvas) const;
   void DrawTerrainAbove(Canvas &hDC, Canvas &buffer);
   void DrawCDI();
 
   //  void DrawSpeedToFly(HDC hDC, RECT rc);
-  void DrawFLARMTraffic(Canvas &canvas);
-  double findMapScaleBarSize(const RECT rc);
+  void DrawFLARMTraffic(Canvas &canvas) const;
+
+  gcc_pure
+  double findMapScaleBarSize(const RECT rc) const;
 
   // thread, main functions
   void Render(Canvas &canvas, const RECT rc);
@@ -247,7 +251,7 @@ private:
   BufferCanvas stencil_canvas;
 
 protected:
-  BitmapCanvas bitmap_canvas;
+  mutable BitmapCanvas bitmap_canvas;
 
 private:
   LabelBlock label_block;

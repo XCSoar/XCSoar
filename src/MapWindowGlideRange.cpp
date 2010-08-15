@@ -74,7 +74,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas, Canvas &buffer)
 
 
 void
-MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
+MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
 {
   if (SettingsComputer().FinalGlideTerrain) {
     canvas.select(MapGfx.hpTerrainLineBg);
@@ -90,7 +90,7 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
   if (!Calculated().TerrainWarningLocation.is_null()) {
     POINT sc;
     if (LonLat2ScreenIfVisible(Calculated().TerrainWarningLocation, &sc))
-      MapGfx.hTerrainWarning.draw(canvas, get_bitmap_canvas(), sc.x, sc.y);
+      MapGfx.hTerrainWarning.draw(canvas, bitmap_canvas, sc.x, sc.y);
   }
 }
 

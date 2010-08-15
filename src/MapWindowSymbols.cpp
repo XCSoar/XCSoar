@@ -52,7 +52,7 @@ Copyright_License {
 #include <stdio.h>
 
 void
-MapWindow::DrawCrossHairs(Canvas &canvas)
+MapWindow::DrawCrossHairs(Canvas &canvas) const
 {
   Pen dash_pen(Pen::DASH, 1, Color(50, 50, 50));
   canvas.select(dash_pen);
@@ -64,7 +64,7 @@ MapWindow::DrawCrossHairs(Canvas &canvas)
 }
 
 void
-MapWindow::DrawAircraft(Canvas &canvas)
+MapWindow::DrawAircraft(Canvas &canvas) const
 {
   POINT Aircraft[] = {
     {1, -5},
@@ -104,7 +104,8 @@ MapWindow::DrawAircraft(Canvas &canvas)
 }
 
 void
-MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc, const GPS_STATE &gps)
+MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc,
+                         const GPS_STATE &gps) const
 {
   if (gps.Connected && !gps.NAVWarning && gps.SatellitesUsed)
     // nothing to do, all OK
@@ -124,7 +125,7 @@ MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc, const GPS_STATE &gps)
     return; // early exit
   }
 
-  icon->draw(canvas, get_bitmap_canvas(),
+  icon->draw(canvas, bitmap_canvas,
              rc.left + IBLSCALE(2),
             rc.bottom + IBLSCALE(-35));
 
@@ -135,7 +136,7 @@ MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc, const GPS_STATE &gps)
 }
 
 void
-MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
+MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc) const
 {
   static bool flip = true;
   static fixed LastTime = fixed_zero;
@@ -161,7 +162,7 @@ MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
     MaskedIcon &icon = (logger.isLoggerActive() && flip) ?
                        MapGfx.hLogger : MapGfx.hLoggerOff;
 
-    icon.draw(canvas, get_bitmap_canvas(),
+    icon.draw(canvas, bitmap_canvas,
               rc.right + IBLSCALE(offset),
               rc.bottom + IBLSCALE(-7));
   }
@@ -179,13 +180,14 @@ MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 
   offset -= 24;
 
-  bmp->draw(canvas, get_bitmap_canvas(),
+  bmp->draw(canvas, bitmap_canvas,
             rc.right + IBLSCALE(offset - 1),
             rc.bottom + IBLSCALE(-21));
 }
 
 void
-MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
+MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig,
+                               const RECT rc) const
 {
   int i;
   POINT Start;
@@ -259,7 +261,7 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
 }
 
 void
-MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
+MapWindow::DrawHorizon(Canvas &canvas, const RECT rc) const
 {
   POINT Start;
   Start.y = IBLSCALE(55) + rc.top;
@@ -316,7 +318,7 @@ MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
 }
 
 void
-MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
+MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc) const
 {
   POINT GlideBar[6] = {
       { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, 0 }, { 9, 0 }, { 0, 0 }
@@ -494,14 +496,14 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
         Units::GetUserAltitudeUnit());
 
       if (unit_symbol != NULL)
-        unit_symbol->draw(canvas, get_bitmap_canvas(),
+        unit_symbol->draw(canvas, bitmap_canvas,
                           x + TextSize.cx + IBLSCALE(1), y);
     }
   }
 }
 
 void
-MapWindow::DrawCompass(Canvas &canvas, const RECT rc)
+MapWindow::DrawCompass(Canvas &canvas, const RECT rc) const
 {
   POINT Start;
 
@@ -552,7 +554,7 @@ MapWindow::DrawCompass(Canvas &canvas, const RECT rc)
 }
 
 void
-MapWindow::DrawBestCruiseTrack(Canvas &canvas)
+MapWindow::DrawBestCruiseTrack(Canvas &canvas) const
 {
   if (task == NULL || !task->check_task())
     return;

@@ -47,6 +47,7 @@ Copyright_License {
 
 #include <stdio.h>
 
+gcc_const
 static int
 fSnailColour(fixed cv)
 {
@@ -59,7 +60,7 @@ fSnailColour(fixed cv)
  * @param canvas Canvas for drawing
  */
 void
-MapWindow::DrawFLARMTraffic(Canvas &canvas)
+MapWindow::DrawFLARMTraffic(Canvas &canvas) const
 {
   // Return if FLARM icons on moving map are disabled
   if (!SettingsMap().EnableFLARMMap)
@@ -212,7 +213,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 
     // If FLARM alarm draw alarm icon below corresponding target
     if ((traffic.AlarmLevel > 0) && (traffic.AlarmLevel < 4))
-      MapGfx.hFLARMTraffic.draw(canvas, get_bitmap_canvas(), sc.x, sc.y);
+      MapGfx.hFLARMTraffic.draw(canvas, bitmap_canvas, sc.x, sc.y);
 
     // Fill the Arrow array with a normal arrow pointing north
     Arrow[0].x = -4;
@@ -259,11 +260,11 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
  * @param canvas Canvas for drawing
  */
 void
-MapWindow::DrawTeammate(Canvas &canvas)
+MapWindow::DrawTeammate(Canvas &canvas) const
 {
   if (SettingsComputer().TeammateCodeValid) {
     POINT sc;
     if (LonLat2ScreenIfVisible(Calculated().TeammateLocation, &sc))
-      MapGfx.hBmpTeammatePosition.draw(canvas, get_bitmap_canvas(), sc.x, sc.y);
+      MapGfx.hBmpTeammatePosition.draw(canvas, bitmap_canvas, sc.x, sc.y);
   }
 }
