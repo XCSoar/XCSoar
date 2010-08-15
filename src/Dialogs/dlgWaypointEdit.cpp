@@ -198,7 +198,7 @@ static void SetValues(void) {
   }
   wp = (WndProperty*)wf->FindByName(_T("prpLongitudeD"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(dd);
+    wp->GetDataField()->SetAsInteger(dd);
     wp->RefreshDisplay();
   }
 
@@ -207,19 +207,19 @@ static void SetValues(void) {
   case 1: // ("DDMMSS.ss");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
     if (wp) {
-      wp->GetDataField()->SetAsFloat(mm);
+      wp->GetDataField()->SetAsInteger(mm);
       wp->RefreshDisplay();
     }
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeS"));
     if (wp) {
-      wp->GetDataField()->SetAsFloat(ss);
+      wp->GetDataField()->SetAsInteger(ss);
       wp->RefreshDisplay();
     }
     break;
   case 2: // ("DDMM.mmm");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
     if (wp) {
-      wp->GetDataField()->SetAsFloat(mm);
+      wp->GetDataField()->SetAsInteger(mm);
       wp->RefreshDisplay();
     }
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudemmm"));
@@ -251,7 +251,7 @@ static void SetValues(void) {
   }
   wp = (WndProperty*)wf->FindByName(_T("prpLatitudeD"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(dd);
+    wp->GetDataField()->SetAsInteger(dd);
     wp->RefreshDisplay();
   }
 
@@ -260,19 +260,19 @@ static void SetValues(void) {
   case 1: // ("DDMMSS.ss");
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeM"));
     if (wp) {
-      wp->GetDataField()->SetAsFloat(mm);
+      wp->GetDataField()->SetAsInteger(mm);
       wp->RefreshDisplay();
     }
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeS"));
     if (wp) {
-      wp->GetDataField()->SetAsFloat(ss);
+      wp->GetDataField()->SetAsInteger(ss);
       wp->RefreshDisplay();
     }
     break;
   case 2: // ("DDMM.mmm");
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeM"));
     if (wp) {
-      wp->GetDataField()->SetAsFloat(mm);
+      wp->GetDataField()->SetAsInteger(mm);
       wp->RefreshDisplay();
     }
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudemmm"));
@@ -292,7 +292,7 @@ static void SetValues(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(
+    wp->GetDataField()->SetAsInteger(iround(
         Units::ToUserUnit(global_wpt->Altitude, Units::AltitudeUnit)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
