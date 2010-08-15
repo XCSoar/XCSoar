@@ -46,6 +46,11 @@ Copyright_License {
 
 #include <stdio.h>
 
+static const StatusMessageSTRUCT StatusMessageDefaults[] = {
+#include "Status_defaults.cpp"
+  { NULL }
+};
+
 StatusMessageList::StatusMessageList()
   :StatusMessageData_Size(0), olddelay(2000)
 {
@@ -58,7 +63,10 @@ StatusMessageList::StatusMessageList()
   StatusMessageData_Size=1;
 
   // Load up other defaults - allow overwrite in config file
-#include "Status_defaults.cpp"
+  StatusMessageSTRUCT *dest = StatusMessageData;
+  const StatusMessageSTRUCT *src = StatusMessageDefaults;
+  while (src->key != NULL)
+    *dest++ = *src++;
 }
 
 void

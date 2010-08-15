@@ -40,9 +40,9 @@ T2E_OBJ = $(call SRC_TO_OBJ,$(SRC)/InputEvents.cpp)
 $(T2E_OBJ): $(XCI_HEADERS) $(OUT)/include/InputEvents_Text2Event.cpp $(OUT)/include/InputEvents_Text2GCE.cpp $(OUT)/include/InputEvents_Text2NE.cpp
 
 $(OUT)/include/Status_defaults.cpp: Data/Status/default.xcs \
-	Data/Status/xcs2cpp.pl $(OUT)/include/dirstamp
+	tools/xcs2cpp.pl $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
-	$(Q)$(PERL) Data/Status/xcs2cpp.pl $< >$@.tmp
+	$(Q)$(PERL) tools/xcs2cpp.pl $< >$@.tmp
 	@mv $@.tmp $@
 
 SM_OBJ = $(call SRC_TO_OBJ,$(SRC)/StatusMessage.cpp)
