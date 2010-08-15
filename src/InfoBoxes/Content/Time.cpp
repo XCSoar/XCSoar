@@ -78,18 +78,12 @@ InfoBoxContentTimeUTC::Update(InfoBoxWindow &infobox)
   infobox.SetTitle(_T("Time UTC"));
 
   // Set Value
-  int dd = abs((int)XCSoarInterface::Basic().Time) % (3600 * 24);
-  int hours = (dd / 3600);
-  int mins = (dd / 60 - hours * 60);
-  int seconds = (dd - mins * 60 - hours * 3600);
-  hours = hours % 24;
-
-  // Set Value
-  _stprintf(sTmp, _T("%02d:%02d"), hours, mins);
+  const BrokenDateTime t = XCSoarInterface::Basic().DateTime;
+  _stprintf(sTmp, _T("%02d:%02d"), t.hour, t.minute);
   infobox.SetValue(sTmp);
 
   // Set Comment
-  _stprintf(sTmp, _T("%02d"), seconds);
+  _stprintf(sTmp, _T("%02d"), t.second);
   infobox.SetComment(sTmp);
 }
 
