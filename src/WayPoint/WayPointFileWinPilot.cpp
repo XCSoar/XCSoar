@@ -41,6 +41,8 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "IO/TextWriter.hpp"
 
+#include <stdlib.h>
+
 bool
 WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
                                 Waypoints &way_points, 
@@ -115,54 +117,65 @@ WayPointFileWinPilot::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
   // 51:47.841N (DD:MM.mmm // the usual)
   // 51:23:45N (DD:MM:SS)
 
-  double val;
-  char sign = 0;
-  unsigned deg, min, sec;
+  TCHAR *endptr;
 
-  // Parse unusual string
-  int s =_stscanf(src, _T("%u:%u:%u%c"), &deg, &min, &sec, &sign);
-  // Hack: the E sign for east is interpreted as exponential sign
-  if (s == 4 || (s == 3 && sign == 0)) {
-    // Calculate angle
-    val = fixed(deg) + (fixed)min / 60 + (fixed)sec / 3600;
-  } else {
-    // Parse usual string
-    s =_stscanf(src, _T("%u:%lf%c"), &deg, &val, &sign);
-    // Hack: the E sign for east is interpreted as exponential sign
-    if (!(s == 3 || (s == 2 && sign == 0)))
-      return false;
-
-    // Calculate angle
-    unsigned minfrac = iround((val - (int)val) * 1000);
-    min = (int)val;
-    val = fixed(deg) + ((fixed)min + (fixed)minfrac / 1000) / 60;
-  }
+  long deg = _tcstol(src, &endptr, 10);
+  if (endptr == src || *endptr != _T(':') || deg < 0)
+    return false;
 
   // Limit angle to +/- 90 degrees for Latitude or +/- 180 degrees for Longitude
-  val = std::min(val, (lat ? 90.0 : 180.0));
+  deg = std::min(deg, lat ? 90L : 180L);
 
-  // Make angle negative if southern/western hemisphere
+  src = endptr + 1;
+  long min = _tcstol(src, &endptr, 10);
+  if (endptr == src || min < 0 || min >= 60)
+    return false;
+
+  src = endptr + 1;
+  fixed sec;
+  if (*endptr == ':') {
+    /* 00..59 */
+    long l = _tcstol(src, &endptr, 10);
+    if (endptr == src || l < 0 || l >= 60)
+        return false;
+
+    sec = fixed(l) / 3600;
+  } else if (*endptr == '.') {
+    /* 000..999 */
+    long l = _tcstol(src, &endptr, 10);
+    if (endptr != src + 3 || l < 0 || l >= 1000)
+        return false;
+
+    sec = fixed(l) / 6000;
+  } else
+    return false;
+
+  src = endptr + 1;
+
+  fixed value = fixed(deg) + fixed(min) / 60;
+
+  TCHAR sign = *src;
   if (sign == 'W' || sign == 'w' || sign == 'S' || sign == 's')
-    val *= -1;
+    value = -value;
 
   // Save angle
-  dest = Angle::degrees((fixed)val);
+  dest = Angle::degrees(value);
   return true;
 }
 
 bool
 WayPointFileWinPilot::parseAltitude(const TCHAR* src, fixed& dest)
 {
-  double val;
-  char unit;
-
   // Parse string
-  if (_stscanf(src, _T("%lf%c"), &val, &unit) != 2)
+  TCHAR *endptr;
+  double value = _tcstod(src, &endptr);
+  if (endptr == src)
     return false;
 
-  dest = fixed(val);
+  dest = fixed(value);
 
   // Convert to system unit if necessary
+  TCHAR unit = *endptr;
   if (unit == 'F' || unit == 'f')
     dest = Units::ToSysUnit(dest, unFeet);
 
