@@ -588,18 +588,18 @@ Chart::DrawArrow(const double x, const double y, const double mag,
   const FastRotation r(angle);
   FastRotation::Pair p;
 
-  p = r.Rotate(mag, 0);
-  wv[1].x = (int)(wv[0].x + p.first);
-  wv[1].y = (int)(wv[0].y + p.second);
+  p = r.Rotate(fixed(mag), fixed_zero);
+  wv[1].x = wv[0].x + (int)p.first;
+  wv[1].y = wv[0].y + (int)p.second;
   StyleLine(wv[0], wv[1], Style);
 
-  p = r.Rotate(mag - 5, -3);
-  wv[1].x = (int)(wv[0].x + p.first);
-  wv[1].y = (int)(wv[0].y + p.second);
+  p = r.Rotate(fixed(mag - 5), fixed(-3));
+  wv[1].x = wv[0].x + (int)p.first;
+  wv[1].y = wv[0].y + (int)p.second;
   StyleLine(wv[0], wv[1], Style);
 
-  p = r.Rotate(mag - 5, 3);
-  wv[1].x = (int)(wv[0].x + p.first);
-  wv[1].y = (int)(wv[0].y + p.second);
+  p = r.Rotate(fixed(mag - 5), fixed(3));
+  wv[1].x = wv[0].x + (int)p.first;
+  wv[1].y = wv[0].y + (int)p.second;
   StyleLine(wv[0], wv[1], Style);
 }

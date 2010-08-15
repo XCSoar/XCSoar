@@ -54,7 +54,7 @@ FastRotation::SetAngle(Angle _angle)
 }
 
 FastRotation::Pair
-FastRotation::Rotate(double x, double y) const
+FastRotation::Rotate(fixed x, fixed y) const
 {
   return Pair(x * cost - y * sint, y * cost + x * sint);
 }

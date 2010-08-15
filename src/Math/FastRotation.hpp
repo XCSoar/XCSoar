@@ -49,10 +49,10 @@ Copyright_License {
  */
 class FastRotation {
   Angle angle;
-  double cost, sint;
+  fixed cost, sint;
 
 public:
-  typedef std::pair<double,double> Pair;
+  typedef std::pair<fixed,fixed> Pair;
 
   FastRotation():angle(), cost(1), sint(0) {}
   FastRotation(Angle _angle):angle(Angle::radians(-fixed(9999))) { SetAngle(_angle); }
@@ -80,7 +80,7 @@ public:
    * @return the rotated coordinates
    */
   gcc_pure
-  Pair Rotate(double x, double y) const;
+  Pair Rotate(fixed x, fixed y) const;
 
   gcc_pure
   Pair Rotate(const Pair p) const {
