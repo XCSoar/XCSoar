@@ -207,9 +207,9 @@ public:
       _stprintf(Buffer + length, _T("%d%s"), AltArrivalAGL, sAltUnit);
     }
 
-    MapWaypointLabelAdd(Buffer, sc.x + 5, sc.y, text_mode, AltArrivalAGL,
-                        in_task, way_point.is_landable(), way_point.is_airport(),
-                        map.GetMapRect());
+    labels.Add(Buffer, sc.x + 5, sc.y, text_mode, AltArrivalAGL,
+               in_task, way_point.is_landable(), way_point.is_airport(),
+               map.GetMapRect());
   }
 
   void
@@ -273,6 +273,9 @@ private:
   int pDisplayTextType;
   TCHAR sAltUnit[4];
   const GlidePolar glide_polar;
+
+public:
+  WayPointLabelList labels;
 };
 
 void
@@ -280,8 +283,6 @@ MapWindow::DrawWaypoints(Canvas &canvas)
 {
   if (way_points == NULL || way_points->empty())
     return;
-
-  MapWaypointLabelClear();
 
   canvas.set_text_color(Color::BLACK);
 
@@ -294,5 +295,6 @@ MapWindow::DrawWaypoints(Canvas &canvas)
   if (task != NULL && SettingsMap().DisplayTextType == DISPLAYNAMEIFINTASK)
     task->CAccept(v);
 
-  MapWaypointLabelSortAndRender(canvas);
+  v.labels.Sort();
+  MapWaypointLabelRender(canvas, v.labels);
 }

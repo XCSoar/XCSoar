@@ -79,6 +79,7 @@ class ProtectedAirspaceWarningManager;
 class ProtectedTaskManager;
 class GlidePolar;
 class ContainerWindow;
+class WayPointLabelList;
 
 class MapWindow : public PaintWindow,
   public MapWindowProjection,
@@ -192,7 +193,7 @@ private:
 
   void CalculateScreenPositionsGroundline();
   void CalculateScreenPositionsThermalSources();
-  void MapWaypointLabelSortAndRender(Canvas &canvas);
+  void MapWaypointLabelRender(Canvas &canvas, const WayPointLabelList &labels);
 
   // display renderers
   void DrawAircraft(Canvas &canvas) const;

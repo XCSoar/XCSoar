@@ -40,16 +40,41 @@ Copyright_License {
 #define XCSOAR_MAP_WINDOW_LABELS_HPP
 
 #include "Screen/Graphics.hpp"
+#include "Util/NonCopyable.hpp"
 
 #include <tchar.h>
 
-void
-MapWaypointLabelAdd(TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
-                    int AltArivalAGL,
-                    bool inTask, bool isLandable, bool isAirport,
-                    RECT MapRect);
+class WayPointLabelList : private NonCopyable {
+public:
+  struct Label{
+    TCHAR Name[NAME_SIZE+1];
+    POINT Pos;
+    TextInBoxMode_t Mode;
+    int AltArivalAGL;
+    bool inTask;
+    bool isLandable;
+    bool isAirport;
+  };
 
-void
-MapWaypointLabelClear();
+protected:
+  Label labels[50];
+  unsigned num_labels;
+
+public:
+  WayPointLabelList():num_labels(0) {}
+
+  void Add(const TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
+           int AltArivalAGL, bool inTask, bool isLandable, bool isAirport,
+           const RECT &MapRect);
+  void Sort();
+
+  unsigned size() const {
+    return num_labels;
+  }
+
+  const Label &operator[](unsigned i) const {
+    return labels[i];
+  }
+};
 
 #endif
