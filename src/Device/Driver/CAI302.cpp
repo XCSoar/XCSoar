@@ -140,8 +140,15 @@ class CAI302Device : public AbstractDevice {
 private:
   ComPort *port;
 
+  int MacCreadyUpdateTimeout;
+  int BugsUpdateTimeout;
+  int BallastUpdateTimeout;
+
 public:
-  CAI302Device(ComPort *_port):port(_port) {}
+  CAI302Device(ComPort *_port)
+    :port(_port),
+     MacCreadyUpdateTimeout(0), BugsUpdateTimeout(0),
+     BallastUpdateTimeout(0) {}
 
 public:
   virtual bool Open();
@@ -151,21 +158,17 @@ public:
   virtual bool PutBugs(double bugs);
   virtual bool PutBallast(double ballast);
   virtual bool Declare(const Declaration *declaration);
+
+private:
+  bool cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro);
 };
 
 // Additional sentance for CAI302 support
-static bool
-cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro);
-
 static bool
 cai_PCAIB(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 
 static bool
 cai_PCAID(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
-
-static int  MacCreadyUpdateTimeout = 0;
-static int  BugsUpdateTimeout = 0;
-static int  BallastUpdateTimeout = 0;
 
 bool
 CAI302Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
@@ -572,8 +575,8 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 *hh  Checksum, XOR of all bytes
 */
 
-static bool
-cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
+bool
+CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   GPS_INFO->ExternalWindAvailable = ReadSpeedVector(line, GPS_INFO->wind);
   if (GPS_INFO->ExternalWindAvailable)
