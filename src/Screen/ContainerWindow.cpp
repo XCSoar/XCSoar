@@ -39,6 +39,10 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/WindowCanvas.hpp"
 
+#ifndef ENABLE_SDL
+#include "Screen/ButtonWindow.hpp"
+#endif
+
 #ifdef ENABLE_SDL
 
 ContainerWindow::ContainerWindow()
@@ -229,6 +233,15 @@ ContainerWindow::on_message(HWND hWnd, UINT message,
       window->on_paint(canvas);
       return TRUE;
     }
+
+  case WM_COMMAND:
+    if (wParam == MAKEWPARAM(ButtonWindow::COMMAND_BOUNCE_ID, BN_CLICKED)) {
+      /* forward this message to ButtonWindow::on_clicked() */
+      ButtonWindow *window = (ButtonWindow *)Window::get((HWND)lParam);
+      if (window != NULL && window->on_clicked())
+        return true;
+    }
+    break;
   };
 
   return PaintWindow::on_message(hWnd, message, wParam, lParam);

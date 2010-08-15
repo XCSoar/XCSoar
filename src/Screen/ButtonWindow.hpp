@@ -92,6 +92,12 @@ public:
            int left, int top, unsigned width, unsigned height,
            const ButtonWindowStyle style=ButtonWindowStyle());
 
+  void set(ContainerWindow &parent, const TCHAR *text,
+           int left, int top, unsigned width, unsigned height,
+           const ButtonWindowStyle style=ButtonWindowStyle()) {
+    set(parent, text, 0, left, top, width, height, style);
+  }
+
   void set_text(const TCHAR *_text) {
     assert_none_locked();
     assert_thread();
@@ -107,6 +113,11 @@ public:
   bool is_down() const {
     return down;
   }
+
+  /**
+   * The button was clicked, and its action shall be triggered.
+   */
+  virtual bool on_clicked();
 
 protected:
   virtual bool on_mouse_down(int x, int y);
@@ -126,7 +137,21 @@ protected:
  */
 class ButtonWindow : public Window {
 public:
+  enum {
+    /**
+     * On WIN32, a WM_COMMAND/BN_CLICKED message with this id will be
+     * bounced back to the originating child
+     * ButtonWindow::on_clicked().
+     */
+    COMMAND_BOUNCE_ID = 0xbeef,
+  };
+
+public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
+           int left, int top, unsigned width, unsigned height,
+           const ButtonWindowStyle style=ButtonWindowStyle());
+
+  void set(ContainerWindow &parent, const TCHAR *text,
            int left, int top, unsigned width, unsigned height,
            const ButtonWindowStyle style=ButtonWindowStyle());
 
@@ -145,6 +170,11 @@ public:
 
     return (Button_GetState(hWnd) & BST_PUSHED) != 0;
   }
+
+  /**
+   * The button was clicked, and its action shall be triggered.
+   */
+  virtual bool on_clicked();
 };
 
 #endif /* !ENABLE_SDL */

@@ -37,10 +37,10 @@ Copyright_License {
 */
 
 #include "Screen/ButtonWindow.hpp"
+#include "Screen/ContainerWindow.hpp"
 
 #ifdef ENABLE_SDL
 
-#include "Screen/ContainerWindow.hpp"
 #include "Screen/Font.hpp"
 
 void
@@ -109,6 +109,16 @@ ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
   ::SetWindowLong(hWnd, GWL_ID, id);
 }
 
+void
+ButtonWindow::set(ContainerWindow &parent, const TCHAR *text,
+                  int left, int top, unsigned width, unsigned height,
+                  const ButtonWindowStyle style)
+{
+  set(parent, text, COMMAND_BOUNCE_ID,
+      left, top, width, height, style);
+  install_wndproc();
+}
+
 const tstring
 ButtonWindow::get_text() const
 {
@@ -123,3 +133,9 @@ ButtonWindow::get_text() const
 }
 
 #endif /* !ENABLE_SDL */
+
+bool
+ButtonWindow::on_clicked()
+{
+  return false;
+}
