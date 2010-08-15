@@ -1000,18 +1000,6 @@ GetInfoBoxSelector(unsigned item, int mode)
   Profile::SetInfoBoxes(item, InfoBoxManager::getTypeAll(item));
 }
 
-static TCHAR szPolarFile[MAX_PATH];
-static TCHAR szAirspaceFile[MAX_PATH];
-static TCHAR szAdditionalAirspaceFile[MAX_PATH];
-static TCHAR szWaypointFile[MAX_PATH];
-static TCHAR szAdditionalWaypointFile[MAX_PATH];
-static TCHAR szTerrainFile[MAX_PATH];
-static TCHAR szTopologyFile[MAX_PATH];
-static TCHAR szAirfieldFile[MAX_PATH];
-static TCHAR szLanguageFile[MAX_PATH];
-static TCHAR szStatusFile[MAX_PATH];
-static TCHAR szInputFile[MAX_PATH];
-static TCHAR szMapFile[MAX_PATH];
 static DeviceConfig device_config[NUMDEV];
 static int dwDeviceIndex1 = 0;
 static int dwDeviceIndex2 = 0;
@@ -1022,6 +1010,33 @@ static int Lift = 0;
 static int Altitude = 0; //default ft
 static int Temperature = 0; //default is celcius
 static TCHAR temptext[MAX_PATH];
+
+static void
+InitFileField(WndProperty &wp, const TCHAR *profile_key, const TCHAR *filters)
+{
+  DataFieldFileReader &df = *(DataFieldFileReader *)wp.GetDataField();
+
+  size_t length;
+  while ((length = _tcslen(filters)) > 0) {
+    df.ScanDirectoryTop(filters);
+    filters += length + 1;
+  }
+
+  TCHAR path[MAX_PATH];
+  Profile::Get(profile_key, path, MAX_PATH);
+  ExpandLocalPath(path);
+  df.Lookup(path);
+  wp.RefreshDisplay();
+}
+
+static void
+InitFileField(WndForm &wf, const TCHAR *control_name,
+              const TCHAR *profile_key, const TCHAR *filters)
+{
+  WndProperty *wp = (WndProperty *)wf.FindByName(control_name);
+  if (wp != NULL)
+    InitFileField(*wp, profile_key, filters);
+}
 
 static void
 SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
@@ -1500,162 +1515,30 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  Profile::Get(szProfilePolarFile, szPolarFile, MAX_PATH);
-  _tcscpy(temptext,szPolarFile);
-  ExpandLocalPath(temptext);
-  wp = (WndProperty*)wf->FindByName(_T("prpPolarFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(_T("*.plr"));
-    dfe->Lookup(temptext);
-    wp->RefreshDisplay();
-  }
-
-  Profile::Get(szProfileAirspaceFile, szAirspaceFile, MAX_PATH);
-  _tcscpy(temptext,szAirspaceFile);
-  ExpandLocalPath(temptext);
-  wp = (WndProperty*)wf->FindByName(_T("prpAirspaceFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(_T("*.txt"));
-    dfe->ScanDirectoryTop(_T("*.air"));
-    dfe->ScanDirectoryTop(_T("*.sua"));
-    dfe->Lookup(temptext);
-    wp->RefreshDisplay();
-  }
-
-  Profile::Get(szProfileAdditionalAirspaceFile,
-                    szAdditionalAirspaceFile, MAX_PATH);
-  _tcscpy(temptext,szAdditionalAirspaceFile);
-  ExpandLocalPath(temptext);
-  wp = (WndProperty*)wf->FindByName(_T("prpAdditionalAirspaceFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(_T("*.txt"));
-    dfe->ScanDirectoryTop(_T("*.air"));
-    dfe->ScanDirectoryTop(_T("*.sua"));
-    dfe->Lookup(temptext);
-    wp->RefreshDisplay();
-  }
-
-  Profile::Get(szProfileWayPointFile, szWaypointFile, MAX_PATH);
-  _tcscpy(temptext,szWaypointFile);
-  ExpandLocalPath(temptext);
-  wp = (WndProperty*)wf->FindByName(_T("prpWaypointFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(_T("*.dat"));
-    dfe->ScanDirectoryTop(_T("*.xcw"));
-    dfe->ScanDirectoryTop(_T("*.cup"));
-    dfe->ScanDirectoryTop(_T("*.wpz"));
-    dfe->Lookup(temptext);
-    wp->RefreshDisplay();
-  }
-
-  Profile::Get(szProfileAdditionalWayPointFile,
-                    szAdditionalWaypointFile, MAX_PATH);
-  _tcscpy(temptext,szAdditionalWaypointFile);
-  ExpandLocalPath(temptext);
-  wp = (WndProperty*)wf->FindByName(_T("prpAdditionalWaypointFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(_T("*.dat"));
-    dfe->ScanDirectoryTop(_T("*.xcw"));
-    dfe->ScanDirectoryTop(_T("*.cup"));
-    dfe->ScanDirectoryTop(_T("*.wpz"));
-    dfe->Lookup(temptext);
-    wp->RefreshDisplay();
-  }
-
-  Profile::Get(szProfileMapFile, szMapFile, MAX_PATH);
-  _tcscpy(temptext,szMapFile);
-  ExpandLocalPath(temptext);
-  wp = (WndProperty*)wf->FindByName(_T("prpMapFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(_T("*.xcm"));
-    dfe->ScanDirectoryTop(_T("*.lkm"));
-    dfe->Lookup(temptext);
-    wp->RefreshDisplay();
-  }
-
-  Profile::Get(szProfileTerrainFile, szTerrainFile, MAX_PATH);
-  _tcscpy(temptext,szTerrainFile);
-  ExpandLocalPath(temptext);
-  wp = (WndProperty*)wf->FindByName(_T("prpTerrainFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(_T("*.jp2"));
-    dfe->Lookup(temptext);
-    wp->RefreshDisplay();
-  }
-
-  Profile::Get(szProfileTopologyFile, szTopologyFile, MAX_PATH);
-  _tcscpy(temptext,szTopologyFile);
-  ExpandLocalPath(temptext);
-  wp = (WndProperty*)wf->FindByName(_T("prpTopologyFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(_T("*.tpl"));
-    dfe->Lookup(temptext);
-    wp->RefreshDisplay();
-  }
-
-  Profile::Get(szProfileAirfieldFile, szAirfieldFile, MAX_PATH);
-  _tcscpy(temptext,szAirfieldFile);
-  ExpandLocalPath(temptext);
-  wp = (WndProperty*)wf->FindByName(_T("prpAirfieldFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(_T("*.txt"));
-    dfe->Lookup(temptext);
-    wp->RefreshDisplay();
-  }
-
-  Profile::Get(szProfileLanguageFile, szLanguageFile, MAX_PATH);
-  _tcscpy(temptext,szLanguageFile);
-  ExpandLocalPath(temptext);
-  wp = (WndProperty*)wf->FindByName(_T("prpLanguageFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(_T("*.mo"));
-    dfe->Lookup(temptext);
-    wp->RefreshDisplay();
-  }
-
-  Profile::Get(szProfileStatusFile, szStatusFile, MAX_PATH);
-  _tcscpy(temptext,szStatusFile);
-  ExpandLocalPath(temptext);
-  wp = (WndProperty*)wf->FindByName(_T("prpStatusFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(_T("*.xcs"));
-    dfe->Lookup(temptext);
-    wp->RefreshDisplay();
-  }
-
-  Profile::Get(szProfileInputFile, szInputFile, MAX_PATH);
-  _tcscpy(temptext,szInputFile);
-  ExpandLocalPath(temptext);
-  wp = (WndProperty*)wf->FindByName(_T("prpInputFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(_T("*.xci"));
-    dfe->Lookup(temptext);
-    wp->RefreshDisplay();
-  }
+  InitFileField(*wf, _T("prpPolarFile"), szProfilePolarFile, _T("*.plr\0"));
+  InitFileField(*wf, _T("prpAirspaceFile"),
+                szProfileAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
+  InitFileField(*wf, _T("prpAdditionalAirspaceFile"),
+                szProfileAdditionalAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
+  InitFileField(*wf, _T("prpWaypointFile"),
+                szProfileWayPointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0"));
+  InitFileField(*wf, _T("prpAdditionalWaypointFile"),
+                szProfileAdditionalWayPointFile,
+                _T("*.dat\0*.xcw\0*.cup\0*.wpz\0"));
+  InitFileField(*wf, _T("prpMapFile"),
+                szProfileMapFile, _T("*.xcm\0*.lkm\0"));
+  InitFileField(*wf, _T("prpTerrainFile"),
+                szProfileTerrainFile, _T("*.jp2\0"));
+  InitFileField(*wf, _T("prpTopologyFile"),
+                szProfileTopologyFile, _T("*.tpl\0"));
+  InitFileField(*wf, _T("prpAirfieldFile"),
+                szProfileAirfieldFile, _T("*.txt\0"));
+  InitFileField(*wf, _T("prpLanguageFile"),
+                szProfileLanguageFile, _T("*.mo\0"));
+  InitFileField(*wf, _T("prpStatusFile"),
+                szProfileStatusFile, _T("*.xcs\0"));
+  InitFileField(*wf, _T("prpInputFile"),
+                szProfileInputFile, _T("*.xci\0"));
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppStatusMessageAlignment"));
   if (wp) {
