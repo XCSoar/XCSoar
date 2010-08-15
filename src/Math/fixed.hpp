@@ -696,18 +696,6 @@ inline fixed atan(fixed const& x)
 }
 
 gcc_pure
-inline fixed max(fixed const& x, fixed const& y)
-{
-  return (x>y? x:y);
-}
-
-gcc_pure
-inline fixed min(fixed const& x, fixed const& y)
-{
-  return (x<y? x:y);
-}
-
-gcc_pure
 inline fixed atan2(fixed const& y, fixed const& x)
 {
   return fixed::atan2(y,x);
