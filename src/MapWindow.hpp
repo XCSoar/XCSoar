@@ -227,7 +227,7 @@ private:
   void DrawFLARMTraffic(Canvas &canvas) const;
 
   gcc_pure
-  double findMapScaleBarSize(const RECT rc) const;
+  fixed findMapScaleBarSize(const RECT rc) const;
 
   // thread, main functions
   void Render(Canvas &canvas, const RECT rc);

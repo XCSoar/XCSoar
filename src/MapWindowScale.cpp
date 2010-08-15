@@ -48,23 +48,23 @@ Copyright_License {
 #include <math.h>
 #include <stdio.h>
 
-double
+fixed
 MapWindow::findMapScaleBarSize(const RECT rc) const
 {
-  double pixelsize = DistanceScreenToUser(1); // units/pixel
-  double half_displaysize = DistanceScreenToUser((rc.bottom - rc.top) / 2); // units
+  fixed pixelsize = DistanceScreenToUser(1); // units/pixel
+  fixed half_displaysize = DistanceScreenToUser((rc.bottom - rc.top) / 2); // units
 
   // find largest bar size that will fit two of (black and white) in display
-  if (half_displaysize > 100.0)
-    return 100.0 / pixelsize;
+  if (half_displaysize > fixed(100))
+    return fixed(100) / pixelsize;
 
-  if (half_displaysize > 10.0)
-    return 10.0 / pixelsize;
+  if (half_displaysize > fixed_ten)
+    return fixed_ten / pixelsize;
 
-  if (half_displaysize > 1.0)
-    return 1.0 / pixelsize;
+  if (half_displaysize > fixed_one)
+    return fixed_one / pixelsize;
 
-  return 0.1 / pixelsize;
+  return fixed_one / 10 / pixelsize;
 }
 
 void
