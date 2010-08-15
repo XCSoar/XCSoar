@@ -74,7 +74,7 @@ public DataField
   void Inc(void);
   void Dec(void);
   int CreateComboList(void);
-  int SetFromCombo(int iDataFieldIndex, TCHAR *sValue);
+  void SetFromCombo(int iDataFieldIndex, TCHAR *sValue);
 
   virtual bool GetAsBoolean(void) const;
   virtual int GetAsInteger(void) const;
@@ -93,10 +93,10 @@ public DataField
   #if defined(__BORLANDC__)
   #pragma warn +hid
   #endif
-  bool SetAsBoolean(bool Value);
-  int SetAsInteger(int Value);
-  double SetAsFloat(double Value);
-  virtual const TCHAR *SetAsString(const TCHAR *Value);
+  virtual void SetAsBoolean(bool Value);
+  virtual void SetAsInteger(int Value);
+  virtual void SetAsFloat(double Value);
+  virtual void SetAsString(const TCHAR *Value);
 };
 
 #endif

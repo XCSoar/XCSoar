@@ -144,11 +144,10 @@ DataFieldFileReader::GetAsInteger(void) const
   return mValue;
 }
 
-int
+void
 DataFieldFileReader::SetAsInteger(int Value)
 {
   Set(Value);
-  return mValue;
 }
 
 void

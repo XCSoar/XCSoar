@@ -38,11 +38,10 @@ Copyright_License {
 
 #include "DataField/String.hpp"
 
-const TCHAR *
+void
 DataFieldString::SetAsString(const TCHAR *Value)
 {
   _tcscpy(mValue, Value);
-  return mValue;
 }
 
 void

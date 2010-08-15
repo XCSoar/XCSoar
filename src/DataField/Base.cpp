@@ -103,32 +103,28 @@ DataField::GetAsDisplayString() const
   return GetAsString();
 }
 
-bool
+void
 DataField::SetAsBoolean(bool Value)
 {
   (void)Value;
-  return false;
 }
 
-int
+void
 DataField::SetAsInteger(int Value)
 {
   (void)Value;
-  return 0;
 }
 
-double
+void
 DataField::SetAsFloat(double Value)
 {
   (void)Value;
-  return 0.0;
 }
 
-const TCHAR *
+void
 DataField::SetAsString(const TCHAR *Value)
 {
   (void)Value;
-  return NULL;
 }
 
 void

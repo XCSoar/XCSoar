@@ -89,10 +89,10 @@ public:
   #pragma warn +hid
   #endif
 
-  bool SetAsBoolean(bool Value);
-  int SetAsInteger(int Value);
-  double SetAsFloat(double Value);
-  virtual const TCHAR *SetAsString(const TCHAR *Value);
+  virtual void SetAsBoolean(bool Value);
+  virtual void SetAsInteger(int Value);
+  virtual void SetAsFloat(double Value);
+  virtual void SetAsString(const TCHAR *Value);
 };
 
 #endif

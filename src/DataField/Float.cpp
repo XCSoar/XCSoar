@@ -99,7 +99,7 @@ DataFieldFloat::SetMax(double Value)
   return res;
 }
 
-bool
+void
 DataFieldFloat::SetAsBoolean(bool Value)
 {
   bool res = GetAsBoolean();
@@ -109,39 +109,32 @@ DataFieldFloat::SetAsBoolean(bool Value)
     else
       SetAsFloat(0.0);
   }
-  return res;
 }
 
-int
+void
 DataFieldFloat::SetAsInteger(int Value)
 {
-  int res = GetAsInteger();
   SetAsFloat(Value);
-  return res;
 }
 
-double
+void
 DataFieldFloat::SetAsFloat(double Value)
 {
-  double res = mValue;
   if (Value < mMin)
     Value = mMin;
   if (Value > mMax)
     Value = mMax;
-  if (res != Value) {
+  if (mValue != Value) {
     mValue = Value;
     if (!GetDetachGUI())
       (mOnDataAccess)(this, daChange);
   }
-  return res;
 }
 
-const TCHAR *
+void
 DataFieldFloat::SetAsString(const TCHAR *Value)
 {
-  const TCHAR *res = GetAsString();
   SetAsFloat(_tcstod(Value, NULL));
-  return res;
 }
 
 void
@@ -197,11 +190,10 @@ DataFieldFloat::SpeedUp(bool keyup)
   return res;
 }
 
-int
+void
 DataFieldFloat::SetFromCombo(int iDataFieldIndex, TCHAR *sValue)
 {
   SetAsString(sValue);
-  return 0;
 }
 
 int

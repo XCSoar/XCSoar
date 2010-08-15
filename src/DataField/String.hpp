@@ -57,7 +57,7 @@ public:
     SupportCombo = false;
   }
 
-  virtual const TCHAR *SetAsString(const TCHAR *Value);
+  virtual void SetAsString(const TCHAR *Value);
 
   #if defined(__BORLANDC__)
   #pragma warn -hid

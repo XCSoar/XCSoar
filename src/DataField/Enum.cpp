@@ -120,11 +120,10 @@ DataFieldEnum::Set(int Value)
   mValue = 0; // fallback
 }
 
-int
+void
 DataFieldEnum::SetAsInteger(int Value)
 {
   Set(Value);
-  return mEntries[mValue].index;
 }
 
 void

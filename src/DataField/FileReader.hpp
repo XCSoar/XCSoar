@@ -185,7 +185,7 @@ public:
    * @see Set()
    * @return The index that was set (min: 0 / max: nFiles)
    */
-  int SetAsInteger(int Value);
+  virtual void SetAsInteger(int Value);
 
   /** Sorts the filelist by filenames */
   void Sort();

@@ -85,14 +85,14 @@ public:
     return fixed(GetAsFloat());
   }
 
-  virtual bool SetAsBoolean(bool Value);
-  virtual int SetAsInteger(int Value);
-  virtual double SetAsFloat(double Value);
-  virtual const TCHAR *SetAsString(const TCHAR *Value);
+  virtual void SetAsBoolean(bool Value);
+  virtual void SetAsInteger(int Value);
+  virtual void SetAsFloat(double Value);
+  virtual void SetAsString(const TCHAR *Value);
 
 #ifdef FIXED_MATH
-  fixed SetAsFloat(fixed Value) {
-    return fixed(SetAsFloat((double)Value));
+  void SetAsFloat(fixed Value) {
+    SetAsFloat((double)Value);
   }
 #endif
 
@@ -133,10 +133,10 @@ public:
   virtual int CreateComboList(void) { return 0; }
   ComboList* GetCombo(void) { return &mComboList; }
 
-  virtual int
+  virtual void
   SetFromCombo(int iDataFieldIndex, TCHAR *sValue)
   {
-    return SetAsInteger(iDataFieldIndex);
+    SetAsInteger(iDataFieldIndex);
   }
 
   void CopyString(TCHAR * szStringOut, bool bFormatted);

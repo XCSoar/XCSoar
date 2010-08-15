@@ -93,46 +93,39 @@ DataFieldBoolean::Set(bool Value)
   mValue = Value;
 }
 
-bool
+void
 DataFieldBoolean::SetAsBoolean(bool Value)
 {
-  bool res = mValue;
   if (mValue != Value) {
     mValue = Value;
     if (!GetDetachGUI())
       (mOnDataAccess)(this, daChange);
   }
-  return res;
 }
 
-int
+void
 DataFieldBoolean::SetAsInteger(int Value)
 {
-  int res = GetAsInteger();
   if (GetAsInteger() != Value) {
     SetAsBoolean(!(Value == 0));
   }
-  return res;
 }
 
-double
+void
 DataFieldBoolean::SetAsFloat(double Value)
 {
-  double res = GetAsFloat();
   if (GetAsFloat() != Value) {
     SetAsBoolean(!(Value == 0.0));
   }
-  return res;
 }
 
-const TCHAR *
+void
 DataFieldBoolean::SetAsString(const TCHAR *Value)
 {
   const TCHAR *res = GetAsString();
   if (_tcscmp(res, Value) != 0) {
     SetAsBoolean(_tcscmp(Value, mTextTrue) == 0);
   }
-  return res;
 }
 
 void

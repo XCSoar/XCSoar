@@ -93,7 +93,7 @@ public:
   #pragma warn +hid
   #endif
 
-  int SetAsInteger(int Value);
+  virtual void SetAsInteger(int Value);
   void Sort(int startindex = 0);
 
   unsigned Count() { return nEnums; }

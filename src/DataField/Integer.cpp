@@ -86,21 +86,18 @@ DataFieldInteger::Set(int Value)
   mValue = Value;
 }
 
-bool
+void
 DataFieldInteger::SetAsBoolean(bool Value)
 {
-  bool res = GetAsBoolean();
   if (Value)
     SetAsInteger(1);
   else
     SetAsInteger(0);
-  return res;
 }
 
-int
+void
 DataFieldInteger::SetAsInteger(int Value)
 {
-  int res = mValue;
   if (Value < mMin)
     Value = mMin;
   if (Value > mMax)
@@ -110,23 +107,18 @@ DataFieldInteger::SetAsInteger(int Value)
     if (!GetDetachGUI())
       (mOnDataAccess)(this, daChange);
   }
-  return res;
 }
 
-double
+void
 DataFieldInteger::SetAsFloat(double Value)
 {
-  double res = GetAsFloat();
   SetAsInteger(iround(Value));
-  return res;
 }
 
-const TCHAR *
+void
 DataFieldInteger::SetAsString(const TCHAR *Value)
 {
-  const TCHAR *res = GetAsString();
   SetAsInteger(_ttoi(Value));
-  return res;
 }
 
 void
