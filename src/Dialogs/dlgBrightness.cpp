@@ -52,9 +52,8 @@ static void OnCloseClicked(WindowControl * Sender){
 	wf->SetModalResult(mrOK);
 }
 
-
-bool EnableAutoBrightness=true;
-int BrightnessValue=0;
+static bool EnableAutoBrightness = true;
+static int BrightnessValue = 0;
 
 static void UpdateValues() {
   static PeriodClock last_time;
