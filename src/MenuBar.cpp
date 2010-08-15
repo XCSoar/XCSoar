@@ -39,6 +39,7 @@ Copyright_License {
 #include "MenuBar.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
+#include "InputEvents.h"
 
 #include <assert.h>
 
@@ -142,6 +143,13 @@ MenuBar::Button::on_paint(Canvas &canvas)
 
 #endif /* GREEN_MENU */
 
+bool
+MenuBar::Button::on_clicked()
+{
+  InputEvents::processButton(index);
+  return true;
+}
+
 #ifndef ENABLE_SDL
 LRESULT
 MenuBar::Button::on_message(HWND hWnd, UINT message,
@@ -173,7 +181,7 @@ MenuBar::MenuBar(ContainerWindow &parent)
 
   for (unsigned i = 0; i < MAX_BUTTONS; ++i) {
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
-    buttons[i].set(parent, _T(""), FIRST_ID + i, x, y, xsize, ysize,
+    buttons[i].set(parent, _T(""), i, x, y, xsize, ysize,
                    style);
   }
 }

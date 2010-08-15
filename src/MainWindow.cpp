@@ -54,7 +54,6 @@ Copyright_License {
 #include "Gauge/GaugeVario.hpp"
 #include "Gauge/GaugeCDI.hpp"
 #include "MenuBar.hpp"
-#include "InputEvents.h"
 #include "Appearance.hpp"
 #include "Asset.hpp" /* for SCREENWIDTH and SCREENHEIGHT */
 
@@ -166,16 +165,6 @@ MainWindow::initialise()
 }
 
 // Windows event handlers
-
-bool
-MainWindow::on_command(unsigned id, unsigned code)
-{
-  if (id >= MenuBar::FIRST_ID && id <= MenuBar::LAST_ID) {
-    InputEvents::processButton(id - MenuBar::FIRST_ID);
-    return true;
-  } else
-    return SingleWindow::on_command(id, code);
-}
 
 bool
 MainWindow::on_activate()

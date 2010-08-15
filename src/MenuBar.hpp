@@ -53,28 +53,31 @@ class MenuBar {
 public:
   enum {
     MAX_BUTTONS = 32,
-    FIRST_ID = 0x5000,
-    LAST_ID = FIRST_ID + MAX_BUTTONS - 1,
   };
 
 protected:
   class Button : public ButtonWindow {
+    unsigned index;
+
 #ifdef GREEN_MENU
   protected:
     virtual void on_paint(Canvas &canvas);
 #endif
 
+  public:
+    virtual bool on_clicked();
+
 #ifndef ENABLE_SDL
   public:
-    void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
+    void set(ContainerWindow &parent, const TCHAR *text, unsigned _index,
              int left, int top, unsigned width, unsigned height,
              ButtonWindowStyle style=ButtonWindowStyle()) {
+      index = _index;
 #ifdef GREEN_MENU
       style.enable_custom_painting();
 #endif
 
-      ButtonWindow::set(parent, text, id, left, top, width, height, style);
-      install_wndproc();
+      ButtonWindow::set(parent, text, left, top, width, height, style);
     }
 
   protected:

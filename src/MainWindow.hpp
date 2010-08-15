@@ -84,7 +84,6 @@ public:
   }
 
 protected:
-  virtual bool on_command(unsigned id, unsigned code);
   bool on_activate();
   bool on_setfocus();
   bool on_timer(timer_t id);
