@@ -66,7 +66,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, int value)
   if (ctl == NULL)
     return;
 
-  ctl->GetDataField()->SetAsFloat(value);
+  ctl->GetDataField()->SetAsInteger(value);
   ctl->RefreshDisplay();
 }
 
@@ -124,7 +124,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
   Units_t unit = Units::GetUserUnitByGroup(unit_group);
   DataField *df = ctl->GetDataField();
   df->SetUnits(Units::GetUnitName(unit));
-  df->SetAsFloat(iround(Units::ToUserUnit(fixed(value), unit)));
+  df->SetAsInteger(iround(Units::ToUserUnit(fixed(value), unit)));
   ctl->RefreshDisplay();
 }
 
