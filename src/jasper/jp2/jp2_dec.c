@@ -92,7 +92,9 @@ typedef unsigned int uint;
 static jp2_dec_t *jp2_dec_create(void);
 static void jp2_dec_destroy(jp2_dec_t *dec);
 static int jp2_getcs(jp2_colr_t *colr);
+#ifdef ENABLE_JASPER_ICC
 static int fromiccpcs(int cs);
+#endif /* ENABLE_JASPER_ICC */
 static int jp2_getct(int colorspace, int type, int assoc);
 
 /******************************************************************************\
@@ -119,8 +121,10 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 	int cmptno;
 #endif
 	jp2_cmapent_t *cmapent;
+#ifdef ENABLE_JASPER_ICC
 	jas_icchdr_t icchdr;
 	jas_iccprof_t *iccprof;
+#endif /* ENABLE_JASPER_ICC */
 
   jas_aux_buffer_t aux_buf;
   aux_buf.id = 0;
@@ -340,6 +344,7 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 	case JP2_COLR_ENUM:
 		jas_image_setclrspc(dec->image, jp2_getcs(&dec->colr->data.colr));
 		break;
+#ifdef ENABLE_JASPER_ICC
 	case JP2_COLR_ICC:
 		iccprof = jas_iccprof_createfrombuf(dec->colr->data.colr.iccp,
 		  dec->colr->data.colr.iccplen);
@@ -351,6 +356,7 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 		assert(dec->image->cmprof_);
 		jas_iccprof_destroy(iccprof);
 		break;
+#endif /* ENABLE_JASPER_ICC */
 	}
 
 	/* If a CMAP box is present, a PCLR box must also be present. */
@@ -657,6 +663,7 @@ static int jp2_getcs(jp2_colr_t *colr)
 	return JAS_CLRSPC_UNKNOWN;
 }
 
+#ifdef ENABLE_JASPER_ICC
 static int fromiccpcs(int cs)
 {
 	switch (cs) {
@@ -672,3 +679,4 @@ static int fromiccpcs(int cs)
 	}
 	return JAS_CLRSPC_UNKNOWN;
 }
+#endif /* ENABLE_JASPER_ICC */

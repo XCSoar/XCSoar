@@ -230,10 +230,12 @@ jas_image_t *jas_image_copy(jas_image_t *image)
 
 	jas_image_setbbox(newimage);
 
+#ifdef ENABLE_JASPER_ICC
 	if (image->cmprof_) {
 		if (!(newimage->cmprof_ = jas_cmprof_copy(image->cmprof_)))
 			goto error;
 	}
+#endif /* ENABLE_JASPER_ICC */
 
 	return newimage;
 error:
@@ -301,8 +303,10 @@ void jas_image_destroy(jas_image_t *image)
 		}
 		jas_free(image->cmpts_);
 	}
+#ifdef ENABLE_JASPER_ICC
 	if (image->cmprof_)
 		jas_cmprof_destroy(image->cmprof_);
+#endif /* ENABLE_JASPER_ICC */
 	jas_free(image);
 }
 
@@ -383,6 +387,7 @@ jas_image_t *jas_image_decode(jas_stream_t *in, int fmt, const char *optstr)
 		goto error;
 
 	/* Create a color profile if needed. */
+#ifdef ENABLE_JASPER_ICC
 	if (!jas_clrspc_isunknown(image->clrspc_) &&
 	  !jas_clrspc_isgeneric(image->clrspc_) && !image->cmprof_) {
 		// JMW memory leak here!
@@ -390,6 +395,7 @@ jas_image_t *jas_image_decode(jas_stream_t *in, int fmt, const char *optstr)
 		  jas_cmprof_createfromclrspc(jas_image_clrspc(image))))
 			goto error;
 	}
+#endif /* ENABLE_JASPER_ICC */
 
 	return image;
 error:
@@ -1245,6 +1251,7 @@ static long uptomult(long x, long y)
 	return ((x + y - 1) / y) * y;
 }
 
+#ifdef ENABLE_JASPER_ICC
 jas_image_t *jas_image_chclrspc(jas_image_t *image, jas_cmprof_t *outprof,
   int intent)
 {
@@ -1421,3 +1428,4 @@ jas_image_dump(outimage, stderr);
 error:
 	return 0;
 }
+#endif /* ENABLE_JASPER_ICC */
