@@ -79,11 +79,11 @@ static void UpdateValues() {
 static void OnAutoData(DataField *Sender, DataField::DataAccessKind_t Mode){
   switch(Mode){
     case DataField::daGet:
-      Sender->Set(EnableAutoBrightness);
+      Sender->SetAsBoolean(EnableAutoBrightness);
     break;
     case DataField::daPut:
     case DataField::daChange:
-      EnableAutoBrightness = (Sender->GetAsInteger()!=0);
+      EnableAutoBrightness = Sender->GetAsBoolean();
       UpdateValues();
     break;
   }
@@ -130,7 +130,7 @@ void dlgBrightnessShowModal(void){
   }
   wp = (WndProperty*)wf->FindByName(_T("prpAuto"));
   if (wp) {
-    wp->GetDataField()->Set(EnableAutoBrightness);
+    wp->GetDataField()->SetAsBoolean(EnableAutoBrightness);
     wp->RefreshDisplay();
   }
   wf->ShowModal();
