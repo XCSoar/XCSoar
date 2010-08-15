@@ -52,6 +52,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Waypoint/Waypoint.hpp"
+#include "Math/FastMath.h"
 
 #include <tchar.h>
 #include <stdlib.h>
@@ -197,7 +198,7 @@ CAI302Device::PutMacCready(double MacCready)
   char szTmp[32];
 
   sprintf(szTmp, "!g,m%d\r\n",
-          int(Units::ToUserUnit(fixed(MacCready) * 10, unKnots) + fixed_half));
+          iround(Units::ToUserUnit(fixed(MacCready) * 10, unKnots)));
 
   port->Write(szTmp);
 
