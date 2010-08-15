@@ -321,7 +321,7 @@ NMEAParser::TimeModify(fixed FixTime, BrokenDateTime &date_time)
   date_time.minute = (int)mins;
 
   // Calculate Second
-  secs = FixTime - fixed(date_time.hour * 10000 - date_time.minute * 100);
+  secs = FixTime - fixed(date_time.hour * 10000 + date_time.minute * 100);
   date_time.second = (int)secs;
 
   // FixTime is now seconds-based instead of mixed format
