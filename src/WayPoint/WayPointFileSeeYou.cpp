@@ -193,46 +193,50 @@ WayPointFileSeeYou::parseString(const TCHAR* src, tstring& dest)
 bool
 WayPointFileSeeYou::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
 {
-  double val;
-  char sign = 0;
+  TCHAR *endptr;
 
-  // Parse string
-  int s =_stscanf(src, _T("%lf%c"), &val, &sign);
-  // Hack: the E sign for east is interpreted as exponential sign
-  if (!(s == 2 || (s == 1 && sign == 0)))
+  long min = _tcstol(src, &endptr, 10);
+  if (endptr == src || *endptr != _T('.') || min < 0)
     return false;
 
-  // Calculate angle
-  unsigned minfrac = iround((val - (int)val) * 1000);
-  unsigned min = (int)val % 100;
-  unsigned deg = ((int)val - min) * 0.01;
-  val = fixed(deg) + ((fixed)min + (fixed)minfrac / 1000) / 60;
+  src = endptr + 1;
+
+  long deg = min / 100;
+  min = min % 100;
+  if (min >= 60)
+    return false;
 
   // Limit angle to +/- 90 degrees for Latitude or +/- 180 degrees for Longitude
-  val = std::min(val, (lat ? 90.0 : 180.0));
+  deg = std::min(deg, lat ? 90L : 180L);
 
-  // Make angle negative if southern/western hemisphere
+  long l = _tcstol(src, &endptr, 10);
+  if (endptr != src + 3 || l < 0 || l >= 1000)
+    return false;
+
+  fixed value = fixed(deg) + fixed(min) / 60 + fixed(l) / 6000;
+
+  TCHAR sign = *src;
   if (sign == 'W' || sign == 'w' || sign == 'S' || sign == 's')
-    val *= -1;
+    value = -value;
 
   // Save angle
-  dest = Angle::degrees((fixed)val);
+  dest = Angle::degrees(value);
   return true;
 }
 
 bool
 WayPointFileSeeYou::parseAltitude(const TCHAR* src, fixed& dest)
 {
-  double val;
-  char unit;
-
   // Parse string
-  if (_stscanf(src, _T("%lf%c"), &val, &unit) != 2)
+  TCHAR *endptr;
+  double value = _tcstod(src, &endptr);
+  if (endptr == src)
     return false;
 
-  dest = fixed(val);
+  dest = fixed(value);
 
   // Convert to system unit if necessary
+  TCHAR unit = *endptr;
   if (unit == 'F' || unit == 'f')
     dest = Units::ToSysUnit(dest, unFeet);
 
@@ -248,10 +252,11 @@ WayPointFileSeeYou::parseStyle(const TCHAR* src, WaypointFlags& dest)
   // 3 - Outlanding
   // 4 - GliderSite
   // 5 - AirfieldSolid ...
-  unsigned style;
 
   // Parse string
-  if (_stscanf(src, _T("%u"), &style) != 1)
+  TCHAR *endptr;
+  long style = _tcstol(src, &endptr, 10);
+  if (endptr == src)
     return false;
 
   // Update flags
