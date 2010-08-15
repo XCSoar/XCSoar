@@ -434,7 +434,7 @@ LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable,
   TCHAR DataType[32];
   TCHAR DisplayFmt[32];
   TCHAR EditFormat[32];
-  double Min, Max, Step;
+  double Step;
   int Fine;
 
   _tcscpy(DataType,
@@ -447,8 +447,8 @@ LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable,
           StringToStringDflt(node.getAttribute(_T("EditFormat")),
                              _T("")));
 
-  Min = StringToIntDflt(node.getAttribute(_T("Min")), INT_MIN);
-  Max = StringToIntDflt(node.getAttribute(_T("Max")), INT_MAX);
+  int Min = StringToIntDflt(node.getAttribute(_T("Min")), INT_MIN);
+  int Max = StringToIntDflt(node.getAttribute(_T("Max")), INT_MAX);
   Step = StringToFloatDflt(node.getAttribute(_T("Step")), 1);
   Fine = StringToIntDflt(node.getAttribute(_T("Fine")), 0);
 
@@ -472,8 +472,8 @@ LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable,
                               callback);
 
   if (_tcsicmp(DataType, _T("integer")) == 0)
-    return new DataFieldInteger(EditFormat, DisplayFmt, (int)Min, (int)Max,
-                                (int)0, (int)Step, callback);
+    return new DataFieldInteger(EditFormat, DisplayFmt, Min, Max,
+                                0, (int)Step, callback);
 
   if (_tcsicmp(DataType, _T("string")) == 0)
     return new DataFieldString(EditFormat, DisplayFmt, _T(""), callback);
