@@ -178,14 +178,12 @@ static void
 LoadChecklist(void)
 {
   nLists = 0;
-  if (ChecklistText[0]) {
-    free(ChecklistText[0]);
-    ChecklistText[0] = NULL;
-  }
-  if (ChecklistTitle[0]) {
-    free(ChecklistTitle[0]);
-    ChecklistTitle[0] = NULL;
-  }
+
+  free(ChecklistText[0]);
+  ChecklistText[0] = NULL;
+
+  free(ChecklistTitle[0]);
+  ChecklistTitle[0] = NULL;
 
   TCHAR filename[MAX_PATH];
   LocalPath(filename, _T(XCSCHKLIST));
