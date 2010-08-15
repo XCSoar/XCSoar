@@ -57,18 +57,10 @@ Copyright_License {
 gcc_const int compare_squared(int a, int b, int c);
 
 gcc_const static inline int
-iround(double i)
-{
-  return (int)floor(i + 0.5);
-}
-
-#ifdef FIXED_MATH
-gcc_const static inline int
 iround(const fixed &x)
 {
   return floor(x+fixed_half).as_int();
 }
-#endif
 
 #ifdef FIXED_MATH
 extern const int COSTABLE[4096];
