@@ -48,7 +48,7 @@ static bool DataFieldKeyUp = false;
 bool
 DataFieldFloat::GetAsBoolean() const
 {
-  return (mValue != 0.0);
+  return mValue != fixed_zero;
 }
 
 int
@@ -60,20 +60,20 @@ DataFieldFloat::GetAsInteger() const
 fixed
 DataFieldFloat::GetAsFixed() const
 {
-  return fixed(mValue);
+  return mValue;
 }
 
 const TCHAR *
 DataFieldFloat::GetAsString() const
 {
-  _stprintf(mOutBuf, mEditFormat, mValue);
+  _stprintf(mOutBuf, mEditFormat, (double)mValue);
   return mOutBuf;
 }
 
 const TCHAR *
 DataFieldFloat::GetAsDisplayString() const
 {
-  _stprintf(mOutBuf, mDisplayFormat, mValue, mUnits);
+  _stprintf(mOutBuf, mDisplayFormat, (double)mValue, mUnits);
   return mOutBuf;
 }
 
@@ -83,18 +83,18 @@ DataFieldFloat::Set(fixed Value)
   mValue = Value;
 }
 
-double
-DataFieldFloat::SetMin(double Value)
+fixed
+DataFieldFloat::SetMin(fixed Value)
 {
-  double res = mMin;
+  fixed res = mMin;
   mMin = Value;
   return res;
 }
 
-double
-DataFieldFloat::SetMax(double Value)
+fixed
+DataFieldFloat::SetMax(fixed Value)
 {
-  double res = mMax;
+  fixed res = mMax;
   mMax = Value;
   return res;
 }
@@ -115,9 +115,8 @@ DataFieldFloat::SetAsInteger(int Value)
 }
 
 void
-DataFieldFloat::SetAsFloat(fixed _Value)
+DataFieldFloat::SetAsFloat(fixed Value)
 {
-  double Value = _Value;
   if (Value < mMin)
     Value = mMin;
   if (Value > mMax)
@@ -139,8 +138,9 @@ void
 DataFieldFloat::Inc(void)
 {
   // no keypad, allow user to scroll small values
-  if (mFine && (mValue < 0.95) && (mStep >= 0.5) && (mMin >= 0.0))
-    SetAsFloat(fixed(mValue + 0.1));
+  if (mFine && mValue < fixed(0.95) && mStep >= fixed_half &&
+      mMin >= fixed_zero)
+    SetAsFloat(mValue + fixed_one / 10);
   else
     SetAsFloat(fixed(mValue + mStep * SpeedUp(true)));
 }
@@ -149,43 +149,41 @@ void
 DataFieldFloat::Dec(void)
 {
   // no keypad, allow user to scroll small values
-  if (mFine && (mValue <= 1.0) && (mStep >= 0.5) && (mMin >= 0.0))
-    SetAsFloat(fixed(mValue - 0.1));
+  if (mFine && mValue <= fixed_one && mStep >= fixed_half &&
+      mMin >= fixed_zero)
+    SetAsFloat(mValue - fixed_one / 10);
   else
     SetAsFloat(fixed(mValue - mStep * SpeedUp(false)));
 }
 
-double
+fixed
 DataFieldFloat::SpeedUp(bool keyup)
 {
-  double res = 1.0;
-
   if (is_altair())
-    return res;
+    return fixed_one;
 
   if (GetDisableSpeedUp() == true)
-    return 1;
+    return fixed_one;
 
   if (keyup != DataFieldKeyUp) {
     mSpeedup = 0;
     DataFieldKeyUp = keyup;
     last_step.update();
-    return 1.0;
+    return fixed_one;
   }
 
   if (!last_step.check(200)) {
     mSpeedup++;
     if (mSpeedup > 5) {
-      res = 10;
       last_step.update_offset(350);
-      return res;
+      return fixed_ten;
     }
   } else
     mSpeedup = 0;
 
   last_step.update();
 
-  return res;
+  return fixed_one;
 }
 
 void

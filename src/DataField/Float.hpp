@@ -46,23 +46,23 @@ class DataFieldFloat:
 public DataField
 {
   private:
-    double mValue;
-    double mMin;
-    double mMax;
-    double mStep;
+  fixed mValue;
+  fixed mMin;
+  fixed mMax;
+  fixed mStep;
   PeriodClock last_step;
     int mSpeedup;
     int mFine;
   mutable TCHAR mOutBuf[OUTBUFFERSIZE+1];
 
   protected:
-    double SpeedUp(bool keyup);
+  fixed SpeedUp(bool keyup);
 
 
   public:
     DataFieldFloat(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
-                   double Min, double Max, double Default,
-                   double Step, int Fine, DataAccessCallback_t OnDataAccess)
+                   fixed Min, fixed Max, fixed Default,
+                   fixed Step, int Fine, DataAccessCallback_t OnDataAccess)
       :DataField(EditFormat, DisplayFormat, OnDataAccess),
        mValue(Default), mMin(Min), mMax(Max), mStep(Step), mFine(Fine)
   {
@@ -82,14 +82,14 @@ public DataField
   virtual const TCHAR *GetAsString(void) const;
   virtual const TCHAR *GetAsDisplayString(void) const;
 
-  virtual void Set(int Value){ Set((double)Value); };
+  virtual void Set(int Value){ Set(fixed(Value)); };
 
   #if defined(__BORLANDC__)
   #pragma warn -hid
   #endif
   void Set(fixed Value);
-  double SetMin(double Value);
-  double SetMax(double Value);
+  fixed SetMin(fixed Value);
+  fixed SetMax(fixed Value);
   #if defined(__BORLANDC__)
   #pragma warn +hid
   #endif

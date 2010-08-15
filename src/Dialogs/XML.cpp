@@ -468,7 +468,8 @@ LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable,
                                 _T("ON"), _T("OFF"), callback);
 
   if (_tcsicmp(DataType, _T("double")) == 0)
-    return new DataFieldFloat(EditFormat, DisplayFmt, Min, Max, 0, Step, Fine,
+    return new DataFieldFloat(EditFormat, DisplayFmt, fixed(Min), fixed(Max),
+                              fixed_zero, fixed(Step), fixed(Fine),
                               callback);
 
   if (_tcsicmp(DataType, _T("integer")) == 0)
