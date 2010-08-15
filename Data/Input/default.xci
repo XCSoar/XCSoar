@@ -86,68 +86,6 @@ event=StatusMessage Final Glide Through Terrain
 # mode=default
 # ------------
 
-# clear main entry buttons
-
-
-mode=default Display1 Display2 Config1 Config2 Config3 Info1 Info2 Info3 Bugs Ballast Wind Vario VarioTest pan Exit
-type=key
-data=APP1
-label=
-location=1
-
-mode=default Nav1 Nav2 Config1 Config2 Config3 Info1 Info2 Info3 Bugs Ballast Wind Vario VarioTest pan Exit
-type=key
-data=APP2
-label=
-location=2
-
-mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 Info3 pan Exit
-type=key
-data=APP3
-label=
-location=3
-
-mode=default Nav1 Nav2 Display1 Display2 Config1 Config2 Config3 Bugs Ballast Wind Vario VarioTest pan Exit
-type=key
-data=APP4
-label=
-location=4
-
-mode=default
-type=key
-data=6
-label=
-event=Null
-location=5
-
-mode=default
-type=key
-data=7
-label=
-event=Null
-location=6
-
-mode=default
-type=key
-data=8
-label=
-event=Null
-location=7
-
-mode=default
-type=key
-data=9
-label=
-event=Null
-location=8
-
-mode=default
-type=key
-data=0
-label=
-event=Null
-location=9
-
 ###### pan mode
 
 mode=pan
@@ -272,34 +210,6 @@ event=ScreenModes toggle
 
 mode=infobox
 type=key
-data=APP1
-event=Null
-label=
-location=1
-
-mode=infobox
-type=key
-data=APP2
-event=Null
-label=
-location=2
-
-mode=infobox
-type=key
-data=APP3
-event=Null
-label=
-location=3
-
-mode=infobox
-type=key
-data=APP4
-event=Null
-label=
-location=4
-
-mode=infobox
-type=key
 data=UP
 event=DoInfoKey up
 
@@ -323,37 +233,6 @@ type=key
 data=RETURN
 event=DoInfoKey return
 
-mode=infobox
-type=key
-data=6
-label=
-location=5
-
-mode=infobox
-type=key
-data=7
-label=
-location=6
-
-mode=infobox
-type=key
-data=8
-label=
-location=7
-
-mode=infobox
-type=key
-data=9
-label=
-location=8
-
-mode=infobox
-type=key
-data=0
-label=
-location=9
-
-# -----------------------------------------------------------------------
 
 # -------------
 # mode=Nav1
@@ -440,13 +319,6 @@ event=Mode default
 event=AbortTask toggle
 label=Task\n$(TaskAbortToggleActionName)$(CheckWaypointFile)
 location=7
-
-mode=Nav2
-type=key
-data=9
-event=Null
-label=
-location=8
 
 mode=Nav2
 type=key
@@ -674,34 +546,6 @@ event=Logger nmea
 label=Raw Logger
 location=5
 
-mode=Config3
-type=key
-data=7
-event=Null
-label=
-location=6
-
-mode=Config3
-type=key
-data=8
-event=Null
-label=
-location=7
-
-mode=Config3
-type=key
-data=9
-event=Null
-label=
-location=8
-
-mode=Config3
-type=key
-data=0
-event=Null
-label=
-location=9
-
 
 # -------------
 # mode=Vario1
@@ -922,27 +766,6 @@ event=ThermalAssistant
 label=Thermal Assistant
 location=6
 
-mode=Info3
-type=key
-data=8
-event=Null
-label=
-location=7
-
-mode=Info3
-type=key
-data=9
-event=Null
-label=
-location=8
-
-mode=Info3
-type=key
-data=0
-event=Null
-label=
-location=9
-
 
 # -------------
 # mode=Exit
@@ -982,54 +805,6 @@ data=APP4
 event=Mode Info1
 label=Info
 location=4
-
-mode=Exit
-type=key
-data=6
-label=
-location=5
-
-mode=Exit
-type=key
-data=7
-label=
-location=6
-
-mode=Exit
-type=key
-data=8
-label=
-location=7
-
-mode=Exit
-type=key
-data=9
-label=
-location=8
-
-mode=Exit
-type=key
-data=0
-label=
-location=9
-
-mode=Menu
-type=key
-data=6
-label=
-location=5
-
-mode=Menu
-type=key
-data=7
-label=
-location=6
-
-mode=Menu
-type=key
-data=8
-label=
-location=7
 
 mode=Menu
 type=key

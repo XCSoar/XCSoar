@@ -85,30 +85,6 @@ event=Pan supertoggle
 
 # clear main entry buttons
 
-mode=default Display1 Display2 Config1 Config2 Info1 Info2 Vario1 Vario2 pan
-type=key
-data=F1
-label=
-location=1
-
-mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Vario1 Vario2 pan Preview
-type=key
-data=F2
-label=
-location=2
-
-mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 pan Preview
-type=key
-data=F3
-label=
-location=3
-
-mode=default Nav1 Nav2 Display1 Display2 Config1 Config2 Vario1 Vario2 pan Preview
-type=key
-data=F4
-label=
-location=4
-
 ###### main entry buttons
 
 mode=default
@@ -188,13 +164,6 @@ data=9
 event=NearestWaypointDetails pan
 label=Nearest\nWaypoint
 location=8
-
-mode=pan
-type=key
-data=0
-event=Null
-label=
-location=9
 
 ##################
 
@@ -367,36 +336,6 @@ type=key
 data=RETURN
 event=DoInfoKey return
 
-mode=infobox
-type=key
-data=6
-label=
-location=5
-
-mode=infobox
-type=key
-data=7
-label=
-location=6
-
-mode=infobox
-type=key
-data=8
-label=
-location=7
-
-mode=infobox
-type=key
-data=9
-label=
-location=8
-
-mode=infobox
-type=key
-data=0
-label=
-location=9
-
 
 # -------------
 # mode=Nav1
@@ -483,13 +422,6 @@ event=Mode default
 event=AbortTask toggle
 label=Task\n$(TaskAbortToggleActionName)$(CheckWaypointFile)
 location=7
-
-mode=Nav2
-type=key
-data=9
-event=Null
-label=
-location=8
 
 mode=Nav2
 type=key
@@ -740,12 +672,6 @@ event=AdjustVarioFilter zero
 event=StatusMessage Not yet implemented
 label=Setup\nStall
 location=8
-
-mode=Vario1
-type=key
-data=0
-label=
-location=9
 
 # -------------
 # mode=Vario2

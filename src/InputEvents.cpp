@@ -771,8 +771,7 @@ InputEvents::drawButtons(mode Mode)
   for (unsigned i = 0; i < menu.MAX_ITEMS; ++i) {
     const MenuItem &item = menu[i];
 
-    if (item.defined())
-      ButtonLabel::SetLabelText(i, item.label);
+    ButtonLabel::SetLabelText(i, item.label);
   }
 }
 
