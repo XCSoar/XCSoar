@@ -50,14 +50,10 @@ private:
 
 public:
   DataFieldBoolean(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
-                   int Default, const TCHAR *TextTrue, const TCHAR *TextFalse,
-                   DataAccessCallback_t OnDataAccess) :
-    DataField(EditFormat, DisplayFormat, OnDataAccess) {
-    if (Default)
-      mValue = true;
-    else
-      mValue = false;
-
+                   bool Default, const TCHAR *TextTrue, const TCHAR *TextFalse,
+                   DataAccessCallback_t OnDataAccess)
+    :DataField(EditFormat, DisplayFormat, OnDataAccess),
+     mValue(Default) {
     _tcscpy(mTextTrue, TextTrue);
     _tcscpy(mTextFalse, TextFalse);
     SupportCombo = true;
