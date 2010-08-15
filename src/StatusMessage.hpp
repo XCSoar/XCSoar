@@ -43,6 +43,8 @@ Copyright_License {
 
 #include <tchar.h>
 
+class TLineReader;
+
 /**
  * Struct used to store status message items
  */
@@ -72,6 +74,7 @@ public:
   StatusMessageList();
 
   void LoadFile();
+  void LoadFile(TLineReader &reader);
 
   void Startup(bool first);
 

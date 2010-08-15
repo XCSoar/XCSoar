@@ -42,7 +42,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
-#include "IO/FileLineReader.hpp"
+#include "IO/ConfiguredFile.hpp"
 
 #include <stdio.h>
 
@@ -66,20 +66,16 @@ StatusMessageList::LoadFile()
 {
   LogStartUp(_T("Loading status file"));
 
-  TCHAR szFile1[MAX_PATH];
+  TLineReader *reader = OpenConfiguredTextFile(szProfileStatusFile);
+  if (reader != NULL) {
+    LoadFile(*reader);
+    delete reader;
+  }
+}
 
-  // Open file from registry
-  Profile::Get(szProfileStatusFile, szFile1, MAX_PATH);
-  ExpandLocalPath(szFile1);
-
-  if (string_is_empty(szFile1))
-    return;
-
-  FileLineReader reader(szFile1);
-  // Unable to open file
-  if (reader.error())
-    return;
-
+void
+StatusMessageList::LoadFile(TLineReader &reader)
+{
   // TODO code: Safer sizes, strings etc - use C++ (can scanf restrict length?)
   TCHAR key[2049];	// key from scanf
   TCHAR value[2049];	// value from scanf
