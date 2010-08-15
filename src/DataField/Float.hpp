@@ -53,8 +53,7 @@ public DataField
   PeriodClock last_step;
     int mSpeedup;
     int mFine;
-    TCHAR mOutBuf[OUTBUFFERSIZE+1];
-
+  mutable TCHAR mOutBuf[OUTBUFFERSIZE+1];
 
   protected:
     double SpeedUp(bool keyup);

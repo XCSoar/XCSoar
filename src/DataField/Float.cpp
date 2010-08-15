@@ -66,7 +66,6 @@ DataFieldFloat::GetAsFloat() const
 const TCHAR *
 DataFieldFloat::GetAsString() const
 {
-  TCHAR *mOutBuf = const_cast<TCHAR *>(this->mOutBuf);
   _stprintf(mOutBuf, mEditFormat, mValue);
   return mOutBuf;
 }
@@ -74,7 +73,6 @@ DataFieldFloat::GetAsString() const
 const TCHAR *
 DataFieldFloat::GetAsDisplayString() const
 {
-  TCHAR *mOutBuf = const_cast<TCHAR *>(this->mOutBuf);
   _stprintf(mOutBuf, mDisplayFormat, mValue, mUnits);
   return mOutBuf;
 }
