@@ -34,50 +34,31 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef OBSERVATION_POINT_VISITOR_HPP
-#define OBSERVATION_POINT_VISITOR_HPP
 
-class ObservationZonePoint;
-class FAISectorZone;
-class SectorZone;
-class LineSectorZone;
-class CylinderZone;
-class KeyholeZone;
-class BGAFixedCourseZone;
-class BGAEnhancedOptionZone;
+#include "BGAEnhancedOptionZone.hpp"
 
-/**
- * Generic const visitor for observation zones (for double-dispatch)
- */
-class ObservationZoneConstVisitor {
-protected:
-  virtual void Visit(const FAISectorZone &z) = 0;
-  virtual void Visit(const SectorZone &z) = 0;
-  virtual void Visit(const LineSectorZone &z) = 0;
-  virtual void Visit(const CylinderZone &z) = 0;
-  virtual void Visit(const KeyholeZone &z) = 0;
-  virtual void Visit(const BGAFixedCourseZone &z) = 0;
-  virtual void Visit(const BGAEnhancedOptionZone &z) = 0;
+GEOPOINT 
+BGAEnhancedOptionZone::get_boundary_parametric(fixed t) const
+{ 
+  const Angle half = getStartRadial().HalfAngle(getEndRadial());
+  const Angle angle = (Angle::radians(t*fixed_two_pi)+half).as_bearing();
+  if (angleInSector(angle)) {
+    return GeoVector(Radius, angle).end_point(get_location());
+  } else {
+    return GeoVector(fixed(500), angle).end_point(get_location());
+  }
+}
 
-public:
-  void Visit(const ObservationZonePoint &ozp);
-};
+fixed 
+BGAEnhancedOptionZone::score_adjustment() const
+{
+  return fixed(500);
+}
 
-/**
- * Generic visitor for observation zones (for double-dispatch)
- */
-class ObservationZoneVisitor {
-protected:
-  virtual void Visit(FAISectorZone &z) = 0;
-  virtual void Visit(SectorZone &z) = 0;
-  virtual void Visit(LineSectorZone &z) = 0;
-  virtual void Visit(CylinderZone &z) = 0;
-  virtual void Visit(KeyholeZone &z) = 0;
-  virtual void Visit(BGAFixedCourseZone &z) = 0;
-  virtual void Visit(BGAEnhancedOptionZone &z) = 0;
+bool 
+BGAEnhancedOptionZone::isInSector(const AIRCRAFT_STATE &ref) const
+{
+  GeoVector f(get_location(), ref.Location);
 
-public:
-  void Visit(ObservationZonePoint &ozp);
-};
-
-#endif
+  return (f.Distance<= fixed(500)) || ((f.Distance<=Radius) && angleInSector(f.Bearing));
+}

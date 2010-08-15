@@ -43,6 +43,8 @@
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
+#include "Task/ObservationZones/BGAFixedCourseZone.hpp"
+#include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 
 #include <algorithm>
@@ -119,6 +121,8 @@ AbstractTaskFactory::getType(const OrderedTaskPoint* point) const
     case ObservationZonePoint::CYLINDER:
     case ObservationZonePoint::SECTOR:
     case ObservationZonePoint::KEYHOLE:
+    case ObservationZonePoint::BGAFIXEDCOURSE:
+    case ObservationZonePoint::BGAENHANCEDOPTION:
       return START_CYLINDER;
     }
     break;
@@ -128,6 +132,8 @@ AbstractTaskFactory::getType(const OrderedTaskPoint* point) const
     case ObservationZonePoint::SECTOR:
     case ObservationZonePoint::FAI_SECTOR:
     case ObservationZonePoint::KEYHOLE:
+    case ObservationZonePoint::BGAFIXEDCOURSE:
+    case ObservationZonePoint::BGAENHANCEDOPTION:
     case ObservationZonePoint::LINE:
       return AAT_SEGMENT;
 
@@ -143,6 +149,12 @@ AbstractTaskFactory::getType(const OrderedTaskPoint* point) const
 
     case ObservationZonePoint::KEYHOLE:
       return KEYHOLE_SECTOR;
+
+    case ObservationZonePoint::BGAFIXEDCOURSE:
+      return BGAFIXEDCOURSE_SECTOR;
+
+    case ObservationZonePoint::BGAENHANCEDOPTION:
+      return BGAENHANCEDOPTION_SECTOR;
 
     case ObservationZonePoint::CYLINDER:
     case ObservationZonePoint::SECTOR:
@@ -162,6 +174,8 @@ AbstractTaskFactory::getType(const OrderedTaskPoint* point) const
     case ObservationZonePoint::CYLINDER:
     case ObservationZonePoint::SECTOR:
     case ObservationZonePoint::KEYHOLE:
+    case ObservationZonePoint::BGAFIXEDCOURSE:
+    case ObservationZonePoint::BGAENHANCEDOPTION:
       return FINISH_CYLINDER;
     } 
     break;
@@ -188,6 +202,10 @@ AbstractTaskFactory::createPoint(const LegalPointType_t type,
     return createAST(new FAISectorZone(wp.Location, true), wp);
   case KEYHOLE_SECTOR:
     return createAST(new KeyholeZone(wp.Location), wp);
+  case BGAFIXEDCOURSE_SECTOR:
+    return createAST(new BGAFixedCourseZone(wp.Location), wp);
+  case BGAENHANCEDOPTION_SECTOR:
+    return createAST(new BGAEnhancedOptionZone(wp.Location), wp);
   case AST_CYLINDER:
     return createAST(new CylinderZone(wp.Location, (fixed)500), wp);
   case AAT_CYLINDER:
@@ -501,7 +519,9 @@ AbstractTaskFactory::validAbstractType(LegalAbstractPointType_t type,
     return is_intermediate &&
       (validIntermediateType(FAI_SECTOR) 
        || validIntermediateType(AST_CYLINDER)
-       || validIntermediateType(KEYHOLE_SECTOR));
+       || validIntermediateType(KEYHOLE_SECTOR)
+       || validIntermediateType(BGAFIXEDCOURSE_SECTOR)
+       || validIntermediateType(BGAENHANCEDOPTION_SECTOR));
   case POINT_AAT:
     return is_intermediate &&
       (validIntermediateType(AAT_CYLINDER) || validIntermediateType(AAT_SEGMENT));

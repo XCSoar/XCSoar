@@ -2,6 +2,8 @@
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
+#include "Task/ObservationZones/BGAFixedCourseZone.hpp"
+#include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Screen/Graphics.hpp"
 #include "Projection.hpp"
@@ -104,6 +106,38 @@ RenderObservationZone::Visit(const FAISectorZone& oz)
 
 void 
 RenderObservationZone::Visit(const KeyholeZone& oz) 
+{
+  parms_sector(oz);
+  if (draw_style(false)) {
+    draw_segment(oz.getStartRadial(), oz.getEndRadial());
+    p_radius = m_proj.DistanceMetersToScreen(fixed(500));
+    draw_circle();
+  }
+  if (draw_style(!m_past)) {
+    draw_two_lines();
+  }
+
+  m_buffer.mix_copy();
+}
+
+void 
+RenderObservationZone::Visit(const BGAFixedCourseZone& oz) 
+{
+  parms_sector(oz);
+  if (draw_style(false)) {
+    draw_segment(oz.getStartRadial(), oz.getEndRadial());
+    p_radius = m_proj.DistanceMetersToScreen(fixed(500));
+    draw_circle();
+  }
+  if (draw_style(!m_past)) {
+    draw_two_lines();
+  }
+
+  m_buffer.mix_copy();
+}
+
+void 
+RenderObservationZone::Visit(const BGAEnhancedOptionZone& oz) 
 {
   parms_sector(oz);
   if (draw_style(false)) {

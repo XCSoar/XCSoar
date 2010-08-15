@@ -41,6 +41,8 @@
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
+#include "Task/ObservationZones/BGAFixedCourseZone.hpp"
+#include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/Tasks/BaseTask/ObservationZonePoint.hpp"
 
 void
@@ -65,6 +67,14 @@ ObservationZoneConstVisitor::Visit(const ObservationZonePoint &ozp)
 
   case ObservationZonePoint::KEYHOLE:
     Visit((const KeyholeZone &)ozp);
+    break;
+
+  case ObservationZonePoint::BGAFIXEDCOURSE:
+    Visit((const BGAFixedCourseZone &)ozp);
+    break;
+
+  case ObservationZonePoint::BGAENHANCEDOPTION:
+    Visit((const BGAEnhancedOptionZone &)ozp);
     break;
   }
 }
@@ -91,6 +101,14 @@ ObservationZoneVisitor::Visit(ObservationZonePoint &ozp)
 
   case ObservationZonePoint::KEYHOLE:
     Visit((KeyholeZone &)ozp);
+    break;
+
+  case ObservationZonePoint::BGAFIXEDCOURSE:
+    Visit((BGAFixedCourseZone &)ozp);
+    break;
+
+  case ObservationZonePoint::BGAENHANCEDOPTION:
+    Visit((BGAEnhancedOptionZone &)ozp);
     break;
   }
 }

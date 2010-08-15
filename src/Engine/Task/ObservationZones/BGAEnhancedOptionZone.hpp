@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+  Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
@@ -33,51 +34,63 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
-#ifndef OBSERVATION_POINT_VISITOR_HPP
-#define OBSERVATION_POINT_VISITOR_HPP
+*/
 
-class ObservationZonePoint;
-class FAISectorZone;
-class SectorZone;
-class LineSectorZone;
-class CylinderZone;
-class KeyholeZone;
-class BGAFixedCourseZone;
-class BGAEnhancedOptionZone;
+#ifndef BGAENHANCEDOPTIONZONE_HPP
+#define BGAENHANCEDOPTIONZONE_HPP
+
+#include "SymmetricSectorZone.hpp"
 
 /**
- * Generic const visitor for observation zones (for double-dispatch)
+ *  A 180 degree 10km sector centered at the bisector of incoming/outgoing legs,
+ *  with 500m cylinder
  */
-class ObservationZoneConstVisitor {
-protected:
-  virtual void Visit(const FAISectorZone &z) = 0;
-  virtual void Visit(const SectorZone &z) = 0;
-  virtual void Visit(const LineSectorZone &z) = 0;
-  virtual void Visit(const CylinderZone &z) = 0;
-  virtual void Visit(const KeyholeZone &z) = 0;
-  virtual void Visit(const BGAFixedCourseZone &z) = 0;
-  virtual void Visit(const BGAEnhancedOptionZone &z) = 0;
+class BGAEnhancedOptionZone: 
+  public SymmetricSectorZone 
+{
+public:  
+  /** 
+   * Constructor
+   * 
+   * @param loc Tip point of sector
+   * 
+   * @return Initialised object
+   */
+  BGAEnhancedOptionZone(const GEOPOINT loc):
+    SymmetricSectorZone(BGAENHANCEDOPTION, loc, fixed(10000.0),
+                        Angle::radians(fixed_pi))
+    {}
 
-public:
-  void Visit(const ObservationZonePoint &ozp);
-};
+  ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
+    if (_location) {
+      return new BGAEnhancedOptionZone(*_location);
+    } else {
+      return new BGAEnhancedOptionZone(get_location());
+    }
+  }
 
-/**
- * Generic visitor for observation zones (for double-dispatch)
+  /** 
+   * Check whether observer is within OZ
+   *
+   * @return True if reference point is inside sector
+   */
+  virtual bool isInSector(const AIRCRAFT_STATE &ref) const;
+
+/** 
+ * Get point on boundary from parametric representation
+ * 
+ * @param t T value [0,1]
+ * 
+ * @return Point on boundary
  */
-class ObservationZoneVisitor {
-protected:
-  virtual void Visit(FAISectorZone &z) = 0;
-  virtual void Visit(SectorZone &z) = 0;
-  virtual void Visit(LineSectorZone &z) = 0;
-  virtual void Visit(CylinderZone &z) = 0;
-  virtual void Visit(KeyholeZone &z) = 0;
-  virtual void Visit(BGAFixedCourseZone &z) = 0;
-  virtual void Visit(BGAEnhancedOptionZone &z) = 0;
+  GEOPOINT get_boundary_parametric(fixed t) const;  
 
-public:
-  void Visit(ObservationZonePoint &ozp);
+/** 
+ * Distance reduction for scoring when outside this OZ
+ * 
+ * @return Distance (m) to subtract from score
+ */
+  virtual fixed score_adjustment() const;
 };
 
 #endif

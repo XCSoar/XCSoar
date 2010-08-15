@@ -43,6 +43,8 @@
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
+#include "Task/ObservationZones/BGAFixedCourseZone.hpp"
+#include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "DataNode.hpp"
 #include <assert.h>
@@ -211,6 +213,10 @@ Serialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
     return new FAISectorZone(wp.Location, is_turnpoint);
   } else if (_tcscmp(type.c_str(), _T("Keyhole")) == 0) {
     return new KeyholeZone(wp.Location);
+  } else if (_tcscmp(type.c_str(), _T("BGAFixedCourse")) == 0) {
+    return new BGAFixedCourseZone(wp.Location);
+  } else if (_tcscmp(type.c_str(), _T("BGAEnhancedOption")) == 0) {
+    return new BGAEnhancedOptionZone(wp.Location);
   }
   assert(1);
   return NULL;
@@ -234,6 +240,18 @@ void
 Serialiser::Visit(const KeyholeZone& data)
 {
   m_node.set_attribute(_T("type"), _T("Keyhole"));
+}
+
+void 
+Serialiser::Visit(const BGAFixedCourseZone& data)
+{
+  m_node.set_attribute(_T("type"), _T("BGAFixedCourse"));
+}
+
+void 
+Serialiser::Visit(const BGAEnhancedOptionZone& data)
+{
+  m_node.set_attribute(_T("type"), _T("BGAEnhancedOption"));
 }
 
 void 

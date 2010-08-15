@@ -145,6 +145,18 @@ public:
   }
 
   void
+  Visit(const BGAFixedCourseZone& oz)
+  {
+    _stprintf(text, _T("BGAFixedCourse"));
+  }
+
+  void
+  Visit(const BGAEnhancedOptionZone& oz)
+  {
+    _stprintf(text, _T("BGAEnhancedOption"));
+  }
+
+  void
   Visit(const SectorZone& oz)
   {
     _stprintf(text, _T("Sector"));
@@ -249,6 +261,10 @@ OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type)
     return _T("Any point within area scored from center");
   case AbstractTaskFactory::KEYHOLE_SECTOR:
     return _T("(As used in German rules) Any point within area scored from center");
+  case AbstractTaskFactory::BGAFIXEDCOURSE_SECTOR:
+    return _T("Any point within area scored from center");
+  case AbstractTaskFactory::BGAENHANCEDOPTION_SECTOR:
+    return _T("Any point within area scored from center");
   case AbstractTaskFactory::AAT_CYLINDER:
     return _T("Scored inside area");
   case AbstractTaskFactory::AAT_SEGMENT:
@@ -279,6 +295,10 @@ OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
     return _T("Turnpoint FAI sector");
   case AbstractTaskFactory::KEYHOLE_SECTOR:
     return _T("Keyhole sector (DAe)");
+  case AbstractTaskFactory::BGAFIXEDCOURSE_SECTOR:
+    return _T("Standard BGA Fixed Course sector");
+  case AbstractTaskFactory::BGAENHANCEDOPTION_SECTOR:
+    return _T("BGA Enhanced Option Fixed Course sector");
   case AbstractTaskFactory::AST_CYLINDER:
     return _T("Turnpoint cylinder");
   case AbstractTaskFactory::AAT_CYLINDER:
