@@ -39,9 +39,14 @@ Copyright_License {
 #ifndef CHART_HPP
 #define CHART_HPP
 
-#include "Math/leastsqs.h"
 #include "Math/fixed.hpp"
-#include "Screen/Canvas.hpp"
+#include "Math/Angle.hpp"
+#include "Screen/Color.hpp"
+
+#include <windef.h>
+
+class LeastSquares;
+class Canvas;
 
 class Chart
 {
