@@ -103,7 +103,7 @@ enum {
 // Log first NN input event errors for display in simulator mode
 #define MAX_INPUT_ERRORS 5
 TCHAR input_errors[MAX_INPUT_ERRORS][3000];
-int input_errors_count = 0;
+unsigned input_errors_count = 0;
 // JMW this is just far too annoying right now,
 // since "title" "note" and commencts are not parsed, they
 // come up as errors.
@@ -137,16 +137,16 @@ static TCHAR mode_map[MAX_MODE][MAX_MODE_STRING] = {
   _T("Menu"),
 };
 
-static int mode_map_count = 4;
+static unsigned mode_map_count = 4;
 
 // Key map to Event - Keys (per mode) mapped to events
-static int Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
+static unsigned Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
 
 // Glide Computer Events
-static int GC2Event[MAX_MODE][GCE_COUNT];
+static unsigned GC2Event[MAX_MODE][GCE_COUNT];
 
 // NMEA Triggered Events
-static int N2Event[MAX_MODE][NE_COUNT];
+static unsigned N2Event[MAX_MODE][NE_COUNT];
 
 // Events - What do you want to DO
 typedef struct {
@@ -155,7 +155,7 @@ typedef struct {
   // Parameters
   const TCHAR *misc;
   // Next in event list - eg: Macros
-  int next;
+  unsigned next;
 } EventSTRUCT;
 
 static EventSTRUCT Events[MAX_EVENTS];
@@ -166,7 +166,7 @@ static EventSTRUCT Events[MAX_EVENTS];
  * This is initialized with 1 because event 0 is reserved - it stands
  * for "no event".
  */
-static int Events_count = 1;
+static unsigned Events_count = 1;
 
 static Menu menus[MAX_MODE];
 
@@ -242,7 +242,8 @@ apply_defaults(const TCHAR *const* default_modes,
   }
 
   while (default_labels->label != NULL) {
-    InputEvents::makeLabel(default_labels->mode, default_labels->label,
+    InputEvents::makeLabel((InputEvents::mode)default_labels->mode,
+                           default_labels->label,
                            default_labels->location, default_labels->event);
     ++default_labels;
   }
@@ -329,7 +330,7 @@ InputEvents::readFile()
   TCHAR d_mode[1024] = _T("");
   TCHAR d_type[256] = _T("");
   TCHAR d_data[256] = _T("");
-  int event_id = 0;
+  unsigned event_id = 0;
   TCHAR d_label[256] = _T("");
   int d_location = 0;
   TCHAR d_event[256] = _T("");
@@ -368,7 +369,6 @@ InputEvents::readFile()
         // General errors - these should be true
         assert(d_location >= 0);
         assert(d_location < 1024); // Scott arbitrary limit
-        assert(event_id >= 0);
         assert(d_mode != NULL);
         assert(d_type != NULL);
         assert(d_label != NULL);
@@ -398,7 +398,7 @@ InputEvents::readFile()
           // key - Hardware key or keyboard
           if (_tcscmp(d_type, _T("key")) == 0) {
             // Get the int key (eg: APP1 vs 'a')
-            int key = findKey(d_data);
+            unsigned key = findKey(d_data);
             if (key > 0)
               Key2Event[mode_id][key] = event_id;
 
@@ -564,7 +564,7 @@ InputEvents::showErrors()
 }
 #endif
 
-int
+unsigned
 InputEvents::findKey(const TCHAR *data)
 {
   if (_tcscmp(data, _T("APP1")) == 0)
@@ -665,8 +665,9 @@ InputEvents::findNE(const TCHAR *data)
 // Create EVENT Entry
 // NOTE: String must already be copied (allows us to use literals
 // without taking up more data - but when loading from file must copy string
-int
-InputEvents::makeEvent(void (*event)(const TCHAR *), const TCHAR *misc, int next)
+unsigned
+InputEvents::makeEvent(void (*event)(const TCHAR *), const TCHAR *misc,
+                       unsigned next)
 {
   if (Events_count >= MAX_EVENTS) {
     assert(0);
@@ -686,10 +687,11 @@ InputEvents::makeEvent(void (*event)(const TCHAR *), const TCHAR *misc, int next
 // NOTE: String must already be copied (allows us to use literals
 // without taking up more data - but when loading from file must copy string
 void
-InputEvents::makeLabel(int mode_id, const TCHAR* label, int location, int event_id)
+InputEvents::makeLabel(mode mode_id, const TCHAR* label,
+                       unsigned location, unsigned event_id)
 {
-  assert(mode_id >= 0);
-  assert(mode_id < MAX_MODE);
+  assert((int)mode_id >= 0);
+  assert((int)mode_id < MAX_MODE);
 
   menus[mode_id].Add(label, location, event_id);
 }
@@ -698,13 +700,11 @@ InputEvents::makeLabel(int mode_id, const TCHAR* label, int location, int event_
 InputEvents::mode
 InputEvents::mode2int(const TCHAR *mode, bool create)
 {
-  int i = 0;
-
   // Better checks !
   if ((mode == NULL))
     return MODE_INVALID;
 
-  for (i = 0; i < mode_map_count; i++) {
+  for (unsigned i = 0; i < mode_map_count; i++) {
     if (_tcscmp(mode, mode_map[i]) == 0)
       return (InputEvents::mode)i;
   }
@@ -723,7 +723,7 @@ InputEvents::mode2int(const TCHAR *mode, bool create)
 void
 InputEvents::setMode(mode mode)
 {
-  assert(mode < mode_map_count);
+  assert((unsigned)mode < mode_map_count);
 
   if (mode == current_mode)
     return;
@@ -788,7 +788,7 @@ InputEvents::getModeID()
 
 // Input is a via the user touching the label on a touch screen / mouse
 bool
-InputEvents::processButton(int bindex)
+InputEvents::processButton(unsigned bindex)
 {
   if (!globalRunningEvent.test())
     return false;
@@ -836,7 +836,7 @@ InputEvents::key_to_event(mode mode, unsigned key_code)
   Return = We had a valid key (even if nothing happens because of Bounce)
 */
 bool
-InputEvents::processKey(int dWord)
+InputEvents::processKey(unsigned dWord)
 {
   if (!globalRunningEvent.test())
     return false;
@@ -849,9 +849,8 @@ InputEvents::processKey(int dWord)
   InputEvents::mode mode = InputEvents::getModeID();
 
   // Which key - can be defined locally or at default (fall back to default)
-  int event_id = key_to_event(mode, dWord);
-
-  if (event_id <= 0)
+  unsigned event_id = key_to_event(mode, dWord);
+  if (event_id == 0)
     return false;
 
   int bindex = -1;
@@ -879,7 +878,7 @@ InputEvents::processKey(int dWord)
 }
 
 bool
-InputEvents::processNmea(int ne_id)
+InputEvents::processNmea(unsigned ne_id)
 {
   // add an event to the bottom of the queue
   mutexEventQueue.Lock();
@@ -899,7 +898,7 @@ InputEvents::processNmea(int ne_id)
   Return = TRUE if we have a valid key match
 */
 bool
-InputEvents::processNmea_real(int ne_id)
+InputEvents::processNmea_real(unsigned ne_id)
 {
   if (!globalRunningEvent.test())
     return false;
@@ -910,7 +909,7 @@ InputEvents::processNmea_real(int ne_id)
   //  InterfaceTimeoutReset();
 
   // Valid input ?
-  if ((ne_id < 0) || (ne_id >= NE_COUNT))
+  if (ne_id >= NE_COUNT)
     return false;
 
   // get current mode
@@ -962,7 +961,7 @@ InputEvents::DoQueuedEvents(void)
 }
 
 bool
-InputEvents::processGlideComputer(int gce_id)
+InputEvents::processGlideComputer(unsigned gce_id)
 {
   // add an event to the bottom of the queue
   mutexEventQueue.Lock();
@@ -981,7 +980,7 @@ InputEvents::processGlideComputer(int gce_id)
   Take virtual inputs from a Glide Computer to do special events
 */
 bool
-InputEvents::processGlideComputer_real(int gce_id)
+InputEvents::processGlideComputer_real(unsigned gce_id)
 {
   if (!globalRunningEvent.test())
     return false;
@@ -990,7 +989,7 @@ InputEvents::processGlideComputer_real(int gce_id)
   // TODO feature: Log glide computer events to IGC file
 
   // Valid input ?
-  if ((gce_id < 0) || (gce_id >= GCE_COUNT))
+  if (gce_id >= GCE_COUNT)
     return false;
 
   // get current mode
@@ -1013,7 +1012,7 @@ InputEvents::processGlideComputer_real(int gce_id)
 
 // EXECUTE an Event - lookup event handler and call back - no return
 void
-InputEvents::processGo(int eventid)
+InputEvents::processGo(unsigned eventid)
 {
   if (!globalRunningEvent.test())
     return;
@@ -1037,7 +1036,7 @@ InputEvents::processGo(int eventid)
   }
 }
 
-int InputEvents::MenuTimeOut = 0;
+unsigned InputEvents::MenuTimeOut = 0;
 
 void
 InputEvents::HideMenu()

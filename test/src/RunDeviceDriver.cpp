@@ -95,12 +95,14 @@ LookupGeoidSeparation(const GEOPOINT pt)
  * Fake InputEvents.cpp
  */
 
-bool InputEvents::processGlideComputer(int)
+bool
+InputEvents::processGlideComputer(unsigned gce_id)
 {
   return true;
 }
 
-bool InputEvents::processNmea(int key)
+bool
+InputEvents::processNmea(unsigned key)
 {
   return true;
 }

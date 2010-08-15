@@ -59,7 +59,7 @@ private:
   static mode current_mode;
   static Mutex mutexEventQueue;
  private:
-  static int MenuTimeOut;
+  static unsigned MenuTimeOut;
   static void ProcessMenuTimer();
   static void DoQueuedEvents(void);
  public:
@@ -73,7 +73,7 @@ private:
   static void setMode(mode mode);
   static void setMode(const TCHAR *mode);
   static mode getModeID();
-  static int findKey(const TCHAR *data);
+  static unsigned findKey(const TCHAR *data);
   static int findGCE(const TCHAR *data);
   static int findNE(const TCHAR *data);
   static pt2Event findEvent(const TCHAR *);
@@ -84,13 +84,15 @@ private:
    */
   static unsigned key_to_event(mode mode, unsigned key_code);
 
-  static bool processKey(int key);
-  static bool processNmea(int key);
-  static bool processButton(int bindex);
-  static bool processGlideComputer(int);
-  static void processGo(int event_id);
-  static int  makeEvent(void (*event)(const TCHAR *), const TCHAR *misc, int next = 0);
-  static void makeLabel(int mode_id, const TCHAR *label, int location, int event_id);
+  static bool processKey(unsigned key);
+  static bool processNmea(unsigned key);
+  static bool processButton(unsigned bindex);
+  static bool processGlideComputer(unsigned gce_id);
+  static void processGo(unsigned event_id);
+  static unsigned makeEvent(void (*event)(const TCHAR *),
+                            const TCHAR *misc, unsigned next = 0);
+  static void makeLabel(mode mode_id, const TCHAR *label,
+                        unsigned location, unsigned event_id);
 
   static void drawButtons(mode Mode);
 
@@ -176,8 +178,8 @@ private:
 #endif
 
  private:
-  static bool processGlideComputer_real(int);
-  static bool processNmea_real(int key);
+  static bool processGlideComputer_real(unsigned gce_id);
+  static bool processNmea_real(unsigned key);
 };
 
 

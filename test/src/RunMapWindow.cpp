@@ -119,7 +119,7 @@ unsigned InfoBoxLayout::ControlWidth = 100;
 InterfaceBlackboard CommonInterface::blackboard;
 
 void InputEvents::ShowMenu() {}
-bool InputEvents::processKey(int key) {
+bool InputEvents::processKey(unsigned key) {
   return false;
 }
 

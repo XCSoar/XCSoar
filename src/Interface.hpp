@@ -138,7 +138,7 @@ public:
 class ActionInterface: public CommonInterface {
 public:
   // settings
-  static int  MenuTimeoutMax;
+  static unsigned MenuTimeoutMax;
 
 protected:
   static void DisplayModes();

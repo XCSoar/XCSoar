@@ -2246,7 +2246,7 @@ void dlgConfigurationShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpMenuTimeout"));
   if (wp) {
-    if (XCSoarInterface::MenuTimeoutMax != wp->GetDataField()->GetAsInteger()*2) {
+    if ((int)XCSoarInterface::MenuTimeoutMax != wp->GetDataField()->GetAsInteger()*2) {
       XCSoarInterface::MenuTimeoutMax = wp->GetDataField()->GetAsInteger()*2;
       Profile::Set(szProfileMenuTimeout,XCSoarInterface::MenuTimeoutMax);
       changed = true;
