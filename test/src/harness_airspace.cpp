@@ -5,7 +5,7 @@
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
 #include "Airspace/AirspaceNearestSort.hpp"
 #include "Airspace/AirspaceSoonestSort.hpp"
-
+#include "Navigation/Geometry/GeoVector.hpp"
 
 void airspace_random_properties(AbstractAirspace& as) {
   AirspaceClass_t Type = (AirspaceClass_t)(rand()%15);

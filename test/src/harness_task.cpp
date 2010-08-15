@@ -29,6 +29,12 @@ public:
   virtual void Visit(const CylinderZone& oz) {
     printf("# cylinder zone\n");
   }
+  virtual void Visit(const BGAFixedCourseZone &oz) {
+    printf("# bga fixed course zone\n");
+  }
+  virtual void Visit(const BGAEnhancedOptionZone &oz) {
+    printf("# bga enhanded option zone\n");
+  }
 
   void Visit(const ObservationZonePoint &oz) {
     ObservationZoneConstVisitor::Visit(oz);
