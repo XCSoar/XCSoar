@@ -43,7 +43,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Defines.h"
 #include "StringUtil.hpp"
-#include "IO/FileLineReader.hpp"
+#include "IO/DataFile.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -185,11 +185,8 @@ LoadChecklist(void)
   free(ChecklistTitle[0]);
   ChecklistTitle[0] = NULL;
 
-  TCHAR filename[MAX_PATH];
-  LocalPath(filename, _T(XCSCHKLIST));
-
-  FileLineReader reader(filename);
-  if (reader.error())
+  TLineReader *reader = OpenDataTextFile(_T(XCSCHKLIST));
+  if (reader == NULL)
     return;
 
   TCHAR Details[MAXDETAILS];
@@ -201,7 +198,7 @@ LoadChecklist(void)
   Name[0] = 0;
 
   TCHAR *TempString;
-  while ((TempString = reader.read()) != NULL) {
+  while ((TempString = reader->read()) != NULL) {
     // Look for start
     if (TempString[0] == '[') {
       if (inDetails) {
@@ -227,6 +224,8 @@ LoadChecklist(void)
       // TODO code: check the string is not too long
     }
   }
+
+  delete reader;
 
   if (inDetails) {
     addChecklist(Name, Details);
