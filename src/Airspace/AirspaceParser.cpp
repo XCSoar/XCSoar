@@ -279,26 +279,26 @@ ReadCoords(const TCHAR *Text, GEOPOINT &point)
 {
   // Format: 53:20:41 N 010:24:41 E
 
-  double deg = 0, min = 0, sec = 0;
   TCHAR *Stop;
 
   // ToDo, add more error checking and making it more tolerant/robust
 
-  deg = (double)_tcstod(Text, &Stop);
+  long deg = _tcstol(Text, &Stop, 10);
   if ((Text == Stop) || (*Stop == '\0'))
     return false;
 
   Stop++;
-  min = (double)_tcstod(Stop, &Stop);
+  long min = _tcstol(Stop, &Stop, 10);
   if (*Stop == '\0')
     return false;
 
+  long sec = 0;
   if (*Stop == ':') {
     Stop++;
     if (*Stop == '\0')
       return false;
 
-    sec = (double)_tcstod(Stop, &Stop);
+    sec = _tcstol(Stop, &Stop, 10);
     if (sec < 0 || sec >= 60) {
       // ToDo
     }
@@ -319,15 +319,15 @@ ReadCoords(const TCHAR *Text, GEOPOINT &point)
   if (*Stop == '\0')
     return false;
 
-  deg = (double)_tcstod(Stop, &Stop);
+  deg = _tcstol(Stop, &Stop, 10);
   Stop++;
-  min = (double)_tcstod(Stop, &Stop);
+  min = _tcstol(Stop, &Stop, 10);
   if (*Stop == ':') {
     Stop++;
     if (*Stop == '\0')
       return false;
 
-    sec = (double)_tcstod(Stop, &Stop);
+    sec = _tcstol(Stop, &Stop, 10);
   }
 
   point.Longitude = Angle::dms(fixed(deg), fixed(min), fixed(sec));
@@ -578,13 +578,13 @@ ParseCoordsTNP(const TCHAR *Text, GEOPOINT &point)
 {
   // Format: N542500 E0105000
   bool negative = false;
-  double deg = 0, min = 0, sec = 0;
+  long deg = 0, min = 0, sec = 0;
   TCHAR *ptr;
 
   if (Text[0] == _T('S') || Text[0] == _T('s'))
     negative = true;
 
-  sec = (double)_tcstod(&Text[1], &ptr);
+  sec = _tcstol(&Text[1], &ptr, 10);
   deg = abs(sec / 10000);
   min = abs((sec - deg * 10000) / 100);
   sec = sec - min * 100 - deg * 10000;
@@ -601,7 +601,7 @@ ParseCoordsTNP(const TCHAR *Text, GEOPOINT &point)
   if (ptr[0] == _T('W') || ptr[0] == _T('w'))
     negative = true;
 
-  sec = (double)_tcstod(&ptr[1], &ptr);
+  sec = _tcstol(&ptr[1], &ptr, 10);
   deg = abs(sec / 10000);
   min = abs((sec - deg * 10000) / 100);
   sec = sec - min * 100 - deg * 10000;
