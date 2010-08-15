@@ -43,6 +43,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "Profile.hpp"
 #include "DataField/Enum.hpp"
+#include "DataField/Float.hpp"
 #include "MainWindow.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
 
@@ -112,8 +113,9 @@ dlgWindSettingsShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
   if (wp) {
-    wp->GetDataField()->SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), unKiloMeterPerHour)));
-    wp->GetDataField()->SetUnits(Units::GetSpeedName());
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), unKiloMeterPerHour)));
+    df.SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }
 

@@ -299,9 +299,10 @@ dlgBasicSettingsShowModal()
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(_T("prpTemperature"));
   if (wp) {
-    wp->GetDataField()->SetMin(Units::ToUserTemperature(fixed(-50)));
-    wp->GetDataField()->SetMax(Units::ToUserTemperature(fixed(60)));
-    wp->GetDataField()->SetUnits(Units::GetTemperatureName());
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetMin(Units::ToUserTemperature(fixed(-50)));
+    df.SetMax(Units::ToUserTemperature(fixed(60)));
+    df.SetUnits(Units::GetTemperatureName());
     wp->RefreshDisplay();
   }
   wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
