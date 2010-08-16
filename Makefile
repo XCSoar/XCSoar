@@ -80,7 +80,6 @@ OUTPUTS := $(TARGET_BIN_DIR)/XCSoar$(TARGET_EXEEXT) $(VALI_XCS)
 OUTPUTS += $(XCSOARSETUP_DLL) $(XCSOARLAUNCH_DLL)
 
 include $(topdir)/build/dist.mk
-include $(topdir)/build/cab.mk
 
 ######## compiler flags
 
@@ -391,6 +390,7 @@ XCSOAR_LDADD = \
 	$(RESOURCE_BINARY)
 
 include $(topdir)/build/gettext.mk
+include $(topdir)/build/cab.mk
 
 all: all-$(TARGET)
 
