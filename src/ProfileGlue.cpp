@@ -538,6 +538,8 @@ Profile::Use()
       XCSoarInterface::SetSettingsMap().EnableFLARMMap);
   Get(szProfileEnableFLARMGauge,
       XCSoarInterface::SetSettingsMap().EnableFLARMGauge);
+  Get(szProfileEnableTAGauge,
+      XCSoarInterface::SetSettingsMap().EnableTAGauge);
   Get(szProfileTerrainContrast,
       XCSoarInterface::SetSettingsMap().TerrainContrast);
   Get(szProfileTerrainBrightness,
