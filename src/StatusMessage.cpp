@@ -99,9 +99,9 @@ parse_assignment(TCHAR *buffer, const TCHAR *&key, const TCHAR *&value)
 void
 StatusMessageList::LoadFile(TLineReader &reader)
 {
-  int ms;				// Found ms for delay
-  const TCHAR **location;	// Where to put the data
-  bool some_data;		// Did we find some in the last loop...
+  int ms; // Found ms for delay
+  const TCHAR **location; // Where to put the data
+  bool some_data; // Did we find some in the last loop...
 
   // Init first entry
   _init_Status(StatusMessageData_Size);
@@ -110,49 +110,46 @@ StatusMessageList::LoadFile(TLineReader &reader)
   /* Read from the file */
   TCHAR *buffer;
   const TCHAR *key, *value;
-  while (
-	 (StatusMessageData_Size < MAXSTATUSMESSAGECACHE)
-         && (buffer = reader.read()) != NULL) {
+  while ((StatusMessageData_Size < MAXSTATUSMESSAGECACHE) &&
+         (buffer = reader.read()) != NULL) {
     // Check valid line? If not valid, assume next record (primative, but works ok!)
     if (*buffer == _T('#') || !parse_assignment(buffer, key, value)) {
       // Global counter (only if the last entry had some data)
       if (some_data) {
-	StatusMessageData_Size++;
-	some_data = false;
-	_init_Status(StatusMessageData_Size);
+        StatusMessageData_Size++;
+        some_data = false;
+        _init_Status(StatusMessageData_Size);
       }
-
     } else {
-
       location = NULL;
 
       if (_tcscmp(key, _T("key")) == 0) {
-	some_data = true;	// Success, we have a real entry
-	location = &StatusMessageData[StatusMessageData_Size].key;
+        some_data = true; // Success, we have a real entry
+        location = &StatusMessageData[StatusMessageData_Size].key;
       } else if (_tcscmp(key, _T("sound")) == 0) {
-	StatusMessageData[StatusMessageData_Size].doSound = true;
-	location = &StatusMessageData[StatusMessageData_Size].sound;
+        StatusMessageData[StatusMessageData_Size].doSound = true;
+        location = &StatusMessageData[StatusMessageData_Size].sound;
       } else if (_tcscmp(key, _T("delay")) == 0) {
         TCHAR *endptr;
         ms = _tcstol(value, &endptr, 10);
         if (endptr > value)
-	  StatusMessageData[StatusMessageData_Size].delay_ms = ms;
+          StatusMessageData[StatusMessageData_Size].delay_ms = ms;
       } else if (_tcscmp(key, _T("hide")) == 0) {
-	if (_tcscmp(value, _T("yes")) == 0)
-	  StatusMessageData[StatusMessageData_Size].doStatus = false;
+        if (_tcscmp(value, _T("yes")) == 0)
+          StatusMessageData[StatusMessageData_Size].doStatus = false;
       }
 
-      // Do we have somewhere to put this && is it currently empty ? (prevent lost at startup)
+      // Do we have somewhere to put this &&
+      // is it currently empty ? (prevent lost at startup)
       if (location && (_tcscmp(*location, _T("")) == 0)) {
-	// TODO code: this picks up memory lost from no entry, but not duplicates - fix.
-	if (*location) {
-	  // JMW fix memory leak
+        // TODO code: this picks up memory lost from no entry, but not duplicates - fix.
+        if (*location) {
+          // JMW fix memory leak
           free((void*)*location);
-	}
-	*location = StringMallocParse(value);
+        }
+        *location = StringMallocParse(value);
       }
     }
-
   }
 
   // How many we really got (blank next just in case)

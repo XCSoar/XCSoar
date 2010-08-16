@@ -7,10 +7,7 @@ CXXFLAGS += -Wmissing-noreturn
 
 # disable some warnings, we're not ready for them yet
 CXXFLAGS += -Wno-unused-parameter -Wno-format -Wno-switch -Wno-non-virtual-dtor
-
-ifneq ($(WINHOST),y)
-	CXXFLAGS += -Wno-missing-field-initializers 
-endif
+CXXFLAGS += -Wno-missing-field-initializers 
 
 # FastMath.h does dirty aliasing tricks
 CXXFLAGS += -Wno-strict-aliasing
