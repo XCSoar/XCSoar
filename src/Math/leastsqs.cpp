@@ -210,7 +210,9 @@ LeastSquares::LeastSquaresAdd(fixed x, fixed y, fixed weight)
   if (sum_n < MAX_STATISTICS) {
     xstore[sum_n] = x;
     ystore[sum_n] = y;
+#ifdef LEASTSQS_WEIGHT_STORE
     weightstore[sum_n] = weight;
+#endif
   }
 
   ++sum_n;

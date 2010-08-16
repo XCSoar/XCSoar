@@ -122,7 +122,9 @@ public:
 
   fixed xstore[MAX_STATISTICS];
   fixed ystore[MAX_STATISTICS];
+#ifdef LEASTSQS_WEIGHT_STORE
   fixed weightstore[MAX_STATISTICS];
+#endif
 
   LeastSquares();
 
