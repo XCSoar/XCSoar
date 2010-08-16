@@ -304,7 +304,7 @@ TopologyFile::PaintLabels(Canvas &canvas,
 
     for (int tt = 0; tt < shape.numlines; ++tt) {
       const lineObj &line = shape.line[tt];
-      unsigned msize = line.numpoints;
+      unsigned msize = line.numpoints / iskip;
       POINT pt[msize];
 
       projection.LonLat2Screen(line.point, pt, msize * iskip, iskip);
