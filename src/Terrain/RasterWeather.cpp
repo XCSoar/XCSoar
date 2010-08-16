@@ -53,16 +53,52 @@ Copyright_License {
 #include <stdio.h>
 #include <windef.h> // for MAX_PATH
 
-static const TCHAR *const WeatherMapNames[RasterWeather::MAX_WEATHER_MAP] = {
-  _T("wstar"),
-  _T("blwindspd"),
-  _T("hbl"),
-  _T("dwcrit"),
-  _T("blcloudpct"),
-  _T("sfctemp"),
-  _T("hwcrit"),
-  _T("wblmaxmin"),
-  _T("blcwbase"),
+struct WeatherDescriptor {
+  const TCHAR *name;
+  const TCHAR *label;
+};
+
+static const WeatherDescriptor WeatherDescriptors[RasterWeather::MAX_WEATHER_MAP] = {
+  {
+    NULL,
+    N_("Terrain"),
+  },
+  {
+    _T("wstar"),
+    N_("W*"),
+  },
+  {
+    _T("blwindspd"),
+    N_("BL Wind spd"),
+  },
+  {
+    _T("hbl"),
+    N_("H bl"),
+  },
+  {
+    _T("dwcrit"),
+    N_("dwcrit"),
+  },
+  {
+    _T("blcloudpct"),
+    N_("bl cloud"),
+  },
+  {
+    _T("sfctemp"),
+    N_("Sfc temp"),
+  },
+  {
+    _T("hwcrit"),
+    N_("hwcrit"),
+  },
+  {
+    _T("wblmaxmin"),
+    N_("wblmaxmin"),
+  },
+  {
+    _T("blcwbase"),
+    N_("blcwbase"),
+  },
 };
 
 RasterWeather::RasterWeather()
@@ -242,7 +278,7 @@ RasterWeather::Reload(int day_time)
 
       _Close();
 
-      if (!LoadItem(WeatherMapNames[_parameter - 1], _weather_time) &&
+      if (!LoadItem(WeatherDescriptors[_parameter].name, _weather_time) &&
           _parameter == 1)
         LoadItem(_T("wstar_bsratio"), _weather_time);
     }
@@ -286,28 +322,14 @@ RasterWeather::SetViewCenter(const GEOPOINT &location)
 const TCHAR*
 RasterWeather::ItemLabel(unsigned i)
 {
-  switch (i) {
-  case 1: // wstar
-    return _("W*");
-  case 2: // blwindspd
-    return _("BL Wind spd");
-  case 3: // hbl
-    return _("H bl");
-  case 4: // dwcrit
-    return _("dwcrit");
-  case 5: // blcloudpct
-    return _("bl cloud");
-  case 6: // sfctemp
-    return _("Sfc temp");
-  case 7: // hwcrit
-    return _("hwcrit");
-  case 8: // wblmaxmin
-    return _("wblmaxmin");
-  case 9: // blcwbase
-    return _("blcwbase");
-  }
+  if (gcc_unlikely(i >= MAX_WEATHER_MAP))
+    return NULL;
 
-  return NULL;
+  const TCHAR *label = WeatherDescriptors[i].label;
+  if (gcc_unlikely(label == NULL))
+    return NULL;
+
+  return gettext(label);
 }
 
 void

@@ -202,7 +202,7 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT rc,
       _tcscat(ScaleInfo, TEMP);
     }
 
-    if (weather != NULL) {
+    if (weather != NULL && weather->GetParameter() > 0) {
       const TCHAR *label = weather->ItemLabel(weather->GetParameter());
       if (label != NULL)
         _tcscat(ScaleInfo, label);
