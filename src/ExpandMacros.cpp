@@ -126,12 +126,12 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
       invalid = true;
       ReplaceInString(OutBuffer, _T("$(WaypointNext)"),
-          _T("Next\nTurnpoint"), Size);
+          _("Next turnpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
       invalid = true;
       ReplaceInString(OutBuffer, _T("$(WaypointPrevious)"),
-          _T("Previous\nTurnpoint"), Size);
+          _("Previous turnpoint"), Size);
     }
 
   } else if (task_manager->is_mode(TaskManager::MODE_ABORT)) {
@@ -143,8 +143,8 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       CondReplaceInString(task->validTaskPoint(1) && !task->validTaskPoint(2),
                           OutBuffer,
                           _T("$(WaypointNext)"),
-                          _T("Furthest\nLandpoint"),
-                          _T("Next\nLandpoint"), Size);
+                          _("Furthest landpoint"),
+                          _("Next landpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
       if (!task->validTaskPoint(-1))
@@ -153,8 +153,8 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       CondReplaceInString(task->validTaskPoint(-1) && !task->validTaskPoint(-2),
                           OutBuffer,
                           _T("$(WaypointPrevious)"),
-                          _T("Closest\nLandpoint"),
-                          _T("Previous\nLandpoint"), Size);
+                          _("Closest landpoint"),
+                          _("Previous landpoint"), Size);
     }
 
   } else {
@@ -166,8 +166,8 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       CondReplaceInString(task->validTaskPoint(1) && !task->validTaskPoint(2),
                           OutBuffer,
                           _T("$(WaypointNext)"),
-                          _T("Finish\nTurnpoint"),
-                          _T("Next\nTurnpoint"), Size);
+                          _("Finish turnpoint"),
+                          _("Next turnpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
       if (!task->validTaskPoint(-1))
@@ -176,8 +176,8 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       CondReplaceInString(task->validTaskPoint(-1) && !task->validTaskPoint(-2),
                           OutBuffer,
                           _T("$(WaypointPrevious)"),
-                          _T("Start\nTurnpoint"),
-                          _T("Previous\nTurnpoint"), Size);
+                          _("Start turnpoint"),
+                          _("Previous turnpoint"), Size);
     } 
 #ifdef OLD_TASK // multiple start points
     else if (task.getSettings().EnableMultipleStartPoints) {
@@ -185,11 +185,13 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       CondReplaceInString((task.getActiveIndex()==0),
                           OutBuffer,
                           _T("$(WaypointPrevious)"),
-                          _T("StartPoint\nCycle"), _T("Waypoint\nPrevious"), Size);
+                          _("Start point cycle"), _("Previous waypoint"),
+                          Size);
     } 
     else {
       invalid |= !calculated.common_stats.active_has_previous;
-      ReplaceInString(OutBuffer, _T("$(WaypointPrevious)"), _T("Waypoint\nPrevious"), Size);
+      ReplaceInString(OutBuffer, _T("$(WaypointPrevious)"),
+                      _("Previous waypoint"), Size);
     }
 #endif
   }
@@ -375,19 +377,19 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     switch (val) {
     case 0:
       ReplaceInString(OutBuffer, _T("$(TerrainTopologyToggleName)"),
-                      _T("Topology\nOn"), Size);
+                      _("Topology on"), Size);
       break;
     case 1:
       ReplaceInString(OutBuffer, _T("$(TerrainTopologyToggleName)"),
-                      _T("Terrain\nOn"), Size);
+                      _("Terrain on"), Size);
       break;
     case 2:
       ReplaceInString(OutBuffer, _T("$(TerrainTopologyToggleName)"),
-                      _T("Terrain\nTopology"), Size);
+                      _("Terrain + Topology"), Size);
       break;
     case 3:
       ReplaceInString(OutBuffer, _T("$(TerrainTopologyToggleName)"),
-                      _("Terrain\nOff"), Size);
+                      _("Terrain off"), Size);
       break;
     }
   }
