@@ -131,8 +131,6 @@ public:
 
 private:
   LeastSquares ThermalAverage;
-  LeastSquares Wind_x;
-  LeastSquares Wind_y;
   LeastSquares Altitude;
   LeastSquares Altitude_Base;
   LeastSquares Altitude_Ceiling;

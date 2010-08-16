@@ -72,8 +72,6 @@ using std::max;
 void FlightStatistics::Reset() {
   Lock();
   ThermalAverage.Reset();
-  Wind_x.Reset();
-  Wind_y.Reset();
   Altitude.Reset();
   Altitude_Base.Reset();
   Altitude_Ceiling.Reset();
