@@ -53,7 +53,6 @@ include $(topdir)/build/tools.mk
 include $(topdir)/build/resource.mk
 include $(topdir)/build/generate.mk
 include $(topdir)/build/doco.mk
-include $(topdir)/build/gettext.mk
 
 # Create libraries for zzip, jasper and compatibility stuff
 include $(topdir)/build/libutil.mk
@@ -390,6 +389,8 @@ XCSOAR_LDADD = \
 	$(UTIL_LIBS) \
 	$(MATH_LIBS) \
 	$(RESOURCE_BINARY)
+
+include $(topdir)/build/gettext.mk
 
 all: all-$(TARGET)
 
