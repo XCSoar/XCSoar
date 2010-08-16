@@ -71,7 +71,7 @@ public:
 
   void ValueToText(TCHAR* Buffer, short val);
   void SetViewCenter(const GEOPOINT &location);
-  gcc_const static const TCHAR* ItemLabel(int i);
+  gcc_const static const TCHAR *ItemLabel(unsigned i);
   RasterMap* GetMap();
   unsigned GetParameter();
   void SetParameter(unsigned i);

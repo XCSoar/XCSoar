@@ -284,7 +284,7 @@ RasterWeather::SetViewCenter(const GEOPOINT &location)
 }
 
 const TCHAR*
-RasterWeather::ItemLabel(int i)
+RasterWeather::ItemLabel(unsigned i)
 {
   switch (i) {
   case 1: // wstar
@@ -307,7 +307,7 @@ RasterWeather::ItemLabel(int i)
     return _("blcwbase");
   }
 
-  return _T("\0");
+  return NULL;
 }
 
 void

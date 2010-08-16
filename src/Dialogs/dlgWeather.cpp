@@ -210,11 +210,10 @@ dlgWeatherShowModal(void)
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Terrain"));
 
-    const TCHAR* Buffer;
     for (int i = 1; i <= 15; i++) {
-      Buffer = RASP.ItemLabel(i);
-      if (_tcslen(Buffer))
-        dfe->addEnumText(Buffer);
+      const TCHAR *label = RASP.ItemLabel(i);
+      if (label != NULL)
+        dfe->addEnumText(label);
     }
     dfe->Set(RASP.GetParameter());
     wp->RefreshDisplay();
