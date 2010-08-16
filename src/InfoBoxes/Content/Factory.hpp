@@ -39,13 +39,18 @@ Copyright_License {
 #ifndef XCSOAR_INFOBOX_FACTORY_HPP
 #define XCSOAR_INFOBOX_FACTORY_HPP
 
+#include "Compiler.h"
+
 #include <tchar.h>
 
 class InfoBoxContent;
 
 namespace InfoBoxFactory
 {
+  gcc_const
   InfoBoxContent* Create(unsigned InfoBoxType);
+
+  gcc_const
   const TCHAR* GetHelpText(unsigned InfoBoxType);
 };
 
