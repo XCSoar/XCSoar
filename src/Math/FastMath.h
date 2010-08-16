@@ -59,7 +59,7 @@ gcc_const int compare_squared(int a, int b, int c);
 gcc_const static inline int
 iround(const fixed &x)
 {
-  return floor(x+fixed_half).as_int();
+  return (int)floor(x + fixed_half);
 }
 
 #ifdef FIXED_MATH
