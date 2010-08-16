@@ -131,6 +131,7 @@ void Update() {
   }
 
   // Set the dialog caption
+  _stprintf(tmp, _T("FLARM Traffic Details (%s)"), target->ID.format(tmp_id));
   wf->SetCaption(tmp);
 
   // Try to find the target in the FLARMnet database
