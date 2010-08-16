@@ -320,7 +320,7 @@ ClipPolygon(Canvas &canvas, const POINT *m_ptin, unsigned int inLength,
                    {rc.right, rc.top},
                    {rc.left, rc.top}};
   //steps left_edge, bottom_edge, right_edge, top_edge
-  POINT clip_ptout[inLength + 1];
+  POINT clip_ptout[inLength * 16];
   for (int step = 0; step < 4; step++) {
     outLength = SutherlandHodgmanPolygoClip(clip_ptin, clip_ptout, inLength,
         edge + step, fill, step);
