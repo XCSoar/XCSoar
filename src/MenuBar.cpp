@@ -55,11 +55,15 @@ GetButtonPosition(unsigned i, RECT rc, int *x, int *y, int *sizex, int *sizey)
   unsigned hwidth = rc.right - rc.left;
   unsigned hheight = rc.bottom - rc.top;
 
+  const unsigned margin = Layout::FastScale(2);
+
   if (hheight > hwidth) {
     // portrait
 
-    hwidth /= 4;
-    hheight /= 4;
+    hheight /= 6;
+
+    *sizex = hwidth - margin * 2;
+    *sizey = hheight - margin * 2;
 
     if (i == 0) {
       *sizex = IBLSCALE(52);
@@ -67,14 +71,19 @@ GetButtonPosition(unsigned i, RECT rc, int *x, int *y, int *sizex, int *sizey)
       *x = rc.left - (*sizex); // JMW make it offscreen for now
       *y = rc.bottom - (*sizey);
     } else if (i < 5) {
-      *sizex = IBLSCALE(52);
-      *sizey = IBLSCALE(40);
-      *x = rc.left + 3 + hwidth * (i - 1);
-      *y = rc.bottom - *sizey - 3;
+      hwidth /= 4;
+
+      *sizex = hwidth - margin * 2;
+      *sizey = hheight - margin * 2;
+      *x = rc.left + margin + hwidth * (i - 1);
+      *y = rc.bottom - hheight + margin;
     } else {
-      *sizex = IBLSCALE(80);
-      *sizey = IBLSCALE(40);
-      *x = rc.right - (*sizex);
+      hwidth /= 3;
+
+      *sizex = hwidth - margin * 2;
+      *sizey = hheight - margin * 2;
+
+      *x = rc.right - hwidth + margin;
       int k = rc.bottom - rc.top - IBLSCALE(46);
 
       if (is_altair()) {
@@ -82,7 +91,7 @@ GetButtonPosition(unsigned i, RECT rc, int *x, int *y, int *sizex, int *sizey)
         // JMW need upside down button order for rotated Altair
         *y = rc.bottom - (i - 5) * k / 5 - (*sizey) - IBLSCALE(20);
       } else {
-        *y = rc.top + (i - 5) * k / 6 + (*sizey / 2 + IBLSCALE(3));
+        *y = rc.top + (i - 5) * hheight + margin;
       }
     }
   } else {
@@ -91,21 +100,18 @@ GetButtonPosition(unsigned i, RECT rc, int *x, int *y, int *sizex, int *sizey)
     hwidth /= 5;
     hheight /= 5;
 
+    *sizex = hwidth - margin * 2;
+    *sizey = hheight - margin * 2;
+
     if (i == 0) {
-      *sizex = IBLSCALE(52);
-      *sizey = IBLSCALE(20);
       *x = rc.left - (*sizex); // JMW make it offscreen for now
       *y = (rc.top);
     } else if (i < 5) {
-      *sizex = IBLSCALE(52);
-      *sizey = is_altair() ? IBLSCALE(20) : IBLSCALE(35);
-      *x = rc.left + 3;
-      *y = (rc.top + hheight * i - (*sizey) / 2);
+      *x = rc.left + margin;
+      *y = rc.top + margin + hheight * (i - 1);
     } else {
-      *sizex = IBLSCALE(60);
-      *sizey = is_altair() ? IBLSCALE(40) : IBLSCALE(35);
       *x = rc.left + hwidth * (i - 5);
-      *y = rc.bottom - *sizey - 3;
+      *y = rc.bottom - hheight + margin;
     }
   }
 }
