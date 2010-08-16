@@ -503,11 +503,11 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
     return FALSE;
 
-#if _WIN32_WCE >= 0x0420
 	case WM_LBUTTONDOWN:
     SelItem = Point2Item(LOWORD(lParam), HIWORD(lParam));
     InvalidateRect(hWnd, NULL, FALSE);
     UpdateWindow(hWnd);
+#if _WIN32_WCE >= 0x0420
     rg.cbSize = sizeof(SHRGINFO);
     rg.hwndClient = hWnd;
     rg.ptDown.x = LOWORD(lParam);
@@ -539,9 +539,9 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                    0, 0, SWP_NOACTIVATE | SWP_NOSIZE | SWP_SHOWWINDOW);
 		}
 #endif
+#endif
 		SetCapture(hWnd);
     break;
-#endif
 
   case WM_LBUTTONUP:
     ShowWindow(hToolTip, SW_HIDE);
