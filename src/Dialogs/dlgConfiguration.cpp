@@ -920,7 +920,7 @@ OnInfoBoxHelp(WindowControl * Sender)
     dlgHelpShowModal(XCSoarInterface::main_window, caption, text);
   else
     dlgHelpShowModal(XCSoarInterface::main_window, caption,
-                     _T("No help available on this item!"));
+                     _("No help available on this item"));
 }
 
 static CallBackTableEntry_t CallBackTable[] = {
