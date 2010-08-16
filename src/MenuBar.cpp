@@ -52,11 +52,14 @@ static const Color menu_button_bk_disabled(0xb0, 0xc0, 0xb0);
 static void
 GetButtonPosition(unsigned i, RECT rc, int *x, int *y, int *sizex, int *sizey)
 {
-  int hwidth = (rc.right - rc.left) / 4;
-  int hheight = (rc.bottom - rc.top) / 4;
+  unsigned hwidth = rc.right - rc.left;
+  unsigned hheight = rc.bottom - rc.top;
 
   if (hheight > hwidth) {
     // portrait
+
+    hwidth /= 4;
+    hheight /= 4;
 
     if (i == 0) {
       *sizex = IBLSCALE(52);
@@ -85,8 +88,8 @@ GetButtonPosition(unsigned i, RECT rc, int *x, int *y, int *sizex, int *sizey)
   } else {
     // landscape
 
-    hwidth = (rc.right - rc.left) / 5;
-    hheight = (rc.bottom - rc.top) / 5;
+    hwidth /= 5;
+    hheight /= 5;
 
     if (i == 0) {
       *sizex = IBLSCALE(52);
