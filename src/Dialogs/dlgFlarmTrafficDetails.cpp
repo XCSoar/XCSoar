@@ -125,11 +125,12 @@ void Update() {
       XCSoarInterface::Basic().flarm.FindTraffic(target_id);
 
   // If target is out of range
-  if (!target)
+  if (target == NULL) {
     wf->SetModalResult(mrCancel);
+    return;
+  }
 
   // Set the dialog caption
-  _stprintf(tmp, _T("FLARM Traffic Details (%s)"), target->ID.format(tmp_id));
   wf->SetCaption(tmp);
 
   // Try to find the target in the FLARMnet database
