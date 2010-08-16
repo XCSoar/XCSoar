@@ -756,7 +756,7 @@ InputEvents::eventMacCready(const TCHAR *misc)
     task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(mc);
   } else if (_tcscmp(misc, _T("down")) == 0) {
-    mc = std::min(mc - fixed_one / 10, fixed_zero);
+    mc = std::max(mc - fixed_one / 10, fixed_zero);
     polar.set_mc(mc);
     task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(mc);
