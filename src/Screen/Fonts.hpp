@@ -52,7 +52,6 @@ namespace Fonts
   extern Font MapBold;
   extern Font CDI;
   extern Font MapLabel;
-  extern Font Statistics;
 
   void LoadCustomFont(Font *theFont, const TCHAR FontRegKey[],
                       LOGFONT *LogFontUsed = NULL);

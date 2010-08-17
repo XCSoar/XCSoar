@@ -279,7 +279,6 @@ const TCHAR szProfileFontTitleSmallWindowFont[] = CONF("TeamCodeFont");
 const TCHAR szProfileFontMapWindowBoldFont[] = CONF("MapWindowBoldFont");
 const TCHAR szProfileFontCDIWindowFont[] = CONF("CDIWindowFont");
 const TCHAR szProfileFontMapLabelFont[] = CONF("MapLabelFont");
-const TCHAR szProfileFontStatisticsFont[] = CONF("StatisticsFont");
 
 const TCHAR szProfileInfoBoxGeometry[] = CONF("InfoBoxGeometry");
 
