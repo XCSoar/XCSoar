@@ -87,8 +87,8 @@ Copyright_License {
 #define ID_ICON_TIMER			1
 #define BUF_SIZE				256
 
-#if (WIN32_PLATFORM_PSPC >= 310)
-#define USE_WATERMARK
+#if (WIN32_PLATFORM_PSPC <= 300)
+#define USE_OPAQUE_FILL
 #endif
 
 /*#if (WIN32_PLATFORM_PSPC < 500)*/
@@ -314,9 +314,7 @@ ToolTipProc(HWND hDlg, UINT uMsg, gcc_unused WPARAM wParam, LPARAM lParam)
 static void
 OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 {
-#ifdef USE_WATERMARK
 	TODAYDRAWWATERMARKINFO dwi;
-#endif
 
 	HDC drawdc, tempdc;
 	HBITMAP hDrawBitMap;
@@ -336,14 +334,13 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
   hDrawBitMap = CreateCompatibleBitmap(hdc, rect.right, rect.bottom);
   hRetDrawBmp = SelectObject(drawdc, hDrawBitMap);
 
-#ifdef USE_WATERMARK
+#ifdef USE_OPAQUE_FILL
+  FillRect(drawdc, &rect, (HBRUSH)GetStockObject(WHITE_BRUSH));
+#endif
   dwi.hdc = drawdc;
   GetClientRect(hWnd, &dwi.rc);
   dwi.hwnd = hWnd;
   SendMessage(GetParent(hWnd), TODAYM_DRAWWATERMARK, 0, (LPARAM)&dwi);
-#else
-  FillRect(drawdc, &rect, (HBRUSH)GetStockObject(WHITE_BRUSH));
-#endif
 
 	x = WinLeftMargin;
   y = WinTopMargin;
