@@ -70,14 +70,14 @@ BackgroundDrawHelper::reset()
 
 
 void 
-BackgroundDrawHelper::set_terrain(RasterTerrain* terrain)
+BackgroundDrawHelper::set_terrain(const RasterTerrain *terrain)
 {
   m_terrain = terrain;
   reset();
 }
 
 void 
-BackgroundDrawHelper::set_weather(RasterWeather* weather)
+BackgroundDrawHelper::set_weather(const RasterWeather *weather)
 {
   m_weather = weather;
   reset();

@@ -72,8 +72,8 @@ public:
   void sun_from_wind(const Projection& proj,
                      const SpeedVector& wind);
   void reset();
-  void set_terrain(RasterTerrain* terrain);
-  void set_weather(RasterWeather* weather);
+  void set_terrain(const RasterTerrain *terrain);
+  void set_weather(const RasterWeather *weather);
 
 private:
   static void DrawSpotHeight(Canvas &canvas, const Projection &map_projection,
@@ -81,8 +81,8 @@ private:
 
 private:
   TerrainRenderer* m_rend;
-  RasterTerrain* m_terrain;
-  RasterWeather* m_weather;
+  const RasterTerrain *m_terrain;
+  const RasterWeather *m_weather;
   Angle m_sun_elevation;
   Angle m_sun_azimuth;
 };
