@@ -38,11 +38,9 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
-#include "Blackboard.hpp"
-#include "SettingsComputer.hpp"
 #include "Units.hpp"
 #include "DataField/Base.hpp"
-#include "MainWindow.hpp"
+#include "Screen/SingleWindow.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 
@@ -297,9 +295,7 @@ static CallBackTableEntry_t CallBackTable[] = {
 void
 dlgTaskCalculatorShowModal(SingleWindow &parent)
 {
-  wf = dlgLoadFromXML(CallBackTable,
-		                  XCSoarInterface::main_window, _T("IDR_XML_TASKCALCULATOR"));
-
+  wf = dlgLoadFromXML(CallBackTable, parent, _T("IDR_XML_TASKCALCULATOR"));
   if (!wf)
     return;
 

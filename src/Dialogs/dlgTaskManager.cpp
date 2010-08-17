@@ -38,13 +38,8 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
-#include "Protection.hpp"
-#include "Blackboard.hpp"
-#include "MainWindow.hpp"
 #include "LocalPath.hpp"
-#include "DataField/FileReader.hpp"
 #include "Components.hpp"
-#include "StringUtil.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/TaskPoints/FinishPoint.hpp"

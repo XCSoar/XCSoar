@@ -38,13 +38,6 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
-#include "Protection.hpp"
-#include "Blackboard.hpp"
-#include "Logger/Logger.hpp"
-#include "Math/FastMath.h"
-#include "MainWindow.hpp"
-#include "LocalPath.hpp"
-#include "StringUtil.hpp"
 
 #include "Dialogs/dlgTaskHelpers.hpp"
 

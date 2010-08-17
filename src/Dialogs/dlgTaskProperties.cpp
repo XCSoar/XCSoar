@@ -38,11 +38,7 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
-#include "Math/FastMath.h"
-#include "MainWindow.hpp"
-#include "LocalPath.hpp"
 #include "DataField/Enum.hpp"
-#include "StringUtil.hpp"
 
 #include "Dialogs/dlgTaskHelpers.hpp"
 

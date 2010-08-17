@@ -39,7 +39,6 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Screen/Layout.hpp"
-#include "StringUtil.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 
 #include <assert.h>
