@@ -128,7 +128,6 @@ static Font TempTitleSmallWindowFont;
 static Font TempMapWindowBoldFont;
 static Font TempCDIWindowFont; // New
 static Font TempMapLabelFont;
-static Font TempUseCustomFontsFont;
 
 extern LOGFONT LogInfoBox;
 extern LOGFONT LogTitle;
@@ -341,7 +340,6 @@ ResetFonts(bool bUseCustom)
     Fonts::LoadCustomFont(&TempMapLabelFont, szProfileFontMapLabelFont);
   }
 
-  Fonts::SetFont(&TempUseCustomFontsFont, LogMap);
   Fonts::SetFont(&TempInfoWindowFont, LogInfoBox);
   Fonts::SetFont(&TempTitleWindowFont, LogTitle);
   Fonts::SetFont(&TempMapWindowFont, LogMap);
@@ -394,7 +392,6 @@ RefreshFonts(void)
     bool bUseCustomFonts =
         ((DataFieldBoolean*)(wp->GetDataField()))->GetAsBoolean();
     ResetFonts(bUseCustomFonts);
-    wp->SetFont(TempUseCustomFontsFont); // this font is never customized
     ShowFontEditButtons(bUseCustomFonts);
   }
 
@@ -2476,7 +2473,6 @@ void dlgConfigurationShowModal(void)
       }
     }
   }
-  TempUseCustomFontsFont.reset();
 
   TempInfoWindowFont.reset();
   TempTitleWindowFont.reset();
