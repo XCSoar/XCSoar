@@ -150,11 +150,9 @@ WayPointFileWinPilot::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
   } else
     return false;
 
-  src = endptr + 1;
-
   fixed value = fixed(deg) + fixed(min) / 60;
 
-  TCHAR sign = *src;
+  TCHAR sign = *endptr;
   if (sign == 'W' || sign == 'w' || sign == 'S' || sign == 's')
     value = -value;
 
