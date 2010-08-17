@@ -43,7 +43,6 @@ Copyright_License {
 #include "Form/Frame.hpp"
 #include "Form/Edit.hpp"
 #include "MainWindow.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Interface.hpp"
 
@@ -118,17 +117,12 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   WndForm wf(XCSoarInterface::main_window,
              lpCaption, X, Y, Width, Height,
              style);
-  wf.SetFont(Fonts::MapBold);
-  wf.SetTitleFont(Fonts::MapBold);
-  wf.SetBackColor(Color(0xDA, 0xDB, 0xAB));
 
   // Create text element
   wText = new WndFrame(wf, 0, Layout::Scale(5), Width, Height);
 
   wText->SetCaption(lpText);
-  wText->SetFont(Fonts::MapBold);
   wText->SetAlignCenter();
-  // | DT_VCENTER
 
   /* TODO code: this doesnt work to set font height
   dY = wText->GetLastDrawTextHeight() - Height;
