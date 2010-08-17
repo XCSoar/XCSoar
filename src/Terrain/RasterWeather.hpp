@@ -69,12 +69,17 @@ public:
   /** Close loaded data */
   void Close();
 
-  void ValueToText(TCHAR* Buffer, short val);
+  void ValueToText(TCHAR* Buffer, short val) const;
   void SetViewCenter(const GEOPOINT &location);
   gcc_const static const TCHAR *ItemLabel(unsigned i);
   gcc_const static const TCHAR *ItemHelp(unsigned i);
-  RasterMap* GetMap();
-  unsigned GetParameter();
+
+  gcc_pure
+  const RasterMap *GetMap() const;
+
+  gcc_pure
+  unsigned GetParameter() const;
+
   void SetParameter(unsigned i);
 
   /**
@@ -83,9 +88,14 @@ public:
   void Reload(int day_time);
 
   void ScanAll(const GEOPOINT &location);
-  bool isWeatherAvailable(unsigned t);
-  unsigned GetTime();
+  bool isWeatherAvailable(unsigned t) const;
+
+  gcc_pure
+  unsigned GetTime() const;
+
   void SetTime(unsigned i);
+
+  gcc_const
   static int IndexToTime(int index);
 
 private:
@@ -100,11 +110,11 @@ private:
   bool LoadItem(const TCHAR* name, unsigned time_index);
 
   gcc_pure
-  bool ExistsItem(const TCHAR* name, unsigned time_index);
+  bool ExistsItem(const TCHAR* name, unsigned time_index) const;
 
   bool weather_available[MAX_WEATHER_TIMES];
 
-  Poco::RWLock lock;
+  mutable Poco::RWLock lock;
   void _Close();
 };
 

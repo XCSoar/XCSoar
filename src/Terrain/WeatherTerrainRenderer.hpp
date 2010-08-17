@@ -46,13 +46,13 @@ class RasterWeather;
 class WeatherTerrainRenderer: public TerrainRenderer {
 public:
   WeatherTerrainRenderer(const RasterTerrain *_terrain,
-                         RasterWeather *_weather);
+                         const RasterWeather *_weather);
 
   virtual void Draw(Canvas &canvas, const Projection &map_projection,
                     const Angle sunazimuth, const Angle sunelevation);
 
 private:
-  RasterWeather *weather;
+  const RasterWeather *weather;
   bool do_scan_spot();
 };
 

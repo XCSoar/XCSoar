@@ -154,8 +154,8 @@ RasterWeather::SetTime(unsigned i)
   reload = true;
 }
 
-RasterMap*
-RasterWeather::GetMap()
+const RasterMap *
+RasterWeather::GetMap() const
 {
   // JMW this is not safe in TerrainRenderer's use
   Poco::ScopedRWLock protect(lock, false);
@@ -163,21 +163,21 @@ RasterWeather::GetMap()
 }
 
 unsigned
-RasterWeather::GetParameter()
+RasterWeather::GetParameter() const
 {
   Poco::ScopedRWLock protect(lock, false);
   return _parameter;
 }
 
 unsigned
-RasterWeather::GetTime()
+RasterWeather::GetTime() const
 {
   Poco::ScopedRWLock protect(lock, false);
   return _weather_time;
 }
 
 bool
-RasterWeather::isWeatherAvailable(unsigned t)
+RasterWeather::isWeatherAvailable(unsigned t) const
 {
   Poco::ScopedRWLock protect(lock, false);
   assert(t < MAX_WEATHER_TIMES);
@@ -211,7 +211,7 @@ RasterWeather::LoadItem(const TCHAR* name, unsigned time_index)
 }
 
 bool
-RasterWeather::ExistsItem(const TCHAR* name, unsigned time_index)
+RasterWeather::ExistsItem(const TCHAR* name, unsigned time_index) const
 {
   TCHAR rasp_filename[MAX_PATH];
   GetFilename(rasp_filename, name, time_index);
@@ -357,7 +357,7 @@ RasterWeather::ItemHelp(unsigned i)
 }
 
 void
-RasterWeather::ValueToText(TCHAR* Buffer, short val)
+RasterWeather::ValueToText(TCHAR* Buffer, short val) const
 {
   *Buffer = _T('\0');
 
