@@ -39,13 +39,8 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Screen/Layout.hpp"
-#include "RenderTask.hpp"
-#include "RenderTaskPoint.hpp"
-#include "RenderObservationZone.hpp"
-#include "Screen/Chart.hpp"
-#include "ChartProjection.hpp"
-#include "BackgroundDrawHelper.hpp"
 #include "Components.hpp"
+#include "Gauge/TaskView.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -112,20 +107,9 @@ OnNewClicked(WindowControl * Sender)
 static void
 OnTaskPaint(WindowControl *Sender, Canvas &canvas)
 {
-  RECT rc = Sender->get_client_rect();
-
-  Chart chart(canvas, rc);
-  ChartProjection proj(rc, *ordered_task, XCSoarInterface::Basic().Location);
-
-  BackgroundDrawHelper background;
-  background.set_terrain(terrain);
-  background.Draw(canvas, proj, XCSoarInterface::SettingsMap());
-
-  RenderObservationZone ozv(canvas, proj, XCSoarInterface::SettingsMap());
-  RenderTaskPoint tpv(canvas, proj, XCSoarInterface::SettingsMap(),
-                      ozv, false, XCSoarInterface::Basic().Location);
-  ::RenderTask dv(tpv);
-  dv.Visit(*ordered_task);
+  PaintTask(canvas, Sender->get_client_rect(), *ordered_task,
+            XCSoarInterface::Basic().Location,
+            XCSoarInterface::SettingsMap(), terrain);
 }
 
 static void

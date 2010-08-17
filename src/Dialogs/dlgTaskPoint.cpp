@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
-
+#include "Components.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 
 #include "Task/TaskPoints/StartPoint.hpp"
@@ -48,13 +48,10 @@ Copyright_License {
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/Visitors/TaskVisitor.hpp"
-
-#include "RenderTask.hpp"
-#include "RenderTaskPoint.hpp"
-#include "RenderObservationZone.hpp"
+#include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Screen/Chart.hpp"
+#include "Gauge/TaskView.hpp"
 #include "DataField/Enum.hpp"
-#include "ChartProjection.hpp"
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
 
 #include <assert.h>
@@ -372,13 +369,10 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
     return;
   }
 
-  ChartProjection proj(rc, *tp, tp->get_location());
-
-  RenderObservationZone ozv(canvas, proj, XCSoarInterface::SettingsMap());
-  RenderTaskPoint tpv(canvas, proj, XCSoarInterface::SettingsMap(),
-                      ozv, false, XCSoarInterface::Basic().Location);
-  ::RenderTask dv(tpv);
-  dv.Visit(*ordered_task);
+  PaintTaskPoint(canvas, rc, *ordered_task, *tp,
+                 XCSoarInterface::Basic().Location,
+                 XCSoarInterface::SettingsMap(),
+                 terrain);
 }
 
 static void 

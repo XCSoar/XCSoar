@@ -40,17 +40,12 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 
-#include "RenderTask.hpp"
-#include "RenderTaskPoint.hpp"
-#include "RenderObservationZone.hpp"
 #include "Screen/Chart.hpp"
-#include "ChartProjection.hpp"
 #include "TaskStore.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
-
-#include "BackgroundDrawHelper.hpp"
+#include "Gauge/TaskView.hpp"
 
 #include <assert.h>
 
@@ -117,17 +112,8 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
     return;
   }
 
-  ChartProjection proj(rc, *ordered_task, XCSoarInterface::Basic().Location);
-
-  BackgroundDrawHelper background;
-  background.set_terrain(terrain);
-  background.Draw(canvas, proj, XCSoarInterface::SettingsMap());
-
-  RenderObservationZone ozv(canvas, proj, XCSoarInterface::SettingsMap());
-  RenderTaskPoint tpv(canvas, proj, XCSoarInterface::SettingsMap(),
-                      ozv, false, XCSoarInterface::Basic().Location);
-  ::RenderTask dv(tpv);
-  dv.Visit(*ordered_task);
+  PaintTask(canvas, rc, *ordered_task, XCSoarInterface::Basic().Location,
+            XCSoarInterface::SettingsMap(), terrain);
 }
 
 static void
