@@ -116,14 +116,10 @@ static void
 OnTaskPaint(WindowControl *Sender, Canvas &canvas)
 {
   RECT rc = Sender->get_client_rect();
-  Chart chart(canvas, rc);
 
   OrderedTask* ordered_task = get_cursor_task();
-  if (ordered_task == NULL) {
-    chart.DrawNoData();
-    return;
-  }
-  if (!ordered_task->check_task()) {
+  if (ordered_task == NULL || !ordered_task->check_task()) {
+    Chart chart(canvas, rc);
     chart.DrawNoData();
     return;
   }

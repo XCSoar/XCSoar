@@ -371,10 +371,10 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
 {
   RECT rc = Sender->get_client_rect();
 
-  Chart chart(canvas, rc);
   OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
 
   if (!tp) {
+    Chart chart(canvas, rc);
     chart.DrawNoData();
     return;
   }
