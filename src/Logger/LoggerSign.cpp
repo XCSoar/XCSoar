@@ -127,14 +127,6 @@ LoggerImpl::DiskBufferReset()
   DiskBuffer.clear();
 }
 
-// VENTA3 TODO: if ifdef PPC2002 load correct dll. Put the dll inside
-// XCSoarData, so users can place their executable XCS wherever they
-// want.
-//
-// JMW: not sure that would work, I think dll has to be in OS
-// directory or same directory as exe
-
-
 void
 LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName)
 {
