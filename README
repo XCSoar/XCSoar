@@ -52,7 +52,7 @@ Supported targets:
 
  PC: desktop Windows
 
- PPC2000, PPC2002, PPC2003: Pocket PC
+ PPC2000, PPC2003: Pocket PC (for PPC2002 devices, use PPC2000 target)
 
  WM5: Windows Mobile 5.0 and later
 
