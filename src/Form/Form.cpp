@@ -96,14 +96,13 @@ WndForm::WndForm(SingleWindow &_main_window,
   main_window(_main_window),
   mModalResult(0),
   mColorTitle(Color::YELLOW),
-  mhTitleFont(GetFont()),
+  mhTitleFont(&Fonts::MapBold),
   mOnTimerNotify(NULL), mOnKeyDownNotify(NULL)
 {
   // Create ClientWindow
 
   SetBackColor(Color(0xDA, 0xDB, 0xAB));
   SetFont(Fonts::MapBold);
-  SetTitleFont(Fonts::MapBold);
 
   WindowStyle client_style;
   client_style.control_parent();
