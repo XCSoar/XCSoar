@@ -509,9 +509,6 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     rg.hwndClient = hWnd;
     rg.ptDown.x = LOWORD(lParam);
     rg.ptDown.y = HIWORD(lParam);
-#ifdef _WCE_PPC2002
-    rg.dwFlags = SHRG_RETURNCMD | SHRG_NOANIMATION;
-#else
     rg.dwFlags = SHRG_RETURNCMD;
     if (SelItem != -1 && SHRecognizeGesture(&rg) == GN_CONTEXTMENU) {
       RECT rect;
@@ -535,7 +532,6 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			SetWindowPos(hToolTip, HWND_TOPMOST, tip_rect.left, tip_rect.top,
                    0, 0, SWP_NOACTIVATE | SWP_NOSIZE | SWP_SHOWWINDOW);
 		}
-#endif
 #endif
 		SetCapture(hWnd);
     break;
