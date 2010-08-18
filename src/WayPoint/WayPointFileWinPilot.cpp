@@ -146,7 +146,7 @@ WayPointFileWinPilot::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
     if (endptr != src + 3 || l < 0 || l >= 1000)
         return false;
 
-    sec = fixed(l) / 6000;
+    sec = fixed(l) / 60000;
   } else
     return false;
 
