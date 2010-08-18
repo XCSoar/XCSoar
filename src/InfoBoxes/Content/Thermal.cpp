@@ -58,8 +58,8 @@ InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)
   infobox.SetTitle(_T("MacCready"));
 
   // Set Value
-  _stprintf(sTmp, _T("%2.1f"), (double)Units::ToUserVSpeed(
-      XCSoarInterface::Calculated().common_stats.current_risk_mc));
+  Units::FormatUserVSpeed(XCSoarInterface::Calculated().common_stats.current_risk_mc,
+                          sTmp, 32, false);
   infobox.SetValue(sTmp);
 
   // Set Comment
@@ -119,8 +119,8 @@ InfoBoxContentVario::Update(InfoBoxWindow &infobox)
   infobox.SetTitle(_T("Vario"));
 
   // Set Value
-  _stprintf(sTmp, _T("%-2.1f"), (double)Units::ToUserVSpeed(
-            XCSoarInterface::Basic().TotalEnergyVario));
+  Units::FormatUserVSpeed(XCSoarInterface::Basic().TotalEnergyVario,
+                          sTmp, 32, false);
   infobox.SetValue(sTmp);
 
   // Set Unit
@@ -136,8 +136,8 @@ InfoBoxContentVarioNetto::Update(InfoBoxWindow &infobox)
   infobox.SetTitle(_T("Netto"));
 
   // Set Value
-  _stprintf(sTmp, _T("%-2.1f"), (double)Units::ToUserVSpeed(
-            XCSoarInterface::Basic().NettoVario));
+  Units::FormatUserVSpeed(XCSoarInterface::Basic().NettoVario,
+                          sTmp, 32, false);
   infobox.SetValue(sTmp);
 
   // Set Unit
@@ -153,8 +153,8 @@ InfoBoxContentThermal30s::Update(InfoBoxWindow &infobox)
   infobox.SetTitle(_T("TC 30s"));
 
   // Set Value
-  _stprintf(sTmp, _T("%-2.1f"), (double)Units::ToUserVSpeed(
-            XCSoarInterface::Calculated().Average30s));
+  Units::FormatUserVSpeed(XCSoarInterface::Calculated().Average30s,
+                          sTmp, 32, false);
   infobox.SetValue(sTmp);
 
   // Set Unit
@@ -176,8 +176,8 @@ InfoBoxContentThermalLastAvg::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR sTmp[32];
-  _stprintf(sTmp, _T("%-2.1f"), (double)Units::ToUserVSpeed(
-      XCSoarInterface::Calculated().LastThermalAverage));
+  Units::FormatUserVSpeed(XCSoarInterface::Calculated().LastThermalAverage,
+                          sTmp, 32, false);
   infobox.SetValue(sTmp);
 
   // Set Unit
@@ -192,8 +192,8 @@ InfoBoxContentThermalLastGain::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR sTmp[32];
-  _stprintf(sTmp, _T("%2.0f"), (double)Units::ToUserAltitude(
-      XCSoarInterface::Calculated().LastThermalGain));
+  Units::FormatUserAltitude(XCSoarInterface::Calculated().LastThermalGain,
+                            sTmp, 32, false);
   infobox.SetValue(sTmp);
 
   // Set Unit
@@ -238,9 +238,9 @@ InfoBoxContentThermalAllAvg::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR sTmp[32];
-  _stprintf(sTmp, _T("%-2.1f"), (double)Units::ToUserVSpeed(
-      XCSoarInterface::Calculated().TotalHeightClimb /
-      XCSoarInterface::Calculated().timeCircling));
+  Units::FormatUserVSpeed(XCSoarInterface::Calculated().TotalHeightClimb /
+                          XCSoarInterface::Calculated().timeCircling,
+                          sTmp, 32, false);
   infobox.SetValue(sTmp);
 
   // Set Unit
@@ -255,8 +255,8 @@ InfoBoxContentThermalAvg::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR sTmp[32];
-  _stprintf(sTmp, _T("%-2.1f"), (double)Units::ToUserVSpeed(
-      XCSoarInterface::Calculated().ThermalAverage));
+  Units::FormatUserVSpeed(XCSoarInterface::Calculated().ThermalAverage,
+                          sTmp, 32, false);
   infobox.SetValue(sTmp);
 
   // Set Unit
@@ -278,8 +278,8 @@ InfoBoxContentThermalGain::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR sTmp[32];
-  _stprintf(sTmp, _T("%2.0f"), (double)Units::ToUserAltitude(
-      XCSoarInterface::Calculated().ThermalGain));
+  Units::FormatUserAltitude(XCSoarInterface::Calculated().ThermalGain,
+                            sTmp, 32, false);
   infobox.SetValue(sTmp);
 
   // Set Unit
@@ -312,8 +312,8 @@ InfoBoxContentVarioDistance::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR sTmp[32];
-  _stprintf(sTmp, _T("%-2.1f"), (double)Units::ToUserVSpeed(
-      XCSoarInterface::Calculated().task_stats.total.vario.get_value()));
+  Units::FormatUserVSpeed(XCSoarInterface::Calculated().task_stats.total.vario.get_value(),
+                          sTmp, 32, false);
   infobox.SetValue(sTmp);
 
   // Set Unit

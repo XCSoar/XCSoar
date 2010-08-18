@@ -209,10 +209,9 @@ InfoBoxContentTeamDistance::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  double Value = Units::ToUserDistance(
-      XCSoarInterface::Calculated().TeammateRange);
   TCHAR tmp[32];
-  _stprintf(tmp, (Value > 100 ? _T("%.0lf") : _T("%.1lf")), Value);
+  Units::FormatUserDistance(XCSoarInterface::Calculated().TeammateRange,
+                            tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit

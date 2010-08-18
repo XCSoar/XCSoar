@@ -57,8 +57,8 @@ InfoBoxContentSpeedGround::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserSpeed(
-      XCSoarInterface::Basic().GroundSpeed));
+  Units::FormatUserSpeed(XCSoarInterface::Basic().GroundSpeed,
+                         tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -112,8 +112,8 @@ InfoBoxContentSpeedIndicated::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserSpeed(
-      XCSoarInterface::Basic().IndicatedAirspeed));
+  Units::FormatUserSpeed(XCSoarInterface::Basic().IndicatedAirspeed,
+                         tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -150,8 +150,8 @@ InfoBoxContentSpeed::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserSpeed(
-      XCSoarInterface::Basic().TrueAirspeed));
+  Units::FormatUserSpeed(XCSoarInterface::Basic().TrueAirspeed,
+                         tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -183,8 +183,8 @@ InfoBoxContentSpeedMacCready::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserSpeed(
-      XCSoarInterface::Calculated().common_stats.V_block));
+  Units::FormatUserSpeed(XCSoarInterface::Calculated().common_stats.V_block,
+                         tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -199,8 +199,8 @@ InfoBoxContentSpeedDolphin::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserSpeed(
-      XCSoarInterface::Calculated().V_stf));
+  Units::FormatUserSpeed(XCSoarInterface::Calculated().V_stf,
+                         tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit

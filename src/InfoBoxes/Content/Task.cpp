@@ -218,8 +218,8 @@ InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.1f"),
-            (double)Units::ToUserDistance(task_stats.current_leg.solution_remaining.Vector.Distance));
+  Units::FormatUserDistance(task_stats.current_leg.solution_remaining.Vector.Distance,
+                            tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -310,8 +310,8 @@ InfoBoxContentNextAltitudeDiff::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserAltitude(task_stats.current_leg.solution_remaining.AltitudeDifference));
+  Units::FormatUserAltitude(task_stats.current_leg.solution_remaining.AltitudeDifference,
+                            tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -332,8 +332,8 @@ InfoBoxContentNextAltitudeRequire::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserAltitude(task_stats.current_leg.solution_remaining.AltitudeRequired));
+  Units::FormatUserAltitude(task_stats.current_leg.solution_remaining.AltitudeRequired,
+                            tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -379,10 +379,10 @@ InfoBoxContentFinalDistance::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  double Value = common_stats.task_finished ?
-    Units::ToUserDistance(task_stats.current_leg.solution_remaining.Vector.Distance) :
-    Units::ToUserDistance(task_stats.total.remaining.get_distance());
-  _stprintf(tmp, _T("%2.0f"), Value);
+  Units::FormatUserDistance(common_stats.task_finished
+                            ? task_stats.current_leg.solution_remaining.Vector.Distance
+                            : task_stats.total.remaining.get_distance(),
+                            tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -471,8 +471,8 @@ InfoBoxContentFinalAltitudeDiff::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserAltitude(task_stats.total.solution_remaining.AltitudeDifference));
+  Units::FormatUserAltitude(task_stats.total.solution_remaining.AltitudeDifference,
+                            tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -493,8 +493,8 @@ InfoBoxContentFinalAltitudeRequire::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserAltitude(task_stats.total.solution_remaining.AltitudeRequired));
+  Units::FormatUserAltitude(task_stats.total.solution_remaining.AltitudeRequired,
+                            tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -626,8 +626,7 @@ InfoBoxContentHomeDistance::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserDistance(common_stats.vector_home.Distance));
+  Units::FormatUserDistance(common_stats.vector_home.Distance, tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -653,8 +652,7 @@ InfoBoxContentOLC::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.1f"),
-            (double)Units::ToUserDistance(common_stats.distance_olc));
+  Units::FormatUserDistance(common_stats.distance_olc, tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -772,8 +770,8 @@ InfoBoxContentTaskAADistance::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserDistance(
-      task_stats.total.planned.get_distance()));
+  Units::FormatUserDistance(task_stats.total.planned.get_distance(),
+                            tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -794,8 +792,8 @@ InfoBoxContentTaskAADistanceMax::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserDistance(
-      task_stats.distance_max));
+  Units::FormatUserDistance(task_stats.distance_max,
+                            tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -816,8 +814,8 @@ InfoBoxContentTaskAADistanceMin::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserDistance(
-      task_stats.distance_min));
+  Units::FormatUserDistance(task_stats.distance_min,
+                            tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
