@@ -168,12 +168,9 @@ InitialiseLogFonts()
 
 #ifndef ENABLE_SDL
   // oversize first so can then scale down
-  int iFontHeight = (int)(FontHeight * 1.4);
-
-  LOGFONT logfont;
-  InitialiseLogfont(&logfont, Fonts::GetStandardFontFace(),
-                    iFontHeight, true, false, true);
-  logfont.lfCharSet = ANSI_CHARSET;
+  InitialiseLogfont(&LogInfoBox, Fonts::GetStandardFontFace(),
+                    (int)(FontHeight * 1.4), true, false, true);
+  LogInfoBox.lfCharSet = ANSI_CHARSET;
 
   // JMW algorithm to auto-size info window font.
   // this is still required in case title font property doesn't exist.
@@ -183,10 +180,9 @@ InitialiseLogFonts()
     HFONT TempWindowFont;
     HFONT hfOld;
 
-    iFontHeight--;
-    logfont.lfHeight = iFontHeight;
+    --LogInfoBox.lfHeight;
 
-    TempWindowFont = CreateFontIndirect(&logfont);
+    TempWindowFont = CreateFontIndirect(&LogInfoBox);
     hfOld = (HFONT)SelectObject(canvas, TempWindowFont);
 
     tsize = canvas.text_size(_T("1234m"));
@@ -195,10 +191,7 @@ InitialiseLogFonts()
     DeleteObject(TempWindowFont);
   } while ((unsigned)tsize.cx > InfoBoxLayout::ControlWidth);
 
-  iFontHeight++;
-  logfont.lfHeight = iFontHeight;
-  memset(&LogInfoBox, 0, sizeof(LOGFONT));
-  memcpy(&LogInfoBox, &logfont, sizeof(LOGFONT));
+  ++LogInfoBox.lfHeight;
 
 #else /* !ENABLE_SDL */
   // XXX implement
