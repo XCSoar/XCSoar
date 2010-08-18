@@ -117,6 +117,8 @@ WndForm::WndForm(SingleWindow &_main_window,
 #if !defined(ENABLE_SDL) && !defined(NDEBUG)
   ::SetWindowText(hWnd, mCaption);
 #endif
+
+  UpdateLayout();
 }
 
 WndForm::~WndForm()
