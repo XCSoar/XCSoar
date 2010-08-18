@@ -206,14 +206,9 @@ WndListFrame::EnsureVisible(unsigned i)
   assert(i < length);
 
   if (origin > i)
-    origin = i;
+    SetOrigin(i);
   else if (origin + items_visible <= i)
-    origin = i - items_visible + 1;
-  else
-    /* no change, no repaint required */
-    return;
-
-  invalidate();
+    SetOrigin(i - items_visible + 1);
 }
 
 bool
@@ -394,19 +389,16 @@ WndListFrame::on_mouse_down(int x, int y)
     // if click in scroll bar up/down/pgup/pgdn
     if (scroll_bar.in_up_arrow(Pos.y))
       // up
-      origin = ((origin >= 1) ? (origin - 1) : 0U);
+      SetOrigin(origin - 1);
     else if (scroll_bar.in_down_arrow(Pos.y))
       // down
-      origin = max(0U, min(length - items_visible, origin + 1));
+      SetOrigin(origin + 1);
     else if (scroll_bar.above_slider(Pos.y))
       // page up
-      origin = ((origin >= items_visible) ? (origin - items_visible) : 0U);
+      SetOrigin(origin - items_visible);
     else if (scroll_bar.below_slider(Pos.y))
       // page down
-      if (length > origin + items_visible)
-        origin = min(length - items_visible, origin + items_visible);
-
-    invalidate();
+      SetOrigin(origin + items_visible);
   } else {
     // if click in ListBox area
     // -> select appropriate item
