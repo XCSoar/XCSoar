@@ -49,6 +49,7 @@ namespace Layout
   bool square = false;
   int scale = 1;
   unsigned scale_1024 = 1024;
+  unsigned small_scale = 1024;
 }
 
 void
@@ -62,4 +63,6 @@ Layout::Initialize(unsigned width, unsigned height)
   // square should be shrunk
   scale_1024 = max(1024U, minsize * 1024 / (square ? 320 : 240));
   scale = scale_1024 / 1024;
+
+  small_scale = (scale_1024 - 1024) / 2 + 1024;
 }

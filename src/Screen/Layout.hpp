@@ -55,6 +55,12 @@ namespace Layout
   extern int scale;
 
   /**
+   * Fixed-point scaling factor for on-screen objects which don't grow
+   * linearly with the screen resolution.
+   */
+  extern unsigned small_scale;
+
+  /**
    * Initializes the screen layout information provided by this
    * namespace.
    *
@@ -128,6 +134,26 @@ namespace Layout
       return x;
 
     return x * scale;
+  }
+
+  gcc_const
+  static inline int
+  SmallScale(int x)
+  {
+    if (!ScaleSupported())
+      return x;
+
+    return (x * (int)small_scale) >> 10;
+  }
+
+  gcc_const
+  static inline unsigned
+  SmallScale(unsigned x)
+  {
+    if (!ScaleSupported())
+      return x;
+
+    return (x * small_scale) >> 10;
   }
 }
 
