@@ -210,7 +210,8 @@ InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("WP Dist"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  if (!task_stats.task_valid) {
     infobox.SetInvalid();
     return;
   }
@@ -218,8 +219,7 @@ InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.1f"),
-            (double)Units::ToUserDistance(XCSoarInterface::Calculated().
-                task_stats.current_leg.solution_remaining.Vector.Distance));
+            (double)Units::ToUserDistance(task_stats.current_leg.solution_remaining.Vector.Distance));
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -302,7 +302,8 @@ InfoBoxContentNextAltitudeDiff::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("WP AltD"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  if (!task_stats.task_valid) {
     infobox.SetInvalid();
     return;
   }
@@ -310,8 +311,7 @@ InfoBoxContentNextAltitudeDiff::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserAltitude(XCSoarInterface::Calculated().
-                task_stats.current_leg.solution_remaining.AltitudeDifference));
+            (double)Units::ToUserAltitude(task_stats.current_leg.solution_remaining.AltitudeDifference));
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -324,7 +324,8 @@ InfoBoxContentNextAltitudeRequire::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("WP AltR"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  if (!task_stats.task_valid) {
     infobox.SetInvalid();
     return;
   }
@@ -332,8 +333,7 @@ InfoBoxContentNextAltitudeRequire::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserAltitude(XCSoarInterface::Calculated().
-                task_stats.current_leg.solution_remaining.AltitudeRequired));
+            (double)Units::ToUserAltitude(task_stats.current_leg.solution_remaining.AltitudeRequired));
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -374,13 +374,14 @@ InfoBoxContentFinalDistance::Update(InfoBoxWindow &infobox)
     return;
   }
 
+  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+
   // Set Value
   TCHAR tmp[32];
-  double Value = (XCSoarInterface::Calculated().common_stats.task_finished ?
-                  Units::ToUserDistance(XCSoarInterface::Calculated().
-                    task_stats.current_leg.solution_remaining.Vector.Distance) :
-                  Units::ToUserDistance(XCSoarInterface::Calculated().
-                    task_stats.total.remaining.get_distance()));
+  double Value = common_stats.task_finished ?
+    Units::ToUserDistance(task_stats.current_leg.solution_remaining.Vector.Distance) :
+    Units::ToUserDistance(task_stats.total.remaining.get_distance());
   _stprintf(tmp, _T("%2.0f"), Value);
   infobox.SetValue(tmp);
 
@@ -394,17 +395,16 @@ InfoBoxContentFinalETE::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("Fin ETE"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
-      !XCSoarInterface::Calculated().task_stats.total.achievable() ||
-      !positive(XCSoarInterface::Calculated().task_stats.
-                total.TimeRemaining)) {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+
+  if (!task_stats.task_valid || !task_stats.total.achievable() ||
+      !positive(task_stats.total.TimeRemaining)) {
     infobox.SetInvalid();
     return;
   }
 
   TCHAR tmp[32];
-  int dd = abs((int)XCSoarInterface::Calculated().
-               task_stats.total.TimeRemaining) % (3600 * 24);
+  int dd = abs((int)task_stats.total.TimeRemaining) % (3600 * 24);
   int hours = (dd / 3600);
   int mins = (dd / 60 - hours * 60);
   int seconds = (dd - mins * 60 - hours * 3600);
@@ -434,15 +434,14 @@ InfoBoxContentFinalETA::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("Fin ETA"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
-      !XCSoarInterface::Calculated().task_stats.total.achievable()) {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  if (!task_stats.task_valid || !task_stats.total.achievable()) {
     infobox.SetInvalid();
     return;
   }
 
   TCHAR tmp[32];
-  int dd = abs((int)(XCSoarInterface::Calculated().task_stats.total.
-      solution_remaining.TimeElapsed +
+  int dd = abs((int)(task_stats.total.solution_remaining.TimeElapsed +
       fixed(DetectCurrentTime(&XCSoarInterface::Basic())))) % (3600 * 24);
   int hours = (dd / 3600);
   int mins = (dd / 60 - hours * 60);
@@ -464,7 +463,8 @@ InfoBoxContentFinalAltitudeDiff::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("Fin AltD"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  if (!task_stats.task_valid) {
     infobox.SetInvalid();
     return;
   }
@@ -472,8 +472,7 @@ InfoBoxContentFinalAltitudeDiff::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserAltitude(XCSoarInterface::Calculated().
-                task_stats.total.solution_remaining.AltitudeDifference));
+            (double)Units::ToUserAltitude(task_stats.total.solution_remaining.AltitudeDifference));
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -486,7 +485,8 @@ InfoBoxContentFinalAltitudeRequire::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("Fin AltR"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  if (!task_stats.task_valid) {
     infobox.SetInvalid();
     return;
   }
@@ -494,8 +494,7 @@ InfoBoxContentFinalAltitudeRequire::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserAltitude(XCSoarInterface::Calculated().
-                task_stats.total.solution_remaining.AltitudeRequired));
+            (double)Units::ToUserAltitude(task_stats.total.solution_remaining.AltitudeRequired));
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -508,7 +507,8 @@ InfoBoxContentTaskSpeed::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("V Task Av"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  if (!task_stats.task_valid) {
     infobox.SetInvalid();
     return;
   }
@@ -516,8 +516,7 @@ InfoBoxContentTaskSpeed::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserTaskSpeed(XCSoarInterface::Calculated().
-                task_stats.total.remaining.get_speed()));
+            (double)Units::ToUserTaskSpeed(task_stats.total.remaining.get_speed()));
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -530,7 +529,8 @@ InfoBoxContentTaskSpeedAchieved::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("V Tsk Ach"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  if (!task_stats.task_valid) {
     infobox.SetInvalid();
     return;
   }
@@ -538,8 +538,7 @@ InfoBoxContentTaskSpeedAchieved::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserTaskSpeed(XCSoarInterface::Calculated().
-                task_stats.total.remaining_effective.get_speed()));
+            (double)Units::ToUserTaskSpeed(task_stats.total.remaining_effective.get_speed()));
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -552,7 +551,8 @@ InfoBoxContentTaskSpeedInstant::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("V Tsk Ins"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  if (!task_stats.task_valid) {
     infobox.SetInvalid();
     return;
   }
@@ -560,8 +560,7 @@ InfoBoxContentTaskSpeedInstant::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserTaskSpeed(XCSoarInterface::Calculated().
-                                           task_stats.total.remaining_effective.
+            (double)Units::ToUserTaskSpeed(task_stats.total.remaining_effective.
                                            get_speed_incremental()));
   infobox.SetValue(tmp);
 
@@ -575,12 +574,13 @@ InfoBoxContentFinalLD::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("Fin LD"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  if (!task_stats.task_valid) {
     infobox.SetInvalid();
     return;
   }
 
-  fixed gradient = XCSoarInterface::Calculated().task_stats.total.gradient;
+  fixed gradient = task_stats.total.gradient;
 
   if (!positive(gradient) || gradient > fixed(500)) {
     infobox.SetValue(_T("+++"));
@@ -598,12 +598,13 @@ InfoBoxContentFinalGR::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("Fin GR"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  if (!task_stats.task_valid) {
     infobox.SetInvalid();
     return;
   }
 
-  fixed gradient = XCSoarInterface::Calculated().task_stats.total.gradient;
+  fixed gradient = task_stats.total.gradient;
 
   if (!positive(gradient) || gradient > fixed(500)) {
     infobox.SetValue(_T("+++"));
@@ -618,22 +619,22 @@ InfoBoxContentFinalGR::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentHomeDistance::Update(InfoBoxWindow &infobox)
 {
+  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+
   // Set Title
   infobox.SetTitle(_T("Home Dis"));
 
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserDistance(XCSoarInterface::Calculated().
-                                          common_stats.vector_home.Distance));
+            (double)Units::ToUserDistance(common_stats.vector_home.Distance));
   infobox.SetValue(tmp);
 
   // Set Unit
   infobox.SetValueUnit(Units::DistanceUnit);
 
   _stprintf(tmp, _T("%d")_T(DEG),
-            (int)XCSoarInterface::Calculated().common_stats.vector_home.
-            Bearing.value_degrees());
+            (int)common_stats.vector_home.Bearing.value_degrees());
   infobox.SetComment(tmp);
 }
 
@@ -648,11 +649,12 @@ InfoBoxContentOLC::Update(InfoBoxWindow &infobox)
     return;
   }
 
+  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.1f"),
-            (double)Units::ToUserDistance(XCSoarInterface::Calculated().
-                                          common_stats.distance_olc));
+            (double)Units::ToUserDistance(common_stats.distance_olc));
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -665,16 +667,17 @@ InfoBoxContentTaskAATime::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("AA Time"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
-      !XCSoarInterface::Calculated().task_stats.total.achievable() ||
-      !positive(XCSoarInterface::Calculated().common_stats.aat_time_remaining)) {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+
+  if (!task_stats.task_valid || !task_stats.total.achievable() ||
+      !positive(common_stats.aat_time_remaining)) {
     infobox.SetInvalid();
     return;
   }
 
   TCHAR tmp[32];
-  int dd = abs((int)XCSoarInterface::Calculated().
-               common_stats.aat_time_remaining) % (3600 * 24);
+  int dd = abs((int)common_stats.aat_time_remaining) % (3600 * 24);
   int hours = (dd / 3600);
   int mins = (dd / 60 - hours * 60);
   int seconds = (dd - mins * 60 - hours * 3600);
@@ -704,17 +707,19 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("AA dT"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
-      !XCSoarInterface::Calculated().task_stats.total.achievable() ||
-      !positive(XCSoarInterface::Calculated().task_stats.total.TimeRemaining) ||
-      !positive(XCSoarInterface::Calculated().common_stats.aat_time_remaining)) {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+
+  if (!task_stats.task_valid || !task_stats.total.achievable() ||
+      !positive(task_stats.total.TimeRemaining) ||
+      !positive(common_stats.aat_time_remaining)) {
     infobox.SetInvalid();
     return;
   }
 
   TCHAR tmp[32];
-  fixed diff = XCSoarInterface::Calculated().task_stats.total.TimeRemaining -
-               XCSoarInterface::Calculated().common_stats.aat_time_remaining;
+  fixed diff = task_stats.total.TimeRemaining -
+    common_stats.aat_time_remaining;
   int dd = abs((int)diff) % (3600 * 24);
   int hours = (dd / 3600);
   int mins = (dd / 60 - hours * 60);
@@ -744,9 +749,8 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxWindow &infobox)
   if (negative(diff))
     // Red
     infobox.SetColor(1);
-  else if (XCSoarInterface::Calculated().task_stats.total.TimeRemaining <
-           XCSoarInterface::Calculated().common_stats.aat_time_remaining +
-           fixed(5))
+  else if (task_stats.total.TimeRemaining <
+           common_stats.aat_time_remaining + fixed(5))
     // Blue
     infobox.SetColor(2);
   else
@@ -760,7 +764,8 @@ InfoBoxContentTaskAADistance::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("AA Dtgt"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  if (!task_stats.task_valid) {
     infobox.SetInvalid();
     return;
   }
@@ -768,7 +773,7 @@ InfoBoxContentTaskAADistance::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserDistance(
-      XCSoarInterface::Calculated().task_stats.total.planned.get_distance()));
+      task_stats.total.planned.get_distance()));
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -781,7 +786,8 @@ InfoBoxContentTaskAADistanceMax::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("AA Dmax"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  if (!task_stats.task_valid) {
     infobox.SetInvalid();
     return;
   }
@@ -789,7 +795,7 @@ InfoBoxContentTaskAADistanceMax::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserDistance(
-      XCSoarInterface::Calculated().task_stats.distance_max));
+      task_stats.distance_max));
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -802,7 +808,8 @@ InfoBoxContentTaskAADistanceMin::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("AA Dmin"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  if (!task_stats.task_valid) {
     infobox.SetInvalid();
     return;
   }
@@ -810,7 +817,7 @@ InfoBoxContentTaskAADistanceMin::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserDistance(
-      XCSoarInterface::Calculated().task_stats.distance_min));
+      task_stats.distance_min));
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -823,8 +830,10 @@ InfoBoxContentTaskAASpeed::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("AA Vtgt"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
-      !positive(XCSoarInterface::Calculated().common_stats.aat_speed_remaining)) {
+  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+
+  if (!task_stats.task_valid || !positive(common_stats.aat_speed_remaining)) {
     infobox.SetInvalid();
     return;
   }
@@ -832,7 +841,7 @@ InfoBoxContentTaskAASpeed::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserTaskSpeed(
-      XCSoarInterface::Calculated().common_stats.aat_speed_remaining));
+      common_stats.aat_speed_remaining));
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -845,8 +854,10 @@ InfoBoxContentTaskAASpeedMax::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("AA Vmax"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
-      !positive(XCSoarInterface::Calculated().common_stats.aat_speed_max)) {
+  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+
+  if (!task_stats.task_valid || !positive(common_stats.aat_speed_max)) {
     infobox.SetInvalid();
     return;
   }
@@ -854,7 +865,7 @@ InfoBoxContentTaskAASpeedMax::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserTaskSpeed(
-      XCSoarInterface::Calculated().common_stats.aat_speed_max));
+      common_stats.aat_speed_max));
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -867,8 +878,10 @@ InfoBoxContentTaskAASpeedMin::Update(InfoBoxWindow &infobox)
   // Set Title
   infobox.SetTitle(_T("AA Vmin"));
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
-      !positive(XCSoarInterface::Calculated().common_stats.aat_speed_min)) {
+  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+
+  if (!task_stats.task_valid || !positive(common_stats.aat_speed_min)) {
     infobox.SetInvalid();
     return;
   }
@@ -876,7 +889,7 @@ InfoBoxContentTaskAASpeedMin::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserTaskSpeed(
-      XCSoarInterface::Calculated().common_stats.aat_speed_min));
+      common_stats.aat_speed_min));
   infobox.SetValue(tmp);
 
   // Set Unit
