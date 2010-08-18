@@ -72,7 +72,7 @@ protected:
   /** The number of items visible at a time. */
   unsigned items_visible;
   /** The index of the selected item on the screen. */
-  unsigned relative_cursor;
+  unsigned cursor;
 
   bool dragging;
   int drag_line;
@@ -129,7 +129,7 @@ public:
    * @return The current cursor position
    */
   unsigned GetCursorIndex() const {
-    return origin + relative_cursor;
+    return cursor;
   }
 
   /**
@@ -169,7 +169,7 @@ protected:
   RECT item_rect(unsigned i) const {
     RECT rc;
     rc.left = 0;
-    rc.top = i * item_height;
+    rc.top = (int)(i - origin) * item_height;
     rc.right = scroll_bar.get_left(get_size());
     rc.bottom = rc.top + item_height;
     return rc;

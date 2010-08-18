@@ -58,7 +58,7 @@ WndListFrame::WndListFrame(ContainerWindow &parent,
                            unsigned _item_height):
   item_height(_item_height),
   length(0), origin(0), items_visible(Height / item_height),
-  relative_cursor(0),
+  cursor(0),
   dragging(false),
   ActivateCallback(NULL),
   CursorCallback(NULL),
@@ -93,7 +93,7 @@ bool
 WndListFrame::on_setfocus()
 {
   PaintWindow::on_setfocus();
-  invalidate_item(relative_cursor);
+  invalidate_item(cursor);
   return true;
 }
 
@@ -101,7 +101,7 @@ bool
 WndListFrame::on_killfocus()
 {
   PaintWindow::on_killfocus();
-  invalidate_item(relative_cursor);
+  invalidate_item(cursor);
   return true;
 }
 
@@ -118,15 +118,15 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
   canvas.select(Fonts::MapBold);
 
   for (unsigned i = start; i < end; i++) {
-    if (i == relative_cursor) {
+    if (i == cursor) {
       Brush brush(selected_background_color);
       canvas.fill_rectangle(rc, brush);
     } else
       canvas.fill_rectangle(rc, background_brush);
 
-    PaintItemCallback(canvas, rc, origin + i);
+    PaintItemCallback(canvas, rc, i);
 
-    if (has_focus() && i == relative_cursor)
+    if (has_focus() && i == cursor)
       canvas.draw_focus(rc);
 
     ::OffsetRect(&rc, 0, rc.bottom - rc.top);
@@ -137,7 +137,7 @@ void
 WndListFrame::on_paint(Canvas &canvas)
 {
   if (PaintItemCallback != NULL)
-    DrawItems(canvas, 0, items_visible + 1);
+    DrawItems(canvas, origin, origin + items_visible + 1);
 
   DrawScrollBar(canvas);
 }
@@ -146,8 +146,8 @@ void
 WndListFrame::on_paint(Canvas &canvas, const RECT &dirty)
 {
   if (PaintItemCallback != NULL)
-    DrawItems(canvas, dirty.top / item_height,
-              (dirty.bottom + item_height - 1) / item_height);
+    DrawItems(canvas, origin + dirty.top / item_height,
+              origin + (dirty.bottom + item_height - 1) / item_height);
 
   DrawScrollBar(canvas);
 }
@@ -227,9 +227,9 @@ WndListFrame::SetCursorIndex(unsigned i)
 
   EnsureVisible(i);
 
-  invalidate_item(relative_cursor);
-  relative_cursor = i - origin;
-  invalidate_item(relative_cursor);
+  invalidate_item(cursor);
+  cursor = i;
+  invalidate_item(cursor);
 
   if (CursorCallback != NULL)
     CursorCallback(GetCursorIndex());
@@ -251,9 +251,6 @@ WndListFrame::SetOrigin(unsigned i)
   origin = i;
 
   invalidate();
-
-  if (CursorCallback != NULL)
-    CursorCallback(GetCursorIndex());
 }
 
 bool
@@ -307,7 +304,7 @@ WndListFrame::on_key_down(unsigned key_code)
     return true;
 
   case VK_RIGHT:
-    if (origin + relative_cursor >= length || length <= items_visible)
+    if (cursor >= length || length <= items_visible)
       break;
 
     SetOrigin(origin + items_visible);
