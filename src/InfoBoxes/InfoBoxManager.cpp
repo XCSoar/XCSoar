@@ -450,15 +450,8 @@ InfoBoxManager::Event_Change(int i)
 
   setType(InfoFocus, j);
 
-  Update(*InfoBoxes[InfoFocus], j, true);
+  InfoBoxes[InfoFocus]->UpdateContent();
   Paint();
-}
-
-void
-InfoBoxManager::Update(InfoBoxWindow &info_box, unsigned type, bool needupdate)
-{
-  if (info_box.UpdateContent())
-    return;
 }
 
 void
@@ -485,7 +478,7 @@ InfoBoxManager::DisplayInfoBox()
     if (needupdate)
       InfoBoxes[i]->SetContentProvider(InfoBoxFactory::Create(DisplayType[i]));
 
-    Update(*InfoBoxes[i], DisplayType[i], needupdate);
+    InfoBoxes[i]->UpdateContent();
 
     DisplayTypeLast[i] = DisplayType[i];
   }

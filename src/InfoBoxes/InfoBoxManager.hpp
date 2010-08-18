@@ -61,11 +61,6 @@ private:
   static void setType(unsigned i, char j);
   static void FocusOnWindow(unsigned i, bool selected);
 
-  /**
-   * Updates the layout and the displayed values of the #InfoBoxWindow.
-   */
-  static void Update(InfoBoxWindow &info_box, unsigned type, bool needupdate);
-
   static void DisplayInfoBox();
   static void InfoBoxDrawIfDirty();
   static int GetFocused();
