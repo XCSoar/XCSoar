@@ -41,9 +41,6 @@ include $(topdir)/build/options.mk
 include $(topdir)/build/boost.mk
 include $(topdir)/build/sdl.mk
 include $(topdir)/build/gconf.mk
-
-CPPFLAGS += -DFLARM_AVERAGE
-
 include $(topdir)/build/flags.mk
 include $(topdir)/build/charset.mk
 include $(topdir)/build/warnings.mk

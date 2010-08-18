@@ -321,11 +321,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
 
   // Climb Rate
   if (!WarningMode()) {
-#ifdef FLARM_AVERAGE
     Units::FormatUserVSpeed(traffic.Average30s, tmp, 20);
-#else
-    Units::FormatUserVSpeed(traffic.ClimbRate, tmp, 20);
-#endif
     canvas.select(hfInfoValues);
     sz = canvas.text_size(tmp);
     canvas.text(rc.right - sz.cx, rc.top + hfInfoLabels.get_height(), tmp);

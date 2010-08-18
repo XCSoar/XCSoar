@@ -442,14 +442,12 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   if (WarningMode())
     return;
 
-#ifdef FLARM_AVERAGE
   // if vertical speed to small or negative -> skip this one
   if (side_display_type == 1 && (traffic.Average30s < fixed(0.5)
         || (traffic.Type != FLARM_TRAFFIC::acGlider
             && traffic.Type != FLARM_TRAFFIC::acHangGlider
             && traffic.Type != FLARM_TRAFFIC::acParaGlider)))
       return;
-#endif
 
   // Select font
   canvas.background_transparent();
@@ -458,11 +456,9 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   // Format string
   TCHAR tmp[10];
 
-#ifdef FLARM_AVERAGE
   if (side_display_type == 1)
     Units::FormatUserVSpeed(traffic.Average30s, tmp, 10, false);
   else
-#endif
     Units::FormatUserArrival(traffic.RelativeAltitude, tmp, 10, true);
 
   SIZE sz = canvas.text_size(tmp);

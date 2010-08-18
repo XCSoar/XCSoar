@@ -39,8 +39,6 @@ Copyright_License {
 #ifndef FLARMCALCULATIONS_H
 #define FLARMCALCULATIONS_H
 
-#ifdef FLARM_AVERAGE
-
 #include "FLARM/FlarmId.hpp"
 #include "ClimbAverageCalculator.hpp"
 
@@ -58,7 +56,5 @@ private:
   typedef std::map<FlarmId, ClimbAverageCalculator*> AverageCalculatorMap;
   AverageCalculatorMap averageCalculatorMap;
 };
-
-#endif
 
 #endif

@@ -42,6 +42,7 @@ Copyright_License {
 #include "Device/device.hpp"
 #include "Protection.hpp"
 #include "Device/Geoid.h"
+#include "FLARM/FlarmCalculations.h"
 #include "Math/Earth.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Checksum.h"
@@ -60,10 +61,7 @@ Copyright_License {
 using std::min;
 using std::max;
 
-#ifdef FLARM_AVERAGE
-#include "FLARM/FlarmCalculations.h"
 static FlarmCalculations flarmCalculations;
-#endif
 
 bool NMEAParser::ignore_checksum;
 
@@ -1037,11 +1035,9 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   // alt
   flarm_slot->Altitude = flarm_slot->RelativeAltitude + GPS_INFO->GPSAltitude;
 
-#ifdef FLARM_AVERAGE
   flarm_slot->Average30s = flarmCalculations.Average30s(flarm_slot->ID,
                                                         GPS_INFO->Time,
                                                         flarm_slot->Altitude);
-#endif
 
   // QUESTION TB: never returns true?!
   return false;

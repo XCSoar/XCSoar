@@ -106,11 +106,7 @@ void UpdateChanging() {
   ((WndProperty *)wf->FindByName(_T("prpDirectionV")))->SetText(tmp);
 
   // Fill climb speed field
-#ifdef FLARM_AVERAGE
   Units::FormatUserVSpeed(target->Average30s, tmp, 20);
-#else
-  Units::FormatUserVSpeed(target->ClimbRate, tmp, 20);
-#endif
   ((WndProperty *)wf->FindByName(_T("prpVSpeed")))->SetText(tmp);
 }
 

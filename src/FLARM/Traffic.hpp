@@ -95,9 +95,7 @@ struct FLARM_TRAFFIC {
   /** Last time the FLARM target was seen */
   fixed Time_Fix;
   AircraftType Type;
-#ifdef FLARM_AVERAGE
   fixed Average30s;
-#endif
 
   bool defined() const {
     return ID.defined();

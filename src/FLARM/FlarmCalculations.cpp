@@ -36,7 +36,6 @@ Copyright_License {
 }
 */
 
-#ifdef FLARM_AVERAGE
 #include "FLARM/FlarmCalculations.h"
 #include "FLARM/State.hpp"
 
@@ -55,5 +54,3 @@ FlarmCalculations::Average30s(FlarmId flarmId, fixed curTime, fixed curAltitude)
 
   return itemTemp->GetAverage(curTime, curAltitude, fixed(30));
 }
-
-#endif

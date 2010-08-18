@@ -78,10 +78,6 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
   // Create point array that will form that arrow polygon
   POINT Arrow[5];
 
-  // double dX, dY;
-  TextInBoxMode_t displaymode;
-  displaymode.AsInt = 0;
-
   // Determine scale factor for use in Scaled mode
   fixed screenrange = GetScreenDistanceMeters();
   fixed scalefact = screenrange / 6000;
@@ -134,10 +130,6 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
     sc_av = sc;
     sc_av.y += IBLSCALE(16);
 
-#ifndef FLARM_AVERAGE
-    if (traffic.HasName())
-      TextInBox(hDC, traffic.Name, sc.x + IBLSCALE(3), sc.y, 0, displaymode, true);
-#else
     const TCHAR *label_name;
     TCHAR label_avg[100];
 
@@ -209,7 +201,6 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
         canvas.text(sc_av.x, sc_av.y, label_avg);
       }
     }
-#endif
 
     // If FLARM alarm draw alarm icon below corresponding target
     if ((traffic.AlarmLevel > 0) && (traffic.AlarmLevel < 4))
