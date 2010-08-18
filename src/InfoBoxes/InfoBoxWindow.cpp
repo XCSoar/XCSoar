@@ -82,6 +82,9 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent, int X, int Y, int Width, 
 void
 InfoBoxWindow::SetValueUnit(Units_t Value)
 {
+  if (mValueUnit == Value)
+    return;
+
   mValueUnit = Value;
   invalidate(recValue);
 }
@@ -115,33 +118,39 @@ InfoBoxWindow::SetValue(const TCHAR *Value)
 void
 InfoBoxWindow::SetColor(int value)
 {
-  if (Appearance.InfoBoxColors)
-    colorValue = value;
-  else
-    colorValue = 0;
+  if (!Appearance.InfoBoxColors)
+    value = 0;
 
+  if (colorValue == value)
+    return;
+
+  colorValue = value;
   invalidate(recValue);
 }
 
 void
 InfoBoxWindow::SetColorBottom(int value)
 {
-  if (Appearance.InfoBoxColors)
-    colorComment = value;
-  else
-    colorComment = 0;
+  if (!Appearance.InfoBoxColors)
+    value = 0;
 
+  if (colorComment == value)
+    return;
+
+  colorComment = value;
   invalidate(recComment);
 }
 
 void
 InfoBoxWindow::SetColorTop(int value)
 {
-  if (Appearance.InfoBoxColors)
-    colorTitle = value;
-  else
-    colorTitle = 0;
+  if (!Appearance.InfoBoxColors)
+    value = 0;
 
+  if (colorTitle == value)
+    return;
+
+  colorTitle = value;
   invalidate(recTitle);
 }
 
