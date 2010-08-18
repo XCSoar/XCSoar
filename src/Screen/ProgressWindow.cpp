@@ -55,7 +55,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 
   unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
 
-  logo.load(width >= 280 && height >= 220 ? IDB_SWIFT : IDB_SWIFT2);
+  logo.load(width >= 240 && height >= 220 ? IDB_SWIFT : IDB_SWIFT2);
 
   VirtualCanvas canvas(1, 1);
   unsigned text_height = canvas.text_height(_T("W"));
