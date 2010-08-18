@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "RenderTaskPoint.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Projection.hpp"

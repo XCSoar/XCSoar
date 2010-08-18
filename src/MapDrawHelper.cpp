@@ -35,7 +35,9 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "MapDrawHelper.hpp"
+#include "Screen/Canvas.hpp"
 #include "Projection.hpp"
 #include "SettingsUser.hpp"
 #include "MapCanvas.hpp"

@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Screen/Chart.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"

@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "FlightStatistics.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"

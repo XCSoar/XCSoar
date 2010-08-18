@@ -8,6 +8,7 @@
 #include "Screen/Graphics.hpp"
 #include "Projection.hpp"
 #include "SettingsUser.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 
 RenderObservationZone::RenderObservationZone(Canvas &_canvas,
