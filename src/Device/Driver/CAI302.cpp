@@ -271,6 +271,7 @@ convert_string(char *dest, size_t size, const TCHAR *src)
 bool
 CAI302Device::Declare(const Declaration *decl)
 {
+  const int ASYNCPAUSE302 = 700;
   nDeclErrorCode = 0;
 
   port->StopRxThread();
@@ -296,6 +297,7 @@ CAI302Device::Declare(const Declaration *decl)
   ExpectString(port, "$$$");
 
   port->Write("O\r");
+  Sleep(ASYNCPAUSE302);
 
   cai302_OdataNoArgs_t cai302_OdataNoArgs;
   port->Read(&cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs));
@@ -305,7 +307,8 @@ CAI302Device::Declare(const Declaration *decl)
   }
 
   port->Write("O 0\r"); // 0=active pilot
-  Sleep(1000); // some params come up 0 if we don't wait!
+  Sleep(ASYNCPAUSE302);
+
   cai302_OdataPilot_t cai302_OdataPilot;
   port->Read(&cai302_OdataPilot, min(sizeof(cai302_OdataPilot),
                                        (size_t)cai302_OdataNoArgs.PilotRecordSize+3));
@@ -324,6 +327,8 @@ CAI302Device::Declare(const Declaration *decl)
   swap(cai302_OdataPilot.MarginHeight);
 
   port->Write("G\r");
+  Sleep(ASYNCPAUSE302);
+
   cai302_GdataNoArgs_t cai302_GdataNoArgs;
   port->Read(&cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs));
   if (!ExpectString(port, "up>")) {
@@ -332,7 +337,8 @@ CAI302Device::Declare(const Declaration *decl)
   }
 
   port->Write("G 0\r");
-  Sleep(1000);
+  Sleep(ASYNCPAUSE302);
+
   cai302_Gdata_t cai302_Gdata;
   port->Read(&cai302_Gdata, cai302_GdataNoArgs.GliderRecordSize + 3);
   if (!ExpectString(port, "up>")) {
