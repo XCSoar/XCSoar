@@ -2,8 +2,8 @@ SVG_ICONS = $(wildcard Data/icons/*.svg)
 SVG_NOALIAS_ICONS = $(patsubst Data/icons/%.svg,output/data/icons/%.svg,$(SVG_ICONS))
 PNG_ICONS_19 = $(patsubst Data/icons/%.svg,output/data/icons/%-19.png,$(SVG_ICONS))
 BMP_ICONS_19 = $(PNG_ICONS_19:.png=.bmp)
-PNG_ICONS_39 = $(patsubst Data/icons/%.svg,output/data/icons/%-39.png,$(SVG_ICONS))
-BMP_ICONS_39 = $(PNG_ICONS_39:.png=.bmp)
+PNG_ICONS_31 = $(patsubst Data/icons/%.svg,output/data/icons/%-31.png,$(SVG_ICONS))
+BMP_ICONS_31 = $(PNG_ICONS_31:.png=.bmp)
 
 ifeq ($(WINHOST),y)
   IM_PREFIX := im-
@@ -18,9 +18,9 @@ $(SVG_NOALIAS_ICONS): output/data/icons/%.svg: build/no_anti_aliasing.xsl Data/i
 $(PNG_ICONS_19): output/data/icons/%-19.png: output/data/icons/%.svg | output/data/icons/dirstamp
 	@$(NQ)echo "  SVG     $@"
 	$(Q)rsvg-convert --width=19 $< -o $@
-$(PNG_ICONS_39): output/data/icons/%-39.png: output/data/icons/%.svg | output/data/icons/dirstamp
+$(PNG_ICONS_31): output/data/icons/%-31.png: output/data/icons/%.svg | output/data/icons/dirstamp
 	@$(NQ)echo "  SVG     $@"
-	$(Q)rsvg-convert --width=39 $< -o $@
+	$(Q)rsvg-convert --width=31 $< -o $@
 
 # extract alpha channel
 %-alpha.png: %.png
@@ -38,7 +38,7 @@ $(PNG_ICONS_39): output/data/icons/%-39.png: output/data/icons/%.svg | output/da
 $(BMP_ICONS_19): %.bmp: %-tile.png
 	@$(NQ)echo "  BMP     $@"
 	$(Q)$(IM_PREFIX)convert $< +dither -colors 256 $@
-$(BMP_ICONS_39): %.bmp: %-tile.png
+$(BMP_ICONS_31): %.bmp: %-tile.png
 	@$(NQ)echo "  BMP     $@"
 	$(Q)$(IM_PREFIX)convert $< +dither -colors 256 $@
 
@@ -47,7 +47,7 @@ ifeq ($(HAVE_WIN32),y)
 RESOURCE_TEXT = Data/XCSoar.rc
 RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/$(notdir $(RESOURCE_TEXT:.rc=.rsc))
 RESOURCE_FILES = $(wildcard Data/Dialogs/*.xml)
-RESOURCE_FILES += $(BMP_ICONS_19) $(BMP_ICONS_39)
+RESOURCE_FILES += $(BMP_ICONS_19) $(BMP_ICONS_31)
 
 $(RESOURCE_BINARY): $(RESOURCE_TEXT) $(RESOURCE_FILES) | $(TARGET_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  WINDRES $@"
