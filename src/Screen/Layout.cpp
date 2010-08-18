@@ -55,17 +55,15 @@ namespace Layout
 void
 Layout::Initialize(unsigned width, unsigned height)
 {
-  unsigned maxsize = max(width, height);
-  unsigned minsize = min(width, height);
+  landscape = width > height;
+  square = width == height;
 
+  unsigned minsize = min(width, height);
   dscale = max(1.0, minsize / 240.0); // always start w/ shortest dimension
 
-  if (maxsize == minsize)  // square should be shrunk
+  if (square)  // square should be shrunk
     dscale *= 240.0 / 320.0;
 
   scale = (int)dscale;
   IntScaleFlag = (((double)scale) == dscale);
-
-  landscape = width > height;
-  square = width == height;
 }
