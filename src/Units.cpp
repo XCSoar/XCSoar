@@ -570,6 +570,8 @@ Units::FormatUserDistance(fixed Distance, TCHAR *Buffer, size_t size,
     prec = 1;
   else if (value > fixed_one)
     prec = 2;
+  else if (!IncludeUnit)
+    prec = 3;
   else {
     prec = 3;
     if (DistanceUnit == unKiloMeter) {
@@ -626,6 +628,8 @@ Units::FormatUserMapScale(Units_t *Unit, fixed Distance, TCHAR *Buffer,
   else if ((DistanceUnit == unKiloMeter && value >= fixed(0.999)) ||
            (DistanceUnit != unKiloMeter && value >= fixed(0.160)))
     prec = 1;
+  else if (!IncludeUnit)
+    prec = 2;
   else {
     prec = 2;
     if (DistanceUnit == unKiloMeter) {
