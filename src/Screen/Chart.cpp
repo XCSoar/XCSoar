@@ -405,6 +405,9 @@ Chart::DrawXGrid(const fixed tic_step, const fixed zero, const int Style,
 
   int xmin, ymin, xmax, ymax;
 
+  /** the minimum next position of the text, to avoid overlapping */
+  int next_text = rc.left;
+
   //  bool do_units = ((x_max-zero)/tic_step)<10;
 
   for (fixed xval = zero; xval <= x_max; xval += tic_step) {
@@ -421,12 +424,14 @@ Chart::DrawXGrid(const fixed tic_step, const fixed zero, const int Style,
     if ((xval < x_max) && (xmin >= rc.left + BORDER_X) && (xmin <= rc.right)) {
       StyleLine(line[0], line[1], Style);
 
-      if (draw_units) {
+      if (draw_units && xmin >= next_text) {
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, xval * unit_step / tic_step, unit_step);
 
         canvas.background_transparent();
         canvas.text(xmin, ymax - IBLSCALE(17), unit_text);
+
+        next_text = xmin + canvas.text_size(unit_text).cx + Layout::FastScale(2);
       }
     }
   }
