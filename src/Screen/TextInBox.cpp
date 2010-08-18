@@ -45,7 +45,7 @@ Copyright_License {
 #include "Appearance.hpp"
 #include "Sizes.h" /* for WPCIRCLESIZE */
 
-bool
+static bool
 TextInBoxMoveInView(POINT *offset, RECT *brect, const RECT &MapRect)
 {
   bool res = false;
