@@ -46,8 +46,12 @@ namespace Layout
 {
   extern bool landscape;
   extern bool square;
-  extern double dscale;
-  extern bool IntScaleFlag;
+
+  /**
+   * Fixed-point scaling factor, fractional part is 10 bits (factor
+   * 1024).
+   */
+  extern unsigned scale_1024;
   extern int scale;
 
   /**
@@ -76,7 +80,7 @@ namespace Layout
   static inline bool
   ScaleEnabled()
   {
-    return ScaleSupported() && (dscale > 1);
+    return ScaleSupported() && scale_1024 > 1024;
   }
 
   gcc_const
@@ -86,16 +90,17 @@ namespace Layout
     if (!ScaleSupported())
       return x;
 
-    return IntScaleFlag
-      ? x * scale
-      : (int)(x * dscale);
+    return (x * (int)scale_1024) >> 10;
   }
 
   gcc_const
   static inline unsigned
   Scale(unsigned x)
   {
-    return Scale((int)x);
+    if (!ScaleSupported())
+      return x;
+
+    return (x * scale_1024) >> 10;
   }
 
   gcc_const
@@ -112,7 +117,7 @@ namespace Layout
     if (!ScaleSupported())
       return x;
 
-    return x * dscale;
+    return x * scale_1024 / 1024.;
   }
 
   gcc_const

@@ -58,7 +58,7 @@ static void
 OnSplashPaint(WindowControl *Sender, Canvas &canvas)
 {
   Bitmap splash_bitmap;
-  if (Layout::dscale > 1.5)
+  if (Layout::scale_1024 > 1024 * 3 / 2)
     splash_bitmap.load(IDB_SWIFT);
   else
     splash_bitmap.load(IDB_SWIFT2);

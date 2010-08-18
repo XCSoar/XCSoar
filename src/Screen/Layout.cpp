@@ -48,8 +48,7 @@ namespace Layout
   bool landscape = false;
   bool square = false;
   int scale = 1;
-  double dscale = 1.0;
-  bool IntScaleFlag = false;
+  unsigned scale_1024 = 1024;
 }
 
 void
@@ -59,11 +58,8 @@ Layout::Initialize(unsigned width, unsigned height)
   square = width == height;
 
   unsigned minsize = min(width, height);
-  dscale = max(1.0, minsize / 240.0); // always start w/ shortest dimension
-
-  if (square)  // square should be shrunk
-    dscale *= 240.0 / 320.0;
-
-  scale = (int)dscale;
-  IntScaleFlag = (((double)scale) == dscale);
+  // always start w/ shortest dimension
+  // square should be shrunk
+  scale_1024 = max(1024U, minsize * 1024 / (square ? 320 : 240));
+  scale = scale_1024 / 1024;
 }
