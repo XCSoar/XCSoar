@@ -160,11 +160,7 @@ InitialiseFontsAltair()
 static void
 InitialiseLogFonts()
 {
-  int FontHeight = Layout::Scale(35);
-
-#ifndef _WIN32_WCE
-  FontHeight = (int)(FontHeight / 1.35);
-#endif
+  int FontHeight = Layout::SmallScale(35);
 
 #ifndef ENABLE_SDL
   // oversize first so can then scale down
