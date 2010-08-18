@@ -678,7 +678,7 @@ InfoBoxManager::Create(RECT rc)
 
   WindowStyle style;
   style.hide();
-  full_window.set(main_window, rc.left, rc.right,
+  full_window.set(main_window, rc.left, rc.top,
                   rc.right - rc.left, rc.bottom - rc.top);
 
   // create infobox windows
