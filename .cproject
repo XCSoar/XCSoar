@@ -251,10 +251,10 @@
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>true</runAllBuilders>
 					</target>
-					<target name="PPC2002" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+					<target name="PPC2000" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>make</buildCommand>
 						<buildArguments>everything  -j4</buildArguments>
-						<buildTarget>TARGET=PPC2002</buildTarget>
+						<buildTarget>TARGET=PPC2000</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>true</runAllBuilders>
@@ -518,10 +518,10 @@
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>true</runAllBuilders>
 					</target>
-					<target name="PPC2002" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+					<target name="PPC2000" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>make</buildCommand>
 						<buildArguments>everything  -j4</buildArguments>
-						<buildTarget>TARGET=PPC2002</buildTarget>
+						<buildTarget>TARGET=PPC2000</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>true</runAllBuilders>
@@ -785,10 +785,10 @@
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>true</runAllBuilders>
 					</target>
-					<target name="PPC2002" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+					<target name="PPC2000" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>make</buildCommand>
 						<buildArguments>everything  -j4</buildArguments>
-						<buildTarget>TARGET=PPC2002</buildTarget>
+						<buildTarget>TARGET=PPC2000</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>true</runAllBuilders>
