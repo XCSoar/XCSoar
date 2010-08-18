@@ -563,9 +563,6 @@ InfoBoxManager::Paint()
 {
   if (!InfoBoxLayout::fullscreen) {
     full_window.hide();
-
-    for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++)
-      InfoBoxes[i]->invalidate();
   } else {
     Canvas &canvas = full_window.get_canvas();
 
