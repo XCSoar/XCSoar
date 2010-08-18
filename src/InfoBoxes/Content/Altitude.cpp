@@ -174,9 +174,9 @@ InfoBoxContentAltitudeQFE::Update(InfoBoxWindow &infobox)
 
   /// @todo fix QFE infobox
 #ifdef OLD_TASK
-  fixed Value = Units::ToUserAltitude(XCSoarInterface::Basic().GPSAltitude - QFEAltitudeOffset);
+  fixed Value = XCSoarInterface::Basic().GPSAltitude - QFEAltitudeOffset;
 #else
-  fixed Value = Units::ToUserAltitude(XCSoarInterface::Basic().GPSAltitude);
+  fixed Value = XCSoarInterface::Basic().GPSAltitude;
 #endif
 
   // Set Value
