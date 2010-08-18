@@ -707,13 +707,13 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     // Create the DrawControl
     WC = new WndOwnerDrawFrame(Parent, X, Y, Width, Height,
-                               WindowStyle(), PaintCallback);
+                               style, PaintCallback);
 
   // FrameControl (WndFrame)
   } else if (_tcscmp(node.getName(), _T("Label")) == 0){
     // Create the FrameControl
     WC = new WndFrame(Parent, X, Y, Width, Height,
-                      WindowStyle());
+                      style);
 
   // ListBoxControl (WndListFrame)
   } else if (_tcscmp(node.getName(), _T("List")) == 0){
