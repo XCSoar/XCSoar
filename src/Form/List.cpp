@@ -40,6 +40,7 @@ Copyright_License {
 #include "Form/Control.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/WindowCanvas.hpp"
 
 #include <assert.h>
 
@@ -245,7 +246,26 @@ WndListFrame::SetOrigin(int i)
   if ((unsigned)i == origin)
     return;
 
+#ifdef WIN32
+  int delta = origin - i;
+#endif
+
   origin = i;
+
+#ifdef WIN32
+  if ((unsigned)abs(delta) < items_visible) {
+    RECT rc = get_client_rect();
+    rc.right = scroll_bar.get_left(get_size());
+    scroll(0, delta * item_height, rc);
+
+    /* repaint the scrollbar synchronously; we could invalidate its
+       area and repaint asynchronously via WM_PAINT, but then the clip
+       rect passed to on_paint() would be the whole client area */
+    WindowCanvas canvas(*this);
+    DrawScrollBar(canvas);
+    return;
+  }
+#endif
 
   invalidate();
 }
