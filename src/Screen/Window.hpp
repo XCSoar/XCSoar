@@ -632,6 +632,10 @@ public:
 
     ::EndPaint(hWnd, ps);
   }
+
+  void scroll(int dx, int dy, const RECT &rc) {
+    ::ScrollWindowEx(hWnd, dx, dy, &rc, NULL, NULL, NULL, SW_INVALIDATE);
+  }
 #endif /* !ENABLE_SDL */
 
 #ifndef ENABLE_SDL
