@@ -11,10 +11,7 @@
 #ifndef XCSOAR_SCREEN_RAW_BITMAP_HPP
 #define XCSOAR_SCREEN_RAW_BITMAP_HPP
 
-#include <windows.h>
-
-#include "Screen/Bitmap.hpp"
-#include "Screen/BitmapCanvas.hpp"
+#include "Screen/Canvas.hpp"
 
 /**
  * BGRColor structure encapsulates color information about one point. Color
@@ -33,12 +30,18 @@ struct BGRColor
 /**
  * This class provides fast drawing methods and offscreen buffer.
  */
-class RawBitmap : public Bitmap {
+class RawBitmap {
 protected:
   const unsigned int width;
   const unsigned int height;
   const unsigned int corrected_width;
   BGRColor *buffer;
+
+#ifdef ENABLE_SDL
+  SDL_Surface *surface;
+#else
+  BITMAPINFO bi;
+#endif
 
 public:
   /**
@@ -49,6 +52,7 @@ public:
    * @param clr Fill color of the buffer
    */
   RawBitmap(unsigned width, unsigned height, const Color color);
+  ~RawBitmap();
 
   /**
    * Returns the Buffer
@@ -105,6 +109,18 @@ public:
    */
   unsigned GetHeight() const {
     return height;
+  }
+
+  void stretch_to(Canvas &dest_canvas) const {
+#ifdef ENABLE_SDL
+    Canvas src_canvas(surface);
+    dest_canvas.stretch(src_canvas, 0, 0, width, height);
+#else
+    ::StretchDIBits(dest_canvas, 0, 0,
+                    dest_canvas.get_width(), dest_canvas.get_height(),
+                    0, 0, width, height,
+                    buffer, &bi, DIB_RGB_COLORS, SRCCOPY);
+#endif
   }
 };
 

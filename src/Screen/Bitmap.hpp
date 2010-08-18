@@ -93,8 +93,6 @@ public:
 
   bool load_file(const TCHAR *path);
 
-  void *create(unsigned width, unsigned height);
-
   void reset();
 
   const SIZE get_size() const;

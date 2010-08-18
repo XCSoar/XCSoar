@@ -94,7 +94,7 @@ public:
                      unsigned height_scale, int contrast, int brightness,
                      const Angle sunazimuth, const Angle sunelevation);
 
-  const Bitmap &GetImage() const {
+  const RawBitmap &GetImage() const {
     return *image;
   }
 

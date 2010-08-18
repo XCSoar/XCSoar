@@ -257,56 +257,6 @@ Bitmap::load_file(const TCHAR *path)
   return false;
 }
 
-void *
-Bitmap::create(unsigned width, unsigned height)
-{
-#ifdef ENABLE_SDL
-  Uint32 rmask, gmask, bmask, amask;
-
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-  rmask = 0x000000ff;
-  gmask = 0x0000ff00;
-  bmask = 0x00ff0000;
-#else
-  rmask = 0x00ff0000;
-  gmask = 0x0000ff00;
-  bmask = 0x000000ff;
-#endif
-  amask = 0x00000000;
-
-  surface = ::SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 24,
-                                   rmask, gmask, bmask, amask);
-  assert(!SDL_MUSTLOCK(surface));
-
-  return surface->pixels;
-#else /* !ENABLE_SDL */
-  DIBINFO bmi;
-
-  bmi.bmiHeader.biBitCount = 24;
-  bmi.bmiHeader.biClrImportant = 0;
-  bmi.bmiHeader.biClrUsed = 0;
-  bmi.bmiHeader.biCompression = 0;
-  bmi.bmiHeader.biHeight = height;
-  bmi.bmiHeader.biPlanes = 1;
-  bmi.bmiHeader.biSize = 40;
-  bmi.bmiHeader.biSizeImage = width * height * 3;
-  bmi.bmiHeader.biWidth = width;
-  bmi.bmiHeader.biXPelsPerMeter = 3780;
-  bmi.bmiHeader.biYPelsPerMeter = 3780;
-  bmi.bmiColors[0].rgbBlue = 0;
-  bmi.bmiColors[0].rgbGreen = 0;
-  bmi.bmiColors[0].rgbRed = 0;
-  bmi.bmiColors[0].rgbReserved = 0;
-
-  VOID *pvBits;
-  HDC hDC = ::GetDC(NULL);
-  bitmap = CreateDIBSection(hDC, &bmi, DIB_RGB_COLORS, &pvBits, NULL, 0);
-  ::ReleaseDC(NULL, hDC);
-
-  return pvBits;
-#endif /* !ENABLE_SDL */
-}
-
 void
 Bitmap::reset()
 {

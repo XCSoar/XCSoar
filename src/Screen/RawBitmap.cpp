@@ -57,13 +57,51 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight, const Color clr)
   assert(nWidth > 0);
   assert(nHeight > 0);
 
-  buffer = (BGRColor *)create(corrected_width, height);
-  assert(defined());
-  assert(buffer);
+#ifdef ENABLE_SDL
+  Uint32 rmask, gmask, bmask, amask;
+
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+  rmask = 0x000000ff;
+  gmask = 0x0000ff00;
+  bmask = 0x00ff0000;
+#else
+  rmask = 0x00ff0000;
+  gmask = 0x0000ff00;
+  bmask = 0x000000ff;
+#endif
+  amask = 0x00000000;
+
+  surface = ::SDL_CreateRGBSurface(SDL_SWSURFACE, corrected_width, height, 24,
+                                   rmask, gmask, bmask, amask);
+  assert(!SDL_MUSTLOCK(surface));
+
+  buffer = (BGRColor *)surface->pixels;
+#else /* !ENABLE_SDL */
+  bi.bmiHeader.biSize = sizeof(bi.bmiHeader);
+  bi.bmiHeader.biWidth = corrected_width;
+  bi.bmiHeader.biHeight = height;
+  bi.bmiHeader.biPlanes = 1;
+  bi.bmiHeader.biBitCount = 24;
+  bi.bmiHeader.biCompression = BI_RGB;
+  bi.bmiHeader.biSizeImage = 0;
+  bi.bmiHeader.biXPelsPerMeter = 3780;
+  bi.bmiHeader.biYPelsPerMeter = 3780;
+  bi.bmiHeader.biClrUsed = 0;
+  bi.bmiHeader.biClrImportant = 0;
+
+  buffer = new BGRColor[corrected_width * height];
+#endif /* !ENABLE_SDL */
 
   BGRColor bgrColor = BGRColor(clr.blue(), clr.green(), clr.red());
   for (BGRColor *p = buffer,
          *end = buffer + corrected_width * height;
        p < end; ++p)
     *p++ = bgrColor;
+}
+
+RawBitmap::~RawBitmap()
+{
+#ifndef ENABLE_SDL
+  delete[] buffer;
+#endif
 }
