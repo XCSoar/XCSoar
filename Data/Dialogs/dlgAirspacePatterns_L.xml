@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 
 <Form Name="frmAirspacePatterns" Width="240" Height="320" Caption="Select pattern">
   <Button Name="cmdClose" Caption="Close" X="2" Y="270" Width="98" Height="28" OnClick="OnCloseClicked"/>

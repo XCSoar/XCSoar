@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 
 <Form Name="frmFlarmTraffic" Width="320" Height="240" Caption="FLARM Traffic">
   <Button Name="cmdDetails" Caption="Details" X="3" Y="103" Width="58" Height="28" />

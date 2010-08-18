@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 
 <Form Name="frmThermalAssistant" Width="320" Height="240" Caption="Thermal Assistant">
   <Button Name="cmdClose" Caption="Close" X="3" Y="193" Width="58" Height="28"/>

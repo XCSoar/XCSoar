@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 
 <Form Name="frmTaskProperties" Width="240" Height="320" Caption="Task Properties">
   <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="60" Height="22" OnClick="OnCloseClicked"/>

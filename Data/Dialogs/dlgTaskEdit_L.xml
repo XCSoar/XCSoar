@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 
 <Form Name="frmTaskEdit" Width="320" Height="240" Caption="Edit Task">
   <Canvas Name="frmTaskView" X="4" Y="26" Width="94" Height="100" Border="1" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />

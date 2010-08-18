@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 
 <Form Name="frmWaypointOutOfTerrain" X="30" Y="55" Width="200" Height="120" Caption="Waypoint Parser">
   <Label Name="frmWaypointOutOfTerrainText" X="0" Y="0" Width="200" Height="80"/>

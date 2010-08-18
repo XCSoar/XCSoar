@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 
 <Form Name="frmAirspaceSelect" Width="240" Height="320" Caption="Select Airspace">
   <Label X="0" Y="0" Width="100" Height="20" Caption="Filter..." />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 
 <Form Name="frmAirspaceWarning" X="2" Y="2" Width="236" Height="172" Caption="Airspace Warnings">
   <List Name="frmAirspaceWarningList" X="1" Y="1" Width="-1" Height="-40" ItemHeight="30"/>

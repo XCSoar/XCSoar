@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 
 <Form Width="320" Height="240" Caption="Analysis">
   <Canvas Name="frmGrid" X="90" Y="2" Width="-1" Height="218" Border="1" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnAnalysisPaint" />

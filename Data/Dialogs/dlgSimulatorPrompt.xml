@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 
 <Form Name="frmComboPopup" Width="240" Height="320" Caption="" BackColor="0xFFFFFF">
   <Label X="8" Y="100" Width="310" Height="20" Caption="What do you want to do:" />

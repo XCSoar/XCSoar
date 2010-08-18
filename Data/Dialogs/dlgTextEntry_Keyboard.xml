@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 
 <Form Name="frmTextEntry_Keyboard" Width="240" Height="320" Caption="Edit text">
   <Edit Name="prpText"  Caption=""   X="0" Y="2" Width="190" Height="22" CaptionWidth="1" ReadOnly="1" />
