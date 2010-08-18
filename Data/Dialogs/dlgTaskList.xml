@@ -3,7 +3,7 @@
 <Form Name="frmTaskList" Width="240" Height="320" Caption="Task Browser">
   <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="77" Height="22" OnClick="OnCloseClicked"/>
 
-  <List Name="frmTasks" X="2" Y="26" Width="234" Height="129" ItemHeight="18" Border="1"/>
+  <List Name="frmTasks" X="2" Y="26" Width="234" Height="129" ItemHeight="18"/>
 
   <Button Name="cmdLoadSave" Caption="Load" X="2" Y="158" Width="77" Height="22" OnClick="OnLoadSaveClicked"/>
   <Button Name="cmdRename" Caption="Rename" X="81" Y="158" Width="77" Height="22" OnClick="OnRenameClicked"/>

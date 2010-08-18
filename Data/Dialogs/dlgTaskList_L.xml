@@ -11,6 +11,6 @@
 
   <Label Name="frmSummary" X="2" Y="144" Width="135" Height="50" Border="1"/>
 
-  <List Name="frmTasks" X="139" Y="24" Width="-2" Height="-2" ItemHeight="18" Border="1"/>
+  <List Name="frmTasks" X="139" Y="24" Width="-2" Height="-2" ItemHeight="18"/>
 
 </Form>

@@ -725,6 +725,13 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     style.tab_stop();
 
+    if (is_embedded() || Layout::scale_1024 < 2048)
+      /* sunken edge doesn't fit well on the tiny screen of an
+         embedded device */
+      style.border();
+    else
+      style.sunken_edge();
+
     window = new WndListFrame(Parent.GetClientAreaWindow(),
                               X, Y, Width, Height,
                               style,
