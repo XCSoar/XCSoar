@@ -36,46 +36,32 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MAP_WINDOW_LABELS_HPP
-#define XCSOAR_MAP_WINDOW_LABELS_HPP
+#ifndef XCSOAR_SCREEN_TEXT_IN_BOX_HPP
+#define XCSOAR_SCREEN_TEXT_IN_BOX_HPP
 
-#include "Screen/TextInBox.hpp"
-#include "Util/NonCopyable.hpp"
-#include "Sizes.h" /* for NAME_SIZE */
+#include <windef.h>
 
-#include <tchar.h>
+class Canvas;
+class LabelBlock;
 
-class WayPointLabelList : private NonCopyable {
-public:
-  struct Label{
-    TCHAR Name[NAME_SIZE+1];
-    POINT Pos;
-    TextInBoxMode_t Mode;
-    int AltArivalAGL;
-    bool inTask;
-    bool isLandable;
-    bool isAirport;
-  };
+typedef union
+{
+  unsigned int AsInt;
+  struct
+  {
+    unsigned Border :1;
+    unsigned FillBackground :1;
+    unsigned AlignRight :1;
+    unsigned Reachable :1;
+    unsigned AlignCenter :1;
+    unsigned WhiteBorder :1;
+    unsigned WhiteBold :1;
+    unsigned NoSetFont :1;
+    unsigned Color :3;
+  } AsFlag;
+} TextInBoxMode_t;
 
-protected:
-  Label labels[50];
-  unsigned num_labels;
-
-public:
-  WayPointLabelList():num_labels(0) {}
-
-  void Add(const TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
-           int AltArivalAGL, bool inTask, bool isLandable, bool isAirport,
-           const RECT &MapRect);
-  void Sort();
-
-  unsigned size() const {
-    return num_labels;
-  }
-
-  const Label &operator[](unsigned i) const {
-    return labels[i];
-  }
-};
+bool TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
+    TextInBoxMode_t Mode, const RECT MapRect, LabelBlock *label_block = NULL);
 
 #endif

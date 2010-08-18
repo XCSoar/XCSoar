@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "MapWindow.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/TextInBox.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/UnitSymbol.hpp"

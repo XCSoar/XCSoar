@@ -45,28 +45,10 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 #include "Screen/Color.hpp"
 #include "Screen/Pen.hpp"
-#include "Screen/Canvas.hpp"
 #include "Airspace/AirspaceClass.hpp"
 
 struct SETTINGS_MAP;
 class LabelBlock;
-
-typedef union
-{
-  unsigned int AsInt;
-  struct
-  {
-    unsigned Border :1;
-    unsigned FillBackground :1;
-    unsigned AlignRight :1;
-    unsigned Reachable :1;
-    unsigned AlignCenter :1;
-    unsigned WhiteBorder :1;
-    unsigned WhiteBold :1;
-    unsigned NoSetFont :1;
-    unsigned Color :3;
-  } AsFlag;
-} TextInBoxMode_t;
 
 // mode are flags
 // bit 0 == fill background add border / 1
@@ -191,8 +173,5 @@ public:
 };
 
 extern ScreenGraphics MapGfx;
-
-bool TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
-    TextInBoxMode_t Mode, const RECT MapRect, LabelBlock *label_block = NULL);
 
 #endif
