@@ -237,15 +237,17 @@ WndListFrame::SetCursorIndex(unsigned i)
 }
 
 void
-WndListFrame::SetOrigin(unsigned i)
+WndListFrame::SetOrigin(int i)
 {
   if (length <= items_visible)
     return;
 
-  if (i + items_visible > length)
+  if (i < 0)
+    i = 0;
+  else if ((unsigned)i + items_visible > length)
     i = length - items_visible;
 
-  if (i == origin)
+  if ((unsigned)i == origin)
     return;
 
   origin = i;
@@ -300,7 +302,7 @@ WndListFrame::on_key_down(unsigned key_code)
     if (origin == 0 || length <= items_visible)
       break;
 
-    SetOrigin(origin > items_visible ? origin - items_visible : 0);
+    SetOrigin(origin - items_visible);
     return true;
 
   case VK_RIGHT:
@@ -361,8 +363,6 @@ WndListFrame::on_mouse_move(int x, int y, unsigned keys)
     return true;
   } else if (dragging) {
     int new_origin = drag_line - y / (int)item_height;
-    if (new_origin < 0)
-      new_origin = 0;
     SetOrigin(new_origin);
     return true;
   }

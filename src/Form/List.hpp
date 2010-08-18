@@ -143,7 +143,7 @@ public:
   /**
    * Scrolls to the specified index.
    */
-  void SetOrigin(unsigned i);
+  void SetOrigin(int i);
 
 protected:
   /** Checks whether a ScrollBar is needed and shows/hides it */
