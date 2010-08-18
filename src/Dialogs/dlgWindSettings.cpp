@@ -104,7 +104,7 @@ static CallBackTableEntry_t CallBackTable[] = {
 void
 dlgWindSettingsShowModal(void)
 {
-  wf = dlgLoadFromXML(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
 		                  _T("IDR_XML_WINDSETTINGS"));
   if (wf == NULL)
     return;

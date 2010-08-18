@@ -236,10 +236,10 @@ dlgTaskEditShowModal(SingleWindow &parent, OrderedTask** task)
   task_modified = false;
 
   if (Layout::landscape)
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
                         parent, _T("IDR_XML_TASKEDIT_L"));
   else
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
                         parent, _T("IDR_XML_TASKEDIT"));
 
   assert(wf != NULL);

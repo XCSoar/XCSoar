@@ -68,7 +68,7 @@ bool
 dlgSimulatorPromptShowModal()
 {
 #ifdef SIMULATOR_AVAILABLE
-  wf = dlgLoadFromXML(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                       Layout::landscape ? _T("IDR_XML_SIMULATORPROMPT_L") :
                       _T("IDR_XML_SIMULATORPROMPT"));
   if (!wf)

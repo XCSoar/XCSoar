@@ -226,7 +226,7 @@ dlgFontEditShowModal(const TCHAR * FontDescription,
 {
   bool bRetVal = false;
 
-  wf = dlgLoadFromXML(CallBackTable,
+  wf = LoadDialog(CallBackTable,
                       XCSoarInterface::main_window, _T("IDR_XML_FONTEDIT"));
   if (wf == NULL)
     return false;

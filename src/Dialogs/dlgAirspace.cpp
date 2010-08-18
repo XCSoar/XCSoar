@@ -157,10 +157,10 @@ dlgAirspaceShowModal(bool coloredit)
   colormode = coloredit;
 
   if (!Layout::landscape)
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
         XCSoarInterface::main_window, _T("IDR_XML_AIRSPACE_L"));
   else
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
         XCSoarInterface::main_window, _T("IDR_XML_AIRSPACE"));
 
   if (!wf)

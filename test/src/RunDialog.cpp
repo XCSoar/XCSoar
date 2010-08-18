@@ -144,7 +144,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                   0, 0, 320, 240);
   main_window.show();
 
-  WndForm *form = dlgLoadFromXML(NULL, main_window, argv[1]);
+  WndForm *form = LoadDialog(NULL, main_window, argv[1]);
   if (form == NULL) {
     fprintf(stderr, "Failed to load resource '%s'\n", argv[1]);
     return 1;

@@ -437,11 +437,11 @@ dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task,
   active_index = index;
 
   if (Layout::landscape)
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
                         parent,
                         _T("IDR_XML_TASKPOINT_L"));
   else
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
                         parent,
                         _T("IDR_XML_TASKPOINT"));
   if (!wf)

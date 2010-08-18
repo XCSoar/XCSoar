@@ -103,7 +103,7 @@ SaveFromForm(const WndForm &form, SETTINGS_COMPUTER &settings)
 
 
 void dlgVoiceShowModal(void){
-  wf = dlgLoadFromXML(CallBackTable,
+  wf = LoadDialog(CallBackTable,
 		      XCSoarInterface::main_window,
 		      _T("IDR_XML_VOICE"));
 

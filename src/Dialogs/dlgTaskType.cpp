@@ -155,11 +155,11 @@ dlgTaskTypeShowModal(SingleWindow &parent, OrderedTask** task)
   wf = NULL;
 
   if (Layout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
                         parent,
                         _T("IDR_XML_TASKTYPE_L"));
   } else {
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
                         parent,
                         _T("IDR_XML_TASKTYPE"));
   }

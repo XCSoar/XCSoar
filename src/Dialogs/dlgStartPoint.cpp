@@ -121,11 +121,11 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgStartPointShowModal(void) {
   if (!Layout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
                         XCSoarInterface::main_window,
                         _T("IDR_XML_STARTPOINT_L"));
   } else {
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
                         XCSoarInterface::main_window,
                         _T("IDR_XML_STARTPOINT"));
   }

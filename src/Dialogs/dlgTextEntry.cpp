@@ -226,7 +226,7 @@ dlgTextEntryHighscoreType(TCHAR *text, int width)
 
   max_width = min(MAX_TEXTENTRY, width);
 
-  wf = dlgLoadFromXML(CallBackTable,
+  wf = LoadDialog(CallBackTable,
                       XCSoarInterface::main_window, _T("IDR_XML_TEXTENTRY"));
   if (!wf)
     return;

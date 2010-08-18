@@ -139,7 +139,7 @@ dlgAirspaceDetails(const AbstractAirspace& the_airspace)
 {
   airspace = &the_airspace;
 
-  wf = dlgLoadFromXML(CallBackTable,
+  wf = LoadDialog(CallBackTable,
                       XCSoarInterface::main_window,
                       _T("IDR_XML_AIRSPACEDETAILS"));
   if (!wf) return;

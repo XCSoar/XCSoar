@@ -139,11 +139,11 @@ dlgTaskManagerShowModal(SingleWindow &parent)
   parent_window = &parent;
 
   if (Layout::landscape)
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
                         parent,
                         _T("IDR_XML_TASKMANAGER_L"));
   else
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
                         parent,
                         _T("IDR_XML_TASKMANAGER"));
 

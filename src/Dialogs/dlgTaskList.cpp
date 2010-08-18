@@ -327,10 +327,10 @@ dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)
   task_store.scan();
 
   if (Layout::landscape)
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
                         parent, _T("IDR_XML_TASKLIST_L"));
   else
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
                         parent, _T("IDR_XML_TASKLIST"));
 
   if (!wf)

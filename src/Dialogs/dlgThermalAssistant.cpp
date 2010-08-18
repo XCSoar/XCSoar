@@ -89,7 +89,7 @@ void
 dlgThermalAssistantShowModal()
 {
   // Load dialog from XML
-  wf = dlgLoadFromXML(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                       Layout::landscape ? _T("IDR_XML_THERMALASSISTANT_L") :
                                           _T("IDR_XML_THERMALASSISTANT"));
   if (!wf)

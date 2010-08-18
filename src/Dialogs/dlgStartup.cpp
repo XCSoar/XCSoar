@@ -87,10 +87,10 @@ dlgStartupShowModal(void)
   LogStartUp(_T("Startup dialog"));
 
   if (Layout::landscape)
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
                         XCSoarInterface::main_window, _T("IDR_XML_STARTUP_L"));
   else
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
                         XCSoarInterface::main_window, _T("IDR_XML_STARTUP"));
 
   if (!wf)

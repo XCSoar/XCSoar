@@ -456,7 +456,7 @@ static CallBackTableEntry_t CallBackTable[]={
 void
 dlgAirspaceWarningInit(SingleWindow &parent)
 {
-  wf = dlgLoadFromXML(CallBackTable,
+  wf = LoadDialog(CallBackTable,
                       parent,
                       _T("IDR_XML_AIRSPACEWARNING"));
   if (wf == NULL)

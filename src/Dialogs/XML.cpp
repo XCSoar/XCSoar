@@ -326,7 +326,7 @@ CalcWidthStretch(XMLNode *xNode, const RECT rc, const DialogStyle_t eDialogStyle
  * @return The WndForm object
  */
 WndForm *
-dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
+LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
                const TCHAR* resource)
 {
 

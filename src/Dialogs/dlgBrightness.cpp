@@ -115,7 +115,7 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 void dlgBrightnessShowModal(void){
-  wf = dlgLoadFromXML(CallBackTable,
+  wf = LoadDialog(CallBackTable,
 		      XCSoarInterface::main_window,
 		      _T("IDR_XML_BRIGHTNESS"));
   if (wf == NULL)

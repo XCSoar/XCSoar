@@ -275,7 +275,7 @@ dlgFlarmTrafficDetailsShowModal(FlarmId id)
   target_id = id;
 
   // Load dialog from XML
-  wf = dlgLoadFromXML(CallBackTable,
+  wf = LoadDialog(CallBackTable,
       XCSoarInterface::main_window, Layout::landscape ?
       _T("IDR_XML_FLARMTRAFFICDETAILS_L") : _T("IDR_XML_FLARMTRAFFICDETAILS"));
 

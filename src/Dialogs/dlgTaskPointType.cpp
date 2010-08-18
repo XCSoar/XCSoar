@@ -210,9 +210,9 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
     way_point = NULL;
 
   if (Layout::landscape)
-    wf = dlgLoadFromXML(CallBackTable, parent, _T("IDR_XML_TASKPOINTTYPE_L"));
+    wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_TASKPOINTTYPE_L"));
   else
-    wf = dlgLoadFromXML(CallBackTable, parent, _T("IDR_XML_TASKPOINTTYPE"));
+    wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_TASKPOINTTYPE"));
 
   if (!wf)
     return false;

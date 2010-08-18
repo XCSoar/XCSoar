@@ -466,11 +466,11 @@ dlgWaypointEditShowModal(Waypoint &way_point)
   global_wpt = &way_point;
 
   if (!Layout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
                         XCSoarInterface::main_window,
                         _T("IDR_XML_WAYPOINTEDIT_L"));
   } else {
-    wf = dlgLoadFromXML(CallBackTable,
+    wf = LoadDialog(CallBackTable,
                         XCSoarInterface::main_window,
                         _T("IDR_XML_WAYPOINTEDIT"));
   }

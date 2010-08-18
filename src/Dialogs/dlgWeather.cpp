@@ -150,7 +150,7 @@ void
 dlgWeatherShowModal(void)
 {
 
-  wf = dlgLoadFromXML(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                       !Layout::landscape ?
                       _T("IDR_XML_WEATHER_L") : _T("IDR_XML_WEATHER"));
   if (wf == NULL)

@@ -295,7 +295,7 @@ static CallBackTableEntry_t CallBackTable[] = {
 void
 dlgTaskCalculatorShowModal(SingleWindow &parent)
 {
-  wf = dlgLoadFromXML(CallBackTable, parent, _T("IDR_XML_TASKCALCULATOR"));
+  wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_TASKCALCULATOR"));
   if (!wf)
     return;
 

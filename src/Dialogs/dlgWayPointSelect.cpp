@@ -552,7 +552,7 @@ static CallBackTableEntry_t CallBackTable[] = {
 const Waypoint*
 dlgWayPointSelect(SingleWindow &parent, const GEOPOINT &location)
 {
-  wf = dlgLoadFromXML(CallBackTable, parent, Layout::landscape ?
+  wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
       _T("IDR_XML_WAYPOINTSELECT_L") : _T("IDR_XML_WAYPOINTSELECT"));
 
   if (!wf)

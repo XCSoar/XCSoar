@@ -241,7 +241,7 @@ dlgChecklistShowModal(void)
     first = false;
   }
 
-  wf = dlgLoadFromXML(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                       Layout::landscape ?
                       _T("IDR_XML_CHECKLIST_L") : _T("IDR_XML_CHECKLIST"));
   if (!wf)
