@@ -49,7 +49,12 @@ private:
   Angle(const fixed& init_value): m_value(init_value) {};
 
 public:
-  Angle():m_value(fixed_zero) {};
+  /**
+   * The default constructor does not initialize the value.  It must
+   * not be used until it is assigned.
+   */
+  Angle() {}
+
   Angle(const Angle& angle): m_value(angle.m_value) {};
 
   static Angle native(const fixed& value) {
