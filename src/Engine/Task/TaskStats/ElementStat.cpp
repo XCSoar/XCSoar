@@ -44,6 +44,7 @@ ElementStat::ElementStat():
   TimeRemaining(0.0),
   TimePlanned(0.0),
   gradient(0.0),
+  travelled(false),
   initialised(false)
 {
 
@@ -72,10 +73,10 @@ ElementStat::reset()
 void 
 ElementStat::calc_speeds(const fixed dt)
 {
-  remaining_effective.calc_speed(this);
-  remaining.calc_speed(this);
-  planned.calc_speed(this);
-  travelled.calc_speed(this);
+  remaining_effective.calc_speed(TimeRemaining);
+  remaining.calc_speed(TimeRemaining);
+  planned.calc_speed(TimePlanned);
+  travelled.calc_speed(TimeElapsed);
 
   if (!initialised) {
     if (positive(dt) && TimeElapsed > fixed(15)) {

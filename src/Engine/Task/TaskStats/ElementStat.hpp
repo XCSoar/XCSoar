@@ -65,10 +65,10 @@ public:
   fixed TimePlanned; /**< Time (s) of overall element */
   fixed gradient; /**< Gradient to element completion */
 
-  DistanceRemainingStat remaining_effective; /**< Stats for effective remaining distance of element */
-  DistanceRemainingStat remaining; /**< Stats for actual remaining distance of element */
-  DistancePlannedStat planned; /**< Stats for overall element distance */
-  DistanceTravelledStat travelled; /**< Stats for travelled distance in this element */
+  DistanceStat remaining_effective; /**< Stats for effective remaining distance of element */
+  DistanceStat remaining; /**< Stats for actual remaining distance of element */
+  DistanceStat planned; /**< Stats for overall element distance */
+  DistanceStat travelled; /**< Stats for travelled distance in this element */
 
   GlideResult solution_planned; /**< Glide solution for planned element */
   GlideResult solution_travelled; /**< Glide solution for travelled element */

@@ -63,8 +63,6 @@ public:
  */
   DistanceStat(const bool is_positive=true);
 
-    virtual ~DistanceStat() {};
-
 /** 
  * Setter for distance value
  * 
@@ -107,7 +105,7 @@ public:
  * 
  * @param es ElementStat (used for time access)
  */
-  virtual void calc_speed(const ElementStat* es) = 0;
+  void calc_speed(fixed time);
 
 /** 
  * Calculate incremental speed from previous step.
@@ -134,54 +132,5 @@ private:
 
   void reset_incremental_speed();
 };
-
-/**
- * Specialisation of DistanceStat for remaining distances
- */
-class DistanceRemainingStat:
-  public DistanceStat
-{
-public:
-/** 
- * Calculate speed (distance remaining/time remaining)
- * 
- * @param es ElementStat (used for time access)
- */
-  void calc_speed(const ElementStat* es);
-};
-
-/**
- * Specialisation of DistanceStat for planned distances
- */
-class DistancePlannedStat:
-  public DistanceStat
-{
-public:
-/** 
- * Calculate speed (distance planned/time planned)
- * 
- * @param es ElementStat (used for time access)
- */
-  void calc_speed(const ElementStat* es);
-};
-
-/**
- * Specialisation of DistanceStat for travelled distances
- */
-class DistanceTravelledStat:
-  public DistanceStat
-{
-public:
-  DistanceTravelledStat();
-
-/** 
- * Calculate speed (distance travelled/time elapsed)
- * 
- * @param es ElementStat (used for time access)
- */
-  void calc_speed(const ElementStat* es);
-};
-
-
 
 #endif

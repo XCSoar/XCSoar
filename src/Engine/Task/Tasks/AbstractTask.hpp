@@ -417,8 +417,8 @@ protected:
   virtual void glide_solution_planned(const AIRCRAFT_STATE &state_now,
                                       GlideResult &total,
                                       GlideResult &leg,
-                                      DistanceRemainingStat &total_remaining_effective,
-                                      DistanceRemainingStat &leg_remaining_effective,
+                                      DistanceStat &total_remaining_effective,
+                                      DistanceStat &leg_remaining_effective,
                                       const fixed total_t_elapsed,
                                       const fixed leg_t_elapsed) = 0;
 

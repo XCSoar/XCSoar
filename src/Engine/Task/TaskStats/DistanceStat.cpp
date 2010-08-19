@@ -79,36 +79,11 @@ DistanceStat::reset_incremental_speed()
 }
 
 
-DistanceTravelledStat::DistanceTravelledStat():
-  DistanceStat(false)
-{
-}
-
 void 
-DistanceRemainingStat::calc_speed(const ElementStat* es) 
+DistanceStat::calc_speed(fixed time)
 {
-  if (positive(es->TimeRemaining)) {
-    speed = fixed(distance) / es->TimeRemaining;
-  } else {
-    speed = fixed_zero;
-  }
-}
-
-void 
-DistancePlannedStat::calc_speed(const ElementStat* es) 
-{
-  if (positive(es->TimePlanned)) {
-    speed = fixed(distance) / es->TimePlanned;
-  } else {
-    speed = fixed_zero;
-  }
-}
-
-void 
-DistanceTravelledStat::calc_speed(const ElementStat* es) 
-{
-  if (positive(es->TimeElapsed)) {
-    speed = fixed(distance) / es->TimeElapsed;
+  if (positive(time)) {
+    speed = fixed(distance) / time;
   } else {
     speed = fixed_zero;
   }
