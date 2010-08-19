@@ -327,13 +327,13 @@ OrderedTaskSave(const OrderedTask& task, bool noask)
                      MB_YESNO | MB_ICONQUESTION) != IDYES)
     return false;
 
-  tstring fname;
+  TCHAR fname[15];
   if (!dlgTextEntryShowModal(fname, 10))
     return false;
 
   TCHAR path[MAX_PATH];
-  fname += _T(".tsk");
-  LocalPath(path, fname.c_str());
+  _tcscat(fname, _T(".tsk"));
+  LocalPath(path, fname);
   protected_task_manager.task_save(path, task);
   return true;
 }
