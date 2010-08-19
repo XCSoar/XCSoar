@@ -55,10 +55,6 @@ extern "C" {
   }
   */
 
-  int jas_rtc_GetScanType(void) {
-    return raster_tile_current->GetScanType();
-  }
-
   short* jas_rtc_GetOverview(void) {
     return raster_tile_current->GetOverview();
   }

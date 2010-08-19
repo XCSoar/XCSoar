@@ -294,7 +294,7 @@ RasterTileCache::LoadJPG2000(const char *jp2_filename)
   if (!in) {
     SetInitialised(false);
   } else {
-    jas_image_decode(in, -1, "xcsoar=1");
+    jas_image_decode(in, -1, scan_overview ? "xcsoar=2" : "xcsoar=1");
     jas_stream_close(in);
   }
 }

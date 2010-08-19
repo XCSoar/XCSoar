@@ -338,11 +338,7 @@ static int jpc_dec_parseopts(const char *optstr, jpc_dec_importopts_t *opts)
 			opts->debug = atoi(jas_tvparser_getval(tvp));
 			break;
 		case OPT_XCSOAR:
-			if (jas_rtc_GetScanType()==1) {
-				opts->xcsoar = 2;
-			} else {
-				opts->xcsoar = 1;
-			}
+			opts->xcsoar = atoi(jas_tvparser_getval(tvp));
 			break;
 		case OPT_MAXPKTS:
 			opts->maxpkts = atoi(jas_tvparser_getval(tvp));

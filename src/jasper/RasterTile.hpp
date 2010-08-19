@@ -75,10 +75,6 @@ private:
   unsigned int width, height;
 
 public:
-  bool GetScanType() const {
-    return scan_overview;
-  }
-
   gcc_pure
   short GetField(unsigned int lx,
                  unsigned int ly) const;
