@@ -272,7 +272,6 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
 	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
 	$(SRC)/WayPoint/WayPointFileZander.cpp \
-	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/LocalPath.cpp \
@@ -427,7 +426,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
-	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/Profile.cpp \
 	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/WayPoint/WayPointGlue.cpp \
@@ -524,7 +522,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
-	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Compatibility/string.c \

@@ -41,8 +41,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
-#include "Simulator.hpp"
-#include "Profile.hpp"
+#include "Asset.hpp"
 
 #include <tchar.h>
 
@@ -51,9 +50,8 @@ Copyright_License {
 #include <sys/stat.h>
 #endif
 
-#if defined(WIN32) && !defined(_WIN32_WCE)
-int SCREENWIDTH = 640;
-int SCREENHEIGHT = 480;
+#ifdef WIN32
+#include <windows.h>
 #endif
 
 static long
@@ -144,120 +142,6 @@ void CreateDirectoryIfAbsent(const TCHAR *filename) {
     CreateDirectory(fullname, NULL);
 
 #endif /* !HAVE_POSIX */
-}
-
-/**
- * Reads and parses arguments/options from the command line
- * @param CommandLine not in use
- */
-void
-ParseCommandLine(const TCHAR *CommandLine)
-{
-  TCHAR extrnProfileFile[MAX_PATH];
-  extrnProfileFile[0] = 0;
-
-#ifdef SIMULATOR_AVAILABLE
-  bool bSimTemp=false;
-  bSimTemp = _tcsstr(CommandLine, _T("-simulator")) != NULL;
-  if (bSimTemp) {
-    global_simulator_flag=true;
-    sim_set_in_cmd_line_flag=true;
-  }
-  bSimTemp = _tcsstr(CommandLine, _T("-fly")) != NULL;
-  if (bSimTemp) {
-    global_simulator_flag=false;
-    sim_set_in_cmd_line_flag=true;
-  }
-#endif
-
-  const TCHAR *pC, *pCe;
-
-  pC = _tcsstr(CommandLine, _T("-profile="));
-  if (pC != NULL) {
-    pC += strlen("-profile=");
-    if (*pC == '"') {
-      pC++;
-      pCe = pC;
-      while (*pCe != '"' && *pCe != '\0')
-        pCe++;
-    } else {
-      pCe = pC;
-      while (*pCe != ' ' && *pCe != '\0')
-        pCe++;
-    }
-    if (pCe != NULL && pCe - 1 > pC) {
-      _tcsncpy(extrnProfileFile, pC, pCe - pC);
-      extrnProfileFile[pCe - pC] = '\0';
-    }
-  }
-
-  Profile::SetFiles(extrnProfileFile);
-
-#if defined(WIN32) && !defined(_WIN32_WCE)
-  SCREENWIDTH = 640;
-  SCREENHEIGHT = 480;
-
-  #if defined(SCREENWIDTH_)
-  SCREENWIDTH = SCREENWIDTH_;
-  #endif
-  #if defined(SCREENHEIGHT_)
-  SCREENHEIGHT = SCREENHEIGHT_;
-  #endif
-
-  pC = _tcsstr(CommandLine, _T("-800x480"));
-  if (pC != NULL) {
-    SCREENWIDTH = 800;
-    SCREENHEIGHT = 480;
-  }
-
-  pC = _tcsstr(CommandLine, _T("-480x272"));
-  if (pC != NULL) {
-    SCREENWIDTH = 480;
-    SCREENHEIGHT = 272;
-  }
-
-  pC = _tcsstr(CommandLine, _T("-480x234"));
-  if (pC != NULL) {
-    SCREENWIDTH = 480;
-    SCREENHEIGHT = 234;
-  }
-
-  pC = _tcsstr(CommandLine, _T("-portrait"));
-  if (pC != NULL) {
-    SCREENWIDTH = 480;
-    SCREENHEIGHT = 640;
-  }
-
-  pC = _tcsstr(CommandLine, _T("-square"));
-  if (pC != NULL) {
-    SCREENWIDTH = 480;
-    SCREENHEIGHT = 480;
-  }
-
-  pC = _tcsstr(CommandLine, _T("-small"));
-  if (pC != NULL) {
-    SCREENWIDTH /= 2;
-    SCREENHEIGHT /= 2;
-  }
-
-  pC = _tcsstr(CommandLine, _T("-320x240"));
-  if (pC != NULL) {
-    SCREENWIDTH = 320;
-    SCREENHEIGHT = 240;
-  }
-
-  pC = _tcsstr(CommandLine, _T("-240x320"));
-  if (pC != NULL) {
-    SCREENWIDTH = 240;
-    SCREENHEIGHT = 320;
-  }
-
-  pC = _tcsstr(CommandLine, _T("-240x240"));
-  if (pC != NULL) {
-    SCREENWIDTH = 240;
-    SCREENHEIGHT = 240;
-  }
-#endif
 }
 
 void

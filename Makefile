@@ -309,6 +309,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/UtilsSettings.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/UtilsText.cpp \
+	$(SRC)/CommandLine.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/FileMapping.cpp \
 	$(SRC)/Version.cpp \
