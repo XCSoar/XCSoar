@@ -55,9 +55,9 @@ protected:
   void Initialise();
   bool DoLogging();
   void SetFastLogging();
-  virtual double GetAverageThermal();
+  virtual fixed GetAverageThermal();
 protected:
-  virtual void OnClimbBase(double StartAlt);
+  virtual void OnClimbBase(fixed StartAlt);
   virtual void OnClimbCeiling();
   virtual void OnDepartedThermal();
 private:

@@ -162,7 +162,7 @@ GlideComputerBlackboard::RestoreFinish()
  * Returns the average vertical speed in the current thermal
  * @return Average vertical speed in the current thermal
  */
-double
+fixed
 GlideComputerBlackboard::GetAverageThermal() const
 {
   return max(fixed_zero, calculated_info.ThermalAverage);

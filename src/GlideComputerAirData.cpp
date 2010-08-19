@@ -110,7 +110,7 @@ GlideComputerAirData::ProcessBasic()
 {
   TerrainHeight();
   ProcessSun();
-  SetCalculated().ThermalAverageAdjusted = fixed(GetAverageThermal());
+  SetCalculated().ThermalAverageAdjusted = GetAverageThermal();
 }
 
 /**
