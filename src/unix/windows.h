@@ -45,8 +45,6 @@ Copyright_License {
 
 /* File I/O */
 
-#define DeleteFile unlink
-
 static inline void Sleep(unsigned ms)
 {
   const struct timespec ts = { ms / 1000, (long)ms % 1000000L };

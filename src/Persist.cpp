@@ -49,6 +49,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Asset.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "OS/FileUtil.hpp"
 
 #include <stdio.h>
 
@@ -66,7 +67,7 @@ static TCHAR szCalculationsPersistDirectory[MAX_PATH];
 void
 DeleteCalculationsPersist(void)
 {
-  DeleteFile(szCalculationsPersistFileName);
+  File::Delete(szCalculationsPersistFileName);
 }
 
 /**

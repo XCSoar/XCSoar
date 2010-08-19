@@ -57,6 +57,7 @@
 #include "NMEA/Info.hpp"
 #include "Simulator.hpp"
 #include "Interface.hpp"
+#include "OS/FileUtil.hpp"
 
 #ifdef HAVE_POSIX
 #include <unistd.h>
@@ -714,7 +715,7 @@ DeleteOldestIGCFile(const NMEA_INFO &gps_info, const TCHAR *pathname)
 
   // now, delete the file...
   _stprintf(fullname, _T("%s%s"), pathname, oldestname);
-  DeleteFile(fullname);
+  File::Delete(fullname);
 
   // did delete one
   return true;

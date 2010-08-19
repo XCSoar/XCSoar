@@ -41,6 +41,12 @@ Copyright_License {
 
 #include <tchar.h>
 
+#ifdef HAVE_POSIX
+#include <unistd.h>
+#else
+#include <windows.h>
+#endif
+
 namespace Directory
 {
   bool Exists(const TCHAR* path);
@@ -49,6 +55,16 @@ namespace Directory
 namespace File
 {
   bool Exists(const TCHAR* path);
+
+  static inline bool
+  Delete(const TCHAR *path)
+  {
+#ifdef HAVE_POSIX
+    return unlink(path) == 0;
+#else
+    return DeleteFile(path);
+#endif
+  }
 }
 
 #endif

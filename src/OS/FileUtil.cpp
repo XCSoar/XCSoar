@@ -43,10 +43,6 @@ Copyright_License {
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#ifndef HAVE_POSIX
-#include <windows.h>
-#endif
-
 bool
 Directory::Exists(const TCHAR* path)
 {

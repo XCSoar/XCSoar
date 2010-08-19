@@ -46,6 +46,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "LocalPath.hpp"
 #include "Gauge/TaskView.hpp"
+#include "OS/FileUtil.hpp"
 
 #include <assert.h>
 
@@ -222,7 +223,7 @@ OnDelete()
 
   TCHAR path[MAX_PATH];
   LocalPath(path, fname.c_str());
-  DeleteFile(path);
+  File::Delete(path);
 
   task_store.scan();
   RefreshView();
