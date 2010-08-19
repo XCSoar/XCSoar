@@ -44,7 +44,7 @@ ChartProjection::ChartProjection(const RECT &rc,
                                  const GEOPOINT &fallback_loc) 
 {
   const GEOPOINT center = task.get_task_center(fallback_loc);
-  const fixed radius = max(fixed(1e3), task.get_task_radius(fallback_loc)); 
+  const fixed radius = max(fixed(10000), task.get_task_radius(fallback_loc));
   set_projection(rc, center, radius);
 }
 
@@ -53,7 +53,7 @@ ChartProjection::ChartProjection(const RECT &rc,
                                  const GEOPOINT &fallback_loc) 
 {
   const GEOPOINT center = task.get_task_center(fallback_loc);
-  const fixed radius = max(fixed(1e3), task.get_task_radius(fallback_loc)); 
+  const fixed radius = max(fixed(10000), task.get_task_radius(fallback_loc));
   set_projection(rc, center, radius);
 }
 
@@ -63,7 +63,7 @@ ChartProjection::ChartProjection(const RECT &rc,
 {
   const TaskProjection proj = get_bounds(trace, fallback_loc);
   const GEOPOINT center = proj.get_center();
-  const fixed radius = max(fixed(1e3), proj.get_radius()); 
+  const fixed radius = max(fixed(10000), proj.get_radius());
   set_projection(rc, center, radius);
 }
 
@@ -88,6 +88,6 @@ ChartProjection::ChartProjection(const RECT &rc,
   point.scan_projection(task_projection);
 
   const GEOPOINT center = task_projection.get_center();
-  const fixed radius = max(fixed(1e3), task_projection.get_radius()); 
+  const fixed radius = max(fixed(10000), task_projection.get_radius());
   set_projection(rc, center, radius * fixed(1.3));
 }
