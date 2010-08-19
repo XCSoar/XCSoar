@@ -705,7 +705,7 @@ DeleteOldestIGCFile(const NMEA_INFO &gps_info, const TCHAR *pathname)
     _tcscpy(fullname, pathname);
     _tcscpy(fullname, ent->d_name);
 
-    if (FileExists(fullname) &&
+    if (File::Exists(fullname) &&
         LogFileIsOlder(gps_info, oldestname, ent->d_name))
       // we have a new oldest name
       _tcscpy(oldestname, ent->d_name);

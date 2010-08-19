@@ -41,14 +41,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-bool
-FileExists(const TCHAR *FileName);
-
-#ifdef _UNICODE
-bool
-FileExists(const char *FileName);
-#endif
-
 /**
  * Checks whether the given filename matches the given extension
  * @param filename Filename to check
