@@ -43,22 +43,38 @@ Copyright_License {
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#ifndef HAVE_POSIX
+#include <windows.h>
+#endif
+
 bool
 Directory::Exists(const TCHAR* path)
 {
+#ifdef HAVE_POSIX
   struct stat st;
   if (stat(NarrowPathName(path), &st) != 0)
     return false;
 
   return (st.st_mode & S_IFDIR);
+#else
+  DWORD attributes = GetFileAttributes(path);
+  return attributes != INVALID_FILE_ATTRIBUTES &&
+    (attributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+#endif
 }
 
 bool
 File::Exists(const TCHAR* path)
 {
+#ifdef HAVE_POSIX
   struct stat st;
   if (stat(NarrowPathName(path), &st) != 0)
     return false;
 
   return (st.st_mode & S_IFREG);
+#else
+  DWORD attributes = GetFileAttributes(path);
+  return attributes != INVALID_FILE_ATTRIBUTES &&
+    (attributes & FILE_ATTRIBUTE_DIRECTORY) == 0;
+#endif
 }
