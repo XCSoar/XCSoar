@@ -205,11 +205,11 @@ GlideComputerAirData::DoWindCirclingAltitude()
 }
 
 void
-GlideComputerAirData::SetWindEstimate(const double wind_speed,
-    const double wind_bearing, const int quality)
+GlideComputerAirData::SetWindEstimate(fixed wind_speed, fixed wind_bearing,
+                                      const int quality)
 {
-  Vector v_wind = Vector(SpeedVector(Angle::degrees(fixed(wind_bearing)), 
-                                     fixed(wind_speed)));
+  Vector v_wind = Vector(SpeedVector(Angle::degrees(wind_bearing),
+                                     wind_speed));
 
   windanalyser.slot_newEstimate(Basic(), SetCalculated(), v_wind, quality);
 }
@@ -541,7 +541,7 @@ GlideComputerAirData::AirspaceWarning()
 }
 
 void
-GlideComputerAirData::TerrainFootprint(double screen_range)
+GlideComputerAirData::TerrainFootprint(fixed screen_range)
 {
   if (terrain == NULL || !SettingsComputer().FinalGlideTerrain)
     return;
@@ -559,7 +559,7 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
 
   GlideTerrain g_terrain(SettingsComputer(), *terrain);
 
-  g_terrain.set_max_range(fixed(max(20000.0, screen_range)));
+  g_terrain.set_max_range(max(fixed(20000), screen_range));
   
   const fixed d_bearing = fixed_360 / TERRAIN_ALT_INFO::NUMTERRAINSWEEPS;
 

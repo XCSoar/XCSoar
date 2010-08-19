@@ -66,8 +66,7 @@ public:
   SunEphemeris sun;
   virtual void ProcessIdle();
 
-  void SetWindEstimate(const double wind_speed,
-		       const double wind_bearing,
+  void SetWindEstimate(fixed wind_speed, fixed wind_bearing,
 		       const int quality=3); // JMW check
   WindAnalyser   windanalyser; // JMW TODO, private and lock-protected
 
@@ -105,7 +104,7 @@ private:
   void TerrainHeight();
   void TakeoffLanding();
   void AirspaceWarning();
-  void TerrainFootprint(const double max_dist);
+  void TerrainFootprint(const fixed max_dist);
   void BallastDump();
   void ThermalSources();
   void LastThermalStats();
