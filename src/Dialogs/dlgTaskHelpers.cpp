@@ -327,8 +327,8 @@ OrderedTaskSave(const OrderedTask& task, bool noask)
                      MB_YESNO | MB_ICONQUESTION) != IDYES)
     return false;
 
-  TCHAR fname[15];
-  if (!dlgTextEntryShowModal(fname, 10))
+  TCHAR fname[69];
+  if (!dlgTextEntryShowModal(fname, 64))
     return false;
 
   TCHAR path[MAX_PATH];
