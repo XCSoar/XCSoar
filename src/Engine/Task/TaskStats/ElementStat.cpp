@@ -43,9 +43,7 @@ ElementStat::ElementStat():
   TimeElapsed(0.0),
   TimeRemaining(0.0),
   TimePlanned(0.0),
-  gradient(0.0),
-  travelled(false),
-  initialised(false)
+  gradient(0.0)
 {
 
 
@@ -63,7 +61,7 @@ ElementStat::set_times(const fixed ts,
 }
 
 void
-ElementStat::reset()
+ElementStatComputer::reset()
 {
   initialised = false;
 
@@ -71,18 +69,18 @@ ElementStat::reset()
 }
 
 void 
-ElementStat::calc_speeds(const fixed dt)
+ElementStatComputer::calc_speeds(const fixed dt)
 {
-  remaining_effective.calc_speed(TimeRemaining);
-  remaining.calc_speed(TimeRemaining);
-  planned.calc_speed(TimePlanned);
-  travelled.calc_speed(TimeElapsed);
+  remaining_effective.calc_speed(data.TimeRemaining);
+  remaining.calc_speed(data.TimeRemaining);
+  planned.calc_speed(data.TimePlanned);
+  travelled.calc_speed(data.TimeElapsed);
 
   if (!initialised) {
-    if (positive(dt) && TimeElapsed > fixed(15)) {
+    if (positive(dt) && data.TimeElapsed > fixed(15)) {
       initialised=true;
     }
-    vario.reset(solution_remaining);
+    data.vario.reset(data.solution_remaining);
     remaining_effective.calc_incremental_speed(fixed_zero);
     remaining.calc_incremental_speed(fixed_zero);
     planned.calc_incremental_speed(fixed_zero);
@@ -92,7 +90,7 @@ ElementStat::calc_speeds(const fixed dt)
     remaining.calc_incremental_speed(dt);
     planned.calc_incremental_speed(dt);
     travelled.calc_incremental_speed(dt);
-    vario.update(solution_remaining, fixed(dt));
+    data.vario.update(data.solution_remaining, fixed(dt));
   }
 }
 
@@ -100,4 +98,14 @@ bool
 ElementStat::achievable() const
 {
   return solution_remaining.Solution == GlideResult::RESULT_OK;
+}
+
+ElementStatComputer::ElementStatComputer(ElementStat &_data)
+  :data(_data),
+   remaining_effective(data.remaining_effective),
+   remaining(data.remaining),
+   planned(data.planned),
+   travelled(data.travelled, false),
+   initialised(false)
+{
 }

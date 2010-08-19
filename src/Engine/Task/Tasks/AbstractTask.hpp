@@ -437,6 +437,7 @@ protected:
   unsigned activeTaskPoint; /**< task point sequence index */
   unsigned activeTaskPoint_last; /**< task point sequence index at last update*/
   TaskStats stats; /**< statistics of this task */
+  TaskStatsComputer stats_computer;
   TaskEvents &task_events; /**< reference to task events (feedback) */
   const TaskBehaviour &task_behaviour; /**< reference to task behaviour (settings) */
   GlidePolar &glide_polar; /**< reference to global glide polar */

@@ -47,8 +47,6 @@
 #include "Util/AvFilter.hpp"
 #include "Util/DiffFilter.hpp"
 
-class ElementStat;
-
 /**
  * Simple distance statistics with derived values (speed, incremental speed)
  * Incremental speeds track the short-term variation of distance with time,
@@ -56,12 +54,10 @@ class ElementStat;
  */
 class DistanceStat
 {
+  friend class DistanceStatComputer;
+
 public:
-/** 
- * Constructor; initialises all to zero
- * 
- */
-  DistanceStat(const bool is_positive=true);
+  DistanceStat():distance(fixed_zero), speed(fixed_zero) {}
 
 /** 
  * Setter for distance value
@@ -107,14 +103,6 @@ public:
  */
   void calc_speed(fixed time);
 
-/** 
- * Calculate incremental speed from previous step.
- * Resets incremental speed to speed if dt=0
- * 
- * @param dt Time step (s)
- */
-  void calc_incremental_speed(const fixed dt);
-
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 
                                    const DistanceStat& ds);
@@ -124,6 +112,35 @@ protected:
   fixed distance; /**< Distance (m) of metric */
   fixed speed; /**< Speed (m/s) of metric */
   fixed speed_incremental; /**< Incremental speed (m/s) of metric */
+};
+
+/**
+ * Computer class for DistanceStat.  It holds the incremental and
+ * internal values, while DistanceStat has only the results.
+ */
+class DistanceStatComputer {
+protected:
+  DistanceStat &data;
+
+public:
+  /**
+   * Constructor; initialises all to zero
+   *
+   */
+  DistanceStatComputer(DistanceStat &_data, const bool is_positive=true);
+
+  void calc_speed(fixed time) {
+    data.calc_speed(time);
+  }
+
+  /**
+   * Calculate incremental speed from previous step.
+   * Resets incremental speed to speed if dt=0
+   *
+   * @param dt Time step (s)
+   */
+  void calc_incremental_speed(const fixed dt);
+
 private:
   AvFilter av_dist;
   DiffFilter df;

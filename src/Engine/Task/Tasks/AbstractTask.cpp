@@ -47,6 +47,7 @@ AbstractTask::AbstractTask(enum type _type, TaskEvents &te,
   TaskInterface(_type),
   activeTaskPoint(0),
   activeTaskPoint_last(0-1),
+  stats_computer(stats),
   task_events(te),
   task_behaviour(tb),
   glide_polar(gp),
@@ -208,11 +209,11 @@ AbstractTask::update_stats_speeds(const AIRCRAFT_STATE &state,
   const fixed dt = state.Time-state_last.Time;
   if (!task_finished()) {
     if (task_started()) {
-      stats.total.calc_speeds(dt);
-      stats.current_leg.calc_speeds(dt);
+      stats_computer.total.calc_speeds(dt);
+      stats_computer.current_leg.calc_speeds(dt);
     } else {
-      stats.total.reset();
-      stats.current_leg.reset();
+      stats_computer.total.reset();
+      stats_computer.current_leg.reset();
     }
   }
 }
@@ -247,7 +248,7 @@ AbstractTask::reset()
   reset_auto_mc();
   activeTaskPoint_last = 0-1;
   ce_lpf.reset(fixed_one);
-  stats.reset();
+  stats_computer.reset();
 }
 
 fixed

@@ -87,21 +87,6 @@ public:
                  const AIRCRAFT_STATE& state);
 
 /** 
- * Calculate element speeds.  Incremental speeds are
- * held at bulk speeds within first minute of elapsed time.
- *
- * @param dt Time step of sample (s)
- */
-  void calc_speeds(const fixed dt);
-
-/** 
- * Reset to uninitialised state, to supress calculation
- * of incremental speeds.
- */
-  void reset();
-
-
-/** 
  * Determine whether the task (or subtask) is able to be finished
  * (will fail if MC too low, wind too high etc)
  * 
@@ -113,6 +98,33 @@ public:
   friend std::ostream& operator<< (std::ostream& o, 
                                    const ElementStat& es);
 #endif
+};
+
+class ElementStatComputer {
+  ElementStat &data;
+
+public:
+  DistanceStatComputer remaining_effective;
+  DistanceStatComputer remaining;
+  DistanceStatComputer planned;
+  DistanceStatComputer travelled;
+
+public:
+  ElementStatComputer(ElementStat &_data);
+
+  /**
+   * Calculate element speeds.  Incremental speeds are
+   * held at bulk speeds within first minute of elapsed time.
+   *
+   * @param dt Time step of sample (s)
+   */
+  void calc_speeds(const fixed dt);
+
+  /**
+   * Reset to uninitialised state, to supress calculation
+   * of incremental speeds.
+   */
+  void reset();
 
 private:
   bool initialised;

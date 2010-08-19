@@ -93,5 +93,22 @@ public:
 #endif
 };
 
+class TaskStatsComputer {
+  TaskStats &data;
+public:
+  ElementStatComputer total;
+  ElementStatComputer current_leg;
+
+public:
+  TaskStatsComputer(TaskStats &_data)
+    :data(_data),
+     total(data.total), current_leg(data.current_leg) {}
+
+  /**
+   * Reset each element (for incremental speeds).
+   *
+   */
+  void reset();
+};
 
 #endif

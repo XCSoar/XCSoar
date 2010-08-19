@@ -45,8 +45,6 @@ TaskStats::TaskStats()
 void
 TaskStats::reset()
 {
-  total.reset();
-  current_leg.reset();
   Time = fixed_zero;
   glide_required = fixed_zero;
   cruise_efficiency = fixed_one;
@@ -79,4 +77,12 @@ TaskStats::calc_flight_mode()
   }
 
   return changed;
+}
+
+void
+TaskStatsComputer::reset()
+{
+  data.reset();
+  total.reset();
+  current_leg.reset();
 }
