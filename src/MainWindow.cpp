@@ -55,7 +55,6 @@ Copyright_License {
 #include "Gauge/GaugeCDI.hpp"
 #include "MenuBar.hpp"
 #include "Appearance.hpp"
-#include "Asset.hpp" /* for SCREENWIDTH and SCREENHEIGHT */
 
 /**
  * Destructor of the MainWindow-Class
@@ -108,15 +107,7 @@ MainWindow::set(const TCHAR* text,
 void
 MainWindow::initialise()
 {
-  RECT rc;
-#if defined(WIN32) && !defined(_WIN32_WCE)
-  rc.left = 0;
-  rc.right = SCREENWIDTH;
-  rc.top = 0;
-  rc.bottom = SCREENHEIGHT;
-#else
-  rc = get_client_rect();
-#endif
+  RECT rc = get_client_rect();
 
   Layout::Initialize(rc.right - rc.left, rc.bottom - rc.top);
 
