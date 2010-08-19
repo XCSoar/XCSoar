@@ -76,7 +76,7 @@ void TriggerVarioUpdate()
   if (instrument_thread == NULL)
     return;
 
-  instrument_thread->trigger_vario();
+  instrument_thread->trigger();
 }
 
 #include "DeviceBlackboard.hpp"

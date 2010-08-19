@@ -49,10 +49,6 @@ class InstrumentThread : public WorkerThread {
 public:
   InstrumentThread(GaugeVario &_vario);
 
-  void trigger_vario() {
-    trigger();
-  }
-
 protected:
   virtual void tick();
 };
