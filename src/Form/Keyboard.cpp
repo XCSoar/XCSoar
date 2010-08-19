@@ -197,20 +197,20 @@ KeyboardControl::move_buttons()
 {
   move_buttons_to_row(_T("1234567890"), 0);
   move_buttons_to_row(_T("QWERTYUIOP"), 1);
-  move_buttons_to_row(_T("ASDFGHJKL"), 2, button_width * 0.333);
-  move_buttons_to_row(_T("ZXCVBNM,."), 3, button_width * 0.667);
+  move_buttons_to_row(_T("ASDFGHJKL"), 2, button_width / 3);
+  move_buttons_to_row(_T("ZXCVBNM,."), 3, button_width * 2 / 3);
 
   if (is_landscape()) {
     move_button(_T("cmdMinus"), button_width * 9, button_height * 4);
 
-    move_button(_T("cmdSpace"), button_width * 2.5, button_height * 4);
+    move_button(_T("cmdSpace"), button_width * 5 / 2, button_height * 4);
     resize_button(_T("cmdSpace"), button_width * 3, button_height);
   } else {
     move_button(_T("cmdMinus"), button_width * 8, button_height * 4);
 
     move_button(_T("cmdSpace"), button_width * 2, button_height * 4);
-    resize_button(_T("cmdSpace"), button_width * 5.5, button_height);
-  }                              
+    resize_button(_T("cmdSpace"), button_width * 11 / 2, button_height);
+  }
 }
 
 void

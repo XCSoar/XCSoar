@@ -194,7 +194,7 @@ InitialiseLogFonts()
 #endif /* !ENABLE_SDL */
 
   InitialiseLogfont(&LogTitle, Fonts::GetStandardFontFace(),
-                    (int)(FontHeight * 0.333), true);
+                    FontHeight / 3, true);
 
   // new font for CDI Scale
   InitialiseLogfont(&LogCDI, Fonts::GetStandardFontFace(),
