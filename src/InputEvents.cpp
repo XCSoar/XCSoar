@@ -561,63 +561,47 @@ InputEvents::showErrors()
 }
 #endif
 
+struct string_to_key {
+  const TCHAR *name;
+  unsigned key;
+};
+
+static const struct string_to_key string_to_key[] = {
+  { _T("APP1"), VK_APP1 },
+  { _T("APP2"), VK_APP2 },
+  { _T("APP3"), VK_APP3 },
+  { _T("APP4"), VK_APP4 },
+  { _T("APP5"), VK_APP5 },
+  { _T("APP6"), VK_APP6 },
+  { _T("F1"), VK_F1 },
+  { _T("F2"), VK_F2 },
+  { _T("F3"), VK_F3 },
+  { _T("F4"), VK_F4 },
+  { _T("F5"), VK_F5 },
+  { _T("F6"), VK_F6 },
+  { _T("F7"), VK_F7 },
+  { _T("F8"), VK_F8 },
+  { _T("F9"), VK_F9 },
+  { _T("F10"), VK_F10 },
+  { _T("F11"), VK_F11 },
+  { _T("F12"), VK_F12 },
+  { _T("LEFT"), VK_LEFT },
+  { _T("RIGHT"), VK_RIGHT },
+  { _T("UP"), VK_UP },
+  { _T("DOWN"), VK_DOWN },
+  { _T("RETURN"), VK_RETURN },
+  { _T("ESCAPE"), VK_ESCAPE },
+  { NULL }
+};
+
 unsigned
 InputEvents::findKey(const TCHAR *data)
 {
-  if (_tcscmp(data, _T("APP1")) == 0)
-    return VK_APP1;
-  else if (_tcscmp(data, _T("APP2")) == 0)
-    return VK_APP2;
-  else if (_tcscmp(data, _T("APP3")) == 0)
-    return VK_APP3;
-  else if (_tcscmp(data, _T("APP4")) == 0)
-    return VK_APP4;
-  else if (_tcscmp(data, _T("APP5")) == 0)
-    return VK_APP5;
-  else if (_tcscmp(data, _T("APP6")) == 0)
-    return VK_APP6;
+  for (const struct string_to_key *p = string_to_key; p->name != NULL; ++p)
+    if (_tcscmp(data, p->name) == 0)
+      return p->key;
 
-  else if (_tcscmp(data, _T("F1")) == 0)
-    return VK_F1;
-  else if (_tcscmp(data, _T("F2")) == 0)
-    return VK_F2;
-  else if (_tcscmp(data, _T("F3")) == 0)
-    return VK_F3;
-  else if (_tcscmp(data, _T("F4")) == 0)
-    return VK_F4;
-  else if (_tcscmp(data, _T("F5")) == 0)
-    return VK_F5;
-  else if (_tcscmp(data, _T("F6")) == 0)
-    return VK_F6;
-  else if (_tcscmp(data, _T("F7")) == 0)
-    return VK_F7;
-  else if (_tcscmp(data, _T("F8")) == 0)
-    return VK_F8;
-  else if (_tcscmp(data, _T("F9")) == 0)
-    return VK_F9;
-  else if (_tcscmp(data, _T("F10")) == 0)
-    return VK_F10;
-// VENTA-TEST HANDLING EXTRA HW KEYS ON HX4700 and HP31X
-// else if (_tcscmp(data, _T("F11")) == 0)
-//  return VK_F11;
-// else if (_tcscmp(data, _T("F12")) == 0)
-//    return VK_F12;
-
-  else if (_tcscmp(data, _T("LEFT")) == 0)
-    return VK_LEFT;
-  else if (_tcscmp(data, _T("RIGHT")) == 0)
-    return VK_RIGHT;
-  else if (_tcscmp(data, _T("UP")) == 0)
-    return VK_UP;
-  else if (_tcscmp(data, _T("DOWN")) == 0)
-    return VK_DOWN;
-
-  else if (_tcscmp(data, _T("RETURN")) == 0)
-    return VK_RETURN;
-  else if (_tcscmp(data, _T("ESCAPE")) == 0)
-    return VK_ESCAPE;
-
-  else if (_tcslen(data) == 1)
+  if (_tcslen(data) == 1)
     return _totupper(data[0]);
 
   else
