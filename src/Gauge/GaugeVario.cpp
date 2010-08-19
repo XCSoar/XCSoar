@@ -158,14 +158,8 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
 
 GaugeVario::~GaugeVario()
 {
-  if (polys) {
-    free(polys);
-    polys = NULL;
-  }
-  if (lines) {
-    free(lines);
-    lines = NULL;
-  }
+  free(polys);
+  free(lines);
 }
 
 void
