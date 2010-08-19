@@ -148,21 +148,19 @@ bool
 RasterTileCache::PollTiles(int x, int y)
 {
   bool retval = false;
-  int i, num_used = 0;
+  int i;
 
   if (scan_overview)
     return false;
 
-  std::fill(ActiveTiles, ActiveTiles + MAX_ACTIVE_TILES, -1);
+  ActiveTiles.clear();
 
   for (i = MAX_RTC_TILES - 1; --i >= 0;) {
     if (tiles[i].VisibilityChanged(x, y))
       retval = true;
 
-    if (tiles[i].IsEnabled()) {
-      ActiveTiles[num_used] = i;
-      num_used++;
-    }
+    if (tiles[i].IsEnabled() && !ActiveTiles.full())
+      ActiveTiles.append(tiles[i]);
   }
 
   return retval;
@@ -204,20 +202,11 @@ RasterTileCache::GetField(unsigned int lx, unsigned int ly) const
   const unsigned int ix = CombinedDivAndMod(px);
   const unsigned int iy = CombinedDivAndMod(py);
 
-  short retval;
-
-  // search starting from last found tile
-  retval = tiles[tile_last].GetField(px, py, ix, iy);
-  if (retval != RasterTile::TERRAIN_INVALID)
-    return retval;
-
-  int tile_this;
-  for (int i = MAX_ACTIVE_TILES - 1; --i >= 0;) {
-    if (((tile_this = ActiveTiles[i]) >= 0)
-        && (tile_this != tile_last)
-        && (retval = tiles[tile_this].GetField(px, py, ix, iy)) != RasterTile::TERRAIN_INVALID) {
-      tile_last = tile_this;
-      return retval;
+  for (unsigned i = 0; i < ActiveTiles.length(); ++i) {
+    short h = ActiveTiles[i].GetField(px, py, ix, iy);
+    if (h != RasterTile::TERRAIN_INVALID) {
+      ActiveTiles.move_to_front(i);
+      return h;
     }
   }
   // still not found, so go to overview
@@ -248,7 +237,6 @@ RasterTileCache::SetLatLonBounds(double _lon_min, double _lon_max,
 void
 RasterTileCache::Reset()
 {
-  tile_last = 0;
   width = 0;
   height = 0;
   initialised = false;
@@ -260,7 +248,7 @@ RasterTileCache::Reset()
   for (i = 0; i < MAX_RTC_TILES; i++)
     tiles[i].Disable();
 
-  std::fill(ActiveTiles, ActiveTiles + MAX_ACTIVE_TILES, -1);
+  ActiveTiles.clear();
 }
 
 void

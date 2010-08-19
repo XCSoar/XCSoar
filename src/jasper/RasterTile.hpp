@@ -3,6 +3,7 @@
 
 #include "Terrain/RasterBuffer.hpp"
 #include "Util/NonCopyable.hpp"
+#include "Util/ActiveList.hpp"
 
 #include <stddef.h>
 
@@ -68,8 +69,7 @@ public:
 private:
   bool initialised;
   RasterTile tiles[MAX_RTC_TILES];
-  mutable int tile_last;
-  int ActiveTiles[MAX_ACTIVE_TILES];
+  mutable ActiveList<const RasterTile, MAX_ACTIVE_TILES> ActiveTiles;
   RasterBuffer Overview;
   bool scan_overview;
   unsigned int width, height;
