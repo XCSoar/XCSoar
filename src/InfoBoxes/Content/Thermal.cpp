@@ -263,7 +263,7 @@ InfoBoxContentThermalAvg::Update(InfoBoxWindow &infobox)
   infobox.SetValueUnit(Units::VerticalSpeedUnit);
 
   if (XCSoarInterface::Calculated().ThermalAverage <
-      fixed(0.667) * XCSoarInterface::Calculated().common_stats.current_risk_mc)
+      fixed_two_thirds * XCSoarInterface::Calculated().common_stats.current_risk_mc)
     // red
     infobox.SetColor(1);
   else

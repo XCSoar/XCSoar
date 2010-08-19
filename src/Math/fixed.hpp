@@ -30,6 +30,8 @@ using std::min;
 #define fixed_ten fixed_int_constant(10)
 
 #define fixed_half fixed_constant(0.5, 1 << (fixed::resolution_shift - 1))
+#define fixed_third fixed_constant(1./3., (1 << fixed::resolution_shift) / 3)
+#define fixed_two_thirds fixed_constant(1./3., (1 << (fixed::resolution_shift)) / 3)
 
 #define fixed_deg_to_rad fixed_constant(0.0174532925199432958, 0x477d1bLL)
 #define fixed_rad_to_deg fixed_constant(57.2957795131, 0x394bb834cLL)
