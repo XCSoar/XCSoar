@@ -38,6 +38,7 @@
 #include "Math/Angle.hpp"
 
 #include <assert.h>
+#include <stdio.h>
 
 static inline bool
 is_zero(const fixed value)
@@ -122,6 +123,13 @@ int main(int argc, char **argv)
   assert(equals(Angle::degrees(fixed_180).fastcosine(), -1));
   assert(equals(Angle::degrees(fixed_270).fastcosine(), 0));
   assert(equals(Angle::degrees(fixed_360).fastcosine(), 1));
+
+  assert(equals(Angle::degrees(fixed_90).BiSector(Angle::degrees(fixed_180)),
+                45));
+  assert(equals(Angle::degrees(fixed_270).BiSector(Angle::degrees(fixed_zero)),
+                225));
+  assert(equals(Angle::degrees(fixed_270).BiSector(Angle::degrees(fixed_180)),
+                315));
 
   return 0;
 }
