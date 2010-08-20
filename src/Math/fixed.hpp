@@ -131,11 +131,6 @@ public:
   explicit fixed(float nVal)
     :m_nVal(static_cast<value_t>(nVal*static_cast<float>(resolution))) {}
 
-  fixed& operator=(fixed const& other) {
-    m_nVal=other.m_nVal;
-    return *this;
-  }
-
   gcc_pure
   friend bool operator==(fixed const& lhs,fixed const& rhs) {
     return lhs.m_nVal==rhs.m_nVal;
