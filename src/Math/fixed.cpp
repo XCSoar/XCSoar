@@ -97,6 +97,10 @@ fixed& fixed::operator/=(fixed const divisor)
 
 fixed fixed::sqrt() const
 {
+#ifdef FAST_BUT_IMPRECISE_SQRT
+  /* TODO: this algorithm is too imprecise, with inaccuracy of about
+     2.1%; disabling it for now, until we have a better one */
+
   unsigned const max_shift=62;
   uvalue_t a_squared=1LL<<max_shift;
   unsigned b_shift=(max_shift+resolution_shift)/2;
@@ -135,6 +139,10 @@ fixed fixed::sqrt() const
   }
 
   return fixed(internal(), a);
+#else
+  /* slow fallback */
+  return fixed(::sqrt(as_double()));
+#endif
 }
 
 namespace
