@@ -125,7 +125,7 @@ IntermediatePoint(GEOPOINT loc1, GEOPOINT loc2, const fixed dthis)
  * @param Bearing Pointer to the bearing variable
  */
 static void
-DistanceBearingS(GEOPOINT loc1, GEOPOINT loc2, fixed *Distance, Angle *Bearing)
+DistanceBearingS(GEOPOINT loc1, GEOPOINT loc2, Angle *Distance, Angle *Bearing)
 {
   fixed cloc1Latitude, sloc1Latitude;
   loc1.Latitude.sin_cos(sloc1Latitude, cloc1Latitude);
@@ -142,8 +142,9 @@ DistanceBearingS(GEOPOINT loc1, GEOPOINT loc2, fixed *Distance, Angle *Bearing)
                         min(fixed_expand_xsq, s1 * s1
                             + cloc1Latitude * cloc2Latitude * s2 * s2));
 
-    *Distance = max(fixed_zero, fixed_two*atan2(sqrt(a),
+    fixed distance2 = max(fixed_zero, fixed_two*atan2(sqrt(a),
         sqrt(fixed_expand_xsq - a)));
+    *Distance = Angle::radians(distance2);
   }
 
   if (Bearing) {
@@ -169,27 +170,27 @@ DistanceBearingS(GEOPOINT loc1, GEOPOINT loc2, fixed *Distance, Angle *Bearing)
 void
 DistanceBearing(GEOPOINT loc1, GEOPOINT loc2, fixed *Distance, Angle *Bearing)
 {
-  DistanceBearingS(loc1, loc2, Distance, Bearing);
-  if (Distance) {
-    (*Distance) *= fixed_earth_r;
-  }
+  if (Distance != NULL) {
+    Angle distance_angle;
+    DistanceBearingS(loc1, loc2, &distance_angle, Bearing);
+    *Distance = distance_angle.value_radians() * fixed_earth_r;
+  } else
+    DistanceBearingS(loc1, loc2, NULL, Bearing);
 }
 
 fixed
 CrossTrackError(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3, GEOPOINT *loc4)
 {
-  fixed dist_AD; Angle crs_AD;
+  Angle dist_AD; Angle crs_AD;
   DistanceBearingS(loc1, loc3, &dist_AD, &crs_AD);
-  dist_AD *= fixed_deg_to_rad;
 
-  fixed dist_AB; Angle crs_AB;
+  Angle dist_AB; Angle crs_AB;
   DistanceBearingS(loc1, loc2, &dist_AB, &crs_AB);
-  dist_AB *= fixed_deg_to_rad;
 
   //  The "along track distance", ATD, the distance from A along the
   //  course towards B to the point abeam D
 
-  const fixed sindist_AD = sin(dist_AD);
+  const fixed sindist_AD = dist_AD.sin();
   // cross track distance
   const fixed XTD(asin(sindist_AD * (crs_AD - crs_AB).sin()));
 
@@ -201,7 +202,7 @@ CrossTrackError(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3, GEOPOINT *loc4)
     const fixed ATD(asin(sqrt(sindist_AD * sindist_AD - sinXTD * sinXTD)
                          / cosXTD));
 
-    *loc4 = IntermediatePoint(loc1, loc2, ATD, dist_AB);
+    *loc4 = IntermediatePoint(loc1, loc2, ATD, dist_AB.value_radians());
   }
 
 #ifdef INSTRUMENT_TASK
@@ -215,18 +216,16 @@ CrossTrackError(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3, GEOPOINT *loc4)
 fixed
 ProjectedDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3)
 {
-  fixed dist_AD; Angle crs_AD;
+  Angle dist_AD; Angle crs_AD;
   DistanceBearingS(loc1, loc3, &dist_AD, &crs_AD);
-  dist_AD *= fixed_deg_to_rad;
 
-  fixed dist_AB; Angle crs_AB;
+  Angle dist_AB; Angle crs_AB;
   DistanceBearingS(loc1, loc2, &dist_AB, &crs_AB);
-  dist_AB *= fixed_deg_to_rad;
 
   // The "along track distance", ATD, the distance from A along the
   // course towards B to the point abeam D
 
-  const fixed sindist_AD = sin(dist_AD);
+  const fixed sindist_AD = dist_AD.sin();
   const fixed XTD(asin(sindist_AD * (crs_AD - crs_AB).sin())); // cross track distance
 
   fixed sinXTD, cosXTD;
