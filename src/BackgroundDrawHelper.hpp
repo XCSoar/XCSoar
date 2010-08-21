@@ -68,7 +68,6 @@ public:
                        const Projection &proj,
                        LabelBlock& block);
 
-  void default_sun();
   void sun_from_wind(const Projection& proj,
                      const SpeedVector& wind);
   void reset();

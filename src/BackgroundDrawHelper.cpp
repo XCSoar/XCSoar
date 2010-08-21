@@ -51,9 +51,10 @@ Copyright_License {
 BackgroundDrawHelper::BackgroundDrawHelper():
   m_rend(NULL),
   m_terrain(NULL),
-  m_weather(NULL)
+  m_weather(NULL),
+  m_sun_elevation(Angle::degrees(fixed(40))),
+  m_sun_azimuth(Angle::degrees(fixed(45)))
 {
-  default_sun();
 }
 
 BackgroundDrawHelper::~BackgroundDrawHelper()
@@ -116,13 +117,6 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
   m_rend->Draw(canvas, proj,
                m_sun_azimuth,
                m_sun_elevation);
-}
-
-void
-BackgroundDrawHelper::default_sun()
-{
-  m_sun_elevation = Angle::degrees(fixed(40.0));
-  m_sun_azimuth = Angle::degrees(fixed(45.0));
 }
 
 void

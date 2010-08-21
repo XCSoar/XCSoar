@@ -44,11 +44,10 @@ Copyright_License {
 #include "Units.hpp"
 
 Projection::Projection() :
-  DisplayAngle(),
+  PanLocation(Angle::native(fixed_zero), Angle::native(fixed_zero)),
+  DisplayAngle(Angle::native(fixed_zero)),
   m_scale_meters_to_screen(fixed_zero)
 {
-  PanLocation.Latitude = Angle();
-  PanLocation.Longitude = Angle();
 }
 
 /**

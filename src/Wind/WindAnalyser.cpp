@@ -100,18 +100,15 @@ a number of windmeasurements and calculates a weighted average based on quality.
 #endif
 
 WindAnalyser::WindAnalyser()
+  :circleCount(0), circleLeft(false),
+   active(false),
+   startmarker(0),
+   circleDeg(0),
+   lastHeading(Angle::native(fixed_zero)),
+   pastHalfway(false),
+   minSatCnt(1), // JMW conf->getWindMinSatCount();
+   curModeOK(false)
 {
-  // initialization
-  active = false;
-  circleLeft = false;
-  circleCount = 0;
-  startmarker = 0;
-  circleDeg = 0;
-  lastHeading = Angle();
-  pastHalfway = false;
-
-  minSatCnt = 1; // JMW conf->getWindMinSatCount();
-  curModeOK = false;
 }
 
 WindAnalyser::~WindAnalyser()

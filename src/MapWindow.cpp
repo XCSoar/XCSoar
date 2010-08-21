@@ -64,11 +64,11 @@ MapWindow::MapWindow()
    airspace_database(NULL), airspace_warnings(NULL), task(NULL),
    marks(NULL), 
    cdi(NULL),
+   TargetDrag_Location(GEOPOINT(Angle::native(fixed_zero),
+                                Angle::native(fixed_zero))),
    TargetDrag_State(0),
    BigZoom(true)
 {
-  TargetDrag_Location.Latitude = Angle();
-  TargetDrag_Location.Longitude = Angle();
   zoomclimb.CruiseMapScale = fixed_ten;
   zoomclimb.ClimbMapScale = fixed(0.25);
   zoomclimb.last_isclimb = false;
