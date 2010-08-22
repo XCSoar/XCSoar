@@ -43,7 +43,7 @@
 GlideResult::GlideResult():
     Vector(fixed_zero),
     DistanceToFinal(fixed_zero),
-    CruiseTrackBearing(),
+    CruiseTrackBearing(Angle::native(fixed_zero)),
     VOpt(fixed_zero),
     HeightClimb(fixed_zero),
     HeightGlide(fixed_zero),
@@ -51,7 +51,7 @@ GlideResult::GlideResult():
     TimeVirtual(fixed_zero),
     AltitudeDifference(fixed_zero),
     EffectiveWindSpeed(fixed_zero),
-    EffectiveWindAngle(),
+    EffectiveWindAngle(Angle::native(fixed_zero)),
     Solution(RESULT_NOSOLUTION)
 {
 }

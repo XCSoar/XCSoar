@@ -47,7 +47,7 @@ static const fixed fixed_scale(fixed(1000.0));
 
 TaskProjection::TaskProjection()
 {
-  GEOPOINT zero;
+  GEOPOINT zero(Angle::native(fixed_zero), Angle::native(fixed_zero));
   reset(zero);
 }
 
@@ -128,7 +128,7 @@ fixed
 TaskProjection::fproject_range(const GEOPOINT &tp, const fixed range) const
 {
   GEOPOINT fr;
-  ::FindLatitudeLongitude(tp,Angle(),range,&fr);
+  ::FindLatitudeLongitude(tp, Angle::native(fixed_zero), range, &fr);
   FlatPoint f = fproject(fr);
   FlatPoint p = fproject(tp);
   return fabs(f.y-p.y);

@@ -580,7 +580,7 @@ static bool
 WindZigZagCheckAirData(const NMEA_INFO &basic)
 {
   static fixed tLast(-1);
-  static Angle bearingLast;
+  static Angle bearingLast = Angle::native(fixed_zero);
 
   bool airdata_invalid = false;
   if (!basic.flight.Flying) {

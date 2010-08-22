@@ -518,11 +518,12 @@ MapWindow::DrawCompass(Canvas &canvas, const RECT rc) const
     canvas.select(MapGfx.hbCompass);
 
     // North arrow
-    PolygonRotateShift(Arrow, 5, Start.x, Start.y, Angle()-GetDisplayAngle());
+    PolygonRotateShift(Arrow, 5, Start.x, Start.y,
+                       Angle::native(fixed_zero) - GetDisplayAngle());
     canvas.polygon(Arrow, 5);
   } else if (Appearance.CompassAppearance == apCompassAltA) {
 
-    static Angle lastDisplayAngle;
+    static Angle lastDisplayAngle = Angle::native(fixed_zero);
     static int lastRcRight = 0;
     static POINT Arrow[5] = { { 0, -11 }, { -5, 9 }, { 0, 3 }, { 5, 9 }, { 0, -11 } };
 
@@ -542,7 +543,8 @@ MapWindow::DrawCompass(Canvas &canvas, const RECT rc) const
       Start.x = rc.right - IBLSCALE(11);
 
       // North arrow
-      PolygonRotateShift(Arrow, 5, Start.x, Start.y, Angle()-GetDisplayAngle());
+      PolygonRotateShift(Arrow, 5, Start.x, Start.y,
+                         Angle::native(fixed_zero) - GetDisplayAngle());
 
       lastDisplayAngle = GetDisplayAngle();
       lastRcRight = rc.right;

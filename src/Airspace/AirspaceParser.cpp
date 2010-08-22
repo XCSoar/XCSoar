@@ -123,8 +123,8 @@ struct TempAirspaceType
   {
     Type = OTHER;
     points.clear();
-    Center.Longitude = Angle();
-    Center.Latitude = Angle();
+    Center.Longitude = Angle::native(fixed_zero);
+    Center.Latitude = Angle::native(fixed_zero);
     Rotation = 1;
     Radius = fixed_zero;
     Waiting = true;

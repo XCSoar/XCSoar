@@ -50,7 +50,7 @@ class SectorZone:
 protected:
   SectorZone(enum shape _shape, const GEOPOINT &loc,
              const fixed _radius=fixed(10000.0),
-             const Angle _startRadial=Angle(),
+             const Angle _startRadial=Angle::native(fixed_zero),
              const Angle _endRadial=Angle::radians(fixed_two_pi)):
     CylinderZone(_shape, loc, _radius),
     StartRadial(_startRadial),
@@ -71,7 +71,7 @@ public:
  */
   SectorZone(const GEOPOINT &loc, 
              const fixed _radius=fixed(10000.0),
-             const Angle _startRadial=Angle(),
+             const Angle _startRadial=Angle::native(fixed_zero),
              const Angle _endRadial=Angle::radians(fixed_two_pi)):
     CylinderZone(SECTOR, loc, _radius),
     StartRadial(_startRadial),

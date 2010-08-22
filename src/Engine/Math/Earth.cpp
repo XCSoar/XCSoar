@@ -157,7 +157,8 @@ DistanceBearingS(GEOPOINT loc1, GEOPOINT loc2, Angle *Distance, Angle *Bearing)
     const fixed x = cloc1Latitude * sloc2Latitude
         - sloc1Latitude * cloc2Latitude * cosdlon;
 
-    *Bearing = (x == fixed_zero && y == fixed_zero) ? Angle()
+    *Bearing = (x == fixed_zero && y == fixed_zero)
+      ? Angle::native(fixed_zero)
       : Angle::radians(atan2(y, x)).as_bearing();
   }
 

@@ -55,7 +55,9 @@ struct GEOPOINT {
    *
    * @return Point initialised at origin
    */
-  GEOPOINT() : Longitude(), Latitude() {}
+  GEOPOINT()
+    :Longitude(Angle::native(fixed_zero)),
+     Latitude(Angle::native(fixed_zero)) {}
 
   /**
    * Constructor (supplied location)

@@ -54,7 +54,7 @@ static const fixed BORDERFACTOR(1.4);
 MapWindowProjection::MapWindowProjection():
   Projection(),
   DisplayMode(dmCruise),
-  DisplayAircraftAngle(),
+  DisplayAircraftAngle(Angle::native(fixed_zero)),
   MapScale(5),
   _RequestedMapScale(5),
   _origin_centered(false),
@@ -107,14 +107,14 @@ MapWindowProjection::CalculateOrientationNormal
       DisplayAngle = DerivedDrawInfo.task_stats.current_leg.solution_remaining.Vector.Bearing;
       DisplayAircraftAngle = trackbearing - DisplayAngle.GetAngle();
     } else {
-      DisplayAngle = Angle();
+      DisplayAngle = Angle::native(fixed_zero);
       DisplayAircraftAngle = trackbearing;
     }
   } else {
     // normal, glider forward
     _origin_centered = false;
     DisplayAngle = trackbearing;
-    DisplayAircraftAngle = Angle();
+    DisplayAircraftAngle = Angle::native(fixed_zero);
   }
 
   DisplayAircraftAngle = DisplayAircraftAngle.as_bearing();
@@ -153,7 +153,7 @@ MapWindowProjection::CalculateOrientationTargetPan
     DisplayAircraftAngle = DrawInfo.TrackBearing;
   }
 #else
-  DisplayAngle.SetAngle(Angle());
+  DisplayAngle.SetAngle(Angle::native(fixed_zero));
   DisplayAircraftAngle = DrawInfo.TrackBearing;
 #endif
 }

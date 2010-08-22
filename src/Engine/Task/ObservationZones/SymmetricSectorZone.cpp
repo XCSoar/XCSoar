@@ -53,7 +53,7 @@ void SymmetricSectorZone::set_legs(const TaskPoint *previous,
     biSector = next->bearing(current->get_location());
   } else {
     // single point
-    biSector = Angle();
+    biSector = Angle::native(fixed_zero);
   }
 
   setStartRadial((biSector-SectorAngle*fixed_half).as_bearing());
