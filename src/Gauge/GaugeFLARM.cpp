@@ -50,15 +50,11 @@ Copyright_License {
  * @param height Height of window (pixels)
  */
 GaugeFLARM::GaugeFLARM(ContainerWindow &parent,
-                       int left, int top, unsigned width, unsigned height)
+                       int left, int top, unsigned width, unsigned height,
+                       const WindowStyle style)
   :FlarmTrafficWindow(1, true),
    ForceVisible(false), Suppress(false)
 {
-  // start of new code for displaying FLARM window
-
-  WindowStyle style;
-  style.hide();
-
   set(parent, left, top, width, height, style);
 }
 

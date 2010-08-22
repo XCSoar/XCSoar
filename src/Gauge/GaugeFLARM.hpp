@@ -62,7 +62,8 @@ public:
 
 public:
   GaugeFLARM(ContainerWindow &parent,
-             int left, int top, unsigned width, unsigned height);
+             int left, int top, unsigned width, unsigned height,
+             const WindowStyle style=WindowStyle());
 
   void Update(bool enable, const NMEA_INFO &gps_info,
               const SETTINGS_TEAMCODE &settings);

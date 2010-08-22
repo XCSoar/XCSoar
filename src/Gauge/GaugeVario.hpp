@@ -95,7 +95,8 @@ private:
 
 public:
   GaugeVario(ContainerWindow &parent,
-             int left, int top, unsigned width, unsigned height);
+             int left, int top, unsigned width, unsigned height,
+             const WindowStyle style=WindowStyle());
   ~GaugeVario();
 
   void Render();

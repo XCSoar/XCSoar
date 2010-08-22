@@ -73,7 +73,8 @@ static Color colTextBackgnd;
 #define TextBal _T("Bal")
 
 GaugeVario::GaugeVario(ContainerWindow &parent,
-                       int left, int top, unsigned width, unsigned height)
+                       int left, int top, unsigned width, unsigned height,
+                       const WindowStyle style)
   :nlength0(Layout::Scale(15)),
    nlength1(Layout::Scale(6)),
    nwidth(Layout::Scale(4)),
@@ -88,9 +89,6 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
   diLabelBottom.InitDone = false;
 
   LogStartUp(_T("Create Vario"));
-
-  WindowStyle style;
-  style.hide();
 
   set(parent, left, top, width, height, style);
 

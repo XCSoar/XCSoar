@@ -133,16 +133,21 @@ MainWindow::initialise()
   map.set_font(Fonts::Map);
   map.SetMapRect(map_rect);
 
+  WindowStyle hidden;
+  hidden.hide();
+
   vario = new GaugeVario(*this,
                          rc.right - InfoBoxLayout::ControlWidth, 0,
                          InfoBoxLayout::ControlWidth,
-                         InfoBoxLayout::ControlHeight * 3);
+                         InfoBoxLayout::ControlHeight * 3,
+                         hidden);
 
   flarm = new GaugeFLARM(*this,
                          rc.right - InfoBoxLayout::ControlWidth * 2 + 1,
                          rc.bottom - InfoBoxLayout::ControlHeight * 2 + 1,
                          InfoBoxLayout::ControlWidth * 2 - 1,
-                         InfoBoxLayout::ControlHeight * 2 - 1);
+                         InfoBoxLayout::ControlHeight * 2 - 1,
+                         hidden);
   flarm->bring_to_top();
 
   unsigned sz = std::min(InfoBoxLayout::ControlHeight,
