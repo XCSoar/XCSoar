@@ -91,8 +91,8 @@ AATPoint::check_target_inside(const AIRCRAFT_STATE& state)
   //    < d(p_last,state)+d(state,p_next)
 
   if (close_to_target(state)) {
-    const double d_to_max = state.Location.distance(get_location_max());
-    if (d_to_max<=0.0) {
+    const fixed d_to_max = state.Location.distance(get_location_max());
+    if (d_to_max <= fixed_zero) {
       // no improvement available
       return false;
     } else {
