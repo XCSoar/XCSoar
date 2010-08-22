@@ -200,6 +200,7 @@ extern const TCHAR szProfileInfoBoxGeometry[];
 
 extern const TCHAR szProfileFlarmSideData[];
 extern const TCHAR szProfileFlarmAutoZoom[];
+extern const TCHAR szProfileFlarmNorthUp[];
 
 extern const TCHAR szProfileIgnoreNMEAChecksum[];
 

@@ -11,6 +11,7 @@
           OnCreate="OnCreateFlarmTrafficControl"/>
 
   <Custom X="3" Y="3" Width="58" Height="28" OnCreate="OnCreateAutoZoom"/>
+  <Custom X="3" Y="33" Width="58" Height="28" OnCreate="OnCreateNorthUp"/>
 
-  <Button Name="cmdSwitchData" Caption="Avg/Alt" X="3" Y="33" Width="58" Height="28" />
+  <Button Name="cmdSwitchData" Caption="Avg/Alt" X="3" Y="63" Width="58" Height="28" />
 </Form>

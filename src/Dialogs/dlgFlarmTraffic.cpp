@@ -59,6 +59,7 @@
 
 enum {
   ID_AUTO_ZOOM = 100,
+  ID_NORTH_UP,
 };
 
 /**
@@ -66,6 +67,7 @@ enum {
  */
 class FlarmTrafficControl : public FlarmTrafficWindow {
 protected:
+  bool enable_north_up;
   bool enable_auto_zoom;
   unsigned zoom;
   Font hfInfoValues, hfInfoLabels, hfCallSign;
@@ -75,7 +77,7 @@ protected:
 public:
   FlarmTrafficControl()
     :FlarmTrafficWindow(Layout::Scale(10)),
-     enable_auto_zoom(true),
+     enable_north_up(false), enable_auto_zoom(true),
      zoom(2),
      task_direction(Angle::degrees(fixed_minus_one)) {}
 
@@ -86,6 +88,12 @@ public:
   void Update(Angle new_direction, const FLARM_STATE &new_data,
               const SETTINGS_TEAMCODE &new_settings);
   void UpdateTaskDirection(bool show_task_direction, Angle bearing);
+
+  bool GetNorthUp() const {
+    return enable_north_up;
+  }
+
+  void SetNorthUp(bool enabled);
 
   bool GetAutoZoom() const {
     return enable_auto_zoom;
@@ -118,7 +126,7 @@ protected:
 
 static WndForm *wf = NULL;
 static FlarmTrafficControl *wdf;
-static CheckBox *auto_zoom;
+static CheckBox *auto_zoom, *north_up;
 
 bool
 FlarmTrafficControl::on_create()
@@ -131,6 +139,7 @@ FlarmTrafficControl::on_create()
 
   Profile::Get(szProfileFlarmSideData, side_display_type);
   Profile::Get(szProfileFlarmAutoZoom, enable_auto_zoom);
+  Profile::Get(szProfileFlarmNorthUp, enable_north_up);
 
   return true;
 }
@@ -151,6 +160,14 @@ FlarmTrafficControl::GetZoomDistance(unsigned zoom)
   default:
     return 2000;
   }
+}
+
+void
+FlarmTrafficControl::SetNorthUp(bool enabled)
+{
+  enable_north_up = enabled;
+  Profile::Set(szProfileFlarmNorthUp, enabled);
+  north_up->set_checked(enabled);
 }
 
 void
@@ -195,6 +212,9 @@ void
 FlarmTrafficControl::Update(Angle new_direction, const FLARM_STATE &new_data,
                             const SETTINGS_TEAMCODE &new_settings)
 {
+  if (enable_north_up)
+    new_direction = Angle::native(fixed_zero);
+
   FlarmTrafficWindow::Update(new_direction, new_data, new_settings);
 
   if (enable_auto_zoom || WarningMode())
@@ -482,6 +502,10 @@ OnCommand(unsigned id)
     wdf->SetAutoZoom(auto_zoom->get_checked());
     return true;
 
+  case ID_NORTH_UP:
+    wdf->SetNorthUp(north_up->get_checked());
+    return true;
+
   default:
     return false;
   }
@@ -643,9 +667,24 @@ OnCreateAutoZoom(ContainerWindow &parent, int left, int top,
   return auto_zoom;
 }
 
+static Window *
+OnCreateNorthUp(ContainerWindow &parent, int left, int top,
+                unsigned width, unsigned height,
+                const WindowStyle _style)
+{
+  CheckBoxStyle style(_style);
+  style.tab_stop();
+  north_up = new CheckBox();
+  north_up->set(parent, _("North up"), ID_NORTH_UP,
+                left, top, width, height, style);
+  north_up->set_font(Fonts::Map);
+  return north_up;
+}
+
 static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnCreateFlarmTrafficControl),
   DeclareCallBackEntry(OnCreateAutoZoom),
+  DeclareCallBackEntry(OnCreateNorthUp),
   DeclareCallBackEntry(OnTimerNotify),
   DeclareCallBackEntry(NULL)
 };
@@ -694,6 +733,7 @@ dlgFlarmTrafficShowModal()
 
   // Get the last chosen Side Data configuration
   auto_zoom->set_checked(wdf->GetAutoZoom());
+  north_up->set_checked(wdf->GetNorthUp());
 
   // Show the dialog
   wf->ShowModal();
