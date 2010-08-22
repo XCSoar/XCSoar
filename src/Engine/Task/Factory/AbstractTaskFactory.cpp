@@ -462,12 +462,6 @@ AbstractTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
 }
 
 bool 
-AbstractTaskFactory::is_position_start(const unsigned position) const
-{
-  return (position == 0);
-}
-
-bool 
 AbstractTaskFactory::is_position_intermediate(const unsigned position) const
 {
   if (is_position_start(position))

@@ -94,12 +94,6 @@ ElementStatComputer::calc_speeds(const fixed dt)
   }
 }
 
-bool
-ElementStat::achievable() const
-{
-  return solution_remaining.Solution == GlideResult::RESULT_OK;
-}
-
 ElementStatComputer::ElementStatComputer(ElementStat &_data)
   :data(_data),
    remaining_effective(data.remaining_effective),

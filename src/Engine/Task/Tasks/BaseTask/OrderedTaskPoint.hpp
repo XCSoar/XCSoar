@@ -123,14 +123,18 @@ public:
  * 
  * @return Previous task point
  */
-  OrderedTaskPoint* get_previous() const;
+  OrderedTaskPoint* get_previous() const {
+    return tp_previous;
+  }
 
 /** 
  * Accessor for next task point
  * 
  * @return Next task point
  */
-  OrderedTaskPoint* get_next() const;
+  OrderedTaskPoint* get_next() const {
+    return tp_next;
+  }
 
   /**
    * States each task point can be in (with respect to which OrderedTaskPoint is

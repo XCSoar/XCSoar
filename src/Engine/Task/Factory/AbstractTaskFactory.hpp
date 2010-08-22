@@ -474,7 +474,9 @@ protected:
    * 
    * @return True if possible
    */
-  bool is_position_start(const unsigned position) const;
+  bool is_position_start(const unsigned position) const {
+    return position == 0;
+  }
 
   /** 
    * Check whether the supplied position can be an IntermediatePoint

@@ -92,7 +92,9 @@ public:
  * 
  * @return True if can finish the task
  */
-  bool achievable() const;
+  bool achievable() const {
+    return solution_remaining.Solution == GlideResult::RESULT_OK;
+  }
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 

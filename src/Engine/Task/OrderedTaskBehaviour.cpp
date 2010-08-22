@@ -55,12 +55,6 @@ OrderedTaskBehaviour::OrderedTaskBehaviour():
 
 }
 
-void
-OrderedTaskBehaviour::all_off()
-{
-  task_scored = false;
-}
-
 bool 
 OrderedTaskBehaviour::check_start_speed(const AIRCRAFT_STATE &state,
                                         const TaskBehaviour& behaviour,
@@ -101,11 +95,3 @@ OrderedTaskBehaviour::check_finish_height(const AIRCRAFT_STATE &state) const
 
   return state.AltitudeAGL >= fixed(finish_min_height);
 }
-
-
-bool 
-OrderedTaskBehaviour::is_fixed_size() const
-{
-  return (min_points == max_points);
-}
-

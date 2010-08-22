@@ -107,14 +107,18 @@ public:
  * Convenience function (used primarily for testing) to disable
  * all expensive task behaviour functions.
  */
-  void all_off();
+  void all_off() {
+    task_scored = false;
+  }
 
 /** 
  * Determine if the task should have a fixed number of turnpoints
  * 
  * @return True if task is fixed size
  */
-  bool is_fixed_size() const;
+  bool is_fixed_size() const {
+    return min_points == max_points;
+  }
 
 public:
 };

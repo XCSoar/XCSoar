@@ -967,14 +967,6 @@ OrderedTask::relocate(const unsigned position, const Waypoint& waypoint)
   return replace(new_tp, position);
 }
 
-
-AbstractTaskFactory& 
-OrderedTask::get_factory() const 
-{
-  return *active_factory;
-}
-
-
 OrderedTask::Factory_t 
 OrderedTask::set_factory(const Factory_t the_factory)
 {
@@ -1022,18 +1014,6 @@ OrderedTask::set_factory(const Factory_t the_factory)
   active_factory->update_ordered_task_behaviour(m_ordered_behaviour);
 
   return factory_mode;
-}
-
-const OrderedTaskBehaviour& 
-OrderedTask::get_ordered_task_behaviour() const
-{
-  return m_ordered_behaviour;
-}
-
-OrderedTaskBehaviour& 
-OrderedTask::get_ordered_task_behaviour() 
-{
-  return m_ordered_behaviour;
 }
 
 void 
@@ -1090,10 +1070,4 @@ OrderedTask::get_tp(const unsigned position) const
     return NULL;
 
   return tps[position];
-}
-
-bool 
-OrderedTask::is_max_size() const
-{
-  return (task_size() == m_ordered_behaviour.max_points);
 }

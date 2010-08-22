@@ -110,7 +110,9 @@ public:
    * @return Factory
    */
   gcc_pure
-  AbstractTaskFactory& get_factory() const;
+  AbstractTaskFactory& get_factory() const {
+    return *active_factory;
+  }
 
   /**
    * Set type of task factory to be used for constructing tasks
@@ -331,7 +333,9 @@ public:
    *
    * @return True if task is full
    */
-  bool is_max_size() const;
+  bool is_max_size() const {
+    return task_size() == m_ordered_behaviour.max_points;
+  }
 
   /**
    * Accessor for task projection, for use when creating task points
@@ -684,14 +688,18 @@ public:
    * 
    * @return Read-only OrderedTaskBehaviour
    */
-  const OrderedTaskBehaviour& get_ordered_task_behaviour() const;
+  const OrderedTaskBehaviour& get_ordered_task_behaviour() const {
+    return m_ordered_behaviour;
+  }
 
   /** 
    * Retrieve the OrderedTaskBehaviour used by this task
    * 
    * @return Reference to OrderedTaskBehaviour
    */
-  OrderedTaskBehaviour& get_ordered_task_behaviour();
+  OrderedTaskBehaviour& get_ordered_task_behaviour() {
+    return m_ordered_behaviour;
+  }
 
   /** 
    * Copy OrderedTaskBehaviour to this task

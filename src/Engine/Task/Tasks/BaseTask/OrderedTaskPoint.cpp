@@ -61,20 +61,6 @@ OrderedTaskPoint::OrderedTaskPoint(enum type _type, ObservationZonePoint* _oz,
 {
 }
 
-
-OrderedTaskPoint* 
-OrderedTaskPoint::get_previous() const
-{
-  return tp_previous;
-}
-
-OrderedTaskPoint* 
-OrderedTaskPoint::get_next() const
-{
-  return tp_next;
-}
-
-
 void 
 OrderedTaskPoint::set_neighbours(OrderedTaskPoint* _prev,
                                  OrderedTaskPoint* _next) 

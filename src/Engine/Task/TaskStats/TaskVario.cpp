@@ -10,14 +10,6 @@ TaskVario::TaskVario():
 
 }
 
-
-fixed
-TaskVario::get_value() const
-{
-  return value;
-}
-
-
 void 
 TaskVario::update(const GlideResult& solution, const fixed dt)
 {

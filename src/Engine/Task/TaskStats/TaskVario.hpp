@@ -24,7 +24,9 @@ public:
  * 
  * @return Current vario value (m/s, positive up)
  */
-  fixed get_value() const;
+  fixed get_value() const {
+    return value;
+  }
 
 /** 
  * Update vario, taking altitude difference from a specified glide solution
