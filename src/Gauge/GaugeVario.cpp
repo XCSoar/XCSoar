@@ -716,7 +716,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 void
 GaugeVario::RenderBallast(Canvas &canvas)
 {
-  static double lastBallast = 1;
+  static fixed lastBallast = fixed_one;
   static RECT recLabelBk = {-1,-1,-1,-1};
   static RECT recValueBk = {-1,-1,-1,-1};
   static POINT orgLabel = {-1,-1};
@@ -773,7 +773,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
                         Fonts::Title.get_capital_height();
   }
 
-  double BALLAST = Calculated().common_stats.current_ballast;
+  fixed BALLAST = Calculated().common_stats.current_ballast;
 
   if (BALLAST != lastBallast) {
     // ballast hase been changed
@@ -783,9 +783,9 @@ GaugeVario::RenderBallast(Canvas &canvas)
     canvas.select(Fonts::Title);
     canvas.set_background_color(colTextBackgnd);
 
-    if (lastBallast < 0.001 || BALLAST < 0.001) {
+    if (lastBallast < fixed(0.001) || BALLAST < fixed(0.001)) {
       // new ballast is 0, hide label
-      if (BALLAST < 0.001)
+      if (BALLAST < fixed(0.001))
         canvas.text_opaque(orgLabel.x, orgLabel.y, &recLabelBk, _T(""));
       else {
         canvas.set_text_color(colTextGray);
@@ -795,10 +795,10 @@ GaugeVario::RenderBallast(Canvas &canvas)
     }
 
     // new ballast 0, hide value
-    if (BALLAST < 0.001)
+    if (BALLAST < fixed(0.001))
       _stprintf(Temp, _T(""));
     else
-      _stprintf(Temp, _T("%.0f%%"), BALLAST * 100);
+      _stprintf(Temp, _T("%.0f%%"), (double)(BALLAST * 100));
 
     canvas.set_text_color(colText);
     canvas.text_opaque(orgValue.x, orgValue.y, &recValueBk, Temp);
@@ -810,7 +810,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
 void
 GaugeVario::RenderBugs(Canvas &canvas)
 {
-  static double lastBugs = 1;
+  static fixed lastBugs = fixed_one;
   static RECT recLabelBk = {-1,-1,-1,-1};
   static RECT recValueBk = {-1,-1,-1,-1};
   static POINT orgLabel = {-1,-1};
@@ -858,15 +858,15 @@ GaugeVario::RenderBugs(Canvas &canvas)
                         Fonts::Title.get_capital_height();
   }
 
-  double BUGS = Calculated().common_stats.current_bugs;
+  fixed BUGS = Calculated().common_stats.current_bugs;
   if (BUGS != lastBugs) {
     TCHAR Temp[18];
 
     canvas.select(Fonts::Title);
     canvas.set_background_color(colTextBackgnd);
 
-    if (lastBugs > 0.999 || BUGS > 0.999) {
-      if (BUGS > 0.999)
+    if (lastBugs > fixed(0.999) || BUGS > fixed(0.999)) {
+      if (BUGS > fixed(0.999))
         canvas.text_opaque(orgLabel.x, orgLabel.y, &recLabelBk, _T(""));
       else {
         canvas.set_text_color(colTextGray);
@@ -874,10 +874,10 @@ GaugeVario::RenderBugs(Canvas &canvas)
       }
     }
 
-    if (BUGS > 0.999)
+    if (BUGS > fixed(0.999))
       _stprintf(Temp, _T(""));
     else
-      _stprintf(Temp, _T("%.0f%%"), (1 - BUGS) * 100);
+      _stprintf(Temp, _T("%.0f%%"), (double)((fixed_one - BUGS) * 100));
 
     canvas.set_text_color(colText);
     canvas.text_opaque(orgLabel.x, orgLabel.y, &recValueBk, Temp);
