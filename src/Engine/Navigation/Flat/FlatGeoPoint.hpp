@@ -124,7 +124,7 @@ struct FLAT_GEOPOINT {
  * @return Scaled value
  */
   gcc_pure
-  FLAT_GEOPOINT operator* (const double t) const {
+  FLAT_GEOPOINT operator* (const fixed t) const {
     FLAT_GEOPOINT res= *this;
     res.Longitude = (int)(res.Longitude*t);
     res.Latitude = (int)(res.Latitude*t);
