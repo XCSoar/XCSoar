@@ -172,6 +172,7 @@ public:
 
 protected:
 
+  gcc_pure
   bool is_reachable(const GlideResult result,
                     const bool final_glide) const;
 
@@ -198,6 +199,7 @@ protected:
  * 
  * @return True if no more task points can be added
  */
+  gcc_pure
   bool task_full() const;
 
 /** 
@@ -207,7 +209,8 @@ protected:
  * 
  * @return Distance (m) of approximate glide range of aircraft
  */
-  fixed abort_range(const AIRCRAFT_STATE &state_now);
+  gcc_pure
+  fixed abort_range(const AIRCRAFT_STATE &state_now) const;
 
 /** 
  * Propagate changes to safety glide polar from global glide polar. 

@@ -38,6 +38,7 @@
 #define SCOREDTASKPOINT_HPP
 
 #include "SampledTaskPoint.hpp"
+#include "Compiler.h"
 
 /**
  * Abstract specialisation of SampledTaskPoint to manage scoring
@@ -132,6 +133,7 @@ public:
  * 
  * @return Location 
  */
+  gcc_pure
   const GEOPOINT& get_location_scored() const;
 
 /** 
@@ -140,6 +142,7 @@ public:
  * 
  * @return Location 
  */
+  gcc_pure
   const GEOPOINT& get_location_travelled() const;
 
 /** 
@@ -149,6 +152,7 @@ public:
  * 
  * @return Location 
  */
+  gcc_pure
   virtual const GEOPOINT& get_location_remaining() const;
 
 private:
@@ -170,12 +174,17 @@ private:
     m_state_exited = state;
   }
 
+  gcc_pure
   virtual bool entry_precondition() const {
     return true;
   }
+
+  gcc_pure
   virtual bool score_last_exit() const {
     return false;
   }
+
+  gcc_pure
   virtual bool score_first_entry() const {
     return false;
   }

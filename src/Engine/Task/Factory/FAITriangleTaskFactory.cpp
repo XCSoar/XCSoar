@@ -45,7 +45,7 @@ FAITriangleTaskFactory::FAITriangleTaskFactory(OrderedTask& _task,
 }
 
 bool 
-FAITriangleTaskFactory::validate()
+FAITriangleTaskFactory::validate() const
 {
   if (!FAITaskFactory::validate()) {
     return false;

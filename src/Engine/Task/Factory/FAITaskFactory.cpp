@@ -51,7 +51,7 @@ FAITaskFactory::FAITaskFactory(OrderedTask& _task,
 }
 
 bool 
-FAITaskFactory::validate()
+FAITaskFactory::validate() const
 {
 
   if (!m_task.has_start() || !m_task.has_finish()) {

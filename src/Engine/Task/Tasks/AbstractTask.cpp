@@ -252,7 +252,7 @@ AbstractTask::reset()
 }
 
 fixed
-AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft) 
+AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft) const
 {
   // Get next turnpoint
   TaskPoint *tp = getActiveTaskPoint();
@@ -269,7 +269,7 @@ AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft)
 }
 
 fixed 
-AbstractTask::calc_effective_mc(const AIRCRAFT_STATE &state_now) 
+AbstractTask::calc_effective_mc(const AIRCRAFT_STATE &state_now) const
 {
   return glide_polar.get_mc();
 }

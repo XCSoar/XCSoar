@@ -38,6 +38,8 @@
 #ifndef TASKINTERFACE_H
 #define TASKINTERFACE_H
 
+#include "Compiler.h"
+
 struct AIRCRAFT_STATE;
 struct GEOPOINT;
 struct GeoVector;
@@ -67,6 +69,7 @@ public:
  * 
  * @return Number of taskpoints in task
  */
+  gcc_pure
   virtual unsigned task_size() const = 0;
 
 /** 
@@ -83,6 +86,7 @@ public:
  * 
  * @return Active task point
  */  
+  gcc_pure
   virtual TaskPoint* getActiveTaskPoint() const = 0;
 
 /**
@@ -91,6 +95,7 @@ public:
  *
  * @param index_offset offset (default 0)
  */
+  gcc_pure
   virtual bool validTaskPoint(const int index_offset=0) const = 0;
 
 /** 
@@ -98,6 +103,7 @@ public:
  * 
  * @return Task statistics reference
  */
+  gcc_pure
   virtual const TaskStats& get_stats() const = 0;
 
 /** 

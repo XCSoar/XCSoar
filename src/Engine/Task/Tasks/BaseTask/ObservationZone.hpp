@@ -41,6 +41,7 @@
 #define OBSERVATIONZONE_HPP
 
 #include "Navigation/Aircraft.hpp"
+#include "Compiler.h"
 
 /**
  * Abstract class giving properties of a zone which is used to measure
@@ -58,6 +59,7 @@ public:
    *
    * @return True if reference point is inside sector
    */
+  gcc_pure
     virtual bool isInSector(const AIRCRAFT_STATE & ref) const = 0;
 
 /** 
@@ -68,6 +70,7 @@ public:
  * 
  * @return True if constraints are satisfied
  */
+  gcc_pure
   virtual bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
                                      const AIRCRAFT_STATE & ref_last) const = 0;
 
@@ -79,6 +82,7 @@ public:
    *
    * @return True if aircraft now inside (and was outside)
    */
+  gcc_pure
     virtual bool check_transition_enter(const AIRCRAFT_STATE & ref_now, 
                                   const AIRCRAFT_STATE & ref_last) const {
         return isInSector(ref_now) && !isInSector(ref_last)
@@ -93,6 +97,7 @@ public:
    *
    * @return True if aircraft now outside (and was inside)
    */
+  gcc_pure
     virtual bool check_transition_exit(const AIRCRAFT_STATE & ref_now, 
                                        const AIRCRAFT_STATE & ref_last) const {
         return check_transition_enter(ref_last, ref_now);
@@ -105,6 +110,7 @@ public:
  * 
  * @return Point on boundary
  */
+  gcc_pure
   virtual GEOPOINT get_boundary_parametric(fixed t) const =0;
 
 /** 
@@ -114,6 +120,7 @@ public:
  * 
  * @return Distance (m) to subtract from score
  */
+  gcc_pure
   virtual fixed score_adjustment() const = 0;
 };
 

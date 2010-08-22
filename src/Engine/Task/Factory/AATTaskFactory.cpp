@@ -51,7 +51,7 @@ AATTaskFactory::AATTaskFactory(OrderedTask& _task, const TaskBehaviour &tb):
 }
 
 bool 
-AATTaskFactory::validate()
+AATTaskFactory::validate() const
 {
   /**
    * @todo

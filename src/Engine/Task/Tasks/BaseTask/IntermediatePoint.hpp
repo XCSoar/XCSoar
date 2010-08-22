@@ -37,7 +37,9 @@
 
 #ifndef INTERMEDIATEPOINT_H
 #define INTERMEDIATEPOINT_H
+
 #include "OrderedTaskPoint.hpp"
+#include "Compiler.h"
 
 /**
  * An IntermediatePoint is an abstract OrderedTaskPoint,
@@ -80,6 +82,7 @@ public:
  * 
  * @return Minimum allowable elevation of task point
  */
+  gcc_pure
   fixed get_elevation() const;
 
 };

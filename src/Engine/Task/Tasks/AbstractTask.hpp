@@ -87,6 +87,7 @@ public:
  * 
  * @return Index of active task point sequence
  */
+  gcc_pure
   unsigned getActiveTaskPointIndex() const;
 
 /** 
@@ -94,6 +95,7 @@ public:
  * 
  * @return Task statistics reference
  */
+  gcc_pure
   virtual const TaskStats& get_stats() const {
     return stats;
   }
@@ -104,6 +106,7 @@ public:
  * 
  * @return True if task is finished
  */
+  gcc_pure
   virtual bool task_finished() const {
     return false;
   }
@@ -114,6 +117,7 @@ public:
  * 
  * @return True if task has started
  */
+  gcc_pure
   virtual bool task_started() const {
     return true;
   }
@@ -157,11 +161,13 @@ public:
  * 
  * @return True if task is valid
  */
+  gcc_pure
   virtual bool check_task() const = 0;
 
   /**
    * Return required arrival height of final point in task
    */
+  gcc_pure
   virtual fixed get_finish_height() const = 0;
 
   /** 
@@ -171,6 +177,7 @@ public:
    * 
    * @return Location of center of task
    */
+  gcc_pure
   virtual GEOPOINT get_task_center(const GEOPOINT& fallback_location) const = 0;
 
   /** 
@@ -180,6 +187,7 @@ public:
    * 
    * @return Radius (m) from center to edge of task
    */
+  gcc_pure
   virtual fixed get_task_radius(const GEOPOINT& fallback_location) const = 0;
     
 protected:
@@ -217,7 +225,7 @@ protected:
  * 
  * @return Best MC value found (m/s)
  */
-  virtual fixed calc_mc_best(const AIRCRAFT_STATE &state_now) = 0;
+  virtual fixed calc_mc_best(const AIRCRAFT_STATE &state_now) const = 0;
 
 /** 
  * Calculate virtual sink rate of aircraft that allows a pure glide solution
@@ -228,7 +236,7 @@ protected:
  * 
  * @return Sink rate of aircraft (m/s)
  */
-  virtual fixed calc_glide_required(const AIRCRAFT_STATE &state_now) = 0;
+  virtual fixed calc_glide_required(const AIRCRAFT_STATE &state_now) const = 0;
 
 /** 
  * Calculate cruise efficiency for the travelled part of the task.
@@ -242,7 +250,8 @@ protected:
  * 
  * @return Cruise efficiency (0-1)
  */
-  virtual fixed calc_cruise_efficiency(const AIRCRAFT_STATE &state_now) {
+  gcc_pure
+  virtual fixed calc_cruise_efficiency(const AIRCRAFT_STATE &state_now) const {
     return fixed_one;
   }
 
@@ -256,7 +265,8 @@ protected:
  * 
  * @return Cruise efficiency (0-1)
  */
-  virtual fixed calc_effective_mc(const AIRCRAFT_STATE &state_now);
+  gcc_pure
+  virtual fixed calc_effective_mc(const AIRCRAFT_STATE &state_now) const;
 
 /** 
  * Optimise target ranges (for adjustable tasks) to produce an estimated
@@ -269,8 +279,9 @@ protected:
  * 
  * @return Target range parameter (0-1)
  */
+  gcc_pure
   virtual fixed calc_min_target(const AIRCRAFT_STATE &state_now, 
-                                const fixed t_target) {
+                                const fixed t_target) const {
     return fixed_zero;
   };
 
@@ -282,7 +293,8 @@ protected:
  * 
  * @return Gradient angle of remainder of task
  */
-  fixed leg_gradient(const AIRCRAFT_STATE &state_now);
+  gcc_pure
+  fixed leg_gradient(const AIRCRAFT_STATE &state_now) const;
 
 /** 
  * Calculate angle from aircraft to remainder of task (height above finish divided
@@ -292,7 +304,8 @@ protected:
  * 
  * @return Gradient angle of remainder of task
  */
-  virtual fixed calc_gradient(const AIRCRAFT_STATE &state_now) = 0;
+  gcc_pure
+  virtual fixed calc_gradient(const AIRCRAFT_STATE &state_now) const = 0;
 
 /** 
  * Calculate task start time.  Default behaviour is current time, to be used
@@ -425,11 +438,13 @@ protected:
   /**
    * Determines whether the task has adjustable targets
    */
+  gcc_pure
   virtual bool has_targets() const = 0;
 
   /**
    * Determines whether this task is scored
    */
+  gcc_pure
   virtual bool is_scored() const = 0;
 
 protected:

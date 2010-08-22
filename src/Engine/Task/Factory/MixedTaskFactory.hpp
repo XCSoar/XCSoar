@@ -64,7 +64,7 @@ public:
  * 
  * @return True if task is valid according to factory rules
  */
-  bool validate();
+  virtual bool validate() const;
 };
 
 #endif

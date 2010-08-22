@@ -287,6 +287,7 @@ public:
    *
    * @return Initialised object
    */
+  gcc_malloc gcc_pure
   OrderedTask* clone(TaskEvents &te, 
                      const TaskBehaviour &tb,
                      GlidePolar &gp) const;

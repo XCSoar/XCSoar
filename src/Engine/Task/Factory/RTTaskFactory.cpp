@@ -53,7 +53,7 @@ RTTaskFactory::RTTaskFactory(OrderedTask& _task,
 }
 
 bool 
-RTTaskFactory::validate()
+RTTaskFactory::validate() const
 {
 
   if (!m_task.has_start() || !m_task.has_finish()) {

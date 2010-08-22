@@ -71,6 +71,7 @@ public:
 
   const AIRCRAFT_STATE& get_state_entered() const;
 
+  gcc_pure
   fixed get_elevation() const;
 };
 

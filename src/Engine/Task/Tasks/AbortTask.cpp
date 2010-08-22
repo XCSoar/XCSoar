@@ -103,7 +103,7 @@ AbortTask::clear() {
 }
 
 fixed
-AbortTask::abort_range(const AIRCRAFT_STATE &state)
+AbortTask::abort_range(const AIRCRAFT_STATE &state) const
 {
   // always scan at least 50km or approx glide range
   return max(fixed(50000.0), state.NavAltitude*polar_safety.get_bestLD());

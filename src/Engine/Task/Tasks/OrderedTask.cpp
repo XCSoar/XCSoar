@@ -565,14 +565,14 @@ OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft,
 // Auxiliary glide functions
 
 fixed
-OrderedTask::calc_glide_required(const AIRCRAFT_STATE &aircraft) 
+OrderedTask::calc_glide_required(const AIRCRAFT_STATE &aircraft) const
 {
   TaskGlideRequired bgr(tps, activeTaskPoint, aircraft, glide_polar);
   return bgr.search(fixed_zero);
 }
 
 fixed
-OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft)
+OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft) const
 {
   // note setting of lower limit on mc
   TaskBestMc bmc(tps,activeTaskPoint, aircraft, glide_polar);
@@ -581,7 +581,7 @@ OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft)
 
 
 fixed
-OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft)
+OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft) const
 {
   if (activeTaskPoint > 0) {
     TaskCruiseEfficiency bce(tps, activeTaskPoint, aircraft, glide_polar);
@@ -592,7 +592,7 @@ OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft)
 }
 
 fixed 
-OrderedTask::calc_effective_mc(const AIRCRAFT_STATE &aircraft) 
+OrderedTask::calc_effective_mc(const AIRCRAFT_STATE &aircraft) const
 {
   if (activeTaskPoint > 0) {
     TaskEffectiveMacCready bce(tps,activeTaskPoint, aircraft, glide_polar);
@@ -605,7 +605,7 @@ OrderedTask::calc_effective_mc(const AIRCRAFT_STATE &aircraft)
 
 fixed
 OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft, 
-                             const fixed t_target)
+                             const fixed t_target) const
 {
   if (stats.distance_max > stats.distance_min) {
     // only perform scan if modification is possible
@@ -621,7 +621,7 @@ OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft,
 
 
 fixed 
-OrderedTask::calc_gradient(const AIRCRAFT_STATE &state) 
+OrderedTask::calc_gradient(const AIRCRAFT_STATE &state) const
 {
   if (tps.size() < 1)
     return fixed_zero;

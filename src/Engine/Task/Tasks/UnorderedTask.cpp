@@ -49,7 +49,7 @@ UnorderedTask::UnorderedTask(const enum type _type, TaskEvents &te,
 
 
 fixed 
-UnorderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft)
+UnorderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft) const
 {
   TaskPoint *tp = getActiveTaskPoint();
   if (!tp) {
@@ -66,7 +66,7 @@ UnorderedTask::check_task() const
 }
 
 fixed 
-UnorderedTask::calc_glide_required(const AIRCRAFT_STATE &aircraft)
+UnorderedTask::calc_glide_required(const AIRCRAFT_STATE &aircraft) const
 {
   TaskPoint *tp = getActiveTaskPoint();
   if (!tp) {
@@ -177,7 +177,7 @@ UnorderedTask::scan_distance_remaining(const GEOPOINT &location)
 }
 
 fixed 
-UnorderedTask::calc_gradient(const AIRCRAFT_STATE &state) 
+UnorderedTask::calc_gradient(const AIRCRAFT_STATE &state) const
 {
   return leg_gradient(state);
 }

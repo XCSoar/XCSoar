@@ -54,7 +54,7 @@ MixedTaskFactory::MixedTaskFactory(OrderedTask& _task,
 }
 
 bool 
-MixedTaskFactory::validate()
+MixedTaskFactory::validate() const
 {
   /**
    * \todo like AATTaskFactory, warn on overlap?

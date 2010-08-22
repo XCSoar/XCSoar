@@ -49,7 +49,7 @@ TouringTaskFactory::TouringTaskFactory(OrderedTask& _task,
 }
 
 bool 
-TouringTaskFactory::validate()
+TouringTaskFactory::validate() const
 {
 
   if (!m_task.has_start() || !m_task.has_finish()) {

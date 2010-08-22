@@ -130,6 +130,7 @@ public:
    * 
    * @return Vector of factory types
    */
+  gcc_pure
   std::vector<Factory_t> get_factory_types(bool all=true) const;
 
   /** 
@@ -154,6 +155,7 @@ public:
    *
    * @return Initialised object
    */
+  gcc_malloc gcc_pure
   OrderedTask* clone(TaskEvents &te, 
                      const TaskBehaviour &tb,
                      GlidePolar &gp) const;
@@ -171,6 +173,7 @@ public:
    *
    * @return Active task point
    */
+  gcc_pure
   TaskPoint* getActiveTaskPoint() const;
 
   /**
@@ -178,6 +181,7 @@ public:
    *
    * @return Index of active task point sequence
    */
+  gcc_pure
   unsigned getActiveIndex() const;
 
   /**
@@ -187,6 +191,7 @@ public:
    *
    * @return OrderedTaskPoint at index (or NULL if out of range)
    */
+  gcc_pure
   const OrderedTaskPoint* getTaskPoint(const unsigned index) const;
 
   /**
@@ -195,6 +200,7 @@ public:
    *
    * @param index_offset offset (default 0)
    */
+  gcc_pure
   bool validTaskPoint(const int index_offset=0) const;
 
   /**
@@ -202,6 +208,7 @@ public:
    *
    * @return True if task has start
    */
+  gcc_pure
   bool has_start() const;
 
   /**
@@ -209,6 +216,7 @@ public:
    *
    * @return True if task has finish
    */
+  gcc_pure
   bool has_finish() const;
 
   /**
@@ -342,6 +350,7 @@ public:
    *
    * @return Task global projection
    */
+  gcc_pure
   TaskProjection& get_task_projection();
 
   /**
@@ -349,6 +358,7 @@ public:
    *
    * @return State at task start (or null state if not started)
    */
+  gcc_pure
   AIRCRAFT_STATE get_start_state() const;
 
   /**
@@ -356,6 +366,7 @@ public:
    *
    * @return State at task finish (or null state if not finished)
    */
+  gcc_pure
   AIRCRAFT_STATE get_finish_state() const;
 
   fixed get_finish_height() const;
@@ -558,7 +569,7 @@ protected:
    *
    * @return Best MC value found (m/s)
    */
-  fixed calc_mc_best(const AIRCRAFT_STATE &state_now);
+  fixed calc_mc_best(const AIRCRAFT_STATE &state_now) const;
 
   /**
    * Calculate virtual sink rate of aircraft that allows a pure glide solution
@@ -569,7 +580,7 @@ protected:
    *
    * @return Sink rate of aircraft (m/s)
    */
-  fixed calc_glide_required(const AIRCRAFT_STATE &state_now);
+  fixed calc_glide_required(const AIRCRAFT_STATE &state_now) const;
 
   /**
    * Calculate cruise efficiency for the travelled part of the task.
@@ -580,9 +591,9 @@ protected:
    *
    * @return Cruise efficiency (0-1)
    */
-  fixed calc_cruise_efficiency(const AIRCRAFT_STATE &state_now);
+  fixed calc_cruise_efficiency(const AIRCRAFT_STATE &state_now) const;
 
-  fixed calc_effective_mc(const AIRCRAFT_STATE &state_now);
+  fixed calc_effective_mc(const AIRCRAFT_STATE &state_now) const;
 
   /**
    * Optimise target ranges (for adjustable tasks) to produce an estimated
@@ -595,7 +606,7 @@ protected:
    * @return Target range parameter (0-1)
    */
   fixed calc_min_target(const AIRCRAFT_STATE &state_now, 
-                        const fixed t_target);
+                        const fixed t_target) const;
 
   /**
    * Calculate angle from aircraft to remainder of task (minimum of leg
@@ -605,7 +616,7 @@ protected:
    *
    * @return Minimum gradient angle of remainder of task
    */
-  fixed calc_gradient(const AIRCRAFT_STATE &state_now);
+  fixed calc_gradient(const AIRCRAFT_STATE &state_now) const;
 
 private:
 
@@ -645,6 +656,7 @@ private:
 
   TaskProjection task_projection;
 
+  gcc_pure
   bool distance_is_significant(const GEOPOINT &location,
                                const GEOPOINT &location_last) const;
 
@@ -714,6 +726,7 @@ public:
    * @param index index position of task point
    * @return Task point or NULL if not found
    */
+  gcc_pure
   OrderedTaskPoint* get_tp(const unsigned index);
 
   /** 
@@ -722,6 +735,7 @@ public:
    * @param index index position of task point
    * @return Task point or NULL if not found
    */
+  gcc_pure
   const OrderedTaskPoint* get_tp(const unsigned index) const;
 
 #ifdef DO_PRINT

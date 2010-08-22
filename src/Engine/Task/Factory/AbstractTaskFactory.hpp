@@ -40,6 +40,7 @@ Copyright_License {
 #define ABSTRACT_TASK_FACTORY_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Compiler.h"
 
 #include <vector>
 
@@ -237,6 +238,7 @@ public:
    * 
    * @return Initialised object.  Transfers ownership to client.
    */
+  gcc_pure gcc_malloc
   OrderedTaskPoint* createPoint(const LegalPointType_t type,
                                 const Waypoint &wp) const;
 
@@ -248,6 +250,7 @@ public:
    *
    * @return Initialised StartPoint if valid, otherwise NULL
    */
+  gcc_pure gcc_malloc
   StartPoint* createStart(const LegalPointType_t type,
                           const Waypoint &wp) const;
 
@@ -259,6 +262,7 @@ public:
    *
    * @return Initialised IntermediatePoint if valid, otherwise NULL
    */
+  gcc_pure gcc_malloc
   IntermediatePoint* createIntermediate(const LegalPointType_t type,
                                         const Waypoint &wp) const;
 
@@ -270,6 +274,7 @@ public:
    *
    * @return Initialised FinishPoint if valid, otherwise NULL
    */
+  gcc_pure gcc_malloc
   FinishPoint* createFinish(const LegalPointType_t type,
                             const Waypoint &wp) const;
 
@@ -280,6 +285,7 @@ public:
    *
    * @return Initialised StartPoint if valid, otherwise NULL
    */
+  gcc_pure gcc_malloc
   StartPoint* createStart(const Waypoint &wp) const;
 
   /**
@@ -289,6 +295,7 @@ public:
    *
    * @return Initialised IntermediatePoint if valid, otherwise NULL
    */
+  gcc_pure gcc_malloc
   IntermediatePoint* createIntermediate(const Waypoint &wp) const;
 
   /**
@@ -298,6 +305,7 @@ public:
    *
    * @return Initialised FinishPoint if valid, otherwise NULL
    */
+  gcc_pure gcc_malloc
   FinishPoint* createFinish(const Waypoint &wp) const;
 
   /**
@@ -308,6 +316,7 @@ public:
    *
    * @return Initialised object.  Ownership is transferred to client.
    */
+  gcc_pure gcc_malloc
   StartPoint* createStart(ObservationZonePoint* pt,
                                 const Waypoint &wp) const;
 
@@ -319,6 +328,7 @@ public:
    *
    * @return Initialised object.  Ownership is transferred to client.
    */
+  gcc_pure gcc_malloc
   ASTPoint* createAST(ObservationZonePoint* pt,
                               const Waypoint &wp) const;
 
@@ -330,6 +340,7 @@ public:
    *
    * @return Initialised object.  Ownership is transferred to client.
    */
+  gcc_pure gcc_malloc
   AATPoint* createAAT(ObservationZonePoint* pt,
                                 const Waypoint &wp) const;
 
@@ -341,6 +352,7 @@ public:
    *
    * @return Initialised object.  Ownership is transferred to client.
    */
+  gcc_pure gcc_malloc
   FinishPoint* createFinish(ObservationZonePoint* pt,
                             const Waypoint &wp) const;
 
@@ -349,13 +361,15 @@ public:
    *
    * @return True if task is valid according to factory rules
    */
-  virtual bool validate() = 0;
+  gcc_pure
+  virtual bool validate() const = 0;
 
   /**
    * Retrieve settings from task
    *
    * @return settings from task
    */
+  gcc_pure
   const OrderedTaskBehaviour& get_ordered_task_behaviour() const;
 
   /**
@@ -366,6 +380,7 @@ public:
    *
    * @return True if type is valid
    */
+  gcc_pure
   virtual bool validAbstractType(LegalAbstractPointType_t type, const unsigned position) const;
 
   /**
@@ -373,6 +388,7 @@ public:
    * @param index index of task point sequence
    * @return True if aircraft has previously entered the taskpoint or if index is invalid
    */
+  gcc_pure
   bool has_entered(unsigned index) const;
 
   /**
@@ -382,6 +398,7 @@ public:
    *
    * @return Vector of valid types in position
    */
+  gcc_pure
   LegalPointVector getValidIntermediateTypes(unsigned position) const;
 
   /**
@@ -391,6 +408,7 @@ public:
    *
    * @return Vector of valid types in position
    */
+  gcc_pure
   LegalPointVector getValidTypes(unsigned position) const;
 
   /**
@@ -400,12 +418,14 @@ public:
    *
    * @return Type of supplied point
    */
+  gcc_pure
   LegalPointType_t getType(const OrderedTaskPoint* point) const;
 
   /**
    * Determines whether task is closed (finish same as start)
    * @return true if task is closed
    */
+  gcc_pure
   bool is_closed() const;
 
   /**
@@ -413,6 +433,7 @@ public:
    * (other than start/finish, no points used more than once)
    * @return true if task is unique
    */
+  gcc_pure
   bool is_unique() const;
 
   /**
@@ -422,6 +443,7 @@ public:
    *
    * @return True if type is valid
    */
+  gcc_pure
   bool validFinishType(LegalPointType_t type) const;
 
   /**
@@ -431,6 +453,7 @@ public:
    *
    * @return True if type is valid
    */
+  gcc_pure
   bool validStartType(LegalPointType_t type) const;
 
   /**
@@ -440,6 +463,7 @@ public:
    *
    * @return True if type is valid
    */
+  gcc_pure
   bool validIntermediateType(LegalPointType_t type) const;
 
 protected:
@@ -453,6 +477,7 @@ protected:
    *
    * @return True if candidate is valid at the position
    */
+  gcc_pure
   virtual bool validType(OrderedTaskPoint *new_tp, unsigned position) const;
 
   /** task managed by this factory */
@@ -485,6 +510,7 @@ protected:
    * 
    * @return True if possible
    */
+  gcc_pure
   bool is_position_intermediate(const unsigned position) const;
 
   /** 
@@ -494,6 +520,7 @@ protected:
    * 
    * @return True if possible
    */
+  gcc_pure
   bool is_position_finish(const unsigned position) const;
 };
 

@@ -41,6 +41,7 @@
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Navigation/Memento/DistanceMemento.hpp"
 #include "Navigation/Memento/GeoVectorMemento.hpp"
+#include "Compiler.h"
 
 struct AIRCRAFT_STATE;
 
@@ -137,6 +138,7 @@ public:
  * 
  * @return Distance (m)
  */
+  gcc_pure
   fixed leg_distance_max() const;
   
 /** 
@@ -144,6 +146,7 @@ public:
  * 
  * @return Distance (m)
  */
+  gcc_pure
   fixed leg_distance_min() const;
 
 /** 
@@ -151,6 +154,7 @@ public:
  * 
  * @return Distance (m)
  */
+  gcc_pure
   fixed leg_distance_nominal() const;
 
 protected:
@@ -167,15 +171,22 @@ private:
   GeoVectorMemento memo_travelled;
   GeoVectorMemento memo_remaining;
 
+  gcc_pure
   GeoVector leg_vector_planned() const;
   
+  gcc_pure
   GeoVector leg_vector_travelled(const GEOPOINT &ref) const;
   
+  gcc_pure
   GeoVector leg_vector_remaining(const GEOPOINT &ref) const;
 
+  gcc_pure
   fixed leg_distance_scored(const GEOPOINT &ref) const;
 
+  gcc_pure
   const OrderedTaskPoint* origin() const;
+
+  gcc_pure
   OrderedTaskPoint* next() const;
 
   OrderedTaskPoint& destination;

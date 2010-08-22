@@ -43,6 +43,7 @@
 #include "ObservationZone.hpp"
 #include "TaskPoint.hpp"
 #include "Navigation/TaskProjection.hpp"
+#include "Compiler.h"
 
 class TaskEvents;
 
@@ -93,6 +94,7 @@ public:
  * 
  * @return Location of max distance node
  */
+  gcc_pure
   const GEOPOINT& get_location_max() const {
     return m_search_max.get_location();
   };
@@ -131,6 +133,7 @@ public:
    * 
    * @return True if sample present
    */
+  gcc_pure
   bool has_sampled() const;
 
 /** 
@@ -147,6 +150,7 @@ public:
  * 
  * @return Vector of sample points representing a closed polygon
  */
+  gcc_pure
   const SearchPointVector& get_sample_points() const;
 
 protected:
@@ -181,6 +185,7 @@ private:
  *
  * @return Vector of boundary points representing a closed polygon
  */
+  gcc_pure
   virtual bool search_nominal_if_unsampled() const = 0;
 
 /** 
@@ -188,6 +193,7 @@ private:
  *
  * @return Vector of boundary points representing a closed polygon
  */
+  gcc_pure
   virtual bool search_boundary_points() const = 0;
 
 /** 
@@ -199,6 +205,7 @@ private:
  * 
  * @return Vector of boundary points representing a closed polygon
  */
+  gcc_pure
   const SearchPointVector& get_search_points() const;
 
 /** 

@@ -43,6 +43,7 @@
 #include "ScoredTaskPoint.hpp"
 #include "ObservationZoneClient.hpp"
 #include "Util/Serialisable.hpp"
+#include "Compiler.h"
 
 /**
  *  Abstract compound specialisation of TaskLeg and ScoredTaskPoint,
@@ -92,6 +93,7 @@ public:
    * @param task_projection Task projection of clone
    * @param waypoint Waypoint to shift to (or NULL)
    */
+  gcc_malloc gcc_pure
   OrderedTaskPoint* clone(const TaskBehaviour &task_behaviour,
                           const OrderedTaskBehaviour &ordered_task_behaviour,
                           const TaskProjection &task_projection,
@@ -243,6 +245,7 @@ protected:
  * 
  * @return Distance (m)
  */
+  gcc_pure
   fixed double_leg_distance(const GEOPOINT &ref) const;
 
 private:

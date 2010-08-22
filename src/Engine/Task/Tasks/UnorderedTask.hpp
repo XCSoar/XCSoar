@@ -67,9 +67,9 @@ protected:
 
   bool check_task() const;
 
-  fixed calc_mc_best(const AIRCRAFT_STATE &state_now);
+  fixed calc_mc_best(const AIRCRAFT_STATE &state_now) const;
 
-  fixed calc_glide_required(const AIRCRAFT_STATE &state_now);
+  fixed calc_glide_required(const AIRCRAFT_STATE &state_now) const;
 
   void glide_solution_remaining(const AIRCRAFT_STATE &state_now, 
                                 const GlidePolar &polar,
@@ -106,7 +106,7 @@ protected:
                             bool full,
                             fixed *dmin, fixed *dmax);
 
-  fixed calc_gradient(const AIRCRAFT_STATE &state_now);
+  fixed calc_gradient(const AIRCRAFT_STATE &state_now) const;
 
   bool has_targets() const { return false; }
 

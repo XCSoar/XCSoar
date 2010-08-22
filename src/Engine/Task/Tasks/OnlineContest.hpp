@@ -75,6 +75,7 @@ public:
  * 
  * @return Vector of all trace points 
  */
+  gcc_pure
   const TracePointVector& get_trace_points(const bool full_trace=true) const;
 
 /** 
@@ -82,6 +83,7 @@ public:
  * 
  * @return Vector of trace points selected for OLC
  */
+  gcc_pure
   const TracePointVector& get_olc_points() const;
 
 private:

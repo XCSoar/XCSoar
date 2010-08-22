@@ -117,6 +117,7 @@ public:
  * 
  * @return Vector for task leg
  */  
+  gcc_pure
   virtual const GeoVector get_vector_planned() const = 0;
 
 /** 
@@ -124,6 +125,7 @@ public:
  * 
  * @return Vector for task leg
  */  
+  gcc_pure
   virtual const GeoVector get_vector_travelled(const AIRCRAFT_STATE &) const = 0;
 
 /** 
@@ -146,6 +148,7 @@ public:
  * 
  * @return True if task point has a target (can have range set)
  */
+  gcc_pure
   virtual bool has_target() const {
     return false;
   };
@@ -172,6 +175,7 @@ public:
  * 
  * @return State at entry, or null if never entered
  */
+  gcc_pure
   virtual const AIRCRAFT_STATE& get_state_entered() const = 0;
 
 /** 
@@ -181,6 +185,7 @@ public:
  * 
  * @return Copy of waypoint associated with this task point
  */
+  gcc_pure
   const Waypoint& get_waypoint() const {
     return m_waypoint;
   }
