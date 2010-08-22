@@ -96,27 +96,16 @@ Units::LongitudeToDMS(Angle Longitude, int *dd, int *mm, int *ss, bool *east)
   // if (Longitude is negative) -> Longitude is West otherwise East
   *east = (Longitude.sign() < 0 ? false : true);
 
-  double mlong = Longitude.magnitude_degrees();
-  // Calculate degrees
-  *dd = (int)mlong;
-  // Calculate minutes
-  mlong = (mlong - (*dd)) * 60.0;
-  *mm = (int)(mlong);
-  // Calculate seconds
-  mlong = (mlong - (*mm)) * 60.0;
-  *ss = (int)(mlong + 0.5);
+  unsigned value = (unsigned)(Longitude.magnitude_degrees() * 3600 +
+                              fixed_half);
 
-  // Check if more then 60 seconds
-  if (*ss >= 60) {
-    (*mm)++;
-    (*ss) -= 60;
-  }
+  *ss = value % 60;
+  value /= 60;
 
-  // Check if more then 60 minutes
-  if ((*mm) >= 60) {
-    (*dd)++;
-    (*mm) -= 60;
-  }
+  *mm = value % 60;
+  value /= 60;
+
+  *dd = value;
 }
 
 void
@@ -125,27 +114,16 @@ Units::LatitudeToDMS(Angle Latitude, int *dd, int *mm, int *ss, bool *north)
   // if (Latitude is negative) -> Latitude is South otherwise North
   *north = (Latitude.sign() < 0 ? false : true);
 
-  double mlat = Latitude.magnitude_degrees();
-  // Calculate degrees
-  *dd = (int)mlat;
-  // Calculate minutes
-  mlat = (mlat - (*dd)) * 60.0;
-  *mm = (int)(mlat);
-  // Calculate seconds
-  mlat = (mlat - (*mm)) * 60.0;
-  *ss = (int)(mlat + 0.5);
+  unsigned value = (unsigned)(Latitude.magnitude_degrees() * 3600 +
+                              fixed_half);
 
-  // Check if more then 60 seconds
-  if (*ss >= 60) {
-    (*mm)++;
-    (*ss) -= 60;
-  }
+  *ss = value % 60;
+  value /= 60;
 
-  // Check if more then 60 minutes
-  if ((*mm) >= 60) {
-    (*dd)++;
-    (*mm) -= 60;
-  }
+  *mm = value % 60;
+  value /= 60;
+
+  *dd = value;
 }
 
 bool
