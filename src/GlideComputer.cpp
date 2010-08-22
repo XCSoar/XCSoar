@@ -177,8 +177,6 @@ GlideComputer::CalculateOwnTeamCode()
   if (!last_team_code_update.check_update(10000))
     return;
 
-  fixed distance;
-  Angle bearing;
   TCHAR code[10];
 
   // Get bearing and distance to the reference waypoint
@@ -188,8 +186,8 @@ GlideComputer::CalculateOwnTeamCode()
   if (!wp)
     return;
 
-  bearing = wp->Location.bearing(Basic().Location);
-  distance = wp->Location.distance(Basic().Location);
+  Angle bearing = wp->Location.bearing(Basic().Location);
+  fixed distance = wp->Location.distance(Basic().Location);
 
   // Calculate teamcode from bearing and distance
   GetTeamCode(code, bearing, distance);
@@ -207,8 +205,6 @@ GlideComputer::CalculateTeammateBearingRange()
   if (SettingsComputer().TeamCodeRefWaypoint < 0)
     return;
 
-  Angle ownBearing;
-
   // Get bearing and distance to the reference waypoint
   const Waypoint *wp =
       way_points.lookup_id(SettingsComputer().TeamCodeRefWaypoint);
@@ -216,7 +212,7 @@ GlideComputer::CalculateTeammateBearingRange()
   if (!wp)
     return;
 
-  ownBearing = wp->Location.bearing(Basic().Location);
+  Angle ownBearing = wp->Location.bearing(Basic().Location);
 
   // If (TeamCode exists and is valid)
   if (SettingsComputer().TeammateCodeValid) {
@@ -306,15 +302,13 @@ GlideComputer::FLARM_ScanTraffic()
   if (!traffic)
     return;
 
-  Angle bearing;
-  fixed distance;
-
   // Set Teammate location to FLARM contact location
   SetCalculated().TeammateLocation = traffic->Location;
 
   // Calculate distance and bearing from teammate to reference waypoint
-  bearing = wp->Location.bearing(traffic->Location);
-  distance = wp->Location.distance(traffic->Location);
+
+  Angle bearing = wp->Location.bearing(traffic->Location);
+  fixed distance = wp->Location.distance(traffic->Location);
 
   // Calculate TeamCode and save it in Calculated
   GetTeamCode(XCSoarInterface::SetSettingsComputer().TeammateCode,

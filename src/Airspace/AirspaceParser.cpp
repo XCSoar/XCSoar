@@ -348,16 +348,14 @@ static void
 CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
 {
   fixed Radius;
-  Angle StartBearing;
-  Angle EndBearing;
   TCHAR *Stop;
   GEOPOINT TempPoint;
   static const fixed fixed_75 = fixed(7.5);
   const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
 
   Radius = Units::ToSysUnit(fixed(_tcstod(&Text[2], &Stop)), unNauticalMiles);
-  StartBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop)));
-  EndBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop)));
+  Angle StartBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop)));
+  Angle EndBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop)));
 
   if (EndBearing < StartBearing)
     EndBearing += Angle::degrees(fixed_360);
@@ -379,7 +377,6 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
   GEOPOINT Start;
   GEOPOINT End;
   Angle StartBearing;
-  Angle EndBearing;
   fixed Radius;
   const TCHAR *Comma = NULL;
   GEOPOINT TempPoint;
@@ -395,7 +392,7 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
   ReadCoords(&Comma[1], End);
 
   DistanceBearing(temp_area.Center, Start, &Radius, &StartBearing);
-  EndBearing = Bearing(temp_area.Center, End);
+  Angle EndBearing = Bearing(temp_area.Center, End);
   TempPoint.Latitude = Start.Latitude;
   TempPoint.Longitude = Start.Longitude;
   temp_area.points.push_back(TempPoint);
