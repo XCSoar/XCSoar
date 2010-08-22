@@ -37,7 +37,6 @@
 #include "FlatPoint.hpp"
 #include <algorithm>
 #include <math.h>
-#define sqr(x) ((x)*(x))
 
 fixed 
 FlatPoint::cross(const FlatPoint& p2) const {
@@ -73,7 +72,7 @@ FlatPoint::rotate(const Angle angle) {
 
 fixed 
 FlatPoint::d(const FlatPoint &p) const {
-  return sqrt(sqr(p.x-x)+sqr(p.y-y));
+  return hypot(p.x - x, p.y - y);
 }
 
 fixed
@@ -83,5 +82,5 @@ FlatPoint::mag_sq() const {
 
 fixed
 FlatPoint::mag() const {
-  return sqrt(mag_sq());
+  return hypot(x, y);
 }
