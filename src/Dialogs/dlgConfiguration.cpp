@@ -1326,9 +1326,9 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(rule_as_text((OLCRules)0).c_str()));
-    dfe->addEnumText(gettext(rule_as_text((OLCRules)1).c_str()));
-    dfe->addEnumText(gettext(rule_as_text((OLCRules)2).c_str()));
+    dfe->addEnumText(gettext(rule_as_text((OLCRules)0)));
+    dfe->addEnumText(gettext(rule_as_text((OLCRules)1)));
+    dfe->addEnumText(gettext(rule_as_text((OLCRules)2)));
     dfe->Set(settings_computer.olc_rules);
     wp->RefreshDisplay();
   }

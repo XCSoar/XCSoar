@@ -9,6 +9,7 @@ enum OLCRules {
   OLC_Classic
 };
 
-tstring rule_as_text(OLCRules the_rule);
+const TCHAR *
+rule_as_text(OLCRules the_rule);
 
 #endif
