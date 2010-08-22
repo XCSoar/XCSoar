@@ -617,17 +617,6 @@ private:
   void set_neighbours(unsigned position);
 
   /**
-   * Checks whether a new task point is suitable to add to the
-   * task based on type of task point and whether task already
-   * has a start/finish point.
-   *
-   * @param new_tp Candidate task point to add
-   *
-   * @return True if ok to add to task
-   */
-  bool check_startfinish(OrderedTaskPoint* new_tp); 
-
-  /**
    * Update internal geometric state of task points.
    * Typically called after task geometry or observation zones are modified.
    *
