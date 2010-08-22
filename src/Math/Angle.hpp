@@ -40,6 +40,8 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Math/FastMath.h"
+#include "Compiler.h"
+
 #ifdef DO_PRINT
 #include <iostream>
 #endif
@@ -57,20 +59,26 @@ public:
 
   Angle(const Angle& angle): m_value(angle.m_value) {};
 
-  static Angle native(const fixed& value) {
+  gcc_const
+  static Angle native(const fixed value) {
     return Angle(value);
   }
+
   fixed value_native() const {
     return m_value;
   }
 
 #ifdef RADIANS
-  static Angle degrees(const fixed& value) {
+  gcc_const
+  static Angle degrees(const fixed value) {
     return Angle(value*fixed_deg_to_rad);
   }
-  static Angle radians(const fixed& value) {
+
+  gcc_const
+  static Angle radians(const fixed value) {
     return Angle(value);
   }
+
   fixed value_degrees() const {
     return m_value*fixed_rad_to_deg;
   }
@@ -78,12 +86,16 @@ public:
     return m_value;
   }
 #else
-  static Angle degrees(const fixed& value) {
+  gcc_const
+  static Angle degrees(const fixed value) {
     return Angle(value);
   }
-  static Angle radians(const fixed& value) {
+
+  gcc_const
+  static Angle radians(const fixed value) {
     return Angle(value*fixed_rad_to_deg);
   }
+
   fixed value_degrees() const {
     return m_value;
   }
@@ -91,38 +103,59 @@ public:
     return m_value*fixed_deg_to_rad;
   }
 #endif
-  static Angle dms(const fixed& d, const fixed& m, const fixed& s) {
+
+  gcc_const
+  static Angle dms(const fixed d, const fixed m, const fixed s) {
     return Angle::degrees(d + m / 60 + s / 3600);
   }
 
+  gcc_pure
   inline fixed sin() const {
     return ::sin(value_radians());
   }
+
+  gcc_pure
   inline fixed cos() const {
     return ::cos(value_radians());
   }
+
+  gcc_pure
   inline fixed fastsine() const {
     return (::fastsine(value_native()));
   }
+
+  gcc_pure
   inline fixed fastcosine() const {
     return (::fastcosine(value_native()));
   }
+
+  gcc_pure
   inline fixed invfastcosine() const {
     return (::invfastcosine(value_native()));
   }
+
+  gcc_pure
   inline int ifastsine() const {
     return (::ifastsine(value_native()));
   }
+
+  gcc_pure
   inline int ifastcosine() const {
     return (::ifastcosine(value_native()));
   }
+
+  gcc_pure
   int sign() const;
 
   inline void sin_cos(fixed& s, fixed& c) const {
     return ::sin_cos(value_radians(), &s, &c);
   }
   
+
+  gcc_pure
   fixed magnitude_degrees() const;
+
+  gcc_pure
   fixed magnitude_radians() const;
 
   void flip();
@@ -131,56 +164,68 @@ public:
    * Limits the angle (theta) to -180 - +180 degrees
    * @return Output angle (-180 - +180 degrees)
    */
+  gcc_pure
   Angle as_delta() const;
 
   /**
    * Limits the angle (theta) to 0 - 360 degrees
    * @return Output angle (0-360 degrees)
    */
+  gcc_pure
   Angle as_bearing() const;
 
   /**
    * Rotate angle by 180 degrees and limit to 0 - 360 degrees
    * @return Output angle (0 - 360 degrees)
    */
+  gcc_pure
   Angle Reciprocal() const;
 
+  gcc_pure
   Angle BiSector(const Angle &OutBound) const;
 
+  gcc_pure
   Angle HalfAngle(const Angle &End) const;
 
+  gcc_pure
   Angle Fraction(const Angle &End, const fixed fraction) const;
 
+  gcc_pure
   Angle
   operator*(const Angle x) const
   {
     return Angle(m_value * x.m_value);
   }
 
+  gcc_pure
   Angle
   operator*(const fixed x) const
   {
     return Angle(m_value * x);
   }
 
+  gcc_pure
   Angle
   operator/(const fixed x) const
   {
     return Angle(m_value / x);
   }
 
+  gcc_pure
   Angle
   operator+(const Angle &x) const
   {
     return Angle(m_value + x.m_value);
   }
 
+  gcc_pure
   Angle
   operator-(const Angle &x) const
   {
     return Angle(m_value - x.m_value);
   }
 
+  gcc_pure
   Angle
   operator-() const
   {
