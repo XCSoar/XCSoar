@@ -92,7 +92,7 @@ public:
   }
 #endif
   static Angle dms(const fixed& d, const fixed& m, const fixed& s) {
-    return Angle::degrees(d + m / fixed(60) + s / fixed(3600));
+    return Angle::degrees(d + m / 60 + s / 3600);
   }
 
   inline fixed sin() const {

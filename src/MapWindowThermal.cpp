@@ -174,7 +174,7 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc) const
     if (positive(wthis)) {
       ht[numtherm] = hp;
       Wt[numtherm] = wthis;
-      Wmax = max(Wmax, wthis / fixed(1.5));
+      Wmax = max(Wmax, wthis * 2 / 3);
       numtherm++;
     }
   }

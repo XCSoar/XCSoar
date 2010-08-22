@@ -312,7 +312,7 @@ heading_to_index(Angle &heading)
   static const Angle afive = Angle::degrees(fixed(5));
 
   unsigned index =
-      floor((heading + afive).as_bearing().value_degrees() / fixed(10));
+      floor((heading + afive).as_bearing().value_degrees() / 10);
 
   return std::max(0u, std::min(35u, index));
 }

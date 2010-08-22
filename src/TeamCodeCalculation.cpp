@@ -65,7 +65,7 @@ GetTeamCode(TCHAR *code, Angle bearing, fixed range)
 	// Calculate bearing part of the teamcode
 	ConvertBearingToTeamCode(bearing, code);
 	// Calculate distance part of the teamcode
-	NumberToTeamCode(range / fixed(100.0), &code[2], 0);
+  NumberToTeamCode(range / 100, &code[2], 0);
 }
 
 /**
