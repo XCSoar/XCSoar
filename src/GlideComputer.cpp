@@ -207,7 +207,6 @@ GlideComputer::CalculateTeammateBearingRange()
   if (SettingsComputer().TeamCodeRefWaypoint < 0)
     return;
 
-  fixed ownDistance;
   Angle ownBearing;
 
   // Get bearing and distance to the reference waypoint
@@ -218,7 +217,6 @@ GlideComputer::CalculateTeammateBearingRange()
     return;
 
   ownBearing = wp->Location.bearing(Basic().Location);
-  ownDistance = wp->Location.distance(Basic().Location);
 
   // If (TeamCode exists and is valid)
   if (SettingsComputer().TeammateCodeValid) {
