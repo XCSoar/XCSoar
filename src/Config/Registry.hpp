@@ -73,6 +73,10 @@ public:
     return hKey == 0;
   }
 
+  operator HKEY() const {
+    return hKey;
+  }
+
   bool get_value(const TCHAR *name, LPDWORD type_r,
                  LPBYTE data, LPDWORD length_r) const {
     LONG result = ::RegQueryValueEx(hKey, name, NULL, type_r, data, length_r);
