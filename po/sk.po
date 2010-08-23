@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-16 23:05+0200\n"
-"PO-Revision-Date: 2010-08-10 10:15+0000\n"
+"PO-Revision-Date: 2010-08-17 18:25+0000\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
-"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-08-13 08:32+0000\n"
+"X-Launchpad-Export-Date: 2010-08-23 05:24+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: sk\n"
 
 #: src/Airspace/AirspaceParser.cpp:155
 msgid "Parse Error at Line"
@@ -139,9 +139,8 @@ msgid "Loading Waypoints..."
 msgstr "Nahrávam otočné body..."
 
 #: src/Gauge/ThermalAssistantWindow.cpp:243
-#, fuzzy
 msgid "Not Circling"
-msgstr "Sever hore v krúžení"
+msgstr "Nie v krúžení"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:252
 msgid "No Traffic"
@@ -157,65 +156,56 @@ msgid "Next turnpoint"
 msgstr "Nasledujúci otočný bod"
 
 #: src/ExpandMacros.cpp:134 src/ExpandMacros.cpp:180
-#, fuzzy
 msgid "Previous turnpoint"
-msgstr "Nasledujúci otočný bod"
+msgstr "Predošlý otočný bod"
 
 #: src/ExpandMacros.cpp:146
 msgid "Furthest landpoint"
-msgstr ""
+msgstr "Najvzdialenejšia p. plocha"
 
 #: src/ExpandMacros.cpp:147
-#, fuzzy
 msgid "Next landpoint"
-msgstr "Ďalší otočný bod"
+msgstr "Daľšia p. plocha"
 
 #: src/ExpandMacros.cpp:156
-#, fuzzy
 msgid "Closest landpoint"
-msgstr "Vymazať otočný bod?"
+msgstr "Najbližšia p. plocha"
 
 #: src/ExpandMacros.cpp:157
 msgid "Previous landpoint"
-msgstr ""
+msgstr "Predošlá p. plocha"
 
 #: src/ExpandMacros.cpp:169
-#, fuzzy
 msgid "Finish turnpoint"
-msgstr "Nasledujúci otočný bod"
+msgstr "Cieľový otočný bod"
 
 #: src/ExpandMacros.cpp:179
-#, fuzzy
 msgid "Start turnpoint"
-msgstr "Bod štartu"
+msgstr "Štartový otočný bod"
 
 #: src/ExpandMacros.cpp:188
 msgid "Start point cycle"
-msgstr ""
+msgstr "Výber štartu"
 
 #: src/ExpandMacros.cpp:188 src/ExpandMacros.cpp:194
-#, fuzzy
 msgid "Previous waypoint"
-msgstr "pridať traťový bod"
+msgstr "Predošlý otočný bod"
 
 #: src/ExpandMacros.cpp:380
-#, fuzzy
 msgid "Topology on"
-msgstr "Súbor s topológiou*"
+msgstr "Topológia zapnutá"
 
 #: src/ExpandMacros.cpp:384
 msgid "Terrain on"
-msgstr ""
+msgstr "Terén zapnutý"
 
 #: src/ExpandMacros.cpp:388
-#, fuzzy
 msgid "Terrain + Topology"
-msgstr "Farebný profil terénu"
+msgstr "Terén + Topológia"
 
 #: src/ExpandMacros.cpp:392
-#, fuzzy
 msgid "Terrain off"
-msgstr "Terén vypnúť"
+msgstr "Terén vypnutý"
 
 #: src/InfoBoxes/Content/Factory.cpp:222
 msgid ""
@@ -406,10 +396,10 @@ msgstr ""
 msgid ""
 "[Wind Speed]\r\n"
 "Wind speed estimated by XCSoar.  (Touchscreen/PC only) Manual adjustment is "
-"possible by pressing the up/down cursor keys to adjust magnitude and left/"
-"right cursor keys to adjust bearing when the infobox is active.  Pressing "
-"the enter cursor key saves the wind value as the initial value when XCSoar "
-"next starts."
+"possible by pressing the up/down cursor keys to adjust magnitude and "
+"left/right cursor keys to adjust bearing when the infobox is active.  "
+"Pressing the enter cursor key saves the wind value as the initial value when "
+"XCSoar next starts."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:274
@@ -1594,13 +1584,13 @@ msgstr "Skenovanie predpovede počasia"
 msgid "Starting devices"
 msgstr "Štartovanie zariadení"
 
-#.
+#. 
 #. -- Reset polar in case devices need the data
 #. LogStartUp(_T("GlidePolar::UpdatePolar"));
 #. GlidePolar::UpdatePolar(true, SettingsComputer());
-#.
+#. 
 #. This should be done inside devStartup if it is really required
-#.
+#. 
 #: src/Components.cpp:365
 msgid "Initialising display"
 msgstr "Spúštanie displeja"
@@ -1831,7 +1821,7 @@ msgstr "Písma"
 
 #: src/Dialogs/dlgConfiguration.cpp:100
 msgid "FLARM and other gauges"
-msgstr ""
+msgstr "FLARM a iné ukazovatele"
 
 #: src/Dialogs/dlgConfiguration.cpp:101
 msgid "Default task rules"
@@ -1939,7 +1929,7 @@ msgstr "prídavný"
 
 #: src/Dialogs/dlgConfiguration.cpp:922 src/Dialogs/dlgWeather.cpp:136
 msgid "No help available on this item"
-msgstr ""
+msgstr "Pre túto položku nie je nápoveda"
 
 #: src/Dialogs/dlgConfiguration.cpp:1172
 msgid "All on"
@@ -2407,23 +2397,20 @@ msgid "A. Zoom"
 msgstr "A. Zoom"
 
 #: src/Dialogs/dlgStatus.cpp:65
-#, fuzzy
 msgid "Flight"
-msgstr "Dĺžka letu"
+msgstr "Let"
 
 #: src/Dialogs/dlgStatus.cpp:66
 msgid "System"
-msgstr ""
+msgstr "Systém"
 
 #: src/Dialogs/dlgStatus.cpp:68
-#, fuzzy
 msgid "Task Rules"
-msgstr "Kalkulácia úlohy"
+msgstr "Pravidlá úlohy"
 
 #: src/Dialogs/dlgStatus.cpp:69
-#, fuzzy
 msgid "Times"
-msgstr "Čas"
+msgstr "Časy"
 
 #: src/Dialogs/dlgStatus.cpp:189
 msgid "Fix invalid"
@@ -2564,9 +2551,8 @@ msgid "Comment"
 msgstr "Komentár"
 
 #: src/Dialogs/dlgWayPointSelect.cpp:474
-#, fuzzy
 msgid "Choose a filter or click here"
-msgstr "Vyberte filter"
+msgstr "Zvoľ filter alebo klikni tu"
 
 #: src/Device/Driver/Volkslogger.cpp:142
 msgid "Comms with Volkslogger"
@@ -2631,7 +2617,7 @@ msgstr "TE zmiešavač"
 
 #: Data/Dialogs/dlgLoggerReplay.xml:14
 msgid "Rate"
-msgstr ""
+msgstr "Stupeň"
 
 #: Data/Dialogs/dlgTaskCalculator.xml:34
 msgid "Achieved MacCready"
@@ -2677,7 +2663,7 @@ msgstr "Ztlm vário pri rádiopríjme"
 #: Data/Dialogs/dlgConfiguration.xml:539
 #: Data/Dialogs/dlgConfiguration_L.xml:538
 msgid "ThermalAssistant"
-msgstr ""
+msgstr "Pomocník v stupáku"
 
 #: Data/Dialogs/dlgVario.xml:12 Data/Dialogs/dlgVario_L.xml:13
 msgid "TE port"
@@ -3654,7 +3640,7 @@ msgstr "Kód priateľa:"
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:6
 msgid "Ack Day"
-msgstr ""
+msgstr "Uznaj dnes"
 
 #: Data/Dialogs/dlgConfiguration.xml:288
 #: Data/Dialogs/dlgConfiguration_L.xml:290
@@ -4216,7 +4202,7 @@ msgstr "Nastav rozsah"
 
 #: Data/Dialogs/dlgVario.xml:329 Data/Dialogs/dlgVario_L.xml:329
 msgid "Max reported circling"
-msgstr ""
+msgstr "Max zaznamenané stúpanie"
 
 #: Data/Dialogs/dlgVario.xml:430 Data/Dialogs/dlgVario_L.xml:430
 msgid "V Flap"
