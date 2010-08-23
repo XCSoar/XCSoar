@@ -55,6 +55,472 @@ Copyright_License {
 
 #include <stddef.h>
 
+// Groups:
+//   Altitude 0,1,20,33
+//   Aircraft info 3,6,23,32,37,47,54
+//   LD 4,5,19,38,53,66
+//   Vario 2,7,8,9,21,22,24,44
+//   Wind 25,26,48,49,50
+//   MacCready 10,34,35,43
+//   Nav 11,12,13,15,16,17,18,27,28,29,30,31
+//   Waypoint 14,36,39,40,41,42,45,46
+const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
+  // 0
+  {
+    N_("Height GPS"),
+    1, 33,
+  },
+
+  // 1
+  {
+    N_("Height AGL"),
+    20, 0,
+  },
+
+  // 2
+  {
+    N_("Thermal last 30 sec"),
+    7, 44,
+  },
+
+  // 3
+  {
+    N_("Bearing"),
+    6, 54,
+  },
+
+  // 4
+  {
+    N_("L/D instantaneous"),
+    5, 38,
+  },
+
+  // 5
+  {
+    N_("L/D cruise"),
+    19, 4,
+  },
+
+  // 6
+  {
+    N_("Speed ground"),
+    23, 3,
+  },
+
+  // 7
+  {
+    N_("Last Thermal Average"),
+    8, 2,
+  },
+
+  // 8
+  {
+    N_("Last Thermal Gain"),
+    9, 7,
+  },
+
+  // 9
+  {
+    N_("Last Thermal Time"),
+    21, 8,
+  },
+
+  // 10
+  {
+    N_("MacCready Setting"),
+    34, 43,
+  },
+
+  // 11
+  {
+    N_("Next Distance"),
+    12, 31,
+  },
+
+  // 12
+  {
+    N_("Next Altitude Difference"),
+    13, 11,
+  },
+
+  // 13
+  {
+    N_("Next Altitude Required"),
+    15, 12,
+  },
+
+  // 14
+  {
+    N_("Next Waypoint"),
+    36, 46,
+  },
+
+  // 15
+  {
+    N_("Final Altitude Difference"),
+    16, 13,
+  },
+
+  // 16
+  {
+    N_("Final Altitude Required"),
+    17, 15,
+  },
+
+  // 17
+  {
+    N_("Speed Task Average"),
+    18, 16,
+  },
+
+  // 18
+  {
+    N_("Final Distance"),
+    27, 17,
+  },
+
+  // 19
+  {
+    N_("Final LD"),
+    38, 5,
+  },
+
+  // 20
+  {
+    N_("Terrain Elevation"),
+    33, 1,
+  },
+
+  // 21
+  {
+    N_("Thermal Average"),
+    22, 9,
+  },
+
+  // 22
+  {
+    N_("Thermal Gain"),
+    24, 21,
+  },
+
+  // 23
+  {
+    N_("Track"),
+    32, 6,
+  },
+
+  // 24
+  {
+    N_("Vario"),
+    44, 22,
+  },
+
+  // 25
+  {
+    N_("Wind Speed"),
+    26, 50,
+  },
+
+  // 26
+  {
+    N_("Wind Bearing"),
+    48, 25,
+  },
+
+  // 27
+  {
+    N_("AA Time"),
+    28, 18,
+  },
+
+  // 28
+  {
+    N_("AA Distance Max"),
+    29, 27,
+  },
+
+  // 29
+  {
+    N_("AA Distance Min"),
+    30, 28,
+  },
+
+  // 30
+  {
+    N_("AA Speed Max"),
+    31, 29,
+  },
+
+  // 31
+  {
+    N_("AA Speed Min"),
+    51, 30,
+  },
+
+  // 32
+  {
+    N_("Airspeed IAS"),
+    37, 23,
+  },
+
+  // 33
+  {
+    N_("Pressure Altitude"),
+    0, 20,
+  },
+
+  // 34
+  {
+    N_("Speed MacCready"),
+    35, 10,
+  },
+
+  // 35
+  {
+    N_("Percentage climb"),
+    43, 34,
+  },
+
+  // 36
+  {
+    N_("Time of flight"),
+    39, 14,
+  },
+
+  // 37
+  {
+    N_("G load"),
+    47, 32,
+  },
+
+  // 38
+  {
+    N_("Next LD"),
+    53, 19,
+  },
+
+  // 39
+  {
+    N_("Time local"),
+    40, 36,
+  },
+
+  // 40
+  {
+    N_("Time UTC"),
+    41, 39,
+  },
+
+  // 41
+  {
+    N_("Task Time To Go"),
+    42, 40,
+  },
+
+  // 42
+  {
+    N_("Next Time To Go"),
+    45, 41,
+  },
+
+  // 43
+  {
+    N_("Speed Dolphin"),
+    10, 35,
+  },
+
+  // 44
+  {
+    N_("Netto Vario"),
+    2, 24,
+  },
+
+  // 45
+  {
+    N_("Task Arrival Time"),
+    46, 42,
+  },
+
+  // 46
+  {
+    N_("Next Arrival Time"),
+    14, 45,
+  },
+
+  // 47
+  {
+    N_("Bearing Difference"),
+    54, 37,
+  },
+
+  // 48
+  {
+    N_("Outside Air Temperature"),
+    49, 26,
+  },
+
+  // 49
+  {
+    N_("Relative Humidity"),
+    50, 48,
+  },
+
+  // 50
+  {
+    N_("Forecast Temperature"),
+    49, 25,
+  },
+
+  // 51
+  {
+    N_("AA Distance Tgt"),
+    52, 31,
+  },
+
+  // 52
+  {
+    N_("AA Speed Tgt"),
+    11, 51,
+  },
+
+  // 53
+  {
+    N_("L/D vario"),
+    4, 38,
+  },
+
+  // 54
+  {
+    N_("Airspeed TAS"),
+    3, 47,
+  },
+
+  // 55
+  {
+    N_("Own Team Code"),
+    56, 54,
+  },
+
+  // 56
+  {
+    N_("Team Bearing"),
+    57, 55,
+  },
+
+  // 57
+  {
+    N_("Team Bearing Diff"),
+    58, 56,
+  },
+
+  // 58
+  {
+    N_("Team Range"),
+    55, 57,
+  },
+
+  // 59
+  {
+    N_("Speed Task Instantaneous"),
+    18, 16,
+  },
+
+  // 60
+  {
+    N_("Distance Home"),
+    18, 16,
+  },
+
+  // 61
+  {
+    N_("Speed Task Achieved"),
+    18, 16,
+  },
+
+  // 62
+  {
+    N_("AA Delta Time"),
+    28, 18,
+  },
+
+  // 63
+  {
+    N_("Thermal All"),
+    8, 2,
+  },
+
+  // 64
+  {
+    N_("Distance Vario"),
+    8, 2,
+  },
+
+  // 65
+  {
+#ifndef GNAV
+    N_("Battery Percent"),
+#else
+    N_("Battery Voltage"),
+#endif
+    49, 26,
+  },
+
+  // 66  VENTA-ADDON added Final GR
+  // VENTA-TODO: fix those 38,5 numbers to point correctly menu items
+  {
+    N_("Final GR"),
+    38, 5,
+  },
+
+  // 67 VENTA3-ADDON Alternate1 destinations infoboxes  TODO> fix 36 46 to something correct
+  {
+    N_("Alternate1 GR"),
+    36, 46,
+  },
+
+  // 68 Alternate 2
+  {
+    N_("Alternate2 GR"),
+    36, 46,
+  },
+
+  // 69 BestAlternate aka BestLanding
+  {
+    N_("Best Alternate"),
+    36, 46,
+  },
+
+  // 70
+  {
+    N_("QFE GPS"),
+    1, 33,
+  },
+
+  // 71 TODO FIX those 19,4 values
+  {
+    N_("L/D Average"),
+    19, 4,
+  },
+
+  // 72 //
+  {
+    N_("Experimental1"),
+    8, 2,
+  },
+
+  // 73 //
+  {
+    N_("Online Contest Distance"),
+    8, 2,
+  },
+
+  // 74 //
+  {
+    N_("Experimental2"),
+    8, 2,
+  },
+};
+
 InfoBoxContent*
 InfoBoxFactory::Create(unsigned InfoBoxType)
 {

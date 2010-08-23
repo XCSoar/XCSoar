@@ -41,13 +41,48 @@ Copyright_License {
 
 #include "Compiler.h"
 
+#include <assert.h>
 #include <tchar.h>
 
 class InfoBoxContent;
 
 namespace InfoBoxFactory
 {
+  struct InfoBoxMetaData {
+    const TCHAR *name;
+    char next, previous;
+  };
+
   static const unsigned NUM_TYPES = 75;
+
+  extern const InfoBoxMetaData MetaData[NUM_TYPES];
+
+  /**
+   * Returns the human-readable name of the info box type.
+   */
+  static inline const TCHAR *
+  GetName(unsigned type)
+  {
+    assert(type < NUM_TYPES);
+
+    return MetaData[type].name;
+  }
+
+  static inline unsigned
+  GetNext(unsigned type)
+  {
+    assert(type < NUM_TYPES);
+
+    return MetaData[type].next;
+  }
+
+  static inline unsigned
+  GetPrevious(unsigned type)
+  {
+    assert(type < NUM_TYPES);
+
+    return MetaData[type].previous;
+  }
 
   gcc_const
   InfoBoxContent* Create(unsigned InfoBoxType);
