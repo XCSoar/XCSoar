@@ -8,15 +8,24 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-16 23:05+0200\n"
-"PO-Revision-Date: 2010-08-03 21:24+0000\n"
-"Last-Translator: Peter Hanhart <Unknown>\n"
+"PO-Revision-Date: 2010-08-17 15:45+0000\n"
+"Last-Translator: Turbo <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-08-04 04:52+0000\n"
+"X-Launchpad-Export-Date: 2010-08-23 05:24+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: de\n"
+
+#: src/Dialogs/dlgTaskHelpers.cpp:324
+msgid "Save task?"
+msgstr "Aufgabe speichern?"
+
+#: Data/Dialogs/dlgConfiguration.xml:313
+#: Data/Dialogs/dlgConfiguration_L.xml:313
+msgid "Ignore checksum*"
+msgstr "Prüfsumme ignorieren*"
 
 #: src/Airspace/AirspaceParser.cpp:155
 msgid "Parse Error at Line"
@@ -35,7 +44,7 @@ msgstr "Luftraum"
 #. Create and init ProgressDialog
 #: src/Airspace/AirspaceParser.cpp:770
 msgid "Loading Airspace File..."
-msgstr "Luftraumdatei wird geladen"
+msgstr "Luftraumdatei wird geladen..."
 
 #: src/ConditionMonitor.cpp:176
 msgid "Significant wind change"
@@ -91,7 +100,7 @@ msgid ""
 "Task NOT Declared!"
 msgstr ""
 "Fehler aufgetreten,\r\n"
-"Aufgabe nicht deklariert!"
+"Aufgabe NICHT deklariert!"
 
 #: src/Logger/LoggerImpl.cpp:592
 msgid "No logger connected"
@@ -139,7 +148,7 @@ msgstr "Lade Wegpunkte..."
 
 #: src/Gauge/ThermalAssistantWindow.cpp:243
 msgid "Not Circling"
-msgstr ""
+msgstr "Kein Kreisflug"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:252
 msgid "No Traffic"
@@ -156,27 +165,27 @@ msgstr "Nächster Wendepunkt"
 
 #: src/ExpandMacros.cpp:134 src/ExpandMacros.cpp:180
 msgid "Previous turnpoint"
-msgstr "Nächster Wendepunkt"
+msgstr "Vorheriger Wendepunkt"
 
 #: src/ExpandMacros.cpp:146
 msgid "Furthest landpoint"
-msgstr ""
+msgstr "Entferntestes Landefeld"
 
 #: src/ExpandMacros.cpp:147
 msgid "Next landpoint"
-msgstr "Nächster Wendepunkt"
+msgstr "Nächstes Landefeld"
 
 #: src/ExpandMacros.cpp:156
 msgid "Closest landpoint"
-msgstr "Nächster Wendepunkt"
+msgstr "Nächstgelegenes Landefeld"
 
 #: src/ExpandMacros.cpp:157
 msgid "Previous landpoint"
-msgstr ""
+msgstr "Vorheriges Landefeld"
 
 #: src/ExpandMacros.cpp:169
 msgid "Finish turnpoint"
-msgstr ""
+msgstr "Zielpunkt"
 
 #: src/ExpandMacros.cpp:179
 msgid "Start turnpoint"
@@ -184,11 +193,11 @@ msgstr "Startpunkt"
 
 #: src/ExpandMacros.cpp:188
 msgid "Start point cycle"
-msgstr ""
+msgstr "Startpunkt Auswahl"
 
 #: src/ExpandMacros.cpp:188 src/ExpandMacros.cpp:194
 msgid "Previous waypoint"
-msgstr "Vorherige Wegpunkt"
+msgstr "Vorheriger Wegpunkt"
 
 #: src/ExpandMacros.cpp:380
 msgid "Topology on"
@@ -214,6 +223,10 @@ msgid ""
 "up/down arrow keys and the right/left arrow keys also cause the glider to "
 "turn."
 msgstr ""
+"[GPS Höhe]\r\n"
+"Dies ist die vom GPS ermittelte Höhe über mittlerem Meeresspiegel. \r\n"
+"Nur bei Touchscreen und PC: Dieser Wert kann im Simulationsmodus mit den "
+"auf/ab Pfeiltasten verändert werden. Rechts/links dreht das Flugzeug."
 
 #: src/InfoBoxes/Content/Factory.cpp:224
 msgid ""
@@ -222,6 +235,10 @@ msgid ""
 "terrain file.  The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
+"[Höhe AGL]\r\n"
+"Dies ist die GPS Höhe abzüglich der Geländehöhe, ermittelt aus der "
+"Geländedatei. Der Wert wird rot dargestellt, wenn sich das Flugzeug "
+"unterhalb der Sicherheitshöhe befindet."
 
 #: src/InfoBoxes/Content/Factory.cpp:226
 msgid ""
@@ -269,18 +286,25 @@ msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
 msgstr ""
+"[Letztes mittleres Steigen]\r\n"
+"Gesamte Höhenänderung in der letzten Thermik geteilt durch die Dauer des "
+"Kreisens."
 
 #: src/InfoBoxes/Content/Factory.cpp:238
 msgid ""
 "[Last Thermal Gain]\r\n"
 "Total altitude gain/loss in the last thermal."
 msgstr ""
+"[Höhengewinn letzte Thermik]\r\n"
+"Gesamter Höhengewinn in der letzten Thermik."
 
 #: src/InfoBoxes/Content/Factory.cpp:240
 msgid ""
 "[Last Thermal Time]\r\n"
 "Time spent circling in the last thermal."
 msgstr ""
+"[Zeit letzte Thermik]\r\n"
+"Gesamtzeit, die in der letzten Thermik gekreist wurde."
 
 #: src/InfoBoxes/Content/Factory.cpp:242
 msgid ""
@@ -343,6 +367,8 @@ msgid ""
 "[Final Distance]\r\n"
 "Distance to finish around remaining turn points."
 msgstr ""
+"[Endanflug Entfernung]\r\n"
+"Distanz zum Ziel um verbleibende Wendepunkte."
 
 #: src/InfoBoxes/Content/Factory.cpp:260
 msgid ""
@@ -362,6 +388,9 @@ msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
 "terrain file at the current GPS location."
 msgstr ""
+"[Geländehöhe]\r\n"
+"Dies ist die Höhe des Geländes über mittlerem Meeresspiegel, entsprechend "
+"der Geländedatei an der aktuellen GPS-Position."
 
 #: src/InfoBoxes/Content/Factory.cpp:264
 msgid ""
@@ -369,12 +398,16 @@ msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermaling."
 msgstr ""
+"[Bart integriert]\r\n"
+"Höhenänderung im aktuellen Bart, geteilt durch die Kurbelzeit."
 
 #: src/InfoBoxes/Content/Factory.cpp:266
 msgid ""
 "[Thermal Gain]\r\n"
 "The altitude gained/lost in the current thermal."
 msgstr ""
+"[Bart gesamt]\r\n"
+"Gesamte Höhenänderung im aktuellen Bart."
 
 #: src/InfoBoxes/Content/Factory.cpp:268
 msgid ""
@@ -383,6 +416,10 @@ msgid ""
 "is active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
+"[Kurs]\r\n"
+"Kompasskurs nach GPS. Nur Touchscreen und PC: Wenn diese Infobox im "
+"Simulationsmodus aktiv ist, kann mit den Pfeitasten auf/ab der Kurs "
+"eingestellt werden."
 
 #: src/InfoBoxes/Content/Factory.cpp:270
 msgid ""
@@ -390,16 +427,24 @@ msgid ""
 "Instantaneous vertical speed, as reported by the GPS, or the intelligent "
 "vario total energy vario value if connected to one."
 msgstr ""
+"[Vario]\r\n"
+"Momentane Höhenänderung nach GPS oder dem energiekompensierten Vario, wenn "
+"verfügbar."
 
 #: src/InfoBoxes/Content/Factory.cpp:272
 msgid ""
 "[Wind Speed]\r\n"
 "Wind speed estimated by XCSoar.  (Touchscreen/PC only) Manual adjustment is "
-"possible by pressing the up/down cursor keys to adjust magnitude and left/"
-"right cursor keys to adjust bearing when the infobox is active.  Pressing "
-"the enter cursor key saves the wind value as the initial value when XCSoar "
-"next starts."
+"possible by pressing the up/down cursor keys to adjust magnitude and "
+"left/right cursor keys to adjust bearing when the infobox is active.  "
+"Pressing the enter cursor key saves the wind value as the initial value when "
+"XCSoar next starts."
 msgstr ""
+"[Windgeschwindigkeit]\r\n"
+"Von XCSoar geschätzte Windgeschwindigkeit. Nur Touchscreen und PC: Wenn "
+"diese Infobox aktiv ist, kann mit den Pfeiltasten auf/ab die Winstärke und "
+"rechts/links die Windrichtung eingegeben werden. Drücken von Eingabe sichert "
+"den eingestellten Wert als Ausgangswert für den nächsten Start von XCSoar."
 
 #: src/InfoBoxes/Content/Factory.cpp:274
 msgid ""
@@ -408,6 +453,10 @@ msgid ""
 "is possible by pressing the up/down cursor keys to adjust bearing when the "
 "infobox is active."
 msgstr ""
+"[Windrichtung]\r\n"
+"Von XCSoar geschätzte Windgeschwindigkeit. Nur Touchscreen und PC: Wenn "
+"diese Infobox aktiv ist, kann mit den Pfeiltasten auf/ab die Windrichtung "
+"eingegeben werden."
 
 #: src/InfoBoxes/Content/Factory.cpp:276
 msgid ""
@@ -1583,13 +1632,13 @@ msgstr ""
 msgid "Starting devices"
 msgstr "Starte Geräte"
 
-#.
+#. 
 #. -- Reset polar in case devices need the data
 #. LogStartUp(_T("GlidePolar::UpdatePolar"));
 #. GlidePolar::UpdatePolar(true, SettingsComputer());
-#.
+#. 
 #. This should be done inside devStartup if it is really required
-#.
+#. 
 #: src/Components.cpp:365
 msgid "Initialising display"
 msgstr "Initialisiere Anzeige"
@@ -2513,10 +2562,6 @@ msgid "Task Point"
 msgstr "Wendepunkt"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:324
-msgid "Save task?"
-msgstr "Aufgabe speichern?"
-
-#: src/Dialogs/dlgTaskHelpers.cpp:324
 msgid "Task Selection"
 msgstr "Aufgaben Auswahl"
 
@@ -2792,11 +2837,6 @@ msgstr "Maximale Startgeschwindigkeit"
 #: Data/Dialogs/dlgWayPointDetails_L.xml:4
 msgid "Goto"
 msgstr "Gehe zu"
-
-#: Data/Dialogs/dlgConfiguration.xml:313
-#: Data/Dialogs/dlgConfiguration_L.xml:313
-msgid "Ignore checksum*"
-msgstr "Prüfsumme ignorieren*"
 
 #: Data/Dialogs/dlgVario.xml:139 Data/Dialogs/dlgVario_L.xml:139
 msgid "Cruise hi cutoff"
@@ -4285,8 +4325,8 @@ msgstr "Geschätzte Aufgabenzeit"
 msgid "Avg/Alt"
 msgstr ""
 
-#~ msgid "Vario Gauge and FLARM"
-#~ msgstr "Vario Anzeige und FLARM"
-
 #~ msgid "Error"
 #~ msgstr "Fehler"
+
+#~ msgid "Vario Gauge and FLARM"
+#~ msgstr "Vario Anzeige und FLARM"
