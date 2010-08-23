@@ -52,9 +52,6 @@ InfoBoxContentAltitudeGPS::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];
 
-  // Set Title
-  infobox.SetTitle(_T("H GPS"));
-
   // Set Value
   Units::FormatUserAltitude(XCSoarInterface::Basic().GPSAltitude, sTmp,
                             sizeof(sTmp) / sizeof(sTmp[0]), false);
@@ -108,9 +105,6 @@ InfoBoxContentAltitudeAGL::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];
 
-  // Set Title
-  infobox.SetTitle(_T("H AGL"));
-
   if (!XCSoarInterface::Calculated().TerrainValid) {
     infobox.SetInvalid();
     return;
@@ -142,9 +136,6 @@ InfoBoxContentAltitudeBaro::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];
 
-  // Set Title
-  infobox.SetTitle(_T("H Baro"));
-
   if (!XCSoarInterface::Basic().BaroAltitudeAvailable) {
     infobox.SetInvalid();
     return;
@@ -168,9 +159,6 @@ void
 InfoBoxContentAltitudeQFE::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];
-
-  // Set Title
-  infobox.SetTitle(_T("QFE GPS"));
 
   /// @todo fix QFE infobox
 #ifdef OLD_TASK
@@ -197,9 +185,6 @@ void
 InfoBoxContentTerrainHeight::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];
-
-  // Set Title
-  infobox.SetTitle(_T("H GND"));
 
   if (!XCSoarInterface::Calculated().TerrainValid) {
     infobox.SetInvalid();

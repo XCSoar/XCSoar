@@ -52,9 +52,6 @@ Copyright_License {
 void
 InfoBoxContentBearing::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Bearing"));
-
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
       XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining.
       Vector.Distance <= fixed(10)) {
@@ -73,9 +70,6 @@ InfoBoxContentBearing::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentBearingDiff::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Brng D"));
-
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
       XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining.
       Vector.Distance <= fixed(10)) {
@@ -207,9 +201,6 @@ InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("WP Dist"));
-
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     infobox.SetInvalid();
@@ -229,9 +220,6 @@ InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentNextETE::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("WP ETE"));
-
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
       !XCSoarInterface::Calculated().task_stats.current_leg.achievable() ||
       !positive(XCSoarInterface::Calculated().task_stats.
@@ -269,9 +257,6 @@ InfoBoxContentNextETE::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentNextETA::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("WP ETA"));
-
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
       !XCSoarInterface::Calculated().task_stats.current_leg.achievable()) {
     infobox.SetInvalid();
@@ -299,9 +284,6 @@ InfoBoxContentNextETA::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentNextAltitudeDiff::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("WP AltD"));
-
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     infobox.SetInvalid();
@@ -321,9 +303,6 @@ InfoBoxContentNextAltitudeDiff::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentNextAltitudeRequire::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("WP AltR"));
-
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     infobox.SetInvalid();
@@ -343,9 +322,6 @@ InfoBoxContentNextAltitudeRequire::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentNextLD::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("WP LD"));
-
   if (!XCSoarInterface::Calculated().task_stats.task_valid) {
     infobox.SetInvalid();
     return;
@@ -366,9 +342,6 @@ InfoBoxContentNextLD::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentFinalDistance::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Fin Dis"));
-
   if (!XCSoarInterface::Calculated().task_stats.task_valid) {
     infobox.SetInvalid();
     return;
@@ -392,9 +365,6 @@ InfoBoxContentFinalDistance::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentFinalETE::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Fin ETE"));
-
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
   if (!task_stats.task_valid || !task_stats.total.achievable() ||
@@ -431,9 +401,6 @@ InfoBoxContentFinalETE::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentFinalETA::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Fin ETA"));
-
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid || !task_stats.total.achievable()) {
     infobox.SetInvalid();
@@ -460,9 +427,6 @@ InfoBoxContentFinalETA::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentFinalAltitudeDiff::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Fin AltD"));
-
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     infobox.SetInvalid();
@@ -482,9 +446,6 @@ InfoBoxContentFinalAltitudeDiff::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentFinalAltitudeRequire::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Fin AltR"));
-
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     infobox.SetInvalid();
@@ -504,9 +465,6 @@ InfoBoxContentFinalAltitudeRequire::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTaskSpeed::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("V Task Av"));
-
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     infobox.SetInvalid();
@@ -526,9 +484,6 @@ InfoBoxContentTaskSpeed::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTaskSpeedAchieved::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("V Tsk Ach"));
-
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     infobox.SetInvalid();
@@ -548,9 +503,6 @@ InfoBoxContentTaskSpeedAchieved::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTaskSpeedInstant::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("V Tsk Ins"));
-
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     infobox.SetInvalid();
@@ -571,9 +523,6 @@ InfoBoxContentTaskSpeedInstant::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentFinalLD::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Fin LD"));
-
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     infobox.SetInvalid();
@@ -595,9 +544,6 @@ InfoBoxContentFinalLD::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentFinalGR::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Fin GR"));
-
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     infobox.SetInvalid();
@@ -621,9 +567,6 @@ InfoBoxContentHomeDistance::Update(InfoBoxWindow &infobox)
 {
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
-  // Set Title
-  infobox.SetTitle(_T("Home Dis"));
-
   // Set Value
   TCHAR tmp[32];
   Units::FormatUserDistance(common_stats.vector_home.Distance, tmp, 32, false);
@@ -640,9 +583,6 @@ InfoBoxContentHomeDistance::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentOLC::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("OLC"));
-
   if (!XCSoarInterface::SettingsComputer().enable_olc) {
     infobox.SetInvalid();
     return;
@@ -662,9 +602,6 @@ InfoBoxContentOLC::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTaskAATime::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("AA Time"));
-
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
@@ -702,9 +639,6 @@ InfoBoxContentTaskAATime::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTaskAATimeDelta::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("AA dT"));
-
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
@@ -759,9 +693,6 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTaskAADistance::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("AA Dtgt"));
-
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     infobox.SetInvalid();
@@ -781,9 +712,6 @@ InfoBoxContentTaskAADistance::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTaskAADistanceMax::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("AA Dmax"));
-
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     infobox.SetInvalid();
@@ -803,9 +731,6 @@ InfoBoxContentTaskAADistanceMax::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTaskAADistanceMin::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("AA Dmin"));
-
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     infobox.SetInvalid();
@@ -825,9 +750,6 @@ InfoBoxContentTaskAADistanceMin::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTaskAASpeed::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("AA Vtgt"));
-
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
@@ -849,9 +771,6 @@ InfoBoxContentTaskAASpeed::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTaskAASpeedMax::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("AA Vmax"));
-
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
@@ -873,9 +792,6 @@ InfoBoxContentTaskAASpeedMax::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTaskAASpeedMin::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("AA Vmin"));
-
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 

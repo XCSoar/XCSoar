@@ -300,8 +300,10 @@ InfoBoxManager::DisplayInfoBox()
 
     bool needupdate = ((DisplayType[i] != DisplayTypeLast[i]) || first);
 
-    if (needupdate)
+    if (needupdate) {
+      InfoBoxes[i]->SetTitle(gettext(InfoBoxFactory::GetCaption(DisplayType[i])));
       InfoBoxes[i]->SetContentProvider(InfoBoxFactory::Create(DisplayType[i]));
+    }
 
     InfoBoxes[i]->UpdateContent();
 

@@ -49,9 +49,6 @@ Copyright_License {
 void
 InfoBoxContentGLoad::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("G"));
-
   if (!XCSoarInterface::Basic().acceleration.Available) {
     infobox.SetInvalid();
     return;
@@ -67,9 +64,6 @@ InfoBoxContentGLoad::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Battery"));
-
   // Set Value
 #ifdef HAVE_BATTERY
   TCHAR tmp[32];
@@ -91,9 +85,6 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentExperimental1::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Exp1"));
-
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%-2.1f"),
@@ -104,9 +95,6 @@ InfoBoxContentExperimental1::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentExperimental2::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Exp2"));
-
   // Set Value
   infobox.SetInvalid();
 }

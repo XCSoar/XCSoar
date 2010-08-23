@@ -49,9 +49,6 @@ Copyright_License {
 void
 InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("TeamCode"));
-
   if (!XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint) {
     infobox.SetInvalid();
     return;
@@ -113,9 +110,6 @@ InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentTeamBearing::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Tm Brng"));
-
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f")_T(DEG)_T("T"), (double)
@@ -140,9 +134,6 @@ InfoBoxContentTeamBearing::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Team Bd"));
-
 #ifndef OLD_TASK
   infobox.SetInvalid();
   return;
@@ -200,9 +191,6 @@ InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTeamDistance::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Team Dis"));
-
   if (!XCSoarInterface::SettingsComputer().TeammateCodeValid) {
     infobox.SetInvalid();
     return;

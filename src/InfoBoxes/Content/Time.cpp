@@ -50,9 +50,6 @@ InfoBoxContentTimeLocal::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];
 
-  // Set Title
-  infobox.SetTitle(_T("Time loc"));
-
   // Set Value
   int dd = abs((int)DetectCurrentTime(&XCSoarInterface::Basic())) % (3600 * 24);
   int hours = (dd / 3600);
@@ -74,9 +71,6 @@ InfoBoxContentTimeUTC::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];
 
-  // Set Title
-  infobox.SetTitle(_T("Time UTC"));
-
   // Set Value
   const BrokenDateTime t = XCSoarInterface::Basic().DateTime;
   _stprintf(sTmp, _T("%02d:%02d"), t.hour, t.minute);
@@ -91,9 +85,6 @@ void
 InfoBoxContentTimeFlight::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];
-
-  // Set Title
-  infobox.SetTitle(_T("Time flt"));
 
   if (!positive(XCSoarInterface::Basic().flight.FlightTime)) {
     infobox.SetInvalid();

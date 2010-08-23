@@ -68,23 +68,27 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   // 0
   {
     N_("Height GPS"),
+    N_("H GPS"),
     1, 33,
   },
 
   // 1
   {
     N_("Height AGL"),
+    N_("H AGL"),
     20, 0,
   },
 
   // 2
   {
     N_("Thermal last 30 sec"),
+    N_("TC 30s"),
     7, 44,
   },
 
   // 3
   {
+    N_("Bearing"),
     N_("Bearing"),
     6, 54,
   },
@@ -92,119 +96,139 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   // 4
   {
     N_("L/D instantaneous"),
+    N_("L/D Inst"),
     5, 38,
   },
 
   // 5
   {
     N_("L/D cruise"),
+    N_("L/D Cru"),
     19, 4,
   },
 
   // 6
   {
     N_("Speed ground"),
+    N_("V Gnd"),
     23, 3,
   },
 
   // 7
   {
     N_("Last Thermal Average"),
+    N_("TL Avg"),
     8, 2,
   },
 
   // 8
   {
     N_("Last Thermal Gain"),
+    N_("TL Gain"),
     9, 7,
   },
 
   // 9
   {
     N_("Last Thermal Time"),
+    N_("TL Time"),
     21, 8,
   },
 
   // 10
   {
     N_("MacCready Setting"),
+    N_("MacCready"),
     34, 43,
   },
 
   // 11
   {
     N_("Next Distance"),
+    N_("WP Dist"),
     12, 31,
   },
 
   // 12
   {
     N_("Next Altitude Difference"),
+    N_("WP AltD"),
     13, 11,
   },
 
   // 13
   {
     N_("Next Altitude Required"),
+    N_("WP AltR"),
     15, 12,
   },
 
   // 14
   {
     N_("Next Waypoint"),
+    N_("Next"),
     36, 46,
   },
 
   // 15
   {
     N_("Final Altitude Difference"),
+    N_("Fin AltD"),
     16, 13,
   },
 
   // 16
   {
     N_("Final Altitude Required"),
+    N_("Fin AltR"),
     17, 15,
   },
 
   // 17
   {
     N_("Speed Task Average"),
+    N_("V Task Av"),
     18, 16,
   },
 
   // 18
   {
     N_("Final Distance"),
+    N_("Fin Dis"),
     27, 17,
   },
 
   // 19
   {
     N_("Final LD"),
+    N_("Fin LD"),
     38, 5,
   },
 
   // 20
   {
     N_("Terrain Elevation"),
+    N_("H GND"),
     33, 1,
   },
 
   // 21
   {
     N_("Thermal Average"),
+    N_("TC Avg"),
     22, 9,
   },
 
   // 22
   {
     N_("Thermal Gain"),
+    N_("TC Gain"),
     24, 21,
   },
 
   // 23
   {
+    N_("Track"),
     N_("Track"),
     32, 6,
   },
@@ -212,23 +236,27 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   // 24
   {
     N_("Vario"),
+    N_("Vario"),
     44, 22,
   },
 
   // 25
   {
     N_("Wind Speed"),
+    N_("Wind V"),
     26, 50,
   },
 
   // 26
   {
     N_("Wind Bearing"),
+    N_("Wind B"),
     48, 25,
   },
 
   // 27
   {
+    N_("AA Time"),
     N_("AA Time"),
     28, 18,
   },
@@ -236,77 +264,90 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   // 28
   {
     N_("AA Distance Max"),
+    N_("AA Dmax"),
     29, 27,
   },
 
   // 29
   {
     N_("AA Distance Min"),
+    N_("AA Dmin"),
     30, 28,
   },
 
   // 30
   {
     N_("AA Speed Max"),
+    N_("AA Vmax"),
     31, 29,
   },
 
   // 31
   {
     N_("AA Speed Min"),
+    N_("AA Vmin"),
     51, 30,
   },
 
   // 32
   {
     N_("Airspeed IAS"),
+    N_("V IAS"),
     37, 23,
   },
 
   // 33
   {
     N_("Pressure Altitude"),
+    N_("H Baro"),
     0, 20,
   },
 
   // 34
   {
     N_("Speed MacCready"),
+    N_("V Mc"),
     35, 10,
   },
 
   // 35
   {
     N_("Percentage climb"),
+    N_("% Climb"),
     43, 34,
   },
 
   // 36
   {
     N_("Time of flight"),
+    N_("Time flt"),
     39, 14,
   },
 
   // 37
   {
     N_("G load"),
+    N_("G"),
     47, 32,
   },
 
   // 38
   {
     N_("Next LD"),
+    N_("WP LD"),
     53, 19,
   },
 
   // 39
   {
     N_("Time local"),
+    N_("Time loc"),
     40, 36,
   },
 
   // 40
   {
+    N_("Time UTC"),
     N_("Time UTC"),
     41, 39,
   },
@@ -314,77 +355,90 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   // 41
   {
     N_("Task Time To Go"),
+    N_("Fin ETE"),
     42, 40,
   },
 
   // 42
   {
     N_("Next Time To Go"),
+    N_("WP ETE"),
     45, 41,
   },
 
   // 43
   {
     N_("Speed Dolphin"),
+    N_("V Opt"),
     10, 35,
   },
 
   // 44
   {
     N_("Netto Vario"),
+    N_("Netto"),
     2, 24,
   },
 
   // 45
   {
     N_("Task Arrival Time"),
+    N_("Fin ETA"),
     46, 42,
   },
 
   // 46
   {
     N_("Next Arrival Time"),
+    N_("WP ETA"),
     14, 45,
   },
 
   // 47
   {
     N_("Bearing Difference"),
+    N_("Brng D"),
     54, 37,
   },
 
   // 48
   {
     N_("Outside Air Temperature"),
+    N_("OAT"),
     49, 26,
   },
 
   // 49
   {
     N_("Relative Humidity"),
+    N_("RelHum"),
     50, 48,
   },
 
   // 50
   {
     N_("Forecast Temperature"),
+    N_("MaxTemp"),
     49, 25,
   },
 
   // 51
   {
     N_("AA Distance Tgt"),
+    N_("AA Dtgt"),
     52, 31,
   },
 
   // 52
   {
     N_("AA Speed Tgt"),
+    N_("AA Vtgt"),
     11, 51,
   },
 
   // 53
   {
+    N_("L/D vario"),
     N_("L/D vario"),
     4, 38,
   },
@@ -392,66 +446,77 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   // 54
   {
     N_("Airspeed TAS"),
+    N_("V TAS"),
     3, 47,
   },
 
   // 55
   {
     N_("Own Team Code"),
+    N_("TeamCode"),
     56, 54,
   },
 
   // 56
   {
     N_("Team Bearing"),
+    N_("Tm Brng"),
     57, 55,
   },
 
   // 57
   {
     N_("Team Bearing Diff"),
+    N_("Team Bd"),
     58, 56,
   },
 
   // 58
   {
     N_("Team Range"),
+    N_("Team Dis"),
     55, 57,
   },
 
   // 59
   {
     N_("Speed Task Instantaneous"),
+    N_("V Tsk Ins"),
     18, 16,
   },
 
   // 60
   {
     N_("Distance Home"),
+    N_("Home Dis"),
     18, 16,
   },
 
   // 61
   {
     N_("Speed Task Achieved"),
+    N_("V Tsk Ach"),
     18, 16,
   },
 
   // 62
   {
     N_("AA Delta Time"),
+    N_("AA dT"),
     28, 18,
   },
 
   // 63
   {
     N_("Thermal All"),
+    N_("TC All"),
     8, 2,
   },
 
   // 64
   {
     N_("Distance Vario"),
+    N_("D Vario"),
     8, 2,
   },
 
@@ -462,6 +527,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 #else
     N_("Battery Voltage"),
 #endif
+    N_("Battery"),
     49, 26,
   },
 
@@ -469,29 +535,34 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   // VENTA-TODO: fix those 38,5 numbers to point correctly menu items
   {
     N_("Final GR"),
+    N_("Fin GR"),
     38, 5,
   },
 
   // 67 VENTA3-ADDON Alternate1 destinations infoboxes  TODO> fix 36 46 to something correct
   {
     N_("Alternate1 GR"),
+    N_("Altern 1"),
     36, 46,
   },
 
   // 68 Alternate 2
   {
     N_("Alternate2 GR"),
+    N_("Altern 2"),
     36, 46,
   },
 
   // 69 BestAlternate aka BestLanding
   {
     N_("Best Alternate"),
+    N_("BestAltn"),
     36, 46,
   },
 
   // 70
   {
+    N_("QFE GPS"),
     N_("QFE GPS"),
     1, 33,
   },
@@ -499,24 +570,28 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   // 71 TODO FIX those 19,4 values
   {
     N_("L/D Average"),
+    N_("L/D Avg"),
     19, 4,
   },
 
   // 72 //
   {
     N_("Experimental1"),
+    N_("Exp1"),
     8, 2,
   },
 
   // 73 //
   {
     N_("Online Contest Distance"),
+    N_("OLC"),
     8, 2,
   },
 
   // 74 //
   {
     N_("Experimental2"),
+    N_("Exp2"),
     8, 2,
   },
 };

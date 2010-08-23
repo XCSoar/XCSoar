@@ -47,9 +47,6 @@ Copyright_License {
 void
 InfoBoxContentLDInstant::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("L/D Inst"));
-
   if (XCSoarInterface::Calculated().LD == fixed(999)) {
     infobox.SetInvalid();
     return;
@@ -64,9 +61,6 @@ InfoBoxContentLDInstant::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentLDCruise::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("L/D Cru"));
-
   if (XCSoarInterface::Calculated().CruiseLD == fixed(999)) {
     infobox.SetInvalid();
     return;
@@ -81,9 +75,6 @@ InfoBoxContentLDCruise::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentLDAvg::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("L/D Cru"));
-
   if (XCSoarInterface::Calculated().AverageLD == 0) {
     infobox.SetInvalid();
     return;
@@ -104,9 +95,6 @@ InfoBoxContentLDAvg::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentLDVario::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("L/D Cru"));
-
   if (XCSoarInterface::Calculated().LDvario == fixed(999) ||
       !XCSoarInterface::Basic().TotalEnergyVarioAvailable ||
       !XCSoarInterface::Basic().AirspeedAvailable) {

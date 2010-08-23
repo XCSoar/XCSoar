@@ -45,23 +45,17 @@ Copyright_License {
 void
 InfoBoxContentAlternateBest::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("BestAltn"));
   infobox.SetInvalid();
 }
 
 void
 InfoBoxContentAlternate1::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Altern 1"));
   infobox.SetInvalid();
 }
 
 void
 InfoBoxContentAlternate2::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Altern 2"));
   infobox.SetInvalid();
 }

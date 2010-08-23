@@ -50,6 +50,7 @@ namespace InfoBoxFactory
 {
   struct InfoBoxMetaData {
     const TCHAR *name;
+    const TCHAR *caption;
     char next, previous;
   };
 
@@ -66,6 +67,19 @@ namespace InfoBoxFactory
     assert(type < NUM_TYPES);
 
     return MetaData[type].name;
+  }
+
+  /**
+   * Returns the default caption of the info box type.  This is
+   * usually a shorter version of the string returned by GetName(), to
+   * git in the small #InfoBoxWindow.
+   */
+  static inline const TCHAR *
+  GetCaption(unsigned type)
+  {
+    assert(type < NUM_TYPES);
+
+    return MetaData[type].caption;
   }
 
   static inline unsigned

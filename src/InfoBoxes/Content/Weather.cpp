@@ -48,9 +48,6 @@ Copyright_License {
 void
 InfoBoxContentHumidity::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("RelHum"));
-
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"), XCSoarInterface::Basic().RelativeHumidity);
@@ -60,9 +57,6 @@ InfoBoxContentHumidity::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTemperature::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("OAT"));
-
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.1f")_T(DEG),
@@ -73,9 +67,6 @@ InfoBoxContentTemperature::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTemperatureForecast::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("MaxTemp"));
-
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.1f")_T(DEG), CuSonde::maxGroundTemperature);
@@ -101,9 +92,6 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentWindSpeed::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Wind V"));
-
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"),
@@ -122,9 +110,6 @@ InfoBoxContentWindSpeed::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentWindBearing::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Wind B"));
-
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f")_T(DEG)_T("T"),

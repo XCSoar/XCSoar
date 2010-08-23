@@ -52,9 +52,6 @@ Copyright_License {
 void
 InfoBoxContentSpeedGround::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("V Gnd"));
-
   // Set Value
   TCHAR tmp[32];
   Units::FormatUserSpeed(XCSoarInterface::Basic().GroundSpeed,
@@ -102,9 +99,6 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentSpeedIndicated::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("V IAS"));
-
   if (!XCSoarInterface::Basic().AirspeedAvailable) {
     infobox.SetInvalid();
     return;
@@ -140,9 +134,6 @@ InfoBoxContentSpeedIndicated::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentSpeed::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("V TAS"));
-
   if (!XCSoarInterface::Basic().AirspeedAvailable) {
     infobox.SetInvalid();
     return;
@@ -178,9 +169,6 @@ InfoBoxContentSpeed::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentSpeedMacCready::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("V Mc"));
-
   // Set Value
   TCHAR tmp[32];
   Units::FormatUserSpeed(XCSoarInterface::Calculated().common_stats.V_block,
@@ -194,9 +182,6 @@ InfoBoxContentSpeedMacCready::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentSpeedDolphin::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("V Opt"));
-
   // Set Value
   TCHAR tmp[32];
   Units::FormatUserSpeed(XCSoarInterface::Calculated().V_stf,

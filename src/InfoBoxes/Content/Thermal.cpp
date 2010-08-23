@@ -54,9 +54,6 @@ InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];
 
-  // Set Title
-  infobox.SetTitle(_T("MacCready"));
-
   // Set Value
   Units::FormatUserVSpeed(XCSoarInterface::Calculated().common_stats.current_risk_mc,
                           sTmp, 32, false);
@@ -115,9 +112,6 @@ InfoBoxContentVario::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];
 
-  // Set Title
-  infobox.SetTitle(_T("Vario"));
-
   // Set Value
   Units::FormatUserVSpeed(XCSoarInterface::Basic().TotalEnergyVario,
                           sTmp, 32, false);
@@ -132,9 +126,6 @@ InfoBoxContentVarioNetto::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];
 
-  // Set Title
-  infobox.SetTitle(_T("Netto"));
-
   // Set Value
   Units::FormatUserVSpeed(XCSoarInterface::Basic().NettoVario,
                           sTmp, 32, false);
@@ -148,9 +139,6 @@ void
 InfoBoxContentThermal30s::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];
-
-  // Set Title
-  infobox.SetTitle(_T("TC 30s"));
 
   // Set Value
   Units::FormatUserVSpeed(XCSoarInterface::Calculated().Average30s,
@@ -171,9 +159,6 @@ InfoBoxContentThermal30s::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentThermalLastAvg::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("TL Avg"));
-
   // Set Value
   TCHAR sTmp[32];
   Units::FormatUserVSpeed(XCSoarInterface::Calculated().LastThermalAverage,
@@ -187,9 +172,6 @@ InfoBoxContentThermalLastAvg::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentThermalLastGain::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("TL Gain"));
-
   // Set Value
   TCHAR sTmp[32];
   Units::FormatUserAltitude(XCSoarInterface::Calculated().LastThermalGain,
@@ -203,9 +185,6 @@ InfoBoxContentThermalLastGain::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentThermalLastTime::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("TL Time"));
-
   // Set Value
   TCHAR sTmp[32];
   int dd = abs((int)XCSoarInterface::Calculated().LastThermalTime) % (3600 * 24);
@@ -228,9 +207,6 @@ InfoBoxContentThermalLastTime::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentThermalAllAvg::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("TC All"));
-
   if (!positive(XCSoarInterface::Calculated().timeCircling)) {
     infobox.SetInvalid();
     return;
@@ -250,9 +226,6 @@ InfoBoxContentThermalAllAvg::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentThermalAvg::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("TC Avg"));
-
   // Set Value
   TCHAR sTmp[32];
   Units::FormatUserVSpeed(XCSoarInterface::Calculated().ThermalAverage,
@@ -273,9 +246,6 @@ InfoBoxContentThermalAvg::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentThermalGain::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("TC Gain"));
-
   // Set Value
   TCHAR sTmp[32];
   Units::FormatUserAltitude(XCSoarInterface::Calculated().ThermalGain,
@@ -289,9 +259,6 @@ InfoBoxContentThermalGain::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentThermalRatio::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("% Climb"));
-
   // Set Value
   TCHAR sTmp[32];
   _stprintf(sTmp, _T("%2.0f%%"),
@@ -302,9 +269,6 @@ InfoBoxContentThermalRatio::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentVarioDistance::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("D Vario"));
-
   if (!XCSoarInterface::Calculated().task_stats.task_valid) {
     infobox.SetInvalid();
     return;

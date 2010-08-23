@@ -50,9 +50,6 @@ Copyright_License {
 void
 InfoBoxContentTrack::Update(InfoBoxWindow &infobox)
 {
-  // Set Title
-  infobox.SetTitle(_T("Track"));
-
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f")_T(DEG)_T("T"),
