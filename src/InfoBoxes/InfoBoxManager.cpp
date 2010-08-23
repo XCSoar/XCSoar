@@ -65,7 +65,6 @@ static bool InfoBoxesDirty = false;
 static bool InfoBoxesHidden = false;
 
 InfoBoxWindow *InfoBoxes[MAXINFOWINDOWS];
-const unsigned NUMSELECTSTRINGS = 75;
 
 static InfoBoxLook info_box_look;
 
@@ -370,7 +369,7 @@ InfoBoxManager::getType(unsigned i)
   else
     retval = getType(i, 1);
 
-  return min(NUMSELECTSTRINGS - 1, retval);
+  return min(InfoBoxFactory::NUM_TYPES - 1, retval);
 }
 
 bool

@@ -687,7 +687,7 @@ OnPaste(gcc_unused WndButton &button)
     WndProperty *wp = FindInfoBoxField(mode, item);
     if (wp &&
         cpyInfoBox[item] >= 0 &&
-        (unsigned)cpyInfoBox[item] < NUMSELECTSTRINGS) {
+        (unsigned)cpyInfoBox[item] < InfoBoxFactory::NUM_TYPES) {
       wp->GetDataField()->Set(cpyInfoBox[item]);
       wp->RefreshDisplay();
     }
@@ -970,7 +970,7 @@ SetInfoBoxSelector(unsigned item, int mode)
 
   DataFieldEnum* dfe;
   dfe = (DataFieldEnum*)wp->GetDataField();
-  for (unsigned i = 0; i < NUMSELECTSTRINGS; i++)
+  for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; i++)
     dfe->addEnumText(gettext(InfoBoxManager::GetTypeDescription(i)));
 
   dfe->Sort(0);

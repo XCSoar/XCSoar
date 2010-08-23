@@ -47,6 +47,8 @@ class InfoBoxContent;
 
 namespace InfoBoxFactory
 {
+  static const unsigned NUM_TYPES = 75;
+
   gcc_const
   InfoBoxContent* Create(unsigned InfoBoxType);
 

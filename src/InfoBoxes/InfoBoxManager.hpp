@@ -46,7 +46,6 @@ Copyright_License {
 #include <windef.h>
 
 extern unsigned numInfoWindows;
-extern const unsigned NUMSELECTSTRINGS;
 
 class InfoBoxWindow;
 
