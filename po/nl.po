@@ -8,114 +8,114 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-16 23:05+0200\n"
-"PO-Revision-Date: 2010-08-13 07:38+0000\n"
-"Last-Translator: Joop Gooden <Unknown>\n"
+"PO-Revision-Date: 2010-08-22 20:58+0000\n"
+"Last-Translator: Hans <Unknown>\n"
 "Language-Team: Dutch <nl@li.org>\n"
-"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-08-13 08:32+0000\n"
+"X-Launchpad-Export-Date: 2010-08-23 05:24+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: nl\n"
 
 #: src/Airspace/AirspaceParser.cpp:155
 msgid "Parse Error at Line"
-msgstr ""
+msgstr "Tekstfout in regel"
 
 #: src/Airspace/AirspaceParser.cpp:156
 msgid "Line skipped."
-msgstr "regel overgeslagen"
+msgstr "Regel overgeslagen"
 
 #: src/Airspace/AirspaceParser.cpp:157 src/Airspace/AirspaceParser.cpp:817
 #: src/Dialogs/dlgAnalysis.cpp:254 src/Dialogs/dlgConfiguration.cpp:89
 #: Data/Dialogs/dlgVoice.xml:34
 msgid "Airspace"
-msgstr "luchtruim"
+msgstr "Luchtruim"
 
 #. Create and init ProgressDialog
 #: src/Airspace/AirspaceParser.cpp:770
 msgid "Loading Airspace File..."
-msgstr "luchtruimbestand laden"
+msgstr "Luchtruimbestand laden"
 
 #: src/ConditionMonitor.cpp:176
 msgid "Significant wind change"
-msgstr "grote windvariatie"
+msgstr "Grote verandering windrichting/snelheid"
 
 #: src/ConditionMonitor.cpp:292
 msgid "Expect arrival past sunset"
-msgstr "verwacht aankomst na zonsondergang"
+msgstr "Aankomst valt na zonsondergang"
 
 #: src/ConditionMonitor.cpp:337
 msgid "Expect early task arrival"
-msgstr ""
+msgstr "Verwacht vroeg rond te komen"
 
 #: src/ConditionMonitor.cpp:391
 msgid ""
 "Start rules slightly violated\r\n"
 "but within margin"
 msgstr ""
-"start: regels licht geschonden\r\n"
-"maar binnen marges"
+"Startregels licht geschonden\r\n"
+"nog binnen marges"
 
 #: src/ConditionMonitor.cpp:393
 msgid "Start rules violated"
-msgstr "startregels geschonden"
+msgstr "Startregels geschonden"
 
 #: src/Logger/Logger.cpp:165
 msgid "Start Logger"
-msgstr "start logger"
+msgstr "Start logger"
 
 #: src/Logger/Logger.cpp:172
 msgid "Logger inactive, insufficient storage!"
-msgstr "logger inaktief, onvoldoende opslagruimte"
+msgstr "Logger inactief, onvoldoende geheugen!"
 
 #: src/Logger/Logger.cpp:173
 msgid "Logger Error"
-msgstr "logger fout"
+msgstr "Loggerfout"
 
 #: src/Logger/Logger.cpp:201 src/Logger/Logger.cpp:202
 msgid "Stop Logger"
-msgstr "stop logger"
+msgstr "Stop logger"
 
 #: src/Logger/LoggerImpl.cpp:560
 msgid "Declare Task?"
-msgstr "opdracht declareren?"
+msgstr "Opdracht inlezen?"
 
 #: src/Logger/LoggerImpl.cpp:563
 msgid "Task Declared!"
-msgstr "opdracht gedeclareerd!"
+msgstr "Opdracht ingelezen!"
 
 #: src/Logger/LoggerImpl.cpp:567
 msgid ""
 "Error occured,\r\n"
 "Task NOT Declared!"
 msgstr ""
-"er trad een fout op,\r\n"
-"opdracht NIET gedeclareerd!"
+"Fout.\r\n"
+"Opdracht NIET ingelezen!"
 
 #: src/Logger/LoggerImpl.cpp:592
 msgid "No logger connected"
-msgstr "geen logger aangesloten"
+msgstr "Geen logger aangesloten"
 
 #: src/Logger/LoggerImpl.cpp:593
 msgid "Declare task"
-msgstr "declareer opdracht"
+msgstr "Geef opdracht in."
 
 #: src/Logger/LoggerImpl.cpp:608
 msgid "OK to invalidate declaration?"
-msgstr "declaratie wissen OK?"
+msgstr "Ingelezen opdracht echt wissen?"
 
 #: src/Logger/LoggerImpl.cpp:609
 msgid "Task declared"
-msgstr "opdracht gedeclareerd"
+msgstr "Opdracht ingelezen"
 
 #: src/Replay/IgcReplayGlue.cpp:130
 msgid "Could not open IGC file!"
-msgstr "kan IGC bestand niet openen"
+msgstr "Kan IGC bestand niet openen"
 
 #: src/Replay/IgcReplayGlue.cpp:131 src/Replay/NmeaReplayGlue.cpp:56
 msgid "Flight replay"
-msgstr "vlucht opnieuw afspelen"
+msgstr "Vlucht opnieuw afspelen"
 
 #: src/Replay/NmeaReplayGlue.cpp:55
 msgid "Could not open NMEA file!"
@@ -129,79 +129,83 @@ msgid ""
 "\r\n"
 "Load anyway?"
 msgstr ""
+"Keerpunt \"%s\" \r\n"
+"buiten kaartgrenzen\r\n"
+"\r\n"
+"Toch laden?"
 
 #: src/WayPoint/WayPointFile.cpp:199
 msgid "Loading Waypoints..."
-msgstr "keerpunten laden"
+msgstr "Keerpunten laden..."
 
 #: src/Gauge/ThermalAssistantWindow.cpp:243
 msgid "Not Circling"
-msgstr ""
+msgstr "Niet draaien"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:252
 msgid "No Traffic"
-msgstr ""
+msgstr "Geen vliegverkeer"
 
 #: src/AirfieldDetails.cpp:158
 msgid "Loading Airfield Details File..."
-msgstr ""
+msgstr "Vliegveldgegevensbestand laden"
 
 #: src/ExpandMacros.cpp:129 src/ExpandMacros.cpp:170
 #: src/InputEventsActions.cpp:1828
 msgid "Next turnpoint"
-msgstr ""
+msgstr "Volgend keerpunt"
 
 #: src/ExpandMacros.cpp:134 src/ExpandMacros.cpp:180
 msgid "Previous turnpoint"
-msgstr ""
+msgstr "Vorig keerpunt"
 
 #: src/ExpandMacros.cpp:146
 msgid "Furthest landpoint"
-msgstr ""
+msgstr "Verste landingsveld"
 
 #: src/ExpandMacros.cpp:147
 msgid "Next landpoint"
-msgstr ""
+msgstr "Volgende landingsveld"
 
 #: src/ExpandMacros.cpp:156
 msgid "Closest landpoint"
-msgstr ""
+msgstr "Dichtstbijzijnde landingsveld"
 
 #: src/ExpandMacros.cpp:157
 msgid "Previous landpoint"
-msgstr ""
+msgstr "Vorige landingsveld"
 
 #: src/ExpandMacros.cpp:169
 msgid "Finish turnpoint"
-msgstr ""
+msgstr "Finish(keer)punt"
 
 #: src/ExpandMacros.cpp:179
 msgid "Start turnpoint"
-msgstr ""
+msgstr "Start(keer)punt"
 
 #: src/ExpandMacros.cpp:188
 msgid "Start point cycle"
-msgstr ""
+msgstr "Startcylinder"
 
 #: src/ExpandMacros.cpp:188 src/ExpandMacros.cpp:194
 msgid "Previous waypoint"
-msgstr ""
+msgstr "Vorig keerpunt"
 
 #: src/ExpandMacros.cpp:380
 msgid "Topology on"
-msgstr ""
+msgstr "Topokaart aan"
 
 #: src/ExpandMacros.cpp:384
 msgid "Terrain on"
-msgstr "Terrein een"
+msgstr "Terreinkaart aan"
 
 #: src/ExpandMacros.cpp:388
 msgid "Terrain + Topology"
-msgstr ""
+msgstr "Terrein + Topo"
 
 #: src/ExpandMacros.cpp:392
 msgid "Terrain off"
-msgstr "Terrein uit"
+msgstr "Terreinkaart uit"
 
 #: src/InfoBoxes/Content/Factory.cpp:222
 msgid ""
@@ -211,6 +215,10 @@ msgid ""
 "up/down arrow keys and the right/left arrow keys also cause the glider to "
 "turn."
 msgstr ""
+"[GPS-hoogte]\r\n"
+"Hoogte boven zee-niveau volgens GPS.\r\n"
+"Touchscreen/PC: in simulatie-modus is de waarde aan te passen door pijl "
+"omhoog/omlaag. Pijl links/rechts laten de kist draaien."
 
 #: src/InfoBoxes/Content/Factory.cpp:224
 msgid ""
@@ -219,6 +227,10 @@ msgid ""
 "terrain file.  The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
+"[Hoogte boven grond]\r\n"
+"Volgt uit vlieghoogte minus terreinhoogte uit het terreinbestand. De waarde "
+"kleurt rood wanneer het zweefvliegtuig onder de opgegeven veilige hoogte "
+"boven grond komt."
 
 #: src/InfoBoxes/Content/Factory.cpp:226
 msgid ""
@@ -226,6 +238,9 @@ msgid ""
 "A 30 second rolling average climb rate based of the reported GPS altitude, "
 "or vario if available."
 msgstr ""
+"[Stijgen van laatste 30 sec.]\r\n"
+"Gemiddeld stijgen van de laatste 30 sec uitgaand van de gelezen GPS-hoogte "
+"of vario indien beschikbaar."
 
 #: src/InfoBoxes/Content/Factory.cpp:228
 msgid ""
@@ -233,6 +248,9 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
+"[Koers]\r\n"
+"Werkelijke koers naar het volgende keerpunt. Bij een AAT opdracht: "
+"werkelijke koers naar het keerpunt binnen de AAT-sector."
 
 #: src/InfoBoxes/Content/Factory.cpp:230
 msgid ""
@@ -242,6 +260,10 @@ msgid ""
 "climbing cruise. If the vertical speed is close to zero, the displayed value "
 "is '---'."
 msgstr ""
+"[Huidig L/D] Huidig glijgetal, bepaald uit de grondsnelheid gedeeld door de "
+"verticale snelheid (uit GPS) over de laatste 20 seconden. Negatieve waarden "
+"geven een klimmende steek aan. Als de verticale snelheid ongeveer nul is, "
+"wordt de waarde weergegeven als '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:232
 msgid ""
@@ -251,6 +273,10 @@ msgid ""
 "(height gain since leaving the last thermal).  If the vertical speed is "
 "close to zero, the displayed value is '---'."
 msgstr ""
+"[L/D steekvlucht]De afstand vanaf het verlaten van de laatste bel, gedeeld "
+"door de hoogte verloren/gewonnen sinds dat punt. Negatieve waardes geven een "
+"klimmende steek aan (hoogtewinst sinds verlaten van de laatste bel). Als de "
+"verticale snelheid dicht bij nul ligt, wordt '---' aangegeven."
 
 #: src/InfoBoxes/Content/Factory.cpp:234
 msgid ""
@@ -259,6 +285,10 @@ msgid ""
 "mode, pressing the up and down arrows adjusts the speed, and left and right "
 "turn the glider."
 msgstr ""
+"[Grondsnelheid]\r\n"
+"Grondsnelheid volgens GPS. Wanneer dit infokader in de simulatie-modus "
+"actief is, kan de snelheid worden gewijzigd met pijltje omhoog/omlaag. "
+"Pijltje links/richts verander de vliegrichting."
 
 #: src/InfoBoxes/Content/Factory.cpp:236
 msgid ""
@@ -266,18 +296,25 @@ msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
 msgstr ""
+"[Laatst gemiddeld stijgen]\r\n"
+"Totaal hoogtewinst/verlies in de laatste bel gedeeld door de totale tijd in "
+"die bel."
 
 #: src/InfoBoxes/Content/Factory.cpp:238
 msgid ""
 "[Last Thermal Gain]\r\n"
 "Total altitude gain/loss in the last thermal."
 msgstr ""
+"[Hoogtewinst laatste bel]\r\n"
+"Totale hoogtewinst/verlies in de laatste bel."
 
 #: src/InfoBoxes/Content/Factory.cpp:240
 msgid ""
 "[Last Thermal Time]\r\n"
 "Time spent circling in the last thermal."
 msgstr ""
+"[Laatste thermiektijd:]\r\n"
+"Totale tijd gedraaid in de laatste bel."
 
 #: src/InfoBoxes/Content/Factory.cpp:242
 msgid ""
@@ -286,6 +323,11 @@ msgid ""
 "manual or auto.  (Touchscreen/PC only) Also used to adjust the MacCready "
 "Setting if the infobox is active, by using the up/down cursor keys."
 msgstr ""
+"[McCready instelling]\r\n"
+"De huidige McCready instelling. Dit infokader geeft ook aan of de McCready "
+"instelling is handmatig of auto. Alleen Touchscreen/PC: ook gebruikt om door "
+"middel van pijltje omhoog/omlaag de McCready instelling aan te passen als "
+"het infokader actief is."
 
 #: src/InfoBoxes/Content/Factory.cpp:244
 msgid ""
@@ -293,6 +335,9 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
+"[Volgende afstand]\r\n"
+"De afstand tot het volgende keerpunt. Bij AAT opdrachten is dit de afstand "
+"tot het keerpunt binnen de AAT sector."
 
 #: src/InfoBoxes/Content/Factory.cpp:246
 msgid ""
@@ -300,12 +345,17 @@ msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival "
 "altitude."
 msgstr ""
+"[Aankomst hoogteverschil]\r\n"
+"Aankomsthoogte bij het volgende keerpunt ten opzicht van de veilige "
+"aankomsthoogte"
 
 #: src/InfoBoxes/Content/Factory.cpp:248
 msgid ""
 "[Next Altitude Required]\r\n"
 "Altitude required to reach the next turn point."
 msgstr ""
+"[Ingave hoogte benodigd]\r\n"
+"Hoogte nodig om het volgende keerpunt te halen"
 
 #: src/InfoBoxes/Content/Factory.cpp:250
 msgid ""
@@ -315,6 +365,11 @@ msgid ""
 "the task.  (Touchscreen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
+"[Volgend keerpunt]\r\n"
+" De naam van het volgende keerpunt. Als dit infokader actief is, kan met "
+"pijltje omhoog/omlaag het volgende/vorige keerpunt uit de opdracht gekozen "
+"worden. Alleen Touchscreen/PC: de 'enter'-toets laat de keerpunt-details "
+"zien."
 
 #: src/InfoBoxes/Content/Factory.cpp:252
 msgid ""
@@ -322,24 +377,32 @@ msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "altitude."
 msgstr ""
+"[Hoogtemarge]\r\n"
+"Hoogtemarge bij het laatste keerpunt tov veilige finishhoogte"
 
 #: src/InfoBoxes/Content/Factory.cpp:254
 msgid ""
 "[Final Altitude Required]\r\n"
 "Altitude required to finish the task."
 msgstr ""
+"[Vereiste hoogte eindsteek]\r\n"
+"Hoogte vereist om de opdracht te finishen"
 
 #: src/InfoBoxes/Content/Factory.cpp:256
 msgid ""
 "[Speed Task Average]\r\n"
 "Average cross country speed while on current task, compensated for altitude."
 msgstr ""
+"[Gemiddelde taaksnelheid]\r\n"
+"Gemiddelde totale snelheid over de huidige taak."
 
 #: src/InfoBoxes/Content/Factory.cpp:258
 msgid ""
 "[Final Distance]\r\n"
 "Distance to finish around remaining turn points."
 msgstr ""
+"[Afstand tot finish]\r\n"
+"Afstand tot de finishlijn inclusief ronden resterende keerpunten."
 
 #: src/InfoBoxes/Content/Factory.cpp:260
 msgid ""
@@ -352,6 +415,15 @@ msgid ""
 "finish by the excess energy height of the glider if its true airspeed is "
 "greater than the MacCready and best LD speeds."
 msgstr ""
+"[L/D eindsteek]\r\n"
+"Glijgetal nodig voor de eindsteek om de opdracht te finishen, bepaald uit de "
+"nog te vliegen afstand gedeeld door de hoogte nodig om op de veilige "
+"aankomsthoogte aan te komen. Negatieve waardes geven aan dat er nog "
+"geklommen moet worden om te finishen. Als de benodigde hoogte dicht bij nul "
+"ligt, wordt '---' getoond. Let op: de berekening kan optimistisch zijn omdat "
+"de energiehoogte van het zweefvliegtuig (voor zover de snelheid boven de "
+"benodigde McCreadysnelheid ligt) bij de  hoogte nodig om te finishen wordt "
+"opgeteld."
 
 #: src/InfoBoxes/Content/Factory.cpp:262
 msgid ""
@@ -359,6 +431,9 @@ msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
 "terrain file at the current GPS location."
 msgstr ""
+"[Grondhoogte]\r\n"
+"Dit is de hoogte van de grond boven zeeniveau, verkregen uit het "
+"terreinbestand en de huidige GPS positie."
 
 #: src/InfoBoxes/Content/Factory.cpp:264
 msgid ""
@@ -366,12 +441,17 @@ msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermaling."
 msgstr ""
+"[Thermiekgemiddelde]\r\n"
+"Hoogte gewonnen/verloren in de huidige bel, gedeeld door de tijd besteed in "
+"de bel."
 
 #: src/InfoBoxes/Content/Factory.cpp:266
 msgid ""
 "[Thermal Gain]\r\n"
 "The altitude gained/lost in the current thermal."
 msgstr ""
+"[Hoogtewinst bel]\r\n"
+"De hoogte gewonnen/verloren in de huidige bel"
 
 #: src/InfoBoxes/Content/Factory.cpp:268
 msgid ""
@@ -380,6 +460,9 @@ msgid ""
 "is active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
+"[Tracklog]\r\n"
+"Logprojectie vanuit de GPS. (Touchscreen/PC) Wanneer in werking tijdens "
+"simulatie kan met de up/downpijlen de log aangepast worden."
 
 #: src/InfoBoxes/Content/Factory.cpp:270
 msgid ""
@@ -387,16 +470,23 @@ msgid ""
 "Instantaneous vertical speed, as reported by the GPS, or the intelligent "
 "vario total energy vario value if connected to one."
 msgstr ""
+"[Vario]\r\n"
+"Huidige verticale snelheid volgens GPS of, indien aangesloten, de variometer."
 
 #: src/InfoBoxes/Content/Factory.cpp:272
 msgid ""
 "[Wind Speed]\r\n"
 "Wind speed estimated by XCSoar.  (Touchscreen/PC only) Manual adjustment is "
-"possible by pressing the up/down cursor keys to adjust magnitude and left/"
-"right cursor keys to adjust bearing when the infobox is active.  Pressing "
-"the enter cursor key saves the wind value as the initial value when XCSoar "
-"next starts."
+"possible by pressing the up/down cursor keys to adjust magnitude and "
+"left/right cursor keys to adjust bearing when the infobox is active.  "
+"Pressing the enter cursor key saves the wind value as the initial value when "
+"XCSoar next starts."
 msgstr ""
+"[Windsnelheid]\r\n"
+"Windsnelheid berekend door XCSoar. (Touchscreen/PC) Handmatig instellen bij  "
+"actieve infobox is mogelijk door pijlen up/down(snelheid) en/of pijlen "
+"links/rechts(richting). Bij [Enter] worden deze waarden als standaard "
+"bewaard."
 
 #: src/InfoBoxes/Content/Factory.cpp:274
 msgid ""
@@ -405,12 +495,18 @@ msgid ""
 "is possible by pressing the up/down cursor keys to adjust bearing when the "
 "infobox is active."
 msgstr ""
+"[Windrichting]\r\n"
+"Windrichting berekend door XCSoar. (Touchscreen/PC) Handmatig instellen bij "
+"actieve infobox is mogelijk door pijlen up/down. Bij [Enter] worden deze "
+"waarden als standaard bewaard."
 
 #: src/InfoBoxes/Content/Factory.cpp:276
 msgid ""
 "[AA Time]\r\n"
 "Assigned Area Task time remaining.  Goes red when time remaining has expired."
 msgstr ""
+"[Venstertijd]\r\n"
+"Overgebleven venstertijd. Kleurt rood wanneer verstreken."
 
 #: src/InfoBoxes/Content/Factory.cpp:278
 msgid ""
@@ -628,6 +724,9 @@ msgid ""
 "[Team Bearing]\r\n"
 "The bearing to the team aircraft location at the last team code report."
 msgstr ""
+"[Team Peiling]\r\n"
+"De peiling naar de positie van het team-vliegtuig bij de laatste team code "
+"melding"
 
 #: src/InfoBoxes/Content/Factory.cpp:336
 msgid ""
@@ -635,12 +734,17 @@ msgid ""
 "The relative bearing to the team aircraft location at the last reported team "
 "code."
 msgstr ""
+"[Team peiling verschil]\r\n"
+"De relatieve peiling naar de team vliegtuig-positie bij de laatste team code "
+"melding"
 
 #: src/InfoBoxes/Content/Factory.cpp:338
 msgid ""
 "[Team range]\r\n"
 "The range to the team aircraft location at the last reported team code."
 msgstr ""
+"[Team afstand]\r\n"
+"De afstand tot het team vliegtuig bij de laatste team code melding"
 
 #: src/InfoBoxes/Content/Factory.cpp:340
 msgid ""
@@ -648,18 +752,26 @@ msgid ""
 "Instantaneous cross country speed while on current task, compensated for "
 "altitude."
 msgstr ""
+"[Actuele snelheid in opdracht]\r\n"
+"De actuele overlandsnelheid in de huidige opdracht, gecompenseerd voor "
+"hoogte."
 
 #: src/InfoBoxes/Content/Factory.cpp:342
 msgid ""
 "[Distance Home]\r\n"
 "Distance to home waypoint (if defined)."
 msgstr ""
+"[Afstand uit]\r\n"
+"De afstand tot de thuisbasis (als gedefinieerd)."
 
 #: src/InfoBoxes/Content/Factory.cpp:344
 msgid ""
 "[Speed Task Achieved]\r\n"
 "Achieved cross country speed while on current task, compensated for altitude."
 msgstr ""
+"[Bereikte snelheid opdracht]\r\n"
+"De bereikte overlandsnelheid in de huidige opdracht, gecompenseerd voor "
+"hoogte."
 
 #: src/InfoBoxes/Content/Factory.cpp:346
 msgid ""
@@ -668,12 +780,19 @@ msgid ""
 "negative (expected arrival too early), or blue if in sector and can turn now "
 "with estimated arrival time greater than AAT time plus 5 minutes."
 msgstr ""
+"[AA delta tijd]\r\n"
+"Verschil tussen de geschatte tijd voor de opdracht en de minimum AAT tijd. "
+"Rood gekleurd als negatief (te vroege aankomst), of blauw als in sector en "
+"bij keren nu een geschatte aankomsttijd later dan AAT tijd plus 5 minuten "
+"gerealiseerd wordt."
 
 #: src/InfoBoxes/Content/Factory.cpp:348
 msgid ""
 "[Thermal All]\r\n"
 "Time-average climb rate in all thermals."
 msgstr ""
+"[Gemiddeld stijgen totaal]\r\n"
+"Gemiddelde stijgen over alle bellen"
 
 #: src/InfoBoxes/Content/Factory.cpp:350
 msgid ""
@@ -681,6 +800,9 @@ msgid ""
 "Supply battery voltage for Altair systems, for PDA systems, this gives the "
 "percent battery capacity available."
 msgstr ""
+"[Accu]\r\n"
+"Accu voedingsspanning voor Altair. Voor PDA: het percentage accucapaciteit "
+"dat nog beschikbaar is."
 
 #: src/InfoBoxes/Content/Factory.cpp:352
 msgid ""
@@ -718,6 +840,16 @@ msgid ""
 "virtual key then the waypoint detail page will come up and you will be able "
 "to perform actions on this Alternate such as goto, inserti in task etc."
 msgstr ""
+"[Beste uitwijkveld]\r\n"
+"Automatisch zoeken naar de best beschikbare landingsveldoptie. De bovenste "
+"regel geeft de naam van het landingsveld, de middelste de benodigde L/D en "
+"de onderste regel de afstand en aankomsthoogte boven de veiligheidsmarge. De "
+"regels worden elke paar seconden geupdate. Lees de volledige handleiding "
+"over het beste uitwijkveld en hoe het gedrag aangepast kan worden. Dit is "
+"een experimentele feature, dus wees voorzichtig. Als je 'Beste uitwijkveld' "
+"selecteert in het infokader en daarna op enter drukt (echte of virtuele "
+"toets) dan komt een detailpagina op waarmee je in staat bent om acties met "
+"het uitwijkveld te plegen, zoals 'ga naar' of 'opnemen in taak' etc."
 
 #: src/InfoBoxes/Content/Factory.cpp:359
 msgid ""
@@ -728,6 +860,12 @@ msgid ""
 "shows QNH altitude. \r\n"
 "Changing QFE does not affect QNH altitude."
 msgstr ""
+"[QFE]\r\n"
+"Automatische QFE (hoogte boven veld). De hoogte is continue gereset naar 0 "
+"VOOR de vlucht begonnen wordt. Daarna wordt de waarde niet meer gereset. "
+"Tijdens de vlucht kan de QFE aangepast worden met pijltje omhoog/omlaag. De "
+"onderste regel toont de QNH (hoogte boven zeeniveau). \r\n"
+"Veranderingen in QFE hebben geen invloed op QNH."
 
 #: src/InfoBoxes/Content/Factory.cpp:361
 msgid ""
@@ -743,10 +881,23 @@ msgid ""
 "glide.\r\n"
 "This value is not calculated while circling. "
 msgstr ""
+"[L/D gemiddeld]\r\n"
+"De afstand afgelegd in de opgegeven tijd, gedeeld door de verloren hoogte in "
+"die tijd. Negatieve waardes worden weergegeven als ^^^ en geven een "
+"klimmende steek (hoogtewinst) aan. Een L/D > 200 wordt weergegeven als "
+"+++.\r\n"
+"Je kunt de tijd waarover gemiddeld word opgeven in het Speciaal config menu. "
+"Voorgesteld wordt om 60, 90 of 120 seconden te gebruiken: lagere waardes "
+"geen een L/D die dichter ligt bij de instantane waarde (L/D inst) en hogere "
+"waardes geven een L/D die dichter ligt bij L/D steek. \r\n"
+"De afgelegde afstand is NIET gelijk aan de rechte lijn tussen de posities "
+"aan het begin en eind van het tijdsinterval, maar is de werkelijk afgelegde "
+"afstand, zoals in een zig-zag.\r\n"
+"Deze waarde wordt niet berekend als er gethermiekt wordt. "
 
 #: src/InfoBoxes/Content/Speed.cpp:132
 msgid "Calibrate ON"
-msgstr "calibreren AAN"
+msgstr "Calibreren AAN"
 
 #: src/InfoBoxes/Content/Speed.cpp:133
 msgid "Calibrate OFF"
@@ -774,37 +925,37 @@ msgstr "stijgen laatste 30 sec"
 #: Data/Dialogs/dlgWayPointDetails.xml:18
 #: Data/Dialogs/dlgWayPointDetails_L.xml:18
 msgid "Bearing"
-msgstr "koers"
+msgstr "Koers volgend keerpunt"
 
 #. 4
 #: src/InfoBoxes/InfoBoxManager.cpp:123
 msgid "L/D instantaneous"
-msgstr "momentane L/D"
+msgstr "Aktuele L/D"
 
 #. 5
 #: src/InfoBoxes/InfoBoxManager.cpp:125
 msgid "L/D cruise"
-msgstr "kruis L/D"
+msgstr "L/D bij steken"
 
 #. 6
 #: src/InfoBoxes/InfoBoxManager.cpp:127
 msgid "Speed ground"
-msgstr "grondsnelheid"
+msgstr "Grondsnelheid"
 
 #. 7
 #: src/InfoBoxes/InfoBoxManager.cpp:129
 msgid "Last Thermal Average"
-msgstr "laatste gemiddelde stijgen"
+msgstr "Gemiddelde stijgen laatste bel"
 
 #. 8
 #: src/InfoBoxes/InfoBoxManager.cpp:131
 msgid "Last Thermal Gain"
-msgstr "laatste hoogtewinst in stijgen"
+msgstr "Hoogtewinst laatste bel"
 
 #. 9
 #: src/InfoBoxes/InfoBoxManager.cpp:133
 msgid "Last Thermal Time"
-msgstr "laatste tijd in stijgen"
+msgstr "Tijd in laatste bel"
 
 #. 10
 #: src/InfoBoxes/InfoBoxManager.cpp:135
@@ -814,52 +965,52 @@ msgstr "McCready instelling"
 #. 11
 #: src/InfoBoxes/InfoBoxManager.cpp:137
 msgid "Next Distance"
-msgstr "Volgende afstand"
+msgstr "Afstand volgend keerpunt"
 
 #. 12
 #: src/InfoBoxes/InfoBoxManager.cpp:139
 msgid "Next Altitude Difference"
-msgstr "volgende hoogteverschil"
+msgstr "Volgend keerpunt - aankomsthoogte"
 
 #. 13
 #: src/InfoBoxes/InfoBoxManager.cpp:141
 msgid "Next Altitude Required"
-msgstr "volgende benodigde hoogte"
+msgstr "Hoogte nodig voor volgend keerpunt"
 
 #. 14
 #: src/InfoBoxes/InfoBoxManager.cpp:143
 msgid "Next Waypoint"
-msgstr "volgende keerpunt"
+msgstr "volgend keerpunt"
 
 #. 15
 #: src/InfoBoxes/InfoBoxManager.cpp:145
 msgid "Final Altitude Difference"
-msgstr ""
+msgstr "eindsteek hoogteverschil"
 
 #. 16
 #: src/InfoBoxes/InfoBoxManager.cpp:147
 msgid "Final Altitude Required"
-msgstr ""
+msgstr "eindsteek vereiste hoogte"
 
 #. 17
 #: src/InfoBoxes/InfoBoxManager.cpp:149
 msgid "Speed Task Average"
-msgstr ""
+msgstr "Opdracht - gemiddelde snelheid"
 
 #. 18
 #: src/InfoBoxes/InfoBoxManager.cpp:151
 msgid "Final Distance"
-msgstr "eindafstand"
+msgstr "eindsteek afstand"
 
 #. 19
 #: src/InfoBoxes/InfoBoxManager.cpp:153
 msgid "Final LD"
-msgstr ""
+msgstr "eindsteek L/D"
 
 #. 20
 #: src/InfoBoxes/InfoBoxManager.cpp:155
 msgid "Terrain Elevation"
-msgstr ""
+msgstr "terreinhoogte"
 
 #. 21
 #: src/InfoBoxes/InfoBoxManager.cpp:157
@@ -898,32 +1049,32 @@ msgstr "windrichting"
 #. 27
 #: src/InfoBoxes/InfoBoxManager.cpp:169
 msgid "AA Time"
-msgstr "AA tijd"
+msgstr "AAT tijd"
 
 #. 28
 #: src/InfoBoxes/InfoBoxManager.cpp:171
 msgid "AA Distance Max"
-msgstr "AA max afstand"
+msgstr "AAT max afstand"
 
 #. 29
 #: src/InfoBoxes/InfoBoxManager.cpp:173
 msgid "AA Distance Min"
-msgstr "AA min afstand"
+msgstr "AAT min afstand"
 
 #. 30
 #: src/InfoBoxes/InfoBoxManager.cpp:175
 msgid "AA Speed Max"
-msgstr "AA max snelheid"
+msgstr "AAT max snelheid"
 
 #. 31
 #: src/InfoBoxes/InfoBoxManager.cpp:177
 msgid "AA Speed Min"
-msgstr "AA min snelheid"
+msgstr "AAT min snelheid"
 
 #. 32
 #: src/InfoBoxes/InfoBoxManager.cpp:179
 msgid "Airspeed IAS"
-msgstr "IAS vliegsnelheid"
+msgstr "Aangewezen vliegsnelheid (IAS)"
 
 #. 33
 #: src/InfoBoxes/InfoBoxManager.cpp:181
@@ -953,7 +1104,7 @@ msgstr "g-belasting"
 #. 38
 #: src/InfoBoxes/InfoBoxManager.cpp:191
 msgid "Next LD"
-msgstr "volgende L/D"
+msgstr "L/D voor volgend keerpunt"
 
 #. 39
 #: src/InfoBoxes/InfoBoxManager.cpp:193
@@ -993,12 +1144,12 @@ msgstr "opdracht aankomsttijd"
 #. 46
 #: src/InfoBoxes/InfoBoxManager.cpp:207
 msgid "Next Arrival Time"
-msgstr "volgende aankomsttijd"
+msgstr "aankomsttijd volgend punt"
 
 #. 47
 #: src/InfoBoxes/InfoBoxManager.cpp:209
 msgid "Bearing Difference"
-msgstr "koersverschil"
+msgstr "Koersafwijking volgend keerpunt"
 
 #. 48
 #: src/InfoBoxes/InfoBoxManager.cpp:211
@@ -1018,12 +1169,12 @@ msgstr "verwachtte temperatuur"
 #. 51
 #: src/InfoBoxes/InfoBoxManager.cpp:217
 msgid "AA Distance Tgt"
-msgstr "AA streefafstand"
+msgstr "AAT resterende afstand tot doel"
 
 #. 52
 #: src/InfoBoxes/InfoBoxManager.cpp:219
 msgid "AA Speed Tgt"
-msgstr "AA streefsnelheid"
+msgstr "AAT snelheid tot doel"
 
 #. 53
 #: src/InfoBoxes/InfoBoxManager.cpp:221
@@ -1033,7 +1184,7 @@ msgstr "vario L/D"
 #. 54
 #: src/InfoBoxes/InfoBoxManager.cpp:223
 msgid "Airspeed TAS"
-msgstr "TAS vliegsnelheid"
+msgstr "Werkelijke vliegsnelheid (TAS)"
 
 #. 55
 #: src/InfoBoxes/InfoBoxManager.cpp:225
@@ -1073,12 +1224,12 @@ msgstr "snelheid over opdracht"
 #. 62
 #: src/InfoBoxes/InfoBoxManager.cpp:239
 msgid "AA Delta Time"
-msgstr "AA verschiltijd"
+msgstr "AAT verschiltijd"
 
 #. 63
 #: src/InfoBoxes/InfoBoxManager.cpp:241
 msgid "Thermal All"
-msgstr ""
+msgstr "Stijgen totaal"
 
 #. 64
 #: src/InfoBoxes/InfoBoxManager.cpp:243
@@ -1112,40 +1263,40 @@ msgstr ""
 #. 69 BestAlternate aka BestLanding
 #: src/InfoBoxes/InfoBoxManager.cpp:258
 msgid "Best Alternate"
-msgstr ""
+msgstr "beste uitwijk"
 
 #. 70
 #: src/InfoBoxes/InfoBoxManager.cpp:260
 msgid "QFE GPS"
-msgstr ""
+msgstr "QFE GPS"
 
 #. 71 TODO FIX those 19,4 values
 #: src/InfoBoxes/InfoBoxManager.cpp:262
 msgid "L/D Average"
-msgstr ""
+msgstr "L/D gemiddeld"
 
 #. 72 //
 #: src/InfoBoxes/InfoBoxManager.cpp:264
 msgid "Experimental1"
-msgstr ""
+msgstr "experimenteel1"
 
 #. 73 //
 #: src/InfoBoxes/InfoBoxManager.cpp:266
 msgid "Online Contest Distance"
-msgstr ""
+msgstr "OLC afstand"
 
 #. 74 //
 #: src/InfoBoxes/InfoBoxManager.cpp:268
 msgid "Experimental2"
-msgstr ""
+msgstr "experimenteel2"
 
 #: src/InputEventsActions.cpp:162
 msgid "Vario Sounds ON"
-msgstr ""
+msgstr "vario geluid AAN"
 
 #: src/InputEventsActions.cpp:164
 msgid "Vario Sounds OFF"
-msgstr ""
+msgstr "vario geluid UIT"
 
 #: src/InputEventsActions.cpp:191
 msgid "SnailTrail OFF"
@@ -1165,15 +1316,15 @@ msgstr "Spoor VOLLEDIG"
 
 #: src/InputEventsActions.cpp:222
 msgid "VisualGlide OFF"
-msgstr ""
+msgstr "Zichtbare glijpad UIT"
 
 #: src/InputEventsActions.cpp:224
 msgid "VisualGlide Steady"
-msgstr ""
+msgstr "Zichtbare glijpad vastzetten"
 
 #: src/InputEventsActions.cpp:226
 msgid "VisualGlide Moving"
-msgstr ""
+msgstr "Zichtbare glijpad beweegt"
 
 #: src/InputEventsActions.cpp:256
 msgid "Show Airspace OFF"
@@ -1221,11 +1372,11 @@ msgstr "Pan modus UIT"
 
 #: src/InputEventsActions.cpp:566
 msgid "Advance: Manual"
-msgstr ""
+msgstr "voortgang: handmatig"
 
 #: src/InputEventsActions.cpp:569
 msgid "Advance: Automatic"
-msgstr ""
+msgstr "voortgang: automatisch"
 
 #: src/InputEventsActions.cpp:572
 msgid "Advance: Ready to start"
@@ -1245,23 +1396,23 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:706
 msgid "No Active Waypoint!"
-msgstr ""
+msgstr "geen aktief keerpunt!"
 
 #: src/InputEventsActions.cpp:771
 msgid "Auto MacCready ON"
-msgstr ""
+msgstr "auto McCready AAN"
 
 #: src/InputEventsActions.cpp:773
 msgid "Auto MacCready OFF"
-msgstr ""
+msgstr "auto McCready UIT"
 
 #: src/InputEventsActions.cpp:780
 msgid "MacCready "
-msgstr ""
+msgstr "McCready "
 
 #: src/InputEventsActions.cpp:985
 msgid "Task Aborted"
-msgstr ""
+msgstr "opdracht afgebroken"
 
 #: src/InputEventsActions.cpp:988
 msgid "Task Goto"
@@ -1273,7 +1424,7 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:994
 msgid "No Task"
-msgstr ""
+msgstr "geen opdracht"
 
 #: src/InputEventsActions.cpp:1049
 msgid "Bugs Performance"
@@ -1281,39 +1432,39 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:1088
 msgid "Ballast %"
-msgstr ""
+msgstr "ballast %"
 
 #: src/InputEventsActions.cpp:1136
 msgid "NMEA Log ON"
-msgstr ""
+msgstr "NMEA log AAN"
 
 #: src/InputEventsActions.cpp:1138
 msgid "NMEA Log OFF"
-msgstr ""
+msgstr "NMEA log UIT"
 
 #: src/InputEventsActions.cpp:1142
 msgid "Logger ON"
-msgstr ""
+msgstr "logger AAN"
 
 #: src/InputEventsActions.cpp:1144
 msgid "Logger OFF"
-msgstr ""
+msgstr "logger UIT"
 
 #: src/InputEventsActions.cpp:1471
 msgid "Forecast temperature"
-msgstr ""
+msgstr "verwachtte temperatuur"
 
 #: src/InputEventsActions.cpp:1508 src/InputEventsActions.cpp:1544
 msgid "Map labels ON"
-msgstr ""
+msgstr "Kaartlabels AAN"
 
 #: src/InputEventsActions.cpp:1510
 msgid "Map labels MID"
-msgstr ""
+msgstr "kaartlabels MEDIUM"
 
 #: src/InputEventsActions.cpp:1512
 msgid "Map labels OFF"
-msgstr ""
+msgstr "kaartlabels UIT"
 
 #: src/InputEventsActions.cpp:1683 src/InputEventsActions.cpp:1688
 #: src/Dialogs/dlgStatus.cpp:238
@@ -1328,15 +1479,15 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:1690
 msgid "Topology / Terrain"
-msgstr ""
+msgstr "topologie / terrein"
 
 #: src/InputEventsActions.cpp:1826
 msgid "Task Start"
-msgstr ""
+msgstr "start opdracht"
 
 #: src/InputEventsActions.cpp:1830
 msgid "Task Finish"
-msgstr ""
+msgstr "finish opdracht"
 
 #: src/InputEventsActions.cpp:1832
 msgid "In sector, arm advance when ready"
@@ -1344,28 +1495,28 @@ msgstr ""
 
 #: src/MapWindowSymbols.cpp:120
 msgid "GPS not connected"
-msgstr ""
+msgstr "GPS niet aangesloten"
 
 #: src/MapWindowSymbols.cpp:123
 msgid "GPS waiting for fix"
-msgstr ""
+msgstr "GPS wacht op fix"
 
 #: src/Topology/TopologyStore.cpp:131
 msgid "Loading Topology File..."
-msgstr ""
+msgstr "topologiebestand laden"
 
 #: src/Terrain/RasterWeather.cpp:65 src/Dialogs/dlgWeather.cpp:183
 #: Data/Dialogs/dlgVoice.xml:10
 msgid "Terrain"
-msgstr ""
+msgstr "terrein"
 
 #: src/Terrain/RasterWeather.cpp:66
 msgid "Display terrain on map, no weather data displayed."
-msgstr ""
+msgstr "toon terrein op kaart, zonder weersinformatie."
 
 #: src/Terrain/RasterWeather.cpp:70
 msgid "W*"
-msgstr ""
+msgstr "W*"
 
 #: src/Terrain/RasterWeather.cpp:71
 msgid ""
@@ -1375,10 +1526,17 @@ msgid ""
 "present, since cloud condensation adds buoyancy aloft (i.e. this negects "
 "\"cloudsuck\").  W* depends upon both the surface heating and the BL depth."
 msgstr ""
+"Gemiddelde stijgsnelheid lucht bij blauwthermiek en halverwege "
+"grenslaaghoogte. Trek eigen daalsnelheid zweefvliegtuig hiervan af om "
+"stijgsnelheid in blauwthermiek te krijgen. Stijgsnelheden zullen groter dan "
+"deze waarde zijn als er convectieve bewolking is, omdat een hogere "
+"luchtvochtigheid de stijgkracht vergroot (ook zonder \"aanzuigende\" werking "
+"van de wolken). W* hangt zowel af van de verwarming van de grond als de "
+"grenslaaghoogte."
 
 #: src/Terrain/RasterWeather.cpp:75
 msgid "BL Wind spd"
-msgstr ""
+msgstr "windsnelheid in grenslaag"
 
 #: src/Terrain/RasterWeather.cpp:76
 msgid ""
@@ -1386,10 +1544,13 @@ msgid ""
 "prediction can be misleading if there is a large change in wind direction "
 "through the BL."
 msgstr ""
+"De snelheid en richting van de vector-gemiddelde wind in de grenslaag. Deze "
+"voorspelling kan misleidend zijn als er een grote verandering in "
+"windrichting optreedt over de grenslaag."
 
 #: src/Terrain/RasterWeather.cpp:80
 msgid "H bl"
-msgstr ""
+msgstr "H grenslaag"
 
 #: src/Terrain/RasterWeather.cpp:81
 msgid ""
@@ -1402,10 +1563,19 @@ msgid ""
 "the mixing results from shear turbulence rather than thermal mixing this "
 "parameter is not useful for glider flying. "
 msgstr ""
+"Hoogte van de bovenkant van de menglaag, die bij thermische convectie "
+"overeenkomt met de gemiddelde bereikte hoogte van blauwe thermiek. Over vlak "
+"terrein zal de maximaal bereikte hoogte in de klim lager zijn door de eigen "
+"daalsnelheid van het zweefvliegtuig en andere factoren. Als er wolken zijn "
+"zal de thermiek tot grotere hoogte stijgen (door condensatie in de wolk), "
+"maar de maximale stijghoogte wordt dan beperkt door de wolkenbasis. Als "
+"menging in de grenslaag vooral het gevolg is van turbulentie als gevolg van "
+"windschering in plaats van convectieve menging in thermiekbellen, dan is "
+"deze parameter niet bruikbaar voor zweefvliegen. "
 
 #: src/Terrain/RasterWeather.cpp:85
 msgid "dwcrit"
-msgstr ""
+msgstr "dwcrit"
 
 #: src/Terrain/RasterWeather.cpp:86
 msgid ""
@@ -1418,10 +1588,19 @@ msgid ""
 "the maximum thermalling height may instead be limited by the cloud base.  "
 "Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
+"Deze parameter schat de hoogte boven grond waarop de gemiddelde "
+"stijgsnelheid in blauwe thermiek onder 1.14 m/s (225 fpm) zakt. Zij geeft "
+"naar verwachting betere waarden voor de maximaal te bereiken hoogte in "
+"blauwe thermiek dan de grenslaaghoogte. Zeker als menging het gevolg is van "
+"windschering met de hoogte en niet zozeer van thermiek. (N.B.: de huidige "
+"aannames neigen tot een onderschatting van de maximaal te bereiken "
+"stijghoogte bij blauwe thermiek.) Als er wolken zijn, kan de te bereiken "
+"stijghoogte worden beperkt door de wolkenbasis. Deze parameter geldt voor "
+"blauwe thermiek en veronachtzaamt daarom de 'aanzuigende' werking van wolken."
 
 #: src/Terrain/RasterWeather.cpp:90
 msgid "bl cloud"
-msgstr ""
+msgstr "bewolking grenslaag"
 
 #: src/Terrain/RasterWeather.cpp:91
 msgid ""
@@ -1432,10 +1611,16 @@ msgid ""
 "humidity within the BL.  The cloud base height is not predicted, but is "
 "expected to be below the BL Top height."
 msgstr ""
+"Deze parameter voorziet in een aanvullende manier van inschatting van "
+"wolkvorming in de grenslaag. Zij kan gebruikt worden in samenhang met of in "
+"plaats van andere wolkverwachtingsparameters. Er wordt een erg eenvoudige "
+"relatie verondersteld tussen het wolkenbedekkingspercentage en de maximale "
+"relatieve vochtigheid in de grenslaag. De basishoogte wordt niet voorspeld, "
+"maar ligt naar verwachting lager dan de grenslaaghoogte."
 
 #: src/Terrain/RasterWeather.cpp:95
 msgid "Sfc temp"
-msgstr ""
+msgstr "grondtemperatuur"
 
 #: src/Terrain/RasterWeather.cpp:96
 msgid ""
@@ -1444,10 +1629,15 @@ msgid ""
 "accuracy; e.g. if observed surface temperatures are significantly below "
 "those forecast, then soaring conditions will be poorer than forecast."
 msgstr ""
+"De temperatuur op een hoogte van 2 m boven de grond. Deze kan worden "
+"vergeleken met temperatuurwaarnemingen als indicatie van de modelsimulatie-"
+"nauwkeurigheid. Als bijvoorbeeld de temperatuurwaarnemingen aanzienlijk "
+"lager zijn dan die, die volgen uit de modelberekening, zullen de "
+"zweefvliegcondities slechter zijn dan verwacht."
 
 #: src/Terrain/RasterWeather.cpp:100
 msgid "hwcrit"
-msgstr ""
+msgstr "hwcrit"
 
 #: src/Terrain/RasterWeather.cpp:101
 msgid ""
@@ -1460,6 +1650,15 @@ msgid ""
 "maximum thermalling height may instead be limited by the cloud base.  Being "
 "for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
+"Deze parameter schat de hoogte boven grond waarop de gemiddelde "
+"stijgsnelheid in blauwe thermiek onder 1.14 m/s (225 fpm) zakt. Zij geeft "
+"naar verwachting betere waarden voor de maximaal te bereiken hoogte in "
+"blauwe thermiek dan de grenslaaghoogte zeker als menging het gevolg is van "
+"windschering met de hoogte en niet zozeer van thermiek. (N.B.: de huidige "
+"aannames neigen tot een onderschatting van de maximaal te bereiken "
+"stijghoogte bij blauwe thermiek.) Als er wolken zijn, kan de te bereiken "
+"stijghoogte worden beperkt door de wolkenbasis. Deze parameter geldt voor "
+"blauwe thermiek en veronachtzaamt daarom de 'aanzuigende' werking van wolken."
 
 #: src/Terrain/RasterWeather.cpp:105
 msgid "wblmaxmin"
@@ -1473,34 +1672,40 @@ msgid ""
 "(divergence) produces subsiding vertical motion, creating low-level "
 "inversions which limit thermalling heights."
 msgstr ""
+"Maximum grootschalige stijgende of dalende luchtbeweging binnen de grenslaag "
+"over het rekenrooster-gebied als gevolg van horizontale windconvergentie. "
+"Positieve convergentie is gerelateerd aan locale kleinschalige "
+"convergentielijnen. Negatieve convergentie (divergentie) veroorzaakt "
+"subsidentie, resulterend in inversies op lagere hoogtes die de te bereiken "
+"stijghoogtes beperken."
 
 #: src/Terrain/RasterWeather.cpp:110
 msgid "blcwbase"
-msgstr ""
+msgstr "blcwbase"
 
 #: src/FlightStatistics.cpp:866 src/FlightStatistics.cpp:874
 msgid "Working band"
-msgstr ""
+msgstr "werkhoogte"
 
 #: src/FlightStatistics.cpp:880
 msgid "Ceiling trend"
-msgstr ""
+msgstr "wolkenbasis trend"
 
 #: src/FlightStatistics.cpp:896 src/FlightStatistics.cpp:903
 msgid "Av climb"
-msgstr ""
+msgstr "gemiddeld stijgen"
 
 #: src/FlightStatistics.cpp:907
 msgid "Climb trend"
-msgstr ""
+msgstr "stijgen trend"
 
 #: src/FlightStatistics.cpp:921 src/FlightStatistics.cpp:935
 msgid "Best LD"
-msgstr ""
+msgstr "beste L/D"
 
 #: src/FlightStatistics.cpp:926 src/FlightStatistics.cpp:940
 msgid "Min sink"
-msgstr ""
+msgstr "min dalen"
 
 #: src/FlightStatistics.cpp:953
 msgid "Thermal height"
@@ -1508,11 +1713,11 @@ msgstr ""
 
 #: src/FlightStatistics.cpp:957
 msgid "Cloud base"
-msgstr ""
+msgstr "wolkenbasis"
 
 #: src/FlightStatistics.cpp:970
 msgid "No task"
-msgstr ""
+msgstr "geen opdracht"
 
 #: src/FlightStatistics.cpp:981 src/FlightStatistics.cpp:996
 #: src/FlightStatistics.cpp:1011
@@ -1521,125 +1726,127 @@ msgstr ""
 
 #: src/FlightStatistics.cpp:983 src/FlightStatistics.cpp:998
 msgid "AAT to go"
-msgstr ""
+msgstr "AAT resterend"
 
 #: src/FlightStatistics.cpp:985 src/FlightStatistics.cpp:1000
 #: src/FlightStatistics.cpp:1013
 msgid "Distance to go"
-msgstr ""
+msgstr "resterende afstand"
 
 #: src/FlightStatistics.cpp:989 src/FlightStatistics.cpp:1003
 msgid "Target speed"
-msgstr ""
+msgstr "streefsnelheid"
 
 #: src/Interface.cpp:182
 msgid "Quit program?"
-msgstr ""
+msgstr "Beeindig programma?"
 
 #. Read the terrain file
 #: src/UtilsSettings.cpp:120 src/Components.cpp:305 src/Components.cpp:323
 msgid "Loading Terrain File..."
-msgstr ""
+msgstr "terreinbestand laden"
 
 #: src/UtilsSettings.cpp:187
 msgid "Settings locked in flight"
-msgstr ""
+msgstr "Instellingen vast tijdens vlucht"
 
 #. TODO feature: Show the user what the batt status is.
 #: src/Screen/Blank.cpp:95
 msgid "Organiser Battery Low"
-msgstr ""
+msgstr "accu PDA laag"
 
 #: src/Screen/Chart.cpp:220
 msgid "No data"
-msgstr ""
+msgstr "geen data"
 
 #: src/Polar/Loader.cpp:87
 msgid ""
 "Error loading Polar file!\r\n"
 "Use LS8 Polar."
 msgstr ""
+"fout bij laden polaire!\r\n"
+"LS8 polaire wordt gebruikt."
 
 #: src/Polar/Loader.cpp:88
 msgid "Warning"
-msgstr ""
+msgstr "waarschuwing"
 
 #: src/Components.cpp:150
 msgid "Initialising"
-msgstr ""
+msgstr "initialiseren"
 
 #. Scan for weather forecast
 #: src/Components.cpp:329
 msgid "Scanning weather forecast"
-msgstr ""
+msgstr "scan weersverwachting"
 
 #. Start the device thread(s)
 #: src/Components.cpp:354
 msgid "Starting devices"
 msgstr ""
 
-#.
+#. 
 #. -- Reset polar in case devices need the data
 #. LogStartUp(_T("GlidePolar::UpdatePolar"));
 #. GlidePolar::UpdatePolar(true, SettingsComputer());
-#.
+#. 
 #. This should be done inside devStartup if it is really required
-#.
+#. 
 #: src/Components.cpp:365
 msgid "Initialising display"
-msgstr ""
+msgstr "initialiseren display"
 
 #. Show progress dialog
 #: src/Components.cpp:424 src/Components.cpp:450 src/Components.cpp:494
 msgid "Shutdown, please wait..."
-msgstr ""
+msgstr "afsluiten, wacht aub"
 
 #. Stop logger and save igc file
 #: src/Components.cpp:434
 msgid "Shutdown, saving logs..."
-msgstr ""
+msgstr "afsluiten, opslaan logs..."
 
 #. Save settings to profile
 #: src/Components.cpp:438
 msgid "Shutdown, saving profile..."
-msgstr ""
+msgstr "afsluiten, profiel wordt opgeslagen..."
 
 #. Save the task for the next time
 #: src/Components.cpp:480
 msgid "Shutdown, saving task..."
-msgstr ""
+msgstr "afsluiten, opdracht wordt opgeslagen..."
 
 #: src/Device/Port.cpp:100 src/Device/Port.cpp:128
 #, c-format
 msgid "Unable to open port %s"
-msgstr ""
+msgstr "kan poort %s niet openen"
 
 #: src/Device/Port.cpp:177
 #, c-format
 msgid "Unable to change settings on port %s"
-msgstr ""
+msgstr "kan instellingen van poort %s niet wijzigen"
 
 #: src/Device/Port.cpp:488
 #, c-format
 msgid "Unable to set serial port timers %s"
-msgstr ""
+msgstr "kan timers van seriele poort %s niet instellen"
 
 #: src/Dialogs/Message.cpp:149 Data/Dialogs/dlgTarget.xml:4
 #: Data/Dialogs/dlgTarget_L.xml:4 Data/Dialogs/dlgTaskCalculator.xml:4
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/Dialogs/Message.cpp:157 Data/Dialogs/dlgWaypointOutOfTerrain.xml:6
 msgid "Yes"
-msgstr ""
+msgstr "ja"
 
 #: src/Dialogs/Message.cpp:163 Data/Dialogs/dlgWaypointOutOfTerrain.xml:8
 msgid "No"
-msgstr ""
+msgstr "nee"
 
 #: src/Dialogs/Message.cpp:171 Data/Dialogs/dlgStartTask.xml:10
 msgid "Retry"
-msgstr ""
+msgstr "probeer opnieuw"
 
 #: src/Dialogs/Message.cpp:179 Data/Dialogs/dlgComboPicker.xml:6
 #: Data/Dialogs/dlgComboPicker_L.xml:6 Data/Dialogs/dlgFontEdit.xml:24
@@ -1648,7 +1855,7 @@ msgstr ""
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:8
 #: Data/Dialogs/dlgWindSettings.xml:24
 msgid "Cancel"
-msgstr ""
+msgstr "annuleer"
 
 #: src/Dialogs/Message.cpp:187
 msgid "Abort"
@@ -1656,31 +1863,31 @@ msgstr ""
 
 #: src/Dialogs/Message.cpp:193
 msgid "Ignore"
-msgstr ""
+msgstr "negeer"
 
 #: src/Dialogs/dlgAirspace.cpp:65 src/Dialogs/dlgAirspace.cpp:87
 msgid "Warn"
-msgstr ""
+msgstr "waarschuw"
 
 #: src/Dialogs/dlgAirspace.cpp:66 src/Dialogs/dlgAirspace.cpp:91
 msgid "Display"
-msgstr ""
+msgstr "toon"
 
 #: src/Dialogs/dlgAirspace.cpp:184
 msgid "Configuration saved"
-msgstr ""
+msgstr "configuratie opgeslagen"
 
 #: src/Dialogs/dlgAirspaceDetails.cpp:66
 msgid "Acknowledge for day?"
-msgstr ""
+msgstr "bevestigen voor vandaag"
 
 #: src/Dialogs/dlgAirspaceSelect.cpp:340 src/Dialogs/dlgWayPointSelect.cpp:473
 msgid "No Match!"
-msgstr ""
+msgstr "geen overeenkomst"
 
 #: src/Dialogs/dlgAirspaceWarning.cpp:213
 msgid "No Warnings"
-msgstr ""
+msgstr "geen waarschuwingen"
 
 #: src/Dialogs/dlgAnalysis.cpp:168 src/Dialogs/dlgAnalysis.cpp:177
 #: src/Dialogs/dlgAnalysis.cpp:186 src/Dialogs/dlgAnalysis.cpp:194
@@ -1688,53 +1895,53 @@ msgstr ""
 #: src/Dialogs/dlgAnalysis.cpp:221 src/Dialogs/dlgAnalysis.cpp:230
 #: src/Dialogs/dlgAnalysis.cpp:253
 msgid "Analysis"
-msgstr ""
+msgstr "analyse"
 
 #: src/Dialogs/dlgAnalysis.cpp:169
 msgid "Barograph"
-msgstr ""
+msgstr "barograaf"
 
 #: src/Dialogs/dlgAnalysis.cpp:173 src/Dialogs/dlgAnalysis.cpp:200
 #: src/Dialogs/dlgAnalysis.cpp:209
 msgid "Settings"
-msgstr ""
+msgstr "instellingen"
 
 #: src/Dialogs/dlgAnalysis.cpp:178
 msgid "Climb"
-msgstr ""
+msgstr "stijgen"
 
 #: src/Dialogs/dlgAnalysis.cpp:182 src/Dialogs/dlgAnalysis.cpp:217
 #: src/Dialogs/dlgAnalysis.cpp:226
 msgid "Task calc"
-msgstr ""
+msgstr "berekening opdracht"
 
 #: src/Dialogs/dlgAnalysis.cpp:187
 msgid "Wind at Altitude"
-msgstr ""
+msgstr "hoogtewind"
 
 #: src/Dialogs/dlgAnalysis.cpp:190
 msgid "Set wind"
-msgstr ""
+msgstr "stel wind in"
 
 #: src/Dialogs/dlgAnalysis.cpp:195
 msgid "Glide Polar"
-msgstr ""
+msgstr "glijpolaire"
 
 #: src/Dialogs/dlgAnalysis.cpp:205
 msgid "Temp trace"
-msgstr ""
+msgstr "temp optekening"
 
 #: src/Dialogs/dlgAnalysis.cpp:214
 msgid "Task speed"
-msgstr ""
+msgstr "opdrachtsnelheid"
 
 #: src/Dialogs/dlgAnalysis.cpp:222 src/Dialogs/dlgStatus.cpp:67
 msgid "Task"
-msgstr ""
+msgstr "opdracht"
 
 #: src/Dialogs/dlgAnalysis.cpp:231
 msgid "OnLine Contest"
-msgstr ""
+msgstr "OLC"
 
 #: src/Dialogs/dlgAnalysis.cpp:240 Data/Dialogs/dlgAirspaceSelect.xml:10
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:16
@@ -1748,26 +1955,26 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointSelect.xml:11
 #: Data/Dialogs/dlgWayPointSelect_L.xml:7
 msgid "Distance"
-msgstr ""
+msgstr "afstand"
 
 #: src/Dialogs/dlgAnalysis.cpp:243 Data/Dialogs/dlgStartTask.xml:4
 #: Data/Dialogs/dlgWeather.xml:10 Data/Dialogs/dlgWeather_L.xml:10
 msgid "Time"
-msgstr ""
+msgstr "tijd"
 
 #: src/Dialogs/dlgAnalysis.cpp:245 Data/Dialogs/dlgStartTask.xml:6
 #: Data/Dialogs/dlgWindSettings.xml:4
 msgid "Speed"
-msgstr ""
+msgstr "snelheid"
 
 #: src/Dialogs/dlgAnalysis.cpp:257 Data/Dialogs/dlgConfiguration.xml:79
 #: Data/Dialogs/dlgConfiguration_L.xml:80
 msgid "Warnings"
-msgstr ""
+msgstr "waarschuwingen"
 
 #: src/Dialogs/dlgChecklist.cpp:81
 msgid "Checklist"
-msgstr ""
+msgstr "checklist"
 
 #: src/Dialogs/dlgConfiguration.cpp:88
 msgid "Site"
@@ -1775,63 +1982,63 @@ msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:90
 msgid "Map Display"
-msgstr ""
+msgstr "kaartweergave"
 
 #: src/Dialogs/dlgConfiguration.cpp:91
 msgid "Terrain Display"
-msgstr ""
+msgstr "terreinweergave"
 
 #: src/Dialogs/dlgConfiguration.cpp:92
 msgid "Glide Computer"
-msgstr ""
+msgstr "glijvluchtcomputer"
 
 #: src/Dialogs/dlgConfiguration.cpp:93
 msgid "Safety factors"
-msgstr ""
+msgstr "veiligheidsfactoren"
 
 #: src/Dialogs/dlgConfiguration.cpp:94
 msgid "Polar"
-msgstr ""
+msgstr "polaire"
 
 #: src/Dialogs/dlgConfiguration.cpp:95
 msgid "Devices"
-msgstr ""
+msgstr "Apparaten"
 
 #: src/Dialogs/dlgConfiguration.cpp:96
 msgid "Units"
-msgstr ""
+msgstr "Eenheden"
 
 #: src/Dialogs/dlgConfiguration.cpp:97
 msgid "Interface"
-msgstr ""
+msgstr "Interface"
 
 #: src/Dialogs/dlgConfiguration.cpp:98
 msgid "Appearance"
-msgstr ""
+msgstr "Weergave"
 
 #: src/Dialogs/dlgConfiguration.cpp:99
 msgid "Fonts"
-msgstr ""
+msgstr "Lettertypes"
 
 #: src/Dialogs/dlgConfiguration.cpp:100
 msgid "FLARM and other gauges"
-msgstr ""
+msgstr "FLARM en andere indicators"
 
 #: src/Dialogs/dlgConfiguration.cpp:101
 msgid "Default task rules"
-msgstr ""
+msgstr "Standaard opdrachtregels"
 
 #: src/Dialogs/dlgConfiguration.cpp:102
 msgid "InfoBox Cruise"
-msgstr ""
+msgstr "Infokader kruisvlucht"
 
 #: src/Dialogs/dlgConfiguration.cpp:103
 msgid "InfoBox Circling"
-msgstr ""
+msgstr "Infokader Thermieken"
 
 #: src/Dialogs/dlgConfiguration.cpp:104
 msgid "InfoBox Final Glide"
-msgstr ""
+msgstr "Infokader Eindsteek"
 
 #: src/Dialogs/dlgConfiguration.cpp:105
 msgid "InfoBox Auxiliary"
@@ -1840,94 +2047,94 @@ msgstr ""
 #: src/Dialogs/dlgConfiguration.cpp:106 Data/Dialogs/dlgStatus.xml:24
 #: Data/Dialogs/dlgStatusSystem.xml:8
 msgid "Logger"
-msgstr ""
+msgstr "Logger"
 
 #: src/Dialogs/dlgConfiguration.cpp:107
 msgid "Waypoint Edit"
-msgstr ""
+msgstr "Bewerk Keerpunt"
 
 #: src/Dialogs/dlgConfiguration.cpp:108
 msgid "Experimental features"
-msgstr ""
+msgstr "Experimentele opties"
 
 #: src/Dialogs/dlgConfiguration.cpp:116
 msgid "GPS Intermediate Driver"
-msgstr ""
+msgstr "GPS intermediair driver"
 
 #: src/Dialogs/dlgConfiguration.cpp:170 src/Dialogs/dlgConfiguration.cpp:178
 #: src/Dialogs/dlgConfiguration.cpp:186 src/Dialogs/dlgConfiguration.cpp:194
 #: src/Dialogs/dlgWaypointEdit.cpp:68 src/Dialogs/dlgWaypointEdit.cpp:78
 msgid "(blank)"
-msgstr ""
+msgstr "(leeg)"
 
 #: src/Dialogs/dlgConfiguration.cpp:172
 msgid "Pilot name"
-msgstr ""
+msgstr "Naam vlieger"
 
 #: src/Dialogs/dlgConfiguration.cpp:180 Data/Dialogs/dlgVario.xml:355
 #: Data/Dialogs/dlgVario_L.xml:355
 msgid "Aircraft type"
-msgstr ""
+msgstr "Vliegtuigtype"
 
 #: src/Dialogs/dlgConfiguration.cpp:188
 msgid "Competition ID"
-msgstr ""
+msgstr "Wedstrijdkenmerk"
 
 #: src/Dialogs/dlgConfiguration.cpp:196
 msgid "Logger ID"
-msgstr ""
+msgstr "Logger ID"
 
 #: src/Dialogs/dlgConfiguration.cpp:278
 msgid "Expert"
-msgstr ""
+msgstr "Expert"
 
 #: src/Dialogs/dlgConfiguration.cpp:684
 msgid "Overwrite?"
-msgstr ""
+msgstr "Overschrijven?"
 
 #: src/Dialogs/dlgConfiguration.cpp:685
 msgid "InfoBox paste"
-msgstr ""
+msgstr "Infokader plakken"
 
 #: src/Dialogs/dlgConfiguration.cpp:844
 msgid "Waypoint not editable"
-msgstr ""
+msgstr "Keerpunt niet te wijzigen"
 
 #: src/Dialogs/dlgConfiguration.cpp:854
 msgid "Waypoints excluded, save anyway?"
-msgstr ""
+msgstr "Keerpunten uitgesloten, toch bewaren?"
 
 #: src/Dialogs/dlgConfiguration.cpp:855
 msgid "Waypoints outside terrain"
-msgstr ""
+msgstr "Keerpunten buiten terreingrenzen"
 
 #: src/Dialogs/dlgConfiguration.cpp:882
 msgid "Delete Waypoint?"
-msgstr ""
+msgstr "Keerpunt verwijderen?"
 
 #: src/Dialogs/dlgConfiguration.cpp:901
 msgid "circling"
-msgstr ""
+msgstr "Cirkelen"
 
 #: src/Dialogs/dlgConfiguration.cpp:904
 msgid "cruise"
-msgstr ""
+msgstr "kruisvlucht"
 
 #: src/Dialogs/dlgConfiguration.cpp:907
 msgid "final glide"
-msgstr ""
+msgstr "eindsteek"
 
 #: src/Dialogs/dlgConfiguration.cpp:910
 msgid "auxiliary"
-msgstr ""
+msgstr "hulp"
 
 #: src/Dialogs/dlgConfiguration.cpp:922 src/Dialogs/dlgWeather.cpp:136
 msgid "No help available on this item"
-msgstr ""
+msgstr "Geen hulp beschikbaar voor dit onderwerp"
 
 #: src/Dialogs/dlgConfiguration.cpp:1172
 msgid "All on"
-msgstr ""
+msgstr "Alles aan"
 
 #: src/Dialogs/dlgConfiguration.cpp:1173
 msgid "Clip"
@@ -1935,55 +2142,55 @@ msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:1174 Data/Dialogs/dlgBrightness.xml:6
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 #: src/Dialogs/dlgConfiguration.cpp:1175
 msgid "All below"
-msgstr ""
+msgstr "Alles beneden"
 
 #: src/Dialogs/dlgConfiguration.cpp:1205
 msgid "ON/Fixed"
-msgstr ""
+msgstr "AAN/Vast"
 
 #: src/Dialogs/dlgConfiguration.cpp:1206
 msgid "ON/Scaled"
-msgstr ""
+msgstr "AAN/Geschaald"
 
 #: src/Dialogs/dlgConfiguration.cpp:1226
 msgid "Names"
-msgstr ""
+msgstr "Namen"
 
 #: src/Dialogs/dlgConfiguration.cpp:1227
 msgid "Numbers"
-msgstr ""
+msgstr "Getallen"
 
 #: src/Dialogs/dlgConfiguration.cpp:1228
 msgid "First 5"
-msgstr ""
+msgstr "Eerste 5"
 
 #: src/Dialogs/dlgConfiguration.cpp:1229
 msgid "None"
-msgstr ""
+msgstr "Geen"
 
 #: src/Dialogs/dlgConfiguration.cpp:1230
 msgid "First 3"
-msgstr ""
+msgstr "Eerste 3"
 
 #: src/Dialogs/dlgConfiguration.cpp:1231
 msgid "Names in task"
-msgstr ""
+msgstr "Namen in opdracht"
 
 #: src/Dialogs/dlgConfiguration.cpp:1232
 msgid "First word"
-msgstr ""
+msgstr "Eerste woord"
 
 #: src/Dialogs/dlgConfiguration.cpp:1248
 msgid "Track up"
-msgstr ""
+msgstr "Koers boven"
 
 #: src/Dialogs/dlgConfiguration.cpp:1249
 msgid "North up"
-msgstr ""
+msgstr "Noord boven"
 
 #: src/Dialogs/dlgConfiguration.cpp:1250
 msgid "North circling"
@@ -1991,65 +2198,65 @@ msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:1251
 msgid "Target circling"
-msgstr ""
+msgstr "Doel bij thermieken"
 
 #: src/Dialogs/dlgConfiguration.cpp:1252
 msgid "North/track"
-msgstr ""
+msgstr "Noord/koers"
 
 #: src/Dialogs/dlgConfiguration.cpp:1270
 msgid "Line"
-msgstr ""
+msgstr "Regel"
 
 #: src/Dialogs/dlgConfiguration.cpp:1271
 msgid "Shade"
-msgstr ""
+msgstr "Schaduw"
 
 #: src/Dialogs/dlgConfiguration.cpp:1283
 msgid "Arrow head"
-msgstr ""
+msgstr "Pijlpunt"
 
 #: src/Dialogs/dlgConfiguration.cpp:1284
 msgid "Full arrow"
-msgstr ""
+msgstr "Volledige pijl"
 
 #: src/Dialogs/dlgConfiguration.cpp:1293 src/Dialogs/dlgWindSettings.cpp:126
 msgid "Manual"
-msgstr ""
+msgstr "Handmatig"
 
 #: src/Dialogs/dlgConfiguration.cpp:1294 src/Dialogs/dlgWindSettings.cpp:127
 #: Data/Dialogs/dlgVegaDemo.xml:14
 msgid "Circling"
-msgstr ""
+msgstr "Thermieken"
 
 #: src/Dialogs/dlgConfiguration.cpp:1295 src/Dialogs/dlgWindSettings.cpp:128
 msgid "ZigZag"
-msgstr ""
+msgstr "Zigzag"
 
 #: src/Dialogs/dlgConfiguration.cpp:1296 src/Dialogs/dlgConfiguration.cpp:1307
 #: src/Dialogs/dlgWindSettings.cpp:129
 msgid "Both"
-msgstr ""
+msgstr "Beide"
 
 #: src/Dialogs/dlgConfiguration.cpp:1305
 msgid "Final glide"
-msgstr ""
+msgstr "Eindsteek"
 
 #: src/Dialogs/dlgConfiguration.cpp:1306
 msgid "Average climb"
-msgstr ""
+msgstr "Gemiddeld stijgen"
 
 #: src/Dialogs/dlgConfiguration.cpp:1316
 msgid "Ask"
-msgstr ""
+msgstr "Vraag"
 
 #: src/Dialogs/dlgConfiguration.cpp:1317
 msgid "Include"
-msgstr ""
+msgstr "Meenemen"
 
 #: src/Dialogs/dlgConfiguration.cpp:1318
 msgid "Exclude"
-msgstr ""
+msgstr "Uitsluiten"
 
 #: src/Dialogs/dlgConfiguration.cpp:1350
 msgid "Statue"
@@ -2058,112 +2265,112 @@ msgstr ""
 #: src/Dialogs/dlgConfiguration.cpp:1351 src/Dialogs/dlgConfiguration.cpp:1383
 #: src/Dialogs/dlgConfiguration.cpp:1398
 msgid "Nautical"
-msgstr ""
+msgstr "Zee"
 
 #: src/Dialogs/dlgConfiguration.cpp:1352 src/Dialogs/dlgConfiguration.cpp:1384
 #: src/Dialogs/dlgConfiguration.cpp:1399
 msgid "Metric"
-msgstr ""
+msgstr "Metrisch"
 
 #: src/Dialogs/dlgConfiguration.cpp:1382 src/Dialogs/dlgConfiguration.cpp:1397
 msgid "Statute"
-msgstr ""
+msgstr "Land"
 
 #: src/Dialogs/dlgConfiguration.cpp:1412
 msgid "Feet"
-msgstr ""
+msgstr "Voet"
 
 #: src/Dialogs/dlgConfiguration.cpp:1413
 msgid "Meters"
-msgstr ""
+msgstr "Meter"
 
 #: src/Dialogs/dlgConfiguration.cpp:1426
 msgid "C"
-msgstr ""
+msgstr "C"
 
 #: src/Dialogs/dlgConfiguration.cpp:1427
 msgid "F"
-msgstr ""
+msgstr "F"
 
 #: src/Dialogs/dlgConfiguration.cpp:1440
 msgid "Knots"
-msgstr ""
+msgstr "Knopen"
 
 #: src/Dialogs/dlgConfiguration.cpp:1441
 msgid "M/s"
-msgstr ""
+msgstr "m/s"
 
 #: src/Dialogs/dlgConfiguration.cpp:1442
 msgid "ft/min"
-msgstr ""
+msgstr "voet/min"
 
 #: src/Dialogs/dlgConfiguration.cpp:1468 src/Dialogs/dlgConfiguration.cpp:1481
 msgid "Off"
-msgstr ""
+msgstr "Uit"
 
 #: src/Dialogs/dlgConfiguration.cpp:1469
 msgid "Long"
-msgstr ""
+msgstr "Lang"
 
 #: src/Dialogs/dlgConfiguration.cpp:1470
 msgid "Short"
-msgstr ""
+msgstr "Kort"
 
 #: src/Dialogs/dlgConfiguration.cpp:1471
 msgid "Full"
-msgstr ""
+msgstr "Volledige"
 
 #: src/Dialogs/dlgConfiguration.cpp:1482
 msgid "Steady"
-msgstr ""
+msgstr "Constante"
 
 #: src/Dialogs/dlgConfiguration.cpp:1483
 msgid "Moving"
-msgstr ""
+msgstr "Bewegende"
 
 #: src/Dialogs/dlgConfiguration.cpp:1546
 msgid "Center"
-msgstr ""
+msgstr "Centreren"
 
 #: src/Dialogs/dlgConfiguration.cpp:1547
 msgid "Topleft"
-msgstr ""
+msgstr "Linksboven"
 
 #: src/Dialogs/dlgConfiguration.cpp:1556 src/Dialogs/dlgConfiguration.cpp:1684
 msgid "Default"
-msgstr ""
+msgstr "Standaard"
 
 #: src/Dialogs/dlgConfiguration.cpp:1557
 msgid "Keyboard"
-msgstr ""
+msgstr "Toetsenbord"
 
 #: src/Dialogs/dlgConfiguration.cpp:1558
 msgid "HighScore Style"
-msgstr ""
+msgstr "Stijl hoogste score"
 
 #: src/Dialogs/dlgConfiguration.cpp:1567
 msgid "Full width"
-msgstr ""
+msgstr "Volledige breedte"
 
 #: src/Dialogs/dlgConfiguration.cpp:1568
 msgid "Scaled"
-msgstr ""
+msgstr "Geschaald"
 
 #: src/Dialogs/dlgConfiguration.cpp:1569
 msgid "Scaled centered"
-msgstr ""
+msgstr "Geschaald gecentreerd"
 
 #: src/Dialogs/dlgConfiguration.cpp:1570
 msgid "Fixed"
-msgstr ""
+msgstr "Vast"
 
 #: src/Dialogs/dlgConfiguration.cpp:1579
 msgid "Box"
-msgstr ""
+msgstr "Kader"
 
 #: src/Dialogs/dlgConfiguration.cpp:1580
 msgid "Tab"
-msgstr ""
+msgstr "Tab"
 
 #: src/Dialogs/dlgConfiguration.cpp:1590
 msgid "8 Top + Bottom (Portrait)"
@@ -2172,285 +2379,287 @@ msgstr ""
 #. 0
 #: src/Dialogs/dlgConfiguration.cpp:1591
 msgid "8 Top (Portrait)"
-msgstr ""
+msgstr "8 Boven (Staand)"
 
 #. 1
 #: src/Dialogs/dlgConfiguration.cpp:1592
 msgid "8 Bottom (Portrait)"
-msgstr ""
+msgstr "8 Onder (Staand)"
 
 #. 2
 #: src/Dialogs/dlgConfiguration.cpp:1593
 msgid "8 Left + Right (Landscape)"
-msgstr ""
+msgstr "8 Links + Rechts (Liggend)"
 
 #. 3
 #: src/Dialogs/dlgConfiguration.cpp:1594
 msgid "8 Left (Landscape)"
-msgstr ""
+msgstr "8 Links (Liggend)"
 
 #. 4
 #: src/Dialogs/dlgConfiguration.cpp:1595
 msgid "8 Right (Landscape)"
-msgstr ""
+msgstr "8 Rechts (Liggend)"
 
 #. 5
 #: src/Dialogs/dlgConfiguration.cpp:1596
 msgid "9 Right + Vario (Landscape)"
-msgstr ""
+msgstr "9 Rechts + Vario (Liggend)"
 
 #. 6
 #: src/Dialogs/dlgConfiguration.cpp:1597
 msgid "5 Right (Square)"
-msgstr ""
+msgstr "5 Rechts (Vierkant)"
 
 #: src/Dialogs/dlgConfiguration.cpp:1608
 msgid "Generic"
-msgstr ""
+msgstr "Algemeen"
 
 #: src/Dialogs/dlgConfiguration.cpp:1609
 msgid "HP31x"
-msgstr ""
+msgstr "HP31x"
 
 #: src/Dialogs/dlgConfiguration.cpp:1610
 msgid "MedionP5"
-msgstr ""
+msgstr "MedionP5"
 
 #: src/Dialogs/dlgConfiguration.cpp:1611
 msgid "MIO"
-msgstr ""
+msgstr "MIO"
 
 #: src/Dialogs/dlgConfiguration.cpp:1612
 msgid "Nokia500"
-msgstr ""
+msgstr "Nokia500"
 
 #. VENTA3
 #: src/Dialogs/dlgConfiguration.cpp:1613
 msgid "PN6000"
-msgstr ""
+msgstr "PN6000"
 
 #: src/Dialogs/dlgConfiguration.cpp:1623 src/Dialogs/dlgConfiguration.cpp:1674
 msgid "Normal"
-msgstr ""
+msgstr "Normaal"
 
 #: src/Dialogs/dlgConfiguration.cpp:1624
 msgid "Extended"
-msgstr ""
+msgstr "Uitgebreide"
 
 #: src/Dialogs/dlgConfiguration.cpp:1634
 msgid "Disabled"
-msgstr ""
+msgstr "Uitgeschakeld"
 
 #: src/Dialogs/dlgConfiguration.cpp:1635
 msgid "Enabled"
-msgstr ""
+msgstr "Ingeschakeld"
 
 #: src/Dialogs/dlgConfiguration.cpp:1645
 msgid "15 seconds"
-msgstr ""
+msgstr "15 seconden"
 
 #: src/Dialogs/dlgConfiguration.cpp:1646
 msgid "30 seconds"
-msgstr ""
+msgstr "30 seconden"
 
 #: src/Dialogs/dlgConfiguration.cpp:1647
 msgid "60 seconds"
-msgstr ""
+msgstr "60 seconden"
 
 #: src/Dialogs/dlgConfiguration.cpp:1648
 msgid "90 seconds"
-msgstr ""
+msgstr "90 seconden"
 
 #: src/Dialogs/dlgConfiguration.cpp:1649
 msgid "2 minutes"
-msgstr ""
+msgstr "2 minuten"
 
 #: src/Dialogs/dlgConfiguration.cpp:1650
 msgid "3 minutes"
-msgstr ""
+msgstr "3 minuten"
 
 #: src/Dialogs/dlgConfiguration.cpp:1675
 msgid "White outline"
-msgstr ""
+msgstr "Witte omtrek"
 
 #: src/Dialogs/dlgConfiguration.cpp:1685 src/Dialogs/dlgConfiguration.cpp:1695
 msgid "Alternate"
-msgstr ""
+msgstr "Uitwijk"
 
 #: src/Dialogs/dlgConfiguration.cpp:1694
 msgid "Winpilot"
-msgstr ""
+msgstr "Winpilot"
 
 #: src/Dialogs/dlgConfiguration.cpp:1696
 msgid "Green/Orange"
-msgstr ""
+msgstr "Groen/Oranje"
 
 #: src/Dialogs/dlgConfiguration.cpp:1706
 msgid "Flap"
-msgstr ""
+msgstr "Flap"
 
 #: src/Dialogs/dlgConfiguration.cpp:1707
 msgid "SC"
-msgstr ""
+msgstr "SC"
 
 #: src/Dialogs/dlgConfiguration.cpp:1727
 msgid "Low lands"
-msgstr ""
+msgstr "Laagland"
 
 #: src/Dialogs/dlgConfiguration.cpp:1728
 msgid "Mountainous"
-msgstr ""
+msgstr "Bergachtig"
 
 #: src/Dialogs/dlgConfiguration.cpp:1729
 msgid "Imhof 7"
-msgstr ""
+msgstr "Imhof 7"
 
 #: src/Dialogs/dlgConfiguration.cpp:1730
 msgid "Imhof 4"
-msgstr ""
+msgstr "Imhof 4"
 
 #: src/Dialogs/dlgConfiguration.cpp:1731
 msgid "Imhof 12"
-msgstr ""
+msgstr "Imhof 12"
 
 #: src/Dialogs/dlgConfiguration.cpp:1732
 msgid "Imhof Atlas"
-msgstr ""
+msgstr "Imhof Atlas"
 
 #: src/Dialogs/dlgConfiguration.cpp:1733
 msgid "ICAO"
-msgstr ""
+msgstr "ICAO"
 
 #: src/Dialogs/dlgConfiguration.cpp:1734
 msgid "Grey"
-msgstr ""
+msgstr "Grijs"
 
 #: src/Dialogs/dlgConfiguration.cpp:1785 src/Dialogs/dlgTaskProperties.cpp:79
 msgid "AGL"
-msgstr ""
+msgstr "boven grond"
 
 #: src/Dialogs/dlgConfiguration.cpp:1786 src/Dialogs/dlgTaskProperties.cpp:80
 msgid "MSL"
-msgstr ""
+msgstr "boven zeeniveau"
 
 #: src/Dialogs/dlgConfiguration.cpp:2740
 msgid "Save changes to waypoint file?"
-msgstr ""
+msgstr "Wijzigingen in keerpuntbestand opslaan?"
 
 #: src/Dialogs/dlgConfiguration.cpp:2740
 msgid "Waypoints edited"
-msgstr ""
+msgstr "Keerpunten gewijzigd"
 
 #: src/Dialogs/dlgConfiguration.cpp:2752 src/Dialogs/dlgVoice.cpp:124
 msgid "Changes to configuration saved."
-msgstr ""
+msgstr "Verandering in configuratie opgeslagen"
 
 #: src/Dialogs/dlgConfiguration.cpp:2755
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr ""
+"Veranderingen in configuratie opgeslagen. Herstart XCSoar om veranderingen "
+"te activeren."
 
 #: src/Dialogs/dlgConfigurationVario.cpp:412
 msgid "Set new audio scheme?  Old values will be lost."
-msgstr ""
+msgstr "Nieuwe audio instellingen vastleggen? Oude waarden gaan verloren."
 
 #: src/Dialogs/dlgConfigurationVario.cpp:413
 #: src/Dialogs/dlgConfigurationVario.cpp:490
 msgid "Vega Audio"
-msgstr ""
+msgstr "Vega Audio"
 
 #: src/Dialogs/dlgConfigurationVario.cpp:489
 msgid "Audio scheme updated."
-msgstr ""
+msgstr "Audio instellingen bijgewerkt."
 
 #: src/Dialogs/dlgConfigurationVario.cpp:967
 msgid "No communication with Vega."
-msgstr ""
+msgstr "Geen communicatie met Vega"
 
 #: src/Dialogs/dlgConfigurationVario.cpp:968
 msgid "Vega error"
-msgstr ""
+msgstr "fout Vega"
 
 #: src/Dialogs/dlgConfigurationVario.cpp:995
 msgid "Reading vario settings..."
-msgstr ""
+msgstr "Vario instellingen uitlezen"
 
 #: src/Dialogs/dlgFlarmTraffic.cpp:334 src/Dialogs/dlgFlarmTraffic.cpp:335
 msgid "Vario:"
-msgstr ""
+msgstr "Vario:"
 
 #: src/Dialogs/dlgFlarmTraffic.cpp:348
 msgid "Distance:"
-msgstr ""
+msgstr "Afstand:"
 
 #: src/Dialogs/dlgFlarmTraffic.cpp:357 src/Dialogs/dlgFlarmTraffic.cpp:360
 msgid "Rel. Alt.:"
-msgstr ""
+msgstr "Rel. Hgt.:"
 
 #: src/Dialogs/dlgFlarmTraffic.cpp:644
 msgid "A. Zoom"
-msgstr ""
+msgstr "A. Zoom"
 
 #: src/Dialogs/dlgStatus.cpp:65
 msgid "Flight"
-msgstr ""
+msgstr "Vlucht"
 
 #: src/Dialogs/dlgStatus.cpp:66
 msgid "System"
-msgstr ""
+msgstr "Systeem"
 
 #: src/Dialogs/dlgStatus.cpp:68
 msgid "Task Rules"
-msgstr ""
+msgstr "Opdracht regels"
 
 #: src/Dialogs/dlgStatus.cpp:69
 msgid "Times"
-msgstr ""
+msgstr "Aantal keer"
 
 #: src/Dialogs/dlgStatus.cpp:189
 msgid "Fix invalid"
-msgstr ""
+msgstr "Peiling ongeldig"
 
 #: src/Dialogs/dlgStatus.cpp:192
 msgid "No fix"
-msgstr ""
+msgstr "Geen peiling"
 
 #: src/Dialogs/dlgStatus.cpp:194
 msgid "3D fix"
-msgstr ""
+msgstr "3D peiling"
 
 #: src/Dialogs/dlgStatus.cpp:210 src/Dialogs/dlgStatus.cpp:220
 #: src/Dialogs/dlgStatus.cpp:230
 msgid "Disconnected"
-msgstr ""
+msgstr "Verbinding verbroken"
 
 #: src/Dialogs/dlgStatus.cpp:218 src/Dialogs/dlgStatus.cpp:228
 msgid "Connected"
-msgstr ""
+msgstr "Verbonden"
 
 #: src/Dialogs/dlgStatus.cpp:248
 msgid "YES"
-msgstr ""
+msgstr "JA"
 
 #: src/Dialogs/dlgStatus.cpp:250
 msgid "NO"
-msgstr ""
+msgstr "NEE"
 
 #. / @todo proper task validity check
 #: src/Dialogs/dlgStatus.cpp:418 src/Dialogs/dlgStatus.cpp:427
 msgid "TRUE"
-msgstr ""
+msgstr "WAAR"
 
 #: src/Dialogs/dlgStatus.cpp:420 src/Dialogs/dlgStatus.cpp:429
 msgid "FALSE"
-msgstr ""
+msgstr "FOUTIEF"
 
 #: src/Dialogs/dlgTaskManager.cpp:75
 msgid "Active task modified"
-msgstr ""
+msgstr "Aktieve opdracht gewijzigd"
 
 #: src/Dialogs/dlgTaskManager.cpp:84
 msgid "Task not valid. Changes will be lost."
-msgstr ""
+msgstr "Opdracht ongeldig. Wijzigingen gaan verloren."
 
 #: src/Dialogs/dlgTaskManager.cpp:85
 msgid "Task Manager"
@@ -2458,76 +2667,76 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskEdit.cpp:111
 msgid "Clear task?"
-msgstr ""
+msgstr "Opdracht wissen?"
 
 #: src/Dialogs/dlgTaskEdit.cpp:112
 msgid "Task edit"
-msgstr ""
+msgstr "Bewerk opdracht"
 
 #: src/Dialogs/dlgTaskEdit.cpp:150
 msgid "add waypoint"
-msgstr ""
+msgstr "keerpunt toevoegen"
 
 #: src/Dialogs/dlgTaskEdit.cpp:182
 msgid "Task invalid.  Not saved."
-msgstr ""
+msgstr "Opdracht ongeldig. Niet opgeslagen."
 
 #: src/Dialogs/dlgTaskEdit.cpp:188
 msgid "Task saved"
-msgstr ""
+msgstr "Opdracht opgeslagen."
 
 #: src/Dialogs/dlgTaskList.cpp:206
 msgid "Load the selected task?"
-msgstr ""
+msgstr "De geselecteerde opdracht laden?"
 
 #: src/Dialogs/dlgTaskList.cpp:211 src/Dialogs/dlgTaskList.cpp:244
 msgid "Task Browser"
-msgstr ""
+msgstr "Opdrachtsnuffelaar"
 
 #: src/Dialogs/dlgTaskList.cpp:239
 msgid "Delete the selected task?"
-msgstr ""
+msgstr "De geselecteerde opdracht verwijderen?"
 
 #. empty task, don't ask confirmation
 #: src/Dialogs/dlgTaskType.cpp:112
 msgid "Change task type?"
-msgstr ""
+msgstr "Opdracht type veranderen?"
 
 #: src/Dialogs/dlgTaskType.cpp:113
 msgid "Task Type"
-msgstr ""
+msgstr "Opdracht type"
 
 #: src/Dialogs/dlgTaskPointType.cpp:127
 msgid "Change point type?"
-msgstr ""
+msgstr "Punt type veranderen?"
 
 #: src/Dialogs/dlgTaskPointType.cpp:127 Data/Dialogs/dlgTarget_L.xml:6
 msgid "Task Point"
-msgstr ""
+msgstr "Opdrachtpunt"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:324
 msgid "Save task?"
-msgstr ""
+msgstr "Opdracht bewaren?"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:324
 msgid "Task Selection"
-msgstr ""
+msgstr "Opdrachtkeuze"
 
 #: src/Dialogs/dlgTeamCode.cpp:166
 msgid "Unknown Competition Number"
-msgstr ""
+msgstr "Onbekend wedstrijdnummer"
 
 #: src/Dialogs/dlgTeamCode.cpp:167
 msgid "Not Found"
-msgstr ""
+msgstr "Niet gevonden"
 
 #: src/Dialogs/dlgWeather.cpp:127
 msgid "Weather parameters"
-msgstr ""
+msgstr "Weerparameters"
 
 #: src/Dialogs/dlgWayPointDetails.cpp:497
 msgid "Blank!"
-msgstr ""
+msgstr "Leeg!"
 
 #: src/Dialogs/dlgWaypointEdit.cpp:67 src/Dialogs/dlgWaypointEdit.cpp:70
 #: Data/Dialogs/dlgAirspaceDetails.xml:8 Data/Dialogs/dlgAirspaceSelect.xml:6
@@ -2536,91 +2745,91 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:274
 #: Data/Dialogs/dlgConfiguration_L.xml:292
 msgid "Name"
-msgstr ""
+msgstr "Naam"
 
 #: src/Dialogs/dlgWaypointEdit.cpp:77 src/Dialogs/dlgWaypointEdit.cpp:80
 #: Data/Dialogs/dlgWayPointDetails.xml:12
 #: Data/Dialogs/dlgWayPointDetails_L.xml:12
 msgid "Comment"
-msgstr ""
+msgstr "Opmerking"
 
 #: src/Dialogs/dlgWayPointSelect.cpp:474
 msgid "Choose a filter or click here"
-msgstr ""
+msgstr "Kies een filter of klik hier"
 
 #: src/Device/Driver/Volkslogger.cpp:142
 msgid "Comms with Volkslogger"
-msgstr ""
+msgstr "Comms met Volkslogger"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:7
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:4
 msgid "Team"
-msgstr ""
+msgstr "Team"
 
 #: Data/Dialogs/dlgConfiguration.xml:415
 #: Data/Dialogs/dlgConfiguration_L.xml:415
 msgid "Final glide bar"
-msgstr ""
+msgstr "Eindsteek balk"
 
 #: Data/Dialogs/dlgWaypointEdit.xml:6 Data/Dialogs/dlgWaypointEdit_L.xml:6
 msgid "Name: "
-msgstr ""
+msgstr "Naam: "
 
 #: Data/Dialogs/dlgWayPointDetails.xml:36
 #: Data/Dialogs/dlgWayPointDetails_L.xml:36
 msgid "Set as Alternate 1"
-msgstr ""
+msgstr "Instellen als uitwijk 1"
 
 #: Data/Dialogs/dlgConfiguration.xml:551
 #: Data/Dialogs/dlgConfiguration_L.xml:550
 msgid "Start max speed margin"
-msgstr ""
+msgstr "Start max snelheidsmarge"
 
 #: Data/Dialogs/dlgSwitches.xml:23
 msgid "Gear down"
-msgstr ""
+msgstr "Wiel uit"
 
 #: Data/Dialogs/dlgVario.xml:387 Data/Dialogs/dlgVario_L.xml:387
 msgid "Radio com max delay"
-msgstr ""
+msgstr "Radio com max vertraging"
 
 #: Data/Dialogs/dlgWeather.xml:6 Data/Dialogs/dlgWeather_L.xml:6
 msgid "Field"
-msgstr ""
+msgstr "Veld"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:29
 #: Data/Dialogs/dlgWayPointDetails_L.xml:29
 msgid "Append to task"
-msgstr ""
+msgstr "Toevoegen aan opdracht"
 
 #: Data/Dialogs/dlgVegaDemo.xml:6
 msgid "TE vario"
-msgstr ""
+msgstr "TE vario"
 
 #: Data/Dialogs/dlgVario.xml:425 Data/Dialogs/dlgVario_L.xml:425
 msgid "V Airbrake"
-msgstr ""
+msgstr "V Remklep"
 
 #: Data/Dialogs/dlgVario.xml:72 Data/Dialogs/dlgVario_L.xml:73
 msgid "Climb fast trigger"
-msgstr ""
+msgstr "trigger snel stijgen"
 
 #: Data/Dialogs/dlgVario.xml:54 Data/Dialogs/dlgVario_L.xml:55
 msgid "TE mixing"
-msgstr ""
+msgstr "TE menging"
 
 #: Data/Dialogs/dlgLoggerReplay.xml:14
 msgid "Rate"
-msgstr ""
+msgstr "Snelheid"
 
 #: Data/Dialogs/dlgTaskCalculator.xml:34
 msgid "Achieved MacCready"
-msgstr ""
+msgstr "Bereikte McCready"
 
 #: Data/Dialogs/dlgConfiguration.xml:230
 #: Data/Dialogs/dlgConfiguration_L.xml:232
 msgid "Abort use current Mc*"
-msgstr ""
+msgstr "Breek gebruik huidige Mc* af"
 
 #: Data/Dialogs/dlgVario.xml:337 Data/Dialogs/dlgVario_L.xml:337
 msgid "Disable circling"
@@ -2628,22 +2837,22 @@ msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:16 Data/Dialogs/dlgTeamCode_L.xml:16
 msgid "Rel. Bearing:"
-msgstr ""
+msgstr "Rel. Koers:"
 
 #: Data/Dialogs/dlgConfiguration.xml:467
 #: Data/Dialogs/dlgConfiguration_L.xml:466
 msgid "Info box titles"
-msgstr ""
+msgstr "Infokader titels"
 
 #: Data/Dialogs/dlgConfiguration.xml:462
 #: Data/Dialogs/dlgConfiguration_L.xml:462
 msgid "Customize Fonts"
-msgstr ""
+msgstr "Lettertype aanpassen"
 
 #: Data/Dialogs/dlgConfiguration.xml:252
 #: Data/Dialogs/dlgConfiguration_L.xml:254
 msgid "V rough air"
-msgstr ""
+msgstr "V onrustige lucht"
 
 #: Data/Dialogs/dlgConfiguration.xml:505
 #: Data/Dialogs/dlgConfiguration_L.xml:504
@@ -2652,109 +2861,109 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:299 Data/Dialogs/dlgVario_L.xml:299
 msgid "Mute vario on radio"
-msgstr ""
+msgstr "Demp vario op radio"
 
 #: Data/Dialogs/dlgConfiguration.xml:539
 #: Data/Dialogs/dlgConfiguration_L.xml:538
 msgid "ThermalAssistant"
-msgstr ""
+msgstr "Thermiekassistent"
 
 #: Data/Dialogs/dlgVario.xml:12 Data/Dialogs/dlgVario_L.xml:13
 msgid "TE port"
-msgstr ""
+msgstr "TE aansluiting"
 
 #: Data/Dialogs/dlgConfiguration.xml:52 Data/Dialogs/dlgConfiguration_L.xml:53
 msgid "Wpt outside terrain*"
-msgstr ""
+msgstr "Kpt buiten terrein*"
 
 #: Data/Dialogs/dlgStatus.xml:42
 msgid "Start alt"
-msgstr ""
+msgstr "Start H"
 
 #: Data/Dialogs/dlgConfiguration.xml:247
 #: Data/Dialogs/dlgConfiguration_L.xml:249
 msgid "Polar file"
-msgstr ""
+msgstr "Polairebestand"
 
 #: Data/Dialogs/dlgConfiguration.xml:320
 #: Data/Dialogs/dlgConfiguration_L.xml:320
 msgid "Aircraft/wind speed"
-msgstr ""
+msgstr "Vliegtuig/windsnelheid"
 
 #: Data/Dialogs/dlgTaskProperties.xml:40
 #: Data/Dialogs/dlgTaskProperties_L.xml:40
 msgid "FAI finish height"
-msgstr ""
+msgstr "FAI finish hoogte"
 
 #: Data/Dialogs/dlgConfiguration.xml:556
 #: Data/Dialogs/dlgConfiguration_L.xml:555
 #: Data/Dialogs/dlgTaskProperties.xml:23
 #: Data/Dialogs/dlgTaskProperties_L.xml:23
 msgid "Start max height"
-msgstr ""
+msgstr "Start max hoogte"
 
 #: Data/Dialogs/dlgTaskCalculator.xml:7
 msgid "Optimise"
-msgstr ""
+msgstr "Optimaliseer"
 
 #: Data/Dialogs/dlgConfiguration.xml:419
 #: Data/Dialogs/dlgConfiguration_L.xml:419
 msgid "Landable fields"
-msgstr ""
+msgstr "Landbare velden"
 
 #: Data/Dialogs/dlgConfiguration.xml:60 Data/Dialogs/dlgConfiguration_L.xml:61
 msgid "Filter"
-msgstr ""
+msgstr "Filter"
 
 #: Data/Dialogs/dlgConfiguration.xml:191
 #: Data/Dialogs/dlgConfiguration_L.xml:192
 msgid "Auto Mc mode"
-msgstr ""
+msgstr "Auto MC modus"
 
 #: Data/Dialogs/dlgBrightness.xml:10
 msgid "Brightness"
-msgstr ""
+msgstr "Helderheid"
 
 #: Data/Dialogs/dlgConfiguration.xml:388
 #: Data/Dialogs/dlgConfiguration_L.xml:388
 msgid "Menu timeout*"
-msgstr ""
+msgstr "Menu timeout*"
 
 #: Data/Dialogs/dlgConfiguration.xml:726
 #: Data/Dialogs/dlgConfiguration_L.xml:737
 msgid "New"
-msgstr ""
+msgstr "Nieuw"
 
 #: Data/Dialogs/dlgSwitches.xml:49
 msgid "User down"
-msgstr ""
+msgstr "Gebruiker KO"
 
 #: Data/Dialogs/dlgConfiguration.xml:20 Data/Dialogs/dlgConfiguration_L.xml:21
 msgid "Waypoints 1"
-msgstr ""
+msgstr "Keerpunten 1"
 
 #: Data/Dialogs/dlgConfiguration.xml:10 Data/Dialogs/dlgConfiguration_L.xml:6
 msgid "Copy"
-msgstr ""
+msgstr "Kopieer"
 
 #: Data/Dialogs/dlgConfiguration.xml:510
 #: Data/Dialogs/dlgConfiguration_L.xml:509
 msgid "Show ballast*"
-msgstr ""
+msgstr "Toon ballast*"
 
 #: Data/Dialogs/dlgConfiguration.xml:470
 #: Data/Dialogs/dlgConfiguration_L.xml:469
 msgid "Info box values"
-msgstr ""
+msgstr "Infokaderwaarden"
 
 #: Data/Dialogs/dlgConfiguration.xml:262
 #: Data/Dialogs/dlgConfiguration_L.xml:264
 msgid "Dump time"
-msgstr ""
+msgstr "Loostijd"
 
 #: Data/Dialogs/dlgVoice.xml:30
 msgid "In Sector"
-msgstr ""
+msgstr "In sector"
 
 #: Data/Dialogs/dlgVario.xml:165 Data/Dialogs/dlgVario.xml:187
 #: Data/Dialogs/dlgVario.xml:209 Data/Dialogs/dlgVario.xml:231
@@ -2768,122 +2977,122 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:15
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:15
 msgid "Pilot"
-msgstr ""
+msgstr "Vlieger"
 
 #: Data/Dialogs/dlgVario.xml:109 Data/Dialogs/dlgVario_L.xml:109
 msgid "Filter circling"
-msgstr ""
+msgstr "Filter cirkelen"
 
 #: Data/Dialogs/dlgConfiguration.xml:546
 #: Data/Dialogs/dlgConfiguration_L.xml:545
 #: Data/Dialogs/dlgTaskProperties.xml:18
 #: Data/Dialogs/dlgTaskProperties_L.xml:18
 msgid "Start max speed"
-msgstr ""
+msgstr "Start max snelheid"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:7
 #: Data/Dialogs/dlgWayPointDetails_L.xml:4
 msgid "Goto"
-msgstr ""
+msgstr "Ga naar"
 
 #: Data/Dialogs/dlgConfiguration.xml:313
 #: Data/Dialogs/dlgConfiguration_L.xml:313
 msgid "Ignore checksum*"
-msgstr ""
+msgstr "Ignore checksum*"
 
 #: Data/Dialogs/dlgVario.xml:139 Data/Dialogs/dlgVario_L.xml:139
 msgid "Cruise hi cutoff"
-msgstr ""
+msgstr "Steken lage demping"
 
 #: Data/Dialogs/dlgStartTask.xml:12
 msgid "Start Anyway"
-msgstr ""
+msgstr "Toch starten"
 
 #: Data/Dialogs/dlgConfiguration.xml:490
 #: Data/Dialogs/dlgConfiguration_L.xml:489
 msgid "Speed arrows"
-msgstr ""
+msgstr "Snelheidsvectors"
 
 #: Data/Dialogs/dlgConfiguration.xml:225
 #: Data/Dialogs/dlgConfiguration_L.xml:227
 msgid "Terrain height"
-msgstr ""
+msgstr "Terreinhoogte"
 
 #: Data/Dialogs/dlgAirspaceWarning.xml:10
 msgid "ACK Day"
-msgstr ""
+msgstr "ACC Dag"
 
 #: Data/Dialogs/dlgVario.xml:315 Data/Dialogs/dlgVario_L.xml:315
 msgid "Headset threshold"
-msgstr ""
+msgstr "Hoofdtelefoon drempel"
 
 #: Data/Dialogs/dlgBasicSettings.xml:16
 msgid "Wing loading"
-msgstr ""
+msgstr "Vleugelbelasting"
 
 #: Data/Dialogs/dlgTarget.xml:21
 msgid "ETE"
-msgstr ""
+msgstr "ETE"
 
 #: Data/Dialogs/dlgConfiguration.xml:167
 #: Data/Dialogs/dlgConfiguration_L.xml:169
 msgid "Terrain colors"
-msgstr ""
+msgstr "Terreinkleuren"
 
 #: Data/Dialogs/dlgSwitches.xml:11
 msgid "Flap positive"
-msgstr ""
+msgstr "Flap positief"
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
 msgid "File"
-msgstr ""
+msgstr "Bestand"
 
 #: Data/Dialogs/dlgConfiguration.xml:183
 #: Data/Dialogs/dlgConfiguration_L.xml:184 Data/Dialogs/dlgWindSettings.xml:12
 msgid "Auto wind"
-msgstr ""
+msgstr "Auto wind"
 
 #: Data/Dialogs/dlgConfiguration.xml:43 Data/Dialogs/dlgConfiguration_L.xml:44
 msgid "Topology file*"
-msgstr ""
+msgstr "Topologiebestand*"
 
 #: Data/Dialogs/dlgStatus.xml:20 Data/Dialogs/dlgStatusSystem.xml:4
 msgid "GPS lock"
-msgstr ""
+msgstr "GPS lock"
 
 #: Data/Dialogs/dlgTextEntry.xml:8
 msgid "A-"
-msgstr ""
+msgstr "A-"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:30
 #: Data/Dialogs/dlgWayPointDetails_L.xml:30
 msgid "Remove from task"
-msgstr ""
+msgstr "Verwijder uit opdracht"
 
 #: Data/Dialogs/dlgFontEdit.xml:22 Data/Dialogs/dlgNumberEntry_Keyboard.xml:21
 #: Data/Dialogs/dlgNumberEntry_Keyboard_L.xml:21
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:7
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:7
 msgid "Ok"
-msgstr ""
+msgstr "OK"
 
 #: Data/Dialogs/dlgConfiguration.xml:696
 #: Data/Dialogs/dlgConfiguration_L.xml:707
 msgid "Time step cruise*"
-msgstr ""
+msgstr "Tijdstap kruisvlucht*"
 
 #: Data/Dialogs/dlgVario.xml:345 Data/Dialogs/dlgVario_L.xml:345
 msgid "No aircraft type"
-msgstr ""
+msgstr "Geen vliegtuigtype"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:765
 msgid "GPS Height Offset*"
-msgstr ""
+msgstr "GPS hoogteverschil*"
 
 #: Data/Dialogs/dlgConfiguration.xml:378
 #: Data/Dialogs/dlgConfiguration_L.xml:378
 msgid "Language*"
-msgstr ""
+msgstr "Taal*"
 
 #: Data/Dialogs/dlgVario.xml:161 Data/Dialogs/dlgVario.xml:183
 #: Data/Dialogs/dlgVario.xml:205 Data/Dialogs/dlgVario.xml:227
@@ -2892,16 +3101,16 @@ msgstr ""
 #: Data/Dialogs/dlgVario_L.xml:205 Data/Dialogs/dlgVario_L.xml:227
 #: Data/Dialogs/dlgVario_L.xml:249 Data/Dialogs/dlgVario_L.xml:271
 msgid "Period Scheme"
-msgstr ""
+msgstr "Interval opzet"
 
 #: Data/Dialogs/dlgConfiguration.xml:561
 #: Data/Dialogs/dlgConfiguration_L.xml:560
 msgid "Start max height margin"
-msgstr ""
+msgstr "Start max hoogte marge"
 
 #: Data/Dialogs/dlgVario.xml:325 Data/Dialogs/dlgVario_L.xml:325
 msgid "Max objects reported"
-msgstr ""
+msgstr "Max gemelde objecten"
 
 #: Data/Dialogs/dlgVario.xml:153 Data/Dialogs/dlgVario.xml:175
 #: Data/Dialogs/dlgVario.xml:197 Data/Dialogs/dlgVario.xml:219
@@ -2910,14 +3119,14 @@ msgstr ""
 #: Data/Dialogs/dlgVario_L.xml:197 Data/Dialogs/dlgVario_L.xml:219
 #: Data/Dialogs/dlgVario_L.xml:241 Data/Dialogs/dlgVario_L.xml:263
 msgid "Pitch Scheme"
-msgstr ""
+msgstr "Toonhoogte opzet"
 
 #: Data/Dialogs/dlgStatus.xml:11 Data/Dialogs/dlgStatusAircraft.xml:4
 #: Data/Dialogs/dlgWayPointDetails.xml:14
 #: Data/Dialogs/dlgWayPointDetails_L.xml:14
 #: Data/Dialogs/dlgWaypointEdit.xml:10
 msgid "Longitude"
-msgstr ""
+msgstr "Lengtegraad"
 
 #: Data/Dialogs/dlgVario.xml:295 Data/Dialogs/dlgVario_L.xml:295
 msgid "Mute vario on voice"
@@ -2925,57 +3134,57 @@ msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:27
 msgid "Acknowledge"
-msgstr ""
+msgstr "Bevestig"
 
 #: Data/Dialogs/dlgFileSelect.xml:12
 msgid "Free"
-msgstr ""
+msgstr "Vrij"
 
 #: Data/Dialogs/dlgConfiguration.xml:708
 #: Data/Dialogs/dlgConfiguration_L.xml:719
 msgid "Aircraft type: "
-msgstr ""
+msgstr "Vliegtuigtype: "
 
 #: Data/Dialogs/dlgTeamCode.xml:4 Data/Dialogs/dlgTeamCode_L.xml:4
 msgid "Own code:"
-msgstr ""
+msgstr "Eigen code:"
 
 #: Data/Dialogs/dlgConfiguration.xml:438
 #: Data/Dialogs/dlgConfiguration_L.xml:438
 msgid "Color infoboxes*"
-msgstr ""
+msgstr "Kleur infokaders*"
 
 #: Data/Dialogs/dlgStatusTask.xml:11
 msgid "Speed achieved"
-msgstr ""
+msgstr "Bereikte snelheid"
 
 #: Data/Dialogs/dlgVario.xml:97 Data/Dialogs/dlgVario_L.xml:97
 msgid "Circling volume"
-msgstr ""
+msgstr "Volume bij thermieken"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:18
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:18
 msgid "Plane"
-msgstr ""
+msgstr "Vliegtuig"
 
 #: Data/Dialogs/dlgVario.xml:391 Data/Dialogs/dlgVario_L.xml:391
 msgid "Battery low delay"
-msgstr ""
+msgstr "Accu laag vertraging"
 
 #: Data/Dialogs/dlgConfiguration.xml:450
 #: Data/Dialogs/dlgConfiguration_L.xml:450
 msgid "Infobox Geometry"
-msgstr ""
+msgstr "Infokader vorm"
 
 #: Data/Dialogs/dlgConfiguration.xml:284 Data/Dialogs/dlgConfiguration.xml:305
 #: Data/Dialogs/dlgConfiguration_L.xml:286
 #: Data/Dialogs/dlgConfiguration_L.xml:305
 msgid "Setup ..."
-msgstr ""
+msgstr "Instelling ..."
 
 #: Data/Dialogs/dlgVario.xml:351 Data/Dialogs/dlgVario_L.xml:351
 msgid "Privacy"
-msgstr ""
+msgstr "Privacy"
 
 #: Data/Dialogs/dlgAirspace.xml:4 Data/Dialogs/dlgAirspaceColours.xml:4
 #: Data/Dialogs/dlgAirspaceColours_L.xml:4
@@ -3016,51 +3225,51 @@ msgstr ""
 #: Data/Dialogs/dlgWaypointEdit_L.xml:4 Data/Dialogs/dlgWeather.xml:4
 #: Data/Dialogs/dlgWeather_L.xml:4
 msgid "Close"
-msgstr ""
+msgstr "Sluit"
 
 #: Data/Dialogs/dlgStatusTask.xml:10
 msgid "Speed remaining"
-msgstr ""
+msgstr "Resterende snelheid"
 
 #: Data/Dialogs/dlgVario.xml:127 Data/Dialogs/dlgVario_L.xml:127
 msgid "Circling hi cutoff"
-msgstr ""
+msgstr "Thermieken lage demping"
 
 #: Data/Dialogs/dlgVario.xml:24 Data/Dialogs/dlgVario_L.xml:25
 msgid "Stall port"
-msgstr ""
+msgstr "Overtrek bakboord"
 
 #: Data/Dialogs/dlgVario.xml:420 Data/Dialogs/dlgVario_L.xml:420
 msgid "V Manoeuvering"
-msgstr ""
+msgstr "V Manoeuvreer"
 
 #: Data/Dialogs/dlgConfiguration.xml:712
 #: Data/Dialogs/dlgConfiguration_L.xml:723
 msgid "Logger ID: "
-msgstr ""
+msgstr "Logger ID: "
 
 #: Data/Dialogs/dlgConfiguration.xml:424
 #: Data/Dialogs/dlgConfiguration_L.xml:424
 msgid "Default map zoom*"
-msgstr ""
+msgstr "Standaard kaart zoom*"
 
 #: Data/Dialogs/dlgVario.xml:410 Data/Dialogs/dlgVario_L.xml:410
 msgid "V Terrain"
-msgstr ""
+msgstr "V terrein"
 
 #: Data/Dialogs/dlgLoggerReplay.xml:10
 msgid "Start"
-msgstr ""
+msgstr "Start"
 
 #: Data/Dialogs/dlgConfiguration.xml:157
 #: Data/Dialogs/dlgConfiguration_L.xml:159
 msgid "Terrain contrast"
-msgstr ""
+msgstr "Terreincontrast"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:20
 #: Data/Dialogs/dlgWayPointDetails_L.xml:20
 msgid "Alt diff Mc safety"
-msgstr ""
+msgstr "H verschil MC marge"
 
 #: Data/Dialogs/dlgConfiguration.xml:747
 #: Data/Dialogs/dlgConfiguration_L.xml:761
@@ -3070,11 +3279,11 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:19
 #: Data/Dialogs/dlgWayPointDetails_L.xml:19
 msgid "Alt diff Mc 0"
-msgstr ""
+msgstr "H verschil MC 0"
 
 #: Data/Dialogs/dlgVario.xml:440 Data/Dialogs/dlgVario_L.xml:440
 msgid "Zander"
-msgstr ""
+msgstr "Zander"
 
 #: Data/Dialogs/dlgVario.xml:131 Data/Dialogs/dlgVario_L.xml:131
 msgid "Circling low cutoff"
@@ -3084,60 +3293,60 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:282
 #: Data/Dialogs/dlgConfiguration_L.xml:300
 msgid "Baudrate"
-msgstr ""
+msgstr "Baudrate"
 
 #: Data/Dialogs/dlgConfiguration.xml:257
 #: Data/Dialogs/dlgConfiguration_L.xml:259
 msgid "Handicap"
-msgstr ""
+msgstr "Handicap"
 
 #: Data/Dialogs/dlgConfiguration.xml:11 Data/Dialogs/dlgConfiguration_L.xml:8
 msgid "Paste"
-msgstr ""
+msgstr "Plakken"
 
 #: Data/Dialogs/dlgVario.xml:143 Data/Dialogs/dlgVario_L.xml:143
 msgid "Cruise low cutoff"
-msgstr ""
+msgstr "Steken hoge demping"
 
 #: Data/Dialogs/dlgConfiguration.xml:729
 #: Data/Dialogs/dlgConfiguration_L.xml:743 Data/Dialogs/dlgTaskList.xml:10
 #: Data/Dialogs/dlgTaskList_L.xml:8
 msgid "Delete"
-msgstr ""
+msgstr "Wissen"
 
 #: Data/Dialogs/dlgStartup.xml:18 Data/Dialogs/dlgStartup_L.xml:18
 msgid "Profile"
-msgstr ""
+msgstr "Profiel"
 
 #: Data/Dialogs/dlgStatus.xml:13
 msgid "Max height gain"
-msgstr ""
+msgstr "Max hoogtewinst"
 
 #: Data/Dialogs/dlgConfiguration.xml:354
 #: Data/Dialogs/dlgConfiguration_L.xml:354 Data/Dialogs/dlgVario.xml:281
 #: Data/Dialogs/dlgVario_L.xml:281
 msgid "UTC Offset"
-msgstr ""
+msgstr "UTC afwijking"
 
 #: Data/Dialogs/dlgVoice.xml:6
 msgid "Climb Rate"
-msgstr ""
+msgstr "Stijgsnelheid"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:455
 msgid "Msg window*"
-msgstr ""
+msgstr "Berichtvenster*"
 
 #: Data/Dialogs/dlgConfiguration.xml:220
 #: Data/Dialogs/dlgConfiguration_L.xml:222
 msgid "Arrival height"
-msgstr ""
+msgstr "Aankomsthoogte"
 
 #: Data/Dialogs/dlgStatus.xml:10 Data/Dialogs/dlgStatusAircraft.xml:5
 #: Data/Dialogs/dlgWayPointDetails.xml:13
 #: Data/Dialogs/dlgWayPointDetails_L.xml:13
 #: Data/Dialogs/dlgWaypointEdit.xml:34
 msgid "Latitude"
-msgstr ""
+msgstr "Breedtegraad"
 
 #: Data/Dialogs/dlgBasicSettings.xml:28 Data/Dialogs/dlgConfiguration.xml:334
 #: Data/Dialogs/dlgConfiguration_L.xml:334
@@ -3146,47 +3355,47 @@ msgstr ""
 #: Data/Dialogs/dlgStartTask.xml:8 Data/Dialogs/dlgStatus.xml:12
 #: Data/Dialogs/dlgWaypointEdit.xml:56 Data/Dialogs/dlgWaypointEdit_L.xml:58
 msgid "Altitude"
-msgstr ""
+msgstr "Hoogte"
 
 #: Data/Dialogs/dlgConfiguration.xml:479
 #: Data/Dialogs/dlgConfiguration_L.xml:478
 msgid "Dialog boxes"
-msgstr ""
+msgstr "Dialoogkaders"
 
 #: Data/Dialogs/dlgVario.xml:7 Data/Dialogs/dlgVario_L.xml:8
 msgid "Demo"
-msgstr ""
+msgstr "Demo"
 
 #: Data/Dialogs/dlgTaskManager.xml:10 Data/Dialogs/dlgTaskManager_L.xml:8
 msgid "Declare"
-msgstr ""
+msgstr "Declareer"
 
 #: Data/Dialogs/dlgBasicSettings.xml:20
 msgid "Clean"
-msgstr ""
+msgstr "Schoon"
 
 #: Data/Dialogs/dlgConfiguration.xml:398
 #: Data/Dialogs/dlgConfiguration_L.xml:398
 msgid "Text Input Style*"
-msgstr ""
+msgstr "Tekst invoerstijl*"
 
 #: Data/Dialogs/dlgStatus.xml:54 Data/Dialogs/dlgStatusAircraft.xml:8
 #: Data/Dialogs/dlgWayPointDetails.xml:16
 #: Data/Dialogs/dlgWayPointDetails_L.xml:16
 msgid "Sunset"
-msgstr ""
+msgstr "Zonsondergang"
 
 #: Data/Dialogs/dlgAirspaceWarning.xml:8
 msgid "ACK Space"
-msgstr ""
+msgstr "ACC luchtruim"
 
 #: Data/Dialogs/dlgStatus.xml:53
 msgid "Landing time"
-msgstr ""
+msgstr "Landingstijd"
 
 #: Data/Dialogs/dlgTeamCode.xml:22 Data/Dialogs/dlgTeamCode_L.xml:22
 msgid "Set Mate code"
-msgstr ""
+msgstr "Code teammaat instellen"
 
 #: Data/Dialogs/dlgVario.xml:307 Data/Dialogs/dlgVario_L.xml:307
 msgid "Voice muting"
@@ -3195,7 +3404,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:500
 #: Data/Dialogs/dlgConfiguration_L.xml:499
 msgid "Show MacReady"
-msgstr ""
+msgstr "Toon McCready"
 
 #: Data/Dialogs/dlgVario.xml:319 Data/Dialogs/dlgVario_L.xml:319
 msgid "Urgent min volume"
@@ -3203,218 +3412,218 @@ msgstr ""
 
 #: Data/Dialogs/dlgTarget.xml:25
 msgid "delta T"
-msgstr ""
+msgstr "delta T"
 
 #: Data/Dialogs/dlgConfiguration.xml:403
 #: Data/Dialogs/dlgConfiguration_L.xml:403
 msgid "Dialog Style*"
-msgstr ""
+msgstr "Dialoog stijl*"
 
 #: Data/Dialogs/dlgConfiguration.xml:443
 #: Data/Dialogs/dlgConfiguration_L.xml:443
 msgid "Infobox border*"
-msgstr ""
+msgstr "Infokader rand*"
 
 #: Data/Dialogs/dlgConfiguration.xml:578
 #: Data/Dialogs/dlgConfiguration_L.xml:577
 msgid "Online contest"
-msgstr ""
+msgstr "OLC"
 
 #: Data/Dialogs/dlgConfiguration.xml:473
 #: Data/Dialogs/dlgConfiguration_L.xml:472
 msgid "Map waypoints"
-msgstr ""
+msgstr "Kaart keerpunten"
 
 #: Data/Dialogs/dlgVario.xml:117 Data/Dialogs/dlgVario_L.xml:117
 msgid "Tone pitch scale"
-msgstr ""
+msgstr "Schaal toonhoogte"
 
 #: Data/Dialogs/dlgVario.xml:44 Data/Dialogs/dlgVario_L.xml:45
 msgid "PDA power"
-msgstr ""
+msgstr "PDA stroom"
 
 #: Data/Dialogs/dlgVario.xml:66 Data/Dialogs/dlgVario_L.xml:67
 msgid "TE dynamic cal"
-msgstr ""
+msgstr "TE dynamische cal"
 
 #: Data/Dialogs/dlgConfiguration.xml:738
 #: Data/Dialogs/dlgConfiguration_L.xml:753
 msgid "Gestures"
-msgstr ""
+msgstr "Bewegingen"
 
 #: Data/Dialogs/dlgVario.xml:405 Data/Dialogs/dlgVario_L.xml:405
 msgid "VNE"
-msgstr ""
+msgstr "VNE"
 
 #: Data/Dialogs/dlgConfiguration.xml:112
 #: Data/Dialogs/dlgConfiguration_L.xml:113
 msgid "Orientation"
-msgstr ""
+msgstr "Stand"
 
 #: Data/Dialogs/dlgStatus.xml:43
 msgid "Start point"
-msgstr ""
+msgstr "Startpunt"
 
 #: Data/Dialogs/dlgConfiguration.xml:131
 #: Data/Dialogs/dlgConfiguration_L.xml:133
 msgid "Trail drift*"
-msgstr ""
+msgstr "Spoordrift*"
 
 #: Data/Dialogs/dlgVario.xml:62 Data/Dialogs/dlgVario_L.xml:63
 msgid "TE static cal"
-msgstr ""
+msgstr "TE statische cal"
 
 #: Data/Dialogs/dlgFontEdit.xml:20
 msgid "my sample"
-msgstr ""
+msgstr "Mijn staaltje"
 
 #: Data/Dialogs/dlgFontEdit.xml:23
 msgid "Reset"
-msgstr ""
+msgstr "Herstel"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:37
 #: Data/Dialogs/dlgWayPointDetails_L.xml:37
 msgid "Set as Alternate 2"
-msgstr ""
+msgstr "Instellen als uitwijk 2"
 
 #: Data/Dialogs/dlgStatus.xml:44
 msgid "Start speed"
-msgstr ""
+msgstr "Startsnelheid"
 
 #: Data/Dialogs/dlgConfiguration.xml:359
 #: Data/Dialogs/dlgConfiguration_L.xml:359 Data/Dialogs/dlgStatus.xml:50
 #: Data/Dialogs/dlgStatusAircraft.xml:7
 msgid "Local time"
-msgstr ""
+msgstr "Lokale tijd"
 
 #: Data/Dialogs/dlgVario.xml:341 Data/Dialogs/dlgVario_L.xml:341
 msgid "No mode reports"
-msgstr ""
+msgstr "Geen modusmeldingen"
 
 #: Data/Dialogs/dlgConfiguration.xml:59 Data/Dialogs/dlgConfiguration_L.xml:60
 msgid "Colours"
-msgstr ""
+msgstr "Kleuren"
 
 #: Data/Dialogs/dlgVario.xml:379 Data/Dialogs/dlgVario_L.xml:379
 msgid "Gear off delay"
-msgstr ""
+msgstr "Wiel uit vertraging"
 
 #: Data/Dialogs/dlgVario.xml:36 Data/Dialogs/dlgVario_L.xml:37
 msgid "Baud Rate Vega"
-msgstr ""
+msgstr "Baud Rate Vega"
 
 #: Data/Dialogs/dlgStatus.xml:34 Data/Dialogs/dlgStatusTask.xml:9
 msgid "Remaining distance"
-msgstr ""
+msgstr "Resterende afstand"
 
 #: Data/Dialogs/dlgConfiguration.xml:122
 #: Data/Dialogs/dlgConfiguration_L.xml:124
 msgid "Auto zoom"
-msgstr ""
+msgstr "Auto zoom"
 
 #: Data/Dialogs/dlgFontEdit.xml:8
 msgid "Height"
-msgstr ""
+msgstr "Hoogte"
 
 #: Data/Dialogs/dlgConfiguration.xml:495
 #: Data/Dialogs/dlgConfiguration_L.xml:494
 msgid "Show average"
-msgstr ""
+msgstr "Toon gemiddelde"
 
 #: Data/Dialogs/dlgVario.xml:28 Data/Dialogs/dlgVario_L.xml:29
 msgid "Accelerometer"
-msgstr ""
+msgstr "Versnellingsmeter"
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:16 Data/Dialogs/dlgTarget.xml:13
 #: Data/Dialogs/dlgTarget_L.xml:11
 msgid "Range"
-msgstr ""
+msgstr "Bereik"
 
 #: Data/Dialogs/dlgVario.xml:361 Data/Dialogs/dlgVario_L.xml:361
 msgid "Interval, Info"
-msgstr ""
+msgstr "Interval, info"
 
 #: Data/Dialogs/dlgSwitches.xml:35
 msgid "Speed command"
-msgstr ""
+msgstr "Steeksnelheidsindicatie"
 
 #: Data/Dialogs/dlgStatus.xml:32 Data/Dialogs/dlgStatusTask.xml:6
 msgid "Remaining time"
-msgstr ""
+msgstr "Resterende tijd"
 
 #: Data/Dialogs/dlgSwitches.xml:41
 msgid "User up"
-msgstr ""
+msgstr "Gebruiker boven"
 
 #: Data/Dialogs/dlgConfiguration.xml:476
 #: Data/Dialogs/dlgConfiguration_L.xml:475
 msgid "Topology labels"
-msgstr ""
+msgstr "Topologielabels"
 
 #: Data/Dialogs/dlgStatus.xml:26 Data/Dialogs/dlgStatusSystem.xml:10
 msgid "Supply voltage"
-msgstr ""
+msgstr "Voedingsspanning"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:28
 #: Data/Dialogs/dlgWayPointDetails_L.xml:28
 msgid "Insert in task"
-msgstr ""
+msgstr "Invoegen in opdracht"
 
 #: Data/Dialogs/dlgConfiguration.xml:83 Data/Dialogs/dlgConfiguration_L.xml:84
 msgid "Warning time*"
-msgstr ""
+msgstr "Waarschuwingstijd*"
 
 #: Data/Dialogs/dlgSwitches.xml:53
 msgid "Vario circling"
-msgstr ""
+msgstr "Vario thermieken"
 
 #: Data/Dialogs/dlgTaskManager.xml:6 Data/Dialogs/dlgTaskManager_L.xml:6
 msgid "Browse"
-msgstr ""
+msgstr "Bladeren"
 
 #: Data/Dialogs/dlgConfiguration.xml:135
 #: Data/Dialogs/dlgConfiguration_L.xml:137
 msgid "Trail width*"
-msgstr ""
+msgstr "Spoorbreedte*"
 
 #: Data/Dialogs/dlgConfiguration.xml:433
 #: Data/Dialogs/dlgConfiguration_L.xml:433
 msgid "Inverse infoboxes*"
-msgstr ""
+msgstr "Omgekeerde infokaders*"
 
 #: Data/Dialogs/dlgStatus.xml:14 Data/Dialogs/dlgStatusAircraft.xml:9
 msgid "Near"
-msgstr ""
+msgstr "Nabij"
 
 #: Data/Dialogs/dlgSwitches.xml:57
 msgid "Flap landing"
-msgstr ""
+msgstr "Flap landing"
 
 #: Data/Dialogs/dlgConfiguration.xml:714
 #: Data/Dialogs/dlgConfiguration_L.xml:725
 msgid "Short file name"
-msgstr ""
+msgstr "Korte bestandsnaam"
 
 #: Data/Dialogs/dlgVario.xml:448 Data/Dialogs/dlgVario_L.xml:448
 msgid "LED Bright"
-msgstr ""
+msgstr "LED helder"
 
 #: Data/Dialogs/dlgVario.xml:303 Data/Dialogs/dlgVario_L.xml:303
 msgid "Vario muting"
-msgstr ""
+msgstr "Vario dempen"
 
 #: Data/Dialogs/dlgTaskList.xml:8 Data/Dialogs/dlgTaskList_L.xml:6
 msgid "Load"
-msgstr ""
+msgstr "Laad"
 
 #: Data/Dialogs/dlgComboPicker.xml:8 Data/Dialogs/dlgComboPicker_L.xml:8
 msgid "Help"
-msgstr ""
+msgstr "Help"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:27
 #: Data/Dialogs/dlgWayPointDetails_L.xml:27
 msgid "Replace in task"
-msgstr ""
+msgstr "Vervang in opdracht"
 
 #: Data/Dialogs/dlgVario.xml:123 Data/Dialogs/dlgVario_L.xml:123
 msgid "Circling deadband type"
@@ -3423,45 +3632,45 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:127
 #: Data/Dialogs/dlgConfiguration_L.xml:129
 msgid "Circling zoom"
-msgstr ""
+msgstr "Zoom thermieken"
 
 #: Data/Dialogs/dlgVegaDemo.xml:10
 msgid "Airspeed"
-msgstr ""
+msgstr "Vliegsnelheid"
 
 #: Data/Dialogs/dlgAirspaceWarning.xml:6
 msgid "ACK Warn"
-msgstr ""
+msgstr "ACC Waarschuwing"
 
 #: Data/Dialogs/dlgConfiguration.xml:485
 #: Data/Dialogs/dlgConfiguration_L.xml:484
 msgid "Gauges"
-msgstr ""
+msgstr "Meters"
 
 #: Data/Dialogs/dlgConfiguration.xml:344
 #: Data/Dialogs/dlgConfiguration_L.xml:344
 msgid "Task Speed"
-msgstr ""
+msgstr "Opdrachtsnelheid"
 
 #: Data/Dialogs/dlgConfiguration.xml:97 Data/Dialogs/dlgConfiguration_L.xml:98
 msgid "Labels"
-msgstr ""
+msgstr "Labels"
 
 #: Data/Dialogs/dlgFontEdit.xml:4
 msgid "Font Face"
-msgstr ""
+msgstr "Lettertype"
 
 #: Data/Dialogs/dlgTarget.xml:37
 msgid "Locked"
-msgstr ""
+msgstr "Vastgezet"
 
 #: Data/Dialogs/dlgVario.xml:438 Data/Dialogs/dlgVario_L.xml:438
 msgid "Borgelt"
-msgstr ""
+msgstr "Borgelt"
 
 #: Data/Dialogs/dlgTaskCalculator.xml:42
 msgid "Cruise efficiency"
-msgstr ""
+msgstr "Steek efficientie"
 
 #: Data/Dialogs/dlgVario.xml:157 Data/Dialogs/dlgVario.xml:179
 #: Data/Dialogs/dlgVario.xml:201 Data/Dialogs/dlgVario.xml:223
@@ -3470,46 +3679,46 @@ msgstr ""
 #: Data/Dialogs/dlgVario_L.xml:201 Data/Dialogs/dlgVario_L.xml:223
 #: Data/Dialogs/dlgVario_L.xml:245 Data/Dialogs/dlgVario_L.xml:267
 msgid "Pitch Scale"
-msgstr ""
+msgstr "Schaal toonhoogte"
 
 #: Data/Dialogs/dlgConfiguration.xml:525
 #: Data/Dialogs/dlgConfiguration_L.xml:524
 msgid "FLARM map"
-msgstr ""
+msgstr "FLARM kaart"
 
 #: Data/Dialogs/dlgVario.xml:437 Data/Dialogs/dlgVario_L.xml:437
 msgid "Vega"
-msgstr ""
+msgstr "Vega"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:17
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:17
 msgid "Freq."
-msgstr ""
+msgstr "Freq."
 
 #: Data/Dialogs/dlgTaskCalculator.xml:8
 msgid "Target"
-msgstr ""
+msgstr "Doel"
 
 #: Data/Dialogs/dlgConfiguration.xml:34 Data/Dialogs/dlgConfiguration_L.xml:35
 msgid "Airspace 2"
-msgstr ""
+msgstr "Luchtruim 2"
 
 #: Data/Dialogs/dlgVoice.xml:14
 msgid "Waypoint Distance"
-msgstr ""
+msgstr "Keerpunt afstand"
 
 #: Data/Dialogs/dlgVario.xml:365 Data/Dialogs/dlgVario_L.xml:365
 msgid "Interval, Caution"
-msgstr ""
+msgstr "Interval, waarschuwing"
 
 #: Data/Dialogs/dlgAirspaceWarning.xml:12
 msgid "Enable"
-msgstr ""
+msgstr "Aanzetten"
 
 #: Data/Dialogs/dlgConfiguration.xml:235
 #: Data/Dialogs/dlgConfiguration_L.xml:237
 msgid "Safety Mc*"
-msgstr ""
+msgstr "Veilige MC*"
 
 #: Data/Dialogs/dlgVario.xml:135 Data/Dialogs/dlgVario_L.xml:135
 msgid "Cruise deadband type"
@@ -3517,12 +3726,12 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:101 Data/Dialogs/dlgVario_L.xml:101
 msgid "Cruise volume"
-msgstr ""
+msgstr "Steek volume"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:39
 #: Data/Dialogs/dlgWayPointDetails_L.xml:39
 msgid "Set teamcode"
-msgstr ""
+msgstr "Instellen teamcode"
 
 #: Data/Dialogs/dlgVario.xml:149 Data/Dialogs/dlgVario.xml:171
 #: Data/Dialogs/dlgVario.xml:193 Data/Dialogs/dlgVario.xml:215
@@ -3531,25 +3740,25 @@ msgstr ""
 #: Data/Dialogs/dlgVario_L.xml:193 Data/Dialogs/dlgVario_L.xml:215
 #: Data/Dialogs/dlgVario_L.xml:237 Data/Dialogs/dlgVario_L.xml:259
 msgid "Beep type"
-msgstr ""
+msgstr "Piep type"
 
 #: Data/Dialogs/dlgConfiguration.xml:349
 #: Data/Dialogs/dlgConfiguration_L.xml:349
 msgid "Lat/Lon"
-msgstr ""
+msgstr "Lat/Lon"
 
 #: Data/Dialogs/dlgVario.xml:395 Data/Dialogs/dlgVario_L.xml:395
 msgid "Battery empty delay"
-msgstr ""
+msgstr "Accu leeg vertraging"
 
 #: Data/Dialogs/dlgConfiguration.xml:153
 #: Data/Dialogs/dlgConfiguration_L.xml:155
 msgid "Topology display"
-msgstr ""
+msgstr "Topologie weergave"
 
 #: Data/Dialogs/dlgFileSelect.xml:6
 msgid "File type"
-msgstr ""
+msgstr "Bestandstype"
 
 #: Data/Dialogs/dlgNumberEntry_Keyboard.xml:20
 #: Data/Dialogs/dlgNumberEntry_Keyboard_L.xml:20
@@ -3558,19 +3767,19 @@ msgstr ""
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:9
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:9
 msgid "Clear"
-msgstr ""
+msgstr "Wis"
 
 #: Data/Dialogs/dlgTaskCalculator.xml:22
 msgid "Set MacCready"
-msgstr ""
+msgstr "Instellen McCready"
 
 #: Data/Dialogs/dlgVoice.xml:26
 msgid "New Waypoint"
-msgstr ""
+msgstr "Nieuw keerpunt"
 
 #: Data/Dialogs/dlgConfiguration.xml:455
 msgid "Msg window"
-msgstr ""
+msgstr "Berichtvenster"
 
 #: Data/Dialogs/dlgVario.xml:93 Data/Dialogs/dlgVario_L.xml:93
 msgid "Cruise averager scale"
@@ -3585,122 +3794,122 @@ msgstr ""
 #: Data/Dialogs/dlgTaskProperties.xml:28
 #: Data/Dialogs/dlgTaskProperties_L.xml:28
 msgid "Start height ref"
-msgstr ""
+msgstr "Starthoogte ref"
 
 #: Data/Dialogs/dlgConfiguration.xml:742
 #: Data/Dialogs/dlgConfiguration_L.xml:757
 msgid "L/D Average period"
-msgstr ""
+msgstr "L/D middelingstijd"
 
 #: Data/Dialogs/dlgConfiguration.xml:270
 #: Data/Dialogs/dlgConfiguration_L.xml:272
 msgid "Device A"
-msgstr ""
+msgstr "Apparaat A"
 
 #: Data/Dialogs/dlgSwitches.xml:19
 msgid "Flap negative"
-msgstr ""
+msgstr "Flap negatief"
 
 #: Data/Dialogs/dlgVario.xml:20 Data/Dialogs/dlgVario_L.xml:21
 msgid "Static port"
-msgstr ""
+msgstr "Statische druk aansluiting"
 
 #: Data/Dialogs/dlgConfiguration.xml:87 Data/Dialogs/dlgConfiguration_L.xml:88
 msgid "Acknowledge time*"
-msgstr ""
+msgstr "Accordeertijd*"
 
 #: Data/Dialogs/dlgConfiguration.xml:520
 #: Data/Dialogs/dlgConfiguration_L.xml:519
 msgid "Averager needle*"
-msgstr ""
+msgstr "Gemiddelde wijzer*"
 
 #: Data/Dialogs/dlgConfiguration.xml:209
 #: Data/Dialogs/dlgConfiguration_L.xml:210
 msgid "Flap forces cruise*"
-msgstr ""
+msgstr "Flap krachten steek*"
 
 #: Data/Dialogs/dlgTarget.xml:6
 msgid "Tp"
-msgstr ""
+msgstr "Tp"
 
 #: Data/Dialogs/dlgConfiguration.xml:329
 #: Data/Dialogs/dlgConfiguration_L.xml:329
 msgid "Lift"
-msgstr ""
+msgstr "Draagkracht"
 
 #: Data/Dialogs/dlgTeamCode.xml:6 Data/Dialogs/dlgTeamCode_L.xml:6
 msgid "Mate code:"
-msgstr ""
+msgstr "Maat code:"
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:6
 msgid "Ack Day"
-msgstr ""
+msgstr "Acc Dag"
 
 #: Data/Dialogs/dlgConfiguration.xml:288
 #: Data/Dialogs/dlgConfiguration_L.xml:290
 msgid "Device B"
-msgstr ""
+msgstr "Apparaat B"
 
 #: Data/Dialogs/dlgWindSettings.xml:19
 msgid "Trail drift"
-msgstr ""
+msgstr "Spoordrift"
 
 #: Data/Dialogs/dlgConfiguration.xml:373
 #: Data/Dialogs/dlgConfiguration_L.xml:373
 msgid "Events*"
-msgstr ""
+msgstr "Gebeurtenissen*"
 
 #: Data/Dialogs/dlgTaskPoint.xml:5 Data/Dialogs/dlgTaskPoint_L.xml:8
 msgid "Remove"
-msgstr ""
+msgstr "Verwijder"
 
 #: Data/Dialogs/dlgStatus.xml:36
 msgid "Speed average"
-msgstr ""
+msgstr "Snelheidsgemiddelde"
 
 #: Data/Dialogs/dlgTaskEdit.xml:13 Data/Dialogs/dlgTaskEdit_L.xml:9
 msgid "Properties"
-msgstr ""
+msgstr "Eigenschappen"
 
 #: Data/Dialogs/dlgTaskEdit.xml:14 Data/Dialogs/dlgTaskEdit_L.xml:10
 msgid "Save as"
-msgstr ""
+msgstr "Opslaan als"
 
 #: Data/Dialogs/dlgConfiguration.xml:204
 #: Data/Dialogs/dlgConfiguration_L.xml:205
 msgid "Nav by baro altitude*"
-msgstr ""
+msgstr "Nav met baro hoogte*"
 
 #: Data/Dialogs/dlgConfiguration.xml:199
 #: Data/Dialogs/dlgConfiguration_L.xml:200
 msgid "Block speed to fly*"
-msgstr ""
+msgstr "Te vliegen bloksnelheid*"
 
 #: Data/Dialogs/dlgTaskPoint.xml:32 Data/Dialogs/dlgTaskPoint_L.xml:33
 msgid "Start radial"
-msgstr ""
+msgstr "Startradiaal"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:16
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:16
 msgid "Airport"
-msgstr ""
+msgstr "Vliegveld"
 
 #: Data/Dialogs/dlgConfiguration.xml:47 Data/Dialogs/dlgConfiguration_L.xml:48
 msgid "Airfields file*"
-msgstr ""
+msgstr "Vliegveldbestand*"
 
 #: Data/Dialogs/dlgVoice.xml:18
 msgid "Task Altitude Difference"
-msgstr ""
+msgstr "Opdracht hoogte verschil"
 
 #: Data/Dialogs/dlgConfiguration.xml:515
 #: Data/Dialogs/dlgConfiguration_L.xml:514
 msgid "Show gross*"
-msgstr ""
+msgstr "Toon bruto*"
 
 #: Data/Dialogs/dlgFontEdit.xml:16
 msgid "Italic"
-msgstr ""
+msgstr "Cursief"
 
 #: Data/Dialogs/dlgConfiguration.xml:468 Data/Dialogs/dlgConfiguration.xml:471
 #: Data/Dialogs/dlgConfiguration.xml:474 Data/Dialogs/dlgConfiguration.xml:477
@@ -3716,154 +3925,154 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:739 Data/Dialogs/dlgTaskManager.xml:5
 #: Data/Dialogs/dlgTaskManager_L.xml:5
 msgid "Edit"
-msgstr ""
+msgstr "Bewerk"
 
 #: Data/Dialogs/dlgVario.xml:40 Data/Dialogs/dlgVario_L.xml:41
 msgid "FLARM connected"
-msgstr ""
+msgstr "FLARM aangesloten"
 
 #: Data/Dialogs/dlgWaypointOutOfTerrain.xml:10
 msgid "Yes All"
-msgstr ""
+msgstr "Ja op alles"
 
 #: Data/Dialogs/dlgConfiguration.xml:108
 #: Data/Dialogs/dlgConfiguration_L.xml:109
 msgid "Trail length"
-msgstr ""
+msgstr "Spoorlengte"
 
 #: Data/Dialogs/dlgTeamCode.xml:18 Data/Dialogs/dlgTeamCode_L.xml:18
 msgid "Flarm lock:"
-msgstr ""
+msgstr "FLARM lock:"
 
 #: Data/Dialogs/dlgConfiguration.xml:15 Data/Dialogs/dlgConfiguration_L.xml:16
 msgid "Map file"
-msgstr ""
+msgstr "Kaartbestand"
 
 #: Data/Dialogs/dlgStatus.xml:30 Data/Dialogs/dlgStatusTask.xml:4
 #: Data/Dialogs/dlgTaskCalculator.xml:10
 msgid "Assigned task time"
-msgstr ""
+msgstr "Toegewezen opdracht tijd"
 
 #: Data/Dialogs/dlgConfiguration.xml:728
 #: Data/Dialogs/dlgConfiguration_L.xml:741 Data/Dialogs/dlgVario.xml:8
 #: Data/Dialogs/dlgVario_L.xml:9
 msgid "Save"
-msgstr ""
+msgstr "Opslaan"
 
 #: Data/Dialogs/dlgTextEntry.xml:7
 msgid "A+"
-msgstr ""
+msgstr "A+"
 
 #: Data/Dialogs/dlgConfiguration.xml:213
 #: Data/Dialogs/dlgConfiguration_L.xml:215
 msgid "STF risk factor*"
-msgstr ""
+msgstr "STF risico factor*"
 
 #: Data/Dialogs/dlgVario.xml:79 Data/Dialogs/dlgVario_L.xml:80
 msgid "Cruise lift trigger"
-msgstr ""
+msgstr "Steek stijgen trigger"
 
 #: Data/Dialogs/dlgBasicSettings.xml:24
 msgid "QNH"
-msgstr ""
+msgstr "QNH"
 
 #: Data/Dialogs/dlgVario.xml:439 Data/Dialogs/dlgVario_L.xml:439
 msgid "Cambridge"
-msgstr ""
+msgstr "Cambridge"
 
 #: Data/Dialogs/dlgStatus.xml:45
 msgid "Finish alt min"
-msgstr ""
+msgstr "Finish H min"
 
 #: Data/Dialogs/dlgSwitches.xml:31
 msgid "Repeat"
-msgstr ""
+msgstr "Herhaal"
 
 #: Data/Dialogs/dlgVario.xml:58 Data/Dialogs/dlgVario_L.xml:59
 msgid "ASI cal"
-msgstr ""
+msgstr "ASI cal"
 
 #: Data/Dialogs/dlgConfiguration.xml:339
 #: Data/Dialogs/dlgConfiguration_L.xml:339 Data/Dialogs/dlgVario.xml:32
 #: Data/Dialogs/dlgVario_L.xml:33
 msgid "Temperature"
-msgstr ""
+msgstr "Temperatuur"
 
 #: Data/Dialogs/dlgConfiguration.xml:308
 #: Data/Dialogs/dlgConfiguration_L.xml:308
 msgid "Use GPS time"
-msgstr ""
+msgstr "Gebruik GPS tijd"
 
 #: Data/Dialogs/dlgVoice.xml:22
 msgid "MacCready"
-msgstr ""
+msgstr "McCready"
 
 #: Data/Dialogs/dlgStatus.xml:51 Data/Dialogs/dlgStatusAircraft.xml:6
 msgid "Flight time"
-msgstr ""
+msgstr "Vluchtduur"
 
 #: Data/Dialogs/dlgVario.xml:289 Data/Dialogs/dlgVario_L.xml:289
 msgid "Logger interval"
-msgstr ""
+msgstr "Logger interval"
 
 #: Data/Dialogs/dlgTaskProperties.xml:13
 #: Data/Dialogs/dlgTaskProperties_L.xml:13
 msgid "Task scoring"
-msgstr ""
+msgstr "Opdracht scoring"
 
 #: Data/Dialogs/dlgBasicSettings.xml:8
 msgid "Ballast"
-msgstr ""
+msgstr "Ballast"
 
 #: Data/Dialogs/dlgStartup.xml:16 Data/Dialogs/dlgStartup_L.xml:16
 msgid "Accept"
-msgstr ""
+msgstr "Goedkeuren"
 
 #: Data/Dialogs/dlgTaskPoint.xml:6 Data/Dialogs/dlgTaskPoint_L.xml:9
 msgid "Relocate"
-msgstr ""
+msgstr "Verplaatsen"
 
 #: Data/Dialogs/dlgConfiguration.xml:276 Data/Dialogs/dlgConfiguration.xml:296
 #: Data/Dialogs/dlgConfiguration_L.xml:278
 #: Data/Dialogs/dlgConfiguration_L.xml:296
 msgid "Port"
-msgstr ""
+msgstr "Poort"
 
 #: Data/Dialogs/dlgNumberEntry_Keyboard.xml:4
 #: Data/Dialogs/dlgNumberEntry_Keyboard_L.xml:4
 msgid "Number: "
-msgstr ""
+msgstr "Getal: "
 
 #: Data/Dialogs/dlgSimulatorPrompt.xml:6
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:6
 msgid "Simulator"
-msgstr ""
+msgstr "Simulator"
 
 #: Data/Dialogs/dlgConfiguration.xml:149
 #: Data/Dialogs/dlgConfiguration_L.xml:151
 msgid "Terrain display"
-msgstr ""
+msgstr "Terreinweergave"
 
 #: Data/Dialogs/dlgBasicSettings.xml:6
 msgid "Dump"
-msgstr ""
+msgstr "Dump"
 
 #: Data/Dialogs/dlgConfiguration.xml:534
 #: Data/Dialogs/dlgConfiguration_L.xml:533
 msgid "FLARM radar"
-msgstr ""
+msgstr "FLARM radar"
 
 #: Data/Dialogs/dlgTaskPoint.xml:16 Data/Dialogs/dlgTaskPoint_L.xml:17
 msgid "Length"
-msgstr ""
+msgstr "Lengte"
 
 #: Data/Dialogs/dlgStatus.xml:41 Data/Dialogs/dlgStatusTask.xml:7
 msgid "Start time"
-msgstr ""
+msgstr "Starttijd"
 
 #: Data/Dialogs/dlgStatus.xml:52
 msgid "Takeoff time"
-msgstr ""
+msgstr "Tijd vluchtaanvang"
 
 #: Data/Dialogs/dlgConfiguration.xml:175
 #: Data/Dialogs/dlgConfiguration_L.xml:176
@@ -3873,91 +4082,91 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:368
 #: Data/Dialogs/dlgConfiguration_L.xml:368
 msgid "Safety lock"
-msgstr ""
+msgstr "Veiligheidsslot"
 
 #: Data/Dialogs/dlgVario.xml:399 Data/Dialogs/dlgVario_L.xml:399
 msgid "Interval, battery"
-msgstr ""
+msgstr "Interval, accu"
 
 #: Data/Dialogs/dlgSwitches.xml:15
 msgid "Flap neutral"
-msgstr ""
+msgstr "Flap neutraal"
 
 #: Data/Dialogs/dlgConfiguration.xml:428
 #: Data/Dialogs/dlgConfiguration_L.xml:428
 msgid "North arrow*"
-msgstr ""
+msgstr "Noordpijl*"
 
 #: Data/Dialogs/dlgWaypointEdit.xml:8 Data/Dialogs/dlgWaypointEdit_L.xml:8
 msgid "Comment: "
-msgstr ""
+msgstr "Opmerking: "
 
 #: Data/Dialogs/dlgSimulatorPrompt.xml:5
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:5
 msgid "Fly"
-msgstr ""
+msgstr "Vlucht"
 
 #: Data/Dialogs/dlgVario.xml:89 Data/Dialogs/dlgVario_L.xml:89
 msgid "Climb averager scale"
-msgstr ""
+msgstr "Schaal gemiddeld stijgen"
 
 #: Data/Dialogs/dlgConfiguration.xml:38 Data/Dialogs/dlgConfiguration_L.xml:39
 msgid "Terrain file*"
-msgstr ""
+msgstr "Terreinbestand*"
 
 #: Data/Dialogs/dlgFontEdit.xml:12
 msgid "Bold"
-msgstr ""
+msgstr "Vet"
 
 #: Data/Dialogs/dlgTarget.xml:11
 msgid "Move"
-msgstr ""
+msgstr "Verplaats"
 
 #: Data/Dialogs/dlgConfiguration.xml:91 Data/Dialogs/dlgConfiguration_L.xml:92
 msgid "Use black outline*"
-msgstr ""
+msgstr "Gebruik zwart kader*"
 
 #: Data/Dialogs/dlgWaypointEdit_L.xml:10
 msgid "Lon"
-msgstr ""
+msgstr "Lengte"
 
 #: Data/Dialogs/dlgAirspaceSelect.xml:14
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:20
 #: Data/Dialogs/dlgWayPointSelect.xml:15
 #: Data/Dialogs/dlgWayPointSelect_L.xml:10 Data/Dialogs/dlgWindSettings.xml:8
 msgid "Direction"
-msgstr ""
+msgstr "Richting"
 
 #: Data/Dialogs/dlgVario.xml:369 Data/Dialogs/dlgVario_L.xml:369
 msgid "Interval, Warning"
-msgstr ""
+msgstr "Interval, Waarschuwing"
 
 #: Data/Dialogs/dlgAirspace.xml:5 Data/Dialogs/dlgAirspace_L.xml:5
 msgid "Lookup"
-msgstr ""
+msgstr "Zoek"
 
 #: Data/Dialogs/dlgStatus.xml:35
 msgid "Speed estimated"
-msgstr ""
+msgstr "Geschatte snelheid"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:40
 #: Data/Dialogs/dlgWayPointDetails_L.xml:40
 msgid "Clear Alternates"
-msgstr ""
+msgstr "Wis uitwijkvelden"
 
 #: Data/Dialogs/dlgStatus.xml:33 Data/Dialogs/dlgStatusTask.xml:8
 #: Data/Dialogs/dlgTaskCalculator.xml:18
 msgid "Task distance"
-msgstr ""
+msgstr "Opdrachtafstand"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:9
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:9
 msgid "Comp. ID"
-msgstr ""
+msgstr "Wedstr.reg."
 
 #: Data/Dialogs/dlgVario.xml:50 Data/Dialogs/dlgVario_L.xml:51
 msgid "TE probe cal"
-msgstr ""
+msgstr "TE probe cal"
 
 #: Data/Dialogs/dlgConfiguration.xml:393
 #: Data/Dialogs/dlgConfiguration_L.xml:393
@@ -3966,16 +4175,16 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:14
 msgid "Base"
-msgstr ""
+msgstr "Basis"
 
 #: Data/Dialogs/dlgTaskProperties.xml:9 Data/Dialogs/dlgTaskProperties_L.xml:9
 msgid "AAT min time"
-msgstr ""
+msgstr "AAT min tijd"
 
 #: Data/Dialogs/dlgFlarmTraffic.xml:4 Data/Dialogs/dlgFlarmTraffic_L.xml:4
 #: Data/Dialogs/dlgTaskPoint.xml:11 Data/Dialogs/dlgTaskPoint_L.xml:12
 msgid "Details"
-msgstr ""
+msgstr "Details"
 
 #: Data/Dialogs/dlgTarget.xml:29
 msgid "V rem"
@@ -3984,34 +4193,34 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:21
 #: Data/Dialogs/dlgWayPointDetails_L.xml:21
 msgid "Alt diff Mc current"
-msgstr ""
+msgstr "H verschil actuele MC"
 
 #: Data/Dialogs/dlgConfiguration.xml:25 Data/Dialogs/dlgConfiguration_L.xml:26
 msgid "Waypoints 2"
-msgstr ""
+msgstr "Keerpunten 2"
 
 #: Data/Dialogs/dlgLoggerReplay.xml:12
 msgid "Stop"
-msgstr ""
+msgstr "Stop"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:15
 #: Data/Dialogs/dlgWayPointDetails_L.xml:15
 msgid "Elevation"
-msgstr ""
+msgstr "Hoogte"
 
 #: Data/Dialogs/dlgConfiguration.xml:706
 #: Data/Dialogs/dlgConfiguration_L.xml:717
 msgid "Pilot name: "
-msgstr ""
+msgstr "Vliegernaam: "
 
 #: Data/Dialogs/dlgTarget.xml:17 Data/Dialogs/dlgTarget_L.xml:15
 msgid "Radial"
-msgstr ""
+msgstr "Radiaal"
 
 #: Data/Dialogs/dlgConfiguration.xml:383
 #: Data/Dialogs/dlgConfiguration_L.xml:383
 msgid "Status message*"
-msgstr ""
+msgstr "Statusbericht*"
 
 #: Data/Dialogs/dlgVario.xml:375 Data/Dialogs/dlgVario_L.xml:375
 msgid "Gear on delay"
@@ -4020,42 +4229,42 @@ msgstr ""
 #: Data/Dialogs/dlgTaskPoint.xml:22 Data/Dialogs/dlgTaskPoint.xml:28
 #: Data/Dialogs/dlgTaskPoint_L.xml:23 Data/Dialogs/dlgTaskPoint_L.xml:29
 msgid "Radius"
-msgstr ""
+msgstr "Straal"
 
 #: Data/Dialogs/dlgWaypointOutOfTerrain.xml:12
 msgid "No All"
-msgstr ""
+msgstr "Nee op alles"
 
 #: Data/Dialogs/dlgTeamCode.xml:12 Data/Dialogs/dlgTeamCode_L.xml:12
 msgid "Bearing:"
-msgstr ""
+msgstr "Koers:"
 
 #: Data/Dialogs/dlgConfiguration.xml:719
 #: Data/Dialogs/dlgConfiguration_L.xml:730
 msgid "Auto logger*"
-msgstr ""
+msgstr "Auto logger*"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:38
 #: Data/Dialogs/dlgWayPointDetails_L.xml:38
 msgid "Set as new home"
-msgstr ""
+msgstr "Instellen als nieuwe thuisbasis"
 
 #: Data/Dialogs/dlgVario.xml:285 Data/Dialogs/dlgVario_L.xml:285
 msgid "IGC logging"
-msgstr ""
+msgstr "IGC loggen"
 
 #: Data/Dialogs/dlgVario.xml:311 Data/Dialogs/dlgVario_L.xml:311
 msgid "Speaker threshold"
-msgstr ""
+msgstr "Luidspreker drempel"
 
 #: Data/Dialogs/dlgConfiguration.xml:701
 #: Data/Dialogs/dlgConfiguration_L.xml:712
 msgid "Time step circling*"
-msgstr ""
+msgstr "Tijdstap thermieken*"
 
 #: Data/Dialogs/dlgConfiguration.xml:30 Data/Dialogs/dlgConfiguration_L.xml:31
 msgid "Airspace 1"
-msgstr ""
+msgstr "Luchtruim 1"
 
 #: Data/Dialogs/dlgComboPicker.xml:4 Data/Dialogs/dlgComboPicker_L.xml:4
 #: Data/Dialogs/dlgTaskPointType.xml:6 Data/Dialogs/dlgTaskPointType_L.xml:6
@@ -4063,40 +4272,40 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointSelect.xml:19
 #: Data/Dialogs/dlgWayPointSelect_L.xml:18
 msgid "Select"
-msgstr ""
+msgstr "Kies"
 
 #: Data/Dialogs/dlgTaskCalculator.xml:38
 msgid "Achieved Speed"
-msgstr ""
+msgstr "Bereikte snelheid"
 
 #: Data/Dialogs/dlgConfiguration.xml:162
 #: Data/Dialogs/dlgConfiguration_L.xml:164
 msgid "Terrain brightness"
-msgstr ""
+msgstr "Terrein helderheid"
 
 #: Data/Dialogs/dlgVario.xml:383 Data/Dialogs/dlgVario_L.xml:383
 msgid "Interval, gear"
-msgstr ""
+msgstr "Interval, wiel"
 
 #: Data/Dialogs/dlgFileSelect.xml:10
 msgid "Refresh"
-msgstr ""
+msgstr "Ververs"
 
 #: Data/Dialogs/dlgStatus.xml:21 Data/Dialogs/dlgStatusSystem.xml:5
 msgid "Satellites in view"
-msgstr ""
+msgstr "Satellieten in zicht"
 
 #: Data/Dialogs/dlgStatus.xml:23 Data/Dialogs/dlgStatusSystem.xml:7
 msgid "FLARM"
-msgstr ""
+msgstr "FLARM"
 
 #: Data/Dialogs/dlgTeamCode.xml:20 Data/Dialogs/dlgTeamCode_L.xml:20
 msgid "Flarm Lock"
-msgstr ""
+msgstr "FLARM lock"
 
 #: Data/Dialogs/dlgVario.xml:105 Data/Dialogs/dlgVario_L.xml:105
 msgid "Base frequency"
-msgstr ""
+msgstr "Basis frequentie"
 
 #: Data/Dialogs/dlgTarget.xml:33
 msgid "V ach"
@@ -4105,28 +4314,28 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:710
 #: Data/Dialogs/dlgConfiguration_L.xml:721
 msgid "Competition Id: "
-msgstr ""
+msgstr "Wedstrijd ID: "
 
 #: Data/Dialogs/dlgBasicSettings.xml:12
 msgid "Volume"
-msgstr ""
+msgstr "Volume"
 
 #: Data/Dialogs/dlgTeamCode.xml:8 Data/Dialogs/dlgTeamCode_L.xml:8
 msgid "Range:"
-msgstr ""
+msgstr "Bereik:"
 
 #: Data/Dialogs/dlgVario.xml:113 Data/Dialogs/dlgVario_L.xml:113
 msgid "Filter cruise"
-msgstr ""
+msgstr "Filter steken"
 
 #: Data/Dialogs/dlgBasicSettings.xml:32
 msgid "Max Temp"
-msgstr ""
+msgstr "Max Temp"
 
 #: Data/Dialogs/dlgConfiguration.xml:756
 #: Data/Dialogs/dlgConfiguration_L.xml:773
 msgid "Auto Sound Volume"
-msgstr ""
+msgstr "Auto geluidsvolume"
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:10
 #: Data/Dialogs/dlgAirspaceSelect.xml:18
@@ -4138,40 +4347,40 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointSelect_L.xml:14 Data/Dialogs/dlgWaypointEdit.xml:60
 #: Data/Dialogs/dlgWaypointEdit_L.xml:62
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: Data/Dialogs/dlgTarget_L.xml:19
 msgid "Target locked"
-msgstr ""
+msgstr "Doel vergrendeld"
 
 #: Data/Dialogs/dlgWindSettings.xml:23
 msgid "Okay"
-msgstr ""
+msgstr "OK"
 
 #: Data/Dialogs/dlgStatus.xml:25 Data/Dialogs/dlgStatusSystem.xml:9
 msgid "Declared"
-msgstr ""
+msgstr "gedeclareerd"
 
 #: Data/Dialogs/dlgAnalysis.xml:8 Data/Dialogs/dlgAnalysis_L.xml:8
 msgid "Calc"
-msgstr ""
+msgstr "Ber"
 
 #: Data/Dialogs/dlgTaskEdit.xml:7 Data/Dialogs/dlgTaskEdit_L.xml:12
 msgid "v"
-msgstr ""
+msgstr "v"
 
 #: Data/Dialogs/dlgConfiguration.xml:733
 #: Data/Dialogs/dlgConfiguration_L.xml:748
 msgid "Device model"
-msgstr ""
+msgstr "Apparaatmodel"
 
 #: Data/Dialogs/dlgTaskCalculator.xml:30
 msgid "Set speed remaining"
-msgstr ""
+msgstr "Stel resterende snelheid in"
 
 #: Data/Dialogs/dlgVario.xml:333 Data/Dialogs/dlgVario_L.xml:333
 msgid "Flarm interface"
-msgstr ""
+msgstr "FLARM interface"
 
 #: Data/Dialogs/dlgSwitches.xml:45
 msgid "User middle"
@@ -4179,20 +4388,20 @@ msgstr ""
 
 #: Data/Dialogs/dlgTaskList.xml:9 Data/Dialogs/dlgTaskList_L.xml:7
 msgid "Rename"
-msgstr ""
+msgstr "Hernoem"
 
 #: Data/Dialogs/dlgConfiguration.xml:482
 #: Data/Dialogs/dlgConfiguration_L.xml:481
 msgid "Info box values small"
-msgstr ""
+msgstr "Infokader waarden klein"
 
 #: Data/Dialogs/dlgConfiguration.xml:62 Data/Dialogs/dlgConfiguration_L.xml:63
 msgid "Airspace display"
-msgstr ""
+msgstr "Luchtruimweergave"
 
 #: Data/Dialogs/dlgTaskCalculator.xml:26
 msgid "Set range"
-msgstr ""
+msgstr "Bereik instellen"
 
 #: Data/Dialogs/dlgVario.xml:329 Data/Dialogs/dlgVario_L.xml:329
 msgid "Max reported circling"
@@ -4200,80 +4409,80 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:430 Data/Dialogs/dlgVario_L.xml:430
 msgid "V Flap"
-msgstr ""
+msgstr "VFE"
 
 #: Data/Dialogs/dlgStatus.xml:46
 msgid "Valid finish"
-msgstr ""
+msgstr "Geldige finish"
 
 #: Data/Dialogs/dlgVario.xml:444 Data/Dialogs/dlgVario_L.xml:444
 msgid "Needle gauge type"
-msgstr ""
+msgstr "Type wijzerinstrument"
 
 #: Data/Dialogs/dlgVario.xml:16 Data/Dialogs/dlgVario_L.xml:17
 msgid "Pitot port"
-msgstr ""
+msgstr "Pitotaansluiting"
 
 #: Data/Dialogs/dlgTaskPoint.xml:36 Data/Dialogs/dlgTaskPoint_L.xml:37
 msgid "Finish radial"
-msgstr ""
+msgstr "Finishradiaal"
 
 #: Data/Dialogs/dlgVario.xml:415 Data/Dialogs/dlgVario_L.xml:415
 msgid "Height terrain"
-msgstr ""
+msgstr "Terreinhoogte"
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:12
 msgid "Top"
-msgstr ""
+msgstr "Boven"
 
 #: Data/Dialogs/dlgWaypointEdit_L.xml:34
 msgid "Lat"
-msgstr ""
+msgstr "Breedte"
 
 #: Data/Dialogs/dlgConfiguration.xml:410
 #: Data/Dialogs/dlgConfiguration_L.xml:410
 msgid "Glider position"
-msgstr ""
+msgstr "Positie zweefvliegtuig"
 
 #: Data/Dialogs/dlgConfiguration.xml:363
 #: Data/Dialogs/dlgConfiguration_L.xml:363
 msgid "Auto Blank"
-msgstr ""
+msgstr "Auto blank"
 
 #: Data/Dialogs/dlgConfiguration.xml:75 Data/Dialogs/dlgConfiguration_L.xml:76
 msgid "Margin"
-msgstr ""
+msgstr "Marge"
 
 #: Data/Dialogs/dlgStatus.xml:40
 msgid "Valid start"
-msgstr ""
+msgstr "Geldige start"
 
 #: Data/Dialogs/dlgConfiguration.xml:573
 #: Data/Dialogs/dlgConfiguration_L.xml:572
 #: Data/Dialogs/dlgTaskProperties.xml:35
 #: Data/Dialogs/dlgTaskProperties_L.xml:35
 msgid "Finish min height"
-msgstr ""
+msgstr "Finish min hoogte"
 
 #: Data/Dialogs/dlgConfiguration.xml:752
 #: Data/Dialogs/dlgConfiguration_L.xml:769
 msgid "Auto Backlight"
-msgstr ""
+msgstr "Auto Backlight"
 
 #: Data/Dialogs/dlgConfiguration.xml:140
 #: Data/Dialogs/dlgConfiguration_L.xml:142
 msgid "Wind arrow*"
-msgstr ""
+msgstr "Windpijl*"
 
 #: Data/Dialogs/dlgSwitches.xml:7
 msgid "Airbrake locked"
-msgstr ""
+msgstr "Remklep vergrendeld"
 
 #: Data/Dialogs/dlgStatus.xml:31 Data/Dialogs/dlgStatusTask.xml:5
 #: Data/Dialogs/dlgTaskCalculator.xml:14
 msgid "Estimated task time"
-msgstr ""
+msgstr "Geschatte opdrachttijd"
 
 #: Data/Dialogs/dlgFlarmTraffic.xml:7 Data/Dialogs/dlgFlarmTraffic_L.xml:15
 msgid "Avg/Alt"
-msgstr ""
+msgstr "Gem/H"
