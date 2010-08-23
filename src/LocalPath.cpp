@@ -173,6 +173,25 @@ ModuleInFlash(HMODULE hModule, TCHAR *buffer)
   return InFlash(buffer, buffer);
 }
 
+/**
+ * Looks for a directory called "XCSoarData" on all flash disks.
+ */
+static const TCHAR *
+ExistingDataOnFlash(TCHAR *buffer)
+{
+  assert(buffer != NULL);
+
+  FlashCardEnumerator enumerator;
+  const TCHAR *name;
+  while ((name = enumerator.next()) != NULL) {
+    _stprintf(buffer, _T("/%s/") XCSDATADIR, name);
+    if (Directory::Exists(buffer))
+      return buffer;
+  }
+
+  return NULL;
+}
+
 #endif /* _WIN32_WCE */
 
 static TCHAR *
@@ -193,6 +212,10 @@ FindDataPath()
       if (Directory::Exists(buffer))
         return _tcsdup(buffer);
     }
+
+    /* if a flash disk with XCSoarData exists, use it */
+    if (ExistingDataOnFlash(buffer) != NULL)
+      return _tcsdup(buffer);
   }
 #endif
 
