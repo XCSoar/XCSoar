@@ -51,6 +51,7 @@ namespace InfoBoxFactory
   struct InfoBoxMetaData {
     const TCHAR *name;
     const TCHAR *caption;
+    const TCHAR *description;
     char next, previous;
   };
 
@@ -82,6 +83,17 @@ namespace InfoBoxFactory
     return MetaData[type].caption;
   }
 
+  /**
+   * Returns the long description (help text) of the info box type.
+   */
+  static inline const TCHAR *
+  GetDescription(unsigned type)
+  {
+    assert(type < NUM_TYPES);
+
+    return MetaData[type].description;
+  }
+
   static inline unsigned
   GetNext(unsigned type)
   {
@@ -100,9 +112,6 @@ namespace InfoBoxFactory
 
   gcc_const
   InfoBoxContent* Create(unsigned InfoBoxType);
-
-  gcc_const
-  const TCHAR* GetHelpText(unsigned InfoBoxType);
 };
 
 #endif

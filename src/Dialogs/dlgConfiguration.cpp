@@ -909,11 +909,12 @@ OnInfoBoxHelp(WindowControl * Sender)
   default:
     return;
   }
-  _stprintf(caption, _T("InfoBox %s in %s mode"), wp->GetCaption(), mode);
+  _stprintf(caption, _T("InfoBox %s in %s mode: %s"), wp->GetCaption(), mode,
+            InfoBoxFactory::GetName(type));
 
-  const TCHAR* text = InfoBoxFactory::GetHelpText(type);
+  const TCHAR* text = InfoBoxFactory::GetDescription(type);
   if (text)
-    dlgHelpShowModal(XCSoarInterface::main_window, caption, text);
+    dlgHelpShowModal(XCSoarInterface::main_window, caption, gettext(text));
   else
     dlgHelpShowModal(XCSoarInterface::main_window, caption,
                      _("No help available on this item"));

@@ -69,6 +69,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Height GPS"),
     N_("H GPS"),
+    N_("This is the height above mean sea level reported by the GPS. Touchscreen/PC only: in simulation mode, this value is adjustable with the up/down arrow keys and the right/left arrow keys also cause the glider to turn."),
     1, 33,
   },
 
@@ -76,6 +77,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Height AGL"),
     N_("H AGL"),
+    N_("This is the navigation altitude minus the terrain height obtained from the terrain file. The value is coloured red when the glider is below the terrain safety clearance height."),
     20, 0,
   },
 
@@ -83,6 +85,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Thermal last 30 sec"),
     N_("TC 30s"),
+    N_("A 30 second rolling average climb rate based of the reported GPS altitude, or vario if available."),
     7, 44,
   },
 
@@ -90,6 +93,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Bearing"),
     N_("Bearing"),
+    N_("True bearing of the next waypoint.  For AAT tasks, this is the true bearing to the target within the AAT sector."),
     6, 54,
   },
 
@@ -97,6 +101,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("L/D instantaneous"),
     N_("L/D Inst"),
+    N_("Instantaneous glide ratio, given by the ground speed divided by the vertical speed (GPS speed) over the last 20 seconds. Negative values indicate climbing cruise. If the vertical speed is close to zero, the displayed value is '---'."),
     5, 38,
   },
 
@@ -104,6 +109,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("L/D cruise"),
     N_("L/D Cru"),
+    N_("The distance from the top of the last thermal, divided by the altitude lost since the top of the last thermal. Negative values indicate climbing cruise (height gain since leaving the last thermal). If the vertical speed is close to zero, the displayed value is '---'."),
     19, 4,
   },
 
@@ -111,6 +117,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Speed ground"),
     N_("V Gnd"),
+    N_("Ground speed measured by the GPS. If this infobox is active in simulation mode, pressing the up and down arrows adjusts the speed, and left and right turn the glider."),
     23, 3,
   },
 
@@ -118,6 +125,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Last Thermal Average"),
     N_("TL Avg"),
+    N_("Total altitude gain/loss in the last thermal divided by the time spent circling."),
     8, 2,
   },
 
@@ -125,6 +133,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Last Thermal Gain"),
     N_("TL Gain"),
+    N_("Total altitude gain/loss in the last thermal."),
     9, 7,
   },
 
@@ -132,6 +141,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Last Thermal Time"),
     N_("TL Time"),
+    N_("Time spent circling in the last thermal."),
     21, 8,
   },
 
@@ -139,6 +149,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("MacCready Setting"),
     N_("MacCready"),
+    N_("The current MacCready setting. This infobox also shows whether MacCready is manual or auto. (Touchscreen/PC only) Also used to adjust the MacCready Setting if the infobox is active, by using the up/down cursor keys."),
     34, 43,
   },
 
@@ -146,6 +157,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Next Distance"),
     N_("WP Dist"),
+    N_("The distance to the currently selected waypoint. For AAT tasks, this is the distance to the target within the AAT sector."),
     12, 31,
   },
 
@@ -153,6 +165,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Next Altitude Difference"),
     N_("WP AltD"),
+    N_("Arrival altitude at the next waypoint relative to the safety arrival altitude."),
     13, 11,
   },
 
@@ -160,6 +173,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Next Altitude Required"),
     N_("WP AltR"),
+    N_("Altitude required to reach the next turn point."),
     15, 12,
   },
 
@@ -167,6 +181,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Next Waypoint"),
     N_("Next"),
+    N_("The name of the currently selected turn point. When this infobox is active, using the up/down cursor keys selects the next/previous waypoint in the task. (Touchscreen/PC only) Pressing the enter cursor key brings up the waypoint details."),
     36, 46,
   },
 
@@ -174,6 +189,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Final Altitude Difference"),
     N_("Fin AltD"),
+    N_("Arrival altitude at the final task turn point relative to the safety arrival altitude."),
     16, 13,
   },
 
@@ -181,6 +197,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Final Altitude Required"),
     N_("Fin AltR"),
+    N_("Altitude required to finish the task."),
     17, 15,
   },
 
@@ -188,6 +205,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Speed Task Average"),
     N_("V Task Av"),
+    N_("Average cross country speed while on current task, compensated for altitude."),
     18, 16,
   },
 
@@ -195,6 +213,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Final Distance"),
     N_("Fin Dis"),
+    N_("Distance to finish around remaining turn points."),
     27, 17,
   },
 
@@ -202,6 +221,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Final LD"),
     N_("Fin LD"),
+    N_("The required glide ratio to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival altitude. Negative values indicate a climb is necessary to finish. If the height required is close to zero, the displayed value is '---'. Note that this calculation may be optimistic because it reduces the height required to finish by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds."),
     38, 5,
   },
 
@@ -209,6 +229,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Terrain Elevation"),
     N_("H GND"),
+    N_("This is the elevation of the terrain above mean sea level, obtained from the terrain file at the current GPS location."),
     33, 1,
   },
 
@@ -216,6 +237,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Thermal Average"),
     N_("TC Avg"),
+    N_("Altitude gained/lost in the current thermal, divided by time spent thermaling."),
     22, 9,
   },
 
@@ -223,6 +245,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Thermal Gain"),
     N_("TC Gain"),
+    N_("The altitude gained/lost in the current thermal."),
     24, 21,
   },
 
@@ -230,6 +253,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Track"),
     N_("Track"),
+    N_("Magnetic track reported by the GPS. (Touchscreen/PC only) If this infobox is active in simulation mode, pressing the up and down  arrows adjusts the track."),
     32, 6,
   },
 
@@ -237,6 +261,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Vario"),
     N_("Vario"),
+    N_("Instantaneous vertical speed, as reported by the GPS, or the intelligent vario total energy vario value if connected to one."),
     44, 22,
   },
 
@@ -244,6 +269,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Wind Speed"),
     N_("Wind V"),
+    N_("Wind speed estimated by XCSoar. (Touchscreen/PC only) Manual adjustment is possible by pressing the up/down cursor keys to adjust magnitude and left/right cursor keys to adjust bearing when the infobox is active. Pressing the enter cursor key saves the wind value as the initial value when XCSoar next starts."),
     26, 50,
   },
 
@@ -251,6 +277,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Wind Bearing"),
     N_("Wind B"),
+    N_("Wind bearing estimated by XCSoar. (Touchscreen/PC only) Manual adjustment is possible by pressing the up/down cursor keys to adjust bearing when the infobox is active."),
     48, 25,
   },
 
@@ -258,6 +285,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("AA Time"),
     N_("AA Time"),
+    N_("Assigned Area Task time remaining. Goes red when time remaining has expired."),
     28, 18,
   },
 
@@ -265,6 +293,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("AA Distance Max"),
     N_("AA Dmax"),
+    N_("Assigned Area Task maximum distance possible for remainder of task."),
     29, 27,
   },
 
@@ -272,6 +301,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("AA Distance Min"),
     N_("AA Dmin"),
+    N_("Assigned Area Task minimum distance possible for remainder of task."),
     30, 28,
   },
 
@@ -279,6 +309,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("AA Speed Max"),
     N_("AA Vmax"),
+    N_("Assigned Area Task average speed achievable if flying maximum possible distance remaining in minimum AAT time."),
     31, 29,
   },
 
@@ -286,6 +317,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("AA Speed Min"),
     N_("AA Vmin"),
+    N_("Assigned Area Task average speed achievable if flying minimum possible distance remaining in minimum AAT time."),
     51, 30,
   },
 
@@ -293,6 +325,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Airspeed IAS"),
     N_("V IAS"),
+    N_("Indicated Airspeed reported by a supported external intelligent vario."),
     37, 23,
   },
 
@@ -300,6 +333,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Pressure Altitude"),
     N_("H Baro"),
+    N_("This is the barometric altitude obtained from a GPS equipped with pressure sensor, or a supported external intelligent vario."),
     0, 20,
   },
 
@@ -307,6 +341,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Speed MacCready"),
     N_("V Mc"),
+    N_("The MacCready speed-to-fly for optimal flight to the next waypoint. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude. In final glide mode, this speed-to-fly is calculated for descent."),
     35, 10,
   },
 
@@ -314,6 +349,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Percentage climb"),
     N_("% Climb"),
+    N_("Percentage of time spent in climb mode. These statistics are reset upon starting the task."),
     43, 34,
   },
 
@@ -321,6 +357,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Time of flight"),
     N_("Time flt"),
+    N_("Time elapsed since takeoff was detected."),
     39, 14,
   },
 
@@ -328,6 +365,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("G load"),
     N_("G"),
+    N_("Magnitude of G loading reported by a supported external intelligent vario. This value is negative for pitch-down manoeuvres."),
     47, 32,
   },
 
@@ -335,6 +373,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Next LD"),
     N_("WP LD"),
+    N_("The required glide ratio to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival altitude. Negative values indicate a climb is necessary to reach the waypoint. If the height required is close to zero, the displayed value is '---'.   Note that this calculation may be optimistic because it reduces the height required to reach the waypoint by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds."),
     53, 19,
   },
 
@@ -342,6 +381,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Time local"),
     N_("Time loc"),
+    N_("GPS time expressed in local time zone."),
     40, 36,
   },
 
@@ -349,6 +389,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Time UTC"),
     N_("Time UTC"),
+    N_("GPS time expressed in UTC."),
     41, 39,
   },
 
@@ -356,6 +397,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Task Time To Go"),
     N_("Fin ETE"),
+    N_("Estimated time required to complete task, assuming performance of ideal MacCready cruise/climb cycle."),
     42, 40,
   },
 
@@ -363,6 +405,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Next Time To Go"),
     N_("WP ETE"),
+    N_("Estimated time required to reach next waypoint, assuming performance of ideal MacCready cruise/climb cycle."),
     45, 41,
   },
 
@@ -370,6 +413,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Speed Dolphin"),
     N_("V Opt"),
+    N_("The instantaneous MacCready speed-to-fly, making use of Netto vario calculations to determine dolphin cruise speed in the glider's current bearing. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude. In final glide mode, this speed-to-fly is calculated for descent. In climb mode, this switches to the speed for minimum sink at the current load factor (if an accelerometer is connected). When Block mode speed to fly is selected, this infobox displays the MacCready speed."),
     10, 35,
   },
 
@@ -377,6 +421,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Netto Vario"),
     N_("Netto"),
+    N_("Instantaneous vertical speed of air-mass, equal to vario value less the glider's estimated sink rate. Best used if airspeed, accelerometers and vario are connected, otherwise calculations are based on GPS measurements and wind estimates."),
     2, 24,
   },
 
@@ -384,6 +429,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Task Arrival Time"),
     N_("Fin ETA"),
+    N_("Estimated arrival local time at task completion, assuming performance of ideal MacCready cruise/climb cycle."),
     46, 42,
   },
 
@@ -391,6 +437,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Next Arrival Time"),
     N_("WP ETA"),
+    N_("Estimated arrival local time at next waypoint, assuming performance of ideal MacCready cruise/climb cycle."),
     14, 45,
   },
 
@@ -398,6 +445,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Bearing Difference"),
     N_("Brng D"),
+    N_("The difference between the glider's track bearing, to the bearing of the next waypoint, or for AAT tasks, to the bearing to the target within the AAT sector. GPS navigation is based on the track bearing across the ground, and this track bearing may differ from the glider's heading when there is wind present. Chevrons point to the direction the glider needs to alter course to correct the bearing difference, that is, so that the glider's course made good is pointing directly at the next waypoint. This bearing takes into account the curvature of the Earth."),
     54, 37,
   },
 
@@ -405,6 +453,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Outside Air Temperature"),
     N_("OAT"),
+    N_("Outside air temperature measured by a probe if supported by a connected intelligent variometer."),
     49, 26,
   },
 
@@ -412,6 +461,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Relative Humidity"),
     N_("RelHum"),
+    N_("Relative humidity of the air in percent as measured by a probe if supported by a connected intelligent variometer."),
     50, 48,
   },
 
@@ -419,6 +469,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Forecast Temperature"),
     N_("MaxTemp"),
+    N_("Forecast temperature of the ground at the home airfield, used in estimating convection height and cloud base in conjunction with outside air temperature and relative humidity probe. (Touchscreen/PC only) Pressing the up/down cursor keys adjusts this forecast temperature."),
     49, 25,
   },
 
@@ -426,6 +477,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("AA Distance Tgt"),
     N_("AA Dtgt"),
+    N_("Assigned Area Task distance around target points for remainder of task."),
     52, 31,
   },
 
@@ -433,6 +485,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("AA Speed Tgt"),
     N_("AA Vtgt"),
+    N_("Assigned Area Task average speed achievable around target points remaining in minimum AAT time."),
     11, 51,
   },
 
@@ -440,6 +493,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("L/D vario"),
     N_("L/D vario"),
+    N_("Instantaneous glide ratio, given by the indicated airspeed divided by the total energy vertical speed, when connected to an intelligent variometer. Negative values indicate climbing cruise. If the total energy vario speed is close to zero, the displayed value is '---'."),
     4, 38,
   },
 
@@ -447,6 +501,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Airspeed TAS"),
     N_("V TAS"),
+    N_("True Airspeed reported by a supported external intelligent vario."),
     3, 47,
   },
 
@@ -454,6 +509,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Own Team Code"),
     N_("TeamCode"),
+    N_("The current Team code for this aircraft. Use this to report to other team members."),
     56, 54,
   },
 
@@ -461,6 +517,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Team Bearing"),
     N_("Tm Brng"),
+    N_("The bearing to the team aircraft location at the last team code report."),
     57, 55,
   },
 
@@ -468,6 +525,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Team Bearing Diff"),
     N_("Team Bd"),
+    N_("The relative bearing to the team aircraft location at the last reported team code."),
     58, 56,
   },
 
@@ -475,6 +533,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Team Range"),
     N_("Team Dis"),
+    N_("The range to the team aircraft location at the last reported team code."),
     55, 57,
   },
 
@@ -482,6 +541,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Speed Task Instantaneous"),
     N_("V Tsk Ins"),
+    N_("Instantaneous cross country speed while on current task, compensated for altitude."),
     18, 16,
   },
 
@@ -489,6 +549,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Distance Home"),
     N_("Home Dis"),
+    N_("Distance to home waypoint (if defined)."),
     18, 16,
   },
 
@@ -496,6 +557,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Speed Task Achieved"),
     N_("V Tsk Ach"),
+    N_("Achieved cross country speed while on current task, compensated for altitude."),
     18, 16,
   },
 
@@ -503,6 +565,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("AA Delta Time"),
     N_("AA dT"),
+    N_("Difference between estimated task time and AAT minimum time. Colored red if negative (expected arrival too early), or blue if in sector and can turn now with estimated arrival time greater than AAT time plus 5 minutes."),
     28, 18,
   },
 
@@ -510,6 +573,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Thermal All"),
     N_("TC All"),
+    N_("Time-average climb rate in all thermals."),
     8, 2,
   },
 
@@ -517,6 +581,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Distance Vario"),
     N_("D Vario"),
+    NULL,
     8, 2,
   },
 
@@ -528,6 +593,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Battery Voltage"),
 #endif
     N_("Battery"),
+    N_("Supply battery voltage for Altair systems, for PDA systems, this gives the percent battery capacity available."),
     49, 26,
   },
 
@@ -536,6 +602,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Final GR"),
     N_("Fin GR"),
+    N_("Geometric gradient to the arrival height above the final waypoint. This is not adjusted for total energy."),
     38, 5,
   },
 
@@ -543,6 +610,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Alternate1 GR"),
     N_("Altern 1"),
+    N_("Geometric gradient to the arrival height above the selected alternate waypoint. This is not adjusted for total energy. Over 200 nothing is shown, between 100 and 200 an integer number is shown, between 1 and 99 a decimal value is shown. The Alternate value is RED if above the best LD or unreachable (terrain, wind, arrival altitude is less than 100m OVER safety altitude). The bottom line is changing every 3 seconds showing distance or arrival altitude over safety. All values are calculated in real-time. PRESS the ENTER key to make the relative waypoint info page come up: here you can perform actions on the alternate such as goto, insert in task etc."),
     36, 46,
   },
 
@@ -550,6 +618,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Alternate2 GR"),
     N_("Altern 2"),
+    NULL,
     36, 46,
   },
 
@@ -557,6 +626,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Best Alternate"),
     N_("BestAltn"),
+    N_("Automatic search for the best landing option available. Top line is name of landpoint, middle is LD required, bottom line hold distance and arrival altitude over safety, swapped every few seconds. Please read the full manual document about the BestAlternate and how you can customise its behaviour. This is still experimental so be careful. If you select BestAlternate by clicking on the infobox and the PRESS ENTER either with a real key or virtual key then the waypoint detail page will come up and you will be able to perform actions on this Alternate such as goto, inserti in task etc."),
     36, 46,
   },
 
@@ -564,6 +634,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("QFE GPS"),
     N_("QFE GPS"),
+    N_("Automatic QFE. This altitude value is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground. During flight you can change QFE with up and down keys. Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude."),
     1, 33,
   },
 
@@ -571,6 +642,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("L/D Average"),
     N_("L/D Avg"),
+    N_("The distance made in the configured period of time , divided by the altitude lost since then. Negative values are shown as ^^^ and indicate climbing cruise (height gain). Over 200 of LD the value is shown as +++ . You can configure the period of averaging in the Special config menu. Suggested values for this configuration are 60, 90 or 120: lower values will be closed to LD INST, and higher values will be closed to LD Cruise. Notice that the distance is NOT the straight line between you old and current position: it's exactly the distance you have made even in a zigzag glide. This value is not calculated while circling. "),
     19, 4,
   },
 
@@ -578,6 +650,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Experimental1"),
     N_("Exp1"),
+    NULL,
     8, 2,
   },
 
@@ -585,6 +658,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Online Contest Distance"),
     N_("OLC"),
+    NULL,
     8, 2,
   },
 
@@ -592,6 +666,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Experimental2"),
     N_("Exp2"),
+    NULL,
     8, 2,
   },
 };
@@ -750,156 +825,6 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentOLC();
   case 74:
     return new InfoBoxContentExperimental2();
-  }
-
-  return NULL;
-}
-
-const TCHAR*
-InfoBoxFactory::GetHelpText(unsigned InfoBoxType)
-{
-  switch (InfoBoxType) {
-  case 0:
-    return _("[Height GPS]\r\nThis is the height above mean sea level reported by the GPS.\r\nTouchscreen/PC only: in simulation mode, this value is adjustable with the up/down arrow keys and the right/left arrow keys also cause the glider to turn.");
-  case 1:
-    return _("[Height AGL]\r\nThis is the navigation altitude minus the terrain height obtained from the terrain file.  The value is coloured red when the glider is below the terrain safety clearance height.");
-  case 2:
-    return _("[Thermal last 30 sec]\r\nA 30 second rolling average climb rate based of the reported GPS altitude, or vario if available.");
-  case 3:
-    return _("[Bearing]\r\nTrue bearing of the next waypoint.  For AAT tasks, this is the true bearing to the target within the AAT sector.");
-  case 4:
-    return _("[L/D instantaneous]\r\nInstantaneous glide ratio, given by the ground speed divided by the vertical speed (GPS speed) over the last 20 seconds.  Negative values indicate climbing cruise. If the vertical speed is close to zero, the displayed value is '---'.");
-  case 5:
-    return _("[L/D cruise]\r\nThe distance from the top of the last thermal, divided by the altitude lost since the top of the last thermal.  Negative values indicate climbing cruise (height gain since leaving the last thermal).  If the vertical speed is close to zero, the displayed value is '---'.");
-  case 6:
-    return _("[Speed ground]\r\nGround speed measured by the GPS.  If this infobox is active in simulation mode, pressing the up and down arrows adjusts the speed, and left and right turn the glider.");
-  case 7:
-    return _("[Last Thermal Average]\r\nTotal altitude gain/loss in the last thermal divided by the time spent circling.");
-  case 8:
-    return _("[Last Thermal Gain]\r\nTotal altitude gain/loss in the last thermal.");
-  case 9:
-    return _("[Last Thermal Time]\r\nTime spent circling in the last thermal.");
-  case 10:
-    return _("[MacCready Setting]\r\nThe current MacCready setting.  This infobox also shows whether MacCready is manual or auto.  (Touchscreen/PC only) Also used to adjust the MacCready Setting if the infobox is active, by using the up/down cursor keys.");
-  case 11:
-    return _("[Next Distance]\r\nThe distance to the currently selected waypoint. For AAT tasks, this is the distance to the target within the AAT sector.");
-  case 12:
-    return _("[Next Altitude Difference]\r\nArrival altitude at the next waypoint relative to the safety arrival altitude.");
-  case 13:
-    return _("[Next Altitude Required]\r\nAltitude required to reach the next turn point.");
-  case 14:
-    return _("[Next Waypoint]\r\n The name of the currently selected turn point.  When this infobox is active, using the up/down cursor keys selects the next/previous waypoint in the task.  (Touchscreen/PC only) Pressing the enter cursor key brings up the waypoint details.");
-  case 15:
-    return _("[Final Altitude Difference]\r\nArrival altitude at the final task turn point relative to the safety arrival altitude.");
-  case 16:
-    return _("[Final Altitude Required]\r\nAltitude required to finish the task.");
-  case 17:
-    return _("[Speed Task Average]\r\nAverage cross country speed while on current task, compensated for altitude.");
-  case 18:
-    return _("[Final Distance]\r\nDistance to finish around remaining turn points.");
-  case 19:
-    return _("[Final L/D]\r\nThe required glide ratio to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival altitude.  Negative values indicate a climb is necessary to finish. If the height required is close to zero, the displayed value is '---'.  Note that this calculation may be optimistic because it reduces the height required to finish by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds.");
-  case 20:
-    return _("[Terrain Elevation]\r\nThis is the elevation of the terrain above mean sea level, obtained from the terrain file at the current GPS location.");
-  case 21:
-    return _("[Thermal Average]\r\nAltitude gained/lost in the current thermal, divided by time spent thermaling.");
-  case 22:
-    return _("[Thermal Gain]\r\nThe altitude gained/lost in the current thermal.");
-  case 23:
-    return _("[Track]\r\nMagnetic track reported by the GPS.  (Touchscreen/PC only) If this infobox is active in simulation mode, pressing the up and down  arrows adjusts the track.");
-  case 24:
-    return _("[Vario]\r\nInstantaneous vertical speed, as reported by the GPS, or the intelligent vario total energy vario value if connected to one.");
-  case 25:
-    return _("[Wind Speed]\r\nWind speed estimated by XCSoar.  (Touchscreen/PC only) Manual adjustment is possible by pressing the up/down cursor keys to adjust magnitude and left/right cursor keys to adjust bearing when the infobox is active.  Pressing the enter cursor key saves the wind value as the initial value when XCSoar next starts.");
-  case 26:
-    return _("[Wind Bearing]\r\nWind bearing estimated by XCSoar.  (Touchscreen/PC only) Manual adjustment is possible by pressing the up/down cursor keys to adjust bearing when the infobox is active.");
-  case 27:
-    return _("[AA Time]\r\nAssigned Area Task time remaining.  Goes red when time remaining has expired.");
-  case 28:
-    return _("[AA Distance Max]\r\nAssigned Area Task maximum distance possible for remainder of task.");
-  case 29:
-    return _("[AA Distance Min]\r\nAssigned Area Task minimum distance possible for remainder of task.");
-  case 30:
-    return _("[AA Speed Max]\r\nAssigned Area Task average speed achievable if flying maximum possible distance remaining in minimum AAT time.");
-  case 31:
-    return _("[AA Speed Min]\r\nAssigned Area Task average speed achievable if flying minimum possible distance remaining in minimum AAT time.");
-  case 32:
-    return _("[Airspeed IAS]\r\nIndicated Airspeed reported by a supported external intelligent vario.");
-  case 33:
-    return _("[Pressure Altitude]\r\nThis is the barometric altitude obtained from a GPS equipped with pressure sensor, or a supported external intelligent vario.");
-  case 34:
-    return _("[Speed MacCready]\r\nThe MacCready speed-to-fly for optimal flight to the next waypoint. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude.  In final glide mode, this speed-to-fly is calculated for descent.");
-  case 35:
-    return _("[Percentage climb]\r\nPercentage of time spent in climb mode.  These statistics are reset upon starting the task.");
-  case 36:
-    return _("[Time of flight]\r\nTime elapsed since takeoff was detected.");
-  case 37:
-    return _("[G load]\r\nMagnitude of G loading reported by a supported external intelligent vario.  This value is negative for pitch-down manoeuvres.");
-  case 38:
-    return _("[Next L/D]\r\nThe required glide ratio to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival altitude.  Negative values indicate a climb is necessary to reach the waypoint.  If the height required is close to zero, the displayed value is '---'.    Note that this calculation may be optimistic because it reduces the height required to reach the waypoint by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds.");
-  case 39:
-    return _("[Time local]\r\nGPS time expressed in local time zone.");
-  case 40:
-    return _("[Time UTC]\r\nGPS time expressed in UTC.");
-  case 41:
-    return _("[Task Time To Go]\r\nEstimated time required to complete task, assuming performance of ideal MacCready cruise/climb cycle.");
-  case 42:
-    return _("[Next Time To Go]\r\nEstimated time required to reach next waypoint, assuming performance of ideal MacCready cruise/climb cycle.");
-  case 43:
-    return _("[Speed Dolphin]\r\nThe instantaneous MacCready speed-to-fly, making use of Netto vario calculations to determine dolphin cruise speed in the glider's current bearing.  In cruise flight mode, this speed-to-fly is calculated for maintaining altitude.  In final glide mode, this speed-to-fly is calculated for descent.  In climb mode, this switches to the speed for minimum sink at the current load factor (if an accelerometer is connected).  When Block mode speed to fly is selected, this infobox displays the MacCready speed.");
-  case 44:
-    return _("[Netto Vario]\r\nInstantaneous vertical speed of air-mass, equal to vario value less the glider's estimated sink rate.  Best used if airspeed, accelerometers and vario are connected, otherwise calculations are based on GPS measurements and wind estimates.");
-  case 45:
-    return _("[Task Arrival Time]\r\nEstimated arrival local time at task completion, assuming performance of ideal MacCready cruise/climb cycle.");
-  case 46:
-    return _("[Next Arrival Time]\r\nEstimated arrival local time at next waypoint, assuming performance of ideal MacCready cruise/climb cycle.");
-  case 47:
-    return _("[Bearing Difference]\r\nThe difference between the glider's track bearing, to the bearing of the next waypoint, or for AAT tasks, to the bearing to the target within the AAT sector.  GPS navigation is based on the track bearing across the ground, and this track bearing may differ from the glider's heading when there is wind present.  Chevrons point to the direction the glider needs to alter course to correct the bearing difference, that is, so that the glider's course made good is pointing directly at the next waypoint.  This bearing takes into account the curvature of the Earth.");
-  case 48:
-    return _("[Outside Air Temperature]\r\nOutside air temperature measured by a probe if supported by a connected intelligent variometer.");
-  case 49:
-    return _("[Relative Humidity]\r\nRelative humidity of the air in percent as measured by a probe if supported by a connected intelligent variometer.");
-  case 50:
-    return _("[Forecast Temperature]\r\nForecast temperature of the ground at the home airfield, used in estimating convection height and cloud base in conjunction with outside air temperature and relative humidity probe.  (Touchscreen/PC only) Pressing the up/down cursor keys adjusts this forecast temperature.");
-  case 51:
-    return _("[AA Distance Tgt]\r\nAssigned Area Task distance around target points for remainder of task.");
-  case 52:
-    return _("[AA Speed Tgt]\r\nAssigned Area Task average speed achievable around target points remaining in minimum AAT time.");
-  case 53:
-    return _("[L/D vario]\r\nInstantaneous glide ratio, given by the indicated airspeed divided by the total energy vertical speed, when connected to an intelligent variometer.  Negative values indicate climbing cruise. If the total energy vario speed is close to zero, the displayed value is '---'.");
-  case 54:
-    return _("[Airspeed TAS]\r\nTrue Airspeed reported by a supported external intelligent vario.");
-  case 55:
-    return _("[Own Team Code]\r\nThe current Team code for this aircraft.  Use this to report to other team members.");
-  case 56:
-    return _("[Team Bearing]\r\nThe bearing to the team aircraft location at the last team code report.");
-  case 57:
-    return _("[Team Bearing Diff]\r\nThe relative bearing to the team aircraft location at the last reported team code.");
-  case 58:
-    return _("[Team range]\r\nThe range to the team aircraft location at the last reported team code.");
-  case 59:
-    return _("[Speed Task Instantaneous]\r\nInstantaneous cross country speed while on current task, compensated for altitude.");
-  case 60:
-    return _("[Distance Home]\r\nDistance to home waypoint (if defined).");
-  case 61:
-    return _("[Speed Task Achieved]\r\nAchieved cross country speed while on current task, compensated for altitude.");
-  case 62:
-    return _("[AA Delta Time]\r\nDifference between estimated task time and AAT minimum time.  Colored red if negative (expected arrival too early), or blue if in sector and can turn now with estimated arrival time greater than AAT time plus 5 minutes.");
-  case 63:
-    return _("[Thermal All]\r\nTime-average climb rate in all thermals.");
-  case 65:
-    return _("[Battery]\r\nSupply battery voltage for Altair systems, for PDA systems, this gives the percent battery capacity available.");
-  case 66:
-    return _("[Final GR]\r\nGeometric gradient to the arrival height above the final waypoint.  This is not adjusted for total energy.");
-  case 67:
-  case 68:
-    return _("[Alternate GR]\r\nGeometric gradient to the arrival height above the selected alternate waypoint.  This is not adjusted for total energy.\r\nOver 200 nothing is shown, between 100 and 200 an integer number is shown, between 1 and 99 a decimal value is shown.\r\nThe Alternate value is RED if:\r\n- above the best LD or unreachable (terrain, wind, arrival altitude is less than 100m OVER safety altitude)\r\nThe bottom line is changing every 3 seconds showing distance or arrival altitude over safety.\r\n All values are calculated in real-time\r\nPRESS the ENTER key to make the relative waypoint info page come up: here you can perform actions on the alternate such as goto, insert in task etc.");
-  case 69:
-    return _("[BestAlternate]\r\nAutomatic search for the best landing option available. Top line is name of landpoint, middle is LD required, bottom line hold distance and arrival altitude over safety, swapped every few seconds. Please read the full manual document about the BestAlternate and how you can customise its behaviour. This is still experimental so be careful. If you select BestAlternate by clicking on the infobox and the PRESS ENTER either with a real key or virtual key then the waypoint detail page will come up and you will be able to perform actions on this Alternate such as goto, inserti in task etc.");
-  case 70:
-    return _("[QFE]\r\nAutomatic QFE. This altitude value is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground. During flight you can change QFE with up and down keys. Bottom line shows QNH altitude. \r\nChanging QFE does not affect QNH altitude.");
-  case 71:
-    return _("[L/D average]\r\nThe distance made in the configured period of time , divided by the altitude lost since then.  Negative values are shown as ^^^ and indicate climbing cruise (height gain). Over 200 of LD the value is shown as +++ .\r\nYou can configure the period of averaging in the Special config menu. Suggested values for this configuration are 60, 90 or 120: lower values will be closed to LD INST, and higher values will be closed to LD Cruise. \r\nNotice that the distance is NOT the straight line between you old and current position: it's exactly the distance you have made even in a zigzag glide.\r\nThis value is not calculated while circling. ");
   }
 
   return NULL;
