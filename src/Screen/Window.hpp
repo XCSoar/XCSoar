@@ -70,6 +70,11 @@ protected:
   bool double_clicks;
   bool custom_painting;
 
+#ifdef _WIN32_WCE
+  /* workaround for gcc optimization bug on ARM/XScale */
+  bool dummy0, dummy1;
+#endif
+
 public:
   WindowStyle()
     :style(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS),
