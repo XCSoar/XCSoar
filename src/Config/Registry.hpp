@@ -125,6 +125,12 @@ public:
   bool delete_value(const TCHAR *name) {
     return ::RegDeleteValue(hKey, name) == ERROR_SUCCESS;
   }
+
+  bool enum_key(DWORD idx, TCHAR *name, size_t _name_max_length) const {
+    DWORD name_max_length = (DWORD)_name_max_length;
+    return ::RegEnumKeyEx(hKey, idx, name, &name_max_length,
+                          NULL, NULL, NULL, NULL) == ERROR_SUCCESS;
+  }
 };
 
 #endif
