@@ -83,6 +83,7 @@ GlideComputerTask::ProcessBasicTask()
 
   SetCalculated().task_stats = m_task.get_stats();
   SetCalculated().common_stats = m_task.get_common_stats();
+  SetMC(m_task.get_common_stats().current_risk_mc);
 
   TerrainWarning();
 
