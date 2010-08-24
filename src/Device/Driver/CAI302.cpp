@@ -614,12 +614,11 @@ CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   line.skip(2);
 
   if (line.read_checked(value)) {
-    GPS_INFO->MacCready = Units::ToSysUnit(value / 10, unKnots);
-  if (MacCreadyUpdateTimeout <= 0) {
-      /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
-      ///    oldGlidePolar::SetMacCready(GPS_INFO->MacCready);
-    } else
+    if (MacCreadyUpdateTimeout <= 0) {
+      GPS_INFO->MacCready = Units::ToSysUnit(value / 10, unKnots);
+    } else {
       MacCreadyUpdateTimeout--;
+    }
   }
 
   if (line.read_checked(value)) {
