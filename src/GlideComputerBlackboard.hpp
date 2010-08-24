@@ -78,6 +78,7 @@ protected:
   void Initialise();
   void SaveFinish();
   void RestoreFinish();
+  void SetMC(fixed _mc) { gps_info.MacCready = (double) _mc; }
 
   virtual fixed GetAverageThermal() const;
   virtual void OnClimbBase(fixed StartAlt) = 0;
