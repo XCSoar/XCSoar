@@ -66,6 +66,12 @@ GlideComputerTask::ProcessBasicTask()
 
   m_task.set_task_behaviour(SettingsComputer());
 
+  if (!SettingsComputer().auto_mc) {
+    GlidePolar glide_polar = m_task.get_glide_polar();
+    glide_polar.set_mc(fixed(basic.MacCready));
+    m_task.set_glide_polar(glide_polar);
+  }
+
   if (basic.Time != LastBasic().Time && !basic.gps.NAVWarning) {
     const AIRCRAFT_STATE current_as = ToAircraftState(Basic());
     const AIRCRAFT_STATE last_as = ToAircraftState(LastBasic());
