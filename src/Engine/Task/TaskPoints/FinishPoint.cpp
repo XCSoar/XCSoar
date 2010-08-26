@@ -71,7 +71,7 @@ FinishPoint::get_elevation() const
   if (m_ordered_task_behaviour.fai_finish) {
     return max(nominal_elevation, fai_finish_height);
   } else {
-    return nominal_elevation;
+    return max(nominal_elevation, m_elevation + fixed(m_ordered_task_behaviour.finish_min_height));
   }
 }
 
