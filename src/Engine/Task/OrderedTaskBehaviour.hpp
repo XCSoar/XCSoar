@@ -85,22 +85,25 @@ public:
  * 
  * @param state Aircraft state
  * @param behaviour TaskBehaviour (contains margins)
+ * @param spAlt start point altitude
  * @param with_margin Whether to use margin for minor rule violation
  * 
  * @return True if within limits
  */
   bool check_start_height(const AIRCRAFT_STATE &state,
                           const TaskBehaviour& behaviour,
+                          const fixed spAlt,
                           const bool with_margin=false) const;
 
 /** 
  * Check whether aircraft height is within finish height limit
  * 
  * @param state Aircraft state
+ * @param fpAlt finish point altitude
  * 
  * @return True if within limits
  */
-  bool check_finish_height(const AIRCRAFT_STATE &state) const;
+  bool check_finish_height(const AIRCRAFT_STATE &state, const fixed fpAlt) const;
 
 
 /** 

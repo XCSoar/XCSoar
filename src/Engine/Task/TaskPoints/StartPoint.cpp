@@ -126,7 +126,7 @@ StartPoint::isInSector(const AIRCRAFT_STATE &state) const
   if (!ObservationZoneClient::isInSector(state)) 
     return false;
 
-  return m_ordered_task_behaviour.check_start_height(state, m_task_behaviour);  
+  return m_ordered_task_behaviour.check_start_height(state, m_task_behaviour, m_elevation );
 }
 
 bool 
@@ -135,10 +135,12 @@ StartPoint::check_transition_exit(const AIRCRAFT_STATE & ref_now,
 {
   const bool now_in_height = 
     m_ordered_task_behaviour.check_start_height(ref_now,
-                                                m_task_behaviour);
+                                                m_task_behaviour,
+                                                m_elevation);
   const bool last_in_height = 
     m_ordered_task_behaviour.check_start_height(ref_last,
-                                                m_task_behaviour);
+                                                m_task_behaviour,
+                                                m_elevation);
 
   if (now_in_height && last_in_height) {
     // both within height limit, so use normal location checks
