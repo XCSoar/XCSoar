@@ -34,13 +34,13 @@ $(PNG_ICONS_31): output/data/icons/%-31.png: output/data/icons/%.svg | output/da
 %-tile.png: %-alpha.png %-rgb.png
 	$(Q)$(IM_PREFIX)montage -tile 2x1 -geometry +0+0 $^ -depth 8 $@
 
-# convert to 8-bit BMP
+# convert to uncompressed 8-bit BMP
 $(BMP_ICONS_19): %.bmp: %-tile.png
 	@$(NQ)echo "  BMP     $@"
-	$(Q)$(IM_PREFIX)convert $< +dither -colors 256 $@
+	$(Q)$(IM_PREFIX)convert $< +dither -compress none -colors 256 $@
 $(BMP_ICONS_31): %.bmp: %-tile.png
 	@$(NQ)echo "  BMP     $@"
-	$(Q)$(IM_PREFIX)convert $< +dither -colors 256 $@
+	$(Q)$(IM_PREFIX)convert $< +dither -compress none -colors 256 $@
 
 ifeq ($(HAVE_WIN32),y)
 
