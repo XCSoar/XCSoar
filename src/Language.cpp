@@ -137,12 +137,8 @@ ReadLanguageFile()
   TCHAR szFile1[MAX_PATH];
 
   // Read the language filename from the registry
-  if (Profile::Get(szProfileLanguageFile, szFile1, MAX_PATH) &&
-      !string_is_empty(szFile1)) {
-    ExpandLocalPath(szFile1);
-  } else {
+  if (!Profile::GetPath(szProfileLanguageFile, szFile1))
     LocalPath(szFile1, _T("default.po"));
-  }
 
   mo_file.reset(new MOFile(szFile1));
   if (mo_file->error())

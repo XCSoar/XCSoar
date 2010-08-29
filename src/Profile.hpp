@@ -129,6 +129,15 @@ namespace Profile
   void SetStringIfAbsent(const TCHAR *key, const TCHAR *value);
 
   /**
+   * Reads a configured path from the profile, and expands it with
+   * ExpandLocalPath().
+   *
+   * @param value a buffer which can store at least MAX_PATH
+   * characters
+   */
+  bool GetPath(const TCHAR *key, TCHAR *value);
+
+  /**
    * Adjusts the application settings according to the profile settings
    */
   void Use();

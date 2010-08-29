@@ -222,3 +222,13 @@ Profile::SetStringIfAbsent(const TCHAR *key, const TCHAR *value)
   if (!Get(key, temp, MAX_PATH))
     Set(key, value);
 }
+
+bool
+Profile::GetPath(const TCHAR *key, TCHAR *value)
+{
+  if (!Get(key, value, MAX_PATH) || string_is_empty(value))
+    return false;
+
+  ExpandLocalPath(value);
+  return true;
+}

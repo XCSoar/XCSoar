@@ -40,7 +40,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Math/Earth.hpp"
 #include "Profile.hpp"
-#include "LocalPath.hpp"
 #include "LocalTime.hpp"
 #include "UtilsText.hpp"
 #include "Math/SunEphemeris.hpp"
@@ -368,8 +367,7 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   if (!wf)
     return;
 
-  Profile::Get(szProfileWayPointFile, szWaypointFile, MAX_PATH);
-  ExpandLocalPath(szWaypointFile);
+  Profile::GetPath(szProfileWayPointFile, szWaypointFile);
   ExtractDirectory(Directory, szWaypointFile);
 
   _stprintf(path_modis, _T("%s" DIR_SEPARATOR_S "modis-%03d.jpg"),

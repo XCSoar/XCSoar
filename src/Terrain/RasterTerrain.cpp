@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "Terrain/RasterTerrain.hpp"
 #include "Profile.hpp"
-#include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "OS/PathName.hpp"
 
@@ -49,15 +48,11 @@ RasterTerrain::OpenTerrain()
 {
   TCHAR szFile[MAX_PATH];
 
-  if (Profile::Get(szProfileTerrainFile, szFile, MAX_PATH) &&
-      !string_is_empty(szFile)) {
-  } else if (Profile::Get(szProfileMapFile, szFile, MAX_PATH) &&
-             !string_is_empty(szFile)) {
+  if (Profile::GetPath(szProfileTerrainFile, szFile)) {
+  } else if (Profile::GetPath(szProfileMapFile, szFile)) {
     _tcscat(szFile, _T("/terrain.jp2"));
   } else
     return NULL;
-
-  ExpandLocalPath(szFile);
 
   RasterTerrain *rt = new RasterTerrain(NarrowPathName(szFile));
   if (!rt->map.isMapLoaded()) {

@@ -40,7 +40,6 @@ Copyright_License {
 #include "FileLineReader.hpp"
 #include "ZipLineReader.hpp"
 #include "Profile.hpp"
-#include "LocalPath.hpp"
 #include "StringUtil.hpp"
 
 #include <assert.h>
@@ -51,10 +50,8 @@ OpenConfiguredTextFile(const TCHAR *profile_key, ConvertLineReader::charset cs)
   assert(profile_key != NULL);
 
   TCHAR path[MAX_PATH];
-  if (!Profile::Get(profile_key, path, MAX_PATH) || string_is_empty(path))
+  if (!Profile::GetPath(profile_key, path))
     return NULL;
-
-  ExpandLocalPath(path);
 
   FileLineReader *reader = new FileLineReader(path, cs);
   if (reader == NULL)
@@ -74,10 +71,9 @@ OpenMapTextFile(const TCHAR *in_map_file, ConvertLineReader::charset cs)
   assert(in_map_file != NULL);
 
   TCHAR path[MAX_PATH];
-  if (!Profile::Get(szProfileMapFile, path, MAX_PATH) || string_is_empty(path))
+  if (!Profile::GetPath(szProfileMapFile, path))
     return NULL;
 
-  ExpandLocalPath(path);
   _tcscat(path, _T("/"));
   _tcscat(path, in_map_file);
 

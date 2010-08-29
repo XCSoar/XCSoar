@@ -39,7 +39,6 @@ Copyright_License {
 #include "WayPointGlue.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Profile.hpp"
-#include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
 #include "Terrain/RasterTerrain.hpp"
@@ -150,10 +149,9 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
   // ### FIRST FILE ###
 
   // Get first waypoint filename
-  Profile::Get(szProfileWayPointFile, szFile, MAX_PATH);
-  ExpandLocalPath(szFile);
-
-  wp_file0 = WayPointFile::create(szFile, 0);
+  wp_file0 = Profile::GetPath(szProfileWayPointFile, szFile)
+    ? WayPointFile::create(szFile, 0)
+    : NULL;
 
   // If waypoint file exists
   if (wp_file0) {
@@ -172,10 +170,10 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
   // ### SECOND FILE ###
 
   // Get second waypoint filename
-  Profile::Get(szProfileAdditionalWayPointFile, szFile, MAX_PATH);
-  ExpandLocalPath(szFile);
+  wp_file1 = Profile::GetPath(szProfileAdditionalWayPointFile, szFile)
+    ? WayPointFile::create(szFile, 0)
+    : NULL;
 
-  wp_file1 = WayPointFile::create(szFile, 1);
   // If waypoint file exists
   if (wp_file1) {
     // parse the file
@@ -193,8 +191,7 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
   // If no waypoint file found yet
   if (!found) {
     // Get the map filename
-    Profile::Get(szProfileMapFile, szFile, MAX_PATH);
-    ExpandLocalPath(szFile);
+    Profile::GetPath(szProfileMapFile, szFile);
     _tcscat(szFile, _T("/"));
     _tcscat(szFile, _T("waypoints.xcw"));
 

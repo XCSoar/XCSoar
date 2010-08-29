@@ -131,3 +131,10 @@ Profile::Set(const TCHAR *szRegValue, const TCHAR *Pos)
 {
   return false;
 }
+
+bool
+Profile::GetPath(const TCHAR *key, TCHAR *value)
+{
+  *value = _T('\0');
+  return false;
+}

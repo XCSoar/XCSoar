@@ -1020,9 +1020,9 @@ InitFileField(WndProperty &wp, const TCHAR *profile_key, const TCHAR *filters)
   }
 
   TCHAR path[MAX_PATH];
-  Profile::Get(profile_key, path, MAX_PATH);
-  ExpandLocalPath(path);
-  df.Lookup(path);
+  if (Profile::GetPath(profile_key, path))
+    df.Lookup(path);
+
   wp.RefreshDisplay();
 }
 

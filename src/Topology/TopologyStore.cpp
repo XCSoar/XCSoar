@@ -133,15 +133,11 @@ TopologyStore::Open()
   // Start off by getting the names and paths
   TCHAR szFile[MAX_PATH];
 
-  Profile::Get(szProfileTopologyFile, szFile, MAX_PATH);
-  ExpandLocalPath(szFile);
-
-  if (string_is_empty(szFile) || !File::Exists(szFile)) {
+  if (!Profile::GetPath(szProfileTopologyFile, szFile) ||
+      !File::Exists(szFile)) {
     // file is blank, so look for it in a map file
-    Profile::Get(szProfileMapFile, szFile, MAX_PATH);
-    ExpandLocalPath(szFile);
-
-    if (string_is_empty(szFile) || !File::Exists(szFile))
+    if (!Profile::GetPath(szProfileMapFile, szFile) ||
+        !File::Exists(szFile))
       return;
 
     // Look for the file within the map zip file...
