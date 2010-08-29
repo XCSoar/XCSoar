@@ -52,7 +52,6 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "ProfileKeys.hpp"
 #include "LocalTime.hpp"
-#include "LocalPath.hpp"
 #include "WayPointGlue.hpp"
 #include "Device/device.hpp"
 #include "InputEvents.h"
@@ -72,6 +71,7 @@ Copyright_License {
 #include "Engine/Task/TaskEvents.hpp"
 #include "LogFile.hpp"
 #include "IO/FileLineReader.hpp"
+#include "IO/ConfiguredFile.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -253,14 +253,10 @@ LoadFiles()
 
   WayPointGlue::ReadWaypoints(way_points, terrain);
 
-  TCHAR tpath[MAX_PATH];
-  Profile::Get(szProfileAirspaceFile, tpath, MAX_PATH);
-  if (tpath[0] != 0) {
-    ExpandLocalPath(tpath);
-
-    FileLineReader reader(tpath);
-    if (reader.error() || !ReadAirspace(airspace_database, reader))
-      LogStartUp(_T("No airspace file 1"));
+  TLineReader *reader = OpenConfiguredTextFile(szProfileAirspaceFile);
+  if (reader != NULL) {
+    ReadAirspace(airspace_database, *reader);
+    delete reader;
 
     airspace_database.optimise();
   }

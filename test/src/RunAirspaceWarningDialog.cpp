@@ -42,7 +42,6 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "InputEvents.h"
 #include "UtilsSystem.hpp"
-#include "LocalPath.hpp"
 #include "Profile.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceParser.hpp"
@@ -57,6 +56,7 @@ Copyright_License {
 #include "ResourceLoader.hpp"
 #include "Appearance.hpp"
 #include "IO/FileLineReader.hpp"
+#include "IO/ConfiguredFile.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -96,14 +96,11 @@ ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
 static void
 LoadFiles()
 {
-  TCHAR tpath[MAX_PATH];
-  Profile::Get(szProfileAirspaceFile, tpath, MAX_PATH);
-  if (tpath[0] != 0) {
-    ExpandLocalPath(tpath);
+  TLineReader *reader = OpenConfiguredTextFile(szProfileAirspaceFile);
+  if (reader != NULL) {
+    ReadAirspace(airspace_database, *reader);
+    delete reader;
 
-    FileLineReader reader(tpath);
-    if (!reader.error())
-      ReadAirspace(airspace_database, reader);
     airspace_database.optimise();
   }
 }
