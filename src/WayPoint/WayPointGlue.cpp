@@ -39,6 +39,7 @@ Copyright_License {
 #include "WayPointGlue.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Profile.hpp"
+#include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
 #include "Terrain/RasterTerrain.hpp"
@@ -150,6 +151,7 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
 
   // Get first waypoint filename
   Profile::Get(szProfileWayPointFile, szFile, MAX_PATH);
+  ExpandLocalPath(szFile);
 
   wp_file0 = WayPointFile::create(szFile, 0);
 
@@ -171,6 +173,7 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
 
   // Get second waypoint filename
   Profile::Get(szProfileAdditionalWayPointFile, szFile, MAX_PATH);
+  ExpandLocalPath(szFile);
 
   wp_file1 = WayPointFile::create(szFile, 1);
   // If waypoint file exists
@@ -191,6 +194,7 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
   if (!found) {
     // Get the map filename
     Profile::Get(szProfileMapFile, szFile, MAX_PATH);
+    ExpandLocalPath(szFile);
     _tcscat(szFile, _T("/"));
     _tcscat(szFile, _T("waypoints.xcw"));
 
