@@ -1278,10 +1278,6 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 				for (i = 0; i < jas_matrix_numrows(tcomp->data); ++i) {
 					for (j = 0; j < jas_matrix_numcols(tcomp->data); ++j) {
 						short d = jas_matrix_get(tcomp->data, i, j);
-						if ((d<0) || (d>16384)) {
-							// JMW this is to avoid overflow errors
-							d = 0;
-						}
 						*dptr++ = d;
 					}
 				}
