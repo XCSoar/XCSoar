@@ -67,7 +67,8 @@ $(TARGET_BIN_DIR)/01_test_tap$(TARGET_EXEEXT): $(TEST_SRC_DIR)/01_test_tap.c | $
 TESTS = \
 	$(TARGET_BIN_DIR)/TestAngle$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/TestEarth$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/TestRadixTree$(TARGET_EXEEXT)
+	$(TARGET_BIN_DIR)/TestRadixTree$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/TestWayPointFile$(TARGET_EXEEXT)
 
 TEST_ANGLE_SOURCES = \
 	$(TEST_SRC_DIR)/TestAngle.cpp
@@ -90,6 +91,31 @@ TEST_RADIX_TREE_SOURCES = \
 	$(TEST_SRC_DIR)/TestRadixTree.cpp
 TEST_RADIX_TREE_OBJS = $(call SRC_TO_OBJ,$(TEST_RADIX_TREE_SOURCES))
 $(TARGET_BIN_DIR)/TestRadixTree$(TARGET_EXEEXT): $(TEST_RADIX_TREE_OBJS) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_WAY_POINT_FILE_SOURCES = \
+	$(SRC)/ProfileKeys.cpp \
+	$(SRC)/Units.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/UtilsFile.cpp \
+	$(SRC)/WayPoint/WayPointFile.cpp \
+	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
+	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
+	$(SRC)/WayPoint/WayPointFileZander.cpp \
+	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
+	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
+	$(ENGINE_SRC_DIR)/Waypoint/WaypointEnvelope.cpp \
+	$(ENGINE_SRC_DIR)/Waypoint/Waypoints.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
+	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
+	$(TEST_SRC_DIR)/TestWayPointFile.cpp
+TEST_WAY_POINT_FILE_OBJS = $(call SRC_TO_OBJ,$(TEST_WAY_POINT_FILE_SOURCES))
+TEST_WAY_POINT_FILE_LDADD = $(UTIL_LIBS) $(MATH_LIBS) $(IO_LIBS) $(ZZIP_LIBS)
+$(TARGET_BIN_DIR)/TestWayPointFile$(TARGET_EXEEXT): $(TEST_WAY_POINT_FILE_OBJS) $(TEST_WAY_POINT_FILE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 

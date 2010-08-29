@@ -35,48 +35,52 @@
 }
 */
 
-#ifndef XCSOAR_TEST_UTIL_HPP
-#define XCSOAR_TEST_UTIL_HPP
+#include "WayPoint/WayPointFile.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
+#include "Terrain/RasterMap.hpp"
+#include "TestUtil.hpp"
 
-#include "Math/Angle.hpp"
+#include <assert.h>
 
-static inline bool
-is_zero(const fixed value)
+short
+RasterMap::GetField(const GEOPOINT &location) const
 {
-  return (long)fabs(value * 10000) == 0;
+  return 0;
 }
 
-static inline bool
-is_one(const fixed value)
+static void
+TestWinPilot()
 {
-  return is_zero(value - fixed_one);
+  WayPointFile *f = WayPointFile::create(_T("test/data/waypoints.dat"), 0);
+  assert(f != NULL);
+
+  Waypoints way_points;
+  bool success = f->Parse(way_points, NULL);
+  assert(success);
+  delete f;
+
+  way_points.optimise();
+
+  assert(!way_points.empty());
+  assert(way_points.size() == 1);
+
+  const Waypoint *wp = way_points.lookup_name(_T("Bergneustadt"));
+  assert(wp != NULL);
+  assert(equals(wp->Location.Longitude, 7.7061111111111114));
+  assert(equals(wp->Location.Latitude, 51.051944444444445));
+  assert(equals(wp->Altitude, 488));
+  assert(wp->Flags.Airport);
+  assert(wp->Flags.TurnPoint);
+  assert(!wp->Flags.LandPoint);
+  assert(wp->Flags.Home);
+  assert(!wp->Flags.StartPoint);
+  assert(!wp->Flags.FinishPoint);
+  assert(!wp->Flags.Restricted);
 }
 
-static inline bool
-equals(const fixed a, const fixed b)
+int main(int argc, char **argv)
 {
-  if (is_zero(a) || is_zero(b))
-    return is_zero(a) && is_zero(b);
+  TestWinPilot();
 
-  return is_one(a / b);
+  return 0;
 }
-
-static inline bool
-equals(const fixed a, int b)
-{
-  return equals(a, fixed(b));
-}
-
-static inline bool
-equals(const Angle a, int b)
-{
-  return equals(a.value_degrees(), fixed(b));
-}
-
-static inline bool
-equals(const Angle a, double b)
-{
-  return equals(a.value_degrees(), fixed(b));
-}
-
-#endif
