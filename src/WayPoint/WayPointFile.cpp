@@ -39,12 +39,8 @@ Copyright_License {
 #include "WayPointFile.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "Dialogs.h"
-#include "Profile.hpp"
 #include "Language.hpp"
-#include "Profile.hpp"
 #include "LocalPath.hpp"
-#include "StringUtil.hpp"
 #include "UtilsFile.hpp"
 #include "OS/FileUtil.hpp"
 #include "ProgressGlue.hpp"
@@ -53,8 +49,6 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 
 int WayPointFile::WaypointsOutOfRangeSetting = 0;
-int WayPointFile::WaypointOutOfTerrainRangeDialogResult = 0;
-bool WayPointFile::initialised_range_setting = false;
 
 WayPointFile::WayPointFile(const TCHAR* file_name, const int _file_num,
                            const bool _compressed): 
@@ -62,14 +56,6 @@ WayPointFile::WayPointFile(const TCHAR* file_name, const int _file_num,
   compressed(_compressed)
 {
   _tcscpy(file, file_name);
-
-  if (!initialised_range_setting) {
-    if (WaypointsOutOfRangeSetting == 1)
-      WaypointOutOfTerrainRangeDialogResult = wpTerrainBoundsYesAll;
-    if (WaypointsOutOfRangeSetting == 2)
-      WaypointOutOfTerrainRangeDialogResult = wpTerrainBoundsNoAll;
-    initialised_range_setting = true;
-  }
 }
 
 
@@ -143,48 +129,8 @@ bool
 WayPointFile::checkWaypointInTerrainRange(const Waypoint &way_point,
                                           const RasterTerrain &terrain)
 {
-  TCHAR sTmp[250];
-
-  // If (YesToAll) -> include waypoint
-  if (WaypointOutOfTerrainRangeDialogResult == wpTerrainBoundsYesAll)
-    return true;
-
-  // If (Waypoint in Terrain range) -> include waypoint
-  if (terrain.WaypointIsInTerrainRange(way_point.Location))
-    return true;
-
-  // If (NoToAll) -> dont include waypoint
-  if (WaypointOutOfTerrainRangeDialogResult == wpTerrainBoundsNoAll)
-    return false;
-
-  // Open Dialogbox
-  _stprintf(sTmp,
-            _("Waypoint \"%s\" \r\nout of Terrain bounds\r\n\r\nLoad anyway?"),
-            way_point.Name.c_str());
-
-  WaypointOutOfTerrainRangeDialogResult = dlgWaypointOutOfTerrain(sTmp);
-
-  // Execute result
-  switch (WaypointOutOfTerrainRangeDialogResult) {
-  case wpTerrainBoundsYesAll:
-    Profile::Set(szProfileWaypointsOutOfRange, 1);
-    Profile::Save();
-    return true;
-
-  case wpTerrainBoundsNoAll:
-    Profile::Set(szProfileWaypointsOutOfRange, 2);
-    Profile::Save();
-    return false;
-
-  case wpTerrainBoundsYes:
-    return true;
-
-  default:
-  case mrCancel:
-  case wpTerrainBoundsNo:
-    WaypointOutOfTerrainRangeDialogResult = wpTerrainBoundsNo;
-    return false;
-  }
+  return WaypointsOutOfRangeSetting != 2 ||
+    terrain.WaypointIsInTerrainRange(way_point.Location);
 }
 
 

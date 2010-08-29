@@ -146,12 +146,6 @@ PopupNearestWaypointDetails(const Waypoints &way_points,
   return false;
 }
 
-int dlgWaypointOutOfTerrain(const TCHAR *Message)
-{
-  _ftprintf(stderr, _T("%s\n"), Message);
-  return mrCancel;
-}
-
 void dlgAirspaceDetails(const AbstractAirspace& the_airspace) {}
 
 Logger::Logger() {}

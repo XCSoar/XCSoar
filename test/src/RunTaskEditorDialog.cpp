@@ -77,12 +77,6 @@ DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
 {
 }
 
-int
-dlgWaypointOutOfTerrain(const TCHAR *Message)
-{
-  return -1;
-}
-
 void dlgStartPointShowModal() {}
 
 Projection::Projection() {}

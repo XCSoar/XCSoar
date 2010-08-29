@@ -132,7 +132,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgVegaDemo.cpp \
 	$(SRC)/Dialogs/dlgVoice.cpp \
 	$(SRC)/Dialogs/dlgWeather.cpp \
-	$(SRC)/Dialogs/dlgWaypointOutOfTerrain.cpp \
 	$(SRC)/Dialogs/dlgWayPointDetails.cpp \
 	$(SRC)/Dialogs/dlgWaypointEdit.cpp \
 	$(SRC)/Dialogs/dlgWayPointSelect.cpp \

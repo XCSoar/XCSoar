@@ -70,12 +70,6 @@ fixed MapWindowProjection::GetMapScaleUser() const { return fixed_one; }
 SettingsComputerBlackboard::SettingsComputerBlackboard() {}
 SettingsMapBlackboard::SettingsMapBlackboard() {}
 
-int
-dlgWaypointOutOfTerrain(const TCHAR *Message)
-{
-  return -1;
-}
-
 int main(int argc, char **argv)
 {
   if (argc != 2) {

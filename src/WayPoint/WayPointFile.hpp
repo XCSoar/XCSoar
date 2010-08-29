@@ -47,11 +47,6 @@ class Waypoints;
 class RasterTerrain;
 class TextWriter;
 
-#define wpTerrainBoundsYes    100
-#define wpTerrainBoundsYesAll 101
-#define wpTerrainBoundsNo     102
-#define wpTerrainBoundsNoAll  103
-
 class WayPointFile 
 {
 protected:
@@ -125,10 +120,6 @@ protected:
 
   bool checkWaypointInTerrainRange(const Waypoint &way_point,
                                    const RasterTerrain &terrain);
-
-private:
-  static int WaypointOutOfTerrainRangeDialogResult;
-  static bool initialised_range_setting;
 };
 
 #endif
