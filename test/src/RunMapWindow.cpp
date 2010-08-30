@@ -341,6 +341,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   window.event_loop();
 
+  delete terrain;
   delete topology;
 
   return 0;
