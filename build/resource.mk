@@ -70,6 +70,28 @@ $(BMP_SPLASH_160): %.bmp: %.png
 	@$(NQ)echo "  BMP     $@"
 	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 $@
 
+####### launcher graphics
+
+SVG_LAUNCH = Data/graphics/launcher.svg
+PNG_LAUNCH_224 = $(patsubst Data/graphics/%.svg,output/data/graphics/%-224.png,$(SVG_LAUNCH))
+BMP_LAUNCH_FLY_224 = $(PNG_LAUNCH_224:.png=-1.bmp)
+BMP_LAUNCH_SIM_224 = $(PNG_LAUNCH_224:.png=-2.bmp)
+
+# render from SVG to PNG
+$(PNG_LAUNCH_224): output/data/graphics/%-224.png: Data/graphics/%.svg | output/data/graphics/dirstamp
+	@$(NQ)echo "  SVG     $@"
+	$(Q)rsvg-convert --width=224 $< -o $@
+
+# split into two uncompressed 8-bit BMPs (single 'convert' operation)
+$(BMP_LAUNCH_FLY_224): %-1.bmp: %.png
+	@$(NQ)echo "  BMP     $@"
+	@$(NQ)echo "  BMP     $(@:1.bmp=2.bmp)"
+	$(Q)$(IM_PREFIX)convert $< -background blue -layers flatten +matte +dither -compress none -type optimize -colors 256 -crop '50%x100%' -scene 1 $(@:1.bmp=%d.bmp)
+$(BMP_LAUNCH_SIM_224): %-2.bmp: %.png
+	@$(NQ)echo "  BMP     $@"
+	@$(NQ)echo "  BMP     $(@:1.bmp=2.bmp)"
+	$(Q)$(IM_PREFIX)convert $< -background blue -layers flatten +matte +dither -compress none -type optimize -colors 256 -crop '50%x100%' -scene 1 $(@:1.bmp=%d.bmp)
+
 ifeq ($(HAVE_WIN32),y)
 
 RESOURCE_TEXT = Data/XCSoar.rc
