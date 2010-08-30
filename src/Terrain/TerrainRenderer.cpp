@@ -223,7 +223,8 @@ TerrainRenderer::ScanSpotHeights(const RECT& rect)
 void
 TerrainRenderer::CopyTo(Canvas &canvas)
 {
-  raster_renderer.GetImage().stretch_to(canvas);
+  raster_renderer.GetImage().stretch_to(raster_renderer.get_width(),
+                                        raster_renderer.get_height(), canvas);
 }
 
 /**

@@ -114,10 +114,10 @@ public:
     return height;
   }
 
-  void stretch_to(Canvas &dest_canvas) const {
+  void stretch_to(unsigned width, unsigned height, Canvas &dest_canvas) const {
 #ifdef ENABLE_SDL
     Canvas src_canvas(surface);
-    dest_canvas.stretch(src_canvas);
+    dest_canvas.stretch(src_canvas, 0, 0, width, height);
 #elif defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
     /* StretchDIBits() is bugged on PPC2002, workaround follows */
     HDC source_dc = ::CreateCompatibleDC(dest_canvas);
@@ -130,7 +130,7 @@ public:
 #else
     ::StretchDIBits(dest_canvas, 0, 0,
                     dest_canvas.get_width(), dest_canvas.get_height(),
-                    0, 0, width, height,
+                    0, GetHeight() - height, width, height,
                     buffer, &bi, DIB_RGB_COLORS, SRCCOPY);
 #endif
   }

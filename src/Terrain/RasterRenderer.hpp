@@ -76,6 +76,14 @@ public:
     return height_matrix;
   }
 
+  unsigned get_width() const {
+    return height_matrix.get_width();
+  }
+
+  unsigned get_height() const {
+    return height_matrix.get_height();
+  }
+
   /**
    * Generate the color table.
    */
