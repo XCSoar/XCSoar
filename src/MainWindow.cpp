@@ -62,12 +62,9 @@ Copyright_License {
  */
 MainWindow::~MainWindow()
 {
-  if (vario != NULL)
-    delete vario;
-  if (flarm != NULL)
-    delete flarm;
-  if (ta != NULL)
-    delete ta;
+  delete vario;
+  delete flarm;
+  delete ta;
 }
 
 bool

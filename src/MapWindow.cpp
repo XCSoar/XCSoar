@@ -80,8 +80,7 @@ MapWindow::MapWindow()
  */
 MapWindow::~MapWindow()
 {
-  if (cdi != NULL)
-    delete cdi;
+  delete cdi;
 }
 
 void

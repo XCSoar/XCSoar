@@ -49,9 +49,7 @@ GotoTask::GotoTask(TaskEvents &te,
 
 GotoTask::~GotoTask() 
 {
-  if (tp) {
-    delete tp;
-  }
+  delete tp;
 }
 
 TaskPoint* 
@@ -94,9 +92,7 @@ bool
 GotoTask::do_goto(const Waypoint & wp)
 {
   if (task_behaviour.goto_nonlandable || wp.is_landable()) {
-    if (tp) {
-      delete tp;
-    }
+    delete tp;
     tp = new UnorderedTaskPoint(wp, task_behaviour);
     return true;
   } else {
@@ -125,8 +121,6 @@ GotoTask::task_size() const
 void
 GotoTask::reset()
 {
-  if (tp) {
-    delete tp;
-  }
+  delete tp;
   UnorderedTask::reset();
 }

@@ -40,9 +40,7 @@
 void 
 Airspace::destroy()
 {
-  if (pimpl_airspace) {
-    delete pimpl_airspace;
-  }
+  delete pimpl_airspace;
 }
 
 Airspace::Airspace(AbstractAirspace& airspace,

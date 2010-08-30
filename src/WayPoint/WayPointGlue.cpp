@@ -139,15 +139,9 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
   way_points.clear();
 
   // tear down old parsers
-  if (wp_file0) {
-    delete wp_file0;
-  }
-  if (wp_file1) {
-    delete wp_file1;
-  }
-  if (wp_file2) {
-    delete wp_file2;
-  }
+  delete wp_file0;
+  delete wp_file1;
+  delete wp_file2;
 
   // ### FIRST FILE ###
 

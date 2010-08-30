@@ -64,8 +64,7 @@ class RadixTree {
       :next(_next), value(_value) {}
 
     ~Leaf() {
-      if (next != NULL)
-        delete next;
+      delete next;
     }
   };
 

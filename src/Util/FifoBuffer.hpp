@@ -54,8 +54,7 @@ public:
     :data(new T[_size]), size(_size), head(0), tail(0) {}
 
   ~FifoBuffer() {
-    if (data != NULL)
-      delete[] data;
+    delete[] data;
   }
 
 protected:

@@ -95,16 +95,13 @@ DeviceDescriptor::Open()
 void
 DeviceDescriptor::Close()
 {
-  if (device != NULL) {
-    delete device;
-    device = NULL;
-  }
+  delete device;
+  device = NULL;
 
   ComPort *OldCom = Com;
   Com = NULL;
 
-  if (OldCom != NULL)
-    delete OldCom;
+  delete OldCom;
 }
 
 const TCHAR *

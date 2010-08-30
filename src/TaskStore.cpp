@@ -91,7 +91,7 @@ TaskStore::TaskStoreItem::TaskStoreItem(const tstring the_filename,
 
 TaskStore::TaskStoreItem::~TaskStoreItem() 
 {
-  if (!filename.empty() && (task != NULL))
+  if (!filename.empty())
     delete task;
 }
 
