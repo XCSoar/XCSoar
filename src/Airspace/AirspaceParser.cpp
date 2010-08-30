@@ -43,7 +43,6 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Util/StringUtil.hpp"
-#include "LogFile.hpp"
 #include "Math/Earth.hpp"
 #include "IO/LineReader.hpp"
 #include "Airspace/AirspacePolygon.hpp"
@@ -758,13 +757,10 @@ DetectFileType(const TCHAR *line)
 bool
 ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
 {
-  LogStartUp(_T("ReadAirspace"));
-
   int LineCount = 0;
   bool ignore = false;
 
   // Create and init ProgressDialog
-  ProgressGlue::Create(_("Loading Airspace File..."));
   ProgressGlue::SetRange(1024);
 
   long file_size = reader.size();

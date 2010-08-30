@@ -39,7 +39,6 @@ Copyright_License {
 #include "WayPointFile.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "Language.hpp"
 #include "UtilsFile.hpp"
 #include "OS/FileUtil.hpp"
 #include "ProgressGlue.hpp"
@@ -141,7 +140,6 @@ WayPointFile::Parse(Waypoints &way_points,
   if (file[0] == 0)
     return false;
 
-  ProgressGlue::Create(_("Loading Waypoints..."));
   ProgressGlue::SetRange(100);
 
   // If normal file

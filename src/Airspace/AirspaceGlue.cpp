@@ -41,6 +41,8 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "ProfileKeys.hpp"
 #include "Terrain/RasterTerrain.hpp"
+#include "ProgressGlue.hpp"
+#include "Language.hpp"
 #include "LogFile.hpp"
 #include "IO/ConfiguredFile.hpp"
 
@@ -49,8 +51,8 @@ ReadAirspace(Airspaces &airspaces,
              RasterTerrain *terrain,
              const AtmosphericPressure &press)
 {
-  // TODO bug: add exception handler to protect parser code against crashes
-  // TODO bug: second file should be opened even if first was not okay
+  LogStartUp(_T("ReadAirspace"));
+  ProgressGlue::Create(_("Loading Airspace File..."));
 
   bool airspace_ok = false;
 

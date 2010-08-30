@@ -44,6 +44,8 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "WayPointFile.hpp"
+#include "Language.hpp"
+#include "ProgressGlue.hpp"
 
 #include <tchar.h>
 
@@ -128,6 +130,7 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
                             const RasterTerrain *terrain)
 {
   LogStartUp(_T("ReadWaypoints"));
+  ProgressGlue::Create(_("Loading Waypoints..."));
 
   bool found = false;
   TCHAR szFile[MAX_PATH];
