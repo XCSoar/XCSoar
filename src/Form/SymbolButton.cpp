@@ -131,14 +131,24 @@ WndSymbolButton::on_paint(Canvas &canvas)
   if (caption == _T("Fly")) {
     Bitmap launcher1_bitmap(IDB_LAUNCHER1);
     BitmapCanvas bitmap_canvas(canvas, launcher1_bitmap);
-    canvas.stretch(bitmap_canvas);
+    if (is_down())
+      canvas.stretch(bitmap_canvas);
+    else {
+      canvas.clear_white();
+      canvas.stretch_transparent(bitmap_canvas, Color::BLUE);
+    }
   }
 
   // Draw Simulator bitmap
   if (caption == _T("Simulator")) {
     Bitmap launcher2_bitmap(IDB_LAUNCHER2);
     BitmapCanvas bitmap_canvas(canvas, launcher2_bitmap);
-    canvas.stretch(bitmap_canvas);
+    if (is_down())
+      canvas.stretch(bitmap_canvas);
+    else {
+      canvas.clear_white();
+      canvas.stretch_transparent(bitmap_canvas, Color::BLUE);
+    }
   }
 
 }
