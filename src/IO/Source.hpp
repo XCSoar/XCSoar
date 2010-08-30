@@ -56,6 +56,8 @@ public:
   typedef std::pair<T*, unsigned> Range;
 
 public:
+  virtual ~Source() {}
+
   /**
    * Returns words from this source.  After you have used them, call
    * the method consume().  This method invalidates any range returned

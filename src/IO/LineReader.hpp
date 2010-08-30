@@ -44,6 +44,8 @@ Copyright_License {
 template<class T>
 class LineReader {
 public:
+  virtual ~LineReader() {}
+
   /**
    * Read one line, and returns a it as a null-terminated string
    * (without the trailing line feed character).  The returned buffer
