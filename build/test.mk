@@ -312,21 +312,11 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
 	$(SRC)/WayPoint/WayPointFileZander.cpp \
 	$(SRC)/UtilsFile.cpp \
-	$(SRC)/ProfileKeys.cpp \
-	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/Simulator.cpp \
-	$(SRC)/UtilsText.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Compatibility/fmode.c \
-	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeDialogs.cpp \
-	$(TEST_SRC_DIR)/FakeInterface.cpp \
-	$(TEST_SRC_DIR)/FakeLanguage.cpp \
-	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/RunWayPointParser.cpp
