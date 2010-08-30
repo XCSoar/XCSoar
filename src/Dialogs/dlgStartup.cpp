@@ -64,7 +64,7 @@ OnSplashPaint(WindowControl *Sender, Canvas &canvas)
     splash_bitmap.load(IDB_SWIFT2);
 
   BitmapCanvas bitmap_canvas(canvas, splash_bitmap);
-  canvas.stretch(bitmap_canvas, 0, 0, Layout::Scale(110), Layout::Scale(82));
+  canvas.stretch(bitmap_canvas);
 }
 
 static void

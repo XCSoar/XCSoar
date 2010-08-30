@@ -131,14 +131,14 @@ WndSymbolButton::on_paint(Canvas &canvas)
   if (caption == _T("Fly")) {
     Bitmap launcher1_bitmap(IDB_LAUNCHER1);
     BitmapCanvas bitmap_canvas(canvas, launcher1_bitmap);
-    canvas.stretch(bitmap_canvas, 0, 0, 112, 30);
+    canvas.stretch(bitmap_canvas);
   }
 
   // Draw Simulator bitmap
   if (caption == _T("Simulator")) {
     Bitmap launcher2_bitmap(IDB_LAUNCHER2);
     BitmapCanvas bitmap_canvas(canvas, launcher2_bitmap);
-    canvas.stretch(bitmap_canvas, 0, 0, 112, 30);
+    canvas.stretch(bitmap_canvas);
   }
 
 }

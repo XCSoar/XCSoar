@@ -117,7 +117,7 @@ public:
   void stretch_to(Canvas &dest_canvas) const {
 #ifdef ENABLE_SDL
     Canvas src_canvas(surface);
-    dest_canvas.stretch(src_canvas, 0, 0, width, height);
+    dest_canvas.stretch(src_canvas);
 #elif defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
     /* StretchDIBits() is bugged on PPC2002, workaround follows */
     HDC source_dc = ::CreateCompatibleDC(dest_canvas);

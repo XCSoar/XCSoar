@@ -405,6 +405,8 @@ public:
                int src_x, int src_y,
                unsigned src_width, unsigned src_height);
 
+  void stretch(const Canvas &src);
+
   void copy_or(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
                const Canvas &src, int src_x, int src_y);
@@ -801,6 +803,8 @@ public:
   void stretch(const Canvas &src,
                int src_x, int src_y,
                unsigned src_width, unsigned src_height);
+
+  void stretch(const Canvas &src);
 
   void copy_or(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,

@@ -854,6 +854,12 @@ Canvas::stretch_and(int dest_x, int dest_y,
 #endif /* !ENABLE_SDL */
 
 void
+Canvas::stretch(const Canvas &src)
+{
+  stretch(src, 0, 0, src.get_width(), src.get_height());
+}
+
+void
 Canvas::scale_copy(int dest_x, int dest_y,
                    const Canvas &src,
                    int src_x, int src_y,
