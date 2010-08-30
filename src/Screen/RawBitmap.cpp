@@ -89,7 +89,16 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight, const Color clr)
   bi.bmiHeader.biClrUsed = 0;
   bi.bmiHeader.biClrImportant = 0;
 
+#if defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
+  /* StretchDIBits() is bugged on PPC2002, workaround follows */
+  VOID *pvBits;
+  HDC hDC = ::GetDC(NULL);
+  bitmap = CreateDIBSection(hDC, &bi, DIB_RGB_COLORS, &pvBits, NULL, 0);
+  ::ReleaseDC(NULL, hDC);
+  buffer = (BGRColor *)pvBits;
+#else
   buffer = new BGRColor[corrected_width * height];
+#endif
 #endif /* !ENABLE_SDL */
 
   BGRColor bgrColor = BGRColor(clr.blue(), clr.green(), clr.red());
@@ -103,6 +112,8 @@ RawBitmap::~RawBitmap()
 {
 #ifdef ENABLE_SDL
   ::SDL_FreeSurface(surface);
+#elif defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
+  ::DeleteObject(bitmap);
 #else
   delete[] buffer;
 #endif

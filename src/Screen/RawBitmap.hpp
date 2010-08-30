@@ -41,6 +41,9 @@ protected:
   SDL_Surface *surface;
 #else
   BITMAPINFO bi;
+#if defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
+  HBITMAP bitmap;
+#endif
 #endif
 
 public:
@@ -115,6 +118,15 @@ public:
 #ifdef ENABLE_SDL
     Canvas src_canvas(surface);
     dest_canvas.stretch(src_canvas, 0, 0, width, height);
+#elif defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
+    /* StretchDIBits() is bugged on PPC2002, workaround follows */
+    HDC source_dc = ::CreateCompatibleDC(dest_canvas);
+    ::SelectObject(source_dc, bitmap);
+    ::StretchBlt(dest_canvas, 0, 0,
+                 dest_canvas.get_width(), dest_canvas.get_height(),
+                 source_dc, 0, 0, width, height,
+                 SRCCOPY);
+    ::DeleteDC(source_dc);
 #else
     ::StretchDIBits(dest_canvas, 0, 0,
                     dest_canvas.get_width(), dest_canvas.get_height(),
