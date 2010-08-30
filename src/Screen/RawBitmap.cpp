@@ -101,7 +101,9 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight, const Color clr)
 
 RawBitmap::~RawBitmap()
 {
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+  ::SDL_FreeSurface(surface);
+#else
   delete[] buffer;
 #endif
 }
