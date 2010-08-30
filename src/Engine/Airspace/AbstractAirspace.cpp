@@ -42,6 +42,8 @@
 
 #include <assert.h>
 
+AbstractAirspace::~AbstractAirspace() {}
+
 bool 
 AbstractAirspace::inside(const AIRCRAFT_STATE& state) const
 {

@@ -69,6 +69,7 @@ public:
   const enum shape shape;
 
   AbstractAirspace(enum shape _shape):shape(_shape) {}
+  virtual ~AbstractAirspace();
 
   /** 
    * Compute bounding box enclosing the airspace.  Rounds up/down
