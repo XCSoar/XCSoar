@@ -99,6 +99,9 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/Units.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/UtilsFile.cpp \
+	$(SRC)/Poco/RWLock.cpp \
+	$(SRC)/Thread/Debug.cpp \
+	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/WayPoint/WayPointFile.cpp \
 	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
 	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
@@ -114,7 +117,7 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
 	$(TEST_SRC_DIR)/TestWayPointFile.cpp
 TEST_WAY_POINT_FILE_OBJS = $(call SRC_TO_OBJ,$(TEST_WAY_POINT_FILE_SOURCES))
-TEST_WAY_POINT_FILE_LDADD = $(UTIL_LIBS) $(MATH_LIBS) $(IO_LIBS) $(ZZIP_LIBS)
+TEST_WAY_POINT_FILE_LDADD = $(UTIL_LIBS) $(MATH_LIBS) $(IO_LIBS) $(ZZIP_LIBS) $(COMPAT_LIBS)
 $(TARGET_BIN_DIR)/TestWayPointFile$(TARGET_EXEEXT): $(TEST_WAY_POINT_FILE_OBJS) $(TEST_WAY_POINT_FILE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
