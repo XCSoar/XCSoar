@@ -897,13 +897,13 @@ OnInfoBoxHelp(WindowControl * Sender)
   case 15:
     mode = _("circling");
     break;
-  case 16:
+  case 14:
     mode = _("cruise");
     break;
-  case 17:
+  case 16:
     mode = _("final glide");
     break;
-  case 18:
+  case 17:
     mode = _("auxiliary");
     break;
   default:
