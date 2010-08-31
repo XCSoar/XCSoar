@@ -100,7 +100,7 @@ InfoBoxManager::Hide()
   InfoBoxesHidden = true;
 
   for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++)
-    InfoBoxes[i]->hide();
+    InfoBoxes[i]->fast_hide();
 
   full_window.hide();
 }
