@@ -322,6 +322,23 @@ public:
 #endif
   }
 
+  /**
+   * Like move(), but does not trigger a synchronous redraw.  The
+   * caller is responsible for redrawing.
+   */
+  void fast_move(int left, int top, unsigned width, unsigned height) {
+    assert_none_locked();
+    assert_thread();
+
+#ifdef ENABLE_SDL
+    move(left, top, width, height);
+#else /* !ENABLE_SDL */
+    ::SetWindowPos(hWnd, NULL, left, top, width, height,
+                   SWP_NOCOPYBITS | SWP_NOREDRAW | SWP_DEFERERASE |
+                   SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+#endif
+  }
+
   void resize(unsigned width, unsigned height) {
     assert_none_locked();
     assert_thread();
@@ -396,6 +413,24 @@ public:
     // XXX
 #else
     ::ShowWindow(hWnd, SW_HIDE);
+#endif
+  }
+
+  /**
+   * Like hide(), but does not trigger a synchronous redraw of the
+   * parent window's background.
+   */
+  void fast_hide() {
+    assert_thread();
+
+#ifdef ENABLE_SDL
+    hide();
+#else
+    ::SetWindowPos(hWnd, NULL, 0, 0, 0, 0,
+                   SWP_HIDEWINDOW |
+                   SWP_NOCOPYBITS | SWP_NOREDRAW | SWP_DEFERERASE |
+                   SWP_NOMOVE | SWP_NOSIZE |
+                   SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
 #endif
   }
 
