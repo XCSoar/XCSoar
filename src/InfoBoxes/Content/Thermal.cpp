@@ -49,24 +49,26 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
+static void
+SetVSpeed(InfoBoxWindow &infobox, fixed value)
+{
+  TCHAR buffer[32];
+  Units::FormatUserVSpeed(value, buffer, 32, false);
+  infobox.SetValue(buffer);
+  infobox.SetValueUnit(Units::VerticalSpeedUnit);
+}
+
 void
 InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)
 {
-  TCHAR sTmp[32];
-
-  // Set Value
-  Units::FormatUserVSpeed(XCSoarInterface::Calculated().common_stats.current_risk_mc,
-                          sTmp, 32, false);
-  infobox.SetValue(sTmp);
+  SetVSpeed(infobox,
+            XCSoarInterface::Calculated().common_stats.current_risk_mc);
 
   // Set Comment
   if (XCSoarInterface::SettingsComputer().auto_mc)
     infobox.SetComment(_T("AUTO"));
   else
     infobox.SetComment(_T("MANUAL"));
-
-  // Set Unit
-  infobox.SetValueUnit(Units::VerticalSpeedUnit);
 }
 
 bool
@@ -110,43 +112,19 @@ InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentVario::Update(InfoBoxWindow &infobox)
 {
-  TCHAR sTmp[32];
-
-  // Set Value
-  Units::FormatUserVSpeed(XCSoarInterface::Basic().TotalEnergyVario,
-                          sTmp, 32, false);
-  infobox.SetValue(sTmp);
-
-  // Set Unit
-  infobox.SetValueUnit(Units::VerticalSpeedUnit);
+  SetVSpeed(infobox, XCSoarInterface::Basic().TotalEnergyVario);
 }
 
 void
 InfoBoxContentVarioNetto::Update(InfoBoxWindow &infobox)
 {
-  TCHAR sTmp[32];
-
-  // Set Value
-  Units::FormatUserVSpeed(XCSoarInterface::Basic().NettoVario,
-                          sTmp, 32, false);
-  infobox.SetValue(sTmp);
-
-  // Set Unit
-  infobox.SetValueUnit(Units::VerticalSpeedUnit);
+  SetVSpeed(infobox, XCSoarInterface::Basic().NettoVario);
 }
 
 void
 InfoBoxContentThermal30s::Update(InfoBoxWindow &infobox)
 {
-  TCHAR sTmp[32];
-
-  // Set Value
-  Units::FormatUserVSpeed(XCSoarInterface::Calculated().Average30s,
-                          sTmp, 32, false);
-  infobox.SetValue(sTmp);
-
-  // Set Unit
-  infobox.SetValueUnit(Units::VerticalSpeedUnit);
+  SetVSpeed(infobox, XCSoarInterface::Calculated().Average30s);
 
   if (XCSoarInterface::Calculated().Average30s <
       fixed_half * XCSoarInterface::Calculated().common_stats.current_risk_mc)
@@ -159,14 +137,7 @@ InfoBoxContentThermal30s::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentThermalLastAvg::Update(InfoBoxWindow &infobox)
 {
-  // Set Value
-  TCHAR sTmp[32];
-  Units::FormatUserVSpeed(XCSoarInterface::Calculated().LastThermalAverage,
-                          sTmp, 32, false);
-  infobox.SetValue(sTmp);
-
-  // Set Unit
-  infobox.SetValueUnit(Units::VerticalSpeedUnit);
+  SetVSpeed(infobox, XCSoarInterface::Calculated().LastThermalAverage);
 }
 
 void
@@ -212,28 +183,14 @@ InfoBoxContentThermalAllAvg::Update(InfoBoxWindow &infobox)
     return;
   }
 
-  // Set Value
-  TCHAR sTmp[32];
-  Units::FormatUserVSpeed(XCSoarInterface::Calculated().TotalHeightClimb /
-                          XCSoarInterface::Calculated().timeCircling,
-                          sTmp, 32, false);
-  infobox.SetValue(sTmp);
-
-  // Set Unit
-  infobox.SetValueUnit(Units::VerticalSpeedUnit);
+  SetVSpeed(infobox, XCSoarInterface::Calculated().TotalHeightClimb /
+            XCSoarInterface::Calculated().timeCircling);
 }
 
 void
 InfoBoxContentThermalAvg::Update(InfoBoxWindow &infobox)
 {
-  // Set Value
-  TCHAR sTmp[32];
-  Units::FormatUserVSpeed(XCSoarInterface::Calculated().ThermalAverage,
-                          sTmp, 32, false);
-  infobox.SetValue(sTmp);
-
-  // Set Unit
-  infobox.SetValueUnit(Units::VerticalSpeedUnit);
+  SetVSpeed(infobox, XCSoarInterface::Calculated().ThermalAverage);
 
   if (XCSoarInterface::Calculated().ThermalAverage <
       fixed_two_thirds * XCSoarInterface::Calculated().common_stats.current_risk_mc)
@@ -274,14 +231,8 @@ InfoBoxContentVarioDistance::Update(InfoBoxWindow &infobox)
     return;
   }
 
-  // Set Value
-  TCHAR sTmp[32];
-  Units::FormatUserVSpeed(XCSoarInterface::Calculated().task_stats.total.vario.get_value(),
-                          sTmp, 32, false);
-  infobox.SetValue(sTmp);
-
-  // Set Unit
-  infobox.SetValueUnit(Units::VerticalSpeedUnit);
+  SetVSpeed(infobox,
+            XCSoarInterface::Calculated().task_stats.total.vario.get_value());
 
   // Set Color
   if (negative(XCSoarInterface::Calculated().task_stats.total.vario.get_value()))
