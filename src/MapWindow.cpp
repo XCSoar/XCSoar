@@ -64,6 +64,7 @@ MapWindow::MapWindow()
    airspace_database(NULL), airspace_warnings(NULL), task(NULL),
    marks(NULL), 
    cdi(NULL),
+   ui_generation(1), buffer_generation(0),
    TargetDrag_Location(GEOPOINT(Angle::native(fixed_zero),
                                 Angle::native(fixed_zero))),
    TargetDrag_State(0),
@@ -164,6 +165,8 @@ MapWindow::UpdateWeather()
 void
 MapWindow::DrawThreadLoop(void)
 {
+  thread_generation = ui_generation;
+
   // Start the drawing timer (for drawing time calculation)
   StartTimer();
 
@@ -180,11 +183,16 @@ MapWindow::DrawThreadLoop(void)
   // Render the moving map
   Render(draw_canvas, MapRect);
 
-  // Copy the rendered map to the drawing canvas
-  invalidate();
-
   // Stop the drawing timer and calculate drawing time
   StopTimer();
+
+  /* save the generation number which was active when rendering had
+     begun */
+  buffer_generation = thread_generation;
+
+  // Copy the rendered map to the drawing canvas
+  if (buffer_generation == ui_generation)
+    invalidate();
 }
 
 bool

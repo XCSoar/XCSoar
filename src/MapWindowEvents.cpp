@@ -44,7 +44,10 @@ MapWindow::on_resize(unsigned width, unsigned height)
 {
   PaintWindow::on_resize(width, height);
 
+  mutexBuffer.Lock();
   MapRect = get_client_rect();
+  ++ui_generation;
+  mutexBuffer.Unlock();
 
   draw_canvas.resize(width, height);
   buffer_canvas.resize(width, height);
@@ -82,6 +85,14 @@ void
 MapWindow::on_paint(Canvas& _canvas)
 {
   mutexBuffer.Lock();
-  _canvas.copy(draw_canvas);
+
+  if (buffer_generation == ui_generation)
+    _canvas.copy(draw_canvas);
+  else
+    /* the UI has changed since the last DrawThread iteration has
+       started: the buffer has invalid data, paint a white window
+       instead */
+    _canvas.clear_white();
+
   mutexBuffer.Unlock();
 }
