@@ -244,7 +244,7 @@ MapWindow::DrawAirspaceIntersections(Canvas &canvas) const
        it != m_airspace_intersections.end(); ++it) {
     
     POINT sc;
-    if (LonLat2ScreenIfVisible(*it, &sc)) {
+    if (projection.LonLat2ScreenIfVisible(*it, &sc)) {
       MapGfx.hAirspaceInterceptBitmap.draw(canvas, bitmap_canvas, sc.x, sc.y);
     }
   }
@@ -265,7 +265,7 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
   if (airspace_warnings != NULL)
     airspace_warnings->visit_warnings(awc);
 
-  MapDrawHelper helper (canvas, buffer, stencil_canvas, *this,
+  MapDrawHelper helper(canvas, buffer, stencil_canvas, projection,
                         SettingsMap());
   AirspaceVisitorMap v(helper, awc);
   const AirspaceMapVisible visible(SettingsComputer(),
@@ -275,13 +275,15 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
   // JMW TODO wasteful to draw twice, can't it be drawn once?
   // we are using two draws so borders go on top of everything
 
-  airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(),
+  airspace_database->visit_within_range(projection.GetPanLocation(),
+                                        projection.GetScreenDistanceMeters(),
                                         v, visible);
   v.draw_intercepts();
 
-  AirspaceOutlineRenderer outline_renderer(canvas, *this,
+  AirspaceOutlineRenderer outline_renderer(canvas, projection,
                                            SettingsMap().bAirspaceBlackOutline);
-  airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(),
+  airspace_database->visit_within_range(projection.GetPanLocation(),
+                                        projection.GetScreenDistanceMeters(),
                                         outline_renderer, visible);
 
   m_airspace_intersections = awc.get_locations();

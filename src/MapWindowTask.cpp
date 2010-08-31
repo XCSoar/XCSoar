@@ -75,7 +75,7 @@ protected:
       return;
 
     POINT sc;
-    if (m_map.LonLat2ScreenIfVisible(tp.get_location_remaining(), &sc))
+    if (m_map.MapProjection().LonLat2ScreenIfVisible(tp.get_location_remaining(), &sc))
       MapGfx.hBmpTarget.draw(m_buffer, m_map.get_bitmap_canvas(), sc.x, sc.y);
   }
 
@@ -95,7 +95,8 @@ protected:
       return;
 
     fixed distance_max =
-        min(vec.Distance, m_map.GetScreenDistanceMeters() * fixed(0.7));
+        min(vec.Distance,
+            m_map.MapProjection().GetScreenDistanceMeters() * fixed(0.7));
 
     // too short to bother
     if (distance_max < fixed(5000))
@@ -121,7 +122,7 @@ protected:
       if ((idist != ilast) && (idist > 0) && (idist < 1000)) {
         TCHAR Buffer[5];
         _stprintf(Buffer, _T("%d"), idist);
-        POINT sc = m_map.LonLat2Screen(dloc);
+        POINT sc = m_map.MapProjection().LonLat2Screen(dloc);
         RECT brect;
         SIZE tsize = m_canvas.text_size(Buffer);
 
@@ -154,8 +155,8 @@ MapWindow::DrawTask(Canvas &canvas, const RECT &rc, Canvas &buffer)
    but we can still draw targets */
   const bool draw_bearing = Basic().gps.Connected;
 
-  RenderObservationZone ozv(canvas, *this, SettingsMap());
-  RenderTaskPointMap tpv(canvas, *this, SettingsMap(),
+  RenderObservationZone ozv(canvas, projection, SettingsMap());
+  RenderTaskPointMap tpv(canvas, projection, SettingsMap(),
                          ozv, draw_bearing,
                          Basic().Location, *this,
                          Basic().TrackBearing,

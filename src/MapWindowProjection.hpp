@@ -80,11 +80,20 @@ class MapWindowProjection: public Projection
     return DisplayMode;
   }
 
+  void SetDisplayMode(DisplayMode_t _DisplayMode) {
+    DisplayMode = _DisplayMode;
+  }
+
+  Angle GetDisplayAircraftAngle() const {
+    return DisplayAircraftAngle;
+  }
+
  protected:
   DisplayMode_t DisplayMode;
 
   Angle DisplayAircraftAngle;
 
+public:
   // scale/display stuff
   void CalculateOrigin(const RECT rc,
                        const NMEA_INFO &nmea_info,
@@ -116,6 +125,8 @@ class MapWindowProjection: public Projection
     _RequestedMapScale = LimitMapScale(x, settings_map);
     return _RequestedMapScale;
   }
+
+protected:
   fixed GetRequestedMapScale() const {
     return _RequestedMapScale;
   }

@@ -64,21 +64,21 @@ MapWindow::CalculateScreenPositionsThermalSources()
     FindLatitudeLongitude(Calculated().ThermalSources[i].Location,
                           Basic().wind.bearing, Basic().wind.norm * t, &loc);
     ThermalSources[i].Visible =
-        LonLat2ScreenIfVisible(loc, &ThermalSources[i].Screen);
+        projection.LonLat2ScreenIfVisible(loc, &ThermalSources[i].Screen);
   }
 }
 
 void
 MapWindow::DrawThermalEstimate(Canvas &canvas) const
 {
-  if (DisplayMode == dmCircling) {
+  if (projection.GetDisplayMode() == dmCircling) {
     if (positive(Calculated().ThermalEstimate_R)) {
       POINT sc;
-      if (LonLat2ScreenIfVisible(Calculated().ThermalEstimate_Location, &sc)) {
+      if (projection.LonLat2ScreenIfVisible(Calculated().ThermalEstimate_Location, &sc)) {
         MapGfx.hBmpThermalSource.draw(canvas, bitmap_canvas, sc.x, sc.y);
       }
     }
-  } else if (GetMapScaleKM() <= fixed_four) {
+  } else if (projection.GetMapScaleKM() <= fixed_four) {
     for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
       if (ThermalSources[i].Visible) 
         MapGfx.hBmpThermalSource.draw(canvas, bitmap_canvas,
@@ -94,7 +94,7 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
   POINT GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };
 
   if ((Calculated().task_stats.total.solution_remaining.AltitudeDifference > fixed(50))
-      && (DisplayMode == dmFinalGlide))
+      && projection.GetDisplayMode() == dmFinalGlide)
     return;
 
   const ThermalBandInfo &thermal_band = Calculated().thermal_band;

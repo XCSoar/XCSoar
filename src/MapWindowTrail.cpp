@@ -64,7 +64,7 @@ MapWindow::DrawTrail(Canvas &canvas) const
 
   unsigned min_time = 0;
 
-  if (DisplayMode == dmCircling) {
+  if (projection.GetDisplayMode() == dmCircling) {
     min_time = max(0, (int)Basic().Time - 600);
   } else {
     switch(SettingsMap().TrailActive) {
@@ -80,16 +80,18 @@ MapWindow::DrawTrail(Canvas &canvas) const
     }
   }
 
-  TracePointVector trace = task->find_trace_points(GetPanLocation(),
-                                                   GetScreenDistanceMeters(),
-                                                   min_time, 
-                                                   DistancePixelsToMeters(3));
+  TracePointVector trace =
+    task->find_trace_points(projection.GetPanLocation(),
+                            projection.GetScreenDistanceMeters(),
+                            min_time,
+                            projection.DistancePixelsToMeters(3));
 
   if (trace.empty()) return; // nothing to draw
 
   GEOPOINT traildrift;
 
-  if (SettingsMap().EnableTrailDrift && (DisplayMode == dmCircling)) {
+  if (SettingsMap().EnableTrailDrift &&
+      projection.GetDisplayMode() == dmCircling) {
     GEOPOINT tp1;
 
     FindLatitudeLongitude(Basic().Location,
@@ -117,7 +119,7 @@ MapWindow::DrawTrail(Canvas &canvas) const
        it != trace.end(); ++it) {
 
     const fixed dt = (Basic().Time - fixed(it->time)) * it->drift_factor;
-    POINT pt = LonLat2Screen(it->get_location().parametric(traildrift, dt));
+    POINT pt = projection.LonLat2Screen(it->get_location().parametric(traildrift, dt));
 
     if (it->last_time != last_time) {
       canvas.move_to(pt.x, pt.y);
@@ -132,7 +134,8 @@ MapWindow::DrawTrail(Canvas &canvas) const
     }
     last_time = it->time;
   }
-  canvas.line_to(GetOrigAircraft().x, GetOrigAircraft().y);
+  canvas.line_to(projection.GetOrigAircraft().x,
+                 projection.GetOrigAircraft().y);
 }
 
 

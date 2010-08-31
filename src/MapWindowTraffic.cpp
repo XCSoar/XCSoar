@@ -79,7 +79,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
   POINT Arrow[5];
 
   // Determine scale factor for use in Scaled mode
-  fixed screenrange = GetScreenDistanceMeters();
+  fixed screenrange = projection.GetScreenDistanceMeters();
   fixed scalefact = screenrange / 6000;
 
   // Create the brushes for filling the arrow (red/yellow/green)
@@ -119,7 +119,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
     POINT sc, sc_name, sc_av;
 
     // If FLARM target not on the screen, move to the next one
-    if (!LonLat2ScreenIfVisible(target_loc, &sc))
+    if (!projection.LonLat2ScreenIfVisible(target_loc, &sc))
       continue;
 
     // Draw the name 16 points below the icon
@@ -149,8 +149,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
 
     // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
 
-    int dx = (sc_av.x - GetOrigAircraft().x);
-    int dy = (sc_av.y - GetOrigAircraft().y);
+    int dx = sc_av.x - projection.GetOrigAircraft().x;
+    int dy = sc_av.y - projection.GetOrigAircraft().y;
 
     // only draw labels if not close to aircraft
     if (dx * dx + dy * dy > IBLSCALE(30) * IBLSCALE(30)) {
@@ -239,7 +239,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
 
     // Rotate and shift the arrow to the right position and angle
     PolygonRotateShift(Arrow, 5, sc.x, sc.y,
-                       traffic.TrackBearing - GetDisplayAngle());
+                       traffic.TrackBearing - projection.GetDisplayAngle());
 
     // Draw the arrow
     canvas.polygon(Arrow, 5);
@@ -255,7 +255,7 @@ MapWindow::DrawTeammate(Canvas &canvas) const
 {
   if (SettingsComputer().TeammateCodeValid) {
     POINT sc;
-    if (LonLat2ScreenIfVisible(Calculated().TeammateLocation, &sc))
+    if (projection.LonLat2ScreenIfVisible(Calculated().TeammateLocation, &sc))
       MapGfx.hBmpTeammatePosition.draw(canvas, bitmap_canvas, sc.x, sc.y);
   }
 }

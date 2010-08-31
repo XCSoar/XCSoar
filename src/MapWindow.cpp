@@ -55,8 +55,7 @@ ScreenGraphics MapGfx;
  * Constructor of the MapWindow class
  */
 MapWindow::MapWindow()
-  :MapWindowProjection(),
-   way_points(NULL),
+  :way_points(NULL),
    topology(NULL),
    terrain(NULL),
    terrain_center(Angle::native(fixed_zero), Angle::native(fixed_zero)),
@@ -86,16 +85,14 @@ MapWindow::~MapWindow()
 void
 MapWindow::set(ContainerWindow &parent, const RECT &rc)
 {
-  MapRect = rc;
-
   WindowStyle style;
   style.enable_double_clicks();
-  PaintWindow::set(parent, _T("XCSoarMap"), MapRect.left, MapRect.top,
-                   MapRect.right - MapRect.left, MapRect.bottom - MapRect.top,
+  PaintWindow::set(parent, _T("XCSoarMap"), rc.left, rc.top,
+                   rc.right - rc.left, rc.bottom - rc.top,
                    style);
 
   // initialize other systems
-  InitialiseScaleList(SettingsMap());
+  projection.InitialiseScaleList(SettingsMap());
 
   cdi = new GaugeCDI(parent); /* XXX better attach to "this"? */
 }
@@ -123,27 +120,28 @@ void
 MapWindow::UpdateProjection()
 {
   ApplyScreenSize();
-  MapWindowProjection::ExchangeBlackboard(Calculated(), SettingsMap());
+  projection.ExchangeBlackboard(Calculated(), SettingsMap());
 }
 
 void
 MapWindow::UpdateTopology()
 {
   if (topology != NULL && SettingsMap().EnableTopology)
-    topology->ScanVisibility(*this);
+    topology->ScanVisibility(projection);
 }
 
 void
 MapWindow::UpdateTerrain()
 {
-  if (terrain == NULL || Distance(terrain_center, PanLocation) < fixed(1000))
+  if (terrain == NULL ||
+      Distance(terrain_center, projection.GetPanLocation()) < fixed(1000))
     return;
 
   // always service terrain even if it's not used by the map,
   // because it's used by other calculations
   RasterTerrain::ExclusiveLease lease(*terrain);
-  lease->SetViewCenter(PanLocation);
-  terrain_center = PanLocation;
+  lease->SetViewCenter(projection.GetPanLocation());
+  terrain_center = projection.GetPanLocation();
 }
 
 void
@@ -154,7 +152,7 @@ MapWindow::UpdateWeather()
 
   if (weather != NULL) {
     weather->Reload((int)Basic().Time);
-    weather->SetViewCenter(PanLocation);
+    weather->SetViewCenter(projection.GetPanLocation());
   }
 }
 
@@ -248,7 +246,7 @@ MapWindow::set_weather(RasterWeather *_weather)
 void
 MapWindow::SwitchZoomClimb(void)
 {
-  bool isclimb = (DisplayMode == dmCircling);
+  bool isclimb = (projection.GetDisplayMode() == dmCircling);
 
   bool my_target_pan = SettingsMap().TargetPan;
 
@@ -256,15 +254,15 @@ MapWindow::SwitchZoomClimb(void)
     if (my_target_pan) {
       // save starting values
       if (isclimb)
-        zoomclimb.ClimbMapScale = GetMapScaleUser();
+        zoomclimb.ClimbMapScale = projection.GetMapScaleUser();
       else
-        zoomclimb.CruiseMapScale = GetMapScaleUser();
+        zoomclimb.CruiseMapScale = projection.GetMapScaleUser();
     } else {
       // restore scales
       if (isclimb)
-        RequestMapScale(zoomclimb.ClimbMapScale, SettingsMap());
+        projection.RequestMapScale(zoomclimb.ClimbMapScale, SettingsMap());
       else
-        RequestMapScale(zoomclimb.CruiseMapScale, SettingsMap());
+        projection.RequestMapScale(zoomclimb.CruiseMapScale, SettingsMap());
     }
     zoomclimb.last_targetpan = my_target_pan;
     return;
@@ -274,14 +272,14 @@ MapWindow::SwitchZoomClimb(void)
     if (isclimb != zoomclimb.last_isclimb) {
       if (isclimb) {
         // save cruise scale
-        zoomclimb.CruiseMapScale = GetMapScaleUser();
+        zoomclimb.CruiseMapScale = projection.GetMapScaleUser();
         // switch to climb scale
-        RequestMapScale(zoomclimb.ClimbMapScale, SettingsMap());
+        projection.RequestMapScale(zoomclimb.ClimbMapScale, SettingsMap());
       } else {
         // leaving climb
         // save cruise scale
-        zoomclimb.ClimbMapScale = GetMapScaleUser();
-        RequestMapScale(zoomclimb.CruiseMapScale, SettingsMap());
+        zoomclimb.ClimbMapScale = projection.GetMapScaleUser();
+        projection.RequestMapScale(zoomclimb.CruiseMapScale, SettingsMap());
         // switch to climb scale
       }
 
@@ -308,11 +306,14 @@ ApplyUserForceDisplayMode(DisplayMode_t current,
 void
 MapWindow::ApplyScreenSize()
 {
-  DisplayMode_t lastDisplayMode = DisplayMode;
-  DisplayMode = ApplyUserForceDisplayMode(lastDisplayMode, SettingsMap(),
-                                          Calculated());
-  if (lastDisplayMode != DisplayMode)
+  DisplayMode_t lastDisplayMode = projection.GetDisplayMode();
+  DisplayMode_t newDisplayMode =
+    ApplyUserForceDisplayMode(lastDisplayMode, SettingsMap(), Calculated());
+
+  if (newDisplayMode != lastDisplayMode) {
+    projection.SetDisplayMode(newDisplayMode);
     SwitchZoomClimb();
+  }
 }
 
 

@@ -108,8 +108,8 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
 #endif
 
   if (SettingsMap().EnablePan && (keys & MK_LBUTTON)) {
-    const GEOPOINT start = Screen2LonLat(drag_last.x, drag_last.y);
-    const GEOPOINT end = Screen2LonLat(x, y);
+    const GEOPOINT start = projection.Screen2LonLat(drag_last.x, drag_last.y);
+    const GEOPOINT end = projection.Screen2LonLat(x, y);
 
     XCSoarInterface::SetSettingsMap().PanLocation.Longitude +=
         start.Longitude - end.Longitude;
@@ -143,7 +143,7 @@ GlueMapWindow::on_mouse_down(int x, int y)
 
   drag_start.x = x;
   drag_start.y = y;
-  drag_start_geopoint = Screen2LonLat(x, y);
+  drag_start_geopoint = projection.Screen2LonLat(x, y);
   drag_last = drag_start;
 
   if (XCSoarInterface::SettingsComputer().EnableGestures)
@@ -207,7 +207,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
   if (is_simulator() && !Basic().gps.Replay && click_time > 50 &&
       compare_squared(drag_start.x - x, drag_start.y - y,
                       Layout::Scale(36)) == 1) {
-    GEOPOINT G = Screen2LonLat(x, y);
+    GEOPOINT G = projection.Screen2LonLat(x, y);
 
     double distance = hypot(drag_start.x - x, drag_start.y - y);
 
@@ -242,7 +242,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
     // click less then one second -> open nearest waypoint details
     if (way_points != NULL &&
         PopupNearestWaypointDetails(*way_points, drag_start_geopoint,
-                                    DistancePixelsToMeters(Layout::Scale(10)),
+                                    projection.DistancePixelsToMeters(Layout::Scale(10)),
                                     true))
       return true;
   } else {

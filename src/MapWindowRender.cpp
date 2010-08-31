@@ -51,7 +51,8 @@ void
 MapWindow::RenderStart(Canvas &canvas, const RECT &rc)
 {
   // Calculate screen position of the aircraft
-  CalculateOrigin(rc, Basic(), Calculated(), SettingsComputer(), SettingsMap());
+  projection.CalculateOrigin(rc, Basic(), Calculated(),
+                             SettingsComputer(), SettingsMap());
 
   // Calculate screen positions of the thermal sources
   CalculateScreenPositionsThermalSources();
@@ -72,8 +73,8 @@ MapWindow::RenderStart(Canvas &canvas, const RECT &rc)
 void
 MapWindow::RenderMapLayer(Canvas &canvas)
 {
-  m_background.sun_from_wind(*this, Basic().wind);
-  m_background.Draw(canvas, *this, SettingsMap());
+  m_background.sun_from_wind(projection, Basic().wind);
+  m_background.Draw(canvas, projection, SettingsMap());
 
   // Select black brush/pen and the MapWindowFont
   canvas.black_brush();
@@ -89,7 +90,7 @@ MapWindow::RenderMapLayer(Canvas &canvas)
 
   if (topology != NULL && SettingsMap().EnableTopology)
     // Draw the topology
-    topology->Draw(canvas, bitmap_canvas, *this);
+    topology->Draw(canvas, bitmap_canvas, projection);
 }
 
 /**
@@ -127,10 +128,10 @@ MapWindow::RenderTaskElements(Canvas &canvas, const RECT &rc)
   if (task != NULL && task->check_task())
     DrawTask(canvas, rc, buffer_canvas);
 
-  DrawWaypoints(canvas);
+  DrawWaypoints(canvas, rc);
 
   if (marks != NULL)
-    marks->Draw(canvas, bitmap_canvas, *this);
+    marks->Draw(canvas, bitmap_canvas, projection);
 }
 
 /**
@@ -156,9 +157,9 @@ MapWindow::RenderAirborne(Canvas &canvas, const RECT &rc)
 {
   // Draw wind vector at aircraft
   if (!SettingsMap().EnablePan)
-    DrawWindAtAircraft2(canvas, GetOrigAircraft(), rc);
+    DrawWindAtAircraft2(canvas, projection.GetOrigAircraft(), rc);
   else if (SettingsMap().TargetPan)
-    DrawWindAtAircraft2(canvas, GetOrigScreen(), rc);
+    DrawWindAtAircraft2(canvas, projection.GetOrigScreen(), rc);
 
   // Draw traffic
   DrawTeammate(canvas);
@@ -257,7 +258,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
 
   // Render topology on top of airspace, to keep the text readable
   if (topology != NULL && SettingsMap().EnableTopology)
-    topology->DrawLabels(canvas, *this, label_block, SettingsMap());
+    topology->DrawLabels(canvas, projection, label_block, SettingsMap());
 
   // Render glide through terrain range
   RenderGlide(canvas, rc);
@@ -267,7 +268,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
 
   // Render weather/terrain max/min values
   canvas.select(Fonts::Title);
-  m_background.DrawSpotHeights(canvas, *this, label_block);
+  m_background.DrawSpotHeights(canvas, projection, label_block);
 
   // Render lower symbology
   RenderSymbology_lower(canvas, rc);

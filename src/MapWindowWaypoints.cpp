@@ -63,7 +63,7 @@ public:
     aircraft_state(ToAircraftState(map.Basic())),
     canvas(_canvas),
     glide_polar(polar),
-    labels(map.GetMapRect())
+    labels(map.MapProjection().GetMapRect())
   {
     // if pan mode, show full names
     pDisplayTextType = map.SettingsMap().DisplayTextType;
@@ -124,11 +124,13 @@ public:
   void
   DrawWaypoint(const Waypoint& way_point, bool in_task = false)
   {
+    const MapWindowProjection &projection = map.MapProjection();
+
     POINT sc;
-    if (!map.LonLat2ScreenIfVisible(way_point.Location, &sc))
+    if (!projection.LonLat2ScreenIfVisible(way_point.Location, &sc))
       return;
 
-    if (!map.WaypointInScaleFilter(way_point) && !in_task)
+    if (!projection.WaypointInScaleFilter(way_point) && !in_task)
       return;
 
     TextInBoxMode_t text_mode;
@@ -180,7 +182,7 @@ public:
 
     } else {
       // non landable turnpoint
-      if (map.GetMapScaleKM() <= fixed_four)
+      if (projection.GetMapScaleKM() <= fixed_four)
         icon = &MapGfx.TurnPointIcon;
     }
 
@@ -279,7 +281,7 @@ public:
 };
 
 void
-MapWindow::DrawWaypoints(Canvas &canvas)
+MapWindow::DrawWaypoints(Canvas &canvas, const RECT &MapRect)
 {
   if (way_points == NULL || way_points->empty())
     return;
@@ -290,11 +292,11 @@ MapWindow::DrawWaypoints(Canvas &canvas)
   polar.set_mc(min(Calculated().common_stats.current_risk_mc,
                    SettingsComputer().safety_mc));
   WaypointVisitorMap v(*this, canvas, polar);
-  way_points->visit_within_range(PanLocation,
-                                 GetScreenDistanceMeters(), v);
+  way_points->visit_within_range(projection.GetPanLocation(),
+                                 projection.GetScreenDistanceMeters(), v);
   if (task != NULL && SettingsMap().DisplayTextType == DISPLAYNAMEIFINTASK)
     task->CAccept(v);
 
   v.labels.Sort();
-  MapWaypointLabelRender(canvas, v.labels);
+  MapWaypointLabelRender(canvas, projection.GetMapRect(), v.labels);
 }

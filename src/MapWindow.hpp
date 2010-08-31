@@ -82,11 +82,12 @@ class ContainerWindow;
 class WayPointLabelList;
 
 class MapWindow : public PaintWindow,
-  public MapWindowProjection,
   public MapWindowBlackboard,
   public MapWindowTimer
 {
 protected:
+  MapWindowProjection projection;
+
   const Waypoints *way_points;
   TopologyStore *topology;
 
@@ -163,7 +164,7 @@ public:
   void UpdateProjection();
 
   const MapWindowProjection &MapProjection() const {
-    return *this;
+    return projection;
   }
 
 private:
@@ -194,7 +195,8 @@ private:
 
   void CalculateScreenPositionsGroundline();
   void CalculateScreenPositionsThermalSources();
-  void MapWaypointLabelRender(Canvas &canvas, const WayPointLabelList &labels);
+  void MapWaypointLabelRender(Canvas &canvas, const RECT &rc,
+                              const WayPointLabelList &labels);
 
   // display renderers
   void DrawAircraft(Canvas &canvas) const;
@@ -206,7 +208,7 @@ private:
                            const RECT &rc) const;
   void DrawAirspace(Canvas &canvas, Canvas &buffer);
   void DrawAirspaceIntersections(Canvas &canvas) const;
-  void DrawWaypoints(Canvas &canvas);
+  void DrawWaypoints(Canvas &canvas, const RECT &rc);
 
   void DrawFlightMode(Canvas &canvas, const RECT &rc) const;
   void DrawGPSStatus(Canvas &canvas, const RECT &rc,

@@ -97,7 +97,7 @@ WayPointLabelList::Sort()
 }
 
 void
-MapWindow::MapWaypointLabelRender(Canvas &canvas,
+MapWindow::MapWaypointLabelRender(Canvas &canvas, const RECT &MapRect,
                                   const WayPointLabelList &labels)
 {
   // now draw task waypoints

@@ -58,6 +58,8 @@ MapWindow::DrawCrossHairs(Canvas &canvas) const
   Pen dash_pen(Pen::DASH, 1, Color(50, 50, 50));
   canvas.select(dash_pen);
 
+  const POINT Orig_Screen = projection.GetOrigScreen();
+
   canvas.line(Orig_Screen.x + 20, Orig_Screen.y,
               Orig_Screen.x - 20, Orig_Screen.y);
   canvas.line(Orig_Screen.x, Orig_Screen.y + 20,
@@ -89,11 +91,11 @@ MapWindow::DrawAircraft(Canvas &canvas) const
 
   int n = sizeof(Aircraft) / sizeof(Aircraft[0]);
 
-  const Angle angle = DisplayAircraftAngle +
+  const Angle angle = projection.GetDisplayAircraftAngle() +
                       (Basic().Heading - Basic().TrackBearing);
 
-  PolygonRotateShift(Aircraft, n, GetOrigAircraft().x - 1,
-                     GetOrigAircraft().y, angle);
+  PolygonRotateShift(Aircraft, n, projection.GetOrigAircraft().x - 1,
+                     projection.GetOrigAircraft().y, angle);
 
   canvas.select(MapGfx.hpAircraft);
   canvas.polygon(Aircraft, n);
@@ -168,9 +170,9 @@ MapWindow::DrawFlightMode(Canvas &canvas, const RECT &rc) const
 
   if (task != NULL && (task->get_mode() == TaskManager::MODE_ABORT))
     bmp = &MapGfx.hAbort;
-  else if (DisplayMode == dmCircling)
+  else if (projection.GetDisplayMode() == dmCircling)
     bmp = &MapGfx.hClimb;
-  else if (DisplayMode == dmFinalGlide)
+  else if (projection.GetDisplayMode() == dmFinalGlide)
     bmp = &MapGfx.hFinalGlide;
   else
     bmp = &MapGfx.hCruise;
@@ -222,8 +224,8 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT &Start,
   for (i = 1; i < 4; i++)
     Arrow[i].y -= wmag;
 
-  PolygonRotateShift(Arrow, 7, Start.x, Start.y, wind.bearing
-      - GetDisplayAngle());
+  PolygonRotateShift(Arrow, 7, Start.x, Start.y,
+                     wind.bearing - projection.GetDisplayAngle());
 
   canvas.polygon(Arrow, 5);
 
@@ -233,7 +235,7 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT &Start,
       { 0, Layout::FastScale(-26 - min(20, wmag) * 3) },
     };
 
-    Angle angle = (wind.bearing - GetDisplayAngle()).as_bearing();
+    Angle angle = (wind.bearing - projection.GetDisplayAngle()).as_bearing();
     PolygonRotateShift(Tail, 2, Start.x, Start.y, angle);
 
     // optionally draw dashed line
@@ -508,7 +510,7 @@ MapWindow::DrawCompass(Canvas &canvas, const RECT &rc) const
 
     // North arrow
     PolygonRotateShift(Arrow, 5, Start.x, Start.y,
-                       Angle::native(fixed_zero) - GetDisplayAngle());
+                       Angle::native(fixed_zero) - projection.GetDisplayAngle());
     canvas.polygon(Arrow, 5);
   } else if (Appearance.CompassAppearance == apCompassAltA) {
 
@@ -516,7 +518,8 @@ MapWindow::DrawCompass(Canvas &canvas, const RECT &rc) const
     static int lastRcRight = 0;
     static POINT Arrow[5] = { { 0, -11 }, { -5, 9 }, { 0, 3 }, { 5, 9 }, { 0, -11 } };
 
-    if (lastDisplayAngle != GetDisplayAngle() || lastRcRight != rc.right) {
+    if (lastDisplayAngle != projection.GetDisplayAngle() ||
+        lastRcRight != rc.right) {
       Arrow[0].x = 0;
       Arrow[0].y = -11;
       Arrow[1].x = -5;
@@ -533,9 +536,9 @@ MapWindow::DrawCompass(Canvas &canvas, const RECT &rc) const
 
       // North arrow
       PolygonRotateShift(Arrow, 5, Start.x, Start.y,
-                         Angle::native(fixed_zero) - GetDisplayAngle());
+                         Angle::native(fixed_zero) - projection.GetDisplayAngle());
 
-      lastDisplayAngle = GetDisplayAngle();
+      lastDisplayAngle = projection.GetDisplayAngle();
       lastRcRight = rc.right;
     }
     canvas.polygon(Arrow, 5);
@@ -559,13 +562,14 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas) const
   canvas.select(MapGfx.hbBestCruiseTrack);
 
   const Angle angle = Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing
-                    - GetDisplayAngle();
+                    - projection.GetDisplayAngle();
 
   POINT Arrow[] = { { -1, -40 }, { -1, -62 }, { -6, -62 }, {  0, -70 },
                     {  6, -62 }, {  1, -62 }, {  1, -40 }, { -1, -40 } };
 
   PolygonRotateShift(Arrow, sizeof(Arrow) / sizeof(Arrow[0]),
-                     GetOrigAircraft().x, GetOrigAircraft().y,
+                     projection.GetOrigAircraft().x,
+                     projection.GetOrigAircraft().y,
                      angle);
 
   canvas.polygon(Arrow, sizeof(Arrow) / sizeof(Arrow[0]));
