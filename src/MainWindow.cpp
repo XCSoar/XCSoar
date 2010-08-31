@@ -110,7 +110,7 @@ MainWindow::initialise()
 
   LogStartUp(_T("InfoBox geometry"));
   InfoBoxLayout::Init(rc);
-  RECT map_rect = InfoBoxLayout::GetRemainingRect(rc);
+  map_rect = InfoBoxLayout::GetRemainingRect(rc);
 
   // color/pattern chart (must have infobox geometry before this)
   MapGfx.Initialise();
@@ -126,9 +126,8 @@ MainWindow::initialise()
   ButtonLabel::SetLabelText(0,_T("MODE"));
   ButtonLabel::SetFont(Fonts::Map);
 
-  map.set(*this, map_rect, rc);
+  map.set(*this, map_rect);
   map.set_font(Fonts::Map);
-  map.SetMapRect(map_rect);
 
   WindowStyle hidden;
   hidden.hide();
@@ -222,4 +221,22 @@ bool MainWindow::on_close() {
     XCSoarInterface::Shutdown();
   }
   return true;
+}
+
+void
+MainWindow::SetFullScreen(bool _full_screen)
+{
+  if (_full_screen == FullScreen)
+    return;
+
+  FullScreen = _full_screen;
+
+  if (FullScreen)
+    InfoBoxManager::Hide();
+  else
+    InfoBoxManager::Show();
+
+  const RECT rc = FullScreen ? get_client_rect() : map_rect;
+  map.fast_move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+  // the repaint will be triggered by the DrawThread
 }

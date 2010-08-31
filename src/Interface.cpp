@@ -237,8 +237,10 @@ vario_visible()
 void
 ActionInterface::DisplayModes()
 {
+  bool full_screen = main_window.GetFullScreen();
+
   // Determine whether the vario gauge should be drawn
-  SetSettingsMap().EnableVarioGauge = vario_visible() && !SettingsMap().FullScreen;
+  SetSettingsMap().EnableVarioGauge = vario_visible() && !full_screen;
 
   if (main_window.vario) {
     if (!SettingsMap().ScreenBlanked && SettingsMap().EnableVarioGauge)
@@ -252,9 +254,4 @@ ActionInterface::DisplayModes()
     if (gauge_flarm != NULL)
       gauge_flarm->Suppress = false;
   }
-
-  if (SettingsMap().FullScreen)
-    InfoBoxManager::Hide();
-  else
-    InfoBoxManager::Show();
 }

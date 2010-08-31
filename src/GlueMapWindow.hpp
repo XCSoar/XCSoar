@@ -44,8 +44,6 @@ Copyright_License {
 #include "GestureManager.hpp"
 
 class GlueMapWindow : public MapWindow {
-  RECT MapRectSmall, MapRectBig;
-
   unsigned idle_robin;
 
   PeriodClock mouse_down_clock;
@@ -53,16 +51,7 @@ class GlueMapWindow : public MapWindow {
 public:
   GlueMapWindow();
 
-  void set(ContainerWindow &parent,
-           const RECT _MapRectSmall, const RECT _MapRectBig);
-
   bool Idle();
-
-  bool GetFullScreen() const {
-    return SettingsMap().FullScreen;
-  }
-
-  void SetFullScreen(bool full_screen);
 
 private:
   GEOPOINT drag_start_geopoint;

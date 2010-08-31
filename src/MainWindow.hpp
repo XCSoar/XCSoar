@@ -62,9 +62,13 @@ public:
 private:
   timer_t timer_id;
 
+  RECT map_rect;
+  bool FullScreen;
+
 public:
   MainWindow(const StatusMessageList &status_messages)
-    :vario(NULL), flarm(NULL), ta(NULL), popup(status_messages, *this) {}
+    :vario(NULL), flarm(NULL), ta(NULL), popup(status_messages, *this),
+     FullScreen(false) {}
   virtual ~MainWindow();
 
   static bool find(const TCHAR *text) {
@@ -82,6 +86,12 @@ public:
     map.reset();
     TopWindow::reset();
   }
+
+  bool GetFullScreen() const {
+    return FullScreen;
+  }
+
+  void SetFullScreen(bool _full_screen);
 
 protected:
   bool on_activate();

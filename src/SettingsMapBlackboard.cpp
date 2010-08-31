@@ -64,7 +64,6 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.OnAirSpace = 1;
   settings_map.EnableAuxiliaryInfo = 0;
   settings_map.UserForceDisplayMode = dmNone;
-  settings_map.FullScreen = false;
   settings_map.EnablePan = false;
   settings_map.PanLocation.Longitude = Angle::native(fixed_zero);
   settings_map.PanLocation.Latitude = Angle::native(fixed_zero);

@@ -269,20 +269,20 @@ InputEvents::eventScreenModes(const TCHAR *misc)
   //  -- normal infobox
 
   if (_tcscmp(misc, _T("normal")) == 0) {
-    main_window.map.SetFullScreen(false);
+    main_window.SetFullScreen(false);
     SetSettingsMap().EnableAuxiliaryInfo = false;
   } else if (_tcscmp(misc, _T("auxilary")) == 0) {
-    main_window.map.SetFullScreen(false);
+    main_window.SetFullScreen(false);
     SetSettingsMap().EnableAuxiliaryInfo = true;
   } else if (_tcscmp(misc, _T("toggleauxiliary")) == 0) {
-    main_window.map.SetFullScreen(false);
+    main_window.SetFullScreen(false);
     SetSettingsMap().EnableAuxiliaryInfo = !SettingsMap().EnableAuxiliaryInfo;
   } else if (_tcscmp(misc, _T("full")) == 0) {
-    main_window.map.SetFullScreen(true);
+    main_window.SetFullScreen(true);
   } else if (_tcscmp(misc, _T("togglefull")) == 0) {
-    main_window.map.SetFullScreen(!main_window.map.GetFullScreen());
+    main_window.SetFullScreen(!main_window.GetFullScreen());
   } else if (_tcscmp(misc, _T("show")) == 0) {
-    if (main_window.map.GetFullScreen())
+    if (main_window.GetFullScreen())
       Message::AddMessage(_("Screen Mode Full"));
     else if (SettingsMap().EnableAuxiliaryInfo)
       Message::AddMessage(_("Screen Mode Auxiliary"));
@@ -292,11 +292,11 @@ InputEvents::eventScreenModes(const TCHAR *misc)
     InfoBoxLayout::fullscreen = !InfoBoxLayout::fullscreen;
   } else {
     if (SettingsMap().EnableAuxiliaryInfo) {
-      main_window.map.SetFullScreen(!main_window.map.GetFullScreen());
+      main_window.SetFullScreen(!main_window.GetFullScreen());
       SetSettingsMap().EnableAuxiliaryInfo = false;
     } else {
-      if (main_window.map.GetFullScreen()) {
-        main_window.map.SetFullScreen(false);
+      if (main_window.GetFullScreen()) {
+        main_window.SetFullScreen(false);
       } else {
         SetSettingsMap().EnableAuxiliaryInfo = true;
       }

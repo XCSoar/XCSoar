@@ -145,11 +145,6 @@ public:
   // used by dlgTarget
   bool TargetDragged(double *longitude, double *latitude);
 
-  // use at startup
-  void SetMapRect(RECT rc) {
-    move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
-  }
-
   void ReadBlackboard(const NMEA_INFO &nmea_info,
                       const DERIVED_INFO &derived_info,
                       const SETTINGS_COMPUTER &settings_computer,

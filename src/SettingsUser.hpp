@@ -117,8 +117,6 @@ struct SETTINGS_MAP {
   int OnAirSpace; // VENTA3 toggle DrawAirSpace
   bool EnableAuxiliaryInfo;
   DisplayMode_t UserForceDisplayMode;
-  /** Fullscreen mode (no infoboxes) */
-  bool FullScreen;
   bool EnablePan;
   GEOPOINT PanLocation;
   bool   TargetPan;

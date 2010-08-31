@@ -44,16 +44,6 @@ Copyright_License {
 GlueMapWindow::GlueMapWindow()
   :idle_robin(2), ignore_single_click(true) {}
 
-void
-GlueMapWindow::set(ContainerWindow &parent,
-                   const RECT _MapRectSmall, const RECT _MapRectBig)
-{
-  MapRectSmall = _MapRectSmall;
-  MapRectBig = _MapRectBig;
-
-  MapWindow::set(parent, MapRectBig);
-}
-
 /**
  * This idle function allows progressive scanning of visibility etc
  */
@@ -91,16 +81,6 @@ GlueMapWindow::Idle()
            (still_dirty = terrain_dirty || topology_dirty || weather_dirty));
 
   return still_dirty;
-}
-
-void
-GlueMapWindow::SetFullScreen(bool full_screen)
-{
-  if (full_screen == GetFullScreen())
-    return;
-
-  XCSoarInterface::SetSettingsMap().FullScreen = full_screen;
-  SetMapRect(full_screen ? MapRectBig : MapRectSmall);
 }
 
 /**
