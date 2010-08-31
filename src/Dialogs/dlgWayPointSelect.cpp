@@ -248,14 +248,13 @@ private:
 
     int a = DirectionFilter[filter_data.direction_index];
     Angle angle = a == DirHDG
-      ? last_heading = XCSoarInterface::Basic().Heading
+      ? last_heading = heading
       : Angle::degrees(fixed(a));
 
     const GeoVector vec(location, wp.Location);
-    fixed DirectionErr = (vec.Bearing - heading).as_delta().magnitude_degrees();
+    fixed DirectionErr = (vec.Bearing - angle).as_delta().magnitude_degrees();
 
-    static const fixed fixed_18(18);
-    return DirectionErr > fixed_18;
+    return DirectionErr < fixed(18);
   }
 
   static bool
