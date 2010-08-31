@@ -44,6 +44,8 @@ MapWindow::on_resize(unsigned width, unsigned height)
 {
   PaintWindow::on_resize(width, height);
 
+  MapRect = get_client_rect();
+
   draw_canvas.resize(width, height);
   buffer_canvas.resize(width, height);
   stencil_canvas.resize(width, height);

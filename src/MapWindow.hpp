@@ -148,7 +148,6 @@ public:
   // use at startup
   void SetMapRect(RECT rc) {
     move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
-    SetRect(&MapRect, 0, 0, rc.right - rc.left, rc.bottom - rc.top);
   }
 
   void ReadBlackboard(const NMEA_INFO &nmea_info,
