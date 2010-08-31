@@ -80,6 +80,9 @@ AATPoint::check_target(const AIRCRAFT_STATE& state)
 bool 
 AATPoint::close_to_target(const AIRCRAFT_STATE& state, const fixed threshold) const
 {
+  if (!valid())
+    return false;
+
   return (double_leg_distance(m_target_location)-double_leg_distance(state.Location)
           <= threshold);
 }

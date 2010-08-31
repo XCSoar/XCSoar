@@ -76,6 +76,11 @@ public:
     OrderedTaskPoint(_type, _oz, tp, wp, tb, to, b_scored)
     {};
 
+  gcc_pure
+  bool valid() const {
+    return get_previous() != NULL && get_next() != NULL;
+  }
+
 /** 
  * Retrieve elevation of taskpoint, taking into account
  * rules and safety margins.

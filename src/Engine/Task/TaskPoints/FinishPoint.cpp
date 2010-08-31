@@ -59,7 +59,7 @@ FinishPoint::reset()
 bool 
 FinishPoint::entry_precondition() const
 {
-  return get_previous()->has_entered();
+  return get_previous() != NULL && get_previous()->has_entered();
 }
 
 fixed

@@ -271,9 +271,9 @@ RenderTaskPoint::draw_task_line(const GEOPOINT& start, const GEOPOINT& end)
 void 
 RenderTaskPoint::draw_isoline(const AATPoint& tp) 
 {
-  if (!do_draw_isoline(tp)) {
+  if (!tp.valid() || !do_draw_isoline(tp))
     return;
-  }
+
   AATIsolineSegment seg(tp);
   if (!seg.valid()) {
     return;
