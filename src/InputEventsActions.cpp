@@ -684,7 +684,7 @@ void
 InputEvents::eventAnalysis(const TCHAR *misc)
 {
   (void)misc;
-  PopupAnalysis();
+  dlgAnalysisShowModal();
 }
 
 // WaypointDetails

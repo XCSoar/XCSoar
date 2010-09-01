@@ -55,15 +55,6 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 
 /**
- * Opens the Analysis window
- */
-void
-PopupAnalysis()
-{
-  dlgAnalysisShowModal();
-}
-
-/**
  * Opens up the WaypointDetails window of the nearest
  * waypoint to location
  * @param way_points Waypoints including all possible

@@ -154,8 +154,6 @@ void dlgNumberEntryKeyboardShowModal(int *value, int width = 0);
 
 int dlgComboPicker(SingleWindow &parent, WndProperty *theProperty);
 
-void PopupAnalysis();
-
 bool PopupNearestWaypointDetails(const Waypoints &way_points,
     const GEOPOINT &location, double range, bool scalefilter = false);
 
