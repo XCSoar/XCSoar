@@ -55,10 +55,10 @@ enum {
 };
 
 void ClipPolygon(Canvas &canvas, const POINT *m_ptin, unsigned int inLength,
-                 RECT rc, bool fill);
+                 bool fill);
 
 bool
-Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
+Segment(Canvas &canvas, long x, long y, int radius,
         Angle start, Angle end,
         bool horizon=false);
 

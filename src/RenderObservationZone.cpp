@@ -71,7 +71,7 @@ void
 RenderObservationZone::draw_segment(const Angle start_radial, 
                                     const Angle end_radial) 
 {
-  m_buffer.segment(p_center.x, p_center.y, p_radius, m_proj.GetMapRect(),
+  m_buffer.segment(p_center.x, p_center.y, p_radius,
                    start_radial-m_proj.GetDisplayAngle(), 
                    end_radial-m_proj.GetDisplayAngle());
 }

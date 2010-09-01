@@ -281,7 +281,7 @@ SutherlandHodgmanPolygoClip (POINT* inVertexArray,
  */
 void
 ClipPolygon(Canvas &canvas, const POINT *m_ptin, unsigned int inLength,
-    RECT rc, bool fill)
+            bool fill)
 {
   unsigned int outLength = 0;
 
@@ -305,6 +305,9 @@ ClipPolygon(Canvas &canvas, const POINT *m_ptin, unsigned int inLength,
       inLength++;
     }
   }
+
+  RECT rc;
+  SetRect(&rc, 0, 0, canvas.get_width(), canvas.get_height());
 
   // PAOLO NOTE: IF CLIPPING WITH N>2 DOESN'T WORK,
   // TRY IFDEF'ing out THE FOLLOWING ADJUSTMENT TO THE CLIPPING RECTANGLE
@@ -371,7 +374,7 @@ static const double ycoords[64] = {
 static const fixed seg_steps_degrees(64/ 360.0);
 
 bool
-Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
+Segment(Canvas &canvas, long x, long y, int radius,
         Angle start, Angle end, bool horizon)
 {
   POINT pt[66];
@@ -379,7 +382,8 @@ Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
   int istart;
   int iend;
 
-  RECT bounds;
+  RECT rc, bounds;
+  SetRect(&rc, 0, 0, canvas.get_width(), canvas.get_height());
   SetRect(&bounds, x - radius, y - radius, x + radius, y + radius);
   if (!IntersectRect(&bounds, &bounds, &rc))
     return false;

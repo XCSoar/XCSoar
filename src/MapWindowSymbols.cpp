@@ -290,12 +290,12 @@ MapWindow::DrawHorizon(Canvas &canvas, const RECT rc) const
   canvas.select(hpHorizonSky);
   canvas.select(hbHorizonSky);
 
-  canvas.segment(Start.x, Start.y, radius, rc, alpha2, alpha1, true);
+  canvas.segment(Start.x, Start.y, radius, alpha2, alpha1, true);
 
   canvas.select(hpHorizonGround);
   canvas.select(hbHorizonGround);
 
-  canvas.segment(Start.x, Start.y, radius, rc, alpha1, alpha2, true);
+  canvas.segment(Start.x, Start.y, radius, alpha1, alpha2, true);
 
   Pen dash_pen(Pen::DASH, 2, Color::BLACK);
   canvas.select(dash_pen);

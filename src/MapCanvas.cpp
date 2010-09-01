@@ -49,7 +49,7 @@ MapCanvas::line(const GEOPOINT &a, const GEOPOINT &b)
   pts[1] = projection.LonLat2Screen(b);
 
   if (need_clipping())
-    canvas.autoclip_polyline(pts, 2, projection.GetMapRect());
+    canvas.autoclip_polyline(pts, 2);
   else
     canvas.line(pts[0], pts[1]);
 }
@@ -110,5 +110,5 @@ MapCanvas::draw(const SearchPointVector &points)
   project(points, pts);
 
   if (visible(pts, num_points))
-    canvas.autoclip_polygon(pts, num_points, projection.GetMapRect());
+    canvas.autoclip_polygon(pts, num_points);
 }

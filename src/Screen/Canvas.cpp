@@ -76,7 +76,7 @@ Canvas::line_to(int x, int y)
 }
 
 void
-Canvas::segment(int x, int y, unsigned radius, const RECT rc,
+Canvas::segment(int x, int y, unsigned radius,
                 Angle start, Angle end, bool horizon)
 {
   // XXX horizon
@@ -509,31 +509,31 @@ Canvas::stretch_and(int dest_x, int dest_y,
 // We need to make it so.
 
 void
-Canvas::clipped_polygon(const POINT* lppt, unsigned cPoints, const RECT rc)
+Canvas::clipped_polygon(const POINT* lppt, unsigned cPoints)
 {
-  ::ClipPolygon(*this, lppt, cPoints, rc, true);
+  ::ClipPolygon(*this, lppt, cPoints, true);
 }
 
 void
-Canvas::clipped_polyline(const POINT* lppt, unsigned cPoints, const RECT rc)
+Canvas::clipped_polyline(const POINT* lppt, unsigned cPoints)
 {
-  ::ClipPolygon(*this, lppt, cPoints, rc, false);
+  ::ClipPolygon(*this, lppt, cPoints, false);
 }
 
 void
-Canvas::autoclip_polygon(const POINT* lppt, unsigned cPoints, const RECT rc)
+Canvas::autoclip_polygon(const POINT* lppt, unsigned cPoints)
 {
   if (need_clipping())
-    clipped_polygon(lppt, cPoints, rc);
+    clipped_polygon(lppt, cPoints);
   else
     polygon(lppt, cPoints);
 }
 
 void
-Canvas::autoclip_polyline(const POINT* lppt, unsigned cPoints, const RECT rc)
+Canvas::autoclip_polyline(const POINT* lppt, unsigned cPoints)
 {
   if (need_clipping())
-    clipped_polyline(lppt, cPoints, rc);
+    clipped_polyline(lppt, cPoints);
   else
     polyline(lppt, cPoints);
 }
@@ -595,10 +595,10 @@ Canvas::line_to(int x, int y)
 }
 
 void
-Canvas::segment(int x, int y, unsigned radius, const RECT rc,
+Canvas::segment(int x, int y, unsigned radius,
                 Angle start, Angle end, bool horizon)
 {
-  ::Segment(*this, x, y, radius, rc, start, end, horizon);
+  ::Segment(*this, x, y, radius, start, end, horizon);
 }
 
 const SIZE

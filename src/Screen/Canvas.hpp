@@ -273,12 +273,12 @@ public:
       ::polygonColor(surface, vx, vy, cPoints, pen.get_color().gfx_color());
   }
 
-  void autoclip_polygon(const POINT* lppt, unsigned cPoints, const RECT rc) {
+  void autoclip_polygon(const POINT* lppt, unsigned cPoints) {
     // XXX clip
     polygon(lppt, cPoints);
   }
 
-  void autoclip_polyline(const POINT* lppt, unsigned cPoints, const RECT rc) {
+  void autoclip_polyline(const POINT* lppt, unsigned cPoints) {
     // XXX clip
     polyline(lppt, cPoints);
   }
@@ -313,7 +313,7 @@ public:
       ::circleColor(surface, x, y, radius, pen.get_color().gfx_color());
   }
 
-  void segment(int x, int y, unsigned radius, const RECT rc,
+  void segment(int x, int y, unsigned radius,
                Angle start, Angle end, bool horizon=false);
 
   void draw_focus(RECT rc) {
@@ -687,12 +687,12 @@ public:
   }
 
 private:
-  void clipped_polygon(const POINT* lppt, unsigned cPoints, const RECT rc);
-  void clipped_polyline(const POINT* lppt, unsigned cPoints, const RECT rc);
+  void clipped_polygon(const POINT* lppt, unsigned cPoints);
+  void clipped_polyline(const POINT* lppt, unsigned cPoints);
 
 public:
-  void autoclip_polygon(const POINT *lppt, unsigned cPoints, const RECT rc);
-  void autoclip_polyline(const POINT *lppt, unsigned cPoints, const RECT rc);
+  void autoclip_polygon(const POINT *lppt, unsigned cPoints);
+  void autoclip_polyline(const POINT *lppt, unsigned cPoints);
 
   void line(int ax, int ay, int bx, int by);
   void line(const POINT a, const POINT b) {
@@ -711,7 +711,7 @@ public:
     ::Ellipse(dc, x - radius, y - radius, x + radius, y + radius);
   }
 
-  void segment(int x, int y, unsigned radius, const RECT rc,
+  void segment(int x, int y, unsigned radius,
                Angle start, Angle end, bool horizon=false);
 
   void draw_focus(RECT rc) {
