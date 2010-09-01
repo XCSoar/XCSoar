@@ -58,10 +58,6 @@ void ClipPolygon(Canvas &canvas, const POINT *m_ptin, unsigned int inLength,
                  RECT rc, bool fill);
 
 bool
-ClippedCircle(Canvas &canvas, long x, long y, int radius, RECT rc,
-              bool fill=true);
-
-bool
 Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
         Angle start, Angle end,
         bool horizon=false);

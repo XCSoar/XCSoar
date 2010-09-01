@@ -368,43 +368,6 @@ static const double ycoords[64] = {
   0.707106781,	0.773010453,	0.831469612,	0.881921264,	0.923879533,	0.956940336,	0.98078528,		0.995184727
 };
 
-/**
- * Paints a circle to the canvas
- * @param canvas Painting canvas
- * @param x x-Coordinate of the circle's center
- * @param y y-Coordinate of the circle's center
- * @param radius Radius of the circle
- * @param rc Clipping bounds
- * @param fill Whether the circle will be filled (closed polygon) 
- * @return
- */
-bool
-ClippedCircle(Canvas &canvas, long x, long y, int radius, RECT rc, bool fill)
-{
-  POINT pt[65];
-  unsigned int i;
-
-  RECT bounds;
-  SetRect(&bounds, x - radius, y - radius, x + radius, y + radius);
-  if (!IntersectRect(&bounds, &bounds, &rc))
-    return false;
-
-  unsigned int step = 1;
-  if (radius < 20) {
-    step = 2;
-  }
-  for (i = 64 / step; i--;) {
-    pt[i].x = x + (long)(radius * xcoords[i * step]);
-    pt[i].y = y + (long)(radius * ycoords[i * step]);
-  }
-  step = 64 / step;
-  pt[step].x = x + (long)(radius * xcoords[0]);
-  pt[step].y = y + (long)(radius * ycoords[0]);
-
-  ClipPolygon(canvas, pt, step + 1, rc, fill);
-  return true;
-}
-
 static const fixed seg_steps_degrees(64/ 360.0);
 
 bool

@@ -313,11 +313,6 @@ public:
       ::circleColor(surface, x, y, radius, pen.get_color().gfx_color());
   }
 
-  void circle(int x, int y, unsigned radius, const RECT rc)
-  {
-    circle(x, y, radius);
-  }
-
   void arc(int x, int y, unsigned radius, const RECT rc,
            Angle start, Angle end);
 
@@ -719,8 +714,6 @@ public:
   void circle(int x, int y, unsigned radius) {
     ::Ellipse(dc, x - radius, y - radius, x + radius, y + radius);
   }
-
-  void autoclip_circle(int x, int y, unsigned radius, const RECT rc);
 
   void arc(int x, int y, unsigned radius, const RECT rc,
            Angle start, Angle end);
