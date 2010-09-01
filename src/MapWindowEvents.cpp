@@ -49,9 +49,9 @@ MapWindow::on_resize(unsigned width, unsigned height)
   ++ui_generation;
   mutexBuffer.Unlock();
 
-  draw_canvas.resize(width, height);
-  buffer_canvas.resize(width, height);
-  stencil_canvas.resize(width, height);
+  draw_canvas.grow(width, height);
+  buffer_canvas.grow(width, height);
+  stencil_canvas.grow(width, height);
 
   return true;
 }

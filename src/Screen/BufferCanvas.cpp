@@ -39,6 +39,7 @@ Copyright_License {
 #include "Screen/BufferCanvas.hpp"
 
 #include <assert.h>
+#include <algorithm>
 
 #ifndef ENABLE_SDL
 
@@ -91,3 +92,9 @@ void BufferCanvas::resize(unsigned _width, unsigned _height)
 }
 
 #endif /* !ENABLE_SDL */
+
+void
+BufferCanvas::grow(unsigned _width, unsigned _height)
+{
+  resize(std::max(get_width(), _width), std::max(get_height(), _height));
+}

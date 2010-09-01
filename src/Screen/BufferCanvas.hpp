@@ -63,6 +63,11 @@ public:
   void reset();
 
   void resize(unsigned _width, unsigned _height);
+
+  /**
+   * Similar to resize(), but never shrinks the buffer.
+   */
+  void grow(unsigned _width, unsigned _height);
 };
 
 #endif

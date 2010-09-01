@@ -14,6 +14,7 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/Color.cpp \
 	$(SCREEN_SRC_DIR)/VirtualCanvas.cpp \
+	$(SCREEN_SRC_DIR)/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/BitmapCanvas.cpp \
 	$(SCREEN_SRC_DIR)/Font.cpp \
 	$(SCREEN_SRC_DIR)/Pen.cpp \
@@ -32,7 +33,6 @@ ifeq ($(ENABLE_SDL),y)
 SCREEN_SOURCES += $(SCREEN_SRC_DIR)/Timer.cpp
 else
 SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/PaintCanvas.cpp
 endif
 
