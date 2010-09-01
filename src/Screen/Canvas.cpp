@@ -76,16 +76,6 @@ Canvas::line_to(int x, int y)
 }
 
 void
-Canvas::arc(int x, int y, unsigned radius, const RECT rc,
-            Angle start, Angle end)
-{
-  // XXX
-  ::pieColor(surface, x, y, radius,
-             (int)start.value_degrees() - 90, (int)end.value_degrees() - 90,
-             brush.get_color().gfx_color());
-}
-
-void
 Canvas::segment(int x, int y, unsigned radius, const RECT rc,
                 Angle start, Angle end, bool horizon)
 {
@@ -603,13 +593,6 @@ Canvas::line_to(int x, int y)
 #else
   ::LineTo(dc, x, y);
 #endif
-}
-
-void
-Canvas::arc(int x, int y, unsigned radius, const RECT rc,
-            Angle start, Angle end)
-{
-  ::DrawArc(*this, x, y, radius, rc, start, end);
 }
 
 void

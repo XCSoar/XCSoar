@@ -62,8 +62,4 @@ Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
         Angle start, Angle end,
         bool horizon=false);
 
-bool
-DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
-        Angle start, Angle end);
-
 #endif
