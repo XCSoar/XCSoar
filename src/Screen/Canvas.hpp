@@ -687,8 +687,7 @@ public:
   }
 
 private:
-  void clipped_polygon(const POINT* lppt, unsigned cPoints, const RECT rc,
-                       bool fill=true);
+  void clipped_polygon(const POINT* lppt, unsigned cPoints, const RECT rc);
   void clipped_polyline(const POINT* lppt, unsigned cPoints, const RECT rc);
 
 public:

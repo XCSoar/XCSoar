@@ -509,10 +509,9 @@ Canvas::stretch_and(int dest_x, int dest_y,
 // We need to make it so.
 
 void
-Canvas::clipped_polygon(const POINT* lppt, unsigned cPoints, const RECT rc,
-                        bool fill)
+Canvas::clipped_polygon(const POINT* lppt, unsigned cPoints, const RECT rc)
 {
-  ::ClipPolygon(*this, lppt, cPoints, rc, fill);
+  ::ClipPolygon(*this, lppt, cPoints, rc, true);
 }
 
 void
@@ -525,7 +524,7 @@ void
 Canvas::autoclip_polygon(const POINT* lppt, unsigned cPoints, const RECT rc)
 {
   if (need_clipping())
-    clipped_polygon(lppt, cPoints, rc, true);
+    clipped_polygon(lppt, cPoints, rc);
   else
     polygon(lppt, cPoints);
 }
