@@ -273,21 +273,6 @@ public:
       ::polygonColor(surface, vx, vy, cPoints, pen.get_color().gfx_color());
   }
 
-  void clipped_polygon(const POINT* lppt, unsigned cPoints, const RECT rc,
-                       bool fill=true)
-  {
-    // XXX clip
-    if (fill)
-      polygon(lppt, cPoints);
-    else
-      polyline(lppt, cPoints);
-  }
-
-  void clipped_polyline(const POINT* lppt, unsigned cPoints, const RECT rc) {
-    // XXX clip
-    polyline(lppt, cPoints);
-  }
-
   void autoclip_polygon(const POINT* lppt, unsigned cPoints, const RECT rc) {
     // XXX clip
     polygon(lppt, cPoints);
@@ -709,10 +694,12 @@ public:
     ::Polygon(dc, lppt, cPoints);
   }
 
+private:
   void clipped_polygon(const POINT* lppt, unsigned cPoints, const RECT rc,
                        bool fill=true);
   void clipped_polyline(const POINT* lppt, unsigned cPoints, const RECT rc);
 
+public:
   void autoclip_polygon(const POINT *lppt, unsigned cPoints, const RECT rc);
   void autoclip_polyline(const POINT *lppt, unsigned cPoints, const RECT rc);
 
