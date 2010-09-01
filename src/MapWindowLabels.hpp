@@ -58,15 +58,15 @@ public:
   };
 
 protected:
+  RECT bounds;
   Label labels[50];
   unsigned num_labels;
 
 public:
-  WayPointLabelList():num_labels(0) {}
+  WayPointLabelList(const RECT &_bounds):bounds(_bounds), num_labels(0) {}
 
   void Add(const TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
-           int AltArivalAGL, bool inTask, bool isLandable, bool isAirport,
-           const RECT &MapRect);
+           int AltArivalAGL, bool inTask, bool isLandable, bool isAirport);
   void Sort();
 
   unsigned size() const {

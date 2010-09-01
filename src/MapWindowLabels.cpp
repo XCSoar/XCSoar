@@ -65,13 +65,12 @@ MapWaypointLabelListCompare(const void *elem1, const void *elem2)
 void
 WayPointLabelList::Add(const TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
                        int AltArivalAGL, bool inTask,
-                       bool isLandable, bool isAirport,
-                       const RECT &MapRect)
+                       bool isLandable, bool isAirport)
 {
-  if ((X < MapRect.left - WPCIRCLESIZE)
-      || (X > MapRect.right + (WPCIRCLESIZE * 3))
-      || (Y < MapRect.top - WPCIRCLESIZE)
-      || (Y > MapRect.bottom + WPCIRCLESIZE))
+  if ((X < bounds.left - WPCIRCLESIZE)
+      || (X > bounds.right + (WPCIRCLESIZE * 3))
+      || (Y < bounds.top - WPCIRCLESIZE)
+      || (Y > bounds.bottom + WPCIRCLESIZE))
     return;
 
 

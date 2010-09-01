@@ -62,7 +62,8 @@ public:
     map(_map),
     aircraft_state(ToAircraftState(map.Basic())),
     canvas(_canvas),
-    glide_polar(polar)
+    glide_polar(polar),
+    labels(map.GetMapRect())
   {
     // if pan mode, show full names
     pDisplayTextType = map.SettingsMap().DisplayTextType;
@@ -208,8 +209,7 @@ public:
     }
 
     labels.Add(Buffer, sc.x + 5, sc.y, text_mode, AltArrivalAGL,
-               in_task, way_point.is_landable(), way_point.is_airport(),
-               map.GetMapRect());
+               in_task, way_point.is_landable(), way_point.is_airport());
   }
 
   void
