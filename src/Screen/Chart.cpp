@@ -160,7 +160,7 @@ Chart::ScaleXFromValue(const fixed value)
 }
 
 void
-Chart::StyleLine(const POINT l1, const POINT l2, const int Style)
+Chart::StyleLine(const POINT l1, const POINT l2, enum Style Style)
 {
   int minwidth = 1;
   if (!is_altair())
@@ -256,7 +256,7 @@ Chart::DrawYLabel(const TCHAR *text)
 }
 
 void
-Chart::DrawTrend(const LeastSquares &lsdata, const int Style)
+Chart::DrawTrend(const LeastSquares &lsdata, enum Style Style)
 {
   if (lsdata.sum_n < 2)
     return;
@@ -285,7 +285,7 @@ Chart::DrawTrend(const LeastSquares &lsdata, const int Style)
 }
 
 void
-Chart::DrawTrendN(const LeastSquares &lsdata, const int Style)
+Chart::DrawTrendN(const LeastSquares &lsdata, enum Style Style)
 {
   if (lsdata.sum_n < 2)
     return;
@@ -315,7 +315,7 @@ Chart::DrawTrendN(const LeastSquares &lsdata, const int Style)
 
 void
 Chart::DrawLine(const fixed xmin, const fixed ymin,
-    const fixed xmax, const fixed ymax, const int Style)
+                const fixed xmax, const fixed ymax, enum Style Style)
 {
   if (unscaled_x || unscaled_y)
     return;
@@ -368,7 +368,7 @@ Chart::DrawFilledLineGraph(const LeastSquares &lsdata, const Color color)
 }
 
 void
-Chart::DrawLineGraph(const LeastSquares &lsdata, int Style)
+Chart::DrawLineGraph(const LeastSquares &lsdata, enum Style Style)
 {
   POINT line[2];
 
@@ -395,7 +395,7 @@ Chart::FormatTicText(TCHAR *text, const fixed val, const fixed step)
 }
 
 void
-Chart::DrawXGrid(const fixed tic_step, const fixed zero, const int Style,
+Chart::DrawXGrid(const fixed tic_step, const fixed zero, enum Style Style,
                  const fixed unit_step, bool draw_units)
 {
   if (!tic_step)
@@ -463,7 +463,7 @@ Chart::DrawXGrid(const fixed tic_step, const fixed zero, const int Style,
 }
 
 void
-Chart::DrawYGrid(const fixed tic_step, const fixed zero, const int Style,
+Chart::DrawYGrid(const fixed tic_step, const fixed zero, enum Style Style,
                  const fixed unit_step, bool draw_units)
 {
   if (!tic_step)
@@ -582,7 +582,7 @@ Chart::screenS(fixed s) const
 
 void
 Chart::DrawArrow(const fixed x, const fixed y, const fixed mag,
-    const Angle angle, const int Style)
+                 const Angle angle, enum Style Style)
 {
   POINT wv[2];
 
