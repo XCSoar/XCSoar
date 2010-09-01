@@ -218,11 +218,7 @@ protected:
 
   /*
   virtual bool on_erase(Canvas &canvas) {
-    canvas.white_brush();
-    canvas.white_pen();
-
-    RECT rc = get_client_rect();
-    canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
+    canvas.clear_white();
     return true;
   }
   */
@@ -231,11 +227,7 @@ protected:
     if (!buffered) {
       // due to a limitation of our PaintCanvas class, we cannot rely on
       // background erasing with on_erase()
-      canvas.white_brush();
-      canvas.white_pen();
-
-      RECT rc = get_client_rect();
-      canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
+      canvas.clear_white();
 
       paint(canvas);
     } else
