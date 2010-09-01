@@ -42,6 +42,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 #include "Screen/Color.hpp"
+#include "Screen/Pen.hpp"
 #include "Compiler.h"
 
 #include <windef.h>
@@ -54,6 +55,8 @@ class Chart
 private:
   Canvas &canvas;
   RECT rc;
+
+  Pen pens[5];
 
 public:
   Chart(Canvas &the_canvas, const RECT the_rc);

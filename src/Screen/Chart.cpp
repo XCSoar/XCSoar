@@ -47,6 +47,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Math/leastsqs.h"
 
+#include <assert.h>
 #include <stdio.h>
 
 #define BORDER_X 24
@@ -71,6 +72,12 @@ Chart::Chart(Canvas &the_canvas, const RECT the_rc) :
   canvas(the_canvas), rc(the_rc)
 {
   ResetScale();
+
+  pens[STYLE_BLUETHIN].set(Pen::DASH, is_altair() ? 1 : 2, Color(0, 50, 255));
+  pens[STYLE_REDTHICK].set(Pen::DASH, 3, Color(200, 50, 50));
+  pens[STYLE_DASHGREEN].set(Pen::DASH, 2, Color::GREEN);
+  pens[STYLE_MEDIUMBLACK].set(is_altair() ? 1 : 2, Color(50, 243, 45));
+  pens[STYLE_THINDASHPAPER].set(Pen::DASH, 1, Color(0x60, 0x60, 0x60));
 }
 
 void
@@ -162,45 +169,9 @@ Chart::ScaleXFromValue(const fixed value)
 void
 Chart::StyleLine(const POINT l1, const POINT l2, enum Style Style)
 {
-  int minwidth = 1;
-  if (!is_altair())
-    minwidth = 2;
-
-  Pen penThinSignal;
-  POINT line[2];
-  line[0] = l1;
-  line[1] = l2;
-
-  switch (Style) {
-  case STYLE_BLUETHIN:
-    canvas.autoclip_dashed_line(minwidth, l1, l2, Color(0, 50, 255), rc);
-    break;
-
-  case STYLE_REDTHICK:
-    canvas.autoclip_dashed_line(3, l1, l2, Color(200, 50, 50), rc);
-    break;
-
-  case STYLE_DASHGREEN:
-    canvas.autoclip_dashed_line(2, line[0], line[1], Color::GREEN, rc);
-    break;
-
-  case STYLE_MEDIUMBLACK:
-    if (!is_altair())
-      penThinSignal.set(2, Color(50, 243, 45));
-    else
-      penThinSignal.set(1, Color(50, 243, 45));
-
-    canvas.select(penThinSignal);
-    canvas.autoclip_polyline(line, 2, rc);
-    break;
-
-  case STYLE_THINDASHPAPER:
-    canvas.autoclip_dashed_line(1, l1, l2, Color(0x60, 0x60, 0x60), rc);
-    break;
-
-  default:
-    break;
-  }
+  assert((unsigned)Style < sizeof(pens) / sizeof(pens[0]));
+  canvas.select(pens[(unsigned)Style]);
+  canvas.line(l1, l2);
 }
 
 void

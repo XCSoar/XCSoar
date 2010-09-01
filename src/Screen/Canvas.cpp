@@ -550,60 +550,6 @@ Canvas::autoclip_polyline(const POINT* lppt, unsigned cPoints, const RECT rc)
 }
 
 void
-Canvas::clipped_dashed_line(int width, const POINT a, const POINT b,
-                            const Color color, const RECT rc)
-{
-  int i;
-  POINT pt[2];
-
-  //Create a dot pen
-  Pen pen(Pen::DASH, 1, color);
-  select(pen);
-
-  pt[0].x = a.x;
-  pt[0].y = a.y;
-  pt[1].x = b.x;
-  pt[1].y = b.y;
-
-  //increment on smallest variance
-  if (abs(a.x - b.x) < abs(a.y - b.y)) {
-    pt[0].x -= width / 2;
-    pt[1].x -= width / 2;
-    for (i = 0; i < width; i++){
-      pt[0].x += 1;
-      pt[1].x += 1;
-      clipped_polyline(pt, 2, rc);
-    }
-  } else {
-    pt[0].y -= width / 2;
-    pt[1].y -= width / 2;
-    for (i = 0; i < width; i++){
-      pt[0].y += 1;
-      pt[1].y += 1;
-      clipped_polyline(pt, 2, rc);
-    }
-  }
-}
-
-void
-Canvas::dashed_line(int width, const POINT a, const POINT b, const Color color)
-{
-  Pen pen(Pen::DASH, width, color);
-  select(pen);
-  line(a, b);
-}
-
-void
-Canvas::autoclip_dashed_line(int width, const POINT a, const POINT b,
-                             const Color color, const RECT rc)
-{
-  if (need_clipping())
-    clipped_dashed_line(width, a, b, color, rc);
-  else
-    dashed_line(width, a, b, color);
-}
-
-void
 Canvas::line(int ax, int ay, int bx, int by)
 {
 #ifndef NOLINETO
