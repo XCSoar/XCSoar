@@ -72,9 +72,11 @@ void
 HeightMatrix::Fill(const RasterMap &map, const Projection &projection,
                    unsigned quantisation_pixels)
 {
-  const RECT rc = projection.GetMapRect();
-  SetSize((rc.right - rc.left + quantisation_pixels - 1) / quantisation_pixels,
-          (rc.bottom - rc.top + quantisation_pixels - 1) / quantisation_pixels);
+  const unsigned screen_width = projection.GetScreenWidth();
+  const unsigned screen_height = projection.GetScreenHeight();
+
+  SetSize((screen_width + quantisation_pixels - 1) / quantisation_pixels,
+          (screen_height + quantisation_pixels - 1) / quantisation_pixels);
 
   minimum = 0x7fff;
   maximum = 0;
@@ -89,16 +91,16 @@ HeightMatrix::Fill(const RasterMap &map, const Projection &projection,
   const int sint = projection.GetDisplayAngle().ifastsine();
 #endif
 
-  for (int y = rc.top; y < rc.bottom; y += quantisation_pixels) {
+  for (unsigned y = 0; y < screen_height; y += quantisation_pixels) {
 #ifndef SLOW_TERRAIN_STUFF
     const int dy = y - Orig_Screen.y;
     const int dycost = dy * cost+512;
     const int dysint = dy * sint-512;
 #endif
 
-    short *p = data.begin() + (y * width + rc.left) / quantisation_pixels;
+    short *p = data.begin() + y * width / quantisation_pixels;
 
-    for (int x = rc.left; x < rc.right; x += quantisation_pixels) {
+    for (unsigned x = 0; x < screen_width; x += quantisation_pixels) {
 #ifndef SLOW_TERRAIN_STUFF
       const int dx = x - Orig_Screen.x;
       const POINT r = { (dx * cost - dysint) / 1024,

@@ -96,12 +96,8 @@ RasterRenderer::~RasterRenderer()
 void
 RasterRenderer::ScanMap(const RasterMap &map, const Projection &projection)
 {
-  int x, y;
-
-  const RECT &rect_visible = projection.GetMapRect();
-
-  x = (rect_visible.left + rect_visible.right) / 2;
-  y = (rect_visible.top + rect_visible.bottom) / 2;
+  unsigned x = projection.GetScreenWidth() / 2;
+  unsigned y = projection.GetScreenHeight() / 2;
   GEOPOINT Gmid = projection.Screen2LonLat(x, y);
 
   pixel_size = fixed_sqrt_half *

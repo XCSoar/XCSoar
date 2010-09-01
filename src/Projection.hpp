@@ -99,6 +99,20 @@ public:
     return MapRect;
   }
 
+  /**
+   * Returns the width of the map area in pixels.
+   */
+  unsigned GetScreenWidth() const {
+    return MapRect.right - MapRect.left;
+  }
+
+  /**
+   * Returns the height of the map area in pixels.
+   */
+  unsigned GetScreenHeight() const {
+    return MapRect.bottom - MapRect.top;
+  }
+
   // used by terrain renderer, topology and airspace
   gcc_pure
   rectObj CalculateScreenBounds(const fixed scale) const;
