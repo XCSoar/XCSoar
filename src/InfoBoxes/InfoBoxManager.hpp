@@ -40,7 +40,7 @@ Copyright_License {
 #define XCSOAR_INFO_BOX_MANAGER_HPP
 
 #include "Interface.hpp"
-#include "Screen/BufferWindow.hpp"
+#include "Screen/PaintWindow.hpp"
 #include "InfoBoxes/Content/Base.hpp"
 
 #include <windef.h>
@@ -49,10 +49,15 @@ extern unsigned numInfoWindows;
 
 class InfoBoxWindow;
 
+class InfoBoxFullWindow : public PaintWindow {
+protected:
+  virtual void on_paint(Canvas &canvas);
+};
+
 class InfoBoxManager: public ActionInterface
 {
   /** the window for displaying infoboxes full-screen */
-  static BufferWindow full_window;
+  static InfoBoxFullWindow full_window;
 
 private:
   static void ResetInfoBoxes();

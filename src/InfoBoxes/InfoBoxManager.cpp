@@ -59,7 +59,7 @@ Copyright_License {
 
 using std::min;
 
-BufferWindow InfoBoxManager::full_window;
+InfoBoxFullWindow InfoBoxManager::full_window;
 
 static bool InfoBoxesDirty = false;
 static bool InfoBoxesHidden = false;
@@ -92,6 +92,53 @@ static const int InfoTypeAltairDefault[MAXINFOWINDOWS] = {
 };
 
 static int InfoType[MAXINFOWINDOWS];
+
+void
+InfoBoxFullWindow::on_paint(Canvas &canvas)
+{
+  canvas.clear_white();
+
+  for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++) {
+    // JMW TODO: make these calculated once only.
+    int x, y;
+    int rx, ry;
+    int rw;
+    int rh;
+    double fw, fh;
+
+    if (Layout::landscape) {
+      rw = 84;
+      rh = 68;
+    } else {
+      rw = 120;
+      rh = 80;
+    }
+
+    fw = rw / (double)InfoBoxLayout::ControlWidth;
+    fh = rh / (double)InfoBoxLayout::ControlHeight;
+
+    double f = min(fw, fh);
+    rw = (int)(f * InfoBoxLayout::ControlWidth);
+    rh = (int)(f * InfoBoxLayout::ControlHeight);
+
+    if (Layout::landscape) {
+      rx = i % 3;
+      ry = i / 3;
+
+      x = (rw + 4) * rx;
+      y = (rh + 3) * ry;
+    } else {
+      rx = i % 2;
+      ry = i / 4;
+
+      x = (rw) * rx;
+      y = (rh) * ry;
+    }
+
+    InfoBoxes[i]->PaintInto(canvas, IBLSCALE(x), IBLSCALE(y),
+                            IBLSCALE(rw), IBLSCALE(rh));
+  }
+}
 
 // TODO locking
 void
@@ -391,51 +438,6 @@ InfoBoxManager::Paint()
   if (!InfoBoxLayout::fullscreen) {
     full_window.hide();
   } else {
-    Canvas &canvas = full_window.get_canvas();
-
-    canvas.clear_white();
-
-    for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++) {
-      // JMW TODO: make these calculated once only.
-      int x, y;
-      int rx, ry;
-      int rw;
-      int rh;
-      double fw, fh;
-
-      if (Layout::landscape) {
-        rw = 84;
-        rh = 68;
-      } else {
-        rw = 120;
-        rh = 80;
-      }
-
-      fw = rw / (double)InfoBoxLayout::ControlWidth;
-      fh = rh / (double)InfoBoxLayout::ControlHeight;
-
-      double f = min(fw, fh);
-      rw = (int)(f * InfoBoxLayout::ControlWidth);
-      rh = (int)(f * InfoBoxLayout::ControlHeight);
-
-      if (Layout::landscape) {
-        rx = i % 3;
-        ry = i / 3;
-
-        x = (rw + 4) * rx;
-        y = (rh + 3) * ry;
-      } else {
-        rx = i % 2;
-        ry = i / 4;
-
-        x = (rw) * rx;
-        y = (rh) * ry;
-      }
-
-      InfoBoxes[i]->PaintInto(canvas, IBLSCALE(x), IBLSCALE(y),
-                              IBLSCALE(rw), IBLSCALE(rh));
-    }
-
     full_window.invalidate();
     full_window.show();
   }
