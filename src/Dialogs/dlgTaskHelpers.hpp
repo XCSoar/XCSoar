@@ -44,7 +44,7 @@ Copyright_License {
 const TCHAR* OrderedTaskFactoryDescription(OrderedTask::Factory_t type);
 const TCHAR* OrderedTaskFactoryName(OrderedTask::Factory_t type);
 void OrderedTaskSummary(OrderedTask* task, TCHAR* text);
-void OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* text);
+void OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* name, TCHAR* radius);
 bool OrderedTaskSave(const OrderedTask& task, bool noask=false);
 
 const TCHAR* OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type);

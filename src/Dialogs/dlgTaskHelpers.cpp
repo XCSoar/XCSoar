@@ -47,6 +47,9 @@ Copyright_License {
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Task/ObservationZones/CylinderZone.hpp"
+#include "Task/ObservationZones/SectorZone.hpp"
+#include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
 
@@ -180,15 +183,69 @@ private:
   TCHAR *text;
 };
 
+class LabelSizeObservationZone:
+  public ObservationZoneConstVisitor
+{
+public:
+  LabelSizeObservationZone(TCHAR* _radius):
+    radius(_radius)
+  {
+    radius[0] = _T('\0');
+  }
+
+  void
+  Visit(const FAISectorZone& oz)
+  {
+    _stprintf(radius,_T("FAI"));
+  }
+  void
+  Visit(const KeyholeZone& oz)
+  {
+    _stprintf(radius,_T("DAe"));
+  }
+
+  void
+  Visit(const BGAFixedCourseZone& oz)
+  {
+    _stprintf(radius,_T("BGA"));
+  }
+
+  void
+  Visit(const BGAEnhancedOptionZone& oz)
+  {
+    _stprintf(radius,_T("BGAE"));
+  }
+
+  void
+  Visit(const SectorZone& oz)
+  {
+    _stprintf(radius,_T("%.1f%s"), (double)Units::ToUserDistance(oz.getRadius()),Units::GetUnitName(Units::DistanceUnit));
+  }
+
+  void
+  Visit(const LineSectorZone& oz)
+  {
+    _stprintf(radius,_T("%.1f%s"), (double)Units::ToUserDistance(oz.getLength()),Units::GetUnitName(Units::DistanceUnit));
+  }
+
+  void
+  Visit(const CylinderZone& oz)
+  {
+    _stprintf(radius,_T("%.1f%s"), (double)Units::ToUserDistance(oz.getRadius()),Units::GetUnitName(Units::DistanceUnit));
+  }
+  TCHAR* radius;
+};
+
 class LabelTaskPoint:
   public TaskPointConstVisitor
 {
 public:
-  LabelTaskPoint(const unsigned index, TCHAR* buff):
+    LabelTaskPoint(const unsigned index, TCHAR* _name, TCHAR* _radius):
     m_index(0),
     m_active_index(index),
-    text(buff) {
-    text[0] = _T('\0');
+    name(_name),
+    ozSize(_radius){
+    name[0] = _T('\0');
   }
 
   void Visit(const UnorderedTaskPoint& tp) {}
@@ -196,33 +253,44 @@ public:
   void
   Visit(const StartPoint& tp)
   {
-    if (found())
-      _stprintf(text, _T("S:  %s"), tp.get_waypoint().Name.c_str());
+    if (found()) {
+      _stprintf(name, _T("S:  %s"), tp.get_waypoint().Name.c_str());
+      const ObservationZonePoint *ozp = tp.get_oz();
+      ((ObservationZoneConstVisitor &)ozSize).Visit(*ozp);
+    }
 
     inc_index();
   }
   void
   Visit(const FinishPoint& tp)
   {
-    if (found())
-      _stprintf(text, _T("F:  %s"), tp.get_waypoint().Name.c_str());
+    if (found()) {
+      _stprintf(name, _T("F:  %s"), tp.get_waypoint().Name.c_str());
+      const ObservationZonePoint *ozp = tp.get_oz();
+      ((ObservationZoneConstVisitor &)ozSize).Visit(*ozp);
+    }
 
     inc_index();
   }
   void
   Visit(const AATPoint& tp)
   {
-    if (found())
-      _stprintf(text, _T("A%d: %s"), m_index, tp.get_waypoint().Name.c_str());
+    if (found()) {
+      _stprintf(name, _T("A%d: %s"), m_index, tp.get_waypoint().Name.c_str());
+      const ObservationZonePoint *ozp = tp.get_oz();
+      ((ObservationZoneConstVisitor &)ozSize).Visit(*ozp);
+    }
 
     inc_index();
   }
   void
   Visit(const ASTPoint& tp)
   {
-    if (found())
-      _stprintf(text, _T("T%d: %s"), m_index, tp.get_waypoint().Name.c_str());
-
+    if (found()) {
+      _stprintf(name, _T("T%d: %s"), m_index, tp.get_waypoint().Name.c_str());
+      const ObservationZonePoint *ozp = tp.get_oz();
+      ((ObservationZoneConstVisitor &)ozSize).Visit(*ozp);
+    }
     inc_index();
   }
 
@@ -237,13 +305,14 @@ private:
 
   unsigned m_index;
   const unsigned m_active_index;
-  TCHAR* text;
+  TCHAR* name;
+  LabelSizeObservationZone ozSize;
 };
 
 void
-OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* text)
+OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* name, TCHAR* radius)
 {
-  LabelTaskPoint tpv(index, text);
+  LabelTaskPoint tpv(index, name, radius);
   task->tp_CAccept(tpv);
 }
 

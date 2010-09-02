@@ -127,9 +127,37 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
                   rc.top + Layout::FastScale(2), sTmp);
     }
   } else {
-    OrderedTaskPointLabel(ordered_task, DrawListIndex, sTmp);
-    canvas.text(rc.left + Layout::FastScale(2),
-                rc.top + Layout::FastScale(2), sTmp);
+
+    TCHAR sRad[10];
+    TCHAR sDist[10];
+    fixed fDist = fixed_zero;
+    int w0, wRad, wDist, x;
+
+    w0 = rc.right - rc.left - Layout::FastScale(4);
+    wRad = canvas.text_width(_T("XXXkm"));
+    wDist = canvas.text_width(_T("00000km"));
+    x = w0 - wRad - wDist;
+
+    OrderedTaskPointLabel(ordered_task, DrawListIndex, sTmp, sRad);
+
+    canvas.text_clipped(rc.left + Layout::FastScale(2),
+                        rc.top + Layout::FastScale(2),
+                        x - Layout::FastScale(5), sTmp);
+
+    if (sRad[0] != _T('\0')) {
+      x = w0 - wDist - canvas.text_width(sRad);
+      canvas.text(rc.left + x, rc.top + Layout::FastScale(2), sRad);
+    }
+
+    if (DrawListIndex < ordered_task->task_size()) {
+      fDist = ordered_task->getTaskPoint(DrawListIndex)->leg_distance_nominal();
+
+      if (fDist > fixed(0.01)) {
+        _stprintf(sDist,_T("%.1f%s"), (double)Units::ToUserDistance(fDist),Units::GetUnitName(Units::DistanceUnit));
+        x = w0 - canvas.text_width(sDist);
+        canvas.text(rc.left + x, rc.top + Layout::FastScale(2), sDist);
+      }
+    }
   }
 }
 
