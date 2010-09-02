@@ -68,8 +68,13 @@ public:
     return GEOPOINT(Angle::native(fixed(p.x)), Angle::native(fixed(p.y)));
   }
 
-  POINT GetOrigScreen(void) const { return Orig_Screen; }
-  GEOPOINT GetPanLocation() const { return PanLocation; }
+  const POINT &GetOrigScreen() const {
+    return Orig_Screen;
+  }
+
+  const GEOPOINT &GetPanLocation() const {
+    return PanLocation;
+  }
 
   bool LonLat2ScreenIfVisible(const GEOPOINT &loc, POINT *sc) const;
 

@@ -67,7 +67,8 @@ class MapWindowProjection: public Projection
   fixed GetMapScaleKM() const {
     return (fixed)Units::ToSysUnit(MapScale * fixed(0.001), Units::DistanceUnit);
   }
-  POINT GetOrigAircraft(void) const {
+
+  const POINT &GetOrigAircraft(void) const {
     return Orig_Aircraft;
   }
 
