@@ -13,6 +13,11 @@
     <Button Name="butType" Caption="Type" X="10" Y="-1" Width="220" Height="22" OnClick="OnTypeClicked"/>
   </Panel>
 
+  <Panel Name="frmNextPrevious" X="80" Y="200" Width="240" Height="22">
+    <Button Name="butPrevious" Caption="Previous" X="0" Y="0" Width="55" Height="22" OnClick="OnPreviousClicked"/>
+    <Button Name="butNext" Caption="Next" X="55" Y="0" Width="55" Height="22" OnClick="OnNextClicked"/>
+  </Panel>
+
   <Panel Name="frmOZLine" X="80" Y="80" Width="240" Height="142">
     <Edit Name="prpOZLineLength" Caption="Length" X="2" Y="-1" Width="240" Height="22" CaptionWidth="150" Help="Length of the OZ line.">
       <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.1" Max="100" Step="0.5" Fine="1" />

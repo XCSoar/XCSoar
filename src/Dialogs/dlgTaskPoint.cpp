@@ -63,6 +63,7 @@ static WndFrame* wTaskView = NULL;
 static OrderedTask* ordered_task = NULL;
 static bool task_modified = false;
 static unsigned active_index = 0;
+static int next_previous = 0;
 
 static void
 OnCloseClicked(WindowControl * Sender)
@@ -342,6 +343,14 @@ RefreshView()
   if (wb)
     wb->SetCaption(tp->get_waypoint().Name.c_str());
 
+  wb = ((WndButton*)wf->FindByName(_T("butPrevious")));
+  if (wb)
+    wb->set_visible(active_index > 0);
+
+  wb = ((WndButton*)wf->FindByName(_T("butNext")));
+  if (wb)
+    wb->set_visible(active_index < (ordered_task->task_size() - 1));
+
   TCHAR buf[100];
   TPLabelTaskPoint tpv(buf);
   ((TaskPointConstVisitor &)tpv).Visit(*tp);
@@ -417,12 +426,30 @@ OnTypeClicked(WindowControl * Sender)
   }
 }
 
+static void
+OnPreviousClicked(WindowControl * Sender)
+{
+  (void)Sender;
+  next_previous=-1;
+  wf->SetModalResult(mrOK);
+}
+
+static void
+OnNextClicked(WindowControl * Sender)
+{
+  (void)Sender;
+  next_previous=1;
+  wf->SetModalResult(mrOK);
+}
+
 static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnRemoveClicked),
   DeclareCallBackEntry(OnRelocateClicked),
   DeclareCallBackEntry(OnDetailsClicked),
   DeclareCallBackEntry(OnTypeClicked),
+  DeclareCallBackEntry(OnPreviousClicked),
+  DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnTaskPaint),
   DeclareCallBackEntry(NULL)
 };
@@ -450,10 +477,13 @@ dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task,
   wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView"));
   assert(wTaskView != NULL);
 
-  RefreshView();
-
-  if (wf->ShowModal() == mrOK)
-    ReadValues();
+  do {
+    RefreshView();
+    next_previous=0;
+    if (wf->ShowModal() == mrOK)
+      ReadValues();
+    active_index += next_previous;
+  } while (next_previous != 0);
 
   delete wf;
   wf = NULL;
