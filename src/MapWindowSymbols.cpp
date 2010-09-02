@@ -108,7 +108,6 @@ void
 MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc,
                          const GPS_STATE &gps) const
 {
-  TextInBoxMode_t TextInBoxMode = { 2 };
   const TCHAR *txt;
   MaskedIcon *icon = NULL;
 
@@ -126,12 +125,11 @@ MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc,
              rc.left + IBLSCALE(2),
             rc.bottom + IBLSCALE(-35));
 
+  canvas.background_opaque();
+  canvas.set_background_color(Color::WHITE);
   canvas.set_text_color(Color::BLACK);
-
-  TextInBox(canvas, txt,
-            rc.left + IBLSCALE(24),
-            rc.bottom + IBLSCALE(-32),
-            TextInBoxMode, rc);
+  canvas.text(rc.left + IBLSCALE(24), rc.bottom + IBLSCALE(-32),
+              txt);
 }
 
 void
