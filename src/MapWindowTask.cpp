@@ -145,7 +145,7 @@ private:
 };
 
 void
-MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
+MapWindow::DrawTask(Canvas &canvas, const RECT &rc, Canvas &buffer)
 {
   if (task == NULL)
     return;

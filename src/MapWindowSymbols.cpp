@@ -105,7 +105,7 @@ MapWindow::DrawAircraft(Canvas &canvas) const
 }
 
 void
-MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc,
+MapWindow::DrawGPSStatus(Canvas &canvas, const RECT &rc,
                          const GPS_STATE &gps) const
 {
   const TCHAR *txt;
@@ -133,7 +133,7 @@ MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc,
 }
 
 void
-MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc) const
+MapWindow::DrawFlightMode(Canvas &canvas, const RECT &rc) const
 {
   static bool flip = true;
   static fixed LastTime = fixed_zero;
@@ -183,11 +183,10 @@ MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc) const
 }
 
 void
-MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig,
-                               const RECT rc) const
+MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT &Start,
+                               const RECT &rc) const
 {
   int i;
-  POINT Start;
   TCHAR sTmp[12];
   static SIZE tsize = { 0, 0 };
 
@@ -207,9 +206,6 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig,
   canvas.select(MapGfx.hbWind);
 
   int wmag = iround(4 * wind.norm);
-
-  Start.y = Orig.y;
-  Start.x = Orig.x;
 
   int kx = tsize.cx / Layout::scale / 2;
 
@@ -260,7 +256,7 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig,
 }
 
 void
-MapWindow::DrawHorizon(Canvas &canvas, const RECT rc) const
+MapWindow::DrawHorizon(Canvas &canvas, const RECT &rc) const
 {
   POINT Start;
   Start.y = IBLSCALE(55) + rc.top;
@@ -317,7 +313,7 @@ MapWindow::DrawHorizon(Canvas &canvas, const RECT rc) const
 }
 
 void
-MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc) const
+MapWindow::DrawFinalGlide(Canvas &canvas, const RECT &rc) const
 {
   POINT GlideBar[6] = {
       { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, 0 }, { 9, 0 }, { 0, 0 }
@@ -497,7 +493,7 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc) const
 }
 
 void
-MapWindow::DrawCompass(Canvas &canvas, const RECT rc) const
+MapWindow::DrawCompass(Canvas &canvas, const RECT &rc) const
 {
   POINT Start;
 

@@ -49,7 +49,7 @@ Copyright_License {
 #include <stdio.h>
 
 fixed
-MapWindow::findMapScaleBarSize(const RECT rc) const
+MapWindow::findMapScaleBarSize(const RECT &rc) const
 {
   fixed pixelsize = DistanceScreenToUser(1); // units/pixel
   fixed half_displaysize = DistanceScreenToUser((rc.bottom - rc.top) / 2); // units
@@ -68,7 +68,7 @@ MapWindow::findMapScaleBarSize(const RECT rc) const
 }
 
 void
-MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc) const
+MapWindow::DrawMapScale2(Canvas &canvas, const RECT &rc) const
 {
   canvas.select(MapGfx.hpMapScale);
 
@@ -122,7 +122,7 @@ draw_bitmap(Canvas &canvas, BitmapCanvas &bitmap_canvas, const Bitmap &bitmap,
 }
 
 void
-MapWindow::DrawMapScale(Canvas &canvas, const RECT rc) const
+MapWindow::DrawMapScale(Canvas &canvas, const RECT &rc) const
 {
   static int LastMapWidth = 0;
   fixed MapWidth;

@@ -89,7 +89,7 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
 }
 
 void
-MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc) const
+MapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
 {
   POINT GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };
 

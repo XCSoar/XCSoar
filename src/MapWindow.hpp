@@ -128,7 +128,7 @@ public:
   static bool identify(HWND hWnd);
 #endif
 
-  void set(ContainerWindow &parent, const RECT rc);
+  void set(ContainerWindow &parent, const RECT &rc);
 
   void set_way_points(const Waypoints *_way_points) {
     way_points = _way_points;
@@ -189,7 +189,7 @@ private:
 
   // display element functions
 
-  void CalculateScreenPositions(POINT Orig, RECT rc,
+  void CalculateScreenPositions(const POINT &Orig, const RECT &rc,
                                 POINT *Orig_Aircraft);
 
   void CalculateScreenPositionsGroundline();
@@ -200,26 +200,27 @@ private:
   void DrawAircraft(Canvas &canvas) const;
   void DrawCrossHairs(Canvas &canvas) const;
   void DrawBestCruiseTrack(Canvas &canvas) const;
-  void DrawCompass(Canvas &canvas, const RECT rc) const;
-  void DrawHorizon(Canvas &canvas, const RECT rc) const;
-  void DrawWindAtAircraft2(Canvas &canvas, POINT Orig, RECT rc) const;
+  void DrawCompass(Canvas &canvas, const RECT &rc) const;
+  void DrawHorizon(Canvas &canvas, const RECT &rc) const;
+  void DrawWindAtAircraft2(Canvas &canvas, const POINT &Orig,
+                           const RECT &rc) const;
   void DrawAirspace(Canvas &canvas, Canvas &buffer);
   void DrawAirspaceIntersections(Canvas &canvas) const;
   void DrawWaypoints(Canvas &canvas);
 
-  void DrawFlightMode(Canvas &canvas, const RECT rc) const;
-  void DrawGPSStatus(Canvas &canvas, const RECT rc,
+  void DrawFlightMode(Canvas &canvas, const RECT &rc) const;
+  void DrawGPSStatus(Canvas &canvas, const RECT &rc,
                      const GPS_STATE &gps) const;
   void DrawTrail(Canvas &canvas) const;
   void DrawTeammate(Canvas &canvas) const;
   void DrawProjectedTrack(Canvas &canvas) const;
-  void DrawTask(Canvas &canvas, RECT rc, Canvas &buffer);
+  void DrawTask(Canvas &canvas, const RECT &rc, Canvas &buffer);
   void DrawThermalEstimate(Canvas &canvas) const;
 
-  void DrawMapScale(Canvas &canvas, const RECT rc) const;
-  void DrawMapScale2(Canvas &canvas, const RECT rc) const;
-  void DrawFinalGlide(Canvas &canvas, const RECT rc) const;
-  void DrawThermalBand(Canvas &canvas, const RECT rc) const;
+  void DrawMapScale(Canvas &canvas, const RECT &rc) const;
+  void DrawMapScale2(Canvas &canvas, const RECT &rc) const;
+  void DrawFinalGlide(Canvas &canvas, const RECT &rc) const;
+  void DrawThermalBand(Canvas &canvas, const RECT &rc) const;
   void DrawGlideThroughTerrain(Canvas &canvas) const;
   void DrawTerrainAbove(Canvas &hDC, Canvas &buffer);
   void DrawCDI();
@@ -228,10 +229,10 @@ private:
   void DrawFLARMTraffic(Canvas &canvas) const;
 
   gcc_pure
-  fixed findMapScaleBarSize(const RECT rc) const;
+  fixed findMapScaleBarSize(const RECT &rc) const;
 
   // thread, main functions
-  void Render(Canvas &canvas, const RECT rc);
+  void Render(Canvas &canvas, const RECT &rc);
 
 protected:
   void UpdateTopology();
@@ -274,15 +275,15 @@ protected:
 private:
   GlidePolar get_glide_polar() const;
 
-  void RenderStart(Canvas &canvas, const RECT rc);
+  void RenderStart(Canvas &canvas, const RECT &rc);
   void RenderMapLayer(Canvas &canvas);
-  void RenderAreas(Canvas &canvas, const RECT rc);
-  void RenderTrail(Canvas &canvas, const RECT rc);
-  void RenderTaskElements(Canvas &canvas, const RECT rc);
-  void RenderGlide(Canvas &canvas, const RECT rc);
-  void RenderAirborne(Canvas &canvas, const RECT rc);
-  void RenderSymbology_upper(Canvas &canvas, const RECT rc);
-  void RenderSymbology_lower(Canvas &canvas, const RECT rc);
+  void RenderAreas(Canvas &canvas, const RECT &rc);
+  void RenderTrail(Canvas &canvas);
+  void RenderTaskElements(Canvas &canvas, const RECT &rc);
+  void RenderGlide(Canvas &canvas, const RECT &rc);
+  void RenderAirborne(Canvas &canvas, const RECT &rc);
+  void RenderSymbology_upper(Canvas &canvas, const RECT &rc);
+  void RenderSymbology_lower(Canvas &canvas, const RECT &rc);
 
   std::vector<GEOPOINT> m_airspace_intersections;
 

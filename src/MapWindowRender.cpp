@@ -48,7 +48,7 @@ Copyright_License {
  * @param rc The area to draw in
  */
 void
-MapWindow::RenderStart(Canvas &canvas, const RECT rc)
+MapWindow::RenderStart(Canvas &canvas, const RECT &rc)
 {
   // Calculate screen position of the aircraft
   CalculateOrigin(rc, Basic(), Calculated(), SettingsComputer(), SettingsMap());
@@ -98,7 +98,7 @@ MapWindow::RenderMapLayer(Canvas &canvas)
  * @param rc The area to draw in
  */
 void
-MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
+MapWindow::RenderAreas(Canvas &canvas, const RECT &rc)
 {
   // Draw airspace on top
   if (SettingsMap().OnAirSpace > 0)
@@ -111,7 +111,7 @@ MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
  * @param rc The area to draw in
  */
 void
-MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
+MapWindow::RenderTrail(Canvas &canvas)
 {
   DrawTrail(canvas);
 }
@@ -122,7 +122,7 @@ MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
  * @param rc The area to draw in
  */
 void
-MapWindow::RenderTaskElements(Canvas &canvas, const RECT rc)
+MapWindow::RenderTaskElements(Canvas &canvas, const RECT &rc)
 {
   if (task != NULL && task->check_task())
     DrawTask(canvas, rc, buffer_canvas);
@@ -139,7 +139,7 @@ MapWindow::RenderTaskElements(Canvas &canvas, const RECT rc)
  * @param rc The area to draw in
  */
 void
-MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
+MapWindow::RenderGlide(Canvas &canvas, const RECT &rc)
 {
   // draw red cross on glide through terrain marker
   if (Calculated().TerrainValid)
@@ -152,7 +152,7 @@ MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
  * @param rc The area to draw in
  */
 void
-MapWindow::RenderAirborne(Canvas &canvas, const RECT rc)
+MapWindow::RenderAirborne(Canvas &canvas, const RECT &rc)
 {
   // Draw wind vector at aircraft
   if (!SettingsMap().EnablePan)
@@ -180,7 +180,7 @@ MapWindow::RenderAirborne(Canvas &canvas, const RECT rc)
  * @param rc The area to draw in
  */
 void
-MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
+MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT &rc)
 {
   const NMEA_INFO &data = Basic();
 
@@ -210,7 +210,7 @@ MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
  * @param rc
  */
 void
-MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
+MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT &rc)
 {
   if (Basic().gps.Connected)
     // TODO enhancement: don't draw offtrack indicator if showing spot heights
@@ -225,7 +225,7 @@ MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
  * @param rc The area to draw in
  */
 void
-MapWindow::Render(Canvas &canvas, const RECT rc)
+MapWindow::Render(Canvas &canvas, const RECT &rc)
 { 
   // Calculate screen positions
   RenderStart(canvas, rc);
@@ -245,7 +245,7 @@ MapWindow::Render(Canvas &canvas, const RECT rc)
   // Render the snail trail
   /// @todo trail should be drawn above task shaded sections
 
-  RenderTrail(canvas, rc);
+  RenderTrail(canvas);
 
   DrawThermalEstimate(canvas);
 
