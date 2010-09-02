@@ -137,7 +137,7 @@ TextInBoxMoveInView(POINT *offset, RECT *brect, const RECT &MapRect)
 // returns true if really wrote something
 bool
 TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
-    TextInBoxMode_t Mode, const RECT MapRect, LabelBlock *label_block)
+          TextInBoxMode_t Mode, const RECT &MapRect, LabelBlock *label_block)
 {
   RECT brect;
   POINT org;
