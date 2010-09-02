@@ -89,10 +89,9 @@ ColorRampLookup(const short h,
   }
 
   // check if h lower than lowest
-  if (h <= ramp_colors[0].h) {
-    r = ramp_colors[0].r;
-    g = ramp_colors[0].g;
-    b = ramp_colors[0].b;
-    return;
-  }
+  assert(h <= ramp_colors[0].h);
+
+  r = ramp_colors[0].r;
+  g = ramp_colors[0].g;
+  b = ramp_colors[0].b;
 }
