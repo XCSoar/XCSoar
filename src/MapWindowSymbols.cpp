@@ -108,10 +108,6 @@ void
 MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc,
                          const GPS_STATE &gps) const
 {
-  if (gps.Connected && !gps.NAVWarning && gps.SatellitesUsed)
-    // nothing to do, all OK
-    return;
-
   TextInBoxMode_t TextInBoxMode = { 2 };
   const TCHAR *txt;
   MaskedIcon *icon = NULL;
