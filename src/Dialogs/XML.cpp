@@ -447,8 +447,8 @@ LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable,
           StringToStringDflt(node.getAttribute(_T("EditFormat")),
                              _T("")));
 
-  int Min = StringToIntDflt(node.getAttribute(_T("Min")), INT_MIN);
-  int Max = StringToIntDflt(node.getAttribute(_T("Max")), INT_MAX);
+  fixed Min = fixed(StringToFloatDflt(node.getAttribute(_T("Min")), INT_MIN));
+  fixed Max = fixed(StringToFloatDflt(node.getAttribute(_T("Max")), INT_MAX));
   Step = StringToFloatDflt(node.getAttribute(_T("Step")), 1);
   Fine = StringToIntDflt(node.getAttribute(_T("Fine")), 0);
 
@@ -468,7 +468,7 @@ LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable,
                                 _T("ON"), _T("OFF"), callback);
 
   if (_tcsicmp(DataType, _T("double")) == 0)
-    return new DataFieldFloat(EditFormat, DisplayFmt, fixed(Min), fixed(Max),
+    return new DataFieldFloat(EditFormat, DisplayFmt, Min, Max,
                               fixed_zero, fixed(Step), fixed(Fine),
                               callback);
 
