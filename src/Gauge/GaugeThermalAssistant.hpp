@@ -59,7 +59,8 @@ class GaugeThermalAssistant : public ThermalAssistantWindow {
 
 public:
   GaugeThermalAssistant(ContainerWindow &parent,
-                        int left, int top, unsigned width, unsigned height);
+                        int left, int top, unsigned width, unsigned height,
+                        WindowStyle style=WindowStyle());
 
   void Update(const bool enabled, const Angle direction,
               const DERIVED_INFO &derived);

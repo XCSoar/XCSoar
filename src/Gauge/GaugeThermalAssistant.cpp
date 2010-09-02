@@ -49,12 +49,11 @@ Copyright_License {
  * @param height Height of window (pixels)
  */
 GaugeThermalAssistant::GaugeThermalAssistant(ContainerWindow &parent,
-                       int left, int top, unsigned width, unsigned height)
+                                             int left, int top,
+                                             unsigned width, unsigned height,
+                                             WindowStyle style)
   :ThermalAssistantWindow(5, true)
 {
-  WindowStyle style;
-  style.hide();
-
   set(parent, left, top, width, height, style);
 }
 

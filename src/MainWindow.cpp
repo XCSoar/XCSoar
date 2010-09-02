@@ -149,7 +149,8 @@ MainWindow::initialise()
   unsigned sz = std::min(InfoBoxLayout::ControlHeight,
                          InfoBoxLayout::ControlWidth) * 2;
 
-  ta = new GaugeThermalAssistant(*this, 0, rc.bottom - sz, sz, sz);
+  ta = new GaugeThermalAssistant(*this, 0, rc.bottom - sz, sz, sz,
+                                 hidden);
   ta->bring_to_top();
 
   LogStartUp(_T("Initialise message system"));
