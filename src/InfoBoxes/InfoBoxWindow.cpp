@@ -179,7 +179,6 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
   int x, y;
   int halftextwidth;
 
-  canvas.set_background_color(look.title.bg_color);
   canvas.set_text_color(look.get_title_color(colorTitle));
 
   const Font &font = *look.title.font;
@@ -193,7 +192,7 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 
   y = recTitle.top + 1 + font.get_capital_height() - font.get_ascent_height();
 
-  canvas.text_opaque(x, y, &recTitle, mTitle);
+  canvas.text(x, y, mTitle);
 
   if (Appearance.InfoBoxBorder == apIbTab && halftextwidth > IBLSCALE(3)) {
     int ytop = recTitle.top + font.get_capital_height() / 2;
@@ -224,7 +223,6 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   SIZE tsize;
   int x, y;
 
-  canvas.set_background_color(look.value.bg_color);
   canvas.set_text_color(look.get_value_color(colorValue));
 
   canvas.select(*look.value.font);
@@ -254,7 +252,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   y = recValue.top + 1 - ascent_height +
     (recValue.bottom - recValue.top + capital_height) / 2;
 
-  canvas.text_opaque(x, y, &recValue, mValue);
+  canvas.text(x, y, mValue);
 
   if (unit_symbol != NULL && colorValue >= 0) {
     POINT origin = unit_symbol->get_origin(Appearance.InverseInfoBox
@@ -278,7 +276,6 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
   SIZE tsize;
   int x, y;
 
-  canvas.set_background_color(look.comment.bg_color);
   canvas.set_text_color(look.get_comment_color(colorComment));
 
   const Font &font = *look.comment.font;
@@ -290,7 +287,7 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
   y = recComment.top + 1 + font.get_capital_height()
     - font.get_ascent_height();
 
-  canvas.text_opaque(x, y, &recComment, mComment);
+  canvas.text(x, y, mComment);
 }
 
 void
@@ -320,7 +317,9 @@ InfoBoxWindow::PaintSelector(Canvas &canvas)
 void
 InfoBoxWindow::Paint(Canvas &canvas)
 {
-  canvas.background_opaque();
+  canvas.clear(look.background_brush);
+
+  canvas.background_transparent();
 
   PaintTitle(canvas);
   PaintComment(canvas);

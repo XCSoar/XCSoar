@@ -60,9 +60,10 @@ class Font;
 
 struct InfoBoxLook {
   Pen border_pen, selector_pen;
+  Brush background_brush;
 
   struct {
-    Color fg_color, bg_color;
+    Color fg_color;
     const Font *font;
   } title, value, comment;
 

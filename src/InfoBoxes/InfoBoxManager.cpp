@@ -475,10 +475,8 @@ InfoBoxManager::Create(RECT rc)
     = info_box_look.title.fg_color
     = info_box_look.comment.fg_color
     = Appearance.InverseInfoBox ? Color::WHITE : Color::BLACK;
-  info_box_look.value.bg_color
-    = info_box_look.title.bg_color
-    = info_box_look.comment.bg_color
-    = Appearance.InverseInfoBox ? Color::BLACK : Color::WHITE;
+  info_box_look.background_brush.set(Appearance.InverseInfoBox
+                                     ? Color::BLACK : Color::WHITE);
 
   Color border_color = Color(80, 80, 80);
   info_box_look.border_pen.set(InfoBoxWindow::BORDER_WIDTH, border_color);
