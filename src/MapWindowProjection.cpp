@@ -48,9 +48,6 @@ Copyright_License {
 #include <stdlib.h>
 #include <math.h>
 
-// ratio of border size to trigger shape cache reload
-static const fixed BORDERFACTOR(1.4);
-
 MapWindowProjection::MapWindowProjection():
   Projection(),
   DisplayMode(dmCruise),
