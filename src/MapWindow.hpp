@@ -187,9 +187,6 @@ private:
 
   THERMAL_SOURCE_VIEW ThermalSources[MAX_THERMAL_SOURCES];
 
-  // projection
-  bool BigZoom;
-
   // display element functions
 
   void CalculateScreenPositions(POINT Orig, RECT rc,
@@ -219,8 +216,7 @@ private:
   void DrawTask(Canvas &canvas, RECT rc, Canvas &buffer);
   void DrawThermalEstimate(Canvas &canvas) const;
 
-  void DrawMapScale(Canvas &canvas, const RECT rc,
-                    const bool ScaleChangeFeedback) const;
+  void DrawMapScale(Canvas &canvas, const RECT rc) const;
   void DrawMapScale2(Canvas &canvas, const RECT rc) const;
   void DrawFinalGlide(Canvas &canvas, const RECT rc) const;
   void DrawThermalBand(Canvas &canvas, const RECT rc) const;

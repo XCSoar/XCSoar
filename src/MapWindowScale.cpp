@@ -122,21 +122,21 @@ draw_bitmap(Canvas &canvas, BitmapCanvas &bitmap_canvas, const Bitmap &bitmap,
 }
 
 void
-MapWindow::DrawMapScale(Canvas &canvas, const RECT rc,
-                        const bool ScaleChangeFeedback) const
+MapWindow::DrawMapScale(Canvas &canvas, const RECT rc) const
 {
   static int LastMapWidth = 0;
   fixed MapWidth;
   TCHAR ScaleInfo[80];
-  TCHAR TEMP[20];
 
   int Height;
   Units_t Unit;
 
+  /*
   if (ScaleChangeFeedback)
     MapWidth = RequestDistancePixelsToMeters(rc.right - rc.left);
   else
-    MapWidth = DistancePixelsToMeters(rc.right - rc.left);
+  */
+  MapWidth = DistancePixelsToMeters(rc.right - rc.left);
 
   canvas.select(Fonts::MapBold);
   Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,
@@ -150,69 +150,58 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT rc,
   canvas.white_brush();
   canvas.white_pen();
   canvas.rectangle(0, rc.bottom - Height, TextSize.cx + IBLSCALE(21), rc.bottom);
-  if (ScaleChangeFeedback) {
-    canvas.background_transparent();
-    canvas.set_text_color(Color(0xff, 0, 0));
-  } else {
-    canvas.set_text_color(Color(0, 0, 0));
-    canvas.set_background_color(Color::WHITE);
-  }
+
+  canvas.background_transparent();
+  canvas.set_text_color(Color::BLACK);
 
   canvas.text(IBLSCALE(7),
               rc.bottom - Fonts::MapBold.get_ascent_height() - IBLSCALE(1),
               ScaleInfo);
-
-  if (ScaleChangeFeedback)
-    canvas.background_opaque();
 
   draw_bitmap(canvas, bitmap_canvas, MapGfx.hBmpMapScale,
               0, rc.bottom - Height, 0, 0, 6, 11);
   draw_bitmap(canvas, bitmap_canvas, MapGfx.hBmpMapScale,
               IBLSCALE(14) + TextSize.cx, rc.bottom - Height, 6, 0, 8, 11);
 
-  if (!ScaleChangeFeedback) {
-    const UnitSymbol *symbol = GetUnitSymbol(Unit);
-
-    if (symbol != NULL)
-      symbol->draw(canvas, bitmap_canvas, IBLSCALE(8) + TextSize.cx,
-                   rc.bottom - Height);
-  }
+  const UnitSymbol *symbol = GetUnitSymbol(Unit);
+  if (symbol != NULL)
+    symbol->draw(canvas, bitmap_canvas, IBLSCALE(8) + TextSize.cx,
+                 rc.bottom - Height);
 
   int y = rc.bottom - Height - Fonts::Title.get_ascent_height() + IBLSCALE(2);
 
-  if (!ScaleChangeFeedback) {
-    ScaleInfo[0] = 0;
-    if (SettingsMap().AutoZoom)
-      _tcscat(ScaleInfo, _T("AUTO "));
+  ScaleInfo[0] = 0;
+  if (SettingsMap().AutoZoom)
+    _tcscat(ScaleInfo, _T("AUTO "));
 
-    if (SettingsMap().TargetPan)
-      _tcscat(ScaleInfo, _T("TARGET "));
-    else if (SettingsMap().EnablePan)
-      _tcscat(ScaleInfo, _T("PAN "));
+  if (SettingsMap().TargetPan)
+    _tcscat(ScaleInfo, _T("TARGET "));
+  else if (SettingsMap().EnablePan)
+    _tcscat(ScaleInfo, _T("PAN "));
 
-    if (SettingsMap().EnableAuxiliaryInfo)
-      _tcscat(ScaleInfo, _T("AUX "));
+  if (SettingsMap().EnableAuxiliaryInfo)
+    _tcscat(ScaleInfo, _T("AUX "));
 
-    if (Basic().gps.Replay)
-      _tcscat(ScaleInfo, _T("REPLAY "));
+  if (Basic().gps.Replay)
+    _tcscat(ScaleInfo, _T("REPLAY "));
 
-    if (task != NULL && SettingsComputer().BallastTimerActive) {
-      _stprintf(TEMP, _T("BALLAST %d LITERS"),
-                (int)task->get_glide_polar().get_ballast_litres());
-      _tcscat(ScaleInfo, TEMP);
-    }
+  if (task != NULL && SettingsComputer().BallastTimerActive) {
+    TCHAR TEMP[20];
+    _stprintf(TEMP, _T("BALLAST %d LITERS"),
+              (int)task->get_glide_polar().get_ballast_litres());
+    _tcscat(ScaleInfo, TEMP);
+  }
 
-    if (weather != NULL && weather->GetParameter() > 0) {
-      const TCHAR *label = weather->ItemLabel(weather->GetParameter());
-      if (label != NULL)
-        _tcscat(ScaleInfo, label);
-    }
+  if (weather != NULL && weather->GetParameter() > 0) {
+    const TCHAR *label = weather->ItemLabel(weather->GetParameter());
+    if (label != NULL)
+      _tcscat(ScaleInfo, label);
+  }
 
-    if (ScaleInfo[0]) {
-      canvas.select(Fonts::Title);
-      // FontSelected = true;
-      canvas.text(IBLSCALE(1), y, ScaleInfo);
-      y -= (Fonts::Title.get_capital_height() + IBLSCALE(1));
-    }
+  if (ScaleInfo[0]) {
+    canvas.select(Fonts::Title);
+    canvas.background_opaque();
+    canvas.set_background_color(Color::WHITE);
+    canvas.text(IBLSCALE(1), y, ScaleInfo);
   }
 }

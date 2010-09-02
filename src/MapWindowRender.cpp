@@ -61,8 +61,6 @@ MapWindow::RenderStart(Canvas &canvas, const RECT rc)
 
   // reset label over-write preventer
   label_block.reset();
-
-  BigZoom = false;
 }
 
 
@@ -87,7 +85,6 @@ MapWindow::RenderMapLayer(Canvas &canvas)
         Calculated().TerrainValid)
       // Draw the groundline (and shading)
       DrawTerrainAbove(canvas, buffer_canvas);
-    BigZoom = false;
   }
 
   if (topology != NULL && SettingsMap().EnableTopology)
@@ -191,7 +188,7 @@ MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
   DrawCDI();
 
   canvas.select(Fonts::Map);
-  DrawMapScale(canvas, rc, BigZoom);
+  DrawMapScale(canvas, rc);
   DrawMapScale2(canvas, rc);
   DrawCompass(canvas, rc);
 

@@ -67,8 +67,7 @@ MapWindow::MapWindow()
    ui_generation(1), buffer_generation(0),
    TargetDrag_Location(GEOPOINT(Angle::native(fixed_zero),
                                 Angle::native(fixed_zero))),
-   TargetDrag_State(0),
-   BigZoom(true)
+   TargetDrag_State(0)
 {
   zoomclimb.CruiseMapScale = fixed_ten;
   zoomclimb.ClimbMapScale = fixed(0.25);
@@ -174,12 +173,6 @@ MapWindow::DrawThreadLoop(void)
   //  printf("draw %d\n",mclock.elapsed());
   //  mclock.update();
 
-  if (BigZoom) {
-    // quickly draw zoom level on top
-    WindowCanvas canvas(*this);
-    DrawMapScale(canvas, MapRect, true);
-  }
-
   // Render the moving map
   Render(draw_canvas, MapRect);
 
@@ -272,8 +265,6 @@ MapWindow::SwitchZoomClimb(void)
         RequestMapScale(zoomclimb.ClimbMapScale, SettingsMap());
       else
         RequestMapScale(zoomclimb.CruiseMapScale, SettingsMap());
-
-      BigZoom = true;
     }
     zoomclimb.last_targetpan = my_target_pan;
     return;
@@ -293,7 +284,7 @@ MapWindow::SwitchZoomClimb(void)
         RequestMapScale(zoomclimb.CruiseMapScale, SettingsMap());
         // switch to climb scale
       }
-      BigZoom = true;
+
       zoomclimb.last_isclimb = isclimb;
     }
   }
