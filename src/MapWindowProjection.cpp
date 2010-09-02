@@ -161,6 +161,7 @@ MapWindowProjection::CalculateOrigin(const RECT rc, const NMEA_INFO &DrawInfo,
     const SETTINGS_COMPUTER &settings_computer,
     const SETTINGS_MAP &settings_map)
 {
+  MapRect = rc;
 
   if (settings_map.TargetPan)
     CalculateOrientationTargetPan(DrawInfo, DerivedDrawInfo, settings_map);

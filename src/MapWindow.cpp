@@ -174,7 +174,7 @@ MapWindow::DrawThreadLoop(void)
   //  mclock.update();
 
   // Render the moving map
-  Render(draw_canvas, MapRect);
+  Render(draw_canvas, get_client_rect());
 
   // Stop the drawing timer and calculate drawing time
   StopTimer();

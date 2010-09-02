@@ -44,10 +44,7 @@ MapWindow::on_resize(unsigned width, unsigned height)
 {
   PaintWindow::on_resize(width, height);
 
-  mutexBuffer.Lock();
-  MapRect = get_client_rect();
   ++ui_generation;
-  mutexBuffer.Unlock();
 
   draw_canvas.grow(width, height);
   buffer_canvas.grow(width, height);
