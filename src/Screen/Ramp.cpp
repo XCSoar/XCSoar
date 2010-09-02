@@ -41,9 +41,8 @@ Copyright_License {
 #include <assert.h>
 #include <stddef.h>
 
-void
+Color
 ColorRampLookup(const short h,
-                unsigned char &r, unsigned char &g, unsigned char &b,
                 const COLORRAMP* ramp_colors,
                 const int numramp,
                 const unsigned char interp_levels)
@@ -57,10 +56,7 @@ ColorRampLookup(const short h,
   /* Monochrome
 
      #ifndef NDEBUG
-     r = 0xDA;
-     g = 0xDA;
-     b = 0xDA;
-     return;
+     return Color(0xda, 0xda, 0xda);
      #endif
 
   */
@@ -68,10 +64,9 @@ ColorRampLookup(const short h,
 
   // gone past end, so use last color
   if (h >= ramp_colors[numramp - 1].h) {
-    r = ramp_colors[numramp-1].r;
-    g = ramp_colors[numramp-1].g;
-    b = ramp_colors[numramp-1].b;
-    return;
+    return Color(ramp_colors[numramp-1].r,
+                 ramp_colors[numramp-1].g,
+                 ramp_colors[numramp-1].b);
   }
   for (unsigned int i = numramp - 2; i--;) {
     assert(ramp_colors[i].h < ramp_colors[i + 1].h);
@@ -81,17 +76,14 @@ ColorRampLookup(const short h,
           / (unsigned short)(ramp_colors[i + 1].h - ramp_colors[i].h);
       of = is - f;
 
-      r = (f * ramp_colors[i + 1].r + of * ramp_colors[i].r) >> interp_levels;
-      g = (f * ramp_colors[i + 1].g + of * ramp_colors[i].g) >> interp_levels;
-      b = (f * ramp_colors[i + 1].b + of * ramp_colors[i].b) >> interp_levels;
-      return;
+      return Color((f * ramp_colors[i + 1].r + of * ramp_colors[i].r) >> interp_levels,
+                   (f * ramp_colors[i + 1].g + of * ramp_colors[i].g) >> interp_levels,
+                   (f * ramp_colors[i + 1].b + of * ramp_colors[i].b) >> interp_levels);
     }
   }
 
   // check if h lower than lowest
   assert(h <= ramp_colors[0].h);
 
-  r = ramp_colors[0].r;
-  g = ramp_colors[0].g;
-  b = ramp_colors[0].b;
+  return Color(ramp_colors[0].r, ramp_colors[0].g, ramp_colors[0].b);
 }

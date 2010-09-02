@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_RAMP_HPP
 #define XCSOAR_SCREEN_RAMP_HPP
 
+#include "Screen/Color.hpp"
+
 struct COLORRAMP {
   short h;
   unsigned char r;
@@ -46,9 +48,8 @@ struct COLORRAMP {
   unsigned char b;
 };
 
-void
+Color
 ColorRampLookup(short h,
-                unsigned char &r, unsigned char &g, unsigned char &b,
                 const COLORRAMP* ramp_colors,
                 const int numramp,
                 const unsigned char interp_bits=6);

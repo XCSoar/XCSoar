@@ -241,8 +241,6 @@ ScreenGraphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
 void
 ScreenGraphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
 {
-  BYTE Red, Green, Blue;
-
   int iwidth;
   int minwidth;
   minwidth = max(Layout::Scale(2),
@@ -250,7 +248,7 @@ ScreenGraphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
 
   for (int i = 0; i < NUMSNAILCOLORS; i++) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
-    ColorRampLookup(ih, Red, Green, Blue, snail_colors, NUMSNAILRAMP, 6);
+    hSnailColours[i] = ColorRampLookup(ih, snail_colors, NUMSNAILRAMP, 6);
 
     if (i < NUMSNAILCOLORS / 2)
       iwidth = minwidth;
@@ -258,7 +256,6 @@ ScreenGraphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
       iwidth = max(minwidth, (i - NUMSNAILCOLORS / 2)
           * Layout::Scale(settings_map.SnailWidthScale) / NUMSNAILCOLORS);
 
-    hSnailColours[i] = Color((BYTE)Red, (BYTE)Green, (BYTE)Blue);
     hSnailPens[i].set(iwidth, hSnailColours[i]);
   }
 }

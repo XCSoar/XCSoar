@@ -320,8 +320,12 @@ RasterRenderer::ColorTable(const COLORRAMP *color_ramp, bool do_water,
           // Color_ramp, NUM_COLOR_RAMP_LEVELS, interp_levels);
         }
       } else {
-        ColorRampLookup(i << height_scale, r, g, b, color_ramp,
-            NUM_COLOR_RAMP_LEVELS, interp_levels);
+        Color color =  ColorRampLookup(i << height_scale, color_ramp,
+                                       NUM_COLOR_RAMP_LEVELS, interp_levels);
+        r = color.red();
+        g = color.green();
+        b = color.blue();
+
         TerrainShading(mag, r, g, b);
       }
 
