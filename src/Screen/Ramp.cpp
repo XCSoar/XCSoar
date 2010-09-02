@@ -38,6 +38,9 @@ Copyright_License {
 
 #include "Screen/Ramp.hpp"
 
+#include <assert.h>
+#include <stddef.h>
+
 void
 ColorRampLookup(const short h,
                 unsigned char &r, unsigned char &g, unsigned char &b,
@@ -45,6 +48,9 @@ ColorRampLookup(const short h,
                 const int numramp,
                 const unsigned char interp_levels)
 {
+  assert(ramp_colors != NULL);
+  assert(numramp >= 2);
+
   unsigned short f, of;
   unsigned short is = 1<<interp_levels;
 
@@ -68,6 +74,8 @@ ColorRampLookup(const short h,
     return;
   }
   for (unsigned int i = numramp - 2; i--;) {
+    assert(ramp_colors[i].h < ramp_colors[i + 1].h);
+
     if (h >= ramp_colors[i].h) {
       f = (unsigned short)(h - ramp_colors[i].h) * is
           / (unsigned short)(ramp_colors[i + 1].h - ramp_colors[i].h);
