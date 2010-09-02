@@ -138,19 +138,23 @@ MainWindow::initialise()
                          InfoBoxLayout::ControlHeight * 3,
                          hidden);
 
+  WindowStyle hidden_border;
+  hidden_border.hide();
+  hidden_border.border();
+
   flarm = new GaugeFLARM(*this,
                          rc.right - InfoBoxLayout::ControlWidth * 2 + 1,
                          rc.bottom - InfoBoxLayout::ControlHeight * 2 + 1,
                          InfoBoxLayout::ControlWidth * 2 - 1,
                          InfoBoxLayout::ControlHeight * 2 - 1,
-                         hidden);
+                         hidden_border);
   flarm->bring_to_top();
 
   unsigned sz = std::min(InfoBoxLayout::ControlHeight,
                          InfoBoxLayout::ControlWidth) * 2;
 
   ta = new GaugeThermalAssistant(*this, 0, rc.bottom - sz, sz, sz,
-                                 hidden);
+                                 hidden_border);
   ta->bring_to_top();
 
   LogStartUp(_T("Initialise message system"));
