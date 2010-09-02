@@ -15,19 +15,19 @@
 
   <Panel Name="frmOZLine" X="80" Y="80" Width="240" Height="142">
     <Edit Name="prpOZLineLength" Caption="Length" X="2" Y="-1" Width="240" Height="22" CaptionWidth="150" Help="Length of the OZ line.">
-      <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="100" Step="0.5" Fine="1" />
+      <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.1" Max="100" Step="0.5" Fine="1" />
     </Edit>
   </Panel>
 
   <Panel Name="frmOZCylinder" X="80" Y="80" Width="240" Height="142">
     <Edit Name="prpOZCylinderRadius" Caption="Radius" X="2" Y="-1" Width="240" Height="22" CaptionWidth="150" Help="Radius of the OZ cylinder.">
-      <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="100" Step="0.5" Fine="1" />
+      <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.1" Max="100" Step="0.5" Fine="1" />
     </Edit>
   </Panel>
 
   <Panel Name="frmOZSector" X="80" Y="80" Width="240" Height="142">
     <Edit Name="prpOZSectorRadius" Caption="Radius" X="2" Y="-1" Width="240" Height="22" CaptionWidth="150" Help="Radius of the OZ sector.">
-      <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="100" Step="0.5" Fine="1" />
+      <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.1" Max="100" Step="0.5" Fine="1" />
     </Edit>
 
     <Edit Name="prpOZSectorStartRadial" Caption="Start radial" X="2" Y="-1" Width="240" Height="22" CaptionWidth="150" Help="Start radial of the OZ area">
