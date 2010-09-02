@@ -441,18 +441,10 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc) const
     // draw x on final glide bar if unreachable at current Mc
     if (!Calculated().task_stats.total.achievable()) {
       canvas.select(MapGfx.hpAircraftBorder);
-      POINT Cross[4] = {
-          {-5, -5},
-          { 5,  5},
-          {-5,  5},
-          { 5, -5}
-      };
-      for (i = 0; i < 4; i++) {
-        Cross[i].x = IBLSCALE(Cross[i].x+9);
-        Cross[i].y = IBLSCALE(Cross[i].y+9) + y0;
-      }
-      canvas.polygon(Cross, 2);
-      canvas.polygon(&Cross[2], 2);
+      canvas.line(Layout::Scale(9 - 5), y0 + Layout::Scale(9 - 5),
+                  Layout::Scale(9 + 5), y0 + Layout::Scale(9 + 5));
+      canvas.line(Layout::Scale(9 - 5), y0 + Layout::Scale(9 + 5),
+                  Layout::Scale(9 + 5), y0 + Layout::Scale(9 - 5));
     }
 
     if (Appearance.IndFinalGlide == fgFinalGlideDefault) {
