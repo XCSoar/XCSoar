@@ -46,7 +46,11 @@ Copyright_License {
 
 #include <assert.h>
 
-#define MIX(x,y,i) (BYTE)((x*i+y*((1<<7)-i))>>7)
+static inline unsigned
+MIX(unsigned x, unsigned y, unsigned i)
+{
+  return (x * i + y * ((1 << 7) - i)) >> 7;
+}
 
 inline void
 TerrainShading(const short illum, BYTE &r, BYTE &g, BYTE &b)
