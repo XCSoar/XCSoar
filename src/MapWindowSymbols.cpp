@@ -130,6 +130,8 @@ MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc,
              rc.left + IBLSCALE(2),
             rc.bottom + IBLSCALE(-35));
 
+  canvas.set_text_color(Color::BLACK);
+
   TextInBox(canvas, txt,
             rc.left + IBLSCALE(24),
             rc.bottom + IBLSCALE(-32),
@@ -252,6 +254,8 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig,
 
   _stprintf(sTmp, _T("%i"),
             iround(Units::ToUserUnit(wind.norm, Units::WindSpeedUnit)));
+
+  canvas.set_text_color(Color::BLACK);
 
   TextInBoxMode_t TextInBoxMode = { 16 | 32 };
 
@@ -459,6 +463,8 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc) const
       else
         Offset = GlideBar[2].y + Offset - IBLSCALE(15);
 
+      canvas.set_text_color(Color::BLACK);
+
       TextInBoxMode_t TextInBoxMode = { 1 | 8 };
       TextInBox(canvas, Value, 0, (int)Offset, TextInBoxMode, rc);
 
@@ -481,6 +487,7 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc) const
       canvas.rectangle(x, y, x + IBLSCALE(1) + TextSize.cx,
                        y + Fonts::MapBold.get_capital_height() + IBLSCALE(2));
 
+      canvas.set_text_color(Color::BLACK);
       canvas.text(x + IBLSCALE(1),
                   y + Fonts::MapBold.get_capital_height() -
                   Fonts::MapBold.get_ascent_height() + IBLSCALE(1), Value);
