@@ -37,19 +37,14 @@
 */
 
 #include "Logger/LoggerImpl.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
 #include "Version.hpp"
-#include "Dialogs/Message.hpp"
-#include "Language.hpp"
 #include "Profile.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
 #include "UtilsSystem.hpp"
 #include "UtilsFile.hpp"
 #include "LocalPath.hpp"
-#include "Device/device.hpp"
-#include "Device/Descriptor.hpp"
-#include "Device/List.hpp"
+#include "Device/Declaration.hpp"
 #include "Compatibility/path.h"
 #include "Compatibility/string.h"
 #include "Compatibility/dirent.h"
@@ -65,6 +60,7 @@
 #include <time.h>
 #include <sys/types.h>
 #include <tchar.h>
+#include <stdio.h>
 #include <algorithm>
 
 const struct LoggerImpl::LoggerPreTakeoffBuffer &
@@ -92,7 +88,6 @@ LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
 LoggerImpl::LoggerImpl():
   frecord_clock(fixed_270), // 4.5 minutes)
   LoggerActive(false),
-  DeclaredToDevice(false),
   Simulator(false)
 {
   ResetFRecord();
@@ -112,16 +107,6 @@ NumToIGCChar(int n)
     return _T('1') + (n - 1);
 
   return _T('A') + (n - 10);
-}
-
-/**
- * Returns whether a task is declared to the device
- * @return True if a task is declared to the device, False otherwise
- */
-bool
-LoggerImpl::isTaskDeclared() const
-{
-  return DeclaredToDevice;
 }
 
 static int
@@ -542,70 +527,6 @@ LoggerImpl::LoggerNote(const TCHAR *text)
   char fulltext[500];
   sprintf(fulltext, "LPLT%S\r\n", text);
   IGCWriteRecord(fulltext, szLoggerFileName);
-}
-
-bool
-LoggerImpl::LoggerDeclare(DeviceDescriptor *dev, const Declaration &decl)
-{
-  if (!devIsLogger(*dev))
-    return false;
-
-  if (MessageBoxX(_("Declare Task?"),
-                  dev->GetName(), MB_YESNO| MB_ICONQUESTION) == IDYES) {
-    if (devDeclare(*dev, &decl)) {
-      MessageBoxX(_("Task Declared!"),
-                  dev->GetName(), MB_OK| MB_ICONINFORMATION);
-      DeclaredToDevice = true;
-    } else {
-      MessageBoxX(_("Error occured,\r\nTask NOT Declared!"),
-                  dev->GetName(), MB_OK| MB_ICONERROR);
-    }
-  }
-
-  return true;
-}
-
-void
-LoggerImpl::LoggerDeviceDeclare(const OrderedTask& task)
-{
-  DeclaredToDevice = false;
-  bool found_logger = false;
-
-  // don't do anything if task is not valid
-  if (!task.check_task())
-    return;
-
-  const Declaration decl(&task);
-
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    if (LoggerDeclare(&DeviceList[i], decl))
-      found_logger = true;
-
-  if (!found_logger)
-    MessageBoxX(_("No logger connected"),
-                _("Declare task"), MB_OK | MB_ICONINFORMATION);
-}
-
-/**
- * Checks whether a Task is declared to the Logger.
- * If so, asks whether to invalidate the declaration.
- * @return True if a Task is NOT declared to the Logger, False otherwise
- */
-bool
-LoggerImpl::CheckDeclaration(void)
-{
-  // if (Task is not declared) -> return true;
-  if (!isTaskDeclared())
-    return true;
-
-  if (MessageBoxX(_("OK to invalidate declaration?"),
-                  _("Task declared"),
-     MB_YESNO| MB_ICONQUESTION) == IDYES){
-    DeclaredToDevice = false;
-    return true;
-  }
-
-  return false;
 }
 
 static time_t

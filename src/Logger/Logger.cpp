@@ -37,6 +37,7 @@
 */
 
 #include "Logger/Logger.hpp"
+#include "Logger/ExternalLogger.hpp"
 #include "Device/Declaration.hpp"
 #include "NMEA/Info.hpp"
 #include "Language.hpp"
@@ -93,13 +94,13 @@ void Logger::LogTurnpointEvent(const NMEA_INFO &gps_info) {
 bool
 Logger::CheckDeclaration(void)
 {
-  return _logger.CheckDeclaration();
+  return ExternalLogger::CheckDeclaration();
 }
 
 bool
 Logger::isTaskDeclared()
 {
-  return _logger.isTaskDeclared();
+  return ExternalLogger::IsDeclared();
 }
 
 bool
@@ -191,7 +192,7 @@ Logger::guiStopLogger(const NMEA_INFO &gps_info,
 void
 Logger::LoggerDeviceDeclare(const OrderedTask& task)
 {
-  return _logger.LoggerDeviceDeclare(task);
+  return ExternalLogger::Declare(task);
 }
 
 void

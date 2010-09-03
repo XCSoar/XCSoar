@@ -114,8 +114,6 @@ public:
   void LogPoint(const NMEA_INFO &gps_info);
   void LogEvent(const NMEA_INFO &gps_info, const char* event);
 
-  bool CheckDeclaration(void);
-  bool isTaskDeclared() const;
   bool isLoggerActive() const;
   static bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
   void StartLogger(const NMEA_INFO &gps_info,
@@ -123,7 +121,6 @@ public:
                    const TCHAR *strAssetNumber,
                    const Declaration &decl);
   void StopLogger(const NMEA_INFO &gps_info);
-  void LoggerDeviceDeclare(const OrderedTask& task);
   void LoggerNote(const TCHAR *text);
   void clearBuffer();
 
@@ -140,7 +137,6 @@ private:
 
   bool IGCWriteRecord(const char *szIn, const TCHAR *);
   void CleanIGCRecord(char * szIn);
-  bool LoggerDeclare(DeviceDescriptor *dev, const Declaration &decl);
   void LoggerGInit();
   
 private:
@@ -165,7 +161,6 @@ private:
 
 private:
   bool LoggerActive;
-  bool DeclaredToDevice;
 
   /**
    * If at least one GPS fix came from the simulator
