@@ -291,7 +291,7 @@ MapWindow::DrawWaypoints(Canvas &canvas)
                    SettingsComputer().safety_mc));
   WaypointVisitorMap v(*this, canvas, polar);
   way_points->visit_within_range(PanLocation,
-                                 fixed(GetScreenDistanceMeters()), v);
+                                 GetScreenDistanceMeters(), v);
   if (task != NULL && SettingsMap().DisplayTextType == DISPLAYNAMEIFINTASK)
     task->CAccept(v);
 

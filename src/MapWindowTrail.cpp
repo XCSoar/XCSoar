@@ -81,9 +81,9 @@ MapWindow::DrawTrail(Canvas &canvas) const
   }
 
   TracePointVector trace = task->find_trace_points(GetPanLocation(),
-                                                   fixed(GetScreenDistanceMeters()), 
+                                                   GetScreenDistanceMeters(),
                                                    min_time, 
-                                                   fixed(DistancePixelsToMeters(3)));
+                                                   DistancePixelsToMeters(3));
 
   if (trace.empty()) return; // nothing to draw
 
