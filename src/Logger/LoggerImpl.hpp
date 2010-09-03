@@ -135,7 +135,7 @@ private:
   void EndDeclaration(void);
   void LoggerHeader(const NMEA_INFO &gps_info, const Declaration& decl);
 
-  bool IGCWriteRecord(const char *szIn, const TCHAR *);
+  bool IGCWriteRecord(const char *szIn);
   void CleanIGCRecord(char * szIn);
   void LoggerGInit();
   

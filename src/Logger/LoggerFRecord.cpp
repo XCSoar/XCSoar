@@ -102,7 +102,7 @@ LoggerImpl::LogFRecordToFile(const int SatelliteIDs[],
   }
    
   if (frecord_clock.check_advance(fixed(Time)) && DetectFRecordChange) {
-    if (IGCWriteRecord(szFRecord, szLoggerFileName)) {
+    if (IGCWriteRecord(szFRecord)) {
       strcpy(szLastFRecord, szFRecord);
       DetectFRecordChange=false;
       frecord_clock.set_dt(fixed(270)); //4.5 minutes

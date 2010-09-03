@@ -57,7 +57,7 @@ LoggerImpl::CleanIGCRecord(char * szIn)
 }
 
 bool
-LoggerImpl::IGCWriteRecord(const char *szIn, const TCHAR* szLoggerFileName)
+LoggerImpl::IGCWriteRecord(const char *szIn)
 {
   char charbuffer[MAX_IGC_BUFF];
 

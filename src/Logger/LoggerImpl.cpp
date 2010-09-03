@@ -247,7 +247,7 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
           p.DegLon, (double)p.MinLon, p.EoW, IsValidFix,
           (int)gps_info.BaroAltitude, p.GPSAltitude, (int)dEPE, iSIU);
 
-  IGCWriteRecord(szBRecord, szLoggerFileName);
+  IGCWriteRecord(szBRecord);
 }
 
 void
@@ -258,7 +258,7 @@ LoggerImpl::LogEvent(const NMEA_INFO& gps_info, const char* event)
           gps_info.DateTime.hour, gps_info.DateTime.minute,
           gps_info.DateTime.second, event);
 
-  IGCWriteRecord(szBRecord, szLoggerFileName);
+  IGCWriteRecord(szBRecord);
   // tech_spec_gnss.pdf says we need a B record immediately after an E record
   LogPointToFile(gps_info);
 }
@@ -387,28 +387,28 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info, const Declaration &decl)
           strAssetNumber[0],
           strAssetNumber[1],
           strAssetNumber[2]);
-  IGCWriteRecord(temp, szLoggerFileName);
+  IGCWriteRecord(temp);
 
   sprintf(temp, "HFDTE%02u%02u%02u\r\n",
           gps_info.DateTime.day,
           gps_info.DateTime.month,
           gps_info.DateTime.year % 100);
-  IGCWriteRecord(temp, szLoggerFileName);
+  IGCWriteRecord(temp);
 
   if (!Simulator)
-    IGCWriteRecord(GetHFFXARecord(), szLoggerFileName);
+    IGCWriteRecord(GetHFFXARecord());
 
   sprintf(temp, "HFPLTPILOT:%S\r\n", decl.PilotName);
-  IGCWriteRecord(temp, szLoggerFileName);
+  IGCWriteRecord(temp);
 
   sprintf(temp, "HFGTYGLIDERTYPE:%S\r\n", decl.AircraftType);
-  IGCWriteRecord(temp, szLoggerFileName);
+  IGCWriteRecord(temp);
 
   sprintf(temp, "HFGIDGLIDERID:%S\r\n", decl.AircraftRego);
-  IGCWriteRecord(temp, szLoggerFileName);
+  IGCWriteRecord(temp);
 
   sprintf(temp, "HFFTYFR TYPE:XCSOAR,XCSOAR %S\r\n", XCSoar_VersionStringOld);
-  IGCWriteRecord(temp, szLoggerFileName);
+  IGCWriteRecord(temp);
 
   DeviceConfig device_config;
   // this is only the XCSoar Simulator, not Condor etc, so don't use Simulator flag
@@ -418,12 +418,12 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info, const Declaration &decl)
     Profile::GetDeviceConfig(0, device_config);
 
   sprintf(temp, "HFGPS: %S\r\n", device_config.driver_name);
-  IGCWriteRecord(temp, szLoggerFileName);
+  IGCWriteRecord(temp);
 
-  IGCWriteRecord(datum, szLoggerFileName);
+  IGCWriteRecord(datum);
 
   if (!Simulator)
-    IGCWriteRecord(GetIRecord(), szLoggerFileName);
+    IGCWriteRecord(GetIRecord());
 }
 
 void
@@ -453,10 +453,10 @@ LoggerImpl::StartDeclaration(const NMEA_INFO &gps_info, const int ntp)
           FirstDateTime.second,
           ntp - 2);
 
-  IGCWriteRecord(temp, szLoggerFileName);
+  IGCWriteRecord(temp);
   // takeoff line
   // IGC GNSS specification 3.6.3
-  IGCWriteRecord(start, szLoggerFileName);
+  IGCWriteRecord(start);
 }
 
 void
@@ -465,7 +465,7 @@ LoggerImpl::EndDeclaration(void)
   // TODO bug: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
   const char start[] = "C0000000N00000000ELANDING\r\n";
-  IGCWriteRecord(start, szLoggerFileName);
+  IGCWriteRecord(start);
 }
 
 void
@@ -515,7 +515,7 @@ LoggerImpl::AddDeclaration(const GEOPOINT &location, const TCHAR *ID)
   sprintf(szCRecord, "C%02d%05.0f%c%03d%05.0f%c%s\r\n",
           DegLat, (double)MinLat, NoS, DegLon, (double)MinLon, EoW, IDString);
 
-  IGCWriteRecord(szCRecord, szLoggerFileName);
+  IGCWriteRecord(szCRecord);
 }
 
 void
@@ -526,7 +526,7 @@ LoggerImpl::LoggerNote(const TCHAR *text)
 
   char fulltext[500];
   sprintf(fulltext, "LPLT%S\r\n", text);
-  IGCWriteRecord(fulltext, szLoggerFileName);
+  IGCWriteRecord(fulltext);
 }
 
 static time_t
