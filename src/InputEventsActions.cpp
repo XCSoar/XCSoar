@@ -1761,6 +1761,10 @@ InputEvents::sub_AutoZoom(int vswitch)
 void
 InputEvents::sub_SetZoom(double value)
 {
+  if (SetSettingsMap().AutoZoom == 1) {
+    SetSettingsMap().AutoZoom = 0;  // disable autozoom if user manually changes zoom
+    Message::AddMessage(_("AutoZoom OFF"));
+  }
   SetSettingsMap().MapScale = value;
 }
 
