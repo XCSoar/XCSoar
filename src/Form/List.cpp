@@ -455,16 +455,12 @@ WndListFrame::on_mouse_wheel(int delta)
 
   if (delta > 0) {
     // scroll up
-    if (origin > 0) {
-      --origin;
-      invalidate();
-    }
+    if (origin > 0)
+      SetOrigin(origin - 1);
   } else if (delta < 0) {
     // scroll down
-    if (origin + items_visible < length) {
-      ++origin;
-      invalidate();
-    }
+    if (origin + items_visible < length)
+      SetOrigin(origin + 1);
   }
 
   return true;
