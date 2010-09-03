@@ -128,7 +128,6 @@ LoggerImpl::DiskBufferReset()
 void
 LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName)
 {
-  BOOL bFileValid = true;
   TCHAR OldGRecordBuff[MAX_IGC_BUFF];
   TCHAR NewGRecordBuff[MAX_IGC_BUFF];
 
@@ -144,10 +143,7 @@ LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName)
   oGRecord.FinalizeBuffer();
   oGRecord.GetDigest(NewGRecordBuff);
 
-  for (unsigned int i = 0; i < 128; i++)
-    if (OldGRecordBuff[i] != NewGRecordBuff[i])
-      bFileValid = false;
-
+  bool bFileValid = _tcscmp(OldGRecordBuff, NewGRecordBuff) == 0;
   oGRecord.AppendGRecordToFile(bFileValid);
 }
 
