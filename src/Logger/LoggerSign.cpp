@@ -59,8 +59,6 @@ LoggerImpl::CleanIGCRecord(char * szIn)
 bool
 LoggerImpl::IGCWriteRecord(const char *szIn, const TCHAR* szLoggerFileName)
 {
-  Poco::ScopedRWLock protect(lock, true);
-
   char charbuffer[MAX_IGC_BUFF];
 
   strncpy(charbuffer, szIn, MAX_IGC_BUFF);

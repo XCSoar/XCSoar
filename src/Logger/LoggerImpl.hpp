@@ -42,7 +42,6 @@ Copyright_License {
 #include "Sizes.h"
 #include "DateTime.hpp"
 #include "GPSClock.hpp"
-#include "Poco/RWLock.h"
 #include "Navigation/GeoPoint.hpp"
 #include "Logger/LoggerGRecord.hpp"
 #include "OverwritingRingBuffer.hpp"
@@ -127,15 +126,6 @@ public:
   void LoggerDeviceDeclare(const OrderedTask& task);
   void LoggerNote(const TCHAR *text);
   void clearBuffer();
-
-private:
-  void WriteLock() {
-    lock.writeLock();
-  }
-  void Unlock() {
-    lock.unlock();
-  }
-  Poco::RWLock lock;
 
 private:
   void StartLogger(const NMEA_INFO &gps_info,

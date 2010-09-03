@@ -174,9 +174,7 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info)
     return;
 
   // Write IGC File
-  WriteLock();
   DiskBufferFlush();
-  Unlock();
 
   // Write GRecord
   if (!Simulator)
@@ -339,9 +337,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
 
   LocalPath(path, _T("logs"));
 
-  WriteLock();
   DiskBufferReset();
-  Unlock();
 
   if (gps_info.gps.Simulator)
     Simulator = true;
