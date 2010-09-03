@@ -810,7 +810,7 @@ type=key
 data=0
 event=Exit system
 event=Mode default
-label=Exit
+label=Quit
 location=9
 
 
