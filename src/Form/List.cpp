@@ -246,13 +246,13 @@ WndListFrame::SetOrigin(int i)
   if ((unsigned)i == origin)
     return;
 
-#ifdef WIN32
+#ifndef ENABLE_SDL
   int delta = origin - i;
 #endif
 
   origin = i;
 
-#ifdef WIN32
+#ifndef ENABLE_SDL
   if ((unsigned)abs(delta) < items_visible) {
     RECT rc = get_client_rect();
     rc.right = scroll_bar.get_left(get_size());
