@@ -290,34 +290,27 @@ MapWindow::SwitchZoomClimb(void)
   }
 }
 
+static DisplayMode_t
+ApplyUserForceDisplayMode(DisplayMode_t current,
+                          const SETTINGS_MAP &settings_map,
+                          const DERIVED_INFO &derived_info)
+{
+  if (settings_map.UserForceDisplayMode != dmNone)
+    return settings_map.UserForceDisplayMode;
+  else if (derived_info.Circling)
+    return dmCircling;
+  else if (derived_info.task_stats.flight_mode_final_glide)
+    return dmFinalGlide;
+  else
+    return dmCruise;
+}
+
 void
 MapWindow::ApplyScreenSize()
 {
   DisplayMode_t lastDisplayMode = DisplayMode;
-  switch (SettingsMap().UserForceDisplayMode) {
-  case dmCircling:
-    DisplayMode = dmCircling;
-    break;
-
-  case dmCruise:
-    DisplayMode = dmCruise;
-    break;
-
-  case dmFinalGlide:
-    DisplayMode = dmFinalGlide;
-    break;
-
-  case dmNone:
-    if (Calculated().Circling)
-      DisplayMode = dmCircling;
-    else if (Calculated().task_stats.flight_mode_final_glide)
-      DisplayMode = dmFinalGlide;
-    else
-      DisplayMode = dmCruise;
-
-    break;
-  }
-
+  DisplayMode = ApplyUserForceDisplayMode(lastDisplayMode, SettingsMap(),
+                                          Calculated());
   if (lastDisplayMode != DisplayMode)
     SwitchZoomClimb();
 }
