@@ -37,7 +37,6 @@
 */
 
 #include "Logger/Logger.hpp"
-#include "Logger/LoggerImpl.hpp"
 #include "Device/Declaration.hpp"
 #include "NMEA/Info.hpp"
 #include "Language.hpp"
@@ -47,22 +46,6 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Asset.hpp"
 
-/**
- * Constructor of the Logger class
- */
-Logger::Logger()
-{
-  _logger = new LoggerImpl();
-}
-
-/**
- * Destructor of the Logger class
- */
-Logger::~Logger()
-{
-  delete _logger;
-}
-
 void
 Logger::LogPoint(const NMEA_INFO &gps_info)
 {
@@ -70,7 +53,7 @@ Logger::LogPoint(const NMEA_INFO &gps_info)
   // by another process (most likely the logger gui message)
 
   if (lock.tryWriteLock()) {
-    _logger->LogPoint(gps_info);
+    _logger.LogPoint(gps_info);
     lock.unlock();
   }
 }
@@ -79,7 +62,7 @@ void
 Logger::LogEvent(const NMEA_INFO &gps_info, const char* event)
 {
   if (lock.tryWriteLock()) {
-    _logger->LogEvent(gps_info, event);
+    _logger.LogEvent(gps_info, event);
     lock.unlock();
   }
 
@@ -110,27 +93,27 @@ void Logger::LogTurnpointEvent(const NMEA_INFO &gps_info) {
 bool
 Logger::CheckDeclaration(void)
 {
-  return _logger->CheckDeclaration();
+  return _logger.CheckDeclaration();
 }
 
 bool
 Logger::isTaskDeclared()
 {
-  return _logger->isTaskDeclared();
+  return _logger.isTaskDeclared();
 }
 
 bool
 Logger::isLoggerActive()
 {
   Poco::ScopedRWLock protect(lock, false);
-  return _logger->isLoggerActive();
+  return _logger.isLoggerActive();
 }
 
 bool
 Logger::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
 {
   Poco::ScopedRWLock protect(lock, true);
-  return _logger->LoggerClearFreeSpace(gps_info);
+  return _logger.LoggerClearFreeSpace(gps_info);
 }
 
 
@@ -175,7 +158,7 @@ Logger::guiStartLogger(const NMEA_INFO& gps_info,
   }
 
   Poco::ScopedRWLock protect(lock, true);
-  _logger->StartLogger(gps_info, settings, strAssetNumber, decl);
+  _logger.StartLogger(gps_info, settings, strAssetNumber, decl);
 }
 
 void
@@ -201,26 +184,26 @@ Logger::guiStopLogger(const NMEA_INFO &gps_info,
                             _("Stop Logger"),
                             MB_YESNO | MB_ICONQUESTION) == IDYES)) {
     Poco::ScopedRWLock protect(lock, true);
-    _logger->StopLogger(gps_info);
+    _logger.StopLogger(gps_info);
   }
 }
 
 void
 Logger::LoggerDeviceDeclare(const OrderedTask& task)
 {
-  return _logger->LoggerDeviceDeclare(task);
+  return _logger.LoggerDeviceDeclare(task);
 }
 
 void
 Logger::LoggerNote(const TCHAR *text)
 {
   Poco::ScopedRWLock protect(lock, true);
-  return _logger->LoggerNote(text);
+  return _logger.LoggerNote(text);
 }
 
 void
 Logger::clearBuffer()
 {
   Poco::ScopedRWLock protect(lock, true);
-  return _logger->clearBuffer();
+  return _logger.clearBuffer();
 }

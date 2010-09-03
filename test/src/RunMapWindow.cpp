@@ -148,8 +148,7 @@ PopupNearestWaypointDetails(const Waypoints &way_points,
 
 void dlgAirspaceDetails(const AbstractAirspace& the_airspace) {}
 
-Logger::Logger() {}
-Logger::~Logger() {}
+LoggerImpl::LoggerImpl():frecord_clock(fixed_one) {}
 
 bool
 Logger::isLoggerActive()

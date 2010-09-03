@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_LOGGER_HPP
 #define XCSOAR_LOGGER_HPP
 
+#include "LoggerImpl.hpp"
+
 #include <windows.h>
 #include <tchar.h>
 #include "Poco/RWLock.h"
@@ -51,13 +53,10 @@ class OrderedTask;
 
 class Logger {
 private:
-  LoggerImpl* _logger;
+  LoggerImpl _logger;
   Poco::RWLock lock;
   void LogEvent(const NMEA_INFO &gps_info, const char*);
 public:
-  Logger();
-  ~Logger();
-
   void LogPoint(const NMEA_INFO &gps_info);
   void LogStartEvent(const NMEA_INFO &gps_info);
   void LogFinishEvent(const NMEA_INFO &gps_info);
