@@ -90,8 +90,10 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
   bool alt_ok = parseAltitude(params[3], new_waypoint.Altitude);
   check_altitude(new_waypoint, terrain, alt_ok);
 
-  // Description (e.g. 119.750 Airport)
-  parseString(params[6], new_waypoint.Comment);
+  if (n_params > 6) {
+    // Description (e.g. 119.750 Airport)
+    parseString(params[6], new_waypoint.Comment);
+  }
 
   // Waypoint Flags (e.g. AT)
   parseFlags(params[4], new_waypoint.Flags);
