@@ -310,8 +310,8 @@
         <DataField name="" DataType="boolean" />
       </Edit>
 
-      <Edit Name="prpIgnoreNMEAChecksum" Caption="Ignore checksum*"
-            X="2" Y="-1" Width="-2" Height="22" CaptionWidth="150">
+      <Edit Name="prpIgnoreNMEAChecksum" Caption="Ignore checksum*" X="2" Y="-1" Width="-2" Height="22" CaptionWidth="150"
+        Help="If your GPS device outputs invalid NMEA checksums, this will allow it's data to be used anyway">
         <DataField name="" DataType="boolean"/>
       </Edit>
     </Panel>
