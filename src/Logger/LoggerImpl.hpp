@@ -41,10 +41,8 @@ Copyright_License {
 
 #include "Sizes.h"
 #include "DateTime.hpp"
-#include "GPSClock.hpp"
 #include "Navigation/GeoPoint.hpp"
-#include "Logger/LoggerFRecord.hpp"
-#include "Logger/LoggerGRecord.hpp"
+#include "Logger/IGCWriter.hpp"
 #include "OverwritingRingBuffer.hpp"
 #include "BatchBuffer.hpp"
 
@@ -91,28 +89,14 @@ public:
      */
     const struct LoggerPreTakeoffBuffer &operator=(const NMEA_INFO &src);
   };
-  struct LogPoint_GPSPosition {
-    bool Initialized;
-    int DegLat;
-    int DegLon;
-    fixed MinLat;
-    fixed MinLon;
-    char NoS;
-    char EoW;
-    int GPSAltitude;
-
-    const LogPoint_GPSPosition &operator=(const NMEA_INFO &gps_info);
-  };
 
 private:
-  LoggerFRecord frecord;
-  GRecord oGRecord;
-  LogPoint_GPSPosition LastValidPoint;
-  BatchBuffer<char[MAX_IGC_BUFF],LOGGER_DISK_BUFFER_NUM_RECS> DiskBuffer;
+  IGCWriter *writer;
 
 public:
   /** Default constructor */
   LoggerImpl();
+  ~LoggerImpl();
 
 public:
   void LogPoint(const NMEA_INFO &gps_info);
@@ -132,52 +116,13 @@ private:
   void StartLogger(const NMEA_INFO &gps_info,
                    const SETTINGS_COMPUTER &settings,
                    const TCHAR *strAssetNumber);
-
-  void AddDeclaration(const GEOPOINT &location, const TCHAR *ID);
-  void StartDeclaration(const NMEA_INFO &gps_info,
-                        const int numturnpoints);
-  void EndDeclaration(void);
-  void LoggerHeader(const NMEA_INFO &gps_info, const Declaration& decl);
-
-  bool IGCWriteRecord(const char *szIn);
-  void CleanIGCRecord(char * szIn);
-  void LoggerGInit();
   
 private:
-  void LogPointToFile(const NMEA_INFO& gps_info);
   void LogPointToBuffer(const NMEA_INFO &gps_info);
-  void LoggerGStop(TCHAR* szLoggerFileName);
-  
-private:
-  const char * GetHFFXARecord(void);
-  const char * GetIRecord(void);
-  fixed GetEPE(const NMEA_INFO& gps_info);
-  int GetSIU(const NMEA_INFO& gps_info);
 
 private:
-  bool LoggerActive;
-
-  /**
-   * If at least one GPS fix came from the simulator
-   * (NMEA_INFO.Simulator), the this flag is true, and signing is
-   * disabled.
-   */
-  bool Simulator;
-
   TCHAR szLoggerFileName[MAX_PATH];
   OverwritingRingBuffer<LoggerPreTakeoffBuffer,LOGGER_PRETAKEOFF_BUFFER_MAX> PreTakeoffBuffer;
-
-  /* stdio buffering is bad on wince3.0:
-   * it appends up to 1024 NULLs at the end of the file if PDA power fails
-   * This does not cause SeeYou to crash (today - but it may in the future)
-   * NULLs are invalid IGC characters
-   * So, we're creating our manual disk buffering system for the IGC files
-   */
-   
-private:
-  bool DiskBufferFlush();
-  bool DiskBufferAdd(char *sIn);
-  void DiskBufferReset();
 };
 
 #endif

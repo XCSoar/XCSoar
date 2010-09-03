@@ -46,7 +46,6 @@
 #include "LocalPath.hpp"
 #include "Device/Declaration.hpp"
 #include "Compatibility/path.h"
-#include "Compatibility/string.h"
 #include "Compatibility/dirent.h"
 #include "SettingsComputer.hpp"
 #include "NMEA/Info.hpp"
@@ -85,18 +84,21 @@ LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
   return *this;
 }
 
-LoggerImpl::LoggerImpl():
-  LoggerActive(false),
-  Simulator(false)
+LoggerImpl::LoggerImpl()
+  :writer(NULL)
 {
-  frecord.reset();
   szLoggerFileName[0] = 0;
+}
+
+LoggerImpl::~LoggerImpl()
+{
+  delete writer;
 }
 
 bool
 LoggerImpl::isLoggerActive() const
 {
-  return LoggerActive;
+  return writer != NULL;
 }
 
 static TCHAR
@@ -120,22 +122,6 @@ IGCCharToNum(TCHAR c)
   return 0; // Error!
 }
 
-/*
- HFDTE141203  <- should be UTC, same as time in filename
- HFFXA100
- HFPLTPILOT:JOHN WHARINGTON
- HFGTYGLIDERTYPE:LS 3
- HFGIDGLIDERID:VH-WUE
- HFDTM100GPSDATUM:WGS84
- HFRFWFIRMWAREVERSION:3.6
- HFRHWHARDWAREVERSION:3.4
- HFFTYFR TYPE:GARRECHT INGENIEURGESELLSCHAFT,VOLKSLOGGER 1.0
- HFCIDCOMPETITIONID:WUE
- HFCCLCOMPETITIONCLASS:FAI
- HFCIDCOMPETITIONID:WUE
- HFCCLCOMPETITIONCLASS:15M
-*/
-
 /**
  * Stops the logger
  * @param gps_info NMEA_INFO struct holding the current date
@@ -144,25 +130,19 @@ void
 LoggerImpl::StopLogger(const NMEA_INFO &gps_info)
 {
   // Logger can't be switched off if already off -> cancel
-  if (!LoggerActive)
+  if (writer == NULL)
     return;
 
-  // Logger off
-  LoggerActive = false;
+  writer->finish(gps_info);
+  writer->sign();
 
-  if (gps_info.gps.Simulator)
-    Simulator = true;
+  // Logger off
+  delete writer;
+  writer = NULL;
 
   // Make space for logger file, if unsuccessful -> cancel
   if (!LoggerClearFreeSpace(gps_info))
     return;
-
-  // Write IGC File
-  DiskBufferFlush();
-
-  // Write GRecord
-  if (!Simulator)
-    LoggerGStop(szLoggerFileName);
 
   PreTakeoffBuffer.clear();
 }
@@ -175,101 +155,18 @@ LoggerImpl::LogPointToBuffer(const NMEA_INFO &gps_info)
   PreTakeoffBuffer.push(item);
 }
 
-const LoggerImpl::LogPoint_GPSPosition &
-LoggerImpl::LogPoint_GPSPosition::operator=(const NMEA_INFO &gps_info)
-{
-  DegLat = (int)gps_info.Location.Latitude.value_degrees();
-  MinLat = gps_info.Location.Latitude.value_degrees() - fixed(DegLat);
-  NoS = 'N';
-  if (negative(MinLat) || ((int)MinLat == DegLat && DegLat < 0)) {
-    NoS = 'S';
-    DegLat *= -1;
-    MinLat *= -1;
-  }
-  MinLat *= 60;
-  MinLat *= 1000;
-
-  DegLon = (int)gps_info.Location.Longitude.value_degrees();
-  MinLon = gps_info.Location.Longitude.value_degrees() - fixed(DegLon);
-  EoW = 'E';
-  if (negative(MinLon) || ((int)MinLon == DegLon && DegLon < 0)) {
-    EoW = 'W';
-    DegLon *= -1;
-    MinLon *= -1;
-  }
-  MinLon *= 60;
-  MinLon *= 1000;
-  GPSAltitude = (int)gps_info.GPSAltitude;
-  Initialized = true;
-
-  return *this;
-}
-
-void
-LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
-{
-  char szBRecord[500];
-  int iSIU = GetSIU(gps_info);
-  fixed dEPE = GetEPE(gps_info);
-  LogPoint_GPSPosition p;
-
-  char IsValidFix;
-
-  // if at least one GPS fix comes from the simulator, disable signing
-  if (gps_info.gps.Simulator)
-    Simulator = true;
-
-  if (!Simulator) {
-    const char *p = frecord.update(gps_info.gps.SatelliteIDs,
-                                   gps_info.DateTime, gps_info.Time,
-                                   gps_info.gps.NAVWarning);
-    if (p != NULL)
-      IGCWriteRecord(p);
-  }
-
-  if (!LastValidPoint.Initialized &&
-      ((gps_info.GPSAltitude < fixed(-100))
-       || (gps_info.BaroAltitude < fixed(-100))
-          || gps_info.gps.NAVWarning))
-    return;
-
-
-  if (gps_info.gps.NAVWarning) {
-    IsValidFix = 'V'; // invalid
-    p = LastValidPoint;
-  } else {
-    IsValidFix = 'A'; // Active
-    // save last active fix location
-    p = LastValidPoint = gps_info;
-  }
-
-  sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%c%c%05d%05d%03d%02d\r\n",
-          gps_info.DateTime.hour, gps_info.DateTime.minute,
-          gps_info.DateTime.second,
-          p.DegLat, (double)p.MinLat, p.NoS,
-          p.DegLon, (double)p.MinLon, p.EoW, IsValidFix,
-          (int)gps_info.BaroAltitude, p.GPSAltitude, (int)dEPE, iSIU);
-
-  IGCWriteRecord(szBRecord);
-}
-
 void
 LoggerImpl::LogEvent(const NMEA_INFO& gps_info, const char* event)
 {
-  char szBRecord[30];
-  sprintf(szBRecord,"E%02d%02d%02d%s\r\n",
-          gps_info.DateTime.hour, gps_info.DateTime.minute,
-          gps_info.DateTime.second, event);
+  assert(writer != NULL);
 
-  IGCWriteRecord(szBRecord);
-  // tech_spec_gnss.pdf says we need a B record immediately after an E record
-  LogPointToFile(gps_info);
+  writer->LogEvent(gps_info, event);
 }
 
 void
 LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
 {
-  if (!LoggerActive) {
+  if (writer == NULL) {
     LogPointToBuffer(gps_info);
     return;
   }
@@ -292,10 +189,10 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
     for (int iSat = 0; iSat < MAXSATELLITES; iSat++)
       tmp_info.gps.SatelliteIDs[iSat] = src.SatelliteIDs[iSat];
 
-    LogPointToFile(tmp_info);
+    writer->LogPoint(tmp_info);
   }
 
-  LogPointToFile(gps_info);
+  writer->LogPoint(gps_info);
 }
 
 static bool
@@ -315,8 +212,6 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
 {
   int i;
   TCHAR path[MAX_PATH];
-  Simulator = false;
-  LastValidPoint.Initialized = false;
 
   // chars must be legal in file names
   for (i = 0; i < 3; i++)
@@ -324,16 +219,6 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
                         strAssetNumber[i] : _T('A');
 
   LocalPath(path, _T("logs"));
-
-  DiskBufferReset();
-
-  if (gps_info.gps.Simulator)
-    Simulator = true;
-
-  if (!Simulator)
-    LoggerGInit();
-
-  frecord.reset();
 
   for (i = 1; i < 99; i++) {
     // 2003-12-31-XXX-987-01.IGC
@@ -376,160 +261,17 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
       break;  // file not exist, we'll use this name
   }
 
+  delete writer;
+  writer = new IGCWriter(szLoggerFileName, gps_info);
+
   LogStartUp(_T("Logger Started: %s"), szLoggerFileName);
-}
-
-void
-LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info, const Declaration &decl)
-{
-  char datum[] = "HFDTM100Datum: WGS-84\r\n";
-  char temp[100];
-
-  // Flight recorder ID number MUST go first..
-  sprintf(temp, "AXCS%C%C%C\r\n",
-          strAssetNumber[0],
-          strAssetNumber[1],
-          strAssetNumber[2]);
-  IGCWriteRecord(temp);
-
-  sprintf(temp, "HFDTE%02u%02u%02u\r\n",
-          gps_info.DateTime.day,
-          gps_info.DateTime.month,
-          gps_info.DateTime.year % 100);
-  IGCWriteRecord(temp);
-
-  if (!Simulator)
-    IGCWriteRecord(GetHFFXARecord());
-
-  sprintf(temp, "HFPLTPILOT:%S\r\n", decl.PilotName);
-  IGCWriteRecord(temp);
-
-  sprintf(temp, "HFGTYGLIDERTYPE:%S\r\n", decl.AircraftType);
-  IGCWriteRecord(temp);
-
-  sprintf(temp, "HFGIDGLIDERID:%S\r\n", decl.AircraftRego);
-  IGCWriteRecord(temp);
-
-  sprintf(temp, "HFFTYFR TYPE:XCSOAR,XCSOAR %S\r\n", XCSoar_VersionStringOld);
-  IGCWriteRecord(temp);
-
-  DeviceConfig device_config;
-  // this is only the XCSoar Simulator, not Condor etc, so don't use Simulator flag
-  if (is_simulator())
-    _tcscpy(device_config.driver_name, _T("Simulator"));
-  else
-    Profile::GetDeviceConfig(0, device_config);
-
-  sprintf(temp, "HFGPS: %S\r\n", device_config.driver_name);
-  IGCWriteRecord(temp);
-
-  IGCWriteRecord(datum);
-
-  if (!Simulator)
-    IGCWriteRecord(GetIRecord());
-}
-
-void
-LoggerImpl::StartDeclaration(const NMEA_INFO &gps_info, const int ntp)
-{
-  // TODO bug: this is causing problems with some analysis software
-  // maybe it's because the date and location fields are bogus
-  char start[] = "C0000000N00000000ETAKEOFF\r\n";
-  char temp[100];
-
-  BrokenDateTime FirstDateTime = !PreTakeoffBuffer.empty()
-    ? PreTakeoffBuffer.peek().DateTime
-    : gps_info.DateTime;
-
-  // JMW added task start declaration line
-
-  // LGCSTKF013945TAKEOFF DETECTED
-
-  // IGC GNSS specification 3.6.1
-  sprintf(temp, "C%02u%02u%02u%02u%02u%02u0000000000%02d\r\n",
-          // DD  MM  YY  HH  MM  SS  DD  MM  YY IIII TT
-          FirstDateTime.day,
-          FirstDateTime.month,
-          FirstDateTime.year % 100,
-          FirstDateTime.hour,
-          FirstDateTime.minute,
-          FirstDateTime.second,
-          ntp - 2);
-
-  IGCWriteRecord(temp);
-  // takeoff line
-  // IGC GNSS specification 3.6.3
-  IGCWriteRecord(start);
-}
-
-void
-LoggerImpl::EndDeclaration(void)
-{
-  // TODO bug: this is causing problems with some analysis software
-  // maybe it's because the date and location fields are bogus
-  const char start[] = "C0000000N00000000ELANDING\r\n";
-  IGCWriteRecord(start);
-}
-
-void
-LoggerImpl::AddDeclaration(const GEOPOINT &location, const TCHAR *ID)
-{
-  const fixed Latitude = location.Latitude.value_degrees();
-  const fixed Longitude = location.Longitude.value_degrees();
-
-  char szCRecord[500];
-  char IDString[MAX_PATH];
-  int i;
-
-  int DegLat, DegLon;
-  fixed MinLat, MinLon;
-  char NoS, EoW;
-
-  TCHAR tmpstring[MAX_PATH];
-  _tcscpy(tmpstring, ID);
-  _tcsupr(tmpstring);
-  for (i = 0; i < (int)_tcslen(tmpstring); i++)
-    IDString[i] = (char)tmpstring[i];
-
-  IDString[i] = '\0';
-
-  DegLat = (int)Latitude;
-  MinLat = Latitude - fixed(DegLat);
-  NoS = 'N';
-  if (negative(MinLat) || (((int)MinLat - DegLat == 0) && DegLat < 0)) {
-    NoS = 'S';
-    DegLat *= -1;
-    MinLat *= -1;
-  }
-  MinLat *= 60;
-  MinLat *= 1000;
-
-  DegLon = (int)Longitude;
-  MinLon = Longitude - fixed(DegLon);
-  EoW = 'E';
-  if (negative(MinLon) || ((int)MinLon == DegLon && DegLon < 0)) {
-    EoW = 'W';
-    DegLon *= -1;
-    MinLon *= -1;
-  }
-  MinLon *= 60;
-  MinLon *= 1000;
-
-  sprintf(szCRecord, "C%02d%05.0f%c%03d%05.0f%c%s\r\n",
-          DegLat, (double)MinLat, NoS, DegLon, (double)MinLon, EoW, IDString);
-
-  IGCWriteRecord(szCRecord);
 }
 
 void
 LoggerImpl::LoggerNote(const TCHAR *text)
 {
-  if (!LoggerActive)
-    return;
-
-  char fulltext[500];
-  sprintf(fulltext, "LPLT%S\r\n", text);
-  IGCWriteRecord(fulltext);
+  if (writer != NULL)
+    writer->LoggerNote(text);
 }
 
 static time_t
@@ -709,17 +451,29 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
                         const Declaration &decl)
 {
   StartLogger(gps_info, settings, strAssetNumber);
-  LoggerHeader(gps_info, decl);
+
+  DeviceConfig device_config;
+  // this is only the XCSoar Simulator, not Condor etc, so don't use Simulator flag
+  if (is_simulator())
+    _tcscpy(device_config.driver_name, _T("Simulator"));
+  else
+    Profile::GetDeviceConfig(0, device_config);
+
+  writer->header(gps_info.DateTime,
+                 decl.PilotName, decl.AircraftType, decl.AircraftRego,
+                 strAssetNumber, device_config.driver_name);
 
   if (decl.size()) {
-    StartDeclaration(gps_info, decl.size());
+    BrokenDateTime FirstDateTime = !PreTakeoffBuffer.empty()
+      ? PreTakeoffBuffer.peek().DateTime
+      : gps_info.DateTime;
+    writer->StartDeclaration(FirstDateTime, decl.size());
+
     for (unsigned i = 0; i< decl.size(); ++i)
-      AddDeclaration(decl.get_location(i), decl.get_name(i));
+      writer->AddDeclaration(decl.get_location(i), decl.get_name(i));
 
-    EndDeclaration();
+    writer->EndDeclaration();
   }
-
-  LoggerActive = true; // start logger after Header is completed.  Concurrency
 }
 
 void

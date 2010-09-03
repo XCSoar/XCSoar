@@ -35,7 +35,8 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#include "Logger/LoggerImpl.hpp"
+
+#include "Logger/IGCWriter.hpp"
 #include "NMEA/Info.hpp"
 
 /*
@@ -74,7 +75,7 @@ Copyright_License {
  *
  */
 const char *
-LoggerImpl::GetHFFXARecord(void)
+IGCWriter::GetHFFXARecord(void)
 {
   return "HFFXA50\r\n";
 }
@@ -97,7 +98,7 @@ LoggerImpl::GetHFFXARecord(void)
  * I023638FXA3940SIU  (no spaces)
  */
 const char *
-LoggerImpl::GetIRecord(void)
+IGCWriter::GetIRecord(void)
 {
   return "I023638FXA3940SIU\r\n";
 }
@@ -145,7 +146,7 @@ LoggerImpl::GetIRecord(void)
  * 8 = Simulation mode
  */
 fixed
-LoggerImpl::GetEPE(const NMEA_INFO& gps_info)
+IGCWriter::GetEPE(const NMEA_INFO& gps_info)
 {
   fixed dEPE = fixed_zero;
 
@@ -169,7 +170,7 @@ LoggerImpl::GetEPE(const NMEA_INFO& gps_info)
  * returns Satellites in use if logger fix quality is a valid gps
  */
 int
-LoggerImpl::GetSIU(const NMEA_INFO& gps_info)
+IGCWriter::GetSIU(const NMEA_INFO& gps_info)
 {
   int iSIU=0;
 
