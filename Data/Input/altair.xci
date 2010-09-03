@@ -559,7 +559,7 @@ type=key
 data=9
 event=Setup Basic
 event=Mode default
-label=Setup\nBasic
+label=Flight\nSetup
 location=8
 
 mode=Config1
