@@ -68,6 +68,7 @@ TESTS = \
 	$(TARGET_BIN_DIR)/TestAngle$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/TestEarth$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/TestRadixTree$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/TestLogger$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/TestWayPointFile$(TARGET_EXEEXT)
 
 TEST_ANGLE_SOURCES = \
@@ -91,6 +92,31 @@ TEST_RADIX_TREE_SOURCES = \
 	$(TEST_SRC_DIR)/TestRadixTree.cpp
 TEST_RADIX_TREE_OBJS = $(call SRC_TO_OBJ,$(TEST_RADIX_TREE_SOURCES))
 $(TARGET_BIN_DIR)/TestRadixTree$(TARGET_EXEEXT): $(TEST_RADIX_TREE_OBJS) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_LOGGER_SOURCES = \
+	$(SRC)/Logger/IGCWriter.cpp \
+	$(SRC)/Logger/LoggerFRecord.cpp \
+	$(SRC)/Logger/LoggerGRecord.cpp \
+	$(SRC)/Logger/LoggerEPE.cpp \
+	$(SRC)/Logger/MD5.cpp \
+	$(SRC)/Simulator.cpp \
+	$(SRC)/Version.cpp \
+	$(SRC)/ProfileKeys.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/Math/fixed.cpp \
+	$(SRC)/Math/Angle.cpp \
+	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
+	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
+	$(TEST_SRC_DIR)/TestLogger.cpp
+TEST_LOGGER_OBJS = $(call SRC_TO_OBJ,$(TEST_LOGGER_SOURCES))
+TEST_LOGGER_LDADD = $(IO_LIBS)
+$(TARGET_BIN_DIR)/TestLogger$(TARGET_EXEEXT): $(TEST_LOGGER_OBJS) $(TEST_LOGGER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
@@ -124,7 +150,7 @@ $(TARGET_BIN_DIR)/TestWayPointFile$(TARGET_EXEEXT): $(TEST_WAY_POINT_FILE_OBJS) 
 
 build-check: $(TESTS)
 
-check: $(TESTS)
+check: $(TESTS) | $(OUT)/test/dirstamp
 	@$(NQ)echo "  TEST    $(notdir $(patsubst %$(TARGET_EXEEXT),%,$^))"
 	$(Q)for i in $(TESTS); do $$i || exit $$?; done
 
