@@ -126,13 +126,8 @@ GRecord::Init(int iKey)
 
   unsigned int i=0;
   for (i=0; i< BUFF_LEN; i++) {
-    Digest[i]=0;
-    DigestRead[i]=0;
     FileName[i]=0;
   }
-  ptrDigest=0;
-  ptrFileName=0;
-
 
   for (i=0; i < 3; i++) {
     oMD5[i].InitDigest();

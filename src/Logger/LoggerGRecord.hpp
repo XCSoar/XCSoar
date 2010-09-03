@@ -56,11 +56,7 @@ private:
     BUFF_LEN = 255,
   };
 
-  TCHAR Digest[BUFF_LEN];
-  TCHAR DigestRead[BUFF_LEN];
   TCHAR FileName[BUFF_LEN];
-  unsigned int ptrDigest;
-  unsigned int ptrFileName;
 
 public:
 
