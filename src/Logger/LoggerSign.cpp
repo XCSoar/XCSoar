@@ -128,12 +128,10 @@ LoggerImpl::DiskBufferReset()
 void
 LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName)
 {
-  TCHAR OldGRecordBuff[MAX_IGC_BUFF];
-  TCHAR NewGRecordBuff[MAX_IGC_BUFF];
-
   // buffer is appended w/ each igc file write
   oGRecord.FinalizeBuffer();
   // read record built by individual file writes
+  char OldGRecordBuff[MAX_IGC_BUFF];
   oGRecord.GetDigest(OldGRecordBuff);
 
   // now calc from whats in the igc file on disk
@@ -141,9 +139,10 @@ LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName)
   oGRecord.SetFileName(szLoggerFileName);
   oGRecord.LoadFileToBuffer();
   oGRecord.FinalizeBuffer();
+  char NewGRecordBuff[MAX_IGC_BUFF];
   oGRecord.GetDigest(NewGRecordBuff);
 
-  bool bFileValid = _tcscmp(OldGRecordBuff, NewGRecordBuff) == 0;
+  bool bFileValid = strcmp(OldGRecordBuff, NewGRecordBuff) == 0;
   oGRecord.AppendGRecordToFile(bFileValid);
 }
 

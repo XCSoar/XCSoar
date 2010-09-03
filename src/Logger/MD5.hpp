@@ -39,7 +39,6 @@
 #define __MD5__
 
 #include <stdint.h>
-#include <tchar.h>
 
 class MD5
 {
@@ -64,7 +63,7 @@ public:
   void InitDigest(void);
   void AppendString(const unsigned char *sin, int bSkipWhiteSpaceFlag); // must be NULL-terminated string!
   void Finalize(void);
-  int GetDigest(TCHAR * szOut);
+  int GetDigest(char *buffer);
     //int IsWhiteSpace(char c);
   static int IsValidIGCChar(char c); //returns 1 if Valid IGC Char
 

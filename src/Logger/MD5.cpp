@@ -36,8 +36,8 @@
  */
 
 #include "Logger/MD5.hpp"
+
 #include <memory.h>
-#include <tchar.h>
 #include <stdio.h>
 
 static const uint32_t k[64] = {
@@ -303,7 +303,7 @@ MD5::Process512(const unsigned char *s512in)
 
 
 int
-MD5::GetDigest(TCHAR * szOut)
+MD5::GetDigest(char *buffer)
 { // extract 4 bytes from each uint32_t
   unsigned char digest[16];
 
@@ -327,13 +327,9 @@ MD5::GetDigest(TCHAR * szOut)
   digest[14] = (unsigned char)((h3 >> 16) & 0xFF);
   digest[15] = (unsigned char)((h3 >> 24) & 0xFF);
 
-  char sztemp[8];
-
   int i;
   for (i = 0; i < 16; i++) {
-    sprintf(sztemp,"%02x", digest[i]);
-    szOut[i*2+0]= sztemp[0];
-    szOut[i*2+1]= sztemp[1];
+    sprintf(buffer + i * 2, "%02x", digest[i]);
   }
 
   return 1;

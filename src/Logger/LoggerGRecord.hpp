@@ -62,19 +62,16 @@ public:
 
   void Init();
   const TCHAR *GetVersion() const;
-#ifdef _UNICODE
-  bool AppendRecordToBuffer(const TCHAR *szIn);
-#endif
   bool AppendRecordToBuffer(const char *szIn);
   void FinalizeBuffer();
-  void GetDigest(TCHAR *szOut);
+  void GetDigest(char *buffer);
   int IsValidIGCChar(char c);
 
   // File specific functions
   void SetFileName(const TCHAR *szIn);
   bool LoadFileToBuffer();
   bool AppendGRecordToFile(bool bValid); // writes error if invalid G Record
-  bool ReadGRecordFromFile(TCHAR *buffer, size_t max_length);
+  bool ReadGRecordFromFile(char *buffer, size_t max_length);
   bool VerifyGRecordInFile(void);  // returns 0 if false, 1 if true
 
 private:

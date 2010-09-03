@@ -57,23 +57,6 @@ GRecord::Init()
   return Init(2);  // OLC uses key #2 since 9/1/2008
 }
 
-#ifdef _UNICODE
-
-bool
-GRecord::AppendRecordToBuffer(const TCHAR *szIn)
-{
-  unsigned int iLen = _tcslen(szIn);
-  char buff[BUFF_LEN];
-
-  for (unsigned int i = 0; i <= iLen ; i++) {
-    buff[i] = (unsigned char) szIn[i];
-  }
-
-  return AppendRecordToBuffer( buff);
-}
-
-#endif /* _UNICODE */
-
 /**
  * @return returns true if record is appended, false if skipped
  */
@@ -106,14 +89,10 @@ GRecord::FinalizeBuffer()
 }
 
 void
-GRecord::GetDigest(TCHAR *szOutput)
+GRecord::GetDigest(char *szOutput)
 {
-  TCHAR TempBuff[BUFF_LEN];
   for (int idig=0; idig <=3; idig++) {
-    oMD5[idig].GetDigest(TempBuff);
-    for (unsigned int i = 0; i < 32; i++) {
-      szOutput[idig*32 + i] = TempBuff[i];
-    }
+    oMD5[idig].GetDigest(szOutput + idig * 32);
   }
 
   szOutput[128]='\0';
@@ -231,10 +210,7 @@ GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Record
   if (writer.error())
     return false;
 
-  TCHAR szDigestBuff[BUFF_LEN];
-  TCHAR * szDigest;
-  szDigest=szDigestBuff;
-
+  char szDigest[BUFF_LEN];
   GetDigest(szDigest);
 
   if (bValid) {
@@ -246,7 +222,7 @@ GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Record
     sDig16[0]='G';
     for ( iLine = 0; iLine < (128/iNumCharsPerLine); iLine++) {// 0 - 15
       for (int iChar = 0; iChar < iNumCharsPerLine; iChar++) {
-        sDig16[iChar+1] = (char)szDigest[iChar + iNumCharsPerLine*iLine];
+        sDig16[iChar+1] = szDigest[iChar + iNumCharsPerLine*iLine];
       }
 
       sDig16[iNumCharsPerLine+1]=0; // +1 is the initial "G"
@@ -264,7 +240,7 @@ GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Record
 }
 
 bool
-GRecord::ReadGRecordFromFile(TCHAR szOutput[], size_t max_length)
+GRecord::ReadGRecordFromFile(char *szOutput, size_t max_length)
 {// returns in szOutput the G Record from the file referenced by FileName member
   FileSource source(FileName);
   if (source.error())
@@ -279,7 +255,7 @@ GRecord::ReadGRecordFromFile(TCHAR szOutput[], size_t max_length)
       continue;
 
     for (const char *p = data + 1; *p != '\0'; ++p) {
-      szOutput[iLenDigest++] = (TCHAR)*p;
+      szOutput[iLenDigest++] = *p;
       if (iLenDigest >= max_length)
         /* G record too large */
         return false;
@@ -293,26 +269,21 @@ GRecord::ReadGRecordFromFile(TCHAR szOutput[], size_t max_length)
 
 bool GRecord::VerifyGRecordInFile()
 { // assumes FileName member is set
-  TCHAR OldGRecordBuff[BUFF_LEN];
-  TCHAR * szOldGRecord ;
-  szOldGRecord = OldGRecordBuff;
-
-  TCHAR NewGRecordBuff[BUFF_LEN];
-  TCHAR * szNewGRecord ;
-  szNewGRecord = NewGRecordBuff;
-
   // Load File into Buffer (assume name is already set)
   LoadFileToBuffer();
 
   // load Existing Digest "old"
+  char szOldGRecord[BUFF_LEN];
   if (!ReadGRecordFromFile(szOldGRecord, BUFF_LEN))
     return false;
 
   // recalculate digest from buffer
   FinalizeBuffer();
+
+  char szNewGRecord[BUFF_LEN];
   GetDigest(szNewGRecord);
 
-  return _tcscmp(szOldGRecord, szNewGRecord) == 0;
+  return strcmp(szOldGRecord, szNewGRecord) == 0;
 }
 
 int
