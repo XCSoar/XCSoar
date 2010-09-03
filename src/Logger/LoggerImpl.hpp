@@ -170,7 +170,6 @@ private:
   bool Simulator;
 
   TCHAR szLoggerFileName[MAX_PATH];
-  char szLoggerFileName_c[MAX_PATH];
   OverwritingRingBuffer<LoggerPreTakeoffBuffer,LOGGER_PRETAKEOFF_BUFFER_MAX> PreTakeoffBuffer;
 
   /* stdio buffering is bad on wince3.0:
