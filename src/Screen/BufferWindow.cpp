@@ -53,7 +53,7 @@ BufferWindow::on_create()
     return false;
 
   WindowCanvas a_canvas(*this);
-  buffer.set(a_canvas, get_width(), get_height());
+  buffer.set(a_canvas);
   return true;
 }
 
