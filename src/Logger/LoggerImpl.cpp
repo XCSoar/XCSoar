@@ -384,11 +384,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
 
     }
 
-    FILE *file = _tfopen(szLoggerFileName, _T("r"));
-    if (file != NULL)
-      // file exists, close, try next
-      fclose(file);
-    else
+    if (!File::Exists(szLoggerFileName))
       break;  // file not exist, we'll use this name
   }
 
