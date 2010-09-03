@@ -57,8 +57,6 @@ public:
    */
   Angle() {}
 
-  Angle(const Angle& angle): m_value(angle.m_value) {};
-
   gcc_const
   static Angle native(const fixed value) {
     return Angle(value);
