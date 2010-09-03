@@ -60,7 +60,6 @@ Logger::Logger()
  */
 Logger::~Logger()
 {
-  Poco::ScopedRWLock protect(lock, true);
   delete _logger;
 }
 
