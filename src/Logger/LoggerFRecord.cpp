@@ -92,10 +92,8 @@ LoggerImpl::LogFRecordToFile(const int SatelliteIDs[],
   }
   sprintf(szFRecord+ eof,"\r\n");
 
-  if (strcmp(szFRecord + 7, szLastFRecord + 7) != 0 ||
-       strlen(szFRecord) != strlen(szLastFRecord) ) {
-    DetectFRecordChange=true;
-  }
+  DetectFRecordChange = DetectFRecordChange ||
+    strcmp(szFRecord + 7, szLastFRecord + 7);
   
   if (iNumberSatellites < 3 || NAVWarning) {
     frecord_clock.set_dt(fixed(30)); // accelerate to 30 seconds if bad signal
