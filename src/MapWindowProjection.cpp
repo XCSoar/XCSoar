@@ -61,9 +61,11 @@ MapWindowProjection::MapWindowProjection():
 
 
 void
-MapWindowProjection::InitialiseScaleList
-(const SETTINGS_MAP &settings_map)
+MapWindowProjection::InitialiseScaleList(const SETTINGS_MAP &settings_map,
+                                         const RECT &rc)
 {
+  MapRect = rc;
+
   ScaleListCount = Profile::GetScaleList(ScaleList,
                                          sizeof(ScaleList)/sizeof(ScaleList[0]));
   _RequestedMapScale = LimitMapScale(_RequestedMapScale, settings_map);

@@ -92,7 +92,7 @@ MapWindow::set(ContainerWindow &parent, const RECT &rc)
                    style);
 
   // initialize other systems
-  projection.InitialiseScaleList(SettingsMap());
+  projection.InitialiseScaleList(SettingsMap(), get_client_rect());
 
   cdi = new GaugeCDI(parent); /* XXX better attach to "this"? */
 }

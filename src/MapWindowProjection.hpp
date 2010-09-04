@@ -101,7 +101,7 @@ public:
                        const SETTINGS_COMPUTER &settings_computer,
                        const SETTINGS_MAP &settings_map);
 
-  void InitialiseScaleList(const SETTINGS_MAP &settings);
+  void InitialiseScaleList(const SETTINGS_MAP &settings, const RECT &rc);
 
   // 4 = x*30/1000
   gcc_pure
