@@ -86,11 +86,10 @@ LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
 }
 
 LoggerImpl::LoggerImpl():
-  frecord_clock(fixed_270), // 4.5 minutes)
   LoggerActive(false),
   Simulator(false)
 {
-  ResetFRecord();
+  frecord.reset();
   szLoggerFileName[0] = 0;
 }
 
@@ -220,10 +219,13 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
   if (gps_info.gps.Simulator)
     Simulator = true;
 
-  if (!Simulator)
-    LogFRecordToFile(gps_info.gps.SatelliteIDs,
-                     gps_info.DateTime, gps_info.Time,
-                     gps_info.gps.NAVWarning);
+  if (!Simulator) {
+    const char *p = frecord.update(gps_info.gps.SatelliteIDs,
+                                   gps_info.DateTime, gps_info.Time,
+                                   gps_info.gps.NAVWarning);
+    if (p != NULL)
+      IGCWriteRecord(p);
+  }
 
   if (!LastValidPoint.Initialized &&
       ((gps_info.GPSAltitude < fixed(-100))
@@ -331,7 +333,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
   if (!Simulator)
     LoggerGInit();
 
-  ResetFRecord();
+  frecord.reset();
 
   for (i = 1; i < 99; i++) {
     // 2003-12-31-XXX-987-01.IGC

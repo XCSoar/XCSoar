@@ -43,6 +43,7 @@ Copyright_License {
 #include "DateTime.hpp"
 #include "GPSClock.hpp"
 #include "Navigation/GeoPoint.hpp"
+#include "Logger/LoggerFRecord.hpp"
 #include "Logger/LoggerGRecord.hpp"
 #include "OverwritingRingBuffer.hpp"
 #include "BatchBuffer.hpp"
@@ -104,6 +105,7 @@ public:
   };
 
 private:
+  LoggerFRecord frecord;
   GRecord oGRecord;
   LogPoint_GPSPosition LastValidPoint;
   BatchBuffer<char[MAX_IGC_BUFF],LOGGER_DISK_BUFFER_NUM_RECS> DiskBuffer;
@@ -147,13 +149,6 @@ private:
   void LoggerGStop(TCHAR* szLoggerFileName);
   
 private:
-  void LogFRecordToFile(const int SatelliteIDs[],
-                        const BrokenTime broken_time, fixed Time,
-                        int NAVWarning);
-  void ResetFRecord(void);
-  char szLastFRecord[MAX_IGC_BUFF];
-  bool DetectFRecordChange;
-  GPSClock frecord_clock;
   const char * GetHFFXARecord(void);
   const char * GetIRecord(void);
   fixed GetEPE(const NMEA_INFO& gps_info);

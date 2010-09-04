@@ -36,9 +36,12 @@ Copyright_License {
 }
 */
 
-#include "Logger/LoggerImpl.hpp"
+#include "Logger/LoggerFRecord.hpp"
+#include "DateTime.hpp"
+#include "Sizes.h" /* for MAXSATELLITES */
 
 #include <stdio.h>
+#include <string.h>
 
 /*
  * From FAI_Tech_Spec_Gnss.pdf 
@@ -61,19 +64,20 @@ Copyright_License {
  */
 
 void
-LoggerImpl::ResetFRecord(void)
+LoggerFRecord::reset()
 {
   szLastFRecord[0] = 0;
   DetectFRecordChange=true;
   frecord_clock.reset(); // reset clock / timer
   frecord_clock.set_dt(fixed_one); // 1 sec so it appears at top of each file
 }
-void
-LoggerImpl::LogFRecordToFile(const int SatelliteIDs[],
-                             const BrokenTime broken_time, fixed Time,
-                         int NAVWarning)
+
+const char *
+LoggerFRecord::update(const int SatelliteIDs[],
+                      const BrokenTime &broken_time, fixed Time,
+                      bool NAVWarning)
 { 
-  char szFRecord[MAX_IGC_BUFF];
+  char szFRecord[sizeof(szLastFRecord)];
   int eof=0;
   int iNumberSatellites=0;
   
@@ -97,13 +101,11 @@ LoggerImpl::LogFRecordToFile(const int SatelliteIDs[],
     frecord_clock.set_dt(fixed(30)); // accelerate to 30 seconds if bad signal
   }
    
-  if (frecord_clock.check_advance(fixed(Time)) && DetectFRecordChange) {
-    if (IGCWriteRecord(szFRecord)) {
-      strcpy(szLastFRecord, szFRecord);
-      DetectFRecordChange=false;
-      frecord_clock.set_dt(fixed(270)); //4.5 minutes
-    }
-  }
+  if (!frecord_clock.check_advance(fixed(Time)) || !DetectFRecordChange)
+    return NULL;
 
-  return;
+  strcpy(szLastFRecord, szFRecord);
+  DetectFRecordChange=false;
+  frecord_clock.set_dt(fixed(270)); //4.5 minutes
+  return szLastFRecord;
 }
