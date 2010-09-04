@@ -176,31 +176,34 @@ LoggerImpl::LogPointToBuffer(const NMEA_INFO &gps_info)
   PreTakeoffBuffer.push(item);
 }
 
-void
-LoggerImpl::LoadGPSPointFromNMEA(const NMEA_INFO& gps_info, LogPoint_GPSPosition &p)
+const LoggerImpl::LogPoint_GPSPosition &
+LoggerImpl::LogPoint_GPSPosition::operator=(const NMEA_INFO &gps_info)
 {
-  p.DegLat = (int)gps_info.Location.Latitude.value_degrees();
-  p.MinLat = gps_info.Location.Latitude.value_degrees() - fixed(p.DegLat);
-  p.NoS = 'N';
-  if (negative(p.MinLat) || ((int)p.MinLat == p.DegLat && p.DegLat < 0)) {
-    p.NoS = 'S';
-    p.DegLat *= -1;
-    p.MinLat *= -1;
+  DegLat = (int)gps_info.Location.Latitude.value_degrees();
+  MinLat = gps_info.Location.Latitude.value_degrees() - fixed(DegLat);
+  NoS = 'N';
+  if (negative(MinLat) || ((int)MinLat == DegLat && DegLat < 0)) {
+    NoS = 'S';
+    DegLat *= -1;
+    MinLat *= -1;
   }
-  p.MinLat *= 60;
-  p.MinLat *= 1000;
+  MinLat *= 60;
+  MinLat *= 1000;
 
-  p.DegLon = (int)gps_info.Location.Longitude.value_degrees();
-  p.MinLon = gps_info.Location.Longitude.value_degrees() - fixed(p.DegLon);
-  p.EoW = 'E';
-  if (negative(p.MinLon) || ((int)p.MinLon == p.DegLon && p.DegLon < 0)) {
-    p.EoW = 'W';
-    p.DegLon *= -1;
-    p.MinLon *= -1;
+  DegLon = (int)gps_info.Location.Longitude.value_degrees();
+  MinLon = gps_info.Location.Longitude.value_degrees() - fixed(DegLon);
+  EoW = 'E';
+  if (negative(MinLon) || ((int)MinLon == DegLon && DegLon < 0)) {
+    EoW = 'W';
+    DegLon *= -1;
+    MinLon *= -1;
   }
-  p.MinLon *= 60;
-  p.MinLon *= 1000;
-  p.GPSAltitude = (int)gps_info.GPSAltitude;
+  MinLon *= 60;
+  MinLon *= 1000;
+  GPSAltitude = (int)gps_info.GPSAltitude;
+  Initialized = true;
+
+  return *this;
 }
 
 void
@@ -234,10 +237,8 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
     p = LastValidPoint;
   } else {
     IsValidFix = 'A'; // Active
-    LastValidPoint.Initialized = true;
     // save last active fix location
-    LoadGPSPointFromNMEA(gps_info, LastValidPoint);
-    LoadGPSPointFromNMEA(gps_info, p);
+    p = LastValidPoint = gps_info;
   }
 
   sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%c%c%05d%05d%03d%02d\r\n",

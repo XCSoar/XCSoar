@@ -99,6 +99,8 @@ public:
     char NoS;
     char EoW;
     int GPSAltitude;
+
+    const LogPoint_GPSPosition &operator=(const NMEA_INFO &gps_info);
   };
 
 private:
@@ -156,7 +158,6 @@ private:
   const char * GetIRecord(void);
   fixed GetEPE(const NMEA_INFO& gps_info);
   int GetSIU(const NMEA_INFO& gps_info);
-  void LoadGPSPointFromNMEA(const NMEA_INFO& gps_info, LogPoint_GPSPosition &p);
 
 private:
   bool LoggerActive;
