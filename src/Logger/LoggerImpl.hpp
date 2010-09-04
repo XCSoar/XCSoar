@@ -149,7 +149,6 @@ private:
                         const BrokenTime broken_time, fixed Time,
                         int NAVWarning);
   void ResetFRecord(void);
-  int LastFRecordValid;
   char szLastFRecord[MAX_IGC_BUFF];
   bool DetectFRecordChange;
   GPSClock frecord_clock;

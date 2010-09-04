@@ -63,7 +63,6 @@ Copyright_License {
 void
 LoggerImpl::ResetFRecord(void)
 {
-  LastFRecordValid=true;
   DetectFRecordChange=true;
   frecord_clock.reset(); // reset clock / timer
   frecord_clock.set_dt(fixed_one); // 1 sec so it appears at top of each file
