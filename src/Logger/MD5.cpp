@@ -150,7 +150,7 @@ MD5::InitDigest(void)
 * This is the version we want to use, but we're reverting to 1.0.0 until OLC can upgrade to 1.0.3
 * Validation program 1.0.3 is backwards compatible and reads either 1.0.0 or 1.0.2
 */
-int
+bool
 MD5::IsValidIGCChar(char c) //returns 1 if Valid IGC Char
 {//                                  else 0
 
@@ -167,9 +167,9 @@ MD5::IsValidIGCChar(char c) //returns 1 if Valid IGC Char
     c != 0x5E &&
     c != 0x7E
        )
-      return 1;
+      return true;
     else
-      return 0;
+      return false;
 }
 
 void

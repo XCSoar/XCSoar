@@ -65,7 +65,7 @@ public:
   void Finalize(void);
   int GetDigest(char *buffer);
     //int IsWhiteSpace(char c);
-  static int IsValidIGCChar(char c); //returns 1 if Valid IGC Char
+  static bool IsValidIGCChar(char c);
 
 };
 
