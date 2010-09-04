@@ -144,7 +144,8 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
 
   // Elevation (e.g. 458.0m)
   /// @todo configurable behaviour
-  bool alt_ok = parseAltitude(params[iElevation], new_waypoint.Altitude);
+  bool alt_ok = iElevation < n_params &&
+    parseAltitude(params[iElevation], new_waypoint.Altitude);
   check_altitude(new_waypoint, terrain, alt_ok);
 
   // Description (e.g. "Some Turnpoint", with quotes)
