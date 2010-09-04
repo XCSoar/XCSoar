@@ -63,11 +63,10 @@ Copyright_License {
 void
 LoggerImpl::ResetFRecord(void)
 {
+  szLastFRecord[0] = 0;
   DetectFRecordChange=true;
   frecord_clock.reset(); // reset clock / timer
   frecord_clock.set_dt(fixed_one); // 1 sec so it appears at top of each file
-  for (int iFirst = 0; iFirst < MAX_IGC_BUFF; iFirst++)
-    szLastFRecord[iFirst]=0;
 }
 void
 LoggerImpl::LogFRecordToFile(const int SatelliteIDs[],
