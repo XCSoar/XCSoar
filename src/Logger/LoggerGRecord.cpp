@@ -285,11 +285,3 @@ bool GRecord::VerifyGRecordInFile()
 
   return strcmp(szOldGRecord, szNewGRecord) == 0;
 }
-
-int
-GRecord::IsValidIGCChar(char c) //returns 1 if Valid IGC Char
-{//                                  else 0
-  // ToDo: RLD move this function out of MD5 class
-  return MD5::IsValidIGCChar(c);
-}
-

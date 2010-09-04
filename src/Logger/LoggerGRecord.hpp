@@ -38,6 +38,8 @@
 #ifndef __GRecord__
 #define __GRecord__
 
+#include "Compiler.h"
+
 #include <tchar.h>
 #include "Logger/MD5.hpp"
 
@@ -65,7 +67,11 @@ public:
   bool AppendRecordToBuffer(const char *szIn);
   void FinalizeBuffer();
   void GetDigest(char *buffer);
-  int IsValidIGCChar(char c);
+
+  gcc_const
+  static bool IsValidIGCChar(char c) {
+    return MD5::IsValidIGCChar(c);
+  }
 
   // File specific functions
   void SetFileName(const TCHAR *szIn);
