@@ -144,6 +144,23 @@ IGCWriter::writeln(const char *line)
   return true;
 }
 
+bool
+IGCWriter::write_tstring(const char *a, const TCHAR *b)
+{
+  size_t a_length = strlen(a);
+  size_t b_length = _tcslen(b);
+  char buffer[a_length + b_length * 2 + 1];
+  memcpy(buffer, a, a_length);
+
+#ifdef _UNICODE
+  sprintf(buffer, "%s%S", a, b);
+#else
+  memcpy(buffer + a_length, b, b_length + 1);
+#endif
+
+  return writeln(buffer);
+}
+
 /*
  HFDTE141203  <- should be UTC, same as time in filename
  HFFXA100
@@ -170,10 +187,10 @@ IGCWriter::header(const BrokenDateTime &DateTime,
   char temp[100];
 
   // Flight recorder ID number MUST go first..
-  sprintf(temp, "AXCS%C%C%C",
-          strAssetNumber[0],
-          strAssetNumber[1],
-          strAssetNumber[2]);
+  sprintf(temp, "AXCS%c%c%c",
+          (char)strAssetNumber[0],
+          (char)strAssetNumber[1],
+          (char)strAssetNumber[2]);
   writeln(temp);
 
   sprintf(temp, "HFDTE%02u%02u%02u",
@@ -183,20 +200,11 @@ IGCWriter::header(const BrokenDateTime &DateTime,
   if (!Simulator)
     writeln(GetHFFXARecord());
 
-  sprintf(temp, "HFPLTPILOT:%S", pilot_name);
-  writeln(temp);
-
-  sprintf(temp, "HFGTYGLIDERTYPE:%S", aircraft_model);
-  writeln(temp);
-
-  sprintf(temp, "HFGIDGLIDERID:%S", aircraft_registration);
-  writeln(temp);
-
-  sprintf(temp, "HFFTYFR TYPE:XCSOAR,XCSOAR %S", XCSoar_VersionStringOld);
-  writeln(temp);
-
-  sprintf(temp, "HFGPS: %S", driver_name);
-  writeln(temp);
+  write_tstring("HFPLTPILOT:", pilot_name);
+  write_tstring("HFGTYGLIDERTYPE:", aircraft_model);
+  write_tstring("HFGIDGLIDERID:", aircraft_registration);
+  write_tstring("HFFTYFR TYPE:XCSOAR,XCSOAR ", XCSoar_VersionStringOld);
+  write_tstring("HFGPS: ", driver_name);
 
   writeln(datum);
 

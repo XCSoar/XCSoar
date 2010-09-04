@@ -95,18 +95,20 @@ public:
 
   bool writeln(const char *line);
 
-  void header(const BrokenDateTime &DateTime,
-              const TCHAR *pilot_name, const TCHAR *aircraft_model,
-              const TCHAR *aircraft_registration,
-              const TCHAR *strAssetNumber, const TCHAR *driver_name);
-
 private:
+  bool write_tstring(const char *a, const TCHAR *b);
+
   static const char *GetHFFXARecord();
   static const char *GetIRecord();
   static fixed GetEPE(const NMEA_INFO &gps_info);
   static int GetSIU(const NMEA_INFO &gps_info);
 
 public:
+  void header(const BrokenDateTime &DateTime,
+              const TCHAR *pilot_name, const TCHAR *aircraft_model,
+              const TCHAR *aircraft_registration,
+              const TCHAR *strAssetNumber, const TCHAR *driver_name);
+
   void AddDeclaration(const GEOPOINT &location, const TCHAR *ID);
   void StartDeclaration(const BrokenDateTime &FirstDateTime,
                         const int numturnpoints);
