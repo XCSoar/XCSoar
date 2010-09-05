@@ -43,6 +43,7 @@ Copyright_License {
 #include "Logger/LoggerGRecord.hpp"
 #include "BatchBuffer.hpp"
 #include "Math/fixed.hpp"
+#include "Engine/Navigation/GeoPoint.hpp"
 
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
@@ -73,12 +74,8 @@ class IGCWriter {
 
   struct LogPoint_GPSPosition {
     bool Initialized;
-    int DegLat;
-    int DegLon;
-    fixed MinLat;
-    fixed MinLon;
-    char NoS;
-    char EoW;
+
+    GEOPOINT Location;
     int GPSAltitude;
 
     const LogPoint_GPSPosition &operator=(const NMEA_INFO &gps_info);

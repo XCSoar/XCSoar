@@ -47,27 +47,7 @@ Copyright_License {
 const IGCWriter::LogPoint_GPSPosition &
 IGCWriter::LogPoint_GPSPosition::operator=(const NMEA_INFO &gps_info)
 {
-  DegLat = (int)gps_info.Location.Latitude.value_degrees();
-  MinLat = gps_info.Location.Latitude.value_degrees() - fixed(DegLat);
-  NoS = 'N';
-  if (negative(MinLat) || ((int)MinLat == DegLat && DegLat < 0)) {
-    NoS = 'S';
-    DegLat *= -1;
-    MinLat *= -1;
-  }
-  MinLat *= 60;
-  MinLat *= 1000;
-
-  DegLon = (int)gps_info.Location.Longitude.value_degrees();
-  MinLon = gps_info.Location.Longitude.value_degrees() - fixed(DegLon);
-  EoW = 'E';
-  if (negative(MinLon) || ((int)MinLon == DegLon && DegLon < 0)) {
-    EoW = 'W';
-    DegLon *= -1;
-    MinLon *= -1;
-  }
-  MinLon *= 60;
-  MinLon *= 1000;
+  Location = gps_info.Location;
   GPSAltitude = (int)gps_info.GPSAltitude;
   Initialized = true;
 
@@ -357,12 +337,17 @@ IGCWriter::LogPoint(const NMEA_INFO& gps_info)
     p = LastValidPoint = gps_info;
   }
 
-  sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%c%c%05d%05d%03d%02d",
+  char *q = szBRecord;
+  sprintf(q, "B%02d%02d%02d",
           gps_info.DateTime.hour, gps_info.DateTime.minute,
-          gps_info.DateTime.second,
-          p.DegLat, (double)p.MinLat, p.NoS,
-          p.DegLon, (double)p.MinLon, p.EoW, IsValidFix,
-          (int)gps_info.BaroAltitude, p.GPSAltitude, (int)dEPE, iSIU);
+          gps_info.DateTime.second);
+  q += strlen(q);
+
+  q = igc_format_location(q, p.Location);
+
+  sprintf(q, "%c%05d%05d%03d%02d",
+          IsValidFix, (int)gps_info.BaroAltitude, p.GPSAltitude,
+          (int)dEPE, iSIU);
 
   writeln(szBRecord);
 }
