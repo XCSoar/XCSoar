@@ -74,6 +74,44 @@ IGCWriter::LogPoint_GPSPosition::operator=(const NMEA_INFO &gps_info)
   return *this;
 }
 
+static char *
+igc_format_location(char *buffer, const GEOPOINT &location)
+{
+  const fixed Latitude = location.Latitude.value_degrees();
+  const fixed Longitude = location.Longitude.value_degrees();
+
+  int DegLat, DegLon;
+  fixed MinLat, MinLon;
+  char NoS, EoW;
+
+  DegLat = (int)Latitude;
+  MinLat = Latitude - fixed(DegLat);
+  NoS = 'N';
+  if (negative(MinLat) || (((int)MinLat - DegLat == 0) && DegLat < 0)) {
+    NoS = 'S';
+    DegLat *= -1;
+    MinLat *= -1;
+  }
+  MinLat *= 60;
+  MinLat *= 1000;
+
+  DegLon = (int)Longitude;
+  MinLon = Longitude - fixed(DegLon);
+  EoW = 'E';
+  if (negative(MinLon) || ((int)MinLon == DegLon && DegLon < 0)) {
+    EoW = 'W';
+    DegLon *= -1;
+    MinLon *= -1;
+  }
+  MinLon *= 60;
+  MinLon *= 1000;
+
+  sprintf(buffer, "%02d%05.0f%c%03d%05.0f%c",
+          DegLat, (double)MinLat, NoS, DegLon, (double)MinLon, EoW);
+
+  return buffer + strlen(buffer);
+}
+
 IGCWriter::IGCWriter(const TCHAR *_path, const NMEA_INFO &gps_info)
   :Simulator(gps_info.gps.Simulator)
 {
@@ -253,16 +291,9 @@ IGCWriter::EndDeclaration(void)
 void
 IGCWriter::AddDeclaration(const GEOPOINT &location, const TCHAR *ID)
 {
-  const fixed Latitude = location.Latitude.value_degrees();
-  const fixed Longitude = location.Longitude.value_degrees();
-
   char szCRecord[500];
   char IDString[MAX_PATH];
   int i;
-
-  int DegLat, DegLon;
-  fixed MinLat, MinLon;
-  char NoS, EoW;
 
   TCHAR tmpstring[MAX_PATH];
   _tcscpy(tmpstring, ID);
@@ -272,30 +303,10 @@ IGCWriter::AddDeclaration(const GEOPOINT &location, const TCHAR *ID)
 
   IDString[i] = '\0';
 
-  DegLat = (int)Latitude;
-  MinLat = Latitude - fixed(DegLat);
-  NoS = 'N';
-  if (negative(MinLat) || (((int)MinLat - DegLat == 0) && DegLat < 0)) {
-    NoS = 'S';
-    DegLat *= -1;
-    MinLat *= -1;
-  }
-  MinLat *= 60;
-  MinLat *= 1000;
-
-  DegLon = (int)Longitude;
-  MinLon = Longitude - fixed(DegLon);
-  EoW = 'E';
-  if (negative(MinLon) || ((int)MinLon == DegLon && DegLon < 0)) {
-    EoW = 'W';
-    DegLon *= -1;
-    MinLon *= -1;
-  }
-  MinLon *= 60;
-  MinLon *= 1000;
-
-  sprintf(szCRecord, "C%02d%05.0f%c%03d%05.0f%c%s",
-          DegLat, (double)MinLat, NoS, DegLon, (double)MinLon, EoW, IDString);
+  char *p = szCRecord;
+  *p++ = 'C';
+  p = igc_format_location(p, location);
+  strcpy(p, IDString);
 
   writeln(szCRecord);
 }
