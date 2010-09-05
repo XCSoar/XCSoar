@@ -42,6 +42,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "InfoBoxes/Content/Base.hpp"
 #include "Screen/PaintWindow.hpp"
+#include "PeriodClock.hpp"
 
 typedef enum {
   bkNone,
@@ -126,6 +127,8 @@ private:
   int colorValue;
   int colorComment;
   int colorTitle;
+
+  PeriodClock click_clock;
 
   /**
    * Paints the InfoBox title to the given canvas

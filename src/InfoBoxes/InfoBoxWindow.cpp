@@ -39,7 +39,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InputEvents.h"
 #include "Compatibility/string.h"
-#include "PeriodClock.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/Layout.hpp"
@@ -449,10 +448,9 @@ bool
 InfoBoxWindow::on_mouse_down(int x, int y)
 {
   // synthetic double click detection with no proximity , good for infoboxes
-  static PeriodClock double_click;
 
   // if double clicked -> show menu
-  if (!double_click.check_always_update(DOUBLECLICKINTERVAL)) {
+  if (!click_clock.check_always_update(DOUBLECLICKINTERVAL)) {
     InputEvents::ShowMenu();
     return true;
   }
