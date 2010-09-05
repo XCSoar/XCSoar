@@ -57,37 +57,19 @@ IGCWriter::LogPoint_GPSPosition::operator=(const NMEA_INFO &gps_info)
 static char *
 igc_format_location(char *buffer, const GEOPOINT &location)
 {
-  const fixed Latitude = location.Latitude.value_degrees();
-  const fixed Longitude = location.Longitude.value_degrees();
+  char latitude_suffix = negative(location.Latitude.value_native())
+    ? 'S' : 'N';
+  unsigned latitude =
+    (unsigned)uround(fabs(location.Latitude.value_degrees() * 60000));
 
-  int DegLat, DegLon;
-  fixed MinLat, MinLon;
-  char NoS, EoW;
+  char longitude_suffix = negative(location.Longitude.value_native())
+    ? 'W' : 'E';
+  unsigned longitude =
+    (unsigned)uround(fabs(location.Longitude.value_degrees() * 60000));
 
-  DegLat = (int)Latitude;
-  MinLat = Latitude - fixed(DegLat);
-  NoS = 'N';
-  if (negative(MinLat) || (((int)MinLat - DegLat == 0) && DegLat < 0)) {
-    NoS = 'S';
-    DegLat *= -1;
-    MinLat *= -1;
-  }
-  MinLat *= 60;
-  MinLat *= 1000;
-
-  DegLon = (int)Longitude;
-  MinLon = Longitude - fixed(DegLon);
-  EoW = 'E';
-  if (negative(MinLon) || ((int)MinLon == DegLon && DegLon < 0)) {
-    EoW = 'W';
-    DegLon *= -1;
-    MinLon *= -1;
-  }
-  MinLon *= 60;
-  MinLon *= 1000;
-
-  sprintf(buffer, "%02d%05.0f%c%03d%05.0f%c",
-          DegLat, (double)MinLat, NoS, DegLon, (double)MinLon, EoW);
+  sprintf(buffer, "%02u%05u%c%03u%05u%c",
+          latitude / 60000, latitude % 60000, latitude_suffix,
+          longitude / 60000, longitude % 60000, longitude_suffix);
 
   return buffer + strlen(buffer);
 }
