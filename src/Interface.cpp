@@ -213,22 +213,11 @@ XCSoarInterface::Debounce(void)
  * display orientation and the infobox layout
  * @return True if vario gauge should be drawn, False otherwise
  */
-bool
+static bool
 vario_visible()
 {
-  if (!Layout::landscape && !is_altair())
-    return false;
-
-  // Disable vario gauge in geometry 5 landscape mode, leave 8 boxes on
-  // the right
-  if (Layout::landscape &&
-      (InfoBoxLayout::InfoBoxGeometry == InfoBoxLayout::ibRight8))
-    return false;
-
-  if (InfoBoxLayout::InfoBoxGeometry != InfoBoxLayout::ibGNav)
-    return false;
-
-  return true;
+  return Layout::landscape &&
+    InfoBoxLayout::InfoBoxGeometry == InfoBoxLayout::ibGNav;
 }
 
 /**
