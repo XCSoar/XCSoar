@@ -54,17 +54,17 @@ class AirspaceWarningCopy:
 public:
   void Visit(const AirspaceWarning& as) {
     if (as.get_warning_state()== AirspaceWarning::WARNING_INSIDE) {
-      ids_inside.push_back(&as.get_airspace());
+      ids_inside.checked_append(&as.get_airspace());
     } else if (as.get_warning_state()> AirspaceWarning::WARNING_CLEAR) {
-      ids_warning.push_back(&as.get_airspace());
-      locs.push_back(as.get_solution().location);
+      ids_warning.checked_append(&as.get_airspace());
+      locs.checked_append(as.get_solution().location);
     }
     if (!as.get_ack_expired()) {
-      ids_acked.push_back(&as.get_airspace());
+      ids_acked.checked_append(&as.get_airspace());
     }
   }
 
-  std::vector<GEOPOINT> get_locations() const {
+  const StaticArray<GEOPOINT,32> &get_locations() const {
     return locs;
   }
   bool is_warning(const AbstractAirspace& as) const {
@@ -79,20 +79,12 @@ public:
 
 private:
   bool find(const AbstractAirspace& as, 
-            const std::vector<const AbstractAirspace*>& list) const {
-    for (std::vector<const AbstractAirspace*>::const_iterator it = list.begin();
-         it != list.end(); ++it) {
-      if ((*it) == &as) {
-        return true;
-      }
-    }
-    return false;
+            const StaticArray<const AbstractAirspace *,64> &list) const {
+    return list.contains(&as);
   }
 
-  std::vector<const AbstractAirspace*> ids_inside;
-  std::vector<const AbstractAirspace*> ids_warning;
-  std::vector<const AbstractAirspace*> ids_acked;
-  std::vector<GEOPOINT> locs;
+  StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning, ids_acked;
+  StaticArray<GEOPOINT,32> locs;
 };
 
 
@@ -240,13 +232,10 @@ public:
 void
 MapWindow::DrawAirspaceIntersections(Canvas &canvas) const
 {
-  for (std::vector<GEOPOINT>::const_iterator it = m_airspace_intersections.begin();
-       it != m_airspace_intersections.end(); ++it) {
-    
+  for (unsigned i = m_airspace_intersections.size(); i--;) {
     POINT sc;
-    if (projection.LonLat2ScreenIfVisible(*it, &sc)) {
+    if (projection.LonLat2ScreenIfVisible(m_airspace_intersections[i], &sc))
       MapGfx.hAirspaceInterceptBitmap.draw(canvas, bitmap_canvas, sc.x, sc.y);
-    }
   }
 }
 

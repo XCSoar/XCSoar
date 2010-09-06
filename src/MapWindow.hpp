@@ -39,6 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_MAP_WINDOW_HPP
 #define XCSOAR_MAP_WINDOW_HPP
 
+#include "Util/StaticArray.hpp"
 #include "MapWindowProjection.hpp"
 #include "MapWindowTimer.hpp"
 #include "Thread/Mutex.hpp"
@@ -50,8 +51,6 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "BackgroundDrawHelper.hpp"
 #include "Compiler.h"
-
-#include <vector>
 
 struct THERMAL_SOURCE_VIEW
 {
@@ -287,7 +286,7 @@ private:
   void RenderSymbology_upper(Canvas &canvas, const RECT &rc);
   void RenderSymbology_lower(Canvas &canvas, const RECT &rc);
 
-  std::vector<GEOPOINT> m_airspace_intersections;
+  StaticArray<GEOPOINT,32> m_airspace_intersections;
 
   friend class DrawThread;
 };

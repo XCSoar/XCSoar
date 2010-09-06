@@ -53,19 +53,15 @@ class AirspaceWarningCopy:
 public:
   void Visit(const AirspaceWarning& as) {
     if (as.get_warning_state()== AirspaceWarning::WARNING_INSIDE) {
-      ids_inside.push_back(&as.get_airspace());
+      ids_inside.checked_append(&as.get_airspace());
     } else if (as.get_warning_state()> AirspaceWarning::WARNING_CLEAR) {
-      ids_warning.push_back(&as.get_airspace());
-      locs.push_back(as.get_solution().location);
+      ids_warning.checked_append(&as.get_airspace());
     }
     if (!as.get_ack_expired()) {
-      ids_acked.push_back(&as.get_airspace());
+      ids_acked.checked_append(&as.get_airspace());
     }
   }
 
-  std::vector<GEOPOINT> get_locations() const {
-    return locs;
-  }
   bool is_warning(const AbstractAirspace& as) const {
     return find(as, ids_warning);
   }
@@ -78,20 +74,11 @@ public:
 
 private:
   bool find(const AbstractAirspace& as, 
-            const std::vector<const AbstractAirspace*>& list) const {
-    for (std::vector<const AbstractAirspace*>::const_iterator it = list.begin();
-         it != list.end(); ++it) {
-      if ((*it) == &as) {
-        return true;
-      }
-    }
-    return false;
+            const StaticArray<const AbstractAirspace *,64> &list) const {
+    return list.contains(&as);
   }
 
-  std::vector<const AbstractAirspace*> ids_inside;
-  std::vector<const AbstractAirspace*> ids_warning;
-  std::vector<const AbstractAirspace*> ids_acked;
-  std::vector<GEOPOINT> locs;
+  StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning, ids_acked;
 };
 
 class AirspaceMapVisible: public AirspaceVisible
