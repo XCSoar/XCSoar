@@ -5,8 +5,8 @@
 
   <Button Name="cmdSelect" Caption="Select" X="150" Y="2" Width="60" Height="22" OnClick="OnSelectClicked"/>
 
-  <List Name="frmPointTypes" X="2" Y="-1" Width="232" Height="174" ItemHeight="18"/>
+  <List Name="frmPointTypes" X="2" Width="232" Height="174" ItemHeight="18"/>
 
-  <Label Name="frmSummary" X="2" Y="-1" Width="176" Height="96" Border="1"/>
+  <Label Name="frmSummary" X="2" Width="176" Height="96" Border="1"/>
 
 </Form>

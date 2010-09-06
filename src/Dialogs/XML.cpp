@@ -187,7 +187,7 @@ GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
   // Calculate x- and y-Coordinate
   *X = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("X")), 0),
                        eDialogStyle);
-  *Y = StringToIntDflt(Node->getAttribute(_T("Y")), 0);
+  *Y = StringToIntDflt(Node->getAttribute(_T("Y")), -1);
   if (*Y != -1)
     (*Y) = Layout::Scale(*Y);
 

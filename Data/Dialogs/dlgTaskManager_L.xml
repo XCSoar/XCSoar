@@ -2,8 +2,8 @@
 
 <Form Name="frmTaskManager" Width="320" Height="240" Caption="Task Manager">
   <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="98" Height="22" OnClick="OnCloseClicked"/>
-  <Button Name="cmdEdit" Caption="Edit" X="2" Y="-1" Width="98" Height="22" OnClick="OnEditClicked"/>
-  <Button Name="cmdList" Caption="Browse" X="2" Y="-1" Width="98" Height="22" OnClick="OnListClicked"/>
+  <Button Name="cmdEdit" Caption="Edit" X="2" Width="98" Height="22" OnClick="OnEditClicked"/>
+  <Button Name="cmdList" Caption="Browse" X="2" Width="98" Height="22" OnClick="OnListClicked"/>
 
   <Button Name="cmdDeclare" Caption="Declare" X="2" Y="201" Width="98" Height="22" OnClick="OnDeclareClicked"/>
 

@@ -2,20 +2,20 @@
 
 <Form Name="frmStartup" Width="240" Height="320" Caption="XCSoar" BackColor="0xFFFFFF">
 
-  <Canvas Name="frmspacer1" X="2" Y="-1" Width="240" Height="20" />
+  <Canvas Name="frmspacer1" X="2" Width="240" Height="20" />
 
-  <Canvas Name="frmSplash" X="65" Y="-1" Width="110" Height="81" OnPaint="OnSplashPaint" />
+  <Canvas Name="frmSplash" X="65" Width="110" Height="81" OnPaint="OnSplashPaint" />
 
-  <Canvas Name="frmspacer2" X="2" Y="-1" Width="300" Height="15" />
+  <Canvas Name="frmspacer2" X="2" Width="300" Height="15" />
 
-  <Label Name="frmDisclaimer1" X="2" Y="-1" Width="235" Height="75"/>
+  <Label Name="frmDisclaimer1" X="2" Width="235" Height="75"/>
 
-  <Canvas Name="frmspacer3" X="2" Y="-1" Width="240" Height="7" />
+  <Canvas Name="frmspacer3" X="2" Width="240" Height="7" />
   
-  <Panel Name="frmShade" X="0" Y="-1" Width="0" Height="145" Border="0" BackColor="0xDADBAB">
-    <Button Name="cmdClose" Caption="Accept" X="2" Y="-1" Width="-2" Height="30"/>
+  <Panel Name="frmShade" X="0" Width="0" Height="145" Border="0" BackColor="0xDADBAB">
+    <Button Name="cmdClose" Caption="Accept" X="2" Width="-2" Height="30"/>
 
-    <Edit Name="prpProfile" Caption="Profile" X="2" Y="-1" Width="-2" Height="25" CaptionWidth="60" BackColor="0xDADBAB">
+    <Edit Name="prpProfile" Caption="Profile" X="2" Width="-2" Height="25" CaptionWidth="60" BackColor="0xDADBAB">
       <DataField DataType="filereader" Min="0" Max="200" Step="1"/>
     </Edit>
   </Panel>
