@@ -99,8 +99,8 @@ static const TCHAR *const captions[] = {
   N_("Fonts"),
   N_("FLARM and other gauges"),
   N_("Default task rules"),
-  N_("InfoBox Cruise"),
   N_("InfoBox Circling"),
+  N_("InfoBox Cruise"),
   N_("InfoBox Final Glide"),
   N_("InfoBox Auxiliary"),
   N_("Logger"),
@@ -949,19 +949,6 @@ static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-/**
- * Convert a page number mode returned by page2mode() to a
- * InfoBoxManager mode number.
- */
-static unsigned
-page_mode_to_ibm_mode(unsigned page_mode)
-{
-  static const unsigned table[] = { 1, 0, 2, 3 };
-
-  assert(page_mode < sizeof(table) / sizeof(table[0]));
-  return table[page_mode];
-}
-
 static void
 SetInfoBoxSelector(unsigned item, int mode)
 {
@@ -976,7 +963,7 @@ SetInfoBoxSelector(unsigned item, int mode)
 
   dfe->Sort(0);
 
-  dfe->Set(InfoBoxManager::getType(item, page_mode_to_ibm_mode(mode)));
+  dfe->Set(InfoBoxManager::getType(item, mode));
   wp->RefreshDisplay();
 }
 
@@ -988,13 +975,13 @@ GetInfoBoxSelector(unsigned item, int mode)
     return;
 
   int itnew = wp->GetDataField()->GetAsInteger();
-  int it = InfoBoxManager::getType(item, page_mode_to_ibm_mode(mode));
+  int it = InfoBoxManager::getType(item, mode);
 
   if (it == itnew)
     return;
 
   changed = true;
-  InfoBoxManager::setType(item, itnew, page_mode_to_ibm_mode(mode));
+  InfoBoxManager::setType(item, itnew, mode);
   Profile::SetInfoBoxes(item, InfoBoxManager::getTypeAll(item));
 }
 
