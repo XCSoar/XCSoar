@@ -84,6 +84,30 @@ enum {
   ID_USER_LEVEL = 100,
 };
 
+enum config_page {
+  PAGE_SITE,
+  PAGE_AIRSPACE,
+  PAGE_MAP,
+  PAGE_TERRAIN,
+  PAGE_GLIDE_COMPUTER,
+  PAGE_SAFETY_FACTORS,
+  PAGE_POLAR,
+  PAGE_DEVICES,
+  PAGE_UNITS,
+  PAGE_INTERFACE,
+  PAGE_APPEARANCE,
+  PAGE_FONTS,
+  PAGE_VARIO,
+  PAGE_TASK_RULES,
+  PAGE_INFOBOX_CIRCLING,
+  PAGE_INFOBOX_CRUISE,
+  PAGE_INFOBOX_FINAL,
+  PAGE_INFOBOX_AUXILIARY,
+  PAGE_LOGGER,
+  PAGE_WAYPOINTS,
+  PAGE_EXPERIMENTAL,
+};
+
 static const TCHAR *const captions[] = {
   N_("Site"),
   N_("Airspace"),
@@ -147,7 +171,7 @@ static bool requirerestart = false;
 static bool utcchanged = false;
 static bool waypointneedsave = false;
 static bool FontRegistryChanged=false;
-static unsigned config_page;
+static config_page current_page;
 static WndForm *wf = NULL;
 static CheckBox *user_level;
 TabbedControl *configuration_tabbed;
@@ -197,21 +221,31 @@ UpdateButtons(void)
   }
 }
 
+static bool
+is_infobox_page(config_page page)
+{
+  return page == PAGE_INFOBOX_CIRCLING ||
+    page == PAGE_INFOBOX_CRUISE ||
+    page == PAGE_INFOBOX_FINAL ||
+    page == PAGE_INFOBOX_AUXILIARY;
+}
+
 static void
 PageSwitched()
 {
-  config_page = configuration_tabbed->GetCurrentPage();
+  current_page = (config_page)configuration_tabbed->GetCurrentPage();
 
   TCHAR caption[64];
   _sntprintf(caption, 64, _T("%u %s"),
-             config_page + 1, gettext(captions[config_page]));
+             (unsigned)current_page + 1,
+             gettext(captions[(unsigned)current_page]));
   wf->SetCaption(caption);
 
   if (buttonCopy != NULL)
-    buttonCopy->set_visible(config_page >= 14 && config_page <= 17);
+    buttonCopy->set_visible(is_infobox_page(current_page));
 
   if (buttonPaste != NULL)
-    buttonPaste->set_visible(config_page >= 14 && config_page <= 17);
+    buttonPaste->set_visible(is_infobox_page(current_page));
 }
 
 static void
@@ -632,10 +666,25 @@ OnCloseClicked(gcc_unused WndButton &button)
 
 static int cpyInfoBox[10];
 
-static int
-page2mode(void)
+static const TCHAR *
+page2mode(config_page page)
 {
-  return configuration_tabbed->GetCurrentPage() - 14;
+  switch (page) {
+  case PAGE_INFOBOX_CIRCLING:
+    return _T("Circling");
+
+  case PAGE_INFOBOX_CRUISE:
+    return _T("Cruise");
+
+  case PAGE_INFOBOX_FINAL:
+    return _T("FinalGlide");
+
+  case PAGE_INFOBOX_AUXILIARY:
+    return _T("Aux");
+
+  default:
+    return NULL;
+  }
 }
 
 static const TCHAR *const info_box_mode_names[] = {
@@ -645,12 +694,12 @@ static const TCHAR *const info_box_mode_names[] = {
   _T("Aux"),
 };
 
-static void InfoBoxPropName(TCHAR *name, int item, int mode) {
-  _stprintf(name, _T("prpInfoBox%s%1d"), info_box_mode_names[mode], item);
+static void InfoBoxPropName(TCHAR *name, int item, const TCHAR *mode) {
+  _stprintf(name, _T("prpInfoBox%s%1d"), mode, item);
 }
 
 static WndProperty *
-FindInfoBoxField(int mode, int item)
+FindInfoBoxField(const TCHAR *mode, int item)
 {
   TCHAR name[80];
   InfoBoxPropName(name, item, mode);
@@ -660,8 +709,8 @@ FindInfoBoxField(int mode, int item)
 static void
 OnCopy(gcc_unused WndButton &button)
 {
-  int mode = page2mode();
-  if ((mode < 0) || (mode > 3))
+  const TCHAR *mode = page2mode(current_page);
+  if (mode == NULL)
     return;
 
   for (unsigned item = 0; item < InfoBoxLayout::numInfoWindows; item++) {
@@ -674,8 +723,8 @@ OnCopy(gcc_unused WndButton &button)
 static void
 OnPaste(gcc_unused WndButton &button)
 {
-  int mode = page2mode();
-  if ((mode < 0) || (mode > 3) || (cpyInfoBox[0] < 0))
+  const TCHAR *mode = page2mode(current_page);
+  if (mode == NULL)
     return;
 
   if(MessageBoxX(_("Overwrite?"),
@@ -894,16 +943,16 @@ OnInfoBoxHelp(WindowControl * Sender)
   TCHAR caption[100];
   const TCHAR *mode;
   switch (configuration_tabbed->GetCurrentPage()) {
-  case 15:
+  case PAGE_INFOBOX_CIRCLING:
     mode = _("circling");
     break;
-  case 14:
+  case PAGE_INFOBOX_CRUISE:
     mode = _("cruise");
     break;
-  case 16:
+  case PAGE_INFOBOX_FINAL:
     mode = _("final glide");
     break;
-  case 17:
+  case PAGE_INFOBOX_AUXILIARY:
     mode = _("auxiliary");
     break;
   default:
@@ -952,7 +1001,7 @@ static CallBackTableEntry_t CallBackTable[] = {
 static void
 SetInfoBoxSelector(unsigned item, int mode)
 {
-  WndProperty *wp = FindInfoBoxField(mode, item);
+  WndProperty *wp = FindInfoBoxField(info_box_mode_names[mode], item);
   if (wp == NULL)
     return;
 
@@ -970,7 +1019,7 @@ SetInfoBoxSelector(unsigned item, int mode)
 static void
 GetInfoBoxSelector(unsigned item, int mode)
 {
-  WndProperty *wp = FindInfoBoxField(mode, item);
+  WndProperty *wp = FindInfoBoxField(info_box_mode_names[mode], item);
   if (wp == NULL)
     return;
 
@@ -1922,7 +1971,7 @@ PrepareConfigurationDialog()
   setVariables();
 
   /* restore previous page */
-  configuration_tabbed->SetCurrentPage(config_page);
+  configuration_tabbed->SetCurrentPage((unsigned)current_page);
   PageSwitched();
 
   changed = false;
@@ -1939,7 +1988,7 @@ void dlgConfigurationShowModal(void)
   wf->ShowModal();
 
   /* save page number for next time this dialog is opened */
-  config_page = configuration_tabbed->GetCurrentPage();
+  current_page = (config_page)configuration_tabbed->GetCurrentPage();
 
   // TODO enhancement: implement a cancel button that skips all this
   // below after exit.
