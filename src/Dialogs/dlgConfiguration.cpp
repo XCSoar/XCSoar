@@ -2567,80 +2567,39 @@ void dlgConfigurationShowModal(void)
                               szProfileEnableExternalTriggerCruise,
                               settings_computer.EnableExternalTriggerCruise);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppInverseInfoBox"));
-  if (wp) {
-    if ((int)(Appearance.InverseInfoBox) != wp->GetDataField()->GetAsInteger()) {
-      Appearance.InverseInfoBox = (wp->GetDataField()->GetAsInteger() != 0);
-      Profile::Set(szProfileAppInverseInfoBox,Appearance.InverseInfoBox);
-      requirerestart = true;
-      changed = true;
-    }
-  }
+  changed |= requirerestart |=
+    SaveFormProperty(wf, _T("prpAppInverseInfoBox"),
+                     szProfileAppInverseInfoBox, Appearance.InverseInfoBox);
 
   changed |= SaveFormProperty(wf, _T("prpGliderScreenPosition"),
                               szProfileGliderScreenPosition,
                               XCSoarInterface::SetSettingsMap().GliderScreenPosition);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppDefaultMapWidth"));
-  if (wp) {
-    if ((int)(Appearance.DefaultMapWidth) != wp->GetDataField()->GetAsInteger()) {
-      Appearance.DefaultMapWidth = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileAppDefaultMapWidth,Appearance.DefaultMapWidth);
-      requirerestart = true;
-      changed = true;
-    }
-  }
+  changed |= requirerestart |=
+    SaveFormProperty(wf, _T("prpAppDefaultMapWidth"),
+                     szProfileAppDefaultMapWidth, Appearance.DefaultMapWidth);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppAveNeedle"));
-  if (wp) {
-    if ((int)(Appearance.GaugeVarioAveNeedle) !=
-        wp->GetDataField()->GetAsInteger()) {
-      Appearance.GaugeVarioAveNeedle =
-        (wp->GetDataField()->GetAsInteger() != 0);
-      Profile::Set(szProfileAppAveNeedle,Appearance.GaugeVarioAveNeedle);
-      changed = true;
-    }
-  }
+  changed |= SaveFormProperty(wf, _T("prpAppAveNeedle"), szProfileAppAveNeedle,
+                              Appearance.GaugeVarioAveNeedle);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxColors"));
-  if (wp) {
-    if ((int)(Appearance.InfoBoxColors) != wp->GetDataField()->GetAsInteger()) {
-      Appearance.InfoBoxColors = (wp->GetDataField()->GetAsInteger() != 0);
-      Profile::Set(szProfileAppInfoBoxColors,Appearance.InfoBoxColors);
-      requirerestart = true;
-      changed = true;
-    }
-  }
+  changed |= requirerestart |=
+    SaveFormProperty(wf, _T("prpAppInfoBoxColors"),
+                     szProfileAppInfoBoxColors, Appearance.InfoBoxColors);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppGaugeVarioSpeedToFly"));
-  if (wp) {
-    if ((int)(Appearance.GaugeVarioSpeedToFly) != wp->GetDataField()->GetAsInteger()) {
-      Appearance.GaugeVarioSpeedToFly = (wp->GetDataField()->GetAsInteger() != 0);
-      Profile::Set(szProfileAppGaugeVarioSpeedToFly,Appearance.GaugeVarioSpeedToFly);
-      changed = true;
-      requirerestart = true;
-    }
-  }
+  changed |= requirerestart |=
+    SaveFormProperty(wf, _T("prpAppGaugeVarioSpeedToFly"),
+                     szProfileAppGaugeVarioSpeedToFly,
+                     Appearance.GaugeVarioSpeedToFly);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppGaugeVarioAvgText"));
-  if (wp) {
-    if ((int)Appearance.GaugeVarioAvgText != wp->GetDataField()->GetAsInteger()) {
-      Appearance.GaugeVarioAvgText = (wp->GetDataField()->GetAsInteger() != 0);
-      Profile::Set(szProfileAppGaugeVarioAvgText,Appearance.GaugeVarioAvgText);
-      changed = true;
-      requirerestart = true;
-    }
-  }
+  changed |= requirerestart |=
+    SaveFormProperty(wf, _T("prpAppGaugeVarioAvgText"),
+                     szProfileAppGaugeVarioAvgText,
+                     Appearance.GaugeVarioAvgText);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppGaugeVarioGross"));
-  if (wp) {
-    if ((int)Appearance.GaugeVarioGross != wp->GetDataField()->GetAsInteger()) {
-      Appearance.GaugeVarioGross = (wp->GetDataField()->GetAsInteger() != 0);
-      Profile::Set(szProfileAppGaugeVarioGross,Appearance.GaugeVarioGross);
-      changed = true;
-      requirerestart = true;
-    }
-  }
+  changed |= requirerestart |=
+    SaveFormProperty(wf, _T("prpAppGaugeVarioGross"),
+                     szProfileAppGaugeVarioGross,
+                     Appearance.GaugeVarioGross);
 
   changed |= SaveFormProperty(wf, _T("prpAppGaugeVarioMc"),
                               szProfileAppGaugeVarioMc,
@@ -2655,14 +2614,9 @@ void dlgConfigurationShowModal(void)
                               Appearance.GaugeVarioBallast);
 
 #ifdef HAVE_BLANK
-  wp = (WndProperty*)wf->FindByName(_T("prpAutoBlank"));
-  if (wp) {
-    if (XCSoarInterface::SettingsMap().EnableAutoBlank != (wp->GetDataField()->GetAsInteger()!=0)) {
-      XCSoarInterface::SetSettingsMap().EnableAutoBlank = (wp->GetDataField()->GetAsInteger() != 0);
-      Profile::Set(szProfileAutoBlank, XCSoarInterface::SettingsMap().EnableAutoBlank);
-      changed = true;
-    }
-  }
+  changed |= SaveFormProperty(wf, _T("prpAutoBlank"),
+                              szProfileAutoBlank,
+                              XCSoarInterface::SetSettingsMap().EnableAutoBlank);
 #endif
 
   changed |= SaveFormProperty(wf, _T("prpAutoBacklight"),
