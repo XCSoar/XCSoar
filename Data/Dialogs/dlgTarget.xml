@@ -5,36 +5,36 @@
 
   <Edit Name="prpTaskPoint" Caption="Tp" X="2" Y="-1" Width="115" Height="24" CaptionWidth="30"
     Help="This sets the task point for review.">
-    <DataField name="" DataType="enum" Min="0" Max="50" Step="1" OnDataAccess="OnTaskPointData"/>
+    <DataField DataType="enum" Min="0" Max="50" Step="1" OnDataAccess="OnTaskPointData"/>
   </Edit>
 
   <Button Name="btnMove" Caption="Move" X="34" Y="-1" Width="50" Height="22" OnClick="OnMoveClicked" />
 
   <Edit Name="prpRange" Caption="Range" X="2" Y="-1" Width="115" Height="22" CaptionWidth="60" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min="-100" Max="100" Step="2" OnDataAccess="OnRangeData"/>
+    <DataField DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min="-100" Max="100" Step="2" OnDataAccess="OnRangeData"/>
   </Edit>
 
   <Edit Name="prpRadial" Caption="Radial" X="2" Y="-1" Width="115" Height="22" CaptionWidth="60" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="-92" Max="92" Step="2" OnDataAccess="OnRadialData"/>
+    <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="-92" Max="92" Step="2" OnDataAccess="OnRadialData"/>
   </Edit>
 
   <Edit Name="prpAATEst" Caption="ETE" X="2" Y="-1" Width="115" Height="22" CaptionWidth="60" ReadOnly="1" min="0" max="600" step="10">
-    <DataField name="" DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" readonly="1"/>
+    <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" readonly="1"/>
   </Edit>
 
   <Edit Name="prpAATDelta" Caption="delta T" X="2" Y="-1" Width="115" Height="22" CaptionWidth="60" ReadOnly="1" min="0" max="600" step="10">
-    <DataField name="" DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" readonly="1"/>
+    <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" readonly="1"/>
   </Edit>
 
   <aEdit Name="prpSpeedRemaining" Caption="V rem" X="2" Y="-1" Width="115" Height="22" CaptionWidth="60" ReadOnly="1" min="0" max="2000" step="10">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.1f" readonly="1"/>
+    <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.1f" readonly="1"/>
   </aEdit>
 
   <Edit Name="prpSpeedAchieved" Caption="V ach" X="2" Y="-1" Width="115" Height="22" CaptionWidth="60" ReadOnly="1" min="0" max="2000" step="10">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.1f" readonly="1"/>
+    <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.1f" readonly="1"/>
   </Edit>
 
   <Edit Name="prpAATTargetLocked" Caption="Locked" X="2" Y="-1" Width="115" Height="22" CaptionWidth="60" ReadOnly="0" Help="When enabled, targets placed within the AAT area are not adjusted automatically.">
-    <DataField name="" DataType="boolean" ReadOnly="0" OnDataAccess="OnLockedData"/>
+    <DataField DataType="boolean" ReadOnly="0" OnDataAccess="OnLockedData"/>
   </Edit>
 </Form>

@@ -4,19 +4,19 @@
   <Label X="0" Y="0" Width="100" Height="20" Caption="Filter..." />
 
   <Edit Name="prpFltName" Caption="Name" X="2" Y="-1" Width="98" Height="36" CaptionWidth="0">
-    <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterName"/>
+    <DataField DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterName"/>
   </Edit>
 
   <Edit Name="prpFltDistance" Caption="Distance" X="2" Y="-1" Width="98" Height="36" CaptionWidth="0">
-    <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDistance"/>
+    <DataField DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDistance"/>
   </Edit>
 
   <Edit Name="prpFltDirection" Caption="Direction" X="2" Y="-1" Width="98" Height="36" CaptionWidth="0">
-    <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
+    <DataField DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
   </Edit>
 
   <Edit Name="prpFltType" Caption="Type" X="2" Y="-1" Width="98" Height="36" CaptionWidth="0">
-    <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterType"/>
+    <DataField DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterType"/>
   </Edit>
 
   <Button Name="cmdClose" Caption="Close" X="2" Y="190" Width="60" Height="28" />
