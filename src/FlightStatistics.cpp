@@ -691,14 +691,15 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
   if (terrain != NULL) {
     RasterTerrain::Lease map(*terrain);
 
-    std::vector<POINT> points;
+    POINT points[2 + AIRSPACE_SCANSIZE_X + 1];
+
     POINT pf0, pf1;
     pf0.x = chart.screenX(range);
     pf0.y = chart.screenY(fixed_zero);
-    points.push_back(pf0);
+    points[0] = pf0;
     pf1.x = chart.screenX(fixed_zero);
     pf1.y = chart.screenY(fixed_zero);
-    points.push_back(pf1);
+    points[1] = pf1;
 
     for (unsigned j = 0; j < AIRSPACE_SCANSIZE_X; ++j) {
       const fixed t_this = fixed(j) / (AIRSPACE_SCANSIZE_X - 1);
@@ -708,16 +709,17 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
       p.x = chart.screenX(t_this * range);
       p.y = chart.screenY(fixed(map->GetField(p_this)));
 
-      points.push_back(p);
+      points[2 + j] = p;
     }
-    points.push_back(points[0]);
+
+    points[2 + AIRSPACE_SCANSIZE_X] = points[0];
 
     Pen a_pen (Pen::SOLID, IBLSCALE(1), Chart::GROUND_COLOUR);
     Brush a_brush (Chart::GROUND_COLOUR);
 
     canvas.select(a_pen);
     canvas.select(a_brush);
-    canvas.polygon(&points[0], points.size());
+    canvas.polygon(&points[0], sizeof(points) / sizeof(points[0]));
   }
 
   // draw aircraft trend line
