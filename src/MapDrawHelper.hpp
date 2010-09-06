@@ -71,9 +71,6 @@ public:
 
 protected:
 
-  void draw_great_circle(Canvas& the_canvas, const GEOPOINT &from,
-                         const GEOPOINT &to);
-
   void draw_search_point_vector(Canvas& the_canvas, const SearchPointVector& points);
 
   void draw_circle(Canvas& the_canvas, const POINT& center, unsigned radius);
@@ -83,10 +80,6 @@ protected:
   void buffer_render_start();
 
   void clear_buffer();
-
-  bool add_if_visible(std::vector<POINT>& screen, const GEOPOINT& pt) const;
-  void add(std::vector<POINT>& screen, const GEOPOINT& pt) const;
-
 };
 
 

@@ -69,32 +69,6 @@ MapDrawHelper::MapDrawHelper(MapDrawHelper &_that):
 }
 
 void 
-MapDrawHelper::add(std::vector<POINT>& screen, const GEOPOINT& pt) const
-{
-  POINT sc = m_proj.LonLat2Screen(pt);
-  screen.push_back(sc);
-}
-
-bool 
-MapDrawHelper::add_if_visible(std::vector<POINT>& screen, const GEOPOINT& pt) const
-{
-  if (!m_proj.LonLatVisible(pt)) {
-    add(screen, pt);
-    return true;
-  } else {
-    return false;
-  }
-}
-
-void 
-MapDrawHelper::draw_great_circle(Canvas& the_canvas, const GEOPOINT &from,
-                                 const GEOPOINT &to) 
-{
-  MapCanvas map_canvas(the_canvas, m_proj);
-  map_canvas.line(from, to);
-}
-
-void 
 MapDrawHelper::draw_search_point_vector(Canvas& the_canvas, 
                                         const SearchPointVector& points) 
 {
