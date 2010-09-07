@@ -50,7 +50,7 @@ InfoBoxContentHumidity::Update(InfoBoxWindow &infobox)
 {
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), XCSoarInterface::Basic().RelativeHumidity);
+  _stprintf(tmp, _T("%d"), (int)XCSoarInterface::Basic().RelativeHumidity);
   infobox.SetValue(tmp);
 }
 
@@ -60,7 +60,7 @@ InfoBoxContentTemperature::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.1f")_T(DEG),
-            XCSoarInterface::Basic().OutsideAirTemperature);
+            (double)XCSoarInterface::Basic().OutsideAirTemperature);
   infobox.SetValue(tmp);
 }
 

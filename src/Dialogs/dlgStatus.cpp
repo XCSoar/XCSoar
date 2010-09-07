@@ -149,7 +149,7 @@ static void UpdateValuesSystem() {
   static int FLARM_Available_last = XCSoarInterface::Basic().flarm.FLARM_Available;
   static bool LoggerActive_last = logger.isLoggerActive();
   static bool DeclaredToDevice_last = logger.isTaskDeclared();
-  static double SupplyBatteryVoltage_last = XCSoarInterface::Basic().SupplyBatteryVoltage;
+  static fixed SupplyBatteryVoltage_last = XCSoarInterface::Basic().SupplyBatteryVoltage;
   static int PDABatteryPercent_last = PDABatteryPercent;
 
   if (first ||
@@ -259,10 +259,11 @@ static void UpdateValuesSystem() {
     _stprintf(Temp2,_T("%d%% "), PDABatteryPercent);
     _tcscat(Temp, Temp2);
 #endif
-    if (XCSoarInterface::Basic().SupplyBatteryVoltage == 0) {
+    if (XCSoarInterface::Basic().SupplyBatteryVoltage == fixed_zero) {
       _stprintf(Temp2,_T("\0"));
     } else {
-      _stprintf(Temp2,_T("%.1f V"),XCSoarInterface::Basic().SupplyBatteryVoltage);
+      _stprintf(Temp2, _T("%.1f V"),
+                (double)XCSoarInterface::Basic().SupplyBatteryVoltage);
     }
     _tcscat(Temp, Temp2);
 

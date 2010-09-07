@@ -92,7 +92,7 @@ CalculationThread::tick()
     ScopeLock protect(mutexBlackboard);
     device_blackboard.ReadBlackboard(glide_computer.Calculated());
     if (device_blackboard.Basic().MacCready != glide_computer.Basic().MacCready)
-      device_blackboard.SetMC(fixed(glide_computer.Basic().MacCready));
+      device_blackboard.SetMC(glide_computer.Basic().MacCready);
   }
 
   // if (new GPS data)

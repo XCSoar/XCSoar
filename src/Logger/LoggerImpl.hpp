@@ -77,7 +77,7 @@ public:
     int NAVWarning;             /**< GPS fix state */
     int FixQuality;             /**< GPS fix quality */
     int SatellitesUsed;         /**< GPS fix state */
-    bool HDOP;                  /**< GPS Horizontal Dilution of precision */
+    fixed HDOP; /**< GPS Horizontal Dilution of precision */
     bool Simulator;             /**< GPS Simulator flag  */
 
     /** 

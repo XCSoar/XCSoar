@@ -690,7 +690,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   else
     GPS_INFO->gps.NAVWarning = true;
 
-  gps.HDOP = line.read(0.0);
+  gps.HDOP = line.read(fixed_zero);
 
   if (RMZAvailable) {
     GPS_INFO->BaroAltitudeAvailable = true;

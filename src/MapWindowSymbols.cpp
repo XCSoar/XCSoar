@@ -307,7 +307,7 @@ MapWindow::DrawHorizon(Canvas &canvas, const RECT &rc) const
   canvas.line(Start.x - rr2p, Start.y - rr2p, Start.x - rr2n, Start.y - rr2n);
 
   // JMW experimental, display stall sensor
-  double s = max(0.0, min(1.0, Basic().StallRatio));
+  fixed s = max(fixed_zero, min(fixed_one, Basic().StallRatio));
   long m = (long)((rc.bottom - rc.top) * s * s);
 
   canvas.black_pen();

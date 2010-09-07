@@ -108,7 +108,7 @@ struct GPS_STATE
   int SatelliteIDs[MAXSATELLITES];
 
   /** Horizontal dilution of precision */
-  double HDOP;
+  fixed HDOP;
 
   /** Is the GPS unit moving? (Speed > 2.0) */
   bool MovementDetected;
@@ -332,13 +332,13 @@ struct NMEA_INFO {
   //##############
 
   /** MacCready value of external device (if available) */
-  double MacCready;
+  fixed MacCready;
 
   /** Ballast information of external device (if available) */
-  double Ballast;
+  fixed Ballast;
 
   /** Bugs information of external device (if available) */
-  double Bugs;
+  fixed Bugs;
 
   //################
   //   Atmosphere
@@ -362,7 +362,7 @@ struct NMEA_INFO {
    * Temperature of outside air (if available)
    * @see TemperatureAvailable
    */
-  double OutsideAirTemperature;
+  fixed OutsideAirTemperature;
 
   /**
    * Is humidity information available?
@@ -373,21 +373,21 @@ struct NMEA_INFO {
    * Humidity of outside air (if available)
    * @see HumidityAvailable
    */
-  double RelativeHumidity;
+  fixed RelativeHumidity;
 
   //###########
   //   Other
   //###########
 
   /** Battery supply voltage information (if available) */
-  double SupplyBatteryVoltage;
+  fixed SupplyBatteryVoltage;
 
   bool SwitchStateAvailable;
 
   /** Switch state of the user inputs */
   SWITCH_INFO SwitchState;
 
-  double StallRatio;
+  fixed StallRatio;
 
   FLARM_STATE flarm;
 
@@ -474,7 +474,7 @@ struct NMEA_INFO {
       HumidityAvailable = add.HumidityAvailable;
     }
 
-    if (SupplyBatteryVoltage <= 0.0 && add.SupplyBatteryVoltage > 0.0)
+    if (!positive(SupplyBatteryVoltage) && positive(add.SupplyBatteryVoltage))
       SupplyBatteryVoltage = add.SupplyBatteryVoltage;
 
     if (!SwitchStateAvailable && add.SwitchStateAvailable)

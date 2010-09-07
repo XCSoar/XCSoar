@@ -99,12 +99,10 @@ PDSWC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   MACCREADY = line.read(0.0);
   long switchinputs = line.read_hex(0L);
   long switchoutputs = line.read_hex(0L);
-  GPS_INFO->SupplyBatteryVoltage = line.read(0.0);
+  GPS_INFO->SupplyBatteryVoltage = line.read(fixed_zero) / 10;
 
   MACCREADY /= 10;
 //  oldGlidePolar::SetMacCready(MACCREADY);
-
-  GPS_INFO->SupplyBatteryVoltage/= 10;
 
   GPS_INFO->SwitchStateAvailable = true;
 
@@ -293,7 +291,7 @@ PDVDS(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   */
   line.skip();
 
-  GPS_INFO->StallRatio = line.read(0.0);
+  GPS_INFO->StallRatio = line.read(fixed_zero);
 
   fixed value;
   GPS_INFO->NettoVarioAvailable = line.read_checked(value);
@@ -320,7 +318,7 @@ PDVVT(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   fixed value;
   GPS_INFO->TemperatureAvailable = line.read_checked(value);
   if (GPS_INFO->TemperatureAvailable)
-    GPS_INFO->OutsideAirTemperature = (double)(value / 10) - 273.0;
+    GPS_INFO->OutsideAirTemperature = (value / 10) - fixed(273);
 
   GPS_INFO->HumidityAvailable = line.read_checked(GPS_INFO->RelativeHumidity);
 

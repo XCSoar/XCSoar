@@ -68,7 +68,7 @@ GlideComputerTask::ProcessBasicTask()
 
   if (!SettingsComputer().auto_mc) {
     GlidePolar glide_polar = m_task.get_glide_polar();
-    glide_polar.set_mc(fixed(basic.MacCready));
+    glide_polar.set_mc(basic.MacCready);
     m_task.set_glide_polar(glide_polar);
   }
 
