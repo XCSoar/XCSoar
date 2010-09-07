@@ -10,24 +10,25 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="10"
-   height="10"
-   id="svg2"
+   width="11"
+   height="11"
+   id="svg2816"
    inkscape:version="0.47 r22583"
-   sodipodi:docname="airspacei.svg">
+   sodipodi:docname="terrainw.svg">
   <metadata
-     id="metadata11">
+     id="metadata9">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <sodipodi:namedview
-     pagecolor="#ffffff"
+     pagecolor="#ff00ff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -37,57 +38,76 @@
      inkscape:pageshadow="2"
      inkscape:window-width="1280"
      inkscape:window-height="774"
-     id="namedview9"
+     id="namedview7"
      showgrid="true"
-     showguides="true"
-     inkscape:guide-bbox="true"
      inkscape:zoom="27.842105"
      inkscape:cx="9.5"
      inkscape:cy="9.5"
      inkscape:window-x="-4"
      inkscape:window-y="-4"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer4">
+     inkscape:current-layer="layer5">
     <inkscape:grid
        type="xygrid"
-       id="grid2822"
+       id="grid2823"
        empspacing="5"
        visible="true"
        enabled="true"
        snapvisiblegridlinesonly="true" />
   </sodipodi:namedview>
   <defs
-     id="defs4">
+     id="defs2818">
     <inkscape:perspective
        sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 5 : 1"
+       inkscape:vp_x="0 : 10 : 1"
        inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="10 : 5 : 1"
-       inkscape:persp3d-origin="5 : 3.3333333 : 1"
-       id="perspective13" />
+       inkscape:vp_z="20 : 10 : 1"
+       inkscape:persp3d-origin="10 : 6.6666667 : 1"
+       id="perspective11" />
     <inkscape:perspective
-       id="perspective2827"
+       id="perspective2825"
        inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
        inkscape:vp_z="1 : 0.5 : 1"
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
     <inkscape:perspective
-       id="perspective2876"
+       id="perspective2823"
        inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
        inkscape:vp_z="1 : 0.5 : 1"
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
     <inkscape:perspective
-       id="perspective2899"
+       id="perspective4020"
        inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
        inkscape:vp_z="1 : 0.5 : 1"
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
     <inkscape:perspective
-       id="perspective2925"
+       id="perspective4055"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4077"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4103"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4121"
        inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
        inkscape:vp_z="1 : 0.5 : 1"
        inkscape:vp_y="0 : 1000 : 0"
@@ -102,35 +122,27 @@
        sodipodi:type="inkscape:persp3d" />
   </defs>
   <g
+     transform="translate(0,-5)"
+     id="layer1" />
+  <g
      inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="NOAA_Layer"
-     transform="translate(0,-22)">
-    <g
-       inkscape:groupmode="layer"
-       id="layer4"
-       inkscape:label="MASK_Background"
-       style="display:inline">
-      <path
-         d="m 0.52731403,30.500117 c -0.1233759,0.654644 0.16483958,1.018322 0.99461197,0.999162 l 6.9622825,0 c 0.811319,6.34e-4 1.1011389,-0.361446 0.9946127,-0.999162 l -3.978448,-7.493713 c -0.5235556,-0.91626 -0.7434301,-0.383434 -0.9946117,0 l -3.97844747,7.493713 z"
-         id="path3603"
-         style="fill:#fff200;fill-opacity:1;stroke:#ff6400;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;display:inline" />
-    </g>
-    <g
-       id="layer2"
-       style="display:inline"
-       transform="matrix(0.96238422,0,0,0.47118653,0.21450791,26.764067)" />
-    <g
-       id="layer3"
-       transform="matrix(0.91820293,0,0,0.92240324,0.41181699,22.390802)" />
+     id="layer2"
+     inkscape:label="MASK_Image"
+     transform="translate(0,-8)" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer5"
+     inkscape:label="NOAA_Image"
+     transform="translate(0,-8)">
     <path
-       d="M 6,30.000124 A 1,1 0 1 1 5.99873,29.949617"
-       id="path3606"
-       style="fill:#000000;fill-opacity:1;stroke:none" />
+       style="fill:none;stroke:#ff0000;stroke-width:1.91666675;stroke-linecap:butt;stroke-linejoin:bevel;stroke-opacity:1"
+       d="M 0.70833337,18.291667 10.291666,8.7083334"
+       id="path4111"
+       sodipodi:nodetypes="cc" />
     <path
-       d="m 5,28 -0.5,-3.5 1,0 L 5,28 z"
-       id="path3608"
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       sodipodi:nodetypes="cccc" />
+       style="fill:none;stroke:#ff0000;stroke-width:1.91666687;stroke-linecap:butt;stroke-linejoin:bevel;stroke-opacity:1"
+       d="M 10.291666,18.291667 0.70833341,8.7083338"
+       id="path4111-2"
+       sodipodi:nodetypes="cc" />
   </g>
 </svg>

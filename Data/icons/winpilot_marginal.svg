@@ -14,9 +14,9 @@
    height="19"
    id="svg2816"
    inkscape:version="0.47 r22583"
-   sodipodi:docname="reachable.svg">
+   sodipodi:docname="marginal.svg">
   <metadata
-     id="metadata12">
+     id="metadata11">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -27,7 +27,7 @@
     </rdf:RDF>
   </metadata>
   <sodipodi:namedview
-     pagecolor="#ff00ff"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -35,16 +35,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="640"
-     inkscape:window-height="481"
-     id="namedview10"
+     inkscape:window-width="1280"
+     inkscape:window-height="774"
+     id="namedview9"
      showgrid="false"
      inkscape:zoom="11.8"
      inkscape:cx="10"
      inkscape:cy="10"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
+     inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <defs
      id="defs2818">
@@ -54,9 +54,9 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_z="20 : 10 : 1"
        inkscape:persp3d-origin="10 : 6.6666667 : 1"
-       id="perspective14" />
+       id="perspective13" />
     <inkscape:perspective
-       id="perspective2825"
+       id="perspective2824"
        inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
        inkscape:vp_z="1 : 0.5 : 1"
        inkscape:vp_y="0 : 1000 : 0"
@@ -69,7 +69,7 @@
      inkscape:label="MASK_Image">
     <g
        transform="translate(0,3)"
-       id="layer1-1">
+       id="layer1-7">
       <path
          d="M 20,10 A 10,10 0 1 1 0,10 10,10 0 1 1 20,10 z"
          transform="matrix(0.95,0,0,0.95,0,-3)"
@@ -79,12 +79,7 @@
          d="M 20,10 A 10,10 0 1 1 0,10 10,10 0 1 1 20,10 z"
          transform="matrix(0.85,0,0,0.85,1,-2)"
          id="path2830-4"
-         style="opacity:0.98999999;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-      <path
-         d="M 20,10 A 10,10 0 1 1 0,10 10,10 0 1 1 20,10 z"
-         transform="matrix(0.75,0,0,0.75,2,-1)"
-         id="path2830-4-0"
-         style="opacity:0.98999999;fill:#00ff00;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+         style="opacity:0.98999999;fill:#ffff00;fill-opacity:1;fill-rule:evenodd;stroke:none" />
       <path
          d="M 20,10 A 10,10 0 1 1 0,10 10,10 0 1 1 20,10 z"
          transform="matrix(0.55,0,0,0.55,4,1)"

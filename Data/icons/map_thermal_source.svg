@@ -10,7 +10,7 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="7"
+   width="9"
    height="9"
    id="svg3632"
    inkscape:version="0.47 r22583"
@@ -23,7 +23,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -37,18 +37,18 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1280"
-     inkscape:window-height="774"
+     inkscape:window-height="742"
      id="namedview8"
      showgrid="true"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:zoom="15.816862"
-     inkscape:cx="-10.594006"
-     inkscape:cy="5.1887003"
+     inkscape:zoom="31.633724"
+     inkscape:cx="2.4415805"
+     inkscape:cy="5.7631102"
      inkscape:window-x="-4"
      inkscape:window-y="-4"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer4">
+     inkscape:current-layer="Climb_SP">
     <inkscape:grid
        type="xygrid"
        id="grid3632"
@@ -185,6 +185,13 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2993"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <g
      inkscape:groupmode="layer"
@@ -192,22 +199,32 @@
      inkscape:label="Layer"
      style="display:inline"
      transform="translate(0,-22)">
-    <path
-       style="fill:#ff0000;fill-opacity:1;stroke:none;display:inline"
-       d="m 0.5,22.5 6,6 -6,0"
-       id="path2832-7"
-       sodipodi:nodetypes="ccc" />
+    <g
+       transform="translate(29.916,15.25)"
+       id="Climb_SP">
+      <ellipse
+         style="fill:#ffffff"
+         sodipodi:ry="5.7129998"
+         sodipodi:rx="5.7280002"
+         sodipodi:cy="10.037"
+         sodipodi:cx="-24.188"
+         cx="-24.188"
+         cy="10.037"
+         rx="5.7280002"
+         ry="5.7129998"
+         id="ellipse138"
+         d="m -18.46,10.037 c 0,3.155202 -2.564513,5.713 -5.728,5.713 -3.163487,0 -5.728,-2.557798 -5.728,-5.713 0,-3.155203 2.564513,-5.7130001 5.728,-5.7130001 3.163487,0 5.728,2.5577971 5.728,5.7130001 z"
+         transform="matrix(0.7856145,0,0,0.78767725,-6.4135565,3.3440832)" />
+      <path
+         d="m -29.416,11.321792 c 0,0.878439 0.50204,2.829341 2.406088,3.69443 1.006728,0.458355 2.249035,0.236742 3.089886,-0.612326 0.991728,-0.999481 1.849344,-2.414596 0.282343,-4.208856 0,0 -1.32701,-1.2460133 -2.53226,-0.03026 -1.20525,1.215752 0.385574,2.433286 0.385574,2.433286 0.407632,0.368464 0.233815,0.822369 -0.354692,0.868649 -0.732327,0.05696 -2.040808,-0.307943 -2.040808,-2.144033 0,-1.6135869 1.439947,-2.9103313 2.76431,-2.9103313 2.16345,0 3.091651,1.3483644 3.38017,2.3923463 0.57792,2.084402 -0.540863,2.82934 -0.57792,2.970852 0,0 1.197309,-0.84462 1.197309,-2.484018 0,-1.9704806 -1.49818,-4.0415329 -3.999559,-4.0415329 -2.28874,0 -4.000441,1.7631091 -4.000441,4.0717939 z"
+         id="path140"
+         style="fill:#00ff00" />
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="MASK_Marker"
      style="display:inline"
-     transform="translate(0,-1)">
-    <path
-       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 0.5,10 c 0,0 0,-8.25 0,-8.25 l 6,5.75 -6,0"
-       id="path2832"
-       sodipodi:nodetypes="cccc" />
-  </g>
+     transform="translate(0,-1)" />
 </svg>
