@@ -42,6 +42,7 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 #include "Screen/Font.hpp"
 #include "Thread/Debug.hpp"
+#include "Compiler.h"
 
 #ifdef ENABLE_SDL
 #include "Screen/BufferCanvas.hpp"
@@ -208,6 +209,7 @@ public:
   /**
    * Is it this window or one of its descendants?
    */
+  gcc_pure
   bool identify_descendant(HWND h) const {
     return h == hWnd || ::IsChild(hWnd, h);
   }
@@ -293,6 +295,7 @@ public:
    * Determines the root owner window of this Window.  This is
    * probably a pointer to the #MainWindow instance.
    */
+  gcc_pure
   ContainerWindow *get_root_owner();
 
   void move(int left, int top) {
@@ -388,6 +391,7 @@ public:
 #endif
   }
 
+  gcc_pure
   bool is_visible() const {
 #ifdef ENABLE_SDL
     return true; // XXX
@@ -444,6 +448,7 @@ public:
   /**
    * Can this window get user input?
    */
+  gcc_pure
   bool is_enabled() const {
 #ifdef ENABLE_SDL
     return true;
@@ -481,6 +486,7 @@ public:
 
 #endif /* !ENABLE_SDL */
 
+  gcc_pure
   bool has_focus() const {
 #ifdef ENABLE_SDL
     return focused;
@@ -489,6 +495,7 @@ public:
 #endif
   }
 
+  gcc_pure
   bool has_capture() const {
 #ifdef ENABLE_SDL
     return false; // XXX
@@ -565,6 +572,7 @@ public:
   /**
    * Returns the position on the screen.
    */
+  gcc_pure
   const RECT get_screen_position() const
   {
     RECT rc;
@@ -580,6 +588,7 @@ public:
   /**
    * Returns the position within the parent window.
    */
+  gcc_pure
   const RECT get_position() const
   {
     RECT rc;
@@ -611,6 +620,7 @@ public:
     return rc;
   }
 
+  gcc_pure
   const RECT get_client_rect() const
   {
     RECT rc;
@@ -625,6 +635,7 @@ public:
     return rc;
   }
 
+  gcc_pure
   bool in_client_rect(int x, int y) const {
     if (x < 0 || y < 0)
       return false;
@@ -633,6 +644,7 @@ public:
     return x < rc.right && y < rc.bottom;
   }
 
+  gcc_pure
   const SIZE get_size() const
   {
     RECT rc = get_client_rect();
@@ -679,6 +691,7 @@ public:
 #endif /* !ENABLE_SDL */
 
 #ifndef ENABLE_SDL
+  gcc_const
   static void *get_userdata(HWND hWnd) {
     return (void *)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
   }
@@ -687,6 +700,7 @@ public:
    * Converts a #HWND into a #Window pointer, without checking if that
    * is legal.
    */
+  gcc_const
   static Window *get_unchecked(HWND hWnd) {
     return (Window *)get_userdata(hWnd);
   }
@@ -696,6 +710,7 @@ public:
    * HWND is not a Window peer.  This only works for windows which
    * have called install_wndproc().
    */
+  gcc_const
   static Window *get(HWND hWnd) {
     WNDPROC wndproc = (WNDPROC)::GetWindowLongPtr(hWnd, GWLP_WNDPROC);
     return wndproc == WndProc
@@ -710,6 +725,7 @@ public:
       : NULL;
   }
 
+  gcc_pure
   LONG get_window_long(int nIndex) const {
     return ::GetWindowLong(hWnd, nIndex);
   }

@@ -98,6 +98,7 @@ public:
   /**
    * Locate a child window by its relative coordinates.
    */
+  gcc_pure
   Window *child_at(int x, int y);
 
   void set_active_child(Window &child);
@@ -106,6 +107,7 @@ public:
    * Override the Window::get_focused_window() method, and search in
    * the active child window.
    */
+  gcc_pure
   virtual Window *get_focused_window();
 
   void expose_child(const Window &child);
