@@ -396,7 +396,7 @@ OrderedTaskSave(const OrderedTask& task, bool noask)
                      MB_YESNO | MB_ICONQUESTION) != IDYES)
     return false;
 
-  TCHAR fname[69];
+  TCHAR fname[69] = _T("");
   if (!dlgTextEntryShowModal(fname, 64))
     return false;
 
