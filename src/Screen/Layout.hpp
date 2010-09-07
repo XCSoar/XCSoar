@@ -39,6 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_LAYOUT_HPP
 #define XCSOAR_SCREEN_LAYOUT_HPP
 
+#include "Math/fixed.hpp"
 #include "Asset.hpp"
 #include "Compiler.h"
 
@@ -154,6 +155,33 @@ namespace Layout
       return x;
 
     return (x * small_scale) >> 10;
+  }
+
+  /**
+   * Scale a vertical dimension value according to the aspect ratio of
+   * the display, to work around non-square pixels.  An ellipsis with
+   * the pixel width "x" and the pixel height "ScaleY(x)" shall be a
+   * circle.
+   */
+  gcc_const
+  static inline int
+  ScaleY(int y)
+  {
+    return y;
+  }
+
+  gcc_const
+  static inline unsigned
+  ScaleY(unsigned y)
+  {
+    return y;
+  }
+
+  gcc_const
+  static inline fixed
+  ScaleY(fixed y)
+  {
+    return y;
   }
 }
 

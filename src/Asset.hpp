@@ -60,24 +60,10 @@ enum ModelType {
 #if defined(_WIN32_WCE) && !defined(GNAV)
 
 extern ModelType GlobalModelType;
-extern float GlobalEllipse;
-
-static inline void
-SetGlobalEllipse(float value)
-{
-  GlobalEllipse = value;
-}
 
 #else
 
 #define GlobalModelType MODELTYPE_PNA_PNA
-#define GlobalEllipse 1.1f
-
-static inline void
-SetGlobalEllipse(float value)
-{
-  (void)value; // ignored on this platform
-}
 
 #endif
 

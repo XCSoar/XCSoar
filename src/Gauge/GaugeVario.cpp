@@ -295,23 +295,21 @@ GaugeVario::MakePolygon(const int i)
   const FastRotation r = FastRotation(Angle::degrees(fixed(i)));
   FastRotation::Pair p;
 
-  const fixed fGlobalEllipse = fixed(GlobalEllipse);
-
   p = r.Rotate(fixed(-xoffset + nlength0), fixed(nwidth));
   bit[0].x = (int)p.first + xoffset;
-  bit[0].y = (int)(p.second * fGlobalEllipse) + yoffset + 1;
+  bit[0].y = (int)Layout::ScaleY(p.second) + yoffset + 1;
 
   p = r.Rotate(fixed(-xoffset + nlength0), fixed(-nwidth));
   bit[2].x = (int)p.first + xoffset;
-  bit[2].y = (int)(p.second * fGlobalEllipse) + yoffset + 1;
+  bit[2].y = (int)Layout::ScaleY(p.second) + yoffset + 1;
 
   p = r.Rotate(fixed(-xoffset + nlength1), fixed_zero);
   bit[1].x = (int)p.first + xoffset;
-  bit[1].y = (int)(p.second * fGlobalEllipse) + yoffset + 1;
+  bit[1].y = (int)Layout::ScaleY(p.second) + yoffset + 1;
 
   p = r.Rotate(fixed(-xoffset + nline), fixed_zero);
   bline->x = (int)p.first + xoffset;
-  bline->y = (int)(p.second * fGlobalEllipse) + yoffset + 1;
+  bline->y = (int)Layout::ScaleY(p.second) + yoffset + 1;
 }
 
 POINT *

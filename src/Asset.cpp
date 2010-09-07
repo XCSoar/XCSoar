@@ -55,7 +55,6 @@ TCHAR strRegKey[MAX_LOADSTRING] = _T("");
 
 #if defined(_WIN32_WCE) && !defined(GNAV)
 ModelType GlobalModelType = MODELTYPE_PNA_PNA;
-float	GlobalEllipse = 1.1f;	// default ellipse type
 #endif
 
 static void
