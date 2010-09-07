@@ -70,7 +70,8 @@ Copyright_License {
 #include <algorithm>
 
 // used when stretching dialog and components
-double g_ddlgScaleWidth = 1.0;
+static unsigned dialog_width_scale = 1024;
+
 // to full width of screen
 DialogStyle_t g_eDialogStyle = eDialogFullWidth;
 
@@ -161,7 +162,7 @@ Scale_Dlg_Width(const int x, const DialogStyle_t eDialogStyle)
 
   if (eDialogStyle == eDialogFullWidth)
     // stretch width to fill screen horizontally
-    return (int)(x * g_ddlgScaleWidth);
+    return x * dialog_width_scale / 1024;
   else
     return Layout::Scale(x);
 }
@@ -311,9 +312,9 @@ CalcWidthStretch(XMLNode *xNode, const RECT rc, const DialogStyle_t eDialogStyle
   int Width = StringToIntDflt(xNode->getAttribute(_T("Width")), 50);
 
   if ((eDialogStyle == eDialogFullWidth) && Layout::ScaleSupported())
-    g_ddlgScaleWidth = (double)(rc.right - rc.left) / (double)Width;
+    dialog_width_scale = (rc.right - rc.left) * 1024 / Width;
   else
-    g_ddlgScaleWidth = Layout::Scale(1); // retain dialog geometry
+    dialog_width_scale = 1024;
 }
 
 /**
