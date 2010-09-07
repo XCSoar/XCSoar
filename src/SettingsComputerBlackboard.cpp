@@ -41,7 +41,6 @@ Copyright_License {
 SettingsComputerBlackboard::SettingsComputerBlackboard()
 {
   settings_computer.AutoWindMode= D_AUTOWIND_CIRCLING;
-  settings_computer.SafetySpeed = 50.0;
   settings_computer.EnableBlockSTF = false;
 
   settings_computer.TeamCodeRefWaypoint = -1;
@@ -111,7 +110,7 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.iAirspaceMode[13] =  0;
 
   settings_computer.POLARID = 1;
-  settings_computer.SafetySpeed = 70.0;
+  settings_computer.SafetySpeed = fixed(70);
   settings_computer.BallastSecsToEmpty  = 120;
   settings_computer.BallastTimerActive = false;
 }
