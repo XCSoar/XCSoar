@@ -78,15 +78,6 @@ void
 LoadFormProperty(WndForm &form, const TCHAR *control_name,
                  UnitGroup_t unit_group, fixed value);
 
-#ifdef FIXED_MATH
-static inline void
-LoadFormProperty(WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, double value)
-{
-  LoadFormProperty(form, control_name, unit_group, fixed(value));
-}
-#endif
-
 bool
 SaveFormProperty(WndForm* wfm, const TCHAR* field, bool &value);
 
@@ -142,13 +133,6 @@ bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
                  UnitGroup_t unit_group, fixed &value,
                  const TCHAR *registry_name);
-
-#ifdef FIXED_MATH
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, double &value,
-                 const TCHAR *registry_name);
-#endif
 
 bool
 SaveFormProperty(WndForm *wfm, const TCHAR *field, DisplayTextType_t &value);

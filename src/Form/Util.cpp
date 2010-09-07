@@ -302,22 +302,6 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
     return false;
 }
 
-#ifdef FIXED_MATH
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, double &value,
-                 const TCHAR *registry_name)
-{
-  int value2 = value;
-  if (SaveFormProperty(form, control_name, unit_group, value2,
-                       registry_name)) {
-    value = value2;
-    return true;
-  } else
-    return false;
-}
-#endif
-
 bool
 SaveFormProperty(WndForm *wfm, const TCHAR *field, DisplayTextType_t &value)
 {
