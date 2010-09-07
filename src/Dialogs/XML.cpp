@@ -70,7 +70,7 @@ Copyright_License {
 #include <algorithm>
 
 // used when stretching dialog and components
-static unsigned dialog_width_scale = 1024;
+static int dialog_width_scale = 1024;
 
 // to full width of screen
 DialogStyle_t g_eDialogStyle = eDialogFullWidth;
