@@ -46,6 +46,7 @@ Copyright_License {
 #include "Screen/Color.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"
+#include "Compiler.h"
 
 #include <windows.h>
 #include <tchar.h>
@@ -116,6 +117,7 @@ public:
     return surface->h;
   }
 
+  gcc_pure
   const HWColor map(const Color color) const
   {
     return HWColor(::SDL_MapRGB(surface->format, color.value.r,
@@ -322,12 +324,18 @@ public:
 
   void draw_button(RECT rc, bool down);
 
+  gcc_pure
   const SIZE text_size(const TCHAR *text, size_t length) const;
+
+  gcc_pure
   const SIZE text_size(const TCHAR *text) const;
+
+  gcc_pure
   unsigned text_width(const TCHAR *text) const {
     return text_size(text).cx;
   }
 
+  gcc_pure
   unsigned text_height(const TCHAR *text) const {
     return text_size(_T("W")).cy;
   }
@@ -537,6 +545,7 @@ public:
     height = _height;
   }
 
+  gcc_pure
   const HWColor map(const Color color) const
   {
     return HWColor(color);
@@ -582,6 +591,7 @@ public:
     ::SetTextColor(dc, c);
   }
 
+  gcc_pure
   Color get_text_color() const {
     return Color(::GetTextColor(dc));
   }
@@ -590,6 +600,7 @@ public:
     ::SetBkColor(dc, c);
   }
 
+  gcc_pure
   Color get_background_color() const {
     return Color(::GetBkColor(dc));
   }
@@ -611,6 +622,7 @@ public:
   }
 
 #ifdef HAVE_VIEWPORT
+  gcc_pure
   POINT get_viewport_origin() {
     POINT old;
 #ifdef HAVE_OFFSET_VIEWPORT
@@ -723,12 +735,18 @@ public:
                        DFCS_BUTTONPUSH | (down ? DFCS_PUSHED : 0));
   }
 
+  gcc_pure
   const SIZE text_size(const TCHAR *text, size_t length) const;
+
+  gcc_pure
   const SIZE text_size(const TCHAR *text) const;
+
+  gcc_pure
   unsigned text_width(const TCHAR *text) const {
     return text_size(text).cx;
   }
 
+  gcc_pure
   unsigned text_height(const TCHAR *text) const;
 
   void text(int x, int y, const TCHAR *text);
@@ -844,6 +862,7 @@ public:
               src, src_x, src_y, src_width, src_height);
   }
 
+  gcc_pure
   HWColor get_pixel(int x, int y) const {
     return HWColor(::GetPixel(dc, x, y));
   }
