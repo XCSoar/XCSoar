@@ -108,7 +108,7 @@ ProcessTimer::CommonProcessTimer()
   ExchangeBlackboard();
 
   // send ignore command
-  SetSettingsMap().MapScale = 0;
+  SetSettingsMap().MapScale = fixed_zero;
 
   InfoBoxManager::ProcessTimer();
   InputEvents::ProcessTimer();

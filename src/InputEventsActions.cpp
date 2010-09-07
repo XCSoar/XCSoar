@@ -328,7 +328,6 @@ InputEvents::eventZoom(const TCHAR* misc)
   // -1 means toggle
   // 0 means off
   // 1 means on
-  float zoom;
 
   if (_tcscmp(misc, _T("auto toggle")) == 0)
     sub_AutoZoom(-1);
@@ -357,9 +356,6 @@ InputEvents::eventZoom(const TCHAR* misc)
     sub_ScaleZoom(-2);
   else if (_tcscmp(misc, _T("++")) == 0)
     sub_ScaleZoom(2);
-  else if (_stscanf(misc, _T("%f"), &zoom) == 1)
-    sub_SetZoom((double)zoom);
-
   else if (_tcscmp(misc, _T("circlezoom toggle")) == 0) {
     SetSettingsMap().CircleZoom = !SettingsMap().CircleZoom;
   } else if (_tcscmp(misc, _T("circlezoom on")) == 0) {
@@ -371,6 +367,13 @@ InputEvents::eventZoom(const TCHAR* misc)
       Message::AddMessage(_("Circling Zoom ON"));
     else
       Message::AddMessage(_("Circling Zoom OFF"));
+  } else {
+    TCHAR *endptr;
+    double zoom = _tcstod(misc, &endptr);
+    if (endptr == misc)
+      return;
+
+    sub_SetZoom(fixed(zoom));
   }
 
   SendSettingsMap(true);
@@ -1759,7 +1762,7 @@ InputEvents::sub_AutoZoom(int vswitch)
 }
 
 void
-InputEvents::sub_SetZoom(double value)
+InputEvents::sub_SetZoom(fixed value)
 {
   if (SetSettingsMap().AutoZoom == 1) {
     SetSettingsMap().AutoZoom = 0;  // disable autozoom if user manually changes zoom
@@ -1771,8 +1774,8 @@ InputEvents::sub_SetZoom(double value)
 void
 InputEvents::sub_ScaleZoom(int vswitch)
 {
-  double value;
-  if (SettingsMap().MapScale > 0)
+  fixed value;
+  if (positive(SettingsMap().MapScale))
     value = SettingsMap().MapScale;
   else
     value = MapProjection().GetMapScaleUser();
@@ -1790,16 +1793,16 @@ InputEvents::sub_ScaleZoom(int vswitch)
 
     if (vswitch == 1)
       // zoom in a little
-      value /= 1.414;
+      value /= fixed_sqrt_two;
     else if (vswitch == -1)
       // zoom out a little
-      value *= 1.414;
+      value *= fixed_sqrt_two;
     else if (vswitch == 2)
       // zoom in a lot
-      value /= 2.0;
+      value /= 2;
     else if (vswitch == -2)
       // zoom out a lot
-      value *= 2.0;
+      value *= 2;
   }
 
   sub_SetZoom(value);

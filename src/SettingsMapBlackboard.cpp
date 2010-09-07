@@ -69,8 +69,8 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.PanLocation.Latitude = Angle::native(fixed_zero);
   settings_map.TargetPan = false;
   settings_map.TargetPanIndex = 0;
-  settings_map.TargetZoomDistance = 500;
-  settings_map.MapScale = 5;
+  settings_map.TargetZoomDistance = fixed(500);
+  settings_map.MapScale = fixed(5);
   settings_map.EnableFLARMGauge = true;
   settings_map.EnableFLARMMap = 1;
   settings_map.ScreenBlanked = false;

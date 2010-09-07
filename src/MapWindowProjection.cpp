@@ -295,7 +295,7 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   static DisplayMode_t DisplayModeLast = DisplayMode;
 
   // if there is user intervention in the scale
-  if (settings_map.MapScale > 0) {
+  if (positive(settings_map.MapScale)) {
     fixed ext_mapscale = LimitMapScale(fixed(settings_map.MapScale),
         settings_map);
     if ((fabs(_RequestedMapScale - ext_mapscale) > fixed(0.05))
