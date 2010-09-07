@@ -101,14 +101,13 @@ static bool
 Intersect (const POINT &first, const POINT &second,
            const POINT *clipBoundary, POINT *intersectPt)
 {
-  float f;
-
   // Horizontal
   if (clipBoundary[0].y == clipBoundary[1].y) {
     intersectPt->y = clipBoundary[0].y;
     if (second.y != first.y) {
-      f = ((float)(second.x - first.x)) / ((float)(second.y - first.y));
-      intersectPt->x = first.x + (long)(((clipBoundary[0].y - first.y) * f));
+      long dx = second.x - first.x, dy = second.y - first.y;
+      long cy = clipBoundary[0].y - first.y;
+      intersectPt->x = first.x + cy * dx / dy;
       return true;
     }
 
@@ -116,8 +115,9 @@ Intersect (const POINT &first, const POINT &second,
   } else {
     intersectPt->x = clipBoundary[0].x;
     if (second.x != first.x) {
-      f = ((float)(second.y - first.y)) / ((float)(second.x - first.x));
-      intersectPt->y = first.y + (long)(((clipBoundary[0].x - first.x) * f));
+      long dx = second.x - first.x, dy = second.y - first.y;
+      long cx = clipBoundary[0].x - first.x;
+      intersectPt->y = first.y + cx * dy / dx;
       return true;
     }
   }
