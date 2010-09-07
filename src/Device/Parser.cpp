@@ -150,36 +150,6 @@ NMEAParser::ParseNMEAString_Internal(const char *String, NMEA_INFO *GPS_INFO)
   return false;
 }
 
-/**
- * Converts a given double and 'E' and 'W' to the appropriate signed double
- * @param in Input value
- * @param EoW Input direction
- * @return Signed value
- */
-static double
-EastOrWest(double in, char EoW)
-{
-  if (EoW == 'W')
-    return -in;
-  else
-    return in;
-}
-
-/**
- * Converts a given double and 'N' and 'S' to the appropriate signed double
- * @param in Input value
- * @param NoS Input direction
- * @return Signed value
- */
-static double
-NorthOrSouth(double in, char NoS)
-{
-  if (NoS == 'S')
-    return -in;
-  else
-    return in;
-}
-
 /*
 static double
 LeftOrRight(double in, char LoR)
@@ -203,32 +173,30 @@ NAVWarn(char c)
 }
 
 /**
- * Converts the mixed lat/lon format to pure degrees
- *
- * Example:
- * 3845.587
- * => 38 + 45.587/60
- * = 38.75978333 degrees
- * @param mixed Mixed formated string
- * @return Degrees
+ * Parses an angle in the form "DDDMM.SSS".  Minutes are 0..59, and
+ * seconds are 0..999.
  */
-static double
-MixedFormatToDegrees(double mixed)
-{
-  double mins, degrees;
-
-  degrees = (int)(mixed / 100);
-  mins = (mixed - degrees * 100) / 60;
-
-  return degrees + mins;
-}
-
 static bool
-ReadDoubleAndChar(NMEAInputLine &line, double &d, char &ch)
+ReadPositiveAngle(NMEAInputLine &line, Angle &a)
 {
-  bool success = line.read_checked(d);
-  ch = line.read_first_char();
-  return success;
+  char buffer[32], *endptr;
+  line.read(buffer, sizeof(buffer));
+
+  char *dot = strchr(buffer, '.');
+  if (dot < buffer + 3)
+    return false;
+
+  double x = strtod(dot - 2, &endptr);
+  if (x < 0 || x >= 60 || *endptr != 0)
+    return false;
+
+  dot[-2] = 0;
+  long y = strtol(buffer, &endptr, 10);
+  if (y < 0 || endptr == buffer || *endptr != 0)
+    return false;
+
+  a = Angle::degrees(fixed(y) + fixed(x) / 60);
+  return true;
 }
 
 static bool
@@ -239,32 +207,31 @@ ReadFixedAndChar(NMEAInputLine &line, fixed &d, char &ch)
   return success;
 }
 
-#include <stdio.h>
 static bool
 ReadLatitude(NMEAInputLine &line, Angle &value_r)
 {
-  double value;
-  char ch;
-
-  if (!ReadDoubleAndChar(line, value, ch))
+  Angle value;
+  if (!ReadPositiveAngle(line, value))
     return false;
 
-  value = NorthOrSouth(MixedFormatToDegrees(value), ch);
-  value_r = Angle::degrees(fixed(value));
+  if (line.read_first_char() == 'S')
+    value = -value;
+
+  value_r = value;
   return true;
 }
 
 static bool
 ReadLongitude(NMEAInputLine &line, Angle &value_r)
 {
-  double value;
-  char ch;
-
-  if (!ReadDoubleAndChar(line, value, ch))
+  Angle value;
+  if (!ReadPositiveAngle(line, value))
     return false;
 
-  value = EastOrWest(MixedFormatToDegrees(value), ch);
-  value_r = Angle::degrees(fixed(value));
+  if (line.read_first_char() == 'W')
+    value = -value;
+
+  value_r = value;
   return true;
 }
 
