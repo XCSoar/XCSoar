@@ -47,6 +47,8 @@ Copyright_License {
 #include "Airspace/AirspaceWarningVisitor.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "MapDrawHelper.hpp"
+#include "Screen/Layout.hpp"
+#include "Screen/Graphics.hpp"
 
 class AirspaceWarningCopy: 
   public AirspaceWarningVisitor

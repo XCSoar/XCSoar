@@ -39,8 +39,8 @@ Copyright_License {
 #define MAP_DRAW_HELPER_HPP
 
 #include "Navigation/SearchPointVector.hpp"
-#include "Screen/Graphics.hpp"
-#include "Screen/Layout.hpp"
+
+#include <windef.h>
 
 class Canvas;
 class Projection;
