@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-31 08:51+0200\n"
-"PO-Revision-Date: 2010-09-02 08:41+0000\n"
+"PO-Revision-Date: 2010-09-07 12:51+0000\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-02 10:20+0000\n"
+"X-Launchpad-Export-Date: 2010-09-07 16:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Language: sk\n"
 
@@ -256,6 +256,8 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
+"Azimut k ďalšiemu otočnému bodu. Pre AAT úlohy je toto azimut k cieľu v AAT "
+"sektore."
 
 #: src/InfoBoxes/Content/Factory.cpp:102
 msgid "L/D instantaneous"
@@ -430,6 +432,9 @@ msgid ""
 "task. (Touchscreen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
+"Názov momentálne aktívneho otočného bodu. Ak je toto info-okno aktívne, "
+"stlačenie kláves hore/dole mení otočný bod za nasledujúci/predošlí. (Iba "
+"dotykový displej/PC) Stlačením klávesy enter zobrazíme detaily otočného bodu."
 
 #: src/InfoBoxes/Content/Factory.cpp:190
 msgid "Final Altitude Difference"
@@ -455,7 +460,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:200
 msgid "Altitude required to finish the task."
-msgstr ""
+msgstr "Výška potrebná na dokončenie úlohy."
 
 #: src/InfoBoxes/Content/Factory.cpp:206
 msgid "Speed Task Average"
@@ -528,6 +533,7 @@ msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermaling."
 msgstr ""
+"Výška získaná/stratená v terajšom stupáku, delená časom stráveným krúžením."
 
 #: src/InfoBoxes/Content/Factory.cpp:246
 msgid "Thermal Gain"
