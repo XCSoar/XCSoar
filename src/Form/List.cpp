@@ -271,7 +271,7 @@ WndListFrame::SetOrigin(int i)
 }
 
 bool
-WndListFrame::on_key_check(unsigned key_code)
+WndListFrame::on_key_check(unsigned key_code) const
 {
   switch (key_code) {
   case VK_RETURN:

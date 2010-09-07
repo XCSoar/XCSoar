@@ -70,7 +70,7 @@ WndProperty::Editor::on_mouse_down(int x, int y)
 }
 
 bool
-WndProperty::Editor::on_key_check(unsigned key_code)
+WndProperty::Editor::on_key_check(unsigned key_code) const
 {
   switch (key_code) {
   case VK_RETURN:

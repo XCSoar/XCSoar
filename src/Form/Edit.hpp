@@ -68,7 +68,7 @@ class WndProperty : public WindowControl {
      */
     virtual bool on_mouse_down(int x, int y);
 
-    virtual bool on_key_check(unsigned key_code);
+    virtual bool on_key_check(unsigned key_code) const;
 
     /**
      * The on_key_down event is called when a key is pressed while the

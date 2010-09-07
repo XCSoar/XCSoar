@@ -790,7 +790,8 @@ public:
    * @return true if the window will handle they key, false if the
    * dialog manager may use it
    */
-  virtual bool on_key_check(unsigned key_code);
+  gcc_pure
+  virtual bool on_key_check(unsigned key_code) const;
 
   virtual bool on_key_down(unsigned key_code);
   virtual bool on_key_up(unsigned key_code);

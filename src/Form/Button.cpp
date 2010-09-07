@@ -62,7 +62,7 @@ WndButton::on_clicked()
 }
 
 bool
-WndButton::on_key_check(unsigned key_code)
+WndButton::on_key_check(unsigned key_code) const
 {
   switch (key_code) {
   case VK_RETURN:

@@ -298,7 +298,7 @@ Window::on_mouse_wheel(int delta)
 }
 
 bool
-Window::on_key_check(unsigned key_code)
+Window::on_key_check(unsigned key_code) const
 {
   return false;
 }

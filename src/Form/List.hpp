@@ -216,7 +216,7 @@ protected:
    */
   virtual bool on_mouse_wheel(int delta);
 
-  virtual bool on_key_check(unsigned key_code);
+  virtual bool on_key_check(unsigned key_code) const;
 
   /**
    * The on_key_down event is called when a key is pressed while the
