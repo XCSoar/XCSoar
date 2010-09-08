@@ -196,20 +196,23 @@ Additional data files, such as terrain and topology, special use
 airspace, waypoints etc.\ can also be downloaded.  The files used by
 XCSoar are described in Chapter~\ref{cha:data-files}.
 
-All data files should be copied into the directory:
-\begin{verbatim}
-My Documents/XCSoarData
-\end{verbatim}
+All data files should be copied into the directory
+\texttt{XCSoarData}.  The location of this directory is determined
+with the following method:
 
-For PDA users, data can also be stored on the operating system file
-store, on Compact Flash cards or SD cards under the directory
-\verb|XCSoarData|.
+\begin{itemize}
+\item on PC, it is always in your personal folder (``\texttt{My
+  Documents}'')
+\item if you start XCSoar from a SD card, it is always in the root of
+  that SD card (e.g. ``\texttt{/SD Card/XCSoarData}'')
+\item if \texttt{XCSoarData} already exists on any SD card inserted
+  during XCSoar startup, this one is used
+\item if none of the above applies, then it is in your personal folder
+  (``\texttt{/My Documents}'')
+\end{itemize}
 
-For example:
-\begin{verbatim}
-SD Card/XCSoarData
-IPAQ File Store/XCSoarData
-\end{verbatim}
+It is recommended to create \texttt{XCSoarData} on a SD card, because
+you can easily update the data files on your PC.
 
 
 \section{Installation}
