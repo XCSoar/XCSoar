@@ -122,7 +122,7 @@ private:
 
   void Reset();
 
-  void invalid_estimate(THERMAL_LOCATOR_INFO &therm);
+  void invalid_estimate(THERMAL_LOCATOR_INFO &therm) const;
 
   void glider_average(fixed &xav, fixed& yav);
 
