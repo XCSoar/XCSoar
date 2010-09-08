@@ -676,10 +676,7 @@ VLA_ERROR VLAPI::read_db_and_declaration() {
   if (dbb1.header[0].dsfirst != 0xffff) {
     database.nwpts = 1 + (dbb1.header[0].dslast - dbb1.header[0].dsfirst)
       / dbb1.header[0].dslaenge;
-    if(database.wpts != 0) {
-      delete[] database.wpts;
-      database.wpts = 0;
-    }
+    delete[] database.wpts;
     database.wpts = new WPT[database.nwpts];
     for (int i=0; i<database.nwpts; i++) {
       database.wpts[i].get(dbb1.block + dbb1.header[0].dsfirst +
@@ -692,10 +689,7 @@ VLA_ERROR VLAPI::read_db_and_declaration() {
   if (dbb1.header[3].dsfirst != 0xffff) {
     database.nroutes = 1 + (dbb1.header[3].dslast - dbb1.header[3].dsfirst)
       / dbb1.header[3].dslaenge ;
-    if(database.routes != 0) {
-      delete[] database.routes;
-      database.routes = 0;
-    }
+    delete[] database.routes;
     database.routes = new ROUTE[database.nroutes];
     for (int i=0; i<database.nroutes; i++) {
       database.routes[i].get(dbb1.block + dbb1.header[3].dsfirst +
@@ -707,10 +701,7 @@ VLA_ERROR VLAPI::read_db_and_declaration() {
   if (dbb1.header[1].dsfirst != 0xffff) {
     database.npilots = 1 + (dbb1.header[1].dslast - dbb1.header[1].dsfirst)
       / dbb1.header[1].dslaenge;
-    if(database.pilots != 0) {
-      delete[] database.pilots;
-      database.pilots = 0;
-    }
+    delete[] database.pilots;
     database.pilots = new PILOT[database.npilots];
     for (int i=0; i<database.npilots; i++) {
       database.pilots[i].get(dbb1.block + dbb1.header[1].dsfirst +
@@ -776,10 +767,8 @@ VLA_ERROR VLAPI::read_directory() {
 
   if(err == VLA_ERR_NOERR) {
     int fcount = conv_dir(0,dirbuffer,1);
-    if(directory.flights != 0) {
-      delete[] directory.flights;
-      directory.flights = 0;
-    }
+    delete[] directory.flights;
+    directory.flights = NULL;
     if(fcount>0) {
       directory.nflights = fcount;
       directory.flights = new DIRENTRY[fcount];
