@@ -213,10 +213,8 @@ GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
 static void *
 CallBackLookup(CallBackTableEntry_t *LookUpTable, const TCHAR *Name)
 {
-  int i;
-
   if (LookUpTable != NULL && Name != NULL && !string_is_empty(Name))
-    for (i = 0; LookUpTable[i].Ptr != NULL; i++) {
+    for (unsigned i = 0; LookUpTable[i].Ptr != NULL; i++) {
       if (_tcscmp(LookUpTable[i].Name, Name) == 0) {
         return LookUpTable[i].Ptr;
       }
