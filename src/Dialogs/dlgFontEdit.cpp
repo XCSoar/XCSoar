@@ -53,7 +53,7 @@ static LOGFONT resetLogFont;
 static Font NewFont;
 const static TCHAR * OriginalFontRegKey;
 
-void LoadGUI();
+static void LoadGUI();
 
 static void
 OnCloseClicked(WindowControl * Sender)
@@ -142,7 +142,7 @@ static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-void
+static void
 InitGUI(const TCHAR * FontDescription)
 {
   #define FONTEDIT_GUI_MAX_TITLE 128
@@ -164,7 +164,7 @@ InitGUI(const TCHAR * FontDescription)
   }
 }
 
-void
+static void
 LoadGUI()
 {
   WndProperty* wp;
