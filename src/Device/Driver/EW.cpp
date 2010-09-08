@@ -81,7 +81,7 @@ WriteWithChecksum(ComPort *port, const char *String)
 {
   port->Write(String);
 
-  char sTmp[4];
+  char sTmp[8];
   sprintf(sTmp, "%02X\r\n", ::NMEAChecksum(String));
   port->Write(sTmp);
 }
