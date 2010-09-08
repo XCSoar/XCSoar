@@ -89,18 +89,14 @@ AbstractTask::update_auto_mc(const AIRCRAFT_STATE& state, fixed fallback_mc)
 bool 
 AbstractTask::update_idle(const AIRCRAFT_STATE &state)
 {
-  bool retval = false;
-
   if (task_started() && task_behaviour.calc_cruise_efficiency) {
     stats.cruise_efficiency = ce_lpf.update(calc_cruise_efficiency(state));
-    retval = true;
   } else {
     stats.cruise_efficiency = ce_lpf.reset(fixed_one);
   }
 
   if (task_started() && task_behaviour.calc_effective_mc) {
     stats.effective_mc = em_lpf.update(calc_effective_mc(state));
-    retval = true;
   } else {
     stats.effective_mc = em_lpf.reset(glide_polar.get_mc());
   }
