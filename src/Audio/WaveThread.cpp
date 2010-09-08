@@ -291,23 +291,14 @@ BOOL CWaveInThread::StopThread()
       m_hWaveIn = NULL;
     }
 
-  if (m_pWaveInBuffer)
-    {
-      delete m_pWaveInBuffer;
-      m_pWaveInBuffer = NULL;
-    }
+  delete m_pWaveInBuffer;
+  m_pWaveInBuffer = NULL;
 
-  if (m_pWaveCopyBuffer)
-    {
-      delete m_pWaveCopyBuffer;
-      m_pWaveCopyBuffer = NULL;
-    }
+  delete m_pWaveCopyBuffer;
+  m_pWaveCopyBuffer = NULL;
 
-  if (m_pWaveHeaderArray)
-    {
-      delete m_pWaveHeaderArray;
-      m_pWaveHeaderArray = NULL;
-    }
+  delete m_pWaveHeaderArray;
+  m_pWaveHeaderArray = NULL;
 
   return TRUE;
 }
@@ -783,23 +774,14 @@ BOOL CWaveOutThread::StopThread()
       m_hWaveOut = NULL;
     }
 
-  if (m_pWaveOutBuffer)
-    {
-      delete m_pWaveOutBuffer;
-      m_pWaveOutBuffer = NULL;
-    }
+  delete m_pWaveOutBuffer;
+  m_pWaveOutBuffer = NULL;
 
-  if (m_pWaveCopyBuffer)
-    {
-      delete m_pWaveCopyBuffer;
-      m_pWaveCopyBuffer = NULL;
-    }
+  delete m_pWaveCopyBuffer;
+  m_pWaveCopyBuffer = NULL;
 
-  if (m_pWaveHeaderArray)
-    {
-      delete m_pWaveHeaderArray;
-      m_pWaveHeaderArray = NULL;
-    }
+  delete m_pWaveHeaderArray;
+  m_pWaveHeaderArray = NULL;
 
   return TRUE;
 }
