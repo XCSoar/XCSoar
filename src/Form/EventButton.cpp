@@ -54,10 +54,7 @@ WndEventButton::on_clicked()
 }
 
 WndEventButton::~WndEventButton() {
-  if (parameters) {
-    free(parameters);
-    parameters=NULL;
-  }
+  free(parameters);
 }
 
 

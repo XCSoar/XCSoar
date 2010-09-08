@@ -90,10 +90,7 @@ WindowControl::WindowControl(ContainerWindow *Parent,
 
 WindowControl::~WindowControl(void)
 {
-  if (mHelpText) {
-    free(mHelpText);
-    mHelpText = NULL;
-  }
+  free(mHelpText);
 }
 
 void
