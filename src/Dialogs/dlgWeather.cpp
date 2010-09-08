@@ -73,8 +73,6 @@ OnDisplayItemData(DataField *Sender, DataField::DataAccessKind_t Mode)
 static void
 RASPGetTime(DataField *Sender)
 {
-  DataFieldEnum* dfe;
-  dfe = (DataFieldEnum*)Sender;
   int index = 0;
   for (unsigned i = 0; i < RasterWeather::MAX_WEATHER_TIMES; i++) {
     if (RASP.isWeatherAvailable(i)) {
