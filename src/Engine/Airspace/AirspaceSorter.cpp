@@ -42,7 +42,7 @@ AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
 }
 
 const AirspaceSelectInfoVector& 
-AirspaceSorter::get_list()
+AirspaceSorter::get_list() const
 {
   return m_airspaces_all;
 }

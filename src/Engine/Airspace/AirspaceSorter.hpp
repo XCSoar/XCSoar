@@ -3,6 +3,7 @@
 
 #include "Math/Angle.hpp"
 #include "Airspace/AirspaceClass.hpp"
+#include "Compiler.h"
 
 #include <vector>
 
@@ -47,7 +48,8 @@ public:
  * 
  * @return Master list
  */
-  const AirspaceSelectInfoVector& get_list();
+  gcc_pure
+  const AirspaceSelectInfoVector& get_list() const;
 
 /** 
  * Remove airspaces not of specified class
