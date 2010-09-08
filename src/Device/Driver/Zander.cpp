@@ -52,6 +52,7 @@ static bool
 PZAN2(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 
 class ZanderDevice : public AbstractDevice {
+public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
 };

@@ -84,6 +84,7 @@ public:
  * base class for specific device drivers.
  */
 class AbstractDevice : public Device {
+public:
   virtual bool Open();
 
   virtual void LinkTimeout();
