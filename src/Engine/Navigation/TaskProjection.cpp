@@ -91,8 +91,8 @@ TaskProjection::update_fast()
 FlatPoint
 TaskProjection::fproject(const GEOPOINT& tp) const
 {
-  FlatPoint fp(((tp.Longitude-location_mid.Longitude)*cos_midloc).value_native(),
-               ((tp.Latitude-location_mid.Latitude)*fixed_scale).value_native());
+  FlatPoint fp((tp.Longitude - location_mid.Longitude).as_delta().value_native() * cos_midloc,
+               (tp.Latitude - location_mid.Latitude).as_delta().value_native() * fixed_scale);
   return fp;
 }
 
