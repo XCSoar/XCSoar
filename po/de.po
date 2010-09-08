@@ -8,15 +8,24 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-31 08:51+0200\n"
-"PO-Revision-Date: 2010-08-31 09:00+0200\n"
-"Last-Translator: Turbo <Unknown>\n"
+"PO-Revision-Date: 2010-09-07 22:43+0000\n"
+"Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-08-23 05:24+0000\n"
+"X-Launchpad-Export-Date: 2010-09-08 07:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: de\n"
+
+#: src/Dialogs/dlgTaskHelpers.cpp:326
+msgid "Save task?"
+msgstr "Aufgabe speichern?"
+
+#: Data/Dialogs/dlgConfiguration.xml:313
+#: Data/Dialogs/dlgConfiguration_L.xml:313
+msgid "Ignore checksum*"
+msgstr "Prüfsumme ignorieren*"
 
 #: src/Airspace/AirspaceGlue.cpp:55
 msgid "Loading Airspace File..."
@@ -199,30 +208,35 @@ msgstr "Höhe GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:71
 msgid "H GPS"
-msgstr ""
+msgstr "H GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:72
 msgid ""
 "This is the height above mean sea level reported by the GPS. Touchscreen/PC "
 "only: in simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
-msgstr "Dies ist die vom GPS ermittelte Höhe über mittlerem Meeresspiegel. Nur bei Touchscreen und PC: Dieser Wert kann im Simulationsmodus mit den auf/ab Pfeiltasten verändert werden. Rechts/links dreht das Flugzeug."
+msgstr ""
+"Dies ist die vom GPS ermittelte Höhe über mittlerem Meeresspiegel. Nur bei "
+"Touchscreen und PC: Dieser Wert kann im Simulationsmodus mit den auf/ab "
+"Pfeiltasten verändert werden. Rechts/links dreht das Flugzeug."
 
 #: src/InfoBoxes/Content/Factory.cpp:78
 msgid "Height AGL"
 msgstr "Höhe AGL"
 
 #: src/InfoBoxes/Content/Factory.cpp:79
-#, fuzzy
 msgid "H AGL"
-msgstr "Höhe AGL"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:80
 msgid ""
 "This is the navigation altitude minus the terrain height obtained from the "
 "terrain file. The value is coloured red when the glider is below the terrain "
 "safety clearance height."
-msgstr "Dies ist die GPS Höhe abzüglich der Geländehöhe, ermittelt aus der Geländedatei. Der Wert wird rot dargestellt, wenn sich das Flugzeug unterhalb der Sicherheitshöhe befindet."
+msgstr ""
+"Dies ist die GPS Höhe abzüglich der Geländehöhe, ermittelt aus der "
+"Geländedatei. Der Wert wird rot dargestellt, wenn sich das Flugzeug "
+"unterhalb der Sicherheitshöhe befindet."
 
 #: src/InfoBoxes/Content/Factory.cpp:86
 msgid "Thermal last 30 sec"
@@ -257,7 +271,7 @@ msgstr "Gleitzahl - Aktuell"
 
 #: src/InfoBoxes/Content/Factory.cpp:103
 msgid "L/D Inst"
-msgstr ""
+msgstr "Gleitzahl"
 
 #: src/InfoBoxes/Content/Factory.cpp:104
 msgid ""
@@ -273,7 +287,7 @@ msgstr "Gleitzahl - Geradeausflug"
 
 #: src/InfoBoxes/Content/Factory.cpp:111
 msgid "L/D Cru"
-msgstr ""
+msgstr "Überlandgleitzahl"
 
 #: src/InfoBoxes/Content/Factory.cpp:112
 msgid ""
@@ -310,7 +324,9 @@ msgstr ""
 msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
-msgstr "Gesamte Höhenänderung in der letzten Thermik geteilt durch die Dauer des Kreisens."
+msgstr ""
+"Gesamte Höhenänderung in der letzten Thermik geteilt durch die Dauer des "
+"Kreisens."
 
 #: src/InfoBoxes/Content/Factory.cpp:134
 msgid "Last Thermal Gain"
@@ -455,9 +471,8 @@ msgid "Fin Dis"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:216
-#, fuzzy
 msgid "Distance to finish around remaining turn points."
-msgstr "Distanz zum Ziel um verbleibende Wendepunkte."
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:222
 msgid "Final LD"
@@ -490,7 +505,9 @@ msgstr ""
 msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
 "terrain file at the current GPS location."
-msgstr "Dies ist die Höhe des Geländes über mittlerem Meeresspiegel, entsprechend der Geländedatei an der aktuellen GPS-Position."
+msgstr ""
+"Dies ist die Höhe des Geländes über mittlerem Meeresspiegel, entsprechend "
+"der Geländedatei an der aktuellen GPS-Position."
 
 #: src/InfoBoxes/Content/Factory.cpp:238
 msgid "Thermal Average"
@@ -527,7 +544,10 @@ msgid ""
 "Magnetic track reported by the GPS. (Touchscreen/PC only) If this infobox is "
 "active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
-msgstr "Kompasskurs nach GPS. Nur Touchscreen und PC: Wenn diese Infobox im Simulationsmodus aktiv ist, kann mit den Pfeitasten auf/ab der Kurs eingestellt werden."
+msgstr ""
+"Kompasskurs nach GPS. Nur Touchscreen und PC: Wenn diese Infobox im "
+"Simulationsmodus aktiv ist, kann mit den Pfeitasten auf/ab der Kurs "
+"eingestellt werden."
 
 #: src/InfoBoxes/Content/Factory.cpp:262 src/InfoBoxes/Content/Factory.cpp:263
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:14
@@ -540,7 +560,9 @@ msgstr "Vario"
 msgid ""
 "Instantaneous vertical speed, as reported by the GPS, or the intelligent "
 "vario total energy vario value if connected to one."
-msgstr "Momentane Höhenänderung nach GPS oder dem energiekompensierten Vario, wenn verfügbar."
+msgstr ""
+"Momentane Höhenänderung nach GPS oder dem energiekompensierten Vario, wenn "
+"verfügbar."
 
 #: src/InfoBoxes/Content/Factory.cpp:270
 msgid "Wind Speed"
@@ -553,11 +575,15 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:272
 msgid ""
 "Wind speed estimated by XCSoar. (Touchscreen/PC only) Manual adjustment is "
-"possible by pressing the up/down cursor keys to adjust magnitude and left/"
-"right cursor keys to adjust bearing when the infobox is active. Pressing the "
-"enter cursor key saves the wind value as the initial value when XCSoar next "
-"starts."
-msgstr "Von XCSoar geschätzte Windgeschwindigkeit. Nur Touchscreen und PC: Wenn diese Infobox aktiv ist, kann mit den Pfeiltasten auf/ab die Winstärke und rechts/links die Windrichtung eingegeben werden. Drücken von Eingabe sichert den eingestellten Wert als Ausgangswert für den nächsten Start von XCSoar."
+"possible by pressing the up/down cursor keys to adjust magnitude and "
+"left/right cursor keys to adjust bearing when the infobox is active. "
+"Pressing the enter cursor key saves the wind value as the initial value when "
+"XCSoar next starts."
+msgstr ""
+"Von XCSoar geschätzte Windgeschwindigkeit. Nur Touchscreen und PC: Wenn "
+"diese Infobox aktiv ist, kann mit den Pfeiltasten auf/ab die Winstärke und "
+"rechts/links die Windrichtung eingegeben werden. Drücken von Eingabe sichert "
+"den eingestellten Wert als Ausgangswert für den nächsten Start von XCSoar."
 
 #: src/InfoBoxes/Content/Factory.cpp:278
 msgid "Wind Bearing"
@@ -572,7 +598,10 @@ msgid ""
 "Wind bearing estimated by XCSoar. (Touchscreen/PC only) Manual adjustment is "
 "possible by pressing the up/down cursor keys to adjust bearing when the "
 "infobox is active."
-msgstr "Von XCSoar geschätzte Windgeschwindigkeit. Nur Touchscreen und PC: Wenn diese Infobox aktiv ist, kann mit den Pfeiltasten auf/ab die Windrichtung eingegeben werden."
+msgstr ""
+"Von XCSoar geschätzte Windgeschwindigkeit. Nur Touchscreen und PC: Wenn "
+"diese Infobox aktiv ist, kann mit den Pfeiltasten auf/ab die Windrichtung "
+"eingegeben werden."
 
 #: src/InfoBoxes/Content/Factory.cpp:286 src/InfoBoxes/Content/Factory.cpp:287
 msgid "AA Time"
@@ -644,7 +673,8 @@ msgid "V IAS"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:328
-msgid "Indicated Airspeed reported by a supported external intelligent vario."
+msgid ""
+"Indicated Airspeed reported by a supported external intelligent vario."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:334
@@ -730,8 +760,8 @@ msgid ""
 "The required glide ratio to reach the next waypoint, given by the distance "
 "to next waypoint divided by the height required to arrive at the safety "
 "arrival altitude. Negative values indicate a climb is necessary to reach the "
-"waypoint. If the height required is close to zero, the displayed value is "
-"'---'.   Note that this calculation may be optimistic because it reduces the "
+"waypoint. If the height required is close to zero, the displayed value is '--"
+"-'.   Note that this calculation may be optimistic because it reduces the "
 "height required to reach the waypoint by the excess energy height of the "
 "glider if its true airspeed is greater than the MacCready and best LD speeds."
 msgstr ""
@@ -920,7 +950,8 @@ msgid "AA Dtgt"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:480
-msgid "Assigned Area Task distance around target points for remainder of task."
+msgid ""
+"Assigned Area Task distance around target points for remainder of task."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:486
@@ -984,7 +1015,8 @@ msgid "Tm Brng"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:520
-msgid "The bearing to the team aircraft location at the last team code report."
+msgid ""
+"The bearing to the team aircraft location at the last team code report."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:526
@@ -1010,7 +1042,8 @@ msgid "Team Dis"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:536
-msgid "The range to the team aircraft location at the last reported team code."
+msgid ""
+"The range to the team aircraft location at the last reported team code."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:542
@@ -1620,7 +1653,7 @@ msgstr ""
 #: src/FlightStatistics.cpp:986 src/FlightStatistics.cpp:1001
 #: src/FlightStatistics.cpp:1014
 msgid "Distance to go"
-msgstr ""
+msgstr "verbleibende Strecke"
 
 #: src/FlightStatistics.cpp:990 src/FlightStatistics.cpp:1004
 msgid "Target speed"
@@ -1642,7 +1675,7 @@ msgstr "Einstellungen im Flug gesperrt"
 #. TODO feature: Show the user what the batt status is.
 #: src/Screen/Blank.cpp:95
 msgid "Organiser Battery Low"
-msgstr ""
+msgstr "Batteriestand niedrig"
 
 #: src/Screen/Chart.cpp:221
 msgid "No data"
@@ -1674,13 +1707,13 @@ msgstr ""
 msgid "Starting devices"
 msgstr "Starte Geräte"
 
-#.
+#. 
 #. -- Reset polar in case devices need the data
 #. LogStartUp(_T("GlidePolar::UpdatePolar"));
 #. GlidePolar::UpdatePolar(true, SettingsComputer());
-#.
+#. 
 #. This should be done inside devStartup if it is really required
-#.
+#. 
 #: src/Components.cpp:365
 msgid "Initialising display"
 msgstr "Initialisiere Anzeige"
@@ -1772,7 +1805,7 @@ msgstr ""
 
 #: src/Dialogs/dlgAirspaceSelect.cpp:340 src/Dialogs/dlgWayPointSelect.cpp:472
 msgid "No Match!"
-msgstr ""
+msgstr "Keinen Eintrag gefunden!"
 
 #: src/Dialogs/dlgAirspaceWarning.cpp:213
 msgid "No Warnings"
@@ -1818,7 +1851,7 @@ msgstr "Polare"
 
 #: src/Dialogs/dlgAnalysis.cpp:205
 msgid "Temp trace"
-msgstr ""
+msgstr "Temperaturverlauf"
 
 #: src/Dialogs/dlgAnalysis.cpp:214
 msgid "Task speed"
@@ -1830,7 +1863,7 @@ msgstr "Aufgabe"
 
 #: src/Dialogs/dlgAnalysis.cpp:231
 msgid "OnLine Contest"
-msgstr ""
+msgstr "Online Contest"
 
 #: src/Dialogs/dlgAnalysis.cpp:240 Data/Dialogs/dlgAirspaceSelect.xml:10
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:16
@@ -1915,7 +1948,7 @@ msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:101
 msgid "Default task rules"
-msgstr ""
+msgstr "Standard Aufgaben Regeln"
 
 #: src/Dialogs/dlgConfiguration.cpp:102
 msgid "InfoBox Cruise"
@@ -2015,7 +2048,7 @@ msgstr "Endanflug"
 
 #: src/Dialogs/dlgConfiguration.cpp:907
 msgid "auxiliary"
-msgstr ""
+msgstr "zusätzlich"
 
 #: src/Dialogs/dlgConfiguration.cpp:920 src/Dialogs/dlgWeather.cpp:136
 msgid "No help available on this item"
@@ -2035,7 +2068,7 @@ msgstr "Auto"
 
 #: src/Dialogs/dlgConfiguration.cpp:1173
 msgid "All below"
-msgstr ""
+msgstr "Alles unter"
 
 #: src/Dialogs/dlgConfiguration.cpp:1203
 msgid "ON/Fixed"
@@ -2071,7 +2104,7 @@ msgstr "Namen in Aufgabe"
 
 #: src/Dialogs/dlgConfiguration.cpp:1230
 msgid "First word"
-msgstr ""
+msgstr "Erstes Wort"
 
 #: src/Dialogs/dlgConfiguration.cpp:1246
 msgid "Track up"
@@ -2211,7 +2244,7 @@ msgstr "Voll"
 
 #: src/Dialogs/dlgConfiguration.cpp:1480
 msgid "Steady"
-msgstr ""
+msgstr "Stetig"
 
 #: src/Dialogs/dlgConfiguration.cpp:1481
 msgid "Moving"
@@ -2604,10 +2637,6 @@ msgid "Task Point"
 msgstr "Wendepunkt"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:326
-msgid "Save task?"
-msgstr "Aufgabe speichern?"
-
-#: src/Dialogs/dlgTaskHelpers.cpp:326
 msgid "Task Selection"
 msgstr "Aufgaben Auswahl"
 
@@ -2763,7 +2792,7 @@ msgstr "Total Energie Düse"
 
 #: Data/Dialogs/dlgConfiguration.xml:52 Data/Dialogs/dlgConfiguration_L.xml:53
 msgid "Wpt outside terrain*"
-msgstr ""
+msgstr "Wendepunkt ausserhalb der Karte"
 
 #: Data/Dialogs/dlgStatus.xml:42
 msgid "Start alt"
@@ -2883,11 +2912,6 @@ msgstr "Maximale Startgeschwindigkeit"
 #: Data/Dialogs/dlgWayPointDetails_L.xml:4
 msgid "Goto"
 msgstr "Gehe zu"
-
-#: Data/Dialogs/dlgConfiguration.xml:313
-#: Data/Dialogs/dlgConfiguration_L.xml:313
-msgid "Ignore checksum*"
-msgstr "Prüfsumme ignorieren*"
 
 #: Data/Dialogs/dlgVario.xml:139 Data/Dialogs/dlgVario_L.xml:139
 msgid "Cruise hi cutoff"
@@ -3054,11 +3078,11 @@ msgstr "Kreisen Volumen"
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:18
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:18
 msgid "Plane"
-msgstr ""
+msgstr "Flugzeug"
 
 #: Data/Dialogs/dlgVario.xml:391 Data/Dialogs/dlgVario_L.xml:391
 msgid "Battery low delay"
-msgstr ""
+msgstr "Batterie leer Verzögerung"
 
 #: Data/Dialogs/dlgConfiguration.xml:450
 #: Data/Dialogs/dlgConfiguration_L.xml:450
@@ -3534,7 +3558,7 @@ msgstr "Warnung quittieren"
 #: Data/Dialogs/dlgConfiguration.xml:485
 #: Data/Dialogs/dlgConfiguration_L.xml:484
 msgid "Gauges"
-msgstr ""
+msgstr "Anzeigen"
 
 #: Data/Dialogs/dlgConfiguration.xml:344
 #: Data/Dialogs/dlgConfiguration_L.xml:344
@@ -3701,7 +3725,7 @@ msgstr "Wölbklappen negativ"
 
 #: Data/Dialogs/dlgVario.xml:20 Data/Dialogs/dlgVario_L.xml:21
 msgid "Static port"
-msgstr ""
+msgstr "Statischer Port"
 
 #: Data/Dialogs/dlgConfiguration.xml:87 Data/Dialogs/dlgConfiguration_L.xml:88
 msgid "Acknowledge time*"
@@ -4364,6 +4388,13 @@ msgstr "Geschätzte Aufgabenzeit"
 msgid "Avg/Alt"
 msgstr ""
 
+#~ msgid "Error"
+#~ msgstr "Fehler"
+
+#~ msgid "Yes All"
+#~ msgstr "Ja alle"
+
+#, c-format
 #~ msgid ""
 #~ "Waypoint \"%s\" \r\n"
 #~ "out of Terrain bounds\r\n"
@@ -4373,12 +4404,6 @@ msgstr ""
 #~ "Wendepunkt \"%s\"\r\n"
 #~ "ausserhalb des Geländes.\r\n"
 #~ "Trotzdem Laden?"
-
-#~ msgid "Yes All"
-#~ msgstr "Ja alle"
-
-#~ msgid "Error"
-#~ msgstr "Fehler"
 
 #~ msgid "Vario Gauge and FLARM"
 #~ msgstr "Vario Anzeige und FLARM"
