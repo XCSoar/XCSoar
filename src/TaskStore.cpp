@@ -80,8 +80,8 @@ TaskStore::TaskStoreItem::TaskStoreItem():
 {
 }
 
-TaskStore::TaskStoreItem::TaskStoreItem(const tstring the_filename, 
-                                        const tstring the_short_name):
+TaskStore::TaskStoreItem::TaskStoreItem(const tstring &the_filename,
+                                        const tstring &the_short_name):
   filename(the_filename),
   short_name(the_short_name),
   task(NULL),
@@ -110,8 +110,8 @@ TaskStore::TaskStoreItem::get_task()
   return task;
 }
 
-tstring 
-TaskStore::get_name(unsigned index)
+const tstring &
+TaskStore::get_name(unsigned index) const
 {
   return m_store[index].short_name;
 }

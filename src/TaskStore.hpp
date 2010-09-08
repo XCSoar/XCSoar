@@ -62,8 +62,8 @@ public:
   {
     TaskStoreItem();
 
-    TaskStoreItem(const tstring the_filename, 
-                  const tstring the_short_name);
+    TaskStoreItem(const tstring &the_filename,
+                  const tstring &the_short_name);
     ~TaskStoreItem();
 
     tstring filename;
@@ -86,7 +86,7 @@ public:
    * @param index TaskStore index of the desired Task
    * @return Filename of the task defined by the given index
    */
-  tstring get_name(unsigned index); 
+  const tstring &get_name(unsigned index) const;
   /**
    * Return the task defined by the given index
    * @param index TaskStore index of the desired Task
