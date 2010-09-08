@@ -74,7 +74,7 @@ public:
   }
 
   void
-  FormatTitle(TCHAR* Buffer, const Waypoint way_point, bool in_task)
+  FormatTitle(TCHAR* Buffer, const Waypoint &way_point, bool in_task)
   {
     Buffer[0] = _T('\0');
 
