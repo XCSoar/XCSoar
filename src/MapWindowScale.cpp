@@ -125,7 +125,6 @@ draw_bitmap(Canvas &canvas, BitmapCanvas &bitmap_canvas, const Bitmap &bitmap,
 void
 MapWindow::DrawMapScale(Canvas &canvas, const RECT &rc) const
 {
-  static int LastMapWidth = 0;
   fixed MapWidth;
   TCHAR ScaleInfo[80];
 
@@ -143,7 +142,6 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT &rc) const
   Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,
                             sizeof(ScaleInfo) / sizeof(TCHAR), false);
   SIZE TextSize = canvas.text_size(ScaleInfo);
-  LastMapWidth = (int)MapWidth;
 
   Height = Fonts::MapBold.get_capital_height() + IBLSCALE(2);
   // 2: add 1pix border
