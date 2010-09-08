@@ -397,7 +397,7 @@ TaskManager::set_glide_polar(const GlidePolar& glide_polar)
 }
 
 void 
-TaskManager::default_task(const GEOPOINT loc, const bool force)
+TaskManager::default_task(const GEOPOINT &loc, const bool force)
 {
   /// @todo implement default_task
 }

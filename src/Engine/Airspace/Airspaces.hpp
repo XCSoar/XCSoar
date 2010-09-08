@@ -161,7 +161,7 @@ public:
    * 
    * @return vector of airspaces intersecting search radius
    */
-  const AirspaceVector scan_range(const GEOPOINT location,
+  const AirspaceVector scan_range(const GEOPOINT &location,
                                   const fixed range,
                                   const AirspacePredicate &condition
                                   =AirspacePredicate::always_true) const;
@@ -174,7 +174,7 @@ public:
    * 
    * @return single nearest airspace if external, or all airspaces enclosing the aircraft
    */
-  const AirspaceVector scan_nearest(const GEOPOINT location,
+  const AirspaceVector scan_nearest(const GEOPOINT &location,
                                     const AirspacePredicate &condition
                                     =AirspacePredicate::always_true) const;
 

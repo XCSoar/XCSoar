@@ -39,14 +39,14 @@
 
 TaskMacCreadyRemaining::TaskMacCreadyRemaining(const std::vector<OrderedTaskPoint*> &_tps,
                                                const unsigned _activeTaskPoint,
-                                               const GlidePolar _gp):
+                                               const GlidePolar &_gp):
   TaskMacCready(_tps,_activeTaskPoint, _gp)
 {
   m_start = m_activeTaskPoint;
 }
 
 TaskMacCreadyRemaining::TaskMacCreadyRemaining(TaskPoint* tp,
-                                               const GlidePolar _gp):
+                                               const GlidePolar &_gp):
   TaskMacCready(tp,_gp)
 {
 }

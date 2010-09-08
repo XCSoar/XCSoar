@@ -182,7 +182,7 @@ protected:
    * @param destination Terminal point to query
    */
   void find_solution(const DijkstraTaskPoint &dijkstra, 
-                     const ScanTaskPoint destination) {
+                     const ScanTaskPoint &destination) {
     ScanTaskPoint p(destination); 
     ScanTaskPoint p_last(p);
 

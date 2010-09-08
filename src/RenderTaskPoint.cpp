@@ -57,7 +57,7 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
                                  const SETTINGS_MAP &_settings_map,
                                  RenderObservationZone &_ozv,
                                  const bool draw_bearing,
-                                 const GEOPOINT location)
+                                 const GEOPOINT &location)
   :m_canvas(_canvas), m_buffer(_canvas), m_proj(_projection),
    map_canvas(_canvas, _projection),
    m_settings_map(_settings_map),

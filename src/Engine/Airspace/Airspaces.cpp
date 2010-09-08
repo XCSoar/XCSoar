@@ -120,7 +120,7 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
 // SCAN METHODS
 
 const Airspaces::AirspaceVector
-Airspaces::scan_nearest(const GEOPOINT location,
+Airspaces::scan_nearest(const GEOPOINT &location,
                         const AirspacePredicate &condition) const 
 {
   Airspace bb_target(location, task_projection);
@@ -148,7 +148,7 @@ Airspaces::scan_nearest(const GEOPOINT location,
 }
 
 const Airspaces::AirspaceVector
-Airspaces::scan_range(const GEOPOINT location,
+Airspaces::scan_range(const GEOPOINT &location,
                       const fixed range,
                       const AirspacePredicate &condition) const
 {

@@ -63,7 +63,7 @@ public:
                   const SETTINGS_MAP &_settings_map,
                   RenderObservationZone &_ozv,
                   const bool draw_bearing,
-                  const GEOPOINT location);
+                  const GEOPOINT &location);
 
   void Visit(const UnorderedTaskPoint& tp);
   void Visit(const StartPoint& tp);

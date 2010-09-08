@@ -57,7 +57,7 @@ public:
                      const SETTINGS_MAP &_settings_map,
                      RenderObservationZone &_ozv,
                      const bool draw_bearing,
-                     const GEOPOINT location,
+                     const GEOPOINT &location,
                      MapWindow& map,
                      const Angle bearing,
                      const bool do_draw_off_track):

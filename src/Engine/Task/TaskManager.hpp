@@ -160,7 +160,7 @@ public:
    * @param loc Location of aircraft at start
    * @param force Force creation of default task even if a task is present
    */
-  void default_task(const GEOPOINT loc, const bool force=false);
+  void default_task(const GEOPOINT &loc, const bool force=false);
 
   /**
    * Updates internal state of task given new aircraft.

@@ -59,7 +59,7 @@ public:
   void set(const BoundsRectangle &bounds, unsigned width, unsigned height);
 
   gcc_const std::pair<unsigned, unsigned>
-  project(const GEOPOINT location) const {
+  project(const GEOPOINT &location) const {
     unsigned x = (int)(location.Longitude.value_native() * x_scale) - left;
     unsigned y = top - (int)(location.Latitude.value_native() * y_scale);
 
