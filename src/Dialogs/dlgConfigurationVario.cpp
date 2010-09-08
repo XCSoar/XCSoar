@@ -165,7 +165,6 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
   TCHAR propname[100];
   TCHAR requesttext[100];
   unsigned updated = 0;
-  unsigned newval = 0;
   unsigned lvalue = 0;
 
   WndProperty* wp;
@@ -240,7 +239,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
     } else if (updated == 2) {
       wp = (WndProperty*)wf->FindByName(propname);
       if (wp) {
-        newval = (wp->GetDataField()->GetAsInteger());
+        unsigned newval = (wp->GetDataField()->GetAsInteger());
         if (newval != lvalue) {
           // value has changed
           Profile::Set(updatename, 2);
