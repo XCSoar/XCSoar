@@ -69,8 +69,9 @@ public:
    */
   void SetAngle(Angle _angle);
 
-  void operator =(Angle _angle) {
+  const FastRotation &operator =(Angle _angle) {
     SetAngle(_angle);
+    return *this;
   }
 
   /**
@@ -109,8 +110,9 @@ public:
 
   void SetAngle(Angle _angle);
 
-  void operator =(Angle _angle) {
+  const FastIntegerRotation &operator =(Angle _angle) {
     SetAngle(_angle);
+    return *this;
   }
 
   /**
