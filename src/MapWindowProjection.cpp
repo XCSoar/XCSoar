@@ -289,7 +289,6 @@ void
 MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
                                     const SETTINGS_MAP &settings_map)
 {
-  static int AutoMapScaleWaypointIndex = -1;
   static fixed StartingAutoMapScale(fixed_zero);
   fixed AutoZoomFactor;
   static DisplayMode_t DisplayModeLast = DisplayMode;
@@ -357,6 +356,7 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
 
   // if there is an active waypoint
 #ifdef OLD_TASK // auto zoom
+  static int AutoMapScaleWaypointIndex = -1;
   if (task.Valid()) {
     int task_index = task.getWaypointIndex();
 
@@ -376,8 +376,6 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   } else {
     AutoMapScaleWaypointIndex = -1;
   }
-#else
-    AutoMapScaleWaypointIndex = -1;
 #endif
 }
 
