@@ -40,9 +40,9 @@
 
 // scaling for flat earth integer representation, gives approximately 50m resolution
 #ifdef RADIANS
-static const fixed fixed_scale(fixed(57295.7));
+static const int fixed_scale = 57296;
 #else
-static const fixed fixed_scale(fixed(1000.0));
+static const int fixed_scale = 1000;
 #endif
 
 TaskProjection::TaskProjection()
