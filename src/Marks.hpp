@@ -59,7 +59,7 @@ public:
   void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
             const Projection &projection);
   void MarkLocation(const GEOPOINT &loc,
-                    const BrokenDateTime time,
+                    const BrokenDateTime &time,
                     bool play_sound);
 
 private:

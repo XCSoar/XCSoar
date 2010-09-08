@@ -73,7 +73,7 @@ Marks::~Marks()
 
 void
 Marks::MarkLocation(const GEOPOINT &loc,
-                    const BrokenDateTime time,
+                    const BrokenDateTime &time,
                     bool play_sound)
 {
   Poco::ScopedRWLock protect(lock, true);
