@@ -147,7 +147,7 @@ struct AlternateRank : public std::binary_function<AbortTask::Alternate,
 
 
 bool 
-AbortTask::is_reachable(const GlideResult result,
+AbortTask::is_reachable(const GlideResult &result,
                         const bool final_glide) const 
 {
   return !positive(result.Vector.Distance) || 

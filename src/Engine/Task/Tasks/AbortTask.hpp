@@ -173,7 +173,7 @@ public:
 protected:
 
   gcc_pure
-  bool is_reachable(const GlideResult result,
+  bool is_reachable(const GlideResult &result,
                     const bool final_glide) const;
 
 /** 
