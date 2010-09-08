@@ -53,6 +53,8 @@ static LOGFONT resetLogFont;
 static Font NewFont;
 const static TCHAR * OriginalFontRegKey;
 
+static bool locked;
+
 static void LoadGUI();
 
 static void
@@ -130,7 +132,7 @@ static void RedrawSampleFont(void)
 static void
 OnData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  if (Mode == DataField::daChange)
+  if (!locked && Mode == DataField::daChange)
     RedrawSampleFont();
 }
 
@@ -167,6 +169,9 @@ InitGUI(const TCHAR * FontDescription)
 static void
 LoadGUI()
 {
+  assert(!locked);
+  locked = true;
+
   WndProperty* wp;
 
   wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
@@ -214,6 +219,8 @@ LoadGUI()
 
     wp->RefreshDisplay();
   }
+
+  locked = false;
 
   RedrawSampleFont();
 }
