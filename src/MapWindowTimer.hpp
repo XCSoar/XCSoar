@@ -52,7 +52,7 @@ public:
    * Returns the average drawing time
    * @return The average drawing time
    */
-  int GetAverageTime() {
+  int GetAverageTime() const {
     return timestats_av;
   }
 
