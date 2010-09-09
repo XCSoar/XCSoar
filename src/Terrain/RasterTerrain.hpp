@@ -54,7 +54,7 @@ class RasterMap;
 class RasterTerrain : public Guard<RasterMap> {
 public:
   /** invalid value for terrain */
-  static const short TERRAIN_INVALID = -1000;
+  static const short TERRAIN_INVALID = RasterBuffer::TERRAIN_INVALID;
 
 protected:
   RasterMap map;

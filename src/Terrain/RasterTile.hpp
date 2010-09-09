@@ -11,9 +11,6 @@ class RasterTile : private NonCopyable {
   RasterBuffer buffer;
 
 public:
-  /** invalid value for terrain */
-  static const short TERRAIN_INVALID = -1000;
-
   RasterTile()
     :xstart(0), ystart(0), xend(0), yend(0),
      width(0), height(0) {}

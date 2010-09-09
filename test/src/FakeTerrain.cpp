@@ -40,5 +40,5 @@ Copyright_License {
 short
 RasterMap::GetField(const GEOPOINT &location) const
 {
-  return TERRAIN_INVALID;
+  return RasterBuffer::TERRAIN_INVALID;
 }

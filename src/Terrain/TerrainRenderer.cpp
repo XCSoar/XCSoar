@@ -203,7 +203,7 @@ TerrainRenderer::ScanSpotHeights(const RECT& rect)
     const short *h_buf = height_matrix.GetRow(y);
     for (int x = rect.left; x < rect.right; x += quantisation_pixels, ++h_buf) {
       const short val = *h_buf;
-      if (val == RasterMap::TERRAIN_INVALID)
+      if (val == RasterBuffer::TERRAIN_INVALID)
         continue;
 
       if (val > spot_max_val) {

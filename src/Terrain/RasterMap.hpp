@@ -55,10 +55,6 @@ class RasterMap : private NonCopyable {
   RasterProjection projection;
 
 public:
-  /** invalid value for terrain */
-  static const short TERRAIN_INVALID = -1000;
-
-public:
   RasterMap(const char *path);
   ~RasterMap();
 

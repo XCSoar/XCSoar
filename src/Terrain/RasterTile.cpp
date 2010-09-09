@@ -62,15 +62,15 @@ RasterTile::GetField(unsigned lx, unsigned ly, unsigned ix, unsigned iy) const
   // if we have the wrong tile
 
   if (IsDisabled())
-    return TERRAIN_INVALID;
+    return RasterBuffer::TERRAIN_INVALID;
 
   // check x in range
   if ((lx -= xstart) >= width)
-    return TERRAIN_INVALID;
+    return RasterBuffer::TERRAIN_INVALID;
 
   // check y in range
   if ((ly -= ystart) >= height)
-    return TERRAIN_INVALID;
+    return RasterBuffer::TERRAIN_INVALID;
 
   return buffer.get_interpolated(lx, ly, ix, iy);
 }
@@ -196,7 +196,7 @@ RasterTileCache::GetField(unsigned int lx, unsigned int ly) const
 {
   if ((lx >= overview_width_fine) || (ly >= overview_height_fine))
     // outside overall bounds
-    return RasterTile::TERRAIN_INVALID;
+    return RasterBuffer::TERRAIN_INVALID;
 
   unsigned px = lx, py = ly;
   const unsigned int ix = CombinedDivAndMod(px);
@@ -204,7 +204,7 @@ RasterTileCache::GetField(unsigned int lx, unsigned int ly) const
 
   for (unsigned i = 0; i < ActiveTiles.length(); ++i) {
     short h = ActiveTiles[i].GetField(px, py, ix, iy);
-    if (h != RasterTile::TERRAIN_INVALID) {
+    if (h != RasterBuffer::TERRAIN_INVALID) {
       ActiveTiles.move_to_front(i);
       return h;
     }

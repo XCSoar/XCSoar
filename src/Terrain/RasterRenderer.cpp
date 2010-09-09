@@ -159,7 +159,7 @@ RasterRenderer::GenerateUnshadedImage(bool is_terrain, unsigned height_scale)
 
     for (unsigned x = height_matrix.get_width(); x > 0; --x) {
       short h = *src;
-      if (h == RasterMap::TERRAIN_INVALID) {
+      if (h == RasterBuffer::TERRAIN_INVALID) {
         /* outside the terrain file bounds: white background */
         *p++ = BGRColor(0xff, 0xff, 0xff);
       } else if (h != 0) {
@@ -178,7 +178,7 @@ RasterRenderer::GenerateUnshadedImage(bool is_terrain, unsigned height_scale)
 static int
 checked_height_difference(int a, int b)
 {
-  return a == RasterMap::TERRAIN_INVALID || b == RasterMap::TERRAIN_INVALID
+  return a == RasterBuffer::TERRAIN_INVALID || b == RasterBuffer::TERRAIN_INVALID
     ? 0
     : a - b;
 }
@@ -227,7 +227,7 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
 
     for (unsigned x = 0; x < height_matrix.get_width(); ++x, ++src) {
       short h = *src;
-      if (h == RasterMap::TERRAIN_INVALID) {
+      if (h == RasterBuffer::TERRAIN_INVALID) {
         /* outside the terrain file bounds: white background */
         *p++ = BGRColor(0xff, 0xff, 0xff);
       } else if (h != 0) {
