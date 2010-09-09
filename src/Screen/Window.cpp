@@ -88,6 +88,7 @@ Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
     parent->add_child(*this);
 
   on_create();
+  on_resize(width, height);
 #else /* !ENABLE_SDL */
   DWORD style = window_style.style, ex_style = window_style.ex_style;
 
