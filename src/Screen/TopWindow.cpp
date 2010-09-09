@@ -56,7 +56,9 @@ TopCanvas::set()
 void
 TopCanvas::full_screen()
 {
+#if 0 /* disabled for now, for easier development */
   ::SDL_WM_ToggleFullScreen(surface);
+#endif
 }
 
 #endif /* ENABLE_SDL */
