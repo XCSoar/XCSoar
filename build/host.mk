@@ -17,8 +17,8 @@ $(HOST_OUTPUT_DIR)/%.o: %.c | $(HOST_OUTPUT_DIR)/%/../dirstamp
 
 $(HOST_OUTPUT_DIR)/%.o: %.cpp | $(HOST_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  HOSTCXX $@"
-	$(C)$(HOSTCXX) -c $(host-cxx-flags) -o $@ $^
+	$(Q)$(HOSTCXX) -c $(host-cxx-flags) -o $@ $^
 
 $(HOST_OUTPUT_DIR)/%$(HOST_EXEEXT): $(HOST_OUTPUT_DIR)/%.o
 	@$(NQ)echo "  HOSTLD  $@"
-	$(HOSTCC) $(host-ld-flags) -o $@ $^
+	$(Q)$(HOSTCC) $(host-ld-flags) -o $@ $^
