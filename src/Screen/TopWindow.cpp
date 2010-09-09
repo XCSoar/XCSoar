@@ -38,7 +38,9 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+#include "PeriodClock.hpp"
+#else
 #include "Interface.hpp" /* for XCSoarInterface::hInst */
 #if defined(GNAV) && !defined(PCGNAV)
 #include "resource.h" /* for IDI_XCSOAR */
@@ -221,7 +223,10 @@ TopWindow::on_event(const SDL_Event &event)
     return on_mouse_move(event.motion.x, event.motion.y, 0);
 
   case SDL_MOUSEBUTTONDOWN:
-    return on_mouse_down(event.button.x, event.button.y);
+    static PeriodClock double_click;
+    return double_click.check_always_update(300)
+      ? on_mouse_down(event.button.x, event.button.y)
+      : on_mouse_double(event.button.x, event.button.y);
 
   case SDL_MOUSEBUTTONUP:
     return on_mouse_up(event.button.x, event.button.y);
