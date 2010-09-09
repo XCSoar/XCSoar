@@ -47,7 +47,6 @@ WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerControl &parent,
    mOnPaintCallback(OnPaintCallback),
    mOnMouseDownCallback(NULL)
 {
-  mCaption[0] = '\0';
   SetForeColor(parent.GetForeColor());
   SetBackColor(parent.GetBackColor());
 }
