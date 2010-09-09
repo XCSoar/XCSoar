@@ -218,6 +218,11 @@ bool
 TopWindow::on_event(const SDL_Event &event)
 {
   switch (event.type) {
+  case SDL_VIDEOEXPOSE:
+    on_paint(canvas);
+    expose();
+    return true;
+
   case SDL_MOUSEMOTION:
     // XXX keys
     return on_mouse_move(event.motion.x, event.motion.y, 0);
