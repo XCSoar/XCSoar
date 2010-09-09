@@ -82,6 +82,9 @@ Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
   this->parent = parent;
   this->left = left;
   this->top = top;
+
+  visible = window_style.visible;
+
   canvas.set(width, height);
 
   if (parent != NULL)
@@ -213,6 +216,9 @@ Window::set_focus()
 void
 Window::expose(const RECT &rect)
 {
+  if (!visible)
+    return;
+
   canvas.expose(rect.left, rect.top,
                 rect.right - rect.left, rect.bottom - rect.top);
   if (parent != NULL)
@@ -222,9 +228,36 @@ Window::expose(const RECT &rect)
 void
 Window::expose()
 {
+  if (!visible)
+    return;
+
   canvas.expose();
   if (parent != NULL)
     parent->expose_child(*this);
+}
+
+void
+Window::show()
+{
+  assert_thread();
+
+  if (visible)
+    return;
+
+  visible = true;
+  expose();
+}
+
+void
+Window::hide()
+{
+  assert_thread();
+
+  if (!visible)
+    return;
+
+  visible = false;
+  parent->invalidate();
 }
 
 #endif /* ENABLE_SDL */

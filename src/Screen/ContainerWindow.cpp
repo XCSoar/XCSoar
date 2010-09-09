@@ -130,6 +130,9 @@ ContainerWindow::on_paint(Canvas &canvas)
   for (std::list<Window*>::const_iterator i = children.begin();
        i != children.end(); ++i) {
     Window &child = **i;
+    if (!child.is_visible())
+      continue;
+
     child.paint();
 
     WindowCanvas child_canvas(child);
@@ -147,8 +150,8 @@ ContainerWindow::child_at(int x, int y)
   for (std::list<Window*>::const_reverse_iterator i = children.rbegin();
        i != children.rend(); ++i) {
     Window &child = **i;
-
-    if (x >= child.get_left() && x < child.get_right() &&
+    if (child.is_visible() &&
+        x >= child.get_left() && x < child.get_right() &&
         y >= child.get_top() && y < child.get_bottom())
       return &child;
   }

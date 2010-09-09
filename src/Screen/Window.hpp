@@ -172,6 +172,7 @@ protected:
   int left, top;
   BufferCanvas canvas;
 
+  bool visible;
   bool focused;
 #else
   HWND hWnd;
@@ -184,7 +185,10 @@ private:
 
 public:
 #ifdef ENABLE_SDL
-  Window():parent(NULL), focused(false), double_clicks(false) {}
+  Window()
+    :parent(NULL),
+     visible(true), focused(false),
+     double_clicks(false) {}
 #else
   Window():hWnd(NULL), prev_wndproc(NULL),
            double_clicks(false), custom_painting(false) {}
@@ -394,31 +398,28 @@ public:
   gcc_pure
   bool is_visible() const {
 #ifdef ENABLE_SDL
-    return true; // XXX
+    return visible;
 #else
     return ::IsWindowVisible(hWnd);
 #endif
   }
 
+#ifdef ENABLE_SDL
+  void show();
+  void hide();
+#else
   void show() {
     assert_thread();
 
-#ifdef ENABLE_SDL
-    // XXX
-#else
     ::ShowWindow(hWnd, SW_SHOW);
-#endif
   }
 
   void hide() {
     assert_thread();
 
-#ifdef ENABLE_SDL
-    // XXX
-#else
     ::ShowWindow(hWnd, SW_HIDE);
-#endif
   }
+#endif
 
   /**
    * Like hide(), but does not trigger a synchronous redraw of the
