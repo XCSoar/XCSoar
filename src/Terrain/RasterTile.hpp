@@ -62,9 +62,6 @@ public:
     :scan_overview(true) {
     Reset();
   }
-  ~RasterTileCache() {
-    Reset();
-  }
 
 private:
   bool initialised;
