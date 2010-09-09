@@ -43,11 +43,12 @@ Copyright_License {
 TabbedControl::TabbedControl(ContainerControl &parent,
                              int x, int y, unsigned width, unsigned height,
                              const WindowStyle style)
-  :ContainerControl(&parent.GetClientAreaWindow(), x, y, width, height, style),
-   current(0)
+  :current(0)
 {
   SetForeColor(parent.GetForeColor());
   SetBackColor(parent.GetBackColor());
+
+  set(parent.GetClientAreaWindow(), x, y, width, height, style);
 }
 
 void

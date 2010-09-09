@@ -167,10 +167,7 @@ WndProperty::WndProperty(ContainerControl &parent,
                          const WindowStyle style,
                          const EditWindowStyle edit_style,
                          DataChangeCallback_t DataChangeNotify)
-  :WindowControl(&parent.GetClientAreaWindow(),
-                 X, Y, Width, Height,
-                 style),
-   edit(this),
+  :edit(this),
    mCaptionWidth(CaptionWidth),
    mDownDown(false), mUpDown(false)
 {
@@ -189,6 +186,8 @@ WndProperty::WndProperty(ContainerControl &parent,
   }
   if (mDialogStyle)
     mBitmapSize = 0;
+
+  set(parent.GetClientAreaWindow(), X, Y, Width, Height, style);
 
   UpdateButtonData(mBitmapSize);
 

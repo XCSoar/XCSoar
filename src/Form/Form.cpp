@@ -92,13 +92,14 @@ WndForm::WndForm(SingleWindow &_main_window,
                  const TCHAR *Caption,
                  int X, int Y, int Width, int Height,
                  const WindowStyle style):
-  ContainerControl(&_main_window, X, Y, Width, Height, add_border(style)),
   main_window(_main_window),
   mModalResult(0),
   mColorTitle(Color::YELLOW),
   mhTitleFont(&Fonts::MapBold),
   mOnTimerNotify(NULL), mOnKeyDownNotify(NULL)
 {
+  set(main_window, X, Y, Width, Height, add_border(style));
+
   // Create ClientWindow
 
   SetBackColor(Color(0xDA, 0xDB, 0xAB));
@@ -117,8 +118,6 @@ WndForm::WndForm(SingleWindow &_main_window,
 #if !defined(ENABLE_SDL) && !defined(NDEBUG)
   ::SetWindowText(hWnd, mCaption);
 #endif
-
-  UpdateLayout();
 }
 
 WndForm::~WndForm()

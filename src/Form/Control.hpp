@@ -54,18 +54,7 @@ public:
   typedef void (*OnHelpCallback_t)(WindowControl *Sender);
 
 public:
-  /**
-   * Constructor of the WindowControl class
-   * @param Parent
-   * @param X x-Coordinate of the Control
-   * @param Y y-Coordinate of the Control
-   * @param Width Width of the Control
-   * @param Height Height of the Control
-   * @param Visible Visibility of the Control
-   */
-  WindowControl(ContainerWindow *Parent,
-                int X, int Y, int Width, int Height,
-                const WindowStyle style);
+  WindowControl();
 
   /** Destructor */
   virtual ~WindowControl(void);

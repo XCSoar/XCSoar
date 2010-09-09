@@ -48,21 +48,6 @@ Copyright_License {
  */
 class ContainerControl : public WindowControl {
 public:
-  /**
-   * Constructor for the ContainerControl class
-   * @param parent
-   * @param x x-Coordinate of the ContainerControl
-   * @param y y-Coordinate of the ContainerControl
-   * @param width Width of the ContainerControl
-   * @param height Height of the ContainerControl
-   * @param visible True if the ContainerControl should be visible, False if not
-   */
-  ContainerControl(ContainerWindow *parent,
-                   int x, int y, int width, int height,
-                   const WindowStyle style)
-    :WindowControl(parent, x, y, width, height, style) {}
-
-public:
   virtual ContainerWindow &GetClientAreaWindow();
 };
 

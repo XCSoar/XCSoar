@@ -72,9 +72,7 @@ KeyTimer(bool isdown, unsigned thekey)
   return false;
 }
 
-WindowControl::WindowControl(ContainerWindow *Parent,
-                             int X, int Y, int Width, int Height,
-                             const WindowStyle style) :
+WindowControl::WindowControl() :
     mColorBack(Color::WHITE),
     mColorFore(Color::BLACK),
     mhBrushBk(mColorBack),
@@ -84,8 +82,6 @@ WindowControl::WindowControl(ContainerWindow *Parent,
 {
   // Clear the caption
   mCaption[0] = '\0';
-
-  set(*Parent, X, Y, Width, Height, style);
 }
 
 WindowControl::~WindowControl(void)

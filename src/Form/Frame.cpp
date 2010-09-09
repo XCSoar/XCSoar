@@ -42,11 +42,12 @@ Copyright_License {
 WndFrame::WndFrame(ContainerControl &parent,
                    int X, int Y, int Width, int Height,
                    const WindowStyle style)
-  :WindowControl(&parent.GetClientAreaWindow(), X, Y, Width, Height, style),
-   mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
+  :mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
 {
   SetForeColor(parent.GetForeColor());
   SetBackColor(parent.GetBackColor());
+
+  set(parent.GetClientAreaWindow(), X, Y, Width, Height, style);
 }
 
 void WndFrame::SetCaption(const TCHAR *Value){
