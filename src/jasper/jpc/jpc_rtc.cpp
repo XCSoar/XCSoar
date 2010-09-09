@@ -1,5 +1,5 @@
 #include "jasper/jpc_rtc.h"
-#include "jasper/RasterTile.hpp"
+#include "Terrain/RasterTile.hpp"
 #include "ProgressGlue.hpp"
 
 RasterTileCache *raster_tile_current = 0;

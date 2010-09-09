@@ -40,10 +40,10 @@ Copyright_License {
 #define XCSOAR_TERRAIN_RASTER_MAP_HPP
 
 #include "RasterProjection.hpp"
+#include "RasterTile.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Geo/BoundsRectangle.hpp"
 #include "Util/NonCopyable.hpp"
-#include "jasper/RasterTile.hpp"
 #include "Compiler.h"
 
 class RasterMap : private NonCopyable {

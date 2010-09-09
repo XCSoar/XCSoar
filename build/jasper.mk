@@ -15,7 +15,7 @@ JASPER = \
 	$(JASSRC)/jpc/jpc_t1cod.c \
 	$(JASSRC)/jpc/jpc_t2dec.c 	$(JASSRC)/jpc/jpc_t2cod.c \
 	$(JASSRC)/jpc/jpc_tagtree.c	$(JASSRC)/jpc/jpc_tsfb.c \
-	$(JASSRC)/jpc/jpc_util.c 	$(JASSRC)/jpc/RasterTile.cpp
+	$(JASSRC)/jpc/jpc_util.c
 
 JASPER_LIBS = $(TARGET_OUTPUT_DIR)/jasper.a
 
