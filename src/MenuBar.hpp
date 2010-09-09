@@ -67,7 +67,6 @@ protected:
   public:
     virtual bool on_clicked();
 
-#ifndef ENABLE_SDL
   public:
     void set(ContainerWindow &parent, const TCHAR *text, unsigned _index,
              int left, int top, unsigned width, unsigned height,
@@ -80,6 +79,7 @@ protected:
       ButtonWindow::set(parent, text, left, top, width, height, style);
     }
 
+#ifndef ENABLE_SDL
   protected:
     virtual LRESULT on_message(HWND hWnd, UINT message,
                                WPARAM wParam, LPARAM lParam);
