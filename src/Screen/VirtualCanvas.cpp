@@ -77,6 +77,9 @@ VirtualCanvas::~VirtualCanvas()
 void
 VirtualCanvas::set(unsigned _width, unsigned _height)
 {
+  assert(_width < 0x1000000);
+  assert(_height < 0x1000000);
+
   reset();
 
 #ifdef ENABLE_SDL
