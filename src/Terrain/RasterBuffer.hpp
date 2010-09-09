@@ -47,7 +47,7 @@ Copyright_License {
 class RasterBuffer : private NonCopyable {
 public:
   /** invalid value for terrain */
-  static const short TERRAIN_INVALID = -1000;
+  static const short TERRAIN_INVALID = -32768;
 
 private:
   unsigned width, height;
