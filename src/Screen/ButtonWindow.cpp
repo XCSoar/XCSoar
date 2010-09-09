@@ -76,8 +76,10 @@ ButtonWindow::on_mouse_up(int x, int y)
   down = false;
   invalidate();
 
-  if (parent != NULL)
-    parent->on_command(id, 0);
+  if (parent != NULL) {
+    if (!on_clicked())
+      parent->on_command(id, 0);
+  }
 
   return true;
 }
