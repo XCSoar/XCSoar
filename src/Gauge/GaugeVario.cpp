@@ -79,7 +79,8 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
    nlength1(Layout::Scale(6)),
    nwidth(Layout::Scale(4)),
    nline(Layout::Scale(8)),
-   polys(NULL), lines(NULL)
+   polys(NULL), lines(NULL),
+   dirty(true)
 {
   diValueTop.InitDone = false;
   diValueMiddle.InitDone = false;
