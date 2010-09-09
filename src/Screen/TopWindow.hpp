@@ -46,6 +46,8 @@ Copyright_License {
 #endif
 
 #ifdef ENABLE_SDL
+#include "Thread/Mutex.hpp"
+
 class TopCanvas : public Canvas {
 public:
   void set();
@@ -60,6 +62,9 @@ public:
 class TopWindow : public ContainerWindow {
 #ifdef ENABLE_SDL
   TopCanvas screen;
+
+  Mutex invalidated_lock;
+  bool invalidated;
 #else /* !ENABLE_SDL */
 
   /**
@@ -98,6 +103,8 @@ public:
   void full_screen();
 
 #ifdef ENABLE_SDL
+  virtual void invalidate();
+
   virtual void expose(const RECT &rect);
   virtual void expose();
 #endif /* ENABLE_SDL */

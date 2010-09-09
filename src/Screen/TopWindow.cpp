@@ -66,7 +66,9 @@ TopCanvas::full_screen()
 #endif /* ENABLE_SDL */
 
 TopWindow::TopWindow()
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+  :invalidated(false)
+#else
   :hSavedFocus(NULL)
 #endif
 {
@@ -156,6 +158,24 @@ TopWindow::full_screen()
 #ifdef ENABLE_SDL
 
 void
+TopWindow::invalidate()
+{
+  invalidated_lock.Lock();
+  if (invalidated) {
+    /* already invalidated, don't send the event twice */
+    invalidated_lock.Unlock();
+    return;
+  }
+
+  invalidated = true;
+  invalidated_lock.Unlock();
+
+  SDL_ExposeEvent event;
+  event.type = SDL_VIDEOEXPOSE;
+  ::SDL_PushEvent((SDL_Event *)&event);
+}
+
+void
 TopWindow::expose(const RECT &rect) {
   ContainerWindow::expose(rect);
   screen.copy(canvas);
@@ -219,6 +239,10 @@ TopWindow::on_event(const SDL_Event &event)
 {
   switch (event.type) {
   case SDL_VIDEOEXPOSE:
+    invalidated_lock.Lock();
+    invalidated = false;
+    invalidated_lock.Unlock();
+
     on_paint(canvas);
     expose();
     return true;

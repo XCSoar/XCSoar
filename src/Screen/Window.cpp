@@ -214,6 +214,13 @@ Window::set_focus()
 }
 
 void
+Window::invalidate()
+{
+  if (parent != NULL)
+    parent->invalidate();
+}
+
+void
 Window::expose(const RECT &rect)
 {
   if (!visible)

@@ -661,6 +661,8 @@ public:
     on_paint(canvas);
   }
 
+  virtual void invalidate();
+
   /**
    * Ensures that the specified rectangle is updated on the physical
    * screen.
