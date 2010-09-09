@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_FORM_TABBED_HPP
 
 #include "Form/Container.hpp"
+#include "Util/StaticArray.hpp"
 
 #include <vector>
 
@@ -63,8 +64,8 @@ protected:
   virtual bool on_resize(unsigned width, unsigned height);
 
 protected:
-  std::vector<Window *> tabs;
   unsigned current;
+  StaticArray<Window *, 32> tabs;
 };
 
 #endif

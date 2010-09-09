@@ -56,7 +56,7 @@ TabbedControl::AddClient(Window *w)
   if (current != tabs.size())
     w->hide();
 
-  tabs.push_back(w);
+  tabs.append(w);
 
   const RECT rc = get_client_rect();
   w->move(rc.left, rc.top, rc.right, rc.bottom);
@@ -103,9 +103,8 @@ TabbedControl::on_resize(unsigned width, unsigned height)
   ContainerControl::on_resize(width, height);
 
   const RECT rc = get_client_rect();
-  for (std::vector<Window *>::iterator it = tabs.begin();
-       it != tabs.end(); ++it)
-    (*it)->move(rc.left, rc.top, rc.right, rc.bottom);
+  for (unsigned i = tabs.size(); i--;)
+    tabs[i]->move(rc.left, rc.top, rc.right, rc.bottom);
 
   return true;
 }
