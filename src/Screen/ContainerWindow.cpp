@@ -127,8 +127,8 @@ ContainerWindow::on_mouse_double(int x, int y)
 void
 ContainerWindow::on_paint(Canvas &canvas)
 {
-  for (std::list<Window*>::const_iterator i = children.begin();
-       i != children.end(); ++i) {
+  for (std::list<Window*>::const_reverse_iterator i = children.rbegin();
+       i != children.rend(); ++i) {
     Window &child = **i;
     if (!child.is_visible())
       continue;
@@ -147,8 +147,8 @@ ContainerWindow::on_paint(Canvas &canvas)
 Window *
 ContainerWindow::child_at(int x, int y)
 {
-  for (std::list<Window*>::const_reverse_iterator i = children.rbegin();
-       i != children.rend(); ++i) {
+  for (std::list<Window*>::const_iterator i = children.begin();
+       i != children.end(); ++i) {
     Window &child = **i;
     if (child.is_visible() &&
         x >= child.get_left() && x < child.get_right() &&
