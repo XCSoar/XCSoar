@@ -95,6 +95,12 @@ public:
       active_child = NULL;
   }
 
+  void bring_child_to_top(Window &child) {
+    children.remove(&child);
+    children.insert(children.begin(), &child);
+    child.expose();
+  }
+
   /**
    * Locate a child window by its relative coordinates.
    */

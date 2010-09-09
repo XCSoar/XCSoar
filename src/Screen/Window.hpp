@@ -360,23 +360,24 @@ public:
 #endif
   }
 
+#ifdef ENABLE_SDL
+  void bring_to_top();
+#else
   void bring_to_top() {
     assert_none_locked();
     assert_thread();
 
-#ifdef ENABLE_SDL
-    // XXX
-#else
     ::BringWindowToTop(hWnd);
-#endif
   }
+#endif
 
   void show_on_top() {
     assert_none_locked();
     assert_thread();
 
 #ifdef ENABLE_SDL
-    // XXX
+    bring_to_top();
+    show();
 #else
     ::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0,
                    SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);

@@ -260,6 +260,15 @@ Window::hide()
   parent->invalidate();
 }
 
+void
+Window::bring_to_top()
+{
+  assert_none_locked();
+  assert_thread();
+
+  parent->bring_child_to_top(*this);
+}
+
 #endif /* ENABLE_SDL */
 
 bool
