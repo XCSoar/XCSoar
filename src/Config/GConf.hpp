@@ -52,13 +52,17 @@ public:
   }
 
   bool get(const char *key, int &value) {
-    GError *error = NULL;
-    value = gconf_engine_get_int(engine, key, &error);
-    if (value == 0 && error != NULL) {
-      g_error_free(error);
+    GConfValue *cv = gconf_engine_get_without_default(engine, key, NULL);
+    if (cv == NULL)
+      return false;
+
+    if (cv->type != GCONF_VALUE_INT) {
+      gconf_value_free(cv);
       return false;
     }
 
+    value = gconf_value_get_int(cv);
+    gconf_value_free(cv);
     return true;
   }
 
