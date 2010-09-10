@@ -113,7 +113,10 @@ Fonts::SetFont(Font *theFont, LOGFONT autoLogFont,
     return;
 
   // XXX hard coded path
-  if (theFont->set("Data/Fonts/DejaVuSansCondensed2.ttf",
+  const char *dejavu_ttf =
+    "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf";
+
+  if (theFont->set(dejavu_ttf,
                    autoLogFont.lfHeight > 0 ? autoLogFont.lfHeight : 10,
                    autoLogFont.lfWeight >= 700,
                    autoLogFont.lfItalic) &&

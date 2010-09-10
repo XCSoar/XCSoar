@@ -55,8 +55,10 @@ ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
   this->text = text;
   this->id = id;
 
-  // XXX hard coded path, relative to the "test" directory
-  font.set("Data/Fonts/DejaVuSansCondensed2.ttf", 12);
+  // XXX hard coded path
+  const char *dejavu_ttf =
+    "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf";
+  font.set(dejavu_ttf, 16);
 }
 
 bool
