@@ -288,8 +288,10 @@ bool
 Window::on_destroy()
 {
 #ifdef ENABLE_SDL
-  if (parent != NULL)
+  if (parent != NULL) {
     parent->remove_child(*this);
+    parent = NULL;
+  }
 #else /* !ENABLE_SDL */
   assert(hWnd != NULL);
 
