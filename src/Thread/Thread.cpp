@@ -83,9 +83,8 @@ Thread::join()
 
   ::WaitForSingleObject(handle, INFINITE);
   ::CloseHandle(handle);
-#endif
-
   handle = NULL;
+#endif
 }
 
 bool
