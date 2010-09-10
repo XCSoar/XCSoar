@@ -89,7 +89,9 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
                   bool bold = false, bool italic = false,
                   bool variable_pitch = true)
 {
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+  font->lfHeight = (long)height;
+#else
   memset((char *)font, 0, sizeof(LOGFONT));
 
   _tcscpy(font->lfFaceName, facename);
