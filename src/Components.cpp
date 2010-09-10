@@ -135,8 +135,6 @@ GlideComputer glide_computer(protected_task_manager, airspace_warnings,
 void
 XCSoarInterface::PreloadInitialisation(bool ask)
 {
-  Profile::Set(_T("XCV"), 1);
-
   if (!ask) {
     Profile::Load();
     Profile::Use();
