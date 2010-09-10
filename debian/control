@@ -1,0 +1,19 @@
+Source: xcsoar
+Section: misc
+Priority: extra
+Maintainer: Max Kellermann <max@duempel.org>
+Build-Depends: debhelper (>= 5),
+ libboost-dev,
+ libsdl1.2-dev, libsdl-gfx1.2-dev, libsdl-ttf2.0-dev,
+ libgconf2-dev,
+ librsvg2-bin, imagemagick, xsltproc,
+ texlive, texlive-latex-extra
+Standards-Version: 3.9.1.0
+Homepage: http://www.xcsoar.org/
+
+Package: xcsoar
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ttf-dejavu
+Description: tactical glide computer
+ XCSoar is a tactical glide computer.  It was initially developed for
+ Pocket PC (Windows CE).

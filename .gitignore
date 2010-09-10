@@ -22,3 +22,9 @@ Doc/html/*
 Doc/cloc.txt
 output
 perf.data
+
+debian/files
+debian/stamp-*
+debian/tmp
+debian/*.substvars
+debian/xcsoar

@@ -1,6 +1,7 @@
 ifeq ($(TARGET),UNIX)
 
-prefix = /usr
+DESTDIR =
+prefix = $(DESTDIR)/usr
 
 install: all mo manual
 	install -d -m 0755 $(prefix)/bin $(prefix)/share/doc/xcsoar
