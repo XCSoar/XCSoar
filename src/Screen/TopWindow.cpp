@@ -243,6 +243,9 @@ TopWindow::on_event(const SDL_Event &event)
     invalidated = false;
     invalidated_lock.Unlock();
 
+    if (!canvas.defined())
+      return false;
+
     on_paint(canvas);
     expose();
     return true;
