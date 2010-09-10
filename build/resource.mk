@@ -95,15 +95,15 @@ $(BMP_LAUNCH_SIM_224): %-2.bmp: %.png
 	@$(NQ)echo "  BMP     $(@:1.bmp=2.bmp)"
 	$(Q)$(IM_PREFIX)convert $< -background blue -layers flatten +matte +dither -compress none -type optimize -colors 256 -crop '50%x100%' -scene 1 $(@:1.bmp=%d.bmp)
 
-ifeq ($(HAVE_WIN32),y)
-
-RESOURCE_TEXT = Data/XCSoar.rc
-RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/$(notdir $(RESOURCE_TEXT:.rc=.rsc))
-RESOURCE_FILES = $(wildcard Data/Dialogs/*.xml)
+RESOURCE_FILES = $(wildcard Data/Dialogs/*.xml) $(wildcard Data/bitmaps/*.bmp)
 RESOURCE_FILES += $(BMP_ICONS) $(BMP_ICONS_160) 
 RESOURCE_FILES += $(BMP_SPLASH_220) $(BMP_SPLASH_160)
 RESOURCE_FILES += $(BMP_LAUNCH_FLY_224) $(BMP_LAUNCH_SIM_224)
 
+ifeq ($(HAVE_WIN32),y)
+
+RESOURCE_TEXT = Data/XCSoar.rc
+RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/$(notdir $(RESOURCE_TEXT:.rc=.rsc))
 
 $(RESOURCE_BINARY): $(RESOURCE_TEXT) $(RESOURCE_FILES) | $(TARGET_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  WINDRES $@"

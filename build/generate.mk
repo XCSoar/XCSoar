@@ -56,15 +56,11 @@ $(TARGET_OUTPUT_DIR)/XCSoar.rc: Data/XCSoar.rc src/resource.h | $(TARGET_OUTPUT_
 	$(HOSTCPP) -o $@ $< -I$(SRC) $(TARGET_CPPFLAGS)
 
 $(TARGET_OUTPUT_DIR)/include/resource_data.h: $(TARGET_OUTPUT_DIR)/XCSoar.rc \
-	$(wildcard Data/bitmaps/*.bmp) $(BMP_ICONS_19) $(BMP_ICONS_31) \
-	$(wildcard Data/Dialogs/*.xml) \
+	$(RESOURCE_FILES) \
 	tools/GenerateResources.pl | $(TARGET_OUTPUT_DIR)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) tools/GenerateResources.pl $< >$@.tmp
 	@mv $@.tmp $@
-
-x:
-	echo $(TARGET_OUTPUT_DIR)/src/ResourceLoader.o
 
 $(TARGET_OUTPUT_DIR)/$(SRC)/ResourceLoader.o: $(TARGET_OUTPUT_DIR)/include/resource_data.h
 
