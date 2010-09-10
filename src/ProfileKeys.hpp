@@ -41,10 +41,15 @@ Copyright_License {
 
 #include <tchar.h>
 
-#ifdef WIN32
+#ifndef WIN32
+/* for GConf */
+#define PROFILE_KEY_PREFIX "/apps/XCSoar/"
+#endif
+
+#ifdef PROFILE_KEY_PREFIX
+#define CONF(key) _T(PROFILE_KEY_PREFIX key)
+#else
 #define CONF(key) _T(key)
-#else /* !WIN32 */
-#define CONF(key) ("/apps/XCSoar/" key)
 #endif
 
 extern const TCHAR szProfileKey[];
