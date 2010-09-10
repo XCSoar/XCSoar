@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "Registry.hpp"
 #include "Profile.hpp"
+#include "ProfileKeys.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
 #include "Defines.h"
@@ -161,6 +162,14 @@ Registry::Import(const TCHAR *szFile)
     *p = _T('\0');
     TCHAR *value = p + 1;
 
+#ifdef PROFILE_KEY_PREFIX
+    TCHAR key[sizeof(PROFILE_KEY_PREFIX) + _tcslen(line)];
+    _tcscpy(key, PROFILE_KEY_PREFIX);
+    _tcscat(key, line);
+#else
+    const TCHAR *key = line;
+#endif
+
     if (*value == _T('"')) {
       ++value;
       p = _tcschr(value, _T('"'));
@@ -169,11 +178,11 @@ Registry::Import(const TCHAR *szFile)
 
       *p = _T('\0');
 
-      Set(line, value);
+      Set(key, value);
     } else {
       long l = _tcstol(value, &p, 10);
       if (p > value)
-        Set(line, l);
+        Set(key, l);
     }
   }
 }

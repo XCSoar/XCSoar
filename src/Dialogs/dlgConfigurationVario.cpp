@@ -174,8 +174,8 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
     ProgressGlue::Step();
 #endif
 
-  _stprintf(updatename, _T("Vega%sUpdated"), name);
-  _stprintf(fullname, _T("Vega%s"), name);
+  _stprintf(updatename, CONF("Vega%sUpdated"), name);
+  _stprintf(fullname, CONF("Vega%s"), name);
   _stprintf(propname, _T("prp%s"), name);
 
   if (first) {

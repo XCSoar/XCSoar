@@ -55,27 +55,27 @@ static void
 SetAltairDefaults()
 {
   // these are redundant b/c they're also added to "InitialiseFontsHardCoded"
-  Profile::SetStringIfAbsent(_T("InfoWindowFont"),
+  Profile::SetStringIfAbsent(szProfileFontInfoWindowFont,
       _T("24,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
-  Profile::SetStringIfAbsent(_T("TitleWindowFont"),
+  Profile::SetStringIfAbsent(szProfileFontTitleWindowFont,
       _T("10,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicNineCond"));
-  Profile::SetStringIfAbsent(_T("CDIWindowFont"),
+  Profile::SetStringIfAbsent(szProfileFontCDIWindowFont,
       _T("19,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicEighteenCond"));
-  Profile::SetStringIfAbsent(_T("MapLabelFont"),
+  Profile::SetStringIfAbsent(szProfileFontMapLabelFont,
       _T("13,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicTwelveCond"));
-  Profile::SetStringIfAbsent(_T("StatisticsFont"),
+  Profile::SetStringIfAbsent(szProfileFontStatisticsFont,
       _T("15,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
-  Profile::SetStringIfAbsent(_T("MapWindowFont"),
+  Profile::SetStringIfAbsent(szProfileFontMapWindowFont,
       _T("15,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
-  Profile::SetStringIfAbsent(_T("MapWindowBoldFont"),
+  Profile::SetStringIfAbsent(szProfileFontMapWindowBoldFont,
       _T("15,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
-  Profile::SetStringIfAbsent(_T("BugsBallastFont"),
+  Profile::SetStringIfAbsent(szProfileFontBugsBallastFont,
       _T("24,0,0,0,750,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
-  Profile::SetStringIfAbsent(_T("AirspacePressFont"),
+  Profile::SetStringIfAbsent(szProfileFontAirspacePressFont,
       _T("24,0,0,0,750,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
-  Profile::SetStringIfAbsent(_T("AirspaceColourDlgFont"),
+  Profile::SetStringIfAbsent(szProfileFontAirspaceColourDlgFont,
       _T("14,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
-  Profile::SetStringIfAbsent(_T("TeamCodeFont"),
+  Profile::SetStringIfAbsent(szProfileFontTeamCodeFont,
       _T("19,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicEighteenCond"));
 }
 
@@ -616,7 +616,7 @@ Profile::SetSoundSettings()
 int
 Profile::GetScaleList(fixed *List, size_t Size)
 {
-  static const TCHAR Name[] = _T("ScaleList");
+  static const TCHAR Name[] = CONF("ScaleList");
   TCHAR Buffer[128];
   int Idx = 0;
   double vlast = 0;

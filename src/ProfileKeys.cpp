@@ -279,6 +279,11 @@ const TCHAR szProfileFontTitleSmallWindowFont[] = CONF("TeamCodeFont");
 const TCHAR szProfileFontMapWindowBoldFont[] = CONF("MapWindowBoldFont");
 const TCHAR szProfileFontCDIWindowFont[] = CONF("CDIWindowFont");
 const TCHAR szProfileFontMapLabelFont[] = CONF("MapLabelFont");
+const TCHAR szProfileFontStatisticsFont[] = CONF("StatisticsFont");
+const TCHAR szProfileFontBugsBallastFont[] = CONF("BugsBallastFont");
+const TCHAR szProfileFontAirspacePressFont[] = CONF("AirspacePressFont");
+const TCHAR szProfileFontAirspaceColourDlgFont[] = CONF("AirspaceColourDlgFont");
+const TCHAR szProfileFontTeamCodeFont[] = CONF("TeamCodeFont");
 
 const TCHAR szProfileInfoBoxGeometry[] = CONF("InfoBoxGeometry");
 
