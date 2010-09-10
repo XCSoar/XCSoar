@@ -162,7 +162,11 @@ InitialiseFontsAltair()
 static void
 InitialiseLogFonts()
 {
+#ifdef ENABLE_SDL
+  int FontHeight = Layout::SmallScale(20);
+#else
   int FontHeight = Layout::SmallScale(35);
+#endif
 
 #ifndef ENABLE_SDL
   // oversize first so can then scale down
