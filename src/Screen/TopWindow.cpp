@@ -238,6 +238,8 @@ bool
 TopWindow::on_event(const SDL_Event &event)
 {
   switch (event.type) {
+    Window *w;
+
   case SDL_VIDEOEXPOSE:
     invalidated_lock.Lock();
     invalidated = false;
@@ -249,6 +251,20 @@ TopWindow::on_event(const SDL_Event &event)
     on_paint(canvas);
     expose();
     return true;
+
+  case SDL_KEYDOWN:
+    w = get_focused_window();
+    if (w == NULL)
+      w = this;
+
+    return w->on_key_down(event.key.keysym.sym);
+
+  case SDL_KEYUP:
+    w = get_focused_window();
+    if (w == NULL)
+      w = this;
+
+    return w->on_key_up(event.key.keysym.sym);
 
   case SDL_MOUSEMOTION:
     // XXX keys
