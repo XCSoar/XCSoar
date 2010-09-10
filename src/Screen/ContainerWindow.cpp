@@ -43,6 +43,8 @@ Copyright_License {
 #include "Screen/ButtonWindow.hpp"
 #endif
 
+#include <assert.h>
+
 #ifdef ENABLE_SDL
 
 ContainerWindow::ContainerWindow()
@@ -68,9 +70,15 @@ ContainerWindow::on_color(Window &window, Canvas &canvas)
 bool
 ContainerWindow::on_destroy()
 {
-  for (std::list<Window*>::const_iterator i = children.begin();
-       i != children.end(); ++i)
-    (*i)->clear_parent();
+  std::list<Window*>::const_iterator i;
+  while ((i = children.begin()) != children.end()) {
+    Window *w = *i;
+    w->reset();
+
+    assert(std::find(children.begin(), children.end(), w) == children.end());
+  }
+
+  assert(children.empty());
 
   PaintWindow::on_destroy();
   return true;
