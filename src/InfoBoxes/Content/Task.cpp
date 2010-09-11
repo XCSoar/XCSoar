@@ -474,7 +474,7 @@ InfoBoxContentTaskSpeed::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserTaskSpeed(task_stats.total.remaining.get_speed()));
+            (double)Units::ToUserTaskSpeed(task_stats.total.travelled.get_speed()));
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -493,7 +493,7 @@ InfoBoxContentTaskSpeedAchieved::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserTaskSpeed(task_stats.total.remaining_effective.get_speed()));
+            (double)Units::ToUserTaskSpeed(task_stats.total.travelled.get_speed()));
   infobox.SetValue(tmp);
 
   // Set Unit
