@@ -83,7 +83,8 @@ struct BoundsRectangle {
   }
 
   GEOPOINT center() const {
-    return GEOPOINT(west.HalfAngle(east), south.HalfAngle(north));
+    return GEOPOINT(west.Fraction(east, fixed_half),
+                    south.Fraction(north, fixed_half));
   }
 };
 
