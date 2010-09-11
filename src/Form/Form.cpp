@@ -289,7 +289,7 @@ int WndForm::ShowModal(bool bEnableMap) {
   update();
 
   SDL_Event event;
-  while (SDL_WaitEvent(&event)) {
+  while (mModalResult == 0 && SDL_WaitEvent(&event)) {
     if (event.type == SDL_QUIT)
       break;
 
@@ -300,9 +300,6 @@ int WndForm::ShowModal(bool bEnableMap) {
     } else
       parent->on_event(event);
   }
-
-  main_window.remove_dialog(this);
-  return 0;
 
 #else /* !ENABLE_SDL */
   while ((mModalResult == 0) && GetMessage(&msg, NULL, 0, 0)) {
