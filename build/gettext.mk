@@ -9,6 +9,7 @@ GETTEXT_SOURCES = $(XCSOAR_SOURCES) \
 GETTEXT_DIALOGS = $(wildcard Data/Dialogs/*.xml)
 PO_FILES = $(wildcard po/*.po)
 MO_FILES = $(patsubst po/%.po,$(OUT)/po/%.mo,$(PO_FILES))
+LINGUAS = $(patsubst po/%.po,%,$(PO_FILES))
 
 $(OUT)/po/cpp.pot: $(GETTEXT_SOURCES) | $(OUT)/po/dirstamp
 	$(XGETTEXT) --default-domain=$(GETTEXT_PACKAGE) \

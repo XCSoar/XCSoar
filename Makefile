@@ -83,6 +83,7 @@ OUTPUTS := $(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(TARGET_EXEEXT) $(VALI_XCS)
 OUTPUTS += $(XCSOARSETUP_DLL) $(XCSOARLAUNCH_DLL)
 
 include $(topdir)/build/dist.mk
+include $(topdir)/build/install.mk
 
 ######## compiler flags
 
@@ -423,11 +424,15 @@ everything: everything-$(TARGET)
 
 ####### products
 
+ifeq ($(HAVE_CE),y)
+
 SYNCE_PCP = synce-pcp
 
 install: XCSoar.exe
 	@echo Copying to device...
 	$(SYNCE_PCP) -f XCSoar.exe ':/Program Files/XCSoar/XCSoar.exe'
+
+endif
 
 ifneq ($(NOSTRIP_SUFFIX),)
 $(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(TARGET_EXEEXT): $(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
