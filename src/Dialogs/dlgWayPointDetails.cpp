@@ -161,7 +161,7 @@ OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
   int nstart = LineOffsets[DrawListIndex];
   int nlen;
   if (DrawListIndex < nTextLines - 1) {
-    nlen = LineOffsets[DrawListIndex + 1] - LineOffsets[DrawListIndex] - 1;
+    nlen = LineOffsets[DrawListIndex + 1] - LineOffsets[DrawListIndex];
     nlen--;
   } else {
     nlen = _tcslen(text + nstart) - 1;
