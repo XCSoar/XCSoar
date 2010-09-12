@@ -45,48 +45,11 @@ Copyright_License {
 
 #include <stdlib.h>
 
-static bool
-PZAN1(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro);
-
-static bool
-PZAN2(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
-
 class ZanderDevice : public AbstractDevice {
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
 };
-
-bool
-ZanderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
-                        bool enable_baro)
-{
-  NMEAInputLine line(String);
-  char type[16];
-  line.read(type, 16);
-
-  if (strcmp(type, "$PZAN1") == 0)
-    return PZAN1(line, GPS_INFO, enable_baro);
-  else if (strcmp(type, "$PZAN2") == 0)
-    return PZAN2(line, GPS_INFO);
-  else
-    return false;
-}
-
-static Device *
-ZanderCreateOnComPort(ComPort *com_port)
-{
-  return new ZanderDevice();
-}
-
-const struct DeviceRegister zanderDevice = {
-  _T("Zander"),
-  drfGPS | drfBaroAlt | drfSpeed | drfVario,
-  ZanderCreateOnComPort,
-};
-
-// *****************************************************************************
-// local stuff
 
 static bool
 PZAN1(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
@@ -103,7 +66,6 @@ PZAN1(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   return true;
 }
-
 
 static bool
 PZAN2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
@@ -129,3 +91,32 @@ PZAN2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   return true;
 }
+
+bool
+ZanderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
+                        bool enable_baro)
+{
+  NMEAInputLine line(String);
+  char type[16];
+  line.read(type, 16);
+
+  if (strcmp(type, "$PZAN1") == 0)
+    return PZAN1(line, GPS_INFO, enable_baro);
+
+  if (strcmp(type, "$PZAN2") == 0)
+    return PZAN2(line, GPS_INFO);
+
+  return false;
+}
+
+static Device *
+ZanderCreateOnComPort(ComPort *com_port)
+{
+  return new ZanderDevice();
+}
+
+const struct DeviceRegister zanderDevice = {
+  _T("Zander"),
+  drfGPS | drfBaroAlt | drfSpeed | drfVario,
+  ZanderCreateOnComPort,
+};
