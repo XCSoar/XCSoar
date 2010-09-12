@@ -101,7 +101,6 @@ ComPort::Open()
     return false;
   }
 #else /* !HAVE_POSIX */
-  DWORD dwError;
   DCB PortDCB;
 
   buffer.clear();
@@ -117,8 +116,6 @@ ComPort::Open()
 
   // If it fails to open the port, return false.
   if (hPort == INVALID_HANDLE_VALUE) {
-    dwError = GetLastError();
-
     // Could not open the port.
     ComPort_StatusMessage(MB_OK | MB_ICONINFORMATION, NULL,
                           _("Unable to open port %s"), sPortName);
@@ -164,7 +161,6 @@ ComPort::Open()
     // gettext(), port added on new line
     ComPort_StatusMessage(MB_OK, _T("Error"),
                           _("Unable to change settings on port %s"), sPortName);
-    dwError = GetLastError();
     return false;
   }
 
