@@ -93,10 +93,10 @@ EWDevice::TryConnect()
   while (--retries){
 
     port->Write("##\r\n");         // send IO Mode command
-    if (ExpectString(port, "IO Mode.\r"))
+    if (port->ExpectString("IO Mode.\r"))
       return true;
 
-    ExpectString(port, "$$$"); // empty input buffer
+    port->ExpectString("$$$"); // empty input buffer
   }
 
   nDeclErrorCode = 1;
@@ -162,7 +162,7 @@ EWDevice::Declare(const struct Declaration *decl)
   );
   port->Write(sTmp);
 
-  if (!ExpectString(port, "OK\r")){
+  if (!port->ExpectString("OK\r")){
     nDeclErrorCode = 1;
     return false;
   };
@@ -175,7 +175,7 @@ EWDevice::Declare(const struct Declaration *decl)
   port->Write(PilotsName);
   port->Write('\r');
 
-  if (!ExpectString(port, "OK\r")) {
+  if (!port->ExpectString("OK\r")) {
     nDeclErrorCode = 1;
     return false;
   };
@@ -186,7 +186,7 @@ EWDevice::Declare(const struct Declaration *decl)
   port->Write(Class);
   port->Write('\r');
 
-  if (!ExpectString(port, "OK\r")) {
+  if (!port->ExpectString("OK\r")) {
     nDeclErrorCode = 1;
     return false;
   };
@@ -197,7 +197,7 @@ EWDevice::Declare(const struct Declaration *decl)
   port->Write(ID);
   port->Write('\r');
 
-  if (!ExpectString(port, "OK\r")) {
+  if (!port->ExpectString("OK\r")) {
     nDeclErrorCode = 1;
     return false;
   };
@@ -206,7 +206,7 @@ EWDevice::Declare(const struct Declaration *decl)
   for (int i=0; i<6; i++){                        // clear all 6 TP's
     sprintf(sTmp, "#CTP%02d", i);
     WriteWithChecksum(port, sTmp);
-    if (!ExpectString(port, "OK\r")) {
+    if (!port->ExpectString("OK\r")) {
       nDeclErrorCode = 1;
       return false;
     };
@@ -317,7 +317,7 @@ EWDevice::AddWayPoint(const Waypoint &way_point)
                       DegLon, (int)MinLon/10);
   WriteWithChecksum(port, EWRecord);
 
-  if (!ExpectString(port, "OK\r")) { // wait for response
+  if (!port->ExpectString("OK\r")) { // wait for response
     nDeclErrorCode = 1;
     return false;
   }

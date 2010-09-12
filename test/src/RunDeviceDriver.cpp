@@ -156,6 +156,12 @@ ComPort::Read(void *Buffer, size_t Size)
   return 0;
 }
 
+bool
+ComPort::ExpectString(const char *token)
+{
+  return true;
+}
+
 /*
  * Fake MapWindowProjection.cpp
  */

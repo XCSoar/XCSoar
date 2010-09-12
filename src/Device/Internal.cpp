@@ -56,23 +56,3 @@ PortWriteNMEA(ComPort *port, const char *line)
   sprintf(checksum, "*%02X\r\n", NMEAChecksum(line));
   port->Write(checksum);
 }
-
-bool
-ExpectString(ComPort *port, const char *token)
-{
-  assert(port != NULL);
-  assert(token != NULL);
-
-  const char *p = token;
-  while (*p != '\0') {
-    int ch = port->GetChar();
-    if (ch == EOF)
-      return false;
-
-    if (ch != *p++)
-      /* retry */
-      p = token;
-  }
-
-  return true;
-}

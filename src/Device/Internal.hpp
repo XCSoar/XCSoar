@@ -59,7 +59,4 @@ class ComPort;
 void
 PortWriteNMEA(ComPort *port, const char *line);
 
-bool
-ExpectString(ComPort *port, const char *token);
-
 #endif

@@ -55,7 +55,7 @@ FlarmDeclareSetGet(ComPort *port, char *Buffer)
   port->Write("\r\n");
 
   Buffer[6] = _T('A');
-  return ExpectString(port, Buffer);
+  return port->ExpectString(Buffer);
 }
 
 #ifdef _UNICODE

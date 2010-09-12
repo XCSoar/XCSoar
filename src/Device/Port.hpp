@@ -163,6 +163,8 @@ public:
    */
   int Read(void *Buffer, size_t Size);
 
+  bool ExpectString(const char *token);
+
 protected:
   /**
    * Entry point for the receive thread

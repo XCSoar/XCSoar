@@ -541,3 +541,22 @@ ComPort::ProcessChar(char c)
     buffer.append(1);
   }
 }
+
+bool
+ComPort::ExpectString(const char *token)
+{
+  assert(token != NULL);
+
+  const char *p = token;
+  while (*p != '\0') {
+    int ch = GetChar();
+    if (ch == EOF)
+      return false;
+
+    if (ch != *p++)
+      /* retry */
+      p = token;
+  }
+
+  return true;
+}
