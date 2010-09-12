@@ -52,20 +52,6 @@ private:
 #endif /* !ENABLE_SDL */
 
 public:
-#ifndef ENABLE_SDL
-  void set(ContainerWindow &parent, const TCHAR *cls,
-           int left, int top, unsigned width, unsigned height,
-           const WindowStyle style=WindowStyle()) {
-    PaintWindow::set(parent, cls, left, top, width, height, style);
-  }
-
-  void set(ContainerWindow &parent,
-           int left, int top, unsigned width, unsigned height,
-           const WindowStyle style=WindowStyle()) {
-    PaintWindow::set(parent, left, top, width, height, style);
-  }
-#endif /* !ENABLE_SDL */
-
   Canvas &get_canvas() {
 #ifdef ENABLE_SDL
     return canvas;
