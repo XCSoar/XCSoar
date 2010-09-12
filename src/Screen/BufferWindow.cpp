@@ -39,11 +39,6 @@ Copyright_License {
 #include "Screen/BufferWindow.hpp"
 #include "Screen/WindowCanvas.hpp"
 
-BufferWindow::~BufferWindow()
-{
-  reset();
-}
-
 #ifndef ENABLE_SDL
 
 bool
