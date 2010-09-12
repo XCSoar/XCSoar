@@ -42,11 +42,10 @@ Copyright_License {
 bool
 MapWindow::on_resize(unsigned width, unsigned height)
 {
-  PaintWindow::on_resize(width, height);
+  DoubleBufferWindow::on_resize(width, height);
 
   ++ui_generation;
 
-  draw_canvas.grow(width, height);
   buffer_canvas.grow(width, height);
   stencil_canvas.grow(width, height);
 
@@ -56,11 +55,10 @@ MapWindow::on_resize(unsigned width, unsigned height)
 bool
 MapWindow::on_create()
 {
-  if (!PaintWindow::on_create())
+  if (!DoubleBufferWindow::on_create())
     return false;
 
   WindowCanvas canvas(*this);
-  draw_canvas.set(canvas);
   buffer_canvas.set(canvas);
   stencil_canvas.set(canvas);
   bitmap_canvas.set(canvas);
@@ -70,26 +68,21 @@ MapWindow::on_create()
 bool
 MapWindow::on_destroy()
 {
-  draw_canvas.reset();
   buffer_canvas.reset();
   stencil_canvas.reset();
 
-  PaintWindow::on_destroy();
+  DoubleBufferWindow::on_destroy();
   return true;
 }
 
 void
 MapWindow::on_paint(Canvas& _canvas)
 {
-  mutexBuffer.Lock();
-
   if (buffer_generation == ui_generation)
-    _canvas.copy(draw_canvas);
+    DoubleBufferWindow::on_paint(_canvas);
   else
     /* the UI has changed since the last DrawThread iteration has
        started: the buffer has invalid data, paint a white window
        instead */
     _canvas.clear_white();
-
-  mutexBuffer.Unlock();
 }

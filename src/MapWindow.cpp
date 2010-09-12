@@ -87,9 +87,9 @@ MapWindow::set(ContainerWindow &parent, const RECT &rc)
 {
   WindowStyle style;
   style.enable_double_clicks();
-  PaintWindow::set(parent, _T("XCSoarMap"), rc.left, rc.top,
-                   rc.right - rc.left, rc.bottom - rc.top,
-                   style);
+  DoubleBufferWindow::set(parent, _T("XCSoarMap"), rc.left, rc.top,
+                          rc.right - rc.left, rc.bottom - rc.top,
+                          style);
 
   // initialize other systems
   projection.InitialiseScaleList(SettingsMap(), get_client_rect());
@@ -172,7 +172,7 @@ MapWindow::DrawThreadLoop(void)
   //  mclock.update();
 
   // Render the moving map
-  Render(draw_canvas, get_client_rect());
+  Render(get_canvas(), get_client_rect());
 
   // Stop the drawing timer and calculate drawing time
   StopTimer();
@@ -183,7 +183,7 @@ MapWindow::DrawThreadLoop(void)
 
   // Copy the rendered map to the drawing canvas
   if (buffer_generation == ui_generation)
-    invalidate();
+    flip();
 }
 
 bool

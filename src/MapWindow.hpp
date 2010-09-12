@@ -42,8 +42,7 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "MapWindowProjection.hpp"
 #include "MapWindowTimer.hpp"
-#include "Thread/Mutex.hpp"
-#include "Screen/PaintWindow.hpp"
+#include "Screen/DoubleBufferWindow.hpp"
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/LabelBlock.hpp"
@@ -80,7 +79,7 @@ class GlidePolar;
 class ContainerWindow;
 class WayPointLabelList;
 
-class MapWindow : public PaintWindow,
+class MapWindow : public DoubleBufferWindow,
   public MapWindowBlackboard,
   public MapWindowTimer
 {
@@ -170,7 +169,6 @@ private:
 
   void DrawThreadLoop ();
   void DrawThreadInitialise (void);
-  Mutex    mutexBuffer;
 
   void ApplyScreenSize();
 
@@ -249,7 +247,6 @@ protected:
 private:
   // graphics vars
 
-  BufferCanvas draw_canvas;
   BufferCanvas buffer_canvas;
   BufferCanvas stencil_canvas;
 
