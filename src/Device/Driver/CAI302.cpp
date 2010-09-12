@@ -61,7 +61,7 @@ Copyright_License {
 #pragma pack(push, 1) // force byte alignment
 
 /** Structure for CAI302 device info */
-typedef struct {
+struct cai302_Wdata_t {
   unsigned char result[3];
   unsigned char reserved[15];
   unsigned char ID[3];
@@ -70,17 +70,17 @@ typedef struct {
   unsigned char reserved2[6];
   unsigned char cai302ID;
   unsigned char reserved3;
-} cai302_Wdata_t;
+};
 
 /** Structure for CAI302 Odata info */
-typedef struct {
+struct cai302_OdataNoArgs_t {
   unsigned char result[3];
   unsigned char PilotCount;
   unsigned char PilotRecordSize;
-} cai302_OdataNoArgs_t;
+};
 
 /** Structure for CAI302 settings */
-typedef struct {
+struct cai302_OdataPilot_t {
   unsigned char  result[3];
   char           PilotName[24];
   unsigned char  OldUnit; // old unit
@@ -103,16 +103,16 @@ typedef struct {
   unsigned short MarginHeight; // (10ths of Meters)
   unsigned char  Spare[60]; // 302 expect more data than the documented filed
                             // be shure there is space to hold the data
-} cai302_OdataPilot_t;
+};
 
 /** Structure for CAI302 glider response */
-typedef struct {
+struct cai302_GdataNoArgs_t {
   unsigned char result[3];
   unsigned char GliderRecordSize;
-} cai302_GdataNoArgs_t;
+};
 
 /** Structure for CAI302 glider data */
-typedef struct {
+struct cai302_Gdata_t {
   unsigned char  result[3];
   unsigned char  GliderType[12];
   unsigned char  GliderID[12];
@@ -127,7 +127,7 @@ typedef struct {
   unsigned short WingArea; // 100ths square meters
   unsigned char  Spare[60]; // 302 expect more data than the documented filed
                             // be shure there is space to hold the data
-} cai302_Gdata_t;
+};
 
 #pragma pack(pop)
 
