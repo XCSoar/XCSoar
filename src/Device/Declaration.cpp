@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Declaration.hpp"
+
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Profile.hpp"
 
@@ -46,11 +47,9 @@ Declaration::Declaration(const OrderedTask* task)
   Profile::Get(szProfileAircraftType, AircraftType, 32);
   Profile::Get(szProfileAircraftRego, AircraftRego, 32);
 
-  if (task) {
-    for (unsigned i=0; i< task->task_size(); i++) {
+  if (task)
+    for (unsigned i = 0; i < task->task_size(); i++)
       waypoints.push_back(task->get_tp(i)->get_waypoint());
-    }
-  }
 }
 
 const TCHAR* 
