@@ -329,8 +329,10 @@ ComPort::Write(const char *s)
 bool
 ComPort::StopRxThread()
 {
+  // Make sure the thread isn't terminating itself
   assert(!Thread::inside());
 
+  // Make sure the port is still open
 #ifdef HAVE_POSIX
   if (fd < 0)
     return false;
@@ -339,6 +341,7 @@ ComPort::StopRxThread()
     return false;
 #endif /* !HAVE_POSIX */
 
+  // If the thread is not running, cancel the rest of the function
   if (!Thread::defined())
     return true;
 
@@ -347,15 +350,14 @@ ComPort::StopRxThread()
 #ifndef HAVE_POSIX
   if (is_embedded()) {
     Flush();
-    // setting the comm event mask with the same value
-    //  GetCommMask(hPort, &dwMask);
 
-    /* will cancel any WaitCommEvent!  this is a documented CE trick
-       to cancel the WaitCommEvent */
+    // this will cancel any WaitCommEvent!
+    // this is a documented CE trick to cancel the WaitCommEvent
     SetCommMask(hPort, dwMask);
   }
 #endif /* !HAVE_POSIX */
 
+  // Stop the thread
   Thread::join();
   return true;
 }
@@ -363,8 +365,10 @@ ComPort::StopRxThread()
 bool
 ComPort::StartRxThread(void)
 {
+  // Make sure the thread isn't starting itself
   assert(!Thread::inside());
 
+  // Make sure the port was opened correctly
 #ifdef HAVE_POSIX
   if (fd < 0)
     return false;
@@ -375,6 +379,7 @@ ComPort::StartRxThread(void)
 
   stop_trigger.reset();
 
+  // Start the receive thread
   Thread::start();
   return true;
 }

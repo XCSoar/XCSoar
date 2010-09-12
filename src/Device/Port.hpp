@@ -68,8 +68,7 @@ protected:
 
 public:
   /**
-   * Creates a new serial port (RS-232) object, but does not open it
-   * yet.
+   * Creates a new serial port (RS-232) object, but does not open it yet.
    *
    * @param path the path of the virtual file to open, e.g. "COM1:"
    * @param _baud_rate the speed of the port
@@ -78,21 +77,49 @@ public:
    */
   ComPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler);
 
+  /**
+   * Closes the serial port (Destructor)
+   */
   ~ComPort()
   {
     Close();
   }
 
+  /**
+   * Writes a string to the serial port
+   * @param data Pointer to the first character
+   * @param length Length of the string
+   */
   void Write(const void *data, unsigned length);
+
+  /**
+   * Writes a null-terminated string to the serial port
+   * @param s The string to write
+   */
   void Write(const char *s);
 
+  /**
+   * Writes a single byte to the serial port
+   * @param ch Byte to write
+   */
   void Write(char ch) {
     Write(&ch, sizeof(ch));
   }
 
+  /**
+   * Flushes the serial port buffers
+   */
   void Flush();
 
+  /**
+   * Opens the serial port
+   * @return True on success, False on failure
+   */
   bool Open();
+  /**
+   * Closes the serial port
+   * @return True on success, False on failure
+   */
   bool Close();
 
   /**
@@ -101,6 +128,12 @@ public:
    * @return The previous timeout in ms or -1 on error
    */
   int SetRxTimeout(int Timeout);
+
+  /**
+   * Sets the baud rate of the serial port to the given value
+   * @param BaudRate The desired baudrate
+   * @return The previous baud rate or 0 on error
+   */
   unsigned long SetBaudrate(unsigned long BaudRate);
 
   /**
@@ -117,13 +150,23 @@ public:
   void ProcessChar(char c);
 
   /**
-   * Read a single byte from the port
+   * Read a single byte from the serial port
    * @return The byte that was read or EOF in failure
    */
   int GetChar();
+
+  /**
+   * Read data from the serial port
+   * @param Buffer Pointer to the buffer
+   * @param Size Size of the buffer
+   * @return Number of bytes read from the serial port
+   */
   int Read(void *Buffer, size_t Size);
 
 protected:
+  /**
+   * Entry point for the receive thread
+   */
   virtual void run();
 
 private:
@@ -134,6 +177,7 @@ private:
   DWORD dwMask;
 #endif /* !HAVE_POSIX */
 
+  /** Name of the serial port */
   TCHAR sPortName[64];
 
   Trigger stop_trigger;
