@@ -120,8 +120,6 @@ ComPort::Open()
     dwError = GetLastError();
 
     // Could not open the port.
-    // TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
-    // gettext(), port added on new line
     ComPort_StatusMessage(MB_OK | MB_ICONINFORMATION, NULL,
                           _("Unable to open port %s"), sPortName);
 
