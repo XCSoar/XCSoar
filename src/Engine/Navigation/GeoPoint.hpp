@@ -44,8 +44,7 @@ Copyright_License {
 #include "Compiler.h"
 
 /**
- * Geodetic coordinate expressed as Longitude and Latitude in degrees.
- * @todo - support wrap-around at 0,360 degrees longitude
+ * Geodetic coordinate expressed as Longitude and Latitude angles.
  */
 struct GEOPOINT {
   friend class Serialiser;
