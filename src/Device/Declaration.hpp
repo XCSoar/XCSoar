@@ -39,10 +39,10 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DECLARATION_H
 #define XCSOAR_DEVICE_DECLARATION_H
 
-#include "Sizes.h"
+#include "Navigation/GeoPoint.hpp"
+
 #include <vector>
 #include <tchar.h>
-#include "Navigation/GeoPoint.hpp"
 
 class OrderedTask;
 class Waypoint;
