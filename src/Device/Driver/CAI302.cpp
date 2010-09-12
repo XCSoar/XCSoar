@@ -262,9 +262,6 @@ CAI302Device::Open()
 static int DeclIndex = 128;
 static int nDeclErrorCode;
 
-static bool
-cai302DeclAddWayPoint(ComPort *port, const Waypoint &way_point);
-
 static void
 convert_string(char *dest, size_t size, const TCHAR *src)
 {
@@ -282,6 +279,57 @@ convert_string(char *dest, size_t size, const TCHAR *src)
   strncpy(dest, src, size - 1);
   dest[size - 1] = '\0';
 #endif
+}
+
+static bool
+cai302DeclAddWayPoint(ComPort *port, const Waypoint &way_point)
+{
+  int DegLat, DegLon;
+  double tmp, MinLat, MinLon;
+  char NoS, EoW;
+
+  if (nDeclErrorCode != 0)
+    return false;
+
+  tmp = way_point.Location.Latitude.value_degrees();
+  NoS = 'N';
+  if (tmp < 0) {
+    NoS = 'S';
+    tmp = -tmp;
+  }
+  DegLat = (int)tmp;
+  MinLat = (tmp - DegLat) * 60;
+
+  tmp = way_point.Location.Longitude.value_degrees();
+  EoW = 'E';
+  if (tmp < 0) {
+    EoW = 'W';
+    tmp = -tmp;
+  }
+  DegLon = (int)tmp;
+  MinLon = (tmp - DegLon) * 60;
+
+  char Name[13];
+  convert_string(Name, sizeof(Name), way_point.Name.c_str());
+
+  char szTmp[128];
+  sprintf(szTmp, "D,%d,%02d%07.4f%c,%03d%07.4f%c,%s,%d\r",
+          DeclIndex,
+          DegLat, MinLat, NoS,
+          DegLon, MinLon, EoW,
+          Name,
+          (int)way_point.Altitude);
+
+  DeclIndex++;
+
+  port->Write(szTmp);
+
+  if (!ExpectString(port, "dn>")) {
+    nDeclErrorCode = 1;
+    return false;
+  }
+
+  return true;
 }
 
 bool
@@ -457,57 +505,6 @@ CAI302Device::Declare(const Declaration *decl)
   port->StartRxThread();
 
   return (nDeclErrorCode == 0);
-}
-
-static bool
-cai302DeclAddWayPoint(ComPort *port, const Waypoint &way_point)
-{
-  int DegLat, DegLon;
-  double tmp, MinLat, MinLon;
-  char NoS, EoW;
-
-  if (nDeclErrorCode != 0)
-    return false;
-
-  tmp = way_point.Location.Latitude.value_degrees();
-  NoS = 'N';
-  if (tmp < 0) {
-    NoS = 'S';
-    tmp = -tmp;
-  }
-  DegLat = (int)tmp;
-  MinLat = (tmp - DegLat) * 60;
-
-  tmp = way_point.Location.Longitude.value_degrees();
-  EoW = 'E';
-  if (tmp < 0) {
-    EoW = 'W';
-    tmp = -tmp;
-  }
-  DegLon = (int)tmp;
-  MinLon = (tmp - DegLon) * 60;
-
-  char Name[13];
-  convert_string(Name, sizeof(Name), way_point.Name.c_str());
-
-  char szTmp[128];
-  sprintf(szTmp, "D,%d,%02d%07.4f%c,%03d%07.4f%c,%s,%d\r",
-          DeclIndex,
-          DegLat, MinLat, NoS,
-          DegLon, MinLon, EoW,
-          Name,
-          (int)way_point.Altitude);
-
-  DeclIndex++;
-
-  port->Write(szTmp);
-
-  if (!ExpectString(port, "dn>")) {
-    nDeclErrorCode = 1;
-    return false;
-  }
-
-  return true;
 }
 
 static Device *
