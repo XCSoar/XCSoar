@@ -161,12 +161,34 @@ private:
   bool cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro);
 };
 
-// Additional sentance for CAI302 support
+/*
+$PCAIB,<1>,<2>,<CR><LF>
+<1> Destination Navpoint elevation in meters, format XXXXX (leading zeros will be transmitted)
+<2> Destination Navpoint attribute word, format XXXXX (leading zeros will be transmitted)
+*/
 static bool
-cai_PCAIB(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+cai_PCAIB(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+{
+  (void)line;
+  (void)GPS_INFO;
+  return true;
+}
 
+/*
+$PCAID,<1>,<2>,<3>,<4>*hh<CR><LF>
+<1> Logged 'L' Last point Logged 'N' Last Point not logged
+<2> Barometer Altitude in meters (Leading zeros will be transmitted)
+<3> Engine Noise Level
+<4> Log Flags
+*hh Checksum, XOR of all bytes of the sentence after the ‘$’ and before the ‘*’
+*/
 static bool
-cai_PCAID(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+cai_PCAID(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+{
+  (void)line;
+  (void)GPS_INFO;
+  return true;
+}
 
 bool
 CAI302Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
@@ -499,37 +521,6 @@ const struct DeviceRegister cai302Device = {
   drfGPS | drfLogger | drfSpeed | drfVario | drfWind,
   CAI302CreateOnComPort,
 };
-
-/*
-$PCAIB,<1>,<2>,<CR><LF>
-<1> Destination Navpoint elevation in meters, format XXXXX (leading zeros will be transmitted)
-<2> Destination Navpoint attribute word, format XXXXX (leading zeros will be transmitted)
-*/
-
-static bool
-cai_PCAIB(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
-{
-  (void)line;
-  (void)GPS_INFO;
-  return true;
-}
-
-/*
-$PCAID,<1>,<2>,<3>,<4>*hh<CR><LF>
-<1> Logged 'L' Last point Logged 'N' Last Point not logged
-<2> Barometer Altitude in meters (Leading zeros will be transmitted)
-<3> Engine Noise Level
-<4> Log Flags
-*hh Checksum, XOR of all bytes of the sentence after the ‘$’ and before the ‘*’
-*/
-
-static bool
-cai_PCAID(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
-{
-  (void)line;
-	(void)GPS_INFO;
-  return true;
-}
 
 static bool
 ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
