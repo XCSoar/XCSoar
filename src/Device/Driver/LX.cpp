@@ -54,64 +54,6 @@ public:
 };
 
 static bool
-LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro);
-
-static bool
-LXWP1(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
-
-static bool
-LXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
-
-bool
-LXDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO, bool enable_baro)
-{
-  NMEAInputLine line(String);
-  char type[16];
-  line.read(type, 16);
-
-  if (strcmp(type, "$LXWP0") == 0)
-    return LXWP0(line, GPS_INFO, enable_baro);
-  else if (strcmp(type, "$LXWP1") == 0)
-    return LXWP1(line, GPS_INFO);
-  else if (strcmp(type, "$LXWP2") == 0)
-    return LXWP2(line, GPS_INFO);
-  else
-    return false;
-}
-
-static Device *
-LXCreateOnComPort(ComPort *com_port)
-{
-  return new LXDevice();
-}
-
-const struct DeviceRegister lxDevice = {
-  _T("LX"),
-  drfGPS | drfBaroAlt | drfSpeed | drfVario,
-  LXCreateOnComPort,
-};
-
-// local stuff
-
-static bool
-LXWP1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
-{
-  (void)GPS_INFO;
-  // do nothing!
-  return true;
-}
-
-static bool
-LXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
-{
-  (void)GPS_INFO;
-
-  /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
-  //  oldGlidePolar::SetMacCready(_tcstod(ctemp, NULL));
-  return true;
-}
-
-static bool
 ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
   fixed bearing, norm;
@@ -171,3 +113,48 @@ LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   return true;
 }
+
+static bool
+LXWP1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+{
+  (void)GPS_INFO;
+  return true;
+}
+
+static bool
+LXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+{
+  (void)GPS_INFO;
+  return true;
+}
+
+bool
+LXDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO, bool enable_baro)
+{
+  NMEAInputLine line(String);
+  char type[16];
+  line.read(type, 16);
+
+  if (strcmp(type, "$LXWP0") == 0)
+    return LXWP0(line, GPS_INFO, enable_baro);
+
+  if (strcmp(type, "$LXWP1") == 0)
+    return LXWP1(line, GPS_INFO);
+
+  if (strcmp(type, "$LXWP2") == 0)
+    return LXWP2(line, GPS_INFO);
+
+  return false;
+}
+
+static Device *
+LXCreateOnComPort(ComPort *com_port)
+{
+  return new LXDevice();
+}
+
+const struct DeviceRegister lxDevice = {
+  _T("LX"),
+  drfGPS | drfBaroAlt | drfSpeed | drfVario,
+  LXCreateOnComPort,
+};
