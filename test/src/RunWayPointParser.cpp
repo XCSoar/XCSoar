@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "WayPointFile.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "Engine/Waypoint/WaypointVisitor.hpp"
 #include "Thread/Mutex.hpp"
 #include "Interface.hpp"
 #include "Dialogs.h"
@@ -70,6 +71,13 @@ fixed MapWindowProjection::GetMapScaleUser() const { return fixed_one; }
 SettingsComputerBlackboard::SettingsComputerBlackboard() {}
 SettingsMapBlackboard::SettingsMapBlackboard() {}
 
+class DumpVisitor : public WaypointVisitor {
+public:
+  void Visit(const Waypoint &wp) {
+    _ftprintf(stdout, _T("%s\n"), wp.Name.c_str());
+  }
+};
+
 int main(int argc, char **argv)
 {
   if (argc != 2) {
@@ -96,6 +104,9 @@ int main(int argc, char **argv)
 
   way_points.optimise();
   printf("Size %d\n", way_points.size());
+
+  DumpVisitor visitor;
+  way_points.visit_name_prefix(_T(""), visitor);
 
   return 0;
 }
