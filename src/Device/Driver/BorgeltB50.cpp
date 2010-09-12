@@ -53,66 +53,21 @@ public:
                          bool enable_baro);
 };
 
-static bool
-PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
-
-bool
-B50Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
-                     bool enable_baro)
-{
-  NMEAInputLine line(String);
-  char type[16];
-  line.read(type, 16);
-
-  if (strcmp(type, "$PBB50") == 0)
-    return PBB50(line, GPS_INFO);
-  else
-    return false;
-}
-
-static Device *
-B50CreateOnComPort(ComPort *com_port)
-{
-  return new B50Device();
-}
-
-const struct DeviceRegister b50Device = {
-  _T("Borgelt B50"),
-  drfGPS,
-  B50CreateOnComPort,
-};
-
-// *****************************************************************************
-// local stuff
-
 /*
 Sentence has following format:
 
 $PBB50,AAA,BBB.B,C.C,DDDDD,EE,F.FF,G,HH*CHK crlf
 
-
-
 AAA = TAS 0 to 150 knots
-
 BBB.B = Vario, -10 to +15 knots, negative sign for sink
-
 C.C = MacCready 0 to 8.0 knots
-
 DDDDD = IAS squared 0 to 22500
-
 EE = bugs degradation, 0 = clean to 30 %
-
 F.FF = Ballast 1.00 to 1.60
-
 G = 0 in climb, 1 in cruise
-
 HH = Outside airtemp in degrees celcius ( may have leading negative sign )
-
 CHK = standard NMEA checksum
-
-
 */
-
 static bool
 PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
@@ -176,3 +131,29 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   return false;
 }
+
+bool
+B50Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
+                     bool enable_baro)
+{
+  NMEAInputLine line(String);
+  char type[16];
+  line.read(type, 16);
+
+  if (strcmp(type, "$PBB50") == 0)
+    return PBB50(line, GPS_INFO);
+  else
+    return false;
+}
+
+static Device *
+B50CreateOnComPort(ComPort *com_port)
+{
+  return new B50Device();
+}
+
+const struct DeviceRegister b50Device = {
+  _T("Borgelt B50"),
+  drfGPS,
+  B50CreateOnComPort,
+};
