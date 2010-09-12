@@ -94,9 +94,9 @@ bool
 ComPort::Open()
 {
 #ifdef HAVE_POSIX
-  fd = open(sPortName, O_RDWR|O_NOCTTY);
+  fd = open(sPortName, O_RDWR | O_NOCTTY);
   if (fd < 0) {
-    ComPort_StatusMessage(MB_OK|MB_ICONINFORMATION, NULL,
+    ComPort_StatusMessage(MB_OK | MB_ICONINFORMATION, NULL,
                           _("Unable to open port %s"), sPortName);
     return false;
   }
@@ -107,15 +107,13 @@ ComPort::Open()
   buffer.clear();
 
   // Open the serial port.
-  hPort = CreateFile(sPortName, // Pointer to the name of the port
-                      GENERIC_READ | GENERIC_WRITE,
-                                    // Access (read-write) mode
-                      0,            // Share mode
-                      NULL,         // Pointer to the security attribute
-                      OPEN_EXISTING,// How to open the serial port
-                      FILE_ATTRIBUTE_NORMAL,            // Port attributes
-                      NULL);        // Handle to port with attribute
-                                    // to copy
+  hPort = CreateFile(sPortName,    // Pointer to the name of the port
+                     GENERIC_READ | GENERIC_WRITE, // Access (read-write) mode
+                     0,            // Share mode
+                     NULL,         // Pointer to the security attribute
+                     OPEN_EXISTING,// How to open the serial port
+                     FILE_ATTRIBUTE_NORMAL, // Port attributes
+                     NULL);        // Handle to port with attribute to copy
 
   // If it fails to open the port, return false.
   if (hPort == INVALID_HANDLE_VALUE) {
@@ -124,7 +122,7 @@ ComPort::Open()
     // Could not open the port.
     // TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
-    ComPort_StatusMessage(MB_OK|MB_ICONINFORMATION, NULL,
+    ComPort_StatusMessage(MB_OK | MB_ICONINFORMATION, NULL,
                           _("Unable to open port %s"), sPortName);
 
     return false;
@@ -141,28 +139,21 @@ ComPort::Open()
   PortDCB.fParity = true;               // Enable parity checking
   PortDCB.fOutxCtsFlow = false;         // No CTS output flow control
   PortDCB.fOutxDsrFlow = false;         // No DSR output flow control
-  PortDCB.fDtrControl = DTR_CONTROL_ENABLE;
-                                        // DTR flow control type
+  PortDCB.fDtrControl = DTR_CONTROL_ENABLE; // DTR flow control type
   PortDCB.fDsrSensitivity = false;      // DSR sensitivity
   PortDCB.fTXContinueOnXoff = true;     // XOFF continues Tx
   PortDCB.fOutX = false;                // No XON/XOFF out flow control
   PortDCB.fInX = false;                 // No XON/XOFF in flow control
   PortDCB.fErrorChar = false;           // Disable error replacement
   PortDCB.fNull = false;                // Disable null removal
-  PortDCB.fRtsControl = RTS_CONTROL_ENABLE;
-                                        // RTS flow control
-
-  PortDCB.fAbortOnError = true;         // JMW abort reads/writes on
-                                        // error, was false
-
+  PortDCB.fRtsControl = RTS_CONTROL_ENABLE; // RTS flow control
+  PortDCB.fAbortOnError = true;         // JMW abort reads/writes on error
   PortDCB.ByteSize = 8;                 // Number of bits/byte, 4-8
   PortDCB.Parity = NOPARITY;            // 0-4=no,odd,even,mark,space
   PortDCB.StopBits = ONESTOPBIT;        // 0,1,2 = 1, 1.5, 2
+  PortDCB.EvtChar = '\n';               // wait for end of line
 
-  PortDCB.EvtChar = '\n'; // wait for end of line
-
-  // Configure the port according to the specifications of the DCB
-  // structure.
+  // Configure the port according to the specifications of the DCB structure.
   if (!SetCommState(hPort, &PortDCB)) {
     // Could not create the read thread.
     CloseHandle(hPort);
@@ -174,8 +165,7 @@ ComPort::Open()
     // TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
     ComPort_StatusMessage(MB_OK, _T("Error"),
-                          _("Unable to change settings on port %s"),
-                          sPortName);
+                          _("Unable to change settings on port %s"), sPortName);
     dwError = GetLastError();
     return false;
   }
@@ -187,8 +177,8 @@ ComPort::Open()
 
   // Direct the port to perform extended functions SETDTR and SETRTS
   // SETDTR: Sends the DTR (data-terminal-ready) signal.
-  // SETRTS: Sends the RTS (request-to-send) signal.
   EscapeCommFunction(hPort, SETDTR);
+  // SETRTS: Sends the RTS (request-to-send) signal.
   EscapeCommFunction(hPort, SETRTS);
 #endif /* !HAVE_POSIX */
 
@@ -216,8 +206,7 @@ ComPort::Flush(void)
 #ifdef HAVE_POSIX
   // XXX
 #else /* !HAVE_POSIX */
-  PurgeComm(hPort, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR
-      | PURGE_RXCLEAR);
+  PurgeComm(hPort, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
 #endif /* !HAVE_POSIX */
 }
 
@@ -459,7 +448,6 @@ ComPort::SetRxTimeout(int Timeout)
   // Change the COMMTIMEOUTS structure settings.
   CommTimeouts.ReadIntervalTimeout = MAXDWORD;
 
-  // JMW 20070515
   if (Timeout == 0) {
     // no total timeouts used
     CommTimeouts.ReadTotalTimeoutMultiplier = 0;
@@ -485,8 +473,7 @@ ComPort::SetRxTimeout(int Timeout)
       Sleep(2000); // needed for windows bug
 
     ComPort_StatusMessage(MB_OK, _T("Error"),
-                          _("Unable to set serial port timers %s"),
-                          sPortName);
+                          _("Unable to set serial port timers %s"), sPortName);
     dwError = GetLastError();
     return -1;
   }
