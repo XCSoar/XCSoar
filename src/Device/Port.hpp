@@ -104,7 +104,7 @@ public:
    * @return The previous timeout in ms or -1 on error
    */
   int SetRxTimeout(int Timeout);
-  unsigned long SetBaudrate(unsigned long);
+  unsigned long SetBaudrate(unsigned long BaudRate);
 
   /**
    * Stops the receive thread
@@ -117,7 +117,7 @@ public:
    * @return True on success, False on failure
    */
   bool StartRxThread();
-  void ProcessChar(char);
+  void ProcessChar(char c);
 
   /**
    * Read a single byte from the port
