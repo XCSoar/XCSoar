@@ -66,6 +66,17 @@ namespace Display {
    * Change the orientation of the screen.
    */
   bool Rotate();
+
+  /**
+   * Returns the number of pixels per logical inch along the screen width
+   * @return Number of pixels per logical inch along the screen width
+   */
+  int GetXDPI();
+  /**
+   * Returns the number of pixels per logical inch along the screen height
+   * @return Number of pixels per logical inch along the screen height
+   */
+  int GetYDPI();
 }
 
 #endif

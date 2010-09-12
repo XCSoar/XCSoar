@@ -37,7 +37,12 @@ Copyright_License {
 */
 
 #include "Display.hpp"
+
 #include "Asset.hpp"
+
+#ifndef HAVE_POSIX
+#include "Screen/RootCanvas.hpp"
+#endif
 
 #ifdef WIN32
 #include "Config/Registry.hpp"
@@ -129,5 +134,27 @@ Display::Rotate()
                                  CDS_RESET, NULL) == DISP_CHANGE_SUCCESSFUL;
 #else
   return false;
+#endif
+}
+
+int
+Display::GetXDPI()
+{
+#ifndef HAVE_POSIX
+  RootCanvas canvas;
+  return GetDeviceCaps(canvas, LOGPIXELSX);
+#else
+  return 96;
+#endif
+}
+
+int
+Display::GetYDPI()
+{
+#ifndef HAVE_POSIX
+  RootCanvas canvas;
+  return GetDeviceCaps(canvas, LOGPIXELSY);
+#else
+  return 96;
 #endif
 }
