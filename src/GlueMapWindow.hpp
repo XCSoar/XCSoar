@@ -54,6 +54,13 @@ public:
   bool Idle();
 
 private:
+  enum drag_mode {
+    DRAG_NONE,
+    DRAG_PAN,
+    DRAG_GESTURE,
+    DRAG_SIMULATOR,
+  } drag_mode;
+
   GEOPOINT drag_start_geopoint;
   POINT drag_start, drag_last;
   GestureManager gestures;
@@ -87,6 +94,7 @@ protected:
 #endif
 
   virtual bool on_setfocus();
+  virtual bool on_cancel_mode();
 
 private:
 

@@ -75,10 +75,6 @@ enum {
 };
 
 enum {
-  MK_LBUTTON,
-};
-
-enum {
   IDOK,
   IDCANCEL,
   IDYES,

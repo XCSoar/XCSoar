@@ -107,7 +107,11 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
   }
 #endif
 
-  if (SettingsMap().EnablePan && (keys & MK_LBUTTON)) {
+  switch (drag_mode) {
+  case DRAG_NONE:
+    break;
+
+  case DRAG_PAN: {
     const GEOPOINT start = projection.Screen2LonLat(drag_last.x, drag_last.y);
     const GEOPOINT end = projection.Screen2LonLat(x, y);
 
@@ -123,9 +127,13 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
     return true;
   }
 
-  // If we are dragging already or starting to drag now...
-  if (XCSoarInterface::SettingsComputer().EnableGestures)
+  case DRAG_GESTURE:
     gestures.AddPoint(x, y);
+    return true;
+
+  case DRAG_SIMULATOR:
+    return true;
+  }
 
   return MapWindow::on_mouse_move(x, y, keys);
 }
@@ -134,7 +142,7 @@ bool
 GlueMapWindow::on_mouse_down(int x, int y)
 {
   // Ignore single click event if double click detected
-  if (ignore_single_click)
+  if (ignore_single_click || drag_mode != DRAG_NONE)
     return true;
 
   mouse_down_clock.update();
@@ -146,8 +154,17 @@ GlueMapWindow::on_mouse_down(int x, int y)
   drag_start_geopoint = projection.Screen2LonLat(x, y);
   drag_last = drag_start;
 
-  if (XCSoarInterface::SettingsComputer().EnableGestures)
+  if (SettingsMap().EnablePan)
+    drag_mode = DRAG_PAN;
+  else if (is_simulator() && !Basic().gps.Replay)
+    drag_mode = DRAG_SIMULATOR;
+  else if (XCSoarInterface::SettingsComputer().EnableGestures) {
     gestures.Start(x, y);
+    drag_mode = DRAG_GESTURE;
+  }
+
+  if (drag_mode != DRAG_NONE)
+    set_capture();
 
 #ifdef OLD_TASK // target control
   if (task != NULL &&
@@ -173,6 +190,9 @@ GlueMapWindow::on_mouse_down(int x, int y)
 bool
 GlueMapWindow::on_mouse_up(int x, int y)
 {
+  if (drag_mode != DRAG_NONE)
+    release_capture();
+
   // Ignore single click event if double click detected
   if (ignore_single_click) {
     ignore_single_click = false;
@@ -199,43 +219,57 @@ GlueMapWindow::on_mouse_up(int x, int y)
 #endif
   }
 
-  if (SettingsMap().EnablePan &&
-      compare_squared(drag_start.x - x, drag_start.y - y,
-                      Layout::Scale(10)) == 1)
-    return true;
+  enum drag_mode old_drag_mode = drag_mode;
+  drag_mode = DRAG_NONE;
 
-  if (is_simulator() && !Basic().gps.Replay && click_time > 50 &&
-      compare_squared(drag_start.x - x, drag_start.y - y,
-                      Layout::Scale(36)) == 1) {
-    GEOPOINT G = projection.Screen2LonLat(x, y);
+  switch (old_drag_mode) {
+  case DRAG_NONE:
+    break;
 
-    double distance = hypot(drag_start.x - x, drag_start.y - y);
+  case DRAG_PAN:
+    if (compare_squared(drag_start.x - x, drag_start.y - y,
+                        Layout::Scale(10)) == 1)
+      return true;
 
-    // This drag moves the aircraft (changes speed and direction)
-    const Angle oldbearing = Basic().TrackBearing;
-    const fixed minspeed = fixed(1.1) * (task != NULL ?
-                                  task->get_glide_polar() :
-                                  GlidePolar(fixed_zero)).get_Vmin();
-    const Angle newbearing = Bearing(drag_start_geopoint, G);
-    if (((newbearing - oldbearing).as_delta().magnitude_degrees() < fixed(30)) ||
-        (Basic().GroundSpeed < minspeed))
-      device_blackboard.SetSpeed(min(fixed(100.0),
-                                 max(minspeed,
-                                     fixed(distance / (3 * Layout::scale)))));
+    break;
 
-    device_blackboard.SetTrackBearing(newbearing);
-    // change bearing without changing speed if direction change > 30
-    // 20080815 JMW prevent dragging to stop glider
+  case DRAG_SIMULATOR:
+    if (click_time > 50 &&
+        compare_squared(drag_start.x - x, drag_start.y - y,
+                        Layout::Scale(36)) == 1) {
+      GEOPOINT G = projection.Screen2LonLat(x, y);
 
-    // JMW trigger recalcs immediately
-    TriggerGPSUpdate();
-    return true;
-  }
+      double distance = hypot(drag_start.x - x, drag_start.y - y);
 
-  if (XCSoarInterface::SettingsComputer().EnableGestures) {
+      // This drag moves the aircraft (changes speed and direction)
+      const Angle oldbearing = Basic().TrackBearing;
+      const fixed minspeed = fixed(1.1) * (task != NULL ?
+                                           task->get_glide_polar() :
+                                           GlidePolar(fixed_zero)).get_Vmin();
+      const Angle newbearing = Bearing(drag_start_geopoint, G);
+      if (((newbearing - oldbearing).as_delta().magnitude_degrees() < fixed(30)) ||
+          (Basic().GroundSpeed < minspeed))
+        device_blackboard.SetSpeed(min(fixed(100.0),
+                                       max(minspeed,
+                                           fixed(distance / (3 * Layout::scale)))));
+
+      device_blackboard.SetTrackBearing(newbearing);
+      // change bearing without changing speed if direction change > 30
+      // 20080815 JMW prevent dragging to stop glider
+
+      // JMW trigger recalcs immediately
+      TriggerGPSUpdate();
+      return true;
+    }
+
+    break;
+
+  case DRAG_GESTURE:
     const TCHAR* gesture = gestures.Finish();
     if (gesture && on_mouse_gesture(gesture))
       return true;
+
+    break;
   }
 
   if(click_time < 1000) {
@@ -258,6 +292,9 @@ GlueMapWindow::on_mouse_up(int x, int y)
 bool
 GlueMapWindow::on_mouse_wheel(int delta)
 {
+  if (drag_mode != DRAG_NONE)
+    return true;
+
   if (delta > 0)
     // zoom in
     InputEvents::sub_ScaleZoom(1);
@@ -337,6 +374,19 @@ GlueMapWindow::on_key_press(unsigned key_code)
   mouse_down_clock.reset();
   if (InputEvents::processKey(key_code)) {
     return true; // don't go to default handler
+  }
+
+  return false;
+}
+
+bool
+GlueMapWindow::on_cancel_mode()
+{
+  MapWindow::on_cancel_mode();
+
+  if (drag_mode != DRAG_NONE) {
+    release_capture();
+    drag_mode = DRAG_NONE;
   }
 
   return false;
