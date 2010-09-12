@@ -1,5 +1,5 @@
-#if !defined(AFX_SIZES_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
-#define AFX_SIZES_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
+#ifndef XCSOAR_SIZES_H
+#define XCSOAR_SIZES_H
 
 #define MINFREESTORAGE 500
 // 500 kb must be free for logger to be active this is based on rough
