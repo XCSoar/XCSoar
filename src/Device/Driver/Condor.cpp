@@ -53,19 +53,67 @@ public:
 };
 
 static bool
-cLXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro);
+cLXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
+{
+  /*
+  $LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1
+
+   0 logger_stored (Y/N)
+   1 IAS (kph) ----> Condor uses TAS!
+   2 baroaltitude (m)
+   3 vario (m/s)
+   4-8 unknown
+   9 heading of plane
+  10 windcourse (deg)
+  11 windspeed (kph)
+  */
+
+  line.skip();
+
+  fixed airspeed = line.read(fixed_zero);
+  airspeed = Units::ToSysUnit(airspeed, unKiloMeterPerHour);
+
+  fixed alt = line.read(fixed_zero);
+
+  GPS_INFO->IndicatedAirspeed =
+      airspeed / AtmosphericPressure::AirDensityRatio(alt);
+  GPS_INFO->TrueAirspeed = airspeed;
+
+  if (enable_baro) {
+    GPS_INFO->BaroAltitudeAvailable = true;
+    GPS_INFO->BaroAltitude = alt; // ToDo check if QNH correction is needed!
+  }
+
+  GPS_INFO->TotalEnergyVario = line.read(fixed_zero);
+  GPS_INFO->TotalEnergyVarioAvailable = true;
+
+  GPS_INFO->AirspeedAvailable = true;
+  GPS_INFO->TotalEnergyVarioAvailable = true;
+
+  TriggerVarioUpdate();
+
+  return true;
+}
 
 static bool
-cLXWP1(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+cLXWP1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+{
+  (void)GPS_INFO;
+  return true;
+}
 
 static bool
-cLXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+cLXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+{
+  (void)GPS_INFO;
+  return true;
+}
 
 bool
 CondorDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
                         bool enable_baro)
 {
-  GPS_INFO->gps.Simulator=true;
+  GPS_INFO->gps.Simulator = true;
 
   NMEAInputLine line(String);
   char type[16];
@@ -73,12 +121,14 @@ CondorDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
 
   if (strcmp(type, "$LXWP0") == 0)
     return cLXWP0(line, GPS_INFO, enable_baro);
-  else if (strcmp(type, "$LXWP1") == 0)
+
+  if (strcmp(type, "$LXWP1") == 0)
     return cLXWP1(line, GPS_INFO);
-  else if (strcmp(type, "$LXWP2") == 0)
+
+  if (strcmp(type, "$LXWP2") == 0)
     return cLXWP2(line, GPS_INFO);
-  else
-    return false;
+
+  return false;
 }
 
 static Device *
@@ -92,71 +142,3 @@ const struct DeviceRegister condorDevice = {
   drfGPS | drfBaroAlt | drfSpeed | drfVario,
   CondorCreateOnComPort,
 };
-
-// *****************************************************************************
-// local stuff
-
-static bool
-cLXWP1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
-{
-  (void)GPS_INFO;
-  // do nothing!
-  return true;
-}
-
-
-static bool
-cLXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
-{
-  (void)GPS_INFO;
-
-//  oldGlidePolar::SetMacCready(_tcstod(ctemp, NULL));
-  /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
-
-  return true;
-}
-
-
-static bool
-cLXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
-{
-  /*
-  $LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1
-
-   0 loger_stored (Y/N)
-   1 IAS (kph) ----> Condor uses TAS!
-   2 baroaltitude (m)
-   3 vario (m/s)
-   4-8 unknown
-   9 heading of plane
-  10 windcourse (deg)
-  11 windspeed (kph)
-
-  */
-
-  line.skip();
-
-  fixed airspeed = line.read(fixed_zero);
-  airspeed = Units::ToSysUnit(airspeed, unKiloMeterPerHour);
-
-  fixed alt = line.read(fixed_zero);
-
-  GPS_INFO->IndicatedAirspeed =
-    airspeed/AtmosphericPressure::AirDensityRatio(alt);
-  GPS_INFO->TrueAirspeed = airspeed;
-
-  if (enable_baro) {
-    GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = alt;    // ToDo check if QNH correction is needed!
-  }
-
-  GPS_INFO->TotalEnergyVario = line.read(fixed_zero);
-  GPS_INFO->TotalEnergyVarioAvailable = true;
-
-  GPS_INFO->AirspeedAvailable = true;
-  GPS_INFO->TotalEnergyVarioAvailable = true;
-
-  TriggerVarioUpdate();
-
-  return true;
-}
