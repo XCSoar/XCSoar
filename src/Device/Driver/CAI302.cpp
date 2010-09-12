@@ -36,9 +36,6 @@ Copyright_License {
 }
 */
 
-//
-
-
 // CAUTION!
 // cai302ParseNMEA is called from com port read thread
 // all other functions are called from windows message loop thread
@@ -58,13 +55,13 @@ Copyright_License {
 #include <stdlib.h>
 #include <stdio.h>
 
-#define  CtrlC  0x03
-#define  swap(x)      x = ((((x<<8) & 0xff00) | ((x>>8) & 0x00ff)) & 0xffff)
+#define CtrlC 0x03
+#define swap(x) x = ((((x<<8) & 0xff00) | ((x>>8) & 0x00ff)) & 0xffff)
 
-#pragma pack(push, 1)                  // force byte allignement
+#pragma pack(push, 1) // force byte alignment
 
 /** Structure for CAI302 device info */
-typedef struct{
+typedef struct {
   unsigned char result[3];
   unsigned char reserved[15];
   unsigned char ID[3];
@@ -73,48 +70,49 @@ typedef struct{
   unsigned char reserved2[6];
   unsigned char cai302ID;
   unsigned char reserved3;
-}cai302_Wdata_t;
+} cai302_Wdata_t;
 
 /** Structure for CAI302 Odata info */
-typedef struct{
+typedef struct {
   unsigned char result[3];
   unsigned char PilotCount;
   unsigned char PilotRecordSize;
-}cai302_OdataNoArgs_t;
+} cai302_OdataNoArgs_t;
 
 /** Structure for CAI302 settings */
-typedef struct{
+typedef struct {
   unsigned char  result[3];
   char           PilotName[24];
-  unsigned char  OldUnit;                                       // old unit
-  unsigned char  OldTemperaturUnit;                             //0=Celcius 1=Farenheight
+  unsigned char  OldUnit; // old unit
+  unsigned char  OldTemperaturUnit; // 0 = Celcius, 1 = Farenheight
   unsigned char  SinkTone;
   unsigned char  TotalEnergyFinalGlide;
   unsigned char  ShowFinalGlideAltitude;
-  unsigned char  MapDatum;  // ignored on IGC version
+  unsigned char  MapDatum; // ignored on IGC version
   unsigned short ApproachRadius;
   unsigned short ArrivalRadius;
   unsigned short EnrouteLoggingInterval;
   unsigned short CloseTpLoggingInterval;
-  unsigned short TimeBetweenFlightLogs;                     // [Minutes]
-  unsigned short MinimumSpeedToForceFlightLogging;          // (Knots)
-  unsigned char  StfDeadBand;                                // (10ths M/S)
-  unsigned char  ReservedVario;                           // multiplexed w/ vario mode:  Tot Energy, SuperNeto, Netto
+  unsigned short TimeBetweenFlightLogs; // [Minutes]
+  unsigned short MinimumSpeedToForceFlightLogging; // (Knots)
+  unsigned char  StfDeadBand; // (10ths M/S)
+  unsigned char  ReservedVario; // multiplexed w/ vario mode:
+                                // Tot Energy, SuperNetto, Netto
   unsigned short UnitWord;
   unsigned short Reserved2;
-  unsigned short MarginHeight;                              // (10ths of Meters)
-  unsigned char  Spare[60];                                 // 302 expect more data than the documented filed
-                                                            // be shure there is space to hold the data
-}cai302_OdataPilot_t;
+  unsigned short MarginHeight; // (10ths of Meters)
+  unsigned char  Spare[60]; // 302 expect more data than the documented filed
+                            // be shure there is space to hold the data
+} cai302_OdataPilot_t;
 
 /** Structure for CAI302 glider response */
-typedef struct{
+typedef struct {
   unsigned char result[3];
   unsigned char GliderRecordSize;
-}cai302_GdataNoArgs_t;
+} cai302_GdataNoArgs_t;
 
 /** Structure for CAI302 glider data */
-typedef struct{
+typedef struct {
   unsigned char  result[3];
   unsigned char  GliderType[12];
   unsigned char  GliderID[12];
@@ -125,12 +123,11 @@ typedef struct{
   unsigned short WeightInLiters;
   unsigned short BallastCapacity;
   unsigned short Reserved2;
-  unsigned short ConfigWord;                                //locked(1) = FF FE.  unlocked(0) = FF FF
-  unsigned short WingArea;                                  // 100ths square meters
-  unsigned char  Spare[60];                                 // 302 expect more data than the documented filed
-                                                            // be shure there is space to hold the data
-}cai302_Gdata_t;
-
+  unsigned short ConfigWord; // locked(1) = FF FE.  unlocked(0) = FF FF
+  unsigned short WingArea; // 100ths square meters
+  unsigned char  Spare[60]; // 302 expect more data than the documented filed
+                            // be shure there is space to hold the data
+} cai302_Gdata_t;
 
 #pragma pack(pop)
 
@@ -184,26 +181,26 @@ CAI302Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
 
   if (strcmp(type, "$PCAIB") == 0)
     return cai_PCAIB(line, GPS_INFO);
-  else if (strcmp(type, "$PCAID") == 0)
+
+  if (strcmp(type, "$PCAID") == 0)
     return cai_PCAID(line, GPS_INFO);
-  else if (strcmp(type, "!w") == 0)
+
+  if (strcmp(type, "!w") == 0)
     return cai_w(line, GPS_INFO, enable_baro);
-  else
-    return false;
+
+  return false;
 }
 
 bool
 CAI302Device::PutMacCready(double MacCready)
 {
   char szTmp[32];
-
   sprintf(szTmp, "!g,m%d\r\n",
           iround(Units::ToUserUnit(fixed(MacCready) * 10, unKnots)));
 
   port->Write(szTmp);
 
   MacCreadyUpdateTimeout = 2;
-
   return true;
 }
 
@@ -216,7 +213,6 @@ CAI302Device::PutBugs(double Bugs)
   port->Write(szTmp);
 
   BugsUpdateTimeout = 2;
-
   return true;
 }
 
@@ -224,13 +220,11 @@ bool
 CAI302Device::PutBallast(double Ballast)
 {
   char szTmp[32];
-
   sprintf(szTmp, "!g,b%d\r\n", int((Ballast * 10) + 0.5));
 
   port->Write(szTmp);
 
   BallastUpdateTimeout = 2;
-
   return true;
 }
 
@@ -372,25 +366,23 @@ CAI302Device::Declare(const Declaration *decl)
 
   char szTmp[255];
   sprintf(szTmp, "O,%-24s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r",
-    PilotName,
-    cai302_OdataPilot.OldUnit,
-    cai302_OdataPilot.OldTemperaturUnit,
-    cai302_OdataPilot.SinkTone,
-    cai302_OdataPilot.TotalEnergyFinalGlide,
-    cai302_OdataPilot.ShowFinalGlideAltitude,
-    cai302_OdataPilot.MapDatum,
-    cai302_OdataPilot.ApproachRadius,
-    cai302_OdataPilot.ArrivalRadius,
-    cai302_OdataPilot.EnrouteLoggingInterval,
-    cai302_OdataPilot.CloseTpLoggingInterval,
-    cai302_OdataPilot.TimeBetweenFlightLogs,
-    cai302_OdataPilot.MinimumSpeedToForceFlightLogging,
-    cai302_OdataPilot.StfDeadBand,
-    cai302_OdataPilot.ReservedVario,
-    cai302_OdataPilot.UnitWord,
-    cai302_OdataPilot.MarginHeight
-  );
-
+          PilotName,
+          cai302_OdataPilot.OldUnit,
+          cai302_OdataPilot.OldTemperaturUnit,
+          cai302_OdataPilot.SinkTone,
+          cai302_OdataPilot.TotalEnergyFinalGlide,
+          cai302_OdataPilot.ShowFinalGlideAltitude,
+          cai302_OdataPilot.MapDatum,
+          cai302_OdataPilot.ApproachRadius,
+          cai302_OdataPilot.ArrivalRadius,
+          cai302_OdataPilot.EnrouteLoggingInterval,
+          cai302_OdataPilot.CloseTpLoggingInterval,
+          cai302_OdataPilot.TimeBetweenFlightLogs,
+          cai302_OdataPilot.MinimumSpeedToForceFlightLogging,
+          cai302_OdataPilot.StfDeadBand,
+          cai302_OdataPilot.ReservedVario,
+          cai302_OdataPilot.UnitWord,
+          cai302_OdataPilot.MarginHeight);
 
   port->Write(szTmp);
   if (!ExpectString(port, "dn>")) {
@@ -399,17 +391,17 @@ CAI302Device::Declare(const Declaration *decl)
   }
 
   sprintf(szTmp, "G,%-12s,%-12s,%d,%d,%d,%d,%d,%d,%d,%d\r",
-    GliderType,
-    GliderID,
-    cai302_Gdata.bestLD,
-    cai302_Gdata.BestGlideSpeed,
-    cai302_Gdata.TwoMeterSinkAtSpeed,
-    cai302_Gdata.WeightInLiters,
-    cai302_Gdata.BallastCapacity,
-    0,
-    cai302_Gdata.ConfigWord,
-    cai302_Gdata.WingArea
-  );
+          GliderType,
+          GliderID,
+          cai302_Gdata.bestLD,
+          cai302_Gdata.BestGlideSpeed,
+          cai302_Gdata.TwoMeterSinkAtSpeed,
+          cai302_Gdata.WeightInLiters,
+          cai302_Gdata.BallastCapacity,
+
+          0,
+          cai302_Gdata.ConfigWord,
+          cai302_Gdata.WingArea);
 
   port->Write(szTmp);
   if (!ExpectString(port, "dn>")) {
@@ -424,9 +416,7 @@ CAI302Device::Declare(const Declaration *decl)
 
   if (nDeclErrorCode == 0){
     port->Write("D,255\r");
-
-    port->SetRxTimeout(1500);            // D,255 takes more than 800ms
-
+    port->SetRxTimeout(1500); // D,255 takes more than 800ms
     if (!ExpectString(port, "dn>")) {
       nDeclErrorCode = 1;
     }
@@ -444,8 +434,7 @@ CAI302Device::Declare(const Declaration *decl)
   port->SetRxTimeout(0);
   port->StartRxThread();
 
-  return(nDeclErrorCode == 0);
-
+  return (nDeclErrorCode == 0);
 }
 
 static bool
@@ -460,22 +449,19 @@ cai302DeclAddWayPoint(ComPort *port, const Waypoint &way_point)
 
   tmp = way_point.Location.Latitude.value_degrees();
   NoS = 'N';
-  if (tmp < 0)
-    {
-      NoS = 'S';
-      tmp = -tmp;
-    }
+  if (tmp < 0) {
+    NoS = 'S';
+    tmp = -tmp;
+  }
   DegLat = (int)tmp;
   MinLat = (tmp - DegLat) * 60;
 
-
   tmp = way_point.Location.Longitude.value_degrees();
   EoW = 'E';
-  if (tmp < 0)
-    {
-      EoW = 'W';
-      tmp = -tmp;
-    }
+  if (tmp < 0) {
+    EoW = 'W';
+    tmp = -tmp;
+  }
   DegLon = (int)tmp;
   MinLon = (tmp - DegLon) * 60;
 
@@ -484,12 +470,11 @@ cai302DeclAddWayPoint(ComPort *port, const Waypoint &way_point)
 
   char szTmp[128];
   sprintf(szTmp, "D,%d,%02d%07.4f%c,%03d%07.4f%c,%s,%d\r",
-    DeclIndex,
-    DegLat, MinLat, NoS,
-    DegLon, MinLon, EoW,
-    Name,
-    (int)way_point.Altitude
-  );
+          DeclIndex,
+          DegLat, MinLat, NoS,
+          DegLon, MinLon, EoW,
+          Name,
+          (int)way_point.Altitude);
 
   DeclIndex++;
 
@@ -511,11 +496,9 @@ CAI302CreateOnComPort(ComPort *com_port)
 
 const struct DeviceRegister cai302Device = {
   _T("CAI 302"),
-  drfGPS | drfLogger | drfSpeed | drfVario | drfWind, /* XXX: drfBaroAlt? */
+  drfGPS | drfLogger | drfSpeed | drfVario | drfWind,
   CAI302CreateOnComPort,
 };
-
-// local stuff
 
 /*
 $PCAIB,<1>,<2>,<CR><LF>
@@ -560,8 +543,9 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
     value_r.bearing = Angle::degrees(bearing);
     value_r.norm = norm / 10;
     return true;
-  } else
-    return false;
+  }
+
+  return false;
 }
 
 /*
@@ -614,11 +598,10 @@ CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   line.skip(2);
 
   if (line.read_checked(value)) {
-    if (MacCreadyUpdateTimeout <= 0) {
+    if (MacCreadyUpdateTimeout <= 0)
       GPS_INFO->MacCready = Units::ToSysUnit(value / 10, unKnots);
-    } else {
+    else
       MacCreadyUpdateTimeout--;
-    }
   }
 
   if (line.read_checked(value)) {
