@@ -95,6 +95,7 @@ protected:
 
   virtual bool on_setfocus();
   virtual bool on_cancel_mode();
+  virtual void on_paint(Canvas &canvas);
 
 private:
 

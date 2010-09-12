@@ -143,6 +143,8 @@ public:
 protected:
   static void DisplayModes();
   static void SendSettingsComputer();
+
+public:
   static void SendSettingsMap(const bool trigger_draw = false);
 
 public:
