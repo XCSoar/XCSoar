@@ -98,13 +98,31 @@ public:
   bool Open();
   bool Close();
 
-  int SetRxTimeout(int);
+  /**
+   * Sets the RX timeout in ms
+   * @param Timeout The receive timeout in ms
+   * @return The previous timeout in ms or -1 on error
+   */
+  int SetRxTimeout(int Timeout);
   unsigned long SetBaudrate(unsigned long);
 
+  /**
+   * Stops the receive thread
+   * @return True on success, False on failure
+   */
   bool StopRxThread();
+
+  /**
+   * (Re)Starts the receive thread
+   * @return True on success, False on failure
+   */
   bool StartRxThread();
   void ProcessChar(char);
 
+  /**
+   * Read a single byte from the port
+   * @return The byte that was read or EOF in failure
+   */
   int GetChar();
   int Read(void *Buffer, size_t Size);
 

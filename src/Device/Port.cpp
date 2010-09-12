@@ -204,9 +204,6 @@ ComPort::Flush(void)
 #endif /* !HAVE_POSIX */
 }
 
-/* **********************************************************************
-  PortReadThread (LPVOID lpvoid)
-********************************************************************** */
 void
 ComPort::run()
 {
@@ -269,9 +266,6 @@ ComPort::run()
   Flush();
 }
 
-/* **********************************************************************
-  PortClose()
-********************************************************************** */
 bool
 ComPort::Close()
 {
@@ -332,8 +326,6 @@ ComPort::Write(const char *s)
   Write(s, strlen(s));
 }
 
-// Stop Rx Thread
-// return: true on success, false on error
 bool
 ComPort::StopRxThread()
 {
@@ -368,8 +360,6 @@ ComPort::StopRxThread()
   return true;
 }
 
-// Restart Rx Thread
-// return: true on success, false on error
 bool
 ComPort::StartRxThread(void)
 {
@@ -389,8 +379,6 @@ ComPort::StartRxThread(void)
   return true;
 }
 
-// Get a single Byte
-// return: char readed or EOF on error
 int
 ComPort::GetChar(void)
 {
@@ -419,9 +407,6 @@ ComPort::GetChar(void)
   return EOF;
 }
 
-// Set Rx Timeout in ms
-// Timeout: Rx receive timeout in ms
-// return: last set Rx timeout or -1 on error
 int
 ComPort::SetRxTimeout(int Timeout)
 {
