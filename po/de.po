@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-31 08:51+0200\n"
-"PO-Revision-Date: 2010-09-07 22:43+0000\n"
+"PO-Revision-Date: 2010-09-13 00:57+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-08 07:36+0000\n"
+"X-Launchpad-Export-Date: 2010-09-13 06:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Language: de\n"
 
@@ -226,7 +226,7 @@ msgstr "Höhe AGL"
 
 #: src/InfoBoxes/Content/Factory.cpp:79
 msgid "H AGL"
-msgstr ""
+msgstr "H GND"
 
 #: src/InfoBoxes/Content/Factory.cpp:80
 msgid ""
@@ -244,13 +244,15 @@ msgstr "Steigen letzte 30 sec"
 
 #: src/InfoBoxes/Content/Factory.cpp:87
 msgid "TC 30s"
-msgstr ""
+msgstr "Steigen 30s"
 
 #: src/InfoBoxes/Content/Factory.cpp:88
 msgid ""
 "A 30 second rolling average climb rate based of the reported GPS altitude, "
 "or vario if available."
 msgstr ""
+"Laufend aktualisiertes Mittleres-Steigen, basierend auf GPS, oder besser "
+"Vario."
 
 #: src/InfoBoxes/Content/Factory.cpp:94 src/InfoBoxes/Content/Factory.cpp:95
 #: Data/Dialogs/dlgStatus.xml:15 Data/Dialogs/dlgStatusAircraft.xml:10
@@ -264,6 +266,8 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
+"Rechtweisende Peilung zum nächsten Wegpunkt. Bei AA Aufgaben ist das die "
+"rechtweisende Peilung zum Ziel im AA Sektor."
 
 #: src/InfoBoxes/Content/Factory.cpp:102
 msgid "L/D instantaneous"
@@ -280,6 +284,10 @@ msgid ""
 "climbing cruise. If the vertical speed is close to zero, the displayed value "
 "is '---'."
 msgstr ""
+"Momentan realisierte Gleitzahl; Geschwindigkeit über Grund dividiert durch "
+"die Sinkgeschwindigkeit (GPS) der letzten 20 Sekunden. Negative Werte "
+"bedeuten einen ansteigenden Pfad, für Variowerte nahe Null wird '---' "
+"angezeigt."
 
 #: src/InfoBoxes/Content/Factory.cpp:110
 msgid "L/D cruise"
@@ -296,14 +304,17 @@ msgid ""
 "(height gain since leaving the last thermal). If the vertical speed is close "
 "to zero, the displayed value is '---'."
 msgstr ""
+"Entfernung zur letzten Thermik dividiert durch die seither verlorene Höhe. "
+"Negative Werte bedeuten einen ansteigenden Pfad, für Variowerte nahe Null "
+"wird '---' angezeigt."
 
 #: src/InfoBoxes/Content/Factory.cpp:118
 msgid "Speed ground"
-msgstr "Bodengeschwindigkeit"
+msgstr "Geschwindigkeit über Grund"
 
 #: src/InfoBoxes/Content/Factory.cpp:119
 msgid "V Gnd"
-msgstr ""
+msgstr "V GND"
 
 #: src/InfoBoxes/Content/Factory.cpp:120
 msgid ""
@@ -311,6 +322,9 @@ msgid ""
 "mode, pressing the up and down arrows adjusts the speed, and left and right "
 "turn the glider."
 msgstr ""
+"Geschwindigkeit über Grund (GPS). Aktiviere diese Infobox im "
+"Simulationsmodus um mit dem Hoch- Runterpfeil die Geschwindigkeit und mit "
+"dem Links- Rechtspfeil die Richtung zu ändern."
 
 #: src/InfoBoxes/Content/Factory.cpp:126
 msgid "Last Thermal Average"
@@ -318,7 +332,7 @@ msgstr "Letzte Thermik - Durchschnitt"
 
 #: src/InfoBoxes/Content/Factory.cpp:127
 msgid "TL Avg"
-msgstr ""
+msgstr "l. Steigmitl."
 
 #: src/InfoBoxes/Content/Factory.cpp:128
 msgid ""
@@ -346,7 +360,7 @@ msgstr "Letzte Thermik - Dauer"
 
 #: src/InfoBoxes/Content/Factory.cpp:143
 msgid "TL Time"
-msgstr ""
+msgstr "l. Steigzeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:144
 msgid "Time spent circling in the last thermal."
@@ -366,6 +380,9 @@ msgid ""
 "manual or auto. (Touchscreen/PC only) Also used to adjust the MacCready "
 "Setting if the infobox is active, by using the up/down cursor keys."
 msgstr ""
+"Die aktuelle McCready Einstellung. Die Infobox zeigt auch ob der McCready-"
+"Wert automatisch, oder manuell gesetzt wurde. Aktiviere die Infobox und "
+"verändere den McCready-Wert mit dem Hoch- Runterpfeil (Touchscreen/PC)."
 
 #: src/InfoBoxes/Content/Factory.cpp:158
 msgid "Next Distance"
@@ -373,13 +390,15 @@ msgstr "Nächster Wendepunkt - Distanz"
 
 #: src/InfoBoxes/Content/Factory.cpp:159
 msgid "WP Dist"
-msgstr ""
+msgstr "WP Dist"
 
 #: src/InfoBoxes/Content/Factory.cpp:160
 msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
+"Strecke zum ausgewählten Wegpunkt. Für AA Aufgaben ist dies die Strecke bis "
+"zum Ziel im AA Sektor."
 
 #: src/InfoBoxes/Content/Factory.cpp:166
 msgid "Next Altitude Difference"
@@ -387,13 +406,14 @@ msgstr "Nächster Wendepunkt - Ankunftshöhe"
 
 #: src/InfoBoxes/Content/Factory.cpp:167
 msgid "WP AltD"
-msgstr ""
+msgstr "WP HöheD"
 
 #: src/InfoBoxes/Content/Factory.cpp:168
 msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival "
 "altitude."
 msgstr ""
+"Ankunftshöhe am nächsten Wegpunkt, relativ zur eingestellten Sicherheitshöhe."
 
 #: src/InfoBoxes/Content/Factory.cpp:174
 msgid "Next Altitude Required"
@@ -401,11 +421,11 @@ msgstr "Nächster Wendepunkt - min. Endanflughöhe"
 
 #: src/InfoBoxes/Content/Factory.cpp:175
 msgid "WP AltR"
-msgstr ""
+msgstr "WP HöheGP"
 
 #: src/InfoBoxes/Content/Factory.cpp:176
 msgid "Altitude required to reach the next turn point."
-msgstr ""
+msgstr "Benötigte Höhe um den nächsten Wendepunkt zu erreichen."
 
 #: src/InfoBoxes/Content/Factory.cpp:182
 msgid "Next Waypoint"
@@ -413,7 +433,7 @@ msgstr "Nächster Wendepunkt"
 
 #: src/InfoBoxes/Content/Factory.cpp:183
 msgid "Next"
-msgstr ""
+msgstr "Weiter"
 
 #: src/InfoBoxes/Content/Factory.cpp:184
 msgid ""
@@ -422,20 +442,25 @@ msgid ""
 "task. (Touchscreen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
+"Name des ausgewählten Wendepunkts. Aktiviere diese Infobox um mit dem Hoch- "
+"Runterpfeil den Wegpunkte aus der Aufgabe auszuwählen. Die Entertaste zeigt "
+"die Wegpunktdetails (Touchscreen/PC)."
 
 #: src/InfoBoxes/Content/Factory.cpp:190
 msgid "Final Altitude Difference"
-msgstr ""
+msgstr "Endanflug - Höhenreserve"
 
 #: src/InfoBoxes/Content/Factory.cpp:191
 msgid "Fin AltD"
-msgstr ""
+msgstr "EA HöheD"
 
 #: src/InfoBoxes/Content/Factory.cpp:192
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "altitude."
 msgstr ""
+"Ankunftshöhe am letzten Wendepunkt der Aufgabe, relativ zur eingestellten "
+"Sicherheitshöhe."
 
 #: src/InfoBoxes/Content/Factory.cpp:198
 msgid "Final Altitude Required"
@@ -443,11 +468,11 @@ msgstr "Endanflug - min. Endanflughöhe"
 
 #: src/InfoBoxes/Content/Factory.cpp:199
 msgid "Fin AltR"
-msgstr ""
+msgstr "AE HöheGP"
 
 #: src/InfoBoxes/Content/Factory.cpp:200
 msgid "Altitude required to finish the task."
-msgstr ""
+msgstr "Benötigte Höhe um die Aufgabe zu beenden."
 
 #: src/InfoBoxes/Content/Factory.cpp:206
 msgid "Speed Task Average"
@@ -460,7 +485,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:208
 msgid ""
 "Average cross country speed while on current task, compensated for altitude."
-msgstr ""
+msgstr "Mittlere Geschwindigkeit über die Aufgabe, höhenkompensiert."
 
 #: src/InfoBoxes/Content/Factory.cpp:214
 msgid "Final Distance"
@@ -468,11 +493,11 @@ msgstr "Endanflug - Distanz"
 
 #: src/InfoBoxes/Content/Factory.cpp:215
 msgid "Fin Dis"
-msgstr ""
+msgstr "EA Strecke"
 
 #: src/InfoBoxes/Content/Factory.cpp:216
 msgid "Distance to finish around remaining turn points."
-msgstr ""
+msgstr "Verbleibende Strecke  um alle Wenden."
 
 #: src/InfoBoxes/Content/Factory.cpp:222
 msgid "Final LD"
@@ -480,7 +505,7 @@ msgstr "Endanflug - benötigte Gleitzahl"
 
 #: src/InfoBoxes/Content/Factory.cpp:223
 msgid "Fin LD"
-msgstr ""
+msgstr "EA GZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:224
 msgid ""
@@ -499,7 +524,7 @@ msgstr "Geländehöhe"
 
 #: src/InfoBoxes/Content/Factory.cpp:231
 msgid "H GND"
-msgstr ""
+msgstr "H GND"
 
 #: src/InfoBoxes/Content/Factory.cpp:232
 msgid ""
@@ -515,7 +540,7 @@ msgstr "Thermik - Durchschnitt"
 
 #: src/InfoBoxes/Content/Factory.cpp:239
 msgid "TC Avg"
-msgstr ""
+msgstr "mitl. Steigen"
 
 #: src/InfoBoxes/Content/Factory.cpp:240
 msgid ""
@@ -570,7 +595,7 @@ msgstr "Windgeschwindigkeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:271
 msgid "Wind V"
-msgstr ""
+msgstr "Windgeschw"
 
 #: src/InfoBoxes/Content/Factory.cpp:272
 msgid ""
@@ -591,7 +616,7 @@ msgstr "Windrichtung"
 
 #: src/InfoBoxes/Content/Factory.cpp:279
 msgid "Wind B"
-msgstr ""
+msgstr "Windpeil"
 
 #: src/InfoBoxes/Content/Factory.cpp:280
 msgid ""
@@ -611,6 +636,8 @@ msgstr "AAT - Zeit"
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
 msgstr ""
+"Verbleibende Zeit für die AA Aufgabe; schaltet auf Rot wenn die Zeit "
+"verstrichen ist."
 
 #: src/InfoBoxes/Content/Factory.cpp:294
 msgid "AA Distance Max"
@@ -618,11 +645,11 @@ msgstr "AAT - max. Distanz"
 
 #: src/InfoBoxes/Content/Factory.cpp:295
 msgid "AA Dmax"
-msgstr ""
+msgstr "AA Dmax"
 
 #: src/InfoBoxes/Content/Factory.cpp:296
 msgid "Assigned Area Task maximum distance possible for remainder of task."
-msgstr ""
+msgstr "Maximale mögliche Strecke für den Abschluss der AA Aufgabe."
 
 #: src/InfoBoxes/Content/Factory.cpp:302
 msgid "AA Distance Min"
@@ -630,11 +657,11 @@ msgstr "AAT - min. Distanz"
 
 #: src/InfoBoxes/Content/Factory.cpp:303
 msgid "AA Dmin"
-msgstr ""
+msgstr "AA Dmin"
 
 #: src/InfoBoxes/Content/Factory.cpp:304
 msgid "Assigned Area Task minimum distance possible for remainder of task."
-msgstr ""
+msgstr "Minimal mögliche Strecke für die verbleibende AA Aufgabe."
 
 #: src/InfoBoxes/Content/Factory.cpp:310
 msgid "AA Speed Max"
@@ -642,13 +669,15 @@ msgstr "AAT - max. Geschwindigkeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:311
 msgid "AA Vmax"
-msgstr ""
+msgstr "AA Vmax"
 
 #: src/InfoBoxes/Content/Factory.cpp:312
 msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"Erreichbare mittlere AA Geschwindigkeit, wenn die maximal mögliche Strecke "
+"in der Mindest-AA-Aufgabenzeit abgeschlossen wird."
 
 #: src/InfoBoxes/Content/Factory.cpp:318
 msgid "AA Speed Min"
@@ -656,13 +685,15 @@ msgstr "AAT - min. Geschwindigkeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:319
 msgid "AA Vmin"
-msgstr ""
+msgstr "AA Vmin"
 
 #: src/InfoBoxes/Content/Factory.cpp:320
 msgid ""
 "Assigned Area Task average speed achievable if flying minimum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"Erreichbare mittlere AA Geschwindigkeit, wenn die minimal mögliche Strecke "
+"in der Mindest-AA-Aufgabenzeit abgeschlossen wird."
 
 #: src/InfoBoxes/Content/Factory.cpp:326
 msgid "Airspeed IAS"
@@ -670,12 +701,13 @@ msgstr "Angezeigte Luftgeschwindigkeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:327
 msgid "V IAS"
-msgstr ""
+msgstr "V IAS"
 
 #: src/InfoBoxes/Content/Factory.cpp:328
 msgid ""
 "Indicated Airspeed reported by a supported external intelligent vario."
 msgstr ""
+"Angezeigte Geschwindigkeit gegenüber Luft, laut angeschlossenem Sensor."
 
 #: src/InfoBoxes/Content/Factory.cpp:334
 msgid "Pressure Altitude"
@@ -683,13 +715,13 @@ msgstr "Druckhöhe"
 
 #: src/InfoBoxes/Content/Factory.cpp:335
 msgid "H Baro"
-msgstr ""
+msgstr "H Baro"
 
 #: src/InfoBoxes/Content/Factory.cpp:336
 msgid ""
 "This is the barometric altitude obtained from a GPS equipped with pressure "
 "sensor, or a supported external intelligent vario."
-msgstr ""
+msgstr "Barometrische Höhe laut dem angeschlossenem Drucksensor."
 
 #: src/InfoBoxes/Content/Factory.cpp:342
 msgid "Speed MacCready"
@@ -697,7 +729,7 @@ msgstr "McCready Sollfahrt"
 
 #: src/InfoBoxes/Content/Factory.cpp:343
 msgid "V Mc"
-msgstr ""
+msgstr "V Mc"
 
 #: src/InfoBoxes/Content/Factory.cpp:344
 msgid ""
@@ -705,6 +737,9 @@ msgid ""
 "cruise flight mode, this speed-to-fly is calculated for maintaining "
 "altitude. In final glide mode, this speed-to-fly is calculated for descent."
 msgstr ""
+"Die optimale McCready Vorflug-Geschwindigkeit zum nächsten Wegpunkt. Während "
+"des Flugs ist die Geschwindigkeit berechnet um die Höhe zu halten, beim "
+"Endanflug um ans Ziel zu gelangen."
 
 #: src/InfoBoxes/Content/Factory.cpp:350
 msgid "Percentage climb"
@@ -720,6 +755,8 @@ msgid ""
 "Percentage of time spent in climb mode. These statistics are reset upon "
 "starting the task."
 msgstr ""
+"Prozentsatz der Zeit, die zum Steigen verwendet wurde. Die Statistik wird "
+"beim Start der Aufgabe neu gestartet."
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 msgid "Time of flight"
@@ -731,7 +768,7 @@ msgstr "Flugzeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:360
 msgid "Time elapsed since takeoff was detected."
-msgstr ""
+msgstr "Flugzeit seit Starterkennung."
 
 #: src/InfoBoxes/Content/Factory.cpp:366
 msgid "G load"
@@ -739,13 +776,15 @@ msgstr "G-Last"
 
 #: src/InfoBoxes/Content/Factory.cpp:367
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: src/InfoBoxes/Content/Factory.cpp:368
 msgid ""
 "Magnitude of G loading reported by a supported external intelligent vario. "
 "This value is negative for pitch-down manoeuvres."
 msgstr ""
+"Lastvielfaches (G) laut dem angeschlossenen Sensor. Der Wert kann beim "
+"Nachdrücken negativ werden."
 
 #: src/InfoBoxes/Content/Factory.cpp:374
 msgid "Next LD"
@@ -753,7 +792,7 @@ msgstr "Nächster Wendepunkt - benötigte Gleitzahl"
 
 #: src/InfoBoxes/Content/Factory.cpp:375
 msgid "WP LD"
-msgstr ""
+msgstr "WP GZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:376
 msgid ""
@@ -776,7 +815,7 @@ msgstr "Lokalzeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:384
 msgid "GPS time expressed in local time zone."
-msgstr ""
+msgstr "Lokale Uhzeit nach GPS."
 
 #: src/InfoBoxes/Content/Factory.cpp:390 src/InfoBoxes/Content/Factory.cpp:391
 msgid "Time UTC"
@@ -784,7 +823,7 @@ msgstr "Zeit UTC"
 
 #: src/InfoBoxes/Content/Factory.cpp:392
 msgid "GPS time expressed in UTC."
-msgstr ""
+msgstr "UTC nach GPS."
 
 #: src/InfoBoxes/Content/Factory.cpp:398
 msgid "Task Time To Go"
@@ -792,13 +831,15 @@ msgstr "Restzeit Aufgabe"
 
 #: src/InfoBoxes/Content/Factory.cpp:399
 msgid "Fin ETE"
-msgstr ""
+msgstr "EA ETE"
 
 #: src/InfoBoxes/Content/Factory.cpp:400
 msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
+"Geschätzte Zeit die benötigt wird die Aufgabe zu beenden, vorausgesetzt die "
+"Flugleistung entspricht dem idealen McCready Vorflug- Steigzyklus."
 
 #: src/InfoBoxes/Content/Factory.cpp:406
 msgid "Next Time To Go"
@@ -806,13 +847,16 @@ msgstr "Nächster Wendepunkt - benötigte Zeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:407
 msgid "WP ETE"
-msgstr ""
+msgstr "WP ETE"
 
 #: src/InfoBoxes/Content/Factory.cpp:408
 msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
+"Geschätzte Zeit die benötigt wird den nächsten Wegpunkt zu erreichen, "
+"vorausgesetzt die Flugleistung entspricht dem idealen McCready Vorflug- "
+"Steigzyklus."
 
 #: src/InfoBoxes/Content/Factory.cpp:414
 msgid "Speed Dolphin"
@@ -820,7 +864,7 @@ msgstr "Sollfahrt (Delphin-Stil)"
 
 #: src/InfoBoxes/Content/Factory.cpp:415
 msgid "V Opt"
-msgstr ""
+msgstr "V Opt"
 
 #: src/InfoBoxes/Content/Factory.cpp:416
 msgid ""
@@ -839,7 +883,7 @@ msgstr "Netto Vario"
 
 #: src/InfoBoxes/Content/Factory.cpp:423
 msgid "Netto"
-msgstr ""
+msgstr "Netto"
 
 #: src/InfoBoxes/Content/Factory.cpp:424
 msgid ""
@@ -848,6 +892,10 @@ msgid ""
 "vario are connected, otherwise calculations are based on GPS measurements "
 "and wind estimates."
 msgstr ""
+"Augenblickliche Vertikalgeschwindigkeit der Luftmasse, entspricht der "
+"Varioanzeige minus dem geschätzten Eigensinken. Die Angabe ist am "
+"genauesten, wenn Fahrt-, Beschleunigungs- und Variosensor angeschlossen "
+"sind, ansonsten beruht die Rechnung auf dem GPS und Windschätzungen."
 
 #: src/InfoBoxes/Content/Factory.cpp:430
 msgid "Task Arrival Time"
@@ -855,7 +903,7 @@ msgstr "Aufgabe - Ankunftszeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:431
 msgid "Fin ETA"
-msgstr ""
+msgstr "ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:432
 msgid ""
@@ -869,7 +917,7 @@ msgstr "Nächster Wendepunkt - Ankunftszeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:439
 msgid "WP ETA"
-msgstr ""
+msgstr "WP ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:440
 msgid ""
@@ -883,7 +931,7 @@ msgstr "Nächster Wendepunkt - Richtungsdifferenz"
 
 #: src/InfoBoxes/Content/Factory.cpp:447
 msgid "Brng D"
-msgstr ""
+msgstr "Peilung D"
 
 #: src/InfoBoxes/Content/Factory.cpp:448
 msgid ""
@@ -903,7 +951,7 @@ msgstr "Aussentemperatur"
 
 #: src/InfoBoxes/Content/Factory.cpp:455
 msgid "OAT"
-msgstr ""
+msgstr "Temp"
 
 #: src/InfoBoxes/Content/Factory.cpp:456
 msgid ""
@@ -917,13 +965,13 @@ msgstr "Relative Luftfeuchtigkeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:463
 msgid "RelHum"
-msgstr ""
+msgstr "Rel.Feucht"
 
 #: src/InfoBoxes/Content/Factory.cpp:464
 msgid ""
 "Relative humidity of the air in percent as measured by a probe if supported "
 "by a connected intelligent variometer."
-msgstr ""
+msgstr "Relative Feuchtigkeit in Prozent, laut dem angeschlossenen Sensor."
 
 #: src/InfoBoxes/Content/Factory.cpp:470
 msgid "Forecast Temperature"
@@ -956,7 +1004,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:486
 msgid "AA Speed Tgt"
-msgstr ""
+msgstr "mitl. AA Geschwindigkeit zum Ziel"
 
 #: src/InfoBoxes/Content/Factory.cpp:487
 msgid "AA Vtgt"
@@ -1062,7 +1110,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:550
 msgid "Distance Home"
-msgstr ""
+msgstr "Heimdistanz"
 
 #: src/InfoBoxes/Content/Factory.cpp:551
 msgid "Home Dis"
@@ -1087,7 +1135,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:566
 msgid "AA Delta Time"
-msgstr ""
+msgstr "AA Differenzzeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:567
 msgid "AA dT"
@@ -1106,7 +1154,7 @@ msgstr "Steigen gesamt"
 
 #: src/InfoBoxes/Content/Factory.cpp:575
 msgid "TC All"
-msgstr ""
+msgstr "Höhengewinn insg."
 
 #: src/InfoBoxes/Content/Factory.cpp:576
 msgid "Time-average climb rate in all thermals."
@@ -1276,11 +1324,11 @@ msgstr "Vario-Ton AUS"
 
 #: src/InputEventsActions.cpp:191
 msgid "SnailTrail OFF"
-msgstr ""
+msgstr "Flugspur AUS"
 
 #: src/InputEventsActions.cpp:193
 msgid "SnailTrail ON Long"
-msgstr ""
+msgstr "Lange Flugspur"
 
 #: src/InputEventsActions.cpp:195
 msgid "SnailTrail ON Short"
@@ -1368,7 +1416,7 @@ msgstr "Fortschritt: bereit zum wenden"
 
 #: src/InputEventsActions.cpp:581
 msgid "Advance: Hold turn"
-msgstr ""
+msgstr "Vorrücken: Wende halten"
 
 #: src/InputEventsActions.cpp:706
 msgid "No Active Waypoint!"
@@ -1432,15 +1480,15 @@ msgstr "Temperaturprognose"
 
 #: src/InputEventsActions.cpp:1508 src/InputEventsActions.cpp:1544
 msgid "Map labels ON"
-msgstr ""
+msgstr "Beschriftung AN"
 
 #: src/InputEventsActions.cpp:1510
 msgid "Map labels MID"
-msgstr ""
+msgstr "Beschriftungen MID"
 
 #: src/InputEventsActions.cpp:1512
 msgid "Map labels OFF"
-msgstr ""
+msgstr "Beschriftung AUS"
 
 #: src/InputEventsActions.cpp:1683 src/InputEventsActions.cpp:1688
 #: src/Dialogs/dlgStatus.cpp:238
@@ -1615,7 +1663,7 @@ msgstr "Obergrenze Trend"
 
 #: src/FlightStatistics.cpp:897 src/FlightStatistics.cpp:904
 msgid "Av climb"
-msgstr "Mittleres Steigen"
+msgstr "Mitl. Steigen"
 
 #: src/FlightStatistics.cpp:908
 msgid "Climb trend"
@@ -1631,7 +1679,7 @@ msgstr "Geringstes Sinken"
 
 #: src/FlightStatistics.cpp:954
 msgid "Thermal height"
-msgstr ""
+msgstr "Aufwindhöhe"
 
 #: src/FlightStatistics.cpp:958
 msgid "Cloud base"
@@ -1644,11 +1692,11 @@ msgstr "Keine Aufgabe"
 #: src/FlightStatistics.cpp:982 src/FlightStatistics.cpp:997
 #: src/FlightStatistics.cpp:1012
 msgid "Task to go"
-msgstr ""
+msgstr "verbleibende Aufgabe"
 
 #: src/FlightStatistics.cpp:984 src/FlightStatistics.cpp:999
 msgid "AAT to go"
-msgstr ""
+msgstr "verbleibende AAT"
 
 #: src/FlightStatistics.cpp:986 src/FlightStatistics.cpp:1001
 #: src/FlightStatistics.cpp:1014
@@ -1700,7 +1748,7 @@ msgstr "Initialisierung läuft"
 #. Scan for weather forecast
 #: src/Components.cpp:329
 msgid "Scanning weather forecast"
-msgstr ""
+msgstr "Suche Wetterprognose"
 
 #. Start the device thread(s)
 #: src/Components.cpp:354
@@ -1726,7 +1774,7 @@ msgstr "Abstellvorgang, bitte warten..."
 #. Stop logger and save igc file
 #: src/Components.cpp:434
 msgid "Shutdown, saving logs..."
-msgstr ""
+msgstr "Abschalten, speichere Logs..."
 
 #. Save settings to profile
 #: src/Components.cpp:438
@@ -1801,7 +1849,7 @@ msgstr "Einstellungen gespeichert"
 
 #: src/Dialogs/dlgAirspaceDetails.cpp:66
 msgid "Acknowledge for day?"
-msgstr ""
+msgstr "Bestätige für den ganzen Tag?"
 
 #: src/Dialogs/dlgAirspaceSelect.cpp:340 src/Dialogs/dlgWayPointSelect.cpp:472
 msgid "No Match!"
@@ -1835,7 +1883,7 @@ msgstr "Steigen"
 #: src/Dialogs/dlgAnalysis.cpp:182 src/Dialogs/dlgAnalysis.cpp:217
 #: src/Dialogs/dlgAnalysis.cpp:226
 msgid "Task calc"
-msgstr ""
+msgstr "Aufgabe Berechnung"
 
 #: src/Dialogs/dlgAnalysis.cpp:187
 msgid "Wind at Altitude"
@@ -1900,7 +1948,7 @@ msgstr "Checkliste"
 
 #: src/Dialogs/dlgConfiguration.cpp:88
 msgid "Site"
-msgstr ""
+msgstr "Platz"
 
 #: src/Dialogs/dlgConfiguration.cpp:90
 msgid "Map Display"
@@ -2040,7 +2088,7 @@ msgstr "Kreisen"
 
 #: src/Dialogs/dlgConfiguration.cpp:901
 msgid "cruise"
-msgstr ""
+msgstr "Vorflug"
 
 #: src/Dialogs/dlgConfiguration.cpp:904
 msgid "final glide"
@@ -2120,7 +2168,7 @@ msgstr "Norden kreisend"
 
 #: src/Dialogs/dlgConfiguration.cpp:1249
 msgid "Target circling"
-msgstr ""
+msgstr "Kreisendes Ziel"
 
 #: src/Dialogs/dlgConfiguration.cpp:1250
 msgid "North/track"
@@ -2140,7 +2188,7 @@ msgstr "Pfeilkopf"
 
 #: src/Dialogs/dlgConfiguration.cpp:1282
 msgid "Full arrow"
-msgstr ""
+msgstr "Gefüllter Pfeil"
 
 #: src/Dialogs/dlgConfiguration.cpp:1291 src/Dialogs/dlgWindSettings.cpp:126
 msgid "Manual"
@@ -2726,7 +2774,7 @@ msgstr "TE Vario"
 
 #: Data/Dialogs/dlgVario.xml:425 Data/Dialogs/dlgVario_L.xml:425
 msgid "V Airbrake"
-msgstr ""
+msgstr "V Bremsklappe"
 
 #: Data/Dialogs/dlgVario.xml:72 Data/Dialogs/dlgVario_L.xml:73
 msgid "Climb fast trigger"
@@ -2796,7 +2844,7 @@ msgstr "Wendepunkt ausserhalb der Karte"
 
 #: Data/Dialogs/dlgStatus.xml:42
 msgid "Start alt"
-msgstr ""
+msgstr "Starthöhe"
 
 #: Data/Dialogs/dlgConfiguration.xml:247
 #: Data/Dialogs/dlgConfiguration_L.xml:249
@@ -2806,7 +2854,7 @@ msgstr "Polardatei"
 #: Data/Dialogs/dlgConfiguration.xml:320
 #: Data/Dialogs/dlgConfiguration_L.xml:320
 msgid "Aircraft/wind speed"
-msgstr ""
+msgstr "Flugzeug/Windgeschwindigkeit"
 
 #: Data/Dialogs/dlgTaskProperties.xml:40
 #: Data/Dialogs/dlgTaskProperties_L.xml:40
@@ -2854,7 +2902,7 @@ msgstr "Neu"
 
 #: Data/Dialogs/dlgSwitches.xml:49
 msgid "User down"
-msgstr ""
+msgstr "Benutzer nicht verfügbar"
 
 #: Data/Dialogs/dlgConfiguration.xml:20 Data/Dialogs/dlgConfiguration_L.xml:21
 msgid "Waypoints 1"
@@ -2915,7 +2963,7 @@ msgstr "Gehe zu"
 
 #: Data/Dialogs/dlgVario.xml:139 Data/Dialogs/dlgVario_L.xml:139
 msgid "Cruise hi cutoff"
-msgstr ""
+msgstr "Vorflug oberer Grenzwert"
 
 #: Data/Dialogs/dlgStartTask.xml:12
 msgid "Start Anyway"
@@ -3349,7 +3397,7 @@ msgstr "Wendepunkte der Karte"
 
 #: Data/Dialogs/dlgVario.xml:117 Data/Dialogs/dlgVario_L.xml:117
 msgid "Tone pitch scale"
-msgstr "Ton Anstiegsskalierung"
+msgstr "Tonanstieg"
 
 #: Data/Dialogs/dlgVario.xml:44 Data/Dialogs/dlgVario_L.xml:45
 msgid "PDA power"
@@ -3466,7 +3514,7 @@ msgstr "Verbleibende Zeit"
 
 #: Data/Dialogs/dlgSwitches.xml:41
 msgid "User up"
-msgstr ""
+msgstr "Benutzer angemeldet"
 
 #: Data/Dialogs/dlgConfiguration.xml:476
 #: Data/Dialogs/dlgConfiguration_L.xml:475
@@ -3592,7 +3640,7 @@ msgstr "Gleiteffizienz"
 #: Data/Dialogs/dlgVario_L.xml:201 Data/Dialogs/dlgVario_L.xml:223
 #: Data/Dialogs/dlgVario_L.xml:245 Data/Dialogs/dlgVario_L.xml:267
 msgid "Pitch Scale"
-msgstr "Neigungs Skalierung"
+msgstr "Änderung"
 
 #: Data/Dialogs/dlgConfiguration.xml:525
 #: Data/Dialogs/dlgConfiguration_L.xml:524
@@ -3635,7 +3683,7 @@ msgstr "Sicherheits Mc*"
 
 #: Data/Dialogs/dlgVario.xml:135 Data/Dialogs/dlgVario_L.xml:135
 msgid "Cruise deadband type"
-msgstr ""
+msgstr "Vorflug Totbandtyp"
 
 #: Data/Dialogs/dlgVario.xml:101 Data/Dialogs/dlgVario_L.xml:101
 msgid "Cruise volume"
@@ -3739,11 +3787,11 @@ msgstr "Mittelwert Zeiger"
 #: Data/Dialogs/dlgConfiguration.xml:209
 #: Data/Dialogs/dlgConfiguration_L.xml:210
 msgid "Flap forces cruise*"
-msgstr "Flaps forcieren"
+msgstr "Flaps wechseln zu Vorflug"
 
 #: Data/Dialogs/dlgTarget.xml:6
 msgid "Tp"
-msgstr ""
+msgstr "Wp"
 
 #: Data/Dialogs/dlgConfiguration.xml:329
 #: Data/Dialogs/dlgConfiguration_L.xml:329
@@ -3800,7 +3848,7 @@ msgstr "Zu fliegende Blockgeschwindigkeit"
 
 #: Data/Dialogs/dlgTaskPoint.xml:32 Data/Dialogs/dlgTaskPoint_L.xml:33
 msgid "Start radial"
-msgstr ""
+msgstr "Abflug Radial"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:16
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:16
@@ -3813,12 +3861,12 @@ msgstr "Flugplatzdatei*"
 
 #: Data/Dialogs/dlgVoice.xml:18
 msgid "Task Altitude Difference"
-msgstr ""
+msgstr "Aufgabe Höhenunterschied"
 
 #: Data/Dialogs/dlgConfiguration.xml:515
 #: Data/Dialogs/dlgConfiguration_L.xml:514
 msgid "Show gross*"
-msgstr ""
+msgstr "Zeige Brutto*"
 
 #: Data/Dialogs/dlgFontEdit.xml:16
 msgid "Italic"
@@ -3847,7 +3895,7 @@ msgstr "FLARM verbunden"
 #: Data/Dialogs/dlgConfiguration.xml:108
 #: Data/Dialogs/dlgConfiguration_L.xml:109
 msgid "Trail length"
-msgstr "Schweiflänge"
+msgstr "Spurlänge"
 
 #: Data/Dialogs/dlgTeamCode.xml:18 Data/Dialogs/dlgTeamCode_L.xml:18
 msgid "Flarm lock:"
@@ -3860,7 +3908,7 @@ msgstr "Kartendatei"
 #: Data/Dialogs/dlgStatus.xml:30 Data/Dialogs/dlgStatusTask.xml:4
 #: Data/Dialogs/dlgTaskCalculator.xml:10
 msgid "Assigned task time"
-msgstr ""
+msgstr "Zugeteilte Aufgabenzeit"
 
 #: Data/Dialogs/dlgConfiguration.xml:728
 #: Data/Dialogs/dlgConfiguration_L.xml:741 Data/Dialogs/dlgVario.xml:8
@@ -3875,11 +3923,11 @@ msgstr "A+"
 #: Data/Dialogs/dlgConfiguration.xml:213
 #: Data/Dialogs/dlgConfiguration_L.xml:215
 msgid "STF risk factor*"
-msgstr ""
+msgstr "STF Risiko Faktor*"
 
 #: Data/Dialogs/dlgVario.xml:79 Data/Dialogs/dlgVario_L.xml:80
 msgid "Cruise lift trigger"
-msgstr ""
+msgstr "Steigen Umschaltauslösung"
 
 #: Data/Dialogs/dlgBasicSettings.xml:24
 msgid "QNH"
@@ -3899,7 +3947,7 @@ msgstr "Wiederholen"
 
 #: Data/Dialogs/dlgVario.xml:58 Data/Dialogs/dlgVario_L.xml:59
 msgid "ASI cal"
-msgstr ""
+msgstr "IAS Kalibrierung"
 
 #: Data/Dialogs/dlgConfiguration.xml:339
 #: Data/Dialogs/dlgConfiguration_L.xml:339 Data/Dialogs/dlgVario.xml:32
@@ -3935,7 +3983,7 @@ msgstr "Bestätigen"
 
 #: Data/Dialogs/dlgTaskPoint.xml:6 Data/Dialogs/dlgTaskPoint_L.xml:9
 msgid "Relocate"
-msgstr ""
+msgstr "Verschieben"
 
 #: Data/Dialogs/dlgConfiguration.xml:276 Data/Dialogs/dlgConfiguration.xml:296
 #: Data/Dialogs/dlgConfiguration_L.xml:278
@@ -3946,7 +3994,7 @@ msgstr "Port"
 #: Data/Dialogs/dlgNumberEntry_Keyboard.xml:4
 #: Data/Dialogs/dlgNumberEntry_Keyboard_L.xml:4
 msgid "Number: "
-msgstr ""
+msgstr "Zahl: "
 
 #: Data/Dialogs/dlgSimulatorPrompt.xml:6
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:6
@@ -3960,7 +4008,7 @@ msgstr "Geländeanzeige"
 
 #: Data/Dialogs/dlgBasicSettings.xml:6
 msgid "Dump"
-msgstr ""
+msgstr "Abwurf"
 
 #: Data/Dialogs/dlgConfiguration.xml:534
 #: Data/Dialogs/dlgConfiguration_L.xml:533
@@ -3982,7 +4030,7 @@ msgstr "Abflugzeit"
 #: Data/Dialogs/dlgConfiguration.xml:175
 #: Data/Dialogs/dlgConfiguration_L.xml:176
 msgid "Glide terrain line"
-msgstr ""
+msgstr "Gleitflugbereich Linie"
 
 #: Data/Dialogs/dlgConfiguration.xml:368
 #: Data/Dialogs/dlgConfiguration_L.xml:368
@@ -4013,7 +4061,7 @@ msgstr "Fliegen"
 
 #: Data/Dialogs/dlgVario.xml:89 Data/Dialogs/dlgVario_L.xml:89
 msgid "Climb averager scale"
-msgstr ""
+msgstr "Größe Steigmittelwert"
 
 #: Data/Dialogs/dlgConfiguration.xml:38 Data/Dialogs/dlgConfiguration_L.xml:39
 msgid "Terrain file*"
@@ -4029,11 +4077,11 @@ msgstr "Verschieben"
 
 #: Data/Dialogs/dlgConfiguration.xml:91 Data/Dialogs/dlgConfiguration_L.xml:92
 msgid "Use black outline*"
-msgstr "Benutze schwarze Konturlinie"
+msgstr "Benutze schwarze Kontur"
 
 #: Data/Dialogs/dlgWaypointEdit_L.xml:10
 msgid "Lon"
-msgstr ""
+msgstr "Länge"
 
 #: Data/Dialogs/dlgAirspaceSelect.xml:14
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:20
@@ -4044,7 +4092,7 @@ msgstr "Richtung"
 
 #: Data/Dialogs/dlgVario.xml:369 Data/Dialogs/dlgVario_L.xml:369
 msgid "Interval, Warning"
-msgstr ""
+msgstr "Intervall, Warnung"
 
 #: Data/Dialogs/dlgAirspace.xml:5 Data/Dialogs/dlgAirspace_L.xml:5
 msgid "Lookup"
@@ -4057,7 +4105,7 @@ msgstr "Geschätze Geschwindigkeit"
 #: Data/Dialogs/dlgWayPointDetails.xml:40
 #: Data/Dialogs/dlgWayPointDetails_L.xml:40
 msgid "Clear Alternates"
-msgstr ""
+msgstr "Lösche Veränderungen"
 
 #: Data/Dialogs/dlgStatus.xml:33 Data/Dialogs/dlgStatusTask.xml:8
 #: Data/Dialogs/dlgTaskCalculator.xml:18
@@ -4071,7 +4119,7 @@ msgstr "Wettbewerbszeichen"
 
 #: Data/Dialogs/dlgVario.xml:50 Data/Dialogs/dlgVario_L.xml:51
 msgid "TE probe cal"
-msgstr ""
+msgstr "TE Sondenkalibrierung"
 
 #: Data/Dialogs/dlgConfiguration.xml:393
 #: Data/Dialogs/dlgConfiguration_L.xml:393
