@@ -68,6 +68,24 @@ prefix_sum(const RadixTree<int> &rt, const TCHAR *prefix)
   return sum.value;
 }
 
+template<typename T>
+struct AscendingKeyVisitor {
+  tstring last;
+
+  void operator()(const TCHAR *key, const T &value) {
+    assert(last.compare(key) <= 0);
+    last = key;
+  }
+};
+
+template<typename T>
+static void
+check_ascending_keys(const RadixTree<T> &tree)
+{
+  AscendingKeyVisitor<T> visitor;
+  tree.visit_all_pairs(visitor);
+}
+
 int main(int argc, char **argv)
 {
   TCHAR buffer[64], *suggest;
@@ -80,6 +98,10 @@ int main(int argc, char **argv)
   assert(prefix_sum(irt, _T("fo")) == 42);
   assert(prefix_sum(irt, _T("foo")) == 42);
   assert(prefix_sum(irt, _T("foobar")) == 0);
+
+  irt.add(_T("foa"), 0);
+  assert(all_sum(irt) == 42);
+  check_ascending_keys(irt);
 
   suggest = irt.suggest(_T("xyz"), buffer, 64);
   assert(suggest == NULL);
@@ -191,6 +213,8 @@ int main(int argc, char **argv)
   assert(all_sum(irt) == 35);
   assert(prefix_sum(irt, _T("")) == 35);
   assert(prefix_sum(irt, _T("foo")) == 17);
+
+  check_ascending_keys(irt);
 
   return 0;
 }
