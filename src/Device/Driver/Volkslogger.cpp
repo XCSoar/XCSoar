@@ -43,7 +43,7 @@ Copyright_License {
 
 #include "Device/Driver/Volkslogger.hpp"
 #include "Device/Parser.hpp"
-#include "Device/Internal.hpp"
+#include "Device/Driver.hpp"
 #include "ProgressGlue.hpp"
 #include "Language.hpp"
 #include "UtilsText.hpp"

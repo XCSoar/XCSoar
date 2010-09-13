@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Device/Driver/AltairPro.hpp"
-#include "Device/Internal.hpp"
+#include "Device/Driver.hpp"
 #include "NMEA/Info.hpp"
 #include "Units.hpp"
 

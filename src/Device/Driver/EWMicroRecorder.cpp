@@ -42,7 +42,7 @@ Copyright_License {
 // adding baro alt sentance parser to support baro source priority  if (d == pDevPrimaryBaroSource){...}
 
 #include "Device/Driver/EWMicroRecorder.hpp"
-#include "Device/Internal.hpp"
+#include "Device/Driver.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Port.hpp"
 #include "NMEA/Info.hpp"

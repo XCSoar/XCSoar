@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Device/Driver/NmeaOut.hpp"
-#include "Device/Internal.hpp"
+#include "Device/Driver.hpp"
 
 const struct DeviceRegister nmoDevice = {
   _T("NmeaOut"),

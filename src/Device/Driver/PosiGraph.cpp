@@ -47,7 +47,7 @@ Copyright_License {
 
 #include "Device/Driver/PosiGraph.hpp"
 #include "Device/Parser.hpp"
-#include "Device/Internal.hpp"
+#include "Device/Driver.hpp"
 #include "Math/FastMath.h"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"

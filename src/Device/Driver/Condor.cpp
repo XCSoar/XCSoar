@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Device/Driver/Condor.hpp"
-#include "Device/Internal.hpp"
+#include "Device/Driver.hpp"
 #include "Protection.hpp"
 #include "Units.hpp"
 #include "Device/Parser.hpp"

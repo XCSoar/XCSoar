@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Device/Driver/FlymasterF1.hpp"
-#include "Device/Internal.hpp"
+#include "Device/Driver.hpp"
 #include "Device/Parser.hpp"
 #include "Protection.hpp"
 #include "NMEA/Info.hpp"

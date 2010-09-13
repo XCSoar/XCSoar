@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Device/Driver/XCOM760.hpp"
-#include "Device/Internal.hpp"
+#include "Device/Driver.hpp"
 #include "Device/Port.hpp"
 
 #include <stdio.h>

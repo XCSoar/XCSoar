@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "Device/Driver/Leonardo.hpp"
 #include "Device/Parser.hpp"
-#include "Device/Internal.hpp"
+#include "Device/Driver.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Protection.hpp"

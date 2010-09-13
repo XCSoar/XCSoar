@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Device/FLARM.hpp"
-#include "Device/Internal.hpp"
+
 #include "Device/device.hpp"
 #include "Device/Port.hpp"
 

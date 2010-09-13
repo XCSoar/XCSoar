@@ -43,7 +43,7 @@ Copyright_License {
 #include "Device/Driver/CAI302.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Port.hpp"
-#include "Device/Internal.hpp"
+#include "Device/Driver.hpp"
 #include "Protection.hpp"
 #include "Units.hpp"
 #include "NMEA/Info.hpp"
