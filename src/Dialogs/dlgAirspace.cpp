@@ -129,6 +129,8 @@ OnAirspaceListEnter(unsigned ItemIndex)
     Profile::SetAirspaceMode(ItemIndex);
     changed = true;
   }
+
+  wAirspaceList->invalidate();
 }
 
 static void
