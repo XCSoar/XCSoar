@@ -308,6 +308,19 @@ class RadixTree {
     }
 
     /**
+     * Visit all direct values of this node in no specific order.
+     * This overload is used by visit_all_pairs().
+     */
+    template<typename V>
+    void visit_values(const TCHAR *prefix, V &visitor) const {
+      tstring key(prefix);
+      key.append(label);
+
+      for (const Leaf *leaf = leafs; leaf != NULL; leaf = leaf->next)
+        visitor(key.c_str(), leaf->value);
+    }
+
+    /**
      * Recursively visit all child nodes and their values in
      * alphabetic order.
      */
@@ -328,6 +341,21 @@ class RadixTree {
       for (const Node *node = children; node != NULL; node = node->next_sibling) {
         node->visit_values(visitor);
         node->visit_all_children(visitor);
+      }
+    }
+
+    /**
+     * Recursively visit all child nodes and their values in
+     * alphabetic order.  This overload is used by visit_all_pairs().
+     */
+    template<typename V>
+    void visit_all_children(const TCHAR *prefix, V &visitor) const {
+      tstring key(prefix);
+      key.append(label);
+
+      for (const Node *node = children; node != NULL; node = node->next_sibling) {
+        node->visit_values(key.c_str(), visitor);
+        node->visit_all_children(key.c_str(), visitor);
       }
     }
 
@@ -649,6 +677,15 @@ public:
   void visit_all(V &visitor) const {
     root.visit_values(visitor);
     root.visit_all_children(visitor);
+  }
+
+  /**
+   * Visit all key/value pairs in alphabetic order.
+   */
+  template<typename V>
+  void visit_all_pairs(V &visitor) const {
+    root.visit_values(_T(""), visitor);
+    root.visit_all_children(_T(""), visitor);
   }
 
   /**
