@@ -44,7 +44,7 @@ public:
    * @param _threshold The threshold distance in px for edge detection
    */
   GestureManager():
-    active(false), threshold(0) {}
+    threshold(0) {}
 
   /**
    * Stops the GestureManager and returns the recognized gesture
@@ -61,7 +61,6 @@ public:
   void AddPoint(int x, int y);
 
 protected:
-  bool active;
   /** Position of the last mouse_move event */
   POINT drag_last;
   /** The gesture string */

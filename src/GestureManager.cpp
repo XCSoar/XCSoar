@@ -52,9 +52,6 @@ getDirection(int dx, int dy)
 void
 GestureManager::AddPoint(int x, int y)
 {
-  if (!active)
-    return;
-
   // Calculate deltas
   int dx = x - drag_last.x;
   int dy = y - drag_last.y;
@@ -86,8 +83,6 @@ GestureManager::AddPoint(int x, int y)
 void
 GestureManager::Start(int x, int y, int _threshold)
 {
-  active = true;
-
   // Reset last position
   drag_last.x = x;
   drag_last.y = y;
@@ -102,8 +97,6 @@ GestureManager::Start(int x, int y, int _threshold)
 const char*
 GestureManager::Finish()
 {
-  active = false;
-
   if (string_is_empty(gesture))
     return NULL;
 
