@@ -30,6 +30,7 @@
 #ifndef XCSOAR_RADIX_TREE_HPP
 #define XCSOAR_RADIX_TREE_HPP
 
+#include "Util/NonCopyable.hpp"
 #include "StringUtil.hpp"
 #include "tstring.hpp"
 
@@ -76,7 +77,7 @@ class RadixTree {
    * property of radix trees).  When inserting a node starting with
    * the same character, the node has to be splitted.
    */
-  struct Node {
+  struct Node : private NonCopyable {
     tstring label;
     Node *next_sibling, *children;
     Leaf *leafs;
