@@ -417,14 +417,34 @@ ParseType(const TCHAR* text)
   return OTHER;
 }
 
+/**
+ * Returns the value of the specified line, after a space character
+ * which is skipped.  If the input is empty (without a leading space),
+ * an empty string is returned, as a special case to work around
+ * broken input files.
+ *
+ * @return the first character of the value, or NULL if the input is
+ * malformed
+ */
+static const TCHAR *
+value_after_space(const TCHAR *p)
+{
+  if (string_is_empty(p))
+    return p;
+
+  if (*p != _T(' '))
+    /* not a space: must be a malformed line */
+    return NULL;
+
+  /* skip the space */
+  return p + 1;
+}
+
 static bool
 ParseLine(Airspaces &airspace_database, const TCHAR *line,
           TempAirspaceType &temp_area)
 {
-  // Ignore lines less than 3 characters
-  int nSize = _tcslen(line);
-  if (nSize < 3)
-    return true;
+  const TCHAR *value;
 
   // Only return expected lines
   switch (line[0]) {
@@ -433,28 +453,38 @@ ParseLine(Airspaces &airspace_database, const TCHAR *line,
     switch (line[1]) {
     case _T('C'):
     case _T('c'):
+      value = value_after_space(line + 2);
+      if (value == NULL)
+        break;
+
       if (!temp_area.Waiting)
         temp_area.AddPolygon(airspace_database);
 
       temp_area.reset();
 
-      temp_area.Type = ParseType(&line[3]);
+      temp_area.Type = ParseType(value);
       temp_area.Waiting = false;
       break;
 
     case _T('N'):
     case _T('n'):
-      temp_area.Name = &line[3];
+      value = value_after_space(line + 2);
+      if (value != NULL)
+        temp_area.Name = value;
       break;
 
     case _T('L'):
     case _T('l'):
-      ReadAltitude(&line[3], &temp_area.Base);
+      value = value_after_space(line + 2);
+      if (value != NULL)
+        ReadAltitude(value, &temp_area.Base);
       break;
 
     case _T('H'):
     case _T('h'):
-      ReadAltitude(&line[3],&temp_area.Top);
+      value = value_after_space(line + 2);
+      if (value != NULL)
+        ReadAltitude(value, &temp_area.Top);
       break;
 
     default:
@@ -486,10 +516,14 @@ ParseLine(Airspaces &airspace_database, const TCHAR *line,
 
     case _T('P'):
     case _T('p'):
+      value = value_after_space(line + 2);
+      if (value == NULL)
+        break;
+
     {
       GEOPOINT TempPoint;
 
-      if (!ReadCoords(&line[3],TempPoint))
+      if (!ReadCoords(value, TempPoint))
         return false;
 
       temp_area.points.push_back(TempPoint);
@@ -748,7 +782,8 @@ DetectFileType(const TCHAR *line)
       string_after_prefix_ci(line, _T("TYPE=")))
     return ftTNP;
 
-  if (string_after_prefix_ci(line, _T("AC ")))
+  const TCHAR *p = string_after_prefix_ci(line, _T("AC"));
+  if (p != NULL && (string_is_empty(p) || *p == _T(' ')))
     return ftOpenAir;
 
   return ftUnknown;
