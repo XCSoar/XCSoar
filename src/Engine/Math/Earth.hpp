@@ -47,7 +47,6 @@ Copyright_License {
 #define XCSOAR_MATH_EARTH_HPP
 
 #include "Navigation/GeoPoint.hpp"
-#include <stdlib.h> // for NULL
 
 extern const fixed fixed_earth_r;
 extern const fixed fixed_inv_earth_r;
