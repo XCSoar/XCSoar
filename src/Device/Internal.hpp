@@ -44,8 +44,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_INTERNAL_HPP
 #define XCSOAR_DEVICE_INTERNAL_HPP
 
-#include "Device/Driver.hpp"
-
 #include <tchar.h>
 
 class ComPort;
