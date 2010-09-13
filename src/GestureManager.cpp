@@ -28,7 +28,6 @@
  */
 
 #include "GestureManager.hpp"
-#include "Screen/Layout.hpp"
 #include "StringUtil.hpp"
 #include "Math/FastMath.h"
 #include "Compiler.h"
@@ -61,7 +60,7 @@ GestureManager::AddPoint(int x, int y)
   int dy = y - drag_last.y;
 
   // See if we've reached the threshold already
-  if (compare_squared(dx, dy, Layout::Scale(20)) != 1)
+  if (compare_squared(dx, dy, threshold) != 1)
     return;
 
   // Save position for next call
@@ -85,7 +84,7 @@ GestureManager::AddPoint(int x, int y)
 }
 
 void
-GestureManager::Start(int x, int y)
+GestureManager::Start(int x, int y, int _threshold)
 {
   active = true;
 
@@ -95,6 +94,9 @@ GestureManager::Start(int x, int y)
 
   // Reset gesture
   _tcscpy(gesture, _T(""));
+
+  // Set threshold
+  threshold = _threshold;
 }
 
 const TCHAR*

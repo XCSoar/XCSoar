@@ -584,7 +584,7 @@ bool
 FlarmTrafficControl::on_mouse_down(int x, int y)
 {
   if (XCSoarInterface::SettingsComputer().EnableGestures)
-    gestures.Start(x, y);
+    gestures.Start(x, y, Layout::Scale(20));
 
   return true;
 }

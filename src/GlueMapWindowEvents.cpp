@@ -149,7 +149,7 @@ GlueMapWindow::on_mouse_down(int x, int y)
   else if (is_simulator() && !Basic().gps.Replay)
     drag_mode = DRAG_SIMULATOR;
   else if (XCSoarInterface::SettingsComputer().EnableGestures) {
-    gestures.Start(x, y);
+    gestures.Start(x, y, Layout::Scale(20));
     drag_mode = DRAG_GESTURE;
   }
 

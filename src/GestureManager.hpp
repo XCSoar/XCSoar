@@ -37,7 +37,7 @@ class GestureManager
 {
 public:
   GestureManager():
-    active(false) {}
+    active(false), threshold(0) {}
 
   /**
    * Stops the GestureManager and returns the recognized gesture
@@ -47,7 +47,7 @@ public:
   /**
    * Starts the GestureManager at the given coordinates
    */
-  void Start(int x, int y);
+  void Start(int x, int y, int _threshold);
   /**
    * Adds new coordinates to the GestureManager
    */
@@ -59,6 +59,9 @@ protected:
   POINT drag_last;
   /** The gesture string */
   TCHAR gesture[11];
+
+  /** The threshold distance in px for edge detection */
+  int threshold;
 };
 
 #endif
