@@ -33,9 +33,17 @@
 #include <tchar.h>
 #include <windef.h>
 
+/**
+ * A manager class that can detect mouse gesture
+ * @see http://en.wikipedia.org/wiki/Pointing_device_gesture
+ */
 class GestureManager
 {
 public:
+  /**
+   * Constructor of the GestureManager class
+   * @param _threshold The threshold distance in px for edge detection
+   */
   GestureManager():
     active(false), threshold(0) {}
 
