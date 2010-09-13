@@ -884,6 +884,7 @@ OrderedTask::clone(TaskEvents &te,
 {
   OrderedTask* new_task = new OrderedTask(te, tb, gp);
 
+  new_task->activeTaskPoint = activeTaskPoint;
   new_task->m_ordered_behaviour = m_ordered_behaviour;
 
   new_task->set_factory(factory_mode);
