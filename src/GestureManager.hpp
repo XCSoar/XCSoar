@@ -58,7 +58,7 @@ public:
   /**
    * Adds new coordinates to the GestureManager
    */
-  void AddPoint(int x, int y);
+  void Update(int x, int y);
 
 protected:
   /** Position of the last mouse_move event */

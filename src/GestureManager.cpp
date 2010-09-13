@@ -50,7 +50,7 @@ getDirection(int dx, int dy)
 }
 
 void
-GestureManager::AddPoint(int x, int y)
+GestureManager::Update(int x, int y)
 {
   // Calculate deltas
   int dx = x - drag_last.x;

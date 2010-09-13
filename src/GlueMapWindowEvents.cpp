@@ -118,7 +118,7 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
     return true;
 
   case DRAG_GESTURE:
-    gestures.AddPoint(x, y);
+    gestures.Update(x, y);
     return true;
 
   case DRAG_SIMULATOR:

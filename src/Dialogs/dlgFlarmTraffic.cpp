@@ -575,7 +575,7 @@ bool
 FlarmTrafficControl::on_mouse_move(int x, int y, unsigned keys)
 {
   if (XCSoarInterface::SettingsComputer().EnableGestures)
-    gestures.AddPoint(x, y);
+    gestures.Update(x, y);
 
   return true;
 }
