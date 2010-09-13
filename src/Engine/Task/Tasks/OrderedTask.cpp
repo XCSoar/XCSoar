@@ -903,9 +903,8 @@ OrderedTask::check_duplicate_waypoints(Waypoints& waypoints)
     Waypoint wp(tps[i]->get_waypoint());
     bool this_changed = !waypoints.find_duplicate(wp);
     changed |= this_changed;
-    if (this_changed)
-      replace(tps[i]->clone(task_behaviour, m_ordered_behaviour,
-                            get_task_projection(), &wp), i);
+    replace(tps[i]->clone(task_behaviour, m_ordered_behaviour,
+                          get_task_projection(), &wp), i);
   }
 
   if (changed)
