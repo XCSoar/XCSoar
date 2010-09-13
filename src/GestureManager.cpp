@@ -34,19 +34,19 @@
 
 #include <algorithm>
 
-static gcc_const TCHAR
+static gcc_const char
 getDirection(int dx, int dy)
 {
   if (dy < 0 && -dy >= abs(dx) * 2)
-    return _T('U');
+    return 'U';
   if (dy > 0 && dy >= abs(dx) * 2)
-    return _T('D');
+    return 'D';
   if (dx > 0 && dx >= abs(dy) * 2)
-    return _T('R');
+    return 'R';
   if (dx < 0 && -dx >= abs(dy) * 2)
-    return _T('L');
+    return 'L';
 
-  return _T('\0');
+  return '\0';
 }
 
 void
@@ -68,18 +68,18 @@ GestureManager::AddPoint(int x, int y)
   drag_last.y = y;
 
   // Get current dragging direction
-  TCHAR direction = getDirection(dx, dy);
+  char direction = getDirection(dx, dy);
 
   // Return if we are in an unclear direction
-  if (direction == _T('\0'))
+  if (direction == '\0')
     return;
 
   // Return if we are still in the same direction
-  size_t length = _tcslen(gesture);
+  size_t length = strlen(gesture);
   if (length < sizeof(gesture) / sizeof(gesture[0]) - 1 &&
       gesture[length - 1] != direction) {
     gesture[length] = direction;
-    gesture[length + 1] = _T('\0');
+    gesture[length + 1] = '\0';
   }
 }
 
@@ -93,13 +93,13 @@ GestureManager::Start(int x, int y, int _threshold)
   drag_last.y = y;
 
   // Reset gesture
-  _tcscpy(gesture, _T(""));
+  strcpy(gesture, "");
 
   // Set threshold
   threshold = _threshold;
 }
 
-const TCHAR*
+const char*
 GestureManager::Finish()
 {
   active = false;

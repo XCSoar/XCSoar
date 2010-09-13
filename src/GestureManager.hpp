@@ -30,7 +30,6 @@
 #ifndef GESTURE_MANAGER_HPP
 #define GESTURE_MANAGER_HPP
 
-#include <tchar.h>
 #include <windef.h>
 
 /**
@@ -51,7 +50,7 @@ public:
    * Stops the GestureManager and returns the recognized gesture
    * @return NULL or recognized gesture string
    */
-  const TCHAR* Finish();
+  const char* Finish();
   /**
    * Starts the GestureManager at the given coordinates
    */
@@ -66,7 +65,7 @@ protected:
   /** Position of the last mouse_move event */
   POINT drag_last;
   /** The gesture string */
-  TCHAR gesture[11];
+  char gesture[11];
 
   /** The threshold distance in px for edge detection */
   int threshold;

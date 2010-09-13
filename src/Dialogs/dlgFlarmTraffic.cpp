@@ -121,7 +121,7 @@ protected:
   virtual bool on_mouse_move(int x, int y, unsigned keys);
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
-  bool on_mouse_gesture(const TCHAR* gesture);
+  bool on_mouse_gesture(const char* gesture);
 };
 
 static WndForm *wf = NULL;
@@ -593,7 +593,7 @@ bool
 FlarmTrafficControl::on_mouse_up(int x, int y)
 {
   if (XCSoarInterface::SettingsComputer().EnableGestures) {
-    const TCHAR* gesture = gestures.Finish();
+    const char* gesture = gestures.Finish();
     if (gesture && on_mouse_gesture(gesture))
       return true;
   }
@@ -605,36 +605,36 @@ FlarmTrafficControl::on_mouse_up(int x, int y)
 }
 
 bool
-FlarmTrafficControl::on_mouse_gesture(const TCHAR* gesture)
+FlarmTrafficControl::on_mouse_gesture(const char* gesture)
 {
   if (!XCSoarInterface::SettingsComputer().EnableGestures)
     return false;
 
-  if (_tcscmp(gesture, _T("U")) == 0) {
+  if (strcmp(gesture, "U") == 0) {
     ZoomIn();
     return true;
   }
-  if (_tcscmp(gesture, _T("D")) == 0) {
+  if (strcmp(gesture, "D") == 0) {
     ZoomOut();
     return true;
   }
-  if (_tcscmp(gesture, _T("L")) == 0) {
+  if (strcmp(gesture, "L") == 0) {
     PrevTarget();
     return true;
   }
-  if (_tcscmp(gesture, _T("R")) == 0) {
+  if (strcmp(gesture, "R") == 0) {
     NextTarget();
     return true;
   }
-  if (_tcscmp(gesture, _T("UD")) == 0) {
+  if (strcmp(gesture, "UD") == 0) {
     SetAutoZoom(true);
     return true;
   }
-  if (_tcscmp(gesture, _T("DR")) == 0) {
+  if (strcmp(gesture, "DR") == 0) {
     OpenDetails();
     return true;
   }
-  if (_tcscmp(gesture, _T("RL")) == 0) {
+  if (strcmp(gesture, "RL") == 0) {
     SwitchData();
     return true;
   }
