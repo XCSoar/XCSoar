@@ -47,8 +47,7 @@ Copyright_License {
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 
-class AirspaceWarningCopy: 
-  public AirspaceWarningVisitor
+class AirspaceWarningCopy2 : public AirspaceWarningVisitor
 {
 public:
   void Visit(const AirspaceWarning& as) {
@@ -86,7 +85,7 @@ class AirspaceMapVisible: public AirspaceVisible
 public:
   AirspaceMapVisible(const SETTINGS_COMPUTER& _settings, 
                      const fixed& _altitude, const bool& _border,
-                     const AirspaceWarningCopy& warnings):
+                     const AirspaceWarningCopy2 &warnings):
     AirspaceVisible(_settings, _altitude),
     m_border(_border),
     m_warnings(warnings)
@@ -104,7 +103,7 @@ public:
   }
 private:
   const bool &m_border;
-  const AirspaceWarningCopy& m_warnings;
+  const AirspaceWarningCopy2 &m_warnings;
 };
 
 /**
@@ -149,7 +148,7 @@ GlueMapWindow::AirspaceDetailsAtPoint(const GEOPOINT &location) const
   if (airspace_database == NULL)
     return false;
 
-  AirspaceWarningCopy awc;
+  AirspaceWarningCopy2 awc;
   if (airspace_warnings != NULL)
     airspace_warnings->visit_warnings(awc);
 
