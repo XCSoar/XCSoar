@@ -37,6 +37,8 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Engine/Task/TaskEvents.hpp"
+#include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Protection.hpp"
 #include "Math/Earth.hpp"
 #include "Profile.hpp"
@@ -61,6 +63,14 @@ Copyright_License {
 
 #include <assert.h>
 #include <stdio.h>
+
+#include <memory>
+
+enum task_edit_result {
+  SUCCESS,
+  UNMODIFIED,
+  INVALID,
+};
 
 static int page = 0;
 static WndForm *wf = NULL;
@@ -221,16 +231,49 @@ OnGotoClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrOK);
 }
 
+static task_edit_result
+replace_in_task(const Waypoint &wp)
+{
+  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  TaskEvents task_events;
+  GlidePolar glide_polar(task_manager->get_glide_polar());
+  std::auto_ptr<OrderedTask> task(task_manager->clone(task_events,
+                                                      XCSoarInterface::SettingsComputer(),
+                                                      glide_polar));
+  task->check_duplicate_waypoints(way_points);
+
+  unsigned i = task->getActiveIndex();
+  if (i >= task->task_size())
+    return UNMODIFIED;
+
+  task->relocate(i, wp);
+
+  if (!task->check_task())
+    return INVALID;
+
+  task_manager->commit(*task);
+  return SUCCESS;
+}
+
 static void
 OnReplaceClicked(gcc_unused WndButton &button)
 {
-#ifdef OLD_TASK
-  task.ReplaceWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
-      XCSoarInterface::Basic());
-  task.RefreshTask(XCSoarInterface::SettingsComputer(),
-                   XCSoarInterface::Basic());
-#endif
-  wf->SetModalResult(mrOK);
+  switch (replace_in_task(*selected_waypoint)) {
+  case SUCCESS:
+    protected_task_manager.task_save_default();
+    wf->SetModalResult(mrOK);
+    break;
+
+  case UNMODIFIED:
+    MessageBoxX(_("No active task point."), _("Replace in task"),
+                MB_OK | MB_ICONINFORMATION);
+    break;
+
+  case INVALID:
+    MessageBoxX(_("Task would not be valid after the change."), _("Error"),
+                MB_OK | MB_ICONEXCLAMATION);
+    break;
+  }
 }
 
 static void 
@@ -299,36 +342,173 @@ OnTeamCodeClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrOK);
 }
 
+static task_edit_result
+insert_in_task(const Waypoint &wp)
+{
+  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  TaskEvents task_events;
+  GlidePolar glide_polar(task_manager->get_glide_polar());
+  std::auto_ptr<OrderedTask> task(task_manager->clone(task_events,
+                                                      XCSoarInterface::SettingsComputer(),
+                                                      glide_polar));
+
+  int i = task->getActiveIndex();
+  /* skip all start points */
+  while (true) {
+    if (i >= (int)task->task_size())
+      return UNMODIFIED;
+
+    const TaskPoint *tp = task->get_tp(i);
+    if (tp == NULL || tp->is_intermediate())
+      break;
+
+    ++i;
+  }
+
+  const AbstractTaskFactory &factory = task->get_factory();
+  OrderedTaskPoint *tp = (OrderedTaskPoint *)factory.createIntermediate(wp);
+  if (tp == NULL)
+    return UNMODIFIED;
+
+  if (!task->insert(tp, i)) {
+    delete tp;
+    return UNMODIFIED;
+  }
+
+  if (!task->check_task())
+    return INVALID;
+
+  task_manager->commit(*task);
+  return SUCCESS;
+}
+
 static void
 OnInsertInTaskClicked(gcc_unused WndButton &button)
 {
-#ifdef OLD_TASK
-  task.InsertWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
-      XCSoarInterface::Basic());
-  task.RefreshTask(XCSoarInterface::SettingsComputer(),
-      XCSoarInterface::Basic());
-#endif
-  wf->SetModalResult(mrOK);
+  switch (insert_in_task(*selected_waypoint)) {
+  case SUCCESS:
+    protected_task_manager.task_save_default();
+    wf->SetModalResult(mrOK);
+    break;
+
+  case UNMODIFIED:
+  case INVALID:
+    MessageBoxX(_("Task would not be valid after the change."), _("Error"),
+                MB_OK | MB_ICONEXCLAMATION);
+    break;
+  }
+}
+
+static task_edit_result
+append_to_task(const Waypoint &wp)
+{
+  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  TaskEvents task_events;
+  GlidePolar glide_polar(task_manager->get_glide_polar());
+  std::auto_ptr<OrderedTask> task(task_manager->clone(task_events,
+                                                      XCSoarInterface::SettingsComputer(),
+                                                      glide_polar));
+
+  int i = task->task_size() - 1;
+  /* skip all finish points */
+  while (i >= 0) {
+    const TaskPoint *tp = task->get_tp(i);
+    if (tp == NULL)
+      break;
+
+    if (tp->is_intermediate()) {
+      ++i;
+      break;
+    }
+
+    --i;
+  }
+
+  const AbstractTaskFactory &factory = task->get_factory();
+  OrderedTaskPoint *tp = (OrderedTaskPoint *)factory.createIntermediate(wp);
+  if (tp == NULL)
+    return UNMODIFIED;
+
+  if (!(i >= 0 ? task->insert(tp, i) : task->append(tp))) {
+    delete tp;
+    return UNMODIFIED;
+  }
+
+  if (!task->check_task())
+    return INVALID;
+
+  task_manager->commit(*task);
+  return SUCCESS;
 }
 
 static void
 OnAppendInTaskClicked(gcc_unused WndButton &button)
 {
-#ifdef OLD_TASK
-  task.InsertWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
-      XCSoarInterface::Basic(), true);
-#endif
-  wf->SetModalResult(mrOK);
+  switch (append_to_task(*selected_waypoint)) {
+  case SUCCESS:
+    protected_task_manager.task_save_default();
+    wf->SetModalResult(mrOK);
+    break;
+
+  case UNMODIFIED:
+  case INVALID:
+    MessageBoxX(_("Task would not be valid after the change."), _("Error"),
+                MB_OK | MB_ICONEXCLAMATION);
+    break;
+  }
+}
+
+static task_edit_result
+remove_from_task(const Waypoint &wp)
+{
+  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  TaskEvents task_events;
+  GlidePolar glide_polar(task_manager->get_glide_polar());
+  std::auto_ptr<OrderedTask> task(task_manager->clone(task_events,
+                                                      XCSoarInterface::SettingsComputer(),
+                                                      glide_polar));
+  task->check_duplicate_waypoints(way_points);
+
+  bool modified = false;
+  for (unsigned i = task->task_size(); i--;) {
+    const OrderedTaskPoint *tp = task->get_tp(i);
+    assert(tp != NULL);
+
+    if (tp->get_waypoint() == wp) {
+      task->remove(i);
+      modified = true;
+    }
+  }
+
+  if (!modified)
+    return UNMODIFIED;
+
+  if (!task->check_task())
+    return INVALID;
+
+  task_manager->commit(*task);
+  return SUCCESS;
 }
 
 static void
 OnRemoveFromTaskClicked(gcc_unused WndButton &button)
 {
-#ifdef OLD_TASK
-  task.RemoveWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
-      XCSoarInterface::Basic());
-#endif
-  wf->SetModalResult(mrOK);
+  switch (remove_from_task(*selected_waypoint)) {
+  case SUCCESS:
+    protected_task_manager.task_save_default();
+    wf->SetModalResult(mrOK);
+    break;
+
+  case UNMODIFIED:
+    MessageBoxX(_("Waypoint not in task."), _("Remove from task"),
+                MB_OK | MB_ICONINFORMATION);
+    break;
+
+  case INVALID:
+    MessageBoxX(_("Task would not be valid after the change."), _("Error"),
+                MB_OK | MB_ICONEXCLAMATION);
+    break;
+  }
 }
 
 static void
