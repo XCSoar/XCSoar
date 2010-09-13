@@ -548,7 +548,7 @@ class RadixTree {
           Node *node = new Node(m.second);
           node->add_value(value);
 
-          if (key[0] < m.first->label[0]) {
+          if (m.second[0] < m.first->children->label[0]) {
             /* insert before list head */
             node->next_sibling = m.first->children;
             m.first->children = node;
