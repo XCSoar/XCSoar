@@ -215,10 +215,9 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
 static void
 OnGotoClicked(gcc_unused WndButton &button)
 {
-  if (selected_waypoint) {
-    protected_task_manager.do_goto(*selected_waypoint);
-  }
+  assert(selected_waypoint != NULL);
 
+  protected_task_manager.do_goto(*selected_waypoint);
   wf->SetModalResult(mrOK);
 }
 
@@ -237,6 +236,8 @@ OnReplaceClicked(gcc_unused WndButton &button)
 static void 
 OnNewHomeClicked(gcc_unused WndButton &button)
 {
+  assert(selected_waypoint != NULL);
+
   XCSoarInterface::SetSettingsComputer().HomeWaypoint = selected_waypoint->id;
 
   {
@@ -253,6 +254,8 @@ OnNewHomeClicked(gcc_unused WndButton &button)
 static void 
 OnSetAlternate1Clicked(gcc_unused WndButton &button)
 {
+  assert(selected_waypoint != NULL);
+
   XCSoarInterface::SetSettingsComputer().Alternate1 = selected_waypoint->id;
   Profile::Set(szProfileAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
   wf->SetModalResult(mrOK);
@@ -261,6 +264,8 @@ OnSetAlternate1Clicked(gcc_unused WndButton &button)
 static void 
 OnSetAlternate2Clicked(gcc_unused WndButton &button)
 {
+  assert(selected_waypoint != NULL);
+
   XCSoarInterface::SetSettingsComputer().Alternate2 = selected_waypoint->id;
   Profile::Set(szProfileAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
   wf->SetModalResult(mrOK);
@@ -284,6 +289,8 @@ OnClearAlternatesClicked(gcc_unused WndButton &button)
 static void
 OnTeamCodeClicked(gcc_unused WndButton &button)
 {
+  assert(selected_waypoint != NULL);
+
   XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint =
       selected_waypoint->id;
   Profile::Set(szProfileTeamcodeRefWaypoint,
