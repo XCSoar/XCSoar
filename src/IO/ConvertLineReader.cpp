@@ -83,10 +83,17 @@ ConvertLineReader::read()
 {
   char *narrow = source.read();
 
-#ifdef _UNICODE
   if (narrow == NULL)
     return NULL;
 
+  // Check if there is byte order mark in front
+  if (narrow[0] == (char)0xEF &&
+      narrow[1] == (char)0xBB &&
+      narrow[2] == (char)0xBF)
+    // -> if so, skip it
+    narrow += 3;
+
+#ifdef _UNICODE
   size_t narrow_length = strlen(narrow);
 
   TCHAR *t = tbuffer.get(narrow_length + 1);
@@ -110,6 +117,7 @@ ConvertLineReader::read()
       return NULL;
 
     t[length] = _T('\0');
+
     break;
   }
 
