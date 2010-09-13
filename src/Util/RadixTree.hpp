@@ -289,7 +289,7 @@ class RadixTree {
     }
 
     /**
-     * Visit all direkt values of this node in no specific order.
+     * Visit all direct values of this node in no specific order.
      */
     template<typename V>
     void visit_values(V &visitor) {
@@ -298,7 +298,7 @@ class RadixTree {
     }
 
     /**
-     * Visit all direkt values of this node in no specific order.
+     * Visit all direct values of this node in no specific order.
      */
     template<typename V>
     void visit_values(V &visitor) const {
