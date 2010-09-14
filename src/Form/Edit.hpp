@@ -133,6 +133,9 @@ public:
 
   const Font *SetFont(const Font &font);
 
+protected:
+  virtual bool on_resize(unsigned width, unsigned height);
+
   /**
    * The on_mouse_down event is called when the mouse is pressed over the button
    * (derived from Window)
@@ -144,6 +147,7 @@ public:
    */
   virtual bool on_mouse_up(int x, int y);
 
+public:
   /**
    * Returns the Control's DataField
    * @return The Control's DataField

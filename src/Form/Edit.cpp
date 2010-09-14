@@ -178,8 +178,6 @@ WndProperty::WndProperty(ContainerControl &parent,
 
   set(parent.GetClientAreaWindow(), X, Y, Width, Height, style);
 
-  UpdateLayout();
-
   edit.set(*this, mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y, edit_style);
   edit.install_wndproc();
 
@@ -293,6 +291,14 @@ WndProperty::on_editor_killfocus()
   }
 
   invalidate();
+}
+
+bool
+WndProperty::on_resize(unsigned width, unsigned height)
+{
+  WindowControl::on_resize(width, height);
+  UpdateLayout();
+  return true;
 }
 
 bool
