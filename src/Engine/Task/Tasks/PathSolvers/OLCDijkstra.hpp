@@ -60,10 +60,9 @@ public:
    * @param finish_alt_diff Maximum height loss from start to finish (m)
    * @param full_trace Whether this OLC algorithm requires the full history or just the first 2.5 hours
    */
-  OLCDijkstra(OnlineContest& _olc, 
-              const unsigned n_legs,
+  OLCDijkstra(OnlineContest& _olc, const unsigned n_legs,
               const unsigned finish_alt_diff = 3000,
-              const bool full_trace=true);
+              const bool full_trace = true);
 
   /**
    * Calculate the scored value of the OLC path
@@ -74,9 +73,7 @@ public:
    *
    * @return Score (interpretation depends on OLC type)
    */
-  fixed score(fixed &the_distance,
-              fixed &the_speed,
-              fixed &the_time);
+  fixed score(fixed &the_distance, fixed &the_speed, fixed &the_time);
 
   /**
    * Copy the best OLC path solution
@@ -117,7 +114,7 @@ protected:
   const TracePoint &get_point(const ScanTaskPoint &sp) const;
 
   virtual void add_edges(DijkstraTaskPoint &dijkstra,
-      const ScanTaskPoint &curNode);
+                         const ScanTaskPoint &curNode);
 
   virtual bool finish_satisfied(const ScanTaskPoint &sp) const;
 

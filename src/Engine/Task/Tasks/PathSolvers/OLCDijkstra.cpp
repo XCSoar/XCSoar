@@ -43,12 +43,11 @@
 #include <stdio.h>
 #endif
 
-OLCDijkstra::OLCDijkstra(OnlineContest& _olc, 
-                         const unsigned n_legs,
+OLCDijkstra::OLCDijkstra(OnlineContest& _olc, const unsigned n_legs,
                          const unsigned finish_alt_diff,
                          const bool full_trace):
-  NavDijkstra<TracePoint>(n_legs+1),
-  m_dijkstra(ScanTaskPoint(0,0), false),
+  NavDijkstra<TracePoint>(n_legs + 1),
+  m_dijkstra(ScanTaskPoint(0, 0), false),
   olc(_olc),
   m_finish_alt_diff(finish_alt_diff),
   solution_found(false),
@@ -66,9 +65,9 @@ void
 OLCDijkstra::set_weightings()
 {
   m_weightings.clear();
-  for (unsigned i = 0; i + 1 < num_stages; ++i) {
+
+  for (unsigned i = 0; i + 1 < num_stages; ++i)
     m_weightings.push_back(5);
-  }
 }
 
 bool
@@ -79,14 +78,13 @@ OLCDijkstra::solve()
     n_points = olc.get_trace_points(m_full_trace).size();
   }
 
-  if (n_points < num_stages) {
+  if (n_points < num_stages)
     return false;
-  }
 
   if (m_dijkstra.empty()) {
     m_dijkstra.reset(ScanTaskPoint(0, 0));
     add_start_edges();
-    if (m_dijkstra.empty()) {
+    if (m_dijkstra.empty())
       // no processing to perform!
       // @todo
       // problem with this is it will immediately ask
@@ -94,7 +92,6 @@ OLCDijkstra::solve()
       // instead, new data should arrive only when preconditions
       // are satisfied (significant difference and valid)
       return true;
-    }
   }
 
   return solve_inner();
@@ -106,9 +103,9 @@ OLCDijkstra::solve_inner()
   if (distance_general(m_dijkstra, 25)) {
     save_solution();
     return true;
-  } else {
-    return false;
   }
+
+  return false;
 }
 
 void
@@ -123,9 +120,7 @@ OLCDijkstra::reset()
 }
 
 fixed
-OLCDijkstra::score(fixed& the_distance,
-                   fixed& the_speed,
-                   fixed& the_time)
+OLCDijkstra::score(fixed& the_distance, fixed& the_speed, fixed& the_time)
 {
   if (positive(calc_time())) {
     solution_found = true;
@@ -134,17 +129,17 @@ OLCDijkstra::score(fixed& the_distance,
     the_time = best_time;
 
     return best_distance;
-  } else {
-    return fixed_zero;
   }
+
+  return fixed_zero;
 }
 
 fixed
 OLCDijkstra::calc_time() const
 {
-  if (!solution.size()) {
+  if (!solution.size())
     return fixed_zero;
-  }
+
   assert(num_stages == solution.size());
   return fixed(solution[num_stages - 1].time - solution[0].time);
 }
@@ -153,10 +148,10 @@ fixed
 OLCDijkstra::calc_distance() const
 {
   fixed dist = fixed_zero;
-  for (unsigned i = 0; i + 1 < num_stages; ++i) {
+  for (unsigned i = 0; i + 1 < num_stages; ++i)
     dist += get_weighting(i) *
-        solution[i].distance(solution[i + 1].get_location());
-  }
+            solution[i].distance(solution[i + 1].get_location());
+
   static const fixed fixed_fifth(0.2);
   dist *= fixed_fifth;
   return dist;
@@ -169,9 +164,8 @@ OLCDijkstra::add_start_edges()
 
   ScanTaskPoint destination(0, 0);
 
-  for (; destination.second != n_points; ++destination.second) {
+  for (; destination.second != n_points; ++destination.second)
     m_dijkstra.link(destination, destination, 0);
-  }
 }
 
 void
@@ -184,7 +178,7 @@ OLCDijkstra::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& origin)
   for (; destination.second != n_points; ++destination.second) {
     if (admit_candidate(destination)) {
       const unsigned d = get_weighting(origin.first) *
-          distance(origin, destination);
+                         distance(origin, destination);
       dijkstra.link(destination, origin, d);
     }
   }
@@ -210,8 +204,8 @@ OLCDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
   if (!is_final(candidate))
     return true;
   else
-    return (get_point(candidate).NavAltitude + fixed(m_finish_alt_diff)
-        >= solution[0].NavAltitude);
+    return (get_point(candidate).NavAltitude + fixed(m_finish_alt_diff) >=
+            solution[0].NavAltitude);
 }
 
 bool
@@ -223,23 +217,21 @@ OLCDijkstra::finish_satisfied(const ScanTaskPoint &sp) const
 void
 OLCDijkstra::save_solution()
 {
-  if (!solution.size()) {
+  if (!solution.size())
     return;
-  }
 
   const fixed the_distance = calc_distance();
   if (the_distance > best_distance) {
     best_solution.clear();
-    for (unsigned i = 0; i < num_stages; ++i) {
+    for (unsigned i = 0; i < num_stages; ++i)
       best_solution.push_back(solution[i]);
-    }
+
     best_distance = the_distance;
     best_time = calc_time();
-    if (positive(best_time)) {
-      best_speed = best_distance/best_time;
-    } else {
+    if (positive(best_time))
+      best_speed = best_distance / best_time;
+    else
       best_speed = fixed_zero;
-    }
   }
 }
 
@@ -249,9 +241,8 @@ OLCDijkstra::copy_solution(TracePointVector &vec)
   vec.clear();
   if (solution_found) {
     vec.reserve(num_stages);
-    for (unsigned i = 0; i < num_stages; ++i) {
+    for (unsigned i = 0; i < num_stages; ++i)
       vec.push_back(best_solution[i]);
-    }
   }
 }
 
@@ -259,7 +250,7 @@ OLCDijkstra::copy_solution(TracePointVector &vec)
 
 OLC classic:
 - start, 5 turnpoints, finish
-- weightings: 1,1,1,0.8,0.8,0.6
+- weightings: 1,1,1,1,0.8,0.6
 
 FAI OLC:
 - start, 2 turnpoints, finish
@@ -274,7 +265,6 @@ OLC classic + FAI-OLC
 - The finish altitude is the highest altitude after reaching the finish point and before end of free flight.
 - The finish time is the time at which the finish altitude is reached after the finish point is reached.
 
-
 OLC league:
 - start, 3 turnpoints, finish
 - weightings: 1 all
@@ -282,8 +272,8 @@ OLC league:
 - The sprint start altitude is the altitude at the sprint start point.
 - Sprint arrival height is the altitude at the sprint end point.
 - The average speed (points) of each individual flight is the sum of
-the distances from sprint start, around up to three turnpoints, to the
-sprint end divided DAeC index increased by 100, multiplied by 200 and
-divided by 2.5h: [formula: Points = km / 2,5 * 200 / (Index+100)
+  the distances from sprint start, around up to three turnpoints, to the
+  sprint end divided DAeC index increased by 100, multiplied by 200 and
+  divided by 2.5h: [formula: Points = km / 2,5 * 200 / (Index+100)
 
 */
