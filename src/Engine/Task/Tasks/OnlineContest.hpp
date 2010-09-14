@@ -32,7 +32,7 @@ public:
    * @param trace_sprint Trace object containing 2.5 hour flight history for scanning
    * 
    */
-  OnlineContest(const OLCRules &olc_rules,
+  OnlineContest(const OLCRules olc_rules,
                 CommonStats &stats, const Trace &trace_full,
                 const Trace &trace_sprint);
 
@@ -82,7 +82,7 @@ public:
   const TracePointVector& get_olc_points() const;
 
 private:
-  const OLCRules &m_olc_rules;
+  const OLCRules m_olc_rules;
   CommonStats &common_stats;
 
   const Trace &m_trace_full;

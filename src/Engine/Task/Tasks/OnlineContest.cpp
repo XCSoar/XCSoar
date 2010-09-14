@@ -7,7 +7,7 @@
 #include <stdio.h>
 #endif
 
-OnlineContest::OnlineContest(const OLCRules &olc_rules,
+OnlineContest::OnlineContest(const OLCRules olc_rules,
                              CommonStats& stats,
                              const Trace& trace_full,
                              const Trace& trace_sprint):
