@@ -114,8 +114,7 @@ public:
                   const NMEA_INFO &nmea_info,
                   const SETTINGS_COMPUTER &settings_computer,
                   const SETTINGS_MAP &settings_map,
-                  const ProtectedTaskManager &task,
-                  const TracePointVector& trace) const;
+                  const ProtectedTaskManager &task) const;
 
   void RenderSpeed(Canvas &canvas, const RECT rc,
                    const NMEA_INFO &nmea_info,

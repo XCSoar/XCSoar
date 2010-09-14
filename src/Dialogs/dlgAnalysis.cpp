@@ -129,8 +129,7 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     fs.RenderTask(canvas, rcgfx, XCSoarInterface::Basic(),
                   XCSoarInterface::SettingsComputer(),
                   XCSoarInterface::SettingsMap(),
-                  protected_task_manager,
-                  trace);
+                  protected_task_manager);
     break;
   case ANALYSIS_PAGE_OLC:
     fs.RenderOLC(canvas, rcgfx, XCSoarInterface::Basic(),
