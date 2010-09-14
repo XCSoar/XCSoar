@@ -44,8 +44,8 @@ Copyright_License {
 void
 MaskedIcon::load_big(unsigned id, unsigned big_id, bool center)
 {
-  if (Layout::ScaleSupported()) {
-    if (big_id > 0 && Layout::ScaleEnabled())
+  if (Layout::ScaleEnabled()) {
+    if (big_id > 0)
       bitmap.load(big_id);
     else
       bitmap.load_stretch(id, Layout::FastScale(1));
