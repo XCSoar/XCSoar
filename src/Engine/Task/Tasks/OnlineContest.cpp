@@ -10,11 +10,11 @@
 #include <stdio.h>
 #endif
 
-OnlineContest::OnlineContest(const TaskBehaviour &tb,
+OnlineContest::OnlineContest(const OLCRules &olc_rules,
                              CommonStats& stats,
                              const Trace& trace_full,
                              const Trace& trace_sprint):
-  m_task_behaviour(tb),
+  m_olc_rules(olc_rules),
   common_stats(stats),
   m_trace_full(trace_full),
   m_trace_sprint(trace_sprint),
@@ -88,7 +88,7 @@ OnlineContest::update_idle(const AIRCRAFT_STATE &state)
   if (m_trace_points_full.size() < 10)
     update_trace();
 
-  switch (m_task_behaviour.olc_rules) {
+  switch (m_olc_rules) {
   case OLC_Sprint:
     retval = run_olc(olc_sprint);
     break;
