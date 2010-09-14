@@ -103,7 +103,10 @@ public:
    * Returns the Control's font
    * @return The Control's font
    */
-  const Font *GetFont(void) { return mhFont; }
+  const Font *GetFont() const {
+    return mhFont;
+  }
+
   /**
    * Sets the Control's font
    * @param font The new font
@@ -127,7 +130,9 @@ public:
    * Return the Control's foreground color
    * @return The Control's foreground color
    */
-  Color GetForeColor(void) { return mColorFore; }
+  Color GetForeColor() const {
+    return mColorFore;
+  }
 
   /**
    * Sets the Control's background color
@@ -139,13 +144,15 @@ public:
    * Return the Control's background color
    * @return The Control's background color
    */
-  Color GetBackColor(void) { return mColorBack; }
+  Color GetBackColor() const {
+    return mColorBack;
+  }
 
   /**
    * Returns the brush for painting the background
    * @return The brush for painting the background
    */
-  Brush &GetBackBrush(void) {
+  const Brush &GetBackBrush() const {
     return mhBrushBk;
   }
 
@@ -153,7 +160,10 @@ public:
    * Returns the Caption/Text of the Control
    * @return The Caption/Text of the Control
    */
-  TCHAR *GetCaption(void) { return mCaption; }
+  const TCHAR *GetCaption() const {
+    return mCaption;
+  }
+
   /**
    * Sets the Caption/Text of the Control
    * @param Value The new Caption/Text of the Control
