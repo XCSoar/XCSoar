@@ -105,7 +105,7 @@ OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
   int nstart = LineOffsets[i];
   int nlen;
   if (i < nTextLines - 1) {
-    nlen = LineOffsets[i + 1] - LineOffsets[i] - 1;
+    nlen = LineOffsets[i + 1] - LineOffsets[i];
     nlen--;
   } else {
     nlen = _tcslen(text + nstart) - 1;
