@@ -48,10 +48,8 @@ OnlineContest::update_trace_sample(const AIRCRAFT_STATE &state,
 bool 
 OnlineContest::update_sample(const AIRCRAFT_STATE &state)
 {
-  bool retval = false;
-  retval |= update_trace_sample(state, m_trace_points_full);
-  retval |= update_trace_sample(state, m_trace_points_sprint);
-  return retval;
+  return update_trace_sample(state, m_trace_points_full) |
+         update_trace_sample(state, m_trace_points_sprint);
 }
 
 #ifdef INSTRUMENT_TASK
