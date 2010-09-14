@@ -1,8 +1,5 @@
 #include "OnlineContest.hpp"
 
-#include "Task/TaskEvents.hpp"
-#include "Task/TaskBehaviour.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
 #include "Task/TaskStats/CommonStats.hpp"
 #include "Trace/Trace.hpp"
 

@@ -12,8 +12,6 @@
 #include "PathSolvers/OLCRules.hpp"
 
 class TaskPoint;
-class TaskBehaviour;
-class GlidePolar;
 class CommonStats;
 class Trace;
 
