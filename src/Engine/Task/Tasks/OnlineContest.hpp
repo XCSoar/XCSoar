@@ -11,7 +11,6 @@
 #include "PathSolvers/OLCClassic.hpp"
 
 class TaskPoint;
-class TaskEvents;
 class TaskBehaviour;
 class GlidePolar;
 class CommonStats;
@@ -34,7 +33,7 @@ public:
    * @param trace_sprint Trace object containing 2.5 hour flight history for scanning
    * 
    */
-  OnlineContest(const TaskEvents &te, const TaskBehaviour &tb,
+  OnlineContest(const TaskBehaviour &tb,
                 CommonStats &stats, const Trace &trace_full,
                 const Trace &trace_sprint);
 
@@ -84,7 +83,6 @@ public:
   const TracePointVector& get_olc_points() const;
 
 private:
-  const TaskEvents &m_task_events;
   const TaskBehaviour &m_task_behaviour;
   CommonStats &common_stats;
 

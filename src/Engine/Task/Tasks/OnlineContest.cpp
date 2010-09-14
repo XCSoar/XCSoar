@@ -10,12 +10,10 @@
 #include <stdio.h>
 #endif
 
-OnlineContest::OnlineContest(const TaskEvents &te, 
-                             const TaskBehaviour &tb,
+OnlineContest::OnlineContest(const TaskBehaviour &tb,
                              CommonStats& stats,
                              const Trace& trace_full,
                              const Trace& trace_sprint):
-  m_task_events(te),
   m_task_behaviour(tb),
   common_stats(stats),
   m_trace_full(trace_full),
