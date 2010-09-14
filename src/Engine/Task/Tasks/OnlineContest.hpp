@@ -34,34 +34,31 @@ public:
    * @param trace_sprint Trace object containing 2.5 hour flight history for scanning
    * 
    */
-  OnlineContest(const TaskEvents &te, 
-                const TaskBehaviour &tb,
-                const GlidePolar &gp,
-                CommonStats &stats,
-                const Trace &trace_full,
-                const Trace &trace_sprint);
+  OnlineContest(const TaskEvents &te, const TaskBehaviour &tb,
+                const GlidePolar &gp, CommonStats &stats,
+                const Trace &trace_full, const Trace &trace_sprint);
 
-/** 
- * Update internal states when aircraft state advances.
- * This performs a scan of reachable waypoints.
- * 
- * \todo
- * - check tracking of active waypoint
- *
- * @param state Aircraft state at this time step
- *
- * @return True if internal state changes
- */
+  /**
+   * Update internal states when aircraft state advances.
+   * This performs a scan of reachable waypoints.
+   *
+   * \todo
+   * - check tracking of active waypoint
+   *
+   * @param state Aircraft state at this time step
+   *
+   * @return True if internal state changes
+   */
   bool update_sample(const AIRCRAFT_STATE &state);
 
-/** 
- * Update internal states (non-essential) for housework, or where functions are slow
- * and would cause loss to real-time performance.
- * 
- * @param state Aircraft state at this time step
- * 
- * @return True if internal state changed
- */
+  /**
+   * Update internal states (non-essential) for housework, or where functions are slow
+   * and would cause loss to real-time performance.
+   *
+   * @param state Aircraft state at this time step
+   *
+   * @return True if internal state changed
+   */
   bool update_idle(const AIRCRAFT_STATE &state);
 
   /** 
@@ -70,19 +67,19 @@ public:
    */
   void reset();
 
-/** 
- * Retrieve trace vector
- * 
- * @return Vector of all trace points 
- */
+  /**
+   * Retrieve trace vector
+   *
+   * @return Vector of all trace points
+   */
   gcc_pure
   const TracePointVector& get_trace_points(const bool full_trace=true) const;
 
-/** 
- * Retrieve olc solution vector
- * 
- * @return Vector of trace points selected for OLC
- */
+  /**
+   * Retrieve olc solution vector
+   *
+   * @return Vector of trace points selected for OLC
+   */
   gcc_pure
   const TracePointVector& get_olc_points() const;
 
@@ -108,8 +105,7 @@ private:
 
   void update_trace();
 
-  bool update_trace_sample(const AIRCRAFT_STATE &state,
-                           TracePointVector& vec);
+  bool update_trace_sample(const AIRCRAFT_STATE &state, TracePointVector& vec);
 
 public:
 #ifdef DO_PRINT

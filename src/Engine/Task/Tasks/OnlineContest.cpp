@@ -1,4 +1,5 @@
 #include "OnlineContest.hpp"
+
 #include "Task/TaskEvents.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
@@ -28,7 +29,6 @@ OnlineContest::OnlineContest(const TaskEvents &te,
   reset();
 }
 
-
 bool 
 OnlineContest::update_trace_sample(const AIRCRAFT_STATE &state,
                                    TracePointVector& vec)
@@ -40,11 +40,10 @@ OnlineContest::update_trace_sample(const AIRCRAFT_STATE &state,
     // replace if lower even if not significant distance away
     vec.back().NavAltitude = state.NavAltitude;
     return true;
-  } else {
-    return false;
   }
-}
 
+  return false;
+}
 
 bool 
 OnlineContest::update_sample(const AIRCRAFT_STATE &state)
@@ -54,7 +53,6 @@ OnlineContest::update_sample(const AIRCRAFT_STATE &state)
   retval |= update_trace_sample(state, m_trace_points_sprint);
   return retval;
 }
-
 
 #ifdef INSTRUMENT_TASK
 extern long count_olc;
@@ -75,11 +73,10 @@ OnlineContest::run_olc(OLCDijkstra &dijkstra)
 #endif
 
     return true;
-  } else {
-    return false;
   }
-}
 
+  return false;
+}
 
 void
 OnlineContest::update_trace()
@@ -88,16 +85,14 @@ OnlineContest::update_trace()
   m_trace_points_sprint = m_trace_sprint.get_trace_points(300);
 }
 
-
 bool 
 OnlineContest::update_idle(const AIRCRAFT_STATE &state)
 {
   // \todo: possibly scan each type in a round robin fashion?
   bool retval = false;
 
-  if (m_trace_points_full.size()<10) {
+  if (m_trace_points_full.size() < 10)
     update_trace();
-  }
 
   switch (m_task_behaviour.olc_rules) {
   case OLC_Sprint:
@@ -124,7 +119,6 @@ OnlineContest::update_idle(const AIRCRAFT_STATE &state)
   return retval;
 }
 
-
 void
 OnlineContest::reset()
 {
@@ -136,13 +130,11 @@ OnlineContest::reset()
   olc_classic.reset();
 }
 
-
 const TracePointVector& 
 OnlineContest::get_trace_points(bool full_trace) const
 {
-  return full_trace? m_trace_points_full: m_trace_points_sprint;
+  return full_trace ? m_trace_points_full : m_trace_points_sprint;
 }
-
 
 const TracePointVector& 
 OnlineContest::get_olc_points() const
