@@ -2,13 +2,12 @@
 #include "Navigation/Aircraft.hpp"
 #include <algorithm>
 
-const unsigned Trace::null_delta = 0-1;
-const unsigned Trace::null_time = 0-1;
-
+const unsigned Trace::null_delta = 0 - 1;
+const unsigned Trace::null_time = 0 - 1;
 
 Trace::Trace(const unsigned max_time,
              const unsigned recent_time,
-             const unsigned max_points):
+             const unsigned max_points) :
   m_optimise_time(null_time),
   m_recent_time(recent_time),
   m_max_time(max_time),
@@ -23,8 +22,7 @@ Trace::append(const AIRCRAFT_STATE& state)
     task_projection.reset(state.get_location());
     task_projection.update_fast();
     m_last_point.time = null_time;
-  } else if (trace_tree.size() > 0 &&
-             state.Time < fixed(m_last_point.time)) {
+  } else if (trace_tree.size() > 0 && state.Time < fixed(m_last_point.time)) {
     clear();
     return;
   }
@@ -42,9 +40,8 @@ Trace::append(const AIRCRAFT_STATE& state)
   time_delta_map[tp.time] = null_time;
 
   TraceTree::const_iterator it_prev = find_prev(tp);
-  if (it_prev != end()) {
+  if (it_prev != end())
     update_delta(find_prev(*it_prev), it_prev, it_this);
-  }
 }
 
 void 
@@ -52,35 +49,33 @@ Trace::update_delta(TraceTree::const_iterator it_prev,
                     TraceTree::const_iterator it,
                     TraceTree::const_iterator it_next)
 {
-  if ((it == end())
-      || (it_prev == end())
-      || (it_next == end()))
+  if ((it == end()) || (it_prev == end()) || (it_next == end()))
     return;
 
-  const unsigned d_this = it_prev->approx_dist(*it)+it->approx_dist(*it_next);
+  const unsigned d_this = it_prev->approx_dist(*it) + it->approx_dist(*it_next);
   const unsigned d_rem = it_prev->approx_dist(*it_next);
-  const unsigned delta = d_this-d_rem;
+  const unsigned delta = d_this - d_rem;
   distance_delta_map[it->time] = delta;
   time_delta_map[it->time] = std::max(it->dt(), it_next->dt());
 }
 
-bool 
+bool
 Trace::inside_recent_time(unsigned time) const
 {
-  if (m_last_point.time == null_time) return true;
+  if (m_last_point.time == null_time)
+    return true;
 
-  return (time+ m_recent_time >= m_last_point.time);
+  return (time + m_recent_time >= m_last_point.time);
 }
-
 
 bool
 Trace::inside_time_window(unsigned time) const
 {
-  if (m_last_point.time == null_time) return true;
+  if (m_last_point.time == null_time)
+    return true;
 
-  return inside_recent_time(time) || (time+ m_max_time >= m_last_point.time);
+  return inside_recent_time(time) || (time + m_max_time >= m_last_point.time);
 }
-
 
 unsigned
 Trace::lowest_delta() const
@@ -90,14 +85,12 @@ Trace::lowest_delta() const
   unsigned lowest = null_delta;
 
   TraceDeltaMap::const_iterator it = distance_delta_map.begin();
-
   for (++it; it != distance_delta_map.end(); ++it) {
-    if (inside_recent_time(it->first)) {
+    if (inside_recent_time(it->first))
       return lowest;
-    }
-    if (it->second < lowest) {
+
+    if (it->second < lowest)
       lowest = it->second;
-    }
   }
   return lowest;
 }
@@ -128,17 +121,14 @@ Trace::erase_earlier_than(unsigned min_time)
                        time_delta_map.lower_bound(min_time));
 }
 
-
 void
 Trace::trim_point_time()
 {
   for (TraceDeltaMap::const_iterator it = distance_delta_map.begin(); 
        it != distance_delta_map.end(); ++it) {
-
     const unsigned this_time = it->first;
 
     if (inside_time_window(this_time)) {
-
       erase_earlier_than(this_time);
       distance_delta_map[this_time] = null_delta;
       time_delta_map[this_time] = null_time;
@@ -166,11 +156,11 @@ Trace::trim_point_delta()
 
   for (TraceTree::const_iterator it = trace_tree.begin();
        it != trace_tree.end(); ++it) {
-
     const unsigned this_time = it->time;
-    assert(this_time>=min_time);
-    
-    if (!inside_recent_time(this_time) && (distance_delta_map[this_time] == delta)) {
+    assert(this_time >= min_time);
+
+    if (!inside_recent_time(this_time) &&
+        distance_delta_map[this_time] == delta) {
       const unsigned dt = time_delta_map[this_time];
       if (dt < lowest_dt) {
         lowest_dt = dt;
@@ -178,55 +168,46 @@ Trace::trim_point_delta()
       }
     }
   }
-  if (candidate != trace_tree.end()) {
+
+  if (candidate != trace_tree.end())
     erase(candidate);
-  }
 }
 
 void
 Trace::optimise()
 {
   // first remove points outside max time range
-
-  if (m_max_time != null_time) {
+  if (m_max_time != null_time)
     trim_point_time();
-  }
 
   // if still too big, remove points based on line simplification
-
-  while (trace_tree.size()> m_max_points) {
+  while (trace_tree.size()> m_max_points)
     trim_point_delta();
-  }
 
   // re-balance tree 
-
   trace_tree.optimize();
   m_optimise_time = m_last_point.time;
 }
-
 
 Trace::TraceTree::const_iterator
 Trace::find_prev(const TracePoint& tp) const
 {
   for (TraceTree::const_iterator it = trace_tree.begin();
-       it != trace_tree.end(); ++it) {
-    if (it->time == tp.last_time) {
+       it != trace_tree.end(); ++it)
+    if (it->time == tp.last_time)
       return it;
-    }
-  }
+
   return end();
 }
-
 
 Trace::TraceTree::const_iterator
 Trace::find_next(const TracePoint& tp) const
 {
   for (TraceTree::const_iterator it = trace_tree.begin();
-       it != trace_tree.end(); ++it) {
-    if (it->last_time == tp.time) {
+       it != trace_tree.end(); ++it)
+    if (it->last_time == tp.time)
       return it;
-    }
-  }
+
   return end();
 }
 
@@ -234,17 +215,14 @@ void
 Trace::erase(TraceTree::const_iterator& rit)
 {
   /// @todo merge data for erased point?
-  if (rit == trace_tree.end()) {
+  if (rit == trace_tree.end())
     return;
-  }
 
   TraceTree::const_iterator it_prev = find_prev(*rit);
   TraceTree::const_iterator it_next = find_next(*rit);
 
-  if ((it_prev == trace_tree.end()) || 
-      (it_next == trace_tree.end())) {
+  if ((it_prev == trace_tree.end()) || (it_next == trace_tree.end()))
     return;
-  }
 
   TracePoint tp_next = *it_next;
   tp_next.last_time = it_prev->time;
@@ -260,7 +238,6 @@ Trace::erase(TraceTree::const_iterator& rit)
   update_delta(find_prev(*it_prev), it_prev, it_next);
   update_delta(it_prev, it_next, find_next(*it_next));
 }
-
 
 void
 Trace::clear()
@@ -312,9 +289,7 @@ public:
    */
   TracePointSetFilterInserter(TracePointSet& the_set, 
                               const unsigned _min_time = 0) :
-    m_set(&the_set), min_time(_min_time)
-  {
-  }
+    m_set(&the_set), min_time(_min_time) {}
 
   /** 
    * Set operator; adds point to set if time satisfied
@@ -431,7 +406,7 @@ Trace::thin_trace(TracePointList& tlist, const unsigned mrange_sq) const
   }
 }
 
-TracePointVector 
+TracePointVector
 Trace::get_trace_points(const unsigned max_points) const
 {
   TracePointSet tset(begin(), end());

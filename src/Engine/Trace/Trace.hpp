@@ -70,7 +70,7 @@ public:
    * @param max_points Maximum number of points that can be stored
    */
   Trace(const unsigned max_time = null_time,
-        const unsigned recent_time= 300,
+        const unsigned recent_time = 300,
         const unsigned max_points = 1000);
 
   /**
@@ -146,7 +146,8 @@ public:
    */
   gcc_pure
   TracePointVector
-  find_within_range(const GEOPOINT &loc, const fixed range, const unsigned mintime=0,
+  find_within_range(const GEOPOINT &loc, const fixed range,
+                    const unsigned mintime = 0,
                     const fixed resolution = -fixed_one) const;
 
   /** 
