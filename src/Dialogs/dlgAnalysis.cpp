@@ -101,8 +101,6 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
   // background is painted in the base-class
 
   const FlightStatistics &fs = glide_computer.GetFlightStats();
-  const TracePointVector trace = protected_task_manager.get_trace_points();
-  const TracePointVector olc = protected_task_manager.get_olc_points();
   const GlidePolar glide_polar = protected_task_manager.get_glide_polar();
 
   switch (page) {
@@ -125,17 +123,21 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
   case ANALYSIS_PAGE_TEMPTRACE:
     fs.RenderTemperature(canvas, rcgfx);
     break;
-  case ANALYSIS_PAGE_TASK:
+  case ANALYSIS_PAGE_TASK: {
+    ProtectedTaskManager::Lease task(protected_task_manager);
     fs.RenderTask(canvas, rcgfx, XCSoarInterface::Basic(),
                   XCSoarInterface::SettingsComputer(),
                   XCSoarInterface::SettingsMap(),
-                  protected_task_manager);
+                  task);
+  }
     break;
-  case ANALYSIS_PAGE_OLC:
+  case ANALYSIS_PAGE_OLC: {
+    ProtectedTaskManager::Lease task(protected_task_manager);
     fs.RenderOLC(canvas, rcgfx, XCSoarInterface::Basic(),
                  XCSoarInterface::SettingsComputer(),
                  XCSoarInterface::SettingsMap(),
-                 olc, trace);
+                 task->get_olc_points(), task->get_trace_points());
+  }
     break;
   case ANALYSIS_PAGE_AIRSPACE:
     fs.RenderAirspace(canvas, rcgfx, XCSoarInterface::Basic(),
@@ -143,9 +145,11 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
                       XCSoarInterface::SettingsMap(),
                       airspace_database, terrain);
     break;
-  case ANALYSIS_PAGE_TASK_SPEED:
+  case ANALYSIS_PAGE_TASK_SPEED: {
+    ProtectedTaskManager::Lease task(protected_task_manager);
     fs.RenderSpeed(canvas, rcgfx, XCSoarInterface::Basic(), 
-                   XCSoarInterface::Calculated(), protected_task_manager);
+                   XCSoarInterface::Calculated(), task);
+  }
     break;
   default:
     // should never get here!

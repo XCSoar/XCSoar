@@ -294,8 +294,10 @@ MapWindow::DrawWaypoints(Canvas &canvas, const RECT &MapRect)
   WaypointVisitorMap v(*this, canvas, polar);
   way_points->visit_within_range(projection.GetPanLocation(),
                                  projection.GetScreenDistanceMeters(), v);
-  if (task != NULL && SettingsMap().DisplayTextType == DISPLAYNAMEIFINTASK)
-    task->CAccept(v);
+  if (task != NULL && SettingsMap().DisplayTextType == DISPLAYNAMEIFINTASK) {
+    ProtectedTaskManager::Lease task_manager(*task);
+    task_manager->CAccept(v);
+  }
 
   v.labels.Sort();
   MapWaypointLabelRender(canvas, projection.GetMapRect(), v.labels);

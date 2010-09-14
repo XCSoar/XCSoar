@@ -64,26 +64,33 @@ GlideComputerTask::ProcessBasicTask()
 {
   const NMEA_INFO &basic = Basic();
 
-  m_task.set_task_behaviour(SettingsComputer());
+  ProtectedTaskManager::ExclusiveLease task(m_task);
+
+  task->set_task_behaviour(SettingsComputer());
 
   if (!SettingsComputer().auto_mc) {
-    GlidePolar glide_polar = m_task.get_glide_polar();
+    GlidePolar glide_polar = task->get_glide_polar();
     glide_polar.set_mc(basic.MacCready);
-    m_task.set_glide_polar(glide_polar);
+    task->set_glide_polar(glide_polar);
   }
 
   if (basic.Time != LastBasic().Time && !basic.gps.NAVWarning) {
     const AIRCRAFT_STATE current_as = ToAircraftState(Basic());
     const AIRCRAFT_STATE last_as = ToAircraftState(LastBasic());
 
-    m_task.update(current_as, last_as);
-    m_task.update_auto_mc(current_as, std::max(
+    task->update(current_as, last_as);
+    task->update_auto_mc(current_as, std::max(
         Calculated().LastThermalAverageSmooth, fixed_zero));
   }
 
-  SetCalculated().task_stats = m_task.get_stats();
-  SetCalculated().common_stats = m_task.get_common_stats();
-  SetMC(m_task.get_common_stats().current_risk_mc);
+  SetCalculated().task_stats = task->get_stats();
+  SetCalculated().common_stats = task->get_common_stats();
+}
+
+void
+GlideComputerTask::ProcessMoreTask()
+{
+  SetMC(Calculated().common_stats.current_risk_mc);
 
   TerrainWarning();
 
@@ -100,7 +107,8 @@ void
 GlideComputerTask::ProcessIdle()
 {
   const AIRCRAFT_STATE as = ToAircraftState(Basic());
-  m_task.update_idle(as);
+  ProtectedTaskManager::ExclusiveLease task(m_task);
+  task->update_idle(as);
 }
 
 void

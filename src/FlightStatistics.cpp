@@ -61,7 +61,6 @@ Copyright_License {
 #include "RenderTask.hpp"
 #include "RenderTaskPoint.hpp"
 #include "RenderObservationZone.hpp"
-#include "Task/ProtectedTaskManager.hpp"
 
 #include <algorithm>
 
@@ -153,7 +152,7 @@ private:
 
 
 static void DrawLegs(Chart& chart,
-                     const ProtectedTaskManager &task,
+                     const TaskManager &task,
                      const NMEA_INFO& basic,
                      const DERIVED_INFO& calculated,
                      const bool task_relative)
@@ -165,7 +164,6 @@ static void DrawLegs(Chart& chart,
       : basic.flight.TakeOffTime;
 
     ChartTaskHelper visitor(chart, start_time);
-
     task.ordered_CAccept(visitor);
   }
 }
@@ -175,7 +173,7 @@ void
 FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
                                   const NMEA_INFO &nmea_info,
                                   const DERIVED_INFO &derived_info,
-                                  const ProtectedTaskManager &task) const
+                                  const ProtectedTaskManager &_task) const
 {
   Chart chart(canvas, rc);
 
@@ -190,7 +188,10 @@ FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
   chart.ScaleXFromValue(Altitude.x_min + fixed_one); // in case no data
   chart.ScaleXFromValue(Altitude.x_min);
 
-  DrawLegs(chart, task, nmea_info, derived_info, false);
+  {
+    ProtectedTaskManager::Lease task(_task);
+    DrawLegs(chart, task, nmea_info, derived_info, false);
+  }
 
   Pen hpHorizonGround(Pen::SOLID, IBLSCALE(1), Chart::GROUND_COLOUR);
   Brush hbHorizonGround(Chart::GROUND_COLOUR);
@@ -220,7 +221,7 @@ void
 FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc,
                               const NMEA_INFO &nmea_info,
                               const DERIVED_INFO &derived_info,
-                              const ProtectedTaskManager &task) const
+                              const TaskManager &task) const
 {
   Chart chart(canvas, rc);
 
@@ -408,7 +409,7 @@ FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
                              const NMEA_INFO &nmea_info, 
                              const SETTINGS_COMPUTER &settings_computer,
                              const SETTINGS_MAP &settings_map, 
-                             const ProtectedTaskManager &task) const
+                             const TaskManager &task) const
 {
   Chart chart(canvas, rc);
 

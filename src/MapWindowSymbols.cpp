@@ -551,10 +551,8 @@ MapWindow::DrawCompass(Canvas &canvas, const RECT &rc) const
 void
 MapWindow::DrawBestCruiseTrack(Canvas &canvas) const
 {
-  if (task == NULL || !task->check_task())
-    return;
-
-  if (Calculated().task_stats.current_leg.solution_remaining.Vector.Distance
+  if (!Calculated().task_stats.task_valid ||
+      Calculated().task_stats.current_leg.solution_remaining.Vector.Distance
       < fixed(0.010))
     return;
 

@@ -151,6 +151,10 @@ MapWindow::DrawTask(Canvas &canvas, const RECT &rc, Canvas &buffer)
   if (task == NULL)
     return;
 
+  ProtectedTaskManager::Lease task_manager(*task);
+  if (!task_manager->check_task())
+    return;
+
   /* RLD bearing is invalid if GPS not connected and in non-sim mode,
    but we can still draw targets */
   const bool draw_bearing = Basic().gps.Connected;
@@ -162,7 +166,7 @@ MapWindow::DrawTask(Canvas &canvas, const RECT &rc, Canvas &buffer)
                          Basic().TrackBearing,
                          !Calculated().Circling);
   RenderTask dv(tpv);
-  task->CAccept(dv);
+  task_manager->CAccept(dv);
 }
 
 #ifdef OLD_TASK // projected track line

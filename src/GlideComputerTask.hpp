@@ -52,6 +52,7 @@ public:
 protected:
   void Initialise() {}
   void ProcessBasicTask();
+  void ProcessMoreTask();
   void ResetFlight(const bool full=true);
 
 private:

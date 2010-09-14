@@ -65,7 +65,7 @@ CommitTaskChanges()
     MessageBoxX(_("Active task modified"),
                 _T("Task Manager"), MB_OK);
 
-    protected_task_manager.check_duplicate_waypoints(*ordered_task, way_points);
+    ordered_task->check_duplicate_waypoints(way_points);
     protected_task_manager.task_commit(*ordered_task);
     protected_task_manager.task_save_default();
 

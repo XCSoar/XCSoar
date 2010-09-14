@@ -116,6 +116,7 @@ GlideComputer::ProcessGPS()
 
   // Process basic task information
   ProcessBasicTask();
+  ProcessMoreTask();
 
   // Check if everything is okay with the gps time and process it
   if (!FlightTimes()) {

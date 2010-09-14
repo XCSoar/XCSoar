@@ -125,8 +125,7 @@ MapWindow::RenderTrail(Canvas &canvas)
 void
 MapWindow::RenderTaskElements(Canvas &canvas, const RECT &rc)
 {
-  if (task != NULL && task->check_task())
-    DrawTask(canvas, rc, buffer_canvas);
+  DrawTask(canvas, rc, buffer_canvas);
 
   DrawWaypoints(canvas, rc);
 

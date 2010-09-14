@@ -71,7 +71,6 @@ public:
   GlidePolar get_glide_polar() const;
   void set_glide_polar(const GlidePolar& glide_polar);
 
-  bool check_task() const;
   TaskManager::TaskMode_t get_mode() const;
 
   // trace points
@@ -80,11 +79,7 @@ public:
                                      const unsigned mintime, 
                                      const fixed resolution) const;
 
-  void CAccept(TaskVisitor &visitor) const;
-  void ordered_CAccept(TaskVisitor &visitor) const;
   const OrderedTaskBehaviour get_ordered_task_behaviour() const;
-
-  TaskAdvance::TaskAdvanceState_t get_advance_state() const;
 
   GlidePolar get_safety_polar() const;
 
@@ -96,21 +91,6 @@ public:
 
   AIRCRAFT_STATE get_start_state() const;
   fixed get_finish_height() const;
-
-  const TracePointVector get_trace_points();
-  const TracePointVector get_olc_points();
-
-  bool check_ordered_task() const;
-
-  GEOPOINT get_task_center(const GEOPOINT& fallback_location) const;
-  fixed get_task_radius(const GEOPOINT& fallback_location) const;
-
-  // waypoints
-  bool read_waypoints(const RasterTerrain *terrain);
-  void save_waypoints();
-  void close_waypoints();
-  bool check_duplicate_waypoints(OrderedTask& ordered_task,
-                                 Waypoints &way_points);
 
   OrderedTask* task_clone();
   OrderedTask* task_blank();
@@ -133,19 +113,6 @@ public:
 
   /** Reset the tasks (as if never flown) */
   void reset();
-
-  bool update(const AIRCRAFT_STATE &state_now, 
-              const AIRCRAFT_STATE &state_last);
-
-  bool update_idle(const AIRCRAFT_STATE &state);
-
-  bool update_auto_mc(const AIRCRAFT_STATE& state_now,
-                      const fixed fallback_mc);
-
-  void set_task_behaviour(const TaskBehaviour& behaviour);
-
-  const TaskStats& get_stats() const;
-  const CommonStats& get_common_stats() const;
 };
 
 #endif

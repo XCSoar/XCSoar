@@ -39,7 +39,7 @@ Copyright_License {
 #include "Projection.hpp"
 #include "Engine/Navigation/TracePoint.hpp"
 
-class ProtectedTaskManager;
+class TaskManager;
 class OrderedTask;
 class OrderedTaskPoint;
 
@@ -51,8 +51,9 @@ class ChartProjection:
   public Projection
 {
 public:
+
   ChartProjection(const RECT &rc,
-                  const ProtectedTaskManager &task,
+                  const TaskManager &task,
                   const GEOPOINT &fallback_loc);
 
   ChartProjection(const RECT &rc,
