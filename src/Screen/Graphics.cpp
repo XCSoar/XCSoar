@@ -119,8 +119,6 @@ const Color ScreenGraphics::Colours[] = {
   Color::BLACK,
 };
 
-// JMW TODO: some of these should be loaded after settings are loaded
-
 void
 ScreenGraphics::Initialise()
 {
