@@ -102,9 +102,7 @@ static bool changed = false;
 static void
 OnAirspaceListEnter(unsigned ItemIndex)
 {
-  if (ItemIndex >= AIRSPACECLASSCOUNT) {
-    ItemIndex = AIRSPACECLASSCOUNT - 1;
-  }
+  assert(ItemIndex < AIRSPACECLASSCOUNT);
 
   if (colormode) {
     int c = dlgAirspaceColoursShowModal();
