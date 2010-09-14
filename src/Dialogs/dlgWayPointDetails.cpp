@@ -569,7 +569,6 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
 
   wp = ((WndProperty *)wf->FindByName(_T("prpWpComment")));
   wp->SetText(selected_waypoint->Comment.c_str());
-  wp->SetButtonSize(16);
 
   Units::LongitudeToString(selected_waypoint->Location.Longitude, sTmp, sizeof(sTmp)-1);
   ((WndProperty *)wf->FindByName(_T("prpLongitude")))
