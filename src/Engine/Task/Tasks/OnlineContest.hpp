@@ -35,8 +35,8 @@ public:
    * 
    */
   OnlineContest(const TaskEvents &te, const TaskBehaviour &tb,
-                const GlidePolar &gp, CommonStats &stats,
-                const Trace &trace_full, const Trace &trace_sprint);
+                CommonStats &stats, const Trace &trace_full,
+                const Trace &trace_sprint);
 
   /**
    * Update internal states when aircraft state advances.
@@ -86,7 +86,6 @@ public:
 private:
   const TaskEvents &m_task_events;
   const TaskBehaviour &m_task_behaviour;
-  const GlidePolar &m_glide_polar;
   CommonStats &common_stats;
 
   const Trace &m_trace_full;

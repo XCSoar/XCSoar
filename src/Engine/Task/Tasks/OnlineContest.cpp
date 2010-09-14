@@ -12,13 +12,11 @@
 
 OnlineContest::OnlineContest(const TaskEvents &te, 
                              const TaskBehaviour &tb,
-                             const GlidePolar &gp,
                              CommonStats& stats,
                              const Trace& trace_full,
                              const Trace& trace_sprint):
   m_task_events(te),
   m_task_behaviour(tb),
-  m_glide_polar(gp),
   common_stats(stats),
   m_trace_full(trace_full),
   m_trace_sprint(trace_sprint),
