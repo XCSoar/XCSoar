@@ -95,12 +95,6 @@ LoggerImpl::~LoggerImpl()
   delete writer;
 }
 
-bool
-LoggerImpl::isLoggerActive() const
-{
-  return writer != NULL;
-}
-
 static TCHAR
 NumToIGCChar(int n)
 {

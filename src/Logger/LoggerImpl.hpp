@@ -102,7 +102,10 @@ public:
   void LogPoint(const NMEA_INFO &gps_info);
   void LogEvent(const NMEA_INFO &gps_info, const char* event);
 
-  bool isLoggerActive() const;
+  bool isLoggerActive() const {
+    return writer != NULL;
+  }
+
   static bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
   void StartLogger(const NMEA_INFO &gps_info,
                    const SETTINGS_COMPUTER &settings,
