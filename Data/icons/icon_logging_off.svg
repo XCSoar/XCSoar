@@ -14,7 +14,7 @@
    height="7"
    id="svg2816"
    inkscape:version="0.47 r22583"
-   sodipodi:docname="loggingoff.svg">
+   sodipodi:docname="icon_logging_off.svg">
   <metadata
      id="metadata9">
     <rdf:RDF>
@@ -36,15 +36,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="774"
+     inkscape:window-width="1680"
+     inkscape:window-height="988"
      id="namedview7"
      showgrid="false"
      inkscape:zoom="27.842105"
-     inkscape:cx="1.3805311"
+     inkscape:cx="-5.4975408"
      inkscape:cy="9.5"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer3"
      showguides="true"
@@ -163,28 +163,31 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3608"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
-  <g
-     transform="translate(0,-9)"
-     id="layer1" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="MASK_Image"
-     transform="translate(0,-12)" />
   <g
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="NOAA_Layer"
      transform="translate(0,-12)">
     <path
+       d="m 7,15.5 a 3.5,3.5 0 0 1 -7,0 3.5,3.5 0 1 1 7,0 z"
+       id="path2830-4-5-7"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+    <path
        d="m 6,15.5 a 2.5,2.5 0 0 1 -5,0 2.5,2.5 0 1 1 5,0 z"
        id="path2830-4-5"
-       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+       style="fill:#a00000;fill-opacity:1;fill-rule:evenodd;stroke:none" />
     <path
        d="M 4.8926991,14.1122 C 5.2617994,14.480768 5.5,14.980046 5.5,15.502888 5.5,16.548574 4.5471975,17.5 3.5,17.5 c -1.0471975,0 -2,-0.951426 -2,-1.997112"
        id="path2830-4-5-4"
-       style="fill:none;stroke:#800000;stroke-width:1"
+       style="fill:none;stroke:#5a0000;stroke-width:1;stroke-opacity:1"
        sodipodi:nodetypes="ccsc" />
   </g>
 </svg>

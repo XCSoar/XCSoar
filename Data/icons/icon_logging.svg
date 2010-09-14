@@ -14,7 +14,7 @@
    height="7"
    id="svg2816"
    inkscape:version="0.47 r22583"
-   sodipodi:docname="logging.svg">
+   sodipodi:docname="icon_logging.svg">
   <metadata
      id="metadata9">
     <rdf:RDF>
@@ -36,17 +36,17 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="774"
+     inkscape:window-width="1680"
+     inkscape:window-height="988"
      id="namedview7"
      showgrid="false"
      inkscape:zoom="27.842105"
-     inkscape:cx="1.3805311"
+     inkscape:cx="-5.4975408"
      inkscape:cy="9.5"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer3" />
+     inkscape:current-layer="svg2816" />
   <defs
      id="defs2818">
     <inkscape:perspective
@@ -135,23 +135,14 @@
        sodipodi:type="inkscape:persp3d" />
   </defs>
   <g
-     transform="translate(0,-9)"
-     id="layer1" />
-  <g
      inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="MASK_Image"
+     id="layer3"
+     inkscape:label="NOAA_Layer"
      transform="translate(0,-12)">
     <path
        d="m 7,15.5 a 3.5,3.5 0 0 1 -7,0 3.5,3.5 0 1 1 7,0 z"
        id="path2830-4-5-7"
        style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-  </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer3"
-     inkscape:label="NOAA_Layer"
-     transform="translate(0,-12)">
     <path
        d="m 6,15.5 a 2.5,2.5 0 0 1 -5,0 2.5,2.5 0 1 1 5,0 z"
        id="path2830-4-5"
