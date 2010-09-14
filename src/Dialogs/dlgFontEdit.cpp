@@ -117,8 +117,7 @@ static void RedrawSampleFont(void)
     wf->SetTitleFont(NewFont);
   }
 
-  WndProperty* wp;
-  wp = (WndProperty*)wf->FindByName(_T("prpFontSample"));
+  WndFrame *wp = (WndFrame *)wf->FindByName(_T("prpFontSample"));
   if (wp) {
     if (NewFont.defined()) {
       wp->SetFont(NewFont);

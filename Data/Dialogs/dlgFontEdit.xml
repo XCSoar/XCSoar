@@ -17,7 +17,7 @@
     <DataField DataType="boolean"  OnDataAccess="OnData"/>
   </Edit>
 
-  <Edit Name="prpFontSample" Caption="my sample" X="2" Width="235" Height="40" CaptionWidth="235" readonly="1" />
+  <Label Name="prpFontSample" Caption="my sample" X="2" Width="235" Height="40"/>
 
   <Button Caption="Ok" X="2" Y="185" Width="70" Height="22" OnClick="OnCloseClicked" />
   <Button Caption="Reset" X="77" Y="185" Width="70" Height="22" OnClick="OnResetClicked" />

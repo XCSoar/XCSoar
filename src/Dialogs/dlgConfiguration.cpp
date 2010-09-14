@@ -430,33 +430,35 @@ RefreshFonts(void)
   }
 
   // now set SampleTexts on the Fonts frame
-  wp = (WndProperty*)wf->FindByName(_T("prpInfoWindowFont"));
-  if (wp)
-    wp->SetFont(TempInfoWindowFont);
+  WndFrame *sample;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpTitleWindowFont"));
-  if (wp)
-    wp->SetFont(TempTitleWindowFont);
+  sample = (WndFrame *)wf->FindByName(_T("prpInfoWindowFont"));
+  if (sample)
+    sample->SetFont(TempInfoWindowFont);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpMapWindowFont"));
-  if (wp)
-    wp->SetFont(TempMapWindowFont);
+  sample = (WndFrame *)wf->FindByName(_T("prpTitleWindowFont"));
+  if (sample)
+    sample->SetFont(TempTitleWindowFont);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpTitleSmallWindowFont"));
-  if (wp)
-    wp->SetFont(TempTitleSmallWindowFont);
+  sample = (WndFrame *)wf->FindByName(_T("prpMapWindowFont"));
+  if (sample)
+    sample->SetFont(TempMapWindowFont);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpMapWindowBoldFont"));
-  if (wp)
-    wp->SetFont(TempMapWindowBoldFont);
+  sample = (WndFrame *)wf->FindByName(_T("prpTitleSmallWindowFont"));
+  if (sample)
+    sample->SetFont(TempTitleSmallWindowFont);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpCDIWindowFont"));
-  if (wp)
-    wp->SetFont(TempCDIWindowFont);
+  sample = (WndFrame *)wf->FindByName(_T("prpMapWindowBoldFont"));
+  if (sample)
+    sample->SetFont(TempMapWindowBoldFont);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpMapLabelFont"));
-  if (wp)
-    wp->SetFont(TempMapLabelFont);
+  sample = (WndFrame *)wf->FindByName(_T("prpCDIWindowFont"));
+  if (sample)
+    sample->SetFont(TempCDIWindowFont);
+
+  sample = (WndFrame *)wf->FindByName(_T("prpMapLabelFont"));
+  if (sample)
+    sample->SetFont(TempMapLabelFont);
 
   // now fix the rest of the dlgConfiguration fonts:
   wf->SetFont(TempMapWindowBoldFont);
@@ -483,8 +485,7 @@ OnUseCustomFontData(DataField *Sender, DataField::DataAccessKind_t Mode)
 static void
 GetFontDescription(TCHAR Description[], const TCHAR * prpName, int iMaxLen)
 {
-  WndProperty * wp;
-  wp = (WndProperty*)wf->FindByName(prpName);
+  const WndFrame *wp = (WndFrame *)wf->FindByName(prpName);
   if (wp)
     _tcsncpy(Description, wp->GetCaption(), iMaxLen - 1);
 }
