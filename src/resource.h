@@ -27,7 +27,9 @@
 #define IDD_PROGRESS_LANDSCAPE          265
 #define IDB_ABORT                       269
 #define IDB_LOGGER                      271
+#define IDB_LOGGER_HD                  5271
 #define IDB_LOGGEROFF                   272
+#define IDB_LOGGEROFF_HD               5272
 #define IDB_FLARMTRAFFIC                278
 #define IDB_AIRSPACE3                   280
 #define IDB_DLGBUTTONLEFT16             281

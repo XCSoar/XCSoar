@@ -145,8 +145,8 @@ ScreenGraphics::Initialise()
   hTerrainWarning.load(IDB_TERRAINWARNING);
   hGPSStatus1.load(IDB_GPSSTATUS1, false);
   hGPSStatus2.load(IDB_GPSSTATUS2, false);
-  hLogger.load(IDB_LOGGER);
-  hLoggerOff.load(IDB_LOGGEROFF);
+  hLogger.load_big(IDB_LOGGER, IDB_LOGGER_HD);
+  hLoggerOff.load_big(IDB_LOGGEROFF, IDB_LOGGEROFF_HD);
   hBmpTeammatePosition.load(IDB_TEAMMATE_POS);
 
   hAutoMacCready.load(IDB_AUTOMACCREADY, false);
