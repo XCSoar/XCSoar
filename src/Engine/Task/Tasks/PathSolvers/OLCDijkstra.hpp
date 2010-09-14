@@ -66,11 +66,6 @@ public:
               const bool full_trace=true);
 
   /**
-   * Destructor, frees local variables
-   */
-  ~OLCDijkstra();
-
-  /**
    * Calculate the scored value of the OLC path
    *
    * @param the_distance output distance (m) of scored path

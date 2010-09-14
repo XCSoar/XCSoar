@@ -43,11 +43,6 @@
 #include <stdio.h>
 #endif
 
-
-OLCDijkstra::~OLCDijkstra() {
-}
-
-
 OLCDijkstra::OLCDijkstra(OnlineContest& _olc, 
                          const unsigned n_legs,
                          const unsigned finish_alt_diff,
