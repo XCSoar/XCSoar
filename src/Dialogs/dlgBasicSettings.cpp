@@ -56,7 +56,7 @@ static WndForm *wf = NULL;
 
 static bool changed = false;
 
-GlidePolar* glide_polar = NULL;
+static GlidePolar *glide_polar = NULL;
 
 static void
 SetButtons()
