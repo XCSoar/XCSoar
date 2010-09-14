@@ -288,8 +288,7 @@ public:
    * @return Initialised object
    */
   gcc_malloc gcc_pure
-  OrderedTask* clone(TaskEvents &te, 
-                     const TaskBehaviour &tb,
+  OrderedTask* clone(TaskEvents &te, const TaskBehaviour &tb,
                      GlidePolar &gp) const;
 
   /**
@@ -379,7 +378,8 @@ public:
    *
    */
   TracePointVector find_trace_points(const GEOPOINT &loc, const fixed range,
-                                     const unsigned mintime, const fixed resolution) const;
+                                     const unsigned mintime,
+                                     const fixed resolution) const;
 
   /**
    * Retrieve olc solution vector
@@ -542,4 +542,5 @@ public:
    */
   void ordered_Accept(TaskVisitor &visitor);
 };
-#endif //TASKMANAGER_H
+
+#endif

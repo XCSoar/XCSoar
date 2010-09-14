@@ -46,14 +46,12 @@ TaskManager::TaskManager(TaskEvents &te,
   m_glide_polar(fixed_zero),
   trace_full(),
   trace_sprint(9000, 2, 300),
-  task_ordered(te,task_behaviour,m_glide_polar),
-  task_goto(te,task_behaviour,m_glide_polar),
-  task_abort(te,task_behaviour,m_glide_polar,wps),
+  task_ordered(te, task_behaviour, m_glide_polar),
+  task_goto(te, task_behaviour, m_glide_polar),
+  task_abort(te, task_behaviour, m_glide_polar, wps),
   task_olc(task_behaviour.olc_rules, common_stats, trace_full, trace_sprint),
   mode(MODE_NULL),
-  active_task(NULL)
-{
-}
+  active_task(NULL) {}
 
 TaskManager::TaskMode_t 
 TaskManager::set_mode(const TaskMode_t the_mode)
@@ -63,18 +61,21 @@ TaskManager::set_mode(const TaskMode_t the_mode)
     active_task = &task_abort;
     mode = MODE_ABORT;
     break;
+
   case (MODE_ORDERED):
     if (task_ordered.task_size()) {
       active_task = &task_ordered;
       mode = MODE_ORDERED;
       break;
     }
+
   case (MODE_GOTO):
     if (task_goto.getActiveTaskPoint()) {
       active_task = &task_goto;
       mode = MODE_GOTO;
       break;
     }
+
   case (MODE_NULL):
     active_task = NULL;
     mode = MODE_NULL;
@@ -86,17 +87,17 @@ TaskManager::set_mode(const TaskMode_t the_mode)
 void 
 TaskManager::setActiveTaskPoint(unsigned index)
 {
-  if (active_task) active_task->setActiveTaskPoint(index);
+  if (active_task)
+    active_task->setActiveTaskPoint(index);
 }
 
 unsigned 
 TaskManager::getActiveTaskPointIndex() const
 {
-  if (active_task) {
+  if (active_task)
     return active_task->getActiveTaskPointIndex();
-  } else {
-    return 0;
-  }
+
+  return 0;
 }
 
 void 
@@ -108,50 +109,51 @@ TaskManager::incrementActiveTaskPoint(int offset)
   }
 }
 
-
 TaskPoint* 
 TaskManager::getActiveTaskPoint() const
 {
   if (active_task) 
     return active_task->getActiveTaskPoint();
-  else 
-    return NULL;
-}
 
+  return NULL;
+}
 
 void
 TaskManager::update_common_stats_times(const AIRCRAFT_STATE &state)
 {
-  if (task_ordered.task_size()>1) {
+  if (task_ordered.task_size() > 1) {
     common_stats.task_started = task_ordered.get_stats().task_started;
     common_stats.task_finished = task_ordered.get_stats().task_finished;
 
     common_stats.ordered_has_targets = task_ordered.has_targets();
 
-    common_stats.aat_time_remaining = max(fixed_zero, 
-                                          task_ordered.get_ordered_task_behaviour().aat_min_time
-                                          -task_ordered.get_stats().total.TimeElapsed);
+    common_stats.aat_time_remaining =
+        max(fixed_zero, task_ordered.get_ordered_task_behaviour().aat_min_time -
+                        task_ordered.get_stats().total.TimeElapsed);
 
-    if (positive(common_stats.aat_time_remaining)) {
-      common_stats.aat_speed_remaining = fixed(task_ordered.get_stats().total.remaining.get_distance()) /
-        common_stats.aat_time_remaining;
-    } else {
+    if (positive(common_stats.aat_time_remaining))
+      common_stats.aat_speed_remaining =
+          fixed(task_ordered.get_stats().total.remaining.get_distance()) /
+          common_stats.aat_time_remaining;
+    else
       common_stats.aat_speed_remaining = -fixed_one;
-    }
 
     fixed aat_min_time = task_ordered.get_ordered_task_behaviour().aat_min_time;
 
     if (positive(aat_min_time)) {
-      common_stats.aat_speed_max = task_ordered.get_stats().distance_max / aat_min_time;
-      common_stats.aat_speed_min = task_ordered.get_stats().distance_min / aat_min_time;
+      common_stats.aat_speed_max =
+          task_ordered.get_stats().distance_max / aat_min_time;
+      common_stats.aat_speed_min =
+          task_ordered.get_stats().distance_min / aat_min_time;
     } else {
       common_stats.aat_speed_max = -fixed_one;
       common_stats.aat_speed_min = -fixed_one;
     }
 
-    common_stats.task_time_remaining = task_ordered.get_stats().total.TimeRemaining;
-    common_stats.task_time_elapsed = task_ordered.get_stats().total.TimeElapsed;
-
+    common_stats.task_time_remaining =
+        task_ordered.get_stats().total.TimeRemaining;
+    common_stats.task_time_elapsed =
+        task_ordered.get_stats().total.TimeElapsed;
   } else {
     common_stats.reset_task();
   }
@@ -164,27 +166,29 @@ TaskManager::update_common_stats_waypoints(const AIRCRAFT_STATE &state)
 
   // if during this update, no landables found, try abort task
 
-  if (active_task && (active_task != &task_abort)) {
+  if (active_task && (active_task != &task_abort))
     // update abort task offline
     task_abort.update_offline(state);
-  }
+
   common_stats.landable_reachable |= task_abort.has_landable_reachable();
 }
 
 void
 TaskManager::update_common_stats_task(const AIRCRAFT_STATE &state)
 {
-  common_stats.mode_abort = (mode==MODE_ABORT);
-  common_stats.mode_goto = (mode==MODE_GOTO);
-  common_stats.mode_ordered = (mode==MODE_ORDERED);
+  common_stats.mode_abort = (mode == MODE_ABORT);
+  common_stats.mode_goto = (mode == MODE_GOTO);
+  common_stats.mode_ordered = (mode == MODE_ORDERED);
 
   common_stats.ordered_valid = task_ordered.check_task();
 
   if (active_task && active_task->get_stats().task_valid) {
     common_stats.active_has_next = active_task->validTaskPoint(1);
     common_stats.active_has_previous = active_task->validTaskPoint(-1);
-    common_stats.next_is_last = active_task->validTaskPoint(1) && !active_task->validTaskPoint(2);
-    common_stats.previous_is_first = active_task->validTaskPoint(-1) && !active_task->validTaskPoint(-2);
+    common_stats.next_is_last = active_task->validTaskPoint(1) &&
+                                !active_task->validTaskPoint(2);
+    common_stats.previous_is_first = active_task->validTaskPoint(-1) &&
+                                     !active_task->validTaskPoint(-2);
   } else {
     common_stats.active_has_next = false;
     common_stats.active_has_previous = false;
@@ -196,7 +200,6 @@ TaskManager::update_common_stats_task(const AIRCRAFT_STATE &state)
 void
 TaskManager::update_common_stats_polar(const AIRCRAFT_STATE &state)
 {
-
   common_stats.current_mc = m_glide_polar.get_mc();
   common_stats.current_bugs = m_glide_polar.get_bugs();
   common_stats.current_ballast = m_glide_polar.get_ballast();
@@ -219,7 +222,6 @@ TaskManager::update_common_stats_polar(const AIRCRAFT_STATE &state)
     risk_polar.speed_to_fly(state,
                             get_stats().current_leg.solution_remaining,
                             false);
-
 }
 
 void
@@ -231,7 +233,6 @@ TaskManager::update_common_stats(const AIRCRAFT_STATE &state)
   update_common_stats_polar(state);
 }
 
-
 bool 
 TaskManager::update(const AIRCRAFT_STATE &state, 
                     const AIRCRAFT_STATE& state_last)
@@ -241,29 +242,25 @@ TaskManager::update(const AIRCRAFT_STATE &state,
 
   bool retval = false;
 
-  if (state_last.Time > state.Time) {
+  if (state_last.Time > state.Time)
     reset();
-  }
 
   if (state.Flying) {
     trace_full.append(state);
     trace_sprint.append(state);
   }
 
-  if (task_ordered.task_size()>1) {
+  if (task_ordered.task_size() > 1)
     // always update ordered task
     retval |= task_ordered.update(state, state_last);
-  }
 
-  if (active_task && (active_task != &task_ordered)) {
+  if (active_task && (active_task != &task_ordered))
     // update mode task
     retval |= active_task->update(state, state_last);
-  }
 
-  if (state.Flying) {
+  if (state.Flying)
     // always update OLC sampling task
     retval |= task_olc.update_sample(state);
-  }
 
   update_common_stats(state);
 
@@ -280,27 +277,23 @@ TaskManager::update_idle(const AIRCRAFT_STATE& state)
     retval |= trace_full.optimise_if_old();
     retval |= trace_sprint.optimise_if_old();
 
-    if (task_behaviour.enable_olc) {
+    if (task_behaviour.enable_olc)
       retval |= task_olc.update_idle(state);
-    }
   }
 
-  if (active_task) {
+  if (active_task)
     retval |= active_task->update_idle(state);
-  }
 
   return retval;
 }
 
-
 const TaskStats& 
 TaskManager::get_stats() const
 {
-  if (active_task) {
+  if (active_task)
     return active_task->get_stats();
-  } else {
-    return null_stats;
-  }
+
+  return null_stats;
 }
 
 bool
@@ -309,9 +302,9 @@ TaskManager::do_goto(const Waypoint & wp)
   if (task_goto.do_goto(wp)) {
     set_mode(MODE_GOTO);
     return true;
-  } else {
-    return false;
   }
+
+  return false;
 }
 
 bool 
@@ -319,8 +312,8 @@ TaskManager::check_task() const
 {
   if (active_task) 
     return active_task->check_task();
-  else
-    return false;  
+
+  return false;
 }
 
 void
@@ -362,32 +355,26 @@ TaskManager::reset()
   trace_sprint.clear();
 }
 
-
 unsigned 
 TaskManager::task_size() const
 {
-  if (active_task) {
+  if (active_task)
     return active_task->task_size();
-  } else {
-    return 0;
-  }
+
+  return 0;
 }
 
 GEOPOINT 
 TaskManager::random_point_in_task(const unsigned index, const fixed mag) const
 {
-  if (active_task == &task_ordered) {
-    if (index< task_size()) {
-      return task_ordered.getTaskPoint(index)->randomPointInSector(mag);
-    }
-  }
-  if (index<= task_size()) {
+  if (active_task == &task_ordered && index < task_size())
+    return task_ordered.getTaskPoint(index)->randomPointInSector(mag);
+
+  if (index <= task_size())
     return active_task->getActiveTaskPoint()->get_location();
-  } else {
-    GEOPOINT null_location(Angle::native(fixed_zero),
-                           Angle::native(fixed_zero));
-    return null_location;
-  }
+
+  GEOPOINT null_location(Angle::native(fixed_zero), Angle::native(fixed_zero));
+  return null_location;
 }
 
 void 
@@ -404,7 +391,8 @@ TaskManager::default_task(const GEOPOINT &loc, const bool force)
 
 TracePointVector 
 TaskManager::find_trace_points(const GEOPOINT &loc, const fixed range,
-                               const unsigned mintime, const fixed resolution) const
+                               const unsigned mintime,
+                               const fixed resolution) const
 {
   return trace_full.find_within_range(loc, range, mintime, resolution);
 }
@@ -412,11 +400,10 @@ TaskManager::find_trace_points(const GEOPOINT &loc, const fixed range,
 fixed 
 TaskManager::get_finish_height() const
 {
-  if (active_task) {
+  if (active_task)
     return active_task->get_finish_height();
-  } else {
-    return fixed_zero;
-  }
+
+  return fixed_zero;
 }
 
 bool 
@@ -429,40 +416,37 @@ TaskManager::update_auto_mc(const AIRCRAFT_STATE& state_now,
   if (!task_behaviour.auto_mc) 
     return false;
 
-  if (task_behaviour.auto_mc_mode==TaskBehaviour::AUTOMC_FINALGLIDE) 
+  if (task_behaviour.auto_mc_mode == TaskBehaviour::AUTOMC_FINALGLIDE)
     return false;
 
   if (positive(fallback_mc)) {
     m_glide_polar.set_mc(fallback_mc);
     return true;
   }
+
   return false;
 }
 
 GEOPOINT
 TaskManager::get_task_center(const GEOPOINT& fallback_location) const
 {
-  if (active_task) {
+  if (active_task)
     return active_task->get_task_center(fallback_location);
-  } else {
-    return fallback_location;
-  }
+
+  return fallback_location;
 }
 
 fixed
 TaskManager::get_task_radius(const GEOPOINT& fallback_location) const
 {
-  if (active_task) {
+  if (active_task)
     return active_task->get_task_radius(fallback_location);
-  } else {
-    return fixed_zero;
-  }
+
+  return fixed_zero;
 }
 
-
 OrderedTask* 
-TaskManager::clone(TaskEvents &te, 
-                   const TaskBehaviour &tb,
+TaskManager::clone(TaskEvents &te, const TaskBehaviour &tb,
                    GlidePolar &gp) const
 {
   return task_ordered.clone(te, tb, gp);
@@ -471,15 +455,15 @@ TaskManager::clone(TaskEvents &te,
 bool 
 TaskManager::commit(const OrderedTask& other)
 {
-  bool retval;
-  if ((mode== MODE_ORDERED) && !other.task_size()) {
+  if ((mode == MODE_ORDERED) && !other.task_size())
     set_mode(MODE_NULL);
-  } 
-  retval = task_ordered.commit(other);
 
-  if (mode== MODE_NULL) {
+  bool retval = task_ordered.commit(other);
+
+  if (mode == MODE_NULL) {
     setActiveTaskPoint(0);
     set_mode(MODE_ORDERED);
   }
+
   return retval;
 }
