@@ -9,7 +9,9 @@
 #define IDB_REACHABLE                   140
 #define IDB_REACHABLE_HD               5140
 #define IDB_TURNPOINT                   141
+#define IDB_TURNPOINT_HD               5141
 #define IDB_SMALL                       142
+#define IDB_SMALL_HD                   5142
 #define IDB_CRUISE                      212
 #define IDB_CLIMB                       213
 #define IDB_FINALGLIDE                  214

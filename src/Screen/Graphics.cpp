@@ -221,8 +221,8 @@ ScreenGraphics::Initialise()
   hpVisualGlideLightRed.set(Pen::DASH, Layout::Scale(1), Color::RED);
   hpVisualGlideHeavyRed.set(Pen::DASH, Layout::Scale(2), Color::RED);
 
-  SmallIcon.load(IDB_SMALL);
-  TurnPointIcon.load(IDB_TURNPOINT);
+  SmallIcon.load_big(IDB_SMALL, IDB_SMALL_HD);
+  TurnPointIcon.load_big(IDB_TURNPOINT, IDB_TURNPOINT_HD);
 
   hpAircraft.set(Layout::Scale(3), Color::WHITE);
   hpAircraftBorder.set(Layout::Scale(1), Color::BLACK);
