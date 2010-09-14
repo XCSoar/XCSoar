@@ -76,20 +76,16 @@ OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
     canvas.rectangle(rc.left + x0, rc.top + Layout::FastScale(2),
         rc.right - Layout::FastScale(2), rc.bottom - Layout::FastScale(2));
   } else {
-    bool iswarn;
-    bool isdisplay;
+    const SETTINGS_AIRSPACE &settings_airspace =
+      XCSoarInterface::SettingsComputer();
 
-    iswarn = (XCSoarInterface::SettingsComputer().iAirspaceMode[i] >= 2);
-    isdisplay = ((XCSoarInterface::SettingsComputer().iAirspaceMode[i] % 2) > 0);
-
-    if (iswarn) {
+    if (settings_airspace.WarnAirspaces[i])
       canvas.text(rc.left + w0 - w1 - w2, rc.top + Layout::FastScale(2),
                   _("Warn"));
-    }
-    if (isdisplay) {
+
+    if (settings_airspace.DisplayAirspaces[i])
       canvas.text(rc.left + w0 - w2, rc.top + Layout::FastScale(2),
                   _("Display"));
-    }
   }
 
   canvas.text_clipped(rc.left + Layout::FastScale(2),
@@ -122,8 +118,15 @@ OnAirspaceListEnter(unsigned ItemIndex)
       changed = true;
     }
   } else {
-    int v = (XCSoarInterface::SettingsComputer().iAirspaceMode[ItemIndex] + 1) % 4;
-    XCSoarInterface::SetSettingsComputer().iAirspaceMode[ItemIndex] = v;
+    SETTINGS_AIRSPACE &settings_airspace =
+      XCSoarInterface::SetSettingsComputer();
+
+    bool display = settings_airspace.DisplayAirspaces[ItemIndex];
+    settings_airspace.DisplayAirspaces[ItemIndex] = !display;
+    if (display)
+      settings_airspace.WarnAirspaces[ItemIndex] =
+        !settings_airspace.WarnAirspaces[ItemIndex];
+
     Profile::SetAirspaceMode(ItemIndex);
     changed = true;
   }

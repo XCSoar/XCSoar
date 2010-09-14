@@ -96,9 +96,13 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.EnableSoundModes = true;
   settings_computer.EnableSoundTask = true;
 
-  std::fill(settings_computer.iAirspaceMode,
-            settings_computer.iAirspaceMode + AIRSPACECLASSCOUNT,
-            3);
+  std::fill(settings_computer.DisplayAirspaces,
+            settings_computer.DisplayAirspaces + AIRSPACECLASSCOUNT,
+            true);
+
+  std::fill(settings_computer.WarnAirspaces,
+            settings_computer.WarnAirspaces + AIRSPACECLASSCOUNT,
+            true);
 
   settings_computer.POLARID = 1;
   settings_computer.SafetySpeed = fixed(70);

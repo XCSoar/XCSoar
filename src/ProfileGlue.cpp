@@ -305,8 +305,10 @@ Profile::Use()
   Get(szProfileRegKey, strRegKey, 65);
 
   for (i = 0; i < AIRSPACECLASSCOUNT; i++) {
-    if (Get(szProfileAirspaceMode[i], Temp))
-      settings_computer.iAirspaceMode[i] = Temp;
+    if (Get(szProfileAirspaceMode[i], Temp)) {
+      settings_computer.DisplayAirspaces[i] = (Temp & 0x1) != 0;
+      settings_computer.WarnAirspaces[i] = (Temp & 0x2) != 0;
+    }
 
     Get(szProfileBrush[i],
         settings_map.iAirspaceBrush[i]);
@@ -641,7 +643,15 @@ Profile::GetScaleList(fixed *List, size_t Size)
 void
 Profile::SetAirspaceMode(int i)
 {
-  int val = XCSoarInterface::SettingsComputer().iAirspaceMode[i];
+  const SETTINGS_AIRSPACE &settings_airspace =
+    XCSoarInterface::SettingsComputer();
+
+  int val = 0;
+  if (settings_airspace.DisplayAirspaces[i])
+    val |= 0x1;
+  if (settings_airspace.WarnAirspaces[i])
+    val |= 0x2;
+
   Set(szProfileAirspaceMode[i], val);
 }
 

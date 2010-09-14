@@ -249,8 +249,13 @@ GenerateBlackboard(MapWindow &map)
     lease->SetViewCenter(nmea_info.Location);
   }
 
-  for (unsigned i = 0; i <AIRSPACECLASSCOUNT; ++i)
-    settings_computer.iAirspaceMode[i] = 3;
+  std::fill(settings_computer.DisplayAirspaces,
+            settings_computer.DisplayAirspaces + AIRSPACECLASSCOUNT,
+            true);
+
+  std::fill(settings_computer.WarnAirspaces,
+            settings_computer.WarnAirspaces + AIRSPACECLASSCOUNT,
+            true);
 
   map.ReadBlackboard(nmea_info, derived_info, settings_computer,
                      blackboard.SettingsMap());

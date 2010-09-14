@@ -44,7 +44,7 @@ Copyright_License {
 bool
 AirspaceVisible::type_visible(const AbstractAirspace& airspace) const
 {
-  return m_settings.iAirspaceMode[airspace.get_type()]%2==1;
+  return m_settings.DisplayAirspaces[airspace.get_type()];
 }
 
 bool
