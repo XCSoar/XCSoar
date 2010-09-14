@@ -42,17 +42,49 @@
 AATIsolineSegment::AATIsolineSegment(const AATPoint& ap):
   AATIsoline(ap)
 {
-  IsolineCrossingFinder icf_up(ap, ell, fixed_zero, fixed_half);
-  IsolineCrossingFinder icf_down(ap, ell, -fixed_half, fixed_zero);
+  const fixed t_target = FindTargetInSector(ap);
+
+  const fixed t_a = t_target + - fixed_half;
+  const fixed t_c = t_target + fixed_half;
+
+  IsolineCrossingFinder icf_up(ap, ell, t_target , t_c);
+  IsolineCrossingFinder icf_down(ap, ell, t_a, t_target);
 
   t_up = icf_up.solve();
   t_down = icf_down.solve();
 
-  if ((t_up<-fixed_half) || (t_down<-fixed_half)) {
+  if ((t_down <= t_a) || (t_down >= t_target) || (t_up <= t_target) || (t_up >= t_c)) {
     t_up = fixed_zero;
     t_down = fixed_zero;
     // single solution only
   }
+}
+
+bool
+AATIsolineSegment::isInSector(const AATPoint& ap, fixed t) {
+  GEOPOINT a = ell.parametric(t);
+  AIRCRAFT_STATE s;
+  s.Location = a;
+  if (ap.isInSector((s)))
+    return true;
+  else
+    return false;
+}
+
+fixed
+AATIsolineSegment::FindTargetInSector(const AATPoint& ap) {
+  static fixed t_target = fixed_zero;
+  for (fixed t_b = fixed_zero; t_b < fixed_half; t_b += fixed(0.01)) {
+    if (isInSector(ap, t_target + t_b)) {
+      t_target += t_b;
+      break;
+    }
+    if (isInSector(ap, t_target - t_b)) {
+      t_target -= t_b;
+      break;
+    }
+  }
+  return t_target;
 }
 
 bool
