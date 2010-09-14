@@ -66,7 +66,11 @@ MainWindow CommonInterface::main_window(status_messages);
 // settings used only by interface thread scope
 bool ActionInterface::LockSettingsInFlight = true;
 unsigned ActionInterface::UserLevel = 0; // used by dlgConfiguration
-unsigned XCSoarInterface::debounceTimeout = 200;
+#if defined(GNAV) || defined(PCGNAV)
+unsigned XCSoarInterface::debounceTimeout = 0;
+#else
+unsigned XCSoarInterface::debounceTimeout = 250;
+#endif
 unsigned ActionInterface::MenuTimeoutMax = MENUTIMEOUTMAX;
 bool CommonInterface::EnableAutoBacklight = true;
 bool CommonInterface::EnableAutoSoundVolume = true;

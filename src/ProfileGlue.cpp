@@ -144,9 +144,8 @@ Profile::Use()
   }
 #endif
 
-  Temp = 0;
-  Get(szProfileLatLonUnits, Temp);
-  Units::SetCoordinateFormat((CoordinateFormats_t)Temp);
+  if (Get(szProfileLatLonUnits, Temp))
+    Units::SetCoordinateFormat((CoordinateFormats_t)Temp);
 
   Get(szProfileSpeedUnitsValue, Speed);
   switch (Speed) {
@@ -227,63 +226,29 @@ Profile::Use()
   }
 
   for (i = 0; i < MAXINFOWINDOWS; i++) {
-    Temp = InfoBoxManager::getTypeAll(i);
-    Get(szProfileDisplayType[i], Temp);
-    InfoBoxManager::setTypeAll(i, Temp);
+    if (Get(szProfileDisplayType[i], Temp))
+      InfoBoxManager::setTypeAll(i, Temp);
   }
 
   // check against V3 infotypes
   CheckInfoTypes();
 
-  Temp = XCSoarInterface::SetSettingsMap().DisplayOrientation;
-  Get(szProfileDisplayUpValue, Temp);
-  switch (Temp) {
-  case TRACKUP:
-    XCSoarInterface::SetSettingsMap().DisplayOrientation = TRACKUP;
-    break;
-  case NORTHUP:
-    XCSoarInterface::SetSettingsMap().DisplayOrientation = NORTHUP;
-    break;
-  case NORTHCIRCLE:
-    XCSoarInterface::SetSettingsMap().DisplayOrientation = NORTHCIRCLE;
-    break;
-  case TRACKCIRCLE:
-    XCSoarInterface::SetSettingsMap().DisplayOrientation = TRACKCIRCLE;
-    break;
-  case NORTHTRACK:
-    XCSoarInterface::SetSettingsMap().DisplayOrientation = NORTHTRACK;
-    break;
-  }
+  if (Get(szProfileDisplayUpValue, Temp) &&
+      (Temp == TRACKUP || Temp == NORTHUP || Temp == NORTHCIRCLE ||
+       Temp == TRACKCIRCLE || Temp == NORTHTRACK))
+    XCSoarInterface::SetSettingsMap().DisplayOrientation =
+      (DisplayOrientation_t)Temp;
 
-  Temp = XCSoarInterface::SetSettingsMap().DisplayTextType;
-  Get(szProfileDisplayText, Temp);
-  switch (Temp) {
-  case 0:
-    XCSoarInterface::SetSettingsMap().DisplayTextType = DISPLAYNAME;
-    break;
-  case 1:
-    XCSoarInterface::SetSettingsMap().DisplayTextType = DISPLAYNUMBER;
-    break;
-  case 2:
-    XCSoarInterface::SetSettingsMap().DisplayTextType = DISPLAYFIRSTFIVE;
-    break;
-  case 3:
-    XCSoarInterface::SetSettingsMap().DisplayTextType = DISPLAYNONE;
-    break;
-  case 4:
-    XCSoarInterface::SetSettingsMap().DisplayTextType = DISPLAYFIRSTTHREE;
-    break;
-  case 5:
-    XCSoarInterface::SetSettingsMap().DisplayTextType = DISPLAYNAMEIFINTASK;
-    break;
-  case 6:
-    XCSoarInterface::SetSettingsMap().DisplayTextType = DISPLAYUNTILSPACE;
-    break;
-  }
+  if (Get(szProfileDisplayText, Temp) &&
+      (Temp == DISPLAYNAME || Temp == DISPLAYNUMBER ||
+       Temp == DISPLAYFIRSTFIVE || Temp == DISPLAYNONE ||
+       Temp == DISPLAYFIRSTTHREE || Temp == DISPLAYNAMEIFINTASK ||
+       Temp == DISPLAYUNTILSPACE))
+    XCSoarInterface::SetSettingsMap().DisplayTextType =
+      (DisplayTextType_t)Temp;
 
-  Temp = XCSoarInterface::SetSettingsComputer().AltitudeMode;
-  Get(szProfileAltMode, Temp);
-  XCSoarInterface::SetSettingsComputer().AltitudeMode = (AirspaceDisplayMode_t)Temp;
+  if (Get(szProfileAltMode, Temp))
+    XCSoarInterface::SetSettingsComputer().AltitudeMode = (AirspaceDisplayMode_t)Temp;
 
   Get(szProfileClipAlt,
       XCSoarInterface::SetSettingsComputer().ClipAltitude);
@@ -343,7 +308,6 @@ Profile::Use()
   Get(szProfileHomeWaypoint,
       XCSoarInterface::SetSettingsComputer().HomeWaypoint);
 
-  Temp = XCSoarInterface::SettingsComputer().Alternate1;
   if (Get(szProfileAlternate1, Temp)) {
     // TODO: for portrait no need to force alternate calculations here.
     // Infobox will trigger them on if visible..
@@ -354,7 +318,6 @@ Profile::Use()
     XCSoarInterface::SetSettingsComputer().EnableAlternate1 = false;
   }
 
-  Temp = XCSoarInterface::SettingsComputer().Alternate2;
   if (Get(szProfileAlternate2, Temp)) {
     XCSoarInterface::SetSettingsComputer().Alternate2 = Temp;
     XCSoarInterface::SetSettingsComputer().EnableAlternate2 = true;
@@ -411,22 +374,15 @@ Profile::Use()
   Get(szProfileGestures,
       XCSoarInterface::SetSettingsComputer().EnableGestures);
 
-  Temp = (AverEffTime_t)ae2minutes;
-  Get(szProfileAverEffTime,Temp);
-  XCSoarInterface::SetSettingsComputer().AverEffTime = Temp;
+  if (Get(szProfileAverEffTime, Temp))
+    XCSoarInterface::SetSettingsComputer().AverEffTime = Temp;
 
-#if defined(GNAV) || defined(PCGNAV)
-  Temp = 0;
-#else
-  Temp = 250;
-#endif
-  Get(szProfileDebounceTimeout, Temp);
-  XCSoarInterface::debounceTimeout = Temp;
+  if (Get(szProfileDebounceTimeout, Temp))
+    XCSoarInterface::debounceTimeout = Temp;
 
   /* JMW broken
-  Temp = 100;
-  Get(szProfileAccelerometerZero, Temp);
-  AccelerometerZero = Temp;
+  if (Get(szProfileAccelerometerZero, Temp))
+    AccelerometerZero = Temp;
   if (AccelerometerZero==0.0) {
     AccelerometerZero= 100.0;
     Temp = 100;
@@ -437,13 +393,11 @@ Profile::Use()
   // new appearance variables
 
   //Temp = Appearance.IndFinalGlide;
-  Temp = (IndFinalGlide_t)fgFinalGlideDefault;
-  Get(szProfileAppIndFinalGlide, Temp);
-  Appearance.IndFinalGlide = (IndFinalGlide_t)Temp;
+  if (Get(szProfileAppIndFinalGlide, Temp))
+    Appearance.IndFinalGlide = (IndFinalGlide_t)Temp;
 
-  Temp = Appearance.IndLandable;
-  Get(szProfileAppIndLandable, Temp);
-  Appearance.IndLandable = (IndLandable_t)Temp;
+  if (Get(szProfileAppIndLandable, Temp))
+    Appearance.IndLandable = (IndLandable_t)Temp;
 
   Get(szProfileAppInverseInfoBox,
 		  Appearance.InverseInfoBox);
@@ -460,24 +414,20 @@ Profile::Use()
   Get(szProfileAppGaugeVarioGross,
 		  Appearance.GaugeVarioGross);
 
-  Temp = Appearance.CompassAppearance;
-  Get(szProfileAppCompassAppearance, Temp);
-  Appearance.CompassAppearance = (CompassAppearance_t)Temp;
+  if (Get(szProfileAppCompassAppearance, Temp))
+    Appearance.CompassAppearance = (CompassAppearance_t)Temp;
 
-  Temp = (InfoBoxBorderAppearance_t)apIbBox;
-  Get(szProfileAppInfoBoxBorder, Temp);
-  Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)Temp;
+  if (Get(szProfileAppInfoBoxBorder, Temp))
+    Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)Temp;
 
-  Temp = Appearance.StateMessageAlign;
-  Get(szProfileAppStatusMessageAlignment, Temp);
-  Appearance.StateMessageAlign = (StateMessageAlign_t)Temp;
+  if (Get(szProfileAppStatusMessageAlignment, Temp))
+    Appearance.StateMessageAlign = (StateMessageAlign_t)Temp;
 
   if (Get(szProfileAppTextInputStyle, Temp))
     Appearance.TextInputStyle = (TextInputStyle_t)Temp;
 
-  Temp = g_eDialogStyle;
-  Get(szProfileAppDialogStyle, Temp);
-  g_eDialogStyle = (DialogStyle_t)Temp;
+  if (Get(szProfileAppDialogStyle, Temp))
+    g_eDialogStyle = (DialogStyle_t)Temp;
 
   Get(szProfileAppDefaultMapWidth,
 		  Appearance.DefaultMapWidth);
@@ -500,19 +450,16 @@ Profile::Use()
   // IndFinalGlide
   // IndLandable
 
-  {
-    unsigned t = XCSoarInterface::SettingsComputer().auto_mc_mode;
-    Get(szProfileAutoMcMode, t);
-    XCSoarInterface::SetSettingsComputer().auto_mc_mode = (TaskBehaviour::AutoMCMode_t)t;
-  }
+  if (Get(szProfileAutoMcMode, Temp))
+    XCSoarInterface::SetSettingsComputer().auto_mc_mode =
+      (TaskBehaviour::AutoMCMode_t)Temp;
 
   Get(szProfileWaypointsOutOfRange,
                   WayPointFile::WaypointsOutOfRangeSetting);
-  {
-    unsigned t = XCSoarInterface::SettingsComputer().olc_rules;
-    Get(szProfileOLCRules, t);
-    XCSoarInterface::SetSettingsComputer().olc_rules = (OLCRules)t;
-  }
+
+  if (Get(szProfileOLCRules, Temp))
+      XCSoarInterface::SetSettingsComputer().olc_rules = (OLCRules)Temp;
+
   Get(szProfileHandicap,
       XCSoarInterface::SetSettingsComputer().olc_handicap);
   Get(szProfileEnableExternalTriggerCruise,
@@ -579,19 +526,16 @@ Profile::Use()
   Get(szProfileAbortSafetyUseCurrent,
       XCSoarInterface::SetSettingsComputer().safety_mc_use_current);
 
-  Temp = iround(XCSoarInterface::SettingsComputer().safety_mc * 10);
-  Get(szProfileSafetyMacCready, Temp);
-  XCSoarInterface::SetSettingsComputer().safety_mc = fixed(Temp) / 10;
+  if (Get(szProfileSafetyMacCready, Temp))
+    XCSoarInterface::SetSettingsComputer().safety_mc = fixed(Temp) / 10;
 
   Get(szProfileUserLevel, XCSoarInterface::UserLevel);
 
-  Temp = iround(XCSoarInterface::SettingsComputer().risk_gamma * 10);
-  Get(szProfileRiskGamma, Temp);
-  XCSoarInterface::SetSettingsComputer().risk_gamma = fixed(Temp) / 10;
+  if (Get(szProfileRiskGamma, Temp))
+    XCSoarInterface::SetSettingsComputer().risk_gamma = fixed(Temp) / 10;
 
-  Temp = (CompassAppearance_t)apCompassAltA;
-  Get(szProfileWindArrowStyle, Temp);
-  XCSoarInterface::SetSettingsMap().WindArrowStyle = Temp;
+  if (Get(szProfileWindArrowStyle, Temp))
+    XCSoarInterface::SetSettingsMap().WindArrowStyle = Temp;
 
   Get(szProfileDisableAutoLogger,
       XCSoarInterface::SetSettingsComputer().DisableAutoLogger);
