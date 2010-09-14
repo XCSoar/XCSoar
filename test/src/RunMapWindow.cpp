@@ -253,8 +253,8 @@ GenerateBlackboard(MapWindow &map)
             settings_computer.DisplayAirspaces + AIRSPACECLASSCOUNT,
             true);
 
-  std::fill(settings_computer.WarnAirspaces,
-            settings_computer.WarnAirspaces + AIRSPACECLASSCOUNT,
+  std::fill(settings_computer.airspace_warnings.class_warnings,
+            settings_computer.airspace_warnings.class_warnings + AIRSPACECLASSCOUNT,
             true);
 
   map.ReadBlackboard(nmea_info, derived_info, settings_computer,

@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
@@ -34,43 +33,36 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
-
-#if !defined(XCSOAR_SETTINGS_AIRSPACE_H)
-#define XCSOAR_SETTINGS_AIRSPACE_H
-
-#include "Airspace/AirspaceClass.hpp"
-#include "Engine/Airspace/AirspaceWarningConfig.hpp"
-
-/** Airspace display modes */
-typedef enum
-{
-  ALLON = 0,
-  CLIP,
-  AUTO,
-  ALLBELOW,
-  INSIDE,
-  ALLOFF
-} AirspaceDisplayMode_t;
-
-
-/**
- * Settings for airspace options
  */
-struct SETTINGS_AIRSPACE
-{
-  /** Airspace warnings enabled (true/false) */
-  bool EnableAirspaceWarnings;
 
-  AirspaceDisplayMode_t AltitudeMode; /**< Mode controlling how airspaces are filtered for display */
-  unsigned ClipAltitude;        /**< Altitude (m) above which airspace is not drawn for clip mode */
-  unsigned AltWarningMargin;    /**< Altitude margin (m) outside of which to not display airspace for auto mode */
+#ifndef AIRSPACE_WARNING_CONFIG_HPP
+#define AIRSPACE_WARNING_CONFIG_HPP
 
-  /** Class-specific display flags */
-  bool DisplayAirspaces[AIRSPACECLASSCOUNT];
+#include "AirspaceClass.hpp"
 
-  AirspaceWarningConfig airspace_warnings;
+#include <assert.h>
+#include <algorithm>
+
+struct AirspaceWarningConfig {
+  /** Warning time before airspace entry */
+  unsigned WarningTime;
+
+  /** Time an acknowledgement will persist before a warning is reissued */
+  unsigned AcknowledgementTime;
+
+  /** Class-specific warning flags */
+  bool class_warnings[AIRSPACECLASSCOUNT];
+
+  AirspaceWarningConfig()
+    :WarningTime(30), AcknowledgementTime(30) {
+    std::fill(class_warnings, class_warnings + AIRSPACECLASSCOUNT, true);
+  }
+
+  bool class_enabled(AirspaceClass_t cls) const {
+    assert(cls >= 0 && cls < AIRSPACECLASSCOUNT);
+
+    return class_warnings[cls];
+  }
 };
-
 
 #endif

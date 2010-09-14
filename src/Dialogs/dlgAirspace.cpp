@@ -79,7 +79,7 @@ OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
     const SETTINGS_AIRSPACE &settings_airspace =
       XCSoarInterface::SettingsComputer();
 
-    if (settings_airspace.WarnAirspaces[i])
+    if (settings_airspace.airspace_warnings.class_warnings[i])
       canvas.text(rc.left + w0 - w1 - w2, rc.top + Layout::FastScale(2),
                   _("Warn"));
 
@@ -124,8 +124,8 @@ OnAirspaceListEnter(unsigned ItemIndex)
     bool display = settings_airspace.DisplayAirspaces[ItemIndex];
     settings_airspace.DisplayAirspaces[ItemIndex] = !display;
     if (display)
-      settings_airspace.WarnAirspaces[ItemIndex] =
-        !settings_airspace.WarnAirspaces[ItemIndex];
+      settings_airspace.airspace_warnings.class_warnings[ItemIndex] =
+        !settings_airspace.airspace_warnings.class_warnings[ItemIndex];
 
     Profile::SetAirspaceMode(ItemIndex);
     changed = true;

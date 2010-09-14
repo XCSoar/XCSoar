@@ -85,8 +85,6 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.EnableVoiceAirspace = false;
 
   settings_computer.EnableAirspaceWarnings = true;
-  settings_computer.WarningTime = 30;
-  settings_computer.AcknowledgementTime = 30;
 
   settings_computer.AltitudeMode = ALLON;
   settings_computer.ClipAltitude = 1000;
@@ -98,10 +96,6 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
 
   std::fill(settings_computer.DisplayAirspaces,
             settings_computer.DisplayAirspaces + AIRSPACECLASSCOUNT,
-            true);
-
-  std::fill(settings_computer.WarnAirspaces,
-            settings_computer.WarnAirspaces + AIRSPACECLASSCOUNT,
             true);
 
   settings_computer.POLARID = 1;

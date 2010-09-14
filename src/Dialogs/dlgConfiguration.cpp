@@ -1246,9 +1246,9 @@ setVariables()
   LoadFormProperty(*wf, _T("prpAirspaceWarnings"),
                    settings_computer.EnableAirspaceWarnings);
   LoadFormProperty(*wf, _T("prpWarningTime"),
-                   settings_computer.WarningTime);
+                   settings_computer.airspace_warnings.WarningTime);
   LoadFormProperty(*wf, _T("prpAcknowledgementTime"),
-                   settings_computer.AcknowledgementTime);
+                   settings_computer.airspace_warnings.AcknowledgementTime);
 
   wp = (WndProperty*)wf->FindByName(_T("prpWaypointLabels"));
   if (wp) {
@@ -2132,11 +2132,11 @@ void dlgConfigurationShowModal(void)
 
   changed |= SaveFormProperty(wf, _T("prpWarningTime"),
                               szProfileWarningTime,
-                              settings_computer.WarningTime);
+                              settings_computer.airspace_warnings.WarningTime);
 
   changed |= SaveFormProperty(wf, _T("prpAcknowledgementTime"),
                               szProfileAcknowledgementTime,
-                              settings_computer.AcknowledgementTime);
+                              settings_computer.airspace_warnings.AcknowledgementTime);
 
   changed |= SaveFormProperty(wf, _T("prpWaypointLabels"),
                               szProfileDisplayText,

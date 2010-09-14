@@ -307,7 +307,7 @@ Profile::Use()
   for (i = 0; i < AIRSPACECLASSCOUNT; i++) {
     if (Get(szProfileAirspaceMode[i], Temp)) {
       settings_computer.DisplayAirspaces[i] = (Temp & 0x1) != 0;
-      settings_computer.WarnAirspaces[i] = (Temp & 0x2) != 0;
+      settings_computer.airspace_warnings.class_warnings[i] = (Temp & 0x2) != 0;
     }
 
     Get(szProfileBrush[i],
@@ -374,10 +374,10 @@ Profile::Use()
       settings_computer.EnableAirspaceWarnings);
 
   Get(szProfileWarningTime,
-      settings_computer.WarningTime);
+      settings_computer.airspace_warnings.WarningTime);
 
   Get(szProfileAcknowledgementTime,
-      settings_computer.AcknowledgementTime);
+      settings_computer.airspace_warnings.AcknowledgementTime);
 
   Get(szProfileSoundVolume,
       settings_computer.SoundVolume);
@@ -649,7 +649,7 @@ Profile::SetAirspaceMode(int i)
   int val = 0;
   if (settings_airspace.DisplayAirspaces[i])
     val |= 0x1;
-  if (settings_airspace.WarnAirspaces[i])
+  if (settings_airspace.airspace_warnings.class_warnings[i])
     val |= 0x2;
 
   Set(szProfileAirspaceMode[i], val);
