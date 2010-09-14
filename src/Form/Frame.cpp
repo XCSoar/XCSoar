@@ -50,16 +50,6 @@ WndFrame::WndFrame(ContainerControl &parent,
   set(parent.GetClientAreaWindow(), X, Y, Width, Height, style);
 }
 
-void WndFrame::SetCaption(const TCHAR *Value){
-  if (Value == NULL)
-    Value = _T("");
-
-  if (_tcscmp(mCaption, Value) != 0){
-    _tcscpy(mCaption, Value);  // todo size check
-    invalidate();
-  }
-}
-
 void
 WndFrame::SetAlignCenter()
 {

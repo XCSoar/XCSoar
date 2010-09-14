@@ -47,8 +47,6 @@ public:
            int X, int Y, int Width, int Height,
            const WindowStyle style=WindowStyle());
 
-  void SetCaption(const TCHAR *Value);
-
   void SetAlignCenter();
 
   unsigned GetTextHeight();
