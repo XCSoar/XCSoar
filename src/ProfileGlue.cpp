@@ -233,135 +233,171 @@ Profile::Use()
   // check against V3 infotypes
   CheckInfoTypes();
 
-  if (Get(szProfileDisplayUpValue, Temp) &&
-      (Temp == TRACKUP || Temp == NORTHUP || Temp == NORTHCIRCLE ||
-       Temp == TRACKCIRCLE || Temp == NORTHTRACK))
-    XCSoarInterface::SetSettingsMap().DisplayOrientation =
-      (DisplayOrientation_t)Temp;
+  SETTINGS_MAP &settings_map = XCSoarInterface::SetSettingsMap();
 
-  if (Get(szProfileDisplayText, Temp) &&
-      (Temp == DISPLAYNAME || Temp == DISPLAYNUMBER ||
-       Temp == DISPLAYFIRSTFIVE || Temp == DISPLAYNONE ||
-       Temp == DISPLAYFIRSTTHREE || Temp == DISPLAYNAMEIFINTASK ||
-       Temp == DISPLAYUNTILSPACE))
-    XCSoarInterface::SetSettingsMap().DisplayTextType =
-      (DisplayTextType_t)Temp;
+  Temp = settings_map.DisplayOrientation;
+  Get(szProfileDisplayUpValue, Temp);
+  switch (Temp) {
+  case TRACKUP:
+    settings_map.DisplayOrientation = TRACKUP;
+    break;
+  case NORTHUP:
+    settings_map.DisplayOrientation = NORTHUP;
+    break;
+  case NORTHCIRCLE:
+    settings_map.DisplayOrientation = NORTHCIRCLE;
+    break;
+  case TRACKCIRCLE:
+    settings_map.DisplayOrientation = TRACKCIRCLE;
+    break;
+  case NORTHTRACK:
+    settings_map.DisplayOrientation = NORTHTRACK;
+    break;
+  }
 
-  if (Get(szProfileAltMode, Temp))
-    XCSoarInterface::SetSettingsComputer().AltitudeMode = (AirspaceDisplayMode_t)Temp;
+  Temp = settings_map.DisplayTextType;
+  Get(szProfileDisplayText, Temp);
+  switch (Temp) {
+  case 0:
+    settings_map.DisplayTextType = DISPLAYNAME;
+    break;
+  case 1:
+    settings_map.DisplayTextType = DISPLAYNUMBER;
+    break;
+  case 2:
+    settings_map.DisplayTextType = DISPLAYFIRSTFIVE;
+    break;
+  case 3:
+    settings_map.DisplayTextType = DISPLAYNONE;
+    break;
+  case 4:
+    settings_map.DisplayTextType = DISPLAYFIRSTTHREE;
+    break;
+  case 5:
+    settings_map.DisplayTextType = DISPLAYNAMEIFINTASK;
+    break;
+  case 6:
+    settings_map.DisplayTextType = DISPLAYUNTILSPACE;
+    break;
+  }
+
+  SETTINGS_COMPUTER &settings_computer =
+    XCSoarInterface::SetSettingsComputer();
+
+  Temp = settings_computer.AltitudeMode;
+  Get(szProfileAltMode, Temp);
+  settings_computer.AltitudeMode = (AirspaceDisplayMode_t)Temp;
 
   Get(szProfileClipAlt,
-      XCSoarInterface::SetSettingsComputer().ClipAltitude);
+      settings_computer.ClipAltitude);
   Get(szProfileAltMargin,
-      XCSoarInterface::SetSettingsComputer().AltWarningMargin);
+      settings_computer.AltWarningMargin);
 
   Get(szProfileSafetyAltitudeArrival,
-      XCSoarInterface::SetSettingsComputer().safety_height_arrival);
+      settings_computer.safety_height_arrival);
   Get(szProfileSafetyAltitudeTerrain,
-      XCSoarInterface::SetSettingsComputer().safety_height_terrain);
+      settings_computer.safety_height_terrain);
   Get(szProfileSafteySpeed,
-      XCSoarInterface::SetSettingsComputer().SafetySpeed);
+      settings_computer.SafetySpeed);
   Get(szProfilePolarID,
-      XCSoarInterface::SetSettingsComputer().POLARID);
+      settings_computer.POLARID);
 
   Get(szProfileRegKey, strRegKey, 65);
 
   for (i = 0; i < AIRSPACECLASSCOUNT; i++) {
     if (Get(szProfileAirspaceMode[i], Temp))
-      XCSoarInterface::SetSettingsComputer().iAirspaceMode[i] = Temp;
+      settings_computer.iAirspaceMode[i] = Temp;
 
     Get(szProfileBrush[i],
-        XCSoarInterface::SetSettingsMap().iAirspaceBrush[i]);
+        settings_map.iAirspaceBrush[i]);
     Get(szProfileColour[i],
-        XCSoarInterface::SetSettingsMap().iAirspaceColour[i]);
-    if (XCSoarInterface::SettingsMap().iAirspaceColour[i] >= NUMAIRSPACECOLORS) {
-      XCSoarInterface::SetSettingsMap().iAirspaceColour[i] = 0;
-    }
-    if (XCSoarInterface::SettingsMap().iAirspaceBrush[i] >= NUMAIRSPACEBRUSHES) {
-      XCSoarInterface::SetSettingsMap().iAirspaceBrush[i] = 0;
-    }
+        settings_map.iAirspaceColour[i]);
+    if (settings_map.iAirspaceColour[i] >= NUMAIRSPACECOLORS)
+      settings_map.iAirspaceColour[i] = 0;
+    if (settings_map.iAirspaceBrush[i] >= NUMAIRSPACEBRUSHES)
+      settings_map.iAirspaceBrush[i] = 0;
   }
 
   Get(szProfileAirspaceBlackOutline,
-      XCSoarInterface::SetSettingsMap().bAirspaceBlackOutline);
+      settings_map.bAirspaceBlackOutline);
   Get(szProfileSnailTrail,
-      XCSoarInterface::SetSettingsMap().TrailActive);
+      settings_map.TrailActive);
 
   Get(szProfileTrailDrift,
-      XCSoarInterface::SetSettingsMap().EnableTrailDrift);
+      settings_map.EnableTrailDrift);
 
   Get(szProfileDrawTopology,
-      XCSoarInterface::SetSettingsMap().EnableTopology);
+      settings_map.EnableTopology);
 
   Get(szProfileDrawTerrain,
-      XCSoarInterface::SetSettingsMap().EnableTerrain);
+      settings_map.EnableTerrain);
 
   Get(szProfileFinalGlideTerrain,
-      XCSoarInterface::SetSettingsComputer().FinalGlideTerrain);
+      settings_computer.FinalGlideTerrain);
 
   Get(szProfileAutoWind,
-      XCSoarInterface::SetSettingsComputer().AutoWindMode);
+      settings_computer.AutoWindMode);
 
   Get(szProfileCircleZoom,
-      XCSoarInterface::SetSettingsMap().CircleZoom);
+      settings_map.CircleZoom);
 
   Get(szProfileHomeWaypoint,
-      XCSoarInterface::SetSettingsComputer().HomeWaypoint);
+      settings_computer.HomeWaypoint);
 
   if (Get(szProfileAlternate1, Temp)) {
     // TODO: for portrait no need to force alternate calculations here.
     // Infobox will trigger them on if visible..
-    XCSoarInterface::SetSettingsComputer().Alternate1 = Temp;
-    XCSoarInterface::SetSettingsComputer().EnableAlternate1 = true;
+    settings_computer.Alternate1 = Temp;
+    settings_computer.EnableAlternate1 = true;
   } else {
-    XCSoarInterface::SetSettingsComputer().Alternate1 = -1;
-    XCSoarInterface::SetSettingsComputer().EnableAlternate1 = false;
+    settings_computer.Alternate1 = -1;
+    settings_computer.EnableAlternate1 = false;
   }
 
   if (Get(szProfileAlternate2, Temp)) {
-    XCSoarInterface::SetSettingsComputer().Alternate2 = Temp;
-    XCSoarInterface::SetSettingsComputer().EnableAlternate2 = true;
+    settings_computer.Alternate2 = Temp;
+    settings_computer.EnableAlternate2 = true;
   } else {
-    XCSoarInterface::SetSettingsComputer().Alternate2 = -1;
-    XCSoarInterface::SetSettingsComputer().EnableAlternate2 = false;
+    settings_computer.Alternate2 = -1;
+    settings_computer.EnableAlternate2 = false;
   }
 
   Get(szProfileSnailWidthScale,
-      XCSoarInterface::SetSettingsMap().SnailWidthScale);
+      settings_map.SnailWidthScale);
 
   Get(szProfileTeamcodeRefWaypoint,
-      XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint);
+      settings_computer.TeamCodeRefWaypoint);
 
   Get(szProfileAirspaceWarning,
-      XCSoarInterface::SetSettingsComputer().EnableAirspaceWarnings);
+      settings_computer.EnableAirspaceWarnings);
 
   Get(szProfileWarningTime,
-      XCSoarInterface::SetSettingsComputer().WarningTime);
+      settings_computer.WarningTime);
 
   Get(szProfileAcknowledgementTime,
-      XCSoarInterface::SetSettingsComputer().AcknowledgementTime);
+      settings_computer.AcknowledgementTime);
 
   Get(szProfileSoundVolume,
-      XCSoarInterface::SetSettingsComputer().SoundVolume);
+      settings_computer.SoundVolume);
 
   Get(szProfileSoundDeadband,
-      XCSoarInterface::SetSettingsComputer().SoundDeadband);
+      settings_computer.SoundDeadband);
 
   Get(szProfileSoundAudioVario,
-      XCSoarInterface::SetSettingsComputer().EnableSoundVario);
+      settings_computer.EnableSoundVario);
 
   Get(szProfileSoundTask,
-      XCSoarInterface::SetSettingsComputer().EnableSoundTask);
+      settings_computer.EnableSoundTask);
 
   Get(szProfileSoundModes,
-      XCSoarInterface::SetSettingsComputer().EnableSoundModes);
+      settings_computer.EnableSoundModes);
 
-  XCSoarInterface::SetSettingsMap().EnableCDICruise = 0;
-  XCSoarInterface::SetSettingsMap().EnableCDICircling = 0;
+  settings_map.EnableCDICruise = 0;
+  settings_map.EnableCDICircling = 0;
 
 #ifdef HAVE_BLANK
   Get(szProfileAutoBlank,
-      XCSoarInterface::SetSettingsMap().EnableAutoBlank);
+      settings_map.EnableAutoBlank);
 #endif
 
   Get(szProfileAutoBacklight,
@@ -369,13 +405,13 @@ Profile::Use()
   Get(szProfileAutoSoundVolume,
       XCSoarInterface::EnableAutoSoundVolume);
   Get(szProfileExtendedVisualGlide,
-      XCSoarInterface::SetSettingsMap().ExtendedVisualGlide);
+      settings_map.ExtendedVisualGlide);
 
   Get(szProfileGestures,
-      XCSoarInterface::SetSettingsComputer().EnableGestures);
+      settings_computer.EnableGestures);
 
   if (Get(szProfileAverEffTime, Temp))
-    XCSoarInterface::SetSettingsComputer().AverEffTime = Temp;
+    settings_computer.AverEffTime = Temp;
 
   if (Get(szProfileDebounceTimeout, Temp))
     XCSoarInterface::debounceTimeout = Temp;
@@ -450,110 +486,114 @@ Profile::Use()
   // IndFinalGlide
   // IndLandable
 
+
   if (Get(szProfileAutoMcMode, Temp))
-    XCSoarInterface::SetSettingsComputer().auto_mc_mode =
+    settings_computer.auto_mc_mode =
       (TaskBehaviour::AutoMCMode_t)Temp;
 
   Get(szProfileWaypointsOutOfRange,
                   WayPointFile::WaypointsOutOfRangeSetting);
 
   if (Get(szProfileOLCRules, Temp))
-      XCSoarInterface::SetSettingsComputer().olc_rules = (OLCRules)Temp;
+      settings_computer.olc_rules = (OLCRules)Temp;
 
   Get(szProfileHandicap,
-      XCSoarInterface::SetSettingsComputer().olc_handicap);
+      settings_computer.olc_handicap);
   Get(szProfileEnableExternalTriggerCruise,
-      XCSoarInterface::SetSettingsComputer().EnableExternalTriggerCruise);
+      settings_computer.EnableExternalTriggerCruise);
 
   Get(szProfileUTCOffset,
-      XCSoarInterface::SetSettingsComputer().UTCOffset);
-  if (XCSoarInterface::SettingsComputer().UTCOffset > 12 * 3600)
-    XCSoarInterface::SetSettingsComputer().UTCOffset -= 24 * 3600;
+      settings_computer.UTCOffset);
+  if (settings_computer.UTCOffset > 12 * 3600)
+    settings_computer.UTCOffset -= 24 * 3600;
 
   Get(szProfileBlockSTF,
-      XCSoarInterface::SetSettingsComputer().EnableBlockSTF);
+      settings_computer.EnableBlockSTF);
   Get(szProfileAutoZoom,
-      XCSoarInterface::SetSettingsMap().AutoZoom);
+      settings_map.AutoZoom);
   Get(szProfileMenuTimeout,
       XCSoarInterface::MenuTimeoutMax);
   Get(szProfileLockSettingsInFlight,
       XCSoarInterface::LockSettingsInFlight);
   Get(szProfileLoggerShort,
-      XCSoarInterface::SetSettingsComputer().LoggerShortName);
+      settings_computer.LoggerShortName);
   Get(szProfileEnableFLARMMap,
-      XCSoarInterface::SetSettingsMap().EnableFLARMMap);
+      settings_map.EnableFLARMMap);
   Get(szProfileEnableFLARMGauge,
-      XCSoarInterface::SetSettingsMap().EnableFLARMGauge);
+      settings_map.EnableFLARMGauge);
   Get(szProfileEnableTAGauge,
-      XCSoarInterface::SetSettingsMap().EnableTAGauge);
+      settings_map.EnableTAGauge);
   Get(szProfileTerrainContrast,
-      XCSoarInterface::SetSettingsMap().TerrainContrast);
+      settings_map.TerrainContrast);
   Get(szProfileTerrainBrightness,
-      XCSoarInterface::SetSettingsMap().TerrainBrightness);
+      settings_map.TerrainBrightness);
   Get(szProfileTerrainRamp,
-      XCSoarInterface::SetSettingsMap().TerrainRamp);
+      settings_map.TerrainRamp);
 
   Get(szProfileGliderScreenPosition,
-      XCSoarInterface::SetSettingsMap().GliderScreenPosition);
+      settings_map.GliderScreenPosition);
   Get(szProfileBallastSecsToEmpty,
-      XCSoarInterface::SetSettingsComputer().BallastSecsToEmpty);
+      settings_computer.BallastSecsToEmpty);
   Get(szProfileSetSystemTimeFromGPS,
-      XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS);
+      settings_map.SetSystemTimeFromGPS);
   Get(szProfileUseCustomFonts,
       Appearance.UseCustomFonts);
   Get(szProfileVoiceClimbRate,
-      XCSoarInterface::SetSettingsComputer().EnableVoiceClimbRate);
+      settings_computer.EnableVoiceClimbRate);
   Get(szProfileVoiceTerrain,
-      XCSoarInterface::SetSettingsComputer().EnableVoiceTerrain);
+      settings_computer.EnableVoiceTerrain);
   Get(szProfileVoiceWaypointDistance,
-      XCSoarInterface::SetSettingsComputer().EnableVoiceWaypointDistance);
+      settings_computer.EnableVoiceWaypointDistance);
   Get(szProfileVoiceTaskAltitudeDifference,
-      XCSoarInterface::SetSettingsComputer().EnableVoiceTaskAltitudeDifference);
+      settings_computer.EnableVoiceTaskAltitudeDifference);
   Get(szProfileVoiceMacCready,
-      XCSoarInterface::SetSettingsComputer().EnableVoiceMacCready);
+      settings_computer.EnableVoiceMacCready);
   Get(szProfileVoiceNewWaypoint,
-      XCSoarInterface::SetSettingsComputer().EnableVoiceNewWaypoint);
+      settings_computer.EnableVoiceNewWaypoint);
   Get(szProfileVoiceInSector,
-      XCSoarInterface::SetSettingsComputer().EnableVoiceInSector);
+      settings_computer.EnableVoiceInSector);
   Get(szProfileVoiceAirspace,
-      XCSoarInterface::SetSettingsComputer().EnableVoiceAirspace);
+      settings_computer.EnableVoiceAirspace);
   Get(szProfileEnableNavBaroAltitude,
-      XCSoarInterface::SetSettingsComputer().EnableNavBaroAltitude);
+      settings_computer.EnableNavBaroAltitude);
   Get(szProfileLoggerTimeStepCruise,
-      XCSoarInterface::SetSettingsComputer().LoggerTimeStepCruise);
+      settings_computer.LoggerTimeStepCruise);
   Get(szProfileLoggerTimeStepCircling,
-      XCSoarInterface::SetSettingsComputer().LoggerTimeStepCircling);
+      settings_computer.LoggerTimeStepCircling);
   Get(szProfileAbortSafetyUseCurrent,
-      XCSoarInterface::SetSettingsComputer().safety_mc_use_current);
+      settings_computer.safety_mc_use_current);
 
   if (Get(szProfileSafetyMacCready, Temp))
-    XCSoarInterface::SetSettingsComputer().safety_mc = fixed(Temp) / 10;
+    settings_computer.safety_mc = fixed(Temp) / 10;
 
   Get(szProfileUserLevel, XCSoarInterface::UserLevel);
 
   if (Get(szProfileRiskGamma, Temp))
-    XCSoarInterface::SetSettingsComputer().risk_gamma = fixed(Temp) / 10;
+    settings_computer.risk_gamma = fixed(Temp) / 10;
 
   if (Get(szProfileWindArrowStyle, Temp))
-    XCSoarInterface::SetSettingsMap().WindArrowStyle = Temp;
+    settings_map.WindArrowStyle = Temp;
 
   Get(szProfileDisableAutoLogger,
-      XCSoarInterface::SetSettingsComputer().DisableAutoLogger);
+      settings_computer.DisableAutoLogger);
 }
 
 void
 Profile::SetSoundSettings()
 {
+  const SETTINGS_COMPUTER &settings_computer =
+    XCSoarInterface::SettingsComputer();
+
   Set(szProfileSoundVolume,
-      XCSoarInterface::SettingsComputer().SoundVolume);
+      settings_computer.SoundVolume);
   Set(szProfileSoundDeadband,
-      XCSoarInterface::SettingsComputer().SoundDeadband);
+      settings_computer.SoundDeadband);
   Set(szProfileSoundAudioVario,
-      XCSoarInterface::SettingsComputer().EnableSoundVario);
+      settings_computer.EnableSoundVario);
   Set(szProfileSoundTask,
-      XCSoarInterface::SettingsComputer().EnableSoundTask);
+      settings_computer.EnableSoundTask);
   Set(szProfileSoundModes,
-      XCSoarInterface::SettingsComputer().EnableSoundModes);
+      settings_computer.EnableSoundModes);
 }
 
 int
