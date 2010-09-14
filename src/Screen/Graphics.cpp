@@ -141,17 +141,17 @@ ScreenGraphics::Initialise()
 
   hFLARMTraffic.load(IDB_FLARMTRAFFIC);
   hTerrainWarning.load(IDB_TERRAINWARNING);
-  hGPSStatus1.load(IDB_GPSSTATUS1, false);
-  hGPSStatus2.load(IDB_GPSSTATUS2, false);
+  hGPSStatus1.load_big(IDB_GPSSTATUS1, IDB_GPSSTATUS1_HD, false);
+  hGPSStatus2.load_big(IDB_GPSSTATUS2, IDB_GPSSTATUS2_HD, false);
   hLogger.load_big(IDB_LOGGER, IDB_LOGGER_HD);
   hLoggerOff.load_big(IDB_LOGGEROFF, IDB_LOGGEROFF_HD);
   hBmpTeammatePosition.load(IDB_TEAMMATE_POS);
 
   hAutoMacCready.load(IDB_AUTOMACCREADY, false);
-  hCruise.load(IDB_CRUISE, false);
-  hClimb.load(IDB_CLIMB, false);
-  hFinalGlide.load(IDB_FINALGLIDE, false);
-  hAbort.load(IDB_ABORT, false);
+  hCruise.load_big(IDB_CRUISE, IDB_CRUISE_HD, false);
+  hClimb.load_big(IDB_CLIMB, IDB_CLIMB_HD, false);
+  hFinalGlide.load_big(IDB_FINALGLIDE, IDB_FINALGLIDE_HD, false);
+  hAbort.load_big(IDB_ABORT, IDB_ABORT_HD, false);
 
   // airspace brushes and colors
   hAirspaceBitmap[0].load(IDB_AIRSPACE0);

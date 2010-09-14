@@ -13,8 +13,11 @@
 #define IDB_SMALL                       142
 #define IDB_SMALL_HD                   5142
 #define IDB_CRUISE                      212
+#define IDB_CRUISE_HD                  5212
 #define IDB_CLIMB                       213
+#define IDB_CLIMB_HD                   5213
 #define IDB_FINALGLIDE                  214
+#define IDB_FINALGLIDE_HD              5214
 #define IDB_AUTOMACCREADY               215
 #define IDB_TOWN                        218
 #define IDB_MARK                        219
@@ -25,9 +28,12 @@
 #define IDB_AIRSPACE2                   242
 #define IDB_SWIFT                       251
 #define IDB_GPSSTATUS1                  256
+#define IDB_GPSSTATUS1_HD              5256
 #define IDB_GPSSTATUS2                  257
+#define IDB_GPSSTATUS2_HD              5257
 #define IDD_PROGRESS_LANDSCAPE          265
 #define IDB_ABORT                       269
+#define IDB_ABORT_HD                   5269
 #define IDB_LOGGER                      271
 #define IDB_LOGGER_HD                  5271
 #define IDB_LOGGEROFF                   272
