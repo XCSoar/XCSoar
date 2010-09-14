@@ -45,7 +45,7 @@ struct Appearance Appearance = {
   wpLandableDefault,
   false,
   smAlignCenter,
-  tiHighScore,
+  tiDefault,
   false,
   false,
   false,

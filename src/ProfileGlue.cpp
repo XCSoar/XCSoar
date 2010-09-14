@@ -472,9 +472,8 @@ Profile::Use()
   Get(szProfileAppStatusMessageAlignment, Temp);
   Appearance.StateMessageAlign = (StateMessageAlign_t)Temp;
 
-  Appearance.TextInputStyle = Get(szProfileAppTextInputStyle, Temp)
-    ? (TextInputStyle_t)Temp
-    : tiDefault;
+  if (Get(szProfileAppTextInputStyle, Temp))
+    Appearance.TextInputStyle = (TextInputStyle_t)Temp;
 
   Temp = g_eDialogStyle;
   Get(szProfileAppDialogStyle, Temp);
