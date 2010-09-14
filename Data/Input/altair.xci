@@ -233,7 +233,7 @@ type=key
 data=6
 event=Setup Basic
 event=Mode default
-label=Setup\nBasic
+label=Flight\nSetup
 location=5
 
 mode=Preview
