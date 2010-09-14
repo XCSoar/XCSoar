@@ -152,9 +152,8 @@ LoggerImpl::LogPointToBuffer(const NMEA_INFO &gps_info)
 void
 LoggerImpl::LogEvent(const NMEA_INFO& gps_info, const char* event)
 {
-  assert(writer != NULL);
-
-  writer->LogEvent(gps_info, event);
+  if (writer != NULL)
+    writer->LogEvent(gps_info, event);
 }
 
 void
