@@ -178,7 +178,7 @@ WndProperty::WndProperty(ContainerControl &parent,
 
   set(parent.GetClientAreaWindow(), X, Y, Width, Height, style);
 
-  UpdateButtonData(mBitmapSize);
+  UpdateLayout();
 
   edit.set(*this, mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y, edit_style);
   edit.install_wndproc();
@@ -235,13 +235,9 @@ WndProperty::SetFont(const Font &Value)
 }
 
 void
-WndProperty::UpdateButtonData(int Value)
+WndProperty::UpdateLayout()
 {
-
-  if (Value == 0) // if combo is enabled
-    mBitmapSize = 0;
-  else
-    mBitmapSize = Layout::Scale(32) / 2;
+  mBitmapSize = mDialogStyle ? 0 : Layout::Scale(16);
 
   const SIZE size = get_size();
 
@@ -267,20 +263,11 @@ WndProperty::UpdateButtonData(int Value)
   mHitRectUp.top = mHitRectDown.top;
   mHitRectUp.right = mHitRectUp.left + mBitmapSize;
   mHitRectUp.bottom = mHitRectUp.top + mBitmapSize;
-}
 
-int
-WndProperty::SetButtonSize(int Value)
-{
-  int res = mBitmapSize;
-
-  if (mBitmapSize != Value) {
-    UpdateButtonData(Value);
+  if (edit.defined())
     edit.move(mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y);
-    invalidate();
-  }
 
-  return res;
+  invalidate();
 }
 
 void
@@ -492,11 +479,7 @@ WndProperty::SetDataField(DataField *Value)
 
     mDialogStyle = has_pointer() && mDataField->SupportCombo;
 
-    if (mDialogStyle) {
-      this->SetButtonSize(0);
-    } else {
-      this->SetButtonSize(16);
-    }
+    UpdateLayout();
 
     RefreshDisplay();
   }

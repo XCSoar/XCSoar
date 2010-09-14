@@ -167,7 +167,6 @@ public:
    * @param Value The new text of the Editor Control
    */
   void SetText(const TCHAR *Value);
-  int SetButtonSize(int Value);
 
 private:
   /** Arrow left bitmap */
@@ -216,7 +215,7 @@ private:
 
   DataField *mDataField;
 
-  void UpdateButtonData(int Value);
+  void UpdateLayout();
 };
 
 #endif
