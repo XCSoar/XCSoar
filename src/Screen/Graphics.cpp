@@ -264,10 +264,10 @@ void
 ScreenGraphics::InitLandableIcons()
 {
   if (Appearance.IndLandable == wpLandableDefault) {
-    AirportReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_BIG);
-    AirportUnreachableIcon.load_big(IDB_LANDABLE, IDB_LANDABLE_BIG);
-    FieldReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_BIG);
-    FieldUnreachableIcon.load_big(IDB_LANDABLE, IDB_LANDABLE_BIG);
+    AirportReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_HD);
+    AirportUnreachableIcon.load_big(IDB_LANDABLE, IDB_LANDABLE_HD);
+    FieldReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_HD);
+    FieldUnreachableIcon.load_big(IDB_LANDABLE, IDB_LANDABLE_HD);
   } else if (Appearance.IndLandable == wpLandableAltA) {
     AirportReachableIcon.load_big(IDB_AIRPORT_REACHABLE,
                                   IDB_AIRPORT_REACHABLE_HD);
