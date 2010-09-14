@@ -1,7 +1,7 @@
 #ifndef OLC_RULES_HPP
 #define OLC_RULES_HPP
 
-#include "Util/tstring.hpp"
+#include <tchar.h>
 
 enum OLCRules {
   OLC_Sprint = 0,
