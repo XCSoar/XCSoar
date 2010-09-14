@@ -167,25 +167,14 @@ WndProperty::WndProperty(ContainerControl &parent,
                          const WindowStyle style,
                          const EditWindowStyle edit_style,
                          DataChangeCallback_t DataChangeNotify)
-  :edit(this),
-   mCaptionWidth(CaptionWidth),
-   mDownDown(false), mUpDown(false)
+  :mDialogStyle(false), edit(this),
+   mBitmapSize(Layout::Scale(32) / 2), mCaptionWidth(CaptionWidth),
+   mDownDown(false), mUpDown(false),
+   mOnDataChangeNotify(DataChangeNotify),
+   mOnClickUpNotify(NULL), mOnClickDownNotify(NULL),
+   mDataField(NULL)
 {
-  mOnClickUpNotify = NULL;
-  mOnClickDownNotify = NULL;
-  mOnDataChangeNotify = DataChangeNotify;
-
   _tcscpy(mCaption, Caption);
-  mDataField = NULL;
-  mDialogStyle=false; // this is set by ::SetDataField()
-
-  if (mCaptionWidth != 0) {
-    mBitmapSize = Layout::Scale(32) / 2;
-  } else {
-    mBitmapSize = Layout::Scale(32) / 2;
-  }
-  if (mDialogStyle)
-    mBitmapSize = 0;
 
   set(parent.GetClientAreaWindow(), X, Y, Width, Height, style);
 
