@@ -5,9 +5,9 @@
 #define IDI_XCSOAR                      101
 #define IDD_PROGRESS                    104
 #define IDB_LANDABLE                    139
-#define IDB_LANDABLE_BIG 400
+#define IDB_LANDABLE_BIG                400
 #define IDB_REACHABLE                   140
-#define IDB_REACHABLE_BIG 401
+#define IDB_REACHABLE_BIG               401
 #define IDB_TURNPOINT                   141
 #define IDB_SMALL                       142
 #define IDB_CRUISE                      212
@@ -39,9 +39,13 @@
 #define IDB_UNIT_M                      287
 #define IDB_UNIT_FT                     288
 #define IDB_AIRPORT_REACHABLE           289
+#define IDB_AIRPORT_REACHABLE_HD       5289
 #define IDB_AIRPORT_UNREACHABLE         290
+#define IDB_AIRPORT_UNREACHABLE_HD     5290
 #define IDB_OUTFIELD_REACHABLE          291
+#define IDB_OUTFIELD_REACHABLE_HD      5291
 #define IDB_OUTFIELD_UNREACHABLE        292
+#define IDB_OUTFIELD_UNREACHABLE_HD    5292
 #define IDB_VARIOSCALEA                 293
 #define IDB_UNIT_MS                     294
 #define IDB_UNIT_KT                     295
@@ -70,8 +74,10 @@
 #define IDB_SWIFT2                      332
 #define IDD_PROGRESS_LANDSCAPE2         333
 #define IDB_AIRPORT_UNREACHABLE2        334
+#define IDB_AIRPORT_UNREACHABLE2_HD    5334
 #define IDB_OUTFIELD_UNREACHABLE2       335
-#define IDB_AIRSPACEI                   1263
+#define IDB_OUTFIELD_UNREACHABLE2_HD   5335
+#define IDB_AIRSPACEI                  1263
 
 // Next default values for new objects
 //

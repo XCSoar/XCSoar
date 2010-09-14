@@ -269,15 +269,23 @@ ScreenGraphics::InitLandableIcons()
     FieldReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_BIG);
     FieldUnreachableIcon.load_big(IDB_LANDABLE, IDB_LANDABLE_BIG);
   } else if (Appearance.IndLandable == wpLandableAltA) {
-    AirportReachableIcon.load(IDB_AIRPORT_REACHABLE);
-    AirportUnreachableIcon.load(IDB_AIRPORT_UNREACHABLE);
-    FieldReachableIcon.load(IDB_OUTFIELD_REACHABLE);
-    FieldUnreachableIcon.load(IDB_OUTFIELD_UNREACHABLE);
+    AirportReachableIcon.load_big(IDB_AIRPORT_REACHABLE,
+                                  IDB_AIRPORT_REACHABLE_HD);
+    AirportUnreachableIcon.load_big(IDB_AIRPORT_UNREACHABLE,
+                                    IDB_AIRPORT_UNREACHABLE_HD);
+    FieldReachableIcon.load_big(IDB_OUTFIELD_REACHABLE,
+                                IDB_OUTFIELD_REACHABLE_HD);
+    FieldUnreachableIcon.load_big(IDB_OUTFIELD_UNREACHABLE,
+                                  IDB_OUTFIELD_UNREACHABLE_HD);
   } else if (Appearance.IndLandable == wpLandableAltB) {
-    AirportReachableIcon.load(IDB_AIRPORT_REACHABLE);
-    AirportUnreachableIcon.load(IDB_AIRPORT_UNREACHABLE2);
-    FieldReachableIcon.load(IDB_OUTFIELD_REACHABLE);
-    FieldUnreachableIcon.load(IDB_OUTFIELD_UNREACHABLE2);
+    AirportReachableIcon.load_big(IDB_AIRPORT_REACHABLE,
+                                  IDB_AIRPORT_REACHABLE_HD);
+    AirportUnreachableIcon.load_big(IDB_AIRPORT_UNREACHABLE2,
+                                    IDB_AIRPORT_UNREACHABLE2_HD);
+    FieldReachableIcon.load_big(IDB_OUTFIELD_REACHABLE,
+                                IDB_OUTFIELD_REACHABLE_HD);
+    FieldUnreachableIcon.load_big(IDB_OUTFIELD_UNREACHABLE2,
+                                  IDB_OUTFIELD_UNREACHABLE2_HD);
   }
 }
 
