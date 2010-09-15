@@ -34,6 +34,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef AIRSPACECIRCLE_HPP
 #define AIRSPACECIRCLE_HPP
 
@@ -67,12 +68,12 @@ public:
    */
   const FlatBoundingBox get_bounding_box(const TaskProjection& task_projection);
 
-/** 
- * Get arbitrary center or reference point for use in determining
- * overall center location of all airspaces
- * 
- * @return Location of reference point
- */
+  /**
+   * Get arbitrary center or reference point for use in determining
+   * overall center location of all airspaces
+   *
+   * @return Location of reference point
+   */
   const GeoPoint get_center() const {
     return m_center;
   }
@@ -101,17 +102,19 @@ public:
 
   GeoPoint closest_point(const GeoPoint& loc) const;
 
-/** 
- * Accessor for radius
- * 
- * @return Radius of circle (m)
- */
+  /**
+   * Accessor for radius
+   *
+   * @return Radius of circle (m)
+   */
   const fixed& get_radius() const {
     return m_radius;
   }
+
 private:
   const GeoPoint m_center;
   const fixed m_radius;
+
 public:
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& f, 
