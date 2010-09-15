@@ -137,9 +137,6 @@ private:
   LeastSquares Task_Speed;
   LeastSquares Altitude_Terrain;
   Mutex mutexStats;
-
-  void Lock() { mutexStats.Lock(); }
-  void Unlock() { mutexStats.Unlock(); }
 };
 
 #endif

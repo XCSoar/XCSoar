@@ -70,14 +70,14 @@ using std::min;
 using std::max;
 
 void FlightStatistics::Reset() {
-  Lock();
+  mutexStats.Lock();
   ThermalAverage.Reset();
   Altitude.Reset();
   Altitude_Base.Reset();
   Altitude_Ceiling.Reset();
   Task_Speed.Reset();
   Altitude_Terrain.Reset();
-  Unlock();
+  mutexStats.Unlock();
 }
 
 #include "Screen/Chart.hpp"
@@ -769,29 +769,29 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
 void
 FlightStatistics::StartTask()
 {
-  Lock();
+  mutexStats.Lock();
   // JMW clear thermal climb average on task start
   ThermalAverage.Reset();
   Task_Speed.Reset();
-  Unlock();
+  mutexStats.Unlock();
 }
 
 void
 FlightStatistics::AddAltitudeTerrain(const fixed tflight,
                                      const fixed terrainalt)
 {
-  Lock();
+  mutexStats.Lock();
   Altitude_Terrain.LeastSquaresUpdate(max(fixed_zero, tflight / 3600),
                                       terrainalt);
-  Unlock();
+  mutexStats.Unlock();
 }
 
 void
 FlightStatistics::AddAltitude(const fixed tflight, const fixed alt)
 {
-  Lock();
+  mutexStats.Lock();
   Altitude.LeastSquaresUpdate(max(fixed_zero, tflight / 3600), alt);
-  Unlock();
+  mutexStats.Unlock();
 }
 
 fixed
@@ -800,7 +800,7 @@ FlightStatistics::AverageThermalAdjusted(const fixed mc_current,
 {
   fixed mc_stats;
 
-  Lock();
+  mutexStats.Lock();
   if (ThermalAverage.y_ave > fixed_zero) {
     if (mc_current > fixed_zero && circling) {
       mc_stats = (ThermalAverage.sum_n * ThermalAverage.y_ave + mc_current)
@@ -811,7 +811,7 @@ FlightStatistics::AverageThermalAdjusted(const fixed mc_current,
   } else {
     mc_stats = mc_current;
   }
-  Unlock();
+  mutexStats.Unlock();
 
   return mc_stats;
 }
@@ -819,15 +819,15 @@ FlightStatistics::AverageThermalAdjusted(const fixed mc_current,
 void
 FlightStatistics::AddTaskSpeed(const fixed tflight, const fixed val)
 {
-  Lock();
+  mutexStats.Lock();
   Task_Speed.LeastSquaresUpdate(tflight / 3600, val);
-  Unlock();
+  mutexStats.Unlock();
 }
 
 void
 FlightStatistics::AddClimbBase(const fixed tflight, const fixed alt)
 {
-  Lock();
+  mutexStats.Lock();
 
   if (Altitude_Ceiling.sum_n > 0) {
     // only update base if have already climbed, otherwise
@@ -835,15 +835,15 @@ FlightStatistics::AddClimbBase(const fixed tflight, const fixed alt)
     Altitude_Base.LeastSquaresUpdate(max(fixed_zero, tflight) / 3600, alt);
   }
 
-  Unlock();
+  mutexStats.Unlock();
 }
 
 void
 FlightStatistics::AddClimbCeiling(const fixed tflight, const fixed alt)
 {
-  Lock();
+  mutexStats.Lock();
   Altitude_Ceiling.LeastSquaresUpdate(max(fixed_zero, tflight) / 3600, alt);
-  Unlock();
+  mutexStats.Unlock();
 }
 
 /**
@@ -853,15 +853,15 @@ FlightStatistics::AddClimbCeiling(const fixed tflight, const fixed alt)
 void
 FlightStatistics::AddThermalAverage(const fixed v)
 {
-  Lock();
+  mutexStats.Lock();
   ThermalAverage.LeastSquaresUpdate(v);
-  Unlock();
+  mutexStats.Unlock();
 }
 
 void
 FlightStatistics::CaptionBarograph(TCHAR *sTmp)
 {
-  Lock();
+  mutexStats.Lock();
   if (Altitude_Ceiling.sum_n<2) {
     _stprintf(sTmp, _T("\0"));
   } else if (Altitude_Ceiling.sum_n<4) {
@@ -885,13 +885,13 @@ FlightStatistics::CaptionBarograph(TCHAR *sTmp)
                                         Units::AltitudeUnit),
               Units::GetAltitudeName());
   }
-  Unlock();
+  mutexStats.Unlock();
 }
 
 void
 FlightStatistics::CaptionClimb(TCHAR* sTmp)
 {
-  Lock();
+  mutexStats.Lock();
   if (ThermalAverage.sum_n==0) {
     _stprintf(sTmp, _T("\0"));
   } else if (ThermalAverage.sum_n==1) {
@@ -913,7 +913,7 @@ FlightStatistics::CaptionClimb(TCHAR* sTmp)
 	      Units::GetVerticalSpeedName()
 	      );
   }
-  Unlock();
+  mutexStats.Unlock();
 }
 
 void
