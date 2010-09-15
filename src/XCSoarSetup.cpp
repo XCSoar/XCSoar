@@ -81,6 +81,9 @@ extern "C" {
 
   DECLSPEC_EXPORT codeUNINSTALL_EXIT
   Uninstall_Exit(HWND hwndparent);
+
+  DECLSPEC_EXPORT APIENTRY BOOL
+  DllMain(HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved);
 };
 
 #else
