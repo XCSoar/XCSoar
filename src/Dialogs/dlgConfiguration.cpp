@@ -161,10 +161,6 @@ extern LOGFONT LogMapBold;
 extern LOGFONT LogCDI; // New
 extern LOGFONT LogMapLabel;
 
-extern bool dlgFontEditShowModal(const TCHAR * FontDescription,
-                          const TCHAR * FontRegKey,
-                          LOGFONT autoLogFont);
-
 static bool changed = false;
 static bool taskchanged = false;
 static bool requirerestart = false;

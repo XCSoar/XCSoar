@@ -60,4 +60,9 @@ Copyright_License {
 #include "Language.hpp"
 #include "Interface.hpp"
 
+bool
+dlgFontEditShowModal(const TCHAR * FontDescription,
+                     const TCHAR * FontRegKey,
+                     LOGFONT autoLogFont);
+
 #endif
