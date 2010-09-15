@@ -1374,35 +1374,35 @@ XMLNode::parseFile(const char *filename, XMLResults *pResults)
 
   // Read the whole(!) file into a buffer string
   fseek(f, 0, SEEK_SET);
-  char *buf = (char*)malloc(l + 1);
-  assert(buf);
-  fread(buf, l, 1, f);
+  char *raw = new char[l + 1];
+  fread(raw, l, 1, f);
 
   // Close the file
   fclose(f);
 
   // Terminate the buffer string
-  buf[l] = 0;
+  raw[l] = 0;
   l++;
 
+  TCHAR *text;
 #ifdef _UNICODE
-  LPTSTR b2 = (LPTSTR)malloc(l * 2 + 2);
-  assert(b2);
+  text = new TCHAR[l + 1];
   MultiByteToWideChar(CP_ACP, // code page
                       MB_PRECOMPOSED, // character-type options
-                      buf, // string to map
+                      raw, // string to map
                       l, // number of bytes in string
-                      b2, // wide-character buffer
+                      text, // wide-character buffer
                       l * 2 + 2); // size of buffer
-  free(buf);
-  buf = (char*)b2;
+  delete[] raw;
+#else
+  text = raw;
 #endif
 
   // Parse the string and get the main XMLNode
-  XMLNode x = parseString((LPTSTR)buf, pResults);
+  XMLNode x = parseString(text, pResults);
 
   // Free the buffer memory
-  free(buf);
+  delete[] text;
 
   // Return the main XMLNode
   return x;
