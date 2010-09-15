@@ -57,7 +57,6 @@ protected:
   void StartTask();
   bool DoLogging();
   void SetFastLogging();
-  virtual fixed GetAverageThermal();
 
 protected:
   virtual void OnClimbBase(fixed StartAlt);

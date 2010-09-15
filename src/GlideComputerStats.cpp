@@ -106,13 +106,6 @@ GlideComputerStats::DoLogging()
   return true;
 }
 
-fixed
-GlideComputerStats::GetAverageThermal()
-{
-  fixed mc_current(GlideComputerBlackboard::GetAverageThermal());
-  return flightstats.AverageThermalAdjusted(mc_current, Calculated().Circling);
-}
-
 void
 GlideComputerStats::OnClimbBase(fixed StartAlt)
 {
