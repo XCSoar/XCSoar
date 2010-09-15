@@ -85,7 +85,6 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   WndButton *wButtons[10];
   int ButtonCount = 0;
   int i, x, y, d, w, h, res, dY;
-  RECT rc;
 
   assert(lpText != NULL);
 
@@ -93,7 +92,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   // TODO bug: doesn't work sometimes. buttons have to be pressed multiple times (TB)
   XCSoarInterface::Debounce();
 
-  rc = XCSoarInterface::main_window.get_screen_position();
+  const RECT rc = XCSoarInterface::main_window.get_client_rect();
 
 #ifdef ALTAIRSYNC
   Width = Layout::Scale(220);
