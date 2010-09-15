@@ -139,11 +139,6 @@ GlideComputerStats::OnDepartedThermal()
 }
 
 void
-GlideComputerStats::Initialise()
-{
-}
-
-void
 GlideComputerStats::SetFastLogging()
 {
   FastLogNum = 5;

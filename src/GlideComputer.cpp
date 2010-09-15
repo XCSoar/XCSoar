@@ -91,7 +91,6 @@ GlideComputer::Initialise()
 {
   GlideComputerBlackboard::Initialise();
   GlideComputerTask::Initialise();
-  GlideComputerStats::Initialise();
   ResetFlight(true);
 
   LoadCalculationsPersist(&SetCalculated());

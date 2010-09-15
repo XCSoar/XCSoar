@@ -55,7 +55,6 @@ public:
 protected:
   void ResetFlight(const bool full = true);
   void StartTask();
-  void Initialise();
   bool DoLogging();
   void SetFastLogging();
   virtual fixed GetAverageThermal();
