@@ -49,10 +49,7 @@ Copyright_License {
 GlideComputerStats::GlideComputerStats(ProtectedTaskManager &task) :
   GlideComputerBlackboard(task),
   log_clock(fixed(5)),
-  stats_clock(fixed(60))
-{
-
-}
+  stats_clock(fixed(60)) {}
 
 void
 GlideComputerStats::ResetFlight(const bool full)
@@ -81,11 +78,10 @@ GlideComputerStats::DoLogging()
     return false;
 
   // log points more often in circling mode
-  if (Calculated().Circling) {
+  if (Calculated().Circling)
     log_clock.set_dt(fixed(SettingsComputer().LoggerTimeStepCircling));
-  } else {
+  else
     log_clock.set_dt(fixed(SettingsComputer().LoggerTimeStepCruise));
-  }
 
   if (FastLogNum) {
     log_clock.set_dt(fixed_one);
@@ -100,9 +96,8 @@ GlideComputerStats::DoLogging()
   if (Basic().flight.Flying) {
     if (stats_clock.check_advance(Basic().Time)) {
       flightstats.AddAltitudeTerrain(Basic().flight.FlightTime,
-          Calculated().TerrainAlt);
-      flightstats.AddAltitude(Basic().flight.FlightTime,
-                              Basic().NavAltitude);
+                                     Calculated().TerrainAlt);
+      flightstats.AddAltitude(Basic().flight.FlightTime, Basic().NavAltitude);
       flightstats.AddTaskSpeed(Basic().flight.FlightTime,
                                Calculated().task_stats.total.remaining_effective.get_speed_incremental());
     }
@@ -121,16 +116,15 @@ GlideComputerStats::GetAverageThermal()
 void
 GlideComputerStats::OnClimbBase(fixed StartAlt)
 {
-  flightstats.AddClimbBase(Calculated().ClimbStartTime
-                           - Basic().flight.TakeOffTime,
-                           StartAlt);
+  flightstats.AddClimbBase(Calculated().ClimbStartTime -
+                           Basic().flight.TakeOffTime, StartAlt);
 }
 
 void
 GlideComputerStats::OnClimbCeiling()
 {
-  flightstats.AddClimbCeiling(Calculated().CruiseStartTime
-                              - Basic().flight.TakeOffTime,
+  flightstats.AddClimbCeiling(Calculated().CruiseStartTime -
+                              Basic().flight.TakeOffTime,
                               Calculated().CruiseStartAlt);
 }
 
@@ -147,7 +141,6 @@ GlideComputerStats::OnDepartedThermal()
 void
 GlideComputerStats::Initialise()
 {
-
 }
 
 void

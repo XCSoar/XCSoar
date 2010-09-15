@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_GLIDECOMPUTER_STATS_HPP)
+#ifndef XCSOAR_GLIDECOMPUTER_STATS_HPP
 #define XCSOAR_GLIDECOMPUTER_STATS_HPP
 
 #include "GlideComputerBlackboard.hpp"
@@ -45,25 +45,31 @@ Copyright_License {
 
 class ProtectedTaskManager;
 
-class GlideComputerStats: virtual public GlideComputerBlackboard {
+class GlideComputerStats:
+  virtual public GlideComputerBlackboard
+{
 public:
   GlideComputerStats(ProtectedTaskManager &task);
-  FlightStatistics     flightstats;
+  FlightStatistics flightstats;
+
 protected:
-  void ResetFlight(const bool full=true);
+  void ResetFlight(const bool full = true);
   void StartTask();
   void Initialise();
   bool DoLogging();
   void SetFastLogging();
   virtual fixed GetAverageThermal();
+
 protected:
   virtual void OnClimbBase(fixed StartAlt);
   virtual void OnClimbCeiling();
   virtual void OnDepartedThermal();
+
 private:
   GPSClock log_clock;
   GPSClock stats_clock;
-  unsigned FastLogNum; // number of points to log at high rate
+  /** number of points to log at high rate */
+  unsigned FastLogNum;
 };
 
 #endif
