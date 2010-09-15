@@ -20,6 +20,7 @@
 #define IDB_FINALGLIDE_HD              5214
 #define IDB_AUTOMACCREADY               215
 #define IDB_TOWN                        218
+#define IDB_TOWN_HD                    5218
 #define IDB_MARK                        219
 #define IDB_MARK_HD                    5219
 #define IDB_TERRAINWARNING              220

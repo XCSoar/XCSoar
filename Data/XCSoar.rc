@@ -79,6 +79,7 @@ IDB_TERRAINWARNING_HD   BITMAP  DISCARDABLE     "../output/data/icons/map_terrai
 IDB_THERMALSOURCE       BITMAP  DISCARDABLE     "../output/data/icons/map_thermal_source.bmp"
 IDB_THERMALSOURCE_HD    BITMAP  DISCARDABLE     "../output/data/icons/map_thermal_source-160.bmp"
 IDB_TOWN                BITMAP  DISCARDABLE     "../output/data/icons/map_town.bmp"
+IDB_TOWN_HD             BITMAP  DISCARDABLE     "../output/data/icons/map_town-160.bmp"
 IDB_TURNPOINT           BITMAP  DISCARDABLE     "../output/data/icons/map_turnpoint.bmp"
 IDB_TURNPOINT_HD        BITMAP  DISCARDABLE     "../output/data/icons/map_turnpoint-160.bmp"
 IDB_UNIT_KM             BITMAP  DISCARDABLE     "bitmaps/UnitKm.bmp"

@@ -46,6 +46,7 @@ Copyright_License {
 #include "Screen/LabelBlock.hpp"
 #include "SettingsUser.hpp"
 #include "Navigation/GeoPoint.hpp"
+#include "resource.h"
 
 #include <stdlib.h>
 #include <tchar.h>
@@ -54,7 +55,10 @@ Copyright_License {
 void
 TopologyFile::loadIcon(const int res_id)
 {
-  icon.load(res_id);
+  if (res_id == IDB_TOWN)
+    icon.load_big(IDB_TOWN, IDB_TOWN_HD);
+  else
+    icon.load(res_id);
 }
 
 TopologyFile::TopologyFile(const char *filename, const Color thecolor,
