@@ -69,7 +69,6 @@ TESTS = \
 	$(TARGET_BIN_DIR)/TestEarth$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/TestRadixTree$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/TestLogger$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/TestOLC$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/TestWayPointFile$(TARGET_EXEEXT)
 
 TEST_ANGLE_SOURCES = \
@@ -168,6 +167,7 @@ check: $(TESTS) | $(OUT)/test/dirstamp
 	$(Q)for i in $(TESTS); do $$i || exit $$?; done
 
 DEBUG_PROGRAM_NAMES = \
+	TestOLC \
 	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
 	ReadMO \
 	ReadProfileString ReadProfileInt \
