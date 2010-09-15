@@ -403,7 +403,7 @@ GlideComputerAirData::LD()
 
     SetCalculated().LD =
       UpdateLD(Calculated().LD, DistanceFlown,
-               Basic().NavAltitude - LastBasic().NavAltitude, fixed(0.1));
+               LastBasic().NavAltitude - Basic().NavAltitude, fixed(0.1));
 
     if (!Basic().flight.OnGround && !Calculated().Circling)
       rotaryLD.add((int)DistanceFlown, (int)Basic().NavAltitude);
