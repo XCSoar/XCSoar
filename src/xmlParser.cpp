@@ -1385,43 +1385,17 @@ XMLNode::parseFile(const char *filename, XMLResults *pResults)
   buf[l] = 0;
   l++;
 
-#if defined(WIN32)
 #ifdef _UNICODE
-#ifndef _WIN32_WCE
-  if (!IsTextUnicode(buf,mmin(l,10000),NULL)) {
-#endif
-    LPTSTR b2 = (LPTSTR)malloc(l * 2 + 2);
-    assert(b2);
-    MultiByteToWideChar(CP_ACP, // code page
-                        MB_PRECOMPOSED, // character-type options
-                        buf, // string to map
-                        l, // number of bytes in string
-                        b2, // wide-character buffer
-                        l * 2 + 2); // size of buffer
-    free(buf);
-    buf = (char*)b2;
-#ifndef _WIN32_WCE
-  }
-#endif
-#else
-  if (IsTextUnicode(buf, mmin(l, 10000), NULL))
-  {
-    l >>= 1;
-    LPTSTR b2 = (LPTSTR)malloc(l + 2);
-    assert(b2);
-    WideCharToMultiByte(CP_ACP, // code page
-                        0, // performance and mapping flags
-                        (const WCHAR*)buf, // wide-character string
-                        l, // number of chars in string
-                        b2, // buffer for new string
-                        l + 2, // size of buffer
-                        NULL, // default for unmappable chars
-                        NULL // set when default char used
-    );
-    free(buf);
-    buf = (char*)b2;
-  }
-#endif
+  LPTSTR b2 = (LPTSTR)malloc(l * 2 + 2);
+  assert(b2);
+  MultiByteToWideChar(CP_ACP, // code page
+                      MB_PRECOMPOSED, // character-type options
+                      buf, // string to map
+                      l, // number of bytes in string
+                      b2, // wide-character buffer
+                      l * 2 + 2); // size of buffer
+  free(buf);
+  buf = (char*)b2;
 #endif
 
   // Parse the string and get the main XMLNode
