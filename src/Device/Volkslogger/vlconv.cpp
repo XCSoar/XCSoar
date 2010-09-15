@@ -433,7 +433,7 @@ struct IGCHEADER
  * more or less inaccurate conversion from HDOP to fix accuracy.
  * doesn't have to be right. might be changed sometime.
  */
-word
+static word
 hdop2fxa(byte hdop)
 {
   // return (float) hdop * 100.0/3);
@@ -441,7 +441,7 @@ hdop2fxa(byte hdop)
 }
 
 /** non-linear conversion of the ENL values */
-int
+static int
 enlflt(int enl)
 {
   if (enl < 500)
@@ -455,7 +455,7 @@ enlflt(int enl)
 }
 
 /** ENL limitation */
-int
+static int
 enllim(int enl)
 {
   if (enl > 999)
@@ -1011,7 +1011,7 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, lpb bin_puffer,
 }
 
 // Members of class DIRENTRY
-char *
+static char *
 gen_filename(DIRENTRY *de, int flightnum)
 {
   static char tempfn[15];

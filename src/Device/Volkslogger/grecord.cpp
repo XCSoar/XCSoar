@@ -25,7 +25,9 @@
 
 // base-64 functions
 //
-char *byte_bas64(byte *b) {
+static const char *
+byte_bas64(const byte *b)
+{
  const char *base64tab = "0123456789@ABCDEFGHIJKLMNOPQRSTUVWXYZ`abcdefghijklmnopqrstuvwxyz";
  static char bas64ar[5];
   bas64ar[0] = base64tab[   b[0] >> 2                           ];
@@ -36,7 +38,9 @@ char *byte_bas64(byte *b) {
   return bas64ar;
 }
 
-byte b64b(char c) {
+static byte
+b64b(char c)
+{
   if ((c >= '0') && (c <= '9'))
     return(c-'0');
   else if ((c >= '@') && (c <= 'Z'))
@@ -47,7 +51,9 @@ byte b64b(char c) {
     return(0);
 }
 
-void bas64_byte(byte *b, char *c) {
+static void
+bas64_byte(byte *b, char *c)
+{
   b[0] = ( b64b(c[0]) << 2)         | (b64b(c[1]) >> 4);
   b[1] = ((b64b(c[1]) & 0x0f) << 4) | (b64b(c[2]) >> 2);
   b[2] = ((b64b(c[2]) & 0x03) << 6) | (b64b(c[3])     );
@@ -152,7 +158,9 @@ Filtern einer Zeile:
     Datensätzen (A,B,C,D,E,F,HF,I,J,K,LGCS-Datensatz) gehört,
     Leerzeile zurückliefern, sonst den gefilterten String
 */
-char *filterline(char *st) {
+static char *
+filterline(char *st)
+{
   strtrim(st);
   if (!(
       (st[0]=='A')
@@ -175,7 +183,9 @@ char *filterline(char *st) {
 /*
 Zeile aus *datei lesen und über IGC-linefilter laufen lassen
 */
-char *fgetline(char *st, size_t si, FILE *datei) {
+static char *
+fgetline(char *st, size_t si, FILE *datei)
+{
  char *stat;
   if ( (stat = fgets(st,si,datei)) != 0)
     filterline(st);
