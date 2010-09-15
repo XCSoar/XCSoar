@@ -51,7 +51,7 @@ Copyright_License {
 Marks::Marks()
 {
   LogStartUp(_T("Initialise marks"));
-  icon.load(IDB_MARK);
+  icon.load_big(IDB_MARK, IDB_MARK_HD);
   Reset();
 }
 

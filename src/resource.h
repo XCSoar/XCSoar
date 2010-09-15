@@ -21,7 +21,9 @@
 #define IDB_AUTOMACCREADY               215
 #define IDB_TOWN                        218
 #define IDB_MARK                        219
+#define IDB_MARK_HD                    5219
 #define IDB_TERRAINWARNING              220
+#define IDB_TERRAINWARNING_HD          5220
 #define IDB_AIRSPACE                    235
 #define IDB_AIRSPACE0                   240
 #define IDB_AIRSPACE1                   241
@@ -39,6 +41,7 @@
 #define IDB_LOGGEROFF                   272
 #define IDB_LOGGEROFF_HD               5272
 #define IDB_FLARMTRAFFIC                278
+#define IDB_FLARMTRAFFIC_HD            5278
 #define IDB_AIRSPACE3                   280
 #define IDB_DLGBUTTONLEFT32             282
 #define IDB_MAPSCALE_A                  283
@@ -72,11 +75,14 @@
 #define IDB_CLIMBSMALLINV               314
 #define IDB_VARIOSCALEC                 315
 #define IDB_THERMALSOURCE               316
+#define IDB_THERMALSOURCE_HD           5316
 #define IDB_AIRSPACE6                   317
 #define IDB_AIRSPACE7                   318
 #define IDB_TARGET                      320
+#define IDB_TARGET_HD                  5320
 #define IDB_ABOVETERRAIN                321
 #define IDB_TEAMMATE_POS                322
+#define IDB_TEAMMATE_POS_HD            5322
 #define IDB_LAUNCHER1                   330
 #define IDB_LAUNCHER2                   331
 #define IDB_SWIFT2                      332
@@ -85,7 +91,8 @@
 #define IDB_AIRPORT_UNREACHABLE2_HD    5334
 #define IDB_OUTFIELD_UNREACHABLE2       335
 #define IDB_OUTFIELD_UNREACHABLE2_HD   5335
-#define IDB_AIRSPACEI                  1263
+#define IDB_AIRSPACEI                   336
+#define IDB_AIRSPACEI_HD               5336
 
 // Next default values for new objects
 //

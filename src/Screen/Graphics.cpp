@@ -139,13 +139,13 @@ ScreenGraphics::Initialise()
 
   hBackgroundBrush.set(BackgroundColor);
 
-  hFLARMTraffic.load(IDB_FLARMTRAFFIC);
-  hTerrainWarning.load(IDB_TERRAINWARNING);
+  hFLARMTraffic.load_big(IDB_FLARMTRAFFIC, IDB_FLARMTRAFFIC_HD);
+  hTerrainWarning.load_big(IDB_TERRAINWARNING, IDB_TERRAINWARNING_HD);
   hGPSStatus1.load_big(IDB_GPSSTATUS1, IDB_GPSSTATUS1_HD, false);
   hGPSStatus2.load_big(IDB_GPSSTATUS2, IDB_GPSSTATUS2_HD, false);
   hLogger.load_big(IDB_LOGGER, IDB_LOGGER_HD);
   hLoggerOff.load_big(IDB_LOGGEROFF, IDB_LOGGEROFF_HD);
-  hBmpTeammatePosition.load(IDB_TEAMMATE_POS);
+  hBmpTeammatePosition.load_big(IDB_TEAMMATE_POS, IDB_TEAMMATE_POS_HD);
 
   hAutoMacCready.load(IDB_AUTOMACCREADY, false);
   hCruise.load_big(IDB_CRUISE, IDB_CRUISE_HD, false);
@@ -162,7 +162,7 @@ ScreenGraphics::Initialise()
   hAirspaceBitmap[5].load(IDB_AIRSPACE5);
   hAirspaceBitmap[6].load(IDB_AIRSPACE6);
   hAirspaceBitmap[7].load(IDB_AIRSPACE7);
-  hAirspaceInterceptBitmap.load(IDB_AIRSPACEI);
+  hAirspaceInterceptBitmap.load_big(IDB_AIRSPACEI, IDB_AIRSPACEI_HD);
 
   hAboveTerrainBitmap.load(IDB_ABOVETERRAIN);
 
@@ -176,8 +176,8 @@ ScreenGraphics::Initialise()
   hBmpMapScale.load(IDB_MAPSCALE_A);
   hBrushFlyingModeAbort.set(Color::RED);
 
-  hBmpThermalSource.load(IDB_THERMALSOURCE);
-  hBmpTarget.load(IDB_TARGET);
+  hBmpThermalSource.load_big(IDB_THERMALSOURCE, IDB_THERMALSOURCE_HD);
+  hBmpTarget.load_big(IDB_TARGET, IDB_TARGET_HD);
 
   hbCompass.set(has_colors() ? Color(0x40, 0x40, 0xFF) : Color::WHITE);
 
