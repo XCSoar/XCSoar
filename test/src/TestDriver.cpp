@@ -41,6 +41,7 @@
 #include "Device/Parser.hpp"
 #include "NMEA/Info.hpp"
 #include "TestUtil.hpp"
+#include "Protection.hpp"
 
 #include <assert.h>
 #include <string.h>

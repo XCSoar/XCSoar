@@ -40,12 +40,15 @@ Copyright_License {
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Descriptor.hpp"
+#include "Device/device.hpp"
+#include "Device/Geoid.h"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "InputEvents.h"
 #include "Thread/Trigger.hpp"
 #include "DeviceBlackboard.hpp"
 #include "MapWindowProjection.hpp"
 #include "OS/PathName.hpp"
+#include "Protection.hpp"
 
 #include <stdio.h>
 
