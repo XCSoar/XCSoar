@@ -57,7 +57,7 @@ static const fixed fixed_double_earth_r(REARTH * 2);
 #define fixed_expand_x 1.0
 #endif
 
-GEOPOINT
+static GEOPOINT
 IntermediatePoint(GEOPOINT loc1, GEOPOINT loc2, fixed dthis, fixed dtotal)
 {
   if ((loc1.Longitude == loc2.Longitude) && 

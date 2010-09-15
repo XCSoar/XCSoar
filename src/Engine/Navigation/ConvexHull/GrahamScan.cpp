@@ -36,17 +36,17 @@
  */
 #include "GrahamScan.hpp"
 
-bool operator==(const SearchPoint& s1, const SearchPoint& s2)
+static bool
+operator==(const SearchPoint& s1, const SearchPoint& s2)
 {
   return s1.equals(s2);
 }
 
-
-bool sortleft (const SearchPoint& sp1, const SearchPoint& sp2)
+static bool
+sortleft (const SearchPoint& sp1, const SearchPoint& sp2)
 { 
   return sp1.sort(sp2);
 }
-
 
 GrahamScan::GrahamScan(const SearchPointVector& sps):
   raw_points(sps.begin(), sps.end()), raw_vector(sps)

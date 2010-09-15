@@ -47,7 +47,8 @@ FlatBoundingBox::distance(const FlatBoundingBox &f) const {
   return isqrt4(dx*dx+dy*dy);
 }
 
-void swap(fixed &t1, fixed &t2) 
+static void
+swap(fixed &t1, fixed &t2)
 {
   fixed t3 = t1;
   t1= t2;
