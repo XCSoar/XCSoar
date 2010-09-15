@@ -73,14 +73,13 @@ public:
 
 public:
   void Reset();
-  void RenderAirspace(Canvas &canvas, const RECT rc,
-                      const NMEA_INFO &nmea_info, const DERIVED_INFO &derived,
+  void RenderAirspace(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
+                      const DERIVED_INFO &derived,
                       const SETTINGS_MAP &settings_map,
                       const Airspaces &airspace_database,
                       RasterTerrain *terrain) const;
 
-  void RenderBarograph(Canvas &canvas, const RECT rc,
-                       const NMEA_INFO &nmea_info,
+  void RenderBarograph(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
                        const DERIVED_INFO &derived_info,
                        const ProtectedTaskManager &task) const;
 
@@ -91,34 +90,30 @@ public:
                         const DERIVED_INFO &derived,
                         const SETTINGS_COMPUTER &settings_computer,
                         const GlidePolar& glide_polar) const;
-  void RenderWind(Canvas &canvas, const RECT rc,
-                  const NMEA_INFO &nmea_info,
+
+  void RenderWind(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
                   const WindStore &wind_store) const;
 
   void RenderTemperature(Canvas &canvas, const RECT rc) const;
 
 
-  void RenderTrace(Canvas &canvas, const RECT rc,
-                   const NMEA_INFO &nmea_info,
+  void RenderTrace(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
                    const SETTINGS_COMPUTER &settings_computer,
                    const SETTINGS_MAP &settings_map,
                    const TracePointVector& trace) const;
 
-  void RenderOLC(Canvas &canvas, const RECT rc,
-                 const NMEA_INFO &nmea_info,
+  void RenderOLC(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
                  const SETTINGS_COMPUTER &settings_computer,
                  const SETTINGS_MAP &settings_map,
                  const TracePointVector& olc,
                  const TracePointVector& trace) const;
 
-  void RenderTask(Canvas &canvas, const RECT rc,
-                  const NMEA_INFO &nmea_info,
+  void RenderTask(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
                   const SETTINGS_COMPUTER &settings_computer,
                   const SETTINGS_MAP &settings_map,
                   const TaskManager &task) const;
 
-  void RenderSpeed(Canvas &canvas, const RECT rc,
-                   const NMEA_INFO &nmea_info,
+  void RenderSpeed(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
                    const DERIVED_INFO &derived_info,
                    const TaskManager &task) const;
 
