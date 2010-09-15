@@ -136,50 +136,38 @@ IgcReplayGlue::on_advance(const GEOPOINT &loc, const fixed speed,
   olc_sprint.update_idle(new_state);
 }
 
-static int
+static void
 TestOLC()
 {
-  FILE *fp;
-  fp = fopen("olc.log", "w");
-  fprintf(fp, "TestOLC\n");
-  fclose(fp);
-
   IgcReplayGlue replay;
   replay.SetFilename(_T("test/data/07if14k1.igc"));
   replay.Start();
-  if (replay.error)
-    return 1;
+  assert(!replay.error);
 
   for (int i = 1; replay.Update(); i++) {
-    if (i % 100 == 0) {
-      fp = fopen("olc.log", "a");
-      fprintf(fp, "%d seconds parsed\n", i);
-      fclose(fp);
+    if (i % 500 == 0) {
+      putchar('.');
     }
   }
+  putchar('\n');
 
-  fp = fopen("olc.log", "a");
-  fprintf(fp, "classic: %.2f km / %.3f min / %.2f km/h\n",
+  printf("classic: %.2f km / %.3f min / %.2f km/h\n",
           (double)stats_classic.distance_olc / 1000,
           (double)stats_classic.time_olc / 60,
           (double)stats_classic.speed_olc * 3.6);
-  fprintf(fp, "fai: %.2f km / %.3f min / %.2f km/h\n",
+  printf("fai: %.2f km / %.3f min / %.2f km/h\n",
           (double)stats_fai.distance_olc / 1000,
           (double)stats_fai.time_olc / 60,
           (double)stats_fai.speed_olc * 3.6);
-  fprintf(fp, "sprint: %.2f km / %.3f min / %.2f km/h\n",
+  printf("sprint: %.2f km / %.3f min / %.2f km/h\n",
           (double)stats_sprint.distance_olc / 1000,
           (double)stats_sprint.time_olc / 60,
           (double)stats_sprint.speed_olc * 3.6);
-  fclose(fp);
-
-  return 0;
 }
 
 int main(int argc, char **argv)
 {
-  printf("TestOLC\n");
-  int res = TestOLC();
-  assert(res == 0);
-  return res;
+  TestOLC();
+
+  return 0;
 }
