@@ -663,7 +663,7 @@ Profile::SetInfoBoxes(int Index, int the_type)
   Set(szProfileDisplayType[Index], the_type);
 }
 
-const TCHAR *
+static const TCHAR *
 MakeDeviceSettingName(TCHAR *buffer, const TCHAR *prefix, unsigned n,
                       const TCHAR *suffix)
 {
