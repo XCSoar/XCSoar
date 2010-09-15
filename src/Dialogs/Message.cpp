@@ -84,7 +84,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   int X, Y, Width, Height;
   WndButton *wButtons[10];
   int ButtonCount = 0;
-  int i, x, y, d, w, h, res, dY;
+  int i, x, d, w, h, res;
 
   assert(lpText != NULL);
 
@@ -105,7 +105,6 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   X = ((rc.right - rc.left) - Width) / 2;
   Y = ((rc.bottom - rc.top) - Height) / 2;
 
-  y = Layout::Scale(100);
   w = Layout::Scale(60);
   h = Layout::Scale(32);
 
@@ -118,19 +117,18 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
              style);
 
   // Create text element
-  wText = new WndFrame(wf, 0, Layout::Scale(5), Width, Height);
+  wText = new WndFrame(wf, 0, Layout::Scale(2), Width, Height);
 
   wText->SetCaption(lpText);
   wText->SetAlignCenter();
 
-  /* TODO code: this doesnt work to set font height
-  dY = wText->GetLastDrawTextHeight() - Height;
-  */
-  dY = Layout::Scale(-40);
-  wText->resize(Width, wText->GetTextHeight() + 5);
-  wf.resize(Width, wf.get_size().cy + dY);
+  unsigned text_height = wText->GetTextHeight();
+  wText->resize(Width, text_height + Layout::Scale(2));
 
-  y += dY;
+  Height = wf.GetTitleHeight() + Layout::Scale(10) + text_height + h;
+  wf.resize(Width, Height);
+
+  int y = Layout::Scale(6) + text_height;
 
   // Create buttons
   WindowStyle button_style;

@@ -158,6 +158,10 @@ protected:
 public:
   ContainerWindow &GetClientAreaWindow(void);
 
+  unsigned GetTitleHeight() const {
+    return mTitleRect.bottom - mTitleRect.top;
+  }
+
   /**
    * Add a #Window to the "destruct" list: the object will be deleted
    * by the destructor of this class.  This means that the caller
