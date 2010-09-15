@@ -42,6 +42,7 @@
 #include "Engine/Task/Tasks/OnlineContest.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
 
+#include <windef.h>
 #include <assert.h>
 #include <cstdio>
 
@@ -70,6 +71,8 @@ public:
   bool error;
 
   IgcReplayGlue() : error(false) {}
+
+  void SetFilename(const char *name);
 
 protected:
   virtual bool update_time(const fixed mintime);
@@ -136,11 +139,26 @@ IgcReplayGlue::on_advance(const GEOPOINT &loc, const fixed speed,
   olc_sprint.update_idle(new_state);
 }
 
+void
+IgcReplayGlue::SetFilename(const char *name)
+{
+#ifdef _UNICODE
+  TCHAR tname[MAX_PATH];
+  int length = ::MultiByteToWideChar(CP_ACP, 0, name, -1, tname, MAX_PATH);
+  if (length == 0)
+    return;
+
+  IgcReplay::SetFilename(tname);
+#else
+  IgcReplay::SetFilename(name);
+#endif
+}
+
 static void
-TestOLC()
+TestOLC(const char *filename)
 {
   IgcReplayGlue replay;
-  replay.SetFilename(_T("test/data/07if14k1.igc"));
+  replay.SetFilename(filename);
   replay.Start();
   assert(!replay.error);
 
@@ -167,7 +185,9 @@ TestOLC()
 
 int main(int argc, char **argv)
 {
-  TestOLC();
+  assert(argc >= 2);
+
+  TestOLC(argv[1]);
 
   return 0;
 }
