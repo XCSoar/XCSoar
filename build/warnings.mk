@@ -1,6 +1,7 @@
 WARNINGS = -Wall -Wextra
 WARNINGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
 WARNINGS += -Wundef
+WARNINGS += -Wmissing-declarations
 
 ifneq ($(TARGET),ANDROID)
 WARNINGS += -Wredundant-decls
@@ -12,14 +13,13 @@ CXXFLAGS += -Wmissing-noreturn
 # disable some warnings, we're not ready for them yet
 CXXFLAGS += -Wno-unused-parameter -Wno-format -Wno-switch -Wno-non-virtual-dtor
 CXXFLAGS += -Wno-missing-field-initializers 
-
-# FastMath.h does dirty aliasing tricks
-CXXFLAGS += -Wno-strict-aliasing
+CXXFLAGS += -Wcast-align
 
 # plain C warnings
 
 CFLAGS += $(WARNINGS)
-CFLAGS += -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes
+CFLAGS += -Wmissing-prototypes -Wstrict-prototypes
+CFLAGS += -Wnested-externs
 
 # make warnings fatal (for perfectionists)
 
