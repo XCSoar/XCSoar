@@ -196,6 +196,7 @@ Registry::Export(const TCHAR *szFile)
   union {
     BYTE pValue[nMaxValueValueSize+4];
     DWORD dValue;
+    TCHAR string_value[1];
   } uValue;
 
   // If no file is given -> return
@@ -258,7 +259,7 @@ Registry::Export(const TCHAR *szFile)
       }
 
       // does it contain invalid characters?
-      if (_tcspbrk((const TCHAR *)uValue.pValue, _T("\r\n\"")) != NULL) {
+      if (_tcspbrk(uValue.string_value, _T("\r\n\"")) != NULL) {
         // -> write ="" to the output file an continue with the next subkey
         writer.printfln(_T("%s=\"\""), lpstrName);
         continue;
@@ -270,7 +271,7 @@ Registry::Export(const TCHAR *szFile)
       uValue.pValue[nValueSize + 1] = 0;
 
       // If the value string is not empty
-      if (!string_is_empty((const TCHAR*)uValue.pValue))
+      if (!string_is_empty(uValue.string_value))
         // -> write the value to the output file
         writer.printfln(_T("%s=\"%s\""), lpstrName, uValue.pValue);
       else
