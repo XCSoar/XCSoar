@@ -116,7 +116,7 @@ OnTimeData(DataField *Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
-void
+static void
 OnWeatherHelp(WindowControl * Sender)
 {
   WndProperty *wp = (WndProperty*)Sender;

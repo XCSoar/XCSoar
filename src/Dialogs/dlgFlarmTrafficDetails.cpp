@@ -64,7 +64,9 @@ static FlarmId target_id;
  * Updates all the dialogs fields, that are changing frequently.
  * e.g. climb speed, distance, height
  */
-void UpdateChanging() {
+static void
+UpdateChanging()
+{
   TCHAR tmp[20];
   const FLARM_TRAFFIC* target =
       XCSoarInterface::Basic().flarm.FindTraffic(target_id);
@@ -115,7 +117,9 @@ void UpdateChanging() {
  * Should be called on dialog opening as it closes the dialog when the
  * target does not exist.
  */
-void Update() {
+static void
+Update()
+{
   TCHAR tmp[200], tmp_id[7];
   const FLARM_TRAFFIC* target =
       XCSoarInterface::Basic().flarm.FindTraffic(target_id);
