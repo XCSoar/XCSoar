@@ -374,13 +374,9 @@ dlgAnalysisShowModal(void)
   wInfo = NULL;
   wCalc = NULL;
 
-  if (!Layout::landscape)
-    wf = LoadDialog(CallBackTable,
-                        XCSoarInterface::main_window, _T("IDR_XML_ANALYSIS_L"));
-  else
-    wf = LoadDialog(CallBackTable,
-                        XCSoarInterface::main_window, _T("IDR_XML_ANALYSIS"));
-
+  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+                  Layout::landscape ? _T("IDR_XML_ANALYSIS_L") :
+                                      _T("IDR_XML_ANALYSIS"));
   if (!wf)
     return;
 
