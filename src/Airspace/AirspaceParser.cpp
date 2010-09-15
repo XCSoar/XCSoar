@@ -37,6 +37,7 @@ Copyright_License {
 
 */
 
+#include "AirspaceParser.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "ProgressGlue.hpp"
 #include "Units.hpp"
