@@ -127,7 +127,7 @@ DataField::SetAsString(const TCHAR *Value)
   (void)Value;
 }
 
-void
+static void
 __Dummy(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   (void)Sender;
