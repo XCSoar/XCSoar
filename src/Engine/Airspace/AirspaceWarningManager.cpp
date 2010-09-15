@@ -307,8 +307,10 @@ AirspaceWarningManager::update_task(const AIRCRAFT_STATE& state)
   const GEOPOINT location_tp = m_task.getActiveTaskPoint()->get_location_remaining();
   const fixed time_remaining = m_task.get_stats().current_leg.solution_remaining.TimeElapsed; 
 
+  fixed max_time = min(fixed(config.WarningTime), time_remaining);
+
   return update_predicted(state, location_tp, perf_task,
-                          AirspaceWarning::WARNING_TASK, time_remaining);
+                          AirspaceWarning::WARNING_TASK, max_time);
 }
 
 
