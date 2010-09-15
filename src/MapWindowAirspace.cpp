@@ -66,7 +66,7 @@ public:
     }
   }
 
-  const StaticArray<GEOPOINT,32> &get_locations() const {
+  const StaticArray<GeoPoint,32> &get_locations() const {
     return locs;
   }
   bool is_warning(const AbstractAirspace& as) const {
@@ -86,7 +86,7 @@ private:
   }
 
   StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning, ids_acked;
-  StaticArray<GEOPOINT,32> locs;
+  StaticArray<GeoPoint,32> locs;
 };
 
 

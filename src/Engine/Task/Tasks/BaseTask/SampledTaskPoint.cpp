@@ -162,7 +162,7 @@ SampledTaskPoint::get_sample_points() const
 
 
 void 
-SampledTaskPoint::set_search_min(const GEOPOINT &location)
+SampledTaskPoint::set_search_min(const GeoPoint &location)
 {
   SearchPoint sp(location, m_task_projection, false);
   set_search_min(sp);

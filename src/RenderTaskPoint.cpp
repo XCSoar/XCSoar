@@ -57,7 +57,7 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
                                  const SETTINGS_MAP &_settings_map,
                                  RenderObservationZone &_ozv,
                                  const bool draw_bearing,
-                                 const GEOPOINT &location)
+                                 const GeoPoint &location)
   :m_canvas(_canvas), m_buffer(_canvas), m_proj(_projection),
    map_canvas(_canvas, _projection),
    m_settings_map(_settings_map),
@@ -242,7 +242,7 @@ RenderTaskPoint::draw_target(const TaskPoint &tp)
 }
 
 void 
-RenderTaskPoint::draw_task_line(const GEOPOINT& start, const GEOPOINT& end) 
+RenderTaskPoint::draw_task_line(const GeoPoint& start, const GeoPoint& end) 
 {
   m_buffer.select(leg_active() ? pen_leg_active : pen_leg_inactive);
   m_buffer.background_transparent();
@@ -285,7 +285,7 @@ RenderTaskPoint::draw_isoline(const AATPoint& tp)
                                     distance(seg.parametric(fixed_one)))>2) {
     
     for (fixed t = fixed_zero; t<=fixed_one; t+= fixed_twentieth) {
-      GEOPOINT ga = seg.parametric(t);
+      GeoPoint ga = seg.parametric(t);
       screen.push_back(m_proj.LonLat2Screen(ga));
     }
     if (screen.size()>=2) {

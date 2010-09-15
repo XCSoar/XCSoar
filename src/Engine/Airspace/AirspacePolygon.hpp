@@ -58,7 +58,7 @@ public:
    *
    * @return Initialised airspace object
    */
-  AirspacePolygon(const std::vector<GEOPOINT>& pts,
+  AirspacePolygon(const std::vector<GeoPoint>& pts,
     const bool prune = false);
 
   /** 
@@ -77,7 +77,7 @@ public:
  * 
  * @return Location of reference point
  */
-  const GEOPOINT get_center() const;
+  const GeoPoint get_center() const;
 
   /** 
    * Checks whether an aircraft is inside the airspace.
@@ -87,7 +87,7 @@ public:
    * 
    * @return true if aircraft is inside airspace boundary
    */
-  bool inside(const GEOPOINT &loc) const;
+  bool inside(const GeoPoint &loc) const;
 
   /** 
    * Checks whether a line intersects with the airspace.
@@ -98,10 +98,10 @@ public:
    * 
    * @return Vector of intersection pairs if the line intersects the airspace
    */
-  AirspaceIntersectionVector intersects(const GEOPOINT& g1, 
+  AirspaceIntersectionVector intersects(const GeoPoint& g1, 
                                         const GeoVector &vec) const;
 
-  GEOPOINT closest_point(const GEOPOINT& loc) const;
+  GeoPoint closest_point(const GeoPoint& loc) const;
 
   /**
    * Accessor for airspace shape

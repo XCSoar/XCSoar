@@ -15,7 +15,7 @@ public:
   const AIRCRAFT_STATE& get_state() {
     return state;
   }
-  GEOPOINT get_next() const;
+  GeoPoint get_next() const;
   void set_wind(const fixed speed, const Angle direction);
 
   bool far(TaskManager &task_manager);
@@ -34,12 +34,12 @@ public:
   void set_speed_factor(fixed f) {
     speed_factor = f;
   }
-  GEOPOINT target(TaskManager &task_manager);
+  GeoPoint target(TaskManager &task_manager);
 
 private:
   fixed target_height(TaskManager &task_manager);
 
-  GEOPOINT endpoint(const Angle& bear) const;
+  GeoPoint endpoint(const Angle& bear) const;
   void update_bearing(TaskManager &task_manager);
 
   int test_num;
@@ -50,7 +50,7 @@ private:
   bool short_flight;
 
   AIRCRAFT_STATE state, state_last;
-  std::vector<GEOPOINT> w;
+  std::vector<GeoPoint> w;
   Angle bearing;
   unsigned awp;
 

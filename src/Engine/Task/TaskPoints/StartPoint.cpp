@@ -89,8 +89,8 @@ StartPoint::find_best_start(const AIRCRAFT_STATE &state,
   class StartPointBestStart: public ZeroFinder {
   public:
     StartPointBestStart(const StartPoint& ts,
-                        const GEOPOINT &loc_from,
-                        const GEOPOINT &loc_to):
+                        const GeoPoint &loc_from,
+                        const GeoPoint &loc_to):
       ZeroFinder(fixed_zero, fixed_one, fixed(0.01)),
       m_start(ts),
       m_loc_from(loc_from),
@@ -100,17 +100,17 @@ StartPoint::find_best_start(const AIRCRAFT_STATE &state,
       return ::DoubleDistance(m_loc_from,parametric(p),m_loc_to);
     }
 
-    GEOPOINT solve() {
+    GeoPoint solve() {
       const fixed p = find_min(fixed_half);
       return parametric(p);
     }
   private:
-    GEOPOINT parametric(const fixed p) {
+    GeoPoint parametric(const fixed p) {
       return m_start.get_boundary_parametric(p);
     }
     const StartPoint& m_start;
-    const GEOPOINT m_loc_from;
-    const GEOPOINT m_loc_to;
+    const GeoPoint m_loc_from;
+    const GeoPoint m_loc_to;
 
   };
 

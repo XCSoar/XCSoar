@@ -63,7 +63,7 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
     /* line too long for buffer */
     return false;
 
-  GEOPOINT location;
+  GeoPoint location;
 
   // Get fields
   n_params = extractParameters(line, ctemp, params, 20);

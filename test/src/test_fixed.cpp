@@ -49,10 +49,10 @@ int main(int argc, char** argv) {
 
   ok(fabs(t-fixed(dt))<fixed(1.0e5),"atan(y,x)",0);
 
-  GEOPOINT l1; 
+  GeoPoint l1; 
   l1.Longitude = Angle::degrees(fixed(0.0)); 
   l1.Latitude= Angle::degrees(fixed(0.0));
-  GEOPOINT l2; 
+  GeoPoint l2; 
   l2.Longitude = Angle::degrees(fixed(-0.3)); 
   l2.Latitude= Angle::degrees(fixed(1.0));
   fixed d; Angle b;

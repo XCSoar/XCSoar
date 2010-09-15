@@ -32,7 +32,7 @@ protected:
   virtual void on_stop() {}
   virtual void on_bad_file() {}
 
-  void on_advance(const GEOPOINT &loc,
+  void on_advance(const GeoPoint &loc,
                   const fixed speed, const Angle bearing,
                   const fixed alt, const fixed baroalt, const fixed t) {
 

@@ -51,14 +51,14 @@ struct BoundsRectangle {
   Angle west, north, east, south;
 
   BoundsRectangle() {}
-  BoundsRectangle(const GEOPOINT pt)
+  BoundsRectangle(const GeoPoint pt)
     :west(pt.Longitude), north(pt.Latitude),
      east(pt.Longitude), south(pt.Latitude) {}
-  BoundsRectangle(const GEOPOINT _north_west, const GEOPOINT _south_east)
+  BoundsRectangle(const GeoPoint _north_west, const GeoPoint _south_east)
     :west(_north_west.Longitude), north(_north_west.Latitude),
      east(_south_east.Longitude), south(_south_east.Latitude) {}
 
-  void merge(const GEOPOINT pt) {
+  void merge(const GeoPoint pt) {
     if (pt.Longitude < west)
       west = pt.Longitude;
     if (pt.Latitude > north)
@@ -73,7 +73,7 @@ struct BoundsRectangle {
     return longitude.between(west, east) && latitude.between(south, north);
   }
 
-  bool inside(const GEOPOINT pt) const {
+  bool inside(const GeoPoint pt) const {
     return inside(pt.Longitude, pt.Latitude);
   }
 
@@ -82,8 +82,8 @@ struct BoundsRectangle {
       inside(interior.east, interior.south);
   }
 
-  GEOPOINT center() const {
-    return GEOPOINT(west.Fraction(east, fixed_half),
+  GeoPoint center() const {
+    return GeoPoint(west.Fraction(east, fixed_half),
                     south.Fraction(north, fixed_half));
   }
 };

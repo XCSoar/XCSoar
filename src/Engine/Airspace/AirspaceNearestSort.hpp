@@ -26,7 +26,7 @@ public:
  * 
  * @return Initialised object
  */
-  AirspaceNearestSort(const GEOPOINT _location,
+  AirspaceNearestSort(const GeoPoint _location,
                       const AirspacePredicate &condition=AirspacePredicate::always_true):
     m_location(_location),
     m_condition(condition),
@@ -84,7 +84,7 @@ public:
 
 protected:
 
-  const GEOPOINT m_location; /**< Location of observer for queries */
+  const GeoPoint m_location; /**< Location of observer for queries */
   const AirspacePredicate &m_condition; /**< Condition to be applied to queries */
 
 private:

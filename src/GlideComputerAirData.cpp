@@ -796,7 +796,7 @@ GlideComputerAirData::Turning()
 void
 GlideComputerAirData::ThermalSources()
 {
-  GEOPOINT ground_location;
+  GeoPoint ground_location;
   fixed ground_altitude;
 
   EstimateThermalBase(Calculated().ThermalEstimate_Location,

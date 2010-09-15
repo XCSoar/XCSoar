@@ -74,9 +74,9 @@ equals(const Angle a, int b)
 
 int main(int argc, char **argv)
 {
-  const GEOPOINT a(Angle::degrees(fixed(7.7061111111111114)),
+  const GeoPoint a(Angle::degrees(fixed(7.7061111111111114)),
                    Angle::degrees(fixed(51.051944444444445)));
-  const GEOPOINT b(Angle::degrees(fixed(7.599444444444444)),
+  const GeoPoint b(Angle::degrees(fixed(7.599444444444444)),
                    Angle::degrees(fixed(51.099444444444444)));
 
   fixed distance = Distance(a, b);
@@ -95,7 +95,7 @@ int main(int argc, char **argv)
   distance = ProjectedDistance(a, b, b);
   assert(distance > fixed(9120) && distance < fixed(9140));
 
-  const GEOPOINT middle(a.Longitude.Fraction(b.Longitude, fixed_half),
+  const GeoPoint middle(a.Longitude.Fraction(b.Longitude, fixed_half),
                         a.Latitude.Fraction(b.Latitude, fixed_half));
   distance = ProjectedDistance(a, b, middle);
   assert(distance > fixed(9100/2) && distance < fixed(9140/2));

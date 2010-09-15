@@ -124,7 +124,7 @@ CloseGeoid(void)
  * @return The geoid separation
  */
 fixed
-LookupGeoidSeparation(const GEOPOINT pt)
+LookupGeoidSeparation(const GeoPoint pt)
 {
   if (!egm96data)
     return fixed_zero;

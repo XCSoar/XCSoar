@@ -64,7 +64,7 @@ public:
  *
  * @return Initialised (virtual) object.  Not to be added to actual Waypoints class
  */
-  WaypointEnvelope(const GEOPOINT &location,
+  WaypointEnvelope(const GeoPoint &location,
     const TaskProjection &task_projection);
 
   /** 
@@ -81,7 +81,7 @@ public:
  * 
  * @return Distance in flat units
  */
-  unsigned flat_distance_to(const FLAT_GEOPOINT &f) const {
+  unsigned flat_distance_to(const FlatGeoPoint &f) const {
     return FlatLocation.distance_to(f);
   }
 
@@ -154,7 +154,7 @@ public:
   }
 
 private:
-  FLAT_GEOPOINT FlatLocation; /**< Flat projected location */
+  FlatGeoPoint FlatLocation; /**< Flat projected location */
   mutable Waypoint waypoint; /**< Actual waypoint contained */
 };
 

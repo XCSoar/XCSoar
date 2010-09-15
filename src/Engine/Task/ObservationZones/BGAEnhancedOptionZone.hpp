@@ -56,12 +56,12 @@ public:
    * 
    * @return Initialised object
    */
-  BGAEnhancedOptionZone(const GEOPOINT loc):
+  BGAEnhancedOptionZone(const GeoPoint loc):
     SymmetricSectorZone(BGAENHANCEDOPTION, loc, fixed(10000.0),
                         Angle::radians(fixed_pi))
     {}
 
-  ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
+  ObservationZonePoint* clone(const GeoPoint * _location=0) const {
     if (_location) {
       return new BGAEnhancedOptionZone(*_location);
     } else {
@@ -83,7 +83,7 @@ public:
  * 
  * @return Point on boundary
  */
-  GEOPOINT get_boundary_parametric(fixed t) const;  
+  GeoPoint get_boundary_parametric(fixed t) const;  
 
 /** 
  * Distance reduction for scoring when outside this OZ

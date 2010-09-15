@@ -37,9 +37,9 @@
 #include "LineSectorZone.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
-GEOPOINT LineSectorZone::get_boundary_parametric(fixed t) const
+GeoPoint LineSectorZone::get_boundary_parametric(fixed t) const
 { 
-  GEOPOINT loc;
+  GeoPoint loc;
   loc = SectorStart.interpolate(SectorEnd,t);
   return loc;
 }

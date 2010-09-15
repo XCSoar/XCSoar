@@ -73,7 +73,7 @@ public:
   bool intercept(const AATPoint& ap,
                  const AIRCRAFT_STATE &state,
                  const double bearing_offset,
-                 GEOPOINT& ip) const;
+                 GeoPoint& ip) const;
 };
 
 #endif

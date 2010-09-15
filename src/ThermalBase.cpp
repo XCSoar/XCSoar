@@ -43,10 +43,10 @@ Copyright_License {
 #include "Math/Earth.hpp"
 
 void
-EstimateThermalBase(const GEOPOINT Thermal_Location,
+EstimateThermalBase(const GeoPoint Thermal_Location,
                     const fixed altitude, const fixed wthermal,
                     const SpeedVector wind,
-                    GEOPOINT *ground_location, fixed *ground_alt)
+                    GeoPoint *ground_location, fixed *ground_alt)
 {
   if ((Thermal_Location.Longitude == Angle::native(fixed_zero))
       || (Thermal_Location.Latitude == Angle::native(fixed_zero))
@@ -65,7 +65,7 @@ EstimateThermalBase(const GEOPOINT Thermal_Location,
     ? new RasterTerrain::Lease(*terrain)
     : NULL;
 
-  GEOPOINT loc;
+  GeoPoint loc;
   FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * dt, &loc);
 
   for (fixed t = fixed_zero; t <= Tmax; t += dt) {

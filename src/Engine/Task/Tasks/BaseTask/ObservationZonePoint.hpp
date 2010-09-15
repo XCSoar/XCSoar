@@ -43,7 +43,7 @@
 #include "Util/NonCopyable.hpp"
 #include "Util/Serialisable.hpp"
 
-struct GEOPOINT;
+struct GeoPoint;
 class TaskPoint;
 
 /**
@@ -76,7 +76,7 @@ public:
  * 
  * @return Initialised object
  */
-  ObservationZonePoint(enum shape _shape, const GEOPOINT & _location)
+  ObservationZonePoint(enum shape _shape, const GeoPoint & _location)
     :ReferencePoint(_location), shape(_shape) {}
 
 /** 
@@ -107,7 +107,7 @@ public:
  *
  * @return Location of point
  */
-  virtual GEOPOINT randomPointInSector(const fixed mag) const = 0;
+  virtual GeoPoint randomPointInSector(const fixed mag) const = 0;
 
 /** 
  * Clone this object with optional shift
@@ -115,7 +115,7 @@ public:
  * @param _location New location, or if NULL, uses object's location 
  * @return Cloned object
  */
-  virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const = 0;
+  virtual ObservationZonePoint* clone(const GeoPoint * _location=0) const = 0;
 };
 
 #endif

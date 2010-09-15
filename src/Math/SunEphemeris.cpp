@@ -176,7 +176,7 @@ SunEphemeris::FNsun(double d)
  * @return Sunset time
  */
 double
-SunEphemeris::CalcSunTimes(const GEOPOINT &Location,
+SunEphemeris::CalcSunTimes(const GeoPoint &Location,
                            const BrokenDateTime &date_time,
                            const double TimeZone)
 {

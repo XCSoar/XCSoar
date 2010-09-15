@@ -69,7 +69,7 @@ struct FLARM_TRAFFIC {
   };
 
   /** Location of the FLARM target */
-  GEOPOINT Location;
+  GeoPoint Location;
   /** TrackBearing of the FLARM target */
   Angle TrackBearing;
   /** Speed of the FLARM target */

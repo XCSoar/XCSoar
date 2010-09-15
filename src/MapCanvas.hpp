@@ -45,7 +45,7 @@ Copyright_License {
 
 class Canvas;
 class Projection;
-struct GEOPOINT;
+struct GeoPoint;
 
 /**
  * A wrapper of #Canvas which draws to geographic coordinates
@@ -60,8 +60,8 @@ public:
   MapCanvas(Canvas &_canvas, const Projection &_projection)
     :canvas(_canvas), projection(_projection) {}
 
-  void line(const GEOPOINT &a, const GEOPOINT &b);
-  void circle(const GEOPOINT &center, fixed radius);
+  void line(const GeoPoint &a, const GeoPoint &b);
+  void circle(const GeoPoint &center, fixed radius);
 
   /**
    * Projects all points of the #SearchPointVector to screen

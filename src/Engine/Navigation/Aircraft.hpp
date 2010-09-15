@@ -196,7 +196,7 @@ struct AIRCRAFT_STATE:
   //   Navigation
   //################
 
-  GEOPOINT Location; /**< location of aircraft */
+  GeoPoint Location; /**< location of aircraft */
 
   Angle TrackBearing; /**< track angle in degrees true */
 
@@ -212,7 +212,7 @@ struct AIRCRAFT_STATE:
   fixed Gload;
 
   /** Accessor for the aircraft location */
-  const GEOPOINT& get_location() const {
+  const GeoPoint& get_location() const {
     return Location;
   }
 

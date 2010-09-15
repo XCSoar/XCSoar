@@ -88,7 +88,7 @@ HaveCondorDevice()
  */
 
 fixed
-LookupGeoidSeparation(const GEOPOINT pt)
+LookupGeoidSeparation(const GeoPoint pt)
 {
   return fixed_zero;
 }
@@ -131,7 +131,7 @@ SettingsMapBlackboard::SettingsMapBlackboard() {}
  */
 
 static void
-Dump(GEOPOINT location)
+Dump(GeoPoint location)
 {
   double latitude = location.Latitude.value_degrees();
   double longitude = location.Longitude.value_degrees();

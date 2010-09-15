@@ -282,14 +282,14 @@ Serialiser::Visit(const CylinderZone& data)
 
 
 void 
-Serialiser::serialise(const GEOPOINT& data)
+Serialiser::serialise(const GeoPoint& data)
 {
   m_node.set_attribute(_T("longitude"), data.Longitude);
   m_node.set_attribute(_T("latitude"), data.Latitude);
 }
 
 void 
-Serialiser::deserialise(GEOPOINT& data)
+Serialiser::deserialise(GeoPoint& data)
 {
   m_node.get_attribute(_T("longitude"), data.Longitude);
   m_node.get_attribute(_T("latitude"), data.Latitude);
@@ -303,7 +303,7 @@ Serialiser::deserialise_waypoint()
   DataNode* loc_node = m_node.get_child_by_name(_T("Location"));
   if (!loc_node)
     return NULL;
-  GEOPOINT loc;
+  GeoPoint loc;
   Serialiser lser(*loc_node);
   lser.deserialise(loc);
   delete loc_node;

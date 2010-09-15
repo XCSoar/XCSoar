@@ -81,12 +81,12 @@ private:
      */
     void Drift(fixed t, 
                const TaskProjection& projection,
-               const GEOPOINT& wind_drift,
+               const GeoPoint& wind_drift,
                fixed decay);
 
     bool valid;                 /**< Whether this point is a valid sample */
     
-    GEOPOINT location;          /**< Actual location of sample */
+    GeoPoint location;          /**< Actual location of sample */
     FlatPoint loc_drift;        /**< Projected/drifted sample */
     fixed t_0;                  /**< Time of sample (s) */
     fixed w;                    /**< Scaled updraft value of sample */
@@ -113,7 +113,7 @@ public:
    */
   void Process(const bool circling,
                const fixed time, 
-               const GEOPOINT &location, 
+               const GeoPoint &location, 
                const fixed w,
                const SpeedVector wind,
                THERMAL_LOCATOR_INFO& therm);
@@ -127,24 +127,24 @@ private:
   void glider_average(fixed &xav, fixed& yav);
 
   fixed est_t;
-  GEOPOINT est_location;
+  GeoPoint est_location;
 
-  void AddPoint(const fixed t, const GEOPOINT &location, const fixed w);
+  void AddPoint(const fixed t, const GeoPoint &location, const fixed w);
   void Update(const fixed t_0,
-              const GEOPOINT &location_0,
+              const GeoPoint &location_0,
               const SpeedVector wind,
               THERMAL_LOCATOR_INFO &therm);
 
   void Update_Internal(const fixed t_0,
                        const TaskProjection& projection,
-                       const GEOPOINT& location_0, 
-                       const GEOPOINT& traildrift,
+                       const GeoPoint& location_0, 
+                       const GeoPoint& traildrift,
                        const fixed decay,
                        THERMAL_LOCATOR_INFO& therm);
 
   void Drift(const fixed t_0,
              const TaskProjection& projection, 
-             const GEOPOINT& traildrift,
+             const GeoPoint& traildrift,
              const fixed decay);
 
   ThermalLocator_Point points[TLOCATOR_NMAX]; /**< Circular buffer of points */

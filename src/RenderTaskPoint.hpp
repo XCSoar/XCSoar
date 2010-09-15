@@ -63,7 +63,7 @@ public:
                   const SETTINGS_MAP &_settings_map,
                   RenderObservationZone &_ozv,
                   const bool draw_bearing,
-                  const GEOPOINT &location);
+                  const GeoPoint &location);
 
   void Visit(const UnorderedTaskPoint& tp);
   void Visit(const StartPoint& tp);
@@ -84,7 +84,7 @@ protected:
   void draw_bearing(const TaskPoint &tp);
   virtual void draw_target(const TaskPoint &tp);
   virtual void draw_off_track(const TaskPoint &tp);
-  void draw_task_line(const GEOPOINT& start, const GEOPOINT& end);
+  void draw_task_line(const GeoPoint& start, const GeoPoint& end);
   void draw_isoline(const AATPoint& tp);
   void draw_samples(const OrderedTaskPoint& tp);
   void draw_oz_background(const OrderedTaskPoint& tp);
@@ -94,12 +94,12 @@ protected:
   const Pen pen_leg_inactive;
   const Pen pen_leg_arrow;
   const Pen pen_isoline;
-  GEOPOINT m_last_point;
+  GeoPoint m_last_point;
   unsigned m_index;
   RenderObservationZone &ozv;
   unsigned m_active_index;
   unsigned m_layer;
-  const GEOPOINT m_location;
+  const GeoPoint m_location;
 };
 
 

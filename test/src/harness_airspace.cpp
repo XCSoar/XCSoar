@@ -21,7 +21,7 @@ bool test_airspace_extra(Airspaces &airspaces) {
   // try adding a null polygon
 
   AbstractAirspace* as;
-  std::vector<GEOPOINT> pts;
+  std::vector<GeoPoint> pts;
   as = new AirspacePolygon(pts);
   airspaces.insert(as);
 
@@ -38,7 +38,7 @@ void setup_airspaces(Airspaces& airspaces, const unsigned n) {
   for (unsigned i=0; i<n; i++) {
     AbstractAirspace* as;
     if (rand()%4!=0) {
-      GEOPOINT c;
+      GeoPoint c;
       c.Longitude = Angle::degrees(fixed((rand()%1200-600)/1000.0+0.5));
       c.Latitude = Angle::degrees(fixed((rand()%1200-600)/1000.0+0.5));
       fixed radius(10000.0*(0.2+(rand()%12)/12.0));
@@ -48,13 +48,13 @@ void setup_airspaces(Airspaces& airspaces, const unsigned n) {
       // just for testing, create a random polygon from a convex hull around
       // random points
       const unsigned num = rand()%10+5;
-      GEOPOINT c;
+      GeoPoint c;
       c.Longitude = Angle::degrees(fixed((rand()%1200-600)/1000.0+0.5));
       c.Latitude = Angle::degrees(fixed((rand()%1200-600)/1000.0+0.5));
       
-      std::vector<GEOPOINT> pts;
+      std::vector<GeoPoint> pts;
       for (unsigned j=0; j<num; j++) {
-        GEOPOINT p=c;
+        GeoPoint p=c;
         p.Longitude += Angle::degrees(fixed((rand()%200)/1000.0));
         p.Latitude += Angle::degrees(fixed((rand()%200)/1000.0));
         pts.push_back(p);
@@ -164,8 +164,8 @@ public:
     *fout << "# intersection point\n";
     for (AirspaceIntersectionVector::const_iterator it = m_intersections.begin();
          it != m_intersections.end(); ++it) {
-      const GEOPOINT start = (it->first);
-      const GEOPOINT end = (it->second);
+      const GeoPoint start = (it->first);
+      const GeoPoint end = (it->second);
       *fout << start.Longitude << " " << start.Latitude << " " << "\n";
       *fout << end.Longitude << " " << end.Latitude << " " << "\n\n";
     }
@@ -223,7 +223,7 @@ public:
 #endif    
   }
   virtual void closest(const AbstractAirspace& as) {
-    GEOPOINT c = as.closest_point(state.Location);
+    GeoPoint c = as.closest_point(state.Location);
 #ifdef DO_PRINT
     *fout << "# closest point\n";
     *fout << c.Longitude << " " << c.Latitude << " " << "\n";
@@ -271,7 +271,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
                     const Airspaces& airspaces,
                     const AirspaceAircraftPerformance& perf,
                     bool do_report,
-                    const GEOPOINT &target) 
+                    const GeoPoint &target) 
 {
   const fixed range(20000.0);
 

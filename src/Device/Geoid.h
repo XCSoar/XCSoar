@@ -43,6 +43,6 @@ Copyright_License {
 
 void OpenGeoid(void);
 void CloseGeoid(void);
-fixed LookupGeoidSeparation(const GEOPOINT pt);
+fixed LookupGeoidSeparation(const GeoPoint pt);
 
 #endif

@@ -80,7 +80,7 @@ WayPointFile::extractParameters(const TCHAR *src, TCHAR *dst,
 }
 
 short
-WayPointFile::AltitudeFromTerrain(GEOPOINT &location,
+WayPointFile::AltitudeFromTerrain(GeoPoint &location,
                                   const RasterTerrain &terrain)
 {
   return terrain.GetTerrainHeight(location);

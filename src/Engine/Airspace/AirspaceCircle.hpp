@@ -55,7 +55,7 @@ public:
    * 
    * @return Initialised airspace object
    */
-  AirspaceCircle(const GEOPOINT &loc, const fixed _radius);
+  AirspaceCircle(const GeoPoint &loc, const fixed _radius);
 
   /** 
    * Compute bounding box enclosing the airspace.  Rounds up/down
@@ -73,7 +73,7 @@ public:
  * 
  * @return Location of reference point
  */
-  const GEOPOINT get_center() const {
+  const GeoPoint get_center() const {
     return m_center;
   }
 
@@ -85,7 +85,7 @@ public:
    * 
    * @return true if aircraft is inside airspace boundary
    */
-  bool inside(const GEOPOINT &loc) const;
+  bool inside(const GeoPoint &loc) const;
 
   /** 
    * Checks whether a line intersects with the airspace.
@@ -96,10 +96,10 @@ public:
    * 
    * @return Vector of intersection pairs if the line intersects the airspace
    */
-  AirspaceIntersectionVector intersects(const GEOPOINT& g1, 
+  AirspaceIntersectionVector intersects(const GeoPoint& g1, 
                                         const GeoVector &vec) const;
 
-  GEOPOINT closest_point(const GEOPOINT& loc) const;
+  GeoPoint closest_point(const GeoPoint& loc) const;
 
 /** 
  * Accessor for radius
@@ -110,7 +110,7 @@ public:
     return m_radius;
   }
 private:
-  const GEOPOINT m_center;
+  const GeoPoint m_center;
   const fixed m_radius;
 public:
 #ifdef DO_PRINT

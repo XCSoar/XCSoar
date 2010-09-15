@@ -59,12 +59,12 @@ public:
  * 
  * @return Initialised object
  */
-  LineSectorZone(const GEOPOINT loc, const fixed length=fixed(1000.0)):
+  LineSectorZone(const GeoPoint loc, const fixed length=fixed(1000.0)):
     SymmetricSectorZone(LINE, loc, length * fixed_half,
                         Angle::radians(fixed_pi))
   {};
 
-  ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
+  ObservationZonePoint* clone(const GeoPoint * _location=0) const {
     if (_location) {
       return new LineSectorZone(*_location, getLength());
     } else {
@@ -86,7 +86,7 @@ public:
     return CylinderZone::isInSector(ref_now) && CylinderZone::isInSector(ref_last);
   }
 
-  GEOPOINT get_boundary_parametric(fixed t) const;  
+  GeoPoint get_boundary_parametric(fixed t) const;  
 
 /** 
  * Distance reduction for scoring when outside this OZ

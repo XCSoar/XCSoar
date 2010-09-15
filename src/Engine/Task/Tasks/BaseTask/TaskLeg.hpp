@@ -110,7 +110,7 @@ public:
  * 
  * @return Distance (m) remaining in the planned task
  */
-  fixed scan_distance_remaining(const GEOPOINT &ref);
+  fixed scan_distance_remaining(const GeoPoint &ref);
 
 /** 
  * Calculate scored distance of achieved part of task.
@@ -119,7 +119,7 @@ public:
  * 
  * @return Distance (m) achieved adjusted for scoring
  */
-  fixed scan_distance_scored(const GEOPOINT &ref) const;
+  fixed scan_distance_scored(const GeoPoint &ref) const;
 
 /** 
  * Calculate distance of achieved part of task.
@@ -131,7 +131,7 @@ public:
  * 
  * @return Distance (m) achieved
  */
-  fixed scan_distance_travelled(const GEOPOINT &ref);
+  fixed scan_distance_travelled(const GeoPoint &ref);
 
 /** 
  * Retrieve maximum possible leg distance
@@ -175,13 +175,13 @@ private:
   GeoVector leg_vector_planned() const;
   
   gcc_pure
-  GeoVector leg_vector_travelled(const GEOPOINT &ref) const;
+  GeoVector leg_vector_travelled(const GeoPoint &ref) const;
   
   gcc_pure
-  GeoVector leg_vector_remaining(const GEOPOINT &ref) const;
+  GeoVector leg_vector_remaining(const GeoPoint &ref) const;
 
   gcc_pure
-  fixed leg_distance_scored(const GEOPOINT &ref) const;
+  fixed leg_distance_scored(const GeoPoint &ref) const;
 
   gcc_pure
   const OrderedTaskPoint* origin() const;

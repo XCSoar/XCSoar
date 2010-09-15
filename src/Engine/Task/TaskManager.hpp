@@ -117,7 +117,7 @@ public:
    *
    * @return Location of point
    */
-  GEOPOINT random_point_in_task(const unsigned index,
+  GeoPoint random_point_in_task(const unsigned index,
                                 const fixed mag=fixed_one) const;
 
   /**
@@ -160,7 +160,7 @@ public:
    * @param loc Location of aircraft at start
    * @param force Force creation of default task even if a task is present
    */
-  void default_task(const GEOPOINT &loc, const bool force=false);
+  void default_task(const GeoPoint &loc, const bool force=false);
 
   /**
    * Updates internal state of task given new aircraft.
@@ -381,7 +381,7 @@ public:
    * Retrieve trace vector
    *
    */
-  TracePointVector find_trace_points(const GEOPOINT &loc, const fixed range,
+  TracePointVector find_trace_points(const GeoPoint &loc, const fixed range,
                                      const unsigned mintime,
                                      const fixed resolution) const;
 
@@ -435,7 +435,7 @@ public:
    * 
    * @return Location of center of task
    */
-  GEOPOINT get_task_center(const GEOPOINT& fallback_location) const;
+  GeoPoint get_task_center(const GeoPoint& fallback_location) const;
 
   /** 
    * Find approximate radius of task from center to edge (for rendering purposes)
@@ -444,7 +444,7 @@ public:
    * 
    * @return Radius (m) from center to edge of task
    */
-  fixed get_task_radius(const GEOPOINT& fallback_location) const;
+  fixed get_task_radius(const GeoPoint& fallback_location) const;
 
 #ifdef DO_PRINT
   void print(const AIRCRAFT_STATE &location);

@@ -351,8 +351,8 @@ AbortTask::get_vector_home(const AIRCRAFT_STATE &state) const
   }
 }
 
-GEOPOINT 
-AbortTask::get_task_center(const GEOPOINT& fallback_location) const
+GeoPoint 
+AbortTask::get_task_center(const GeoPoint& fallback_location) const
 {
   if (tps.empty()) {
     return fallback_location;
@@ -370,7 +370,7 @@ AbortTask::get_task_center(const GEOPOINT& fallback_location) const
 }
 
 fixed 
-AbortTask::get_task_radius(const GEOPOINT& fallback_location) const
+AbortTask::get_task_radius(const GeoPoint& fallback_location) const
 { 
   if (tps.empty()) {
     return fixed_zero;

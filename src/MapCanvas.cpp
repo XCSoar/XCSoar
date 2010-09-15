@@ -42,7 +42,7 @@ Copyright_License {
 #include "Asset.hpp"
 
 void
-MapCanvas::line(const GEOPOINT &a, const GEOPOINT &b)
+MapCanvas::line(const GeoPoint &a, const GeoPoint &b)
 {
   POINT pts[2];
   pts[0] = projection.LonLat2Screen(a);
@@ -55,7 +55,7 @@ MapCanvas::line(const GEOPOINT &a, const GEOPOINT &b)
 }
 
 void
-MapCanvas::circle(const GEOPOINT &center, fixed radius)
+MapCanvas::circle(const GeoPoint &center, fixed radius)
 {
   POINT screen_center = projection.LonLat2Screen(center);
   unsigned screen_radius = projection.DistanceMetersToScreen(radius);

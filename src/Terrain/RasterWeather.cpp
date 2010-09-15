@@ -225,7 +225,7 @@ RasterWeather::ExistsItem(const TCHAR* name, unsigned time_index) const
 }
 
 void
-RasterWeather::ScanAll(const GEOPOINT &location)
+RasterWeather::ScanAll(const GeoPoint &location)
 {
   /* not holding the lock here, because this method is only called
      during startup, when the other threads aren't running yet */
@@ -312,11 +312,11 @@ RasterWeather::_Close()
 {
   delete weather_map;
   weather_map = NULL;
-  center = GEOPOINT(Angle::native(fixed_zero), Angle::native(fixed_zero));
+  center = GeoPoint(Angle::native(fixed_zero), Angle::native(fixed_zero));
 }
 
 void
-RasterWeather::SetViewCenter(const GEOPOINT &location)
+RasterWeather::SetViewCenter(const GeoPoint &location)
 {
   Poco::ScopedRWLock protect(lock, true);
 

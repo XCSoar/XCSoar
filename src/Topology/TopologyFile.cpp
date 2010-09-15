@@ -230,7 +230,7 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 
         for (int jj = 0; jj < line.numpoints; ++jj) {
           POINT sc;
-          const GEOPOINT l = projection.point2GeoPoint(line.point[jj]);
+          const GeoPoint l = projection.point2GeoPoint(line.point[jj]);
 
           if (projection.LonLat2ScreenIfVisible(l, &sc))
             icon.draw(canvas, bitmap_canvas, sc.x, sc.y);

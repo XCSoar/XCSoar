@@ -44,7 +44,7 @@
 
 #include <assert.h>
 
-AirspacePolygon::AirspacePolygon(const std::vector<GEOPOINT>& pts,
+AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint>& pts,
   const bool prune)
   :AbstractAirspace(POLYGON)
 {
@@ -52,13 +52,13 @@ AirspacePolygon::AirspacePolygon(const std::vector<GEOPOINT>& pts,
     m_is_convex = true;
   } else {
     TaskProjection task_projection; // note dummy blank projection
-    for (std::vector<GEOPOINT>::const_iterator v = pts.begin();
+    for (std::vector<GeoPoint>::const_iterator v = pts.begin();
          v != pts.end(); ++v) {
       m_border.push_back(SearchPoint(*v, task_projection));
     }
     // ensure airspace is closed
-    GEOPOINT p_start = pts[0];
-    GEOPOINT p_end = *(pts.end()-1);
+    GeoPoint p_start = pts[0];
+    GeoPoint p_end = *(pts.end()-1);
     if (p_start != p_end) {
       m_border.push_back(SearchPoint(p_start, task_projection));
     }
@@ -81,11 +81,11 @@ AirspacePolygon::project(const TaskProjection &task_projection)
 }
 
 
-const GEOPOINT 
+const GeoPoint 
 AirspacePolygon::get_center() const
 {
   if (m_border.empty()) {
-    return GEOPOINT();
+    return GeoPoint();
   } else {
     return m_border[0].get_location();
   }
@@ -95,15 +95,15 @@ AirspacePolygon::get_center() const
 const FlatBoundingBox 
 AirspacePolygon::get_bounding_box(const TaskProjection& task_projection)
 {
-  FLAT_GEOPOINT fmin;
-  FLAT_GEOPOINT fmax;
+  FlatGeoPoint fmin;
+  FlatGeoPoint fmax;
 
   project(task_projection);
 
   bool empty=true;
   for (SearchPointVector::const_iterator v = m_border.begin();
        v != m_border.end(); ++v) {
-    FLAT_GEOPOINT f = v->get_flatLocation();
+    FlatGeoPoint f = v->get_flatLocation();
     if (empty) {
       empty = false;
       fmin = f; 
@@ -121,22 +121,22 @@ AirspacePolygon::get_bounding_box(const TaskProjection& task_projection)
     fmax.Longitude+= 1; fmax.Latitude+= 1;
     return FlatBoundingBox(fmin,fmax);
   } else {
-    return FlatBoundingBox(FLAT_GEOPOINT(0,0),FLAT_GEOPOINT(0,0));
+    return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
   }
 }
 
 bool 
-AirspacePolygon::inside(const GEOPOINT &loc) const
+AirspacePolygon::inside(const GeoPoint &loc) const
 {
   return PolygonInterior(loc, m_border);
 }
 
 
 AirspaceIntersectionVector
-AirspacePolygon::intersects(const GEOPOINT& start, 
+AirspacePolygon::intersects(const GeoPoint& start, 
                             const GeoVector &vec) const
 {
-  const GEOPOINT end = vec.end_point(start);
+  const GeoPoint end = vec.end_point(start);
   const FlatRay ray(m_task_projection->project(start),
                     m_task_projection->project(end));
 
@@ -158,10 +158,10 @@ AirspacePolygon::intersects(const GEOPOINT& start,
 }
 
 
-GEOPOINT 
-AirspacePolygon::closest_point(const GEOPOINT& loc) const
+GeoPoint 
+AirspacePolygon::closest_point(const GeoPoint& loc) const
 {
-  const FLAT_GEOPOINT p = m_task_projection->project(loc);
-  const FLAT_GEOPOINT pb = nearest_point(m_border, p, m_is_convex); 
+  const FlatGeoPoint p = m_task_projection->project(loc);
+  const FlatGeoPoint pb = nearest_point(m_border, p, m_is_convex); 
   return m_task_projection->unproject(pb);
 }

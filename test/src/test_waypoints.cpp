@@ -23,7 +23,7 @@ public:
 
 unsigned test_location(const Waypoints& waypoints, bool good)
 {
-  GEOPOINT loc; // at 0,0
+  GeoPoint loc; // at 0,0
   if (!good) {
     loc.Longitude = Angle::degrees(fixed(-23.4));
   }

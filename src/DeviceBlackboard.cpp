@@ -108,7 +108,7 @@ DeviceBlackboard::Initialise()
  * @param alt New altitude
  */
 void
-DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const fixed alt)
+DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt)
 {
   ScopeLock protect(mutexBlackboard);
   SetBasic().Location = loc;
@@ -132,7 +132,7 @@ DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const fixed alt)
  * @see IgcReplay::UpdateInternal()
  */
 void
-DeviceBlackboard::SetLocation(const GEOPOINT &loc,
+DeviceBlackboard::SetLocation(const GeoPoint &loc,
                               const fixed speed, const Angle bearing,
                               const fixed alt, const fixed baroalt,
                               const fixed t)

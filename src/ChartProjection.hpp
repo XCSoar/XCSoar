@@ -54,22 +54,22 @@ public:
 
   ChartProjection(const RECT &rc,
                   const TaskManager &task,
-                  const GEOPOINT &fallback_loc);
+                  const GeoPoint &fallback_loc);
 
   ChartProjection(const RECT &rc,
                   const OrderedTask& task,
-                  const GEOPOINT &fallback_loc);
+                  const GeoPoint &fallback_loc);
 
   ChartProjection(const RECT &rc,
                   const OrderedTaskPoint& point,
-                  const GEOPOINT &fallback_loc);
+                  const GeoPoint &fallback_loc);
 
   ChartProjection(const RECT &rc,
                   const TracePointVector& trace,
-                  const GEOPOINT &fallback_loc);
+                  const GeoPoint &fallback_loc);
 private:
 
   void set_projection(const RECT &rc, 
-                      const GEOPOINT &center,
+                      const GeoPoint &center,
                       const fixed radius);
 };

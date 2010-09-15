@@ -131,7 +131,7 @@ OrderedTaskPoint::search_nominal_if_unsampled() const
 }
 
 fixed 
-OrderedTaskPoint::double_leg_distance(const GEOPOINT &ref) const
+OrderedTaskPoint::double_leg_distance(const GeoPoint &ref) const
 {
   assert(tp_previous);
   assert(tp_next);

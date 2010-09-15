@@ -102,7 +102,7 @@ public:
  * @return Location 
  */
   gcc_pure
-  virtual const GEOPOINT& get_location_remaining() const;
+  virtual const GeoPoint& get_location_remaining() const;
 
 /** 
  * Calculate vector from aircraft to destination

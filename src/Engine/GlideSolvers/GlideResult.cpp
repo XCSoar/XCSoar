@@ -167,8 +167,8 @@ GlideResult::is_final_glide() const
   return (Solution == RESULT_OK) && !positive(DistanceToFinal);
 }
 
-GEOPOINT 
-GlideResult::location_at_final(const GEOPOINT &location) const
+GeoPoint 
+GlideResult::location_at_final(const GeoPoint &location) const
 {
   return Vector.intermediate_point(location, DistanceToFinal);
 }

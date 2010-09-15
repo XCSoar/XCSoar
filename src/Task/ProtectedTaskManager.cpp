@@ -66,7 +66,7 @@ ProtectedTaskManager::get_mode() const
 }
 
 TracePointVector 
-ProtectedTaskManager::find_trace_points(const GEOPOINT &loc, 
+ProtectedTaskManager::find_trace_points(const GeoPoint &loc, 
                                         const fixed range,
                                         const unsigned mintime,
                                         const fixed resolution) const

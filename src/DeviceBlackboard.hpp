@@ -70,8 +70,8 @@ public:
 protected:
   NMEA_INFO& SetBasic() { return gps_info; }
 public:
-  void SetStartupLocation(const GEOPOINT &loc, const fixed alt);
-  void SetLocation(const GEOPOINT &loc, const fixed speed, const Angle bearing,
+  void SetStartupLocation(const GeoPoint &loc, const fixed alt);
+  void SetLocation(const GeoPoint &loc, const fixed speed, const Angle bearing,
                    const fixed alt, const fixed baroalt, const fixed t);
   void ProcessSimulation();
   bool LowerConnection();

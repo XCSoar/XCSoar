@@ -44,10 +44,10 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct GEOPOINT;
+struct GeoPoint;
 
 void GetTeamCode(TCHAR *code, Angle bearing, fixed range);
-GEOPOINT GetTeamCodePosition(GEOPOINT wpPos, const TCHAR *TeamMateCode);
+GeoPoint GetTeamCodePosition(GeoPoint wpPos, const TCHAR *TeamMateCode);
 Angle GetTeammateBearingFromRef(const TCHAR *code);
 fixed GetTeammateRangeFromRef(const TCHAR *code);
 

@@ -44,7 +44,7 @@ Copyright_License {
 #include <tchar.h>
 #include "Util/tstring.hpp"
 
-struct GEOPOINT;
+struct GeoPoint;
 class SingleWindow;
 class WndProperty;
 class Waypoint;
@@ -72,7 +72,7 @@ void dlgAirspaceSelect();
 
 const Waypoint *
 dlgWayPointSelect(SingleWindow &parent,
-                  const GEOPOINT &location);
+                  const GeoPoint &location);
 
 void dlgBasicSettingsShowModal();
 void dlgBrightnessShowModal();
@@ -155,7 +155,7 @@ void dlgNumberEntryKeyboardShowModal(int *value, int width = 0);
 int dlgComboPicker(SingleWindow &parent, WndProperty *theProperty);
 
 bool PopupNearestWaypointDetails(const Waypoints &way_points,
-    const GEOPOINT &location, double range, bool scalefilter = false);
+    const GeoPoint &location, double range, bool scalefilter = false);
 
 #define mrOK             2
 #define mrCancel         3

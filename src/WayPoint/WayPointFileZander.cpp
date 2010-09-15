@@ -60,7 +60,7 @@ WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
   if (len < 34)
     return false;
 
-  GEOPOINT location;
+  GeoPoint location;
 
   // Latitude (Characters 13-20 // DDMMSS(N/S))
   if (!parseAngle(line + 13, location.Latitude, true))

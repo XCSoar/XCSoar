@@ -88,7 +88,7 @@ public:
  *
  * @return Location of point
  */
-  GEOPOINT randomPointInSector(const fixed mag) const {
+  GeoPoint randomPointInSector(const fixed mag) const {
     return m_oz->randomPointInSector(mag);
   }
 
@@ -109,7 +109,7 @@ public:
  * 
  * @return Boundary point
  */
-  GEOPOINT get_boundary_parametric(fixed t) const
+  GeoPoint get_boundary_parametric(fixed t) const
   {
     return m_oz->get_boundary_parametric(t);
   }

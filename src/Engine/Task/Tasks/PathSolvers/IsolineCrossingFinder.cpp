@@ -54,7 +54,7 @@ IsolineCrossingFinder::IsolineCrossingFinder(const AATPoint& _aap,
 fixed 
 IsolineCrossingFinder::f(const fixed t) 
 {
-  const GEOPOINT a = ell.parametric(t);
+  const GeoPoint a = ell.parametric(t);
   AIRCRAFT_STATE s;
   s.Location = a;
 

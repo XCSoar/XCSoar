@@ -594,7 +594,7 @@ class AirspaceIntersectionVisitorSlice: public AirspaceIntersectionVisitor
 {
 public:
   AirspaceIntersectionVisitorSlice(Canvas &canvas, Chart &chart,
-      const SETTINGS_MAP &settings, const GEOPOINT start) :
+      const SETTINGS_MAP &settings, const GeoPoint start) :
     m_canvas(canvas), m_chart(chart), m_settings(settings), m_start(start)
   {
     Pen mpen(Pen::BLANK, 0, Color(0xf0, 0xf0, 0xb0));
@@ -621,8 +621,8 @@ public:
     
     for (AirspaceIntersectionVector::const_iterator it =
         m_intersections.begin(); it != m_intersections.end(); ++it) {
-      const GEOPOINT p_start = (it->first);
-      const GEOPOINT p_end = (it->second);
+      const GeoPoint p_start = (it->first);
+      const GeoPoint p_end = (it->second);
       const fixed distance_start = m_start.distance(p_start);
       const fixed distance_end = m_start.distance(p_end);
 
@@ -657,7 +657,7 @@ private:
   Canvas& m_canvas;
   Chart& m_chart;
   const SETTINGS_MAP& m_settings;
-  const GEOPOINT& m_start;
+  const GeoPoint& m_start;
 };
 
 void
@@ -672,9 +672,9 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
   static const fixed range(50000); // 50 km
   fixed hmin = max(fixed_zero, nmea_info.GPSAltitude - fixed(3300));
   fixed hmax = max(fixed(3300), nmea_info.GPSAltitude + fixed(1000));
-  const GEOPOINT p_start = nmea_info.Location;
+  const GeoPoint p_start = nmea_info.Location;
   const GeoVector vec(range, nmea_info.TrackBearing);
-  const GEOPOINT p_end = vec.end_point(p_start);
+  const GeoPoint p_end = vec.end_point(p_start);
 
   Chart chart(canvas, rc);
   chart.ResetScale();
@@ -703,7 +703,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas,
 
     for (unsigned j = 0; j < AIRSPACE_SCANSIZE_X; ++j) {
       const fixed t_this = fixed(j) / (AIRSPACE_SCANSIZE_X - 1);
-      const GEOPOINT p_this = p_start + (p_end - p_start) * t_this;
+      const GeoPoint p_this = p_start + (p_end - p_start) * t_this;
 
       POINT p;
       p.x = chart.screenX(t_this * range);

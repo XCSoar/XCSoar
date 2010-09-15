@@ -55,20 +55,20 @@ extern const fixed fixed_inv_earth_r;
  * Finds cross track error in meters and closest point P4 between P3
  * and desired track P1-P2.  Very slow function!
  */
-fixed CrossTrackError(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3,
-    GEOPOINT *loc4);
+fixed CrossTrackError(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3,
+    GeoPoint *loc4);
 
 /**
  * Calculates projected distance from P3 along line P1-P2.
  */
-fixed ProjectedDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3);
+fixed ProjectedDistance(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3);
 
-void DistanceBearing(GEOPOINT loc1, GEOPOINT loc2, fixed *Distance,
+void DistanceBearing(GeoPoint loc1, GeoPoint loc2, fixed *Distance,
     Angle *Bearing);
 
-fixed Distance(GEOPOINT loc1, GEOPOINT loc2);
+fixed Distance(GeoPoint loc1, GeoPoint loc2);
 
-Angle Bearing(GEOPOINT loc1, GEOPOINT loc2);
+Angle Bearing(GeoPoint loc1, GeoPoint loc2);
 
 /**
  * Finds the point along a distance dthis (m) between p1 and p2, which are
@@ -76,7 +76,7 @@ Angle Bearing(GEOPOINT loc1, GEOPOINT loc2);
  *
  * This is a slow function.  Adapted from The Aviation Formulary 1.42.
  */
-GEOPOINT IntermediatePoint(GEOPOINT loc1, GEOPOINT loc2, const fixed dthis);
+GeoPoint IntermediatePoint(GeoPoint loc1, GeoPoint loc2, const fixed dthis);
 
 /** 
  * Calculate and add distances between point 1 and 2, and point 2 and 3.
@@ -87,9 +87,9 @@ GEOPOINT IntermediatePoint(GEOPOINT loc1, GEOPOINT loc2, const fixed dthis);
  * 
  * @return Distance 12 plus 23 (m)
  */
-fixed DoubleDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3);
+fixed DoubleDistance(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3);
 
-void FindLatitudeLongitude(GEOPOINT loc, Angle Bearing, fixed Distance,
-    GEOPOINT *loc_out);
+void FindLatitudeLongitude(GeoPoint loc, Angle Bearing, fixed Distance,
+    GeoPoint *loc_out);
 
 #endif

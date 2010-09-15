@@ -15,7 +15,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
                     const Airspaces& airspaces,
                     const AirspaceAircraftPerformance& perf,
                     bool do_report,
-                    const GEOPOINT &target);
+                    const GeoPoint &target);
 
 bool test_airspace_extra(Airspaces &airspaces);
 

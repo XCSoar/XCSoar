@@ -86,7 +86,7 @@ void GrahamScan::partition_points()
   // Now put the remaining points in one of the two output sequences
   //
 
-  GEOPOINT loclast = left->get_location();
+  GeoPoint loclast = left->get_location();
 
   for (std::list<SearchPoint>::iterator i = raw_points.begin(); 
        i != raw_points.end(); ) {
@@ -183,9 +183,9 @@ void GrahamScan::build_half_hull( std::vector< SearchPoint* > input,
 // is on a straight line.
 //
 
-int GrahamScan::direction( const GEOPOINT& p0,
-                           const GEOPOINT& p1,
-                           const GEOPOINT& p2 )
+int GrahamScan::direction( const GeoPoint& p0,
+                           const GeoPoint& p1,
+                           const GeoPoint& p2 )
 {
   return (( (p0.Longitude - p1.Longitude ) * (p2.Latitude - p1.Latitude ) )
           - ( (p2.Longitude - p1.Longitude ) * (p0.Latitude - p1.Latitude ) )).sign();

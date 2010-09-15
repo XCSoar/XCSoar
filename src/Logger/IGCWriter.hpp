@@ -51,7 +51,7 @@ Copyright_License {
 struct BrokenDateTime;
 struct NMEA_INFO;
 struct Declaration;
-class GEOPOINT;
+class GeoPoint;
 
 class IGCWriter {
   enum {
@@ -75,7 +75,7 @@ class IGCWriter {
   struct LogPoint_GPSPosition {
     bool Initialized;
 
-    GEOPOINT Location;
+    GeoPoint Location;
     int GPSAltitude;
 
     const LogPoint_GPSPosition &operator=(const NMEA_INFO &gps_info);
@@ -106,7 +106,7 @@ public:
               const TCHAR *aircraft_registration,
               const TCHAR *strAssetNumber, const TCHAR *driver_name);
 
-  void AddDeclaration(const GEOPOINT &location, const TCHAR *ID);
+  void AddDeclaration(const GeoPoint &location, const TCHAR *ID);
   void StartDeclaration(const BrokenDateTime &FirstDateTime,
                         const int numturnpoints);
   void EndDeclaration(void);

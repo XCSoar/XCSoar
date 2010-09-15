@@ -245,7 +245,7 @@ private:
   bool update_inside(const AIRCRAFT_STATE& state);
 
   bool update_predicted(const AIRCRAFT_STATE& state, 
-                        const GEOPOINT &location_predicted,
+                        const GeoPoint &location_predicted,
                         const AirspaceAircraftPerformance &perf,
                         const AirspaceWarning::AirspaceWarningState& warning_state,
                         const fixed max_time);

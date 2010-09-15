@@ -41,7 +41,7 @@
 
 typedef struct _LOGGER_INTERP_POINT
 {
-  GEOPOINT loc;
+  GeoPoint loc;
   fixed alt;
   fixed t;
 } LOGGER_INTERP_POINT;
@@ -133,7 +133,7 @@ public:
   }
 
   void
-  Interpolate(fixed time, GEOPOINT &loc, fixed &alt)
+  Interpolate(fixed time, GeoPoint &loc, fixed &alt)
   {
     if (!Ready()) {
       loc = p[num].loc;

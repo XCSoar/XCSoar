@@ -55,7 +55,7 @@ public:
   TCHAR AircraftRego[32];
   std::vector<Waypoint> waypoints;
   const TCHAR* get_name(const unsigned i) const;
-  const GEOPOINT& get_location(const unsigned i) const;
+  const GeoPoint& get_location(const unsigned i) const;
   size_t size() const;
 };
 

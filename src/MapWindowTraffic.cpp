@@ -99,7 +99,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
       continue;
 
     // Save the location of the FLARM target
-    GEOPOINT target_loc = traffic.Location;
+    GeoPoint target_loc = traffic.Location;
 
     // If Scaled mode is chosen, recalculate the
     // targets virtual position using the scale factor

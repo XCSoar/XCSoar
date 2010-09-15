@@ -63,23 +63,23 @@ public:
   }
 
   gcc_pure
-  bool inside(const GEOPOINT &pt) const {
+  bool inside(const GeoPoint &pt) const {
     return bounds.inside(pt);
   }
 
   gcc_pure
-  GEOPOINT GetMapCenter() const {
+  GeoPoint GetMapCenter() const {
     return bounds.center();
   }
 
-  void SetViewCenter(const GEOPOINT &location);
+  void SetViewCenter(const GeoPoint &location);
 
   // accurate method
   int GetEffectivePixelSize(fixed &pixel_D,
-                            const GEOPOINT &location) const;
+                            const GeoPoint &location) const;
 
   gcc_pure
-  short GetField(const GEOPOINT &location) const;
+  short GetField(const GeoPoint &location) const;
 
  protected:
   void _ReloadJPG2000(void);

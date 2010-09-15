@@ -109,7 +109,7 @@ IgcReplayGlue::reset_time()
 }
 
 void
-IgcReplayGlue::on_advance(const GEOPOINT &loc, const fixed speed,
+IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
                              const Angle bearing, const fixed alt,
                              const fixed baroalt, const fixed t)
 {

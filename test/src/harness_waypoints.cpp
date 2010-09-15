@@ -13,39 +13,39 @@
 bool setup_waypoints(Waypoints &waypoints, const unsigned n) 
 {
 
-  Waypoint wp = waypoints.create(GEOPOINT(Angle::degrees(fixed_zero),
+  Waypoint wp = waypoints.create(GeoPoint(Angle::degrees(fixed_zero),
                                           Angle::degrees(fixed_zero)));
   wp.Flags.Airport = true;
   wp.Altitude = fixed(0.25);
   waypoints.append(wp);
 
-  wp = waypoints.create(GEOPOINT(Angle::degrees(fixed_zero), 
+  wp = waypoints.create(GeoPoint(Angle::degrees(fixed_zero), 
                                  Angle::degrees(fixed_one)));
   wp.Flags.Airport = true;
   wp.Altitude = fixed(0.25);
   waypoints.append(wp);
 
-  wp = waypoints.create(GEOPOINT(Angle::degrees(fixed_one), 
+  wp = waypoints.create(GeoPoint(Angle::degrees(fixed_one), 
                                  Angle::degrees(fixed_one)));
   wp.Name = "Hello";
   wp.Flags.Airport = true;
   wp.Altitude = fixed_half;
   waypoints.append(wp);
 
-  wp = waypoints.create(GEOPOINT(Angle::degrees(fixed(0.8)), 
+  wp = waypoints.create(GeoPoint(Angle::degrees(fixed(0.8)), 
                                  Angle::degrees(fixed(0.5))));
   wp.Name = "Unk";
   wp.Flags.Airport = true;
   wp.Altitude = fixed(0.25);
   waypoints.append(wp);
 
-  wp = waypoints.create(GEOPOINT(Angle::degrees(fixed_one), 
+  wp = waypoints.create(GeoPoint(Angle::degrees(fixed_one), 
                                  Angle::degrees(fixed_zero)));
   wp.Flags.Airport = true;
   wp.Altitude = fixed(0.25);
   waypoints.append(wp);
 
-  wp = waypoints.create(GEOPOINT(Angle::degrees(fixed_zero), 
+  wp = waypoints.create(GeoPoint(Angle::degrees(fixed_zero), 
                                  Angle::degrees(fixed(0.23))));
   wp.Flags.Airport = true;
   wp.Altitude = fixed(0.25);
@@ -55,7 +55,7 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
     int x = rand()%1200-100;
     int y = rand()%1200-100;
     double z = rand()% std::max(terrain_height,1);
-    wp = waypoints.create(GEOPOINT(Angle::degrees(fixed(x/1000.0)), 
+    wp = waypoints.create(GeoPoint(Angle::degrees(fixed(x/1000.0)), 
                                    Angle::degrees(fixed(y/1000.0))));
     wp.Flags.Airport = false;
     wp.Altitude = fixed(z);

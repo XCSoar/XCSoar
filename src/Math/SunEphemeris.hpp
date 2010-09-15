@@ -42,7 +42,7 @@ Copyright_License {
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
-struct GEOPOINT;
+struct GeoPoint;
 struct BrokenDateTime;
 
 /**
@@ -69,7 +69,7 @@ class SunEphemeris {
  public:
   double MorningTwilight, altmax, TimeOfNoon, TimeOfSunSet, TimeOfSunRise, EveningTwilight;
 
-  double CalcSunTimes(const GEOPOINT &location,
+  double CalcSunTimes(const GeoPoint &location,
                       const BrokenDateTime &date_time,
                       double TimeZone);
 };

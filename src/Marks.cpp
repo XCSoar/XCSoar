@@ -72,7 +72,7 @@ Marks::~Marks()
 }
 
 void
-Marks::MarkLocation(const GEOPOINT &loc,
+Marks::MarkLocation(const GeoPoint &loc,
                     const BrokenDateTime &time,
                     bool play_sound)
 {

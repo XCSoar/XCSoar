@@ -102,7 +102,7 @@ public:
    *
    * @return Blank object at given location, with id set
    */
-  Waypoint create(const GEOPOINT& location);
+  Waypoint create(const GeoPoint& location);
 
   /**
    * Optimise the internal search tree after adding/removing elements.
@@ -195,7 +195,7 @@ public:
    *
    * @return Pointer to waypoint if found (or NULL if none found)
    */
-  const Waypoint* lookup_location(const GEOPOINT &loc,
+  const Waypoint* lookup_location(const GeoPoint &loc,
                                   const fixed range= fixed_zero) const;
 
   /**
@@ -230,7 +230,7 @@ public:
    * @param range Distance in meters of search radius
    * @param visitor Visitor to be called on waypoints within range
    */
-  void visit_within_range(const GEOPOINT &loc, const fixed range,
+  void visit_within_range(const GeoPoint &loc, const fixed range,
                           WaypointVisitor& visitor) const;
 
   /**
@@ -241,7 +241,7 @@ public:
    * @param range Distance in meters of search radius
    * @param visitor Visitor to be called on waypoints within range
    */
-  void visit_within_radius(const GEOPOINT &loc, const fixed range,
+  void visit_within_radius(const GeoPoint &loc, const fixed range,
                            WaypointVisitor& visitor) const;
 
   /**
@@ -278,7 +278,7 @@ public:
    *
    * @return Null if none found, otherwise pointer to nearest
    */
-  const Waypoint* get_nearest(const GEOPOINT &loc) const;
+  const Waypoint* get_nearest(const GeoPoint &loc) const;
 
   /**
    * Looks up nearest waypoint to the search location.
@@ -289,7 +289,7 @@ public:
    *
    * @return Iterator to absolute nearest waypoint
    */
-  WaypointTree::const_iterator find_nearest(const GEOPOINT &loc) const;
+  WaypointTree::const_iterator find_nearest(const GeoPoint &loc) const;
 
   /**
    * Look up waypoint by ID.
@@ -326,7 +326,7 @@ private:
    * @return Vector of waypoints within square range
    */
   std::vector<WaypointEnvelope>
-    find_within_range(const GEOPOINT &loc, const fixed range) const;
+    find_within_range(const GeoPoint &loc, const fixed range) const;
 
   unsigned next_id;
 

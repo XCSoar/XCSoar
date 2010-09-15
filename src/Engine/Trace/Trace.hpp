@@ -146,7 +146,7 @@ public:
    */
   gcc_pure
   TracePointVector
-  find_within_range(const GEOPOINT &loc, const fixed range,
+  find_within_range(const GeoPoint &loc, const fixed range,
                     const unsigned mintime = 0,
                     const fixed resolution = -fixed_one) const;
 
@@ -217,7 +217,7 @@ private:
 
 public:
 #ifdef DO_PRINT
-  void print(const GEOPOINT &loc) const;
+  void print(const GeoPoint &loc) const;
 #endif
 };
 

@@ -40,10 +40,10 @@
 #include "Math/Angle.hpp"
 #include "Compiler.h"
 
-struct GEOPOINT;
+struct GeoPoint;
 
 gcc_pure
-bool operator != (const GEOPOINT&g1, const GEOPOINT &g2);
+bool operator != (const GeoPoint&g1, const GeoPoint &g2);
 
 /**
  * A constant bearing vector in lat/lon coordinates.  
@@ -78,7 +78,7 @@ struct GeoVector {
    * \todo
    * - handle is_average
    */
-  GeoVector(const GEOPOINT &source, const GEOPOINT &target,
+  GeoVector(const GeoPoint &source, const GeoPoint &target,
             const bool is_average=true);
 
   /**
@@ -94,7 +94,7 @@ struct GeoVector {
    * Assumes constant bearing. 
    */
   gcc_pure
-  GEOPOINT end_point(const GEOPOINT &source) const;
+  GeoPoint end_point(const GeoPoint &source) const;
 
   /**
    * Returns the end point of the geovector projected from the start point.  
@@ -103,7 +103,7 @@ struct GeoVector {
    * @param source start of vector
    * @return location of end point
    */
-  GEOPOINT mid_point(const GEOPOINT &source) const;
+  GeoPoint mid_point(const GeoPoint &source) const;
   
   /**
    * Returns the location of a point from source along vector at distance
@@ -113,7 +113,7 @@ struct GeoVector {
    * @return location of point
    */
   gcc_pure
-  GEOPOINT intermediate_point(const GEOPOINT &source, const fixed distance) const;
+  GeoPoint intermediate_point(const GeoPoint &source, const fixed distance) const;
 
 /** 
  * Minimum distance from a point on the vector to the reference
@@ -124,8 +124,8 @@ struct GeoVector {
  * @return Distance (m)
  */
   gcc_pure
-  fixed minimum_distance(const GEOPOINT &source,
-                         const GEOPOINT &ref) const;
+  fixed minimum_distance(const GeoPoint &source,
+                         const GeoPoint &ref) const;
 
   /**
    * Distance in meters 

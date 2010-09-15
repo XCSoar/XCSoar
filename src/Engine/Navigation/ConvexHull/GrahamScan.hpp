@@ -74,9 +74,9 @@ private :
                         int factor );
 
   gcc_pure
-  static int direction(const GEOPOINT& p0,
-                       const GEOPOINT& p1,
-                       const GEOPOINT& p2);
+  static int direction(const GeoPoint& p0,
+                       const GeoPoint& p1,
+                       const GeoPoint& p2);
 
   std::list< SearchPoint > raw_points;
   SearchPoint *left;

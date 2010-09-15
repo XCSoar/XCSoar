@@ -102,7 +102,7 @@ struct GlideResult {
   /**
    * Convenience function, returns location of start of final glide component
    */
-  GEOPOINT location_at_final(const GEOPOINT &location) const;
+  GeoPoint location_at_final(const GeoPoint &location) const;
 
   /**
    * Check whether task is partially achievable.  It will

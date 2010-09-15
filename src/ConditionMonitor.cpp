@@ -419,7 +419,7 @@ protected:
         !cmp.Calculated().task_stats.task_valid)
       return false;
 
-    const GEOPOINT null_point;
+    const GeoPoint null_point;
     return (cmp.Calculated().TerrainWarningLocation != null_point);
   }
 

@@ -47,12 +47,12 @@ static const int fixed_scale = 1000;
 
 TaskProjection::TaskProjection()
 {
-  GEOPOINT zero(Angle::native(fixed_zero), Angle::native(fixed_zero));
+  GeoPoint zero(Angle::native(fixed_zero), Angle::native(fixed_zero));
   reset(zero);
 }
 
 void 
-TaskProjection::reset(const GEOPOINT &ref) 
+TaskProjection::reset(const GeoPoint &ref) 
 {
   location_min = ref;
   location_max = ref;
@@ -60,7 +60,7 @@ TaskProjection::reset(const GEOPOINT &ref)
 }
 
 
-void TaskProjection::scan_location(const GEOPOINT &ref) 
+void TaskProjection::scan_location(const GeoPoint &ref) 
 {
   location_min.Longitude = min(ref.Longitude,
                                location_min.Longitude);
@@ -75,7 +75,7 @@ void TaskProjection::scan_location(const GEOPOINT &ref)
 bool
 TaskProjection::update_fast()
 {
-  GEOPOINT old_loc = location_mid;
+  GeoPoint old_loc = location_mid;
   fixed old_midloc = cos_midloc;
 
   location_mid.Longitude =
@@ -89,37 +89,37 @@ TaskProjection::update_fast()
 
 
 FlatPoint
-TaskProjection::fproject(const GEOPOINT& tp) const
+TaskProjection::fproject(const GeoPoint& tp) const
 {
   FlatPoint fp((tp.Longitude - location_mid.Longitude).as_delta().value_native() * cos_midloc,
                (tp.Latitude - location_mid.Latitude).as_delta().value_native() * fixed_scale);
   return fp;
 }
 
-GEOPOINT 
+GeoPoint 
 TaskProjection::funproject(const FlatPoint& fp) const
 {
-  GEOPOINT tp;
+  GeoPoint tp;
   tp.Longitude = Angle::native(fp.x/cos_midloc)+location_mid.Longitude;
   tp.Latitude = Angle::native(fp.y/fixed_scale)+location_mid.Latitude;
   return tp;
 }
 
-FLAT_GEOPOINT 
-TaskProjection::project(const GEOPOINT& tp) const
+FlatGeoPoint 
+TaskProjection::project(const GeoPoint& tp) const
 {
   FlatPoint f = fproject(tp);
-  FLAT_GEOPOINT fp;
+  FlatGeoPoint fp;
   fp.Longitude = (int)(f.x+fixed_half);
   fp.Latitude = (int)(f.y+fixed_half);
   return fp;
 }
 
 
-GEOPOINT 
-TaskProjection::unproject(const FLAT_GEOPOINT& fp) const
+GeoPoint 
+TaskProjection::unproject(const FlatGeoPoint& fp) const
 {
-  GEOPOINT tp;
+  GeoPoint tp;
   tp.Longitude = Angle::native(fixed(fp.Longitude) / cos_midloc) + location_mid.Longitude;
   tp.Latitude = Angle::native(fixed(fp.Latitude) / fixed_scale) + location_mid.Latitude;
   return tp;
@@ -127,9 +127,9 @@ TaskProjection::unproject(const FLAT_GEOPOINT& fp) const
 
 
 fixed
-TaskProjection::fproject_range(const GEOPOINT &tp, const fixed range) const
+TaskProjection::fproject_range(const GeoPoint &tp, const fixed range) const
 {
-  GEOPOINT fr;
+  GeoPoint fr;
   ::FindLatitudeLongitude(tp, Angle::native(fixed_zero), range, &fr);
   FlatPoint f = fproject(fr);
   FlatPoint p = fproject(tp);
@@ -137,7 +137,7 @@ TaskProjection::fproject_range(const GEOPOINT &tp, const fixed range) const
 }
 
 unsigned
-TaskProjection::project_range(const GEOPOINT &tp, const fixed range) const
+TaskProjection::project_range(const GeoPoint &tp, const fixed range) const
 {
   return (int)(fproject_range(tp,range)+fixed_half);
 }

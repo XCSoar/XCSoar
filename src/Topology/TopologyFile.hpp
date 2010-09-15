@@ -46,7 +46,7 @@ Copyright_License {
 #include "Screen/Icon.hpp"
 #include "Util/NonCopyable.hpp"
 
-struct GEOPOINT;
+struct GeoPoint;
 class Canvas;
 class Projection;
 class LabelBlock;

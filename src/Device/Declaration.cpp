@@ -58,7 +58,7 @@ Declaration::get_name(const unsigned i) const
   return waypoints[i].Name.c_str();
 }
 
-const GEOPOINT& 
+const GeoPoint& 
 Declaration::get_location(const unsigned i) const
 {
   return waypoints[i].Location;

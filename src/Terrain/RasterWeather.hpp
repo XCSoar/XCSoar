@@ -56,7 +56,7 @@ public:
   static const unsigned MAX_WEATHER_TIMES = 48; /**< Max time segments of each item */
 
 private:
-  GEOPOINT center;
+  GeoPoint center;
 
 public:
   /** 
@@ -70,7 +70,7 @@ public:
   void Close();
 
   void ValueToText(TCHAR* Buffer, short val) const;
-  void SetViewCenter(const GEOPOINT &location);
+  void SetViewCenter(const GeoPoint &location);
   gcc_const static const TCHAR *ItemLabel(unsigned i);
   gcc_const static const TCHAR *ItemHelp(unsigned i);
 
@@ -87,7 +87,7 @@ public:
    */
   void Reload(int day_time);
 
-  void ScanAll(const GEOPOINT &location);
+  void ScanAll(const GeoPoint &location);
   bool isWeatherAvailable(unsigned t) const;
 
   gcc_pure

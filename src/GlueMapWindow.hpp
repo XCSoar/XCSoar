@@ -61,7 +61,7 @@ private:
     DRAG_SIMULATOR,
   } drag_mode;
 
-  GEOPOINT drag_start_geopoint;
+  GeoPoint drag_start_geopoint;
   POINT drag_start, drag_last;
   GestureManager gestures;
   bool ignore_single_click;
@@ -69,7 +69,7 @@ private:
   // display management
   void RefreshMap();
 
-  bool AirspaceDetailsAtPoint(const GEOPOINT &location) const;
+  bool AirspaceDetailsAtPoint(const GeoPoint &location) const;
 
 protected:
   // events

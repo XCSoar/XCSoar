@@ -43,11 +43,11 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/SpeedVector.hpp"
 
-void EstimateThermalBase(const GEOPOINT Thermal_Location,
+void EstimateThermalBase(const GeoPoint Thermal_Location,
                          const fixed altitude,
                          const fixed wthermal,
                          const SpeedVector wind,
-                         GEOPOINT *ground_location,
+                         GeoPoint *ground_location,
                          fixed *ground_alt);
 
 #endif

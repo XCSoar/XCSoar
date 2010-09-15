@@ -43,7 +43,7 @@
 #include <assert.h>
 
 short
-RasterMap::GetField(const GEOPOINT &location) const
+RasterMap::GetField(const GeoPoint &location) const
 {
   return 0;
 }

@@ -236,9 +236,9 @@ ReadLongitude(NMEAInputLine &line, Angle &value_r)
 }
 
 static bool
-ReadGeoPoint(NMEAInputLine &line, GEOPOINT &value_r)
+ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r)
 {
-  GEOPOINT value;
+  GeoPoint value;
 
   bool latitude_valid = ReadLatitude(line, value.Latitude);
   bool longitude_valid = ReadLongitude(line, value.Longitude);
@@ -395,7 +395,7 @@ NMEAParser::GSA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 bool
 NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  GEOPOINT location;
+  GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
   fixed ThisTime = TimeModify(line.read(fixed_zero), GPS_INFO->DateTime);
@@ -508,7 +508,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   gpsValid = !NAVWarn(line.read_first_char());
 
-  GEOPOINT location;
+  GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
   GPS_STATE &gps = GPS_INFO->gps;
@@ -633,7 +633,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   fixed ThisTime = TimeModify(line.read(fixed_zero), GPS_INFO->DateTime);
 
-  GEOPOINT location;
+  GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
   gps.FixQuality = line.read(0);
@@ -926,9 +926,9 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   Angle delta_lat = Angle::degrees(fixed(0.01));
   Angle delta_lon = Angle::degrees(fixed(0.01));
 
-  GEOPOINT plat = GPS_INFO->Location;
+  GeoPoint plat = GPS_INFO->Location;
   plat.Latitude += delta_lat;
-  GEOPOINT plon = GPS_INFO->Location;
+  GeoPoint plon = GPS_INFO->Location;
   plon.Longitude += delta_lon;
 
   fixed dlat = Distance(GPS_INFO->Location, plat);

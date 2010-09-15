@@ -52,14 +52,14 @@ public:
  * @param from Origin of ray
  * @param to End point of ray
  */
-  FlatRay(const FLAT_GEOPOINT& from,
-          const FLAT_GEOPOINT& to):
+  FlatRay(const FlatGeoPoint& from,
+          const FlatGeoPoint& to):
     point(from),vector(to-from),
     fx(vector.Longitude!=0? 1.0/vector.Longitude:0),
     fy(vector.Latitude!=0? 1.0/vector.Latitude:0) {};
 
-  const FLAT_GEOPOINT point; /**< Origin of ray */
-  const FLAT_GEOPOINT vector; /**< Vector representing ray direction and length */
+  const FlatGeoPoint point; /**< Origin of ray */
+  const FlatGeoPoint vector; /**< Vector representing ray direction and length */
   const fixed fx; /**< speedups for box intersection test */
   const fixed fy; /**< speedups for box intersection test */
 
@@ -81,7 +81,7 @@ public:
  * @return Location of end point
  */
   gcc_pure
-  FLAT_GEOPOINT parametric(const fixed t) const;
+  FlatGeoPoint parametric(const fixed t) const;
 };
 
 #endif

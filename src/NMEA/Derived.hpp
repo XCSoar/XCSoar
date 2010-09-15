@@ -55,7 +55,7 @@ Copyright_License {
  */
 struct THERMAL_SOURCE_INFO
 {
-  GEOPOINT Location;
+  GeoPoint Location;
   fixed GroundHeight;
   fixed LiftRate;
   fixed Time;
@@ -136,14 +136,14 @@ struct CIRCLING_INFO
   fixed SmoothedTurnRate;
 
   /** StartLocation of the current/last climb */
-  GEOPOINT ClimbStartLocation;
+  GeoPoint ClimbStartLocation;
   /** StartAltitude of the current/last climb */
   fixed ClimbStartAlt;
   /** StartTime of the current/last climb */
   fixed ClimbStartTime;
 
   /** StartLocation of the current/last cruise */
-  GEOPOINT CruiseStartLocation;
+  GeoPoint CruiseStartLocation;
   /** StartAltitude of the current/last cruise */
   fixed CruiseStartAlt;
   /** StartTime of the current/last cruise */
@@ -152,7 +152,7 @@ struct CIRCLING_INFO
   /** Start/End time of the turn (used for flight mode determination) */
   fixed TurnStartTime;
   /** Start/End location of the turn (used for flight mode determination) */
-  GEOPOINT TurnStartLocation;
+  GeoPoint TurnStartLocation;
   /** Start/End altitude of the turn (used for flight mode determination) */
   fixed TurnStartAltitude;
   /** Start/End energy height of the turn (used for flight mode determination) */
@@ -198,10 +198,10 @@ struct TERRAIN_ALT_INFO
   /** True if terrain is valid, False otherwise */
   bool   TerrainValid;
 
-  GEOPOINT TerrainWarningLocation;
+  GeoPoint TerrainWarningLocation;
 
   /** Final glide ground line */
-  GEOPOINT GlideFootPrint[NUMTERRAINSWEEPS+1];
+  GeoPoint GlideFootPrint[NUMTERRAINSWEEPS+1];
 
   /** Lowest height within glide range */
   fixed TerrainBase;
@@ -227,7 +227,7 @@ struct CLIMB_HISTORY_INFO
 struct THERMAL_LOCATOR_INFO
 {
   /** Location of thermal at aircraft altitude */
-  GEOPOINT ThermalEstimate_Location;
+  GeoPoint ThermalEstimate_Location;
   /** Estimated thermal strength (m/s) */
   fixed ThermalEstimate_W;
   /** Estimated thermal radius (m) */
@@ -249,7 +249,7 @@ struct TEAMCODE_INFO
   /** Distance to the chosen team mate */
   fixed TeammateRange;
   /** Position of the chosen team mate */
-  GEOPOINT TeammateLocation;
+  GeoPoint TeammateLocation;
 };
 
 /**

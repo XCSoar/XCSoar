@@ -9,7 +9,7 @@ void print_mode(const char* mode) {
   }
 }
 
-GEOPOINT AircraftSim::get_next() const {
+GeoPoint AircraftSim::get_next() const {
   return w[awp];
 }
 
@@ -26,11 +26,11 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
   if (task_manager.task_size()<=1) {
     short_flight = true;
     // cheat for non-ordered tasks
-    w.push_back(GEOPOINT(Angle::degrees(fixed(0.1)), Angle::degrees(fixed(0.1))));
+    w.push_back(GeoPoint(Angle::degrees(fixed(0.1)), Angle::degrees(fixed(0.1))));
     if (task_manager.task_size()>0) {
       w.push_back(task_manager.random_point_in_task(0, fixed(random_mag)));
     } else {
-      w.push_back(GEOPOINT(Angle::degrees(fixed_one), Angle::degrees(fixed_zero)));
+      w.push_back(GeoPoint(Angle::degrees(fixed_one), Angle::degrees(fixed_zero)));
     }
   } else {
     for (unsigned i=0; i<task_manager.task_size(); i++) {
@@ -57,7 +57,7 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
   acstate = Cruise;
 }
 
-GEOPOINT AircraftSim::target(TaskManager &task_manager) {
+GeoPoint AircraftSim::target(TaskManager &task_manager) {
   if (goto_target && (awp>0)) {
     return task_manager.getActiveTaskPoint()->get_location();
   } else {
@@ -208,9 +208,9 @@ void AircraftSim::update_mode(TaskManager &task_manager)
   };
 }
 
-GEOPOINT AircraftSim::endpoint(const Angle &bear) const
+GeoPoint AircraftSim::endpoint(const Angle &bear) const
 {
-  GEOPOINT ref;
+  GeoPoint ref;
   ref = GeoVector(state.TrueAirspeed, bear).end_point(state.Location);
   return GeoVector(state.wind.norm, 
                    state.wind.bearing+ Angle::degrees(fixed_180)).end_point(ref);

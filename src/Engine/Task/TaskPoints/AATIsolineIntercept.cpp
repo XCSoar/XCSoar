@@ -46,7 +46,7 @@ bool
 AATIsolineIntercept::intercept(const AATPoint &ap,
                                const AIRCRAFT_STATE &state,
                                const double bearing_offset,
-                               GEOPOINT& ip) const
+                               GeoPoint& ip) const
 {
   AIRCRAFT_STATE s1, s2;
   if (ell.intersect_extended(state.Location,

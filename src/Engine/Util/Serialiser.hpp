@@ -118,18 +118,18 @@ protected:
   Waypoint* deserialise_waypoint();
 
   /** 
-   * Serialise a GEOPOINT
+   * Serialise a GeoPoint
    * 
    * @param data Item to serialise
    */
-  void serialise(const GEOPOINT& data);
+  void serialise(const GeoPoint& data);
 
   /** 
-   * Deserialise a GEOPOINT
+   * Deserialise a GeoPoint
    * 
    * @param data Item to deserialise
    */
-  void deserialise(GEOPOINT& data);
+  void deserialise(GeoPoint& data);
 
   /** 
    * Serialise an ObservationZonePoint

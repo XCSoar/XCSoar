@@ -94,8 +94,8 @@ private:
   bool first;
   int startcircle;
 
-  GEOPOINT climbstartpos;
-  GEOPOINT climbendpos;
+  GeoPoint climbstartpos;
+  GeoPoint climbendpos;
   fixed climbstarttime;
   fixed climbendtime;
 

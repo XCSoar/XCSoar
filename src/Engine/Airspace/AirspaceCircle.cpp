@@ -41,7 +41,7 @@
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "AirspaceIntersectSort.hpp"
 
-AirspaceCircle::AirspaceCircle(const GEOPOINT &loc, 
+AirspaceCircle::AirspaceCircle(const GeoPoint &loc, 
                                const fixed _radius):
   AbstractAirspace(CIRCLE),
   m_center(loc), 
@@ -59,39 +59,39 @@ AirspaceCircle::get_bounding_box(const TaskProjection& task_projection)
   static const Angle a315 = Angle::degrees(fixed(315));
 
   const fixed eradius = m_radius * fixed(1.42);
-  const GEOPOINT ll = GeoVector(eradius, a225).end_point(m_center);
-  const GEOPOINT lr = GeoVector(eradius, a135).end_point(m_center);
-  const GEOPOINT ur = GeoVector(eradius, a045).end_point(m_center);
-  const GEOPOINT ul = GeoVector(eradius, a315).end_point(m_center);
+  const GeoPoint ll = GeoVector(eradius, a225).end_point(m_center);
+  const GeoPoint lr = GeoVector(eradius, a135).end_point(m_center);
+  const GeoPoint ur = GeoVector(eradius, a045).end_point(m_center);
+  const GeoPoint ul = GeoVector(eradius, a315).end_point(m_center);
 
-  FLAT_GEOPOINT fll = task_projection.project(ll);
-  FLAT_GEOPOINT flr = task_projection.project(lr);
-  FLAT_GEOPOINT ful = task_projection.project(ul);
-  FLAT_GEOPOINT fur = task_projection.project(ur);
+  FlatGeoPoint fll = task_projection.project(ll);
+  FlatGeoPoint flr = task_projection.project(lr);
+  FlatGeoPoint ful = task_projection.project(ul);
+  FlatGeoPoint fur = task_projection.project(ur);
 
   // note +/- 1 to ensure rounding keeps bb valid 
 
-  return FlatBoundingBox(FLAT_GEOPOINT(min(fll.Longitude,
+  return FlatBoundingBox(FlatGeoPoint(min(fll.Longitude,
                                            ful.Longitude)-1, 
                                        min(fll.Latitude,
                                            flr.Latitude)-1), 
-                         FLAT_GEOPOINT(max(flr.Longitude,
+                         FlatGeoPoint(max(flr.Longitude,
                                            fur.Longitude)+1, 
                                        max(ful.Latitude,
                                            fur.Latitude)+1));
 }
 
 bool 
-AirspaceCircle::inside(const GEOPOINT &loc) const
+AirspaceCircle::inside(const GeoPoint &loc) const
 {
   return (loc.distance(m_center)<=m_radius);
 }
 
 AirspaceIntersectionVector
-AirspaceCircle::intersects(const GEOPOINT& start, 
+AirspaceCircle::intersects(const GeoPoint& start, 
                            const GeoVector &vec) const
 {
-  const GEOPOINT end = vec.end_point(start);
+  const GeoPoint end = vec.end_point(start);
   AirspaceIntersectSort sorter(start, end, *this);
 
   const fixed f_radius = m_task_projection->fproject_range(m_center, m_radius);
@@ -134,8 +134,8 @@ AirspaceCircle::intersects(const GEOPOINT& start,
 }
 
 
-GEOPOINT 
-AirspaceCircle::closest_point(const GEOPOINT& loc) const
+GeoPoint 
+AirspaceCircle::closest_point(const GeoPoint& loc) const
 {
   const fixed d = loc.distance(m_center);
   if (d<=m_radius) {

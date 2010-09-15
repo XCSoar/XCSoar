@@ -42,6 +42,6 @@
 #include "Compiler.h"
 
 gcc_pure bool
-PolygonInterior( const GEOPOINT &P, const std::vector<SearchPoint>& V);
+PolygonInterior( const GeoPoint &P, const std::vector<SearchPoint>& V);
 
 #endif

@@ -51,19 +51,19 @@ Projection::Projection() :
 }
 
 /**
- * Converts screen coordinates to a GEOPOINT
+ * Converts screen coordinates to a GeoPoint
  * @param x x-Coordinate on the screen
  * @param y y-Coordinate on the screen
  */
-GEOPOINT
+GeoPoint
 Projection::Screen2LonLat(int x, int y) const
 {
   const FastIntegerRotation::Pair p =
     DisplayAngle.Rotate(x - Orig_Screen.x, y - Orig_Screen.y);
-  const GEOPOINT pg(Angle::native(fixed(p.first)*InvDrawScale),
+  const GeoPoint pg(Angle::native(fixed(p.first)*InvDrawScale),
                     Angle::native(fixed(p.second)*InvDrawScale));
 
-  GEOPOINT g;
+  GeoPoint g;
   g.Latitude = PanLocation.Latitude - pg.Latitude;
   g.Longitude = PanLocation.Longitude
               + pg.Longitude * g.Latitude.invfastcosine();
@@ -71,13 +71,13 @@ Projection::Screen2LonLat(int x, int y) const
 }
 
 /**
- * Converts a GEOPOINT to screen coordinates
- * @param g GEOPOINT to convert
+ * Converts a GeoPoint to screen coordinates
+ * @param g GeoPoint to convert
  */
 POINT
-Projection::LonLat2Screen(const GEOPOINT &g) const
+Projection::LonLat2Screen(const GeoPoint &g) const
 {
-  const GEOPOINT d = PanLocation-g;
+  const GeoPoint d = PanLocation-g;
   const FastIntegerRotation::Pair p =
     DisplayAngle.Rotate((int)(d.Longitude.value_native()
                               * g.Latitude.fastcosine() * DrawScale),
@@ -99,7 +99,7 @@ Projection::LonLat2Screen(const GEOPOINT &g) const
  * @param skip Number of corners to skip after a successful conversion
  */
 void
-Projection::LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
+Projection::LonLat2Screen(const GeoPoint *ptin, POINT *ptout,
                           unsigned n, unsigned skip) const
 {
   static Angle lastangle(Angle::native(fixed_minus_one));
@@ -113,9 +113,9 @@ Projection::LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
   const int xxs = Orig_Screen.x * 1024 - 512;
   const int yys = Orig_Screen.y * 1024 + 512;
   const fixed mDrawScale = DrawScale;
-  const GEOPOINT mPan = PanLocation;
-  const GEOPOINT *p = ptin;
-  const GEOPOINT *ptend = ptin + n;
+  const GeoPoint mPan = PanLocation;
+  const GeoPoint *p = ptin;
+  const GeoPoint *ptend = ptin + n;
 
   while (p < ptend) {
     int Y = (int)((mPan.Latitude - p->Latitude).value_native() * mDrawScale);
@@ -154,12 +154,12 @@ Projection::LonLat2Screen(const pointObj* const ptin,
   const int xxs = Orig_Screen.x * 1024 - 512;
   const int yys = Orig_Screen.y * 1024 + 512;
   const fixed mDrawScale = DrawScale;
-  const GEOPOINT mPan = PanLocation;
+  const GeoPoint mPan = PanLocation;
   pointObj const * p = ptin;
   const pointObj* ptend = ptin + n;
 
   while (p < ptend) {
-    const GEOPOINT g = point2GeoPoint(*p);
+    const GeoPoint g = point2GeoPoint(*p);
 
     const int Y = (int)((mPan.Latitude - g.Latitude).value_native()
                         * mDrawScale);
@@ -174,7 +174,7 @@ Projection::LonLat2Screen(const pointObj* const ptin,
 }
 
 bool
-Projection::LonLatVisible(const GEOPOINT &loc) const
+Projection::LonLatVisible(const GeoPoint &loc) const
 {
   if (loc.Longitude.value_native() > fixed(screenbounds_latlon.minx) &&
       loc.Longitude.value_native() < fixed(screenbounds_latlon.maxx) &&
@@ -186,7 +186,7 @@ Projection::LonLatVisible(const GEOPOINT &loc) const
 }
 
 bool
-Projection::LonLat2ScreenIfVisible(const GEOPOINT &loc,
+Projection::LonLat2ScreenIfVisible(const GeoPoint &loc,
                                    POINT *sc) const
 {
   if (LonLatVisible(loc)) {
@@ -258,7 +258,7 @@ Projection::CalculateScreenBounds(const fixed scale) const
       POINT p;
       p.x = screen_center.x + iround(ang.fastcosine() * maxsc * scale);
       p.y = screen_center.y + iround(ang.fastsine() * maxsc * scale);
-      GEOPOINT g = Screen2LonLat(p.x, p.y);
+      GeoPoint g = Screen2LonLat(p.x, p.y);
       sb.minx = min((double)g.Longitude.value_native(), sb.minx);
       sb.miny = min((double)g.Latitude.value_native(), sb.miny);
       sb.maxx = max((double)g.Longitude.value_native(), sb.maxx);
@@ -270,7 +270,7 @@ Projection::CalculateScreenBounds(const fixed scale) const
 
     x = MapRect.left;
     y = MapRect.top;
-    GEOPOINT g = Screen2LonLat(x, y);
+    GeoPoint g = Screen2LonLat(x, y);
     xmin = g.Longitude.value_native();
     xmax = g.Longitude.value_native();
     ymin = g.Latitude.value_native();

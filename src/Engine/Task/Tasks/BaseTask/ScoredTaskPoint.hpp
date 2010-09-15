@@ -134,7 +134,7 @@ public:
  * @return Location 
  */
   gcc_pure
-  const GEOPOINT& get_location_scored() const;
+  const GeoPoint& get_location_scored() const;
 
 /** 
  * Retrieve location to be used for the task already travelled.
@@ -143,7 +143,7 @@ public:
  * @return Location 
  */
   gcc_pure
-  const GEOPOINT& get_location_travelled() const;
+  const GeoPoint& get_location_travelled() const;
 
 /** 
  * Retrieve location to be used for remaining task.
@@ -153,7 +153,7 @@ public:
  * @return Location 
  */
   gcc_pure
-  virtual const GEOPOINT& get_location_remaining() const;
+  virtual const GeoPoint& get_location_remaining() const;
 
 private:
 /** 

@@ -77,19 +77,19 @@ ScoredTaskPoint::transition_exit(const AIRCRAFT_STATE & ref_now,
 }
 
 
-const GEOPOINT &
+const GeoPoint &
 ScoredTaskPoint::get_location_travelled() const
 {
   return get_location_min();
 }
 
-const GEOPOINT &
+const GeoPoint &
 ScoredTaskPoint::get_location_scored() const
 {
   return get_location_min();
 }
 
-const GEOPOINT &
+const GeoPoint &
 ScoredTaskPoint::get_location_remaining() const
 {
   return get_location_min();

@@ -74,7 +74,7 @@ public:
   TaskManager::TaskMode_t get_mode() const;
 
   // trace points
-  TracePointVector find_trace_points(const GEOPOINT &loc, 
+  TracePointVector find_trace_points(const GeoPoint &loc, 
                                      const fixed range,
                                      const unsigned mintime, 
                                      const fixed resolution) const;

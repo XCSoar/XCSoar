@@ -131,7 +131,7 @@ Waypoints::append(Waypoint& wp)
 
 
 const Waypoint*
-Waypoints::get_nearest(const GEOPOINT &loc) const 
+Waypoints::get_nearest(const GeoPoint &loc) const 
 {
   WaypointTree::const_iterator it = find_nearest(loc);
 
@@ -142,7 +142,7 @@ Waypoints::get_nearest(const GEOPOINT &loc) const
 }
 
 Waypoints::WaypointTree::const_iterator
-Waypoints::find_nearest(const GEOPOINT &loc) const
+Waypoints::find_nearest(const GeoPoint &loc) const
 {
   WaypointEnvelope bb_target(loc, task_projection);
   std::pair<WaypointTree::const_iterator, double> found =
@@ -176,7 +176,7 @@ Waypoints::lookup_name(const TCHAR *name) const
 }
 
 const Waypoint*
-Waypoints::lookup_location(const GEOPOINT &loc, const fixed range) const
+Waypoints::lookup_location(const GeoPoint &loc, const fixed range) const
 {
   WaypointEnvelope bb_target(loc, task_projection);
   std::pair<WaypointTree::const_iterator, double> found =
@@ -266,7 +266,7 @@ Waypoints::find_id(const unsigned id) const
 }
 
 std::vector<WaypointEnvelope>
-Waypoints::find_within_range(const GEOPOINT &loc, const fixed range) const
+Waypoints::find_within_range(const GeoPoint &loc, const fixed range) const
 {
   WaypointEnvelope bb_target(loc, task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
@@ -282,7 +282,7 @@ Waypoints::find_within_range(const GEOPOINT &loc, const fixed range) const
 }
 
 void
-Waypoints::visit_within_range(const GEOPOINT &loc, const fixed range,
+Waypoints::visit_within_range(const GeoPoint &loc, const fixed range,
     WaypointVisitor& visitor) const
 {
   WaypointEnvelope bb_target(loc, task_projection);
@@ -302,12 +302,12 @@ Waypoints::visit_within_range(const GEOPOINT &loc, const fixed range,
  * specified radius.
  */
 class RadiusVisitor {
-  FLAT_GEOPOINT location;
+  FlatGeoPoint location;
   unsigned mrange;
   WaypointVisitor *visitor;
 
 public:
-  RadiusVisitor(FLAT_GEOPOINT _location, unsigned _mrange,
+  RadiusVisitor(FlatGeoPoint _location, unsigned _mrange,
                 WaypointVisitor *_visitor)
     :location(_location), mrange(_mrange), visitor(_visitor) {}
 
@@ -326,13 +326,13 @@ public:
 };
 
 void
-Waypoints::visit_within_radius(const GEOPOINT &loc, const fixed range,
+Waypoints::visit_within_radius(const GeoPoint &loc, const fixed range,
     WaypointVisitor& visitor) const
 {
   const unsigned mrange = task_projection.project_range(loc, range);
   WaypointEnvelope bb_target(loc, task_projection);
 
-  FLAT_GEOPOINT floc = task_projection.project(loc);
+  FlatGeoPoint floc = task_projection.project(loc);
   RadiusVisitor radius_visitor(floc, mrange, &visitor);
   waypoint_tree.visit_within_range(bb_target, mrange, radius_visitor);
 }
@@ -412,7 +412,7 @@ Waypoints::replace(const Waypoint& orig, Waypoint& replacement)
 }
 
 Waypoint
-Waypoints::create(const GEOPOINT &location)
+Waypoints::create(const GeoPoint &location)
 {
   Waypoint edit_waypoint(location);
 

@@ -58,14 +58,14 @@ protected:
  * 
  * @return Initialised object
  */
-  SymmetricSectorZone(enum shape _shape, const GEOPOINT &loc,
+  SymmetricSectorZone(enum shape _shape, const GeoPoint &loc,
                       const fixed radius=fixed(10000.0),
                       const Angle angle=Angle::radians(fixed_half_pi)):
     SectorZone(_shape, loc, radius),
     SectorAngle(angle) {}
 
 public:
-  virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const = 0;
+  virtual ObservationZonePoint* clone(const GeoPoint * _location=0) const = 0;
 
 /** 
  * Update radials when previous/next legs are modified.

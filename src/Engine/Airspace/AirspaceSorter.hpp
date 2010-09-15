@@ -9,7 +9,7 @@
 
 class AbstractAirspace;
 class Airspaces;
-struct GEOPOINT;
+struct GeoPoint;
 
 /**
  * Structure to hold Airspace sorting information
@@ -40,7 +40,7 @@ public:
  * @param distance_factor Units factor to apply to distance calculations
  */
   AirspaceSorter(const Airspaces &_airspaces,
-                 const GEOPOINT &Location,
+                 const GeoPoint &Location,
                  const fixed distance_factor);
 
 /** 

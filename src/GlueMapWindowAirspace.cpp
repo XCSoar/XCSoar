@@ -113,7 +113,7 @@ class AirspaceDetailsDialogVisitor:
   public AirspaceVisitor
 {
 public:
-  AirspaceDetailsDialogVisitor(const GEOPOINT &location):
+  AirspaceDetailsDialogVisitor(const GeoPoint &location):
     m_airspace(NULL),
     m_location(location)
   {}
@@ -139,11 +139,11 @@ public:
   }
 private:
   const AbstractAirspace *m_airspace;
-  const GEOPOINT &m_location;
+  const GeoPoint &m_location;
 };
 
 bool
-GlueMapWindow::AirspaceDetailsAtPoint(const GEOPOINT &location) const
+GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location) const
 {
   if (airspace_database == NULL)
     return false;

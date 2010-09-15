@@ -2,7 +2,7 @@
 #include "AbstractAirspace.hpp"
 
 void 
-AirspaceIntersectSort::add(const fixed t, const GEOPOINT &p)
+AirspaceIntersectSort::add(const fixed t, const GeoPoint &p)
 {
   if (t>=fixed_zero) {
     m_q.push(std::make_pair(t,p));
@@ -16,7 +16,7 @@ AirspaceIntersectSort::empty() const
 }
 
 bool
-AirspaceIntersectSort::top(GEOPOINT &p) const
+AirspaceIntersectSort::top(GeoPoint &p) const
 {
   if (m_airspace->inside(m_start)) {
     p = m_start;
@@ -35,11 +35,11 @@ AirspaceIntersectSort::all()
 {
   AirspaceIntersectionVector res;
 
-  GEOPOINT p_last = m_start;
+  GeoPoint p_last = m_start;
   bool waiting = false;
   while (!m_q.empty()) {
-    const GEOPOINT p_this = m_q.top().second; 
-    const GEOPOINT p_mid = (p_this+p_last)*fixed_half;
+    const GeoPoint p_this = m_q.top().second; 
+    const GeoPoint p_mid = (p_this+p_last)*fixed_half;
 
     if (m_airspace->inside(p_mid)) {    
       res.push_back(std::make_pair(p_last, p_this));

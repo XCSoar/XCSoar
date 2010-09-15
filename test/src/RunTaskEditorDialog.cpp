@@ -72,7 +72,7 @@ InputEvents::findEvent(const TCHAR *)
 }
 
 void
-DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
+DeviceBlackboard::SetStartupLocation(const GeoPoint &loc,
                                      const double alt)
 {
 }

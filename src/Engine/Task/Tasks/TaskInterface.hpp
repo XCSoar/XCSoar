@@ -41,7 +41,7 @@
 #include "Compiler.h"
 
 struct AIRCRAFT_STATE;
-struct GEOPOINT;
+struct GeoPoint;
 struct GeoVector;
 
 class TaskStats;

@@ -118,7 +118,7 @@ struct SETTINGS_MAP {
   bool EnableAuxiliaryInfo;
   DisplayMode_t UserForceDisplayMode;
   bool EnablePan;
-  GEOPOINT PanLocation;
+  GeoPoint PanLocation;
   bool   TargetPan;
   int    TargetPanIndex;
   fixed TargetZoomDistance;

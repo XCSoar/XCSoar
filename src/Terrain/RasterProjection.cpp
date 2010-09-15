@@ -54,7 +54,7 @@ RasterProjection::set(const BoundsRectangle &bounds,
 }
 
 fixed
-RasterProjection::pixel_distance(const GEOPOINT &location, unsigned pixels) const
+RasterProjection::pixel_distance(const GeoPoint &location, unsigned pixels) const
 {
   enum {
     /**
@@ -65,14 +65,14 @@ RasterProjection::pixel_distance(const GEOPOINT &location, unsigned pixels) cons
     FACTOR = 4096,
   };
 
-  GEOPOINT p;
+  GeoPoint p;
 
   Angle distance = Angle::native(fixed_sqrt_two * FACTOR / (x_scale / pixels));
-  p = GEOPOINT(location.Longitude + distance, location.Latitude);
+  p = GeoPoint(location.Longitude + distance, location.Latitude);
   fixed x = Distance(location, p);
 
   distance = Angle::native(fixed_sqrt_two * FACTOR / (y_scale / pixels));
-  p = GEOPOINT(location.Longitude, location.Latitude + distance);
+  p = GeoPoint(location.Longitude, location.Latitude + distance);
   fixed y = Distance(location, p);
 
   return max(x, y) / FACTOR;

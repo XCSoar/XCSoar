@@ -12,7 +12,7 @@ TracePoint::TracePoint(const AIRCRAFT_STATE &state, const TaskProjection& tp):
 }
 
 TaskProjection get_bounds(const TracePointVector& trace,
-                          const GEOPOINT &fallback_location) 
+                          const GeoPoint &fallback_location) 
 {
   TaskProjection task_projection;
 

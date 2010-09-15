@@ -89,7 +89,7 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
     // target follows "finger" so easier to drop near edge of
     // sector
     if (TargetDrag_State == 1) {
-      GEOPOINT mouseMove = Screen2LonLat(x, y);
+      GeoPoint mouseMove = Screen2LonLat(x, y);
       unsigned index = SettingsMap().TargetPanIndex;
       if (task->InAATTurnSector(mouseMove, index)) {
         // update waypoints so if we drag out of the cylinder, it
@@ -219,9 +219,9 @@ GlueMapWindow::on_mouse_up(int x, int y)
   case DRAG_PAN:
     if (compare_squared(drag_start.x - x, drag_start.y - y,
                         Layout::Scale(10)) == 1) {
-      const GEOPOINT start = projection.Screen2LonLat(drag_start.x,
+      const GeoPoint start = projection.Screen2LonLat(drag_start.x,
                                                       drag_start.y);
-      const GEOPOINT end = projection.Screen2LonLat(x, y);
+      const GeoPoint end = projection.Screen2LonLat(x, y);
 
       XCSoarInterface::SetSettingsMap().PanLocation.Longitude +=
         start.Longitude - end.Longitude;
@@ -239,7 +239,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
     if (click_time > 50 &&
         compare_squared(drag_start.x - x, drag_start.y - y,
                         Layout::Scale(36)) == 1) {
-      GEOPOINT G = projection.Screen2LonLat(x, y);
+      GeoPoint G = projection.Screen2LonLat(x, y);
 
       double distance = hypot(drag_start.x - x, drag_start.y - y);
 

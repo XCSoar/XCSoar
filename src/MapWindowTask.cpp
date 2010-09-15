@@ -57,7 +57,7 @@ public:
                      const SETTINGS_MAP &_settings_map,
                      RenderObservationZone &_ozv,
                      const bool draw_bearing,
-                     const GEOPOINT &location,
+                     const GeoPoint &location,
                      MapWindow& map,
                      const Angle bearing,
                      const bool do_draw_off_track):
@@ -102,14 +102,14 @@ protected:
     if (distance_max < fixed(5000))
       return;
 
-    GEOPOINT start = m_location;
-    GEOPOINT target = tp.get_location_remaining();
+    GeoPoint start = m_location;
+    GeoPoint target = tp.get_location_remaining();
 
     m_canvas.select(Fonts::Title);
     m_canvas.set_text_color(Color::BLACK);
     m_canvas.background_transparent();
 
-    GEOPOINT dloc;
+    GeoPoint dloc;
     int ilast = 0;
     for (fixed d = fixed_one / 4; d <= fixed_one; d += fixed_one / 4) {
       FindLatitudeLongitude(start, m_bearing, distance_max * d, &dloc);
@@ -186,8 +186,8 @@ MapWindow::DrawProjectedTrack(Canvas &canvas) const
   // TODO feature: maybe have this work even if no task?
   // TODO feature: draw this also when in target pan mode
 
-  GEOPOINT start = Basic().Location;
-  GEOPOINT previous_loc = task->getTargetLocation(task->getActiveIndex() - 1);
+  GeoPoint start = Basic().Location;
+  GeoPoint previous_loc = task->getTargetLocation(task->getActiveIndex() - 1);
 
   double distance_from_previous, bearing;
   DistanceBearing(previous_loc, start,
@@ -205,7 +205,7 @@ MapWindow::DrawProjectedTrack(Canvas &canvas) const
     double f_high = 1.5;
     screen_range = max(screen_range, Calculated().WaypointDistance);
 
-    GEOPOINT p1, p2;
+    GeoPoint p1, p2;
     FindLatitudeLongitude(start,
 			  bearing, f_low*screen_range,
 			  &p1);

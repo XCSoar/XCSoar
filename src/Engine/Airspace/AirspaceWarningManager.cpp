@@ -278,7 +278,7 @@ private:
 
 bool 
 AirspaceWarningManager::update_predicted(const AIRCRAFT_STATE& state, 
-                                         const GEOPOINT &location_predicted,
+                                         const GeoPoint &location_predicted,
                                          const AirspaceAircraftPerformance &perf,
                                          const AirspaceWarning::AirspaceWarningState& warning_state,
                                          const fixed max_time) 
@@ -304,7 +304,7 @@ AirspaceWarningManager::update_task(const AIRCRAFT_STATE& state)
   }
 
   AirspaceAircraftPerformanceTask perf_task(state, m_glide_polar, m_task);
-  const GEOPOINT location_tp = m_task.getActiveTaskPoint()->get_location_remaining();
+  const GeoPoint location_tp = m_task.getActiveTaskPoint()->get_location_remaining();
   const fixed time_remaining = m_task.get_stats().current_leg.solution_remaining.TimeElapsed; 
 
   fixed max_time = min(fixed(config.WarningTime), time_remaining);
@@ -319,7 +319,7 @@ AirspaceWarningManager::update_filter(const AIRCRAFT_STATE& state)
 {
   m_state_filter.update(state);
 
-  const GEOPOINT location_predicted = 
+  const GeoPoint location_predicted = 
     m_state_filter.get_predicted_state(m_prediction_time_filter).Location;
 
   return update_predicted(state, location_predicted,
@@ -331,7 +331,7 @@ AirspaceWarningManager::update_filter(const AIRCRAFT_STATE& state)
 bool 
 AirspaceWarningManager::update_glide(const AIRCRAFT_STATE& state)
 {
-  const GEOPOINT location_predicted = 
+  const GeoPoint location_predicted = 
     state.get_predicted_state(m_prediction_time_glide).Location;
 
   return update_predicted(state, location_predicted,
@@ -358,7 +358,7 @@ AirspaceWarningManager::update_inside(const AIRCRAFT_STATE& state)
     AirspaceWarning& warning = get_warning(airspace);
 
     if (warning.state_accepted(AirspaceWarning::WARNING_INSIDE)) {
-      GEOPOINT c = airspace.closest_point(state.Location);
+      GeoPoint c = airspace.closest_point(state.Location);
       GeoVector vector_exit(state.Location, c);
       AirspaceInterceptSolution solution;
       airspace.intercept(state, vector_exit, m_perf_glide, solution); 

@@ -87,7 +87,7 @@ static void MoveTarget(double adjust_angle) {
   if (!task.ValidTaskPoint(target_point+1)) return;
   if (target_point < task.getActiveIndex()) return;
 
-  GEOPOINT target_location;
+  GeoPoint target_location;
   double bearing, distance;
 
   TASK_POINT tp = task.getTaskPoint(target_point);
@@ -163,7 +163,7 @@ static void MoveTarget(double adjust_angle) {
 }
 
 
-static void DragTarget(const GEOPOINT target_location) {
+static void DragTarget(const GeoPoint target_location) {
   if (!task.getSettings().AATEnabled) return;
   if (target_point==0) return;
   if (!task.ValidTaskPoint(target_point)) return;
@@ -379,7 +379,7 @@ static void RefreshCalculator(void) {
 
 static int OnTimerNotify(WindowControl * Sender) {
   (void)Sender;
-  GEOPOINT loc;
+  GeoPoint loc;
   // JMW illegal
   if (XCSoarInterface::main_window.map.TargetDragged(&loc.Longitude, &loc.Latitude)) {
     DragTarget(loc);

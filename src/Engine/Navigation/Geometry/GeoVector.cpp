@@ -37,55 +37,55 @@
 #include "GeoVector.hpp"
 #include "Math/Earth.hpp"
 
-GeoVector::GeoVector(const GEOPOINT &source, const GEOPOINT &target,
+GeoVector::GeoVector(const GeoPoint &source, const GeoPoint &target,
                      const bool is_average)
 {
-  GEOPOINT loc1 = source;
-  GEOPOINT loc2 = target;
+  GeoPoint loc1 = source;
+  GeoPoint loc2 = target;
   ::DistanceBearing(loc1, loc2, &Distance, &Bearing);
 }
 
-GEOPOINT 
-GeoVector::end_point(const GEOPOINT &source) const
+GeoPoint 
+GeoVector::end_point(const GeoPoint &source) const
 {
   if (!positive(Distance)) {
     return source;
   } else {
-    GEOPOINT p;
+    GeoPoint p;
     ::FindLatitudeLongitude(source, Bearing, Distance, &p);
     return p;
   }
 }
 
-GEOPOINT 
-GeoVector::mid_point(const GEOPOINT &source) const
+GeoPoint 
+GeoVector::mid_point(const GeoPoint &source) const
 {
   if (!positive(Distance)) {
     return source;
   } else {
-    GEOPOINT p;
+    GeoPoint p;
     ::FindLatitudeLongitude(source, Bearing, Distance*fixed_half, &p);
     return p;
   }
 }
 
 fixed
-GeoVector::minimum_distance(const GEOPOINT &source,
-                            const GEOPOINT &ref) const
+GeoVector::minimum_distance(const GeoPoint &source,
+                            const GeoPoint &ref) const
 {
-  const GEOPOINT end = end_point(source);
+  const GeoPoint end = end_point(source);
   return (::CrossTrackError(source, end, ref, NULL));
 }
 
-GEOPOINT 
-GeoVector::intermediate_point(const GEOPOINT &source, 
+GeoPoint 
+GeoVector::intermediate_point(const GeoPoint &source, 
                               const fixed distance) const
 {
   return source.intermediate_point(end_point(source), distance);
 }
 
 
-bool operator != (const GEOPOINT&g1, const GEOPOINT &g2) {
+bool operator != (const GeoPoint&g1, const GeoPoint &g2) {
   return (g1.Latitude != g2.Latitude) || (g1.Longitude != g2.Longitude);
 }
 

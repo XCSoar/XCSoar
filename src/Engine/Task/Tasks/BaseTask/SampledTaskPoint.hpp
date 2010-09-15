@@ -95,7 +95,7 @@ public:
  * @return Location of max distance node
  */
   gcc_pure
-  const GEOPOINT& get_location_max() const {
+  const GeoPoint& get_location_max() const {
     return m_search_max.get_location();
   };
 
@@ -105,7 +105,7 @@ public:
  * 
  * @return Location of minimum distance node
  */
-  const GEOPOINT& get_location_min() const {
+  const GeoPoint& get_location_min() const {
     return m_search_min.get_location();
   };
 
@@ -169,7 +169,7 @@ protected:
    * 
    * @param location Location of min point
    */
-  void set_search_min(const GEOPOINT &location);
+  void set_search_min(const GeoPoint &location);
 
 private:
 

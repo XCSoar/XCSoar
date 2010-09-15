@@ -5,7 +5,7 @@
 #include <algorithm>
 
 AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
-                               const GEOPOINT &Location,
+                               const GeoPoint &Location,
                                const fixed distance_factor)
 {
   airspaces.lock();
@@ -20,7 +20,7 @@ AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
 
     info.airspace = &airspace;
 
-    const GEOPOINT closest_loc = airspace.closest_point(Location);
+    const GeoPoint closest_loc = airspace.closest_point(Location);
     const GeoVector vec(Location, closest_loc);
 
     info.Distance = vec.Distance*distance_factor;

@@ -78,7 +78,7 @@ public:
    * 
    * @return dummy airspace envelope
    */
-  Airspace(const GEOPOINT&loc, const TaskProjection& task_projection, const
+  Airspace(const GeoPoint&loc, const TaskProjection& task_projection, const
     fixed range=fixed_zero):
     FlatBoundingBox(task_projection.project(loc),
                     task_projection.project_range(loc,range)),
@@ -96,8 +96,8 @@ public:
    * 
    * @return dummy airspace envelope
    */
-  Airspace(const GEOPOINT &ll, 
-           const GEOPOINT &ur,
+  Airspace(const GeoPoint &ll, 
+           const GeoPoint &ur,
            const TaskProjection& task_projection):
     FlatBoundingBox(task_projection.project(ll),
                     task_projection.project(ur)), 
@@ -121,7 +121,7 @@ public:
    * 
    * @return true if location is inside airspace
    */
-  bool inside(const GEOPOINT &loc) const;
+  bool inside(const GeoPoint &loc) const;
 
   /** 
    * Checks whether a flat-earth ray intersects with the airspace
@@ -142,7 +142,7 @@ public:
    * 
    * @return true if the line intersects the airspace
    */
-  AirspaceIntersectionVector intersects(const GEOPOINT& g1, const GeoVector &vec) const;
+  AirspaceIntersectionVector intersects(const GeoPoint& g1, const GeoVector &vec) const;
 
   /** 
    * Destroys concrete airspace enclosed by this instance if present.

@@ -246,7 +246,7 @@ protected:
  * @return Distance (m)
  */
   gcc_pure
-  fixed double_leg_distance(const GEOPOINT &ref) const;
+  fixed double_leg_distance(const GeoPoint &ref) const;
 
 private:
 

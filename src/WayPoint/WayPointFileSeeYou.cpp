@@ -125,7 +125,7 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   if (iLongitude >= n_params)
     return false;
 
-  GEOPOINT location;
+  GeoPoint location;
 
   // Latitude (e.g. 5115.900N)
   if (!parseAngle(params[iLatitude], location.Latitude, true))

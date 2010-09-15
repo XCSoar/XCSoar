@@ -4,7 +4,7 @@
 AirspaceInterceptSolution 
 AirspaceSoonestSort::solve_intercept(const AbstractAirspace &a) const
 {
-  const GEOPOINT loc = a.closest_point(m_state.Location);
+  const GeoPoint loc = a.closest_point(m_state.Location);
 
   AirspaceInterceptSolution sol;
   bool valid = a.intercept(m_state, m_perf, sol, loc, loc);

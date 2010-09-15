@@ -53,7 +53,7 @@ class FlatBoundingBox;
 class TaskProjection;
 
 #include <vector>
-typedef std::vector< std::pair<GEOPOINT,GEOPOINT> > AirspaceIntersectionVector;
+typedef std::vector< std::pair<GeoPoint,GeoPoint> > AirspaceIntersectionVector;
 
 /**
  * Abstract base class for airspace regions
@@ -97,7 +97,7 @@ public:
  * 
  * @return Location of reference point
  */
-  virtual const GEOPOINT get_center() const = 0;
+  virtual const GeoPoint get_center() const = 0;
 
   /** 
    * Checks whether an observer is inside the airspace (no altitude taken into account)
@@ -107,7 +107,7 @@ public:
    * 
    * @return true if observer is inside airspace boundary
    */
-  virtual bool inside(const GEOPOINT &loc) const = 0;
+  virtual bool inside(const GeoPoint &loc) const = 0;
 
   /** 
    * Checks whether an observer is inside the airspace (altitude is taken into account)
@@ -128,7 +128,7 @@ public:
    * 
    * @return Vector of intersection pairs if the line intersects the airspace
    */
-  virtual AirspaceIntersectionVector intersects(const GEOPOINT& g1, 
+  virtual AirspaceIntersectionVector intersects(const GeoPoint& g1, 
                                                 const GeoVector &vec) const = 0;
 
 /** 
@@ -138,7 +138,7 @@ public:
  * 
  * @return Location of closest point of boundary to reference 
  */
-  virtual GEOPOINT closest_point(const GEOPOINT& loc) const
+  virtual GeoPoint closest_point(const GeoPoint& loc) const
     = 0;
 
   /** 
@@ -226,8 +226,8 @@ public:
   bool intercept(const AIRCRAFT_STATE &state,
                  const AirspaceAircraftPerformance& perf,
                  AirspaceInterceptSolution &solution,
-                 const GEOPOINT& loc_start,
-                 const GEOPOINT& loc_end) const;
+                 const GeoPoint& loc_start,
+                 const GeoPoint& loc_end) const;
 
 /**
  * Find time/distance/height to airspace from an observer given a

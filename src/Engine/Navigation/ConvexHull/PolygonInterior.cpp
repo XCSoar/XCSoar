@@ -53,7 +53,7 @@
 //            <0 for P2 right of the line
 //    See: the January 2001 Algorithm "Area of 2D and 3D Triangles and Polygons"
 inline static int
-isLeft( const GEOPOINT &P0, const GEOPOINT &P1, const GEOPOINT &P2 )
+isLeft( const GeoPoint &P0, const GeoPoint &P1, const GeoPoint &P2 )
 {
     return ( (P1.Longitude - P0.Longitude) * (P2.Latitude - P0.Latitude)
              - (P2.Longitude - P0.Longitude) * (P1.Latitude - P0.Latitude) ).sign();
@@ -66,7 +66,7 @@ isLeft( const GEOPOINT &P0, const GEOPOINT &P1, const GEOPOINT &P2 )
 //      Return:  true if P is inside V
 
 bool
-PolygonInterior( const GEOPOINT &P, const std::vector<SearchPoint>& V)
+PolygonInterior( const GeoPoint &P, const std::vector<SearchPoint>& V)
 {
   int n = V.size()-1;
   if (n<2) {

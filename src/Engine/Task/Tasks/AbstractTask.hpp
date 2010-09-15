@@ -178,7 +178,7 @@ public:
    * @return Location of center of task
    */
   gcc_pure
-  virtual GEOPOINT get_task_center(const GEOPOINT& fallback_location) const = 0;
+  virtual GeoPoint get_task_center(const GeoPoint& fallback_location) const = 0;
 
   /** 
    * Find approximate radius of task from center to edge (for rendering purposes)
@@ -188,7 +188,7 @@ public:
    * @return Radius (m) from center to edge of task
    */
   gcc_pure
-  virtual fixed get_task_radius(const GEOPOINT& fallback_location) const = 0;
+  virtual fixed get_task_radius(const GeoPoint& fallback_location) const = 0;
     
 protected:
 
@@ -353,7 +353,7 @@ protected:
  * 
  * @return Distance (m) remaining in the planned task
  */ 
-  virtual fixed scan_distance_remaining(const GEOPOINT &ref) = 0;
+  virtual fixed scan_distance_remaining(const GeoPoint &ref) = 0;
 
 /** 
  * Calculate scored distance of achieved part of task.
@@ -362,7 +362,7 @@ protected:
  * 
  * @return Distance (m) achieved adjusted for scoring
  */
-  virtual fixed scan_distance_scored(const GEOPOINT &ref) = 0;
+  virtual fixed scan_distance_scored(const GeoPoint &ref) = 0;
 
 /** 
  * Calculate distance of achieved part of task.
@@ -374,7 +374,7 @@ protected:
  * 
  * @return Distance (m) achieved
  */
-  virtual fixed scan_distance_travelled(const GEOPOINT &ref) = 0;
+  virtual fixed scan_distance_travelled(const GeoPoint &ref) = 0;
 
 /** 
  * Calculate maximum and minimum distances for task, achievable
@@ -385,7 +385,7 @@ protected:
  * @param dmin Minimum distance (m) achievable of task
  * @param dmax Maximum distance (m) achievable of task
  */
-  virtual void scan_distance_minmax(const GEOPOINT &ref, 
+  virtual void scan_distance_minmax(const GeoPoint &ref, 
                                     bool full,
                                     fixed *dmin, fixed *dmax) = 0;
 
@@ -465,7 +465,7 @@ protected:
  * @param location Location of observer
  * @param full_update Whether all calculations or minimal ones to be performed
  */
-  virtual void update_stats_distances(const GEOPOINT &location,
+  virtual void update_stats_distances(const GeoPoint &location,
                                       const bool full_update);
 
 private:

@@ -371,8 +371,8 @@ public:
 
   fixed get_finish_height() const;
 
-  GEOPOINT get_task_center(const GEOPOINT& fallback_location) const;
-  fixed get_task_radius(const GEOPOINT& fallback_location) const;
+  GeoPoint get_task_center(const GeoPoint& fallback_location) const;
+  fixed get_task_radius(const GeoPoint& fallback_location) const;
 
   bool has_targets() const;
 
@@ -460,7 +460,7 @@ protected:
    *
    * @return Distance (m) remaining in the planned task
    */
-  fixed scan_distance_remaining(const GEOPOINT &ref);
+  fixed scan_distance_remaining(const GeoPoint &ref);
 
   /**
    * Calculate scored distance of achieved part of task.
@@ -469,7 +469,7 @@ protected:
    *
    * @return Distance (m) achieved adjusted for scoring
    */
-  fixed scan_distance_scored(const GEOPOINT &ref);
+  fixed scan_distance_scored(const GeoPoint &ref);
 
   /**
    * Calculate distance of achieved part of task.
@@ -481,7 +481,7 @@ protected:
    *
    * @return Distance (m) achieved
    */
-  fixed scan_distance_travelled(const GEOPOINT &ref);
+  fixed scan_distance_travelled(const GeoPoint &ref);
 
   /**
    * Calculate maximum and minimum distances for task, achievable
@@ -492,7 +492,7 @@ protected:
    * @param dmin Minimum distance (m) achievable of task
    * @param dmax Maximum distance (m) achievable of task
    */
-  void scan_distance_minmax(const GEOPOINT &ref, 
+  void scan_distance_minmax(const GeoPoint &ref, 
                             bool full,
                             fixed *dmin, fixed *dmax);
 
@@ -620,7 +620,7 @@ protected:
 
 private:
 
-  fixed scan_distance_min(const GEOPOINT &ref, bool full);
+  fixed scan_distance_min(const GeoPoint &ref, bool full);
   fixed scan_distance_max();
 
   /**
@@ -657,10 +657,10 @@ private:
   TaskProjection task_projection;
 
   gcc_pure
-  bool distance_is_significant(const GEOPOINT &location,
-                               const GEOPOINT &location_last) const;
+  bool distance_is_significant(const GeoPoint &location,
+                               const GeoPoint &location_last) const;
 
-  GEOPOINT m_location_min_last;
+  GeoPoint m_location_min_last;
 
   Factory_t factory_mode;
   AbstractTaskFactory* active_factory;

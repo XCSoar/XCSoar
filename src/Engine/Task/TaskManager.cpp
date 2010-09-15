@@ -364,7 +364,7 @@ TaskManager::task_size() const
   return 0;
 }
 
-GEOPOINT 
+GeoPoint 
 TaskManager::random_point_in_task(const unsigned index, const fixed mag) const
 {
   if (active_task == &task_ordered && index < task_size())
@@ -373,7 +373,7 @@ TaskManager::random_point_in_task(const unsigned index, const fixed mag) const
   if (index <= task_size())
     return active_task->getActiveTaskPoint()->get_location();
 
-  GEOPOINT null_location(Angle::native(fixed_zero), Angle::native(fixed_zero));
+  GeoPoint null_location(Angle::native(fixed_zero), Angle::native(fixed_zero));
   return null_location;
 }
 
@@ -384,13 +384,13 @@ TaskManager::set_glide_polar(const GlidePolar& glide_polar)
 }
 
 void 
-TaskManager::default_task(const GEOPOINT &loc, const bool force)
+TaskManager::default_task(const GeoPoint &loc, const bool force)
 {
   /// @todo implement default_task
 }
 
 TracePointVector 
-TaskManager::find_trace_points(const GEOPOINT &loc, const fixed range,
+TaskManager::find_trace_points(const GeoPoint &loc, const fixed range,
                                const unsigned mintime,
                                const fixed resolution) const
 {
@@ -427,8 +427,8 @@ TaskManager::update_auto_mc(const AIRCRAFT_STATE& state_now,
   return false;
 }
 
-GEOPOINT
-TaskManager::get_task_center(const GEOPOINT& fallback_location) const
+GeoPoint
+TaskManager::get_task_center(const GeoPoint& fallback_location) const
 {
   if (active_task)
     return active_task->get_task_center(fallback_location);
@@ -437,7 +437,7 @@ TaskManager::get_task_center(const GEOPOINT& fallback_location) const
 }
 
 fixed
-TaskManager::get_task_radius(const GEOPOINT& fallback_location) const
+TaskManager::get_task_radius(const GeoPoint& fallback_location) const
 {
   if (active_task)
     return active_task->get_task_radius(fallback_location);

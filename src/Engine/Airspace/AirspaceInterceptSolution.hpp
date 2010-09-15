@@ -29,7 +29,7 @@ struct AirspaceInterceptSolution {
     return !negative(elapsed_time);
   };
 
-  GEOPOINT location; /**< Location of intercept point */
+  GeoPoint location; /**< Location of intercept point */
   fixed distance;  /**< Distance from observer to intercept point (m) */
   fixed altitude; /**< Altitude AMSL (m) of intercept point */
   fixed elapsed_time; /**< Estimated time (s) for observer to reach intercept point */

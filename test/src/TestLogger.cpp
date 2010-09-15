@@ -100,9 +100,9 @@ int main(int argc, char **argv)
   const TCHAR *path = _T("output/test/test.igc");
   File::Delete(path);
 
-  static const GEOPOINT home(Angle::degrees(fixed(7.7061111111111114)),
+  static const GeoPoint home(Angle::degrees(fixed(7.7061111111111114)),
                              Angle::degrees(fixed(51.051944444444445)));
-  static const GEOPOINT tp(Angle::degrees(fixed(10.726111111111111)),
+  static const GeoPoint tp(Angle::degrees(fixed(10.726111111111111)),
                            Angle::degrees(fixed(50.632222222222225)));
 
   static NMEA_INFO i;
@@ -134,7 +134,7 @@ int main(int argc, char **argv)
   writer.LoggerNote(_T("my_note"));
 
   i.DateTime.second += 5;
-  i.Location = GEOPOINT(Angle::degrees(fixed(-7.7061111111111114)),
+  i.Location = GeoPoint(Angle::degrees(fixed(-7.7061111111111114)),
                         Angle::degrees(fixed(-51.051944444444445)));
   writer.LogPoint(i);
 

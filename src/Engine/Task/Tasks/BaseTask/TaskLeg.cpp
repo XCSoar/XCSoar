@@ -75,7 +75,7 @@ TaskLeg::leg_vector_planned() const
 
 
 GeoVector 
-TaskLeg::leg_vector_remaining(const GEOPOINT &ref) const
+TaskLeg::leg_vector_remaining(const GeoPoint &ref) const
 {
   switch (destination.getActiveState()) {
   case OrderedTaskPoint::AFTER_ACTIVE:
@@ -105,7 +105,7 @@ TaskLeg::leg_vector_remaining(const GEOPOINT &ref) const
 
 
 GeoVector
-TaskLeg::leg_vector_travelled(const GEOPOINT &ref) const
+TaskLeg::leg_vector_travelled(const GeoPoint &ref) const
 {
   switch (destination.getActiveState()) {
   case OrderedTaskPoint::BEFORE_ACTIVE:
@@ -146,7 +146,7 @@ TaskLeg::leg_vector_travelled(const GEOPOINT &ref) const
 
 
 fixed 
-TaskLeg::leg_distance_scored(const GEOPOINT &ref) const
+TaskLeg::leg_distance_scored(const GeoPoint &ref) const
 {
   if (!origin()) {
     return fixed_zero;
@@ -228,7 +228,7 @@ TaskLeg::leg_distance_min() const
 }
 
 fixed 
-TaskLeg::scan_distance_travelled(const GEOPOINT &ref) 
+TaskLeg::scan_distance_travelled(const GeoPoint &ref) 
 {
   vector_travelled = leg_vector_travelled(ref);
   return vector_travelled.Distance 
@@ -237,7 +237,7 @@ TaskLeg::scan_distance_travelled(const GEOPOINT &ref)
 
 
 fixed 
-TaskLeg::scan_distance_remaining(const GEOPOINT &ref) 
+TaskLeg::scan_distance_remaining(const GeoPoint &ref) 
 {
   vector_remaining = leg_vector_remaining(ref);
   return vector_remaining.Distance 
@@ -278,7 +278,7 @@ TaskLeg::scan_distance_nominal() const
 }
 
 fixed 
-TaskLeg::scan_distance_scored(const GEOPOINT &ref) const
+TaskLeg::scan_distance_scored(const GeoPoint &ref) const
 {
   return leg_distance_scored(ref)
     +(next()? next()->scan_distance_scored(ref):fixed_zero);

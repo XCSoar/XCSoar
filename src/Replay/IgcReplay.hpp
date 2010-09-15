@@ -47,7 +47,7 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 #include <stdio.h>
 
-struct GEOPOINT;
+struct GeoPoint;
 class Angle;
 
 class IgcReplay
@@ -68,7 +68,7 @@ protected:
   virtual void on_reset() = 0;
   virtual void on_stop() = 0;
   virtual void on_bad_file() = 0;
-  virtual void on_advance(const GEOPOINT &loc,
+  virtual void on_advance(const GeoPoint &loc,
                           const fixed speed, const Angle bearing,
                           const fixed alt, const fixed baroalt, const fixed t) = 0;
   virtual bool ScanBuffer(const TCHAR *buffer, fixed *Time, fixed *Latitude,

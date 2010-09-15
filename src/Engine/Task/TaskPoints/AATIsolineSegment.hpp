@@ -76,7 +76,7 @@ public:
  * 
  * @return Location of point on isoline segment
  */
-  GEOPOINT parametric(const fixed t) const;
+  GeoPoint parametric(const fixed t) const;
 
 private:
 /**

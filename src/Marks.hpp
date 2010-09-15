@@ -46,7 +46,7 @@ Copyright_License {
 
 class Projection;
 class Canvas;
-struct GEOPOINT;
+struct GeoPoint;
 struct BrokenDateTime;
 
 class Marks
@@ -58,13 +58,13 @@ public:
   void Reset();
   void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
             const Projection &projection);
-  void MarkLocation(const GEOPOINT &loc,
+  void MarkLocation(const GeoPoint &loc,
                     const BrokenDateTime &time,
                     bool play_sound);
 
 private:
   MaskedIcon icon;
-  std::vector<GEOPOINT> marker_store;
+  std::vector<GeoPoint> marker_store;
 
   Poco::RWLock lock;
 };

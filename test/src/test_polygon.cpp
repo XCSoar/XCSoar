@@ -24,7 +24,7 @@ void test_polygon()
   GrahamScan gs(sampled_points);
   sampled_points = gs.prune_interior();
 
-  GEOPOINT location;
+  GeoPoint location;
   location.Longitude = 0.4;
   location.Latitude = 1.0;
   if (PolygonInterior(location, sampled_points)) {

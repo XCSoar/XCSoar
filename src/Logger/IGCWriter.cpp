@@ -55,7 +55,7 @@ IGCWriter::LogPoint_GPSPosition::operator=(const NMEA_INFO &gps_info)
 }
 
 static char *
-igc_format_location(char *buffer, const GEOPOINT &location)
+igc_format_location(char *buffer, const GeoPoint &location)
 {
   char latitude_suffix = negative(location.Latitude.value_native())
     ? 'S' : 'N';
@@ -251,7 +251,7 @@ IGCWriter::EndDeclaration(void)
 }
 
 void
-IGCWriter::AddDeclaration(const GEOPOINT &location, const TCHAR *ID)
+IGCWriter::AddDeclaration(const GeoPoint &location, const TCHAR *ID)
 {
   char szCRecord[500];
   char IDString[MAX_PATH];

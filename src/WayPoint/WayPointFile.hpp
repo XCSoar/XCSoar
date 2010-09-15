@@ -83,7 +83,7 @@ public:
 
   virtual bool IsWritable() = 0;
 
-  static short AltitudeFromTerrain(GEOPOINT &location,
+  static short AltitudeFromTerrain(GeoPoint &location,
                                    const RasterTerrain &terrain);
 
 protected:

@@ -113,8 +113,8 @@ bool
 AbstractAirspace::intercept(const AIRCRAFT_STATE &state,
                             const AirspaceAircraftPerformance& perf,
                             AirspaceInterceptSolution &solution,
-                            const GEOPOINT& loc_start,
-                            const GEOPOINT& loc_end) const
+                            const GeoPoint& loc_start,
+                            const GeoPoint& loc_end) const
 {
   const fixed distance_start = state.Location.distance(loc_start);
   const fixed distance_end = (loc_start==loc_end)? 

@@ -66,7 +66,7 @@ Copyright_License {
  */
 bool
 PopupNearestWaypointDetails(const Waypoints &way_points,
-                            const GEOPOINT &location,
+                            const GeoPoint &location,
                             double range, bool scalefilter)
 {
   const Waypoint *way_point;

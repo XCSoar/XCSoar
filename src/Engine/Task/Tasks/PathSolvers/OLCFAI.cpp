@@ -44,14 +44,14 @@ OLCFAI::add_edges(DijkstraTaskPoint &dijkstra,
 
   find_solution(dijkstra, origin);
 
-  const FLAT_GEOPOINT prev = get_point(origin).get_flatLocation();
-  const FLAT_GEOPOINT v_close = solution[0].get_flatLocation() 
+  const FlatGeoPoint prev = get_point(origin).get_flatLocation();
+  const FlatGeoPoint v_close = solution[0].get_flatLocation() 
     - prev;
   
   for (; destination.second!= n_points; ++destination.second) {
     if (admit_candidate(destination)) {
 
-      const FLAT_GEOPOINT v_this = 
+      const FlatGeoPoint v_this = 
         get_point(destination).get_flatLocation() - prev;
 
       const unsigned d = get_weighting(origin.first)

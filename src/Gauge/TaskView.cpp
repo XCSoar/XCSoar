@@ -48,7 +48,7 @@
 static void
 PaintTask(Canvas &canvas, const Projection &projection,
           const OrderedTask &task,
-          const GEOPOINT &location, const SETTINGS_MAP &settings_map,
+          const GeoPoint &location, const SETTINGS_MAP &settings_map,
           const RasterTerrain *terrain)
 {
   BackgroundDrawHelper background;
@@ -64,7 +64,7 @@ PaintTask(Canvas &canvas, const Projection &projection,
 
 void
 PaintTask(Canvas &canvas, const RECT &rc, const OrderedTask &task,
-          const GEOPOINT &location, const SETTINGS_MAP &settings_map,
+          const GeoPoint &location, const SETTINGS_MAP &settings_map,
           const RasterTerrain *terrain)
 {
   ChartProjection projection(rc, task, location);
@@ -74,7 +74,7 @@ PaintTask(Canvas &canvas, const RECT &rc, const OrderedTask &task,
 void
 PaintTaskPoint(Canvas &canvas, const RECT &rc,
                const OrderedTask &task, const OrderedTaskPoint &point,
-               const GEOPOINT &location, const SETTINGS_MAP &settings_map,
+               const GeoPoint &location, const SETTINGS_MAP &settings_map,
                const RasterTerrain *terrain)
 {
   ChartProjection projection(rc, point, point.get_location());

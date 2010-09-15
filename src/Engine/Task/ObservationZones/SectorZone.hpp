@@ -48,7 +48,7 @@ class SectorZone:
   public CylinderZone 
 {
 protected:
-  SectorZone(enum shape _shape, const GEOPOINT &loc,
+  SectorZone(enum shape _shape, const GeoPoint &loc,
              const fixed _radius=fixed(10000.0),
              const Angle _startRadial=Angle::native(fixed_zero),
              const Angle _endRadial=Angle::radians(fixed_two_pi)):
@@ -69,7 +69,7 @@ public:
  * 
  * @return Initialised object
  */
-  SectorZone(const GEOPOINT &loc, 
+  SectorZone(const GeoPoint &loc, 
              const fixed _radius=fixed(10000.0),
              const Angle _startRadial=Angle::native(fixed_zero),
              const Angle _endRadial=Angle::radians(fixed_two_pi)):
@@ -79,7 +79,7 @@ public:
     {
     };
 
-  virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
+  virtual ObservationZonePoint* clone(const GeoPoint * _location=0) const {
     if (_location) {
       return new SectorZone(*_location, Radius, StartRadial, EndRadial);
     } else {
@@ -143,7 +143,7 @@ public:
  * 
  * @return Point on boundary
  */
-  GEOPOINT get_boundary_parametric(fixed t) const;  
+  GeoPoint get_boundary_parametric(fixed t) const;  
 
 /** 
  * Distance reduction for scoring when outside this OZ
@@ -167,7 +167,7 @@ public:
    * 
    * @return Location of extreme point on start radial
    */
-  const GEOPOINT& get_SectorStart() const {
+  const GeoPoint& get_SectorStart() const {
     return SectorStart;
   }
 
@@ -176,7 +176,7 @@ public:
    * 
    * @return Location of extreme point on end radial
    */
-  const GEOPOINT& get_SectorEnd() const {
+  const GeoPoint& get_SectorEnd() const {
     return SectorEnd;
   }
 
@@ -197,8 +197,8 @@ protected:
  */
   virtual bool angleInSector(const Angle that) const;
 
-  GEOPOINT SectorStart; /**< Location of far end point of start radial */
-  GEOPOINT SectorEnd; /**< Location of far end point of end radial */
+  GeoPoint SectorStart; /**< Location of far end point of start radial */
+  GeoPoint SectorEnd; /**< Location of far end point of end radial */
 
 private:
 

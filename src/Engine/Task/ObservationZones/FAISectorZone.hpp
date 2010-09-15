@@ -57,14 +57,14 @@ public:
    * 
    * @return Initialised object
    */
-  FAISectorZone(const GEOPOINT loc, const bool is_turnpoint=true):
+  FAISectorZone(const GeoPoint loc, const bool is_turnpoint=true):
     SymmetricSectorZone(FAI_SECTOR, loc,
                         fixed(1000.0 * (is_turnpoint ? 10 : 1)),
                         Angle::radians(fixed_half_pi)),
     m_is_turnpoint(is_turnpoint)
     {}
 
-  ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
+  ObservationZonePoint* clone(const GeoPoint * _location=0) const {
     if (_location) {
       return new FAISectorZone(*_location, m_is_turnpoint);
     } else {

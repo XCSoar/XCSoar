@@ -54,9 +54,9 @@ class RasterRounding;
 
 struct TerrainIntersection
 {
-  TerrainIntersection(const GEOPOINT& start);
+  TerrainIntersection(const GeoPoint& start);
 
-  GEOPOINT location;
+  GeoPoint location;
   fixed range;
   fixed altitude;
   bool out_of_range;
@@ -106,7 +106,7 @@ public:
                                         const GlidePolar& polar);
 
 private:
-  fixed h_terrain(const RasterMap &map, const GEOPOINT& loc);
+  fixed h_terrain(const RasterMap &map, const GeoPoint& loc);
 
   RasterTerrain &m_terrain;
   const fixed safety_height_terrain;

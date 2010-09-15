@@ -44,7 +44,7 @@ Copyright_License {
 void
 ThermalLocator::ThermalLocator_Point::Drift(fixed t, 
                                             const TaskProjection& projection,
-                                            const GEOPOINT& wind_drift,
+                                            const GeoPoint& wind_drift,
                                             fixed decay)
 {
   static const fixed decay_factor(-1.5/TLOCATOR_NMAX);
@@ -53,7 +53,7 @@ ThermalLocator::ThermalLocator_Point::Drift(fixed t,
 
   weight = exp(decay_factor * decay * dt);
 
-  GEOPOINT p = location+wind_drift*dt;
+  GeoPoint p = location+wind_drift*dt;
 
   loc_drift = projection.fproject(p);
 }
@@ -80,7 +80,7 @@ ThermalLocator::Reset()
 }
 
 void
-ThermalLocator::AddPoint(const fixed t, const GEOPOINT &location, const fixed w)
+ThermalLocator::AddPoint(const fixed t, const GeoPoint &location, const fixed w)
 {
   points[n_index].location = location;
   points[n_index].t_0 = t;
@@ -110,7 +110,7 @@ ThermalLocator::invalid_estimate(THERMAL_LOCATOR_INFO &therm) const
 
 void
 ThermalLocator::Update(const fixed t_0, 
-                       const GEOPOINT &location_0,
+                       const GeoPoint &location_0,
                        const SpeedVector wind, 
                        THERMAL_LOCATOR_INFO &therm)
 {
@@ -119,11 +119,11 @@ ThermalLocator::Update(const fixed t_0,
     return; // nothing to do.
   }
 
-  GEOPOINT dloc;
+  GeoPoint dloc;
 
   FindLatitudeLongitude(location_0, wind.bearing, wind.norm, &dloc);
 
-  const GEOPOINT traildrift = location_0-dloc;
+  const GeoPoint traildrift = location_0-dloc;
 
   TaskProjection projection;
   projection.reset(location_0);
@@ -158,8 +158,8 @@ ThermalLocator::glider_average(fixed &xav, fixed& yav)
 void
 ThermalLocator::Update_Internal(const fixed t_0, 
                                 const TaskProjection& projection, 
-                                const GEOPOINT& location_0,
-                                const GEOPOINT& traildrift,
+                                const GeoPoint& location_0,
+                                const GeoPoint& traildrift,
                                 const fixed decay, 
                                 THERMAL_LOCATOR_INFO &therm)
 {
@@ -206,7 +206,7 @@ ThermalLocator::Update_Internal(const fixed t_0,
 void
 ThermalLocator::Drift(const fixed t_0, 
                       const TaskProjection& projection, 
-                      const GEOPOINT& traildrift,
+                      const GeoPoint& traildrift,
                       const fixed decay)
 {
   for (int i = 0; i < TLOCATOR_NMAX; ++i) {
@@ -218,7 +218,7 @@ ThermalLocator::Drift(const fixed t_0,
 void
 ThermalLocator::Process(const bool circling,
                         const fixed time, 
-                        const GEOPOINT &location, 
+                        const GeoPoint &location, 
                         const fixed w,
                         const SpeedVector wind,
                         THERMAL_LOCATOR_INFO& therm)

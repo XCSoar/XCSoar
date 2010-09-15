@@ -45,18 +45,18 @@ class Canvas;
 class OrderedTask;
 class OrderedTaskPoint;
 class RasterTerrain;
-class GEOPOINT;
+class GeoPoint;
 struct SETTINGS_MAP;
 
 void
 PaintTask(Canvas &canvas, const RECT &rc, const OrderedTask &task,
-          const GEOPOINT &location, const SETTINGS_MAP &settings_map,
+          const GeoPoint &location, const SETTINGS_MAP &settings_map,
           const RasterTerrain *terrain);
 
 void
 PaintTaskPoint(Canvas &canvas, const RECT &rc,
                const OrderedTask &task, const OrderedTaskPoint &point,
-               const GEOPOINT &location, const SETTINGS_MAP &settings_map,
+               const GeoPoint &location, const SETTINGS_MAP &settings_map,
                const RasterTerrain *terrain);
 
 #endif

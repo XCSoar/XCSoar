@@ -64,7 +64,7 @@ MapWindow::MapWindow()
    marks(NULL), 
    cdi(NULL),
    ui_generation(1), buffer_generation(0),
-   TargetDrag_Location(GEOPOINT(Angle::native(fixed_zero),
+   TargetDrag_Location(GeoPoint(Angle::native(fixed_zero),
                                 Angle::native(fixed_zero))),
    TargetDrag_State(0)
 {
@@ -231,7 +231,7 @@ void
 MapWindow::set_terrain(RasterTerrain *_terrain)
 {
   terrain = _terrain;
-  terrain_center = GEOPOINT(Angle::native(fixed_zero),
+  terrain_center = GeoPoint(Angle::native(fixed_zero),
                             Angle::native(fixed_zero));
   m_background.set_terrain(_terrain);
 }

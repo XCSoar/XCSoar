@@ -134,7 +134,7 @@ public:
    * @param range distance in meters of search radius
    * @param visitor visitor class to call on airspaces within range
    */
-  void visit_within_range(const GEOPOINT &loc, 
+  void visit_within_range(const GeoPoint &loc, 
                           const fixed range,
                           AirspaceVisitor& visitor,
                           const AirspacePredicate &predicate
@@ -148,7 +148,7 @@ public:
    * @param vec vector of line along with to search for intersections
    * @param visitor visitor class to call on airspaces intersected by line
    */
-  void visit_intersecting(const GEOPOINT &loc, 
+  void visit_intersecting(const GeoPoint &loc, 
                           const GeoVector &vec,
                           AirspaceIntersectionVisitor& visitor) const;
 
@@ -161,7 +161,7 @@ public:
    * 
    * @return vector of airspaces intersecting search radius
    */
-  const AirspaceVector scan_range(const GEOPOINT &location,
+  const AirspaceVector scan_range(const GeoPoint &location,
                                   const fixed range,
                                   const AirspacePredicate &condition
                                   =AirspacePredicate::always_true) const;
@@ -174,7 +174,7 @@ public:
    * 
    * @return single nearest airspace if external, or all airspaces enclosing the aircraft
    */
-  const AirspaceVector scan_nearest(const GEOPOINT &location,
+  const AirspaceVector scan_nearest(const GeoPoint &location,
                                     const AirspacePredicate &condition
                                     =AirspacePredicate::always_true) const;
 

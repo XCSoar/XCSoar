@@ -57,19 +57,19 @@ public:
    * from previously saved value if input arguments are identical. 
    */
   gcc_pure
-  fixed Distance(const GEOPOINT& _origin,
-                 const GEOPOINT& _destination) const;
+  fixed Distance(const GeoPoint& _origin,
+                 const GeoPoint& _destination) const;
 private:
 
   /**
    * Origin point of saved query 
    */
-  mutable GEOPOINT origin;
+  mutable GeoPoint origin;
 
   /**
    * Destination point of previous query 
    */
-  mutable GEOPOINT destination;
+  mutable GeoPoint destination;
 
   /**
    * Distance in meters saved from previous query 

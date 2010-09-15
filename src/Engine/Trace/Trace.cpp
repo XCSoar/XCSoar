@@ -329,7 +329,7 @@ private:
 };
 
 TracePointVector
-Trace::find_within_range(const GEOPOINT &loc, const fixed range,
+Trace::find_within_range(const GeoPoint &loc, const fixed range,
                          const unsigned mintime, const fixed resolution) const
 {
   AIRCRAFT_STATE state;

@@ -41,34 +41,34 @@ Copyright_License {
 
 ChartProjection::ChartProjection(const RECT &rc,
                                  const TaskManager &task,
-                                 const GEOPOINT &fallback_loc)
+                                 const GeoPoint &fallback_loc)
 {
-  const GEOPOINT center = task.get_task_center(fallback_loc);
+  const GeoPoint center = task.get_task_center(fallback_loc);
   const fixed radius = max(fixed(10000), task.get_task_radius(fallback_loc));
   set_projection(rc, center, radius);
 }
 
 ChartProjection::ChartProjection(const RECT &rc,
                                  const OrderedTask& task,
-                                 const GEOPOINT &fallback_loc) 
+                                 const GeoPoint &fallback_loc) 
 {
-  const GEOPOINT center = task.get_task_center(fallback_loc);
+  const GeoPoint center = task.get_task_center(fallback_loc);
   const fixed radius = max(fixed(10000), task.get_task_radius(fallback_loc));
   set_projection(rc, center, radius);
 }
 
 ChartProjection::ChartProjection(const RECT &rc,
                                  const TracePointVector& trace,
-                                 const GEOPOINT &fallback_loc) 
+                                 const GeoPoint &fallback_loc) 
 {
   const TaskProjection proj = get_bounds(trace, fallback_loc);
-  const GEOPOINT center = proj.get_center();
+  const GeoPoint center = proj.get_center();
   const fixed radius = max(fixed(10000), proj.get_radius());
   set_projection(rc, center, radius);
 }
 
 void ChartProjection::set_projection(const RECT &rc, 
-                                     const GEOPOINT &center,
+                                     const GeoPoint &center,
                                      const fixed radius)
 {
   SetScaleMetersToScreen(fixed(max_dimension(rc)) / (radius * 2));
@@ -81,13 +81,13 @@ void ChartProjection::set_projection(const RECT &rc,
 
 ChartProjection::ChartProjection(const RECT &rc,
                                  const OrderedTaskPoint& point,
-                                 const GEOPOINT &fallback_loc)
+                                 const GeoPoint &fallback_loc)
 {
   TaskProjection task_projection;
   task_projection.reset(fallback_loc);
   point.scan_projection(task_projection);
 
-  const GEOPOINT center = task_projection.get_center();
+  const GeoPoint center = task_projection.get_center();
   const fixed radius = max(fixed(10000), task_projection.get_radius());
   set_projection(rc, center, radius * fixed(1.3));
 }

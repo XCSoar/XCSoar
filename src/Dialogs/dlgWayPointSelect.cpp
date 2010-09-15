@@ -55,7 +55,7 @@ Copyright_License {
 #include <assert.h>
 #include <stdlib.h>
 
-static GEOPOINT g_location;
+static GeoPoint g_location;
 
 static WndForm *wf=NULL;
 static WndListFrame *wWayPointList=NULL;
@@ -121,7 +121,7 @@ struct WayPointSelectInfo {
 };
 
 struct WaypointSelectInfoVector : public std::vector<WayPointSelectInfo> {
-  void push_back(const Waypoint &way_point, const GEOPOINT &Location) {
+  void push_back(const Waypoint &way_point, const GeoPoint &Location) {
     WayPointSelectInfo info;
 
     info.way_point = &way_point;
@@ -209,7 +209,7 @@ class FilterWaypointVisitor:
   public WaypointVisitor,
   private WayPointFilterData
 {
-  const GEOPOINT location;
+  const GeoPoint location;
   const Angle heading;
   WaypointSelectInfoVector &vector;
 
@@ -241,7 +241,7 @@ private:
 
   static bool
   compare_direction(const Waypoint &wp, int direction_index,
-                    GEOPOINT location, Angle heading)
+                    GeoPoint location, Angle heading)
   {
     if (direction_index <= 0)
       return true;
@@ -265,7 +265,7 @@ private:
 
 public:
   FilterWaypointVisitor(const WayPointFilterData &filter,
-                        GEOPOINT _location, Angle _heading,
+                        GeoPoint _location, Angle _heading,
                         WaypointSelectInfoVector &_vector)
     :WayPointFilterData(filter), location(_location), heading(_heading),
      vector(_vector) {}
@@ -287,7 +287,7 @@ WaypointDistanceCompare(const struct WayPointSelectInfo &a,
 
 static void
 FillList(WaypointSelectInfoVector &dest, const Waypoints &src,
-         GEOPOINT location, Angle heading, const WayPointFilterData &filter)
+         GeoPoint location, Angle heading, const WayPointFilterData &filter)
 {
   dest.clear();
 
@@ -549,7 +549,7 @@ static CallBackTableEntry_t CallBackTable[] = {
 };
 
 const Waypoint*
-dlgWayPointSelect(SingleWindow &parent, const GEOPOINT &location)
+dlgWayPointSelect(SingleWindow &parent, const GeoPoint &location)
 {
   wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
       _T("IDR_XML_WAYPOINTSELECT_L") : _T("IDR_XML_WAYPOINTSELECT"));

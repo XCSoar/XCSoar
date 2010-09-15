@@ -36,8 +36,8 @@
  */
 #include "GeoEllipse.hpp"
 
-GeoEllipse::GeoEllipse(const GEOPOINT &f1, const GEOPOINT &f2,
-                       const GEOPOINT &p,
+GeoEllipse::GeoEllipse(const GeoPoint &f1, const GeoPoint &f2,
+                       const GeoPoint &p,
                        const TaskProjection &_task_projection): 
   task_projection(_task_projection)
 {
@@ -46,16 +46,16 @@ GeoEllipse::GeoEllipse(const GEOPOINT &f1, const GEOPOINT &f2,
                     task_projection.fproject(p));
 }
 
-GEOPOINT 
+GeoPoint 
 GeoEllipse::parametric(const fixed t) const {
   const FlatPoint fp = ell.parametric(t);
   return task_projection.funproject(fp);
 }
 
 bool 
-GeoEllipse::intersect_extended(const GEOPOINT &p,
-                               GEOPOINT &i1,
-                               GEOPOINT &i2) const 
+GeoEllipse::intersect_extended(const GeoPoint &p,
+                               GeoPoint &i1,
+                               GeoPoint &i2) const 
 {
   const FlatPoint pf = task_projection.fproject(p);
   FlatPoint i1f, i2f;

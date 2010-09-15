@@ -48,7 +48,7 @@ Copyright_License {
 struct BoundsRectangle;
 
 /**
- * This class manages the projection from GEOPOINT to RasterMap
+ * This class manages the projection from GeoPoint to RasterMap
  * coordinates.
  */
 class RasterProjection {
@@ -59,7 +59,7 @@ public:
   void set(const BoundsRectangle &bounds, unsigned width, unsigned height);
 
   gcc_const std::pair<unsigned, unsigned>
-  project(const GEOPOINT &location) const {
+  project(const GeoPoint &location) const {
     unsigned x = (int)(location.Longitude.value_native() * x_scale) - left;
     unsigned y = top - (int)(location.Latitude.value_native() * y_scale);
 
@@ -72,7 +72,7 @@ public:
    * @param pixels the pixel distance between two pixels
    */
   gcc_pure fixed
-  pixel_distance(const GEOPOINT &location, unsigned pixels) const;
+  pixel_distance(const GeoPoint &location, unsigned pixels) const;
 };
 
 #endif

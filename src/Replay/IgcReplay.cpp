@@ -187,7 +187,7 @@ IgcReplay::Update()
     Stop();
   } else {
     fixed Alt;
-    GEOPOINT Pos;
+    GeoPoint Pos;
 
     cli.Interpolate(t_simulation, Pos, Alt);
 

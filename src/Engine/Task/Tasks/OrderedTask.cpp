@@ -85,7 +85,7 @@ OrderedTask::update_geometry()
     // update stats so data can be used during task construction
     /// @todo this should only be done if not flying! (currently done with has_entered)
     if (!ts->has_entered()) {
-      GEOPOINT loc = ts->get_location();
+      GeoPoint loc = ts->get_location();
       update_stats_distances(loc, true);
       if (has_finish()) {
         /// @todo: call AbstractTask::update stats methods with fake state
@@ -118,7 +118,7 @@ OrderedTask::scan_leg_start_time(const AIRCRAFT_STATE &)
 // DISTANCES
 
 fixed
-OrderedTask::scan_distance_min(const GEOPOINT &location, bool full)
+OrderedTask::scan_distance_min(const GeoPoint &location, bool full)
 {
   if (full) {
     SearchPoint ac(location, task_projection);
@@ -151,7 +151,7 @@ OrderedTask::scan_distance_max()
 }
 
 void
-OrderedTask::scan_distance_minmax(const GEOPOINT &location, 
+OrderedTask::scan_distance_minmax(const GeoPoint &location, 
                                   bool force,
                                   fixed *dmin, fixed *dmax)
 {
@@ -176,7 +176,7 @@ OrderedTask::scan_distance_nominal()
 }
 
 fixed
-OrderedTask::scan_distance_scored(const GEOPOINT &location)
+OrderedTask::scan_distance_scored(const GeoPoint &location)
 {
   if (ts)
     return ts->scan_distance_scored(location);
@@ -185,7 +185,7 @@ OrderedTask::scan_distance_scored(const GEOPOINT &location)
 }
 
 fixed
-OrderedTask::scan_distance_remaining(const GEOPOINT &location)
+OrderedTask::scan_distance_remaining(const GeoPoint &location)
 {
   if (ts)
     return ts->scan_distance_remaining(location);
@@ -194,7 +194,7 @@ OrderedTask::scan_distance_remaining(const GEOPOINT &location)
 }
 
 fixed
-OrderedTask::scan_distance_travelled(const GEOPOINT &location)
+OrderedTask::scan_distance_travelled(const GeoPoint &location)
 {
   if (ts)
     return ts->scan_distance_travelled(location);
@@ -748,8 +748,8 @@ OrderedTask::task_started() const
 
 
 bool 
-OrderedTask::distance_is_significant(const GEOPOINT &location,
-                                     const GEOPOINT &location_last) const
+OrderedTask::distance_is_significant(const GeoPoint &location,
+                                     const GeoPoint &location_last) const
 {
   SearchPoint a1(location, task_projection);
   SearchPoint a2(location_last, task_projection);
@@ -859,8 +859,8 @@ OrderedTask::get_finish_height() const
   return fixed_zero;
 }
 
-GEOPOINT 
-OrderedTask::get_task_center(const GEOPOINT& fallback_location) const
+GeoPoint 
+OrderedTask::get_task_center(const GeoPoint& fallback_location) const
 {
   if (!has_start() || !tps[0])
     return fallback_location;
@@ -869,7 +869,7 @@ OrderedTask::get_task_center(const GEOPOINT& fallback_location) const
 }
 
 fixed 
-OrderedTask::get_task_radius(const GEOPOINT& fallback_location) const
+OrderedTask::get_task_radius(const GeoPoint& fallback_location) const
 { 
   if (!has_start() || !tps[0])
     return fixed_zero;

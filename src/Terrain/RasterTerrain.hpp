@@ -75,21 +75,21 @@ public:
   static RasterTerrain *OpenTerrain();
 
   gcc_pure
-  short GetTerrainHeight(const GEOPOINT location) const {
+  short GetTerrainHeight(const GeoPoint location) const {
     Lease lease(*this);
     return lease->GetField(location);
   }
 
-  int GetEffectivePixelSize(fixed &pixel_D, const GEOPOINT &location) const {
+  int GetEffectivePixelSize(fixed &pixel_D, const GeoPoint &location) const {
     return map.GetEffectivePixelSize(pixel_D, location);
   }
 
   gcc_pure
-  bool WaypointIsInTerrainRange(const GEOPOINT &location) const {
+  bool WaypointIsInTerrainRange(const GeoPoint &location) const {
     return map.inside(location);
   }
 
-  GEOPOINT GetTerrainCenter() const {
+  GeoPoint GetTerrainCenter() const {
     return map.GetMapCenter();
   }
 };

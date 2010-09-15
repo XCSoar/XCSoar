@@ -37,7 +37,7 @@
 
 #include "KeyholeZone.hpp"
 
-GEOPOINT 
+GeoPoint 
 KeyholeZone::get_boundary_parametric(fixed t) const
 { 
   const Angle half = getStartRadial().HalfAngle(getEndRadial());

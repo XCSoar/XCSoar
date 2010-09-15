@@ -109,10 +109,10 @@ struct TempAirspaceType
   AIRSPACE_ALT Top;
 
   // Polygon
-  std::vector<GEOPOINT> points;
+  std::vector<GeoPoint> points;
 
   // Circle or Arc
-  GEOPOINT Center;
+  GeoPoint Center;
   fixed Radius;
 
   // Arc
@@ -275,7 +275,7 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
 }
 
 static bool
-ReadCoords(const TCHAR *Text, GEOPOINT &point)
+ReadCoords(const TCHAR *Text, GeoPoint &point)
 {
   // Format: 53:20:41 N 010:24:41 E
 
@@ -349,7 +349,7 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
 {
   fixed Radius;
   TCHAR *Stop;
-  GEOPOINT TempPoint;
+  GeoPoint TempPoint;
   static const fixed fixed_75 = fixed(7.5);
   const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
 
@@ -374,12 +374,12 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
 static void
 CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
 {
-  GEOPOINT Start;
-  GEOPOINT End;
+  GeoPoint Start;
+  GeoPoint End;
   Angle StartBearing;
   fixed Radius;
   const TCHAR *Comma = NULL;
-  GEOPOINT TempPoint;
+  GeoPoint TempPoint;
   static const fixed fixed_75 = fixed(7.5);
   const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
 
@@ -522,7 +522,7 @@ ParseLine(Airspaces &airspace_database, const TCHAR *line,
         break;
 
     {
-      GEOPOINT TempPoint;
+      GeoPoint TempPoint;
 
       if (!ReadCoords(value, TempPoint))
         return false;
@@ -605,7 +605,7 @@ ParseTypeTNP(const TCHAR* text)
 }
 
 static bool
-ParseCoordsTNP(const TCHAR *Text, GEOPOINT &point)
+ParseCoordsTNP(const TCHAR *Text, GeoPoint &point)
 {
   // Format: N542500 E0105000
   bool negative = false;
@@ -654,7 +654,7 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
 
   // (ANTI-)CLOCKWISE RADIUS=34.95 CENTRE=N523333 E0131603 TO=N522052 E0122236
 
-  GEOPOINT from = temp_area.points.back();
+  GeoPoint from = temp_area.points.back();
 
   const TCHAR* parameter;
   if ((parameter = _tcsstr(Text, _T(" "))) == NULL)
@@ -663,7 +663,7 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
     return false;
   ParseCoordsTNP(parameter, temp_area.Center);
 
-  GEOPOINT to;
+  GeoPoint to;
   if ((parameter = _tcsstr(parameter, _T(" "))) == NULL)
     return false;
   parameter++;
@@ -683,7 +683,7 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
   DistanceBearing(temp_area.Center, from, &radius, &bearing_from);
   bearing_to = Bearing(temp_area.Center, to);
 
-  GEOPOINT TempPoint;
+  GeoPoint TempPoint;
   while ((bearing_to - bearing_from).magnitude_degrees() > fixed_75) {
     bearing_from += BearingStep;
     bearing_from = bearing_from.as_bearing();
@@ -749,7 +749,7 @@ ParseLineTNP(Airspaces &airspace_database, const TCHAR *line,
   } else if ((parameter = string_after_prefix_ci(line, _T("BASE="))) != NULL) {
     ReadAltitude(parameter, &temp_area.Base);
   } else if ((parameter = string_after_prefix_ci(line, _T("POINT="))) != NULL) {
-    GEOPOINT TempPoint;
+    GeoPoint TempPoint;
 
     if (!ParseCoordsTNP(parameter, TempPoint))
       return false;

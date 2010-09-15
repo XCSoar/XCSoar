@@ -84,7 +84,7 @@ HeightMatrix::Fill(const RasterMap &map, const Projection &projection,
 #ifndef SLOW_TERRAIN_STUFF
   // This code is quickest (by a little) but not so readable
 
-  const GEOPOINT PanLocation = projection.GetPanLocation();
+  const GeoPoint PanLocation = projection.GetPanLocation();
   const fixed InvDrawScale = projection.GetScreenScaleToLonLat();
   const POINT Orig_Screen = projection.GetOrigScreen();
   const int cost = projection.GetDisplayAngle().ifastcosine();
@@ -106,12 +106,12 @@ HeightMatrix::Fill(const RasterMap &map, const Projection &projection,
       const POINT r = { (dx * cost - dysint) / 1024,
                         (dycost + dx * sint) / 1024 };
 
-      GEOPOINT gp;
+      GeoPoint gp;
       gp.Latitude = PanLocation.Latitude - Angle::native(r.y * InvDrawScale);
       gp.Longitude = PanLocation.Longitude + Angle::native(r.x * InvDrawScale)
         * gp.Latitude.invfastcosine();
 #else
-      GEOPOINT gp = projection.Screen2LonLat(x, y);
+      GeoPoint gp = projection.Screen2LonLat(x, y);
 #endif
 
       short h = map.GetField(gp);

@@ -56,8 +56,8 @@ public:
  * @param ll Lower left location
  * @param ur Upper right location
  */
-  FlatBoundingBox(const FLAT_GEOPOINT &ll,
-                  const FLAT_GEOPOINT &ur):
+  FlatBoundingBox(const FlatGeoPoint &ll,
+                  const FlatGeoPoint &ur):
     bb_ll(ll.Longitude,ll.Latitude),
     bb_ur(ur.Longitude,ur.Latitude) {};
 
@@ -68,7 +68,7 @@ public:
  * @param loc Location of center point
  * @param range Radius in projected units
  */
-  FlatBoundingBox(const FLAT_GEOPOINT &loc,
+  FlatBoundingBox(const FlatGeoPoint &loc,
                   const unsigned range=0):
     bb_ll(loc.Longitude-range,loc.Latitude-range),
     bb_ur(loc.Longitude+range,loc.Latitude+range) 
@@ -160,11 +160,11 @@ public:
  * @return Center in flat coordinates
  */
   gcc_pure
-  FLAT_GEOPOINT get_center() const;
+  FlatGeoPoint get_center() const;
 
 private:
-  FLAT_GEOPOINT bb_ll;
-  FLAT_GEOPOINT bb_ur;
+  FlatGeoPoint bb_ll;
+  FlatGeoPoint bb_ur;
 
   /** @link dependency */
   /*#  BBDist lnkBBDist; */

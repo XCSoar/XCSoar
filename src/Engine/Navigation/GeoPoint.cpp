@@ -37,45 +37,45 @@
 #include "Navigation/GeoPoint.hpp"
 #include "Math/Earth.hpp"
 
-GEOPOINT 
-GEOPOINT::parametric(const GEOPOINT &delta, const fixed t) const
+GeoPoint 
+GeoPoint::parametric(const GeoPoint &delta, const fixed t) const
 {
   return (*this) + delta * t;
 }
 
-GEOPOINT 
-GEOPOINT::interpolate(const GEOPOINT &end, const fixed t) const
+GeoPoint 
+GeoPoint::interpolate(const GeoPoint &end, const fixed t) const
 {
   return (*this) + (end - (*this)) * t;
 }
 
 fixed
-GEOPOINT::distance(const GEOPOINT &other) const
+GeoPoint::distance(const GeoPoint &other) const
 {
   return ::Distance(*this, other);
 }
 
 Angle
-GEOPOINT::bearing(const GEOPOINT &other) const
+GeoPoint::bearing(const GeoPoint &other) const
 {
   return ::Bearing(*this, other);
 }
 
 fixed 
-GEOPOINT::projected_distance(const GEOPOINT &from,
-                             const GEOPOINT &to) const
+GeoPoint::projected_distance(const GeoPoint &from,
+                             const GeoPoint &to) const
 {
   return ::ProjectedDistance(from, to, *this);
 }
 
 bool 
-GEOPOINT::equals(const GEOPOINT &other) const
+GeoPoint::equals(const GeoPoint &other) const
 {
   return (Longitude == other.Longitude) && (Latitude == other.Latitude);
 }
 
 bool 
-GEOPOINT::sort(const GEOPOINT &sp) const
+GeoPoint::sort(const GeoPoint &sp) const
 {
   if (Longitude < sp.Longitude)
     return false;
@@ -86,14 +86,14 @@ GEOPOINT::sort(const GEOPOINT &sp) const
 }
 
 
-GEOPOINT 
-GEOPOINT::intermediate_point(const GEOPOINT &destination, 
+GeoPoint 
+GeoPoint::intermediate_point(const GeoPoint &destination, 
                              const fixed distance) const
 {
   /* slow way */
   return ::IntermediatePoint(*this, destination, distance);
   /* fast way (linear interpolation)
-  GEOPOINT end = end_point(source);
+  GeoPoint end = end_point(source);
   if (Distance > fixed_zero) {
     fixed t = distance / Distance;
     return source + (end - source) * t;
@@ -104,7 +104,7 @@ GEOPOINT::intermediate_point(const GEOPOINT &destination,
 }
 
 bool
-GEOPOINT::is_null() const
+GeoPoint::is_null() const
 {
   return (Longitude.value_degrees() == fixed_zero) &&
          (Latitude.value_degrees() == fixed_zero);

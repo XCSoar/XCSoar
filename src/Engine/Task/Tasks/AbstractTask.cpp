@@ -116,7 +116,7 @@ AbstractTask::getActiveTaskPointIndex() const
 }
 
 void
-AbstractTask::update_stats_distances(const GEOPOINT &location,
+AbstractTask::update_stats_distances(const GeoPoint &location,
                                      const bool full_update)
 {
   stats.total.remaining.set_distance(scan_distance_remaining(location));

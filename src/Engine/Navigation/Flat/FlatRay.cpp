@@ -53,7 +53,7 @@ FlatRay::intersects (const FlatRay &that) const
     // lines are parallel
     return -fixed_one;
   }
-  const FLAT_GEOPOINT delta = that.point-point;
+  const FlatGeoPoint delta = that.point-point;
   const int ua = delta.cross(that.vector);
   if ((sgn(ua)*sgn(denom)<0) || (abs(ua)>abs(denom))) {
     // outside first line
@@ -70,10 +70,10 @@ FlatRay::intersects (const FlatRay &that) const
 }
 
 
-FLAT_GEOPOINT
+FlatGeoPoint
 FlatRay::parametric(const fixed t) const
 {
-  FLAT_GEOPOINT p = point;
+  FlatGeoPoint p = point;
   p.Longitude += (int)(vector.Longitude*FIXED_DOUBLE(t));
   p.Latitude += (int)(vector.Latitude*FIXED_DOUBLE(t));
   return p;

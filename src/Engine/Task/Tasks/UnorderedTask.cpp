@@ -135,7 +135,7 @@ UnorderedTask::scan_leg_start_time(const AIRCRAFT_STATE &state)
 
 
 void 
-UnorderedTask::scan_distance_minmax(const GEOPOINT &location, bool full,
+UnorderedTask::scan_distance_minmax(const GeoPoint &location, bool full,
                                     fixed *dmin, fixed *dmax)
 {
   *dmin = stats.total.remaining.get_distance();
@@ -155,19 +155,19 @@ UnorderedTask::scan_distance_planned()
 }
 
 fixed 
-UnorderedTask::scan_distance_scored(const GEOPOINT &location)
+UnorderedTask::scan_distance_scored(const GeoPoint &location)
 {
   return fixed_zero;
 }
 
 fixed 
-UnorderedTask::scan_distance_travelled(const GEOPOINT &location)
+UnorderedTask::scan_distance_travelled(const GeoPoint &location)
 {
   return fixed_zero;
 }
 
 fixed 
-UnorderedTask::scan_distance_remaining(const GEOPOINT &location)
+UnorderedTask::scan_distance_remaining(const GeoPoint &location)
 {
   TaskPoint *tp = getActiveTaskPoint();
   if (!tp) {
@@ -192,8 +192,8 @@ UnorderedTask::get_finish_height() const
   return tp->get_elevation();
 }
 
-GEOPOINT 
-UnorderedTask::get_task_center(const GEOPOINT& fallback_location) const
+GeoPoint 
+UnorderedTask::get_task_center(const GeoPoint& fallback_location) const
 {
   TaskPoint *tp = getActiveTaskPoint();
   if (!tp) {
@@ -204,7 +204,7 @@ UnorderedTask::get_task_center(const GEOPOINT& fallback_location) const
 }
 
 fixed 
-UnorderedTask::get_task_radius(const GEOPOINT& fallback_location) const
+UnorderedTask::get_task_radius(const GeoPoint& fallback_location) const
 {
   TaskPoint *tp = getActiveTaskPoint();
   if (!tp) {

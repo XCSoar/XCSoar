@@ -36,7 +36,7 @@
  */
 #include "TaskPoint.hpp"
 
-const GEOPOINT &
+const GeoPoint &
 TaskPoint::get_location_remaining() const
 {
   return get_location();

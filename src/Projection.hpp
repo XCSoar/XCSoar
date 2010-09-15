@@ -53,33 +53,33 @@ public:
   virtual fixed GetMapScaleUser() const;
 
   gcc_pure
-  GEOPOINT Screen2LonLat(int x, int y) const;
+  GeoPoint Screen2LonLat(int x, int y) const;
 
   gcc_pure
-  POINT LonLat2Screen(const GEOPOINT &location) const;
+  POINT LonLat2Screen(const GeoPoint &location) const;
 
-  void LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
+  void LonLat2Screen(const GeoPoint *ptin, POINT *ptout,
                      unsigned n, unsigned skip) const;
   void LonLat2Screen(const pointObj* const ptin, POINT *ptout,
                      const int n, const int skip) const;
 
   gcc_pure
-  GEOPOINT point2GeoPoint(const pointObj& p) const {
-    return GEOPOINT(Angle::native(fixed(p.x)), Angle::native(fixed(p.y)));
+  GeoPoint point2GeoPoint(const pointObj& p) const {
+    return GeoPoint(Angle::native(fixed(p.x)), Angle::native(fixed(p.y)));
   }
 
   const POINT &GetOrigScreen() const {
     return Orig_Screen;
   }
 
-  const GEOPOINT &GetPanLocation() const {
+  const GeoPoint &GetPanLocation() const {
     return PanLocation;
   }
 
-  bool LonLat2ScreenIfVisible(const GEOPOINT &loc, POINT *sc) const;
+  bool LonLat2ScreenIfVisible(const GeoPoint &loc, POINT *sc) const;
 
   gcc_pure
-  bool LonLatVisible(const GEOPOINT &loc) const;
+  bool LonLatVisible(const GeoPoint &loc) const;
 
   gcc_pure
   bool PointVisible(const POINT &P) const;
@@ -128,7 +128,7 @@ protected:
 
   void SetScaleMetersToScreen(const fixed scale_meters_to_screen);
 
-  GEOPOINT PanLocation;
+  GeoPoint PanLocation;
   POINT Orig_Screen;
   FastIntegerRotation DisplayAngle;
   RECT MapRect;

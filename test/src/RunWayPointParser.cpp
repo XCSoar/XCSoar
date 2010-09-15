@@ -57,7 +57,7 @@ Mutex mutexTaskData;
 DeviceBlackboard device_blackboard;
 
 void
-DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
+DeviceBlackboard::SetStartupLocation(const GeoPoint &loc,
                                      const fixed alt)
 {
 }

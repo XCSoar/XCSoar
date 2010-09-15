@@ -41,20 +41,20 @@
 using std::min;
 
 unsigned 
-FLAT_GEOPOINT::distance_to(const FLAT_GEOPOINT &sp) const
+FlatGeoPoint::distance_to(const FlatGeoPoint &sp) const
 {
   return isqrt4(distance_sq_to(sp));
 }
 
 unsigned 
-FLAT_GEOPOINT::distance_sq_to(const FLAT_GEOPOINT &sp) const
+FlatGeoPoint::distance_sq_to(const FlatGeoPoint &sp) const
 {
-  const FLAT_GEOPOINT delta = *this - sp;
+  const FlatGeoPoint delta = *this - sp;
   return delta.dot(delta);
 }
 
 unsigned 
-FLAT_GEOPOINT::projected_distance(const FLAT_GEOPOINT &other) const
+FlatGeoPoint::projected_distance(const FlatGeoPoint &other) const
 {
   const unsigned d_this = dot(*this);
 

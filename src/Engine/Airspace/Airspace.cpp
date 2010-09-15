@@ -64,7 +64,7 @@ Airspace::inside(const AIRCRAFT_STATE &loc) const
 
 
 bool 
-Airspace::inside(const GEOPOINT &loc) const
+Airspace::inside(const GeoPoint &loc) const
 {
   if (pimpl_airspace) {
     return pimpl_airspace->inside(loc);
@@ -82,7 +82,7 @@ Airspace::intersects(const FlatRay& ray) const
 
 
 AirspaceIntersectionVector
-Airspace::intersects(const GEOPOINT& g1, 
+Airspace::intersects(const GeoPoint& g1, 
                      const GeoVector &vec) const
 {
   if (pimpl_airspace) {

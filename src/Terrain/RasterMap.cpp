@@ -75,7 +75,7 @@ angle_to_pixel(Angle value, Angle start, Angle end, unsigned width)
 }
 
 void
-RasterMap::SetViewCenter(const GEOPOINT &location)
+RasterMap::SetViewCenter(const GeoPoint &location)
 {
   if (!raster_tile_cache.GetInitialised())
     return;
@@ -95,7 +95,7 @@ RasterMap::SetViewCenter(const GEOPOINT &location)
 // accurate method
 int
 RasterMap::GetEffectivePixelSize(fixed &pixel_D,
-                                 const GEOPOINT &location) const
+                                 const GeoPoint &location) const
 {
   if (negative(pixel_D)) {
     pixel_D = fixed_one;
@@ -110,7 +110,7 @@ RasterMap::GetEffectivePixelSize(fixed &pixel_D,
 }
 
 short
-RasterMap::GetField(const GEOPOINT &location) const
+RasterMap::GetField(const GeoPoint &location) const
 {
   std::pair<unsigned, unsigned> xy = projection.project(location);
   return raster_tile_cache.GetField(xy.first, xy.second);

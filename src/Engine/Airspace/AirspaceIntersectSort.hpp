@@ -18,8 +18,8 @@ public:
  * @param end Location of end point
  * @param the_airspace Airspace to test for intersections
  */
-  AirspaceIntersectSort(const GEOPOINT &start,
-                        const GEOPOINT &end,
+  AirspaceIntersectSort(const GeoPoint &start,
+                        const GeoPoint &end,
                         const AbstractAirspace &the_airspace):
     m_start(start),
     m_end(end),
@@ -31,7 +31,7 @@ public:
  * @param t Ray parameter [0,1]
  * @param p Point of intersection
  */
-  void add(const fixed t, const GEOPOINT &p);
+  void add(const fixed t, const GeoPoint &p);
 
 /** 
  * Determine if no points are found
@@ -47,7 +47,7 @@ public:
  * 
  * @return True if an intercept was found
  */
-  bool top(GEOPOINT &p) const;
+  bool top(GeoPoint &p) const;
 
 /** 
  * Return vector of pairs of enter/exit intersections.
@@ -57,7 +57,7 @@ public:
   AirspaceIntersectionVector all();
 
 private:
-  typedef std::pair<fixed,GEOPOINT> Intersection;
+  typedef std::pair<fixed,GeoPoint> Intersection;
 
   /**
    * Function object used to rank intercepts by vector parameter t(0,1)
@@ -70,8 +70,8 @@ private:
 
   std::priority_queue<Intersection, std::vector<Intersection>, Rank> m_q;
 
-  const GEOPOINT& m_start;
-  const GEOPOINT& m_end;
+  const GeoPoint& m_start;
+  const GeoPoint& m_end;
   const AbstractAirspace *m_airspace;
 };
 

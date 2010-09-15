@@ -81,7 +81,7 @@ public:
  * 
  * @return Location 
  */
-  const GEOPOINT& get_location_remaining() const;
+  const GeoPoint& get_location_remaining() const;
   
 /** 
  * Update sample, specialisation to move target for active
@@ -134,14 +134,14 @@ public:
  * @param loc Location of new target
  * @param override_lock If false, won't set the target if it is locked
  */
-  void set_target(const GEOPOINT &loc, const bool override_lock=false);
+  void set_target(const GeoPoint &loc, const bool override_lock=false);
 
 /** 
  * Accessor to get target location
  * 
  * @return Target location
  */
-  const GEOPOINT &get_location_target() const {
+  const GeoPoint &get_location_target() const {
     return m_target_location;
   }
 
@@ -184,8 +184,8 @@ public:
 #endif
 
 private:
-  GEOPOINT m_target_location;      /**< Location of target within OZ */
-  GEOPOINT m_target_save;          /**< Saved location of target within OZ */
+  GeoPoint m_target_location;      /**< Location of target within OZ */
+  GeoPoint m_target_save;          /**< Saved location of target within OZ */
   bool m_target_locked;            /**< Whether target can float */
 
 /** 

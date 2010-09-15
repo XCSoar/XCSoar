@@ -97,7 +97,7 @@ TaskOptTarget::search(const fixed tp)
 void 
 TaskOptTarget::set_target(const fixed p)
 {
-  const GEOPOINT loc = iso.parametric(min(xmax,max(xmin,p)));
+  const GeoPoint loc = iso.parametric(min(xmax,max(xmin,p)));
   tp_current.set_target(loc);
   tp_start->scan_distance_remaining(aircraft.Location);
 }

@@ -37,8 +37,8 @@
 #include "DistanceMemento.hpp"
 
 fixed 
-DistanceMemento::Distance(const GEOPOINT& _origin,
-                          const GEOPOINT& _destination) const
+DistanceMemento::Distance(const GeoPoint& _origin,
+                          const GeoPoint& _destination) const
 {
   if ((_origin != origin)||(_destination != destination)) {
     origin = _origin;

@@ -38,7 +38,7 @@
 #include "AATPoint.hpp"
 #include <math.h>
 
-const GEOPOINT&
+const GeoPoint&
 AATPoint::get_location_remaining() const
 {
   if (getActiveState() == BEFORE_ACTIVE) {
@@ -167,7 +167,7 @@ AATPoint::set_range(const fixed p, const bool force_if_current)
 
 
 void 
-AATPoint::set_target(const GEOPOINT &loc, const bool override_lock)
+AATPoint::set_target(const GeoPoint &loc, const bool override_lock)
 {
   if (override_lock || !m_target_locked) {
     m_target_location = loc;

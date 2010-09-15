@@ -190,7 +190,7 @@ struct NMEA_INFO {
   FLYING_STATE flight;
 
   /** location of aircraft */
-  GEOPOINT Location;
+  GeoPoint Location;
 
   /** track angle in degrees true */
   Angle TrackBearing;

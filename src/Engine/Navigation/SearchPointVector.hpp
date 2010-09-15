@@ -47,8 +47,8 @@ bool is_convex(const SearchPointVector& spv);
 
 void project(SearchPointVector& spv, const TaskProjection& tp);
 
-FLAT_GEOPOINT nearest_point(const SearchPointVector& spv, 
-                            const FLAT_GEOPOINT &p,
+FlatGeoPoint nearest_point(const SearchPointVector& spv, 
+                            const FlatGeoPoint &p,
                             const bool is_convex=false);
 
 #endif

@@ -46,7 +46,7 @@ CylinderZone::score_adjustment() const
   return Radius;
 }
 
-GEOPOINT 
+GeoPoint 
 CylinderZone::get_boundary_parametric(fixed t) const
 { 
   return GeoVector(Radius, Angle::radians(t*fixed_two_pi)).end_point(get_location());
@@ -60,7 +60,7 @@ CylinderZone::equals(const ObservationZonePoint* other) const
   return ObservationZonePoint::equals(other) && Radius == z->getRadius();
 }
 
-GEOPOINT
+GeoPoint
 CylinderZone::randomPointInSector(const fixed mag) const
 {
   AIRCRAFT_STATE ac;  

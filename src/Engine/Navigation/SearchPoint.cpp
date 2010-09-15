@@ -39,7 +39,7 @@
 #include "Navigation/TaskProjection.hpp"
 #include <math.h>
 
-SearchPoint::SearchPoint(const GEOPOINT &loc, 
+SearchPoint::SearchPoint(const GeoPoint &loc, 
                          const TaskProjection& tp,
                          bool _actual):
   ReferencePoint(loc),

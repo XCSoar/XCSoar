@@ -63,7 +63,7 @@ public:
 };
 
 void 
-Airspaces::visit_within_range(const GEOPOINT &loc, 
+Airspaces::visit_within_range(const GeoPoint &loc, 
                               const fixed range,
                               AirspaceVisitor& visitor,
                               const AirspacePredicate &predicate) const
@@ -79,13 +79,13 @@ Airspaces::visit_within_range(const GEOPOINT &loc,
 }
 
 class IntersectingAirspaceVisitorAdapter {
-  const GEOPOINT *loc;
+  const GeoPoint *loc;
   const GeoVector *vec;
   const FlatRay *ray;
   AirspaceIntersectionVisitor *visitor;
 
 public:
-  IntersectingAirspaceVisitorAdapter(const GEOPOINT &_loc,
+  IntersectingAirspaceVisitorAdapter(const GeoPoint &_loc,
                                      const GeoVector &_vec,
                                      const FlatRay &_ray,
                                      AirspaceIntersectionVisitor &_visitor)
@@ -99,14 +99,14 @@ public:
 };
 
 void 
-Airspaces::visit_intersecting(const GEOPOINT &loc, 
+Airspaces::visit_intersecting(const GeoPoint &loc, 
                               const GeoVector &vec,
                               AirspaceIntersectionVisitor& visitor) const
 {
   FlatRay ray(task_projection.project(loc), 
               task_projection.project(vec.end_point(loc)));
 
-  GEOPOINT c = vec.mid_point(loc);
+  GeoPoint c = vec.mid_point(loc);
   Airspace bb_target(c, task_projection);
   int mrange = task_projection.project_range(c, vec.Distance / 2);
   IntersectingAirspaceVisitorAdapter adapter(loc, vec, ray, visitor);
@@ -120,7 +120,7 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
 // SCAN METHODS
 
 const Airspaces::AirspaceVector
-Airspaces::scan_nearest(const GEOPOINT &location,
+Airspaces::scan_nearest(const GeoPoint &location,
                         const AirspacePredicate &condition) const 
 {
   Airspace bb_target(location, task_projection);
@@ -148,7 +148,7 @@ Airspaces::scan_nearest(const GEOPOINT &location,
 }
 
 const Airspaces::AirspaceVector
-Airspaces::scan_range(const GEOPOINT &location,
+Airspaces::scan_range(const GeoPoint &location,
                       const fixed range,
                       const AirspacePredicate &condition) const
 {

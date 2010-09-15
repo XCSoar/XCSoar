@@ -51,7 +51,7 @@ Copyright_License {
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 
-TerrainIntersection::TerrainIntersection(const GEOPOINT& start):
+TerrainIntersection::TerrainIntersection(const GeoPoint& start):
   location(start),
   range(fixed_zero),
   altitude(fixed_zero),
@@ -94,7 +94,7 @@ GlideTerrain::find_intersection(const AIRCRAFT_STATE &state,
   
   RasterTerrain::Lease map(m_terrain);
 
-  GEOPOINT loc= state.Location, last_loc = loc;
+  GeoPoint loc= state.Location, last_loc = loc;
   fixed altitude = state.NavAltitude;
   fixed h = h_terrain(map, loc);
   fixed dh = altitude - h;
@@ -108,7 +108,7 @@ GlideTerrain::find_intersection(const AIRCRAFT_STATE &state,
   
   // find grid
   const GeoVector vec(glide_max_range*f_scale, state.TrackBearing);
-  const GEOPOINT delta_ll = vec.end_point(state.Location)-state.Location;
+  const GeoPoint delta_ll = vec.end_point(state.Location)-state.Location;
   const fixed delta_alt = -f_scale * state.NavAltitude;
   
   for (int i=1; i<=NUMFINALGLIDETERRAIN; ++i) {
@@ -179,7 +179,7 @@ GlideTerrain::find_intersection(const AIRCRAFT_STATE &state,
 }
 
 fixed 
-GlideTerrain::h_terrain(const RasterMap &map, const GEOPOINT& loc)
+GlideTerrain::h_terrain(const RasterMap &map, const GeoPoint& loc)
 {
   return max(fixed_zero, 
              fixed(map.GetField(loc)))
@@ -200,7 +200,7 @@ GlideTerrain::find_intersection(const AIRCRAFT_STATE &state)
 
   RasterTerrain::Lease map(m_terrain);
 
-  GEOPOINT loc= state.Location, last_loc = loc;
+  GeoPoint loc= state.Location, last_loc = loc;
   const fixed altitude = state.NavAltitude;
   fixed h = h_terrain(map, loc);
   fixed dh = altitude - h;
@@ -214,7 +214,7 @@ GlideTerrain::find_intersection(const AIRCRAFT_STATE &state)
   
   // find grid
   const GeoVector vec(max_range*f_scale, state.TrackBearing);
-  const GEOPOINT delta_ll = vec.end_point(state.Location)-state.Location;
+  const GeoPoint delta_ll = vec.end_point(state.Location)-state.Location;
   
   for (int i=1; i<=NUMFINALGLIDETERRAIN; ++i) {
     fixed f;

@@ -56,8 +56,8 @@ public:
  * @param p Point on ellipse
  * @param _task_projection Task projection used for internal representation
  */
-  GeoEllipse(const GEOPOINT &f1, const GEOPOINT &f2,
-             const GEOPOINT &p,
+  GeoEllipse(const GeoPoint &f1, const GeoPoint &f2,
+             const GeoPoint &p,
              const TaskProjection &_task_projection);
 
 /** 
@@ -68,7 +68,7 @@ public:
  * @return Location of point on ellipse
  */
   gcc_pure
-  GEOPOINT parametric(const fixed t) const;
+  GeoPoint parametric(const fixed t) const;
 
 /** 
  * Calculate where a line from the first focus through a point p
@@ -80,9 +80,9 @@ public:
  * 
  * @return True if line intersects
  */
-  bool intersect_extended(const GEOPOINT &p,
-                          GEOPOINT &i1,
-                          GEOPOINT &i2) const;
+  bool intersect_extended(const GeoPoint &p,
+                          GeoPoint &i1,
+                          GeoPoint &i2) const;
 
 private:
   TaskProjection task_projection;

@@ -80,7 +80,7 @@ protected:
   virtual void on_reset() {}
   virtual void on_stop() {}
   virtual void on_bad_file() { error = true; }
-  virtual void on_advance(const GEOPOINT &loc, const fixed speed,
+  virtual void on_advance(const GeoPoint &loc, const fixed speed,
                           const Angle bearing, const fixed alt,
                           const fixed baroalt, const fixed t);
 };
@@ -100,7 +100,7 @@ IgcReplayGlue::reset_time()
 }
 
 void
-IgcReplayGlue::on_advance(const GEOPOINT &loc, const fixed speed,
+IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
                           const Angle bearing, const fixed alt,
                           const fixed baroalt, const fixed t)
 {

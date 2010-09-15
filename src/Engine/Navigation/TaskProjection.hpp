@@ -65,7 +65,7 @@ public:
  * 
  * @param ref Default value for initial search bounds
  */
-  void reset(const GEOPOINT &ref);
+  void reset(const GeoPoint &ref);
 
 /** 
  * Check a location against bounds and update them if outside.
@@ -73,7 +73,7 @@ public:
  * 
  * @param ref Point to check against bounds
  */
-  void scan_location(const GEOPOINT &ref);
+  void scan_location(const GeoPoint &ref);
 
 /** 
  * Update projection.
@@ -90,7 +90,7 @@ public:
  * @return Projected point
  */
   gcc_pure
-  FLAT_GEOPOINT project(const GEOPOINT& tp) const;
+  FlatGeoPoint project(const GeoPoint& tp) const;
 
 /** 
  * Projects an integer 2-d representation to a Geodetic point
@@ -100,7 +100,7 @@ public:
  * @return Projected point
  */
   gcc_pure
-  GEOPOINT unproject(const FLAT_GEOPOINT& tp) const;
+  GeoPoint unproject(const FlatGeoPoint& tp) const;
 
 /** 
  * Project a Geodetic point to an floating point 2-d representation
@@ -110,7 +110,7 @@ public:
  * @return Projected point
  */
   gcc_pure
-  FlatPoint fproject(const GEOPOINT& tp) const;
+  FlatPoint fproject(const GeoPoint& tp) const;
 
 /** 
  * Projects an integer 2-d representation to a Geodetic point
@@ -120,7 +120,7 @@ public:
  * @return Projected point
  */
   gcc_pure
-  GEOPOINT funproject(const FlatPoint& tp) const;
+  GeoPoint funproject(const FlatPoint& tp) const;
 
 /** 
  * Calculates the integer flat earth distance from an actual distance
@@ -132,7 +132,7 @@ public:
  * @return Distance in flat earth projected units
  */
   gcc_pure
-  unsigned project_range(const GEOPOINT &tp, const fixed range) const;
+  unsigned project_range(const GeoPoint &tp, const fixed range) const;
 
 /** 
  * Calculates the floating point flat earth distance from an actual distance
@@ -144,7 +144,7 @@ public:
  * @return Distance in flat earth projected units
  */
   gcc_pure
-  fixed fproject_range(const GEOPOINT &tp, const fixed range) const;
+  fixed fproject_range(const GeoPoint &tp, const fixed range) const;
 
   /** 
    * Return center point (projection reference)
@@ -152,7 +152,7 @@ public:
    * @return Center point of task projection
    */
   gcc_pure
-  const GEOPOINT& get_center() const {
+  const GeoPoint& get_center() const {
     return location_mid;
   }
   
@@ -170,9 +170,9 @@ public:
 #endif
 
 private:
-  GEOPOINT location_min; /**< Lower left corner found in scan */
-  GEOPOINT location_max; /**< Upper right corner found in scan */
-  GEOPOINT location_mid; /**< Midpoint of boundary, used as projection center point */
+  GeoPoint location_min; /**< Lower left corner found in scan */
+  GeoPoint location_max; /**< Upper right corner found in scan */
+  GeoPoint location_mid; /**< Midpoint of boundary, used as projection center point */
   fixed cos_midloc;      /**< Cosine of the midpoint */
 };
 

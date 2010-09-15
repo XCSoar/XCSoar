@@ -60,8 +60,8 @@ public:
 
   fixed get_finish_height() const;
 
-  virtual GEOPOINT get_task_center(const GEOPOINT& fallback_location) const;
-  virtual fixed get_task_radius(const GEOPOINT& fallback_location) const;
+  virtual GeoPoint get_task_center(const GeoPoint& fallback_location) const;
+  virtual fixed get_task_radius(const GeoPoint& fallback_location) const;
 
 protected:
 
@@ -96,13 +96,13 @@ protected:
   
   fixed scan_distance_planned();
 
-  fixed scan_distance_remaining(const GEOPOINT &ref);
+  fixed scan_distance_remaining(const GeoPoint &ref);
 
-  fixed scan_distance_scored(const GEOPOINT &ref);
+  fixed scan_distance_scored(const GeoPoint &ref);
 
-  fixed scan_distance_travelled(const GEOPOINT &ref);
+  fixed scan_distance_travelled(const GeoPoint &ref);
 
-  void scan_distance_minmax(const GEOPOINT &ref, 
+  void scan_distance_minmax(const GeoPoint &ref, 
                             bool full,
                             fixed *dmin, fixed *dmax);
 

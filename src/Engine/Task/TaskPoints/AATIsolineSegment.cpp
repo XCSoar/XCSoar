@@ -62,7 +62,7 @@ AATIsolineSegment::AATIsolineSegment(const AATPoint& ap):
 
 bool
 AATIsolineSegment::isInSector(const AATPoint& ap, fixed t) {
-  GEOPOINT a = ell.parametric(t);
+  GeoPoint a = ell.parametric(t);
   AIRCRAFT_STATE s;
   s.Location = a;
   if (ap.isInSector((s)))
@@ -93,7 +93,7 @@ AATIsolineSegment::valid() const
   return t_up > t_down + fixed(TOLERANCE_ISOLINE_CROSSING) * 2;
 }
 
-GEOPOINT 
+GeoPoint 
 AATIsolineSegment::parametric(const fixed t) const
 {
   const fixed r = t*(t_up-t_down)+t_down;

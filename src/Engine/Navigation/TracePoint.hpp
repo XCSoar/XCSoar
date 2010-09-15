@@ -138,7 +138,7 @@ class TaskProjection;
 
 gcc_pure
 TaskProjection get_bounds(const TracePointVector& vec,
-                          const GEOPOINT &fallback_location);
+                          const GeoPoint &fallback_location);
 
 #endif
 

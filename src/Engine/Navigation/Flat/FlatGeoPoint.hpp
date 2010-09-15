@@ -34,8 +34,8 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef FLAT_GEOPOINT_HPP
-#define FLAT_GEOPOINT_HPP
+#ifndef FlatGeoPoint_HPP
+#define FlatGeoPoint_HPP
 
 #include "Math/FastMath.h"
 #include "Compiler.h"
@@ -43,13 +43,13 @@
 /**
  * Integer projected (flat-earth) version of Geodetic coordinates
  */
-struct FLAT_GEOPOINT {
+struct FlatGeoPoint {
 /** 
  * Constructor (default) at origin
  * 
  * @return Initialised object at origin
  */
-  FLAT_GEOPOINT():Longitude(0),Latitude(0) {};
+  FlatGeoPoint():Longitude(0),Latitude(0) {};
 
 /** 
  * Constructor at specified location (x,y)
@@ -59,7 +59,7 @@ struct FLAT_GEOPOINT {
  *
  * @return Initialised object at origin
  */
-  FLAT_GEOPOINT(const int x,
+  FlatGeoPoint(const int x,
                 const int y):
     Longitude(x),Latitude(y) {};
 
@@ -74,7 +74,7 @@ struct FLAT_GEOPOINT {
  * @return Distance in projected units
  */
   gcc_pure
-  unsigned distance_to(const FLAT_GEOPOINT &sp) const;
+  unsigned distance_to(const FlatGeoPoint &sp) const;
 
 /** 
  * Find squared distance from one point to another
@@ -84,7 +84,7 @@ struct FLAT_GEOPOINT {
  * @return Squared distance in projected units
  */
   gcc_pure
-  unsigned distance_sq_to(const FLAT_GEOPOINT &sp) const;
+  unsigned distance_sq_to(const FlatGeoPoint &sp) const;
 
 /** 
  * Add one point to another
@@ -94,8 +94,8 @@ struct FLAT_GEOPOINT {
  * @return Added value
  */
   gcc_pure
-  FLAT_GEOPOINT operator+ (const FLAT_GEOPOINT &p2) const {
-    FLAT_GEOPOINT res= *this;
+  FlatGeoPoint operator+ (const FlatGeoPoint &p2) const {
+    FlatGeoPoint res= *this;
     res.Longitude += p2.Longitude;
     res.Latitude += p2.Latitude;
     return res;
@@ -109,8 +109,8 @@ struct FLAT_GEOPOINT {
  * @return Subtracted value
  */
   gcc_pure
-  FLAT_GEOPOINT operator- (const FLAT_GEOPOINT &p2) const {
-    FLAT_GEOPOINT res= *this;
+  FlatGeoPoint operator- (const FlatGeoPoint &p2) const {
+    FlatGeoPoint res= *this;
     res.Longitude -= p2.Longitude;
     res.Latitude -= p2.Latitude;
     return res;
@@ -124,8 +124,8 @@ struct FLAT_GEOPOINT {
  * @return Scaled value
  */
   gcc_pure
-  FLAT_GEOPOINT operator* (const fixed t) const {
-    FLAT_GEOPOINT res= *this;
+  FlatGeoPoint operator* (const fixed t) const {
+    FlatGeoPoint res= *this;
     res.Longitude = (int)(res.Longitude*t);
     res.Latitude = (int)(res.Latitude*t);
     return res;
@@ -139,7 +139,7 @@ struct FLAT_GEOPOINT {
  * @return Cross product
  */
   gcc_pure
-  int cross(const FLAT_GEOPOINT &other) const {
+  int cross(const FlatGeoPoint &other) const {
     return Longitude*other.Latitude-Latitude*other.Longitude;
   }
 
@@ -151,7 +151,7 @@ struct FLAT_GEOPOINT {
  * @return Dot product
  */
   gcc_pure
-  int dot(const FLAT_GEOPOINT &other) const {
+  int dot(const FlatGeoPoint &other) const {
     return Longitude*other.Longitude+Latitude*other.Latitude;
   }
 
@@ -163,7 +163,7 @@ struct FLAT_GEOPOINT {
  * @return True if coincident
  */
   gcc_pure
-  bool operator== (const FLAT_GEOPOINT &other) const {
+  bool operator== (const FlatGeoPoint &other) const {
     return (Longitude == other.Longitude) && (Latitude == other.Latitude);
   };
 
@@ -172,7 +172,7 @@ struct FLAT_GEOPOINT {
  * the projected distance of this along other.
  */
   gcc_pure
-  unsigned projected_distance(const FLAT_GEOPOINT &other) const;
+  unsigned projected_distance(const FlatGeoPoint &other) const;
 };
 
 #endif

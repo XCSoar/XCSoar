@@ -83,7 +83,7 @@ int DisplayTimeOut;
 DeviceBlackboard device_blackboard;
 
 void
-DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const fixed alt) {}
+DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt) {}
 
 int
 Profile::GetScaleList(fixed *List, size_t Size)

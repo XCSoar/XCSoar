@@ -67,7 +67,7 @@ std::ostream& operator<< (std::ostream& o,
     << tp.location_min.Latitude << "),("
     << tp.location_max.Longitude << "," << tp.location_max.Latitude << ")\n";
 
-  FLAT_GEOPOINT pll, pur;
+  FlatGeoPoint pll, pur;
   pll = tp.project(tp.location_min);
   pur = tp.project(tp.location_max);
 
@@ -191,14 +191,14 @@ std::ostream& operator<< (std::ostream& f,
 /*
 void 
 FlatBoundingBox::print(std::ostream &f, const TaskProjection &task_projection) const {
-  FLAT_GEOPOINT ll(bb_ll.Longitude,bb_ll.Latitude);
-  FLAT_GEOPOINT lr(bb_ur.Longitude,bb_ll.Latitude);
-  FLAT_GEOPOINT ur(bb_ur.Longitude,bb_ur.Latitude);
-  FLAT_GEOPOINT ul(bb_ll.Longitude,bb_ur.Latitude);
-  GEOPOINT gll = task_projection.unproject(ll);
-  GEOPOINT glr = task_projection.unproject(lr);
-  GEOPOINT gur = task_projection.unproject(ur);
-  GEOPOINT gul = task_projection.unproject(ul);
+  FlatGeoPoint ll(bb_ll.Longitude,bb_ll.Latitude);
+  FlatGeoPoint lr(bb_ur.Longitude,bb_ll.Latitude);
+  FlatGeoPoint ur(bb_ur.Longitude,bb_ur.Latitude);
+  FlatGeoPoint ul(bb_ll.Longitude,bb_ur.Latitude);
+  GeoPoint gll = task_projection.unproject(ll);
+  GeoPoint glr = task_projection.unproject(lr);
+  GeoPoint gur = task_projection.unproject(ur);
+  GeoPoint gul = task_projection.unproject(ul);
   
   f << gll.Longitude << " " << gll.Latitude << "\n";
   f << glr.Longitude << " " << glr.Latitude << "\n";
@@ -236,7 +236,7 @@ std::ostream& operator<< (std::ostream& f,
 {
   f << "# circle " << as.get_base_altitude() << " " << as.get_top_altitude() << "\n";
   for (double t=0; t<=360; t+= 30) {
-    GEOPOINT l;
+    GeoPoint l;
     FindLatitudeLongitude(as.m_center, Angle::degrees(fixed(t)), as.m_radius, &l);
     f << l.Longitude << " " << l.Latitude << "\n";
   }
@@ -252,7 +252,7 @@ std::ostream& operator<< (std::ostream& f,
   f << "# polygon " << as.get_base_altitude() << " " << as.get_top_altitude() << "\n";
   for (std::vector<SearchPoint>::const_iterator v = as.m_border.begin();
        v != as.m_border.end(); ++v) {
-    GEOPOINT l = v->get_location();
+    GeoPoint l = v->get_location();
     f << l.Longitude << " " << l.Latitude << "\n";
   }
   f << "\n";
@@ -404,7 +404,7 @@ void AbortTask::print(const AIRCRAFT_STATE &state)
   std::ofstream f1("results/res-abort-task.txt");
   f1 << "#### Task points\n";
   for (unsigned i=0; i<tps.size(); i++) {
-    GEOPOINT l = tps[i].first->get_location();
+    GeoPoint l = tps[i].first->get_location();
     f1 << "## point " << i << " ###################\n";
     if (i==activeTaskPoint) {
       f1 << state.Location.Longitude << " " << state.Location.Latitude << "\n";
@@ -444,7 +444,7 @@ void AATPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
       bool filter_backtrack = true;
       if (seg.valid()) {
         for (double t = 0.0; t<=1.0; t+= 1.0/20) {
-          GEOPOINT ga = seg.parametric(fixed(t));
+          GeoPoint ga = seg.parametric(fixed(t));
           double dthis = ::Distance(get_previous()->get_location_remaining(),
                                     ga);
           if (!filter_backtrack 
@@ -455,7 +455,7 @@ void AATPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
           }
         }
       } else {
-        GEOPOINT ga = seg.parametric(fixed_zero);
+        GeoPoint ga = seg.parametric(fixed_zero);
         f << ga.Longitude << " " << ga.Latitude << "\n";
       }
       f << "\n";
@@ -489,10 +489,10 @@ OrderedTaskPoint::print_boundary(std::ostream& f, const AIRCRAFT_STATE &state) c
 {
   f << "#   Boundary points\n";
   for (double t=0; t<= 1.0; t+= 0.05) {
-    GEOPOINT loc = get_boundary_parametric(fixed(t));
+    GeoPoint loc = get_boundary_parametric(fixed(t));
     f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
   }
-  GEOPOINT loc = get_boundary_parametric(fixed_zero);
+  GeoPoint loc = get_boundary_parametric(fixed_zero);
   f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
   f << "\n";
 }
@@ -514,7 +514,7 @@ SampledTaskPoint::print_samples(std::ostream& f,
   const unsigned n= get_search_points().size();
   f << "#   Search points\n";
   for (unsigned i=0; i<n; i++) {
-    const GEOPOINT loc = get_search_points()[i].get_location();
+    const GeoPoint loc = get_search_points()[i].get_location();
     f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
   }
   f << "\n";
@@ -619,7 +619,7 @@ void print_tpv(const TracePointVector& vec, std::ofstream& fs)
 }
 
 void
-Trace::print(const GEOPOINT &loc) const
+Trace::print(const GeoPoint &loc) const
 {
   std::ofstream fs("results/res-trace.txt");
 

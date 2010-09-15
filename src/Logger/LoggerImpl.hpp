@@ -68,7 +68,7 @@ public:
 
   /** Buffer for points recorded before takeoff */
   struct LoggerPreTakeoffBuffer {
-    GEOPOINT Location;          /**< Location of fix */
+    GeoPoint Location;          /**< Location of fix */
     fixed Altitude;            /**< GPS Altitude (m) */
     fixed BaroAltitude;        /**< Barometric altitude (m) */
     BrokenDateTime DateTime;    /**< Date and time of fix */

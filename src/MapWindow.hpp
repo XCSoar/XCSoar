@@ -90,7 +90,7 @@ protected:
   TopologyStore *topology;
 
   RasterTerrain *terrain;
-  GEOPOINT terrain_center;
+  GeoPoint terrain_center;
 
   RasterWeather *weather;
 
@@ -176,7 +176,7 @@ private:
   void SwitchZoomClimb(void);
 
   // state/localcopy/local data
-  GEOPOINT TargetDrag_Location;
+  GeoPoint TargetDrag_Location;
   int TargetDrag_State;
 
   POINT Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1];
@@ -283,7 +283,7 @@ private:
   void RenderSymbology_upper(Canvas &canvas, const RECT &rc);
   void RenderSymbology_lower(Canvas &canvas, const RECT &rc);
 
-  StaticArray<GEOPOINT,32> m_airspace_intersections;
+  StaticArray<GeoPoint,32> m_airspace_intersections;
 
   friend class DrawThread;
 };

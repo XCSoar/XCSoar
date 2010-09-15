@@ -87,10 +87,10 @@ public:
    * @param is_turnpoint Whether newly created waypoint is a turnpoint
    * @return Uninitialised object
    */
-  Waypoint(const GEOPOINT &_location, const bool is_turnpoint= false);
+  Waypoint(const GeoPoint &_location, const bool is_turnpoint= false);
 
   unsigned id; /**< Unique id */
-  GEOPOINT Location; /**< Geodetic location */
+  GeoPoint Location; /**< Geodetic location */
   fixed Altitude; /**< Height AMSL (m) of waypoint terrain */
   WaypointFlags Flags; /**< Flag types of this waypoint */
   int FileNum; /**< File number to store waypoint in (0,1), -1 to delete/ignore */
@@ -154,7 +154,7 @@ public:
  * @return True if close to reference location
  */
   bool
-  is_close_to(const GEOPOINT &location, const fixed range) const;
+  is_close_to(const GeoPoint &location, const fixed range) const;
 
 public:
 #ifdef DO_PRINT

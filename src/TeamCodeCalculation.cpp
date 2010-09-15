@@ -209,13 +209,13 @@ GetValueFromTeamCode(const TCHAR *code, int maxCount)
  * @param bearToMate Bearing to the teammate (pointer)
  * @param distToMate Distance to the teammate (pointer)
  */
-GEOPOINT
-GetTeamCodePosition(GEOPOINT wpPos, const TCHAR *TeamCode)
+GeoPoint
+GetTeamCodePosition(GeoPoint wpPos, const TCHAR *TeamCode)
 {
   Angle bearing = GetBearing(TeamCode);
 	fixed distance = GetRange(TeamCode);
 
-	GEOPOINT position;
+	GeoPoint position;
   FindLatitudeLongitude(wpPos, bearing, distance, &position);
   return position;
 }

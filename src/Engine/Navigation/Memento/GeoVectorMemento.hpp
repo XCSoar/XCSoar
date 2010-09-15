@@ -59,19 +59,19 @@ public:
    * from previously saved value if input arguments are identical. 
    */
   gcc_pure
-  GeoVector calc(const GEOPOINT& _origin,
-                 const GEOPOINT& _destination) const;
+  GeoVector calc(const GeoPoint& _origin,
+                 const GeoPoint& _destination) const;
 private:
 
   /**
    * Origin point of saved query 
    */
-  mutable GEOPOINT origin;
+  mutable GeoPoint origin;
 
   /**
    * Destination point of previous query 
    */
-  mutable GEOPOINT destination;
+  mutable GeoPoint destination;
 
   /**
    * GeoVector saved from previous query 

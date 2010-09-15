@@ -48,7 +48,7 @@
  */
 class CylinderZone : public ObservationZonePoint {
 protected:
-  CylinderZone(enum shape _shape, const GEOPOINT &loc,
+  CylinderZone(enum shape _shape, const GeoPoint &loc,
                const fixed _radius=fixed(10000.0)):
     ObservationZonePoint(_shape, loc),
     Radius(_radius)
@@ -64,13 +64,13 @@ public:
  * 
  * @return Initialised object
  */
-  CylinderZone(const GEOPOINT &loc, const fixed _radius=fixed(10000.0)):
+  CylinderZone(const GeoPoint &loc, const fixed _radius=fixed(10000.0)):
     ObservationZonePoint(CYLINDER, loc),
     Radius(_radius)
   {
   };
 
-  virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
+  virtual ObservationZonePoint* clone(const GeoPoint * _location=0) const {
     if (_location) {
       return new CylinderZone(*_location, Radius);
     } else {
@@ -95,7 +95,7 @@ public:
  * 
  * @return Point on boundary
  */
-  GEOPOINT get_boundary_parametric(fixed t) const;
+  GeoPoint get_boundary_parametric(fixed t) const;
 
 /** 
  * Distance reduction for scoring when outside this OZ
@@ -153,7 +153,7 @@ public:
  *
  * @return Location of point
  */
-  virtual GEOPOINT randomPointInSector(const fixed mag) const;
+  virtual GeoPoint randomPointInSector(const fixed mag) const;
 
 protected:
   fixed Radius; /**< radius (m) of OZ */

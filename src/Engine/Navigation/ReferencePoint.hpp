@@ -54,29 +54,29 @@ public:
  * Constructor
  * @param _location Location of reference point
  */
-  ReferencePoint(const GEOPOINT & _location) : m_location(_location) {
+  ReferencePoint(const GeoPoint & _location) : m_location(_location) {
   };
 
   /** bearing from this to the reference
    */
-  Angle bearing(const GEOPOINT & ref) const {
+  Angle bearing(const GeoPoint & ref) const {
     return m_location.bearing(ref);
   }
 
   /** distance from this to the reference
    */
-  fixed distance(const GEOPOINT & ref) const {
+  fixed distance(const GeoPoint & ref) const {
     return m_location.distance(ref);
   }
 
   /** The actual location
    */
-  const GEOPOINT & get_location() const {
+  const GeoPoint & get_location() const {
     return m_location;
   };
 
 private:
-  GEOPOINT m_location; /**< Local copy of reference point location */
+  GeoPoint m_location; /**< Local copy of reference point location */
 };
 
 #endif

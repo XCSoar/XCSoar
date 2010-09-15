@@ -187,13 +187,13 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
       startcircle--;
 
     if (startcircle == 1) {
-      climbstartpos = GEOPOINT(info.Location.Longitude,
+      climbstartpos = GeoPoint(info.Location.Longitude,
                                info.Location.Latitude);
       climbstarttime = info.Time;
       startcircle = 0;
     }
 
-    climbendpos = GEOPOINT(info.Location.Longitude,
+    climbendpos = GeoPoint(info.Location.Longitude,
                            info.Location.Latitude);
     climbendtime = info.Time;
 

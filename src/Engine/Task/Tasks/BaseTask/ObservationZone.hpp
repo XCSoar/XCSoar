@@ -111,7 +111,7 @@ public:
  * @return Point on boundary
  */
   gcc_pure
-  virtual GEOPOINT get_boundary_parametric(fixed t) const =0;
+  virtual GeoPoint get_boundary_parametric(fixed t) const =0;
 
 /** 
  * Distance reduction for scoring when outside this OZ

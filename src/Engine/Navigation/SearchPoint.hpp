@@ -57,7 +57,7 @@ public:
    * 
    * @return Null object
    */
-  SearchPoint():ReferencePoint(GEOPOINT()) {}
+  SearchPoint():ReferencePoint(GeoPoint()) {}
 
 /** 
  * Constructor
@@ -66,7 +66,7 @@ public:
  * @param tp Projection used
  * @param _actual Whether search point is real or virtual
  */
-  SearchPoint(const GEOPOINT &loc, const TaskProjection& tp,
+  SearchPoint(const GeoPoint &loc, const TaskProjection& tp,
     bool _actual=false);
 
 /** 
@@ -82,7 +82,7 @@ public:
  * 
  * @return Flat projected coordinate
  */
-  const FLAT_GEOPOINT& get_flatLocation() const {
+  const FlatGeoPoint& get_flatLocation() const {
     return flatLocation;
   };
 
@@ -123,7 +123,7 @@ public:
   }
 
 private:
-  FLAT_GEOPOINT flatLocation;
+  FlatGeoPoint flatLocation;
   bool actual;
 };
 

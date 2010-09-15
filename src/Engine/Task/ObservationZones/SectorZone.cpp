@@ -38,7 +38,7 @@
 #include "SectorZone.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
-GEOPOINT 
+GeoPoint 
 SectorZone::get_boundary_parametric(fixed t) const
 { 
   const Angle half = StartRadial.HalfAngle(EndRadial);
