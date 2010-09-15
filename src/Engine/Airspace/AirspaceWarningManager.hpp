@@ -39,6 +39,7 @@
 
 #include "Util/NonCopyable.hpp"
 #include "AirspaceWarning.hpp"
+#include "AirspaceWarningConfig.hpp"
 #include "AirspaceAircraftPerformance.hpp"
 #include "Compiler.h"
 
@@ -65,6 +66,8 @@ class AirspaceWarningVisitor;
 class AirspaceWarningManager: 
   public NonCopyable
 {
+  AirspaceWarningConfig config;
+
 public:
   /** 
    * Default constructor
@@ -82,6 +85,12 @@ public:
                          const TaskManager &task_manager,
                          const fixed& prediction_time_glide=fixed(15.0),
                          const fixed& prediction_time_filter=fixed(60.0));
+
+  const AirspaceWarningConfig &get_config() const {
+    return config;
+  }
+
+  void set_config(const AirspaceWarningConfig &_config);
 
 /** 
  * Reset warning list and filter (as in new flight)

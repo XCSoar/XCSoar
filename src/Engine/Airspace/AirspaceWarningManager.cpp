@@ -61,6 +61,15 @@ AirspaceWarningManager::AirspaceWarningManager(const Airspaces& airspaces,
 }
 
 void
+AirspaceWarningManager::set_config(const AirspaceWarningConfig &_config)
+{
+  config = _config;
+
+  set_prediction_time_glide(fixed(config.WarningTime));
+  set_prediction_time_filter(fixed(config.WarningTime));
+}
+
+void
 AirspaceWarningManager::reset(const AIRCRAFT_STATE& state)
 {
   m_warnings.clear();

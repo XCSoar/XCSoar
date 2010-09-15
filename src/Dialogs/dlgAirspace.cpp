@@ -44,7 +44,10 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "SettingsAirspace.hpp"
+#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceClass.hpp"
+#include "Engine/Airspace/AirspaceWarningManager.hpp"
+#include "Components.hpp"
 
 #include <assert.h>
 
@@ -183,6 +186,11 @@ dlgAirspaceShowModal(bool coloredit)
 
   // now retrieve back the properties...
   if (changed) {
+    if (!colormode) {
+      ProtectedAirspaceWarningManager::ExclusiveLease awm(airspace_warnings);
+      awm->set_config(XCSoarInterface::SetSettingsComputer().airspace_warnings);
+    }
+
     Profile::Save();
     Message::AddMessage(_("Configuration saved"));
   }

@@ -334,6 +334,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   const AIRCRAFT_STATE aircraft_state =
     ToAircraftState(device_blackboard.Basic());
   airspace_warning.reset(aircraft_state);
+  airspace_warning.set_config(XCSoarInterface::SettingsComputer().airspace_warnings);
 
   // Read the FLARM details file
   FlarmDetails::Load();
