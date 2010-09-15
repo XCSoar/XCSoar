@@ -125,7 +125,8 @@ typedef enum Status
     eOutsideTag
 } Status;
 
-LPTSTR toXMLString(LPTSTR dest, LPCTSTR source)
+static LPTSTR
+toXMLString(LPTSTR dest, LPCTSTR source)
 {
   LPTSTR dd = dest;
   while (*source) {
@@ -161,7 +162,7 @@ LPTSTR toXMLString(LPTSTR dest, LPCTSTR source)
   return dd;
 }
 
-int
+static int
 lengthXMLString(LPCTSTR source)
 {
   int r = 0;
@@ -208,7 +209,7 @@ toXMLStringFast(LPTSTR *dest, int *destSz, LPCTSTR source)
   return toXMLString(*dest, source);
 }
 
-LPTSTR
+static LPTSTR
 fromXMLString(LPCTSTR s, int lo)
 {
   // This function is the opposite of the function "toXMLString". It decodes the escape
@@ -299,7 +300,7 @@ fromXMLString(LPCTSTR s, int lo)
   return result;
 }
 
-char
+static char
 myTagCompare(LPCTSTR cclose, LPCTSTR copen)
 {
   // !!!! WARNING strange convention&:
