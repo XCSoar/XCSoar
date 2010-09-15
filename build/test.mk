@@ -64,12 +64,12 @@ testtap: $(BUILDTESTS)
 $(TARGET_BIN_DIR)/01_test_tap$(TARGET_EXEEXT): $(TEST_SRC_DIR)/01_test_tap.c | $(TARGET_BIN_DIR)/dirstamp
 	gcc -o $@ $<
 
-TESTS = \
-	$(TARGET_BIN_DIR)/TestAngle$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/TestEarth$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/TestRadixTree$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/TestLogger$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/TestWayPointFile$(TARGET_EXEEXT)
+TEST_NAMES = \
+	TestAngle TestEarth \
+	TestRadixTree \
+	TestWayPointFile
+
+TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
 
 TEST_ANGLE_SOURCES = \
 	$(TEST_SRC_DIR)/TestAngle.cpp
