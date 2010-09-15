@@ -228,9 +228,10 @@ public:
  * @param airspace Airspace corresponding to current intersection
  */
   void intersection(const AbstractAirspace& airspace) {
-    if (exclude_alt(airspace)) {
+    if (!m_warning_manager.get_config().class_enabled(airspace.get_type()) ||
+        exclude_alt(airspace))
       return;
-    }
+
     AirspaceWarning& warning = m_warning_manager.get_warning(airspace);
     if (warning.state_accepted(m_warning_state)) {
       AirspaceInterceptSolution solution = intercept(airspace, m_state, m_perf);
@@ -349,6 +350,9 @@ AirspaceWarningManager::update_inside(const AIRCRAFT_STATE& state)
        it != results.end(); ++it) {
 
     const AbstractAirspace& airspace = *it->get_airspace();
+    if (!config.class_enabled(airspace.get_type()))
+        continue;
+
     AirspaceWarning& warning = get_warning(airspace);
 
     if (warning.state_accepted(AirspaceWarning::WARNING_INSIDE)) {
