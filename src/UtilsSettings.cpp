@@ -36,6 +36,7 @@ Copyright_License {
 }
 */
 
+#include "UtilsSettings.hpp"
 #include "Protection.hpp"
 #include "MainWindow.hpp"
 #include "SettingsComputer.hpp"

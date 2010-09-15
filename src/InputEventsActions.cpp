@@ -98,6 +98,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "DrawThread.hpp"
 #include "Replay/Replay.hpp"
 #include "DeviceBlackboard.hpp"
+#include "UtilsSettings.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -1298,8 +1299,6 @@ InputEvents::eventBeep(const TCHAR *misc)
   InputEvents::eventDLLExecute(_T("altairplatform.dll DoBeep2 1"));
   #endif
 }
-
-void SystemConfiguration(void);
 
 // Setup
 // Activates configuration and setting dialogs
