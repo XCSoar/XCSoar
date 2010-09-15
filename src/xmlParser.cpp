@@ -1380,23 +1380,28 @@ XMLNode::parseFile(const char *filename, XMLResults *pResults)
   // Close the file
   fclose(f);
 
-  // Terminate the buffer string
-  raw[l] = 0;
-  l++;
-
   TCHAR *text;
 #ifdef _UNICODE
   text = new TCHAR[l + 1];
-  MultiByteToWideChar(CP_ACP, // code page
-                      MB_PRECOMPOSED, // character-type options
-                      raw, // string to map
-                      l, // number of bytes in string
-                      text, // wide-character buffer
-                      l * 2 + 2); // size of buffer
+  l = MultiByteToWideChar(CP_ACP, // code page
+                          MB_PRECOMPOSED, // character-type options
+                          raw, // string to map
+                          l, // number of bytes in string
+                          text, // wide-character buffer
+                          l); // size of buffer
   delete[] raw;
+
+  if (l <= 0) {
+    /* conversion has failed */
+    delete[] text;
+    return emptyXMLNode;
+  }
 #else
   text = raw;
 #endif
+
+  // Terminate the buffer string
+  text[l] = 0;
 
   // Parse the string and get the main XMLNode
   XMLNode x = parseString(text, pResults);
