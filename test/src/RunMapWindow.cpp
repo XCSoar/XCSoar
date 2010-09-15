@@ -54,10 +54,8 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "WayPointGlue.hpp"
 #include "Device/device.hpp"
-#include "InputEvents.h"
 #include "Topology/TopologyStore.hpp"
 #include "Dialogs.h"
-#include "Protection.hpp"
 #include "Gauge/GaugeCDI.hpp"
 #include "Logger/LoggerImpl.hpp"
 #include "Audio/Sound.hpp"
@@ -84,9 +82,6 @@ int DisplayTimeOut;
 
 DeviceBlackboard device_blackboard;
 
-void DeviceBlackboard::SetTrackBearing(Angle val) {}
-void DeviceBlackboard::SetSpeed(fixed val) {}
-
 void
 DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const fixed alt) {}
 
@@ -96,11 +91,8 @@ Profile::GetScaleList(fixed *List, size_t Size)
   return 0;
 }
 
-Trigger targetManipEvent(_T("targetManip"));
-
 static Waypoints way_points;
 
-static TaskBehaviour task_behaviour;
 static TaskEvents task_events;
 
 static TaskManager task_manager(task_events,
@@ -108,45 +100,16 @@ static TaskManager task_manager(task_events,
 
 static Airspaces airspace_database;
 
-static AIRCRAFT_STATE ac_state; // dummy
-
 static TopologyStore *topology;
 static RasterTerrain *terrain;
 Logger logger;
 
 unsigned InfoBoxLayout::ControlWidth = 100;
 
-InterfaceBlackboard CommonInterface::blackboard;
-
-void InputEvents::ShowMenu() {}
-bool InputEvents::processKey(unsigned key) {
-  return false;
-}
-
-void InputEvents::setMode(mode mode) {}
-InputEvents::mode InputEvents::getModeID() { return MODE_DEFAULT; }
-
-void InputEvents::sub_ScaleZoom(int vswitch) {}
-
 GaugeCDI::GaugeCDI(ContainerWindow &parent) {}
 void GaugeCDI::update_async(Angle TrackBearing, Angle WaypointBearing) {}
 void GaugeCDI::hide_async() {}
 bool GaugeCDI::on_user(unsigned id) { return true; }
-
-int
-propGetScaleList(fixed *List, size_t Size)
-{
-  return 0;
-}
-
-bool
-PopupNearestWaypointDetails(const Waypoints &way_points,
-                            const GEOPOINT &location, double range)
-{
-  return false;
-}
-
-void dlgAirspaceDetails(const AbstractAirspace& the_airspace) {}
 
 LoggerImpl::LoggerImpl() {}
 LoggerImpl::~LoggerImpl() {}
@@ -228,8 +191,6 @@ protected:
     return TopWindow::on_command(id, code);
   }
 };
-
-void TriggerGPSUpdate() {}
 
 class Blackboard : public SettingsMapBlackboard {
 public:

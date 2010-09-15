@@ -45,6 +45,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "StatusMessage.hpp"
 #include "Asset.hpp"
+#include "LocalPath.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -63,16 +64,6 @@ GetPrimaryDataPath()
   return _T("");
 }
 
-void
-LocalPath(TCHAR *buf, const TCHAR* file)
-{
-  _tcscpy(buf, file);
-}
-
-void dlgHelpShowModal(const TCHAR* Caption, const TCHAR* HelpText)
-{
-}
-
 pt2Event
 InputEvents::findEvent(const TCHAR *)
 {
@@ -86,10 +77,6 @@ MapWindow::identify(HWND hWnd)
   return false;
 }
 #endif /* !ENABLE_SDL */
-
-StatusMessageList::StatusMessageList() {}
-
-static const StatusMessageList messages;
 
 Font Fonts::Map;
 Font Fonts::MapBold;
