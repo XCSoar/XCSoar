@@ -61,6 +61,13 @@ Copyright_License {
 #include "RenderTask.hpp"
 #include "RenderTaskPoint.hpp"
 #include "RenderObservationZone.hpp"
+#include "Screen/Chart.hpp"
+#include "Task/Visitors/TaskVisitor.hpp"
+#include "Task/Visitors/TaskPointVisitor.hpp"
+#include "Airspace/AirspaceIntersectionVisitor.hpp"
+#include "Airspace/AirspaceCircle.hpp"
+#include "Airspace/AirspacePolygon.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
 
 #include <algorithm>
 
@@ -79,10 +86,6 @@ void FlightStatistics::Reset() {
   Task_Speed.Reset();
   Altitude_Terrain.Reset();
 }
-
-#include "Screen/Chart.hpp"
-#include "Task/Visitors/TaskVisitor.hpp"
-#include "Task/Visitors/TaskPointVisitor.hpp"
 
 /**
  * Utility class to draw task leg entry lines
@@ -583,12 +586,6 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
   chart.DrawXLabel(_T("w"));
   chart.DrawYLabel(_T("h"));
 }
-
-#include "Airspace/AirspaceIntersectionVisitor.hpp"
-#include "Airspace/AirspaceCircle.hpp"
-#include "Airspace/AirspacePolygon.hpp"
-#include "Engine/Airspace/Airspaces.hpp"
-
 
 class AirspaceIntersectionVisitorSlice: public AirspaceIntersectionVisitor
 {
