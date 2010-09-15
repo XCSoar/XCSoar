@@ -150,12 +150,6 @@ namespace Profile
   int GetScaleList(fixed *List, size_t Size);
 
   /**
-   * Reads the airspace mode setting from the profile
-   * @param i Airspace class index
-   * @return The mode
-   */
-  int GetAirspaceMode(int i);
-  /**
    * Saves the airspace mode setting to the profile
    * @param i Airspace class index
    */
