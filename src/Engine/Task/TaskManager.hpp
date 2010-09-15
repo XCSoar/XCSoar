@@ -373,6 +373,10 @@ public:
    */
   void set_safety_polar(const GlidePolar& glide_polar);
 
+  void set_olc_rules(OLCRules _olc_rules) {
+    task_olc.set_olc_rules(_olc_rules);
+  }
+
   /**
    * Retrieve trace vector
    *

@@ -36,6 +36,10 @@ public:
                 CommonStats &stats, const Trace &trace_full,
                 const Trace &trace_sprint);
 
+  void set_olc_rules(OLCRules _olc_rules) {
+    m_olc_rules = _olc_rules;
+  }
+
   /**
    * Update internal states when aircraft state advances.
    * This performs a scan of reachable waypoints.
@@ -82,7 +86,7 @@ public:
   const TracePointVector& get_olc_points() const;
 
 private:
-  const OLCRules m_olc_rules;
+  OLCRules m_olc_rules;
   CommonStats &common_stats;
 
   const Trace &m_trace_full;

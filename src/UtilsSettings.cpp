@@ -162,6 +162,11 @@ SettingsLeave()
     }
   }
 
+  {
+    ProtectedTaskManager::ExclusiveLease lease(protected_task_manager);
+    lease->set_olc_rules(XCSoarInterface::SettingsComputer().olc_rules);
+  }
+
   if (AirfieldFileChanged
       || AirspaceFileChanged
       || WaypointFileChanged
