@@ -332,7 +332,8 @@ RefreshView()
     return;
 
   TPLabelObservationZone ozv;
-  ((ObservationZoneConstVisitor &)ozv).Visit(*tp->get_oz());
+  ObservationZoneConstVisitor &visitor = ozv;
+  visitor.Visit(*tp->get_oz());
 
   WndButton* wb;
   wb = ((WndButton*)wf->FindByName(_T("butType")));
@@ -353,7 +354,8 @@ RefreshView()
 
   TCHAR buf[100];
   TPLabelTaskPoint tpv(buf);
-  ((TaskPointConstVisitor &)tpv).Visit(*tp);
+  TaskPointConstVisitor &tp_visitor = tpv;
+  tp_visitor.Visit(*tp);
   wf->SetCaption(tpv.text);
 }
 
@@ -362,7 +364,8 @@ ReadValues()
 {
   TPReadObservationZone tpv;
   OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
-  ((ObservationZoneConstVisitor &)tpv).Visit(*tp->get_oz());
+  ObservationZoneVisitor &visitor = tpv;
+  visitor.Visit(*tp->get_oz());
 }
 
 static void
