@@ -61,6 +61,14 @@ equals(const fixed a, const fixed b)
   return is_one(a / b);
 }
 
+#ifdef FIXED_MATH
+static inline bool
+equals(const fixed a, double b)
+{
+  return equals(a, fixed(b));
+}
+#endif
+
 static inline bool
 equals(const fixed a, int b)
 {

@@ -67,6 +67,7 @@ $(TARGET_BIN_DIR)/01_test_tap$(TARGET_EXEEXT): $(TEST_SRC_DIR)/01_test_tap.c | $
 TEST_NAMES = \
 	TestAngle TestEarth \
 	TestRadixTree \
+	TestDriver \
 	TestWayPointFile
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
@@ -117,6 +118,23 @@ TEST_LOGGER_SOURCES = \
 TEST_LOGGER_OBJS = $(call SRC_TO_OBJ,$(TEST_LOGGER_SOURCES))
 TEST_LOGGER_LDADD = $(IO_LIBS)
 $(TARGET_BIN_DIR)/TestLogger$(TARGET_EXEEXT): $(TEST_LOGGER_OBJS) $(TEST_LOGGER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_DRIVER_SOURCES = \
+	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/Driver/CAI302.cpp \
+	$(SRC)/Device/Driver/LX.cpp \
+	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/Math/fixed.cpp \
+	$(SRC)/Math/Angle.cpp \
+	$(SRC)/Units.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
+	$(TEST_SRC_DIR)/FakePort.cpp \
+	$(TEST_SRC_DIR)/TestDriver.cpp
+TEST_DRIVER_OBJS = $(call SRC_TO_OBJ,$(TEST_DRIVER_SOURCES))
+$(TARGET_BIN_DIR)/TestDriver$(TARGET_EXEEXT): $(TEST_DRIVER_OBJS) $(TEST_DRIVER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
