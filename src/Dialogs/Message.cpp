@@ -102,8 +102,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   Height = Layout::Scale(160);
 #endif
 
-  X = ((rc.right - rc.left) - Width) / 2;
-  Y = ((rc.bottom - rc.top) - Height) / 2;
+  X = Y = 0;
 
   w = Layout::Scale(60);
   h = Layout::Scale(32);
@@ -126,7 +125,9 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   wText->resize(Width, text_height + Layout::Scale(2));
 
   Height = wf.GetTitleHeight() + Layout::Scale(10) + text_height + h;
-  wf.resize(Width, Height);
+  X = ((rc.right - rc.left) - Width) / 2;
+  Y = ((rc.bottom - rc.top) - Height) / 2;
+  wf.move(X, Y, Width, Height);
 
   int y = Layout::Scale(6) + text_height;
 
