@@ -99,6 +99,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Replay/Replay.hpp"
 #include "DeviceBlackboard.hpp"
 #include "UtilsSettings.hpp"
+#include "Pages.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -270,16 +271,13 @@ InputEvents::eventScreenModes(const TCHAR *misc)
   //  -- normal infobox
 
   if (_tcscmp(misc, _T("normal")) == 0) {
-    main_window.SetFullScreen(false);
-    SetSettingsMap().EnableAuxiliaryInfo = false;
+    Pages::Open(0);
   } else if (_tcscmp(misc, _T("auxilary")) == 0) {
-    main_window.SetFullScreen(false);
-    SetSettingsMap().EnableAuxiliaryInfo = true;
+    Pages::Open(1);
   } else if (_tcscmp(misc, _T("toggleauxiliary")) == 0) {
-    main_window.SetFullScreen(false);
-    SetSettingsMap().EnableAuxiliaryInfo = !SettingsMap().EnableAuxiliaryInfo;
+    Pages::Open(SettingsMap().EnableAuxiliaryInfo ? 0 : 1);
   } else if (_tcscmp(misc, _T("full")) == 0) {
-    main_window.SetFullScreen(true);
+    Pages::Open(2);
   } else if (_tcscmp(misc, _T("togglefull")) == 0) {
     main_window.SetFullScreen(!main_window.GetFullScreen());
   } else if (_tcscmp(misc, _T("show")) == 0) {
@@ -291,22 +289,10 @@ InputEvents::eventScreenModes(const TCHAR *misc)
       Message::AddMessage(_("Screen Mode Normal"));
   } else if (_tcscmp(misc, _T("togglebiginfo")) == 0) {
     InfoBoxLayout::fullscreen = !InfoBoxLayout::fullscreen;
+    InfoBoxManager::SetDirty();
   } else {
-    if (SettingsMap().EnableAuxiliaryInfo) {
-      main_window.SetFullScreen(!main_window.GetFullScreen());
-      SetSettingsMap().EnableAuxiliaryInfo = false;
-    } else {
-      if (main_window.GetFullScreen()) {
-        main_window.SetFullScreen(false);
-      } else {
-        SetSettingsMap().EnableAuxiliaryInfo = true;
-      }
-    }
+    Pages::Next();
   }
-
-  // refresh display
-  InfoBoxManager::SetDirty();
-  SendSettingsMap(true);
 }
 
 // eventAutoZoom - Turn on|off|toggle AutoZoom

@@ -236,6 +236,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/InfoBoxManager.cpp \
 	$(SRC)/InputEvents.cpp \
 	$(SRC)/InputEventsActions.cpp \
+	$(SRC)/Pages.cpp \
 	$(SRC)/StatusMessage.cpp \
 	$(SRC)/PopupMessage.cpp \
 	$(SRC)/Message.cpp \
