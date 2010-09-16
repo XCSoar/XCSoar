@@ -45,21 +45,21 @@ Copyright_License {
 #include "SettingsAirspace.hpp"
 
 typedef enum {
-  TRACKUP=0,
-  NORTHUP=1,
-  NORTHCIRCLE=2,
-  TRACKCIRCLE=3,
-  NORTHTRACK=4
+  TRACKUP = 0,
+  NORTHUP,
+  NORTHCIRCLE,
+  TRACKCIRCLE,
+  NORTHTRACK
 } DisplayOrientation_t;
 
 typedef enum {
-  DISPLAYNAME=0,
-  DISPLAYNUMBER=1,
-  DISPLAYFIRSTFIVE=2,
-  DISPLAYNONE=3,
-  DISPLAYFIRSTTHREE=4,
-  DISPLAYNAMEIFINTASK=5,
-  DISPLAYUNTILSPACE=6
+  DISPLAYNAME = 0,
+  DISPLAYNUMBER,
+  DISPLAYFIRSTFIVE,
+  DISPLAYNONE,
+  DISPLAYFIRSTTHREE,
+  DISPLAYNAMEIFINTASK,
+  DISPLAYUNTILSPACE
 } DisplayTextType_t;
 
 typedef enum {
@@ -76,36 +76,36 @@ typedef enum {
 
 struct SETTINGS_MAP {
   /** Map zooms in on circling */
-  bool  CircleZoom;
-  bool  ExtendedVisualGlide;
+  bool CircleZoom;
+  bool ExtendedVisualGlide;
   /** Map will show topology */
-  bool  EnableTopology;
+  bool EnableTopology;
   /** Map will show terrain */
-  bool  EnableTerrain;
+  bool EnableTerrain;
   /**
    * 0: show all labels
    * 1: show decluttered labels
    * 2: show no labels
    */
-  unsigned char  DeclutterLabels;
+  unsigned char DeclutterLabels;
   /** Snailtrail wind drifting in circling mode */
-  bool  EnableTrailDrift;
+  bool EnableTrailDrift;
   /** Show compass in cruise mode */
-  bool  EnableCDICruise;
+  bool EnableCDICruise;
   /** Show compass in circling mode */
-  bool  EnableCDICircling;
+  bool EnableCDICircling;
   /** Automatic zoom when closing in on waypoint */
-  bool  AutoZoom;
-  int   SnailWidthScale;
-  int   WindArrowStyle;
+  bool AutoZoom;
+  int SnailWidthScale;
+  int WindArrowStyle;
   /** What type of text to draw next to the waypoint icon */
-  DisplayTextType_t  DisplayTextType;
-  int   TrailActive;
-  int   VisualGlide;
+  DisplayTextType_t DisplayTextType;
+  int TrailActive;
+  int VisualGlide;
   /** Airspaces are drawn with black border (otherwise in airspace color) */
-  bool  bAirspaceBlackOutline;
+  bool bAirspaceBlackOutline;
 
-  int   GliderScreenPosition;
+  int GliderScreenPosition;
   /** Orientation of the map (North up, Track up, etc.) */
   DisplayOrientation_t DisplayOrientation;
 
@@ -119,24 +119,24 @@ struct SETTINGS_MAP {
   DisplayMode_t UserForceDisplayMode;
   bool EnablePan;
   GeoPoint PanLocation;
-  bool   TargetPan;
-  int    TargetPanIndex;
+  bool TargetPan;
+  int TargetPanIndex;
   fixed TargetZoomDistance;
   fixed MapScale;
   /** Show FLARM radar if traffic present */
-  bool  EnableFLARMGauge;
+  bool EnableFLARMGauge;
   /** Show ThermalAssistant if circling */
-  bool  EnableTAGauge;
+  bool EnableTAGauge;
   unsigned EnableFLARMMap;
-  bool  ScreenBlanked;
+  bool ScreenBlanked;
   bool EnableAutoBlank;
   /** Show vario gauge */
   bool  EnableVarioGauge;
   /** Update system time from GPS time */
   bool SetSystemTimeFromGPS;
 
-  int    iAirspaceBrush[AIRSPACECLASSCOUNT];
-  int    iAirspaceColour[AIRSPACECLASSCOUNT];
+  int iAirspaceBrush[AIRSPACECLASSCOUNT];
+  int iAirspaceColour[AIRSPACECLASSCOUNT];
 };
 
 #endif
