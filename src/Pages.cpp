@@ -48,7 +48,7 @@ Copyright_License {
 namespace Pages
 {
   int Current = 0;
-  Layout pages[8] = {
+  PageLayout pages[8] = {
     lMapInfoBoxes,
     lMapAuxInfoBoxes,
     lMap,
@@ -106,7 +106,7 @@ Pages::Open(int page)
 }
 
 void
-Pages::OpenLayout(Layout layout)
+Pages::OpenLayout(PageLayout layout)
 {
   switch (layout) {
   case lMapInfoBoxes:
@@ -130,7 +130,7 @@ Pages::OpenLayout(Layout layout)
 }
 
 void
-Pages::SetLayout(int page, Layout layout)
+Pages::SetLayout(int page, PageLayout layout)
 {
   if (page < 0 || page > 7)
     return;
@@ -141,7 +141,7 @@ Pages::SetLayout(int page, Layout layout)
     Update();
 }
 
-Pages::Layout
+Pages::PageLayout
 Pages::GetLayout(int page)
 {
   if (page < 0 || page > 7)

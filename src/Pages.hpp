@@ -41,7 +41,7 @@ Copyright_License {
 
 namespace Pages
 {
-  enum Layout {
+  enum PageLayout {
     lEmpty,
     lMap,
     lMapInfoBoxes,
@@ -66,20 +66,20 @@ namespace Pages
    * Attention! Internally the previous page is still selected.
    * @param layout The layout to open
    */
-  void OpenLayout(Layout layout);
+  void OpenLayout(PageLayout layout);
 
   /**
    * Assigns a new layout to the given page
    * @param page The page to change
    * @param layout The layout that should be assigned
    */
-  void SetLayout(int page, Layout layout);
+  void SetLayout(int page, PageLayout layout);
   /**
    * Returns the layout of the given page
    * @param page The page to look for
    * @return The layout of the given page
    */
-  Layout GetLayout(int page);
+  PageLayout GetLayout(int page);
 
   void SaveToProfile();
   void LoadFromProfile();
