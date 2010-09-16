@@ -119,3 +119,21 @@ Pages::OpenLayout(Layout layout)
   InfoBoxManager::SetDirty();
   XCSoarInterface::SendSettingsMap(true);
 }
+
+void
+Pages::SetLayout(int page, Layout layout)
+{
+  if (page < 0 || page > 7)
+    return;
+
+  pages[page] = layout;
+}
+
+Pages::Layout
+Pages::GetLayout(int page)
+{
+  if (page < 0 || page > 7)
+    return lEmpty;
+
+  return pages[page];
+}

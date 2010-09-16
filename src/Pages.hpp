@@ -53,6 +53,9 @@ namespace Pages
   void Prev();
   void OpenLayout(Layout layout);
   void Update();
+
+  void SetLayout(int page, Layout layout);
+  Layout GetLayout(int page);
 }
 
 #endif
