@@ -62,8 +62,8 @@ namespace Pages
     PageLayout(eType _type) :
       Type(_type), MapInfoBoxes(mib_None) {}
 
-    void ParseString(TCHAR* str);
-    void MakeString(TCHAR* str);
+    void ParseConfigString(TCHAR* str);
+    void MakeConfigString(TCHAR* str);
   };
 
   /**

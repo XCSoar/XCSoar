@@ -162,7 +162,7 @@ Pages::MakeProfileKey(TCHAR* buffer, int page)
 }
 
 void
-Pages::PageLayout::MakeString(TCHAR* buffer)
+Pages::PageLayout::MakeConfigString(TCHAR* buffer)
 {
   switch (Type) {
   case t_Map:
@@ -193,13 +193,13 @@ Pages::MakeProfileValue(TCHAR* buffer, int page)
   if (!pl)
     return false;
 
-  pl->MakeString(buffer);
+  pl->MakeConfigString(buffer);
 
   return true;
 }
 
 void
-Pages::PageLayout::ParseString(TCHAR* buffer)
+Pages::PageLayout::ParseConfigString(TCHAR* buffer)
 {
   if (_tcsncmp(buffer, _T("map"), 3) == 0) {
     Type = t_Map;
@@ -221,7 +221,7 @@ Pages::ParseProfileValue(TCHAR* buffer, int page)
   if (page < 0 || page > 7)
     return false;
 
-  pages[page].ParseString(buffer);
+  pages[page].ParseConfigString(buffer);
   return true;
 }
 
