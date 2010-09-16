@@ -43,6 +43,8 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Profile.hpp"
 
+#include <tchar.h>
+
 namespace Pages
 {
   int Current = 0;
