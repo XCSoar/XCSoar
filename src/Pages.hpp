@@ -48,13 +48,38 @@ namespace Pages
     lMapAuxInfoBoxes
   };
 
+  /**
+   * Opens the given page.
+   * @param page The page to open
+   */
   void Open(int page);
+  /**
+   * Opens the next page.
+   */
   void Next();
+  /**
+   * Opens the previous page.
+   */
   void Prev();
+  /**
+   * Opens the given layout.
+   * Attention! Internally the previous page is still selected.
+   * @param layout The layout to open
+   */
   void OpenLayout(Layout layout);
   void Update();
 
+  /**
+   * Assigns a new layout to the given page
+   * @param page The page to change
+   * @param layout The layout that should be assigned
+   */
   void SetLayout(int page, Layout layout);
+  /**
+   * Returns the layout of the given page
+   * @param page The page to look for
+   * @return The layout of the given page
+   */
   Layout GetLayout(int page);
 }
 
