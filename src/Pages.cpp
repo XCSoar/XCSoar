@@ -41,6 +41,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "Profile.hpp"
 
 namespace Pages
 {
@@ -57,6 +58,10 @@ namespace Pages
   };
 
   void Update();
+
+  bool MakeProfileKey(TCHAR* buffer, int page);
+  bool MakeProfileValue(TCHAR* buffer, int page);
+  bool ParseProfileValue(TCHAR* buffer, int page);
 }
 
 void
@@ -141,4 +146,93 @@ Pages::GetLayout(int page)
     return lEmpty;
 
   return pages[page];
+}
+
+bool
+Pages::MakeProfileKey(TCHAR* buffer, int page)
+{
+  if (page < 0 || page > 7)
+    return false;
+
+  _tcscpy(buffer, CONF("Page"));
+  _stprintf(buffer + _tcslen(buffer), _T("%d"), page + 1);
+  return true;
+}
+
+bool
+Pages::MakeProfileValue(TCHAR* buffer, int page)
+{
+  if (page < 0 || page > 7)
+    return false;
+
+  switch (pages[page]) {
+  case lMapInfoBoxes:
+    _tcscpy(buffer, _T("map ib_normal"));
+    break;
+
+  case lMapAuxInfoBoxes:
+    _tcscpy(buffer, _T("map ib_aux"));
+    break;
+
+  case lMap:
+    _tcscpy(buffer, _T("map"));
+    break;
+
+  case lEmpty:
+    _tcscpy(buffer, _T(""));
+    break;
+
+  default:
+    return false;
+  }
+
+  return true;
+}
+
+bool
+Pages::ParseProfileValue(TCHAR* buffer, int page)
+{
+  if (page < 0 || page > 7)
+    return false;
+
+  if (_tcscmp(buffer, _T("map ib_normal")) == 0)
+    SetLayout(page, lMapInfoBoxes);
+  else if (_tcscmp(buffer, _T("map ib_aux")) == 0)
+    SetLayout(page, lMapAuxInfoBoxes);
+  else if (_tcscmp(buffer, _T("map")) == 0)
+    SetLayout(page, lMap);
+  else {
+    SetLayout(page, lEmpty);
+    return false;
+  }
+
+  return true;
+}
+
+void
+Pages::SaveToProfile()
+{
+  for (int i = 0; i < 8; i++) {
+    TCHAR key[64] = _T("");
+    TCHAR value[255] = _T("");
+
+    if (!MakeProfileKey(key, i) || !MakeProfileValue(value, i))
+      continue;
+
+    Profile::Set(key, value);
+  }
+}
+
+void
+Pages::LoadFromProfile()
+{
+  for (int i = 0; i < 8; i++) {
+    TCHAR key[64] = _T("");
+    TCHAR value[255] = _T("");
+
+    if (!MakeProfileKey(key, i) || !Profile::Get(key, value, 255))
+      continue;
+
+    ParseProfileValue(value, i);
+  }
 }

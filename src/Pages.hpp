@@ -80,6 +80,9 @@ namespace Pages
    * @return The layout of the given page
    */
   Layout GetLayout(int page);
+
+  void SaveToProfile();
+  void LoadFromProfile();
 }
 
 #endif
