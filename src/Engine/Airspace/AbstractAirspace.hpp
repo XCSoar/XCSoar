@@ -44,11 +44,11 @@
 #include "Compiler.h"
 
 struct AIRCRAFT_STATE;
-class GeoVector;
+struct GeoVector;
 class AtmosphericPressure;
 class AirspaceAircraftPerformance;
 class AirspaceAircraftPerformanceGlide;
-class AirspaceInterceptSolution;
+struct AirspaceInterceptSolution;
 class FlatBoundingBox;
 class TaskProjection;
 

@@ -51,7 +51,7 @@ Copyright_License {
 struct BrokenDateTime;
 struct NMEA_INFO;
 struct Declaration;
-class GeoPoint;
+struct GeoPoint;
 
 class IGCWriter {
   enum {

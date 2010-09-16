@@ -45,7 +45,7 @@ class Canvas;
 class OrderedTask;
 class OrderedTaskPoint;
 class RasterTerrain;
-class GeoPoint;
+struct GeoPoint;
 struct SETTINGS_MAP;
 
 void
