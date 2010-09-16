@@ -55,6 +55,14 @@ namespace Pages
     lEmpty,
     lEmpty
   };
+
+  void Update();
+}
+
+void
+Pages::Update()
+{
+  OpenLayout(pages[Current]);
 }
 
 void
@@ -88,12 +96,6 @@ Pages::Open(int page)
 
   Current = page;
   Update();
-}
-
-void
-Pages::Update()
-{
-  OpenLayout(pages[Current]);
 }
 
 void

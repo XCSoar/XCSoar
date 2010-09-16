@@ -67,7 +67,6 @@ namespace Pages
    * @param layout The layout to open
    */
   void OpenLayout(Layout layout);
-  void Update();
 
   /**
    * Assigns a new layout to the given page
