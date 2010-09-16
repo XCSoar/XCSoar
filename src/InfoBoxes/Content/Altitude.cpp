@@ -41,6 +41,9 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Units.hpp"
 #include "Interface.hpp"
+#include "Components.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 
 #include "DeviceBlackboard.hpp"
 #include "Simulator.hpp"
@@ -160,12 +163,11 @@ InfoBoxContentAltitudeQFE::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];
 
-  /// @todo fix QFE infobox
-#ifdef OLD_TASK
-  fixed Value = XCSoarInterface::Basic().GPSAltitude - QFEAltitudeOffset;
-#else
   fixed Value = XCSoarInterface::Basic().GPSAltitude;
-#endif
+
+  const Waypoint* home_waypoint = way_points.find_home();
+  if (home_waypoint)
+    Value -= home_waypoint->Altitude;
 
   // Set Value
   Units::FormatUserAltitude(Value, sTmp,
