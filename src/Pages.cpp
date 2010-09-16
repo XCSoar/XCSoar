@@ -129,6 +129,9 @@ Pages::SetLayout(int page, Layout layout)
     return;
 
   pages[page] = layout;
+
+  if (page == Current)
+    Update();
 }
 
 Pages::Layout
