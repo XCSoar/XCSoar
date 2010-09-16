@@ -96,6 +96,7 @@ Copyright_License {
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideComputerInterface.hpp"
 #include "ProgressGlue.hpp"
+#include "Pages.hpp"
 
 Marks *marks;
 TopologyStore *topology;
@@ -401,6 +402,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   // Give focus to the map
   main_window.map.set_focus();
+
+  Pages::LoadFromProfile();
 
   // Start calculation thread
   calculation_thread->start();
