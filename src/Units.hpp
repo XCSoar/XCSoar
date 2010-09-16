@@ -51,14 +51,14 @@ class Angle;
 #define DEG "°"
 #endif
 
-typedef enum {
+enum CoordinateFormats_t {
   cfDDMMSS = 0,
   cfDDMMSSss,
   cfDDMMmmm,
   cfDDdddd
-} CoordinateFormats_t;
+};
 
-typedef enum {
+enum Units_t {
   unUndef,
   unKiloMeter,
   unNauticalMiles,
@@ -79,9 +79,10 @@ typedef enum {
    * The sentinel: the number of units in this enum.
    */
   unCount
-} Units_t;
+};
 
-typedef enum {
+enum UnitGroup_t
+{
   ugNone,
   ugDistance,
   ugAltitude,
@@ -90,13 +91,14 @@ typedef enum {
   ugVerticalSpeed,
   ugWindSpeed,
   ugTaskSpeed
-} UnitGroup_t;
+};
 
-typedef struct{
+struct UnitDescriptor_t
+{
   const TCHAR *Name;
   fixed ToUserFact;
   fixed ToUserOffset;
-} UnitDescriptor_t;
+};
 
 /**
  * Class to manage unit conversions and display,
