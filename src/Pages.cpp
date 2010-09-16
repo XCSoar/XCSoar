@@ -45,13 +45,23 @@ Copyright_License {
 namespace Pages
 {
   int Current = 0;
+  Layout pages[8] = {
+    lMapInfoBoxes,
+    lMapAuxInfoBoxes,
+    lMap,
+    lEmpty,
+    lEmpty,
+    lEmpty,
+    lEmpty,
+    lEmpty
+  };
 }
 
 void
 Pages::Next()
 {
   Current++;
-  if (Current > 2)
+  if (Current > 7 || pages[Current] == lEmpty)
     Current = 0;
 
   Update();
@@ -62,7 +72,10 @@ Pages::Prev()
 {
   Current--;
   if (Current < 0)
-    Current = 2;
+    Current = 7;
+
+  while (pages[Current] == lEmpty && Current > 0)
+    Current--;
 
   Update();
 }
@@ -70,6 +83,9 @@ Pages::Prev()
 void
 Pages::Open(int page)
 {
+  if (page < 0 || page > 7)
+    return;
+
   Current = page;
   Update();
 }
@@ -77,20 +93,7 @@ Pages::Open(int page)
 void
 Pages::Update()
 {
-  switch (Current) {
-  case 1:
-    OpenLayout(lMapAuxInfoBoxes);
-    break;
-
-  case 2:
-    OpenLayout(lMap);
-    break;
-
-  case 0:
-  default:
-    OpenLayout(lMapInfoBoxes);
-    break;
-  }
+  OpenLayout(pages[Current]);
 }
 
 void
