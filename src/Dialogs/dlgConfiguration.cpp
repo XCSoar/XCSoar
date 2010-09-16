@@ -77,6 +77,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
+#include "Pages.hpp"
 
 #include <assert.h>
 
@@ -105,6 +106,7 @@ enum config_page {
   PAGE_INFOBOX_AUXILIARY,
   PAGE_LOGGER,
   PAGE_WAYPOINTS,
+  PAGE_PAGES,
   PAGE_EXPERIMENTAL,
 };
 
@@ -129,6 +131,7 @@ static const TCHAR *const captions[] = {
   N_("InfoBox Auxiliary"),
   N_("Logger"),
   N_("Waypoint Edit"),
+  N_("Pages"),
   N_("Experimental features"),
 };
 
@@ -177,6 +180,7 @@ static WndButton *buttonAircraftRego = NULL;
 static WndButton *buttonLoggerID = NULL;
 static WndButton *buttonCopy = NULL;
 static WndButton *buttonPaste = NULL;
+static WndListFrame* PagesList = NULL;
 
 static void
 UpdateButtons(void)
@@ -1925,6 +1929,22 @@ FinishDeviceFields(DeviceConfig &config, int &driver_index,
 }
 
 static void
+OnPagesListItemPaint(Canvas &canvas, const RECT rc, unsigned i)
+{
+  using namespace Pages;
+
+  TCHAR buffer[255];
+  PageLayout* pl = GetLayout(i);
+  if (!pl)
+    return;
+
+  pl->MakeTitle(buffer);
+
+  canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
+              buffer);
+}
+
+static void
 PrepareConfigurationDialog()
 {
   gcc_unused ScopeBusyIndicator busy;
@@ -1951,6 +1971,13 @@ PrepareConfigurationDialog()
 
   configuration_tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
   assert(configuration_tabbed != NULL);
+
+  PagesList = ((WndListFrame *)wf->FindByName(_T("lstPages")));
+  assert(PagesList != NULL);
+  PagesList->SetPaintItemCallback(OnPagesListItemPaint);
+  PagesList->SetLength(8);
+  PagesList->SetOrigin(0);
+  PagesList->SetCursorIndex(0);
 
   wf->FilterAdvanced(XCSoarInterface::UserLevel>0);
 

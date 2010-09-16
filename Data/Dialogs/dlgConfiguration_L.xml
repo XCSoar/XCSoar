@@ -742,6 +742,10 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
     
       <Button Name="cmdWaypointDelete" Caption="Delete" X="50" Width="100" Height="28" OnClick="OnWaypointDeleteClicked" />
     </Panel>
+    
+    <Panel Name="frmPages" X="0" Y="0" Width="0" Height="222">
+      <List Name="lstPages" X="0" Width="-1" Height="-1" />
+    </Panel>
   
     <Panel Name="frmSpecials" X="0" Y="0" Width="0" Height="222">
     
