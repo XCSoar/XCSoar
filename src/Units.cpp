@@ -53,7 +53,7 @@ Copyright_License {
 #include <stdio.h>
 
 #include "resource.h"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 
 #include <stdlib.h>
 #include <math.h>

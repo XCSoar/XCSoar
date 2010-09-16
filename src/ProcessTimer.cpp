@@ -44,7 +44,7 @@ Copyright_License {
 #include "Device/All.hpp"
 #include "Dialogs.h"
 #include "Screen/Blank.hpp"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "UtilsSystem.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "MapWindow.hpp"

@@ -50,7 +50,7 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "RenderObservationZone.hpp"
 #include "NMEA/Info.hpp"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 
 RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
                                  const Projection &_projection,

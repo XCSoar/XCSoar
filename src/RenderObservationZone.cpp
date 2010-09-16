@@ -7,7 +7,7 @@
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Screen/Graphics.hpp"
 #include "Projection.hpp"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 

@@ -40,7 +40,7 @@ Copyright_License {
 #define XCSOAR_FORM_UTIL_HPP
 
 #include "Units.hpp"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 
 #include <tchar.h>
 

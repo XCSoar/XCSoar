@@ -40,7 +40,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Terrain/WeatherTerrainRenderer.hpp"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "Navigation/SpeedVector.hpp"
 #include "Projection.hpp"
 #include "Screen/Canvas.hpp"

@@ -45,7 +45,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Components.hpp"
 #include "Compatibility/string.h"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "Simulator.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"

@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef SETTINGS_MAP_BLACKBOARD_H
 #define SETTINGS_MAP_BLACKBOARD_H
 
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "Compiler.h"
 
 /**

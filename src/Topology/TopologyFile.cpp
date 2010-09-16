@@ -44,7 +44,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/LabelBlock.hpp"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "resource.h"
 

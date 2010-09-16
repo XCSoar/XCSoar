@@ -71,7 +71,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Asset.hpp"
 #include "MenuData.hpp"
 #include "IO/ConfiguredFile.hpp"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "Screen/Blank.hpp"
 #include "MapWindowProjection.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"

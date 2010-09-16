@@ -40,7 +40,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "MainWindow.hpp"
 #include "SettingsComputer.hpp"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "AirfieldDetails.h"
 #include "Topology/TopologyStore.hpp"

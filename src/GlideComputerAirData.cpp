@@ -43,7 +43,7 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "Math/LowPassFilter.hpp"
 #include "Math/Earth.hpp"
 #include "Math/Constants.h"

@@ -40,7 +40,7 @@ Copyright_License {
 
 #include "Projection.hpp"
 #include "Units.hpp"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "Sizes.h"
 #include "Math/fixed.hpp"
 #include "Compiler.h"

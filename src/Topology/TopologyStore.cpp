@@ -46,7 +46,7 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
-#include "SettingsUser.hpp" // for EnableTopology
+#include "SettingsMap.hpp" // for EnableTopology
 #include "IO/ZipLineReader.hpp"
 #include "ProgressGlue.hpp"
 #include "OS/FileUtil.hpp"

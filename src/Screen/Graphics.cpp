@@ -41,7 +41,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Ramp.hpp"
 #include "Appearance.hpp"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "resource.h"
 #include "Asset.hpp"
 #include "LogFile.hpp"

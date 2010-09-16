@@ -39,7 +39,7 @@ Copyright_License {
 #include "MapDrawHelper.hpp"
 #include "Screen/Canvas.hpp"
 #include "Projection.hpp"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "MapCanvas.hpp"
 
 MapDrawHelper::MapDrawHelper(Canvas &_canvas, 

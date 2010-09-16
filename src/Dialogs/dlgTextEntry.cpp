@@ -39,7 +39,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "Appearance.hpp"
 #include "Asset.hpp"
 #include "StringUtil.hpp"

@@ -40,7 +40,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "LogFile.hpp"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "Screen/Layout.hpp"
 #include "Profile.hpp"
 

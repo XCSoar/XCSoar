@@ -46,7 +46,7 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "InputEvents.h"
 #include "Interface.hpp"
 #include "Asset.hpp"

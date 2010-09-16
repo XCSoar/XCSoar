@@ -57,7 +57,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "UtilsSystem.hpp"
 #include "FLARM/FlarmDetails.hpp"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "Logger/Logger.hpp"
 #include "Logger/NMEALogger.hpp"
 #include "AirfieldDetails.h"

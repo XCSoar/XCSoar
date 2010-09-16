@@ -42,7 +42,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsAirspace.hpp"
 #include "SettingsComputer.hpp"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "Appearance.hpp"
 #include "LocalPath.hpp"
 #include "ProfileKeys.hpp"

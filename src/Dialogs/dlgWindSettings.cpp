@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Blackboard.hpp"
-#include "SettingsUser.hpp"
+#include "SettingsMap.hpp"
 #include "SettingsComputer.hpp"
 #include "Units.hpp"
 #include "Profile.hpp"
