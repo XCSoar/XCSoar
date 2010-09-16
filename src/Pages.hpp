@@ -41,11 +41,24 @@ Copyright_License {
 
 namespace Pages
 {
-  enum PageLayout {
-    lEmpty,
-    lMap,
-    lMapInfoBoxes,
-    lMapAuxInfoBoxes
+  struct PageLayout
+  {
+    enum eType {
+      t_Empty,
+      t_Map
+    } Type;
+
+    enum eMapInfoBoxes {
+      mib_None,
+      mib_Normal,
+      mib_Aux
+    } MapInfoBoxes;
+
+    PageLayout() :
+      Type(t_Empty), MapInfoBoxes(mib_None) {}
+
+    PageLayout(eType _type) :
+      Type(_type), MapInfoBoxes(mib_None) {}
   };
 
   /**
@@ -66,23 +79,24 @@ namespace Pages
    * Attention! Internally the previous page is still selected.
    * @param layout The layout to open
    */
-  void OpenLayout(PageLayout layout);
+  void OpenLayout(PageLayout &layout);
 
   /**
    * Assigns a new layout to the given page
    * @param page The page to change
    * @param layout The layout that should be assigned
    */
-  void SetLayout(int page, PageLayout layout);
+  void SetLayout(int page, PageLayout &layout);
   /**
    * Returns the layout of the given page
    * @param page The page to look for
    * @return The layout of the given page
    */
-  PageLayout GetLayout(int page);
+  PageLayout* GetLayout(int page);
 
   void SaveToProfile();
   void LoadFromProfile();
+  void LoadDefault();
 }
 
 #endif

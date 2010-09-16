@@ -270,15 +270,24 @@ InputEvents::eventScreenModes(const TCHAR *misc)
   //  -- full screen
   //  -- normal infobox
 
+  using namespace Pages;
+
   if (_tcscmp(misc, _T("normal")) == 0) {
-    Pages::OpenLayout(Pages::lMapInfoBoxes);
+    PageLayout pl(PageLayout::t_Map);
+    pl.MapInfoBoxes = PageLayout::mib_Normal;
+    OpenLayout(pl);
   } else if (_tcscmp(misc, _T("auxilary")) == 0) {
-    Pages::OpenLayout(Pages::lMapAuxInfoBoxes);
+    PageLayout pl(PageLayout::t_Map);
+    pl.MapInfoBoxes = PageLayout::mib_Aux;
+    OpenLayout(pl);
   } else if (_tcscmp(misc, _T("toggleauxiliary")) == 0) {
-    Pages::OpenLayout(SettingsMap().EnableAuxiliaryInfo ?
-                      Pages::lMapInfoBoxes : Pages::lMapAuxInfoBoxes);
+    PageLayout pl(PageLayout::t_Map);
+    pl.MapInfoBoxes = SettingsMap().EnableAuxiliaryInfo ?
+                      PageLayout::mib_Normal : PageLayout::mib_Aux;
+    OpenLayout(pl);
   } else if (_tcscmp(misc, _T("full")) == 0) {
-    Pages::OpenLayout(Pages::lMap);
+    PageLayout pl(PageLayout::t_Map);
+    OpenLayout(pl);
   } else if (_tcscmp(misc, _T("togglefull")) == 0) {
     main_window.SetFullScreen(!main_window.GetFullScreen());
   } else if (_tcscmp(misc, _T("show")) == 0) {

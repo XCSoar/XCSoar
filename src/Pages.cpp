@@ -48,16 +48,7 @@ Copyright_License {
 namespace Pages
 {
   int Current = 0;
-  PageLayout pages[8] = {
-    lMapInfoBoxes,
-    lMapAuxInfoBoxes,
-    lMap,
-    lEmpty,
-    lEmpty,
-    lEmpty,
-    lEmpty,
-    lEmpty
-  };
+  PageLayout pages[8];
 
   void Update();
 
@@ -76,7 +67,7 @@ void
 Pages::Next()
 {
   Current++;
-  if (Current > 7 || pages[Current] == lEmpty)
+  if (Current > 7 || pages[Current].Type == PageLayout::t_Empty)
     Current = 0;
 
   Update();
@@ -89,7 +80,7 @@ Pages::Prev()
   if (Current < 0)
     Current = 7;
 
-  while (pages[Current] == lEmpty && Current > 0)
+  while (pages[Current].Type == PageLayout::t_Empty && Current > 0)
     Current--;
 
   Update();
@@ -101,28 +92,39 @@ Pages::Open(int page)
   if (page < 0 || page > 7)
     return;
 
+  if (pages[page].Type == PageLayout::t_Empty)
+    return;
+
   Current = page;
   Update();
 }
 
 void
-Pages::OpenLayout(PageLayout layout)
+Pages::OpenLayout(PageLayout &layout)
 {
-  switch (layout) {
-  case lMapInfoBoxes:
-    XCSoarInterface::main_window.SetFullScreen(false);
-    XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = false;
+  switch (layout.Type) {
+  case PageLayout::t_Map:
+    switch (layout.MapInfoBoxes) {
+    case PageLayout::mib_Normal:
+      XCSoarInterface::main_window.SetFullScreen(false);
+      XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = false;
+      break;
+
+    case PageLayout::mib_Aux:
+      XCSoarInterface::main_window.SetFullScreen(false);
+      XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = true;
+      break;
+
+    case PageLayout::mib_None:
+    default:
+      XCSoarInterface::main_window.SetFullScreen(true);
+      XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = false;
+      break;
+    }
     break;
 
-  case lMapAuxInfoBoxes:
-    XCSoarInterface::main_window.SetFullScreen(false);
-    XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = true;
-    break;
-
-  case lMap:
-    XCSoarInterface::main_window.SetFullScreen(true);
-    XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = false;
-    break;
+  default:
+    return;
   }
 
   InfoBoxManager::SetDirty();
@@ -130,7 +132,7 @@ Pages::OpenLayout(PageLayout layout)
 }
 
 void
-Pages::SetLayout(int page, PageLayout layout)
+Pages::SetLayout(int page, PageLayout &layout)
 {
   if (page < 0 || page > 7)
     return;
@@ -141,13 +143,13 @@ Pages::SetLayout(int page, PageLayout layout)
     Update();
 }
 
-Pages::PageLayout
+Pages::PageLayout*
 Pages::GetLayout(int page)
 {
   if (page < 0 || page > 7)
-    return lEmpty;
+    return NULL;
 
-  return pages[page];
+  return &pages[page];
 }
 
 bool
@@ -164,23 +166,25 @@ Pages::MakeProfileKey(TCHAR* buffer, int page)
 bool
 Pages::MakeProfileValue(TCHAR* buffer, int page)
 {
-  if (page < 0 || page > 7)
+  PageLayout* pl = GetLayout(page);
+  if (!pl)
     return false;
 
-  switch (pages[page]) {
-  case lMapInfoBoxes:
-    _tcscpy(buffer, _T("map ib_normal"));
-    break;
-
-  case lMapAuxInfoBoxes:
-    _tcscpy(buffer, _T("map ib_aux"));
-    break;
-
-  case lMap:
+  switch (pl->Type) {
+  case PageLayout::t_Map:
     _tcscpy(buffer, _T("map"));
-    break;
 
-  case lEmpty:
+    switch (pl->MapInfoBoxes) {
+    case PageLayout::mib_Normal:
+      _tcscat(buffer, _T(" ib_normal"));
+      break;
+
+    case PageLayout::mib_Aux:
+      _tcscat(buffer, _T(" ib_aux"));
+      break;
+    }
+
+  case PageLayout::t_Empty:
     _tcscpy(buffer, _T(""));
     break;
 
@@ -197,15 +201,17 @@ Pages::ParseProfileValue(TCHAR* buffer, int page)
   if (page < 0 || page > 7)
     return false;
 
-  if (_tcscmp(buffer, _T("map ib_normal")) == 0)
-    SetLayout(page, lMapInfoBoxes);
-  else if (_tcscmp(buffer, _T("map ib_aux")) == 0)
-    SetLayout(page, lMapAuxInfoBoxes);
-  else if (_tcscmp(buffer, _T("map")) == 0)
-    SetLayout(page, lMap);
-  else {
-    SetLayout(page, lEmpty);
-    return false;
+  if (_tcsncmp(buffer, _T("map"), 3) == 0) {
+    pages[page].Type = PageLayout::t_Map;
+
+    if (_tcsncmp(buffer + 3, _T(" ib_normal"), 10) == 0)
+      pages[page].MapInfoBoxes = PageLayout::mib_Normal;
+    else if (_tcsncmp(buffer + 3, _T(" ib_aux"), 7) == 0)
+      pages[page].MapInfoBoxes = PageLayout::mib_Aux;
+    else
+      pages[page].MapInfoBoxes = PageLayout::mib_None;
+  } else {
+    pages[page].Type = PageLayout::t_Empty;
   }
 
   return true;
@@ -228,6 +234,8 @@ Pages::SaveToProfile()
 void
 Pages::LoadFromProfile()
 {
+  LoadDefault();
+
   for (int i = 0; i < 8; i++) {
     TCHAR key[64] = _T("");
     TCHAR value[255] = _T("");
@@ -237,4 +245,25 @@ Pages::LoadFromProfile()
 
     ParseProfileValue(value, i);
   }
+
+  Update();
+}
+
+void
+Pages::LoadDefault()
+{
+  pages[0].Type = PageLayout::t_Map;
+  pages[0].MapInfoBoxes = PageLayout::mib_Normal;
+
+  pages[1].Type = PageLayout::t_Map;
+  pages[1].MapInfoBoxes = PageLayout::mib_Aux;
+
+  pages[2].Type = PageLayout::t_Map;
+  pages[2].MapInfoBoxes = PageLayout::mib_None;
+
+  pages[3].Type = PageLayout::t_Empty;
+  pages[4].Type = PageLayout::t_Empty;
+  pages[5].Type = PageLayout::t_Empty;
+  pages[6].Type = PageLayout::t_Empty;
+  pages[7].Type = PageLayout::t_Empty;
 }
