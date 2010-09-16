@@ -42,6 +42,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Profile.hpp"
+#include "Language.hpp"
 
 namespace Pages
 {
@@ -159,6 +160,33 @@ Pages::MakeProfileKey(TCHAR* buffer, int page)
   _tcscpy(buffer, CONF("Page"));
   _stprintf(buffer + _tcslen(buffer), _T("%d"), page + 1);
   return true;
+}
+
+void
+Pages::PageLayout::MakeTitle(TCHAR* buffer)
+{
+  switch (Type) {
+  case t_Map:
+    _tcscpy(buffer, _("Map"));
+
+    switch (MapInfoBoxes) {
+    case mib_Normal:
+      _tcscat(buffer, _T(" "));
+      _tcscat(buffer, _("w. infoboxes"));
+      break;
+
+    case mib_Aux:
+      _tcscat(buffer, _T(" "));
+      _tcscat(buffer, _("w. aux. infoboxes"));
+      break;
+    }
+    break;
+
+  case t_Empty:
+  default:
+    _tcscpy(buffer, _T("---"));
+    break;
+  }
 }
 
 void
