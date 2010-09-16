@@ -79,18 +79,36 @@ Pages::Update()
 {
   switch (Current) {
   case 1:
-    XCSoarInterface::main_window.SetFullScreen(false);
-    XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = true;
+    OpenLayout(lMapAuxInfoBoxes);
     break;
 
   case 2:
-    XCSoarInterface::main_window.SetFullScreen(true);
-    XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = false;
+    OpenLayout(lMap);
     break;
 
   case 0:
   default:
+    OpenLayout(lMapInfoBoxes);
+    break;
+  }
+}
+
+void
+Pages::OpenLayout(Layout layout)
+{
+  switch (layout) {
+  case lMapInfoBoxes:
     XCSoarInterface::main_window.SetFullScreen(false);
+    XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = false;
+    break;
+
+  case lMapAuxInfoBoxes:
+    XCSoarInterface::main_window.SetFullScreen(false);
+    XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = true;
+    break;
+
+  case lMap:
+    XCSoarInterface::main_window.SetFullScreen(true);
     XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = false;
     break;
   }

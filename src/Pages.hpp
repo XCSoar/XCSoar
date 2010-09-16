@@ -41,9 +41,17 @@ Copyright_License {
 
 namespace Pages
 {
+  enum Layout {
+    lEmpty,
+    lMap,
+    lMapInfoBoxes,
+    lMapAuxInfoBoxes
+  };
+
   void Open(int page);
   void Next();
   void Prev();
+  void OpenLayout(Layout layout);
   void Update();
 }
 
