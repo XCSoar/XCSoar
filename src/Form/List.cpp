@@ -119,7 +119,7 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
   canvas.select(Fonts::MapBold);
 
   for (unsigned i = start; i < end; i++) {
-    if (i == cursor) {
+    if (i == cursor && length > 0) {
       Brush brush(selected_background_color);
       canvas.fill_rectangle(rc, brush);
     } else
