@@ -63,8 +63,8 @@ FlatEllipse::FlatEllipse(const FlatPoint &_f1,
 
   FlatPoint op = ap;
   op.sub(p);
-  op.rotate(theta.Reciprocal());
-  theta_initial = Angle::radians(atan2(op.y*a, op.x*b));
+  op.rotate(-theta);
+  theta_initial = Angle::radians(atan2(op.y*a, op.x*b)).as_delta();
 }
 
 fixed 
@@ -79,8 +79,8 @@ FlatEllipse::ba() const {
 
 FlatPoint 
 FlatEllipse::parametric(const fixed t) const {
-  const Angle at = Angle::radians(fixed_two_pi*t)
-    +theta_initial;
+  const Angle at = (Angle::radians(fixed_two_pi*t)
+    +theta_initial).as_delta();
 
   fixed cat, sat;
   at.sin_cos(sat, cat);
