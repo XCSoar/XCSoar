@@ -43,8 +43,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Profile.hpp"
 
-#include <tchar.h>
-
 namespace Pages
 {
   int Current = 0;
@@ -163,6 +161,31 @@ Pages::MakeProfileKey(TCHAR* buffer, int page)
   return true;
 }
 
+void
+Pages::PageLayout::MakeString(TCHAR* buffer)
+{
+  switch (Type) {
+  case t_Map:
+    _tcscpy(buffer, _T("map"));
+
+    switch (MapInfoBoxes) {
+    case mib_Normal:
+      _tcscat(buffer, _T(" ib_normal"));
+      break;
+
+    case mib_Aux:
+      _tcscat(buffer, _T(" ib_aux"));
+      break;
+    }
+    break;
+
+  case t_Empty:
+  default:
+    _tcscpy(buffer, _T(""));
+    break;
+  }
+}
+
 bool
 Pages::MakeProfileValue(TCHAR* buffer, int page)
 {
@@ -170,29 +193,26 @@ Pages::MakeProfileValue(TCHAR* buffer, int page)
   if (!pl)
     return false;
 
-  switch (pl->Type) {
-  case PageLayout::t_Map:
-    _tcscpy(buffer, _T("map"));
-
-    switch (pl->MapInfoBoxes) {
-    case PageLayout::mib_Normal:
-      _tcscat(buffer, _T(" ib_normal"));
-      break;
-
-    case PageLayout::mib_Aux:
-      _tcscat(buffer, _T(" ib_aux"));
-      break;
-    }
-
-  case PageLayout::t_Empty:
-    _tcscpy(buffer, _T(""));
-    break;
-
-  default:
-    return false;
-  }
+  pl->MakeString(buffer);
 
   return true;
+}
+
+void
+Pages::PageLayout::ParseString(TCHAR* buffer)
+{
+  if (_tcsncmp(buffer, _T("map"), 3) == 0) {
+    Type = t_Map;
+
+    if (_tcsncmp(buffer + 3, _T(" ib_normal"), 10) == 0)
+      MapInfoBoxes = mib_Normal;
+    else if (_tcsncmp(buffer + 3, _T(" ib_aux"), 7) == 0)
+      MapInfoBoxes = mib_Aux;
+    else
+      MapInfoBoxes = mib_None;
+  } else {
+    Type = t_Empty;
+  }
 }
 
 bool
@@ -201,19 +221,7 @@ Pages::ParseProfileValue(TCHAR* buffer, int page)
   if (page < 0 || page > 7)
     return false;
 
-  if (_tcsncmp(buffer, _T("map"), 3) == 0) {
-    pages[page].Type = PageLayout::t_Map;
-
-    if (_tcsncmp(buffer + 3, _T(" ib_normal"), 10) == 0)
-      pages[page].MapInfoBoxes = PageLayout::mib_Normal;
-    else if (_tcsncmp(buffer + 3, _T(" ib_aux"), 7) == 0)
-      pages[page].MapInfoBoxes = PageLayout::mib_Aux;
-    else
-      pages[page].MapInfoBoxes = PageLayout::mib_None;
-  } else {
-    pages[page].Type = PageLayout::t_Empty;
-  }
-
+  pages[page].ParseString(buffer);
   return true;
 }
 

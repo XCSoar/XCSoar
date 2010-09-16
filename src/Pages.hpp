@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_PAGES_HPP
 #define XCSOAR_PAGES_HPP
 
+#include <tchar.h>
+
 namespace Pages
 {
   struct PageLayout
@@ -59,6 +61,9 @@ namespace Pages
 
     PageLayout(eType _type) :
       Type(_type), MapInfoBoxes(mib_None) {}
+
+    void ParseString(TCHAR* str);
+    void MakeString(TCHAR* str);
   };
 
   /**
