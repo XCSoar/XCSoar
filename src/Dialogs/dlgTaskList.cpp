@@ -89,7 +89,7 @@ get_cursor_task()
   return task_store.get_task(get_cursor_index() - 1);
 }
 
-static tstring
+static const TCHAR *
 get_cursor_name()
 {
   if (cursor_at_active_task())
@@ -123,7 +123,7 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
   if (DrawListIndex > task_store.size())
     return;
 
-  tstring name;
+  const TCHAR *name;
   if (DrawListIndex == 0)
     name = _T("(Active task)");
   else
@@ -131,7 +131,7 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 
   canvas.text(rc.left + Layout::FastScale(2),
               rc.top + Layout::FastScale(2),
-              name.c_str());
+              name);
 }
 
 static void
@@ -178,10 +178,9 @@ OnLoad()
   if (orig == NULL)
     return;
 
-  tstring fname = get_cursor_name();
   tstring text = _("Load the selected task?");
   text += _T("\n(");
-  text += fname;
+  text += get_cursor_name();
   text += _T(")");
 
   if (MessageBoxX(text.c_str(), _("Task Browser"),
@@ -211,7 +210,7 @@ OnDelete()
   if (cursor_at_active_task())
     return;
 
-  tstring fname = get_cursor_name();
+  const TCHAR *fname = get_cursor_name();
   tstring text = _("Delete the selected task?");
   text += _T("\n(");
   text += fname;
@@ -222,7 +221,7 @@ OnDelete()
     return;
 
   TCHAR path[MAX_PATH];
-  LocalPath(path, fname.c_str());
+  LocalPath(path, fname);
   File::Delete(path);
 
   task_store.scan();
@@ -235,7 +234,7 @@ OnRename()
   if (cursor_at_active_task())
     return;
 
-  tstring oldname = get_cursor_name();
+  const TCHAR *oldname = get_cursor_name();
   tstring newname = oldname;
   if (newname.find(_T(".tsk")) != tstring::npos)
     newname = newname.substr(0, newname.find(_T(".tsk")));
@@ -247,7 +246,7 @@ OnRename()
 
   TCHAR oldpath[MAX_PATH];
   TCHAR newpath[MAX_PATH];
-  LocalPath(oldpath, oldname.c_str());
+  LocalPath(oldpath, oldname);
   LocalPath(newpath, newname.c_str());
 
   MoveFile(oldpath, newpath);

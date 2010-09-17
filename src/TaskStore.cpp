@@ -110,10 +110,10 @@ TaskStore::TaskStoreItem::get_task()
   return task;
 }
 
-const tstring &
+const TCHAR *
 TaskStore::get_name(unsigned index) const
 {
-  return m_store[index].short_name;
+  return m_store[index].short_name.c_str();
 }
 
 OrderedTask* 

@@ -86,7 +86,8 @@ public:
    * @param index TaskStore index of the desired Task
    * @return Filename of the task defined by the given index
    */
-  const tstring &get_name(unsigned index) const;
+  const TCHAR *get_name(unsigned index) const;
+
   /**
    * Return the task defined by the given index
    * @param index TaskStore index of the desired Task
