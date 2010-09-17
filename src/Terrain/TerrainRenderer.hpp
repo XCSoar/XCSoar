@@ -91,7 +91,7 @@ protected:
   void GenerateSlopeImage(const Angle sunazimuth, const Angle sunelevation);
 
   void ColorTable();
-  void CopyTo(Canvas &canvas);
+  void CopyTo(Canvas &canvas, unsigned width, unsigned height);
 
   virtual bool do_scan_spot();
 

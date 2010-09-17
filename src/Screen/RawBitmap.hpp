@@ -114,7 +114,8 @@ public:
     return height;
   }
 
-  void stretch_to(unsigned width, unsigned height, Canvas &dest_canvas) const {
+  void stretch_to(unsigned width, unsigned height, Canvas &dest_canvas,
+                  unsigned dest_width, unsigned dest_height) const {
 #ifdef ENABLE_SDL
     Canvas src_canvas(surface);
     dest_canvas.stretch(src_canvas, 0, 0, width, height);
@@ -123,13 +124,13 @@ public:
     HDC source_dc = ::CreateCompatibleDC(dest_canvas);
     ::SelectObject(source_dc, bitmap);
     ::StretchBlt(dest_canvas, 0, 0,
-                 dest_canvas.get_width(), dest_canvas.get_height(),
+                 dest_width, dest_height,
                  source_dc, 0, 0, width, height,
                  SRCCOPY);
     ::DeleteDC(source_dc);
 #else
     ::StretchDIBits(dest_canvas, 0, 0,
-                    dest_canvas.get_width(), dest_canvas.get_height(),
+                    dest_width, dest_height,
                     0, GetHeight() - height, width, height,
                     buffer, &bi, DIB_RGB_COLORS, SRCCOPY);
 #endif

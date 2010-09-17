@@ -39,6 +39,7 @@ Copyright_License {
 #include "Terrain/TerrainRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Screen/Ramp.hpp"
+#include "Projection.hpp"
 
 #include <assert.h>
 
@@ -221,10 +222,11 @@ TerrainRenderer::ScanSpotHeights(const RECT& rect)
 }
 
 void
-TerrainRenderer::CopyTo(Canvas &canvas)
+TerrainRenderer::CopyTo(Canvas &canvas, unsigned width, unsigned height)
 {
   raster_renderer.GetImage().stretch_to(raster_renderer.get_width(),
-                                        raster_renderer.get_height(), canvas);
+                                        raster_renderer.get_height(), canvas,
+                                        width, height);
 }
 
 /**
@@ -263,7 +265,8 @@ TerrainRenderer::Draw(Canvas &canvas,
                                 TerrainContrast, TerrainBrightness,
                                 sunazimuth, sunelevation);
 
-  CopyTo(canvas);
+  CopyTo(canvas, map_projection.GetScreenWidth(),
+         map_projection.GetScreenHeight());
 }
 
 bool 

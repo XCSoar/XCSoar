@@ -37,9 +37,9 @@ Copyright_License {
 */
 
 #include "Terrain/WeatherTerrainRenderer.hpp"
-
 #include "Terrain/RasterWeather.hpp"
 #include "Screen/Ramp.hpp"
+#include "Projection.hpp"
 
 const COLORRAMP weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
   { // Blue to red       // vertical speed
@@ -231,5 +231,5 @@ WeatherTerrainRenderer::Draw(Canvas &canvas,
                                 TerrainContrast, TerrainBrightness,
                                 sunazimuth, sunelevation);
 
-  CopyTo(canvas);
+  CopyTo(canvas, projection.GetScreenWidth(), projection.GetScreenHeight());
 }
