@@ -94,8 +94,6 @@ static const TCHAR *TypeFilter[] = {_T("*"),
 
 static unsigned TypeFilterIdx=0;
 
-static unsigned UpLimit=0;
-
 static AirspaceSelectInfoVector AirspaceSelectInfo;
 
 static AirspaceSorter* airspace_sorter;
@@ -103,7 +101,7 @@ static AirspaceSorter* airspace_sorter;
 static void
 OnAirspaceListEnter(unsigned i)
 {
-  if (!UpLimit || i >= UpLimit || i>= AirspaceSelectInfo.size())
+  if (i >= AirspaceSelectInfo.size())
     return;
 
   dlgAirspaceDetails(*AirspaceSelectInfo[i].airspace);
@@ -140,8 +138,7 @@ static void UpdateList(void)
     airspace_sorter->filter_name(AirspaceSelectInfo, (NameFilter[NameFilterIdx])&0xff);
   }
 
-  UpLimit = AirspaceSelectInfo.size();
-  wAirspaceList->SetLength(UpLimit);
+  wAirspaceList->SetLength(AirspaceSelectInfo.size());
   wAirspaceList->invalidate();
 }
 
@@ -334,7 +331,7 @@ static void OnFilterType(DataField *Sender,
 static void
 OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  if ((i >= UpLimit) || (i>=AirspaceSelectInfo.size())) {
+  if (i >= AirspaceSelectInfo.size()) {
     if (!i) {
       canvas.text(rc.left + Layout::FastScale(2),
                   rc.top + Layout::FastScale(2), _("No Match!"));
@@ -443,8 +440,6 @@ static void
 PrepareAirspaceSelectDialog()
 {
   gcc_unused ScopeBusyIndicator busy;
-
-  UpLimit = 0;
 
   if (!Layout::landscape) {
     wf = LoadDialog(CallBackTable,
