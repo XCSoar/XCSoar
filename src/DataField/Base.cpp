@@ -172,7 +172,7 @@ DataField::CopyString(TCHAR * szbuffOut, bool bFormatted)
   szbuffOut[min(iLen, ComboPopupITEMMAX - 1)] = '\0';
 }
 
-int
+unsigned
 DataField::CreateComboListStepping(void)
 {
   // for DataFieldInteger and DataFieldFloat

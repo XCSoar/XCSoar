@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "DataField/Boolean.hpp"
 
-int
+unsigned
 DataFieldBoolean::CreateComboList(void)
 {
   int i = 0;

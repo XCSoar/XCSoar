@@ -70,7 +70,7 @@ ComboListEntry_t * ComboList::CreateItem(int ItemIndex,
 
 void ComboList::FreeComboPopupItemList(void)
 {
-  for (int i = 0; i < ComboPopupItemCount && i < ComboPopupLISTMAX; i++)
+  for (unsigned i = 0; i < ComboPopupItemCount && i < ComboPopupLISTMAX; i++)
   {
     if (ComboPopupItemList[i] != NULL)
     {

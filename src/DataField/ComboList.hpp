@@ -66,7 +66,7 @@ class ComboList{
     void FreeComboPopupItemList(void);
 
     int ComboPopupItemSavedIndex;
-    int ComboPopupItemCount;
+    unsigned ComboPopupItemCount;
     ComboListEntry_t * ComboPopupItemList[ComboPopupLISTMAX]; // RLD make this dynamic later
 
     int PropertyDataFieldIndexSaved;

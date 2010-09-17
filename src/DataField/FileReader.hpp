@@ -113,7 +113,7 @@ public:
    * Prepares the ComboList items
    * @return The number of items in the ComboList
    */
-  int CreateComboList(void);
+  virtual unsigned CreateComboList();
 
   /**
    * Adds a filename/filepath couple to the filelist

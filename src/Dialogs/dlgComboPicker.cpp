@@ -58,7 +58,7 @@ static int iSavedInitialDataIndex = -1;
 static void
 OnPaintComboPopupListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  if (i >= (unsigned)ComboListPopup->ComboPopupItemCount)
+  if (i >= ComboListPopup->ComboPopupItemCount)
     return;
 
   canvas.text_clipped(rc.left + Layout::FastScale(2),
@@ -71,9 +71,9 @@ OnHelpClicked(WindowControl * Sender)
 {
   (void)Sender;
 
-  int i = wComboPopupListFrame->GetCursorIndex();
+  unsigned i = wComboPopupListFrame->GetCursorIndex();
 
-  if (i >= 0 && i < ComboListPopup->ComboPopupItemCount) {
+  if (i < ComboListPopup->ComboPopupItemCount) {
     int iDataIndex = ComboListPopup->ComboPopupItemList[i]->DataFieldIndex;
     ComboPopupDataField->SetFromCombo(iDataIndex,
       ComboListPopup->ComboPopupItemList[i]->StringValue);
@@ -172,7 +172,7 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
 
     bOpenCombo = false; //tell  combo to exit loop after close
 
-    if (idx >= 0 && idx < ComboListPopup->ComboPopupItemCount) {
+    if (idx >= 0 && (unsigned)idx < ComboListPopup->ComboPopupItemCount) {
       // OK/Select
       if (ComboListPopup->ComboPopupItemList[idx]->DataFieldIndex ==
           ComboPopupReopenMOREDataIndex) {

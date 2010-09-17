@@ -552,7 +552,7 @@ DataFieldFileReader::Sort(void)
         DataFieldFileReaderCompare);
 }
 
-int
+unsigned
 DataFieldFileReader::CreateComboList(void)
 {
   EnsureLoaded();

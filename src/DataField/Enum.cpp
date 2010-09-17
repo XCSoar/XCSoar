@@ -162,7 +162,7 @@ DataFieldEnum::Sort(int startindex)
         DataFieldEnumCompare);
 }
 
-int
+unsigned
 DataFieldEnum::CreateComboList(void)
 {
   unsigned int i;

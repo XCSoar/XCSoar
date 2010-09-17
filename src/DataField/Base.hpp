@@ -114,7 +114,7 @@ public:
   // allows combolist to iterate all values w/out triggering external events
   void SetDetachGUI(bool bDetachGUI) { mDetachGUI = bDetachGUI; }
   bool GetDetachGUI(void) { return mDetachGUI; }
-  virtual int CreateComboList(void) { return 0; }
+  virtual unsigned CreateComboList() { return 0; }
   ComboList* GetCombo(void) { return &mComboList; }
 
   virtual void
@@ -132,7 +132,7 @@ protected:
   TCHAR mDisplayFormat[FORMATSIZE + 1];
   TCHAR mUnits[UNITSIZE + 1];
   ComboList mComboList;
-  int CreateComboListStepping(void);
+  unsigned CreateComboListStepping(void);
 
 private:
   int mUsageCounter;
