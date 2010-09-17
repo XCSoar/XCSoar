@@ -60,6 +60,7 @@ Copyright_License {
 #include "Form/Tabbed.hpp"
 #include "Form/Panel.hpp"
 #include "Form/Keyboard.hpp"
+#include "Form/CheckBox.hpp"
 #include "StringUtil.hpp"
 #include "ResourceLoader.hpp"
 
@@ -628,6 +629,23 @@ LoadChild(WndForm &form, ContainerControl &Parent,
                            X, Y, Width, Height,
                            style,
                            ClickCallback);
+
+  } else if (_tcscmp(node.getName(), _T("CheckBox")) == 0) {
+    // Determine ClickCallback function
+    CheckBoxControl::ClickNotifyCallback_t ClickCallback =
+      (CheckBoxControl::ClickNotifyCallback_t)
+      CallBackLookup(LookUpTable,
+                     StringToStringDflt(node.getAttribute(_T("OnClick")),
+                                        NULL));
+
+    // Create the CheckBoxControl
+
+    style.tab_stop();
+
+    window = new CheckBoxControl(Parent.GetClientAreaWindow(), Caption,
+                                 X, Y, Width, Height,
+                                 style,
+                                 ClickCallback);
 
   // SymbolButtonControl (WndSymbolButton) not used yet
   } else if (_tcscmp(node.getName(), _T("SymbolButton")) == 0) {
