@@ -79,19 +79,6 @@ public:
   GeoPoint parametric(const fixed t) const;
 
 private:
-/**
- * Find a target point on the ellipse perimeter inside the sector
- * todo: replace this function with GeoEllipse::unparametric
- * @param ap the AATPoint
- * @return
- */
-  fixed FindTargetInSector(const AATPoint& ap);
-  /**
-   * Test if a point is inside the sector (helps FindTargetInSector())
-   * @param ap the AATPoint
-   * @return
-   */
-  bool isInSector(const AATPoint& ap, fixed t);
   fixed t_up;
   fixed t_down;
 };
