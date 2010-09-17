@@ -1561,6 +1561,7 @@ void
 InputEvents::eventAddWaypoint(const TCHAR *misc)
 {
   Waypoint edit_waypoint = way_points.create(Basic().Location);
+  edit_waypoint.Altitude = Basic().GPSAltitude;
   if (dlgWaypointEditShowModal(edit_waypoint)) {
     if (edit_waypoint.Name.size()) {
       ScopeSuspendAllThreads suspend;
