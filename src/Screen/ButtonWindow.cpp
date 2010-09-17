@@ -97,30 +97,34 @@ ButtonWindow::on_paint(Canvas &canvas)
               (get_height() - size.cy) / 2 + down, text.c_str());
 }
 
+bool
+ButtonWindow::on_clicked()
+{
+  return false;
+}
+
 #else /* !ENABLE_SDL */
 
 #include <commctrl.h>
 
 void
-ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-                  int left, int top, unsigned width, unsigned height,
-                  const ButtonWindowStyle style)
+BaseButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
+                      int left, int top, unsigned width, unsigned height,
+                      const WindowStyle style)
 {
   Window::set(&parent, WC_BUTTON, text,
               left, top, width, height,
               style);
 
   ::SetWindowLong(hWnd, GWL_ID, id);
+
+  install_wndproc();
 }
 
-void
-ButtonWindow::set(ContainerWindow &parent, const TCHAR *text,
-                  int left, int top, unsigned width, unsigned height,
-                  const ButtonWindowStyle style)
+bool
+BaseButtonWindow::on_clicked()
 {
-  set(parent, text, COMMAND_BOUNCE_ID,
-      left, top, width, height, style);
-  install_wndproc();
+  return false;
 }
 
 const tstring
@@ -137,9 +141,3 @@ ButtonWindow::get_text() const
 }
 
 #endif /* !ENABLE_SDL */
-
-bool
-ButtonWindow::on_clicked()
-{
-  return false;
-}

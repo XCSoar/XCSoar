@@ -87,16 +87,24 @@ public:
 
 #else /* !ENABLE_SDL */
 
-#include <commctrl.h>
+#include "Screen/ButtonWindow.hpp"
 
 /**
  * A check box.
  */
-class CheckBox : public Window {
+class CheckBox : public BaseButtonWindow {
 public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
            int left, int top, unsigned width, unsigned height,
-           const CheckBoxStyle style=CheckBoxStyle());
+           const CheckBoxStyle style=CheckBoxStyle()) {
+    BaseButtonWindow::set(parent, text, id, left, top, width, height, style);
+  }
+
+  void set(ContainerWindow &parent, const TCHAR *text,
+           int left, int top, unsigned width, unsigned height,
+           const CheckBoxStyle style=CheckBoxStyle()) {
+    BaseButtonWindow::set(parent, text, left, top, width, height, style);
+  }
 
   bool get_checked() const {
     return SendMessage(hWnd, BM_GETCHECK, 0, 0) == BST_CHECKED;

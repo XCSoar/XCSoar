@@ -133,9 +133,9 @@ protected:
 #include <tchar.h>
 
 /**
- * A clickable button.
+ * A base class for WC_BUTTON windows.
  */
-class ButtonWindow : public Window {
+class BaseButtonWindow : public Window {
 public:
   enum {
     /**
@@ -149,11 +149,44 @@ public:
 public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
            int left, int top, unsigned width, unsigned height,
-           const ButtonWindowStyle style=ButtonWindowStyle());
+           const WindowStyle style);
 
   void set(ContainerWindow &parent, const TCHAR *text,
            int left, int top, unsigned width, unsigned height,
-           const ButtonWindowStyle style=ButtonWindowStyle());
+           const WindowStyle style) {
+    set(parent, text, COMMAND_BOUNCE_ID,
+        left, top, width, height, style);
+  }
+
+  /**
+   * The button was clicked, and its action shall be triggered.
+   */
+  virtual bool on_clicked();
+};
+
+/**
+ * A clickable button.
+ */
+class ButtonWindow : public BaseButtonWindow {
+public:
+  void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
+           int left, int top, unsigned width, unsigned height,
+           const ButtonWindowStyle style=ButtonWindowStyle()) {
+    BaseButtonWindow::set(parent, text, id, left, top, width, height, style);
+  }
+
+  void set(ContainerWindow &parent, const TCHAR *text,
+           int left, int top, unsigned width, unsigned height,
+           const ButtonWindowStyle style=ButtonWindowStyle()) {
+    BaseButtonWindow::set(parent, text, left, top, width, height, style);
+  }
+
+  bool is_down() const {
+    assert_none_locked();
+    assert_thread();
+
+    return (Button_GetState(hWnd) & BST_PUSHED) != 0;
+  }
 
   void set_text(const TCHAR *text) {
     assert_none_locked();
@@ -163,18 +196,6 @@ public:
   }
 
   const tstring get_text() const;
-
-  bool is_down() const {
-    assert_none_locked();
-    assert_thread();
-
-    return (Button_GetState(hWnd) & BST_PUSHED) != 0;
-  }
-
-  /**
-   * The button was clicked, and its action shall be triggered.
-   */
-  virtual bool on_clicked();
 };
 
 #endif /* !ENABLE_SDL */

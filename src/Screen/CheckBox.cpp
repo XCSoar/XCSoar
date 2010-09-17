@@ -42,23 +42,4 @@ Copyright_License {
 // XXX
 #else /* !ENABLE_SDL */
 
-#include "Screen/Window.hpp"
-
-#include <commctrl.h>
-
-void
-CheckBox::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-              int left, int top, unsigned width, unsigned height,
-              const CheckBoxStyle style)
-{
-  Window::set(&parent, WC_BUTTON, text,
-              left, top, width, height,
-              style);
-
-  ::SetWindowLong(hWnd, GWL_ID, id);
-
-  /* this is needed to make the parent's on_color() work */
-  install_wndproc();
-}
-
 #endif /* !ENABLE_SDL */
