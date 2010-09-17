@@ -44,6 +44,8 @@ Copyright_License {
 #include "Profile.hpp"
 #include "Language.hpp"
 
+#include <stdio.h>
+
 namespace Pages
 {
   int Current = 0;
