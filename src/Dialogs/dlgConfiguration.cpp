@@ -180,7 +180,6 @@ static WndButton *buttonAircraftRego = NULL;
 static WndButton *buttonLoggerID = NULL;
 static WndButton *buttonCopy = NULL;
 static WndButton *buttonPaste = NULL;
-static WndListFrame* PagesList = NULL;
 
 static void
 UpdateButtons(void)
@@ -1971,6 +1970,7 @@ PrepareConfigurationDialog()
   configuration_tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
   assert(configuration_tabbed != NULL);
 
+  WndListFrame* PagesList = NULL;
   PagesList = ((WndListFrame *)wf->FindByName(_T("lstPages")));
   assert(PagesList != NULL);
   PagesList->SetPaintItemCallback(OnPagesListItemPaint);
