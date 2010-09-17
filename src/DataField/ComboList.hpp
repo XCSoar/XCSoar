@@ -52,9 +52,7 @@ class ComboList{
 
   public:
 
-    ComboList(void) {
-      ComboPopupItemSavedIndex=-1;
-    }
+  ComboList():ComboPopupItemSavedIndex(-1) {}
 
 #define ComboPopupLISTMAX 300
 #define ComboPopupITEMMAX 100
