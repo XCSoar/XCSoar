@@ -59,8 +59,7 @@ static bool colormode = false;
 static void
 OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  if (i >= AIRSPACECLASSCOUNT)
-    return;
+  assert(i < AIRSPACECLASSCOUNT);
 
   int w1, w2, x0;
   int w0 = rc.right - rc.left - Layout::FastScale(4);

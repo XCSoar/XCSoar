@@ -118,8 +118,10 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
   canvas.background_transparent();
   canvas.select(Fonts::MapBold);
 
-  for (unsigned i = start; i < end; i++) {
-    if (i == cursor && length > 0) {
+  unsigned last_item = min(length, end);
+
+  for (unsigned i = start; i < last_item; i++) {
+    if (i == cursor) {
       Brush brush(selected_background_color);
       canvas.fill_rectangle(rc, brush);
     } else
@@ -132,6 +134,11 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 
     ::OffsetRect(&rc, 0, rc.bottom - rc.top);
   }
+
+  /* paint the bottom part below the last item */
+  rc.bottom = canvas.get_height();
+  if (rc.bottom > rc.top)
+    canvas.fill_rectangle(rc, background_brush);
 }
 
 void

@@ -48,8 +48,7 @@ static WndForm *wf = NULL;
 static void
 OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  if (i >= NUMAIRSPACEBRUSHES)
-    return;
+  assert(i < NUMAIRSPACECOLORS);
 
   canvas.black_pen();
   canvas.set_background_color(Color::WHITE);

@@ -90,9 +90,9 @@ RefreshView()
 static void
 OnPointPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
+  assert(DrawListIndex < point_types.size());
+
   TCHAR sTmp[120];
-  if (DrawListIndex >= point_types.size())
-    return;
 
   const TCHAR* text = OrderedTaskPointName(point_types[DrawListIndex]);
 

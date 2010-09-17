@@ -205,14 +205,18 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   TCHAR sTmp[128];
 
   ProtectedAirspaceWarningManager::Lease lease(airspace_warnings);
-  const AirspaceWarning* _warning = lease->get_warning(i);
+  if (lease->empty()) {
+    assert(i == 0);
 
-  if (!_warning) {
-    if (i == 0)
-      canvas.text(paint_rc.left + IBLSCALE(2),
-                  paint_rc.top + IBLSCALE(2), _("No Warnings"));
+    canvas.text(paint_rc.left + IBLSCALE(2),
+                paint_rc.top + IBLSCALE(2), _("No Warnings"));
     return;
   }
+
+  assert(i < lease->size());
+
+  const AirspaceWarning* _warning = lease->get_warning(i);
+
   const AirspaceWarning warning = *_warning;
 
   const AbstractAirspace& as = warning.get_airspace();

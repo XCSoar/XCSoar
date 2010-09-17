@@ -51,8 +51,7 @@ static int ItemIndex = -1;
 static void
 OnAirspaceColoursPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  if (i >= NUMAIRSPACECOLORS)
-    return;
+  assert(i < NUMAIRSPACECOLORS);
 
   canvas.white_brush();
   canvas.black_pen();

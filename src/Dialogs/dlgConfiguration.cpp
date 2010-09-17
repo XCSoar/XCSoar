@@ -1935,8 +1935,7 @@ OnPagesListItemPaint(Canvas &canvas, const RECT rc, unsigned i)
 
   TCHAR buffer[255];
   PageLayout* pl = GetLayout(i);
-  if (!pl)
-    return;
+  assert(pl != NULL);
 
   pl->MakeTitle(buffer);
 

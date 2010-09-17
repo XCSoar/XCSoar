@@ -120,8 +120,7 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
 static void
 OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
-  if (DrawListIndex > task_store.size())
-    return;
+  assert(DrawListIndex <= task_store.size());
 
   const TCHAR *name;
   if (DrawListIndex == 0)

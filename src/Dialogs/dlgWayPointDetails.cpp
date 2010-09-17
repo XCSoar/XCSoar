@@ -163,9 +163,7 @@ static void
 OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
   assert(selected_waypoint);
-
-  if (DrawListIndex >= nTextLines)
-    return;
+  assert(DrawListIndex < nTextLines);
 
   const TCHAR* text = selected_waypoint->Details.c_str();
   int nstart = LineOffsets[DrawListIndex];

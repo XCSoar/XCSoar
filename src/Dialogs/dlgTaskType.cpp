@@ -74,10 +74,9 @@ RefreshView()
 static void
 OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
+  assert(DrawListIndex < factory_types.size());
+
   TCHAR sTmp[120];
-  if (DrawListIndex >= factory_types.size()) {
-    return;
-  }
 
   const TCHAR* text = OrderedTaskFactoryName(factory_types[DrawListIndex]);
 

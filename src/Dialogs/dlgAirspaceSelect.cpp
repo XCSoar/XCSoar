@@ -101,8 +101,12 @@ static AirspaceSorter* airspace_sorter;
 static void
 OnAirspaceListEnter(unsigned i)
 {
-  if (i >= AirspaceSelectInfo.size())
+  if (AirspaceSelectInfo.empty()) {
+    assert(i == 0);
     return;
+  }
+
+  assert(i < AirspaceSelectInfo.size());
 
   dlgAirspaceDetails(*AirspaceSelectInfo[i].airspace);
 }
@@ -138,7 +142,7 @@ static void UpdateList(void)
     airspace_sorter->filter_name(AirspaceSelectInfo, (NameFilter[NameFilterIdx])&0xff);
   }
 
-  wAirspaceList->SetLength(AirspaceSelectInfo.size());
+  wAirspaceList->SetLength(max((size_t)1, AirspaceSelectInfo.size()));
   wAirspaceList->invalidate();
 }
 
@@ -331,13 +335,15 @@ static void OnFilterType(DataField *Sender,
 static void
 OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  if (i >= AirspaceSelectInfo.size()) {
-    if (!i) {
-      canvas.text(rc.left + Layout::FastScale(2),
-                  rc.top + Layout::FastScale(2), _("No Match!"));
-    }
+  if (AirspaceSelectInfo.empty()) {
+    assert(i == 0);
+
+    canvas.text(rc.left + Layout::FastScale(2),
+                rc.top + Layout::FastScale(2), _("No Match!"));
     return;
   }
+
+  assert(i < AirspaceSelectInfo.size());
 
   const AbstractAirspace &airspace = *AirspaceSelectInfo[i].airspace;
     

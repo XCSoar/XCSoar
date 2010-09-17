@@ -464,13 +464,19 @@ PaintWaypoint(Canvas &canvas, const RECT rc,
 static void
 OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  if (i < WayPointSelectInfo.size())
-    PaintWaypoint(canvas, rc, WayPointSelectInfo[i]);
-  else if (i == 0)
+  if (WayPointSelectInfo.empty()) {
+    assert(i == 0);
+
     canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
                 filter_data.defined() || way_points.empty()
                 ? _("No Match!")
                 : _("Choose a filter or click here"));
+    return;
+  }
+
+  assert(i < WayPointSelectInfo.size());
+
+  PaintWaypoint(canvas, rc, WayPointSelectInfo[i]);
 }
 
 static void

@@ -115,10 +115,9 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
 static void
 OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
+  assert(DrawListIndex <= ordered_task->task_size());
+
   TCHAR sTmp[120];
-  if (DrawListIndex > ordered_task->task_size())
-    // error!
-    return;
 
   if (DrawListIndex == ordered_task->task_size()) {
     if (!ordered_task->is_max_size()) {

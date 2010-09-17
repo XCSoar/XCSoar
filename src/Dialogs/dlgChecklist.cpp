@@ -95,8 +95,7 @@ NextPage(int Step)
 static void
 OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  if (i >= nTextLines)
-    return;
+  assert(i < nTextLines);
 
   TCHAR* text = ChecklistText[page];
   if (text == NULL)

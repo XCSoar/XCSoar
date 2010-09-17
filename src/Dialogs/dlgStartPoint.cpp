@@ -53,10 +53,9 @@ static WndListFrame *wStartPointList=NULL;
 static void
 OnStartPointPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  TCHAR label[MAX_PATH];
+  assert(i < MAXSTARTPOINTS);
 
-  if (i >= MAXSTARTPOINTS)
-    return;
+  TCHAR label[MAX_PATH];
 
   if ((task_start_points[i].Index != -1)
       &&(task_start_stats[i].Active)) {
