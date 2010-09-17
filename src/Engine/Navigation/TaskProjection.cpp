@@ -100,8 +100,8 @@ GeoPoint
 TaskProjection::funproject(const FlatPoint& fp) const
 {
   GeoPoint tp;
-  tp.Longitude = Angle::native(fp.x/cos_midloc)+location_mid.Longitude;
-  tp.Latitude = Angle::native(fp.y/fixed_scale)+location_mid.Latitude;
+  tp.Longitude = (Angle::native(fp.x/cos_midloc)+location_mid.Longitude).as_delta();
+  tp.Latitude = (Angle::native(fp.y/fixed_scale)+location_mid.Latitude).as_delta();
   return tp;
 }
 
