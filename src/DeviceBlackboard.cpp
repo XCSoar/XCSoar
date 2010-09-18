@@ -452,9 +452,11 @@ DeviceBlackboard::tick_fast(const GlidePolar& glide_polar)
 void
 DeviceBlackboard::NettoVario(const GlidePolar& glide_polar)
 {
-  SetBasic().GliderSinkRate = 
-    - glide_polar.SinkRate(Basic().IndicatedAirspeed,
-                           Basic().acceleration.Gload);
+  SetBasic().GliderSinkRate = Basic().flight.Flying
+    ? - glide_polar.SinkRate(Basic().IndicatedAirspeed,
+                             Basic().acceleration.Gload)
+    /* the glider sink rate is useless when not flying */
+    : fixed_zero;
 
   if (!Basic().NettoVarioAvailable)
     SetBasic().NettoVario = Basic().TotalEnergyVario
