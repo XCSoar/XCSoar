@@ -77,23 +77,23 @@ sub convert_data {
   my $latmax = $area->top();
 
   my $shapes = [ { inshp => "mispopp\@pop\(\*\)_point.shp", 
-		   where => "", select => "txt", opts => "" },
+		   where => "", select => "txt" },
 		 { inshp => "builtupa\@pop\(\*\)_area.shp", 
-		   where => "", select => "nam", opts => "" },
+		   where => "", select => "nam" },
 		 { inshp => "watrcrsl\@hydro\(\*\)_line.shp", 
-		   where => "hyc=8",select => "nam", opts => ""}, # was hyc=6
+		   where => "hyc=8",select => "nam"}, # was hyc=6
 		 { inshp => "inwatera\@hydro\(\*\)_area.shp", 
-		   where => "hyc=8",select => "nam", opts => ""},
+		   where => "hyc=8",select => "nam"},
 		 { inshp => "railrdl\@trans\(\*\)_line.shp", 
-		   where => "exs=28",select => "fco", opts => ""},
+		   where => "exs=28",select => "fco"},
 		 { inshp => "roadl\@trans\(\*\)_line.shp", 
-		   where => "rtt=14", select => "med", opts => ""} ];
+		   where => "rtt=14", select => "med"} ];
   
   for my $shape (@$shapes) {
     my $sname = $shape->{inshp};
     $sname =~ s/(\S+)\@.*/$1/g;
     my $whereclause = $shape->{where} ? " -where \"" . $shape->{where} . "\"" : "";
-    my $comd = "ogr2ogr $tempdir \"$collected_dir/" . $shape->{inshp} . "\"  $whereclause -select \"" . $shape->{select} . "\" -spat $lonmin $latmin $lonmax $latmax " . $shape->{opts};
+    my $comd = "ogr2ogr $tempdir \"$collected_dir/" . $shape->{inshp} . "\"  $whereclause -select \"" . $shape->{select} . "\" -spat $lonmin $latmin $lonmax $latmax";
     system($comd);
 
     my $file = $shape->{inshp};
