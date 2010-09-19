@@ -1,3 +1,4 @@
+
 results/res-*
 .stgit*
 .deps
@@ -28,3 +29,7 @@ debian/stamp-*
 debian/tmp
 debian/*.substvars
 debian/xcsoar
+
+terraingen/data/*
+terraingen/tmp/*
+*.pyc
