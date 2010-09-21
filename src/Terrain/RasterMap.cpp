@@ -48,9 +48,9 @@ int RasterMap::ref_count = 0;
 RasterMap::RasterMap(const char *_path)
   :path(strdup(_path))
 {
-  if (ref_count==0) {
+  if (ref_count == 0)
     jas_init();
-  }
+
   ref_count++;
 
   _ReloadJPG2000();
@@ -61,9 +61,8 @@ RasterMap::RasterMap(const char *_path)
 
 RasterMap::~RasterMap() {
   ref_count--;
-  if (ref_count==0) {
+  if (ref_count == 0)
     jas_cleanup();
-  }
 
   free(path);
 }
