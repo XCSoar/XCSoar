@@ -120,7 +120,7 @@ RasterMap::_ReloadJPG2000()
 {
   raster_tile_cache.LoadJPG2000(path);
 
-  if (!raster_tile_cache.GetInitialised())
+  if (!isMapLoaded())
     return;
 
   bounds.west = Angle::degrees((fixed)raster_tile_cache.lon_min);
