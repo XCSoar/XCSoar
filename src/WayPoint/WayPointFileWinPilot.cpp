@@ -67,7 +67,7 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
 
   // Get fields
   n_params = extractParameters(line, ctemp, params, 20);
-  if (n_params < 5)
+  if (n_params < 6)
     return false;
 
   // Latitude (e.g. 51:15.900N)
