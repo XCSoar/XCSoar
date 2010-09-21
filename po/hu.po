@@ -19,11 +19,11 @@ msgstr ""
 
 #: src/Airspace/AirspaceGlue.cpp:55
 msgid "Loading Airspace File..."
-msgstr "LÈgtÈr (Airspace) file betˆltÈse..."
+msgstr "L√©gt√©r (Airspace) file bet√∂lt√©se..."
 
 #: src/Airspace/AirspaceParser.cpp:154
 msgid "Parse Error at Line"
-msgstr "Hiba a kˆvetkezı sorban: "
+msgstr "Hiba a k√∂vetkez√µ sorban: "
 
 #: src/Airspace/AirspaceParser.cpp:155
 msgid "Line skipped."
@@ -33,11 +33,11 @@ msgstr "sor kihagyva"
 #: src/Dialogs/dlgAnalysis.cpp:254 src/Dialogs/dlgConfiguration.cpp:89
 #: Data/Dialogs/dlgVoice.xml:34
 msgid "Airspace"
-msgstr "LÈgtÈr"
+msgstr "L√©gt√©r"
 
 #: src/ConditionMonitor.cpp:176
 msgid "Significant wind change"
-msgstr "Jelentıs szÈl v·ltoz·s"
+msgstr "Jelent√µs sz√©l v√°ltoz√°s"
 
 #: src/ConditionMonitor.cpp:292
 msgid "Expect arrival past sunset"
