@@ -58,7 +58,6 @@ class MapGenerator:
         print ""
         o = ogr2ogr()
         files = o.copy_clipped(self.__bounds, self.__dir_temp)
-        print files
         self.__files.extend(files)
         self.__files.append([o.generate_tpl_file(self.__dir_temp), True])
         
