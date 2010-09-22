@@ -12,7 +12,7 @@ __layers = [["pop-miscellaneous-population-p", "mispopppop_point", "", "txt"],
             ["trans-railroad-l", "railrdltrans_line", "exs=28", "fco"],
             ["trans-road-l", "roadltrans_line", "rtt=14", "med"]]
         
-def __create_layer(rc, layer, dir_data, dir_temp):
+def __create_layer(bounds, layer, dir_data, dir_temp):
     print "Creating topology layer " + layer[1] + " ..."
 
     for i in range(len(__maps)):
@@ -30,10 +30,10 @@ def __create_layer(rc, layer, dir_data, dir_temp):
         arg.extend(["-select", layer[3]])
         
         arg.extend(["-spat",
-                    str(rc.left.value_degrees()),
-                    str(rc.bottom.value_degrees()),
-                    str(rc.right.value_degrees()),
-                    str(rc.top.value_degrees())])
+                    str(bounds.left.value_degrees()),
+                    str(bounds.bottom.value_degrees()),
+                    str(bounds.right.value_degrees()),
+                    str(bounds.top.value_degrees())])
 
         arg.append(dir_temp)
         arg.append(os.path.join(dir_data, __maps[i]))
@@ -53,10 +53,10 @@ def __create_layer(rc, layer, dir_data, dir_temp):
         
     return files
         
-def __create_layers(rc, dir_data, dir_temp):
+def __create_layers(bounds, dir_data, dir_temp):
     files = []
     for layer in __layers:
-        files.extend(__create_layer(rc, layer, dir_data, dir_temp))
+        files.extend(__create_layer(bounds, layer, dir_data, dir_temp))
         
     return files
                     
