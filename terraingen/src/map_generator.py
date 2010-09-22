@@ -151,9 +151,9 @@ class MapGenerator:
                 continue
             
             # Check if we should compress the file  
-            if file[1] == True:
-                z.write(file[0], None, ZIP_DEFLATED)
-            else:
+            if file[1] == False:
                 z.write(file[0], None, ZIP_STORED)
+            else:
+                z.write(file[0], None, ZIP_DEFLATED)
         z.close()
         print "done"        
