@@ -227,7 +227,7 @@ def __convert(dir_temp, rc):
         
     args = [cmd_geojasper,
             "-f", os.path.join(dir_temp, "terrain.tif"),
-            "-F" ,os.path.join(dir_temp, "terrain.jp2"),
+            "-F", os.path.join(dir_temp, "terrain.jp2"),
             "-T", "jp2",
             "-O", "rate=0.1",
             "-O", "tilewidth=256",
@@ -240,6 +240,7 @@ def __convert(dir_temp, rc):
     p = subprocess.Popen(args)
     p.wait()
     print "done"
+    return os.path.join(dir_temp, "terrain.jp2")
     
 def __cleanup(dir_temp):
     os.unlink(os.path.join(dir_temp, "terrain_merged.tif"))
@@ -260,9 +261,9 @@ def Create(bounds, arcseconds_per_pixel = 9.0,
     __merge_tiles(dir_temp, tiles)
     __resample(dir_temp, arcseconds_per_pixel)
     __crop(dir_temp, bounds)
-    __convert(dir_temp, bounds)
+    terrain_file = __convert(dir_temp, bounds)
     __cleanup(dir_temp)
     
-    return [os.path.join(dir_temp, "terrain.jp2"), False]
+    return [terrain_file, False]
 
     
