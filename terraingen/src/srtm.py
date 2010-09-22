@@ -42,11 +42,11 @@ def __prepare_tile(source, destination, lat, lon):
     print "Decompression failed!"
     return None
 
-def prepare_tiles(source, destination, rc):
+def gather_tiles(source, destination, rc):
     if not isinstance(rc, georect.GeoRect):
         return None
 
-    print "Preparing terrain tiles ..."
+    print "Gathering terrain tiles ..."
     lat_start = int(math.floor(rc.bottom.value_degrees() / 5.0)) * 5
     lon_start = int(math.floor(rc.left.value_degrees() / 5.0)) * 5
     lat_end = int(math.ceil(rc.top.value_degrees() / 5.0)) * 5
@@ -229,7 +229,7 @@ def Create(bounds, arcseconds_per_pixel = 9.0,
     dir_temp = os.path.abspath(dir_temp) 
     
     # Make sure the tiles are available
-    tiles = prepare_tiles(dir_data + "/", dir_temp + "/", bounds)
+    tiles = gather_tiles(dir_data + "/", dir_temp + "/", bounds)
     merge_tiles(dir_temp + "/", tiles)
     resample(dir_temp + "/", arcseconds_per_pixel)
     crop(dir_temp + "/", bounds)
