@@ -38,9 +38,8 @@ class vmap0:
                 arg.append(str(rc.right.value_degrees()))
                 arg.append(str(rc.top.value_degrees()))
 
-                arg.append(os.path.abspath(destination))
-                arg.append(os.path.abspath(self.__source + 
-                                           self.__maps[i]))
+                arg.append(destination)
+                arg.append(os.path.join(self.__source, self.__maps[i]))
 
                 arg.append(layer[0])
                 arg.append("-nln")
@@ -59,7 +58,7 @@ class vmap0:
             
                 
     def generate_tpl_file(self, destination):
-        file = open(os.path.abspath(destination) + "/topology.tpl" , "w")
+        file = open(os.path.join(destination, "topology.tpl"), "w")
         file.write("* filename,range,icon,field\n");
         file.write("inwaterahydro_area, 100,,,64,96,240\n");
         file.write("watrcrslhydro_line,    7,,,64,96,240\n");
@@ -68,7 +67,7 @@ class vmap0:
         file.write("railrdltrans_line,   10,,,64,64,64\n");
         file.write("mispopppop_point,    5,218,1,223,223,0\n");
         file.close()
-        return os.path.abspath(destination) + "/topology.tpl"
+        return os.path.join(destination, "/topology.tpl")
 
 def Create(bounds, dir_data = "../data/", dir_temp = "../tmp/"):
     dir_data = os.path.abspath(os.path.join(dir_data, "vmap0")) 
