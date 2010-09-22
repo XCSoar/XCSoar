@@ -95,13 +95,14 @@ def __gather_tiles(dir_data, dir_temp, bounds):
 '''
 def __merge_tiles(dir_temp, tiles):
     print "Merging terrain tiles ...",
-    if os.path.exists(os.path.join(dir_temp, "terrain_merged.tif")):
-        os.unlink(os.path.join(dir_temp, "terrain_merged.tif"))
+    output_file = os.path.join(dir_temp, "terrain_merged.tif")
+    if os.path.exists(output_file):
+        os.unlink(output_file)
         
     args = [cmd_gdal_merge,
             "-n", "-32768",
             "-init", "-32768",
-            "-o", os.path.join(dir_temp, "terrain_merged.tif")]
+            "-o", output_file]
     args.extend(tiles)
     p = subprocess.Popen(args)
     p.wait()
@@ -142,8 +143,9 @@ def __merge_tiles(dir_temp, tiles):
 '''    
 def __resample(dir_temp, arcseconds_per_pixel):
     print "Resampling terrain ...",
-    if os.path.exists(os.path.join(dir_temp, "terrain_resampled.tif")):
-        os.unlink(os.path.join(dir_temp, "terrain_resampled.tif"))
+    output_file = os.path.join(dir_temp, "terrain_resampled.tif")
+    if os.path.exists(output_file):
+        os.unlink(output_file)
         
     degree_per_pixel = float(arcseconds_per_pixel) / 3600.0
 
@@ -156,7 +158,7 @@ def __resample(dir_temp, arcseconds_per_pixel):
             "-srcnodata", "-32768",
             "-dstnodata", "-1",
             os.path.join(dir_temp, "terrain_merged.tif"),
-            os.path.join(dir_temp, "terrain_resampled.tif")]
+            output_file]
     p = subprocess.Popen(args)
     p.wait()
     print "done"
@@ -185,8 +187,9 @@ def __resample(dir_temp, arcseconds_per_pixel):
 '''    
 def __crop(dir_temp, rc):
     print "Cropping terrain ...",
-    if os.path.exists(os.path.join(dir_temp, "terrain.tif")):
-        os.unlink(os.path.join(dir_temp, "terrain.tif"))
+    output_file = os.path.join(dir_temp, "terrain.tif")
+    if os.path.exists(output_file):
+        os.unlink(output_file)
         
     args = [cmd_gdal_warp,
             "-srcnodata", "-1",
@@ -196,7 +199,7 @@ def __crop(dir_temp, rc):
             str(rc.right.value_degrees()),
             str(rc.top.value_degrees()),
             os.path.join(dir_temp, "terrain_resampled.tif"),
-            os.path.join(dir_temp, "terrain.tif")]
+            output_file]
     p = subprocess.Popen(args)
     p.wait()
     print "done"
@@ -221,12 +224,13 @@ def __crop(dir_temp, rc):
 '''    
 def __convert(dir_temp, rc):
     print "Converting terrain to GeoJP2 format ...",
-    if os.path.exists(os.path.join(dir_temp, "terrain.jp2")):
-        os.unlink(os.path.join(dir_temp, "terrain.jp2"))
+    output_file = os.path.join(dir_temp, "terrain.jp2")
+    if os.path.exists(output_file):
+        os.unlink(output_file)
         
     args = [cmd_geojasper,
             "-f", os.path.join(dir_temp, "terrain.tif"),
-            "-F", os.path.join(dir_temp, "terrain.jp2"),
+            "-F", output_file,
             "-T", "jp2",
             "-O", "rate=0.1",
             "-O", "tilewidth=256",
@@ -239,7 +243,7 @@ def __convert(dir_temp, rc):
     p = subprocess.Popen(args)
     p.wait()
     print "done"
-    return os.path.join(dir_temp, "terrain.jp2")
+    return output_file
     
 def __cleanup(dir_temp):
     os.unlink(os.path.join(dir_temp, "terrain_merged.tif"))
