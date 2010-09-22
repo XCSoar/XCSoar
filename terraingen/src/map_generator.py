@@ -3,7 +3,7 @@ import shutil
 from zipfile import ZipFile, ZIP_DEFLATED, ZIP_STORED
 from georect import GeoRect
 from waypoint_list import WaypointList
-import srtm
+import terrain_srtm
 from ogr2ogr import ogr2ogr
 
 class MapGenerator:
@@ -71,7 +71,7 @@ class MapGenerator:
             return False
         
         print ""
-        terrain_file = srtm.Create(self.__bounds, arcseconds_per_pixel,
+        terrain_file = terrain_srtm.Create(self.__bounds, arcseconds_per_pixel,
                                    self.__dir_data, self.__dir_temp)
         if terrain_file == None:
             return False
