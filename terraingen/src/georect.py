@@ -10,4 +10,10 @@ class GeoRect:
         self.right = right
         self.top = top
         self.bottom = bottom
+        
+    def __str__(self):
+        return ("L: " + str(self.left) + ", " + 
+                "R: " + str(self.right) + ", " +
+                "T: " + str(self.top) + ", " +
+                "B: " + str(self.bottom))
             
