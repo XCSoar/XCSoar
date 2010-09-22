@@ -42,7 +42,7 @@ def __prepare_tile(source, destination, lat, lon):
     print "Decompression failed!"
     return None
 
-def __prepare_tiles(source, destination, rc):
+def prepare_tiles(source, destination, rc):
     if not isinstance(rc, georect.GeoRect):
         return None
 
@@ -76,7 +76,7 @@ def __prepare_tiles(source, destination, rc):
     a.tif b.tif c.tif ...
         (Input files)
 '''
-def __merge_tiles(destination, tiles):
+def merge_tiles(destination, tiles):
     print "Merging terrain tiles ..."
     if os.path.exists(destination + "terrain_merged.tif"):
         return
@@ -123,7 +123,7 @@ def __merge_tiles(destination, tiles):
     blabla_resampled.tif
         (Output file)
 '''    
-def __resample(destination):
+def resample(destination):
     print "Resampling terrain ..."
     if os.path.exists(destination + "terrain_resampled.tif"):
         return
@@ -168,7 +168,7 @@ def __resample(destination):
     blabla_cropped.tif
         (Output file)
 '''    
-def __crop(destination, rc):
+def crop(destination, rc):
     print "Cropping terrain ..."
     if os.path.exists(destination + "terrain.tif"):
         return
@@ -204,7 +204,7 @@ def __crop(destination, rc):
     -O xcsoar=1
         (???)
 '''    
-def __convert(destination, rc):
+def convert(destination, rc):
     print "Converting terrain to GeoJP2 format ..."
     if os.path.exists(destination + "terrain.jp2"):
         os.unlink(destination + "terrain.jp2")
