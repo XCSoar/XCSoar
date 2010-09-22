@@ -46,13 +46,15 @@ class MapGenerator:
         
         return True
             
-    def AddTopology(self):
+    def AddTopology(self, bounds = None):
         print "Adding topology ..."
-        if self.__bounds == None:
+        
+        if bounds == None: bounds = self.__bounds
+        if bounds == None:
             print "failed! (Boundaries undefined!)"
             return False
         
-        topology_files = topology_vmap0.Create(self.__bounds, self.__dir_data, 
+        topology_files = topology_vmap0.Create(bounds, self.__dir_data, 
                                                self.__dir_temp)
         if topology_files == None:
             return False
@@ -60,13 +62,15 @@ class MapGenerator:
         self.__files.extend(topology_files)
         return True
         
-    def AddTerrain(self, arcseconds_per_pixel = 9.0):
+    def AddTerrain(self, arcseconds_per_pixel = 9.0, bounds = None):
         print "Adding terrain ..."
-        if self.__bounds == None:
+        
+        if bounds == None: bounds = self.__bounds
+        if bounds == None:
             print "failed! (Boundaries undefined!)"
             return False
         
-        terrain_file = terrain_srtm.Create(self.__bounds, arcseconds_per_pixel,
+        terrain_file = terrain_srtm.Create(bounds, arcseconds_per_pixel,
                                            self.__dir_data, self.__dir_temp)
         if terrain_file == None:
             return False
