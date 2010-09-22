@@ -63,7 +63,7 @@ class MapGenerator:
         
         return True
         
-    def AddTerrain(self):
+    def AddTerrain(self, arcseconds_per_pixel = 9.0):
         print "Adding terrain ...",
         if self.__bounds == None:
             print "failed!"
@@ -71,7 +71,7 @@ class MapGenerator:
             return False
         
         print ""
-        terrain_file = srtm.Create(self.__bounds, 
+        terrain_file = srtm.Create(self.__bounds, arcseconds_per_pixel,
                                    self.__dir_data, self.__dir_temp)
         if terrain_file == None:
             return False

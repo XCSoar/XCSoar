@@ -223,14 +223,15 @@ def convert(destination, rc):
     p.wait()
     print "done"
 
-def Create(bounds, dir_data = "../data/", dir_temp = "../tmp/"):
+def Create(bounds, arcseconds_per_pixel = 9.0, 
+           dir_data = "../data/", dir_temp = "../tmp/"):
     dir_data = os.path.abspath(dir_data) 
     dir_temp = os.path.abspath(dir_temp) 
     
     # Make sure the tiles are available
     tiles = prepare_tiles(dir_data + "/", dir_temp + "/", bounds)
     merge_tiles(dir_temp + "/", tiles)
-    resample(dir_temp + "/", 3.0)
+    resample(dir_temp + "/", arcseconds_per_pixel)
     crop(dir_temp + "/", bounds)
     convert(dir_temp + "/", bounds)
     
