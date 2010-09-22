@@ -12,7 +12,7 @@ __layers = [["pop-miscellaneous-population-p", "mispopppop_point", "", "txt"],
             ["trans-railroad-l", "railrdltrans_line", "exs=28", "fco"],
             ["trans-road-l", "roadltrans_line", "rtt=14", "med"]]
         
-def copy_clipped(rc, dir_data, dir_temp):
+def __copy_clipped(rc, dir_data, dir_temp):
     files = []
     for layer in __layers:
         print "Creating topology layer " + layer[1] + " ..."
@@ -55,7 +55,7 @@ def copy_clipped(rc, dir_data, dir_temp):
     return files
         
             
-def generate_tpl_file(dir_temp):
+def __generate_tpl_file(dir_temp):
     file = open(os.path.join(dir_temp, "topology.tpl"), "w")
     file.write("* filename,range,icon,field\n");
     file.write("inwaterahydro_area, 100,,,64,96,240\n");
@@ -71,7 +71,7 @@ def Create(bounds, dir_data = "../data/", dir_temp = "../tmp/"):
     dir_data = os.path.abspath(os.path.join(dir_data, "vmap0")) 
     dir_temp = os.path.abspath(dir_temp) 
     
-    files = copy_clipped(bounds, dir_data, dir_temp)
-    files.append([generate_tpl_file(dir_temp), True])
+    files = __copy_clipped(bounds, dir_data, dir_temp)
+    files.append([__generate_tpl_file(dir_temp), True])
         
     return files
