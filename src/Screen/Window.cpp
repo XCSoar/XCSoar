@@ -144,6 +144,7 @@ Window::reset()
     assert(prev_wndproc == NULL || hWnd == NULL);
 
     hWnd = NULL;
+    prev_wndproc = NULL;
   }
 #endif /* !ENABLE_SDL */
 }
