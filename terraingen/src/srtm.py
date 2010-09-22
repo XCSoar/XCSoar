@@ -11,7 +11,7 @@ cmd_gdal_warp = "gdalwarp"
 cmd_geojasper = "geojasper" 
 
 '''
- 1) prepare tiles
+ 1) Gather tiles
 '''
 def __get_tile_name(lat, lon):
     return "srtm_%02d_%02d" % (((lon + 180) / 5) + 1, (60 - lat) / 5)
@@ -48,7 +48,7 @@ def __gather_tile(dir_data, dir_temp, lat, lon):
     print "Decompression failed!"
     return None
 
-def gather_tiles(dir_data, dir_temp, bounds):
+def __gather_tiles(dir_data, dir_temp, bounds):
     '''
     Makes sure the terrain tiles are available at a certain location.
     @param dir_data: Data path
@@ -80,7 +80,7 @@ def gather_tiles(dir_data, dir_temp, bounds):
     return tiles
 
 '''
- 2) merge tiles into big tif 
+ 2) Merge tiles into big tif 
     cmd_gdal_merge.py 
     -n -32768 
         (Ignore pixels from files being merged in with this pixel value.)
@@ -94,7 +94,7 @@ def gather_tiles(dir_data, dir_temp, bounds):
     a.tif b.tif c.tif ...
         (Input files)
 '''
-def merge_tiles(dir_temp, tiles):
+def __merge_tiles(dir_temp, tiles):
     print "Merging terrain tiles ...",
     if os.path.exists(os.path.join(dir_temp, "terrain_merged.tif")):
         os.unlink(os.path.join(dir_temp, "terrain_merged.tif"))
@@ -109,7 +109,7 @@ def merge_tiles(dir_temp, tiles):
     print "done"
 
 '''
- 3) resample merged image
+ 3) Resample merged image
     gdalwarp 
     -r cubicspline
         (Resampling method to use. Cubic spline resampling.)
@@ -141,7 +141,7 @@ def merge_tiles(dir_temp, tiles):
     blabla_resampled.tif
         (Output file)
 '''    
-def resample(dir_temp, arcseconds_per_pixel):
+def __resample(dir_temp, arcseconds_per_pixel):
     print "Resampling terrain ...",
     if os.path.exists(os.path.join(dir_temp, "terrain_resampled.tif")):
         os.unlink(os.path.join(dir_temp, "terrain_resampled.tif"))
@@ -163,7 +163,7 @@ def resample(dir_temp, arcseconds_per_pixel):
     print "done"
 
 '''
- 4) crop resampled image
+ 4) Crop resampled image
     gdalwarp 
     -srcnodata -1 
         (Set nodata masking values for input bands (different values can be 
@@ -184,7 +184,7 @@ def resample(dir_temp, arcseconds_per_pixel):
     blabla_cropped.tif
         (Output file)
 '''    
-def crop(dir_temp, rc):
+def __crop(dir_temp, rc):
     print "Cropping terrain ...",
     if os.path.exists(os.path.join(dir_temp, "terrain.tif")):
         os.unlink(os.path.join(dir_temp, "terrain.tif"))
@@ -203,7 +203,7 @@ def crop(dir_temp, rc):
     print "done"
 
 '''
- 5) convert to GeoJP2 with GeoJasPer
+ 5) Convert to GeoJP2 with GeoJasPer
     cmd_geojasper 
     -f blabla_cropped.tif 
         (Input file name)
@@ -220,7 +220,7 @@ def crop(dir_temp, rc):
     -O xcsoar=1
         (???)
 '''    
-def convert(dir_temp, rc):
+def __convert(dir_temp, rc):
     print "Converting terrain to GeoJP2 format ...",
     if os.path.exists(os.path.join(dir_temp, "terrain.jp2")):
         os.unlink(os.path.join(dir_temp, "terrain.jp2"))
@@ -241,7 +241,7 @@ def convert(dir_temp, rc):
     p.wait()
     print "done"
     
-def cleanup(dir_temp):
+def __cleanup(dir_temp):
     os.unlink(os.path.join(dir_temp, "terrain_merged.tif"))
     os.unlink(os.path.join(dir_temp, "terrain_resampled.tif"))
     os.unlink(os.path.join(dir_temp, "terrain.tif"))
@@ -256,12 +256,12 @@ def Create(bounds, arcseconds_per_pixel = 9.0,
     dir_temp = os.path.abspath(dir_temp) 
     
     # Make sure the tiles are available
-    tiles = gather_tiles(dir_data, dir_temp, bounds)
-    merge_tiles(dir_temp, tiles)
-    resample(dir_temp, arcseconds_per_pixel)
-    crop(dir_temp, bounds)
-    convert(dir_temp, bounds)
-    cleanup(dir_temp)
+    tiles = __gather_tiles(dir_data, dir_temp, bounds)
+    __merge_tiles(dir_temp, tiles)
+    __resample(dir_temp, arcseconds_per_pixel)
+    __crop(dir_temp, bounds)
+    __convert(dir_temp, bounds)
+    __cleanup(dir_temp)
     
     return [os.path.join(dir_temp, "terrain.jp2"), False]
 
