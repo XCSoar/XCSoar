@@ -53,7 +53,7 @@ class vmap0:
         for file in os.listdir(destination):
             if (file.endswith(".shp") or file.endswith(".shx") or
                 file.endswith(".prj") or file.endswith(".dbf")):
-                files.append(os.path.join(destination, file))                
+                files.append([os.path.join(destination, file), True])                
             
         return files
             
