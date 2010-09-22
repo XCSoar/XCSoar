@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-31 08:51+0200\n"
-"PO-Revision-Date: 2010-09-10 08:38+0000\n"
+"PO-Revision-Date: 2010-09-16 11:40+0000\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-13 06:04+0000\n"
+"X-Launchpad-Export-Date: 2010-09-22 09:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Language: sk\n"
 
@@ -634,7 +634,7 @@ msgstr "AA Čas"
 #: src/InfoBoxes/Content/Factory.cpp:288
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
-msgstr ""
+msgstr "Zostávajúci čas pre AAT úlohu. Sčervená ak čas vypršal."
 
 #: src/InfoBoxes/Content/Factory.cpp:294
 msgid "AA Distance Max"
@@ -642,11 +642,11 @@ msgstr "AA Max vzdialenosť"
 
 #: src/InfoBoxes/Content/Factory.cpp:295
 msgid "AA Dmax"
-msgstr ""
+msgstr "AA Vzmax"
 
 #: src/InfoBoxes/Content/Factory.cpp:296
 msgid "Assigned Area Task maximum distance possible for remainder of task."
-msgstr ""
+msgstr "Maximálna možná vzdialenosť do ukončenia AAT úlohy."
 
 #: src/InfoBoxes/Content/Factory.cpp:302
 msgid "AA Distance Min"
@@ -654,11 +654,11 @@ msgstr "AA Min vzdialenosť"
 
 #: src/InfoBoxes/Content/Factory.cpp:303
 msgid "AA Dmin"
-msgstr ""
+msgstr "AA Vzmin"
 
 #: src/InfoBoxes/Content/Factory.cpp:304
 msgid "Assigned Area Task minimum distance possible for remainder of task."
-msgstr ""
+msgstr "Minimálna možná vzdialenosť do ukončenia AAT úlohy."
 
 #: src/InfoBoxes/Content/Factory.cpp:310
 msgid "AA Speed Max"
@@ -758,7 +758,7 @@ msgstr "Trvanie letu"
 
 #: src/InfoBoxes/Content/Factory.cpp:359
 msgid "Time flt"
-msgstr ""
+msgstr "Doba letu"
 
 #: src/InfoBoxes/Content/Factory.cpp:360
 msgid "Time elapsed since takeoff was detected."
@@ -853,7 +853,7 @@ msgstr "Rýchlosť pri delfínovaní"
 
 #: src/InfoBoxes/Content/Factory.cpp:415
 msgid "V Opt"
-msgstr ""
+msgstr "R Opt"
 
 #: src/InfoBoxes/Content/Factory.cpp:416
 msgid ""
@@ -865,6 +865,13 @@ msgid ""
 "the current load factor (if an accelerometer is connected). When Block mode "
 "speed to fly is selected, this infobox displays the MacCready speed."
 msgstr ""
+"Okamžitá MacCready rýchlosť letu, využívajúca výpočet netto vária na "
+"stanovenie rýchlosti delfínovania momentálnym kurzom. Pri kĺzavom lete je "
+"táto letová rýchlosť optimalizovaná na udržanie výšky, pri doklze na "
+"optimálny zotup. V móde pre krúženie sa táto rýchlosť prepne na minimálne "
+"opadanie pri momentálnom prevádzkovom násobku (ak je pripojený "
+"akceleromenter). Ak je nastavená pevná MacCready rýchlosť tak je táto "
+"zobrazovaná."
 
 #: src/InfoBoxes/Content/Factory.cpp:422
 msgid "Netto Vario"
@@ -961,6 +968,8 @@ msgid ""
 "Relative humidity of the air in percent as measured by a probe if supported "
 "by a connected intelligent variometer."
 msgstr ""
+"Relatívna vlhkosť v percentách. Odmeraná pripojeným senzorom (ak je "
+"podporovaný inteligentným váriom)."
 
 #: src/InfoBoxes/Content/Factory.cpp:470
 msgid "Forecast Temperature"
