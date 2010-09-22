@@ -21,29 +21,29 @@ def __gather_tile(dir_data, dir_temp, lat, lon):
     filename = __get_tile_name(lat, lon)
     
     # check if the GeoTIFF file already exists in the temporary folder
-    if os.path.exists(dir_temp + filename + ".tif"):
+    if os.path.exists(os.path.join(dir_temp, filename + ".tif")):
         print "Tile " + filename + " found!"
-        return os.path.relpath(dir_temp + filename + ".tif")
+        return os.path.join(dir_temp, filename + ".tif")
     
     # check if the GeoTIFF file exists in the data folder
-    if os.path.exists(dir_data + filename + ".tif"):
+    if os.path.exists(os.path.join(dir_data, filename + ".tif")):
         print "Tile " + filename + " found!"
-        return os.path.relpath(dir_data + filename + ".tif")
+        return os.path.join(dir_data, filename + ".tif")
     
     # check if the ZIP file exists in the data folder
-    if not os.path.exists(dir_data + filename + ".zip"):
+    if not os.path.exists(os.path.join(dir_data, filename + ".zip")):
         print "Tile " + filename + " can not be found!"
         return None
     
     print "Tile " + filename + " found inside zip file! -> Decompressing ..."
     # decompress the ZIP file to the temporary folder
-    zip = ZipFile(dir_data + filename + ".zip", "r")
+    zip = ZipFile(os.path.join(dir_data, filename + ".zip"), "r")
     zip.extract(filename + ".tif", dir_temp)
     zip.close()
 
     # check if the GeoTIFF file now exists in the temporary folder
-    if os.path.exists(dir_temp + filename + ".tif"):
-        return os.path.relpath(dir_temp + filename + ".tif")
+    if os.path.exists(os.path.join(dir_temp, filename + ".tif")):
+        return os.path.join(dir_temp, filename + ".tif")
     
     print "Decompression failed!"
     return None
@@ -96,13 +96,13 @@ def gather_tiles(dir_data, dir_temp, bounds):
 '''
 def merge_tiles(dir_temp, tiles):
     print "Merging terrain tiles ...",
-    if os.path.exists(dir_temp + "terrain_merged.tif"):
-        os.unlink(dir_temp + "terrain_merged.tif")
+    if os.path.exists(os.path.join(dir_temp, "terrain_merged.tif")):
+        os.unlink(os.path.join(dir_temp, "terrain_merged.tif"))
         
     args = [cmd_gdal_merge,
             "-n", "-32768",
             "-init", "-32768",
-            "-o", os.path.relpath(dir_temp + "terrain_merged.tif")]
+            "-o", os.path.join(dir_temp, "terrain_merged.tif")]
     args.extend(tiles)
     p = subprocess.Popen(args)
     p.wait()
@@ -143,8 +143,8 @@ def merge_tiles(dir_temp, tiles):
 '''    
 def resample(dir_temp, arcseconds_per_pixel):
     print "Resampling terrain ...",
-    if os.path.exists(dir_temp + "terrain_resampled.tif"):
-        os.unlink(dir_temp + "terrain_resampled.tif")
+    if os.path.exists(os.path.join(dir_temp, "terrain_resampled.tif")):
+        os.unlink(os.path.join(dir_temp, "terrain_resampled.tif"))
         
     degree_per_pixel = float(arcseconds_per_pixel) / 3600.0
 
@@ -156,8 +156,8 @@ def resample(dir_temp, arcseconds_per_pixel):
             "-of", "GTiff",
             "-srcnodata", "-32768",
             "-dstnodata", "-1",
-            os.path.relpath(dir_temp + "terrain_merged.tif"),
-            os.path.relpath(dir_temp + "terrain_resampled.tif")]
+            os.path.join(dir_temp, "terrain_merged.tif"),
+            os.path.join(dir_temp, "terrain_resampled.tif")]
     p = subprocess.Popen(args)
     p.wait()
     print "done"
@@ -186,8 +186,8 @@ def resample(dir_temp, arcseconds_per_pixel):
 '''    
 def crop(dir_temp, rc):
     print "Cropping terrain ...",
-    if os.path.exists(dir_temp + "terrain.tif"):
-        os.unlink(dir_temp + "terrain.tif")
+    if os.path.exists(os.path.join(dir_temp, "terrain.tif")):
+        os.unlink(os.path.join(dir_temp, "terrain.tif"))
         
     args = [cmd_gdal_warp,
             "-srcnodata", "-1",
@@ -196,8 +196,8 @@ def crop(dir_temp, rc):
             str(rc.bottom.value_degrees()),
             str(rc.right.value_degrees()),
             str(rc.top.value_degrees()),
-            os.path.relpath(dir_temp + "terrain_resampled.tif"),
-            os.path.relpath(dir_temp + "terrain.tif")]
+            os.path.join(dir_temp, "terrain_resampled.tif"),
+            os.path.join(dir_temp, "terrain.tif")]
     p = subprocess.Popen(args)
     p.wait()
     print "done"
@@ -222,12 +222,12 @@ def crop(dir_temp, rc):
 '''    
 def convert(dir_temp, rc):
     print "Converting terrain to GeoJP2 format ...",
-    if os.path.exists(dir_temp + "terrain.jp2"):
-        os.unlink(dir_temp + "terrain.jp2")
+    if os.path.exists(os.path.join(dir_temp, "terrain.jp2")):
+        os.unlink(os.path.join(dir_temp, "terrain.jp2"))
         
     args = [cmd_geojasper,
-            "-f", os.path.relpath(dir_temp + "terrain.tif"),
-            "-F" ,os.path.relpath(dir_temp + "terrain.jp2"),
+            "-f", os.path.join(dir_temp, "terrain.tif"),
+            "-F" ,os.path.join(dir_temp, "terrain.jp2"),
             "-T", "jp2",
             "-O", "rate=0.1",
             "-O", "tilewidth=256",
@@ -247,12 +247,12 @@ def Create(bounds, arcseconds_per_pixel = 9.0,
     dir_temp = os.path.abspath(dir_temp) 
     
     # Make sure the tiles are available
-    tiles = gather_tiles(dir_data + "/", dir_temp + "/", bounds)
-    merge_tiles(dir_temp + "/", tiles)
-    resample(dir_temp + "/", arcseconds_per_pixel)
-    crop(dir_temp + "/", bounds)
-    convert(dir_temp + "/", bounds)
+    tiles = gather_tiles(dir_data, dir_temp, bounds)
+    merge_tiles(dir_temp, tiles)
+    resample(dir_temp, arcseconds_per_pixel)
+    crop(dir_temp, bounds)
+    convert(dir_temp, bounds)
     
-    return [dir_temp + "/terrain.jp2", False]
+    return [os.path.join(dir_temp, "terrain.jp2"), False]
 
     
