@@ -4,7 +4,6 @@ import math
 import georect
 from zipfile import ZipFile
 import subprocess
-import shutil
 
 cmd_gdal_merge = "gdal_merge.py"
 cmd_gdal_warp = "gdalwarp" 
