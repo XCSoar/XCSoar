@@ -14,7 +14,7 @@ class vmap0:
                 ["trans-railroad-l", "railrdltrans_line", "exs=28", "fco"],
                 ["trans-road-l", "roadltrans_line", "rtt=14", "med"]]
         
-    def copy_clipped(self, rc, destination):
+    def copy_clipped(self, rc, dir_temp):
         for i in range(len(self.__maps)):
             for layer in self.__layers:
                 arg = [cmd_ogr2ogr]
@@ -38,7 +38,7 @@ class vmap0:
                 arg.append(str(rc.right.value_degrees()))
                 arg.append(str(rc.top.value_degrees()))
 
-                arg.append(destination)
+                arg.append(dir_temp)
                 arg.append(os.path.join(self.__source, self.__maps[i]))
 
                 arg.append(layer[0])
@@ -49,16 +49,16 @@ class vmap0:
                 p.wait()
              
         files = []
-        for file in os.listdir(destination):
+        for file in os.listdir(dir_temp):
             if (file.endswith(".shp") or file.endswith(".shx") or
                 file.endswith(".prj") or file.endswith(".dbf")):
-                files.append([os.path.join(destination, file), True])                
+                files.append([os.path.join(dir_temp, file), True])                
             
         return files
             
                 
-    def generate_tpl_file(self, destination):
-        file = open(os.path.join(destination, "topology.tpl"), "w")
+    def generate_tpl_file(self, dir_temp):
+        file = open(os.path.join(dir_temp, "topology.tpl"), "w")
         file.write("* filename,range,icon,field\n");
         file.write("inwaterahydro_area, 100,,,64,96,240\n");
         file.write("watrcrslhydro_line,    7,,,64,96,240\n");
@@ -67,7 +67,7 @@ class vmap0:
         file.write("railrdltrans_line,   10,,,64,64,64\n");
         file.write("mispopppop_point,    5,218,1,223,223,0\n");
         file.close()
-        return os.path.join(destination, "/topology.tpl")
+        return os.path.join(dir_temp, "/topology.tpl")
 
 def Create(bounds, dir_data = "../data/", dir_temp = "../tmp/"):
     dir_data = os.path.abspath(os.path.join(dir_data, "vmap0")) 
