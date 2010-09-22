@@ -13,8 +13,10 @@ __layers = [["pop-miscellaneous-population-p", "mispopppop_point", "", "txt"],
             ["trans-road-l", "roadltrans_line", "rtt=14", "med"]]
         
 def copy_clipped(rc, dir_data, dir_temp):
-    for i in range(len(__maps)):
-        for layer in __layers:
+    for layer in __layers:
+        print "Creating topology layer " + layer[1] + " ..."
+
+        for i in range(len(__maps)):
             arg = [cmd_ogr2ogr]
             
             if i > 0:
