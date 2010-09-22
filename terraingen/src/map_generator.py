@@ -71,15 +71,12 @@ class MapGenerator:
             return False
         
         print ""
-        tiles = srtm.prepare_tiles(self.__dir_data + "/", self.__dir_temp + "/", 
-                                     self.__bounds)
-        srtm.merge_tiles(self.__dir_temp + "/", tiles)
-        srtm.resample(self.__dir_temp + "/")
-        srtm.crop(self.__dir_temp + "/", self.__bounds)
-        srtm.convert(self.__dir_temp + "/", self.__bounds)
+        terrain_file = srtm.Create(self.__bounds, 
+                                   self.__dir_data, self.__dir_temp)
+        if terrain_file == None:
+            return False
         
-        self.__files.append([self.__dir_temp + "/terrain.jp2", False])
-        
+        self.__files.append(terrain_file)
         return True
         
     def SetBounds(self, bounds):

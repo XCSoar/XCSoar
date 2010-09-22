@@ -123,14 +123,12 @@ def merge_tiles(destination, tiles):
     blabla_resampled.tif
         (Output file)
 '''    
-def resample(destination):
+def resample(destination, arcseconds_per_pixel):
     print "Resampling terrain ...",
     if os.path.exists(destination + "terrain_resampled.tif"):
         os.unlink(destination + "terrain_resampled.tif")
         
-    # 1 px = 3 arc seconds
-    seconds_per_pixel = 3.0
-    degree_per_pixel = seconds_per_pixel / 3600.0
+    degree_per_pixel = float(arcseconds_per_pixel) / 3600.0
 
     args = [cmd_gdal_warp,
             "-r", "cubicspline",
@@ -224,3 +222,18 @@ def convert(destination, rc):
     p = subprocess.Popen(args)
     p.wait()
     print "done"
+
+def Create(bounds, dir_data = "../data/", dir_temp = "../tmp/"):
+    dir_data = os.path.abspath(dir_data) 
+    dir_temp = os.path.abspath(dir_temp) 
+    
+    # Make sure the tiles are available
+    tiles = prepare_tiles(dir_data + "/", dir_temp + "/", bounds)
+    merge_tiles(dir_temp + "/", tiles)
+    resample(dir_temp + "/", 3.0)
+    crop(dir_temp + "/", bounds)
+    convert(dir_temp + "/", bounds)
+    
+    return [dir_temp + "/terrain.jp2", False]
+
+    
