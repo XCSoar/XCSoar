@@ -12,37 +12,41 @@ __layers = [["pop-miscellaneous-population-p", "mispopppop_point", "", "txt"],
             ["trans-railroad-l", "railrdltrans_line", "exs=28", "fco"],
             ["trans-road-l", "roadltrans_line", "rtt=14", "med"]]
         
+def __create_layer_from_map(bounds, layer, map, overwrite, dir_data, dir_temp):
+    arg = [cmd_ogr2ogr]
+    
+    if overwrite == True:
+        arg.append("-overwrite")
+    else:
+        arg.append("-update")
+        arg.append("-append")
+        
+    if layer[1] != "":
+        arg.extend(["-where", layer[2]])
+        
+    arg.extend(["-select", layer[3]])
+    
+    arg.extend(["-spat",
+                str(bounds.left.value_degrees()),
+                str(bounds.bottom.value_degrees()),
+                str(bounds.right.value_degrees()),
+                str(bounds.top.value_degrees())])
+
+    arg.append(dir_temp)
+    arg.append(os.path.join(dir_data, map))
+
+    arg.append(layer[0])
+    arg.extend(["-nln", layer[1]])
+    
+    p = subprocess.Popen(arg)
+    p.wait()
+
 def __create_layer(bounds, layer, dir_data, dir_temp):
     print "Creating topology layer " + layer[1] + " ..."
 
     for i in range(len(__maps)):
-        arg = [cmd_ogr2ogr]
-        
-        if i > 0:
-            arg.append("-update")
-            arg.append("-append")
-        else:
-            arg.append("-overwrite")
-            
-        if layer[1] != "":
-            arg.extend(["-where", layer[2]])
-            
-        arg.extend(["-select", layer[3]])
-        
-        arg.extend(["-spat",
-                    str(bounds.left.value_degrees()),
-                    str(bounds.bottom.value_degrees()),
-                    str(bounds.right.value_degrees()),
-                    str(bounds.top.value_degrees())])
-
-        arg.append(dir_temp)
-        arg.append(os.path.join(dir_data, __maps[i]))
-
-        arg.append(layer[0])
-        arg.extend(["-nln", layer[1]])
-        
-        p = subprocess.Popen(arg)
-        p.wait()
+        __create_layer_from_map(bounds, layer, __maps[i], 
+                                i == 0, dir_data, dir_temp)
 
     files = []        
     if os.path.exists(os.path.join(dir_temp, layer[1] + ".shp")):
