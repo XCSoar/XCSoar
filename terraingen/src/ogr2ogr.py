@@ -61,3 +61,4 @@ class ogr2ogr:
         file.write("railrdltrans_line,   10,,,64,64,64\n");
         file.write("mispopppop_point,    5,218,1,223,223,0\n");
         file.close()
+        return os.path.abspath(destination) + "/topology.tpl"
