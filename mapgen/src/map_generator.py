@@ -4,7 +4,7 @@ from zipfile import ZipFile, ZIP_DEFLATED, ZIP_STORED
 from georect import GeoRect
 from waypoint_list import WaypointList
 import terrain_srtm
-from ogr2ogr import ogr2ogr
+from topology_vmap0 import vmap0
 
 class MapGenerator:
     __files = []
@@ -52,7 +52,7 @@ class MapGenerator:
             print "failed! (Boundaries undefined!)"
             return False
         
-        o = ogr2ogr()
+        o = vmap0()
         files = o.copy_clipped(self.__bounds, self.__dir_temp)
         self.__files.extend(files)
         self.__files.append([o.generate_tpl_file(self.__dir_temp), True])

@@ -2,7 +2,7 @@ import os.path
 import subprocess
 from georect import GeoRect
 
-class ogr2ogr:
+class vmap0:
     __maps = ["eur", "noa", "sas", "soa"]
     __source = "../data/vmap0/"
     __layers = [["pop-miscellaneous-population-p", "mispopppop_point", "", "txt"],
@@ -12,10 +12,10 @@ class ogr2ogr:
                 ["trans-railroad-l", "railrdltrans_line", "exs=28", "fco"],
                 ["trans-road-l", "roadltrans_line", "rtt=14", "med"]]
     
-    def __init__(self, executable = "ogr2ogr"):
+    def __init__(self, executable = "vmap0"):
         self.set_executable(executable)
         
-    def set_executable(self, executable = "ogr2ogr"):
+    def set_executable(self, executable = "vmap0"):
         self.__executable = executable
         
     def copy_clipped(self, rc, destination):
