@@ -26,6 +26,8 @@ class ogr2ogr:
                 if i > 0:
                     arg.append("-update")
                     arg.append("-append")
+                else:
+                    arg.append("-overwrite")
                     
                 if layer[1] != "":
                     arg.append("-where")
