@@ -10,8 +10,8 @@
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="63" Y="272" Width="28" Height="28" />
   <SymbolButton Name="cmdNext" Caption="&gt;" X="93" Y="272" Width="28" Height="28" />
 
-  <Custom X="123" Y="272" Width="48" Height="28" OnCreate="OnCreateNorthUp"/>
-  <Custom X="173" Y="272" Width="58" Height="28" OnCreate="OnCreateAutoZoom"/>
+  <CheckBox Name="NorthUp" Caption="North up" X="123" Y="272" Width="48" Height="28" OnClick="OnNorthUp"/>
+  <CheckBox Name="AutoZoom" Caption="A. Zoom" X="173" Y="272" Width="58" Height="28" OnClick="OnAutoZoom"/>
   
   <Custom Name="frmRadar" X="1" Y="1" Width="-1" Height="232" Border="1"
           OnCreate="OnCreateFlarmTrafficControl"/>

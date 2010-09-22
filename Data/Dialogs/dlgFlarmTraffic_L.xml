@@ -10,8 +10,8 @@
   <Custom Name="frmRadar" X="65" Y="1" Width="-1" Height="-1" Border="1"
           OnCreate="OnCreateFlarmTrafficControl"/>
 
-  <Custom X="3" Y="3" Width="58" Height="28" OnCreate="OnCreateAutoZoom"/>
-  <Custom X="3" Y="33" Width="58" Height="28" OnCreate="OnCreateNorthUp"/>
+  <CheckBox Name="NorthUp" Caption="North up" X="3" Y="3" Width="58" Height="28" OnClick="OnNorthUp"/>
+  <CheckBox Name="AutoZoom" Caption="A. Zoom" X="3" Y="33" Width="58" Height="28" OnClick="OnAutoZoom"/>
 
   <Button Name="cmdSwitchData" Caption="Avg/Alt" X="3" Y="63" Width="58" Height="28" />
 </Form>

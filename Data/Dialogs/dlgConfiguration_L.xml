@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <Form Name="frmConfiguration" Width="320" Height="240" Caption="Configuration">
-  <Custom X="5" Y="5" Width="60" Height="25" OnCreate="OnCreateUserLevel"/>
+  <CheckBox Name="Expert" Caption="Expert" X="5" Y="5" Width="60" Height="25" OnClick="OnUserLevel"/>
 
   <Button Name="cmdCopy" Caption="Copy" X="5" Y="40" Width="60" Height="28"/>
 

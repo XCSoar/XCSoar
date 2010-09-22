@@ -49,18 +49,13 @@
 #include "Screen.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/CheckBox.hpp"
+#include "Form/CheckBox.hpp"
 #include "MainWindow.hpp"
 #include "Profile.hpp"
 #include "Compiler.h"
 #include "Gauge/FlarmTrafficWindow.hpp"
 #include "Language.hpp"
 #include "GestureManager.hpp"
-
-enum {
-  ID_AUTO_ZOOM = 100,
-  ID_NORTH_UP,
-};
 
 /**
  * A Window which renders FLARM traffic, with user interaction.
@@ -491,24 +486,16 @@ OnSwitchDataClicked(gcc_unused WndButton &button)
   SwitchData();
 }
 
-/**
- * This event handler is called when the "AutoZoom" button is pressed
- */
-static bool
-OnCommand(unsigned id)
+static void
+OnAutoZoom(CheckBoxControl &control)
 {
-  switch (id) {
-  case ID_AUTO_ZOOM:
-    wdf->SetAutoZoom(auto_zoom->get_checked());
-    return true;
+  wdf->SetAutoZoom(control.get_checked());
+}
 
-  case ID_NORTH_UP:
-    wdf->SetNorthUp(north_up->get_checked());
-    return true;
-
-  default:
-    return false;
-  }
+static void
+OnNorthUp(CheckBoxControl &control)
+{
+  wdf->SetNorthUp(control.get_checked());
 }
 
 /**
@@ -653,39 +640,11 @@ OnCreateFlarmTrafficControl(ContainerWindow &parent, int left, int top,
   return wdf;
 }
 
-static Window *
-OnCreateAutoZoom(ContainerWindow &parent, int left, int top,
-                 unsigned width, unsigned height,
-                 const WindowStyle _style)
-{
-  CheckBoxStyle style(_style);
-  style.tab_stop();
-  auto_zoom = new CheckBox();
-  auto_zoom->set(parent, _("A. Zoom"), ID_AUTO_ZOOM,
-                 left, top, width, height, style);
-  auto_zoom->set_font(Fonts::Map);
-  return auto_zoom;
-}
-
-static Window *
-OnCreateNorthUp(ContainerWindow &parent, int left, int top,
-                unsigned width, unsigned height,
-                const WindowStyle _style)
-{
-  CheckBoxStyle style(_style);
-  style.tab_stop();
-  north_up = new CheckBox();
-  north_up->set(parent, _("North up"), ID_NORTH_UP,
-                left, top, width, height, style);
-  north_up->set_font(Fonts::Map);
-  return north_up;
-}
-
 static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnCreateFlarmTrafficControl),
-  DeclareCallBackEntry(OnCreateAutoZoom),
-  DeclareCallBackEntry(OnCreateNorthUp),
   DeclareCallBackEntry(OnTimerNotify),
+  DeclareCallBackEntry(OnAutoZoom),
+  DeclareCallBackEntry(OnNorthUp),
   DeclareCallBackEntry(NULL)
 };
 
@@ -705,8 +664,6 @@ dlgFlarmTrafficShowModal()
   // Set dialog events
   wf->SetKeyDownNotify(FormKeyDown);
   wf->SetTimerNotify(OnTimerNotify);
-
-  wf->SetCommandCallback(OnCommand);
 
   // Set button events
   ((WndButton *)wf->FindByName(_T("cmdDetails")))->
@@ -728,7 +685,10 @@ dlgFlarmTrafficShowModal()
   Update();
 
   // Get the last chosen Side Data configuration
+  auto_zoom = (CheckBox *)wf->FindByName(_T("AutoZoom"));
   auto_zoom->set_checked(wdf->GetAutoZoom());
+
+  north_up = (CheckBox *)wf->FindByName(_T("NorthUp"));
   north_up->set_checked(wdf->GetNorthUp());
 
   // Show the dialog

@@ -52,7 +52,7 @@ Copyright_License {
 #include "Device/Descriptor.hpp"
 #include "Screen/Busy.hpp"
 #include "Screen/Blank.hpp"
-#include "Screen/CheckBox.hpp"
+#include "Form/CheckBox.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "Profile.hpp"
@@ -80,10 +80,6 @@ Copyright_License {
 #include "Pages.hpp"
 
 #include <assert.h>
-
-enum {
-  ID_USER_LEVEL = 100,
-};
 
 enum config_page {
   PAGE_SITE,
@@ -172,7 +168,6 @@ static bool waypointneedsave = false;
 static bool FontRegistryChanged=false;
 static config_page current_page;
 static WndForm *wf = NULL;
-static CheckBox *user_level;
 TabbedControl *configuration_tabbed;
 static WndButton *buttonPilotName = NULL;
 static WndButton *buttonAircraftType = NULL;
@@ -299,37 +294,13 @@ UpdateDeviceSetupButton(unsigned DeviceIdx, const TCHAR *Name)
     wb->set_visible(Name != NULL && _tcscmp(Name, _T("Vega")) == 0);
 }
 
-static Window *
-OnCreateUserLevel(ContainerWindow &parent, int left, int top,
-                  unsigned width, unsigned height,
-                  const WindowStyle _style)
+static void
+OnUserLevel(CheckBoxControl &control)
 {
-  CheckBoxStyle style(_style);
-  style.tab_stop();
-  user_level = new CheckBox();
-  user_level->set(parent, _("Expert"), ID_USER_LEVEL,
-                  left, top, width, height, style);
-  user_level->set_font(Fonts::Map);
-  user_level->set_checked(XCSoarInterface::UserLevel > 0);
-  return user_level;
-}
-
-static bool
-OnCommand(unsigned id)
-{
-  switch (id) {
-  case ID_USER_LEVEL:
-    if ((int)user_level->get_checked() != (int)XCSoarInterface::UserLevel) {
-      XCSoarInterface::UserLevel = (int)user_level->get_checked();
-      changed = true;
-      Profile::Set(szProfileUserLevel,(int)XCSoarInterface::UserLevel);
-      wf->FilterAdvanced(XCSoarInterface::UserLevel>0);
-    }
-    return true;
-
-  default:
-    return false;
-  }
+  XCSoarInterface::UserLevel = (int)control.get_checked();
+  changed = true;
+  Profile::Set(szProfileUserLevel,(int)XCSoarInterface::UserLevel);
+  wf->FilterAdvanced(XCSoarInterface::UserLevel>0);
 }
 
 static void
@@ -994,7 +965,7 @@ static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnEditMapWindowBoldFontClicked),
   DeclareCallBackEntry(OnEditCDIWindowFontClicked),
   DeclareCallBackEntry(OnEditMapLabelFontClicked),
-  DeclareCallBackEntry(OnCreateUserLevel),
+  DeclareCallBackEntry(OnUserLevel),
   DeclareCallBackEntry(NULL)
 };
 
@@ -1963,7 +1934,9 @@ PrepareConfigurationDialog()
     return;
 
   wf->SetKeyDownNotify(FormKeyDown);
-  wf->SetCommandCallback(OnCommand);
+
+  CheckBox *cb = (CheckBox *)wf->FindByName(_T("Expert"));
+  cb->set_checked(XCSoarInterface::UserLevel > 0);
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
