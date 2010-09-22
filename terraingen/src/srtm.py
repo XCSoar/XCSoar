@@ -260,7 +260,7 @@ def __cleanup(dir_temp):
 
 def Create(bounds, arcseconds_per_pixel = 9.0, 
            dir_data = "../data/", dir_temp = "../tmp/"):
-    dir_data = os.path.abspath(dir_data) 
+    dir_data = os.path.abspath(os.path.join(dir_data, "srtm")) 
     dir_temp = os.path.abspath(dir_temp) 
     
     # Make sure the tiles are available
