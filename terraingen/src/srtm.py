@@ -77,7 +77,7 @@ def prepare_tiles(source, destination, rc):
         (Input files)
 '''
 def merge_tiles(destination, tiles):
-    print "Merging terrain tiles ..."
+    print "Merging terrain tiles ...",
     if os.path.exists(destination + "terrain_merged.tif"):
         os.unlink(destination + "terrain_merged.tif")
         
@@ -88,6 +88,7 @@ def merge_tiles(destination, tiles):
     args.extend(tiles)
     p = subprocess.Popen(args)
     p.wait()
+    print "done"
 
 '''
  3) resample merged image
@@ -123,7 +124,7 @@ def merge_tiles(destination, tiles):
         (Output file)
 '''    
 def resample(destination):
-    print "Resampling terrain ..."
+    print "Resampling terrain ...",
     if os.path.exists(destination + "terrain_resampled.tif"):
         os.unlink(destination + "terrain_resampled.tif")
         
@@ -143,6 +144,7 @@ def resample(destination):
             os.path.relpath(destination + "terrain_resampled.tif")]
     p = subprocess.Popen(args)
     p.wait()
+    print "done"
 
 '''
  4) crop resampled image
@@ -167,7 +169,7 @@ def resample(destination):
         (Output file)
 '''    
 def crop(destination, rc):
-    print "Cropping terrain ..."
+    print "Cropping terrain ...",
     if os.path.exists(destination + "terrain.tif"):
         os.unlink(destination + "terrain.tif")
         
@@ -182,6 +184,7 @@ def crop(destination, rc):
             os.path.relpath(destination + "terrain.tif")]
     p = subprocess.Popen(args)
     p.wait()
+    print "done"
 
 '''
  5) convert to GeoJP2 with GeoJasPer
@@ -202,7 +205,7 @@ def crop(destination, rc):
         (???)
 '''    
 def convert(destination, rc):
-    print "Converting terrain to GeoJP2 format ..."
+    print "Converting terrain to GeoJP2 format ...",
     if os.path.exists(destination + "terrain.jp2"):
         os.unlink(destination + "terrain.jp2")
         
@@ -220,3 +223,4 @@ def convert(destination, rc):
             "-O", "latmin=" + str(rc.bottom.value_degrees())]
     p = subprocess.Popen(args)
     p.wait()
+    print "done"
