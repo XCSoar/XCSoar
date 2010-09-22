@@ -55,11 +55,13 @@ class MapGenerator:
             print "(Boundaries undefined!)"
             return False
         
+        print ""
         o = ogr2ogr()
-        o.copy_clipped(self.__bounds, self.__dir_temp)
+        files = o.copy_clipped(self.__bounds, self.__dir_temp)
+        print files
+        self.__files.extend(files)
         self.__files.append([o.generate_tpl_file(self.__dir_temp), True])
         
-        print "done"
         return True
         
     def AddTerrain(self):
@@ -79,7 +81,6 @@ class MapGenerator:
         
         self.__files.append([self.__dir_temp + "/terrain.jp2", False])
         
-        print "done"
         return True
         
     def SetBounds(self, bounds):
