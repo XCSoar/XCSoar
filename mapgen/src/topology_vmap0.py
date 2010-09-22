@@ -69,3 +69,13 @@ class vmap0:
         file.write("mispopppop_point,    5,218,1,223,223,0\n");
         file.close()
         return os.path.abspath(destination) + "/topology.tpl"
+
+def Create(bounds, dir_data = "../data/", dir_temp = "../tmp/"):
+    dir_data = os.path.abspath(os.path.join(dir_data, "vmap0")) 
+    dir_temp = os.path.abspath(dir_temp) 
+    
+    o = vmap0()
+    files = o.copy_clipped(bounds, dir_temp)
+    files.append([o.generate_tpl_file(dir_temp), True])
+        
+    return files

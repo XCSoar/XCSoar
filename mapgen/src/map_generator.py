@@ -4,7 +4,7 @@ from zipfile import ZipFile, ZIP_DEFLATED, ZIP_STORED
 from georect import GeoRect
 from waypoint_list import WaypointList
 import terrain_srtm
-from topology_vmap0 import vmap0
+import topology_vmap0 
 
 class MapGenerator:
     __files = []
@@ -52,11 +52,12 @@ class MapGenerator:
             print "failed! (Boundaries undefined!)"
             return False
         
-        o = vmap0()
-        files = o.copy_clipped(self.__bounds, self.__dir_temp)
-        self.__files.extend(files)
-        self.__files.append([o.generate_tpl_file(self.__dir_temp), True])
+        topology_files = topology_vmap0.Create(self.__bounds, self.__dir_data, 
+                                               self.__dir_temp)
+        if topology_files == None:
+            return False
         
+        self.__files.extend(topology_files)
         return True
         
     def AddTerrain(self, arcseconds_per_pixel = 9.0):
@@ -66,7 +67,7 @@ class MapGenerator:
             return False
         
         terrain_file = terrain_srtm.Create(self.__bounds, arcseconds_per_pixel,
-                                   self.__dir_data, self.__dir_temp)
+                                           self.__dir_data, self.__dir_temp)
         if terrain_file == None:
             return False
         
