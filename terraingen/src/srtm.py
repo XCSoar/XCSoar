@@ -240,6 +240,15 @@ def convert(dir_temp, rc):
     p = subprocess.Popen(args)
     p.wait()
     print "done"
+    
+def cleanup(dir_temp):
+    os.unlink(os.path.join(dir_temp, "terrain_merged.tif"))
+    os.unlink(os.path.join(dir_temp, "terrain_resampled.tif"))
+    os.unlink(os.path.join(dir_temp, "terrain.tif"))
+    
+    for file in os.listdir(dir_temp):
+        if file.startswith("srtm_") and file.endswith(".tif"):
+            os.unlink(os.path.join(dir_temp, file))
 
 def Create(bounds, arcseconds_per_pixel = 9.0, 
            dir_data = "../data/", dir_temp = "../tmp/"):
@@ -252,6 +261,7 @@ def Create(bounds, arcseconds_per_pixel = 9.0,
     resample(dir_temp, arcseconds_per_pixel)
     crop(dir_temp, bounds)
     convert(dir_temp, bounds)
+    cleanup(dir_temp)
     
     return [os.path.join(dir_temp, "terrain.jp2"), False]
 
