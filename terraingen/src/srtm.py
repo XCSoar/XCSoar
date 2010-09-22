@@ -104,8 +104,11 @@ def __merge_tiles(dir_temp, tiles):
             "-init", "-32768",
             "-o", output_file]
     args.extend(tiles)
+    
     p = subprocess.Popen(args)
     p.wait()
+    
+    return output_file
 
 '''
  3) Resample merged image
@@ -158,8 +161,11 @@ def __resample(dir_temp, arcseconds_per_pixel):
             "-dstnodata", "-1",
             os.path.join(dir_temp, "terrain_merged.tif"),
             output_file]
+    
     p = subprocess.Popen(args)
     p.wait()
+    
+    return output_file
 
 '''
  4) Crop resampled image
@@ -198,8 +204,11 @@ def __crop(dir_temp, rc):
             str(rc.top.value_degrees()),
             os.path.join(dir_temp, "terrain_resampled.tif"),
             output_file]
+    
     p = subprocess.Popen(args)
     p.wait()
+    
+    return output_file
 
 '''
  5) Convert to GeoJP2 with GeoJasPer
@@ -237,6 +246,7 @@ def __convert(dir_temp, rc):
             "-O", "lonmax=" + str(rc.right.value_degrees()),
             "-O", "latmax=" + str(rc.top.value_degrees()),
             "-O", "latmin=" + str(rc.bottom.value_degrees())]
+    
     p = subprocess.Popen(args)
     p.wait()
     
