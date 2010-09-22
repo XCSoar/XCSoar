@@ -1,0 +1,18 @@
+--------------
+ vmap0 folder
+--------------
+ This folder should contain four subfolders corresponding
+ to the four VMAP0 parts (eur, noa, soa and sas) containing 
+ the necessary shapefiles. 
+ 
+ The compressed shapefiles can be downloaded at 
+ http://gis-lab.info/qa/vmap0-eng.html
+
+-------------
+ srtm folder
+-------------
+ This folder should contain the srtm_??_??.zip files that
+ are needed to create terrain files.
+ 
+ The zip files can be downloaded at
+ http://srtm.csi.cgiar.org/
