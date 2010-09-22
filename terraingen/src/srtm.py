@@ -253,12 +253,9 @@ def __convert(dir_temp, rc):
     return output_file
     
 def __cleanup(dir_temp):
-    os.unlink(os.path.join(dir_temp, "terrain_merged.tif"))
-    os.unlink(os.path.join(dir_temp, "terrain_resampled.tif"))
-    os.unlink(os.path.join(dir_temp, "terrain.tif"))
-    
     for file in os.listdir(dir_temp):
-        if file.startswith("srtm_") and file.endswith(".tif"):
+        if  file.endswith(".tif") and (file.startswith("srtm_") or 
+                                       file.startswith("terrain")):
             os.unlink(os.path.join(dir_temp, file))
 
 def Create(bounds, arcseconds_per_pixel = 9.0, 
