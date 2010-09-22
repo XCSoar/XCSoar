@@ -52,6 +52,15 @@ class ogr2ogr:
                 
                 p = subprocess.Popen(arg)
                 p.wait()
+             
+        files = []
+        for file in os.listdir(destination):
+            if (file.endswith(".shp") or file.endswith(".shx") or
+                file.endswith(".prj") or file.endswith(".dbf")):
+                files.append(os.path.join(destination, file))                
+            
+        return files
+            
                 
     def generate_tpl_file(self, destination):
         file = open(os.path.abspath(destination) + "/topology.tpl" , "w")
