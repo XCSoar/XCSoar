@@ -17,25 +17,31 @@ def __make_tile_name(lat, lon):
     return "srtm_%02d_%02d" % (((lon + 180) / 5) + 1, (60 - lat) / 5)
 
 def __prepare_tile(source, destination, lat, lon):
+    # generate filename to search for
     filename = __make_tile_name(lat, lon)
     
+    # check if the GeoTIFF file already exists in the temporary folder
     if os.path.exists(destination + filename + ".tif"):
         print "Tile " + filename + " found!"
         return os.path.relpath(destination + filename + ".tif")
     
+    # check if the GeoTIFF file exists in the data folder
     if os.path.exists(source + filename + ".tif"):
         print "Tile " + filename + " found!"
         return os.path.relpath(source + filename + ".tif")
     
+    # check if the ZIP file exists in the data folder
     if not os.path.exists(source + filename + ".zip"):
         print "Tile " + filename + " can not be found!"
         return None
     
     print "Tile " + filename + " found inside zip file! -> Decompressing ..."
+    # decompress the ZIP file to the temporary folder
     zip = ZipFile(source + filename + ".zip", "r")
     zip.extract(filename + ".tif", destination)
     zip.close()
 
+    # check if the GeoTIFF file now exists in the temporary folder
     if os.path.exists(destination + filename + ".tif"):
         return os.path.relpath(destination + filename + ".tif")
     
@@ -43,22 +49,34 @@ def __prepare_tile(source, destination, lat, lon):
     return None
 
 def gather_tiles(source, destination, rc):
+    '''
+    Makes sure the terrain tiles are available at a certain location.
+    @param source: Data path
+    @param destination: Temporary path
+    @param rc: Bounding box (GeoRect)
+    @return: The list of tile files
+    '''
     if not isinstance(rc, georect.GeoRect):
         return None
 
     print "Gathering terrain tiles ..."
+    
+    # Calculate rounded bounds
     lat_start = int(math.floor(rc.bottom.value_degrees() / 5.0)) * 5
     lon_start = int(math.floor(rc.left.value_degrees() / 5.0)) * 5
     lat_end = int(math.ceil(rc.top.value_degrees() / 5.0)) * 5
     lon_end = int(math.ceil(rc.right.value_degrees() / 5.0)) * 5
     
     tiles = []
+    # Iterate through latitude and longitude in 5 degree interval
     for lat in range(lat_start, lat_end, 5):
         for lon in range(lon_start, lon_end, 5):
             tile = __prepare_tile(source, destination, lat, lon)
             if tile != None:
+                # If tile is available append its filename to the tiles list
                 tiles.append(tile)
     
+    # Return list of available tile files
     return tiles
 
 '''
