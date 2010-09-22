@@ -381,7 +381,7 @@ adjust_links(const TracePoint& previous, const TracePoint& obj,
 }
 
 void 
-Trace::thin_trace(TracePointList& tlist, const unsigned mrange_sq) const
+Trace::thin_trace(TracePointList& tlist, const unsigned mrange_sq)
 {
   if (tlist.size() < 2)
     return;

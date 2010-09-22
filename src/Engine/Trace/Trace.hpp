@@ -163,7 +163,7 @@ public:
 private:
   typedef std::map<unsigned, unsigned> TraceDeltaMap;
 
-  void thin_trace(TracePointList& vec, const unsigned range_sq) const;
+  static void thin_trace(TracePointList& vec, const unsigned range_sq);
   void trim_point_delta();
   void trim_point_time();
 
