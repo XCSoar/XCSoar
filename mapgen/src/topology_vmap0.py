@@ -12,49 +12,54 @@ __layers = [["pop-miscellaneous-population-p", "mispopppop_point", "", "txt"],
             ["trans-railroad-l", "railrdltrans_line", "exs=28", "fco"],
             ["trans-road-l", "roadltrans_line", "rtt=14", "med"]]
         
-def __create_layers(rc, dir_data, dir_temp):
-    files = []
-    for layer in __layers:
-        print "Creating topology layer " + layer[1] + " ..."
+def __create_layer(rc, layer, dir_data, dir_temp):
+    print "Creating topology layer " + layer[1] + " ..."
 
-        for i in range(len(__maps)):
-            arg = [cmd_ogr2ogr]
+    for i in range(len(__maps)):
+        arg = [cmd_ogr2ogr]
+        
+        if i > 0:
+            arg.append("-update")
+            arg.append("-append")
+        else:
+            arg.append("-overwrite")
             
-            if i > 0:
-                arg.append("-update")
-                arg.append("-append")
-            else:
-                arg.append("-overwrite")
-                
-            if layer[1] != "":
-                arg.extend(["-where", layer[2]])
-                
-            arg.extend(["-select", layer[3]])
+        if layer[1] != "":
+            arg.extend(["-where", layer[2]])
             
-            arg.extend(["-spat",
-                        str(rc.left.value_degrees()),
-                        str(rc.bottom.value_degrees()),
-                        str(rc.right.value_degrees()),
-                        str(rc.top.value_degrees())])
+        arg.extend(["-select", layer[3]])
+        
+        arg.extend(["-spat",
+                    str(rc.left.value_degrees()),
+                    str(rc.bottom.value_degrees()),
+                    str(rc.right.value_degrees()),
+                    str(rc.top.value_degrees())])
 
-            arg.append(dir_temp)
-            arg.append(os.path.join(dir_data, __maps[i]))
+        arg.append(dir_temp)
+        arg.append(os.path.join(dir_data, __maps[i]))
 
-            arg.append(layer[0])
-            arg.extend(["-nln", layer[1]])
-            
-            p = subprocess.Popen(arg)
-            p.wait()
-            
-        if os.path.exists(os.path.join(dir_temp, layer[1] + ".shp")):
-            files.append([os.path.join(dir_temp, layer[1] + ".shp"), True])   
-            files.append([os.path.join(dir_temp, layer[1] + ".shx"), True])   
-            files.append([os.path.join(dir_temp, layer[1] + ".dbf"), True])   
-            files.append([os.path.join(dir_temp, layer[1] + ".prj"), True])   
+        arg.append(layer[0])
+        arg.extend(["-nln", layer[1]])
+        
+        p = subprocess.Popen(arg)
+        p.wait()
+
+    files = []        
+    if os.path.exists(os.path.join(dir_temp, layer[1] + ".shp")):
+        files.append([os.path.join(dir_temp, layer[1] + ".shp"), True])   
+        files.append([os.path.join(dir_temp, layer[1] + ".shx"), True])   
+        files.append([os.path.join(dir_temp, layer[1] + ".dbf"), True])   
+        files.append([os.path.join(dir_temp, layer[1] + ".prj"), True])   
         
     return files
         
-            
+def __create_layers(rc, dir_data, dir_temp):
+    files = []
+    for layer in __layers:
+        files.extend(__create_layer(rc, layer, dir_data, dir_temp))
+        
+    return files
+                    
 def __create_index_file(dir_temp):
     file = open(os.path.join(dir_temp, "topology.tpl"), "w")
     file.write("* filename,range,icon,field\n");
