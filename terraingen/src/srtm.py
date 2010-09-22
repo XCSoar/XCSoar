@@ -94,7 +94,7 @@ def __gather_tiles(dir_data, dir_temp, bounds):
         (Input files)
 '''
 def __merge_tiles(dir_temp, tiles):
-    print "Merging terrain tiles ...",
+    print "Merging terrain tiles ..."
     output_file = os.path.join(dir_temp, "terrain_merged.tif")
     if os.path.exists(output_file):
         os.unlink(output_file)
@@ -106,7 +106,6 @@ def __merge_tiles(dir_temp, tiles):
     args.extend(tiles)
     p = subprocess.Popen(args)
     p.wait()
-    print "done"
 
 '''
  3) Resample merged image
@@ -142,7 +141,7 @@ def __merge_tiles(dir_temp, tiles):
         (Output file)
 '''    
 def __resample(dir_temp, arcseconds_per_pixel):
-    print "Resampling terrain ...",
+    print "Resampling terrain ..."
     output_file = os.path.join(dir_temp, "terrain_resampled.tif")
     if os.path.exists(output_file):
         os.unlink(output_file)
@@ -161,7 +160,6 @@ def __resample(dir_temp, arcseconds_per_pixel):
             output_file]
     p = subprocess.Popen(args)
     p.wait()
-    print "done"
 
 '''
  4) Crop resampled image
@@ -186,7 +184,7 @@ def __resample(dir_temp, arcseconds_per_pixel):
         (Output file)
 '''    
 def __crop(dir_temp, rc):
-    print "Cropping terrain ...",
+    print "Cropping terrain ..."
     output_file = os.path.join(dir_temp, "terrain.tif")
     if os.path.exists(output_file):
         os.unlink(output_file)
@@ -202,7 +200,6 @@ def __crop(dir_temp, rc):
             output_file]
     p = subprocess.Popen(args)
     p.wait()
-    print "done"
 
 '''
  5) Convert to GeoJP2 with GeoJasPer
@@ -223,7 +220,7 @@ def __crop(dir_temp, rc):
         (???)
 '''    
 def __convert(dir_temp, rc):
-    print "Converting terrain to GeoJP2 format ...",
+    print "Converting terrain to GeoJP2 format ..."
     output_file = os.path.join(dir_temp, "terrain.jp2")
     if os.path.exists(output_file):
         os.unlink(output_file)
@@ -242,7 +239,7 @@ def __convert(dir_temp, rc):
             "-O", "latmin=" + str(rc.bottom.value_degrees())]
     p = subprocess.Popen(args)
     p.wait()
-    print "done"
+    
     return output_file
     
 def __cleanup(dir_temp):
