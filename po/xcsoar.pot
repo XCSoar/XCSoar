@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-31 08:51+0200\n"
+"POT-Creation-Date: 2010-09-22 12:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,16 +21,16 @@ msgstr ""
 msgid "Loading Airspace File..."
 msgstr ""
 
-#: src/Airspace/AirspaceParser.cpp:154
+#: src/Airspace/AirspaceParser.cpp:155
 msgid "Parse Error at Line"
 msgstr ""
 
-#: src/Airspace/AirspaceParser.cpp:155
+#: src/Airspace/AirspaceParser.cpp:156
 msgid "Line skipped."
 msgstr ""
 
-#: src/Airspace/AirspaceParser.cpp:156 src/Airspace/AirspaceParser.cpp:810
-#: src/Dialogs/dlgAnalysis.cpp:254 src/Dialogs/dlgConfiguration.cpp:89
+#: src/Airspace/AirspaceParser.cpp:157 src/Airspace/AirspaceParser.cpp:846
+#: src/Dialogs/dlgAnalysis.cpp:257 src/Dialogs/dlgConfiguration.cpp:115
 #: Data/Dialogs/dlgVoice.xml:34
 msgid "Airspace"
 msgstr ""
@@ -57,49 +57,49 @@ msgstr ""
 msgid "Start rules violated"
 msgstr ""
 
-#: src/Logger/Logger.cpp:165
+#: src/Logger/Logger.cpp:148
 msgid "Start Logger"
 msgstr ""
 
-#: src/Logger/Logger.cpp:172
+#: src/Logger/Logger.cpp:155
 msgid "Logger inactive, insufficient storage!"
 msgstr ""
 
-#: src/Logger/Logger.cpp:173
+#: src/Logger/Logger.cpp:156
 msgid "Logger Error"
 msgstr ""
 
-#: src/Logger/Logger.cpp:201 src/Logger/Logger.cpp:202
+#: src/Logger/Logger.cpp:184 src/Logger/Logger.cpp:185
 msgid "Stop Logger"
 msgstr ""
 
-#: src/Logger/LoggerImpl.cpp:561
+#: src/Logger/ExternalLogger.cpp:61
 msgid "Declare Task?"
 msgstr ""
 
-#: src/Logger/LoggerImpl.cpp:564
+#: src/Logger/ExternalLogger.cpp:64
 msgid "Task Declared!"
 msgstr ""
 
-#: src/Logger/LoggerImpl.cpp:568
+#: src/Logger/ExternalLogger.cpp:68
 msgid ""
 "Error occured,\r\n"
 "Task NOT Declared!"
 msgstr ""
 
-#: src/Logger/LoggerImpl.cpp:593
+#: src/Logger/ExternalLogger.cpp:93
 msgid "No logger connected"
 msgstr ""
 
-#: src/Logger/LoggerImpl.cpp:594
+#: src/Logger/ExternalLogger.cpp:94
 msgid "Declare task"
 msgstr ""
 
-#: src/Logger/LoggerImpl.cpp:609
+#: src/Logger/ExternalLogger.cpp:109
 msgid "OK to invalidate declaration?"
 msgstr ""
 
-#: src/Logger/LoggerImpl.cpp:610
+#: src/Logger/ExternalLogger.cpp:110
 msgid "Task declared"
 msgstr ""
 
@@ -132,7 +132,7 @@ msgid "Loading Airfield Details File..."
 msgstr ""
 
 #: src/ExpandMacros.cpp:129 src/ExpandMacros.cpp:170
-#: src/InputEventsActions.cpp:1828
+#: src/InputEventsActions.cpp:1830
 msgid "Next turnpoint"
 msgstr ""
 
@@ -389,7 +389,8 @@ msgstr ""
 msgid "Next Waypoint"
 msgstr ""
 
-#: src/InfoBoxes/Content/Factory.cpp:183
+#: src/InfoBoxes/Content/Factory.cpp:183 Data/Dialogs/dlgTaskPoint.xml:17
+#: Data/Dialogs/dlgTaskPoint_L.xml:18
 msgid "Next"
 msgstr ""
 
@@ -1226,75 +1227,76 @@ msgstr ""
 msgid "Calibrate OFF"
 msgstr ""
 
-#: src/InputEventsActions.cpp:162
+#: src/InputEventsActions.cpp:164
 msgid "Vario Sounds ON"
 msgstr ""
 
-#: src/InputEventsActions.cpp:164
+#: src/InputEventsActions.cpp:166
 msgid "Vario Sounds OFF"
 msgstr ""
 
-#: src/InputEventsActions.cpp:191
+#: src/InputEventsActions.cpp:193
 msgid "SnailTrail OFF"
 msgstr ""
 
-#: src/InputEventsActions.cpp:193
+#: src/InputEventsActions.cpp:195
 msgid "SnailTrail ON Long"
 msgstr ""
 
-#: src/InputEventsActions.cpp:195
+#: src/InputEventsActions.cpp:197
 msgid "SnailTrail ON Short"
 msgstr ""
 
-#: src/InputEventsActions.cpp:197
+#: src/InputEventsActions.cpp:199
 msgid "SnailTrail ON Full"
 msgstr ""
 
-#: src/InputEventsActions.cpp:222
+#: src/InputEventsActions.cpp:224
 msgid "VisualGlide OFF"
 msgstr ""
 
-#: src/InputEventsActions.cpp:224
+#: src/InputEventsActions.cpp:226
 msgid "VisualGlide Steady"
 msgstr ""
 
-#: src/InputEventsActions.cpp:226
+#: src/InputEventsActions.cpp:228
 msgid "VisualGlide Moving"
 msgstr ""
 
-#: src/InputEventsActions.cpp:256
+#: src/InputEventsActions.cpp:258
 msgid "Show Airspace OFF"
 msgstr ""
 
-#: src/InputEventsActions.cpp:258
+#: src/InputEventsActions.cpp:260
 msgid "Show Airspace ON"
 msgstr ""
 
-#: src/InputEventsActions.cpp:286
+#: src/InputEventsActions.cpp:295
 msgid "Screen Mode Full"
 msgstr ""
 
-#: src/InputEventsActions.cpp:288
+#: src/InputEventsActions.cpp:297
 msgid "Screen Mode Auxiliary"
 msgstr ""
 
-#: src/InputEventsActions.cpp:290
+#: src/InputEventsActions.cpp:299
 msgid "Screen Mode Normal"
 msgstr ""
 
-#: src/InputEventsActions.cpp:341
+#: src/InputEventsActions.cpp:337
 msgid "AutoZoom ON"
 msgstr ""
 
-#: src/InputEventsActions.cpp:343
+#. disable autozoom if user manually changes zoom
+#: src/InputEventsActions.cpp:339 src/InputEventsActions.cpp:1764
 msgid "AutoZoom OFF"
 msgstr ""
 
-#: src/InputEventsActions.cpp:371
+#: src/InputEventsActions.cpp:364
 msgid "Circling Zoom ON"
 msgstr ""
 
-#: src/InputEventsActions.cpp:373
+#: src/InputEventsActions.cpp:366
 msgid "Circling Zoom OFF"
 msgstr ""
 
@@ -1334,106 +1336,118 @@ msgstr ""
 msgid "No Active Waypoint!"
 msgstr ""
 
-#: src/InputEventsActions.cpp:771
+#: src/InputEventsActions.cpp:770
 msgid "Auto MacCready ON"
 msgstr ""
 
-#: src/InputEventsActions.cpp:773
+#: src/InputEventsActions.cpp:772
 msgid "Auto MacCready OFF"
 msgstr ""
 
-#: src/InputEventsActions.cpp:780
+#: src/InputEventsActions.cpp:779
 msgid "MacCready "
 msgstr ""
 
-#: src/InputEventsActions.cpp:985
+#: src/InputEventsActions.cpp:984
 msgid "Task Aborted"
 msgstr ""
 
-#: src/InputEventsActions.cpp:988
+#: src/InputEventsActions.cpp:987
 msgid "Task Goto"
 msgstr ""
 
-#: src/InputEventsActions.cpp:991
+#: src/InputEventsActions.cpp:990
 msgid "Task Ordered"
 msgstr ""
 
-#: src/InputEventsActions.cpp:994
+#: src/InputEventsActions.cpp:993
 msgid "No Task"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1049
+#: src/InputEventsActions.cpp:1048
 msgid "Bugs Performance"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1088
+#: src/InputEventsActions.cpp:1087
 msgid "Ballast %"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1136
+#: src/InputEventsActions.cpp:1135
 msgid "NMEA Log ON"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1138
+#: src/InputEventsActions.cpp:1137
 msgid "NMEA Log OFF"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1142
+#: src/InputEventsActions.cpp:1141
 msgid "Logger ON"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1144
+#: src/InputEventsActions.cpp:1143
 msgid "Logger OFF"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1471
+#: src/InputEventsActions.cpp:1468
 msgid "Forecast temperature"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1508 src/InputEventsActions.cpp:1544
+#: src/InputEventsActions.cpp:1505 src/InputEventsActions.cpp:1541
 msgid "Map labels ON"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1510
+#: src/InputEventsActions.cpp:1507
 msgid "Map labels MID"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1512
+#: src/InputEventsActions.cpp:1509
 msgid "Map labels OFF"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1683 src/InputEventsActions.cpp:1688
+#: src/InputEventsActions.cpp:1681 src/InputEventsActions.cpp:1686
 #: src/Dialogs/dlgStatus.cpp:238
 msgid "ON"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1685 src/InputEventsActions.cpp:1688
-#: src/Dialogs/dlgConfiguration.cpp:1202 src/Dialogs/dlgConfiguration.cpp:1267
-#: src/Dialogs/dlgConfiguration.cpp:1703 src/Dialogs/dlgStatus.cpp:240
+#: src/InputEventsActions.cpp:1683 src/InputEventsActions.cpp:1686
+#: src/Dialogs/dlgConfiguration.cpp:1238 src/Dialogs/dlgConfiguration.cpp:1303
+#: src/Dialogs/dlgConfiguration.cpp:1739 src/Dialogs/dlgStatus.cpp:240
 msgid "OFF"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1690
+#: src/InputEventsActions.cpp:1688
 msgid "Topology / Terrain"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1826
+#: src/InputEventsActions.cpp:1828
 msgid "Task Start"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1830
+#: src/InputEventsActions.cpp:1832
 msgid "Task Finish"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1832
+#: src/InputEventsActions.cpp:1834
 msgid "In sector, arm advance when ready"
 msgstr ""
 
-#: src/MapWindowSymbols.cpp:121
+#: src/Pages.cpp:172
+msgid "Map"
+msgstr ""
+
+#: src/Pages.cpp:177
+msgid "w. infoboxes"
+msgstr ""
+
+#: src/Pages.cpp:182
+msgid "w. aux. infoboxes"
+msgstr ""
+
+#: src/MapWindowSymbols.cpp:118
 msgid "GPS not connected"
 msgstr ""
 
-#: src/MapWindowSymbols.cpp:124
+#: src/MapWindowSymbols.cpp:121
 msgid "GPS waiting for fix"
 msgstr ""
 
@@ -1441,7 +1455,7 @@ msgstr ""
 msgid "Loading Topology File..."
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:65 src/Dialogs/dlgWeather.cpp:183
+#: src/Terrain/RasterWeather.cpp:65 src/Dialogs/dlgWeather.cpp:181
 #: Data/Dialogs/dlgVoice.xml:10
 msgid "Terrain"
 msgstr ""
@@ -1565,70 +1579,70 @@ msgstr ""
 msgid "blcwbase"
 msgstr ""
 
-#: src/FlightStatistics.cpp:867 src/FlightStatistics.cpp:875
+#: src/FlightStatistics.cpp:837 src/FlightStatistics.cpp:845
 msgid "Working band"
 msgstr ""
 
-#: src/FlightStatistics.cpp:881
+#: src/FlightStatistics.cpp:851
 msgid "Ceiling trend"
 msgstr ""
 
-#: src/FlightStatistics.cpp:897 src/FlightStatistics.cpp:904
+#: src/FlightStatistics.cpp:866 src/FlightStatistics.cpp:872
 msgid "Av climb"
 msgstr ""
 
-#: src/FlightStatistics.cpp:908
+#: src/FlightStatistics.cpp:876
 msgid "Climb trend"
 msgstr ""
 
-#: src/FlightStatistics.cpp:922 src/FlightStatistics.cpp:936
+#: src/FlightStatistics.cpp:888 src/FlightStatistics.cpp:902
 msgid "Best LD"
 msgstr ""
 
-#: src/FlightStatistics.cpp:927 src/FlightStatistics.cpp:941
+#: src/FlightStatistics.cpp:893 src/FlightStatistics.cpp:907
 msgid "Min sink"
 msgstr ""
 
-#: src/FlightStatistics.cpp:954
+#: src/FlightStatistics.cpp:921
 msgid "Thermal height"
 msgstr ""
 
-#: src/FlightStatistics.cpp:958
+#: src/FlightStatistics.cpp:925
 msgid "Cloud base"
 msgstr ""
 
-#: src/FlightStatistics.cpp:971
+#: src/FlightStatistics.cpp:938
 msgid "No task"
 msgstr ""
 
-#: src/FlightStatistics.cpp:982 src/FlightStatistics.cpp:997
-#: src/FlightStatistics.cpp:1012
+#: src/FlightStatistics.cpp:949 src/FlightStatistics.cpp:959
+#: src/FlightStatistics.cpp:971
 msgid "Task to go"
 msgstr ""
 
-#: src/FlightStatistics.cpp:984 src/FlightStatistics.cpp:999
+#: src/FlightStatistics.cpp:949 src/FlightStatistics.cpp:959
 msgid "AAT to go"
 msgstr ""
 
-#: src/FlightStatistics.cpp:986 src/FlightStatistics.cpp:1001
-#: src/FlightStatistics.cpp:1014
+#: src/FlightStatistics.cpp:950 src/FlightStatistics.cpp:960
+#: src/FlightStatistics.cpp:971
 msgid "Distance to go"
 msgstr ""
 
-#: src/FlightStatistics.cpp:990 src/FlightStatistics.cpp:1004
+#: src/FlightStatistics.cpp:952 src/FlightStatistics.cpp:963
 msgid "Target speed"
 msgstr ""
 
-#: src/Interface.cpp:182
+#: src/Interface.cpp:186
 msgid "Quit program?"
 msgstr ""
 
 #. Read the terrain file
-#: src/UtilsSettings.cpp:120 src/Components.cpp:305 src/Components.cpp:323
+#: src/UtilsSettings.cpp:121 src/Components.cpp:306 src/Components.cpp:324
 msgid "Loading Terrain File..."
 msgstr ""
 
-#: src/UtilsSettings.cpp:187
+#: src/UtilsSettings.cpp:193
 msgid "Settings locked in flight"
 msgstr ""
 
@@ -1637,7 +1651,7 @@ msgstr ""
 msgid "Organiser Battery Low"
 msgstr ""
 
-#: src/Screen/Chart.cpp:221
+#: src/Screen/Chart.cpp:192
 msgid "No data"
 msgstr ""
 
@@ -1651,17 +1665,17 @@ msgstr ""
 msgid "Warning"
 msgstr ""
 
-#: src/Components.cpp:150
+#: src/Components.cpp:149
 msgid "Initialising"
 msgstr ""
 
 #. Scan for weather forecast
-#: src/Components.cpp:329
+#: src/Components.cpp:330
 msgid "Scanning weather forecast"
 msgstr ""
 
 #. Start the device thread(s)
-#: src/Components.cpp:354
+#: src/Components.cpp:356
 msgid "Starting devices"
 msgstr ""
 
@@ -1672,64 +1686,65 @@ msgstr ""
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Components.cpp:365
+#: src/Components.cpp:367
 msgid "Initialising display"
 msgstr ""
 
 #. Show progress dialog
-#: src/Components.cpp:424 src/Components.cpp:450 src/Components.cpp:494
+#: src/Components.cpp:428 src/Components.cpp:454 src/Components.cpp:498
 msgid "Shutdown, please wait..."
 msgstr ""
 
 #. Stop logger and save igc file
-#: src/Components.cpp:434
+#: src/Components.cpp:438
 msgid "Shutdown, saving logs..."
 msgstr ""
 
 #. Save settings to profile
-#: src/Components.cpp:438
+#: src/Components.cpp:442
 msgid "Shutdown, saving profile..."
 msgstr ""
 
 #. Save the task for the next time
-#: src/Components.cpp:480
+#: src/Components.cpp:484
 msgid "Shutdown, saving task..."
 msgstr ""
 
-#: src/Device/Port.cpp:100 src/Device/Port.cpp:128
+#: src/Device/Port.cpp:100 src/Device/Port.cpp:121
 #, c-format
 msgid "Unable to open port %s"
 msgstr ""
 
-#: src/Device/Port.cpp:177
+#: src/Device/Port.cpp:163
 #, c-format
 msgid "Unable to change settings on port %s"
 msgstr ""
 
-#: src/Device/Port.cpp:488
+#: src/Device/Port.cpp:460
 #, c-format
 msgid "Unable to set serial port timers %s"
 msgstr ""
 
-#: src/Dialogs/Message.cpp:143 Data/Dialogs/dlgTarget.xml:4
+#: src/Dialogs/Message.cpp:141 Data/Dialogs/dlgTarget.xml:4
 #: Data/Dialogs/dlgTarget_L.xml:4 Data/Dialogs/dlgTaskCalculator.xml:4
 msgid "OK"
 msgstr ""
 
-#: src/Dialogs/Message.cpp:151
+#: src/Dialogs/Message.cpp:149
 msgid "Yes"
 msgstr ""
 
-#: src/Dialogs/Message.cpp:157
+#: src/Dialogs/Message.cpp:155
 msgid "No"
 msgstr ""
 
-#: src/Dialogs/Message.cpp:165 Data/Dialogs/dlgStartTask.xml:10
+#: src/Dialogs/Message.cpp:163 Data/Dialogs/dlgStartTask.xml:10
 msgid "Retry"
 msgstr ""
 
-#: src/Dialogs/Message.cpp:173 Data/Dialogs/dlgComboPicker.xml:6
-#: Data/Dialogs/dlgComboPicker_L.xml:6 Data/Dialogs/dlgFontEdit.xml:24
+#: src/Dialogs/Message.cpp:171 Data/Dialogs/dlgComboPicker.xml:6
+#: Data/Dialogs/dlgComboPicker_L.xml:6 Data/Dialogs/dlgConfigPage.xml:8
+#: Data/Dialogs/dlgConfigPage_L.xml:8 Data/Dialogs/dlgFontEdit.xml:24
 #: Data/Dialogs/dlgTaskCalculator.xml:5
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:8
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:8
@@ -1737,23 +1752,23 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: src/Dialogs/Message.cpp:181
+#: src/Dialogs/Message.cpp:179
 msgid "Abort"
 msgstr ""
 
-#: src/Dialogs/Message.cpp:187
+#: src/Dialogs/Message.cpp:185
 msgid "Ignore"
 msgstr ""
 
-#: src/Dialogs/dlgAirspace.cpp:65 src/Dialogs/dlgAirspace.cpp:87
+#: src/Dialogs/dlgAirspace.cpp:67 src/Dialogs/dlgAirspace.cpp:86
 msgid "Warn"
 msgstr ""
 
-#: src/Dialogs/dlgAirspace.cpp:66 src/Dialogs/dlgAirspace.cpp:91
+#: src/Dialogs/dlgAirspace.cpp:68 src/Dialogs/dlgAirspace.cpp:90
 msgid "Display"
 msgstr ""
 
-#: src/Dialogs/dlgAirspace.cpp:184
+#: src/Dialogs/dlgAirspace.cpp:194
 msgid "Configuration saved"
 msgstr ""
 
@@ -1761,69 +1776,69 @@ msgstr ""
 msgid "Acknowledge for day?"
 msgstr ""
 
-#: src/Dialogs/dlgAirspaceSelect.cpp:340 src/Dialogs/dlgWayPointSelect.cpp:472
+#: src/Dialogs/dlgAirspaceSelect.cpp:342 src/Dialogs/dlgWayPointSelect.cpp:472
 msgid "No Match!"
 msgstr ""
 
-#: src/Dialogs/dlgAirspaceWarning.cpp:213
+#: src/Dialogs/dlgAirspaceWarning.cpp:212
 msgid "No Warnings"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:168 src/Dialogs/dlgAnalysis.cpp:177
-#: src/Dialogs/dlgAnalysis.cpp:186 src/Dialogs/dlgAnalysis.cpp:194
-#: src/Dialogs/dlgAnalysis.cpp:204 src/Dialogs/dlgAnalysis.cpp:213
-#: src/Dialogs/dlgAnalysis.cpp:221 src/Dialogs/dlgAnalysis.cpp:230
-#: src/Dialogs/dlgAnalysis.cpp:253
+#: src/Dialogs/dlgAnalysis.cpp:171 src/Dialogs/dlgAnalysis.cpp:180
+#: src/Dialogs/dlgAnalysis.cpp:189 src/Dialogs/dlgAnalysis.cpp:197
+#: src/Dialogs/dlgAnalysis.cpp:207 src/Dialogs/dlgAnalysis.cpp:216
+#: src/Dialogs/dlgAnalysis.cpp:224 src/Dialogs/dlgAnalysis.cpp:233
+#: src/Dialogs/dlgAnalysis.cpp:256
 msgid "Analysis"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:169
+#: src/Dialogs/dlgAnalysis.cpp:172
 msgid "Barograph"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:173 src/Dialogs/dlgAnalysis.cpp:200
-#: src/Dialogs/dlgAnalysis.cpp:209
+#: src/Dialogs/dlgAnalysis.cpp:176 src/Dialogs/dlgAnalysis.cpp:203
+#: src/Dialogs/dlgAnalysis.cpp:212
 msgid "Settings"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:178
+#: src/Dialogs/dlgAnalysis.cpp:181
 msgid "Climb"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:182 src/Dialogs/dlgAnalysis.cpp:217
-#: src/Dialogs/dlgAnalysis.cpp:226
+#: src/Dialogs/dlgAnalysis.cpp:185 src/Dialogs/dlgAnalysis.cpp:220
+#: src/Dialogs/dlgAnalysis.cpp:229
 msgid "Task calc"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:187
+#: src/Dialogs/dlgAnalysis.cpp:190
 msgid "Wind at Altitude"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:190
+#: src/Dialogs/dlgAnalysis.cpp:193
 msgid "Set wind"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:195
+#: src/Dialogs/dlgAnalysis.cpp:198
 msgid "Glide Polar"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:205
+#: src/Dialogs/dlgAnalysis.cpp:208
 msgid "Temp trace"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:214
+#: src/Dialogs/dlgAnalysis.cpp:217
 msgid "Task speed"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:222 src/Dialogs/dlgStatus.cpp:67
+#: src/Dialogs/dlgAnalysis.cpp:225 src/Dialogs/dlgStatus.cpp:67
 msgid "Task"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:231
+#: src/Dialogs/dlgAnalysis.cpp:234
 msgid "OnLine Contest"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:240 Data/Dialogs/dlgAirspaceSelect.xml:10
+#: src/Dialogs/dlgAnalysis.cpp:243 Data/Dialogs/dlgAirspaceSelect.xml:10
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:16
 #: Data/Dialogs/dlgConfiguration.xml:325
 #: Data/Dialogs/dlgConfiguration_L.xml:325
@@ -1837,17 +1852,17 @@ msgstr ""
 msgid "Distance"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:243 Data/Dialogs/dlgStartTask.xml:4
+#: src/Dialogs/dlgAnalysis.cpp:246 Data/Dialogs/dlgStartTask.xml:4
 #: Data/Dialogs/dlgWeather.xml:10 Data/Dialogs/dlgWeather_L.xml:10
 msgid "Time"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:245 Data/Dialogs/dlgStartTask.xml:6
+#: src/Dialogs/dlgAnalysis.cpp:248 Data/Dialogs/dlgStartTask.xml:6
 #: Data/Dialogs/dlgWindSettings.xml:4
 msgid "Speed"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:257 Data/Dialogs/dlgConfiguration.xml:79
+#: src/Dialogs/dlgAnalysis.cpp:260 Data/Dialogs/dlgConfiguration.xml:79
 #: Data/Dialogs/dlgConfiguration_L.xml:80
 msgid "Warnings"
 msgstr ""
@@ -1856,608 +1871,612 @@ msgstr ""
 msgid "Checklist"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:88
+#: src/Dialogs/dlgConfiguration.cpp:114
 msgid "Site"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:90
+#: src/Dialogs/dlgConfiguration.cpp:116
 msgid "Map Display"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:91
+#: src/Dialogs/dlgConfiguration.cpp:117
 msgid "Terrain Display"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:92
+#: src/Dialogs/dlgConfiguration.cpp:118
 msgid "Glide Computer"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:93
+#: src/Dialogs/dlgConfiguration.cpp:119
 msgid "Safety factors"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:94
+#: src/Dialogs/dlgConfiguration.cpp:120
 msgid "Polar"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:95
+#: src/Dialogs/dlgConfiguration.cpp:121
 msgid "Devices"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:96
+#: src/Dialogs/dlgConfiguration.cpp:122
 msgid "Units"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:97
+#: src/Dialogs/dlgConfiguration.cpp:123
 msgid "Interface"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:98
+#: src/Dialogs/dlgConfiguration.cpp:124
 msgid "Appearance"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:99
+#: src/Dialogs/dlgConfiguration.cpp:125
 msgid "Fonts"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:100
+#: src/Dialogs/dlgConfiguration.cpp:126
 msgid "FLARM and other gauges"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:101
+#: src/Dialogs/dlgConfiguration.cpp:127
 msgid "Default task rules"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:102
-msgid "InfoBox Cruise"
-msgstr ""
-
-#: src/Dialogs/dlgConfiguration.cpp:103
+#: src/Dialogs/dlgConfiguration.cpp:128
 msgid "InfoBox Circling"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:104
+#: src/Dialogs/dlgConfiguration.cpp:129
+msgid "InfoBox Cruise"
+msgstr ""
+
+#: src/Dialogs/dlgConfiguration.cpp:130
 msgid "InfoBox Final Glide"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:105
+#: src/Dialogs/dlgConfiguration.cpp:131
 msgid "InfoBox Auxiliary"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:106 Data/Dialogs/dlgStatus.xml:24
+#: src/Dialogs/dlgConfiguration.cpp:132 Data/Dialogs/dlgStatus.xml:24
 #: Data/Dialogs/dlgStatusSystem.xml:8
 msgid "Logger"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:107
+#: src/Dialogs/dlgConfiguration.cpp:133
 msgid "Waypoint Edit"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:108
+#: src/Dialogs/dlgConfiguration.cpp:134
+msgid "Pages"
+msgstr ""
+
+#: src/Dialogs/dlgConfiguration.cpp:135
 msgid "Experimental features"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:116
+#: src/Dialogs/dlgConfiguration.cpp:143
 msgid "GPS Intermediate Driver"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:169 src/Dialogs/dlgConfiguration.cpp:177
-#: src/Dialogs/dlgConfiguration.cpp:185 src/Dialogs/dlgConfiguration.cpp:193
+#: src/Dialogs/dlgConfiguration.cpp:192 src/Dialogs/dlgConfiguration.cpp:200
+#: src/Dialogs/dlgConfiguration.cpp:208 src/Dialogs/dlgConfiguration.cpp:216
 #: src/Dialogs/dlgWaypointEdit.cpp:68 src/Dialogs/dlgWaypointEdit.cpp:78
 msgid "(blank)"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:171
+#: src/Dialogs/dlgConfiguration.cpp:194
 msgid "Pilot name"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:179 Data/Dialogs/dlgVario.xml:355
+#: src/Dialogs/dlgConfiguration.cpp:202 Data/Dialogs/dlgVario.xml:355
 #: Data/Dialogs/dlgVario_L.xml:355
 msgid "Aircraft type"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:187
+#: src/Dialogs/dlgConfiguration.cpp:210
 msgid "Competition ID"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:195
+#: src/Dialogs/dlgConfiguration.cpp:218
 msgid "Logger ID"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:277
+#: src/Dialogs/dlgConfiguration.cpp:310
 msgid "Expert"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:681
+#: src/Dialogs/dlgConfiguration.cpp:730
 msgid "Overwrite?"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:682
+#: src/Dialogs/dlgConfiguration.cpp:731
 msgid "InfoBox paste"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:841
+#: src/Dialogs/dlgConfiguration.cpp:890
 msgid "Waypoint not editable"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:851
+#: src/Dialogs/dlgConfiguration.cpp:900
 msgid "Waypoints excluded, save anyway?"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:852
+#: src/Dialogs/dlgConfiguration.cpp:901
 msgid "Waypoints outside terrain"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:879
+#: src/Dialogs/dlgConfiguration.cpp:928
 msgid "Delete Waypoint?"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:898
+#: src/Dialogs/dlgConfiguration.cpp:947
 msgid "circling"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:901
+#: src/Dialogs/dlgConfiguration.cpp:950
 msgid "cruise"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:904
+#: src/Dialogs/dlgConfiguration.cpp:953
 msgid "final glide"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:907
+#: src/Dialogs/dlgConfiguration.cpp:956
 msgid "auxiliary"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:920 src/Dialogs/dlgWeather.cpp:136
+#: src/Dialogs/dlgConfiguration.cpp:969 src/Dialogs/dlgWeather.cpp:134
 msgid "No help available on this item"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1170
+#: src/Dialogs/dlgConfiguration.cpp:1206
 msgid "All on"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1171
+#: src/Dialogs/dlgConfiguration.cpp:1207
 msgid "Clip"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1172 Data/Dialogs/dlgBrightness.xml:6
+#: src/Dialogs/dlgConfiguration.cpp:1208 Data/Dialogs/dlgBrightness.xml:6
 msgid "Auto"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1173
+#: src/Dialogs/dlgConfiguration.cpp:1209
 msgid "All below"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1203
+#: src/Dialogs/dlgConfiguration.cpp:1239
 msgid "ON/Fixed"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1204
+#: src/Dialogs/dlgConfiguration.cpp:1240
 msgid "ON/Scaled"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1224
+#: src/Dialogs/dlgConfiguration.cpp:1260
 msgid "Names"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1225
+#: src/Dialogs/dlgConfiguration.cpp:1261
 msgid "Numbers"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1226
+#: src/Dialogs/dlgConfiguration.cpp:1262
 msgid "First 5"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1227
+#: src/Dialogs/dlgConfiguration.cpp:1263
 msgid "None"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1228
+#: src/Dialogs/dlgConfiguration.cpp:1264
 msgid "First 3"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1229
+#: src/Dialogs/dlgConfiguration.cpp:1265
 msgid "Names in task"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1230
+#: src/Dialogs/dlgConfiguration.cpp:1266
 msgid "First word"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1246
+#: src/Dialogs/dlgConfiguration.cpp:1282
 msgid "Track up"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1247 src/Dialogs/dlgFlarmTraffic.cpp:678
+#: src/Dialogs/dlgConfiguration.cpp:1283 src/Dialogs/dlgFlarmTraffic.cpp:678
 msgid "North up"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1248
+#: src/Dialogs/dlgConfiguration.cpp:1284
 msgid "North circling"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1249
+#: src/Dialogs/dlgConfiguration.cpp:1285
 msgid "Target circling"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1250
+#: src/Dialogs/dlgConfiguration.cpp:1286
 msgid "North/track"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1268
+#: src/Dialogs/dlgConfiguration.cpp:1304
 msgid "Line"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1269
+#: src/Dialogs/dlgConfiguration.cpp:1305
 msgid "Shade"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1281
+#: src/Dialogs/dlgConfiguration.cpp:1317
 msgid "Arrow head"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1282
+#: src/Dialogs/dlgConfiguration.cpp:1318
 msgid "Full arrow"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1291 src/Dialogs/dlgWindSettings.cpp:126
+#: src/Dialogs/dlgConfiguration.cpp:1327 src/Dialogs/dlgWindSettings.cpp:126
 msgid "Manual"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1292 src/Dialogs/dlgWindSettings.cpp:127
+#: src/Dialogs/dlgConfiguration.cpp:1328 src/Dialogs/dlgWindSettings.cpp:127
 #: Data/Dialogs/dlgVegaDemo.xml:14
 msgid "Circling"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1293 src/Dialogs/dlgWindSettings.cpp:128
+#: src/Dialogs/dlgConfiguration.cpp:1329 src/Dialogs/dlgWindSettings.cpp:128
 msgid "ZigZag"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1294 src/Dialogs/dlgConfiguration.cpp:1305
+#: src/Dialogs/dlgConfiguration.cpp:1330 src/Dialogs/dlgConfiguration.cpp:1341
 #: src/Dialogs/dlgWindSettings.cpp:129
 msgid "Both"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1303
+#: src/Dialogs/dlgConfiguration.cpp:1339
 msgid "Final glide"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1304
+#: src/Dialogs/dlgConfiguration.cpp:1340
 msgid "Average climb"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1314
+#: src/Dialogs/dlgConfiguration.cpp:1350
 msgid "Ask"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1315
+#: src/Dialogs/dlgConfiguration.cpp:1351
 msgid "Include"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1316
+#: src/Dialogs/dlgConfiguration.cpp:1352
 msgid "Exclude"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1348
+#: src/Dialogs/dlgConfiguration.cpp:1384
 msgid "Statue"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1349 src/Dialogs/dlgConfiguration.cpp:1381
-#: src/Dialogs/dlgConfiguration.cpp:1396
+#: src/Dialogs/dlgConfiguration.cpp:1385 src/Dialogs/dlgConfiguration.cpp:1417
+#: src/Dialogs/dlgConfiguration.cpp:1432
 msgid "Nautical"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1350 src/Dialogs/dlgConfiguration.cpp:1382
-#: src/Dialogs/dlgConfiguration.cpp:1397
+#: src/Dialogs/dlgConfiguration.cpp:1386 src/Dialogs/dlgConfiguration.cpp:1418
+#: src/Dialogs/dlgConfiguration.cpp:1433
 msgid "Metric"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1380 src/Dialogs/dlgConfiguration.cpp:1395
+#: src/Dialogs/dlgConfiguration.cpp:1416 src/Dialogs/dlgConfiguration.cpp:1431
 msgid "Statute"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1410
+#: src/Dialogs/dlgConfiguration.cpp:1446
 msgid "Feet"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1411
+#: src/Dialogs/dlgConfiguration.cpp:1447
 msgid "Meters"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1424
+#: src/Dialogs/dlgConfiguration.cpp:1460
 msgid "C"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1425
+#: src/Dialogs/dlgConfiguration.cpp:1461
 msgid "F"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1438
+#: src/Dialogs/dlgConfiguration.cpp:1474
 msgid "Knots"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1439
+#: src/Dialogs/dlgConfiguration.cpp:1475
 msgid "M/s"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1440
+#: src/Dialogs/dlgConfiguration.cpp:1476
 msgid "ft/min"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1466 src/Dialogs/dlgConfiguration.cpp:1479
+#: src/Dialogs/dlgConfiguration.cpp:1502 src/Dialogs/dlgConfiguration.cpp:1515
 msgid "Off"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1467
+#: src/Dialogs/dlgConfiguration.cpp:1503
 msgid "Long"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1468
+#: src/Dialogs/dlgConfiguration.cpp:1504
 msgid "Short"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1469
+#: src/Dialogs/dlgConfiguration.cpp:1505
 msgid "Full"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1480
+#: src/Dialogs/dlgConfiguration.cpp:1516
 msgid "Steady"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1481
+#: src/Dialogs/dlgConfiguration.cpp:1517
 msgid "Moving"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1544
+#: src/Dialogs/dlgConfiguration.cpp:1580
 msgid "Center"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1545
+#: src/Dialogs/dlgConfiguration.cpp:1581
 msgid "Topleft"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1554 src/Dialogs/dlgConfiguration.cpp:1682
+#: src/Dialogs/dlgConfiguration.cpp:1590 src/Dialogs/dlgConfiguration.cpp:1718
 msgid "Default"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1555
+#: src/Dialogs/dlgConfiguration.cpp:1591
 msgid "Keyboard"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1556
+#: src/Dialogs/dlgConfiguration.cpp:1592
 msgid "HighScore Style"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1565
+#: src/Dialogs/dlgConfiguration.cpp:1601
 msgid "Full width"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1566
+#: src/Dialogs/dlgConfiguration.cpp:1602
 msgid "Scaled"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1567
+#: src/Dialogs/dlgConfiguration.cpp:1603
 msgid "Scaled centered"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1568
+#: src/Dialogs/dlgConfiguration.cpp:1604
 msgid "Fixed"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1577
+#: src/Dialogs/dlgConfiguration.cpp:1613
 msgid "Box"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1578
+#: src/Dialogs/dlgConfiguration.cpp:1614
 msgid "Tab"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1588
+#: src/Dialogs/dlgConfiguration.cpp:1624
 msgid "8 Top + Bottom (Portrait)"
 msgstr ""
 
 #. 0
-#: src/Dialogs/dlgConfiguration.cpp:1589
+#: src/Dialogs/dlgConfiguration.cpp:1625
 msgid "8 Top (Portrait)"
 msgstr ""
 
 #. 1
-#: src/Dialogs/dlgConfiguration.cpp:1590
+#: src/Dialogs/dlgConfiguration.cpp:1626
 msgid "8 Bottom (Portrait)"
 msgstr ""
 
 #. 2
-#: src/Dialogs/dlgConfiguration.cpp:1591
+#: src/Dialogs/dlgConfiguration.cpp:1627
 msgid "8 Left + Right (Landscape)"
 msgstr ""
 
 #. 3
-#: src/Dialogs/dlgConfiguration.cpp:1592
+#: src/Dialogs/dlgConfiguration.cpp:1628
 msgid "8 Left (Landscape)"
 msgstr ""
 
 #. 4
-#: src/Dialogs/dlgConfiguration.cpp:1593
+#: src/Dialogs/dlgConfiguration.cpp:1629
 msgid "8 Right (Landscape)"
 msgstr ""
 
 #. 5
-#: src/Dialogs/dlgConfiguration.cpp:1594
+#: src/Dialogs/dlgConfiguration.cpp:1630
 msgid "9 Right + Vario (Landscape)"
 msgstr ""
 
 #. 6
-#: src/Dialogs/dlgConfiguration.cpp:1595
+#: src/Dialogs/dlgConfiguration.cpp:1631
 msgid "5 Right (Square)"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1606
+#: src/Dialogs/dlgConfiguration.cpp:1642
 msgid "Generic"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1607
+#: src/Dialogs/dlgConfiguration.cpp:1643
 msgid "HP31x"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1608
+#: src/Dialogs/dlgConfiguration.cpp:1644
 msgid "MedionP5"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1609
+#: src/Dialogs/dlgConfiguration.cpp:1645
 msgid "MIO"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1610
+#: src/Dialogs/dlgConfiguration.cpp:1646
 msgid "Nokia500"
 msgstr ""
 
 #. VENTA3
-#: src/Dialogs/dlgConfiguration.cpp:1611
+#: src/Dialogs/dlgConfiguration.cpp:1647
 msgid "PN6000"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1621 src/Dialogs/dlgConfiguration.cpp:1672
+#: src/Dialogs/dlgConfiguration.cpp:1657 src/Dialogs/dlgConfiguration.cpp:1708
 msgid "Normal"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1622
+#: src/Dialogs/dlgConfiguration.cpp:1658
 msgid "Extended"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1632
+#: src/Dialogs/dlgConfiguration.cpp:1668
 msgid "Disabled"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1633
+#: src/Dialogs/dlgConfiguration.cpp:1669
 msgid "Enabled"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1643
+#: src/Dialogs/dlgConfiguration.cpp:1679
 msgid "15 seconds"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1644
+#: src/Dialogs/dlgConfiguration.cpp:1680
 msgid "30 seconds"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1645
+#: src/Dialogs/dlgConfiguration.cpp:1681
 msgid "60 seconds"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1646
+#: src/Dialogs/dlgConfiguration.cpp:1682
 msgid "90 seconds"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1647
+#: src/Dialogs/dlgConfiguration.cpp:1683
 msgid "2 minutes"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1648
+#: src/Dialogs/dlgConfiguration.cpp:1684
 msgid "3 minutes"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1673
+#: src/Dialogs/dlgConfiguration.cpp:1709
 msgid "White outline"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1683 src/Dialogs/dlgConfiguration.cpp:1693
+#: src/Dialogs/dlgConfiguration.cpp:1719 src/Dialogs/dlgConfiguration.cpp:1729
 msgid "Alternate"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1692
+#: src/Dialogs/dlgConfiguration.cpp:1728
 msgid "Winpilot"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1694
+#: src/Dialogs/dlgConfiguration.cpp:1730
 msgid "Green/Orange"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1704
+#: src/Dialogs/dlgConfiguration.cpp:1740
 msgid "Flap"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1705
+#: src/Dialogs/dlgConfiguration.cpp:1741
 msgid "SC"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1725
+#: src/Dialogs/dlgConfiguration.cpp:1761
 msgid "Low lands"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1726
+#: src/Dialogs/dlgConfiguration.cpp:1762
 msgid "Mountainous"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1727
+#: src/Dialogs/dlgConfiguration.cpp:1763
 msgid "Imhof 7"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1728
+#: src/Dialogs/dlgConfiguration.cpp:1764
 msgid "Imhof 4"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1729
+#: src/Dialogs/dlgConfiguration.cpp:1765
 msgid "Imhof 12"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1730
+#: src/Dialogs/dlgConfiguration.cpp:1766
 msgid "Imhof Atlas"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1731
+#: src/Dialogs/dlgConfiguration.cpp:1767
 msgid "ICAO"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1732
+#: src/Dialogs/dlgConfiguration.cpp:1768
 msgid "Grey"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1783 src/Dialogs/dlgTaskProperties.cpp:75
+#: src/Dialogs/dlgConfiguration.cpp:1819 src/Dialogs/dlgTaskProperties.cpp:75
 msgid "AGL"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1784 src/Dialogs/dlgTaskProperties.cpp:76
+#: src/Dialogs/dlgConfiguration.cpp:1820 src/Dialogs/dlgTaskProperties.cpp:76
 msgid "MSL"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:2737
+#: src/Dialogs/dlgConfiguration.cpp:2750
 msgid "Save changes to waypoint file?"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:2737
+#: src/Dialogs/dlgConfiguration.cpp:2750
 msgid "Waypoints edited"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:2749 src/Dialogs/dlgVoice.cpp:124
+#: src/Dialogs/dlgConfiguration.cpp:2762 src/Dialogs/dlgVoice.cpp:124
 msgid "Changes to configuration saved."
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:2752
+#: src/Dialogs/dlgConfiguration.cpp:2765
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr ""
 
-#: src/Dialogs/dlgConfigurationVario.cpp:412
+#: src/Dialogs/dlgConfigurationVario.cpp:411
 msgid "Set new audio scheme?  Old values will be lost."
 msgstr ""
 
-#: src/Dialogs/dlgConfigurationVario.cpp:413
-#: src/Dialogs/dlgConfigurationVario.cpp:490
+#: src/Dialogs/dlgConfigurationVario.cpp:412
+#: src/Dialogs/dlgConfigurationVario.cpp:489
 msgid "Vega Audio"
 msgstr ""
 
-#: src/Dialogs/dlgConfigurationVario.cpp:489
+#: src/Dialogs/dlgConfigurationVario.cpp:488
 msgid "Audio scheme updated."
 msgstr ""
 
-#: src/Dialogs/dlgConfigurationVario.cpp:967
+#: src/Dialogs/dlgConfigurationVario.cpp:966
 msgid "No communication with Vega."
 msgstr ""
 
-#: src/Dialogs/dlgConfigurationVario.cpp:968
+#: src/Dialogs/dlgConfigurationVario.cpp:967
 msgid "Vega error"
 msgstr ""
 
-#: src/Dialogs/dlgConfigurationVario.cpp:995
+#: src/Dialogs/dlgConfigurationVario.cpp:994
 msgid "Reading vario settings..."
 msgstr ""
 
@@ -2523,11 +2542,11 @@ msgid "NO"
 msgstr ""
 
 #. / @todo proper task validity check
-#: src/Dialogs/dlgStatus.cpp:418 src/Dialogs/dlgStatus.cpp:427
+#: src/Dialogs/dlgStatus.cpp:419 src/Dialogs/dlgStatus.cpp:428
 msgid "TRUE"
 msgstr ""
 
-#: src/Dialogs/dlgStatus.cpp:420 src/Dialogs/dlgStatus.cpp:429
+#: src/Dialogs/dlgStatus.cpp:421 src/Dialogs/dlgStatus.cpp:430
 msgid "FALSE"
 msgstr ""
 
@@ -2551,36 +2570,36 @@ msgstr ""
 msgid "Task edit"
 msgstr ""
 
-#: src/Dialogs/dlgTaskEdit.cpp:125
+#: src/Dialogs/dlgTaskEdit.cpp:124
 msgid "add waypoint"
 msgstr ""
 
-#: src/Dialogs/dlgTaskEdit.cpp:157
+#: src/Dialogs/dlgTaskEdit.cpp:184
 msgid "Task invalid.  Not saved."
 msgstr ""
 
-#: src/Dialogs/dlgTaskEdit.cpp:163
+#: src/Dialogs/dlgTaskEdit.cpp:190
 msgid "Task saved"
 msgstr ""
 
-#: src/Dialogs/dlgTaskList.cpp:182
+#: src/Dialogs/dlgTaskList.cpp:180
 msgid "Load the selected task?"
 msgstr ""
 
-#: src/Dialogs/dlgTaskList.cpp:187 src/Dialogs/dlgTaskList.cpp:220
+#: src/Dialogs/dlgTaskList.cpp:185 src/Dialogs/dlgTaskList.cpp:218
 msgid "Task Browser"
 msgstr ""
 
-#: src/Dialogs/dlgTaskList.cpp:215
+#: src/Dialogs/dlgTaskList.cpp:213
 msgid "Delete the selected task?"
 msgstr ""
 
 #. empty task, don't ask confirmation
-#: src/Dialogs/dlgTaskType.cpp:111
+#: src/Dialogs/dlgTaskType.cpp:110
 msgid "Change task type?"
 msgstr ""
 
-#: src/Dialogs/dlgTaskType.cpp:112
+#: src/Dialogs/dlgTaskType.cpp:111
 msgid "Task Type"
 msgstr ""
 
@@ -2592,11 +2611,11 @@ msgstr ""
 msgid "Task Point"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:326
+#: src/Dialogs/dlgTaskHelpers.cpp:395
 msgid "Save task?"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:326
+#: src/Dialogs/dlgTaskHelpers.cpp:395
 msgid "Task Selection"
 msgstr ""
 
@@ -2608,11 +2627,43 @@ msgstr ""
 msgid "Not Found"
 msgstr ""
 
-#: src/Dialogs/dlgWeather.cpp:127
+#: src/Dialogs/dlgWeather.cpp:125
 msgid "Weather parameters"
 msgstr ""
 
-#: src/Dialogs/dlgWayPointDetails.cpp:495
+#: src/Dialogs/dlgWayPointDetails.cpp:266
+msgid "No active task point."
+msgstr ""
+
+#: src/Dialogs/dlgWayPointDetails.cpp:266
+#: Data/Dialogs/dlgWayPointDetails.xml:27
+#: Data/Dialogs/dlgWayPointDetails_L.xml:27
+msgid "Replace in task"
+msgstr ""
+
+#: src/Dialogs/dlgWayPointDetails.cpp:271
+#: src/Dialogs/dlgWayPointDetails.cpp:394
+#: src/Dialogs/dlgWayPointDetails.cpp:453
+#: src/Dialogs/dlgWayPointDetails.cpp:506
+msgid "Task would not be valid after the change."
+msgstr ""
+
+#: src/Dialogs/dlgWayPointDetails.cpp:271
+#: src/Dialogs/dlgWayPointDetails.cpp:394
+#: src/Dialogs/dlgWayPointDetails.cpp:453
+#: src/Dialogs/dlgWayPointDetails.cpp:506
+msgid "Error"
+msgstr ""
+
+#: src/Dialogs/dlgWayPointDetails.cpp:501
+msgid "Waypoint not in task."
+msgstr ""
+
+#: src/Dialogs/dlgWayPointDetails.cpp:501
+msgid "Remove from task"
+msgstr ""
+
+#: src/Dialogs/dlgWayPointDetails.cpp:679
 msgid "Blank!"
 msgstr ""
 
@@ -2673,11 +2724,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgWeather.xml:6 Data/Dialogs/dlgWeather_L.xml:6
 msgid "Field"
-msgstr ""
-
-#: Data/Dialogs/dlgWayPointDetails.xml:29
-#: Data/Dialogs/dlgWayPointDetails_L.xml:29
-msgid "Append to task"
 msgstr ""
 
 #: Data/Dialogs/dlgVegaDemo.xml:6
@@ -2942,11 +2988,7 @@ msgstr ""
 msgid "A-"
 msgstr ""
 
-#: Data/Dialogs/dlgWayPointDetails.xml:30
-#: Data/Dialogs/dlgWayPointDetails_L.xml:30
-msgid "Remove from task"
-msgstr ""
-
+#: Data/Dialogs/dlgConfigPage.xml:4 Data/Dialogs/dlgConfigPage_L.xml:4
 #: Data/Dialogs/dlgFontEdit.xml:22 Data/Dialogs/dlgNumberEntry_Keyboard.xml:21
 #: Data/Dialogs/dlgNumberEntry_Keyboard_L.xml:21
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:7
@@ -2963,7 +3005,7 @@ msgstr ""
 msgid "No aircraft type"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration_L.xml:765
+#: Data/Dialogs/dlgConfiguration_L.xml:769
 msgid "GPS Height Offset*"
 msgstr ""
 
@@ -3016,11 +3058,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgFileSelect.xml:12
 msgid "Free"
-msgstr ""
-
-#: Data/Dialogs/dlgConfiguration.xml:708
-#: Data/Dialogs/dlgConfiguration_L.xml:719
-msgid "Aircraft type: "
 msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:4 Data/Dialogs/dlgTeamCode_L.xml:4
@@ -3082,24 +3119,21 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTraffic_L.xml:9 Data/Dialogs/dlgHelp.xml:4
 #: Data/Dialogs/dlgHelp_L.xml:4 Data/Dialogs/dlgLoggerReplay.xml:4
 #: Data/Dialogs/dlgStartPoint.xml:4 Data/Dialogs/dlgStartPoint_L.xml:4
-#: Data/Dialogs/dlgStatus.xml:4 Data/Dialogs/dlgStatusAircraft.xml:13
-#: Data/Dialogs/dlgStatusSystem.xml:12 Data/Dialogs/dlgStatusTask.xml:13
-#: Data/Dialogs/dlgSwitches.xml:4 Data/Dialogs/dlgTaskEdit.xml:6
-#: Data/Dialogs/dlgTaskEdit_L.xml:6 Data/Dialogs/dlgTaskList.xml:4
-#: Data/Dialogs/dlgTaskList_L.xml:4 Data/Dialogs/dlgTaskManager.xml:4
-#: Data/Dialogs/dlgTaskManager_L.xml:4 Data/Dialogs/dlgTaskPoint.xml:4
-#: Data/Dialogs/dlgTaskPointType.xml:4 Data/Dialogs/dlgTaskPointType_L.xml:4
-#: Data/Dialogs/dlgTaskPoint_L.xml:4 Data/Dialogs/dlgTaskProperties.xml:4
-#: Data/Dialogs/dlgTaskProperties_L.xml:4 Data/Dialogs/dlgTaskType.xml:4
-#: Data/Dialogs/dlgTaskType_L.xml:4 Data/Dialogs/dlgTeamCode.xml:24
-#: Data/Dialogs/dlgTeamCode_L.xml:24 Data/Dialogs/dlgTextEntry.xml:6
-#: Data/Dialogs/dlgThermalAssistant.xml:4
+#: Data/Dialogs/dlgStatus.xml:4 Data/Dialogs/dlgSwitches.xml:4
+#: Data/Dialogs/dlgTaskEdit.xml:6 Data/Dialogs/dlgTaskEdit_L.xml:6
+#: Data/Dialogs/dlgTaskList.xml:4 Data/Dialogs/dlgTaskList_L.xml:4
+#: Data/Dialogs/dlgTaskManager.xml:4 Data/Dialogs/dlgTaskManager_L.xml:4
+#: Data/Dialogs/dlgTaskPoint.xml:4 Data/Dialogs/dlgTaskPointType.xml:4
+#: Data/Dialogs/dlgTaskPointType_L.xml:4 Data/Dialogs/dlgTaskPoint_L.xml:4
+#: Data/Dialogs/dlgTaskProperties.xml:4 Data/Dialogs/dlgTaskProperties_L.xml:4
+#: Data/Dialogs/dlgTaskType.xml:4 Data/Dialogs/dlgTaskType_L.xml:4
+#: Data/Dialogs/dlgTeamCode.xml:24 Data/Dialogs/dlgTeamCode_L.xml:24
+#: Data/Dialogs/dlgTextEntry.xml:6 Data/Dialogs/dlgThermalAssistant.xml:4
 #: Data/Dialogs/dlgThermalAssistant_L.xml:4 Data/Dialogs/dlgVario.xml:6
 #: Data/Dialogs/dlgVario_L.xml:6 Data/Dialogs/dlgVegaDemo.xml:4
 #: Data/Dialogs/dlgVoice.xml:4 Data/Dialogs/dlgWayPointDetails.xml:9
 #: Data/Dialogs/dlgWayPointDetails_L.xml:9
-#: Data/Dialogs/dlgWayPointSelect.xml:20
-#: Data/Dialogs/dlgWayPointSelect_L.xml:19 Data/Dialogs/dlgWaypointEdit.xml:4
+#: Data/Dialogs/dlgWayPointSelect.xml:20 Data/Dialogs/dlgWaypointEdit.xml:4
 #: Data/Dialogs/dlgWaypointEdit_L.xml:4 Data/Dialogs/dlgWeather.xml:4
 #: Data/Dialogs/dlgWeather_L.xml:4
 msgid "Close"
@@ -3119,11 +3153,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:420 Data/Dialogs/dlgVario_L.xml:420
 msgid "V Manoeuvering"
-msgstr ""
-
-#: Data/Dialogs/dlgConfiguration.xml:712
-#: Data/Dialogs/dlgConfiguration_L.xml:723
-msgid "Logger ID: "
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:424
@@ -3149,8 +3178,8 @@ msgstr ""
 msgid "Alt diff Mc safety"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:747
-#: Data/Dialogs/dlgConfiguration_L.xml:761
+#: Data/Dialogs/dlgConfiguration.xml:751
+#: Data/Dialogs/dlgConfiguration_L.xml:765
 msgid "Extended Visual Glide*"
 msgstr ""
 
@@ -3324,8 +3353,8 @@ msgstr ""
 msgid "TE dynamic cal"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:738
-#: Data/Dialogs/dlgConfiguration_L.xml:753
+#: Data/Dialogs/dlgConfiguration.xml:742
+#: Data/Dialogs/dlgConfiguration_L.xml:757
 msgid "Gestures"
 msgstr ""
 
@@ -3351,17 +3380,8 @@ msgstr ""
 msgid "TE static cal"
 msgstr ""
 
-#: Data/Dialogs/dlgFontEdit.xml:20
-msgid "my sample"
-msgstr ""
-
 #: Data/Dialogs/dlgFontEdit.xml:23
 msgid "Reset"
-msgstr ""
-
-#: Data/Dialogs/dlgWayPointDetails.xml:37
-#: Data/Dialogs/dlgWayPointDetails_L.xml:37
-msgid "Set as Alternate 2"
 msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:44
@@ -3442,11 +3462,6 @@ msgstr ""
 msgid "Supply voltage"
 msgstr ""
 
-#: Data/Dialogs/dlgWayPointDetails.xml:28
-#: Data/Dialogs/dlgWayPointDetails_L.xml:28
-msgid "Insert in task"
-msgstr ""
-
 #: Data/Dialogs/dlgConfiguration.xml:83 Data/Dialogs/dlgConfiguration_L.xml:84
 msgid "Warning time*"
 msgstr ""
@@ -3496,11 +3511,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgComboPicker.xml:8 Data/Dialogs/dlgComboPicker_L.xml:8
 msgid "Help"
-msgstr ""
-
-#: Data/Dialogs/dlgWayPointDetails.xml:27
-#: Data/Dialogs/dlgWayPointDetails_L.xml:27
-msgid "Replace in task"
 msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:123 Data/Dialogs/dlgVario_L.xml:123
@@ -3606,11 +3616,6 @@ msgstr ""
 msgid "Cruise volume"
 msgstr ""
 
-#: Data/Dialogs/dlgWayPointDetails.xml:39
-#: Data/Dialogs/dlgWayPointDetails_L.xml:39
-msgid "Set teamcode"
-msgstr ""
-
 #: Data/Dialogs/dlgVario.xml:149 Data/Dialogs/dlgVario.xml:171
 #: Data/Dialogs/dlgVario.xml:193 Data/Dialogs/dlgVario.xml:215
 #: Data/Dialogs/dlgVario.xml:237 Data/Dialogs/dlgVario.xml:259
@@ -3618,6 +3623,10 @@ msgstr ""
 #: Data/Dialogs/dlgVario_L.xml:193 Data/Dialogs/dlgVario_L.xml:215
 #: Data/Dialogs/dlgVario_L.xml:237 Data/Dialogs/dlgVario_L.xml:259
 msgid "Beep type"
+msgstr ""
+
+#: Data/Dialogs/dlgTaskPoint.xml:16 Data/Dialogs/dlgTaskPoint_L.xml:17
+msgid "Previous"
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:349
@@ -3674,8 +3683,8 @@ msgstr ""
 msgid "Start height ref"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:742
-#: Data/Dialogs/dlgConfiguration_L.xml:757
+#: Data/Dialogs/dlgConfiguration.xml:746
+#: Data/Dialogs/dlgConfiguration_L.xml:761
 msgid "L/D Average period"
 msgstr ""
 
@@ -3763,7 +3772,7 @@ msgstr ""
 msgid "Block speed to fly*"
 msgstr ""
 
-#: Data/Dialogs/dlgTaskPoint.xml:32 Data/Dialogs/dlgTaskPoint_L.xml:33
+#: Data/Dialogs/dlgTaskPoint.xml:37 Data/Dialogs/dlgTaskPoint_L.xml:38
 msgid "Start radial"
 msgstr ""
 
@@ -3894,14 +3903,6 @@ msgstr ""
 msgid "Ballast"
 msgstr ""
 
-#: Data/Dialogs/dlgStartup.xml:16 Data/Dialogs/dlgStartup_L.xml:16
-msgid "Accept"
-msgstr ""
-
-#: Data/Dialogs/dlgTaskPoint.xml:6 Data/Dialogs/dlgTaskPoint_L.xml:9
-msgid "Relocate"
-msgstr ""
-
 #: Data/Dialogs/dlgConfiguration.xml:276 Data/Dialogs/dlgConfiguration.xml:296
 #: Data/Dialogs/dlgConfiguration_L.xml:278
 #: Data/Dialogs/dlgConfiguration_L.xml:296
@@ -3918,6 +3919,10 @@ msgstr ""
 msgid "Simulator"
 msgstr ""
 
+#: Data/Dialogs/dlgTaskPoint.xml:6 Data/Dialogs/dlgTaskPoint_L.xml:9
+msgid "Relocate"
+msgstr ""
+
 #: Data/Dialogs/dlgConfiguration.xml:149
 #: Data/Dialogs/dlgConfiguration_L.xml:151
 msgid "Terrain display"
@@ -3932,7 +3937,7 @@ msgstr ""
 msgid "FLARM radar"
 msgstr ""
 
-#: Data/Dialogs/dlgTaskPoint.xml:16 Data/Dialogs/dlgTaskPoint_L.xml:17
+#: Data/Dialogs/dlgTaskPoint.xml:21 Data/Dialogs/dlgTaskPoint_L.xml:22
 msgid "Length"
 msgstr ""
 
@@ -3965,10 +3970,6 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:428
 #: Data/Dialogs/dlgConfiguration_L.xml:428
 msgid "North arrow*"
-msgstr ""
-
-#: Data/Dialogs/dlgWaypointEdit.xml:8 Data/Dialogs/dlgWaypointEdit_L.xml:8
-msgid "Comment: "
 msgstr ""
 
 #: Data/Dialogs/dlgSimulatorPrompt.xml:5
@@ -4017,11 +4018,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:35
 msgid "Speed estimated"
-msgstr ""
-
-#: Data/Dialogs/dlgWayPointDetails.xml:40
-#: Data/Dialogs/dlgWayPointDetails_L.xml:40
-msgid "Clear Alternates"
 msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:33 Data/Dialogs/dlgStatusTask.xml:8
@@ -4078,11 +4074,6 @@ msgstr ""
 msgid "Elevation"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:706
-#: Data/Dialogs/dlgConfiguration_L.xml:717
-msgid "Pilot name: "
-msgstr ""
-
 #: Data/Dialogs/dlgTarget.xml:17 Data/Dialogs/dlgTarget_L.xml:15
 msgid "Radial"
 msgstr ""
@@ -4096,8 +4087,8 @@ msgstr ""
 msgid "Gear on delay"
 msgstr ""
 
-#: Data/Dialogs/dlgTaskPoint.xml:22 Data/Dialogs/dlgTaskPoint.xml:28
-#: Data/Dialogs/dlgTaskPoint_L.xml:23 Data/Dialogs/dlgTaskPoint_L.xml:29
+#: Data/Dialogs/dlgTaskPoint.xml:27 Data/Dialogs/dlgTaskPoint.xml:33
+#: Data/Dialogs/dlgTaskPoint_L.xml:28 Data/Dialogs/dlgTaskPoint_L.xml:34
 msgid "Radius"
 msgstr ""
 
@@ -4108,11 +4099,6 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:719
 #: Data/Dialogs/dlgConfiguration_L.xml:730
 msgid "Auto logger*"
-msgstr ""
-
-#: Data/Dialogs/dlgWayPointDetails.xml:38
-#: Data/Dialogs/dlgWayPointDetails_L.xml:38
-msgid "Set as new home"
 msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:285 Data/Dialogs/dlgVario_L.xml:285
@@ -4136,7 +4122,6 @@ msgstr ""
 #: Data/Dialogs/dlgTaskPointType.xml:6 Data/Dialogs/dlgTaskPointType_L.xml:6
 #: Data/Dialogs/dlgTaskType.xml:5 Data/Dialogs/dlgTaskType_L.xml:5
 #: Data/Dialogs/dlgWayPointSelect.xml:19
-#: Data/Dialogs/dlgWayPointSelect_L.xml:18
 msgid "Select"
 msgstr ""
 
@@ -4177,11 +4162,6 @@ msgstr ""
 msgid "V ach"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:710
-#: Data/Dialogs/dlgConfiguration_L.xml:721
-msgid "Competition Id: "
-msgstr ""
-
 #: Data/Dialogs/dlgBasicSettings.xml:12
 msgid "Volume"
 msgstr ""
@@ -4198,8 +4178,8 @@ msgstr ""
 msgid "Max Temp"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:756
-#: Data/Dialogs/dlgConfiguration_L.xml:773
+#: Data/Dialogs/dlgConfiguration.xml:760
+#: Data/Dialogs/dlgConfiguration_L.xml:777
 msgid "Auto Sound Volume"
 msgstr ""
 
@@ -4235,8 +4215,8 @@ msgstr ""
 msgid "v"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:733
-#: Data/Dialogs/dlgConfiguration_L.xml:748
+#: Data/Dialogs/dlgConfiguration.xml:737
+#: Data/Dialogs/dlgConfiguration_L.xml:752
 msgid "Device model"
 msgstr ""
 
@@ -4289,7 +4269,7 @@ msgstr ""
 msgid "Pitot port"
 msgstr ""
 
-#: Data/Dialogs/dlgTaskPoint.xml:36 Data/Dialogs/dlgTaskPoint_L.xml:37
+#: Data/Dialogs/dlgTaskPoint.xml:41 Data/Dialogs/dlgTaskPoint_L.xml:42
 msgid "Finish radial"
 msgstr ""
 
@@ -4330,8 +4310,8 @@ msgstr ""
 msgid "Finish min height"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:752
-#: Data/Dialogs/dlgConfiguration_L.xml:769
+#: Data/Dialogs/dlgConfiguration.xml:756
+#: Data/Dialogs/dlgConfiguration_L.xml:773
 msgid "Auto Backlight"
 msgstr ""
 
