@@ -13,6 +13,7 @@ __layers = [["pop-miscellaneous-population-p", "mispopppop_point", "", "txt"],
             ["trans-road-l", "roadltrans_line", "rtt=14", "med"]]
         
 def copy_clipped(rc, dir_data, dir_temp):
+    files = []
     for layer in __layers:
         print "Creating topology layer " + layer[1] + " ..."
 
@@ -47,12 +48,12 @@ def copy_clipped(rc, dir_data, dir_temp):
             
             p = subprocess.Popen(arg)
             p.wait()
-         
-    files = []
-    for file in os.listdir(dir_temp):
-        if (file.endswith(".shp") or file.endswith(".shx") or
-            file.endswith(".prj") or file.endswith(".dbf")):
-            files.append([os.path.join(dir_temp, file), True])                
+            
+        if os.path.exists(os.path.join(dir_temp, layer[1] + ".shp")):
+            files.append([os.path.join(dir_temp, layer[1] + ".shp"), True])   
+            files.append([os.path.join(dir_temp, layer[1] + ".shx"), True])   
+            files.append([os.path.join(dir_temp, layer[1] + ".dbf"), True])   
+            files.append([os.path.join(dir_temp, layer[1] + ".prj"), True])   
         
     return files
         
