@@ -1,9 +1,9 @@
 import os
 import math
-
-import georect
-from zipfile import ZipFile
 import subprocess
+
+from georect import GeoRect
+from zipfile import ZipFile
 
 cmd_gdal_merge = "gdal_merge.py"
 cmd_gdal_warp = "gdalwarp" 
@@ -55,7 +55,7 @@ def __gather_tiles(dir_data, dir_temp, bounds):
     @param bounds: Bounding box (GeoRect)
     @return: The list of tile files
     '''
-    if not isinstance(bounds, georect.GeoRect):
+    if not isinstance(bounds, GeoRect):
         return None
 
     print "Gathering terrain tiles ..."
