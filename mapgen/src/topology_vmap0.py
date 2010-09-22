@@ -27,24 +27,21 @@ def copy_clipped(rc, dir_data, dir_temp):
                 arg.append("-overwrite")
                 
             if layer[1] != "":
-                arg.append("-where")
-                arg.append(layer[2])
+                arg.extend(["-where", layer[2]])
                 
-            arg.append("-select")
-            arg.append(layer[3])
+            arg.extend(["-select", layer[3]])
             
-            arg.append("-spat")
-            arg.append(str(rc.left.value_degrees())) 
-            arg.append(str(rc.bottom.value_degrees())) 
-            arg.append(str(rc.right.value_degrees()))
-            arg.append(str(rc.top.value_degrees()))
+            arg.extend(["-spat",
+                        str(rc.left.value_degrees()),
+                        str(rc.bottom.value_degrees()),
+                        str(rc.right.value_degrees()),
+                        str(rc.top.value_degrees())])
 
             arg.append(dir_temp)
             arg.append(os.path.join(dir_data, __maps[i]))
 
             arg.append(layer[0])
-            arg.append("-nln")
-            arg.append(layer[1])
+            arg.extend(["-nln", layer[1]])
             
             p = subprocess.Popen(arg)
             p.wait()
