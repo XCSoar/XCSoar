@@ -143,7 +143,7 @@ def __merge_tiles(dir_temp, tiles):
     blabla_resampled.tif
         (Output file)
 '''    
-def __resample(dir_temp, arcseconds_per_pixel):
+def __resample(dir_temp, input_file, arcseconds_per_pixel):
     print "Resampling terrain ..."
     output_file = os.path.join(dir_temp, "terrain_resampled.tif")
     if os.path.exists(output_file):
@@ -159,7 +159,7 @@ def __resample(dir_temp, arcseconds_per_pixel):
             "-of", "GTiff",
             "-srcnodata", "-32768",
             "-dstnodata", "-1",
-            os.path.join(dir_temp, "terrain_merged.tif"),
+            input_file,
             output_file]
     
     p = subprocess.Popen(args)
@@ -189,7 +189,7 @@ def __resample(dir_temp, arcseconds_per_pixel):
     blabla_cropped.tif
         (Output file)
 '''    
-def __crop(dir_temp, rc):
+def __crop(dir_temp, input_file, rc):
     print "Cropping terrain ..."
     output_file = os.path.join(dir_temp, "terrain.tif")
     if os.path.exists(output_file):
@@ -202,7 +202,7 @@ def __crop(dir_temp, rc):
             str(rc.bottom.value_degrees()),
             str(rc.right.value_degrees()),
             str(rc.top.value_degrees()),
-            os.path.join(dir_temp, "terrain_resampled.tif"),
+            input_file,
             output_file]
     
     p = subprocess.Popen(args)
@@ -228,14 +228,14 @@ def __crop(dir_temp, rc):
     -O xcsoar=1
         (???)
 '''    
-def __convert(dir_temp, rc):
+def __convert(dir_temp, input_file, rc):
     print "Converting terrain to GeoJP2 format ..."
     output_file = os.path.join(dir_temp, "terrain.jp2")
     if os.path.exists(output_file):
         os.unlink(output_file)
         
     args = [cmd_geojasper,
-            "-f", os.path.join(dir_temp, "terrain.tif"),
+            "-f", input_file,
             "-F", output_file,
             "-T", "jp2",
             "-O", "rate=0.1",
@@ -265,12 +265,12 @@ def Create(bounds, arcseconds_per_pixel = 9.0,
     
     # Make sure the tiles are available
     tiles = __gather_tiles(dir_data, dir_temp, bounds)
-    __merge_tiles(dir_temp, tiles)
-    __resample(dir_temp, arcseconds_per_pixel)
-    __crop(dir_temp, bounds)
-    terrain_file = __convert(dir_temp, bounds)
+    merged_file = __merge_tiles(dir_temp, tiles)
+    resampled_file = __resample(dir_temp, merged_file, arcseconds_per_pixel)
+    cropped_file = __crop(dir_temp, resampled_file, bounds)
+    converted_file = __convert(dir_temp, cropped_file, bounds)
     __cleanup(dir_temp)
     
-    return [terrain_file, False]
+    return [converted_file, False]
 
     
