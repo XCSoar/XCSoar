@@ -13,6 +13,9 @@ __layers = [["pop-miscellaneous-population-p", "mispopppop_point", "", "txt"],
             ["trans-road-l", "roadltrans_line", "rtt=14", "med"]]
         
 def __create_layer_from_map(bounds, layer, map, overwrite, dir_data, dir_temp):
+    if not isinstance(bounds, GeoRect):
+        return False
+    
     arg = [cmd_ogr2ogr]
     
     if overwrite == True:
@@ -40,6 +43,8 @@ def __create_layer_from_map(bounds, layer, map, overwrite, dir_data, dir_temp):
     
     p = subprocess.Popen(arg)
     p.wait()
+    
+    return True
 
 def __create_layer(bounds, layer, dir_data, dir_temp):
     print "Creating topology layer " + layer[1] + " ..."
