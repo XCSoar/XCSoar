@@ -13,11 +13,18 @@ cmd_geojasper = "geojasper"
  1) Gather tiles
 '''
 def __get_tile_name(lat, lon):
-    return "srtm_%02d_%02d" % (((lon + 180) / 5) + 1, (60 - lat) / 5)
+    col = ((lon + 180) / 5) + 1
+    row = (60 - lat) / 5
+    if col < 1 or col > 72 or row < 1 or row > 24:
+        return None
+    
+    return "srtm_%02d_%02d" % (col, row)
 
 def __gather_tile(dir_data, dir_temp, lat, lon):
     # generate filename to search for
     filename = __get_tile_name(lat, lon)
+    if filename == None:
+        return None
     
     # check if the GeoTIFF file already exists in the temporary folder
     if os.path.exists(os.path.join(dir_temp, filename + ".tif")):
