@@ -6,7 +6,6 @@ cmd_ogr2ogr = "ogr2ogr"
 
 class vmap0:
     __maps = ["eur", "noa", "sas", "soa"]
-    __source = "../data/vmap0/"
     __layers = [["pop-miscellaneous-population-p", "mispopppop_point", "", "txt"],
                 ["pop-built-up-a", "builtupapop_area", "", "nam"],
                 ["hydro-water-course-l", "watrcrslhydro_line", "hyc=8", "nam"],
@@ -14,7 +13,7 @@ class vmap0:
                 ["trans-railroad-l", "railrdltrans_line", "exs=28", "fco"],
                 ["trans-road-l", "roadltrans_line", "rtt=14", "med"]]
         
-    def copy_clipped(self, rc, dir_temp):
+    def copy_clipped(self, rc, dir_data, dir_temp):
         for i in range(len(self.__maps)):
             for layer in self.__layers:
                 arg = [cmd_ogr2ogr]
@@ -39,7 +38,7 @@ class vmap0:
                 arg.append(str(rc.top.value_degrees()))
 
                 arg.append(dir_temp)
-                arg.append(os.path.join(self.__source, self.__maps[i]))
+                arg.append(os.path.join(dir_data, self.__maps[i]))
 
                 arg.append(layer[0])
                 arg.append("-nln")
@@ -74,7 +73,7 @@ def Create(bounds, dir_data = "../data/", dir_temp = "../tmp/"):
     dir_temp = os.path.abspath(dir_temp) 
     
     o = vmap0()
-    files = o.copy_clipped(bounds, dir_temp)
+    files = o.copy_clipped(bounds, dir_data, dir_temp)
     files.append([o.generate_tpl_file(dir_temp), True])
         
     return files
