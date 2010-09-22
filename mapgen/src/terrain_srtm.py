@@ -272,6 +272,9 @@ def Create(bounds, arcseconds_per_pixel = 9.0,
     
     # Make sure the tiles are available
     tiles = __gather_tiles(dir_data, dir_temp, bounds)
+    if len(tiles) < 1: 
+        return None
+    
     merged_file = __merge_tiles(dir_temp, tiles)
     resampled_file = __resample(dir_temp, merged_file, arcseconds_per_pixel)
     cropped_file = __crop(dir_temp, resampled_file, bounds)
