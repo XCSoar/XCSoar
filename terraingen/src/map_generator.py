@@ -30,32 +30,28 @@ class MapGenerator:
         Adds a waypoint file to the map
         @param filename: The file that should be added
         '''
-        print "Adding waypoint file ...",
+        print "Adding waypoint file ..."
         if not os.path.exists(filename):
-            print "failed!"
-            print "(" + filename + " not found!)"
+            print "failed! (" + filename + " not found!)"
             return False
             
         dst = os.path.abspath(self.__dir_temp + "/waypoints.xcw")
         shutil.copy(filename, dst)
         if not os.path.exists(dst):
-            print "failed!"
-            print ("(Copying " + os.path.basename(filename) +
+            print ("failed! (Copying " + os.path.basename(filename) +
                    " to " + dst + " not possible!)")
             return False
 
         self.__files.append([dst, True])
-        print "done"
+        
         return True
             
     def AddTopology(self):
-        print "Adding topology ...",
+        print "Adding topology ..."
         if self.__bounds == None:
-            print "failed!"
-            print "(Boundaries undefined!)"
+            print "failed! (Boundaries undefined!)"
             return False
         
-        print ""
         o = ogr2ogr()
         files = o.copy_clipped(self.__bounds, self.__dir_temp)
         self.__files.extend(files)
@@ -64,13 +60,11 @@ class MapGenerator:
         return True
         
     def AddTerrain(self, arcseconds_per_pixel = 9.0):
-        print "Adding terrain ...",
+        print "Adding terrain ..."
         if self.__bounds == None:
-            print "failed!"
-            print "(Boundaries undefined!)"
+            print "failed! (Boundaries undefined!)"
             return False
         
-        print ""
         terrain_file = terrain_srtm.Create(self.__bounds, arcseconds_per_pixel,
                                    self.__dir_data, self.__dir_temp)
         if terrain_file == None:
@@ -80,15 +74,13 @@ class MapGenerator:
         return True
         
     def SetBounds(self, bounds):
-        print "Setting map boundaries ...",
+        print "Setting map boundaries ..."
         
         if not isinstance(bounds, GeoRect):
-            print "failed"
-            print "(GeoRect expected)"
+            print "failed! (GeoRect expected)"
             return False
         
         self.__bounds = bounds
-        print "done"
         print "(", self.__bounds, ")"
         return True
 
@@ -102,22 +94,19 @@ class MapGenerator:
     def SetBoundsByWaypointFile(self, filename):
         print "Setting map boundaries to match waypoint file contents ..."
         
-        print "Reading waypoint file ...",
+        print "Reading waypoint file ..."
         if not isinstance(filename, str):
-            print "failed!"
-            print "(String expected)"
+            print "failed! (String expected)"
             return False
         
         if not os.path.exists(filename):
-            print "failed!"
-            print "(" + filename + " not found!)"
+            print "failed! (" + filename + " not found!)"
             return False
         
         f = open(filename, "r")
         wplist = WaypointList()
         wplist.parse(f)
         f.close()
-        print "done"
         
         return self.SetBounds(wplist.get_bounds())        
                 
@@ -126,7 +115,7 @@ class MapGenerator:
         Creates the map at the given location
         @param filename: Location of the map file that should be created
         '''
-        print "Creating map file ...",
+        print "Creating map file ..."
         # Open the zip file
         z = ZipFile(filename, "w")
         for file in self.__files:
@@ -151,5 +140,4 @@ class MapGenerator:
                 z.write(file[0], None, ZIP_STORED)
             else:
                 z.write(file[0], None, ZIP_DEFLATED)
-        z.close()
-        print "done"        
+        z.close()     
