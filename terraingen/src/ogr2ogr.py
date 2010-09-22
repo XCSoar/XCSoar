@@ -16,7 +16,7 @@ class ogr2ogr:
         self.set_executable(executable)
         
     def set_executable(self, executable = "ogr2ogr"):
-        self.__executable = os.path.abspath(executable)
+        self.__executable = executable
         
     def copy_clipped(self, rc, destination):
         for i in range(len(self.__maps)):
