@@ -2,6 +2,8 @@ import os.path
 import subprocess
 from georect import GeoRect
 
+cmd_ogr2ogr = "ogr2ogr"
+
 class vmap0:
     __maps = ["eur", "noa", "sas", "soa"]
     __source = "../data/vmap0/"
@@ -11,17 +13,11 @@ class vmap0:
                 ["hydro-inland-water-a", "inwaterahydro_area", "hyc=8", "nam"],
                 ["trans-railroad-l", "railrdltrans_line", "exs=28", "fco"],
                 ["trans-road-l", "roadltrans_line", "rtt=14", "med"]]
-    
-    def __init__(self, executable = "vmap0"):
-        self.set_executable(executable)
-        
-    def set_executable(self, executable = "vmap0"):
-        self.__executable = executable
         
     def copy_clipped(self, rc, destination):
         for i in range(len(self.__maps)):
             for layer in self.__layers:
-                arg = [self.__executable]
+                arg = [cmd_ogr2ogr]
                 
                 if i > 0:
                     arg.append("-update")
