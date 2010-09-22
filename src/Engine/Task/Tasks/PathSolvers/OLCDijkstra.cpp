@@ -57,7 +57,6 @@ OLCDijkstra::OLCDijkstra(OnlineContest& _olc, const unsigned n_legs,
   m_full_trace(full_trace)
 {
   m_weightings.reserve(n_legs);
-  best_solution.reserve(num_stages);
   reset();
 }
 
@@ -137,7 +136,6 @@ OLCDijkstra::score(fixed& the_distance, fixed& the_speed, fixed& the_time)
 fixed
 OLCDijkstra::calc_time() const
 {
-  assert(num_stages == solution.size());
   return fixed(solution[num_stages - 1].time - solution[0].time);
 }
 
@@ -216,10 +214,7 @@ OLCDijkstra::save_solution()
 {
   const fixed the_distance = calc_distance();
   if (the_distance > best_distance) {
-    best_solution.clear();
-    for (unsigned i = 0; i < num_stages; ++i)
-      best_solution.push_back(solution[i]);
-
+    std::copy(solution, solution + num_stages, best_solution);
     best_distance = the_distance;
     best_time = calc_time();
     if (positive(best_time))

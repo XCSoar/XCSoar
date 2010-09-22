@@ -164,7 +164,7 @@ private:
   fixed best_speed;
   fixed best_time;
 
-  TracePointVector best_solution;
+  TracePoint best_solution[MAX_STAGES];
 
   virtual void add_start_edges();
 
