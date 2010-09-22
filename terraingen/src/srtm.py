@@ -79,7 +79,6 @@ def prepare_tiles(source, destination, rc):
 def merge_tiles(destination, tiles):
     print "Merging terrain tiles ..."
     if os.path.exists(destination + "terrain_merged.tif"):
-        return
         os.unlink(destination + "terrain_merged.tif")
         
     args = [cmd_gdal_merge,
@@ -126,7 +125,6 @@ def merge_tiles(destination, tiles):
 def resample(destination):
     print "Resampling terrain ..."
     if os.path.exists(destination + "terrain_resampled.tif"):
-        return
         os.unlink(destination + "terrain_resampled.tif")
         
     # 1 px = 3 arc seconds
@@ -171,7 +169,6 @@ def resample(destination):
 def crop(destination, rc):
     print "Cropping terrain ..."
     if os.path.exists(destination + "terrain.tif"):
-        return
         os.unlink(destination + "terrain.tif")
         
     args = [cmd_gdal_warp,
