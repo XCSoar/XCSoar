@@ -192,20 +192,19 @@ InfoBoxManager::Event_Select(int i)
 }
 
 int
-InfoBoxManager::getType(unsigned i, unsigned layer)
+InfoBoxManager::getType(unsigned i, enum mode mode)
 {
   assert(i < MAXINFOWINDOWS);
-  assert(layer < 4);
 
-  switch (layer) {
-  case 0:
-    return InfoType[i] & 0xff; // climb
-  case 1:
-    return (InfoType[i] >> 8) & 0xff; // cruise
-  case 2:
-    return (InfoType[i] >> 16) & 0xff; // final glide
-  case 3:
-    return (InfoType[i] >> 24) & 0xff; // auxiliary
+  switch (mode) {
+  case MODE_CIRCLING:
+    return InfoType[i] & 0xff;
+  case MODE_CRUISE:
+    return (InfoType[i] >> 8) & 0xff;
+  case MODE_FINAL_GLIDE:
+    return (InfoType[i] >> 16) & 0xff;
+  case MODE_AUXILIARY:
+    return (InfoType[i] >> 24) & 0xff;
   }
 
   return 0xdeadbeef; /* not reachable */
@@ -234,19 +233,19 @@ InfoBoxManager::getType(unsigned i)
   unsigned retval = 0;
 
   if (SettingsMap().EnableAuxiliaryInfo)
-    retval = getType(i, 3);
+    retval = getType(i, MODE_AUXILIARY);
   else if (MapProjection().GetDisplayMode() == dmCircling)
-    retval = getType(i, 0);
+    retval = getType(i, MODE_CIRCLING);
   else if (MapProjection().GetDisplayMode() == dmFinalGlide)
-    retval = getType(i, 2);
+    retval = getType(i, MODE_FINAL_GLIDE);
   else
-    retval = getType(i, 1);
+    retval = getType(i, MODE_CRUISE);
 
   return min(InfoBoxFactory::NUM_TYPES - 1, retval);
 }
 
 bool
-InfoBoxManager::IsEmpty(unsigned mode)
+InfoBoxManager::IsEmpty(enum mode mode)
 {
   for (unsigned i = 0; i < MAXINFOWINDOWS; ++i)
     if (InfoBoxManager::getType(i, mode) != 0)
@@ -266,24 +265,24 @@ InfoBoxManager::IsEmpty()
 }
 
 void
-InfoBoxManager::setType(unsigned i, char j, unsigned layer)
+InfoBoxManager::setType(unsigned i, char j, enum mode mode)
 {
   assert(i < MAXINFOWINDOWS);
 
-  switch (layer) {
-  case 0:
+  switch (mode) {
+  case MODE_CIRCLING:
     InfoType[i] &= 0xffffff00;
     InfoType[i] += j;
     break;
-  case 1:
+  case MODE_CRUISE:
     InfoType[i] &= 0xffff00ff;
     InfoType[i] += (j << 8);
     break;
-  case 2:
+  case MODE_FINAL_GLIDE:
     InfoType[i] &= 0xff00ffff;
     InfoType[i] += (j << 16);
     break;
-  case 3:
+  case MODE_AUXILIARY:
     InfoType[i] &= 0x00ffffff;
     InfoType[i] += (j << 24);
     break;
@@ -294,13 +293,13 @@ void
 InfoBoxManager::setType(unsigned i, char j)
 {
   if (SettingsMap().EnableAuxiliaryInfo)
-    setType(i, j, 3);
+    setType(i, j, MODE_AUXILIARY);
   else if (MapProjection().GetDisplayMode() == dmCircling)
-    setType(i, j, 0);
+    setType(i, j, MODE_CIRCLING);
   else if (MapProjection().GetDisplayMode() == dmFinalGlide)
-    setType(i, j, 2);
+    setType(i, j, MODE_FINAL_GLIDE);
   else
-    setType(i, j, 1);
+    setType(i, j, MODE_CRUISE);
 }
 
 void

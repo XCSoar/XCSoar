@@ -56,6 +56,15 @@ protected:
 
 class InfoBoxManager: public ActionInterface
 {
+public:
+  enum mode {
+    MODE_CIRCLING,
+    MODE_CRUISE,
+    MODE_FINAL_GLIDE,
+    MODE_AUXILIARY,
+  };
+
+private:
   /** the window for displaying infoboxes full-screen */
   static InfoBoxFullWindow full_window;
 
@@ -89,13 +98,13 @@ public:
   static void Show();
   static void Hide();
 
-  static int getType(unsigned i, unsigned layer);
-  static void setType(unsigned i, char j, unsigned layer);
+  static int getType(unsigned i, enum mode mode);
+  static void setType(unsigned i, char j, enum mode mode);
 
   static int getTypeAll(unsigned i);
   static void setTypeAll(unsigned i, unsigned j);
 
-  static bool IsEmpty(unsigned mode);
+  static bool IsEmpty(enum mode mode);
   static bool IsEmpty();
 
   static bool HasFocus();

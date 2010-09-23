@@ -970,7 +970,7 @@ static CallBackTableEntry_t CallBackTable[] = {
 };
 
 static void
-SetInfoBoxSelector(unsigned item, int mode)
+SetInfoBoxSelector(unsigned item, enum InfoBoxManager::mode mode)
 {
   WndProperty *wp = FindInfoBoxField(info_box_mode_names[mode], item);
   if (wp == NULL)
@@ -988,7 +988,7 @@ SetInfoBoxSelector(unsigned item, int mode)
 }
 
 static void
-GetInfoBoxSelector(unsigned item, int mode)
+GetInfoBoxSelector(unsigned item, enum InfoBoxManager::mode mode)
 {
   WndProperty *wp = FindInfoBoxField(info_box_mode_names[mode], item);
   if (wp == NULL)
@@ -1807,7 +1807,7 @@ setVariables()
 
   for (unsigned i = 0; i < 4; i++) {
     for (unsigned j = 0; j < InfoBoxLayout::numInfoWindows; j++) {
-      SetInfoBoxSelector(j, i);
+      SetInfoBoxSelector(j, (enum InfoBoxManager::mode)i);
     }
   }
 }
@@ -2716,7 +2716,7 @@ void dlgConfigurationShowModal(void)
 
   for (unsigned i = 0; i < 4; ++i)
     for (unsigned j = 0; j < InfoBoxLayout::numInfoWindows; ++j)
-      GetInfoBoxSelector(j, i);
+      GetInfoBoxSelector(j, (enum InfoBoxManager::mode)i);
 
   if (waypointneedsave) {
     way_points.optimise();

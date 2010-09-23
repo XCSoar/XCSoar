@@ -85,19 +85,21 @@ SetAltairDefaults()
 static void
 CheckInfoTypes()
 {
-  if (InfoBoxManager::IsEmpty(1))
+  if (InfoBoxManager::IsEmpty(InfoBoxManager::MODE_CRUISE))
     return;
 
-  bool iszero_fg = InfoBoxManager::IsEmpty(2);
-  bool iszero_aux = InfoBoxManager::IsEmpty(3);
+  bool iszero_fg = InfoBoxManager::IsEmpty(InfoBoxManager::MODE_FINAL_GLIDE);
+  bool iszero_aux = InfoBoxManager::IsEmpty(InfoBoxManager::MODE_AUXILIARY);
   if (!iszero_fg && !iszero_aux)
     return;
 
   for (unsigned i = 0; i < MAXINFOWINDOWS; ++i) {
     if (iszero_fg)
-      InfoBoxManager::setType(i, InfoBoxManager::getType(i, 1), 2);
+      InfoBoxManager::setType(i, InfoBoxManager::getType(i, InfoBoxManager::MODE_CRUISE),
+                              InfoBoxManager::MODE_FINAL_GLIDE);
     if (iszero_aux)
-      InfoBoxManager::setType(i, InfoBoxManager::getType(i, 1), 3);
+      InfoBoxManager::setType(i, InfoBoxManager::getType(i, InfoBoxManager::MODE_CRUISE),
+                              InfoBoxManager::MODE_AUXILIARY);
   }
 }
 
