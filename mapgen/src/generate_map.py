@@ -32,8 +32,8 @@ def main():
         return
 
     m = MapGenerator()
-    m.AddWaypointFile(wp)
     if wp != None:
+        m.AddWaypointFile(wp)
         m.SetBoundsByWaypointFile(wp)
     if latmin != None:
         m.SetBoundsSeperatly(latmin, latmax, lonmin, lonmax)
@@ -44,3 +44,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
