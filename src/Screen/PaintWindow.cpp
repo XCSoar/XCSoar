@@ -56,7 +56,7 @@ PaintWindow::register_class(HINSTANCE hInstance)
   WNDCLASS wc;
 
   wc.hInstance = hInstance;
-  wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
+  wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_PARENTDC;
   wc.lpfnWndProc = Window::WndProc;
   wc.cbClsExtra = 0;
   wc.cbWndExtra = 0;
