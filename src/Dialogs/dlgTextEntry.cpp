@@ -98,9 +98,8 @@ OnTextPaint(WindowControl *Sender, Canvas &canvas)
   canvas.white_pen();
   canvas.polyline(p + 1, 4);
 
-  canvas.background_opaque();
-  canvas.text_opaque(p[0].x, p[0].y, NULL, edittext);
   canvas.background_transparent();
+  canvas.text(p[0].x, p[0].y, edittext);
 }
 
 static void
