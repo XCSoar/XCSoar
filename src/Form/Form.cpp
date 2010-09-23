@@ -98,6 +98,8 @@ WndForm::WndForm(SingleWindow &_main_window,
   mhTitleFont(&Fonts::MapBold),
   mOnTimerNotify(NULL), mOnKeyDownNotify(NULL)
 {
+  _tcscpy(mCaption, Caption);
+
   set(main_window, X, Y, Width, Height, add_border(style));
 
   // Create ClientWindow
@@ -112,8 +114,6 @@ WndForm::WndForm(SingleWindow &_main_window,
   client_area.SetBackColor(GetBackColor());
 
   cbTimerID = set_timer(1001, 500);
-
-  SetCaption(Caption);
 
 #if !defined(ENABLE_SDL) && !defined(NDEBUG)
   ::SetWindowText(hWnd, mCaption);
