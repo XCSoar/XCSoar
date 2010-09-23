@@ -146,9 +146,9 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT &rc) const
   Height = Fonts::MapBold.get_capital_height() + IBLSCALE(2);
   // 2: add 1pix border
 
-  canvas.white_brush();
-  canvas.white_pen();
-  canvas.rectangle(0, rc.bottom - Height, TextSize.cx + IBLSCALE(21), rc.bottom);
+  canvas.fill_rectangle(0, rc.bottom - Height,
+                        TextSize.cx + IBLSCALE(21), rc.bottom,
+                        Color::WHITE);
 
   canvas.background_transparent();
   canvas.set_text_color(Color::BLACK);

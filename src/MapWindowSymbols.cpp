@@ -474,10 +474,9 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT &rc) const
       canvas.select(Fonts::MapBold);
       TextSize = canvas.text_size(Value);
 
-      canvas.white_brush();
-      canvas.white_pen();
-      canvas.rectangle(x, y, x + IBLSCALE(1) + TextSize.cx,
-                       y + Fonts::MapBold.get_capital_height() + IBLSCALE(2));
+      canvas.fill_rectangle(x, y, x + IBLSCALE(1) + TextSize.cx,
+                            y + Fonts::MapBold.get_capital_height() + IBLSCALE(2),
+                            Color::WHITE);
 
       canvas.set_text_color(Color::BLACK);
       canvas.text(x + IBLSCALE(1),
