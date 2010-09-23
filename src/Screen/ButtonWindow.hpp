@@ -82,7 +82,6 @@ class ButtonWindow : public PaintWindow
   tstring text;
   unsigned id;
   bool down;
-  Font font;
 
 public:
   ButtonWindow():down(false) {}

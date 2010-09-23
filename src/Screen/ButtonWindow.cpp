@@ -41,8 +41,6 @@ Copyright_License {
 
 #ifdef ENABLE_SDL
 
-#include "Screen/Font.hpp"
-
 void
 ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
                   int left, int top, unsigned width, unsigned height,
@@ -54,11 +52,6 @@ ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
 
   this->text = text;
   this->id = id;
-
-  // XXX hard coded path
-  const char *dejavu_ttf =
-    "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf";
-  font.set(dejavu_ttf, 16);
 }
 
 bool
@@ -91,7 +84,6 @@ ButtonWindow::on_paint(Canvas &canvas)
 {
   canvas.draw_button(get_client_rect(), down);
 
-  canvas.select(font);
   SIZE size = canvas.text_size(text.c_str());
   canvas.text((get_width() - size.cx) / 2 + down,
               (get_height() - size.cy) / 2 + down, text.c_str());
