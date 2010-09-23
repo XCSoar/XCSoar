@@ -190,5 +190,7 @@ class MapGenerator:
         z.close()
         
     def Cleanup(self):
-        for file in os.listdir(self.__dir_temp):
-            os.unlink(os.path.join(self.__dir_temp, file))
+        for file in self.__files:
+            if isinstance(file, list):
+                file = file[0]
+            os.unlink(file)
