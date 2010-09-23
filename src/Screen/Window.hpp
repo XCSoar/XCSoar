@@ -310,6 +310,7 @@ public:
 #ifdef ENABLE_SDL
     this->left = left;
     this->top = top;
+    invalidate();
 #else
     ::SetWindowPos(hWnd, NULL, left, top, 0, 0,
                    SWP_NOSIZE | SWP_NOZORDER |
@@ -322,7 +323,8 @@ public:
     assert_thread();
 
 #ifdef ENABLE_SDL
-    // XXX
+    move(left, top);
+    resize(width, height);
 #else /* !ENABLE_SDL */
     ::SetWindowPos(hWnd, NULL, left, top, width, height,
                    SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
@@ -352,7 +354,9 @@ public:
     assert_thread();
 
 #ifdef ENABLE_SDL
-    // XXX
+    canvas.resize(width, height);
+    invalidate();
+    on_resize(width, height);
 #else /* !ENABLE_SDL */
     ::SetWindowPos(hWnd, NULL, 0, 0, width, height,
                    SWP_NOMOVE | SWP_NOZORDER |
