@@ -146,3 +146,7 @@ class MapGenerator:
             else:
                 z.write(file[0], os.path.basename(file[0]), ZIP_DEFLATED)
         z.close()
+        
+    def Cleanup(self):
+        for file in os.listdir(self.__dir_temp):
+            os.unlink(os.path.join(self.__dir_temp, file))

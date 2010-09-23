@@ -40,6 +40,7 @@ def main():
     m.AddTopology()
     m.AddTerrain(res)
     m.Create(output_file)
+    m.Cleanup()
 
 if __name__ == "__main__":
     main()
