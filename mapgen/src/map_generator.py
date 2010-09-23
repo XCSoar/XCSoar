@@ -43,9 +43,51 @@ class MapGenerator:
             return False
 
         self.__files.append([dst, True])
-
+        
         return True
+            
+    def AddWaypointDetailsFile(self, filename):
+        '''
+        Adds a waypoint details file to the map
+        @param filename: The file that should be added
+        '''
+        print "Adding waypoint details file ..."
+        if not os.path.exists(filename):
+            print "failed! (" + filename + " not found!)"
+            return False
+            
+        dst = os.path.abspath(self.__dir_temp + "/airfields.txt")
+        shutil.copy(filename, dst)
+        if not os.path.exists(dst):
+            print ("failed! (Copying " + os.path.basename(filename) +
+                   " to " + dst + " not possible!)")
+            return False
 
+        self.__files.append([dst, True])
+        
+        return True
+            
+    def AddAirspaceFile(self, filename):
+        '''
+        Adds a airspace file to the map
+        @param filename: The file that should be added
+        '''
+        print "Adding airspace file ..."
+        if not os.path.exists(filename):
+            print "failed! (" + filename + " not found!)"
+            return False
+            
+        dst = os.path.abspath(self.__dir_temp + "/airspace.txt")
+        shutil.copy(filename, dst)
+        if not os.path.exists(dst):
+            print ("failed! (Copying " + os.path.basename(filename) +
+                   " to " + dst + " not possible!)")
+            return False
+
+        self.__files.append([dst, True])
+        
+        return True
+            
     def AddTopology(self, bounds = None):
         print "Adding topology ..."
 
