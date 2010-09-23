@@ -217,7 +217,7 @@ Window::set_focus()
 void
 Window::invalidate()
 {
-  if (parent != NULL)
+  if (visible && parent != NULL)
     parent->invalidate();
 }
 
