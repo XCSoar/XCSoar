@@ -177,7 +177,7 @@ Canvas::text(int x, int y, const TCHAR *text)
 void
 Canvas::text_opaque(int x, int y, const RECT &rc, const TCHAR *_text)
 {
-  // XXX
+  fill_rectangle(rc, background_color);
   text(x, y, _text);
 }
 
