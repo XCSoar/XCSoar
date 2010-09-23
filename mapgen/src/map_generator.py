@@ -122,7 +122,7 @@ class MapGenerator:
         '''
         print "Creating map file ..."
         # Open the zip file
-        z = ZipFile(filename, "w")
+        z = ZipFile(filename, "w", ZIP_DEFLATED)
         for file in self.__files:
             # Make sure we have a list
             if not isinstance(file, list):
@@ -142,7 +142,7 @@ class MapGenerator:
 
             # Check if we should compress the file
             if file[1] == False:
-                z.write(file[0], None, ZIP_STORED)
+                z.write(file[0], os.path.basename(file[0]), ZIP_STORED)
             else:
-                z.write(file[0], None, ZIP_DEFLATED)
+                z.write(file[0], os.path.basename(file[0]), ZIP_DEFLATED)
         z.close()
