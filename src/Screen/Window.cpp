@@ -507,14 +507,20 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_LBUTTONDBLCLK:
+    if (!double_clicks)
+      /* instead of disabling CS_DBLCLKS (which would affect all
+         instances of a window class), we just translate
+         WM_LBUTTONDBLCLK to WM_LBUTTONDOWN here; this even works for
+         built-in window class such as BUTTON */
+      return on_message(_hWnd, WM_LBUTTONDOWN, wParam, lParam);
+
     XCSoarInterface::InterfaceTimeoutReset();
-    if (double_clicks
-        ? on_mouse_double(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))
-        : on_mouse_down(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
+    if (on_mouse_double(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;
     }
+
     break;
 
 #ifdef WM_MOUSEWHEEL
