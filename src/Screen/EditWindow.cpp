@@ -51,3 +51,17 @@ EditWindow::set(ContainerWindow &parent, int left, int top,
   Window::set(&parent, WC_EDIT, NULL,
               left, top, width, height, style);
 }
+
+#ifdef ENABLE_SDL
+
+void
+EditWindow::on_paint(Canvas &canvas)
+{
+  canvas.clear_white();
+
+  canvas.set_text_color(Color::BLACK);
+  canvas.background_transparent();
+  canvas.text(1, 1, value.c_str());
+}
+
+#endif /* ENABLE_SDL */

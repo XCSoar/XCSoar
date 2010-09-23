@@ -41,6 +41,11 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 
+#ifdef ENABLE_SDL
+#include <tstring.hpp>
+#include <algorithm>
+#endif
+
 class TextWindowStyle : public WindowStyle {
 public:
   void left() {
@@ -72,25 +77,38 @@ public:
  * A window which renders static text.
  */
 class TextWindow : public Window {
+#ifdef ENABLE_SDL
+  tstring text;
+#endif
+
 public:
   void set(ContainerWindow &parent, const TCHAR *text,
            int left, int top, unsigned width, unsigned height,
            const TextWindowStyle style=TextWindowStyle());
 
-  void set_text(const TCHAR *text) {
+  void set_text(const TCHAR *_text) {
     assert_none_locked();
     assert_thread();
 
 #ifdef ENABLE_SDL
-    // XXX
+    if (_text != NULL)
+      text = _text;
+    else
+      text.clear();
+    invalidate();
 #else /* !ENABLE_SDL */
-    ::SetWindowText(hWnd, text);
+    ::SetWindowText(hWnd, _text);
 
 #ifdef _WIN32_WCE
     ::UpdateWindow(hWnd);
 #endif
 #endif /* !ENABLE_SDL */
   }
+
+#ifdef ENABLE_SDL
+protected:
+  virtual void on_paint(Canvas &canvas);
+#endif /* ENABLE_SDL */
 };
 
 #endif

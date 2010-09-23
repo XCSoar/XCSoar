@@ -41,6 +41,11 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 
+#ifdef ENABLE_SDL
+#include <tstring.hpp>
+#include <algorithm>
+#endif
+
 class EditWindowStyle : public WindowStyle {
 public:
   EditWindowStyle() {
@@ -80,6 +85,10 @@ public:
  * A simple text editor widget.
  */
 class EditWindow : public Window {
+#ifdef ENABLE_SDL
+  tstring value;
+#endif
+
 public:
   void set(ContainerWindow &parent, int left, int top,
            unsigned width, unsigned height,
@@ -99,7 +108,11 @@ public:
     assert_none_locked();
 
 #ifdef ENABLE_SDL
-    // XXX
+    if (text != NULL)
+      value = text;
+    else
+      value.clear();
+    invalidate();
 #else /* !ENABLE_SDL */
     ::SetWindowText(hWnd, text);
 #endif /* !ENABLE_SDL */
@@ -107,8 +120,7 @@ public:
 
   void get_text(TCHAR *text, size_t max_length) {
 #ifdef ENABLE_SDL
-    // XXX
-    *text = 0;
+    value.copy(text, std::min(max_length - 1, value.length()));
 #else /* !ENABLE_SDL */
     ::GetWindowText(hWnd, text, max_length);
 #endif /* !ENABLE_SDL */
@@ -149,6 +161,11 @@ public:
     set_selection(0, -1);
 #endif /* !ENABLE_SDL */
   }
+
+#ifdef ENABLE_SDL
+protected:
+  virtual void on_paint(Canvas &canvas);
+#endif /* ENABLE_SDL */
 };
 
 #endif

@@ -41,11 +41,32 @@ Copyright_License {
 #include <commctrl.h>
 
 void
-TextWindow::set(ContainerWindow &parent, const TCHAR *text,
+TextWindow::set(ContainerWindow &parent, const TCHAR *_text,
                 int left, int top, unsigned width, unsigned height,
                 const TextWindowStyle style)
 {
-  Window::set(&parent, WC_STATIC, text,
+#ifdef ENABLE_SDL
+  if (_text != NULL)
+    text = _text;
+  else
+    text.clear();
+#endif
+
+  Window::set(&parent, WC_STATIC, _text,
               left, top, width, height,
               style);
 }
+
+#ifdef ENABLE_SDL
+
+void
+TextWindow::on_paint(Canvas &canvas)
+{
+  canvas.clear_white();
+
+  canvas.set_text_color(Color::BLACK);
+  canvas.background_transparent();
+  canvas.text(1, 1, text.c_str());
+}
+
+#endif /* ENABLE_SDL */
