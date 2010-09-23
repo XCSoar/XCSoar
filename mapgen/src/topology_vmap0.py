@@ -79,7 +79,7 @@ def __create_index_file(dir_temp):
     file.write("railrdltrans_line,   10,,,64,64,64\n");
     file.write("mispopppop_point,    5,218,1,223,223,0\n");
     file.close()
-    return os.path.join(dir_temp, "/topology.tpl")
+    return os.path.join(dir_temp, "topology.tpl")
 
 def Create(bounds, dir_data = "../data/", dir_temp = "../tmp/"):
     dir_data = os.path.abspath(os.path.join(dir_data, "vmap0")) 
