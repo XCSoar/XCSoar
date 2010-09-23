@@ -71,9 +71,17 @@
  */
 
 #if !defined(_WIN32_WCE) || defined(__BORLANDC__) || defined(__GNUC__)
+#ifndef uchar
 #define	uchar		unsigned char
+#endif
+
+#ifndef longlong
 #define	longlong	long long
+#endif
+
+#ifndef ulonglong
 #define	ulonglong	unsigned long long
+#endif
 /*#define	ssize_t		int*/
 #endif
 
