@@ -76,6 +76,13 @@ public:
     PaintWindow::set(parent, left, top, width, height);
   }
 
+  void set(ContainerWindow &parent, const TCHAR *text,
+           int left, int top, unsigned width, unsigned height,
+           const CheckBoxStyle style=CheckBoxStyle()) {
+    // XXX
+    PaintWindow::set(parent, left, top, width, height);
+  }
+
   bool get_checked() const {
     return false; // XXX
   }
