@@ -191,6 +191,19 @@ InfoBoxManager::Event_Select(int i)
     InfoBoxes[i]->set_focus();
 }
 
+enum InfoBoxManager::mode
+InfoBoxManager::GetCurrentMode()
+{
+  if (SettingsMap().EnableAuxiliaryInfo)
+    return MODE_AUXILIARY;
+  else if (MapProjection().GetDisplayMode() == dmCircling)
+    return MODE_CIRCLING;
+  else if (MapProjection().GetDisplayMode() == dmFinalGlide)
+    return MODE_FINAL_GLIDE;
+  else
+    return MODE_CRUISE;
+}
+
 int
 InfoBoxManager::getType(unsigned i, enum mode mode)
 {
@@ -230,17 +243,7 @@ InfoBoxManager::setTypeAll(unsigned i, unsigned j)
 int
 InfoBoxManager::getType(unsigned i)
 {
-  unsigned retval = 0;
-
-  if (SettingsMap().EnableAuxiliaryInfo)
-    retval = getType(i, MODE_AUXILIARY);
-  else if (MapProjection().GetDisplayMode() == dmCircling)
-    retval = getType(i, MODE_CIRCLING);
-  else if (MapProjection().GetDisplayMode() == dmFinalGlide)
-    retval = getType(i, MODE_FINAL_GLIDE);
-  else
-    retval = getType(i, MODE_CRUISE);
-
+  unsigned retval = getType(i, GetCurrentMode());
   return min(InfoBoxFactory::NUM_TYPES - 1, retval);
 }
 
@@ -292,14 +295,7 @@ InfoBoxManager::setType(unsigned i, char j, enum mode mode)
 void
 InfoBoxManager::setType(unsigned i, char j)
 {
-  if (SettingsMap().EnableAuxiliaryInfo)
-    setType(i, j, MODE_AUXILIARY);
-  else if (MapProjection().GetDisplayMode() == dmCircling)
-    setType(i, j, MODE_CIRCLING);
-  else if (MapProjection().GetDisplayMode() == dmFinalGlide)
-    setType(i, j, MODE_FINAL_GLIDE);
-  else
-    setType(i, j, MODE_CRUISE);
+  setType(i, j, GetCurrentMode());
 }
 
 void

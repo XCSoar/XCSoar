@@ -98,6 +98,8 @@ public:
   static void Show();
   static void Hide();
 
+  static enum mode GetCurrentMode();
+
   static int getType(unsigned i, enum mode mode);
   static void setType(unsigned i, char j, enum mode mode);
 
