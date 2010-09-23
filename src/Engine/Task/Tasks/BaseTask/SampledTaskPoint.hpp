@@ -134,7 +134,9 @@ public:
    * @return True if sample present
    */
   gcc_pure
-  bool has_sampled() const;
+  bool has_sampled() const {
+    return !m_sampled_points.empty();
+  }
 
 /** 
  * Accessor for task projection
@@ -151,7 +153,9 @@ public:
  * @return Vector of sample points representing a closed polygon
  */
   gcc_pure
-  const SearchPointVector& get_sample_points() const;
+  const SearchPointVector& get_sample_points() const {
+    return m_sampled_points;
+  }
 
 protected:
 
