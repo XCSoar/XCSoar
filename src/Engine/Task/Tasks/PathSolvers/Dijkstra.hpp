@@ -197,8 +197,21 @@ private:
     }
   };
 
+  /**
+   * Stores the value of each node.  It is updated by push(), if a
+   * value lower than the current one is found.
+   */
   std::map<Node, unsigned> m;
+
+  /**
+   * Stores the predecessor of each node.  It is maintained by
+   * set_predecessor().
+   */
   std::map<Node, Node> p;
+
+  /**
+   * A sorted list of all possible node paths, lowest distance first.
+   */
   std::priority_queue<Value, std::vector<Value>, Rank> q;
 
   Iter cur;
