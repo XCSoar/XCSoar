@@ -346,11 +346,11 @@ public:
     // XXX
   }
 
-  void text_opaque(int x, int y, const RECT* lprc, const TCHAR *text);
+  void text_opaque(int x, int y, const RECT &rc, const TCHAR *text);
 
   void text_clipped(int x, int y, const RECT &rc, const TCHAR *text) {
     // XXX
-    text_opaque(x, y, &rc, text);
+    text_opaque(x, y, rc, text);
   }
 
   void text_clipped(int x, int y, unsigned width, const TCHAR *text) {
@@ -751,7 +751,7 @@ public:
 
   void text(int x, int y, const TCHAR *text);
   void text(int x, int y, const TCHAR *text, size_t length);
-  void text_opaque(int x, int y, const RECT* lprc, const TCHAR *text);
+  void text_opaque(int x, int y, const RECT &rc, const TCHAR *text);
 
   void text_clipped(int x, int y, const RECT &rc, const TCHAR *text);
   void text_clipped(int x, int y, unsigned width, const TCHAR *text);

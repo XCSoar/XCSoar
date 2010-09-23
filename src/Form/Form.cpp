@@ -407,7 +407,7 @@ WndForm::on_paint(Canvas &canvas)
 
   // Draw titlebar text
   canvas.text_opaque(mTitleRect.left + Layout::FastScale(2),
-      mTitleRect.top, &mTitleRect, mCaption);
+                     mTitleRect.top, mTitleRect, mCaption);
 }
 
 void

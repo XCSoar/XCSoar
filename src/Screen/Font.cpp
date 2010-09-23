@@ -152,7 +152,7 @@ Font::calculate_heights()
     rec.top = 0;
     rec.right = tm.tmAveCharWidth;
     rec.bottom = tm.tmHeight;
-    buffer.text_opaque(0, 0, &rec, _T("M"));
+    buffer.text_opaque(0, 0, rec, _T("M"));
 
     int top = tm.tmHeight, bottom = 0;
 

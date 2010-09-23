@@ -547,7 +547,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
     tsize = canvas.text_size(Label);
     diLabel->orgText.x = diLabel->recBkg.right - tsize.cx;
     canvas.text_opaque(diLabel->orgText.x, diLabel->orgText.y,
-                       &diLabel->recBkg, Label);
+                       diLabel->recBkg, Label);
     diLabel->recBkg.left = diLabel->orgText.x;
     _tcscpy(diLabel->lastText, Label);
   }
@@ -562,7 +562,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
     diValue->orgText.x = diValue->recBkg.right - tsize.cx;
 
     canvas.text_opaque(diValue->orgText.x, diValue->orgText.y,
-                       &diValue->recBkg, Temp);
+                       diValue->recBkg, Temp);
 
     diValue->recBkg.left = diValue->orgText.x;
     diValue->lastValue = Value;
@@ -783,11 +783,11 @@ GaugeVario::RenderBallast(Canvas &canvas)
     if (lastBallast < fixed(0.001) || BALLAST < fixed(0.001)) {
       // new ballast is 0, hide label
       if (BALLAST < fixed(0.001))
-        canvas.text_opaque(orgLabel.x, orgLabel.y, &recLabelBk, _T(""));
+        canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, _T(""));
       else {
         canvas.set_text_color(colTextGray);
         // ols ballast was 0, show label
-        canvas.text_opaque(orgLabel.x, orgLabel.y, &recLabelBk, TextBal);
+        canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, TextBal);
       }
     }
 
@@ -798,7 +798,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
       _stprintf(Temp, _T("%.0f%%"), (double)(BALLAST * 100));
 
     canvas.set_text_color(colText);
-    canvas.text_opaque(orgValue.x, orgValue.y, &recValueBk, Temp);
+    canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
 
     lastBallast = BALLAST;
   }
@@ -864,10 +864,10 @@ GaugeVario::RenderBugs(Canvas &canvas)
 
     if (lastBugs > fixed(0.999) || BUGS > fixed(0.999)) {
       if (BUGS > fixed(0.999))
-        canvas.text_opaque(orgLabel.x, orgLabel.y, &recLabelBk, _T(""));
+        canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, _T(""));
       else {
         canvas.set_text_color(colTextGray);
-        canvas.text_opaque(orgLabel.x, orgLabel.y, &recLabelBk, TextBug);
+        canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, TextBug);
       }
     }
 
@@ -877,7 +877,7 @@ GaugeVario::RenderBugs(Canvas &canvas)
       _stprintf(Temp, _T("%.0f%%"), (double)((fixed_one - BUGS) * 100));
 
     canvas.set_text_color(colText);
-    canvas.text_opaque(orgLabel.x, orgLabel.y, &recValueBk, Temp);
+    canvas.text_opaque(orgLabel.x, orgLabel.y, recValueBk, Temp);
 
     lastBugs = BUGS;
   }
