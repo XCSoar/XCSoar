@@ -37,6 +37,8 @@
 
 #include "OLCDijkstra.hpp"
 #include "Task/Tasks/OnlineContest.hpp"
+
+#include <algorithm>
 #include <assert.h>
 
 #ifdef DO_PRINT
@@ -56,17 +58,13 @@ OLCDijkstra::OLCDijkstra(OnlineContest& _olc, const unsigned n_legs,
   best_time(fixed_zero),
   m_full_trace(full_trace)
 {
-  m_weightings.reserve(n_legs);
   reset();
 }
 
 void
 OLCDijkstra::set_weightings()
 {
-  m_weightings.clear();
-
-  for (unsigned i = 0; i + 1 < num_stages; ++i)
-    m_weightings.push_back(5);
+  std::fill(m_weightings, m_weightings + num_stages - 1, 5);
 }
 
 bool

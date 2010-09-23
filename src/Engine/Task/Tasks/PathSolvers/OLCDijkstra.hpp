@@ -132,7 +132,7 @@ protected:
   virtual bool admit_candidate(const ScanTaskPoint &candidate) const;
 
   /** Weightings applied to each leg distance */
-  std::vector<unsigned> m_weightings;
+  unsigned m_weightings[MAX_STAGES];
 
   /** Dijkstra search algorithm */
   DijkstraTaskPoint m_dijkstra;
