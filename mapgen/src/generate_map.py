@@ -9,7 +9,7 @@ def print_help():
 
 def main():
     args = sys.argv[1:]
-    
+
     wp = None
     latmin = None
     output_file = None
@@ -25,12 +25,12 @@ def main():
             latmax = args[i + 2]
             lonmin = args[i + 3]
             lonmax = args[i + 4]
-            output_file = args[i + 5]       
-        
+            output_file = args[i + 5]
+
     if (wp == None and latmin == None) or output_file == None:
         print_help()
         return
-    
+
     m = MapGenerator()
     m.AddWaypointFile(wp)
     if wp != None:

@@ -11,24 +11,24 @@ __layers = [["pop-miscellaneous-population-p", "mispopppop_point", "", "txt"],
             ["hydro-inland-water-a", "inwaterahydro_area", "hyc=8", "nam"],
             ["trans-railroad-l", "railrdltrans_line", "exs=28", "fco"],
             ["trans-road-l", "roadltrans_line", "rtt=14", "med"]]
-        
+
 def __create_layer_from_map(bounds, layer, map, overwrite, dir_data, dir_temp):
     if not isinstance(bounds, GeoRect):
         return False
-    
+
     arg = [cmd_ogr2ogr]
-    
+
     if overwrite == True:
         arg.append("-overwrite")
     else:
         arg.append("-update")
         arg.append("-append")
-        
+
     if layer[1] != "":
         arg.extend(["-where", layer[2]])
-        
+
     arg.extend(["-select", layer[3]])
-    
+
     arg.extend(["-spat",
                 str(bounds.left.value_degrees()),
                 str(bounds.bottom.value_degrees()),
@@ -40,35 +40,35 @@ def __create_layer_from_map(bounds, layer, map, overwrite, dir_data, dir_temp):
 
     arg.append(layer[0])
     arg.extend(["-nln", layer[1]])
-    
+
     p = subprocess.Popen(arg)
     p.wait()
-    
+
     return True
 
 def __create_layer(bounds, layer, dir_data, dir_temp):
     print "Creating topology layer " + layer[1] + " ..."
 
     for i in range(len(__maps)):
-        __create_layer_from_map(bounds, layer, __maps[i], 
+        __create_layer_from_map(bounds, layer, __maps[i],
                                 i == 0, dir_data, dir_temp)
 
-    files = []        
+    files = []
     if os.path.exists(os.path.join(dir_temp, layer[1] + ".shp")):
-        files.append([os.path.join(dir_temp, layer[1] + ".shp"), True])   
-        files.append([os.path.join(dir_temp, layer[1] + ".shx"), True])   
-        files.append([os.path.join(dir_temp, layer[1] + ".dbf"), True])   
-        files.append([os.path.join(dir_temp, layer[1] + ".prj"), True])   
-        
+        files.append([os.path.join(dir_temp, layer[1] + ".shp"), True])
+        files.append([os.path.join(dir_temp, layer[1] + ".shx"), True])
+        files.append([os.path.join(dir_temp, layer[1] + ".dbf"), True])
+        files.append([os.path.join(dir_temp, layer[1] + ".prj"), True])
+
     return files
-        
+
 def __create_layers(bounds, dir_data, dir_temp):
     files = []
     for layer in __layers:
         files.extend(__create_layer(bounds, layer, dir_data, dir_temp))
-        
+
     return files
-                    
+
 def __create_index_file(dir_temp):
     file = open(os.path.join(dir_temp, "topology.tpl"), "w")
     file.write("* filename,range,icon,field\n");
@@ -82,10 +82,10 @@ def __create_index_file(dir_temp):
     return os.path.join(dir_temp, "topology.tpl")
 
 def Create(bounds, dir_data = "../data/", dir_temp = "../tmp/"):
-    dir_data = os.path.abspath(os.path.join(dir_data, "vmap0")) 
-    dir_temp = os.path.abspath(dir_temp) 
-    
+    dir_data = os.path.abspath(os.path.join(dir_data, "vmap0"))
+    dir_temp = os.path.abspath(dir_temp)
+
     files = __create_layers(bounds, dir_data, dir_temp)
     files.append([__create_index_file(dir_temp), True])
-        
+
     return files

@@ -31,20 +31,20 @@ class Angle:
         while (retval.value_degrees() >= 360):
             retval.set_degrees(retval.value_degrees() - 360)
         return retval
-    
+
     def limit_180(self):
         retval = Angle(self.__value)
         while (retval.value_degrees() < -180):
             retval.set_degrees(retval.value_degrees() + 360)
         while (retval.value_degrees() >= 180):
             retval.set_degrees(retval.value_degrees() - 360)
-        return retval 
+        return retval
 
     def between(self, start, end):
         width = (end - start).limit_360().value_degrees();
         delta = (self - start).limit_360().value_degrees();
         return delta <= width;
-    
+
     def flip(self):
         self.__value *= -1
 
