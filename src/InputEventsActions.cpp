@@ -526,7 +526,7 @@ InputEvents::eventSelectInfoBox(const TCHAR *misc)
 {
   if (_tcscmp(misc, _T("next")) == 0)
     InfoBoxManager::Event_Select(1);
-  if (_tcscmp(misc, _T("previous")) == 0)
+  else if (_tcscmp(misc, _T("previous")) == 0)
     InfoBoxManager::Event_Select(-1);
 }
 
@@ -537,7 +537,7 @@ InputEvents::eventChangeInfoBoxType(const TCHAR *misc)
 {
   if (_tcscmp(misc, _T("next")) == 0)
     InfoBoxManager::Event_Change(1);
-  if (_tcscmp(misc, _T("previous")) == 0)
+  else if (_tcscmp(misc, _T("previous")) == 0)
     InfoBoxManager::Event_Change(-1);
 }
 
@@ -593,13 +593,13 @@ InputEvents::eventArmAdvance(const TCHAR *misc)
 void InputEvents::eventDoInfoKey(const TCHAR *misc) {
   if (_tcscmp(misc, _T("up")) == 0)
     InfoBoxManager::ProcessKey(InfoBoxContent::ibkUp);
-  if (_tcscmp(misc, _T("down")) == 0)
+  else if (_tcscmp(misc, _T("down")) == 0)
     InfoBoxManager::ProcessKey(InfoBoxContent::ibkDown);
-  if (_tcscmp(misc, _T("left")) == 0)
+  else if (_tcscmp(misc, _T("left")) == 0)
     InfoBoxManager::ProcessKey(InfoBoxContent::ibkLeft);
-  if (_tcscmp(misc, _T("right")) == 0)
+  else if (_tcscmp(misc, _T("right")) == 0)
     InfoBoxManager::ProcessKey(InfoBoxContent::ibkRight);
-  if (_tcscmp(misc, _T("return")) == 0)
+  else if (_tcscmp(misc, _T("return")) == 0)
     InfoBoxManager::ProcessKey(InfoBoxContent::ibkEnter);
 }
 
