@@ -206,6 +206,9 @@ public:
 
   void fill_rectangle(int left, int top, int right, int bottom,
                       const HWColor color) {
+    if (left >= right || top >= bottom)
+      return;
+
     SDL_Rect r = { left, top, right - left, bottom - top };
     SDL_FillRect(surface, &r, color);
   }
