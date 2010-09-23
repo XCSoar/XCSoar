@@ -194,3 +194,4 @@ class MapGenerator:
             if isinstance(file, list):
                 file = file[0]
             os.unlink(file)
+        self.__files = []
