@@ -206,11 +206,10 @@ ScrollBar::paint(Canvas &canvas) const
   canvas.draw_button(rc_slider2, false);
 
   // fill the rest with darker gray
-  Brush background_brush(Color::GRAY);
   canvas.fill_rectangle(rc.left + 1, up_arrow_rect.bottom + 1,
-                        rc.right, rc_slider.top, background_brush);
+                        rc.right, rc_slider.top, Color::GRAY);
   canvas.fill_rectangle(rc.left + 1, rc_slider.bottom,
-                        rc.right, down_arrow_rect.top, background_brush);
+                        rc.right, down_arrow_rect.top, Color::GRAY);
 }
 
 void

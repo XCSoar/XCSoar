@@ -132,8 +132,8 @@ menu_button_bk_color(bool enabled, bool down)
 void
 MenuBar::Button::on_paint(Canvas &canvas)
 {
-  Brush brush(menu_button_bk_color(is_enabled(), is_down()));
-  canvas.fill_rectangle(0, 0, canvas.get_width(), canvas.get_height(), brush);
+  canvas.fill_rectangle(0, 0, canvas.get_width(), canvas.get_height(),
+                        menu_button_bk_color(is_enabled(), is_down()));
 
   canvas.set_text_color(is_enabled() ? Color::BLACK : Color::GRAY);
   canvas.background_transparent();

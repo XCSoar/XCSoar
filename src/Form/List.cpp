@@ -109,8 +109,6 @@ WndListFrame::on_killfocus()
 void
 WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 {
-  Brush background_brush(background_color);
-
   RECT rc = item_rect(start);
 
   canvas.set_text_color(text_color);
@@ -121,11 +119,10 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
   unsigned last_item = min(length, end);
 
   for (unsigned i = start; i < last_item; i++) {
-    if (i == cursor) {
-      Brush brush(selected_background_color);
-      canvas.fill_rectangle(rc, brush);
-    } else
-      canvas.fill_rectangle(rc, background_brush);
+    if (i == cursor)
+      canvas.fill_rectangle(rc, selected_background_color);
+    else
+      canvas.fill_rectangle(rc, background_color);
 
     PaintItemCallback(canvas, rc, i);
 
@@ -138,7 +135,7 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
   /* paint the bottom part below the last item */
   rc.bottom = canvas.get_height();
   if (rc.bottom > rc.top)
-    canvas.fill_rectangle(rc, background_brush);
+    canvas.fill_rectangle(rc, background_color);
 }
 
 void
