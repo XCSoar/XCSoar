@@ -3,7 +3,9 @@
 
 #include "Task/Factory/AbstractTaskFactory.hpp"
 
-void print_mode(const char* mode) {
+static void
+print_mode(const char* mode)
+{
   if (verbose>1) {
     printf("%s",mode);
   }

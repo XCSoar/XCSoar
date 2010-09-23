@@ -16,7 +16,9 @@ public:
   unsigned count;
 };
 
-bool test_wp(const unsigned n, std::ostream &fo) {
+static bool
+test_wp(const unsigned n, std::ostream &fo)
+{
   Waypoints waypoints;
   setup_waypoints(waypoints,n);
 
@@ -38,8 +40,9 @@ bool test_wp(const unsigned n, std::ostream &fo) {
   return true;
 }
 
-
-bool test_as(const unsigned n, std::ostream &fo) {
+static bool
+test_as(const unsigned n, std::ostream &fo)
+{
   AIRCRAFT_STATE state;
 
   Airspaces airspaces;

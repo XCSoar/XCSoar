@@ -2,13 +2,17 @@
 #include "test_debug.hpp"
 #include "Atmosphere/Pressure.hpp"
 
-bool test_find_qnh() {
+static bool
+test_find_qnh()
+{
   AtmosphericPressure pres;
   pres.FindQNH(fixed(100), fixed(100));
   return fabs(pres.get_QNH()-fixed(1013.25))<fixed(0.01);
 }
 
-bool test_find_qnh2() {
+static bool
+test_find_qnh2()
+{
   AtmosphericPressure pres;
   pres.FindQNH(fixed(100), fixed(120));
   if (verbose) {
@@ -21,7 +25,9 @@ bool test_find_qnh2() {
   // qnh= 1016
 }
 
-bool test_qnh_to_static() {
+static bool
+test_qnh_to_static()
+{
   AtmosphericPressure pres;
   fixed p0 = pres.QNHAltitudeToStaticPressure(fixed_zero);
   if (verbose) {
@@ -30,7 +36,9 @@ bool test_qnh_to_static() {
   return fabs(p0-fixed(101325))<fixed(0.1);
 }
 
-bool test_qnh_round() {
+static bool
+test_qnh_round()
+{
   AtmosphericPressure pres;
   pres.FindQNH(fixed(100), fixed(120));
   fixed h0 = pres.AltitudeToQNHAltitude(fixed(100));
@@ -40,7 +48,9 @@ bool test_qnh_round() {
   return fabs(h0-fixed(120))<fixed(1);
 }
 
-bool test_qnh_round2() {
+static bool
+test_qnh_round2()
+{
   AtmosphericPressure pres;
   pres.FindQNH(fixed(100), fixed(120));
   fixed p0 = pres.get_QNH()*100;
@@ -51,8 +61,9 @@ bool test_qnh_round2() {
   return fabs(h0)<fixed(1);
 }
 
-
-bool test_isa_pressure(const fixed alt, const fixed prat) {
+static bool
+test_isa_pressure(const fixed alt, const fixed prat)
+{
   AtmosphericPressure pres;
   fixed p0 = pres.QNHAltitudeToStaticPressure(alt);
   if (verbose) {
@@ -61,7 +72,9 @@ bool test_isa_pressure(const fixed alt, const fixed prat) {
   return fabs(p0/fixed(101325)-prat)<fixed(0.001);
 }
 
-bool test_isa_density(const fixed alt, const fixed prat) {
+static bool
+test_isa_density(const fixed alt, const fixed prat)
+{
   fixed p0 = AtmosphericPressure::AirDensity(alt);
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(p0));

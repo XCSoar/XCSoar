@@ -21,7 +21,8 @@ public:
   }
 };
 
-unsigned test_location(const Waypoints& waypoints, bool good)
+static unsigned
+test_location(const Waypoints& waypoints, bool good)
 {
   GeoPoint loc; // at 0,0
   if (!good) {
@@ -38,7 +39,8 @@ unsigned test_location(const Waypoints& waypoints, bool good)
 }
 
 
-unsigned test_range(const Waypoints& waypoints, const double range)
+static unsigned
+test_range(const Waypoints& waypoints, const double range)
 {
   const Waypoint *r = waypoints.lookup_id(3);
   if (r) {
@@ -50,7 +52,8 @@ unsigned test_range(const Waypoints& waypoints, const double range)
   }
 }
 
-unsigned test_radius(const Waypoints& waypoints, const double range)
+static unsigned
+test_radius(const Waypoints& waypoints, const double range)
 {
   const Waypoint *r = waypoints.lookup_id(3);
   if (r) {
@@ -62,7 +65,8 @@ unsigned test_radius(const Waypoints& waypoints, const double range)
   }
 }
 
-unsigned test_nearest(const Waypoints& waypoints)
+static unsigned
+test_nearest(const Waypoints& waypoints)
 {
   const Waypoint *r = waypoints.lookup_id(3);
   if (r) {
@@ -76,7 +80,8 @@ unsigned test_nearest(const Waypoints& waypoints)
   return false;
 }
 
-unsigned test_copy(Waypoints& waypoints)
+static unsigned
+test_copy(Waypoints& waypoints)
 {
   const Waypoint *r = waypoints.lookup_id(5);
   if (!r) {
@@ -91,7 +96,8 @@ unsigned test_copy(Waypoints& waypoints)
   return (size_new == size_old+1);
 }
 
-bool test_lookup(const Waypoints& waypoints, unsigned id)
+static bool
+test_lookup(const Waypoints& waypoints, unsigned id)
 {
   const Waypoint* wp;
   wp = waypoints.lookup_id(id);
@@ -101,7 +107,8 @@ bool test_lookup(const Waypoints& waypoints, unsigned id)
   return true;
 }
 
-bool test_erase(Waypoints& waypoints, unsigned id)
+static bool
+test_erase(Waypoints& waypoints, unsigned id)
 {
   waypoints.optimise();
   const Waypoint* wp;
@@ -119,7 +126,8 @@ bool test_erase(Waypoints& waypoints, unsigned id)
   return true;
 }
 
-bool test_replace(Waypoints& waypoints, unsigned id)
+static bool
+test_replace(Waypoints& waypoints, unsigned id)
 {
   const Waypoint* wp;
   wp = waypoints.lookup_id(id);

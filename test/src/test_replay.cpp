@@ -47,8 +47,7 @@ protected:
   }
 };
 
-
-bool 
+static bool
 test_replay(const OLCRules olc_type)
 {
 #ifdef DO_PRINT

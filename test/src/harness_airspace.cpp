@@ -7,7 +7,9 @@
 #include "Airspace/AirspaceSoonestSort.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
-void airspace_random_properties(AbstractAirspace& as) {
+static void
+airspace_random_properties(AbstractAirspace& as)
+{
   AirspaceClass_t Type = (AirspaceClass_t)(rand()%15);
   AIRSPACE_ALT base;
   AIRSPACE_ALT top;

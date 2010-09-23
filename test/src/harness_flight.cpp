@@ -39,7 +39,9 @@ wind_to_mag(int n_wind)
   return fixed_zero;
 }
 
-Angle wind_to_dir(int n_wind) {
+static Angle
+wind_to_dir(int n_wind)
+{
   if (n_wind) {
     return Angle::degrees(fixed(90*((n_wind-1)%4)));
   }

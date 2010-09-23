@@ -13,7 +13,8 @@ const fixed Vmin(5.0);
 
 std::ofstream ofile("results/res-polar-m.txt");
 
-void polar_mc(const fixed mc) 
+static void
+polar_mc(const fixed mc)
 {
   GlidePolar polar(mc);
   ofile << mc << " " << polar.get_VbestLD() << " " << polar.get_bestLD() 
@@ -21,7 +22,8 @@ void polar_mc(const fixed mc)
         << " " << polar.get_Vmax() << " " << polar.get_Smax() << "\n";
 }
 
-void basic_polar(const fixed mc) 
+static void
+basic_polar(const fixed mc)
 {
   char bname[100];
   sprintf(bname,"results/res-polar-%02d-best.txt",(int)(mc*10));
@@ -47,8 +49,9 @@ void basic_polar(const fixed mc)
 }
 
 
-void test_glide_alt(const fixed h, const fixed W, 
-                    const fixed Wangle, std::ostream &hfile) 
+static void
+test_glide_alt(const fixed h, const fixed W, const fixed Wangle,
+               std::ostream &hfile)
 {
   GlidePolar polar(fixed_zero);
   polar.set_mc(fixed_one);
@@ -74,11 +77,9 @@ void test_glide_alt(const fixed h, const fixed W,
         << "\n";
 }
 
-
-void test_glide_stf(const fixed h, const fixed W, 
-                    const fixed Wangle, 
-                    const fixed S,
-                    std::ostream &hfile) 
+static void
+test_glide_stf(const fixed h, const fixed W, const fixed Wangle, const fixed S,
+               std::ostream &hfile)
 {
   GlidePolar polar(fixed_zero);
   polar.set_mc(fixed_one);
@@ -109,7 +110,8 @@ void test_glide_stf(const fixed h, const fixed W,
         << "\n";
 }
 
-bool test_stf()
+static bool
+test_stf()
 {
   { // variation with height
     std::ofstream hfile("results/res-polar-s0.txt");
@@ -144,8 +146,8 @@ bool test_stf()
   return true;
 }
 
-
-bool test_mc()
+static bool
+test_mc()
 {
   for (fixed mc=fixed_zero; mc<fixed(5.0); mc+= fixed(0.1)) {
     basic_polar(mc);
@@ -182,10 +184,9 @@ bool test_mc()
   return true;
 }
 
-
-void test_glide_cb(const fixed h, const fixed W, 
-                   const fixed Wangle,
-                   std::ostream &hfile) 
+static void
+test_glide_cb(const fixed h, const fixed W, const fixed Wangle,
+              std::ostream &hfile)
 {
   GlidePolar polar(fixed_one);
 
@@ -211,8 +212,8 @@ void test_glide_cb(const fixed h, const fixed W,
         << "\n";
 }
 
-
-bool test_cb()
+static bool
+test_cb()
 {
   {
     std::ofstream hfile("results/res-polar-cb.txt");

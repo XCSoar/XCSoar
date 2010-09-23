@@ -599,7 +599,8 @@ OnlineContest::print() const
 
 #include "Trace/Trace.hpp"
 
-void print_tpv(const TracePointVector& vec, std::ofstream& fs) 
+static void
+print_tpv(const TracePointVector& vec, std::ofstream& fs)
 {
   unsigned last_time = 0;
   for (TracePointVector::const_iterator it = vec.begin(); it != vec.end();
