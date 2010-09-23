@@ -61,7 +61,7 @@ public:
    *
    * @return True if internal state changed
    */
-  bool update_idle(const AIRCRAFT_STATE &state);
+  bool update_idle();
 
   /** 
    * Reset the task (as if never flown)

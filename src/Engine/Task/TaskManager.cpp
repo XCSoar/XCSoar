@@ -278,7 +278,7 @@ TaskManager::update_idle(const AIRCRAFT_STATE& state)
     retval |= trace_sprint.optimise_if_old();
 
     if (task_behaviour.enable_olc)
-      retval |= task_olc.update_idle(state);
+      retval |= task_olc.update_idle();
   }
 
   if (active_task)

@@ -118,7 +118,7 @@ IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
 
   full_trace_classic.optimise_if_old();
   sprint_trace_classic.optimise_if_old();
-  olc_classic.update_idle(new_state);
+  olc_classic.update_idle();
 
 
   full_trace_fai.append(new_state);
@@ -127,7 +127,7 @@ IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
 
   full_trace_fai.optimise_if_old();
   sprint_trace_fai.optimise_if_old();
-  olc_fai.update_idle(new_state);
+  olc_fai.update_idle();
 
 
   full_trace_sprint.append(new_state);
@@ -136,7 +136,7 @@ IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
 
   full_trace_sprint.optimise_if_old();
   sprint_trace_sprint.optimise_if_old();
-  olc_sprint.update_idle(new_state);
+  olc_sprint.update_idle();
 }
 
 void

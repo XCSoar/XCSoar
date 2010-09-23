@@ -77,7 +77,7 @@ OnlineContest::update_trace()
 }
 
 bool 
-OnlineContest::update_idle(const AIRCRAFT_STATE &state)
+OnlineContest::update_idle()
 {
   // \todo: possibly scan each type in a round robin fashion?
   bool retval = false;
@@ -99,8 +99,7 @@ OnlineContest::update_idle(const AIRCRAFT_STATE &state)
 
   if (retval) {
 #ifdef DO_PRINT
-    printf("# time %d size %d/%d dist %g\n",
-           (int)state.Time,
+    printf("# size %d/%d dist %g\n",
            m_trace_points_full.size(), 
            m_trace_points_sprint.size(), 
            (double)common_stats.distance_olc);
