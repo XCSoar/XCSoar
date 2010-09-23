@@ -601,6 +601,8 @@ void InputEvents::eventDoInfoKey(const TCHAR *misc) {
     InfoBoxManager::ProcessKey(InfoBoxContent::ibkRight);
   else if (_tcscmp(misc, _T("return")) == 0)
     InfoBoxManager::ProcessKey(InfoBoxContent::ibkEnter);
+  else if (_tcscmp(misc, _T("setup")) == 0)
+    InfoBoxManager::SetupFocused();
 }
 
 // Mode

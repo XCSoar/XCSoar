@@ -52,6 +52,10 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Appearance.hpp"
 #include "Language.hpp"
+#include "DataField/Enum.hpp"
+#include "Form/Edit.hpp"
+#include "Form/Form.hpp"
+#include "Profile.hpp"
 
 #include <assert.h>
 
@@ -518,4 +522,68 @@ InfoBoxManager::Destroy()
     delete (InfoBoxes[i]);
 
   full_window.reset();
+}
+
+static void
+OnInfoBoxHelp(WindowControl *Sender)
+{
+  WndProperty *wp = (WndProperty*)Sender;
+  int type = wp->GetDataField()->GetAsInteger();
+
+  TCHAR caption[100];
+  _stprintf(caption, _T("InfoBox: %s"), InfoBoxFactory::GetName(type));
+
+  const TCHAR* text = InfoBoxFactory::GetDescription(type);
+  if (text)
+    dlgHelpShowModal(XCSoarInterface::main_window, caption, gettext(text));
+  else
+    dlgHelpShowModal(XCSoarInterface::main_window, caption,
+                     _("No help available on this item"));
+}
+
+void
+InfoBoxManager::SetupFocused()
+{
+  int i = GetFocused();
+  if (i < 0)
+    return;
+
+  const enum mode mode = GetCurrentMode();
+  int old_type = getType(i, mode);
+
+  /* create a fake WndProperty for dlgComboPicker() */
+  /* XXX reimplement properly */
+
+  WindowStyle style;
+  style.hide();
+
+  WndForm form(main_window, _T(""), 0, 0, 256, 128, style);
+  WndProperty control(form, _T("InfoBox"), 0, 0, 256, 128, 128,
+                      style, EditWindowStyle(), NULL);
+  control.SetOnHelpCallback(OnInfoBoxHelp);
+
+  DataFieldEnum *dfe = new DataFieldEnum(_T(""), _T(""), old_type, NULL);
+  for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; i++)
+    dfe->addEnumText(gettext(GetTypeDescription(i)));
+  dfe->Sort(0);
+  dfe->Set(old_type);
+  control.RefreshDisplay();
+
+  control.SetDataField(dfe);
+
+  /* let the user select */
+
+  dlgComboPicker(main_window, &control);
+
+  /* was there a modification? */
+
+  int new_type = dfe->GetAsInteger();
+  if (new_type == old_type)
+    return;
+
+  /* yes: apply and save it */
+
+  setType(i, new_type, mode);
+  DisplayInfoBox();
+  Profile::SetInfoBoxes(i, getTypeAll(i));
 }

@@ -235,6 +235,9 @@ protected:
    * @return True if the event has been handled, False otherwise
    */
   virtual bool on_mouse_down(int x, int y);
+
+  virtual bool on_mouse_up(int x, int y);
+
   /**
    * This event handler is called when a mouse button is double clicked over
    * the InfoBox

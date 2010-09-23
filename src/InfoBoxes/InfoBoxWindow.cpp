@@ -461,6 +461,16 @@ InfoBoxWindow::on_mouse_down(int x, int y)
 }
 
 bool
+InfoBoxWindow::on_mouse_up(int x, int y)
+{
+  if (click_clock.check(2000)) {
+    InputEvents::eventDoInfoKey(_T("setup"));
+    return true;
+  } else
+    return PaintWindow::on_mouse_up(x, y);
+}
+
+bool
 InfoBoxWindow::on_mouse_double(int x, int y)
 {
   if (!is_altair()) {

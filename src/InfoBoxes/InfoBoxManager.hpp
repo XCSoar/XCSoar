@@ -110,6 +110,11 @@ public:
   static bool IsEmpty();
 
   static bool HasFocus();
+
+  /**
+   * Opens a configuration dialog for the focused InfoBox.
+   */
+  static void SetupFocused();
 };
 
 #endif
