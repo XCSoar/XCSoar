@@ -7,8 +7,6 @@ import terrain_srtm
 import topology_vmap0
 
 class MapGenerator:
-    __files = []
-
     def __init__(self, dir_data = "../data/", dir_temp = "../tmp/"):
         '''
         Constructor of the MapGenerator class
@@ -22,6 +20,7 @@ class MapGenerator:
             os.mkdir(self.__dir_temp)
 
         self.__bounds = None
+        self.__files = []
 
         print "MapGenerator created"
 
