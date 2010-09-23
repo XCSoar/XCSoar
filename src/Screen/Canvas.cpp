@@ -97,6 +97,8 @@ Canvas::segment(int x, int y, unsigned radius,
 void
 Canvas::draw_button(RECT rc, bool down)
 {
+  const Pen old_pen = pen;
+
   Brush gray(Color(192, 192, 192));
   fill_rectangle(rc, gray);
 
@@ -115,7 +117,7 @@ Canvas::draw_button(RECT rc, bool down)
   two_lines(rc.left + 2, rc.bottom - 2, rc.right - 2, rc.bottom - 2,
             rc.right - 2, rc.top + 2);
 
-  white_pen();
+  pen = old_pen;
 }
 
 const SIZE
