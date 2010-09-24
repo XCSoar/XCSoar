@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
-#include "Units.hpp"
+#include "Dialogs/ListPicker.hpp"
 #include "InputEvents.h"
 #include "DataField/Base.hpp"
 #include "DataField/ComboList.hpp"
@@ -45,12 +45,9 @@ Copyright_License {
 
 #include <assert.h>
 
-static WndForm *wf = NULL;
-
 static WndProperty *wComboPopupWndProperty;
 static DataField *ComboPopupDataField;
 static ComboList *ComboListPopup;
-static WndListFrame *wComboPopupListFrame;
 
 static TCHAR sSavedInitialValue[ComboPopupITEMMAX];
 static int iSavedInitialDataIndex = -1;
@@ -66,12 +63,8 @@ OnPaintComboPopupListItem(Canvas &canvas, const RECT rc, unsigned i)
 }
 
 static void
-OnHelpClicked(WindowControl * Sender)
+OnHelpClicked(unsigned i)
 {
-  (void)Sender;
-
-  unsigned i = wComboPopupListFrame->GetCursorIndex();
-
   if (i < ComboListPopup->ComboPopupItemCount) {
     int iDataIndex = ComboListPopup->ComboPopupItemList[i]->DataFieldIndex;
     ComboPopupDataField->SetFromCombo(iDataIndex,
@@ -80,34 +73,6 @@ OnHelpClicked(WindowControl * Sender)
 
   wComboPopupWndProperty->OnHelp();
 }
-
-static void
-OnCloseClicked(WindowControl * Sender)
-{
-  (void)Sender;
-  wf->SetModalResult(mrOK);
-}
-
-static void
-OnComboPopupListEnter(unsigned i)
-{
-  // double-click on item -- NOT in callback table because added manually
-  OnCloseClicked(wf);
-}
-
-static void
-OnCancelClicked(WindowControl * Sender)
-{
-  (void)Sender;
-  wf->SetModalResult(mrCancel);
-}
-
-static CallBackTableEntry_t CallBackTable[] = {
-  DeclareCallBackEntry(OnHelpClicked),
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(OnCancelClicked),
-  DeclareCallBackEntry(NULL)
-};
 
 int
 dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
@@ -128,35 +93,11 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
     assert(theProperty != NULL);
     wComboPopupWndProperty = theProperty;
 
-    if (!Layout::landscape) {
-      wf = LoadDialog(CallBackTable, parent,
-                          _T("IDR_XML_COMBOPICKER_L"));
-    } else {
-      wf = LoadDialog(CallBackTable, parent,
-                          _T("IDR_XML_COMBOPICKER"));
-    }
-
-    if (!wf)
-      return -1;
-
-    assert(wf != NULL);
-    //assert(wf->GetWidth() <1200);  // sometimes we have a bogus window, setfocus goes nuts
-
-    wf->SetCaption(theProperty->GetCaption());
-
-    wComboPopupListFrame =
-      (WndListFrame*)wf->FindByName(_T("frmComboPopupList"));
-    assert(wComboPopupListFrame != NULL);
-    wComboPopupListFrame->SetActivateCallback(OnComboPopupListEnter);
-    wComboPopupListFrame->SetPaintItemCallback(OnPaintComboPopupListItem);
-
     ComboPopupDataField = wComboPopupWndProperty->GetDataField();
     ComboListPopup = ComboPopupDataField->GetCombo();
     assert(ComboPopupDataField != NULL);
 
     ComboPopupDataField->CreateComboList();
-    wComboPopupListFrame->SetLength(ComboListPopup->ComboPopupItemCount);
-    wComboPopupListFrame->SetCursorIndex(ComboListPopup->ComboPopupItemSavedIndex);
     if (bInitialPage) { // save values for "Cancel" from first page only
       bInitialPage = false;
       iSavedInitialDataIndex = ComboListPopup->
@@ -165,9 +106,12 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
       ComboPopupDataField->CopyString(sSavedInitialValue, false);
     }
 
-    int idx = (wf->ShowModal() == mrOK ?
-               (int)wComboPopupListFrame->GetCursorIndex() :
-               -1);
+    int idx = ListPicker(parent, theProperty->GetCaption(),
+                         ComboListPopup->ComboPopupItemCount,
+                         ComboListPopup->ComboPopupItemSavedIndex,
+                         Layout::Scale(18),
+                         OnPaintComboPopupListItem,
+                         OnHelpClicked);
 
     bOpenCombo = false; //tell  combo to exit loop after close
 
@@ -202,9 +146,6 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
 
     wComboPopupWndProperty->RefreshDisplay();
     ComboListPopup->FreeComboPopupItemList();
-
-    delete wf;
-    wf = NULL;
   } // loop reopen combo if <<More>>  or <<Less>> picked
 
   bInComboPicker = false;
