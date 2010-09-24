@@ -62,6 +62,8 @@ MapWindow::DrawTrail(Canvas &canvas) const
   if (!SettingsMap().TrailActive || task == NULL)
     return;
 
+  const MapWindowProjection &projection = render_projection;
+
   unsigned min_time = 0;
 
   if (projection.GetDisplayMode() == dmCircling) {

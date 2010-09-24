@@ -64,13 +64,16 @@ MapWindow::CalculateScreenPositionsThermalSources()
     FindLatitudeLongitude(Calculated().ThermalSources[i].Location,
                           Basic().wind.bearing, Basic().wind.norm * t, &loc);
     ThermalSources[i].Visible =
-        projection.LonLat2ScreenIfVisible(loc, &ThermalSources[i].Screen);
+        render_projection.LonLat2ScreenIfVisible(loc,
+                                                 &ThermalSources[i].Screen);
   }
 }
 
 void
 MapWindow::DrawThermalEstimate(Canvas &canvas) const
 {
+  const MapWindowProjection &projection = render_projection;
+
   if (projection.GetDisplayMode() == dmCircling) {
     if (positive(Calculated().ThermalEstimate_R)) {
       POINT sc;
@@ -94,7 +97,7 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
   POINT GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };
 
   if ((Calculated().task_stats.total.solution_remaining.AltitudeDifference > fixed(50))
-      && projection.GetDisplayMode() == dmFinalGlide)
+      && render_projection.GetDisplayMode() == dmFinalGlide)
     return;
 
   const ThermalBandInfo &thermal_band = Calculated().thermal_band;

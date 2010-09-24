@@ -85,7 +85,25 @@ class MapWindow : public DoubleBufferWindow,
   public MapWindowTimer
 {
 protected:
-  MapWindowProjection projection;
+  /**
+   * The projection as currently visible on the screen.  This object
+   * is being edited by the user.
+   */
+  MapWindowProjection visible_projection;
+
+  /**
+   * The projection of the buffer.  This differs from
+   * visible_projection only after the projection was modified, until
+   * the DrawThread has finished drawing the new projection.
+   */
+  MapWindowProjection buffer_projection;
+
+  /**
+   * The projection of the DrawThread.  This is used to render the new
+   * map.  After rendering has completed, this object is copied over
+   * #buffer_projection.
+   */
+  MapWindowProjection render_projection;
 
   const Waypoints *way_points;
   TopologyStore *topology;
@@ -202,8 +220,8 @@ public:
 
   void UpdateProjection();
 
-  const MapWindowProjection &MapProjection() const {
-    return projection;
+  const MapWindowProjection &VisibleProjection() const {
+    return visible_projection;
   }
 
 private:

@@ -132,9 +132,9 @@ bool MapWindow::isClickOnTarget(const POINT pc)
     if (t == gnull)
       return false;
 
-    const POINT pt = projection.LonLat2Screen(t);
-    const GeoPoint gp = projection.Screen2LonLat(pc.x, pc.y);
-    if (projection.DistanceMetersToScreen(gp.distance((t))) < unsigned(Layout::Scale(10)) )
+    const POINT pt = visible_projection.LonLat2Screen(t);
+    const GeoPoint gp = visible_projection.Screen2LonLat(pc.x, pc.y);
+    if (visible_projection.DistanceMetersToScreen(gp.distance((t))) < unsigned(Layout::Scale(10)) )
       return true;
   }
   return false;
@@ -147,7 +147,7 @@ bool MapWindow::isInSector(const int x, const int y)
   dragPT.y = y;
 
   if (XCSoarInterface::SetSettingsMap().TargetPan) {
-    GeoPoint gp = projection.Screen2LonLat(dragPT.x, dragPT.y);
+    GeoPoint gp = visible_projection.Screen2LonLat(dragPT.x, dragPT.y);
     AIRCRAFT_STATE a;
     a.Location = gp;
     return protected_task_manager.isInSector(XCSoarInterface::SetSettingsMap().TargetPanIndex, a);
@@ -162,7 +162,7 @@ MapWindow::TargetPaintDrag(Canvas &canvas, const POINT drag_last)
 
 bool MapWindow::TargetDragged(const int x, const int y)
 {
-  GeoPoint gp = projection.Screen2LonLat(x, y);
+  GeoPoint gp = visible_projection.Screen2LonLat(x, y);
   if (protected_task_manager.target_is_locked(XCSoarInterface::SetSettingsMap().TargetPanIndex)) {
     protected_task_manager.set_target(XCSoarInterface::SetSettingsMap().TargetPanIndex, gp, true);
     return true;

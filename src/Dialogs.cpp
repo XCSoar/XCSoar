@@ -74,7 +74,7 @@ PopupNearestWaypointDetails(const Waypoints &way_points,
 
   if (way_point &&
       (!scalefilter ||
-       XCSoarInterface::main_window.map.MapProjection().WaypointInScaleFilter(*way_point))) {
+       XCSoarInterface::main_window.map.VisibleProjection().WaypointInScaleFilter(*way_point))) {
     dlgWayPointDetailsShowModal(XCSoarInterface::main_window, *way_point);
     return true;
   }

@@ -44,9 +44,9 @@ Copyright_License {
 
 void MapWindow::CalculateScreenPositionsGroundline(void) {
   if (SettingsComputer().FinalGlideTerrain)
-    projection.LonLat2Screen(Calculated().GlideFootPrint,
-                             Groundline,
-                             TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1, 1);
+    render_projection.LonLat2Screen(Calculated().GlideFootPrint,
+                                    Groundline,
+                                    TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1, 1);
 }
 
 /**
@@ -90,8 +90,8 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
 
   if (!Calculated().TerrainWarningLocation.is_null()) {
     POINT sc;
-    if (projection.LonLat2ScreenIfVisible(Calculated().TerrainWarningLocation,
-                                          &sc))
+    if (render_projection.LonLat2ScreenIfVisible(Calculated().TerrainWarningLocation,
+                                                 &sc))
       MapGfx.hTerrainWarning.draw(canvas, bitmap_canvas, sc.x, sc.y);
   }
 }

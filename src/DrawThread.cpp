@@ -58,7 +58,7 @@ DrawThread::ExchangeBlackboard()
 
   /* return MapWindow projection to the device_blackboard */
   mutexBlackboard.Lock();
-  device_blackboard.ReadMapProjection(map.MapProjection());
+  device_blackboard.ReadMapProjection(map.VisibleProjection());
   mutexBlackboard.Unlock();
 }
 

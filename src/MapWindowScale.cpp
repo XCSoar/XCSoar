@@ -51,9 +51,9 @@ Copyright_License {
 fixed
 MapWindow::findMapScaleBarSize(const RECT &rc) const
 {
-  fixed pixelsize = projection.DistanceScreenToUser(1); // units/pixel
+  fixed pixelsize = render_projection.DistanceScreenToUser(1); // units/pixel
   fixed half_displaysize =
-    projection.DistanceScreenToUser((rc.bottom - rc.top) / 2); // units
+    render_projection.DistanceScreenToUser((rc.bottom - rc.top) / 2); // units
 
   // find largest bar size that will fit two of (black and white) in display
   if (half_displaysize > fixed(100))
@@ -79,7 +79,7 @@ MapWindow::DrawMapScale2(Canvas &canvas, const RECT &rc) const
   int barsize = iround(findMapScaleBarSize(rc));
 
   End.x = rc.right - 1;
-  End.y = projection.GetOrigAircraft().y;
+  End.y = render_projection.GetOrigAircraft().y;
   Start = End;
   for (Start.y += barsize; Start.y < rc.bottom + barsize; Start.y += barsize) {
     if (color)
@@ -94,7 +94,7 @@ MapWindow::DrawMapScale2(Canvas &canvas, const RECT &rc) const
   }
 
   color = true;
-  End.y = projection.GetOrigAircraft().y;
+  End.y = render_projection.GetOrigAircraft().y;
   Start = End;
   for (Start.y -= barsize; Start.y > rc.top - barsize; Start.y -= barsize) {
     if (color)
@@ -136,7 +136,7 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT &rc) const
     MapWidth = projection.RequestDistancePixelsToMeters(rc.right - rc.left);
   else
   */
-  MapWidth = projection.DistancePixelsToMeters(rc.right - rc.left);
+  MapWidth = render_projection.DistancePixelsToMeters(rc.right - rc.left);
 
   canvas.select(Fonts::MapBold);
   Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,

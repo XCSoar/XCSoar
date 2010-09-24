@@ -47,7 +47,7 @@ MapWindow::DrawWaypoints(Canvas &canvas, const RECT &MapRect)
                    SettingsComputer().safety_mc));
 
   way_point_renderer.render(canvas, bitmap_canvas, label_block,
-                            MapProjection(), SettingsMap(),
+                            render_projection, SettingsMap(),
                             SettingsComputer(), polar,
                             ToAircraftState(Basic()),
                             task);

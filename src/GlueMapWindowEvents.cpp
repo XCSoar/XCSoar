@@ -124,7 +124,7 @@ GlueMapWindow::on_mouse_down(int x, int y)
 
   drag_start.x = x;
   drag_start.y = y;
-  drag_start_geopoint = projection.Screen2LonLat(x, y);
+  drag_start_geopoint = visible_projection.Screen2LonLat(x, y);
   drag_last = drag_start;
 
   if (SettingsMap().TargetPan) {
@@ -134,8 +134,8 @@ GlueMapWindow::on_mouse_down(int x, int y)
     drag_mode = DRAG_PAN;
   if (is_simulator() && !Basic().gps.Replay && drag_mode == DRAG_NONE)
     if (!XCSoarInterface::SettingsComputer().EnableGestures ||
-        compare_squared(projection.GetOrigAircraft().x - x,
-                        projection.GetOrigAircraft().y - y,
+        compare_squared(visible_projection.GetOrigAircraft().x - x,
+                        visible_projection.GetOrigAircraft().y - y,
                         Layout::Scale(30)) != 1)
         drag_mode = DRAG_SIMULATOR;
   if (XCSoarInterface::SettingsComputer().EnableGestures &&
@@ -179,7 +179,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
   case DRAG_PAN:
     if (compare_squared(drag_start.x - x, drag_start.y - y,
                         Layout::Scale(10)) == 1) {
-      const GeoPoint end = projection.Screen2LonLat(x, y);
+      const GeoPoint end = visible_projection.Screen2LonLat(x, y);
 
       XCSoarInterface::SetSettingsMap().PanLocation.Longitude +=
         drag_start_geopoint.Longitude - end.Longitude;
@@ -197,7 +197,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
     if (click_time > 50 &&
         compare_squared(drag_start.x - x, drag_start.y - y,
                         Layout::Scale(36)) == 1) {
-      GeoPoint G = projection.Screen2LonLat(x, y);
+      GeoPoint G = visible_projection.Screen2LonLat(x, y);
 
       double distance = hypot(drag_start.x - x, drag_start.y - y);
 
@@ -237,7 +237,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
       // click less then one second -> open nearest waypoint details
       if (way_points != NULL &&
           PopupNearestWaypointDetails(*way_points, drag_start_geopoint,
-                                      projection.DistancePixelsToMeters(Layout::Scale(10)),
+                                      visible_projection.DistancePixelsToMeters(Layout::Scale(10)),
                                       true))
         return true;
     }

@@ -166,8 +166,8 @@ MapWindow::DrawTask(Canvas &canvas, const RECT &rc, Canvas &buffer)
    but we can still draw targets */
   const bool draw_bearing = Basic().gps.Connected;
 
-  RenderObservationZone ozv(canvas, projection, SettingsMap());
-  RenderTaskPointMap tpv(canvas, projection, SettingsMap(),
+  RenderObservationZone ozv(canvas, render_projection, SettingsMap());
+  RenderTaskPointMap tpv(canvas, render_projection, SettingsMap(),
                          ozv, draw_bearing,
                          Basic().Location,
                          getLabelBlock(), get_bitmap_canvas(),

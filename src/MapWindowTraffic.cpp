@@ -71,6 +71,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
   if (!flarm.FLARM_Available)
     return;
 
+  const MapWindowProjection &projection = render_projection;
+
   // Create pen for icon outlines
   Pen thinBlackPen(IBLSCALE(1), Color(0, 0, 0));
   canvas.select(thinBlackPen);
@@ -255,7 +257,8 @@ MapWindow::DrawTeammate(Canvas &canvas) const
 {
   if (SettingsComputer().TeammateCodeValid) {
     POINT sc;
-    if (projection.LonLat2ScreenIfVisible(Calculated().TeammateLocation, &sc))
+    if (render_projection.LonLat2ScreenIfVisible(Calculated().TeammateLocation,
+                                                 &sc))
       MapGfx.hBmpTeammatePosition.draw(canvas, bitmap_canvas, sc.x, sc.y);
   }
 }

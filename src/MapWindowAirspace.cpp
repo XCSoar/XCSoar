@@ -236,7 +236,7 @@ MapWindow::DrawAirspaceIntersections(Canvas &canvas) const
 {
   for (unsigned i = m_airspace_intersections.size(); i--;) {
     POINT sc;
-    if (projection.LonLat2ScreenIfVisible(m_airspace_intersections[i], &sc))
+    if (render_projection.LonLat2ScreenIfVisible(m_airspace_intersections[i], &sc))
       MapGfx.hAirspaceInterceptBitmap.draw(canvas, bitmap_canvas, sc.x, sc.y);
   }
 }
@@ -256,7 +256,7 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
   if (airspace_warnings != NULL)
     airspace_warnings->visit_warnings(awc);
 
-  MapDrawHelper helper(canvas, buffer, stencil_canvas, projection,
+  MapDrawHelper helper(canvas, buffer, stencil_canvas, render_projection,
                         SettingsMap());
   AirspaceVisitorMap v(helper, awc);
   const AirspaceMapVisible visible(SettingsComputer(),
@@ -266,15 +266,15 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
   // JMW TODO wasteful to draw twice, can't it be drawn once?
   // we are using two draws so borders go on top of everything
 
-  airspace_database->visit_within_range(projection.GetPanLocation(),
-                                        projection.GetScreenDistanceMeters(),
+  airspace_database->visit_within_range(render_projection.GetPanLocation(),
+                                        render_projection.GetScreenDistanceMeters(),
                                         v, visible);
   v.draw_intercepts();
 
-  AirspaceOutlineRenderer outline_renderer(canvas, projection,
+  AirspaceOutlineRenderer outline_renderer(canvas, render_projection,
                                            SettingsMap().bAirspaceBlackOutline);
-  airspace_database->visit_within_range(projection.GetPanLocation(),
-                                        projection.GetScreenDistanceMeters(),
+  airspace_database->visit_within_range(render_projection.GetPanLocation(),
+                                        render_projection.GetScreenDistanceMeters(),
                                         outline_renderer, visible);
 
   m_airspace_intersections = awc.get_locations();
