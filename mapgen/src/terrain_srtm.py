@@ -1,6 +1,7 @@
 import os
 import math
 import subprocess
+import urllib
 
 from georect import GeoRect
 from zipfile import ZipFile
@@ -8,6 +9,8 @@ from zipfile import ZipFile
 cmd_gdal_merge = "gdal_merge.py"
 cmd_gdal_warp = "gdalwarp"
 cmd_geojasper = "geojasper"
+#gather_from_server = None
+gather_from_server = "ftp://xftp.jrc.it/pub/srtmV4/tiff/"
 
 '''
  1) Gather tiles
@@ -35,6 +38,13 @@ def __gather_tile(dir_data, dir_temp, lat, lon):
     if os.path.exists(os.path.join(dir_data, filename + ".tif")):
         print "Tile " + filename + " found!"
         return os.path.join(dir_data, filename + ".tif")
+
+    # if the ZIP file doesn't exist in the data folder try to download it
+    if gather_from_server != None:
+        if not os.path.exists(os.path.join(dir_data, filename + ".zip")):
+            print "Downloading tile " + filename + " from the internet ..."
+            urllib.urlretrieve(gather_from_server + filename + ".zip",
+                               os.path.join(dir_data, filename + ".zip"))
 
     # check if the ZIP file exists in the data folder
     if not os.path.exists(os.path.join(dir_data, filename + ".zip")):
