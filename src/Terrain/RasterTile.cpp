@@ -136,6 +136,10 @@ RasterTileCache::SetTile(unsigned index,
   if (index >= MAX_RTC_TILES)
     return;
 
+  if (!segments.empty() && segments.last().tile < 0)
+    /* link current marker segment with this tile */
+    segments.last().tile = index;
+
   tiles[index].set(xstart, ystart, xend, yend);
 }
 
@@ -235,6 +239,7 @@ RasterTileCache::Reset()
   width = 0;
   height = 0;
   initialised = false;
+  segments.clear();
   scan_overview = true;
 
   Overview.reset();
@@ -261,6 +266,59 @@ RasterTileCache::SetInitialised(bool val)
     return;
   }
   initialised = val;
+}
+
+gcc_pure
+const RasterTileCache::MarkerSegmentInfo *
+RasterTileCache::FindMarkerSegment(long file_offset) const
+{
+  for (const MarkerSegmentInfo *p = segments.begin(); p < segments.end(); ++p)
+    if (p->file_offset >= file_offset)
+      return p;
+
+  return NULL;
+}
+
+long
+RasterTileCache::SkipMarkerSegment(long file_offset) const
+{
+  if (scan_overview)
+    /* use all segments when loading the overview */
+    return 0;
+
+  const MarkerSegmentInfo *segment = FindMarkerSegment(file_offset);
+  if (segment == NULL)
+  if (segment == NULL)
+    /* past the end of the recorded segment list; shouldn't happen */
+    return 0;
+
+  long skip_to = segment->file_offset;
+  while (segment->tile >= 0 && !tiles[segment->tile].is_requested()) {
+    ++segment;
+    if (segment >= segments.end())
+      /* last segment is hidden; shouldn't happen either, because we
+         expect EOC there */
+      break;
+
+    skip_to = segment->file_offset;
+  }
+
+  return skip_to - file_offset;
+}
+
+void
+RasterTileCache::MarkerSegment(long file_offset, unsigned id)
+{
+  if (!scan_overview || segments.full())
+    return;
+
+  int tile = -1;
+  if (id == 0xff93 && !segments.empty())
+    /* this SOD segment belongs to the same tile as the preceding SOT
+       segment */
+    tile = segments.last().tile;
+
+  segments.append(MarkerSegmentInfo(file_offset, tile));
 }
 
 extern RasterTileCache *raster_tile_current;

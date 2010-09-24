@@ -4,6 +4,7 @@
 #include "Terrain/RasterBuffer.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/ActiveList.hpp"
+#include "Util/StaticArray.hpp"
 
 #include <stddef.h>
 
@@ -68,6 +69,25 @@ class RasterTileCache : private NonCopyable {
   static const unsigned MAX_RTC_TILES = 4096;
   static const unsigned RTC_SUBSAMPLING = 16;
 
+  struct MarkerSegmentInfo {
+    MarkerSegmentInfo() {}
+    MarkerSegmentInfo(long _file_offset, int _tile=-1)
+      :file_offset(_file_offset), tile(_tile) {}
+
+    /**
+     * The position of this marker segment within the file.
+     */
+    long file_offset;
+
+    /**
+     * The associated tile number.  -1 if this segment does not belong
+     * to a tile.
+     */
+    int tile;
+  };
+
+  StaticArray<MarkerSegmentInfo, 8192> segments;
+
 public:
   RasterTileCache()
     :scan_overview(true) {
@@ -95,6 +115,15 @@ public:
 
   void Reset();
   void SetInitialised(bool val);
+
+private:
+  gcc_pure
+  const MarkerSegmentInfo *
+  FindMarkerSegment(long file_offset) const;
+
+public:
+  long SkipMarkerSegment(long file_offset) const;
+  void MarkerSegment(long file_offset, unsigned id);
 
   bool TileRequest(unsigned index);
 

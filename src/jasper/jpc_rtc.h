@@ -5,6 +5,9 @@
 extern "C" {
 #endif
 
+  long jas_rtc_SkipMarkerSegment(long file_offset);
+  void jas_rtc_MarkerSegment(long file_offset, unsigned id);
+
   void jas_rtc_SetTile(unsigned index,
 		       int xstart, int ystart, int xend, int yend);
   bool jas_rtc_TileRequest(unsigned index);

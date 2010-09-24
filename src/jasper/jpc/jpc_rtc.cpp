@@ -14,6 +14,14 @@ static void SetNumTiles(unsigned num) {
 
 extern "C" {
 
+  long jas_rtc_SkipMarkerSegment(long file_offset) {
+    return raster_tile_current->SkipMarkerSegment(file_offset);
+  }
+
+  void jas_rtc_MarkerSegment(long file_offset, unsigned id) {
+    return raster_tile_current->MarkerSegment(file_offset, id);
+  }
+
   void jas_rtc_stepprogress(void) {
     StepProgressDialog();
   }
