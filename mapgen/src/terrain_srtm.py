@@ -2,6 +2,7 @@ import os
 import math
 import subprocess
 import urllib
+import socket
 
 from georect import GeoRect
 from zipfile import ZipFile
@@ -47,6 +48,7 @@ def __gather_tile(dir_data, dir_temp, lat, lon):
     if gather_from_server != None:
         if not os.path.exists(os.path.join(dir_data, filename + ".zip")):
             print "Downloading tile " + filename + " from the internet ..."
+            socket.setdefaulttimeout(10)
             urllib.urlretrieve(gather_from_server + filename + ".zip",
                                os.path.join(dir_data, filename + ".zip"))
 
