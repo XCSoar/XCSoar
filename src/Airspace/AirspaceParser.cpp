@@ -817,8 +817,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
       *comment = _T('\0');
 
     // Skip empty line
-    unsigned linelength = _tcslen(line);
-    if (linelength < 1)
+    if (string_is_empty(line))
       continue;
 
     if (filetype == ftUnknown) {
