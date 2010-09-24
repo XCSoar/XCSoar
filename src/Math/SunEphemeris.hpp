@@ -40,8 +40,6 @@ Copyright_License {
 
 #include "Compiler.h"
 
-struct NMEA_INFO;
-struct DERIVED_INFO;
 struct GeoPoint;
 struct BrokenDateTime;
 
