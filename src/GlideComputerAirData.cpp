@@ -923,7 +923,7 @@ void
 GlideComputerAirData::ProcessSun()
 {
   sun.CalcSunTimes(Basic().Location, Basic().DateTime,
-                   GetUTCOffset() / 3600);
+                   fixed(GetUTCOffset()) / 3600);
   SetCalculated().TimeSunset = fixed(sun.TimeOfSunSet);
 }
 

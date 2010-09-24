@@ -75,10 +75,18 @@ equals(const fixed a, int b)
   return equals(a, fixed(b));
 }
 
+#ifdef FIXED_MATH
 static inline bool
 between(double x, double a, double b)
 {
   return x >= a && x <= b;
+}
+#endif
+
+static inline bool
+between(fixed x, double a, double b)
+{
+  return x >= fixed(a) && x <= fixed(b);
 }
 
 static inline bool

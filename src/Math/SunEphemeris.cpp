@@ -42,16 +42,13 @@ Copyright_License {
 */
 
 #include "Math/SunEphemeris.hpp"
-#include "Math/Constants.h"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "DateTime.hpp"
 
 // Sun radius in degrees (?)
-#define SUN_DIAMETER 0.53
+#define SUN_DIAMETER fixed(0.53)
 // Atmospheric refraction degrees
-#define AIR_REFRACTION 34.0/60.0
-
-#include <math.h>
+#define AIR_REFRACTION fixed(34.0/60.0)
 
 /**
  * Get the days to J2000
@@ -63,14 +60,14 @@ Copyright_License {
  * @return days to J2000
  * @see http://www.sci.fi/~benefon/azimalt.cpp
  */
-double
-SunEphemeris::FNday(int y, int m, int d, float h)
+fixed
+SunEphemeris::FNday(int y, int m, int d, fixed h)
 {
   long int luku = -7 * (y + (m + 9) / 12) / 4 + 275 * m / 9 + d;
   // type casting necessary on PC DOS and TClite to avoid overflow
   luku += (long int)y * 367;
 
-  return (double)luku - 730531.5 + h / 24.0;
+  return fixed(luku) - fixed(730531.5) + h / 24;
 }
 
 /**
@@ -79,14 +76,14 @@ SunEphemeris::FNday(int y, int m, int d, float h)
  * @return an angle in the range 0 to 2*PI
  * @see http://www.sci.fi/~benefon/azimalt.cpp
  */
-double
-SunEphemeris::FNrange(double x)
+fixed
+SunEphemeris::FNrange(fixed x)
 {
-  const double b = 0.5 * x / M_PI;
-  double a = 2.0 * M_PI * (b - (long)(b));
+  const fixed b = x / 2 / fixed_pi;
+  fixed a = fixed_two_pi * (b - trunc(b));
 
-  if (a < 0)
-    a = 2.0 * M_PI + a;
+  if (negative(a))
+    a = fixed_two_pi + a;
 
   return a;
 }
@@ -98,24 +95,24 @@ SunEphemeris::FNrange(double x)
  * @return The hourangle
  */
 // TODO TB: find explanations/links for this and following
-double
-SunEphemeris::f0(double lat, double declin)
+fixed
+SunEphemeris::f0(fixed lat, fixed declin)
 {
-  double fo, dfo;
+  fixed fo, dfo;
 
   // Correction: different sign at southern hemisphere
-  dfo = DEG_TO_RAD * (0.5 * SUN_DIAMETER + AIR_REFRACTION);
+  dfo = fixed_deg_to_rad * (SUN_DIAMETER / 2 + AIR_REFRACTION);
 
-  if (lat < 0.0)
+  if (negative(lat))
     dfo = -dfo;
 
-  fo = tan(declin + dfo) * tan(lat * DEG_TO_RAD);
+  fo = tan(declin + dfo) * tan(lat * fixed_deg_to_rad);
 
-  if (fo > 0.99999)
+  if (fo > fixed(0.99999))
     // to avoid overflow
-    fo = 1.0;
+    fo = fixed_one;
 
-  fo = asin(fo) + M_PI / 2.0;
+  fo = asin(fo) + fixed_half_pi;
 
   return fo;
 }
@@ -126,24 +123,24 @@ SunEphemeris::f0(double lat, double declin)
  * @param declin Declination
  * @return The hourangle for twilight times
  */
-double
-SunEphemeris::f1(double lat, double declin)
+fixed
+SunEphemeris::f1(fixed lat, fixed declin)
 {
-  double fi, df1;
+  fixed fi, df1;
 
   // Correction: different sign at southern hemisphere
-  df1 = DEG_TO_RAD * 6.0;
+  df1 = fixed_deg_to_rad * 6;
 
-  if (lat < 0.0)
+  if (negative(lat))
     df1 = -df1;
 
-  fi = tan(declin + df1) * tan(lat * DEG_TO_RAD);
+  fi = tan(declin + df1) * tan(lat * fixed_deg_to_rad);
 
-  if (fi > 0.99999)
+  if (fi > fixed(0.99999))
     // to avoid overflow
-    fi = 1.0;
+    fi = fixed_one;
 
-  fi = asin(fi) + M_PI / 2.0;
+  fi = asin(fi) + fixed_half_pi;
 
   return fi;
 }
@@ -152,18 +149,20 @@ SunEphemeris::f1(double lat, double declin)
  * Find the ecliptic longitude of the Sun
  * @return The ecliptic longitude of the Sun
  */
-double
-SunEphemeris::FNsun(double d)
+fixed
+SunEphemeris::FNsun(fixed d)
 {
   //   mean longitude of the Sun
-  L = FNrange(280.461 * DEG_TO_RAD + .9856474 * DEG_TO_RAD * d);
+  L = FNrange(fixed_deg_to_rad * (fixed(280.461) +
+                                  fixed(.9856474) * d));
 
   //   mean anomaly of the Sun
-  g = FNrange(357.528 * DEG_TO_RAD + .9856003 * DEG_TO_RAD * d);
+  g = FNrange(fixed_deg_to_rad * (fixed(357.528) +
+                                  fixed(.9856003) * d));
 
   //   Ecliptic longitude of the Sun
-  return FNrange(L + 1.915 * DEG_TO_RAD * sin(g) + .02 * DEG_TO_RAD
-      * sin(2 * g));
+  return FNrange(L + fixed(1.915) * fixed_deg_to_rad * sin(g) +
+                 fixed(.02) * fixed_deg_to_rad * sin(2 * g));
 }
 
 /**
@@ -175,14 +174,14 @@ SunEphemeris::FNsun(double d)
  * @param TimeZone The timezone
  * @return Sunset time
  */
-double
+fixed
 SunEphemeris::CalcSunTimes(const GeoPoint &Location,
                            const BrokenDateTime &date_time,
-                           const double TimeZone)
+                           const fixed TimeZone)
 {
   //float intz;
-  double DaysToJ2000, Lambda;
-  double Obliquity, Alpha, Delta, LL, equation, HourAngle, HourAngleTwilight, TwilightHours;
+  fixed DaysToJ2000, Lambda;
+  fixed Obliquity, Alpha, Delta, LL, equation, HourAngle, HourAngleTwilight, TwilightHours;
   int Year, Month, Day, Hour;
 
   // testing
@@ -195,13 +194,14 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
   Day = date_time.day;
   Hour = date_time.hour % 24;
 
-  DaysToJ2000 = FNday(Year, Month, Day, (float)Hour);
+  DaysToJ2000 = FNday(Year, Month, Day, fixed(Hour));
 
   // Use FNsun to find the ecliptic longitude of the Sun
   Lambda = FNsun(DaysToJ2000);
 
   // Obliquity of the ecliptic
-  Obliquity = 23.439 * DEG_TO_RAD - .0000004 * DEG_TO_RAD * DaysToJ2000;
+  Obliquity = fixed(23.439) * fixed_deg_to_rad
+    - fixed(.0000004) * fixed_deg_to_rad * DaysToJ2000;
 
   // Find the RA and DEC of the Sun
   Alpha = atan2(cos(Obliquity) * sin(Lambda), cos(Lambda));
@@ -210,10 +210,10 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
   // Find the Equation of Time in minutes
   // Correction suggested by David Smith
   LL = L - Alpha;
-  if (L < M_PI)
-    LL += 2.0 * M_PI;
+  if (L < fixed_pi)
+    LL += fixed_two_pi;
 
-  equation = 1440.0 * (1.0 - LL / M_PI / 2.0);
+  equation = fixed(1440) * (fixed_one - LL / fixed_pi / 2);
 
   HourAngle = f0(Location.Latitude.value_degrees(), Delta);
   HourAngleTwilight = f1(Location.Latitude.value_degrees(), Delta);
@@ -221,41 +221,41 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
   // length of twilight in radians
   TwilightHours = HourAngleTwilight - HourAngle;
   // length of twilight in hours
-  TwilightHours = 12.0 * TwilightHours / M_PI;
+  TwilightHours = 12 * TwilightHours / fixed_pi;
 
   //printf("ha= %.2f   hb= %.2f \n",ha,hb);
 
   // Conversion of angle to hours and minutes
-  DayLength = RAD_TO_DEG * HourAngle / 7.5;
+  DayLength = fixed_rad_to_deg * HourAngle / fixed(7.5);
 
-  if (DayLength < 0.0001)
+  if (DayLength < fixed(0.0001))
     // arctic winter
-    DayLength = 0.0;
+    DayLength = fixed_zero;
 
-  TimeOfSunRise = 12.0 - 12.0 * HourAngle / M_PI + TimeZone
-    - (double)Location.Longitude.value_degrees() / 15.0 + equation / 60.0;
+  TimeOfSunRise = fixed(12) - fixed(12) * HourAngle / fixed_pi + TimeZone
+    - Location.Longitude.value_degrees() / 15 + equation / 60;
 
-  TimeOfSunSet = 12.0 + 12.0 * HourAngle / M_PI + TimeZone
-    - (double)Location.Longitude.value_degrees() / 15.0 + equation / 60.0;
+  TimeOfSunSet = fixed(12) + fixed(12) * HourAngle / fixed_pi + TimeZone
+    - Location.Longitude.value_degrees() / 15 + equation / 60;
 
-  TimeOfNoon = TimeOfSunRise + 12.0 * HourAngle / M_PI;
-  altmax = 90.0 + Delta * RAD_TO_DEG - (double)Location.Latitude.value_degrees();
+  TimeOfNoon = TimeOfSunRise + fixed(12) * HourAngle / fixed_pi;
+  altmax = fixed(90) + Delta * fixed_rad_to_deg - Location.Latitude.value_degrees();
 
   // Correction for southern hemisphere suggested by David Smith
   // to express altitude as degrees from the N horizon
-  if ((double)Location.Latitude.value_degrees() < Delta * RAD_TO_DEG)
-    altmax = 180.0 - altmax;
+  if (Location.Latitude.value_degrees() < Delta * fixed_rad_to_deg)
+    altmax = fixed(180) - altmax;
 
   // morning twilight begin
   MorningTwilight = TimeOfSunRise - TwilightHours;
   // evening twilight end
   EveningTwilight = TimeOfSunSet + TwilightHours;
 
-  if (TimeOfSunRise > 24.0)
-    TimeOfSunRise -= 24.0;
+  if (TimeOfSunRise > fixed(24))
+    TimeOfSunRise -= fixed(24);
 
-  if (TimeOfSunSet > 24.0)
-    TimeOfSunSet -= 24.0;
+  if (TimeOfSunSet > fixed(24))
+    TimeOfSunSet -= fixed(24);
 
   // return TimeOfSunSet since this is most commonly what is requested
   return TimeOfSunSet;

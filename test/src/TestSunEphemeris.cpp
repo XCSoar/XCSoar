@@ -55,7 +55,7 @@ int main(int argc, char **argv)
   dt.second = 12;
 
   SunEphemeris sun;
-  double sunset = sun.CalcSunTimes(location, dt, 2.0);
+  fixed sunset = sun.CalcSunTimes(location, dt, fixed_two);
 
   assert(between(sunset, 19.36, 19.40));
   assert(between(sun.MorningTwilight, 6.88, 6.9));

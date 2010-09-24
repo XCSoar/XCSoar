@@ -278,7 +278,8 @@ protected:
     /// @todo should be destination location
 
     fixed sunsettime(sun.CalcSunTimes(cmp.Basic().Location,
-                                      cmp.Basic().DateTime, GetUTCOffset() / 3600));
+                                      cmp.Basic().DateTime,
+                                      fixed(GetUTCOffset()) / 3600));
     fixed d1((res.TimeElapsed + fixed(DetectCurrentTime(&cmp.Basic()))) / 3600);
     fixed d0(DetectCurrentTime(&cmp.Basic()) / 3600);
 

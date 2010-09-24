@@ -38,6 +38,7 @@ Copyright_License {
 #ifndef SUN_EPHEMERIS_HPP
 #define SUN_EPHEMERIS_HPP
 
+#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 struct GeoPoint;
@@ -47,29 +48,29 @@ struct BrokenDateTime;
  * Sun ephemeris model, used largely for calculations of sunset times
  */
 class SunEphemeris {
-  double L, g, DayLength;
+  fixed L, g, DayLength;
 
   gcc_const
-  static double FNday(int y, int m, int d, float h);
+  static fixed FNday(int y, int m, int d, fixed h);
 
   gcc_const
-  static double FNrange (double x);
+  static fixed FNrange(fixed x);
 
   gcc_const
-  static double f0(double lat, double declin);
+  static fixed f0(fixed lat, fixed declin);
 
   gcc_const
-  static double f1(double lat, double declin);
+  static fixed f1(fixed lat, fixed declin);
 
   gcc_pure
-  double FNsun(double d);
+  fixed FNsun(fixed d);
 
  public:
-  double MorningTwilight, altmax, TimeOfNoon, TimeOfSunSet, TimeOfSunRise, EveningTwilight;
+  fixed MorningTwilight, altmax, TimeOfNoon, TimeOfSunSet, TimeOfSunRise, EveningTwilight;
 
-  double CalcSunTimes(const GeoPoint &location,
-                      const BrokenDateTime &date_time,
-                      double TimeZone);
+  fixed CalcSunTimes(const GeoPoint &location,
+                     const BrokenDateTime &date_time,
+                     fixed TimeZone);
 };
 
 #endif

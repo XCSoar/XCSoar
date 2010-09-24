@@ -584,7 +584,7 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   sunsettime = sun.CalcSunTimes
     (selected_waypoint->Location,
      XCSoarInterface::Basic().DateTime,
-     GetUTCOffset()/3600);
+     fixed(GetUTCOffset()) / 3600);
 
   sunsethours = (int)sunsettime;
   sunsetmins = (int)((sunsettime - sunsethours) * 60);
