@@ -264,6 +264,15 @@ public:
   bool negative() const;
 
   gcc_pure
+  fixed trunc() const {
+    value_t x = m_nVal;
+    if (x < 0)
+      x += resolution - 1;
+    return fixed(fixed::internal(),
+                 x & ((int64_t)-1 << resolution_shift));
+  }
+
+  gcc_pure
   fixed floor() const;
 
   gcc_pure
@@ -720,6 +729,11 @@ gcc_pure
 inline fixed log(fixed const& x)
 {
   return x.log();
+}
+
+inline fixed trunc(fixed x)
+{
+  return x.trunc();
 }
 
 inline fixed floor(fixed const& x)
