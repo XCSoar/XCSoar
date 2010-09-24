@@ -65,7 +65,7 @@ $(TARGET_BIN_DIR)/01_test_tap$(TARGET_EXEEXT): $(TEST_SRC_DIR)/01_test_tap.c | $
 	gcc -o $@ $<
 
 TEST_NAMES = \
-	TestAngle TestEarth \
+	TestAngle TestEarth TestSunEphemeris \
 	TestRadixTree \
 	TestDriver \
 	TestWayPointFile
@@ -86,6 +86,15 @@ TEST_EARTH_SOURCES = \
 TEST_EARTH_OBJS = $(call SRC_TO_OBJ,$(TEST_EARTH_SOURCES))
 TEST_EARTH_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestEarth$(TARGET_EXEEXT): $(TEST_EARTH_OBJS) $(TEST_EARTH_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_SUN_EPHEMERIS_SOURCES = \
+	$(SRC)/Math/SunEphemeris.cpp \
+	$(TEST_SRC_DIR)/TestSunEphemeris.cpp
+TEST_SUN_EPHEMERIS_OBJS = $(call SRC_TO_OBJ,$(TEST_SUN_EPHEMERIS_SOURCES))
+TEST_SUN_EPHEMERIS_LDADD = $(MATH_LIBS)
+$(TARGET_BIN_DIR)/TestSunEphemeris$(TARGET_EXEEXT): $(TEST_SUN_EPHEMERIS_OBJS) $(TEST_SUN_EPHEMERIS_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 

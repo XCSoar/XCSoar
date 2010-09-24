@@ -35,62 +35,34 @@
 }
 */
 
-#ifndef XCSOAR_TEST_UTIL_HPP
-#define XCSOAR_TEST_UTIL_HPP
+#include "Math/SunEphemeris.hpp"
+#include "Engine/Navigation/GeoPoint.hpp"
+#include "DateTime.hpp"
+#include "TestUtil.hpp"
 
-#include "Math/Angle.hpp"
+#include <assert.h>
 
-static inline bool
-is_zero(const fixed value)
+int main(int argc, char **argv)
 {
-  return (long)fabs(value * 10000) == 0;
+  const GeoPoint location(Angle::degrees(fixed(7.7061111111111114)),
+                          Angle::degrees(fixed(51.051944444444445)));
+  BrokenDateTime dt;
+  dt.year = 2010;
+  dt.month = 9;
+  dt.day = 24;
+  dt.hour = 8;
+  dt.minute = 21;
+  dt.second = 12;
+
+  SunEphemeris sun;
+  double sunset = sun.CalcSunTimes(location, dt, 2.0);
+
+  assert(between(sunset, 19.36, 19.40));
+  assert(between(sun.MorningTwilight, 6.88, 6.9));
+  assert(between(sun.TimeOfNoon, 13.3, 13.4));
+  assert(between(sun.TimeOfSunSet, 19.36, 19.40));
+  assert(between(sun.TimeOfSunRise, 7.32, 7.41));
+  assert(between(sun.EveningTwilight, 19.81, 19.82));
+
+  return 0;
 }
-
-static inline bool
-is_one(const fixed value)
-{
-  return is_zero(value - fixed_one);
-}
-
-static inline bool
-equals(const fixed a, const fixed b)
-{
-  if (is_zero(a) || is_zero(b))
-    return is_zero(a) && is_zero(b);
-
-  return is_one(a / b);
-}
-
-#ifdef FIXED_MATH
-static inline bool
-equals(const fixed a, double b)
-{
-  return equals(a, fixed(b));
-}
-#endif
-
-static inline bool
-equals(const fixed a, int b)
-{
-  return equals(a, fixed(b));
-}
-
-static inline bool
-between(double x, double a, double b)
-{
-  return x >= a && x <= b;
-}
-
-static inline bool
-equals(const Angle a, int b)
-{
-  return equals(a.value_degrees(), fixed(b));
-}
-
-static inline bool
-equals(const Angle a, double b)
-{
-  return equals(a.value_degrees(), fixed(b));
-}
-
-#endif
