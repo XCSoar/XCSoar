@@ -27,3 +27,7 @@ class GeoRect:
                 "R: " + str(self.right) + ", " +
                 "T: " + str(self.top) + ", " +
                 "B: " + str(self.bottom))
+    
+    def Inside(self, lat, lon):
+        return (lat.between(self.bottom, self.top) and 
+                lon.between(self.left, self.right))
