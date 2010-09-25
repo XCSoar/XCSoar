@@ -51,7 +51,7 @@ PanelControl::PanelControl(ContainerControl &parent,
 void
 PanelControl::on_paint(Canvas &canvas)
 {
-  canvas.clear(GetBackBrush());
+  canvas.clear(GetBackColor());
 
   ContainerControl::on_paint(canvas);
 }

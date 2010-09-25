@@ -74,7 +74,7 @@ WndFrame::GetTextHeight()
 void
 WndFrame::on_paint(Canvas &canvas)
 {
-  canvas.clear(GetBackBrush());
+  canvas.clear(GetBackColor());
 
   if (mCaption[0] == 0)
     return;

@@ -75,7 +75,6 @@ KeyTimer(bool isdown, unsigned thekey)
 WindowControl::WindowControl() :
     mColorBack(Color::WHITE),
     mColorFore(Color::BLACK),
-    mhBrushBk(mColorBack),
     mhFont(&Fonts::Map),
     mHelpText(NULL),
     mOnHelpCallback(NULL)
@@ -141,7 +140,6 @@ WindowControl::SetBackColor(Color Value)
 
   if (mColorBack != Value) {
     mColorBack = Value;
-    mhBrushBk.set(mColorBack);
     invalidate();
   }
 

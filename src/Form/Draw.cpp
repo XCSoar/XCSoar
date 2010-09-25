@@ -55,7 +55,7 @@ WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerControl &parent,
 void
 WndOwnerDrawFrame::on_paint(Canvas &canvas)
 {
-  canvas.clear(GetBackBrush());
+  canvas.clear(GetBackColor());
 
   if (mOnPaintCallback == NULL)
     return;

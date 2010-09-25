@@ -402,11 +402,10 @@ WndProperty::on_paint(Canvas &canvas)
 {
   /* background and selector */
   if (edit.has_focus()) {
-    const Brush brush(GetBackColor().highlight());
-    canvas.clear(brush);
+    canvas.clear(GetBackColor().highlight());
     PaintSelector(canvas, get_client_rect());
   } else
-    canvas.clear(GetBackBrush());
+    canvas.clear(GetBackColor());
 
   SIZE tsize;
   POINT org;

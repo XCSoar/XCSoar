@@ -149,14 +149,6 @@ public:
   }
 
   /**
-   * Returns the brush for painting the background
-   * @return The brush for painting the background
-   */
-  const Brush &GetBackBrush() const {
-    return mhBrushBk;
-  }
-
-  /**
    * Returns the Caption/Text of the Control
    * @return The Caption/Text of the Control
    */
@@ -189,9 +181,6 @@ private:
   Color mColorBack;
   /** Foreground color */
   Color mColorFore;
-
-  /** Brush for painting the background */
-  Brush mhBrushBk;
 
   /** Font of the Control */
   const Font *mhFont;
