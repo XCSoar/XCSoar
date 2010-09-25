@@ -8,8 +8,13 @@
 #include "Util/StaticArray.hpp"
 
 #include <stddef.h>
+#include <stdio.h>
 
 class RasterTile : private NonCopyable {
+  struct MetaData {
+    unsigned int xstart, ystart, xend, yend;
+  };
+
   unsigned int xstart, ystart, xend, yend;
   unsigned int width, height;
   bool request;
@@ -34,9 +39,16 @@ public:
     height = yend - ystart;
   }
 
+  bool defined() const {
+    return width > 0 && height > 0;
+  }
+
   bool is_requested() const {
     return request;
   }
+
+  bool SaveCache(FILE *file) const;
+  bool LoadCache(FILE *file);
 
   bool CheckTileVisibility(const int view_x, const int view_y);
 
@@ -85,6 +97,12 @@ class RasterTileCache : private NonCopyable {
     int tile;
   };
 
+  struct CacheHeader {
+    enum { VERSION = 0x1 };
+    unsigned version, width, height, num_marker_segments;
+    BoundsRectangle bounds;
+  };
+
   StaticArray<MarkerSegmentInfo, 8192> segments;
 
 public:
@@ -110,6 +128,9 @@ public:
   void LoadJPG2000(const char *path);
 
   bool LoadOverview(const char *path);
+
+  bool SaveCache(FILE *file) const;
+  bool LoadCache(FILE *file);
 
   void UpdateTiles(const char *path, int x, int y);
 

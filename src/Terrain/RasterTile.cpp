@@ -45,6 +45,30 @@ Copyright_License {
 using std::min;
 using std::max;
 
+
+bool
+RasterTile::SaveCache(FILE *file) const
+{
+  MetaData data;
+  data.xstart = xstart;
+  data.ystart = ystart;
+  data.xend = xend;
+  data.yend = yend;
+
+  return fwrite(&data, sizeof(data), 1, file) == 1;
+}
+
+bool
+RasterTile::LoadCache(FILE *file)
+{
+  MetaData data;
+  if (fread(&data, sizeof(data), 1, file) != 1)
+    return false;
+
+  set(data.xstart, data.ystart, data.xend, data.yend);
+  return true;
+}
+
 void
 RasterTile::Enable()
 {
@@ -347,4 +371,96 @@ RasterTileCache::UpdateTiles(const char *path, int x, int y)
     LoadJPG2000(path);
     PollTiles(x, y);
   }
+}
+
+bool
+RasterTileCache::SaveCache(FILE *file) const
+{
+  if (!initialised)
+    return false;
+
+  /* save metadata */
+  CacheHeader header;
+  header.version = CacheHeader::VERSION;
+  header.width = width;
+  header.height = height;
+  header.num_marker_segments = segments.size();
+  header.bounds = bounds;
+
+  if (fwrite(&header, sizeof(header), 1, file) != 1 ||
+      /* .. and segments */
+      fwrite(segments.begin(), sizeof(*segments.begin()), segments.size(), file) != segments.size())
+    return false;
+
+  /* save tiles */
+  unsigned i;
+  for (i = 0; i < MAX_RTC_TILES; ++i)
+    if (tiles[i].defined() &&
+        (fwrite(&i, sizeof(i), 1, file) != 1 ||
+         !tiles[i].SaveCache(file)))
+      return false;
+
+  i = -1;
+  if (fwrite(&i, sizeof(i), 1, file) != 1)
+    return false;
+
+  /* save overview */
+  size_t overview_size = Overview.get_width() * Overview.get_height();
+  if (fwrite(Overview.get_data(), sizeof(*Overview.get_data()),
+             overview_size, file) != overview_size)
+    return false;
+
+  /* done */
+  return true;
+}
+
+bool
+RasterTileCache::LoadCache(FILE *file)
+{
+  Reset();
+
+  /* load metadata */
+  CacheHeader header;
+  if (fread(&header, sizeof(header), 1, file) != 1 ||
+      header.version != CacheHeader::VERSION ||
+      header.width < 1024 || header.width > 1024 * 1024 ||
+      header.height < 1024 || header.height > 1024 * 1024 ||
+      header.num_marker_segments < 4 ||
+      header.num_marker_segments > segments.MAX_SIZE)
+    return false;
+
+  SetSize(header.width, header.height);
+  bounds = header.bounds;
+
+  /* load segments */
+  for (unsigned i = 0; i < header.num_marker_segments; ++i) {
+    MarkerSegmentInfo &segment = segments.append();
+    if (fread(&segment, sizeof(segment), 1, file) != 1)
+      return false;
+  }
+
+  /* load tiles */
+  unsigned i;
+  while (true) {
+    if (fread(&i, sizeof(i), 1, file) != 1)
+      return false;
+
+    if (i == (unsigned)-1)
+      break;
+
+    if (i >= MAX_RTC_TILES)
+      return false;
+
+    if (!tiles[i].LoadCache(file))
+      return false;
+  }
+
+  /* load overview */
+  size_t overview_size = Overview.get_width() * Overview.get_height();
+  if (fread(Overview.get_data(), sizeof(*Overview.get_data()),
+            overview_size, file) != overview_size)
+    return false;
+
+  SetInitialised(true);
+  return true;
 }

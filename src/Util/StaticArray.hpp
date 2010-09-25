@@ -39,6 +39,9 @@
  */
 template<class T, unsigned max>
 class StaticArray {
+public:
+  static const unsigned MAX_SIZE = max;
+
 protected:
   unsigned the_size;
   T data[max];
