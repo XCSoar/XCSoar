@@ -185,6 +185,7 @@ OnTargetClicked(WindowControl * Sender)
   Range = task.AdjustAATTargets(2.0);
   RefreshCalculator();
 #endif
+  dlgTarget();
   wf->show();
 }
 
