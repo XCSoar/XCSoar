@@ -102,6 +102,18 @@ public:
     return data + the_size;
   }
 
+  T &last() {
+    assert(the_size > 0);
+
+    return data[the_size - 1];
+  }
+
+  const T &last() const {
+    assert(the_size > 0);
+
+    return data[the_size - 1];
+  }
+
   bool contains(const T &value) const {
     return std::find(begin(), end(), value) != end();
   }
