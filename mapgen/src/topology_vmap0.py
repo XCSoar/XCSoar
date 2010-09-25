@@ -22,6 +22,14 @@ __layers = [["pop-miscellaneous-population-p", "mispopppop_point", "", "txt"],
             ["trans-railroad-l", "railrdltrans_line", "exs=28", "fco"],
             ["trans-road-l", "roadltrans_line", "rtt=14", "med"]]
 
+def __filter_maps(bounds, maps = __maps):
+    maps_filtered = []
+    for map in maps:
+        if bounds.Intersects(map[1]):
+            maps_filtered.append(map)
+        
+    return maps_filtered
+
 def __gather_map(dir_data, map_name):
     zip_file = os.path.join(dir_data, map_name + ".7z")
     if not os.path.exists(zip_file):
@@ -123,7 +131,8 @@ def Create(bounds, dir_data = "../data/", dir_temp = "../tmp/"):
     dir_data = os.path.abspath(os.path.join(dir_data, "vmap0"))
     dir_temp = os.path.abspath(dir_temp)
 
-    files = __create_layers(bounds, __maps, dir_data, dir_temp)
+    maps = __filter_maps(bounds)
+    files = __create_layers(bounds, maps, dir_data, dir_temp)
     files.append([__create_index_file(dir_temp), True])
 
     return files
