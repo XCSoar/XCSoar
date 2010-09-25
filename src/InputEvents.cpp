@@ -76,6 +76,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "MapWindowProjection.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Compatibility/string.h" /* for _ttoi() */
+#include "Language.hpp"
 
 #include <algorithm>
 #include <assert.h>
@@ -254,7 +255,7 @@ apply_defaults(const TCHAR *const* default_modes,
 
   while (default_labels->label != NULL) {
     InputEvents::makeLabel((InputEvents::mode)default_labels->mode,
-                           default_labels->label,
+                           gettext(default_labels->label),
                            default_labels->location, default_labels->event);
     ++default_labels;
   }

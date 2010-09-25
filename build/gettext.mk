@@ -7,6 +7,7 @@ GETTEXT_PACKAGE = xcsoar
 GETTEXT_SOURCES = $(XCSOAR_SOURCES) \
 	$(DRIVER_SOURCES)
 GETTEXT_DIALOGS = $(wildcard Data/Dialogs/*.xml)
+GETTEXT_EVENTS = Data/Input/default.xci
 PO_FILES = $(wildcard po/*.po)
 MO_FILES = $(patsubst po/%.po,$(OUT)/po/%.mo,$(PO_FILES))
 LINGUAS = $(patsubst po/%.po,%,$(PO_FILES))
@@ -28,7 +29,11 @@ $(OUT)/po/xml.pot: $(GETTEXT_DIALOGS) | $(OUT)/po/dirstamp
 	$(Q)$(PERL) $(topdir)/tools/xml2po.pl $^ >$@.tmp
 	$(Q)mv $@.tmp $@
 
-po/$(GETTEXT_PACKAGE).pot: $(OUT)/po/cpp.pot $(OUT)/po/xml.pot
+$(OUT)/po/event.pot: $(GETTEXT_EVENTS) | $(OUT)/include/dirstamp
+	$(Q)$(PERL) $(topdir)/tools/xci2po.pl $^ >$@.tmp
+	$(Q)mv $@.tmp $@
+
+po/$(GETTEXT_PACKAGE).pot: $(OUT)/po/cpp.pot $(OUT)/po/xml.pot $(OUT)/po/event.pot
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(MSGCAT) -o $@ $^
 
