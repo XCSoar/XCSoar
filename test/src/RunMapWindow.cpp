@@ -177,6 +177,7 @@ public:
     map.set_terrain(terrain);
 
     close_button.set(*this, _T("Close"), ID_CLOSE, 5, 5, 65, 25);
+    close_button.set_font(Fonts::Map);
     close_button.bring_to_top();
   }
 
