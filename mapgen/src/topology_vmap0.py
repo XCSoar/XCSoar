@@ -80,11 +80,11 @@ def __create_layer_from_map(bounds, layer, map, overwrite, dir_data, dir_temp):
 
     return True
 
-def __create_layer(bounds, layer, dir_data, dir_temp):
+def __create_layer(bounds, layer, maps, dir_data, dir_temp):
     print "Creating topology layer " + layer[1] + " ..."
 
-    for i in range(len(__maps)):
-        __create_layer_from_map(bounds, layer, __maps[i],
+    for i in range(len(maps)):
+        __create_layer_from_map(bounds, layer, maps[i],
                                 i == 0, dir_data, dir_temp)
 
     files = []
@@ -96,10 +96,10 @@ def __create_layer(bounds, layer, dir_data, dir_temp):
 
     return files
 
-def __create_layers(bounds, dir_data, dir_temp):
+def __create_layers(bounds, maps, dir_data, dir_temp):
     files = []
     for layer in __layers:
-        files.extend(__create_layer(bounds, layer, dir_data, dir_temp))
+        files.extend(__create_layer(bounds, layer, maps, dir_data, dir_temp))
 
     return files
 
@@ -119,7 +119,7 @@ def Create(bounds, dir_data = "../data/", dir_temp = "../tmp/"):
     dir_data = os.path.abspath(os.path.join(dir_data, "vmap0"))
     dir_temp = os.path.abspath(dir_temp)
 
-    files = __create_layers(bounds, dir_data, dir_temp)
+    files = __create_layers(bounds, __maps, dir_data, dir_temp)
     files.append([__create_index_file(dir_temp), True])
 
     return files
