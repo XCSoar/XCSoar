@@ -294,14 +294,13 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   MapWindow::register_class(hInstance);
 #endif
 
-  Fonts::Initialize(false);
-
   MapGfx.Initialise();
   MapGfx.InitialiseConfigured(blackboard.SettingsMap());
 
   TestWindow window;
   GenerateBlackboard(window.map);
   window.set(0, 0, 640, 480);
+  Fonts::Initialize(false);
   DrawThread::Draw(window.map);
   window.show();
 
