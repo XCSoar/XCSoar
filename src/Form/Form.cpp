@@ -209,11 +209,9 @@ WndForm::on_command(unsigned id, unsigned code)
   return false;
 }
 
-const Font *
+void
 WndForm::SetTitleFont(const Font &font)
 {
-  const Font *res = mhTitleFont;
-
   if (mhTitleFont != &font){
     // todo
     mhTitleFont = &font;
@@ -221,9 +219,6 @@ WndForm::SetTitleFont(const Font &font)
     invalidate();
     UpdateLayout();
   }
-
-  return res;
-
 }
 
 #ifndef ENABLE_SDL
@@ -423,8 +418,9 @@ WndForm::SetCaption(const TCHAR *Value)
   }
 }
 
-Color WndForm::SetBackColor(Color Value)
+void
+WndForm::SetBackColor(Color Value)
 {
   client_area.SetBackColor(Value);
-  return ContainerControl::SetBackColor(Value);
+  ContainerControl::SetBackColor(Value);
 }

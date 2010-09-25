@@ -224,7 +224,7 @@ public:
   }
 
   /** Set the font of the titlebar */
-  const Font *SetTitleFont(const Font &font);
+  void SetTitleFont(const Font &font);
 
   int ShowModal(bool bEnableMap = false);
 
@@ -238,7 +238,7 @@ public:
   virtual bool on_command(unsigned id, unsigned code);
 
   /** Set the background color of the window */
-  Color SetBackColor(Color Value);
+  void SetBackColor(Color Value);
 
   void SetKeyDownNotify(KeyDownNotifyCallback_t KeyDownNotify) {
     mOnKeyDownNotify = KeyDownNotify;

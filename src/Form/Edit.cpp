@@ -222,14 +222,11 @@ WndProperty::SetText(const TCHAR *Value)
   edit.set_text(Value);
 }
 
-const Font *
+void
 WndProperty::SetFont(const Font &Value)
 {
-  const Font *res = GetFont();
   WindowControl::SetFont(Value);
-
   edit.set_font(Value);
-  return res;
 }
 
 void

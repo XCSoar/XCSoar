@@ -131,7 +131,7 @@ public:
 
   void RefreshDisplay(void);
 
-  const Font *SetFont(const Font &font);
+  void SetFont(const Font &font);
 
 protected:
   virtual bool on_resize(unsigned width, unsigned height);

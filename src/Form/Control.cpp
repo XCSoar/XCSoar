@@ -107,43 +107,32 @@ WindowControl::SetCaption(const TCHAR *Value)
   }
 }
 
-const Font *
+void
 WindowControl::SetFont(const Font &Value)
 {
-  const Font *res = mhFont;
-
   if (mhFont != &Value) {
     // todo
     mhFont = &Value;
     invalidate();
   }
-  return res;
 }
 
-Color
+void
 WindowControl::SetForeColor(Color Value)
 {
-  Color res = mColorFore;
-
   if (mColorFore != Value) {
     mColorFore = Value;
     invalidate();
   }
-
-  return res;
 }
 
-Color
+void
 WindowControl::SetBackColor(Color Value)
 {
-  Color res = mColorBack;
-
   if (mColorBack != Value) {
     mColorBack = Value;
     invalidate();
   }
-
-  return res;
 }
 
 void
