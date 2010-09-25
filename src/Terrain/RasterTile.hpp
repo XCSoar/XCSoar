@@ -65,7 +65,6 @@ public:
 #define MAX_RTC_TILES 1024
 #define MAX_ACTIVE_TILES 16
 #define RTC_SUBSAMPLING 16U
-#define RTC_SUBSAMPLING_FINE (16*256)
 
 class RasterTileCache : private NonCopyable {
 public:
