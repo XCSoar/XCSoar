@@ -84,6 +84,8 @@
 #include "jpc_mqdec.h"
 #include "jpc_t2cod.h"
 
+#include "Compiler.h"
+
 /******************************************************************************\
 * Below are some ugly warts necessary to support packed packet headers.
 \******************************************************************************/
@@ -688,6 +690,7 @@ typedef struct {
 \******************************************************************************/
 
 /* Create a decoder segment object. */
+gcc_malloc
 jpc_dec_seg_t *jpc_seg_alloc(void);
 
 /* Destroy a decoder segment object. */

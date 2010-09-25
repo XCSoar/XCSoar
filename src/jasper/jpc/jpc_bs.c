@@ -85,6 +85,7 @@
 * Local function prototypes.
 \******************************************************************************/
 
+gcc_malloc
 static jpc_bitstream_t *jpc_bitstream_alloc(void);
 
 /******************************************************************************\
@@ -143,6 +144,7 @@ int jpc_bitstream_close(jpc_bitstream_t *bitstream)
 }
 
 /* Allocate a new bit stream. */
+gcc_malloc
 static jpc_bitstream_t *jpc_bitstream_alloc()
 {
 	jpc_bitstream_t *bitstream;

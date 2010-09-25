@@ -62,6 +62,8 @@
 #ifndef	JPC_MATH_H
 #define	JPC_MATH_H
 
+#include "Compiler.h"
+
 /******************************************************************************\
 * Includes
 \******************************************************************************/
@@ -90,10 +92,12 @@
 
 /* Calculate the bit position of the first leading one in a nonnegative
   integer. */
+gcc_const
 int jpc_firstone(int x);
 
 /* Calculate the integer quantity floor(log2(x)), where x is a positive
   integer. */
+gcc_const
 int jpc_floorlog2(int x);
 
 #endif

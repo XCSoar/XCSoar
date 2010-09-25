@@ -86,6 +86,8 @@
 #endif
 #include <jasper/jas_types.h>
 
+#include "Compiler.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -294,18 +296,23 @@ typedef struct {
 \******************************************************************************/
 
 /* Open a file as a stream. */
+gcc_malloc
 jas_stream_t *jas_stream_fopen(const char *filename, const char *mode);
 
 /* Open a memory buffer as a stream. */
+gcc_malloc
 jas_stream_t *jas_stream_memopen(char *buf, int bufsize);
 
 /* Open a file descriptor as a stream. */
+gcc_malloc
 jas_stream_t *jas_stream_fdopen(int fd, const char *mode);
 
 /* Open a stdio stream as a stream. */
+gcc_malloc
 jas_stream_t *jas_stream_reopen(const char *path, const char *mode, FILE *fp);
 
 /* Open a temporary file as a stream. */
+gcc_malloc
 jas_stream_t *jas_stream_tmpfile(void);
 
 /* Close a stream. */
@@ -388,6 +395,7 @@ int jas_stream_ungetc(jas_stream_t *stream, int c);
 \******************************************************************************/
 
 /* Is it possible to seek on this stream? */
+gcc_pure
 int jas_stream_isseekable(jas_stream_t *stream);
 
 /* Set the current position within the stream. */
