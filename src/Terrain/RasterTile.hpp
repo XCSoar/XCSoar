@@ -116,7 +116,6 @@ public:
   }
 
   void Reset();
-  void SetInitialised(bool val);
 
 private:
   gcc_pure
@@ -124,6 +123,8 @@ private:
   FindMarkerSegment(long file_offset) const;
 
 public:
+  /* callback methods for libjasper (via jas_rtc.cpp) */
+
   long SkipMarkerSegment(long file_offset) const;
   void MarkerSegment(long file_offset, unsigned id);
 
@@ -139,6 +140,10 @@ public:
   void SetLatLonBounds(double lon_min, double lon_max,
                        double lat_min, double lat_max);
   void SetTile(unsigned index, int xstart, int ystart, int xend, int yend);
+
+  void SetInitialised(bool val);
+
+public:
   bool PollTiles(int x, int y);
 
   short GetMaxElevation() const {
