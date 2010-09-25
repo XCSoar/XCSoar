@@ -111,12 +111,12 @@ class MapGenerator:
             print "failed! (Boundaries undefined!)"
             return False
 
-        terrain_file = terrain_srtm.Create(bounds, arcseconds_per_pixel,
+        terrain_files = terrain_srtm.Create(bounds, arcseconds_per_pixel,
                                            self.__dir_data, self.__dir_temp)
-        if terrain_file == None:
+        if terrain_files == None:
             return False
 
-        self.__files.append(terrain_file)
+        self.__files.extend(terrain_files)
         return True
 
     def SetBounds(self, bounds):

@@ -17,6 +17,8 @@ cmd_geojasper = "geojasper"
 gather_from_server = "ftp://xftp.jrc.it/pub/srtmV4/tiff/"
 #gather_from_server = "http://webbuster.dyndns.info/xcsoar/mapgen_data/terrain/srtm/"
 
+use_world_file = True
+
 '''
  1) Gather tiles
 '''
@@ -220,13 +222,17 @@ def __crop(dir_temp, input_file, rc):
 
     args = [cmd_gdal_warp,
             "-srcnodata", "-1",
-            "-dstnodata", "-1",
-            "-te", str(rc.left.value_degrees()),
-            str(rc.bottom.value_degrees()),
-            str(rc.right.value_degrees()),
-            str(rc.top.value_degrees()),
-            input_file,
-            output_file]
+            "-dstnodata", "-1"]
+    
+    if use_world_file == True:
+        args.extend(["-co", "TFW=YES"])
+    
+    args.extend(["-te", str(rc.left.value_degrees()),
+                str(rc.bottom.value_degrees()),
+                str(rc.right.value_degrees()),
+                str(rc.top.value_degrees()),
+                input_file,
+                output_file])
 
     p = subprocess.Popen(args)
     p.wait()
@@ -252,7 +258,7 @@ def __crop(dir_temp, input_file, rc):
         (???)
 '''
 def __convert(dir_temp, input_file, rc):
-    print "Converting terrain to GeoJP2 format ..."
+    print "Converting terrain to JP2 format ..."
     output_file = os.path.join(dir_temp, "terrain.jp2")
     if os.path.exists(output_file):
         os.unlink(output_file)
@@ -272,8 +278,16 @@ def __convert(dir_temp, input_file, rc):
 
     p = subprocess.Popen(args)
     p.wait()
+    
+    output = [[output_file, False]]
+    
+    world_file_tiff = os.path.join(dir_temp, "terrain.tfw")
+    world_file = os.path.join(dir_temp, "terrain.j2w")
+    if use_world_file and os.path.exists(world_file_tiff):
+        os.rename(world_file_tiff, world_file)
+        output.append([world_file, True])
 
-    return output_file
+    return output
 
 def __cleanup(dir_temp):
     for file in os.listdir(dir_temp):
@@ -294,8 +308,7 @@ def Create(bounds, arcseconds_per_pixel = 9.0,
     merged_file = __merge_tiles(dir_temp, tiles)
     resampled_file = __resample(dir_temp, merged_file, arcseconds_per_pixel)
     cropped_file = __crop(dir_temp, resampled_file, bounds)
-    converted_file = __convert(dir_temp, cropped_file, bounds)
+    final_files = __convert(dir_temp, cropped_file, bounds)
     __cleanup(dir_temp)
 
-    return [converted_file, False]
-
+    return final_files
