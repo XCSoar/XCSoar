@@ -57,17 +57,29 @@ class WaypointVisitorMap:
   public TaskPointConstVisitor,
   public TaskVisitor
 {
+  const MapWindowProjection &projection;
+  const SETTINGS_MAP &settings_map;
+  const SETTINGS_COMPUTER &settings_computer;
+  BitmapCanvas &bitmap_canvas;
+
 public:
-  WaypointVisitorMap(MapWindow &_map, Canvas &_canvas, const GlidePolar &polar):
-    map(_map),
-    aircraft_state(ToAircraftState(map.Basic())),
+  WaypointVisitorMap(const MapWindowProjection &_projection,
+                     const SETTINGS_MAP &_settings_map,
+                     const SETTINGS_COMPUTER &_settings_computer,
+                     const AIRCRAFT_STATE &_aircraft_state, Canvas &_canvas,
+                     BitmapCanvas &_bitmap_canvas,
+                     const GlidePolar &polar):
+    projection(_projection),
+    settings_map(_settings_map), settings_computer(_settings_computer),
+    bitmap_canvas(_bitmap_canvas),
+    aircraft_state(_aircraft_state),
     canvas(_canvas),
     glide_polar(polar),
-    labels(map.MapProjection().GetMapRect())
+    labels(projection.GetMapRect())
   {
     // if pan mode, show full names
-    pDisplayTextType = map.SettingsMap().DisplayTextType;
-    if (map.SettingsMap().EnablePan)
+    pDisplayTextType = settings_map.DisplayTextType;
+    if (settings_map.EnablePan)
       pDisplayTextType = DISPLAYNAME;
 
     _tcscpy(sAltUnit, Units::GetAltitudeName());
@@ -124,8 +136,6 @@ public:
   void
   DrawWaypoint(const Waypoint& way_point, bool in_task = false)
   {
-    const MapWindowProjection &projection = map.MapProjection();
-
     POINT sc;
     if (!projection.LonLat2ScreenIfVisible(way_point.Location, &sc))
       return;
@@ -138,7 +148,7 @@ public:
     if (in_task)
       text_mode.AsFlag.WhiteBold = 1;
 
-    bool do_write_label = in_task || (map.SettingsMap().DeclutterLabels < 2);
+    bool do_write_label = in_task || (settings_map.DeclutterLabels < 2);
 
     const MaskedIcon *icon = &MapGfx.SmallIcon;
 
@@ -146,22 +156,22 @@ public:
 
     if (way_point.is_landable()) {
 
-      const UnorderedTaskPoint t(way_point, map.SettingsComputer());
+      const UnorderedTaskPoint t(way_point, settings_computer);
       const GlideResult r =
         TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
 
       if (r.glide_reachable()) {
         text_mode.AsFlag.Reachable = 1;
 
-        if ((map.SettingsMap().DeclutterLabels < 1) || in_task) {
+        if ((settings_map.DeclutterLabels < 1) || in_task) {
           AltArrivalAGL = (int)Units::ToUserUnit(r.AltitudeDifference,
                                                  Units::AltitudeUnit);
 
           // show all reachable landing field altitudes unless we want a
           // decluttered screen.
         } 
-        if ((map.SettingsMap().DeclutterLabels < 2) || in_task) {
-          if (in_task || (map.SettingsMap().DeclutterLabels < 1))
+        if ((settings_map.DeclutterLabels < 2) || in_task) {
+          if (in_task || (settings_map.DeclutterLabels < 1))
             text_mode.AsFlag.Border = 1;
 
           // show all reachable landing field labels unless we want a
@@ -186,7 +196,7 @@ public:
         icon = &MapGfx.TurnPointIcon;
     }
 
-    icon->draw(canvas, map.get_bitmap_canvas(), sc.x, sc.y);
+    icon->draw(canvas, bitmap_canvas, sc.x, sc.y);
 
     if (pDisplayTextType == DISPLAYNAMEIFINTASK) {
       if (!in_task)
@@ -269,7 +279,6 @@ public:
   }
 
 private:
-  MapWindow &map;
   const AIRCRAFT_STATE aircraft_state;
   Canvas &canvas;
   int pDisplayTextType;
@@ -291,7 +300,9 @@ MapWindow::DrawWaypoints(Canvas &canvas, const RECT &MapRect)
   GlidePolar polar = get_glide_polar();
   polar.set_mc(min(Calculated().common_stats.current_risk_mc,
                    SettingsComputer().safety_mc));
-  WaypointVisitorMap v(*this, canvas, polar);
+  WaypointVisitorMap v(MapProjection(), SettingsMap(), SettingsComputer(),
+                       ToAircraftState(Basic()),
+                       canvas, bitmap_canvas, polar);
   way_points->visit_within_range(projection.GetPanLocation(),
                                  projection.GetScreenDistanceMeters(), v);
   if (task != NULL && SettingsMap().DisplayTextType == DISPLAYNAMEIFINTASK) {
