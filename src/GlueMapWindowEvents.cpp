@@ -157,12 +157,14 @@ GlueMapWindow::on_mouse_down(int x, int y)
   }
   else if (SettingsMap().EnablePan)
     drag_mode = DRAG_PAN;
-  else if (is_simulator() && !Basic().gps.Replay &&
-           compare_squared(projection.GetOrigAircraft().x -
-                           drag_start.x, projection.GetOrigAircraft().y -
-                           drag_start.y, Layout::Scale(30)) != 1)
-    drag_mode = DRAG_SIMULATOR;
-  else if (XCSoarInterface::SettingsComputer().EnableGestures) {
+  if (is_simulator() && !Basic().gps.Replay && drag_mode == DRAG_NONE)
+    if (!XCSoarInterface::SettingsComputer().EnableGestures ||
+        compare_squared(projection.GetOrigAircraft().x - x,
+                        projection.GetOrigAircraft().y - y,
+                        Layout::Scale(30)) != 1)
+        drag_mode = DRAG_SIMULATOR;
+  if (XCSoarInterface::SettingsComputer().EnableGestures &&
+      drag_mode == DRAG_NONE ) {
     gestures.Start(x, y, Layout::Scale(20));
     drag_mode = DRAG_GESTURE;
   }
