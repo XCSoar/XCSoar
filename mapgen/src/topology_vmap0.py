@@ -9,6 +9,7 @@ cmd_ogr2ogr = "ogr2ogr"
 cmd_7zip = "7za"
 #gather_from_server = None
 gather_from_server = "http://gis-lab.info/data/vmap0/"
+#gather_from_server = "http://webbuster.dyndns.info/xcsoar/mapgen_data/topo/vmap0/"
 
 __maps = ["eur", "noa", "sas", "soa"]
 __layers = [["pop-miscellaneous-population-p", "mispopppop_point", "", "txt"],
