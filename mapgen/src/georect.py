@@ -1,15 +1,26 @@
 from angle import Angle
 
 class GeoRect:
-    def __init__(self,
-                 left = Angle.degrees(0),
-                 right = Angle.degrees(0),
-                 top = Angle.degrees(0),
-                 bottom = Angle.degrees(0)):
-        self.left = left
-        self.right = right
-        self.top = top
-        self.bottom = bottom
+    def __init__(self, left = 0, right = 0, top = 0, bottom = 0):
+        if isinstance(left, Angle):
+            self.left = left
+        else:
+            self.left = Angle.degrees(left)
+            
+        if isinstance(right, Angle):
+            self.right = right
+        else:
+            self.right = Angle.degrees(right)
+
+        if isinstance(top, Angle):
+            self.top = top
+        else:
+            self.top = Angle.degrees(top)
+
+        if isinstance(bottom, Angle):
+            self.bottom = bottom
+        else:
+            self.bottom = Angle.degrees(bottom)
 
     def __str__(self):
         return ("L: " + str(self.left) + ", " +
