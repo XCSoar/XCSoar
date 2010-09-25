@@ -41,6 +41,9 @@ class MapDaemon:
         
         return job
     
+    def __check_job_lock_expired(self, file_lock):
+        return (time.time() - os.path.getctime(file_lock) > 60 * 60 * 2)
+    
     def __check_jobs(self):
         for file in os.listdir(self.__dir_jobs):
             dir_job = os.path.join(self.__dir_jobs, file)
@@ -49,6 +52,10 @@ class MapDaemon:
 
             file_job = os.path.join(dir_job, "job")
             if os.path.exists(file_job + ".lock"):
+                if self.__check_job_lock_expired(file_job + ".lock"):
+                    print "---------------------"
+                    print "Job lock expired (" + file_job + ".lock)"
+                    self.__delete_job(file_job)
                 continue
             
             if not os.path.exists(file_job):
