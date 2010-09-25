@@ -8,6 +8,10 @@
 #include <stddef.h>
 
 class RasterTile : private NonCopyable {
+  unsigned int xstart, ystart, xend, yend;
+  unsigned int width, height;
+  bool request;
+
   RasterBuffer buffer;
 
 public:
@@ -18,10 +22,6 @@ public:
     Disable();
   }
 
-  unsigned int xstart, ystart, xend, yend;
-  unsigned int width, height;
-  bool request;
-
   void set(unsigned _xstart, unsigned _ystart,
            unsigned _xend, unsigned _yend) {
     xstart = _xstart;
@@ -30,6 +30,10 @@ public:
     yend = _yend;
     width = xend - xstart;
     height = yend - ystart;
+  }
+
+  bool is_requested() const {
+    return request;
   }
 
   bool CheckTileVisibility(const int view_x, const int view_y);

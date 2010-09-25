@@ -170,7 +170,7 @@ RasterTileCache::TileRequest(int index)
     return false;
   }
 
-  if (!tiles[index].request)
+  if (!tiles[index].is_requested())
     return false;
 
   for (int i = 0; i < MAX_RTC_TILES; ++i)
