@@ -341,3 +341,12 @@ RasterTileCache::LoadOverview(const char *path)
 
   return initialised;
 }
+
+void
+RasterTileCache::UpdateTiles(const char *path, int x, int y)
+{
+  if (PollTiles(x, y)) {
+    LoadJPG2000(path);
+    PollTiles(x, y);
+  }
+}

@@ -109,6 +109,8 @@ public:
 
   bool LoadOverview(const char *path);
 
+  void UpdateTiles(const char *path, int x, int y);
+
   bool GetInitialised() const {
     return initialised;
   }
@@ -140,9 +142,10 @@ public:
 
   void SetInitialised(bool val);
 
-public:
+protected:
   bool PollTiles(int x, int y);
 
+public:
   short GetMaxElevation() const {
     return Overview.get_max();
   }

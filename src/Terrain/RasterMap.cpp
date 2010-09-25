@@ -79,10 +79,7 @@ RasterMap::SetViewCenter(const GeoPoint &location)
   int y = angle_to_pixel(location.Latitude, bounds.north, bounds.south,
                          raster_tile_cache.GetHeight());
 
-  if (raster_tile_cache.PollTiles(x, y)) {
-    raster_tile_cache.LoadJPG2000(path);
-    raster_tile_cache.PollTiles(x, y);
-  }
+  raster_tile_cache.UpdateTiles(path, x, y);
 }
 
 // accurate method
