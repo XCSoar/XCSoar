@@ -389,7 +389,7 @@ protected:
   Notify(void)
   {
     if (withinMargin)
-      Message::AddMessage(_("Start rules slightly violated\r\nbut within margin"));
+      Message::AddMessage(_("Start rules slightly violated\nbut within margin"));
     else
       Message::AddMessage(_("Start rules violated"));
   }

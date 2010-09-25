@@ -65,7 +65,7 @@ DeviceDeclare(DeviceDescriptor *dev, const Declaration &decl)
                   dev->GetName(), MB_OK| MB_ICONINFORMATION);
       DeclaredToDevice = true;
     } else {
-      MessageBoxX(_("Error occured,\r\nTask NOT Declared!"),
+      MessageBoxX(_("Error occured,\nTask NOT Declared!"),
                   dev->GetName(), MB_OK| MB_ICONERROR);
     }
   }
