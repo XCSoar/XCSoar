@@ -183,13 +183,12 @@ public:
   bool set_range(const fixed p, const bool force_if_current);
 
 /** 
- * Capability of this TaskPoint to have adjustable range (true for AAT unless it
- * is locked)
+ * Capability of this TaskPoint to have adjustable range (true for AAT)
  * 
  * @return True if task point has a target (can have range set)
  */
   bool has_target() const {
-    return !m_target_locked;
+    return true;
   };
 
 /** 
