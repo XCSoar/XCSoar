@@ -111,6 +111,14 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
   case DRAG_NONE:
     break;
 
+  case DRAG_TARGET:
+    if (isInSector(x, y)) {
+      drag_last.x = drag_last_valid_target.x = x;
+      drag_last.y = drag_last_valid_target.y = y;
+      invalidate();
+    }
+    return true;
+
   case DRAG_PAN:
     drag_last.x = x;
     drag_last.y = y;
@@ -144,7 +152,10 @@ GlueMapWindow::on_mouse_down(int x, int y)
   drag_start_geopoint = projection.Screen2LonLat(x, y);
   drag_last = drag_start;
 
-  if (SettingsMap().EnablePan)
+  if (SettingsMap().TargetPan) {
+    drag_mode = isClickOnTarget(drag_start) ? DRAG_TARGET : DRAG_NONE;
+  }
+  else if (SettingsMap().EnablePan)
     drag_mode = DRAG_PAN;
   else if (is_simulator() && !Basic().gps.Replay)
     drag_mode = DRAG_SIMULATOR;
@@ -216,6 +227,10 @@ GlueMapWindow::on_mouse_up(int x, int y)
   case DRAG_NONE:
     break;
 
+  case DRAG_TARGET:
+    TargetDragged(drag_last_valid_target.x, drag_last_valid_target.y);
+    break;
+
   case DRAG_PAN:
     if (compare_squared(drag_start.x - x, drag_start.y - y,
                         Layout::Scale(10)) == 1) {
@@ -274,18 +289,21 @@ GlueMapWindow::on_mouse_up(int x, int y)
     break;
   }
 
-  if(click_time < 1000) {
-    // click less then one second -> open nearest waypoint details
-    if (way_points != NULL &&
-        PopupNearestWaypointDetails(*way_points, drag_start_geopoint,
-                                    projection.DistancePixelsToMeters(Layout::Scale(10)),
-                                    true))
-      return true;
-  } else {
-    // click more then one second -> open nearest airspace details
-    if (airspace_database != NULL &&
-        AirspaceDetailsAtPoint(drag_start_geopoint))
-      return true;
+  if (!SettingsMap().TargetPan) {
+    if(click_time < 1000) {
+      // click less then one second -> open nearest waypoint details
+      if (way_points != NULL &&
+          PopupNearestWaypointDetails(*way_points, drag_start_geopoint,
+                                      projection.DistancePixelsToMeters(Layout::Scale(10)),
+                                      true))
+        return true;
+    }
+    else {
+      // click more then one second -> open nearest airspace details
+      if (airspace_database != NULL &&
+          AirspaceDetailsAtPoint(drag_start_geopoint))
+        return true;
+    }
   }
 
   return false;
@@ -394,7 +412,11 @@ GlueMapWindow::on_cancel_mode()
 void
 GlueMapWindow::on_paint(Canvas &canvas)
 {
-  if (drag_mode == DRAG_PAN) {
+
+  if (drag_mode == DRAG_TARGET) {
+    TargetPaintDrag(canvas, drag_last);
+  }
+  else if (drag_mode == DRAG_PAN) {
     /* quick redraw while scrolling the map with the mouse */
 
     canvas.null_pen();
