@@ -535,7 +535,6 @@ typedef struct {
 	jpc_pi_t *pi;
 
 	/* JMW hidden and caching */
-	int hidden;
 	int cache_index;
 
 } jpc_dec_tile_t;

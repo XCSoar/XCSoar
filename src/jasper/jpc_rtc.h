@@ -10,7 +10,6 @@ extern "C" {
 
   void jas_rtc_SetTile(unsigned index,
 		       int xstart, int ystart, int xend, int yend);
-  bool jas_rtc_TileRequest(unsigned index);
   bool jas_rtc_PollTiles(int viewx, int viewy);
   short* jas_rtc_GetImageBuffer(unsigned index);
   void jas_rtc_SetLatLonBounds(double lon_min, double lon_max, double lat_min, double lat_max);

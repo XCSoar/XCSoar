@@ -35,10 +35,6 @@ extern "C" {
     raster_tile_current->SetTile(index, xstart, ystart, xend, yend);
   }
 
-  bool jas_rtc_TileRequest(unsigned index) {
-    return raster_tile_current->TileRequest(index);
-  }
-
   short* jas_rtc_GetImageBuffer(unsigned index) {
     return raster_tile_current->GetImageBuffer(index);
   }

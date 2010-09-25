@@ -564,14 +564,6 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 		jas_rtc_SetTile(sot->tileno, tile->xstart,
 				tile->ystart, tile->xend,
 				tile->yend);
-
-		if (dec->xcsoar==2) {
-			tile->hidden = 0;
-		} else {
-			tile->hidden = !(jas_rtc_TileRequest(sot->tileno));
-		}
-	} else {
-		tile->hidden = 0;
 	}
 
 	/* Ensure that this is the expected part number. */
@@ -598,9 +590,7 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 	switch (tile->state) {
 	case JPC_TILE_INIT:
 		/* This is the first tile-part for this tile. */
-		if (!tile->hidden) {
-			tile->state = JPC_TILE_ACTIVE;
-		}
+		tile->state = JPC_TILE_ACTIVE;
 		assert(!tile->cp);
 		if (!(tile->cp = jpc_dec_cp_copy(dec->cp))) {
 			return -1;
@@ -684,8 +674,7 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
 	}
 
 	// JMW hack
-	if (!tile->hidden &&
-	  jpc_dec_decodepkts(dec, (tile->pkthdrstream) ? tile->pkthdrstream :
+	if (jpc_dec_decodepkts(dec, (tile->pkthdrstream) ? tile->pkthdrstream :
 	  dec->in, dec->in)) {
 #if 0 // JMW
 		fprintf(stderr, "jpc_dec_decodepkts failed\n");
@@ -700,13 +689,11 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
 		curoff = jas_stream_getrwcount(dec->in);
 		if (curoff < dec->curtileendoff) {
 			n = dec->curtileendoff - curoff;
-			if (!tile->hidden) {
 #if 0 // JMW
 			fprintf(stderr,
 			  "warning: ignoring trailing garbage (%lu bytes)\n",
 			  (unsigned long) n);
 #endif
-			}
 
 			while (n-- > 0) {
 				if (jas_stream_getc(dec->in) == EOF) {
@@ -726,7 +713,7 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
 
 	}
 
-	if (!tile->hidden && tile->numparts > 0 && tile->partno == tile->numparts - 1) {
+	if (tile->numparts > 0 && tile->partno == tile->numparts - 1) {
 		if (jpc_dec_tiledecode(dec, tile)) {
 			return -1;
 		}
@@ -793,16 +780,6 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	tile->realmode = 0;
 	if (cp->mctid == JPC_MCT_ICT) {
 		tile->realmode = 1;
-	}
-
-	// JMW hack
-	if (tile->hidden) {
-		if (tile->tcomps) {
-			jas_free(tile->tcomps);
-			tile->tcomps=0;
-		}
-		tile->pi = 0;
-		return 0;
 	}
 
 	for (compno = 0, tcomp = tile->tcomps, cmpt = dec->cmpts; compno <
@@ -1150,8 +1127,6 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 
 	short* dptr;
 	int ilevel = 0;
-
-	if (tile->hidden) return 0;
 
 	if (jpc_dec_decodecblks(dec, tile)) {
 #if 0 // JMW

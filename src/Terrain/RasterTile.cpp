@@ -114,7 +114,7 @@ RasterTile::VisibilityChanged(int view_x, int view_y)
 short*
 RasterTileCache::GetImageBuffer(unsigned index)
 {
-  if (index < MAX_RTC_TILES)
+  if (TileRequest(index))
     return tiles[index].GetImageBuffer();
 
   return NULL;
