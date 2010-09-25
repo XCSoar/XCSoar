@@ -62,11 +62,12 @@ public:
   bool VisibilityChanged(int view_x, int view_y);
 };
 
-#define MAX_RTC_TILES 1024
 #define MAX_ACTIVE_TILES 16
-#define RTC_SUBSAMPLING 16U
 
 class RasterTileCache : private NonCopyable {
+  static const unsigned MAX_RTC_TILES = 1024;
+  static const unsigned RTC_SUBSAMPLING = 16;
+
 public:
   RasterTileCache()
     :scan_overview(true) {
