@@ -45,30 +45,6 @@ Copyright_License {
 #include <string.h>
 #include <windef.h>
 
-void
-ExtractDirectory(TCHAR *Dest, const TCHAR *Source)
-{
-  int len = _tcslen(Source);
-  int found = -1;
-  int i;
-
-  if (len == 0) {
-    Dest[0] = 0;
-    return;
-  }
-
-  for (i = 0; i < len; i++) {
-    if ((Source[i] == '/') || (Source[i] == '\\')) {
-      found = i;
-    }
-  }
-
-  for (i = 0; i <= found; i++) {
-    Dest[i] = Source[i];
-  }
-  Dest[i] = 0;
-}
-
 /**
  * Parses the special characters (cr, lf, back slash) in the old_string and
  * returns the parsed new_string

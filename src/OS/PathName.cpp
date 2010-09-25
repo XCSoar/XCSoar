@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+  Copyright (C) 2000 - 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,7 +18,6 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
-	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -35,16 +34,46 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#if !defined(XCSOAR_UTILS_TEXT_H)
-#define XCSOAR_UTILS_TEXT_H
 
-#include <tchar.h>
+#include "OS/PathName.hpp"
+#include "Util/StringUtil.hpp"
 
-// Parse string (new lines etc) and malloc the string
-TCHAR* StringMallocParse(const TCHAR* old_string);
+#include <string.h>
 
-void ConvertCToT(TCHAR *pszDest, const char *pszSrc);
-
-int TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines);
-
+static const TCHAR *
+LastSeparator(const TCHAR *path)
+{
+  const TCHAR *p = _tcsrchr(path, _T('/'));
+#ifdef WIN32
+  const TCHAR *backslash = _tcsrchr(path, _T('\\'));
+  if (p == NULL || backslash > p)
+    p = backslash;
 #endif
+  return p;
+}
+
+const TCHAR *
+BaseName(const TCHAR *path)
+{
+  const TCHAR *p = LastSeparator(path);
+  if (p != NULL)
+    path = p + 1;
+
+  if (string_is_empty(path))
+    return NULL;
+
+  return path;
+}
+
+const TCHAR *
+DirName(const TCHAR *path, TCHAR *buffer)
+{
+  const TCHAR *p = LastSeparator(path);
+  if (p == NULL || p == path)
+    return _T(".");
+
+  size_t length = p - path;
+  _tcsncpy(buffer, path, length);
+  buffer[length] = _T('\0');
+  return buffer;
+}

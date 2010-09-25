@@ -43,13 +43,14 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "Profile.hpp"
 #include "LocalPath.hpp"
-#include "UtilsText.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
 #include "SettingsMap.hpp" // for EnableTopology
 #include "IO/ZipLineReader.hpp"
 #include "ProgressGlue.hpp"
 #include "OS/FileUtil.hpp"
+#include "OS/PathName.hpp"
+#include "Compatibility/path.h"
 
 #include <assert.h>
 
@@ -154,10 +155,10 @@ TopologyStore::Open()
 
   LineSplitter splitter(reader);
 
-  TCHAR Directory[MAX_PATH];
-  ExtractDirectory(Directory, szFile);
-
-  Load(splitter, Directory);
+  TCHAR buffer[MAX_PATH];
+  const TCHAR *Directory = DirName(szFile, buffer);
+  if (Directory != NULL)
+    Load(splitter, Directory);
 }
 
 void
@@ -178,6 +179,7 @@ TopologyStore::Load(NLineReader &reader, const TCHAR* Directory)
 #else
   strcpy(ShapeFilename, Directory);
 #endif
+  strcat(ShapeFilename, DIR_SEPARATOR_S);
 
   char *ShapeFilenameEnd = ShapeFilename + strlen(ShapeFilename);
 

@@ -45,6 +45,8 @@ Copyright_License {
 #include <string.h>
 #endif
 
+#include <tchar.h>
+
 /**
  * Representation of a file name.  It is automatically converted to
  * the file system character set.  If no conversion is needed, then
@@ -152,5 +154,20 @@ public:
     return value;
   }
 };
+
+/**
+ * Returns the base name of the specified path, i.e. the part after
+ * the last separator.  May return NULL if there is no base name.
+ */
+const TCHAR *
+BaseName(const TCHAR *path);
+
+/**
+ * Returns the directory name of the specified path, i.e. the part
+ * before the last separator.  Returns "." if there is no directory
+ * name.
+ */
+const TCHAR *
+DirName(const TCHAR *path, TCHAR *buffer);
 
 #endif

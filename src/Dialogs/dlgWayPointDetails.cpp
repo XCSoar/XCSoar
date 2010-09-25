@@ -44,6 +44,7 @@ Copyright_License {
 #include "Profile.hpp"
 #include "LocalTime.hpp"
 #include "UtilsText.hpp"
+#include "OS/PathName.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "Blackboard.hpp"
 #include "SettingsComputer.hpp"
@@ -88,7 +89,6 @@ static Bitmap jpgimage1, jpgimage2;
 static TCHAR path_modis[MAX_PATH];
 static TCHAR path_google[MAX_PATH];
 static TCHAR szWaypointFile[MAX_PATH];
-static TCHAR Directory[MAX_PATH];
 
 #define MAXLINES 100
 static int LineOffsets[MAXLINES];
@@ -552,8 +552,12 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   if (!wf)
     return;
 
-  Profile::GetPath(szProfileWayPointFile, szWaypointFile);
-  ExtractDirectory(Directory, szWaypointFile);
+  TCHAR buffer[MAX_PATH];
+  const TCHAR *Directory = NULL;
+  if (Profile::GetPath(szProfileWayPointFile, szWaypointFile))
+    Directory = DirName(szWaypointFile, buffer);
+  if (Directory == NULL)
+    Directory = _T("");
 
   _stprintf(path_modis, _T("%s" DIR_SEPARATOR_S "modis-%03d.jpg"),
            Directory,

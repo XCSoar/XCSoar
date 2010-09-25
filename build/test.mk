@@ -468,6 +468,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Projection.cpp \
 	$(SRC)/RenderObservationZone.cpp \
 	$(SRC)/BackgroundDrawHelper.cpp \
