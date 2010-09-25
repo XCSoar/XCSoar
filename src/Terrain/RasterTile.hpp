@@ -95,18 +95,18 @@ public:
   void Reset();
   void SetInitialised(bool val);
 
-  bool TileRequest(int index);
+  bool TileRequest(unsigned index);
 
   short *GetOverview() {
     return Overview.get_data();
   }
 
-  void SetSize(int width, int height);
-  short* GetImageBuffer(int index);
-  const short* GetImageBuffer(int index) const;
+  void SetSize(unsigned width, unsigned height);
+  short* GetImageBuffer(unsigned index);
+  const short* GetImageBuffer(unsigned index) const;
   void SetLatLonBounds(double lon_min, double lon_max,
                        double lat_min, double lat_max);
-  void SetTile(int index, int xstart, int ystart, int xend, int yend);
+  void SetTile(unsigned index, int xstart, int ystart, int xend, int yend);
   bool PollTiles(int x, int y);
 
   short GetMaxElevation() const {

@@ -21,17 +21,17 @@ extern "C" {
     SetNumTiles(num);
   }
 
-  void jas_rtc_SetTile(int index,
+  void jas_rtc_SetTile(unsigned index,
                        int xstart, int ystart,
                        int xend, int yend) {
     raster_tile_current->SetTile(index, xstart, ystart, xend, yend);
   }
 
-  bool jas_rtc_TileRequest(int index) {
+  bool jas_rtc_TileRequest(unsigned index) {
     return raster_tile_current->TileRequest(index);
   }
 
-  short* jas_rtc_GetImageBuffer(int index) {
+  short* jas_rtc_GetImageBuffer(unsigned index) {
     return raster_tile_current->GetImageBuffer(index);
   }
 
@@ -40,8 +40,7 @@ extern "C" {
     raster_tile_current->SetLatLonBounds(lon_min, lon_max, lat_min, lat_max);
   }
 
-  void jas_rtc_SetSize(int width,
-                       int height) {
+  void jas_rtc_SetSize(unsigned width, unsigned height) {
     raster_tile_current->SetSize(width, height);
   }
 

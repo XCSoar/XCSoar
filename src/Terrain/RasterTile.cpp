@@ -112,7 +112,7 @@ RasterTile::VisibilityChanged(int view_x, int view_y)
 }
 
 short*
-RasterTileCache::GetImageBuffer(int index)
+RasterTileCache::GetImageBuffer(unsigned index)
 {
   if (index < MAX_RTC_TILES)
     return tiles[index].GetImageBuffer();
@@ -121,7 +121,7 @@ RasterTileCache::GetImageBuffer(int index)
 }
 
 const short *
-RasterTileCache::GetImageBuffer(int index) const
+RasterTileCache::GetImageBuffer(unsigned index) const
 {
   if (index< MAX_RTC_TILES)
     return tiles[index].GetImageBuffer();
@@ -130,7 +130,8 @@ RasterTileCache::GetImageBuffer(int index) const
 }
 
 void
-RasterTileCache::SetTile(int index, int xstart, int ystart, int xend, int yend)
+RasterTileCache::SetTile(unsigned index,
+                         int xstart, int ystart, int xend, int yend)
 {
   if (index >= MAX_RTC_TILES)
     return;
@@ -161,9 +162,9 @@ RasterTileCache::PollTiles(int x, int y)
 }
 
 bool
-RasterTileCache::TileRequest(int index)
+RasterTileCache::TileRequest(unsigned index)
 {
-  int num_used = 0;
+  unsigned num_used = 0;
 
   if (index >= MAX_RTC_TILES) {
     // tile index too big!
@@ -173,7 +174,7 @@ RasterTileCache::TileRequest(int index)
   if (!tiles[index].is_requested())
     return false;
 
-  for (int i = 0; i < MAX_RTC_TILES; ++i)
+  for (unsigned i = 0; i < MAX_RTC_TILES; ++i)
     if (tiles[i].IsEnabled())
       num_used++;
 
@@ -208,7 +209,7 @@ RasterTileCache::GetField(unsigned int lx, unsigned int ly) const
 }
 
 void
-RasterTileCache::SetSize(int _width, int _height)
+RasterTileCache::SetSize(unsigned _width, unsigned _height)
 {
   width = _width;
   height = _height;
@@ -238,8 +239,7 @@ RasterTileCache::Reset()
 
   Overview.reset();
 
-  int i;
-  for (i = 0; i < MAX_RTC_TILES; i++)
+  for (unsigned i = 0; i < MAX_RTC_TILES; i++)
     tiles[i].Disable();
 
   ActiveTiles.clear();
