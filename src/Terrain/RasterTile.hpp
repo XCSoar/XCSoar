@@ -22,6 +22,16 @@ public:
   unsigned int width, height;
   bool request;
 
+  void set(unsigned _xstart, unsigned _ystart,
+           unsigned _xend, unsigned _yend) {
+    xstart = _xstart;
+    ystart = _ystart;
+    xend = _xend;
+    yend = _yend;
+    width = xend - xstart;
+    height = yend - ystart;
+  }
+
   bool CheckTileVisibility(const int view_x, const int view_y);
 
   void Disable() {

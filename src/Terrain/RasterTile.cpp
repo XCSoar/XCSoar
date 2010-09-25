@@ -135,13 +135,7 @@ RasterTileCache::SetTile(int index, int xstart, int ystart, int xend, int yend)
   if (index >= MAX_RTC_TILES)
     return;
 
-  RasterTile &tile = tiles[index];
-  tile.xstart = xstart;
-  tile.ystart = ystart;
-  tile.xend = xend;
-  tile.yend = yend;
-  tile.width = xend - xstart;
-  tile.height = yend - ystart;
+  tiles[index].set(xstart, ystart, xend, yend);
 }
 
 bool
