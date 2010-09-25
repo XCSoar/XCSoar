@@ -19,17 +19,17 @@ __layers = [["pop-miscellaneous-population-p", "mispopppop_point", "", "txt"],
             ["trans-railroad-l", "railrdltrans_line", "exs=28", "fco"],
             ["trans-road-l", "roadltrans_line", "rtt=14", "med"]]
 
-def __gather_map(dir_data, map):
-    zip_file = os.path.join(dir_data, map + ".7z")
+def __gather_map(dir_data, map_name):
+    zip_file = os.path.join(dir_data, map_name + ".7z")
     if not os.path.exists(zip_file):
-        print "Downloading map file " + map + ".7z ..."
+        print "Downloading map file " + map_name + ".7z ..."
         socket.setdefaulttimeout(10)
-        urllib.urlretrieve(gather_from_server + map + ".7z", zip_file)
+        urllib.urlretrieve(gather_from_server + map_name + ".7z", zip_file)
 
     if not os.path.exists(zip_file):
         return False
      
-    print "Decompressing map file " + map + ".7z ..."
+    print "Decompressing map file " + map_name + ".7z ..."
     arg = [cmd_7zip, "x", "-o" + dir_data, zip_file]
     p = subprocess.Popen(arg)
     p.wait()
@@ -39,15 +39,15 @@ def __gather_map(dir_data, map):
     return True
     
 
-def __check_map(dir_data, map):
-    return os.path.exists(os.path.join(dir_data, map))
+def __check_map(dir_data, map_name):
+    return os.path.exists(os.path.join(dir_data, map_name))
     
-def __create_layer_from_map(bounds, layer, map, overwrite, dir_data, dir_temp):
+def __create_layer_from_map(bounds, layer, map_name, overwrite, dir_data, dir_temp):
     if not isinstance(bounds, GeoRect):
         return False
     
-    if not __check_map(dir_data, map):
-        if not __gather_map(dir_data, map):
+    if not __check_map(dir_data, map_name):
+        if not __gather_map(dir_data, map_name):
             return False
 
     arg = [cmd_ogr2ogr]
@@ -70,7 +70,7 @@ def __create_layer_from_map(bounds, layer, map, overwrite, dir_data, dir_temp):
                 str(bounds.top.value_degrees())])
 
     arg.append(dir_temp)
-    arg.append(os.path.join(dir_data, map))
+    arg.append(os.path.join(dir_data, map_name))
 
     arg.append(layer[0])
     arg.extend(["-nln", layer[1]])
