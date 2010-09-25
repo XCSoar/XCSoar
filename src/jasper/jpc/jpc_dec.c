@@ -1392,6 +1392,7 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 		tile->pkthdrstreampos = 0;
 		tile->pptstab = 0;
 		tile->cp = 0;
+		tile->pi = NULL;
 
 		// JMW, memory leak?
 		if (!(tile->tcomps = jas_malloc(dec->numcomps *
@@ -1401,6 +1402,7 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 		for (compno = 0, cmpt = dec->cmpts, tcomp = tile->tcomps;
 		  compno < dec->numcomps; ++compno, ++cmpt, ++tcomp) {
 			tcomp->rlvls = 0;
+			tcomp->numrlvls = 0;
 			tcomp->data = 0;
 			tcomp->xstart = JPC_CEILDIV(tile->xstart, cmpt->hstep);
 			tcomp->ystart = JPC_CEILDIV(tile->ystart, cmpt->vstep);
