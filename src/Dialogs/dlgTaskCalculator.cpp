@@ -165,16 +165,6 @@ RefreshCalculator(void)
 }
 
 static void
-DoOptimise(void)
-{
-  // should do a GUI::ExchangeBlackboard() here and use local storage
-
-  targetManipEvent.trigger();
-  // ... OLD_TASK \todo
-  targetManipEvent.reset();
-}
-
-static void
 OnTargetClicked(WindowControl * Sender)
 {
   (void)Sender;
@@ -231,7 +221,6 @@ OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
   fixed rthis;
   switch (Mode) {
   case DataField::daSpecial:
-    DoOptimise();
     break;
   case DataField::daGet:
     //      Sender->Set(Range*100.0);
@@ -281,18 +270,12 @@ OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
-static void
-OnOptimiseClicked(WindowControl * Sender)
-{
-  DoOptimise();
-}
 
 static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnMacCreadyData),
   DeclareCallBackEntry(OnRangeData),
   DeclareCallBackEntry(OnOKClicked),
   DeclareCallBackEntry(OnCancelClicked),
-  DeclareCallBackEntry(OnOptimiseClicked),
   DeclareCallBackEntry(OnTargetClicked),
   DeclareCallBackEntry(OnCruiseEfficiencyData),
   DeclareCallBackEntry(NULL)
