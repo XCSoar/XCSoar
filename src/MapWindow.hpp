@@ -49,6 +49,7 @@ Copyright_License {
 #include "MapWindowBlackboard.hpp"
 #include "NMEA/Derived.hpp"
 #include "BackgroundDrawHelper.hpp"
+#include "WayPoint/WayPointRenderer.hpp"
 #include "Compiler.h"
 
 struct THERMAL_SOURCE_VIEW
@@ -95,6 +96,8 @@ protected:
   RasterWeather *weather;
 
   BackgroundDrawHelper m_background;
+  WayPointRenderer way_point_renderer;
+
   Airspaces *airspace_database;
   ProtectedAirspaceWarningManager *airspace_warnings;
   ProtectedTaskManager *task;
@@ -131,6 +134,7 @@ public:
 
   void set_way_points(const Waypoints *_way_points) {
     way_points = _way_points;
+    way_point_renderer.set_way_points(way_points);
   }
 
   void set_task(ProtectedTaskManager *_task) {

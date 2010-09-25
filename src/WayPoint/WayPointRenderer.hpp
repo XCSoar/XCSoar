@@ -36,19 +36,46 @@ Copyright_License {
 }
 */
 
-#include "MapWindow.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
+#ifndef XCSOAR_WAY_POINT_RENDERER_HPP
+#define XCSOAR_WAY_POINT_RENDERER_HPP
 
-void
-MapWindow::DrawWaypoints(Canvas &canvas, const RECT &MapRect)
-{
-  GlidePolar polar = get_glide_polar();
-  polar.set_mc(min(Calculated().common_stats.current_risk_mc,
-                   SettingsComputer().safety_mc));
+#include "Util/NonCopyable.hpp"
 
-  way_point_renderer.render(canvas, bitmap_canvas, label_block,
-                            MapProjection(), SettingsMap(),
-                            SettingsComputer(), polar,
-                            ToAircraftState(Basic()),
-                            task);
-}
+#include <stddef.h>
+
+struct SETTINGS_MAP;
+struct AIRCRAFT_STATE;
+class Canvas;
+class BitmapCanvas;
+class LabelBlock;
+class MapWindowProjection;
+class Waypoints;
+class GlidePolar;
+class TaskBehaviour;
+class ProtectedTaskManager;
+
+/**
+ * Renders way point icons and labels into a #Canvas.
+ */
+class WayPointRenderer : private NonCopyable {
+  const Waypoints *way_points;
+
+public:
+  WayPointRenderer(const Waypoints *_way_points=NULL)
+    :way_points(_way_points) {}
+
+  void set_way_points(const Waypoints *_way_points) {
+    way_points = _way_points;
+  }
+
+  void render(Canvas &canvas, BitmapCanvas &bitmap_canvas,
+              LabelBlock &label_block,
+              const MapWindowProjection &projection,
+              const SETTINGS_MAP &settings_map,
+              const TaskBehaviour &task_behaviour,
+              const GlidePolar &glide_polar,
+              const AIRCRAFT_STATE &aircraft_state,
+              const ProtectedTaskManager *task);
+};
+
+#endif

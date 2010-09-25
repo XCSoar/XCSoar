@@ -531,6 +531,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
 	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
 	$(SRC)/WayPoint/WayPointFileZander.cpp \
+	$(SRC)/WayPoint/WayPointRenderer.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/xmlParser.cpp \
