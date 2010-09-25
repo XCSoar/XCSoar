@@ -46,6 +46,8 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 #include "Compiler.h"
 
+#include <tchar.h>
+
 class RasterMap : private NonCopyable {
   char *path;
   RasterTileCache raster_tile_cache;
@@ -53,7 +55,7 @@ class RasterMap : private NonCopyable {
   RasterProjection projection;
 
 public:
-  RasterMap(const char *path);
+  RasterMap(const TCHAR *path);
   ~RasterMap();
 
   bool isMapLoaded() const {

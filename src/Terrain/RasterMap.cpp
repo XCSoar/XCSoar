@@ -38,12 +38,13 @@ Copyright_License {
 
 #include "Terrain/RasterMap.hpp"
 #include "Math/Earth.hpp"
+#include "OS/PathName.hpp"
 
 #include <assert.h>
 #include <string.h>
 
-RasterMap::RasterMap(const char *_path)
-  :path(strdup(_path))
+RasterMap::RasterMap(const TCHAR *_path)
+  :path(strdup(NarrowPathName(_path)))
 {
   if (!raster_tile_cache.LoadOverview(path))
     return;

@@ -38,8 +38,6 @@ Copyright_License {
 
 #include "Terrain/RasterTerrain.hpp"
 #include "Profile.hpp"
-#include "StringUtil.hpp"
-#include "OS/PathName.hpp"
 
 // General, open/close
 
@@ -54,7 +52,7 @@ RasterTerrain::OpenTerrain()
   } else
     return NULL;
 
-  RasterTerrain *rt = new RasterTerrain(NarrowPathName(szFile));
+  RasterTerrain *rt = new RasterTerrain(szFile);
   if (!rt->map.isMapLoaded()) {
     delete rt;
     return NULL;

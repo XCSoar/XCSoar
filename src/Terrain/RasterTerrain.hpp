@@ -44,6 +44,8 @@ Copyright_License {
 #include "Thread/Guard.hpp"
 #include "Compiler.h"
 
+#include <tchar.h>
+
 class RasterMap;
 
 /**
@@ -65,7 +67,7 @@ public:
  * Constructor.  Returns uninitialised object. 
  * 
  */
-  RasterTerrain(const char *path)
+  RasterTerrain(const TCHAR *path)
     :Guard<RasterMap>(map), map(path) {}
 
 /** 
