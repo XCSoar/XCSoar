@@ -63,7 +63,7 @@ class WaypointList:
 
     def __parse_winpilot_altitude(self, str):
         str = str.lower()
-        if str.endswith("ft"):
+        if str.endswith("ft") or str.endswith("f"):
             str = str.rstrip("ft")
             return int(str) * 0.3048
         else:
