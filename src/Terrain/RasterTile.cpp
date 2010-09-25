@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Terrain/RasterTile.hpp"
-#include "jasper/jasper.h"
+#include "jasper/jas_image.h"
 #include "Math/Angle.hpp"
 
 #include <algorithm>
@@ -334,7 +334,7 @@ RasterTileCache::LoadJPG2000(const char *jp2_filename)
   if (!in) {
     SetInitialised(false);
   } else {
-    jas_image_decode(in, -1, scan_overview ? "xcsoar=2" : "xcsoar=1");
+    jp2_decode(in, scan_overview ? "xcsoar=2" : "xcsoar=1");
     jas_stream_close(in);
   }
 }

@@ -38,21 +38,13 @@ Copyright_License {
 
 #include "Terrain/RasterMap.hpp"
 #include "Math/Earth.hpp"
-#include "jasper/jasper.h"
 
 #include <assert.h>
 #include <string.h>
 
-int RasterMap::ref_count = 0;
-
 RasterMap::RasterMap(const char *_path)
   :path(strdup(_path))
 {
-  if (ref_count == 0)
-    jas_init();
-
-  ref_count++;
-
   if (!raster_tile_cache.LoadOverview(path))
     return;
 
@@ -66,10 +58,6 @@ RasterMap::RasterMap(const char *_path)
 }
 
 RasterMap::~RasterMap() {
-  ref_count--;
-  if (ref_count == 0)
-    jas_cleanup();
-
   free(path);
 }
 

@@ -1,11 +1,10 @@
 JASSRC = $(SRC)/jasper
 JASPER = \
 	$(JASSRC)/base/jas_debug.c \
-	$(JASSRC)/base/jas_image.c \
-	$(JASSRC)/base/jas_init.c 	$(JASSRC)/base/jas_malloc.c \
+	$(JASSRC)/base/jas_malloc.c \
 	$(JASSRC)/base/jas_seq.c 	$(JASSRC)/base/jas_stream.c \
 	$(JASSRC)/base/jas_string.c 	$(JASSRC)/base/jas_tvp.c \
-	$(JASSRC)/base/jas_version.c	$(JASSRC)/jp2/jp2_cod.c \
+	$(JASSRC)/jp2/jp2_cod.c \
 	$(JASSRC)/jp2/jp2_dec.c 	$(JASSRC)/jpc/jpc_bs.c \
 	$(JASSRC)/jpc/jpc_cs.c 		$(JASSRC)/jpc/jpc_dec.c \
 	$(JASSRC)/jpc/jpc_math.c 	$(JASSRC)/jpc/jpc_mct.c \

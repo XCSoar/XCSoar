@@ -47,8 +47,6 @@ Copyright_License {
 #include "Compiler.h"
 
 class RasterMap : private NonCopyable {
-  static int ref_count;
-
   char *path;
   RasterTileCache raster_tile_cache;
   BoundsRectangle bounds;

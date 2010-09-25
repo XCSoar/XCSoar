@@ -237,8 +237,10 @@ jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr)
 {
 	jpc_dec_importopts_t opts;
 	jpc_dec_t *dec;
+#ifdef ENABLE_JASPER_IMAGE
 	jas_image_t *image = 0;
   unsigned int i;
+#endif /* ENABLE_JASPER_IMAGE */
 
 	dec = 0;
 
@@ -263,6 +265,7 @@ jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr)
 		return 0;
 	}
 
+#ifdef ENABLE_JASPER_IMAGE
   // dima: define the default for color space
 	jas_image_setclrspc(dec->image, JAS_CLRSPC_SGRAY);
   for (i=0; i<(unsigned int)jas_image_numcmpts(dec->image); ++i)
@@ -292,6 +295,7 @@ jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr)
 	jpc_dec_destroy(dec);
 
 	return image;
+#endif /* ENABLE_JASPER_IMAGE */
 
 error:
 	if (dec) {
@@ -478,13 +482,16 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 {
 	jpc_dec_tile_t *tile;
 	jpc_sot_t *sot = &ms->parms.sot;
+#ifdef ENABLE_JASPER_IMAGE
 	jas_image_cmptparm_t *compinfos;
 	jas_image_cmptparm_t *compinfo;
 	jpc_dec_cmpt_t *cmpt;
 	int cmptno;
+#endif /* ENABLE_JASPER_IMAGE */
 
 	if (dec->state == JPC_MH) {
 
+#ifdef ENABLE_JASPER_IMAGE
 		compinfos = jas_malloc(dec->numcomps * sizeof(jas_image_cmptparm_t));
 		assert(compinfos);
 		for (cmptno = 0, cmpt = dec->cmpts, compinfo = compinfos;
@@ -498,6 +505,7 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 			compinfo->hstep = cmpt->hstep;
 			compinfo->vstep = cmpt->vstep;
 		}
+#endif /* ENABLE_JASPER_IMAGE */
 
 		// JMW image created here
 
@@ -506,12 +514,14 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 		}
 
 		// JMW don't create this image in xcsoar mode
+#ifdef ENABLE_JASPER_IMAGE
 		if (dec->xcsoar == 0 &&
 		  !(dec->image = jas_image_create(dec->numcomps, compinfos,
 		  JAS_CLRSPC_UNKNOWN))) {
 			return -1;
 		}
 		jas_free(compinfos);
+#endif /* ENABLE_JASPER_IMAGE */
 
 		/* Is the packet header information stored in PPM marker segments in
 		  the main header? */
@@ -1279,6 +1289,7 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 				}
 			}
 			break;
+#ifdef ENABLE_JASPER_IMAGE
 		default:
 		case 0:
 			if (jas_image_writecmpt(dec->image, compno,
@@ -1291,6 +1302,7 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 #endif
 				return -4;
 			}
+#endif /* ENABLE_JASPER_IMAGE */
 		}
 	}
 
@@ -2088,9 +2100,11 @@ static void jpc_dec_destroy(jpc_dec_t *dec)
 	if (dec->pkthdrstreams) {
 		jpc_streamlist_destroy(dec->pkthdrstreams);
 	}
+#ifdef ENABLE_JASPER_IMAGE
 	if (dec->image) {
 		jas_image_destroy(dec->image);
 	}
+#endif /* ENABLE_JASPER_IMAGE */
 
 	if (dec->cp) {
 		jpc_dec_cp_destroy(dec->cp);

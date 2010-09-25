@@ -93,11 +93,13 @@ typedef unsigned int uint;
 
 static jp2_dec_t *jp2_dec_create(void);
 static void jp2_dec_destroy(jp2_dec_t *dec);
+#ifdef ENABLE_JASPER_IMAGE
 static int jp2_getcs(jp2_colr_t *colr);
 #ifdef ENABLE_JASPER_ICC
 static int fromiccpcs(int cs);
 #endif /* ENABLE_JASPER_ICC */
 static int jp2_getct(int colorspace, int type, int assoc);
+#endif /* ENABLE_JASPER_IMAGE */
 
 /******************************************************************************\
 * Functions.
@@ -109,6 +111,7 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 	int found;
 	jas_image_t *image;
 	jp2_dec_t *dec;
+#ifdef ENABLE_JASPER_IMAGE
 	bool samedtype;
 	int dtype;
 	unsigned int i;
@@ -123,7 +126,6 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 	int cmptno;
 #endif
 	jp2_cmapent_t *cmapent;
-#ifdef ENABLE_JASPER_ICC
 	jas_icchdr_t icchdr;
 	jas_iccprof_t *iccprof;
 #endif /* ENABLE_JASPER_ICC */
@@ -275,6 +277,7 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 		goto error;
 	}
 
+#ifdef ENABLE_JASPER_IMAGE
 	/* An IHDR box must be present. */
 	if (!dec->ihdr) {
 		jas_eprintf("error: missing IHDR box\n");
@@ -496,6 +499,7 @@ fprintf(stderr, "no of components is %d\n", jas_image_numcmpts(dec->image));
 	jp2_dec_destroy(dec);
 
 	return image;
+#endif /* ENABLE_JASPER_IMAGE */
 
 error:
 	// JMW memory leak fixed
@@ -584,9 +588,11 @@ static void jp2_dec_destroy(jp2_dec_t *dec)
 	if (dec->pclr) {
 		jp2_box_destroy(dec->pclr);
 	}
+#ifdef ENABLE_JASPER_IMAGE
 	if (dec->image) {
 		jas_image_destroy(dec->image);
 	}
+#endif /* ENABLE_JASPER_IMAGE */
 	if (dec->cmap) {
 		jp2_box_destroy(dec->cmap);
 	}
@@ -598,6 +604,8 @@ static void jp2_dec_destroy(jp2_dec_t *dec)
 	}
 	jas_free(dec);
 }
+
+#ifdef ENABLE_JASPER_IMAGE
 
 static int jp2_getct(int colorspace, int type, int assoc)
 {
@@ -682,3 +690,4 @@ static int fromiccpcs(int cs)
 	return JAS_CLRSPC_UNKNOWN;
 }
 #endif /* ENABLE_JASPER_ICC */
+#endif /* ENABLE_JASPER_IMAGE */
