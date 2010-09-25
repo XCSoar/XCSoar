@@ -53,6 +53,7 @@ def __create_layer_from_map(bounds, layer, map_name, overwrite, dir_data, dir_te
         if not __gather_map(dir_data, map_name):
             return False
 
+    print "Reading map " + map_name + " ..."
     arg = [cmd_ogr2ogr]
 
     if overwrite == True:
