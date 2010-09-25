@@ -11,7 +11,10 @@ cmd_7zip = "7za"
 gather_from_server = "http://gis-lab.info/data/vmap0/"
 #gather_from_server = "http://webbuster.dyndns.info/xcsoar/mapgen_data/topo/vmap0/"
 
-__maps = ["eur", "noa", "sas", "soa"]
+__maps = [["eur", GeoRect(-35, 180, 90, 30)], 
+          ["noa", GeoRect(-180, 0, 90, -40)], 
+          ["sas", GeoRect(25, 180, 50, -60)], 
+          ["soa", GeoRect(-180, 180, 30, -90)]]
 __layers = [["pop-miscellaneous-population-p", "mispopppop_point", "", "txt"],
             ["pop-built-up-a", "builtupapop_area", "", "nam"],
             ["hydro-water-course-l", "watrcrslhydro_line", "hyc=8", "nam"],
@@ -84,7 +87,7 @@ def __create_layer(bounds, layer, maps, dir_data, dir_temp):
     print "Creating topology layer " + layer[1] + " ..."
 
     for i in range(len(maps)):
-        __create_layer_from_map(bounds, layer, maps[i],
+        __create_layer_from_map(bounds, layer, maps[i][0],
                                 i == 0, dir_data, dir_temp)
 
     files = []
