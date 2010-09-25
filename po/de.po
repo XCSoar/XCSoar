@@ -837,11 +837,11 @@ msgstr "Lokale Uhzeit nach GPS."
 
 #: src/InfoBoxes/Content/Factory.cpp:390 src/InfoBoxes/Content/Factory.cpp:391
 msgid "Time UTC"
-msgstr "UTC Zeit"
+msgstr "Zeit UTC"
 
 #: src/InfoBoxes/Content/Factory.cpp:392
 msgid "GPS time expressed in UTC."
-msgstr "UTC laut GPS."
+msgstr "UTC nach GPS."
 
 #: src/InfoBoxes/Content/Factory.cpp:398
 msgid "Task Time To Go"
