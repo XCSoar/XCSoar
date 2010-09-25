@@ -27,6 +27,21 @@ class GeoRect:
                 "R: " + str(self.right) + ", " +
                 "T: " + str(self.top) + ", " +
                 "B: " + str(self.bottom))
+
+    def Intersects(self, other):
+        if (self.Inside(other.top, other.left) or 
+            self.Inside(other.top, other.right) or 
+            self.Inside(other.bottom, other.top) or 
+            self.Inside(other.bottom, other.right)):
+            return True 
+        
+        if (other.Inside(self.top, self.left) or 
+            other.Inside(self.top, self.right) or 
+            other.Inside(self.bottom, self.top) or 
+            other.Inside(self.bottom, self.right)):
+            return True 
+        
+        return False
     
     def Inside(self, lat, lon):
         return (lat.between(self.bottom, self.top) and 
