@@ -120,15 +120,6 @@ RasterTileCache::GetImageBuffer(unsigned index)
   return NULL;
 }
 
-const short *
-RasterTileCache::GetImageBuffer(unsigned index) const
-{
-  if (index< MAX_RTC_TILES)
-    return tiles[index].GetImageBuffer();
-
-  return NULL;
-}
-
 void
 RasterTileCache::SetTile(unsigned index,
                          int xstart, int ystart, int xend, int yend)

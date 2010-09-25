@@ -57,9 +57,7 @@ public:
   inline short* GetImageBuffer() {
     return buffer.get_data();
   }
-  const short* GetImageBuffer() const {
-    return buffer.get_data();
-  }
+
   bool VisibilityChanged(int view_x, int view_y);
 };
 
@@ -136,7 +134,6 @@ public:
 
   void SetSize(unsigned width, unsigned height);
   short* GetImageBuffer(unsigned index);
-  const short* GetImageBuffer(unsigned index) const;
   void SetLatLonBounds(double lon_min, double lon_max,
                        double lat_min, double lat_max);
   void SetTile(unsigned index, int xstart, int ystart, int xend, int yend);
