@@ -58,6 +58,10 @@ struct BoundsRectangle {
     :west(_north_west.Longitude), north(_north_west.Latitude),
      east(_south_east.Longitude), south(_south_east.Latitude) {}
 
+  bool empty() const {
+    return west == east && north == south;
+  }
+
   void merge(const GeoPoint pt) {
     if (pt.Longitude < west)
       west = pt.Longitude;
