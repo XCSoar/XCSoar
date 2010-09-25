@@ -109,6 +109,8 @@ public:
 
   void LoadJPG2000(const char *path);
 
+  bool LoadOverview(const char *path);
+
   bool GetInitialised() const {
     return initialised;
   }

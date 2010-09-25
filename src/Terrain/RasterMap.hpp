@@ -80,9 +80,6 @@ public:
 
   gcc_pure
   short GetField(const GeoPoint &location) const;
-
- protected:
-  void _ReloadJPG2000(void);
 };
 
 

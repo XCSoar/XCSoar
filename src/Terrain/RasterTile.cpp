@@ -338,3 +338,15 @@ RasterTileCache::LoadJPG2000(const char *jp2_filename)
     jas_stream_close(in);
   }
 }
+
+bool
+RasterTileCache::LoadOverview(const char *path)
+{
+  Reset();
+
+  LoadJPG2000(path);
+  if (!initialised)
+    Reset();
+
+  return initialised;
+}
