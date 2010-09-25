@@ -37,6 +37,13 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
+#include "Screen/Graphics.hpp"
+#include "Screen/Canvas.hpp"
+#include "Components.hpp"
+#include "Interface.hpp"
+#include "Task/ProtectedTaskManager.hpp"
+#include "Screen/Layout.hpp"
+#include "SettingsMap.hpp"
 
 // TARGET STUFF
 
@@ -106,8 +113,64 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
   */
 
 
-bool MapWindow::TargetDragged(double *longitude, double *latitude) {
-  bool retval = false;
+/*
+* set to -1 to turn off
+* returns old zoom value
+*/
+
+bool MapWindow::isClickOnTarget(const POINT pc)
+{
+  if (XCSoarInterface::SetSettingsMap().TargetPan) {
+
+    if (!protected_task_manager.target_is_locked(XCSoarInterface::SetSettingsMap().TargetPanIndex))
+      return false;
+
+    const GeoPoint& t = protected_task_manager.get_location_target(
+        XCSoarInterface::SetSettingsMap().TargetPanIndex,
+        terrain_center);
+
+    if (t == terrain_center)
+      return false;
+
+    const POINT pt = projection.LonLat2Screen(t);
+    const GeoPoint gp = projection.Screen2LonLat(pc.x, pc.y);
+    if (projection.DistanceMetersToScreen(gp.distance((t))) < unsigned(Layout::Scale(10)) )
+      return true;
+  }
+  return false;
+}
+
+bool MapWindow::isInSector(const int x, const int y)
+{
+  POINT dragPT;
+  dragPT.x = x;
+  dragPT.y = y;
+
+  if (XCSoarInterface::SetSettingsMap().TargetPan) {
+    GeoPoint gp = projection.Screen2LonLat(dragPT.x, dragPT.y);
+    AIRCRAFT_STATE a;
+    a.Location = gp;
+    return protected_task_manager.isInSector(XCSoarInterface::SetSettingsMap().TargetPanIndex, a);
+  }
+  return false;
+}
+void
+MapWindow::TargetPaintDrag(Canvas &canvas, const POINT drag_last)
+{
+  MapGfx.hBmpTarget.draw(canvas, get_bitmap_canvas(), drag_last.x, drag_last.y);
+}
+
+bool MapWindow::TargetDragged(const int x, const int y)
+{
+  GeoPoint gp = projection.Screen2LonLat(x, y);
+  if (protected_task_manager.target_is_locked(XCSoarInterface::SetSettingsMap().TargetPanIndex)) {
+    protected_task_manager.set_target(XCSoarInterface::SetSettingsMap().TargetPanIndex, gp, true);
+    return true;
+  }
+  return false;
+}
+
+
 /* JMW illegal
   mutexTaskData.Lock();
   if (TargetDrag_State >0) { // always return true if we're dragging
@@ -122,6 +185,3 @@ bool MapWindow::TargetDragged(double *longitude, double *latitude) {
   }
   mutexTaskData.Unlock();
 */
-  return retval;
-}
-
