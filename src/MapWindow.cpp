@@ -216,7 +216,7 @@ MapWindow::identify(HWND hWnd)
   TCHAR name[16];
   if (::GetClassName(hWnd, name, sizeof(name)) == 0)
     return false;
-  return _tcscmp(name, _T("XCSoarMap"));
+  return !_tcscmp(name, _T("XCSoarMap"));
 }
 #endif /* WIN32 */
 
