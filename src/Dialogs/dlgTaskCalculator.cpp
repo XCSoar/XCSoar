@@ -189,6 +189,11 @@ OnTargetClicked(WindowControl * Sender)
   wf->show();
 }
 
+static int OnTimerNotify(WindowControl * Sender) {
+  (void)Sender;
+  RefreshCalculator();
+  return 0;
+}
 
 static void
 OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
@@ -315,6 +320,9 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
 
   RefreshCalculator();
 
+  if (!XCSoarInterface::Calculated().common_stats.ordered_has_targets) {
+    ((WndButton *)wf->FindByName(_T("Target")))->hide();
+  }
 #ifdef OLD_TASK
   if (!task.getSettings().AATEnabled ||
       !task.ValidTaskPoint(task.getActiveIndex() + 1))
@@ -323,6 +331,7 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
   if (!task.ValidTaskPoint(task.getActiveIndex()))
     ((WndButton *)wf->FindByName(_T("Target")))->hide();
 #endif
+  wf->SetTimerNotify(OnTimerNotify);
 
   if (wf->ShowModal() == mrCancel) {
     // todo: restore task settings.
