@@ -51,7 +51,7 @@ class OrderedTaskPoint;
 class TaskPointVisitor;
 class AbstractTaskFactory;
 class Waypoints;
-
+class AATPoint;
 /**
  * A task comprising an ordered sequence of task points, each with
  * observation zones.  A valid OrderedTask has a StartPoint, zero or more
@@ -291,6 +291,25 @@ public:
    */
   bool check_task() const;
 
+ /**
+  * returns tp accessed via TPIndex
+  *
+  * @param TPindex index of taskpoint
+  *
+  * @return pointer to tp if valid, else NULL
+  */	
+ OrderedTaskPoint* get_ordered_task_point(unsigned TPindex) const;
+
+ /**
+  * returns pointer to AATPoint accessed via TPIndex if exist
+  *
+  * @param TPindex index of taskpoint
+  *
+  * @return pointer to tp if valid, else NULL
+  */
+ AATPoint* get_AAT_task_point(unsigned TPindex) const;
+
+  
   /**
    * Test if task has finished.  Used to determine whether
    * or not to continue updating stats.
