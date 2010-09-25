@@ -99,7 +99,81 @@ ProtectedTaskManager::getActiveWaypoint() const
 
   return NULL;
 }
+//////////////////////////////
+bool
+ProtectedTaskManager::isInSector (const unsigned TPindex, const AIRCRAFT_STATE &ref) const
+{
+  Lease lease(*this);
+  return lease->isInSector(TPindex, ref);
+}
 
+const GeoPoint&
+ProtectedTaskManager::get_location_target(const unsigned TPindex, const GeoPoint& fallback_location) const
+{
+  Lease lease(*this);
+  return lease->get_location_target(TPindex, fallback_location);
+}
+
+bool
+ProtectedTaskManager::target_is_locked(const unsigned TPindex) const
+{
+  Lease lease(*this);
+  return lease->target_is_locked(TPindex);
+}
+
+bool
+ProtectedTaskManager::has_target(const unsigned TPindex) const
+{
+  Lease lease(*this);
+  return lease->has_target(TPindex);
+}
+
+bool
+ProtectedTaskManager::set_target(const unsigned TPindex, const GeoPoint &loc,
+   const bool override_lock)
+{
+  ExclusiveLease lease(*this);
+  return lease->set_target(TPindex, loc, override_lock);
+}
+
+bool
+ProtectedTaskManager::set_target(const unsigned TPindex, const fixed range,
+   const fixed radial)
+{
+  ExclusiveLease lease(*this);
+  return lease->set_target(TPindex, range, radial);
+}
+
+bool
+ProtectedTaskManager::get_target_range_radial(const unsigned TPindex, fixed &range,
+   fixed &radial)
+{
+  Lease lease(*this);
+  return lease->get_target_range_radial(TPindex, range, radial);
+}
+
+bool
+ProtectedTaskManager::target_lock(const unsigned TPindex, bool do_lock)
+{
+  ExclusiveLease lease(*this);
+  return lease->target_lock(TPindex, do_lock);
+}
+
+const GeoPoint&
+ProtectedTaskManager::get_ordered_taskpoint_location(const unsigned TPindex,
+   const GeoPoint& fallback_location) const
+{
+  Lease lease(*this);
+  return lease->get_ordered_taskpoint_location(TPindex, fallback_location);
+}
+
+const TCHAR*
+ProtectedTaskManager::get_ordered_taskpoint_name(const unsigned TPindex)
+{
+ Lease lease(*this);
+ return lease->get_ordered_taskpoint_name(TPindex);
+}
+/////////////////////////////////////
 void 
 ProtectedTaskManager::incrementActiveTaskPoint(int offset)
 {
