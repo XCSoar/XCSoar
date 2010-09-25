@@ -67,6 +67,7 @@ typedef wchar_t TCHAR;
 #define _tcsncpy wcsncpy
 #define _tcsstr wcsstr
 #define _tcschr wcschr
+#define _tcsrchr wcsrchr
 #define _tcscat wcscat
 #define _tcsncat wcsncat
 #define _T(x) (L ## x)
@@ -116,6 +117,7 @@ typedef char TCHAR;
 #define _tcsncpy strncpy
 #define _tcsstr strstr
 #define _tcschr strchr
+#define _tcsrchr strrchr
 #define _tcscat strcat
 #define _tcsncat strncat
 #define _T(x) x
