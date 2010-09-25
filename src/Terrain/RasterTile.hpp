@@ -2,6 +2,7 @@
 #define XCSOAR_RASTERTILE_HPP
 
 #include "Terrain/RasterBuffer.hpp"
+#include "Geo/BoundsRectangle.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/ActiveList.hpp"
 #include "Util/StaticArray.hpp"
@@ -99,6 +100,7 @@ private:
   RasterBuffer Overview;
   bool scan_overview;
   unsigned int width, height;
+  BoundsRectangle bounds;
 
 public:
   gcc_pure
@@ -116,6 +118,10 @@ public:
   }
 
   void Reset();
+
+  const BoundsRectangle &GetBounds() const {
+    return bounds;
+  }
 
 private:
   gcc_pure
@@ -150,7 +156,6 @@ public:
     return Overview.get_max();
   }
 
-  double lat_min, lat_max, lon_min, lon_max;
   unsigned int GetWidth() const { return width; }
   unsigned int GetHeight() const { return height; }
 

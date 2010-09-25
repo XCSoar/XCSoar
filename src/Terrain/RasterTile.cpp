@@ -218,10 +218,11 @@ void
 RasterTileCache::SetLatLonBounds(double _lon_min, double _lon_max,
                                  double _lat_min, double _lat_max)
 {
-  lat_min = min(_lat_min, _lat_max);
-  lat_max = max(_lat_min, _lat_max);
-  lon_min = min(_lon_min, _lon_max);
-  lon_max = max(_lon_min, _lon_max);
+
+  bounds.west = Angle::degrees(fixed(min(_lon_min, _lon_max)));
+  bounds.east = Angle::degrees(fixed(max(_lon_min, _lon_max)));
+  bounds.north = Angle::degrees(fixed(max(_lat_min, _lat_max)));
+  bounds.south = Angle::degrees(fixed(min(_lat_min, _lat_max)));
 }
 
 void
@@ -245,10 +246,7 @@ void
 RasterTileCache::SetInitialised(bool val)
 {
   if (!initialised && val) {
-    if (lon_max - lon_min < 0)
-      return;
-
-    if (lat_max - lat_min < 0)
+    if (bounds.empty())
       return;
 
     initialised = true;

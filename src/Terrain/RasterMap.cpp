@@ -49,12 +49,8 @@ RasterMap::RasterMap(const TCHAR *_path)
   if (!raster_tile_cache.LoadOverview(path))
     return;
 
-  bounds.west = Angle::degrees((fixed)raster_tile_cache.lon_min);
-  bounds.east = Angle::degrees((fixed)raster_tile_cache.lon_max);
-  bounds.north = Angle::degrees((fixed)raster_tile_cache.lat_max);
-  bounds.south = Angle::degrees((fixed)raster_tile_cache.lat_min);
-
-  projection.set(bounds, raster_tile_cache.GetWidth() * 256,
+  projection.set(raster_tile_cache.GetBounds(),
+                 raster_tile_cache.GetWidth() * 256,
                  raster_tile_cache.GetHeight() * 256);
 }
 
@@ -73,6 +69,8 @@ RasterMap::SetViewCenter(const GeoPoint &location)
 {
   if (!raster_tile_cache.GetInitialised())
     return;
+
+  const BoundsRectangle &bounds = raster_tile_cache.GetBounds();
 
   int x = angle_to_pixel(location.Longitude, bounds.west, bounds.east,
                          raster_tile_cache.GetWidth());

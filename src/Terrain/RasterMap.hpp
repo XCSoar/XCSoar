@@ -42,7 +42,6 @@ Copyright_License {
 #include "RasterProjection.hpp"
 #include "RasterTile.hpp"
 #include "Navigation/GeoPoint.hpp"
-#include "Geo/BoundsRectangle.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Compiler.h"
 
@@ -51,7 +50,6 @@ Copyright_License {
 class RasterMap : private NonCopyable {
   char *path;
   RasterTileCache raster_tile_cache;
-  BoundsRectangle bounds;
   RasterProjection projection;
 
 public:
@@ -64,12 +62,12 @@ public:
 
   gcc_pure
   bool inside(const GeoPoint &pt) const {
-    return bounds.inside(pt);
+    return raster_tile_cache.GetBounds().inside(pt);
   }
 
   gcc_pure
   GeoPoint GetMapCenter() const {
-    return bounds.center();
+    return raster_tile_cache.GetBounds().center();
   }
 
   void SetViewCenter(const GeoPoint &location);
