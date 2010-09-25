@@ -211,7 +211,7 @@ LoadFiles()
 {
   topology = new TopologyStore();
 
-  terrain = RasterTerrain::OpenTerrain();
+  terrain = RasterTerrain::OpenTerrain(NULL);
 
   WayPointGlue::ReadWaypoints(way_points, terrain);
 

@@ -312,7 +312,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   // Read the terrain file
   ProgressGlue::Create(_("Loading Terrain File..."));
   LogStartUp(_T("OpenTerrain"));
-  terrain = RasterTerrain::OpenTerrain();
+  terrain = RasterTerrain::OpenTerrain(file_cache);
 
   // Read the waypoint files
   WayPointGlue::ReadWaypoints(way_points, terrain);

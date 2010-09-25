@@ -39,15 +39,39 @@ Copyright_License {
 #include "Terrain/RasterMap.hpp"
 #include "Math/Earth.hpp"
 #include "OS/PathName.hpp"
+#include "IO/FileCache.hpp"
 
 #include <assert.h>
 #include <string.h>
 
-RasterMap::RasterMap(const TCHAR *_path)
+RasterMap::RasterMap(const TCHAR *_path, FileCache *cache)
   :path(strdup(NarrowPathName(_path)))
 {
-  if (!raster_tile_cache.LoadOverview(path))
-    return;
+  bool cache_loaded = false;
+  if (cache != NULL) {
+    /* load the cache file */
+    FILE *file = cache->load(_T("terrain"), _path);
+    if (file != NULL) {
+      cache_loaded = raster_tile_cache.LoadCache(file);
+      fclose(file);
+    }
+  }
+
+  if (!cache_loaded) {
+    if (!raster_tile_cache.LoadOverview(path))
+      return;
+
+    if (cache != NULL) {
+      /* save the cache file */
+      FILE *file = cache->save(_T("terrain"), _path);
+      if (file != NULL) {
+        if (raster_tile_cache.SaveCache(file))
+          cache->commit(_T("terrain"), file);
+        else
+          cache->cancel(_T("terrain"), file);
+      }
+    }
+  }
 
   projection.set(raster_tile_cache.GetBounds(),
                  raster_tile_cache.GetWidth() * 256,

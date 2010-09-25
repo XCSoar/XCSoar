@@ -46,7 +46,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-class RasterMap;
+class FileCache;
 
 /**
  * Class to manage raster terrain database, potentially with 
@@ -67,14 +67,14 @@ public:
  * Constructor.  Returns uninitialised object. 
  * 
  */
-  RasterTerrain(const TCHAR *path)
-    :Guard<RasterMap>(map), map(path) {}
+  RasterTerrain(const TCHAR *path, FileCache *cache)
+    :Guard<RasterMap>(map), map(path, cache) {}
 
 /** 
  * Load the terrain.  Determines the file to load from profile settings.
  * 
  */
-  static RasterTerrain *OpenTerrain();
+  static RasterTerrain *OpenTerrain(FileCache *cache);
 
   gcc_pure
   short GetTerrainHeight(const GeoPoint location) const {

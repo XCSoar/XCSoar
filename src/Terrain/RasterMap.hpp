@@ -47,13 +47,15 @@ Copyright_License {
 
 #include <tchar.h>
 
+class FileCache;
+
 class RasterMap : private NonCopyable {
   char *path;
   RasterTileCache raster_tile_cache;
   RasterProjection projection;
 
 public:
-  RasterMap(const TCHAR *path);
+  RasterMap(const TCHAR *path, FileCache *cache);
   ~RasterMap();
 
   bool isMapLoaded() const {

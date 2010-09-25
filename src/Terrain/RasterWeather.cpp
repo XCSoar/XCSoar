@@ -199,7 +199,7 @@ RasterWeather::LoadItem(const TCHAR* name, unsigned time_index)
 {
   TCHAR rasp_filename[MAX_PATH];
   GetFilename(rasp_filename, name, time_index);
-  RasterMap *map = new RasterMap(rasp_filename);
+  RasterMap *map = new RasterMap(rasp_filename, NULL);
   if (!map->isMapLoaded()) {
     delete map;
     return false;

@@ -124,7 +124,7 @@ SettingsLeave()
 
     // re-load terrain
     delete terrain;
-    terrain = RasterTerrain::OpenTerrain();
+    terrain = RasterTerrain::OpenTerrain(file_cache);
 
     // re-load waypoints
     WayPointGlue::ReadWaypoints(way_points, terrain);

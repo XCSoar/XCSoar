@@ -42,7 +42,7 @@ Copyright_License {
 // General, open/close
 
 RasterTerrain *
-RasterTerrain::OpenTerrain()
+RasterTerrain::OpenTerrain(FileCache *cache)
 {
   TCHAR szFile[MAX_PATH];
 
@@ -52,7 +52,7 @@ RasterTerrain::OpenTerrain()
   } else
     return NULL;
 
-  RasterTerrain *rt = new RasterTerrain(szFile);
+  RasterTerrain *rt = new RasterTerrain(szFile, cache);
   if (!rt->map.isMapLoaded()) {
     delete rt;
     return NULL;
