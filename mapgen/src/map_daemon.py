@@ -60,7 +60,7 @@ class MapDaemon:
             if job != None:
                 return job
             
-            self.__delete_job(dir_job)
+            self.__delete_job(file_job)
             
         return None
     
