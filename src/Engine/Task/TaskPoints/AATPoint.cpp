@@ -36,6 +36,7 @@
 */
 
 #include "AATPoint.hpp"
+#include "Navigation/Flat/FlatLine.hpp"
 #include <math.h>
 
 const GeoPoint&
@@ -172,6 +173,64 @@ AATPoint::set_target(const GeoPoint &loc, const bool override_lock)
   if (override_lock || !m_target_locked) {
     m_target_location = loc;
   }
+}
+
+void
+AATPoint::set_target(const fixed range, const fixed radial)
+{
+  fixed oldrange = fixed_zero;
+  fixed oldradial = fixed_zero;
+  get_target_range_radial(oldrange, oldradial);
+
+  const TaskProjection &proj = get_task_projection();
+
+  const FlatPoint fprev = proj.fproject(get_previous()->get_location());
+  const FlatPoint floc = proj.fproject(get_location());
+  const FlatLine flb (fprev,floc);
+  const FlatLine fradius (floc,proj.fproject(get_location_min()));
+  const fixed bearing = fixed_minus_one * flb.angle().value_degrees();
+  const fixed radius = fradius.d();
+
+  fixed swapquadrants = fixed_zero;
+  if (positive(range) != positive(oldrange))
+    swapquadrants = fixed(180);
+  const FlatPoint ftarget1 (fabs(range) * radius *
+        cos((bearing + radial + swapquadrants)
+            / fixed(360) * fixed_two_pi),
+      fabs(range) * radius *
+        sin( fixed_minus_one * (bearing + radial + swapquadrants)
+            / fixed(360) * fixed_two_pi));
+
+  const FlatPoint ftarget2 = floc + ftarget1;
+  const GeoPoint targetG = proj.funproject(ftarget2);
+
+  set_target(targetG, true);
+}
+
+void
+AATPoint::get_target_range_radial(fixed &range, fixed &radial) const
+{
+  const fixed oldrange = range;
+  const fixed oldradial = radial;
+
+  const GeoPoint fprev = get_previous()->get_location();
+  const GeoPoint floc = get_location();
+  const Angle radialraw = (floc.bearing(get_location_target()) -
+      fprev.bearing(floc)).as_bearing();
+
+  const fixed d = floc.distance(get_location_target());
+  const fixed radius = floc.distance(get_location_min());
+  const fixed rangeraw = d / radius;
+  if (d > radius)
+    return; // should never happen
+
+  radial = radialraw.as_delta().value_degrees();
+  const fixed rangesign = (fabs(radial) > fixed(90)) ?
+      fixed_minus_one : fixed_one;
+  range = rangeraw * rangesign;
+
+  if ((oldrange == fixed_zero) && (range == fixed_zero))
+    radial = fixed_zero;
 }
 
 
