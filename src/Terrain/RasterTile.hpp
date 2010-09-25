@@ -65,7 +65,7 @@ public:
 #define MAX_ACTIVE_TILES 16
 
 class RasterTileCache : private NonCopyable {
-  static const unsigned MAX_RTC_TILES = 1024;
+  static const unsigned MAX_RTC_TILES = 4096;
   static const unsigned RTC_SUBSAMPLING = 16;
 
 public:
