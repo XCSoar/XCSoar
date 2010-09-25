@@ -37,6 +37,7 @@
 #include "TaskManager.hpp"
 #include "Visitors/TaskVisitor.hpp"
 #include "Visitors/TaskPointVisitor.hpp"
+#include "Sizes.h"
 
 // uses delegate pattern
 
@@ -443,6 +444,162 @@ TaskManager::get_task_radius(const GeoPoint& fallback_location) const
     return active_task->get_task_radius(fallback_location);
 
   return fixed_zero;
+}
+/*
+OrderedTaskPoint*
+TaskManager::get_ordered_task_point(unsigned TPindex) const {
+ if (!check_ordered_task())
+   return NULL;
+
+ return task_ordered.get_ordered_task_point(TPindex);
+}
+
+AATPoint*
+TaskManager::get_AAT_task_point(unsigned TPindex) const {
+ if (!check_ordered_task())
+   return NULL;
+
+ return task_ordered.get_AAT_task_point(TPindex);
+}
+*/
+const TCHAR*
+TaskManager::get_ordered_taskpoint_name(unsigned TPindex) const
+{
+ static TCHAR buff[NAME_SIZE+1];
+ buff[0] = '\0';
+
+ if (!check_ordered_task())
+   return buff;
+
+ if (active_task == &task_ordered && TPindex < task_size())
+   _tcsncpy(buff, task_ordered.getTaskPoint(TPindex)->get_waypoint().Name.c_str(), NAME_SIZE);
+
+ buff[NAME_SIZE] = '\0';
+
+ return buff;
+}
+////////////////////////////
+
+
+
+bool
+TaskManager::isInSector (const unsigned TPindex, const AIRCRAFT_STATE &ref) const
+{
+  if (!check_ordered_task())
+    return false;
+
+  const AATPoint *ap = task_ordered.get_AAT_task_point(TPindex);
+  if (ap)
+    return ap->isInSector(ref);
+
+  return false;
+}
+
+const GeoPoint&
+TaskManager::get_location_target(const unsigned TPindex, const GeoPoint& fallback_location) const
+{
+  if (!check_ordered_task())
+    return fallback_location;
+
+  const AATPoint *ap = task_ordered.get_AAT_task_point(TPindex);
+  if (ap)
+    return ap->get_location_target();
+
+ return fallback_location;
+}
+bool
+TaskManager::target_is_locked(const unsigned TPindex) const
+{
+  if (!check_ordered_task())
+    return false;
+
+  const AATPoint *ap = task_ordered.get_AAT_task_point(TPindex);
+  if (ap)
+    return ap->target_is_locked();
+
+ return false;
+}
+
+bool
+TaskManager::has_target(const unsigned TPindex) const
+{
+  if (!check_ordered_task())
+    return false;
+
+  const AATPoint *ap = task_ordered.get_AAT_task_point(TPindex);
+  if (ap)
+    return ap->has_target();
+
+ return false;
+}
+
+bool
+TaskManager::set_target(const unsigned TPindex, const GeoPoint &loc,
+   const bool override_lock)
+{
+  if (!check_ordered_task())
+    return false;
+
+  AATPoint *ap = task_ordered.get_AAT_task_point(TPindex);
+  if (ap)
+    ap->set_target(loc, override_lock);
+
+  return true;
+}
+
+bool
+TaskManager::set_target(const unsigned TPindex, const fixed range,
+   const fixed radial)
+{
+  if (!check_ordered_task())
+    return false;
+
+  AATPoint *ap = task_ordered.get_AAT_task_point(TPindex);
+  if (ap)
+    ap->set_target(range, radial);
+
+  return true;
+}
+
+bool
+TaskManager::get_target_range_radial(const unsigned TPindex, fixed &range,
+   fixed &radial) const
+{
+  if (!check_ordered_task())
+    return false;
+
+  const AATPoint *ap = task_ordered.get_AAT_task_point(TPindex);
+  if (ap)
+    ap->get_target_range_radial(range, radial);
+
+  return true;
+}
+
+bool
+TaskManager::target_lock(const unsigned TPindex, bool do_lock)
+{
+  if (!check_ordered_task())
+    return false;
+
+  AATPoint *ap = task_ordered.get_AAT_task_point(TPindex);
+  if (ap)
+    ap->target_lock(do_lock);
+
+  return true;
+}
+
+const GeoPoint&
+TaskManager::get_ordered_taskpoint_location(const unsigned TPindex,
+   const GeoPoint& fallback_location) const
+{
+  if (!check_ordered_task())
+    return fallback_location;
+
+  TaskPoint *tp = task_ordered.get_ordered_task_point(TPindex);
+  if (tp)
+    return tp->get_location();
+
+  return fallback_location;
 }
 
 OrderedTask* 
