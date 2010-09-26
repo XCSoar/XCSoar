@@ -83,11 +83,20 @@ class MapDaemon:
                 print "No waypoint file or bounds set. Aborting."
                 self.__delete_job(job.file_job)
                 return
+
+            if isinstance(job.waypoint_file, basestring):
+                job.waypoint_file = job.waypoint_file.replace("\\", "/")
+            if isinstance(job.waypoint_details_file, basestring):
+                job.waypoint_details_file = job.waypoint_details_file.replace("\\", "/")
+            if isinstance(job.airspace_file, basestring):
+                job.airspace_file = job.airspace_file.replace("\\", "/")
+            if isinstance(job.output_file, basestring):
+                job.output_file = job.output_file.replace("\\", "/")
                 
             m = MapGenerator()
             if job.waypoint_file != None:
-                m.AddWaypointFile(job.waypoint_file)
-                m.SetBoundsByWaypointFile(job.waypoint_file)
+                m.AddWaypointFile(os.path.normpath(job.waypoint_file))
+                m.SetBoundsByWaypointFile(os.path.normpath(job.waypoint_file))
             if job.bounds != None:
                 m.SetBounds(job.bounds)
             
@@ -98,12 +107,12 @@ class MapDaemon:
                 m.AddTerrain(job.resolution)
             
             if job.waypoint_details_file != None:
-                m.AddWaypointDetailsFile(job.waypoint_details_file)
+                m.AddWaypointDetailsFile(os.path.normpath(job.waypoint_details_file))
                 
             if job.airspace_file != None:
-                m.AddAirspaceFile(job.airspace_file)
+                m.AddAirspaceFile(os.path.normpath(job.airspace_file))
                 
-            m.Create(job.output_file)
+            m.Create(os.path.normpath(job.output_file))
             m.Cleanup()
             print "Map ready for use (" + job.output_file + ")"
             self.__delete_job(job.file_job)
