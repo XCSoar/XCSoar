@@ -167,7 +167,9 @@ public:
                        double lat_min, double lat_max);
   void SetTile(unsigned index, int xstart, int ystart, int xend, int yend);
 
-  void SetInitialised(bool val);
+  void SetInitialised(bool val) {
+    initialised = val;
+  }
 
 protected:
   bool PollTiles(int x, int y);

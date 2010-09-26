@@ -266,21 +266,6 @@ RasterTileCache::Reset()
   ActiveTiles.clear();
 }
 
-void
-RasterTileCache::SetInitialised(bool val)
-{
-  if (!initialised && val) {
-    if (bounds.empty())
-      return;
-
-    initialised = true;
-    scan_overview = false;
-
-    return;
-  }
-  initialised = val;
-}
-
 gcc_pure
 const RasterTileCache::MarkerSegmentInfo *
 RasterTileCache::FindMarkerSegment(long file_offset) const
@@ -359,6 +344,11 @@ RasterTileCache::LoadOverview(const char *path)
   Reset();
 
   LoadJPG2000(path);
+  scan_overview = false;
+
+  if (initialised && bounds.empty())
+    initialised = false;
+
   if (!initialised)
     Reset();
 
@@ -427,7 +417,8 @@ RasterTileCache::LoadCache(FILE *file)
       header.width < 1024 || header.width > 1024 * 1024 ||
       header.height < 1024 || header.height > 1024 * 1024 ||
       header.num_marker_segments < 4 ||
-      header.num_marker_segments > segments.MAX_SIZE)
+      header.num_marker_segments > segments.MAX_SIZE ||
+      header.bounds.empty())
     return false;
 
   SetSize(header.width, header.height);
@@ -462,6 +453,7 @@ RasterTileCache::LoadCache(FILE *file)
             overview_size, file) != overview_size)
     return false;
 
-  SetInitialised(true);
+  initialised = true;
+  scan_overview = false;
   return true;
 }
