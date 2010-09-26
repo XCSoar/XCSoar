@@ -266,7 +266,8 @@ jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr)
 	}
 
 	if (dec->xcsoar) {
-		jas_rtc_SetInitialised(true);
+		if (dec->xcsoar == 2)
+			jas_rtc_SetInitialised(true);
 		jpc_dec_destroy(dec);
 		return 0;
 	}
