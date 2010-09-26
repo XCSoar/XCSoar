@@ -345,11 +345,12 @@ RasterTileCache::LoadJPG2000(const char *jp2_filename)
 
   in = jas_stream_fopen(jp2_filename, "rb");
   if (!in) {
-    SetInitialised(false);
-  } else {
-    jp2_decode(in, scan_overview ? "xcsoar=2" : "xcsoar=1");
-    jas_stream_close(in);
+    Reset();
+    return;
   }
+
+  jp2_decode(in, scan_overview ? "xcsoar=2" : "xcsoar=1");
+  jas_stream_close(in);
 }
 
 bool
