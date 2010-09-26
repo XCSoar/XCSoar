@@ -52,12 +52,6 @@ extern "C" {
     raster_tile_current->SetInitialised(val);
   }
 
-  /*
-  bool jas_rtc_GetInitialised(void) {
-    return raster_tile_current->GetInitialised();
-  }
-  */
-
   short* jas_rtc_GetOverview(void) {
     return raster_tile_current->GetOverview();
   }

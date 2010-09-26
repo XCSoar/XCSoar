@@ -15,7 +15,6 @@ extern "C" {
   void jas_rtc_SetLatLonBounds(double lon_min, double lon_max, double lat_min, double lat_max);
   void jas_rtc_SetSize(unsigned width, unsigned height);
   void jas_rtc_SetInitialised(bool val);
-  bool jas_rtc_GetInitialised(void);
   short* jas_rtc_GetOverview(void);
   void jas_rtc_stepprogress(void);
   void jas_rtc_set_num_tiles(unsigned num);
