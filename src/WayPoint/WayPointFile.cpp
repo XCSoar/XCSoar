@@ -138,7 +138,7 @@ WayPointFile::Parse(Waypoints &way_points,
   if (file[0] == 0)
     return false;
 
-  ProgressGlue::SetRange(100);
+  ProgressGlue::SetRange(25);
 
   // If normal file
   if (!compressed) {
@@ -155,7 +155,7 @@ WayPointFile::Parse(Waypoints &way_points,
       // and parse them
       parseLine(line, i, way_points, terrain);
 
-      unsigned status = reader.tell() * 100 / filesize;
+      unsigned status = reader.tell() * 25 / filesize;
       ProgressGlue::SetValue(status);
     }
   // If compressed file inside map file
@@ -173,7 +173,7 @@ WayPointFile::Parse(Waypoints &way_points,
       // and parse them
       parseLine(line, i, way_points, terrain);
 
-      unsigned status = reader.tell() * 100 / filesize;
+      unsigned status = reader.tell() * 25 / filesize;
       ProgressGlue::SetValue(status);
     }
   }
