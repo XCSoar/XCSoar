@@ -1631,11 +1631,8 @@ static int jpc_dec_process_com(jpc_dec_t *dec, jpc_ms_t *ms)
 			if (cptr) {
 				sscanf(cptr+6, "%f %f %f %f", &lon_min, &lon_max, &lat_min, &lat_max);
 				jas_rtc_SetLatLonBounds(lon_min, lon_max, lat_min, lat_max);
-				return 0;
 			}
 		}
-		// Error! XCSoar header text not found
-		return -1;
 	}
 
 	return 0;
