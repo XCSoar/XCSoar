@@ -304,27 +304,26 @@ RefreshCalculator() {
 
   // update outputs
 
-  fixed timerem = XCSoarInterface::Calculated().task_stats.total.TimeRemaining;
   fixed speedach = XCSoarInterface::Calculated().task_stats.total.travelled.get_speed();
 
-  fixed distrem = XCSoarInterface::Calculated().task_stats.total.remaining.get_distance();
+  fixed distrem = XCSoarInterface::Calculated().task_stats.total.solution_planned.Vector.Distance;
   fixed speedtrem = XCSoarInterface::Calculated().task_stats.total.remaining.get_speed();
   fixed aattimerem = XCSoarInterface::Calculated().common_stats.aat_time_remaining;
+  fixed aattimeEst = XCSoarInterface::Calculated().common_stats.task_time_remaining +
+      XCSoarInterface::Calculated().common_stats.task_time_elapsed;
+  fixed aatTime = protected_task_manager.get_ordered_task_behaviour().aat_min_time;
 
 //  if ((XCSoarInterface::Calculated().TaskStartTime>0.0)&&(XCSoarInterface::Calculated().Flying)) {
 //    dd += XCSoarInterface::Basic().Time-XCSoarInterface::Calculated().TaskStartTime;
 //  }
-  timerem = min(fixed(24 * 60), timerem / fixed(60));
   wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));// Same as infobox
   if (wp) {
-    wp->GetDataField()->Set(timerem);
+    wp->GetDataField()->Set(aattimeEst / fixed(60));
     wp->RefreshDisplay();
   }
   wp = (WndProperty*)wf->FindByName(_T("prpAATDelta")); // same as infobox
   if (wp) {
-    fixed detlatime = aattimerem - timerem;
-    detlatime = min(fixed(24 * 60), detlatime / fixed(60));
-    wp->GetDataField()->Set(detlatime);
+    wp->GetDataField()->Set((aatTime - aattimeEst) / fixed(60));
     wp->RefreshDisplay();
   }
 /*
@@ -336,14 +335,15 @@ RefreshCalculator() {
     v1 = 0;
   }
   */
-/*
+
   wp = (WndProperty*)wf->FindByName(_T("prpSpeedRemaining"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(Units::ToUserUnit(v1, Units::TaskSpeedUnit));
-    wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
-    wp->RefreshDisplay();
+    wp->GetDataField()->SetAsFloat(Units::ToUserTaskSpeed(
+       XCSoarInterface::Calculated().task_stats.total.remaining_effective.get_speed()));
+       wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
+       wp->RefreshDisplay();
   }
-*/
+
   wp = (WndProperty*)wf->FindByName(_T("prpSpeedAchieved"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(Units::ToUserUnit(speedach, Units::TaskSpeedUnit));
