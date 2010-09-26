@@ -84,7 +84,7 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
   ///  oldGlidePolar::SetMacCready(GPS_INFO->MacCready);
 
-  vias = Units::ToSysUnit(line.read(fixed_zero), unKnots);
+  vias = sqrt(Units::ToSysUnit(line.read(fixed_zero), unKnots));
 
   // RMN: Changed bugs-calculation, swapped ballast and bugs to suit
   // the B50-string for Borgelt, it's % degradation, for us, it is %
