@@ -1620,7 +1620,7 @@ static int jpc_dec_process_com(jpc_dec_t *dec, jpc_ms_t *ms)
 	char* cptr;
 
 	// JMW
-	if (dec->xcsoar) {
+	if (dec->xcsoar == 2) {
 		char sTmp[128];
 		jpc_com_t *com = &ms->parms.com;
 
