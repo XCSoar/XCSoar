@@ -365,9 +365,11 @@ OnMoveClicked(WindowControl * Sender){
   (void)Sender;
   TargetMoveMode = !TargetMoveMode;
   if (TargetMoveMode) {
-    btnMove->SetCaption(_T("Cursor"));
+    if (btnMove)
+      btnMove->SetCaption(_T("Cursor"));
   } else {
-    btnMove->SetCaption(_T("Move"));
+    if (btnMove)
+      btnMove->SetCaption(_T("Move"));
   }
   RefreshCalculator();
 }
@@ -577,7 +579,8 @@ dlgTarget() {
   TargetMoveMode = false;
 
   btnMove = (WndButton*)wf->FindByName(_T("btnMove"));
-  btnMove->set_visible(false); // todo enable move buttons
+  if (btnMove)
+    btnMove->set_visible(false); // todo enable move buttons
   btnIsLocked = (WndButton*)wf->FindByName(_T("btnIsLocked"));
 
   assert(btnIsLocked != NULL);
