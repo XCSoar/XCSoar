@@ -55,7 +55,7 @@ class RasterMap : private NonCopyable {
   RasterProjection projection;
 
 public:
-  RasterMap(const TCHAR *path, FileCache *cache);
+  RasterMap(const TCHAR *path, const TCHAR *world_file, FileCache *cache);
   ~RasterMap();
 
   bool isMapLoaded() const {

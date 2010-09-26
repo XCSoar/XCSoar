@@ -7,6 +7,7 @@
 #include "Util/ActiveList.hpp"
 #include "Util/StaticArray.hpp"
 
+#include <tchar.h>
 #include <stddef.h>
 #include <stdio.h>
 
@@ -125,9 +126,16 @@ public:
   short GetField(unsigned int lx,
                  unsigned int ly) const;
 
+protected:
   void LoadJPG2000(const char *path);
 
-  bool LoadOverview(const char *path);
+  /**
+   * Load a world file (*.tfw or *.j2w).
+   */
+  bool LoadWorldFile(const TCHAR *path);
+
+public:
+  bool LoadOverview(const char *path, const TCHAR *world_file);
 
   bool SaveCache(FILE *file) const;
   bool LoadCache(FILE *file);

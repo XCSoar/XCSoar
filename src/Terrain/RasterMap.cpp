@@ -44,7 +44,8 @@ Copyright_License {
 #include <assert.h>
 #include <string.h>
 
-RasterMap::RasterMap(const TCHAR *_path, FileCache *cache)
+RasterMap::RasterMap(const TCHAR *_path, const TCHAR *world_file,
+                     FileCache *cache)
   :path(strdup(NarrowPathName(_path)))
 {
   bool cache_loaded = false;
@@ -58,7 +59,7 @@ RasterMap::RasterMap(const TCHAR *_path, FileCache *cache)
   }
 
   if (!cache_loaded) {
-    if (!raster_tile_cache.LoadOverview(path))
+    if (!raster_tile_cache.LoadOverview(path, world_file))
       return;
 
     if (cache != NULL) {

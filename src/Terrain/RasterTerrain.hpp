@@ -67,8 +67,8 @@ public:
  * Constructor.  Returns uninitialised object. 
  * 
  */
-  RasterTerrain(const TCHAR *path, FileCache *cache)
-    :Guard<RasterMap>(map), map(path, cache) {}
+  RasterTerrain(const TCHAR *path, const TCHAR *world_file, FileCache *cache)
+    :Guard<RasterMap>(map), map(path, world_file, cache) {}
 
 /** 
  * Load the terrain.  Determines the file to load from profile settings.

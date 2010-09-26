@@ -39,8 +39,11 @@ Copyright_License {
 #include "Terrain/RasterTile.hpp"
 #include "jasper/jas_image.h"
 #include "Math/Angle.hpp"
+#include "IO/ZipSource.hpp"
+#include "IO/LineSplitter.hpp"
 #include "ProgressGlue.hpp"
 
+#include <stdlib.h>
 #include <algorithm>
 
 using std::min;
@@ -344,12 +347,77 @@ RasterTileCache::LoadJPG2000(const char *jp2_filename)
 }
 
 bool
-RasterTileCache::LoadOverview(const char *path)
+RasterTileCache::LoadWorldFile(const TCHAR *path)
+{
+  ZipSource source(path);
+  if (source.error())
+    return false;
+
+  LineSplitter reader(source);
+
+  char *endptr;
+  const char *line = reader.read(); // x scale
+  double x_scale = strtod(line, &endptr);
+  if (endptr == line)
+    return false;
+
+  line = reader.read(); // y rotation
+  if (line == NULL)
+    return false;
+
+  double y_rotation = strtod(line, &endptr);
+  if (endptr == line || y_rotation < -0.01 || y_rotation > 0.01)
+    /* we don't support rotation */
+    return false;
+
+  line = reader.read(); // x rotation
+  if (line == NULL)
+    return false;
+
+  double x_rotation = strtod(line, &endptr);
+  if (endptr == line || x_rotation < -0.01 || x_rotation > 0.01)
+    /* we don't support rotation */
+    return false;
+
+  line = reader.read(); // y scale
+  if (line == NULL)
+    return false;
+
+  double y_scale = strtod(line, &endptr);
+  if (endptr == line)
+    return false;
+
+  line = reader.read(); // x origin
+  if (line == NULL)
+    return false;
+
+  double x_origin = strtod(line, &endptr);
+  if (endptr == line)
+    return false;
+
+  line = reader.read(); // y origin
+  if (line == NULL)
+    return false;
+
+  double y_origin = strtod(line, &endptr);
+  if (endptr == line)
+    return false;
+
+  SetLatLonBounds(x_origin, x_origin + GetWidth() * x_scale,
+                  y_origin, y_origin + GetHeight() * y_scale);
+  return true;
+}
+
+bool
+RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file)
 {
   Reset();
 
   LoadJPG2000(path);
   scan_overview = false;
+
+  if (initialised && world_file != NULL)
+    LoadWorldFile(world_file);
 
   if (initialised && bounds.empty())
     initialised = false;

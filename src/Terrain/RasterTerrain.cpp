@@ -38,21 +38,29 @@ Copyright_License {
 
 #include "Terrain/RasterTerrain.hpp"
 #include "Profile.hpp"
+#include "OS/PathName.hpp"
+#include "Compatibility/path.h"
 
 // General, open/close
 
 RasterTerrain *
 RasterTerrain::OpenTerrain(FileCache *cache)
 {
-  TCHAR szFile[MAX_PATH];
+  TCHAR szFile[MAX_PATH], world_file_buffer[MAX_PATH];
+  const TCHAR *world_file;
 
   if (Profile::GetPath(szProfileTerrainFile, szFile)) {
+    world_file = NULL;
   } else if (Profile::GetPath(szProfileMapFile, szFile)) {
+    _tcscpy(world_file_buffer, szFile);
+    _tcscat(world_file_buffer, _T(DIR_SEPARATOR_S "terrain.j2w"));
+    world_file = world_file_buffer;
+
     _tcscat(szFile, _T("/terrain.jp2"));
   } else
     return NULL;
 
-  RasterTerrain *rt = new RasterTerrain(szFile, cache);
+  RasterTerrain *rt = new RasterTerrain(szFile, world_file, cache);
   if (!rt->map.isMapLoaded()) {
     delete rt;
     return NULL;
