@@ -22,11 +22,19 @@ class MapDaemon:
         self.__dir_jobs = os.path.abspath(dir_jobs)
         self.__run = False
     
-    def __delete_job(self, file_job):
+    def __lock_download(self, dir_job):
+        open(os.path.join(dir_job, "download.lock"), "w").close()
+    
+    def __delete_job(self, file_job, complete = True):
         dir_job = os.path.dirname(file_job)
-        for file in os.listdir(dir_job):
-            os.unlink(os.path.join(dir_job, file))
-        os.rmdir(dir_job)
+        if complete:
+            for file in os.listdir(dir_job):
+                os.unlink(os.path.join(dir_job, file))
+            os.rmdir(dir_job)
+        else:
+            if os.path.exists(file_job):
+                os.unlink(file_job)
+            
         print "Job deleted (" + file_job + ")"
         
     def __read_job(self, file_job):
@@ -44,6 +52,9 @@ class MapDaemon:
     def __check_job_lock_expired(self, file_lock):
         return (time.time() - os.path.getctime(file_lock) > 60 * 60 * 2)
     
+    def __check_download_lock_expired(self, file_lock):
+        return (time.time() - os.path.getctime(file_lock) > 60 * 60 * 24 * 7)
+    
     def __check_jobs(self):
         for file in os.listdir(self.__dir_jobs):
             dir_job = os.path.join(self.__dir_jobs, file)
@@ -59,6 +70,12 @@ class MapDaemon:
                 continue
             
             if not os.path.exists(file_job):
+                file_download = os.path.join(dir_job, "download.lock")
+                if os.path.exists(file_download):
+                    if self.__check_download_lock_expired(file_download):
+                        print "---------------------"
+                        print "Download lock expired (" + file_download + ")"
+                        self.__delete_job(file_job)
                 continue
 
             print "---------------------"
@@ -115,7 +132,8 @@ class MapDaemon:
             m.Create(os.path.normpath(job.output_file))
             m.Cleanup()
             print "Map ready for use (" + job.output_file + ")"
-            self.__delete_job(job.file_job)
+            self.__lock_download(os.path.dirname(job.file_job))
+            self.__delete_job(job.file_job, False)
             return
             
         if job.command == "stop":
