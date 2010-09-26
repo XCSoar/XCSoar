@@ -269,12 +269,14 @@ def __convert(dir_temp, input_file, rc):
             "-T", "jp2",
             "-O", "rate=0.1",
             "-O", "tilewidth=256",
-            "-O", "tileheight=256",
-            "-O", "xcsoar=1",
-            "-O", "lonmin=" + str(rc.left.value_degrees()),
-            "-O", "lonmax=" + str(rc.right.value_degrees()),
-            "-O", "latmax=" + str(rc.top.value_degrees()),
-            "-O", "latmin=" + str(rc.bottom.value_degrees())]
+            "-O", "tileheight=256"]
+    
+    if not use_world_file:
+        args.extend(["-O", "xcsoar=1",
+                     "-O", "lonmin=" + str(rc.left.value_degrees()),
+                     "-O", "lonmax=" + str(rc.right.value_degrees()),
+                     "-O", "latmax=" + str(rc.top.value_degrees()),
+                     "-O", "latmin=" + str(rc.bottom.value_degrees())])
 
     p = subprocess.Popen(args)
     p.wait()
