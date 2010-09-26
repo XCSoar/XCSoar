@@ -141,7 +141,7 @@ class MapGenerator:
         print "Setting map boundaries to match waypoint file contents ..."
 
         print "Reading waypoint file ..."
-        if not isinstance(filename, str):
+        if not isinstance(filename, basestring):
             print "failed! (String expected)"
             return False
 
