@@ -16,6 +16,6 @@
     <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="-92" Max="92" Step="5" OnDataAccess="OnRadialData"/>
   </Edit>
 
-  <Button Name="btnIsLocked" Caption="Locked" X="s" Width="50" Height="22" OnClick="OnIsLockedClicked" />
+  <Button Name="btnIsLocked" Caption="Locked" X="2" Width="50" Height="22" OnClick="OnIsLockedClicked" />
 
 </Form>
