@@ -77,14 +77,21 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   fixed vtas, vias, wnet;
 
-  vtas = Units::ToSysUnit(line.read(fixed_zero), unKnots);
+  bool vtas_av = line.read_checked(vtas);
   wnet = Units::ToSysUnit(line.read(fixed_zero), unKnots);
   GPS_INFO->MacCready = Units::ToSysUnit(line.read(fixed_zero), unKnots);
 
   /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
   ///  oldGlidePolar::SetMacCready(GPS_INFO->MacCready);
 
-  vias = sqrt(Units::ToSysUnit(line.read(fixed_zero), unKnots));
+  if (line.read_checked(vias) && vtas_av) {
+    vtas = Units::ToSysUnit(vtas, unKnots);
+    vias = Units::ToSysUnit(sqrt(vias), unKnots);
+
+    GPS_INFO->AirspeedAvailable = true;
+    GPS_INFO->IndicatedAirspeed = vias;
+    GPS_INFO->TrueAirspeed = vtas;
+  }
 
   // RMN: Changed bugs-calculation, swapped ballast and bugs to suit
   // the B50-string for Borgelt, it's % degradation, for us, it is %
@@ -121,9 +128,6 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     triggerClimbEvent.reset();
   }
 
-  GPS_INFO->AirspeedAvailable = true;
-  GPS_INFO->IndicatedAirspeed = vias;
-  GPS_INFO->TrueAirspeed = vtas;
   GPS_INFO->TotalEnergyVarioAvailable = true;
   GPS_INFO->TotalEnergyVario = wnet;
 
