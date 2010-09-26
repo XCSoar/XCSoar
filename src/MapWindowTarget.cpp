@@ -124,12 +124,12 @@ bool MapWindow::isClickOnTarget(const POINT pc)
 
     if (!protected_task_manager.target_is_locked(XCSoarInterface::SetSettingsMap().TargetPanIndex))
       return false;
-
+    GeoPoint gnull;
     const GeoPoint& t = protected_task_manager.get_location_target(
         XCSoarInterface::SetSettingsMap().TargetPanIndex,
-        terrain_center);
+        gnull);
 
-    if (t == terrain_center)
+    if (t == gnull)
       return false;
 
     const POINT pt = projection.LonLat2Screen(t);
