@@ -389,10 +389,6 @@ static int jpc_dec_decode(jpc_dec_t *dec)
 	int ret;
 	jpc_cstate_t *cstate;
 
-	if (dec->xcsoar) {
-		jas_rtc_SetInitialised(false);
-	}
-
 	if (!(cstate = jpc_cstate_create())) {
 		return -1;
 	}
