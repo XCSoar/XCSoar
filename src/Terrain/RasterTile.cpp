@@ -39,6 +39,7 @@ Copyright_License {
 #include "Terrain/RasterTile.hpp"
 #include "jasper/jas_image.h"
 #include "Math/Angle.hpp"
+#include "ProgressGlue.hpp"
 
 #include <algorithm>
 
@@ -307,6 +308,8 @@ RasterTileCache::SkipMarkerSegment(long file_offset) const
 void
 RasterTileCache::MarkerSegment(long file_offset, unsigned id)
 {
+  ProgressGlue::SetValue(file_offset / 65536);
+
   if (!scan_overview || segments.full())
     return;
 
@@ -333,6 +336,8 @@ RasterTileCache::LoadJPG2000(const char *jp2_filename)
     Reset();
     return;
   }
+
+  ProgressGlue::SetRange(jas_stream_length(in) / 65536);
 
   jp2_decode(in, scan_overview ? "xcsoar=2" : "xcsoar=1");
   jas_stream_close(in);

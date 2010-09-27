@@ -1,16 +1,7 @@
 #include "jasper/jpc_rtc.h"
 #include "Terrain/RasterTile.hpp"
-#include "ProgressGlue.hpp"
 
 RasterTileCache *raster_tile_current = 0;
-
-static void StepProgressDialog(void) {
-  ProgressGlue::Step();
-}
-
-static void SetNumTiles(unsigned num) {
-  ProgressGlue::SetStep(1000 / (num + MAX_ACTIVE_TILES));
-}
 
 extern "C" {
 
@@ -20,13 +11,6 @@ extern "C" {
 
   void jas_rtc_MarkerSegment(long file_offset, unsigned id) {
     return raster_tile_current->MarkerSegment(file_offset, id);
-  }
-
-  void jas_rtc_stepprogress(void) {
-    StepProgressDialog();
-  }
-  void jas_rtc_set_num_tiles(unsigned num) {
-    SetNumTiles(num);
   }
 
   void jas_rtc_SetTile(unsigned index,
