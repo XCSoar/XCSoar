@@ -545,56 +545,56 @@ gcc_pure
 inline fixed operator*(fixed const& a,unsigned long b)
 {
   fixed temp(a);
-  return temp *= fixed(b);
+  return temp *= b;
 }
 
 gcc_pure
 inline fixed operator*(fixed const& a,long b)
 {
   fixed temp(a);
-  return temp *= fixed(b);
+  return temp *= b;
 }
 
 gcc_pure
 inline fixed operator*(fixed const& a,unsigned b)
 {
   fixed temp(a);
-  return temp *= fixed(b);
+  return temp *= b;
 }
 
 gcc_pure
 inline fixed operator*(fixed const& a,int b)
 {
   fixed temp(a);
-  return temp *= fixed(b);
+  return temp *= b;
 }
 
 gcc_pure
 inline fixed operator*(fixed const& a,unsigned short b)
 {
   fixed temp(a);
-  return temp *= fixed(b);
+  return temp *= b;
 }
 
 gcc_pure
 inline fixed operator*(fixed const& a,short b)
 {
   fixed temp(a);
-  return temp *= fixed(b);
+  return temp *= b;
 }
 
 gcc_pure
 inline fixed operator*(fixed const& a,unsigned char b)
 {
   fixed temp(a);
-  return temp *= fixed(b);
+  return temp *= b;
 }
 
 gcc_pure
 inline fixed operator*(fixed const& a,char b)
 {
   fixed temp(a);
-  return temp *= fixed(b);
+  return temp *= b;
 }
 
 gcc_pure
@@ -608,56 +608,56 @@ gcc_pure
 inline fixed operator/(fixed const& a,unsigned long b)
 {
   fixed temp(a);
-  return temp /= fixed(b);
+  return temp /= b;
 }
 
 gcc_pure
 inline fixed operator/(fixed const& a,long b)
 {
   fixed temp(a);
-  return temp /= fixed(b);
+  return temp /= b;
 }
 
 gcc_pure
 inline fixed operator/(fixed const& a,unsigned b)
 {
   fixed temp(a);
-  return temp /= fixed(b);
+  return temp /= b;
 }
 
 gcc_pure
 inline fixed operator/(fixed const& a,int b)
 {
   fixed temp(a);
-  return temp /= fixed(b);
+  return temp /= b;
 }
 
 gcc_pure
 inline fixed operator/(fixed const& a,unsigned short b)
 {
   fixed temp(a);
-  return temp /= fixed(b);
+  return temp /= b;
 }
 
 gcc_pure
 inline fixed operator/(fixed const& a,short b)
 {
   fixed temp(a);
-  return temp /= fixed(b);
+  return temp /= b;
 }
 
 gcc_pure
 inline fixed operator/(fixed const& a,unsigned char b)
 {
   fixed temp(a);
-  return temp /= fixed(b);
+  return temp /= b;
 }
 
 gcc_pure
 inline fixed operator/(fixed const& a,char b)
 {
   fixed temp(a);
-  return temp /= fixed(b);
+  return temp /= b;
 }
 
 gcc_pure
