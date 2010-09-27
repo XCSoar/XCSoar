@@ -49,6 +49,14 @@ class MapDaemon:
         
         return job
     
+    def __update_job_status(self, dir_job, status):
+        if not os.path.exists(dir_job):
+            return
+        
+        f = open(os.path.join(dir_job, "status"), "w")
+        f.write(status)
+        f.close()
+    
     def __check_job_lock_expired(self, file_lock):
         return (time.time() - os.path.getctime(file_lock) > 60 * 60 * 2)
     
@@ -112,25 +120,39 @@ class MapDaemon:
                 
             m = MapGenerator()
             if job.waypoint_file != None:
+                self.__update_job_status(os.path.dirname(job.file_job), 
+                                         "Adding waypoint file...")
                 m.AddWaypointFile(os.path.normpath(job.waypoint_file))
                 m.SetBoundsByWaypointFile(os.path.normpath(job.waypoint_file))
             if job.bounds != None:
                 m.SetBounds(job.bounds)
             
             if job.no_topology != True:
+                self.__update_job_status(os.path.dirname(job.file_job), 
+                                         "Creating topology files...")
                 m.AddTopology()
 
             if job.no_terrain != True:
+                self.__update_job_status(os.path.dirname(job.file_job), 
+                                         "Creating terrain files...")
                 m.AddTerrain(job.resolution)
             
             if job.waypoint_details_file != None:
+                self.__update_job_status(os.path.dirname(job.file_job), 
+                                         "Adding waypoint details file...")
                 m.AddWaypointDetailsFile(os.path.normpath(job.waypoint_details_file))
                 
             if job.airspace_file != None:
+                self.__update_job_status(os.path.dirname(job.file_job), 
+                                         "Adding airspace file...")
                 m.AddAirspaceFile(os.path.normpath(job.airspace_file))
                 
+            self.__update_job_status(os.path.dirname(job.file_job), 
+                                     "Creating map file...")
             m.Create(os.path.normpath(job.output_file))
             m.Cleanup()
+            self.__update_job_status(os.path.dirname(job.file_job), 
+                                     "Done")
             print "Map ready for use (" + job.output_file + ")"
             self.__lock_download(os.path.dirname(job.file_job))
             self.__delete_job(job.file_job, False)
