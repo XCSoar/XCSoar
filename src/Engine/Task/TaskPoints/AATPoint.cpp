@@ -211,7 +211,6 @@ void
 AATPoint::get_target_range_radial(fixed &range, fixed &radial) const
 {
   const fixed oldrange = range;
-  const fixed oldradial = radial;
 
   const GeoPoint fprev = get_previous()->get_location();
   const GeoPoint floc = get_location();

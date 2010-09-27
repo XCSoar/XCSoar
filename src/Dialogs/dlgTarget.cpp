@@ -306,9 +306,6 @@ RefreshCalculator() {
 
   fixed speedach = XCSoarInterface::Calculated().task_stats.total.travelled.get_speed();
 
-  fixed distrem = XCSoarInterface::Calculated().task_stats.total.solution_planned.Vector.Distance;
-  fixed speedtrem = XCSoarInterface::Calculated().task_stats.total.remaining.get_speed();
-  fixed aattimerem = XCSoarInterface::Calculated().common_stats.aat_time_remaining;
   fixed aattimeEst = XCSoarInterface::Calculated().common_stats.task_time_remaining +
       XCSoarInterface::Calculated().common_stats.task_time_elapsed;
   fixed aatTime = protected_task_manager.get_ordered_task_behaviour().aat_min_time;
