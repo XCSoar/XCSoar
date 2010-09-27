@@ -124,7 +124,7 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
   info.TemperatureAvailable =
     line.read_checked_compare(value, "C");
   if (info.TemperatureAvailable)
-    info.OutsideAirTemperature = value;
+    info.OutsideAirTemperature = Units::ToSysUnit(value, unGradCelcius);
 
   return true;
 }

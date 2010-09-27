@@ -113,7 +113,10 @@ LeonardoParseC(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
     return true;
 
   // 4 = temperature [deg C]
-  info.TemperatureAvailable = line.read_checked(info.OutsideAirTemperature);
+  fixed oat;
+  info.TemperatureAvailable = line.read_checked(oat);
+  if (info.TemperatureAvailable)
+    info.OutsideAirTemperature = Units::ToSysUnit(oat, unGradCelcius);
 
   // 10 = wind speed [km/h]
   // 11 = wind direction [degrees]
@@ -159,7 +162,10 @@ LeonardoParseD(NMEAInputLine &line, NMEA_INFO &info)
   }
 
   // 4 = temperature [deg C]
-  info.TemperatureAvailable = line.read_checked(info.OutsideAirTemperature);
+  fixed oat;
+  info.TemperatureAvailable = line.read_checked(oat);
+  if (info.TemperatureAvailable)
+    info.OutsideAirTemperature = Units::ToSysUnit(oat, unGradCelcius);
 
   // 5 = compass [degrees]
   /* XXX unsupported by XCSoar */
