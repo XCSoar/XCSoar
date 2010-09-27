@@ -42,6 +42,7 @@
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/TaskManager.hpp"
 #include "Task/TaskAdvance.hpp"
+#include "Task/TaskPoints/AATPoint.hpp"
 
 class TaskStats;
 class CommonStats;
@@ -113,6 +114,109 @@ public:
 
   /** Reset the tasks (as if never flown) */
   void reset();
+
+  /**
+   * Check whether observer is within OZ of specified tp
+   *
+   * @param TPindex index of tp in task
+   * @param ref state of aircraft to be checked
+   *
+   * @return True if reference point is inside sector
+   */
+  bool isInSector (const unsigned TPindex, const AIRCRAFT_STATE &ref) const;
+
+  /**
+   * Accessor to get target location of specified tp
+   *
+   * @param TPindex index of tp in task
+   *
+   * @return Target location or fallback_location if TPindex is
+   *    invalid or has no target
+   */
+  const GeoPoint& get_location_target(const unsigned TPindex,
+     const GeoPoint& fallback_location) const;
+
+  /**
+   * Accessor for locked state of target of specified tp
+   *
+   * @param TPindex index of tp in task
+   *
+   * @return True if target is locked or tp location if has no target
+   */
+  bool target_is_locked(const unsigned TPindex) const;
+
+  /**
+   * Capability of specified TaskPoint to have adjustable range (true for AAT)
+   *
+   * @param TPindex index of tp in task
+   *
+   * @return True if task point has a target (can have range set)
+   */
+  bool has_target(const unsigned TPindex) const;
+
+  /**
+   * Set target location explicitly of specified tp
+   *
+   * @param TPindex index of tp in task
+   * @param loc Location of new target
+   * @param override_lock If false, won't set the target if it is locked
+   */
+  bool set_target(const unsigned TPindex, const GeoPoint &loc,
+     const bool override_lock);
+
+  /**
+   * Set target location from a range and radial
+   * referenced on the bearing from the previous target
+   * used by dlgTarget
+   *
+   * @param range the range [0,1] from center to perimeter
+   * of the oz
+   *
+   * @param radial the angle in degrees of the target
+   */
+  bool set_target(const unsigned TPindex, const fixed range,
+     const fixed radial);
+
+  /**
+   * returns position of the target in range / radial format
+   * referenced on the bearing from the previous target
+   * used by dlgTarget
+   *
+   * @param &range returns the range [0,1] from center
+   * to perimeter of the oz
+   *
+   * @param &radial returns the angle in degrees of
+   * the target in the sector in polar coordinates
+   */
+  bool get_target_range_radial(const unsigned TPindex, fixed &range,
+     fixed &radial);
+
+  /**
+   * Lock/unlock the target from automatic shifts of specified tp
+   *
+   * @param TPindex index of tp in task
+   * @param do_lock Whether to lock the target
+   */
+  bool target_lock(const unsigned TPindex, bool do_lock);
+
+  /**
+   * returns copy of name of specified ordered tp
+   *
+   * @param TPindex index of ordered tp in task
+   */
+  const TCHAR* get_ordered_taskpoint_name(const unsigned TPindex);
+
+  /**
+   * Accessor for location of specified ordered tp
+   *
+   * @param TPindex index of tp in ordered task
+   *
+   * @return location of tp or fallback_location if
+   * TPindex is invalid
+   */
+  const GeoPoint& get_ordered_taskpoint_location(const unsigned TPindex,
+     const GeoPoint& fallback_location) const;
+
 };
 
 #endif

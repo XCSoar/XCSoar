@@ -4,21 +4,21 @@ Copyright_License {
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
-	M Roberts (original release)
-	Robin Birch <robinb@ruffnready.co.uk>
-	Samuel Gisiger <samuel.gisiger@triadis.ch>
-	Jeff Goodenough <jeff@enborne.f2s.com>
-	Alastair Harrison <aharrison@magic.force9.co.uk>
-	Scott Penrose <scottp@dd.com.au>
-	John Wharington <jwharington@gmail.com>
-	Lars H <lars_hn@hotmail.com>
-	Rob Dunning <rob@raspberryridgesheepfarm.com>
-	Russell King <rmk@arm.linux.org.uk>
-	Paolo Ventafridda <coolwind@email.it>
-	Tobias Lohner <tobias@lohner-net.de>
-	Mirek Jezek <mjezek@ipplc.cz>
-	Max Kellermann <max@duempel.org>
-	Tobias Bieniek <tobias.bieniek@gmx.de>
+  M Roberts (original release)
+  Robin Birch <robinb@ruffnready.co.uk>
+  Samuel Gisiger <samuel.gisiger@triadis.ch>
+  Jeff Goodenough <jeff@enborne.f2s.com>
+  Alastair Harrison <aharrison@magic.force9.co.uk>
+  Scott Penrose <scottp@dd.com.au>
+  John Wharington <jwharington@gmail.com>
+  Lars H <lars_hn@hotmail.com>
+  Rob Dunning <rob@raspberryridgesheepfarm.com>
+  Russell King <rmk@arm.linux.org.uk>
+  Paolo Ventafridda <coolwind@email.it>
+  Tobias Lohner <tobias@lohner-net.de>
+  Mirek Jezek <mjezek@ipplc.cz>
+  Max Kellermann <max@duempel.org>
+  Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -38,49 +38,47 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
-#include "Protection.hpp"
-#include "Blackboard.hpp"
-#include "SettingsTask.hpp"
-#include "Units.hpp"
-#include "Math/Earth.hpp"
-#include "LogFile.hpp"
-#include "Calculations.h"
-#include "MapWindow.hpp"
-#include "Math/Geometry.hpp"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
-#include "WayPoint.hpp"
-#include "Protection.hpp"
-#include "WayPointList.hpp"
 #include "Components.hpp"
-#include "Task.h"
+#include "Task/TaskPoints/AATPoint.hpp"
+#include "Task/ProtectedTaskManager.hpp"
+#include "Task/Tasks/AbstractTask.hpp"
+#include "Units.hpp"
 
-#include <math.h>
-
-#include <algorithm>
 
 using std::min;
 using std::max;
 
 static WndForm *wf=NULL;
-static WindowControl *btnMove = NULL;
+static WndButton *btnMove = NULL;
+static WndButton *btnIsLocked = NULL;
 static unsigned ActiveTaskPointOnEntry = 0;
+unsigned TaskSize = 0;
 
+bool oldEnablePan = XCSoarInterface::SetSettingsMap().EnablePan;
+GeoPoint oldPanLocation = XCSoarInterface::SetSettingsMap().PanLocation;
+fixed oldMapScale = XCSoarInterface::SetSettingsMap().MapScale;
 
-static double Range = 0;
-static double Radial = 0;
+static fixed Range = fixed_zero;
+static fixed Radial = fixed_zero;
 static unsigned target_point = 0;
 static bool TargetMoveMode = false;
+static bool IsLocked = true;
 
 static void OnOKClicked(WindowControl * Sender){
   (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
+static void InitTargetPoints(void);
 
 
 
-static void MoveTarget(double adjust_angle) {
+static void
+MoveTarget(double adjust_angle) {
+
+  /*
   if (!task.getSettings().AATEnabled) return;
   if (target_point==0) return;
   if (!task.ValidTaskPoint(target_point)) return;
@@ -160,90 +158,22 @@ static void MoveTarget(double adjust_angle) {
       task.SetTargetModified();
     }
   }
+  */
 }
 
-
-static void DragTarget(const GeoPoint target_location) {
-  if (!task.getSettings().AATEnabled) return;
-  if (target_point==0) return;
-  if (!task.ValidTaskPoint(target_point)) return;
-  if (!task.ValidTaskPoint(target_point+1)) return;
-  if (target_point < task.getActiveIndex()) return;
-
-  double distance, bearing;
-  TASK_POINT tp = task.getTaskPoint(target_point);
-
-  if (task.InAATTurnSector(target_location,
-                           target_point)) {
-    if (XCSoarInterface::Calculated().IsInSector
-        && (target_point == task.getActiveIndex())) {
-      // set range/radial for inside sector
-      double course_bearing, target_bearing;
-      DistanceBearing(task.getTargetLocation(target_point-1),
-                      XCSoarInterface::Basic().Location,
-                      NULL, &course_bearing);
-
-      DistanceBearing(XCSoarInterface::Basic().Location,
-                      target_location,
-                      &distance, &target_bearing);
-      bearing = AngleLimit180(target_bearing-course_bearing);
-
-      if (fabs(bearing)<90.0) {
-        tp.AATTargetLocation = target_location;
-        Radial = bearing;
-        tp.AATTargetOffsetRadial = Radial;
-        Range =
-          task.FindInsideAATSectorRange(XCSoarInterface::Basic().Location,
-                                        target_point,
-                                        target_bearing,
-                                        distance);
-        tp.AATTargetOffsetRadius = Range;
-        task.setTaskPoint(target_point, tp);
-	task.SetTargetModified();
-      }
-    } else {
-      // OK to change it..
-      tp.AATTargetLocation = target_location;
-
-      // set range/radial for outside sector
-      DistanceBearing(task.getTaskPointLocation(target_point),
-                      tp.AATTargetLocation,
-                      &distance, &bearing);
-      bearing = AngleLimit180(bearing-tp.Bisector);
-      if (tp.AATType == AAT_SECTOR) {
-        Range = (fabs(distance)/task.getTaskPoint(target_point).AATSectorRadius)*2-1;
-      } else {
-        if (fabs(bearing)>90.0) {
-          distance = -distance;
-          bearing = AngleLimit180(bearing+180);
-        }
-        Range = distance/tp.AATCircleRadius;
-      }
-      tp.AATTargetOffsetRadius = Range;
-      tp.AATTargetOffsetRadial = bearing;
-      Radial = bearing;
-      task.setTaskPoint(target_point, tp);
-      task.SetTargetModified();
-    }
-  }
-}
 
 static bool
 FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
-	(void)Sender;
+  (void)Sender;
   switch(key_code){
     case '2':
-#ifdef GNAV
     case VK_F2:
-#endif
       MoveTarget(0);
     return true;
 
     case '3':
-#ifdef GNAV
     case VK_F3:
-#endif
       MoveTarget(180);
     return true;
 
@@ -257,7 +187,6 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   }
 
   if (TargetMoveMode) {
-    LogStartUp(_T("moving"));
     switch (key_code) {
     case VK_UP:
       MoveTarget(0);
@@ -280,26 +209,78 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   return false;
 }
 
-
-
-static void RefreshCalculator(void) {
+/* Lock target fields
+ * if turnpoint does not have
+ * adjustable target
+ */
+static void
+LockCalculatorUI()
+{
   WndProperty* wp;
+  if (btnMove)
+    btnMove->set_enabled(IsLocked);
 
-  task.RefreshTask(XCSoarInterface::SettingsComputer(),
-                   XCSoarInterface::Basic());
-  RefreshTaskStatistics();
-  target_point = max(target_point,task.getActiveIndex());
+  wp = (WndProperty*)wf->FindByName(_T("prpRange"));
+  if (wp)
+    wp->set_enabled(IsLocked);
 
-  bool nodisplay = !task.getSettings().AATEnabled
-    || (target_point==0)
-    || !task.ValidTaskPoint(target_point+1);
+  wp = (WndProperty*)wf->FindByName(_T("prpRadial"));
+  if (wp)
+    wp->set_enabled(IsLocked);
+}
+
+/*
+ * Refresh UI based on location of target
+ * and current task stats
+ */
+static void
+RefreshCalculator() {
+  WndProperty* wp = NULL;
+  bool nodisplay = false;
+  bool bAAT = protected_task_manager.has_target(target_point);
+
+  if (btnIsLocked)
+    btnIsLocked->set_enabled(bAAT);
+
+  if (!bAAT) {
+    nodisplay = true;
+    IsLocked=false;
+  }
+  else {
+    protected_task_manager.get_target_range_radial(target_point,
+        Range, Radial);
+
+    IsLocked = protected_task_manager.target_is_locked(target_point);
+  }
+
+  LockCalculatorUI();
+
+  wp = (WndProperty*)wf->FindByName(_T("prpRange"));
+  if (wp) {
+    wp->GetDataField()->Set(Range * fixed(100));
+    wp->RefreshDisplay();
+    wp->set_visible(!nodisplay);
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpRadial"));
+  if (wp) {
+    fixed rTemp = Radial;
+    if (rTemp < fixed(-90))
+      rTemp += fixed(180);
+    else if (rTemp > fixed(90))
+      rTemp -= fixed(180);
+
+    wp->GetDataField()->Set(rTemp);
+    wp->RefreshDisplay();
+    wp->set_visible(!nodisplay);
+  }
 
   if (btnMove) {
-    btnMove->set_visible(!nodisplay);
+    btnMove->set_visible(false);
+    // todo add functionality for a cursor/move button
     if (nodisplay)
       TargetMoveMode = false;
   }
-
   nodisplay = nodisplay || TargetMoveMode;
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskPoint"));
@@ -312,45 +293,40 @@ static void RefreshCalculator(void) {
     wc->set_visible(!TargetMoveMode);
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAATTargetLocked"));
-  if (wp) {
-    wp->GetDataField()->Set(task.getTaskPoint(target_point).AATTargetLocked);
-    wp->RefreshDisplay();
-    wp->set_visible(!nodisplay);
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpRange"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(Range*100.0);
-    wp->RefreshDisplay();
-    wp->set_visible(!nodisplay);
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpRadial"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(Radial);
-    wp->RefreshDisplay();
-    wp->set_visible(!nodisplay);
+  if (btnIsLocked) {
+    if (IsLocked) {
+      btnIsLocked->SetCaption(_T("Locked"));
+    } else {
+      btnIsLocked->SetCaption(_T("Auto"));
+    }
+    btnIsLocked->set_visible(!nodisplay);
   }
 
   // update outputs
-  double dd = XCSoarInterface::Calculated().TaskTimeToGo;
-  if ((XCSoarInterface::Calculated().TaskStartTime>0.0)&&(XCSoarInterface::Calculated().Flying)) {
-    dd += XCSoarInterface::Basic().Time-XCSoarInterface::Calculated().TaskStartTime;
-  }
-  dd= min(24.0*60.0,dd/60.0);
-  wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(dd);
-    wp->RefreshDisplay();
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpAATDelta"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(dd-task.getSettings().AATTaskLength);
-    wp->set_visible(task.getSettings().AATEnabled);
-    wp->RefreshDisplay();
-  }
 
+  fixed speedach = XCSoarInterface::Calculated().task_stats.total.travelled.get_speed();
+
+  fixed distrem = XCSoarInterface::Calculated().task_stats.total.solution_planned.Vector.Distance;
+  fixed speedtrem = XCSoarInterface::Calculated().task_stats.total.remaining.get_speed();
+  fixed aattimerem = XCSoarInterface::Calculated().common_stats.aat_time_remaining;
+  fixed aattimeEst = XCSoarInterface::Calculated().common_stats.task_time_remaining +
+      XCSoarInterface::Calculated().common_stats.task_time_elapsed;
+  fixed aatTime = protected_task_manager.get_ordered_task_behaviour().aat_min_time;
+
+//  if ((XCSoarInterface::Calculated().TaskStartTime>0.0)&&(XCSoarInterface::Calculated().Flying)) {
+//    dd += XCSoarInterface::Basic().Time-XCSoarInterface::Calculated().TaskStartTime;
+//  }
+  wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));// Same as infobox
+  if (wp) {
+    wp->GetDataField()->Set(aattimeEst / fixed(60));
+    wp->RefreshDisplay();
+  }
+  wp = (WndProperty*)wf->FindByName(_T("prpAATDelta")); // same as infobox
+  if (wp) {
+    wp->GetDataField()->Set((aatTime - aattimeEst) / fixed(60));
+    wp->RefreshDisplay();
+  }
+/*
   double v1;
   if (XCSoarInterface::Calculated().TaskTimeToGo>0) {
     v1 = XCSoarInterface::Calculated().TaskDistanceToGo/
@@ -358,188 +334,229 @@ static void RefreshCalculator(void) {
   } else {
     v1 = 0;
   }
+  */
 
   wp = (WndProperty*)wf->FindByName(_T("prpSpeedRemaining"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(Units::ToUserUnit(v1, Units::TaskSpeedUnit));
-    wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
-    wp->RefreshDisplay();
+    wp->GetDataField()->SetAsFloat(Units::ToUserTaskSpeed(
+       XCSoarInterface::Calculated().task_stats.total.remaining_effective.get_speed()));
+       wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
+       wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpSpeedAchieved"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(Units::ToUserUnit(
-        XCSoarInterface::Calculated().TaskSpeed, Units::TaskSpeedUnit));
+    wp->GetDataField()->SetAsFloat(Units::ToUserUnit(speedach, Units::TaskSpeedUnit));
     wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
     wp->RefreshDisplay();
   }
-
 }
 
-
-static int OnTimerNotify(WindowControl * Sender) {
+static int
+OnTimerNotify(WindowControl * Sender) {
   (void)Sender;
-  GeoPoint loc;
-  // JMW illegal
-  if (XCSoarInterface::main_window.map.TargetDragged(&loc.Longitude, &loc.Latitude)) {
-    DragTarget(loc);
-  }
-  if (task.isTargetModified()) {
-    RefreshCalculator();
-  }
+
+  RefreshCalculator();
   return 0;
 }
 
-
-static void OnMoveClicked(WindowControl * Sender){
+static void
+OnMoveClicked(WindowControl * Sender){
   (void)Sender;
   TargetMoveMode = !TargetMoveMode;
   if (TargetMoveMode) {
-    btnMove->SetCaption(_T("Cursor"));
+    if (btnMove)
+      btnMove->SetCaption(_T("Cursor"));
   } else {
-    btnMove->SetCaption(_T("Move"));
+    if (btnMove)
+      btnMove->SetCaption(_T("Move"));
   }
   RefreshCalculator();
 }
 
+static void
+OnIsLockedClicked(WindowControl * Sender){
+  (void)Sender;
+  IsLocked = !IsLocked;
+  protected_task_manager.target_lock(target_point, IsLocked);
+  RefreshCalculator();
+}
 
-static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode) {
-  double RangeNew;
-  switch(Mode){
+static void
+OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode) {
+  switch(Mode) {
     case DataField::daGet:
-      //      Sender->Set(Range*100.0);
     break;
     case DataField::daPut:
+    break;
     case DataField::daChange:
-      if (target_point>=task.getActiveIndex()) {
-        RangeNew = Sender->GetAsFloat()/100.0;
+      if (target_point >= ActiveTaskPointOnEntry) {
+        const fixed RangeNew = Sender->GetAsFixed() / fixed(100);
         if (RangeNew != Range) {
-          TASK_POINT tp = task.getTaskPoint(target_point);
-          tp.AATTargetOffsetRadius = RangeNew;
-          task.setTaskPoint(target_point, tp);
+          protected_task_manager.set_target(target_point, RangeNew, Radial);
           Range = RangeNew;
-          task.SetTargetModified();
         }
       }
     break;
   }
 }
 
+/*
+ * reads Radial from the screen UI,  translates it from [90, -90]
+ * to [180, -180] based on whether the Range variable is positive or negative
+ */
+static void
+OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
 
-static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
-  double RadialNew;
-  bool updated = false;
-  bool dowrap = false;
+  fixed RadialNew;
   switch(Mode){
     case DataField::daGet:
-      //      Sender->Set(Range*100.0);
     break;
     case DataField::daPut:
     case DataField::daChange:
-      TASK_POINT tp = task.getTaskPoint(target_point);
-
-      if (target_point>=task.getActiveIndex()) {
-        if (!XCSoarInterface::Calculated().IsInSector
-            || (target_point != task.getActiveIndex())) {
-          dowrap = true;
+      if (target_point >= ActiveTaskPointOnEntry) {
+        fixed rTemp = Sender->GetAsFixed();
+        if (fabs(Radial) > fixed(90)){
+          if (rTemp < fixed_zero)
+            RadialNew = rTemp + fixed(180);
+          else
+            RadialNew = rTemp - fixed(180);
         }
-        RadialNew = Sender->GetAsFloat();
-        if (fabs(RadialNew)>90) {
-          if (dowrap) {
-            RadialNew = AngleLimit180(RadialNew+180);
-            // flip!
-            Range = -Range;
-            tp.AATTargetOffsetRadius= -tp.AATTargetOffsetRadius;
-            updated = true;
-          } else {
-            RadialNew = max(-90.0, min(90.0, RadialNew));
-            updated = true;
-          }
+        else {
+          RadialNew = rTemp;
         }
-        if (RadialNew != Radial) {
-          tp.AATTargetOffsetRadial = RadialNew;
+        if (Radial != RadialNew) {
+          protected_task_manager.set_target(target_point, Range, RadialNew);
           Radial = RadialNew;
-          updated = true;
-        }
-      }
-      if (updated) {
-        task.setTaskPoint(target_point, tp);
-	task.SetTargetModified();
-      }
-    break;
-  }
-}
-
-
-static void RefreshTargetPoint(void) {
-  target_point = max(target_point, task.getActiveIndex());
-  if (task.ValidTaskPoint(target_point)) {
-    XCSoarInterface::SetSettingsMap().TargetPanIndex = target_point;
-    XCSoarInterface::SetSettingsMap().TargetPan = true;
-    Range = task.getTaskPoint(target_point).AATTargetOffsetRadius;
-    Radial = task.getTaskPoint(target_point).AATTargetOffsetRadial;
-  } else {
-    Range = 0;
-    Radial = 0;
-  }
-  RefreshCalculator();
-}
-
-
-static void OnLockedData(DataField *Sender, DataField::DataAccessKind_t Mode) {
-  switch(Mode){
-    case DataField::daGet:
-    break;
-    case DataField::daPut:
-    case DataField::daChange:
-      bool lockedthis = Sender->GetAsBoolean();
-      if (task.ValidTaskPoint(target_point)) {
-        TASK_POINT tp = task.getTaskPoint(target_point);
-        if (tp.AATTargetLocked != lockedthis) {
-          tp.AATTargetLocked = lockedthis;
-          task.setTaskPoint(target_point, tp);
-	  task.SetTargetModified();
         }
       }
     break;
   }
 }
 
+/* resets the target point and reads its polar coordinates
+ * from the AATPoint's target
+ */
+static void
+RefreshTargetPoint(void) {
 
-static void OnTaskPointData(DataField *Sender, DataField::DataAccessKind_t Mode) {
+  if (target_point < TaskSize && target_point >= ActiveTaskPointOnEntry) {
+    if (XCSoarInterface::SetSettingsMap().TargetPanIndex != (int)target_point) {
+      const GeoPoint t = protected_task_manager.get_ordered_taskpoint_location(
+              target_point,
+              XCSoarInterface::Basic().Location);
+      if (t == XCSoarInterface::Basic().Location)
+        return; // should not happen
+
+      XCSoarInterface::SetSettingsMap().PanLocation = t;
+      XCSoarInterface::SetSettingsMap().TargetPanIndex = (int)target_point;
+    }
+
+    fixed range = fixed_zero;
+    fixed radial = fixed_zero;
+    protected_task_manager.get_target_range_radial( target_point,
+        range, radial);
+    RefreshCalculator();
+  }
+  else {
+    Range = fixed_zero;
+    Radial = fixed_zero;
+  }
+}
+
+/*
+ * handles UI event where task point is changed
+ */
+static void
+OnTaskPointData(DataField *Sender, DataField::DataAccessKind_t Mode) {
+
   unsigned old_target_point = target_point;
+//  static bool inTaskPointData = false;
   switch(Mode){
     case DataField::daGet:
     break;
     case DataField::daPut:
     case DataField::daChange:
-      target_point = Sender->GetAsInteger() + ActiveTaskPointOnEntry;
-      target_point = max(target_point,task.getActiveIndex());
-      if (target_point != old_target_point) {
-        RefreshTargetPoint();
-      }
+//      if (!inTaskPointData) {
+//        inTaskPointData = true;
+        target_point = Sender->GetAsInteger() + ActiveTaskPointOnEntry;
+        if (target_point != old_target_point) {
+          RefreshTargetPoint();
+        }
+//        inTaskPointData = false;
+//      }
     break;
   }
 }
 
-
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t
+CallBackTable[]={
   DeclareCallBackEntry(OnTaskPointData),
   DeclareCallBackEntry(OnRangeData),
   DeclareCallBackEntry(OnRadialData),
-  DeclareCallBackEntry(OnLockedData),
   DeclareCallBackEntry(OnOKClicked),
   DeclareCallBackEntry(OnMoveClicked),
+  DeclareCallBackEntry(OnIsLockedClicked),
   DeclareCallBackEntry(NULL)
 };
 
+static void
+GetTaskData()
+{
+  ProtectedTaskManager::Lease task_manager(protected_task_manager);
+  const AbstractTask *at = task_manager->get_active_task();
 
-void dlgTarget(void) {
+  ActiveTaskPointOnEntry = task_manager->getActiveTaskPointIndex();
+  TaskSize = at->task_size();
+}
 
-  if (!task.ValidTaskPoint(task.getActiveIndex())) {
-    return;
+/*
+ * Reads task points from the
+ * protected task manager
+ * and loads the Task Point UI
+ * and initializes the pan mode on the map
+ */
+static void
+InitTargetPoints()
+{
+
+  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpTaskPoint"));
+  GetTaskData();
+  DataFieldEnum* dfe;
+  dfe = (DataFieldEnum*)wp->GetDataField();
+  TCHAR tp_label[80];
+  TCHAR tp_short[21];
+
+  if (TaskSize <= target_point) {
+    target_point = ActiveTaskPointOnEntry;
+  } else {
+    target_point = max(target_point, ActiveTaskPointOnEntry);
   }
-  ActiveTaskPointOnEntry = task.getActiveIndex();
+  target_point = max(0,min((int)target_point, (int)TaskSize - 1));
+  for (unsigned i=ActiveTaskPointOnEntry; i < TaskSize; i++) {
+    _tcsncpy(tp_short, protected_task_manager.get_ordered_taskpoint_name(i), 20);
+    tp_short[20] = 0;
+    _stprintf(tp_label, _T("%d %s"), i, tp_short);
+    dfe->addEnumText(tp_label);
+  }
+  dfe->Set(max(0,(int)target_point-(int)ActiveTaskPointOnEntry));
+  //ToDo set this to the radius of the OZ
+  const fixed Radius = fixed(25000);
+
+  if (TaskSize > target_point) {
+    const GeoPoint t = protected_task_manager.get_ordered_taskpoint_location(target_point,
+        XCSoarInterface::Basic().Location);
+    XCSoarInterface::SetSettingsMap().TargetZoomDistance = Radius;
+    XCSoarInterface::SetSettingsMap().TargetPan = true;
+    XCSoarInterface::SetSettingsMap().EnablePan = true;
+    XCSoarInterface::SetSettingsMap().PanLocation = t;
+    XCSoarInterface::SetSettingsMap().TargetPanIndex = target_point;
+  }
+  wp->RefreshDisplay();
+}
+
+void
+dlgTarget() {
 
   if (!Layout::landscape) {
     wf = LoadDialog(CallBackTable,
@@ -553,54 +570,31 @@ void dlgTarget(void) {
 
   if (!wf) return;
 
-  targetManipEvent.trigger();
+  oldEnablePan = XCSoarInterface::SetSettingsMap().EnablePan;
+  oldPanLocation = XCSoarInterface::SetSettingsMap().PanLocation;
+  oldMapScale = XCSoarInterface::SetSettingsMap().MapScale;
+
+  InitTargetPoints();
+
   TargetMoveMode = false;
 
-  if (Layout::landscape)
-  {// make flush right in landscape mode (at top in portrait mode)
-    WndFrame *wf2 = (WndFrame*)wf->FindByName(_T("frmTarget"));
-    if (wf2)
-    {
-      RECT rc = XCSoarInterface::main_window.get_client_rect();
-      wf->move(rc.top, rc.right - wf2->get_size().cx);
-    }
-  }
+  btnMove = (WndButton*)wf->FindByName(_T("btnMove"));
+  if (btnMove)
+    btnMove->set_visible(false); // todo enable move buttons
+  btnIsLocked = (WndButton*)wf->FindByName(_T("btnIsLocked"));
 
-  btnMove = (WindowControl*)wf->FindByName(_T("btnMove"));
+  assert(btnIsLocked != NULL);
 
   wf->SetKeyDownNotify(FormKeyDown);
-
-  WndProperty *wp;
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskPoint"));
-  DataFieldEnum* dfe;
-  dfe = (DataFieldEnum*)wp->GetDataField();
-  TCHAR tp_label[80];
-  TCHAR tp_short[21];
-  if (!task.ValidTaskPoint(target_point)) {
-    target_point = ActiveTaskPointOnEntry;
-  } else {
-    target_point = max(target_point, ActiveTaskPointOnEntry);
-  }
-  target_point = max(0,min((int)target_point, task.getFinalWaypoint()));
-
-  for (unsigned i=ActiveTaskPointOnEntry; task.ValidTaskPoint(i); i++) {
-    _tcsncpy(tp_short, task.getWaypoint(i).Name, 20);
-    tp_short[20] = 0;
-    _stprintf(tp_label, _T("%d %s"), i, tp_short);
-    dfe->addEnumText(tp_label);
-  }
-  dfe->Set(max(0,(int)target_point-(int)ActiveTaskPointOnEntry));
-  wp->RefreshDisplay();
-
-  RefreshTargetPoint();
 
   wf->SetTimerNotify(OnTimerNotify);
 
   wf->ShowModal(true); // enable map
-
+  XCSoarInterface::SetSettingsMap().EnablePan = oldEnablePan;
+  XCSoarInterface::SetSettingsMap().PanLocation = oldPanLocation;
+  XCSoarInterface::SetSettingsMap().MapScale = oldMapScale;
   XCSoarInterface::SetSettingsMap().TargetPan = false;
-
-  targetManipEvent.reset();
+  //Todo fix pan settings so they correctly remember old settings
 
   delete wf;
   wf = NULL;

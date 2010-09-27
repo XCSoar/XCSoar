@@ -70,7 +70,7 @@ bool
 TaskMacCreadyRemaining::has_targets() const
 {
   for (int i=m_start; i<=m_end; i++) {
-    if (m_tps[i]->has_target()) {
+    if (m_tps[i]->has_target() && !m_tps[i]->target_is_locked()) {
       return true;
     }
   }

@@ -382,7 +382,31 @@ OrderedTask::check_task() const
   return true;
 }
 
-bool 
+OrderedTaskPoint*
+OrderedTask::get_ordered_task_point(unsigned TPindex) const
+{
+ if (TPindex > tps.size() - 1) {
+   return NULL;
+ }
+ return tps[TPindex];
+}
+
+AATPoint*
+OrderedTask::get_AAT_task_point(unsigned TPindex) const
+{
+ if (TPindex > tps.size() - 1) {
+   return NULL;
+ }
+ if (tps[TPindex]) {
+    if (tps[TPindex]->type == TaskPoint::AAT)
+      return (AATPoint*) tps[TPindex];
+    else
+      return (AATPoint*)NULL;
+ }
+ return NULL;
+}
+
+bool
 OrderedTask::scan_start_finish()
 {
   /// @todo also check there are not more than one start/finish point

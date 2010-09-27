@@ -143,6 +143,20 @@ public:
     return false;
   };
 
+/**
+  * If this TaskPoint has the capability to adjust the
+  * target/range, this indicates whether it is locked from
+  * being updated by the optimizer
+  * Only valid for TaskPoints where has_target() returns true
+  *
+  * @return True if target is locked
+  *    or False if target is unlocked or tp has no target
+  */
+   gcc_pure
+   virtual bool target_is_locked() const {
+     return false;
+   };
+
 /** 
  * Capability of this TaskPoint to have adjustable range/target
  * 
