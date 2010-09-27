@@ -101,7 +101,9 @@ LeonardoParseC(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
   info.AirspeedAvailable = line.read_checked(value);
   if (info.AirspeedAvailable) {
     info.TrueAirspeed = Units::ToSysUnit(value, unKiloMeterPerHour);
-    info.IndicatedAirspeed = info.TrueAirspeed; // XXX convert properly
+    info.IndicatedAirspeed = info.TrueAirspeed *
+        AtmosphericPressure::AirDensityRatio(info.BaroAltitudeAvailable ?
+            info.BaroAltitude : info.GPSAltitude);
   }
 
   // 3 = netto vario [dm/s]
