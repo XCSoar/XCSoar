@@ -79,11 +79,9 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   bool vtas_av = line.read_checked(vtas);
 
-  if (line.read_checked(wnet)) {
-    wnet = Units::ToSysUnit(wnet, unKnots);
-
-    GPS_INFO->TotalEnergyVarioAvailable = true;
-    GPS_INFO->TotalEnergyVario = wnet;
+  GPS_INFO->TotalEnergyVarioAvailable = line.read_checked(wnet);
+  if (GPS_INFO->TotalEnergyVarioAvailable) {
+    GPS_INFO->TotalEnergyVario = Units::ToSysUnit(wnet, unKnots);
 
     TriggerVarioUpdate();
   }
@@ -94,13 +92,10 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
   ///  oldGlidePolar::SetMacCready(GPS_INFO->MacCready);
 
-  if (line.read_checked(vias) && vtas_av) {
-    vtas = Units::ToSysUnit(vtas, unKnots);
-    vias = Units::ToSysUnit(sqrt(vias), unKnots);
-
-    GPS_INFO->AirspeedAvailable = true;
-    GPS_INFO->IndicatedAirspeed = vias;
-    GPS_INFO->TrueAirspeed = vtas;
+  GPS_INFO->AirspeedAvailable = line.read_checked(vias) && vtas_av;
+  if (GPS_INFO->AirspeedAvailable) {
+    GPS_INFO->IndicatedAirspeed = Units::ToSysUnit(sqrt(vias), unKnots);
+    GPS_INFO->TrueAirspeed = Units::ToSysUnit(vtas, unKnots);
   }
 
   // RMN: Changed bugs-calculation, swapped ballast and bugs to suit
@@ -138,12 +133,9 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     triggerClimbEvent.reset();
   }
 
-  if (line.read_checked(oat)) {
-    oat = Units::ToSysUnit(oat, unGradCelcius);
-
-    GPS_INFO->TemperatureAvailable = true;
-    GPS_INFO->OutsideAirTemperature = oat;
-  }
+  GPS_INFO->TemperatureAvailable = line.read_checked(oat);
+  if (GPS_INFO->TemperatureAvailable)
+    GPS_INFO->OutsideAirTemperature = Units::ToSysUnit(oat, unGradCelcius);
 
   return false;
 }
