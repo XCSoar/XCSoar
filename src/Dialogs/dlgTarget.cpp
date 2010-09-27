@@ -46,6 +46,7 @@ Copyright_License {
 #include "Task/Tasks/AbstractTask.hpp"
 #include "Units.hpp"
 
+#include <stdio.h>
 
 using std::min;
 using std::max;
