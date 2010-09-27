@@ -85,13 +85,21 @@ fixed& fixed::operator/=(fixed const divisor)
     numerator <<= 7;
   }
 
+  bool small_denominator = denominator >= -resolution * 1024 &&
+    denominator <= resolution * 1024;
+
   /* apply the remaining bits to the denominator */
-  denominator >>= shift;
+  if (!small_denominator)
+    denominator >>= shift;
 
   /* now do the real division */
   m_nVal = gcc_likely(denominator != 0)
     ? numerator / denominator
     : fixed_max.m_nVal;
+
+  if (small_denominator)
+    m_nVal <<= shift;
+
   return *this;
 }
 
