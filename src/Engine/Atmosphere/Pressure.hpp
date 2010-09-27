@@ -49,49 +49,48 @@ Copyright_License {
 class AtmosphericPressure 
 {
 public:
-
-/** 
- * Default constructor, sets QNH to International Standard Atmosphere
- * (1013.25)
- */
+  /**
+   * Default constructor, sets QNH to International Standard Atmosphere
+   * (1013.25)
+   */
   AtmosphericPressure();
 
-/** 
- * Set QNH value (Mean Sea Level pressure)
- * 
- * @param set New value of QNH (hPa)
- */
+  /**
+   * Set QNH value (Mean Sea Level pressure)
+   *
+   * @param set New value of QNH (hPa)
+   */
   void set_QNH(const fixed set) {
     m_QNH = set;
   }
 
-/** 
- * Access QNH value
- * 
- * @return QNH value (hPa)
- */
+  /**
+   * Access QNH value
+   *
+   * @return QNH value (hPa)
+   */
   fixed get_QNH() const {
     return m_QNH;
   }
 
-/**
- * Sets the current QNH by comparing a raw altitude
- * to a known altitude of a certain location
- *
- * This function assumes the barometric altitude (alt_raw) is
- * already adjusted for QNH ---> the function returns the
- * QNH value to make the barometric altitude equal to the
- * alt_known value.
- * @param alt_raw Current pressure altitude (m)
- * @param alt_known Altitude of a known location (m)
- */
+  /**
+   * Sets the current QNH by comparing a raw altitude
+   * to a known altitude of a certain location
+   *
+   * This function assumes the barometric altitude (alt_raw) is
+   * already adjusted for QNH ---> the function returns the
+   * QNH value to make the barometric altitude equal to the
+   * alt_known value.
+   * @param alt_raw Current pressure altitude (m)
+   * @param alt_known Altitude of a known location (m)
+   */
   void FindQNH(const fixed alt_raw, const fixed alt_known);
 
-/**
- * Converts altitude with QNH=1013.25 reference to QNH adjusted altitude
- * @param alt 1013.25-based altitude (m)
- * @return QNH-based altitude (m)
- */
+  /**
+   * Converts altitude with QNH=1013.25 reference to QNH adjusted altitude
+   * @param alt 1013.25-based altitude (m)
+   * @return QNH-based altitude (m)
+   */
   gcc_pure
   fixed AltitudeToQNHAltitude(const fixed alt) const;
 
@@ -111,37 +110,37 @@ public:
   gcc_pure
   static fixed AirDensityRatio(const fixed altitude);
 
-/**
- * Converts a pressure value to the corresponding QNH-based altitude
- *
- * See http://wahiduddin.net/calc/density_altitude.htm
- *
- * Example:
- * QNH=1014, ps=100203 => alt = 100
- * @see QNHAltitudeToStaticPressure
- * @param ps Air pressure (Pa)
- * @return Altitude over QNH-based zero (m)
- */
+  /**
+   * Converts a pressure value to the corresponding QNH-based altitude
+   *
+   * See http://wahiduddin.net/calc/density_altitude.htm
+   *
+   * Example:
+   * QNH=1014, ps=100203 => alt = 100
+   * @see QNHAltitudeToStaticPressure
+   * @param ps Air pressure (Pa)
+   * @return Altitude over QNH-based zero (m)
+   */
   gcc_pure
   fixed StaticPressureToQNHAltitude(const fixed ps) const;
 
-/**
- * Converts a QNH-based altitude to the corresponding pressure
- *
- * See http://wahiduddin.net/calc/density_altitude.htm
- *
- * Example:
- * alt= 100, QNH=1014 => ps = 100203 Pa
- * @see StaticPressureToAltitude
- * @param alt Altitude over QNH-based zero (m)
- * @return Air pressure at given altitude (Pa)
- */
+  /**
+   * Converts a QNH-based altitude to the corresponding pressure
+   *
+   * See http://wahiduddin.net/calc/density_altitude.htm
+   *
+   * Example:
+   * alt= 100, QNH=1014 => ps = 100203 Pa
+   * @see StaticPressureToAltitude
+   * @param alt Altitude over QNH-based zero (m)
+   * @return Air pressure at given altitude (Pa)
+   */
   gcc_pure
   fixed QNHAltitudeToStaticPressure(const fixed alt) const;
 
 private:
-
-  fixed m_QNH; /**< Pressure at sea level, hPa */
+  /** Pressure at sea level, hPa */
+  fixed m_QNH;
 };
 
 #endif

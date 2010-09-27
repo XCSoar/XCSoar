@@ -51,23 +51,19 @@ static const fixed k5(1.0 / 4946.54);
 static const fixed k6(1.0 / 42266.5);
 static const fixed k7(1.0 / 0.234969);
 
-
 AtmosphericPressure::AtmosphericPressure():
-  m_QNH(fixed_101325)
-{
-}
-
+  m_QNH(fixed_101325) {}
 
 fixed
 AtmosphericPressure::QNHAltitudeToStaticPressure(const fixed alt) const
 {
-  return hpa_to_pa*pow((pow(m_QNH,k1)-k2*alt),inv_k1);
+  return hpa_to_pa * pow((pow(m_QNH, k1) - k2 * alt), inv_k1);
 }
 
 fixed
 AtmosphericPressure::StaticPressureToQNHAltitude(const fixed ps) const
 {
-  return (pow(m_QNH,k1) - pow(ps*pa_to_hpa, k1))*inv_k2;
+  return (pow(m_QNH, k1) - pow(ps * pa_to_hpa, k1)) * inv_k2;
 }
 
 fixed
@@ -77,14 +73,13 @@ AtmosphericPressure::AltitudeToQNHAltitude(const fixed alt) const
 }
 
 void
-AtmosphericPressure::FindQNH(const fixed alt_raw, 
-                             const fixed alt_known) 
+AtmosphericPressure::FindQNH(const fixed alt_raw, const fixed alt_known)
 {
   // step 1, find static pressure from device assuming it's QNH adjusted
   const fixed psraw = QNHAltitudeToStaticPressure(alt_raw);
 
   // step 2, calculate QNH so that reported alt will be known alt
-  m_QNH = pow(pow(psraw*pa_to_hpa, k1) + k2*alt_known, inv_k1);
+  m_QNH = pow(pow(psraw * pa_to_hpa, k1) + k2 * alt_known, inv_k1);
 }
 
 fixed
@@ -96,6 +91,6 @@ AtmosphericPressure::AirDensity(const fixed altitude)
 fixed
 AtmosphericPressure::AirDensityRatio(const fixed altitude)
 {
-  return sqrt(isa_sea_level_density/AirDensity(altitude));
+  return sqrt(isa_sea_level_density / AirDensity(altitude));
 }
 
