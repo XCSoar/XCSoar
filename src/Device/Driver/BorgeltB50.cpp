@@ -75,7 +75,7 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   // $PBB50,0,.0,.0,0,0,1.07,0,-228*58
   // $PBB50,14,-.2,.0,196,0,.92,0,-228*71
 
-  fixed vtas, vias, wnet;
+  fixed vtas, vias, wnet, mc;
 
   bool vtas_av = line.read_checked(vtas);
 
@@ -86,7 +86,8 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     GPS_INFO->TotalEnergyVario = wnet;
   }
 
-  GPS_INFO->MacCready = Units::ToSysUnit(line.read(fixed_zero), unKnots);
+  if (line.read_checked(mc))
+    GPS_INFO->MacCready = Units::ToSysUnit(mc, unKnots);
 
   /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
   ///  oldGlidePolar::SetMacCready(GPS_INFO->MacCready);
