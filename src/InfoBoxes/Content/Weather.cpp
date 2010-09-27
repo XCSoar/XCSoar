@@ -57,6 +57,11 @@ InfoBoxContentHumidity::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTemperature::Update(InfoBoxWindow &infobox)
 {
+  if (!XCSoarInterface::Basic().TemperatureAvailable) {
+    infobox.SetInvalid();
+    return;
+  }
+
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%2.1f")_T(DEG),
