@@ -56,11 +56,6 @@ ProgressGlue::Step()
 }
 
 void
-ProgressGlue::SetText(const TCHAR *text)
-{
-}
-
-void
 ProgressGlue::SetValue(unsigned value)
 {
 }

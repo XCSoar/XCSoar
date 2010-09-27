@@ -58,7 +58,6 @@ namespace ProgressGlue {
    */
   void Step();
 
-  void SetText(const TCHAR *text);
   void SetValue(unsigned value);
   void SetRange(unsigned value);
   void SetStep(int step);

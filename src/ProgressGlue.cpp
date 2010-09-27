@@ -68,13 +68,6 @@ ProgressGlue::Step()
 }
 
 void
-ProgressGlue::SetText(const TCHAR *text)
-{
-  if (global_progress_window != NULL)
-    global_progress_window->set_message(text);
-}
-
-void
 ProgressGlue::SetValue(unsigned value)
 {
   if (global_progress_window != NULL)
