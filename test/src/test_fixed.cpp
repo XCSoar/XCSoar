@@ -23,7 +23,8 @@ int main(int argc, char** argv) {
   ok((fixed_minus_one / fixed_minus_one) * fixed(1000) == fixed(1000), "-1/-1", 0);
   ok((fixed(-1000000) / fixed(2)) * fixed(1000) == -fixed(500000000), "-1M/2", 0);
   ok((long)((fixed_one / (fixed_one / fixed(10))) * fixed(1000)) == (10000), "1/0.1", 0);
-  ok((long)((fixed_one / (fixed_one / fixed(-10))) * fixed(1000)) == -(10000), "1/-0.1", 0);
+  ok((long)((fixed_one / (fixed_one / fixed(-10))) * fixed(1000)) == -(10000) ||
+     (long)((fixed_one / (fixed_one / fixed(-10))) * fixed(1000)) == -(10001), "1/-0.1", 0);
 
   double da = 20.0;
   double dsina = sin(da);
