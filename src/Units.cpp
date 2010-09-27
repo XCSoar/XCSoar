@@ -705,7 +705,7 @@ fixed
 Units::ToUserUnit(fixed Value, Units_t Unit)
 {
   const UnitDescriptor_t *pU = &UnitDescriptors[Unit];
-  Value *= pU->ToUserFact; // + pU->ToUserOffset;
+  Value = Value * pU->ToUserFact + pU->ToUserOffset;
   return Value;
 }
 
@@ -713,7 +713,7 @@ fixed
 Units::ToSysUnit(fixed Value, Units_t Unit)
 {
   const UnitDescriptor_t *pU = &UnitDescriptors[Unit];
-  Value /= pU->ToUserFact; // + pU->ToUserOffset;
+  Value = (Value - pU->ToUserOffset) / pU->ToUserFact;
   return Value;
 }
 
