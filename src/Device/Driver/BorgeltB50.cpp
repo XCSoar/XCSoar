@@ -75,7 +75,7 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   // $PBB50,0,.0,.0,0,0,1.07,0,-228*58
   // $PBB50,14,-.2,.0,196,0,.92,0,-228*71
 
-  fixed vtas, vias, wnet, mc;
+  fixed vtas, vias, wnet, mc, oat;
 
   bool vtas_av = line.read_checked(vtas);
 
@@ -136,6 +136,13 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     triggerClimbEvent.trigger();
   } else {
     triggerClimbEvent.reset();
+  }
+
+  if (line.read_checked(oat)) {
+    oat = Units::ToSysUnit(oat, unGradCelcius);
+
+    GPS_INFO->TemperatureAvailable = true;
+    GPS_INFO->OutsideAirTemperature = oat;
   }
 
   return false;
