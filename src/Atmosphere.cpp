@@ -40,6 +40,8 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
+#include "Units.hpp"
+
 #include <math.h>
 #include <stdlib.h> /* for abs() */
 #include <algorithm>
@@ -144,7 +146,8 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic)
   // if (going up)
   if (level > last_level) {
     // we round down (level) because of potential lag of temp sensor
-    cslevels[level].updateTemps(basic.RelativeHumidity, basic.OutsideAirTemperature);
+    cslevels[level].updateTemps(basic.RelativeHumidity,
+        Units::ToUserUnit(basic.OutsideAirTemperature, unGradCelcius));
     cslevels[level].updateThermalIndex(level);
 
     if (level > 0) {
@@ -156,7 +159,7 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic)
   } else {
     // we round up (level+1) because of potential lag of temp sensor
     cslevels[level + 1].updateTemps(basic.RelativeHumidity,
-                                    basic.OutsideAirTemperature);
+        Units::ToUserUnit(basic.OutsideAirTemperature, unGradCelcius));
     cslevels[level + 1].updateThermalIndex((unsigned short)(level + 1));
 
     if (level < CUSONDE_NUMLEVELS - 1) {
