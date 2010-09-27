@@ -78,7 +78,14 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   fixed vtas, vias, wnet;
 
   bool vtas_av = line.read_checked(vtas);
-  wnet = Units::ToSysUnit(line.read(fixed_zero), unKnots);
+
+  if (line.read_checked(wnet)) {
+    wnet = Units::ToSysUnit(wnet, unKnots);
+
+    GPS_INFO->TotalEnergyVarioAvailable = true;
+    GPS_INFO->TotalEnergyVario = wnet;
+  }
+
   GPS_INFO->MacCready = Units::ToSysUnit(line.read(fixed_zero), unKnots);
 
   /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
@@ -127,9 +134,6 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   } else {
     triggerClimbEvent.reset();
   }
-
-  GPS_INFO->TotalEnergyVarioAvailable = true;
-  GPS_INFO->TotalEnergyVario = wnet;
 
   TriggerVarioUpdate();
 
