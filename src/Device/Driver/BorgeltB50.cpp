@@ -84,6 +84,8 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
     GPS_INFO->TotalEnergyVarioAvailable = true;
     GPS_INFO->TotalEnergyVario = wnet;
+
+    TriggerVarioUpdate();
   }
 
   if (line.read_checked(mc))
@@ -135,8 +137,6 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   } else {
     triggerClimbEvent.reset();
   }
-
-  TriggerVarioUpdate();
 
   return false;
 }
