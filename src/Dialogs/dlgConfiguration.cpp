@@ -858,7 +858,7 @@ OnWaypointEditClicked(WindowControl * Sender)
         way_points.replace(*way_point, wp_copy);
       }
     } else {
-      MessageBoxX(_("Waypoint not editable"), _T("Error"), MB_OK);
+      MessageBoxX(_("Waypoint not editable"), _("Error"), MB_OK);
     }
   }
 }
@@ -1611,11 +1611,11 @@ setVariables()
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Generic"));
-    dfe->addEnumText(_("HP31x"));
-    dfe->addEnumText(_("MedionP5"));
-    dfe->addEnumText(_("MIO"));
-    dfe->addEnumText(_("Nokia500")); // VENTA3
-    dfe->addEnumText(_("PN6000"));
+    dfe->addEnumText(_T("HP31x"));
+    dfe->addEnumText(_T("MedionP5"));
+    dfe->addEnumText(_T("MIO"));
+    dfe->addEnumText(_T("Nokia500")); // VENTA3
+    dfe->addEnumText(_T("PN6000"));
     dfe->Set((int)GlobalModelType);
     wp->RefreshDisplay();
   }

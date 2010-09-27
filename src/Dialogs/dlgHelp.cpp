@@ -81,7 +81,7 @@ dlgHelpShowModal(SingleWindow &parent,
   WndProperty* wp;
 
   TCHAR fullcaption[100];
-  _stprintf(fullcaption,_T("Help: %s"), Caption);
+  _stprintf(fullcaption,_T("%s: %s"), _("Help"), Caption);
 
   wf->SetCaption(fullcaption);
 

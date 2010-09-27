@@ -66,7 +66,7 @@ SetButtons()
   if ((wb = (WndButton *)wf->FindByName(_T("cmdDump"))) != NULL) {
     wb->set_visible(glide_polar->is_ballastable());
     wb->SetCaption(XCSoarInterface::SettingsComputer().BallastTimerActive ?
-        _T("Stop") : _T("Dump"));
+        _("Stop") : _("Dump"));
   }
 }
 

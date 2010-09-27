@@ -159,7 +159,7 @@ ComPort::Open()
 
     // TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
-    ComPort_StatusMessage(MB_OK, _T("Error"),
+    ComPort_StatusMessage(MB_OK, _("Error"),
                           _("Unable to change settings on port %s"), sPortName);
     return false;
   }
@@ -456,7 +456,7 @@ ComPort::SetRxTimeout(int Timeout)
     if (!is_embedded())
       Sleep(2000); // needed for windows bug
 
-    ComPort_StatusMessage(MB_OK, _T("Error"),
+    ComPort_StatusMessage(MB_OK, _("Error"),
                           _("Unable to set serial port timers %s"), sPortName);
     dwError = GetLastError();
     return -1;

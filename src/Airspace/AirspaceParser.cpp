@@ -842,7 +842,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
   }
 
   if (filetype == ftUnknown) {
-    MessageBoxX(_T("Unknown Filetype."), _("Airspace"), MB_OK);
+    MessageBoxX(_("Unknown Filetype."), _("Airspace"), MB_OK);
     return false;
   }
 

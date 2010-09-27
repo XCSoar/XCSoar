@@ -194,8 +194,8 @@ Update(void)
     break;
 
   case ANALYSIS_PAGE_POLAR:
-    _stprintf(sTmp, _T("%s: %s (Mass %d kg)"), _("Analysis"),
-              _("Glide Polar"),
+    _stprintf(sTmp, _T("%s: %s (%s %d kg)"), _("Analysis"),
+              _("Glide Polar"), _("Mass"),
               (int)polar.get_all_up_weight());
     wf->SetCaption(sTmp);
     fs.CaptionPolar(sTmp, polar);
