@@ -131,6 +131,9 @@ def Create(bounds, dir_data = "../data/", dir_temp = "../tmp/"):
     dir_data = os.path.abspath(os.path.join(dir_data, "vmap0"))
     dir_temp = os.path.abspath(dir_temp)
 
+    if not os.access(dir_data, os.X_OK):
+        os.makedirs(dir_data)
+
     maps = __filter_maps(bounds)
     files = __create_layers(bounds, maps, dir_data, dir_temp)
     files.append([__create_index_file(dir_temp), True])

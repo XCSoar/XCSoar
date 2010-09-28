@@ -302,6 +302,9 @@ def Create(bounds, arcseconds_per_pixel = 9.0,
     dir_data = os.path.abspath(os.path.join(dir_data, "srtm"))
     dir_temp = os.path.abspath(dir_temp)
 
+    if not os.access(dir_data, os.X_OK):
+        os.makedirs(dir_data)
+
     # Make sure the tiles are available
     tiles = __gather_tiles(dir_data, dir_temp, bounds)
     if len(tiles) < 1:
