@@ -439,7 +439,7 @@ static void
 RefreshTargetPoint(void) {
 
   if (target_point < TaskSize && target_point >= ActiveTaskPointOnEntry) {
-    if (XCSoarInterface::SetSettingsMap().TargetPanIndex != (int)target_point) {
+    if (XCSoarInterface::SetSettingsMap().TargetPanIndex != target_point) {
       const GeoPoint t = protected_task_manager.get_ordered_taskpoint_location(
               target_point,
               XCSoarInterface::Basic().Location);
@@ -447,7 +447,7 @@ RefreshTargetPoint(void) {
         return; // should not happen
 
       XCSoarInterface::SetSettingsMap().PanLocation = t;
-      XCSoarInterface::SetSettingsMap().TargetPanIndex = (int)target_point;
+      XCSoarInterface::SetSettingsMap().TargetPanIndex = target_point;
     }
 
     fixed range = fixed_zero;

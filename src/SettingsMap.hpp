@@ -120,7 +120,7 @@ struct SETTINGS_MAP {
   bool EnablePan;
   GeoPoint PanLocation;
   bool TargetPan;
-  int TargetPanIndex;
+  unsigned TargetPanIndex;
   fixed TargetZoomDistance;
   fixed MapScale;
   /** Show FLARM radar if traffic present */
