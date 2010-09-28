@@ -143,12 +143,12 @@ FileCache::load(const TCHAR *name, const TCHAR *original_path)
   struct file_info cached_info;
   if (!get_regular_file_info(path, &cached_info))
     return NULL;
-
+#ifndef _WIN32_WCE
   if (original_info.mtime > cached_info.mtime) {
     File::Delete(path);
     return NULL;
   }
-
+#endif
   FILE *file = _tfopen(path, _T("rb"));
   if (file == NULL)
     return NULL;
