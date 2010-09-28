@@ -297,8 +297,7 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   if (positive(settings_map.MapScale)) {
     fixed ext_mapscale = LimitMapScale(fixed(settings_map.MapScale),
         settings_map);
-    if ((fabs(_RequestedMapScale - ext_mapscale) > fixed(0.05))
-        && positive(ext_mapscale) && (DisplayMode == DisplayModeLast))
+    if (positive(ext_mapscale) && DisplayMode == DisplayModeLast)
       _RequestedMapScale = ext_mapscale;
   }
 
