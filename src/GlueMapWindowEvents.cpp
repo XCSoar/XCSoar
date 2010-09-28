@@ -419,6 +419,7 @@ GlueMapWindow::on_paint(Canvas &canvas)
 {
 
   if (drag_mode == DRAG_TARGET) {
+    MapWindow::on_paint(canvas);
     TargetPaintDrag(canvas, drag_last);
   }
   else if (drag_mode == DRAG_PAN) {
