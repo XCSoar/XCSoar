@@ -135,9 +135,6 @@ MapWindowProjection::CalculateOrientationTargetPan
     DisplayAngle.SetAngle(Angle::native(fixed_zero));
     DisplayAircraftAngle = DrawInfo.TrackBearing;
   }
-
-  // Target pan mode, show track up when looking at current task point,
-  // otherwise north up.  If circling, orient towards target.
 }
 
 void
