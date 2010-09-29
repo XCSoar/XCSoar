@@ -7,7 +7,6 @@ import socket
 from georect import GeoRect
 from zipfile import ZipFile
 
-cmd_gdal_merge = "gdal_merge.py"
 cmd_gdal_warp = "gdalwarp"
 cmd_geojasper = "geojasper"
 #gather_from_server = None
@@ -105,18 +104,18 @@ def __gather_tiles(dir_data, dir_temp, bounds):
 
 '''
  2) Merge tiles into big tif
-    cmd_gdal_merge.py
-    -n -32768
-        (Ignore pixels from files being merged in with this pixel value.)
-    -init -32768
-        (Pre-initialize the output image bands with these values. However,
-         it is not marked as the nodata value in the output file. If only one
-         value is given, the same value is used in all the bands.)
-    -o blabla_merged.tif
-        (The name of the output file, which will be created if it does
-         not already exist.)
+    gdalwarp
+    -dstnodata -32768
+        (Set nodata values for output bands (different values can be supplied
+         for each band). If more than one value is supplied all values should
+         be quoted to keep them together as a single operating system argument.
+         New files will be initialized to this value and if possible the
+         nodata value will be recorded in the output file.)
     a.tif b.tif c.tif ...
         (Input files)
+    blabla_merged.tif
+        (The name of the output file, which will be created if it does
+         not already exist.)
 '''
 def __merge_tiles(dir_temp, tiles):
     print "Merging terrain tiles ..."
@@ -124,11 +123,10 @@ def __merge_tiles(dir_temp, tiles):
     if os.path.exists(output_file):
         os.unlink(output_file)
 
-    args = [cmd_gdal_merge,
-            "-n", "-32768",
-            "-init", "-32768",
-            "-o", output_file]
+    args = [cmd_gdal_warp,
+            "-dstnodata", "-32768"]
     args.extend(tiles)
+    args.append(output_file)
 
     p = subprocess.Popen(args)
     p.wait()
