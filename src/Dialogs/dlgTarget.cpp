@@ -57,9 +57,9 @@ static WndButton *btnIsLocked = NULL;
 static unsigned ActiveTaskPointOnEntry = 0;
 unsigned TaskSize = 0;
 
-bool oldEnablePan = XCSoarInterface::SettingsMap().EnablePan;
-GeoPoint oldPanLocation = XCSoarInterface::SettingsMap().PanLocation;
-fixed oldMapScale = XCSoarInterface::SettingsMap().MapScale;
+bool oldEnablePan = false;
+GeoPoint oldPanLocation;
+fixed oldMapScale = fixed_zero;
 
 static fixed Range = fixed_zero;
 static fixed Radial = fixed_zero;
