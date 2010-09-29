@@ -165,23 +165,6 @@ GlueMapWindow::on_mouse_up(int x, int y)
   int click_time = mouse_down_clock.elapsed();
   mouse_down_clock.reset();
 
-  if (SettingsMap().TargetPan) {
-#ifdef OLD_TASK // target control
-    if (task != NULL &&
-        task->getSettings().AATEnabled &&
-        TargetDrag_State > 0) {
-      TargetDrag_State = 2;
-      if (task->InAATTurnSector(G, SettingsMap().TargetPanIndex))
-        // if release mouse out of sector, don't update w/ bad coords
-        TargetDrag_Location = G;
-
-      return true;
-    }
-
-    return false;
-#endif
-  }
-
   enum drag_mode old_drag_mode = drag_mode;
   drag_mode = DRAG_NONE;
 
