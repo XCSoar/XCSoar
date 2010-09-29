@@ -69,6 +69,8 @@ public:
   bool next_is_last;
   /** Is previous turnpoint the first */
   bool previous_is_first;
+  /** index of active tp */
+  unsigned active_taskpoint_index;
 
   /** Block speed to fly */
   fixed V_block;
