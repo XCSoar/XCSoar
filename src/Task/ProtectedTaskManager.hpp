@@ -217,6 +217,16 @@ public:
   const GeoPoint& get_ordered_taskpoint_location(const unsigned TPindex,
      const GeoPoint& fallback_location) const;
 
+  /**
+   * Accessor for oz radius of specified ordered tp
+   *
+   * @param TPindex index of tp in ordered task
+   *
+   * @return oz radius or 0 if
+   * TPindex is invalid
+   */
+  fixed get_ordered_taskpoint_radius(const unsigned TPindex) const;
+
 };
 
 #endif

@@ -167,6 +167,13 @@ ProtectedTaskManager::get_ordered_taskpoint_location(const unsigned TPindex,
   return lease->get_ordered_taskpoint_location(TPindex, fallback_location);
 }
 
+fixed
+ProtectedTaskManager::get_ordered_taskpoint_radius(const unsigned TPindex) const
+{
+  Lease lease(*this);
+  return lease->get_ordered_taskpoint_radius(TPindex);
+}
+
 const TCHAR*
 ProtectedTaskManager::get_ordered_taskpoint_name(const unsigned TPindex)
 {
