@@ -105,7 +105,7 @@ def __gather_tiles(dir_data, dir_temp, bounds):
 '''
  2) Merge tiles into big tif
     gdalwarp
-    -dstnodata -32768
+    -dstnodata -31744
         (Set nodata values for output bands (different values can be supplied
          for each band). If more than one value is supplied all values should
          be quoted to keep them together as a single operating system argument.
@@ -124,7 +124,7 @@ def __merge_tiles(dir_temp, tiles):
         os.unlink(output_file)
 
     args = [cmd_gdal_warp,
-            "-dstnodata", "-32768"]
+            "-dstnodata", "-31744"]
     args.extend(tiles)
     args.append(output_file)
 
@@ -149,13 +149,13 @@ def __merge_tiles(dir_temp, tiles):
     -of "GTiff"
         (Select the output format. The default is GeoTIFF (GTiff).
          Use the short format name.)
-    -srcnodata -32768
+    -srcnodata -31744
         (Set nodata masking values for input bands (different values can be
          supplied for each band). If more than one value is supplied all values
          should be quoted to keep them together as a single operating system
          argument. Masked values will not be used in interpolation. Use a value
          of None to ignore intrinsic nodata settings on the source dataset.)
-    -dstnodata -1
+    -dstnodata -31744
         (Set nodata values for output bands (different values can be supplied
          for each band). If more than one value is supplied all values should
          be quoted to keep them together as a single operating system argument.
@@ -180,8 +180,8 @@ def __resample(dir_temp, input_file, arcseconds_per_pixel):
             "-wo", "INTERLEAVE=BIL",
             "-wt", "Int16",
             "-of", "GTiff",
-            "-srcnodata", "-32768",
-            "-dstnodata", "-1",
+            "-srcnodata", "-31744",
+            "-dstnodata", "-31744",
             input_file,
             output_file]
 
@@ -193,13 +193,13 @@ def __resample(dir_temp, input_file, arcseconds_per_pixel):
 '''
  4) Crop resampled image
     gdalwarp
-    -srcnodata -1
+    -srcnodata -31744
         (Set nodata masking values for input bands (different values can be
          supplied for each band). If more than one value is supplied all values
          should be quoted to keep them together as a single operating system
          argument. Masked values will not be used in interpolation. Use a value
          of None to ignore intrinsic nodata settings on the source dataset.)
-    -dstnodata -1
+    -dstnodata -31744
         (Set nodata values for output bands (different values can be supplied
          for each band). If more than one value is supplied all values should
          be quoted to keep them together as a single operating system argument.
@@ -219,8 +219,8 @@ def __crop(dir_temp, input_file, rc):
         os.unlink(output_file)
 
     args = [cmd_gdal_warp,
-            "-srcnodata", "-1",
-            "-dstnodata", "-1"]
+            "-srcnodata", "-31744",
+            "-dstnodata", "-31744"]
     
     if use_world_file == True:
         args.extend(["-co", "TFW=YES"])
