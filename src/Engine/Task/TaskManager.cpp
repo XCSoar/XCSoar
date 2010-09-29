@@ -602,6 +602,26 @@ TaskManager::get_ordered_taskpoint_location(const unsigned TPindex,
   return fallback_location;
 }
 
+fixed
+TaskManager::get_ordered_taskpoint_radius(const unsigned TPindex) const
+{
+  if (!check_ordered_task())
+    return fixed_zero;
+
+  OrderedTaskPoint *otp = task_ordered.get_ordered_task_point(TPindex);
+  if (otp) {
+    ObservationZonePoint *ozp = otp->get_oz();
+
+    if (ozp->shape == ObservationZonePoint::CYLINDER) {
+      CylinderZone *cz = (CylinderZone *) ozp;
+      if (cz)
+        return cz->getRadius();
+    }
+  }
+  return fixed_zero;
+}
+
+
 OrderedTask* 
 TaskManager::clone(TaskEvents &te, const TaskBehaviour &tb,
                    GlidePolar &gp) const
