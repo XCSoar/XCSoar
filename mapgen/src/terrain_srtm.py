@@ -176,7 +176,7 @@ def __resample(dir_temp, input_file, arcseconds_per_pixel):
     degree_per_pixel = float(arcseconds_per_pixel) / 3600.0
 
     args = [cmd_gdal_warp,
-            "-r", "cubicspline",
+            "-r", "cubic",
             "-tr", str(degree_per_pixel), str(degree_per_pixel),
             "-wo", "INTERLEAVE=BIL",
             "-wt", "Int16",
