@@ -147,24 +147,6 @@ GlueMapWindow::on_mouse_down(int x, int y)
   if (drag_mode != DRAG_NONE)
     set_capture();
 
-#ifdef OLD_TASK // target control
-  if (task != NULL &&
-      task->getSettings().AATEnabled &&
-      SettingsMap().TargetPan) {
-    if (task->ValidTaskPoint(SettingsMap().TargetPanIndex)) {
-      POINT tscreen;
-      LonLat2Screen(task->getTargetLocation(SettingsMap().TargetPanIndex),
-                    tscreen);
-      double distance = hypot(drag_start.x - tscreen.x,
-                              drag_start.y - tscreen.y);
-      distance /= Layout::scale;
-
-      if (distance < 10)
-        TargetDrag_State = 1;
-    }
-  }
-#endif
-
   return true;
 }
 
