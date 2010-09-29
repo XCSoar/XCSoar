@@ -126,6 +126,16 @@ MapWindowProjection::CalculateOrientationTargetPan
  const SETTINGS_MAP &settings)
 
 {
+  if (DerivedDrawInfo.common_stats.active_taskpoint_index == settings.TargetPanIndex) {
+        CalculateOrientationNormal(DrawInfo,
+        DerivedDrawInfo,
+        settings);
+  }
+  else {
+    DisplayAngle.SetAngle(Angle::native(fixed_zero));
+    DisplayAircraftAngle = DrawInfo.TrackBearing;
+  }
+
   // Target pan mode, show track up when looking at current task point,
   // otherwise north up.  If circling, orient towards target.
 
@@ -152,8 +162,8 @@ MapWindowProjection::CalculateOrientationTargetPan
     DisplayAircraftAngle = DrawInfo.TrackBearing;
   }
 #else
-  DisplayAngle.SetAngle(Angle::native(fixed_zero));
-  DisplayAircraftAngle = DrawInfo.TrackBearing;
+//  DisplayAngle.SetAngle(Angle::native(fixed_zero));
+//  DisplayAircraftAngle = DrawInfo.TrackBearing;
 #endif
 }
 
