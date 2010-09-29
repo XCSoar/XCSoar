@@ -138,33 +138,6 @@ MapWindowProjection::CalculateOrientationTargetPan
 
   // Target pan mode, show track up when looking at current task point,
   // otherwise north up.  If circling, orient towards target.
-
-#ifdef OLD_TASK // target control
-
-  _origin_centered = true;
-  if (((int)task.getActiveIndex()==settings.TargetPanIndex)
-      &&(settings.DisplayOrientation != NORTHUP)
-      &&(settings.DisplayOrientation != NORTHTRACK)
-      )    {
-    if (DisplayMode == dmCircling) {
-      // target-up
-      DisplayAngle = DerivedDrawInfo.WaypointBearing;
-      DisplayAircraftAngle =
-        DrawInfo.TrackBearing-DisplayAngle;
-    } else {
-      // track up
-      DisplayAngle = DrawInfo.TrackBearing;
-      DisplayAircraftAngle = 0.0;
-    }
-  } else {
-    // North up
-    DisplayAngle = 0.0;
-    DisplayAircraftAngle = DrawInfo.TrackBearing;
-  }
-#else
-//  DisplayAngle.SetAngle(Angle::native(fixed_zero));
-//  DisplayAircraftAngle = DrawInfo.TrackBearing;
-#endif
 }
 
 void
