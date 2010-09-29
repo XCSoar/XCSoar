@@ -190,11 +190,13 @@ TaskManager::update_common_stats_task(const AIRCRAFT_STATE &state)
                                 !active_task->validTaskPoint(2);
     common_stats.previous_is_first = active_task->validTaskPoint(-1) &&
                                      !active_task->validTaskPoint(-2);
+    common_stats.active_taskpoint_index = this->active_task->getActiveTaskPointIndex();
   } else {
     common_stats.active_has_next = false;
     common_stats.active_has_previous = false;
     common_stats.next_is_last = false;
     common_stats.previous_is_first = false;
+    common_stats.active_taskpoint_index = 0;
   }
 }
 
