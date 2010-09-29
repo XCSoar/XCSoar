@@ -432,6 +432,13 @@ OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
   }
 }
 
+static void
+SetRadius(void)
+{
+ const fixed Radius = protected_task_manager.get_ordered_taskpoint_radius(target_point) * fixed(2);
+ XCSoarInterface::SetSettingsMap().TargetZoomDistance = Radius;
+}
+
 /* resets the target point and reads its polar coordinates
  * from the AATPoint's target
  */
@@ -454,6 +461,7 @@ RefreshTargetPoint(void) {
     fixed radial = fixed_zero;
     protected_task_manager.get_target_range_radial( target_point,
         range, radial);
+    SetRadius();
     RefreshCalculator();
   }
   else {
@@ -538,13 +546,11 @@ InitTargetPoints()
     dfe->addEnumText(tp_label);
   }
   dfe->Set(max(0,(int)target_point-(int)ActiveTaskPointOnEntry));
-  //ToDo set this to the radius of the OZ
-  const fixed Radius = fixed(25000);
 
   if (TaskSize > target_point) {
     const GeoPoint t = protected_task_manager.get_ordered_taskpoint_location(target_point,
         XCSoarInterface::Basic().Location);
-    XCSoarInterface::SetSettingsMap().TargetZoomDistance = Radius;
+    SetRadius();
     XCSoarInterface::SetSettingsMap().TargetPan = true;
     XCSoarInterface::SetSettingsMap().EnablePan = true;
     XCSoarInterface::SetSettingsMap().PanLocation = t;
