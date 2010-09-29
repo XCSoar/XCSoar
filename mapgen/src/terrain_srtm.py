@@ -124,7 +124,8 @@ def __merge_tiles(dir_temp, tiles):
         os.unlink(output_file)
 
     args = [cmd_gdal_warp,
-            "-dstnodata", "-31744"]
+            "-dstnodata", "-31744",
+            "-multi"]
     args.extend(tiles)
     args.append(output_file)
 
@@ -182,6 +183,7 @@ def __resample(dir_temp, input_file, arcseconds_per_pixel):
             "-of", "GTiff",
             "-srcnodata", "-31744",
             "-dstnodata", "-31744",
+            "-multi",
             input_file,
             output_file]
 
@@ -220,7 +222,8 @@ def __crop(dir_temp, input_file, rc):
 
     args = [cmd_gdal_warp,
             "-srcnodata", "-31744",
-            "-dstnodata", "-31744"]
+            "-dstnodata", "-31744",
+            "-multi"]
     
     if use_world_file == True:
         args.extend(["-co", "TFW=YES"])
