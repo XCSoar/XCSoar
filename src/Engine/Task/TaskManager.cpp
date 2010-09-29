@@ -608,21 +608,28 @@ fixed
 TaskManager::get_ordered_taskpoint_radius(const unsigned TPindex) const
 {
   if (!check_ordered_task())
-    return fixed_zero;
+    return fixed(5);
 
   OrderedTaskPoint *otp = task_ordered.get_ordered_task_point(TPindex);
   if (otp) {
     ObservationZonePoint *ozp = otp->get_oz();
 
-    if (ozp->shape == ObservationZonePoint::CYLINDER) {
+    switch (ozp->shape) {
+    case ObservationZonePoint::LINE:
+    case ObservationZonePoint::CYLINDER:
+    case ObservationZonePoint::SECTOR:
+    case ObservationZonePoint::FAI_SECTOR:
+    case ObservationZonePoint::KEYHOLE:
+    case ObservationZonePoint::BGAFIXEDCOURSE:
+    case ObservationZonePoint::BGAENHANCEDOPTION:
       CylinderZone *cz = (CylinderZone *) ozp;
       if (cz)
         return cz->getRadius();
+      break;
     }
   }
-  return fixed_zero;
+  return fixed(5);
 }
-
 
 OrderedTask* 
 TaskManager::clone(TaskEvents &te, const TaskBehaviour &tb,
