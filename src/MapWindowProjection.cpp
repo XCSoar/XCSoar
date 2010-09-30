@@ -308,13 +308,12 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   }
 
   if (settings_map.AutoZoom && positive(wpd)) {
-    if ((((settings_map.DisplayOrientation == NORTHTRACK)
+    if (((settings_map.DisplayOrientation == NORTHTRACK)
           && (DisplayMode != dmCircling))
          || (settings_map.DisplayOrientation == NORTHUP)
          || (((settings_map.DisplayOrientation == NORTHCIRCLE)
              || (settings_map.DisplayOrientation == TRACKCIRCLE))
-            && (DisplayMode == dmCircling)))
-        && !settings_map.TargetPan) {
+            && (DisplayMode == dmCircling))) {
       AutoZoomFactor = fixed(2.5);
     } else {
       AutoZoomFactor = fixed_four;
