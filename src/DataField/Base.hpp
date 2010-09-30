@@ -86,12 +86,6 @@ public:
   virtual void SetAsFloat(fixed Value);
   virtual void SetAsString(const TCHAR *Value);
 
-  virtual void Set(bool Value){ (void)Value; }
-  virtual void Set(int Value){ (void)Value; }
-  virtual void Set(unsigned Value){ Set((int)Value); }
-  virtual void Set(fixed Value){ (void)Value; }
-  virtual void Set(const TCHAR *Value){ (void)Value; }
-
   void SetUnits(const TCHAR *text) { _tcscpy(mUnits, text); }
 
   void

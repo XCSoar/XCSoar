@@ -40,7 +40,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "Units.hpp"
 #include "InputEvents.h"
-#include "DataField/Base.hpp"
+#include "DataField/Boolean.hpp"
 #include "MainWindow.hpp"
 
 static WndForm *wf = NULL;
@@ -52,9 +52,9 @@ Update(const TCHAR *name, bool value)
   if (wp == NULL)
     return;
 
-  DataField *df = wp->GetDataField();
+  DataFieldBoolean *df = (DataFieldBoolean *)wp->GetDataField();
   if (df->GetAsBoolean() != value) {
-    wp->GetDataField()->Set(value);
+    df->Set(value);
     wp->RefreshDisplay();
   }
 }

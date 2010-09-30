@@ -39,6 +39,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
 #include "DataField/Enum.hpp"
+#include "DataField/Float.hpp"
 #include "MainWindow.hpp"
 #include "Components.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
@@ -255,7 +256,8 @@ RefreshCalculator()
 
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp) {
-    wp->GetDataField()->Set(Range * fixed(100));
+    DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
+    df->Set(Range * fixed(100));
     wp->RefreshDisplay();
     wp->set_visible(!nodisplay);
   }
@@ -268,7 +270,8 @@ RefreshCalculator()
     else if (rTemp > fixed(90))
       rTemp -= fixed(180);
 
-    wp->GetDataField()->Set(rTemp);
+    DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
+    df->Set(rTemp);
     wp->RefreshDisplay();
     wp->set_visible(!nodisplay);
   }
@@ -303,18 +306,21 @@ RefreshCalculator()
 
   wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));// Same as infobox
   if (wp) {
-    wp->GetDataField()->Set(aattimeEst / fixed(60));
+    DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
+    df->Set(aattimeEst / fixed(60));
     wp->RefreshDisplay();
   }
   wp = (WndProperty*)wf->FindByName(_T("prpAATDelta")); // same as infobox
   if (wp) {
-    wp->GetDataField()->Set((aatTime - aattimeEst) / fixed(60));
+    DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
+    df->Set((aatTime - aattimeEst) / fixed(60));
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpSpeedRemaining"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(Units::ToUserTaskSpeed(
+    DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
+    df->Set(Units::ToUserTaskSpeed(
        XCSoarInterface::Calculated().task_stats.total.remaining_effective.get_speed()));
     wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
     wp->RefreshDisplay();

@@ -57,7 +57,7 @@ OnCloseClicked(WindowControl * Sender)
 }
 
 static void
-RASPGetTime(DataField *Sender)
+RASPGetTime(DataFieldEnum *Sender)
 {
   int index = 0;
   for (unsigned i = 0; i < RasterWeather::MAX_WEATHER_TIMES; i++) {
@@ -71,7 +71,7 @@ RASPGetTime(DataField *Sender)
 }
 
 static void
-RASPSetTime(DataField *Sender)
+RASPSetTime(DataFieldEnum *Sender)
 {
   int index = 0;
   if (Sender->GetAsInteger() <= 0) {

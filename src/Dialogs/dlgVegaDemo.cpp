@@ -40,7 +40,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "Device/device.hpp"
 #include "Math/FastMath.h"
-#include "DataField/Base.hpp"
+#include "DataField/Boolean.hpp"
 #include "MainWindow.hpp"
 #include "PeriodClock.hpp"
 
@@ -149,7 +149,8 @@ void dlgVegaDemoShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpVegaDemoAudioClimb"));
   if (wp) {
-    wp->GetDataField()->Set(VegaDemoAudioClimb);
+    DataFieldBoolean *df = (DataFieldBoolean *)wp->GetDataField();
+    df->Set(VegaDemoAudioClimb);
     wp->RefreshDisplay();
   }
 

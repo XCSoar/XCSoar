@@ -100,7 +100,8 @@ OnPaste(gcc_unused WndButton &button)
     if (wp &&
         cpyInfoBox[item] >= 0 &&
         (unsigned)cpyInfoBox[item] < InfoBoxFactory::NUM_TYPES) {
-      wp->GetDataField()->Set(cpyInfoBox[item]);
+      DataFieldEnum *dfe = (DataFieldEnum *)wp->GetDataField();
+      dfe->Set(cpyInfoBox[item]);
       wp->RefreshDisplay();
     }
   }

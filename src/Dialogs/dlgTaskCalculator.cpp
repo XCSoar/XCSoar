@@ -39,7 +39,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Units.hpp"
-#include "DataField/Base.hpp"
+#include "DataField/Float.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
@@ -170,7 +170,8 @@ RefreshCalculator(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpCruiseEfficiency"));
   if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::Calculated().task_stats.cruise_efficiency * fixed(100));
+    DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
+    df->Set(XCSoarInterface::Calculated().task_stats.cruise_efficiency * fixed(100));
     wp->RefreshDisplay();
   }
 }
@@ -192,19 +193,21 @@ static void OnTimerNotify(WindowControl * Sender) {
 static void
 OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
+  DataFieldFloat *df = (DataFieldFloat *)Sender;
+
   fixed MACCREADY;
   switch (Mode) {
   case DataField::daSpecial:
     if (positive(XCSoarInterface::Calculated().timeCircling)) {
       MACCREADY = XCSoarInterface::Calculated().TotalHeightClimb /
                   XCSoarInterface::Calculated().timeCircling;
-      Sender->Set(Units::ToUserVSpeed(MACCREADY));
+      df->Set(Units::ToUserVSpeed(MACCREADY));
       SetMC(MACCREADY);
       RefreshCalculator();
     }
     break;
   case DataField::daGet:
-    Sender->Set(Units::ToUserVSpeed(protected_task_manager.get_glide_polar().get_mc()));
+    df->Set(Units::ToUserVSpeed(protected_task_manager.get_glide_polar().get_mc()));
     break;
   case DataField::daPut:
   case DataField::daChange:

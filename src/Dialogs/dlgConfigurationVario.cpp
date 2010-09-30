@@ -192,7 +192,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
   if (setvalue) {
     wp = (WndProperty*)wf->FindByName(propname);
     if (wp) {
-      wp->GetDataField()->Set((int)ext_setvalue);
+      wp->GetDataField()->SetAsInteger((int)ext_setvalue);
       wp->RefreshDisplay();
     }
     _stprintf(requesttext, _T("PDVSC,S,%s,%d"), name, ext_setvalue);
@@ -219,7 +219,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
       // helps if variables haven't been modified.
       wp = (WndProperty*)wf->FindByName(propname);
       if (wp) {
-        wp->GetDataField()->Set(lvalue);
+        wp->GetDataField()->SetAsInteger(lvalue);
         wp->RefreshDisplay();
       }
     }
@@ -233,7 +233,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
 
       wp = (WndProperty*)wf->FindByName(propname);
       if (wp) {
-        wp->GetDataField()->Set(lvalue);
+        wp->GetDataField()->SetAsInteger(lvalue);
         wp->RefreshDisplay();
       }
     } else if (updated == 2) {

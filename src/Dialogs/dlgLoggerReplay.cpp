@@ -41,6 +41,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Replay/Replay.hpp"
 #include "DataField/FileReader.hpp"
+#include "DataField/Float.hpp"
 #include "MainWindow.hpp"
 
 static WndForm *wf = NULL;

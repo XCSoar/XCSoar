@@ -44,6 +44,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Float.hpp"
+#include "DataField/Boolean.hpp"
 #include "MainWindow.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
 
@@ -103,13 +104,14 @@ dlgWindSettingsShowModal(void)
     dfe->addEnumText(_("Circling"));
     dfe->addEnumText(_("ZigZag"));
     dfe->addEnumText(_("Both"));
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().AutoWindMode);
+    dfe->Set(XCSoarInterface::SettingsComputer().AutoWindMode);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpTrailDrift"));
   if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().EnableTrailDrift);
+    DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
+    df.Set(XCSoarInterface::SettingsMap().EnableTrailDrift);
     wp->RefreshDisplay();
   }
 

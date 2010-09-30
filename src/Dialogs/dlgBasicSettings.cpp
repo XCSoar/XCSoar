@@ -89,8 +89,9 @@ OnBallastDump(WindowControl *Sender)
 }
 
 static void
-OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 {
+  DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
   WndProperty* wp;
 
   switch (Mode) {
@@ -211,8 +212,9 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnBugsData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 {
+  DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
   static fixed lastRead = fixed_minus_one;
 
   switch (Mode) {
@@ -232,8 +234,9 @@ OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-OnTempData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnTempData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 {
+  DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
   static fixed lastRead = fixed_minus_one;
   switch (Mode) {
   case DataField::daGet:

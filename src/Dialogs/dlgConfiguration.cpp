@@ -1283,14 +1283,16 @@ setVariables()
   if (wp) {
     if (is_altair() || !is_embedded())
       wp->hide();
-    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().EnableAutoBlank);
+    DataFieldBoolean *df = (DataFieldBoolean *)wp->GetDataField();
+    df->Set(XCSoarInterface::SettingsMap().EnableAutoBlank);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAutoBacklight")); // VENTA4
   if (wp) {
     wp->set_visible(model_is_hp31x());
-    wp->GetDataField()->Set(CommonInterface::EnableAutoBacklight);
+    DataFieldBoolean *df = (DataFieldBoolean *)wp->GetDataField();
+    df->Set(CommonInterface::EnableAutoBacklight);
     wp->RefreshDisplay();
   }
 

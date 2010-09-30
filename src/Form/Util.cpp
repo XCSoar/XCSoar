@@ -40,6 +40,8 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Edit.hpp"
 #include "DataField/Base.hpp"
+#include "DataField/Boolean.hpp"
+#include "DataField/Float.hpp"
 #include "Profile/Profile.hpp"
 
 #include <assert.h>
@@ -53,7 +55,8 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, bool value)
   if (ctl == NULL)
     return;
 
-  ctl->GetDataField()->Set(value);
+  DataFieldBoolean &df = *(DataFieldBoolean *)ctl->GetDataField();
+  df.Set(value);
   ctl->RefreshDisplay();
 }
 
@@ -92,7 +95,8 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value)
   if (ctl == NULL)
     return;
 
-  ctl->GetDataField()->Set(value);
+  DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
+  df.Set(value);
   ctl->RefreshDisplay();
 }
 

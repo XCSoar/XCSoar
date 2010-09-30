@@ -43,7 +43,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "MainWindow.hpp"
-#include "DataField/Base.hpp"
+#include "DataField/String.hpp"
 #include "MapWindow.hpp"
 #include "Components.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
@@ -157,24 +157,28 @@ static void FilterMode(bool direction) {
     DistanceFilterIdx=0;
     DirectionFilterIdx=0;
     if (wpDistance) {
-      wpDistance->GetDataField()->Set(_T("*"));
+      DataFieldString *df = (DataFieldString *)wpDistance->GetDataField();
+      df->Set(_T("*"));
       wpDistance->RefreshDisplay();
     }
     if (wpDirection) {
-      wpDirection->GetDataField()->Set(_T("*"));
+      DataFieldString *df = (DataFieldString *)wpDirection->GetDataField();
+      df->Set(_T("*"));
       wpDirection->RefreshDisplay();
     }
   } else {
     NameFilterIdx=0;
     if (wpName) {
-      wpName->GetDataField()->Set(_T("**"));
+      DataFieldString *df = (DataFieldString *)wpName->GetDataField();
+      df->Set(_T("**"));
       wpName->RefreshDisplay();
     }
   }
 }
 
 
-static void OnFilterName(DataField *Sender, DataField::DataAccessKind_t Mode){
+static void OnFilterName(DataField *_Sender, DataField::DataAccessKind_t Mode){
+  DataFieldString *Sender = (DataFieldString *)_Sender;
 
   TCHAR sTmp[12];
 
@@ -208,9 +212,9 @@ static void OnFilterName(DataField *Sender, DataField::DataAccessKind_t Mode){
 
 
 
-static void OnFilterDistance(DataField *Sender,
+static void OnFilterDistance(DataField *_Sender,
                              DataField::DataAccessKind_t Mode) {
-
+  DataFieldString *Sender = (DataFieldString *)_Sender;
   TCHAR sTmp[12];
 
   switch(Mode){
@@ -245,12 +249,12 @@ static void OnFilterDistance(DataField *Sender,
 }
 
 
-static void SetDirectionData(DataField *Sender){
+static void SetDirectionData(DataFieldString *Sender){
 
   TCHAR sTmp[12];
 
   if (Sender == NULL){
-    Sender = wpDirection->GetDataField();
+    Sender = (DataFieldString *)wpDirection->GetDataField();
   }
 
   if (DirectionFilterIdx == 0)
@@ -267,8 +271,9 @@ static void SetDirectionData(DataField *Sender){
 
 }
 
-static void OnFilterDirection(DataField *Sender,
+static void OnFilterDirection(DataField *_Sender,
                               DataField::DataAccessKind_t Mode){
+  DataFieldString *Sender = (DataFieldString *)_Sender;
 
   switch(Mode){
     case DataField::daGet:
@@ -296,8 +301,10 @@ static void OnFilterDirection(DataField *Sender,
 
 }
 
-static void OnFilterType(DataField *Sender,
+static void OnFilterType(DataField *_Sender,
                          DataField::DataAccessKind_t Mode) {
+  DataFieldString *Sender = (DataFieldString *)_Sender;
+
   switch(Mode){
     case DataField::daGet:
     case DataField::daPut:
