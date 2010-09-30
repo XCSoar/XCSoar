@@ -103,39 +103,7 @@ def __gather_tiles(dir_data, dir_temp, bounds):
     return tiles
 
 '''
- 2) Merge tiles into big tif
-    gdalwarp
-    -dstnodata -31744
-        (Set nodata values for output bands (different values can be supplied
-         for each band). If more than one value is supplied all values should
-         be quoted to keep them together as a single operating system argument.
-         New files will be initialized to this value and if possible the
-         nodata value will be recorded in the output file.)
-    a.tif b.tif c.tif ...
-        (Input files)
-    blabla_merged.tif
-        (The name of the output file, which will be created if it does
-         not already exist.)
-'''
-def __merge_tiles(dir_temp, tiles):
-    print "Merging terrain tiles ..."
-    output_file = os.path.join(dir_temp, "terrain_merged.tif")
-    if os.path.exists(output_file):
-        os.unlink(output_file)
-
-    args = [cmd_gdal_warp,
-            "-dstnodata", "-31744",
-            "-multi"]
-    args.extend(tiles)
-    args.append(output_file)
-
-    p = subprocess.Popen(args)
-    p.wait()
-
-    return output_file
-
-'''
- 3) Resample and crop merged image
+ 2) Merge tiles into big tif, Resample and Crop merged image
     gdalwarp
     -r cubicspline
         (Resampling method to use. Cubic spline resampling.)
@@ -164,12 +132,12 @@ def __merge_tiles(dir_temp, tiles):
          nodata value will be recorded in the output file.)
     -te $left $bottom $right $top
         (set georeferenced extents of output file to be created (in target SRS))
-    blabla_merged.tif
-        (Input file)
-    blabla.tif
+    a.tif b.tif c.tif ...
+        (Input files)
+    terrain.tif
         (Output file)
 '''
-def __resample(dir_temp, input_file, arcseconds_per_pixel, bounds):
+def __create(dir_temp, tiles, arcseconds_per_pixel, bounds):
     print "Resampling terrain ..."
     output_file = os.path.join(dir_temp, "terrain.tif")
     if os.path.exists(output_file):
@@ -183,7 +151,6 @@ def __resample(dir_temp, input_file, arcseconds_per_pixel, bounds):
             "-wo", "INTERLEAVE=BIL",
             "-wt", "Int16",
             "-of", "GTiff",
-            "-srcnodata", "-31744",
             "-dstnodata", "-31744",
             "-multi"]
 
@@ -193,9 +160,10 @@ def __resample(dir_temp, input_file, arcseconds_per_pixel, bounds):
     args.extend(["-te", str(bounds.left.value_degrees()),
                 str(bounds.bottom.value_degrees()),
                 str(bounds.right.value_degrees()),
-                str(bounds.top.value_degrees()),
-                input_file,
-                output_file])
+                str(bounds.top.value_degrees())])
+
+    args.extend(tiles)
+    args.append(output_file)
 
     p = subprocess.Popen(args)
     p.wait()
@@ -203,7 +171,7 @@ def __resample(dir_temp, input_file, arcseconds_per_pixel, bounds):
     return output_file
 
 '''
- 5) Convert to GeoJP2 with GeoJasPer
+ 3) Convert to GeoJP2 with GeoJasPer
     cmd_geojasper
     -f blabla_cropped.tif
         (Input file name)
@@ -273,10 +241,8 @@ def Create(bounds, arcseconds_per_pixel = 9.0,
     if len(tiles) < 1:
         return None
 
-    merged_file = __merge_tiles(dir_temp, tiles)
-    resampled_file = __resample(dir_temp, merged_file, 
-                                arcseconds_per_pixel, bounds)
-    final_files = __convert(dir_temp, resampled_file, bounds)
+    terrain_file = __create(dir_temp, tiles, arcseconds_per_pixel, bounds)
+    final_files = __convert(dir_temp, terrain_file, bounds)
     __cleanup(dir_temp)
 
     return final_files
