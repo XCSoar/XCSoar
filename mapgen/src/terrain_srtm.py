@@ -135,7 +135,7 @@ def __merge_tiles(dir_temp, tiles):
     return output_file
 
 '''
- 3) Resample merged image
+ 3) Resample and crop merged image
     gdalwarp
     -r cubicspline
         (Resampling method to use. Cubic spline resampling.)
@@ -162,14 +162,16 @@ def __merge_tiles(dir_temp, tiles):
          be quoted to keep them together as a single operating system argument.
          New files will be initialized to this value and if possible the
          nodata value will be recorded in the output file.)
+    -te $left $bottom $right $top
+        (set georeferenced extents of output file to be created (in target SRS))
     blabla_merged.tif
         (Input file)
-    blabla_resampled.tif
+    blabla.tif
         (Output file)
 '''
-def __resample(dir_temp, input_file, arcseconds_per_pixel):
+def __resample(dir_temp, input_file, arcseconds_per_pixel, bounds):
     print "Resampling terrain ..."
-    output_file = os.path.join(dir_temp, "terrain_resampled.tif")
+    output_file = os.path.join(dir_temp, "terrain.tif")
     if os.path.exists(output_file):
         os.unlink(output_file)
 
@@ -183,55 +185,15 @@ def __resample(dir_temp, input_file, arcseconds_per_pixel):
             "-of", "GTiff",
             "-srcnodata", "-31744",
             "-dstnodata", "-31744",
-            "-multi",
-            input_file,
-            output_file]
-
-    p = subprocess.Popen(args)
-    p.wait()
-
-    return output_file
-
-'''
- 4) Crop resampled image
-    gdalwarp
-    -srcnodata -31744
-        (Set nodata masking values for input bands (different values can be
-         supplied for each band). If more than one value is supplied all values
-         should be quoted to keep them together as a single operating system
-         argument. Masked values will not be used in interpolation. Use a value
-         of None to ignore intrinsic nodata settings on the source dataset.)
-    -dstnodata -31744
-        (Set nodata values for output bands (different values can be supplied
-         for each band). If more than one value is supplied all values should
-         be quoted to keep them together as a single operating system argument.
-         New files will be initialized to this value and if possible the
-         nodata value will be recorded in the output file.)
-    -te $left $bottom $right $top
-        (set georeferenced extents of output file to be created (in target SRS))
-    blabla_resampled.tif
-        (Input file)
-    blabla_cropped.tif
-        (Output file)
-'''
-def __crop(dir_temp, input_file, rc):
-    print "Cropping terrain ..."
-    output_file = os.path.join(dir_temp, "terrain.tif")
-    if os.path.exists(output_file):
-        os.unlink(output_file)
-
-    args = [cmd_gdal_warp,
-            "-srcnodata", "-31744",
-            "-dstnodata", "-31744",
             "-multi"]
-    
+
     if use_world_file == True:
         args.extend(["-co", "TFW=YES"])
     
-    args.extend(["-te", str(rc.left.value_degrees()),
-                str(rc.bottom.value_degrees()),
-                str(rc.right.value_degrees()),
-                str(rc.top.value_degrees()),
+    args.extend(["-te", str(bounds.left.value_degrees()),
+                str(bounds.bottom.value_degrees()),
+                str(bounds.right.value_degrees()),
+                str(bounds.top.value_degrees()),
                 input_file,
                 output_file])
 
@@ -312,9 +274,9 @@ def Create(bounds, arcseconds_per_pixel = 9.0,
         return None
 
     merged_file = __merge_tiles(dir_temp, tiles)
-    resampled_file = __resample(dir_temp, merged_file, arcseconds_per_pixel)
-    cropped_file = __crop(dir_temp, resampled_file, bounds)
-    final_files = __convert(dir_temp, cropped_file, bounds)
+    resampled_file = __resample(dir_temp, merged_file, 
+                                arcseconds_per_pixel, bounds)
+    final_files = __convert(dir_temp, resampled_file, bounds)
     __cleanup(dir_temp)
 
     return final_files
