@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-25 15:43+0200\n"
-"PO-Revision-Date: 2010-09-25 16:03+0200\n"
+"POT-Creation-Date: 2010-09-25 16:05+0200\n"
+"PO-Revision-Date: 2010-09-29 16:18+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-25 13:52+0000\n"
+"X-Launchpad-Export-Date: 2010-09-30 12:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: de\n"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:395
 msgid "Save task?"
@@ -251,8 +251,8 @@ msgid ""
 "A 30 second rolling average climb rate based of the reported GPS altitude, "
 "or vario if available."
 msgstr ""
-"Laufend aktualisiertes Mittleres-Steigen, basierend auf GPS, oder besser "
-"Vario."
+"Laufend aktualisiertes Mittleres-Steigen (über 30 Sek.), basierend auf GPS, "
+"oder Vario wenn verfügbar."
 
 #: src/InfoBoxes/Content/Factory.cpp:94 src/InfoBoxes/Content/Factory.cpp:95
 #: Data/Dialogs/dlgStatus.xml:15 Data/Dialogs/dlgStatusAircraft.xml:10
@@ -837,11 +837,11 @@ msgstr "Lokale Uhzeit nach GPS."
 
 #: src/InfoBoxes/Content/Factory.cpp:390 src/InfoBoxes/Content/Factory.cpp:391
 msgid "Time UTC"
-msgstr "Zeit UTC"
+msgstr "UTC Zeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:392
 msgid "GPS time expressed in UTC."
-msgstr "UTC nach GPS."
+msgstr "UTC laut GPS."
 
 #: src/InfoBoxes/Content/Factory.cpp:398
 msgid "Task Time To Go"
@@ -973,6 +973,12 @@ msgid ""
 "good is pointing directly at the next waypoint. This bearing takes into "
 "account the curvature of the Earth."
 msgstr ""
+"Die Differenz aus der Peilung zum nächsten Wegpunkt, oder für AA-Aufgaben "
+"zum Ziel im AAT Sektor, zum geflogenen Kurs. GPS navigation basiert auf dem "
+"Kurs über Grund. Bei Wind kann sich dieser vom Steuerkurs unterscheiden. Die "
+"Pfeilgitter zeigen in die Richtung, in der der Kurs korrigiert werden muss "
+"um den nächsten Wegpunkt direkt anzufliegen. Diese Peilung berücksichtigt "
+"die Erdkrümmung."
 
 #: src/InfoBoxes/Content/Factory.cpp:454
 msgid "Outside Air Temperature"
@@ -1081,7 +1087,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:510
 msgid "Own Team Code"
-msgstr "Eigener Teamcode"
+msgstr "Eigener Teamkode"
 
 #: src/InfoBoxes/Content/Factory.cpp:511
 msgid "TeamCode"
@@ -1141,7 +1147,7 @@ msgstr "Momentane ÜL-Geschwindigkeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:543
 msgid "V Tsk Ins"
-msgstr ""
+msgstr "V Agb mom."
 
 #: src/InfoBoxes/Content/Factory.cpp:544
 msgid ""
@@ -1168,7 +1174,7 @@ msgstr "Erreichte Aufgaben-Geschwindigkeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:559
 msgid "V Tsk Ach"
-msgstr ""
+msgstr "V Agb errb."
 
 #: src/InfoBoxes/Content/Factory.cpp:560
 msgid ""
@@ -1213,7 +1219,7 @@ msgstr "Distanz Vario"
 
 #: src/InfoBoxes/Content/Factory.cpp:583
 msgid "D Vario"
-msgstr ""
+msgstr "D Vario"
 
 #: src/InfoBoxes/Content/Factory.cpp:591
 msgid "Battery Percent"
@@ -1271,6 +1277,16 @@ msgid ""
 "the ENTER key to make the relative waypoint info page come up: here you can "
 "perform actions on the alternate such as goto, insert in task etc."
 msgstr ""
+"Geometrischer Gradient zur Ankunftshöhe and der gewählten "
+"Wegpunktalternative. Die Berechnung berücksichtigt nicht die total Energie. "
+"Über 200 wird nichts angezeigt, zwischen 100 und 200  wird eine Zahl "
+"zwischen 1 und 99 gezeigt. Der Wert der Alternative ist ROT solange sie "
+"unerreichbar ist (Gelände, Wind, Ankunftshöhe weniger als 100m ÜBER der "
+"Sicherheitshöhe). Der Gleitbereich wird alle 3 Sekunden aktualisiert und "
+"zeigt Entfernung bzw. Ankunftshöhe über Sicherheitshöhe. Alles in Echtzeit "
+"berechnet. Drücke die ENTER-Taste um die relevante Wegpunkt Info anzuzeigen: "
+"Hier kann die Alternative als Ziel, oder in die Aufgabe eingebunden usw. "
+"werden."
 
 #: src/InfoBoxes/Content/Factory.cpp:619
 msgid "Alternate2 GR"
@@ -1299,6 +1315,15 @@ msgid ""
 "virtual key then the waypoint detail page will come up and you will be able "
 "to perform actions on this Alternate such as goto, inserti in task etc."
 msgstr ""
+"Automatische Wahl der besten Landemöglichkeit. Oben steht der Name, in der "
+"Mitte die benötige Gleitzahl, unten (alle paar Sekunden alternierend) die "
+"Distanz oder die Ankunftshöhe über der Sicherheitshöhe. Bitte lese die ganze "
+"Dokumentation im Handbuch über die beste Alternative und die "
+"Konfigurationsmöglichkeit. Diese Funktion ist immernoch experimentell. Die "
+"Alternative kann durch Klick in der Infobox ausgewählt werden. Drücke die "
+"ENTER-Taste und die Wegpunktbeschreibung wird angezeigt. Damit ist es "
+"möglich die Alternative als Ziel zu wählen, in die Aufgabe zu übernehmen, "
+"usw."
 
 #: src/InfoBoxes/Content/Factory.cpp:635 src/InfoBoxes/Content/Factory.cpp:636
 msgid "QFE GPS"
@@ -1388,7 +1413,7 @@ msgstr "Lange Flugspur"
 
 #: src/InputEventsActions.cpp:197
 msgid "SnailTrail ON Short"
-msgstr "Flugspur EIN (kurz)"
+msgstr "Kurze Flugspur"
 
 #: src/InputEventsActions.cpp:199
 msgid "SnailTrail ON Full"
@@ -1473,7 +1498,7 @@ msgstr "Fortschritt: bereit zum wenden"
 
 #: src/InputEventsActions.cpp:581
 msgid "Advance: Hold turn"
-msgstr "Vorrücken: Wende halten"
+msgstr "Fortschritt: Wende halten"
 
 #: src/InputEventsActions.cpp:708
 msgid "No Active Waypoint!"
@@ -1646,6 +1671,15 @@ msgid ""
 "the mixing results from shear turbulence rather than thermal mixing this "
 "parameter is not useful for glider flying. "
 msgstr ""
+"Die Höhe des oberen Ende vom Durchmischungsband. Für thermische Konvektion "
+"ist das die durchschnittliche Höhe des oberen Ende eines trockenen Thermik-"
+"Aufwinds. Über flachem Gelände ist die max. thermisch erreichbare Höhe "
+"aufgrund des Eigensinken des Seglers und anderen Faktoren geringer. Bei "
+"Wolkenthermik (die Wolke darüber gibt zusätzlichen Auftrieb frei, den "
+"sogenannten \"Wolkensog\") liegt die erreichbare Höhe über dieser "
+"Vorhersage, allerdings ist die nutzbare Höhe durch die Wolkenuntergrenze "
+"limitiert. Des weiteren ist dieser Parameter ohne Aussage für den Segelflug, "
+"wenn die thermische Durchmischung von Scherwinden dominiert wird. "
 
 #: src/Terrain/RasterWeather.cpp:85
 msgid "dwcrit"
@@ -2537,7 +2571,7 @@ msgstr "Wölbklappe"
 
 #: src/Dialogs/dlgConfiguration.cpp:1712
 msgid "SC"
-msgstr "Geschwindigkeit"
+msgstr "man. Schalter"
 
 #: src/Dialogs/dlgConfiguration.cpp:1732
 msgid "Low lands"
@@ -2585,7 +2619,7 @@ msgstr "Änderungen in Wegpunktedatei speichern?"
 
 #: src/Dialogs/dlgConfiguration.cpp:2723
 msgid "Waypoints edited"
-msgstr "Wgpunkte ändern"
+msgstr "Wgpunkte bearbeiten"
 
 #: src/Dialogs/dlgConfiguration.cpp:2735 src/Dialogs/dlgVoice.cpp:124
 msgid "Changes to configuration saved."
@@ -2780,7 +2814,7 @@ msgstr "In Aufgabe ersetzen"
 #: src/Dialogs/dlgWayPointDetails.cpp:453
 #: src/Dialogs/dlgWayPointDetails.cpp:506
 msgid "Task would not be valid after the change."
-msgstr ""
+msgstr "Die Aufgabe wäre mit diesen Änderungen fehlerhaft."
 
 #: src/Dialogs/dlgWayPointDetails.cpp:271
 #: src/Dialogs/dlgWayPointDetails.cpp:394
@@ -2846,7 +2880,7 @@ msgstr "Als Ausweichsflugplatz 1 deklarieren"
 #: Data/Dialogs/dlgConfiguration.xml:551
 #: Data/Dialogs/dlgConfiguration_L.xml:550
 msgid "Start max speed margin"
-msgstr "Start, max. Geschwindigkeitsband"
+msgstr "max. Start-Geschwindigkeitstoleranz"
 
 #: Data/Dialogs/dlgSwitches.xml:23
 msgid "Gear down"
@@ -2958,7 +2992,7 @@ msgstr "FAI Zielhöhe"
 #: Data/Dialogs/dlgTaskProperties.xml:23
 #: Data/Dialogs/dlgTaskProperties_L.xml:23
 msgid "Start max height"
-msgstr "Maximal Starthöhe"
+msgstr "Maximal Abflughöhe"
 
 #: Data/Dialogs/dlgTaskCalculator.xml:7
 msgid "Optimise"
@@ -3155,7 +3189,7 @@ msgstr "Periodenschema"
 #: Data/Dialogs/dlgConfiguration.xml:561
 #: Data/Dialogs/dlgConfiguration_L.xml:560
 msgid "Start max height margin"
-msgstr "Maximale Starthöhe Toleranz"
+msgstr "max. tolerierte Abflugüberhöhung"
 
 #: Data/Dialogs/dlgVario.xml:325 Data/Dialogs/dlgVario_L.xml:325
 msgid "Max objects reported"
@@ -3195,7 +3229,7 @@ msgstr "Frei"
 
 #: Data/Dialogs/dlgTeamCode.xml:4 Data/Dialogs/dlgTeamCode_L.xml:4
 msgid "Own code:"
-msgstr "Eigenes Kürzel:"
+msgstr "Eigener Kode:"
 
 #: Data/Dialogs/dlgConfiguration.xml:438
 #: Data/Dialogs/dlgConfiguration_L.xml:438
@@ -3435,7 +3469,7 @@ msgstr "Landezeit"
 
 #: Data/Dialogs/dlgTeamCode.xml:22 Data/Dialogs/dlgTeamCode_L.xml:22
 msgid "Set Mate code"
-msgstr "Kameraden Code setzen"
+msgstr "Kameraden Kode setzen"
 
 #: Data/Dialogs/dlgVario.xml:307 Data/Dialogs/dlgVario_L.xml:307
 msgid "Voice muting"
@@ -3519,7 +3553,7 @@ msgstr "Zurücksetzen"
 
 #: Data/Dialogs/dlgStatus.xml:44
 msgid "Start speed"
-msgstr "Startgeschwindigkeit"
+msgstr "Abfluggeschwindigkeit"
 
 #: Data/Dialogs/dlgConfiguration.xml:359
 #: Data/Dialogs/dlgConfiguration_L.xml:359 Data/Dialogs/dlgStatus.xml:50
@@ -3814,7 +3848,7 @@ msgstr "Max. Höhe"
 #: Data/Dialogs/dlgTaskProperties.xml:28
 #: Data/Dialogs/dlgTaskProperties_L.xml:28
 msgid "Start height ref"
-msgstr "Starthöhe Referenz"
+msgstr "Abflughöhe bezogen auf"
 
 #: Data/Dialogs/dlgConfiguration.xml:746
 #: Data/Dialogs/dlgConfiguration_L.xml:761
@@ -3846,7 +3880,7 @@ msgstr "Mittelwert Zeiger"
 #: Data/Dialogs/dlgConfiguration.xml:209
 #: Data/Dialogs/dlgConfiguration_L.xml:210
 msgid "Flap forces cruise*"
-msgstr "Auto Wechseln zu Vorflug"
+msgstr "Wechsel zu Vorflug"
 
 #: Data/Dialogs/dlgTarget.xml:6
 msgid "Tp"
@@ -3859,7 +3893,7 @@ msgstr "Vario"
 
 #: Data/Dialogs/dlgTeamCode.xml:6 Data/Dialogs/dlgTeamCode_L.xml:6
 msgid "Mate code:"
-msgstr "Kameraden Kürzel:"
+msgstr "Kameraden Kode:"
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:6
 msgid "Ack Day"
@@ -3920,7 +3954,7 @@ msgstr "Flugplatzdatei*"
 
 #: Data/Dialogs/dlgVoice.xml:18
 msgid "Task Altitude Difference"
-msgstr "Aufgabe Höhenunterschied"
+msgstr "Endanflug Höhenunterschied"
 
 #: Data/Dialogs/dlgConfiguration.xml:515
 #: Data/Dialogs/dlgConfiguration_L.xml:514
@@ -3945,7 +3979,7 @@ msgstr "Kursiv"
 #: Data/Dialogs/dlgConfiguration_L.xml:739 Data/Dialogs/dlgTaskManager.xml:5
 #: Data/Dialogs/dlgTaskManager_L.xml:5
 msgid "Edit"
-msgstr "Ändern"
+msgstr "Bearbeiten"
 
 #: Data/Dialogs/dlgVario.xml:40 Data/Dialogs/dlgVario_L.xml:41
 msgid "FLARM connected"
@@ -4006,7 +4040,7 @@ msgstr "Wiederholen"
 
 #: Data/Dialogs/dlgVario.xml:58 Data/Dialogs/dlgVario_L.xml:59
 msgid "ASI cal"
-msgstr "IAS Kalibrierung"
+msgstr "ASI Kalib."
 
 #: Data/Dialogs/dlgConfiguration.xml:339
 #: Data/Dialogs/dlgConfiguration_L.xml:339 Data/Dialogs/dlgVario.xml:32
@@ -4468,7 +4502,7 @@ msgstr "A. Ansicht"
 
 #: Data/Dialogs/dlgFlarmTraffic.xml:7 Data/Dialogs/dlgFlarmTraffic_L.xml:16
 msgid "Avg/Alt"
-msgstr "Ste/Höh"
+msgstr "Vario/Höhe"
 
 #: Data/Input/default.xci:441
 msgid ""
@@ -4477,56 +4511,58 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:422
-#, fuzzy
 msgid "Labels\n"
-msgstr "Schriftfelder"
+msgstr "Beschriftung\n"
 
 #: Data/Input/default.xci:669
-#, fuzzy
 msgid ""
 "Nearest\n"
 "Airspace"
-msgstr "Luftraum"
+msgstr ""
+"Naher\n"
+"Luftraum"
 
 #: Data/Input/default.xci:703
-#, fuzzy
 msgid "Status"
-msgstr "Landmeile"
+msgstr "Status"
 
 #: Data/Input/default.xci:414
-#, fuzzy
 msgid "Bright"
 msgstr "Helligkeit"
 
 #: Data/Input/default.xci:276
-#, fuzzy
 msgid ""
 "Waypoint\n"
 "List"
-msgstr "Wendepunkt editieren"
+msgstr ""
+"Wegpunkt\n"
+"Liste"
 
 #: Data/Input/default.xci:433 Data/Input/default.xci:482
 #: Data/Input/default.xci:531 Data/Input/default.xci:791
 msgid "Config"
-msgstr ""
+msgstr "Konfig."
 
 #: Data/Input/default.xci:464
-#, fuzzy
 msgid ""
 "Flight\n"
 "Setup"
-msgstr "Flug wiedergeben"
+msgstr ""
+"Flug\n"
+"Einstellung"
 
 #: Data/Input/default.xci:497
 msgid ""
 "Setup\n"
 "System"
 msgstr ""
+"System\n"
+"Einstellung"
 
 #: Data/Input/default.xci:644 Data/Input/default.xci:695
 #: Data/Input/default.xci:744 Data/Input/default.xci:798
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: Data/Input/default.xci:448
 msgid ""
@@ -4536,15 +4572,15 @@ msgstr ""
 
 #: Data/Input/default.xci:770
 msgid "Menu"
-msgstr ""
+msgstr "Menü"
 
 #: Data/Input/default.xci:565
-#, fuzzy
 msgid "Setup Audio"
-msgstr "Vega Audio"
+msgstr ""
+"Audio\r\n"
+"Einstellung"
 
 #: Data/Input/default.xci:751
-#, fuzzy
 msgid "FLARM Radar"
 msgstr "FLARM Radar"
 
@@ -4553,137 +4589,156 @@ msgid ""
 "Cruise\n"
 "Demo"
 msgstr ""
+"Überland\n"
+"Demo"
 
 #: Data/Input/default.xci:612
-#, fuzzy
 msgid ""
 "Accel\n"
 "Zero"
-msgstr "Beschleunigungsmesser"
+msgstr ""
+"Accel.\n"
+"auf Null"
 
 #: Data/Input/default.xci:489
-#, fuzzy
 msgid "Vario/"
-msgstr "Vario"
+msgstr "Vario/"
 
 #: Data/Input/default.xci:572
-#, fuzzy
 msgid ""
 "Manual\n"
 "Demo"
-msgstr "Manuell"
+msgstr ""
+"Manuell\n"
+"Demo"
 
 #: Data/Input/default.xci:521
-#, fuzzy
 msgid ""
 "Logger\n"
 "Replay"
-msgstr "Logger"
+msgstr ""
+"Logger\n"
+"Wiedergabe"
 
 #: Data/Input/default.xci:579
 msgid ""
 "Setup\n"
 "Stall"
 msgstr ""
+"Überzieh\n"
+"Konfig."
 
 #: Data/Input/default.xci:304
 msgid "GoTo"
-msgstr ""
+msgstr "Ziel auf"
 
 #: Data/Input/default.xci:513
-#, fuzzy
 msgid "Logger\n"
-msgstr "Logger"
+msgstr "Logger\n"
 
 #: Data/Input/default.xci:372
 msgid ""
 "Pan\n"
 "On"
 msgstr ""
+"Verschieben\n"
+"Ein"
 
 #: Data/Input/default.xci:677
-#, fuzzy
 msgid ""
 "Check\n"
 "list"
-msgstr "Checkliste"
+msgstr ""
+"Check\n"
+"liste"
 
 #: Data/Input/default.xci:605
 msgid ""
 "ASI\n"
 "Zero"
 msgstr ""
+"ASI\n"
+"auf Null"
 
 #: Data/Input/default.xci:296
-#, fuzzy
 msgid ""
 "Task\n"
 "Edit"
-msgstr "Aufgabe editieren"
+msgstr ""
+"Aufgabe\n"
+"ändern"
 
 #: Data/Input/default.xci:711
 msgid "Weather"
-msgstr ""
+msgstr "Wetter"
 
 #: Data/Input/default.xci:356
 msgid ""
 "Mark\n"
 "Drop"
 msgstr ""
+"Marke\n"
+"Setzen"
 
 #: Data/Input/default.xci:136
-#, fuzzy
 msgid ""
 "Nearest\n"
 "Waypoint"
-msgstr "Nächster Wendepunkt"
+msgstr ""
+"Naher\n"
+"Wendepunkt"
 
 #: Data/Input/default.xci:586
-#, fuzzy
 msgid "Accel"
-msgstr "Bestätigen"
+msgstr "Beschleunigen"
 
 #: Data/Input/default.xci:129
 msgid ""
 "Zoom\n"
 "out"
 msgstr ""
+"Ansicht\n"
+"kleiner"
 
 #: Data/Input/default.xci:312
-#, fuzzy
 msgid "Task\n"
-msgstr "Aufgabe"
+msgstr "Aufgabe\n"
 
 #: Data/Input/default.xci:538
-#, fuzzy
 msgid "Raw Logger"
-msgstr "Logger"
+msgstr "Rohlogger"
 
 #: Data/Input/default.xci:346
 msgid ""
 "Zoom\n"
 "Out"
 msgstr ""
+"Ansicht\n"
+"kleiner"
 
 #: Data/Input/default.xci:472
 msgid ""
 "Setup\n"
 "Wind"
 msgstr ""
+"Wind\n"
+"Einstellung"
 
 #: Data/Input/default.xci:634
-#, fuzzy
 msgid ""
 "Climb\n"
 "Demo"
-msgstr "Steigen"
+msgstr ""
+"Steigen\n"
+"Demo"
 
 #: Data/Input/default.xci:733
-#, fuzzy
 msgid ""
 "Message\n"
 "Repeat"
-msgstr "Wiederholen"
+msgstr ""
+"Wiederhole\n"
+"Meldung"
 
 #: Data/Input/default.xci:558
 msgid ""
@@ -4696,10 +4751,12 @@ msgid ""
 "Zoom\n"
 "In"
 msgstr ""
+"Ansicht\n"
+"größer"
 
 #: Data/Input/default.xci:813
 msgid "Quit"
-msgstr ""
+msgstr "Beenden"
 
 #: Data/Input/default.xci:237 Data/Input/default.xci:287
 #: Data/Input/default.xci:777
@@ -4707,70 +4764,78 @@ msgid "Nav"
 msgstr ""
 
 #: Data/Input/default.xci:505
-#, fuzzy
 msgid ""
 "Settings\n"
 "Airspace"
-msgstr "Luftraum"
+msgstr ""
+"Luftraum\n"
+"Einstellung"
 
 #: Data/Input/default.xci:620
 msgid "Store"
-msgstr ""
+msgstr "Speichern"
 
 #: Data/Input/default.xci:115
 msgid ""
 "Pan\n"
 "Off"
 msgstr ""
+"Verschieben\n"
+"Aus"
 
 #: Data/Input/default.xci:758
-#, fuzzy
 msgid "Thermal Assistant"
 msgstr "Zentrierhilfe"
 
 #: Data/Input/default.xci:726
 msgid "Aux Info\n"
-msgstr ""
+msgstr "weit. Info\n"
 
 #: Data/Input/default.xci:719
-#, fuzzy
 msgid ""
 "Team\n"
 "Code"
-msgstr "Eigener Teamcode"
+msgstr ""
+"Team\n"
+"kode"
 
 #: Data/Input/default.xci:144
 msgid ""
 "Marks\n"
 "clear"
 msgstr ""
+"Marke\n"
+"Löschen"
 
 #: Data/Input/default.xci:399
 msgid "Trail\n"
-msgstr ""
+msgstr "Spur\n"
 
 #: Data/Input/default.xci:391
-#, fuzzy
 msgid "Zoom\n"
-msgstr "Höhe Zoom"
+msgstr "Ansicht\n"
 
 #: Data/Input/default.xci:122
 msgid ""
 "Zoom\n"
 "in"
 msgstr ""
+"Ansicht\n"
+"größer"
 
 #: Data/Input/default.xci:245
-#, fuzzy
 msgid ""
 "Task\n"
 "Calc"
-msgstr "Aufgabe Berechnung"
+msgstr ""
+"Aufgabe\n"
+"Berechn."
 
 #: Data/Input/default.xci:364
-#, fuzzy
 msgid "Full Scrn\n"
-msgstr "Gefüllter Pfeil"
+msgstr ""
+"Ganzer\n"
+"Bildschirm\n"
 
 #~ msgid "Append to task"
 #~ msgstr "An Aufgabe hinzufügen"
@@ -4781,33 +4846,25 @@ msgstr "Gefüllter Pfeil"
 #~ msgid "Logger ID: "
 #~ msgstr "Logger ID: "
 
-#~ msgid "my sample"
-#~ msgstr "mein Muster"
-
 #~ msgid "Insert in task"
 #~ msgstr "In Aufgabe einfügen"
-
-#~ msgid "Set teamcode"
-#~ msgstr "Teamcode setzen"
-
-#~ msgid "Comment: "
-#~ msgstr "Kommentar: "
-
-#~ msgid "Clear Alternates"
-#~ msgstr "Lösche Veränderungen"
-
-#~ msgid "Pilot name: "
-#~ msgstr "Pilotenname: "
-
-#~ msgid "Set as new home"
-#~ msgstr "Setze als neuer Heimatflughafen"
-
-#~ msgid "Competition Id: "
-#~ msgstr "Wettbewerbszeichen: "
 
 #~ msgid "Yes All"
 #~ msgstr "Ja alle"
 
+#~ msgid "Comment: "
+#~ msgstr "Kommentar: "
+
+#~ msgid "Set as new home"
+#~ msgstr "Setze als neuer Heimatflughafen"
+
+#~ msgid "Pilot name: "
+#~ msgstr "Pilotenname: "
+
+#~ msgid "Competition Id: "
+#~ msgstr "Wettbewerbszeichen: "
+
+#, c-format
 #~ msgid ""
 #~ "Waypoint \"%s\" \r\n"
 #~ "out of Terrain bounds\r\n"
@@ -4820,3 +4877,12 @@ msgstr "Gefüllter Pfeil"
 
 #~ msgid "Vario Gauge and FLARM"
 #~ msgstr "Vario Anzeige und FLARM"
+
+#~ msgid "my sample"
+#~ msgstr "mein Muster"
+
+#~ msgid "Set teamcode"
+#~ msgstr "Teamcode setzen"
+
+#~ msgid "Clear Alternates"
+#~ msgstr "Lösche Veränderungen"
