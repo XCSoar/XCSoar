@@ -59,7 +59,6 @@ unsigned TaskSize = 0;
 
 bool oldEnablePan = false;
 GeoPoint oldPanLocation;
-fixed oldMapScale = fixed_zero;
 
 static fixed Range = fixed_zero;
 static fixed Radial = fixed_zero;
@@ -576,7 +575,6 @@ dlgTarget() {
 
   oldEnablePan = XCSoarInterface::SetSettingsMap().EnablePan;
   oldPanLocation = XCSoarInterface::SetSettingsMap().PanLocation;
-  oldMapScale = XCSoarInterface::SetSettingsMap().MapScale;
 
   InitTargetPoints();
 
@@ -596,7 +594,6 @@ dlgTarget() {
   wf->ShowModal(true); // enable map
   XCSoarInterface::SetSettingsMap().EnablePan = oldEnablePan;
   XCSoarInterface::SetSettingsMap().PanLocation = oldPanLocation;
-  XCSoarInterface::SetSettingsMap().MapScale = oldMapScale;
   XCSoarInterface::SetSettingsMap().TargetPan = false;
   //Todo fix pan settings so they correctly remember old settings
 
