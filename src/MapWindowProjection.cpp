@@ -344,30 +344,6 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
 
   if (!settings_map.TargetPan && TargetPanLast)
    TargetPanLast = false;
-
-  // if there is an active waypoint
-#ifdef OLD_TASK // auto zoom
-  static int AutoMapScaleWaypointIndex = -1;
-  if (task.Valid()) {
-    int task_index = task.getWaypointIndex();
-
-    // if the current zoom focused waypoint has changed...
-    if (AutoMapScaleWaypointIndex != task_index) {
-      AutoMapScaleWaypointIndex = task_index;
-
-      // zoom back out to where we were before
-      if (StartingAutoMapScale> 0.0) {
-	_RequestedMapScale = StartingAutoMapScale;
-	ModifyMapScale(settings_map);
-      }
-
-      // reset search for new starting zoom level
-      StartingAutoMapScale = 0.0;
-    }
-  } else {
-    AutoMapScaleWaypointIndex = -1;
-  }
-#endif
 }
 
 void
