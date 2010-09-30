@@ -105,13 +105,10 @@ def __gather_tiles(dir_data, dir_temp, bounds):
 '''
  2) Merge tiles into big tif, Resample and Crop merged image
     gdalwarp
-    -r cubicspline
-        (Resampling method to use. Cubic spline resampling.)
+    -r cubic
+        (Resampling method to use. Cubic resampling.)
     -tr $degrees_per_pixel $degrees_per_pixel
         (set output file resolution (in target georeferenced units))
-    -wo "INTERLEAVE=BIL"
-        (Set a warp options. The GDALWarpOptions::papszWarpOptions docs show
-         all options. Multiple -wo options may be listed.)
     -wt Int16
         (Working pixel data type. The data type of pixels in the source
          image and destination image buffers.)
@@ -145,7 +142,6 @@ def __create(dir_temp, tiles, arcseconds_per_pixel, bounds):
     args = [cmd_gdal_warp,
             "-r", "cubic",
             "-tr", str(degree_per_pixel), str(degree_per_pixel),
-            "-wo", "INTERLEAVE=BIL",
             "-wt", "Int16",
             "-dstnodata", "-31744",
             "-multi"]
