@@ -112,12 +112,6 @@ def __gather_tiles(dir_data, dir_temp, bounds):
     -wt Int16
         (Working pixel data type. The data type of pixels in the source
          image and destination image buffers.)
-    -srcnodata -31744
-        (Set nodata masking values for input bands (different values can be
-         supplied for each band). If more than one value is supplied all values
-         should be quoted to keep them together as a single operating system
-         argument. Masked values will not be used in interpolation. Use a value
-         of None to ignore intrinsic nodata settings on the source dataset.)
     -dstnodata -31744
         (Set nodata values for output bands (different values can be supplied
          for each band). If more than one value is supplied all values should
