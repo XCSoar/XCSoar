@@ -1287,7 +1287,7 @@ setVariables()
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Arrow head"));
     dfe->addEnumText(_("Full arrow"));
-    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().WindArrowStyle);
+    dfe->Set(XCSoarInterface::SettingsMap().WindArrowStyle);
     wp->RefreshDisplay();
   }
 
@@ -1299,7 +1299,7 @@ setVariables()
     dfe->addEnumText(_("Circling"));
     dfe->addEnumText(_("ZigZag"));
     dfe->addEnumText(_("Both"));
-    wp->GetDataField()->Set(settings_computer.AutoWindMode);
+    dfe->Set(settings_computer.AutoWindMode);
     wp->RefreshDisplay();
   }
 
@@ -1310,7 +1310,7 @@ setVariables()
     dfe->addEnumText(_("Final glide"));
     dfe->addEnumText(_("Average climb"));
     dfe->addEnumText(_("Both"));
-    wp->GetDataField()->Set((int)settings_computer.auto_mc_mode);
+    dfe->Set((int)settings_computer.auto_mc_mode);
     wp->RefreshDisplay();
   }
 
@@ -1321,7 +1321,7 @@ setVariables()
     dfe->addEnumText(_("Ask"));
     dfe->addEnumText(_("Include"));
     dfe->addEnumText(_("Exclude"));
-    wp->GetDataField()->Set(WayPointFile::WaypointsOutOfRangeSetting);
+    dfe->Set(WayPointFile::WaypointsOutOfRangeSetting);
     wp->RefreshDisplay();
   }
 
