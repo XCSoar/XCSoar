@@ -115,9 +115,6 @@ def __gather_tiles(dir_data, dir_temp, bounds):
     -wt Int16
         (Working pixel data type. The data type of pixels in the source
          image and destination image buffers.)
-    -of "GTiff"
-        (Select the output format. The default is GeoTIFF (GTiff).
-         Use the short format name.)
     -srcnodata -31744
         (Set nodata masking values for input bands (different values can be
          supplied for each band). If more than one value is supplied all values
@@ -150,7 +147,6 @@ def __create(dir_temp, tiles, arcseconds_per_pixel, bounds):
             "-tr", str(degree_per_pixel), str(degree_per_pixel),
             "-wo", "INTERLEAVE=BIL",
             "-wt", "Int16",
-            "-of", "GTiff",
             "-dstnodata", "-31744",
             "-multi"]
 
