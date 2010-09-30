@@ -272,6 +272,8 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   static fixed StartingAutoMapScale(fixed_zero);
   fixed AutoZoomFactor;
   static DisplayMode_t DisplayModeLast = DisplayMode;
+  static bool TargetPanLast = false;
+  static fixed TargetPanUnZoom = fixed_one;
 
   // if there is user intervention in the scale
   if (positive(settings_map.MapScale)) {
@@ -293,6 +295,10 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
     wpd = DerivedDrawInfo.ZoomDistance;
 
   if (settings_map.TargetPan) {
+    if (!TargetPanLast) { // just entered targetpan so save zoom
+     TargetPanLast = true;
+     TargetPanUnZoom = MapScale;
+    }
     // set scale exactly so that waypoint distance is the zoom factor
     // across the screen
     _RequestedMapScale = LimitMapScale((fixed)Units::ToUserUnit(wpd / 4,
@@ -332,6 +338,13 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
       ModifyMapScale(settings_map);
     }
   }
+  else if (TargetPanLast) {
+    _RequestedMapScale = TargetPanUnZoom;
+    ModifyMapScale(settings_map);
+  }
+
+  if (!settings_map.TargetPan && TargetPanLast)
+   TargetPanLast = false;
 
   // if there is an active waypoint
 #ifdef OLD_TASK // auto zoom
