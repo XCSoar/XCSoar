@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-25 16:05+0200\n"
-"PO-Revision-Date: 2010-09-25 15:47+0200\n"
+"PO-Revision-Date: 2010-09-30 10:30+0000\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
-"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-22 09:52+0000\n"
+"X-Launchpad-Export-Date: 2010-09-30 12:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: sk\n"
 
 #: src/Airspace/AirspaceGlue.cpp:55
 msgid "Loading Airspace File..."
@@ -207,9 +207,9 @@ msgid ""
 "only: in simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
-"Udáva výšku nad hladinou mora, stanovenú podľa GPS. Iba pre dotykový "
-"displej / PC: pri simulácii je táto hodnota meniteľná tlačítkom hore/dole. "
-"Tlačítko vľavo/vpravo zatáča vetroň."
+"Udáva výšku nad hladinou mora, stanovenú podľa GPS. Iba pre dotykový displej "
+"/ PC: pri simulácii je táto hodnota meniteľná tlačítkom hore/dole. Tlačítko "
+"vľavo/vpravo zatáča vetroň."
 
 #: src/InfoBoxes/Content/Factory.cpp:78
 msgid "Height AGL"
@@ -601,10 +601,10 @@ msgstr "R vetra"
 #: src/InfoBoxes/Content/Factory.cpp:272
 msgid ""
 "Wind speed estimated by XCSoar. (Touchscreen/PC only) Manual adjustment is "
-"possible by pressing the up/down cursor keys to adjust magnitude and left/"
-"right cursor keys to adjust bearing when the infobox is active. Pressing the "
-"enter cursor key saves the wind value as the initial value when XCSoar next "
-"starts."
+"possible by pressing the up/down cursor keys to adjust magnitude and "
+"left/right cursor keys to adjust bearing when the infobox is active. "
+"Pressing the enter cursor key saves the wind value as the initial value when "
+"XCSoar next starts."
 msgstr ""
 "Rýchlosť vetra odhadovaná XCSoarom. (Iba dotykový displej/PC) Manuálne "
 "nastavenie je možné stlačením klávesy hore/dole pre silu a vľavo/vpravo pre "
@@ -668,13 +668,15 @@ msgstr "AA Max rýchlosť"
 
 #: src/InfoBoxes/Content/Factory.cpp:311
 msgid "AA Vmax"
-msgstr ""
+msgstr "AA Rmax"
 
 #: src/InfoBoxes/Content/Factory.cpp:312
 msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"Dosiahnuteľná priemerná rýchlosť AAT úlohy pri preletení maximálne možnej "
+"vzdialenosti v minimálnom AAT čase."
 
 #: src/InfoBoxes/Content/Factory.cpp:318
 msgid "AA Speed Min"
@@ -682,13 +684,15 @@ msgstr "AA Min rýchlosť"
 
 #: src/InfoBoxes/Content/Factory.cpp:319
 msgid "AA Vmin"
-msgstr ""
+msgstr "AA Rmin"
 
 #: src/InfoBoxes/Content/Factory.cpp:320
 msgid ""
 "Assigned Area Task average speed achievable if flying minimum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"Dosiahnuteľná priemerná rýchlosť AAT úlohy pri preletení minimálnej možnej "
+"vzdialenosti v minimálnom AAT čase."
 
 #: src/InfoBoxes/Content/Factory.cpp:326
 msgid "Airspeed IAS"
@@ -699,7 +703,8 @@ msgid "V IAS"
 msgstr "R IAS"
 
 #: src/InfoBoxes/Content/Factory.cpp:328
-msgid "Indicated Airspeed reported by a supported external intelligent vario."
+msgid ""
+"Indicated Airspeed reported by a supported external intelligent vario."
 msgstr "Skutočná rýchlosť z výstupu kompatibilného inteligentného vária."
 
 #: src/InfoBoxes/Content/Factory.cpp:334
@@ -794,8 +799,8 @@ msgid ""
 "The required glide ratio to reach the next waypoint, given by the distance "
 "to next waypoint divided by the height required to arrive at the safety "
 "arrival altitude. Negative values indicate a climb is necessary to reach the "
-"waypoint. If the height required is close to zero, the displayed value is "
-"'---'.   Note that this calculation may be optimistic because it reduces the "
+"waypoint. If the height required is close to zero, the displayed value is '--"
+"-'.   Note that this calculation may be optimistic because it reduces the "
 "height required to reach the waypoint by the excess energy height of the "
 "glider if its true airspeed is greater than the MacCready and best LD speeds."
 msgstr ""
@@ -955,6 +960,7 @@ msgid ""
 "Outside air temperature measured by a probe if supported by a connected "
 "intelligent variometer."
 msgstr ""
+"Vonkajšia teplota vzduchu meraná senzorom, ak je pripojený a podporovaný."
 
 #: src/InfoBoxes/Content/Factory.cpp:462
 msgid "Relative Humidity"
@@ -962,7 +968,7 @@ msgstr "Relatívna vlhkosť"
 
 #: src/InfoBoxes/Content/Factory.cpp:463
 msgid "RelHum"
-msgstr ""
+msgstr "RelVlh"
 
 #: src/InfoBoxes/Content/Factory.cpp:464
 msgid ""
@@ -978,7 +984,7 @@ msgstr "Predpovedaná teplota"
 
 #: src/InfoBoxes/Content/Factory.cpp:471
 msgid "MaxTemp"
-msgstr ""
+msgstr "MaxTepl"
 
 #: src/InfoBoxes/Content/Factory.cpp:472
 msgid ""
@@ -997,7 +1003,8 @@ msgid "AA Dtgt"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:480
-msgid "Assigned Area Task distance around target points for remainder of task."
+msgid ""
+"Assigned Area Task distance around target points for remainder of task."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:486
@@ -1055,6 +1062,7 @@ msgid ""
 "The current Team code for this aircraft. Use this to report to other team "
 "members."
 msgstr ""
+"Týmový kód tohoto lietadla. Používať k hláseniu pre ostatných členov týmu."
 
 #: src/InfoBoxes/Content/Factory.cpp:518
 msgid "Team Bearing"
@@ -1065,7 +1073,8 @@ msgid "Tm Brng"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:520
-msgid "The bearing to the team aircraft location at the last team code report."
+msgid ""
+"The bearing to the team aircraft location at the last team code report."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:526
@@ -1091,7 +1100,8 @@ msgid "Team Dis"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:536
-msgid "The range to the team aircraft location at the last reported team code."
+msgid ""
+"The range to the team aircraft location at the last reported team code."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:542
@@ -1106,7 +1116,7 @@ msgstr ""
 msgid ""
 "Instantaneous cross country speed while on current task, compensated for "
 "altitude."
-msgstr ""
+msgstr "Momentálna rýchlosť úlohy, výškovo kompenzovaná."
 
 #: src/InfoBoxes/Content/Factory.cpp:550
 msgid "Distance Home"
@@ -1131,7 +1141,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:560
 msgid ""
 "Achieved cross country speed while on current task, compensated for altitude."
-msgstr ""
+msgstr "Dosiahnutá rýchlosť úlohy, výškovo kompenzovaná."
 
 #: src/InfoBoxes/Content/Factory.cpp:566
 msgid "AA Delta Time"
@@ -1298,7 +1308,7 @@ msgstr "OLC vzdialenosť"
 
 #: src/InfoBoxes/Content/Factory.cpp:660
 msgid "OLC"
-msgstr ""
+msgstr "OLC"
 
 #: src/InfoBoxes/Content/Factory.cpp:667
 msgid "Experimental2"
@@ -1527,17 +1537,15 @@ msgstr "V sektore, povol pokračovanie ak si pripravený"
 
 #: src/Pages.cpp:172
 msgid "Map"
-msgstr ""
+msgstr "Mapa"
 
 #: src/Pages.cpp:177
-#, fuzzy
 msgid "w. infoboxes"
-msgstr "Farebné info-okná*"
+msgstr ""
 
 #: src/Pages.cpp:182
-#, fuzzy
 msgid "w. aux. infoboxes"
-msgstr "Farebné info-okná*"
+msgstr ""
 
 #: src/MapWindowSymbols.cpp:118
 msgid "GPS not connected"
@@ -1777,13 +1785,13 @@ msgstr "Skenovanie predpovede počasia"
 msgid "Starting devices"
 msgstr "Štartovanie zariadení"
 
-#.
+#. 
 #. -- Reset polar in case devices need the data
 #. LogStartUp(_T("GlidePolar::UpdatePolar"));
 #. GlidePolar::UpdatePolar(true, SettingsComputer());
-#.
+#. 
 #. This should be done inside devStartup if it is really required
-#.
+#. 
 #: src/Components.cpp:367
 msgid "Initialising display"
 msgstr "Spúštanie displeja"
@@ -2050,7 +2058,7 @@ msgstr "Upraviť otočný bod"
 
 #: src/Dialogs/dlgConfiguration.cpp:130
 msgid "Pages"
-msgstr ""
+msgstr "Strany"
 
 #: src/Dialogs/dlgConfiguration.cpp:131
 msgid "Experimental features"
@@ -2721,9 +2729,8 @@ msgid "Weather parameters"
 msgstr "Parametre počasia"
 
 #: src/Dialogs/dlgWayPointDetails.cpp:266
-#, fuzzy
 msgid "No active task point."
-msgstr "Žiadny aktívny otočný bod!"
+msgstr "Žiadny aktívny otočný bod."
 
 #: src/Dialogs/dlgWayPointDetails.cpp:266
 #: Data/Dialogs/dlgWayPointDetails.xml:27
@@ -2736,7 +2743,7 @@ msgstr "Nahradiť v úlohe"
 #: src/Dialogs/dlgWayPointDetails.cpp:453
 #: src/Dialogs/dlgWayPointDetails.cpp:506
 msgid "Task would not be valid after the change."
-msgstr ""
+msgstr "Úloha bude po zmene neplatná."
 
 #: src/Dialogs/dlgWayPointDetails.cpp:271
 #: src/Dialogs/dlgWayPointDetails.cpp:394
@@ -2746,9 +2753,8 @@ msgid "Error"
 msgstr "Chyba"
 
 #: src/Dialogs/dlgWayPointDetails.cpp:501
-#, fuzzy
 msgid "Waypoint not in task."
-msgstr "Otočný bod sa nedá upraviť"
+msgstr "Otočný bod nieje v úlohe."
 
 #: src/Dialogs/dlgWayPointDetails.cpp:501
 msgid "Remove from task"
@@ -3721,9 +3727,8 @@ msgid "Beep type"
 msgstr "Typ pípnutia"
 
 #: Data/Dialogs/dlgTaskPoint.xml:16 Data/Dialogs/dlgTaskPoint_L.xml:17
-#, fuzzy
 msgid "Previous"
-msgstr "Predošlý otočný bod"
+msgstr "Predošlý"
 
 #: Data/Dialogs/dlgConfiguration.xml:349
 #: Data/Dialogs/dlgConfiguration_L.xml:349
@@ -4155,7 +4160,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:21
 #: Data/Dialogs/dlgWayPointDetails_L.xml:21
 msgid "Alt diff Mc current"
-msgstr ""
+msgstr "Výškový rozdiel MC akt."
 
 #: Data/Dialogs/dlgConfiguration.xml:25 Data/Dialogs/dlgConfiguration_L.xml:26
 msgid "Waypoints 2"
@@ -4438,79 +4443,82 @@ msgid ""
 "MC\n"
 "+"
 msgstr ""
+"MC\n"
+"+"
 
 #: Data/Input/default.xci:422
-#, fuzzy
 msgid "Labels\n"
-msgstr "Popisky"
+msgstr ""
 
 #: Data/Input/default.xci:669
-#, fuzzy
 msgid ""
 "Nearest\n"
 "Airspace"
-msgstr "Vzdušný priestor"
+msgstr ""
+"Najbližší\n"
+"Vpriestor"
 
 #: Data/Input/default.xci:703
-#, fuzzy
 msgid "Status"
-msgstr "Anglické míly"
+msgstr "Stav"
 
 #: Data/Input/default.xci:414
-#, fuzzy
 msgid "Bright"
 msgstr "Jas"
 
 #: Data/Input/default.xci:276
-#, fuzzy
 msgid ""
 "Waypoint\n"
 "List"
-msgstr "Upraviť otočný bod"
+msgstr ""
+"Zoznam\n"
+"OtBodov"
 
 #: Data/Input/default.xci:433 Data/Input/default.xci:482
 #: Data/Input/default.xci:531 Data/Input/default.xci:791
 msgid "Config"
-msgstr ""
+msgstr "Nastavenia"
 
 #: Data/Input/default.xci:464
-#, fuzzy
 msgid ""
 "Flight\n"
 "Setup"
-msgstr "Let"
+msgstr ""
+"Nastavenie\n"
+"Letu"
 
 #: Data/Input/default.xci:497
-#, fuzzy
 msgid ""
 "Setup\n"
 "System"
-msgstr "Systém"
+msgstr ""
+"Nastavenie\n"
+"Systému"
 
 #: Data/Input/default.xci:644 Data/Input/default.xci:695
 #: Data/Input/default.xci:744 Data/Input/default.xci:798
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: Data/Input/default.xci:448
 msgid ""
 "MC\n"
 "-"
 msgstr ""
+"MC\n"
+"-"
 
 #: Data/Input/default.xci:770
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: Data/Input/default.xci:565
-#, fuzzy
 msgid "Setup Audio"
-msgstr "Vega zvuky"
+msgstr "Nastavenie zvuku"
 
 #: Data/Input/default.xci:751
-#, fuzzy
 msgid "FLARM Radar"
-msgstr "FLARM radar"
+msgstr "FLARM Radar"
 
 #: Data/Input/default.xci:627
 msgid ""
@@ -4519,30 +4527,26 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:612
-#, fuzzy
 msgid ""
 "Accel\n"
 "Zero"
-msgstr "Akcelerometer"
+msgstr ""
 
 #: Data/Input/default.xci:489
-#, fuzzy
 msgid "Vario/"
-msgstr "Vário"
+msgstr "Vário/"
 
 #: Data/Input/default.xci:572
-#, fuzzy
 msgid ""
 "Manual\n"
 "Demo"
-msgstr "Ručne"
+msgstr ""
 
 #: Data/Input/default.xci:521
-#, fuzzy
 msgid ""
 "Logger\n"
 "Replay"
-msgstr "Logger"
+msgstr ""
 
 #: Data/Input/default.xci:579
 msgid ""
@@ -4552,25 +4556,27 @@ msgstr ""
 
 #: Data/Input/default.xci:304
 msgid "GoTo"
-msgstr ""
+msgstr "Choď na"
 
 #: Data/Input/default.xci:513
-#, fuzzy
 msgid "Logger\n"
-msgstr "Logger"
+msgstr "Logger\n"
 
 #: Data/Input/default.xci:372
 msgid ""
 "Pan\n"
 "On"
 msgstr ""
+"Posun\n"
+"zapnutý"
 
 #: Data/Input/default.xci:677
-#, fuzzy
 msgid ""
 "Check\n"
 "list"
-msgstr "Povinné úkony"
+msgstr ""
+"Povinné\n"
+"Úkony"
 
 #: Data/Input/default.xci:605
 msgid ""
@@ -4579,75 +4585,78 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:296
-#, fuzzy
 msgid ""
 "Task\n"
 "Edit"
-msgstr "Upraviť úlohu"
+msgstr ""
+"Zmeniť\n"
+"úlohu"
 
 #: Data/Input/default.xci:711
 msgid "Weather"
-msgstr ""
+msgstr "Počasie"
 
 #: Data/Input/default.xci:356
 msgid ""
 "Mark\n"
 "Drop"
 msgstr ""
+"Poznač\n"
+"miesto"
 
 #: Data/Input/default.xci:136
-#, fuzzy
 msgid ""
 "Nearest\n"
 "Waypoint"
-msgstr "Ďalší otočný bod"
+msgstr ""
+"Najbližší\n"
+"OtBod"
 
 #: Data/Input/default.xci:586
-#, fuzzy
 msgid "Accel"
-msgstr "Prijať"
+msgstr ""
 
 #: Data/Input/default.xci:129
 msgid ""
 "Zoom\n"
 "out"
-msgstr ""
+msgstr "Oddiaľ"
 
 #: Data/Input/default.xci:312
-#, fuzzy
 msgid "Task\n"
-msgstr "Úloha"
+msgstr "Úloha\n"
 
 #: Data/Input/default.xci:538
-#, fuzzy
 msgid "Raw Logger"
-msgstr "Logger"
+msgstr ""
 
 #: Data/Input/default.xci:346
 msgid ""
 "Zoom\n"
 "Out"
-msgstr ""
+msgstr "Oddiaľ"
 
 #: Data/Input/default.xci:472
 msgid ""
 "Setup\n"
 "Wind"
 msgstr ""
+"Nastavenie\n"
+"vetra"
 
 #: Data/Input/default.xci:634
-#, fuzzy
 msgid ""
 "Climb\n"
 "Demo"
-msgstr "Stúpanie"
+msgstr ""
 
 #: Data/Input/default.xci:733
-#, fuzzy
 msgid ""
 "Message\n"
 "Repeat"
-msgstr "Opakovať"
+msgstr ""
+"Opakuj\n"
+"správu"
 
 #: Data/Input/default.xci:558
 msgid ""
@@ -4659,11 +4668,11 @@ msgstr ""
 msgid ""
 "Zoom\n"
 "In"
-msgstr ""
+msgstr "Priblíž"
 
 #: Data/Input/default.xci:813
 msgid "Quit"
-msgstr ""
+msgstr "Ukončiť"
 
 #: Data/Input/default.xci:237 Data/Input/default.xci:287
 #: Data/Input/default.xci:777
@@ -4671,37 +4680,36 @@ msgid "Nav"
 msgstr ""
 
 #: Data/Input/default.xci:505
-#, fuzzy
 msgid ""
 "Settings\n"
 "Airspace"
-msgstr "Vzdušný priestor"
+msgstr ""
 
 #: Data/Input/default.xci:620
 msgid "Store"
-msgstr ""
+msgstr "Uložiť"
 
 #: Data/Input/default.xci:115
 msgid ""
 "Pan\n"
 "Off"
 msgstr ""
+"Posun\n"
+"vypnutý"
 
 #: Data/Input/default.xci:758
-#, fuzzy
 msgid "Thermal Assistant"
-msgstr "Pomocník v stupáku"
+msgstr ""
 
 #: Data/Input/default.xci:726
 msgid "Aux Info\n"
 msgstr ""
 
 #: Data/Input/default.xci:719
-#, fuzzy
 msgid ""
 "Team\n"
 "Code"
-msgstr "Vlastný kód tímu"
+msgstr ""
 
 #: Data/Input/default.xci:144
 msgid ""
@@ -4714,39 +4722,37 @@ msgid "Trail\n"
 msgstr ""
 
 #: Data/Input/default.xci:391
-#, fuzzy
 msgid "Zoom\n"
-msgstr "A. Zoom"
+msgstr "Lupa\n"
 
 #: Data/Input/default.xci:122
 msgid ""
 "Zoom\n"
 "in"
-msgstr ""
+msgstr "Priblíž"
 
 #: Data/Input/default.xci:245
-#, fuzzy
 msgid ""
 "Task\n"
 "Calc"
-msgstr "Kalkulácia úlohy"
+msgstr ""
+"Výpočet \n"
+"úlohy"
 
 #: Data/Input/default.xci:364
-#, fuzzy
 msgid "Full Scrn\n"
-msgstr "Plná šípka"
+msgstr ""
+"Celá\n"
+"obrazovka\n"
+
+#~ msgid "Vario Gauge and FLARM"
+#~ msgstr "Ukazovateľ vária a FLARM"
 
 #~ msgid "Append to task"
 #~ msgstr "Pridať k úlohe"
 
 #~ msgid "Aircraft type: "
 #~ msgstr "Typ lietadla: "
-
-#~ msgid "Logger ID: "
-#~ msgstr "Logger ID: "
-
-#~ msgid "my sample"
-#~ msgstr "Moja vzorka"
 
 #~ msgid "Set as Alternate 2"
 #~ msgstr "Nastav ako alternatívu 2"
@@ -4756,6 +4762,9 @@ msgstr "Plná šípka"
 
 #~ msgid "Set teamcode"
 #~ msgstr "Nastaviť tímový kód"
+
+#~ msgid "Yes All"
+#~ msgstr "Áno pre všetko"
 
 #~ msgid "Comment: "
 #~ msgstr "Komentár: "
@@ -4769,15 +4778,7 @@ msgstr "Plná šípka"
 #~ msgid "Set as new home"
 #~ msgstr "Nastav ako nový domov"
 
-#~ msgid "Competition Id: "
-#~ msgstr "Súťažný znak: "
-
-#~ msgid "Vario Gauge and FLARM"
-#~ msgstr "Ukazovateľ vária a FLARM"
-
-#~ msgid "Yes All"
-#~ msgstr "Áno pre všetko"
-
+#, c-format
 #~ msgid ""
 #~ "Waypoint \"%s\" \r\n"
 #~ "out of Terrain bounds\r\n"
@@ -4788,3 +4789,12 @@ msgstr "Plná šípka"
 #~ "je mimo hraníc terénu\r\n"
 #~ "\r\n"
 #~ "Načítať ho napriek tomu?"
+
+#~ msgid "Logger ID: "
+#~ msgstr "Logger ID: "
+
+#~ msgid "Competition Id: "
+#~ msgstr "Súťažný znak: "
+
+#~ msgid "my sample"
+#~ msgstr "Moja vzorka"
