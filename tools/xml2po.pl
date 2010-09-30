@@ -13,7 +13,7 @@ sub handle_start {
     my $expat = shift;
     my $element = shift;
 
-    while (length @_ >= 2) {
+    while (scalar @_ >= 2) {
         my ($name, $value) = (shift, shift);
 
         if ($name eq 'Caption' or $name eq 'Help') {
