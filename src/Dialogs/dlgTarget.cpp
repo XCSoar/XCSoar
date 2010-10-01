@@ -590,7 +590,6 @@ dlgTarget() {
   XCSoarInterface::SetSettingsMap().EnablePan = oldEnablePan;
   XCSoarInterface::SetSettingsMap().PanLocation = oldPanLocation;
   XCSoarInterface::SetSettingsMap().TargetPan = false;
-  //Todo fix pan settings so they correctly remember old settings
 
   delete wf;
   wf = NULL;
