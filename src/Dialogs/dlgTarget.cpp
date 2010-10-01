@@ -476,20 +476,15 @@ static void
 OnTaskPointData(DataField *Sender, DataField::DataAccessKind_t Mode) {
 
   unsigned old_target_point = target_point;
-//  static bool inTaskPointData = false;
   switch(Mode){
     case DataField::daGet:
     break;
     case DataField::daPut:
     case DataField::daChange:
-//      if (!inTaskPointData) {
-//        inTaskPointData = true;
         target_point = Sender->GetAsInteger() + ActiveTaskPointOnEntry;
         if (target_point != old_target_point) {
           RefreshTargetPoint();
         }
-//        inTaskPointData = false;
-//      }
     break;
   }
 }
