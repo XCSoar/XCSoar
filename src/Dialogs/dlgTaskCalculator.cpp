@@ -43,6 +43,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
+#include "DeviceBlackboard.hpp"
 
 #include <math.h>
 #include <algorithm>
@@ -73,6 +74,14 @@ static void
 GetCruiseEfficiency(void)
 {
   cruise_efficiency = XCSoarInterface::Calculated().task_stats.cruise_efficiency;
+}
+
+static void
+SetMC(fixed mc) {
+  GlidePolar polar = protected_task_manager.get_glide_polar();
+  polar.set_mc(mc);
+  protected_task_manager.set_glide_polar(polar);
+  device_blackboard.SetMC(mc);
 }
 
 static void
@@ -207,6 +216,7 @@ OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
   case DataField::daPut:
   case DataField::daChange:
     MACCREADY = Units::ToSysVSpeed(Sender->GetAsFixed());
+    SetMC(MACCREADY);
 #ifdef OLD_TASK
     GlidePolar::SetMacCready(MACCREADY);
 #endif
@@ -291,6 +301,7 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
   GlidePolar polar = protected_task_manager.get_glide_polar();
 
   fixed CRUISE_EFFICIENCY_enter = polar.get_cruise_efficiency();
+  fixed MACCREADY_enter = protected_task_manager.get_glide_polar().get_mc();
 
   emc = XCSoarInterface::Calculated().task_stats.effective_mc;
 
@@ -318,6 +329,7 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
 
   if (wf->ShowModal() == mrCancel) {
     // todo: restore task settings.
+    SetMC(MACCREADY_enter);
 #ifdef OLD_TASK
     GlidePolar::SetMacCready(MACCREADY_enter);
     GlidePolar::SetCruiseEfficiency(CRUISE_EFFICIENCY_enter);
