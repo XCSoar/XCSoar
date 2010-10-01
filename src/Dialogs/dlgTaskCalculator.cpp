@@ -205,9 +205,6 @@ OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
                   XCSoarInterface::Calculated().timeCircling;
       Sender->Set(Units::ToUserVSpeed(MACCREADY));
       SetMC(MACCREADY);
-#ifdef OLD_TASK
-      GlidePolar::SetMacCready(MACCREADY);
-#endif
       RefreshCalculator();
     }
     break;
@@ -218,9 +215,6 @@ OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
   case DataField::daChange:
     MACCREADY = Units::ToSysVSpeed(Sender->GetAsFixed());
     SetMC(MACCREADY);
-#ifdef OLD_TASK
-    GlidePolar::SetMacCready(MACCREADY);
-#endif
     RefreshCalculator();
     break;
   }
@@ -322,9 +316,6 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
   if (!task.getSettings().AATEnabled ||
       !task.ValidTaskPoint(task.getActiveIndex() + 1))
     ((WndButton *)wf->FindByName(_T("Optimise")))->hide();
-
-  if (!task.ValidTaskPoint(task.getActiveIndex()))
-    ((WndButton *)wf->FindByName(_T("Target")))->hide();
 #endif
   wf->SetTimerNotify(OnTimerNotify);
 
@@ -332,7 +323,6 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
     // todo: restore task settings.
     SetMC(MACCREADY_enter);
 #ifdef OLD_TASK
-    GlidePolar::SetMacCready(MACCREADY_enter);
     GlidePolar::SetCruiseEfficiency(CRUISE_EFFICIENCY_enter);
 #endif
   }
