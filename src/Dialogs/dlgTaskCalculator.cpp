@@ -312,11 +312,6 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
   if (!XCSoarInterface::Calculated().common_stats.ordered_has_targets) {
     ((WndButton *)wf->FindByName(_T("Target")))->hide();
   }
-#ifdef OLD_TASK
-  if (!task.getSettings().AATEnabled ||
-      !task.ValidTaskPoint(task.getActiveIndex() + 1))
-    ((WndButton *)wf->FindByName(_T("Optimise")))->hide();
-#endif
   wf->SetTimerNotify(OnTimerNotify);
 
   if (wf->ShowModal() == mrCancel) {
