@@ -5,14 +5,13 @@ from map_generator import MapGenerator
 import pickle
 
 class MapJob:
-    output_file = None
-    waypoint_file = None
-    waypoint_details_file = None
-    airspace_file = None
+    use_waypoint_file = False
+    use_waypoint_details_file = False
+    use_airspace_file = False
+    use_topology = True
+    use_terrain = True
     bounds = None
     resolution = 9.0
-    no_topology = False
-    no_terrain = False
     
     def __init__(self, command = None):
         self.command = command
@@ -46,6 +45,7 @@ class MapDaemon:
         f.close()
         
         job.file_job = file_job
+        job.dir_job = os.path.dirname(file_job)
         
         return job
     
@@ -99,62 +99,48 @@ class MapDaemon:
     def __execute_job(self, job):
         if job.command == "generate":
             print "Command \"generate\" found. Generating map file."
-            if job.output_file == None:
-                print "No output file set. Aborting."
-                self.__delete_job(job.file_job)
-                return
-
-            if job.waypoint_file == None and job.bounds == None:
+            if job.use_waypoint_file == False and job.bounds == None:
                 print "No waypoint file or bounds set. Aborting."
                 self.__delete_job(job.file_job)
                 return
 
-            if isinstance(job.waypoint_file, basestring):
-                job.waypoint_file = job.waypoint_file.replace("\\", "/")
-            if isinstance(job.waypoint_details_file, basestring):
-                job.waypoint_details_file = job.waypoint_details_file.replace("\\", "/")
-            if isinstance(job.airspace_file, basestring):
-                job.airspace_file = job.airspace_file.replace("\\", "/")
-            if isinstance(job.output_file, basestring):
-                job.output_file = job.output_file.replace("\\", "/")
-                
             m = MapGenerator()
-            if job.waypoint_file != None:
-                self.__update_job_status(os.path.dirname(job.file_job), 
+            if job.use_waypoint_file:
+                self.__update_job_status(job.dir_job, 
                                          "Adding waypoint file...")
-                m.AddWaypointFile(os.path.normpath(job.waypoint_file))
-                m.SetBoundsByWaypointFile(os.path.normpath(job.waypoint_file))
+                m.AddWaypointFile(os.path.join(job.dir_job, "waypoints.dat"))
+                m.SetBoundsByWaypointFile(os.path.join(job.dir_job, "waypoints.dat"))
             if job.bounds != None:
                 m.SetBounds(job.bounds)
             
-            if job.no_topology != True:
-                self.__update_job_status(os.path.dirname(job.file_job), 
+            if job.use_topology:
+                self.__update_job_status(job.dir_job, 
                                          "Creating topology files...")
                 m.AddTopology()
 
-            if job.no_terrain != True:
-                self.__update_job_status(os.path.dirname(job.file_job), 
+            if job.use_terrain:
+                self.__update_job_status(job.dir_job, 
                                          "Creating terrain files...")
                 m.AddTerrain(job.resolution)
             
-            if job.waypoint_details_file != None:
-                self.__update_job_status(os.path.dirname(job.file_job), 
+            if job.use_waypoint_details_file:
+                self.__update_job_status(job.dir_job, 
                                          "Adding waypoint details file...")
-                m.AddWaypointDetailsFile(os.path.normpath(job.waypoint_details_file))
+                m.AddWaypointDetailsFile(os.path.join(job.dir_job, "details.txt"))
                 
-            if job.airspace_file != None:
-                self.__update_job_status(os.path.dirname(job.file_job), 
+            if job.use_airspace_file:
+                self.__update_job_status(job.dir_job, 
                                          "Adding airspace file...")
-                m.AddAirspaceFile(os.path.normpath(job.airspace_file))
+                m.AddAirspaceFile(os.path.join(job.dir_job, "sua.txt"))
                 
-            self.__update_job_status(os.path.dirname(job.file_job), 
+            self.__update_job_status(job.dir_job, 
                                      "Creating map file...")
-            m.Create(os.path.normpath(job.output_file))
+            m.Create(os.path.join(job.dir_job, "map.xcm"))
             m.Cleanup()
-            self.__update_job_status(os.path.dirname(job.file_job), 
+            self.__update_job_status(job.dir_job,  
                                      "Done")
-            print "Map ready for use (" + job.output_file + ")"
-            self.__lock_download(os.path.dirname(job.file_job))
+            print "Map ready for use (" + os.path.join(job.dir_job, "map.xcm") + ")"
+            self.__lock_download(job.dir_job)
             self.__delete_job(job.file_job, False)
             return
             
