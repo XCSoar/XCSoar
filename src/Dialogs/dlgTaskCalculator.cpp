@@ -137,7 +137,7 @@ RefreshCalculator(void)
     wp->RefreshDisplay();
     fixed rMax = XCSoarInterface::Calculated().task_stats.distance_max;
     fixed rMin = XCSoarInterface::Calculated().task_stats.distance_min;
-    fixed range = (rPlanned - rMin) / (rMax - rMin);
+    fixed range = (fixed_two * (rPlanned - rMin) / (rMax - rMin)) - fixed_one;
     wp->GetDataField()->SetAsFloat(range * fixed(100));
     wp->RefreshDisplay();
   }
