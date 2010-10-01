@@ -43,6 +43,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Task/Tasks/AbstractTask.hpp"
 #include "Units.hpp"
 
@@ -555,6 +556,9 @@ InitTargetPoints()
 
 void
 dlgTarget() {
+
+  if (protected_task_manager.get_mode() != TaskManager::MODE_ORDERED)
+    return;
 
   if (!Layout::landscape) {
     wf = LoadDialog(CallBackTable,
