@@ -204,6 +204,7 @@ OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
       MACCREADY = XCSoarInterface::Calculated().TotalHeightClimb /
                   XCSoarInterface::Calculated().timeCircling;
       Sender->Set(Units::ToUserVSpeed(MACCREADY));
+      SetMC(MACCREADY);
 #ifdef OLD_TASK
       GlidePolar::SetMacCready(MACCREADY);
 #endif
