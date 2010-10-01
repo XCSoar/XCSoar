@@ -290,7 +290,6 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
   RefreshCalculator();
 
   if (!XCSoarInterface::Calculated().common_stats.ordered_has_targets) {
-    ((WndButton *)wf->FindByName(_T("Target")))->hide();
     ((WndButton *)wf->FindByName(_T("prpRange")))->hide();
   }
   wf->SetTimerNotify(OnTimerNotify);
