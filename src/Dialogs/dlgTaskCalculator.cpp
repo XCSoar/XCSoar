@@ -110,10 +110,11 @@ RefreshCalculator(void)
     }
   }
 
+  fixed rPlanned = XCSoarInterface::Calculated().task_stats.total.solution_planned.Vector.Distance;
+
   wp = (WndProperty*)wf->FindByName(_T("prpDistance"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(Units::ToUserDistance(
-        XCSoarInterface::Calculated().task_stats.total.solution_planned.Vector.Distance));
+    wp->GetDataField()->SetAsFloat(Units::ToUserDistance(rPlanned));
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
     wp->RefreshDisplay();
   }
@@ -131,16 +132,16 @@ RefreshCalculator(void)
     wp->RefreshDisplay();
   }
 
-  /*
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp) {
     wp->RefreshDisplay();
-    wp->set_visible(task.getSettings().AATEnabled &&
-                    task.ValidTaskPoint(task.getActiveIndex() + 1));
-    wp->GetDataField()->SetAsFloat(Range*100.0);
+    fixed rMax = XCSoarInterface::Calculated().task_stats.distance_max;
+    fixed rMin = XCSoarInterface::Calculated().task_stats.distance_min;
+    fixed range = (rPlanned - rMin) / (rMax - rMin);
+    wp->GetDataField()->SetAsFloat(range * fixed(100));
     wp->RefreshDisplay();
   }
-
+/*
   fixed v1;
   if (XCSoarInterface::Calculated().TaskTimeToGo>0) {
     v1 = XCSoarInterface::Calculated().TaskDistanceToGo/
@@ -311,6 +312,7 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
 
   if (!XCSoarInterface::Calculated().common_stats.ordered_has_targets) {
     ((WndButton *)wf->FindByName(_T("Target")))->hide();
+    ((WndButton *)wf->FindByName(_T("prpRange")))->hide();
   }
   wf->SetTimerNotify(OnTimerNotify);
 
