@@ -179,12 +179,6 @@ OnTargetClicked(WindowControl * Sender)
 {
   (void)Sender;
   wf->hide();
-#ifdef OLD_TASK
-  dlgTarget();
-  // find start value for range (it may have changed)
-  Range = task.AdjustAATTargets(2.0);
-  RefreshCalculator();
-#endif
   dlgTarget();
   wf->show();
 }
@@ -224,23 +218,13 @@ OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 static void
 OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  fixed rthis;
   switch (Mode) {
   case DataField::daSpecial:
     break;
   case DataField::daGet:
-    //      Sender->Set(Range*100.0);
     break;
   case DataField::daPut:
   case DataField::daChange:
-    rthis = Sender->GetAsFixed() / 100;
-#ifdef OLD_TASK
-    if (fabs(Range - rthis) > fixed_one / 100) {
-      Range = rthis;
-      task.AdjustAATTargets(Range);
-      RefreshCalculator();
-    }
-#endif
     break;
   }
 }
@@ -302,11 +286,6 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
   emc = XCSoarInterface::Calculated().task_stats.effective_mc;
 
   cruise_efficiency = CRUISE_EFFICIENCY_enter;
-
-  // find start value for range
-#ifdef OLD_TASK
-  Range = task.AdjustAATTargets(2.0);
-#endif
 
   RefreshCalculator();
 
