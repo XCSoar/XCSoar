@@ -200,20 +200,18 @@ class MapDaemon:
             
             # Activate the download lock
             self.__lock_download(job.uuid)
-            # Delete job file
-            self.__delete_job(job.uuid, False)
-            return
         
         # Check for "stop" command
-        if job.command == "stop":
+        elif job.command == "stop":
             print "Command \"stop\" found. Stopping daemon."
-            # Delete the "stop" job
-            self.__delete_job(job.uuid)
-            # ... and stop the daemon 
+            # Stop the daemon 
             self.__run = False
-            return
         
-        print "No known command given inside MapJob object"
+        # Every other command
+        else:
+            print "No known command given inside MapJob object"
+        
+        # Delete the job
         self.__delete_job(job.uuid)
                 
     def Run(self):
