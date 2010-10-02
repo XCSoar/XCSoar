@@ -269,6 +269,7 @@ READ_PROFILE_STRING_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Profile/Registry.cpp \
+	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
@@ -283,6 +284,7 @@ READ_PROFILE_INT_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Profile/Registry.cpp \
+	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
@@ -297,6 +299,7 @@ WRITE_PROFILE_STRING_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Profile/Registry.cpp \
+	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
@@ -311,6 +314,7 @@ WRITE_PROFILE_INT_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Profile/Registry.cpp \
+	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
@@ -506,6 +510,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Terrain/TerrainRenderer.cpp \
 	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
 	$(SRC)/Profile/Registry.cpp \
+	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/Graphics.cpp \
@@ -620,6 +625,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Profile/Registry.cpp \
+	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/UtilsText.cpp \
@@ -681,6 +687,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Profile/Registry.cpp \
+	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \

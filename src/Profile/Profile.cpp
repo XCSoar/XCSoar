@@ -37,11 +37,16 @@ Copyright_License {
 */
 
 #include "Profile/Profile.hpp"
-#include "Profile/Registry.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
+
+#ifndef USE_PROFILE_MAP
+#include "Profile/Registry.hpp"
+#else
+#include "Profile/ProfileMap.hpp"
+#endif
 
 #define XCSPROFILE "xcsoar-registry.prf"
 
@@ -71,7 +76,11 @@ Profile::LoadFile(const TCHAR *szFile)
     return;
 
   LogStartUp(_T("Loading profile from %s"), szFile);
+#ifndef USE_PROFILE_MAP
   Registry::Import(szFile);
+#else
+  ProfileMap::Import(szFile);
+#endif
 }
 
 void
@@ -94,7 +103,11 @@ Profile::SaveFile(const TCHAR *szFile)
     return;
 
   LogStartUp(_T("Saving profile to %s"), szFile);
+#ifndef USE_PROFILE_MAP
   Registry::Export(szFile);
+#else
+  ProfileMap::Export(szFile);
+#endif
 }
 
 
@@ -125,31 +138,51 @@ Profile::SetFiles(const TCHAR* override)
 bool
 Profile::Get(const TCHAR *key, int &value)
 {
+#ifndef USE_PROFILE_MAP
   return Registry::Get(key, value);
+#else
+  return ProfileMap::Get(key, value);
+#endif
 }
 
 bool
 Profile::Get(const TCHAR *key, short &value)
 {
+#ifndef USE_PROFILE_MAP
   return Registry::Get(key, value);
+#else
+  return ProfileMap::Get(key, value);
+#endif
 }
 
 bool
 Profile::Get(const TCHAR *key, bool &value)
 {
+#ifndef USE_PROFILE_MAP
   return Registry::Get(key, value);
+#else
+  return ProfileMap::Get(key, value);
+#endif
 }
 
 bool
 Profile::Get(const TCHAR *key, unsigned &value)
 {
+#ifndef USE_PROFILE_MAP
   return Registry::Get(key, value);
+#else
+  return ProfileMap::Get(key, value);
+#endif
 }
 
 bool
 Profile::Get(const TCHAR *key, double &value)
 {
+#ifndef USE_PROFILE_MAP
   return Registry::Get(key, value);
+#else
+  return ProfileMap::Get(key, value);
+#endif
 }
 
 #ifdef FIXED_MATH
@@ -157,7 +190,11 @@ Profile::Get(const TCHAR *key, double &value)
 bool
 Profile::Get(const TCHAR *key, fixed &value)
 {
+#ifndef USE_PROFILE_MAP
   return Registry::Get(key, value);
+#else
+  return ProfileMap::Get(key, value);
+#endif
 }
 
 #endif
@@ -165,7 +202,11 @@ Profile::Get(const TCHAR *key, fixed &value)
 bool
 Profile::Get(const TCHAR *key, TCHAR *value, size_t dwSize)
 {
+#ifndef USE_PROFILE_MAP
   if (Registry::Get(key, value, dwSize))
+#else
+  if (ProfileMap::Get(key, value, dwSize))
+#endif
     return true;
   else {
     value[0] = _T('\0');
@@ -176,43 +217,71 @@ Profile::Get(const TCHAR *key, TCHAR *value, size_t dwSize)
 bool
 Profile::Set(const TCHAR *key, int value)
 {
+#ifndef USE_PROFILE_MAP
   return Registry::Set(key, value);
+#else
+  return ProfileMap::Set(key, value);
+#endif
 }
 
 bool
 Profile::Set(const TCHAR *key, short value)
 {
+#ifndef USE_PROFILE_MAP
   return Registry::Set(key, value);
+#else
+  return ProfileMap::Set(key, value);
+#endif
 }
 
 bool
 Profile::Set(const TCHAR *key, bool value)
 {
+#ifndef USE_PROFILE_MAP
   return Registry::Set(key, value);
+#else
+  return ProfileMap::Set(key, value);
+#endif
 }
 
 bool
 Profile::Set(const TCHAR *key, unsigned value)
 {
+#ifndef USE_PROFILE_MAP
   return Registry::Set(key, value);
+#else
+  return ProfileMap::Set(key, value);
+#endif
 }
 
 bool
 Profile::Set(const TCHAR *key, double value)
 {
+#ifndef USE_PROFILE_MAP
   return Registry::Set(key, (DWORD)value);
+#else
+  return ProfileMap::Set(key, (DWORD)value);
+#endif
 }
 
 bool
 Profile::Set(const TCHAR *key, long value)
 {
+#ifndef USE_PROFILE_MAP
   return Registry::Set(key, value);
+#else
+  return ProfileMap::Set(key, value);
+#endif
 }
 
 bool
 Profile::Set(const TCHAR *key, const TCHAR *value)
 {
+#ifndef USE_PROFILE_MAP
   return Registry::Set(key, value);
+#else
+  return ProfileMap::Set(key, value);
+#endif
 }
 
 void
