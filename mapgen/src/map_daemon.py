@@ -113,7 +113,7 @@ class MapDaemon:
                 if self.__job_lock_expired(file):
                     # If expired -> Delete the outdated job
                     print "---------------------"
-                    print "Job lock expired (" + file_job + ".lock)"
+                    print "Job lock expired (" + file + ")"
                     self.__delete_job(file)
                 # If you exists -> Continue with next job
                 continue
