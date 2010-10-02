@@ -37,13 +37,18 @@ class MapDaemon:
         print "Job deleted (" + file_job + ")"
         
     def __read_job(self, file_job):
+        # Check if the job file exists
         if not os.path.exists(file_job):
             return None
         
+        # Open the job file for reading
         f = open(file_job, "r")
+        # Unpickle the MapJob instance
         job = pickle.load(f)
+        # Close the job file again
         f.close()
         
+        # Save the job file path and folder path in the MapJob instance
         job.file_job = file_job
         job.dir_job = os.path.dirname(file_job)
         
