@@ -56,6 +56,10 @@ Copyright_License {
 #include "Config/GConf.hpp"
 #endif
 
+const static size_t nMaxValueValueSize = MAX_PATH * 2 + 6;
+// max regkey name is 256 chars + " = "
+const static size_t nMaxKeyNameSize = MAX_PATH + 6;
+
 //
 // NOTE: all registry variables are unsigned!
 //
@@ -133,11 +137,6 @@ Registry::Set(const TCHAR *szRegValue, const TCHAR *Pos)
   return GConf().set(szRegValue, Pos);
 #endif /* !WIN32 */
 }
-
-// Registry file handling
-
-const static size_t nMaxValueValueSize = MAX_PATH * 2 + 6; // max regkey name is 256 chars + " = "
-const static size_t nMaxKeyNameSize = MAX_PATH + 6;
 
 void
 Registry::Import(const TCHAR *szFile)
