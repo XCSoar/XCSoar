@@ -40,11 +40,14 @@ class MapDaemon:
     def __get_dir_job(self, uuid):
         return os.path.join(self.__dir_jobs, uuid)
         
+    def __get_file(self, uuid, filename):
+        return os.path.join(self.__dir_jobs, uuid, filename)
+
     def __get_file_job(self, uuid):
-        return os.path.join(self.__dir_jobs, uuid, "job")
+        return self.__get_file(uuid, "job")
         
     def __get_file_download_lock(self, uuid):
-        return os.path.join(self.__dir_jobs, uuid, "download.lock")
+        return self.__get_file(uuid, "download.lock")
         
     def __read_job(self, uuid):
         file_job = self.__get_file_job(uuid)
