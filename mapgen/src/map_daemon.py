@@ -21,9 +21,19 @@ class MapDaemon:
                  dir_jobs = "../jobs/", 
                  dir_data = "../data/", 
                  dir_temp = "../tmp/"):
+        
         self.__dir_jobs = os.path.abspath(dir_jobs)
+        if not os.path.exists(self.__dir_jobs):
+            os.mkdir(self.__dir_jobs)
+        
         self.__dir_data = os.path.abspath(dir_data)
+        if not os.path.exists(self.__dir_data):
+            os.mkdir(self.__dir_data)
+        
         self.__dir_temp = os.path.abspath(dir_temp)
+        if not os.path.exists(self.__dir_temp):
+            os.mkdir(self.__dir_temp)
+
         self.__run = False
     
     def __lock_download(self, uuid):
