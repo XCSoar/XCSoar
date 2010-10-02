@@ -24,13 +24,14 @@ class MapDaemon:
     def __lock_download(self, uuid):
         open(self.__get_file_download_lock(uuid), "w").close()
     
-    def __delete_job(self, file_job, complete = True):
-        dir_job = os.path.dirname(file_job)
+    def __delete_job(self, uuid, complete = True):
+        dir_job = self.__get_dir_job(uuid)
         if complete:
             for file in os.listdir(dir_job):
                 os.unlink(os.path.join(dir_job, file))
             os.rmdir(dir_job)
         else:
+            file_job = self.__get_file_job(uuid)
             if os.path.exists(file_job):
                 os.unlink(file_job)
             
@@ -99,7 +100,7 @@ class MapDaemon:
                     # If expired -> Delete the outdated job
                     print "---------------------"
                     print "Job lock expired (" + file_job + ".lock)"
-                    self.__delete_job(file_job)
+                    self.__delete_job(file)
                 # If you exists -> Continue with next job
                 continue
             
@@ -113,7 +114,7 @@ class MapDaemon:
                         # If expired -> Delete the job
                         print "---------------------"
                         print "Download lock expired (" + file_download + ")"
-                        self.__delete_job(file_job)
+                        self.__delete_job(file)
                 # If no job file exists -> Continue with next job
                 continue
 
@@ -125,7 +126,7 @@ class MapDaemon:
                 return job
             
             # If job file could not be read -> Delete the job
-            self.__delete_job(file_job)
+            self.__delete_job(file)
         
         # Not jobs found
         return None
@@ -139,7 +140,7 @@ class MapDaemon:
             if job.use_waypoint_file == False and job.bounds == None:
                 print "No waypoint file or bounds set. Aborting."
                 # If not -> Delete the job
-                self.__delete_job(job.file_job)
+                self.__delete_job(job.uuid)
                 return
 
             # Create a MapGenerator instance for creating the map file
@@ -200,20 +201,20 @@ class MapDaemon:
             # Activate the download lock
             self.__lock_download(job.uuid)
             # Delete job file
-            self.__delete_job(job.file_job, False)
+            self.__delete_job(job.uuid, False)
             return
         
         # Check for "stop" command
         if job.command == "stop":
             print "Command \"stop\" found. Stopping daemon."
             # Delete the "stop" job
-            self.__delete_job(job.file_job)
+            self.__delete_job(job.uuid)
             # ... and stop the daemon 
             self.__run = False
             return
         
         print "No known command given inside MapJob object"
-        self.__delete_job(job.file_job)
+        self.__delete_job(job.uuid)
                 
     def Run(self):
         print "Starting MapDaemon ..."
