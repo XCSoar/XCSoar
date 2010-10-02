@@ -133,12 +133,15 @@ class MapDaemon:
                                          "Adding waypoint file...")
                 # Add the waypoint file to the MapGenerator
                 m.AddWaypointFile(os.path.join(job.dir_job, "waypoints.dat"))
-                # Calculate the bounds of the waypoint file
-                m.SetBoundsByWaypointFile(os.path.join(job.dir_job, "waypoints.dat"))
-            
-            # If the job has fixed bounds defined use them instead
+                
+            # If the job has fixed bounds defined 
             if job.bounds != None:
+                # ... use them
                 m.SetBounds(job.bounds)
+            else:
+                # If not -> Calculate the bounds of the waypoint file
+                m.SetBoundsByWaypointFile(os.path.join(job.dir_job, 
+                                                       "waypoints.dat"))
             
             # Check if we should create topology files
             if job.use_topology:
