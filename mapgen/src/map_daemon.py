@@ -13,7 +13,7 @@ class MapJob:
     bounds = None
     resolution = 9.0
     
-    def __init__(self, command = None):
+    def __init__(self, command = "generate"):
         self.command = command
 
 class MapDaemon:
