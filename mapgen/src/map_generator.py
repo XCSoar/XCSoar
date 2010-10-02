@@ -14,8 +14,10 @@ class MapGenerator:
         @param dir_temp: Path of the temporary folder
         '''
         self.__dir_data = os.path.abspath(dir_data)
-        self.__dir_temp = os.path.abspath(dir_temp)
+        if not os.path.exists(self.__dir_data):
+            os.mkdir(self.__dir_data)
 
+        self.__dir_temp = os.path.abspath(dir_temp)
         if not os.path.exists(self.__dir_temp):
             os.mkdir(self.__dir_temp)
 
