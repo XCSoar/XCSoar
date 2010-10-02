@@ -1329,11 +1329,7 @@ InputEvents::eventSetup(const TCHAR *misc)
   else if (_tcscmp(misc, _T("Teamcode")) == 0)
     dlgTeamCodeShowModal();
   else if (_tcscmp(misc, _T("Target")) == 0)
-#ifdef OLD_TASK // target control
     dlgTarget();
-#else
-	(void)1;
-#endif
 }
 
 #ifdef WIN32

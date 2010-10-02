@@ -14,8 +14,10 @@ class MapGenerator:
         @param dir_temp: Path of the temporary folder
         '''
         self.__dir_data = os.path.abspath(dir_data)
-        self.__dir_temp = os.path.abspath(dir_temp)
+        if not os.path.exists(self.__dir_data):
+            os.mkdir(self.__dir_data)
 
+        self.__dir_temp = os.path.abspath(dir_temp)
         if not os.path.exists(self.__dir_temp):
             os.mkdir(self.__dir_temp)
 
@@ -90,10 +92,12 @@ class MapGenerator:
     def AddTopology(self, bounds = None):
         print "Adding topology ..."
 
-        if bounds == None: bounds = self.__bounds
-        if bounds == None:
-            print "failed! (Boundaries undefined!)"
-            return False
+        if bounds == None: 
+            if self.__bounds == None:
+                print "failed! (Boundaries undefined!)"
+                return False
+            
+            bounds = self.__bounds
 
         topology_files = topology_vmap0.Create(bounds, self.__dir_data,
                                                self.__dir_temp)
@@ -106,10 +110,12 @@ class MapGenerator:
     def AddTerrain(self, arcseconds_per_pixel = 9.0, bounds = None):
         print "Adding terrain ..."
 
-        if bounds == None: bounds = self.__bounds
-        if bounds == None:
-            print "failed! (Boundaries undefined!)"
-            return False
+        if bounds == None: 
+            if self.__bounds == None:
+                print "failed! (Boundaries undefined!)"
+                return False
+            
+            bounds = self.__bounds
 
         terrain_files = terrain_srtm.Create(bounds, arcseconds_per_pixel,
                                            self.__dir_data, self.__dir_temp)

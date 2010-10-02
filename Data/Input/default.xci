@@ -317,7 +317,7 @@ type=key
 data=0
 event=Setup Target
 event=Mode default
-label=$(CheckTask)Target
+label=$(CheckTask)$(CheckTaskResumed)Target
 location=9
 
 # -------------
