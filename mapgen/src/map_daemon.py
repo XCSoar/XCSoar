@@ -105,7 +105,7 @@ class MapDaemon:
             if not os.path.isdir(dir_job):
                 continue
 
-            file_job = os.path.join(dir_job, "job")
+            file_job = self.__get_file_job(file)
 
             # Check if the job is locked by the creator
             if self.__job_locked(file):
