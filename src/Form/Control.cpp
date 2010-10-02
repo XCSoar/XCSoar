@@ -44,6 +44,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "PeriodClock.hpp"
 #include "Util/StringUtil.hpp"
+#include "Language.hpp"
 
 #include <stdlib.h>
 
@@ -165,7 +166,7 @@ WindowControl::OnHelp()
   return 0; // undefined. return 1 if defined
 #else
   if (mHelpText && !string_is_empty(mHelpText)) {
-    dlgHelpShowModal(*(SingleWindow *)get_root_owner(), mCaption, mHelpText);
+    dlgHelpShowModal(*(SingleWindow *)get_root_owner(), gettext(mCaption), gettext(mHelpText));
     return 1;
   }
 
