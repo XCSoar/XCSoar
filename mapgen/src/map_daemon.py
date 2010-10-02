@@ -46,6 +46,9 @@ class MapDaemon:
     def __get_file_job(self, uuid):
         return self.__get_file(uuid, "job")
         
+    def __get_file_job_lock(self, uuid):
+        return self.__get_file(uuid, "job.lock")
+        
     def __get_file_download_lock(self, uuid):
         return self.__get_file(uuid, "download.lock")
         
@@ -77,10 +80,12 @@ class MapDaemon:
         f.write(status)
         f.close()
     
-    def __check_job_lock_expired(self, file_lock):
+    def __check_job_lock_expired(self, uuid):
+        file_lock = self.__get_file_job_lock(uuid)
         return (time.time() - os.path.getctime(file_lock) > 60 * 60 * 2)
     
-    def __check_download_lock_expired(self, file_lock):
+    def __check_download_lock_expired(self, uuid):
+        file_lock = self.__get_file_download_lock(uuid)
         return (time.time() - os.path.getctime(file_lock) > 60 * 60 * 24 * 7)
     
     def __check_jobs(self):
@@ -97,7 +102,7 @@ class MapDaemon:
             # Check if the job is locked by the creator
             if os.path.exists(file_job + ".lock"):
                 # Check if the lock is expired
-                if self.__check_job_lock_expired(file_job + ".lock"):
+                if self.__check_job_lock_expired(file):
                     # If expired -> Delete the outdated job
                     print "---------------------"
                     print "Job lock expired (" + file_job + ".lock)"
@@ -111,7 +116,7 @@ class MapDaemon:
                 file_download = os.path.join(dir_job, "download.lock")
                 if os.path.exists(file_download):
                     # Check if download lock is expired
-                    if self.__check_download_lock_expired(file_download):
+                    if self.__check_download_lock_expired(file):
                         # If expired -> Delete the job
                         print "---------------------"
                         print "Download lock expired (" + file_download + ")"
