@@ -68,7 +68,7 @@ static const WeatherDescriptor WeatherDescriptors[RasterWeather::MAX_WEATHER_MAP
   {
     _T("wstar"),
     N_("W*"),
-    N_("Average dry thermal updraft strength near mid-BL height.  Subtract glider descent rate to get average vario reading for cloudless thermals.  Updraft strengths will be stronger than this forecast if convective clouds are present, since cloud condensation adds buoyancy aloft (i.e. this negects \"cloudsuck\").  W* depends upon both the surface heating and the BL depth."),
+    N_("Average dry thermal updraft strength near mid-BL height.  Subtract glider descent rate to get average vario reading for cloudless thermals.  Updraft strengths will be stronger than this forecast if convective clouds are present, since cloud condensation adds buoyancy aloft (i.e. this neglects \"cloudsuck\").  W* depends upon both the surface heating and the BL depth."),
   },
   {
     _T("blwindspd"),
