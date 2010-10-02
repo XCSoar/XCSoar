@@ -53,7 +53,8 @@ class MapDaemon:
         # Close the job file again
         f.close()
         
-        # Save the job file path and folder path in the MapJob instance
+        # Save the job uuid, job file path and folder path in the MapJob instance
+        job.uuid = uuid
         job.file_job = file_job
         job.dir_job = os.path.dirname(file_job)
         
