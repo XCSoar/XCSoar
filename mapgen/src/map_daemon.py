@@ -100,7 +100,7 @@ class MapDaemon:
         file_lock = self.__get_file_download_lock(uuid)
         return os.path.exists(file_lock)
     
-    def __check_jobs(self):
+    def __get_next_job(self):
         # Iterate through files/folders in our jobs folder
         for file in os.listdir(self.__dir_jobs):
             # Skip any non-folder entries
@@ -144,7 +144,7 @@ class MapDaemon:
         # Not jobs found
         return None
     
-    def __execute_generate_job(self, job):
+    def __do_generate_job(self, job):
         # Check if there is anything defining the boundaries
         if job.use_waypoint_file == False and job.bounds == None:
             print "No waypoint file or bounds set. Aborting."
@@ -209,12 +209,12 @@ class MapDaemon:
         # Activate the download lock
         self.__lock_download(job.uuid)
         
-    def __execute_job(self, job):
+    def __do_job(self, job):
         # Check for "generate" command
         if job.command == "generate":
             print "Command \"generate\" found. Generating map file."
             # Execute "generate" job
-            self.__execute_generate_job(job)
+            self.__do_generate_job(job)
         
         # Check for "stop" command
         elif job.command == "stop":
@@ -236,10 +236,10 @@ class MapDaemon:
         print "Monitoring " + self.__dir_jobs + " for new jobs ..."
         while self.__run:
             # Check if there are new jobs
-            job = self.__check_jobs()
+            job = self.__get_next_job()
             if job != None:
                 # If we found a job -> execute it
-                self.__execute_job(job)
+                self.__do_job(job)
             else:
                 # Otherwise sleep for a little while
                 time.sleep(0.5)
