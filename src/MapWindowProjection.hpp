@@ -162,11 +162,32 @@ private:
   fixed MapScale;
   fixed _RequestedMapScale;
 
+/**
+ * sets the MapScale based on the validated value
+ * of _RequestedMapScale
+ * @param settings_map
+ */
   void ModifyMapScale(const SETTINGS_MAP &settings_map);
 
+  /**
+ * sets the map scale based on three possible inputs:
+ * If TerrainPan is enabled, then uses that parameter
+ * Else If settings_map.MapScale > 0, uses that value (which
+ * will be reset back to zero during the blackboard copy)
+ * Else If AutoZoom is enabled, scales to DerivedDrawInfo.ZoomDistance
+ * @param derived_info
+ * @param settings_map
+ */
   void UpdateMapScale(const DERIVED_INFO &derived_info,
                       const SETTINGS_MAP &settings_map);
-
+/**
+ * sets orientation for dlgTarget
+ * if he next tp is the one being viewed by dlgTarget
+ * then use normal orientation, else use NorthUp
+ * @param nmea_info
+ * @param derived_info
+ * @param settings
+ */
   void CalculateOrientationTargetPan(const NMEA_INFO &nmea_info,
                                      const DERIVED_INFO &derived_info,
                                      const SETTINGS_MAP &settings);
