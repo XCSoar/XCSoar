@@ -64,7 +64,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "LogFile.hpp"
 #include "Compatibility/vk.h"
 #include "ButtonLabel.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"

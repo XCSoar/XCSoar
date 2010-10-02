@@ -41,7 +41,7 @@ Copyright_License {
 #include "SettingsMap.hpp"
 #include "SettingsComputer.hpp"
 #include "Units.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Float.hpp"
 #include "MainWindow.hpp"

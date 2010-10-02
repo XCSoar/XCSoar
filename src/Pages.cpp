@@ -41,7 +41,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "Language.hpp"
 
 #include <stdio.h>

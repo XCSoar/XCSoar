@@ -39,7 +39,7 @@ Copyright_License {
 #include "Polar/WinPilot.hpp"
 #include "Polar/Polar.hpp"
 #include "IO/ConfiguredFile.hpp"
-#include "ProfileKeys.hpp"
+#include "Profile/ProfileKeys.hpp"
 #include "Sizes.h"
 
 #include <math.h>

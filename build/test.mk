@@ -113,7 +113,7 @@ TEST_LOGGER_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Version.cpp \
-	$(SRC)/ProfileKeys.cpp \
+	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Math/fixed.cpp \
 	$(SRC)/Math/Angle.cpp \
@@ -148,7 +148,7 @@ $(TARGET_BIN_DIR)/TestDriver$(TARGET_EXEEXT): $(TEST_DRIVER_OBJS) $(TEST_DRIVER_
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 TEST_WAY_POINT_FILE_SOURCES = \
-	$(SRC)/ProfileKeys.cpp \
+	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/UtilsFile.cpp \
@@ -268,9 +268,9 @@ $(TARGET_BIN_DIR)/ReadMO$(TARGET_EXEEXT): $(READ_MO_OBJS) $(READ_MO_LDADD) | $(T
 READ_PROFILE_STRING_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/Registry.cpp \
-	$(SRC)/Profile.cpp \
-	$(SRC)/ProfileKeys.cpp \
+	$(SRC)/Profile/Registry.cpp \
+	$(SRC)/Profile/Profile.cpp \
+	$(SRC)/Profile/ProfileKeys.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/ReadProfileString.cpp
 READ_PROFILE_STRING_OBJS = $(call SRC_TO_OBJ,$(READ_PROFILE_STRING_SOURCES))
@@ -282,9 +282,9 @@ $(TARGET_BIN_DIR)/ReadProfileString$(TARGET_EXEEXT): $(READ_PROFILE_STRING_OBJS)
 READ_PROFILE_INT_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/Registry.cpp \
-	$(SRC)/Profile.cpp \
-	$(SRC)/ProfileKeys.cpp \
+	$(SRC)/Profile/Registry.cpp \
+	$(SRC)/Profile/Profile.cpp \
+	$(SRC)/Profile/ProfileKeys.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/ReadProfileInt.cpp
 READ_PROFILE_INT_OBJS = $(call SRC_TO_OBJ,$(READ_PROFILE_INT_SOURCES))
@@ -296,9 +296,9 @@ $(TARGET_BIN_DIR)/ReadProfileInt$(TARGET_EXEEXT): $(READ_PROFILE_INT_OBJS) $(REA
 WRITE_PROFILE_STRING_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/Registry.cpp \
-	$(SRC)/Profile.cpp \
-	$(SRC)/ProfileKeys.cpp \
+	$(SRC)/Profile/Registry.cpp \
+	$(SRC)/Profile/Profile.cpp \
+	$(SRC)/Profile/ProfileKeys.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/WriteProfileString.cpp
 WRITE_PROFILE_STRING_OBJS = $(call SRC_TO_OBJ,$(WRITE_PROFILE_STRING_SOURCES))
@@ -310,9 +310,9 @@ $(TARGET_BIN_DIR)/WriteProfileString$(TARGET_EXEEXT): $(WRITE_PROFILE_STRING_OBJ
 WRITE_PROFILE_INT_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/Registry.cpp \
-	$(SRC)/Profile.cpp \
-	$(SRC)/ProfileKeys.cpp \
+	$(SRC)/Profile/Registry.cpp \
+	$(SRC)/Profile/Profile.cpp \
+	$(SRC)/Profile/ProfileKeys.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/WriteProfileInt.cpp
 WRITE_PROFILE_INT_OBJS = $(call SRC_TO_OBJ,$(WRITE_PROFILE_INT_SOURCES))
@@ -412,7 +412,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/Device/FLARM.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
-	$(SRC)/ProfileKeys.cpp \
+	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
@@ -505,7 +505,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Terrain/RasterRenderer.cpp \
 	$(SRC)/Terrain/TerrainRenderer.cpp \
 	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
-	$(SRC)/Registry.cpp \
+	$(SRC)/Profile/Registry.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/Graphics.cpp \
@@ -526,8 +526,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
-	$(SRC)/Profile.cpp \
-	$(SRC)/ProfileKeys.cpp \
+	$(SRC)/Profile/Profile.cpp \
+	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/WayPoint/WayPointGlue.cpp \
 	$(SRC)/WayPoint/WayPointFile.cpp \
 	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
@@ -619,13 +619,13 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
-	$(SRC)/Registry.cpp \
+	$(SRC)/Profile/Registry.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
-	$(SRC)/ProfileKeys.cpp \
+	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
@@ -680,8 +680,8 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
-	$(SRC)/Registry.cpp \
-	$(SRC)/ProfileKeys.cpp \
+	$(SRC)/Profile/Registry.cpp \
+	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/UtilsText.cpp \

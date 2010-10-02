@@ -39,7 +39,7 @@ Copyright_License {
 #include "Declaration.hpp"
 
 #include "Task/Tasks/OrderedTask.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 
 Declaration::Declaration(const OrderedTask* task)
 {

@@ -51,7 +51,7 @@
 #include "Screen/Layout.hpp"
 #include "Form/CheckBox.hpp"
 #include "MainWindow.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "Compiler.h"
 #include "Gauge/FlarmTrafficWindow.hpp"
 #include "Language.hpp"

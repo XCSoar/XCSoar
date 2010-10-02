@@ -38,8 +38,8 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "../Message.hpp"
-#include "Profile.hpp"
-#include "ProfileKeys.hpp"
+#include "Profile/Profile.hpp"
+#include "Profile/ProfileKeys.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"

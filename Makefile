@@ -331,10 +331,10 @@ XCSOAR_SOURCES := \
 	$(SRC)/Audio/VegaVoice.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/Compatibility/string.c 	\
-	$(SRC)/Registry.cpp \
-	$(SRC)/Profile.cpp \
-	$(SRC)/ProfileGlue.cpp \
-	$(SRC)/ProfileKeys.cpp \
+	$(SRC)/Profile/Registry.cpp \
+	$(SRC)/Profile/Profile.cpp \
+	$(SRC)/Profile/ProfileGlue.cpp \
+	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/WorkerThread.cpp \

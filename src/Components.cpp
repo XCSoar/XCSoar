@@ -37,9 +37,9 @@ Copyright_License {
 */
 
 #include "Components.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "Interface.hpp"
-#include "ProfileKeys.hpp"
+#include "Profile/ProfileKeys.hpp"
 #include "Asset.hpp"
 #include "Simulator.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
@@ -446,7 +446,7 @@ XCSoarInterface::Shutdown(void)
   logger.guiStopLogger(Basic(), true);
 
   // Save settings to profile
-  ProgressGlue::Create(_("Shutdown, saving profile..."));
+  ProgressGlue::Create(_("Shutdown, saving Profile/Profile..."));
   Profile::Save();
 
   // Stop sound

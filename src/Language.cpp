@@ -42,7 +42,7 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "Sizes.h"
 
 #ifdef ANDROID

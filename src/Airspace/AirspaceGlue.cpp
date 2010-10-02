@@ -39,7 +39,7 @@ Copyright_License {
 #include "Airspace/AirspaceGlue.hpp"
 #include "Airspace/AirspaceParser.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
-#include "ProfileKeys.hpp"
+#include "Profile/ProfileKeys.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "ProgressGlue.hpp"
 #include "Language.hpp"

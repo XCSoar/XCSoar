@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_HPP
 #define XCSOAR_PROFILE_HPP
 
-#include "ProfileKeys.hpp"
+#include "Profile/ProfileKeys.hpp"
 #include "Math/fixed.hpp"
 
 #include <stddef.h>

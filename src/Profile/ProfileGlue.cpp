@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "LogFile.hpp"
 #include "Appearance.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"

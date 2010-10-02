@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#include "Profile.hpp"
-#include "Registry.hpp"
+#include "Profile/Profile.hpp"
+#include "Profile/Registry.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"

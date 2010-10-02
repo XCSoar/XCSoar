@@ -41,7 +41,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Compatibility/string.h"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"

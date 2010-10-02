@@ -35,8 +35,8 @@ Copyright_License {
 }
 */
 
-#include "Profile.hpp"
-#include "ProfileKeys.hpp"
+#include "Profile/Profile.hpp"
+#include "Profile/ProfileKeys.hpp"
 
 void
 Profile::Save(void)

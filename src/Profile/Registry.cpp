@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#include "Registry.hpp"
-#include "ProfileKeys.hpp"
+#include "Profile/Registry.hpp"
+#include "Profile/ProfileKeys.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
 #include "IO/FileLineReader.hpp"

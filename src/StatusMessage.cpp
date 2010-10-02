@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "StatusMessage.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"

@@ -39,7 +39,7 @@ Copyright_License {
 #include "ConfiguredFile.hpp"
 #include "FileLineReader.hpp"
 #include "ZipLineReader.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "StringUtil.hpp"
 
 #include <assert.h>

@@ -38,8 +38,8 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Units.hpp"
-#include "ProfileKeys.hpp"
-#include "Profile.hpp"
+#include "Profile/ProfileKeys.hpp"
+#include "Profile/Profile.hpp"
 #include "Audio/VegaVoice.h"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"

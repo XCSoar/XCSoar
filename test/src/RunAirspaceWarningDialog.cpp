@@ -42,7 +42,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "InputEvents.h"
 #include "UtilsSystem.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceParser.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"

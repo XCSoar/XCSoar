@@ -55,7 +55,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Form.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 
 #include <assert.h>
 

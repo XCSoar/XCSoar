@@ -41,7 +41,7 @@ Copyright_License {
 #include "UtilsFont.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "ButtonLabel.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/VirtualCanvas.hpp"
 #include "Appearance.hpp"

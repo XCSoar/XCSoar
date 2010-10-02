@@ -40,7 +40,7 @@ Copyright_License {
 #include "Math/FastRotation.hpp"
 #include "Screen/Layout.hpp"
 #include "SettingsComputer.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Waypoint/Waypoint.hpp"

@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "CommandLine.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "Simulator.hpp"
 
 #include <windef.h> /* for MAX_PATH */

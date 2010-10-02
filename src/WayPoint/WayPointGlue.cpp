@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "WayPointGlue.hpp"
 #include "DeviceBlackboard.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
 #include "Terrain/RasterTerrain.hpp"

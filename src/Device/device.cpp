@@ -53,7 +53,7 @@ Copyright_License {
 #include "Language.hpp"
 #include "Asset.hpp"
 #include "Simulator.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 
 #ifdef _WIN32_WCE
 #include "Config/Registry.hpp"

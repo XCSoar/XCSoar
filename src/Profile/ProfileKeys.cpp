@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "Sizes.h"
 #include "Defines.h"
-#include "ProfileKeys.hpp"
+#include "Profile/ProfileKeys.hpp"
 
 #define REGKEYNAME  "Software\\MPSR\\XCSoar"
 

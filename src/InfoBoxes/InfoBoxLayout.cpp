@@ -42,7 +42,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "SettingsMap.hpp"
 #include "Screen/Layout.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 
 #include <stdio.h>
 

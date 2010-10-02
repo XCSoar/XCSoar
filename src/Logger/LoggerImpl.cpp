@@ -38,7 +38,7 @@
 
 #include "Logger/LoggerImpl.hpp"
 #include "Version.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
 #include "UtilsSystem.hpp"

@@ -42,7 +42,7 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Protection.hpp"
 #include "Message.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "DeviceBlackboard.hpp"
 #include "InputEvents.h"
 #include "LogFile.hpp"

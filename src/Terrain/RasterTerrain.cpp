@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Terrain/RasterTerrain.hpp"
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
 

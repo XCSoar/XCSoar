@@ -35,7 +35,7 @@ Copyright_License {
 }
 */
 
-#include "Profile.hpp"
+#include "Profile/Profile.hpp"
 
 bool
 Profile::GetFont(const TCHAR *key, LOGFONT* lplf)
