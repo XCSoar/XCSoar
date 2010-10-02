@@ -103,7 +103,7 @@ class MapDaemon:
     def __check_jobs(self):
         # Iterate through files/folders in our jobs folder
         for file in os.listdir(self.__dir_jobs):
-            dir_job = os.path.join(self.__dir_jobs, file)
+            dir_job = self.__get_dir_job(file)
             
             # Skip any non-folder entries
             if not os.path.isdir(dir_job):
