@@ -35,8 +35,13 @@ class MapDaemon:
                 os.unlink(file_job)
             
         print "Job deleted (" + file_job + ")"
+    
+    def __get_file_job(self, uuid):
+        return os.path.join(self.__dir_jobs, uuid, "job")
         
-    def __read_job(self, file_job):
+    def __read_job(self, uuid):
+        file_job = self.__get_file_job(uuid)
+        
         # Check if the job file exists
         if not os.path.exists(file_job):
             return None
@@ -106,8 +111,8 @@ class MapDaemon:
 
             # We've found a job! -> Try to read the MapJob instance from the job file
             print "---------------------"
-            print "Job found (" + file_job + ")"
-            job = self.__read_job(file_job)
+            print "Job found (" + file + ")"
+            job = self.__read_job(file)
             if job != None:
                 return job
             
