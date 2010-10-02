@@ -65,7 +65,6 @@ class MapDaemon:
         
         # Save the job uuid, job file path and folder path in the MapJob instance
         job.uuid = uuid
-        job.dir_job = os.path.dirname(file_job)
         
         return job
     
