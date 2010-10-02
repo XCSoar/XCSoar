@@ -92,6 +92,10 @@ class MapDaemon:
         file_lock = self.__get_file_job_lock(uuid)
         return os.path.exists(file_lock)
     
+    def __job_file_exists(self, uuid):
+        file_job = self.__get_file_job(uuid)
+        return os.path.exists(file_job)
+    
     def __download_locked(self, uuid):
         file_lock = self.__get_file_download_lock(uuid)
         return os.path.exists(file_lock)
@@ -105,8 +109,6 @@ class MapDaemon:
             if not os.path.isdir(dir_job):
                 continue
 
-            file_job = self.__get_file_job(file)
-
             # Check if the job is locked by the creator
             if self.__job_locked(file):
                 # Check if the lock is expired
@@ -119,7 +121,7 @@ class MapDaemon:
                 continue
             
             # If the job isn't locked -> Check if the job file exists
-            if not os.path.exists(file_job):
+            if not self.__job_file_exists(file):
                 # If no job file exists -> Check if the download lock exists
                 if self.__download_locked(file):
                     # Check if download lock is expired
