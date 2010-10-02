@@ -21,8 +21,8 @@ class MapDaemon:
         self.__dir_jobs = os.path.abspath(dir_jobs)
         self.__run = False
     
-    def __lock_download(self, dir_job):
-        open(os.path.join(dir_job, "download.lock"), "w").close()
+    def __lock_download(self, uuid):
+        open(self.__get_file_download_lock(uuid), "w").close()
     
     def __delete_job(self, file_job, complete = True):
         dir_job = os.path.dirname(file_job)
@@ -197,7 +197,7 @@ class MapDaemon:
             print "Map ready for use (" + os.path.join(job.dir_job, "map.xcm") + ")"
             
             # Activate the download lock
-            self.__lock_download(job.dir_job)
+            self.__lock_download(job.uuid)
             # Delete job file
             self.__delete_job(job.file_job, False)
             return
