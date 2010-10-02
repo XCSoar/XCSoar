@@ -37,12 +37,9 @@ Copyright_License {
 */
 
 #include "Registry.hpp"
-#include "Profile.hpp"
 #include "ProfileKeys.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
-#include "Defines.h"
-#include "Sizes.h"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
 
