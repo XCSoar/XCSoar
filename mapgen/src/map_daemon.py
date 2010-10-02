@@ -1,8 +1,8 @@
 import os
 import time
+import pickle
 
 from map_generator import MapGenerator
-import pickle
 
 class MapJob:
     use_waypoint_file = False
