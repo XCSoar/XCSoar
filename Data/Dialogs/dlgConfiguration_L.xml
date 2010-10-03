@@ -192,8 +192,8 @@
       <Edit Name="prpAutoMcMode" Caption="Auto Mc mode" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="This option defines which auto MacCready algorithm is used.
 [Final glide] adjusts Mc for fastest arrival.  For OLC sprint tasks, the MacCready is adjusted in order to cover the greatest distance in the remaining time and reach the finish height.
-[Average] sets Mc to the average climb rate across all climbs.
-[Both] Uses average during task, then fastest arrival when in final glide mode.">
+[Trending Average] sets Mc to the trending average climb rate based on all climbs.
+[Both] Uses trending average during task, then fastest arrival when in final glide mode.">
         <DataField DataType="enum" Min="0" Max="50" Step="1" />
       </Edit>
     
