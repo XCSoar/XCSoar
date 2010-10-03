@@ -107,6 +107,21 @@ private:
   void TerrainFootprint(const fixed max_dist);
   void BallastDump();
   void ThermalSources();
+
+  /**
+   * Updates stats during transition from climb mode to cruise mode
+   * Sets last thermal stats if Circling state has changed
+   * Inputs:
+   *  CruiseStartTime
+   *  ClimbStartTime
+   *  CruiseStartAlt
+   *  Basic().EnergyHeight
+   * Updates:
+   *  LastThermalAverage
+   *  LastThermalGain
+   *  LastThermalTime
+   *  LastThermalAverageSmooth
+   */
   void LastThermalStats();
   void ThermalBand();
   void PercentCircling(const fixed Rate);
