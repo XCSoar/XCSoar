@@ -132,17 +132,9 @@ detect_gps(TCHAR *path, size_t path_max_size)
 #endif
 }
 
-static bool
-devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
-           DeviceDescriptor *&nmeaout)
+static ComPort *
+OpenPort(const DeviceConfig &config, ComPort::Handler &handler)
 {
-  if (is_simulator())
-    return false;
-
-  const struct DeviceRegister *Driver = devGetDriver(config.driver_name);
-  if (Driver == NULL)
-    return false;
-
   const TCHAR *path = NULL;
   TCHAR buffer[MAX_PATH];
 
@@ -154,7 +146,7 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
   case DeviceConfig::AUTO:
     if (!detect_gps(buffer, sizeof(buffer))) {
       LogStartUp(_T("no GPS detected"));
-      return false;
+      return NULL;
     }
 
     LogStartUp(_T("GPS detected: %s"), buffer);
@@ -164,14 +156,31 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
   }
 
   if (path == NULL)
-    return false;
+    return NULL;
 
-  ComPort *Com = new ComPort(path, dwSpeed[config.speed_index],
-                             device);
+  ComPort *Com = new ComPort(path, dwSpeed[config.speed_index], handler);
   if (!Com->Open()) {
     delete Com;
-    return false;
+    return NULL;
   }
+
+  return Com;
+}
+
+static bool
+devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
+           DeviceDescriptor *&nmeaout)
+{
+  if (is_simulator())
+    return false;
+
+  const struct DeviceRegister *Driver = devGetDriver(config.driver_name);
+  if (Driver == NULL)
+    return false;
+
+  ComPort *Com = OpenPort(config, device);
+  if (Com == NULL)
+    return false;
 
   device.Driver = Driver;
   device.Com = Com;
