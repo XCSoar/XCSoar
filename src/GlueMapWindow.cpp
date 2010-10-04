@@ -59,6 +59,8 @@ GlueMapWindow::QuickRedraw(const SETTINGS_MAP &_settings_map)
                                      SettingsComputer(),
                                      SettingsMap());
 
+  visible_projection.ExchangeBlackboard(Calculated(), SettingsMap());
+
   ++ui_generation;
 
   /* quickly stretch the existing buffer into the window */

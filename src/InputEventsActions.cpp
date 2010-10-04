@@ -1767,20 +1767,24 @@ InputEvents::sub_SetZoom(fixed value)
     Message::AddMessage(_("AutoZoom OFF"));
   }
   SetSettingsMap().MapScale = value;
+
+  main_window.map.QuickRedraw(SettingsMap());
+  SendSettingsMap(true);
 }
 
 void
 InputEvents::sub_ScaleZoom(int vswitch)
 {
+  const MapWindowProjection &projection = main_window.map.VisibleProjection();
+
   fixed value;
   if (positive(SettingsMap().MapScale))
     value = SettingsMap().MapScale;
   else
-    value = MapProjection().GetMapScaleUser();
+    value = projection.GetMapScaleUser();
 
-  MapWindowProjection copy = MapProjection();
-  if (copy.HaveScaleList()) {
-    value = copy.StepMapScale(fixed(value), -vswitch);
+  if (projection.HaveScaleList()) {
+    value = projection.StepMapScale(fixed(value), -vswitch);
   } else {
     if (abs(vswitch) >= 4) {
       if (vswitch == 4)
