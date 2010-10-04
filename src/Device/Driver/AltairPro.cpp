@@ -134,7 +134,7 @@ AltairProDevice::OnSysTicker()
 }
 
 static Device *
-AltairProCreateOnComPort(ComPort *com_port)
+AltairProCreateOnPort(Port *com_port)
 {
   return new AltairProDevice();
 }
@@ -142,5 +142,5 @@ AltairProCreateOnComPort(ComPort *com_port)
 const struct DeviceRegister atrDevice = {
   _T("Altair Pro"),
   drfGPS | drfBaroAlt, // drfLogger - ToDo
-  AltairProCreateOnComPort,
+  AltairProCreateOnPort,
 };

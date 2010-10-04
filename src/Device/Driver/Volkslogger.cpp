@@ -56,10 +56,10 @@ Copyright_License {
 
 class VolksloggerDevice : public AbstractDevice {
 private:
-  ComPort *port;
+  Port *port;
 
 public:
-  VolksloggerDevice(ComPort *_port):port(_port) {}
+  VolksloggerDevice(Port *_port):port(_port) {}
 
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
@@ -306,7 +306,7 @@ VLDeclAddWayPoint(const Waypoint &way_point)
 
 
 static Device *
-VolksloggerCreateOnComPort(ComPort *com_port)
+VolksloggerCreateOnPort(Port *com_port)
 {
   return new VolksloggerDevice(com_port);
 }
@@ -314,5 +314,5 @@ VolksloggerCreateOnComPort(ComPort *com_port)
 const struct DeviceRegister vlDevice = {
   _T("Volkslogger"),
   drfGPS | drfLogger | drfBaroAlt,
-  VolksloggerCreateOnComPort,
+  VolksloggerCreateOnPort,
 };

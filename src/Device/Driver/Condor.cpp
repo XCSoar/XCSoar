@@ -131,7 +131,7 @@ CondorDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
 }
 
 static Device *
-CondorCreateOnComPort(ComPort *com_port)
+CondorCreateOnPort(Port *com_port)
 {
   return new CondorDevice();
 }
@@ -139,5 +139,5 @@ CondorCreateOnComPort(ComPort *com_port)
 const struct DeviceRegister condorDevice = {
   _T("Condor"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario,
-  CondorCreateOnComPort,
+  CondorCreateOnPort,
 };

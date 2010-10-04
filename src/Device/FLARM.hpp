@@ -39,9 +39,9 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_FLARM_HPP
 #define XCSOAR_DEVICE_FLARM_HPP
 
-class ComPort;
+class Port;
 struct Declaration;
 
-bool FlarmDeclare(ComPort *port, const struct Declaration *decl);
+bool FlarmDeclare(Port *port, const struct Declaration *decl);
 
 #endif

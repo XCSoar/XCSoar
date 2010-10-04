@@ -44,8 +44,12 @@ Copyright_License {
 #include <assert.h>
 #include <tchar.h>
 
+#ifdef _UNICODE
+#include <windows.h>
+#endif
+
 static bool
-FlarmDeclareSetGet(ComPort *port, char *Buffer)
+FlarmDeclareSetGet(Port *port, char *Buffer)
 {
   assert(port != NULL);
   assert(Buffer != NULL);
@@ -60,7 +64,7 @@ FlarmDeclareSetGet(ComPort *port, char *Buffer)
 
 #ifdef _UNICODE
 static bool
-FlarmDeclareSetGet(ComPort *port, TCHAR *s)
+FlarmDeclareSetGet(Port *port, TCHAR *s)
 {
   assert(port != NULL);
   assert(s != NULL);
@@ -73,7 +77,7 @@ FlarmDeclareSetGet(ComPort *port, TCHAR *s)
 #endif
 
 bool
-FlarmDeclare(ComPort *port, const Declaration *decl)
+FlarmDeclare(Port *port, const Declaration *decl)
 {
   assert(port != NULL);
 

@@ -76,13 +76,13 @@ DeviceDescriptor::Open()
   if (Driver == NULL)
     return false;
 
-  assert(Driver->CreateOnComPort != NULL || Driver->Flags & drfNmeaOut);
-  if (Driver->CreateOnComPort == NULL)
+  assert(Driver->CreateOnPort != NULL || Driver->Flags & drfNmeaOut);
+  if (Driver->CreateOnPort == NULL)
     return true;
 
   parser.Reset();
 
-  device = Driver->CreateOnComPort(Com);
+  device = Driver->CreateOnPort(Com);
   if (!device->Open()) {
     delete device;
     device = NULL;
@@ -98,7 +98,7 @@ DeviceDescriptor::Close()
   delete device;
   device = NULL;
 
-  ComPort *OldCom = Com;
+  Port *OldCom = Com;
   Com = NULL;
 
   delete OldCom;

@@ -44,7 +44,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct NMEA_INFO;
-class ComPort;
+class Port;
 class AtmosphericPressure;
 
 /**
@@ -138,7 +138,7 @@ typedef enum {
 struct DeviceRegister {
   const TCHAR *Name;
   unsigned int Flags;
-  Device *(*CreateOnComPort)(ComPort *com_port);
+  Device *(*CreateOnPort)(Port *com_port);
 };
 
 #endif

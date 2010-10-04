@@ -149,7 +149,7 @@ LXDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 }
 
 static Device *
-LXCreateOnComPort(ComPort *com_port)
+LXCreateOnPort(Port *com_port)
 {
   return new LXDevice();
 }
@@ -157,5 +157,5 @@ LXCreateOnComPort(ComPort *com_port)
 const struct DeviceRegister lxDevice = {
   _T("LX"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario,
-  LXCreateOnComPort,
+  LXCreateOnPort,
 };

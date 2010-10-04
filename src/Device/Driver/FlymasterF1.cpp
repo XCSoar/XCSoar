@@ -70,7 +70,7 @@ FlymasterF1Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
 }
 
 static Device *
-FlymasterF1CreateOnComPort(ComPort *com_port)
+FlymasterF1CreateOnPort(Port *com_port)
 {
   return new FlymasterF1Device();
 }
@@ -78,7 +78,7 @@ FlymasterF1CreateOnComPort(ComPort *com_port)
 const struct DeviceRegister flymasterf1Device = {
   _T("FlymasterF1"),
   drfGPS | drfBaroAlt | drfVario,
-  FlymasterF1CreateOnComPort,
+  FlymasterF1CreateOnPort,
 };
 
 // *****************************************************************************

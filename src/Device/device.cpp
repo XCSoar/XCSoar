@@ -46,6 +46,7 @@ Copyright_License {
 #include "Device/Descriptor.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Port.hpp"
+#include "Device/SerialPort.hpp"
 #include "Thread/Mutex.hpp"
 #include "LogFile.hpp"
 #include "DeviceBlackboard.hpp"
@@ -132,8 +133,8 @@ detect_gps(TCHAR *path, size_t path_max_size)
 #endif
 }
 
-static ComPort *
-OpenPort(const DeviceConfig &config, ComPort::Handler &handler)
+static Port *
+OpenPort(const DeviceConfig &config, Port::Handler &handler)
 {
   const TCHAR *path = NULL;
   TCHAR buffer[MAX_PATH];
@@ -158,7 +159,7 @@ OpenPort(const DeviceConfig &config, ComPort::Handler &handler)
   if (path == NULL)
     return NULL;
 
-  ComPort *Com = new ComPort(path, dwSpeed[config.speed_index], handler);
+  SerialPort *Com = new SerialPort(path, dwSpeed[config.speed_index], handler);
   if (!Com->Open()) {
     delete Com;
     return NULL;
@@ -178,7 +179,7 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
   if (Driver == NULL)
     return false;
 
-  ComPort *Com = OpenPort(config, device);
+  Port *Com = OpenPort(config, device);
   if (Com == NULL)
     return false;
 
@@ -286,7 +287,7 @@ HaveCondorDevice()
 
 #ifdef _UNICODE
 static void
-PortWriteNMEA(ComPort *port, const TCHAR *line)
+PortWriteNMEA(Port *port, const TCHAR *line)
 {
   assert(port != NULL);
   assert(line != NULL);

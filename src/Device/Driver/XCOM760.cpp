@@ -44,10 +44,10 @@ Copyright_License {
 
 class XCOM760Device : public AbstractDevice {
 private:
-  ComPort *port;
+  Port *port;
 
 public:
-  XCOM760Device(ComPort *_port):port(_port) {}
+  XCOM760Device(Port *_port):port(_port) {}
 
 public:
   virtual bool PutVolume(int volume);
@@ -83,7 +83,7 @@ XCOM760Device::PutStandbyFrequency(double Freq)
 }
 
 static Device *
-XCOM760CreateOnComPort(ComPort *com_port)
+XCOM760CreateOnPort(Port *com_port)
 {
   return new XCOM760Device(com_port);
 }
@@ -91,7 +91,7 @@ XCOM760CreateOnComPort(ComPort *com_port)
 const struct DeviceRegister xcom760Device = {
   _T("XCOM760"),
   drfRadio,
-  XCOM760CreateOnComPort,
+  XCOM760CreateOnPort,
 };
 
 /* Commands

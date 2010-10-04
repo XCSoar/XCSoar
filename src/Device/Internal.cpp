@@ -45,7 +45,7 @@ Copyright_License {
 #include <stdio.h>
 
 void
-PortWriteNMEA(ComPort *port, const char *line)
+PortWriteNMEA(Port *port, const char *line)
 {
   assert(port != NULL);
   assert(line != NULL);

@@ -35,7 +35,7 @@ const int VLAPI_DBB_MEMSIZE = 16384;
 const int32 VLAPI_LOG_MEMSIZE = 81920L;
 
 void
-VLAPI::set_port(ComPort *_port)
+VLAPI::set_port(Port *_port)
 {
   port = _port;
 }

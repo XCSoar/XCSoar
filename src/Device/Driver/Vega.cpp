@@ -75,10 +75,10 @@ using std::max;
 
 class VegaDevice : public AbstractDevice {
 private:
-  ComPort *port;
+  Port *port;
 
 public:
-  VegaDevice(ComPort *_port):port(_port) {}
+  VegaDevice(Port *_port):port(_port) {}
 
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
@@ -421,7 +421,7 @@ VegaDevice::PutVoice(const TCHAR *Sentence)
 #include "Blackboard.hpp"
 
 static void
-_VarioWriteSettings(ComPort *port)
+_VarioWriteSettings(Port *port)
 {
     char mcbuf[100];
 
@@ -465,7 +465,7 @@ VegaDevice::OnSysTicker()
 }
 
 static Device *
-VegaCreateOnComPort(ComPort *com_port)
+VegaCreateOnPort(Port *com_port)
 {
   return new VegaDevice(com_port);
 }
@@ -473,5 +473,5 @@ VegaCreateOnComPort(ComPort *com_port)
 const struct DeviceRegister vgaDevice = {
   _T("Vega"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario, // drfLogger if FLARM connected
-  VegaCreateOnComPort,
+  VegaCreateOnPort,
 };

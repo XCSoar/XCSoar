@@ -70,7 +70,7 @@ Declaration::size() const
 static void
 TestCAI302()
 {
-  Device *device = cai302Device.CreateOnComPort(NULL);
+  Device *device = cai302Device.CreateOnPort(NULL);
   assert(device != NULL);
 
   NMEA_INFO nmea_info;
@@ -99,7 +99,7 @@ TestCAI302()
 static void
 TestLX()
 {
-  Device *device = lxDevice.CreateOnComPort(NULL);
+  Device *device = lxDevice.CreateOnPort(NULL);
   assert(device != NULL);
 
   NMEA_INFO nmea_info;

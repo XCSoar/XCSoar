@@ -155,7 +155,7 @@ B50Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
 }
 
 static Device *
-B50CreateOnComPort(ComPort *com_port)
+B50CreateOnPort(Port *com_port)
 {
   return new B50Device();
 }
@@ -163,5 +163,5 @@ B50CreateOnComPort(ComPort *com_port)
 const struct DeviceRegister b50Device = {
   _T("Borgelt B50"),
   drfGPS,
-  B50CreateOnComPort,
+  B50CreateOnPort,
 };

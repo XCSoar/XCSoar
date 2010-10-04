@@ -36,6 +36,7 @@ Copyright_License {
 }
 */
 
+#include "Device/NullPort.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
@@ -232,7 +233,7 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  ComPort port(_T("dummy"), 19200, *(ComPort::Handler *)NULL);
+  NullPort port(*(Port::Handler *)NULL);
   device.Com = &port;
   device.enable_baro = true;
 

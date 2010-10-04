@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -35,57 +36,57 @@ Copyright_License {
 }
 */
 
-#include "Device/Port.hpp"
+#include "Device/NullPort.hpp"
 
 #include <stdio.h>
 
-ComPort::ComPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
-  :handler(_handler),
-   stop_trigger(_T("ComPort::stop_trigger"), true),
-   buffer(NMEA_BUF_SIZE) {}
-
-void ComPort::run() {}
-
-bool ComPort::Close() { return true; }
-
-int ComPort::SetRxTimeout(int) { return 0; }
-unsigned long ComPort::SetBaudrate(unsigned long baud) { return baud; }
-
-bool ComPort::StopRxThread() { return true; }
-bool ComPort::StartRxThread() { return true; }
-
-void
-ComPort::Write(const void *data, unsigned length)
+NullPort::NullPort(Handler &_handler)
+  :Port(_handler)
 {
-  fwrite(data, length, 1, stdout);
 }
 
 void
-ComPort::Write(const char *text)
+NullPort::Flush(void)
 {
-  fputs(text, stdout);
 }
 
 void
-ComPort::Flush()
+NullPort::Write(const void *data, unsigned length)
 {
-  fflush(stdout);
-}
-
-int
-ComPort::GetChar()
-{
-  return getchar();
-}
-
-int
-ComPort::Read(void *Buffer, size_t Size)
-{
-  return 0;
 }
 
 bool
-ComPort::ExpectString(const char *token)
+NullPort::StopRxThread()
 {
   return true;
+}
+
+bool
+NullPort::StartRxThread(void)
+{
+  return true;
+}
+
+int
+NullPort::GetChar(void)
+{
+  return EOF;
+}
+
+int
+NullPort::SetRxTimeout(int Timeout)
+{
+  return Timeout;
+}
+
+unsigned long
+NullPort::SetBaudrate(unsigned long BaudRate)
+{
+  return BaudRate;
+}
+
+int
+NullPort::Read(void *Buffer, size_t Size)
+{
+  return -1;
 }

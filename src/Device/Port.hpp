@@ -39,22 +39,15 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_PORT_HPP
 #define XCSOAR_DEVICE_PORT_HPP
 
-#include "FifoBuffer.hpp"
-#include "Thread/StoppableThread.hpp"
-#include "Thread/Trigger.hpp"
-
-#include <windows.h>
-
-#define NMEA_BUF_SIZE 100
+#include <stddef.h>
 
 /**
- * Generic ComPort thread handler class
+ * Generic Port thread handler class
  */
-class ComPort : protected StoppableThread
-{
+class Port {
 public:
   /**
-   * Interface with callbacks for the #ComPort class.
+   * Interface with callbacks for the #Port class.
    */
   class Handler {
   public:
@@ -62,35 +55,18 @@ public:
   };
 
 protected:
-  unsigned baud_rate;
-
   Handler &handler;
 
 public:
-  /**
-   * Creates a new serial port (RS-232) object, but does not open it yet.
-   *
-   * @param path the path of the virtual file to open, e.g. "COM1:"
-   * @param _baud_rate the speed of the port
-   * @param _handler the callback object for input received on the
-   * port
-   */
-  ComPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler);
-
-  /**
-   * Closes the serial port (Destructor)
-   */
-  ~ComPort()
-  {
-    Close();
-  }
+  Port(Handler &_handler);
+  virtual ~Port();
 
   /**
    * Writes a string to the serial port
    * @param data Pointer to the first character
    * @param length Length of the string
    */
-  void Write(const void *data, unsigned length);
+  virtual void Write(const void *data, unsigned length) = 0;
 
   /**
    * Writes a null-terminated string to the serial port
@@ -109,51 +85,39 @@ public:
   /**
    * Flushes the serial port buffers
    */
-  void Flush();
-
-  /**
-   * Opens the serial port
-   * @return True on success, False on failure
-   */
-  bool Open();
-  /**
-   * Closes the serial port
-   * @return True on success, False on failure
-   */
-  bool Close();
+  virtual void Flush() = 0;
 
   /**
    * Sets the RX timeout in ms
    * @param Timeout The receive timeout in ms
    * @return The previous timeout in ms or -1 on error
    */
-  int SetRxTimeout(int Timeout);
+  virtual int SetRxTimeout(int Timeout) = 0;
 
   /**
    * Sets the baud rate of the serial port to the given value
    * @param BaudRate The desired baudrate
    * @return The previous baud rate or 0 on error
    */
-  unsigned long SetBaudrate(unsigned long BaudRate);
+  virtual unsigned long SetBaudrate(unsigned long BaudRate) = 0;
 
   /**
    * Stops the receive thread
    * @return True on success, False on failure
    */
-  bool StopRxThread();
+  virtual bool StopRxThread() = 0;
 
   /**
    * (Re)Starts the receive thread
    * @return True on success, False on failure
    */
-  bool StartRxThread();
-  void ProcessChar(char c);
+  virtual bool StartRxThread() = 0;
 
   /**
    * Read a single byte from the serial port
    * @return The byte that was read or EOF in failure
    */
-  int GetChar();
+  virtual int GetChar() = 0;
 
   /**
    * Read data from the serial port
@@ -161,28 +125,9 @@ public:
    * @param Size Size of the buffer
    * @return Number of bytes read from the serial port
    */
-  int Read(void *Buffer, size_t Size);
+  virtual int Read(void *Buffer, size_t Size) = 0;
 
   bool ExpectString(const char *token);
-
-protected:
-  /**
-   * Entry point for the receive thread
-   */
-  virtual void run();
-
-private:
-#ifdef HAVE_POSIX
-  int fd;
-#else /* !HAVE_POSIX */
-  HANDLE hPort;
-  DWORD dwMask;
-#endif /* !HAVE_POSIX */
-
-  /** Name of the serial port */
-  TCHAR sPortName[64];
-
-  FifoBuffer<char> buffer;
 };
 
 #endif

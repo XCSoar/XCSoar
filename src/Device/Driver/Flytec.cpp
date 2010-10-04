@@ -49,10 +49,10 @@ Copyright_License {
 
 class FlytecDevice : public AbstractDevice {
 private:
-  ComPort *port;
+  Port *port;
 
 public:
-  FlytecDevice(ComPort *_port):port(_port) {}
+  FlytecDevice(Port *_port):port(_port) {}
 
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
@@ -145,7 +145,7 @@ FlytecDevice::ParseNMEA(const char *_line, NMEA_INFO *info, bool enable_baro)
 }
 
 static Device *
-FlytecCreateOnComPort(ComPort *com_port)
+FlytecCreateOnPort(Port *com_port)
 {
   return new FlytecDevice(com_port);
 }
@@ -153,5 +153,5 @@ FlytecCreateOnComPort(ComPort *com_port)
 const struct DeviceRegister flytec_device_driver = {
   _T("Flytec"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario,
-  FlytecCreateOnComPort,
+  FlytecCreateOnPort,
 };

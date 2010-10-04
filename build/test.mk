@@ -131,6 +131,8 @@ $(TARGET_BIN_DIR)/TestLogger$(TARGET_EXEEXT): $(TEST_LOGGER_OBJS) $(TEST_LOGGER_
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 TEST_DRIVER_SOURCES = \
+	$(SRC)/Device/Port.cpp \
+	$(SRC)/Device/NullPort.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Driver/CAI302.cpp \
 	$(SRC)/Device/Driver/LX.cpp \
@@ -140,7 +142,6 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Units.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
-	$(TEST_SRC_DIR)/FakePort.cpp \
 	$(TEST_SRC_DIR)/TestDriver.cpp
 TEST_DRIVER_OBJS = $(call SRC_TO_OBJ,$(TEST_DRIVER_SOURCES))
 $(TARGET_BIN_DIR)/TestDriver$(TARGET_EXEEXT): $(TEST_DRIVER_OBJS) $(TEST_DRIVER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
@@ -408,6 +409,8 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/Units.cpp \
+	$(SRC)/Device/Port.cpp \
+	$(SRC)/Device/NullPort.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Parser.cpp \
@@ -428,7 +431,6 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeNMEALogger.cpp \
 	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
-	$(TEST_SRC_DIR)/FakePort.cpp \
 	$(TEST_SRC_DIR)/RunDeviceDriver.cpp
 RUN_DEVICE_DRIVER_OBJS = $(call SRC_TO_OBJ,$(RUN_DEVICE_DRIVER_SOURCES))
 RUN_DEVICE_DRIVER_LDADD = \

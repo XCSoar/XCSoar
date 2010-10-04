@@ -89,7 +89,7 @@ PGDevice::Declare(const struct Declaration *decl)
 }
 
 static Device *
-PGCreateOnComPort(ComPort *com_port)
+PGCreateOnPort(Port *com_port)
 {
   return new PGDevice();
 }
@@ -97,7 +97,7 @@ PGCreateOnComPort(ComPort *com_port)
 const struct DeviceRegister pgDevice = {
   _T("PosiGraph Logger"),
   drfGPS | drfBaroAlt | drfLogger,
-  PGCreateOnComPort,
+  PGCreateOnPort,
 };
 
 // *****************************************************************************

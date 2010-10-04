@@ -46,14 +46,14 @@ Copyright_License {
 #include <stdio.h>
 
 struct NMEA_INFO;
-class ComPort;
+class Port;
 class Device;
 class AtmosphericPressure;
 struct DeviceRegister;
 
-class DeviceDescriptor : public ComPort::Handler {
+class DeviceDescriptor : public Port::Handler {
 public:
-  ComPort *Com;
+  Port *Com;
   DeviceDescriptor *pDevPipeTo;
   const struct DeviceRegister *Driver;
 

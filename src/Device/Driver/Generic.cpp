@@ -43,7 +43,7 @@ class GenericDevice : public AbstractDevice {
 };
 
 static Device *
-GenericCreateOnComPort(ComPort *com_port)
+GenericCreateOnPort(Port *com_port)
 {
   return new GenericDevice();
 }
@@ -51,5 +51,5 @@ GenericCreateOnComPort(ComPort *com_port)
 const struct DeviceRegister genDevice = {
   _T("Generic"),
   drfGPS,
-  GenericCreateOnComPort,
+  GenericCreateOnPort,
 };

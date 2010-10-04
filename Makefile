@@ -381,6 +381,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/Geoid.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Port.cpp \
+	$(SRC)/Device/SerialPort.cpp \
 	$(SRC)/Device/FLARM.cpp \
 	$(SRC)/Device/Internal.cpp \
 	$(DIALOG_SOURCES)

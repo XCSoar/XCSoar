@@ -49,10 +49,10 @@ Copyright_License {
 
 class LeonardoDevice : public AbstractDevice {
 private:
-  ComPort *port;
+  Port *port;
 
 public:
-  LeonardoDevice(ComPort *_port):port(_port) {}
+  LeonardoDevice(Port *_port):port(_port) {}
 
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
@@ -203,7 +203,7 @@ LeonardoDevice::ParseNMEA(const char *_line, NMEA_INFO *info, bool enable_baro)
 }
 
 static Device *
-LeonardoCreateOnComPort(ComPort *com_port)
+LeonardoCreateOnPort(Port *com_port)
 {
   return new LeonardoDevice(com_port);
 }
@@ -211,5 +211,5 @@ LeonardoCreateOnComPort(ComPort *com_port)
 const struct DeviceRegister leonardo_device_driver = {
   _T("Leonardo"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario,
-  LeonardoCreateOnComPort,
+  LeonardoCreateOnPort,
 };

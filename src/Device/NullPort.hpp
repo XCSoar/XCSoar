@@ -36,25 +36,26 @@ Copyright_License {
 }
 */
 
-/** @file
- *
- * Internal header for driver implementations.
- */
+#ifndef XCSOAR_DEVICE_NULL_PORT_HPP
+#define XCSOAR_DEVICE_NULL_PORT_HPP
 
-#ifndef XCSOAR_DEVICE_INTERNAL_HPP
-#define XCSOAR_DEVICE_INTERNAL_HPP
-
-#include <tchar.h>
-
-class Port;
+#include "Device/Port.hpp"
 
 /**
- * Writes one line of NMEA data.
- *
- * @param port the port to write to
- * @param line the line without asterisk, checksum and newline
+ * Generic NullPort thread handler class
  */
-void
-PortWriteNMEA(Port *port, const char *line);
+class NullPort : public Port {
+public:
+  NullPort(Handler &_handler);
+
+  virtual void Write(const void *data, unsigned length);
+  virtual void Flush();
+  virtual int SetRxTimeout(int Timeout);
+  virtual unsigned long SetBaudrate(unsigned long BaudRate);
+  virtual bool StopRxThread();
+  virtual bool StartRxThread();
+  virtual int GetChar();
+  virtual int Read(void *Buffer, size_t Size);
+};
 
 #endif

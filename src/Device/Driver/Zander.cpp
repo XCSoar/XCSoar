@@ -110,7 +110,7 @@ ZanderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
 }
 
 static Device *
-ZanderCreateOnComPort(ComPort *com_port)
+ZanderCreateOnPort(Port *com_port)
 {
   return new ZanderDevice();
 }
@@ -118,5 +118,5 @@ ZanderCreateOnComPort(ComPort *com_port)
 const struct DeviceRegister zanderDevice = {
   _T("Zander"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario,
-  ZanderCreateOnComPort,
+  ZanderCreateOnPort,
 };

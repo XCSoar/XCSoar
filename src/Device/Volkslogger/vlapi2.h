@@ -200,7 +200,7 @@ class VLAPI : protected VLA_XFR, public VLAPI_DATA {
   void close(boolean reset=0 // reset=1 will cause the logger to leave data mode and restart
              );
 
-  void set_port(ComPort *_port);
+  void set_port(Port *_port);
 };
 
 #endif
