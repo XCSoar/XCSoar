@@ -40,7 +40,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_PORT_HPP
 
 #include "FifoBuffer.hpp"
-#include "Thread/Thread.hpp"
+#include "Thread/StoppableThread.hpp"
 #include "Thread/Trigger.hpp"
 
 #include <windows.h>
@@ -50,7 +50,7 @@ Copyright_License {
 /**
  * Generic ComPort thread handler class
  */
-class ComPort : protected Thread
+class ComPort : protected StoppableThread
 {
 public:
   /**
@@ -181,8 +181,6 @@ private:
 
   /** Name of the serial port */
   TCHAR sPortName[64];
-
-  Trigger stop_trigger;
 
   FifoBuffer<char> buffer;
 };

@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_DRAW_THREAD_HPP
 #define XCSOAR_DRAW_THREAD_HPP
 
-#include "Thread/Thread.hpp"
+#include "Thread/StoppableThread.hpp"
 #include "Thread/Trigger.hpp"
 
 class GlueMapWindow;
@@ -54,7 +54,7 @@ class GaugeThermalAssistant;
  * why it is not handled by this thread.
  * 
  */
-class DrawThread : public Thread {
+class DrawThread : public StoppableThread {
   enum {
     MIN_WAIT_TIME = 100,
   };
@@ -68,11 +68,6 @@ class DrawThread : public Thread {
    * This triggers a redraw.
    */
   Trigger trigger;
-
-  /**
-   * Shuts down the thread.
-   */
-  Trigger stop_trigger;
 
   /** Pointer to the MapWindow */
   GlueMapWindow &map;
@@ -88,7 +83,6 @@ public:
              GaugeThermalAssistant *_ta)
     :running(_T("DrawThread::running"), true),
      trigger(_T("DrawThread::trigger"), true),
-     stop_trigger(_T("WorkerThread::stop_trigger"), true),
      map(_map), flarm(_flarm), ta(_ta) {
   }
 
@@ -121,7 +115,7 @@ public:
    * synchronously for the thread to exit.
    */
   void stop() {
-    stop_trigger.trigger();
+    StoppableThread::stop();
     trigger_redraw();
     resume();
   }

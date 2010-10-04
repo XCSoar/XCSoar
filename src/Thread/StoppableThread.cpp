@@ -36,59 +36,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_THREAD_WORKER_THREAD_HPP
-#define XCSOAR_THREAD_WORKER_THREAD_HPP
-
 #include "Thread/StoppableThread.hpp"
-#include "Thread/Trigger.hpp"
 
-/**
- * A thread which performs regular work in background.
- */
-class WorkerThread : public StoppableThread {
-  Trigger event_trigger, running;
-
-public:
-  WorkerThread();
-
-  /**
-   * Wakes up the thread to do work, calls tick().
-   */
-  void trigger() {
-    event_trigger.trigger();
-  }
-
-  /**
-   * Suspend execution until resume() is called.
-   */
-  void suspend() {
-    running.reset();
-  }
-
-  /**
-   * Resume execution after suspend().
-   */
-  void resume() {
-    running.trigger();
-  }
-
-  /**
-   * Triggers thread shutdown.  Call join() after this to wait
-   * synchronously for the thread to exit.
-   */
-  void stop() {
-    StoppableThread::stop();
-    trigger();
-    resume();
-  }
-
-protected:
-  virtual void run();
-
-  /**
-   * Implement this to do the actual work.
-   */
-  virtual void tick() = 0;
-};
-
-#endif
+StoppableThread::StoppableThread()
+  :stop_trigger(_T("StoppableThread::stop_trigger"), true) {}

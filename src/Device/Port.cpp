@@ -82,7 +82,6 @@ ComPort::ComPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
    hPort(INVALID_HANDLE_VALUE),
    dwMask(0),
 #endif
-   stop_trigger(_T("ComPort::stop_trigger"), true),
    buffer(NMEA_BUF_SIZE)
 {
   assert(path != NULL);
@@ -211,7 +210,7 @@ ComPort::run()
   char buffer[1024];
 
   // XXX use poll()
-  while (!stop_trigger.wait(50)) {
+  while (!wait_stopped(50)) {
     ssize_t nbytes = read(fd, buffer, sizeof(buffer));
     for (ssize_t i = 0; i < nbytes; ++i)
       ProcessChar(buffer[i]);
@@ -229,7 +228,7 @@ ComPort::run()
   if (is_embedded())
     SetCommMask(hPort, dwMask);
 
-  while (!stop_trigger.test()) {
+  while (!is_stopped()) {
 
     if (is_embedded()) {
       // Wait for an event to occur for the port.
@@ -345,7 +344,7 @@ ComPort::StopRxThread()
   if (!Thread::defined())
     return true;
 
-  stop_trigger.trigger();
+  stop();
 
 #ifndef HAVE_POSIX
   if (is_embedded()) {
@@ -377,10 +376,8 @@ ComPort::StartRxThread(void)
     return false;
 #endif /* !HAVE_POSIX */
 
-  stop_trigger.reset();
-
   // Start the receive thread
-  Thread::start();
+  StoppableThread::start();
   return true;
 }
 

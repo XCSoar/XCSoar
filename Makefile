@@ -338,6 +338,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/Thread/WorkerThread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Debug.cpp \

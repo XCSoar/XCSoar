@@ -41,8 +41,7 @@ Copyright_License {
 
 WorkerThread::WorkerThread()
   :event_trigger(_T("WorkerThread::event_trigger"), false),
-   running(_T("WorkerThread::running"), true),
-   stop_trigger(_T("WorkerThread::stop_trigger"), true) {
+   running(_T("WorkerThread::running"), true) {
   running.trigger();
 }
 
@@ -57,7 +56,7 @@ WorkerThread::run()
     running.wait();
 
     /* got the "stop" trigger? */
-    if (stop_trigger.test())
+    if (is_stopped())
       break;
 
     /* do the actual work */

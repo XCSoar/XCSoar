@@ -36,40 +36,25 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_THREAD_WORKER_THREAD_HPP
-#define XCSOAR_THREAD_WORKER_THREAD_HPP
+#ifndef XCSOAR_THREAD_STOPPABLE_THREAD_HPP
+#define XCSOAR_THREAD_STOPPABLE_THREAD_HPP
 
-#include "Thread/StoppableThread.hpp"
+#include "Thread/Thread.hpp"
 #include "Thread/Trigger.hpp"
 
 /**
- * A thread which performs regular work in background.
+ * A thread which can be stopped from the outside.  Implementers must
+ * check is_stopped().
  */
-class WorkerThread : public StoppableThread {
-  Trigger event_trigger, running;
+class StoppableThread : public Thread {
+  Trigger stop_trigger;
 
 public:
-  WorkerThread();
+  StoppableThread();
 
-  /**
-   * Wakes up the thread to do work, calls tick().
-   */
-  void trigger() {
-    event_trigger.trigger();
-  }
-
-  /**
-   * Suspend execution until resume() is called.
-   */
-  void suspend() {
-    running.reset();
-  }
-
-  /**
-   * Resume execution after suspend().
-   */
-  void resume() {
-    running.trigger();
+  void start() {
+    stop_trigger.reset();
+    Thread::start();
   }
 
   /**
@@ -77,18 +62,17 @@ public:
    * synchronously for the thread to exit.
    */
   void stop() {
-    StoppableThread::stop();
-    trigger();
-    resume();
+    stop_trigger.trigger();
   }
 
 protected:
-  virtual void run();
+  bool is_stopped() {
+    return stop_trigger.test();
+  }
 
-  /**
-   * Implement this to do the actual work.
-   */
-  virtual void tick() = 0;
+  bool wait_stopped(unsigned timeout_ms) {
+    return stop_trigger.wait(timeout_ms);
+  }
 };
 
 #endif

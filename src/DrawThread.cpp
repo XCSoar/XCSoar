@@ -102,7 +102,7 @@ DrawThread::run()
       running.wait();
 
       /* got the "stop" trigger? */
-      if (stop_trigger.test())
+      if (is_stopped())
         break;
 
       // Get data from the DeviceBlackboard
@@ -132,7 +132,7 @@ DrawThread::run()
       running.wait();
 
       /* got the "stop" trigger? */
-      if (stop_trigger.test())
+      if (is_stopped())
         break;
 
       bounds_dirty = map.Idle();
