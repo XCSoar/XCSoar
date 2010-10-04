@@ -54,10 +54,10 @@ class MapWindowBlackboard:
   public SettingsMapBlackboard
 {
 protected:
-  virtual void ReadBlackboard(const NMEA_INFO &nmea_info,
-			      const DERIVED_INFO &derived_info);
-  virtual void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
-  virtual void ReadSettingsMap(const SETTINGS_MAP &settings);
+  void ReadBlackboard(const NMEA_INFO &nmea_info,
+                      const DERIVED_INFO &derived_info);
+  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
+  void ReadSettingsMap(const SETTINGS_MAP &settings);
 };
 
 #endif
