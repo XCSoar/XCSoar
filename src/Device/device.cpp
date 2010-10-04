@@ -47,6 +47,7 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/Port.hpp"
 #include "Device/SerialPort.hpp"
+#include "Device/NullPort.hpp"
 #include "Thread/Mutex.hpp"
 #include "LogFile.hpp"
 #include "DeviceBlackboard.hpp"
@@ -136,6 +137,9 @@ detect_gps(TCHAR *path, size_t path_max_size)
 static Port *
 OpenPort(const DeviceConfig &config, Port::Handler &handler)
 {
+  if (is_simulator())
+    return new NullPort(handler);
+
   const TCHAR *path = NULL;
   TCHAR buffer[MAX_PATH];
 
@@ -172,9 +176,6 @@ static bool
 devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
            DeviceDescriptor *&nmeaout)
 {
-  if (is_simulator())
-    return false;
-
   const struct DeviceRegister *Driver = devGetDriver(config.driver_name);
   if (Driver == NULL)
     return false;
@@ -347,9 +348,6 @@ devShutdown()
 void
 devRestart()
 {
-  if (is_simulator())
-    return;
-
   LogStartUp(_T("RestartCommPorts"));
 
   ScopeLock protect(mutexComm);
