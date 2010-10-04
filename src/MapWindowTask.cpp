@@ -52,18 +52,26 @@ Copyright_License {
 
 class RenderTaskPointMap: public RenderTaskPoint
 {
+protected:
+  const MapWindowProjection &projection;
+  LabelBlock &label_block;
+  BitmapCanvas &bitmap_canvas;
+
 public:
-  RenderTaskPointMap(Canvas &_canvas, const Projection &_projection,
+  RenderTaskPointMap(Canvas &_canvas, const MapWindowProjection &_projection,
                      const SETTINGS_MAP &_settings_map,
                      RenderObservationZone &_ozv,
                      const bool draw_bearing,
                      const GeoPoint &location,
-                     MapWindow& map,
+                     LabelBlock &_label_block,
+                     BitmapCanvas &_bitmap_canvas,
                      const Angle bearing,
                      const bool do_draw_off_track):
     RenderTaskPoint(_canvas, _projection, _settings_map,
                     _ozv, draw_bearing, location),
-    m_map(map),
+    projection(_projection),
+    label_block(_label_block),
+    bitmap_canvas(_bitmap_canvas),
     m_bearing(bearing),
     m_draw_off_track(do_draw_off_track) {};
 
@@ -75,8 +83,8 @@ protected:
       return;
 
     POINT sc;
-    if (m_map.MapProjection().LonLat2ScreenIfVisible(tp.get_location_remaining(), &sc))
-      MapGfx.hBmpTarget.draw(m_buffer, m_map.get_bitmap_canvas(), sc.x, sc.y);
+    if (m_proj.LonLat2ScreenIfVisible(tp.get_location_remaining(), &sc))
+      MapGfx.hBmpTarget.draw(m_buffer, bitmap_canvas, sc.x, sc.y);
   }
 
   void
@@ -96,7 +104,7 @@ protected:
 
     fixed distance_max =
         min(vec.Distance,
-            m_map.MapProjection().GetScreenDistanceMeters() * fixed(0.7));
+            projection.GetScreenDistanceMeters() * fixed(0.7));
 
     // too short to bother
     if (distance_max < fixed(5000))
@@ -122,7 +130,7 @@ protected:
       if ((idist != ilast) && (idist > 0) && (idist < 1000)) {
         TCHAR Buffer[5];
         _stprintf(Buffer, _T("%d"), idist);
-        POINT sc = m_map.MapProjection().LonLat2Screen(dloc);
+        POINT sc = m_proj.LonLat2Screen(dloc);
         RECT brect;
         SIZE tsize = m_canvas.text_size(Buffer);
 
@@ -131,7 +139,7 @@ protected:
         brect.top = sc.y - 4;
         brect.bottom = brect.top + tsize.cy + 4;
 
-        if (m_map.getLabelBlock().check(brect)) {
+        if (label_block.check(brect)) {
           m_canvas.text(sc.x - tsize.cx / 2, sc.y - tsize.cy / 2, Buffer);
           ilast = idist;
         }
@@ -140,7 +148,6 @@ protected:
   }
 
 private:
-  MapWindow& m_map;
   const Angle m_bearing;
   const bool m_draw_off_track;
 };
@@ -162,7 +169,8 @@ MapWindow::DrawTask(Canvas &canvas, const RECT &rc, Canvas &buffer)
   RenderObservationZone ozv(canvas, projection, SettingsMap());
   RenderTaskPointMap tpv(canvas, projection, SettingsMap(),
                          ozv, draw_bearing,
-                         Basic().Location, *this,
+                         Basic().Location,
+                         getLabelBlock(), get_bitmap_canvas(),
                          Basic().TrackBearing,
                          !Calculated().Circling);
   RenderTask dv(tpv);
