@@ -165,10 +165,6 @@ MapWindow::RenderAirborne(Canvas &canvas, const RECT &rc)
   DrawTeammate(canvas);
   DrawFLARMTraffic(canvas);
 
-  // Draw center screen cross hair in pan mode
-  if (SettingsMap().EnablePan && !SettingsMap().TargetPan)
-    DrawCrossHairs(canvas);
-
   // Finally, draw you!
   if (Basic().gps.Connected)
     DrawAircraft(canvas);

@@ -263,7 +263,11 @@ private:
 
   // display renderers
   void DrawAircraft(Canvas &canvas) const;
+
+protected:
   void DrawCrossHairs(Canvas &canvas) const;
+
+public:
   void DrawBestCruiseTrack(Canvas &canvas) const;
   void DrawCompass(Canvas &canvas, const RECT &rc) const;
   void DrawHorizon(Canvas &canvas, const RECT &rc) const;
