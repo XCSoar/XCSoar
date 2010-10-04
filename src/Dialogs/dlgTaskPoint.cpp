@@ -239,7 +239,7 @@ public:
     wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorRadius")));
     if (wv) {
       fixed val = Units::ToSysDistance(wv->GetDataField()->GetAsFixed());
-      if (val != oz.getRadius()) {
+      if (fabs(val - oz.getRadius()) > fixed(49)) {
         oz.setRadius((fixed)val);
         task_modified = true;
       }
@@ -271,7 +271,7 @@ public:
     wv = ((WndProperty*)wf->FindByName(_T("prpOZLineLength")));
     if (wv) {
       fixed val = Units::ToSysDistance(wv->GetDataField()->GetAsFixed());
-      if (val != oz.getLength()) {
+      if (fabs(val - oz.getLength()) > fixed(49)) {
         oz.setLength((fixed)val);
         task_modified = true;
       }
@@ -285,7 +285,7 @@ public:
     wv = ((WndProperty*)wf->FindByName(_T("prpOZCylinderRadius")));
     if (wv) {
       fixed val = Units::ToSysDistance(wv->GetDataField()->GetAsFixed());
-      if (val != oz.getRadius()) {
+      if (fabs(val - oz.getRadius()) > fixed(49)) {
         oz.setRadius((fixed)val);
         task_modified = true;
       }
