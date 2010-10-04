@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "GlueMapWindow.hpp"
 #include "Components.hpp"
-#include "Interface.hpp"
 #include "DrawThread.hpp"
 
 GlueMapWindow::GlueMapWindow()
