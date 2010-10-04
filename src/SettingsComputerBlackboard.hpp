@@ -39,7 +39,6 @@ Copyright_License {
 #ifndef SETTINGS_COMPUTER_BLACKBOARD_HPP
 #define SETTINGS_COMPUTER_BLACKBOARD_HPP
 
-#include "Blackboard.hpp"
 #include "SettingsComputer.hpp"
 #include "Compiler.h"
 
