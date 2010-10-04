@@ -76,13 +76,13 @@ MapWindow::on_destroy()
 }
 
 void
-MapWindow::on_paint(Canvas& _canvas)
+MapWindow::on_paint(Canvas &canvas)
 {
   if (buffer_generation == ui_generation)
-    DoubleBufferWindow::on_paint(_canvas);
+    DoubleBufferWindow::on_paint(canvas);
   else
     /* the UI has changed since the last DrawThread iteration has
        started: the buffer has invalid data, paint a white window
        instead */
-    _canvas.clear_white();
+    canvas.clear_white();
 }
