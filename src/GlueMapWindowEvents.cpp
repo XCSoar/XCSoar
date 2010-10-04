@@ -179,14 +179,12 @@ GlueMapWindow::on_mouse_up(int x, int y)
   case DRAG_PAN:
     if (compare_squared(drag_start.x - x, drag_start.y - y,
                         Layout::Scale(10)) == 1) {
-      const GeoPoint start = projection.Screen2LonLat(drag_start.x,
-                                                      drag_start.y);
       const GeoPoint end = projection.Screen2LonLat(x, y);
 
       XCSoarInterface::SetSettingsMap().PanLocation.Longitude +=
-        start.Longitude - end.Longitude;
+        drag_start_geopoint.Longitude - end.Longitude;
       XCSoarInterface::SetSettingsMap().PanLocation.Latitude +=
-        start.Latitude - end.Latitude;
+        drag_start_geopoint.Latitude - end.Latitude;
       ++ui_generation;
 
       ActionInterface::SendSettingsMap(true);
