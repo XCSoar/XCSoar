@@ -162,7 +162,7 @@ MapWindow::UpdateWeather()
 void
 MapWindow::DrawThreadLoop(void)
 {
-  thread_generation = ui_generation;
+  unsigned render_generation = ui_generation;
 
   // Start the drawing timer (for drawing time calculation)
   StartTimer();
@@ -179,7 +179,7 @@ MapWindow::DrawThreadLoop(void)
 
   /* save the generation number which was active when rendering had
      begun */
-  buffer_generation = thread_generation;
+  buffer_generation = render_generation;
 
   // Copy the rendered map to the drawing canvas
   if (buffer_generation == ui_generation)

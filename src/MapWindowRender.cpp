@@ -233,14 +233,8 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   // Render terrain, groundline and topology and reset pen, brush and font
   RenderMapLayer(canvas);
 
-  if (thread_generation != ui_generation)
-    return; /* cancel */
-
   // Render the AAT areas and airspace
   RenderAreas(canvas, rc);
-
-  if (thread_generation != ui_generation)
-    return; /* cancel */
 
   // Render the snail trail
   /// @todo trail should be drawn above task shaded sections
@@ -252,18 +246,12 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   // Render task, waypoints and marks
   RenderTaskElements(canvas, rc);
 
-  if (thread_generation != ui_generation)
-    return; /* cancel */
-
   // Render topology on top of airspace, to keep the text readable
   if (topology != NULL && SettingsMap().EnableTopology)
     topology->DrawLabels(canvas, projection, label_block, SettingsMap());
 
   // Render glide through terrain range
   RenderGlide(canvas, rc);
-
-  if (thread_generation != ui_generation)
-    return; /* cancel */
 
   // Render weather/terrain max/min values
   canvas.select(Fonts::Title);

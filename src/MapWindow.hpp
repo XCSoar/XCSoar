@@ -110,11 +110,8 @@ protected:
    * Tracks whether the buffer canvas contains valid data.  We use
    * those attributes to prevent showing invalid data on the map, when
    * the user switches quickly to or from full-screen mode.
-   *
-   * thread_generation is used by Render() to cancel the current
-   * iteration when ui_generation changes.
    */
-  unsigned ui_generation, thread_generation, buffer_generation;
+  unsigned ui_generation, buffer_generation;
 
 public:
   MapWindow();
