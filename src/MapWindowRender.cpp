@@ -188,7 +188,6 @@ MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT &rc)
   // overlays
   DrawCDI();
 
-  canvas.select(Fonts::Map);
   DrawMapScale(canvas, rc);
   DrawMapScale2(canvas, rc);
   DrawCompass(canvas, rc);
