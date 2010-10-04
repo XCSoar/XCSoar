@@ -58,8 +58,6 @@ Supported targets:
 
  PPC2003X: Pocket PC 2003 with XScale CPU
 
- PNA: PNAs running Windows CE without hardware buttons
-
  ALTAIR: Triadis Altair (unmaintained)
 
  WINE: WineLib (experimental)
