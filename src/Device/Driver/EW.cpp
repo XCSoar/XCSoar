@@ -46,6 +46,7 @@ Copyright_License {
 #include "Device/Port.hpp"
 #include "NMEA/Checksum.h"
 
+#include <windows.h> /* for Sleep() */
 #include <tchar.h>
 #include <stdio.h>
 #include "Waypoint/Waypoint.hpp"

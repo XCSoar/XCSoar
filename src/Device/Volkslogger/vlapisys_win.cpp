@@ -19,6 +19,7 @@
 #include "Device/Port.hpp"
 #include "ProgressGlue.hpp"
 
+#include <windows.h> /* for Sleep() */
 #include <stdio.h>
 #if defined(HAVE_POSIX) || !defined(_WIN32_WCE)
 #include <time.h>

@@ -51,6 +51,7 @@ Copyright_License {
 #include "Waypoint/Waypoint.hpp"
 #include "Math/FastMath.h"
 
+#include <windows.h> /* for Sleep() */
 #include <tchar.h>
 #include <stdlib.h>
 #include <stdio.h>

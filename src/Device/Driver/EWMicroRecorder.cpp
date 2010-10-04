@@ -53,6 +53,12 @@ Copyright_License {
 #include <tchar.h>
 #include <assert.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdarg.h>
+
+#ifdef _UNICODE
+#include <windows.h>
+#endif
 
 // Additional sentance for EW support
 

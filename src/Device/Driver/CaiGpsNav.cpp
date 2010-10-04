@@ -48,6 +48,7 @@ Copyright_License {
 #include "Device/Port.hpp"
 
 #include <tchar.h>
+#include <windows.h> /* for Sleep() */
 
 static const char CtrlC = '\x03';
 
