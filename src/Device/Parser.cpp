@@ -135,7 +135,7 @@ NMEAParser::ParseNMEAString_Internal(const char *String, NMEA_INFO *GPS_INFO)
 
   if (strcmp(type + 3, "GLL") == 0)
     //    return GLL(line, GPS_INFO);
-    return false;
+    return true;
 
   if (strcmp(type + 3, "RMB") == 0)
     return RMB(line, GPS_INFO);
@@ -411,7 +411,7 @@ NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   GPS_INFO->gps.NAVWarning = !gpsValid;
 
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
-    return false;
+    return true;
 
   if (valid_location)
     GPS_INFO->Location = location;
@@ -539,7 +539,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   GPS_INFO->DateTime.day = atoi(&date_buffer[0]);
 
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
-    return false;
+    return true;
 
   if (valid_location)
     GPS_INFO->Location = location;
@@ -649,7 +649,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   gps.SatellitesUsed = nSatellites;
 
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
-    return false;
+    return true;
 
   if (valid_location)
     GPS_INFO->Location = location;
@@ -722,7 +722,7 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     GPS_INFO->BaroAltitude = RMZAltitude;
   }
 
-  return false;
+  return true;
 }
 
 /**
@@ -762,7 +762,7 @@ NMEAParser::RMA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     GPS_INFO->BaroAltitude = RMAAltitude;
   }
 
-  return false;
+  return true;
 }
 
 /**
@@ -857,7 +857,7 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   TriggerVarioUpdate();
 
-  return false;
+  return true;
 }
 
 /**
@@ -900,7 +900,7 @@ NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm)
 
   old_flarm_rx = flarm.FLARM_RX;
 
-  return false;
+  return true;
 }
 
 /**
