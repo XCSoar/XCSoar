@@ -138,8 +138,7 @@ NMEAParser::ParseNMEAString_Internal(const char *String, NMEA_INFO *GPS_INFO)
     return false;
 
   if (strcmp(type + 3, "RMB") == 0)
-    //return RMB(line, GPS_INFO);
-    return false;
+    return RMB(line, GPS_INFO);
 
   if (strcmp(type + 3, "RMC") == 0)
     return RMC(line, GPS_INFO);
@@ -967,7 +966,7 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     flarm_slot = flarm.AllocateTraffic();
     if (flarm_slot == NULL)
       // no more slots available
-      return false;
+      return true;
 
     flarm_slot->ID = traffic.ID;
 
@@ -1006,8 +1005,7 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
                                                         GPS_INFO->Time,
                                                         flarm_slot->Altitude);
 
-  // QUESTION TB: never returns true?!
-  return false;
+  return true;
 }
 
 /**
