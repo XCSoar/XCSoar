@@ -278,7 +278,5 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
 
   canvas.text(rc.left, rc.top, load);
 #endif
-
-  buffer_projection = render_projection;
 }
 

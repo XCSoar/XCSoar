@@ -64,6 +64,7 @@ MapWindow::MapWindow()
    marks(NULL), 
    cdi(NULL),
    ui_generation(1), buffer_generation(0),
+   scale_buffer(0),
    TargetDrag_Location(GeoPoint(Angle::native(fixed_zero),
                                 Angle::native(fixed_zero))),
    TargetDrag_State(0)
@@ -180,11 +181,10 @@ MapWindow::DrawThreadLoop(void)
 
   /* save the generation number which was active when rendering had
      begun */
+  buffer_projection = render_projection;
   buffer_generation = render_generation;
 
-  // Copy the rendered map to the drawing canvas
-  if (buffer_generation == ui_generation)
-    flip();
+  flip();
 }
 
 bool

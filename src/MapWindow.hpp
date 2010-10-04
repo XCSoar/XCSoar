@@ -131,6 +131,13 @@ protected:
    */
   unsigned ui_generation, buffer_generation;
 
+  /**
+   * If non-zero, then the buffer will be scaled to the new
+   * projection, and this variable is decremented.  This is used while
+   * zooming and panning, to give instant visual feedback.
+   */
+  unsigned scale_buffer;
+
 public:
   MapWindow();
   virtual ~MapWindow();

@@ -80,7 +80,61 @@ MapWindow::on_paint(Canvas &canvas)
 {
   if (buffer_generation == ui_generation)
     DoubleBufferWindow::on_paint(canvas);
-  else
+  else if (scale_buffer > 0) {
+    /* while zooming/panning, project the current buffer into the
+       Canvas */
+
+    --scale_buffer;
+
+    /* do the projection */
+
+    const RECT buffer_rect = buffer_projection.GetMapRect();
+    const POINT top_left =
+      visible_projection.LonLat2Screen(buffer_projection.Screen2LonLat(buffer_rect.left,
+                                                                       buffer_rect.top));
+    POINT bottom_right =
+      visible_projection.LonLat2Screen(buffer_projection.Screen2LonLat(buffer_rect.right,
+                                                                       buffer_rect.bottom));
+
+    /* compensate for rounding errors in destination area */
+
+    if (abs((buffer_rect.right - buffer_rect.left) -
+            (bottom_right.x - top_left.x)) < 5)
+      bottom_right.x = top_left.x + buffer_rect.right - buffer_rect.left;
+
+    if (abs((buffer_rect.bottom - buffer_rect.top) -
+            (bottom_right.y - top_left.y)) < 5)
+      bottom_right.y = top_left.y + buffer_rect.bottom - buffer_rect.top;
+
+    /* clear the areas around the buffer */
+
+    canvas.null_pen();
+    canvas.white_brush();
+
+    if (top_left.x > 0)
+      canvas.rectangle(0, 0, top_left.x, canvas.get_height());
+
+    if (bottom_right.x < (int)canvas.get_width())
+      canvas.rectangle(bottom_right.x, 0,
+                       canvas.get_width(), canvas.get_height());
+
+    if (top_left.y > 0)
+      canvas.rectangle(top_left.x, 0, bottom_right.x, top_left.y);
+
+    if (bottom_right.y < (int)canvas.get_height())
+      canvas.rectangle(top_left.x, bottom_right.y,
+                       bottom_right.x, canvas.get_height());
+
+    /* now stretch the buffer into the window Canvas */
+
+    ScopeLock protect(DoubleBufferWindow::mutex);
+    const Canvas &src = get_visible_canvas();
+    canvas.stretch(top_left.x, top_left.y,
+                   bottom_right.x - top_left.x, bottom_right.y - top_left.y,
+                   src, buffer_rect.left, buffer_rect.top,
+                   buffer_rect.right - buffer_rect.left,
+                   buffer_rect.bottom - buffer_rect.top);
+  } else
     /* the UI has changed since the last DrawThread iteration has
        started: the buffer has invalid data, paint a white window
        instead */

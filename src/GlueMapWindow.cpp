@@ -45,6 +45,28 @@ GlueMapWindow::GlueMapWindow()
    drag_mode(DRAG_NONE),
    ignore_single_click(true) {}
 
+void
+GlueMapWindow::QuickRedraw(const SETTINGS_MAP &_settings_map)
+{
+  assert(&_settings_map != &SettingsMap());
+
+  ReadSettingsMap(_settings_map);
+
+  /* update the Projection */
+
+  visible_projection.CalculateOrigin(get_client_rect(),
+                                     Basic(), Calculated(),
+                                     SettingsComputer(),
+                                     SettingsMap());
+
+  ++ui_generation;
+
+  /* quickly stretch the existing buffer into the window */
+
+  scale_buffer = 2;
+  invalidate();
+}
+
 /**
  * This idle function allows progressive scanning of visibility etc
  */

@@ -1725,20 +1725,25 @@ InputEvents::sub_Pan(int vswitch)
 void
 InputEvents::sub_PanCursor(int dx, int dy)
 {
-  const RECT &MapRect = MapProjection().GetMapRect();
+  const Projection &projection = main_window.map.VisibleProjection();
+
+  const RECT &MapRect = projection.GetMapRect();
   int X = (MapRect.right + MapRect.left) / 2;
   int Y = (MapRect.bottom + MapRect.top) / 2;
 
-  const GeoPoint pstart = MapProjection().Screen2LonLat(X, Y);
+  const GeoPoint pstart = projection.Screen2LonLat(X, Y);
 
   X += (MapRect.right - MapRect.left) * dx / 4;
   Y += (MapRect.bottom - MapRect.top) * dy / 4;
-  const GeoPoint pnew = MapProjection().Screen2LonLat(X, Y);
+  const GeoPoint pnew = projection.Screen2LonLat(X, Y);
 
   if (SettingsMap().EnablePan) {
     SetSettingsMap().PanLocation.Longitude += pstart.Longitude - pnew.Longitude;
     SetSettingsMap().PanLocation.Latitude += pstart.Latitude - pnew.Latitude;
   }
+
+  main_window.map.QuickRedraw(SettingsMap());
+  SendSettingsMap(true);
 }
 
 // called from UI or input event handler (same thread)

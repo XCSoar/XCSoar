@@ -95,9 +95,12 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
     return true;
 
   case DRAG_PAN:
-    drag_last.x = x;
-    drag_last.y = y;
-    invalidate();
+    XCSoarInterface::SetSettingsMap().PanLocation =
+      drag_projection.GetPanLocation() + drag_start_geopoint
+      - drag_projection.Screen2LonLat(x, y);
+
+    QuickRedraw(XCSoarInterface::SettingsMap());
+    ActionInterface::SendSettingsMap(true);
     return true;
 
   case DRAG_GESTURE:
@@ -129,9 +132,11 @@ GlueMapWindow::on_mouse_down(int x, int y)
 
   if (SettingsMap().TargetPan) {
     drag_mode = isClickOnTarget(drag_start) ? DRAG_TARGET : DRAG_NONE;
-  }
-  else if (SettingsMap().EnablePan)
+  } else if (SettingsMap().EnablePan) {
     drag_mode = DRAG_PAN;
+    drag_projection = visible_projection;
+  }
+
   if (is_simulator() && !Basic().gps.Replay && drag_mode == DRAG_NONE)
     if (!XCSoarInterface::SettingsComputer().EnableGestures ||
         compare_squared(visible_projection.GetOrigAircraft().x - x,
@@ -177,21 +182,10 @@ GlueMapWindow::on_mouse_up(int x, int y)
     break;
 
   case DRAG_PAN:
-    if (compare_squared(drag_start.x - x, drag_start.y - y,
-                        Layout::Scale(10)) == 1) {
-      const GeoPoint end = visible_projection.Screen2LonLat(x, y);
-
-      XCSoarInterface::SetSettingsMap().PanLocation.Longitude +=
-        drag_start_geopoint.Longitude - end.Longitude;
-      XCSoarInterface::SetSettingsMap().PanLocation.Latitude +=
-        drag_start_geopoint.Latitude - end.Latitude;
-      ++ui_generation;
-
-      ActionInterface::SendSettingsMap(true);
-      return true;
-    }
-
-    break;
+    /* allow the use of the stretched last buffer for the next two
+       redraws */
+    scale_buffer = 2;
+    return true;
 
   case DRAG_SIMULATOR:
     if (click_time > 50 &&
@@ -355,37 +349,8 @@ GlueMapWindow::on_cancel_mode()
 void
 GlueMapWindow::on_paint(Canvas &canvas)
 {
+  MapWindow::on_paint(canvas);
 
-  if (drag_mode == DRAG_TARGET) {
-    MapWindow::on_paint(canvas);
+  if (drag_mode == DRAG_TARGET)
     TargetPaintDrag(canvas, drag_last);
-  }
-  else if (drag_mode == DRAG_PAN) {
-    /* quick redraw while scrolling the map with the mouse */
-
-    canvas.null_pen();
-    canvas.white_brush();
-
-    /* clear the areas around the buffer */
-
-    if (drag_last.x > drag_start.x)
-      canvas.rectangle(0, 0, drag_last.x - drag_start.x, canvas.get_height());
-    else if (drag_last.x < drag_start.x)
-      canvas.rectangle(canvas.get_width() + drag_last.x - drag_start.x, 0,
-                       canvas.get_width(), canvas.get_height());
-
-    if (drag_last.y > drag_start.y)
-      canvas.rectangle(0, 0, canvas.get_width(), drag_last.y - drag_start.y);
-    else if (drag_last.y < drag_start.y)
-      canvas.rectangle(0, canvas.get_height() + drag_last.y - drag_start.y,
-                       canvas.get_width(), canvas.get_height());
-
-    /* now copy the buffer */
-
-    ScopeLock protect(DoubleBufferWindow::mutex);
-    canvas.copy(drag_last.x - drag_start.x, drag_last.y - drag_start.y,
-                canvas.get_width(), canvas.get_height(),
-                get_visible_canvas(), 0, 0);
-  } else
-    return MapWindow::on_paint(canvas);
 }
