@@ -84,14 +84,3 @@ GlueMapWindow::Idle()
 
   return still_dirty;
 }
-
-/**
- * Triggers the drawTrigger and is called by
- * the on_mouse_up event in case of panning
- */
-void
-GlueMapWindow::RefreshMap()
-{
-  MapWindowTimer::InterruptTimer();
-  draw_thread->trigger_redraw();
-}

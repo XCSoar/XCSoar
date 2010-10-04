@@ -67,9 +67,6 @@ private:
   GestureManager gestures;
   bool ignore_single_click;
 
-  // display management
-  void RefreshMap();
-
   bool AirspaceDetailsAtPoint(const GeoPoint &location) const;
 
 protected:
