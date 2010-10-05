@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Name="frmTarget" X="200" Y="0" Width="119" Height="240" Caption="Target" Popup="1">
-  <Button Name="btnOK" Caption="OK" X="2" Y="2" Width="50" Height="22" OnClick="OnOKClicked" />
+  <Button Name="btnOK" Caption="OK" X="55" Y="2" Width="60" Height="29" OnClick="OnOKClicked" />
 
-  <Edit Name="prpTaskPoint" Caption="Tp" X="2" Width="115" Height="24" CaptionWidth="30"
+  <Edit Name="prpTaskPoint" Caption=" " X="2" Width="115" Height="29" CaptionWidth="1"
     Help="This sets the task point for review.">
     <DataField DataType="enum" Min="0" Max="50" Step="1" OnDataAccess="OnTaskPointData"/>
   </Edit>
 
-  <Button Name="btnIsLocked" Caption="Locked" X="34" Width="50" Height="22" OnClick="OnIsLockedClicked" />
+  <Button Name="btnIsLocked" Caption="Locked" X="55" Width="60" Height="29" OnClick="OnIsLockedClicked" />
 
-  <Button Name="btnMove" Caption="Move" X="34" Width="50" Height="22" OnClick="OnMoveClicked" />
+  <Buttona Name="btnMove" Caption="Move" X="34" Width="50" Height="22" OnClick="OnMoveClicked" visible=0 />
 
-  <Edit Name="prpRange" Caption="Range" X="2" Width="115" Height="22" CaptionWidth="60" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">
+  <Edit Name="prpRange" Caption="Range" X="2" Width="115" Height="27" CaptionWidth="60" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">
     <DataField DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min="-100" Max="100" Step="5" OnDataAccess="OnRangeData"/>
   </Edit>
 
-  <Edit Name="prpRadial" Caption="Radial" X="2" Width="115" Height="22" CaptionWidth="60" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise.">
+  <Edit Name="prpRadial" Caption="Radial" X="2" Width="115" Height="27" CaptionWidth="60" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise.">
     <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="-190" Max="190" Step="5" OnDataAccess="OnRadialData"/>
   </Edit>
 

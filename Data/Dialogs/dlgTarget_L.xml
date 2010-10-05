@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Name="frmTarget" X="1" Y="1" Width="240" Height="90" Caption="Target" Popup="1">
-  <Button Name="btnOK" Caption="OK" X="2" Y="2" Width="50" Height="22" OnClick="OnOKClicked" />
+  <Button Name="btnOK" Caption="OK" X="2" Y="2" Width="60" Height="29" OnClick="OnOKClicked" />
 
-  <Edit Name="prpTaskPoint" Caption="Task Point" X="55" Y="2" Width="180" Height="22" CaptionWidth="80"
+  <Edit Name="prpTaskPoint" Caption="Point" X="55" Y="2" Width="180" Height="27" CaptionWidth="40"
   Help="This sets the task point for review.">
     <DataField DataType="enum" Min="0" Max="50" Step="1" OnDataAccess="OnTaskPointData"/>
   </Edit>
 
-  <Edit Name="prpRange" Caption="Range" X="2" Y="25" Width="115" Height="22" CaptionWidth="65" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">
+  <Edit Name="prpRange" Caption="Range" X="64" Y="42" Width="80" Height="27" CaptionWidth="32" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">
     <DataField DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min="-100" Max="100" Step="5" OnDataAccess="OnRangeData"/>
   </Edit>
 
-  <Edit Name="prpRadial" Caption="Radial" X="120" Y="25" Width="115" Height="22" CaptionWidth="65" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise.">
+  <Edit Name="prpRadial" Caption="Radial" X="150" Y="42" Width="80" Height="27" CaptionWidth="32" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise.">
     <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="-92" Max="92" Step="5" OnDataAccess="OnRadialData"/>
   </Edit>
 
-  <Button Name="btnIsLocked" Caption="Locked" X="2" Width="50" Height="22" OnClick="OnIsLockedClicked" />
+  <Button Name="btnIsLocked" Caption="Locked" X="2" Y="42" Width="60" Height="29" OnClick="OnIsLockedClicked" />
 
 </Form>
