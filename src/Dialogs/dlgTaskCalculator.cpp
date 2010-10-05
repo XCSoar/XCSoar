@@ -44,6 +44,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "DeviceBlackboard.hpp"
+#include "Screen/Layout.hpp"
 
 #include <math.h>
 #include <algorithm>
@@ -274,7 +275,15 @@ static CallBackTableEntry_t CallBackTable[] = {
 void
 dlgTaskCalculatorShowModal(SingleWindow &parent)
 {
-  wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_TASKCALCULATOR"));
+  if (!Layout::landscape) {
+    wf = LoadDialog(CallBackTable,
+                        parent,
+                        _T("IDR_XML_TASKCALCULATOR"));
+  } else {
+    wf = LoadDialog(CallBackTable,
+                        parent,
+                        _T("IDR_XML_TASKCALCULATOR_L"));
+  }
   if (!wf)
     return;
 
