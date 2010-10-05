@@ -170,7 +170,7 @@ RefreshCalculator(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpCruiseEfficiency"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(cruise_efficiency * 100);
+    wp->GetDataField()->Set(XCSoarInterface::Calculated().task_stats.cruise_efficiency * fixed(100));
     wp->RefreshDisplay();
   }
 }
