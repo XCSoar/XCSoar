@@ -313,7 +313,7 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
       && (task_behaviour.optimise_targets_range)
       && (get_ordered_task_behaviour().aat_min_time > fixed_zero)) {
 
-    fixed p = calc_min_target(state, get_ordered_task_behaviour().aat_min_time);
+    fixed p = calc_min_target(state, get_ordered_task_behaviour().aat_min_time + fixed(300));
     (void)p;
 
     if (task_behaviour.optimise_targets_bearing) {
