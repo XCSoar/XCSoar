@@ -64,28 +64,24 @@ InfoBoxContentGLoad::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
 {
-  // Set Value
-#ifdef HAVE_BATTERY
   TCHAR tmp[32];
-  if (!is_altair()) {
-    if (PDABatteryPercent < 0) {
-      infobox.SetInvalid();
-      return;
-    }
 
+#ifdef HAVE_BATTERY
+  if (PDABatteryPercent >= 0) {
     _stprintf(tmp, _T("%d%%"), PDABatteryPercent);
-  } else {
-    if (negative(XCSoarInterface::Basic().SupplyBatteryVoltage)) {
-      infobox.SetInvalid();
-      return;
-    }
+    infobox.SetValue(tmp);
+    return;
+  }
+#endif
+
+  if (!negative(XCSoarInterface::Basic().SupplyBatteryVoltage)) {
     _stprintf(tmp, _T("%2.1fV"),
               (double)XCSoarInterface::Basic().SupplyBatteryVoltage);
+    infobox.SetValue(tmp);
+    return;
   }
-  infobox.SetValue(tmp);
-#else
+
   infobox.SetInvalid();
-#endif
 }
 
 void
