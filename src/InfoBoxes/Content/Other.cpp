@@ -68,14 +68,14 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
 #ifdef HAVE_BATTERY
   TCHAR tmp[32];
   if (!is_altair()) {
-    _stprintf(tmp, _T("%2.1fV"), PDABatteryPercent);
+    _stprintf(tmp, _T("%d%%"), PDABatteryPercent);
   } else {
     if (negative(XCSoarInterface::Basic().SupplyBatteryVoltage)) {
       infobox.SetInvalid();
       return;
     }
-    _stprintf(tmp, _T("%d%%"),
-              (int)XCSoarInterface::Basic().SupplyBatteryVoltage);
+    _stprintf(tmp, _T("%2.1fV"),
+              (double)XCSoarInterface::Basic().SupplyBatteryVoltage);
   }
   infobox.SetValue(tmp);
 #else
