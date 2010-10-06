@@ -111,7 +111,10 @@ dlgStartupShowModal(void)
   TCHAR temp[MAX_PATH];
 
   _stprintf(temp, _T("XCSoar: Version %s"), XCSoar_VersionString);
-  wf->SetCaption(temp);
+  WindowControl* wc;
+  wc = ((WindowControl *)wf->FindByName(_T("lblVersion")));
+  if (wc)
+    wc->SetCaption(temp);
 
   static WndFrame* wDisclaimer1 = (WndFrame*)wf->FindByName(_T("frmDisclaimer1"));
   wDisclaimer1->SetCaption(_T("Pilot assumes complete responsibility to ")

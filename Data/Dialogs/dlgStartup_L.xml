@@ -1,16 +1,13 @@
 <?xml version="1.0"?>
 
-<Form Name="frmStartup" Width="320" Height="240" Caption="XCSoar" BackColor="0xFFFFFF">
+<Form Name="frmStartup" Width="320" Height="240" Caption="" BackColor="0xFFFFFF">
+  <Label Name="lblVersion" X="8" Y="5" Width="155" Height="18" Caption="" />
 
-  <Canvas Name="frmspacer" X="2" Width="300" Height="10" />
+  <Canvas Name="frmSplash" X="175" Y="2" Width="110" Height="110" OnPaint="OnSplashPaint" />
 
-  <Canvas Name="frmSplash" X="105" Width="110" Height="82" OnPaint="OnSplashPaint" />
+  <Canvas Name="frmspacer2" X="2" Width="300" Height="10" />
 
-  <Canvas Name="frmspacer2" X="2" Width="300" Height="5" />
-
-  <Label Name="frmDisclaimer1" X="2" Width="314" Height="55"/>
-  
-  <Canvas Name="frmspacer4" X="2" Width="300" Height="12" />
+  <Label Name="frmDisclaimer1" X="8" Width="314" Height="55"/>
   
   <Panel Name="frmShade" X="0" Width="0" Height="80" Border="0" BackColor="0xDADBAB">
     <Button Name="cmdClose" Caption="Accept" X="2" Width="-2" Height="30"/>
