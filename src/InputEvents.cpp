@@ -1048,6 +1048,12 @@ InputEvents::ResetMenuTimeOut()
 void
 InputEvents::ShowMenu()
 {
+  if (SettingsMap().EnablePan && !SettingsMap().TargetPan)
+    /* disable pan mode before displaying the normal menu; leaving pan
+       mode enabled would be confusing for the user, and doesn't look
+       consistent */
+    sub_Pan(0);
+
   #if !defined(GNAV) && !defined(PCGNAV)
   // Popup exit button if in .xci
   // setMode(_T("Exit"));
