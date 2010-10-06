@@ -82,12 +82,13 @@ BlankDisplay(bool doblank)
     // we don't want the PDA to be completely depleted.
 
     if (!PDABatteryAC) {
-      if (is_simulator() && (PDABatteryPercent < BATTERY_EXIT)) {
+      if (is_simulator() && PDABatteryPercent >= 0 &&
+          PDABatteryPercent < BATTERY_EXIT) {
         LogStartUp(TEXT("Battery low exit..."));
         // TODO feature: Warning message on battery shutdown
         XCSoarInterface::SignalShutdown(true);
       } else {
-        if (PDABatteryPercent < BATTERY_WARNING) {
+        if (PDABatteryPercent >= 0 && PDABatteryPercent < BATTERY_WARNING) {
           DWORD LocalWarningTime = ::GetTickCount();
           if ((LocalWarningTime - BatteryWarningTime) > BATTERY_REMINDER) {
             BatteryWarningTime = LocalWarningTime;

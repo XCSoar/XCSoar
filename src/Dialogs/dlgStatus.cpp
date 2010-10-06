@@ -256,8 +256,10 @@ static void UpdateValuesSystem() {
   if (wp) {
     _stprintf(Temp,_T("\0"));
 #ifdef HAVE_BATTERY
-    _stprintf(Temp2,_T("%d%% "), PDABatteryPercent);
-    _tcscat(Temp, Temp2);
+    if (PDABatteryPercent >= 0) {
+      _stprintf(Temp2, _T("%d%% "), PDABatteryPercent);
+      _tcscat(Temp, Temp2);
+    }
 #endif
     if (XCSoarInterface::Basic().SupplyBatteryVoltage == fixed_zero) {
       _stprintf(Temp2,_T("\0"));

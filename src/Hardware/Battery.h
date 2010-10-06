@@ -72,7 +72,7 @@ UpdateBatteryInfo(void);
 #else /* !HAVE_BATTERY */
 
 enum {
-  PDABatteryPercent = 100,
+  PDABatteryPercent = -1,
   PDABatteryTemperature = 0,
 };
 

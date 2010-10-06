@@ -40,8 +40,8 @@ Copyright_License {
 
 #ifdef HAVE_BATTERY
 
-/** Battery percentage (default = 100%) */
-int PDABatteryPercent = 100;
+/** Battery percentage; negative means unknown */
+int PDABatteryPercent = -1;
 /** Battery temperature (default = 0°C (?)) */
 int PDABatteryTemperature = 0;
 
@@ -62,7 +62,7 @@ UpdateBatteryInfo(void)
     PDABatteryTemperature = sps.BatteryTemperature;
     PDABatteryAC = sps.ACLineStatus != AC_LINE_OFFLINE;
   } else {
-    PDABatteryPercent = 100;
+    PDABatteryPercent = -1;
     PDABatteryTemperature = 0;
     PDABatteryAC = false;
   }
