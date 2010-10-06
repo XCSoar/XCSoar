@@ -36,15 +36,32 @@ Copyright_License {
 }
 */
 
+#include "Screen/Bitmap.hpp"
 #include "Dialogs/Internal.hpp"
 #include "resource.h"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "Simulator.hpp"
+#include "Version.hpp"
+
+#include <stdio.h>
 
 #ifdef SIMULATOR_AVAILABLE
 
 static WndForm *wf=NULL;
+
+static void
+OnSplashPaint(WindowControl *Sender, Canvas &canvas)
+{
+  Bitmap splash_bitmap;
+  if (Layout::scale_1024 > 1024 * 3 / 2)
+    splash_bitmap.load(IDB_SWIFT);
+  else
+    splash_bitmap.load(IDB_SWIFT2);
+
+  BitmapCanvas bitmap_canvas(canvas, splash_bitmap);
+  canvas.stretch(bitmap_canvas);
+}
 
 static void
 OnSimulatorClicked(gcc_unused WndButton &button)
@@ -59,7 +76,8 @@ OnFlyClicked(gcc_unused WndButton &button)
 }
 
 static CallBackTableEntry_t CallBackTable[]={
-    DeclareCallBackEntry(NULL)
+      DeclareCallBackEntry(OnSplashPaint),
+      DeclareCallBackEntry(NULL)
 };
 
 #endif
@@ -73,6 +91,15 @@ dlgSimulatorPromptShowModal()
                       _T("IDR_XML_SIMULATORPROMPT"));
   if (!wf)
     return false;
+
+  TCHAR temp[MAX_PATH];
+
+  _stprintf(temp, _T("XCSoar v%s"), XCSoar_VersionString);
+
+  WindowControl* wc;
+  wc = ((WindowControl *)wf->FindByName(_T("lblVersion")));
+  if (wc)
+    wc->SetCaption(temp);
 
   WndButton* wb;
   wb = ((WndButton *)wf->FindByName(_T("cmdSimulator")));

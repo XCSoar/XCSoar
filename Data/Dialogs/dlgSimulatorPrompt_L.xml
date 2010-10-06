@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 
 <Form Name="frmComboPopup" Width="320" Height="240" BackColor="0xFFFFFF">
-  <Label X="48" Y="75" Width="220" Height="20" Caption="What do you want to do:" />
-  <SymbolButton Name="cmdFly" Caption="Fly" X="48" Y="100" Width="112" Height="30" OnClick="OnFlyClicked"/>
-  <SymbolButton Name="cmdSimulator" Caption="Simulator" X="160" Y="100" Width="112" Height="30" OnClick="OnSimulatorClicked"/>
+  <Label Name="lblVersion" X="8" Y="5" Width="130" Height="18" Caption="" />
+  <Canvas Name="frmSplash" X="175" Y="2" Width="110" Height="110" OnPaint="OnSplashPaint" />
+  <Label X="48" Y="120" Width="220" Height="20" Caption="What do you want to do:" />
+  <SymbolButton Name="cmdFly" Caption="Fly" X="48" Y="150" Width="112" Height="30" OnClick="OnFlyClicked"/>
+  <SymbolButton Name="cmdSimulator" Caption="Simulator" X="160" Y="150" Width="112" Height="30" OnClick="OnSimulatorClicked"/>
 </Form>
