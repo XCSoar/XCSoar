@@ -99,7 +99,9 @@ RenderTaskPoint::draw_ordered(const OrderedTaskPoint& tp)
 {
   if (m_layer == 0) {
     draw_oz_background(tp);
-    draw_samples(tp);
+    // draw_samples(tp);
+    // Todo: find out from John W what draw_samples does.
+    // currently, it's drawing white shapes on the screen in aats
   }
   
   if (m_layer == 1) {

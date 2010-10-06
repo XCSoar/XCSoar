@@ -86,6 +86,13 @@ protected:
   virtual void draw_off_track(const TaskPoint &tp);
   void draw_task_line(const GeoPoint& start, const GeoPoint& end);
   void draw_isoline(const AATPoint& tp);
+  /**
+   * ToDo: the draw_samples function has been disabled
+   * pending word from John W because it has no apparent
+   * benefit and draws white areas around aat turns.
+   * We should either fix it or completely remove the code
+   * @param tp
+   */
   void draw_samples(const OrderedTaskPoint& tp);
   void draw_oz_background(const OrderedTaskPoint& tp);
   void draw_oz_foreground(const OrderedTaskPoint& tp);
