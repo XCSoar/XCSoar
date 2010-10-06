@@ -150,7 +150,9 @@ static void UpdateValuesSystem() {
   static bool LoggerActive_last = logger.isLoggerActive();
   static bool DeclaredToDevice_last = logger.isTaskDeclared();
   static fixed SupplyBatteryVoltage_last = XCSoarInterface::Basic().SupplyBatteryVoltage;
+#ifdef HAVE_BATTERY
   static int PDABatteryPercent_last = PDABatteryPercent;
+#endif
 
   if (first ||
       (extGPSCONNECT_last != gps.Connected) ||
@@ -160,8 +162,11 @@ static void UpdateValuesSystem() {
       (FLARM_Available_last != XCSoarInterface::Basic().flarm.FLARM_Available) ||
       (LoggerActive_last != logger.isLoggerActive()) ||
       (DeclaredToDevice_last != logger.isTaskDeclared()) ||
-      (SupplyBatteryVoltage_last != XCSoarInterface::Basic().SupplyBatteryVoltage) ||
-      (PDABatteryPercent_last != PDABatteryPercent)) {
+      (SupplyBatteryVoltage_last != XCSoarInterface::Basic().SupplyBatteryVoltage)
+#ifdef HAVE_BATTERY
+      || PDABatteryPercent_last != PDABatteryPercent
+#endif
+      ) {
     first = false;
 
     extGPSCONNECT_last = gps.Connected;
@@ -172,7 +177,9 @@ static void UpdateValuesSystem() {
     LoggerActive_last = logger.isLoggerActive();
     DeclaredToDevice_last = logger.isTaskDeclared();
     SupplyBatteryVoltage_last = XCSoarInterface::Basic().SupplyBatteryVoltage;
+#ifdef HAVE_BATTERY
     PDABatteryPercent_last = PDABatteryPercent;
+#endif
 
   } else {
     return;
