@@ -91,7 +91,9 @@
 #endif
 
 /* Define to 1 if you have the <unistd.h> header file. */
-#undef HAVE_UNISTD_H
+#ifndef ZZIP_HAVE_UNISTD_H 
+#define ZZIP_HAVE_UNISTD_H  1 
+#endif
 
 /* Define to 1 if you have the <winbase.h> header file. */
 #ifndef ZZIP_HAVE_WINBASE_H

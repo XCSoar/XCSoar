@@ -34,7 +34,7 @@
 #include <zlib.h>
 
 #ifdef ZZIP_HAVE_UNISTD_H
-//JMW#include <unistd.h>
+#include <unistd.h>
 #else
 #include <stdio.h>
 # ifdef ZZIP_HAVE_SYS_TYPES_H
