@@ -18,21 +18,12 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <stdlib.h>
-#if defined(__BORLANDC__)
-#include <io.h>
-#endif
 #ifdef DEBUG
 #include <stdio.h>
 #endif
 
 #include <zzip/file.h>
 #include <zzip/format.h>
-#include <zzip/_config.h>
-
-// #ifndef HAVE_MSVCRT
-#ifdef ZZIP_HAVE_UNISTD_H
-  #include <unistd.h>
-#endif
 
 zzip_off_t
 zzip_filesize(int fd)
