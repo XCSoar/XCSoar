@@ -231,11 +231,11 @@
 /* #undef size_t */
 
 /* Define to `int' if <sys/types.h> does not define. */
-#ifndef _zzip_ssize_t
-#ifdef HAVE_POSIX
-#define _zzip_ssize_t ssize_t
-#else
-#define _zzip_ssize_t  int
+#ifndef ZZIP_ssize_t
+#ifndef HAVE_POSIX
+/* we need "int" here because the standard C functions read() and
+   write() must fit into the zzip_plugin_io struct */
+#define ZZIP_ssize_t int
 #endif
 #endif
 
