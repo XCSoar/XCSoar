@@ -106,7 +106,7 @@ FileMapping::FileMapping(const TCHAR *path)
   hMapping = ::CreateFileMapping(hFile, NULL, PAGE_READONLY,
                                  i.fi.nFileSizeHigh, i.fi.nFileSizeLow,
                                  NULL);
-  if (gcc_unlikely(hMapping == INVALID_HANDLE_VALUE))
+  if (gcc_unlikely(hMapping == NULL))
     return;
 
   m_data = ::MapViewOfFile(hMapping, FILE_MAP_READ, 0, 0, m_size);
@@ -122,7 +122,7 @@ FileMapping::~FileMapping()
   if (m_data != NULL)
     ::UnmapViewOfFile(m_data);
 
-  if (hMapping != INVALID_HANDLE_VALUE)
+  if (hMapping != NULL)
     ::CloseHandle(hMapping);
 
   if (hFile != INVALID_HANDLE_VALUE)
