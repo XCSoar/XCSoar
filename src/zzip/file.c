@@ -255,7 +255,7 @@ zzip_file_open(ZZIP_DIR * dir, zzip_char_t* name, int o_mode)
             {   /* skip local header - should test tons of other info,
 		 * but trust that those are correct */
                 zzip_ssize_t dataoff;
-                struct zzip_file_header * p = (struct zzip_file_header *)(void*) fp->buf32k;
+                struct zzip_file_header * p = (void*) fp->buf32k;
 
 		dataoff = dir->io->fd.read(dir->fd, (void*)p, sizeof(*p));
 		if (dataoff < (zzip_ssize_t)sizeof(*p))
@@ -736,7 +736,7 @@ zzip_open_shared_io (ZZIP_FILE* stream,
 	int fd = os->fd.open(filename, o_flags); /* io->fd.open */
         if (fd != -1)
         {
-            ZZIP_FILE* fp = (ZZIP_FILE *)calloc (1, sizeof(ZZIP_FILE));
+            ZZIP_FILE* fp = calloc (1, sizeof(ZZIP_FILE));
             if (! fp) {
 		os->fd.close(fd); return 0;
 	    } /* io->fd.close */
