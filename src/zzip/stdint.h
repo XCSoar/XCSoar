@@ -14,9 +14,9 @@
     /* ISO C 9X: 7.18 Integer types <stdint.h> */
 #include <stdint.h>
 #elif defined ZZIP_HAVE_SYS_INT_TYPES_H /*solaris*/
-//JMW#include <sys/int_types.h>
+#include <sys/int_types.h>
 #elif defined ZZIP_HAVE_INTTYPES_H /*freebsd*/
-//JMW#include <inttypes.h>
+#include <inttypes.h>
 #else
     typedef unsigned char uint8_t;      typedef signed char int8_t;
 
