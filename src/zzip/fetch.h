@@ -7,7 +7,7 @@
 
 /* linux knows "byteswap.h" giving us an optimized variant */
 #ifdef ZZIP_HAVE_BYTESWAP_H
-//JMW#include <byteswap.h>
+#include <byteswap.h>
 #endif
 
 #ifdef __cplusplus
