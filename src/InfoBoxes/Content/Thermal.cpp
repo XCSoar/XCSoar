@@ -66,9 +66,9 @@ InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)
 
   // Set Comment
   if (XCSoarInterface::SettingsComputer().auto_mc)
-    infobox.SetComment(_T("AUTO"));
+    infobox.SetComment(_("AUTO"));
   else
-    infobox.SetComment(_T("MANUAL"));
+    infobox.SetComment(_("MANUAL"));
 }
 
 bool

@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_INFOBOX_CONTENT_HPP
 
 #include <tchar.h>
+#include "Language.hpp"
 
 class InfoBoxWindow;
 
