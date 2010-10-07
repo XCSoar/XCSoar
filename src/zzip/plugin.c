@@ -1,3 +1,4 @@
+
 /*
  * Author: 
  *	Guido Draheim <guidod@gmx.de>
@@ -28,18 +29,18 @@
 zzip_off_t
 zzip_filesize(int fd)
 {
-  struct stat st;
+    struct stat st;
 
-  if (fstat(fd, &st) < 0)
-    return -1;
+    if (fstat(fd, &st) < 0)
+        return -1;
 
 # if defined DEBUG && ! defined _WIN32
-  if (! st.st_size && st.st_blocks > 1) /* seen on some darwin 10.1 machines */
-      fprintf(stderr, "broken fstat(2) ?? st_size=%ld st_blocks=%ld\n", 
-	      (long) st.st_size, (long) st.st_blocks);
+    if (! st.st_size && st.st_blocks > 1)        /* seen on some darwin 10.1 machines */
+        fprintf(stderr, "broken fstat(2) ?? st_size=%ld st_blocks=%ld\n",
+                (long) st.st_size, (long) st.st_blocks);
 # endif
 
-  return st.st_size;
+    return st.st_size;
 }
 
 #ifdef _WIN32_WCE
@@ -120,8 +121,7 @@ mingw_open (const char *path, int oflag, ...)
 
 #endif
 
-static const struct zzip_plugin_io default_io =
-{
+static const struct zzip_plugin_io default_io = {
 #ifdef _WIN32_WCE
     &mingw_open,
 #else
@@ -140,18 +140,20 @@ static const struct zzip_plugin_io default_io =
  * wrapping the posix io file functions for actual file access.
  */
 zzip_plugin_io_t
-zzip_get_default_io()
+zzip_get_default_io(void)
 {
-    return (zzip_plugin_io_t) &default_io;
+    return (zzip_plugin_io_t) & default_io;
 }
 
 /**
  * This function initializes the users handler struct to default values 
  * being the posix io functions in default configured environments.
  */
-int zzip_init_io(zzip_plugin_io_handlers_t io, int flags)
+int
+zzip_init_io(zzip_plugin_io_handlers_t io, int flags)
 {
-    if (! io) {
+    if (! io)
+    {
         return ZZIP_ERROR;
     }
     memcpy(io, &default_io, sizeof(default_io));

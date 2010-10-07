@@ -1,3 +1,4 @@
+
 /*
  * Author: 
  *	Guido Draheim <guidod@gmx.de>
@@ -17,7 +18,7 @@
  *      of 
  */
 
-#include <zzip/lib.h>                                   /* exported...*/
+#include <zzip/lib.h>           /* exported... */
 #include <zzip/file.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -33,46 +34,53 @@
  * opening that file first. Mostly used to obtain the uncompressed 
  * size of a file inside a zip-archive. see => zzip_dir_open.
  */
-int 
-zzip_dir_stat(ZZIP_DIR * dir, zzip_char_t* name, ZZIP_STAT * zs, int flags)
+int
+zzip_dir_stat(ZZIP_DIR * dir, zzip_char_t * name, ZZIP_STAT * zs, int flags)
 {
-    struct zzip_dir_hdr * hdr = dir->hdr0;
-    int (*cmp)(zzip_char_t*, zzip_char_t*);
+    struct zzip_dir_hdr *hdr = dir->hdr0;
+    int (*cmp) (zzip_char_t *, zzip_char_t *);
 
     cmp = (flags & ZZIP_CASEINSENSITIVE) ? strcasecmp : strcmp;
 
-    if (flags & ZZIP_IGNOREPATH)
+    if (! hdr)
     {
-        char* n = strrchr((const char *)name, '/');
-        if (n)  name = n + 1;
+        dir->errcode = ZZIP_ENOENT;
+        return -1;
     }
 
-    if (hdr)
+    if (flags & ZZIP_IGNOREPATH)
+    {
+        char *n = strrchr((const char *)name, '/');
+        if (n)
+            name = n + 1;
+    }
+
     while (1)
     {
-        register char* hdr_name = hdr->d_name;
+        register char *hdr_name = hdr->d_name;
         if (flags & ZZIP_IGNOREPATH)
         {
-            register char* n = strrchr(hdr_name, '/');
-            if (n)  hdr_name = n + 1;
+            register char *n = strrchr(hdr_name, '/');
+            if (n)
+                hdr_name = n + 1;
         }
 
-	if (! cmp(hdr_name, name))
+        if (! cmp(hdr_name, name))
             break;
 
-	if (! hdr->d_reclen)
-	{
+        if (! hdr->d_reclen)
+        {
             dir->errcode = ZZIP_ENOENT;
             return -1;
-	}
+        }
 
-	hdr = (struct zzip_dir_hdr *) ((char *)hdr + hdr->d_reclen);
+        hdr = (struct zzip_dir_hdr *) ((char *) hdr + hdr->d_reclen);
     }
 
     zs->d_compr = hdr->d_compr;
     zs->d_csize = hdr->d_csize;
     zs->st_size = hdr->d_usize;
-    zs->d_name  = hdr->d_name;
+    zs->d_name = hdr->d_name;
 
     return 0;
 }
@@ -83,13 +91,15 @@ zzip_dir_stat(ZZIP_DIR * dir, zzip_char_t* name, ZZIP_STAT * zs, int flags)
  * The st_size stat-member contains the uncompressed size. The optional 
  * d_name is never set here.
  */
-int zzip_file_stat (ZZIP_FILE* file, ZZIP_STAT* zs)
+int
+zzip_file_stat(ZZIP_FILE * file, ZZIP_STAT * zs)
 {
-    if (! file) return -1;
+    if (! file)
+        return -1;
     zs->d_compr = file->method;
     zs->d_csize = file->csize;
     zs->st_size = file->usize;
-    zs->d_name  = 0;
+    zs->d_name = 0;
     return 0;
 }
 
@@ -100,23 +110,23 @@ int zzip_file_stat (ZZIP_FILE* file, ZZIP_STAT* zs)
  * The optional d_name is never set here. For a real file, we do set the
  * d_csize := st_size and d_compr := 0 for meaningful defaults.
  */
-int zzip_fstat (ZZIP_FILE* file, ZZIP_STAT* zs)
+int
+zzip_fstat(ZZIP_FILE * file, ZZIP_STAT * zs)
 {
     if (ZZIP_file_real(file))
     {
-		// JMW TODO!
 #if !defined(WIN32) || !defined(_WIN32_WCE)
-	struct stat st;
-	if (fstat (file->fd, &st) < 0) return -1;
-	zs->st_size = st.st_size;
-	zs->d_csize = st.st_size;
-	zs->d_compr = 0;
-	return 0;
-#else
-	return 0;
+        struct stat st;
+        if (fstat(file->fd, &st) < 0)
+            return -1;
+        zs->st_size = st.st_size;
+        zs->d_csize = st.st_size;
+        zs->d_compr = 0;
 #endif
-    }else{
-	return zzip_file_stat (file, zs);
+        return 0;
+    } else
+    {
+        return zzip_file_stat(file, zs);
     }
 }
 

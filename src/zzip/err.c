@@ -1,3 +1,4 @@
+
 /*
  * Author: 
  *      Guido Draheim <guidod@gmx.de>
@@ -11,7 +12,7 @@
  *          of the Mozilla Public License 1.1
  */
 
-#include <zzip/lib.h>                                    /* exported... */
+#include <zzip/lib.h>           /* exported... */
 #include <zlib.h>
 
 #include <string.h>
@@ -57,29 +58,30 @@ errlist[] =
  * or it can be an error code from => libzzip, which is an
  * negative value lower than => ZZIP_ERROR
  */
-zzip_char_t* 
+zzip_char_t *
 zzip_strerror(int errcode)
 {
-  if (errcode < ZZIP_ERROR && errcode > ZZIP_ERROR-32)
-  {
-      struct errlistentry* err = errlist;
-      for (; err->mesg ; err++)
-      {
-          if (err->code == errcode) 
-              return err->mesg; 
-      }
-      errcode = EINVAL;
-  }
+    if (errcode < ZZIP_ERROR && errcode > ZZIP_ERROR - 32)
+    {
+        struct errlistentry *err = errlist;
 
-  if (errcode < 0)
-  {
-      if (errcode == -1)
-          return strerror(errcode);
-      else
-          return zError(errcode);
-  }
-  
-  return strerror (errcode);
+        for (; err->mesg; err++)
+        {
+            if (err->code == errcode)
+                return err->mesg;
+        }
+        errcode = EINVAL;
+    }
+
+    if (errcode < 0)
+    {
+        if (errcode == -1)
+            return strerror(errcode);
+        else
+            return zError(errcode);
+    }
+
+    return strerror(errcode);
 }
 
 /** => zzip_strerror
@@ -87,10 +89,11 @@ zzip_strerror(int errcode)
  * runs it through => zzip_strerror to obtain the static string
  * describing the error.
  */
-zzip_char_t* 
-zzip_strerror_of(ZZIP_DIR* dir)
+zzip_char_t *
+zzip_strerror_of(ZZIP_DIR * dir)
 {
-    if (! dir) return strerror (errno);
+    if (! dir)
+        return strerror(errno);
     return zzip_strerror(dir->errcode);
 }
 
@@ -146,19 +149,22 @@ errnolist[] =
 int
 zzip_errno(int errcode)
 {
-    if (errcode >= -1) return errno;
-
-    return errcode;
+    if (errcode >= -1)
+    {
+        return errno;
+    } else
+    {
 /*
-    {   struct errnolistentry* err = errnolist;
-        for (; err->code ; err++)
+        struct errnolistentry *err = errnolist;
+
+        for (; err->code; err++)
         {
-            if (err->code == errcode) 
-                return err->e_no; 
+            if (err->code == errcode)
+                return err->e_no;
         }
-    }
-    return EINVAL;
 */
+        return EINVAL;
+    }
 }
 
 /* 

@@ -5,6 +5,9 @@
 /* config.h.  Generated from config.h.in by configure.  */
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
+/* Define if building universal (internal helper macro) */
+/* #undef AC_APPLE_UNIVERSAL_BUILD */
+
 /* Define if pointers to integers require aligned access */
 /* #undef HAVE_ALIGNED_ACCESS_REQUIRED */
 
@@ -134,6 +137,12 @@
    */
 /* #undef LARGEFILE_SENSITIVE */
 
+/* Define to the sub-directory in which libtool stores uninstalled libraries.
+   */
+#ifndef ZZIP_LT_OBJDIR 
+#define ZZIP_LT_OBJDIR  ".libs/" 
+#endif
+
 /* Name of package */
 #ifndef ZZIP_PACKAGE 
 #define ZZIP_PACKAGE  "zziplib" 
@@ -171,7 +180,7 @@
 
 /* The number of bytes in type long */
 #ifndef ZZIP_SIZEOF_LONG 
-#define ZZIP_SIZEOF_LONG  4 
+#define ZZIP_SIZEOF_LONG  8 
 #endif
 
 /* The number of bytes in type short */
@@ -186,12 +195,20 @@
 
 /* Version number of package */
 #ifndef ZZIP_VERSION 
-#define ZZIP_VERSION  "0.13.49" 
+#define ZZIP_VERSION  "0.13.59" 
 #endif
 
-/* Define to 1 if your processor stores words with the most significant byte
-   first (like Motorola and SPARC, unlike Intel and VAX). */
-/* #undef WORDS_BIGENDIAN */
+/* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
+   significant byte first (like Motorola and SPARC, unlike Intel). */
+#if defined AC_APPLE_UNIVERSAL_BUILD
+# if defined __BIG_ENDIAN__
+#  define WORDS_BIGENDIAN 1
+# endif
+#else
+# ifndef WORDS_BIGENDIAN
+/* #  undef WORDS_BIGENDIAN */
+# endif
+#endif
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 /* #undef _FILE_OFFSET_BITS */

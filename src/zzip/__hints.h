@@ -18,7 +18,7 @@
 # if ZZIP_GNUC_ATLEAST(2,8)
 # define ZZIP_GNUC_EXTENSION __extension__
 # else
-# define ZZIP_GNUC_EXTENSION 
+# define ZZIP_GNUC_EXTENSION
 # endif
 #endif
 
@@ -146,6 +146,12 @@
 # endif
 #endif
 
+#ifdef __GNUC__
+#define ZZIP_GNUC_PACKED __attribute__((packed))
+#else
+#define ZZIP_GNUC_PACKED
+#endif
+
 #ifndef ZZIP_FUNCTION
 # if ZZIP_GNUC_ATLEAST(2,6)
 # define ZZIP_FUNC             __FUNCTION__
@@ -153,10 +159,10 @@
 # elif  defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
 # define ZZIP_FUNC             __func__
 # define ZZIP_FUNCTION         ""
-# else   
+# else
 # define ZZIP_FUNC             0
 # define ZZIP_FUNCTION         ""
-# endif  
+# endif
 #endif
 
 #ifndef ZZIP_STRING

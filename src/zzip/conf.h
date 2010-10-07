@@ -4,17 +4,17 @@
  * in plain config.h if the host system does already have it but we do
  * need the prefix variant - so we add here a #define _zzip_off_t off_t
  *
- * This file is supposed to only carry '#define's. 
+ * This file is supposed to only carry '#define's.
  * See <zzip/types.h> for definitions that might be seen by the compiler.
  *
- * Author: 
+ * Author:
  *      Guido Draheim <guidod@gmx.de>
  *
  *      Copyright (c) 2001,2002,2003,2004 Guido Draheim
  *          All rights reserved,
  *          use under the restrictions of the
  *          Lesser GNU General Public License
- *          or alternatively the restrictions 
+ *          or alternatively the restrictions
  *          of the Mozilla Public License 1.1
  */
 
@@ -110,7 +110,7 @@
 
 /* whether this library shall use a 64bit off_t largefile variant in 64on32: */
 /* (some exported names must be renamed to avoid bad calls after linking) */
-#if defined ZZIP_LARGEFILE_SENSITIVE 
+#if defined ZZIP_LARGEFILE_SENSITIVE
 # if _FILE_OFFSET_BITS+0 == 64
 # define  ZZIP_LARGEFILE_RENAME
 # elif defined  _LARGE_FILES    /* used on older AIX to get at 64bit off_t */
@@ -207,12 +207,6 @@
 #  endif
 #     endif
 
-
-#if defined __GNUC__ || defined __attribute__
-#define __zzip_attribute__(X) __attribute__(X)
-#else
-#define __zzip_attribute__(X) 
-#endif
 
 #if defined ZZIP_EXPORTS || defined ZZIPLIB_EXPORTS
 # undef ZZIP_DLL
