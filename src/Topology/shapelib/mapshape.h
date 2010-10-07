@@ -4,6 +4,7 @@
 #include "mapprimitive.h"
 
 #include <stdio.h>
+#include <zzip/lib.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -97,20 +97,3 @@ void msFreeShape(shapeObj *shape)
 
   msInitShape(shape); // now reset
 }
-
-ZZIP_FILE *ppc_fopen(const char *filename, const char *mode)
-{
-  /*
-  WCHAR wszFileName[256];          // Unicode user name
-  WCHAR wszMode[10];
-
-  MultiByteToWideChar( CP_ACP, 0, filename,
-        strlen(filename)+1, wszFileName,
-     sizeof(wszFileName)/sizeof(wszFileName[0]) );
-  MultiByteToWideChar( CP_ACP, 0, mode,
-        strlen(mode)+1, wszMode,
-     sizeof(wszMode)/sizeof(wszMode[0]) );
-  return _tfopen(wszFileName, wszMode);
-  */
-  return zzip_fopen(filename, mode);
-}

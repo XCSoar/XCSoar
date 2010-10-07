@@ -40,7 +40,6 @@ Copyright_License {
 #define TOPOLOGY_STORE_H
 
 #include "Util/NonCopyable.hpp"
-#include "shapelib/mapshape.h"
 
 #include <tchar.h>
 

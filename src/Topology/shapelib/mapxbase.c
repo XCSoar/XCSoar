@@ -104,7 +104,7 @@ DBFHandle msDBFOpen( const char * pszFilename, const char * pszAccess )
     /*      Open the file.                                                  */
     /* -------------------------------------------------------------------- */
     psDBF = (DBFHandle) calloc( 1, sizeof(DBFInfo) );
-    psDBF->zfp = ppc_fopen( pszDBFFilename, pszAccess );
+    psDBF->zfp = zzip_fopen( pszDBFFilename, pszAccess );
     if( psDBF->zfp == NULL )
         return( NULL );
 

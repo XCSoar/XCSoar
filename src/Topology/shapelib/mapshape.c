@@ -151,7 +151,7 @@ SHPHandle msSHPOpen( const char * pszLayer, const char * pszAccess )
   /* -------------------------------------------------------------------- */
   pszFullname = (char *) malloc(strlen(pszBasename) + 5);
   sprintf( pszFullname, "%s.shp", pszBasename );
-  psSHP->zfpSHP = ppc_fopen(pszFullname, pszAccess );
+  psSHP->zfpSHP = zzip_fopen(pszFullname, pszAccess );
   psSHP->fpSHP = NULL;
   if( psSHP->zfpSHP == NULL ) {
     free(psSHP);
@@ -160,7 +160,7 @@ SHPHandle msSHPOpen( const char * pszLayer, const char * pszAccess )
   }
 
   sprintf( pszFullname, "%s.shx", pszBasename );
-  psSHP->zfpSHX = ppc_fopen(pszFullname, pszAccess );
+  psSHP->zfpSHX = zzip_fopen(pszFullname, pszAccess );
   psSHP->fpSHX = NULL;
   if( psSHP->zfpSHX == NULL ) {
     free(psSHP);
