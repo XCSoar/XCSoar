@@ -3,10 +3,10 @@
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
-#include "zzip/zutil.h"
-#include "zzip/inftrees.h"
-#include "zzip/inflate.h"
-#include "zzip/inffast.h"
+#include "zutil.h"
+#include "inftrees.h"
+#include "inflate.h"
+#include "inffast.h"
 
 #define this THIS
 

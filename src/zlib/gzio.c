@@ -9,7 +9,7 @@
 
 #include <stdio.h>
 
-#include "zzip/zutil.h"
+#include "zutil.h"
 #include "errno.h"
 
 #ifdef NO_DEFLATE       /* for compatibility with old definition */

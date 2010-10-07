@@ -12,7 +12,7 @@
  */
 
 #include <zzip/lib.h>                                    /* exported... */
-#include <zzip/zlib.h>
+#include <zlib.h>
 
 #include <string.h>
 #include <errno.h>

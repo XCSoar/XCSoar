@@ -21,7 +21,7 @@
 #include <stdio.h>
 
 #ifdef _ZZIP_ENTRY_STRUCT
-#include <zzip/zlib.h>
+#include <zlib.h>
 #include <zzip/format.h>
 #endif
 
