@@ -6,8 +6,7 @@
 
 /* perhaps want to show on syslog(3) ?? */
 
-#ifndef _WIN32_WCE
-#ifdef DEBUG
+#if 0 && defined(DEBUG)
 #include <stdio.h>
 #define DBG1(X1) ZZIP_FOR1 { \
         fprintf(stderr,"\n%s:%i:"X1"\n", ZZIP_FUNC,__LINE__ \
@@ -27,14 +26,6 @@
 #define DBG6(X1,X2,X3,X4,X5,X6)   ZZIP_FOR1 { \
         fprintf(stderr,"\n%s:%i:"X1"\n", ZZIP_FUNC,__LINE__ \
 		 ,X2,X3,X4,X5,X6); } ZZIP_END1
-#else
-#define DBG1(X1) {}
-#define DBG2(X1,X2) {}
-#define DBG3(X1,X2,X3) {}
-#define DBG4(X1,X2,X3,X4) {}
-#define DBG5(X1,X2,X3,X4,X5) {}
-#define DBG6(X1,X2,X3,X4,X5,X6) {}
-#endif
 #else
 #define DBG1(X1) {}
 #define DBG2(X1,X2) {}
@@ -74,7 +65,7 @@
 
 
 
-#ifdef DEBUG
+#if 0 && defined(DEBUG)
 _zzip_inline static void zzip_debug_xbuf (unsigned char* p, int l)
     /* ZZIP_GNUC_UNUSED */
 {
