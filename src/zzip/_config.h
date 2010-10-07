@@ -9,8 +9,10 @@
 /* #undef HAVE_ALIGNED_ACCESS_REQUIRED */
 
 /* Define to 1 if you have the <byteswap.h> header file. */
+#ifndef WIN32
 #ifndef ZZIP_HAVE_BYTESWAP_H
 #define ZZIP_HAVE_BYTESWAP_H  1
+#endif
 #endif
 
 /* Define to 1 if you have the <direct.h> header file. */
@@ -50,7 +52,7 @@
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #ifndef ZZIP_HAVE_STDINT_H
-//#define ZZIP_HAVE_STDINT_H  1
+#define ZZIP_HAVE_STDINT_H  1 
 #endif
 
 /* Define to 1 if you have the <stdlib.h> header file. */
@@ -130,9 +132,7 @@
 
 /* whether the system defaults to 32bit off_t but can do 64bit when requested
    */
-#ifndef ZZIP_LARGEFILE_SENSITIVE
-#define ZZIP_LARGEFILE_SENSITIVE  1
-#endif
+/* #undef LARGEFILE_SENSITIVE */
 
 /* Name of package */
 #ifndef ZZIP_PACKAGE
@@ -194,9 +194,7 @@
 /* #undef WORDS_BIGENDIAN */
 
 /* Number of bits in a file offset, on hosts where this is settable. */
-#ifndef ZZIP__FILE_OFFSET_BITS
-#define ZZIP__FILE_OFFSET_BITS  64
-#endif
+/* #undef _FILE_OFFSET_BITS */
 
 /* Define for large files, on AIX-style hosts. */
 /* #undef _LARGE_FILES */
@@ -234,7 +232,13 @@
 /* #undef size_t */
 
 /* Define to `int' if <sys/types.h> does not define. */
-/* #undef ssize_t */
+#ifndef _zzip_ssize_t
+#ifdef HAVE_POSIX
+#define _zzip_ssize_t ssize_t
+#else
+#define _zzip_ssize_t  int
+#endif
+#endif
 
 /* once: _ZZIP__CONFIG_H */
 #endif

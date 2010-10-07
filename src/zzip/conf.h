@@ -22,13 +22,20 @@
 #define _ZZIP_CONF_H 1
 
 #if !defined ZZIP_OMIT_CONFIG_H
-# ifdef __GNUC__
-# include <zzip/_gnuc.h>
-# elif defined _MSC_VER || defined __BORLANDC__ || defined __WATCOMC__ || defined WIN32
+# if defined _MSC_VER || defined __BORLANDC__ || defined __WATCOMC__
 # include <zzip/_msvc.h>
+# elif defined ZZIP_1_H
+# include "zzip-1.h"
+# elif defined ZZIP_2_H
+# include "zzip-2.h"
+# elif defined ZZIP_3_H
+# include "zzip-3.h"
+# elif defined ZZIP_4_H
+# include "zzip-4.h"
+# elif defined ZZIP_5_H
+# include "zzip-5.h"
 # else /* autoconf generated */
-JMW something wrong
-//# include <zzip/_config.h>
+# include <zzip/_config.h>
 # endif
 #endif
 
