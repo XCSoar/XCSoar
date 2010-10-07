@@ -5,7 +5,7 @@ ZZIP = \
 	$(ZZIPSRC)/info.c \
 	$(ZZIPSRC)/plugin.c \
 	$(ZZIPSRC)/zip.c \
-	$(ZZIPSRC)/zstat.c
+	$(ZZIPSRC)/stat.c
 
 ZZIP_LIBS = $(TARGET_OUTPUT_DIR)/zzip.a
 
