@@ -49,11 +49,12 @@ Copyright_License {
 #include <stdio.h>
 
 fixed
-MapWindow::findMapScaleBarSize(const RECT &rc) const
+MapWindow::findMapScaleBarSize(const RECT &rc, 
+           const MapWindowProjection &projection) const
 {
-  fixed pixelsize = render_projection.DistanceScreenToUser(1); // units/pixel
+  fixed pixelsize = projection.DistanceScreenToUser(1); // units/pixel
   fixed half_displaysize =
-    render_projection.DistanceScreenToUser((rc.bottom - rc.top) / 2); // units
+    projection.DistanceScreenToUser((rc.bottom - rc.top) / 2); // units
 
   // find largest bar size that will fit two of (black and white) in display
   if (half_displaysize > fixed(100))
@@ -69,17 +70,17 @@ MapWindow::findMapScaleBarSize(const RECT &rc) const
 }
 
 void
-MapWindow::DrawMapScale2(Canvas &canvas, const RECT &rc) const
+MapWindow::DrawMapScale2(Canvas &canvas, const RECT &rc, const MapWindowProjection &projection) const
 {
   canvas.select(MapGfx.hpMapScale);
 
   bool color = false;
   POINT Start, End = { 0, 0 };
 
-  int barsize = iround(findMapScaleBarSize(rc));
+  int barsize = iround(findMapScaleBarSize(rc, projection));
 
   End.x = rc.right - 1;
-  End.y = render_projection.GetOrigAircraft().y;
+  End.y = projection.GetOrigAircraft().y;
   Start = End;
   for (Start.y += barsize; Start.y < rc.bottom + barsize; Start.y += barsize) {
     if (color)
@@ -94,7 +95,7 @@ MapWindow::DrawMapScale2(Canvas &canvas, const RECT &rc) const
   }
 
   color = true;
-  End.y = render_projection.GetOrigAircraft().y;
+  End.y = projection.GetOrigAircraft().y;
   Start = End;
   for (Start.y -= barsize; Start.y > rc.top - barsize; Start.y -= barsize) {
     if (color)
@@ -123,7 +124,7 @@ draw_bitmap(Canvas &canvas, BitmapCanvas &bitmap_canvas, const Bitmap &bitmap,
 }
 
 void
-MapWindow::DrawMapScale(Canvas &canvas, const RECT &rc) const
+MapWindow::DrawMapScale(Canvas &canvas, const RECT &rc, const MapWindowProjection &projection) const
 {
   fixed MapWidth;
   TCHAR ScaleInfo[80];
@@ -136,7 +137,7 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT &rc) const
     MapWidth = projection.RequestDistancePixelsToMeters(rc.right - rc.left);
   else
   */
-  MapWidth = render_projection.DistancePixelsToMeters(rc.right - rc.left);
+  MapWidth = projection.DistancePixelsToMeters(rc.right - rc.left);
 
   canvas.select(Fonts::MapBold);
   Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,

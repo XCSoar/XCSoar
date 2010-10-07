@@ -184,8 +184,8 @@ MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT &rc)
   // overlays
   DrawCDI();
 
-  DrawMapScale(canvas, rc);
-  DrawMapScale2(canvas, rc);
+  DrawMapScale(canvas, rc, render_projection);
+  DrawMapScale2(canvas, rc, render_projection);
   DrawCompass(canvas, rc);
 
   // JMW Experimental only! EXPERIMENTAL

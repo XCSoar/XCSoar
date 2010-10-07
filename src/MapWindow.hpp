@@ -286,8 +286,10 @@ public:
   void DrawTask(Canvas &canvas, const RECT &rc, Canvas &buffer);
   void DrawThermalEstimate(Canvas &canvas) const;
 
-  void DrawMapScale(Canvas &canvas, const RECT &rc) const;
-  void DrawMapScale2(Canvas &canvas, const RECT &rc) const;
+  void DrawMapScale(Canvas &canvas, const RECT &rc,
+                    const MapWindowProjection &projection) const;
+  void DrawMapScale2(Canvas &canvas, const RECT &rc,
+                     const MapWindowProjection &projection) const;
   void DrawFinalGlide(Canvas &canvas, const RECT &rc) const;
   void DrawThermalBand(Canvas &canvas, const RECT &rc) const;
   void DrawGlideThroughTerrain(Canvas &canvas) const;
@@ -298,7 +300,7 @@ public:
   void DrawFLARMTraffic(Canvas &canvas) const;
 
   gcc_pure
-  fixed findMapScaleBarSize(const RECT &rc) const;
+  fixed findMapScaleBarSize(const RECT &rc, const MapWindowProjection &projection) const;
 
   // thread, main functions
   void Render(Canvas &canvas, const RECT &rc);

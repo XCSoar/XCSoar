@@ -134,6 +134,12 @@ MapWindow::on_paint(Canvas &canvas)
                    src, buffer_rect.left, buffer_rect.top,
                    buffer_rect.right - buffer_rect.left,
                    buffer_rect.bottom - buffer_rect.top);
+    /* redraw map scale to match new visible area */
+
+    DrawMapScale(canvas, buffer_rect, visible_projection);
+    DrawMapScale2(canvas, buffer_rect, visible_projection);
+
+
   } else
     /* the UI has changed since the last DrawThread iteration has
        started: the buffer has invalid data, paint a white window
