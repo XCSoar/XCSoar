@@ -736,9 +736,6 @@ zzip_open_shared_io (ZZIP_FILE* stream,
 	int fd = os->fd.open(filename, o_flags); /* io->fd.open */
         if (fd != -1)
         {
-#ifdef _WIN32_WCE
-            struct stat st; // JMW
-#endif
             ZZIP_FILE* fp = (ZZIP_FILE *)calloc (1, sizeof(ZZIP_FILE));
             if (! fp) {
 		os->fd.close(fd); return 0;
@@ -749,6 +746,7 @@ zzip_open_shared_io (ZZIP_FILE* stream,
             fp->io = os;
 
 #ifdef _WIN32_WCE
+            struct stat st; // JMW
             if (stat(filename,&st) >=0)
                 fp->usize = st.st_size;
 #else
