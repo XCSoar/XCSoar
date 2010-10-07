@@ -158,8 +158,8 @@ InfoBoxContentSpeed::HandleKey(const InfoBoxKeyCodes keycode)
         = !XCSoarInterface::SettingsComputer().EnableCalibration;
 
     Message::AddMessage(XCSoarInterface::SettingsComputer().EnableCalibration ?
-                        _T("Calibrate ON") :
-                        _T("Calibrate OFF"));
+                        _("Calibrate ON") :
+                        _("Calibrate OFF"));
     return true;
   }
 
@@ -193,9 +193,9 @@ InfoBoxContentSpeedDolphin::Update(InfoBoxWindow &infobox)
 
   // Set Comment
   if (XCSoarInterface::SettingsComputer().EnableBlockSTF)
-    infobox.SetComment(_T("BLOCK"));
+    infobox.SetComment(_("BLOCK"));
   else
-    infobox.SetComment(_T("DOLPHIN"));
+    infobox.SetComment(_("DOLPHIN"));
 
 }
 

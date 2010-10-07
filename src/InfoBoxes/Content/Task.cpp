@@ -110,7 +110,7 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
 
   if (!way_point) {
     // Set Title
-    infobox.SetTitle(_T("Next"));
+    infobox.SetTitle(_("Next"));
 
     infobox.SetInvalid();
     return;

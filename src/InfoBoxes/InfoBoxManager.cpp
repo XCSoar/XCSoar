@@ -531,7 +531,7 @@ OnInfoBoxHelp(WindowControl *Sender)
   int type = wp->GetDataField()->GetAsInteger();
 
   TCHAR caption[100];
-  _stprintf(caption, _T("InfoBox: %s"), InfoBoxFactory::GetName(type));
+  _stprintf(caption, _T("%s: %s"), _("InfoBox"), InfoBoxFactory::GetName(type));
 
   const TCHAR* text = InfoBoxFactory::GetDescription(type);
   if (text)
@@ -558,7 +558,7 @@ InfoBoxManager::SetupFocused()
   style.hide();
 
   WndForm form(main_window, _T(""), 0, 0, 256, 128, style);
-  WndProperty control(form, _T("InfoBox"), 0, 0, 256, 128, 128,
+  WndProperty control(form, _("InfoBox"), 0, 0, 256, 128, 128,
                       style, EditWindowStyle(), NULL);
   control.SetOnHelpCallback(OnInfoBoxHelp);
 
