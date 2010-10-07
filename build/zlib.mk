@@ -1,3 +1,11 @@
+ifeq ($(TARGET),UNIX)
+
+# use the native zlib on UNIX
+ZLIB_LIBS = /usr/lib/libz.a
+ZLIB_INCLUDES =
+
+else
+
 ZLIB_SRC_DIR = $(SRC)/zlib
 ZLIB_SOURCES = \
 	$(ZLIB_SRC_DIR)/adler32.c \
@@ -19,3 +27,5 @@ $(ZLIB_LIBS): CPPFLAGS += -DNO_VIZ -DHAVE_UNISTD_H
 $(ZLIB_LIBS): $(call SRC_TO_OBJ,$(ZLIB_SOURCES))
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^
+
+endif
