@@ -201,8 +201,7 @@
 
 /* Define to `long long' if <sys/types.h> does not define. */
 #ifndef ZZIP___int64
-#define ZZIP___int64  _int64
-// JMW
+#define ZZIP___int64 int64_t
 #endif
 
 /* Define to empty if `const' does not conform to ANSI C. */
