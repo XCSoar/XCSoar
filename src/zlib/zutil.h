@@ -17,7 +17,7 @@
 #include "zlib.h"
 
 #ifdef STDC
-#  if !defined(_WIN32_WCE) || defined(__MINGW32__)
+#  ifndef _WIN32_WCE
 #    include <stddef.h>
 #  endif
 #  include <string.h>
@@ -94,7 +94,7 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
        void _Cdecl farfree( void *block );
        void *_Cdecl farmalloc( unsigned long nbytes );
 #    else
-//JMW#      include <alloc.h>
+#      include <alloc.h>
 #    endif
 #  else /* MSC or DJGPP */
 #    include <malloc.h>
@@ -125,7 +125,7 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 #if defined(MACOS) || defined(TARGET_OS_MAC)
 #  define OS_CODE  0x07
 #  if defined(__MWERKS__) && __dest_os != __be_os && __dest_os != __win32_os
-//JMW#    include <unix.h> /* for fdopen */
+#    include <unix.h> /* for fdopen */
 #  else
 #    ifndef fdopen
 #      define fdopen(fd,mode) NULL /* No fdopen() */
