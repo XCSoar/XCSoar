@@ -48,6 +48,5 @@ PaintCanvas::PaintCanvas(Window &_window)
 
 PaintCanvas::~PaintCanvas()
 {
-  DeleteDC(dc);
   window.EndPaint(&ps);
 }
