@@ -3,14 +3,14 @@
  * zip-access variants that refer to <zzip/format.h>. On the x86 platform the
  * actual definitions will be empty - fetching is done on native machine-level
  *
- * Author:
+ * Author: 
  *      Guido Draheim <guidod@gmx.de>
  *
  * Copyright (c) 2004,2005,2006 Guido Draheim
  *          All rights reserved,
- *          use under the restrictions of the
+ *          use under the restrictions of the 
  *          Lesser GNU General Public License
- *          or alternatively the restrictions
+ *          or alternatively the restrictions 
  *          of the Mozilla Public License 1.1
  */
 
@@ -43,9 +43,8 @@ uint32_t __zzip_get32(unsigned char * s)
 #endif
 }
 
-/**
- * This function does the same as __zzip_get32 for a 16 bit value.
- * @see __zzip_get32
+/** => __zzip_get32
+ * This function does the same for a 16 bit value.
  */
 uint16_t __zzip_get16(unsigned char * s)
 {
@@ -56,9 +55,8 @@ uint16_t __zzip_get16(unsigned char * s)
 #endif
 }
 
-/**
- * This function does the same as __zzip_get32 for an off64_t value.
- * @see __zzip_get32
+/** => __zzip_get32
+ * This function does the same for an off64_t value.
  */
 uint64_t __zzip_get64(unsigned char * s)
 {
@@ -82,9 +80,8 @@ uint64_t __zzip_get64(unsigned char * s)
 #endif
 }
 
-/**
+/** => __zzip_get32
  * This function pushes a 32bit value at the specified address
- * @see __zzip_get32
  */
 void __zzip_set32(unsigned char * s, uint32_t v)
 {
@@ -100,9 +97,8 @@ void __zzip_set32(unsigned char * s, uint32_t v)
 #endif
 }
 
-/**
- * This function does the same as __zzip_set32 for a 16 bit value.
- * @see __zzip_set32
+/** => __zzip_get32
+ * This function does the same for a 16 bit value.
  */
 void __zzip_set16(unsigned char * s, uint16_t v)
 {
@@ -116,9 +112,8 @@ void __zzip_set16(unsigned char * s, uint16_t v)
 #endif
 }
 
-/**
+/** => __zzip_get32
  * This function pushes a off64_t value at the specified address
- * @see __zzip_set32
  */
 void __zzip_set64(unsigned char * s, uint64_t v)
 {

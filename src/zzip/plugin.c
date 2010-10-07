@@ -1,5 +1,5 @@
 /*
- * Author:
+ * Author: 
  *	Guido Draheim <guidod@gmx.de>
  *      Mike Nordell <tamlin-@-algonet-se>
  *
@@ -7,7 +7,7 @@
  * 	    All rights reserved,
  *	    use under the restrictions of the
  *	    Lesser GNU General Public License
- *          or alternatively the restrictions
+ *          or alternatively the restrictions 
  *          of the Mozilla Public License 1.1
  */
 
@@ -28,18 +28,17 @@
 zzip_off_t
 zzip_filesize(int fd)
 {
-    (void)fd;
+  struct stat st;
 
-// JMW
-    struct stat st;
   if (fstat(fd, &st) < 0)
     return -1;
 
 # if defined DEBUG && ! defined _WIN32
   if (! st.st_size && st.st_blocks > 1) /* seen on some darwin 10.1 machines */
-      fprintf(stderr, "broken fstat(2) ?? st_size=%ld st_blocks=%ld\n",
+      fprintf(stderr, "broken fstat(2) ?? st_size=%ld st_blocks=%ld\n", 
 	      (long) st.st_size, (long) st.st_blocks);
 # endif
+
   return st.st_size;
 }
 
@@ -147,7 +146,7 @@ zzip_get_default_io()
 }
 
 /**
- * This function initializes the users handler struct to default values
+ * This function initializes the users handler struct to default values 
  * being the posix io functions in default configured environments.
  */
 int zzip_init_io(zzip_plugin_io_handlers_t io, int flags)
@@ -160,7 +159,7 @@ int zzip_init_io(zzip_plugin_io_handlers_t io, int flags)
     return 0;
 }
 
-/*
+/* 
  * Local variables:
  * c-file-style: "stroustrup"
  * End:

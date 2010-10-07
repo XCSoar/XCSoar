@@ -2,7 +2,7 @@
 #define _ZZIP_FORMATS_H
 
 #include <zzip/types.h>
-#include <zzip/format.h>
+#include <zzip/format.h> 
 #include <zzip/stdint.h>
 
 /* linux knows "byteswap.h" giving us an optimized variant */
@@ -19,6 +19,7 @@ extern uint32_t __zzip_get32(zzip_byte_t * s) __zzip_attribute__((const));
 extern uint16_t __zzip_get16(zzip_byte_t * s) __zzip_attribute__((const));
 extern void     __zzip_set32(zzip_byte_t * s, uint32_t v);
 extern void     __zzip_set16(zzip_byte_t * s, uint16_t v);
+
 extern uint64_t __zzip_get64(zzip_byte_t * s) __zzip_attribute__((const));
 extern void     __zzip_set64(zzip_byte_t * s, uint64_t v);
 

@@ -1,5 +1,5 @@
 /*
- * Author:
+ * Author: 
  *	Guido Draheim <guidod@gmx.de>
  *	Tomi Ollila <Tomi.Ollila@iki.fi>
  *
@@ -7,14 +7,14 @@
  * 	    All rights reserved,
  *	    use under the restrictions of the
  *	    Lesser GNU General Public License
- *          or alternatively the restrictions
+ *          or alternatively the restrictions 
  *          of the Mozilla Public License 1.1
  *
  * Description:
  *      although this file is defining a function called zzip_stat it
  *      will not need a real stat(2) exported by the Operating System.
  *      It will just try to fill the fields of the ZZIP_STAT structure
- *      of
+ *      of 
  */
 
 #include <zzip/lib.h>                                   /* exported...*/
@@ -29,11 +29,11 @@
   #define strcasecmp stricmp
 #endif
 /**
- * obtain information about a filename in an opened zip-archive without
- * opening that file first. Mostly used to obtain the uncompressed
+ * obtain information about a filename in an opened zip-archive without 
+ * opening that file first. Mostly used to obtain the uncompressed 
  * size of a file inside a zip-archive. see => zzip_dir_open.
  */
-int
+int 
 zzip_dir_stat(ZZIP_DIR * dir, zzip_char_t* name, ZZIP_STAT * zs, int flags)
 {
     struct zzip_dir_hdr * hdr = dir->hdr0;
@@ -78,9 +78,9 @@ zzip_dir_stat(ZZIP_DIR * dir, zzip_char_t* name, ZZIP_STAT * zs, int flags)
 }
 
 /** => zzip_dir_stat
- * This function will obtain information about a opened file _within_ a
- * zip-archive. The file is supposed to be open (otherwise -1 is returned).
- * The st_size stat-member contains the uncompressed size. The optional
+ * This function will obtain information about a opened file _within_ a 
+ * zip-archive. The file is supposed to be open (otherwise -1 is returned). 
+ * The st_size stat-member contains the uncompressed size. The optional 
  * d_name is never set here.
  */
 int zzip_file_stat (ZZIP_FILE* file, ZZIP_STAT* zs)
@@ -95,8 +95,8 @@ int zzip_file_stat (ZZIP_FILE* file, ZZIP_STAT* zs)
 
 /** => zzip_dir_stat
  * This function will obtain information about a opened file which may be
- * either real/zipped. The file is supposed to be open (otherwise -1 is
- * returned). The st_size stat-member contains the uncompressed size.
+ * either real/zipped. The file is supposed to be open (otherwise -1 is 
+ * returned). The st_size stat-member contains the uncompressed size. 
  * The optional d_name is never set here. For a real file, we do set the
  * d_csize := st_size and d_compr := 0 for meaningful defaults.
  */
@@ -120,7 +120,7 @@ int zzip_fstat (ZZIP_FILE* file, ZZIP_STAT* zs)
     }
 }
 
-/*
+/* 
  * Local variables:
  * c-file-style: "stroustrup"
  * End:

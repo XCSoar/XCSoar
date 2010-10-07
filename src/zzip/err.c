@@ -1,5 +1,5 @@
 /*
- * Author:
+ * Author: 
  *      Guido Draheim <guidod@gmx.de>
  *      Tomi Ollila <Tomi.Ollila@iki.fi>
  *
@@ -7,7 +7,7 @@
  *          All rights reserved,
  *          use under the restrictions of the
  *          Lesser GNU General Public License
- *          or alternatively the restrictions
+ *          or alternatively the restrictions 
  *          of the Mozilla Public License 1.1
  */
 
@@ -20,22 +20,22 @@
 #include <zzip/file.h>
 
 /* *INDENT-OFF* */
-static struct errlistentry { int code; const char* mesg; }
-errlist[] =
+static struct errlistentry { int code; const char* mesg; } 
+errlist[] = 
 {
     { ZZIP_NO_ERROR,        "No error" },
-    { ZZIP_OUTOFMEM,
+    { ZZIP_OUTOFMEM,        
       "could not get temporary memory for internal structures" },
     { ZZIP_DIR_OPEN,        "Failed to open zip-file %s" },
     { ZZIP_DIR_STAT,        "Failed to fstat zip-file %s" },
     { ZZIP_DIR_SEEK,        "Failed to lseek zip-file %s" },
-    { ZZIP_DIR_READ,        "Failed to read zip-file %s"},
+    { ZZIP_DIR_READ,        "Failed to read zip-file %s"},  
     { ZZIP_DIR_TOO_SHORT,   "zip-file %s too short" },
     { ZZIP_DIR_EDH_MISSING, "zip-file central directory not found" },
     { ZZIP_DIRSIZE,         "Directory size too big..." },
     { ZZIP_ENOENT,          "No such file found in zip-file %s" },
     { ZZIP_UNSUPP_COMPR,    "Unsupported compression format" },
-    { ZZIP_CORRUPTED,       "Zipfile corrupted" },
+    { ZZIP_CORRUPTED,       "Zipfile corrupted" }, 
     { ZZIP_UNDEF,           "Some undefined error occurred" },
     { ZZIP_DIR_LARGEFILE,   "Directory is largefile variant" },
     { 0, 0 },
@@ -57,7 +57,7 @@ errlist[] =
  * or it can be an error code from => libzzip, which is an
  * negative value lower than => ZZIP_ERROR
  */
-zzip_char_t*
+zzip_char_t* 
 zzip_strerror(int errcode)
 {
   if (errcode < ZZIP_ERROR && errcode > ZZIP_ERROR-32)
@@ -65,8 +65,8 @@ zzip_strerror(int errcode)
       struct errlistentry* err = errlist;
       for (; err->mesg ; err++)
       {
-          if (err->code == errcode)
-              return err->mesg;
+          if (err->code == errcode) 
+              return err->mesg; 
       }
       errcode = EINVAL;
   }
@@ -78,24 +78,24 @@ zzip_strerror(int errcode)
       else
           return zError(errcode);
   }
-
+  
   return strerror (errcode);
 }
 
 /** => zzip_strerror
- * This function fetches the errorcode from the => DIR-handle and
+ * This function fetches the errorcode from the => DIR-handle and 
  * runs it through => zzip_strerror to obtain the static string
  * describing the error.
  */
-zzip_char_t*
+zzip_char_t* 
 zzip_strerror_of(ZZIP_DIR* dir)
 {
     if (! dir) return strerror (errno);
     return zzip_strerror(dir->errcode);
 }
 
-/* *INDENT-OFF*
-static struct errnolistentry { int code; int e_no; }
+/* *INDENT-OFF* 
+static struct errnolistentry { int code; int e_no; } 
 errnolist[] =
 {
     { Z_STREAM_ERROR, EPIPE },
@@ -103,14 +103,14 @@ errnolist[] =
     { Z_MEM_ERROR, ENOMEM },
     { Z_BUF_ERROR, EMFILE },
     { Z_VERSION_ERROR, ENOEXEC },
-
+      
     { ZZIP_DIR_OPEN, ENOTDIR },
     { ZZIP_DIR_STAT, EREMOTE },
     { ZZIP_DIR_SEEK, ESPIPE },
 #  ifdef ESTRPIPE
-    { ZZIP_DIR_READ, ESTRPIPE},
+    { ZZIP_DIR_READ, ESTRPIPE},  
 #  else
-    { ZZIP_DIR_READ, EPIPE},
+    { ZZIP_DIR_READ, EPIPE},  
 #  endif
     { ZZIP_DIR_TOO_SHORT, ENOEXEC },
 #  ifdef ENOMEDIUM
@@ -125,15 +125,15 @@ errnolist[] =
     { ZZIP_UNSUPP_COMPR, EPFNOSUPPORT },
 #  else
     { ZZIP_UNSUPP_COMPR, EACCES },
-#  endif
+#  endif 
 # ifdef EILSEQ
-    { ZZIP_CORRUPTED, EILSEQ },
+    { ZZIP_CORRUPTED, EILSEQ }, 
 # else
-    { ZZIP_CORRUPTED, ELOOP },
+    { ZZIP_CORRUPTED, ELOOP }, 
 # endif
     { ZZIP_UNDEF, EINVAL },
     { 0, 0 },
-};
+};    
  *INDENT-ON* */
 
 /**
@@ -153,15 +153,15 @@ zzip_errno(int errcode)
     {   struct errnolistentry* err = errnolist;
         for (; err->code ; err++)
         {
-            if (err->code == errcode)
-                return err->e_no;
+            if (err->code == errcode) 
+                return err->e_no; 
         }
     }
     return EINVAL;
 */
 }
 
-/*
+/* 
  * Local variables:
  * c-file-style: "stroustrup"
  * End:
