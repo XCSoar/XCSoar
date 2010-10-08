@@ -507,9 +507,9 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 
   // 55
   {
-    N_("Own Team Code"),
+    N_("Team Code"),
     N_("TeamCode"),
-    N_("The current Team code for this aircraft. Use this to report to other team members."),
+    N_("The current Team code for this aircraft. Use this to report to other team members. The last team aircraft code entered is displayed underneath."),
     56, 54,
   },
 
