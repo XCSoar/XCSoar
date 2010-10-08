@@ -196,10 +196,17 @@ public:
   void SetColorTop(int Value);
 
   /**
-   * This function will reset the value to ---, clear the comment
-   * line and remove the unit
+   * Calls SetValueInvalid() then SetCommentInvalid()
    */
   void SetInvalid();
+  /**
+   * Resets value to --- and unassigns the unit
+   */
+  void SetValueInvalid();
+  /**
+   * Clears comment
+   */
+  void SetCommentInvalid();
 
   /**
    * Constructor of the InfoBoxWindow class
