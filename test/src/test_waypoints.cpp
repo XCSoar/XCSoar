@@ -137,7 +137,7 @@ test_replace(Waypoints& waypoints, unsigned id)
   tstring oldName = wp->Name;
 
   Waypoint copy = *wp;
-  copy.Name= "Fred";
+  copy.Name = _T("Fred");
   waypoints.replace(*wp,copy);
   waypoints.optimise();
 
@@ -145,7 +145,7 @@ test_replace(Waypoints& waypoints, unsigned id)
   if (wp== NULL) {
     return false;
   }
-  return (wp->Name != oldName) && (wp->Name == "Fred");
+  return (wp->Name != oldName) && (wp->Name == _T("Fred"));
 }
 
 int main(int argc, char** argv)

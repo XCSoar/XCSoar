@@ -27,14 +27,14 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
 
   wp = waypoints.create(GeoPoint(Angle::degrees(fixed_one), 
                                  Angle::degrees(fixed_one)));
-  wp.Name = "Hello";
+  wp.Name = _T("Hello");
   wp.Flags.Airport = true;
   wp.Altitude = fixed_half;
   waypoints.append(wp);
 
   wp = waypoints.create(GeoPoint(Angle::degrees(fixed(0.8)), 
                                  Angle::degrees(fixed(0.5))));
-  wp.Name = "Unk";
+  wp.Name = _T("Unk");
   wp.Flags.Airport = true;
   wp.Altitude = fixed(0.25);
   waypoints.append(wp);
