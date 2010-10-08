@@ -137,6 +137,8 @@ OnCodeClicked(gcc_unused WndButton &button)
     XCSoarInterface::SetSettingsComputer().TeammateCodeValid = true;
     XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = false;
   }
+  else
+    XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
 }
 
 static void
