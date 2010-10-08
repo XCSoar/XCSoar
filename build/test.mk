@@ -50,6 +50,10 @@ $(TESTS): $(TARGET_BIN_DIR)/%$(TARGET_EXEEXT): $(TARGET_OUTPUT_DIR)/test/src/%.o
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 TEST_NAMES = \
+	test_fixed \
+	test_waypoints \
+	test_pressure \
+	test_task \
 	TestAngle TestEarth TestSunEphemeris \
 	TestRadixTree \
 	TestDriver \
