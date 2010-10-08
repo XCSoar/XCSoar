@@ -58,7 +58,10 @@ UpdateBatteryInfo(void)
   // request the power status
   DWORD result = GetSystemPowerStatusEx2(&sps, sizeof(sps), TRUE);
   if (result >= sizeof(sps)) {
-    PDABatteryPercent = sps.BatteryLifePercent;
+    if (sps.BatteryLifePercent != BATTERY_PERCENTAGE_UNKNOWN)
+      PDABatteryPercent = sps.BatteryLifePercent;
+    else
+      PDABatteryPercent = -1;
     PDABatteryTemperature = sps.BatteryTemperature;
     PDABatteryAC = sps.ACLineStatus != AC_LINE_OFFLINE;
   } else {
