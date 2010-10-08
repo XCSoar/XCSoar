@@ -36,41 +36,9 @@
 */
 
 #include "Math/Earth.hpp"
+#include "TestUtil.hpp"
 
 #include <assert.h>
-
-static inline bool
-is_zero(const fixed value)
-{
-  return (long)fabs(value * 10000) == 0;
-}
-
-static inline bool
-is_one(const fixed value)
-{
-  return is_zero(value - fixed_one);
-}
-
-static inline bool
-equals(const fixed a, const fixed b)
-{
-  if (is_zero(a) || is_zero(b))
-    return is_zero(a) && is_zero(b);
-
-  return is_one(a / b);
-}
-
-static inline bool
-equals(const fixed a, int b)
-{
-  return equals(a, fixed(b));
-}
-
-static inline bool
-equals(const Angle a, int b)
-{
-  return equals(a.value_degrees(), fixed(b));
-}
 
 int main(int argc, char **argv)
 {
