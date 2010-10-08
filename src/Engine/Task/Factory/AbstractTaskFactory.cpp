@@ -530,10 +530,16 @@ AbstractTaskFactory::validType(OrderedTaskPoint *new_tp, unsigned position) cons
 
   switch (new_tp->type) {
   case TaskPoint::START:
+    return validAbstractType(POINT_START, position);
+
   case TaskPoint::AST:
+    return validAbstractType(POINT_AST, position);
+
   case TaskPoint::AAT:
+    return validAbstractType(POINT_AAT, position);
+
   case TaskPoint::FINISH:
-    return true;
+    return validAbstractType(POINT_FINISH, position);
   }
 
   return false;
