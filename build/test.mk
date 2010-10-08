@@ -53,17 +53,6 @@ $(TESTS): $(TARGET_BIN_DIR)/%$(TARGET_EXEEXT): $(TARGET_OUTPUT_DIR)/test/src/%.o
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
-
-BUILDTESTS=\
-	$(TARGET_BIN_DIR)/01_test_tap$(TARGET_EXEEXT)
-
-testtap: $(BUILDTESTS)
-	cd test && perl tools/testall.pl t/*
-
-# TODO generalise
-$(TARGET_BIN_DIR)/01_test_tap$(TARGET_EXEEXT): $(TEST_SRC_DIR)/01_test_tap.c | $(TARGET_BIN_DIR)/dirstamp
-	gcc -o $@ $<
-
 TEST_NAMES = \
 	TestAngle TestEarth TestSunEphemeris \
 	TestRadixTree \
