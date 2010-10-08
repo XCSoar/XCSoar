@@ -311,6 +311,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
     airspaces.visit_intersecting(state.Location, vec, ivisitor);
   }
 
+#ifdef DO_PRINT
   {
     AirspaceNearestSort ans(state.Location);
     const AbstractAirspace* as = ans.find_nearest(airspaces, range);
@@ -336,7 +337,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
       }
     }
   }
-
+#endif
 }
 
 
