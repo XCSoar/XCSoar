@@ -408,7 +408,10 @@ void
 Waypoints::replace(const Waypoint& orig, Waypoint& replacement)
 {
   erase(orig);
-  append(replacement);
+
+  /* preserve the old waypoint id */
+  replacement.id = orig.id;
+  tmp_wps.push_back(WaypointEnvelope(replacement));
 }
 
 Waypoint
