@@ -33,6 +33,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "tap.h"
 
@@ -96,7 +97,8 @@ _gen_result(int ok, const char *func, const char *file, unsigned int line,
 		vasprintf(&local_test_name, test_name, ap);
 		va_end(ap);
 #else
-                local_test_name = test_name;
+                (void)ap;
+                local_test_name = strdup(test_name);
 #endif
 
 		/* Make sure the test name contains more than digits
@@ -163,8 +165,10 @@ _gen_result(int ok, const char *func, const char *file, unsigned int line,
 	printf("\n");
 
 	if(!ok) {
+#ifndef WIN32
 		if(getenv("HARNESS_ACTIVE") != NULL)
 			fputs("\n", stderr);
+#endif
 
 		diag("    Failed %stest (%s:%s() at line %d)", 
 		     todo ? "(TODO) " : "", file, func, line);
@@ -194,10 +198,12 @@ _tap_init(void)
 	if(!run_once) {
 		atexit(_cleanup);
 
+#ifndef WIN32
 		/* stdout needs to be unbuffered so that the output appears
 		   in the same place relative to stderr output as it does 
 		   with Test::Harness */
 		setbuf(stdout, 0);
+#endif
 		run_once = 1;
 	}
 }
@@ -324,6 +330,7 @@ skip(unsigned int n, char *fmt, ...)
 	asprintf(&skip_msg, fmt, ap);
 	va_end(ap);
 #else
+        (void)ap;
         skip_msg = fmt;
 #endif
 
@@ -353,6 +360,7 @@ todo_start(char *fmt, ...)
 	vasprintf(&todo_msg, fmt, ap);
 	va_end(ap);
 #else
+        (void)ap;
         todo_msg = fmt;
 #endif
 	todo = 1;
