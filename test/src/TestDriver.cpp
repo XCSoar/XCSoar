@@ -43,7 +43,6 @@
 #include "TestUtil.hpp"
 #include "Protection.hpp"
 
-#include <assert.h>
 #include <string.h>
 
 static bool vario_updated;
@@ -71,7 +70,7 @@ static void
 TestCAI302()
 {
   Device *device = cai302Device.CreateOnPort(NULL);
-  assert(device != NULL);
+  ok1(device != NULL);
 
   NMEA_INFO nmea_info;
   memset(&nmea_info, 0, sizeof(nmea_info));
@@ -79,19 +78,19 @@ TestCAI302()
   /* baro altitude disabled */
   device->ParseNMEA("!w,000,000,0000,500,01287,01020,-0668,191,199,191,000,000,100*44",
                     &nmea_info, false);
-  assert(!nmea_info.BaroAltitudeAvailable);
-  assert(nmea_info.AirspeedAvailable);
-  assert(nmea_info.TotalEnergyVarioAvailable);
+  ok1(!nmea_info.BaroAltitudeAvailable);
+  ok1(nmea_info.AirspeedAvailable);
+  ok1(nmea_info.TotalEnergyVarioAvailable);
 
   /* baro altitude enabled */
   device->ParseNMEA("!w,000,000,0000,500,01287,01020,-0668,191,199,191,000,000,100*44",
                     &nmea_info, true);
-  assert(nmea_info.BaroAltitudeAvailable);
-  assert(equals(nmea_info.BaroAltitude, 287));
-  assert(nmea_info.AirspeedAvailable);
-  assert(equals(nmea_info.TrueAirspeed, -6.68));
-  assert(nmea_info.TotalEnergyVarioAvailable);
-  assert(equals(nmea_info.TotalEnergyVario, -0.463));
+  ok1(nmea_info.BaroAltitudeAvailable);
+  ok1(equals(nmea_info.BaroAltitude, 287));
+  ok1(nmea_info.AirspeedAvailable);
+  ok1(equals(nmea_info.TrueAirspeed, -6.68));
+  ok1(nmea_info.TotalEnergyVarioAvailable);
+  ok1(equals(nmea_info.TotalEnergyVario, -0.463));
 
   delete device;
 }
@@ -100,39 +99,41 @@ static void
 TestLX()
 {
   Device *device = lxDevice.CreateOnPort(NULL);
-  assert(device != NULL);
+  ok1(device != NULL);
 
   NMEA_INFO nmea_info;
   memset(&nmea_info, 0, sizeof(nmea_info));
 
   /* baro altitude disabled */
   device->ParseNMEA("$LXWP0,N,,1266.5,,,,,,,,248,23.1*55", &nmea_info, false);
-  assert(!nmea_info.BaroAltitudeAvailable);
-  assert(!nmea_info.AirspeedAvailable);
-  assert(!nmea_info.TotalEnergyVarioAvailable);
+  ok1(!nmea_info.BaroAltitudeAvailable);
+  ok1(!nmea_info.AirspeedAvailable);
+  ok1(!nmea_info.TotalEnergyVarioAvailable);
 
   /* baro altitude enabled */
   device->ParseNMEA("$LXWP0,N,,1266.5,,,,,,,,248,23.1*55", &nmea_info, true);
-  assert(nmea_info.BaroAltitudeAvailable);
-  assert(equals(nmea_info.BaroAltitude, 1266.5));
-  assert(!nmea_info.AirspeedAvailable);
-  assert(!nmea_info.TotalEnergyVarioAvailable);
+  ok1(nmea_info.BaroAltitudeAvailable);
+  ok1(equals(nmea_info.BaroAltitude, 1266.5));
+  ok1(!nmea_info.AirspeedAvailable);
+  ok1(!nmea_info.TotalEnergyVarioAvailable);
 
   /* airspeed and vario available */
   device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1",
                     &nmea_info, true);
-  assert(nmea_info.BaroAltitudeAvailable);
-  assert(equals(nmea_info.BaroAltitude, 1665.5));
-  assert(nmea_info.AirspeedAvailable);
-  assert(equals(nmea_info.TrueAirspeed, 222.3/3.6));
-  assert(nmea_info.TotalEnergyVarioAvailable);
-  assert(equals(nmea_info.TotalEnergyVario, 1.71));
+  ok1(nmea_info.BaroAltitudeAvailable);
+  ok1(equals(nmea_info.BaroAltitude, 1665.5));
+  ok1(nmea_info.AirspeedAvailable);
+  ok1(equals(nmea_info.TrueAirspeed, 222.3/3.6));
+  ok1(nmea_info.TotalEnergyVarioAvailable);
+  ok1(equals(nmea_info.TotalEnergyVario, 1.71));
 
   delete device;
 }
 
 int main(int argc, char **argv)
 {
+  plan_tests(24);
+
   TestCAI302();
   TestLX();
 

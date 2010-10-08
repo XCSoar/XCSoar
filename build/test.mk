@@ -58,6 +58,7 @@ TEST_NAMES = \
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
 
 TEST_ANGLE_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestAngle.cpp
 TEST_ANGLE_OBJS = $(call SRC_TO_OBJ,$(TEST_ANGLE_SOURCES))
 TEST_ANGLE_LDADD = $(MATH_LIBS)
@@ -67,6 +68,7 @@ $(TARGET_BIN_DIR)/TestAngle$(TARGET_EXEEXT): $(TEST_ANGLE_OBJS) $(TEST_ANGLE_LDA
 
 TEST_EARTH_SOURCES = \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
+	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestEarth.cpp
 TEST_EARTH_OBJS = $(call SRC_TO_OBJ,$(TEST_EARTH_SOURCES))
 TEST_EARTH_LDADD = $(MATH_LIBS)
@@ -76,6 +78,7 @@ $(TARGET_BIN_DIR)/TestEarth$(TARGET_EXEEXT): $(TEST_EARTH_OBJS) $(TEST_EARTH_LDA
 
 TEST_SUN_EPHEMERIS_SOURCES = \
 	$(SRC)/Math/SunEphemeris.cpp \
+	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestSunEphemeris.cpp
 TEST_SUN_EPHEMERIS_OBJS = $(call SRC_TO_OBJ,$(TEST_SUN_EPHEMERIS_SOURCES))
 TEST_SUN_EPHEMERIS_LDADD = $(MATH_LIBS)
@@ -84,6 +87,7 @@ $(TARGET_BIN_DIR)/TestSunEphemeris$(TARGET_EXEEXT): $(TEST_SUN_EPHEMERIS_OBJS) $
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 TEST_RADIX_TREE_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestRadixTree.cpp
 TEST_RADIX_TREE_OBJS = $(call SRC_TO_OBJ,$(TEST_RADIX_TREE_SOURCES))
 $(TARGET_BIN_DIR)/TestRadixTree$(TARGET_EXEEXT): $(TEST_RADIX_TREE_OBJS) | $(TARGET_BIN_DIR)/dirstamp
@@ -127,6 +131,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Units.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
+	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestDriver.cpp
 TEST_DRIVER_OBJS = $(call SRC_TO_OBJ,$(TEST_DRIVER_SOURCES))
 $(TARGET_BIN_DIR)/TestDriver$(TARGET_EXEEXT): $(TEST_DRIVER_OBJS) $(TEST_DRIVER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
@@ -154,6 +159,7 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoints.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
+	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestWayPointFile.cpp
 TEST_WAY_POINT_FILE_OBJS = $(call SRC_TO_OBJ,$(TEST_WAY_POINT_FILE_SOURCES))
 TEST_WAY_POINT_FILE_LDADD = $(UTIL_LIBS) $(MATH_LIBS) $(IO_LIBS) $(ZZIP_LIBS) $(COMPAT_LIBS)
@@ -177,7 +183,7 @@ build-check: $(TESTS)
 
 check: $(TESTS) | $(OUT)/test/dirstamp
 	@$(NQ)echo "  TEST    $(notdir $(patsubst %$(TARGET_EXEEXT),%,$^))"
-	$(Q)for i in $(TESTS); do $$i || exit $$?; done
+	$(Q)$(PERL) $(TEST_SRC_DIR)/testall.pl $(TESTS)
 
 DEBUG_PROGRAM_NAMES = \
 	TestOLC \

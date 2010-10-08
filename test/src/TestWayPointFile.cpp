@@ -40,8 +40,6 @@
 #include "Terrain/RasterMap.hpp"
 #include "TestUtil.hpp"
 
-#include <assert.h>
-
 short
 RasterMap::GetField(const GeoPoint &location) const
 {
@@ -51,31 +49,33 @@ RasterMap::GetField(const GeoPoint &location) const
 static void
 TestWinPilot()
 {
+  plan_tests(15);
+
   WayPointFile *f = WayPointFile::create(_T("test/data/waypoints.dat"), 0);
-  assert(f != NULL);
+  ok1(f != NULL);
 
   Waypoints way_points;
   bool success = f->Parse(way_points, NULL);
-  assert(success);
+  ok1(success);
   delete f;
 
   way_points.optimise();
 
-  assert(!way_points.empty());
-  assert(way_points.size() == 1);
+  ok1(!way_points.empty());
+  ok1(way_points.size() == 1);
 
   const Waypoint *wp = way_points.lookup_name(_T("Bergneustadt"));
-  assert(wp != NULL);
-  assert(equals(wp->Location.Longitude, 7.7061111111111114));
-  assert(equals(wp->Location.Latitude, 51.051944444444445));
-  assert(equals(wp->Altitude, 488));
-  assert(wp->Flags.Airport);
-  assert(wp->Flags.TurnPoint);
-  assert(!wp->Flags.LandPoint);
-  assert(wp->Flags.Home);
-  assert(!wp->Flags.StartPoint);
-  assert(!wp->Flags.FinishPoint);
-  assert(!wp->Flags.Restricted);
+  ok1(wp != NULL);
+  ok1(equals(wp->Location.Longitude, 7.7061111111111114));
+  ok1(equals(wp->Location.Latitude, 51.051944444444445));
+  ok1(equals(wp->Altitude, 488));
+  ok1(wp->Flags.Airport);
+  ok1(wp->Flags.TurnPoint);
+  ok1(!wp->Flags.LandPoint);
+  ok1(wp->Flags.Home);
+  ok1(!wp->Flags.StartPoint);
+  ok1(!wp->Flags.FinishPoint);
+  ok1(!wp->Flags.Restricted);
 }
 
 int main(int argc, char **argv)

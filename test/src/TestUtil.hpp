@@ -40,6 +40,12 @@
 
 #include "Math/Angle.hpp"
 
+extern "C" {
+#include "tap.h"
+}
+
+int verbose;
+
 static inline bool
 is_zero(const fixed value)
 {

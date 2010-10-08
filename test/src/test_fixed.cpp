@@ -1,15 +1,9 @@
-#include "test_debug.hpp"
 #include "Math/Earth.hpp"
 #include "TestUtil.hpp"
 
 #include <stdio.h>
 
 int main(int argc, char** argv) {
-
-  if (!parse_args(argc,argv)) {
-    return 0;
-  }
-
   plan_tests(19);
 
   /* check the division operator */

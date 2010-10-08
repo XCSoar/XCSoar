@@ -37,10 +37,10 @@
 
 #define PRINT_RADIX_TREE
 
-#include "Util/RadixTree.hpp"
-
 #include <iostream>
-#include <assert.h>
+
+#include "Util/RadixTree.hpp"
+#include "TestUtil.hpp"
 
 struct Sum {
   int value;
@@ -73,7 +73,7 @@ struct AscendingKeyVisitor {
   tstring last;
 
   void operator()(const TCHAR *key, const T &value) {
-    assert(last.compare(key) <= 0);
+    ok1(last.compare(key) <= 0);
     last = key;
   }
 };
@@ -88,131 +88,133 @@ check_ascending_keys(const RadixTree<T> &tree)
 
 int main(int argc, char **argv)
 {
+  plan_tests(82);
+
   TCHAR buffer[64], *suggest;
 
   RadixTree<int> irt;
   irt.add(_T("foo"), 42);
-  assert(all_sum(irt) == 42);
-  assert(prefix_sum(irt, _T("")) == 42);
-  assert(prefix_sum(irt, _T("f")) == 42);
-  assert(prefix_sum(irt, _T("fo")) == 42);
-  assert(prefix_sum(irt, _T("foo")) == 42);
-  assert(prefix_sum(irt, _T("foobar")) == 0);
+  ok1(all_sum(irt) == 42);
+  ok1(prefix_sum(irt, _T("")) == 42);
+  ok1(prefix_sum(irt, _T("f")) == 42);
+  ok1(prefix_sum(irt, _T("fo")) == 42);
+  ok1(prefix_sum(irt, _T("foo")) == 42);
+  ok1(prefix_sum(irt, _T("foobar")) == 0);
 
   irt.add(_T("foa"), 0);
-  assert(all_sum(irt) == 42);
+  ok1(all_sum(irt) == 42);
   check_ascending_keys(irt);
 
   suggest = irt.suggest(_T("xyz"), buffer, 64);
-  assert(suggest == NULL);
+  ok1(suggest == NULL);
 
   suggest = irt.suggest(_T(""), buffer, 64);
-  assert(suggest != NULL);
-  assert(_tcscmp(suggest, _T("f")) == 0);
+  ok1(suggest != NULL);
+  ok1(_tcscmp(suggest, _T("f")) == 0);
 
   suggest = irt.suggest(_T("f"), buffer, 64);
-  assert(suggest != NULL);
-  assert(_tcscmp(suggest, _T("o")) == 0);
+  ok1(suggest != NULL);
+  ok1(_tcscmp(suggest, _T("o")) == 0);
 
   suggest = irt.suggest(_T("foo"), buffer, 64);
-  assert(suggest != NULL);
-  assert(_tcscmp(suggest, _T("")) == 0);
+  ok1(suggest != NULL);
+  ok1(_tcscmp(suggest, _T("")) == 0);
 
   irt.add(_T("bar"), 1);
-  assert(all_sum(irt) == 43);
-  assert(prefix_sum(irt, _T("")) == 43);
-  assert(prefix_sum(irt, _T("f")) == 42);
+  ok1(all_sum(irt) == 43);
+  ok1(prefix_sum(irt, _T("")) == 43);
+  ok1(prefix_sum(irt, _T("f")) == 42);
 
   suggest = irt.suggest(_T(""), buffer, 64);
-  assert(suggest != NULL);
-  assert(_tcscmp(suggest, _T("bf")) == 0);
+  ok1(suggest != NULL);
+  ok1(_tcscmp(suggest, _T("bf")) == 0);
 
   suggest = irt.suggest(_T("ba"), buffer, 64);
-  assert(suggest != NULL);
-  assert(_tcscmp(suggest, _T("r")) == 0);
+  ok1(suggest != NULL);
+  ok1(_tcscmp(suggest, _T("r")) == 0);
 
   irt.add(_T("foo"), 2);
-  assert(all_sum(irt) == 45);
-  assert(prefix_sum(irt, _T("")) == 45);
-  assert(prefix_sum(irt, _T("f")) == 44);
-  assert(prefix_sum(irt, _T("fo")) == 44);
-  assert(prefix_sum(irt, _T("foo")) == 44);
-  assert(prefix_sum(irt, _T("foobar")) == 0);
+  ok1(all_sum(irt) == 45);
+  ok1(prefix_sum(irt, _T("")) == 45);
+  ok1(prefix_sum(irt, _T("f")) == 44);
+  ok1(prefix_sum(irt, _T("fo")) == 44);
+  ok1(prefix_sum(irt, _T("foo")) == 44);
+  ok1(prefix_sum(irt, _T("foobar")) == 0);
 
   suggest = irt.suggest(_T("foo"), buffer, 64);
-  assert(suggest != NULL);
-  assert(_tcscmp(suggest, _T("")) == 0);
+  ok1(suggest != NULL);
+  ok1(_tcscmp(suggest, _T("")) == 0);
 
   irt.add(_T("baz"), 3);
-  assert(all_sum(irt) == 48);
-  assert(prefix_sum(irt, _T("b")) == 4);
-  assert(prefix_sum(irt, _T("ba")) == 4);
-  assert(prefix_sum(irt, _T("bar")) == 1);
-  assert(prefix_sum(irt, _T("baz")) == 3);
+  ok1(all_sum(irt) == 48);
+  ok1(prefix_sum(irt, _T("b")) == 4);
+  ok1(prefix_sum(irt, _T("ba")) == 4);
+  ok1(prefix_sum(irt, _T("bar")) == 1);
+  ok1(prefix_sum(irt, _T("baz")) == 3);
 
   suggest = irt.suggest(_T(""), buffer, 64);
-  assert(suggest != NULL);
-  assert(_tcscmp(suggest, _T("bf")) == 0);
+  ok1(suggest != NULL);
+  ok1(_tcscmp(suggest, _T("bf")) == 0);
 
   suggest = irt.suggest(_T("ba"), buffer, 64);
-  assert(suggest != NULL);
-  assert(_tcscmp(suggest, _T("rz")) == 0);
+  ok1(suggest != NULL);
+  ok1(_tcscmp(suggest, _T("rz")) == 0);
 
   irt.add(_T("foobar"), 4);
-  assert(all_sum(irt) == 52);
-  assert(prefix_sum(irt, _T("f")) == 48);
-  assert(prefix_sum(irt, _T("fo")) == 48);
-  assert(prefix_sum(irt, _T("foo")) == 48);
-  assert(prefix_sum(irt, _T("foobar")) == 4);
+  ok1(all_sum(irt) == 52);
+  ok1(prefix_sum(irt, _T("f")) == 48);
+  ok1(prefix_sum(irt, _T("fo")) == 48);
+  ok1(prefix_sum(irt, _T("foo")) == 48);
+  ok1(prefix_sum(irt, _T("foobar")) == 4);
 
   suggest = irt.suggest(_T("foo"), buffer, 64);
-  assert(suggest != NULL);
-  assert(_tcscmp(suggest, _T("b")) == 0);
+  ok1(suggest != NULL);
+  ok1(_tcscmp(suggest, _T("b")) == 0);
 
   irt.add(_T("fo"), 5);
-  assert(all_sum(irt) == 57);
-  assert(prefix_sum(irt, _T("f")) == 53);
-  assert(prefix_sum(irt, _T("fo")) == 53);
-  assert(prefix_sum(irt, _T("foo")) == 48);
-  assert(prefix_sum(irt, _T("foobar")) == 4);
+  ok1(all_sum(irt) == 57);
+  ok1(prefix_sum(irt, _T("f")) == 53);
+  ok1(prefix_sum(irt, _T("fo")) == 53);
+  ok1(prefix_sum(irt, _T("foo")) == 48);
+  ok1(prefix_sum(irt, _T("foobar")) == 4);
 
   irt.add(_T("fooz"), 6);
-  assert(all_sum(irt) == 63);
-  assert(prefix_sum(irt, _T("f")) == 59);
-  assert(prefix_sum(irt, _T("fo")) == 59);
-  assert(prefix_sum(irt, _T("foo")) == 54);
+  ok1(all_sum(irt) == 63);
+  ok1(prefix_sum(irt, _T("f")) == 59);
+  ok1(prefix_sum(irt, _T("fo")) == 59);
+  ok1(prefix_sum(irt, _T("foo")) == 54);
 
   suggest = irt.suggest(_T("foo"), buffer, 64);
-  assert(suggest != NULL);
-  assert(_tcscmp(suggest, _T("bz")) == 0);
+  ok1(suggest != NULL);
+  ok1(_tcscmp(suggest, _T("bz")) == 0);
 
   irt.add(_T("fooy"), 7);
-  assert(all_sum(irt) == 70);
-  assert(prefix_sum(irt, _T("f")) == 66);
-  assert(prefix_sum(irt, _T("fo")) == 66);
-  assert(prefix_sum(irt, _T("foo")) == 61);
+  ok1(all_sum(irt) == 70);
+  ok1(prefix_sum(irt, _T("f")) == 66);
+  ok1(prefix_sum(irt, _T("fo")) == 66);
+  ok1(prefix_sum(irt, _T("foo")) == 61);
 
   suggest = irt.suggest(_T("foo"), buffer, 64);
-  assert(suggest != NULL);
-  assert(_tcscmp(suggest, _T("byz")) == 0);
+  ok1(suggest != NULL);
+  ok1(_tcscmp(suggest, _T("byz")) == 0);
 
   irt.add(_T("foo"), 8);
-  assert(all_sum(irt) == 78);
-  assert(prefix_sum(irt, _T("foo")) == 69);
+  ok1(all_sum(irt) == 78);
+  ok1(prefix_sum(irt, _T("foo")) == 69);
 
   irt.remove(_T("foo"), 42);
-  assert(all_sum(irt) == 36);
-  assert(prefix_sum(irt, _T("foo")) == 27);
+  ok1(all_sum(irt) == 36);
+  ok1(prefix_sum(irt, _T("foo")) == 27);
 
   irt.remove(_T("foo"));
-  assert(all_sum(irt) == 26);
-  assert(prefix_sum(irt, _T("")) == 26);
-  assert(prefix_sum(irt, _T("foo")) == 17);
+  ok1(all_sum(irt) == 26);
+  ok1(prefix_sum(irt, _T("")) == 26);
+  ok1(prefix_sum(irt, _T("foo")) == 17);
 
   irt.add(_T(""), 9);
-  assert(all_sum(irt) == 35);
-  assert(prefix_sum(irt, _T("")) == 35);
-  assert(prefix_sum(irt, _T("foo")) == 17);
+  ok1(all_sum(irt) == 35);
+  ok1(prefix_sum(irt, _T("")) == 35);
+  ok1(prefix_sum(irt, _T("foo")) == 17);
 
   check_ascending_keys(irt);
 

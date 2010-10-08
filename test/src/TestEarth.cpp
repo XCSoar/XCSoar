@@ -42,31 +42,33 @@
 
 int main(int argc, char **argv)
 {
+  plan_tests(8);
+
   const GeoPoint a(Angle::degrees(fixed(7.7061111111111114)),
                    Angle::degrees(fixed(51.051944444444445)));
   const GeoPoint b(Angle::degrees(fixed(7.599444444444444)),
                    Angle::degrees(fixed(51.099444444444444)));
 
   fixed distance = Distance(a, b);
-  assert(distance > fixed(9130) && distance < fixed(9140));
+  ok1(distance > fixed(9130) && distance < fixed(9140));
 
   Angle bearing = Bearing(a, b);
-  assert(bearing.value_degrees() > fixed(304));
-  assert(bearing.value_degrees() < fixed(306));
+  ok1(bearing.value_degrees() > fixed(304));
+  ok1(bearing.value_degrees() < fixed(306));
 
   bearing = Bearing(b, a);
-  assert(bearing.value_degrees() > fixed(124));
-  assert(bearing.value_degrees() < fixed(126));
+  ok1(bearing.value_degrees() > fixed(124));
+  ok1(bearing.value_degrees() < fixed(126));
 
   distance = ProjectedDistance(a, b, a);
-  assert(is_zero(distance));
+  ok1(is_zero(distance));
   distance = ProjectedDistance(a, b, b);
-  assert(distance > fixed(9120) && distance < fixed(9140));
+  ok1(distance > fixed(9120) && distance < fixed(9140));
 
   const GeoPoint middle(a.Longitude.Fraction(b.Longitude, fixed_half),
                         a.Latitude.Fraction(b.Latitude, fixed_half));
   distance = ProjectedDistance(a, b, middle);
-  assert(distance > fixed(9100/2) && distance < fixed(9140/2));
+  ok1(distance > fixed(9100/2) && distance < fixed(9140/2));
 
   return 0;
 }
