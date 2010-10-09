@@ -29,6 +29,17 @@ def __get_tile_name(lat, lon):
 
     return "srtm_%02d_%02d" % (col, row)
 
+def __extract_tile(path_tile_zip, dir_temp, filename):
+    try:
+        zip = ZipFile(path_tile_zip, "r")
+    except BadZipfile:
+        print "Decompression of the file "+filename+".zip failed!"
+        print "Please verify the file's integrity before continuing."
+        raise
+
+    zip.extract(filename + ".tif", dir_temp)
+    zip.close()
+    
 def __gather_tile(dir_data, dir_temp, lat, lon):
     # generate filename to search for
     filename = __get_tile_name(lat, lon)
@@ -62,16 +73,7 @@ def __gather_tile(dir_data, dir_temp, lat, lon):
         return None
 
     print "Tile " + filename + " found inside zip file! -> Decompressing ..."
-    # decompress the ZIP file to the temporary folder
-    try:
-        zip = ZipFile(path_tile_zip, "r")
-    except BadZipfile:
-        print "Decompression of the file "+filename+".zip failed!"
-        print "Please verify the file's integrity before continuing."
-        raise
-    
-    zip.extract(filename + ".tif", dir_temp)
-    zip.close()
+    __extract_tile(path_tile_zip, dir_temp, filename)
 
     # check if the GeoTIFF file now exists in the temporary folder
     path_tile = os.path.join(dir_temp, filename + ".tif")
