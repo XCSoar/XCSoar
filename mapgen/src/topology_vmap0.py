@@ -87,7 +87,17 @@ def __create_layer_from_map(bounds, layer, map_name, overwrite, dir_data, dir_te
     arg.append(layer[0])
     arg.extend(["-nln", layer[1]])
 
-    p = subprocess.Popen(arg)
+    try:
+        p = subprocess.Popen(arg)
+    except OSError, WindowsError:
+        print ("There has been a problem running the ogr2ogr application "+
+               "that extracts the wanted topology features from the "
+               "source shapefiles!")
+        print ("Please check the \"cmd_ogr2ogr\" variable in the "+
+               "topology_vmap0 module and modify it if necessary.")
+        print "Current value: \""+cmd_ogr2ogr+"\""
+        return False
+
     p.wait()
 
     return True
