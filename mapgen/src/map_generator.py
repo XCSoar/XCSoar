@@ -102,6 +102,7 @@ class MapGenerator:
         topology_files = topology_vmap0.Create(bounds, self.__dir_data,
                                                self.__dir_temp)
         if topology_files == None:
+            print "Topology creation failed!"
             return False
 
         self.__files.extend(topology_files)
@@ -120,6 +121,7 @@ class MapGenerator:
         terrain_files = terrain_srtm.Create(bounds, arcseconds_per_pixel,
                                            self.__dir_data, self.__dir_temp)
         if terrain_files == None:
+            print "Terrain creation failed!"
             return False
 
         self.__files.extend(terrain_files)
