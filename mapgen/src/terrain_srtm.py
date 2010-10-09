@@ -5,7 +5,7 @@ import urllib
 import socket
 
 from georect import GeoRect
-from zipfile import ZipFile
+from zipfile import ZipFile, BadZipfile
 
 cmd_gdal_warp = "gdalwarp"
 cmd_geojasper = "geojasper"
@@ -60,7 +60,13 @@ def __gather_tile(dir_data, dir_temp, lat, lon):
 
     print "Tile " + filename + " found inside zip file! -> Decompressing ..."
     # decompress the ZIP file to the temporary folder
-    zip = ZipFile(os.path.join(dir_data, filename + ".zip"), "r")
+    try:
+        zip = ZipFile(os.path.join(dir_data, filename + ".zip"), "r")
+    except BadZipfile:
+        print "Decompression of the file "+filename+".zip failed!"
+        print "Please verify the file's integrity before continuing."
+        raise
+    
     zip.extract(filename + ".tif", dir_temp)
     zip.close()
 
