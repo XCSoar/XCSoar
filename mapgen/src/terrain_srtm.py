@@ -31,7 +31,11 @@ def __get_tile_name(lat, lon):
 
 def __download_tile(path_tile_zip, filename):
     socket.setdefaulttimeout(10)
-    urllib.urlretrieve(gather_from_server + filename + ".zip", path_tile_zip)
+    try:
+        urllib.urlretrieve(gather_from_server + filename + ".zip", 
+                           path_tile_zip)
+    except IOError:
+        print "Download of tile " + filename + " failed!"
 
 def __extract_tile(path_tile_zip, dir_temp, filename):
     try:
