@@ -180,7 +180,7 @@ def __create(dir_temp, tiles, arcseconds_per_pixel, bounds):
         print ("Please check the \"cmd_gdal_warp\" variable in the "+
                "terrain_srtm module and modify it if necessary.")
         print "Current value: \""+cmd_gdal_warp+"\""
-        raise
+        return None
     
     p.wait()
 
@@ -233,7 +233,7 @@ def __convert(dir_temp, input_file, rc):
         print ("Please check the \"cmd_geojasper\" variable in the "+
                "terrain_srtm module and modify it if necessary.")
         print "Current value: \""+cmd_geojasper+"\""
-        raise
+        return None
     
     p.wait()
     
@@ -267,7 +267,13 @@ def Create(bounds, arcseconds_per_pixel = 9.0,
         return None
 
     terrain_file = __create(dir_temp, tiles, arcseconds_per_pixel, bounds)
+    if terrain_file == None:
+        return None
+    
     final_files = __convert(dir_temp, terrain_file, bounds)
+    if final_files == None:
+        return None
+    
     __cleanup(dir_temp)
 
     return final_files
