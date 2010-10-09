@@ -151,7 +151,16 @@ def __create(dir_temp, tiles, arcseconds_per_pixel, bounds):
     args.extend(tiles)
     args.append(output_file)
 
-    p = subprocess.Popen(args)
+    try:
+        p = subprocess.Popen(args)
+    except OSError, WindowsError:
+        print ("There has been a problem running the gdalwarp application "+
+               "that creates the appropriate GeoTIFF terrain file!")
+        print ("Please check the \"cmd_gdal_warp\" variable in the "+
+               "terrain_srtm module and modify it if necessary.")
+        print "Current value: \""+cmd_gdal_warp+"\""
+        raise
+    
     p.wait()
 
     return output_file
@@ -195,7 +204,16 @@ def __convert(dir_temp, input_file, rc):
                      "-O", "latmax=" + str(rc.top.value_degrees()),
                      "-O", "latmin=" + str(rc.bottom.value_degrees())])
 
-    p = subprocess.Popen(args)
+    try:
+        p = subprocess.Popen(args)
+    except OSError, WindowsError:
+        print ("There has been a problem running the geojasper application "+
+               "that converts the GeoTIFF terrain file to GeoJP2!")
+        print ("Please check the \"cmd_geojasper\" variable in the "+
+               "terrain_srtm module and modify it if necessary.")
+        print "Current value: \""+cmd_geojasper+"\""
+        raise
+    
     p.wait()
     
     output = [[output_file, False]]
