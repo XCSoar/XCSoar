@@ -34,11 +34,11 @@ def __extract_tile(path_tile_zip, dir_temp, filename):
         zip = ZipFile(path_tile_zip, "r")
     except BadZipfile:
         print "Decompression of the file "+filename+".zip failed!"
-        print "Please verify the file's integrity before continuing."
-        raise
+        return False
 
     zip.extract(filename + ".tif", dir_temp)
     zip.close()
+    return True
     
 def __gather_tile(dir_data, dir_temp, lat, lon):
     # generate filename to search for
@@ -58,27 +58,30 @@ def __gather_tile(dir_data, dir_temp, lat, lon):
         print "Tile " + filename + " found!"
         return path_tile
 
-    # if the ZIP file doesn't exist in the data folder try to download it
     path_tile_zip = os.path.join(dir_data, filename + ".zip")
-    if gather_from_server != None:
+    for i in range(1, 4):
+        # if the ZIP file doesn't exist in the data folder try to download it
+        if gather_from_server != None:
+            if not os.path.exists(path_tile_zip):
+                print "Downloading tile " + filename + " from the internet ..."
+                socket.setdefaulttimeout(10)
+                urllib.urlretrieve(gather_from_server + filename + ".zip",
+                                   path_tile_zip)
+    
+        # check if the ZIP file exists in the data folder
         if not os.path.exists(path_tile_zip):
-            print "Downloading tile " + filename + " from the internet ..."
-            socket.setdefaulttimeout(10)
-            urllib.urlretrieve(gather_from_server + filename + ".zip",
-                               path_tile_zip)
-
-    # check if the ZIP file exists in the data folder
-    if not os.path.exists(path_tile_zip):
-        print "Tile " + filename + " can not be found!"
-        return None
-
-    print "Tile " + filename + " found inside zip file! -> Decompressing ..."
-    __extract_tile(path_tile_zip, dir_temp, filename)
-
-    # check if the GeoTIFF file now exists in the temporary folder
-    path_tile = os.path.join(dir_temp, filename + ".tif")
-    if os.path.exists(path_tile):
-        return path_tile
+            print "Tile " + filename + " can not be found!"
+            return None
+    
+        print "Tile " + filename + " found inside zip file! -> Decompressing ..."
+        if not __extract_tile(path_tile_zip, dir_temp, filename):
+            os.unlink(path_tile_zip)
+            continue
+    
+        # check if the GeoTIFF file now exists in the temporary folder
+        path_tile = os.path.join(dir_temp, filename + ".tif")
+        if os.path.exists(path_tile):
+            return path_tile
 
     print "Decompression failed!"
     return None
