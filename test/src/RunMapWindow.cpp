@@ -301,7 +301,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TestWindow window;
   GenerateBlackboard(window.map);
   window.set(0, 0, 640, 480);
-  Fonts::Initialize(false);
+  Fonts::Initialize();
   DrawThread::Draw(window.map);
   window.show();
 

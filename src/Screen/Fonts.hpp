@@ -59,8 +59,8 @@ namespace Fonts
   void SetFont(Font *theFont, LOGFONT autoLogFont,
                       LOGFONT *LogFontUsed = NULL);
 
-  void
-  Initialize(bool use_custom);
+  void Initialize();
+  void LoadCustom();
 
   const TCHAR* GetStandardFontFace();
 }

@@ -221,7 +221,7 @@ InitialiseLogFonts()
 }
 
 void
-Fonts::Initialize(bool use_custom)
+Fonts::Initialize()
 {
   InitialiseLogFonts();
 
@@ -234,16 +234,18 @@ Fonts::Initialize(bool use_custom)
   SetFont(&MapLabel, LogMapLabel);
   SetFont(&Map, LogMap);
   SetFont(&MapBold, LogMapBold);
+}
 
-  if (use_custom) {
-    LoadCustomFont(&InfoBox, szProfileFontInfoWindowFont);
-    LoadCustomFont(&InfoBoxSmall, szProfileFontTitleSmallWindowFont);
-    LoadCustomFont(&Title, szProfileFontTitleWindowFont);
-    LoadCustomFont(&CDI, szProfileFontCDIWindowFont);
-    LoadCustomFont(&MapLabel, szProfileFontMapLabelFont);
-    LoadCustomFont(&Map, szProfileFontMapWindowFont);
-    LoadCustomFont(&MapBold, szProfileFontMapWindowBoldFont);
-  }
+void
+Fonts::LoadCustom()
+{
+  LoadCustomFont(&InfoBox, szProfileFontInfoWindowFont);
+  LoadCustomFont(&InfoBoxSmall, szProfileFontTitleSmallWindowFont);
+  LoadCustomFont(&Title, szProfileFontTitleWindowFont);
+  LoadCustomFont(&CDI, szProfileFontCDIWindowFont);
+  LoadCustomFont(&MapLabel, szProfileFontMapLabelFont);
+  LoadCustomFont(&Map, szProfileFontMapWindowFont);
+  LoadCustomFont(&MapBold, szProfileFontMapWindowBoldFont);
 }
 
 const TCHAR*

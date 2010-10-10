@@ -116,7 +116,9 @@ MainWindow::initialise()
   MapGfx.Initialise();
 
   LogStartUp(_T("Initialise fonts"));
-  Fonts::Initialize(Appearance.UseCustomFonts);
+  Fonts::Initialize();
+  if (Appearance.UseCustomFonts)
+    Fonts::LoadCustom();
 
   LogStartUp(_T("Create info boxes"));
   InfoBoxManager::Create(rc);

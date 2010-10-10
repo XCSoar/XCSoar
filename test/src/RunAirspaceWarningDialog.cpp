@@ -126,7 +126,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   LoadFiles();
 
-  Fonts::Initialize(false);
+  Fonts::Initialize();
 
   Airspaces::AirspaceTree::const_iterator it = airspace_database.begin();
 
@@ -141,7 +141,10 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   main_window.show();
 
   Layout::Initialize(640, 480);
-  Fonts::Initialize(Appearance.UseCustomFonts);
+
+  Fonts::Initialize();
+  if (Appearance.UseCustomFonts)
+    Fonts::LoadCustom();
 
   dlgAirspaceWarningInit(main_window);
   dlgAirspaceWarningShowDlg();
