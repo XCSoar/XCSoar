@@ -148,7 +148,7 @@ Fonts::LoadCustomFont(Font *theFont, const TCHAR FontRegKey[], LOGFONT * LogFont
 }
 
 static void
-InitialiseFontsAltair()
+LoadAltairLogFonts()
 {
   if (!is_altair())
     return;
@@ -219,7 +219,7 @@ InitialiseLogFonts()
   InitialiseLogfont(&LogInfoBoxSmall, Fonts::GetStandardFontFace(),
                     Layout::Scale(20));
 
-  InitialiseFontsAltair();
+  LoadAltairLogFonts();
 }
 
 void
