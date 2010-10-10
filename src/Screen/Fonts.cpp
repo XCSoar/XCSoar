@@ -238,8 +238,6 @@ Fonts::Initialize()
   SetFont(&MapLabel, LogMapLabel);
   SetFont(&Map, LogMap);
   SetFont(&MapBold, LogMapBold);
-
-  SizeInfoboxFont();
 }
 
 void

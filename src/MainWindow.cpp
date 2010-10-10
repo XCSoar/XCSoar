@@ -124,6 +124,8 @@ MainWindow::InitialiseConfigured()
 {
   RECT rc = get_client_rect();
 
+  Fonts::SizeInfoboxFont();
+
   if (Appearance.UseCustomFonts)
     LogStartUp(_T("Load fonts"));
     Fonts::LoadCustom();
