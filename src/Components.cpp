@@ -252,7 +252,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   LocalPath(path, _T("cache"));
   file_cache = new FileCache(path);
 
-  MapGfx.InitialiseConfigured(SettingsMap());
+  Graphics::InitialiseConfigured(SettingsMap());
 
 #ifndef DEBUG_TRANSLATIONS
   ReadLanguageFile();

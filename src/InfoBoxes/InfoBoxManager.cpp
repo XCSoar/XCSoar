@@ -489,15 +489,15 @@ InfoBoxManager::Create(RECT rc)
 
   info_box_look.colors[0] = border_color;
   info_box_look.colors[1] = Appearance.InverseInfoBox
-    ? MapGfx.inv_redColor : Color::RED;
+    ? Graphics::inv_redColor : Color::RED;
   info_box_look.colors[2] = Appearance.InverseInfoBox
-    ? MapGfx.inv_blueColor : Color::BLUE;
+    ? Graphics::inv_blueColor : Color::BLUE;
   info_box_look.colors[3] = Appearance.InverseInfoBox
-    ? MapGfx.inv_greenColor : Color::GREEN;
+    ? Graphics::inv_greenColor : Color::GREEN;
   info_box_look.colors[4] = Appearance.InverseInfoBox
-    ? MapGfx.inv_yellowColor : Color::YELLOW;
+    ? Graphics::inv_yellowColor : Color::YELLOW;
   info_box_look.colors[5] = Appearance.InverseInfoBox
-    ? MapGfx.inv_magentaColor : Color::MAGENTA;
+    ? Graphics::inv_magentaColor : Color::MAGENTA;
 
   WindowStyle style;
   style.hide();

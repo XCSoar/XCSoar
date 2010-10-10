@@ -178,11 +178,11 @@ private:
 
   void set_buffer_pens(const AbstractAirspace &airspace) {
     // this color is used as the black bit
-    m_buffer.set_text_color(light_color(MapGfx.Colours[m_settings_map.
-                                                       iAirspaceColour[airspace.get_type()]]));
+    m_buffer.set_text_color(light_color(Graphics::Colours[m_settings_map.
+                                        iAirspaceColour[airspace.get_type()]]));
 
     // get brush, can be solid or a 1bpp bitmap
-    m_buffer.select(MapGfx.hAirspaceBrushes[m_settings_map.
+    m_buffer.select(Graphics::hAirspaceBrushes[m_settings_map.
                                             iAirspaceBrush[airspace.get_type()]]);
     m_buffer.white_pen();
 
@@ -216,7 +216,7 @@ public:
 protected:
   void setup_canvas(const AbstractAirspace &airspace) {
     if (!black)
-      canvas.select(MapGfx.hAirspacePens[airspace.get_type()]);
+      canvas.select(Graphics::hAirspacePens[airspace.get_type()]);
   }
 
 public:
@@ -237,7 +237,7 @@ MapWindow::DrawAirspaceIntersections(Canvas &canvas) const
   for (unsigned i = m_airspace_intersections.size(); i--;) {
     POINT sc;
     if (render_projection.LonLat2ScreenIfVisible(m_airspace_intersections[i], &sc))
-      MapGfx.hAirspaceInterceptBitmap.draw(canvas, bitmap_canvas, sc.x, sc.y);
+      Graphics::hAirspaceInterceptBitmap.draw(canvas, bitmap_canvas, sc.x, sc.y);
   }
 }
 

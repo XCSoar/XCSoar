@@ -191,7 +191,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
 
     if (label_block ? label_block->check(brect) : true) {
       if (Mode.AsFlag.Border)
-        canvas.select(MapGfx.hpMapScale);
+        canvas.select(Graphics::hpMapScale);
       else
         canvas.white_pen();
 

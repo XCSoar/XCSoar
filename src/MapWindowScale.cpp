@@ -72,7 +72,7 @@ MapWindow::findMapScaleBarSize(const RECT &rc,
 void
 MapWindow::DrawMapScale2(Canvas &canvas, const RECT &rc, const MapWindowProjection &projection) const
 {
-  canvas.select(MapGfx.hpMapScale);
+  canvas.select(Graphics::hpMapScale);
 
   bool color = false;
   POINT Start, End = { 0, 0 };
@@ -158,9 +158,9 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT &rc, const MapWindowProjectio
               rc.bottom - Fonts::MapBold.get_ascent_height() - IBLSCALE(1),
               ScaleInfo);
 
-  draw_bitmap(canvas, bitmap_canvas, MapGfx.hBmpMapScale,
+  draw_bitmap(canvas, bitmap_canvas, Graphics::hBmpMapScale,
               0, rc.bottom - Height, 0, 0, 6, 11);
-  draw_bitmap(canvas, bitmap_canvas, MapGfx.hBmpMapScale,
+  draw_bitmap(canvas, bitmap_canvas, Graphics::hBmpMapScale,
               IBLSCALE(14) + TextSize.cx, rc.bottom - Height, 6, 0, 8, 11);
 
   const UnitSymbol *symbol = GetUnitSymbol(Unit);

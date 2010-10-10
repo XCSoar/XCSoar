@@ -64,7 +64,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas, Canvas &buffer)
 
   buffer.set_background_color(Color::WHITE);
   buffer.set_text_color(Color(0xf0,0xf0,0xf0));
-  buffer.clear(MapGfx.hAboveTerrainBrush);
+  buffer.clear(Graphics::hAboveTerrainBrush);
 
   buffer.white_pen();
   buffer.white_brush();
@@ -78,10 +78,10 @@ void
 MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
 {
   if (SettingsComputer().FinalGlideTerrain) {
-    canvas.select(MapGfx.hpTerrainLineBg);
+    canvas.select(Graphics::hpTerrainLineBg);
     canvas.polyline(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1);
 
-    canvas.select(MapGfx.hpTerrainLine);
+    canvas.select(Graphics::hpTerrainLine);
     canvas.polyline(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1);
   }
 
@@ -92,7 +92,7 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
     POINT sc;
     if (render_projection.LonLat2ScreenIfVisible(Calculated().TerrainWarningLocation,
                                                  &sc))
-      MapGfx.hTerrainWarning.draw(canvas, bitmap_canvas, sc.x, sc.y);
+      Graphics::hTerrainWarning.draw(canvas, bitmap_canvas, sc.x, sc.y);
   }
 }
 

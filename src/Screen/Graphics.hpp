@@ -57,8 +57,7 @@ class LabelBlock;
 // bit 3 == landable TP label          / 8
 // bit 4 == center alligned
 
-class ScreenGraphics {
-public:
+namespace Graphics {
   void Initialise();
   void InitialiseConfigured(const SETTINGS_MAP &settings_map);
   void InitSnailTrail(const SETTINGS_MAP &settings_map);
@@ -71,107 +70,105 @@ public:
   const Color GetAirspaceColourByClass(const int i, const SETTINGS_MAP &settings);
   const Brush &GetAirspaceBrushByClass(const int i, const SETTINGS_MAP &settings);
 
-  Pen hAirspacePens[AIRSPACECLASSCOUNT];
-  Brush hAirspaceBrushes[NUMAIRSPACEBRUSHES];
-  Bitmap hAirspaceBitmap[NUMAIRSPACEBRUSHES];
+  extern Pen hAirspacePens[AIRSPACECLASSCOUNT];
+  extern Brush hAirspaceBrushes[NUMAIRSPACEBRUSHES];
+  extern Bitmap hAirspaceBitmap[NUMAIRSPACEBRUSHES];
 
-  Brush infoSelectedBrush;
-  Brush infoUnselectedBrush;
+  extern Brush infoSelectedBrush;
+  extern Brush infoUnselectedBrush;
 
-  Pen hSnailPens[NUMSNAILCOLORS];
-  Color hSnailColours[NUMSNAILCOLORS];
+  extern Pen hSnailPens[NUMSNAILCOLORS];
+  extern Color hSnailColours[NUMSNAILCOLORS];
 
-  Bitmap hAboveTerrainBitmap;
-  Brush hAboveTerrainBrush;
-  MaskedIcon hAirspaceInterceptBitmap;
-  MaskedIcon hTerrainWarning;
-  MaskedIcon hFLARMTraffic;
-  MaskedIcon hLogger, hLoggerOff;
-  MaskedIcon hCruise, hClimb, hFinalGlide, hAbort;
-  MaskedIcon hAutoMacCready;
-  MaskedIcon hGPSStatus1, hGPSStatus2;
+  extern Bitmap hAboveTerrainBitmap;
+  extern Brush hAboveTerrainBrush;
+  extern MaskedIcon hAirspaceInterceptBitmap;
+  extern MaskedIcon hTerrainWarning;
+  extern MaskedIcon hFLARMTraffic;
+  extern MaskedIcon hLogger, hLoggerOff;
+  extern MaskedIcon hCruise, hClimb, hFinalGlide, hAbort;
+  extern MaskedIcon hAutoMacCready;
+  extern MaskedIcon hGPSStatus1, hGPSStatus2;
 
-  Brush hBackgroundBrush;
+  extern Brush hBackgroundBrush;
 
-  Pen hpAircraft;
-  Pen hpAircraftBorder;
-  Pen hpWind;
-  Pen hpWindThick;
-  Pen hpBearing;
-  Pen hpBestCruiseTrack;
-  Pen hpCompass;
-  Pen hpThermalBand;
-  Pen hpThermalBandGlider;
-  Pen hpFinalGlideAbove;
-  Pen hpFinalGlideBelow;
-  Pen hpFinalGlideBelowLandable;
-  Pen hpMapScale;
-  Pen hpTerrainLine;
-  Pen hpTerrainLineBg;
-  Pen hpVisualGlideLightRed;
-  Pen hpVisualGlideHeavyRed;
-  Pen hpVisualGlideLightBlack;
-  Pen hpVisualGlideHeavyBlack;
-  Pen hpVisualGlideExtra;
-  Pen hpSpeedFast;
-  Pen hpSpeedSlow;
-  Pen hpStartFinishThick;
-  Pen hpStartFinishThin;
+  extern Pen hpAircraft;
+  extern Pen hpAircraftBorder;
+  extern Pen hpWind;
+  extern Pen hpWindThick;
+  extern Pen hpBearing;
+  extern Pen hpBestCruiseTrack;
+  extern Pen hpCompass;
+  extern Pen hpThermalBand;
+  extern Pen hpThermalBandGlider;
+  extern Pen hpFinalGlideAbove;
+  extern Pen hpFinalGlideBelow;
+  extern Pen hpFinalGlideBelowLandable;
+  extern Pen hpMapScale;
+  extern Pen hpTerrainLine;
+  extern Pen hpTerrainLineBg;
+  extern Pen hpVisualGlideLightRed;
+  extern Pen hpVisualGlideHeavyRed;
+  extern Pen hpVisualGlideLightBlack;
+  extern Pen hpVisualGlideHeavyBlack;
+  extern Pen hpVisualGlideExtra;
+  extern Pen hpSpeedFast;
+  extern Pen hpSpeedSlow;
+  extern Pen hpStartFinishThick;
+  extern Pen hpStartFinishThin;
 
-  Brush hbCompass;
-  Brush hbThermalBand;
-  Brush hbBestCruiseTrack;
-  Brush hbFinalGlideBelow;
-  Brush hbFinalGlideBelowLandable;
-  Brush hbFinalGlideAbove;
-  Brush hbWind;
+  extern Brush hbCompass;
+  extern Brush hbThermalBand;
+  extern Brush hbBestCruiseTrack;
+  extern Brush hbFinalGlideBelow;
+  extern Brush hbFinalGlideBelowLandable;
+  extern Brush hbFinalGlideAbove;
+  extern Brush hbWind;
 
-  Pen hpCompassBorder;
-  Brush hBrushFlyingModeAbort;
+  extern Pen hpCompassBorder;
+  extern Brush hBrushFlyingModeAbort;
 
-  MaskedIcon SmallIcon, TurnPointIcon;
-  MaskedIcon AirportReachableIcon, AirportUnreachableIcon;
-  MaskedIcon FieldReachableIcon, FieldUnreachableIcon;
-  MaskedIcon hBmpThermalSource;
-  MaskedIcon hBmpTarget;
-  MaskedIcon hBmpTeammatePosition;
+  extern MaskedIcon SmallIcon, TurnPointIcon;
+  extern MaskedIcon AirportReachableIcon, AirportUnreachableIcon;
+  extern MaskedIcon FieldReachableIcon, FieldUnreachableIcon;
+  extern MaskedIcon hBmpThermalSource;
+  extern MaskedIcon hBmpTarget;
+  extern MaskedIcon hBmpTeammatePosition;
 
-  Bitmap hBmpMapScale;
-  Bitmap hBmpClimbeAbort;
-  Bitmap hBmpUnitKm;
-  Bitmap hBmpUnitSm;
-  Bitmap hBmpUnitNm;
-  Bitmap hBmpUnitM;
-  Bitmap hBmpUnitFt;
-  Bitmap hBmpUnitMpS;
+  extern Bitmap hBmpMapScale;
+  extern Bitmap hBmpClimbeAbort;
+  extern Bitmap hBmpUnitKm;
+  extern Bitmap hBmpUnitSm;
+  extern Bitmap hBmpUnitNm;
+  extern Bitmap hBmpUnitM;
+  extern Bitmap hBmpUnitFt;
+  extern Bitmap hBmpUnitMpS;
 
   // used for flarm
-  Brush AlarmBrush;
-  Brush WarningBrush;
-  Brush TrafficBrush;
+  extern Brush AlarmBrush;
+  extern Brush WarningBrush;
+  extern Brush TrafficBrush;
 
   // misc
-  static const Color BackgroundColor;
-  static const Color TaskColor;
-  static const Color Colours[NUMAIRSPACECOLORS];
+  extern const Color BackgroundColor;
+  extern const Color TaskColor;
+  extern const Color Colours[NUMAIRSPACECOLORS];
 
   // used by infobox and gauges
-  static const Color inv_redColor;
-  static const Color inv_blueColor;
+  extern const Color inv_redColor;
+  extern const Color inv_blueColor;
   // Not really used, tested and dropped. But useful for the future
-  static const Color inv_yellowColor;
-  static const Color inv_greenColor;
-  static const Color inv_magentaColor;
+  extern const Color inv_yellowColor;
+  extern const Color inv_greenColor;
+  extern const Color inv_magentaColor;
 
   // these used for infoboxes/buttons
-  static const Color ColorSelected;
-  static const Color ColorUnselected;
-  static const Color ColorWarning;
-  static const Color ColorOK;
-  static const Color ColorBlack;
-  static const Color ColorMidGrey;
+  extern const Color ColorSelected;
+  extern const Color ColorUnselected;
+  extern const Color ColorWarning;
+  extern const Color ColorOK;
+  extern const Color ColorBlack;
+  extern const Color ColorMidGrey;
 };
-
-extern ScreenGraphics MapGfx;
 
 #endif

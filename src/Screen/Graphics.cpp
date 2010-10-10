@@ -57,50 +57,130 @@ const COLORRAMP snail_colors[] = {
   {501, 0x00, 0xff, 0x3e}
 };
 
+Pen Graphics::hAirspacePens[AIRSPACECLASSCOUNT];
+Brush Graphics::hAirspaceBrushes[NUMAIRSPACEBRUSHES];
+Bitmap Graphics::hAirspaceBitmap[NUMAIRSPACEBRUSHES];
+
+Brush Graphics::infoSelectedBrush;
+Brush Graphics::infoUnselectedBrush;
+
+Pen Graphics::hSnailPens[NUMSNAILCOLORS];
+Color Graphics::hSnailColours[NUMSNAILCOLORS];
+
+Bitmap Graphics::hAboveTerrainBitmap;
+Brush Graphics::hAboveTerrainBrush;
+MaskedIcon Graphics::hAirspaceInterceptBitmap;
+MaskedIcon Graphics::hTerrainWarning;
+MaskedIcon Graphics::hFLARMTraffic;
+MaskedIcon Graphics::hLogger, Graphics::hLoggerOff;
+MaskedIcon Graphics::hCruise, Graphics::hClimb,
+           Graphics::hFinalGlide, Graphics::hAbort;
+MaskedIcon Graphics::hAutoMacCready;
+MaskedIcon Graphics::hGPSStatus1, Graphics::hGPSStatus2;
+
+Brush Graphics::hBackgroundBrush;
+
+Pen Graphics::hpAircraft;
+Pen Graphics::hpAircraftBorder;
+Pen Graphics::hpWind;
+Pen Graphics::hpWindThick;
+Pen Graphics::hpBearing;
+Pen Graphics::hpBestCruiseTrack;
+Pen Graphics::hpCompass;
+Pen Graphics::hpThermalBand;
+Pen Graphics::hpThermalBandGlider;
+Pen Graphics::hpFinalGlideAbove;
+Pen Graphics::hpFinalGlideBelow;
+Pen Graphics::hpFinalGlideBelowLandable;
+Pen Graphics::hpMapScale;
+Pen Graphics::hpTerrainLine;
+Pen Graphics::hpTerrainLineBg;
+Pen Graphics::hpVisualGlideLightRed;
+Pen Graphics::hpVisualGlideHeavyRed;
+Pen Graphics::hpVisualGlideLightBlack;
+Pen Graphics::hpVisualGlideHeavyBlack;
+Pen Graphics::hpVisualGlideExtra;
+Pen Graphics::hpSpeedFast;
+Pen Graphics::hpSpeedSlow;
+Pen Graphics::hpStartFinishThick;
+Pen Graphics::hpStartFinishThin;
+
+Brush Graphics::hbCompass;
+Brush Graphics::hbThermalBand;
+Brush Graphics::hbBestCruiseTrack;
+Brush Graphics::hbFinalGlideBelow;
+Brush Graphics::hbFinalGlideBelowLandable;
+Brush Graphics::hbFinalGlideAbove;
+Brush Graphics::hbWind;
+
+Pen Graphics::hpCompassBorder;
+Brush Graphics::hBrushFlyingModeAbort;
+
+MaskedIcon Graphics::SmallIcon, Graphics::TurnPointIcon;
+MaskedIcon Graphics::AirportReachableIcon, Graphics::AirportUnreachableIcon;
+MaskedIcon Graphics::FieldReachableIcon, Graphics::FieldUnreachableIcon;
+MaskedIcon Graphics::hBmpThermalSource;
+MaskedIcon Graphics::hBmpTarget;
+MaskedIcon Graphics::hBmpTeammatePosition;
+
+Bitmap Graphics::hBmpMapScale;
+Bitmap Graphics::hBmpClimbeAbort;
+Bitmap Graphics::hBmpUnitKm;
+Bitmap Graphics::hBmpUnitSm;
+Bitmap Graphics::hBmpUnitNm;
+Bitmap Graphics::hBmpUnitM;
+Bitmap Graphics::hBmpUnitFt;
+Bitmap Graphics::hBmpUnitMpS;
+
+// used for flarm
+Brush Graphics::AlarmBrush;
+Brush Graphics::WarningBrush;
+Brush Graphics::TrafficBrush;
+
 // airspace brushes/colours
 const Color
-ScreenGraphics::GetAirspaceColour(const int i)
+Graphics::GetAirspaceColour(const int i)
 {
   return Colours[i];
 }
 
 const Brush &
-ScreenGraphics::GetAirspaceBrush(const int i)
+Graphics::GetAirspaceBrush(const int i)
 {
   return hAirspaceBrushes[i];
 }
 
 const Color
-ScreenGraphics::GetAirspaceColourByClass(const int i,
+Graphics::GetAirspaceColourByClass(const int i,
     const SETTINGS_MAP &settings)
 {
   return Colours[settings.iAirspaceColour[i]];
 }
 
 const Brush &
-ScreenGraphics::GetAirspaceBrushByClass(const int i,
+Graphics::GetAirspaceBrushByClass(const int i,
     const SETTINGS_MAP &settings)
 {
   return hAirspaceBrushes[settings.iAirspaceBrush[i]];
 }
 
-const Color ScreenGraphics::ColorSelected = Color(0xC0, 0xC0, 0xC0);
-const Color ScreenGraphics::ColorUnselected = Color::WHITE;
-const Color ScreenGraphics::ColorWarning = Color::RED;
-const Color ScreenGraphics::ColorOK = Color::BLUE;
-const Color ScreenGraphics::ColorBlack = Color::BLACK;
-const Color ScreenGraphics::ColorMidGrey = Color::GRAY;
+const Color Graphics::ColorSelected = Color(0xC0, 0xC0, 0xC0);
+const Color Graphics::ColorUnselected = Color::WHITE;
+const Color Graphics::ColorWarning = Color::RED;
+const Color Graphics::ColorOK = Color::BLUE;
+const Color Graphics::ColorBlack = Color::BLACK;
+const Color Graphics::ColorMidGrey = Color::GRAY;
 
-const Color ScreenGraphics::inv_redColor = Color(0xff, 0x70, 0x70);
-const Color ScreenGraphics::inv_blueColor = Color(0x90, 0x90, 0xff);
-const Color ScreenGraphics::inv_yellowColor = Color::YELLOW;
-const Color ScreenGraphics::inv_greenColor = Color::GREEN;
-const Color ScreenGraphics::inv_magentaColor = Color::MAGENTA;
+const Color Graphics::inv_redColor = Color(0xff, 0x70, 0x70);
+const Color Graphics::inv_blueColor = Color(0x90, 0x90, 0xff);
+const Color Graphics::inv_yellowColor = Color::YELLOW;
+const Color Graphics::inv_greenColor = Color::GREEN;
+const Color Graphics::inv_magentaColor = Color::MAGENTA;
 
-const Color ScreenGraphics::TaskColor = Color(0, 120, 0);
-const Color ScreenGraphics::BackgroundColor = Color::WHITE;
+const Color Graphics::TaskColor = Color(0, 120, 0);
+const Color Graphics::BackgroundColor = Color::WHITE;
 
-const Color ScreenGraphics::Colours[] = {
+const Color Graphics::Colours[] = {
   Color::RED,
   Color::GREEN,
   Color::BLUE,
@@ -120,7 +200,7 @@ const Color ScreenGraphics::Colours[] = {
 };
 
 void
-ScreenGraphics::Initialise()
+Graphics::Initialise()
 {
   /// @todo enhancement: support red/green color blind pilots with adjusted colour scheme
 
@@ -128,8 +208,8 @@ ScreenGraphics::Initialise()
 
   LoadUnitSymbols();
 
-  infoSelectedBrush.set(MapGfx.ColorSelected);
-  infoUnselectedBrush.set(MapGfx.ColorUnselected);
+  infoSelectedBrush.set(Graphics::ColorSelected);
+  infoUnselectedBrush.set(Graphics::ColorUnselected);
 
   AlarmBrush.set(Color::RED);
   WarningBrush.set(Color(0xFF, 0xA2, 0x00));
@@ -227,7 +307,7 @@ ScreenGraphics::Initialise()
 }
 
 void
-ScreenGraphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
+Graphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
 {
   InitSnailTrail(settings_map);
   InitLandableIcons();
@@ -235,7 +315,7 @@ ScreenGraphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
 }
 
 void
-ScreenGraphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
+Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
 {
   int iwidth;
   int minwidth;
@@ -257,7 +337,7 @@ ScreenGraphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
 }
 
 void
-ScreenGraphics::InitLandableIcons()
+Graphics::InitLandableIcons()
 {
   if (Appearance.IndLandable == wpLandableDefault) {
     AirportReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_HD);
@@ -286,7 +366,7 @@ ScreenGraphics::InitLandableIcons()
 }
 
 void
-ScreenGraphics::InitAirspacePens(const SETTINGS_MAP &settings_map)
+Graphics::InitAirspacePens(const SETTINGS_MAP &settings_map)
 {
   for (int i = 0; i < AIRSPACECLASSCOUNT; i++)
     hAirspacePens[i].set(Layout::Scale(2),

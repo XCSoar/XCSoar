@@ -109,7 +109,7 @@ MainWindow::Initialise()
   Layout::Initialize(rc.right - rc.left, rc.bottom - rc.top);
 
   // color/pattern chart (must have infobox geometry before this)
-  MapGfx.Initialise();
+  Graphics::Initialise();
 
   LogStartUp(_T("Initialise fonts"));
   Fonts::Initialize();

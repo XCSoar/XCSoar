@@ -295,8 +295,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   MapWindow::register_class(hInstance);
 #endif
 
-  MapGfx.Initialise();
-  MapGfx.InitialiseConfigured(blackboard.SettingsMap());
+  Graphics::Initialise();
+  Graphics::InitialiseConfigured(blackboard.SettingsMap());
 
   TestWindow window;
   GenerateBlackboard(window.map);

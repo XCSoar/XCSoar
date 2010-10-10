@@ -56,8 +56,8 @@ OnAirspaceColoursPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
   canvas.white_brush();
   canvas.black_pen();
   canvas.set_background_color(Color::WHITE);
-  canvas.select(MapGfx.GetAirspaceBrush(1)); // this is the solid brush
-  canvas.set_text_color(MapGfx.GetAirspaceColour(i));
+  canvas.select(Graphics::GetAirspaceBrush(1)); // this is the solid brush
+  canvas.set_text_color(Graphics::GetAirspaceColour(i));
   canvas.rectangle(rc.left + Layout::FastScale(2),
                    rc.top + Layout::FastScale(2),
                    rc.right - Layout::FastScale(2),

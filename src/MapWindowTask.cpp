@@ -84,7 +84,7 @@ protected:
 
     POINT sc;
     if (m_proj.LonLat2ScreenIfVisible(tp.get_location_remaining(), &sc))
-      MapGfx.hBmpTarget.draw(m_buffer, bitmap_canvas, sc.x, sc.y);
+      Graphics::hBmpTarget.draw(m_buffer, bitmap_canvas, sc.x, sc.y);
   }
 
   void

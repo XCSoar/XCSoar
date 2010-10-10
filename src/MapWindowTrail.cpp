@@ -131,7 +131,7 @@ MapWindow::DrawTrail(Canvas &canvas) const
         -it->NettoVario/vario_min :
         it->NettoVario/vario_max ;
 
-      canvas.select(MapGfx.hSnailPens[fSnailColour(colour_vario)]);
+      canvas.select(Graphics::hSnailPens[fSnailColour(colour_vario)]);
       canvas.line_to(pt.x, pt.y);
     }
     last_time = it->time;

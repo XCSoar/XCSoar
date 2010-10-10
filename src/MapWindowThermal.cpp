@@ -78,13 +78,13 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
     if (positive(Calculated().ThermalEstimate_R)) {
       POINT sc;
       if (projection.LonLat2ScreenIfVisible(Calculated().ThermalEstimate_Location, &sc)) {
-        MapGfx.hBmpThermalSource.draw(canvas, bitmap_canvas, sc.x, sc.y);
+        Graphics::hBmpThermalSource.draw(canvas, bitmap_canvas, sc.x, sc.y);
       }
     }
   } else if (projection.GetMapScaleKM() <= fixed_four) {
     for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
       if (ThermalSources[i].Visible) 
-        MapGfx.hBmpThermalSource.draw(canvas, bitmap_canvas,
+        Graphics::hBmpThermalSource.draw(canvas, bitmap_canvas,
                                       ThermalSources[i].Screen.x,
                                       ThermalSources[i].Screen.y);
     }
@@ -189,8 +189,8 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
 
   // position of thermal band
   if (numtherm > 1) {
-    canvas.select(MapGfx.hpThermalBand);
-    canvas.select(MapGfx.hbThermalBand);
+    canvas.select(Graphics::hpThermalBand);
+    canvas.select(Graphics::hbThermalBand);
 
     POINT ThermalProfile[NUMTHERMALBUCKETS + 2];
     for (i = 0; i < numtherm; i++) {
@@ -222,13 +222,13 @@ MapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
   GliderBand[4].x = GliderBand[1].x - IBLSCALE(4);
   GliderBand[4].y = GliderBand[0].y + IBLSCALE(4);
 
-  canvas.select(MapGfx.hpThermalBandGlider);
+  canvas.select(Graphics::hpThermalBandGlider);
 
   canvas.polyline(GliderBand, 2);
   canvas.polyline(GliderBand + 2, 3); // arrow head
 
   if (draw_start_height) {
-    canvas.select(MapGfx.hpFinalGlideBelow);
+    canvas.select(Graphics::hpFinalGlideBelow);
     GliderBand[0].y = IBLSCALE(4) + iround(TBSCALEY * (fixed_one - hstart)) + rc.top;
     GliderBand[1].y = GliderBand[0].y;
     canvas.polyline(GliderBand, 2);

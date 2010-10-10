@@ -190,8 +190,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
 
         int colourIndex = fSnailColour(cv);
         // Select the appropriate background color determined before
-        canvas.select(MapGfx.hSnailPens[colourIndex]);
-        Brush hVarioBrush(MapGfx.hSnailColours[colourIndex]);
+        canvas.select(Graphics::hSnailPens[colourIndex]);
+        Brush hVarioBrush(Graphics::hSnailColours[colourIndex]);
         canvas.select(hVarioBrush);
 
         // Draw the rounded background rectangle
@@ -206,7 +206,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
 
     // If FLARM alarm draw alarm icon below corresponding target
     if ((traffic.AlarmLevel > 0) && (traffic.AlarmLevel < 4))
-      MapGfx.hFLARMTraffic.draw(canvas, bitmap_canvas, sc.x, sc.y);
+      Graphics::hFLARMTraffic.draw(canvas, bitmap_canvas, sc.x, sc.y);
 
     // Fill the Arrow array with a normal arrow pointing north
     Arrow[0].x = -4;
@@ -259,6 +259,6 @@ MapWindow::DrawTeammate(Canvas &canvas) const
     POINT sc;
     if (render_projection.LonLat2ScreenIfVisible(Calculated().TeammateLocation,
                                                  &sc))
-      MapGfx.hBmpTeammatePosition.draw(canvas, bitmap_canvas, sc.x, sc.y);
+      Graphics::hBmpTeammatePosition.draw(canvas, bitmap_canvas, sc.x, sc.y);
   }
 }

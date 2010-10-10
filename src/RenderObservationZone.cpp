@@ -16,8 +16,8 @@ RenderObservationZone::RenderObservationZone(Canvas &_canvas,
                                              const SETTINGS_MAP &_settings_map)
   :m_buffer(_canvas), m_proj(_projection),
    m_settings_map(_settings_map),
-   pen_boundary_current(Pen::SOLID, IBLSCALE(2), MapGfx.TaskColor),
-   pen_boundary_active(Pen::SOLID, IBLSCALE(1), MapGfx.TaskColor),
+   pen_boundary_current(Pen::SOLID, IBLSCALE(2), Graphics::TaskColor),
+   pen_boundary_active(Pen::SOLID, IBLSCALE(1), Graphics::TaskColor),
    pen_boundary_inactive(Pen::SOLID, IBLSCALE(1), Color(127, 127, 127)),
    m_past(false),
    m_current(false),
@@ -32,10 +32,10 @@ RenderObservationZone::draw_style(bool is_boundary_active)
     m_buffer.mix_mask();
 
     // this color is used as the black bit
-    m_buffer.set_text_color(MapGfx.Colours[m_settings_map.
+    m_buffer.set_text_color(Graphics::Colours[m_settings_map.
                                            iAirspaceColour[AATASK]]);
     // get brush, can be solid or a 1bpp bitmap
-    m_buffer.select(MapGfx.hAirspaceBrushes[m_settings_map.
+    m_buffer.select(Graphics::hAirspaceBrushes[m_settings_map.
                                             iAirspaceBrush[AATASK]]);
     m_buffer.white_pen();
     

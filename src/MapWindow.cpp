@@ -49,8 +49,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-ScreenGraphics MapGfx;
-
 /**
  * Constructor of the MapWindow class
  */

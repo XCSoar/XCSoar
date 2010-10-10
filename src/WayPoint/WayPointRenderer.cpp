@@ -159,7 +159,7 @@ public:
 
     bool do_write_label = in_task || (settings_map.DeclutterLabels < 2);
 
-    const MaskedIcon *icon = &MapGfx.SmallIcon;
+    const MaskedIcon *icon = &Graphics::SmallIcon;
 
     int AltArrivalAGL = 0;
 
@@ -189,20 +189,20 @@ public:
         }
 
         if (way_point.Flags.Airport)
-          icon = &MapGfx.AirportReachableIcon;
+          icon = &Graphics::AirportReachableIcon;
         else
-          icon = &MapGfx.FieldReachableIcon;
+          icon = &Graphics::FieldReachableIcon;
       } else {
         if (way_point.Flags.Airport)
-          icon = &MapGfx.AirportUnreachableIcon;
+          icon = &Graphics::AirportUnreachableIcon;
         else
-          icon = &MapGfx.FieldUnreachableIcon;
+          icon = &Graphics::FieldUnreachableIcon;
       }
 
     } else {
       // non landable turnpoint
       if (projection.GetMapScaleKM() <= fixed_four)
-        icon = &MapGfx.TurnPointIcon;
+        icon = &Graphics::TurnPointIcon;
     }
 
     icon->draw(canvas, bitmap_canvas, sc.x, sc.y);

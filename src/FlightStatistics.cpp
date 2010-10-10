@@ -590,8 +590,8 @@ public:
     if (m_intersections.empty())
       return;
 
-    m_canvas.select(MapGfx.GetAirspaceBrushByClass(type, m_settings));
-    m_canvas.set_text_color(MapGfx.GetAirspaceColourByClass(type, m_settings));
+    m_canvas.select(Graphics::GetAirspaceBrushByClass(type, m_settings));
+    m_canvas.set_text_color(Graphics::GetAirspaceColourByClass(type, m_settings));
 
     RECT rcd;
     rcd.top = m_chart.screenY(as.get_top_altitude());

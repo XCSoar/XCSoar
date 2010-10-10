@@ -52,7 +52,7 @@ OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 
   canvas.black_pen();
   canvas.set_background_color(Color::WHITE);
-  canvas.select(MapGfx.GetAirspaceBrush(i));
+  canvas.select(Graphics::GetAirspaceBrush(i));
   canvas.set_text_color(Color::BLACK);
   canvas.rectangle(rc.left + Layout::FastScale(2),
                    rc.top + Layout::FastScale(2),

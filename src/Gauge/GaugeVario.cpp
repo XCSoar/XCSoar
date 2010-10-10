@@ -106,11 +106,11 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
   Color themagentaColor;
 
   if (Appearance.InverseInfoBox) {
-    theredColor = MapGfx.inv_redColor;
-    theblueColor = MapGfx.inv_blueColor;
-    theyellowColor = MapGfx.inv_yellowColor;
-    thegreenColor = MapGfx.inv_greenColor;
-    themagentaColor = MapGfx.inv_magentaColor;
+    theredColor = Graphics::inv_redColor;
+    theblueColor = Graphics::inv_blueColor;
+    theyellowColor = Graphics::inv_yellowColor;
+    thegreenColor = Graphics::inv_greenColor;
+    themagentaColor = Graphics::inv_magentaColor;
   } else {
     theredColor = Color::RED;
     theblueColor = Color::BLUE;
