@@ -178,13 +178,15 @@ XCSoarInterface::CheckShutdown()
 {
   static bool ShutdownRequested = false;
 
+  if (doForceShutdown)
+    return true;
+
   if (ShutdownRequested)
     return false;
 
   bool retval = false;
   ShutdownRequested = true;
-  if (doForceShutdown ||
-      MessageBoxX(_("Quit program?"), _T("XCSoar"),
+  if (MessageBoxX(_("Quit program?"), _T("XCSoar"),
                   MB_YESNO | MB_ICONQUESTION) == IDYES)
     retval = true;
   else
