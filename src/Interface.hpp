@@ -166,10 +166,10 @@ public:
 public:
   static bool Debounce();
 
-  static bool InterfaceTimeoutZero(void);
-  static void InterfaceTimeoutReset(void);
-  static bool InterfaceTimeoutCheck(void);
-  static bool CheckShutdown(void);
+  static bool InterfaceTimeoutZero();
+  static void InterfaceTimeoutReset();
+  static bool InterfaceTimeoutCheck();
+  static bool CheckShutdown();
 
   static void AfterStartup();
   static void Shutdown();

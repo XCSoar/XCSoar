@@ -141,21 +141,21 @@ ActionInterface::SendSettingsMap(const bool trigger_draw)
 }
 
 bool
-XCSoarInterface::InterfaceTimeoutZero(void)
+XCSoarInterface::InterfaceTimeoutZero()
 {
   ScopeLock protect(mutexInterfaceTimeout);
   return (interface_timeout == 0);
 }
 
 void
-XCSoarInterface::InterfaceTimeoutReset(void)
+XCSoarInterface::InterfaceTimeoutReset()
 {
   ScopeLock protect(mutexInterfaceTimeout);
   interface_timeout = 0;
 }
 
 bool
-XCSoarInterface::InterfaceTimeoutCheck(void)
+XCSoarInterface::InterfaceTimeoutCheck()
 {
   ScopeLock protect(mutexInterfaceTimeout);
   if (interface_timeout > 60 * 10) {
@@ -175,7 +175,7 @@ ActionInterface::SignalShutdown(bool force)
 }
 
 bool
-XCSoarInterface::CheckShutdown(void)
+XCSoarInterface::CheckShutdown()
 {
   if (ShutdownRequested)
     return false;
