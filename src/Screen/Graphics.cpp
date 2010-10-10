@@ -124,8 +124,6 @@ ScreenGraphics::Initialise()
 {
   /// @todo enhancement: support red/green color blind pilots with adjusted colour scheme
 
-  int i;
-
   LogStartUp(_T("Initialise graphics"));
 
   LoadUnitSymbols();
@@ -166,7 +164,7 @@ ScreenGraphics::Initialise()
 
   hAboveTerrainBitmap.load(IDB_ABOVETERRAIN);
 
-  for (i = 0; i < NUMAIRSPACEBRUSHES; i++)
+  for (int i = 0; i < NUMAIRSPACEBRUSHES; i++)
     hAirspaceBrushes[i].set(hAirspaceBitmap[i]);
 
   hAboveTerrainBrush.set(hAboveTerrainBitmap);
