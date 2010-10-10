@@ -60,6 +60,7 @@ namespace Fonts
                       LOGFONT *LogFontUsed = NULL);
 
   void Initialize();
+  void SizeInfoboxFont();
   void LoadCustom();
 
   const TCHAR* GetStandardFontFace();

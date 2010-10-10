@@ -203,8 +203,6 @@ InitialiseLogFonts()
   LogInfoBox.lfCharSet = ANSI_CHARSET;
 #endif /* !ENABLE_SDL */
 
-  SizeLogFont(LogInfoBox, InfoBoxLayout::ControlWidth, _T("1234m"));
-
   InitialiseLogfont(&LogTitle, Fonts::GetStandardFontFace(),
                     FontHeight / 3, true);
 
@@ -240,6 +238,15 @@ Fonts::Initialize()
   SetFont(&MapLabel, LogMapLabel);
   SetFont(&Map, LogMap);
   SetFont(&MapBold, LogMapBold);
+
+  SizeInfoboxFont();
+}
+
+void
+Fonts::SizeInfoboxFont()
+{
+  SizeLogFont(LogInfoBox, InfoBoxLayout::ControlWidth, _T("1234m"));
+  SetFont(&InfoBox, LogInfoBox);
 }
 
 void
