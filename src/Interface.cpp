@@ -190,7 +190,6 @@ XCSoarInterface::CheckShutdown()
   else
     retval = false;
 
-  doForceShutdown = false;
   ShutdownRequested = false;
 
   return retval;
