@@ -160,6 +160,28 @@ LoadAltairLogFonts()
 }
 
 static void
+SizeLogFont(LOGFONT &logfont, unsigned width, const TCHAR* str)
+{
+  // JMW algorithm to auto-size info window font.
+  // this is still required in case title font property doesn't exist.
+  VirtualCanvas canvas(1, 1);
+  SIZE tsize;
+  do {
+    --logfont.lfHeight;
+
+    Font font;
+    Fonts::SetFont(&font, logfont, NULL);
+    if (!font.defined())
+      break;
+
+    canvas.select(font);
+    tsize = canvas.text_size(str);
+  } while ((unsigned)tsize.cx > width);
+
+  ++logfont.lfHeight;
+}
+
+static void
 InitialiseLogFonts()
 {
   if (is_altair()) {
@@ -181,23 +203,7 @@ InitialiseLogFonts()
   LogInfoBox.lfCharSet = ANSI_CHARSET;
 #endif /* !ENABLE_SDL */
 
-  // JMW algorithm to auto-size info window font.
-  // this is still required in case title font property doesn't exist.
-  VirtualCanvas canvas(1, 1);
-  SIZE tsize;
-  do {
-    --LogInfoBox.lfHeight;
-
-    Font font;
-    Fonts::SetFont(&font, LogInfoBox, NULL);
-    if (!font.defined())
-      break;
-
-    canvas.select(font);
-    tsize = canvas.text_size(_T("1234m"));
-  } while ((unsigned)tsize.cx > InfoBoxLayout::ControlWidth);
-
-  ++LogInfoBox.lfHeight;
+  SizeLogFont(LogInfoBox, InfoBoxLayout::ControlWidth, _T("1234m"));
 
   InitialiseLogfont(&LogTitle, Fonts::GetStandardFontFace(),
                     FontHeight / 3, true);
