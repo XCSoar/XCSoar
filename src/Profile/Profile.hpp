@@ -59,9 +59,8 @@ struct DeviceConfig {
     /**
      * Attempt to auto-discover the GPS source.
      *
-     * On Windows CE, this opens the GPS Intermediate Driver
-     * Multiplexer:
-     * http://msdn.microsoft.com/en-us/library/bb202042.aspx
+     * On Windows CE, this opens the GPS Intermediate Driver Multiplexer.
+     * @see http://msdn.microsoft.com/en-us/library/bb202042.aspx
      */
     AUTO,
   };
