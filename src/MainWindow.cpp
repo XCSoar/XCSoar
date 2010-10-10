@@ -108,10 +108,6 @@ MainWindow::Initialise()
 
   Layout::Initialize(rc.right - rc.left, rc.bottom - rc.top);
 
-  LogStartUp(_T("InfoBox geometry"));
-  InfoBoxLayout::Init(rc);
-  map_rect = InfoBoxLayout::GetRemainingRect(rc);
-
   // color/pattern chart (must have infobox geometry before this)
   MapGfx.Initialise();
 
@@ -123,6 +119,10 @@ void
 MainWindow::InitialiseConfigured()
 {
   RECT rc = get_client_rect();
+
+  LogStartUp(_T("InfoBox geometry"));
+  InfoBoxLayout::Init(rc);
+  map_rect = InfoBoxLayout::GetRemainingRect(rc);
 
   Fonts::SizeInfoboxFont();
 
