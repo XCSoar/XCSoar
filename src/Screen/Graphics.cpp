@@ -154,14 +154,14 @@ const Color
 Graphics::GetAirspaceColourByClass(const int i,
     const SETTINGS_MAP &settings)
 {
-  return Colours[settings.iAirspaceColour[i]];
+  return GetAirspaceColour(settings.iAirspaceColour[i]);
 }
 
 const Brush &
 Graphics::GetAirspaceBrushByClass(const int i,
     const SETTINGS_MAP &settings)
 {
-  return hAirspaceBrushes[settings.iAirspaceBrush[i]];
+  return GetAirspaceBrush(settings.iAirspaceBrush[i]);
 }
 
 const Color Graphics::ColorSelected = Color(0xC0, 0xC0, 0xC0);
