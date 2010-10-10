@@ -164,24 +164,8 @@ TranscodeKey(unsigned wParam)
   // VENTA-ADDON HARDWARE KEYS TRANSCODING
 
   if (GlobalModelType == MODELTYPE_PNA_HP31X) {
-      /*
-      if (wParam == 0x7b)
-        // VK_APP1
-        wParam = 0xc1;
-      */
-
-      if (wParam == 0x7b)
-        // VK_ESCAPE
-        wParam = 0x1b;
-
-      /*
-      if (wParam == 0x7b)
-        // VK_RIGHT
-        wParam = 0x27;
-      if (wParam == 0x7b)
-        // VK_LEFT
-        wParam=0x25;
-      */
+    if (wParam == 0x7b)
+      wParam = 0x1b;
   } else if (GlobalModelType == MODELTYPE_PNA_PN6000) {
     switch(wParam) {
     case 0x79:					// Upper Silver key short press
