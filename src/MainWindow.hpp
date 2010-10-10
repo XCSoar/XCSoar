@@ -80,7 +80,8 @@ public:
   void set(const TCHAR *text,
            int left, int top, unsigned width, unsigned height);
 
-  void initialise();
+  void Initialise();
+  void InitialiseConfigured();
 
   void reset() {
     map.reset();

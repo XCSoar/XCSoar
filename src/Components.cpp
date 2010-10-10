@@ -243,7 +243,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   if (!main_window.defined())
     return false;
 
-  main_window.initialise();
+  main_window.Initialise();
 
 #ifdef SIMULATOR_AVAILABLE
   // prompt for simulator if not set by command line argument "-simulator" or "-fly"
@@ -252,6 +252,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 #endif
 
   PreloadInitialisation(true);
+
+  main_window.InitialiseConfigured();
 
   TCHAR path[MAX_PATH];
   LocalPath(path, _T("cache"));

@@ -102,7 +102,7 @@ MainWindow::set(const TCHAR* text,
 }
 
 void
-MainWindow::initialise()
+MainWindow::Initialise()
 {
   RECT rc = get_client_rect();
 
@@ -117,7 +117,15 @@ MainWindow::initialise()
 
   LogStartUp(_T("Initialise fonts"));
   Fonts::Initialize();
+}
+
+void
+MainWindow::InitialiseConfigured()
+{
+  RECT rc = get_client_rect();
+
   if (Appearance.UseCustomFonts)
+    LogStartUp(_T("Load fonts"));
     Fonts::LoadCustom();
 
   LogStartUp(_T("Create info boxes"));
