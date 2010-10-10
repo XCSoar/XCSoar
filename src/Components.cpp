@@ -137,7 +137,7 @@ GlideComputer glide_computer(protected_task_manager, airspace_warnings,
                              task_events);
 
 void
-XCSoarInterface::PreloadInitialisation()
+XCSoarInterface::LoadProfile()
 {
   if (Profile::use_files())
     dlgStartupShowModal();
@@ -244,7 +244,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
     global_simulator_flag = dlgSimulatorPromptShowModal();
 #endif
 
-  PreloadInitialisation();
+  LoadProfile();
 
   main_window.InitialiseConfigured();
 

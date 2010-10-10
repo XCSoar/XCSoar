@@ -180,7 +180,7 @@ public:
   static void ReceiveBlackboard();
 
 private:
-  static void PreloadInitialisation();
+  static void LoadProfile();
 };
 
 #endif
