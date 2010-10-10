@@ -229,8 +229,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   MainWindow::register_class(hInst);
   MapWindow::register_class(hInst);
 
-  PreloadInitialisation(false);
-
   // Send the SettingsMap to the DeviceBlackboard
   SendSettingsMap();
 
