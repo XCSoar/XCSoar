@@ -151,15 +151,13 @@ Graphics::GetAirspaceBrush(const int i)
 }
 
 const Color
-Graphics::GetAirspaceColourByClass(const int i,
-    const SETTINGS_MAP &settings)
+Graphics::GetAirspaceColourByClass(const int i, const SETTINGS_MAP &settings)
 {
   return GetAirspaceColour(settings.iAirspaceColour[i]);
 }
 
 const Brush &
-Graphics::GetAirspaceBrushByClass(const int i,
-    const SETTINGS_MAP &settings)
+Graphics::GetAirspaceBrushByClass(const int i, const SETTINGS_MAP &settings)
 {
   return GetAirspaceBrush(settings.iAirspaceBrush[i]);
 }
