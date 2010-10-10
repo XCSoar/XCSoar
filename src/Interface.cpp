@@ -56,7 +56,6 @@ Copyright_License {
 static Mutex mutexInterfaceTimeout;
 static int interface_timeout;
 static bool doForceShutdown = false;
-static bool ShutdownRequested = false;
 
 InterfaceBlackboard CommonInterface::blackboard;
 HINSTANCE CommonInterface::hInst; // The current instance
@@ -177,6 +176,8 @@ ActionInterface::SignalShutdown(bool force)
 bool
 XCSoarInterface::CheckShutdown()
 {
+  static bool ShutdownRequested = false;
+
   if (ShutdownRequested)
     return false;
 
