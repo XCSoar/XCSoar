@@ -42,6 +42,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
+#include "OS/FileUtil.hpp"
 
 #include <tchar.h>
 
@@ -135,18 +136,13 @@ void CreateDirectoryIfAbsent(const TCHAR *filename) {
   TCHAR fullname[MAX_PATH];
 
   LocalPath(fullname, filename);
+  if (Directory::Exists(fullname))
+    return;
 
 #ifdef HAVE_POSIX
   mkdir(filename, 0777);
 #else /* !HAVE_POSIX */
-  DWORD fattr = GetFileAttributes(fullname);
-
-  if ((fattr != 0xFFFFFFFF) &&
-      (fattr & FILE_ATTRIBUTE_DIRECTORY)) {
-    // directory exists
-  } else
-    CreateDirectory(fullname, NULL);
-
+  CreateDirectory(fullname, NULL);
 #endif /* !HAVE_POSIX */
 }
 
