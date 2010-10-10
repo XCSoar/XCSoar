@@ -162,6 +162,11 @@ LoadAltairLogFonts()
 static void
 InitialiseLogFonts()
 {
+  if (is_altair()) {
+    LoadAltairLogFonts();
+    return;
+  }
+
 #ifdef ENABLE_SDL
   int FontHeight = Layout::SmallScale(20);
 #else
@@ -215,9 +220,6 @@ InitialiseLogFonts()
 
   InitialiseLogfont(&LogInfoBoxSmall, Fonts::GetStandardFontFace(),
                     Layout::Scale(20));
-
-  if (is_altair())
-    LoadAltairLogFonts();
 }
 
 void
