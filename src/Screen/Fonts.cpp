@@ -218,14 +218,14 @@ InitialiseLogFonts()
 
   InitialiseLogfont(&LogInfoBoxSmall, Fonts::GetStandardFontFace(),
                     Layout::Scale(20));
+
+  InitialiseFontsAltair();
 }
 
 void
 Fonts::Initialize()
 {
   InitialiseLogFonts();
-
-  InitialiseFontsAltair();
 
   SetFont(&InfoBox, LogInfoBox);
   SetFont(&InfoBoxSmall, LogInfoBoxSmall);
