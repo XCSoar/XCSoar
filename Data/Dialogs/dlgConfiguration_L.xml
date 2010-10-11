@@ -7,6 +7,8 @@
 
   <Button Name="cmdPaste" Caption="Paste" X="5" Y="70" Width="60" Height="28"/>
 
+  <Button Name="cmdFonts" Caption="Fonts" X="5" Y="130" Width="60" Height="28"/>
+
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="160" Width="29" Height="28" OnClick="OnPrevClicked" />
   <SymbolButton Name="cmdNext" Caption="&gt;" X="36" Y="160" Width="29" Height="28" OnClick="OnNextClicked" />
   <Button Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28"/>
@@ -458,33 +460,6 @@
       </Edit>
     </Panel>
     
-    <Panel Name="frmFonts" X="0" Y="0" Width="0" Height="222">
-      <Edit Name="prpUseCustomFonts" Caption="Customize Fonts" X="2" Width="-2" Height="22" CaptionWidth="150">
-        <DataField DataType="boolean" Min="0" Max="50" Step="1" OnDataAccess="OnUseCustomFontData" />
-      </Edit>
-    
-      <Label Name="prpTitleWindowFont" Caption="Info box titles" X="2" Y="25" Width="180" Height="22"/>
-      <Button Name="cmdTitleWindowFont" Caption="Edit" X="185" Y="25" Width="50" Height="22" OnClick="OnEditTitleWindowFontClicked" />
-    
-      <Label Name="prpInfoWindowFont" Caption="Info box values" X="2" Y="49" width="180" Height="22"/>
-      <Button Name="cmdInfoWindowFont" Caption="Edit" X="185" Y="49" Width="50" Height="22" OnClick="OnEditInfoWindowFontClicked" />
-    
-      <Label Name="prpMapWindowFont" Caption="Map waypoints" X="2" Y="73" width="180" Height="22"/>
-      <Button Name="cmdMapWindowFont" Caption="Edit" X="185" Y="73" Width="50" Height="22" OnClick="OnEditMapWindowFontClicked" />
-    
-      <Label Name="prpMapLabelFont" Caption="Topology labels" X="2" Y="97" width="180" Height="22"/>
-      <Button Name="cmdMapLabelFont" Caption="Edit" X="185" Y="97" Width="50" Height="22" OnClick="OnEditMapLabelFontClicked" />
-    
-      <Label Name="prpMapWindowBoldFont" Caption="Dialog boxes" X="2" Y="121" width="180" Height="22"/>
-      <Button Name="cmdMapWindowBoldFont" Caption="Edit" X="185" Y="121" Width="50" Height="22" OnClick="OnEditMapWindowBoldFontClicked" />
-    
-      <Label Name="prpTitleSmallWindowFont" Caption="Info box values small" X="2" Y="145" width="180" Height="22"/>
-      <Button Name="cmdTitleSmallWindowFont" Caption="Edit" X="185" Y="145" Width="50" Height="22" OnClick="OnEditTitleSmallWindowFontClicked" />
-    
-      <Label Name="prpCDIWindowFont" Caption="Gauges" X="2" Y="169" width="180" Height="22"/>
-      <Button Name="cmdCDIWindowFont" Caption="Edit" X="185" Y="169" Width="50" Height="22" OnClick="OnEditCDIWindowFontClicked" />
-    </Panel>
-  
     <Panel Name="frmVarioAppearance" X="0" Y="0" Width="0" Height="222">
       <Edit Name="prpAppGaugeVarioSpeedToFly" Caption="Speed arrows" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Whether to show speed command arrows on the Vario gauge.  When shown, in cruise mode, arrows point up to command slow down; arrows point down to command speed up.">

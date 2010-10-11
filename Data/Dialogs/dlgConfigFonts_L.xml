@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<Form Name="frmConfigFonts" Width="320" Height="240" Caption="Configuration - Fonts">
+  <Button Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28"/>
+
+  <Edit Name="prpUseCustomFonts" Caption="Customize Fonts" X="70" Y="1" Width="-2" Height="22" CaptionWidth="150">
+    <DataField DataType="boolean" Min="0" Max="50" Step="1" OnDataAccess="OnUseCustomFontData" />
+  </Edit>
+
+  <Label Name="prpTitleWindowFont" Caption="Info box titles" X="70" Y="25" Width="180" Height="22"/>
+  <Button Name="cmdTitleWindowFont" Caption="Edit" X="255" Y="25" Width="50" Height="22" OnClick="OnEditTitleWindowFontClicked" />
+
+  <Label Name="prpInfoWindowFont" Caption="Info box values" X="70" Y="49" width="180" Height="22"/>
+  <Button Name="cmdInfoWindowFont" Caption="Edit" X="255" Y="49" Width="50" Height="22" OnClick="OnEditInfoWindowFontClicked" />
+
+  <Label Name="prpMapWindowFont" Caption="Map waypoints" X="70" Y="73" width="180" Height="22"/>
+  <Button Name="cmdMapWindowFont" Caption="Edit" X="255" Y="73" Width="50" Height="22" OnClick="OnEditMapWindowFontClicked" />
+
+  <Label Name="prpMapLabelFont" Caption="Topology labels" X="70" Y="97" width="180" Height="22"/>
+  <Button Name="cmdMapLabelFont" Caption="Edit" X="255" Y="97" Width="50" Height="22" OnClick="OnEditMapLabelFontClicked" />
+
+  <Label Name="prpMapWindowBoldFont" Caption="Dialog boxes" X="70" Y="121" width="180" Height="22"/>
+  <Button Name="cmdMapWindowBoldFont" Caption="Edit" X="255" Y="121" Width="50" Height="22" OnClick="OnEditMapWindowBoldFontClicked" />
+
+  <Label Name="prpTitleSmallWindowFont" Caption="Info box values small" X="70" Y="145" width="180" Height="22"/>
+  <Button Name="cmdTitleSmallWindowFont" Caption="Edit" X="255" Y="145" Width="50" Height="22" OnClick="OnEditTitleSmallWindowFontClicked" />
+
+  <Label Name="prpCDIWindowFont" Caption="Gauges" X="70" Y="169" width="180" Height="22"/>
+  <Button Name="cmdCDIWindowFont" Caption="Edit" X="255" Y="169" Width="50" Height="22" OnClick="OnEditCDIWindowFontClicked" />
+</Form>

@@ -65,7 +65,6 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "DataField/FileReader.hpp"
 #include "Asset.hpp"
-#include "Screen/Fonts.hpp"
 #include "GlideRatio.hpp"
 #include "Components.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -93,7 +92,6 @@ enum config_page {
   PAGE_UNITS,
   PAGE_INTERFACE,
   PAGE_APPEARANCE,
-  PAGE_FONTS,
   PAGE_VARIO,
   PAGE_TASK_RULES,
   PAGE_INFOBOX_CIRCLING,
@@ -118,7 +116,6 @@ static const TCHAR *const captions[] = {
   N_("Units"),
   N_("Interface"),
   N_("Appearance"),
-  N_("Fonts"),
   N_("FLARM and other gauges"),
   N_("Default task rules"),
   N_("InfoBox Circling"),
@@ -144,28 +141,11 @@ static const struct {
 static const unsigned num_port_types =
   sizeof(port_types) / sizeof(port_types[0]) - 1;
 
-static Font TempInfoWindowFont;
-static Font TempTitleWindowFont;
-static Font TempMapWindowFont;
-static Font TempTitleSmallWindowFont;
-static Font TempMapWindowBoldFont;
-static Font TempCDIWindowFont; // New
-static Font TempMapLabelFont;
-
-extern LOGFONT LogInfoBox;
-extern LOGFONT LogTitle;
-extern LOGFONT LogMap;
-extern LOGFONT LogInfoBoxSmall;
-extern LOGFONT LogMapBold;
-extern LOGFONT LogCDI; // New
-extern LOGFONT LogMapLabel;
-
 static bool changed = false;
 static bool taskchanged = false;
 static bool requirerestart = false;
 static bool utcchanged = false;
 static bool waypointneedsave = false;
-static bool FontRegistryChanged=false;
 static config_page current_page;
 static WndForm *wf = NULL;
 TabbedControl *configuration_tabbed;
@@ -175,6 +155,7 @@ static WndButton *buttonAircraftRego = NULL;
 static WndButton *buttonLoggerID = NULL;
 static WndButton *buttonCopy = NULL;
 static WndButton *buttonPaste = NULL;
+static WndButton *buttonFonts = NULL;
 
 static void
 UpdateButtons(void)
@@ -240,6 +221,9 @@ PageSwitched()
 
   if (buttonPaste != NULL)
     buttonPaste->set_visible(is_infobox_page(current_page));
+
+  if (buttonFonts != NULL)
+    buttonFonts->set_visible(current_page == PAGE_INTERFACE);
 }
 
 static void
@@ -326,223 +310,6 @@ OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t Mode)
   case DataField::daChange:
     UpdateDeviceSetupButton(1, Sender->GetAsString());
     break;
-  }
-}
-
-static void
-ResetFonts(bool bUseCustom)
-{
-  if (bUseCustom) {
-    Fonts::LoadCustomFont(&TempInfoWindowFont, szProfileFontInfoWindowFont);
-    Fonts::LoadCustomFont(&TempTitleWindowFont, szProfileFontTitleWindowFont);
-    Fonts::LoadCustomFont(&TempMapWindowFont, szProfileFontMapWindowFont);
-    Fonts::LoadCustomFont(&TempTitleSmallWindowFont,
-        szProfileFontTitleSmallWindowFont);
-    Fonts::LoadCustomFont(&TempMapWindowBoldFont,
-        szProfileFontMapWindowBoldFont);
-    Fonts::LoadCustomFont(&TempCDIWindowFont, szProfileFontCDIWindowFont);
-    Fonts::LoadCustomFont(&TempMapLabelFont, szProfileFontMapLabelFont);
-  }
-
-  Fonts::SetFont(&TempInfoWindowFont, LogInfoBox);
-  Fonts::SetFont(&TempTitleWindowFont, LogTitle);
-  Fonts::SetFont(&TempMapWindowFont, LogMap);
-  Fonts::SetFont(&TempTitleSmallWindowFont, LogInfoBoxSmall);
-  Fonts::SetFont(&TempMapWindowBoldFont, LogMapBold);
-  Fonts::SetFont(&TempCDIWindowFont, LogCDI);
-  Fonts::SetFont(&TempMapLabelFont, LogMapLabel);
-}
-
-static void
-ShowFontEditButtons(bool bVisible)
-{
-  WndProperty * wp;
-  wp = (WndProperty*)wf->FindByName(_T("cmdInfoWindowFont"));
-  if (wp)
-    wp->set_visible(bVisible);
-
-  wp = (WndProperty*)wf->FindByName(_T("cmdTitleWindowFont"));
-  if (wp)
-    wp->set_visible(bVisible);
-
-  wp = (WndProperty*)wf->FindByName(_T("cmdMapWindowFont"));
-  if (wp)
-    wp->set_visible(bVisible);
-
-  wp = (WndProperty*)wf->FindByName(_T("cmdTitleSmallWindowFont"));
-  if (wp)
-    wp->set_visible(bVisible);
-
-  wp = (WndProperty*)wf->FindByName(_T("cmdMapWindowBoldFont"));
-  if (wp)
-    wp->set_visible(bVisible);
-
-  wp = (WndProperty*)wf->FindByName(_T("cmdCDIWindowFont"));
-  if (wp)
-    wp->set_visible(bVisible);
-
-  wp = (WndProperty*)wf->FindByName(_T("cmdMapLabelFont"));
-  if (wp)
-    wp->set_visible(bVisible);
-}
-
-static void
-RefreshFonts(void)
-{
-  WndProperty * wp;
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUseCustomFonts"));
-  if (wp) {
-    bool bUseCustomFonts =
-        ((DataFieldBoolean*)(wp->GetDataField()))->GetAsBoolean();
-    ResetFonts(bUseCustomFonts);
-    ShowFontEditButtons(bUseCustomFonts);
-  }
-
-  // now set SampleTexts on the Fonts frame
-  WndFrame *sample;
-
-  sample = (WndFrame *)wf->FindByName(_T("prpInfoWindowFont"));
-  if (sample)
-    sample->SetFont(TempInfoWindowFont);
-
-  sample = (WndFrame *)wf->FindByName(_T("prpTitleWindowFont"));
-  if (sample)
-    sample->SetFont(TempTitleWindowFont);
-
-  sample = (WndFrame *)wf->FindByName(_T("prpMapWindowFont"));
-  if (sample)
-    sample->SetFont(TempMapWindowFont);
-
-  sample = (WndFrame *)wf->FindByName(_T("prpTitleSmallWindowFont"));
-  if (sample)
-    sample->SetFont(TempTitleSmallWindowFont);
-
-  sample = (WndFrame *)wf->FindByName(_T("prpMapWindowBoldFont"));
-  if (sample)
-    sample->SetFont(TempMapWindowBoldFont);
-
-  sample = (WndFrame *)wf->FindByName(_T("prpCDIWindowFont"));
-  if (sample)
-    sample->SetFont(TempCDIWindowFont);
-
-  sample = (WndFrame *)wf->FindByName(_T("prpMapLabelFont"));
-  if (sample)
-    sample->SetFont(TempMapLabelFont);
-
-  // now fix the rest of the dlgConfiguration fonts:
-  wf->SetFont(TempMapWindowBoldFont);
-  wf->SetTitleFont(TempMapWindowBoldFont);
-}
-
-static void
-OnUseCustomFontData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  switch (Mode) {
-  case DataField::daGet:
-    break;
-
-  case DataField::daPut:
-    break;
-
-  case DataField::daChange:
-    RefreshFonts();
-
-    break;
-  }
-}
-
-static void
-GetFontDescription(TCHAR Description[], const TCHAR * prpName, int iMaxLen)
-{
-  const WndFrame *wp = (WndFrame *)wf->FindByName(prpName);
-  if (wp)
-    _tcsncpy(Description, wp->GetCaption(), iMaxLen - 1);
-}
-
-static void
-OnEditInfoWindowFontClicked(gcc_unused WndButton &button)
-{
-  // updates registry for font info and updates LogFont values
-#define MAX_EDITFONT_DESC_LEN 100
-  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
-  GetFontDescription(FontDesc, _T("prpInfoWindowFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc, szProfileFontInfoWindowFont,
-                           LogInfoBox)) {
-    FontRegistryChanged = true;
-    RefreshFonts();
-  }
-}
-
-static void
-OnEditTitleWindowFontClicked(gcc_unused WndButton &button)
-{
-  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
-  GetFontDescription(FontDesc, _T("prpTitleWindowFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc, szProfileFontTitleWindowFont,
-                           LogTitle)) {
-    FontRegistryChanged = true;
-    RefreshFonts();
-  }
-}
-
-static void
-OnEditMapWindowFontClicked(gcc_unused WndButton &button)
-{
-  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
-  GetFontDescription(FontDesc, _T("prpMapWindowFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc, szProfileFontMapWindowFont,
-                           LogMap)) {
-    FontRegistryChanged = true;
-    RefreshFonts();
-  }
-}
-
-static void
-OnEditTitleSmallWindowFontClicked(gcc_unused WndButton &button)
-{
-  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
-  GetFontDescription(FontDesc, _T("prpTitleSmallWindowFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc, szProfileFontTitleSmallWindowFont,
-                           LogInfoBoxSmall)) {
-    FontRegistryChanged = true;
-    RefreshFonts();
-  }
-}
-
-static void
-OnEditMapWindowBoldFontClicked(gcc_unused WndButton &button)
-{
-  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
-  GetFontDescription(FontDesc, _T("prpMapWindowBoldFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc, szProfileFontMapWindowBoldFont,
-                           LogMapBold)) {
-    FontRegistryChanged = true;
-    RefreshFonts();
-  }
-}
-
-static void
-OnEditCDIWindowFontClicked(gcc_unused WndButton &button)
-{
-  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
-  GetFontDescription(FontDesc, _T("prpCDIWindowFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc, szProfileFontCDIWindowFont,
-                           LogCDI)) {
-    FontRegistryChanged = true;
-    RefreshFonts();
-  }
-}
-
-static void
-OnEditMapLabelFontClicked(gcc_unused WndButton &button)
-{
-  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
-  GetFontDescription(FontDesc, _T("prpMapLabelFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc, szProfileFontMapLabelFont,
-                           LogMapLabel)) {
-    FontRegistryChanged = true;
-    RefreshFonts();
   }
 }
 
@@ -712,6 +479,12 @@ OnPaste(gcc_unused WndButton &button)
       wp->RefreshDisplay();
     }
   }
+}
+
+static void
+OnFonts(gcc_unused WndButton &button)
+{
+  dlgConfigFontsShowModal();
 }
 
 static bool
@@ -957,14 +730,6 @@ static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnPolarTypeData),
   DeclareCallBackEntry(OnDeviceAData),
   DeclareCallBackEntry(OnDeviceBData),
-  DeclareCallBackEntry(OnUseCustomFontData),
-  DeclareCallBackEntry(OnEditInfoWindowFontClicked),
-  DeclareCallBackEntry(OnEditTitleWindowFontClicked),
-  DeclareCallBackEntry(OnEditMapWindowFontClicked),
-  DeclareCallBackEntry(OnEditTitleSmallWindowFontClicked),
-  DeclareCallBackEntry(OnEditMapWindowBoldFontClicked),
-  DeclareCallBackEntry(OnEditCDIWindowFontClicked),
-  DeclareCallBackEntry(OnEditMapLabelFontClicked),
   DeclareCallBackEntry(OnUserLevel),
   DeclareCallBackEntry(NULL)
 };
@@ -1146,6 +911,10 @@ setVariables()
   buttonPaste = ((WndButton *)wf->FindByName(_T("cmdPaste")));
   if (buttonPaste)
     buttonPaste->SetOnClickNotify(OnPaste);
+
+  buttonFonts = ((WndButton *)wf->FindByName(_T("cmdFonts")));
+  if (buttonFonts)
+    buttonFonts->SetOnClickNotify(OnFonts);
 
   UpdateButtons();
 
@@ -1657,20 +1426,6 @@ setVariables()
     dfe->Set(settings_computer.AverEffTime);
     wp->RefreshDisplay();
   }
-
-// Fonts
-  wp = (WndProperty*)wf->FindByName(_T("prpUseCustomFonts"));
-  if (wp) {
-    DataFieldBoolean * dfb = (DataFieldBoolean*) wp->GetDataField();
-    dfb->Set(Appearance.UseCustomFonts);
-    ShowFontEditButtons(dfb->GetAsBoolean());
-    wp->RefreshDisplay();
-    RefreshFonts();
-  }
-  FontRegistryChanged=false;
-
-
-// end fonts
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppCompassAppearance"));
   if (wp) {
@@ -2491,29 +2246,6 @@ void dlgConfigurationShowModal(void)
   }
 //
 #endif
-
-  //Fonts
-  wp = (WndProperty*)wf->FindByName(_T("prpUseCustomFonts"));
-  if (wp) {
-    DataFieldBoolean * dfb = (DataFieldBoolean*) wp->GetDataField();
-    if (dfb) {
-      if ((Appearance.UseCustomFonts != dfb->GetAsBoolean())
-          || (Appearance.UseCustomFonts && FontRegistryChanged)) {
-        Appearance.UseCustomFonts = !Appearance.UseCustomFonts;
-        Profile::Set(szProfileUseCustomFonts, Appearance.UseCustomFonts);
-        changed = true;
-        requirerestart = true;
-      }
-    }
-  }
-
-  TempInfoWindowFont.reset();
-  TempTitleWindowFont.reset();
-  TempMapWindowFont.reset();
-  TempTitleSmallWindowFont.reset();
-  TempMapWindowBoldFont.reset();
-  TempCDIWindowFont.reset();
-  TempMapLabelFont.reset();
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppStatusMessageAlignment"));
   if (wp) {
