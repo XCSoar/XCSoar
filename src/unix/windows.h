@@ -42,6 +42,7 @@ Copyright_License {
 #include <windef.h>
 #include <winbase.h>
 #include <winuser.h>
+#include <wingdi.h>
 
 /* File I/O */
 

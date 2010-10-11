@@ -36,55 +36,26 @@ Copyright_License {
 }
 */
 
-#ifndef WINDEF_H
-#define WINDEF_H
+#ifndef WINGDI_H
+#define WINGDI_H
 
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
-#include <wchar.h>
-#include <stdarg.h>
-#include <time.h>
-#include <unistd.h>
+#define LF_FACESIZE 256
 
-#include "tchar.h"
-
-#ifndef MAX_PATH
-#define MAX_PATH 4096
-#endif
-
-typedef bool BOOL;
-enum {
-	FALSE = false,
-	TRUE = true,
-};
-
-typedef uint8_t BYTE;
-typedef uint32_t DWORD;
-typedef int32_t LONG;
-
-typedef struct w32_handle *HANDLE;
-typedef HANDLE HINSTANCE;
-
-typedef struct tagPOINT {
-	LONG x;
-	LONG y;
-} POINT;
-
-typedef struct tagSIZE {
-  LONG cx;
-  LONG cy;
-} SIZE;
-
-typedef struct _RECT {
-	LONG left;
-	LONG top;
-	LONG right;
-	LONG bottom;
-} RECT;
-
-#define _cdecl
+typedef struct tagLOGFONT {
+	LONG lfHeight;
+	LONG lfWidth;
+	LONG lfEscapement;
+	LONG lfOrientation;
+	LONG lfWeight;
+	BYTE lfItalic;
+	BYTE lfUnderline;
+	BYTE lfStrikeOut;
+	BYTE lfCharSet;
+	BYTE lfOutPrecision;
+	BYTE lfClipPrecision;
+	BYTE lfQuality;
+	BYTE lfPitchAndFamily;
+	TCHAR lfFaceName[LF_FACESIZE];
+} LOGFONT;
 
 #endif
