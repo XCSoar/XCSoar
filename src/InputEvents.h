@@ -126,7 +126,6 @@ private:
   static void eventClearAirspaceWarnings(const TCHAR *misc);
   static void eventClearStatusMessages(const TCHAR *misc);
   static void eventClearWarningsOrTerrainTopology(const TCHAR *misc);
-  static void eventDLLExecute(const TCHAR *misc);
   static void eventDoInfoKey(const TCHAR *misc);
   static void eventLogger(const TCHAR *misc);
   static void eventMacCready(const TCHAR *misc);

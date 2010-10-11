@@ -151,7 +151,6 @@ mode=default
 type=gce
 data=TAKEOFF
 event=AutoLogger start
-#event=DLLExecute XCSoarExamplePlugin.dll DemoSound \My Documents\Sample2.wav
 event=StatusMessage Takeoff
 
 mode=default
