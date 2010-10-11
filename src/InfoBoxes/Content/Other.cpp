@@ -68,9 +68,9 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
 
 #ifdef HAVE_BATTERY
   if (!PDABatteryAC)
-    infobox.SetComment(_("AC OFF"));
+    infobox.SetComment(_("EXT. OFF"));
   else
-    infobox.SetComment(_("AC ON"));
+    infobox.SetComment(_("EXT. ON"));
 
   if (PDABatteryPercent >= 0) {
     _stprintf(tmp, _T("%d%%"), PDABatteryPercent);
