@@ -109,7 +109,7 @@ static void RedrawSampleFont(void)
 #ifdef ENABLE_SDL
   // XXX
 #else /* !ENABLE_SDL */
-  NewFont.set(&NewLogFont);
+  NewFont.set(NewLogFont);
 #endif /* !ENABLE_SDL */
 
   if (_tcscmp(OriginalFontRegKey, szProfileFontMapWindowBoldFont) == 0) {

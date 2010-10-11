@@ -102,15 +102,15 @@ Font::set(const TCHAR* facename, int height, bool bold, bool italic)
   font.lfWeight = (long)(bold ? FW_BOLD : FW_MEDIUM);
   font.lfItalic = italic;
   font.lfQuality = ANTIALIASED_QUALITY;
-  return Font::set(&font);
+  return Font::set(font);
 }
 
 bool
-Font::set(const LOGFONT *lplf)
+Font::set(const LOGFONT &log_font)
 {
   reset();
 
-  font = ::CreateFontIndirect(lplf);
+  font = ::CreateFontIndirect(&log_font);
   if (font == NULL)
     return false;
 

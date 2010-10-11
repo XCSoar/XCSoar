@@ -79,7 +79,7 @@ public:
   #else
   bool set(const TCHAR* facename, int height, bool bold = false,
            bool italic = false);
-  bool set(const LOGFONT *lplf);
+  bool set(const LOGFONT &log_font);
   #endif
   void reset();
 
