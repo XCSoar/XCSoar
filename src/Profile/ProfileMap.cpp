@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "Profile/ProfileMap.hpp"
 #include "Profile/ProfileKeys.hpp"
+#include "Util/tstring.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
 #include "IO/FileLineReader.hpp"
@@ -47,8 +48,12 @@ Copyright_License {
 #include <stdlib.h>
 #include <stdio.h>
 
-std::map<tstring, tstring> ProfileMap::map_str;
-std::map<tstring, DWORD> ProfileMap::map_num;
+#include <map>
+
+namespace ProfileMap {
+  static std::map<tstring, tstring> map_str;
+  static std::map<tstring, DWORD> map_num;
+}
 
 bool
 ProfileMap::Get(const TCHAR *szRegValue, DWORD &pPos)

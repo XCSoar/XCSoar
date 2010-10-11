@@ -43,14 +43,8 @@ Copyright_License {
 
 #include <windows.h>
 #include <tchar.h>
-#include <tstring.hpp>
-
-#include <map>
 
 namespace ProfileMap {
-extern std::map<tstring, tstring> map_str;
-extern std::map<tstring, DWORD> map_num;
-
   bool Get(const TCHAR *szRegValue, DWORD &pPos);
 
   static inline bool Get(const TCHAR *key, int &value)
