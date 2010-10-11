@@ -40,13 +40,27 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(2);
+  plan_tests(10);
 
   Units::SetUserDistanceUnit(unMeter);
   ok1(equals(Units::ToUserDistance(fixed_one), 1));
 
   Units::SetUserDistanceUnit(unKiloMeter);
   ok1(equals(Units::ToUserDistance(fixed_one), 0.001));
+
+  Units::SetUserTemperatureUnit(unKelvin);
+  ok1(equals(Units::ToUserTemperature(fixed_zero), fixed_zero));
+  ok1(equals(Units::ToSysTemperature(fixed_zero), fixed_zero));
+
+  Units::SetUserTemperatureUnit(unGradCelcius);
+  ok1(equals(Units::ToUserTemperature(fixed_zero), -273.15));
+  ok1(equals(Units::ToUserTemperature(fixed(20)), -253.15));
+  ok1(equals(Units::ToSysTemperature(fixed_zero), 273.15));
+  ok1(equals(Units::ToSysTemperature(fixed(20)), 293.15));
+
+  Units::SetUserTemperatureUnit(unGradFahrenheit);
+  ok1(equals(Units::ToUserTemperature(fixed_zero), -459.67));
+  ok1(equals(Units::ToSysTemperature(fixed_zero), 255.37));
 
   return 0;
 }
