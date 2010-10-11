@@ -523,14 +523,6 @@ XCSoarInterface::Shutdown(void)
   // Save everything in the persistent memory file
   SaveCalculationsPersist(Basic(), Calculated());
 
-  if (is_altair()) {
-    LogStartUp(_T("Altair shutdown"));
-    Sleep(2500);
-    InputEvents::eventDLLExecute(_T("altairplatform.dll SetShutdown 1"));
-    while (true)
-      Sleep(100); // free time up for processor to perform shutdown
-  }
-
   // Clear the FLARM database
   FlarmDetails::Reset();
 

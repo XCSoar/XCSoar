@@ -50,7 +50,6 @@ mode=default
 type=gce
 data=STARTUP_REAL
 event=TaskLoad persist/Default.tsk
-event=DLLExecute AltairPlatform.dll WakeUp
 
 mode=default
 type=gce
