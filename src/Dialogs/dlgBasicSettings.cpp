@@ -261,7 +261,7 @@ OnTempData(DataField *Sender, DataField::DataAccessKind_t Mode)
   case DataField::daPut:
     if (fabs(lastRead - Sender->GetAsFixed()) >= fixed_one) {
       lastRead = Units::ToSysTemperature(Sender->GetAsFixed());
-      CuSonde::setForecastTemperature(Units::ToSysTemperature(Sender->GetAsFixed()));
+      CuSonde::setForecastTemperature(lastRead);
     }
     break;
   }
