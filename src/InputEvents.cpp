@@ -290,14 +290,7 @@ InputEvents::readFile()
 
   // Get defaults
   if (!InitONCE) {
-    if (!is_embedded()) {
-      #include "InputEvents_pc.cpp"
-      apply_defaults(default_modes,
-                     default_events,
-                     sizeof(default_events) / sizeof(default_events[0]),
-                     default_key2event, default_gc2event, default_n2event,
-                     default_labels);
-    } else if (is_altair()) {
+    if (is_altair()) {
       #include "InputEvents_altair.cpp"
       apply_defaults(default_modes,
                      default_events,

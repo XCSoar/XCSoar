@@ -27,6 +27,88 @@ data=ARM_READY
 event=Beep 1
 event=TaskTransition ready
 
+# -------------------
+# NMEA switches
+# -------------------
+
+#
+#mode=default
+#type=ne
+#data=UP_OUT_CIRCLING
+#event=StatusMessage Audio cruise
+#
+#mode=default
+#type=ne
+#data=DOWN_OUT_CIRCLING
+#event=StatusMessage Audio circling
+#
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_FLAP_POS
+#event=StatusMessage Flap positive
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_FLAP_ZERO
+#event=Zoom out
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_FLAP_NEG
+#event=MarkLocation
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_SC
+#event=StatusMessage SC SWITCH
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_GEAR_EXTENDED
+#event=ScreenModes toggle
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_AUX
+#event=StatusMessage AUX SWITCH
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_ACK
+#event=StatusMessage ACKNOWLEDGE
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_REP
+#event=StatusMessage REPEAT
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_AIRBRAKELOCKED
+#event=Zoom in
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_USERSWUP
+#event=StatusMessage USER SWITCH UP
+#
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_USERSWMIDDLE
+#event=StatusMessage USER SWITCH MIDDLE
+#
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_USERSWDOWN
+#event=StatusMessage USER SWITCH DOWN
+#
+
+# -------------------
+# GlideComputerEvents
+# -------------------
 mode=default
 type=gce
 data=GPS_CONNECTION_WAIT
@@ -85,6 +167,16 @@ event=StatusMessage Final Glide Through Terrain
 # ------------
 # mode=default
 # ------------
+
+mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Config3 Info1 Info2 Info3 Exit Menu Vario1 Vario2
+type=key
+data=ESCAPE
+event=Mode default
+
+mode=pan
+type=key
+data=ESCAPE
+event=Pan supertoggle
 
 ###### pan mode
 
@@ -194,6 +286,42 @@ mode=default
 type=key
 data=RIGHT
 event=ScreenModes toggle
+
+###
+
+mode=default
+type=key
+data=6
+event=Setup Basic
+event=Mode default
+
+mode=default
+type=key
+data=7
+event=Calculator
+label=$(CheckTaskResumed)$(CheckTask)
+location=6
+
+mode=default
+type=key
+data=8
+event=Setup Task
+event=Mode default
+label=$(CheckTaskResumed)$(CheckWaypointFile)
+location=7
+
+mode=default
+type=key
+data=9
+event=Setup Target
+
+mode=default
+type=key
+data=0
+event=ArmAdvance show
+event=ArmAdvance toggle
+label=$(CheckTaskResumed)$(CheckTask)
+location=9
 
 
 # ------------
