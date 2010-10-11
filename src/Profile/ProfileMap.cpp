@@ -37,15 +37,10 @@ Copyright_License {
 */
 
 #include "Profile/ProfileMap.hpp"
-#include "Profile/ProfileKeys.hpp"
 #include "Util/tstring.hpp"
 #include "StringUtil.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
-
-#include <assert.h>
-#include <stdlib.h>
-#include <stdio.h>
 
 #include <map>
 
