@@ -43,7 +43,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "DataField/Boolean.hpp"
-#include "Screen/Fonts.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -69,27 +68,33 @@ static bool FontRegistryChanged = false;
 static WndForm *wf = NULL;
 
 static void
+ResetFont(Font &font, bool custom, const TCHAR *profile_key,
+          const LOGFONT &default_log_font)
+{
+  LOGFONT log_font;
+  if (!custom || !Profile::GetFont(profile_key, &log_font))
+    log_font = default_log_font;
+
+  font.set(log_font);
+}
+
+static void
 ResetFonts(bool bUseCustom)
 {
-  if (bUseCustom) {
-    Fonts::LoadCustomFont(&TempInfoWindowFont, szProfileFontInfoWindowFont);
-    Fonts::LoadCustomFont(&TempTitleWindowFont, szProfileFontTitleWindowFont);
-    Fonts::LoadCustomFont(&TempMapWindowFont, szProfileFontMapWindowFont);
-    Fonts::LoadCustomFont(&TempTitleSmallWindowFont,
-        szProfileFontTitleSmallWindowFont);
-    Fonts::LoadCustomFont(&TempMapWindowBoldFont,
-        szProfileFontMapWindowBoldFont);
-    Fonts::LoadCustomFont(&TempCDIWindowFont, szProfileFontCDIWindowFont);
-    Fonts::LoadCustomFont(&TempMapLabelFont, szProfileFontMapLabelFont);
-  }
-
-  Fonts::SetFont(&TempInfoWindowFont, LogInfoBox);
-  Fonts::SetFont(&TempTitleWindowFont, LogTitle);
-  Fonts::SetFont(&TempMapWindowFont, LogMap);
-  Fonts::SetFont(&TempTitleSmallWindowFont, LogInfoBoxSmall);
-  Fonts::SetFont(&TempMapWindowBoldFont, LogMapBold);
-  Fonts::SetFont(&TempCDIWindowFont, LogCDI);
-  Fonts::SetFont(&TempMapLabelFont, LogMapLabel);
+  ResetFont(TempInfoWindowFont, bUseCustom,
+            szProfileFontInfoWindowFont, LogInfoBox);
+  ResetFont(TempTitleWindowFont, bUseCustom,
+            szProfileFontTitleWindowFont, LogTitle);
+  ResetFont(TempMapWindowFont, bUseCustom,
+            szProfileFontMapWindowFont, LogMap);
+  ResetFont(TempTitleSmallWindowFont, bUseCustom,
+            szProfileFontTitleSmallWindowFont, LogInfoBoxSmall);
+  ResetFont(TempMapWindowBoldFont, bUseCustom,
+            szProfileFontMapWindowBoldFont, LogMapBold);
+  ResetFont(TempCDIWindowFont, bUseCustom,
+            szProfileFontCDIWindowFont, LogCDI);
+  ResetFont(TempMapLabelFont, bUseCustom,
+            szProfileFontMapLabelFont, LogMapLabel);
 }
 
 static void
