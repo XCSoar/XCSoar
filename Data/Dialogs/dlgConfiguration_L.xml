@@ -8,6 +8,7 @@
   <Button Name="cmdPaste" Caption="Paste" X="5" Y="70" Width="60" Height="28"/>
 
   <Button Name="cmdFonts" Caption="Fonts" X="5" Y="130" Width="60" Height="28"/>
+  <Button Name="cmdWaypoints" Caption="Waypoints" X="5" Y="130" Width="60" Height="28"/>
 
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="160" Width="29" Height="28" OnClick="OnPrevClicked" />
   <SymbolButton Name="cmdNext" Caption="&gt;" X="36" Y="160" Width="29" Height="28" OnClick="OnNextClicked" />
@@ -706,16 +707,6 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
         Help="Enables the automatic starting and stopping of logger on takeoff and landing respectively. Disable when flying paragliders.">
         <DataField DataType="boolean" />
       </Edit>
-    </Panel>
-  
-    <Panel Name="frmWaypointEdit" X="0" Y="0" Width="0" Height="222">
-      <Button Name="cmdWaypointNew" Caption="New" X="50" Width="100" Height="28" OnClick="OnWaypointNewClicked" />
-  
-      <Button Name="cmdWaypointEdit" Caption="Edit" X="50" Width="100" Height="28" OnClick="OnWaypointEditClicked" />
-    
-      <Button Name="cmdWaypointSave" Caption="Save" X="50" Width="100" Height="28" OnClick="OnWaypointSaveClicked" />
-    
-      <Button Name="cmdWaypointDelete" Caption="Delete" X="50" Width="100" Height="28" OnClick="OnWaypointDeleteClicked" />
     </Panel>
     
     <Panel Name="frmPages" X="0" Y="0" Width="0" Height="222">

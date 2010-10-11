@@ -99,7 +99,6 @@ enum config_page {
   PAGE_INFOBOX_FINAL,
   PAGE_INFOBOX_AUXILIARY,
   PAGE_LOGGER,
-  PAGE_WAYPOINTS,
   PAGE_PAGES,
   PAGE_EXPERIMENTAL,
 };
@@ -123,7 +122,6 @@ static const TCHAR *const captions[] = {
   N_("InfoBox Final Glide"),
   N_("InfoBox Auxiliary"),
   N_("Logger"),
-  N_("Waypoint Edit"),
   N_("Pages"),
   N_("Experimental features"),
 };
@@ -156,6 +154,7 @@ static WndButton *buttonLoggerID = NULL;
 static WndButton *buttonCopy = NULL;
 static WndButton *buttonPaste = NULL;
 static WndButton *buttonFonts = NULL;
+static WndButton *buttonWaypoints = NULL;
 
 static void
 UpdateButtons(void)
@@ -224,6 +223,9 @@ PageSwitched()
 
   if (buttonFonts != NULL)
     buttonFonts->set_visible(current_page == PAGE_INTERFACE);
+
+  if (buttonWaypoints != NULL)
+    buttonWaypoints->set_visible(current_page == PAGE_SITE);
 }
 
 static void
@@ -487,6 +489,12 @@ OnFonts(gcc_unused WndButton &button)
   dlgConfigFontsShowModal();
 }
 
+static void
+OnWaypoints(gcc_unused WndButton &button)
+{
+  dlgConfigWaypointsShowModal();
+}
+
 static bool
 FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
@@ -602,83 +610,6 @@ OnPolarTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 
 extern void OnInfoBoxHelp(WindowControl * Sender);
 
-static void
-OnWaypointNewClicked(WindowControl * Sender)
-{
-  (void)Sender;
-
-  Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().Location);
-  if (dlgWaypointEditShowModal(edit_waypoint)) {
-    if (edit_waypoint.Name.size()) {
-      way_points.append(edit_waypoint);
-      waypointneedsave = true;
-    }
-  }
-}
-
-static void
-OnWaypointEditClicked(WindowControl * Sender)
-{
-  (void)Sender;
-
-  const Waypoint *way_point = dlgWayPointSelect(XCSoarInterface::main_window,
-                                                XCSoarInterface::Basic().Location);
-  if (way_point){
-    if (way_points.get_writable(*way_point)) {
-      Waypoint wp_copy = *way_point;
-      if (dlgWaypointEditShowModal(wp_copy)) {
-        waypointneedsave = true;
-        way_points.replace(*way_point, wp_copy);
-      }
-    } else {
-      MessageBoxX(_("Waypoint not editable"), _("Error"), MB_OK);
-    }
-  }
-}
-
-static void
-AskWaypointSave(void)
-{
-  /// @todo terrain check???
-  if (WayPointFile::WaypointsOutOfRangeSetting != 2 ||
-      MessageBoxX(_("Waypoints excluded, save anyway?"),
-                  _("Waypoints outside terrain"),
-                  MB_YESNO | MB_ICONQUESTION) == IDYES) {
-    WayPointGlue::SaveWaypoints(way_points);
-    WaypointFileChanged= true;
-    changed = true;
-  }
-
-  waypointneedsave = false;
-}
-
-static void
-OnWaypointSaveClicked(WindowControl * Sender)
-{
-  (void)Sender;
-
-  AskWaypointSave();
-}
-
-static void
-OnWaypointDeleteClicked(WindowControl * Sender)
-{
-  (void)Sender;
-#ifdef OLD_TASK
-  int res;
-  res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
-  if (res != -1){
-    if(MessageBoxX(way_points.get(res).Name,
-                   _("Delete Waypoint?"),
-                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
-
-      way_points.set(res).FileNum = -1;
-      waypointneedsave = true;
-    }
-  }
-#endif
-}
-
 void
 OnInfoBoxHelp(WindowControl * Sender)
 {
@@ -722,10 +653,6 @@ static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnSetupDeviceAClicked),
   DeclareCallBackEntry(OnSetupDeviceBClicked),
   DeclareCallBackEntry(OnInfoBoxHelp),
-  DeclareCallBackEntry(OnWaypointNewClicked),
-  DeclareCallBackEntry(OnWaypointDeleteClicked),
-  DeclareCallBackEntry(OnWaypointEditClicked),
-  DeclareCallBackEntry(OnWaypointSaveClicked),
   DeclareCallBackEntry(OnPolarFileData),
   DeclareCallBackEntry(OnPolarTypeData),
   DeclareCallBackEntry(OnDeviceAData),
@@ -915,6 +842,10 @@ setVariables()
   buttonFonts = ((WndButton *)wf->FindByName(_T("cmdFonts")));
   if (buttonFonts)
     buttonFonts->SetOnClickNotify(OnFonts);
+
+  buttonWaypoints = ((WndButton *)wf->FindByName(_T("cmdWaypoints")));
+  if (buttonWaypoints)
+    buttonWaypoints->SetOnClickNotify(OnWaypoints);
 
   UpdateButtons();
 
@@ -2118,13 +2049,13 @@ void dlgConfigurationShowModal(void)
   PolarFileChanged = FinishFileField(*wf, _T("prpPolarFile"),
                                      szProfilePolarFile);
 
-  WaypointFileChanged =
-    FinishFileField(*wf, _T("prpWaypointFile"), szProfileWayPointFile) ||
+  WaypointFileChanged = WaypointFileChanged |
+    FinishFileField(*wf, _T("prpWaypointFile"), szProfileWayPointFile) |
     FinishFileField(*wf, _T("prpAdditionalWaypointFile"),
                     szProfileAdditionalWayPointFile);
 
   AirspaceFileChanged =
-    FinishFileField(*wf, _T("prpAirspaceFile"), szProfileAirspaceFile) ||
+    FinishFileField(*wf, _T("prpAirspaceFile"), szProfileAirspaceFile) |
     FinishFileField(*wf, _T("prpAdditionalAirspaceFile"),
                     szProfileAdditionalAirspaceFile);
 
@@ -2449,13 +2380,6 @@ void dlgConfigurationShowModal(void)
   for (unsigned i = 0; i < 4; ++i)
     for (unsigned j = 0; j < InfoBoxLayout::numInfoWindows; ++j)
       GetInfoBoxSelector(j, (enum InfoBoxManager::mode)i);
-
-  if (waypointneedsave) {
-    way_points.optimise();
-    if (MessageBoxX(_("Save changes to waypoint file?"), _("Waypoints edited"),
-                    MB_YESNO | MB_ICONQUESTION) == IDYES)
-      AskWaypointSave();
-  }
 
   if (!is_embedded() && DevicePortChanged)
     requirerestart = true;
