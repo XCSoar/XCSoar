@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Profile/Registry.hpp"
-#include "Profile/ProfileKeys.hpp"
 #include "StringUtil.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
@@ -50,6 +49,10 @@ Copyright_License {
 #include "Config/Registry.hpp"
 #else
 #include "Config/GConf.hpp"
+#endif
+
+#ifdef WIN32
+static const TCHAR szProfileKey[] = _T("Software\\MPSR\\XCSoar");
 #endif
 
 const static size_t nMaxValueValueSize = MAX_PATH * 2 + 6;

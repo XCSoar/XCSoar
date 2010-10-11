@@ -52,7 +52,6 @@ Copyright_License {
 #define CONF(key) _T(key)
 #endif
 
-extern const TCHAR szProfileKey[];
 extern const TCHAR *szProfileDisplayType[];
 extern const TCHAR *szProfileColour[];
 extern const TCHAR *szProfileBrush[];

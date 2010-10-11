@@ -106,7 +106,6 @@ TEST_LOGGER_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Version.cpp \
-	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Math/fixed.cpp \
 	$(SRC)/Math/Angle.cpp \
@@ -143,7 +142,6 @@ $(TARGET_BIN_DIR)/TestDriver$(TARGET_EXEEXT): $(TEST_DRIVER_OBJS) $(TEST_DRIVER_
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 TEST_WAY_POINT_FILE_SOURCES = \
-	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/UtilsFile.cpp \
@@ -267,7 +265,6 @@ READ_PROFILE_STRING_SOURCES = \
 	$(SRC)/Profile/Registry.cpp \
 	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/Profile.cpp \
-	$(SRC)/Profile/ProfileKeys.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/ReadProfileString.cpp
 READ_PROFILE_STRING_OBJS = $(call SRC_TO_OBJ,$(READ_PROFILE_STRING_SOURCES))
@@ -282,7 +279,6 @@ READ_PROFILE_INT_SOURCES = \
 	$(SRC)/Profile/Registry.cpp \
 	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/Profile.cpp \
-	$(SRC)/Profile/ProfileKeys.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/ReadProfileInt.cpp
 READ_PROFILE_INT_OBJS = $(call SRC_TO_OBJ,$(READ_PROFILE_INT_SOURCES))
@@ -297,7 +293,6 @@ WRITE_PROFILE_STRING_SOURCES = \
 	$(SRC)/Profile/Registry.cpp \
 	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/Profile.cpp \
-	$(SRC)/Profile/ProfileKeys.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/WriteProfileString.cpp
 WRITE_PROFILE_STRING_OBJS = $(call SRC_TO_OBJ,$(WRITE_PROFILE_STRING_SOURCES))
@@ -312,7 +307,6 @@ WRITE_PROFILE_INT_SOURCES = \
 	$(SRC)/Profile/Registry.cpp \
 	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/Profile.cpp \
-	$(SRC)/Profile/ProfileKeys.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/WriteProfileInt.cpp
 WRITE_PROFILE_INT_OBJS = $(call SRC_TO_OBJ,$(WRITE_PROFILE_INT_SOURCES))
@@ -682,7 +676,6 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
-	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/UtilsText.cpp \
