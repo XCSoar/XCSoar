@@ -254,14 +254,16 @@ OnTempData(DataField *Sender, DataField::DataAccessKind_t Mode)
   static fixed lastRead = fixed_minus_one;
   switch (Mode) {
   case DataField::daGet:
-    lastRead = fixed(CuSonde::maxGroundTemperature);
+    lastRead = Units::ToSysUnit(fixed(CuSonde::maxGroundTemperature),
+                                unGradCelcius);
     Sender->Set(Units::ToUserTemperature(lastRead));
     break;
   case DataField::daChange:
   case DataField::daPut:
-    if (fabs(lastRead - Sender->GetAsFixed()) >= fixed_one) {
+    if (fabs(lastRead - Units::ToSysTemperature(Sender->GetAsFixed())) >=
+        fixed_one) {
       lastRead = Units::ToSysTemperature(Sender->GetAsFixed());
-      CuSonde::setForecastTemperature(lastRead);
+      CuSonde::setForecastTemperature(Units::ToUserUnit(lastRead, unGradCelcius));
     }
     break;
   }
@@ -300,8 +302,8 @@ dlgBasicSettingsShowModal()
   wp = (WndProperty*)wf->FindByName(_T("prpTemperature"));
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetMin(Units::ToUserTemperature(fixed(-50)));
-    df.SetMax(Units::ToUserTemperature(fixed(60)));
+    df.SetMin(Units::ToUserTemperature(Units::ToSysUnit(fixed(-50), unGradCelcius)));
+    df.SetMax(Units::ToUserTemperature(Units::ToSysUnit(fixed(60), unGradCelcius)));
     df.SetUnits(Units::GetTemperatureName());
     wp->RefreshDisplay();
   }
