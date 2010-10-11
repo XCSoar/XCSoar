@@ -37,6 +37,9 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+
+#ifdef GNAV
+
 #include "Units.hpp"
 #include "InputEvents.h"
 #include "Math/FastMath.h"
@@ -139,3 +142,18 @@ void dlgBrightnessShowModal(void){
 
   delete wf;
 }
+
+#else /* !GNAV */
+
+#include "Dialogs/Message.hpp"
+
+void
+dlgBrightnessShowModal()
+{
+  /* XXX this is ugly, non-Altair platforms should not even see the
+     according menu item; not translating this superfluous message */
+  MessageBoxX(_T("Only available on Altair"), _T("Brightness"),
+              MB_OK|MB_ICONERROR);
+}
+
+#endif /* !GNAV */
