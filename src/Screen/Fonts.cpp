@@ -72,14 +72,6 @@ LOGFONT LogMapBold;
 LOGFONT LogCDI;
 LOGFONT LogMapLabel;
 
-static bool
-IsNullLogFont(LOGFONT logfont)
-{
-  LOGFONT LogFontBlank;
-  memset((char *)&LogFontBlank, 0, sizeof(LOGFONT));
-  return (memcmp(&logfont, &LogFontBlank, sizeof(LOGFONT)) == 0);
-}
-
 static void
 InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
                   bool bold = false, bool italic = false,
@@ -94,17 +86,6 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
   font->lfWeight = (long)(bold ? FW_BOLD : FW_MEDIUM);
   font->lfItalic = italic;
   font->lfQuality = ANTIALIASED_QUALITY;
-}
-
-void
-Fonts::SetFont(Font *theFont, LOGFONT autoLogFont,
-                  LOGFONT * LogFontUsed)
-{
-  if (theFont->defined() || IsNullLogFont(autoLogFont))
-    return;
-
-  if (theFont->set(autoLogFont) && LogFontUsed != NULL)
-    *LogFontUsed = autoLogFont; // RLD save for custom font GUI
 }
 
 void
@@ -142,8 +123,7 @@ SizeLogFont(LOGFONT &logfont, unsigned width, const TCHAR* str)
     --logfont.lfHeight;
 
     Font font;
-    Fonts::SetFont(&font, logfont, NULL);
-    if (!font.defined())
+    if (!font.set(logfont))
       break;
 
     canvas.select(font);
@@ -201,19 +181,19 @@ Fonts::Initialize()
 {
   InitialiseLogFonts();
 
-  SetFont(&InfoBoxSmall, LogInfoBoxSmall);
-  SetFont(&Title, LogTitle);
-  SetFont(&CDI, LogCDI);
-  SetFont(&MapLabel, LogMapLabel);
-  SetFont(&Map, LogMap);
-  SetFont(&MapBold, LogMapBold);
+  InfoBoxSmall.set(LogInfoBoxSmall);
+  Title.set(LogTitle);
+  CDI.set(LogCDI);
+  MapLabel.set(LogMapLabel);
+  Map.set(LogMap);
+  MapBold.set(LogMapBold);
 }
 
 void
 Fonts::SizeInfoboxFont()
 {
   SizeLogFont(LogInfoBox, InfoBoxLayout::ControlWidth, _T("1234m"));
-  SetFont(&InfoBox, LogInfoBox);
+  InfoBox.set(LogInfoBox);
 }
 
 void

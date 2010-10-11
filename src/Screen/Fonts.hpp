@@ -56,9 +56,6 @@ namespace Fonts
   void LoadCustomFont(Font *theFont, const TCHAR FontRegKey[],
                       LOGFONT *LogFontUsed = NULL);
 
-  void SetFont(Font *theFont, LOGFONT autoLogFont,
-                      LOGFONT *LogFontUsed = NULL);
-
   void Initialize();
   void SizeInfoboxFont();
   void LoadCustom();
