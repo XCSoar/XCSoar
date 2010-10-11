@@ -42,6 +42,14 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Math/fixed.hpp"
 
+#ifndef USE_PROFILE_MAP
+#include "Profile/Registry.hpp"
+namespace ProfileImpl = Registry;
+#else
+#include "Profile/ProfileMap.hpp"
+namespace ProfileImpl = ProfileMap;
+#endif
+
 #include <stddef.h>
 #include <tchar.h>
 #include <windows.h>
@@ -73,6 +81,8 @@ struct DeviceConfig {
 
 namespace Profile
 {
+  using namespace ProfileImpl;
+
   static inline bool
   use_files()
   {
@@ -106,24 +116,6 @@ namespace Profile
    * @param override NULL or file to load when calling Load()
    */
   void SetFiles(const TCHAR* override);
-
-  bool Get(const TCHAR *key, int &value);
-  bool Get(const TCHAR *key, short &value);
-  bool Get(const TCHAR *key, bool &value);
-  bool Get(const TCHAR *key, unsigned &value);
-  bool Get(const TCHAR *key, double &value);
-#ifdef FIXED_MATH
-  bool Get(const TCHAR *key, fixed &value);
-#endif
-  bool Get(const TCHAR *key, TCHAR *value, size_t dwSize);
-
-  bool Set(const TCHAR *key, int value);
-  bool Set(const TCHAR *key, short value);
-  bool Set(const TCHAR *key, bool value);
-  bool Set(const TCHAR *key, unsigned value);
-  bool Set(const TCHAR *key, double value);
-  bool Set(const TCHAR *key, long value);
-  bool Set(const TCHAR *key, const TCHAR *value);
 
   void SetStringIfAbsent(const TCHAR *key, const TCHAR *value);
 
