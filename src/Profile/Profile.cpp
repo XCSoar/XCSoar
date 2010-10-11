@@ -203,15 +203,10 @@ bool
 Profile::Get(const TCHAR *key, TCHAR *value, size_t dwSize)
 {
 #ifndef USE_PROFILE_MAP
-  if (Registry::Get(key, value, dwSize))
+  return Registry::Get(key, value, dwSize);
 #else
-  if (ProfileMap::Get(key, value, dwSize))
+  return ProfileMap::Get(key, value, dwSize);
 #endif
-    return true;
-  else {
-    value[0] = _T('\0');
-    return false;
-  }
 }
 
 bool

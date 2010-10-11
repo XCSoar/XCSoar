@@ -85,8 +85,10 @@ ProfileMap::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
 {
   std::map<tstring, tstring>::iterator it;
   it = map_str.find(szRegValue);
-  if (it == map_str.end())
+  if (it == map_str.end()) {
+    pPos[0] = _T('\0');
     return false;
+  }
 
   _tcsncpy(pPos, it->second.c_str(), dwSize);
   return true;
