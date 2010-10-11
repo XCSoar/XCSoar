@@ -54,7 +54,7 @@ TEST_NAMES = \
 	test_waypoints \
 	test_pressure \
 	test_task \
-	TestAngle TestEarth TestSunEphemeris \
+	TestAngle TestUnits TestEarth TestSunEphemeris \
 	TestRadixTree \
 	TestDriver \
 	TestWayPointFile
@@ -67,6 +67,16 @@ TEST_ANGLE_SOURCES = \
 TEST_ANGLE_OBJS = $(call SRC_TO_OBJ,$(TEST_ANGLE_SOURCES))
 TEST_ANGLE_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestAngle$(TARGET_EXEEXT): $(TEST_ANGLE_OBJS) $(TEST_ANGLE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_UNITS_SOURCES = \
+	$(SRC)/Units.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestUnits.cpp
+TEST_UNITS_OBJS = $(call SRC_TO_OBJ,$(TEST_UNITS_SOURCES))
+TEST_UNITS_LDADD = $(MATH_LIBS)
+$(TARGET_BIN_DIR)/TestUnits$(TARGET_EXEEXT): $(TEST_UNITS_OBJS) $(TEST_UNITS_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
