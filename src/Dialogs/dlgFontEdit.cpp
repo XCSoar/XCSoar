@@ -37,21 +37,17 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
-#include "Profile/Profile.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Integer.hpp"
-#include "Screen/Fonts.hpp"
 #include "MainWindow.hpp"
 
 #include <stdio.h>
 
 static WndForm *wf = NULL;
-static LOGFONT OriginalLogFont;
 static LOGFONT NewLogFont;
 static LOGFONT resetLogFont;
 static Font NewFont;
-const static TCHAR * OriginalFontRegKey;
 
 static bool locked;
 
@@ -111,11 +107,6 @@ static void RedrawSampleFont(void)
 #else /* !ENABLE_SDL */
   NewFont.set(NewLogFont);
 #endif /* !ENABLE_SDL */
-
-  if (_tcscmp(OriginalFontRegKey, szProfileFontMapWindowBoldFont) == 0) {
-    wf->SetFont(NewFont);
-    wf->SetTitleFont(NewFont);
-  }
 
   WndFrame *wp = (WndFrame *)wf->FindByName(_T("prpFontSample"));
   if (wp) {
@@ -227,7 +218,7 @@ LoadGUI()
 
 bool
 dlgFontEditShowModal(const TCHAR * FontDescription,
-                     const TCHAR * FontRegKey,
+                     LOGFONT &log_font,
                      LOGFONT autoLogFont)
 {
   bool bRetVal = false;
@@ -237,18 +228,14 @@ dlgFontEditShowModal(const TCHAR * FontDescription,
   if (wf == NULL)
     return false;
 
-  Fonts::SetFont(&NewFont, autoLogFont, &OriginalLogFont);
-  Fonts::LoadCustomFont(&NewFont, FontRegKey, &OriginalLogFont);
-
-  OriginalFontRegKey = FontRegKey;
-  NewLogFont = OriginalLogFont;
+  NewLogFont = log_font;
   resetLogFont = autoLogFont;
 
   InitGUI(FontDescription);
   LoadGUI();
 
   if (wf->ShowModal() == mrOK) {
-    Profile::SetFont(FontRegKey, NewLogFont);
+    log_font = NewLogFont;
     bRetVal = true;
   }
 

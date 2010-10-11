@@ -206,9 +206,14 @@ EditFont(const TCHAR *prp_name, const TCHAR *profile_key,
   // updates registry for font info and updates LogFont values
 #define MAX_EDITFONT_DESC_LEN 100
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
+
+  LOGFONT custom_log_font;
+  if (!Profile::GetFont(profile_key, &custom_log_font))
+    custom_log_font = log_font;
+
   GetFontDescription(FontDesc, prp_name, MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc, profile_key,
-                           log_font)) {
+  if (dlgFontEditShowModal(FontDesc, custom_log_font, log_font)) {
+    Profile::SetFont(profile_key, custom_log_font);
     FontRegistryChanged = true;
     RefreshFonts();
   }

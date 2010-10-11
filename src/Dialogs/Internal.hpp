@@ -62,7 +62,7 @@ Copyright_License {
 
 bool
 dlgFontEditShowModal(const TCHAR * FontDescription,
-                     const TCHAR * FontRegKey,
+                     LOGFONT &log_font,
                      LOGFONT autoLogFont);
 
 #endif
