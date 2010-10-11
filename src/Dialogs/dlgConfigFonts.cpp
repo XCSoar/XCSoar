@@ -200,89 +200,62 @@ GetFontDescription(TCHAR Description[], const TCHAR * prpName, int iMaxLen)
 }
 
 static void
-OnEditInfoWindowFontClicked(gcc_unused WndButton &button)
+EditFont(const TCHAR *prp_name, const TCHAR *profile_key,
+         const LOGFONT &log_font)
 {
   // updates registry for font info and updates LogFont values
 #define MAX_EDITFONT_DESC_LEN 100
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
-  GetFontDescription(FontDesc, _T("prpInfoWindowFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc, szProfileFontInfoWindowFont,
-                           LogInfoBox)) {
+  GetFontDescription(FontDesc, prp_name, MAX_EDITFONT_DESC_LEN);
+  if (dlgFontEditShowModal(FontDesc, profile_key,
+                           log_font)) {
     FontRegistryChanged = true;
     RefreshFonts();
   }
+}
+
+static void
+OnEditInfoWindowFontClicked(gcc_unused WndButton &button)
+{
+  EditFont(_T("prpInfoWindowFont"), szProfileFontInfoWindowFont, LogInfoBox);
 }
 
 static void
 OnEditTitleWindowFontClicked(gcc_unused WndButton &button)
 {
-  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
-  GetFontDescription(FontDesc, _T("prpTitleWindowFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc, szProfileFontTitleWindowFont,
-                           LogTitle)) {
-    FontRegistryChanged = true;
-    RefreshFonts();
-  }
+  EditFont(_T("prpTitleWindowFont"), szProfileFontTitleWindowFont, LogTitle);
 }
 
 static void
 OnEditMapWindowFontClicked(gcc_unused WndButton &button)
 {
-  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
-  GetFontDescription(FontDesc, _T("prpMapWindowFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc, szProfileFontMapWindowFont,
-                           LogMap)) {
-    FontRegistryChanged = true;
-    RefreshFonts();
-  }
+  EditFont(_T("prpMapWindowFont"), szProfileFontMapWindowFont, LogMap);
 }
 
 static void
 OnEditTitleSmallWindowFontClicked(gcc_unused WndButton &button)
 {
-  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
-  GetFontDescription(FontDesc, _T("prpTitleSmallWindowFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc, szProfileFontTitleSmallWindowFont,
-                           LogInfoBoxSmall)) {
-    FontRegistryChanged = true;
-    RefreshFonts();
-  }
+  EditFont(_T("prpTitleSmallWindowFont"), szProfileFontTitleSmallWindowFont,
+           LogInfoBoxSmall);
 }
 
 static void
 OnEditMapWindowBoldFontClicked(gcc_unused WndButton &button)
 {
-  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
-  GetFontDescription(FontDesc, _T("prpMapWindowBoldFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc, szProfileFontMapWindowBoldFont,
-                           LogMapBold)) {
-    FontRegistryChanged = true;
-    RefreshFonts();
-  }
+  EditFont(_T("prpMapWindowBoldFont"), szProfileFontMapWindowBoldFont,
+           LogMapBold);
 }
 
 static void
 OnEditCDIWindowFontClicked(gcc_unused WndButton &button)
 {
-  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
-  GetFontDescription(FontDesc, _T("prpCDIWindowFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc, szProfileFontCDIWindowFont,
-                           LogCDI)) {
-    FontRegistryChanged = true;
-    RefreshFonts();
-  }
+  EditFont(_T("prpCDIWindowFont"), szProfileFontCDIWindowFont, LogCDI);
 }
 
 static void
 OnEditMapLabelFontClicked(gcc_unused WndButton &button)
 {
-  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
-  GetFontDescription(FontDesc, _T("prpMapLabelFont"), MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc, szProfileFontMapLabelFont,
-                           LogMapLabel)) {
-    FontRegistryChanged = true;
-    RefreshFonts();
-  }
+  EditFont(_T("prpMapLabelFont"), szProfileFontMapLabelFont, LogMapLabel);
 }
 
 static void
