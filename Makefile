@@ -337,6 +337,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Compatibility/string.c 	\
 	$(SRC)/Profile/Registry.cpp \
 	$(SRC)/Profile/Profile.cpp \
+	$(SRC)/Profile/Writer.cpp \
 	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/ProfileGlue.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \

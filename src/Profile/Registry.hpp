@@ -44,6 +44,8 @@ Copyright_License {
 #include <windows.h>
 #include <tchar.h>
 
+class ProfileWriter;
+
 namespace Registry {
   bool Get(const TCHAR *szRegValue, DWORD &pPos);
 
@@ -138,7 +140,7 @@ namespace Registry {
   bool Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize);
   bool Set(const TCHAR *szRegValue, const TCHAR *Pos);
 
-  void Export(const TCHAR* szFile);
+  void Export(ProfileWriter &writer);
 }
 
 #endif

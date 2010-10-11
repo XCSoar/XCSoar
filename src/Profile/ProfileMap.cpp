@@ -37,9 +37,9 @@ Copyright_License {
 */
 
 #include "Profile/ProfileMap.hpp"
+#include "Profile/Writer.hpp"
 #include "Util/tstring.hpp"
 #include "StringUtil.hpp"
-#include "IO/TextWriter.hpp"
 
 #include <map>
 
@@ -100,32 +100,14 @@ ProfileMap::Set(const TCHAR *szRegValue, const TCHAR *Pos)
 }
 
 void
-ProfileMap::Export(const TCHAR *szFile)
+ProfileMap::Export(ProfileWriter &writer)
 {
-  // If no file is given -> return
-  if (string_is_empty(szFile))
-    return;
-
-  // Try to open the file for writing
-  TextWriter writer(szFile);
-  // ... on error -> return
-  if (writer.error())
-    return;
-
   // Iterate through the profile maps
   std::map<tstring, DWORD>::iterator it_num;
   for (it_num = map_num.begin(); it_num != map_num.end(); it_num++)
-    writer.printfln(_T("%s=%d"), it_num->first.c_str(), it_num->second);
+    writer.write(it_num->first.c_str(), it_num->second);
 
   std::map<tstring, tstring>::iterator it_str;
-  for (it_str = map_str.begin(); it_str != map_str.end(); it_str++) {
-    // If the value string is not empty
-    if (!string_is_empty(it_str->second.c_str()))
-      // -> write the value to the output file
-      writer.printfln(_T("%s=\"%s\""), it_str->first.c_str(),
-                      it_str->second.c_str());
-    else
-      // otherwise -> write ="" to the output file
-      writer.printfln(_T("%s=\"\""), it_str->first.c_str());
-  }
+  for (it_str = map_str.begin(); it_str != map_str.end(); it_str++)
+    writer.write(it_str->first.c_str(), it_str->second.c_str());
 }

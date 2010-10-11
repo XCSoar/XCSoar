@@ -37,8 +37,7 @@ Copyright_License {
 */
 
 #include "Profile/Registry.hpp"
-#include "StringUtil.hpp"
-#include "IO/TextWriter.hpp"
+#include "Profile/Writer.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -142,7 +141,7 @@ Registry::Set(const TCHAR *szRegValue, const TCHAR *Pos)
 }
 
 void
-Registry::Export(const TCHAR *szFile)
+Registry::Export(ProfileWriter &writer)
 {
 #ifdef WIN32
   TCHAR lpstrName[nMaxKeyNameSize+1];
@@ -152,16 +151,6 @@ Registry::Export(const TCHAR *szFile)
     DWORD dValue;
     TCHAR string_value[1];
   } uValue;
-
-  // If no file is given -> return
-  if (string_is_empty(szFile))
-    return;
-
-  // Try to open the file for writing
-  TextWriter writer(szFile);
-  // ... on error -> return
-  if (writer.error())
-    return;
 
   // Try to open the XCSoar registry key
   HKEY hkFrom;
@@ -201,36 +190,15 @@ Registry::Export(const TCHAR *szFile)
 
     if (nType == REG_DWORD) {
       // If the subkey type is DWORD
-      writer.printfln(_T("%s=%d"), lpstrName, uValue.dValue);
+      writer.write(lpstrName, uValue.dValue);
     } else if (nType == REG_SZ) {
       // If the subkey type is STRING
 
-      // If the value is empty
-      if (nValueSize <= 0) {
-        // -> write ="" to the output file an continue with the next subkey
-        writer.printfln(_T("%s=\"\""), lpstrName);
-        continue;
-      }
-
-      // does it contain invalid characters?
-      if (_tcspbrk(uValue.string_value, _T("\r\n\"")) != NULL) {
-        // -> write ="" to the output file an continue with the next subkey
-        writer.printfln(_T("%s=\"\""), lpstrName);
-        continue;
-      }
-
-      /// @todo SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
       // Force null-termination
       uValue.pValue[nValueSize] = 0;
       uValue.pValue[nValueSize + 1] = 0;
 
-      // If the value string is not empty
-      if (!string_is_empty(uValue.string_value))
-        // -> write the value to the output file
-        writer.printfln(_T("%s=\"%s\""), lpstrName, uValue.pValue);
-      else
-        // otherwise -> write ="" to the output file
-        writer.printfln(_T("%s=\"\""), lpstrName);
+      writer.write(lpstrName, uValue.string_value);
     }
   }
 

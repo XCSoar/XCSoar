@@ -37,11 +37,13 @@ Copyright_License {
 */
 
 #include "Profile/Profile.hpp"
+#include "Profile/Writer.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "IO/FileLineReader.hpp"
+#include "IO/TextWriter.hpp"
 
 #define XCSPROFILE "xcsoar-registry.prf"
 
@@ -132,11 +134,19 @@ Profile::SaveFile(const TCHAR *szFile)
   if (string_is_empty(szFile))
     return;
 
+  // Try to open the file for writing
+  TextWriter writer(szFile);
+  // ... on error -> return
+  if (writer.error())
+    return;
+
+  ProfileWriter profile_writer(writer);
+
   LogStartUp(_T("Saving profile to %s"), szFile);
 #ifndef USE_PROFILE_MAP
-  Registry::Export(szFile);
+  Registry::Export(profile_writer);
 #else
-  ProfileMap::Export(szFile);
+  ProfileMap::Export(profile_writer);
 #endif
 }
 
