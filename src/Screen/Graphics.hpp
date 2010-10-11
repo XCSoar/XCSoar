@@ -50,13 +50,6 @@ Copyright_License {
 struct SETTINGS_MAP;
 class LabelBlock;
 
-// mode are flags
-// bit 0 == fill background add border / 1
-// bit 1 == fill background            / 2
-// bit 2 == right alligned             / 4
-// bit 3 == landable TP label          / 8
-// bit 4 == center alligned
-
 namespace Graphics {
   void Initialise();
   void InitialiseConfigured(const SETTINGS_MAP &settings_map);
