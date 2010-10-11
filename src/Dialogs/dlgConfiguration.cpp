@@ -94,10 +94,7 @@ enum config_page {
   PAGE_APPEARANCE,
   PAGE_VARIO,
   PAGE_TASK_RULES,
-  PAGE_INFOBOX_CIRCLING,
-  PAGE_INFOBOX_CRUISE,
-  PAGE_INFOBOX_FINAL,
-  PAGE_INFOBOX_AUXILIARY,
+  PAGE_INFOBOXES,
   PAGE_LOGGER,
   PAGE_PAGES,
   PAGE_EXPERIMENTAL,
@@ -117,10 +114,7 @@ static const TCHAR *const captions[] = {
   N_("Appearance"),
   N_("FLARM and other gauges"),
   N_("Default task rules"),
-  N_("InfoBox Circling"),
-  N_("InfoBox Cruise"),
-  N_("InfoBox Final Glide"),
-  N_("InfoBox Auxiliary"),
+  N_("InfoBoxes"),
   N_("Logger"),
   N_("Pages"),
   N_("Experimental features"),
@@ -151,8 +145,6 @@ static WndButton *buttonPilotName = NULL;
 static WndButton *buttonAircraftType = NULL;
 static WndButton *buttonAircraftRego = NULL;
 static WndButton *buttonLoggerID = NULL;
-static WndButton *buttonCopy = NULL;
-static WndButton *buttonPaste = NULL;
 static WndButton *buttonFonts = NULL;
 static WndButton *buttonWaypoints = NULL;
 
@@ -195,15 +187,6 @@ UpdateButtons(void)
   }
 }
 
-static bool
-is_infobox_page(config_page page)
-{
-  return page == PAGE_INFOBOX_CIRCLING ||
-    page == PAGE_INFOBOX_CRUISE ||
-    page == PAGE_INFOBOX_FINAL ||
-    page == PAGE_INFOBOX_AUXILIARY;
-}
-
 static void
 PageSwitched()
 {
@@ -214,12 +197,6 @@ PageSwitched()
              (unsigned)current_page + 1,
              gettext(captions[(unsigned)current_page]));
   wf->SetCaption(caption);
-
-  if (buttonCopy != NULL)
-    buttonCopy->set_visible(is_infobox_page(current_page));
-
-  if (buttonPaste != NULL)
-    buttonPaste->set_visible(is_infobox_page(current_page));
 
   if (buttonFonts != NULL)
     buttonFonts->set_visible(current_page == PAGE_INTERFACE);
@@ -404,83 +381,28 @@ OnCloseClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrOK);
 }
 
-static int cpyInfoBox[10];
-
-static const TCHAR *
-page2mode(config_page page)
+static void
+OnInfoBoxesCircling(gcc_unused WndButton &button)
 {
-  switch (page) {
-  case PAGE_INFOBOX_CIRCLING:
-    return _T("Circling");
-
-  case PAGE_INFOBOX_CRUISE:
-    return _T("Cruise");
-
-  case PAGE_INFOBOX_FINAL:
-    return _T("FinalGlide");
-
-  case PAGE_INFOBOX_AUXILIARY:
-    return _T("Aux");
-
-  default:
-    return NULL;
-  }
-}
-
-static const TCHAR *const info_box_mode_names[] = {
-  _T("Circling"),
-  _T("Cruise"),
-  _T("FinalGlide"),
-  _T("Aux"),
-};
-
-static void InfoBoxPropName(TCHAR *name, int item, const TCHAR *mode) {
-  _stprintf(name, _T("prpInfoBox%s%1d"), mode, item);
-}
-
-static WndProperty *
-FindInfoBoxField(const TCHAR *mode, int item)
-{
-  TCHAR name[80];
-  InfoBoxPropName(name, item, mode);
-  return (WndProperty*)wf->FindByName(name);
+  dlgConfigInfoboxesShowModal(InfoBoxManager::MODE_CIRCLING);
 }
 
 static void
-OnCopy(gcc_unused WndButton &button)
+OnInfoBoxesCruise(gcc_unused WndButton &button)
 {
-  const TCHAR *mode = page2mode(current_page);
-  if (mode == NULL)
-    return;
-
-  for (unsigned item = 0; item < InfoBoxLayout::numInfoWindows; item++) {
-    WndProperty *wp = FindInfoBoxField(mode, item);
-    if (wp)
-      cpyInfoBox[item] = wp->GetDataField()->GetAsInteger();
-  }
+  dlgConfigInfoboxesShowModal(InfoBoxManager::MODE_CRUISE);
 }
 
 static void
-OnPaste(gcc_unused WndButton &button)
+OnInfoBoxesFinalGlide(gcc_unused WndButton &button)
 {
-  const TCHAR *mode = page2mode(current_page);
-  if (mode == NULL)
-    return;
+  dlgConfigInfoboxesShowModal(InfoBoxManager::MODE_FINAL_GLIDE);
+}
 
-  if(MessageBoxX(_("Overwrite?"),
-                 _("InfoBox paste"),
-                 MB_YESNO | MB_ICONQUESTION) != IDYES)
-    return;
-
-  for (unsigned item = 0; item < InfoBoxLayout::numInfoWindows; item++) {
-    WndProperty *wp = FindInfoBoxField(mode, item);
-    if (wp &&
-        cpyInfoBox[item] >= 0 &&
-        (unsigned)cpyInfoBox[item] < InfoBoxFactory::NUM_TYPES) {
-      wp->GetDataField()->Set(cpyInfoBox[item]);
-      wp->RefreshDisplay();
-    }
-  }
+static void
+OnInfoBoxesAuxiliary(gcc_unused WndButton &button)
+{
+  dlgConfigInfoboxesShowModal(InfoBoxManager::MODE_AUXILIARY);
 }
 
 static void
@@ -610,40 +532,6 @@ OnPolarTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 
 extern void OnInfoBoxHelp(WindowControl * Sender);
 
-void
-OnInfoBoxHelp(WindowControl * Sender)
-{
-  WndProperty *wp = (WndProperty*)Sender;
-  int type = wp->GetDataField()->GetAsInteger();
-  TCHAR caption[100];
-  const TCHAR *mode;
-  switch (configuration_tabbed->GetCurrentPage()) {
-  case PAGE_INFOBOX_CIRCLING:
-    mode = _("circling");
-    break;
-  case PAGE_INFOBOX_CRUISE:
-    mode = _("cruise");
-    break;
-  case PAGE_INFOBOX_FINAL:
-    mode = _("final glide");
-    break;
-  case PAGE_INFOBOX_AUXILIARY:
-    mode = _("auxiliary");
-    break;
-  default:
-    return;
-  }
-  _stprintf(caption, _T("InfoBox %s in %s mode: %s"), wp->GetCaption(), mode,
-            InfoBoxFactory::GetName(type));
-
-  const TCHAR* text = InfoBoxFactory::GetDescription(type);
-  if (text)
-    dlgHelpShowModal(XCSoarInterface::main_window, caption, gettext(text));
-  else
-    dlgHelpShowModal(XCSoarInterface::main_window, caption,
-                     _("No help available on this item"));
-}
-
 static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnAirspaceColoursClicked),
   DeclareCallBackEntry(OnAirspaceModeClicked),
@@ -660,42 +548,6 @@ static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnUserLevel),
   DeclareCallBackEntry(NULL)
 };
-
-static void
-SetInfoBoxSelector(unsigned item, enum InfoBoxManager::mode mode)
-{
-  WndProperty *wp = FindInfoBoxField(info_box_mode_names[mode], item);
-  if (wp == NULL)
-    return;
-
-  DataFieldEnum* dfe;
-  dfe = (DataFieldEnum*)wp->GetDataField();
-  for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; i++)
-    dfe->addEnumText(gettext(InfoBoxManager::GetTypeDescription(i)));
-
-  dfe->Sort(0);
-
-  dfe->Set(InfoBoxManager::getType(item, mode));
-  wp->RefreshDisplay();
-}
-
-static void
-GetInfoBoxSelector(unsigned item, enum InfoBoxManager::mode mode)
-{
-  WndProperty *wp = FindInfoBoxField(info_box_mode_names[mode], item);
-  if (wp == NULL)
-    return;
-
-  int itnew = wp->GetDataField()->GetAsInteger();
-  int it = InfoBoxManager::getType(item, mode);
-
-  if (it == itnew)
-    return;
-
-  changed = true;
-  InfoBoxManager::setType(item, itnew, mode);
-  Profile::SetInfoBoxes(item, InfoBoxManager::getTypeAll(item));
-}
 
 static DeviceConfig device_config[NUMDEV];
 static int dwDeviceIndex1 = 0;
@@ -830,14 +682,6 @@ setVariables()
   buttonLoggerID = ((WndButton *)wf->FindByName(_T("cmdLoggerID")));
   if (buttonLoggerID)
     buttonLoggerID->SetOnClickNotify(OnLoggerIDClicked);
-
-  buttonCopy = ((WndButton *)wf->FindByName(_T("cmdCopy")));
-  if (buttonCopy)
-    buttonCopy->SetOnClickNotify(OnCopy);
-
-  buttonPaste = ((WndButton *)wf->FindByName(_T("cmdPaste")));
-  if (buttonPaste)
-    buttonPaste->SetOnClickNotify(OnPaste);
 
   buttonFonts = ((WndButton *)wf->FindByName(_T("cmdFonts")));
   if (buttonFonts)
@@ -1490,12 +1334,6 @@ setVariables()
                    settings_computer.LoggerTimeStepCircling);
   LoadFormProperty(*wf, _T("prpSnailWidthScale"),
                    XCSoarInterface::SettingsMap().SnailWidthScale);
-
-  for (unsigned i = 0; i < 4; i++) {
-    for (unsigned j = 0; j < InfoBoxLayout::numInfoWindows; j++) {
-      SetInfoBoxSelector(j, (enum InfoBoxManager::mode)i);
-    }
-  }
 }
 
 static bool
@@ -1626,6 +1464,15 @@ PrepareConfigurationDialog()
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
+  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesCircling")))->
+      SetOnClickNotify(OnInfoBoxesCircling);
+  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesCruise")))->
+      SetOnClickNotify(OnInfoBoxesCruise);
+  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesFinalGlide")))->
+      SetOnClickNotify(OnInfoBoxesFinalGlide);
+  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesAuxiliary")))->
+      SetOnClickNotify(OnInfoBoxesAuxiliary);
+
   configuration_tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
   assert(configuration_tabbed != NULL);
 
@@ -1644,10 +1491,6 @@ PrepareConfigurationDialog()
     if (wp) {
       wp->hide();
     }
-  }
-
-  for (int item=0; item<10; item++) {
-    cpyInfoBox[item] = -1;
   }
 
   setVariables();
@@ -2376,10 +2219,6 @@ void dlgConfigurationShowModal(void)
   if (DevicePortChanged)
     for (unsigned i = 0; i < NUMDEV; ++i)
       Profile::SetDeviceConfig(i, device_config[i]);
-
-  for (unsigned i = 0; i < 4; ++i)
-    for (unsigned j = 0; j < InfoBoxLayout::numInfoWindows; ++j)
-      GetInfoBoxSelector(j, (enum InfoBoxManager::mode)i);
 
   if (!is_embedded() && DevicePortChanged)
     requirerestart = true;

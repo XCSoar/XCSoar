@@ -9,8 +9,6 @@
 
   <Button Name="cmdFonts" Caption="Fonts" X="75" Y="240" Width="60" Height="28" />
   <Button Name="cmdWaypoints" Caption="Waypoints" X="75" Y="240" Width="60" Height="28" />
-  <Button Name="cmdCopy" Caption="Copy" X="75" Y="240" Width="60" Height="28" />
-  <Button Name="cmdPaste" Caption="Paste" X="140" Y="240" Width="60" Height="28" />
 
   <Tabbed Name="tabbed" X="0" Y="0" Width="0" Height="222">
     <Panel Name="frmSite" X="0" Y="0" Width="0" Height="222">
@@ -558,112 +556,11 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
       </Edit>
     </Panel>
   
-    <Panel Name="frmInfoBoxCircling" X="0" Y="0" Width="0" Height="222">
-      <Edit Name="prpInfoBoxCircling0" Caption="1" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxCircling1" Caption="2" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxCircling2" Caption="3" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxCircling3" Caption="4" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxCircling4" Caption="5" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxCircling5" Caption="6" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxCircling6" Caption="7" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxCircling7" Caption="8" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-    </Panel>
-  
-    <Panel Name="frmInfoBoxCruise" X="0" Y="0" Width="0" Height="222">
-      <Edit Name="prpInfoBoxCruise0" Caption="1" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxCruise1" Caption="2" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxCruise2" Caption="3" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxCruise3" Caption="4" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxCruise4" Caption="5" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxCruise5" Caption="6" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxCruise6" Caption="7" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxCruise7" Caption="8" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-    </Panel>
-  
-    <Panel Name="frmInfoBoxFinalGlide" X="0" Y="0" Width="0" Height="222">
-      <Edit Name="prpInfoBoxFinalGlide0" Caption="1" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxFinalGlide1" Caption="2" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxFinalGlide2" Caption="3" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxFinalGlide3" Caption="4" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxFinalGlide4" Caption="5" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxFinalGlide5" Caption="6" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxFinalGlide6" Caption="7" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxFinalGlide7" Caption="8" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-    </Panel>
-  
-    <Panel Name="frmInfoBoxAuxiliary" X="0" Y="0" Width="0" Height="222">
-      <Edit Name="prpInfoBoxAux0" Caption="1" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxAux1" Caption="2" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxAux2" Caption="3" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxAux3" Caption="4" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxAux4" Caption="5" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxAux5" Caption="6" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxAux6" Caption="7" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
-      <Edit Name="prpInfoBoxAux7" Caption="8" X="2" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-        <DataField DataType="enum" Min="0" Max="100" Step="1"/>
-      </Edit>
+    <Panel Name="frmInfoBoxes" X="0" Y="0" Width="0" Height="222">
+      <Button Name="cmdInfoBoxesCircling" Caption="Circling" X="2" Width="-2" Height="22"/>
+      <Button Name="cmdInfoBoxesCruise" Caption="Cruise" X="2" Width="-2" Height="22"/>
+      <Button Name="cmdInfoBoxesFinalGlide" Caption="FinalGlide" X="2" Width="-2" Height="22"/>
+      <Button Name="cmdInfoBoxesAuxiliary" Caption="Auxiliary" X="2" Width="-2" Height="22"/>
     </Panel>
   
     <Panel Name="frmLogger" X="0" Y="0" Width="0" Height="222">

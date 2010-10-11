@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_DIALOGS_H
 
 #include "FLARM/FlarmId.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 
 #include <tchar.h>
 #include "Util/tstring.hpp"
@@ -86,6 +87,7 @@ void dlgChecklistShowModal();
 void dlgConfigurationShowModal();
 void dlgConfigFontsShowModal();
 void dlgConfigWaypointsShowModal();
+void dlgConfigInfoboxesShowModal(InfoBoxManager::mode _mode);
 Pages::PageLayout dlgConfigPageShowModal(Pages::PageLayout _pl, bool include_empty);
 void dlgVegaDemoShowModal();
 bool dlgConfigurationVarioShowModal();
