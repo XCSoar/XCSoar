@@ -312,7 +312,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Asset.cpp \
 	$(SRC)/Appearance.cpp \
-	$(SRC)/Hardware/Battery.c \
+	$(SRC)/Hardware/Battery.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/MOFile.cpp \
 	$(SRC)/Language.cpp \

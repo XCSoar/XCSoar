@@ -58,16 +58,8 @@ extern bool PDABatteryAC;
 
 extern DWORD BatteryWarningTime;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 void
 UpdateBatteryInfo(void);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* !HAVE_BATTERY */
 

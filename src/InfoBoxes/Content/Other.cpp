@@ -40,7 +40,7 @@ Copyright_License {
 
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Interface.hpp"
-#include "Hardware/Battery.h"
+#include "Hardware/Battery.hpp"
 #include "Asset.hpp"
 
 #include <tchar.h>

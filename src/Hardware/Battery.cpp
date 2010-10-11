@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "Battery.h"
+#include "Battery.hpp"
 
 #ifdef HAVE_BATTERY
 

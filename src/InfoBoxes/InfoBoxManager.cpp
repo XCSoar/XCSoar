@@ -48,7 +48,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
-#include "Hardware/Battery.h"
+#include "Hardware/Battery.hpp"
 #include "MainWindow.hpp"
 #include "Appearance.hpp"
 #include "Language.hpp"

@@ -41,7 +41,7 @@ Copyright_License {
 #ifdef HAVE_BLANK
 
 #include "Interface.hpp"
-#include "Hardware/Battery.h"
+#include "Hardware/Battery.hpp"
 #include "Hardware/Display.hpp"
 #include "Dialogs.h"
 #include "LogFile.hpp"
