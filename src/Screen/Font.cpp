@@ -64,6 +64,18 @@ Font::set(const char *file, int ptsize, bool bold, bool italic)
   return true;
 }
 
+bool
+Font::set(const LOGFONT &log_font)
+{
+  // XXX hard coded path
+  const char *dejavu_ttf =
+    "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf";
+
+  return set(dejavu_ttf, log_font.lfHeight > 0 ? log_font.lfHeight : 10,
+             log_font.lfWeight >= 700,
+             log_font.lfItalic);
+}
+
 void
 Font::calculate_heights()
 {

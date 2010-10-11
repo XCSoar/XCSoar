@@ -72,8 +72,6 @@ LOGFONT LogMapBold;
 LOGFONT LogCDI;
 LOGFONT LogMapLabel;
 
-#ifndef ENABLE_SDL
-
 static bool
 IsNullLogFont(LOGFONT logfont)
 {
@@ -82,16 +80,11 @@ IsNullLogFont(LOGFONT logfont)
   return (memcmp(&logfont, &LogFontBlank, sizeof(LOGFONT)) == 0);
 }
 
-#endif /* !ENABLE_SDL */
-
 static void
 InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
                   bool bold = false, bool italic = false,
                   bool variable_pitch = true)
 {
-#ifdef ENABLE_SDL
-  font->lfHeight = (long)height;
-#else
   memset((char *)font, 0, sizeof(LOGFONT));
 
   _tcscpy(font->lfFaceName, facename);
@@ -101,42 +94,22 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
   font->lfWeight = (long)(bold ? FW_BOLD : FW_MEDIUM);
   font->lfItalic = italic;
   font->lfQuality = ANTIALIASED_QUALITY;
-#endif /* !ENABLE_SDL */
 }
 
 void
 Fonts::SetFont(Font *theFont, LOGFONT autoLogFont,
                   LOGFONT * LogFontUsed)
 {
-#ifdef ENABLE_SDL
-  if (theFont->defined())
-    return;
-
-  // XXX hard coded path
-  const char *dejavu_ttf =
-    "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf";
-
-  if (theFont->set(dejavu_ttf,
-                   autoLogFont.lfHeight > 0 ? autoLogFont.lfHeight : 10,
-                   autoLogFont.lfWeight >= 700,
-                   autoLogFont.lfItalic) &&
-      LogFontUsed != NULL)
-    *LogFontUsed = autoLogFont;
-#else /* !ENABLE_SDL */
   if (theFont->defined() || IsNullLogFont(autoLogFont))
     return;
 
   if (theFont->set(autoLogFont) && LogFontUsed != NULL)
     *LogFontUsed = autoLogFont; // RLD save for custom font GUI
-#endif /* !ENABLE_SDL */
 }
 
 void
 Fonts::LoadCustomFont(Font *theFont, const TCHAR FontRegKey[], LOGFONT * LogFontUsed)
 {
-#ifdef ENABLE_SDL
-  // XXX
-#else /* !ENABLE_SDL */
   LOGFONT logfont;
   memset((char *)&logfont, 0, sizeof(LOGFONT));
   if (!Profile::GetFont(FontRegKey, &logfont))
@@ -144,7 +117,6 @@ Fonts::LoadCustomFont(Font *theFont, const TCHAR FontRegKey[], LOGFONT * LogFont
 
   if (theFont->set(logfont) && LogFontUsed != NULL)
     *LogFontUsed = logfont; // RLD save for custom font GUI
-#endif /* !ENABLE_SDL */
 }
 
 static void
@@ -199,9 +171,7 @@ InitialiseLogFonts()
   InitialiseLogfont(&LogInfoBox, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 1.4), true, false, true);
 
-#ifndef ENABLE_SDL
   LogInfoBox.lfCharSet = ANSI_CHARSET;
-#endif /* !ENABLE_SDL */
 
   InitialiseLogfont(&LogTitle, Fonts::GetStandardFontFace(),
                     FontHeight / 3, true);

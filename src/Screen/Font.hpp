@@ -43,9 +43,9 @@ Copyright_License {
 
 #ifdef ENABLE_SDL
   #include <SDL/SDL_ttf.h>
-#else
-  #include <windows.h>
 #endif
+
+#include <windows.h>
 
 /**
  * A font loaded from storage.  It is used by #Canvas to draw text.
@@ -79,8 +79,9 @@ public:
   #else
   bool set(const TCHAR* facename, int height, bool bold = false,
            bool italic = false);
-  bool set(const LOGFONT &log_font);
   #endif
+  bool set(const LOGFONT &log_font);
+
   void reset();
 
   #ifdef ENABLE_SDL
