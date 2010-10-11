@@ -621,7 +621,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
-	$(SRC)/Profile/Registry.cpp \
 	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
@@ -683,8 +682,6 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
-	$(SRC)/Profile/Registry.cpp \
-	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
