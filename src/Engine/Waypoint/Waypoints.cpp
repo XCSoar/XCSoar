@@ -443,7 +443,7 @@ Waypoints::get_writable(const Waypoint& wp) const
   if (wp.FileNum == 0) {
     return m_file0_writable || empty();
   } else {
-    return true;
+    return false;
   }
 }
 
