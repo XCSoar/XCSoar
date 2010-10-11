@@ -67,15 +67,12 @@ Copyright_License {
 #include "Asset.hpp"
 #include "GlideRatio.hpp"
 #include "Components.hpp"
-#include "Waypoint/Waypoints.hpp"
 #include "WayPointFile.hpp"
-#include "WayPoint/WayPointGlue.hpp"
 #include "StringUtil.hpp"
 #include "Simulator.hpp"
 #include "Compiler.h"
 #include "Screen/Graphics.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
-#include "InfoBoxes/Content/Factory.hpp"
 #include "Pages.hpp"
 
 #include <assert.h>
