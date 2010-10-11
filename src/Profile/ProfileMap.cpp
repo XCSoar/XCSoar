@@ -40,7 +40,6 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Util/tstring.hpp"
 #include "StringUtil.hpp"
-#include "LogFile.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
 
@@ -112,7 +111,6 @@ ProfileMap::Import(const TCHAR *szFile)
   if (string_is_empty(szFile))
     return;
 
-  LogStartUp(_T("Loading profile map from %s"), szFile);
   FileLineReader reader(szFile);
   if (reader.error())
     return;
