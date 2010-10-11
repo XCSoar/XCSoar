@@ -231,7 +231,6 @@ Fonts::Initialize()
 {
   InitialiseLogFonts();
 
-  SetFont(&InfoBox, LogInfoBox);
   SetFont(&InfoBoxSmall, LogInfoBoxSmall);
   SetFont(&Title, LogTitle);
   SetFont(&CDI, LogCDI);
