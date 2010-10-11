@@ -36,44 +36,40 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_COMPONENTS_HPP
-#define XCSOAR_COMPONENTS_HPP
-
-class FileCache;
-class Marks;
-class TopologyStore;
-class RasterTerrain;
-class RasterWeather;
-class GlideComputer;
-class DrawThread;
-class CalculationThread;
-class InstrumentThread;
-class Waypoints;
-class Airspaces;
-class ProtectedAirspaceWarningManager;
-class ProtectedTaskManager;
-class TaskBehaviour;
-class Replay;
-class AltairControl;
-
-// other global objects
-extern FileCache *file_cache;
-extern Airspaces airspace_database;
-extern ProtectedAirspaceWarningManager airspace_warnings;
-extern Waypoints way_points;
-extern ProtectedTaskManager protected_task_manager;
-extern Replay replay;
-extern Marks *marks;
-extern TopologyStore *topology;
-extern RasterTerrain *terrain;
-extern RasterWeather RASP;
-extern GlideComputer glide_computer;
-extern DrawThread *draw_thread;
-extern CalculationThread *calculation_thread;
-extern InstrumentThread *instrument_thread;
-
+#ifndef XCSOAR_HARDWARE_ALTAIR_HPP
+#define XCSOAR_HARDWARE_ALTAIR_HPP
 #ifdef GNAV
-extern AltairControl altair_control;
-#endif
 
+#include <windows.h>
+
+/**
+ * A driver for the Altair specific device "TRA1:".
+ */
+class AltairControl {
+  HANDLE handle;
+
+public:
+  AltairControl();
+  ~AltairControl();
+
+  bool error() const {
+    return handle == INVALID_HANDLE_VALUE;
+  }
+
+  bool ShortBeep();
+
+  /**
+   * Reads the backlight value; range is 0..100 or -100 for auto
+   * backlight.
+   */
+  bool GetBacklight(int &value_r);
+
+  /**
+   * Sets a new backlight value; range is 0..100, or -100 for auto
+   * backlight.
+   */
+  bool SetBacklight(int value);
+};
+
+#endif
 #endif

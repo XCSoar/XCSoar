@@ -41,12 +41,13 @@ Copyright_License {
 #ifdef GNAV
 
 #include "Units.hpp"
-#include "InputEvents.h"
 #include "Math/FastMath.h"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"
+#include "Components.hpp"
+#include "Hardware/AltairControl.hpp"
 
 static WndForm *wf=NULL;
 
@@ -63,20 +64,11 @@ static void UpdateValues() {
   if (!last_time.check_update(200))
     return;
 
-  TCHAR text[100];
   if (EnableAutoBrightness) {
-    InputEvents::eventDLLExecute(
-				 _T("altairplatform.dll SetAutoMode on"));
-    _stprintf(text,_T("altairplatform.dll SetAutoBrightness %03d"),
-	      BrightnessValue);
+    altair_control.SetBacklight(-100);
   } else {
-    InputEvents::eventDLLExecute(
-				 _T("altairplatform.dll SetAutoMode off"));
-    _stprintf(text,_T("altairplatform.dll SetManualBrightness %03d"),
-	      BrightnessValue);
+    altair_control.SetBacklight(BrightnessValue);
   }
-  InputEvents::eventDLLExecute(text);
-
 }
 
 static void OnAutoData(DataField *Sender, DataField::DataAccessKind_t Mode){

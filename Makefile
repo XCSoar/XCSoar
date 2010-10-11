@@ -392,6 +392,10 @@ XCSOAR_SOURCES := \
 #	$(SRC)/WaveThread.cpp \
 
 
+ifneq ($(findstring $(TARGET),ALTAIR ALTAIRPORTRAIT),)
+XCSOAR_SOURCES += $(SRC)/Hardware/AltairControl.cpp
+endif
+
 XCSOAR_OBJS = $(call SRC_TO_OBJ,$(XCSOAR_SOURCES))
 XCSOAR_LDADD = \
 	$(IO_LIBS) \

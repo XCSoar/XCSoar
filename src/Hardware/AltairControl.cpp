@@ -36,44 +36,56 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_COMPONENTS_HPP
-#define XCSOAR_COMPONENTS_HPP
+#include "Hardware/AltairControl.hpp"
 
-class FileCache;
-class Marks;
-class TopologyStore;
-class RasterTerrain;
-class RasterWeather;
-class GlideComputer;
-class DrawThread;
-class CalculationThread;
-class InstrumentThread;
-class Waypoints;
-class Airspaces;
-class ProtectedAirspaceWarningManager;
-class ProtectedTaskManager;
-class TaskBehaviour;
-class Replay;
-class AltairControl;
+#include <tchar.h>
 
-// other global objects
-extern FileCache *file_cache;
-extern Airspaces airspace_database;
-extern ProtectedAirspaceWarningManager airspace_warnings;
-extern Waypoints way_points;
-extern ProtectedTaskManager protected_task_manager;
-extern Replay replay;
-extern Marks *marks;
-extern TopologyStore *topology;
-extern RasterTerrain *terrain;
-extern RasterWeather RASP;
-extern GlideComputer glide_computer;
-extern DrawThread *draw_thread;
-extern CalculationThread *calculation_thread;
-extern InstrumentThread *instrument_thread;
+enum {
+  IOCTL_TRA_BACKLIGHTSETVALUE = 5000,
+  IOCTL_TRA_BACKLIGHTGETVALUE = 5001,
+  IOCTL_TRA_GETINFO = 5030,
+  IOCTL_TRA_SHORTBEEP = 5060,
+};
 
-#ifdef GNAV
-extern AltairControl altair_control;
-#endif
+AltairControl::AltairControl()
+ :handle(::CreateFile(_T("TRA1:"), GENERIC_READ|GENERIC_WRITE, 0,
+                      NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL))
+{
+}
 
-#endif
+AltairControl::~AltairControl()
+{
+  if (handle != INVALID_HANDLE_VALUE)
+    ::CloseHandle(handle);
+}
+
+bool
+AltairControl::ShortBeep()
+{
+  if (handle == INVALID_HANDLE_VALUE)
+    return false;
+
+  return ::DeviceIoControl(handle, IOCTL_TRA_SHORTBEEP,
+                           NULL, 0, NULL, 0, NULL, NULL) != 0;
+}
+
+bool
+AltairControl::GetBacklight(int &value_r)
+{
+  if (handle == INVALID_HANDLE_VALUE)
+    return false;
+
+  return ::DeviceIoControl(handle, IOCTL_TRA_BACKLIGHTGETVALUE,
+                           &value_r, sizeof(value_r),
+                           NULL, 0, NULL, NULL) != 0;
+}
+
+bool
+AltairControl::SetBacklight(int value)
+{
+  if (handle == INVALID_HANDLE_VALUE)
+    return false;
+
+  return ::DeviceIoControl(handle, IOCTL_TRA_BACKLIGHTSETVALUE,
+                           &value, sizeof(value), NULL, 0, NULL, NULL) != 0;
+}

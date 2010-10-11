@@ -100,6 +100,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "DeviceBlackboard.hpp"
 #include "UtilsSettings.hpp"
 #include "Pages.hpp"
+#include "Hardware/AltairControl.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -1293,7 +1294,7 @@ InputEvents::eventBeep(const TCHAR *misc)
   #endif
 
   #if defined(GNAV)
-  InputEvents::eventDLLExecute(_T("altairplatform.dll DoBeep2 1"));
+  altair_control.ShortBeep();
   #endif
 }
 

@@ -83,6 +83,7 @@ Copyright_License {
 #include "ResourceLoader.hpp"
 #include "LocalPath.hpp"
 #include "IO/FileCache.hpp"
+#include "Hardware/AltairControl.hpp"
 #include "Compiler.h"
 
 #include "Waypoint/Waypoints.hpp"
@@ -135,6 +136,10 @@ ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
 
 GlideComputer glide_computer(protected_task_manager, airspace_warnings,
                              task_events);
+
+#ifdef GNAV
+AltairControl altair_control;
+#endif
 
 void
 XCSoarInterface::LoadProfile()
