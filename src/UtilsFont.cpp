@@ -122,6 +122,6 @@ GetFontFromString(const TCHAR *Buffer1, LOGFONT* lplf)
 
   _tcscpy(lfTmp.lfFaceName, p + 1);
 
-  memcpy((void *)lplf, (void *)&lfTmp, sizeof(LOGFONT));
+  *lplf = lfTmp;
   return true;
 }
