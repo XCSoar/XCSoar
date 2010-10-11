@@ -39,7 +39,6 @@ Copyright_License {
 #include "Profile/ProfileMap.hpp"
 #include "Util/tstring.hpp"
 #include "StringUtil.hpp"
-#include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
 
 #include <map>
@@ -98,53 +97,6 @@ ProfileMap::Set(const TCHAR *szRegValue, const TCHAR *Pos)
 {
   map_str[szRegValue] = Pos;
   return true;
-}
-
-void
-ProfileMap::Import(const TCHAR *szFile)
-{
-  if (string_is_empty(szFile))
-    return;
-
-  FileLineReader reader(szFile);
-  if (reader.error())
-    return;
-
-  TCHAR *line;
-  while ((line = reader.read()) != NULL) {
-    if (string_is_empty(line) || *line == _T('#'))
-      continue;
-
-    TCHAR *p = _tcschr(line, _T('='));
-    if (p == line || p == NULL)
-      continue;
-
-    *p = _T('\0');
-    TCHAR *value = p + 1;
-
-#ifdef PROFILE_KEY_PREFIX
-    TCHAR key[sizeof(PROFILE_KEY_PREFIX) + _tcslen(line)];
-    _tcscpy(key, PROFILE_KEY_PREFIX);
-    _tcscat(key, line);
-#else
-    const TCHAR *key = line;
-#endif
-
-    if (*value == _T('"')) {
-      ++value;
-      p = _tcschr(value, _T('"'));
-      if (p == NULL)
-        continue;
-
-      *p = _T('\0');
-
-      Set(key, value);
-    } else {
-      long l = _tcstol(value, &p, 10);
-      if (p > value)
-        Set(key, l);
-    }
-  }
 }
 
 void

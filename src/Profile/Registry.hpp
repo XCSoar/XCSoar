@@ -139,7 +139,6 @@ namespace Registry {
   bool Set(const TCHAR *szRegValue, const TCHAR *Pos);
 
   void Export(const TCHAR* szFile);
-  void Import(const TCHAR* szFile);
 }
 
 #endif
