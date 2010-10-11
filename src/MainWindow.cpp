@@ -126,9 +126,10 @@ MainWindow::InitialiseConfigured()
 
   Fonts::SizeInfoboxFont();
 
-  if (Appearance.UseCustomFonts)
+  if (Appearance.UseCustomFonts) {
     LogStartUp(_T("Load fonts"));
     Fonts::LoadCustom();
+  }
 
   LogStartUp(_T("Create info boxes"));
   InfoBoxManager::Create(rc);
