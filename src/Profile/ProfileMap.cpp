@@ -51,8 +51,7 @@ namespace ProfileMap {
 bool
 ProfileMap::Get(const TCHAR *szRegValue, DWORD &pPos)
 {
-  std::map<tstring, DWORD>::iterator it;
-  it = map_num.find(szRegValue);
+  std::map<tstring, DWORD>::iterator it = map_num.find(szRegValue);
   if (it == map_num.end())
     return false;
 
@@ -76,8 +75,7 @@ ProfileMap::Set(const TCHAR *szRegValue, DWORD Pos)
 bool
 ProfileMap::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
 {
-  std::map<tstring, tstring>::iterator it;
-  it = map_str.find(szRegValue);
+  std::map<tstring, tstring>::iterator it = map_str.find(szRegValue);
   if (it == map_str.end()) {
     pPos[0] = _T('\0');
     return false;
@@ -103,11 +101,11 @@ void
 ProfileMap::Export(ProfileWriter &writer)
 {
   // Iterate through the profile maps
-  std::map<tstring, DWORD>::iterator it_num;
-  for (it_num = map_num.begin(); it_num != map_num.end(); it_num++)
+  for (std::map<tstring, DWORD>::iterator it_num = map_num.begin();
+       it_num != map_num.end(); it_num++)
     writer.write(it_num->first.c_str(), it_num->second);
 
-  std::map<tstring, tstring>::iterator it_str;
-  for (it_str = map_str.begin(); it_str != map_str.end(); it_str++)
+  for (std::map<tstring, tstring>::iterator it_str = map_str.begin();
+       it_str != map_str.end(); it_str++)
     writer.write(it_str->first.c_str(), it_str->second.c_str());
 }
