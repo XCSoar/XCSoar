@@ -38,20 +38,13 @@ Copyright_License {
 
 #include "Profile/Registry.hpp"
 #include "Profile/Writer.hpp"
+#include "Config/Registry.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifdef WIN32
-#include "Config/Registry.hpp"
-#else
-#include "Config/GConf.hpp"
-#endif
-
-#ifdef WIN32
 static const TCHAR szProfileKey[] = _T("Software\\MPSR\\XCSoar");
-#endif
 
 const static size_t nMaxValueValueSize = MAX_PATH * 2 + 6;
 // max regkey name is 256 chars + " = "
@@ -63,38 +56,17 @@ const static size_t nMaxKeyNameSize = MAX_PATH + 6;
 bool
 Registry::Get(const TCHAR *szRegValue, DWORD &pPos)
 {
-// returns 0 on SUCCESS, else the non-zero error code
-#ifdef WIN32
   RegistryKey registry(HKEY_CURRENT_USER, szProfileKey, true);
   return !registry.error() &&
     registry.get_value(szRegValue, pPos);
-
-#else /* !WIN32 */
-
-  int value;
-  if (!GConf().get(szRegValue, value))
-    return false;
-
-  pPos = (DWORD)value;
-  return true;
-
-#endif /* !WIN32 */
 }
 
 bool
 Registry::Set(const TCHAR *szRegValue, DWORD Pos)
 {
-#ifdef WIN32
-
   RegistryKey registry(HKEY_CURRENT_USER, szProfileKey, false);
   return !registry.error() &&
     registry.set_value(szRegValue, Pos);
-
-#else /* !WIN32 */
-
-  return GConf().set(szRegValue, (int)Pos);
-
-#endif /* !WIN32 */
 }
 
 /**
@@ -106,16 +78,9 @@ Registry::Set(const TCHAR *szRegValue, DWORD Pos)
 bool
 Registry::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
 {
-#ifdef WIN32
-
   RegistryKey registry(HKEY_CURRENT_USER, szProfileKey, true);
   if (!registry.error() && registry.get_value(szRegValue, pPos, dwSize))
     return true;
-
-#else /* !WIN32 */
-  if (GConf().get(szRegValue, pPos, dwSize))
-    return true;
-#endif /* !WIN32 */
 
   pPos[0] = _T('\0');
   return false;
@@ -129,21 +94,14 @@ Registry::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
 bool
 Registry::Set(const TCHAR *szRegValue, const TCHAR *Pos)
 {
-#ifdef WIN32
-
   RegistryKey registry(HKEY_CURRENT_USER, szProfileKey, false);
   return !registry.error() &&
     registry.set_value(szRegValue, Pos);
-
-#else /* !WIN32 */
-  return GConf().set(szRegValue, Pos);
-#endif /* !WIN32 */
 }
 
 void
 Registry::Export(ProfileWriter &writer)
 {
-#ifdef WIN32
   TCHAR lpstrName[nMaxKeyNameSize+1];
 
   union {
@@ -204,7 +162,4 @@ Registry::Export(ProfileWriter &writer)
 
   // Close the XCSoar registry key
   ::RegCloseKey(hkFrom);
-#else /* !WIN32 */
-  // XXX implement
-#endif /* !WIN32 */
 }
