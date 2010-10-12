@@ -282,9 +282,14 @@ xmlOpenResourceHelper(const TCHAR *resource)
 {
   XMLResults pResults;
 
+  // Reset errors
   pResults.error = eXMLErrorNone;
   XMLNode::GlobalError = false;
+
+  // Load and parse the resource
   XMLNode xnode = xmlLoadFromResource(resource, &pResults);
+
+  // Show errors if they exist
   if (pResults.error != eXMLErrorNone) {
     XMLNode::GlobalError = true;
     TCHAR errortext[100];
@@ -293,6 +298,7 @@ xmlOpenResourceHelper(const TCHAR *resource)
 
     ShowXMLError(errortext);
   }
+
   return xnode;
 }
 
