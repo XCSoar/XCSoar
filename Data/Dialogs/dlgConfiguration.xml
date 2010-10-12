@@ -446,6 +446,11 @@
     </Panel>
 
     <Panel>
+      <Edit Name="prpDisplayOrientation" Caption="Display Orientation" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="Rotatete display on devices that support it.">
+        <DataField DataType="enum"/>
+      </Edit>
+
       <Edit Name="prpAppInfoBoxGeom" Caption="Infobox Geometry" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="Geometry values range 0-7 but in landscape mode only some of them are really available.">
         <DataField DataType="enum" Min="0" Max="50" Step="1"/>

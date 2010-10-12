@@ -46,6 +46,7 @@ Copyright_License {
 #include "Appearance.hpp"
 #include "LocalPath.hpp"
 #include "Profile/ProfileKeys.hpp"
+#include "Profile/DisplayConfig.hpp"
 #include "Logger/Logger.hpp"
 #include "Device/Register.hpp"
 #include "Device/List.hpp"
@@ -74,6 +75,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Pages.hpp"
+#include "Hardware/Display.hpp"
 
 #include <assert.h>
 
@@ -1135,6 +1137,22 @@ setVariables()
     wp->RefreshDisplay();
   }
 
+  if (Display::RotateSupported()) {
+    wp = (WndProperty*)wf->FindByName(_T("prpDisplayOrientation"));
+    assert(wp != NULL);
+
+    DataFieldEnum *dfe = (DataFieldEnum *)wp->GetDataField();
+    dfe->addEnumText(_("Default"));
+    dfe->addEnumText(_("Portrait"));
+    dfe->addEnumText(_("Landscape"));
+    dfe->Set(Profile::GetDisplayOrientation());
+    wp->RefreshDisplay();
+  } else {
+    wp = (WndProperty*)wf->FindByName(_T("prpDisplayOrientation"));
+    assert(wp != NULL);
+    wp->hide();
+  }
+
 #if defined(_WIN32_WCE) && !defined(GNAV)
 // VENTA-ADDON Model change config menu 11
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
@@ -1981,6 +1999,20 @@ void dlgConfigurationShowModal(void)
     if (InfoBoxLayout::InfoBoxGeometry != (unsigned)wp->GetDataField()->GetAsInteger()) {
       InfoBoxLayout::InfoBoxGeometry = (unsigned)wp->GetDataField()->GetAsInteger();
       Profile::Set(szProfileInfoBoxGeometry, InfoBoxLayout::InfoBoxGeometry);
+      changed = true;
+      requirerestart = true;
+    }
+  }
+
+  if (Display::RotateSupported()) {
+    wp = (WndProperty*)wf->FindByName(_T("prpDisplayOrientation"));
+    assert(wp != NULL);
+
+    const DataFieldEnum *dfe = (const DataFieldEnum *)wp->GetDataField();
+    Display::orientation orientation =
+      (Display::orientation)dfe->GetAsInteger();
+    if (orientation != Profile::GetDisplayOrientation()) {
+      Profile::SetDisplayOrientation(orientation);
       changed = true;
       requirerestart = true;
     }

@@ -212,5 +212,6 @@ extern const TCHAR szProfileFlarmAutoZoom[];
 extern const TCHAR szProfileFlarmNorthUp[];
 
 extern const TCHAR szProfileIgnoreNMEAChecksum[];
+extern const TCHAR szProfileDisplayOrientation[];
 
 #endif
