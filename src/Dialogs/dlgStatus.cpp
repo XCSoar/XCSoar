@@ -196,8 +196,8 @@ UpdateValuesSystem()
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(_T("prpFLARM"));
   if (wp) {
-    wp = (WndProperty*)wf->FindByName(_T("prpFLARM"));
     if (XCSoarInterface::Basic().flarm.FLARM_Available)
       wp->SetText(_("Connected"));
     else
