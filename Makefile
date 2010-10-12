@@ -54,6 +54,7 @@ include $(topdir)/build/doco.mk
 # Create libraries for zzip, jasper and compatibility stuff
 include $(topdir)/build/libutil.mk
 include $(topdir)/build/libmath.mk
+include $(topdir)/build/libprofile.mk
 include $(topdir)/build/zlib.mk
 include $(topdir)/build/zzip.mk
 include $(topdir)/build/jasper.mk
@@ -335,10 +336,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Audio/VegaVoice.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/Compatibility/string.c 	\
-	$(SRC)/Profile/Registry.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/Writer.cpp \
-	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/ProfileGlue.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/xmlParser.cpp \
@@ -402,6 +401,7 @@ endif
 
 XCSOAR_OBJS = $(call SRC_TO_OBJ,$(XCSOAR_SOURCES))
 XCSOAR_LDADD = \
+	$(PROFILE_LIBS) \
 	$(IO_LIBS) \
 	$(DATA_FIELD_LIBS) \
 	$(FORM_LIBS) \

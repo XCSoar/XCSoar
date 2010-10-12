@@ -272,14 +272,12 @@ $(TARGET_BIN_DIR)/ReadMO$(TARGET_EXEEXT): $(READ_MO_OBJS) $(READ_MO_LDADD) | $(T
 READ_PROFILE_STRING_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/Profile/Registry.cpp \
-	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/Writer.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/ReadProfileString.cpp
 READ_PROFILE_STRING_OBJS = $(call SRC_TO_OBJ,$(READ_PROFILE_STRING_SOURCES))
-READ_PROFILE_STRING_LDADD = $(IO_LIBS) $(UTIL_LIBS)
+READ_PROFILE_STRING_LDADD = $(PROFILE_LIBS) $(IO_LIBS) $(UTIL_LIBS)
 $(TARGET_BIN_DIR)/ReadProfileString$(TARGET_EXEEXT): $(READ_PROFILE_STRING_OBJS) $(READ_PROFILE_STRING_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
@@ -287,14 +285,12 @@ $(TARGET_BIN_DIR)/ReadProfileString$(TARGET_EXEEXT): $(READ_PROFILE_STRING_OBJS)
 READ_PROFILE_INT_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/Profile/Registry.cpp \
-	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/Writer.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/ReadProfileInt.cpp
 READ_PROFILE_INT_OBJS = $(call SRC_TO_OBJ,$(READ_PROFILE_INT_SOURCES))
-READ_PROFILE_INT_LDADD = $(IO_LIBS) $(UTIL_LIBS)
+READ_PROFILE_INT_LDADD = $(PROFILE_LIBS) $(IO_LIBS) $(UTIL_LIBS)
 $(TARGET_BIN_DIR)/ReadProfileInt$(TARGET_EXEEXT): $(READ_PROFILE_INT_OBJS) $(READ_PROFILE_INT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
@@ -302,14 +298,12 @@ $(TARGET_BIN_DIR)/ReadProfileInt$(TARGET_EXEEXT): $(READ_PROFILE_INT_OBJS) $(REA
 WRITE_PROFILE_STRING_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/Profile/Registry.cpp \
-	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/Writer.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/WriteProfileString.cpp
 WRITE_PROFILE_STRING_OBJS = $(call SRC_TO_OBJ,$(WRITE_PROFILE_STRING_SOURCES))
-WRITE_PROFILE_STRING_LDADD = $(IO_LIBS) $(UTIL_LIBS)
+WRITE_PROFILE_STRING_LDADD = $(PROFILE_LIBS) $(IO_LIBS) $(UTIL_LIBS)
 $(TARGET_BIN_DIR)/WriteProfileString$(TARGET_EXEEXT): $(WRITE_PROFILE_STRING_OBJS) $(WRITE_PROFILE_STRING_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
@@ -317,14 +311,12 @@ $(TARGET_BIN_DIR)/WriteProfileString$(TARGET_EXEEXT): $(WRITE_PROFILE_STRING_OBJ
 WRITE_PROFILE_INT_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/Profile/Registry.cpp \
-	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/Writer.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/WriteProfileInt.cpp
 WRITE_PROFILE_INT_OBJS = $(call SRC_TO_OBJ,$(WRITE_PROFILE_INT_SOURCES))
-WRITE_PROFILE_INT_LDADD = $(IO_LIBS) $(UTIL_LIBS)
+WRITE_PROFILE_INT_LDADD = $(PROFILE_LIBS) $(IO_LIBS) $(UTIL_LIBS)
 $(TARGET_BIN_DIR)/WriteProfileInt$(TARGET_EXEEXT): $(WRITE_PROFILE_INT_OBJS) $(WRITE_PROFILE_INT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
@@ -514,8 +506,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Terrain/RasterRenderer.cpp \
 	$(SRC)/Terrain/TerrainRenderer.cpp \
 	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
-	$(SRC)/Profile/Registry.cpp \
-	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/Writer.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \
 	$(SRC)/Screen/Fonts.cpp \
@@ -561,6 +551,7 @@ RUN_MAP_WINDOW_OBJS = $(call SRC_TO_OBJ,$(RUN_MAP_WINDOW_SOURCES))
 RUN_MAP_WINDOW_BIN = $(TARGET_BIN_DIR)/RunMapWindow$(TARGET_EXEEXT)
 RUN_MAP_WINDOW_LDADD = \
 	$(FAKE_LIBS) \
+	$(PROFILE_LIBS) \
 	$(SCREEN_LIBS) \
 	$(SHAPELIB_LIBS) \
 	$(ENGINE_LIBS) \
@@ -630,8 +621,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
-	$(SRC)/Profile/ProfileMap.cpp \
-	$(SRC)/Profile/Writer.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/UtilsText.cpp \
