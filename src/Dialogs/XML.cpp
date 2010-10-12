@@ -174,14 +174,17 @@ GetName(XMLNode *Node)
   return StringToStringDflt(Node->getAttribute(_T("Name")), _T(""));
 }
 
-static void
-GetCaption(XMLNode *Node, TCHAR *Caption)
+static const TCHAR*
+GetCaption(XMLNode *Node)
 {
-  _tcscpy(Caption, StringToStringDflt(Node->getAttribute(_T("Caption")), _T("")));
+  const TCHAR* tmp =
+      StringToStringDflt(Node->getAttribute(_T("Caption")), _T(""));
 
-  const TCHAR *translated = gettext(Caption);
-  if (translated != Caption)
-    _tcscpy(Caption, translated);
+  const TCHAR *translated = gettext(tmp);
+  if (translated != tmp)
+    return translated;
+
+  return tmp;
 }
 
 /**
@@ -364,7 +367,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   }
 
   int X, Y, Width, Height;
-  TCHAR Caption[128];
+  const TCHAR* Caption;
 
   // todo: this dialog style stuff seems a little weird...
 
@@ -375,7 +378,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   const RECT rc = Parent.get_client_rect();
   CalcWidthStretch(&xNode, rc, eDialogStyle);
 
-  GetCaption(&xNode, Caption);
+  Caption = GetCaption(&xNode);
   GetDefaultWindowControlProps(&xNode, &X, &Y, &Width, &Height,
                                eDialogStyle);
 
@@ -494,7 +497,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
           XMLNode node, const DialogStyle_t eDialogStyle)
 {
   int X, Y, Width, Height;
-  TCHAR Caption[128];
+  const TCHAR* Caption;
   const TCHAR* Name;
 
   Window *window = NULL;
@@ -503,7 +506,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
   // Determine name, coordinates, width, height
   // and caption of the control
   Name = GetName(&node);
-  GetCaption(&node, Caption);
+  Caption = GetCaption(&node);
   GetDefaultWindowControlProps(&node, &X, &Y, &Width, &Height,
                                eDialogStyle);
 
@@ -595,8 +598,6 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     // Load the help text
     W->SetHelpText(StringToStringDflt(node.getAttribute(_T("Help")), _T("")));
-
-    Caption[0] = '\0';
 
     // If the control has (at least) one DataField child control
     if (node.nChildNode(_T("DataField")) > 0){
