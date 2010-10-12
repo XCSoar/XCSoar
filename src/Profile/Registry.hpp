@@ -91,17 +91,6 @@ namespace Registry {
   }
 #endif
 
-  static inline bool Get(const TCHAR *key, double &value)
-  {
-    DWORD temp;
-    if (!Get(key, temp))
-      return false;
-
-    value = temp;
-    return true;
-  }
-
-#ifdef FIXED_MATH
   static inline bool Get(const TCHAR *key, fixed &value)
   {
     DWORD temp;
@@ -111,7 +100,6 @@ namespace Registry {
     value = fixed(temp);
     return true;
   }
-#endif
 
   bool Set(const TCHAR *szRegValue, DWORD Pos);
 
