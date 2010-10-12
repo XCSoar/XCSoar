@@ -168,10 +168,10 @@ Scale_Dlg_Width(const int x, const DialogStyle_t eDialogStyle)
     return Layout::Scale(x);
 }
 
-static void
-GetName(XMLNode *Node, TCHAR *Name)
+static const TCHAR*
+GetName(XMLNode *Node)
 {
-  _tcscpy(Name, StringToStringDflt(Node->getAttribute(_T("Name")), _T("")));
+  return StringToStringDflt(Node->getAttribute(_T("Name")), _T(""));
 }
 
 static void
@@ -495,14 +495,14 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 {
   int X, Y, Width, Height;
   TCHAR Caption[128];
-  TCHAR Name[64];
+  const TCHAR* Name;
 
   Window *window = NULL;
   WindowControl *WC = NULL;
 
   // Determine name, coordinates, width, height
   // and caption of the control
-  GetName(&node, Name);
+  Name = GetName(&node);
   GetCaption(&node, Caption);
   GetDefaultWindowControlProps(&node, &X, &Y, &Width, &Height,
                                eDialogStyle);
