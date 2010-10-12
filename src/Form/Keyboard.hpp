@@ -90,7 +90,7 @@ protected:
   virtual bool on_resize(unsigned width, unsigned height);
 
 private:
-  Brush background_brush;
+  Color background_color;
 
   unsigned button_width;
   unsigned button_height;

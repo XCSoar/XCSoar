@@ -49,11 +49,11 @@ static const TCHAR keyboard_letters[] =
 
 KeyboardControl::KeyboardControl(ContainerWindow &parent,
                                  int x, int y, unsigned width, unsigned height,
-                                 Color background_color,
+                                 Color _background_color,
                                  OnCharacterCallback_t function,
                                  const WindowStyle _style) :
   num_buttons(0),
-  background_brush(background_color),
+  background_color(_background_color),
   button_width(50), button_height(50),
   mOnCharacter(function)
 {
@@ -166,7 +166,7 @@ KeyboardControl::move_buttons()
 void
 KeyboardControl::on_paint(Canvas &canvas)
 {
-  canvas.clear(background_brush);
+  canvas.clear(background_color);
 }
 
 bool
