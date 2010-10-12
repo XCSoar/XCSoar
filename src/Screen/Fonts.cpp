@@ -89,15 +89,12 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
 }
 
 void
-Fonts::LoadCustomFont(Font *theFont, const TCHAR FontRegKey[], LOGFONT * LogFontUsed)
+Fonts::LoadCustomFont(Font *theFont, const TCHAR FontRegKey[])
 {
   LOGFONT logfont;
   memset((char *)&logfont, 0, sizeof(LOGFONT));
-  if (!Profile::GetFont(FontRegKey, &logfont))
-    return;
-
-  if (theFont->set(logfont) && LogFontUsed != NULL)
-    *LogFontUsed = logfont; // RLD save for custom font GUI
+  if (Profile::GetFont(FontRegKey, &logfont))
+    theFont->set(logfont);
 }
 
 static void
