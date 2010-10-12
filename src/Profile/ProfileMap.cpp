@@ -44,14 +44,17 @@ Copyright_License {
 #include <map>
 
 namespace ProfileMap {
-  static std::map<tstring, tstring> map_str;
-  static std::map<tstring, DWORD> map_num;
+  typedef std::map<tstring, tstring> map_str_t;
+  typedef std::map<tstring, DWORD> map_num_t;
+
+  static map_str_t map_str;
+  static map_num_t map_num;
 }
 
 bool
 ProfileMap::Get(const TCHAR *szRegValue, DWORD &pPos)
 {
-  std::map<tstring, DWORD>::iterator it = map_num.find(szRegValue);
+  map_num_t::iterator it = map_num.find(szRegValue);
   if (it == map_num.end())
     return false;
 
@@ -75,7 +78,7 @@ ProfileMap::Set(const TCHAR *szRegValue, DWORD Pos)
 bool
 ProfileMap::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
 {
-  std::map<tstring, tstring>::iterator it = map_str.find(szRegValue);
+  map_str_t::iterator it = map_str.find(szRegValue);
   if (it == map_str.end()) {
     pPos[0] = _T('\0');
     return false;
@@ -101,11 +104,11 @@ void
 ProfileMap::Export(ProfileWriter &writer)
 {
   // Iterate through the profile maps
-  for (std::map<tstring, DWORD>::iterator it_num = map_num.begin();
+  for (map_num_t::iterator it_num = map_num.begin();
        it_num != map_num.end(); it_num++)
     writer.write(it_num->first.c_str(), it_num->second);
 
-  for (std::map<tstring, tstring>::iterator it_str = map_str.begin();
+  for (map_str_t::iterator it_str = map_str.begin();
        it_str != map_str.end(); it_str++)
     writer.write(it_str->first.c_str(), it_str->second.c_str());
 }
