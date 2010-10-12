@@ -259,9 +259,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   Graphics::InitialiseConfigured(SettingsMap());
 
-#ifndef DEBUG_TRANSLATIONS
   ReadLanguageFile();
-#endif
 
   status_messages.LoadFile();
   InputEvents::readFile();
@@ -544,11 +542,6 @@ XCSoarInterface::Shutdown(void)
 
   LogStartUp(_T("Close Windows - main "));
   main_window.reset();
-
-#ifdef DEBUG_TRANSLATIONS
-  LogStartUp(_T("Writing missing translations"));
-  WriteMissingTranslations();
-#endif
 
   StartupLogFreeRamAndStorage();
 
