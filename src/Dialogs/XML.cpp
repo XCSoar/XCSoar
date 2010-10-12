@@ -40,7 +40,6 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "xmlParser.h"
-#include "LocalPath.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/FileReader.hpp"
