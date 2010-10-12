@@ -187,36 +187,32 @@ GetCaption(XMLNode *Node)
   return tmp;
 }
 
-/**
- * This function reads the following parameters from the XML Node and
- * saves them as Control properties:
- * Name, x-, y-Coordinate, Width, Height and Caption
- * @param Node The XML Node that represents the Control
- * @param X x-Coordinate of the Control (pointer)
- * @param Y y-Coordinate of the Control (pointer)
- * @param Width Width of the Control (pointer)
- * @param Height Height of the Control (pointer)
- * @param eDialogStyle Dialog style of the Form
- */
-static void
-GetDefaultWindowControlProps(XMLNode *Node, int *X, int *Y,
-                             int *Width, int *Height,
-                             const DialogStyle_t eDialogStyle)
+static POINT
+GetPosition(XMLNode *Node, const DialogStyle_t eDialogStyle)
 {
+  POINT pt;
+
   // Calculate x- and y-Coordinate
-  *X = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("X")), 0),
+  pt.x = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("X")), 0),
                        eDialogStyle);
-  *Y = StringToIntDflt(Node->getAttribute(_T("Y")), -1);
-  if (*Y != -1)
-    (*Y) = Layout::Scale(*Y);
+  pt.y = StringToIntDflt(Node->getAttribute(_T("Y")), -1);
+  if (pt.y != -1)
+    pt.y = Layout::Scale(pt.y);
+
+  return pt;
+}
+
+static SIZE
+GetSize(XMLNode *Node, const DialogStyle_t eDialogStyle)
+{
+  SIZE sz;
 
   // Calculate width and height
-  *Width = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("Width")), 0),
-                           eDialogStyle);
-  *Height = Layout::Scale(StringToIntDflt(Node->getAttribute(_T("Height")), 0));
+  sz.cx = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("Width")), 0),
+                          eDialogStyle);
+  sz.cy = Layout::Scale(StringToIntDflt(Node->getAttribute(_T("Height")), 0));
 
-  // TODO code: Temporary double handling to
-  // fix "const unsigned short*" to "unsigned short *" problem
+  return sz;
 }
 
 static void *
@@ -378,8 +374,12 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   CalcWidthStretch(&xNode, rc, eDialogStyle);
 
   const TCHAR* Caption = GetCaption(&xNode);
-  GetDefaultWindowControlProps(&xNode, &X, &Y, &Width, &Height,
-                               eDialogStyle);
+  POINT pos = GetPosition(&xNode, eDialogStyle);
+  SIZE size = GetSize(&xNode, eDialogStyle);
+  X = pos.x;
+  Y = pos.y;
+  Width = size.cx;
+  Height = size.cy;
 
   // Correct dialog size and position for dialog style
   switch (eDialogStyle) {
@@ -504,8 +504,12 @@ LoadChild(WndForm &form, ContainerControl &Parent,
   // and caption of the control
   const TCHAR* Name = GetName(&node);
   const TCHAR* Caption = GetCaption(&node);
-  GetDefaultWindowControlProps(&node, &X, &Y, &Width, &Height,
-                               eDialogStyle);
+  POINT pos = GetPosition(&node, eDialogStyle);
+  SIZE size = GetSize(&node, eDialogStyle);
+  X = pos.x;
+  Y = pos.y;
+  Width = size.cx;
+  Height = size.cy;
 
   if (X < -1 || Y < -1 || Width <= 0 || Height <= 0) {
     /* a non-positive width/height specifies the distance from the
