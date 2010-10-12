@@ -40,106 +40,74 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/Fonts.hpp"
-#include "Form/Form.hpp"
+
+#include <assert.h>
+#include <string.h>
 
 static const TCHAR keyboard_letters[] =
   _T("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
-KeyboardControl::KeyboardControl(WndForm &form, ContainerWindow &parent,
+KeyboardControl::KeyboardControl(ContainerWindow &parent,
                                  int x, int y, unsigned width, unsigned height,
                                  Color background_color,
                                  OnCharacterCallback_t function,
                                  const WindowStyle _style) :
+  num_buttons(0),
   background_brush(background_color),
   button_width(50), button_height(50),
-  parent_form(form),
   mOnCharacter(function)
 {
   set(parent, x, y, width, height, _style);
   set_buttons_size();
 
   TCHAR caption[] = _T(" ");
-  TCHAR name[] = _T("cmd ");
 
   for (const TCHAR *i = keyboard_letters; !string_is_empty(i); ++i) {
     caption[0] = *i;
-    name[3] = *i;
 
-    add_button(form, name, caption);
+    add_button(caption);
   }
 
-  add_button(form, _T("cmdSpace"), _T(" Space "));
-  add_button(form, _T("cmdPeriod"), _T("."));
-  add_button(form, _T("cmdComma"), _T(","));
-  add_button(form, _T("cmdMinus"), _T("-"));
+  add_button(_T(" Space "));
+  add_button(_T("."));
+  add_button(_T(","));
+  add_button(_T("-"));
 
   move_buttons();
-}
-
-static void
-ApplyAllowedCharacters(Window *window, TCHAR ch, const TCHAR *allowed)
-{
-  if (window != NULL)
-    window->set_visible(allowed == NULL || _tcschr(allowed, ch) != NULL);
 }
 
 void
 KeyboardControl::SetAllowedCharacters(const TCHAR *allowed)
 {
-  TCHAR name[] = _T("cmd ");
-  for (const TCHAR *i = keyboard_letters; !string_is_empty(i); ++i) {
-    name[3] = *i;
-    ApplyAllowedCharacters(get_button(name), *i, allowed);
-  }
-
-  ApplyAllowedCharacters(get_button(_T("cmdSpace")), ' ', allowed);
-  ApplyAllowedCharacters(get_button(_T("cmdPeriod")), '.', allowed);
-  ApplyAllowedCharacters(get_button(_T("cmdComma")), ',', allowed);
-  ApplyAllowedCharacters(get_button(_T("cmdMinus")), '-', allowed);
+  for (unsigned i = 0; i < num_buttons; ++i)
+    buttons[i].set_visible(allowed == NULL ||
+                           _tcschr(allowed, button_values[i]) != NULL);
 }
 
 ButtonWindow *
-KeyboardControl::get_button(const TCHAR* name)
+KeyboardControl::get_button(TCHAR ch)
 {
-  return (ButtonWindow *)parent_form.FindByName(name);
-}
-
-ButtonWindow *
-KeyboardControl::get_button_by_caption(const TCHAR* caption)
-{
-  if (_tcscmp(caption, _T(",")) == 0)
-    return get_button(_T("cmdComma"));
-  if (_tcscmp(caption, _T(".")) == 0)
-    return get_button(_T("cmdPeriod"));
-  if (_tcscmp(caption, _T("-")) == 0)
-    return get_button(_T("cmdMinus"));
-  if (_tcscmp(caption, _T(" ")) == 0 || _tcscmp(caption, _T(" Space ")) == 0)
-    return get_button(_T("cmdSpace"));
-
-  if (_tcslen(caption) == 1 && _tcschr(keyboard_letters, caption[0]) != NULL) {
-    TCHAR name[5] = _T("cmd");
-    _tcsncat(name, caption, 1);
-    name[4] = 0;
-
-    return get_button(name);
-  }
+  for (unsigned i = 0; i < num_buttons; ++i)
+    if (button_values[i] == ch)
+      return &buttons[i];
 
   return NULL;
+
 }
 
 void
-KeyboardControl::move_button(const TCHAR* name, int left, int top)
+KeyboardControl::move_button(TCHAR ch, int left, int top)
 {
-  ButtonWindow *kb = get_button(name);
+  ButtonWindow *kb = get_button(ch);
   if (kb)
     kb->move(left, top);
 }
 
 void
-KeyboardControl::resize_button(const TCHAR* name,
+KeyboardControl::resize_button(TCHAR ch,
                                unsigned int width, unsigned int height)
 {
-  ButtonWindow *kb = get_button(name);
+  ButtonWindow *kb = get_button(ch);
   if (kb)
     kb->resize(width, height);
 }
@@ -147,22 +115,8 @@ KeyboardControl::resize_button(const TCHAR* name,
 void
 KeyboardControl::resize_buttons()
 {
-  ButtonWindow *kb;
-  for (unsigned i = 0; i < _tcslen(keyboard_letters); i++) {
-    TCHAR caption[2];
-    _tcsncpy(caption, keyboard_letters + i, 1);
-    caption[1] = 0;
-
-    kb = get_button_by_caption(caption);
-    if (!kb)
-      continue;
-
-    kb->resize(button_width, button_height);
-  }
-  resize_button(_T("cmdComma"), button_width, button_height);
-  resize_button(_T("cmdPeriod"), button_width, button_height);
-  resize_button(_T("cmdMinus"), button_width, button_height);
-  resize_button(_T("cmdSpace"), button_width, button_height);
+  for (unsigned i = 0; i < num_buttons; ++i)
+    buttons[i].resize(button_width, button_height);
 }
 
 void
@@ -180,11 +134,7 @@ KeyboardControl::move_buttons_to_row(const TCHAR* buttons, int row, int offset)
 
   ButtonWindow *kb;
   for (unsigned i = 0; i < _tcslen(buttons); i++) {
-    TCHAR caption[2];
-    _tcsncpy(caption, buttons + i, 1);
-    caption[1] = 0;
-
-    kb = get_button_by_caption(caption);
+    kb = get_button(buttons[i]);
     if (!kb)
       continue;
 
@@ -201,15 +151,15 @@ KeyboardControl::move_buttons()
   move_buttons_to_row(_T("ZXCVBNM,."), 3, button_width * 2 / 3);
 
   if (is_landscape()) {
-    move_button(_T("cmdMinus"), button_width * 9, button_height * 4);
+    move_button(_T('-'), button_width * 9, button_height * 4);
 
-    move_button(_T("cmdSpace"), button_width * 5 / 2, button_height * 4);
-    resize_button(_T("cmdSpace"), button_width * 3, button_height);
+    move_button(_T(' '), button_width * 5 / 2, button_height * 4);
+    resize_button(_T(' '), button_width * 3, button_height);
   } else {
-    move_button(_T("cmdMinus"), button_width * 8, button_height * 4);
+    move_button(_T('-'), button_width * 8, button_height * 4);
 
-    move_button(_T("cmdSpace"), button_width * 2, button_height * 4);
-    resize_button(_T("cmdSpace"), button_width * 11 / 2, button_height);
+    move_button(_T(' '), button_width * 2, button_height * 4);
+    resize_button(_T(' '), button_width * 11 / 2, button_height);
   }
 }
 
@@ -244,13 +194,13 @@ KeyboardControl::is_landscape() {
 }
 
 void
-KeyboardControl::add_button(WndForm &form, const TCHAR* name,
-                            const TCHAR* caption)
+KeyboardControl::add_button(const TCHAR* caption)
 {
-  ButtonWindow *button = new ButtonWindow();
+  assert(num_buttons < MAX_BUTTONS);
+
+  button_values[num_buttons] = caption[0];
+  ButtonWindow *button = &buttons[num_buttons++];
   button->set(*this, caption, (unsigned)caption[0],
               0, 0, button_width, button_height);
   button->set_font(Fonts::MapBold);
-  form.AddNamed(name, button);
-  form.AddDestruct(button);
 }

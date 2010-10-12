@@ -40,11 +40,9 @@ Copyright_License {
 #define XCSOAR_KEYBOARD_CONTROL_HPP
 
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/ButtonWindow.hpp"
 
 #include <tchar.h>
-
-class WndForm;
-class ButtonWindow;
 
 /**
  * The PanelControl class implements the simplest form of a ContainerControl
@@ -53,6 +51,16 @@ class KeyboardControl : public ContainerWindow {
 public:
   typedef void (*OnCharacterCallback_t)(TCHAR key);
 
+protected:
+  enum {
+    MAX_BUTTONS = 40,
+  };
+
+  unsigned num_buttons;
+  ButtonWindow buttons[MAX_BUTTONS];
+  TCHAR button_values[MAX_BUTTONS];
+
+public:
   /**
    * Constructor of the KeyboardControl class
    * @param parent the parent window
@@ -61,7 +69,7 @@ public:
    * @param width Width of the Control
    * @param height Height of the Control
    */
-  KeyboardControl(WndForm &form, ContainerWindow &parent, int x, int y,
+  KeyboardControl(ContainerWindow &parent, int x, int y,
                   unsigned width, unsigned height,
                   Color background_color,
                   OnCharacterCallback_t function,
@@ -87,13 +95,10 @@ private:
   unsigned button_width;
   unsigned button_height;
 
-  WndForm &parent_form;
+  ButtonWindow *get_button(TCHAR ch);
 
-  ButtonWindow *get_button(const TCHAR* name);
-  ButtonWindow *get_button_by_caption(const TCHAR* caption);
-
-  void move_button(const TCHAR* name, int left, int top);
-  void resize_button(const TCHAR* name, unsigned int width, unsigned int height);
+  void move_button(TCHAR ch, int left, int top);
+  void resize_button(TCHAR ch, unsigned int width, unsigned int height);
   void resize_buttons();
   void set_buttons_size();
   void move_buttons_to_row(const TCHAR* buttons, int row, int offset_left = 0);
@@ -101,7 +106,7 @@ private:
 
   bool is_landscape();
 
-  void add_button(WndForm &form, const TCHAR* name, const TCHAR* caption);
+  void add_button(const TCHAR* caption);
 
   OnCharacterCallback_t mOnCharacter;
 };

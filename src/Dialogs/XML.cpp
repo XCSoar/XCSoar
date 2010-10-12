@@ -708,7 +708,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     // Create the KeyboardControl
     KeyboardControl *kb =
-      new KeyboardControl(form, Parent.GetClientAreaWindow(),
+      new KeyboardControl(Parent.GetClientAreaWindow(),
                           X, Y, Width, Height, Parent.GetBackColor(),
                           CharacterCallback, style);
 
