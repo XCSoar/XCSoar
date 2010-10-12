@@ -870,8 +870,6 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpBlockSTF"),
                    settings_computer.EnableBlockSTF);
-  LoadFormProperty(*wf, _T("prpFAIFinishHeight"),
-                   settings_computer.ordered_defaults.fai_finish);
 
   wp = (WndProperty*)wf->FindByName(_T("prpOLCRules"));
   if (wp) {
@@ -1018,18 +1016,6 @@ setVariables()
     dfe->addEnumText(_("Short"));
     dfe->addEnumText(_("Full"));
     dfe->Set(XCSoarInterface::SettingsMap().TrailActive);
-    wp->RefreshDisplay();
-  }
-
-  // VENTA3 VisualGlide
-  wp = (WndProperty*)wf->FindByName(_T("prpVGlide"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Off"));
-    dfe->addEnumText(_("Steady"));
-    dfe->addEnumText(_("Moving"));
-    dfe->Set(XCSoarInterface::SettingsMap().VisualGlide);
     wp->RefreshDisplay();
   }
 
