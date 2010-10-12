@@ -143,11 +143,7 @@ Profile::SaveFile(const TCHAR *szFile)
   ProfileWriter profile_writer(writer);
 
   LogStartUp(_T("Saving profile to %s"), szFile);
-#ifndef USE_PROFILE_MAP
-  Registry::Export(profile_writer);
-#else
-  ProfileMap::Export(profile_writer);
-#endif
+  Export(profile_writer);
 }
 
 
