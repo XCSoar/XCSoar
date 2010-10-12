@@ -362,8 +362,6 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
     return NULL;
   }
 
-  int X, Y, Width, Height;
-
   // todo: this dialog style stuff seems a little weird...
 
   // Determine the dialog style of the dialog
@@ -376,23 +374,19 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   const TCHAR* Caption = GetCaption(&xNode);
   POINT pos = GetPosition(&xNode, eDialogStyle);
   SIZE size = GetSize(&xNode, eDialogStyle);
-  X = pos.x;
-  Y = pos.y;
-  Width = size.cx;
-  Height = size.cy;
 
   // Correct dialog size and position for dialog style
   switch (eDialogStyle) {
   case eDialogFullWidth:
-    X = rc.left;
-    Y = rc.top;
-    Width = rc.right - rc.left; // stretch form to full width of screen
-    Height = rc.bottom - rc.top;
+    pos.x = rc.left;
+    pos.y = rc.top;
+    size.cx = rc.right - rc.left; // stretch form to full width of screen
+    size.cy = rc.bottom - rc.top;
     break;
   case eDialogScaled:
     break;
   case eDialogScaledCentered:
-    X = (rc.right + rc.left - Width) / 2; // center form horizontally on screen
+    pos.x = (rc.right + rc.left - size.cx) / 2; // center form horizontally on screen
     break;
   case eDialogFixed:
     break;
@@ -403,7 +397,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   style.hide();
   style.control_parent();
 
-  theForm = new WndForm(Parent, X, Y, Width, Height, Caption, style);
+  theForm = new WndForm(Parent, pos.x, pos.y, size.cx, size.cy, Caption, style);
 
   // Set fore- and background colors
   LoadColors(*theForm, xNode);
@@ -495,8 +489,6 @@ LoadChild(WndForm &form, ContainerControl &Parent,
           CallBackTableEntry_t *LookUpTable,
           XMLNode node, const DialogStyle_t eDialogStyle)
 {
-  int X, Y, Width, Height;
-
   Window *window = NULL;
   WindowControl *WC = NULL;
 
@@ -506,23 +498,19 @@ LoadChild(WndForm &form, ContainerControl &Parent,
   const TCHAR* Caption = GetCaption(&node);
   POINT pos = GetPosition(&node, eDialogStyle);
   SIZE size = GetSize(&node, eDialogStyle);
-  X = pos.x;
-  Y = pos.y;
-  Width = size.cx;
-  Height = size.cy;
 
-  if (X < -1 || Y < -1 || Width <= 0 || Height <= 0) {
+  if (pos.x < -1 || pos.y < -1 || size.cx <= 0 || size.cy <= 0) {
     /* a non-positive width/height specifies the distance from the
        right/bottom border of the parent */
     RECT rc = Parent.GetClientAreaWindow().get_client_rect();
-    if (X < -1)
-      X += rc.right;
-    if (Y < -1)
-      Y += rc.bottom;
-    if (Width <= 0)
-      Width += rc.right - X;
-    if (Height <= 0)
-      Height += rc.bottom - Y;
+    if (pos.x < -1)
+      pos.x += rc.right;
+    if (pos.y < -1)
+      pos.y += rc.bottom;
+    if (size.cx <= 0)
+      size.cx += rc.right - pos.x;
+    if (size.cy <= 0)
+      size.cy += rc.bottom - pos.y;
   }
 
   WindowStyle style;
@@ -589,7 +577,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
       edit_style.vscroll();
     }
 
-    WC = W = new WndProperty(Parent, Caption, X, Y, Width, Height,
+    WC = W = new WndProperty(Parent, Caption, pos.x, pos.y, size.cx, size.cy,
                              CaptionWidth,
                              style, edit_style,
                              DataNotifyCallback);
@@ -626,7 +614,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     style.tab_stop();
 
     window = new WndButton(Parent.GetClientAreaWindow(), Caption,
-                           X, Y, Width, Height,
+                           pos.x, pos.y, size.cx, size.cy,
                            style,
                            ClickCallback);
 
@@ -643,7 +631,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     style.tab_stop();
 
     window = new CheckBoxControl(Parent.GetClientAreaWindow(), Caption,
-                                 X, Y, Width, Height,
+                                 pos.x, pos.y, size.cx, size.cy,
                                  style,
                                  ClickCallback);
 
@@ -661,7 +649,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     style.tab_stop();
 
     window = new WndSymbolButton(Parent.GetClientAreaWindow(), Caption,
-                                 X, Y, Width, Height,
+                                 pos.x, pos.y, size.cx, size.cy,
                                  style, Parent.GetBackColor(),
                                  ClickCallback);
 
@@ -680,7 +668,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     style.tab_stop();
 
     window = new WndEventButton(Parent.GetClientAreaWindow(), Caption,
-                                X, Y, Width, Height,
+                                pos.x, pos.y, size.cx, size.cy,
                                 style,
                                 iename, ieparameters);
 #endif
@@ -691,7 +679,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     style.control_parent();
 
-    PanelControl *frame = new PanelControl(Parent, X, Y, Width, Height, style);
+    PanelControl *frame = new PanelControl(Parent, pos.x, pos.y, size.cx, size.cy, style);
 
     WC = frame;
 
@@ -709,7 +697,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     // Create the KeyboardControl
     KeyboardControl *kb =
       new KeyboardControl(Parent.GetClientAreaWindow(),
-                          X, Y, Width, Height, Parent.GetBackColor(),
+                          pos.x, pos.y, size.cx, size.cy, Parent.GetBackColor(),
                           CharacterCallback, style);
 
     window = kb;
@@ -723,13 +711,13 @@ LoadChild(WndForm &form, ContainerControl &Parent,
                                         NULL));
 
     // Create the DrawControl
-    WC = new WndOwnerDrawFrame(Parent, X, Y, Width, Height,
+    WC = new WndOwnerDrawFrame(Parent, pos.x, pos.y, size.cx, size.cy,
                                style, PaintCallback);
 
   // FrameControl (WndFrame)
   } else if (_tcscmp(node.getName(), _T("Label")) == 0){
     // Create the FrameControl
-    WC = new WndFrame(Parent, X, Y, Width, Height,
+    WC = new WndFrame(Parent, pos.x, pos.y, size.cx, size.cy,
                       style);
 
   // ListBoxControl (WndListFrame)
@@ -750,7 +738,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
       style.sunken_edge();
 
     window = new WndListFrame(Parent.GetClientAreaWindow(),
-                              X, Y, Width, Height,
+                              pos.x, pos.y, size.cx, size.cy,
                               style,
                               item_height);
 
@@ -761,7 +749,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     style.control_parent();
 
     TabbedControl *tabbed = new TabbedControl(Parent,
-                                              X, Y, Width, Height, style);
+                                              pos.x, pos.y, size.cx, size.cy, style);
     WC = tabbed;
 
     const unsigned n = node.nChildNode();
@@ -784,7 +772,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
       return NULL;
 
     window = create(Parent.GetClientAreaWindow(),
-                    X, Y, Width, Height, style);
+                    pos.x, pos.y, size.cx, size.cy, style);
   }
 
   // If WindowControl has been created
