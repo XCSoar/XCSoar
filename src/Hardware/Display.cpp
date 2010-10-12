@@ -201,6 +201,23 @@ Display::Rotate(enum orientation orientation)
 #endif
 }
 
+bool
+Display::RotateRestore()
+{
+#ifdef DM_DISPLAYORIENTATION
+  DEVMODE dm;
+  memset(&dm, 0, sizeof(dm));
+  dm.dmSize = sizeof(dm);
+  dm.dmFields = DM_DISPLAYORIENTATION;
+  dm.dmDisplayOrientation = DMDO_0;
+
+  return ChangeDisplaySettingsEx(NULL, &dm, NULL,
+                                 CDS_RESET, NULL) == DISP_CHANGE_SUCCESSFUL;
+#else
+  return false;
+#endif
+}
+
 int
 Display::GetXDPI()
 {

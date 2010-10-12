@@ -80,6 +80,12 @@ namespace Display {
   Rotate(enum orientation orientation);
 
   /**
+   * Restores the display rotation setting.
+   */
+  bool
+  RotateRestore();
+
+  /**
    * Returns the number of pixels per logical inch along the screen width
    * @return Number of pixels per logical inch along the screen width
    */
