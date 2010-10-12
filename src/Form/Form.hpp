@@ -147,7 +147,7 @@ public:
    */
   WndForm(SingleWindow &_main_window, const TCHAR *Caption,
           int X, int Y, int Width, int Height,
-          const WindowStyle style);
+          const WindowStyle style = WindowStyle());
 
   /** Destructor */
   virtual ~WndForm();
