@@ -64,13 +64,20 @@ namespace Display {
   }
 #endif
 
+  enum orientation {
+    ORIENTATION_DEFAULT,
+    ORIENTATION_PORTRAIT,
+    ORIENTATION_LANDSCAPE,
+  };
+
   gcc_const
   bool RotateSupported();
 
   /**
    * Change the orientation of the screen.
    */
-  bool Rotate();
+  bool
+  Rotate(enum orientation orientation);
 
   /**
    * Returns the number of pixels per logical inch along the screen width

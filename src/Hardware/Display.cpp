@@ -141,14 +141,58 @@ Display::RotateSupported()
 }
 
 bool
-Display::Rotate()
+Display::Rotate(enum orientation orientation)
 {
+  if (orientation == ORIENTATION_DEFAULT)
+    /* leave it as it is */
+    return true;
+
 #ifdef DM_DISPLAYORIENTATION
+  unsigned width = GetSystemMetrics(SM_CXSCREEN);
+  unsigned height = GetSystemMetrics(SM_CYSCREEN);
+  if (width == height)
+    /* cannot rotate a square display */
+    return false;
+
+  if (width < height) {
+    /* portrait currently */
+    if (orientation == ORIENTATION_PORTRAIT)
+      return true;
+  } else {
+    /* landscape currently */
+    if (orientation == ORIENTATION_LANDSCAPE)
+      return true;
+  }
+
   DEVMODE DeviceMode;
   memset(&DeviceMode, 0, sizeof(DeviceMode));
   DeviceMode.dmSize = sizeof(DeviceMode);
   DeviceMode.dmFields = DM_DISPLAYORIENTATION;
-  DeviceMode.dmDisplayOrientation = DMDO_90;
+
+  /* get current rotation */
+
+  if (ChangeDisplaySettingsEx(NULL, &DeviceMode, NULL,
+                              CDS_TEST, NULL) != DISP_CHANGE_SUCCESSFUL)
+    return false;
+
+  /* determine the new rotation */
+
+  switch (DeviceMode.dmDisplayOrientation) {
+  case DMDO_0:
+  case DMDO_180:
+    DeviceMode.dmDisplayOrientation = DMDO_90;
+    break;
+
+  case DMDO_90:
+  case DMDO_270:
+    DeviceMode.dmDisplayOrientation = DMDO_0;
+    break;
+
+  default:
+    return false;
+  }
+
+  /* apply the new rotation */
 
   return ChangeDisplaySettingsEx(NULL, &DeviceMode, NULL,
                                  CDS_RESET, NULL) == DISP_CHANGE_SUCCESSFUL;
