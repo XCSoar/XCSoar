@@ -373,7 +373,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   }
 
   int X, Y, Width, Height;
-  TCHAR sTmp[128];
+  TCHAR Caption[128];
 
   // todo: this dialog style stuff seems a little weird...
 
@@ -384,7 +384,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   const RECT rc = Parent.get_client_rect();
   CalcWidthStretch(&xNode, rc, eDialogStyle);
 
-  GetCaption(&xNode, sTmp);
+  GetCaption(&xNode, Caption);
   GetDefaultWindowControlProps(&xNode, &X, &Y, &Width, &Height,
                                eDialogStyle);
 
@@ -410,7 +410,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   style.hide();
   style.control_parent();
 
-  theForm = new WndForm(Parent, X, Y, Width, Height, sTmp, style);
+  theForm = new WndForm(Parent, X, Y, Width, Height, Caption, style);
 
   // Set fore- and background colors
   LoadColors(*theForm, xNode);
