@@ -67,12 +67,21 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
   TCHAR tmp[32];
 
 #ifdef HAVE_BATTERY
+
+  bool DisplaySupplyVoltageAsValue=false;
   switch (Power::External::Status) {
     case Power::External::OFF:
       infobox.SetComment(_("AC OFF"));
       break;
     case Power::External::ON:
-      infobox.SetComment(_("AC ON"));
+      if (XCSoarInterface::Basic().SupplyBatteryVoltage <= (fixed)0)
+        infobox.SetComment(_("AC ON"));
+      else{
+        DisplaySupplyVoltageAsValue = true;
+        _stprintf(tmp, _T("%2.1fV"),
+                  (double)XCSoarInterface::Basic().SupplyBatteryVoltage);
+        infobox.SetValue(tmp);
+      }
       break;
     case Power::External::UNKNOWN:
     default:
@@ -85,14 +94,23 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
     case Power::Battery::CHARGING:
       if (Power::Battery::RemainingPercentValid){
         _stprintf(tmp, _T("%d%%"), Power::Battery::RemainingPercent);
-        infobox.SetValue(tmp);
+        if (!DisplaySupplyVoltageAsValue)
+          infobox.SetValue(tmp);
+        else
+          infobox.SetComment(tmp);
       }
       else
-        infobox.SetValueInvalid();
+        if (!DisplaySupplyVoltageAsValue)
+          infobox.SetValueInvalid();
+        else
+          infobox.SetCommentInvalid();
       break;
     case Power::Battery::NOBATTERY:
     case Power::Battery::UNKNOWN:
-      infobox.SetValueInvalid(); 
+      if (!DisplaySupplyVoltageAsValue)
+        infobox.SetValueInvalid();
+      else
+        infobox.SetCommentInvalid();
   }
   return;
 

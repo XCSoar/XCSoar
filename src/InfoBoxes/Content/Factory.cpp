@@ -593,7 +593,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Battery Voltage"),
 #endif
     N_("Battery"),
-    N_("Supply battery voltage for Altair systems, for PDA systems, this gives the percent battery capacity available."),
+    N_("Displays percentage of device battery remaining (where applicable) and status/voltage of external power supply. If available, external supply voltage is displayed as the main value."),
     49, 26,
   },
 
