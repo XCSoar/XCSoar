@@ -557,7 +557,7 @@ InfoBoxManager::SetupFocused()
   WindowStyle style;
   style.hide();
 
-  WndForm form(main_window, _T(""), 0, 0, 256, 128, style);
+  WndForm form(main_window, 0, 0, 256, 128, _T(""), style);
   WndProperty control(form, _("InfoBox"), 0, 0, 256, 128, 128,
                       style, EditWindowStyle(), NULL);
   control.SetOnHelpCallback(OnInfoBoxHelp);

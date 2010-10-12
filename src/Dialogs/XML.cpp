@@ -405,7 +405,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   style.hide();
   style.control_parent();
 
-  theForm = new WndForm(Parent, sTmp, X, Y, Width, Height, style);
+  theForm = new WndForm(Parent, X, Y, Width, Height, sTmp, style);
 
   // Set fore- and background colors
   LoadColors(*theForm, xNode);

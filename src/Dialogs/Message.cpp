@@ -112,7 +112,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   style.hide();
 
   WndForm wf(XCSoarInterface::main_window,
-             lpCaption, X, Y, Width, Height,
+             X, Y, Width, Height, lpCaption,
              style);
 
   // Create text element

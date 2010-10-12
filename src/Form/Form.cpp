@@ -89,8 +89,8 @@ add_border(WindowStyle style)
 }
 
 WndForm::WndForm(SingleWindow &_main_window,
-                 const TCHAR *Caption,
                  int X, int Y, int Width, int Height,
+                 const TCHAR *Caption,
                  const WindowStyle style):
   main_window(_main_window),
   mModalResult(0),

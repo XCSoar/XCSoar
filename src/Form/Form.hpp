@@ -145,8 +145,8 @@ public:
    * @param Width Width of the Window
    * @param Height Height of the Window
    */
-  WndForm(SingleWindow &_main_window, const TCHAR *Caption,
-          int X, int Y, int Width, int Height,
+  WndForm(SingleWindow &_main_window, int X, int Y, int Width, int Height,
+          const TCHAR *Caption,
           const WindowStyle style = WindowStyle());
 
   /** Destructor */
