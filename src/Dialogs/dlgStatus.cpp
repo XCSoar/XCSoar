@@ -159,16 +159,14 @@ UpdateValuesSystem()
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(_T("prpGPS"));
   if (wp) {
-    if (gps.Connected) {
-      if (gps.NAVWarning)
-        wp->SetText(_("Fix invalid"));
-      else if (gps.SatellitesUsed == 0)
-        wp->SetText(_("No fix"));
-      else
-        wp->SetText(_("3D fix"));
-    } else {
+    if (!gps.Connected)
       wp->SetText(_("Disconnected"));
-    }
+    else if (gps.NAVWarning)
+      wp->SetText(_("Fix invalid"));
+    else if (gps.SatellitesUsed == 0)
+      wp->SetText(_("No fix"));
+    else
+      wp->SetText(_("3D fix"));
 
     wp->RefreshDisplay();
   }
