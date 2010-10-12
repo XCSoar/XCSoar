@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-30 20:17+0200\n"
-"PO-Revision-Date: 2010-10-05 23:23+0000\n"
-"Last-Translator: Folken Van Vanel <Unknown>\n"
+"PO-Revision-Date: 2010-10-09 08:42+0000\n"
+"Last-Translator: Turbo <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-07 13:20+0000\n"
+"X-Launchpad-Export-Date: 2010-10-12 18:16+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Language: de\n"
 
@@ -530,7 +530,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:230
 msgid "Terrain Elevation"
-msgstr "Geländefreiheit"
+msgstr "Geländehöhe"
 
 #: src/InfoBoxes/Content/Factory.cpp:231
 msgid "H GND"
@@ -766,7 +766,7 @@ msgid ""
 "Percentage of time spent in climb mode. These statistics are reset upon "
 "starting the task."
 msgstr ""
-"Prozentsatz der Zeit, die im Steigmodus verwendet wurde. Die Statistik wird "
+"Prozentsatz der Zeit, die im Steigmodus verbracht wurde. Die Statistik wird "
 "beim Start der Aufgabe neu gestartet."
 
 #: src/InfoBoxes/Content/Factory.cpp:358
@@ -3811,6 +3811,9 @@ msgid ""
 "external power, otherwise max brightneess and a 5 minutes timeout on "
 "batteries. After timeout screen blanks to save energy."
 msgstr ""
+"Stellt die automatische Hintergrundbeleuchtung für das Gerät ein. Solange es "
+"extern versorgt ist, wird die maximale Helligkeit eingestellt, ansonsten "
+"wird nach 5 Minuten Untätigkeit der Bildschirm dunkel um Batterie zu sparen."
 
 #: Data/Dialogs/dlgConfiguration.xml:34 Data/Dialogs/dlgConfiguration_L.xml:35
 msgid "Airspace 2"
@@ -3822,6 +3825,8 @@ msgid ""
 "Draws digital elevation terrain on the map. This is shaded by the wind "
 "direction: upwind is brighter, downwind darker."
 msgstr ""
+"Kennzeichnet digital die Hebungsgebiete auf der Karte. Diese werden aufgrund "
+"des Windvektors schattiert: Aufwind ist heller, Abwind dunkler dargestellt."
 
 #: Data/Dialogs/dlgConfiguration.xml:235
 #: Data/Dialogs/dlgConfiguration_L.xml:237
@@ -3851,6 +3856,9 @@ msgid ""
 "cruise mode, arrows point up to command slow down; arrows point down to "
 "command speed up."
 msgstr ""
+"Ob Pfeile für die Geschwindigkeitsanweisung in der Varioanzeige dargestellt "
+"werden sollen. Wenn aktiviert weisen im Vorflugmodus Aufwärtspfeile zum "
+"Verlangsamen, und Abwärtspfeile zum Beschleunigen an."
 
 #: Data/Dialogs/dlgVario.xml:149 Data/Dialogs/dlgVario.xml:171
 #: Data/Dialogs/dlgVario.xml:193 Data/Dialogs/dlgVario.xml:215
@@ -5279,6 +5287,8 @@ msgid ""
 "The language file defines translations for XCSoar text in English to other "
 "languages.  If this field is left blank, then XCSoar uses English."
 msgstr ""
+"Die Sprachdatei bestimmt die Übersetzung der Englischen XCSoar Texte in "
+"andere Sprachen. Bleibt dieses Feld leer benutzt XCSoar Englisch."
 
 #: Data/Dialogs/dlgConfiguration.xml:433
 #: Data/Dialogs/dlgConfiguration_L.xml:433
@@ -5480,6 +5490,8 @@ msgstr "Altair Pro Nutzer müssen dies auf Anschluss 3 stellen."
 msgid ""
 "Draw a black outline around each airspace rather than the airspace color"
 msgstr ""
+"Zeige jeden Luftraum mit einer schwarzen Kontur, anstatt mit der Farbe des "
+"Luftraums."
 
 #: Data/Dialogs/dlgVario.xml:32 Data/Dialogs/dlgVario_L.xml:33
 msgid ""
