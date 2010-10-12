@@ -69,10 +69,10 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
 #ifdef HAVE_BATTERY
   switch (Power::External::Status) {
     case Power::External::OFF:
-      infobox.SetComment(_("EXT. OFF"));
+      infobox.SetComment(_("AC OFF"));
       break;
     case Power::External::ON:
-      infobox.SetComment(_("EXT. ON"));
+      infobox.SetComment(_("AC ON"));
       break;
     case Power::External::UNKNOWN:
     default:
