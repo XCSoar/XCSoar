@@ -9,7 +9,7 @@
   <Button Name="cmdSave" Caption="Save" X="140" Y="270" Width="60" Height="28" OnClick="OnSaveClicked" />
 
   <Tabbed Name="tabbed" X="0" Y="0" Width="235" Height="222">
-    <Panel Name="frmHardware" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmHardware">
       <Edit Name="prpHasPressureTE" Caption="TE port" X="2" Width="235" Height="22" CaptionWidth="150" Help="Whether the Total Energy port is connected.">
         <DataField DataType="boolean"/>
       </Edit>
@@ -47,7 +47,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmCalibration" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmCalibration">
       <Edit Name="prpCalibrationTEProbe" Caption="TE probe cal" X="2" Width="235" Height="22" CaptionWidth="150" Help="Calibration factor applied to total energy probe to obtain TE vario.">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="50" Max="150" Step="1"/>
       </Edit>
@@ -69,7 +69,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmAudioModes" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmAudioModes">
       <Edit Name="prpToneClimbComparisonType" Caption="Climb fast trigger" X="2" Width="235" Height="22" CaptionWidth="150" Help="Comparison method used to detect climb states (HIGH/LOW).
 [NONE]: State LOW disabled
 [MACCREADY]: State High if gross vario is greater than MacCready setting.
@@ -119,7 +119,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmAudioDeadband" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmAudioDeadband">
       <Edit Name="prpToneDeadbandCirclingType" Caption="Circling deadband type" X="2" Width="235" Height="22" CaptionWidth="150" Help="Type of dead band used in circling mode.">
         <DataField DataType="enum" Min="0" Max="10" Step="1"/>
       </Edit>
@@ -145,7 +145,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmCruiseFaster" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmCruiseFaster">
       <Edit Name="prpToneCruiseFasterBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
         <DataField DataType="enum" Min="0" Max="10" Step="1"/>
       </Edit>
@@ -167,7 +167,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmCruiseSlower" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmCruiseSlower">
       <Edit Name="prpToneCruiseSlowerBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
         <DataField DataType="enum" Min="0" Max="10" Step="1"/>
       </Edit>
@@ -189,7 +189,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmCruiseLift" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmCruiseLift">
       <Edit Name="prpToneCruiseLiftBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
         <DataField DataType="enum" Min="0" Max="10" Step="1"/>
       </Edit>
@@ -211,7 +211,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmCirclingClimbingHi" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmCirclingClimbingHi">
       <Edit Name="prpToneCirclingClimbingHiBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
         <DataField DataType="enum" Min="0" Max="10" Step="1"/>
       </Edit>
@@ -233,7 +233,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmCirclingClimbingLow" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmCirclingClimbingLow">
       <Edit Name="prpToneCirclingClimbingLowBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
         <DataField DataType="enum" Min="0" Max="10" Step="1"/>
       </Edit>
@@ -255,7 +255,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmCirclingDescending" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmCirclingDescending">
       <Edit Name="prpToneCirclingDescendingBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
         <DataField DataType="enum" Min="0" Max="10" Step="1"/>
       </Edit>
@@ -277,7 +277,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmLogger" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmLogger">
       <Edit Name="prpUTCOffset" Caption="UTC Offset" X="2" Width="235" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="-13" Max="13" Step="1"/>
       </Edit>
@@ -291,7 +291,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmMixer" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmMixer">
       <Edit Name="prpMuteVarioOnPlay" Caption="Mute vario on voice" X="2" Width="235" Height="22" CaptionWidth="150">
         <DataField DataType="boolean"/>
       </Edit>
@@ -321,7 +321,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmFlarmAlerts" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmFlarmAlerts">
       <Edit Name="prpFlarmMaxObjectsReported" Caption="Max objects reported" X="2" Width="235" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="1" Max="15" Step="1"/>
       </Edit>
@@ -347,7 +347,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmFlarmIdentification" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmFlarmIdentification">
       <Edit Name="prpFlarmPrivacyFlag" Caption="Privacy" X="2" Width="235" Height="22" CaptionWidth="150">
         <DataField DataType="boolean"/>
       </Edit>
@@ -357,7 +357,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmFlarmRepeats" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmFlarmRepeats">
       <Edit Name="prpFlarmInfoRepeatTime" Caption="Interval, Info" X="2" Width="235" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min="1" Max="2000" Step="100"/>
       </Edit>
@@ -371,7 +371,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmAlerts" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmAlerts">
       <Edit Name="prpGearOnDelay" Caption="Gear on delay" X="2" Width="235" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min="1" Max="2000" Step="50"/>
       </Edit>
@@ -401,7 +401,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmLimits" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmLimits">
       <Edit Name="prpVelocityNeverExceed" Caption="VNE"
  X="2" Width="235" Height="22" CaptionWidth="150">
        <DataField DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min="0" Max="2000" Step="10"/>
@@ -433,14 +433,14 @@
       </Edit>  
     </Panel>
   
-    <Panel Name="frmSchemes" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmSchemes">
       <Button Name="cmdSchemeVega" Caption="Vega" X="50" Width="90" Height="28" OnClick="OnSchemeVegaClicked" />
       <Button Name="cmdSchemeBorgelt" Caption="Borgelt" X="50" Width="90" Height="28" OnClick="OnSchemeBorgeltClicked" />
       <Button Name="cmdSchemeCambridge" Caption="Cambridge" X="50" Width="90" Height="28" OnClick="OnSchemeCambridgeClicked" />
       <Button Name="cmdSchemeZander" Caption="Zander" X="50" Width="90" Height="28" OnClick="OnSchemeZanderClicked" />
     </Panel>
   
-    <Panel Name="frmDisplay" X="0" Y="0" Width="0" Height="0">
+    <Panel Name="frmDisplay">
       <Edit Name="prpNeedleGaugeType" Caption="Needle gauge type" X="2" Width="235" Height="22" CaptionWidth="150">
           <DataField DataType="enum" Min="0" Max="10" Step="1"/>
         </Edit>

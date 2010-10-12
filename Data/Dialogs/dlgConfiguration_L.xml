@@ -11,7 +11,7 @@
   <Button Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28"/>
 
   <Tabbed Name="tabbed" X="70" Y="0" Width="0" Height="222">
-    <Panel Name="frmSite" X="0" Y="0" Width="0" Height="222">
+    <Panel Name="frmSite">
       <Edit Name="prpMapFile" Caption="Map file" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="The name of the file containing terrain, topology, and optionally waypoints, airfield details and airspace.">
         <DataField DataType="filereader" Min="0" Max="200" Step="1" />
@@ -55,7 +55,7 @@
       </Edit>    
     </Panel>
   
-    <Panel Name="frmAirspace" X="0" Y="0" Width="0" Height="222">
+    <Panel Name="frmAirspace">
       <Button Name="cmdAirspaceColours" Caption="Colours" X="100" Y="2" Width="70" Height="22" OnClick="OnAirspaceColoursClicked" />
       <Button Name="cmdAirspaceMode" Caption="Filter" X="170" Y="2" Width="70" Height="22" OnClick="OnAirspaceModeClicked" />
   
@@ -93,7 +93,7 @@
       </Edit>  
     </Panel>
   
-    <Panel Name="frmDisplay" X="0" Y="0" Width="0" Height="222">
+    <Panel Name="frmDisplay">
       <Edit Name="prpWaypointLabels" Caption="Labels" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Determines how labels are displayed with each waypoint:
 [Names] The full name of each waypoint is displayed.
 [Numbers] The waypoint number of each waypoint is displayed.
@@ -150,7 +150,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmTerrain" X="0" Y="0" Width="0" Height="222">
+    <Panel Name="frmTerrain">
       <Edit Name="prpEnableTerrain" Caption="Terrain display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draws digital elevation terrain on the map. This is shaded by the wind direction: upwind is brighter, downwind darker.">
         <DataField DataType="boolean" />
       </Edit>
@@ -175,7 +175,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmFinalGlide" X="0" Y="0" Width="0" Height="222">
+    <Panel Name="frmFinalGlide">
       <Edit Name="prpFinalGlideTerrain" Caption="Glide terrain line" X="2" Width="-2" Height="22" CaptionWidth="150"
        Help="This determines whether the the glide terrain range is calculated and drawn as a line on the map area:
 [OFF] Disables display
@@ -225,7 +225,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmSafety" X="0" Y="0" Width="0" Height="222">
+    <Panel Name="frmSafety">
       <Edit Name="prpSafetyAltitudeArrival" Caption="Arrival height" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The height above terrain that the glider should arrive at for a safe landing.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="10000" Step="100" />
@@ -247,7 +247,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmPolar" X="0" Y="0" Width="0" Height="222">
+    <Panel Name="frmPolar">
       <Edit Name="prpPolarType" Caption="Type" X="2" Width="-2" Height="22" CaptionWidth="70"
         Help="This contains a selection of gliders of different performance classes, as well as a special entry for WinPilot File.">
         <DataField DataType="enum" Min="0" Max="50" Step="1" OnDataAccess="OnPolarTypeData" />
@@ -274,7 +274,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmComm" X="0" Y="0" Width="0" Height="222">
+    <Panel Name="frmComm">
       <Panel Name="frmComm1" X="0" Y="0" Width="0" Height="68" Border="30">
         <Label Caption="Device A" X="2" Y="2" Width="70" Height="22"/>
   
@@ -327,7 +327,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmUnits" X="0" Y="0" Width="0" Height="222">
+    <Panel Name="frmUnits">
       <Edit Name="prpUnitsSpeed" Caption="Aircraft/wind speed" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Units used for airspeed and ground speed.  A separate unit is available for task speeds.">
         <DataField DataType="enum" Min="0" Max="50" Step="1" />
@@ -370,7 +370,7 @@
       <Edit Name="prpLocalTime" Caption="Local time" X="2" Width="-2" Height="22" CaptionWidth="150" ReadOnly="1" />
     </Panel>
   
-    <Panel Name="frmInterface" X="0" Y="0" Width="0" Height="222">
+    <Panel Name="frmInterface">
       <Edit Name="prpAutoBlank" Caption="Auto Blank" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="This determines whether to blank the display after a long period of inactivity when operating on internal battery power.">
         <DataField DataType="boolean" />
@@ -421,7 +421,7 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmAppearance" X="0" Y="0" Width="0" Height="222">
+    <Panel Name="frmAppearance">
       <Edit Name="prpGliderScreenPosition" Caption="Glider position" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Defines the location of the glider drawn on the screen in percent from the bottom.">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="10" Max="50" Step="5" />
@@ -451,7 +451,7 @@
       </Edit>
     </Panel>
     
-    <Panel Name="frmVarioAppearance" X="0" Y="0" Width="0" Height="222">
+    <Panel Name="frmVarioAppearance">
       <Edit Name="prpAppGaugeVarioSpeedToFly" Caption="Speed arrows" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Whether to show speed command arrows on the Vario gauge.  When shown, in cruise mode, arrows point up to command slow down; arrows point down to command speed up.">
         <DataField DataType="boolean" />
@@ -507,7 +507,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
       </Edit>
     </Panel>
   
-    <Panel Name="frmTaskRules" X="0" Y="0" Width="0" Height="222">
+    <Panel Name="frmTaskRules">
       <Edit Name="prpStartMaxSpeed" Caption="Start max speed" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Maximum speed allowed in start observation zone.  Set to 0 for no limit.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="5" />
@@ -549,7 +549,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
       </Edit>
     </Panel>
   
-    <Panel Name="frmInfoBoxes" X="0" Y="0" Width="0" Height="222">
+    <Panel Name="frmInfoBoxes">
       <Button Name="cmdInfoBoxesCircling" Caption="Circling" X="2" Width="-2" Height="22"/>
       <Button Name="cmdInfoBoxesCruise" Caption="Cruise" X="2" Width="-2" Height="22"/>
       <Button Name="cmdInfoBoxesFinalGlide" Caption="FinalGlide" X="2" Width="-2" Height="22"/>
@@ -579,7 +579,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
     
     </Panel>
   
-    <Panel Name="frmLogger" X="0" Y="0" Width="0" Height="222">
+    <Panel Name="frmLogger">
       <Edit Name="prpLoggerTimeStepCruise" Caption="Time step cruise*" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="This is the time interval between logged points when not circling. ">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="1" Max="30" Step="1" />
@@ -609,12 +609,11 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
       </Edit>
     </Panel>
     
-    <Panel Name="frmPages" X="0" Y="0" Width="0" Height="222">
+    <Panel Name="frmPages">
       <List Name="lstPages" X="0" Width="-1" Height="-1" />
     </Panel>
   
-    <Panel Name="frmSpecials" X="0" Y="0" Width="0" Height="222">
-    
+    <Panel Name="frmSpecials">
       <Edit Name="prpAppInfoBoxModel" Caption="Device model" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Select your PNA model to make full use of its hardware capabilities. If it is not included, use Generic type.">
         <DataField DataType="enum" Min="0" Max="50" Step="1" />
