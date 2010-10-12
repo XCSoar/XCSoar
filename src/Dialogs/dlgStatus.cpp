@@ -75,6 +75,32 @@ static bool multi_page = false;
 static int status_page = 0;
 
 static void
+SetCaption()
+{
+  static unsigned status_page;
+  TCHAR caption[64];
+
+  status_page = tabbed->GetCurrentPage();
+  _sntprintf(caption, 64, _T("%u %s"),
+             status_page + 1, gettext(captions[status_page]));
+  wf->SetCaption(caption);
+}
+
+static void
+NextPage()
+{
+  tabbed->NextPage();
+  SetCaption();
+}
+
+static void
+PrevPage()
+{
+  tabbed->PreviousPage();
+  SetCaption();
+}
+
+static void
 OnCloseClicked(gcc_unused WndButton &button)
 {
   wf->SetModalResult(mrOK);
@@ -88,13 +114,13 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   case VK_LEFT:
   case '6':
     ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
-    tabbed->PreviousPage();
+    PrevPage();
     return true;
 
   case VK_RIGHT:
   case '7':
     ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
-    tabbed->NextPage();
+    NextPage();
     return true;
 
   default:
@@ -103,33 +129,17 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
 }
 
 static void
-SetCaption()
-{
-  static unsigned status_page;
-  TCHAR caption[64];
-
-  status_page = tabbed->GetCurrentPage();
-  _sntprintf(caption, 64, _T("%u %s"),
-             status_page + 1, gettext(captions[status_page]));
-  wf->SetCaption(caption);
-}
-
-static void
 OnNextClicked(WindowControl * Sender)
 {
   (void)Sender;
-
-  tabbed->NextPage();
-  SetCaption();
+  NextPage();
 }
 
 static void
 OnPrevClicked(WindowControl * Sender)
 {
   (void)Sender;
-
-  tabbed->PreviousPage();
-  SetCaption();
+  PrevPage();
 }
 
 static CallBackTableEntry_t CallBackTable[] = {
