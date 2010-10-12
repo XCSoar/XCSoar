@@ -72,7 +72,6 @@ unsigned XCSoarInterface::debounceTimeout = 250;
 #endif
 unsigned ActionInterface::MenuTimeoutMax = MENUTIMEOUTMAX;
 bool CommonInterface::EnableAutoBacklight = true;
-bool CommonInterface::EnableAutoSoundVolume = true;
 
 #include "LogFile.hpp"
 #include "Protection.hpp"

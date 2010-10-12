@@ -1296,13 +1296,6 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAutoSoundVolume")); // VENTA4
-  if (wp) {
-    wp->set_visible(is_embedded());
-    wp->GetDataField()->Set(CommonInterface::EnableAutoSoundVolume);
-    wp->RefreshDisplay();
-  }
-
   LoadFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
                    settings_computer.ordered_defaults.finish_min_height);
   LoadFormProperty(*wf, _T("prpStartMaxHeight"), ugAltitude,
@@ -2121,10 +2114,6 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(wf, _T("prpAutoBacklight"),
                               szProfileAutoBacklight,
                               CommonInterface::EnableAutoBacklight);
-
-  changed |= SaveFormProperty(wf, _T("prpAutoSoundVolume"),
-                              szProfileAutoSoundVolume,
-                              CommonInterface::EnableAutoSoundVolume);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainContrast"));
   if (wp) {

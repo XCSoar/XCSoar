@@ -406,8 +406,6 @@ Profile::Use()
 
   Get(szProfileAutoBacklight,
       XCSoarInterface::EnableAutoBacklight);
-  Get(szProfileAutoSoundVolume,
-      XCSoarInterface::EnableAutoSoundVolume);
   Get(szProfileExtendedVisualGlide,
       settings_map.ExtendedVisualGlide);
 

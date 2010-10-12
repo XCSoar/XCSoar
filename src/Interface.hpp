@@ -128,7 +128,6 @@ private:
 public:
   // settings
   static bool EnableAutoBacklight;
-  static bool EnableAutoSoundVolume;
 };
 
 /** 

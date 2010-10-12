@@ -39,7 +39,6 @@ Copyright_License {
 
 HINSTANCE CommonInterface::hInst;
 bool CommonInterface::EnableAutoBacklight;
-bool CommonInterface::EnableAutoSoundVolume;
 
 void
 ActionInterface::SignalShutdown(bool force)
