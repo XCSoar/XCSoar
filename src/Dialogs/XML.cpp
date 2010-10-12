@@ -367,7 +367,6 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   }
 
   int X, Y, Width, Height;
-  const TCHAR* Caption;
 
   // todo: this dialog style stuff seems a little weird...
 
@@ -378,7 +377,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   const RECT rc = Parent.get_client_rect();
   CalcWidthStretch(&xNode, rc, eDialogStyle);
 
-  Caption = GetCaption(&xNode);
+  const TCHAR* Caption = GetCaption(&xNode);
   GetDefaultWindowControlProps(&xNode, &X, &Y, &Width, &Height,
                                eDialogStyle);
 
@@ -497,16 +496,14 @@ LoadChild(WndForm &form, ContainerControl &Parent,
           XMLNode node, const DialogStyle_t eDialogStyle)
 {
   int X, Y, Width, Height;
-  const TCHAR* Caption;
-  const TCHAR* Name;
 
   Window *window = NULL;
   WindowControl *WC = NULL;
 
   // Determine name, coordinates, width, height
   // and caption of the control
-  Name = GetName(&node);
-  Caption = GetCaption(&node);
+  const TCHAR* Name = GetName(&node);
+  const TCHAR* Caption = GetCaption(&node);
   GetDefaultWindowControlProps(&node, &X, &Y, &Width, &Height,
                                eDialogStyle);
 
