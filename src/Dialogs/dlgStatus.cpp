@@ -138,58 +138,10 @@ static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-static bool first = true;
-
 static void
 UpdateValuesSystem()
 {
   static const GPS_STATE &gps = XCSoarInterface::Basic().gps;
-
-  static unsigned extGPSCONNECT_last = gps.Connected;
-  static int NAVWarning_last = gps.NAVWarning;
-  static int SatellitesUsed_last = gps.SatellitesUsed;
-  static bool VarioAvailable_last =
-      XCSoarInterface::Basic().TotalEnergyVarioAvailable;
-  static int FLARM_Available_last =
-      XCSoarInterface::Basic().flarm.FLARM_Available;
-  static bool LoggerActive_last = logger.isLoggerActive();
-  static bool DeclaredToDevice_last = logger.isTaskDeclared();
-  static fixed SupplyBatteryVoltage_last =
-      XCSoarInterface::Basic().SupplyBatteryVoltage;
-#ifdef HAVE_BATTERY
-  static int PDABatteryPercent_last = PDABatteryPercent;
-#endif
-
-  if (first ||
-      (extGPSCONNECT_last != gps.Connected) ||
-      (NAVWarning_last != gps.NAVWarning) ||
-      (SatellitesUsed_last != gps.SatellitesUsed) ||
-      (VarioAvailable_last != XCSoarInterface::Basic().TotalEnergyVarioAvailable) ||
-      (FLARM_Available_last != XCSoarInterface::Basic().flarm.FLARM_Available) ||
-      (LoggerActive_last != logger.isLoggerActive()) ||
-      (DeclaredToDevice_last != logger.isTaskDeclared()) ||
-      (SupplyBatteryVoltage_last != XCSoarInterface::Basic().SupplyBatteryVoltage)
-#ifdef HAVE_BATTERY
-      || PDABatteryPercent_last != PDABatteryPercent
-#endif
-      ) {
-    first = false;
-
-    extGPSCONNECT_last = gps.Connected;
-    NAVWarning_last = gps.NAVWarning;
-    SatellitesUsed_last = gps.SatellitesUsed;
-    VarioAvailable_last = XCSoarInterface::Basic().TotalEnergyVarioAvailable;
-    FLARM_Available_last = XCSoarInterface::Basic().flarm.FLARM_Available;
-    LoggerActive_last = logger.isLoggerActive();
-    DeclaredToDevice_last = logger.isTaskDeclared();
-    SupplyBatteryVoltage_last = XCSoarInterface::Basic().SupplyBatteryVoltage;
-#ifdef HAVE_BATTERY
-    PDABatteryPercent_last = PDABatteryPercent;
-#endif
-
-  } else {
-    return;
-  }
 
   TCHAR Temp[80];
   TCHAR Temp2[80];
@@ -580,8 +532,6 @@ dlgStatusShowModal(int start_page)
 
   if (!multi_page)
     status_page = start_page;
-
-  first = true;
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   _T("IDR_XML_STATUS"));
