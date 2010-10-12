@@ -219,11 +219,9 @@ static void *
 CallBackLookup(CallBackTableEntry_t *LookUpTable, const TCHAR *Name)
 {
   if (LookUpTable != NULL && Name != NULL && !string_is_empty(Name))
-    for (unsigned i = 0; LookUpTable[i].Ptr != NULL; i++) {
-      if (_tcscmp(LookUpTable[i].Name, Name) == 0) {
+    for (unsigned i = 0; LookUpTable[i].Ptr != NULL; i++)
+      if (_tcscmp(LookUpTable[i].Name, Name) == 0)
         return LookUpTable[i].Ptr;
-      }
-    }
 
   return NULL;
 }
