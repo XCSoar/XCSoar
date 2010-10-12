@@ -275,7 +275,6 @@ xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
 /**
  * Tries to load an XML file from the resources
  * @param lpszXML The resource name
- * @param tag (?)
  * @return The parsed XMLNode
  */
 static XMLNode
