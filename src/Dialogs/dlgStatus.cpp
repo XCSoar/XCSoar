@@ -166,25 +166,25 @@ UpdateValuesSystem()
         wp->SetText(_("No fix"));
       else
         wp->SetText(_("3D fix"));
-      wp->RefreshDisplay();
     } else {
       wp->SetText(_("Disconnected"));
-      wp->RefreshDisplay();
     }
+
+    wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpNumSat"));
   if (wp) {
     if (!gps.Connected)
-      Temp = _T("\0");
-    else if (gps.SatellitesUsed >= 0)
+      wp->SetText(_T("\0"));
+    else if (gps.SatellitesUsed >= 0) {
       // known number of sats
       _stprintf(Temp,_T("%d"), gps.SatellitesUsed);
-    else
+      wp->SetText(Temp);
+    } else
       // valid but unknown number of sats
-      _stprintf(Temp,_T(">3"));
+      wp->SetText(_T(">3"));
 
-    wp->SetText(Temp);
     wp->RefreshDisplay();
   }
 
