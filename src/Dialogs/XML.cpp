@@ -374,7 +374,6 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
 
   int X, Y, Width, Height;
   TCHAR sTmp[128];
-  TCHAR Name[64];
 
   // todo: this dialog style stuff seems a little weird...
 
@@ -385,7 +384,6 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   const RECT rc = Parent.get_client_rect();
   CalcWidthStretch(&xNode, rc, eDialogStyle);
 
-  GetName(&xNode, Name);
   GetCaption(&xNode, sTmp);
   GetDefaultWindowControlProps(&xNode, &X, &Y, &Width, &Height,
                                eDialogStyle);
