@@ -44,9 +44,34 @@ Copyright_License {
 
 #include <stdbool.h>
 
-extern int PDABatteryTemperature;
-extern int PDABatteryPercent;
-extern bool PDABatteryAC;
+namespace Power
+{
+  namespace Battery{
+    enum batterystatus {
+      LOW,
+      HIGH,
+      CRITICAL,
+      CHARGING,
+      NOBATTERY,
+      UNKNOWN
+    };
+
+    extern unsigned Temperature;
+    extern unsigned RemainingPercent;
+    extern bool RemainingPercentValid;
+    extern batterystatus Status;
+  };
+  namespace External{
+    enum externalstatus{
+      OFF,
+      ON,
+      UNKNOWN
+    };
+
+    extern externalstatus Status;
+  };
+
+}
 
 #include <windows.h>
 

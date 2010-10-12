@@ -40,12 +40,19 @@ Copyright_License {
 
 #ifdef HAVE_BATTERY
 
-/** Battery percentage; negative means unknown */
-int PDABatteryPercent = -1;
-/** Battery temperature (default = 0°C (?)) */
-int PDABatteryTemperature = 0;
+namespace Power
+{
+  namespace Battery{
+    unsigned Temperature = 0;
+    unsigned RemainingPercent = 0;
+    bool RemainingPercentValid = false;
+    batterystatus Status = UNKNOWN;
+  };
 
-bool PDABatteryAC = false;
+  namespace External{
+    externalstatus Status = UNKNOWN;
+  };
+};
 
 /** Warning time before battery is empty */
 DWORD BatteryWarningTime = 0;
@@ -58,16 +65,49 @@ UpdateBatteryInfo(void)
   // request the power status
   DWORD result = GetSystemPowerStatusEx2(&sps, sizeof(sps), TRUE);
   if (result >= sizeof(sps)) {
-    if (sps.BatteryLifePercent != BATTERY_PERCENTAGE_UNKNOWN)
-      PDABatteryPercent = sps.BatteryLifePercent;
+    if (sps.BatteryLifePercent != BATTERY_PERCENTAGE_UNKNOWN){
+      Power::Battery::RemainingPercent = sps.BatteryLifePercent;
+      Power::Battery::RemainingPercentValid = true;
+    }
     else
-      PDABatteryPercent = -1;
-    PDABatteryTemperature = sps.BatteryTemperature;
-    PDABatteryAC = sps.ACLineStatus != AC_LINE_OFFLINE;
+      Power::Battery::RemainingPercentValid = false;
+
+    switch (sps.BatteryFlag) {
+      case BATTERY_FLAG_HIGH:
+        Power::Battery::Status = Power::Battery::HIGH;
+        break;
+      case BATTERY_FLAG_LOW:
+        Power::Battery::Status = Power::Battery::LOW;
+        break;
+      case BATTERY_FLAG_CRITICAL:
+        Power::Battery::Status = Power::Battery::CRITICAL;
+        break;
+      case BATTERY_FLAG_CHARGING:
+        Power::Battery::Status = Power::Battery::CHARGING;
+        break;
+      case BATTERY_FLAG_NO_BATTERY:
+        Power::Battery::Status = Power::Battery::NOBATTERY;
+        break;
+      case BATTERY_FLAG_UNKNOWN:
+      default:
+        Power::Battery::Status = Power::Battery::UNKNOWN;
+    }
+
+    switch (sps.ACLineStatus) {
+      case AC_LINE_OFFLINE:
+        Power::External::Status = Power::External::OFF;
+        break;
+      case AC_LINE_BACKUP_POWER:
+      case AC_LINE_ONLINE:
+        Power::External::Status = Power::External::ON;
+        break;
+      case AC_LINE_UNKNOWN:
+      default: 
+        Power::External::Status = Power::External::UNKNOWN;
+    }
   } else {
-    PDABatteryPercent = -1;
-    PDABatteryTemperature = 0;
-    PDABatteryAC = false;
+    Power::Battery::Status = Power::Battery::UNKNOWN;
+    Power::External::Status = Power::External::UNKNOWN;
   }
 }
 

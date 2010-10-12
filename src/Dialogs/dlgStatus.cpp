@@ -231,8 +231,8 @@ UpdateValuesSystem()
   assert(wp != NULL);
   Temp[0] = 0;
 #ifdef HAVE_BATTERY
-  if (PDABatteryPercent >= 0) {
-    _stprintf(Temp2, _T("%d%% "), PDABatteryPercent);
+  if (Power::Battery::RemainingPercentValid) {
+    _stprintf(Temp2, _T("%d%% "), Power::Battery::RemainingPercent);
     _tcscat(Temp, Temp2);
   }
 #endif

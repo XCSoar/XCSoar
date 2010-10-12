@@ -67,16 +67,35 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
   TCHAR tmp[32];
 
 #ifdef HAVE_BATTERY
-  if (!PDABatteryAC)
-    infobox.SetComment(_("EXT. OFF"));
-  else
-    infobox.SetComment(_("EXT. ON"));
-
-  if (PDABatteryPercent >= 0) {
-    _stprintf(tmp, _T("%d%%"), PDABatteryPercent);
-    infobox.SetValue(tmp);
-    return;
+  switch (Power::External::Status) {
+    case Power::External::OFF:
+      infobox.SetComment(_("EXT. OFF"));
+      break;
+    case Power::External::ON:
+      infobox.SetComment(_("EXT. ON"));
+      break;
+    case Power::External::UNKNOWN:
+    default:
+      infobox.SetCommentInvalid();
   }
+  switch (Power::Battery::Status){
+    case Power::Battery::HIGH:
+    case Power::Battery::LOW:
+    case Power::Battery::CRITICAL:
+    case Power::Battery::CHARGING:
+      if (Power::Battery::RemainingPercentValid){
+        _stprintf(tmp, _T("%d%%"), Power::Battery::RemainingPercent);
+        infobox.SetValue(tmp);
+      }
+      else
+        infobox.SetValueInvalid();
+      break;
+    case Power::Battery::NOBATTERY:
+    case Power::Battery::UNKNOWN:
+      infobox.SetValueInvalid(); 
+  }
+  return;
+
 #endif
 
   if (!negative(XCSoarInterface::Basic().SupplyBatteryVoltage)) {
