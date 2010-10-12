@@ -146,7 +146,7 @@ public:
    * @param Height Height of the Window
    */
   WndForm(SingleWindow &_main_window, int X, int Y, int Width, int Height,
-          const TCHAR *Caption,
+          const TCHAR *Caption = _T(""),
           const WindowStyle style = WindowStyle());
 
   /** Destructor */
