@@ -38,38 +38,14 @@ Copyright_License {
 #include "WayPointFile.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Engine/Waypoint/WaypointVisitor.hpp"
-#include "Thread/Mutex.hpp"
-#include "Interface.hpp"
-#include "Dialogs.h"
-#include "DeviceBlackboard.hpp"
-#include "Units.hpp"
 #include "OS/PathName.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
-#include <stdarg.h>
 
 /* what follows is a bunch of symbols needed by the linker - we don't
    want to compile & link the original libraries, because that would
    mean even more and more depencies */
-
-Mutex mutexTaskData;
-DeviceBlackboard device_blackboard;
-
-void
-DeviceBlackboard::SetStartupLocation(const GeoPoint &loc,
-                                     const fixed alt)
-{
-}
-
-Projection::Projection() {}
-fixed Projection::GetMapScaleUser() const { return fixed_one; }
-
-MapWindowProjection::MapWindowProjection() {}
-fixed MapWindowProjection::GetMapScaleUser() const { return fixed_one; }
-
-SettingsComputerBlackboard::SettingsComputerBlackboard() {}
-SettingsMapBlackboard::SettingsMapBlackboard() {}
 
 class DumpVisitor : public WaypointVisitor {
 public:
