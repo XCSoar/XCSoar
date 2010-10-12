@@ -174,7 +174,7 @@ UpdateValuesSystem()
   wp = (WndProperty*)wf->FindByName(_T("prpNumSat"));
   if (wp) {
     if (!gps.Connected)
-      wp->SetText(_T("\0"));
+      wp->SetText(_T(""));
     else if (gps.SatellitesUsed >= 0) {
       // known number of sats
       _stprintf(Temp,_T("%d"), gps.SatellitesUsed);
