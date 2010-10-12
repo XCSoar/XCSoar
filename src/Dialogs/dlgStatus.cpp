@@ -571,14 +571,13 @@ static int OnTimerNotify(WindowControl * Sender) {
   return 0;
 }
 
-void dlgStatusShowModal(int start_page){
+void
+dlgStatusShowModal(int start_page)
+{
+  multi_page = (start_page == -1);
 
-  if (start_page==-1) {
-    multi_page = true;
-  } else {
+  if (!multi_page)
     status_page = start_page;
-    multi_page = false;
-  }
 
   first = true;
 
