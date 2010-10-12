@@ -373,6 +373,10 @@
         <DataField DataType="boolean" />
       </Edit>
     
+      <Edit Name="prpGestures" Caption="Gestures" X="2" Width="-2" Height="22" CaptionWidth="150">
+        <DataField DataType="boolean" />
+      </Edit>
+    
       <Edit Name="prpInputFile" Caption="Events*" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="The Input Events file defines the menu system and how XCSoar responds to button presses and events from external devices.">
         <DataField DataType="filereader" Min="0" Max="200" Step="1" />
@@ -606,10 +610,6 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
       <Edit Name="prpAppInfoBoxModel" Caption="Device model" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Select your PNA model to make full use of its hardware capabilities. If it is not included, use Generic type.">
         <DataField DataType="enum" Min="0" Max="50" Step="1" />
-      </Edit>
-    
-      <Edit Name="prpGestures" Caption="Gestures" X="2" Width="-2" Height="22" CaptionWidth="150">
-        <DataField DataType="boolean" />
       </Edit>
     
       <Edit Name="prpExtendedVisualGlide" Caption="Extended Visual Glide*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="If you want Visual Glide to display also moving circles or arcs, in addition to the steady mode then select Extended.">
