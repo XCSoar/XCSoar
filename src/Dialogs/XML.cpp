@@ -278,13 +278,13 @@ xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
  * @return The parsed XMLNode
  */
 static XMLNode
-xmlOpenResourceHelper(const TCHAR *lpszXML)
+xmlOpenResourceHelper(const TCHAR *resource)
 {
   XMLResults pResults;
 
   pResults.error = eXMLErrorNone;
   XMLNode::GlobalError = false;
-  XMLNode xnode = xmlLoadFromResource(lpszXML, &pResults);
+  XMLNode xnode = xmlLoadFromResource(resource, &pResults);
   if (pResults.error != eXMLErrorNone) {
     XMLNode::GlobalError = true;
     TCHAR errortext[100];
