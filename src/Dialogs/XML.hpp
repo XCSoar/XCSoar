@@ -50,21 +50,22 @@ class SingleWindow;
 /**
  * Class to hold callback entries for dialogs
  */
-typedef struct{
+struct CallBackTableEntry_t
+{
   const TCHAR *Name;
   void *Ptr;
-} CallBackTableEntry_t;
+};
 
 /**
  * Dialog display styles
  */
-typedef enum {
-
+enum DialogStyle_t
+{
   eDialogFullWidth = 0,         /**< cover screen, stretch controls horizontally */
   eDialogScaled,                /**< stretch only frame to maintain aspect ratio */  
   eDialogScaledCentered,        /**< like eDialogScaled but center dialog in screen */
   eDialogFixed                  /**< don't adjust at all (same as !Layout::ScaleSupported()) */
-} DialogStyle_t;
+};
 
 /**
  * Callback type for the "Custom" element, attribute "OnCreate".

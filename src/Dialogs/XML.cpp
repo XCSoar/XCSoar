@@ -168,58 +168,60 @@ Scale_Dlg_Width(const int x, const DialogStyle_t eDialogStyle)
     return Layout::Scale(x);
 }
 
-/**
- * This function reads the following parameters from the XML Node and
- * saves them as Control properties:
- * Name, x-, y-Coordinate, Width, Height and Caption
- * @param Node The XML Node that represents the Control
- * @param Name Name of the Control (pointer)
- * @param X x-Coordinate of the Control (pointer)
- * @param Y y-Coordinate of the Control (pointer)
- * @param Width Width of the Control (pointer)
- * @param Height Height of the Control (pointer)
- * @param Caption Caption of the Control (pointer)
- * @param eDialogStyle Dialog style of the Form
- */
-static void
-GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
-                             int *Width, int *Height,
-                             TCHAR *Caption, const DialogStyle_t eDialogStyle)
+static const TCHAR*
+GetName(XMLNode *Node)
 {
+  return StringToStringDflt(Node->getAttribute(_T("Name")), _T(""));
+}
+
+static const TCHAR*
+GetCaption(XMLNode *Node)
+{
+  const TCHAR* tmp =
+      StringToStringDflt(Node->getAttribute(_T("Caption")), _T(""));
+
+  const TCHAR *translated = gettext(tmp);
+  if (translated != tmp)
+    return translated;
+
+  return tmp;
+}
+
+static POINT
+GetPosition(XMLNode *Node, const DialogStyle_t eDialogStyle)
+{
+  POINT pt;
+
   // Calculate x- and y-Coordinate
-  *X = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("X")), 0),
+  pt.x = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("X")), 0),
                        eDialogStyle);
-  *Y = StringToIntDflt(Node->getAttribute(_T("Y")), -1);
-  if (*Y != -1)
-    (*Y) = Layout::Scale(*Y);
+  pt.y = StringToIntDflt(Node->getAttribute(_T("Y")), -1);
+  if (pt.y != -1)
+    pt.y = Layout::Scale(pt.y);
+
+  return pt;
+}
+
+static SIZE
+GetSize(XMLNode *Node, const DialogStyle_t eDialogStyle)
+{
+  SIZE sz;
 
   // Calculate width and height
-  *Width = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("Width")), 0),
-                           eDialogStyle);
-  *Height = Layout::Scale(StringToIntDflt(Node->getAttribute(_T("Height")), 0));
+  sz.cx = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("Width")), 0),
+                          eDialogStyle);
+  sz.cy = Layout::Scale(StringToIntDflt(Node->getAttribute(_T("Height")), 0));
 
-  // Determine name and caption
-  _tcscpy(Name, StringToStringDflt(Node->getAttribute(_T("Name")), _T("")));
-  _tcscpy(Caption, StringToStringDflt(Node->getAttribute(_T("Caption")), _T("")));
-
-  // TODO code: Temporary double handling to
-  // fix "const unsigned short*" to "unsigned short *" problem
-
-  // Translate caption
-  const TCHAR *translated = gettext(Caption);
-  if (translated != Caption)
-    _tcscpy(Caption, translated);
+  return sz;
 }
 
 static void *
 CallBackLookup(CallBackTableEntry_t *LookUpTable, const TCHAR *Name)
 {
   if (LookUpTable != NULL && Name != NULL && !string_is_empty(Name))
-    for (unsigned i = 0; LookUpTable[i].Ptr != NULL; i++) {
-      if (_tcscmp(LookUpTable[i].Name, Name) == 0) {
+    for (unsigned i = 0; LookUpTable[i].Ptr != NULL; i++)
+      if (_tcscmp(LookUpTable[i].Name, Name) == 0)
         return LookUpTable[i].Ptr;
-      }
-    }
 
   return NULL;
 }
@@ -229,13 +231,19 @@ LoadChildrenFromXML(WndForm &form, ContainerControl &parent,
                     CallBackTableEntry_t *LookUpTable,
                     XMLNode *Node, const DialogStyle_t eDialogStyle);
 
+static void
+ShowXMLError(const TCHAR* msg = _T("Error in loading XML dialog"))
+{
+  MessageBoxX(msg, _T("Dialog error"),
+              MB_OK | MB_ICONEXCLAMATION);
+}
+
 static XMLNode
 xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
 {
   ResourceLoader::Data data = ResourceLoader::Load(lpName, _T("XMLDialog"));
   if (data.first == NULL) {
-    MessageBoxX(_T("Can't find resource"), _T("Dialog error"),
-                MB_OK | MB_ICONEXCLAMATION);
+    ShowXMLError(_T("Can't find resource"));
 
     // unable to find the resource
     return XMLNode::emptyXMLNode;
@@ -265,25 +273,30 @@ xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
 /**
  * Tries to load an XML file from the resources
  * @param lpszXML The resource name
- * @param tag (?)
  * @return The parsed XMLNode
  */
 static XMLNode
-xmlOpenResourceHelper(const TCHAR *lpszXML)
+xmlOpenResourceHelper(const TCHAR *resource)
 {
   XMLResults pResults;
 
+  // Reset errors
   pResults.error = eXMLErrorNone;
   XMLNode::GlobalError = false;
-  XMLNode xnode = xmlLoadFromResource(lpszXML, &pResults);
+
+  // Load and parse the resource
+  XMLNode xnode = xmlLoadFromResource(resource, &pResults);
+
+  // Show errors if they exist
   if (pResults.error != eXMLErrorNone) {
     XMLNode::GlobalError = true;
     TCHAR errortext[100];
     _stprintf(errortext,_T("%s %i %i"), XMLNode::getError(pResults.error),
               pResults.nLine, pResults.nColumn);
 
-    MessageBoxX(errortext, _T("Dialog error"), MB_OK | MB_ICONEXCLAMATION);
+    ShowXMLError(errortext);
   }
+
   return xnode;
 }
 
@@ -332,44 +345,27 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
 
   WndForm *theForm = NULL;
 
-  // assert(main_window == Parent);  // Airspace warning has MapWindow as parent,
-  // ist that ok?  JMW: No, I think that it is better to use main UI thread for
-  // everything.  See changes regarding RequestAirspaceDialog in AirspaceWarning.cpp
-
   // Find XML file or resource and load XML data out of it
-  XMLNode xMainNode = xmlOpenResourceHelper(resource);
+  XMLNode xNode = xmlOpenResourceHelper(resource);
 
   // TODO code: put in error checking here and get rid of exits in xmlParser
   // If XML error occurred -> Error messagebox + cancel
-  if (xMainNode.isEmpty()) {
-    MessageBoxX(_T("Error in loading XML dialog"),
-                _T("Dialog error"), MB_OK | MB_ICONEXCLAMATION);
-
+  if (xNode.isEmpty()) {
+    ShowXMLError();
     return NULL;
   }
 
-  XMLNode xNode;
-
   // If the main XMLNode is of type "Form"
-  if (_tcsicmp(xMainNode.getName(), _T("Form")) == 0)
-    // -> save it as the dialog node
-    xNode = xMainNode;
-  else
+  if (_tcsicmp(xNode.getName(), _T("Form")) != 0)
     // Get the first child node of the type "Form"
     // and save it as the dialog node
-    xNode = xMainNode.getChildNode(_T("Form"));
+    xNode = xNode.getChildNode(_T("Form"));
 
   // If Node does not exists -> Error messagebox + cancel
   if (xNode.isEmpty()) {
-    MessageBoxX(_T("Error in loading XML dialog"),
-                _T("Dialog error"), MB_OK | MB_ICONEXCLAMATION);
-
+    ShowXMLError();
     return NULL;
   }
-
-  int X, Y, Width, Height;
-  TCHAR sTmp[128];
-  TCHAR Name[64];
 
   // todo: this dialog style stuff seems a little weird...
 
@@ -380,21 +376,22 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   const RECT rc = Parent.get_client_rect();
   CalcWidthStretch(&xNode, rc, eDialogStyle);
 
-  GetDefaultWindowControlProps(&xNode, Name, &X, &Y, &Width, &Height,
-                               sTmp, eDialogStyle);
+  const TCHAR* Caption = GetCaption(&xNode);
+  POINT pos = GetPosition(&xNode, eDialogStyle);
+  SIZE size = GetSize(&xNode, eDialogStyle);
 
   // Correct dialog size and position for dialog style
   switch (eDialogStyle) {
   case eDialogFullWidth:
-    X = rc.left;
-    Y = rc.top;
-    Width = rc.right - rc.left; // stretch form to full width of screen
-    Height = rc.bottom - rc.top;
+    pos.x = rc.left;
+    pos.y = rc.top;
+    size.cx = rc.right - rc.left; // stretch form to full width of screen
+    size.cy = rc.bottom - rc.top;
     break;
   case eDialogScaled:
     break;
   case eDialogScaledCentered:
-    X = (rc.right + rc.left - Width) / 2; // center form horizontally on screen
+    pos.x = (rc.right + rc.left - size.cx) / 2; // center form horizontally on screen
     break;
   case eDialogFixed:
     break;
@@ -405,7 +402,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   style.hide();
   style.control_parent();
 
-  theForm = new WndForm(Parent, X, Y, Width, Height, sTmp, style);
+  theForm = new WndForm(Parent, pos.x, pos.y, size.cx, size.cy, Caption, style);
 
   // Set fore- and background colors
   LoadColors(*theForm, xNode);
@@ -416,9 +413,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
 
   // If XML error occurred -> Error messagebox + cancel
   if (XMLNode::GlobalError) {
-    MessageBoxX(_T("Error in loading XML dialog"),
-                _T("Dialog error"), MB_OK | MB_ICONEXCLAMATION);
-
+    ShowXMLError();
     delete theForm;
     return NULL;
   }
@@ -497,30 +492,28 @@ LoadChild(WndForm &form, ContainerControl &Parent,
           CallBackTableEntry_t *LookUpTable,
           XMLNode node, const DialogStyle_t eDialogStyle)
 {
-  int X, Y, Width, Height;
-  TCHAR Caption[128];
-  TCHAR Name[64];
-
   Window *window = NULL;
   WindowControl *WC = NULL;
 
   // Determine name, coordinates, width, height
   // and caption of the control
-  GetDefaultWindowControlProps(&node, Name, &X, &Y, &Width, &Height,
-                               Caption, eDialogStyle);
+  const TCHAR* Name = GetName(&node);
+  const TCHAR* Caption = GetCaption(&node);
+  POINT pos = GetPosition(&node, eDialogStyle);
+  SIZE size = GetSize(&node, eDialogStyle);
 
-  if (X < -1 || Y < -1 || Width <= 0 || Height <= 0) {
+  if (pos.x < -1 || pos.y < -1 || size.cx <= 0 || size.cy <= 0) {
     /* a non-positive width/height specifies the distance from the
        right/bottom border of the parent */
     RECT rc = Parent.GetClientAreaWindow().get_client_rect();
-    if (X < -1)
-      X += rc.right;
-    if (Y < -1)
-      Y += rc.bottom;
-    if (Width <= 0)
-      Width += rc.right - X;
-    if (Height <= 0)
-      Height += rc.bottom - Y;
+    if (pos.x < -1)
+      pos.x += rc.right;
+    if (pos.y < -1)
+      pos.y += rc.bottom;
+    if (size.cx <= 0)
+      size.cx += rc.right - pos.x;
+    if (size.cy <= 0)
+      size.cy += rc.bottom - pos.y;
   }
 
   WindowStyle style;
@@ -587,7 +580,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
       edit_style.vscroll();
     }
 
-    WC = W = new WndProperty(Parent, Caption, X, Y, Width, Height,
+    WC = W = new WndProperty(Parent, Caption, pos.x, pos.y, size.cx, size.cy,
                              CaptionWidth,
                              style, edit_style,
                              DataNotifyCallback);
@@ -597,8 +590,6 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     // Load the help text
     W->SetHelpText(StringToStringDflt(node.getAttribute(_T("Help")), _T("")));
-
-    Caption[0] = '\0';
 
     // If the control has (at least) one DataField child control
     if (node.nChildNode(_T("DataField")) > 0){
@@ -626,7 +617,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     style.tab_stop();
 
     window = new WndButton(Parent.GetClientAreaWindow(), Caption,
-                           X, Y, Width, Height,
+                           pos.x, pos.y, size.cx, size.cy,
                            style,
                            ClickCallback);
 
@@ -643,7 +634,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     style.tab_stop();
 
     window = new CheckBoxControl(Parent.GetClientAreaWindow(), Caption,
-                                 X, Y, Width, Height,
+                                 pos.x, pos.y, size.cx, size.cy,
                                  style,
                                  ClickCallback);
 
@@ -661,7 +652,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     style.tab_stop();
 
     window = new WndSymbolButton(Parent.GetClientAreaWindow(), Caption,
-                                 X, Y, Width, Height,
+                                 pos.x, pos.y, size.cx, size.cy,
                                  style, Parent.GetBackColor(),
                                  ClickCallback);
 
@@ -680,7 +671,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     style.tab_stop();
 
     window = new WndEventButton(Parent.GetClientAreaWindow(), Caption,
-                                X, Y, Width, Height,
+                                pos.x, pos.y, size.cx, size.cy,
                                 style,
                                 iename, ieparameters);
 #endif
@@ -691,7 +682,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     style.control_parent();
 
-    PanelControl *frame = new PanelControl(Parent, X, Y, Width, Height, style);
+    PanelControl *frame = new PanelControl(Parent, pos.x, pos.y, size.cx, size.cy, style);
 
     WC = frame;
 
@@ -709,7 +700,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     // Create the KeyboardControl
     KeyboardControl *kb =
       new KeyboardControl(Parent.GetClientAreaWindow(),
-                          X, Y, Width, Height, Parent.GetBackColor(),
+                          pos.x, pos.y, size.cx, size.cy, Parent.GetBackColor(),
                           CharacterCallback, style);
 
     window = kb;
@@ -723,13 +714,13 @@ LoadChild(WndForm &form, ContainerControl &Parent,
                                         NULL));
 
     // Create the DrawControl
-    WC = new WndOwnerDrawFrame(Parent, X, Y, Width, Height,
+    WC = new WndOwnerDrawFrame(Parent, pos.x, pos.y, size.cx, size.cy,
                                style, PaintCallback);
 
   // FrameControl (WndFrame)
   } else if (_tcscmp(node.getName(), _T("Label")) == 0){
     // Create the FrameControl
-    WC = new WndFrame(Parent, X, Y, Width, Height,
+    WC = new WndFrame(Parent, pos.x, pos.y, size.cx, size.cy,
                       style);
 
   // ListBoxControl (WndListFrame)
@@ -750,7 +741,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
       style.sunken_edge();
 
     window = new WndListFrame(Parent.GetClientAreaWindow(),
-                              X, Y, Width, Height,
+                              pos.x, pos.y, size.cx, size.cy,
                               style,
                               item_height);
 
@@ -761,7 +752,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     style.control_parent();
 
     TabbedControl *tabbed = new TabbedControl(Parent,
-                                              X, Y, Width, Height, style);
+                                              pos.x, pos.y, size.cx, size.cy, style);
     WC = tabbed;
 
     const unsigned n = node.nChildNode();
@@ -784,7 +775,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
       return NULL;
 
     window = create(Parent.GetClientAreaWindow(),
-                    X, Y, Width, Height, style);
+                    pos.x, pos.y, size.cx, size.cy, style);
   }
 
   // If WindowControl has been created
