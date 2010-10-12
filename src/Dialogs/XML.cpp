@@ -194,9 +194,9 @@ GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
     (*Y) = Layout::Scale(*Y);
 
   // Calculate width and height
-  *Width = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("Width")), 50),
+  *Width = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("Width")), 0),
                            eDialogStyle);
-  *Height = Layout::Scale(StringToIntDflt(Node->getAttribute(_T("Height")), 50));
+  *Height = Layout::Scale(StringToIntDflt(Node->getAttribute(_T("Height")), 0));
 
   // Determine name and caption
   _tcscpy(Name, StringToStringDflt(Node->getAttribute(_T("Name")), _T("")));
