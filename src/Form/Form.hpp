@@ -186,7 +186,11 @@ public:
    * @return the Window, or NULL if not found
    */
   Window *FindByName(const TCHAR *name) {
-    return name_to_window[name];
+    name_to_window_t::iterator i = name_to_window.find(name);
+    if (i == name_to_window.end())
+      return NULL;
+
+    return i->second;
   }
 
   /**
