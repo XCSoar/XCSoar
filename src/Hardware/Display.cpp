@@ -121,6 +121,26 @@ Display::SetBacklight()
 #endif
 
 bool
+Display::RotateSupported()
+{
+#ifdef DM_DISPLAYORIENTATION
+  if (GetSystemMetrics(SM_CXSCREEN) == GetSystemMetrics(SM_CYSCREEN))
+    /* cannot rotate a square display */
+    return false;
+
+  DEVMODE dm;
+  memset(&dm, 0, sizeof(dm));
+  dm.dmSize = sizeof(dm);
+  dm.dmFields = DM_DISPLAYQUERYORIENTATION;
+
+  return ChangeDisplaySettingsEx(NULL, &dm, NULL,
+                                 CDS_TEST, NULL) == DISP_CHANGE_SUCCESSFUL;
+#else
+  return false;
+#endif
+}
+
+bool
 Display::Rotate()
 {
 #ifdef DM_DISPLAYORIENTATION

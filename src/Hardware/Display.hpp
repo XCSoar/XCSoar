@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_HARDWARE_DISPLAY_H
 #define XCSOAR_HARDWARE_DISPLAY_H
 
+#include "Compiler.h"
+
 namespace Display {
 #if defined(_WIN32_WCE) && !defined(GNAV)
 #define HAVE_HARDWARE_BLANK
@@ -61,6 +63,9 @@ namespace Display {
     return false;
   }
 #endif
+
+  gcc_const
+  bool RotateSupported();
 
   /**
    * Change the orientation of the screen.
