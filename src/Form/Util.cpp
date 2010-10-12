@@ -135,12 +135,13 @@ bool
 SaveFormProperty(WndForm *wfm, const TCHAR *field, bool &value)
 {
   WndProperty* wp = (WndProperty*)wfm->FindByName(field);
-  if (wp) {
-    if (value != wp->GetDataField()->GetAsBoolean()) {
-      value = wp->GetDataField()->GetAsBoolean();
-      return true;
-    }
+  assert(wp);
+
+  if (value != wp->GetDataField()->GetAsBoolean()) {
+    value = wp->GetDataField()->GetAsBoolean();
+    return true;
   }
+
   return false;
 }
 
@@ -148,12 +149,13 @@ bool
 SaveFormProperty(WndForm *wfm, const TCHAR *field, unsigned int &value)
 {
   WndProperty* wp = (WndProperty*)wfm->FindByName(field);
-  if (wp) {
-    if ((int)value != wp->GetDataField()->GetAsInteger()) {
-      value = wp->GetDataField()->GetAsInteger();
-      return true;
-    }
+  assert(wp);
+
+  if ((int)value != wp->GetDataField()->GetAsInteger()) {
+    value = wp->GetDataField()->GetAsInteger();
+    return true;
   }
+
   return false;
 }
 
@@ -161,12 +163,13 @@ bool
 SaveFormProperty(WndForm *wfm, const TCHAR *field, int &value)
 {
   WndProperty* wp = (WndProperty*)wfm->FindByName(field);
-  if (wp) {
-    if (value != wp->GetDataField()->GetAsInteger()) {
-      value = wp->GetDataField()->GetAsInteger();
-      return true;
-    }
+  assert(wp);
+
+  if (value != wp->GetDataField()->GetAsInteger()) {
+    value = wp->GetDataField()->GetAsInteger();
+    return true;
   }
+
   return false;
 }
 
@@ -174,12 +177,13 @@ bool
 SaveFormProperty(WndForm *wfm, const TCHAR *field, short &value)
 {
   WndProperty* wp = (WndProperty*)wfm->FindByName(field);
-  if (wp) {
-    if (value != wp->GetDataField()->GetAsInteger()) {
-      value = wp->GetDataField()->GetAsInteger();
-      return true;
-    }
+  assert(wp);
+
+  if (value != wp->GetDataField()->GetAsInteger()) {
+    value = wp->GetDataField()->GetAsInteger();
+    return true;
   }
+
   return false;
 }
 
