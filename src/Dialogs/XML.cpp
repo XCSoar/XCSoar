@@ -338,27 +338,22 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   WndForm *theForm = NULL;
 
   // Find XML file or resource and load XML data out of it
-  XMLNode xMainNode = xmlOpenResourceHelper(resource);
+  XMLNode xNode = xmlOpenResourceHelper(resource);
 
   // TODO code: put in error checking here and get rid of exits in xmlParser
   // If XML error occurred -> Error messagebox + cancel
-  if (xMainNode.isEmpty()) {
+  if (xNode.isEmpty()) {
     MessageBoxX(_T("Error in loading XML dialog"),
                 _T("Dialog error"), MB_OK | MB_ICONEXCLAMATION);
 
     return NULL;
   }
 
-  XMLNode xNode;
-
   // If the main XMLNode is of type "Form"
-  if (_tcsicmp(xMainNode.getName(), _T("Form")) == 0)
-    // -> save it as the dialog node
-    xNode = xMainNode;
-  else
+  if (_tcsicmp(xNode.getName(), _T("Form")) != 0)
     // Get the first child node of the type "Form"
     // and save it as the dialog node
-    xNode = xMainNode.getChildNode(_T("Form"));
+    xNode = xNode.getChildNode(_T("Form"));
 
   // If Node does not exists -> Error messagebox + cancel
   if (xNode.isEmpty()) {
