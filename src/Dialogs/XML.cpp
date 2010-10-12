@@ -337,10 +337,6 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
 
   WndForm *theForm = NULL;
 
-  // assert(main_window == Parent);  // Airspace warning has MapWindow as parent,
-  // ist that ok?  JMW: No, I think that it is better to use main UI thread for
-  // everything.  See changes regarding RequestAirspaceDialog in AirspaceWarning.cpp
-
   // Find XML file or resource and load XML data out of it
   XMLNode xMainNode = xmlOpenResourceHelper(resource);
 
