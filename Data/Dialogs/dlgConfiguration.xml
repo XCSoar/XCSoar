@@ -375,7 +375,7 @@
         <DataField DataType="boolean"/>
       </Edit>
     
-      <Edit Name="prpGestures" Caption="Gestures" X="2" Width="-2" Height="22" CaptionWidth="150">
+      <Edit Name="prpGestures" Caption="Gestures" X="2" Width="-2" Height="22" CaptionWidth="100">
         <DataField DataType="boolean"/>
       </Edit>
       
