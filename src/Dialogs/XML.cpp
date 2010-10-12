@@ -168,23 +168,37 @@ Scale_Dlg_Width(const int x, const DialogStyle_t eDialogStyle)
     return Layout::Scale(x);
 }
 
+static void
+GetName(XMLNode *Node, TCHAR *Name)
+{
+  _tcscpy(Name, StringToStringDflt(Node->getAttribute(_T("Name")), _T("")));
+}
+
+static void
+GetCaption(XMLNode *Node, TCHAR *Caption)
+{
+  _tcscpy(Caption, StringToStringDflt(Node->getAttribute(_T("Caption")), _T("")));
+
+  const TCHAR *translated = gettext(Caption);
+  if (translated != Caption)
+    _tcscpy(Caption, translated);
+}
+
 /**
  * This function reads the following parameters from the XML Node and
  * saves them as Control properties:
  * Name, x-, y-Coordinate, Width, Height and Caption
  * @param Node The XML Node that represents the Control
- * @param Name Name of the Control (pointer)
  * @param X x-Coordinate of the Control (pointer)
  * @param Y y-Coordinate of the Control (pointer)
  * @param Width Width of the Control (pointer)
  * @param Height Height of the Control (pointer)
- * @param Caption Caption of the Control (pointer)
  * @param eDialogStyle Dialog style of the Form
  */
 static void
-GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
+GetDefaultWindowControlProps(XMLNode *Node, int *X, int *Y,
                              int *Width, int *Height,
-                             TCHAR *Caption, const DialogStyle_t eDialogStyle)
+                             const DialogStyle_t eDialogStyle)
 {
   // Calculate x- and y-Coordinate
   *X = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("X")), 0),
@@ -198,17 +212,8 @@ GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
                            eDialogStyle);
   *Height = Layout::Scale(StringToIntDflt(Node->getAttribute(_T("Height")), 0));
 
-  // Determine name and caption
-  _tcscpy(Name, StringToStringDflt(Node->getAttribute(_T("Name")), _T("")));
-  _tcscpy(Caption, StringToStringDflt(Node->getAttribute(_T("Caption")), _T("")));
-
   // TODO code: Temporary double handling to
   // fix "const unsigned short*" to "unsigned short *" problem
-
-  // Translate caption
-  const TCHAR *translated = gettext(Caption);
-  if (translated != Caption)
-    _tcscpy(Caption, translated);
 }
 
 static void *
@@ -380,8 +385,10 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   const RECT rc = Parent.get_client_rect();
   CalcWidthStretch(&xNode, rc, eDialogStyle);
 
-  GetDefaultWindowControlProps(&xNode, Name, &X, &Y, &Width, &Height,
-                               sTmp, eDialogStyle);
+  GetName(&xNode, Name);
+  GetCaption(&xNode, sTmp);
+  GetDefaultWindowControlProps(&xNode, &X, &Y, &Width, &Height,
+                               eDialogStyle);
 
   // Correct dialog size and position for dialog style
   switch (eDialogStyle) {
@@ -506,8 +513,10 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
   // Determine name, coordinates, width, height
   // and caption of the control
-  GetDefaultWindowControlProps(&node, Name, &X, &Y, &Width, &Height,
-                               Caption, eDialogStyle);
+  GetName(&node, Name);
+  GetCaption(&node, Caption);
+  GetDefaultWindowControlProps(&node, &X, &Y, &Width, &Height,
+                               eDialogStyle);
 
   if (X < -1 || Y < -1 || Width <= 0 || Height <= 0) {
     /* a non-positive width/height specifies the distance from the
