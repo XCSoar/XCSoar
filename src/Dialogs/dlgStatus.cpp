@@ -228,7 +228,8 @@ UpdateValuesSystem()
 
   wp = (WndProperty*)wf->FindByName(_T("prpBattery"));
   if (wp) {
-    _stprintf(Temp,_T("\0"));
+    Temp[0] = 0;
+
 #ifdef HAVE_BATTERY
     if (PDABatteryPercent >= 0) {
       _stprintf(Temp2, _T("%d%% "), PDABatteryPercent);
@@ -236,7 +237,7 @@ UpdateValuesSystem()
     }
 #endif
     if (XCSoarInterface::Basic().SupplyBatteryVoltage == fixed_zero)
-      _stprintf(Temp2,_T("\0"));
+      Temp2[0] = 0;
     else
       _stprintf(Temp2, _T("%.1f V"),
                 (double)XCSoarInterface::Basic().SupplyBatteryVoltage);
