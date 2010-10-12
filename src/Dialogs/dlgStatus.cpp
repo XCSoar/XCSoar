@@ -69,7 +69,7 @@ static const TCHAR *const captions[] = {
   N_("Times"),
 };
 
-static WndForm *wf=NULL;
+static WndForm *wf = NULL;
 static TabbedControl *tabbed;
 static bool multi_page = false;
 static int status_page = 0;
@@ -80,7 +80,6 @@ OnCloseClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrOK);
 }
 
-
 static bool
 FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
@@ -90,14 +89,12 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   case '6':
     ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
     tabbed->PreviousPage();
-    //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
     return true;
 
   case VK_RIGHT:
   case '7':
     ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
     tabbed->NextPage();
-    //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
     return true;
 
   default:
@@ -105,32 +102,37 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   }
 }
 
-static void SetCaption(){
-
+static void
+SetCaption()
+{
   static unsigned status_page;
   TCHAR caption[64];
 
   status_page = tabbed->GetCurrentPage();
   _sntprintf(caption, 64, _T("%u %s"),
-      status_page + 1, gettext(captions[status_page]));
+             status_page + 1, gettext(captions[status_page]));
   wf->SetCaption(caption);
 }
 
-static void OnNextClicked(WindowControl * Sender){
+static void
+OnNextClicked(WindowControl * Sender)
+{
   (void)Sender;
 
   tabbed->NextPage();
   SetCaption();
 }
 
-static void OnPrevClicked(WindowControl * Sender){
+static void
+OnPrevClicked(WindowControl * Sender)
+{
   (void)Sender;
 
   tabbed->PreviousPage();
   SetCaption();
 }
 
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(NULL)
@@ -138,18 +140,22 @@ static CallBackTableEntry_t CallBackTable[]={
 
 static bool first = true;
 
-static void UpdateValuesSystem() {
+static void
+UpdateValuesSystem()
+{
   static const GPS_STATE &gps = XCSoarInterface::Basic().gps;
 
   static unsigned extGPSCONNECT_last = gps.Connected;
   static int NAVWarning_last = gps.NAVWarning;
   static int SatellitesUsed_last = gps.SatellitesUsed;
   static bool VarioAvailable_last =
-    XCSoarInterface::Basic().TotalEnergyVarioAvailable;
-  static int FLARM_Available_last = XCSoarInterface::Basic().flarm.FLARM_Available;
+      XCSoarInterface::Basic().TotalEnergyVarioAvailable;
+  static int FLARM_Available_last =
+      XCSoarInterface::Basic().flarm.FLARM_Available;
   static bool LoggerActive_last = logger.isLoggerActive();
   static bool DeclaredToDevice_last = logger.isTaskDeclared();
-  static fixed SupplyBatteryVoltage_last = XCSoarInterface::Basic().SupplyBatteryVoltage;
+  static fixed SupplyBatteryVoltage_last =
+      XCSoarInterface::Basic().SupplyBatteryVoltage;
 #ifdef HAVE_BATTERY
   static int PDABatteryPercent_last = PDABatteryPercent;
 #endif
@@ -192,24 +198,23 @@ static void UpdateValuesSystem() {
   wp = (WndProperty*)wf->FindByName(_T("prpGPS"));
   if (wp) {
     if (gps.Connected) {
-      if (gps.NAVWarning) {
+      if (gps.NAVWarning)
         wp->SetText(_("Fix invalid"));
-      } else {
-        if (gps.SatellitesUsed == 0) {
-          wp->SetText(_("No fix"));
-        } else {
-          wp->SetText(_("3D fix"));
-        }
-      }
+      else if (gps.SatellitesUsed == 0)
+        wp->SetText(_("No fix"));
+      else
+        wp->SetText(_("3D fix"));
       wp->RefreshDisplay();
 
       wp = (WndProperty*)wf->FindByName(_T("prpNumSat"));
       if (wp) {
-        if (gps.SatellitesUsed >= 0) { // known number of sats
+        if (gps.SatellitesUsed >= 0)
+          // known number of sats
           _stprintf(Temp,_T("%d"), gps.SatellitesUsed);
-        } else { // valid but unknown number of sats
+        else
+          // valid but unknown number of sats
           _stprintf(Temp,_T(">3"));
-        }
+
         wp->SetText(Temp);
         wp->RefreshDisplay();
       }
@@ -221,41 +226,41 @@ static void UpdateValuesSystem() {
 
   wp = (WndProperty*)wf->FindByName(_T("prpVario"));
   if (wp) {
-    if (XCSoarInterface::Basic().TotalEnergyVarioAvailable) {
+    if (XCSoarInterface::Basic().TotalEnergyVarioAvailable)
       wp->SetText(_("Connected"));
-    } else {
+    else
       wp->SetText(_("Disconnected"));
-    }
+
     wp->RefreshDisplay();
   }
 
   if (wp) {
     wp = (WndProperty*)wf->FindByName(_T("prpFLARM"));
-    if (XCSoarInterface::Basic().flarm.FLARM_Available) {
+    if (XCSoarInterface::Basic().flarm.FLARM_Available)
       wp->SetText(_("Connected"));
-    } else {
+    else
       wp->SetText(_("Disconnected"));
-    }
+
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpLogger"));
   if (wp) {
-    if (logger.isLoggerActive()) {
+    if (logger.isLoggerActive())
       wp->SetText(_("ON"));
-    } else {
+    else
       wp->SetText(_("OFF"));
-    }
+
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpDeclared"));
   if (wp) {
-    if (logger.isTaskDeclared()) {
+    if (logger.isTaskDeclared())
       wp->SetText(_("YES"));
-    } else {
+    else
       wp->SetText(_("NO"));
-    }
+
     wp->RefreshDisplay();
   }
 
@@ -268,12 +273,12 @@ static void UpdateValuesSystem() {
       _tcscat(Temp, Temp2);
     }
 #endif
-    if (XCSoarInterface::Basic().SupplyBatteryVoltage == fixed_zero) {
+    if (XCSoarInterface::Basic().SupplyBatteryVoltage == fixed_zero)
       _stprintf(Temp2,_T("\0"));
-    } else {
+    else
       _stprintf(Temp2, _T("%.1f V"),
                 (double)XCSoarInterface::Basic().SupplyBatteryVoltage);
-    }
+
     _tcscat(Temp, Temp2);
 
     wp->SetText(Temp);
@@ -282,7 +287,9 @@ static void UpdateValuesSystem() {
 }
 
 
-static void UpdateValuesTimes(void) {
+static void
+UpdateValuesTimes(void)
+{
   WndProperty *wp;
   TCHAR Temp[1000];
   double sunsettime;
@@ -291,11 +298,11 @@ static void UpdateValuesTimes(void) {
 
   sunsettime = XCSoarInterface::Calculated().TimeSunset;
   sunsethours = (int)sunsettime;
-  sunsetmins = (int)((sunsettime-sunsethours)*60);
+  sunsetmins = (int)((sunsettime - sunsethours) * 60);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSunset"));
   if (wp) {
-    _stprintf(Temp, _T("%02d:%02d"), sunsethours,sunsetmins);
+    _stprintf(Temp, _T("%02d:%02d"), sunsethours, sunsetmins);
     wp->SetText(Temp);
   }
 
@@ -309,7 +316,7 @@ static void UpdateValuesTimes(void) {
   if (wp) {
     if (positive(XCSoarInterface::Basic().flight.FlightTime)) {
       Units::TimeToText(Temp,
-                        (int)TimeLocal((long)XCSoarInterface::Basic().flight.TakeOffTime));
+                        TimeLocal((long)XCSoarInterface::Basic().flight.TakeOffTime));
       wp->SetText(Temp);
     } else {
       wp->SetText(_T(""));
@@ -321,7 +328,7 @@ static void UpdateValuesTimes(void) {
     if (!XCSoarInterface::Basic().flight.Flying &&
         positive(XCSoarInterface::Basic().flight.FlightTime)) {
       Units::TimeToText(Temp,
-                        (int)TimeLocal((long)(XCSoarInterface::Basic().flight.TakeOffTime
+                        TimeLocal((long)(XCSoarInterface::Basic().flight.TakeOffTime
                                               + XCSoarInterface::Basic().flight.FlightTime)));
       wp->SetText(Temp);
     } else {
@@ -338,12 +345,13 @@ static void UpdateValuesTimes(void) {
       wp->SetText(_T(""));
     }
   }
-
 }
 
 static const Waypoint* nearest_waypoint;
 
-static void UpdateValuesFlight(void) {
+static void
+UpdateValuesFlight(void)
+{
   WndProperty *wp;
   TCHAR Temp[1000];
   TCHAR sLongitude[16];
@@ -355,14 +363,12 @@ static void UpdateValuesFlight(void) {
                           sLatitude, sizeof(sLatitude)-1);
 
   wp = (WndProperty*)wf->FindByName(_T("prpLongitude"));
-  if (wp) {
+  if (wp)
     wp->SetText(sLongitude);
-  }
 
   wp = (WndProperty*)wf->FindByName(_T("prpLatitude"));
-  if (wp) {
+  if (wp)
     wp->SetText(sLatitude);
-  }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
   if (wp) {
@@ -381,19 +387,19 @@ static void UpdateValuesFlight(void) {
   }
 
   if (nearest_waypoint) {
-
     GeoVector vec(XCSoarInterface::Basic().Location,
                   nearest_waypoint->Location);
 
     wp = (WndProperty*)wf->FindByName(_T("prpNear"));
-    if (wp) {
+    if (wp)
       wp->SetText(nearest_waypoint->Name.c_str());
-    }
+
     wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
     if (wp) {
       _stprintf(Temp, _T("%d")_T(DEG), (int)vec.Bearing.value_degrees());
       wp->SetText(Temp);
     }
+
     wp = (WndProperty*)wf->FindByName(_T("prpDistance"));
     if (wp) {
       TCHAR DistanceText[MAX_PATH];
@@ -402,42 +408,40 @@ static void UpdateValuesFlight(void) {
     }
   } else {
     wp = (WndProperty*)wf->FindByName(_T("prpNear"));
-    if (wp) {
+    if (wp)
       wp->SetText(_T("-"));
-    }
+
     wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
-    if (wp) {
+    if (wp)
       wp->SetText(_T("-"));
-    }
+
     wp = (WndProperty*)wf->FindByName(_T("prpDistance"));
-    if (wp) {
+    if (wp)
       wp->SetText(_T("-"));
-    }
   }
 }
 
-
-static void UpdateValuesRules(void) {
+static void
+UpdateValuesRules(void)
+{
   WndProperty *wp;
   TCHAR Temp[80];
 
   wp = (WndProperty*)wf->FindByName(_T("prpValidStart"));
   if (wp) {
-    if (XCSoarInterface::Calculated().common_stats.task_started) {
+    if (XCSoarInterface::Calculated().common_stats.task_started)
       /// @todo proper task validity check
       wp->SetText(_("TRUE"));
-    } else {
+    else
       wp->SetText(_("FALSE"));
-    }
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpValidFinish"));
   if (wp) {
-    if (XCSoarInterface::Calculated().common_stats.task_finished) {
+    if (XCSoarInterface::Calculated().common_stats.task_finished)
       wp->SetText(_("TRUE"));
-    } else {
+    else
       wp->SetText(_("FALSE"));
-    }
   }
 
   AIRCRAFT_STATE start_state = protected_task_manager.get_start_state();
@@ -496,22 +500,21 @@ static void UpdateValuesRules(void) {
     }
   }
 #endif
-
 }
 
-
-static void UpdateValuesTask(void) {
+static void
+UpdateValuesTask(void)
+{
   WndProperty *wp;
   TCHAR Temp[80];
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskTime"));
   Units::TimeToText(Temp, protected_task_manager.get_ordered_task_behaviour().aat_min_time);
   if (wp) {
-    if (XCSoarInterface::Calculated().task_stats.has_targets) {
+    if (XCSoarInterface::Calculated().task_stats.has_targets)
       wp->SetText(Temp);
-    } else {
+    else
       wp->hide();
-    }
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpETETime"));
@@ -562,12 +565,11 @@ static void UpdateValuesTask(void) {
   }
 }
 
-
-static int OnTimerNotify(WindowControl * Sender) {
+static int
+OnTimerNotify(WindowControl * Sender)
+{
   (void)Sender;
-
   UpdateValuesSystem();
-
   return 0;
 }
 
@@ -581,11 +583,10 @@ dlgStatusShowModal(int start_page)
 
   first = true;
 
-  wf = LoadDialog(CallBackTable,
-                      XCSoarInterface::main_window,
-                      _T("IDR_XML_STATUS"));
-
-  if (!wf) return;
+  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+                  _T("IDR_XML_STATUS"));
+  if (!wf)
+    return;
 
   wf->SetKeyDownNotify(FormKeyDown);
 
@@ -602,13 +603,12 @@ dlgStatusShowModal(int start_page)
   if (!multi_page) {
     WndButton *wb;
     wb = ((WndButton *)wf->FindByName(_T("cmdNext")));
-    if (wb != NULL) {
+    if (wb != NULL)
       wb->hide();
-    }
+
     wb = ((WndButton *)wf->FindByName(_T("cmdPrev")));
-    if (wb != NULL) {
+    if (wb != NULL)
       wb->hide();
-    }
   }
 
   nearest_waypoint = way_points.get_nearest(XCSoarInterface::Basic().Location);
@@ -628,6 +628,4 @@ dlgStatusShowModal(int start_page)
   delete wf;
 
   wf = NULL;
-
 }
-
