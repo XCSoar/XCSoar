@@ -539,29 +539,24 @@ OnTimerNotify(WindowControl * Sender)
 void
 dlgStatusShowModal(int start_page)
 {
-  multi_page = (start_page == -1);
-
-  if (!multi_page)
-    status_page = start_page;
-
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   _T("IDR_XML_STATUS"));
   if (!wf)
     return;
 
   wf->SetKeyDownNotify(FormKeyDown);
+  wf->SetTimerNotify(OnTimerNotify);
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
   tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
   assert(tabbed != NULL);
 
-  /* restore previous page */
-  tabbed->SetCurrentPage(status_page);
-
-  wf->SetTimerNotify(OnTimerNotify);
+  multi_page = (start_page == -1);
 
   if (!multi_page) {
+    status_page = start_page;
+
     WndButton *wb;
     wb = ((WndButton *)wf->FindByName(_T("cmdNext")));
     if (wb != NULL)
@@ -571,6 +566,9 @@ dlgStatusShowModal(int start_page)
     if (wb != NULL)
       wb->hide();
   }
+
+  /* restore previous page */
+  tabbed->SetCurrentPage(status_page);
 
   nearest_waypoint = way_points.get_nearest(XCSoarInterface::Basic().Location);
 
