@@ -141,8 +141,7 @@ void dlgConfigWaypointsShowModal()
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   Layout::landscape ? _T("IDR_XML_CONFIG_WAYPOINTS_L") :
                                       _T("IDR_XML_CONFIG_WAYPOINTS"));
-  if (wf == NULL)
-    return;
+  assert(wf != NULL);
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
