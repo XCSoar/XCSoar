@@ -45,6 +45,14 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Sizes.h"
 
+#ifdef WIN32
+#include "ResourceLoader.hpp"
+#endif
+
+#ifdef _WIN32_WCE
+#include "OS/DynamicLibrary.hpp"
+#endif
+
 #ifdef ANDROID
 
 #elif defined(HAVE_POSIX)
@@ -121,6 +129,82 @@ gettext(const TCHAR* text)
 
 #endif /* !HAVE_POSIX */
 
+#if defined(WIN32) && !defined(HAVE_POSIX)
+
+#if !defined(_WIN32_WCE) || _WIN32_WCE >= 0x500
+
+static struct {
+  WORD language;
+  const TCHAR *resource;
+} language_table[] = {
+  { LANG_GERMAN, _T("de.mo") },
+  { LANG_FRENCH, _T("fr.mo") },
+  { LANG_HUNGARIAN, _T("hu.mo") },
+  { LANG_DUTCH, _T("nl.mo") },
+  { LANG_POLISH, _T("pl.mo") },
+  { LANG_PORTUGUESE, _T("pt_BR.mo") },
+  { LANG_SLOVAK, _T("sk.mo") },
+  { 0, NULL }
+};
+
+static const TCHAR *
+find_language(WORD language)
+{
+  for (unsigned i = 0; language_table[i].resource != NULL; ++i)
+    if (language_table[i].language == language)
+      return language_table[i].resource;
+
+  return NULL;
+}
+
+static void
+ReadResourceLanguageFile()
+{
+#if defined(_WIN32_WCE)
+  /* the GetUserDefaultUILanguage() prototype is missing on
+     mingw32ce, we have to look it up dynamically */
+  DynamicLibrary coreloc_dll(_T("coredll"));
+  if (!coreloc_dll.defined())
+    return;
+
+  typedef LANGID WINAPI (*GetUserDefaultUILanguage_t)();
+  GetUserDefaultUILanguage_t GetUserDefaultUILanguage =
+    (GetUserDefaultUILanguage_t)
+    coreloc_dll.lookup(_T("GetUserDefaultUILanguage"));
+  if (GetUserDefaultUILanguage == NULL)
+    return;
+#endif
+
+  LANGID lang_id = GetUserDefaultUILanguage();
+  if (lang_id == 0)
+    return;
+
+  const TCHAR *resource = find_language(PRIMARYLANGID(lang_id));
+  if (resource == NULL)
+    return;
+
+  LogStartUp(_T("Loading translations from resource '%s'"), resource);
+
+  ResourceLoader::Data data = ResourceLoader::Load(resource, _T("MO"));
+  if (data.first == NULL)
+    return;
+
+  mo_loader.reset(new MOLoader(data.first, data.second));
+  if (mo_loader->error())
+    mo_loader.reset();
+  else
+    mo_file = &mo_loader->get();
+}
+
+#else
+
+static void
+ReadResourceLanguageFile() {}
+
+#endif
+
+#endif /* WIN32 */
+
 /**
  * Reads the selected LanguageFile into the cache
  */
@@ -150,6 +234,9 @@ ReadLanguageFile()
     mo_loader.reset();
   else
     mo_file = &mo_loader->get();
+
+  if (mo_file == NULL)
+    ReadResourceLanguageFile();
 
 #endif /* !HAVE_POSIX */
 }

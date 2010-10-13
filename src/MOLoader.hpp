@@ -51,7 +51,7 @@ class MOLoader {
 
 public:
   MOLoader(const void *data, size_t size)
-    :file(new MOFile(data, size)) {}
+    :mapping(NULL), file(new MOFile(data, size)) {}
 
   MOLoader(const TCHAR *path)
     :mapping(new FileMapping(path)),

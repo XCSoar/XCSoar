@@ -104,6 +104,7 @@ ifeq ($(HAVE_WIN32),y)
 
 RESOURCE_TEXT = Data/XCSoar.rc
 RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/$(notdir $(RESOURCE_TEXT:.rc=.rsc))
+RESOURCE_FILES += output/po/de.mo output/po/fr.mo output/po/hu.mo output/po/nl.mo output/po/pl.mo output/po/pt_BR.mo output/po/sk.mo
 
 $(RESOURCE_BINARY): $(RESOURCE_TEXT) $(RESOURCE_FILES) | $(TARGET_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  WINDRES $@"

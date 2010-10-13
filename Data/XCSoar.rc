@@ -206,6 +206,17 @@ IDR_XML_TASKPOINT_L     XMLDIALOG DISCARDABLE   "Dialogs/dlgTaskPoint_L.xml"
 IDR_XML_TASKPOINTTYPE   XMLDIALOG DISCARDABLE   "Dialogs/dlgTaskPointType.xml"
 IDR_XML_TASKPOINTTYPE_L XMLDIALOG DISCARDABLE   "Dialogs/dlgTaskPointType_L.xml"
 
+// translations
+#if !defined(_WIN32_WCE) || _WIN32_WCE >= 0x500
+de.mo MO DISCARDABLE "../output/po/de.mo"
+fr.mo MO DISCARDABLE "../output/po/fr.mo"
+hu.mo MO DISCARDABLE "../output/po/hu.mo"
+nl.mo MO DISCARDABLE "../output/po/nl.mo"
+pl.mo MO DISCARDABLE "../output/po/pl.mo"
+pt_BR.mo MO DISCARDABLE "../output/po/pt_BR.mo"
+sk.mo MO DISCARDABLE "../output/po/sk.mo"
+#endif
+
 // --- EGM96 Raster Data --- 
 
 IDR_RASTER_EGM96S       RASTERDATA DISCARDABLE  "other/egm96s.dem"
