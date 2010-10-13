@@ -5,26 +5,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-void msFree(void *p) {
-  free(p);
-}
-
-/*
-** Free memory allocated for a character array
-*/
-void msFreeCharArray(char **array, int num_items)
-{
-  int i;
-
-  if((num_items < 0) || !array) return;
-
-  for(i=0;i<num_items;i++)
-    free(array[i]);
-  msFree(array);
-
-  return;
-}
-
 void msInitShape(shapeObj *shape)
 {
   // spatial component
