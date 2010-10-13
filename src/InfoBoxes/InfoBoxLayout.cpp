@@ -43,6 +43,7 @@ Copyright_License {
 #include "SettingsMap.hpp"
 #include "Screen/Layout.hpp"
 #include "Profile/Profile.hpp"
+#include "Sizes.h"
 
 #include <stdio.h>
 
