@@ -92,6 +92,7 @@ public:
   static void ProcessTimer();
   static void SetDirty();
 
+  static void Initialize();
   static void Create(RECT rc);
   static void Destroy();
   static void Paint();

@@ -466,10 +466,14 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
 }
 
 void
-InfoBoxManager::Create(RECT rc)
+InfoBoxManager::Initialize()
 {
   ResetInfoBoxes();
+}
 
+void
+InfoBoxManager::Create(RECT rc)
+{
   info_box_look.value.fg_color
     = info_box_look.title.fg_color
     = info_box_look.comment.fg_color
