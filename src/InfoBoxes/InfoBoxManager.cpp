@@ -67,8 +67,8 @@ namespace InfoBoxManager
   InfoBoxFullWindow full_window;
 
   unsigned GetCurrentType(unsigned box);
-  void SetCurrentType(unsigned i, char j);
-  void FocusOnWindow(unsigned i, bool selected);
+  void SetCurrentType(unsigned box, char type);
+  void FocusOnWindow(unsigned box, bool selected);
 
   void DisplayInfoBox();
   void InfoBoxDrawIfDirty();
@@ -309,9 +309,9 @@ InfoBoxManager::SetType(unsigned i, char type, enum mode mode)
 }
 
 void
-InfoBoxManager::SetCurrentType(unsigned i, char j)
+InfoBoxManager::SetCurrentType(unsigned box, char type)
 {
-  SetType(i, j, GetCurrentMode());
+  SetType(box, type, GetCurrentMode());
 }
 
 void
