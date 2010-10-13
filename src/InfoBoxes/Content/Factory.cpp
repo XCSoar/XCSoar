@@ -593,7 +593,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Battery Voltage"),
 #endif
     N_("Battery"),
-    N_("Displays percentage of device battery remaining (where applicable) and status/voltage of external power supply. If available, external supply voltage is displayed as the main value."),
+    N_("Displays percentage of device battery remaining (where applicable) and status/voltage of external power supply."),
     49, 26,
   },
 
