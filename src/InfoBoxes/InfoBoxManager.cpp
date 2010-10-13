@@ -68,7 +68,6 @@ namespace InfoBoxManager
 
   unsigned GetCurrentType(unsigned box);
   void SetCurrentType(unsigned box, char type);
-  void FocusOnWindow(unsigned box, bool selected);
 
   void DisplayInfoBox();
   void InfoBoxDrawIfDirty();
