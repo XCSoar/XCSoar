@@ -150,11 +150,10 @@ dlgConfigWaypointsShowModal()
 
   wf->ShowModal();
 
-  if (WaypointsNeedSave) {
-    if (MessageBoxX(_("Save changes to waypoint file?"), _("Waypoints edited"),
-                    MB_YESNO | MB_ICONQUESTION) == IDYES)
+  if (WaypointsNeedSave &&
+      MessageBoxX(_("Save changes to waypoint file?"), _("Waypoints edited"),
+                  MB_YESNO | MB_ICONQUESTION) == IDYES)
       SaveWaypoints();
-  }
 
   delete wf;
 }
