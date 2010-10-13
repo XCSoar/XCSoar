@@ -13,7 +13,7 @@ size_t msGetBitArraySize(int numbits)
 
 char *msAllocBitArray(int numbits)
 {
-  char *array = (char*)calloc((numbits + CHAR_BIT - 1) / CHAR_BIT, sizeof(char));
+  char *array = calloc((numbits + CHAR_BIT - 1) / CHAR_BIT, sizeof(char));
 
   return(array);
 }
