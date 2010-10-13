@@ -14,7 +14,7 @@ typedef struct {
 typedef struct {
   double x;
   double y;
-  double m;
+  double m;  
 } pointObj;
 
 typedef struct {
@@ -43,7 +43,7 @@ typedef struct {
 
 typedef lineObj multipointObj;
 
-/** attribute primatives */
+/* attribute primatives */
 typedef struct {
   char *name;
   long type;

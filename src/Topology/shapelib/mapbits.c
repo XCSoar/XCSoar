@@ -14,7 +14,7 @@ size_t msGetBitArraySize(int numbits)
 char *msAllocBitArray(int numbits)
 {
   char *array = calloc((numbits + CHAR_BIT - 1) / CHAR_BIT, sizeof(char));
-
+  
   return(array);
 }
 
@@ -29,7 +29,7 @@ void msSetBit(char *array, int index, int value)
   array += index / CHAR_BIT;
   if (value)
     *array |= 1 << (index % CHAR_BIT);           /* set bit */
-  else
+  else    
     *array &= ~(1 << (index % CHAR_BIT));        /* clear bit */
 }
 

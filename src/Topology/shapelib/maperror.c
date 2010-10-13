@@ -86,14 +86,14 @@ errorObj *msGetErrorObj()
     te_info_t *link;
     int        thread_id;
     errorObj   *ret_obj;
-
+    
     msAcquireLock( TLOCK_ERROROBJ );
-
+    
     thread_id = msGetThreadId();
 
     /* find link for this thread */
-
-    for( link = error_list;
+    
+    for( link = error_list; 
          link != NULL && link->thread_id != thread_id
              && link->next != NULL && link->next->thread_id != thread_id;
          link = link->next ) {}
@@ -129,7 +129,7 @@ errorObj *msGetErrorObj()
 
     ret_obj = &(error_list->ms_error);
 
-    msReleaseLock( TLOCK_ERROROBJ );
+    msReleaseLock( TLOCK_ERROROBJ ); 
 
     return ret_obj;
 }
@@ -146,13 +146,12 @@ errorObj *msGetErrorObj()
 ** and never changes.
 ** A new errorObj is always inserted after the head, and only if the
 ** head of the list already contains some information.  i.e. If the static
-** errorObj at the head of the list is empty then it is returned directly,
+** errorObj at the head of the list is empty then it is returned directly, 
 ** otherwise a new object is inserted after the head and the data that was in
 ** the head is moved to the new errorObj, freeing the head errorObj to receive
 ** the new error information.
 */
-static errorObj *
-msInsertErrorObj(void)
+static errorObj *msInsertErrorObj(void)
 {
   errorObj *ms_error;
   ms_error = msGetErrorObj();
@@ -167,7 +166,7 @@ msInsertErrorObj(void)
       new_error = (errorObj *)malloc(sizeof(errorObj));
 
       /* Note: if malloc() failed then we simply do nothing and the head will
-       * be overwritten by the caller... we cannot produce an error here
+       * be overwritten by the caller... we cannot produce an error here 
        * since we are already inside a msSetError() call.
        */
       if (new_error)

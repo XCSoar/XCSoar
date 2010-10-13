@@ -25,7 +25,7 @@ int msRectContained(const rectObj *a, const rectObj *b)
   if(a->minx >= b->minx && a->maxx <= b->maxx)
     if(a->miny >= b->miny && a->maxy <= b->maxy)
       return(MS_TRUE);
-  return(MS_FALSE);
+  return(MS_FALSE);  
 }
 
 #ifdef SHAPELIB_DISABLED

@@ -14,11 +14,11 @@ extern "C" {
 typedef struct shape_tree_node {
   // area covered by this node
   rectObj rect;
-
+  
   // list of shapes stored at this node.
   int numshapes;
   int *ids;
-
+  
   int numsubnodes;
   struct shape_tree_node *subnode[MAX_SUBNODES];
 } treeNodeObj;
@@ -65,8 +65,7 @@ char *msSearchDiskTree(const char *filename, rectObj aoi, int debug);
 treeObj *msReadTree(char *filename, int debug);
 int msWriteTree(treeObj *tree, char *filename, int LSB_order);
 
-void msFilterTreeSearch(const shapefileObj *shp, char *status,
-                        rectObj search_rect);
+void msFilterTreeSearch(const shapefileObj *shp, char *status, rectObj search_rect);
 
 #ifdef __cplusplus
 }

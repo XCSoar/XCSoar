@@ -40,7 +40,7 @@ void msInitShape(shapeObj *shape)
   shape->type = MS_SHAPE_NULL;
   shape->bounds.minx = shape->bounds.miny = -1;
   shape->bounds.maxx = shape->bounds.maxy = -1;
-
+  
   // attribute component
   shape->values = NULL;
   shape->numvalues = 0;
@@ -98,7 +98,7 @@ void msFreeShape(shapeObj *shape)
 
   if(shape->values) msFreeCharArray(shape->values, shape->numvalues);
   if(shape->text) free(shape->text);
-
+  
   msInitShape(shape); // now reset
 }
 
@@ -886,3 +886,5 @@ int msPolylineLabelPoint(shapeObj *p, pointObj *lp, int min_length, double *angl
 }
 
 #endif /* SHAPELIB_DISABLED */
+
+

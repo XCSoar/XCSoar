@@ -34,7 +34,7 @@ static void SwapWord( int length, void * wordP )
 {
   int i;
   uchar	temp;
-
+  
   for( i=0; i < length/2; i++ )
     {
       temp = ((uchar *) wordP)[i];
@@ -76,7 +76,7 @@ SHPTreeHandle msSHPDiskTreeOpen(const char * pszTree, int debug)
 {
     char		*pszFullname, *pszBasename;
     SHPTreeHandle	psTree;
-
+  
     char		pabyBuf[16];
     int			i;
 #ifdef SHAPELIB_DISABLED
@@ -91,43 +91,42 @@ SHPTreeHandle msSHPDiskTreeOpen(const char * pszTree, int debug)
     else
       bBigEndian = MS_TRUE;
 #endif /* SHAPELIB_DISABLED */
-
+  
   /* -------------------------------------------------------------------- */
   /*	Initialize the info structure.					    */
   /* -------------------------------------------------------------------- */
     psTree = (SHPTreeHandle) malloc(sizeof(SHPTreeInfo));
-
+  
   /* -------------------------------------------------------------------- */
   /*	Compute the base (layer) name.  If there is any extension	    */
   /*	on the passed in filename we will strip it off.			    */
   /* -------------------------------------------------------------------- */
     pszBasename = (char *) malloc(strlen(pszTree)+5);
     strcpy( pszBasename, pszTree );
-    for( i = strlen(pszBasename)-1;
+    for( i = strlen(pszBasename)-1; 
        i > 0 && pszBasename[i] != '.' && pszBasename[i] != '/'
 	 && pszBasename[i] != '\\';
        i-- ) {}
-
+  
     if( pszBasename[i] == '.' )
       pszBasename[i] = '\0';
-
+  
   /* -------------------------------------------------------------------- */
   /*	Open the .shp and .shx files.  Note that files pulled from	    */
   /*	a PC to Unix with upper case filenames won't work!		    */
   /* -------------------------------------------------------------------- */
     pszFullname = (char *) malloc(strlen(pszBasename) + 5);
-    sprintf( pszFullname, "%s%s", pszBasename, MS_INDEX_EXTENSION);
-
+    sprintf( pszFullname, "%s%s", pszBasename, MS_INDEX_EXTENSION); 
     psTree->zfp = zzip_fopen(pszFullname, "rb" );
 
     msFree(pszBasename); // don't need these any more
-    msFree(pszFullname);
+    msFree(pszFullname);    
 
     if( psTree->zfp == NULL ) {
       msFree(psTree);
       return( NULL );
     }
-
+    
     zzip_fread( pabyBuf, 8, 1, psTree->zfp );
 
     memcpy( &psTree->signature, pabyBuf, 3 );
@@ -146,7 +145,7 @@ SHPTreeHandle msSHPDiskTreeOpen(const char * pszTree, int debug)
                   "which has been deprecated.  It is strongly recommended to "
                   "regenerate it in new format.\n", pszTree);
       }
-      if((pabyBuf[4] == 0 && pabyBuf[5] == 0 &&
+      if((pabyBuf[4] == 0 && pabyBuf[5] == 0 && 
           pabyBuf[6] == 0 && pabyBuf[7] == 0))
       {
         psTree->LSB_order = !(pabyBuf[0] == 0 && pabyBuf[1] == 0);
@@ -167,7 +166,7 @@ SHPTreeHandle msSHPDiskTreeOpen(const char * pszTree, int debug)
     {
       psTree->needswap = (( pabyBuf[3] == MS_NEW_MSB_ORDER ) ^ ( bBigEndian ));
 
-      psTree->LSB_order = ( pabyBuf[3] == MS_NEW_LSB_ORDER );
+      psTree->LSB_order = ( pabyBuf[3] == MS_NEW_LSB_ORDER );      
       memcpy( &psTree->version, pabyBuf+4, 1 );
       memcpy( &psTree->flags, pabyBuf+5, 3 );
 
@@ -176,10 +175,10 @@ SHPTreeHandle msSHPDiskTreeOpen(const char * pszTree, int debug)
 
     if( psTree->needswap ) SwapWord( 4, pabyBuf );
     memcpy( &psTree->nShapes, pabyBuf, 4 );
-
+  
     if( psTree->needswap ) SwapWord( 4, pabyBuf+4 );
     memcpy( &psTree->nDepth, pabyBuf+4, 4 );
-
+  
     return( psTree );
 }
 
@@ -447,7 +446,7 @@ void msTreeTrim(treeObj *tree)
 
 #endif /* SHAPELIB_DISABLED */
 
-static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, char *status)
+static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, char *status) 
 {
   int i;
   long offset;
@@ -464,7 +463,7 @@ static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, char *status
   if ( disktree->needswap ) SwapWord ( 8, &rect.miny );
   if ( disktree->needswap ) SwapWord ( 8, &rect.maxx );
   if ( disktree->needswap ) SwapWord ( 8, &rect.maxy );
-
+      
   zzip_fread( &numshapes, 4, 1, disktree->zfp );
   if ( disktree->needswap ) SwapWord ( 4, &numshapes );
 
@@ -481,7 +480,7 @@ static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, char *status
     {
       for( i=0; i<numshapes; i++ )
       {
-        SwapWord( 4, &ids[i] );
+        SwapWord( 4, &ids[i] );    
         msSetBit(status, ids[i], 1);
       }
     }
@@ -762,8 +761,7 @@ int msWriteTree(treeObj *tree, char *filename, int B_order)
 #endif /* SHAPELIB_DISABLED */
 
 // Function to filter search results further against feature bboxes
-void msFilterTreeSearch(const shapefileObj *shp, char *status,
-                        rectObj search_rect)
+void msFilterTreeSearch(const shapefileObj *shp, char *status, rectObj search_rect)
 {
   int i;
   rectObj shape_rect;

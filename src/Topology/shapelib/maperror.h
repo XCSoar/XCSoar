@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #define MS_NOERR 0 /* general error codes */
-#define MS_IOERR 1
+#define MS_IOERR 1 
 #define MS_MEMERR 2
 #define MS_TYPEERR 3
 #define MS_SYMERR 4

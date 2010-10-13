@@ -1,13 +1,12 @@
 /*
 ** This code is entirely based on the previous work of Frank Warmerdam. It is
 ** essentially shapelib 1.1.5. However, there were enough changes that it was
-** incorporated into the MapServer source to avoid confusion. See the README
+** incorporated into the MapServer source to avoid confusion. See the README 
 ** for licence details.
 */
 
 #include "map.h"
-
-#include <stdlib.h>
+#include <stdlib.h> /* for atof() and atoi() */
 #include <string.h>
 #include <ctype.h>
 
@@ -17,14 +16,13 @@
 /*      A realloc cover function that will access a NULL pointer as     */
 /*      a valid input.                                                  */
 /************************************************************************/
-static void *
-SfRealloc(void *pMem, size_t nNewSize)
+static void * SfRealloc( void * pMem, int nNewSize )
+
 {
   return realloc(pMem, nNewSize);
 }
 
 #ifdef SHAPELIB_DISABLED
-
 
 /************************************************************************/
 /*                           writeHeader()                              */
@@ -109,7 +107,7 @@ static void flushRecord( DBFHandle psDBF )
 /*                              msDBFOpen()                             */
 /*                                                                      */
 /*      Open a .dbf file.                                               */
-/************************************************************************/
+/************************************************************************/   
 DBFHandle msDBFOpen( const char * pszFilename, const char * pszAccess )
 
 {
@@ -121,23 +119,23 @@ DBFHandle msDBFOpen( const char * pszFilename, const char * pszAccess )
     /* -------------------------------------------------------------------- */
     /*      We only allow the access strings "rb" and "r+".                 */
     /* -------------------------------------------------------------------- */
-    if( strcmp(pszAccess,"r") != 0 && strcmp(pszAccess,"r+") != 0
+    if( strcmp(pszAccess,"r") != 0 && strcmp(pszAccess,"r+") != 0 
         && strcmp(pszAccess,"rb") != 0 && strcmp(pszAccess,"r+b") != 0 )
         return( NULL );
-
+    
     /* -------------------------------------------------------------------- */
     /*	Ensure the extension is converted to dbf or DBF if it is 	    */
     /*	currently .shp or .shx.						    */
     /* -------------------------------------------------------------------- */
     pszDBFFilename = (char *) malloc(strlen(pszFilename)+1);
     strcpy( pszDBFFilename, pszFilename );
-
-    if( strcmp(pszFilename+strlen(pszFilename)-4,".shp")
+    
+    if( strcmp(pszFilename+strlen(pszFilename)-4,".shp") 
 	|| strcmp(pszFilename+strlen(pszFilename)-4,".shx") )
     {
         strcpy( pszDBFFilename+strlen(pszDBFFilename)-4, ".dbf");
     }
-    else if( strcmp(pszFilename+strlen(pszFilename)-4,".SHP")
+    else if( strcmp(pszFilename+strlen(pszFilename)-4,".SHP") 
 	     || strcmp(pszFilename+strlen(pszFilename)-4,".SHX") )
     {
         strcpy( pszDBFFilename+strlen(pszDBFFilename)-4, ".DBF");
@@ -160,7 +158,7 @@ DBFHandle msDBFOpen( const char * pszFilename, const char * pszAccess )
 #endif /* SHAPELIB_DISABLED */
 
     psDBF->pszStringField = NULL;
-    psDBF->nStringFieldLen = 0;
+    psDBF->nStringFieldLen = 0;    
 
     free( pszDBFFilename );
 
@@ -170,12 +168,12 @@ DBFHandle msDBFOpen( const char * pszFilename, const char * pszAccess )
     pabyBuf = (uchar *) malloc(500);
     zzip_fread( pabyBuf, 32, 1, psDBF->zfp );
 
-    psDBF->nRecords = nRecords =
+    psDBF->nRecords = nRecords = 
      pabyBuf[4] + pabyBuf[5]*256 + pabyBuf[6]*256*256 + pabyBuf[7]*256*256*256;
 
     psDBF->nHeaderLength = nHeadLen = pabyBuf[8] + pabyBuf[9]*256;
     psDBF->nRecordLength = nRecLen = pabyBuf[10] + pabyBuf[11]*256;
-
+    
     psDBF->nFields = nFields = (nHeadLen - 32) / 32;
 
     psDBF->pszCurrentRecord = (char *) malloc(nRecLen);
@@ -215,7 +213,7 @@ DBFHandle msDBFOpen( const char * pszFilename, const char * pszAccess )
 	if( iField == 0 )
 	    psDBF->panFieldOffset[iField] = 1;
 	else
-	    psDBF->panFieldOffset[iField] =
+	    psDBF->panFieldOffset[iField] = 
 	      psDBF->panFieldOffset[iField-1] + psDBF->panFieldSize[iField-1];
     }
 
@@ -287,7 +285,6 @@ void  msDBFClose(DBFHandle psDBF)
 }
 
 #ifdef SHAPELIB_DISABLED
-
 
 /************************************************************************/
 /*                             msDBFCreate()                            */
@@ -451,7 +448,7 @@ static char *msDBFReadAttribute(DBFHandle psDBF, int hEntity, int iField )
     /* -------------------------------------------------------------------- */
     /*	Is the request valid?                  				    */
     /* -------------------------------------------------------------------- */
-    if( iField < 0 || iField >= psDBF->nFields )
+    if( iField < 0 || iField >= psDBF->nFields ) 
     {
         msSetError(MS_DBFERR, "Invalid field index %d.", "msDBFGetItemIndex()",iField );
         return( NULL );
@@ -499,23 +496,23 @@ static char *msDBFReadAttribute(DBFHandle psDBF, int hEntity, int iField )
 
     /*
     ** Trim trailing blanks (SDL Modification)
-    */
+    */ 
     for(i=strlen(psDBF->pszStringField)-1;i>=0;i--) {
-      if(psDBF->pszStringField[i] != ' ') {
-	psDBF->pszStringField[i+1] = '\0';
+      if(psDBF->pszStringField[i] != ' ') { 
+	psDBF->pszStringField[i+1] = '\0'; 
 	break;
       }
     }
 
-    if(i == -1) psDBF->pszStringField[0] = '\0'; // whole string is blank (SDL fix)
+    if(i == -1) psDBF->pszStringField[0] = '\0'; // whole string is blank (SDL fix)      
 
     /*
     ** Trim/skip leading blanks (SDL/DM Modification - only on numeric types)
-    */
+    */ 
     if( psDBF->pachFieldType[iField] == 'N' || psDBF->pachFieldType[iField] == 'F' || psDBF->pachFieldType[iField] == 'D' ) {
         for(i=0;i<(int)strlen(psDBF->pszStringField);i++) {
             if(psDBF->pszStringField[i] != ' ')
-                break;
+                break;	
         }
         pReturnField = psDBF->pszStringField+i;
     }
@@ -553,7 +550,7 @@ double	msDBFReadDoubleAttribute( DBFHandle psDBF, int iRecord, int iField )
 /************************************************************************/
 const char *msDBFReadStringAttribute( DBFHandle psDBF, int iRecord, int iField )
 {
-  return( msDBFReadAttribute( psDBF, iRecord, iField ) );
+  return( msDBFReadAttribute( psDBF, iRecord, iField ) );  
 }
 
 /************************************************************************/
@@ -585,24 +582,24 @@ DBFFieldType msDBFGetFieldInfo( DBFHandle psDBF, int iField, char * pszFieldName
 {
   if( iField < 0 || iField >= psDBF->nFields )
     return( FTInvalid );
-
+  
   if( pnWidth != NULL )
     *pnWidth = psDBF->panFieldSize[iField];
-
+  
   if( pnDecimals != NULL )
     *pnDecimals = psDBF->panFieldDecimals[iField];
-
+  
   if( pszFieldName != NULL )
     {
       int	i;
-
+      
       strncpy( pszFieldName, (char *) psDBF->pszHeader+iField*32, 11 );
       pszFieldName[11] = '\0';
       for( i = 10; i > 0 && pszFieldName[i] == ' '; i-- )
 	pszFieldName[i] = '\0';
     }
-
-  if( psDBF->pachFieldType[iField] == 'N'
+  
+  if( psDBF->pachFieldType[iField] == 'N' 
       || psDBF->pachFieldType[iField] == 'F'
       || psDBF->pachFieldType[iField] == 'D' )
     {
@@ -618,7 +615,6 @@ DBFFieldType msDBFGetFieldInfo( DBFHandle psDBF, int iField, char * pszFieldName
 }
 
 #ifdef SHAPELIB_DISABLED
-
 
 /************************************************************************/
 /*                         msDBFWriteAttribute()                        */
@@ -775,11 +771,11 @@ int msDBFGetItemIndex(DBFHandle dbffile, char *name)
 {
   int i;
   DBFFieldType dbfField;
-  int fWidth,fnDecimals; /* field width and number of decimals */
+  int fWidth,fnDecimals; /* field width and number of decimals */    
   char fName[32]; /* field name */
 
   if(!name) {
-    msSetError(MS_MISCERR, "NULL item name passed.", "msGetItemIndex()");
+    msSetError(MS_MISCERR, "NULL item name passed.", "msGetItemIndex()");    
     return(-1);
   }
 
@@ -790,7 +786,7 @@ int msDBFGetItemIndex(DBFHandle dbffile, char *name)
       return(i);
   }
 
-  msSetError(MS_DBFERR, "Item '%s' not found.", "msDBFGetItemIndex()",name);
+  msSetError(MS_DBFERR, "Item '%s' not found.", "msDBFGetItemIndex()",name);  
   return(-1); /* item not found */
 }
 
@@ -859,7 +855,7 @@ int *msDBFGetItemIndexes(DBFHandle dbffile, char **items, int numitems)
 
   for(i=0;i<numitems;i++) {
     itemindexes[i] = msDBFGetItemIndex(dbffile, items[i]);
-    if(itemindexes[i] == -1) {
+    if(itemindexes[i] == -1) { 
       free(itemindexes);
       return(NULL); // item not found
     }
