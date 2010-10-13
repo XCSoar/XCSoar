@@ -2,7 +2,6 @@ SHPSRC = $(SRC)/Topology/shapelib
 
 SHAPELIB = \
 	$(SHPSRC)/mapbits.c 	\
-	$(SHPSRC)/maperror.c 	\
 	$(SHPSRC)/mapfile.c \
 	$(SHPSRC)/mapprimitive.c 	\
 	$(SHPSRC)/mapsearch.c 	\

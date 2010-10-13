@@ -101,6 +101,8 @@ extern "C" {
 #define  MS_DLL_EXPORT
 #endif
 
+#ifdef SHAPELIB_DISABLED
+
 typedef struct error_obj {
   int code;
   char routine[ROUTINELENGTH];
@@ -135,6 +137,11 @@ MS_DLL_EXPORT void msWriteErrorImage(struct map_obj *map, char *filename, int bl
 
 MS_DLL_EXPORT void msDebug( const char * pszFormat, ... );
 #endif
+
+#endif /* SHAPELIB_DISABLED */
+
+#define msSetError(...) do {} while (0)
+#define msDebug(...) do {} while (0)
 
 #ifdef __cplusplus
 }
