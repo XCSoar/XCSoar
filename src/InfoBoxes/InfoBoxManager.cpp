@@ -61,8 +61,6 @@ Copyright_License {
 
 #include <algorithm>
 
-using std::min;
-
 namespace InfoBoxManager
 {
   /** the window for displaying infoboxes full-screen */
@@ -136,7 +134,7 @@ InfoBoxFullWindow::on_paint(Canvas &canvas)
     fw = rw / (double)InfoBoxLayout::ControlWidth;
     fh = rh / (double)InfoBoxLayout::ControlHeight;
 
-    double f = min(fw, fh);
+    double f = std::min(fw, fh);
     rw = (int)(f * InfoBoxLayout::ControlWidth);
     rh = (int)(f * InfoBoxLayout::ControlHeight);
 
@@ -263,7 +261,7 @@ int
 InfoBoxManager::getType(unsigned i)
 {
   unsigned retval = getType(i, GetCurrentMode());
-  return min(InfoBoxFactory::NUM_TYPES - 1, retval);
+  return std::min(InfoBoxFactory::NUM_TYPES - 1, retval);
 }
 
 bool
