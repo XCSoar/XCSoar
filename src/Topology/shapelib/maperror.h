@@ -1,3 +1,52 @@
+/******************************************************************************
+ * $Id: maperror.h 5283 2006-03-16 22:28:38Z tamas $
+ *
+ * Project:  MapServer
+ * Purpose:  Declarations for Error and Debug functions.
+ * Author:   Steve Lime and the MapServer team.
+ *
+ ******************************************************************************
+ * Copyright (c) 1996-2005 Regents of the University of Minnesota.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in 
+ * all copies of this Software or works derived from this Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ ******************************************************************************
+ *
+ * $Log$
+ * Revision 1.35  2006/03/16 22:28:38  tamas
+ * Fixed msGetErrorString so as not to truncate the length of the error messages
+ * Added msAddErrorDisplayString to read the displayable messages separatedly
+ *
+ * Revision 1.34  2006/03/14 03:17:19  assefa
+ * Add SOS error code (Bug 1710).
+ * Correct error codes numbers for MS_TIMEERR and MS_GMLERR.
+ *
+ * Revision 1.33  2005/06/14 16:03:33  dan
+ * Updated copyright date to 2005
+ *
+ * Revision 1.32  2005/01/07 18:51:09  sdlime
+ * Added MS_GMLERR code.
+ *
+ * Revision 1.31  2004/10/21 04:30:56  frank
+ * Added standardized headers.  Added MS_CVSID().
+ *
+ */
+
 #ifndef MAPERROR_H
 #define MAPERROR_H
 
@@ -36,11 +85,21 @@ extern "C" {
 #define MS_WFSCONNERR 28  /* WFS connectiontype error */
 #define MS_MAPCONTEXTERR 29 /* Map Context error */
 #define MS_HTTPERR 30
-
-#define MS_NUMERRORCODES 31
+#define MS_CHILDERR 31    /* Errors involving arrays of child objects */
+#define MS_WCSERR 32
+#define MS_GEOSERR 33
+#define MS_RECTERR 34
+#define MS_TIMEERR 35
+#define MS_GMLERR 36
+#define MS_SOSERR 37
+#define MS_NUMERRORCODES 38
 
 #define MESSAGELENGTH 2048
 #define ROUTINELENGTH 64
+
+#ifndef MS_DLL_EXPORT
+#define  MS_DLL_EXPORT
+#endif
 
 typedef struct error_obj {
   int code;
@@ -59,21 +118,22 @@ typedef struct error_obj {
 /*
 ** Function prototypes
 */
-errorObj *msGetErrorObj(void);
-void msResetErrorList(void);
-char *msGetVersion(void);
-char *msGetErrorString(char *delimiter);
+MS_DLL_EXPORT errorObj *msGetErrorObj(void);
+MS_DLL_EXPORT void msResetErrorList(void);
+MS_DLL_EXPORT char *msGetVersion(void);
+MS_DLL_EXPORT char *msGetErrorString(char *delimiter);
 
 #ifndef SWIG
-void msSetError(int code, const char *message, const char *routine, ...);
-void msWriteError(FILE *stream);
-char *msGetErrorCodeString(int code);
+MS_DLL_EXPORT void msSetError(int code, const char *message, const char *routine, ...);
+MS_DLL_EXPORT void msWriteError(FILE *stream);
+MS_DLL_EXPORT void msWriteErrorXML(FILE *stream);
+MS_DLL_EXPORT char *msGetErrorCodeString(int code);
+MS_DLL_EXPORT char *msAddErrorDisplayString(char *source, errorObj *error);
 
 struct map_obj;
-void msWriteErrorImage(struct map_obj *map, char *filename, int blank);
+MS_DLL_EXPORT void msWriteErrorImage(struct map_obj *map, char *filename, int blank);
 
-void msDebug( const char * pszFormat, ... );
-void msWebDebug( const char * pszFormat, ... );
+MS_DLL_EXPORT void msDebug( const char * pszFormat, ... );
 #endif
 
 #ifdef __cplusplus

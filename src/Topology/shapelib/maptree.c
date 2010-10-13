@@ -1,7 +1,49 @@
-/*
-** This code is based in part on the previous work of Frank Warmerdam. See
-** the README for licence details.
-*/
+/******************************************************************************
+ *
+ * Project:  MapServer
+ * Purpose:  .qix spatial index implementation.  
+ * Author:   Steve Lime
+ *           Derived from code in shapelib.
+ *
+ ******************************************************************************
+ * Copyright (c) 1996-2005 Regents of the University of Minnesota.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in 
+ * all copies of this Software or works derived from this Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ ******************************************************************************
+ *
+ * $Log$
+ * Revision 1.18  2006/04/19 16:36:18  hobu
+ * don't throw an MS_IOERR when we're in debug mode when we don't find an index (bug 1752)
+ *
+ * Revision 1.17  2005/08/25 14:20:16  sdlime
+ * Applied patch for bug 1440.
+ *
+ * Revision 1.16  2005/06/14 16:03:35  dan
+ * Updated copyright date to 2005
+ *
+ * Revision 1.15  2005/02/18 03:06:47  dan
+ * Turned all C++ (//) comments into C comments (bug 1238)
+ *
+ * Revision 1.14  2004/10/21 04:30:56  frank
+ * Added standardized headers.  Added MS_CVSID().
+ *
+ */
 
 #include "map.h"
 #include "maptree.h"
@@ -14,6 +56,10 @@
 #ifdef ANDROID
 #include <sys/endian.h>
 #endif
+
+#ifdef SHAPELIB_DISABLED
+MS_CVSID("$Id: maptree.c 5397 2006-04-19 16:36:18Z hobu $")
+#endif /* SHAPELIB_DISABLED */
 
 static const bool bBigEndian = BYTE_ORDER == BIG_ENDIAN;
 
@@ -119,7 +165,7 @@ SHPTreeHandle msSHPDiskTreeOpen(const char * pszTree, int debug)
     sprintf( pszFullname, "%s%s", pszBasename, MS_INDEX_EXTENSION); 
     psTree->zfp = zzip_fopen(pszFullname, "rb" );
 
-    msFree(pszBasename); // don't need these any more
+    msFree(pszBasename); /* don't need these any more */
     msFree(pszFullname);    
 
     if( psTree->zfp == NULL ) {
@@ -359,7 +405,7 @@ static int treeNodeAddShapeId( treeNodeObj *node, int id, rectObj rect, int maxd
 /* -------------------------------------------------------------------- */
     node->numshapes++;
 
-    node->ids = SfRealloc( node->ids, sizeof(int) * node->numshapes );
+    node->ids = SfRealloc( node->ids, sizeof(ms_int32) * node->numshapes );
     node->ids[node->numshapes-1] = id;
 
     return MS_TRUE;
@@ -449,8 +495,8 @@ void msTreeTrim(treeObj *tree)
 static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, char *status) 
 {
   int i;
-  long offset;
-  int numshapes, numsubnodes;
+  ms_int32 offset;
+  ms_int32 numshapes, numsubnodes;
   rectObj rect;
 
   int *ids=NULL;
@@ -467,15 +513,15 @@ static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, char *status
   zzip_fread( &numshapes, 4, 1, disktree->zfp );
   if ( disktree->needswap ) SwapWord ( 4, &numshapes );
 
-  if(!msRectOverlap(&rect, &aoi)) { // skip rest of this node and sub-nodes
-    offset += numshapes*sizeof(int) + sizeof(int);
+  if(!msRectOverlap(&rect, &aoi)) { /* skip rest of this node and sub-nodes */
+    offset += numshapes*sizeof(ms_int32) + sizeof(ms_int32);
     zzip_seek(disktree->zfp, offset, SEEK_CUR);
     return;
   }
   if(numshapes > 0) {
-    ids = (int *)malloc(numshapes*sizeof(int));
+    ids = (int *)malloc(numshapes*sizeof(ms_int32));
 
-    zzip_fread( ids, numshapes*sizeof(int), 1, disktree->zfp );
+    zzip_fread( ids, numshapes*sizeof(ms_int32), 1, disktree->zfp );
     if (disktree->needswap )
     {
       for( i=0; i<numshapes; i++ )
@@ -509,8 +555,8 @@ char *msSearchDiskTree(const char *filename, rectObj aoi, int debug)
   disktree = msSHPDiskTreeOpen (filename, debug);
   if(!disktree) {
 
-    // only set this error IF debugging is turned on, gets annoying otherwise
-    if(debug) msSetError(MS_IOERR, "Unable to open spatial index for %s. In most cases you can safely ignore this message, otherwise check file names and permissions.", "msSearchDiskTree()", filename);
+    /* only set this error IF debugging is turned on, gets annoying otherwise */
+    if(debug) msSetError(MS_NOTFOUND, "Unable to open spatial index for %s. In most cases you can safely ignore this message, otherwise check file names and permissions.", "msSearchDiskTree()", filename);
 
     return(NULL);
   }
@@ -533,7 +579,7 @@ char *msSearchDiskTree(const char *filename, rectObj aoi, int debug)
 treeNodeObj *readTreeNode( SHPTreeHandle disktree ) 
 {
   int i,res;
-  long offset;
+  ms_int32 offset;
   treeNodeObj *node;
 
   node = (treeNodeObj *) malloc(sizeof(treeNodeObj));
@@ -554,7 +600,7 @@ treeNodeObj *readTreeNode( SHPTreeHandle disktree )
   fread( &node->numshapes, 4, 1, disktree->fp );
   if ( disktree->needswap ) SwapWord ( 4, &node->numshapes );
   if( node->numshapes > 0 )
-    node->ids = (int *)malloc(sizeof(int)*node->numshapes);
+    node->ids = (ms_int32 *)malloc(sizeof(ms_int32)*node->numshapes);
   fread( node->ids, node->numshapes*4, 1, disktree->fp );
   for( i=0; i < node->numshapes; i++ )
   {
@@ -592,10 +638,10 @@ treeObj *msReadTree(char *filename, int debug)
   return(tree);
 }
 
-static long getSubNodeOffset(treeNodeObj *node) 
+static ms_int32 getSubNodeOffset(treeNodeObj *node) 
 {
   int i;
-  long offset=0;
+  ms_int32 offset=0;
 
   for(i=0; i<node->numsubnodes; i++ ) {
     if(node->subnode[i]) {
@@ -620,24 +666,24 @@ static long getSubNodeOffset(treeNodeObj *node)
 static void writeTreeNode(SHPTreeHandle disktree, treeNodeObj *node) 
 {
   int i,j;
-  long offset;
+  ms_int32 offset;
   char *pabyRec = NULL;
 
   offset = getSubNodeOffset(node);
   
-  pabyRec = malloc(sizeof(rectObj) + (3 * sizeof(int)) + (node->numshapes * sizeof(int)) );
+  pabyRec = malloc(sizeof(rectObj) + (3 * sizeof(ms_int32)) + (node->numshapes * sizeof(ms_int32)) );
 
   memcpy( pabyRec, &offset, 4);
   if( disktree->needswap ) SwapWord( 4, pabyRec );
     
-  memcpy( pabyRec+4, &node->rect, sizeof(rectObj));
+   memcpy( pabyRec+4, &node->rect, sizeof(rectObj));
   for (i=0; i < 4; i++)
     if( disktree->needswap ) SwapWord( 8, pabyRec+4+(8*i) );
 
   memcpy( pabyRec+36, &node->numshapes, 4);
   if( disktree->needswap ) SwapWord( 4, pabyRec+36 );
 
-  j = node->numshapes*sizeof(int);
+  j = node->numshapes*sizeof(ms_int32);
   memcpy( pabyRec+40, node->ids, j);
   for (i=0; i<node->numshapes; i++)
     if( disktree->needswap ) SwapWord( 4, pabyRec+40+(4*i));
@@ -694,7 +740,7 @@ int msWriteTree(treeObj *tree, char *filename, int B_order)
   sprintf( pszFullname, "%s%s", pszBasename, MS_INDEX_EXTENSION); 
   disktree->fp = fopen(pszFullname, "wb");
   
-  msFree(pszBasename); // not needed
+  msFree(pszBasename); /* not needed */
   msFree(pszFullname);
   
   if(!disktree->fp) {
@@ -704,7 +750,7 @@ int msWriteTree(treeObj *tree, char *filename, int B_order)
   }
   
   
-  // for efficiency, trim the tree
+  /* for efficiency, trim the tree */
   msTreeTrim(tree);
   
   /* -------------------------------------------------------------------- */
@@ -724,7 +770,7 @@ int msWriteTree(treeObj *tree, char *filename, int B_order)
   if( B_order == MS_NATIVE_ORDER )
     disktree->needswap = 0;
   
-  // write the header
+  /* write the header */
   if ( B_order > 0 ) {  
     memcpy( pabyBuf, &signature, 3 );
     memcpy (&disktree->signature, &signature, 3);
@@ -760,7 +806,7 @@ int msWriteTree(treeObj *tree, char *filename, int B_order)
 
 #endif /* SHAPELIB_DISABLED */
 
-// Function to filter search results further against feature bboxes
+/* Function to filter search results further against feature bboxes */
 void msFilterTreeSearch(const shapefileObj *shp, char *status, rectObj search_rect)
 {
   int i;

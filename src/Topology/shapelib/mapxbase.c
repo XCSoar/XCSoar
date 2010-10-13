@@ -1,14 +1,62 @@
-/*
-** This code is entirely based on the previous work of Frank Warmerdam. It is
-** essentially shapelib 1.1.5. However, there were enough changes that it was
-** incorporated into the MapServer source to avoid confusion. See the README 
-** for licence details.
-*/
+/******************************************************************************
+ *
+ * Project:  MapServer
+ * Purpose:  .dbf access API.
+ * Author:   Steve Lime and the MapServer team.
+ *
+ * Derived from shapelib, and relicensed with permission.
+ *
+ ******************************************************************************
+ * Copyright (c) 1996-2005 Regents of the University of Minnesota.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in 
+ * all copies of this Software or works derived from this Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ ******************************************************************************
+ *
+ * $Log$
+ * Revision 1.23  2006/08/22 13:54:37  hobu
+ * cast the second argument to char* that we're passing into strncopy
+ *
+ * Revision 1.22  2005/06/14 16:03:35  dan
+ * Updated copyright date to 2005
+ *
+ * Revision 1.21  2005/04/22 14:11:30  frank
+ * Bug 791: initialize some fields in msDBFCreate()
+ *
+ * Revision 1.20  2005/02/18 03:06:48  dan
+ * Turned all C++ (//) comments into C comments (bug 1238)
+ *
+ * Revision 1.19  2005/02/07 18:37:43  frank
+ * Removed dangerous junk in leading space trimmer.
+ *
+ * Revision 1.18  2004/10/21 04:30:54  frank
+ * Added standardized headers.  Added MS_CVSID().
+ *
+ */
 
 #include "map.h"
 #include <stdlib.h> /* for atof() and atoi() */
 #include <string.h>
 #include <ctype.h>
+
+#ifdef SHAPELIB_DISABLED
+MS_CVSID("$Id: mapxbase.c 5620 2006-08-22 13:54:37Z hobu $")
+#endif /* SHAPELIB_DISABLED */
 
 /************************************************************************/
 /*                             SfRealloc()                              */
@@ -332,7 +380,11 @@ DBFHandle msDBFCreate( const char * pszFilename )
     psDBF->bCurrentRecordModified = MS_FALSE;
     psDBF->pszCurrentRecord = NULL;
 
+    psDBF->pszStringField = NULL;
+    psDBF->nStringFieldLen = 0;    
+
     psDBF->bNoHeader = MS_TRUE;
+    psDBF->bUpdated = MS_FALSE;
 
     return( psDBF );
 }
@@ -442,7 +494,7 @@ static char *msDBFReadAttribute(DBFHandle psDBF, int hEntity, int iField )
 
 {
     int	       	nRecordOffset, i;
-    const char *pabyRec;
+    const uchar *pabyRec;
     char	*pReturnField = NULL;
 
     /* -------------------------------------------------------------------- */
@@ -477,7 +529,7 @@ static char *msDBFReadAttribute(DBFHandle psDBF, int hEntity, int iField )
 	psDBF->nCurrentRecord = hEntity;
     }
 
-    pabyRec = (const char *) psDBF->pszCurrentRecord;
+    pabyRec = (const uchar *) psDBF->pszCurrentRecord;
 
     /* -------------------------------------------------------------------- */
     /*	Ensure our field buffer is large enough to hold this buffer.	    */
@@ -491,7 +543,7 @@ static char *msDBFReadAttribute(DBFHandle psDBF, int hEntity, int iField )
     /* -------------------------------------------------------------------- */
     /*	Extract the requested field.					    */
     /* -------------------------------------------------------------------- */
-    strncpy( psDBF->pszStringField, pabyRec+psDBF->panFieldOffset[iField], psDBF->panFieldSize[iField] );
+    strncpy( psDBF->pszStringField,(const char *) pabyRec+psDBF->panFieldOffset[iField], psDBF->panFieldSize[iField] );
     psDBF->pszStringField[psDBF->panFieldSize[iField]] = '\0';
 
     /*
@@ -504,13 +556,13 @@ static char *msDBFReadAttribute(DBFHandle psDBF, int hEntity, int iField )
       }
     }
 
-    if(i == -1) psDBF->pszStringField[0] = '\0'; // whole string is blank (SDL fix)      
+    if(i == -1) psDBF->pszStringField[0] = '\0'; /* whole string is blank (SDL fix)       */
 
     /*
     ** Trim/skip leading blanks (SDL/DM Modification - only on numeric types)
     */ 
     if( psDBF->pachFieldType[iField] == 'N' || psDBF->pachFieldType[iField] == 'F' || psDBF->pachFieldType[iField] == 'D' ) {
-        for(i=0;i<(int)strlen(psDBF->pszStringField);i++) {
+        for(i=0; psDBF->pszStringField[i] != '\0' ;i++) {
             if(psDBF->pszStringField[i] != ' ')
                 break;	
         }
@@ -678,20 +730,20 @@ static int msDBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField, void * 
     if( psDBF->panFieldDecimals[iField] == 0 ) {
       sprintf( szFormat, "%%%dd", psDBF->panFieldSize[iField] );
       sprintf(szSField, szFormat, (int) *((double *) pValue) );
-      if( strlen(szSField) > psDBF->panFieldSize[iField] )
+      if( (int) strlen(szSField) > psDBF->panFieldSize[iField] )
 	szSField[psDBF->panFieldSize[iField]] = '\0';
       strncpy((char *) (pabyRec+psDBF->panFieldOffset[iField]), szSField, strlen(szSField) );
     } else {
       sprintf( szFormat, "%%%d.%df", psDBF->panFieldSize[iField], psDBF->panFieldDecimals[iField] );
       sprintf(szSField, szFormat, *((double *) pValue) );
-      if( strlen(szSField) > psDBF->panFieldSize[iField] )
+      if( (int) strlen(szSField) > psDBF->panFieldSize[iField] )
 	szSField[psDBF->panFieldSize[iField]] = '\0';
       strncpy((char *) (pabyRec+psDBF->panFieldOffset[iField]),  szSField, strlen(szSField) );
     }
     break;
     
   default:
-    if( strlen((char *) pValue) > psDBF->panFieldSize[iField] )
+    if( (int) strlen((char *) pValue) > psDBF->panFieldSize[iField] )
       j = psDBF->panFieldSize[iField];
     else
       j = strlen((char *) pValue);
@@ -857,7 +909,7 @@ int *msDBFGetItemIndexes(DBFHandle dbffile, char **items, int numitems)
     itemindexes[i] = msDBFGetItemIndex(dbffile, items[i]);
     if(itemindexes[i] == -1) { 
       free(itemindexes);
-      return(NULL); // item not found
+      return(NULL); /* item not found */
     }
   }
 

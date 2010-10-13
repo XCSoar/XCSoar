@@ -1,16 +1,114 @@
-/* $Id: maperror.c,v 1.37.2.2 2003/10/15 12:35:41 dan Exp $ */
+/******************************************************************************
+ *
+ * Project:  MapServer
+ * Purpose:  Implementation of msSetError(), msDebug() and related functions.
+ * Author:   Steve Lime and the MapServer team.
+ *
+ ******************************************************************************
+ * Copyright (c) 1996-2005 Regents of the University of Minnesota.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in 
+ * all copies of this Software or works derived from this Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ ******************************************************************************
+ *
+ * $Log$
+ * Revision 1.75.2.3  2006/12/06 05:51:18  sdlime
+ * Make sure to declare errormsg at the top of the function for MSVC.
+ *
+ * Revision 1.75.2.2  2006/12/06 05:44:21  sdlime
+ * Applied user supplied patch to fix long in-image error wrapping. (bug 1963)
+ *
+ * Revision 1.75.2.1  2006/11/24 22:11:27  frank
+ * fix closing of stderr/stdout after writing error msg (bug 1970)
+ *
+ * Revision 1.75  2006/03/16 22:28:38  tamas
+ * Fixed msGetErrorString so as not to truncate the length of the error messages
+ * Added msAddErrorDisplayString to read the displayable messages separatedly
+ *
+ * Revision 1.74  2006/03/15 18:17:14  dan
+ * Added SUPPORTS=SOS_SERVER to msGetVersion() (bug 1710)
+ *
+ * Revision 1.73  2006/03/14 03:17:19  assefa
+ * Add SOS error code (Bug 1710).
+ * Correct error codes numbers for MS_TIMEERR and MS_GMLERR.
+ *
+ * Revision 1.72  2006/02/18 21:11:35  hobu
+ * make sure we cast the tv_sec to a long because on os x, the type is
+ * really __darwin_suseconds_t, which is ultimately a long.
+ *
+ * Revision 1.71  2005/12/12 16:57:56  sean
+ * write whether point/shape z and m is supported in version message
+ *
+ * Revision 1.70  2005/11/17 14:38:21  assefa
+ * Correct function msGetVersion to indicate if mapserver was build with
+ * MYGIS support.
+ *
+ * Revision 1.69  2005/09/13 23:43:31  frank
+ * fix leak in threaded case of error object
+ *
+ * Revision 1.68  2005/06/14 16:03:33  dan
+ * Updated copyright date to 2005
+ *
+ * Revision 1.67  2005/04/07 21:51:22  frank
+ * added SUPPORTS=THREADS to version info
+ *
+ * Revision 1.66  2005/04/07 17:23:16  assefa
+ * Remove #ifdef USE_SVG. It was added during development.
+ *
+ * Revision 1.65  2005/04/07 13:46:46  frank
+ * added report of SVG support
+ *
+ * Revision 1.64  2005/02/22 07:40:27  sdlime
+ * A bunch of updates to GEOS integration. Can move many primatives between MapServer and GEOS, still need to do collections (e.g. multi-point/line/polygon). Added buffer method to mapscript (mapscript/shape.i).
+ *
+ * Revision 1.63  2005/02/18 03:06:45  dan
+ * Turned all C++ (//) comments into C comments (bug 1238)
+ *
+ * Revision 1.62  2005/02/02 02:21:50  sdlime
+ * Applied Jerry/Dan patch for bug 1194.
+ *
+ * Revision 1.61  2005/01/28 06:16:53  sdlime
+ * Applied patch to make function prototypes ANSI C compliant. Thanks to Petter Reinholdtsen. This fixes but 1181.
+ *
+ * Revision 1.60  2005/01/26 14:42:13  frank
+ * Removed msWebDebug() ... really this time!
+ *
+ * Revision 1.59  2005/01/07 18:51:09  sdlime
+ * Added MS_GMLERR code.
+ *
+ * Revision 1.58  2004/10/21 04:30:55  frank
+ * Added standardized headers.  Added MS_CVSID().
+ *
+ */
 
 #include "map.h"
 #include "maperror.h"
 
 #ifdef SHAPELIB_DISABLED
 #include "mapthread.h"
+#include "maptime.h"
 
 #include "gdfonts.h"
 
 #include <time.h>
 #ifndef _WIN32
 #include <sys/time.h>
+#include <unistd.h>
 #endif
 #endif /* SHAPELIB_DISABLED */
 
@@ -20,13 +118,13 @@
 #include <stdarg.h>
 
 #ifdef NEED_NONBLOCKING_STDERR
-#ifndef _WIN32
-#include <unistd.h>
-#endif
 #include <fcntl.h>
 #endif
 
 #ifdef SHAPELIB_DISABLED
+
+MS_CVSID("$Id: maperror.c 5857 2006-12-06 05:51:18Z sdlime $")
+
 static char *ms_errorCodes[MS_NUMERRORCODES] = {"",
 						"Unable to access file.",
 						"Memory allocation error.",
@@ -57,7 +155,14 @@ static char *ms_errorCodes[MS_NUMERRORCODES] = {"",
 						"WFS server error.",
 						"WFS connection error.",
 						"WMS Map Context error.",
-						"HTTP request error."
+						"HTTP request error.",
+						"Child array error.",
+						"WCS server error.",
+						"GEOS library error.",
+						"Invalid rectangle.",
+						"Date/time error.",
+						"GML encoding error.",
+                                                "SOS server error."
 };
 #endif /* SHAPELIB_DISABLED */
 
@@ -80,9 +185,10 @@ typedef struct te_info
     errorObj        ms_error;
 } te_info_t;
 
+static te_info_t *error_list = NULL;
+
 errorObj *msGetErrorObj()
 {
-    static te_info_t *error_list = NULL;
     te_info_t *link;
     int        thread_id;
     errorObj   *ret_obj;
@@ -209,6 +315,42 @@ void msResetErrorList(void)
   ms_error->code = MS_NOERR;
   ms_error->routine[0] = '\0';
   ms_error->message[0] = '\0';
+
+/* -------------------------------------------------------------------- */
+/*      Cleanup our entry in the thread list.  This is mainly           */
+/*      imprortant when msCleanup() calls msResetErrorList().           */
+/* -------------------------------------------------------------------- */
+#ifdef USE_THREAD
+  {
+      int  thread_id = msGetThreadId();
+      te_info_t *link;
+
+      msAcquireLock( TLOCK_ERROROBJ );
+      
+      /* find link for this thread */
+    
+      for( link = error_list; 
+           link != NULL && link->thread_id != thread_id
+               && link->next != NULL && link->next->thread_id != thread_id;
+           link = link->next ) {}
+      
+      if( link->thread_id == thread_id )
+      { 
+          /* presumably link is at head of list.  */
+          if( error_list == link )
+              error_list = link->next;
+
+          free( link );
+      }
+      else if( link->next != NULL && link->next->thread_id == thread_id )
+      {
+          te_info_t *next_link = link->next;
+          link->next = link->next->next;
+          free( next_link );
+      }
+      msReleaseLock( TLOCK_ERROROBJ );
+  }
+#endif
 }
 
 #ifdef SHAPELIB_DISABLED
@@ -221,35 +363,35 @@ char *msGetErrorCodeString(int code) {
   return(ms_errorCodes[code]);
 }
 
+/* -------------------------------------------------------------------- */
+/*      Adding the displayable error string to a given string           */
+/*      and reallocates the memory enough to hold the characters.       */
+/*      If source is null returns a newly allocated string              */
+/* -------------------------------------------------------------------- */
+char *msAddErrorDisplayString(char *source, errorObj *error)
+{
+	if((source = strcatalloc(source, error->routine)) == NULL) return(NULL);
+	if((source = strcatalloc(source, ": ")) == NULL) return(NULL);
+	if((source = strcatalloc(source, ms_errorCodes[error->code])) == NULL) return(NULL);
+	if((source = strcatalloc(source, " ")) == NULL) return(NULL);
+	if((source = strcatalloc(source, error->message)) == NULL) return(NULL);
+	return source;
+}
+
 char *msGetErrorString(char *delimiter) 
 {
-#if defined(_WIN32) && !defined(__CYGWIN__)
-  char  errbuf[512];
-#else
-  char errbuf[256];
-#endif
   char *errstr=NULL;
 
   errorObj *error = msGetErrorObj();
 
   if(!delimiter || !error) return(NULL);
 
-  if((errstr = strdup("")) == NULL) return(NULL); // empty at first
   while(error && error->code != MS_NOERR) {
-    if(error->next && error->next->code != MS_NOERR) // (peek ahead) more errors, use delimiter
-#if defined(_WIN32) && !defined(__CYGWIN__)
-      sprintf(errbuf,  "%s: %s %s%s", error->routine, ms_errorCodes[error->code], error->message, delimiter);
-    else
-      sprintf(errbuf, "%s: %s %s", error->routine, ms_errorCodes[error->code], error->message);
-#else
-      snprintf(errbuf, 255, "%s: %s %s%s", error->routine, ms_errorCodes[error->code], error->message, delimiter);
-    else
-      snprintf(errbuf, 255, "%s: %s %s", error->routine, ms_errorCodes[error->code], error->message);
-#endif    
-
-    if((errstr = (char *) realloc(errstr, sizeof(char)*(strlen(errstr)+strlen(errbuf)+1))) == NULL) return(NULL);
-    strcat(errstr, errbuf);
-
+    if((errstr = msAddErrorDisplayString(errstr, error)) == NULL) return(NULL);
+	 
+	if(error->next && error->next->code != MS_NOERR) { /* (peek ahead) more errors, use delimiter */
+		if((errstr = strcatalloc(errstr, delimiter)) == NULL) return(NULL);
+	}
     error = error->next;   
   }
 
@@ -272,8 +414,10 @@ void msSetError(int code, const char *message_fmt, const char *routine, ...)
 
   if(!routine)
     strcpy(ms_error->routine, "");
-  else
+  else {
     strncpy(ms_error->routine, routine, ROUTINELENGTH);
+    ms_error->routine[ROUTINELENGTH-1] = '\0';
+  }
 
   if(!message_fmt)
     strcpy(ms_error->message, "");
@@ -296,7 +440,8 @@ void msSetError(int code, const char *message_fmt, const char *routine, ...)
     if(!errstream) return;
     errtime = time(NULL);
     fprintf(errstream, "%s - %s: %s %s\n", chop(ctime(&errtime)), ms_error->routine, ms_errorCodes[ms_error->code], ms_error->message);
-    fclose(errstream);
+    if( errstream != stderr && errstream != stdout )
+        fclose(errstream);
   }
 #endif /* SHAPELIB_DISABLED */
 }
@@ -309,8 +454,25 @@ void msWriteError(FILE *stream)
 
   while (ms_error && ms_error->code != MS_NOERR)
   {
-      fprintf(stream, "%s: %s %s <br>\n", ms_error->routine, ms_errorCodes[ms_error->code], ms_error->message);
+      msIO_fprintf(stream, "%s: %s %s <br>\n", ms_error->routine, ms_errorCodes[ms_error->code], ms_error->message);
       ms_error = ms_error->next;
+  }
+}
+
+void msWriteErrorXML(FILE *stream)
+{
+  char *message;
+  errorObj *ms_error = msGetErrorObj();
+
+  while (ms_error && ms_error->code != MS_NOERR)
+  {
+      message = msEncodeHTMLEntities(ms_error->message);
+
+      msIO_fprintf(stream, "%s: %s %s\n", ms_error->routine, 
+                   ms_errorCodes[ms_error->code], message);
+      ms_error = ms_error->next;
+
+      msFree(message);
   }
 }
 
@@ -334,28 +496,32 @@ void msWriteErrorImage(mapObj *map, char *filename, int blank) {
   int nSpaceBewteenLines = font->h;
   int nBlack = 0;   
   outputFormatObj *format = NULL;
+  char *errormsg = msGetErrorString("; ");
 
-  char errormsg[MESSAGELENGTH+ROUTINELENGTH+4];
-  errorObj *ms_error = msGetErrorObj();
-
-  if (map) {
-    width = map->width;
-    height = map->height;
+  if(map) {
+    if(map->width != -1 && map->height != -1) {
+      width = map->width;
+      height = map->height;
+    }
     format = map->outputformat;
   }
 
   if (format == NULL) format = msCreateDefaultOutputFormat( NULL, "GD/PC256" );
 
   img = gdImageCreate(width, height);
-  color = gdImageColorAllocate(img, 255,255,255); // BG color
-  nBlack = gdImageColorAllocate(img, 0,0,0); // Text color
+  color = gdImageColorAllocate(img, map->imagecolor.red, 
+                               map->imagecolor.green,
+                               map->imagecolor.blue); /* BG color */
+  nBlack = gdImageColorAllocate(img, 0,0,0); /* Text color */
 
-  sprintf(errormsg, "%s: %s", ms_error->routine, ms_error->message);
+  if (map->outputformat && map->outputformat->transparent)
+    gdImageColorTransparent(img, 0);
+
   nTextLength = strlen(errormsg); 
   nWidthTxt  =  nTextLength * font->w;
   nUsableWidth = width - (nMargin*2);
 
-  // Check to see if it all fits on one line. If not, split the text on several lines.
+  /* Check to see if it all fits on one line. If not, split the text on several lines. */
   if(!blank) {
     if (nWidthTxt > nUsableWidth) {
       nMaxCharsPerLine =  nUsableWidth/font->w;
@@ -376,15 +542,13 @@ void msWriteErrorImage(mapObj *map, char *filename, int blank) {
           nLength = nEnd-nStart;
 
           strncpy(papszLines[i], errormsg+nStart, nLength);
-          papszLines[i][nLength+1] = '\0';
+          papszLines[i][nLength] = '\0';
         }
       }
     } else {
       nLines = 1;
       papszLines = (char **)malloc(nLines*sizeof(char *));
-      papszLines[0] = (char *)malloc((strlen(errormsg)+1)*sizeof(char));
-      papszLines[0] = strcpy(papszLines[0], errormsg);
-      papszLines[0][strlen(papszLines[0])+1]='\0';
+      papszLines[0] = strdup(errormsg);
     }   
     for (i=0; i<nLines; i++) {
       nYPos = (nSpaceBewteenLines) * ((i*2) +1); 
@@ -400,17 +564,19 @@ void msWriteErrorImage(mapObj *map, char *filename, int blank) {
     }
   }
 
-  // actually write the image
-  if(!filename) printf("Content-type: %s%c%c", MS_IMAGE_MIME_TYPE(format), 10,10);
+  /* actually write the image */
+  if(!filename) 
+      msIO_printf("Content-type: %s%c%c", MS_IMAGE_MIME_TYPE(format), 10,10);
   msSaveImageGD(img, filename, format);
   gdImageDestroy(img);
 
   if (format->refcount == 0)
     msFreeOutputFormat(format);
+  msFree(errormsg);  
 }
 
 char *msGetVersion() {
-  static char version[384];
+  static char version[1024];
 
   sprintf(version, "MapServer version %s", MS_VERSION);
 
@@ -432,6 +598,7 @@ char *msGetVersion() {
 #ifdef USE_MING_FLASH
   strcat(version, " OUTPUT=SWF");
 #endif
+  strcat(version, " OUTPUT=SVG");
 #ifdef USE_PROJ
   strcat(version, " SUPPORTS=PROJ");
 #endif
@@ -449,6 +616,24 @@ char *msGetVersion() {
 #endif
 #ifdef USE_WFS_LYR
   strcat(version, " SUPPORTS=WFS_CLIENT");
+#endif
+#ifdef USE_WCS_SVR
+  strcat(version, " SUPPORTS=WCS_SERVER");
+#endif
+#ifdef USE_SOS_SVR
+  strcat(version, " SUPPORTS=SOS_SERVER");
+#endif
+#ifdef USE_FASTCGI
+  strcat(version, " SUPPORTS=FASTCGI");
+#endif
+#ifdef USE_THREAD
+  strcat(version, " SUPPORTS=THREADS");
+#endif
+#ifdef USE_GEOS
+  strcat(version, " SUPPORTS=GEOS");
+#endif
+#ifdef USE_POINT_Z_M
+  strcat(version, " SUPPORTS=POINT_Z_M");
 #endif
 #ifdef USE_TIFF
   strcat(version, " INPUT=TIFF");
@@ -474,28 +659,14 @@ char *msGetVersion() {
 #ifdef USE_GDAL
   strcat(version, " INPUT=GDAL");
 #endif
-  strcat(version, " INPUT=SHAPEFILE");
-
-  return(version);
-}
-
-void msWebDebug( const char * pszFormat, ... )
-{
-#ifndef _WIN32
-    va_list args;
-    struct timeval tv;
-
-    fprintf(stdout, "Content-type: text/html%c%c",10,10);
-
-    gettimeofday(&tv, NULL);
-    fprintf(stdout, "[%s].%ld ", chop(ctime(&(tv.tv_sec))), tv.tv_usec);
-
-    va_start(args, pszFormat);
-    vfprintf(stdout, pszFormat, args);
-    va_end(args);
-
-    exit(0);
+#ifdef USE_MYGIS
+  strcat(version, " INPUT=MYGIS");
 #endif
+  strcat(version, " INPUT=SHAPEFILE");
+#ifdef ENABLE_STDERR_DEBUG
+  strcat(version, " DEBUG=MSDEBUG");
+#endif
+  return(version);
 }
 
 #endif /* SHAPELIB_DISABLED */
@@ -505,9 +676,8 @@ void msDebug( const char * pszFormat, ... )
 	  (void)pszFormat;
 #ifdef ENABLE_STDERR_DEBUG
     va_list args;
-    struct timeval tv;
 
-#ifdef NEED_NONBLOCKING_STDERR
+#if defined(NEED_NONBLOCKING_STDERR) && !defined(USE_MAPIO) && !defined(_WIN32)
     static char nonblocking_set = 0;
     if (!nonblocking_set)
     {
@@ -516,11 +686,20 @@ void msDebug( const char * pszFormat, ... )
     }
 #endif
 
-    gettimeofday(&tv, NULL);
-    fprintf(stderr, "[%s].%ld ", chop(ctime(&(tv.tv_sec))), tv.tv_usec);
+#if !defined(USE_FASTCGI) && !defined(_WIN32)
+    /* It seems the FastCGI stuff inserts a timestamp anyways, so  */
+    /* we might as well skip this one.  And the struct timeval doesn't */
+    /* appear to exist on win32.  */
+    {
+        struct timeval tv;
+        msGettimeofday(&tv, NULL);
+        msIO_fprintf(stderr, "[%s].%ld ", 
+                     chop(ctime(&(tv.tv_sec))), (long)tv.tv_usec);
+    }
+#endif
 
     va_start(args, pszFormat);
-    vfprintf(stderr, pszFormat, args);
+    msIO_vfprintf(stderr, pszFormat, args);
     va_end(args);
 #endif
 }
