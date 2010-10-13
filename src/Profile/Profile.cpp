@@ -45,6 +45,8 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
 
+#include <string.h>
+
 #define XCSPROFILE "xcsoar-registry.prf"
 
 TCHAR startProfileFile[MAX_PATH];
@@ -59,7 +61,9 @@ Profile::Load()
   LogStartUp(_T("Loading profiles"));
   // load registry backup if it exists
   LoadFile(defaultProfileFile);
-  LoadFile(startProfileFile);
+
+  if (_tcscmp(startProfileFile, defaultProfileFile) != 0)
+    LoadFile(startProfileFile);
 }
 
 void
