@@ -67,15 +67,11 @@ Copyright_License {
 #include <tchar.h>
 #include <limits.h>
 
-#include <algorithm>
-
 // used when stretching dialog and components
 static int dialog_width_scale = 1024;
 
 // to full width of screen
 DialogStyle_t g_eDialogStyle = eDialogFullWidth;
-
-using std::min;
 
 /**
  * Converts a String into an Integer and returns
