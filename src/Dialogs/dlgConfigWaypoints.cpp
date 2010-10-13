@@ -80,7 +80,7 @@ OnWaypointEditClicked(WindowControl * Sender)
 
   const Waypoint *way_point = dlgWayPointSelect(XCSoarInterface::main_window,
                                                 XCSoarInterface::Basic().Location);
-  if (way_point){
+  if (way_point) {
     if (way_points.get_writable(*way_point)) {
       Waypoint wp_copy = *way_point;
       if (dlgWaypointEditShowModal(wp_copy)) {
@@ -136,7 +136,8 @@ static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-void dlgConfigWaypointsShowModal()
+void
+dlgConfigWaypointsShowModal()
 {
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   Layout::landscape ? _T("IDR_XML_CONFIG_WAYPOINTS_L") :
