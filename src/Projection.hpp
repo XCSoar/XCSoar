@@ -41,6 +41,7 @@ Copyright_License {
 
 #include "Navigation/GeoPoint.hpp"
 #include "Topology/shapelib/mapprimitive.h"
+#include "Geo/BoundsRectangle.hpp"
 #include "Math/FastRotation.hpp"
 #include "Compiler.h"
 
@@ -120,7 +121,7 @@ public:
 
   // used by terrain renderer, topology and airspace
   gcc_pure
-  rectObj CalculateScreenBounds(const fixed scale) const;
+  BoundsRectangle CalculateScreenBounds(const fixed scale) const;
 
 protected:
   gcc_const
@@ -142,7 +143,7 @@ private:
   fixed DrawScale;
   fixed InvDrawScale;
   fixed m_scale_meters_to_screen; 
-  rectObj   screenbounds_latlon;
+  BoundsRectangle screenbounds_latlon;
 };
 
 #endif

@@ -79,8 +79,8 @@ TopologyFile::TopologyFile(const char *filename, const Color thecolor,
 
   shapefileopen = true;
 
-  cache_bounds.minx = cache_bounds.miny =
-    cache_bounds.maxx = cache_bounds.maxy = 0;
+  cache_bounds.west = cache_bounds.east =
+    cache_bounds.south = cache_bounds.north = Angle::native(fixed_zero);
 
   for (int i = 0; i < shpfile.numshapes; i++)
     shpCache[i] = NULL;
@@ -110,17 +110,13 @@ TopologyFile::ClearCache()
 }
 
 rectObj
-TopologyFile::ConvertRect(const rectObj &src)
+TopologyFile::ConvertRect(const BoundsRectangle &br)
 {
-  rectObj dest = src;
-
-#ifdef RADIANS
-  dest.minx *= RAD_TO_DEG;
-  dest.miny *= RAD_TO_DEG;
-  dest.maxx *= RAD_TO_DEG;
-  dest.maxy *= RAD_TO_DEG;
-#endif
-
+  rectObj dest;
+  dest.minx = br.west.value_degrees();
+  dest.maxx = br.east.value_degrees();
+  dest.miny = br.south.value_degrees();
+  dest.maxy = br.north.value_degrees();
   return dest;
 }
 
@@ -134,8 +130,9 @@ TopologyFile::updateCache(const Projection &map_projection)
     /* not visible, don't update cache now */
     return;
 
-  rectObj screenRect = map_projection.CalculateScreenBounds(fixed_zero);
-  if (msRectContained(&screenRect, &cache_bounds))
+  const BoundsRectangle screenRect =
+    map_projection.CalculateScreenBounds(fixed_zero);
+  if (cache_bounds.inside(screenRect))
     /* the cache is still fresh */
     return;
 
@@ -205,14 +202,8 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 
   int iskip = GetSkipSteps(map_scale);
 
-  rectObj screenRect = projection.CalculateScreenBounds(fixed_zero);
-
-#ifdef RADIANS
-  screenRect.minx *= RAD_TO_DEG;
-  screenRect.miny *= RAD_TO_DEG;
-  screenRect.maxx *= RAD_TO_DEG;
-  screenRect.maxy *= RAD_TO_DEG;
-#endif
+  const rectObj screenRect =
+    ConvertRect(projection.CalculateScreenBounds(fixed_zero));
 
   for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
     const XShape *cshape = shpCache[ixshp];
@@ -289,14 +280,8 @@ TopologyFile::PaintLabels(Canvas &canvas,
 
   int iskip = GetSkipSteps(map_scale);
 
-  rectObj screenRect = projection.CalculateScreenBounds(fixed_zero);
-
-#ifdef RADIANS
-  screenRect.minx *= RAD_TO_DEG;
-  screenRect.miny *= RAD_TO_DEG;
-  screenRect.maxx *= RAD_TO_DEG;
-  screenRect.maxy *= RAD_TO_DEG;
-#endif
+  rectObj screenRect =
+    ConvertRect(projection.CalculateScreenBounds(fixed_zero));
 
   for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
     const XShape *cshape = shpCache[ixshp];

@@ -176,13 +176,7 @@ Projection::LonLat2Screen(const pointObj* const ptin,
 bool
 Projection::LonLatVisible(const GeoPoint &loc) const
 {
-  if (loc.Longitude.value_native() > fixed(screenbounds_latlon.minx) &&
-      loc.Longitude.value_native() < fixed(screenbounds_latlon.maxx) &&
-      loc.Latitude.value_native() > fixed(screenbounds_latlon.miny) &&
-      loc.Latitude.value_native() < fixed(screenbounds_latlon.maxy))
-    return true;
-
-  return false;
+  return screenbounds_latlon.inside(loc);
 }
 
 bool
@@ -226,17 +220,17 @@ Projection::UpdateScreenBounds()
   screenbounds_latlon = CalculateScreenBounds(fixed_zero);
 }
 
-rectObj
+BoundsRectangle
 Projection::CalculateScreenBounds(const fixed scale) const
 {
   // compute lat lon extents of visible screen
-  rectObj sb;
+  BoundsRectangle sb;
 
   if (scale >= fixed_one) {
     POINT screen_center = LonLat2Screen(PanLocation);
 
-    sb.minx = sb.maxx = PanLocation.Longitude.value_native();
-    sb.miny = sb.maxy = PanLocation.Latitude.value_native();
+    sb.west = sb.east = PanLocation.Longitude;
+    sb.south = sb.north = PanLocation.Latitude;
 
     int dx, dy;
     unsigned int maxsc = 0;
@@ -259,51 +253,51 @@ Projection::CalculateScreenBounds(const fixed scale) const
       p.x = screen_center.x + iround(ang.fastcosine() * maxsc * scale);
       p.y = screen_center.y + iround(ang.fastsine() * maxsc * scale);
       GeoPoint g = Screen2LonLat(p.x, p.y);
-      sb.minx = min((double)g.Longitude.value_native(), sb.minx);
-      sb.miny = min((double)g.Latitude.value_native(), sb.miny);
-      sb.maxx = max((double)g.Longitude.value_native(), sb.maxx);
-      sb.maxy = max((double)g.Latitude.value_native(), sb.maxy);
+      sb.west = min(g.Longitude, sb.west);
+      sb.south = min(g.Latitude, sb.south);
+      sb.east = max(g.Longitude, sb.east);
+      sb.north = max(g.Latitude, sb.north);
     }
   } else {
-    fixed xmin, xmax, ymin, ymax;
+    Angle xmin, xmax, ymin, ymax;
     int x, y;
 
     x = MapRect.left;
     y = MapRect.top;
     GeoPoint g = Screen2LonLat(x, y);
-    xmin = g.Longitude.value_native();
-    xmax = g.Longitude.value_native();
-    ymin = g.Latitude.value_native();
-    ymax = g.Latitude.value_native();
+    xmin = g.Longitude;
+    xmax = g.Longitude;
+    ymin = g.Latitude;
+    ymax = g.Latitude;
 
     x = MapRect.right;
     y = MapRect.top;
     g = Screen2LonLat(x, y);
-    xmin = min(xmin, g.Longitude.value_native());
-    xmax = max(xmax, g.Longitude.value_native());
-    ymin = min(ymin, g.Latitude.value_native());
-    ymax = max(ymax, g.Latitude.value_native());
+    xmin = min(xmin, g.Longitude);
+    xmax = max(xmax, g.Longitude);
+    ymin = min(ymin, g.Latitude);
+    ymax = max(ymax, g.Latitude);
 
     x = MapRect.right;
     y = MapRect.bottom;
     g = Screen2LonLat(x, y);
-    xmin = min(xmin, g.Longitude.value_native());
-    xmax = max(xmax, g.Longitude.value_native());
-    ymin = min(ymin, g.Latitude.value_native());
-    ymax = max(ymax, g.Latitude.value_native());
+    xmin = min(xmin, g.Longitude);
+    xmax = max(xmax, g.Longitude);
+    ymin = min(ymin, g.Latitude);
+    ymax = max(ymax, g.Latitude);
 
     x = MapRect.left;
     y = MapRect.bottom;
     g = Screen2LonLat(x, y);
-    xmin = min(xmin, g.Longitude.value_native());
-    xmax = max(xmax, g.Longitude.value_native());
-    ymin = min(ymin, g.Latitude.value_native());
-    ymax = max(ymax, g.Latitude.value_native());
+    xmin = min(xmin, g.Longitude);
+    xmax = max(xmax, g.Longitude);
+    ymin = min(ymin, g.Latitude);
+    ymax = max(ymax, g.Latitude);
 
-    sb.minx = xmin;
-    sb.maxx = xmax;
-    sb.miny = ymin;
-    sb.maxy = ymax;
+    sb.west = xmin;
+    sb.east = xmax;
+    sb.south = ymin;
+    sb.north = ymax;
   }
 
   return sb;
