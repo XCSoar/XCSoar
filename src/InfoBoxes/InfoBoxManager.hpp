@@ -54,7 +54,7 @@ protected:
   virtual void on_paint(Canvas &canvas);
 };
 
-class InfoBoxManager: public ActionInterface
+class InfoBoxManager
 {
 public:
   enum mode {

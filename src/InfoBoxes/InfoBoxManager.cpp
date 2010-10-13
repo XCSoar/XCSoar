@@ -190,7 +190,7 @@ InfoBoxManager::Event_Select(int i)
   }
 
   if (InfoFocus >= 0)
-    main_window.map.set_focus();
+    XCSoarInterface::main_window.map.set_focus();
   else
     InfoBoxes[i]->set_focus();
 }
@@ -198,11 +198,11 @@ InfoBoxManager::Event_Select(int i)
 enum InfoBoxManager::mode
 InfoBoxManager::GetCurrentMode()
 {
-  if (SettingsMap().EnableAuxiliaryInfo)
+  if (XCSoarInterface::SettingsMap().EnableAuxiliaryInfo)
     return MODE_AUXILIARY;
-  else if (MapProjection().GetDisplayMode() == dmCircling)
+  else if (XCSoarInterface::MapProjection().GetDisplayMode() == dmCircling)
     return MODE_CIRCLING;
-  else if (MapProjection().GetDisplayMode() == dmFinalGlide)
+  else if (XCSoarInterface::MapProjection().GetDisplayMode() == dmFinalGlide)
     return MODE_FINAL_GLIDE;
   else
     return MODE_CRUISE;
@@ -394,7 +394,7 @@ InfoBoxManager::InfoBoxDrawIfDirty()
   // This should save lots of battery power due to CPU usage
   // of drawing the screen
 
-  if (InfoBoxesDirty && !SettingsMap().ScreenBlanked) {
+  if (InfoBoxesDirty && !XCSoarInterface::SettingsMap().ScreenBlanked) {
     DisplayInfoBox();
     InfoBoxesDirty = false;
   }
@@ -411,9 +411,9 @@ InfoBoxManager::ProcessTimer()
 {
   static fixed lasttime;
 
-  if (Basic().Time != lasttime) {
+  if (XCSoarInterface::Basic().Time != lasttime) {
     SetDirty();
-    lasttime = Basic().Time;
+    lasttime = XCSoarInterface::Basic().Time;
   }
 
   InfoBoxDrawIfDirty();
@@ -505,7 +505,7 @@ InfoBoxManager::Create(RECT rc)
 
   WindowStyle style;
   style.hide();
-  full_window.set(main_window, rc.left, rc.top,
+  full_window.set(XCSoarInterface::main_window, rc.left, rc.top,
                   rc.right - rc.left, rc.bottom - rc.top);
 
   // create infobox windows
@@ -514,8 +514,9 @@ InfoBoxManager::Create(RECT rc)
     InfoBoxLayout::GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
     int Border = GetInfoBoxBorder(i);
 
-    InfoBoxes[i] = new InfoBoxWindow(main_window, xoff, yoff, sizex, sizey,
-                               Border, info_box_look);
+    InfoBoxes[i] = new InfoBoxWindow(XCSoarInterface::main_window,
+                                     xoff, yoff, sizex, sizey,
+                                     Border, info_box_look);
   }
 }
 
@@ -561,7 +562,7 @@ InfoBoxManager::SetupFocused()
   WindowStyle style;
   style.hide();
 
-  WndForm form(main_window, 0, 0, 256, 128, _T(""), style);
+  WndForm form(XCSoarInterface::main_window, 0, 0, 256, 128, _T(""), style);
   WndProperty control(form, _("InfoBox"), 0, 0, 256, 128, 128,
                       style, EditWindowStyle(), NULL);
   control.SetOnHelpCallback(OnInfoBoxHelp);
@@ -577,7 +578,7 @@ InfoBoxManager::SetupFocused()
 
   /* let the user select */
 
-  dlgComboPicker(main_window, &control);
+  dlgComboPicker(XCSoarInterface::main_window, &control);
 
   /* was there a modification? */
 
