@@ -94,7 +94,7 @@ OnWaypointEditClicked(WindowControl * Sender)
 }
 
 static void
-AskWaypointSave(void)
+SaveWaypoints()
 {
   way_points.optimise();
   WayPointGlue::SaveWaypoints(way_points);
@@ -106,8 +106,7 @@ static void
 OnWaypointSaveClicked(WindowControl * Sender)
 {
   (void)Sender;
-
-  AskWaypointSave();
+  SaveWaypoints();
 }
 
 static void
@@ -154,7 +153,7 @@ void dlgConfigWaypointsShowModal()
   if (WaypointsNeedSave) {
     if (MessageBoxX(_("Save changes to waypoint file?"), _("Waypoints edited"),
                     MB_YESNO | MB_ICONQUESTION) == IDYES)
-      AskWaypointSave();
+      SaveWaypoints();
   }
 
   delete wf;
