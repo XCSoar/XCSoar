@@ -470,7 +470,7 @@ static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, char *status
 
   if(!msRectOverlap(&rect, &aoi)) { // skip rest of this node and sub-nodes
     offset += numshapes*sizeof(int) + sizeof(int);
-    fseek(disktree->fp, offset, SEEK_CUR);
+    zzip_seek(disktree->zfp, offset, SEEK_CUR);
     return;
   }
   if(numshapes > 0) {
