@@ -153,8 +153,7 @@ static int
 Scale_Dlg_Width(const int x, const DialogStyle_t eDialogStyle) 
 {
   if (!Layout::ScaleSupported())
-    // todo: return x; ?!
-    return Layout::Scale(x);
+    return x;
 
   if (eDialogStyle == eDialogFullWidth)
     // stretch width to fill screen horizontally
