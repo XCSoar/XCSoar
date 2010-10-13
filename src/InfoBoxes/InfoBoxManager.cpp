@@ -66,7 +66,7 @@ namespace InfoBoxManager
   /** the window for displaying infoboxes full-screen */
   InfoBoxFullWindow full_window;
 
-  int getType(unsigned i);
+  unsigned getType(unsigned box);
   void setType(unsigned i, char j);
   void FocusOnWindow(unsigned i, bool selected);
 
@@ -85,7 +85,7 @@ InfoBoxWindow *InfoBoxes[MAXINFOWINDOWS];
 static InfoBoxLook info_box_look;
 
 #ifdef GNAV
-static int InfoType[MAXINFOWINDOWS] = {
+static unsigned InfoType[MAXINFOWINDOWS] = {
   0x340E0E0E,
   0x33120B0B,
   0x31030316,
@@ -97,7 +97,7 @@ static int InfoType[MAXINFOWINDOWS] = {
   0x1A2D2D2D
 };
 #else
-static int InfoType[MAXINFOWINDOWS] = {
+static unsigned InfoType[MAXINFOWINDOWS] = {
   0x0E0E0E,
   0x0B1215,
   0x040000,
@@ -220,46 +220,46 @@ InfoBoxManager::GetCurrentMode()
     return MODE_CRUISE;
 }
 
-int
-InfoBoxManager::GetType(unsigned i, enum mode mode)
+unsigned
+InfoBoxManager::GetType(unsigned box, enum mode mode)
 {
-  assert(i < MAXINFOWINDOWS);
+  assert(box < MAXINFOWINDOWS);
 
   switch (mode) {
   case MODE_CIRCLING:
-    return InfoType[i] & 0xff;
+    return InfoType[box] & 0xff;
   case MODE_CRUISE:
-    return (InfoType[i] >> 8) & 0xff;
+    return (InfoType[box] >> 8) & 0xff;
   case MODE_FINAL_GLIDE:
-    return (InfoType[i] >> 16) & 0xff;
+    return (InfoType[box] >> 16) & 0xff;
   case MODE_AUXILIARY:
-    return (InfoType[i] >> 24) & 0xff;
+    return (InfoType[box] >> 24) & 0xff;
   }
 
   return 0xdeadbeef; /* not reachable */
 }
 
-int
-InfoBoxManager::GetTypes(unsigned i)
+unsigned
+InfoBoxManager::GetTypes(unsigned box)
 {
-  assert(i < MAXINFOWINDOWS);
+  assert(box < MAXINFOWINDOWS);
 
-  return InfoType[i];
+  return InfoType[box];
 }
 
 void
-InfoBoxManager::SetTypes(unsigned i, unsigned j)
+InfoBoxManager::SetTypes(unsigned box, unsigned types)
 {
-  assert(i < MAXINFOWINDOWS);
+  assert(box < MAXINFOWINDOWS);
 
-  InfoType[i] = j;
+  InfoType[box] = types;
   // TODO: check it's within range
 }
 
-int
-InfoBoxManager::getType(unsigned i)
+unsigned
+InfoBoxManager::getType(unsigned box)
 {
-  unsigned retval = GetType(i, GetCurrentMode());
+  unsigned retval = GetType(box, GetCurrentMode());
   return std::min(InfoBoxFactory::NUM_TYPES - 1, retval);
 }
 
@@ -284,26 +284,26 @@ InfoBoxManager::IsEmpty()
 }
 
 void
-InfoBoxManager::SetType(unsigned i, char j, enum mode mode)
+InfoBoxManager::SetType(unsigned i, char type, enum mode mode)
 {
   assert(i < MAXINFOWINDOWS);
 
   switch (mode) {
   case MODE_CIRCLING:
     InfoType[i] &= 0xffffff00;
-    InfoType[i] += j;
+    InfoType[i] += type;
     break;
   case MODE_CRUISE:
     InfoType[i] &= 0xffff00ff;
-    InfoType[i] += (j << 8);
+    InfoType[i] += (type << 8);
     break;
   case MODE_FINAL_GLIDE:
     InfoType[i] &= 0xff00ffff;
-    InfoType[i] += (j << 16);
+    InfoType[i] += (type << 16);
     break;
   case MODE_AUXILIARY:
     InfoType[i] &= 0x00ffffff;
-    InfoType[i] += (j << 24);
+    InfoType[i] += (type << 24);
     break;
   }
 }
