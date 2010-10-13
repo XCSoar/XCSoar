@@ -39,9 +39,6 @@ extern "C" {
 typedef unsigned char uchar;
 
 typedef	struct {
-    FILE        *fpSHP;
-    FILE	*fpSHX;
-
   ZZIP_FILE     *zfpSHP; // JMW Zip
   ZZIP_FILE	*zfpSHX; // JMW Zip
 
