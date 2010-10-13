@@ -63,7 +63,22 @@ Copyright_License {
 
 using std::min;
 
-InfoBoxFullWindow InfoBoxManager::full_window;
+namespace InfoBoxManager
+{
+  /** the window for displaying infoboxes full-screen */
+  InfoBoxFullWindow full_window;
+
+  void ResetInfoBoxes();
+  int getType(unsigned i);
+  void setType(unsigned i, char j);
+  void FocusOnWindow(unsigned i, bool selected);
+
+  void DisplayInfoBox();
+  void InfoBoxDrawIfDirty();
+  int GetFocused();
+
+  int GetInfoBoxBorder(unsigned i);
+}
 
 static bool InfoBoxesDirty = false;
 static bool InfoBoxesHidden = false;

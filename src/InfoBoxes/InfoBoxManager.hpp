@@ -54,9 +54,8 @@ protected:
   virtual void on_paint(Canvas &canvas);
 };
 
-class InfoBoxManager
+namespace InfoBoxManager
 {
-public:
   enum mode {
     MODE_CIRCLING,
     MODE_CRUISE,
@@ -64,58 +63,41 @@ public:
     MODE_AUXILIARY,
   };
 
-private:
-  /** the window for displaying infoboxes full-screen */
-  static InfoBoxFullWindow full_window;
+  void Event_Select(int i);
+  void Event_Change(int i);
 
-private:
-  static void ResetInfoBoxes();
-  static int getType(unsigned i);
-  static void setType(unsigned i, char j);
-  static void FocusOnWindow(unsigned i, bool selected);
+  const TCHAR *GetTypeDescription(unsigned i);
 
-  static void DisplayInfoBox();
-  static void InfoBoxDrawIfDirty();
-  static int GetFocused();
+  void ProcessKey(InfoBoxContent::InfoBoxKeyCodes keycode);
+  bool Click(InfoBoxWindow &ib);
 
-  static int GetInfoBoxBorder(unsigned i);
+  void ProcessTimer();
+  void SetDirty();
 
-public:
-  static void Event_Select(int i);
-  static void Event_Change(int i);
+  void Initialize();
+  void Create(RECT rc);
+  void Destroy();
+  void Paint();
+  void Show();
+  void Hide();
 
-  static const TCHAR *GetTypeDescription(unsigned i);
+  enum mode GetCurrentMode();
 
-  static void ProcessKey(InfoBoxContent::InfoBoxKeyCodes keycode);
-  static bool Click(InfoBoxWindow &ib);
+  int getType(unsigned i, enum mode mode);
+  void setType(unsigned i, char j, enum mode mode);
 
-  static void ProcessTimer();
-  static void SetDirty();
+  int getTypeAll(unsigned i);
+  void setTypeAll(unsigned i, unsigned j);
 
-  static void Initialize();
-  static void Create(RECT rc);
-  static void Destroy();
-  static void Paint();
-  static void Show();
-  static void Hide();
+  bool IsEmpty(enum mode mode);
+  bool IsEmpty();
 
-  static enum mode GetCurrentMode();
-
-  static int getType(unsigned i, enum mode mode);
-  static void setType(unsigned i, char j, enum mode mode);
-
-  static int getTypeAll(unsigned i);
-  static void setTypeAll(unsigned i, unsigned j);
-
-  static bool IsEmpty(enum mode mode);
-  static bool IsEmpty();
-
-  static bool HasFocus();
+  bool HasFocus();
 
   /**
    * Opens a configuration dialog for the focused InfoBox.
    */
-  static void SetupFocused();
+  void SetupFocused();
 };
 
 #endif
