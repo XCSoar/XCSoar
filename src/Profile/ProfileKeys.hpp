@@ -82,7 +82,6 @@ extern const TCHAR szProfileInputFile[];
 extern const TCHAR szProfileAltMode[];
 extern const TCHAR szProfileClipAlt[];
 extern const TCHAR szProfileAltMargin[];
-extern const TCHAR szProfileRegKey[];
 extern const TCHAR szProfileSnailTrail[];
 extern const TCHAR szProfileDrawTopology[];
 extern const TCHAR szProfileDrawTerrain[];

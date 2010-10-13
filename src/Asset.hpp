@@ -42,7 +42,6 @@ Copyright_License {
 
 // asset/registration data
 extern TCHAR strAssetNumber[];
-extern TCHAR strRegKey[];
 
 void ReadAssetNumber(void);
 

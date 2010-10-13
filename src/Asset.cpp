@@ -51,7 +51,6 @@ Copyright_License {
 
 // Registration Data
 TCHAR strAssetNumber[MAX_LOADSTRING] = _T(""); //4G17DW31L0HY");
-TCHAR strRegKey[MAX_LOADSTRING] = _T("");
 
 #if defined(_WIN32_WCE) && !defined(GNAV)
 ModelType GlobalModelType = MODELTYPE_PNA_PNA;

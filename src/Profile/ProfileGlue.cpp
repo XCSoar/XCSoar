@@ -42,7 +42,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "GlideRatio.hpp"
 #include "Screen/Fonts.hpp"
-#include "Asset.hpp"
 #include "Dialogs/XML.hpp"
 #include "WayPointFile.hpp"
 #include "UtilsFont.hpp"
@@ -274,8 +273,6 @@ Profile::Use()
       settings_computer.SafetySpeed);
   Get(szProfilePolarID,
       settings_computer.POLARID);
-
-  Get(szProfileRegKey, strRegKey, 65);
 
   for (i = 0; i < AIRSPACECLASSCOUNT; i++) {
     if (Get(szProfileAirspaceMode[i], Temp)) {
