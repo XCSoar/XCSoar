@@ -113,8 +113,6 @@ MainWindow::Initialise()
 
   LogStartUp(_T("Initialise fonts"));
   Fonts::Initialize();
-
-  InfoBoxManager::Initialize();
 }
 
 void

@@ -74,7 +74,6 @@ namespace InfoBoxManager
   void ProcessTimer();
   void SetDirty();
 
-  void Initialize();
   void Create(RECT rc);
   void Destroy();
   void Paint();

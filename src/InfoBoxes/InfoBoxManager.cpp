@@ -66,7 +66,6 @@ namespace InfoBoxManager
   /** the window for displaying infoboxes full-screen */
   InfoBoxFullWindow full_window;
 
-  void ResetInfoBoxes();
   int getType(unsigned i);
   void setType(unsigned i, char j);
   void FocusOnWindow(unsigned i, bool selected);
@@ -85,18 +84,8 @@ InfoBoxWindow *InfoBoxes[MAXINFOWINDOWS];
 
 static InfoBoxLook info_box_look;
 
-static const int InfoTypeDefault[MAXINFOWINDOWS] = {
-  0x0E0E0E,
-  0x0B1215,
-  0x040000,
-  0x012316,
-  0x0A0A0A,
-  0x222223,
-  0x060606,
-  0x191919
-};
-
-static const int InfoTypeAltairDefault[MAXINFOWINDOWS] = {
+#ifdef GNAV
+static int InfoType[MAXINFOWINDOWS] = {
   0x340E0E0E,
   0x33120B0B,
   0x31030316,
@@ -107,8 +96,18 @@ static const int InfoTypeAltairDefault[MAXINFOWINDOWS] = {
   0x250F0F0F,
   0x1A2D2D2D
 };
-
-static int InfoType[MAXINFOWINDOWS];
+#else
+static int InfoType[MAXINFOWINDOWS] = {
+  0x0E0E0E,
+  0x0B1215,
+  0x040000,
+  0x012316,
+  0x0A0A0A,
+  0x222223,
+  0x060606,
+  0x191919
+};
+#endif
 
 void
 InfoBoxFullWindow::on_paint(Canvas &canvas)
@@ -432,12 +431,6 @@ InfoBoxManager::ProcessTimer()
   InfoBoxDrawIfDirty();
 }
 
-void InfoBoxManager::ResetInfoBoxes() {
-  memcpy(InfoType,
-         is_altair() ? InfoTypeAltairDefault : InfoTypeDefault,
-         sizeof(InfoType));
-}
-
 const TCHAR *
 InfoBoxManager::GetTypeDescription(unsigned i)
 {
@@ -476,12 +469,6 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
   }
 
   return BORDERRIGHT | BORDERBOTTOM;
-}
-
-void
-InfoBoxManager::Initialize()
-{
-  ResetInfoBoxes();
 }
 
 void
