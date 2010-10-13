@@ -167,14 +167,6 @@ Profile::SetFiles(const TCHAR* override)
     _tcsncpy(startProfileFile, override, MAX_PATH - 1);
 }
 
-void
-Profile::SetStringIfAbsent(const TCHAR *key, const TCHAR *value)
-{
-  TCHAR temp[MAX_PATH];
-  if (!Get(key, temp, MAX_PATH))
-    Set(key, value);
-}
-
 bool
 Profile::GetPath(const TCHAR *key, TCHAR *value)
 {

@@ -53,34 +53,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-static void
-SetAltairDefaults()
-{
-  // these are redundant b/c they're also added to "InitialiseFontsHardCoded"
-  Profile::SetStringIfAbsent(szProfileFontInfoWindowFont,
-      _T("24,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
-  Profile::SetStringIfAbsent(szProfileFontTitleWindowFont,
-      _T("10,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicNineCond"));
-  Profile::SetStringIfAbsent(szProfileFontCDIWindowFont,
-      _T("19,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicEighteenCond"));
-  Profile::SetStringIfAbsent(szProfileFontMapLabelFont,
-      _T("13,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicTwelveCond"));
-  Profile::SetStringIfAbsent(szProfileFontStatisticsFont,
-      _T("15,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
-  Profile::SetStringIfAbsent(szProfileFontMapWindowFont,
-      _T("15,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
-  Profile::SetStringIfAbsent(szProfileFontMapWindowBoldFont,
-      _T("15,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
-  Profile::SetStringIfAbsent(szProfileFontBugsBallastFont,
-      _T("24,0,0,0,750,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
-  Profile::SetStringIfAbsent(szProfileFontAirspacePressFont,
-      _T("24,0,0,0,750,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
-  Profile::SetStringIfAbsent(szProfileFontAirspaceColourDlgFont,
-      _T("14,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
-  Profile::SetStringIfAbsent(szProfileFontTeamCodeFont,
-      _T("19,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicEighteenCond"));
-}
-
 // This function checks to see if Final Glide mode infoboxes have been
 // initialised.  If all are zero, then the current configuration was
 // using XCSoarV3 infoboxes, so copy settings from cruise mode.
@@ -118,9 +90,6 @@ Profile::Use()
   int i;
 
   LogStartUp(_T("Read registry settings"));
-
-  if (is_altair())
-    SetAltairDefaults();
 
   OrderedTaskBehaviour &osettings_task = 
     XCSoarInterface::SetSettingsComputer().ordered_defaults;

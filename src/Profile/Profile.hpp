@@ -120,8 +120,6 @@ namespace Profile
    */
   void SetFiles(const TCHAR* override);
 
-  void SetStringIfAbsent(const TCHAR *key, const TCHAR *value);
-
   /**
    * Reads a configured path from the profile, and expands it with
    * ExpandLocalPath().
