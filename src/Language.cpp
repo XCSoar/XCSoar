@@ -53,11 +53,12 @@ Copyright_License {
 
 #else
 
-#include "MOFile.hpp"
+#include "MOLoader.hpp"
 
 #include <memory>
 
-static std::auto_ptr<MOFile> mo_file;
+static std::auto_ptr<MOLoader> mo_loader;
+static const MOFile *mo_file;
 
 #ifdef _UNICODE
 #include "Util/tstring.hpp"
@@ -85,7 +86,7 @@ gettext(const TCHAR* text)
 {
   assert(text != NULL);
 
-  if (string_is_empty(text) || mo_file.get() == NULL)
+  if (string_is_empty(text) || mo_file == NULL)
     return text;
 
 #ifdef _UNICODE
@@ -144,9 +145,11 @@ ReadLanguageFile()
   if (!Profile::GetPath(szProfileLanguageFile, szFile1))
     LocalPath(szFile1, _T("default.po"));
 
-  mo_file.reset(new MOFile(szFile1));
-  if (mo_file->error())
-    mo_file.reset();
+  mo_loader.reset(new MOLoader(szFile1));
+  if (mo_loader->error())
+    mo_loader.reset();
+  else
+    mo_file = &mo_loader->get();
 
 #endif /* !HAVE_POSIX */
 }

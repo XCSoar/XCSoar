@@ -36,60 +36,40 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MO_FILE_HPP
-#define XCSOAR_MO_FILE_HPP
+#ifndef XCSOAR_MO_LOADER_HPP
+#define XCSOAR_MO_LOADER_HPP
 
-#include "Util/AllocatedArray.hpp"
-
-#include <stdint.h>
+#include "MOFile.hpp"
+#include "OS/FileMapping.hpp"
 
 /**
  * Loader for GNU gettext *.mo files.
  */
-class MOFile {
-  struct mo_header {
-    uint32_t magic;
-    uint32_t format_revision;
-    uint32_t num_strings;
-    uint32_t original_table_offset, translation_table_offset;
-    uint32_t hash_table_size, hash_table_offset;
-  };
-
-  struct mo_table_entry {
-    uint32_t length;
-    uint32_t offset;
-  };
-
-  struct string_pair {
-    const char *original, *translation;
-  };
-
-  const uint8_t *data;
-  size_t size;
-
-  bool native_byte_order;
-
-  unsigned count;
-  AllocatedArray<string_pair> strings;
+class MOLoader {
+  FileMapping *mapping;
+  MOFile *file;
 
 public:
-  MOFile(const void *data, size_t size);
+  MOLoader(const void *data, size_t size)
+    :file(new MOFile(data, size)) {}
+
+  MOLoader(const TCHAR *path)
+    :mapping(new FileMapping(path)),
+     file(mapping->error()
+          ? NULL : new MOFile(mapping->data(), mapping->size())) {
+  }
+
+  ~MOLoader() {
+    delete mapping;
+  }
 
   bool error() const {
-    return count == 0;
+    return file == NULL || file->error();
   }
 
-  const char *lookup(const char *p) const;
-
-private:
-  uint32_t import_uint32(uint32_t x) const {
-    return native_byte_order
-      ? x
-      : ((x >> 24) | ((x >> 8) & 0xff00) |
-         ((x << 8) & 0xff0000) | (x << 24));
+  const MOFile &get() const {
+    return *file;
   }
-
-  const char *get_string(const struct mo_table_entry *entry) const;
 };
 
 #endif

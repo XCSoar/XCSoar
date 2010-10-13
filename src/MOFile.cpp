@@ -39,14 +39,12 @@ Copyright_License {
 #include "MOFile.hpp"
 
 #include <assert.h>
+#include <string.h>
 
-MOFile::MOFile(const TCHAR *path)
-  :mapping(path), count(0) {
-  if (mapping.error())
-    return;
-
-  const struct mo_header *header = (const struct mo_header *)mapping.data();
-  if (mapping.size() < sizeof(*header))
+MOFile::MOFile(const void *_data, size_t _size)
+  :data((const uint8_t *)_data), size(_size), count(0) {
+  const struct mo_header *header = (const struct mo_header *)_data;
+  if (size < sizeof(*header))
     return;
 
   if (header->magic == 0x950412de)
@@ -64,15 +62,15 @@ MOFile::MOFile(const TCHAR *path)
   strings.resize_discard(n);
 
   const struct mo_table_entry *entry = (const struct mo_table_entry *)
-    mapping.at(import_uint32(header->original_table_offset));
+    (const void *)(data + import_uint32(header->original_table_offset));
   for (unsigned i = 0; i < n; ++i) {
     strings[i].original = get_string(entry++);
     if (strings[i].original == NULL)
       return;
   }
 
-  entry = (const struct mo_table_entry *)
-    mapping.at(import_uint32(header->translation_table_offset));
+  entry = (const struct mo_table_entry *)(const void *)
+    (data + import_uint32(header->translation_table_offset));
   for (unsigned i = 0; i < n; ++i) {
     strings[i].translation = get_string(entry++);
     if (strings[i].translation == NULL)
@@ -100,12 +98,11 @@ MOFile::get_string(const struct mo_table_entry *entry) const
   unsigned length = import_uint32(entry->length);
   unsigned offset = import_uint32(entry->offset);
 
-  if (offset >= mapping.size() || length >= mapping.size() ||
-      (offset + length) >= mapping.size())
+  if (offset >= size || length >= size || (offset + length) >= size)
     /* overflow */
     return NULL;
 
-  const char *p = (const char *)mapping.at(offset);
+  const char *p = (const char *)(data + offset);
   if (p[length] != 0 || strlen(p) != length)
     /* invalid string */
     return NULL;

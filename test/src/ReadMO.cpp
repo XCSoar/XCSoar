@@ -1,4 +1,4 @@
-#include "MOFile.hpp"
+#include "MOLoader.hpp"
 
 #include <stdio.h>
 
@@ -24,13 +24,13 @@ int main(int argc, char **argv) {
 
   const char *original = argv[2];
 
-  MOFile mo(path);
+  MOLoader mo(path);
   if (mo.error()) {
     fprintf(stderr, "Failed to load %s\n", path);
     return 2;
   }
 
-  const char *translated = mo.lookup(original);
+  const char *translated = mo.get().lookup(original);
   if (translated == NULL) {
     fprintf(stderr, "No such string\n");
     return 3;
