@@ -23,6 +23,88 @@ SfRealloc(void *pMem, size_t nNewSize)
   return realloc(pMem, nNewSize);
 }
 
+#ifdef SHAPELIB_DISABLED
+
+
+/************************************************************************/
+/*                           writeHeader()                              */
+/*                                                                      */
+/*      This is called to write out the file header, and field          */
+/*      descriptions before writing any actual data records.  This      */
+/*      also computes all the DBFDataSet field offset/size/decimals     */
+/*      and so forth values.                                            */
+/************************************************************************/
+static void writeHeader(DBFHandle psDBF)
+
+{
+    uchar	abyHeader[32];
+    int		i;
+
+    if( !psDBF->bNoHeader )
+        return;
+
+    psDBF->bNoHeader = MS_FALSE;
+
+    /* -------------------------------------------------------------------- */
+    /*	Initialize the file header information.		    		    */
+    /* -------------------------------------------------------------------- */
+    for( i = 0; i < 32; i++ )
+        abyHeader[i] = 0;
+
+    abyHeader[0] = 0x03;		/* memo field? - just copying 	*/
+
+    /* date updated on close, record count preset at zero */
+
+    abyHeader[8] = psDBF->nHeaderLength % 256;
+    abyHeader[9] = psDBF->nHeaderLength / 256;
+    
+    abyHeader[10] = psDBF->nRecordLength % 256;
+    abyHeader[11] = psDBF->nRecordLength / 256;
+
+    /* -------------------------------------------------------------------- */
+    /*      Write the initial 32 byte file header, and all the field        */
+    /*      descriptions.                                     		    */
+    /* -------------------------------------------------------------------- */
+    fseek( psDBF->fp, 0, 0 );
+    fwrite( abyHeader, 32, 1, psDBF->fp );
+    fwrite( psDBF->pszHeader, 32, psDBF->nFields, psDBF->fp );
+
+    /* -------------------------------------------------------------------- */
+    /*      Write out the newline character if there is room for it.        */
+    /* -------------------------------------------------------------------- */
+    if( psDBF->nHeaderLength > 32*psDBF->nFields + 32 )
+    {
+        char	cNewline;
+
+        cNewline = 0x0d;
+        fwrite( &cNewline, 1, 1, psDBF->fp );
+    }
+}
+
+/************************************************************************/
+/*                           flushRecord()                              */
+/*                                                                      */
+/*      Write out the current record if there is one.                   */
+/************************************************************************/
+static void flushRecord( DBFHandle psDBF )
+
+{
+    int		nRecordOffset;
+
+    if( psDBF->bCurrentRecordModified && psDBF->nCurrentRecord > -1 )
+    {
+	psDBF->bCurrentRecordModified = MS_FALSE;
+
+	nRecordOffset = psDBF->nRecordLength * psDBF->nCurrentRecord 
+	                                             + psDBF->nHeaderLength;
+
+	fseek( psDBF->fp, nRecordOffset, 0 );
+	fwrite( psDBF->pszCurrentRecord, psDBF->nRecordLength, 1, psDBF->fp );
+    }
+}
+
+#endif /* SHAPELIB_DISABLED */
+
 /************************************************************************/
 /*                              msDBFOpen()                             */
 /*                                                                      */
@@ -69,7 +151,13 @@ DBFHandle msDBFOpen( const char * pszFilename, const char * pszAccess )
     if( psDBF->zfp == NULL )
         return( NULL );
 
+#ifdef SHAPELIB_DISABLED
+    psDBF->bNoHeader = MS_FALSE;
+#endif /* SHAPELIB_DISABLED */
     psDBF->nCurrentRecord = -1;
+#ifdef SHAPELIB_DISABLED
+    psDBF->bCurrentRecordModified = MS_FALSE;
+#endif /* SHAPELIB_DISABLED */
 
     psDBF->pszStringField = NULL;
     psDBF->nStringFieldLen = 0;
@@ -140,6 +228,40 @@ DBFHandle msDBFOpen( const char * pszFilename, const char * pszAccess )
 
 void  msDBFClose(DBFHandle psDBF)
 {
+#ifdef SHAPELIB_DISABLED
+  /* -------------------------------------------------------------------- */
+  /*      Write out header if not already written.                        */
+  /* -------------------------------------------------------------------- */
+    if( psDBF->bNoHeader )
+        writeHeader( psDBF );
+
+    flushRecord( psDBF );
+
+    /* -------------------------------------------------------------------- */
+    /*      Update last access date, and number of records if we have       */
+    /*	write access.                					    */ 
+    /* -------------------------------------------------------------------- */
+    if( psDBF->bUpdated )
+    {
+	uchar		abyFileHeader[32];
+
+	fseek( psDBF->fp, 0, 0 );
+	fread( abyFileHeader, 32, 1, psDBF->fp );
+
+	abyFileHeader[1] = 95;			/* YY */
+	abyFileHeader[2] = 7;			/* MM */
+	abyFileHeader[3] = 26;			/* DD */
+
+	abyFileHeader[4] = psDBF->nRecords % 256;
+	abyFileHeader[5] = (psDBF->nRecords/256) % 256;
+	abyFileHeader[6] = (psDBF->nRecords/(256*256)) % 256;
+	abyFileHeader[7] = (psDBF->nRecords/(256*256*256)) % 256;
+
+	fseek( psDBF->fp, 0, 0 );
+	fwrite( abyFileHeader, 32, 1, psDBF->fp );
+    }
+#endif /* SHAPELIB_DISABLED */
+
     /* -------------------------------------------------------------------- */
     /*      Close, and free resources.                                      */
     /* -------------------------------------------------------------------- */
@@ -163,6 +285,156 @@ void  msDBFClose(DBFHandle psDBF)
 
     free( psDBF );
 }
+
+#ifdef SHAPELIB_DISABLED
+
+
+/************************************************************************/
+/*                             msDBFCreate()                            */
+/*                                                                      */
+/*      Create a new .dbf file.                                         */
+/************************************************************************/
+DBFHandle msDBFCreate( const char * pszFilename )
+
+{
+    DBFHandle	psDBF;
+    FILE	*fp;
+
+    /* -------------------------------------------------------------------- */
+    /*      Create the file.                                                */
+    /* -------------------------------------------------------------------- */
+    fp = fopen( pszFilename, "wb" );
+    if( fp == NULL )
+        return( NULL );
+
+    fputc( 0, fp );
+    fclose( fp );
+
+    fp = fopen( pszFilename, "rb+" );
+    if( fp == NULL )
+        return( NULL );
+
+    /* -------------------------------------------------------------------- */
+    /*	Create the info structure.			  		    */
+    /* -------------------------------------------------------------------- */
+    psDBF = (DBFHandle) malloc(sizeof(DBFInfo));
+
+    psDBF->fp = fp;
+    psDBF->nRecords = 0;
+    psDBF->nFields = 0;
+    psDBF->nRecordLength = 1;
+    psDBF->nHeaderLength = 33;
+    
+    psDBF->panFieldOffset = NULL;
+    psDBF->panFieldSize = NULL;
+    psDBF->panFieldDecimals = NULL;
+    psDBF->pachFieldType = NULL;
+    psDBF->pszHeader = NULL;
+
+    psDBF->nCurrentRecord = -1;
+    psDBF->bCurrentRecordModified = MS_FALSE;
+    psDBF->pszCurrentRecord = NULL;
+
+    psDBF->bNoHeader = MS_TRUE;
+
+    return( psDBF );
+}
+
+/************************************************************************/
+/*                            msDBFAddField()                           */
+/*                                                                      */
+/*      Add a field to a newly created .dbf file before any records     */
+/*      are written.                                                    */
+/************************************************************************/
+int	msDBFAddField(DBFHandle psDBF, const char * pszFieldName, DBFFieldType eType, int nWidth, int nDecimals )
+{
+    char	*pszFInfo;
+    int		i;
+
+    /* -------------------------------------------------------------------- */
+    /*      Do some checking to ensure we can add records to this file.     */
+    /* -------------------------------------------------------------------- */
+    if( psDBF->nRecords > 0 )
+        return( MS_FALSE );
+
+    if( !psDBF->bNoHeader )
+        return( MS_FALSE );
+
+    if( eType != FTDouble && nDecimals != 0 )
+        return( MS_FALSE );
+
+    /* -------------------------------------------------------------------- */
+    /*      SfRealloc all the arrays larger to hold the additional field    */
+    /*      information.                                                    */
+    /* -------------------------------------------------------------------- */
+    psDBF->nFields++;
+
+    psDBF->panFieldOffset = (int *) 
+      SfRealloc( psDBF->panFieldOffset, sizeof(int) * psDBF->nFields );
+
+    psDBF->panFieldSize = (int *) 
+      SfRealloc( psDBF->panFieldSize, sizeof(int) * psDBF->nFields );
+
+    psDBF->panFieldDecimals = (int *) 
+      SfRealloc( psDBF->panFieldDecimals, sizeof(int) * psDBF->nFields );
+
+    psDBF->pachFieldType = (char *) 
+      SfRealloc( psDBF->pachFieldType, sizeof(char) * psDBF->nFields );
+
+    /* -------------------------------------------------------------------- */
+    /*      Assign the new field information fields.                        */
+    /* -------------------------------------------------------------------- */
+    psDBF->panFieldOffset[psDBF->nFields-1] = psDBF->nRecordLength;
+    psDBF->nRecordLength += nWidth;
+    psDBF->panFieldSize[psDBF->nFields-1] = nWidth;
+    psDBF->panFieldDecimals[psDBF->nFields-1] = nDecimals;
+
+    if( eType == FTString )
+        psDBF->pachFieldType[psDBF->nFields-1] = 'C';
+    else
+        psDBF->pachFieldType[psDBF->nFields-1] = 'N';
+
+    /* -------------------------------------------------------------------- */
+    /*      Extend the required header information.                         */
+    /* -------------------------------------------------------------------- */
+    psDBF->nHeaderLength += 32;
+    psDBF->bUpdated = MS_FALSE;
+
+    psDBF->pszHeader = (char *) SfRealloc(psDBF->pszHeader,psDBF->nFields*32);
+
+    pszFInfo = psDBF->pszHeader + 32 * (psDBF->nFields-1);
+
+    for( i = 0; i < 32; i++ )
+        pszFInfo[i] = '\0';
+
+    if( strlen(pszFieldName) < 10 )
+        strncpy( pszFInfo, pszFieldName, strlen(pszFieldName));
+    else
+        strncpy( pszFInfo, pszFieldName, 10);
+
+    pszFInfo[11] = psDBF->pachFieldType[psDBF->nFields-1];
+
+    if( eType == FTString )
+    {
+        pszFInfo[16] = nWidth % 256;
+        pszFInfo[17] = nWidth / 256;
+    }
+    else
+    {
+        pszFInfo[16] = nWidth;
+        pszFInfo[17] = nDecimals;
+    }
+    
+    /* -------------------------------------------------------------------- */
+    /*      Make the current record buffer appropriately larger.            */
+    /* -------------------------------------------------------------------- */
+    psDBF->pszCurrentRecord = (char *) SfRealloc(psDBF->pszCurrentRecord,
+					       psDBF->nRecordLength);
+
+    return( psDBF->nFields-1 );
+}
+
+#endif /* SHAPELIB_DISABLED */
 
 /************************************************************************/
 /*                          msDBFReadAttribute()                        */
@@ -196,6 +468,10 @@ static char *msDBFReadAttribute(DBFHandle psDBF, int hEntity, int iField )
     /* -------------------------------------------------------------------- */
     if( psDBF->nCurrentRecord != hEntity )
     {
+#ifdef SHAPELIB_DISABLED
+	flushRecord( psDBF );
+#endif /* SHAPELIB_DISABLED */
+
 	nRecordOffset = psDBF->nRecordLength * hEntity + psDBF->nHeaderLength;
 
 	zzip_seek( psDBF->zfp, nRecordOffset, 0 );
@@ -340,6 +616,134 @@ DBFFieldType msDBFGetFieldInfo( DBFHandle psDBF, int iField, char * pszFieldName
       return( FTString );
     }
 }
+
+#ifdef SHAPELIB_DISABLED
+
+
+/************************************************************************/
+/*                         msDBFWriteAttribute()                        */
+/*									*/
+/*	Write an attribute record to the file.				*/
+/************************************************************************/
+static int msDBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField, void * pValue )
+{
+  int	       	nRecordOffset, i, j;
+  uchar	*pabyRec;
+  char	szSField[40], szFormat[12];
+  
+  /* -------------------------------------------------------------------- */
+  /*	Is this a valid record?						  */
+  /* -------------------------------------------------------------------- */
+  if( hEntity < 0 || hEntity > psDBF->nRecords )
+    return( MS_FALSE );
+  
+  if( psDBF->bNoHeader )
+    writeHeader(psDBF);
+  
+  /* -------------------------------------------------------------------- */
+  /*      Is this a brand new record?                                     */
+  /* -------------------------------------------------------------------- */
+  if( hEntity == psDBF->nRecords )
+    {
+      flushRecord( psDBF );
+      
+      psDBF->nRecords++;
+      for( i = 0; i < psDBF->nRecordLength; i++ )
+	psDBF->pszCurrentRecord[i] = ' ';
+      
+      psDBF->nCurrentRecord = hEntity;
+    }
+  
+  /* -------------------------------------------------------------------- */
+  /*      Is this an existing record, but different than the last one     */
+  /*      we accessed?                                                    */
+  /* -------------------------------------------------------------------- */
+  if( psDBF->nCurrentRecord != hEntity )
+    {
+      flushRecord( psDBF );
+      
+      nRecordOffset = psDBF->nRecordLength * hEntity + psDBF->nHeaderLength;
+      
+      fseek( psDBF->fp, nRecordOffset, 0 );
+      fread( psDBF->pszCurrentRecord, psDBF->nRecordLength, 1, psDBF->fp );
+
+      psDBF->nCurrentRecord = hEntity;
+    }
+  
+  pabyRec = (uchar *) psDBF->pszCurrentRecord;
+  
+  /* -------------------------------------------------------------------- */
+  /*      Assign all the record fields.                                   */
+  /* -------------------------------------------------------------------- */
+  switch( psDBF->pachFieldType[iField] ) {
+  case 'D':
+  case 'N':
+  case 'F':
+    if( psDBF->panFieldDecimals[iField] == 0 ) {
+      sprintf( szFormat, "%%%dd", psDBF->panFieldSize[iField] );
+      sprintf(szSField, szFormat, (int) *((double *) pValue) );
+      if( strlen(szSField) > psDBF->panFieldSize[iField] )
+	szSField[psDBF->panFieldSize[iField]] = '\0';
+      strncpy((char *) (pabyRec+psDBF->panFieldOffset[iField]), szSField, strlen(szSField) );
+    } else {
+      sprintf( szFormat, "%%%d.%df", psDBF->panFieldSize[iField], psDBF->panFieldDecimals[iField] );
+      sprintf(szSField, szFormat, *((double *) pValue) );
+      if( strlen(szSField) > psDBF->panFieldSize[iField] )
+	szSField[psDBF->panFieldSize[iField]] = '\0';
+      strncpy((char *) (pabyRec+psDBF->panFieldOffset[iField]),  szSField, strlen(szSField) );
+    }
+    break;
+    
+  default:
+    if( strlen((char *) pValue) > psDBF->panFieldSize[iField] )
+      j = psDBF->panFieldSize[iField];
+    else
+      j = strlen((char *) pValue);
+    
+    strncpy((char *) (pabyRec+psDBF->panFieldOffset[iField]), (char *) pValue, j );
+    break;
+  }
+  
+  psDBF->bCurrentRecordModified = MS_TRUE;
+  psDBF->bUpdated = MS_TRUE;
+  
+  return( MS_TRUE );
+}
+
+/************************************************************************/
+/*                      msDBFWriteDoubleAttribute()                     */
+/*                                                                      */
+/*      Write a double attribute.                                       */
+/************************************************************************/
+int msDBFWriteDoubleAttribute( DBFHandle psDBF, int iRecord, int iField, double dValue )
+{
+  return( msDBFWriteAttribute( psDBF, iRecord, iField, (void *) &dValue ) );
+}
+
+/************************************************************************/
+/*                      msDBFWriteIntegerAttribute()                    */
+/*                                                                      */
+/*      Write a integer attribute.                                      */
+/************************************************************************/
+
+int msDBFWriteIntegerAttribute( DBFHandle psDBF, int iRecord, int iField,	int nValue )
+{
+  double	dValue = nValue;
+  
+  return( msDBFWriteAttribute( psDBF, iRecord, iField, (void *) &dValue ) );
+}
+
+/************************************************************************/
+/*                      msDBFWriteStringAttribute()                     */
+/*                                                                      */
+/*      Write a string attribute.                                       */
+/************************************************************************/
+int msDBFWriteStringAttribute( DBFHandle psDBF, int iRecord, int iField, const char * pszValue )
+{
+  return( msDBFWriteAttribute( psDBF, iRecord, iField, (void *) pszValue ) );
+}
+
+#endif /* SHAPELIB_DISABLED */
 
 static int
 m_strcasecmp(const char *s1, const char*s2)

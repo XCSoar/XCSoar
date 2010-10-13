@@ -54,8 +54,17 @@ typedef SHPTreeInfo * SHPTreeHandle;
 
 SHPTreeHandle msSHPDiskTreeOpen(const char * pszTree, int debug);
 void msSHPDiskTreeClose(SHPTreeHandle disktree);
+treeNodeObj *readTreeNode( SHPTreeHandle disktree );
 
+treeObj *msCreateTree(shapefileObj *shapefile, int maxdepth);
+void msTreeTrim(treeObj *tree);
+void msDestroyTree(treeObj *tree);
+
+char *msSearchTree(treeObj *tree, rectObj aoi);
 char *msSearchDiskTree(const char *filename, rectObj aoi, int debug);
+
+treeObj *msReadTree(char *filename, int debug);
+int msWriteTree(treeObj *tree, char *filename, int LSB_order);
 
 void msFilterTreeSearch(const shapefileObj *shp, char *status,
                         rectObj search_rect);

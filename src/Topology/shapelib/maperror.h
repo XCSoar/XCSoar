@@ -66,9 +66,14 @@ char *msGetErrorString(char *delimiter);
 
 #ifndef SWIG
 void msSetError(int code, const char *message, const char *routine, ...);
+void msWriteError(FILE *stream);
+char *msGetErrorCodeString(int code);
+
+struct map_obj;
+void msWriteErrorImage(struct map_obj *map, char *filename, int blank);
 
 void msDebug( const char * pszFormat, ... );
-
+void msWebDebug( const char * pszFormat, ... );
 #endif
 
 #ifdef __cplusplus
