@@ -315,9 +315,13 @@ LoadColors(WindowControl &wc, const XMLNode &node)
 static void
 CalcWidthStretch(XMLNode &xNode, const RECT rc, const DialogStyle_t eDialogStyle)
 {
+  // No need to calculate the scale factor on platforms that don't scale
+  if (!Layout::ScaleSupported())
+    return;
+
   int Width = StringToIntDflt(xNode.getAttribute(_T("Width")), 50);
 
-  if ((eDialogStyle == eDialogFullWidth) && Layout::ScaleSupported())
+  if (eDialogStyle == eDialogFullWidth)
     dialog_width_scale = (rc.right - rc.left) * 1024 / Width;
   else
     dialog_width_scale = 1024;
