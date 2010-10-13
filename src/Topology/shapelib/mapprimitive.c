@@ -1,5 +1,5 @@
+#include "map.h"
 #include "mapprimitive.h"
-#include "maperror.h"
 
 #include <string.h>
 #include <stdlib.h>

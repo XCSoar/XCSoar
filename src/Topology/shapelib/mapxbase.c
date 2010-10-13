@@ -5,9 +5,7 @@
 ** for licence details.
 */
 
-#include "mapprimitive.h"
-#include "mapshape.h"
-#include "maperror.h"
+#include "map.h"
 
 #include <stdlib.h>
 #include <string.h>

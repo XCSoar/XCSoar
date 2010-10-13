@@ -1,7 +1,7 @@
 /* $Id: maperror.c,v 1.37.2.2 2003/10/15 12:35:41 dan Exp $ */
 
+#include "map.h"
 #include "maperror.h"
-#include "mapprimitive.h"
 
 #include <string.h>
 #include <stdlib.h>

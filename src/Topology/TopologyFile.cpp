@@ -47,6 +47,7 @@ Copyright_License {
 #include "SettingsMap.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "resource.h"
+#include "shapelib/map.h"
 
 #include <stdlib.h>
 #include <tchar.h>

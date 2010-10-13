@@ -3,8 +3,8 @@
 ** the README for licence details.
 */
 
+#include "map.h"
 #include "maptree.h"
-#include "maperror.h"
 
 #include <stdlib.h>
 #include <string.h>

@@ -41,6 +41,7 @@ Copyright_License {
 #include "Screen/LabelBlock.hpp"
 #include "Units.hpp"
 #include "UtilsText.hpp"
+#include "shapelib/map.h"
 
 #include <tchar.h>
 #include <ctype.h>
