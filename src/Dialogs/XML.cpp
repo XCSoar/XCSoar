@@ -313,9 +313,9 @@ LoadColors(WindowControl &wc, const XMLNode &node)
 }
 
 static void
-CalcWidthStretch(XMLNode *xNode, const RECT rc, const DialogStyle_t eDialogStyle)
+CalcWidthStretch(XMLNode &xNode, const RECT rc, const DialogStyle_t eDialogStyle)
 {
-  int Width = StringToIntDflt(xNode->getAttribute(_T("Width")), 50);
+  int Width = StringToIntDflt(xNode.getAttribute(_T("Width")), 50);
 
   if ((eDialogStyle == eDialogFullWidth) && Layout::ScaleSupported())
     dialog_width_scale = (rc.right - rc.left) * 1024 / Width;
@@ -368,7 +368,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
 
   // Determine the dialog size
   const RECT rc = Parent.get_client_rect();
-  CalcWidthStretch(&xNode, rc, eDialogStyle);
+  CalcWidthStretch(xNode, rc, eDialogStyle);
 
   const TCHAR* Caption = GetCaption(xNode);
   POINT pos = GetPosition(xNode, eDialogStyle);
