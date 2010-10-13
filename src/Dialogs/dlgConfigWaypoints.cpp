@@ -65,11 +65,10 @@ OnWaypointNewClicked(WindowControl * Sender)
   (void)Sender;
 
   Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().Location);
-  if (dlgWaypointEditShowModal(edit_waypoint)) {
-    if (edit_waypoint.Name.size()) {
-      way_points.append(edit_waypoint);
-      WaypointsNeedSave = true;
-    }
+  if (dlgWaypointEditShowModal(edit_waypoint) &&
+      edit_waypoint.Name.size()) {
+    way_points.append(edit_waypoint);
+    WaypointsNeedSave = true;
   }
 }
 
