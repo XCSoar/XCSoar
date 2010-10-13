@@ -96,16 +96,9 @@ OnWaypointEditClicked(WindowControl * Sender)
 static void
 AskWaypointSave(void)
 {
-  /// @todo terrain check???
-  if (WayPointFile::WaypointsOutOfRangeSetting != 2 ||
-      MessageBoxX(_("Waypoints excluded, save anyway?"),
-                  _("Waypoints outside terrain"),
-                  MB_YESNO | MB_ICONQUESTION) == IDYES) {
-    way_points.optimise();
-    WayPointGlue::SaveWaypoints(way_points);
-    WaypointFileChanged = true;
-  }
-
+  way_points.optimise();
+  WayPointGlue::SaveWaypoints(way_points);
+  WaypointFileChanged = true;
   WaypointsNeedSave = false;
 }
 

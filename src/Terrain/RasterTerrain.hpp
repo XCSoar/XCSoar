@@ -86,11 +86,6 @@ public:
     return map.GetEffectivePixelSize(pixel_D, location);
   }
 
-  gcc_pure
-  bool WaypointIsInTerrainRange(const GeoPoint &location) const {
-    return map.inside(location);
-  }
-
   GeoPoint GetTerrainCenter() const {
     return map.GetMapCenter();
   }

@@ -257,7 +257,6 @@ const TCHAR szProfileLoggerTimeStepCircling[] = CONF("LoggerTimeStepCircling");
 const TCHAR szProfileSafetyMacCready[] = CONF("SafetyMacCready");
 const TCHAR szProfileAbortSafetyUseCurrent[] = CONF("AbortSafetyUseCurrent");
 const TCHAR szProfileAutoMcMode[] = CONF("AutoMcMode");
-const TCHAR szProfileWaypointsOutOfRange[] = CONF("WaypointsOutOfRange");
 const TCHAR szProfileEnableExternalTriggerCruise[] = CONF("EnableExternalTriggerCruise");
 const TCHAR szProfileOLCRules[] = CONF("OLCRules");
 const TCHAR szProfileHandicap[] = CONF("Handicap");

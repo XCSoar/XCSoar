@@ -861,17 +861,6 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpWaypointsOutOfRange"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Ask"));
-    dfe->addEnumText(_("Include"));
-    dfe->addEnumText(_("Exclude"));
-    dfe->Set(WayPointFile::WaypointsOutOfRangeSetting);
-    wp->RefreshDisplay();
-  }
-
   LoadFormProperty(*wf, _T("prpBlockSTF"),
                    settings_computer.EnableBlockSTF);
 
@@ -1718,13 +1707,6 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(wf, _T("prpAutoMcMode"), szProfileAutoMcMode,
                               auto_mc_mode);
   settings_computer.auto_mc_mode = (TaskBehaviour::AutoMCMode_t)auto_mc_mode;
-
-  if (SaveFormProperty(wf, _T("prpWaypointsOutOfRange"),
-                       szProfileWaypointsOutOfRange,
-                       WayPointFile::WaypointsOutOfRangeSetting)) {
-    WaypointFileChanged = true;
-    changed = true;
-  }
 
   changed |= SaveFormProperty(wf, _T("prpEnableNavBaroAltitude"),
                               szProfileEnableNavBaroAltitude,

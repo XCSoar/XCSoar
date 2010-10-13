@@ -493,9 +493,6 @@ Profile::Use()
     settings_computer.auto_mc_mode =
       (TaskBehaviour::AutoMCMode_t)Temp;
 
-  Get(szProfileWaypointsOutOfRange,
-                  WayPointFile::WaypointsOutOfRangeSetting);
-
   if (Get(szProfileOLCRules, Temp))
       settings_computer.olc_rules = (OLCRules)Temp;
 

@@ -48,11 +48,6 @@
       Help="The airfields file may contain extracts from Enroute Supplements or other contributed information about individual airfields.">
         <DataField DataType="filereader" Min="0" Max="200" Step="1" />
       </Edit>
-    
-      <Edit Name="prpWaypointsOutOfRange" Caption="Wpt outside terrain*" X="2" Width="-2" Height="22" CaptionWidth="150"
-      Help="This option defines how waypoints outside the terrain range are handled: the user can be asked when this occurs, or they can be always included or excluded.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1" />
-      </Edit>    
     </Panel>
   
     <Panel Name="frmAirspace">

@@ -54,9 +54,6 @@ protected:
                const bool _compressed=false);
 
 public:
-
-  static int WaypointsOutOfRangeSetting;
-
   /**
    * Creates a file according to the extension
    * @param filename The filename (will be converted to filepath later)
@@ -117,9 +114,6 @@ protected:
 
   static size_t extractParameters(const TCHAR *src, TCHAR *dst,
                                   const TCHAR **arr, size_t sz);
-
-  bool checkWaypointInTerrainRange(const Waypoint &way_point,
-                                   const RasterTerrain &terrain);
 };
 
 #endif
