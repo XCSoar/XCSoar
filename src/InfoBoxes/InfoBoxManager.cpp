@@ -221,7 +221,7 @@ InfoBoxManager::GetCurrentMode()
 }
 
 int
-InfoBoxManager::getType(unsigned i, enum mode mode)
+InfoBoxManager::GetType(unsigned i, enum mode mode)
 {
   assert(i < MAXINFOWINDOWS);
 
@@ -240,7 +240,7 @@ InfoBoxManager::getType(unsigned i, enum mode mode)
 }
 
 int
-InfoBoxManager::getTypeAll(unsigned i)
+InfoBoxManager::GetTypes(unsigned i)
 {
   assert(i < MAXINFOWINDOWS);
 
@@ -248,7 +248,7 @@ InfoBoxManager::getTypeAll(unsigned i)
 }
 
 void
-InfoBoxManager::setTypeAll(unsigned i, unsigned j)
+InfoBoxManager::SetTypes(unsigned i, unsigned j)
 {
   assert(i < MAXINFOWINDOWS);
 
@@ -259,7 +259,7 @@ InfoBoxManager::setTypeAll(unsigned i, unsigned j)
 int
 InfoBoxManager::getType(unsigned i)
 {
-  unsigned retval = getType(i, GetCurrentMode());
+  unsigned retval = GetType(i, GetCurrentMode());
   return std::min(InfoBoxFactory::NUM_TYPES - 1, retval);
 }
 
@@ -267,7 +267,7 @@ bool
 InfoBoxManager::IsEmpty(enum mode mode)
 {
   for (unsigned i = 0; i < MAXINFOWINDOWS; ++i)
-    if (InfoBoxManager::getType(i, mode) != 0)
+    if (InfoBoxManager::GetType(i, mode) != 0)
       return false;
 
   return true;
@@ -277,14 +277,14 @@ bool
 InfoBoxManager::IsEmpty()
 {
   for (unsigned i = 0; i < MAXINFOWINDOWS; ++i)
-    if (InfoBoxManager::getTypeAll(i) != 0)
+    if (InfoBoxManager::GetTypes(i) != 0)
       return false;
 
   return true;
 }
 
 void
-InfoBoxManager::setType(unsigned i, char j, enum mode mode)
+InfoBoxManager::SetType(unsigned i, char j, enum mode mode)
 {
   assert(i < MAXINFOWINDOWS);
 
@@ -311,7 +311,7 @@ InfoBoxManager::setType(unsigned i, char j, enum mode mode)
 void
 InfoBoxManager::setType(unsigned i, char j)
 {
-  setType(i, j, GetCurrentMode());
+  SetType(i, j, GetCurrentMode());
 }
 
 void
@@ -554,7 +554,7 @@ InfoBoxManager::SetupFocused()
     return;
 
   const enum mode mode = GetCurrentMode();
-  int old_type = getType(i, mode);
+  int old_type = GetType(i, mode);
 
   /* create a fake WndProperty for dlgComboPicker() */
   /* XXX reimplement properly */
@@ -588,7 +588,7 @@ InfoBoxManager::SetupFocused()
 
   /* yes: apply and save it */
 
-  setType(i, new_type, mode);
+  SetType(i, new_type, mode);
   DisplayInfoBox();
-  Profile::SetInfoBoxes(i, getTypeAll(i));
+  Profile::SetInfoBoxes(i, GetTypes(i));
 }

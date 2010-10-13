@@ -82,11 +82,11 @@ namespace InfoBoxManager
 
   enum mode GetCurrentMode();
 
-  int getType(unsigned i, enum mode mode);
-  void setType(unsigned i, char j, enum mode mode);
+  int GetType(unsigned i, enum mode mode);
+  void SetType(unsigned i, char j, enum mode mode);
 
-  int getTypeAll(unsigned i);
-  void setTypeAll(unsigned i, unsigned j);
+  int GetTypes(unsigned i);
+  void SetTypes(unsigned i, unsigned j);
 
   bool IsEmpty(enum mode mode);
   bool IsEmpty();

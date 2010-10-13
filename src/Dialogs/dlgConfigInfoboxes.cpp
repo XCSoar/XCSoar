@@ -161,7 +161,7 @@ SetInfoBoxSelector(unsigned item)
 
   dfe->Sort(0);
 
-  dfe->Set(InfoBoxManager::getType(item, mode));
+  dfe->Set(InfoBoxManager::GetType(item, mode));
   wp->RefreshDisplay();
 }
 
@@ -173,14 +173,14 @@ GetInfoBoxSelector(unsigned item)
     return;
 
   int itnew = wp->GetDataField()->GetAsInteger();
-  int it = InfoBoxManager::getType(item, mode);
+  int it = InfoBoxManager::GetType(item, mode);
 
   if (it == itnew)
     return;
 
   changed = true;
-  InfoBoxManager::setType(item, itnew, mode);
-  Profile::SetInfoBoxes(item, InfoBoxManager::getTypeAll(item));
+  InfoBoxManager::SetType(item, itnew, mode);
+  Profile::SetInfoBoxes(item, InfoBoxManager::GetTypes(item));
 }
 
 void dlgConfigInfoboxesShowModal(InfoBoxManager::mode _mode)

@@ -95,10 +95,10 @@ CheckInfoTypes()
 
   for (unsigned i = 0; i < MAXINFOWINDOWS; ++i) {
     if (iszero_fg)
-      InfoBoxManager::setType(i, InfoBoxManager::getType(i, InfoBoxManager::MODE_CRUISE),
+      InfoBoxManager::SetType(i, InfoBoxManager::GetType(i, InfoBoxManager::MODE_CRUISE),
                               InfoBoxManager::MODE_FINAL_GLIDE);
     if (iszero_aux)
-      InfoBoxManager::setType(i, InfoBoxManager::getType(i, InfoBoxManager::MODE_CRUISE),
+      InfoBoxManager::SetType(i, InfoBoxManager::GetType(i, InfoBoxManager::MODE_CRUISE),
                               InfoBoxManager::MODE_AUXILIARY);
   }
 }
@@ -229,7 +229,7 @@ Profile::Use()
 
   for (i = 0; i < MAXINFOWINDOWS; i++) {
     if (Get(szProfileDisplayType[i], Temp))
-      InfoBoxManager::setTypeAll(i, Temp);
+      InfoBoxManager::SetTypes(i, Temp);
   }
 
   // check against V3 infotypes
