@@ -144,9 +144,9 @@ StringToColor(const TCHAR *String, Color &color)
  * @return Dialog style (DialogStyle_t), Default = FullWidth
  */
 static DialogStyle_t
-GetDialogStyle(XMLNode *xNode) 
+GetDialogStyle(XMLNode &xNode)
 {
-  const TCHAR* popup = xNode->getAttribute(_T("Popup"));
+  const TCHAR* popup = xNode.getAttribute(_T("Popup"));
   if ((popup == NULL) || string_is_empty(popup))
     return g_eDialogStyle;
   else
@@ -168,16 +168,16 @@ Scale_Dlg_Width(const int x, const DialogStyle_t eDialogStyle)
 }
 
 static const TCHAR*
-GetName(XMLNode *Node)
+GetName(XMLNode &Node)
 {
-  return StringToStringDflt(Node->getAttribute(_T("Name")), _T(""));
+  return StringToStringDflt(Node.getAttribute(_T("Name")), _T(""));
 }
 
 static const TCHAR*
-GetCaption(XMLNode *Node)
+GetCaption(XMLNode &Node)
 {
   const TCHAR* tmp =
-      StringToStringDflt(Node->getAttribute(_T("Caption")), _T(""));
+      StringToStringDflt(Node.getAttribute(_T("Caption")), _T(""));
 
   const TCHAR *translated = gettext(tmp);
   if (translated != tmp)
@@ -187,14 +187,14 @@ GetCaption(XMLNode *Node)
 }
 
 static POINT
-GetPosition(XMLNode *Node, const DialogStyle_t eDialogStyle)
+GetPosition(XMLNode &Node, const DialogStyle_t eDialogStyle)
 {
   POINT pt;
 
   // Calculate x- and y-Coordinate
-  pt.x = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("X")), 0),
+  pt.x = Scale_Dlg_Width(StringToIntDflt(Node.getAttribute(_T("X")), 0),
                        eDialogStyle);
-  pt.y = StringToIntDflt(Node->getAttribute(_T("Y")), -1);
+  pt.y = StringToIntDflt(Node.getAttribute(_T("Y")), -1);
   if (pt.y != -1)
     pt.y = Layout::Scale(pt.y);
 
@@ -202,14 +202,14 @@ GetPosition(XMLNode *Node, const DialogStyle_t eDialogStyle)
 }
 
 static SIZE
-GetSize(XMLNode *Node, const DialogStyle_t eDialogStyle)
+GetSize(XMLNode &Node, const DialogStyle_t eDialogStyle)
 {
   SIZE sz;
 
   // Calculate width and height
-  sz.cx = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("Width")), 0),
+  sz.cx = Scale_Dlg_Width(StringToIntDflt(Node.getAttribute(_T("Width")), 0),
                           eDialogStyle);
-  sz.cy = Layout::Scale(StringToIntDflt(Node->getAttribute(_T("Height")), 0));
+  sz.cy = Layout::Scale(StringToIntDflt(Node.getAttribute(_T("Height")), 0));
 
   return sz;
 }
@@ -369,15 +369,15 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   // todo: this dialog style stuff seems a little weird...
 
   // Determine the dialog style of the dialog
-  DialogStyle_t eDialogStyle = GetDialogStyle(&xNode);
+  DialogStyle_t eDialogStyle = GetDialogStyle(xNode);
 
   // Determine the dialog size
   const RECT rc = Parent.get_client_rect();
   CalcWidthStretch(&xNode, rc, eDialogStyle);
 
-  const TCHAR* Caption = GetCaption(&xNode);
-  POINT pos = GetPosition(&xNode, eDialogStyle);
-  SIZE size = GetSize(&xNode, eDialogStyle);
+  const TCHAR* Caption = GetCaption(xNode);
+  POINT pos = GetPosition(xNode, eDialogStyle);
+  SIZE size = GetSize(xNode, eDialogStyle);
 
   // Correct dialog size and position for dialog style
   switch (eDialogStyle) {
@@ -496,10 +496,10 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
   // Determine name, coordinates, width, height
   // and caption of the control
-  const TCHAR* Name = GetName(&node);
-  const TCHAR* Caption = GetCaption(&node);
-  POINT pos = GetPosition(&node, eDialogStyle);
-  SIZE size = GetSize(&node, eDialogStyle);
+  const TCHAR* Name = GetName(node);
+  const TCHAR* Caption = GetCaption(node);
+  POINT pos = GetPosition(node, eDialogStyle);
+  SIZE size = GetSize(node, eDialogStyle);
 
   if (pos.x < -1 || pos.y < -1 || size.cx <= 0 || size.cy <= 0) {
     /* a non-positive width/height specifies the distance from the
