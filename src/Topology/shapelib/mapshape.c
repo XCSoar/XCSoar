@@ -248,10 +248,6 @@ SHPHandle msSHPOpen( const char * pszLayer, const char * pszAccess )
   /*   Read the file size from the SHP file.				    */
   /* -------------------------------------------------------------------- */
   pabyBuf = (uchar *) malloc(100);
-  if (pabyBuf == 0) {
-    free(psSHP);
-    return NULL;
-  }
   if (zzip_fread( pabyBuf, 1, 100, psSHP->zfpSHP )<100) {
     free(psSHP);
     return NULL;
