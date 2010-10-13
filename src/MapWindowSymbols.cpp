@@ -209,7 +209,7 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT &Start,
 
   int wmag = iround(4 * wind.norm);
 
-  int kx = tsize.cx / Layout::scale / 2;
+  int kx = tsize.cx / Layout::FastScale(1) / 2;
 
   POINT Arrow[7] = {
       { 0, -20 },

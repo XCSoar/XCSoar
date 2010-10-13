@@ -205,7 +205,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
           (Basic().GroundSpeed < minspeed))
         device_blackboard.SetSpeed(min(fixed(100.0),
                                        max(minspeed,
-                                           fixed(distance / (3 * Layout::scale)))));
+                                           fixed(distance / (Layout::FastScale(3))))));
 
       device_blackboard.SetTrackBearing(newbearing);
       // change bearing without changing speed if direction change > 30
