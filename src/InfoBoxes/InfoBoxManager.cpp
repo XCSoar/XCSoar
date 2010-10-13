@@ -66,8 +66,8 @@ namespace InfoBoxManager
   /** the window for displaying infoboxes full-screen */
   InfoBoxFullWindow full_window;
 
-  unsigned getType(unsigned box);
-  void setType(unsigned i, char j);
+  unsigned GetCurrentType(unsigned box);
+  void SetCurrentType(unsigned i, char j);
   void FocusOnWindow(unsigned i, bool selected);
 
   void DisplayInfoBox();
@@ -257,7 +257,7 @@ InfoBoxManager::SetTypes(unsigned box, unsigned types)
 }
 
 unsigned
-InfoBoxManager::getType(unsigned box)
+InfoBoxManager::GetCurrentType(unsigned box)
 {
   unsigned retval = GetType(box, GetCurrentMode());
   return std::min(InfoBoxFactory::NUM_TYPES - 1, retval);
@@ -309,7 +309,7 @@ InfoBoxManager::SetType(unsigned i, char type, enum mode mode)
 }
 
 void
-InfoBoxManager::setType(unsigned i, char j)
+InfoBoxManager::SetCurrentType(unsigned i, char j)
 {
   SetType(i, j, GetCurrentMode());
 }
@@ -323,7 +323,7 @@ InfoBoxManager::Event_Change(int i)
   if (InfoFocus < 0)
     return;
 
-  k = getType(InfoFocus);
+  k = GetCurrentType(InfoFocus);
   if (i > 0)
     j = InfoBoxFactory::GetNext(k);
   else if (i < 0)
@@ -331,7 +331,7 @@ InfoBoxManager::Event_Change(int i)
 
   // TODO code: if i==0, go to default or reset
 
-  setType(InfoFocus, j);
+  SetCurrentType(InfoFocus, j);
 
   InfoBoxes[InfoFocus]->UpdateContent();
   Paint();
@@ -354,7 +354,7 @@ InfoBoxManager::DisplayInfoBox()
     // should apply to the function DoCalculationsSlow()
     // Do not put calculations here!
 
-    DisplayType[i] = getType(i);
+    DisplayType[i] = GetCurrentType(i);
 
     bool needupdate = ((DisplayType[i] != DisplayTypeLast[i]) || first);
 
