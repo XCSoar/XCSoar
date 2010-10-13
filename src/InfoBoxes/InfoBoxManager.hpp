@@ -39,7 +39,6 @@ Copyright_License {
 #ifndef XCSOAR_INFO_BOX_MANAGER_HPP
 #define XCSOAR_INFO_BOX_MANAGER_HPP
 
-#include "Interface.hpp"
 #include "Screen/PaintWindow.hpp"
 #include "InfoBoxes/Content/Base.hpp"
 

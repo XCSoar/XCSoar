@@ -56,6 +56,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/Form.hpp"
 #include "Profile/Profile.hpp"
+#include "Interface.hpp"
 
 #include <assert.h>
 
