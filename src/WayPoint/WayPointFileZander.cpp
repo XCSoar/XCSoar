@@ -90,7 +90,7 @@ WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
   if (len > 45)
     parseFlags(line + 45, new_waypoint.Flags);
 
-  add_waypoint_if_in_range(way_points, new_waypoint, terrain);
+  add_waypoint(way_points, new_waypoint);
   return true;
 }
 

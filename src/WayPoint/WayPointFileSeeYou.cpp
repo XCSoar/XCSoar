@@ -173,7 +173,7 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
     }
   }
 
-  add_waypoint_if_in_range(way_points, new_waypoint, terrain);
+  add_waypoint(way_points, new_waypoint);
   return true;
 }
 

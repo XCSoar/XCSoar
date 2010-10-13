@@ -86,15 +86,9 @@ WayPointFile::AltitudeFromTerrain(GeoPoint &location,
 
 
 void
-WayPointFile::add_waypoint_if_in_range(Waypoints &way_points, 
-                                       const Waypoint &new_waypoint,
-                                       const RasterTerrain *terrain)
+WayPointFile::add_waypoint(Waypoints &way_points,
+                           const Waypoint &new_waypoint)
 {
-  // if waypoint out of terrain range and should not be included
-  // -> return without error condition
-  if (terrain != NULL)
-    return;
-
   // Append the new waypoint to the waypoint list and
   // return successful line parse
   Waypoint wp(new_waypoint);

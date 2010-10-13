@@ -92,9 +92,7 @@ protected:
                       const RasterTerrain *terrain,
                       bool alt_ok);
 
-  void add_waypoint_if_in_range(Waypoints &way_points, 
-                                const Waypoint &new_waypoint,
-                                const RasterTerrain *terrain);
+  void add_waypoint(Waypoints &way_points, const Waypoint &new_waypoint);
 
   /**
    * Parse a file line
