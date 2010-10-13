@@ -49,7 +49,6 @@ Copyright_License {
 
 TCHAR startProfileFile[MAX_PATH];
 TCHAR defaultProfileFile[MAX_PATH];
-TCHAR failsafeProfileFile[MAX_PATH];
 
 void
 Profile::Load()
@@ -59,7 +58,7 @@ Profile::Load()
 
   LogStartUp(_T("Loading profiles"));
   // load registry backup if it exists
-  LoadFile(failsafeProfileFile);
+  LoadFile(defaultProfileFile);
   LoadFile(startProfileFile);
 }
 
@@ -158,9 +157,6 @@ Profile::SetFiles(const TCHAR* override)
     LocalPath(defaultProfileFile, _T("config/")_T(XCSPROFILE));
   else
     LocalPath(defaultProfileFile, _T(XCSPROFILE));
-
-  // Set the failsafe profile file
-  LocalPath(failsafeProfileFile, _T(XCSPROFILE));
 
   // Set the profile file to load at startup
   // -> to the default file
