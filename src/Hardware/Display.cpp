@@ -120,10 +120,15 @@ Display::SetBacklight()
 }
 #endif
 
+#if defined(DM_DISPLAYORIENTATION) && defined(_WIN32_WCE) && _WIN32_WCE >= 0x400
+/* on PPC2000, ChangeDisplaySettingsEx() crashes silently */
+#define ROTATE_SUPPORTED
+#endif
+
 bool
 Display::RotateSupported()
 {
-#ifdef DM_DISPLAYORIENTATION
+#ifdef ROTATE_SUPPORTED
   if (GetSystemMetrics(SM_CXSCREEN) == GetSystemMetrics(SM_CYSCREEN))
     /* cannot rotate a square display */
     return false;
@@ -147,7 +152,7 @@ Display::Rotate(enum orientation orientation)
     /* leave it as it is */
     return true;
 
-#ifdef DM_DISPLAYORIENTATION
+#ifdef ROTATE_SUPPORTED
   unsigned width = GetSystemMetrics(SM_CXSCREEN);
   unsigned height = GetSystemMetrics(SM_CYSCREEN);
   if (width == height)
@@ -204,7 +209,7 @@ Display::Rotate(enum orientation orientation)
 bool
 Display::RotateRestore()
 {
-#ifdef DM_DISPLAYORIENTATION
+#ifdef ROTATE_SUPPORTED
   DEVMODE dm;
   memset(&dm, 0, sizeof(dm));
   dm.dmSize = sizeof(dm);
