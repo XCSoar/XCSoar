@@ -203,6 +203,7 @@ DEBUG_PROGRAM_NAMES = \
 	WriteProfileString WriteProfileInt \
 	ReadGRecord VerifyGRecord AppendGRecord \
 	KeyCodeDumper \
+	LoadTopology \
 	RunWayPointParser RunDeviceDriver \
 	RunCanvas RunMapWindow RunDialog \
 	RunAirspaceWarningDialog
@@ -367,6 +368,33 @@ KEY_CODE_DUMPER_LDADD = \
 $(KEY_CODE_DUMPER_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(KEY_CODE_DUMPER_BIN): LDLIBS += $(SCREEN_LDLIBS)
 $(KEY_CODE_DUMPER_BIN): $(KEY_CODE_DUMPER_OBJS) $(KEY_CODE_DUMPER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+LOAD_TOPOLOGY_SOURCES = \
+	$(SRC)/Topology/TopologyStore.cpp \
+	$(SRC)/Topology/TopologyFile.cpp \
+	$(SRC)/Topology/XShape.cpp \
+	$(SRC)/Projection.cpp \
+	$(SRC)/Units.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Screen/LabelBlock.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/Engine/Math/Earth.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/LoadTopology.cpp
+LOAD_TOPOLOGY_OBJS = $(call SRC_TO_OBJ,$(LOAD_TOPOLOGY_SOURCES))
+LOAD_TOPOLOGY_BIN = $(TARGET_BIN_DIR)/LoadTopology$(TARGET_EXEEXT)
+LOAD_TOPOLOGY_LDADD = \
+	$(MATH_LIBS) \
+	$(IO_LIBS) \
+	$(SCREEN_LIBS) \
+	$(SHAPELIB_LIBS) \
+	$(ZZIP_LIBS) \
+	$(COMPAT_LIBS)
+$(LOAD_TOPOLOGY_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(LOAD_TOPOLOGY_BIN): LDLIBS += $(SCREEN_LDLIBS)
+$(LOAD_TOPOLOGY_BIN): $(LOAD_TOPOLOGY_OBJS) $(LOAD_TOPOLOGY_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
