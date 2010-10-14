@@ -195,8 +195,7 @@ static int zzip_inflate_init(ZZIP_FILE *, struct zzip_dir_hdr *);
 ZZIP_FILE *
 zzip_file_open(ZZIP_DIR * dir, zzip_char_t * name, int o_mode)
 {
-    // JMW auto
-    int self;
+    auto int self;
     zzip_error_t err = 0;
     struct zzip_file *fp = 0;
     struct zzip_dir_hdr *hdr = dir->hdr0;
