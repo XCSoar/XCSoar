@@ -354,13 +354,8 @@ OnMoveClicked(WindowControl * Sender)
 {
   (void)Sender;
   TargetMoveMode = !TargetMoveMode;
-  if (TargetMoveMode) {
-    if (btnMove)
-      btnMove->SetCaption(_T("Cursor"));
-  } else {
-    if (btnMove)
-      btnMove->SetCaption(_T("Move"));
-  }
+  if (btnMove)
+    btnMove->SetCaption(TargetMoveMode ? _T("Cursor") : _T("Move"));
   RefreshCalculator();
 }
 
