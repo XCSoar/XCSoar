@@ -795,14 +795,6 @@ zzip_open_shared_io(ZZIP_FILE * stream,
             fp->dir = NULL;
             fp->fd = fd;
             fp->io = os;
-
-#ifdef _WIN32_WCE
-            struct stat st; // JMW
-            if (stat(filename,&st) >=0)
-                fp->usize = st.st_size;
-#else
-            fp->usize = os->fd.filesize(fd);
-#endif
             return fp;
         }
         if (o_modes & ZZIP_PREFERZIP)
