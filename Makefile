@@ -58,7 +58,6 @@ include $(topdir)/build/libprofile.mk
 include $(topdir)/build/zlib.mk
 include $(topdir)/build/zzip.mk
 include $(topdir)/build/jasper.mk
-include $(topdir)/build/compat.mk
 include $(topdir)/build/driver.mk
 include $(topdir)/build/io.mk
 include $(topdir)/build/shapelib.mk
@@ -412,7 +411,6 @@ XCSOAR_LDADD = \
 	$(SHAPELIB_LIBS) \
 	$(JASPER_LIBS) \
 	$(ZZIP_LIBS) \
-	$(COMPAT_LIBS) \
 	$(UTIL_LIBS) \
 	$(MATH_LIBS) \
 	$(RESOURCE_BINARY)
