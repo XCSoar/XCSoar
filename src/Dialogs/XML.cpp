@@ -779,11 +779,10 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     const unsigned n = node.nChildNode();
     for (unsigned i = 0; i < n; ++i) {
       // Load each child control from the child nodes
-      Window *window = LoadChild(form, *tabbed, LookUpTable,
-                                 node.getChildNode(i),
-                                 eDialogStyle);
-      if (window != NULL)
-        tabbed->AddClient(window);
+      Window *child = LoadChild(form, *tabbed, LookUpTable,
+                                node.getChildNode(i), eDialogStyle);
+      if (child != NULL)
+        tabbed->AddClient(child);
         continue;
     }
   } else if (_tcscmp(node.getName(), _T("Custom")) == 0) {
