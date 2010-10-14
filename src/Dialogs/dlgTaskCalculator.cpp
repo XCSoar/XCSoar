@@ -180,7 +180,7 @@ OnTargetClicked(WindowControl * Sender)
 {
   (void)Sender;
   wf->hide();
-  dlgTarget();
+  dlgTargetShowModal();
   wf->show();
 }
 

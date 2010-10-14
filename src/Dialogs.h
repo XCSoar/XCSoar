@@ -152,7 +152,7 @@ void dlgStartPointShowModal();
 bool dlgWaypointEditShowModal(Waypoint &way_point);
 
 void dlgWeatherShowModal();
-void dlgTarget();
+void dlgTargetShowModal();
 void dlgThermalAssistantShowModal();
 void dlgFlarmTrafficShowModal();
 void dlgFlarmTrafficDetailsShowModal(FlarmId id);

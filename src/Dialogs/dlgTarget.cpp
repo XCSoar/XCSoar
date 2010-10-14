@@ -555,7 +555,7 @@ InitTargetPoints()
 }
 
 void
-dlgTarget() {
+dlgTargetShowModal() {
 
   if (protected_task_manager.get_mode() != TaskManager::MODE_ORDERED)
     return;
