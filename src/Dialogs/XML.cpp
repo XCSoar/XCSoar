@@ -401,8 +401,6 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
     return NULL;
   }
 
-  // todo: this dialog style stuff seems a little weird...
-
   // Determine the dialog style of the dialog
   DialogStyle_t eDialogStyle = GetDialogStyle(xNode);
 
