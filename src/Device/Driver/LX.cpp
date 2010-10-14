@@ -78,8 +78,7 @@ LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
    0 loger_stored (Y/N)
    1 IAS (kph) ----> Condor uses TAS!
    2 baroaltitude (m)
-   3 vario (m/s)
-   4-8 unknown
+   3-8 vario (m/s) (last 6 measurements in last second)
    9 heading of plane
   10 windcourse (deg)
   11 windspeed (kph)
@@ -118,6 +117,14 @@ LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 static bool
 LXWP1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
+  /*
+   * $LXWP1,
+   * serial number,
+   * instrument ID,
+   * software version,
+   * hardware version,
+   * license string
+   */
   (void)GPS_INFO;
   return true;
 }
@@ -125,6 +132,16 @@ LXWP1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 static bool
 LXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
+  /*
+   * $LXWP2,
+   * maccready value, (m/s)
+   * ballast, (1.0 - 1.5)
+   * bugs, (0 - 100%)
+   * polar_a,
+   * polar_b,
+   * polar_c,
+   * audio volume
+   */
   (void)GPS_INFO;
   return true;
 }
