@@ -49,7 +49,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Compiler.h"
 
-static WndForm *wf=NULL;
+static WndForm *wf = NULL;
 
 /*
  * use a smaller icon for smaller screens because the "stretch" will not shrink
@@ -81,7 +81,7 @@ static CallBackTableEntry_t CallBackTable[] = {
 extern TCHAR startProfileFile[];
 
 void
-dlgStartupShowModal(void)
+dlgStartupShowModal()
 {
   WndProperty* wp;
   LogStartUp(_T("Startup dialog"));
@@ -121,14 +121,15 @@ dlgStartupShowModal(void)
                            _T("operate the aircraft safely. Maintain ")
                            _T("effective lookout."));
 
-
   if (is_altair())
     dfe->ScanDirectoryTop(_T("config/*.prf"));
   else
     dfe->ScanDirectoryTop(_T("*.prf"));
+
   dfe->Lookup(startProfileFile);
   wp->RefreshDisplay();
-  if (dfe->GetNumFiles( )<= 2) {
+
+  if (dfe->GetNumFiles() <= 2) {
     delete wf;
     return;
   }
