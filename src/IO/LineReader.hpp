@@ -76,7 +76,12 @@ public:
   }
 };
 
-class NLineReader : public LineReader<char> {};
 class TLineReader : public LineReader<TCHAR> {};
+
+#ifdef _UNICODE
+class NLineReader : public LineReader<char> {};
+#else
+class NLineReader : public TLineReader {};
+#endif
 
 #endif
