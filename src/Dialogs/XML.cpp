@@ -549,12 +549,12 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     bool MultiLine;
 
     // Determine the width of the caption field
-    CaptionWidth = 
-      ScaleWidth(StringToIntDflt(node.getAttribute(_T("CaptionWidth")), 0),
-                 eDialogStyle);
+    CaptionWidth = StringToIntDflt(node.getAttribute(_T("CaptionWidth")), 0);
 
     if (Layout::ScaleSupported())
       CaptionWidth = Layout::Scale(CaptionWidth);
+
+    CaptionWidth = ScaleWidth(CaptionWidth, eDialogStyle);
 
     // Determine whether the control is multiline or readonly
     MultiLine = StringToIntDflt(node.getAttribute(_T("MultiLine")), 0);
