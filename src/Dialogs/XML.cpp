@@ -380,34 +380,34 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   WndForm *theForm = NULL;
 
   // Find XML file or resource and load XML data out of it
-  XMLNode xNode = xmlOpenResourceHelper(resource);
+  XMLNode node = xmlOpenResourceHelper(resource);
 
   // TODO code: put in error checking here and get rid of exits in xmlParser
   // If XML error occurred -> Error messagebox + cancel
-  if (xNode.isEmpty()) {
+  if (node.isEmpty()) {
     ShowXMLError();
     return NULL;
   }
 
   // If the main XMLNode is of type "Form"
-  if (_tcsicmp(xNode.getName(), _T("Form")) != 0)
+  if (_tcsicmp(node.getName(), _T("Form")) != 0)
     // Get the first child node of the type "Form"
     // and save it as the dialog node
-    xNode = xNode.getChildNode(_T("Form"));
+    node = node.getChildNode(_T("Form"));
 
   // If Node does not exists -> Error messagebox + cancel
-  if (xNode.isEmpty()) {
+  if (node.isEmpty()) {
     ShowXMLError();
     return NULL;
   }
 
   // Determine the dialog style of the dialog
-  DialogStyle_t eDialogStyle = GetDialogStyle(xNode);
+  DialogStyle_t eDialogStyle = GetDialogStyle(node);
 
   // Determine the dialog size
-  const TCHAR* Caption = GetCaption(xNode);
-  POINT pos = GetPosition(xNode);
-  SIZE size = GetSize(xNode);
+  const TCHAR* Caption = GetCaption(node);
+  POINT pos = GetPosition(node);
+  SIZE size = GetSize(node);
 
   const RECT rc = Parent.get_client_rect();
   CalcWidthStretch(size, rc, eDialogStyle);
@@ -436,10 +436,10 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   theForm = new WndForm(Parent, pos.x, pos.y, size.cx, size.cy, Caption, style);
 
   // Set fore- and background colors
-  LoadColors(*theForm, xNode);
+  LoadColors(*theForm, node);
 
   // Load the children controls
-  LoadChildrenFromXML(*theForm, *theForm, LookUpTable, &xNode,
+  LoadChildrenFromXML(*theForm, *theForm, LookUpTable, &node,
                       eDialogStyle);
 
   // If XML error occurred -> Error messagebox + cancel
