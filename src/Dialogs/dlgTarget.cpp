@@ -301,9 +301,6 @@ RefreshCalculator()
       XCSoarInterface::Calculated().common_stats.task_time_elapsed;
   fixed aatTime = protected_task_manager.get_ordered_task_behaviour().aat_min_time;
 
-  //  if ((XCSoarInterface::Calculated().TaskStartTime>0.0)&&(XCSoarInterface::Calculated().Flying)) {
-  //    dd += XCSoarInterface::Basic().Time-XCSoarInterface::Calculated().TaskStartTime;
-  //  }
   wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));// Same as infobox
   if (wp) {
     wp->GetDataField()->Set(aattimeEst / fixed(60));
@@ -314,22 +311,13 @@ RefreshCalculator()
     wp->GetDataField()->Set((aatTime - aattimeEst) / fixed(60));
     wp->RefreshDisplay();
   }
-  /*
-  double v1;
-  if (XCSoarInterface::Calculated().TaskTimeToGo>0) {
-    v1 = XCSoarInterface::Calculated().TaskDistanceToGo/
-      XCSoarInterface::Calculated().TaskTimeToGo;
-  } else {
-    v1 = 0;
-  }
-  */
 
   wp = (WndProperty*)wf->FindByName(_T("prpSpeedRemaining"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(Units::ToUserTaskSpeed(
        XCSoarInterface::Calculated().task_stats.total.remaining_effective.get_speed()));
-       wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
-       wp->RefreshDisplay();
+    wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
+    wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpSpeedAchieved"));
