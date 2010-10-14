@@ -774,7 +774,11 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     TabbedControl *tabbed = new TabbedControl(Parent,
                                               pos.x, pos.y, size.cx, size.cy, style);
-    WC = tabbed;
+
+    // Set the fore- and background color
+    LoadColors(*tabbed, node);
+
+    window = tabbed;
 
     const unsigned n = node.nChildNode();
     for (unsigned i = 0; i < n; ++i) {
