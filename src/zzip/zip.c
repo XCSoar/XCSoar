@@ -641,12 +641,8 @@ zzip_dir_free(ZZIP_DIR * dir)
     if (dir->refcount)
         return (dir->refcount); /* still open files attached */
 
-#ifdef __MINGW32__
-    if (dir->fd != -1)      dir->io->fd.close(dir->fd);
-#else
     if (dir->fd >= 0)
         dir->io->fd.close(dir->fd);
-#endif
     if (dir->hdr0)
         free(dir->hdr0);
     if (dir->cache.fp)
