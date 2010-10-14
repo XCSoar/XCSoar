@@ -140,7 +140,7 @@ StringToColor(const TCHAR *String, Color &color)
  * @return Dialog style (DialogStyle_t), Default = FullWidth
  */
 static DialogStyle_t
-GetDialogStyle(XMLNode &xNode)
+GetDialogStyle(const XMLNode &xNode)
 {
   const TCHAR* popup = xNode.getAttribute(_T("Popup"));
   if ((popup == NULL) || string_is_empty(popup))
@@ -163,13 +163,13 @@ Scale_Dlg_Width(const int x, const DialogStyle_t eDialogStyle)
 }
 
 static const TCHAR*
-GetName(XMLNode &Node)
+GetName(const XMLNode &Node)
 {
   return StringToStringDflt(Node.getAttribute(_T("Name")), _T(""));
 }
 
 static const TCHAR*
-GetCaption(XMLNode &Node)
+GetCaption(const XMLNode &Node)
 {
   const TCHAR* tmp =
       StringToStringDflt(Node.getAttribute(_T("Caption")), _T(""));
@@ -182,7 +182,7 @@ GetCaption(XMLNode &Node)
 }
 
 static POINT
-GetPosition(XMLNode &Node)
+GetPosition(const XMLNode &Node)
 {
   POINT pt;
 
@@ -209,7 +209,7 @@ ScalePosition(const POINT original, const DialogStyle_t eDialogStyle)
 }
 
 static SIZE
-GetSize(XMLNode &Node)
+GetSize(const XMLNode &Node)
 {
   SIZE sz;
 
