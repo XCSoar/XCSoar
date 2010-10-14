@@ -53,6 +53,13 @@ Copyright_License {
 #include <tchar.h>
 #include <ctype.h> // needed for Wine
 
+gcc_pure
+static GeoPoint
+point2GeoPoint(const pointObj& p)
+{
+  return GeoPoint(Angle::native(fixed(p.x)), Angle::native(fixed(p.y)));
+}
+
 void
 TopologyFile::loadIcon(const int res_id)
 {
@@ -222,7 +229,7 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 
         for (int jj = 0; jj < line.numpoints; ++jj) {
           POINT sc;
-          const GeoPoint l = projection.point2GeoPoint(line.point[jj]);
+          const GeoPoint l = point2GeoPoint(line.point[jj]);
 
           if (projection.LonLat2ScreenIfVisible(l, &sc))
             icon.draw(canvas, bitmap_canvas, sc.x, sc.y);
@@ -237,7 +244,7 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
         POINT pt[msize];
 
         for (unsigned i = 0; i < msize; ++i) {
-          GeoPoint g = projection.point2GeoPoint(line.point[i]);
+          GeoPoint g = point2GeoPoint(line.point[i]);
           pt[i] = projection.LonLat2Screen(g);
         }
 
@@ -253,7 +260,7 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 
         const pointObj *in = line.point;
         for (unsigned i = 0; i < msize; ++i) {
-          GeoPoint g = projection.point2GeoPoint(*in);
+          GeoPoint g = point2GeoPoint(*in);
           in += iskip;
           pt[i] = projection.LonLat2Screen(g);
         }
@@ -308,7 +315,7 @@ TopologyFile::PaintLabels(Canvas &canvas,
       int miny = canvas.get_height();
       const pointObj *in = line.point;
       for (unsigned i = 0; i < (unsigned)line.numpoints; i += iskip) {
-        GeoPoint g = projection.point2GeoPoint(line.point[i]);
+        GeoPoint g = point2GeoPoint(line.point[i]);
         in += iskip;
         POINT pt = projection.LonLat2Screen(g);
 

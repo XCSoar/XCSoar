@@ -40,7 +40,6 @@ Copyright_License {
 #define XCSOAR_PROJECTION_HPP
 
 #include "Navigation/GeoPoint.hpp"
-#include "Topology/shapelib/mapprimitive.h"
 #include "Geo/BoundsRectangle.hpp"
 #include "Math/FastRotation.hpp"
 #include "Compiler.h"
@@ -61,11 +60,6 @@ public:
 
   void LonLat2Screen(const GeoPoint *ptin, POINT *ptout,
                      unsigned n, unsigned skip) const;
-
-  gcc_pure
-  GeoPoint point2GeoPoint(const pointObj& p) const {
-    return GeoPoint(Angle::native(fixed(p.x)), Angle::native(fixed(p.y)));
-  }
 
   const POINT &GetOrigScreen() const {
     return Orig_Screen;
