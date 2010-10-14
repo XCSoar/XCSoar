@@ -39,8 +39,6 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_XML_HPP
 #define XCSOAR_DIALOGS_XML_HPP
 
-#include "Screen/Window.hpp"
-
 #include <tchar.h>
 
 class WndForm;
