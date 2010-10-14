@@ -438,8 +438,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   LoadColors(*form, node);
 
   // Load the children controls
-  LoadChildrenFromXML(*form, *form, LookUpTable, &node,
-                      eDialogStyle);
+  LoadChildrenFromXML(*form, *form, LookUpTable, &node, eDialogStyle);
 
   // If XML error occurred -> Error messagebox + cancel
   if (XMLNode::GlobalError) {
