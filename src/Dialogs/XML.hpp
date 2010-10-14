@@ -43,7 +43,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-class ContainerWindow;
 class WndForm;
 class SingleWindow;
 
