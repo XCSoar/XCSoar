@@ -738,8 +738,14 @@ LoadChild(WndForm &form, ContainerControl &Parent,
       GetCallBack(LookUpTable, node, _T("OnPaint"));
 
     // Create the DrawControl
-    WC = new WndOwnerDrawFrame(Parent, pos.x, pos.y, size.cx, size.cy,
-                               style, PaintCallback);
+    WndOwnerDrawFrame* canvas =
+        new WndOwnerDrawFrame(Parent, pos.x, pos.y, size.cx, size.cy,
+                              style, PaintCallback);
+
+    // Set the fore- and background color
+    LoadColors(*canvas, node);
+
+    window = canvas;
 
   // FrameControl (WndFrame)
   } else if (_tcscmp(node.getName(), _T("Label")) == 0){
