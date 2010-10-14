@@ -816,7 +816,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     if (advanced)
       form.AddAdvanced(window);
 
-    form.AddDestruct(WC);
+    form.AddDestruct(window);
   }
 
   return window;
