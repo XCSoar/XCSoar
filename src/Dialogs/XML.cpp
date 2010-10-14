@@ -71,7 +71,7 @@ Copyright_License {
 static int dialog_width_scale = 1024;
 
 // to full width of screen
-DialogStyle g_eDialogStyle = dsFullWidth;
+DialogStyle DialogStyleSetting = dsFullWidth;
 
 /**
  * Callback type for the "Custom" element, attribute "OnCreate".
@@ -152,7 +152,7 @@ GetDialogStyle(const XMLNode &xNode)
 {
   const TCHAR* popup = xNode.getAttribute(_T("Popup"));
   if ((popup == NULL) || string_is_empty(popup))
-    return g_eDialogStyle;
+    return DialogStyleSetting;
   else
     return (DialogStyle)StringToIntDflt(popup, 0);
 }

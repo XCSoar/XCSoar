@@ -68,7 +68,7 @@ enum DialogStyle
   dsFixed
 };
 
-extern DialogStyle g_eDialogStyle;
+extern DialogStyle DialogStyleSetting;
 
 WndForm *
 LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,

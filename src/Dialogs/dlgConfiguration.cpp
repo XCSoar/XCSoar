@@ -1096,7 +1096,7 @@ setVariables()
     dfe->addEnumText(_("Scaled"));
     dfe->addEnumText(_("Scaled centered"));
     dfe->addEnumText(_("Fixed"));
-    dfe->Set(g_eDialogStyle);
+    dfe->Set(DialogStyleSetting);
     wp->RefreshDisplay();
   }
 
@@ -2044,10 +2044,10 @@ void dlgConfigurationShowModal(void)
   wp = (WndProperty*)wf->FindByName(_T("prpDialogStyle"));
   if (wp)
     {
-      if (g_eDialogStyle != (DialogStyle)(wp->GetDataField()->GetAsInteger()))
+      if (DialogStyleSetting != (DialogStyle)(wp->GetDataField()->GetAsInteger()))
         {
-          g_eDialogStyle = (DialogStyle)(wp->GetDataField()->GetAsInteger());
-          Profile::Set(szProfileAppDialogStyle, g_eDialogStyle);
+          DialogStyleSetting = (DialogStyle)(wp->GetDataField()->GetAsInteger());
+          Profile::Set(szProfileAppDialogStyle, DialogStyleSetting);
           changed = true;
         }
     }
