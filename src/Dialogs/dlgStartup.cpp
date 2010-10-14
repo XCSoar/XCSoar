@@ -50,6 +50,7 @@ Copyright_License {
 #include "Compiler.h"
 
 static WndForm *wf = NULL;
+extern TCHAR startProfileFile[];
 
 /*
  * use a smaller icon for smaller screens because the "stretch" will not shrink
@@ -77,8 +78,6 @@ static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnSplashPaint),
   DeclareCallBackEntry(NULL)
 };
-
-extern TCHAR startProfileFile[];
 
 void
 dlgStartupShowModal()
