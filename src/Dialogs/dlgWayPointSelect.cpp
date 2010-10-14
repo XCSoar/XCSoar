@@ -500,7 +500,7 @@ OnWPSCloseClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrCancel);
 }
 
-static int
+static void
 OnTimerNotify(WindowControl * Sender)
 {
   (void)Sender;
@@ -512,7 +512,6 @@ OnTimerNotify(WindowControl * Sender)
       wpDirection->RefreshDisplay();
     }
   }
-  return 0;
 }
 
 static bool

@@ -550,12 +550,11 @@ Update()
  * This event handler is called when the timer is activated and triggers the
  * repainting of the radar
  */
-static int
+static void
 OnTimerNotify(WindowControl * Sender)
 {
   (void)Sender;
   Update();
-  return 0;
 }
 
 bool

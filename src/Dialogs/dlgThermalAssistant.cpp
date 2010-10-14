@@ -72,12 +72,11 @@ Update()
   wta->Update(XCSoarInterface::Basic().Heading, XCSoarInterface::Calculated());
 }
 
-static int
+static void
 OnTimerNotify(WindowControl * Sender)
 {
   (void)Sender;
   Update();
-  return 0;
 }
 
 static CallBackTableEntry_t CallBackTable[] = {

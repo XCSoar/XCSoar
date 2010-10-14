@@ -411,14 +411,13 @@ update_list()
   }
 }
 
-
-static int OnTimer(WindowControl * Sender) {
+static void
+OnTimer(WindowControl * Sender)
+{
   update_list();
-  return(0);
 }
 
-
-bool dlgAirspaceWarningVisible() 
+bool dlgAirspaceWarningVisible()
 {
   return wf && wf->is_visible();
 }

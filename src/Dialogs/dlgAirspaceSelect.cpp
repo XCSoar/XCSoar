@@ -386,7 +386,9 @@ OnWPSCloseClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrCancel);
 }
 
-static int OnTimerNotify(WindowControl * Sender) {
+static void
+OnTimerNotify(WindowControl * Sender)
+{
   (void)Sender;
   if (DirectionFilterIdx == 1){
     int a;
@@ -397,7 +399,6 @@ static int OnTimerNotify(WindowControl * Sender) {
       wpDirection->RefreshDisplay();
     }
   }
-  return 0;
 }
 
 static bool

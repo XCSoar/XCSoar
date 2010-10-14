@@ -184,12 +184,11 @@ OnCloseClicked(WindowControl * Sender)
   wf->SetModalResult(mrOK);
 }
 
-static int
+static void
 OnTimerNotify(WindowControl * Sender)
 {
   (void)Sender;
   Update();
-  return 0;
 }
 
 static CallBackTableEntry_t CallBackTable[] = {

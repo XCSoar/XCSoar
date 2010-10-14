@@ -77,10 +77,9 @@ static void UpdateValues() {
   Update(_T("prpVarioCircling"), switches.VarioCircling);
 }
 
-static int OnTimerNotify(WindowControl * Sender) {
+static void OnTimerNotify(WindowControl * Sender) {
 	(void)Sender;
   UpdateValues();
-  return 0;
 }
 
 static void OnCloseClicked(WindowControl * Sender){

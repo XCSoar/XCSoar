@@ -503,12 +503,11 @@ UpdateValuesTask(void)
   wp->SetText(Temp);
 }
 
-static int
+static void
 OnTimerNotify(WindowControl * Sender)
 {
   (void)Sender;
   UpdateValuesSystem();
-  return 0;
 }
 
 void

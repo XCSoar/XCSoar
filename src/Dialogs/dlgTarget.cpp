@@ -328,13 +328,11 @@ RefreshCalculator()
   }
 }
 
-static int
+static void
 OnTimerNotify(WindowControl * Sender)
 {
   (void)Sender;
-
   RefreshCalculator();
-  return 0;
 }
 
 static void

@@ -185,15 +185,13 @@ SetBallast(void)
  * current altitude and ballast. The ballast can change without user
  * input due to the dump function.
  */
-static int
+static void
 OnTimerNotify(WindowControl * Sender)
 {
   (void)Sender;
 
   SetBallast();
   SetAltitude();
-
-  return 0;
 }
 
 static void

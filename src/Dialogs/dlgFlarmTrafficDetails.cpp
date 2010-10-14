@@ -195,12 +195,11 @@ Update()
  * This event handler is called when the timer is activated and triggers the
  * update of the variable fields of the dialog
  */
-static int
+static void
 OnTimerNotify(WindowControl * Sender)
 {
   (void)Sender;
   UpdateChanging();
-  return 0;
 }
 
 /**
