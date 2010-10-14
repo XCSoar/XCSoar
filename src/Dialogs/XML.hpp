@@ -61,10 +61,14 @@ struct CallBackTableEntry_t
  */
 enum DialogStyle_t
 {
-  eDialogFullWidth = 0,         /**< cover screen, stretch controls horizontally */
-  eDialogScaled,                /**< stretch only frame to maintain aspect ratio */  
-  eDialogScaledCentered,        /**< like eDialogScaled but center dialog in screen */
-  eDialogFixed                  /**< don't adjust at all (same as !Layout::ScaleSupported()) */
+  /** cover screen, stretch controls horizontally */
+  eDialogFullWidth = 0,
+  /** stretch only frame to maintain aspect ratio */
+  eDialogScaled,
+  /** like eDialogScaled but center dialog in screen */
+  eDialogScaledCentered,
+  /** don't adjust at all (same as !Layout::ScaleSupported()) */
+  eDialogFixed
 };
 
 extern DialogStyle_t g_eDialogStyle;
