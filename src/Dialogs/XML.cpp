@@ -530,7 +530,6 @@ LoadChild(WndForm &form, ContainerControl &Parent,
           XMLNode node, const DialogStyle eDialogStyle)
 {
   Window *window = NULL;
-  WindowControl *WC = NULL;
 
   // Determine name, coordinates, width, height
   // and caption of the control
@@ -816,18 +815,6 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     window = create(Parent.GetClientAreaWindow(),
                     pos.x, pos.y, size.cx, size.cy, style);
-  }
-
-  // If WindowControl has been created
-  if (WC != NULL) {
-    // Set the fore- and background color
-    LoadColors(*WC, node);
-
-    // If caption hasn't been set -> set it
-    if (!string_is_empty(Caption))
-      WC->SetCaption(Caption);
-
-    window = WC;
   }
 
   if (window != NULL) {
