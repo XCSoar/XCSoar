@@ -158,7 +158,7 @@ GetDialogStyle(const XMLNode &xNode)
 }
 
 static int 
-Scale_Dlg_Width(const int x, const DialogStyle eDialogStyle) 
+ScaleWidth(const int x, const DialogStyle eDialogStyle) 
 {
   if (!Layout::ScaleSupported())
     return x;
@@ -207,7 +207,7 @@ ScalePosition(const POINT original, const DialogStyle eDialogStyle)
   POINT pt;
 
   // Calculate x- and y-Coordinate
-  pt.x = Scale_Dlg_Width(original.x, eDialogStyle);
+  pt.x = ScaleWidth(original.x, eDialogStyle);
   if (original.y != -1)
     pt.y = Layout::Scale(original.y);
   else
@@ -242,7 +242,7 @@ ScaleSize(const SIZE original, const DialogStyle eDialogStyle)
   SIZE sz;
 
   // Calculate width and height
-  sz.cx = Scale_Dlg_Width(original.cx, eDialogStyle);
+  sz.cx = ScaleWidth(original.cx, eDialogStyle);
   sz.cy = Layout::Scale(original.cy);
   return sz;
 }
@@ -573,7 +573,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     // Determine the width of the caption field
     CaptionWidth = 
-      Scale_Dlg_Width(StringToIntDflt(node.getAttribute(_T("CaptionWidth")), 0),
+      ScaleWidth(StringToIntDflt(node.getAttribute(_T("CaptionWidth")), 0),
                       eDialogStyle);
 
     // Determine whether the control is multiline or readonly
