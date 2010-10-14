@@ -258,6 +258,14 @@ CallBackLookup(CallBackTableEntry *LookUpTable, const TCHAR *Name)
   return NULL;
 }
 
+static void *
+GetCallBack(CallBackTableEntry *LookUpTable,
+            const XMLNode &node, const TCHAR* attribute)
+{
+  return CallBackLookup(LookUpTable,
+                        StringToStringDflt(node.getAttribute(attribute), NULL));
+}
+
 static void
 LoadChildrenFromXML(WndForm &form, ContainerControl &parent,
                     CallBackTableEntry *LookUpTable,
@@ -576,15 +584,11 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     // Load the event callback properties
     WndProperty::DataChangeCallback_t DataNotifyCallback =
       (WndProperty::DataChangeCallback_t)
-      CallBackLookup(LookUpTable,
-                     StringToStringDflt(node.getAttribute(_T("OnDataNotify")),
-                                        NULL));
+      GetCallBack(LookUpTable, node, _T("OnDataNotify"));
 
     WindowControl::OnHelpCallback_t OnHelpCallback =
       (WindowControl::OnHelpCallback_t)
-      CallBackLookup(LookUpTable,
-                     StringToStringDflt(node.getAttribute(_T("OnHelp")),
-                                        NULL));
+      GetCallBack(LookUpTable, node, _T("OnHelp"));
 
     // Create the Property Control
     style.control_parent();
@@ -635,9 +639,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     // Determine ClickCallback function
     WndButton::ClickNotifyCallback_t ClickCallback =
       (WndButton::ClickNotifyCallback_t)
-      CallBackLookup(LookUpTable,
-                     StringToStringDflt(node.getAttribute(_T("OnClick")),
-                                        NULL));
+      GetCallBack(LookUpTable, node, _T("OnClick"));
 
     // Create the ButtonControl
 
@@ -652,9 +654,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     // Determine ClickCallback function
     CheckBoxControl::ClickNotifyCallback_t ClickCallback =
       (CheckBoxControl::ClickNotifyCallback_t)
-      CallBackLookup(LookUpTable,
-                     StringToStringDflt(node.getAttribute(_T("OnClick")),
-                                        NULL));
+      GetCallBack(LookUpTable, node, _T("OnClick"));
 
     // Create the CheckBoxControl
 
@@ -670,9 +670,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     // Determine ClickCallback function
     WndButton::ClickNotifyCallback_t ClickCallback =
       (WndButton::ClickNotifyCallback_t)
-      CallBackLookup(LookUpTable,
-                     StringToStringDflt(node.getAttribute(_T("OnClick")),
-                                        NULL));
+      GetCallBack(LookUpTable, node, _T("OnClick"));
 
     // Create the SymbolButtonControl
 
@@ -720,9 +718,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
   } else if (_tcscmp(node.getName(), _T("Keyboard")) == 0) {
     KeyboardControl::OnCharacterCallback_t CharacterCallback =
       (KeyboardControl::OnCharacterCallback_t)
-      CallBackLookup(LookUpTable,
-                     StringToStringDflt(node.getAttribute(_T("OnCharacter")),
-                                        NULL));
+      GetCallBack(LookUpTable, node, _T("OnCharacter"));
 
     // Create the KeyboardControl
     KeyboardControl *kb =
@@ -736,9 +732,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     // Determine DrawCallback function
     WndOwnerDrawFrame::OnPaintCallback_t PaintCallback =
       (WndOwnerDrawFrame::OnPaintCallback_t)
-      CallBackLookup(LookUpTable,
-                     StringToStringDflt(node.getAttribute(_T("OnPaint")),
-                                        NULL));
+      GetCallBack(LookUpTable, node, _T("OnPaint"));
 
     // Create the DrawControl
     WC = new WndOwnerDrawFrame(Parent, pos.x, pos.y, size.cx, size.cy,
@@ -794,10 +788,8 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     }
   } else if (_tcscmp(node.getName(), _T("Custom")) == 0) {
     // Create a custom Window object with a callback
-    CreateWindowCallback_t create = (CreateWindowCallback_t)
-      CallBackLookup(LookUpTable,
-                     StringToStringDflt(node.getAttribute(_T("OnCreate")),
-                                        _T("")));
+    CreateWindowCallback_t create =
+        (CreateWindowCallback_t)GetCallBack(LookUpTable, node, _T("OnCreate"));
     if (create == NULL)
       return NULL;
 
