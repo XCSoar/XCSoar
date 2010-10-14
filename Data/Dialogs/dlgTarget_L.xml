@@ -1,21 +1,38 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<Form Name="frmTarget" X="1" Y="1" Width="240" Height="90" Caption="Target" Popup="1">
-  <Button Name="btnOK" Caption="OK" X="2" Y="2" Width="60" Height="29" OnClick="OnOKClicked" />
+<Form Name="frmTarget" X="200" Y="0" Width="119" Height="240" Caption="Target" Popup="1">
+  <Button Name="btnOK" Caption="OK" X="55" Y="2" Width="60" Height="29" OnClick="OnOKClicked" />
 
-  <Edit Name="prpTaskPoint" Caption="Point" X="55" Y="2" Width="180" Height="27" CaptionWidth="40"
-  Help="This sets the task point for review.">
+  <Edit Name="prpTaskPoint" Caption=" " X="2" Width="115" Height="29" CaptionWidth="1"
+    Help="This sets the task point for review.">
     <DataField DataType="enum" Min="0" Max="50" Step="1" OnDataAccess="OnTaskPointData"/>
   </Edit>
 
-  <Edit Name="prpRange" Caption="Range" X="64" Y="42" Width="80" Height="27" CaptionWidth="32" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">
+  <Button Name="btnIsLocked" Caption="Locked" X="55" Width="60" Height="29" OnClick="OnIsLockedClicked" />
+
+  <Buttona Name="btnMove" Caption="Move" X="34" Width="50" Height="22" OnClick="OnMoveClicked" visible=0 />
+
+  <Edit Name="prpRange" Caption="Range" X="2" Width="115" Height="27" CaptionWidth="60" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">
     <DataField DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min="-100" Max="100" Step="5" OnDataAccess="OnRangeData"/>
   </Edit>
 
-  <Edit Name="prpRadial" Caption="Radial" X="150" Y="42" Width="80" Height="27" CaptionWidth="32" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise.">
-    <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="-92" Max="92" Step="5" OnDataAccess="OnRadialData"/>
+  <Edit Name="prpRadial" Caption="Radial" X="2" Width="115" Height="27" CaptionWidth="60" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise.">
+    <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="-190" Max="190" Step="5" OnDataAccess="OnRadialData"/>
   </Edit>
 
-  <Button Name="btnIsLocked" Caption="Locked" X="2" Y="42" Width="60" Height="29" OnClick="OnIsLockedClicked" />
+  <Edit Name="prpAATEst" Caption="ETE" X="2" Width="115" Height="22" CaptionWidth="60" ReadOnly="1" min="0" max="600" step="10" Help="AAT Est Remaining Help">
+    <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" readonly="1"/>
+  </Edit>
 
+  <Edit Name="prpAATDelta" Caption="delta T" X="2" Width="115" Height="22" CaptionWidth="60" ReadOnly="1" min="0" max="600" step="10" Help="AA Delta Time - Difference between estimated task time and AAT minimum time. Colored red if negative (expected arrival too early), or blue if in sector and can turn now with estimated arrival time greater than AAT time plus 5 minutes.">
+    <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" readonly="1"/>
+  </Edit>
+
+  <Edit Name="prpSpeedRemaining" Caption="V rem" X="2" Width="115" Height="22" CaptionWidth="60" ReadOnly="1" min="0" max="2000" step="10" Help="Speed Remaining Help">
+    <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.1f" readonly="1"/>
+  </Edit>
+
+  <aEdit Name="prpSpeedAchieved" Caption="V ach" X="2" Width="115" Height="22" CaptionWidth="60" ReadOnly="1" min="0" max="2000" step="10" Help="AA Speed - Assigned Area Task average speed achievable around target points remaining in minimum AAT time.">
+    <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.1f" readonly="1"/>
+  </aEdit>
 </Form>

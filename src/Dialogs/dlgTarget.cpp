@@ -563,11 +563,11 @@ dlgTarget() {
   if (!Layout::landscape) {
     wf = LoadDialog(CallBackTable,
                         XCSoarInterface::main_window,
-                        _T("IDR_XML_TARGET_L"));
+                        _T("IDR_XML_TARGET"));
   } else {
     wf = LoadDialog(CallBackTable,
                         XCSoarInterface::main_window,
-                        _T("IDR_XML_TARGET"));
+                        _T("IDR_XML_TARGET_L"));
   }
 
   if (!wf) return;
