@@ -211,17 +211,6 @@ GetPosition(const XMLNode &Node)
 }
 
 static POINT
-ScalePosition(const POINT original, const DialogStyle eDialogStyle)
-{
-  POINT pt = original;
-
-  // Calculate x- and y-Coordinate
-  pt.x = ScaleWidth(original.x, eDialogStyle);
-
-  return pt;
-}
-
-static POINT
 SetPositionCentered(const POINT original, const RECT rc, const SIZE size)
 {
   POINT pt = original;
@@ -244,16 +233,6 @@ GetSize(const XMLNode &Node)
 
   sz.cx = Layout::Scale(sz.cx);
   sz.cy = Layout::Scale(sz.cy);
-  return sz;
-}
-
-static SIZE
-ScaleSize(const SIZE original, const DialogStyle eDialogStyle)
-{
-  SIZE sz = original;
-
-  // Calculate width and height
-  sz.cx = ScaleWidth(original.cx, eDialogStyle);
   return sz;
 }
 
@@ -424,8 +403,8 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
   const RECT rc = Parent.get_client_rect();
   CalcWidthStretch(size, rc, dialog_style);
 
-  pos = ScalePosition(pos, dialog_style);
-  size = ScaleSize(size, dialog_style);
+  pos.x = ScaleWidth(pos.x, dialog_style);
+  size.cx = ScaleWidth(size.cx, dialog_style);
 
   // Correct dialog size and position for dialog style
   switch (dialog_style) {
@@ -541,9 +520,9 @@ LoadChild(WndForm &form, ContainerControl &Parent,
   const TCHAR* Name = GetName(node);
   const TCHAR* Caption = GetCaption(node);
   POINT pos = GetPosition(node);
-  pos =  ScalePosition(pos, eDialogStyle);
+  pos.x = ScaleWidth(pos.x, eDialogStyle);
   SIZE size = GetSize(node);
-  size = ScaleSize(size, eDialogStyle);
+  size.cx = ScaleWidth(size.cx, eDialogStyle);
 
   if (pos.x < -1 || pos.y < -1 || size.cx <= 0 || size.cy <= 0) {
     /* a non-positive width/height specifies the distance from the
