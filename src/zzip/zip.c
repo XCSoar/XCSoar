@@ -789,12 +789,8 @@ __zzip_try_open(zzip_char_t * filename, int filemode,
 // JMW not sure why this is required, but it is!
 #endif
 
-    if (len+4 >= PATH_MAX) {
-#ifdef ENAMETOOLONG
-		errno = ENAMETOOLONG;
-#endif
-	return -1; }
-
+    if (len + 4 >= PATH_MAX)
+        { /* errno = ENAMETOOLONG; */ return -1; }
     memcpy(file, filename, len + 1);
 
     if (! io)

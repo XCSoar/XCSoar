@@ -51,7 +51,9 @@ struct zzip_dir_hdr
 struct zzip_dir
 {
     int fd;
+#ifdef ZZIP_DISABLED
     int errcode; /* zzip_error_t */
+#endif /* ZZIP_DISABLED */
     long refcount;
     struct { /* reduce a lot of alloc/deallocations by caching these: */
 	int * volatile locked;

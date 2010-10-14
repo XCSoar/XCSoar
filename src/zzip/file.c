@@ -17,7 +17,9 @@
 
 #include <string.h>
 #include <sys/stat.h>
+#ifdef ZZIP_DISABLED
 #include <errno.h>
+#endif /* ZZIP_DISABLED */
 #include <stdlib.h>
 #include <ctype.h>
 
@@ -208,9 +210,9 @@ zzip_file_open(ZZIP_DIR * dir, zzip_char_t * name, int o_mode)
     if (! dir)
         return NULL;
     if (! dir->fd || dir->fd == -1)
-        { dir->errcode = EBADF; return NULL; }
+        { /* dir->errcode = EBADF; */ return NULL; }
     if (! hdr)
-        { dir->errcode = ENOENT; return NULL; }
+        { /* dir->errcode = ENOENT; */ return NULL; }
 
     if (o_mode & ZZIP_NOPATHS)
         name = filename_basename(name);
@@ -315,13 +317,17 @@ zzip_file_open(ZZIP_DIR * dir, zzip_char_t * name, int o_mode)
             hdr = (struct zzip_dir_hdr *) ((char *) hdr + hdr->d_reclen);
         }                       /*filename_strcmp */
     }                           /*forever */
+#ifdef ZZIP_DISABLED
     dir->errcode = ZZIP_ENOENT;
+#endif /* ZZIP_DISABLED */
 
     return NULL;
   error:
     if (fp)
         zzip_file_close(fp);
+#ifdef ZZIP_DISABLED
     dir->errcode = err;
+#endif /* ZZIP_DISABLED */
     return NULL;
 }
 
@@ -416,7 +422,7 @@ zzip_file_read(ZZIP_FILE * fp, void *buf, zzip_size_t len)
     {
         if (zzip_file_saveoffset(dir->currentfp) < 0
             || fp->io->fd.seeks(dir->fd, fp->offset, SEEK_SET) < 0)
-            { dir->errcode = ZZIP_DIR_SEEK; return -1; }
+            { /* dir->errcode = ZZIP_DIR_SEEK; */ return -1; }
         else
             { dir->currentfp = fp; }
     }
@@ -443,8 +449,10 @@ zzip_file_read(ZZIP_FILE * fp, void *buf, zzip_size_t len)
 
                 if (i <= 0)
                 {
+#ifdef ZZIP_DISABLED
                     dir->errcode = ZZIP_DIR_READ;
                     /* or ZZIP_DIR_READ_EOF ? */
+#endif /* ZZIP_DISABLED */
                     return -1;
                 }
                 fp->crestlen -= i;
@@ -460,7 +468,7 @@ zzip_file_read(ZZIP_FILE * fp, void *buf, zzip_size_t len)
             else if (err == Z_OK)
                 { fp->restlen -= (fp->d_stream.total_out - startlen); }
             else
-                { dir->errcode = err; return -1; }
+                { /* dir->errcode = err; */ return -1; }
         }
         while (fp->restlen && fp->d_stream.avail_out);
 
@@ -470,8 +478,10 @@ zzip_file_read(ZZIP_FILE * fp, void *buf, zzip_size_t len)
         rv = fp->io->fd.read(dir->fd, buf, l);
         if (rv > 0)
             { fp->restlen-= rv; }
+#ifdef ZZIP_DISABLED
         else if (rv < 0)
             { dir->errcode = ZZIP_DIR_READ; }
+#endif /* ZZIP_DISABLED */
         return rv;
     }
 }
@@ -499,8 +509,10 @@ zzip_read(ZZIP_FILE * fp, void *buf, zzip_size_t len)
         register zzip_ssize_t v;
 
         v = zzip_file_read(fp, buf, len);
+#ifdef ZZIP_DISABLED
         if (v == -1)
             { errno = zzip_errno(fp->dir->errcode); }
+#endif /* ZZIP_DISABLED */
         return v;
     }
 }
@@ -804,7 +816,7 @@ zzip_open_shared_io(ZZIP_FILE * stream,
     /* if the user had it in place of a normal xopen, then
      * we better defend this lib against illegal usage */
     if (o_flags & (O_CREAT | O_WRONLY))
-        { errno = EINVAL; return 0; }
+        { /* errno = EINVAL; */ return 0; }
     if (o_flags & (O_RDWR))
         { o_flags ^= O_RDWR; o_flags |= O_RDONLY; }
 
@@ -819,12 +831,8 @@ zzip_open_shared_io(ZZIP_FILE * stream,
         char *p;
         int filename_len = strlen(filename);
 
-	if (filename_len >= PATH_MAX) {
-#ifdef ENAMETOOLONG
-	    errno = ENAMETOOLONG;
-#endif
-	    return 0;
-	}
+        if (filename_len >= PATH_MAX)
+            { /* errno = ENAMETOOLONG; */ return 0; }
         memcpy(basename, filename, filename_len + 1);
 
         /* see if we can share the same zip directory */
@@ -838,8 +846,10 @@ zzip_open_shared_io(ZZIP_FILE * stream,
             {
                 ZZIP_FILE *fp =
                     zzip_file_open(stream->dir, filename + len + 1, o_modes);
+#ifdef ZZIP_DISABLED
                 if (! fp)
                     { errno = zzip_errno (stream->dir->errcode); }
+#endif /* ZZIP_DISABLED */
                 return fp;
             }
         }
@@ -862,12 +872,12 @@ zzip_open_shared_io(ZZIP_FILE * stream,
             /* found zip-file ....  now try to parse it */
             dir = zzip_dir_fdopen_ext_io(fd, &e, ext, io);
             if (e)
-                { errno = zzip_errno(e); io->fd.close(fd); return 0; }
+                { /* errno = zzip_errno(e); */ io->fd.close(fd); return 0; }
 
             /* (p - basename) is the lenghtof zzip_dir part of the filename */
             fp = zzip_file_open(dir, filename + (p - basename) + 1, o_modes);
             if (! fp)
-                { errno = zzip_errno(dir->errcode); }
+                { /* errno = zzip_errno(dir->errcode); */ }
             else
                 { if (! dir->realname) dir->realname = strdup (basename); }
 
@@ -881,7 +891,7 @@ zzip_open_shared_io(ZZIP_FILE * stream,
         if (o_modes & ZZIP_PREFERZIP)
             goto try_real;
         else
-            { errno = ENOENT; return 0; }
+            { /* errno = ENOENT; */ return 0; }
     }
 }
 
@@ -965,7 +975,7 @@ zzip_rewind(ZZIP_FILE * fp)
     if (dir->currentfp != fp)
     {
         if (zzip_file_saveoffset(dir->currentfp) < 0)
-            { dir->errcode = ZZIP_DIR_SEEK; return -1; }
+            { /* dir->errcode = ZZIP_DIR_SEEK; */ return -1; }
         else
             { dir->currentfp = fp; }
     }
@@ -1076,7 +1086,7 @@ zzip_seek(ZZIP_FILE * fp, zzip_off_t offset, int whence)
     {
         if (zzip_file_saveoffset(dir->currentfp) < 0
             || fp->io->fd.seeks(dir->fd, fp->offset, SEEK_SET) < 0)
-            { dir->errcode = ZZIP_DIR_SEEK; return -1; }
+            { /* dir->errcode = ZZIP_DIR_SEEK; */ return -1; }
         else
             { dir->currentfp = fp; }
     }
@@ -1163,9 +1173,9 @@ zzip_tell32(ZZIP_FILE * fp)
         if (off >= 0) {
             register long off32 = off;
             if (off32 == off) return off32;
-#ifndef __MINGW32__
+#ifdef ZZIP_DISABLED
             errno = EOVERFLOW;
-#endif
+#endif /* ZZIP_DISABLED */
         }
         return -1;
     }
@@ -1186,9 +1196,9 @@ zzip_seek32(ZZIP_FILE * fp, long offset, int whence)
         if (off >= 0) {
             register long off32 = off;
             if (off32 == off) return off32;
-#ifndef __MINGW32__
+#ifdef ZZIP_DISABLED
             errno = EOVERFLOW;
-#endif
+#endif /* ZZIP_DISABLED */
         }
         return -1;
     }

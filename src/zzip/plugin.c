@@ -17,7 +17,9 @@
 
 #include <string.h>
 #include <sys/stat.h>
+#ifdef ZZIP_DISABLED
 #include <errno.h>
+#endif /* ZZIP_DISABLED */
 #include <stdlib.h>
 #ifdef DEBUG
 #include <stdio.h>

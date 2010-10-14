@@ -44,7 +44,9 @@ zzip_dir_stat(ZZIP_DIR * dir, zzip_char_t * name, ZZIP_STAT * zs, int flags)
 
     if (! hdr)
     {
+#ifdef ZZIP_DISABLED
         dir->errcode = ZZIP_ENOENT;
+#endif /* ZZIP_DISABLED */
         return -1;
     }
 
@@ -70,7 +72,9 @@ zzip_dir_stat(ZZIP_DIR * dir, zzip_char_t * name, ZZIP_STAT * zs, int flags)
 
         if (! hdr->d_reclen)
         {
+#ifdef ZZIP_DISABLED
             dir->errcode = ZZIP_ENOENT;
+#endif /* ZZIP_DISABLED */
             return -1;
         }
 

@@ -1,6 +1,6 @@
 ZZIPSRC	= $(SRC)/zzip
 ZZIP = \
-	$(ZZIPSRC)/err.c 		$(ZZIPSRC)/fetch.c \
+	$(ZZIPSRC)/fetch.c \
 	$(ZZIPSRC)/file.c 		\
 	$(ZZIPSRC)/plugin.c \
 	$(ZZIPSRC)/zip.c \

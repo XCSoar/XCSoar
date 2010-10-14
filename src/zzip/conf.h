@@ -139,6 +139,8 @@
 # endif
 #endif
 
+#ifdef ZZIP_DISABLED
+
 #include <errno.h>
 
 /* mingw32msvc errno : would be in winsock.h */
@@ -153,6 +155,8 @@
 #define ELOOP ENOEXEC
 #endif
 #endif
+
+#endif /* ZZIP_DISABLED */
 
 #if defined __WATCOMC__
 #undef  _zzip_inline
