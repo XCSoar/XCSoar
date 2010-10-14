@@ -142,7 +142,23 @@ LXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
    * polar_c,
    * audio volume
    */
-  (void)GPS_INFO;
+
+  fixed value;
+  // MacCready value
+  if (line.read_checked(value))
+    GPS_INFO->MacCready = value;
+
+  // Ballast
+  line.skip();
+  /*
+  if (line.read_checked(value))
+    GPS_INFO->Ballast = value;
+  */
+
+  // Bugs
+  if (line.read_checked(value))
+    GPS_INFO->Bugs = fixed(100) - value;
+
   return true;
 }
 
