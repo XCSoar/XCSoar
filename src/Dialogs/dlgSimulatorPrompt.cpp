@@ -48,7 +48,7 @@ Copyright_License {
 
 #ifdef SIMULATOR_AVAILABLE
 
-static WndForm *wf=NULL;
+static WndForm *wf = NULL;
 
 static void
 OnSplashPaint(WindowControl *Sender, Canvas &canvas)
@@ -75,9 +75,9 @@ OnFlyClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrCancel);
 }
 
-static CallBackTableEntry_t CallBackTable[]={
-      DeclareCallBackEntry(OnSplashPaint),
-      DeclareCallBackEntry(NULL)
+static CallBackTableEntry_t CallBackTable[] = {
+  DeclareCallBackEntry(OnSplashPaint),
+  DeclareCallBackEntry(NULL)
 };
 
 #endif
@@ -87,13 +87,12 @@ dlgSimulatorPromptShowModal()
 {
 #ifdef SIMULATOR_AVAILABLE
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
-                      Layout::landscape ? _T("IDR_XML_SIMULATORPROMPT_L") :
-                      _T("IDR_XML_SIMULATORPROMPT"));
+                  Layout::landscape ? _T("IDR_XML_SIMULATORPROMPT_L") :
+                                      _T("IDR_XML_SIMULATORPROMPT"));
   if (!wf)
     return false;
 
   TCHAR temp[MAX_PATH];
-
   _stprintf(temp, _T("XCSoar v%s"), XCSoar_VersionString);
 
   WindowControl* wc;
