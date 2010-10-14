@@ -792,7 +792,6 @@ zzip_open_shared_io(ZZIP_FILE * stream,
             if (! fp)
                 { os->fd.close(fd); return 0; }  /* io->fd.close */
 
-            fp->dir = NULL;
             fp->fd = fd;
             fp->io = os;
             return fp;
