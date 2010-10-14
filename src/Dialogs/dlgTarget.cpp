@@ -290,11 +290,7 @@ RefreshCalculator()
     wc->set_visible(!TargetMoveMode);
 
   if (btnIsLocked) {
-    if (IsLocked)
-      btnIsLocked->SetCaption(_T("Locked"));
-    else
-      btnIsLocked->SetCaption(_T("Auto"));
-
+    btnIsLocked->SetCaption(IsLocked ? _T("Locked") : _T("Auto"));
     btnIsLocked->set_visible(!nodisplay);
   }
 
