@@ -43,7 +43,7 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
 
-static WndForm *wf=NULL;
+static WndForm *wf = NULL;
 
 static void
 Update(const TCHAR *name, bool value)
@@ -59,7 +59,9 @@ Update(const TCHAR *name, bool value)
   }
 }
 
-static void UpdateValues() {
+static void
+UpdateValues()
+{
   const SWITCH_INFO &switches = XCSoarInterface::Basic().SwitchState;
 
   Update(_T("prpFlapLanding"), switches.FlapLanding);
@@ -77,28 +79,30 @@ static void UpdateValues() {
   Update(_T("prpVarioCircling"), switches.VarioCircling);
 }
 
-static void OnTimerNotify(WindowControl * Sender) {
-	(void)Sender;
+static void
+OnTimerNotify(WindowControl * Sender)
+{
+  (void)Sender;
   UpdateValues();
 }
 
-static void OnCloseClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnCloseClicked(WindowControl * Sender)
+{
+  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
-
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };
 
-
-
-void dlgSwitchesShowModal(void){
-  wf = LoadDialog(CallBackTable,
-		      XCSoarInterface::main_window,
-		      _T("IDR_XML_SWITCHES"));
+void
+dlgSwitchesShowModal(void)
+{
+  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+		              _T("IDR_XML_SWITCHES"));
   if (wf == NULL)
     return;
 
