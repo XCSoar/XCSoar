@@ -208,6 +208,15 @@ ScalePosition(const POINT original, const DialogStyle_t eDialogStyle)
   return pt;
 }
 
+static POINT
+SetPositionCentered(const POINT original, const RECT rc, const SIZE size)
+{
+  POINT pt = original;
+  // center horizontally in parent RECT
+  pt.x = (rc.right + rc.left - size.cx) / 2;
+  return pt;
+}
+
 static SIZE
 GetSize(const XMLNode &Node)
 {
@@ -412,7 +421,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   case eDialogScaled:
     break;
   case eDialogScaledCentered:
-    pos.x = (rc.right + rc.left - size.cx) / 2; // center form horizontally on screen
+    pos = SetPositionCentered(pos, rc, size);
     break;
   case eDialogFixed:
     break;
