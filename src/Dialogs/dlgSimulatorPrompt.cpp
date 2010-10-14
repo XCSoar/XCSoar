@@ -72,7 +72,7 @@ OnFlyClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrCancel);
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnSplashPaint),
   DeclareCallBackEntry(NULL)
 };

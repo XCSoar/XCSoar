@@ -142,7 +142,7 @@ OnInfoBoxHelp(WindowControl * Sender)
                      _("No help available on this item"));
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnInfoBoxHelp),
   DeclareCallBackEntry(NULL)
 };

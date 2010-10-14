@@ -306,7 +306,7 @@ OnTaskCursorCallback(unsigned i)
   RefreshView();
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnLoadSaveClicked),
   DeclareCallBackEntry(OnDeleteClicked),

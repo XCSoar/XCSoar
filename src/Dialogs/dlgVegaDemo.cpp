@@ -112,7 +112,7 @@ static void OnVegaDemoAudioClimb(DataField *Sender,
 }
 
 
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry CallBackTable[]={
   DeclareCallBackEntry(OnVegaDemoW),
   DeclareCallBackEntry(OnVegaDemoV),
   DeclareCallBackEntry(OnVegaDemoAudioClimb),

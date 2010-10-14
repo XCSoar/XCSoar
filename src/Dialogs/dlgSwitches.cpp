@@ -93,7 +93,7 @@ OnCloseClicked(WindowControl * Sender)
   wf->SetModalResult(mrOK);
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };

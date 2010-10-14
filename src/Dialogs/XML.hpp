@@ -47,7 +47,7 @@ class SingleWindow;
 /**
  * Class to hold callback entries for dialogs
  */
-struct CallBackTableEntry_t
+struct CallBackTableEntry
 {
   const TCHAR *Name;
   void *Ptr;
@@ -71,7 +71,7 @@ enum DialogStyle
 extern DialogStyle g_eDialogStyle;
 
 WndForm *
-LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
+LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
                const TCHAR *resource);
 
 #endif

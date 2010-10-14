@@ -244,7 +244,7 @@ OnTaskViewClick(WindowControl *Sender, int x, int y)
   return true;
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnPropertiesClicked),
   DeclareCallBackEntry(OnNewClicked),

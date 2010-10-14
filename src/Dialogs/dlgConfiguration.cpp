@@ -535,7 +535,7 @@ OnPolarTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 
 extern void OnInfoBoxHelp(WindowControl * Sender);
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnAirspaceColoursClicked),
   DeclareCallBackEntry(OnAirspaceModeClicked),
   DeclareCallBackEntry(OnUTCData),

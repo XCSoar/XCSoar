@@ -204,7 +204,7 @@ OnDownClicked(WndButton &button)
   FormKeyDown(NULL, VK_DOWN);
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnTextPaint),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnLeftClicked),

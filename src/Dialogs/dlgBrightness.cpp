@@ -100,7 +100,7 @@ static void OnBrightnessData(DataField *Sender,
 }
 
 
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry CallBackTable[]={
   DeclareCallBackEntry(OnAutoData),
   DeclareCallBackEntry(OnBrightnessData),
   DeclareCallBackEntry(OnCloseClicked),

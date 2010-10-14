@@ -231,7 +231,7 @@ static void OnTypeClicked(WindowControl * Sender)
   RefreshView();
 }
 
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry CallBackTable[]={
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnTypeClicked),
   DeclareCallBackEntry(NULL)

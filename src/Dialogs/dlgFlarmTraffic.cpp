@@ -639,7 +639,7 @@ OnCreateFlarmTrafficControl(ContainerWindow &parent, int left, int top,
   return wdf;
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCreateFlarmTrafficControl),
   DeclareCallBackEntry(OnTimerNotify),
   DeclareCallBackEntry(OnAutoZoom),

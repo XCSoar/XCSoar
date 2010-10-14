@@ -124,7 +124,7 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
             XCSoarInterface::SettingsMap(), terrain);
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnEditClicked),
   DeclareCallBackEntry(OnListClicked),

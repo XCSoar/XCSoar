@@ -111,7 +111,7 @@ static void OnClearClicked(WindowControl * Sender){
 }
 
 
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry CallBackTable[]={
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnClearClicked),
   DeclareCallBackEntry(NULL)

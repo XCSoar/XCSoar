@@ -127,7 +127,7 @@ OnWaypointDeleteClicked(WindowControl * Sender)
 #endif
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnWaypointNewClicked),
   DeclareCallBackEntry(OnWaypointDeleteClicked),
   DeclareCallBackEntry(OnWaypointEditClicked),

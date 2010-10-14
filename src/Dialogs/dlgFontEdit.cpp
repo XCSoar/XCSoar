@@ -126,7 +126,7 @@ OnData(DataField *Sender, DataField::DataAccessKind_t Mode)
     RedrawSampleFont();
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnData),
   DeclareCallBackEntry(OnResetClicked),
   DeclareCallBackEntry(OnCancelClicked),

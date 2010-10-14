@@ -99,7 +99,7 @@ FillList(WndListFrame* list, bool include_empty)
   list->SetCursorIndex(0);
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 

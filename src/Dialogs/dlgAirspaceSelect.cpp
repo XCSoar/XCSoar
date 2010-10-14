@@ -435,7 +435,7 @@ FormKeyDown(WindowControl *Sender, unsigned key_code){
   return true;
 }
 
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry CallBackTable[]={
   DeclareCallBackEntry(OnFilterName),
   DeclareCallBackEntry(OnFilterDistance),
   DeclareCallBackEntry(OnFilterDirection),

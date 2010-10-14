@@ -463,7 +463,7 @@ OnTaskPointData(DataField *Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnTaskPointData),
   DeclareCallBackEntry(OnRangeData),
   DeclareCallBackEntry(OnRadialData),

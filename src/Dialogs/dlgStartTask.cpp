@@ -62,7 +62,7 @@ static void OnStartTaskAnywayClicked(WindowControl * Sender){
 }
 
 
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry CallBackTable[]={
   DeclareCallBackEntry(OnStartTaskAnywayClicked),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)

@@ -447,7 +447,7 @@ void dlgAirspaceWarningShowDlg()
 }
 
 
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry CallBackTable[]={
   DeclareCallBackEntry(OnAckClicked),
   DeclareCallBackEntry(OnAck1Clicked),
   DeclareCallBackEntry(OnAck2Clicked),

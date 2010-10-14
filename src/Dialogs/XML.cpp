@@ -248,7 +248,7 @@ ScaleSize(const SIZE original, const DialogStyle eDialogStyle)
 }
 
 static void *
-CallBackLookup(CallBackTableEntry_t *LookUpTable, const TCHAR *Name)
+CallBackLookup(CallBackTableEntry *LookUpTable, const TCHAR *Name)
 {
   if (LookUpTable != NULL && Name != NULL && !string_is_empty(Name))
     for (unsigned i = 0; LookUpTable[i].Ptr != NULL; i++)
@@ -260,7 +260,7 @@ CallBackLookup(CallBackTableEntry_t *LookUpTable, const TCHAR *Name)
 
 static void
 LoadChildrenFromXML(WndForm &form, ContainerControl &parent,
-                    CallBackTableEntry_t *LookUpTable,
+                    CallBackTableEntry *LookUpTable,
                     XMLNode *Node, const DialogStyle eDialogStyle);
 
 static void
@@ -373,7 +373,7 @@ CalcWidthStretch(const SIZE size, const RECT rc, const DialogStyle eDialogStyle)
  * @return The WndForm object
  */
 WndForm *
-LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
+LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
                const TCHAR* resource)
 {
   WndForm *form = NULL;
@@ -452,7 +452,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
 }
 
 static DataField *
-LoadDataField(const XMLNode &node, CallBackTableEntry_t *LookUpTable,
+LoadDataField(const XMLNode &node, CallBackTableEntry *LookUpTable,
               const DialogStyle eDialogStyle)
 {
   TCHAR DataType[32];
@@ -518,7 +518,7 @@ LoadDataField(const XMLNode &node, CallBackTableEntry_t *LookUpTable,
  */
 static Window *
 LoadChild(WndForm &form, ContainerControl &Parent,
-          CallBackTableEntry_t *LookUpTable,
+          CallBackTableEntry *LookUpTable,
           XMLNode node, const DialogStyle eDialogStyle)
 {
   Window *window = NULL;
@@ -841,7 +841,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
  */
 static void
 LoadChildrenFromXML(WndForm &form, ContainerControl &Parent,
-                    CallBackTableEntry_t *LookUpTable,
+                    CallBackTableEntry *LookUpTable,
                     XMLNode *Node, const DialogStyle eDialogStyle)
 {
   // Get the number of childnodes

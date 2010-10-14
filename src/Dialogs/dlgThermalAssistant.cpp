@@ -79,7 +79,7 @@ OnTimerNotify(WindowControl * Sender)
   Update();
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCreateThermalAssistantControl),
   DeclareCallBackEntry(NULL)
 };

@@ -87,7 +87,7 @@ OnRateData(DataField *Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnStopClicked),
   DeclareCallBackEntry(OnStartClicked),
   DeclareCallBackEntry(OnRateData),

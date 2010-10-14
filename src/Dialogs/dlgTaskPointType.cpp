@@ -183,7 +183,7 @@ OnPointCursorCallback(unsigned i)
   RefreshView();
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnSelectClicked),
   DeclareCallBackEntry(NULL)

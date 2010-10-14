@@ -156,7 +156,7 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   }
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(NULL)

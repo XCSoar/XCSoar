@@ -142,7 +142,7 @@ OnPrevClicked(WindowControl * Sender)
   PrevPage();
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(NULL)

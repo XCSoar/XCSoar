@@ -84,7 +84,7 @@ OnCancelClicked(WindowControl * Sender)
   wf->SetModalResult(mrCancel);
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnCancelClicked),
   DeclareCallBackEntry(NULL)

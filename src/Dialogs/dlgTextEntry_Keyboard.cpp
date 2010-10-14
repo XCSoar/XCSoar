@@ -169,7 +169,7 @@ OnCharacter(TCHAR character)
   DoCharacter(character);
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCharacter),
   DeclareCallBackEntry(OnBackspace),
   DeclareCallBackEntry(OnClear),

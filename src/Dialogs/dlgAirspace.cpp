@@ -150,7 +150,7 @@ OnLookupClicked(WindowControl * Sender)
   dlgAirspaceSelect();
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnLookupClicked),
   DeclareCallBackEntry(NULL)

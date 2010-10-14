@@ -136,7 +136,7 @@ OnWeatherHelp(WindowControl * Sender)
   dlgHelpShowModal(XCSoarInterface::main_window, caption, help);
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnTimeData),
   DeclareCallBackEntry(OnDisplayItemData),
   DeclareCallBackEntry(OnCloseClicked),

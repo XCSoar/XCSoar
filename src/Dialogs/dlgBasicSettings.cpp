@@ -267,7 +267,7 @@ OnTempData(DataField *Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
-static CallBackTableEntry_t CallBackTable[] = {
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnBugsData),
   DeclareCallBackEntry(OnTempData),
   DeclareCallBackEntry(OnBallastData),
