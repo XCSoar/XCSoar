@@ -1194,12 +1194,6 @@ zzip_seek32(ZZIP_FILE * fp, long offset, int whence)
     }
 }
 
-zzip_off_t
-zzip_file_size(ZZIP_FILE * fp)
-{
-    return fp->usize;
-}
-
 /*
  * Local variables:
  * c-file-style: "stroustrup"

@@ -209,9 +209,6 @@ zzip_off_t      zzip_seek(ZZIP_FILE * fp, zzip_off_t offset, int whence);
 _zzip_export
 zzip_off_t      zzip_tell(ZZIP_FILE * fp);
 
-// JMW added
-_zzip_export zzip_off_t zzip_file_size(ZZIP_FILE * fp);
-
 /*
  * reading info of a single file 
  * zzip/stat.c

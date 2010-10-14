@@ -74,7 +74,10 @@ ZipSource::~ZipSource()
 long
 ZipSource::size() const
 {
-  return zzip_file_size(file);
+  ZZIP_STAT st;
+  return zzip_file_stat(file, &st) >= 0
+    ? (long)st.st_size
+    : -1l;
 }
 
 unsigned
