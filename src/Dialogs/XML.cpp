@@ -418,12 +418,8 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
     size.cx = rc.right - rc.left; // stretch form to full width of screen
     size.cy = rc.bottom - rc.top;
     break;
-  case eDialogScaled:
-    break;
   case eDialogScaledCentered:
     pos = SetPositionCentered(pos, rc, size);
-    break;
-  case eDialogFixed:
     break;
   }
 
