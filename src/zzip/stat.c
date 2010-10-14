@@ -119,14 +119,12 @@ zzip_fstat(ZZIP_FILE * file, ZZIP_STAT * zs)
 {
     if (ZZIP_file_real(file))
     {
-#if !defined(WIN32) || !defined(_WIN32_WCE)
         struct stat st;
         if (fstat(file->fd, &st) < 0)
             return -1;
         zs->st_size = st.st_size;
         zs->d_csize = st.st_size;
         zs->d_compr = 0;
-#endif
         return 0;
     } else
     {

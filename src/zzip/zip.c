@@ -716,9 +716,6 @@ zzip_dir_fdopen_ext_io(int fd, zzip_error_t * errcode_p,
     return NULL;
 }
 
-char jmw_filename[1024] = "\0"; // JMW
-
-
 static zzip_error_t
 __zzip_dir_parse(ZZIP_DIR * dir)
 {
@@ -732,16 +729,8 @@ __zzip_dir_parse(ZZIP_DIR * dir)
 
     HINT2("------------------ fd=%i", (int) dir->fd);
 
-#if !defined(WIN32) || defined(_WIN32_WCE)
-    struct stat st; // JMW
-    if (stat(jmw_filename,&st) <0)
-        { rv = ZZIP_DIR_STAT; goto error; }
-    else
-        filesize = st.st_size;
-#else
     if ((filesize = dir->io->fd.filesize(dir->fd)) < 0)
         { rv = ZZIP_DIR_STAT; goto error; }
-#endif
 
     HINT2("------------------ filesize=%ld", (long) filesize);
     if ((rv = __zzip_fetch_disk_trailer(dir->fd, filesize, &trailer,
@@ -791,11 +780,8 @@ __zzip_try_open(zzip_char_t * filename, int filemode,
     {
         strcpy(file + len, *ext);
         fd = io->fd.open(file, filemode);
-        if (fd != -1) {
-            // JMW
-            strcpy(jmw_filename, file);
+        if (fd != -1)
             return fd;
-        }
     }
     return -1;
 }
