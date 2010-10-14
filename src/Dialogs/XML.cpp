@@ -578,11 +578,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
                      StringToStringDflt(node.getAttribute(_T("OnHelp")),
                                         NULL));
 
-    // TODO code: Temporary double handling to fix "const unsigned
-    // short *" to "unsigned short *" problem
-
     // Create the Property Control
-
     style.control_parent();
 
     EditWindowStyle edit_style;
