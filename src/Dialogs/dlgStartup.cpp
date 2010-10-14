@@ -82,7 +82,6 @@ static CallBackTableEntry_t CallBackTable[] = {
 void
 dlgStartupShowModal()
 {
-  WndProperty* wp;
   LogStartUp(_T("Startup dialog"));
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
@@ -90,11 +89,10 @@ dlgStartupShowModal()
                                       _T("IDR_XML_STARTUP"));
   assert(wf != NULL);
 
-  wp = ((WndProperty *)wf->FindByName(_T("prpProfile")));
+  WndProperty* wp = ((WndProperty *)wf->FindByName(_T("prpProfile")));
   assert(wp != NULL);
 
-  DataFieldFileReader* dfe;
-  dfe = (DataFieldFileReader*)wp->GetDataField();
+  DataFieldFileReader* dfe = (DataFieldFileReader*)wp->GetDataField();
   assert(dfe != NULL);
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))
