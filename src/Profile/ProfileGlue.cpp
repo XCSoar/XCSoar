@@ -298,6 +298,9 @@ Profile::Use()
   Get(szProfileTrailDrift,
       settings_map.EnableTrailDrift);
 
+  Get(szProfileDetourCostMarker,
+      settings_map.EnableDetourCostMarker);
+
   Get(szProfileDrawTopology,
       settings_map.EnableTopology);
 

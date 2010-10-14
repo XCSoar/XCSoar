@@ -47,6 +47,7 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.EnableTerrain = false;
   settings_map.DeclutterLabels = 0;
   settings_map.EnableTrailDrift = false;
+  settings_map.EnableDetourCostMarker = false;
   settings_map.EnableCDICruise = false;
   settings_map.EnableCDICircling = false;
   settings_map.AutoZoom = false;

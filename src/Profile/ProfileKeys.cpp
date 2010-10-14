@@ -155,6 +155,7 @@ const TCHAR szProfileSafetyAltitudeTerrain[] = CONF("SafetyAltitudeTerrain");
 const TCHAR szProfileSafteySpeed[] = CONF("SafteySpeed");
 const TCHAR szProfileSnailTrail[] = CONF("SnailTrail");
 const TCHAR szProfileTrailDrift[] = CONF("TrailDrift");
+const TCHAR szProfileDetourCostMarker[] = CONF("DetourCostMarker");
 const TCHAR szProfileSpeedUnitsValue[] = CONF("Speed");
 const TCHAR szProfileTaskSpeedUnitsValue[] = CONF("TaskSpeed");
 const TCHAR szProfileWarningTime[] = CONF("WarnTime");

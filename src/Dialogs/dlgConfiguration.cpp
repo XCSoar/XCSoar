@@ -985,7 +985,8 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpTrailDrift"),
                    XCSoarInterface::SettingsMap().EnableTrailDrift);
-
+  LoadFormProperty(*wf, _T("prpDetourCostMarker"),
+                   XCSoarInterface::SettingsMap().EnableDetourCostMarker);
   LoadFormProperty(*wf, _T("prpSetSystemTimeFromGPS"),
                    XCSoarInterface::SettingsMap().SetSystemTimeFromGPS);
   LoadFormProperty(*wf, _T("prpIgnoreNMEAChecksum"),
@@ -1558,7 +1559,9 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(wf, _T("prpTrailDrift"),
                               szProfileTrailDrift,
                               XCSoarInterface::SetSettingsMap().EnableTrailDrift);
-
+  changed |= SaveFormProperty(wf, _T("prpDetourCostMarker"),
+                              szProfileDetourCostMarker,
+                              XCSoarInterface::SetSettingsMap().EnableDetourCostMarker);
   changed |= SaveFormProperty(wf, _T("prpTrail"),
                               szProfileSnailTrail,
                               XCSoarInterface::SetSettingsMap().TrailActive);

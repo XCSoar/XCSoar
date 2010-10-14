@@ -90,6 +90,8 @@ struct SETTINGS_MAP {
   unsigned char DeclutterLabels;
   /** Snailtrail wind drifting in circling mode */
   bool EnableTrailDrift;
+  /** Indicate extra distance reqd. if deviating from target heading */
+  bool EnableDetourCostMarker;
   /** Show compass in cruise mode */
   bool EnableCDICruise;
   /** Show compass in circling mode */
