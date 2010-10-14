@@ -782,13 +782,6 @@ __zzip_try_open(zzip_char_t * filename, int filemode,
     int fd;
     zzip_size_t len = strlen(filename);
 
-#ifdef __MINGW32__
-//    if (filemode & O_RDONLY) {
- 	filemode = O_RDWR;
-//    }
-// JMW not sure why this is required, but it is!
-#endif
-
     if (len + 4 >= PATH_MAX)
         { /* errno = ENAMETOOLONG; */ return -1; }
     memcpy(file, filename, len + 1);
