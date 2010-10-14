@@ -55,6 +55,7 @@ Copyright_License {
 #include "WayPointGlue.hpp"
 #include "Device/device.hpp"
 #include "Topology/TopologyStore.hpp"
+#include "Topology/TopologyGlue.hpp"
 #include "Dialogs.h"
 #include "Gauge/GaugeCDI.hpp"
 #include "Logger/LoggerImpl.hpp"
@@ -210,6 +211,7 @@ static void
 LoadFiles()
 {
   topology = new TopologyStore();
+  LoadConfiguredTopology(*topology);
 
   terrain = RasterTerrain::OpenTerrain(NULL);
 

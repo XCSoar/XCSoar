@@ -36,45 +36,12 @@ Copyright_License {
 }
 */
 
-#ifndef TOPOLOGY_STORE_H
-#define TOPOLOGY_STORE_H
+#ifndef TOPOLOGY_GLUE_H
+#define TOPOLOGY_GLUE_H
 
-#include "Util/NonCopyable.hpp"
+class TopologyStore;
 
-#include <tchar.h>
-
-class Canvas;
-class BitmapCanvas;
-class Projection;
-class LabelBlock;
-class TopologyFile;
-struct SETTINGS_MAP;
-class NLineReader;
-
-/**
- * Class used to manage and render vector topology layers
- */
-class TopologyStore : private NonCopyable {
-  enum {
-    /** maximum number of topologies */
-    MAXTOPOLOGY = 20,
-  };
-
-public:
-  TopologyStore();
-  ~TopologyStore();
-
-  void ScanVisibility(const Projection &m_projection);
-  void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-            const Projection &projection) const;
-  void DrawLabels(Canvas &canvas,
-                  const Projection &projection, LabelBlock &label_block,
-                  const SETTINGS_MAP &settings_map) const;
-
-  void Load(NLineReader &reader, const TCHAR* Directory);
-  void Reset();
-
-  TopologyFile* topology_store[MAXTOPOLOGY];
-};
+bool
+LoadConfiguredTopology(TopologyStore &store);
 
 #endif

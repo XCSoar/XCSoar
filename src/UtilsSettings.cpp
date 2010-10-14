@@ -44,6 +44,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "AirfieldDetails.h"
 #include "Topology/TopologyStore.hpp"
+#include "Topology/TopologyGlue.hpp"
 #include "Dialogs.h"
 #include "Device/device.hpp"
 #include "Message.hpp"
@@ -146,7 +147,7 @@ SettingsLeave()
   }
 
   if (TopologyFileChanged)
-    topology->Reload();
+    LoadConfiguredTopology(*topology);
 
   if (AirspaceFileChanged) {
     airspace_warnings.clear();

@@ -68,6 +68,7 @@ Copyright_License {
 #include "Marks.hpp"
 #include "Device/device.hpp"
 #include "Topology/TopologyStore.hpp"
+#include "Topology/TopologyGlue.hpp"
 #include "Audio/VarioSound.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Busy.hpp"
@@ -351,6 +352,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   // Read the topology file(s)
   topology = new TopologyStore();
+  LoadConfiguredTopology(*topology);
 
   // Read the terrain file
   ProgressGlue::Create(_("Loading Terrain File..."));
@@ -555,7 +557,10 @@ XCSoarInterface::Shutdown(void)
   LogStartUp(_T("CloseTerrain"));
 
   delete terrain;
+
+  LogStartUp(_T("CloseTopology"));
   delete topology;
+
   delete marks;
 
   // Close any device connections

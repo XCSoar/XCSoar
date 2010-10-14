@@ -36,45 +36,49 @@ Copyright_License {
 }
 */
 
-#ifndef TOPOLOGY_STORE_H
-#define TOPOLOGY_STORE_H
+#include "Topology/TopologyGlue.hpp"
+#include "Topology/TopologyStore.hpp"
+#include "Language.hpp"
+#include "Profile/Profile.hpp"
+#include "LogFile.hpp"
+#include "ProgressGlue.hpp"
+#include "IO/ZipLineReader.hpp"
+#include "OS/FileUtil.hpp"
+#include "OS/PathName.hpp"
 
-#include "Util/NonCopyable.hpp"
+bool
+LoadConfiguredTopology(TopologyStore &store)
+{
+  LogStartUp(_T("Loading Topology File..."));
+  ProgressGlue::Create(_("Loading Topology File..."));
 
-#include <tchar.h>
+  // Start off by getting the names and paths
+  TCHAR szFile[MAX_PATH];
 
-class Canvas;
-class BitmapCanvas;
-class Projection;
-class LabelBlock;
-class TopologyFile;
-struct SETTINGS_MAP;
-class NLineReader;
+  if (!Profile::GetPath(szProfileTopologyFile, szFile) ||
+      !File::Exists(szFile)) {
+    // file is blank, so look for it in a map file
+    if (!Profile::GetPath(szProfileMapFile, szFile) ||
+        !File::Exists(szFile))
+      return false;
 
-/**
- * Class used to manage and render vector topology layers
- */
-class TopologyStore : private NonCopyable {
-  enum {
-    /** maximum number of topologies */
-    MAXTOPOLOGY = 20,
-  };
+    // Look for the file within the map zip file...
+    _tcscat(szFile, _T("/"));
+    _tcscat(szFile, _T("topology.tpl"));
+  }
 
-public:
-  TopologyStore();
-  ~TopologyStore();
+  // Ready to open the file now..
+  ZipLineReaderA reader(szFile);
+  if (reader.error()) {
+    LogStartUp(_T("No topology file: %s"), szFile);
+    return false;
+  }
 
-  void ScanVisibility(const Projection &m_projection);
-  void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-            const Projection &projection) const;
-  void DrawLabels(Canvas &canvas,
-                  const Projection &projection, LabelBlock &label_block,
-                  const SETTINGS_MAP &settings_map) const;
+  TCHAR buffer[MAX_PATH];
+  const TCHAR *Directory = DirName(szFile, buffer);
+  if (Directory == NULL)
+    return false;
 
-  void Load(NLineReader &reader, const TCHAR* Directory);
-  void Reset();
-
-  TopologyFile* topology_store[MAXTOPOLOGY];
-};
-
-#endif
+  store.Load(reader, Directory);
+  return true;
+}
