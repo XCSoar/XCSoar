@@ -81,6 +81,11 @@ typedef Window *(*CreateWindowCallback_t)(ContainerWindow &parent,
                                           unsigned width, unsigned height,
                                           const WindowStyle style);
 
+static void
+LoadChildrenFromXML(WndForm &form, ContainerControl &parent,
+                    CallBackTableEntry *LookUpTable,
+                    XMLNode *Node, const DialogStyle eDialogStyle);
+
 /**
  * Converts a String into an Integer and returns
  * the default value if String = NULL
@@ -265,11 +270,6 @@ GetCallBack(CallBackTableEntry *LookUpTable,
   return CallBackLookup(LookUpTable,
                         StringToStringDflt(node.getAttribute(attribute), NULL));
 }
-
-static void
-LoadChildrenFromXML(WndForm &form, ContainerControl &parent,
-                    CallBackTableEntry *LookUpTable,
-                    XMLNode *Node, const DialogStyle eDialogStyle);
 
 static void
 ShowXMLError(const TCHAR* msg = _T("Error in loading XML dialog"))
