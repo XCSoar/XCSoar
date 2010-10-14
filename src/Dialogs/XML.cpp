@@ -558,8 +558,8 @@ LoadChild(WndForm &form, ContainerControl &Parent,
   if (_tcscmp(node.getName(), _T("Edit")) == 0) {
     WndProperty *W;
     int CaptionWidth;
-    int ReadOnly;
-    int MultiLine;
+    bool ReadOnly;
+    bool MultiLine;
 
     // Determine the width of the caption field
     CaptionWidth = 
