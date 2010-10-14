@@ -89,25 +89,24 @@ dlgSimulatorPromptShowModal()
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   Layout::landscape ? _T("IDR_XML_SIMULATORPROMPT_L") :
                                       _T("IDR_XML_SIMULATORPROMPT"));
-  if (!wf)
-    return false;
+  assert(wf != NULL);
 
   TCHAR temp[MAX_PATH];
   _stprintf(temp, _T("XCSoar v%s"), XCSoar_VersionString);
 
   WindowControl* wc;
   wc = ((WindowControl *)wf->FindByName(_T("lblVersion")));
-  if (wc)
-    wc->SetCaption(temp);
+  assert(wc != NULL);
+  wc->SetCaption(temp);
 
   WndButton* wb;
   wb = ((WndButton *)wf->FindByName(_T("cmdSimulator")));
-  if (wb)
-    wb->SetOnClickNotify(OnSimulatorClicked);
+  assert(wb != NULL);
+  wb->SetOnClickNotify(OnSimulatorClicked);
 
   wb = ((WndButton *)wf->FindByName(_T("cmdFly")));
-  if (wb)
-    wb->SetOnClickNotify(OnFlyClicked);
+  assert(wb != NULL);
+  wb->SetOnClickNotify(OnFlyClicked);
 
   bool retval = (wf->ShowModal() == mrOK);
 
