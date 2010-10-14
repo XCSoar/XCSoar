@@ -444,7 +444,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
 }
 
 static DataField *
-LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable, 
+LoadDataField(const XMLNode &node, CallBackTableEntry_t *LookUpTable,
               const DialogStyle_t eDialogStyle)
 {
   TCHAR DataType[32];
