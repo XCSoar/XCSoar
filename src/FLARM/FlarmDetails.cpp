@@ -44,7 +44,6 @@ Copyright_License {
 #include "FLARM/FLARMNet.hpp"
 #include "IO/DataFile.hpp"
 #include "IO/TextWriter.hpp"
-#include "IO/LineSplitter.hpp"
 
 #include <stdlib.h>
 
@@ -73,13 +72,12 @@ FlarmDetails::Load()
 void
 FlarmDetails::LoadFLARMnet()
 {
-  Source<char> *source = OpenDataFile(_T("data.fln"));
-  if (!source)
+  NLineReader *reader = OpenDataTextFileA(_T("data.fln"));
+  if (reader == NULL)
     return;
 
-  LineSplitter splitter(*source);
-  unsigned num_records = flarm_net.LoadFile(splitter);
-  delete source;
+  unsigned num_records = flarm_net.LoadFile(*reader);
+  delete reader;
 
   if (num_records > 0)
     LogStartUp(_T("%u FLARMnet ids found"), num_records);

@@ -69,6 +69,7 @@ OpenDataFile(const TCHAR *name)
 TLineReader *
 OpenDataTextFile(const TCHAR *name, ConvertLineReader::charset cs)
 {
+#ifdef _UNICODE
   assert(name != NULL);
   assert(!string_is_empty(name));
 
@@ -76,6 +77,30 @@ OpenDataTextFile(const TCHAR *name, ConvertLineReader::charset cs)
   LocalPath(path, name);
 
   FileLineReader *reader = new FileLineReader(path, cs);
+  if (reader == NULL)
+    return NULL;
+
+  if (reader->error()) {
+    delete reader;
+    return NULL;
+  }
+
+  return reader;
+#else
+  return OpenDataTextFileA(name);
+#endif
+}
+
+NLineReader *
+OpenDataTextFileA(const TCHAR *name)
+{
+  assert(name != NULL);
+  assert(!string_is_empty(name));
+
+  TCHAR path[MAX_PATH];
+  LocalPath(path, name);
+
+  FileLineReaderA *reader = new FileLineReaderA(path);
   if (reader == NULL)
     return NULL;
 

@@ -67,6 +67,16 @@ OpenDataTextFile(const TCHAR *name,
                  ConvertLineReader::charset cs=ConvertLineReader::UTF8);
 
 /**
+ * Opens a text file from the data directory.
+ *
+ * @param name the file name relative to the data directory
+ * @return a TLineReader which must be deleted by the caller; NULL if
+ * an error occurred opening the file
+ */
+NLineReader *
+OpenDataTextFileA(const TCHAR *name);
+
+/**
  * Creates a text file in the data directory.  If the file already
  * exists, it is truncated, unless "append" is true.
  */
