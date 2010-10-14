@@ -47,6 +47,35 @@ Copyright_License {
  * Glue class which combines ZipSource, LineSplitter and
  * ConvertLineReader, and provides a public TLineReader interface.
  */
+class ZipLineReaderA : public NLineReader {
+protected:
+  ZipSource zip;
+  LineSplitter splitter;
+
+public:
+  ZipLineReaderA(const char *path)
+    :zip(path), splitter(zip) {}
+#ifdef _UNICODE
+  ZipLineReaderA(const TCHAR *path)
+    :zip(path), splitter(zip) {}
+#endif
+
+  bool error() const {
+    return zip.error();
+  }
+
+public:
+  virtual char *read();
+  virtual long size() const;
+  virtual long tell() const;
+};
+
+#ifdef _UNICODE
+
+/**
+ * Glue class which combines ZipSource, LineSplitter and
+ * ConvertLineReader, and provides a public TLineReader interface.
+ */
 class ZipLineReader : public TLineReader {
 protected:
   ZipSource zip;
@@ -72,5 +101,16 @@ public:
   virtual long size() const;
   virtual long tell() const;
 };
+
+#else
+
+class ZipLineReader : public ZipLineReaderA {
+public:
+  ZipLineReader(const char *path,
+                 ConvertLineReader::charset cs=ConvertLineReader::UTF8)
+    :ZipLineReaderA(path) {}
+};
+
+#endif
 
 #endif

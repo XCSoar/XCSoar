@@ -44,6 +44,35 @@ Copyright_License {
 #include "ConvertLineReader.hpp"
 
 /**
+ * Glue class which combines FileSource and LineSplitter, and provides
+ * a public NLineReader interface.
+ */
+class FileLineReaderA : public NLineReader {
+protected:
+  FileSource file;
+  LineSplitter splitter;
+
+public:
+  FileLineReaderA(const char *path)
+    :file(path), splitter(file) {}
+#ifdef _UNICODE
+  FileLineReaderA(const TCHAR *path)
+    :file(path), splitter(file) {}
+#endif
+
+  bool error() const {
+    return file.error();
+  }
+
+public:
+  virtual char *read();
+  virtual long size() const;
+  virtual long tell() const;
+};
+
+#ifdef _UNICODE
+
+/**
  * Glue class which combines FileSource, LineSplitter and
  * ConvertLineReader, and provides a public TLineReader interface.
  */
@@ -72,5 +101,16 @@ public:
   virtual long size() const;
   virtual long tell() const;
 };
+
+#else
+
+class FileLineReader : public FileLineReaderA {
+public:
+  FileLineReader(const char *path,
+                 ConvertLineReader::charset cs=ConvertLineReader::UTF8)
+    :FileLineReaderA(path) {}
+};
+
+#endif
 
 #endif

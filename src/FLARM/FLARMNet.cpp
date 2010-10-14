@@ -134,12 +134,11 @@ FLARMNetDatabase::LoadFile(NLineReader &reader)
 unsigned
 FLARMNetDatabase::LoadFile(const TCHAR *path)
 {
-  FileSource file(path);
+  FileLineReaderA file(path);
   if (file.error())
     return 0;
 
-  LineSplitter splitter(file);
-  return LoadFile(splitter);
+  return LoadFile(file);
 }
 
 /**

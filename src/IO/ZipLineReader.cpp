@@ -38,6 +38,26 @@ Copyright_License {
 
 #include "ZipLineReader.hpp"
 
+char *
+ZipLineReaderA::read()
+{
+  return splitter.read();
+}
+
+long
+ZipLineReaderA::size() const
+{
+  return splitter.size();
+}
+
+long
+ZipLineReaderA::tell() const
+{
+  return splitter.tell();
+}
+
+#ifdef _UNICODE
+
 TCHAR *
 ZipLineReader::read()
 {
@@ -55,3 +75,5 @@ ZipLineReader::tell() const
 {
   return convert.tell();
 }
+
+#endif

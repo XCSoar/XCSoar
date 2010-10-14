@@ -38,6 +38,26 @@ Copyright_License {
 
 #include "FileLineReader.hpp"
 
+char *
+FileLineReaderA::read()
+{
+  return splitter.read();
+}
+
+long
+FileLineReaderA::size() const
+{
+  return splitter.size();
+}
+
+long
+FileLineReaderA::tell() const
+{
+  return splitter.tell();
+}
+
+#ifdef _UNICODE
+
 TCHAR *
 FileLineReader::read()
 {
@@ -55,3 +75,5 @@ FileLineReader::tell() const
 {
   return convert.tell();
 }
+
+#endif

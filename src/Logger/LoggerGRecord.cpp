@@ -38,7 +38,7 @@
 #include "Logger/LoggerGRecord.hpp"
 #include "Logger/MD5.hpp"
 #include "IO/FileSource.hpp"
-#include "IO/LineSplitter.hpp"
+#include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
 
 #include <tchar.h>
@@ -188,14 +188,13 @@ bool GRecord::IncludeRecordInGCalc(const unsigned char *szIn)
 bool
 GRecord::LoadFileToBuffer()
 { //loads a file into the data buffer
-  FileSource source(FileName);
-  if (source.error())
+  FileLineReaderA reader(FileName);
+  if (reader.error())
     return false;
 
-  LineSplitter splitter(source);
   char *line;
 
-  while ((line = splitter.read()) != NULL)
+  while ((line = reader.read()) != NULL)
     AppendRecordToBuffer(line);
 
   return true;
@@ -242,15 +241,13 @@ GRecord::AppendGRecordToFile(bool bValid) // writes error if invalid G Record
 bool
 GRecord::ReadGRecordFromFile(char *szOutput, size_t max_length)
 {// returns in szOutput the G Record from the file referenced by FileName member
-  FileSource source(FileName);
-  if (source.error())
+  FileLineReaderA reader(FileName);
+  if (reader.error())
     return false;
-
-  LineSplitter splitter(source);
 
   unsigned int iLenDigest=0;
   char *data;
-  while ((data = splitter.read()) != NULL) {
+  while ((data = reader.read()) != NULL) {
     if (data[0] != 'G')
       continue;
 

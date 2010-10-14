@@ -44,8 +44,7 @@ Copyright_License {
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
 
-class FileSource;
-class LineSplitter;
+class FileLineReaderA;
 
 class NmeaReplay
 {
@@ -71,8 +70,7 @@ protected:
 
 private:
   TCHAR FileName[MAX_PATH];
-  FileSource *source;
-  LineSplitter *reader;
+  FileLineReaderA *reader;
 
   bool OpenFile();
   void CloseFile();

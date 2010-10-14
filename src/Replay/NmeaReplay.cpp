@@ -37,8 +37,7 @@
 */
 
 #include "Replay/NmeaReplay.hpp"
-#include "IO/FileSource.hpp"
-#include "IO/LineSplitter.hpp"
+#include "IO/FileLineReader.hpp"
 
 #include <algorithm>
 
@@ -48,7 +47,7 @@
 NmeaReplay::NmeaReplay() :
   TimeScale(1.0),
   Enabled(false),
-  source(NULL), reader(NULL)
+  reader(NULL)
 {
   FileName[0] = _T('\0');
 }
@@ -138,13 +137,12 @@ NmeaReplay::OpenFile()
   if (string_is_empty(FileName))
     return false;
 
-  source = new FileSource(FileName);
-  if (source->error()) {
+  reader = new FileLineReaderA(FileName);
+  if (reader->error()) {
     CloseFile();
     return false;
   }
 
-  reader = new LineSplitter(*source);
   return true;
 }
 

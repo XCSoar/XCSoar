@@ -38,8 +38,7 @@
 #include "Logger/IGCWriter.hpp"
 #include "OS/FileUtil.hpp"
 #include "NMEA/Info.hpp"
-#include "IO/FileSource.hpp"
-#include "IO/LineSplitter.hpp"
+#include "IO/FileLineReader.hpp"
 #include "TestUtil.hpp"
 
 #include <assert.h>
@@ -47,10 +46,8 @@
 static void
 CheckTextFile(const TCHAR *path, const char *const* expect)
 {
-  FileSource file(path);
-  ok1(!file.error());
-
-  LineSplitter reader(file);
+  FileLineReaderA reader(path);
+  ok1(!reader.error());
 
   const char *line;
   while ((line = reader.read()) != NULL) {

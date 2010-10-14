@@ -147,18 +147,16 @@ TopologyStore::Open()
   }
 
   // Ready to open the file now..
-  ZipSource reader(szFile);
+  ZipLineReaderA reader(szFile);
   if (reader.error()) {
     LogStartUp(_T("No topology file: %s"), szFile);
     return;
   }
 
-  LineSplitter splitter(reader);
-
   TCHAR buffer[MAX_PATH];
   const TCHAR *Directory = DirName(szFile, buffer);
   if (Directory != NULL)
-    Load(splitter, Directory);
+    Load(reader, Directory);
 }
 
 void

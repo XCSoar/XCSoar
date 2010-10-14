@@ -39,8 +39,7 @@ Copyright_License {
 #include "Terrain/RasterTile.hpp"
 #include "jasper/jas_image.h"
 #include "Math/Angle.hpp"
-#include "IO/ZipSource.hpp"
-#include "IO/LineSplitter.hpp"
+#include "IO/ZipLineReader.hpp"
 #include "ProgressGlue.hpp"
 
 #include <stdlib.h>
@@ -349,11 +348,9 @@ RasterTileCache::LoadJPG2000(const char *jp2_filename)
 bool
 RasterTileCache::LoadWorldFile(const TCHAR *path)
 {
-  ZipSource source(path);
-  if (source.error())
+  ZipLineReaderA reader(path);
+  if (reader.error())
     return false;
-
-  LineSplitter reader(source);
 
   char *endptr;
   const char *line = reader.read(); // x scale
