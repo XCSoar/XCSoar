@@ -165,14 +165,11 @@ GetDialogStyle(const XMLNode &xNode)
 static int 
 ScaleWidth(const int x, const DialogStyle eDialogStyle) 
 {
-  if (!Layout::ScaleSupported())
-    return x;
-
   if (eDialogStyle == dsFullWidth)
     // stretch width to fill screen horizontally
     return x * dialog_width_scale / 1024;
   else
-    return Layout::Scale(x);
+    return x;
 }
 
 static const TCHAR*
@@ -203,20 +200,23 @@ GetPosition(const XMLNode &Node)
   pt.x = StringToIntDflt(Node.getAttribute(_T("X")), 0);
   pt.y = StringToIntDflt(Node.getAttribute(_T("Y")), -1);
 
+  if (!Layout::ScaleSupported())
+    return pt;
+
+  pt.x = Layout::Scale(pt.x);
+  if (pt.y != -1)
+    pt.y = Layout::Scale(pt.y);
+
   return pt;
 }
 
 static POINT
 ScalePosition(const POINT original, const DialogStyle eDialogStyle)
 {
-  POINT pt;
+  POINT pt = original;
 
   // Calculate x- and y-Coordinate
   pt.x = ScaleWidth(original.x, eDialogStyle);
-  if (original.y != -1)
-    pt.y = Layout::Scale(original.y);
-  else
-    pt.y = original.y;
 
   return pt;
 }
@@ -238,17 +238,22 @@ GetSize(const XMLNode &Node)
   // Calculate width and height
   sz.cx = StringToIntDflt(Node.getAttribute(_T("Width")), 0);
   sz.cy = StringToIntDflt(Node.getAttribute(_T("Height")), 0);
+
+  if (!Layout::ScaleSupported())
+    return sz;
+
+  sz.cx = Layout::Scale(sz.cx);
+  sz.cy = Layout::Scale(sz.cy);
   return sz;
 }
 
 static SIZE
 ScaleSize(const SIZE original, const DialogStyle eDialogStyle)
 {
-  SIZE sz;
+  SIZE sz = original;
 
   // Calculate width and height
   sz.cx = ScaleWidth(original.cx, eDialogStyle);
-  sz.cy = Layout::Scale(original.cy);
   return sz;
 }
 
@@ -574,7 +579,10 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     // Determine the width of the caption field
     CaptionWidth = 
       ScaleWidth(StringToIntDflt(node.getAttribute(_T("CaptionWidth")), 0),
-                      eDialogStyle);
+                 eDialogStyle);
+
+    if (Layout::ScaleSupported())
+      CaptionWidth = Layout::Scale(CaptionWidth);
 
     // Determine whether the control is multiline or readonly
     MultiLine = StringToIntDflt(node.getAttribute(_T("MultiLine")), 0);
