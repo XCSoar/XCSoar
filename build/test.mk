@@ -56,7 +56,7 @@ TEST_NAMES = \
 	test_task \
 	TestAngle TestUnits TestEarth TestSunEphemeris \
 	TestRadixTree \
-	TestDriver \
+	TestLogger TestDriver \
 	TestWayPointFile
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
@@ -114,9 +114,7 @@ TEST_LOGGER_SOURCES = \
 	$(SRC)/Logger/LoggerGRecord.cpp \
 	$(SRC)/Logger/LoggerEPE.cpp \
 	$(SRC)/Logger/MD5.cpp \
-	$(SRC)/Simulator.cpp \
 	$(SRC)/Version.cpp \
-	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Math/fixed.cpp \
 	$(SRC)/Math/Angle.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
@@ -124,7 +122,7 @@ TEST_LOGGER_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
-	$(TEST_SRC_DIR)/FakeProfile.cpp \
+	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestLogger.cpp
 TEST_LOGGER_OBJS = $(call SRC_TO_OBJ,$(TEST_LOGGER_SOURCES))
 TEST_LOGGER_LDADD = $(IO_LIBS)

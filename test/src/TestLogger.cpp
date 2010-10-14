@@ -40,6 +40,7 @@
 #include "NMEA/Info.hpp"
 #include "IO/FileSource.hpp"
 #include "IO/LineSplitter.hpp"
+#include "TestUtil.hpp"
 
 #include <assert.h>
 
@@ -47,7 +48,7 @@ static void
 CheckTextFile(const TCHAR *path, const char *const* expect)
 {
   FileSource file(path);
-  assert(!file.error());
+  ok1(!file.error());
 
   LineSplitter reader(file);
 
@@ -56,18 +57,18 @@ CheckTextFile(const TCHAR *path, const char *const* expect)
     if (*line == 'G')
       break;
 
-    assert(*expect != NULL);
+    ok1(*expect != NULL);
 
     if (strncmp(*expect, "HFFTYFR TYPE:", 13) == 0) {
-      assert(strncmp(line, "HFFTYFR TYPE:", 13) == 0);
+      ok1(strncmp(line, "HFFTYFR TYPE:", 13) == 0);
     } else {
-      assert(strcmp(line, *expect) == 0);
+      ok1(strcmp(line, *expect) == 0);
     }
 
     ++expect;
   }
 
-  assert(*expect == NULL);
+  ok1(*expect == NULL);
 }
 
 static const char *const expect[] = {
@@ -97,6 +98,8 @@ static const char *const expect[] = {
 
 int main(int argc, char **argv)
 {
+  plan_tests(45);
+
   const TCHAR *path = _T("output/test/test.igc");
   File::Delete(path);
 
@@ -146,7 +149,7 @@ int main(int argc, char **argv)
   GRecord grecord;
   grecord.Init();
   grecord.SetFileName(path);
-  assert(grecord.VerifyGRecordInFile());
+  ok1(grecord.VerifyGRecordInFile());
 
   return 0;
 }
