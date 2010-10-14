@@ -744,8 +744,15 @@ LoadChild(WndForm &form, ContainerControl &Parent,
   // FrameControl (WndFrame)
   } else if (_tcscmp(node.getName(), _T("Label")) == 0){
     // Create the FrameControl
-    WC = new WndFrame(Parent, pos.x, pos.y, size.cx, size.cy,
-                      style);
+    WndFrame* frame = new WndFrame(Parent, pos.x, pos.y, size.cx, size.cy, style);
+
+    // Set the fore- and background color
+    LoadColors(*frame, node);
+
+    // Set the caption
+    frame->SetCaption(Caption);
+
+    window = frame;
 
   // ListBoxControl (WndListFrame)
   } else if (_tcscmp(node.getName(), _T("List")) == 0){
