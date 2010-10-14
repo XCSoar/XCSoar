@@ -183,11 +183,11 @@ __zzip_fetch_disk_trailer(int fd, zzip_off_t filesize,
                           struct _disk_trailer *_zzip_restrict trailer,
                           zzip_plugin_io_t io)
 {
-//#ifdef DEBUG
-//#define return(val) { e=val; HINT2("%s", zzip_strerror(e)); goto cleanup; }
-//#else
+#ifdef DEBUG
+#define return(val) { e=val; HINT2("%s", zzip_strerror(e)); goto cleanup; }
+#else
 #define return(val) { e=val; goto cleanup; }
-//#endif
+#endif
     register int e;
 
 #ifndef _LOWSTK
@@ -722,13 +722,11 @@ __zzip_dir_parse(ZZIP_DIR * dir)
     zzip_error_t rv;
     zzip_off_t filesize;
     struct _disk_trailer trailer;
-
-    /* if (! dir || dir->fd < 0) 
-     *     { rv = EINVAL; goto error; } 
+    /* if (! dir || dir->fd < 0)
+     *     { rv = EINVAL; goto error; }
      */
 
     HINT2("------------------ fd=%i", (int) dir->fd);
-
     if ((filesize = dir->io->fd.filesize(dir->fd)) < 0)
         { rv = ZZIP_DIR_STAT; goto error; }
 

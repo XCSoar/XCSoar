@@ -104,6 +104,7 @@ zzip_file_saveoffset(ZZIP_FILE * fp)
     return 0;
 }
 
+
 /* user-definition */
 #ifndef ZZIP_BACKSLASH_DIRSEP
 #if defined HAVE_WINDOWS_H || defined ZZIP_HAVE_WINDOWS_H || defined _WIN32
@@ -320,7 +321,6 @@ zzip_file_open(ZZIP_DIR * dir, zzip_char_t * name, int o_mode)
 #ifdef ZZIP_DISABLED
     dir->errcode = ZZIP_ENOENT;
 #endif /* ZZIP_DISABLED */
-
     return NULL;
   error:
     if (fp)
