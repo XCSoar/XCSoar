@@ -709,7 +709,10 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     PanelControl *frame = new PanelControl(Parent, pos.x, pos.y, size.cx, size.cy, style);
 
-    WC = frame;
+    // Set the fore- and background color
+    LoadColors(*frame, node);
+
+    window = frame;
 
     // Load children controls from the XMLNode
     LoadChildrenFromXML(form, *frame, LookUpTable, &node, eDialogStyle);
