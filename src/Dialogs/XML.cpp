@@ -71,7 +71,7 @@ Copyright_License {
 static int dialog_width_scale = 1024;
 
 // to full width of screen
-DialogStyle g_eDialogStyle = eDialogFullWidth;
+DialogStyle g_eDialogStyle = dsFullWidth;
 
 /**
  * Callback type for the "Custom" element, attribute "OnCreate".
@@ -163,7 +163,7 @@ Scale_Dlg_Width(const int x, const DialogStyle eDialogStyle)
   if (!Layout::ScaleSupported())
     return x;
 
-  if (eDialogStyle == eDialogFullWidth)
+  if (eDialogStyle == dsFullWidth)
     // stretch width to fill screen horizontally
     return x * dialog_width_scale / 1024;
   else
@@ -357,7 +357,7 @@ CalcWidthStretch(const SIZE size, const RECT rc, const DialogStyle eDialogStyle)
   if (!Layout::ScaleSupported())
     return;
 
-  if (eDialogStyle == eDialogFullWidth)
+  if (eDialogStyle == dsFullWidth)
     dialog_width_scale = (rc.right - rc.left) * 1024 / size.cx;
   else
     dialog_width_scale = 1024;
@@ -416,13 +416,13 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
 
   // Correct dialog size and position for dialog style
   switch (dialog_style) {
-  case eDialogFullWidth:
+  case dsFullWidth:
     pos.x = rc.left;
     pos.y = rc.top;
     size.cx = rc.right - rc.left; // stretch form to full width of screen
     size.cy = rc.bottom - rc.top;
     break;
-  case eDialogScaledCentered:
+  case dsScaledCentered:
     pos = SetPositionCentered(pos, rc, size);
     break;
   }
