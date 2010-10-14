@@ -192,7 +192,7 @@ GetCaption(const XMLNode &Node)
 }
 
 static POINT
-GetPosition(const XMLNode &Node)
+GetPosition(const XMLNode &Node, const RECT rc)
 {
   POINT pt;
 
@@ -200,12 +200,16 @@ GetPosition(const XMLNode &Node)
   pt.x = StringToIntDflt(Node.getAttribute(_T("X")), 0);
   pt.y = StringToIntDflt(Node.getAttribute(_T("Y")), -1);
 
-  if (!Layout::ScaleSupported())
-    return pt;
+  if (Layout::ScaleSupported()) {
+    pt.x = Layout::Scale(pt.x);
+    if (pt.y != -1)
+      pt.y = Layout::Scale(pt.y);
+  }
 
-  pt.x = Layout::Scale(pt.x);
-  if (pt.y != -1)
-    pt.y = Layout::Scale(pt.y);
+  if (pt.x < -1)
+    pt.x += rc.right;
+  if (pt.y < -1)
+    pt.y += rc.bottom;
 
   return pt;
 }
@@ -220,7 +224,7 @@ SetPositionCentered(const POINT original, const RECT rc, const SIZE size)
 }
 
 static SIZE
-GetSize(const XMLNode &Node)
+GetSize(const XMLNode &Node, const RECT rc, const POINT pos)
 {
   SIZE sz;
 
@@ -228,11 +232,16 @@ GetSize(const XMLNode &Node)
   sz.cx = StringToIntDflt(Node.getAttribute(_T("Width")), 0);
   sz.cy = StringToIntDflt(Node.getAttribute(_T("Height")), 0);
 
-  if (!Layout::ScaleSupported())
-    return sz;
+  if (Layout::ScaleSupported()) {
+    sz.cx = Layout::Scale(sz.cx);
+    sz.cy = Layout::Scale(sz.cy);
+  }
 
-  sz.cx = Layout::Scale(sz.cx);
-  sz.cy = Layout::Scale(sz.cy);
+  if (sz.cx <= 0)
+    sz.cx += rc.right - pos.x;
+  if (sz.cy <= 0)
+    sz.cy += rc.bottom - pos.y;
+
   return sz;
 }
 
@@ -397,10 +406,10 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
 
   // Determine the dialog size
   const TCHAR* Caption = GetCaption(node);
-  POINT pos = GetPosition(node);
-  SIZE size = GetSize(node);
-
   const RECT rc = Parent.get_client_rect();
+  POINT pos = GetPosition(node, rc);
+  SIZE size = GetSize(node, rc, pos);
+
   InitScaleWidth(size, rc, dialog_style);
 
   // Correct dialog size and position for dialog style
@@ -516,24 +525,11 @@ LoadChild(WndForm &form, ContainerControl &Parent,
   // and caption of the control
   const TCHAR* Name = GetName(node);
   const TCHAR* Caption = GetCaption(node);
-  POINT pos = GetPosition(node);
+  RECT rc = Parent.GetClientAreaWindow().get_client_rect();
+  POINT pos = GetPosition(node, rc);
   pos.x = ScaleWidth(pos.x, eDialogStyle);
-  SIZE size = GetSize(node);
+  SIZE size = GetSize(node, rc, pos);
   size.cx = ScaleWidth(size.cx, eDialogStyle);
-
-  if (pos.x < -1 || pos.y < -1 || size.cx <= 0 || size.cy <= 0) {
-    /* a non-positive width/height specifies the distance from the
-       right/bottom border of the parent */
-    RECT rc = Parent.GetClientAreaWindow().get_client_rect();
-    if (pos.x < -1)
-      pos.x += rc.right;
-    if (pos.y < -1)
-      pos.y += rc.bottom;
-    if (size.cx <= 0)
-      size.cx += rc.right - pos.x;
-    if (size.cy <= 0)
-      size.cy += rc.bottom - pos.y;
-  }
 
   WindowStyle style;
 
