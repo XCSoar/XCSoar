@@ -401,7 +401,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   }
 
   // Determine the dialog style of the dialog
-  DialogStyle_t eDialogStyle = GetDialogStyle(node);
+  DialogStyle_t dialog_style = GetDialogStyle(node);
 
   // Determine the dialog size
   const TCHAR* Caption = GetCaption(node);
@@ -409,13 +409,13 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   SIZE size = GetSize(node);
 
   const RECT rc = Parent.get_client_rect();
-  CalcWidthStretch(size, rc, eDialogStyle);
+  CalcWidthStretch(size, rc, dialog_style);
 
-  pos = ScalePosition(pos, eDialogStyle);
-  size = ScaleSize(size, eDialogStyle);
+  pos = ScalePosition(pos, dialog_style);
+  size = ScaleSize(size, dialog_style);
 
   // Correct dialog size and position for dialog style
-  switch (eDialogStyle) {
+  switch (dialog_style) {
   case eDialogFullWidth:
     pos.x = rc.left;
     pos.y = rc.top;
@@ -438,7 +438,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   LoadColors(*form, node);
 
   // Load the children controls
-  LoadChildrenFromXML(*form, *form, LookUpTable, &node, eDialogStyle);
+  LoadChildrenFromXML(*form, *form, LookUpTable, &node, dialog_style);
 
   // If XML error occurred -> Error messagebox + cancel
   if (XMLNode::GlobalError) {
