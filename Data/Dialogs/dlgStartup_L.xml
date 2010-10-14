@@ -4,8 +4,6 @@
   <Label Name="lblVersion" X="8" Y="5" Width="155" Height="18" Caption="" />
 
   <Canvas Name="frmSplash" X="175" Y="2" Width="110" Height="110" OnPaint="OnSplashPaint" />
-
-  <Label Name="frmDisclaimer1" X="8" Width="314" Height="55"/>
   
   <Panel Name="frmShade" X="0" Y="-60" BackColor="0xDADBAB">
     <Button Name="cmdClose" Caption="Accept" X="2" Width="-2" Height="30"/>

@@ -106,11 +106,6 @@ dlgStartupShowModal()
   if (wc)
     wc->SetCaption(temp);
 
-  static WndFrame* wDisclaimer1 = (WndFrame*)wf->FindByName(_T("frmDisclaimer1"));
-  wDisclaimer1->SetCaption(_T("Pilot assumes complete responsibility to ")
-                           _T("operate the aircraft safely. Maintain ")
-                           _T("effective lookout."));
-
   dfe->ScanDirectoryTop(is_altair() ? _T("config/*.prf") : _T("*.prf"));
   dfe->Lookup(startProfileFile);
   wp->RefreshDisplay();
