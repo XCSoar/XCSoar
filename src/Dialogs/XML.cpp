@@ -182,16 +182,28 @@ GetCaption(XMLNode &Node)
 }
 
 static POINT
-GetPosition(XMLNode &Node, const DialogStyle_t eDialogStyle)
+GetPosition(XMLNode &Node)
 {
   POINT pt;
 
   // Calculate x- and y-Coordinate
-  pt.x = Scale_Dlg_Width(StringToIntDflt(Node.getAttribute(_T("X")), 0),
-                       eDialogStyle);
+  pt.x = StringToIntDflt(Node.getAttribute(_T("X")), 0);
   pt.y = StringToIntDflt(Node.getAttribute(_T("Y")), -1);
-  if (pt.y != -1)
-    pt.y = Layout::Scale(pt.y);
+
+  return pt;
+}
+
+static POINT
+ScalePosition(const POINT original, const DialogStyle_t eDialogStyle)
+{
+  POINT pt;
+
+  // Calculate x- and y-Coordinate
+  pt.x = Scale_Dlg_Width(original.x, eDialogStyle);
+  if (original.y != -1)
+    pt.y = Layout::Scale(original.y);
+  else
+    pt.y = original.y;
 
   return pt;
 }
@@ -375,7 +387,8 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   CalcWidthStretch(xNode, rc, eDialogStyle);
 
   const TCHAR* Caption = GetCaption(xNode);
-  POINT pos = GetPosition(xNode, eDialogStyle);
+  POINT pos = GetPosition(xNode);
+  pos = ScalePosition(pos, eDialogStyle);
   SIZE size = GetSize(xNode, eDialogStyle);
 
   // Correct dialog size and position for dialog style
@@ -497,7 +510,8 @@ LoadChild(WndForm &form, ContainerControl &Parent,
   // and caption of the control
   const TCHAR* Name = GetName(node);
   const TCHAR* Caption = GetCaption(node);
-  POINT pos = GetPosition(node, eDialogStyle);
+  POINT pos = GetPosition(node);
+  pos =  ScalePosition(pos, eDialogStyle);
   SIZE size = GetSize(node, eDialogStyle);
 
   if (pos.x < -1 || pos.y < -1 || size.cx <= 0 || size.cy <= 0) {
