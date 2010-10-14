@@ -120,11 +120,7 @@ dlgStartupShowModal()
                            _T("operate the aircraft safely. Maintain ")
                            _T("effective lookout."));
 
-  if (is_altair())
-    dfe->ScanDirectoryTop(_T("config/*.prf"));
-  else
-    dfe->ScanDirectoryTop(_T("*.prf"));
-
+  dfe->ScanDirectoryTop(is_altair() ? _T("config/*.prf") : _T("*.prf"));
   dfe->Lookup(startProfileFile);
   wp->RefreshDisplay();
 
