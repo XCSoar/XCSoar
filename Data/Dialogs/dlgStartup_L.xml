@@ -5,11 +5,9 @@
 
   <Canvas Name="frmSplash" X="175" Y="2" Width="110" Height="110" OnPaint="OnSplashPaint" />
 
-  <Canvas Name="frmspacer2" X="2" Width="300" Height="10" />
-
   <Label Name="frmDisclaimer1" X="8" Width="314" Height="55"/>
   
-  <Panel Name="frmShade" X="0" Width="0" Height="80" Border="0" BackColor="0xDADBAB">
+  <Panel Name="frmShade" X="0" Y="-60" BackColor="0xDADBAB">
     <Button Name="cmdClose" Caption="Accept" X="2" Width="-2" Height="30"/>
 
     <Edit Name="prpProfile" Caption="Profile" X="2" Width="-2" Height="25" CaptionWidth="60" BackColor="0xDADBAB">

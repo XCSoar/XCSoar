@@ -3,17 +3,11 @@
 <Form Name="frmStartup" Width="240" Height="320" Caption="" BackColor="0xFFFFFF">
   <Label Name="lblVersion" X="8" Y="2" Width="310" Height="20" Caption="" />
 
-  <Canvas Name="frmspacer1" X="2" Width="240" Height="20" />
-
   <Canvas Name="frmSplash" X="65" Width="110" Height="110" OnPaint="OnSplashPaint" />
 
-  <Canvas Name="frmspacer2" X="2" Width="300" Height="15" />
-
   <Label Name="frmDisclaimer1" X="8" Width="235" Height="75"/>
-
-  <Canvas Name="frmspacer3" X="2" Width="240" Height="7" />
   
-  <Panel Name="frmShade" X="0" Width="0" Height="145" Border="0" BackColor="0xDADBAB">
+  <Panel Name="frmShade" X="0" Y="-60" BackColor="0xDADBAB">
     <Button Name="cmdClose" Caption="Accept" X="2" Width="-2" Height="30"/>
 
     <Edit Name="prpProfile" Caption="Profile" X="2" Width="-2" Height="25" CaptionWidth="60" BackColor="0xDADBAB">
