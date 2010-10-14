@@ -343,7 +343,7 @@ LoadColors(WindowControl &wc, const XMLNode &node)
 }
 
 static void
-CalcWidthStretch(const SIZE size, const RECT rc, const DialogStyle eDialogStyle)
+InitScaleWidth(const SIZE size, const RECT rc, const DialogStyle eDialogStyle)
 {
   // No need to calculate the scale factor on platforms that don't scale
   if (!Layout::ScaleSupported())
@@ -401,7 +401,7 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
   SIZE size = GetSize(node);
 
   const RECT rc = Parent.get_client_rect();
-  CalcWidthStretch(size, rc, dialog_style);
+  InitScaleWidth(size, rc, dialog_style);
 
   // Correct dialog size and position for dialog style
   switch (dialog_style) {
