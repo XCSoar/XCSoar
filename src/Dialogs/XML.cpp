@@ -403,9 +403,6 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
   const RECT rc = Parent.get_client_rect();
   CalcWidthStretch(size, rc, dialog_style);
 
-  pos.x = ScaleWidth(pos.x, dialog_style);
-  size.cx = ScaleWidth(size.cx, dialog_style);
-
   // Correct dialog size and position for dialog style
   switch (dialog_style) {
   case dsFullWidth:
