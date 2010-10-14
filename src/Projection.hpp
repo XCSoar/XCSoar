@@ -61,8 +61,6 @@ public:
 
   void LonLat2Screen(const GeoPoint *ptin, POINT *ptout,
                      unsigned n, unsigned skip) const;
-  void LonLat2Screen(const pointObj* const ptin, POINT *ptout,
-                     const int n, const int skip) const;
 
   gcc_pure
   GeoPoint point2GeoPoint(const pointObj& p) const {

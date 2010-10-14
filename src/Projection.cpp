@@ -111,31 +111,6 @@ Projection::LonLat2Screen(const GeoPoint *ptin, POINT *ptout,
   }
 }
 
-/**
- * Converts a LatLon-based polygon to screen coordinates
- *
- * This one is optimised for long polygons.
- * @param ptin Input polygon
- * @param ptout Output polygon
- * @param n Number of points in the polygon
- * @param skip Number of corners to skip after a successful conversion
- */
-void
-Projection::LonLat2Screen(const pointObj* const ptin,
-                          POINT *ptout,
-                          const int n,
-                          const int skip) const
-{
-  pointObj const * p = ptin;
-  const pointObj* ptend = ptin + n;
-
-  while (p < ptend) {
-    const GeoPoint g = point2GeoPoint(*p);
-    *ptout++ = LonLat2Screen(g);
-    p += skip;
-  }
-}
-
 bool
 Projection::LonLatVisible(const GeoPoint &loc) const
 {

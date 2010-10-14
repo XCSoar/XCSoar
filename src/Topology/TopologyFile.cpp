@@ -236,7 +236,10 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
         unsigned msize = line.numpoints;
         POINT pt[msize];
 
-        projection.LonLat2Screen(line.point, pt, msize, 1);
+        for (unsigned i = 0; i < msize; ++i) {
+          GeoPoint g = projection.point2GeoPoint(line.point[i]);
+          pt[i] = projection.LonLat2Screen(g);
+        }
 
         canvas.polyline(pt, msize);
       }
@@ -248,7 +251,12 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
         unsigned msize = line.numpoints / iskip;
         POINT pt[msize];
 
-        projection.LonLat2Screen(line.point, pt, msize * iskip, iskip);
+        const pointObj *in = line.point;
+        for (unsigned i = 0; i < msize; ++i) {
+          GeoPoint g = projection.point2GeoPoint(*in);
+          in += iskip;
+          pt[i] = projection.LonLat2Screen(g);
+        }
 
         canvas.polygon(pt, msize);
       }
@@ -295,17 +303,18 @@ TopologyFile::PaintLabels(Canvas &canvas,
 
     for (int tt = 0; tt < shape.numlines; ++tt) {
       const lineObj &line = shape.line[tt];
-      unsigned msize = line.numpoints / iskip;
-      POINT pt[msize];
-
-      projection.LonLat2Screen(line.point, pt, msize * iskip, iskip);
 
       int minx = canvas.get_width();
       int miny = canvas.get_height();
-      for (unsigned jj = 0; jj < msize; ++jj) {
-        if (pt[jj].x <= minx) {
-          minx = pt[jj].x;
-          miny = pt[jj].y;
+      const pointObj *in = line.point;
+      for (unsigned i = 0; i < (unsigned)line.numpoints; i += iskip) {
+        GeoPoint g = projection.point2GeoPoint(line.point[i]);
+        in += iskip;
+        POINT pt = projection.LonLat2Screen(g);
+
+        if (pt.x <= minx) {
+          minx = pt.x;
+          miny = pt.y;
         }
       }
 
