@@ -611,10 +611,12 @@ LoadChild(WndForm &form, ContainerControl &Parent,
       edit_style.vscroll();
     }
 
-    WC = W = new WndProperty(Parent, Caption, pos.x, pos.y, size.cx, size.cy,
-                             CaptionWidth,
-                             style, edit_style,
-                             DataNotifyCallback);
+    window = W = new WndProperty(Parent, Caption, pos.x, pos.y, size.cx, size.cy,
+                                 CaptionWidth, style, edit_style,
+                                 DataNotifyCallback);
+
+    // Set the fore- and background color
+    LoadColors(*W, node);
 
     // Set the help function event callback
     W->SetOnHelpCallback(OnHelpCallback);
