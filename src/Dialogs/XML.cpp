@@ -376,8 +376,7 @@ WndForm *
 LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
                const TCHAR* resource)
 {
-
-  WndForm *theForm = NULL;
+  WndForm *form = NULL;
 
   // Find XML file or resource and load XML data out of it
   XMLNode node = xmlOpenResourceHelper(resource);
@@ -433,24 +432,24 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   style.hide();
   style.control_parent();
 
-  theForm = new WndForm(Parent, pos.x, pos.y, size.cx, size.cy, Caption, style);
+  form = new WndForm(Parent, pos.x, pos.y, size.cx, size.cy, Caption, style);
 
   // Set fore- and background colors
-  LoadColors(*theForm, node);
+  LoadColors(*form, node);
 
   // Load the children controls
-  LoadChildrenFromXML(*theForm, *theForm, LookUpTable, &node,
+  LoadChildrenFromXML(*form, *form, LookUpTable, &node,
                       eDialogStyle);
 
   // If XML error occurred -> Error messagebox + cancel
   if (XMLNode::GlobalError) {
     ShowXMLError();
-    delete theForm;
+    delete form;
     return NULL;
   }
 
   // Return the created form
-  return theForm;
+  return form;
 }
 
 static DataField *
