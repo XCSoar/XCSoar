@@ -88,17 +88,14 @@ dlgStartupShowModal()
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   Layout::landscape ? _T("IDR_XML_STARTUP_L") :
                                       _T("IDR_XML_STARTUP"));
-  if (!wf)
-    return;
+  assert(wf != NULL);
 
   wp = ((WndProperty *)wf->FindByName(_T("prpProfile")));
-  if (!wp)
-    return;
+  assert(wp != NULL);
 
   DataFieldFileReader* dfe;
   dfe = (DataFieldFileReader*)wp->GetDataField();
-  if (!dfe)
-    return;
+  assert(dfe != NULL);
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))
     ->SetOnClickNotify(OnCloseClicked);
