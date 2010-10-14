@@ -71,7 +71,7 @@ Copyright_License {
 static int dialog_width_scale = 1024;
 
 // to full width of screen
-DialogStyle_t g_eDialogStyle = eDialogFullWidth;
+DialogStyle g_eDialogStyle = eDialogFullWidth;
 
 /**
  * Callback type for the "Custom" element, attribute "OnCreate".
@@ -147,18 +147,18 @@ StringToColor(const TCHAR *String, Color &color)
  * @param xNode The node to check
  * @return Dialog style (DialogStyle_t), Default = FullWidth
  */
-static DialogStyle_t
+static DialogStyle
 GetDialogStyle(const XMLNode &xNode)
 {
   const TCHAR* popup = xNode.getAttribute(_T("Popup"));
   if ((popup == NULL) || string_is_empty(popup))
     return g_eDialogStyle;
   else
-    return (DialogStyle_t)StringToIntDflt(popup, 0);
+    return (DialogStyle)StringToIntDflt(popup, 0);
 }
 
 static int 
-Scale_Dlg_Width(const int x, const DialogStyle_t eDialogStyle) 
+Scale_Dlg_Width(const int x, const DialogStyle eDialogStyle) 
 {
   if (!Layout::ScaleSupported())
     return x;
@@ -202,7 +202,7 @@ GetPosition(const XMLNode &Node)
 }
 
 static POINT
-ScalePosition(const POINT original, const DialogStyle_t eDialogStyle)
+ScalePosition(const POINT original, const DialogStyle eDialogStyle)
 {
   POINT pt;
 
@@ -237,7 +237,7 @@ GetSize(const XMLNode &Node)
 }
 
 static SIZE
-ScaleSize(const SIZE original, const DialogStyle_t eDialogStyle)
+ScaleSize(const SIZE original, const DialogStyle eDialogStyle)
 {
   SIZE sz;
 
@@ -261,7 +261,7 @@ CallBackLookup(CallBackTableEntry_t *LookUpTable, const TCHAR *Name)
 static void
 LoadChildrenFromXML(WndForm &form, ContainerControl &parent,
                     CallBackTableEntry_t *LookUpTable,
-                    XMLNode *Node, const DialogStyle_t eDialogStyle);
+                    XMLNode *Node, const DialogStyle eDialogStyle);
 
 static void
 ShowXMLError(const TCHAR* msg = _T("Error in loading XML dialog"))
@@ -351,7 +351,7 @@ LoadColors(WindowControl &wc, const XMLNode &node)
 }
 
 static void
-CalcWidthStretch(const SIZE size, const RECT rc, const DialogStyle_t eDialogStyle)
+CalcWidthStretch(const SIZE size, const RECT rc, const DialogStyle eDialogStyle)
 {
   // No need to calculate the scale factor on platforms that don't scale
   if (!Layout::ScaleSupported())
@@ -401,7 +401,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
   }
 
   // Determine the dialog style of the dialog
-  DialogStyle_t dialog_style = GetDialogStyle(node);
+  DialogStyle dialog_style = GetDialogStyle(node);
 
   // Determine the dialog size
   const TCHAR* Caption = GetCaption(node);
@@ -453,7 +453,7 @@ LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
 
 static DataField *
 LoadDataField(const XMLNode &node, CallBackTableEntry_t *LookUpTable,
-              const DialogStyle_t eDialogStyle)
+              const DialogStyle eDialogStyle)
 {
   TCHAR DataType[32];
   TCHAR DisplayFmt[32];
@@ -519,7 +519,7 @@ LoadDataField(const XMLNode &node, CallBackTableEntry_t *LookUpTable,
 static Window *
 LoadChild(WndForm &form, ContainerControl &Parent,
           CallBackTableEntry_t *LookUpTable,
-          XMLNode node, const DialogStyle_t eDialogStyle)
+          XMLNode node, const DialogStyle eDialogStyle)
 {
   Window *window = NULL;
   WindowControl *WC = NULL;
@@ -842,7 +842,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 static void
 LoadChildrenFromXML(WndForm &form, ContainerControl &Parent,
                     CallBackTableEntry_t *LookUpTable,
-                    XMLNode *Node, const DialogStyle_t eDialogStyle)
+                    XMLNode *Node, const DialogStyle eDialogStyle)
 {
   // Get the number of childnodes
   int Count = Node->nChildNode();

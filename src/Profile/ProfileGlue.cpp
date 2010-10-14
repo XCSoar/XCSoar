@@ -436,7 +436,7 @@ Profile::Use()
     Appearance.TextInputStyle = (TextInputStyle_t)Temp;
 
   if (Get(szProfileAppDialogStyle, Temp))
-    g_eDialogStyle = (DialogStyle_t)Temp;
+    g_eDialogStyle = (DialogStyle)Temp;
 
   Get(szProfileAppDefaultMapWidth,
 		  Appearance.DefaultMapWidth);

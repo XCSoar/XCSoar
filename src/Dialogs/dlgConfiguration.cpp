@@ -2044,9 +2044,9 @@ void dlgConfigurationShowModal(void)
   wp = (WndProperty*)wf->FindByName(_T("prpDialogStyle"));
   if (wp)
     {
-      if (g_eDialogStyle != (DialogStyle_t)(wp->GetDataField()->GetAsInteger()))
+      if (g_eDialogStyle != (DialogStyle)(wp->GetDataField()->GetAsInteger()))
         {
-          g_eDialogStyle = (DialogStyle_t)(wp->GetDataField()->GetAsInteger());
+          g_eDialogStyle = (DialogStyle)(wp->GetDataField()->GetAsInteger());
           Profile::Set(szProfileAppDialogStyle, g_eDialogStyle);
           changed = true;
         }

@@ -56,7 +56,7 @@ struct CallBackTableEntry_t
 /**
  * Dialog display styles
  */
-enum DialogStyle_t
+enum DialogStyle
 {
   /** cover screen, stretch controls horizontally */
   eDialogFullWidth = 0,
@@ -68,7 +68,7 @@ enum DialogStyle_t
   eDialogFixed
 };
 
-extern DialogStyle_t g_eDialogStyle;
+extern DialogStyle g_eDialogStyle;
 
 WndForm *
 LoadDialog(CallBackTableEntry_t *LookUpTable, SingleWindow &Parent,
