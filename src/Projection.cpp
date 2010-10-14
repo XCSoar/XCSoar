@@ -102,28 +102,11 @@ void
 Projection::LonLat2Screen(const GeoPoint *ptin, POINT *ptout,
                           unsigned n, unsigned skip) const
 {
-  static Angle lastangle(Angle::native(fixed_minus_one));
-  static int cost = 1024, sint = 0;
-
-  if (GetDisplayAngle() != lastangle) {
-    lastangle = GetDisplayAngle();
-    cost = lastangle.ifastcosine();
-    sint = lastangle.ifastsine();
-  }
-  const int xxs = Orig_Screen.x * 1024 - 512;
-  const int yys = Orig_Screen.y * 1024 + 512;
-  const fixed mDrawScale = DrawScale;
-  const GeoPoint mPan = PanLocation;
   const GeoPoint *p = ptin;
   const GeoPoint *ptend = ptin + n;
 
   while (p < ptend) {
-    int Y = (int)((mPan.Latitude - p->Latitude).value_native() * mDrawScale);
-    int X = (int)((mPan.Longitude - p->Longitude).value_native()
-                     * p->Latitude.fastcosine() * mDrawScale);
-    ptout->x = (xxs - X * cost + Y * sint) / 1024;
-    ptout->y = (Y * cost + X * sint + yys) / 1024;
-    ptout++;
+    *ptout++ = LonLat2Screen(*p);
     p += skip;
   }
 }
@@ -143,32 +126,12 @@ Projection::LonLat2Screen(const pointObj* const ptin,
                           const int n,
                           const int skip) const
 {
-  static Angle lastangle(Angle::native(fixed_minus_one));
-  static int cost = 1024, sint = 0;
-
-  if (GetDisplayAngle() != lastangle) {
-    lastangle = GetDisplayAngle();
-    cost = lastangle.ifastcosine();
-    sint = lastangle.ifastsine();
-  }
-  const int xxs = Orig_Screen.x * 1024 - 512;
-  const int yys = Orig_Screen.y * 1024 + 512;
-  const fixed mDrawScale = DrawScale;
-  const GeoPoint mPan = PanLocation;
   pointObj const * p = ptin;
   const pointObj* ptend = ptin + n;
 
   while (p < ptend) {
     const GeoPoint g = point2GeoPoint(*p);
-
-    const int Y = (int)((mPan.Latitude - g.Latitude).value_native()
-                        * mDrawScale);
-    const int X = (int)((mPan.Longitude - g.Longitude).value_native()
-                        * g.Latitude.fastcosine() * mDrawScale);
-
-    ptout->x = (xxs - X * cost + Y * sint) / 1024;
-    ptout->y = (Y * cost + X * sint + yys) / 1024;
-    ptout++;
+    *ptout++ = LonLat2Screen(g);
     p += skip;
   }
 }
