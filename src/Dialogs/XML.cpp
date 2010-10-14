@@ -74,6 +74,14 @@ static int dialog_width_scale = 1024;
 DialogStyle_t g_eDialogStyle = eDialogFullWidth;
 
 /**
+ * Callback type for the "Custom" element, attribute "OnCreate".
+ */
+typedef Window *(*CreateWindowCallback_t)(ContainerWindow &parent,
+                                          int left, int top,
+                                          unsigned width, unsigned height,
+                                          const WindowStyle style);
+
+/**
  * Converts a String into an Integer and returns
  * the default value if String = NULL
  * @param String The String to parse

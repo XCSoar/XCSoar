@@ -67,14 +67,6 @@ enum DialogStyle_t
   eDialogFixed                  /**< don't adjust at all (same as !Layout::ScaleSupported()) */
 };
 
-/**
- * Callback type for the "Custom" element, attribute "OnCreate".
- */
-typedef Window *(*CreateWindowCallback_t)(ContainerWindow &parent,
-                                          int left, int top,
-                                          unsigned width, unsigned height,
-                                          const WindowStyle style);
-
 extern DialogStyle_t g_eDialogStyle;
 
 WndForm *
