@@ -560,16 +560,9 @@ dlgTarget() {
   if (protected_task_manager.get_mode() != TaskManager::MODE_ORDERED)
     return;
 
-  if (!Layout::landscape) {
-    wf = LoadDialog(CallBackTable,
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_TARGET"));
-  } else {
-    wf = LoadDialog(CallBackTable,
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_TARGET_L"));
-  }
-
+  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+                  Layout::landscape ? _T("IDR_XML_TARGET") :
+                                      _T("IDR_XML_TARGET_L"));
   if (!wf) return;
 
   oldEnablePan = XCSoarInterface::SetSettingsMap().EnablePan;
