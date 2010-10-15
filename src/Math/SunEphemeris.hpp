@@ -49,8 +49,6 @@ class Angle;
  * Sun ephemeris model, used largely for calculations of sunset times
  */
 class SunEphemeris {
-  fixed L, DayLength;
-
   gcc_const
   static fixed FNday(int y, int m, int d, fixed h);
 
@@ -70,7 +68,8 @@ class SunEphemeris {
   fixed GetMeanSunLongitude(fixed d);
 
  public:
-  fixed MorningTwilight, TimeOfNoon, TimeOfSunSet, TimeOfSunRise, EveningTwilight;
+  fixed DayLength, MorningTwilight, EveningTwilight;
+  fixed TimeOfNoon, TimeOfSunSet, TimeOfSunRise;
 
   void CalcSunTimes(const GeoPoint &location, const BrokenDateTime &date_time,
                     fixed TimeZone);

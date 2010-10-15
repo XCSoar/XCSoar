@@ -180,7 +180,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
 {
   fixed DaysToJ2000;
   Angle Obliquity, Lambda, Alpha, Delta;
-  fixed LL, equation, TwilightHours;
+  fixed L, LL, equation, TwilightHours;
   Angle HourAngle, HourAngleTwilight;
   int Year, Month, Day, Hour;
 
