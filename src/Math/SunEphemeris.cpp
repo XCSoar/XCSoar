@@ -204,8 +204,8 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
   Obliquity = Angle::degrees(fixed(23.439) - fixed(.0000004) * DaysToJ2000);
 
   // Find the RA and DEC of the Sun
-  Alpha = atan2(cos(Obliquity.value_radians()) * sin(Lambda), cos(Lambda));
-  Delta = asin(sin(Obliquity.value_radians()) * sin(Lambda));
+  Alpha = atan2(Obliquity.cos() * sin(Lambda), cos(Lambda));
+  Delta = asin(Obliquity.sin() * sin(Lambda));
 
   // Find the Equation of Time in minutes
   // Correction suggested by David Smith
