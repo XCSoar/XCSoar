@@ -182,14 +182,9 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
   Angle Obliquity, Lambda, Alpha, Delta;
   fixed L, LL, equation, TwilightHours;
   Angle HourAngle, HourAngleTwilight;
-  int Year, Month, Day, Hour;
 
-  Month = date_time.month;
-  Year = date_time.year;
-  Day = date_time.day;
-  Hour = date_time.hour % 24;
-
-  DaysToJ2000 = FNday(Year, Month, Day, fixed(Hour));
+  DaysToJ2000 = FNday(date_time.year, date_time.month, date_time.day,
+                      fixed(date_time.hour % 24));
 
   L = GetMeanSunLongitude(DaysToJ2000);
 
