@@ -128,7 +128,7 @@ SunEphemeris::f1(Angle lat, Angle declin)
   if (negative(lat.value_degrees()))
     df1 = -df1;
 
-  fi = tan(declin.value_radians() + df1) * tan(lat.value_radians());
+  fi = tan(declin.value_radians() + df1) * lat.tan();
 
   if (fi > fixed(0.99999))
     // to avoid overflow
