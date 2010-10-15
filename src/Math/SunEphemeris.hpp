@@ -49,7 +49,7 @@ class Angle;
  * Sun ephemeris model, used largely for calculations of sunset times
  */
 class SunEphemeris {
-  fixed L, g, DayLength;
+  fixed L, DayLength;
 
   gcc_const
   static fixed FNday(int y, int m, int d, fixed h);
