@@ -76,7 +76,7 @@ SunEphemeris::FNday(int y, int m, int d, fixed h)
  * @return an angle in the range 0 to 2*PI
  * @see http://www.sci.fi/~benefon/azimalt.cpp
  */
-fixed
+const Angle
 SunEphemeris::FNrange(fixed x)
 {
   const fixed b = x / 2 / fixed_pi;
@@ -85,7 +85,7 @@ SunEphemeris::FNrange(fixed x)
   if (negative(a))
     a = fixed_two_pi + a;
 
-  return a;
+  return Angle::radians(a);
 }
 
 /**
@@ -154,15 +154,15 @@ SunEphemeris::GetEclipticLongitude(fixed d)
 {
   //   mean longitude of the Sun
   L = FNrange(fixed_deg_to_rad * (fixed(280.461) +
-                                  fixed(.9856474) * d));
+                                  fixed(.9856474) * d)).value_radians();
 
   //   mean anomaly of the Sun
   g = FNrange(fixed_deg_to_rad * (fixed(357.528) +
-                                  fixed(.9856003) * d));
+                                  fixed(.9856003) * d)).value_radians();
 
   //   Ecliptic longitude of the Sun
   return FNrange(L + fixed(1.915) * fixed_deg_to_rad * sin(g) +
-                 fixed(.02) * fixed_deg_to_rad * sin(2 * g));
+                 fixed(.02) * fixed_deg_to_rad * sin(2 * g)).value_radians();
 }
 
 /**

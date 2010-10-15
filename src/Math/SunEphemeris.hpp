@@ -55,7 +55,7 @@ class SunEphemeris {
   static fixed FNday(int y, int m, int d, fixed h);
 
   gcc_const
-  static fixed FNrange(fixed x);
+  static const Angle FNrange(fixed x);
 
   gcc_const
   static fixed f0(Angle lat, fixed declin);
