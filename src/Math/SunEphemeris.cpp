@@ -149,38 +149,33 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
                            const BrokenDateTime &date_time,
                            const fixed TimeZone)
 {
-  fixed DaysToJ2000;
-  Angle Obliquity, Lambda, Alpha, Delta, L;
-  fixed LL, equation, TwilightHours;
-  Angle HourAngle, HourAngleTwilight;
+  fixed DaysToJ2000 = FNday(date_time);
 
-  DaysToJ2000 = FNday(date_time);
-
-  L = GetMeanSunLongitude(DaysToJ2000);
+  Angle L = GetMeanSunLongitude(DaysToJ2000);
 
   // Use GetEclipticLongitude to find the ecliptic longitude of the Sun
-  Lambda = GetEclipticLongitude(DaysToJ2000, L);
+  Angle Lambda = GetEclipticLongitude(DaysToJ2000, L);
 
   // Obliquity of the ecliptic
-  Obliquity = Angle::degrees(fixed(23.439) - fixed(.0000004) * DaysToJ2000);
+  Angle Obliquity = Angle::degrees(fixed(23.439) - fixed(.0000004) * DaysToJ2000);
 
   // Find the RA and DEC of the Sun
-  Alpha = Angle::radians(atan2(Obliquity.cos() * Lambda.sin(), Lambda.cos()));
-  Delta = Angle::radians(asin(Obliquity.sin() * Lambda.sin()));
+  Angle Alpha = Angle::radians(atan2(Obliquity.cos() * Lambda.sin(), Lambda.cos()));
+  Angle Delta = Angle::radians(asin(Obliquity.sin() * Lambda.sin()));
 
   // Find the Equation of Time in minutes
   // Correction suggested by David Smith
-  LL = (L - Alpha).value_radians();
+  fixed LL = (L - Alpha).value_radians();
   if (L.value_radians() < fixed_pi)
     LL += fixed_two_pi;
 
-  equation = fixed(1440) * (fixed_one - LL / fixed_two_pi);
+  fixed equation = fixed(1440) * (fixed_one - LL / fixed_two_pi);
 
-  HourAngle = GetHourAngle(Location.Latitude, Delta);
-  HourAngleTwilight = GetHourAngleTwilight(Location.Latitude, Delta);
+  Angle HourAngle = GetHourAngle(Location.Latitude, Delta);
+  Angle HourAngleTwilight = GetHourAngleTwilight(Location.Latitude, Delta);
 
   // length of twilight in hours
-  TwilightHours = (HourAngleTwilight - HourAngle).value_hours();
+  fixed TwilightHours = (HourAngleTwilight - HourAngle).value_hours();
 
   // Conversion of angle to hours and minutes
   DayLength = HourAngle.value_hours() * fixed_two;
