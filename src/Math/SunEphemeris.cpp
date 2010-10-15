@@ -209,22 +209,22 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
   HourAngleTwilight = GetHourAngleTwilight(Location.Latitude, Delta);
 
   // length of twilight in hours
-  TwilightHours = 12 * (HourAngleTwilight - HourAngle).value_radians() / fixed_pi;
+  TwilightHours = (HourAngleTwilight - HourAngle).value_hours();
 
   // Conversion of angle to hours and minutes
-  DayLength = HourAngle.value_degrees() / fixed(7.5);
+  DayLength = HourAngle.value_hours() * fixed_two;
 
   if (DayLength < fixed(0.0001))
     // arctic winter
     DayLength = fixed_zero;
 
-  TimeOfSunRise = fixed(12) - fixed(12. / 180.) * HourAngle.value_degrees() + TimeZone
+  TimeOfSunRise = fixed(12) - HourAngle.value_hours() + TimeZone
     - Location.Longitude.value_degrees() / 15 + equation / 60;
 
-  TimeOfSunSet = fixed(12) + fixed(12. / 180.) * HourAngle.value_degrees() + TimeZone
+  TimeOfSunSet = fixed(12) + HourAngle.value_hours() + TimeZone
     - Location.Longitude.value_degrees() / 15 + equation / 60;
 
-  TimeOfNoon = TimeOfSunRise + fixed(12. / 180.) * HourAngle.value_degrees();
+  TimeOfNoon = TimeOfSunRise + HourAngle.value_hours();
 
   // morning twilight begin
   MorningTwilight = TimeOfSunRise - TwilightHours;
