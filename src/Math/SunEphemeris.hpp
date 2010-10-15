@@ -69,9 +69,8 @@ class SunEphemeris {
  public:
   fixed MorningTwilight, TimeOfNoon, TimeOfSunSet, TimeOfSunRise, EveningTwilight;
 
-  fixed CalcSunTimes(const GeoPoint &location,
-                     const BrokenDateTime &date_time,
-                     fixed TimeZone);
+  void CalcSunTimes(const GeoPoint &location, const BrokenDateTime &date_time,
+                    fixed TimeZone);
 };
 
 #endif

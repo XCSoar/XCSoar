@@ -169,7 +169,7 @@ SunEphemeris::GetEclipticLongitude(fixed d)
  * @param TimeZone The timezone
  * @return Sunset time
  */
-fixed
+void
 SunEphemeris::CalcSunTimes(const GeoPoint &Location,
                            const BrokenDateTime &date_time,
                            const fixed TimeZone)
@@ -231,7 +231,4 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
   MorningTwilight = TimeOfSunRise - TwilightHours;
   // evening twilight end
   EveningTwilight = TimeOfSunSet + TwilightHours;
-
-  // return TimeOfSunSet since this is most commonly what is requested
-  return TimeOfSunSet;
 }

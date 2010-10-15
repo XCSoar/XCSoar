@@ -535,7 +535,6 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   selected_waypoint = &way_point;
 
   TCHAR sTmp[128];
-  double sunsettime;
   int sunsethours;
   int sunsetmins;
   WndProperty *wp;
@@ -582,13 +581,12 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
     ->SetText(sTmp);
 
   SunEphemeris sun;
-  sunsettime = sun.CalcSunTimes
-    (selected_waypoint->Location,
-     XCSoarInterface::Basic().DateTime,
-     fixed(GetUTCOffset()) / 3600);
+  sun.CalcSunTimes(selected_waypoint->Location,
+                   XCSoarInterface::Basic().DateTime,
+                   fixed(GetUTCOffset()) / 3600);
 
-  sunsethours = (int)sunsettime;
-  sunsetmins = (int)((sunsettime - sunsethours) * 60);
+  sunsethours = (int)sun.TimeOfSunSet;
+  sunsetmins = (int)((sun.TimeOfSunSet - fixed(sunsethours)) * 60);
 
   _stprintf(sTmp, _T("%02d:%02d"), sunsethours, sunsetmins);
   ((WndProperty *)wf->FindByName(_T("prpSunset")))->SetText(sTmp);

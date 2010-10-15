@@ -42,7 +42,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(6);
+  plan_tests(5);
 
   const GeoPoint location(Angle::degrees(fixed(7.7061111111111114)),
                           Angle::degrees(fixed(51.051944444444445)));
@@ -55,9 +55,8 @@ int main(int argc, char **argv)
   dt.second = 12;
 
   SunEphemeris sun;
-  fixed sunset = sun.CalcSunTimes(location, dt, fixed_two);
+  sun.CalcSunTimes(location, dt, fixed_two);
 
-  ok1(between(sunset, 19.36, 19.40));
   ok1(between(sun.MorningTwilight, 6.88, 6.9));
   ok1(between(sun.TimeOfNoon, 13.3, 13.4));
   ok1(between(sun.TimeOfSunSet, 19.36, 19.40));
