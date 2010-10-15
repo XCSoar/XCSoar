@@ -71,18 +71,6 @@ SunEphemeris::FNday(int y, int m, int d, fixed h)
 }
 
 /**
- * The function below returns an angle in the range 0 to 2*PI
- * @param x Angle to be converted (amount of a full circle)
- * @return an angle in the range 0 to 2*PI
- * @see http://www.sci.fi/~benefon/azimalt.cpp
- */
-const Angle
-SunEphemeris::FNrange(fixed x)
-{
-  return Angle::radians(x).as_bearing();
-}
-
-/**
  * Calculating the hourangle
  * @param lat Latitude
  * @param declin Declination
