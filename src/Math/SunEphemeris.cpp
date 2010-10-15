@@ -157,11 +157,11 @@ SunEphemeris::GetEclipticLongitude(fixed d, fixed L)
                  (g * fixed_two).sin());
 }
 
-fixed
+Angle
 SunEphemeris::GetMeanSunLongitude(fixed d)
 {
   // mean longitude of the Sun
-  return Angle::degrees(fixed(280.461) + fixed(.9856474) * d).as_bearing().value_radians();
+  return Angle::degrees(fixed(280.461) + fixed(.9856474) * d).as_bearing();
 }
 
 /**
@@ -186,7 +186,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
   DaysToJ2000 = FNday(date_time.year, date_time.month, date_time.day,
                       fixed(date_time.hour % 24));
 
-  L = GetMeanSunLongitude(DaysToJ2000);
+  L = GetMeanSunLongitude(DaysToJ2000).value_radians();
 
   // Use GetEclipticLongitude to find the ecliptic longitude of the Sun
   Lambda = GetEclipticLongitude(DaysToJ2000, L);
