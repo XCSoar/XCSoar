@@ -120,15 +120,16 @@ SunEphemeris::f0(Angle lat, Angle declin)
 fixed
 SunEphemeris::f1(Angle lat, Angle declin)
 {
-  fixed fi, df1;
+  fixed fi;
+  Angle df1;
 
   // Correction: different sign at southern hemisphere
-  df1 = Angle::degrees(fixed(6)).value_radians();
+  df1 = Angle::degrees(fixed(6));
 
   if (negative(lat.value_degrees()))
-    df1 = -df1;
+    df1.flip();
 
-  fi = tan(declin.value_radians() + df1) * lat.tan();
+  fi = tan(declin.value_radians() + df1.value_radians()) * lat.tan();
 
   if (fi > fixed(0.99999))
     // to avoid overflow
