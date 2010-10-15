@@ -147,12 +147,10 @@ Angle
 SunEphemeris::GetEclipticLongitude(fixed d)
 {
   //   mean longitude of the Sun
-  L = FNrange(Angle::degrees(fixed(280.461) +
-                             fixed(.9856474) * d).value_radians()).value_radians();
+  L = Angle::degrees(fixed(280.461) + fixed(.9856474) * d).as_bearing().value_radians();
 
   //   mean anomaly of the Sun
-  Angle g = FNrange(Angle::degrees(fixed(357.528) +
-                                   fixed(.9856003) * d).value_radians());
+  Angle g = Angle::degrees(fixed(357.528) + fixed(.9856003) * d).as_bearing();
 
   //   Ecliptic longitude of the Sun
   return FNrange(L + Angle::degrees(fixed(1.915)).value_radians() * g.sin() +
