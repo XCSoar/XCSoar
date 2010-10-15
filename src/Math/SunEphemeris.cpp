@@ -96,17 +96,17 @@ SunEphemeris::FNrange(fixed x)
  */
 // TODO TB: find explanations/links for this and following
 fixed
-SunEphemeris::f0(fixed lat, fixed declin)
+SunEphemeris::f0(Angle lat, fixed declin)
 {
   fixed fo, dfo;
 
   // Correction: different sign at southern hemisphere
   dfo = fixed_deg_to_rad * (SUN_DIAMETER / 2 + AIR_REFRACTION);
 
-  if (negative(lat))
+  if (negative(lat.value_degrees()))
     dfo = -dfo;
 
-  fo = tan(declin + dfo) * tan(lat * fixed_deg_to_rad);
+  fo = tan(declin + dfo) * tan(lat.value_degrees() * fixed_deg_to_rad);
 
   if (fo > fixed(0.99999))
     // to avoid overflow
@@ -124,17 +124,17 @@ SunEphemeris::f0(fixed lat, fixed declin)
  * @return The hourangle for twilight times
  */
 fixed
-SunEphemeris::f1(fixed lat, fixed declin)
+SunEphemeris::f1(Angle lat, fixed declin)
 {
   fixed fi, df1;
 
   // Correction: different sign at southern hemisphere
   df1 = fixed_deg_to_rad * 6;
 
-  if (negative(lat))
+  if (negative(lat.value_degrees()))
     df1 = -df1;
 
-  fi = tan(declin + df1) * tan(lat * fixed_deg_to_rad);
+  fi = tan(declin + df1) * tan(lat.value_degrees() * fixed_deg_to_rad);
 
   if (fi > fixed(0.99999))
     // to avoid overflow
@@ -215,8 +215,8 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
 
   equation = fixed(1440) * (fixed_one - LL / fixed_pi / 2);
 
-  HourAngle = f0(Location.Latitude.value_degrees(), Delta);
-  HourAngleTwilight = f1(Location.Latitude.value_degrees(), Delta);
+  HourAngle = f0(Location.Latitude, Delta);
+  HourAngleTwilight = f1(Location.Latitude, Delta);
 
   // length of twilight in radians
   TwilightHours = HourAngleTwilight - HourAngle;

@@ -43,6 +43,7 @@ Copyright_License {
 
 struct GeoPoint;
 struct BrokenDateTime;
+class Angle;
 
 /**
  * Sun ephemeris model, used largely for calculations of sunset times
@@ -57,10 +58,10 @@ class SunEphemeris {
   static fixed FNrange(fixed x);
 
   gcc_const
-  static fixed f0(fixed lat, fixed declin);
+  static fixed f0(Angle lat, fixed declin);
 
   gcc_const
-  static fixed f1(fixed lat, fixed declin);
+  static fixed f1(Angle lat, fixed declin);
 
   gcc_pure
   fixed FNsun(fixed d);
