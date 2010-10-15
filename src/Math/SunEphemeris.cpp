@@ -201,7 +201,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
 
   // Find the Equation of Time in minutes
   // Correction suggested by David Smith
-  LL = L.value_radians() - Alpha.value_radians();
+  LL = (L - Alpha).value_radians();
   if (L.value_radians() < fixed_pi)
     LL += fixed_two_pi;
 
