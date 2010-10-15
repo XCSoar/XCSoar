@@ -61,13 +61,14 @@ Copyright_License {
  * @see http://www.sci.fi/~benefon/azimalt.cpp
  */
 fixed
-SunEphemeris::FNday(int y, int m, int d, fixed h)
+SunEphemeris::FNday(const BrokenDateTime &date_time)
 {
-  long int luku = -7 * (y + (m + 9) / 12) / 4 + 275 * m / 9 + d;
+  long int luku = -7 * (date_time.year + (date_time.month + 9) / 12) / 4 +
+                  275 * date_time.month / 9 + date_time.day;
   // type casting necessary on PC DOS and TClite to avoid overflow
-  luku += (long int)y * 367;
+  luku += (long int)date_time.year * 367;
 
-  return fixed(luku) - fixed(730531.5) + h / 24;
+  return fixed(luku) - fixed(730531.5) + fixed(date_time.hour % 24) / 24;
 }
 
 /**
@@ -170,8 +171,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
   fixed LL, equation, TwilightHours;
   Angle HourAngle, HourAngleTwilight;
 
-  DaysToJ2000 = FNday(date_time.year, date_time.month, date_time.day,
-                      fixed(date_time.hour % 24));
+  DaysToJ2000 = FNday(date_time);
 
   L = GetMeanSunLongitude(DaysToJ2000);
 

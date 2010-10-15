@@ -50,7 +50,7 @@ class Angle;
  */
 class SunEphemeris {
   gcc_const
-  static fixed FNday(int y, int m, int d, fixed h);
+  static fixed FNday(const BrokenDateTime &date_time);
 
   gcc_const
   static Angle GetHourAngle(Angle lat, Angle declin);
