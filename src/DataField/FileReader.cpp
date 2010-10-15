@@ -106,15 +106,12 @@ DataFieldFileReader::DataFieldFileReader(const TCHAR *EditFormat,
                                          const TCHAR *DisplayFormat,
                                          DataAccessCallback_t OnDataAccess)
   :DataField(EditFormat, DisplayFormat, OnDataAccess),
-   // Number of choosable files is now 1
-   nFiles(1),
    // Set selection to zero
    mValue(0),
    loaded(false), postponed_sort(false), num_postponed_patterns(0)
 {
   // Fill first entry -> always exists and is blank
-  fields[0].mTextFile = NULL;
-  fields[0].mTextPathFile = NULL;
+  files.append();
 
   postponed_value[0] = _T('\0');
 
@@ -375,12 +372,11 @@ DataFieldFileReader::Lookup(const TCHAR *Text)
       EnsureLoaded();
   }
 
-  int i = 0;
   mValue = 0;
   // Iterate through the filelist
-  for (i = 1; i < (int)nFiles; i++) {
+  for (unsigned i = 1; i < files.size(); i++) {
     // If Text == pathfile
-    if (_tcscmp(Text, fields[i].mTextPathFile) == 0) {
+    if (_tcscmp(Text, files[i].mTextPathFile) == 0) {
       // -> set selection to current element
       mValue = i;
     }
@@ -392,7 +388,7 @@ DataFieldFileReader::GetNumFiles(void) const
 {
   EnsureLoadedDeconst();
 
-  return nFiles;
+  return files.size();
 }
 
 const TCHAR *
@@ -401,9 +397,9 @@ DataFieldFileReader::GetPathFile(void) const
   if (!loaded)
     return postponed_value;
 
-  if ((mValue <= nFiles) && (mValue)) {
-    return fields[mValue].mTextPathFile;
-  }
+  if (mValue > 0 && mValue <= files.size())
+    return files[mValue].mTextPathFile;
+
   return _T("");
 }
 
@@ -463,14 +459,12 @@ DataFieldFileReader::addFile(const TCHAR *Text, const TCHAR *PText)
   // TODO enhancement: remove duplicates?
 
   // if too many files -> cancel
-  if (nFiles >= DFE_MAX_FILES)
+  if (files.full())
     return;
 
-  fields[nFiles].mTextFile = _tcsdup(Text);
-  fields[nFiles].mTextPathFile = _tcsdup(PText);
-
-  // Increment the number of files in the list
-  nFiles++;
+  Item &item = files.append();
+  item.mTextFile = _tcsdup(Text);
+  item.mTextPathFile = _tcsdup(PText);
 }
 
 const TCHAR *
@@ -486,8 +480,8 @@ DataFieldFileReader::GetAsString(void) const
     return postponed_value;
   }
 
-  if (mValue < nFiles)
-    return (fields[mValue].mTextFile);
+  if (mValue < files.size())
+    return files[mValue].mTextFile;
   else
     return NULL;
 }
@@ -500,10 +494,8 @@ DataFieldFileReader::Set(int Value)
   else
     postponed_value[0] = _T('\0');
 
-  if (Value <= (int)nFiles)
+  if ((unsigned)Value <= files.size())
     mValue = Value;
-  if (Value < 0)
-    mValue = 0;
 }
 
 void
@@ -511,7 +503,7 @@ DataFieldFileReader::Inc(void)
 {
   EnsureLoaded();
 
-  if (mValue < nFiles - 1) {
+  if (mValue < files.size() - 1) {
     mValue++;
     (mOnDataAccess)(this, daChange);
   }
@@ -543,9 +535,8 @@ DataFieldFileReader::Sort(void)
   }
 
   // Sort the filelist (except for the first (empty) element)
-  qsort(fields + 1, nFiles - 1, sizeof(Item),
+  qsort(files.begin() + 1, files.size() - 1, sizeof(Item),
         DataFieldFileReaderCompare);
-
   /* by the way, we're not using std::sort() here, because this
      function would require the Item class to be copyable */
 }
@@ -557,9 +548,8 @@ DataFieldFileReader::CreateComboList(void)
 
   ComboList *cl = new ComboList();
 
-  unsigned int i = 0;
-  for (i = 0; i < nFiles; i++) {
-    const TCHAR *path = fields[i].mTextFile;
+  for (unsigned i = 0; i < files.size(); i++) {
+    const TCHAR *path = files[i].mTextFile;
     if (path == NULL)
       path = _T("");
 
@@ -577,7 +567,7 @@ DataFieldFileReader::size() const
 {
   EnsureLoadedDeconst();
 
-  return nFiles;
+  return files.size();
 }
 
 const TCHAR *
@@ -585,7 +575,7 @@ DataFieldFileReader::getItem(unsigned index) const
 {
   EnsureLoadedDeconst();
 
-  return fields[index].mTextPathFile;
+  return files[index].mTextPathFile;
 }
 
 void

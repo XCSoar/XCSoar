@@ -41,9 +41,7 @@ Copyright_License {
 
 #include "DataField/Base.hpp"
 #include "Util/NonCopyable.hpp"
-
-/** Maximum of files in the list */
-#define DFE_MAX_FILES 100
+#include "Util/StaticArray.hpp"
 
 /**
  * #DataField specialisation that supplies options as a list of
@@ -65,12 +63,10 @@ public:
   };
 
 private:
-  /** Number of files to choose from */
-  unsigned int nFiles;
   /** Index of the active file */
   unsigned int mValue;
   /** FileList item array */
-  Item fields[DFE_MAX_FILES];
+  StaticArray<Item, 100> files;
 
   /**
    * Has the file list already been loaded?  This class tries to
