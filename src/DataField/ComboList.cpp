@@ -58,6 +58,15 @@ ComboList::Clear()
   ComboPopupItemCount = 0;
 }
 
+unsigned
+ComboList::Append(ComboList::Item *entry)
+{
+  assert(ComboPopupItemCount < ComboPopupLISTMAX);
+
+  ComboPopupItemList[ComboPopupItemCount] = entry;
+  return ComboPopupItemCount++;
+}
+
 ComboList::Item *
 ComboList::CreateItem(int ItemIndex, int DataFieldIndex,
                       const TCHAR *StringValue,

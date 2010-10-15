@@ -560,13 +560,13 @@ DataFieldFileReader::CreateComboList(void)
 
   unsigned int i = 0;
   for (i = 0; i < nFiles; i++) {
-    mComboList.ComboPopupItemList[i] =
-        mComboList.CreateItem(i, i, fields[i].mTextFile, fields[i].mTextFile);
+    mComboList.Append(mComboList.CreateItem(i, i, fields[i].mTextFile,
+                                            fields[i].mTextFile));
     if (i == mValue) {
       mComboList.ComboPopupItemSavedIndex = i;
     }
   }
-  mComboList.ComboPopupItemCount = i;
+
   return mComboList.ComboPopupItemCount;
 }
 

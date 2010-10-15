@@ -65,6 +65,8 @@ public:
 
   void Clear();
 
+  unsigned Append(Item *item);
+
 #define ComboPopupLISTMAX 300
 #define ComboPopupITEMMAX 100
 #define ComboPopupReopenMOREDataIndex -800001

@@ -169,12 +169,11 @@ DataFieldEnum::CreateComboList(void)
 
   unsigned int i;
   for (i = 0; i < nEnums; i++) {
-    mComboList.ComboPopupItemList[i] =
-        mComboList.CreateItem(i, mEntries[i].index, mEntries[i].mText,
-                              mEntries[i].mText);
+    mComboList.Append(mComboList.CreateItem(i, mEntries[i].index,
+                                            mEntries[i].mText,
+                                            mEntries[i].mText));
   }
   mComboList.ComboPopupItemSavedIndex = mValue;
-  mComboList.ComboPopupItemCount = i;
 
   return mComboList.ComboPopupItemCount;
 }

@@ -42,16 +42,9 @@ unsigned
 DataFieldBoolean::CreateComboList(void)
 {
   mComboList.Clear();
+  mComboList.Append(mComboList.CreateItem(0, 0, mTextFalse, mTextFalse));
+  mComboList.Append(mComboList.CreateItem(1, 1, mTextTrue, mTextTrue));
 
-  int i = 0;
-  mComboList.ComboPopupItemList[i] =
-      mComboList.CreateItem(i, i, mTextFalse, mTextFalse);
-
-  i = 1;
-  mComboList.ComboPopupItemList[i] =
-      mComboList.CreateItem(i, i, mTextTrue, mTextTrue);
-
-  mComboList.ComboPopupItemCount = 2;
   mComboList.ComboPopupItemSavedIndex = GetAsInteger();
   return mComboList.ComboPopupItemCount;
 }
