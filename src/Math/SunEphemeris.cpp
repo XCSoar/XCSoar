@@ -155,8 +155,9 @@ SunEphemeris::GetEclipticLongitude(fixed d)
                                   fixed(.9856003) * d)).value_radians();
 
   //   Ecliptic longitude of the Sun
-  return FNrange(L + fixed(1.915) * fixed_deg_to_rad * sin(g) +
-                 fixed(.02) * fixed_deg_to_rad * sin(2 * g)).value_radians();
+  return FNrange(L + Angle::degrees(fixed(1.915)).value_radians() * sin(g) +
+                 Angle::degrees(fixed(.02)).value_radians() *
+                 sin(2 * g)).value_radians();
 }
 
 /**
