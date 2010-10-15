@@ -89,7 +89,7 @@ SunEphemeris::FNrange(fixed x)
  * @return The hourangle
  */
 // TODO TB: find explanations/links for this and following
-fixed
+Angle
 SunEphemeris::f0(Angle lat, Angle declin)
 {
   fixed fo;
@@ -109,7 +109,7 @@ SunEphemeris::f0(Angle lat, Angle declin)
 
   fo = asin(fo) + fixed_half_pi;
 
-  return fo;
+  return Angle::radians(fo);
 }
 
 /**
@@ -118,7 +118,7 @@ SunEphemeris::f0(Angle lat, Angle declin)
  * @param declin Declination
  * @return The hourangle for twilight times
  */
-fixed
+Angle
 SunEphemeris::f1(Angle lat, Angle declin)
 {
   fixed fi;
@@ -138,7 +138,7 @@ SunEphemeris::f1(Angle lat, Angle declin)
 
   fi = asin(fi) + fixed_half_pi;
 
-  return fi;
+  return Angle::radians(fi);
 }
 
 /**
@@ -204,8 +204,8 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
 
   equation = fixed(1440) * (fixed_one - LL / fixed_two_pi);
 
-  HourAngle = f0(Location.Latitude, Delta);
-  HourAngleTwilight = f1(Location.Latitude, Delta);
+  HourAngle = f0(Location.Latitude, Delta).value_radians();
+  HourAngleTwilight = f1(Location.Latitude, Delta).value_radians();
 
   // length of twilight in radians
   TwilightHours = HourAngleTwilight - HourAngle;
