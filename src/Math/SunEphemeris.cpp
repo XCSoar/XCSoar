@@ -92,15 +92,16 @@ SunEphemeris::FNrange(fixed x)
 fixed
 SunEphemeris::f0(Angle lat, Angle declin)
 {
-  fixed fo, dfo;
+  fixed fo;
+  Angle dfo;
 
   // Correction: different sign at southern hemisphere
-  dfo = Angle::degrees(SUN_DIAMETER / 2 + AIR_REFRACTION).value_radians();
+  dfo = Angle::degrees(SUN_DIAMETER / 2 + AIR_REFRACTION);
 
   if (negative(lat.value_degrees()))
-    dfo = -dfo;
+    dfo.flip();
 
-  fo = tan(declin.value_radians() + dfo) * tan(lat.value_radians());
+  fo = tan(declin.value_radians() + dfo.value_radians()) * tan(lat.value_radians());
 
   if (fo > fixed(0.99999))
     // to avoid overflow
