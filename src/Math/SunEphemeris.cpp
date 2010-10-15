@@ -181,7 +181,8 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
 {
   //float intz;
   fixed DaysToJ2000, Lambda;
-  fixed Obliquity, Alpha, Delta, LL, equation, HourAngle, HourAngleTwilight, TwilightHours;
+  Angle Obliquity;
+  fixed Alpha, Delta, LL, equation, HourAngle, HourAngleTwilight, TwilightHours;
   int Year, Month, Day, Hour;
 
   // testing
@@ -200,11 +201,11 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
   Lambda = FNsun(DaysToJ2000);
 
   // Obliquity of the ecliptic
-  Obliquity = (fixed(23.439) - fixed(.0000004) * DaysToJ2000) * fixed_deg_to_rad;
+  Obliquity = Angle::degrees(fixed(23.439) - fixed(.0000004) * DaysToJ2000);
 
   // Find the RA and DEC of the Sun
-  Alpha = atan2(cos(Obliquity) * sin(Lambda), cos(Lambda));
-  Delta = asin(sin(Obliquity) * sin(Lambda));
+  Alpha = atan2(cos(Obliquity.value_radians()) * sin(Lambda), cos(Lambda));
+  Delta = asin(sin(Obliquity.value_radians()) * sin(Lambda));
 
   // Find the Equation of Time in minutes
   // Correction suggested by David Smith
