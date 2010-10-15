@@ -66,7 +66,7 @@ public:
             DataAccessCallback_t OnDataAccess = NULL);
   virtual ~DataField(void) {}
 
-  virtual void Special(void);
+  void Special(void);
   virtual void Inc(void);
   virtual void Dec(void);
 
