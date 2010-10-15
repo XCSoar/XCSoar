@@ -174,16 +174,10 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
                            const BrokenDateTime &date_time,
                            const fixed TimeZone)
 {
-  //float intz;
   fixed DaysToJ2000;
   Angle Obliquity, Lambda;
   fixed Alpha, Delta, LL, equation, HourAngle, HourAngleTwilight, TwilightHours;
   int Year, Month, Day, Hour;
-
-  // testing
-
-  // JG Removed simulator conditional code, since GPS_INFO now set up
-  // from system time.
 
   Month = date_time.month;
   Year = date_time.year;
@@ -217,8 +211,6 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
   TwilightHours = HourAngleTwilight - HourAngle;
   // length of twilight in hours
   TwilightHours = 12 * TwilightHours / fixed_pi;
-
-  //printf("ha= %.2f   hb= %.2f \n",ha,hb);
 
   // Conversion of angle to hours and minutes
   DayLength = fixed_rad_to_deg * HourAngle / fixed(7.5);
