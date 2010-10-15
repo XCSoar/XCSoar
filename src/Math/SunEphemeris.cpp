@@ -79,10 +79,7 @@ SunEphemeris::FNday(int y, int m, int d, fixed h)
 const Angle
 SunEphemeris::FNrange(fixed x)
 {
-  const fixed b = x / fixed_two_pi;
-  fixed a = fixed_two_pi * (b - trunc(b));
-
-  return Angle::radians(a).as_bearing();
+  return Angle::radians(x).as_bearing();
 }
 
 /**
