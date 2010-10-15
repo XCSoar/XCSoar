@@ -32,13 +32,11 @@ Copyright_License {
 #include "OS/FlashCardEnumerator.hpp"
 #endif
 
+#include <algorithm>
+
 #include <windef.h> /* for MAX_PATH */
 #include <assert.h>
 #include <stdlib.h>
-
-#ifndef WIN32
-#define _cdecl
-#endif
 
 /**
  * Checks whether the given string str equals a xcsoar internal file's filename
@@ -273,14 +271,6 @@ DataFieldFileReader::Dec()
   }
 }
 
-static int _cdecl
-DataFieldFileReaderCompare(const void *elem1, const void *elem2)
-{
-  // Compare by filename
-  return _tcscmp(((const DataFieldFileReader::Item *)elem1)->filename,
-                 ((const DataFieldFileReader::Item *)elem2)->filename);
-}
-
 void
 DataFieldFileReader::Sort()
 {
@@ -290,9 +280,11 @@ DataFieldFileReader::Sort()
   }
 
   // Sort the filelist (except for the first (empty) element)
-  qsort(files.begin(), files.size(), sizeof(Item), DataFieldFileReaderCompare);
-  /* by the way, we're not using std::sort() here, because this
-     function would require the Item class to be copyable */
+  std::sort(files.begin(), files.end(), [](const Item &a,
+                                           const Item &b) {
+              // Compare by filename
+              return _tcscmp(a.filename, b.filename) < 0;
+            });
 }
 
 ComboList

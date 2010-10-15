@@ -28,6 +28,8 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "Util/StaticString.hpp"
 
+#include <utility>
+
 /**
  * #DataField specialisation that supplies options as a list of
  * files matching a suffix.  First entry is always blank for null entry.
@@ -46,9 +48,26 @@ public:
 
     Item():filename(nullptr), path(nullptr) {}
 
+    Item(Item &&src):filename(src.filename), path(src.path) {
+      src.filename = src.path = nullptr;
+    }
+
     Item(const Item &) = delete;
 
     ~Item();
+
+    Item &operator=(Item &&src) {
+      filename = src.filename;
+      path = src.path;
+      src.filename = src.path = nullptr;
+      return *this;
+    }
+
+    friend void swap(Item &a, Item &b) {
+      using std::swap;
+      swap(a.filename, b.filename);
+      swap(a.path, b.path);
+    }
   };
 
 private:
