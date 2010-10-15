@@ -75,6 +75,18 @@ OnHelpClicked(unsigned i)
   wComboPopupWndProperty->OnHelp();
 }
 
+static int
+ComboPicker(SingleWindow &parent, const WndProperty &control,
+            const ComboList &combo_list)
+{
+  return ListPicker(parent, control.GetCaption(),
+                    combo_list.size(),
+                    combo_list.ComboPopupItemSavedIndex,
+                    Layout::Scale(18),
+                    OnPaintComboPopupListItem,
+                    OnHelpClicked);
+}
+
 int
 dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
 {
@@ -107,12 +119,7 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
       ComboPopupDataField->CopyString(sSavedInitialValue, false);
     }
 
-    int idx = ListPicker(parent, theProperty->GetCaption(),
-                         ComboListPopup->size(),
-                         ComboListPopup->ComboPopupItemSavedIndex,
-                         Layout::Scale(18),
-                         OnPaintComboPopupListItem,
-                         OnHelpClicked);
+    int idx = ComboPicker(parent, *theProperty, *ComboListPopup);
 
     bOpenCombo = false; //tell  combo to exit loop after close
 
@@ -132,6 +139,7 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
         item = &(*ComboListPopup)[idx + 1];
         bOpenCombo = true;
       }
+
       ComboPopupDataField->SetFromCombo(item->DataFieldIndex,
                                         item->StringValue);
     } else {
