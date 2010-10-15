@@ -179,17 +179,17 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
                            const fixed TimeZone)
 {
   fixed DaysToJ2000;
-  Angle Obliquity, Lambda, Alpha, Delta;
-  fixed L, LL, equation, TwilightHours;
+  Angle Obliquity, Lambda, Alpha, Delta, L;
+  fixed LL, equation, TwilightHours;
   Angle HourAngle, HourAngleTwilight;
 
   DaysToJ2000 = FNday(date_time.year, date_time.month, date_time.day,
                       fixed(date_time.hour % 24));
 
-  L = GetMeanSunLongitude(DaysToJ2000).value_radians();
+  L = GetMeanSunLongitude(DaysToJ2000);
 
   // Use GetEclipticLongitude to find the ecliptic longitude of the Sun
-  Lambda = GetEclipticLongitude(DaysToJ2000, L);
+  Lambda = GetEclipticLongitude(DaysToJ2000, L.value_radians());
 
   // Obliquity of the ecliptic
   Obliquity = Angle::degrees(fixed(23.439) - fixed(.0000004) * DaysToJ2000);
@@ -200,8 +200,8 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
 
   // Find the Equation of Time in minutes
   // Correction suggested by David Smith
-  LL = L - Alpha.value_radians();
-  if (L < fixed_pi)
+  LL = L.value_radians() - Alpha.value_radians();
+  if (L.value_radians() < fixed_pi)
     LL += fixed_two_pi;
 
   equation = fixed(1440) * (fixed_one - LL / fixed_two_pi);
