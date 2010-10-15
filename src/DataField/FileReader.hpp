@@ -110,7 +110,7 @@ public:
    * Prepares the ComboList items
    * @return The number of items in the ComboList
    */
-  virtual ComboList *CreateComboList();
+  virtual ComboList *CreateComboList() const;
 
   /**
    * Adds a filename/filepath couple to the filelist

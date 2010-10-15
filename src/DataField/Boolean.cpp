@@ -40,7 +40,7 @@ Copyright_License {
 #include "DataField/ComboList.hpp"
 
 ComboList *
-DataFieldBoolean::CreateComboList(void)
+DataFieldBoolean::CreateComboList() const
 {
   ComboList *combo_list = new ComboList();
   combo_list->Append(0, 0, mTextFalse, mTextFalse);

@@ -164,7 +164,7 @@ DataFieldEnum::Sort(int startindex)
 }
 
 ComboList *
-DataFieldEnum::CreateComboList(void)
+DataFieldEnum::CreateComboList() const
 {
   ComboList *combo_list = new ComboList();
 

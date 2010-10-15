@@ -66,7 +66,7 @@ public:
 
   void Inc(void);
   void Dec(void);
-  virtual ComboList *CreateComboList();
+  virtual ComboList *CreateComboList() const;
 
   virtual bool GetAsBoolean(void) const;
   virtual int GetAsInteger(void) const;

@@ -104,7 +104,7 @@ public:
   // allows combolist to iterate all values w/out triggering external events
   void SetDetachGUI(bool bDetachGUI) { mDetachGUI = bDetachGUI; }
   bool GetDetachGUI(void) { return mDetachGUI; }
-  virtual ComboList *CreateComboList() { return NULL; }
+  virtual ComboList *CreateComboList() const { return NULL; }
 
   virtual void
   SetFromCombo(int iDataFieldIndex, TCHAR *sValue)

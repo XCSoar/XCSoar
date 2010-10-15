@@ -542,9 +542,12 @@ DataFieldFileReader::Sort(void)
 }
 
 ComboList *
-DataFieldFileReader::CreateComboList(void)
+DataFieldFileReader::CreateComboList() const
 {
-  EnsureLoaded();
+  /* sorry for the const_cast .. this method keeps the promise of not
+     modifying the object, given that one does not count filling the
+     (cached) file list as "modification" */
+  EnsureLoadedDeconst();
 
   ComboList *cl = new ComboList();
 

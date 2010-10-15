@@ -193,7 +193,8 @@ DataFieldFloat::SetFromCombo(int iDataFieldIndex, TCHAR *sValue)
 }
 
 ComboList *
-DataFieldFloat::CreateComboList(void)
+DataFieldFloat::CreateComboList() const
 {
-  return CreateComboListStepping();
+  DataFieldFloat clone(*this);
+  return clone.CreateComboListStepping();
 }
