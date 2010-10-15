@@ -150,7 +150,7 @@ SunEphemeris::f1(Angle lat, fixed declin)
  * @return The ecliptic longitude of the Sun
  */
 fixed
-SunEphemeris::FNsun(fixed d)
+SunEphemeris::GetEclipticLongitude(fixed d)
 {
   //   mean longitude of the Sun
   L = FNrange(fixed_deg_to_rad * (fixed(280.461) +
@@ -197,8 +197,8 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
 
   DaysToJ2000 = FNday(Year, Month, Day, fixed(Hour));
 
-  // Use FNsun to find the ecliptic longitude of the Sun
-  Lambda = FNsun(DaysToJ2000);
+  // Use GetEclipticLongitude to find the ecliptic longitude of the Sun
+  Lambda = GetEclipticLongitude(DaysToJ2000);
 
   // Obliquity of the ecliptic
   Obliquity = Angle::degrees(fixed(23.439) - fixed(.0000004) * DaysToJ2000);
