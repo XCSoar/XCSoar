@@ -41,6 +41,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Components.hpp"
+#include "OS/PathName.hpp"
 
 void
 TaskStore::clear()
@@ -62,7 +63,7 @@ TaskStore::scan()
   // append to list
   for (unsigned i = 1; i < fr.size(); i++) {
     const DataFieldFileReaderEntry& item = fr.getItem(i);
-    m_store.push_back(TaskStoreItem(item.mTextPathFile, item.mTextFile));
+    m_store.push_back(TaskStoreItem(item.mTextPathFile));
   }
 }
 
@@ -74,16 +75,13 @@ TaskStore::size() const
 
 TaskStore::TaskStoreItem::TaskStoreItem():
   filename(_T("unk")),
-  short_name(_T("unk")),
   task(NULL),
   valid(false)
 {
 }
 
-TaskStore::TaskStoreItem::TaskStoreItem(const tstring &the_filename,
-                                        const tstring &the_short_name):
+TaskStore::TaskStoreItem::TaskStoreItem(const tstring &the_filename):
   filename(the_filename),
-  short_name(the_short_name),
   task(NULL),
   valid(true)
 {        
@@ -113,7 +111,11 @@ TaskStore::TaskStoreItem::get_task()
 const TCHAR *
 TaskStore::get_name(unsigned index) const
 {
-  return m_store[index].short_name.c_str();
+  const TCHAR *path = m_store[index].filename.c_str();
+  const TCHAR *name = BaseName(path);
+  if (name == NULL)
+    name = path;
+  return name;
 }
 
 OrderedTask* 

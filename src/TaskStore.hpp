@@ -62,12 +62,10 @@ public:
   {
     TaskStoreItem();
 
-    TaskStoreItem(const tstring &the_filename,
-                  const tstring &the_short_name);
+    TaskStoreItem(const tstring &the_filename);
     ~TaskStoreItem();
 
     tstring filename;
-    tstring short_name;
     OrderedTask* task;
     bool valid;
     OrderedTask* get_task();
