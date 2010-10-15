@@ -58,10 +58,10 @@ class SunEphemeris {
   static const Angle FNrange(fixed x);
 
   gcc_const
-  static fixed f0(Angle lat, fixed declin);
+  static fixed f0(Angle lat, Angle declin);
 
   gcc_const
-  static fixed f1(Angle lat, fixed declin);
+  static fixed f1(Angle lat, Angle declin);
 
   gcc_pure
   Angle GetEclipticLongitude(fixed d);

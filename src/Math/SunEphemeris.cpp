@@ -90,7 +90,7 @@ SunEphemeris::FNrange(fixed x)
  */
 // TODO TB: find explanations/links for this and following
 fixed
-SunEphemeris::f0(Angle lat, fixed declin)
+SunEphemeris::f0(Angle lat, Angle declin)
 {
   fixed fo, dfo;
 
@@ -100,7 +100,7 @@ SunEphemeris::f0(Angle lat, fixed declin)
   if (negative(lat.value_degrees()))
     dfo = -dfo;
 
-  fo = tan(declin + dfo) * tan(lat.value_radians());
+  fo = tan(declin.value_radians() + dfo) * tan(lat.value_radians());
 
   if (fo > fixed(0.99999))
     // to avoid overflow
@@ -118,7 +118,7 @@ SunEphemeris::f0(Angle lat, fixed declin)
  * @return The hourangle for twilight times
  */
 fixed
-SunEphemeris::f1(Angle lat, fixed declin)
+SunEphemeris::f1(Angle lat, Angle declin)
 {
   fixed fi, df1;
 
@@ -128,7 +128,7 @@ SunEphemeris::f1(Angle lat, fixed declin)
   if (negative(lat.value_degrees()))
     df1 = -df1;
 
-  fi = tan(declin + df1) * tan(lat.value_radians());
+  fi = tan(declin.value_radians() + df1) * tan(lat.value_radians());
 
   if (fi > fixed(0.99999))
     // to avoid overflow
@@ -175,8 +175,8 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
                            const fixed TimeZone)
 {
   fixed DaysToJ2000;
-  Angle Obliquity, Lambda;
-  fixed Alpha, Delta, LL, equation, HourAngle, HourAngleTwilight, TwilightHours;
+  Angle Obliquity, Lambda, Delta;
+  fixed Alpha, LL, equation, HourAngle, HourAngleTwilight, TwilightHours;
   int Year, Month, Day, Hour;
 
   Month = date_time.month;
@@ -194,7 +194,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
 
   // Find the RA and DEC of the Sun
   Alpha = atan2(Obliquity.cos() * Lambda.sin(), Lambda.cos());
-  Delta = asin(Obliquity.sin() * Lambda.sin());
+  Delta = Angle::radians(asin(Obliquity.sin() * Lambda.sin()));
 
   // Find the Equation of Time in minutes
   // Correction suggested by David Smith
@@ -226,11 +226,11 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
     - Location.Longitude.value_degrees() / 15 + equation / 60;
 
   TimeOfNoon = TimeOfSunRise + fixed(12) * HourAngle / fixed_pi;
-  altmax = fixed(90) + Delta * fixed_rad_to_deg - Location.Latitude.value_degrees();
+  altmax = fixed(90) + Delta.value_degrees() - Location.Latitude.value_degrees();
 
   // Correction for southern hemisphere suggested by David Smith
   // to express altitude as degrees from the N horizon
-  if (Location.Latitude.value_degrees() < Delta * fixed_rad_to_deg)
+  if (Location.Latitude.value_degrees() < Delta.value_degrees())
     altmax = fixed(180) - altmax;
 
   // morning twilight begin
