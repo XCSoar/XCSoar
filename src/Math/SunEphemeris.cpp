@@ -176,7 +176,8 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
 {
   fixed DaysToJ2000;
   Angle Obliquity, Lambda, Delta;
-  fixed Alpha, LL, equation, HourAngle, HourAngleTwilight, TwilightHours;
+  fixed Alpha, LL, equation, TwilightHours;
+  Angle HourAngle, HourAngleTwilight;
   int Year, Month, Day, Hour;
 
   Month = date_time.month;
@@ -204,26 +205,26 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
 
   equation = fixed(1440) * (fixed_one - LL / fixed_two_pi);
 
-  HourAngle = GetHourAngle(Location.Latitude, Delta).value_radians();
-  HourAngleTwilight = GetHourAngleTwilight(Location.Latitude, Delta).value_radians();
+  HourAngle = GetHourAngle(Location.Latitude, Delta);
+  HourAngleTwilight = GetHourAngleTwilight(Location.Latitude, Delta);
 
   // length of twilight in hours
-  TwilightHours = 12 * (HourAngleTwilight - HourAngle) / fixed_pi;
+  TwilightHours = 12 * (HourAngleTwilight - HourAngle).value_radians() / fixed_pi;
 
   // Conversion of angle to hours and minutes
-  DayLength = fixed_rad_to_deg * HourAngle / fixed(7.5);
+  DayLength = HourAngle.value_degrees() / fixed(7.5);
 
   if (DayLength < fixed(0.0001))
     // arctic winter
     DayLength = fixed_zero;
 
-  TimeOfSunRise = fixed(12) - fixed(12) * HourAngle / fixed_pi + TimeZone
+  TimeOfSunRise = fixed(12) - fixed(12) * HourAngle.value_radians() / fixed_pi + TimeZone
     - Location.Longitude.value_degrees() / 15 + equation / 60;
 
-  TimeOfSunSet = fixed(12) + fixed(12) * HourAngle / fixed_pi + TimeZone
+  TimeOfSunSet = fixed(12) + fixed(12) * HourAngle.value_radians() / fixed_pi + TimeZone
     - Location.Longitude.value_degrees() / 15 + equation / 60;
 
-  TimeOfNoon = TimeOfSunRise + fixed(12) * HourAngle / fixed_pi;
+  TimeOfNoon = TimeOfSunRise + fixed(12) * HourAngle.value_radians() / fixed_pi;
   altmax = fixed(90) + Delta.value_degrees() - Location.Latitude.value_degrees();
 
   // Correction for southern hemisphere suggested by David Smith
