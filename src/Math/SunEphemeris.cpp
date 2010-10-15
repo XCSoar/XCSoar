@@ -200,8 +200,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
   Lambda = FNsun(DaysToJ2000);
 
   // Obliquity of the ecliptic
-  Obliquity = fixed(23.439) * fixed_deg_to_rad
-    - fixed(.0000004) * fixed_deg_to_rad * DaysToJ2000;
+  Obliquity = (fixed(23.439) - fixed(.0000004) * DaysToJ2000) * fixed_deg_to_rad;
 
   // Find the RA and DEC of the Sun
   Alpha = atan2(cos(Obliquity) * sin(Lambda), cos(Lambda));
