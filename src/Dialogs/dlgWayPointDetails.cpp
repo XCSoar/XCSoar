@@ -540,17 +540,14 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   int sunsetmins;
   WndProperty *wp;
 
-  if (Layout::landscape)
-    wf = LoadDialog(CallBackTable,
-                        parent, _T("IDR_XML_WAYPOINTDETAILS_L"));
-  else
-    wf = LoadDialog(CallBackTable,
-                        parent, _T("IDR_XML_WAYPOINTDETAILS"));
-
-  nTextLines = 0;
+  wf = LoadDialog(CallBackTable, parent,
+                  Layout::landscape ? _T("IDR_XML_WAYPOINTDETAILS_L") :
+                                      _T("IDR_XML_WAYPOINTDETAILS"));
 
   if (!wf)
     return;
+
+  nTextLines = 0;
 
   TCHAR buffer[MAX_PATH];
   const TCHAR *Directory = NULL;
