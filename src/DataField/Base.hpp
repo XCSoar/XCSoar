@@ -41,13 +41,14 @@ Copyright_License {
 
 // JMW OLD_TASK todo; continue with fixed vars here
 #include "Math/fixed.hpp"
-#include "DataField/ComboList.hpp"
 
 #include <tchar.h>
 
 #define FORMATSIZE 32
 #define UNITSIZE 10
 #define OUTBUFFERSIZE 128
+
+class ComboList;
 
 class DataField
 {
@@ -103,8 +104,7 @@ public:
   // allows combolist to iterate all values w/out triggering external events
   void SetDetachGUI(bool bDetachGUI) { mDetachGUI = bDetachGUI; }
   bool GetDetachGUI(void) { return mDetachGUI; }
-  virtual unsigned CreateComboList() { return 0; }
-  ComboList* GetCombo(void) { return &mComboList; }
+  virtual ComboList *CreateComboList() { return NULL; }
 
   virtual void
   SetFromCombo(int iDataFieldIndex, TCHAR *sValue)
@@ -120,8 +120,8 @@ protected:
   TCHAR mEditFormat[FORMATSIZE + 1];
   TCHAR mDisplayFormat[FORMATSIZE + 1];
   TCHAR mUnits[UNITSIZE + 1];
-  ComboList mComboList;
-  unsigned CreateComboListStepping(void);
+
+  ComboList *CreateComboListStepping(void);
 
 private:
   int mUsageCounter;

@@ -107,10 +107,9 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
     wComboPopupWndProperty = theProperty;
 
     ComboPopupDataField = wComboPopupWndProperty->GetDataField();
-    ComboListPopup = ComboPopupDataField->GetCombo();
     assert(ComboPopupDataField != NULL);
 
-    ComboPopupDataField->CreateComboList();
+    ComboListPopup = ComboPopupDataField->CreateComboList();
     if (bInitialPage) { // save values for "Cancel" from first page only
       bInitialPage = false;
       iSavedInitialDataIndex =
@@ -152,8 +151,9 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
             sSavedInitialValue);
     }
 
+    delete ComboListPopup;
+
     wComboPopupWndProperty->RefreshDisplay();
-    ComboListPopup->Clear();
   } // loop reopen combo if <<More>>  or <<Less>> picked
 
   bInComboPicker = false;

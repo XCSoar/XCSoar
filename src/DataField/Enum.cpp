@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "DataField/Enum.hpp"
+#include "DataField/ComboList.hpp"
 
 #include <stdlib.h>
 
@@ -162,17 +163,17 @@ DataFieldEnum::Sort(int startindex)
         DataFieldEnumCompare);
 }
 
-unsigned
+ComboList *
 DataFieldEnum::CreateComboList(void)
 {
-  mComboList.Clear();
+  ComboList *combo_list = new ComboList();
 
   unsigned int i;
   for (i = 0; i < nEnums; i++) {
-    mComboList.Append(i, mEntries[i].index,
-                      mEntries[i].mText, mEntries[i].mText);
+    combo_list->Append(i, mEntries[i].index,
+                       mEntries[i].mText, mEntries[i].mText);
   }
-  mComboList.ComboPopupItemSavedIndex = mValue;
 
-  return mComboList.size();
+  combo_list->ComboPopupItemSavedIndex = mValue;
+  return combo_list;
 }

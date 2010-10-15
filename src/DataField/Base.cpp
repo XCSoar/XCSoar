@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "DataField/Base.hpp"
+#include "DataField/ComboList.hpp"
 
 #include <math.h>
 #include <algorithm>
@@ -162,7 +163,7 @@ DataField::CopyString(TCHAR * szbuffOut, bool bFormatted)
   szbuffOut[min(iLen, ComboPopupITEMMAX - 1)] = '\0';
 }
 
-unsigned
+ComboList *
 DataField::CreateComboListStepping(void)
 {
   // for DataFieldInteger and DataFieldFloat
@@ -227,13 +228,14 @@ DataField::CreateComboListStepping(void)
   fLast = ComboListInitValue;
 
   fCurrent = GetAsFixed();
-  mComboList.Clear();
+
+  ComboList *combo_list = new ComboList();
 
   // if we stopped before hitting start of list create <<Less>> value at top of list
   if (iListCount == ComboList::MAX_SIZE / 2) {
     // this data index item is checked on close of dialog
-    mComboList.Append(mComboList.size(), ComboList::Item::PREVIOUS_PAGE,
-                      _T("<<More Items>>"), _T("<<More Items>>"));
+    combo_list->Append(combo_list->size(), ComboList::Item::PREVIOUS_PAGE,
+                       _T("<<More Items>>"), _T("<<More Items>>"));
   }
 
   // now we're at the beginning of the list, so load forward until end
@@ -248,19 +250,18 @@ DataField::CreateComboListStepping(void)
           (fSavedValue + ComboFloatPrec * iStepDirection)) {
         // step was too large, we skipped the selected value, so add it now
         iSelectedIndex =
-          mComboList.Append(mComboList.size(), 0, PropertyValueSaved,
-                            PropertyValueSavedFormatted);
+          combo_list->Append(combo_list->size(), 0, PropertyValueSaved,
+                             PropertyValueSavedFormatted);
       }
-
     }
 
     if (iSelectedIndex == -1 && fabs(fCurrent - fSavedValue) < ComboFloatPrec) {
       // selected item index
-      iSelectedIndex = mComboList.size();
+      iSelectedIndex = combo_list->size();
     }
 
     CopyString(sTemp, true); // can't call GetAsString & GetAsStringFormatted together (same output buffer)
-    mComboList.Append(mComboList.size(), 0, GetAsString(), sTemp);
+    combo_list->Append(combo_list->size(), 0, GetAsString(), sTemp);
 
     Inc();
     fNext = GetAsFixed();
@@ -269,7 +270,7 @@ DataField::CreateComboListStepping(void)
       // we're at start of the list
       break;
 
-    if (fNext == fLast && mComboList.size() > 0)
+    if (fNext == fLast && combo_list->size() > 0)
       //we're at the end of the range
       break;
 
@@ -280,8 +281,8 @@ DataField::CreateComboListStepping(void)
   // if we stopped before hitting end of list create <<More>> value at end of list
   if (iListCount == ComboList::MAX_SIZE - 3) {
     // this data index item is checked on close of dialog
-    mComboList.Append(mComboList.size(), ComboList::Item::NEXT_PAGE,
-                      _T("<<More Items>>"), _T("<<More Items>>"));
+    combo_list->Append(combo_list->size(), ComboList::Item::NEXT_PAGE,
+                       _T("<<More Items>>"), _T("<<More Items>>"));
   }
 
   SetDisableSpeedUp(false);
@@ -290,7 +291,7 @@ DataField::CreateComboListStepping(void)
   if (iSelectedIndex >= 0)
     SetAsFloat(fSavedValue);
 
-  mComboList.ComboPopupItemSavedIndex = iSelectedIndex;
+  combo_list->ComboPopupItemSavedIndex = iSelectedIndex;
 
-  return mComboList.size();
+  return combo_list;
 }

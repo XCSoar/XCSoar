@@ -71,7 +71,7 @@ public DataField
 
   void Inc(void);
   void Dec(void);
-  unsigned CreateComboList();
+  virtual ComboList *CreateComboList();
   void SetFromCombo(int iDataFieldIndex, TCHAR *sValue);
 
   virtual bool GetAsBoolean(void) const;

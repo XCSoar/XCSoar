@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "DataField/FileReader.hpp"
+#include "DataField/ComboList.hpp"
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "Compatibility/string.h"
@@ -551,12 +552,12 @@ DataFieldFileReader::Sort(void)
         DataFieldFileReaderCompare);
 }
 
-unsigned
+ComboList *
 DataFieldFileReader::CreateComboList(void)
 {
   EnsureLoaded();
 
-  mComboList.Clear();
+  ComboList *cl = new ComboList();
 
   unsigned int i = 0;
   for (i = 0; i < nFiles; i++) {
@@ -564,13 +565,13 @@ DataFieldFileReader::CreateComboList(void)
     if (path == NULL)
       path = _T("");
 
-    mComboList.Append(i, i, path, path);
+    cl->Append(i, i, path, path);
     if (i == mValue) {
-      mComboList.ComboPopupItemSavedIndex = i;
+      cl->ComboPopupItemSavedIndex = i;
     }
   }
 
-  return mComboList.size();
+  return cl;
 }
 
 unsigned

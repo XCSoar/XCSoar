@@ -166,7 +166,7 @@ DataFieldInteger::SpeedUp(bool keyup)
   return res;
 }
 
-unsigned
+ComboList *
 DataFieldInteger::CreateComboList(void)
 {
   return CreateComboListStepping();
