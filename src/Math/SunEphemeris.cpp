@@ -64,9 +64,8 @@ fixed
 SunEphemeris::FNday(const BrokenDateTime &date_time)
 {
   long int luku = -7 * (date_time.year + (date_time.month + 9) / 12) / 4 +
-                  275 * date_time.month / 9 + date_time.day;
-  // type casting necessary on PC DOS and TClite to avoid overflow
-  luku += (long int)date_time.year * 367;
+                  275 * date_time.month / 9 + date_time.day +
+                  (long int)date_time.year * 367;
 
   return fixed(luku) - fixed(730531.5) + fixed(date_time.hour % 24) / 24;
 }
