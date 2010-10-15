@@ -82,10 +82,7 @@ SunEphemeris::FNrange(fixed x)
   const fixed b = x / fixed_two_pi;
   fixed a = fixed_two_pi * (b - trunc(b));
 
-  if (negative(a))
-    a = fixed_two_pi + a;
-
-  return Angle::radians(a);
+  return Angle::radians(a).as_bearing();
 }
 
 /**
