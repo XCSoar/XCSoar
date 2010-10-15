@@ -48,15 +48,7 @@ static WndForm *wf = NULL;
 static void
 Update(const TCHAR *name, bool value)
 {
-  WndProperty *wp = (WndProperty*)wf->FindByName(name);
-  if (wp == NULL)
-    return;
-
-  DataFieldBoolean *df = (DataFieldBoolean *)wp->GetDataField();
-  if (df->GetAsBoolean() != value) {
-    df->Set(value);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, name, value);
 }
 
 static void
