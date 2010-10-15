@@ -90,11 +90,6 @@ SunEphemeris::GetHourAngle(Angle lat, Angle declin)
     dfo.flip();
 
   fo = (declin + dfo).tan() * lat.tan();
-
-  if (fo > fixed(0.99999))
-    // to avoid overflow
-    fo = fixed_one;
-
   fo = asin(fo) + fixed_half_pi;
 
   return Angle::radians(fo);
@@ -119,11 +114,6 @@ SunEphemeris::GetHourAngleTwilight(Angle lat, Angle declin)
     df1.flip();
 
   fi = (declin + df1).tan() * lat.tan();
-
-  if (fi > fixed(0.99999))
-    // to avoid overflow
-    fi = fixed_one;
-
   fi = asin(fi) + fixed_half_pi;
 
   return Angle::radians(fi);
