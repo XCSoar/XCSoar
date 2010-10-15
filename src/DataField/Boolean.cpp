@@ -42,8 +42,8 @@ unsigned
 DataFieldBoolean::CreateComboList(void)
 {
   mComboList.Clear();
-  mComboList.Append(mComboList.CreateItem(0, 0, mTextFalse, mTextFalse));
-  mComboList.Append(mComboList.CreateItem(1, 1, mTextTrue, mTextTrue));
+  mComboList.Append(0, 0, mTextFalse, mTextFalse);
+  mComboList.Append(1, 1, mTextTrue, mTextTrue);
 
   mComboList.ComboPopupItemSavedIndex = GetAsInteger();
   return mComboList.size();

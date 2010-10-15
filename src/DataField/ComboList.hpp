@@ -57,7 +57,8 @@ public:
     TCHAR *StringValue;
     TCHAR *StringValueFormatted;
 
-    Item();
+    Item(int _ItemIndex, int _DataFieldIndex,
+         const TCHAR *_StringValue, const TCHAR *_StringValueFormatted);
     ~Item();
   };
 
@@ -88,9 +89,12 @@ private:
 
   unsigned Append(Item *item);
 
-  Item *CreateItem(int ItemIndex, int DataFieldIndex,
-                                 const TCHAR *StringValue,
-                                 const TCHAR *StringValueFormatted);
+  unsigned Append(int ItemIndex, int DataFieldIndex,
+                  const TCHAR *StringValue,
+                  const TCHAR *StringValueFormatted) {
+    return Append(new Item(ItemIndex, DataFieldIndex,
+                           StringValue, StringValueFormatted));
+  }
 
     int ComboPopupItemSavedIndex;
 

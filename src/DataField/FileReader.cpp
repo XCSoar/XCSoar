@@ -560,8 +560,11 @@ DataFieldFileReader::CreateComboList(void)
 
   unsigned int i = 0;
   for (i = 0; i < nFiles; i++) {
-    mComboList.Append(mComboList.CreateItem(i, i, fields[i].mTextFile,
-                                            fields[i].mTextFile));
+    const TCHAR *path = fields[i].mTextFile;
+    if (path == NULL)
+      path = _T("");
+
+    mComboList.Append(i, i, path, path);
     if (i == mValue) {
       mComboList.ComboPopupItemSavedIndex = i;
     }

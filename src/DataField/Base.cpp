@@ -232,10 +232,8 @@ DataField::CreateComboListStepping(void)
   // if we stopped before hitting start of list create <<Less>> value at top of list
   if (iListCount == ComboList::MAX_SIZE / 2) {
     // this data index item is checked on close of dialog
-    mComboList.Append(mComboList.CreateItem(mComboList.size(),
-                                            ComboList::Item::PREVIOUS_PAGE,
-                                            _T("<<More Items>>"),
-                                            _T("<<More Items>>")));
+    mComboList.Append(mComboList.size(), ComboList::Item::PREVIOUS_PAGE,
+                      _T("<<More Items>>"), _T("<<More Items>>"));
   }
 
   // now we're at the beginning of the list, so load forward until end
@@ -250,9 +248,8 @@ DataField::CreateComboListStepping(void)
           (fSavedValue + ComboFloatPrec * iStepDirection)) {
         // step was too large, we skipped the selected value, so add it now
         iSelectedIndex =
-          mComboList.Append(mComboList.CreateItem(mComboList.size(),
-                                                  0, PropertyValueSaved,
-                                                  PropertyValueSavedFormatted));
+          mComboList.Append(mComboList.size(), 0, PropertyValueSaved,
+                            PropertyValueSavedFormatted);
       }
 
     }
@@ -263,8 +260,7 @@ DataField::CreateComboListStepping(void)
     }
 
     CopyString(sTemp, true); // can't call GetAsString & GetAsStringFormatted together (same output buffer)
-    mComboList.Append(mComboList.CreateItem(mComboList.size(),
-                                            0, GetAsString(), sTemp));
+    mComboList.Append(mComboList.size(), 0, GetAsString(), sTemp);
 
     Inc();
     fNext = GetAsFixed();
@@ -284,10 +280,8 @@ DataField::CreateComboListStepping(void)
   // if we stopped before hitting end of list create <<More>> value at end of list
   if (iListCount == ComboList::MAX_SIZE - 3) {
     // this data index item is checked on close of dialog
-    mComboList.Append(mComboList.CreateItem(mComboList.size(),
-                                            ComboList::Item::NEXT_PAGE,
-                                            _T("<<More Items>>"),
-                                            _T("<<More Items>>")));
+    mComboList.Append(mComboList.size(), ComboList::Item::NEXT_PAGE,
+                      _T("<<More Items>>"), _T("<<More Items>>"));
   }
 
   SetDisableSpeedUp(false);

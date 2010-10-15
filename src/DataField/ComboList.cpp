@@ -38,11 +38,15 @@ Copyright_License {
 
 #include "DataField/ComboList.hpp"
 
-#include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 
-ComboList::Item::Item()
-  :StringValue(NULL), StringValueFormatted(NULL) {}
+ComboList::Item::Item(int _ItemIndex, int _DataFieldIndex,
+                        const TCHAR *_StringValue,
+                        const TCHAR *_StringValueFormatted)
+  :ItemIndex(_ItemIndex), DataFieldIndex(_DataFieldIndex),
+   StringValue(_tcsdup(_StringValue)),
+   StringValueFormatted(_tcsdup(_StringValueFormatted)) {}
 
 ComboList::Item::~Item() {
   free(StringValue);
@@ -64,25 +68,4 @@ ComboList::Append(ComboList::Item *item)
   unsigned i = items.size();
   items.append(item);
   return i;
-}
-
-ComboList::Item *
-ComboList::CreateItem(int ItemIndex, int DataFieldIndex,
-                      const TCHAR *StringValue,
-                      const TCHAR *StringValueFormatted)
-{
-  // Copy current strings into structure
-  Item *theItem = new Item();
-  theItem->DataFieldIndex = DataFieldIndex;
-  theItem->ItemIndex=0;
-
-  assert(theItem!= NULL);
-
-  theItem->ItemIndex=ItemIndex;
-
-  theItem->StringValue = _tcsdup(StringValue != NULL ? StringValue : _T(""));
-  theItem->StringValueFormatted = _tcsdup(StringValueFormatted != NULL
-                                          ? StringValueFormatted : _T(""));
-
-  return theItem;
 }
