@@ -41,13 +41,21 @@ Copyright_License {
 #include <assert.h>
 #include <stdlib.h>
 
+ComboList::Item::Item()
+  :StringValue(NULL), StringValueFormatted(NULL) {}
+
+ComboList::Item::~Item() {
+  free(StringValue);
+  free(StringValueFormatted);
+}
+
 ComboList::Item *
 ComboList::CreateItem(int ItemIndex, int DataFieldIndex,
                       const TCHAR *StringValue,
                       const TCHAR *StringValueFormatted)
 {
   // Copy current strings into structure
-  Item *theItem = (Item *)malloc(sizeof(Item));
+  Item *theItem = new Item();
   theItem->DataFieldIndex=0;  // NULL is same as 0, so it fails to set it if index value is 0
   theItem->ItemIndex=0;
 
@@ -70,17 +78,7 @@ void ComboList::FreeComboPopupItemList(void)
 {
   for (unsigned i = 0; i < ComboPopupItemCount && i < ComboPopupLISTMAX; i++)
   {
-    if (ComboPopupItemList[i] != NULL)
-    {
-      free (ComboPopupItemList[i]->StringValue);
-      ComboPopupItemList[i]->StringValue=NULL;
-
-      free (ComboPopupItemList[i]->StringValueFormatted);
-      ComboPopupItemList[i]->StringValueFormatted=NULL;
-
-      free (ComboPopupItemList[i]);
-      ComboPopupItemList[i]=NULL;
-
-    }
+    delete ComboPopupItemList[i];
+    ComboPopupItemList[i] = NULL;
   }
 }

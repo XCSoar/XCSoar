@@ -39,15 +39,20 @@ Copyright_License {
 #ifndef XCSOAR_DATA_FIELD_COMBO_LIST_HPP
 #define XCSOAR_DATA_FIELD_COMBO_LIST_HPP
 
+#include "Util/NonCopyable.hpp"
+
 #include <tchar.h>
 
 class ComboList{
 public:
-  struct Item {
+  struct Item : private NonCopyable {
     int ItemIndex;
     int DataFieldIndex;
     TCHAR *StringValue;
     TCHAR *StringValueFormatted;
+
+    Item();
+    ~Item();
   };
 
   public:
