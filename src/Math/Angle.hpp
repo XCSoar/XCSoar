@@ -108,6 +108,11 @@ public:
   }
 
   gcc_pure
+  inline fixed tan() const {
+    return ::tan(value_radians());
+  }
+
+  gcc_pure
   inline fixed sin() const {
     return ::sin(value_radians());
   }
