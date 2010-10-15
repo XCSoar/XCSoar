@@ -80,16 +80,13 @@ SunEphemeris::FNday(const BrokenDateTime &date_time)
 Angle
 SunEphemeris::GetHourAngle(Angle lat, Angle declin)
 {
-  fixed fo;
-  Angle dfo;
+  Angle dfo = Angle::degrees(SUN_DIAMETER / 2 + AIR_REFRACTION);
 
   // Correction: different sign at southern hemisphere
-  dfo = Angle::degrees(SUN_DIAMETER / 2 + AIR_REFRACTION);
-
   if (negative(lat.value_degrees()))
     dfo.flip();
 
-  fo = (declin + dfo).tan() * lat.tan();
+  fixed fo = (declin + dfo).tan() * lat.tan();
   fo = asin(fo) + fixed_half_pi;
 
   return Angle::radians(fo);
@@ -104,16 +101,13 @@ SunEphemeris::GetHourAngle(Angle lat, Angle declin)
 Angle
 SunEphemeris::GetHourAngleTwilight(Angle lat, Angle declin)
 {
-  fixed fi;
-  Angle df1;
+  Angle df1 = Angle::degrees(fixed(6));
 
   // Correction: different sign at southern hemisphere
-  df1 = Angle::degrees(fixed(6));
-
   if (negative(lat.value_degrees()))
     df1.flip();
 
-  fi = (declin + df1).tan() * lat.tan();
+  fixed fi = (declin + df1).tan() * lat.tan();
   fi = asin(fi) + fixed_half_pi;
 
   return Angle::radians(fi);
