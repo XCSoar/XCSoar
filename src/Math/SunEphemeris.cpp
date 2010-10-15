@@ -95,7 +95,7 @@ SunEphemeris::f0(Angle lat, fixed declin)
   fixed fo, dfo;
 
   // Correction: different sign at southern hemisphere
-  dfo = fixed_deg_to_rad * (SUN_DIAMETER / 2 + AIR_REFRACTION);
+  dfo = Angle::degrees(SUN_DIAMETER / 2 + AIR_REFRACTION).value_radians();
 
   if (negative(lat.value_degrees()))
     dfo = -dfo;
@@ -123,7 +123,7 @@ SunEphemeris::f1(Angle lat, fixed declin)
   fixed fi, df1;
 
   // Correction: different sign at southern hemisphere
-  df1 = fixed_deg_to_rad * 6;
+  df1 = Angle::degrees(fixed(6)).value_radians();
 
   if (negative(lat.value_degrees()))
     df1 = -df1;
