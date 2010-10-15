@@ -83,6 +83,9 @@ public:
   fixed value_radians() const {
     return m_value;
   }
+  fixed value_hours() const {
+    return m_value * fixed(24) / fixed_two_pi;
+  }
 #else
   gcc_const
   static Angle degrees(const fixed value) {
@@ -99,6 +102,9 @@ public:
   }
   fixed value_radians() const {
     return m_value*fixed_deg_to_rad;
+  }
+  fixed value_hours() const {
+    return m_value * fixed(24. / 360.);
   }
 #endif
 
