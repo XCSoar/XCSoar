@@ -57,20 +57,6 @@ OnCloseClicked(WindowControl * Sender)
 }
 
 static void
-OnDisplayItemData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  switch (Mode) {
-  case DataField::daGet:
-    Sender->Set((int)RASP.GetParameter());
-    break;
-  case DataField::daPut:
-  case DataField::daChange:
-    RASP.SetParameter(Sender->GetAsInteger());
-    break;
-  }
-}
-
-static void
 RASPGetTime(DataField *Sender)
 {
   int index = 0;
@@ -103,20 +89,6 @@ RASPSetTime(DataField *Sender)
 }
 
 static void
-OnTimeData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  switch (Mode) {
-  case DataField::daGet:
-    RASPGetTime(Sender);
-    break;
-  case DataField::daPut:
-  case DataField::daChange:
-    RASPSetTime(Sender);
-    break;
-  }
-}
-
-static void
 OnWeatherHelp(WindowControl * Sender)
 {
   WndProperty *wp = (WndProperty*)Sender;
@@ -137,8 +109,6 @@ OnWeatherHelp(WindowControl * Sender)
 }
 
 static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnTimeData),
-  DeclareCallBackEntry(OnDisplayItemData),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnWeatherHelp),
   DeclareCallBackEntry(NULL)

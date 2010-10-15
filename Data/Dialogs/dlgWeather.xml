@@ -4,10 +4,10 @@
   <Button Caption="Close" X="2" Y="2" Width="66" Height="22" OnClick="OnCloseClicked" />
 
   <Edit Name="prpDisplayItem" Caption="Field" X="2" Width="115" Height="22" CaptionWidth="45" OnHelp="OnWeatherHelp">
-    <DataField DataType="enum" Min="0" Max="50" Step="1" OnDataAccess="OnDisplayItemData"/>
+    <DataField DataType="enum" Min="0" Max="50" Step="1"/>
   </Edit>
 
   <Edit Name="prpTime" Caption="Time" X="2" Width="115" Height="22" CaptionWidth="45" Help="TODO">
-    <DataField DataType="enum" Min="0" Max="50" Step="1" OnDataAccess="OnTimeData"/>
+    <DataField DataType="enum" Min="0" Max="50" Step="1"/>
   </Edit>
 </Form>
