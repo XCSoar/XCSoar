@@ -208,7 +208,6 @@ OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
       RefreshCalculator();
     }
     break;
-  case DataField::daPut:
   case DataField::daChange:
     MACCREADY = Units::ToSysVSpeed(Sender->GetAsFixed());
     SetMC(MACCREADY);
@@ -233,7 +232,6 @@ OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
     }
 #endif
     break;
-  case DataField::daPut:
   case DataField::daChange:
     cruise_efficiency = Sender->GetAsFixed() / 100;
 #ifdef OLD_TASK

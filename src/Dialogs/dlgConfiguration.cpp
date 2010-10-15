@@ -273,7 +273,6 @@ static void
 OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
-  case DataField::daPut:
   case DataField::daChange:
     UpdateDeviceSetupButton(0, Sender->GetAsString());
     break;
@@ -284,7 +283,6 @@ static void
 OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
-  case DataField::daPut:
   case DataField::daChange:
     UpdateDeviceSetupButton(1, Sender->GetAsString());
     break;
@@ -462,7 +460,6 @@ OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode)
   int ival;
 
   switch(Mode){
-  case DataField::daPut:
   case DataField::daChange:
     ival = iround(Sender->GetAsFixed() * 3600);
     if (XCSoarInterface::SettingsComputer().UTCOffset != ival) {
@@ -482,7 +479,6 @@ OnPolarFileData(DataField *Sender, DataField::DataAccessKind_t Mode)
   WndProperty* wp;
 
   switch(Mode){
-  case DataField::daPut:
   case DataField::daChange:
     if (Sender->GetAsString() != NULL && _tcscmp(Sender->GetAsString(), _T("")) != 0){
       // then ... set Polar Tape to Winpilot
@@ -502,7 +498,6 @@ OnPolarTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
   WndProperty* wp;
 
   switch(Mode){
-  case DataField::daPut:
   case DataField::daChange:
     wp = (WndProperty *)wf->FindByName(_T("prpPolarFile"));
 

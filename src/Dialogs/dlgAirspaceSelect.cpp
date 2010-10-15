@@ -183,8 +183,6 @@ static void OnFilterName(DataField *_Sender, DataField::DataAccessKind_t Mode){
   TCHAR sTmp[12];
 
   switch(Mode){
-    case DataField::daPut:
-    break;
     case DataField::daChange:
     break;
     case DataField::daInc:
@@ -216,7 +214,6 @@ static void OnFilterDistance(DataField *_Sender,
   TCHAR sTmp[12];
 
   switch(Mode){
-    case DataField::daPut:
     case DataField::daChange:
     break;
     case DataField::daInc:
@@ -273,7 +270,6 @@ static void OnFilterDirection(DataField *_Sender,
   DataFieldString *Sender = (DataFieldString *)_Sender;
 
   switch(Mode){
-    case DataField::daPut:
     case DataField::daChange:
     break;
     case DataField::daInc:
@@ -302,7 +298,6 @@ static void OnFilterType(DataField *_Sender,
   DataFieldString *Sender = (DataFieldString *)_Sender;
 
   switch(Mode){
-    case DataField::daPut:
     case DataField::daChange:
     break;
     case DataField::daInc:

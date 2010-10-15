@@ -61,12 +61,6 @@ DataField::Dec(void)
   (mOnDataAccess)(this, daDec);
 }
 
-void
-DataField::SetData(void)
-{
-  (mOnDataAccess)(this, daPut);
-}
-
 bool
 DataField::GetAsBoolean() const
 {

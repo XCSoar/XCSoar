@@ -54,7 +54,6 @@ class DataField
 public:
   typedef enum
   {
-    daPut,
     daChange,
     daInc,
     daDec,
@@ -70,8 +69,6 @@ public:
   virtual void Special(void);
   virtual void Inc(void);
   virtual void Dec(void);
-
-  virtual void SetData(void);
 
   virtual bool GetAsBoolean() const;
   virtual int GetAsInteger() const;

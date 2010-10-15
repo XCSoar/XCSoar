@@ -95,7 +95,6 @@ OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
   WndProperty* wp;
 
   switch (Mode) {
-  case DataField::daPut:
   case DataField::daChange:
     device_blackboard.SetQNH(Sender->GetAsFixed());
     wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
@@ -191,7 +190,6 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
     SetButtons();
     break;
   case DataField::daChange:
-  case DataField::daPut:
     glide_polar->set_ballast(Sender->GetAsFixed() / 100);
     changed = true;
     SetBallast();
@@ -206,7 +204,6 @@ OnBugsData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 
   switch (Mode) {
   case DataField::daChange:
-  case DataField::daPut:
     glide_polar->set_bugs(Sender->GetAsFixed() / 100);
     changed = true;
     break;
@@ -219,7 +216,6 @@ OnTempData(DataField *_Sender, DataField::DataAccessKind_t Mode)
   DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
   switch (Mode) {
   case DataField::daChange:
-  case DataField::daPut:
     CuSonde::setForecastTemperature(Units::ToUserUnit(Units::ToSysTemperature(Sender->GetAsFixed()),
                                                       unGradCelcius));
     break;

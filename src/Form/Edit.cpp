@@ -282,7 +282,6 @@ WndProperty::on_editor_killfocus()
     TCHAR sTmp[128];
     edit.get_text(sTmp, (sizeof(sTmp) / sizeof(TCHAR)) - 1);
     mDataField->SetAsString(sTmp);
-    mDataField->SetData();
     edit.set_text(mDataField->GetAsDisplayString());
   }
 
