@@ -67,9 +67,9 @@ static void
 OnHelpClicked(unsigned i)
 {
   if (i < ComboListPopup->ComboPopupItemCount) {
-    int iDataIndex = ComboListPopup->ComboPopupItemList[i]->DataFieldIndex;
-    ComboPopupDataField->SetFromCombo(iDataIndex,
-      ComboListPopup->ComboPopupItemList[i]->StringValue);
+    const ComboList::Item &item = *ComboListPopup->ComboPopupItemList[i];
+    ComboPopupDataField->SetFromCombo(item.DataFieldIndex,
+                                      item.StringValue);
   }
 
   wComboPopupWndProperty->OnHelp();
@@ -117,24 +117,23 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
     bOpenCombo = false; //tell  combo to exit loop after close
 
     if (idx >= 0 && (unsigned)idx < ComboListPopup->ComboPopupItemCount) {
+      const ComboList::Item *item = ComboListPopup->ComboPopupItemList[idx];
+
       // OK/Select
-      if (ComboListPopup->ComboPopupItemList[idx]->DataFieldIndex ==
-          ComboList::Item::NEXT_PAGE) {
+      if (item->DataFieldIndex == ComboList::Item::NEXT_PAGE) {
         // we're last in list and the want more past end of list so select last real list item and reopen
         ComboPopupDataField->SetDetachGUI(true);
         // we'll reopen, so don't call xcsoar data changed routine yet
-        --idx;
+        item = ComboListPopup->ComboPopupItemList[idx - 1];
         bOpenCombo = true; // reopen combo with new selected index at center
-      } else if (ComboListPopup->ComboPopupItemList[idx]->DataFieldIndex ==
-                 ComboList::Item::PREVIOUS_PAGE) {
+      } else if (item->DataFieldIndex == ComboList::Item::PREVIOUS_PAGE) {
         // same as above but lower items needed
         ComboPopupDataField->SetDetachGUI(true);
-        ++idx;
+        item = ComboListPopup->ComboPopupItemList[idx + 1];
         bOpenCombo = true;
       }
-      int iDataIndex = ComboListPopup->ComboPopupItemList[idx]->DataFieldIndex;
-      ComboPopupDataField->SetFromCombo(iDataIndex,
-          ComboListPopup->ComboPopupItemList[idx]->StringValue);
+      ComboPopupDataField->SetFromCombo(item->DataFieldIndex,
+                                        item->StringValue);
     } else {
       // Cancel
       // if we've detached the GUI during the load, then there is nothing to do here
