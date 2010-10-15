@@ -119,14 +119,14 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
     if (idx >= 0 && (unsigned)idx < ComboListPopup->ComboPopupItemCount) {
       // OK/Select
       if (ComboListPopup->ComboPopupItemList[idx]->DataFieldIndex ==
-          ComboPopupReopenMOREDataIndex) {
+          ComboList::Item::NEXT_PAGE) {
         // we're last in list and the want more past end of list so select last real list item and reopen
         ComboPopupDataField->SetDetachGUI(true);
         // we'll reopen, so don't call xcsoar data changed routine yet
         --idx;
         bOpenCombo = true; // reopen combo with new selected index at center
       } else if (ComboListPopup->ComboPopupItemList[idx]->DataFieldIndex ==
-                 ComboPopupReopenLESSDataIndex) {
+                 ComboList::Item::PREVIOUS_PAGE) {
         // same as above but lower items needed
         ComboPopupDataField->SetDetachGUI(true);
         ++idx;

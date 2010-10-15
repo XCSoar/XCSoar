@@ -208,7 +208,7 @@ DataField::CreateComboListStepping(void)
 
   // reset datafield to top of list (or for large floats, away from selected
   // item so it will be in the middle)
-  for (iListCount = 0; iListCount < ComboPopupLISTMAX / 2; iListCount++) {
+  for (iListCount = 0; iListCount < ComboList::MAX_SIZE / 2; iListCount++) {
     // for floats, go half way down only
     Dec();
     fNext = GetAsFixed();
@@ -230,15 +230,16 @@ DataField::CreateComboListStepping(void)
   mComboList.Clear();
 
   // if we stopped before hitting start of list create <<Less>> value at top of list
-  if (iListCount == ComboPopupLISTMAX / 2) {
+  if (iListCount == ComboList::MAX_SIZE / 2) {
     // this data index item is checked on close of dialog
     mComboList.Append(mComboList.CreateItem(mComboList.ComboPopupItemCount,
-            (int)ComboPopupReopenLESSDataIndex, _T("<<More Items>>"),
+                                            ComboList::Item::PREVIOUS_PAGE,
+                                            _T("<<More Items>>"),
                                             _T("<<More Items>>")));
   }
 
   // now we're at the beginning of the list, so load forward until end
-  for (iListCount = 0; iListCount < ComboPopupLISTMAX - 3; iListCount++) {
+  for (iListCount = 0; iListCount < ComboList::MAX_SIZE - 3; iListCount++) {
     // stop at LISTMAX-3 b/c it may make an additional item if it's "off step", and
     // potentially two more items for <<More>> and << Less>>
 
@@ -281,10 +282,11 @@ DataField::CreateComboListStepping(void)
   }
 
   // if we stopped before hitting end of list create <<More>> value at end of list
-  if (iListCount == ComboPopupLISTMAX - 3) {
+  if (iListCount == ComboList::MAX_SIZE - 3) {
     // this data index item is checked on close of dialog
     mComboList.Append(mComboList.CreateItem(mComboList.ComboPopupItemCount,
-            (int)ComboPopupReopenMOREDataIndex, _T("<<More Items>>"),
+                                            ComboList::Item::NEXT_PAGE,
+                                            _T("<<More Items>>"),
                                             _T("<<More Items>>")));
   }
 

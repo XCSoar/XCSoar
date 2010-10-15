@@ -46,6 +46,11 @@ Copyright_License {
 class ComboList : private NonCopyable {
 public:
   struct Item : private NonCopyable {
+    enum {
+      NEXT_PAGE = -800001,
+      PREVIOUS_PAGE = -800002,
+    };
+
     int ItemIndex;
     int DataFieldIndex;
     TCHAR *StringValue;
@@ -53,6 +58,10 @@ public:
 
     Item();
     ~Item();
+  };
+
+  enum {
+    MAX_SIZE = 300,
   };
 
   public:
@@ -67,17 +76,13 @@ public:
 
   unsigned Append(Item *item);
 
-#define ComboPopupLISTMAX 300
-#define ComboPopupReopenMOREDataIndex -800001
-#define ComboPopupReopenLESSDataIndex -800002
-
-    Item *CreateItem(int ItemIndex, int DataFieldIndex,
+  Item *CreateItem(int ItemIndex, int DataFieldIndex,
                                  const TCHAR *StringValue,
                                  const TCHAR *StringValueFormatted);
 
     int ComboPopupItemSavedIndex;
     unsigned ComboPopupItemCount;
-    Item *ComboPopupItemList[ComboPopupLISTMAX]; // RLD make this dynamic later
+  Item *ComboPopupItemList[MAX_SIZE]; // RLD make this dynamic later
 
     int PropertyDataFieldIndexSaved;
 

@@ -61,7 +61,7 @@ ComboList::Clear()
 unsigned
 ComboList::Append(ComboList::Item *entry)
 {
-  assert(ComboPopupItemCount < ComboPopupLISTMAX);
+  assert(ComboPopupItemCount < MAX_SIZE);
 
   ComboPopupItemList[ComboPopupItemCount] = entry;
   return ComboPopupItemCount++;
