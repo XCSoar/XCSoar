@@ -218,13 +218,13 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
     // arctic winter
     DayLength = fixed_zero;
 
-  TimeOfSunRise = fixed(12) - fixed(12) * HourAngle.value_radians() / fixed_pi + TimeZone
+  TimeOfSunRise = fixed(12) - fixed(12. / 180.) * HourAngle.value_degrees() + TimeZone
     - Location.Longitude.value_degrees() / 15 + equation / 60;
 
-  TimeOfSunSet = fixed(12) + fixed(12) * HourAngle.value_radians() / fixed_pi + TimeZone
+  TimeOfSunSet = fixed(12) + fixed(12. / 180.) * HourAngle.value_degrees() + TimeZone
     - Location.Longitude.value_degrees() / 15 + equation / 60;
 
-  TimeOfNoon = TimeOfSunRise + fixed(12) * HourAngle.value_radians() / fixed_pi;
+  TimeOfNoon = TimeOfSunRise + fixed(12. / 180.) * HourAngle.value_degrees();
   altmax = fixed(90) + Delta.value_degrees() - Location.Latitude.value_degrees();
 
   // Correction for southern hemisphere suggested by David Smith
