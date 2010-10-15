@@ -41,14 +41,14 @@ Copyright_License {
 
 #include <tchar.h>
 
-    typedef struct {
-      int ItemIndex;
-      int DataFieldIndex;
-      TCHAR *StringValue;
-      TCHAR *StringValueFormatted;
-    } ComboListEntry_t;
-
 class ComboList{
+public:
+  struct Item {
+    int ItemIndex;
+    int DataFieldIndex;
+    TCHAR *StringValue;
+    TCHAR *StringValueFormatted;
+  };
 
   public:
 
@@ -60,14 +60,14 @@ class ComboList{
 #define ComboPopupReopenLESSDataIndex -800002
 #define ComboPopupNULL -800003
 
-    ComboListEntry_t *CreateItem(int ItemIndex, int DataFieldIndex,
+    Item *CreateItem(int ItemIndex, int DataFieldIndex,
                                  const TCHAR *StringValue,
                                  const TCHAR *StringValueFormatted);
     void FreeComboPopupItemList(void);
 
     int ComboPopupItemSavedIndex;
     unsigned ComboPopupItemCount;
-    ComboListEntry_t * ComboPopupItemList[ComboPopupLISTMAX]; // RLD make this dynamic later
+    Item *ComboPopupItemList[ComboPopupLISTMAX]; // RLD make this dynamic later
 
     int PropertyDataFieldIndexSaved;
     TCHAR PropertyValueSaved[ComboPopupITEMMAX];

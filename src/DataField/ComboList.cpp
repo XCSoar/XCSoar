@@ -41,15 +41,13 @@ Copyright_License {
 #include <assert.h>
 #include <stdlib.h>
 
-ComboListEntry_t * ComboList::CreateItem(int ItemIndex,
-                                        int DataFieldIndex,
-                                        const TCHAR *StringValue,
-                                        const TCHAR *StringValueFormatted)
+ComboList::Item *
+ComboList::CreateItem(int ItemIndex, int DataFieldIndex,
+                      const TCHAR *StringValue,
+                      const TCHAR *StringValueFormatted)
 {
-  ComboListEntry_t * theItem;
-
   // Copy current strings into structure
-  theItem = (ComboListEntry_t*) malloc(sizeof(ComboListEntry_t));
+  Item *theItem = (Item *)malloc(sizeof(Item));
   theItem->DataFieldIndex=0;  // NULL is same as 0, so it fails to set it if index value is 0
   theItem->ItemIndex=0;
 
