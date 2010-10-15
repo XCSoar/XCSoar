@@ -207,10 +207,8 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
   HourAngle = GetHourAngle(Location.Latitude, Delta).value_radians();
   HourAngleTwilight = GetHourAngleTwilight(Location.Latitude, Delta).value_radians();
 
-  // length of twilight in radians
-  TwilightHours = HourAngleTwilight - HourAngle;
   // length of twilight in hours
-  TwilightHours = 12 * TwilightHours / fixed_pi;
+  TwilightHours = 12 * (HourAngleTwilight - HourAngle) / fixed_pi;
 
   // Conversion of angle to hours and minutes
   DayLength = fixed_rad_to_deg * HourAngle / fixed(7.5);
