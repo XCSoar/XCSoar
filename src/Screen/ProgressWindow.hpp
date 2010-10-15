@@ -51,13 +51,17 @@ class ProgressWindow : public ContainerWindow {
   Color background_color;
   Brush background_brush;
 
-  Bitmap logo;
+  Bitmap bitmap_logo;
+  Bitmap bitmap_progress_border;
+  Bitmap bitmap_title;
 
   TextWindow version, message;
 
   ProgressBar progress_bar;
   unsigned position;
 
+  unsigned text_height;
+  unsigned progress_border_height;
 public:
   explicit ProgressWindow(ContainerWindow &parent);
 

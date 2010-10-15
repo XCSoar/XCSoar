@@ -94,7 +94,9 @@
 #define IDB_OUTFIELD_UNREACHABLE2_HD   5335
 #define IDB_AIRSPACEI                   336
 #define IDB_AIRSPACEI_HD               5336
-
+#define IDB_PROGRESSBORDER              337
+#define IDB_TITLE                       338
+#define IDB_TITLE_HD                    339
 // Next default values for new objects
 //
 #ifdef APSTUDIO_INVOKED

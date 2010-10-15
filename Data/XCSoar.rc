@@ -64,6 +64,7 @@ IDB_OUTFIELD_UNREACHABLE BITMAP DISCARDABLE     "../output/data/icons/alt_landab
 IDB_OUTFIELD_UNREACHABLE_HD BITMAP DISCARDABLE  "../output/data/icons/alt_landable_field-160.bmp"
 IDB_OUTFIELD_UNREACHABLE2 BITMAP DISCARDABLE    "../output/data/icons/alt2_landable_field.bmp"
 IDB_OUTFIELD_UNREACHABLE2_HD BITMAP DISCARDABLE "../output/data/icons/alt2_landable_field-160.bmp"
+IDB_PROGRESSBORDER      BITMAP  DISCARDABLE     "bitmaps/ProgressBorder.bmp"
 IDB_REACHABLE           BITMAP  DISCARDABLE     "../output/data/icons/winpilot_reachable.bmp"
 IDB_REACHABLE_HD        BITMAP  DISCARDABLE     "../output/data/icons/winpilot_reachable-160.bmp"
 IDB_SMALL               BITMAP  DISCARDABLE     "../output/data/icons/map_small.bmp"
@@ -98,7 +99,8 @@ IDB_UNIT_KMH            BITMAP  DISCARDABLE     "bitmaps/UnitKMH.bmp"
 IDB_UNIT_MPH            BITMAP  DISCARDABLE     "bitmaps/UnitMPH.bmp"
 IDB_VARIOSCALEA         BITMAP  DISCARDABLE     "bitmaps/VarioScaleB.bmp"
 IDB_VARIOSCALEC         BITMAP  DISCARDABLE     "bitmaps/VarioScaleC.bmp"
-
+IDB_TITLE             BITMAP  DISCARDABLE     "../output/data/graphics/title-110.bmp"
+IDB_TITLE_HD          BITMAP  DISCARDABLE     "../output/data/graphics/title-320.bmp"
 // --- Audio ---
 
 IDR_FAIL                WAVE    DISCARDABLE     "sound/Fail.wav"
