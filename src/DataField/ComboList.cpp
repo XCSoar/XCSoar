@@ -52,19 +52,18 @@ ComboList::Item::~Item() {
 void
 ComboList::Clear()
 {
-  for (unsigned i = 0; i < ComboPopupItemCount; i++)
-    delete ComboPopupItemList[i];
+  for (unsigned i = 0; i < items.size(); i++)
+    delete items[i];
 
-  ComboPopupItemCount = 0;
+  items.clear();
 }
 
 unsigned
-ComboList::Append(ComboList::Item *entry)
+ComboList::Append(ComboList::Item *item)
 {
-  assert(ComboPopupItemCount < MAX_SIZE);
-
-  ComboPopupItemList[ComboPopupItemCount] = entry;
-  return ComboPopupItemCount++;
+  unsigned i = items.size();
+  items.append(item);
+  return i;
 }
 
 ComboList::Item *

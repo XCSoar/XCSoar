@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_DATA_FIELD_COMBO_LIST_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Util/StaticArray.hpp"
 
 #include <tchar.h>
 
@@ -64,12 +65,23 @@ public:
     MAX_SIZE = 300,
   };
 
+private:
+  StaticArray<Item*, MAX_SIZE> items;
+
   public:
 
-  ComboList():ComboPopupItemSavedIndex(-1), ComboPopupItemCount(0) {}
+  ComboList():ComboPopupItemSavedIndex(-1) {}
 
   ~ComboList() {
     Clear();
+  }
+
+  unsigned size() const {
+    return items.size();
+  }
+
+  const Item &operator[](unsigned i) const {
+    return *items[i];
   }
 
   void Clear();
@@ -81,13 +93,8 @@ public:
                                  const TCHAR *StringValueFormatted);
 
     int ComboPopupItemSavedIndex;
-    unsigned ComboPopupItemCount;
-  Item *ComboPopupItemList[MAX_SIZE]; // RLD make this dynamic later
 
     int PropertyDataFieldIndexSaved;
-
-  private:
-
 };
 
 #endif

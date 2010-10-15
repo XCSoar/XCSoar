@@ -46,7 +46,7 @@ DataFieldBoolean::CreateComboList(void)
   mComboList.Append(mComboList.CreateItem(1, 1, mTextTrue, mTextTrue));
 
   mComboList.ComboPopupItemSavedIndex = GetAsInteger();
-  return mComboList.ComboPopupItemCount;
+  return mComboList.size();
 }
 
 bool

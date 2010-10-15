@@ -567,7 +567,7 @@ DataFieldFileReader::CreateComboList(void)
     }
   }
 
-  return mComboList.ComboPopupItemCount;
+  return mComboList.size();
 }
 
 unsigned

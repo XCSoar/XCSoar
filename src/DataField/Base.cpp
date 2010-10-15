@@ -232,7 +232,7 @@ DataField::CreateComboListStepping(void)
   // if we stopped before hitting start of list create <<Less>> value at top of list
   if (iListCount == ComboList::MAX_SIZE / 2) {
     // this data index item is checked on close of dialog
-    mComboList.Append(mComboList.CreateItem(mComboList.ComboPopupItemCount,
+    mComboList.Append(mComboList.CreateItem(mComboList.size(),
                                             ComboList::Item::PREVIOUS_PAGE,
                                             _T("<<More Items>>"),
                                             _T("<<More Items>>")));
@@ -250,7 +250,7 @@ DataField::CreateComboListStepping(void)
           (fSavedValue + ComboFloatPrec * iStepDirection)) {
         // step was too large, we skipped the selected value, so add it now
         iSelectedIndex =
-          mComboList.Append(mComboList.CreateItem(mComboList.ComboPopupItemCount,
+          mComboList.Append(mComboList.CreateItem(mComboList.size(),
                                                   0, PropertyValueSaved,
                                                   PropertyValueSavedFormatted));
       }
@@ -259,11 +259,11 @@ DataField::CreateComboListStepping(void)
 
     if (iSelectedIndex == -1 && fabs(fCurrent - fSavedValue) < ComboFloatPrec) {
       // selected item index
-      iSelectedIndex = mComboList.ComboPopupItemCount;
+      iSelectedIndex = mComboList.size();
     }
 
     CopyString(sTemp, true); // can't call GetAsString & GetAsStringFormatted together (same output buffer)
-    mComboList.Append(mComboList.CreateItem(mComboList.ComboPopupItemCount,
+    mComboList.Append(mComboList.CreateItem(mComboList.size(),
                                             0, GetAsString(), sTemp));
 
     Inc();
@@ -273,7 +273,7 @@ DataField::CreateComboListStepping(void)
       // we're at start of the list
       break;
 
-    if (fNext == fLast && mComboList.ComboPopupItemCount > 0)
+    if (fNext == fLast && mComboList.size() > 0)
       //we're at the end of the range
       break;
 
@@ -284,7 +284,7 @@ DataField::CreateComboListStepping(void)
   // if we stopped before hitting end of list create <<More>> value at end of list
   if (iListCount == ComboList::MAX_SIZE - 3) {
     // this data index item is checked on close of dialog
-    mComboList.Append(mComboList.CreateItem(mComboList.ComboPopupItemCount,
+    mComboList.Append(mComboList.CreateItem(mComboList.size(),
                                             ComboList::Item::NEXT_PAGE,
                                             _T("<<More Items>>"),
                                             _T("<<More Items>>")));
@@ -298,5 +298,5 @@ DataField::CreateComboListStepping(void)
 
   mComboList.ComboPopupItemSavedIndex = iSelectedIndex;
 
-  return mComboList.ComboPopupItemCount;
+  return mComboList.size();
 }

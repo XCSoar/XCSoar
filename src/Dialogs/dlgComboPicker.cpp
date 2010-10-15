@@ -56,18 +56,18 @@ static int iSavedInitialDataIndex = -1;
 static void
 OnPaintComboPopupListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  assert(i < (unsigned)ComboListPopup->ComboPopupItemCount);
+  assert(i < (unsigned)ComboListPopup->size());
 
   canvas.text_clipped(rc.left + Layout::FastScale(2),
                       rc.top + Layout::FastScale(2), rc,
-                      ComboListPopup->ComboPopupItemList[i]->StringValueFormatted);
+                      (*ComboListPopup)[i].StringValueFormatted);
 }
 
 static void
 OnHelpClicked(unsigned i)
 {
-  if (i < ComboListPopup->ComboPopupItemCount) {
-    const ComboList::Item &item = *ComboListPopup->ComboPopupItemList[i];
+  if (i < ComboListPopup->size()) {
+    const ComboList::Item &item = (*ComboListPopup)[i];
     ComboPopupDataField->SetFromCombo(item.DataFieldIndex,
                                       item.StringValue);
   }
@@ -101,14 +101,14 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
     ComboPopupDataField->CreateComboList();
     if (bInitialPage) { // save values for "Cancel" from first page only
       bInitialPage = false;
-      iSavedInitialDataIndex = ComboListPopup->
-          ComboPopupItemList[ComboListPopup->ComboPopupItemSavedIndex]->
-          DataFieldIndex;
+      iSavedInitialDataIndex =
+        (*ComboListPopup)[ComboListPopup->ComboPopupItemSavedIndex]
+        .DataFieldIndex;
       ComboPopupDataField->CopyString(sSavedInitialValue, false);
     }
 
     int idx = ListPicker(parent, theProperty->GetCaption(),
-                         ComboListPopup->ComboPopupItemCount,
+                         ComboListPopup->size(),
                          ComboListPopup->ComboPopupItemSavedIndex,
                          Layout::Scale(18),
                          OnPaintComboPopupListItem,
@@ -116,20 +116,20 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
 
     bOpenCombo = false; //tell  combo to exit loop after close
 
-    if (idx >= 0 && (unsigned)idx < ComboListPopup->ComboPopupItemCount) {
-      const ComboList::Item *item = ComboListPopup->ComboPopupItemList[idx];
+    if (idx >= 0 && (unsigned)idx < ComboListPopup->size()) {
+      const ComboList::Item *item = &(*ComboListPopup)[idx];
 
       // OK/Select
       if (item->DataFieldIndex == ComboList::Item::NEXT_PAGE) {
         // we're last in list and the want more past end of list so select last real list item and reopen
         ComboPopupDataField->SetDetachGUI(true);
         // we'll reopen, so don't call xcsoar data changed routine yet
-        item = ComboListPopup->ComboPopupItemList[idx - 1];
+        item = &(*ComboListPopup)[idx - 1];
         bOpenCombo = true; // reopen combo with new selected index at center
       } else if (item->DataFieldIndex == ComboList::Item::PREVIOUS_PAGE) {
         // same as above but lower items needed
         ComboPopupDataField->SetDetachGUI(true);
-        item = ComboListPopup->ComboPopupItemList[idx + 1];
+        item = &(*ComboListPopup)[idx + 1];
         bOpenCombo = true;
       }
       ComboPopupDataField->SetFromCombo(item->DataFieldIndex,

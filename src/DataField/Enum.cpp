@@ -175,5 +175,5 @@ DataFieldEnum::CreateComboList(void)
   }
   mComboList.ComboPopupItemSavedIndex = mValue;
 
-  return mComboList.ComboPopupItemCount;
+  return mComboList.size();
 }
