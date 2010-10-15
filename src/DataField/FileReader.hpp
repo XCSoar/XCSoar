@@ -193,7 +193,7 @@ public:
 
   /** For use by other classes */
   unsigned size() const;
-  const DataFieldFileReaderEntry& getItem(unsigned index) const;
+  const TCHAR *getItem(unsigned index) const;
 
  protected:
   bool ScanFiles(const TCHAR *pattern, const TCHAR *filter);

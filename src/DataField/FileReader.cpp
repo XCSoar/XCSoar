@@ -582,12 +582,12 @@ DataFieldFileReader::size() const
   return nFiles;
 }
 
-const DataFieldFileReaderEntry&
+const TCHAR *
 DataFieldFileReader::getItem(unsigned index) const
 {
   EnsureLoadedDeconst();
 
-  return fields[index];
+  return fields[index].mTextPathFile;
 }
 
 void

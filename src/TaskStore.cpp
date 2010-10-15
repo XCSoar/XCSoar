@@ -62,8 +62,7 @@ TaskStore::scan()
 
   // append to list
   for (unsigned i = 1; i < fr.size(); i++) {
-    const DataFieldFileReaderEntry& item = fr.getItem(i);
-    m_store.push_back(TaskStoreItem(item.mTextPathFile));
+    m_store.push_back(TaskStoreItem(fr.getItem(i)));
   }
 }
 
