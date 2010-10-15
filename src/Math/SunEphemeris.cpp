@@ -229,7 +229,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
 
   // Correction for southern hemisphere suggested by David Smith
   // to express altitude as degrees from the N horizon
-  if (Location.Latitude.value_degrees() < Delta.value_degrees())
+  if (Location.Latitude < Delta)
     altmax = fixed(180) - altmax;
 
   // morning twilight begin
