@@ -377,9 +377,6 @@ OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
   case DataField::daGet:
-    Sender->Set(_T("*"));
-    break;
-
   case DataField::daPut:
     break;
 
