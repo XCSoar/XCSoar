@@ -43,6 +43,8 @@ Copyright_License {
 
 using std::min;
 
+enum { ComboPopupITEMMAX = 100 };
+
 void
 DataField::Special(void)
 {
@@ -188,8 +190,10 @@ DataField::CreateComboListStepping(void)
   SetDetachGUI(true); // disable display of inc/dec/change values
 
   // get step direction for int & float so we can detect if we skipped the value while iterating later
-  CopyString(mComboList.PropertyValueSaved, false);
-  CopyString(mComboList.PropertyValueSavedFormatted, true);
+  TCHAR PropertyValueSaved[ComboPopupITEMMAX];
+  TCHAR PropertyValueSavedFormatted[ComboPopupITEMMAX];
+  CopyString(PropertyValueSaved, false);
+  CopyString(PropertyValueSavedFormatted, true);
 
   fSavedValue = GetAsFixed();
   Inc();
@@ -246,8 +250,8 @@ DataField::CreateComboListStepping(void)
         // step was too large, we skipped the selected value, so add it now
         iSelectedIndex =
           mComboList.Append(mComboList.CreateItem(mComboList.ComboPopupItemCount,
-                                                  0, mComboList.PropertyValueSaved,
-                                                  mComboList.PropertyValueSavedFormatted));
+                                                  0, PropertyValueSaved,
+                                                  PropertyValueSavedFormatted));
       }
 
     }

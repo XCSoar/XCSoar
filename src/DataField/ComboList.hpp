@@ -68,7 +68,6 @@ public:
   unsigned Append(Item *item);
 
 #define ComboPopupLISTMAX 300
-#define ComboPopupITEMMAX 100
 #define ComboPopupReopenMOREDataIndex -800001
 #define ComboPopupReopenLESSDataIndex -800002
 
@@ -81,9 +80,6 @@ public:
     Item *ComboPopupItemList[ComboPopupLISTMAX]; // RLD make this dynamic later
 
     int PropertyDataFieldIndexSaved;
-    TCHAR PropertyValueSaved[ComboPopupITEMMAX];
-    TCHAR PropertyValueSavedFormatted[ComboPopupITEMMAX];
-
 
   private:
 

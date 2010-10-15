@@ -49,6 +49,7 @@ static WndProperty *wComboPopupWndProperty;
 static DataField *ComboPopupDataField;
 static ComboList *ComboListPopup;
 
+enum { ComboPopupITEMMAX = 100 };
 static TCHAR sSavedInitialValue[ComboPopupITEMMAX];
 static int iSavedInitialDataIndex = -1;
 
