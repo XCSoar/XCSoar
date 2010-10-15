@@ -535,8 +535,8 @@ static int _cdecl
 DataFieldFileReaderCompare(const void *elem1, const void *elem2)
 {
   // Compare by filename
-  return _tcscmp(((DataFieldFileReaderEntry*)elem1)->mTextFile,
-                 ((DataFieldFileReaderEntry*)elem2)->mTextFile);
+  return _tcscmp(((const DataFieldFileReader::Item *)elem1)->mTextFile,
+                 ((const DataFieldFileReader::Item *)elem2)->mTextFile);
 }
 
 void
@@ -548,7 +548,7 @@ DataFieldFileReader::Sort(void)
   }
 
   // Sort the filelist (except for the first (empty) element)
-  qsort(fields + 1, nFiles - 1, sizeof(DataFieldFileReaderEntry),
+  qsort(fields + 1, nFiles - 1, sizeof(Item),
         DataFieldFileReaderCompare);
 }
 

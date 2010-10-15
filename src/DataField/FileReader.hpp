@@ -44,15 +44,6 @@ Copyright_License {
 /** Maximum of files in the list */
 #define DFE_MAX_FILES 100
 
-/** FileList item */
-typedef struct
-{
-  /** Filename */
-  TCHAR *mTextFile;
-  /** Path including Filename */
-  TCHAR *mTextPathFile;
-} DataFieldFileReaderEntry;
-
 /**
  * #DataField specialisation that supplies options as a list of
  * files matching a suffix.  First entry is always blank for null entry.
@@ -60,13 +51,22 @@ typedef struct
  */
 class DataFieldFileReader: public DataField
 {
+public:
+  /** FileList item */
+  struct Item {
+    /** Filename */
+    TCHAR *mTextFile;
+    /** Path including Filename */
+    TCHAR *mTextPathFile;
+  };
+
 private:
   /** Number of files to choose from */
   unsigned int nFiles;
   /** Index of the active file */
   unsigned int mValue;
   /** FileList item array */
-  DataFieldFileReaderEntry fields[DFE_MAX_FILES];
+  Item fields[DFE_MAX_FILES];
 
   /**
    * Has the file list already been loaded?  This class tries to
