@@ -41,6 +41,8 @@ Copyright_License {
 unsigned
 DataFieldBoolean::CreateComboList(void)
 {
+  mComboList.Clear();
+
   int i = 0;
   mComboList.ComboPopupItemList[i] =
       mComboList.CreateItem(i, i, mTextFalse, mTextFalse);

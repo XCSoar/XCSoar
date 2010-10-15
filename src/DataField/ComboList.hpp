@@ -43,7 +43,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-class ComboList{
+class ComboList : private NonCopyable {
 public:
   struct Item : private NonCopyable {
     int ItemIndex;
@@ -57,7 +57,13 @@ public:
 
   public:
 
-  ComboList():ComboPopupItemSavedIndex(-1) {}
+  ComboList():ComboPopupItemSavedIndex(-1), ComboPopupItemCount(0) {}
+
+  ~ComboList() {
+    Clear();
+  }
+
+  void Clear();
 
 #define ComboPopupLISTMAX 300
 #define ComboPopupITEMMAX 100
@@ -68,7 +74,6 @@ public:
     Item *CreateItem(int ItemIndex, int DataFieldIndex,
                                  const TCHAR *StringValue,
                                  const TCHAR *StringValueFormatted);
-    void FreeComboPopupItemList(void);
 
     int ComboPopupItemSavedIndex;
     unsigned ComboPopupItemCount;

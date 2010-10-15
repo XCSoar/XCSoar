@@ -165,6 +165,8 @@ DataFieldEnum::Sort(int startindex)
 unsigned
 DataFieldEnum::CreateComboList(void)
 {
+  mComboList.Clear();
+
   unsigned int i;
   for (i = 0; i < nEnums; i++) {
     mComboList.ComboPopupItemList[i] =

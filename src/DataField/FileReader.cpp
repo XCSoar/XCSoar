@@ -556,6 +556,8 @@ DataFieldFileReader::CreateComboList(void)
 {
   EnsureLoaded();
 
+  mComboList.Clear();
+
   unsigned int i = 0;
   for (i = 0; i < nFiles; i++) {
     mComboList.ComboPopupItemList[i] =

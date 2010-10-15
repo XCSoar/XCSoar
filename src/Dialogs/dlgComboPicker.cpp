@@ -145,7 +145,7 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
     }
 
     wComboPopupWndProperty->RefreshDisplay();
-    ComboListPopup->FreeComboPopupItemList();
+    ComboListPopup->Clear();
   } // loop reopen combo if <<More>>  or <<Less>> picked
 
   bInComboPicker = false;

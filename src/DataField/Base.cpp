@@ -223,7 +223,7 @@ DataField::CreateComboListStepping(void)
   fLast = ComboListInitValue;
 
   fCurrent = GetAsFixed();
-  mComboList.ComboPopupItemCount = 0;
+  mComboList.Clear();
 
   // if we stopped before hitting start of list create <<Less>> value at top of list
   if (iListCount == ComboPopupLISTMAX / 2) {

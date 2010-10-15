@@ -49,6 +49,15 @@ ComboList::Item::~Item() {
   free(StringValueFormatted);
 }
 
+void
+ComboList::Clear()
+{
+  for (unsigned i = 0; i < ComboPopupItemCount; i++)
+    delete ComboPopupItemList[i];
+
+  ComboPopupItemCount = 0;
+}
+
 ComboList::Item *
 ComboList::CreateItem(int ItemIndex, int DataFieldIndex,
                       const TCHAR *StringValue,
@@ -72,13 +81,4 @@ ComboList::CreateItem(int ItemIndex, int DataFieldIndex,
                                           ? StringValueFormatted : _T(""));
 
   return theItem;
-}
-
-void ComboList::FreeComboPopupItemList(void)
-{
-  for (unsigned i = 0; i < ComboPopupItemCount && i < ComboPopupLISTMAX; i++)
-  {
-    delete ComboPopupItemList[i];
-    ComboPopupItemList[i] = NULL;
-  }
 }
