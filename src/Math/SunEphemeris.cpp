@@ -152,10 +152,8 @@ SunEphemeris::GetEclipticLongitude(fixed d, Angle L)
   Angle g = Angle::degrees(fixed(357.528) + fixed(.9856003) * d).as_bearing();
 
   //   Ecliptic longitude of the Sun
-  return FNrange(L.value_radians() +
-                 Angle::degrees(fixed(1.915)).value_radians() * g.sin() +
-                 Angle::degrees(fixed(.02)).value_radians() *
-                 (g * fixed_two).sin());
+  return (Angle::degrees(fixed(1.915)) * g.sin() + L +
+          Angle::degrees(fixed(.02)) * (g * fixed_two).sin()).as_bearing();
 }
 
 Angle
