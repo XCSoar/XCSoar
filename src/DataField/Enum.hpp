@@ -66,9 +66,6 @@ public:
     mValue(Default >= 0 ? Default : 0)
   {
     SupportCombo = true;
-
-    if (mOnDataAccess)
-      (mOnDataAccess)(this, daGet);
   }
   virtual ~DataFieldEnum();
 

@@ -269,7 +269,6 @@ void
 WndProperty::on_editor_setfocus()
 {
   if (mDataField != NULL) {
-    mDataField->GetData();
     edit.set_text(mDataField->GetAsString());
   }
 
@@ -477,7 +476,6 @@ WndProperty::SetDataField(DataField *Value)
     Value->Use();
 
     mDataField = Value;
-    mDataField->GetData();
 
     mDialogStyle = has_pointer() && mDataField->SupportCombo;
 

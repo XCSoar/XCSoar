@@ -113,7 +113,6 @@ DataFieldFileReader::DataFieldFileReader(const TCHAR *EditFormat,
 
   // This type of DataField supports the combolist
   SupportCombo = true;
-  (mOnDataAccess)(this, daGet);
 }
 
 /** Deconstructor */

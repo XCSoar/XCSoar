@@ -122,7 +122,9 @@ RefreshCalculator(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpMacCready"));
   if (wp) {
-    wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetUnits(Units::GetVerticalSpeedName());
+    df.Set(Units::ToUserVSpeed(protected_task_manager.get_glide_polar().get_mc()));
     wp->RefreshDisplay();
   }
 
@@ -206,9 +208,6 @@ OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
       RefreshCalculator();
     }
     break;
-  case DataField::daGet:
-    df->Set(Units::ToUserVSpeed(protected_task_manager.get_glide_polar().get_mc()));
-    break;
   case DataField::daPut:
   case DataField::daChange:
     MACCREADY = Units::ToSysVSpeed(Sender->GetAsFixed());
@@ -225,8 +224,6 @@ OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
   (void)clast; // unused for now
 
   switch (Mode) {
-  case DataField::daGet:
-    break;
   case DataField::daSpecial:
     GetCruiseEfficiency();
 #ifdef OLD_TASK

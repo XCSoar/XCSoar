@@ -57,8 +57,6 @@ public:
     _tcscpy(mTextTrue, TextTrue);
     _tcscpy(mTextFalse, TextFalse);
     SupportCombo = true;
-
-    (mOnDataAccess)(this, daGet);
   }
 
   void Inc(void);

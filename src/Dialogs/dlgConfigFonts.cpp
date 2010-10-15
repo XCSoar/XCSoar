@@ -183,9 +183,6 @@ static void
 OnUseCustomFontData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
-  case DataField::daGet:
-    break;
-
   case DataField::daPut:
     break;
 

@@ -73,8 +73,6 @@ static void VegaWriteDemo(void) {
 static void OnVegaDemoW(DataField *Sender,
 			 DataField::DataAccessKind_t Mode){
   switch(Mode){
-    case DataField::daGet:
-    break;
     case DataField::daPut:
     case DataField::daChange:
       VegaDemoW = Units::ToSysVSpeed(Sender->GetAsFixed());
@@ -87,8 +85,6 @@ static void OnVegaDemoW(DataField *Sender,
 static void OnVegaDemoV(DataField *Sender,
 			 DataField::DataAccessKind_t Mode){
   switch(Mode){
-    case DataField::daGet:
-    break;
     case DataField::daPut:
     case DataField::daChange:
       VegaDemoV = Units::ToSysSpeed(Sender->GetAsFixed());
@@ -101,8 +97,6 @@ static void OnVegaDemoV(DataField *Sender,
 static void OnVegaDemoAudioClimb(DataField *Sender,
 			 DataField::DataAccessKind_t Mode){
   switch(Mode){
-    case DataField::daGet:
-    break;
     case DataField::daPut:
     case DataField::daChange:
       VegaDemoAudioClimb = (Sender->GetAsInteger()==1);

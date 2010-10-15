@@ -359,7 +359,6 @@ static void
 OnFilterDistance(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
-  case DataField::daGet:
   case DataField::daPut:
     break;
 
@@ -376,7 +375,6 @@ static void
 OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
-  case DataField::daGet:
   case DataField::daPut:
     break;
 
@@ -393,7 +391,6 @@ static void
 OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
-  case DataField::daGet:
   case DataField::daPut:
     break;
 

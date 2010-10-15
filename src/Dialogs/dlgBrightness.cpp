@@ -73,8 +73,6 @@ static void UpdateValues() {
 
 static void OnAutoData(DataField *Sender, DataField::DataAccessKind_t Mode){
   switch(Mode){
-    case DataField::daGet:
-    break;
     case DataField::daPut:
     case DataField::daChange:
       EnableAutoBrightness = Sender->GetAsBoolean();
@@ -87,8 +85,6 @@ static void OnAutoData(DataField *Sender, DataField::DataAccessKind_t Mode){
 static void OnBrightnessData(DataField *Sender,
 			     DataField::DataAccessKind_t Mode){
   switch(Mode){
-    case DataField::daGet:
-    break;
     case DataField::daPut:
     case DataField::daChange:
       BrightnessValue = Sender->GetAsInteger();

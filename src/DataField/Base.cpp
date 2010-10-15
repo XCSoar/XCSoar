@@ -62,12 +62,6 @@ DataField::Dec(void)
 }
 
 void
-DataField::GetData(void)
-{
-  (mOnDataAccess)(this, daGet);
-}
-
-void
 DataField::SetData(void)
 {
   (mOnDataAccess)(this, daPut);

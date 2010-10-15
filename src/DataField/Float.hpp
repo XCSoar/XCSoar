@@ -67,8 +67,6 @@ public DataField
        mValue(Default), mMin(Min), mMax(Max), mStep(Step), mFine(Fine)
   {
       SupportCombo=true;
-     (mOnDataAccess)(this, daGet);
-
     };
 
   void Inc(void);

@@ -62,7 +62,6 @@ public:
     :DataField(EditFormat, DisplayFormat, OnDataAccess),
      mValue(Default), mMin(Min), mMax(Max), mStep(Step) {
     SupportCombo = true;
-    (mOnDataAccess)(this, daGet);
   }
 
   void Inc(void);

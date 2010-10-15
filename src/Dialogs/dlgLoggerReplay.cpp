@@ -78,8 +78,6 @@ static void
 OnRateData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
-  case DataField::daGet:
-    break;
   case DataField::daPut:
   case DataField::daChange:
     replay.SetTimeScale(Sender->GetAsFixed());

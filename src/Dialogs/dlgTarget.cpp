@@ -364,8 +364,6 @@ static void
 OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
-  case DataField::daGet:
-    break;
   case DataField::daPut:
     break;
   case DataField::daChange:
@@ -389,8 +387,6 @@ OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   fixed RadialNew;
   switch (Mode) {
-  case DataField::daGet:
-    break;
   case DataField::daPut:
   case DataField::daChange:
     if (target_point >= ActiveTaskPointOnEntry) {
@@ -457,8 +453,6 @@ OnTaskPointData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   unsigned old_target_point = target_point;
   switch (Mode) {
-  case DataField::daGet:
-    break;
   case DataField::daPut:
   case DataField::daChange:
     target_point = Sender->GetAsInteger() + ActiveTaskPointOnEntry;

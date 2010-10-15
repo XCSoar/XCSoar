@@ -273,8 +273,6 @@ static void
 OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
-  case DataField::daGet:
-    break;
   case DataField::daPut:
   case DataField::daChange:
     UpdateDeviceSetupButton(0, Sender->GetAsString());
@@ -286,8 +284,6 @@ static void
 OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
-  case DataField::daGet:
-    break;
   case DataField::daPut:
   case DataField::daChange:
     UpdateDeviceSetupButton(1, Sender->GetAsString());
@@ -466,8 +462,6 @@ OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode)
   int ival;
 
   switch(Mode){
-  case DataField::daGet:
-    break;
   case DataField::daPut:
   case DataField::daChange:
     ival = iround(Sender->GetAsFixed() * 3600);
@@ -488,8 +482,6 @@ OnPolarFileData(DataField *Sender, DataField::DataAccessKind_t Mode)
   WndProperty* wp;
 
   switch(Mode){
-  case DataField::daGet:
-    break;
   case DataField::daPut:
   case DataField::daChange:
     if (Sender->GetAsString() != NULL && _tcscmp(Sender->GetAsString(), _T("")) != 0){
@@ -510,8 +502,6 @@ OnPolarTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
   WndProperty* wp;
 
   switch(Mode){
-  case DataField::daGet:
-    break;
   case DataField::daPut:
   case DataField::daChange:
     wp = (WndProperty *)wf->FindByName(_T("prpPolarFile"));
