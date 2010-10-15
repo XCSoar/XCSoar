@@ -101,7 +101,7 @@ SunEphemeris::f0(Angle lat, Angle declin)
   if (negative(lat.value_degrees()))
     dfo.flip();
 
-  fo = tan(declin.value_radians() + dfo.value_radians()) * tan(lat.value_radians());
+  fo = (declin + dfo).tan() * lat.tan();
 
   if (fo > fixed(0.99999))
     // to avoid overflow
