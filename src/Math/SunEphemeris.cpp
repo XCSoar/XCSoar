@@ -202,7 +202,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
   if (L < fixed_pi)
     LL += fixed_two_pi;
 
-  equation = fixed(1440) * (fixed_one - LL / fixed_pi / 2);
+  equation = fixed(1440) * (fixed_one - LL / fixed_two_pi);
 
   HourAngle = f0(Location.Latitude, Delta);
   HourAngleTwilight = f1(Location.Latitude, Delta);
