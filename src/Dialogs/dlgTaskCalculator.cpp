@@ -216,20 +216,6 @@ OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  switch (Mode) {
-  case DataField::daSpecial:
-    break;
-  case DataField::daGet:
-    break;
-  case DataField::daPut:
-  case DataField::daChange:
-    break;
-  }
-}
-
-static void
 OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   fixed clast = protected_task_manager.get_glide_polar().get_cruise_efficiency();
@@ -263,7 +249,6 @@ OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnMacCreadyData),
-  DeclareCallBackEntry(OnRangeData),
   DeclareCallBackEntry(OnOKClicked),
   DeclareCallBackEntry(OnCancelClicked),
   DeclareCallBackEntry(OnTargetClicked),

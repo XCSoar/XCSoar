@@ -26,7 +26,7 @@
   </Edit>
 
   <Edit Name="prpAltitude" Caption="Altitude" X="2" Width="-2" Height="22" CaptionWidth="78" ReadOnly="1">
-    <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" ReadOnly="1" OnDataAccess="OnAltitudeData"/>
+    <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" ReadOnly="1"/>
   </Edit>
 
   <Edit Name="prpTemperature" Caption="Max Temp" X="2" Width="-2" Height="22" CaptionWidth="78" Help="Set to forecast ground temperature.  Used by convection estimator (temperature trace page of Analysis dialog)">

@@ -111,21 +111,6 @@ OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-OnAltitudeData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  switch (Mode) {
-  case DataField::daGet:
-    Sender->Set(Units::ToUserUnit(XCSoarInterface::Basic().BaroAltitude,
-                                  Units::AltitudeUnit));
-    break;
-  case DataField::daPut:
-    break;
-  case DataField::daChange:
-    break;
-  }
-}
-
-static void
 SetAltitude()
 {
   static fixed altlast(-2);
@@ -271,7 +256,6 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnBugsData),
   DeclareCallBackEntry(OnTempData),
   DeclareCallBackEntry(OnBallastData),
-  DeclareCallBackEntry(OnAltitudeData),
   DeclareCallBackEntry(OnQnhData),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnBallastDump),
