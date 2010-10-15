@@ -74,16 +74,12 @@ ComboList::CreateItem(int ItemIndex, int DataFieldIndex,
 {
   // Copy current strings into structure
   Item *theItem = new Item();
-  theItem->DataFieldIndex=0;  // NULL is same as 0, so it fails to set it if index value is 0
+  theItem->DataFieldIndex = DataFieldIndex;
   theItem->ItemIndex=0;
 
   assert(theItem!= NULL);
 
   theItem->ItemIndex=ItemIndex;
-
-  if (DataFieldIndex != ComboPopupNULL) { // optional
-    theItem->DataFieldIndex=DataFieldIndex;
-  }
 
   theItem->StringValue = _tcsdup(StringValue != NULL ? StringValue : _T(""));
   theItem->StringValueFormatted = _tcsdup(StringValueFormatted != NULL

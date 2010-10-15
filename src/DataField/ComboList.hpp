@@ -71,7 +71,6 @@ public:
 #define ComboPopupITEMMAX 100
 #define ComboPopupReopenMOREDataIndex -800001
 #define ComboPopupReopenLESSDataIndex -800002
-#define ComboPopupNULL -800003
 
     Item *CreateItem(int ItemIndex, int DataFieldIndex,
                                  const TCHAR *StringValue,

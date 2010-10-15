@@ -246,7 +246,7 @@ DataField::CreateComboListStepping(void)
         // step was too large, we skipped the selected value, so add it now
         iSelectedIndex =
           mComboList.Append(mComboList.CreateItem(mComboList.ComboPopupItemCount,
-                ComboPopupNULL, mComboList.PropertyValueSaved,
+                                                  0, mComboList.PropertyValueSaved,
                                                   mComboList.PropertyValueSavedFormatted));
       }
 
@@ -259,8 +259,7 @@ DataField::CreateComboListStepping(void)
 
     CopyString(sTemp, true); // can't call GetAsString & GetAsStringFormatted together (same output buffer)
     mComboList.Append(mComboList.CreateItem(mComboList.ComboPopupItemCount,
-                                            ComboPopupNULL,
-                                            GetAsString(), sTemp));
+                                            0, GetAsString(), sTemp));
 
     Inc();
     fNext = GetAsFixed();
