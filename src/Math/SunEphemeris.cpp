@@ -225,12 +225,6 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
     - Location.Longitude.value_degrees() / 15 + equation / 60;
 
   TimeOfNoon = TimeOfSunRise + fixed(12. / 180.) * HourAngle.value_degrees();
-  altmax = fixed(90) + Delta.value_degrees() - Location.Latitude.value_degrees();
-
-  // Correction for southern hemisphere suggested by David Smith
-  // to express altitude as degrees from the N horizon
-  if (Location.Latitude < Delta)
-    altmax = fixed(180) - altmax;
 
   // morning twilight begin
   MorningTwilight = TimeOfSunRise - TwilightHours;

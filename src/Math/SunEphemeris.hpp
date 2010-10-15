@@ -67,7 +67,7 @@ class SunEphemeris {
   Angle GetEclipticLongitude(fixed d);
 
  public:
-  fixed MorningTwilight, altmax, TimeOfNoon, TimeOfSunSet, TimeOfSunRise, EveningTwilight;
+  fixed MorningTwilight, TimeOfNoon, TimeOfSunSet, TimeOfSunRise, EveningTwilight;
 
   fixed CalcSunTimes(const GeoPoint &location,
                      const BrokenDateTime &date_time,
