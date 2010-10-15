@@ -224,18 +224,18 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
   TimeOfSunSet = fixed(12) + HourAngle.value_hours() + TimeZone
     - Location.Longitude.value_degrees() / 15 + equation / 60;
 
+  if (TimeOfSunRise > fixed(24))
+    TimeOfSunRise -= fixed(24);
+
+  if (TimeOfSunSet > fixed(24))
+    TimeOfSunSet -= fixed(24);
+
   TimeOfNoon = TimeOfSunRise + HourAngle.value_hours();
 
   // morning twilight begin
   MorningTwilight = TimeOfSunRise - TwilightHours;
   // evening twilight end
   EveningTwilight = TimeOfSunSet + TwilightHours;
-
-  if (TimeOfSunRise > fixed(24))
-    TimeOfSunRise -= fixed(24);
-
-  if (TimeOfSunSet > fixed(24))
-    TimeOfSunSet -= fixed(24);
 
   // return TimeOfSunSet since this is most commonly what is requested
   return TimeOfSunSet;
