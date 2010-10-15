@@ -146,13 +146,14 @@ SunEphemeris::GetHourAngleTwilight(Angle lat, Angle declin)
  * @return The ecliptic longitude of the Sun
  */
 Angle
-SunEphemeris::GetEclipticLongitude(fixed d, fixed L)
+SunEphemeris::GetEclipticLongitude(fixed d, Angle L)
 {
   //   mean anomaly of the Sun
   Angle g = Angle::degrees(fixed(357.528) + fixed(.9856003) * d).as_bearing();
 
   //   Ecliptic longitude of the Sun
-  return FNrange(L + Angle::degrees(fixed(1.915)).value_radians() * g.sin() +
+  return FNrange(L.value_radians() +
+                 Angle::degrees(fixed(1.915)).value_radians() * g.sin() +
                  Angle::degrees(fixed(.02)).value_radians() *
                  (g * fixed_two).sin());
 }
@@ -189,7 +190,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
   L = GetMeanSunLongitude(DaysToJ2000);
 
   // Use GetEclipticLongitude to find the ecliptic longitude of the Sun
-  Lambda = GetEclipticLongitude(DaysToJ2000, L.value_radians());
+  Lambda = GetEclipticLongitude(DaysToJ2000, L);
 
   // Obliquity of the ecliptic
   Obliquity = Angle::degrees(fixed(23.439) - fixed(.0000004) * DaysToJ2000);

@@ -62,7 +62,7 @@ class SunEphemeris {
   static Angle GetHourAngleTwilight(Angle lat, Angle declin);
 
   gcc_pure
-  Angle GetEclipticLongitude(fixed d, fixed L);
+  Angle GetEclipticLongitude(fixed d, Angle L);
 
   gcc_pure
   Angle GetMeanSunLongitude(fixed d);
