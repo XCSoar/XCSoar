@@ -63,39 +63,7 @@ OnOkay(WindowControl * Sender)
   wf->SetModalResult(mrOK);
 }
 
-static void
-OnWindSpeedData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  switch (Mode) {
-  case DataField::daGet:
-    Sender->Set(Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
-    break;
-  case DataField::daPut:
-  case DataField::daChange:
-    XCSoarInterface::SetSettingsComputer().ManualWind.norm =
-        Units::ToSysWindSpeed(Sender->GetAsFixed());
-    break;
-  }
-}
-
-static void
-OnWindDirectionData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  switch (Mode) {
-  case DataField::daGet:
-    Sender->Set(XCSoarInterface::Basic().wind.bearing.value_degrees());
-    break;
-  case DataField::daPut:
-  case DataField::daChange:
-    XCSoarInterface::SetSettingsComputer().ManualWind.bearing =
-        Angle::degrees(Sender->GetAsFixed());
-    break;
-  }
-}
-
 static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnWindSpeedData),
-  DeclareCallBackEntry(OnWindDirectionData),
   DeclareCallBackEntry(OnOkay),
   DeclareCallBackEntry(OnCancel),
   DeclareCallBackEntry(NULL)
@@ -116,6 +84,14 @@ dlgWindSettingsShowModal(void)
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), unKiloMeterPerHour)));
     df.SetUnits(Units::GetSpeedName());
+    df.Set(Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
+  if (wp) {
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.Set(XCSoarInterface::Basic().wind.bearing.value_degrees());
     wp->RefreshDisplay();
   }
 
@@ -137,9 +113,7 @@ dlgWindSettingsShowModal(void)
     wp->RefreshDisplay();
   }
 
-  SpeedVector OriginalWind = XCSoarInterface::SettingsComputer().ManualWind;
   if (wf->ShowModal() != mrOK) {
-    XCSoarInterface::SetSettingsComputer().ManualWind = OriginalWind;
     delete wf;
     return;
   }
