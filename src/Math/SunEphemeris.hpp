@@ -64,7 +64,7 @@ class SunEphemeris {
   static fixed f1(Angle lat, fixed declin);
 
   gcc_pure
-  fixed GetEclipticLongitude(fixed d);
+  Angle GetEclipticLongitude(fixed d);
 
  public:
   fixed MorningTwilight, altmax, TimeOfNoon, TimeOfSunSet, TimeOfSunRise, EveningTwilight;

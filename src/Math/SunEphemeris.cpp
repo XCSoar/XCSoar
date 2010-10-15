@@ -143,7 +143,7 @@ SunEphemeris::f1(Angle lat, fixed declin)
  * Find the ecliptic longitude of the Sun
  * @return The ecliptic longitude of the Sun
  */
-fixed
+Angle
 SunEphemeris::GetEclipticLongitude(fixed d)
 {
   //   mean longitude of the Sun
@@ -157,7 +157,7 @@ SunEphemeris::GetEclipticLongitude(fixed d)
   //   Ecliptic longitude of the Sun
   return FNrange(L + Angle::degrees(fixed(1.915)).value_radians() * sin(g) +
                  Angle::degrees(fixed(.02)).value_radians() *
-                 sin(2 * g)).value_radians();
+                 sin(2 * g));
 }
 
 /**
@@ -175,8 +175,8 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
                            const fixed TimeZone)
 {
   //float intz;
-  fixed DaysToJ2000, Lambda;
-  Angle Obliquity;
+  fixed DaysToJ2000;
+  Angle Obliquity, Lambda;
   fixed Alpha, Delta, LL, equation, HourAngle, HourAngleTwilight, TwilightHours;
   int Year, Month, Day, Hour;
 
@@ -199,8 +199,8 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
   Obliquity = Angle::degrees(fixed(23.439) - fixed(.0000004) * DaysToJ2000);
 
   // Find the RA and DEC of the Sun
-  Alpha = atan2(Obliquity.cos() * sin(Lambda), cos(Lambda));
-  Delta = asin(Obliquity.sin() * sin(Lambda));
+  Alpha = atan2(Obliquity.cos() * Lambda.sin(), Lambda.cos());
+  Delta = asin(Obliquity.sin() * Lambda.sin());
 
   // Find the Equation of Time in minutes
   // Correction suggested by David Smith
