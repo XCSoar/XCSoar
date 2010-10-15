@@ -99,10 +99,14 @@ void
 RenderTaskPoint::draw_ordered(const OrderedTaskPoint& tp) 
 {
   if (m_layer == 0) {
+    // draw shaded part of observation zone
     draw_oz_background(tp);
-    // draw_samples(tp);
-    // Todo: find out from John W what draw_samples does.
-    // currently, it's drawing white shapes on the screen in aats
+
+    // Draw clear area on top indicating part of OZ already travelled in.
+    // This provides a simple and intuitive visual representation of
+    // where in the OZ to go to increase scoring distance.
+
+    draw_samples(tp);
   }
   
   if (m_layer == 1) {
