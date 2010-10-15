@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_DATA_FIELD_FILE_READER_HPP
 
 #include "DataField/Base.hpp"
+#include "Util/NonCopyable.hpp"
 
 /** Maximum of files in the list */
 #define DFE_MAX_FILES 100
@@ -53,11 +54,14 @@ class DataFieldFileReader: public DataField
 {
 public:
   /** FileList item */
-  struct Item {
+  struct Item : private NonCopyable {
     /** Filename */
     TCHAR *mTextFile;
     /** Path including Filename */
     TCHAR *mTextPathFile;
+
+    Item():mTextFile(NULL), mTextPathFile(NULL) {}
+    ~Item();
   };
 
 private:
@@ -101,9 +105,6 @@ public:
    */
   DataFieldFileReader(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
                       DataAccessCallback_t OnDataAccess);
-
-  /** Deconstructor */
-  virtual ~DataFieldFileReader();
 
   /** Move the selection up (+1) */
   void Inc(void);

@@ -59,6 +59,12 @@ Copyright_License {
 #include <fnmatch.h>
 #endif
 
+DataFieldFileReader::Item::~Item()
+{
+  free(mTextFile);
+  free(mTextPathFile);
+}
+
 /**
  * Checks whether the given string str equals "." or ".."
  * @param str The string to check
@@ -114,17 +120,6 @@ DataFieldFileReader::DataFieldFileReader(const TCHAR *EditFormat,
 
   // This type of DataField supports the combolist
   SupportCombo = true;
-}
-
-/** Deconstructor */
-DataFieldFileReader::~DataFieldFileReader()
-{
-  // Iterate through the file array and delete
-  // everything except the first entry
-  for (unsigned int i = 1; i < nFiles; i++) {
-    free(fields[i].mTextFile);
-    free(fields[i].mTextPathFile);
-  }
 }
 
 bool
@@ -550,6 +545,9 @@ DataFieldFileReader::Sort(void)
   // Sort the filelist (except for the first (empty) element)
   qsort(fields + 1, nFiles - 1, sizeof(Item),
         DataFieldFileReaderCompare);
+
+  /* by the way, we're not using std::sort() here, because this
+     function would require the Item class to be copyable */
 }
 
 ComboList *
