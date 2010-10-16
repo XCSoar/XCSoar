@@ -436,7 +436,7 @@ public:
   }
 
   bool
-  Estimate(fixed &V_westb, fixed &theta_westb, fixed &error)
+  Estimate(fixed &V_westb, Angle &theta_westb, fixed &error)
   {
     int i;
 
@@ -488,7 +488,7 @@ public:
 
     // return true if estimate was improved
     V_westb = V_west_best;
-    theta_westb = Angle::radians(theta_west_best).as_bearing().value_radians();
+    theta_westb = Angle::radians(theta_west_best).as_bearing();
 
     error = fixed(error_best) / 10;
     return improved;
@@ -551,9 +551,9 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
     return 0;
 
   fixed V_wind_estimate = basic.wind.norm;
-  fixed theta_wind_estimate = basic.wind.bearing.value_radians();
+  Angle theta_wind_estimate = basic.wind.bearing;
   fixed percent_error = myzigzag.StartSearch(V_wind_estimate,
-                                             theta_wind_estimate);
+                                             theta_wind_estimate.value_radians());
 
   // Check spread of zig-zag manoeuver
   if (!myzigzag.CheckSpread(basic.Time, percent_error))
@@ -569,10 +569,8 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
     // ok, we have made an update
     tLastEstimate = basic.Time;
 
-    theta_wind_estimate /= fixed_deg_to_rad;
-
     zzwindspeed = V_wind_estimate;
-    zzwindbearing = theta_wind_estimate;
+    zzwindbearing = theta_wind_estimate.value_degrees();
 
     // calculate error quality
     int quality;
