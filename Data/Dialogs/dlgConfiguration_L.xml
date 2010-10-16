@@ -409,7 +409,7 @@
     
       <Edit Name="prpLanguageFile" Caption="Language*" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="The language file defines translations for XCSoar text in English to other languages.  If this field is left blank, then XCSoar uses English.">
-        <DataField DataType="filereader" />
+        <DataField DataType="enum"/>
       </Edit>
     
       <Edit Name="prpStatusFile" Caption="Status message*" X="2" Width="-2" Height="22" CaptionWidth="100"

@@ -76,6 +76,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Pages.hpp"
 #include "Hardware/Display.hpp"
+#include "OS/PathName.hpp"
 
 #include <assert.h>
 
@@ -1045,8 +1046,48 @@ setVariables()
                 szProfileTopologyFile, _T("*.tpl\0"));
   InitFileField(*wf, _T("prpAirfieldFile"),
                 szProfileAirfieldFile, _T("*.txt\0"));
-  InitFileField(*wf, _T("prpLanguageFile"),
-                szProfileLanguageFile, _T("*.mo\0"));
+
+  wp = (WndProperty *)wf->FindByName(_T("prpLanguageFile"));
+  if (wp != NULL) {
+    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
+    df.addEnumText(_("Automatic"));
+    df.addEnumText(_("None"));
+
+#ifdef HAVE_BUILTIN_LANGUAGES
+    for (const struct builtin_language *l = language_table;
+         l->resource != NULL; ++l)
+      df.addEnumText(l->resource);
+#endif
+
+    DataFieldFileReader files(NULL);
+    files.ScanDirectoryTop(_T("*.mo"));
+    for (unsigned i = 0; i < files.size(); ++i) {
+      const TCHAR *path = files.getItem(i);
+      if (path == NULL)
+        continue;
+
+      path = BaseName(path);
+      if (path != NULL && df.Find(path) < 0)
+        df.addEnumText(path);
+    }
+
+    df.Sort(2);
+
+    TCHAR value[MAX_PATH];
+    if (!Profile::GetPath(szProfileLanguageFile, value))
+      value[0] = _T('\0');
+
+    if (_tcscmp(value, _T("none")) == 0)
+      df.Set(1);
+    else if (!string_is_empty(value) && _tcscmp(value, _T("auto")) != 0) {
+      const TCHAR *base = BaseName(value);
+      if (base != NULL)
+        df.SetAsString(base);
+    }
+
+    wp->RefreshDisplay();
+  }
+
   InitFileField(*wf, _T("prpStatusFile"),
                 szProfileStatusFile, _T("*.xcs\0"));
   InitFileField(*wf, _T("prpInputFile"),
@@ -1866,8 +1907,46 @@ void dlgConfigurationShowModal(void)
   AirfieldFileChanged = FinishFileField(*wf, _T("prpAirfieldFile"),
                                         szProfileAirfieldFile);
 
-  if (FinishFileField(*wf, _T("prpLanguageFile"), szProfileLanguageFile))
-    requirerestart = true;
+  wp = (WndProperty *)wf->FindByName(_T("prpLanguageFile"));
+  if (wp != NULL) {
+    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
+
+    TCHAR old_value[MAX_PATH];
+    if (!Profile::GetPath(szProfileLanguageFile, old_value))
+      old_value[0] = _T('\0');
+
+    const TCHAR *old_base = BaseName(old_value);
+    if (old_base == NULL)
+      old_base = old_value;
+
+    TCHAR buffer[MAX_PATH];
+    const TCHAR *new_value, *new_base;
+
+    switch (df.GetAsInteger()) {
+    case 0:
+      new_value = new_base = _T("auto");
+      break;
+
+    case 1:
+      new_value = new_base = _T("none");
+      break;
+
+    default:
+      _tcscpy(buffer, df.GetAsString());
+      ContractLocalPath(buffer);
+      new_value = buffer;
+      new_base = BaseName(new_value);
+      if (new_base == NULL)
+        new_base = new_value;
+      break;
+    }
+
+    if (_tcscmp(old_value, new_value) != 0 &&
+        _tcscmp(old_base, new_base) != 0) {
+      Profile::Set(szProfileLanguageFile, new_value);
+      requirerestart = changed = true;
+    }
+  }
 
   if (FinishFileField(*wf, _T("prpStatusFile"), szProfileStatusFile))
     requirerestart = true;

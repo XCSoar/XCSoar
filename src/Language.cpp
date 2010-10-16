@@ -41,6 +41,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
+#include "OS/PathName.hpp"
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
 #include "Sizes.h"
@@ -129,9 +130,7 @@ gettext(const TCHAR* text)
 
 #endif /* !HAVE_POSIX */
 
-#if defined(WIN32) && !defined(HAVE_POSIX)
-
-#if !defined(_WIN32_WCE) || _WIN32_WCE >= 0x500
+#ifdef HAVE_BUILTIN_LANGUAGES
 
 const struct builtin_language language_table[] = {
   { LANG_GERMAN, _T("de.mo") },
@@ -179,34 +178,40 @@ detect_language()
   return find_language(PRIMARYLANGID(lang_id));
 }
 
-static void
-ReadResourceLanguageFile()
+static bool
+ReadResourceLanguageFile(const TCHAR *resource)
 {
-  const TCHAR *resource = detect_language();
-  if (resource == NULL)
-    return;
-
-  LogStartUp(_T("Loading translations from resource '%s'"), resource);
-
   ResourceLoader::Data data = ResourceLoader::Load(resource, _T("MO"));
   if (data.first == NULL)
-    return;
+    return false;
 
   mo_loader.reset(new MOLoader(data.first, data.second));
-  if (mo_loader->error())
+  if (mo_loader->error()) {
     mo_loader.reset();
-  else
-    mo_file = &mo_loader->get();
+    return false;
+  }
+
+  LogStartUp(_T("Loaded translations from resource '%s'"), resource);
+
+  mo_file = &mo_loader->get();
+  return true;
 }
 
-#else
+#else /* !HAVE_BUILTIN_LANGUAGES */
 
-static void
-ReadResourceLanguageFile() {}
+static inline const TCHAR *
+detect_language()
+{
+  return NULL;
+}
 
-#endif
+static inline bool
+ReadResourceLanguageFile(const TCHAR *resource)
+{
+  return false;
+}
 
-#endif /* WIN32 */
+#endif /* !HAVE_BUILTIN_LANGUAGES */
 
 #ifndef ANDROID
 
@@ -221,7 +226,9 @@ AutoDetectLanguage()
 
 #else /* !HAVE_POSIX */
 
-  ReadResourceLanguageFile();
+  const TCHAR *resource = detect_language();
+  if (resource != NULL)
+    ReadResourceLanguageFile(resource);
 
 #endif /* !HAVE_POSIX */
 }
@@ -242,6 +249,8 @@ LoadLanguageFile(const TCHAR *path)
     return false;
   }
 
+  LogStartUp(_T("Loaded translations from file '%s'"), path);
+
   mo_file = &mo_loader->get();
   return true;
 
@@ -260,14 +269,32 @@ ReadLanguageFile()
 
 #ifndef ANDROID
 
-  TCHAR szFile1[MAX_PATH];
+  TCHAR buffer[MAX_PATH], second_buffer[MAX_PATH];
+  const TCHAR *value = Profile::GetPath(szProfileLanguageFile, buffer)
+    ? buffer : _T("");
 
-  // Read the language filename from the registry
-  if (!Profile::GetPath(szProfileLanguageFile, szFile1))
-    LocalPath(szFile1, _T("default.po"));
+  if (_tcscmp(value, _T("none")) == 0)
+    return;
 
-  if (!LoadLanguageFile(szFile1))
+  if (string_is_empty(value) || _tcscmp(value, _T("auto")) == 0) {
     AutoDetectLanguage();
+    return;
+  }
+
+  const TCHAR *base = BaseName(value);
+  if (base == NULL)
+    base = value;
+
+  if (base == value) {
+    LocalPath(second_buffer, value);
+    value = second_buffer;
+
+    if (!LoadLanguageFile(value) && !ReadResourceLanguageFile(base))
+      AutoDetectLanguage();
+  } else {
+    if (!LoadLanguageFile(value))
+      AutoDetectLanguage();
+  }
 
 #endif /* !ANDROID */
 }
