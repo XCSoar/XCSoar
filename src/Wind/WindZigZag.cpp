@@ -503,17 +503,10 @@ WindZigZagCheckAirData(const NMEA_INFO &basic)
   static fixed tLast(-1);
   static Angle bearingLast = Angle::native(fixed_zero);
 
-  bool airdata_invalid = false;
-  if (!basic.flight.Flying)
-    airdata_invalid = true;
-  else if (fabs(basic.TurnRate) > fixed(20))
-    airdata_invalid = true;
-  else if (fabs(basic.GroundSpeed) < fixed(2.5))
-    airdata_invalid = true;
-  else if (fabs(basic.acceleration.Gload - fixed_one) > fixed(0.3))
-    airdata_invalid = true;
-
-  if (airdata_invalid) {
+  if (!basic.flight.Flying ||
+      fabs(basic.TurnRate) > fixed(20) ||
+      fabs(basic.GroundSpeed) < fixed(2.5) ||
+      fabs(basic.acceleration.Gload - fixed_one) > fixed(0.3)) {
     tLast = basic.Time; // blackout for SAMPLE_RATE seconds
     return false;
   }
