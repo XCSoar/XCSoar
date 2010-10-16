@@ -147,6 +147,16 @@ GetFormValueInteger(const WndForm &form, const TCHAR *control_name)
   return control->GetDataField()->GetAsInteger();
 }
 
+fixed
+GetFormValueFixed(const WndForm &form, const TCHAR *control_name)
+{
+  const WndProperty *control =
+    (const WndProperty *)form.FindByName(control_name);
+  assert(control != NULL);
+
+  return control->GetDataField()->GetAsFixed();
+}
+
 bool
 GetFormValueBoolean(const WndForm &form, const TCHAR *control_name)
 {
@@ -196,6 +206,17 @@ bool
 SaveFormProperty(const WndForm &form, const TCHAR *field, short &value)
 {
   short new_value = (short)GetFormValueInteger(form, field);
+  if (new_value == value)
+    return false;
+
+  value = new_value;
+  return true;
+}
+
+bool
+SaveFormProperty(WndForm &form, const TCHAR *control_name, fixed &value)
+{
+  fixed new_value = GetFormValueFixed(form, control_name);
   if (new_value == value)
     return false;
 
@@ -303,13 +324,18 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
                  UnitGroup_t unit_group, fixed &value,
                  const TCHAR *registry_name)
 {
-  int value2 = value;
-  if (SaveFormProperty(form, control_name, unit_group, value2,
-                       registry_name)) {
-    value = fixed(value2);
-    return true;
-  } else
+  assert(control_name != NULL);
+  assert(registry_name != NULL);
+
+  fixed new_value = GetFormValueFixed(form, control_name);
+  Units_t unit = Units::GetUserUnitByGroup(unit_group);
+  new_value = Units::ToSysUnit(new_value, unit);
+  if (new_value == value)
     return false;
+
+  value = new_value;
+  Profile::Set(registry_name, iround(new_value));
+  return true;
 }
 
 bool

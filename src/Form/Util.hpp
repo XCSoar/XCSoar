@@ -87,6 +87,10 @@ gcc_pure
 bool
 GetFormValueBoolean(const WndForm &form, const TCHAR *control_name);
 
+gcc_pure
+fixed
+GetFormValueFixed(const WndForm &form, const TCHAR *control_name);
+
 bool
 SaveFormProperty(const WndForm &form, const TCHAR* field, bool &value);
 
@@ -98,6 +102,9 @@ SaveFormProperty(const WndForm &form, const TCHAR* field, int &value);
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR* field, short &value);
+
+bool
+SaveFormProperty(WndForm &form, const TCHAR *control_name, fixed &value);
 
 /**
  * Saves a form value into a variable and into the registry.
