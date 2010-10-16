@@ -399,7 +399,7 @@ private:
 
     error_best = verr;
     V_west_best = V_west;
-    theta_west_best = theta_best.value_radians();
+    theta_west_best = theta_best;
 
     return true;
   }
@@ -412,26 +412,26 @@ private:
     // find best angle estimate for this assumed wind speed i
     Angle theta;
     if (!FindBestAngle(i, theta))
-      theta = Angle::radians(theta_west_best);
+      theta = theta_west_best;
 
     return (UpdateSearch_Inner(V_west, theta)
-            || UpdateSearch_Inner(V_west, Angle::radians(theta_west_best)));
+            || UpdateSearch_Inner(V_west, theta_west_best));
   }
 
 public:
   int error_best;
   fixed V_west_best;
-  fixed theta_west_best;
+  Angle theta_west_best;
 
   fixed
   StartSearch(fixed V_start, Angle theta_start)
   {
     V_west_best = V_start;
-    theta_west_best = theta_start.value_radians();
+    theta_west_best = theta_start;
     error_best = 10000;
     UpdateSearch(V_start);
     V_west_best = V_start;
-    theta_west_best = theta_start.value_radians();
+    theta_west_best = theta_start;
     return fixed(error_best) / 10;
   }
 
@@ -488,7 +488,7 @@ public:
 
     // return true if estimate was improved
     V_westb = V_west_best;
-    theta_westb = Angle::radians(theta_west_best).as_bearing();
+    theta_westb = theta_west_best.as_bearing();
 
     error = fixed(error_best) / 10;
     return improved;
