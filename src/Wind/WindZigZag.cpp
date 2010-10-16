@@ -219,10 +219,8 @@ public:
     for (int i = 0; i < NUM_SAMPLES; i++)
       points[i].time = fixed_minus_one;
 
-    for (int k = 0; k < NUM_THETA_POINTS; k++) {
-      fixed theta = anglelimit(k * fixed_two_pi / NUM_THETA_POINTS);
-      thetalist[k] = theta;
-    }
+    for (int k = 0; k < NUM_THETA_POINTS; k++)
+      thetalist[k] = Angle::radians(k * fixed_two_pi / NUM_THETA_POINTS).as_delta();
   }
 
   void
@@ -314,7 +312,7 @@ public:
   }
 
 private:
-  fixed thetalist[NUM_THETA_POINTS];
+  Angle thetalist[NUM_THETA_POINTS];
 
   // search all points for error against theta at wind speed index j
   fixed
@@ -350,14 +348,14 @@ private:
     bool ok = false;
 
     for (int k = 0; k < NUM_THETA_POINTS; k++) {
-      fixed ae = AngleError(Angle::radians(thetalist[k]), i);
+      fixed ae = AngleError(thetalist[k], i);
       if (negative(ae))
         continue;
 
       ok = true;
       if (ae < debest) {
         debest = ae;
-        theta_best = Angle::radians(thetalist[k]);
+        theta_best = thetalist[k];
       }
     }
 
