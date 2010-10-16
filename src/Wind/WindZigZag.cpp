@@ -106,12 +106,11 @@ ItoV(int i)
 class ZigZagPoint
 {
 public:
-  ZigZagPoint()
-    :time(-1)
+  ZigZagPoint() :
+    time(-1)
   {
-    for (int i = 0; i < NUM_V_POINTS; i++) {
+    for (int i = 0; i < NUM_V_POINTS; i++)
       theta_west_ok[i] = false;
-    }
   }
 
   fixed V_tas;
@@ -213,14 +212,12 @@ public:
 class ZigZag
 {
 public:
-
   ZigZagPoint points[NUM_SAMPLES];
 
   ZigZag()
   {
-    for (int i = 0; i < NUM_SAMPLES; i++) {
+    for (int i = 0; i < NUM_SAMPLES; i++)
       points[i].time = fixed_minus_one;
-    }
 
     for (int k = 0; k < NUM_THETA_POINTS; k++) {
       fixed theta = anglelimit(k * fixed_two * fixed_pi / NUM_THETA_POINTS);
@@ -236,11 +233,9 @@ public:
     int ioldest = 0;
     int i;
 
-    for (i = 0; i < NUM_SAMPLES; i++) {
-      if (t < points[i].time) {
+    for (i = 0; i < NUM_SAMPLES; i++)
+      if (t < points[i].time)
         points[i].time = fixed_minus_one;
-      }
-    }
 
     for (i = 0; i < NUM_SAMPLES; i++) {
       if ((points[i].time < toldest) || (i == 0) || (t < points[i].time)) {
@@ -301,9 +296,9 @@ public:
   CheckSpread(fixed time, fixed error)
   {
     fixed spread = CheckValidity(time);
-    if (negative(spread)) {
+    if (negative(spread))
       return false;
-    }
+
     spread /= fixed_deg_to_rad;
     fixed minspread;
 
@@ -311,10 +306,10 @@ public:
     // nominal spread required is 40 degrees, smaller if large
     // error is detected
 
-    if ((spread > fixed_360) || (spread < minspread)) {
+    if ((spread > fixed_360) || (spread < minspread))
       // invalid if really circling or if not enough zig-zag
       return false;
-    }
+
     return true;
   }
 
@@ -416,9 +411,8 @@ private:
 
     // find best angle estimate for this assumed wind speed i
     fixed theta = fixed_zero;
-    if (!FindBestAngle(i, &theta)) {
+    if (!FindBestAngle(i, &theta))
       theta = theta_west_best;
-    }
 
     return (UpdateSearch_Inner(V_west, theta)
             || UpdateSearch_Inner(V_west, theta_west_best));
@@ -447,9 +441,8 @@ public:
     int i;
 
     bool scanned[NUM_V_POINTS];
-    for (i = 0; i < NUM_V_POINTS; i++) {
+    for (i = 0; i < NUM_V_POINTS; i++)
       scanned[i] = false;
-    }
 
     // scan for 6 points around current best estimate.
     // if a better estimate is found, keep scanning around
@@ -496,9 +489,9 @@ public:
     // return true if estimate was improved
     *V_westb = V_west_best;
     *theta_westb = theta_west_best;
-    while (negative(*theta_westb)) {
+    while (negative(*theta_westb))
       *theta_westb += fixed_two_pi;
-    }
+
     *error = fixed(error_best) / 10;
     return improved;
   }
@@ -513,15 +506,14 @@ WindZigZagCheckAirData(const NMEA_INFO &basic)
   static Angle bearingLast = Angle::native(fixed_zero);
 
   bool airdata_invalid = false;
-  if (!basic.flight.Flying) {
+  if (!basic.flight.Flying)
     airdata_invalid = true;
-  } else if (fabs(basic.TurnRate) > fixed(20)) {
+  else if (fabs(basic.TurnRate) > fixed(20))
     airdata_invalid = true;
-  } else if (fabs(basic.GroundSpeed) < fixed(2.5)) {
+  else if (fabs(basic.GroundSpeed) < fixed(2.5))
     airdata_invalid = true;
-  } else if (fabs(basic.acceleration.Gload - fixed_one) > fixed(0.3)) {
+  else if (fabs(basic.acceleration.Gload - fixed_one) > fixed(0.3))
     airdata_invalid = true;
-  }
 
   if (airdata_invalid) {
     tLast = basic.Time; // blackout for SAMPLE_RATE seconds
@@ -579,10 +571,9 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
 
   fixed v_error = percent_error * basic.TrueAirspeed / 100;
 
-  if (v_error < fixed_half) {
+  if (v_error < fixed_half)
     // don't refine search if error is small
     return 0;
-  }
 
   if (myzigzag.Estimate(&V_wind_estimate, &theta_wind_estimate, &percent_error)) {
     // ok, we have made an update
@@ -600,12 +591,12 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
     //quality = iround(0.5+4.5/(1.0+percent_error*percent_error/30.0));
 
     quality = max(1, 5 - iround(percent_error / 2));
-    if (derived.Circling) {
+    if (derived.Circling)
       quality = max(1, quality / 2); // de-value updates in circling mode
-    }
 
     return quality;
   }
+
   return 0;
 }
 
