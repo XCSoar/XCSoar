@@ -154,29 +154,35 @@ find_language(WORD language)
   return NULL;
 }
 
-static void
-ReadResourceLanguageFile()
+static const TCHAR *
+detect_language()
 {
 #if defined(_WIN32_WCE)
   /* the GetUserDefaultUILanguage() prototype is missing on
      mingw32ce, we have to look it up dynamically */
   DynamicLibrary coreloc_dll(_T("coredll"));
   if (!coreloc_dll.defined())
-    return;
+    return NULL;
 
   typedef LANGID WINAPI (*GetUserDefaultUILanguage_t)();
   GetUserDefaultUILanguage_t GetUserDefaultUILanguage =
     (GetUserDefaultUILanguage_t)
     coreloc_dll.lookup(_T("GetUserDefaultUILanguage"));
   if (GetUserDefaultUILanguage == NULL)
-    return;
+    return NULL;
 #endif
 
   LANGID lang_id = GetUserDefaultUILanguage();
   if (lang_id == 0)
-    return;
+    return NULL;
 
-  const TCHAR *resource = find_language(PRIMARYLANGID(lang_id));
+  return find_language(PRIMARYLANGID(lang_id));
+}
+
+static void
+ReadResourceLanguageFile()
+{
+  const TCHAR *resource = detect_language();
   if (resource == NULL)
     return;
 
