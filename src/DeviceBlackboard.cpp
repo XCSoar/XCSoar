@@ -625,8 +625,8 @@ DeviceBlackboard::Dynamics()
     }
 
     // estimate bank angle (assuming balanced turn)
-    const fixed angle = atan(fixed_deg_to_rad * Basic().TurnRateWind
-        * Basic().TrueAirspeed * fixed_inv_g);
+    const fixed angle = atan(Angle::degrees(Basic().TurnRateWind
+        * Basic().TrueAirspeed * fixed_inv_g).value_radians());
 
     SetBasic().acceleration.BankAngle = Angle::radians(angle);
 
