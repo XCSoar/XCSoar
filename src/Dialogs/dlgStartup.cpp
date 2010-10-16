@@ -85,10 +85,7 @@ OnSplashPaint(WindowControl *Sender, Canvas &canvas)
   canvas.clear_white();
 
   Bitmap splash_bitmap;
-  if (Layout::scale_1024 > 1024 * 3 / 2)
-    splash_bitmap.load(IDB_SWIFT);
-  else
-    splash_bitmap.load(IDB_SWIFT2);
+  splash_bitmap.load((Layout::scale_1024 > 1024 * 3 / 2) ? IDB_SWIFT : IDB_SWIFT2);
   PaintLogo(canvas, Sender->get_client_rect(), splash_bitmap);
 }
 
