@@ -51,7 +51,7 @@ Copyright_License {
 static WndForm *wf = NULL;
 
 static void
-OnSplashPaint(WindowControl *Sender, Canvas &canvas)
+OnLogoPaint(WindowControl *Sender, Canvas &canvas)
 {
   Bitmap splash_bitmap;
   splash_bitmap.load(Layout::Scale(20) > 30 ? IDB_SWIFT_HD : IDB_SWIFT);
@@ -72,7 +72,7 @@ OnFlyClicked(gcc_unused WndButton &button)
 }
 
 static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnSplashPaint),
+  DeclareCallBackEntry(OnLogoPaint),
   DeclareCallBackEntry(NULL)
 };
 

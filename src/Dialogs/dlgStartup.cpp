@@ -80,7 +80,7 @@ PaintLogo(Canvas &canvas, RECT rc, const Bitmap &logo)
  * use a smaller icon for smaller screens because the "stretch" will not shrink
  */
 static void
-OnSplashPaint(WindowControl *Sender, Canvas &canvas)
+OnLogoPaint(WindowControl *Sender, Canvas &canvas)
 {
   canvas.clear_white();
 
@@ -102,7 +102,7 @@ OnQuit(gcc_unused WndButton &button)
 }
 
 static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnSplashPaint),
+  DeclareCallBackEntry(OnLogoPaint),
   DeclareCallBackEntry(NULL)
 };
 
