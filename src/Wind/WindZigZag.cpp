@@ -280,12 +280,12 @@ public:
     if (nf < NUM_SAMPLES)
       return fixed_minus_one;
 
-    fixed theta_av = atan2(stg, ctg);
+    Angle theta_av = Angle::radians(atan2(stg, ctg));
     fixed dtheta_max = fixed_zero;
     fixed dtheta_min = fixed_zero;
 
     for (i = 0; i < NUM_SAMPLES; i++) {
-      fixed da = anglelimit(points[i].theta_gps.value_radians() - theta_av);
+      fixed da = anglelimit((points[i].theta_gps - theta_av).value_radians());
 
       if (da > dtheta_max)
         dtheta_max = da;
