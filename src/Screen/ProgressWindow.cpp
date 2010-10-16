@@ -69,15 +69,15 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 
   // Make progress bar height proportional to window height
   progress_border_height = height / 10;
-  unsigned progress_size = progress_border_height - (height / 20);
+  unsigned progress_height = progress_border_height - (height / 20);
   unsigned progress_horizontal_border =
-      (progress_border_height - progress_size) / 2;
+      (progress_border_height - progress_height) / 2;
 
   // Initialize version text field
   TextWindowStyle version_style;
   version_style.left();
   version.set(*this, XCSoar_ProductToken, 0, 0,
-              width - progress_size * 2, text_height, version_style);
+              width - progress_height * 2, text_height, version_style);
 
   // Initialize message text field
   TextWindowStyle message_style;
@@ -89,9 +89,9 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   // Initialize progress bar
   ProgressBarStyle pb_style;
   progress_bar.set(*this, progress_horizontal_border,
-                   height - progress_border_height + (progress_size/2),
+                   height - progress_border_height + (progress_height/2),
                    width - progress_horizontal_border*2,
-                   progress_size, pb_style);
+                   progress_height, pb_style);
 
   version.install_wndproc(); // needed for on_color()
   message.install_wndproc(); // needed for on_color()
