@@ -285,7 +285,7 @@ public:
     fixed dtheta_min = fixed_zero;
 
     for (i = 0; i < NUM_SAMPLES; i++) {
-      fixed da = anglelimit((points[i].theta_gps - theta_av).value_radians());
+      fixed da = (points[i].theta_gps - theta_av).as_delta().value_radians();
 
       if (da > dtheta_max)
         dtheta_max = da;
