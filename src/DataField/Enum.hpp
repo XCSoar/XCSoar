@@ -88,11 +88,17 @@ public:
   #endif
 
   virtual void SetAsInteger(int Value);
+  virtual void SetAsString(const TCHAR *Value);
   void Sort(int startindex = 0);
 
   unsigned Count() const {
     return entries.size();
   }
+
+  /**
+   * Finds an entry with the specified text.  Returns -1 if not found.
+   */
+  int Find(const TCHAR *text) const;
 };
 
 #endif

@@ -126,6 +126,20 @@ DataFieldEnum::SetAsInteger(int Value)
 }
 
 void
+DataFieldEnum::SetAsString(const TCHAR *Value)
+{
+  int i = Find(Value);
+  if (i >= 0) {
+    if ((unsigned)i != mValue) {
+      mValue = i;
+      if (!GetDetachGUI())
+        (mOnDataAccess)(this, daChange);
+    }
+  } else
+    mValue = 0; // fallback
+}
+
+void
 DataFieldEnum::Inc(void)
 {
   if (mValue < entries.size() - 1) {
@@ -173,4 +187,16 @@ DataFieldEnum::CreateComboList() const
 
   combo_list->ComboPopupItemSavedIndex = mValue;
   return combo_list;
+}
+
+int
+DataFieldEnum::Find(const TCHAR *text) const
+{
+  assert(text != NULL);
+
+  for (unsigned int i = 0; i < entries.size(); i++)
+    if (_tcscmp(text, entries[i].mText) == 0)
+      return entries[i].index;
+
+  return -1;
 }
