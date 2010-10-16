@@ -133,10 +133,7 @@ gettext(const TCHAR* text)
 
 #if !defined(_WIN32_WCE) || _WIN32_WCE >= 0x500
 
-static struct {
-  WORD language;
-  const TCHAR *resource;
-} language_table[] = {
+const struct builtin_language language_table[] = {
   { LANG_GERMAN, _T("de.mo") },
   { LANG_FRENCH, _T("fr.mo") },
   { LANG_HUNGARIAN, _T("hu.mo") },

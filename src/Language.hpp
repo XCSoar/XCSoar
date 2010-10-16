@@ -81,4 +81,17 @@ const TCHAR* gettext(const TCHAR* text);
 
 void ReadLanguageFile(void);
 
+#if defined(WIN32) && !defined(HAVE_POSIX) && \
+  (!defined(_WIN32_WCE) || _WIN32_WCE >= 0x500)
+#define HAVE_BUILTIN_LANGUAGES
+
+struct builtin_language {
+  unsigned language;
+  const TCHAR *resource;
+};
+
+extern const struct builtin_language language_table[];
+
+#endif
+
 #endif
