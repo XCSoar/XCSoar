@@ -571,10 +571,33 @@ DataFieldFileReader::CreateComboList() const
 
   ComboList *cl = new ComboList();
 
+  TCHAR buffer[MAX_PATH];
+
   for (unsigned i = 0; i < files.size(); i++) {
     const TCHAR *path = files[i].mTextFile;
     if (path == NULL)
       path = _T("");
+
+    /* is a file with the same base name present in another data
+       directory? */
+
+    bool found = false;
+    for (unsigned j = 1; j < files.size(); j++) {
+      if (j != i && _tcscmp(path, files[j].mTextFile) == 0) {
+        found = true;
+        break;
+      }
+    }
+
+    if (found) {
+      /* yes - append the absolute path to allow the user to see the
+         difference */
+      _tcscpy(buffer, path);
+      _tcscat(buffer, _T(" ("));
+      _tcscat(buffer, files[i].mTextPathFile);
+      _tcscat(buffer, _T(")"));
+      path = buffer;
+    }
 
     cl->Append(i, i, path, path);
     if (i == mValue) {
