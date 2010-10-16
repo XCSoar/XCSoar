@@ -302,10 +302,6 @@ public:
   {
     fixed spread = CheckValidity(time);
     if (negative(spread)) {
-      #ifdef DEBUG_ZIGZAG_A
-      LogDebug(_T("zigzag time invalid\n"));
-      #endif
-
       return false;
     }
     spread /= fixed_deg_to_rad;
@@ -317,11 +313,6 @@ public:
 
     if ((spread > fixed_360) || (spread < minspread)) {
       // invalid if really circling or if not enough zig-zag
-
-      #ifdef DEBUG_ZIGZAG_A
-      LogDebug(_T("zigzag spread invalid %03.1f\n"), spread);
-      #endif
-
       return false;
     }
     return true;
@@ -515,58 +506,6 @@ public:
 
 ZigZag myzigzag;
 
-#ifdef DEBUG_ZIGZAG
-
-void TestZigZag(fixed V_wind, fixed theta_wind) {
-  fixed t, V_tas, V_gps, theta_gps, theta_glider;
-
-  int i;
-  for (i=0; i<=NUM_SAMPLES; i++) {
-    t = fixed(i);
-    V_tas = fixed(20);
-    theta_glider = sin(t * fixed_pi * 2 / NUM_SAMPLES) * 30 * fixed_deg_to_rad;
-    fixed V_gps_x = V_tas * sin(theta_glider) - V_wind*sin(theta_wind);
-    fixed V_gps_y = V_tas * cos(theta_glider) - V_wind*cos(theta_wind);
-
-    V_gps = hypot(V_gps_x, V_gps_y);
-    theta_gps = atan2(V_gps_x,V_gps_y);
-
-    myzigzag.AddPoint(t, V_tas, V_gps, theta_gps);
-  }
-
-  // ok, ready to calculate
-  if (myzigzag.CheckSpread(t + fixed_one, fixed_zero)) {
-    // data is ok to make an estimate
-    fixed V_wind_estimate = fixed_one;
-    fixed theta_wind_estimate = fixed_zero;
-    fixed percent_error;
-    percent_error = myzigzag.StartSearch(V_wind_estimate, theta_wind_estimate);
-    myzigzag.Estimate(&V_wind_estimate, &theta_wind_estimate, &percent_error);
-
-    LogDebug(_T("%2.1f %2.1f %03.0f %03.0f %2.1f # test zigzag\n"),
-             (double)V_wind,
-             (double)V_wind_estimate,
-             (double)(theta_wind / fixed_deg_to_rad),
-             (double)(theta_wind_estimate / fixed_deg_to_rad),
-             (double)percent_error
-             );
-  }
-}
-
-void TestZigZagLoop() {
-  static bool first = true;
-  if (!first) return;
-  first = false;
-  for (fixed V_wind = fixed_two; V_wind <= fixed(10); V_wind += fixed_one) {
-    for (fixed theta_wind = fixed_zero; theta_wind < fixed_360;
-         theta_wind += fixed(20)) {
-      TestZigZag(V_wind, theta_wind * fixed_deg_to_rad);
-    }
-  }
-}
-
-#endif
-
 static bool
 WindZigZagCheckAirData(const NMEA_INFO &basic)
 {
@@ -578,19 +517,10 @@ WindZigZagCheckAirData(const NMEA_INFO &basic)
     airdata_invalid = true;
   } else if (fabs(basic.TurnRate) > fixed(20)) {
     airdata_invalid = true;
-#ifdef DEBUG_ZIGZAG_A
-    LogDebug(_T("zigzag airdata invalid - turn rate\n"));
-#endif
   } else if (fabs(basic.GroundSpeed) < fixed(2.5)) {
     airdata_invalid = true;
-#ifdef DEBUG_ZIGZAG_A
-    LogDebug(_T("zigzag airdata invalid - ground speed\n"));
-#endif
   } else if (fabs(basic.acceleration.Gload - fixed_one) > fixed(0.3)) {
     airdata_invalid = true;
-#ifdef DEBUG_ZIGZAG_A
-    LogDebug(_T("zigzag airdata invalid - acceleration\n"));
-#endif
   }
 
   if (airdata_invalid) {
@@ -618,10 +548,6 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
   if (!basic.AirspeedAvailable)
     return 0;
 
-  #ifdef DEBUG_ZIGZAG
-  TestZigZagLoop();
-  #endif
-
   // TODO accuracy: correct TAS for vertical speed if dynamic pullup
 
   if ((basic.Time <= tLastEstimate) || (tLastEstimate == fixed_minus_one))
@@ -635,14 +561,6 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
   myzigzag.AddPoint(basic.Time,
                     basic.TrueAirspeed, basic.GroundSpeed,
                     basic.TrackBearing.value_radians());
-
-  #ifdef DEBUG_ZIGZAG_A
-  LogDebug("%f %03.0f %03.0f %03.0f # zigpoint\n",
-             basic.Time,
-             basic.TrueAirspeed,
-             basic.GroundSpeed,
-             basic.TrackBearing);
-  #endif
 
   // don't update wind from zigzag more often than
   // every UPDATE_RATE seconds, so it is balanced with respect
@@ -663,12 +581,6 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
 
   if (v_error < fixed_half) {
     // don't refine search if error is small
-
-    #ifdef DEBUG_ZIGZAG
-    LogDebug(_T("zigzag error small %02.0f %03.1f"),
-             (double)percent_error, (double)v_error);
-    #endif
-
     return 0;
   }
 
@@ -692,24 +604,8 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
       quality = max(1, quality / 2); // de-value updates in circling mode
     }
 
-    #ifdef DEBUG_ZIGZAG
-    LogDebug(_T("%f %3.1f %03.0f %3.1f %03.0f %f %d # zigzag"),
-             (double)basic.Time,
-             (double)V_wind_estimate,
-             (double)theta_wind_estimate,
-             (double)basic.wind.norm,
-             (double)basic.wind.bearing.value_degrees(),
-             (double)percent_error,
-             quality);
-    #endif
-
     return quality;
-  } else {
-    #ifdef DEBUG_ZIGZAG
-    LogDebug(_T("zigzag estimate failed to improve"));
-    #endif
   }
-
   return 0;
 }
 
