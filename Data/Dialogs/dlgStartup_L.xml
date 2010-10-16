@@ -2,7 +2,7 @@
 
 <Form Name="frmStartup" Width="320" Height="240" Caption="" BackColor="0xFFFFFF">
   <Panel Name="frmShade" X="0" Y="-60" BackColor="0xDADBAB">
-    <Button Name="cmdClose" Caption="Accept" X="2" Width="-2" Height="30"/>
+    <Button Name="cmdClose" Caption="Continue" X="2" Width="-2" Height="30"/>
 
     <Edit Name="prpProfile" Caption="Profile" X="2" Width="-2" Height="25" CaptionWidth="60" BackColor="0xDADBAB">
       <DataField DataType="filereader" Min="0" Max="200" Step="1"/>
