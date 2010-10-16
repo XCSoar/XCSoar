@@ -68,9 +68,9 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   text_height = canvas.text_height(_T("W"));
 
   // Make progress bar height proportional to window height
-  progress_border_height = height / 10;
-  unsigned progress_height = progress_border_height / 2;
-  unsigned progress_horizontal_border = progress_border_height / 4;
+  unsigned progress_height = height / 20;
+  unsigned progress_horizontal_border = progress_height / 2;
+  progress_border_height = progress_height * 2;
 
   // Initialize version text field
   TextWindowStyle version_style;
