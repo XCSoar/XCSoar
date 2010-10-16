@@ -242,7 +242,9 @@ GetHomeDataPath(TCHAR *buffer)
   } else
     return _T("/etc/xcsoar");
 #else
-  SHGetSpecialFolderPath(NULL, buffer, CSIDL_PERSONAL, false);
+  if (!SHGetSpecialFolderPath(NULL, buffer, CSIDL_PERSONAL, false))
+    return NULL;
+
   _tcscat(buffer, _T(DIR_SEPARATOR_S));
   _tcscat(buffer, XCSDATADIR);
   return buffer;
