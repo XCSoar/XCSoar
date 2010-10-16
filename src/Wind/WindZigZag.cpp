@@ -488,9 +488,7 @@ public:
 
     // return true if estimate was improved
     V_westb = V_west_best;
-    theta_westb = theta_west_best;
-    while (negative(theta_westb))
-      theta_westb += fixed_two_pi;
+    theta_westb = Angle::radians(theta_west_best).as_bearing().value_radians();
 
     error = fixed(error_best) / 10;
     return improved;
