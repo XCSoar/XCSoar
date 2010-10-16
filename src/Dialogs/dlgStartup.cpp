@@ -129,7 +129,7 @@ dlgStartupShowModal()
 
   TCHAR temp[MAX_PATH];
 
-  _stprintf(temp, _T("XCSoar: Version %s"), XCSoar_VersionString);
+  _stprintf(temp, _T("XCSoar v%s"), XCSoar_VersionString);
   WindowControl* wc;
   wc = ((WindowControl *)wf->FindByName(_T("lblVersion")));
   if (wc)
