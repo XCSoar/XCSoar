@@ -122,8 +122,8 @@ public:
     CalculateThetaWEst();
   }
 
-  fixed theta_west_1[NUM_V_POINTS];
-  fixed theta_west_2[NUM_V_POINTS];
+  Angle theta_west_1[NUM_V_POINTS];
+  Angle theta_west_2[NUM_V_POINTS];
   bool theta_west_ok[NUM_V_POINTS];
 
   fixed cos_theta_gps;
@@ -171,8 +171,8 @@ private:
 
     if (west_rat < fixed(0.001)) {
       // wind speed too small
-      theta_west_1[i] = fixed_zero;
-      theta_west_2[i] = fixed_zero;
+      theta_west_1[i] = Angle::native(fixed_zero);
+      theta_west_2[i] = Angle::native(fixed_zero);
       return true;
     }
 
@@ -183,8 +183,8 @@ private:
       return false;
 
     Angle gamma = Angle::radians(acos(cosgamma));
-    theta_west_1[i] = (Angle::radians(fixed_pi) - theta_gps - gamma).as_delta().flipped().value_radians();
-    theta_west_2[i] = (Angle::radians(fixed_pi) - theta_gps + gamma).as_delta().flipped().value_radians();
+    theta_west_1[i] = (Angle::radians(fixed_pi) - theta_gps - gamma).as_delta().flipped();
+    theta_west_2[i] = (Angle::radians(fixed_pi) - theta_gps + gamma).as_delta().flipped();
 
     return true;
   }
@@ -317,9 +317,9 @@ private:
 
     for (int i = 0; i < NUM_SAMPLES; i++) {
       if (points[i].theta_west_ok[j]) {
-        fixed e1 = (theta - Angle::radians(points[i].theta_west_1[j])).
+        fixed e1 = (theta - points[i].theta_west_1[j]).
             as_delta().magnitude_radians();
-        fixed e2 = (theta - Angle::radians(points[i].theta_west_2[j])).
+        fixed e2 = (theta - points[i].theta_west_2[j]).
             as_delta().magnitude_radians();
         if (e1 <= e2)
           de += e1 * e1;
