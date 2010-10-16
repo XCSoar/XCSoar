@@ -47,6 +47,8 @@ Copyright_License {
 #include "Version.hpp"
 #include "Asset.hpp"
 #include "StringUtil.hpp"
+#include "LocalPath.hpp"
+#include "OS/PathName.hpp"
 #include "Compiler.h"
 
 static WndForm *wf = NULL;
@@ -117,8 +119,14 @@ dlgStartupShowModal()
 
   wf->ShowModal();
 
-  if (!string_is_empty(dfe->GetPathFile()))
-    _tcscpy(startProfileFile, dfe->GetPathFile());
+  const TCHAR *path = dfe->GetPathFile();
+  if (!string_is_empty(path)) {
+    _tcscpy(startProfileFile, path);
+
+    /* When a profile from a secondary data path is used, this path
+       becomes the primary data path */
+    SetPrimaryDataPath(DirName(path, temp));
+  }
 
   delete wf;
 }

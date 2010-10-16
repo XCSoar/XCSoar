@@ -70,6 +70,16 @@ GetPrimaryDataPath()
 }
 
 void
+SetPrimaryDataPath(const TCHAR *path)
+{
+  assert(path != NULL);
+  assert(!string_is_empty(path));
+
+  free(data_path);
+  data_path = _tcsdup(path);
+}
+
+void
 LocalPath(TCHAR *buffer, const TCHAR *file)
 {
   assert(data_path != NULL);

@@ -44,6 +44,12 @@ Copyright_License {
 #define XCSDATADIR _T("XCSoarData")
 
 /**
+ * Overrides the detected primary data path.
+ */
+void
+SetPrimaryDataPath(const TCHAR *path);
+
+/**
  * Returns the absolute path of the primary data directory.
  */
 const TCHAR *
