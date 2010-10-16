@@ -135,60 +135,72 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
   ctl->RefreshDisplay();
 }
 
+int
+GetFormValueInteger(const WndForm &form, const TCHAR *control_name)
+{
+  assert(control_name != NULL);
+
+  const WndProperty *control =
+    (const WndProperty *)form.FindByName(control_name);
+  assert(control != NULL);
+
+  return control->GetDataField()->GetAsInteger();
+}
+
+bool
+GetFormValueBoolean(const WndForm &form, const TCHAR *control_name)
+{
+  assert(control_name != NULL);
+
+  const WndProperty *control =
+    (const WndProperty *)form.FindByName(control_name);
+  assert(control != NULL);
+
+  return control->GetDataField()->GetAsBoolean();
+}
+
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *field, bool &value)
 {
-  const WndProperty *wp = (const WndProperty *)form.FindByName(field);
-  assert(wp);
+  bool new_value = GetFormValueBoolean(form, field);
+  if (new_value == value)
+    return false;
 
-  if (value != wp->GetDataField()->GetAsBoolean()) {
-    value = wp->GetDataField()->GetAsBoolean();
-    return true;
-  }
-
-  return false;
+  value = new_value;
+  return true;
 }
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *field, unsigned int &value)
 {
-  const WndProperty *wp = (const WndProperty *)form.FindByName(field);
-  assert(wp);
+  unsigned new_value = (unsigned)GetFormValueInteger(form, field);
+  if (new_value == value)
+    return false;
 
-  if ((int)value != wp->GetDataField()->GetAsInteger()) {
-    value = wp->GetDataField()->GetAsInteger();
-    return true;
-  }
-
-  return false;
+  value = new_value;
+  return true;
 }
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *field, int &value)
 {
-  const WndProperty *wp = (const WndProperty *)form.FindByName(field);
-  assert(wp);
+  int new_value = GetFormValueInteger(form, field);
+  if (new_value == value)
+    return false;
 
-  if (value != wp->GetDataField()->GetAsInteger()) {
-    value = wp->GetDataField()->GetAsInteger();
-    return true;
-  }
-
-  return false;
+  value = new_value;
+  return true;
 }
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *field, short &value)
 {
-  const WndProperty *wp = (const WndProperty *)form.FindByName(field);
-  assert(wp);
+  short new_value = (short)GetFormValueInteger(form, field);
+  if (new_value == value)
+    return false;
 
-  if (value != wp->GetDataField()->GetAsInteger()) {
-    value = wp->GetDataField()->GetAsInteger();
-    return true;
-  }
-
-  return false;
+  value = new_value;
+  return true;
 }
 
 bool
@@ -198,16 +210,10 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
   assert(control_name != NULL);
   assert(registry_name != NULL);
 
-  const WndProperty *ctl = (const WndProperty *)form.FindByName(control_name);
-  if (ctl == NULL)
+  if (!SaveFormProperty(form, control_name, value))
     return false;
 
-  bool new_value = ctl->GetDataField()->GetAsBoolean();
-  if (new_value == value)
-    return false;
-
-  value = new_value;
-  Profile::Set(registry_name, new_value);
+  Profile::Set(registry_name, value);
   return true;
 }
 
@@ -267,12 +273,8 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
   assert(control_name != NULL);
   assert(registry_name != NULL);
 
-  const WndProperty *ctl = (const WndProperty *)form.FindByName(control_name);
-  if (ctl == NULL)
-    return false;
-
   Units_t unit = Units::GetUserUnitByGroup(unit_group);
-  int new_value = ctl->GetDataField()->GetAsInteger();
+  int new_value = GetFormValueInteger(form, control_name);
   new_value = iround(Units::ToSysUnit(fixed(new_value), unit));
   if (new_value == value)
     return false;

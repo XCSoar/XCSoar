@@ -41,6 +41,7 @@ Copyright_License {
 
 #include "Units.hpp"
 #include "SettingsMap.hpp"
+#include "Compiler.h"
 
 #include <tchar.h>
 
@@ -77,6 +78,14 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name,
                  UnitGroup_t unit_group, fixed value);
+
+gcc_pure
+int
+GetFormValueInteger(const WndForm &form, const TCHAR *control_name);
+
+gcc_pure
+bool
+GetFormValueBoolean(const WndForm &form, const TCHAR *control_name);
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR* field, bool &value);
