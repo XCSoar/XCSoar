@@ -220,7 +220,7 @@ public:
       points[i].time = fixed_minus_one;
 
     for (int k = 0; k < NUM_THETA_POINTS; k++) {
-      fixed theta = anglelimit(k * fixed_two * fixed_pi / NUM_THETA_POINTS);
+      fixed theta = anglelimit(k * fixed_two_pi / NUM_THETA_POINTS);
       thetalist[k] = theta;
     }
   }
