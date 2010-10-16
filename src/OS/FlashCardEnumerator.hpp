@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_FLASH_CARD_ENUMERATOR_HPP
 #define XCSOAR_FLASH_CARD_ENUMERATOR_HPP
 
+#include "Util/StringUtil.hpp"
+
 #ifdef HAVE_NOTE_PRJ_DLL
 #include "NotePrjDLL.hpp"
 #endif
@@ -79,7 +81,10 @@ public:
     if (note_prj.defined()) {
       if (first)
         first = false;
-      else if (!note_prj.FindNextFlashCard(handle, &data))
+      else if (!note_prj.FindNextFlashCard(handle, &data) ||
+               /* On my Dell Axim x51v, the last entry returned by
+                  FindNextFlashCard() is empty; workaround: */
+               string_is_empty(data.cFileName))
         return NULL;
       return data.cFileName;
     }
