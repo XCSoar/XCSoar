@@ -385,11 +385,11 @@ private:
   }
 
   bool
-  UpdateSearch_Inner(fixed V_west, fixed theta_best)
+  UpdateSearch_Inner(fixed V_west, Angle theta_best)
   {
     // given wind speed and direction, find TAS error
-    int V_west_x = iround(100 * V_west * cos(theta_best));
-    int V_west_y = iround(100 * V_west * sin(theta_best));
+    int V_west_x = iround(100 * V_west * theta_best.cos());
+    int V_west_y = iround(100 * V_west * theta_best.sin());
     int verr = VError(V_west_x, V_west_y);
 
     // search for minimum error
@@ -399,7 +399,7 @@ private:
 
     error_best = verr;
     V_west_best = V_west;
-    theta_west_best = theta_best;
+    theta_west_best = theta_best.value_radians();
 
     return true;
   }
@@ -414,8 +414,8 @@ private:
     if (!FindBestAngle(i, theta))
       theta = theta_west_best;
 
-    return (UpdateSearch_Inner(V_west, theta)
-            || UpdateSearch_Inner(V_west, theta_west_best));
+    return (UpdateSearch_Inner(V_west, Angle::radians(theta))
+            || UpdateSearch_Inner(V_west, Angle::radians(theta_west_best)));
   }
 
 public:
