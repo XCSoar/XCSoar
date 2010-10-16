@@ -6,10 +6,10 @@ PNG_ICONS_160 = $(patsubst Data/icons/%.svg,output/data/icons/%-160.png,$(SVG_IC
 BMP_ICONS_160 = $(PNG_ICONS_160:.png=.bmp)
 
 SVG_SPLASH = Data/graphics/xcsoarswiftsplash.svg
-PNG_SPLASH_220 = $(patsubst Data/graphics/%.svg,output/data/graphics/%-220.png,$(SVG_SPLASH))
-BMP_SPLASH_220 = $(PNG_SPLASH_220:.png=.bmp)
 PNG_SPLASH_160 = $(patsubst Data/graphics/%.svg,output/data/graphics/%-160.png,$(SVG_SPLASH))
 BMP_SPLASH_160 = $(PNG_SPLASH_160:.png=.bmp)
+PNG_SPLASH_80 = $(patsubst Data/graphics/%.svg,output/data/graphics/%-80.png,$(SVG_SPLASH))
+BMP_SPLASH_80 = $(PNG_SPLASH_80:.png=.bmp)
 
 SVG_TITLE = Data/graphics/title.svg
 PNG_TITLE_110 = $(patsubst Data/graphics/%.svg,output/data/graphics/%-110.png,$(SVG_TITLE))
@@ -65,18 +65,18 @@ $(BMP_ICONS_160): %.bmp: %-tile.png
 ####### splash logo
 
 # render from SVG to PNG
-$(PNG_SPLASH_220): output/data/graphics/%-220.png: Data/graphics/%.svg | output/data/graphics/dirstamp
-	@$(NQ)echo "  SVG     $@"
-	$(Q)rsvg-convert --width=220 $< -o $@
 $(PNG_SPLASH_160): output/data/graphics/%-160.png: Data/graphics/%.svg | output/data/graphics/dirstamp
 	@$(NQ)echo "  SVG     $@"
 	$(Q)rsvg-convert --width=160 $< -o $@
+$(PNG_SPLASH_80): output/data/graphics/%-80.png: Data/graphics/%.svg | output/data/graphics/dirstamp
+	@$(NQ)echo "  SVG     $@"
+	$(Q)rsvg-convert --width=80 $< -o $@
 
 # convert to uncompressed 8-bit BMP
-$(BMP_SPLASH_220): %.bmp: %.png
+$(BMP_SPLASH_160): %.bmp: %.png
 	@$(NQ)echo "  BMP     $@"
 	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 $@
-$(BMP_SPLASH_160): %.bmp: %.png
+$(BMP_SPLASH_80): %.bmp: %.png
 	@$(NQ)echo "  BMP     $@"
 	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 $@
 
@@ -127,7 +127,7 @@ $(BMP_LAUNCH_SIM_224): %-2.bmp: %.png
 
 RESOURCE_FILES = $(wildcard Data/Dialogs/*.xml) $(wildcard Data/bitmaps/*.bmp)
 RESOURCE_FILES += $(BMP_ICONS) $(BMP_ICONS_160) 
-RESOURCE_FILES += $(BMP_SPLASH_220) $(BMP_SPLASH_160)
+RESOURCE_FILES += $(BMP_SPLASH_160) $(BMP_SPLASH_80)
 RESOURCE_FILES += $(BMP_TITLE_320) $(BMP_TITLE_110)
 RESOURCE_FILES += $(BMP_LAUNCH_FLY_224) $(BMP_LAUNCH_SIM_224)
 
