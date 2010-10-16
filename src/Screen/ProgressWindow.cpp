@@ -180,7 +180,7 @@ ProgressWindow::on_paint(Canvas &canvas)
   } else if (window_width < window_height) {
     // Portrait
     logox = (window_width - logo_size.cx) / 2;
-    logoy = (window_height - (logo_size.cy + title_size.cy + title_size.cy)) / 2
+    logoy = (window_height - (logo_size.cy + title_size.cy * 2)) / 2
             - text_height;
     titlex = (window_width - title_size.cx) / 2;
     titley = logoy + logo_size.cy + title_size.cy;
