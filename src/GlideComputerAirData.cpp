@@ -166,8 +166,7 @@ GlideComputerAirData::Wind()
     fixed zz_wind_bearing;
     int quality;
     quality = WindZigZagUpdate(Basic(), Calculated(),
-			       &zz_wind_speed,
-			       &zz_wind_bearing);
+                               zz_wind_speed, zz_wind_bearing);
 
     if (quality > 0)
       SetWindEstimate(zz_wind_speed, zz_wind_bearing, quality);

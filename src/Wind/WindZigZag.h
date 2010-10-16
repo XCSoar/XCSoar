@@ -46,6 +46,6 @@ struct DERIVED_INFO;
 
 int
 WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
-                 fixed *zzwindspeed, fixed *zzwindbearing);
+                 fixed &zzwindspeed, fixed &zzwindbearing);
 
 #endif
