@@ -41,11 +41,13 @@ Copyright_License {
 
 #include "FLARM/FlarmId.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "Dialogs/ListPicker.hpp"
 
 #include <tchar.h>
 #include "Util/tstring.hpp"
 
 struct GeoPoint;
+class ComboList;
 class SingleWindow;
 class WndProperty;
 class Waypoint;
@@ -166,6 +168,11 @@ void dlgFlarmTrafficDetailsShowModal(FlarmId id);
 bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width = 0,
                                    AllowedCharactersCallback_t accb=NULL);
 void dlgNumberEntryKeyboardShowModal(int *value, int width = 0);
+
+int
+ComboPicker(SingleWindow &parent, const TCHAR *caption,
+            const ComboList &combo_list,
+            ListHelpCallback_t help_callback);
 
 int dlgComboPicker(SingleWindow &parent, WndProperty *theProperty);
 

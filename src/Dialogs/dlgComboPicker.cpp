@@ -47,7 +47,7 @@ Copyright_License {
 
 static WndProperty *wComboPopupWndProperty;
 static DataField *ComboPopupDataField;
-static ComboList *ComboListPopup;
+static const ComboList *ComboListPopup;
 
 enum { ComboPopupITEMMAX = 100 };
 static TCHAR sSavedInitialValue[ComboPopupITEMMAX];
@@ -61,6 +61,21 @@ OnPaintComboPopupListItem(Canvas &canvas, const RECT rc, unsigned i)
   canvas.text_clipped(rc.left + Layout::FastScale(2),
                       rc.top + Layout::FastScale(2), rc,
                       (*ComboListPopup)[i].StringValueFormatted);
+}
+
+int
+ComboPicker(SingleWindow &parent, const TCHAR *caption,
+            const ComboList &combo_list,
+            ListHelpCallback_t help_callback)
+{
+  ComboListPopup = &combo_list;
+
+  return ListPicker(parent, caption,
+                    combo_list.size(),
+                    combo_list.ComboPopupItemSavedIndex,
+                    Layout::Scale(18),
+                    OnPaintComboPopupListItem,
+                    help_callback);
 }
 
 static void
@@ -79,12 +94,7 @@ static int
 ComboPicker(SingleWindow &parent, const WndProperty &control,
             const ComboList &combo_list)
 {
-  return ListPicker(parent, control.GetCaption(),
-                    combo_list.size(),
-                    combo_list.ComboPopupItemSavedIndex,
-                    Layout::Scale(18),
-                    OnPaintComboPopupListItem,
-                    OnHelpClicked);
+  return ComboPicker(parent, control.GetCaption(), combo_list, OnHelpClicked);
 }
 
 int
