@@ -208,6 +208,48 @@ ReadResourceLanguageFile() {}
 
 #endif /* WIN32 */
 
+#ifndef ANDROID
+
+static void
+AutoDetectLanguage()
+{
+#if defined(HAVE_POSIX)
+
+  setlocale(LC_ALL, "");
+  bindtextdomain("xcsoar", "/usr/share/locale");
+  textdomain("xcsoar");
+
+#else /* !HAVE_POSIX */
+
+  ReadResourceLanguageFile();
+
+#endif /* !HAVE_POSIX */
+}
+
+static bool
+LoadLanguageFile(const TCHAR *path)
+{
+#if defined(HAVE_POSIX)
+
+  /* not supported on UNIX */
+  return false;
+
+#else /* !HAVE_POSIX */
+
+  mo_loader.reset(new MOLoader(path));
+  if (mo_loader->error()) {
+    mo_loader.reset();
+    return false;
+  }
+
+  mo_file = &mo_loader->get();
+  return true;
+
+#endif /* !HAVE_POSIX */
+}
+
+#endif /* !ANDROID */
+
 /**
  * Reads the selected LanguageFile into the cache
  */
@@ -216,15 +258,7 @@ ReadLanguageFile()
 {
   LogStartUp(_T("Loading language file"));
 
-#ifdef ANDROID
-
-#elif defined(HAVE_POSIX)
-
-  setlocale(LC_ALL, "");
-  bindtextdomain("xcsoar", "/usr/share/locale");
-  textdomain("xcsoar");
-
-#else /* !HAVE_POSIX */
+#ifndef ANDROID
 
   TCHAR szFile1[MAX_PATH];
 
@@ -232,14 +266,8 @@ ReadLanguageFile()
   if (!Profile::GetPath(szProfileLanguageFile, szFile1))
     LocalPath(szFile1, _T("default.po"));
 
-  mo_loader.reset(new MOLoader(szFile1));
-  if (mo_loader->error())
-    mo_loader.reset();
-  else
-    mo_file = &mo_loader->get();
+  if (!LoadLanguageFile(szFile1))
+    AutoDetectLanguage();
 
-  if (mo_file == NULL)
-    ReadResourceLanguageFile();
-
-#endif /* !HAVE_POSIX */
+#endif /* !ANDROID */
 }
