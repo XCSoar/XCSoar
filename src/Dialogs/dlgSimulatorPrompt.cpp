@@ -50,12 +50,11 @@ Copyright_License {
 
 static WndForm *wf = NULL;
 static Bitmap bitmap_title;
+static Bitmap bitmap_logo;
 
 static void
 OnLogoPaint(WindowControl *Sender, Canvas &canvas)
 {
-  Bitmap bitmap_logo;
-  bitmap_logo.load(Layout::Scale(20) > 30 ? IDB_SWIFT_HD : IDB_SWIFT);
   BitmapCanvas bitmap_canvas(canvas, bitmap_logo);
   canvas.stretch(bitmap_canvas);
 }
@@ -122,8 +121,9 @@ dlgSimulatorPromptShowModal()
   SIZE title_size = bitmap_title.get_size();
 
   // Determine logo size
-  wc = ((WindowControl*)wf->FindByName(_T("frmLogo")));
-  SIZE logo_size = wc->get_size();
+  bitmap_logo.load(window_width > 272 && window_height > 272 ?
+                   IDB_SWIFT_HD : IDB_SWIFT);
+  SIZE logo_size = bitmap_logo.get_size();
 
   // Determine logo and title positions
   bool hidetitle = false;
@@ -148,7 +148,9 @@ dlgSimulatorPromptShowModal()
     hidetitle = true;
   }
 
-  wc->move(logox, logoy);
+  wc = ((WindowControl*)wf->FindByName(_T("frmLogo")));
+  wc->move(logox, logoy, logo_size.cx, logo_size.cy);
+
   wc = ((WindowControl*)wf->FindByName(_T("frmTitle")));
   if (hidetitle)
     wc->hide();
