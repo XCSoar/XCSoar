@@ -100,11 +100,6 @@ namespace Graphics {
   extern Pen hpMapScale;
   extern Pen hpTerrainLine;
   extern Pen hpTerrainLineBg;
-  extern Pen hpVisualGlideLightRed;
-  extern Pen hpVisualGlideHeavyRed;
-  extern Pen hpVisualGlideLightBlack;
-  extern Pen hpVisualGlideHeavyBlack;
-  extern Pen hpVisualGlideExtra;
   extern Pen hpSpeedFast;
   extern Pen hpSpeedSlow;
   extern Pen hpStartFinishThick;

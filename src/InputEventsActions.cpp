@@ -182,35 +182,6 @@ InputEvents::eventSnailTrail(const TCHAR *misc)
 }
 
 // VENTA3
-void
-InputEvents::eventVisualGlide(const TCHAR *misc)
-{
-
-  if (_tcscmp(misc, _T("toggle")) == 0) {
-    SetSettingsMap().VisualGlide++;
-
-    if (SettingsMap().VisualGlide == 2 && !SettingsMap().ExtendedVisualGlide)
-      SetSettingsMap().VisualGlide = 0;
-    else if (SettingsMap().VisualGlide > 2)
-      SetSettingsMap().VisualGlide = 0;
-
-  } else if (_tcscmp(misc, _T("off")) == 0)
-    SetSettingsMap().VisualGlide = 0;
-  else if (_tcscmp(misc, _T("steady")) == 0)
-    SetSettingsMap().VisualGlide = 1;
-  else if (_tcscmp(misc, _T("moving")) == 0)
-    SetSettingsMap().VisualGlide = 2;
-  else if (_tcscmp(misc, _T("show")) == 0) {
-    if (SettingsMap().VisualGlide == 0)
-      Message::AddMessage(_("VisualGlide OFF"));
-    if (SettingsMap().VisualGlide == 1)
-      Message::AddMessage(_("VisualGlide Steady"));
-    if (SettingsMap().VisualGlide == 2)
-      Message::AddMessage(_("VisualGlide Moving"));
-  }
-}
-
-// VENTA3
 /*
  * This even currently toggles DrawAirSpace() and does nothing else.
  * But since we use an int and not a bool, it is easy to expand it.

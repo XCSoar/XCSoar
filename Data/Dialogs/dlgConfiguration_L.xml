@@ -137,10 +137,6 @@
          Help="If the aircraft heading deviates from the current waypoint, markers are displayed at points ahead of the aircraft. The value of each marker is the extra distance required to reach that point as a percentage of straight-line distance to the waypoint.">
         <DataField DataType="boolean"/>
       </Edit>
-    
-      <Edit Name="prpExtendedVisualGlide" Caption="Extended Visual Glide*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="If you want Visual Glide to display also moving circles or arcs, in addition to the steady mode then select Extended.">
-        <DataField DataType="boolean" />
-      </Edit>
     </Panel>
 
     <Panel>

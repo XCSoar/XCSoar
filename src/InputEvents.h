@@ -148,7 +148,6 @@ private:
   static void eventSendNMEAPort2(const TCHAR *misc);
   static void eventSetup(const TCHAR *misc);
   static void eventSnailTrail(const TCHAR *misc);
-  static void eventVisualGlide(const TCHAR *misc); // VENTA3
   static void eventAirSpace(const TCHAR *misc); // VENTA3
   static void eventSounds(const TCHAR *misc);
   static void eventStatus(const TCHAR *misc);

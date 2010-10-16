@@ -1145,17 +1145,6 @@ setVariables()
   }
 #endif
 
-  wp = (WndProperty*)wf->FindByName(_T("prpExtendedVisualGlide"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Normal"));
-    dfe->addEnumText(_("Extended"));
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->Set(XCSoarInterface::SettingsMap().ExtendedVisualGlide);
-    wp->RefreshDisplay();
-  }
-
   wp = (WndProperty*)wf->FindByName(_T("prpGestures"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1553,8 +1542,6 @@ void dlgConfigurationShowModal(void)
                               szProfileSnailTrail,
                               XCSoarInterface::SetSettingsMap().TrailActive);
 
-// VENTA3: do not save VisualGlide to registry or profile
-
   wp = (WndProperty*)wf->FindByName(_T("prpPolarType"));
   if (wp) {
     if (settings_computer.POLARID != (unsigned)wp->GetDataField()->GetAsInteger()) {
@@ -1935,15 +1922,6 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpExtendedVisualGlide")); // VENTA4
-  if (wp) {
-    if (XCSoarInterface::SettingsMap().ExtendedVisualGlide != wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().ExtendedVisualGlide = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileExtendedVisualGlide,
-                    XCSoarInterface::SettingsMap().ExtendedVisualGlide);
-      changed = true;
-    }
-  }
   wp = (WndProperty*)wf->FindByName(_T("prpGestures")); // VENTA6
   if (wp) {
     if (settings_computer.EnableGestures != wp->GetDataField()->GetAsBoolean()) {

@@ -377,8 +377,6 @@ Profile::Use()
 
   Get(szProfileAutoBacklight,
       XCSoarInterface::EnableAutoBacklight);
-  Get(szProfileExtendedVisualGlide,
-      settings_map.ExtendedVisualGlide);
 
   Get(szProfileGestures,
       settings_computer.EnableGestures);

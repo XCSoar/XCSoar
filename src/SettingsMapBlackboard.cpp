@@ -42,7 +42,6 @@ Copyright_License {
 SettingsMapBlackboard::SettingsMapBlackboard()
 {
   settings_map.CircleZoom = false;
-  settings_map.ExtendedVisualGlide=false;
   settings_map.EnableTopology = false;
   settings_map.EnableTerrain = false;
   settings_map.DeclutterLabels = 0;
@@ -55,7 +54,6 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.WindArrowStyle = 0;
   settings_map.DisplayTextType = DISPLAYNONE;
   settings_map.TrailActive = 1;
-  settings_map.VisualGlide = 0;
   settings_map.bAirspaceBlackOutline = false;
   settings_map.GliderScreenPosition = 20; // 20% from bottom
   settings_map.DisplayOrientation = TRACKUP;

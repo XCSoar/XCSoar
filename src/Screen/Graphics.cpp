@@ -95,11 +95,6 @@ Pen Graphics::hpFinalGlideBelowLandable;
 Pen Graphics::hpMapScale;
 Pen Graphics::hpTerrainLine;
 Pen Graphics::hpTerrainLineBg;
-Pen Graphics::hpVisualGlideLightRed;
-Pen Graphics::hpVisualGlideHeavyRed;
-Pen Graphics::hpVisualGlideLightBlack;
-Pen Graphics::hpVisualGlideHeavyBlack;
-Pen Graphics::hpVisualGlideExtra;
 Pen Graphics::hpSpeedFast;
 Pen Graphics::hpSpeedSlow;
 Pen Graphics::hpStartFinishThick;
@@ -291,11 +286,6 @@ Graphics::Initialise()
   hpMapScale.set(Layout::Scale(1), Color::BLACK);
   hpTerrainLine.set(Pen::DASH, Layout::Scale(1), Color(0x30, 0x30, 0x30));
   hpTerrainLineBg.set(Layout::Scale(1), Color::WHITE);
-
-  hpVisualGlideLightBlack.set(Pen::DASH, Layout::Scale(1), Color::BLACK);
-  hpVisualGlideHeavyBlack.set(Pen::DASH, Layout::Scale(2), Color::BLACK);
-  hpVisualGlideLightRed.set(Pen::DASH, Layout::Scale(1), Color::RED);
-  hpVisualGlideHeavyRed.set(Pen::DASH, Layout::Scale(2), Color::RED);
 
   SmallIcon.load_big(IDB_SMALL, IDB_SMALL_HD);
   TurnPointIcon.load_big(IDB_TURNPOINT, IDB_TURNPOINT_HD);

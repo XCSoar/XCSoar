@@ -337,24 +337,6 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     }
   }
 
-  if (_tcsstr(OutBuffer, _T("$(VisualGlideToggleName)"))) {
-    switch(SettingsMap().VisualGlide) {
-    case 0:
-      ReplaceInString(OutBuffer, _T("$(VisualGlideToggleName)"),
-                      _("Steady"), Size);
-      break;
-    case 1:
-      ReplaceInString(OutBuffer, _T("$(VisualGlideToggleName)"),
-                      SettingsMap().ExtendedVisualGlide ?
-                          _("Moving") : _("Off"), Size);
-      break;
-    case 2:
-      ReplaceInString(OutBuffer, _T("$(VisualGlideToggleName)"),
-                      _("Off"), Size);
-      break;
-    }
-  }
-
   if (_tcsstr(OutBuffer, _T("$(AirSpaceToggleName)"))) {
     switch(SettingsMap().OnAirSpace) {
     case 0:
@@ -471,16 +453,6 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       _T("(*)"), _T(""), Size);
   CondReplaceInString(SettingsMap().TrailActive == 3,
                       OutBuffer, _T("$(SnailTrailFullShortIndicator)"),
-                      _T("(*)"), _T(""), Size);
-
-  CondReplaceInString(SettingsMap().VisualGlide == 0,
-                      OutBuffer, _T("$(VisualGlideOffShortIndicator)"),
-                      _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().VisualGlide == 1,
-                      OutBuffer, _T("$(VisualGlideLightShortIndicator)"),
-                      _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().VisualGlide == 2,
-                      OutBuffer, _T("$(VisualGlideHeavyShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 
   CondReplaceInString(SettingsMap().OnAirSpace == 0,

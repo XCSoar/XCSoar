@@ -50,18 +50,6 @@ key=SnailTrail ON Short
 sound=IDR_INSERT
 delay=1500
 
-key=VisualGlide OFF
-sound=IDR_REMOVE
-delay=1500
-
-key=VisualGlide Light
-sound=IDR_INSERT
-delay=1500
-
-key=VisualGlide Heavy
-sound=IDR_INSERT
-delay=1500
-
 key=Vario Sounds ON
 sound=IDR_INSERT
 delay=1500

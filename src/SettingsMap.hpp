@@ -77,7 +77,6 @@ typedef enum {
 struct SETTINGS_MAP {
   /** Map zooms in on circling */
   bool CircleZoom;
-  bool ExtendedVisualGlide;
   /** Map will show topology */
   bool EnableTopology;
   /** Map will show terrain */
@@ -103,7 +102,6 @@ struct SETTINGS_MAP {
   /** What type of text to draw next to the waypoint icon */
   DisplayTextType_t DisplayTextType;
   int TrailActive;
-  int VisualGlide;
   /** Airspaces are drawn with black border (otherwise in airspace color) */
   bool bAirspaceBlackOutline;
 
