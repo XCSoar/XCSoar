@@ -53,8 +53,8 @@ Copyright_License {
 #include "Appearance.hpp"
 #include "Language.hpp"
 #include "DataField/Enum.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Form.hpp"
+#include "DataField/ComboList.hpp"
+#include "Dialogs.h"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
 
@@ -529,11 +529,12 @@ InfoBoxManager::Destroy()
   full_window.reset();
 }
 
+static const ComboList *info_box_combo_list;
+
 static void
-OnInfoBoxHelp(WindowControl *Sender)
+OnInfoBoxHelp(unsigned item)
 {
-  WndProperty *wp = (WndProperty*)Sender;
-  int type = wp->GetDataField()->GetAsInteger();
+  int type = (*info_box_combo_list)[item].DataFieldIndex;
 
   TCHAR caption[100];
   _stprintf(caption, _T("%s: %s"), _("InfoBox"), InfoBoxFactory::GetName(type));
@@ -559,30 +560,29 @@ InfoBoxManager::SetupFocused()
   /* create a fake WndProperty for dlgComboPicker() */
   /* XXX reimplement properly */
 
-  WindowStyle style;
-  style.hide();
-
-  WndForm form(XCSoarInterface::main_window, 0, 0, 256, 128, _T(""), style);
-  WndProperty control(form, _("InfoBox"), 0, 0, 256, 128, 128,
-                      style, EditWindowStyle(), NULL);
-  control.SetOnHelpCallback(OnInfoBoxHelp);
-
   DataFieldEnum *dfe = new DataFieldEnum(old_type, NULL);
   for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; i++)
     dfe->addEnumText(gettext(GetTypeDescription(i)));
   dfe->Sort(0);
   dfe->Set(old_type);
-  control.RefreshDisplay();
 
-  control.SetDataField(dfe);
+  ComboList *list = dfe->CreateComboList();
+  delete dfe;
 
   /* let the user select */
 
-  dlgComboPicker(XCSoarInterface::main_window, &control);
+  info_box_combo_list = list;
+  int result = ComboPicker(XCSoarInterface::main_window, _("InfoBox"), *list,
+                           OnInfoBoxHelp);
+  if (result < 0) {
+    delete list;
+    return;
+  }
 
   /* was there a modification? */
 
-  int new_type = dfe->GetAsInteger();
+  int new_type = (*list)[result].DataFieldIndex;
+  delete list;
   if (new_type == old_type)
     return;
 
