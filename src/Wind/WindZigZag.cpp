@@ -116,7 +116,7 @@ public:
 
   fixed V_tas;
   fixed V_gps;
-  fixed theta_gps;
+  Angle theta_gps;
   fixed time;
 
   void
@@ -125,7 +125,7 @@ public:
     V_tas = aV_tas;
     V_gps = aV_gps;
     time = t;
-    theta_gps = atheta_gps.value_radians();
+    theta_gps = atheta_gps;
     CalculateThetaWEst();
   }
 
@@ -150,8 +150,8 @@ private:
       theta_west_ok[i] = EstimateW0(Vwest, i);
     }
 
-    cos_theta_gps = cos(theta_gps);
-    sin_theta_gps = sin(theta_gps);
+    cos_theta_gps = theta_gps.cos();
+    sin_theta_gps = theta_gps.sin();
 
     V_gps_x = iround(100 * V_gps * cos_theta_gps);
     V_gps_y = iround(100 * V_gps * sin_theta_gps);
@@ -190,8 +190,8 @@ private:
       return false;
 
     fixed gamma = acos(cosgamma);
-    theta_west_1[i] = -anglelimit(fixed_pi - theta_gps - gamma);
-    theta_west_2[i] = -anglelimit(fixed_pi - theta_gps + gamma);
+    theta_west_1[i] = -anglelimit(fixed_pi - theta_gps.value_radians() - gamma);
+    theta_west_2[i] = -anglelimit(fixed_pi - theta_gps.value_radians() + gamma);
 
     return true;
   }
@@ -285,7 +285,7 @@ public:
     fixed dtheta_min = fixed_zero;
 
     for (i = 0; i < NUM_SAMPLES; i++) {
-      fixed da = anglelimit(points[i].theta_gps - theta_av);
+      fixed da = anglelimit(points[i].theta_gps.value_radians() - theta_av);
 
       if (da > dtheta_max)
         dtheta_max = da;
