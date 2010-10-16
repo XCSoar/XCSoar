@@ -183,8 +183,8 @@ private:
       return false;
 
     Angle gamma = Angle::radians(acos(cosgamma));
-    theta_west_1[i] = -(Angle::radians(fixed_pi) - theta_gps - gamma).as_delta().value_radians();
-    theta_west_2[i] = -(Angle::radians(fixed_pi) - theta_gps + gamma).as_delta().value_radians();
+    theta_west_1[i] = (Angle::radians(fixed_pi) - theta_gps - gamma).as_delta().flipped().value_radians();
+    theta_west_2[i] = (Angle::radians(fixed_pi) - theta_gps + gamma).as_delta().flipped().value_radians();
 
     return true;
   }
