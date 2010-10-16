@@ -157,13 +157,16 @@ ProgressWindow::on_paint(Canvas &canvas)
 {
   BitmapCanvas bitmap_canvas(canvas);
 
+  // Determine window size
   int window_width = canvas.get_width();
   int window_height = canvas.get_height();
 
+  // Determine logo size
   SIZE logo_size = bitmap_logo.get_size();
   int logo_width = logo_size.cx;
   int logo_height = logo_size.cy;
 
+  // Determine title image size
   SIZE title_size = bitmap_title.get_size();
   int title_width = title_size.cx;
   int title_height = title_size.cy;
@@ -172,42 +175,42 @@ ProgressWindow::on_paint(Canvas &canvas)
 
   bool hidetitle = false;
 
+  // Determine logo and title positions
   if (window_width > window_height) {
-    //Landscape
+    // Landscape
     logox = (window_width - (logo_width + title_height + title_width)) / 2;
     logoy = (window_height - logo_height) / 2 - text_height;
     titlex = logox + logo_width + title_height;
     titley = (window_height - title_height) / 2 - text_height;
   } else if (window_width < window_height) {
-    //Portrait
+    // Portrait
     logox = (window_width - logo_width) / 2;
     logoy = (window_height - (logo_height + title_height + title_height)) / 2
             - text_height;
     titlex = (window_width - title_width) / 2;
     titley = logoy + logo_height + title_height;
   } else {
-    //Square screen
+    // Square screen
     logox = (window_width - logo_width) / 2;
     logoy = (window_height - logo_height) / 2 - text_height;
     hidetitle = true;
   }
 
-  //Draw 'XCSoar N.N' title
+  // Draw 'XCSoar N.N' title
   if (!hidetitle){
     bitmap_canvas.select(bitmap_title);
     canvas.copy(titlex, titley, title_width, title_height, bitmap_canvas, 0, 0);
   }
 
-  //Draw XCSoar swift logo
+  // Draw XCSoar swift logo
   bitmap_canvas.select(bitmap_logo);
   canvas.copy(logox, logoy, logo_width, logo_height, bitmap_canvas, 0, 0);
 
+  // Draw progress bar background
   bitmap_canvas.select(bitmap_progress_border);
-
   int progress_bitmap_width = bitmap_canvas.get_width();
   int progress_bitmap_height = bitmap_canvas.get_height();
 
-  //Stretch progress bar border
   canvas.stretch(0, (window_height - progress_border_height),
                  window_width, progress_border_height,
                  bitmap_canvas, 0, 0,
