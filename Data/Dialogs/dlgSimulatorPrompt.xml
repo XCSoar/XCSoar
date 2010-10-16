@@ -4,7 +4,7 @@
   <Label Name="lblVersion" X="8" Y="2" Width="310" Height="20" Caption="" />
   <Canvas Name="frmspacer1" X="2" Width="240" Height="20" />
 
-  <Canvas Name="frmSplash" X="65" Width="110" Height="110" OnPaint="OnLogoPaint" />
+  <Canvas Name="frmLogo" X="65" Width="110" Height="110" OnPaint="OnLogoPaint" />
   <Label X="8" Y="170" Width="310" Height="20" Caption="What do you want to do:" />
   <SymbolButton Name="cmdFly" Caption="Fly" X="8" Y="200" Width="112" Height="30" OnClick="OnFlyClicked"/>
   <SymbolButton Name="cmdSimulator" Caption="Simulator" X="120" Y="200" Width="112" Height="30" OnClick="OnSimulatorClicked"/>
