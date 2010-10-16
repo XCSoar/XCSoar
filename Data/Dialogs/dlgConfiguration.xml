@@ -14,39 +14,39 @@
     <Panel Name="frmSite">
       <Edit Name="prpMapFile" Caption="Map file" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="The name of the file containing terrain, topology, and optionally waypoints, airfield details and airspace.">
-        <DataField DataType="filereader" Min="0" Max="200" Step="1"/>
+        <DataField DataType="filereader"/>
       </Edit>
     
       <Edit Name="prpWaypointFile" Caption="Waypoints 1" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="Primary waypoints file.  File must be in Cambridge format (.dat extension).">
-        <DataField DataType="filereader" Min="0" Max="200" Step="1"/>
+        <DataField DataType="filereader"/>
       </Edit>
     
       <Edit Name="prpAdditionalWaypointFile" Caption="Waypoints 2" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="Secondary waypoints file.  This may be used to add waypoints for a competition.  File must be in Cambridge format (.dat extension).">
-        <DataField DataType="filereader" Min="0" Max="200" Step="1"/>
+        <DataField DataType="filereader"/>
       </Edit>
     
       <Edit Name="prpAirspaceFile" Caption="Airspace 1" X="2" Width="-2" Height="22" CaptionWidth="100" Help="The file name of the primary airspace file.">
-        <DataField DataType="filereader" Min="0" Max="200" Step="1"/>
+        <DataField DataType="filereader"/>
       </Edit>
     
       <Edit Name="prpAdditionalAirspaceFile" Caption="Airspace 2" X="2" Width="-2" Height="22" CaptionWidth="100" Help="The file name of the secondary airspace file.">
-        <DataField DataType="filereader" Min="0" Max="200" Step="1"/>
+        <DataField DataType="filereader"/>
       </Edit>
     
       <Edit Name="prpTerrainFile" Caption="Terrain file*" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="The name of the file containing digital elevation terrain data.">
-        <DataField DataType="filereader" Min="0" Max="200" Step="1"/>
+        <DataField DataType="filereader"/>
       </Edit>
     
       <Edit Name="prpTopologyFile" Caption="Topology file*" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Specifies the file defining the topological features.">
-        <DataField DataType="filereader" Min="0" Max="200" Step="1"/>
+        <DataField DataType="filereader"/>
       </Edit>
     
       <Edit Name="prpAirfieldFile" Caption="Airfields file*" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="The airfields file may contain extracts from Enroute Supplements or other contributed information about individual airfields.">
-        <DataField DataType="filereader" Min="0" Max="200" Step="1"/>
+        <DataField DataType="filereader"/>
       </Edit>
     </Panel>
   
@@ -59,7 +59,7 @@
 [Clip] Only airspace below the clip altitude.
 [Auto] All within a margin of the glider.
 [All below] All airspace below the glider.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpClipAltitude" Caption="Clip altitude" X="2" Width="-2" Height="22" CaptionWidth="150"
@@ -97,11 +97,11 @@
 [First 3] The first 3 letters of the waypoint name are displayed.
 [First 5] The first 5 letters of the waypoint name are displayed.
 [First word] The first word of the waypoint name is displayed.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpTrail" Caption="Trail length" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Determines whether and how long a snail trail is drawn behind the glider">
-        <DataField DataType="enum" Min="0" Max="3" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpOrientation" Caption="Orientation" X="2" Width="-2" Height="22" CaptionWidth="100"
@@ -111,7 +111,7 @@
 [North up when circling] Track-up in cruise and north-up when circling.
 [Target up when circling] Track-up in cruise and the bearing to next waypoint up when circling.
 [North/track] North-up in cruise, glider track-track up in circling">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpAutoZoom" Caption="Auto zoom" X="2" Width="-2" Height="22" CaptionWidth="100"
@@ -145,24 +145,24 @@
       </Edit>
     
       <Edit Name="prpAppIndFinalGlide" Caption="Final glide bar" X="2" Width="-2" Height="22" CaptionWidth="100">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
 
       <Edit Name="prpAppIndLandable" Caption="Landable fields" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="Two styles are available: WinPilot style (green and purple circles) or a high visibility (monochrome) style.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
 
       <Edit Name="prpAppCompassAppearance" Caption="North arrow*" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="Two styles are available.  Normal, or with a white outline.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
 
       <Edit Name="prpWindArrowStyle" Caption="Wind arrow*" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="Determines the way the wind arrow is drawn on the map.
 [Arrow head] Draws an arrow head only
 [Full arrow] Draws an arrow head with a dashed arrow line">
-        <DataField DataType="enum" Min="0" Max="1" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
@@ -187,7 +187,7 @@
     
       <Edit Name="prpTerrainRamp" Caption="Terrain colors" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Defines the color ramp used in terrain rendering.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
@@ -197,7 +197,7 @@
 [OFF] Disables display
 [Line] Draws a dashed line at the glide range
 [Shade] Shades terrain outside glide range">
-       <DataField DataType="enum" Min="0" Max="2" Step="1" />
+       <DataField DataType="enum" />
      </Edit>
      
       <Edit Name="prpAutoWind" Caption="Auto wind" X="2" Width="-2" Height="22" CaptionWidth="150"
@@ -205,7 +205,7 @@
 [Circling] Requires only a GPS source
 [ZigZag] requires an intelligent vario with airspeed output.
 [Both] Use ZigZag and circling.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     
       <Edit Name="prpAutoMcMode" Caption="Auto Mc mode" X="2" Width="-2" Height="22" CaptionWidth="150"
@@ -213,7 +213,7 @@
 [Final glide] adjusts Mc for fastest arrival.  For OLC sprint tasks, the MacCready is adjusted in order to cover the greatest distance in the remaining time and reach the finish height.
 [Trending Average] sets Mc to the trending average climb rate based on all climbs.
 [Both] Uses trending average during task, then fastest arrival when in final glide mode.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     
       <Edit Name="prpBlockSTF" Caption="Block speed to fly*" X="2" Width="-2" Height="22" CaptionWidth="150"
@@ -227,7 +227,7 @@
       </Edit>
     
       <Edit Name="prpEnableExternalTriggerCruise" Caption="Flap forces cruise*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="When Vega variometer is connected and this option is true, the positive flap setting switches the flight mode between circling and cruise.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     
       <Edit Name="prpRiskGamma" Caption="STF risk factor*" X="2" Width="-2" Height="22" CaptionWidth="150"
@@ -237,7 +237,7 @@
 
       <Edit Name="prpAverEffTime" Caption="L/D Average period*" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Average efficiency is always calculated in REAL TIME. Here you can decide on how many seconds of flight this calculation must be done. The real distance covered second by second in this period is divided by the final difference of altitude.  So if for example you go and return back to the same point after 2 minutes, and you have set 2 minutes as period, averageLD will consider the total distance covered in those two minutes , and NOT the distance between your position 2 minutes before and your current position, that in this case could be almost zero! Normally for gliders a good value is 90-120 seconds, and for paragliders 15 seconds. Lower values will give as a result pretty much the same as LD Instant , while higher values will look like LD Cruise. Other commercial instruments and software use 2 minutes. ">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>      
     </Panel>
   
@@ -266,12 +266,12 @@
     <Panel Name="frmPolar">
       <Edit Name="prpPolarType" Caption="Type" X="2" Width="-2" Height="22" CaptionWidth="70"
         Help="This contains a selection of gliders of different performance classes, as well as a special entry for WinPilot File.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpPolarFile" Caption="Polar file" X="2" Width="-2" Height="22" CaptionWidth="70"
         Help="When WinPilot File is the polar type, this is the name of the file containing the glide polar data.">
-        <DataField DataType="filereader" Min="0" Max="200" Step="1"/>
+        <DataField DataType="filereader"/>
       </Edit>
     
       <Edit Name="prpMaxManoeuveringSpeed" Caption="V rough air" X="2" Width="-2" Height="22" CaptionWidth="70"
@@ -295,15 +295,15 @@
         <Label Caption="Device A" X="2" Y="2" Width="60" Height="20"/>
   
         <Edit Name="prpComDevice1" Caption="Name" X="62" Y="1" Width="173" Height="22" CaptionWidth="80" Help="Type of primary device. The primary device should be the most reliable GPS data source.">
-          <DataField DataType="enum" Min="0" Max="50" Step="1" OnDataAccess="OnDeviceAData"/>
+          <DataField DataType="enum" OnDataAccess="OnDeviceAData"/>
         </Edit>
   
         <Edit Name="prpComPort1" Caption="Port" X="62" Width="173" Height="22" CaptionWidth="80" Help="Altair Pro users should set this to Port 3">
-          <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+          <DataField DataType="enum"/>
         </Edit>
   
         <Edit Name="prpComSpeed1" Caption="Baudrate" X="62" Width="173" Height="22" CaptionWidth="80" Help="Altair Pro or Vega users should set this to 38400.">
-          <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+          <DataField DataType="enum"/>
         </Edit>
   
         <Button Name="cmdSetupDeviceA" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" OnClick="OnSetupDeviceAClicked" />
@@ -315,16 +315,16 @@
         <Edit Name="prpComDevice2" Caption="Name" X="62" Y="1" Width="173" Height="22" CaptionWidth="80" Help="Type of secondary device.
             The secondary device may be used as backup GPS data or other data e.g. from an intelligent variometer.
             Generic can be used for GPS sources including FLARM.">
-          <DataField DataType="enum" Min="0" Max="50" Step="1" OnDataAccess="OnDeviceBData"/>
+          <DataField DataType="enum" OnDataAccess="OnDeviceBData"/>
         </Edit>
   
         <Edit Name="prpComPort2" Caption="Port" X="62" Width="173" Height="22" CaptionWidth="80" Help="Altair Pro users should set this to Port 1.">
-          <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+          <DataField DataType="enum"/>
         </Edit>
   
         <Edit Name="prpComSpeed2" Caption="Baudrate" X="62" Width="173" Height="22" CaptionWidth="80"
             Help="Altair Pro or Vega users should set this to 38400.">
-          <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+          <DataField DataType="enum"/>
         </Edit>
   
         <Button Name="cmdSetupDeviceB" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" OnClick="OnSetupDeviceBClicked" />
@@ -348,36 +348,36 @@
     <Panel Name="frmUnits">
       <Edit Name="prpUnitsSpeed" Caption="Aircraft/wind speed" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Units used for airspeed and ground speed.  A separate unit is available for task speeds.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpUnitsDistance" Caption="Distance" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Units used for horizontal distances e.g. range to waypoint, distance to go.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpUnitsLift" Caption="Lift" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Units used for vertical speeds (variometer)">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpUnitsAltitude" Caption="Altitude" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Units used for altitude and heights.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
 
       <Edit Name="prpUnitsTemperature" Caption="Temperature" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Units used for temperature.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpUnitsTaskSpeed" Caption="Task Speed" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Units used for task speeds.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpUnitsLatLon" Caption="Lat/Lon" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Units used for latitude and longitude.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpUTCOffset" Caption="UTC Offset" X="2" Width="-2" Height="22" CaptionWidth="150"
@@ -405,17 +405,17 @@
       
       <Edit Name="prpInputFile" Caption="Events*" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="The Input Events file defines the menu system and how XCSoar responds to button presses and events from external devices.">
-        <DataField DataType="filereader" Min="0" Max="200" Step="1"/>
+        <DataField DataType="filereader"/>
       </Edit>
     
       <Edit Name="prpLanguageFile" Caption="Language*" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="The language file defines translations for XCSoar text in English to other languages.  If this field is left blank, then XCSoar uses English.">
-        <DataField DataType="filereader" Min="0" Max="200" Step="1"/>
+        <DataField DataType="filereader"/>
       </Edit>
     
       <Edit Name="prpStatusFile" Caption="Status message*" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="The status file can be used to define sounds to be played when certain events occur, and how long various status messages will appear on screen.">
-        <DataField DataType="filereader" Min="0" Max="200" Step="1"/>
+        <DataField DataType="filereader"/>
       </Edit>
     
       <Edit Name="prpMenuTimeout" Caption="Menu timeout*" X="2" Width="-2" Height="22" CaptionWidth="100"
@@ -430,7 +430,7 @@
     
       <Edit Name="prpTextInput" Caption="Text Input Style*"  X="2" Width="-2" Height="22" CaptionWidth="100"
       Help="Determines how the user is prompted for text input (filename, teamcode etc.)">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
@@ -448,17 +448,17 @@
 
       <Edit Name="prpAppInfoBoxGeom" Caption="Infobox Geometry" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="Geometry values range 0-7 but in landscape mode only some of them are really available.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
 
       <Edit Name="prpAppStatusMessageAlignment" Caption="Msg window" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="Defines the alignment of the status message box, either centered or in the top left corner.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
 
       <Edit Name="prpDialogStyle" Caption="Dialog Style*"  X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="Determines display size of dialogs.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
@@ -504,7 +504,7 @@
 [ON/Fixed] FLARM map display enabled with fixed scale.
 [ON/Scaled] FLARM map display enabled and auto scaled.
 When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     
       <Edit Name="prpEnableFLARMGauge" Caption="FLARM radar" X="2" Width="-2" Height="22" CaptionWidth="100"
@@ -543,7 +543,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
         Help="Reference used for start max height rule
 [MSL] Reference is altitude above mean sea level
 [AGL] Reference is the height above the start point">
-          <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+          <DataField DataType="enum"/>
         </Edit>
     
       <Edit Name="prpFinishMinHeight" Caption="Finish min height" X="2" Width="-2" Height="22" CaptionWidth="150"
@@ -556,7 +556,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
 [Sprint]: Conforms to FAI IGC League rules.  Up to 5 points including start and finish, maximum duration 2.5 hours, finish height must not be below start height.
 [Triangle]: Conforms to FAI OLC triangle rules.  Four points with common start and finish.  For tasks longer than 500km, no leg less than 25% or larger than 45%; otherwise no leg less than 28% of total.  Finish height must not be lower than start height less 1000 meters.
 [Classic]: Conforms to OLC classic rules.  Up to seven points including start and finish, finish height must not be lower than start height less 1000 meters.  Points awarded 80% on second last leg and 60% on last leg.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
@@ -580,7 +580,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
         Help="Two styles for infobox borders are available:
 [Box]  Draws boxes around each infobox.
 [Tab]  Draws a tab at the top of the infobox across the title.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
@@ -621,7 +621,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
     <Panel Name="frmSpecials">
       <Edit Name="prpAppInfoBoxModel" Caption="Device model" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Select your PNA model to make full use of its hardware capabilities. If it is not included, use Generic type.">
-        <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpAutoBacklight" Caption="Auto Backlight" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Set automatic backlight for this device. Max brightness and no timeout if on external power, otherwise max brightneess and a 5 minutes timeout on batteries. After timeout screen blanks to save energy.">

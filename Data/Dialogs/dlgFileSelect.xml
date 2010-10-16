@@ -4,7 +4,7 @@
   <Button Name="cmdClose" Caption="Close" X="2" Y="0" Width="56" Height="28" OnClick="OnFileCloseClicked"/>
   
   <Edit Name="prpFltType" Caption="File type" X="60" Y="0" Width="190" Height="28" CaptionWidth="70">
-    <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+    <DataField DataType="enum"/>
   </Edit>
   
   <Button Name="cmdRefresh" Caption="Refresh" X="252" Y="0" Width="66" Height="28" OnClick="OnRefreshClicked"/>

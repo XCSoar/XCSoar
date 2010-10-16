@@ -13,7 +13,7 @@
 [Circling] Requires only a GPS source
 [ZigZag] requires an intelligent vario with airspeed output.
 [Both] Use ZigZag and circling.">
-    <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+    <DataField DataType="enum"/>
   </Edit>
 
   <Edit Name="prpTrailDrift" Caption="Trail drift" X="2" Y="68" Width="145" Height="22" CaptionWidth="68" Help="Determines whether the snail trail is drifted with the wind when displayed in circling mode.">

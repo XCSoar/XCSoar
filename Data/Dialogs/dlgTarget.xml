@@ -5,7 +5,7 @@
 
   <Edit Name="prpTaskPoint" Caption="Point" X="55" Y="2" Width="180" Height="27" CaptionWidth="40"
   Help="This sets the task point for review.">
-    <DataField DataType="enum" Min="0" Max="50" Step="1" OnDataAccess="OnTaskPointData"/>
+    <DataField DataType="enum" OnDataAccess="OnTaskPointData"/>
   </Edit>
 
   <Edit Name="prpRange" Caption="Range" X="64" Y="42" Width="80" Height="27" CaptionWidth="32" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">

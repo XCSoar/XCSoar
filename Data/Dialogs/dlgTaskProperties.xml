@@ -29,7 +29,7 @@
     Help="Reference used for start max height rule
 [MSL] Reference is altitude above mean sea level
 [AGL] Reference is the height above the start point">
-    <DataField DataType="enum" Min="0" Max="50" Step="1"/>
+    <DataField DataType="enum"/>
   </Edit>
 
   <Edit Name="prpFinishMinHeight" Caption="Finish min height" X="2" Width="220" Height="22" CaptionWidth="150"

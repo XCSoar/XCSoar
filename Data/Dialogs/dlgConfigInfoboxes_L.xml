@@ -7,30 +7,30 @@
   <Button Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28"/>
 
   <Edit Name="prpInfoBox0" Caption="1" X="72" Y="0" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-    <DataField DataType="enum" Min="0" Max="100" Step="1" />
+    <DataField DataType="enum" />
   </Edit>
   <Edit Name="prpInfoBox1" Caption="2" X="72" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-    <DataField DataType="enum" Min="0" Max="100" Step="1" />
+    <DataField DataType="enum" />
   </Edit>
   <Edit Name="prpInfoBox2" Caption="3" X="72" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-    <DataField DataType="enum" Min="0" Max="100" Step="1" />
+    <DataField DataType="enum" />
   </Edit>
   <Edit Name="prpInfoBox3" Caption="4" X="72" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-    <DataField DataType="enum" Min="0" Max="100" Step="1" />
+    <DataField DataType="enum" />
   </Edit>
   <Edit Name="prpInfoBox4" Caption="5" X="72" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-    <DataField DataType="enum" Min="0" Max="100" Step="1" />
+    <DataField DataType="enum" />
   </Edit>
   <Edit Name="prpInfoBox5" Caption="6" X="72" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-    <DataField DataType="enum" Min="0" Max="100" Step="1" />
+    <DataField DataType="enum" />
   </Edit>
   <Edit Name="prpInfoBox6" Caption="7" X="72" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-    <DataField DataType="enum" Min="0" Max="100" Step="1" />
+    <DataField DataType="enum" />
   </Edit>
   <Edit Name="prpInfoBox7" Caption="8" X="72" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-    <DataField DataType="enum" Min="0" Max="100" Step="1" />
+    <DataField DataType="enum" />
   </Edit>
   <Edit Name="prpInfoBox8" Caption="9" X="72" Width="-2" Height="22" CaptionWidth="20" OnHelp="OnInfoBoxHelp">
-    <DataField DataType="enum" Min="0" Max="100" Step="1" />
+    <DataField DataType="enum" />
   </Edit>
 </Form>

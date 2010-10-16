@@ -5,7 +5,7 @@
     <Button Name="cmdClose" Caption="Continue" X="2" Width="-2" Height="30"/>
 
     <Edit Name="prpProfile" Caption="Profile" X="2" Width="-2" Height="25" CaptionWidth="60" BackColor="0xDADBAB">
-      <DataField DataType="filereader" Min="0" Max="200" Step="1"/>
+      <DataField DataType="filereader"/>
     </Edit>
   </Panel>
 

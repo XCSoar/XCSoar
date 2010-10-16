@@ -31,11 +31,11 @@
       </Edit>
     
       <Edit Name="prpHasTemperature" Caption="Temperature" X="2" Width="235" Height="22" CaptionWidth="150" Help="Whether a temperature and humidity sensor is installed.  Set to 0 to disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be specified.">
-        <DataField DataType="enum" Min="0" Max="2" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     
       <Edit Name="prpBaudRateA" Caption="Baud Rate Vega" X="2" Width="235" Height="22" CaptionWidth="150" Help="Baud rate of serial device connected to Vega port X1.  Use this as necessary when using a third party GPS or data-logger instead of FLARM.  If FLARM is connected the baud rate will be fixed at 38400.  For OzFLARM, the value can be set to 19200.">
-        <DataField DataType="enum" Min="0" Max="2" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     
       <Edit Name="prpFlarmConnected" Caption="FLARM connected" X="2" Width="235" Height="22" CaptionWidth="150" Help="Enable detection of FLARM.  Disable only if FLARM is not used or disconnected.">
@@ -74,7 +74,7 @@
 [NONE]: State LOW disabled
 [MACCREADY]: State High if gross vario is greater than MacCready setting.
 [AVERAGE]: State HIGH if gross vario value is greater than average gross vario value.">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCruiseLiftDetectionType" Caption="Cruise lift trigger" X="2" Width="235" Height="22" CaptionWidth="150" Help="Comparison method used to detect cruise states for switching to lift tones during cruise.
@@ -83,15 +83,15 @@
 [GROSS ZERO] LIFT tone when glider is climbing.
 [RELATIVE MC/2] LIFT tone when relative vario greater than half MC.
 [NET MC/2] LIFT tone when airmass velocity greater than half MC.">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneAveragerVarioTimeScale" Caption="Climb averager scale" X="2" Width="235" Height="22" CaptionWidth="150" Help="Time scale used for vario averager.">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneAveragerCruiseTimeScale" Caption="Cruise averager scale" X="2" Width="235" Height="22" CaptionWidth="150" Help="Time scale used for cruise speed command averager.">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneMeanVolumeCircling" Caption="Circling volume" X="2" Width="235" Height="22" CaptionWidth="150" Help="Mean volume level in circling modes.">
@@ -107,11 +107,11 @@
       </Edit>
   
       <Edit Name="prpVarioTimeConstantCircling" Caption="Filter circling" X="2" Width="235" Height="22" CaptionWidth="150" Help="Variometer low pass filter time constant in circling mode.">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpVarioTimeConstantCruise" Caption="Filter cruise" X="2" Width="235" Height="22" CaptionWidth="150" Help="Variometer low pass filter time constant in cruise mode.">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpTonePitchScale" Caption="Tone pitch scale" X="2" Width="235" Height="22" CaptionWidth="150" Help="Adjustment to base pitch scale of tones in all modes.">
@@ -121,7 +121,7 @@
   
     <Panel Name="frmAudioDeadband">
       <Edit Name="prpToneDeadbandCirclingType" Caption="Circling deadband type" X="2" Width="235" Height="22" CaptionWidth="150" Help="Type of dead band used in circling mode.">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     
       <Edit Name="prpToneDeadbandCirclingHigh" Caption="Circling hi cutoff" X="2" Width="235" Height="22" CaptionWidth="150" Help="High limit of circling dead band">
@@ -133,7 +133,7 @@
       </Edit>
     
       <Edit Name="prpToneDeadbandCruiseType" Caption="Cruise deadband type" X="2" Width="235" Height="22" CaptionWidth="150" Help="Type of dead band used in cruise mode.">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     
       <Edit Name="prpToneDeadbandCruiseHigh" Caption="Cruise hi cutoff" X="2" Width="235" Height="22" CaptionWidth="150" Help="High limit of cruise dead band">
@@ -147,133 +147,133 @@
   
     <Panel Name="frmCruiseFaster">
       <Edit Name="prpToneCruiseFasterBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCruiseFasterPitchScheme" Caption="Pitch Scheme" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCruiseFasterPitchScale" Caption="Pitch Scale" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCruiseFasterPeriodScheme" Caption="Period Scheme" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCruiseFasterPeriodScale" Caption="Period Scale" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmCruiseSlower">
       <Edit Name="prpToneCruiseSlowerBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCruiseSlowerPitchScheme" Caption="Pitch Scheme" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCruiseSlowerPitchScale" Caption="Pitch Scale" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCruiseSlowerPeriodScheme" Caption="Period Scheme" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCruiseSlowerPeriodScale" Caption="Period Scale" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmCruiseLift">
       <Edit Name="prpToneCruiseLiftBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCruiseLiftPitchScheme" Caption="Pitch Scheme" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCruiseLiftPitchScale" Caption="Pitch Scale" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCruiseLiftPeriodScheme" Caption="Period Scheme" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCruiseLiftPeriodScale" Caption="Period Scale" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmCirclingClimbingHi">
       <Edit Name="prpToneCirclingClimbingHiBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCirclingClimbingHiPitchScheme" Caption="Pitch Scheme" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCirclingClimbingHiPitchScale" Caption="Pitch Scale" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCirclingClimbingHiPeriodScheme" Caption="Period Scheme" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCirclingClimbingHiPeriodScale" Caption="Period Scale" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmCirclingClimbingLow">
       <Edit Name="prpToneCirclingClimbingLowBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCirclingClimbingLowPitchScheme" Caption="Pitch Scheme" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCirclingClimbingLowPitchScale" Caption="Pitch Scale" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCirclingClimbingLowPeriodScheme" Caption="Period Scheme" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCirclingClimbingLowPeriodScale" Caption="Period Scale" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmCirclingDescending">
       <Edit Name="prpToneCirclingDescendingBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCirclingDescendingPitchScheme" Caption="Pitch Scheme" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCirclingDescendingPitchScale" Caption="Pitch Scale" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCirclingDescendingPeriodScheme" Caption="Period Scheme" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpToneCirclingDescendingPeriodScale" Caption="Period Scale" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
@@ -331,7 +331,7 @@
       </Edit>
   
       <Edit Name="prpFlarmUserInterface" Caption="Flarm interface" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
   
       <Edit Name="prpKeepOnStraightFlightMode" Caption="Disable circling" X="2" Width="235" Height="22" CaptionWidth="150">
@@ -353,7 +353,7 @@
       </Edit>
     
       <Edit Name="prpFlarmAircraftType" Caption="Aircraft type" X="2" Width="235" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" Min="0" Max="20" Step="1"/>
+        <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
@@ -442,7 +442,7 @@
   
     <Panel Name="frmDisplay">
       <Edit Name="prpNeedleGaugeType" Caption="Needle gauge type" X="2" Width="235" Height="22" CaptionWidth="150">
-          <DataField DataType="enum" Min="0" Max="10" Step="1"/>
+          <DataField DataType="enum"/>
         </Edit>
     
       <Edit Name="prpLedBrightness" Caption="LED Bright" X="2" Width="235" Height="22" CaptionWidth="150">

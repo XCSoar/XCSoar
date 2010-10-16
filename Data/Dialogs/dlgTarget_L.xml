@@ -5,7 +5,7 @@
 
   <Edit Name="prpTaskPoint" Caption=" " X="2" Width="115" Height="29" CaptionWidth="1"
     Help="This sets the task point for review.">
-    <DataField DataType="enum" Min="0" Max="50" Step="1" OnDataAccess="OnTaskPointData"/>
+    <DataField DataType="enum" OnDataAccess="OnTaskPointData"/>
   </Edit>
 
   <Button Name="btnIsLocked" Caption="Locked" X="55" Width="60" Height="29" OnClick="OnIsLockedClicked" />

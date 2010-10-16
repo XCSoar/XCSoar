@@ -4,7 +4,7 @@
   <Button Caption="Close" X="2" Y="2" Width="66" Height="22" OnClick="OnCloseClicked" />
 
   <Edit Name="prpIGCFile" Caption="File" X="2" Y="26" Width="235" Height="22" CaptionWidth="60" Help="Name of IGC file to replay.">
-    <DataField DataType="filereader" Min="0" Max="200" Step="1"/>
+    <DataField DataType="filereader"/>
   </Edit>
 
   <Button Caption="Start" X="2" Y="50" Width="68" Height="22" OnClick="OnStartClicked" />

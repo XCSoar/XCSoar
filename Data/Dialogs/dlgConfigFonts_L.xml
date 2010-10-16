@@ -4,7 +4,7 @@
   <Button Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28"/>
 
   <Edit Name="prpUseCustomFonts" Caption="Customize Fonts" X="70" Y="1" Width="-2" Height="22" CaptionWidth="150">
-    <DataField DataType="boolean" Min="0" Max="50" Step="1" OnDataAccess="OnUseCustomFontData" />
+    <DataField DataType="boolean" OnDataAccess="OnUseCustomFontData" />
   </Edit>
 
   <Label Name="prpTitleWindowFont" Caption="Info box titles" X="70" Y="25" Width="180" Height="22"/>
