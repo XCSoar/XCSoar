@@ -82,12 +82,6 @@ static const int V_SCALE = 20;
 // resolution on theta search
 #define NUM_THETA_POINTS (36)
 
-#if 0
-#ifndef NDEBUG
-  #define DEBUG_ZIGZAG
-#endif
-#endif
-
 static fixed
 anglelimit(fixed ang)
 {
