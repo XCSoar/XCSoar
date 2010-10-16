@@ -42,6 +42,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Compatibility/string.h"
 #include "Compatibility/path.h"
+#include "OS/PathName.hpp"
 
 #if defined(_WIN32_WCE) && !defined(GNAV)
 #include "OS/FlashCardEnumerator.hpp"
@@ -61,7 +62,6 @@ Copyright_License {
 
 DataFieldFileReader::Item::~Item()
 {
-  free(mTextFile);
   free(mTextPathFile);
 }
 
@@ -463,8 +463,10 @@ DataFieldFileReader::addFile(const TCHAR *Text, const TCHAR *PText)
     return;
 
   Item &item = files.append();
-  item.mTextFile = _tcsdup(Text);
   item.mTextPathFile = _tcsdup(PText);
+  item.mTextFile = BaseName(item.mTextPathFile);
+  if (item.mTextFile == NULL)
+    item.mTextFile = item.mTextPathFile;
 }
 
 const TCHAR *

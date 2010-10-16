@@ -54,7 +54,7 @@ public:
   /** FileList item */
   struct Item : private NonCopyable {
     /** Filename */
-    TCHAR *mTextFile;
+    const TCHAR *mTextFile;
     /** Path including Filename */
     TCHAR *mTextPathFile;
 
