@@ -163,13 +163,9 @@ ProgressWindow::on_paint(Canvas &canvas)
 
   // Determine logo size
   SIZE logo_size = bitmap_logo.get_size();
-  int logo_width = logo_size.cx;
-  int logo_height = logo_size.cy;
 
   // Determine title image size
   SIZE title_size = bitmap_title.get_size();
-  int title_width = title_size.cx;
-  int title_height = title_size.cy;
 
   int logox, logoy, titlex, titley;
 
@@ -178,33 +174,33 @@ ProgressWindow::on_paint(Canvas &canvas)
   // Determine logo and title positions
   if (window_width > window_height) {
     // Landscape
-    logox = (window_width - (logo_width + title_height + title_width)) / 2;
-    logoy = (window_height - logo_height) / 2 - text_height;
-    titlex = logox + logo_width + title_height;
-    titley = (window_height - title_height) / 2 - text_height;
+    logox = (window_width - (logo_size.cx + title_size.cy + title_size.cx)) / 2;
+    logoy = (window_height - logo_size.cy) / 2 - text_height;
+    titlex = logox + logo_size.cx + title_size.cy;
+    titley = (window_height - title_size.cy) / 2 - text_height;
   } else if (window_width < window_height) {
     // Portrait
-    logox = (window_width - logo_width) / 2;
-    logoy = (window_height - (logo_height + title_height + title_height)) / 2
+    logox = (window_width - logo_size.cx) / 2;
+    logoy = (window_height - (logo_size.cy + title_size.cy + title_size.cy)) / 2
             - text_height;
-    titlex = (window_width - title_width) / 2;
-    titley = logoy + logo_height + title_height;
+    titlex = (window_width - title_size.cx) / 2;
+    titley = logoy + logo_size.cy + title_size.cy;
   } else {
     // Square screen
-    logox = (window_width - logo_width) / 2;
-    logoy = (window_height - logo_height) / 2 - text_height;
+    logox = (window_width - logo_size.cx) / 2;
+    logoy = (window_height - logo_size.cy) / 2 - text_height;
     hidetitle = true;
   }
 
   // Draw 'XCSoar N.N' title
   if (!hidetitle){
     bitmap_canvas.select(bitmap_title);
-    canvas.copy(titlex, titley, title_width, title_height, bitmap_canvas, 0, 0);
+    canvas.copy(titlex, titley, title_size.cx, title_size.cy, bitmap_canvas, 0, 0);
   }
 
   // Draw XCSoar swift logo
   bitmap_canvas.select(bitmap_logo);
-  canvas.copy(logox, logoy, logo_width, logo_height, bitmap_canvas, 0, 0);
+  canvas.copy(logox, logoy, logo_size.cx, logo_size.cy, bitmap_canvas, 0, 0);
 
   // Draw progress bar background
   bitmap_canvas.select(bitmap_progress_border);
