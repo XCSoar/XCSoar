@@ -436,7 +436,7 @@ public:
   }
 
   bool
-  Estimate(fixed *V_westb, fixed *theta_westb, fixed *error)
+  Estimate(fixed &V_westb, fixed &theta_westb, fixed &error)
   {
     int i;
 
@@ -487,12 +487,12 @@ public:
     }
 
     // return true if estimate was improved
-    *V_westb = V_west_best;
-    *theta_westb = theta_west_best;
-    while (negative(*theta_westb))
-      *theta_westb += fixed_two_pi;
+    V_westb = V_west_best;
+    theta_westb = theta_west_best;
+    while (negative(theta_westb))
+      theta_westb += fixed_two_pi;
 
-    *error = fixed(error_best) / 10;
+    error = fixed(error_best) / 10;
     return improved;
   }
 };
@@ -575,7 +575,7 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
     // don't refine search if error is small
     return 0;
 
-  if (myzigzag.Estimate(&V_wind_estimate, &theta_wind_estimate, &percent_error)) {
+  if (myzigzag.Estimate(V_wind_estimate, theta_wind_estimate, percent_error)) {
     // ok, we have made an update
     tLastEstimate = basic.Time;
 
