@@ -89,7 +89,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   ProgressBarStyle pb_style;
   progress_bar.set(*this, progress_horizontal_border,
                    height - progress_border_height + progress_horizontal_border,
-                   width - progress_border_height,
+                   width - progress_height,
                    progress_height, pb_style);
 
   version.install_wndproc(); // needed for on_color()
