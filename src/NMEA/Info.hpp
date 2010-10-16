@@ -204,9 +204,6 @@ struct NMEA_INFO {
   /** Turn rate based on track */
   fixed TurnRate;
 
-  /** Estimated track bearing at next time step @author JMW */
-  Angle NextTrackBearing;
-
   //############
   //   Speeds
   //############
@@ -431,8 +428,7 @@ struct NMEA_INFO {
       AirspeedAvailable = true;
     }
 
-    /* calculated: Heading, TurnRateWind, TurnRate,
-       NextTrackBearing */
+    /* calculated: Heading, TurnRateWind, TurnRate */
     /* calculated: TrueAirspeedEstimated */
 
     if (!BaroAltitudeAvailable && add.BaroAltitudeAvailable) {

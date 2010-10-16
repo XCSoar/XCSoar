@@ -556,8 +556,7 @@ DeviceBlackboard::Wind()
 }
 
 /**
- * Calculates the turn rate and the derived features.
- * Determines the current flight mode (cruise/circling).
+ * Calculates the turn rate
  */
 void
 DeviceBlackboard::TurnRate()
@@ -569,36 +568,11 @@ DeviceBlackboard::TurnRate()
 
   if (!Basic().flight.Flying) {
     SetBasic().TurnRate = fixed_zero;
-    SetBasic().NextTrackBearing = Basic().TrackBearing;
     return;
   }
 
   SetBasic().TurnRate =
     (Basic().TrackBearing - LastBasic().TrackBearing).as_delta().value_degrees() / dT;
-
-  // if (time passed is less then 2 seconds) time step okay
-  if (dT < fixed_two) {
-    // calculate turn rate acceleration (turn rate derived)
-    fixed dRate = (Basic().TurnRate - LastBasic().TurnRate) / dT;
-
-    // integrate assuming constant acceleration, for one second
-    // QUESTION TB: shouldn't dtlead be = 1, for one second?!
-    static const fixed dtlead(0.3);
-
-    const Angle calc_bearing = Basic().TrackBearing 
-      + Angle::degrees(dtlead
-                       * (Basic().TurnRate + fixed_half * dtlead * dRate));
-
-    // b_new = b_old + Rate * t + 0.5 * dRate * t * t
-
-    // Limit the projected bearing to 360 degrees
-    SetBasic().NextTrackBearing = calc_bearing.as_bearing();
-
-  } else {
-
-    // Time step too big, so just take the last measurement
-    SetBasic().NextTrackBearing = Basic().TrackBearing;
-  }
 }
 
 /**
@@ -635,13 +609,13 @@ DeviceBlackboard::Dynamics()
         / max(fixed_small, fabs(cos(angle)));
 
     // estimate pitch angle (assuming balanced turn)
-    SetBasic().acceleration.PitchAngle = Angle::degrees(fixed_rad_to_deg *
+    SetBasic().acceleration.PitchAngle = Angle::radians(
       atan2(Basic().GPSVario - Basic().TotalEnergyVario,
             Basic().TrueAirspeed));
 
   } else {
-    SetBasic().acceleration.BankAngle = Angle::degrees(fixed_zero);
-    SetBasic().acceleration.PitchAngle = Angle::degrees(fixed_zero);
+    SetBasic().acceleration.BankAngle = Angle::native(fixed_zero);
+    SetBasic().acceleration.PitchAngle = Angle::native(fixed_zero);
     SetBasic().TurnRateWind = fixed_zero;
 
     if (!Basic().acceleration.Available)
