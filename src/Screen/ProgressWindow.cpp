@@ -69,14 +69,15 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 
   // Make progress bar height proportional to window height
   progress_border_height = height / 10;
-  unsigned progress_size = progress_border_height - (height/20);
-  unsigned progress_horizontal_border = (progress_border_height - progress_size)/2;
+  unsigned progress_size = progress_border_height - (height / 20);
+  unsigned progress_horizontal_border =
+      (progress_border_height - progress_size) / 2;
 
   // Initialize version text field
   TextWindowStyle version_style;
   version_style.left();
-  version.set(*this, XCSoar_ProductToken,
-              0, 0, width - progress_size * 2, text_height, version_style);
+  version.set(*this, XCSoar_ProductToken, 0, 0,
+              width - progress_size * 2, text_height, version_style);
 
   // Initialize message text field
   TextWindowStyle message_style;
@@ -166,45 +167,37 @@ ProgressWindow::on_paint(Canvas &canvas)
   int title_width = bitmap_canvas.get_width();
   int title_height = bitmap_canvas.get_height();
 
-  int logox,logoy,titlex,titley;
+  int logox, logoy, titlex, titley;
 
   bool hidetitle = false;
 
-  if (window_width > window_height){ //Landscape
-    logox = (window_width - 
-              (logo_width + title_height + title_width))/2;
-    logoy = (window_height - logo_height)/2-text_height;
+  if (window_width > window_height) {
+    //Landscape
+    logox = (window_width - (logo_width + title_height + title_width)) / 2;
+    logoy = (window_height - logo_height) / 2 - text_height;
     titlex = logox + logo_width + title_height;
-    titley = (window_height - title_height)/2 - text_height;
-  }
-  else{ 
-    if (window_width < window_height){ //Portrait
-      logox = (window_width - logo_width)/2;
-      logoy = (window_height - 
-                (logo_height + title_height + title_height))/2
-              - text_height;
-      titlex = (window_width - title_width)/2;
-      titley = logoy + logo_height + title_height;
-    }
-    else{ //Square screen
-      logox = (window_width - logo_width)/2;
-      logoy = (window_height - logo_height)/2 - text_height;
-      hidetitle = true;      
-    }
+    titley = (window_height - title_height) / 2 - text_height;
+  } else if (window_width < window_height) {
+    //Portrait
+    logox = (window_width - logo_width) / 2;
+    logoy = (window_height - (logo_height + title_height + title_height)) / 2
+            - text_height;
+    titlex = (window_width - title_width) / 2;
+    titley = logoy + logo_height + title_height;
+  } else {
+    //Square screen
+    logox = (window_width - logo_width) / 2;
+    logoy = (window_height - logo_height) / 2 - text_height;
+    hidetitle = true;
   }
 
-  if (!hidetitle){
+  if (!hidetitle)
     //Draw 'XCSoar N.N' title
-    canvas.copy(titlex, titley,
-                title_width, title_height,
-                bitmap_canvas, 0, 0);
-  }
-  bitmap_canvas.select(bitmap_logo);
+    canvas.copy(titlex, titley, title_width, title_height, bitmap_canvas, 0, 0);
 
   //Draw XCSoar swift logo
-  canvas.copy(logox, logoy,
-              logo_width, logo_height,
-              bitmap_canvas, 0, 0);
+  bitmap_canvas.select(bitmap_logo);
+  canvas.copy(logox, logoy, logo_width, logo_height, bitmap_canvas, 0, 0);
 
   bitmap_canvas.select(bitmap_progress_border);
 
@@ -212,8 +205,7 @@ ProgressWindow::on_paint(Canvas &canvas)
   int progress_bitmap_height = bitmap_canvas.get_height();
 
   //Stretch progress bar border
-  canvas.stretch(0,
-                 (window_height - progress_border_height),
+  canvas.stretch(0, (window_height - progress_border_height),
                  window_width, progress_border_height,
                  bitmap_canvas, 0, 0,
                  progress_bitmap_width, progress_bitmap_height);
