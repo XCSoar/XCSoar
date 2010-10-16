@@ -92,7 +92,14 @@ Pages::PageLayout dlgConfigPageShowModal(Pages::PageLayout _pl, bool include_emp
 void dlgVegaDemoShowModal();
 bool dlgConfigurationVarioShowModal();
 void dlgLoggerReplayShowModal();
-void dlgStartupShowModal();
+
+/**
+ * @return true on success, false if the user has pressed the "Quit"
+ * button
+ */
+bool
+dlgStartupShowModal();
+
 bool dlgSimulatorPromptShowModal();
 
 

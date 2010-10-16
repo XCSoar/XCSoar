@@ -144,16 +144,18 @@ GlideComputer glide_computer(protected_task_manager, airspace_warnings,
 AltairControl altair_control;
 #endif
 
-void
+bool
 XCSoarInterface::LoadProfile()
 {
-  if (Profile::use_files())
-    dlgStartupShowModal();
+  if (Profile::use_files() && !dlgStartupShowModal())
+    return false;
 
   Profile::Load();
   Profile::Use();
 
   ProgressGlue::Create(_("Initialising"));
+
+  return true;
 }
 
 static void
@@ -293,7 +295,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
     global_simulator_flag = dlgSimulatorPromptShowModal();
 #endif
 
-  LoadProfile();
+  if (!LoadProfile())
+    return false;
 
   LoadDisplayOrientation();
 

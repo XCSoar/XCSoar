@@ -98,12 +98,18 @@ OnCloseClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrOK);
 }
 
+static void
+OnQuit(gcc_unused WndButton &button)
+{
+  wf->SetModalResult(mrCancel);
+}
+
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnSplashPaint),
   DeclareCallBackEntry(NULL)
 };
 
-void
+bool
 dlgStartupShowModal()
 {
   LogStartUp(_T("Startup dialog"));
@@ -122,6 +128,8 @@ dlgStartupShowModal()
   ((WndButton *)wf->FindByName(_T("cmdClose")))
     ->SetOnClickNotify(OnCloseClicked);
 
+  ((WndButton *)wf->FindByName(_T("cmdQuit")))->SetOnClickNotify(OnQuit);
+
   TCHAR temp[MAX_PATH];
 
   _stprintf(temp, _T("XCSoar: Version %s"), XCSoar_VersionString);
@@ -136,10 +144,11 @@ dlgStartupShowModal()
 
   if (dfe->GetNumFiles() <= 2) {
     delete wf;
-    return;
+    return true;
   }
 
-  wf->ShowModal();
+  if (wf->ShowModal() != mrOK)
+    return false;
 
   const TCHAR *path = dfe->GetPathFile();
   if (!string_is_empty(path)) {
@@ -151,4 +160,5 @@ dlgStartupShowModal()
   }
 
   delete wf;
+  return true;
 }

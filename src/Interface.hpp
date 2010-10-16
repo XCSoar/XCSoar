@@ -179,7 +179,7 @@ public:
   static void ReceiveBlackboard();
 
 private:
-  static void LoadProfile();
+  static bool LoadProfile();
 };
 
 #endif
