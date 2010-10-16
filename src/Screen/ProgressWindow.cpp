@@ -174,20 +174,20 @@ ProgressWindow::on_paint(Canvas &canvas)
   if (window_width > window_height) {
     // Landscape
     logox = (window_width - (logo_size.cx + title_size.cy + title_size.cx)) / 2;
-    logoy = (window_height - logo_size.cy) / 2 - text_height;
+    logoy = (window_height - logo_size.cy - progress_border_height) / 2;
     titlex = logox + logo_size.cx + title_size.cy;
-    titley = (window_height - title_size.cy) / 2 - text_height;
+    titley = (window_height - title_size.cy - progress_border_height) / 2;
   } else if (window_width < window_height) {
     // Portrait
     logox = (window_width - logo_size.cx) / 2;
-    logoy = (window_height - (logo_size.cy + title_size.cy * 2)) / 2
-            - text_height;
+    logoy = (window_height - (logo_size.cy + title_size.cy * 2) -
+             progress_border_height) / 2;
     titlex = (window_width - title_size.cx) / 2;
     titley = logoy + logo_size.cy + title_size.cy;
   } else {
     // Square screen
     logox = (window_width - logo_size.cx) / 2;
-    logoy = (window_height - logo_size.cy) / 2 - text_height;
+    logoy = (window_height - logo_size.cy - progress_border_height) / 2;
     hidetitle = true;
   }
 
