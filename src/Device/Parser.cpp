@@ -1042,7 +1042,7 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   int e2;
   int t2;
   Angle dangle = (angle + Angle::degrees(fixed(120))).as_bearing();
-  Angle hangle = dangle; hangle.flip(); hangle = hangle.as_bearing();
+  Angle hangle = dangle.flipped().as_bearing();
 
   h2 = (angle.ifastcosine()) / 10;
   n2 = (dangle.ifastsine()) / 1.20 + 300;
