@@ -69,7 +69,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 
   // Make progress bar height proportional to window height
   progress_border_height = height / 10;
-  unsigned progress_height = progress_border_height - (height / 20);
+  unsigned progress_height = progress_border_height / 2;
   unsigned progress_horizontal_border =
       (progress_border_height - progress_height) / 2;
 
