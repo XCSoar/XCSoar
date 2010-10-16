@@ -56,7 +56,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
 
   // Load logo
-  bitmap_logo.load(IDB_SWIFT_HD);
+  bitmap_logo.load(width > 272 && height > 272 ? IDB_SWIFT_HD : IDB_SWIFT);
   // Load progress bar background
   bitmap_progress_border.load(IDB_PROGRESSBORDER);
 
