@@ -54,9 +54,9 @@ static Bitmap bitmap_title;
 static void
 OnLogoPaint(WindowControl *Sender, Canvas &canvas)
 {
-  Bitmap splash_bitmap;
-  splash_bitmap.load(Layout::Scale(20) > 30 ? IDB_SWIFT_HD : IDB_SWIFT);
-  BitmapCanvas bitmap_canvas(canvas, splash_bitmap);
+  Bitmap bitmap_logo;
+  bitmap_logo.load(Layout::Scale(20) > 30 ? IDB_SWIFT_HD : IDB_SWIFT);
+  BitmapCanvas bitmap_canvas(canvas, bitmap_logo);
   canvas.stretch(bitmap_canvas);
 }
 
