@@ -63,6 +63,12 @@ GetPrimaryDataPath()
   return _T("");
 }
 
+const TCHAR *
+GetHomeDataPath(TCHAR *buffer)
+{
+  return NULL;
+}
+
 #ifndef ENABLE_SDL
 bool
 MapWindow::identify(HWND hWnd)

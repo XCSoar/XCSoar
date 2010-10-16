@@ -157,6 +157,13 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
   const TCHAR *data_path = GetPrimaryDataPath();
   ScanDirectories(data_path, filter);
 
+  {
+    TCHAR buffer[MAX_PATH];
+    const TCHAR *home_path = GetHomeDataPath(buffer);
+    if (home_path != NULL && _tcscmp(data_path, home_path) != 0)
+      ScanDirectories(home_path, filter);
+  }
+
 #if defined(_WIN32_WCE) && !defined(GNAV)
   TCHAR FlashPath[MAX_PATH];
   FlashCardEnumerator enumerator;
