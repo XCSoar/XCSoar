@@ -49,10 +49,6 @@ static WndProperty *wComboPopupWndProperty;
 static DataField *ComboPopupDataField;
 static const ComboList *ComboListPopup;
 
-enum { ComboPopupITEMMAX = 100 };
-static TCHAR sSavedInitialValue[ComboPopupITEMMAX];
-static int iSavedInitialDataIndex = -1;
-
 static void
 OnPaintComboPopupListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
@@ -111,6 +107,9 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
     return 0;
 
   bInComboPicker = true;
+
+  TCHAR sSavedInitialValue[100];
+  int iSavedInitialDataIndex = -1;
 
   while (bOpenCombo) {
     assert(theProperty != NULL);
