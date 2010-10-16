@@ -41,14 +41,11 @@ Copyright_License {
 
 #include "DataField/Base.hpp"
 #include "Util/NonCopyable.hpp"
+#include "Util/StaticArray.hpp"
 
 class DataFieldEnum: public DataField
 {
 public:
-  enum {
-    DFE_MAX_ENUMS = 128,
-  };
-
   struct Entry : private NonCopyable {
     TCHAR *mText;
     unsigned int index;
@@ -58,15 +55,13 @@ public:
   };
 
 private:
-  unsigned int nEnums;
+  StaticArray<Entry, 128> entries;
   unsigned int mValue;
-  Entry mEntries[DFE_MAX_ENUMS];
 
 public:
   DataFieldEnum(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
                 int Default, DataAccessCallback_t OnDataAccess) :
     DataField(EditFormat, DisplayFormat, OnDataAccess),
-    nEnums(0),
     mValue(Default >= 0 ? Default : 0)
   {
     SupportCombo = true;
@@ -96,7 +91,9 @@ public:
   virtual void SetAsInteger(int Value);
   void Sort(int startindex = 0);
 
-  unsigned Count() { return nEnums; }
+  unsigned Count() const {
+    return entries.size();
+  }
 };
 
 #endif

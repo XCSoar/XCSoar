@@ -53,8 +53,8 @@ DataFieldEnum::Entry::~Entry()
 int
 DataFieldEnum::GetAsInteger() const
 {
-  if (mValue < nEnums)
-    return mEntries[mValue].index;
+  if (mValue < entries.size())
+    return entries[mValue].index;
 
   return 0;
 }
@@ -62,38 +62,37 @@ DataFieldEnum::GetAsInteger() const
 void
 DataFieldEnum::replaceEnumText(unsigned int i, const TCHAR *Text)
 {
-  if (i <= nEnums) {
-    free(mEntries[i].mText);
-    mEntries[i].mText = _tcsdup(Text);
+  if (i <= entries.size()) {
+    free(entries[i].mText);
+    entries[i].mText = _tcsdup(Text);
  }
 }
 
 unsigned
 DataFieldEnum::addEnumText(const TCHAR *Text)
 {
-  if (nEnums < DFE_MAX_ENUMS - 1) {
-    mEntries[nEnums].mText = _tcsdup(Text);
-    mEntries[nEnums].index = nEnums;
-    return nEnums++;
-  }
-  return 0;
+  if (entries.full())
+    return 0;
+
+  unsigned i = entries.size();
+  Entry &entry = entries.append();
+  entry.mText = _tcsdup(Text);
+  entry.index = i;
+  return i;
 }
 
 void
 DataFieldEnum::addEnumTexts(const TCHAR *const*list)
 {
-  while (*list != NULL && nEnums < DFE_MAX_ENUMS - 1) {
-    mEntries[nEnums].mText = _tcsdup(*list++);
-    mEntries[nEnums].index = nEnums;
-    nEnums++;
-  }
+  while (*list != NULL)
+    addEnumText(*list++);
 }
 
 const TCHAR *
 DataFieldEnum::GetAsString() const
 {
-  if (mValue < nEnums)
-    return (mEntries[mValue].mText);
+  if (mValue < entries.size())
+    return entries[mValue].mText;
 
   return NULL;
 }
@@ -105,8 +104,8 @@ DataFieldEnum::Set(int Value)
   if (Value < 0)
     Value = 0;
 
-  for (unsigned int i = 0; i < nEnums; i++) {
-    if (mEntries[i].index == (unsigned int)Value) {
+  for (unsigned int i = 0; i < entries.size(); i++) {
+    if (entries[i].index == (unsigned int)Value) {
       int lastValue = mValue;
       mValue = i;
 
@@ -129,7 +128,7 @@ DataFieldEnum::SetAsInteger(int Value)
 void
 DataFieldEnum::Inc(void)
 {
-  if (mValue < nEnums - 1) {
+  if (mValue < entries.size() - 1) {
     mValue++;
     if (!GetDetachGUI())
       (mOnDataAccess)(this, daChange);
@@ -158,7 +157,8 @@ DataFieldEnumCompare(const void *elem1, const void *elem2)
 void
 DataFieldEnum::Sort(int startindex)
 {
-  qsort(mEntries + startindex, nEnums - startindex, sizeof(mEntries[0]),
+  qsort(entries.begin() + startindex, entries.size() - startindex,
+        sizeof(entries[0]),
         DataFieldEnumCompare);
 }
 
@@ -167,11 +167,9 @@ DataFieldEnum::CreateComboList() const
 {
   ComboList *combo_list = new ComboList();
 
-  unsigned int i;
-  for (i = 0; i < nEnums; i++) {
-    combo_list->Append(i, mEntries[i].index,
-                       mEntries[i].mText, mEntries[i].mText);
-  }
+  for (unsigned i = 0; i < entries.size(); i++)
+    combo_list->Append(i, entries[i].index,
+                       entries[i].mText, entries[i].mText);
 
   combo_list->ComboPopupItemSavedIndex = mValue;
   return combo_list;
