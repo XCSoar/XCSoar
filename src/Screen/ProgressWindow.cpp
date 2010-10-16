@@ -55,35 +55,38 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 
   unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
 
+  // Load logo
   bitmap_logo.load(IDB_SWIFT2);
+  // Load progress bar background
   bitmap_progress_border.load(IDB_PROGRESSBORDER);
 
-  //(Draw a higher-resolution title on larger screens)
+  // Adjust the title to larger screens
   bitmap_title.load(width > 272 && height > 272 ? IDB_TITLE_HD : IDB_TITLE);
+
+  // Determine text height
   VirtualCanvas canvas(1, 1);
   text_height = canvas.text_height(_T("W"));
 
-  //Make progress bar height proportional to window height
+  // Make progress bar height proportional to window height
   progress_border_height = height / 10;
   unsigned progress_size = progress_border_height - (height/20);
-
   unsigned progress_horizontal_border = (progress_border_height - progress_size)/2;
 
+  // Initialize version text field
   TextWindowStyle version_style;
   version_style.left();
   version.set(*this, XCSoar_ProductToken,
               0, 0, width - progress_size * 2, text_height, version_style);
 
+  // Initialize message text field
   TextWindowStyle message_style;
   message_style.center();
-
-  ProgressBarStyle pb_style;
-
-  //Loading message position is spaced above progress bar
   message.set(*this, NULL, 0,
               height - progress_border_height - text_height - (height/48),
               width, text_height, message_style);
 
+  // Initialize progress bar
+  ProgressBarStyle pb_style;
   progress_bar.set(*this, progress_horizontal_border,
                    height - progress_border_height + (progress_size/2),
                    width - progress_horizontal_border*2,
@@ -92,9 +95,11 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   version.install_wndproc(); // needed for on_color()
   message.install_wndproc(); // needed for on_color()
 
+  // Set progress bar step size and range
   set_range(0, 1000);
   set_step(50);
 
+  // Show dialog
   bring_to_top();
   update();
 }
