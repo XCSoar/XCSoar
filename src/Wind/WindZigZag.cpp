@@ -344,7 +344,7 @@ private:
 
   // search for theta to give best match at wind speed index i
   bool
-  FindBestAngle(int i, fixed &theta_best)
+  FindBestAngle(int i, Angle &theta_best)
   {
     fixed debest(1000000);
     bool ok = false;
@@ -357,7 +357,7 @@ private:
       ok = true;
       if (ae < debest) {
         debest = ae;
-        theta_best = thetalist[k];
+        theta_best = Angle::radians(thetalist[k]);
       }
     }
 
@@ -410,11 +410,11 @@ private:
     int i = VtoI(V_west);
 
     // find best angle estimate for this assumed wind speed i
-    fixed theta = fixed_zero;
+    Angle theta;
     if (!FindBestAngle(i, theta))
-      theta = theta_west_best;
+      theta = Angle::radians(theta_west_best);
 
-    return (UpdateSearch_Inner(V_west, Angle::radians(theta))
+    return (UpdateSearch_Inner(V_west, theta)
             || UpdateSearch_Inner(V_west, Angle::radians(theta_west_best)));
   }
 
