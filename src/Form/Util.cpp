@@ -136,9 +136,9 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
 }
 
 bool
-SaveFormProperty(WndForm *wfm, const TCHAR *field, bool &value)
+SaveFormProperty(const WndForm &form, const TCHAR *field, bool &value)
 {
-  WndProperty* wp = (WndProperty*)wfm->FindByName(field);
+  const WndProperty *wp = (const WndProperty *)form.FindByName(field);
   assert(wp);
 
   if (value != wp->GetDataField()->GetAsBoolean()) {
@@ -150,9 +150,9 @@ SaveFormProperty(WndForm *wfm, const TCHAR *field, bool &value)
 }
 
 bool
-SaveFormProperty(WndForm *wfm, const TCHAR *field, unsigned int &value)
+SaveFormProperty(const WndForm &form, const TCHAR *field, unsigned int &value)
 {
-  WndProperty* wp = (WndProperty*)wfm->FindByName(field);
+  const WndProperty *wp = (const WndProperty *)form.FindByName(field);
   assert(wp);
 
   if ((int)value != wp->GetDataField()->GetAsInteger()) {
@@ -164,9 +164,9 @@ SaveFormProperty(WndForm *wfm, const TCHAR *field, unsigned int &value)
 }
 
 bool
-SaveFormProperty(WndForm *wfm, const TCHAR *field, int &value)
+SaveFormProperty(const WndForm &form, const TCHAR *field, int &value)
 {
-  WndProperty* wp = (WndProperty*)wfm->FindByName(field);
+  const WndProperty *wp = (const WndProperty *)form.FindByName(field);
   assert(wp);
 
   if (value != wp->GetDataField()->GetAsInteger()) {
@@ -178,9 +178,9 @@ SaveFormProperty(WndForm *wfm, const TCHAR *field, int &value)
 }
 
 bool
-SaveFormProperty(WndForm *wfm, const TCHAR *field, short &value)
+SaveFormProperty(const WndForm &form, const TCHAR *field, short &value)
 {
-  WndProperty* wp = (WndProperty*)wfm->FindByName(field);
+  const WndProperty *wp = (const WndProperty *)form.FindByName(field);
   assert(wp);
 
   if (value != wp->GetDataField()->GetAsInteger()) {
@@ -212,10 +212,10 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
 }
 
 bool
-SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
                  bool &value)
 {
-  if (SaveFormProperty(wfm, field, value)) {
+  if (SaveFormProperty(form, field, value)) {
     Profile::Set(reg, value);
     return true;
   } else {
@@ -224,10 +224,10 @@ SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
 }
 
 bool
-SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
                  unsigned int &value)
 {
-  if (SaveFormProperty(wfm, field, value)) {
+  if (SaveFormProperty(form, field, value)) {
     Profile::Set(reg, value);
     return true;
   } else {
@@ -236,10 +236,10 @@ SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
 }
 
 bool
-SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
                  int &value)
 {
-  if (SaveFormProperty(wfm, field, value)) {
+  if (SaveFormProperty(form, field, value)) {
     Profile::Set(reg, value);
     return true;
   } else {
@@ -248,10 +248,10 @@ SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
 }
 
 bool
-SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
                  short &value)
 {
-  if (SaveFormProperty(wfm, field, value)) {
+  if (SaveFormProperty(form, field, value)) {
     Profile::Set(reg, value);
     return true;
   } else {
@@ -311,9 +311,9 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
 }
 
 bool
-SaveFormProperty(WndForm *wfm, const TCHAR *field, DisplayTextType_t &value)
+SaveFormProperty(const WndForm &form, const TCHAR *field, DisplayTextType_t &value)
 {
-  WndProperty* wp = (WndProperty*)wfm->FindByName(field);
+  const WndProperty *wp = (const WndProperty *)form.FindByName(field);
   if (wp) {
     if ((int)value != wp->GetDataField()->GetAsInteger()) {
       value = (DisplayTextType_t)wp->GetDataField()->GetAsInteger();
@@ -324,9 +324,9 @@ SaveFormProperty(WndForm *wfm, const TCHAR *field, DisplayTextType_t &value)
 }
 
 bool
-SaveFormProperty(WndForm *wfm, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
                          DisplayTextType_t &value) {
-  if (SaveFormProperty(wfm, field, value)) {
+  if (SaveFormProperty(form, field, value)) {
     Profile::Set(reg, value);
     return true;
   } else {

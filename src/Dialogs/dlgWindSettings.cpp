@@ -130,9 +130,9 @@ dlgWindSettingsShowModal(void)
     XCSoarInterface::SetSettingsComputer().ManualWind.bearing =
             Angle::degrees(wp->GetDataField()->GetAsFixed());
 
-  SaveFormProperty(wf, _T("prpAutoWind"), szProfileAutoWind,
+  SaveFormProperty(*wf, _T("prpAutoWind"), szProfileAutoWind,
                    XCSoarInterface::SetSettingsComputer().AutoWindMode);
-  SaveFormProperty(wf, _T("prpTrailDrift"),
+  SaveFormProperty(*wf, _T("prpTrailDrift"),
                    XCSoarInterface::SetSettingsMap().EnableTrailDrift);
 
   delete wf;

@@ -1496,7 +1496,7 @@ void dlgConfigurationShowModal(void)
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();
 
-  changed |= SaveFormProperty(wf, _T("prpAbortSafetyUseCurrent"),
+  changed |= SaveFormProperty(*wf, _T("prpAbortSafetyUseCurrent"),
                               szProfileAbortSafetyUseCurrent,
                               settings_computer.safety_mc_use_current);
 
@@ -1535,21 +1535,21 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  changed |= SaveFormProperty(wf, _T("prpSetSystemTimeFromGPS"),
+  changed |= SaveFormProperty(*wf, _T("prpSetSystemTimeFromGPS"),
                               szProfileSetSystemTimeFromGPS,
                               XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS);
 
-  changed |= SaveFormProperty(wf, _T("prpIgnoreNMEAChecksum"),
+  changed |= SaveFormProperty(*wf, _T("prpIgnoreNMEAChecksum"),
                               szProfileIgnoreNMEAChecksum,
                               NMEAParser::ignore_checksum);
 
-  changed |= SaveFormProperty(wf, _T("prpTrailDrift"),
+  changed |= SaveFormProperty(*wf, _T("prpTrailDrift"),
                               szProfileTrailDrift,
                               XCSoarInterface::SetSettingsMap().EnableTrailDrift);
-  changed |= SaveFormProperty(wf, _T("prpDetourCostMarker"),
+  changed |= SaveFormProperty(*wf, _T("prpDetourCostMarker"),
                               szProfileDetourCostMarker,
                               XCSoarInterface::SetSettingsMap().EnableDetourCostMarker);
-  changed |= SaveFormProperty(wf, _T("prpTrail"),
+  changed |= SaveFormProperty(*wf, _T("prpTrail"),
                               szProfileSnailTrail,
                               XCSoarInterface::SetSettingsMap().TrailActive);
 
@@ -1566,27 +1566,27 @@ void dlgConfigurationShowModal(void)
   }
 
   short tmp = settings_computer.AltitudeMode;
-  changed |= SaveFormProperty(wf, _T("prpAirspaceDisplay"),
+  changed |= SaveFormProperty(*wf, _T("prpAirspaceDisplay"),
                               szProfileAltMode, tmp);
   settings_computer.AltitudeMode = (AirspaceDisplayMode_t)tmp;
 
-  changed |= SaveFormProperty(wf, _T("prpLockSettingsInFlight"),
+  changed |= SaveFormProperty(*wf, _T("prpLockSettingsInFlight"),
                               szProfileLockSettingsInFlight,
                               XCSoarInterface::LockSettingsInFlight);
 
-  changed |= SaveFormProperty(wf, _T("prpLoggerShortName"),
+  changed |= SaveFormProperty(*wf, _T("prpLoggerShortName"),
                               szProfileLoggerShort,
                               settings_computer.LoggerShortName);
 
-  changed |= SaveFormProperty(wf, _T("prpEnableFLARMMap"),
+  changed |= SaveFormProperty(*wf, _T("prpEnableFLARMMap"),
                               szProfileEnableFLARMMap,
                               XCSoarInterface::SetSettingsMap().EnableFLARMMap);
 
-  changed |= SaveFormProperty(wf, _T("prpEnableFLARMGauge"),
+  changed |= SaveFormProperty(*wf, _T("prpEnableFLARMGauge"),
                               szProfileEnableFLARMGauge,
                               XCSoarInterface::SetSettingsMap().EnableFLARMGauge);
 
-  changed |= SaveFormProperty(wf, _T("prpEnableTAGauge"),
+  changed |= SaveFormProperty(*wf, _T("prpEnableTAGauge"),
                               szProfileEnableTAGauge,
                               XCSoarInterface::SetSettingsMap().EnableTAGauge);
 
@@ -1599,11 +1599,11 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  changed |= SaveFormProperty(wf, _T("prpAirspaceOutline"),
+  changed |= SaveFormProperty(*wf, _T("prpAirspaceOutline"),
                               szProfileAirspaceBlackOutline,
                               XCSoarInterface::SetSettingsMap().bAirspaceBlackOutline);
 
-  changed |= SaveFormProperty(wf, _T("prpAutoZoom"),
+  changed |= SaveFormProperty(*wf, _T("prpAutoZoom"),
                               szProfileAutoZoom,
                               XCSoarInterface::SetSettingsMap().AutoZoom);
 
@@ -1631,31 +1631,31 @@ void dlgConfigurationShowModal(void)
                               ugAltitude, settings_computer.AltWarningMargin,
                               szProfileAltMargin);
 
-  changed |= SaveFormProperty(wf, _T("prpAirspaceWarnings"),
+  changed |= SaveFormProperty(*wf, _T("prpAirspaceWarnings"),
                               szProfileAirspaceWarning,
                               settings_computer.EnableAirspaceWarnings);
 
-  changed |= SaveFormProperty(wf, _T("prpWarningTime"),
+  changed |= SaveFormProperty(*wf, _T("prpWarningTime"),
                               szProfileWarningTime,
                               settings_computer.airspace_warnings.WarningTime);
 
-  changed |= SaveFormProperty(wf, _T("prpAcknowledgementTime"),
+  changed |= SaveFormProperty(*wf, _T("prpAcknowledgementTime"),
                               szProfileAcknowledgementTime,
                               settings_computer.airspace_warnings.AcknowledgementTime);
 
-  changed |= SaveFormProperty(wf, _T("prpWaypointLabels"),
+  changed |= SaveFormProperty(*wf, _T("prpWaypointLabels"),
                               szProfileDisplayText,
                               XCSoarInterface::SetSettingsMap().DisplayTextType);
 
-  changed |= SaveFormProperty(wf, _T("prpEnableTerrain"),
+  changed |= SaveFormProperty(*wf, _T("prpEnableTerrain"),
                               szProfileDrawTerrain,
                               XCSoarInterface::SetSettingsMap().EnableTerrain);
 
-  changed |= SaveFormProperty(wf, _T("prpEnableTopology"),
+  changed |= SaveFormProperty(*wf, _T("prpEnableTopology"),
                               szProfileDrawTopology,
                               XCSoarInterface::SetSettingsMap().EnableTopology);
 
-  changed |= SaveFormProperty(wf, _T("prpCirclingZoom"),
+  changed |= SaveFormProperty(*wf, _T("prpCirclingZoom"),
                               szProfileCircleZoom,
                               XCSoarInterface::SetSettingsMap().CircleZoom);
 
@@ -1686,27 +1686,27 @@ void dlgConfigurationShowModal(void)
                               settings_computer.safety_height_terrain,
                               szProfileSafetyAltitudeTerrain);
 
-  changed |= SaveFormProperty(wf, _T("prpAutoWind"), szProfileAutoWind,
+  changed |= SaveFormProperty(*wf, _T("prpAutoWind"), szProfileAutoWind,
                               settings_computer.AutoWindMode);
 
-  changed |= SaveFormProperty(wf, _T("prpWindArrowStyle"),
+  changed |= SaveFormProperty(*wf, _T("prpWindArrowStyle"),
                               szProfileWindArrowStyle,
                               XCSoarInterface::SetSettingsMap().WindArrowStyle);
 
   int auto_mc_mode = (int)settings_computer.auto_mc_mode;
-  changed |= SaveFormProperty(wf, _T("prpAutoMcMode"), szProfileAutoMcMode,
+  changed |= SaveFormProperty(*wf, _T("prpAutoMcMode"), szProfileAutoMcMode,
                               auto_mc_mode);
   settings_computer.auto_mc_mode = (TaskBehaviour::AutoMCMode_t)auto_mc_mode;
 
-  changed |= SaveFormProperty(wf, _T("prpEnableNavBaroAltitude"),
+  changed |= SaveFormProperty(*wf, _T("prpEnableNavBaroAltitude"),
                               szProfileEnableNavBaroAltitude,
                               settings_computer.EnableNavBaroAltitude);
 
-  changed |= SaveFormProperty(wf, _T("prpFinalGlideTerrain"),
+  changed |= SaveFormProperty(*wf, _T("prpFinalGlideTerrain"),
                               szProfileFinalGlideTerrain,
                               settings_computer.FinalGlideTerrain);
 
-  changed |= SaveFormProperty(wf, _T("prpBlockSTF"),
+  changed |= SaveFormProperty(*wf, _T("prpBlockSTF"),
                               szProfileBlockSTF,
                               settings_computer.EnableBlockSTF);
 
@@ -1851,12 +1851,12 @@ void dlgConfigurationShowModal(void)
 
   {
     unsigned t= settings_computer.olc_rules;
-    changed |= SaveFormProperty(wf, _T("prpOLCRules"), szProfileOLCRules,
+    changed |= SaveFormProperty(*wf, _T("prpOLCRules"), szProfileOLCRules,
                                 t);
     settings_computer.olc_rules = (OLCRules)t;
   }
 
-  changed |= SaveFormProperty(wf, _T("prpHandicap"), szProfileHandicap,
+  changed |= SaveFormProperty(*wf, _T("prpHandicap"), szProfileHandicap,
                               settings_computer.olc_handicap);
 
   PolarFileChanged = FinishFileField(*wf, _T("prpPolarFile"),
@@ -1892,7 +1892,7 @@ void dlgConfigurationShowModal(void)
   if (FinishFileField(*wf, _T("prpInputFile"), szProfileInputFile))
     requirerestart = true;
 
-  changed |= SaveFormProperty(wf, _T("prpBallastSecsToEmpty"),
+  changed |= SaveFormProperty(*wf, _T("prpBallastSecsToEmpty"),
                               szProfileBallastSecsToEmpty,
                               settings_computer.BallastSecsToEmpty);
 
@@ -2049,63 +2049,63 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  changed |= SaveFormProperty(wf, _T("prpEnableExternalTriggerCruise"),
+  changed |= SaveFormProperty(*wf, _T("prpEnableExternalTriggerCruise"),
                               szProfileEnableExternalTriggerCruise,
                               settings_computer.EnableExternalTriggerCruise);
 
   changed |= requirerestart |=
-    SaveFormProperty(wf, _T("prpAppInverseInfoBox"),
+    SaveFormProperty(*wf, _T("prpAppInverseInfoBox"),
                      szProfileAppInverseInfoBox, Appearance.InverseInfoBox);
 
-  changed |= SaveFormProperty(wf, _T("prpGliderScreenPosition"),
+  changed |= SaveFormProperty(*wf, _T("prpGliderScreenPosition"),
                               szProfileGliderScreenPosition,
                               XCSoarInterface::SetSettingsMap().GliderScreenPosition);
 
   changed |= requirerestart |=
-    SaveFormProperty(wf, _T("prpAppDefaultMapWidth"),
+    SaveFormProperty(*wf, _T("prpAppDefaultMapWidth"),
                      szProfileAppDefaultMapWidth, Appearance.DefaultMapWidth);
 
-  changed |= SaveFormProperty(wf, _T("prpAppAveNeedle"), szProfileAppAveNeedle,
+  changed |= SaveFormProperty(*wf, _T("prpAppAveNeedle"), szProfileAppAveNeedle,
                               Appearance.GaugeVarioAveNeedle);
 
   changed |= requirerestart |=
-    SaveFormProperty(wf, _T("prpAppInfoBoxColors"),
+    SaveFormProperty(*wf, _T("prpAppInfoBoxColors"),
                      szProfileAppInfoBoxColors, Appearance.InfoBoxColors);
 
   changed |= requirerestart |=
-    SaveFormProperty(wf, _T("prpAppGaugeVarioSpeedToFly"),
+    SaveFormProperty(*wf, _T("prpAppGaugeVarioSpeedToFly"),
                      szProfileAppGaugeVarioSpeedToFly,
                      Appearance.GaugeVarioSpeedToFly);
 
   changed |= requirerestart |=
-    SaveFormProperty(wf, _T("prpAppGaugeVarioAvgText"),
+    SaveFormProperty(*wf, _T("prpAppGaugeVarioAvgText"),
                      szProfileAppGaugeVarioAvgText,
                      Appearance.GaugeVarioAvgText);
 
   changed |= requirerestart |=
-    SaveFormProperty(wf, _T("prpAppGaugeVarioGross"),
+    SaveFormProperty(*wf, _T("prpAppGaugeVarioGross"),
                      szProfileAppGaugeVarioGross,
                      Appearance.GaugeVarioGross);
 
-  changed |= SaveFormProperty(wf, _T("prpAppGaugeVarioMc"),
+  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioMc"),
                               szProfileAppGaugeVarioMc,
                               Appearance.GaugeVarioMc);
 
-  changed |= SaveFormProperty(wf, _T("prpAppGaugeVarioBugs"),
+  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioBugs"),
                               szProfileAppGaugeVarioBugs,
                               Appearance.GaugeVarioBugs);
 
-  changed |= SaveFormProperty(wf, _T("prpAppGaugeVarioBallast"),
+  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioBallast"),
                               szProfileAppGaugeVarioBallast,
                               Appearance.GaugeVarioBallast);
 
 #ifdef HAVE_BLANK
-  changed |= SaveFormProperty(wf, _T("prpAutoBlank"),
+  changed |= SaveFormProperty(*wf, _T("prpAutoBlank"),
                               szProfileAutoBlank,
                               XCSoarInterface::SetSettingsMap().EnableAutoBlank);
 #endif
 
-  changed |= SaveFormProperty(wf, _T("prpAutoBacklight"),
+  changed |= SaveFormProperty(*wf, _T("prpAutoBacklight"),
                               szProfileAutoBacklight,
                               CommonInterface::EnableAutoBacklight);
 
@@ -2130,7 +2130,7 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  changed |= SaveFormProperty(wf, _T("prpTerrainRamp"), szProfileTerrainRamp,
+  changed |= SaveFormProperty(*wf, _T("prpTerrainRamp"), szProfileTerrainRamp,
                               XCSoarInterface::SetSettingsMap().TerrainRamp);
 
   taskchanged |= SaveFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
@@ -2161,11 +2161,11 @@ void dlgConfigurationShowModal(void)
 
   changed |= taskchanged;
 
-  changed |= SaveFormProperty(wf, _T("prpLoggerTimeStepCruise"),
+  changed |= SaveFormProperty(*wf, _T("prpLoggerTimeStepCruise"),
                               szProfileLoggerTimeStepCruise,
                               settings_computer.LoggerTimeStepCruise);
 
-  changed |= SaveFormProperty(wf, _T("prpLoggerTimeStepCircling"),
+  changed |= SaveFormProperty(*wf, _T("prpLoggerTimeStepCircling"),
                               szProfileLoggerTimeStepCircling,
                               settings_computer.LoggerTimeStepCircling);
 
