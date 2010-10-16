@@ -144,8 +144,10 @@ dlgStartupShowModal()
     return true;
   }
 
-  if (wf->ShowModal() != mrOK)
+  if (wf->ShowModal() != mrOK) {
+    delete wf;
     return false;
+  }
 
   const TCHAR *path = dfe->GetPathFile();
   if (!string_is_empty(path)) {
