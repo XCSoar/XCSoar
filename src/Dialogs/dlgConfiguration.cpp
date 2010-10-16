@@ -1886,7 +1886,7 @@ void dlgConfigurationShowModal(void)
   if (FinishFileField(*wf, _T("prpLanguageFile"), szProfileLanguageFile))
     requirerestart = true;
 
-  if (FinishFileField(*wf, _T("prpStartMaxSpeedMargin"), szProfileStatusFile))
+  if (FinishFileField(*wf, _T("prpStatusFile"), szProfileStatusFile))
     requirerestart = true;
 
   if (FinishFileField(*wf, _T("prpInputFile"), szProfileInputFile))
