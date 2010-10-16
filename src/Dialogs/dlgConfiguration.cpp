@@ -1147,12 +1147,8 @@ setVariables()
 
   wp = (WndProperty*)wf->FindByName(_T("prpGestures"));
   if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Disabled"));
-    dfe->addEnumText(_("Enabled"));
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->Set(settings_computer.EnableGestures);
+    DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
+    df.Set(settings_computer.EnableGestures);
     wp->RefreshDisplay();
   }
 
