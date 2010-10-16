@@ -474,12 +474,11 @@ DataFieldFileReader::GetAsString(void) const
 {
   if (!loaded) {
     /* get basename from postponed_value */
-    const TCHAR *p = postponed_value + _tcslen(postponed_value);
-    while (p-- > postponed_value)
-      if (is_dir_separator(*p))
-        return p + 1;
+    const TCHAR *p = BaseName(postponed_value);
+    if (p == NULL)
+      p = postponed_value;
 
-    return postponed_value;
+    return p;
   }
 
   if (mValue < files.size())
