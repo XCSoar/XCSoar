@@ -148,6 +148,12 @@ public:
    * Returns the selection title (filename)
    * @return The selection title (filename)
    */
+  virtual const TCHAR *GetAsDisplayString() const;
+
+  /**
+   * Returns the PathFile of the currently selected item
+   * @return The PathFile of the currently selected item
+   */
   virtual const TCHAR *GetAsString(void) const;
 
   /**

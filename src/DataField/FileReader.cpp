@@ -472,6 +472,18 @@ DataFieldFileReader::addFile(const TCHAR *Text, const TCHAR *PText)
 const TCHAR *
 DataFieldFileReader::GetAsString(void) const
 {
+  if (!loaded)
+    return postponed_value;
+
+  if (mValue < files.size())
+    return files[mValue].mTextPathFile;
+  else
+    return NULL;
+}
+
+const TCHAR *
+DataFieldFileReader::GetAsDisplayString() const
+{
   if (!loaded) {
     /* get basename from postponed_value */
     const TCHAR *p = BaseName(postponed_value);
