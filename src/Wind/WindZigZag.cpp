@@ -229,7 +229,7 @@ public:
   }
 
   void
-  AddPoint(fixed t, fixed V_tas, fixed V_gps, fixed theta_gps)
+  AddPoint(fixed t, fixed V_tas, fixed V_gps, Angle theta_gps)
   {
     // find oldest point
     fixed toldest = fixed_zero;
@@ -250,7 +250,7 @@ public:
     }
 
     i = ioldest;
-    points[i].Set(t, V_tas, V_gps, theta_gps);
+    points[i].Set(t, V_tas, V_gps, theta_gps.value_radians());
   }
 
   fixed
@@ -560,7 +560,7 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
 
   myzigzag.AddPoint(basic.Time,
                     basic.TrueAirspeed, basic.GroundSpeed,
-                    basic.TrackBearing.value_radians());
+                    basic.TrackBearing);
 
   // don't update wind from zigzag more often than
   // every UPDATE_RATE seconds, so it is balanced with respect
