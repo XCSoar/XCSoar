@@ -40,6 +40,7 @@ Copyright_License {
 #include "Wind/WindZigZag.h"
 #include "LogFile.hpp"
 #include "Math/FastMath.h"
+#include "Math/Angle.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
@@ -90,13 +91,7 @@ static const int V_SCALE = 20;
 static fixed
 anglelimit(fixed ang)
 {
-  while (ang < -fixed_pi)
-    ang += fixed_two_pi;
-
-  while (ang > fixed_pi)
-    ang -= fixed_two_pi;
-
-  return ang;
+  return Angle::radians(ang).as_delta().value_radians();
 }
 
 static int
