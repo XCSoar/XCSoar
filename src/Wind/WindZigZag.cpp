@@ -188,9 +188,9 @@ private:
     if (fabs(cosgamma) > fixed_one)
       return false;
 
-    fixed gamma = acos(cosgamma);
-    theta_west_1[i] = -anglelimit(fixed_pi - theta_gps.value_radians() - gamma);
-    theta_west_2[i] = -anglelimit(fixed_pi - theta_gps.value_radians() + gamma);
+    Angle gamma = Angle::radians(acos(cosgamma));
+    theta_west_1[i] = -anglelimit(fixed_pi - (theta_gps + gamma).value_radians());
+    theta_west_2[i] = -anglelimit(fixed_pi - (theta_gps - gamma).value_radians());
 
     return true;
   }
