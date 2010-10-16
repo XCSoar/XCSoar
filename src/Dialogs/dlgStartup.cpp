@@ -64,8 +64,8 @@ PaintLogo(Canvas &canvas, RECT rc, const Bitmap &logo)
   int bitmap_width = bitmap_canvas.get_width();
   int bitmap_height = bitmap_canvas.get_height();
 
-  int scale = min((window_width - 10) / bitmap_width,
-                  (window_height - 10) / bitmap_height);
+  fixed scale = min(fixed(window_width - 10) / bitmap_width,
+                    fixed(window_height - 10) / bitmap_height);
 
   unsigned dest_width = bitmap_width * scale;
   unsigned dest_height = bitmap_height * scale;
