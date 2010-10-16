@@ -103,10 +103,8 @@ IsInternalFile(const TCHAR* str)
   return false;
 }
 
-DataFieldFileReader::DataFieldFileReader(const TCHAR *EditFormat,
-                                         const TCHAR *DisplayFormat,
-                                         DataAccessCallback_t OnDataAccess)
-  :DataField(EditFormat, DisplayFormat, OnDataAccess),
+DataFieldFileReader::DataFieldFileReader(DataAccessCallback_t OnDataAccess)
+  :DataField(_T(""), _T(""), OnDataAccess),
    // Set selection to zero
    mValue(0),
    loaded(false), postponed_sort(false), num_postponed_patterns(0)

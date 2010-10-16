@@ -49,10 +49,9 @@ private:
   TCHAR mValue[EDITSTRINGSIZE];
 
 public:
-  DataFieldString(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
-                  const TCHAR *Default,
+  DataFieldString(const TCHAR *Default,
                   DataAccessCallback_t OnDataAccess) :
-    DataField(EditFormat, DisplayFormat, OnDataAccess) {
+    DataField(_T(""), _T(""), OnDataAccess) {
     _tcscpy(mValue, Default);
     SupportCombo = false;
   }

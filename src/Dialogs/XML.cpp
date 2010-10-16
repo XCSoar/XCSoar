@@ -479,14 +479,13 @@ LoadDataField(const XMLNode &node, CallBackTableEntry *LookUpTable,
                                       NULL));
 
   if (_tcsicmp(DataType, _T("enum")) == 0)
-    return new DataFieldEnum(EditFormat, DisplayFmt, false, callback);
+    return new DataFieldEnum(false, callback);
 
   if (_tcsicmp(DataType, _T("filereader")) == 0)
-    return new DataFieldFileReader(EditFormat, DisplayFmt, callback);
+    return new DataFieldFileReader(callback);
 
   if (_tcsicmp(DataType, _T("boolean")) == 0)
-    return new DataFieldBoolean(EditFormat, DisplayFmt, false,
-                                _T("ON"), _T("OFF"), callback);
+    return new DataFieldBoolean(false, _T("ON"), _T("OFF"), callback);
 
   if (_tcsicmp(DataType, _T("double")) == 0)
     return new DataFieldFloat(EditFormat, DisplayFmt, Min, Max,
@@ -498,7 +497,7 @@ LoadDataField(const XMLNode &node, CallBackTableEntry *LookUpTable,
                                 0, (int)Step, callback);
 
   if (_tcsicmp(DataType, _T("string")) == 0)
-    return new DataFieldString(EditFormat, DisplayFmt, _T(""), callback);
+    return new DataFieldString(_T(""), callback);
 
   return NULL;
 }

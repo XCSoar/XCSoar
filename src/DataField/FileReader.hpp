@@ -95,12 +95,9 @@ private:
 public:
   /**
    * Constructor of the DataFieldFileReader class
-   * @param EditFormat
-   * @param DisplayFormat
    * @param OnDataAccess
    */
-  DataFieldFileReader(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
-                      DataAccessCallback_t OnDataAccess);
+  DataFieldFileReader(DataAccessCallback_t OnDataAccess);
 
   /** Move the selection up (+1) */
   void Inc(void);

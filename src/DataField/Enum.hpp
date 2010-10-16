@@ -59,9 +59,8 @@ private:
   unsigned int mValue;
 
 public:
-  DataFieldEnum(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
-                int Default, DataAccessCallback_t OnDataAccess) :
-    DataField(EditFormat, DisplayFormat, OnDataAccess),
+  DataFieldEnum(int Default, DataAccessCallback_t OnDataAccess) :
+    DataField(_T(""), _T(""), OnDataAccess),
     mValue(Default >= 0 ? Default : 0)
   {
     SupportCombo = true;

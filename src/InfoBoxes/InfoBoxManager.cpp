@@ -567,7 +567,7 @@ InfoBoxManager::SetupFocused()
                       style, EditWindowStyle(), NULL);
   control.SetOnHelpCallback(OnInfoBoxHelp);
 
-  DataFieldEnum *dfe = new DataFieldEnum(_T(""), _T(""), old_type, NULL);
+  DataFieldEnum *dfe = new DataFieldEnum(old_type, NULL);
   for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; i++)
     dfe->addEnumText(gettext(GetTypeDescription(i)));
   dfe->Sort(0);

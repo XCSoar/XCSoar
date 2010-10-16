@@ -56,7 +56,7 @@ TaskStore::scan()
   clear();
 
   // scan files
-  DataFieldFileReader fr(_T("%s"), _T("%s"), NULL);
+  DataFieldFileReader fr(NULL);
   fr.ScanDirectoryTop(_T("*.tsk"));
   fr.Sort();
 
