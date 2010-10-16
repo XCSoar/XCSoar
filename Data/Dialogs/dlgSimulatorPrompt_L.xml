@@ -3,7 +3,8 @@
 <Form Name="frmComboPopup" Width="320" Height="240" BackColor="0xFFFFFF">
   <Label Name="lblVersion" X="8" Y="5" Width="130" Height="18" Caption="" />
   <Canvas Name="frmLogo" Width="80" Height="80" OnPaint="OnLogoPaint" />
-  <Label X="48" Y="120" Width="220" Height="20" Caption="What do you want to do:" />
-  <SymbolButton Name="cmdFly" Caption="Fly" X="48" Y="150" Width="112" Height="30" OnClick="OnFlyClicked"/>
-  <SymbolButton Name="cmdSimulator" Caption="Simulator" X="160" Y="150" Width="112" Height="30" OnClick="OnSimulatorClicked"/>
+  <Canvas Name="frmTitle" OnPaint="OnTitlePaint" />
+  <Label X="48" Y="140" Width="220" Height="20" Caption="What do you want to do:" />
+  <SymbolButton Name="cmdFly" Caption="Fly" X="48" Y="165" Width="112" Height="30" OnClick="OnFlyClicked"/>
+  <SymbolButton Name="cmdSimulator" Caption="Simulator" X="160" Y="165" Width="112" Height="30" OnClick="OnSimulatorClicked"/>
 </Form>

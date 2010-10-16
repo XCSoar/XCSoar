@@ -49,6 +49,7 @@ Copyright_License {
 #ifdef SIMULATOR_AVAILABLE
 
 static WndForm *wf = NULL;
+static Bitmap bitmap_title;
 
 static void
 OnLogoPaint(WindowControl *Sender, Canvas &canvas)
@@ -56,6 +57,13 @@ OnLogoPaint(WindowControl *Sender, Canvas &canvas)
   Bitmap splash_bitmap;
   splash_bitmap.load(Layout::Scale(20) > 30 ? IDB_SWIFT_HD : IDB_SWIFT);
   BitmapCanvas bitmap_canvas(canvas, splash_bitmap);
+  canvas.stretch(bitmap_canvas);
+}
+
+static void
+OnTitlePaint(WindowControl *Sender, Canvas &canvas)
+{
+  BitmapCanvas bitmap_canvas(canvas, bitmap_title);
   canvas.stretch(bitmap_canvas);
 }
 
@@ -72,6 +80,7 @@ OnFlyClicked(gcc_unused WndButton &button)
 }
 
 static CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnTitlePaint),
   DeclareCallBackEntry(OnLogoPaint),
   DeclareCallBackEntry(NULL)
 };
@@ -108,16 +117,43 @@ dlgSimulatorPromptShowModal()
   int window_width = wf->get_width();
   int window_height = wf->get_height();
 
+  bitmap_title.load(window_width > 272 && window_height > 272 ?
+                    IDB_TITLE_HD : IDB_TITLE);
+  SIZE title_size = bitmap_title.get_size();
+
   // Determine logo size
   wc = ((WindowControl*)wf->FindByName(_T("frmLogo")));
   SIZE logo_size = wc->get_size();
 
   // Determine logo and title positions
-  int logox, logoy;
-  logox = (window_width - logo_size.cx) / 2;
-  logoy = (window_height - logo_size.cy - Layout::Scale(100)) / 2;
+  bool hidetitle = false;
+  int logox, logoy, titlex, titley;
+  if (window_width > window_height) {
+    // Landscape
+    logox = (window_width - (logo_size.cx + title_size.cy + title_size.cx)) / 2;
+    logoy = (window_height - logo_size.cy - Layout::Scale(100)) / 2;
+    titlex = logox + logo_size.cx + title_size.cy;
+    titley = (window_height - title_size.cy - Layout::Scale(100)) / 2;
+  } else if (window_width < window_height) {
+    // Portrait
+    logox = (window_width - logo_size.cx) / 2;
+    logoy = (window_height - (logo_size.cy + title_size.cy * 2) -
+             Layout::Scale(100)) / 2;
+    titlex = (window_width - title_size.cx) / 2;
+    titley = logoy + logo_size.cy + title_size.cy;
+  } else {
+    // Square screen
+    logox = (window_width - logo_size.cx) / 2;
+    logoy = (window_height - logo_size.cy - Layout::Scale(100)) / 2;
+    hidetitle = true;
+  }
 
   wc->move(logox, logoy);
+  wc = ((WindowControl*)wf->FindByName(_T("frmTitle")));
+  if (hidetitle)
+    wc->hide();
+  else
+    wc->move(titlex, titley, title_size.cx, title_size.cy);
 
   bool retval = (wf->ShowModal() == mrOK);
 
