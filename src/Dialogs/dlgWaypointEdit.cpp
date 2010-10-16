@@ -196,49 +196,29 @@ static void SetValues(void) {
     dfe->Set(sign);
     wp->RefreshDisplay();
   }
-  wp = (WndProperty*)wf->FindByName(_T("prpLongitudeD"));
-  if (wp) {
-    wp->GetDataField()->SetAsInteger(dd);
-    wp->RefreshDisplay();
-  }
+
+  LoadFormProperty(*wf, _T("prpLongitudeD"), dd);
 
   switch (Units::GetCoordinateFormat()) {
   case 0: // ("DDMMSS");
   case 1: // ("DDMMSS.ss");
-    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
-    if (wp) {
-      wp->GetDataField()->SetAsInteger(mm);
-      wp->RefreshDisplay();
-    }
-    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeS"));
-    if (wp) {
-      wp->GetDataField()->SetAsInteger(ss);
-      wp->RefreshDisplay();
-    }
+    LoadFormProperty(*wf, _T("prpLongitudeM"), mm);
+    LoadFormProperty(*wf, _T("prpLongitudeS"), ss);
     break;
   case 2: // ("DDMM.mmm");
-    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
-    if (wp) {
-      wp->GetDataField()->SetAsInteger(mm);
-      wp->RefreshDisplay();
-    }
-    wp = (WndProperty*)wf->FindByName(_T("prpLongitudemmm"));
-    if (wp) {
-      wp->GetDataField()->SetAsFloat(1000 * fixed(ss) / 60);
-      wp->RefreshDisplay();
-    }
+    LoadFormProperty(*wf, _T("prpLongitudeM"), mm);
+    LoadFormProperty(*wf, _T("prpLongitudemmm"), 1000 * fixed(ss) / 60);
     break;
   case 3: // ("DD.dddd");
-    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
-    if (wp) {
-      wp->GetDataField()->SetAsFloat(10000 * (fixed)(mm + ss) / 3600);
-      wp->RefreshDisplay();
-    }
+    LoadFormProperty(*wf, _T("prpLongitudeDDDD"),
+                     10000 * (fixed)(mm + ss) / 3600);
     break;
   }
 
   Units::LatitudeToDMS(global_wpt->Location.Latitude,
 		       &dd, &mm, &ss, &sign);
+
+  LoadFormProperty(*wf, _T("prpLatitudeD"), dd);
 
   wp = (WndProperty*)wf->FindByName(_T("prpLatitudeSign"));
   if (wp) {
@@ -258,35 +238,16 @@ static void SetValues(void) {
   switch (Units::GetCoordinateFormat()) {
   case 0: // ("DDMMSS");
   case 1: // ("DDMMSS.ss");
-    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeM"));
-    if (wp) {
-      wp->GetDataField()->SetAsInteger(mm);
-      wp->RefreshDisplay();
-    }
-    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeS"));
-    if (wp) {
-      wp->GetDataField()->SetAsInteger(ss);
-      wp->RefreshDisplay();
-    }
+    LoadFormProperty(*wf, _T("prpLatitudeM"), mm);
+    LoadFormProperty(*wf, _T("prpLatitudeS"), ss);
     break;
   case 2: // ("DDMM.mmm");
-    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeM"));
-    if (wp) {
-      wp->GetDataField()->SetAsInteger(mm);
-      wp->RefreshDisplay();
-    }
-    wp = (WndProperty*)wf->FindByName(_T("prpLatitudemmm"));
-    if (wp) {
-      wp->GetDataField()->SetAsFloat(1000 * fixed(ss) / 60);
-      wp->RefreshDisplay();
-    }
+    LoadFormProperty(*wf, _T("prpLatitudeM"), mm);
+    LoadFormProperty(*wf, _T("prpLatitudemmm"), 1000 * fixed(ss) / 60);
     break;
   case 3: // ("DD.dddd");
-    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeDDDD"));
-    if (wp) {
-      wp->GetDataField()->SetAsFloat(10000 * fixed(mm + ss) / 3600);
-      wp->RefreshDisplay();
-    }
+    LoadFormProperty(*wf, _T("prpLatitudeDDDD"),
+                     10000 * (fixed)(mm + ss) / 3600);
     break;
   }
 
@@ -326,44 +287,23 @@ static void GetValues(void) {
   int dd = 0;
   double num=0, mm = 0, ss = 0; // mm,ss are numerators (division) so don't want to lose decimals
 
-  wp = (WndProperty*)wf->FindByName(_T("prpLongitudeSign"));
-  if (wp) {
-    sign = (wp->GetDataField()->GetAsInteger()==1);
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpLongitudeD"));
-  if (wp) {
-    dd = wp->GetDataField()->GetAsInteger();
-  }
+  sign = GetFormValueInteger(*wf, _T("prpLongitudeSign")) == 1;
+  dd = GetFormValueInteger(*wf, _T("prpLongitudeD"));
 
   switch (Units::GetCoordinateFormat()) {
   case 0: // ("DDMMSS");
   case 1: // ("DDMMSS.ss");
-    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
-    if (wp) {
-      mm = wp->GetDataField()->GetAsInteger();
-    }
-    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeS"));
-    if (wp) {
-      ss = wp->GetDataField()->GetAsInteger();
-    }
+    mm = GetFormValueInteger(*wf, _T("prpLongitudeM"));
+    ss = GetFormValueInteger(*wf, _T("prpLongitudeS"));
     num = dd+mm/60.0+ss/3600.0;
     break;
   case 2: // ("DDMM.mmm");
-    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
-    if (wp) {
-      mm = wp->GetDataField()->GetAsInteger();
-    }
-    wp = (WndProperty*)wf->FindByName(_T("prpLongitudemmm"));
-    if (wp) {
-      ss = wp->GetDataField()->GetAsInteger();
-    }
+    mm = GetFormValueInteger(*wf, _T("prpLongitudeM"));
+    ss = GetFormValueInteger(*wf, _T("prpLongitudemmm"));
     num = dd+(mm+ss/1000.0)/60.0;
     break;
   case 3: // ("DD.dddd");
-    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
-    if (wp) {
-      mm = wp->GetDataField()->GetAsInteger();
-    }
+    mm = GetFormValueInteger(*wf, _T("prpLongitudeDDDD"));
     num = dd+mm/10000;
     break;
   }
@@ -373,44 +313,23 @@ static void GetValues(void) {
 
   global_wpt->Location.Longitude = Angle::degrees(fixed(num));
 
-  wp = (WndProperty*)wf->FindByName(_T("prpLatitudeSign"));
-  if (wp) {
-    sign = (wp->GetDataField()->GetAsInteger()==1);
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpLatitudeD"));
-  if (wp) {
-    dd = wp->GetDataField()->GetAsInteger();
-  }
+  sign = GetFormValueInteger(*wf, _T("prpLatitudeSign")) == 1;
+  dd = GetFormValueInteger(*wf, _T("prpLatitudeD"));
 
   switch (Units::GetCoordinateFormat()) {
   case 0: // ("DDMMSS");
   case 1: // ("DDMMSS.ss");
-    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeM"));
-    if (wp) {
-      mm = wp->GetDataField()->GetAsInteger();
-    }
-    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeS"));
-    if (wp) {
-      ss = wp->GetDataField()->GetAsInteger();
-    }
+    mm = GetFormValueInteger(*wf, _T("prpLatitudeM"));
+    ss = GetFormValueInteger(*wf, _T("prpLatitudeS"));
     num = dd+mm/60.0+ss/3600.0;
     break;
   case 2: // ("DDMM.mmm");
-    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeM"));
-    if (wp) {
-      mm = wp->GetDataField()->GetAsInteger();
-    }
-    wp = (WndProperty*)wf->FindByName(_T("prpLatitudemmm"));
-    if (wp) {
-      ss = wp->GetDataField()->GetAsInteger();
-    }
+    mm = GetFormValueInteger(*wf, _T("prpLatitudeM"));
+    ss = GetFormValueInteger(*wf, _T("prpLatitudemmm"));
     num = dd+(mm+ss/1000.0)/60.0;
     break;
   case 3: // ("DD.dddd");
-    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeDDDD"));
-    if (wp) {
-      mm = wp->GetDataField()->GetAsInteger();
-    }
+    mm = GetFormValueInteger(*wf, _T("prpLatitudeDDDD"));
     num = dd+mm/10000;
     break;
   }
@@ -420,14 +339,10 @@ static void GetValues(void) {
 
   global_wpt->Location.Latitude = Angle::degrees(fixed(num));
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
-  if (wp) {
-    ss = wp->GetDataField()->GetAsInteger();
-
-    global_wpt->Altitude = ss == 0 && terrain != NULL
-      ? fixed(WayPointFile::AltitudeFromTerrain(global_wpt->Location, *terrain))
-      : Units::ToSysUnit(fixed(ss), Units::AltitudeUnit);
-  }
+  ss = GetFormValueInteger(*wf, _T("prpAltitude"));
+  global_wpt->Altitude = ss == 0 && terrain != NULL
+    ? fixed(WayPointFile::AltitudeFromTerrain(global_wpt->Location, *terrain))
+    : Units::ToSysUnit(fixed(ss), Units::AltitudeUnit);
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
   if (wp) {

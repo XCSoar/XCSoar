@@ -51,7 +51,6 @@ Copyright_License {
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Screen/Chart.hpp"
 #include "Gauge/TaskView.hpp"
-#include "DataField/Enum.hpp"
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
 
 #include <assert.h>
@@ -120,23 +119,12 @@ public:
     if (wp)
       wp->show();
 
-    WndProperty* wv;
-    wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorRadius")));
-    if (wv) {
-      wv->GetDataField()->SetAsFloat(Units::ToUserDistance(oz.getRadius()));
-      wv->GetDataField()->SetUnits(Units::GetDistanceName());
-      wv->RefreshDisplay();
-    }
-    wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorStartRadial")));
-    if (wv) {
-      wv->GetDataField()->SetAsFloat(oz.getStartRadial().value_degrees());
-      wv->RefreshDisplay();
-    }
-    wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorFinishRadial")));
-    if (wv) {
-      wv->GetDataField()->SetAsFloat(oz.getEndRadial().value_degrees());
-      wv->RefreshDisplay();
-    }
+    LoadFormProperty(*wf, _T("prpOZSectorRadius"),
+                     ugDistance, oz.getRadius());
+    LoadFormProperty(*wf, _T("prpOZSectorStartRadial"),
+                     oz.getStartRadial().value_degrees());
+    LoadFormProperty(*wf, _T("prpOZSectorFinishRadial"),
+                     oz.getEndRadial().value_degrees());
   }
 
   void
@@ -147,13 +135,8 @@ public:
     if (wp)
       wp->show();
 
-    WndProperty* wv;
-    wv = ((WndProperty*)wf->FindByName(_T("prpOZLineLength")));
-    if (wv) {
-      wv->GetDataField()->SetAsFloat(Units::ToUserDistance(oz.getLength()));
-      wv->GetDataField()->SetUnits(Units::GetDistanceName());
-      wv->RefreshDisplay();
-    }
+    LoadFormProperty(*wf, _T("prpOZLineLength"),
+                     ugDistance, oz.getLength());
   }
 
   void
@@ -164,13 +147,8 @@ public:
     if (wp)
       wp->show();
 
-    WndProperty* wv;
-    wv = ((WndProperty*)wf->FindByName(_T("prpOZCylinderRadius")));
-    if (wv) {
-      wv->GetDataField()->SetAsFloat(Units::ToUserDistance(oz.getRadius()));
-      wv->GetDataField()->SetUnits(Units::GetDistanceName());
-      wv->RefreshDisplay();
-    }
+    LoadFormProperty(*wf, _T("prpOZCylinderRadius"),
+                     ugDistance, oz.getRadius());
   }
 
 private:
@@ -235,60 +213,45 @@ public:
   void
   Visit(SectorZone& oz)
   {
-    WndProperty* wv;
-    wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorRadius")));
-    if (wv) {
-      fixed val = Units::ToSysDistance(wv->GetDataField()->GetAsFixed());
-      if (fabs(val - oz.getRadius()) > fixed(49)) {
-        oz.setRadius((fixed)val);
-        task_modified = true;
-      }
+    fixed radius =
+      Units::ToSysDistance(GetFormValueFixed(*wf, _T("prpOZSectorRadius")));
+    if (fabs(radius - oz.getRadius()) > fixed(49)) {
+      oz.setRadius(radius);
+      task_modified = true;
     }
 
-    wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorStartRadial")));
-    if (wv) {
-      fixed val = wv->GetDataField()->GetAsFixed();
-      if (val != oz.getStartRadial().value_degrees()) {
-        oz.setStartRadial(Angle::degrees((fixed)val));
-        task_modified = true;
-      }
+    fixed start_radial = GetFormValueFixed(*wf, _T("prpOZSectorStartRadial"));
+    if (start_radial != oz.getStartRadial().value_degrees()) {
+      oz.setStartRadial(Angle::degrees(start_radial));
+      task_modified = true;
     }
 
-    wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorFinishRadial")));
-    if (wv) {
-      fixed val = wv->GetDataField()->GetAsFixed();
-      if (val != oz.getEndRadial().value_degrees()) {
-        oz.setEndRadial(Angle::degrees((fixed)val));
-        task_modified = true;
-      }
+    fixed finish_radial = GetFormValueFixed(*wf, _T("prpOZSectorFinishRadial"));
+    if (finish_radial != oz.getEndRadial().value_degrees()) {
+      oz.setEndRadial(Angle::degrees(finish_radial));
+      task_modified = true;
     }
   }
 
   void
   Visit(LineSectorZone& oz)
   {
-    WndProperty* wv;
-    wv = ((WndProperty*)wf->FindByName(_T("prpOZLineLength")));
-    if (wv) {
-      fixed val = Units::ToSysDistance(wv->GetDataField()->GetAsFixed());
-      if (fabs(val - oz.getLength()) > fixed(49)) {
-        oz.setLength((fixed)val);
-        task_modified = true;
-      }
+    fixed line_length =
+      Units::ToSysDistance(GetFormValueFixed(*wf, _T("prpOZLineLength")));
+    if (fabs(line_length - oz.getLength()) > fixed(49)) {
+      oz.setLength(line_length);
+      task_modified = true;
     }
   }
 
   void
   Visit(CylinderZone& oz)
   {
-    WndProperty* wv;
-    wv = ((WndProperty*)wf->FindByName(_T("prpOZCylinderRadius")));
-    if (wv) {
-      fixed val = Units::ToSysDistance(wv->GetDataField()->GetAsFixed());
-      if (fabs(val - oz.getRadius()) > fixed(49)) {
-        oz.setRadius((fixed)val);
-        task_modified = true;
-      }
+    fixed radius =
+      Units::ToSysDistance(GetFormValueFixed(*wf, _T("prpOZCylinderRadius")));
+    if (fabs(radius - oz.getRadius()) > fixed(49)) {
+      oz.setRadius(radius);
+      task_modified = true;
     }
   }
 };

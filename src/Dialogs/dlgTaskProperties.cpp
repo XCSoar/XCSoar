@@ -159,61 +159,45 @@ RefreshView()
 static void 
 ReadValues()
 {
-  WndProperty* wp;
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
 
-  wp = ((WndProperty*)wf->FindByName(_T("prpMinTime")));
-  if (wp) {
-    if (p.aat_min_time != wp->GetDataField()->GetAsFixed() * 60) {
-      p.aat_min_time = wp->GetDataField()->GetAsFixed() * 60;
-      task_changed = true;
-    }
+  fixed min_time = GetFormValueFixed(*wf, _T("prpMinTime")) * 60;
+  if (min_time != p.aat_min_time) {
+    p.aat_min_time = min_time;
+    task_changed = true;
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpFAIFinishHeight"));
-  if (wp) {
-    if (p.fai_finish 
-        != (wp->GetDataField()->GetAsInteger()>0)) {
-      p.fai_finish = (wp->GetDataField()->GetAsInteger()>0);
-      task_changed = true;
-    }
+  bool finish_height = GetFormValueBoolean(*wf, _T("prpFAIFinishHeight"));
+  if (finish_height != p.fai_finish) {
+    p.fai_finish = finish_height;
+    task_changed = true;
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeight"));
-  if (wp) {
-    int ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsFixed()));
-    if ((int)p.start_max_height != ival) {
-      p.start_max_height = ival;
-      task_changed = true;
-    }
+  unsigned max_height =
+    iround(Units::ToSysAltitude(GetFormValueFixed(*wf, _T("prpStartMaxHeight"))));
+  if (max_height != p.start_max_height) {
+    p.start_max_height = max_height;
+    task_changed = true;
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
-  if (wp) {
-    int ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsFixed()));
-    if ((int)p.start_max_speed != ival) {
-      p.start_max_speed = fixed(ival);
-      task_changed = true;
-    }
+  fixed max_speed =
+    Units::ToSysSpeed(GetFormValueFixed(*wf, _T("prpStartMaxSpeed")));
+  if (max_speed != p.start_max_speed) {
+    p.start_max_speed = max_speed;
+    task_changed = true;
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpFinishMinHeight"));
-  if (wp) {
-    int ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsFixed()));
-    if ((int)p.finish_min_height != ival) {
-      p.finish_min_height = ival;
-      task_changed = true;
-    }
+  unsigned min_height =
+    iround(Units::ToSysAltitude(GetFormValueFixed(*wf, _T("prpFinishMinHeight"))));
+  if (min_height != p.finish_min_height) {
+    p.finish_min_height = max_height;
+    task_changed = true;
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
-  if (wp) {
-    if (p.start_max_height_ref 
-        != (unsigned)wp->GetDataField()->GetAsInteger()) {
-      p.start_max_height_ref = 
-        wp->GetDataField()->GetAsInteger();
-      task_changed = true;
-    }
+  unsigned height_ref = GetFormValueInteger(*wf, _T("prpStartHeightRef"));
+  if (height_ref != p.start_max_height_ref) {
+    p.start_max_height_ref = height_ref;
+    task_changed = true;
   }
 }
 
