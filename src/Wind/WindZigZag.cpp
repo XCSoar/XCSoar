@@ -318,15 +318,15 @@ private:
 
   // search all points for error against theta at wind speed index j
   fixed
-  AngleError(fixed theta, int j)
+  AngleError(Angle theta, int j)
   {
     fixed de = fixed_zero;
     int nf = 0;
 
     for (int i = 0; i < NUM_SAMPLES; i++) {
       if (points[i].theta_west_ok[j]) {
-        fixed e1 = fabs(anglelimit(theta - points[i].theta_west_1[j]));
-        fixed e2 = fabs(anglelimit(theta - points[i].theta_west_2[j]));
+        fixed e1 = fabs(anglelimit(theta.value_radians() - points[i].theta_west_1[j]));
+        fixed e2 = fabs(anglelimit(theta.value_radians() - points[i].theta_west_2[j]));
         if (e1 <= e2)
           de += e1 * e1;
         else
@@ -350,7 +350,7 @@ private:
     bool ok = false;
 
     for (int k = 0; k < NUM_THETA_POINTS; k++) {
-      fixed ae = AngleError(thetalist[k], i);
+      fixed ae = AngleError(Angle::radians(thetalist[k]), i);
       if (negative(ae))
         continue;
 
