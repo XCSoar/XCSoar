@@ -38,11 +38,11 @@ Copyright_License {
 
 #include "Version.hpp"
 
-#ifndef GIT_COMMIT_ID
-#define GIT_COMMIT_ID
+#ifndef XCSOAR_VERSION
+#error Macro "XCSOAR_VERSION" is not defined.  Check build/version.mk!
 #endif
 
-#define VERSION "6.0"
+#define VERSION XCSOAR_VERSION
 
 #ifdef GNAV
   #define TARGET "Altair"
@@ -62,7 +62,11 @@ Copyright_License {
 
 #define VERSION_SUFFIX ""
 
+#ifdef GIT_COMMIT_ID
 #define GIT_SUFFIX "~git#" GIT_COMMIT_ID
+#else
+#define GIT_SUFFIX
+#endif
 
 const TCHAR XCSoar_Version[] = _T(VERSION);
 const TCHAR XCSoar_VersionLong[] = _T(VERSION VERSION_SUFFIX);
