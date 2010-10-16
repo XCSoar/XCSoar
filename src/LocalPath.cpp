@@ -111,7 +111,13 @@ ExpandLocalPath(TCHAR* filein)
 
   // Get the relative file name and location (ptr)
   const TCHAR *ptr = string_after_prefix(filein, local_path_code);
-  if (!ptr || string_is_empty(ptr))
+  if (ptr == NULL)
+    return;
+
+  while (*ptr == _T('/') || *ptr == _T('\\'))
+    ++ptr;
+
+  if (string_is_empty(ptr))
     return;
 
   // Replace the code "%LOCAL_PATH%\\" by the full local path (output)
