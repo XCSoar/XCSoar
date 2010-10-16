@@ -219,22 +219,33 @@ FindDataPath()
   }
 #endif
 
+  {
+    TCHAR buffer[MAX_PATH];
+    const TCHAR *path = GetHomeDataPath(buffer);
+    if (path != NULL)
+      return _tcsdup(path);
+  }
+
+  return NULL;
+}
+
+const TCHAR *
+GetHomeDataPath(TCHAR *buffer)
+{
 #ifdef HAVE_POSIX
   /* on Unix or WINE, use ~/.xcsoar */
   const TCHAR *home = getenv("HOME");
   if (home != NULL) {
-    TCHAR buffer[_tcslen(home) + 9];
     _tcscpy(buffer, home);
     _tcscat(buffer, _T("/.xcsoar"));
-    return _tcsdup(buffer);
+    return buffer;
   } else
-    return _tcsdup(_T("/etc/xcsoar"));
+    return _T("/etc/xcsoar");
 #else
-  TCHAR buffer[MAX_PATH];
   SHGetSpecialFolderPath(NULL, buffer, CSIDL_PERSONAL, false);
   _tcscat(buffer, _T(DIR_SEPARATOR_S));
   _tcscat(buffer, XCSDATADIR);
-  return _tcsdup(buffer);
+  return buffer;
 #endif
 }
 

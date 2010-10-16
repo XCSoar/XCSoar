@@ -50,6 +50,14 @@ const TCHAR *
 GetPrimaryDataPath();
 
 /**
+ * Returns the location of XCSoarData in the user's home directory.
+ *
+ * @return a buffer which may be used to build the path
+ */
+const TCHAR *
+GetHomeDataPath(TCHAR *buffer);
+
+/**
  * Returns the path of the XCSoarData folder, optionally including
  * the given file name
  * @param buffer Output buffer
