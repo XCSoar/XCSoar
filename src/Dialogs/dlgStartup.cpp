@@ -54,20 +54,42 @@ Copyright_License {
 static WndForm *wf = NULL;
 extern TCHAR startProfileFile[];
 
+static void
+PaintLogo(Canvas &canvas, RECT rc, const Bitmap &logo)
+{
+  BitmapCanvas bitmap_canvas(canvas, logo);
+
+  int window_width = rc.right - rc.left;
+  int window_height = rc.bottom - rc.top;
+  int bitmap_width = bitmap_canvas.get_width();
+  int bitmap_height = bitmap_canvas.get_height();
+
+  int scale = min((window_width - 10) / bitmap_width,
+                  (window_height - 10) / bitmap_height);
+
+  unsigned dest_width = bitmap_width * scale;
+  unsigned dest_height = bitmap_height * scale;
+
+  canvas.stretch((rc.left + rc.right - dest_width) / 2,
+                 (rc.top + rc.bottom - dest_height) / 2,
+                 dest_width, dest_height,
+                 bitmap_canvas, 0, 0, bitmap_width, bitmap_height);
+}
+
 /*
  * use a smaller icon for smaller screens because the "stretch" will not shrink
  */
 static void
 OnSplashPaint(WindowControl *Sender, Canvas &canvas)
 {
+  canvas.clear_white();
+
   Bitmap splash_bitmap;
   if (Layout::scale_1024 > 1024 * 3 / 2)
     splash_bitmap.load(IDB_SWIFT);
   else
     splash_bitmap.load(IDB_SWIFT2);
-
-  BitmapCanvas bitmap_canvas(canvas, splash_bitmap);
-  canvas.stretch(bitmap_canvas);
+  PaintLogo(canvas, Sender->get_client_rect(), splash_bitmap);
 }
 
 static void

@@ -1,10 +1,6 @@
 <?xml version="1.0"?>
 
 <Form Name="frmStartup" Width="240" Height="320" Caption="" BackColor="0xFFFFFF">
-  <Label Name="lblVersion" X="8" Y="2" Width="310" Height="20" Caption="" />
-
-  <Canvas Name="frmSplash" X="65" Width="110" Height="110" OnPaint="OnSplashPaint" />
-  
   <Panel Name="frmShade" X="0" Y="-60" BackColor="0xDADBAB">
     <Button Name="cmdClose" Caption="Accept" X="2" Width="-2" Height="30"/>
 
@@ -12,6 +8,7 @@
       <DataField DataType="filereader" Min="0" Max="200" Step="1"/>
     </Edit>
   </Panel>
+
+  <Label Name="lblVersion" X="8" Y="2" Width="-75" Height="20" Caption="" />
+  <Canvas Name="frmSplash" X="0" Y="30" Height="-60" OnPaint="OnSplashPaint" />
 </Form>
-
-
