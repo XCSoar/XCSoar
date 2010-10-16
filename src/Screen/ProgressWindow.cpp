@@ -155,7 +155,7 @@ ProgressWindow::on_erase(Canvas &canvas)
 void
 ProgressWindow::on_paint(Canvas &canvas)
 {
-  BitmapCanvas bitmap_canvas(canvas, bitmap_logo);
+  BitmapCanvas bitmap_canvas(canvas);
 
   int window_width = canvas.get_width();
   int window_height = canvas.get_height();
@@ -163,8 +163,6 @@ ProgressWindow::on_paint(Canvas &canvas)
   SIZE logo_size = bitmap_logo.get_size();
   int logo_width = logo_size.cx;
   int logo_height = logo_size.cy;
-
-  bitmap_canvas.select(bitmap_title);
 
   SIZE title_size = bitmap_title.get_size();
   int title_width = title_size.cx;
@@ -194,9 +192,11 @@ ProgressWindow::on_paint(Canvas &canvas)
     hidetitle = true;
   }
 
-  if (!hidetitle)
-    //Draw 'XCSoar N.N' title
+  //Draw 'XCSoar N.N' title
+  if (!hidetitle){
+    bitmap_canvas.select(bitmap_title);
     canvas.copy(titlex, titley, title_width, title_height, bitmap_canvas, 0, 0);
+  }
 
   //Draw XCSoar swift logo
   bitmap_canvas.select(bitmap_logo);
