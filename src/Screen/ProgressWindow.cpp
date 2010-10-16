@@ -159,13 +159,16 @@ ProgressWindow::on_paint(Canvas &canvas)
 
   int window_width = canvas.get_width();
   int window_height = canvas.get_height();
-  int logo_width = bitmap_canvas.get_width();
-  int logo_height = bitmap_canvas.get_height();
+
+  SIZE logo_size = bitmap_logo.get_size();
+  int logo_width = logo_size.cx;
+  int logo_height = logo_size.cy;
 
   bitmap_canvas.select(bitmap_title);
 
-  int title_width = bitmap_canvas.get_width();
-  int title_height = bitmap_canvas.get_height();
+  SIZE title_size = bitmap_title.get_size();
+  int title_width = title_size.cx;
+  int title_height = title_size.cy;
 
   int logox, logoy, titlex, titley;
 
