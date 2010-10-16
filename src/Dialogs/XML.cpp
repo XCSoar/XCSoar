@@ -72,6 +72,16 @@ static int dialog_width_scale = 1024;
 // to full width of screen
 DialogStyle DialogStyleSetting = dsFullWidth;
 
+struct ControlSize: public SIZE
+{
+  bool no_scaling;
+};
+
+struct ControlPosition: public POINT
+{
+  bool no_scaling;
+};
+
 /**
  * Callback type for the "Custom" element, attribute "OnCreate".
  */
@@ -190,14 +200,15 @@ GetCaption(const XMLNode &Node)
   return tmp;
 }
 
-static POINT
+static ControlPosition
 GetPosition(const XMLNode &Node, const RECT rc)
 {
-  POINT pt;
+  ControlPosition pt;
 
   // Calculate x- and y-Coordinate
   pt.x = StringToIntDflt(Node.getAttribute(_T("X")), 0);
   pt.y = StringToIntDflt(Node.getAttribute(_T("Y")), -1);
+  pt.no_scaling = false;
 
   if (Layout::ScaleSupported()) {
     pt.x = Layout::Scale(pt.x);
@@ -205,39 +216,45 @@ GetPosition(const XMLNode &Node, const RECT rc)
       pt.y = Layout::Scale(pt.y);
   }
 
-  if (pt.x < -1)
+  if (pt.x < -1) {
     pt.x += rc.right;
+    pt.no_scaling = false;
+  }
   if (pt.y < -1)
     pt.y += rc.bottom;
 
   return pt;
 }
 
-static POINT
-SetPositionCentered(const POINT original, const RECT rc, const SIZE size)
+static ControlPosition
+SetPositionCentered(const ControlPosition original, const RECT rc,
+                    const ControlSize size)
 {
-  POINT pt = original;
+  ControlPosition pt = original;
   // center horizontally in parent RECT
   pt.x = (rc.right + rc.left - size.cx) / 2;
   return pt;
 }
 
-static SIZE
+static ControlSize
 GetSize(const XMLNode &Node, const RECT rc, const POINT pos)
 {
-  SIZE sz;
+  ControlSize sz;
 
   // Calculate width and height
   sz.cx = StringToIntDflt(Node.getAttribute(_T("Width")), 0);
   sz.cy = StringToIntDflt(Node.getAttribute(_T("Height")), 0);
+  sz.no_scaling = false;
 
   if (Layout::ScaleSupported()) {
     sz.cx = Layout::Scale(sz.cx);
     sz.cy = Layout::Scale(sz.cy);
   }
 
-  if (sz.cx <= 0)
+  if (sz.cx <= 0) {
     sz.cx += rc.right - pos.x;
+    sz.no_scaling = true;
+  }
   if (sz.cy <= 0)
     sz.cy += rc.bottom - pos.y;
 
@@ -406,8 +423,8 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
   // Determine the dialog size
   const TCHAR* Caption = GetCaption(node);
   const RECT rc = Parent.get_client_rect();
-  POINT pos = GetPosition(node, rc);
-  SIZE size = GetSize(node, rc, pos);
+  ControlPosition pos = GetPosition(node, rc);
+  ControlSize size = GetSize(node, rc, pos);
 
   InitScaleWidth(size, rc, dialog_style);
 
@@ -524,10 +541,13 @@ LoadChild(WndForm &form, ContainerControl &Parent,
   const TCHAR* Name = GetName(node);
   const TCHAR* Caption = GetCaption(node);
   RECT rc = Parent.GetClientAreaWindow().get_client_rect();
-  POINT pos = GetPosition(node, rc);
-  pos.x = ScaleWidth(pos.x, eDialogStyle);
-  SIZE size = GetSize(node, rc, pos);
-  size.cx = ScaleWidth(size.cx, eDialogStyle);
+  ControlPosition pos = GetPosition(node, rc);
+  if (!pos.no_scaling)
+    pos.x = ScaleWidth(pos.x, eDialogStyle);
+
+  ControlSize size = GetSize(node, rc, pos);
+  if (!size.no_scaling)
+    size.cx = ScaleWidth(size.cx, eDialogStyle);
 
   WindowStyle style;
 
