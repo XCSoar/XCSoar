@@ -82,12 +82,6 @@ static const int V_SCALE = 20;
 /** resolution on theta search */
 #define NUM_THETA_POINTS (36)
 
-static fixed
-anglelimit(fixed ang)
-{
-  return Angle::radians(ang).as_delta().value_radians();
-}
-
 static int
 VtoI(fixed V)
 {
@@ -189,8 +183,8 @@ private:
       return false;
 
     Angle gamma = Angle::radians(acos(cosgamma));
-    theta_west_1[i] = -anglelimit(fixed_pi - (theta_gps + gamma).value_radians());
-    theta_west_2[i] = -anglelimit(fixed_pi - (theta_gps - gamma).value_radians());
+    theta_west_1[i] = -(Angle::radians(fixed_pi) - theta_gps - gamma).as_delta().value_radians();
+    theta_west_2[i] = -(Angle::radians(fixed_pi) - theta_gps + gamma).as_delta().value_radians();
 
     return true;
   }
