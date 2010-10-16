@@ -52,7 +52,6 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
 #include "Form/Edit.hpp"
-#include "Form/EventButton.hpp"
 #include "Form/SymbolButton.hpp"
 #include "Form/Draw.hpp"
 #include "Form/List.hpp"
@@ -661,26 +660,6 @@ LoadChild(WndForm &form, ContainerControl &Parent,
                                  pos.x, pos.y, size.cx, size.cy,
                                  style, Parent.GetBackColor(),
                                  ClickCallback);
-
-#ifndef ALTAIRSYNC
-  // EventButtonControl (WndEventButton) not used yet
-  } else if (_tcscmp(node.getName(), _T("EventButton")) == 0) {
-    TCHAR iename[100];
-    TCHAR ieparameters[100];
-    _tcscpy(iename,
-            StringToStringDflt(node.getAttribute(_T("InputEvent")), _T("")));
-    _tcscpy(ieparameters,
-            StringToStringDflt(node.getAttribute(_T("Parameters")), _T("")));
-
-    // Create the EventButtonControl
-
-    style.tab_stop();
-
-    window = new WndEventButton(Parent.GetClientAreaWindow(), Caption,
-                                pos.x, pos.y, size.cx, size.cy,
-                                style,
-                                iename, ieparameters);
-#endif
 
   // PanelControl (WndPanel)
   } else if (_tcscmp(node.getName(), _T("Panel")) == 0) {

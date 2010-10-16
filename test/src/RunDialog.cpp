@@ -41,7 +41,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
 #include "ResourceLoader.hpp"
-#include "InputEvents.h"
 #include "MapWindow.hpp"
 #include "StatusMessage.hpp"
 #include "Asset.hpp"
@@ -62,12 +61,6 @@ const TCHAR *
 GetPrimaryDataPath()
 {
   return _T("");
-}
-
-pt2Event
-InputEvents::findEvent(const TCHAR *)
-{
-  return NULL;
 }
 
 #ifndef ENABLE_SDL

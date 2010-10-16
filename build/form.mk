@@ -10,7 +10,6 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/Button.cpp \
 	$(FORM_SRC_DIR)/CheckBox.cpp \
 	$(FORM_SRC_DIR)/SymbolButton.cpp \
-	$(FORM_SRC_DIR)/EventButton.cpp \
 	$(FORM_SRC_DIR)/Frame.cpp \
 	$(FORM_SRC_DIR)/Draw.cpp \
 	$(FORM_SRC_DIR)/List.cpp \

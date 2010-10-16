@@ -40,7 +40,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Dialogs.h"
 #include "MapWindow.hpp"
-#include "InputEvents.h"
 #include "UtilsSystem.hpp"
 #include "Profile/Profile.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
@@ -66,12 +65,6 @@ int DisplayTimeOut = 0;
 #endif
 
 unsigned InfoBoxLayout::ControlWidth = 100;
-
-pt2Event
-InputEvents::findEvent(const TCHAR *)
-{
-  return NULL;
-}
 
 #ifndef ENABLE_SDL
 bool

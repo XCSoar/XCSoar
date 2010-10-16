@@ -40,7 +40,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Dialogs.h"
 #include "MapWindow.hpp"
-#include "InputEvents.h"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "WayPointParser.h"
@@ -64,12 +63,6 @@ int DisplayTimeOut = 0;
 #endif
 
 unsigned InfoBoxLayout::ControlWidth = 100;
-
-pt2Event
-InputEvents::findEvent(const TCHAR *)
-{
-  return NULL;
-}
 
 void
 DeviceBlackboard::SetStartupLocation(const GeoPoint &loc,
