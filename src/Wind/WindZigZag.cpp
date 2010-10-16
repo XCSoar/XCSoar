@@ -120,12 +120,12 @@ public:
   fixed time;
 
   void
-  Set(fixed t, fixed aV_tas, fixed aV_gps, fixed atheta_gps)
+  Set(fixed t, fixed aV_tas, fixed aV_gps, Angle atheta_gps)
   {
     V_tas = aV_tas;
     V_gps = aV_gps;
     time = t;
-    theta_gps = atheta_gps;
+    theta_gps = atheta_gps.value_radians();
     CalculateThetaWEst();
   }
 
@@ -250,7 +250,7 @@ public:
     }
 
     i = ioldest;
-    points[i].Set(t, V_tas, V_gps, theta_gps.value_radians());
+    points[i].Set(t, V_tas, V_gps, theta_gps);
   }
 
   fixed
