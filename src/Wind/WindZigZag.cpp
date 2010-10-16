@@ -424,14 +424,14 @@ public:
   fixed theta_west_best;
 
   fixed
-  StartSearch(fixed V_start, fixed theta_start)
+  StartSearch(fixed V_start, Angle theta_start)
   {
     V_west_best = V_start;
-    theta_west_best = theta_start;
+    theta_west_best = theta_start.value_radians();
     error_best = 10000;
     UpdateSearch(V_start);
     V_west_best = V_start;
-    theta_west_best = theta_start;
+    theta_west_best = theta_start.value_radians();
     return fixed(error_best) / 10;
   }
 
@@ -553,7 +553,7 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
   fixed V_wind_estimate = basic.wind.norm;
   Angle theta_wind_estimate = basic.wind.bearing;
   fixed percent_error = myzigzag.StartSearch(V_wind_estimate,
-                                             theta_wind_estimate.value_radians());
+                                             theta_wind_estimate);
 
   // Check spread of zig-zag manoeuver
   if (!myzigzag.CheckSpread(basic.Time, percent_error))
