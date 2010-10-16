@@ -512,12 +512,11 @@ WindZigZagCheckAirData(const NMEA_INFO &basic)
   }
 
   if (basic.Time < tLast + SAMPLE_RATE &&
-      (bearingLast - basic.TrackBearing).as_delta().magnitude_degrees() < fixed(10)) {
+      (bearingLast - basic.TrackBearing).as_delta().magnitude_degrees() < fixed(10))
     return false;
-  } else {
-    tLast = basic.Time;
-    bearingLast = basic.TrackBearing;
-  }
+
+  tLast = basic.Time;
+  bearingLast = basic.TrackBearing;
 
   return true;
 }
