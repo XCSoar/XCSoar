@@ -104,6 +104,21 @@ dlgSimulatorPromptShowModal()
   assert(wb != NULL);
   wb->SetOnClickNotify(OnFlyClicked);
 
+  // Determine window size
+  int window_width = wf->get_width();
+  int window_height = wf->get_height();
+
+  // Determine logo size
+  wc = ((WindowControl*)wf->FindByName(_T("frmLogo")));
+  SIZE logo_size = wc->get_size();
+
+  // Determine logo and title positions
+  int logox, logoy;
+  logox = (window_width - logo_size.cx) / 2;
+  logoy = (window_height - logo_size.cy - Layout::Scale(100)) / 2;
+
+  wc->move(logox, logoy);
+
   bool retval = (wf->ShowModal() == mrOK);
 
   delete wf;
