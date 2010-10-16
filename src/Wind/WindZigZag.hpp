@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#ifndef WINDZIGZAG_H
-#define WINDZIGZAG_H
+#ifndef WINDZIGZAG_HPP
+#define WINDZIGZAG_HPP
 
 #include "Math/fixed.hpp"
 
