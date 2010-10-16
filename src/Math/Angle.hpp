@@ -169,6 +169,8 @@ public:
 
   void flip();
 
+  Angle flipped() const;
+
   /**
    * Limits the angle (theta) to -180 - +180 degrees
    * @return Output angle (-180 - +180 degrees)

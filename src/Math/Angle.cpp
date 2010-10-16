@@ -72,6 +72,14 @@ Angle::magnitude_radians() const
 }
 
 Angle
+Angle::flipped() const
+{
+  Angle retval(m_value);
+  retval.flip();
+  return retval;
+}
+
+Angle
 Angle::as_bearing() const
 {
   Angle retval(m_value);
