@@ -51,8 +51,13 @@ Copyright_License {
 #elif !defined(_WIN32_WCE)
   #define TARGET "PC"
 #else
-  // TODO code: consider adding PPC, 2002, 2003 (not enough room now)
-  #define TARGET "PPC"
+  #if _WIN32_WCE >= 0x0500
+    #define TARGET "WM5"
+  #elif _WIN32_WCE >= 0x0400
+    #define TARGET "PPC2003"
+  #else
+    #define TARGET "PPC2000"
+  #endif
 #endif
 
 #define VERSION_SUFFIX ""
