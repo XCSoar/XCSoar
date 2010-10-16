@@ -52,7 +52,7 @@ Copyright_License {
   using std::max;
 #endif
 
-/*
+/**
  * number of points required, should be
  * equivalent to a circle to prevent
  * zigzag from dominating when used in
@@ -61,7 +61,7 @@ Copyright_License {
  */
 #define NUM_SAMPLES 20
 
-/*
+/**
  * equivalent to a circle to prevent
  * zigzag from dominating when used in
  * conjunction with circling drift
@@ -69,17 +69,17 @@ Copyright_License {
  */
 static const fixed SAMPLE_RATE(4);
 
-/*
+/**
  * minimum number of seconds between
  * recalculating estimate
  */
 static const fixed UPDATE_RATE(20);
 
-// 15 m/s = 30 knots max approx
+/** 15 m/s = 30 knots max approx */
 static const int V_SCALE = 20;
-// resolution on V search
+/** resolution on V search */
 #define NUM_V_POINTS 41
-// resolution on theta search
+/** resolution on theta search */
 #define NUM_THETA_POINTS (36)
 
 static fixed
