@@ -45,10 +45,9 @@ Copyright_License {
 #define _cdecl
 #endif
 
-DataFieldEnum::~DataFieldEnum()
+DataFieldEnum::Entry::~Entry()
 {
-  for (unsigned int i = 0; i < nEnums; i++)
-    free(mEntries[i].mText);
+  free(mText);
 }
 
 int

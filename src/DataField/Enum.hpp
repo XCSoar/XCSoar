@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_DATA_FIELD_ENUM_HPP
 
 #include "DataField/Base.hpp"
+#include "Util/NonCopyable.hpp"
 
 class DataFieldEnum: public DataField
 {
@@ -48,9 +49,12 @@ public:
     DFE_MAX_ENUMS = 128,
   };
 
-  struct Entry {
+  struct Entry : private NonCopyable {
     TCHAR *mText;
     unsigned int index;
+
+    Entry():mText(NULL) {}
+    ~Entry();
   };
 
 private:
@@ -67,7 +71,6 @@ public:
   {
     SupportCombo = true;
   }
-  virtual ~DataFieldEnum();
 
   void Inc(void);
   void Dec(void);
