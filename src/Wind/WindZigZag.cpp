@@ -323,9 +323,9 @@ private:
 
     for (int i = 0; i < NUM_SAMPLES; i++) {
       if (points[i].theta_west_ok[j]) {
-        fixed e1 = Angle::radians(theta.value_radians() - points[i].theta_west_1[j]).
+        fixed e1 = (theta - Angle::radians(points[i].theta_west_1[j])).
             as_delta().magnitude_radians();
-        fixed e2 = Angle::radians(theta.value_radians() - points[i].theta_west_2[j]).
+        fixed e2 = (theta - Angle::radians(points[i].theta_west_2[j])).
             as_delta().magnitude_radians();
         if (e1 <= e2)
           de += e1 * e1;
