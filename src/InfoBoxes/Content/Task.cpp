@@ -599,6 +599,20 @@ InfoBoxContentOLC::Update(InfoBoxWindow &infobox)
   infobox.SetValueUnit(Units::DistanceUnit);
 }
 
+bool
+InfoBoxContentOLC::HandleKey(const InfoBoxKeyCodes keycode)
+{
+  switch (keycode) {
+  case ibkEnter:
+    dlgAnalysisShowModal(7);
+    return true;
+  }
+
+  return false;
+}
+
+
+
 void
 InfoBoxContentTaskAATime::Update(InfoBoxWindow &infobox)
 {
