@@ -54,135 +54,145 @@ extern long count_dijkstra_links;
  */
 template <class Node> class Dijkstra {
 public:
-/** 
- * Default constructor
- * 
- * @param is_min Whether this algorithm will search for min or max distance
- */
-  Dijkstra(const bool is_min=true):m_min(is_min) {}
+  /**
+   * Default constructor
+   *
+   * @param is_min Whether this algorithm will search for min or max distance
+   */
+  Dijkstra(const bool is_min = true) :
+    m_min(is_min) {}
 
-/** 
- * Constructor
- * 
- * @param n Node to start
- * @param is_min Whether this algorithm will search for min or max distance
- */
-  Dijkstra(const Node &n, const bool is_min=true):
+  /**
+   * Constructor
+   *
+   * @param n Node to start
+   * @param is_min Whether this algorithm will search for min or max distance
+   */
+  Dijkstra(const Node &n, const bool is_min = true) :
     m_min(is_min) { 
     push(n, n, 0); 
   }
 
-/** 
- * Resets as if constructed afresh
- * 
- * @param n Node to start
- */
+  /**
+   * Resets as if constructed afresh
+   *
+   * @param n Node to start
+   */
   void reset(const Node &n) {
     clear();
     push(n,n,0);
-  };
+  }
 
   /** 
    * Clears the queues
    * 
    */
   void clear() {
-    while (!q.empty()) {
+    while (!q.empty())
       q.pop();
-    }
+
     p.clear();
     m.clear();
-  };
+  }
 
-/** 
- * Test whether queue is empty 
- *
- * @return True if no more nodes to search
- */  
-  bool empty() const { return q.empty(); }
+  /**
+   * Test whether queue is empty
+   *
+   * @return True if no more nodes to search
+   */
+  bool empty() const {
+    return q.empty();
+  }
 
-/** 
- * Return top element of queue for processing
- * 
- * @return Node for processing
- */
+  /**
+   * Return top element of queue for processing
+   *
+   * @return Node for processing
+   */
   const Node &pop() {
     cur = q.top().second;
-    do q.pop();
+
+    do
+      q.pop();
     while (!q.empty() && q.top().second->second < q.top().first);
+
     return cur->first;
   }
 
-/** 
- * Return total edge distances 
- *
- * @return Total edge distances so far
- */
-  unsigned dist() const { return (cur->second); }
+  /**
+   * Return total edge distances
+   *
+   * @return Total edge distances so far
+   */
+  unsigned dist() const {
+    return cur->second;
+  }
 
-/** 
- * Add an edge (node-node-distance) to the search 
- * 
- * @param n Destination node to add
- * @param pn Predecessor of destination node
- * @param e Edge distance
- */
-  void link(const Node &n, const Node &pn, const unsigned &e=1) { 
+  /**
+   * Add an edge (node-node-distance) to the search
+   *
+   * @param n Destination node to add
+   * @param pn Predecessor of destination node
+   * @param e Edge distance
+   */
+  void link(const Node &n, const Node &pn, const unsigned &e = 1) {
 #ifdef INSTRUMENT_TASK
     count_dijkstra_links++;
 #endif
     push(n, pn, cur->second + minmax_dist(e)); 
   }
 
-/** 
- * Find best predecessor found so far to the specified node
- * 
- * @param n Node as destination to find best predecessor for
- * 
- * @return Predecessor node
- */
+  /**
+   * Find best predecessor found so far to the specified node
+   *
+   * @param n Node as destination to find best predecessor for
+   *
+   * @return Predecessor node
+   */
   Node get_predecessor(const Node &n) const {
     IterCP it = p.find(n);
-    if (it == p.end()) { // first entry
+    if (it == p.end())
+      // first entry
       return n;
-    } else {
+    else
       return (it->second); 
-    }
   }
   
 private:
-
   unsigned minmax_dist(const unsigned d) const {
     return m_min? d:MINMAX_OFFSET-d;
   }
 
-/** 
- * Add node to search queue
- * 
- * @param n Destination node to add
- * @param pn Previous node
- * @param e Edge distance (previous to this)
- */
-  void push(const Node &n, const Node &pn, const unsigned &e=0) {
+  /**
+   * Add node to search queue
+   *
+   * @param n Destination node to add
+   * @param pn Previous node
+   * @param e Edge distance (previous to this)
+   */
+  void push(const Node &n, const Node &pn, const unsigned &e = 0) {
     Iter it = m.find(n);
-    if (it == m.end()) { // first entry
+    if (it == m.end()) {
+      // first entry
       it = m.insert(make_pair(n, e)).first;
       set_predecessor(n, pn);
     } else if (it->second > e) {
-      it->second = e; // replace, it's bigger
+      it->second = e;
+      // replace, it's bigger
       set_predecessor(n, pn);
     } else 
       return;
+
     q.push(make_pair(e, it));
   }
 
   void set_predecessor(const Node &n, const Node &pn) {
     IterP it = p.find(n);
-    if (it == p.end()) { // first entry
+    if (it == p.end())
+      // first entry
       p.insert(make_pair(n, pn));
-    } else {
+    else
       it->second = pn; 
-    }
   }
 
   typedef typename std::map<Node, unsigned>::iterator Iter;
