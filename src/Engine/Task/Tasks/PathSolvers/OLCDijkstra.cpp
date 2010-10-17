@@ -142,11 +142,8 @@ OLCDijkstra::calc_distance() const
 {
   fixed dist = fixed_zero;
   for (unsigned i = 0; i + 1 < num_stages; ++i)
-    dist += get_weighting(i) *
-            solution[i].distance(solution[i + 1].get_location());
+    dist += solution[i].distance(solution[i + 1].get_location());
 
-  static const fixed fixed_fifth(0.2);
-  dist *= fixed_fifth;
   return dist;
 }
 
