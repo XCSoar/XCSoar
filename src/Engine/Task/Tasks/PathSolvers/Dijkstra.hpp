@@ -78,7 +78,7 @@ public:
    *
    * @param n Node to start
    */
-  void reset(const Node &n) {
+  void restart(const Node &n) {
     clear();
     push(n,n,0);
   }

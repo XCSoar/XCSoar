@@ -79,7 +79,7 @@ OLCDijkstra::solve()
     return false;
 
   if (m_dijkstra.empty()) {
-    m_dijkstra.reset(ScanTaskPoint(0, 0));
+    m_dijkstra.restart(ScanTaskPoint(0, 0));
     add_start_edges();
     if (m_dijkstra.empty())
       // no processing to perform!
