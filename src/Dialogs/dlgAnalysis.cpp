@@ -367,7 +367,7 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgAnalysisShowModal(void)
+dlgAnalysisShowModal(int _page)
 {
   wf = NULL;
   wGrid = NULL;
@@ -388,6 +388,8 @@ dlgAnalysisShowModal(void)
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->
       SetOnClickNotify(OnCloseClicked);
+
+  page = (analysis_page)_page;
 
   Update();
 
