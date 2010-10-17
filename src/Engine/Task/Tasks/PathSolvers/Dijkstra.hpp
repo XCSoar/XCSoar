@@ -68,9 +68,9 @@ public:
    * @param n Node to start
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  Dijkstra(const Node &n, const bool is_min = true) :
+  Dijkstra(const Node &node, const bool is_min = true) :
     m_min(is_min) { 
-    push(n, n, 0); 
+    push(node, node, 0); 
   }
 
   /**
@@ -78,9 +78,9 @@ public:
    *
    * @param n Node to start
    */
-  void restart(const Node &n) {
+  void restart(const Node &node) {
     clear();
-    push(n,n,0);
+    push(node, node, 0);
   }
 
   /** 
@@ -134,11 +134,11 @@ public:
    * @param pn Predecessor of destination node
    * @param e Edge distance
    */
-  void link(const Node &n, const Node &pn, const unsigned &e = 1) {
+  void link(const Node &node, const Node &parent, const unsigned &value = 1) {
 #ifdef INSTRUMENT_TASK
     count_dijkstra_links++;
 #endif
-    push(n, pn, cur->second + minmax_dist(e)); 
+    push(node, parent, cur->second + minmax_dist(value)); 
   }
 
   /**
@@ -148,14 +148,14 @@ public:
    *
    * @return Predecessor node
    */
-  Node get_predecessor(const Node &n) const {
+  Node get_predecessor(const Node &node) const {
     // Try to find the given node in the node_parent_map
-    node_parent_const_iterator it = node_parents.find(n);
+    node_parent_const_iterator it = node_parents.find(node);
     if (it == node_parents.end())
       // first entry
       // If the node wasn't found
       // -> Return the given node itself
-      return n;
+      return node;
     else
       // If the node was found
       // -> Return the parent node
@@ -174,45 +174,45 @@ private:
    * @param pn Previous node
    * @param e Edge distance (previous to this)
    */
-  void push(const Node &n, const Node &pn, const unsigned &e = 0) {
+  void push(const Node &node, const Node &parent, const unsigned &value = 0) {
     // Try to find the given node n in the node_value_map
-    node_value_iterator it = node_values.find(n);
+    node_value_iterator it = node_values.find(node);
     if (it == node_values.end()) {
       // first entry
       // If the node wasn't found
       // -> Insert a new node into the node_value_map
-      it = node_values.insert(make_pair(n, e)).first;
+      it = node_values.insert(make_pair(node, value)).first;
 
       // Remember the parent node
-      set_predecessor(n, pn);
-    } else if (it->second > e) {
+      set_predecessor(node, parent);
+    } else if (it->second > value) {
       // If the node was found and the value is smaller
       // -> Replace the value with the new one
-      it->second = e;
+      it->second = value;
       // replace, it's bigger
 
       // Remember the new parent node
-      set_predecessor(n, pn);
+      set_predecessor(node, parent);
     } else
       // If the node was found but the value is higher or equal
       // -> Don't use this new leg
       return;
 
-    q.push(make_pair(e, it));
+    q.push(make_pair(value, it));
   }
 
-  void set_predecessor(const Node &n, const Node &pn) {
+  void set_predecessor(const Node &value, const Node &parent) {
     // Try to find the given node in the node_parent_map
-    node_parent_iterator it = node_parents.find(n);
+    node_parent_iterator it = node_parents.find(value);
     if (it == node_parents.end())
       // first entry
       // If the node wasn't found
       // -> Insert a new node into the node_parent_map
-      node_parents.insert(make_pair(n, pn));
+      node_parents.insert(make_pair(value, parent));
     else
       // If the node was found
       // -> Replace the according parent node with the new one
-      it->second = pn; 
+      it->second = parent; 
   }
 
   typedef std::map<Node, unsigned> node_value_map;
