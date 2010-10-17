@@ -195,7 +195,8 @@ private:
       it->second = pn; 
   }
 
-  typedef typename std::map<Node, unsigned>::iterator Iter;
+  typedef std::map<Node, unsigned> node_value_map;
+  typedef typename node_value_map::iterator Iter;
   typedef typename std::map<Node, Node>::iterator IterP;
   typedef typename std::map<Node, Node>::const_iterator IterCP;
 
@@ -211,7 +212,7 @@ private:
    * Stores the value of each node.  It is updated by push(), if a
    * value lower than the current one is found.
    */
-  std::map<Node, unsigned> node_values;
+  node_value_map node_values;
 
   /**
    * Stores the predecessor of each node.  It is maintained by
