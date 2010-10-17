@@ -149,11 +149,16 @@ public:
    * @return Predecessor node
    */
   Node get_predecessor(const Node &n) const {
+    // Try to find the given node in the node_parent_map
     node_parent_const_iterator it = node_parents.find(n);
     if (it == node_parents.end())
       // first entry
+      // If the node wasn't found
+      // -> Return the given node itself
       return n;
     else
+      // If the node was found
+      // -> Return the parent node
       return (it->second); 
   }
   
@@ -170,27 +175,43 @@ private:
    * @param e Edge distance (previous to this)
    */
   void push(const Node &n, const Node &pn, const unsigned &e = 0) {
+    // Try to find the given node n in the node_value_map
     node_value_iterator it = node_values.find(n);
     if (it == node_values.end()) {
       // first entry
+      // If the node wasn't found
+      // -> Insert a new node into the node_value_map
       it = node_values.insert(make_pair(n, e)).first;
+
+      // Remember the parent node
       set_predecessor(n, pn);
     } else if (it->second > e) {
+      // If the node was found and the value is smaller
+      // -> Replace the value with the new one
       it->second = e;
       // replace, it's bigger
+
+      // Remember the new parent node
       set_predecessor(n, pn);
-    } else 
+    } else
+      // If the node was found but the value is higher or equal
+      // -> Don't use this new leg
       return;
 
     q.push(make_pair(e, it));
   }
 
   void set_predecessor(const Node &n, const Node &pn) {
+    // Try to find the given node in the node_parent_map
     node_parent_iterator it = node_parents.find(n);
     if (it == node_parents.end())
       // first entry
+      // If the node wasn't found
+      // -> Insert a new node into the node_parent_map
       node_parents.insert(make_pair(n, pn));
     else
+      // If the node was found
+      // -> Replace the according parent node with the new one
       it->second = pn; 
   }
 
