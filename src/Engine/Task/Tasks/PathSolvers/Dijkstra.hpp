@@ -150,7 +150,7 @@ public:
    * @return Predecessor node
    */
   Node get_predecessor(const Node &n) const {
-    IterCP it = node_parents.find(n);
+    node_parent_const_iterator it = node_parents.find(n);
     if (it == node_parents.end())
       // first entry
       return n;
@@ -171,7 +171,7 @@ private:
    * @param e Edge distance (previous to this)
    */
   void push(const Node &n, const Node &pn, const unsigned &e = 0) {
-    Iter it = node_values.find(n);
+    node_value_iterator it = node_values.find(n);
     if (it == node_values.end()) {
       // first entry
       it = node_values.insert(make_pair(n, e)).first;
@@ -187,7 +187,7 @@ private:
   }
 
   void set_predecessor(const Node &n, const Node &pn) {
-    IterP it = node_parents.find(n);
+    node_parent_iterator it = node_parents.find(n);
     if (it == node_parents.end())
       // first entry
       node_parents.insert(make_pair(n, pn));
@@ -196,13 +196,13 @@ private:
   }
 
   typedef std::map<Node, unsigned> node_value_map;
-  typedef typename node_value_map::iterator Iter;
+  typedef typename node_value_map::iterator node_value_iterator;
 
   typedef std::map<Node, Node> node_parent_map;
-  typedef typename node_parent_map::iterator IterP;
-  typedef typename node_parent_map::const_iterator IterCP;
+  typedef typename node_parent_map::iterator node_parent_iterator;
+  typedef typename node_parent_map::const_iterator node_parent_const_iterator;
 
-  typedef std::pair<unsigned, Iter> Value;
+  typedef std::pair<unsigned, node_value_iterator> Value;
 
   struct Rank : public std::binary_function<Value, Value, bool> {
     bool operator()(const Value& x, const Value& y) const {
@@ -227,7 +227,7 @@ private:
    */
   std::priority_queue<Value, std::vector<Value>, Rank> q;
 
-  Iter cur;
+  node_value_iterator cur;
   const bool m_min;
 };
 
