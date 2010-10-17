@@ -92,7 +92,7 @@ public:
       q.pop();
 
     p.clear();
-    m.clear();
+    node_values.clear();
   }
 
   /**
@@ -171,10 +171,10 @@ private:
    * @param e Edge distance (previous to this)
    */
   void push(const Node &n, const Node &pn, const unsigned &e = 0) {
-    Iter it = m.find(n);
-    if (it == m.end()) {
+    Iter it = node_values.find(n);
+    if (it == node_values.end()) {
       // first entry
-      it = m.insert(make_pair(n, e)).first;
+      it = node_values.insert(make_pair(n, e)).first;
       set_predecessor(n, pn);
     } else if (it->second > e) {
       it->second = e;
@@ -211,7 +211,7 @@ private:
    * Stores the value of each node.  It is updated by push(), if a
    * value lower than the current one is found.
    */
-  std::map<Node, unsigned> m;
+  std::map<Node, unsigned> node_values;
 
   /**
    * Stores the predecessor of each node.  It is maintained by
