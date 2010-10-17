@@ -91,7 +91,7 @@ public:
     while (!q.empty())
       q.pop();
 
-    p.clear();
+    node_parents.clear();
     node_values.clear();
   }
 
@@ -150,8 +150,8 @@ public:
    * @return Predecessor node
    */
   Node get_predecessor(const Node &n) const {
-    IterCP it = p.find(n);
-    if (it == p.end())
+    IterCP it = node_parents.find(n);
+    if (it == node_parents.end())
       // first entry
       return n;
     else
@@ -187,10 +187,10 @@ private:
   }
 
   void set_predecessor(const Node &n, const Node &pn) {
-    IterP it = p.find(n);
-    if (it == p.end())
+    IterP it = node_parents.find(n);
+    if (it == node_parents.end())
       // first entry
-      p.insert(make_pair(n, pn));
+      node_parents.insert(make_pair(n, pn));
     else
       it->second = pn; 
   }
@@ -220,7 +220,7 @@ private:
    * Stores the predecessor of each node.  It is maintained by
    * set_predecessor().
    */
-  node_parent_map p;
+  node_parent_map node_parents;
 
   /**
    * A sorted list of all possible node paths, lowest distance first.
