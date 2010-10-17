@@ -49,8 +49,8 @@ extern long count_dijkstra_links;
 
 /**
  * Dijkstra search algorithm.
- * From http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
- * with modifications by John Wharington to track optimal solution 
+ * Modifications by John Wharington to track optimal solution
+ * @see http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
  */
 template <class Node> class Dijkstra {
 public:
@@ -85,7 +85,6 @@ public:
 
   /** 
    * Clears the queues
-   * 
    */
   void clear() {
     while (!q.empty())
