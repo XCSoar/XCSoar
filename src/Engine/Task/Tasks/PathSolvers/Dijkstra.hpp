@@ -197,8 +197,10 @@ private:
 
   typedef std::map<Node, unsigned> node_value_map;
   typedef typename node_value_map::iterator Iter;
-  typedef typename std::map<Node, Node>::iterator IterP;
-  typedef typename std::map<Node, Node>::const_iterator IterCP;
+
+  typedef std::map<Node, Node> node_parent_map;
+  typedef typename node_parent_map::iterator IterP;
+  typedef typename node_parent_map::const_iterator IterCP;
 
   typedef std::pair<unsigned, Iter> Value;
 
@@ -218,7 +220,7 @@ private:
    * Stores the predecessor of each node.  It is maintained by
    * set_predecessor().
    */
-  std::map<Node, Node> p;
+  node_parent_map p;
 
   /**
    * A sorted list of all possible node paths, lowest distance first.
