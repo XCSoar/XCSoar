@@ -116,7 +116,7 @@ OLCDijkstra::reset()
   best_time = fixed_zero;
 }
 
-fixed
+bool
 OLCDijkstra::score(fixed& the_distance, fixed& the_speed, fixed& the_time)
 {
   if (positive(calc_time())) {
@@ -125,10 +125,10 @@ OLCDijkstra::score(fixed& the_distance, fixed& the_speed, fixed& the_time)
     the_speed = best_speed;
     the_time = best_time;
 
-    return best_distance;
+    return true;
   }
 
-  return fixed_zero;
+  return false;
 }
 
 fixed
