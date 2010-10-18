@@ -551,8 +551,10 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
 void
 FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
 {
-  FastRotation::Pair p = fr.Rotate(fixed_zero, fixed_minus_one);
-  fixed x = p.first, y = p.second;
+  fixed x = fixed_zero, y = fixed_minus_one;
+  FastRotation::Pair p = fr.Rotate(x, y);
+  x = p.first;
+  y = p.second;
 
   canvas.set_text_color(Color::WHITE);
   canvas.select(hpRadar);
