@@ -305,12 +305,7 @@ Window::on_destroy()
 bool
 Window::on_close()
 {
-#ifdef ENABLE_SDL
-  reset();
-  return true;
-#else /* !ENABLE_SDL */
   return false;
-#endif /* !ENABLE_SDL */
 }
 
 bool
