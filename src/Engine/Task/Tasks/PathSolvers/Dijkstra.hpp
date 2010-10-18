@@ -119,15 +119,6 @@ public:
   }
 
   /**
-   * Return total edge distances
-   *
-   * @return Total edge distances so far
-   */
-  unsigned dist() const {
-    return cur->second;
-  }
-
-  /**
    * Add an edge (node-node-distance) to the search
    *
    * @param n Destination node to add
