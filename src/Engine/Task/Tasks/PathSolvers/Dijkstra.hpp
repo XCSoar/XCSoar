@@ -134,11 +134,11 @@ public:
    * @param pn Predecessor of destination node
    * @param e Edge distance
    */
-  void link(const Node &node, const Node &parent, const unsigned &value = 1) {
+  void link(const Node &node, const Node &parent, const unsigned &edge_value = 1) {
 #ifdef INSTRUMENT_TASK
     count_dijkstra_links++;
 #endif
-    push(node, parent, cur->second + minmax_dist(value)); 
+    push(node, parent, cur->second + minmax_dist(edge_value)); 
   }
 
   /**
@@ -174,21 +174,21 @@ private:
    * @param pn Previous node
    * @param e Edge distance (previous to this)
    */
-  void push(const Node &node, const Node &parent, const unsigned &value = 0) {
+  void push(const Node &node, const Node &parent, const unsigned &edge_value = 0) {
     // Try to find the given node n in the node_value_map
     node_value_iterator it = node_values.find(node);
     if (it == node_values.end()) {
       // first entry
       // If the node wasn't found
       // -> Insert a new node into the node_value_map
-      it = node_values.insert(make_pair(node, value)).first;
+      it = node_values.insert(make_pair(node, edge_value)).first;
 
       // Remember the parent node
       set_predecessor(node, parent);
-    } else if (it->second > value) {
+    } else if (it->second > edge_value) {
       // If the node was found and the value is smaller
       // -> Replace the value with the new one
-      it->second = value;
+      it->second = edge_value;
       // replace, it's bigger
 
       // Remember the new parent node
@@ -198,17 +198,17 @@ private:
       // -> Don't use this new leg
       return;
 
-    q.push(make_pair(value, it));
+    q.push(make_pair(edge_value, it));
   }
 
-  void set_predecessor(const Node &value, const Node &parent) {
+  void set_predecessor(const Node &node, const Node &parent) {
     // Try to find the given node in the node_parent_map
-    node_parent_iterator it = node_parents.find(value);
+    node_parent_iterator it = node_parents.find(node);
     if (it == node_parents.end())
       // first entry
       // If the node wasn't found
       // -> Insert a new node into the node_parent_map
-      node_parents.insert(make_pair(value, parent));
+      node_parents.insert(make_pair(node, parent));
     else
       // If the node was found
       // -> Replace the according parent node with the new one
