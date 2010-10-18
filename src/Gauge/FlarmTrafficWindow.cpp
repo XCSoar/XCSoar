@@ -219,7 +219,8 @@ FlarmTrafficWindow::Update(Angle new_direction, const FLARM_STATE &new_data,
                            const SETTINGS_TEAMCODE &new_settings)
 {
   heading = new_direction;
-  fr.SetAngle(enable_north_up ? Angle::native(fixed_zero) : -heading);
+  fr.SetAngle(-heading);
+  fir.SetAngle(heading);
   data = new_data;
   settings = new_settings;
 
@@ -532,18 +533,59 @@ void
 FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
 {
   canvas.select(hpPlane);
-  canvas.line(radar_mid.x + Layout::FastScale(small ? 5 : 10),
-              radar_mid.y - Layout::FastScale(small ? 1 : 2),
-              radar_mid.x - Layout::FastScale(small ? 5 : 10),
-              radar_mid.y - Layout::FastScale(small ? 1 : 2));
-  canvas.line(radar_mid.x,
-              radar_mid.y - Layout::FastScale(small ? 3 : 6),
-              radar_mid.x,
-              radar_mid.y + Layout::FastScale(small ? 3 : 6));
-  canvas.line(radar_mid.x + Layout::FastScale(small ? 2 : 4),
-              radar_mid.y + Layout::FastScale(small ? 2 : 4),
-              radar_mid.x - Layout::FastScale(small ? 2 : 4),
-              radar_mid.y + Layout::FastScale(small ? 2 : 4));
+
+  int x1, y1, x2, y2;
+
+  x1 = Layout::FastScale(small ? 5 : 10);
+  y1 = -Layout::FastScale(small ? 1 : 2);
+  x2 = -Layout::FastScale(small ? 5 : 10);
+  y2 = -Layout::FastScale(small ? 1 : 2);
+
+  if (enable_north_up) {
+    FastRotation::Pair p = fir.Rotate(x1, y1);
+    x1 = p.first;
+    y1 = p.second;
+    p = fir.Rotate(x2, y2);
+    x2 = p.first;
+    y2 = p.second;
+  }
+
+  canvas.line(radar_mid.x + x1, radar_mid.y + y1,
+              radar_mid.x + x2, radar_mid.y + y2);
+
+  x1 = 0;
+  y1 = -Layout::FastScale(small ? 3 : 6);
+  x2 = 0;
+  y2 = Layout::FastScale(small ? 3 : 6);
+
+  if (enable_north_up) {
+    FastRotation::Pair p = fir.Rotate(x1, y1);
+    x1 = p.first;
+    y1 = p.second;
+    p = fir.Rotate(x2, y2);
+    x2 = p.first;
+    y2 = p.second;
+  }
+
+  canvas.line(radar_mid.x + x1, radar_mid.y + y1,
+              radar_mid.x + x2, radar_mid.y + y2);
+
+  x1 = Layout::FastScale(small ? 2 : 4);
+  y1 = Layout::FastScale(small ? 2 : 4);
+  x2 = -Layout::FastScale(small ? 2 : 4);
+  y2 = Layout::FastScale(small ? 2 : 4);
+
+  if (enable_north_up) {
+    FastRotation::Pair p = fir.Rotate(x1, y1);
+    x1 = p.first;
+    y1 = p.second;
+    p = fir.Rotate(x2, y2);
+    x2 = p.first;
+    y2 = p.second;
+  }
+
+  canvas.line(radar_mid.x + x1, radar_mid.y + y1,
+              radar_mid.x + x2, radar_mid.y + y2);
 }
 
 /**

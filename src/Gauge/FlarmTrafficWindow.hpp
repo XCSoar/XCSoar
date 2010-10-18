@@ -101,6 +101,7 @@ protected:
   bool enable_north_up;
   Angle heading;
   FastRotation fr;
+  FastIntegerRotation fir;
   FLARM_STATE data;
   SETTINGS_TEAMCODE settings;
 
