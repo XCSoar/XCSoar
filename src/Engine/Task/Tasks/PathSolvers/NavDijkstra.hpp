@@ -52,24 +52,22 @@ public:
     std::fill(solution, solution + num_stages, T());
   }
 
-/** 
- * Test whether two points (as previous search locations) are significantly
- * different to warrant a new search
- * 
- * @param a1 First point to compare
- * @param a2 Second point to compare
- * @param dist_threshold Threshold distance for significance
- * 
- * @return True if distance is significant
- */
-  static bool distance_is_significant(const T& a1,
-                                      const T& a2,
-                                      const unsigned dist_threshold=1) {
+  /**
+   * Test whether two points (as previous search locations) are significantly
+   * different to warrant a new search
+   *
+   * @param a1 First point to compare
+   * @param a2 Second point to compare
+   * @param dist_threshold Threshold distance for significance
+   *
+   * @return True if distance is significant
+   */
+  static bool distance_is_significant(const T& a1, const T& a2,
+                                      const unsigned dist_threshold = 1) {
     return a1.flat_distance(a2)> dist_threshold;
   }
 
 protected:
-
   /** 
    * Determine whether a finished path is valid
    * 
@@ -107,7 +105,7 @@ protected:
    * @return True if point is terminal
    */
   bool is_final(const ScanTaskPoint &sp) const {
-    return sp.first+1== num_stages;
+    return sp.first + 1 == num_stages;
   }
 
   /** 
@@ -118,7 +116,7 @@ protected:
    * @return True if point is in first layer
    */
   bool is_first(const ScanTaskPoint &sp) const {
-    return sp.first== 0;
+    return sp.first == 0;
   }
 
   /** 
@@ -130,16 +128,14 @@ protected:
    * @return True if algorithm returns a terminal path or no path found
    */
   bool distance_general(DijkstraTaskPoint &dijkstra, 
-                        unsigned max_steps = 0-1) {
-
+                        unsigned max_steps = 0 - 1) {
 #ifdef INSTRUMENT_TASK
- count_dijkstra_queries++;
+    count_dijkstra_queries++;
 #endif
 
     while (!dijkstra.empty()) {
-      
       const ScanTaskPoint destination = dijkstra.pop();
-      
+
       if (is_final(destination)) {
         find_solution(dijkstra, destination);
         if (finish_satisfied(destination)) {
@@ -148,15 +144,16 @@ protected:
         }
       } else {
         add_edges(dijkstra, destination);
-        if (dijkstra.empty()) return true; // error, no way to reach final
+        if (dijkstra.empty())
+          return true; // error, no way to reach final
       }
 
-      if (max_steps) {
+      if (max_steps)
         --max_steps;
-      } else {
+      else
         return false; // Reached limit
-      }
     }
+
     return false; // No path found
   }
 
@@ -181,8 +178,7 @@ protected:
    * 
    * @return Distance (flat) from origin to destination
    */
-  unsigned distance(const ScanTaskPoint &s1,
-                    const ScanTaskPoint &s2) const {
+  unsigned distance(const ScanTaskPoint &s1, const ScanTaskPoint &s2) const {
     return get_point(s1).flat_distance(get_point(s2));
   }
 
@@ -204,7 +200,8 @@ protected:
     } while ((p.second != p_last.second) || (p.first != p_last.first));
   }
 
-  unsigned num_stages; /**< Number of stages in search */
+  /** Number of stages in search */
+  unsigned num_stages;
   T solution[MAX_STAGES];
 };
 
