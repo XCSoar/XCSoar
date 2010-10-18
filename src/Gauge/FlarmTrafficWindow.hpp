@@ -98,7 +98,7 @@ protected:
 
   POINT sc[FLARM_STATE::FLARM_MAX_TRAFFIC];
 
-  Angle direction;
+  Angle heading;
   FastRotation fr;
   FLARM_STATE data;
   SETTINGS_TEAMCODE settings;

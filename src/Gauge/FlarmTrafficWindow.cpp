@@ -61,7 +61,7 @@ FlarmTrafficWindow::FlarmTrafficWindow(unsigned _padding, bool _small)
    selection(-1), warning(-1),
    padding(_padding),
    small(_small),
-   direction(Angle::radians(fixed_zero)),
+   heading(Angle::radians(fixed_zero)),
    side_display_type(1)
 {
   memset(&data, 0, sizeof(data));
@@ -217,8 +217,8 @@ void
 FlarmTrafficWindow::Update(Angle new_direction, const FLARM_STATE &new_data,
                            const SETTINGS_TEAMCODE &new_settings)
 {
-  direction = new_direction;
-  fr.SetAngle(-direction);
+  heading = new_direction;
+  fr.SetAngle(-heading);
   data = new_data;
   settings = new_settings;
 
@@ -368,7 +368,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   // Rotate and shift the arrow
   PolygonRotateShift(Arrow, 5, sc[i].x, sc[i].y,
-                     traffic.TrackBearing - direction);
+                     traffic.TrackBearing - heading);
 
   // Draw the polygon
   canvas.polygon(Arrow, 5);
