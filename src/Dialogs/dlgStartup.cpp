@@ -53,41 +53,22 @@ Copyright_License {
 #include <stdio.h>
 
 static WndForm *wf = NULL;
+static Bitmap bitmap_title;
+static Bitmap bitmap_logo;
 extern TCHAR startProfileFile[];
 
 static void
-PaintLogo(Canvas &canvas, RECT rc, const Bitmap &logo)
-{
-  BitmapCanvas bitmap_canvas(canvas, logo);
-
-  int window_width = rc.right - rc.left;
-  int window_height = rc.bottom - rc.top;
-  int bitmap_width = bitmap_canvas.get_width();
-  int bitmap_height = bitmap_canvas.get_height();
-
-  fixed scale = min(fixed(window_width - 10) / bitmap_width,
-                    fixed(window_height - 10) / bitmap_height);
-
-  unsigned dest_width = bitmap_width * scale;
-  unsigned dest_height = bitmap_height * scale;
-
-  canvas.stretch((rc.left + rc.right - dest_width) / 2,
-                 (rc.top + rc.bottom - dest_height) / 2,
-                 dest_width, dest_height,
-                 bitmap_canvas, 0, 0, bitmap_width, bitmap_height);
-}
-
-/*
- * use a smaller icon for smaller screens because the "stretch" will not shrink
- */
-static void
 OnLogoPaint(WindowControl *Sender, Canvas &canvas)
 {
-  canvas.clear_white();
+  BitmapCanvas bitmap_canvas(canvas, bitmap_logo);
+  canvas.stretch(bitmap_canvas);
+}
 
-  Bitmap splash_bitmap;
-  splash_bitmap.load(Layout::Scale(20) > 30 ? IDB_SWIFT_HD : IDB_SWIFT);
-  PaintLogo(canvas, Sender->get_client_rect(), splash_bitmap);
+static void
+OnTitlePaint(WindowControl *Sender, Canvas &canvas)
+{
+  BitmapCanvas bitmap_canvas(canvas, bitmap_title);
+  canvas.stretch(bitmap_canvas);
 }
 
 static void
@@ -103,6 +84,7 @@ OnQuit(gcc_unused WndButton &button)
 }
 
 static CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnTitlePaint),
   DeclareCallBackEntry(OnLogoPaint),
   DeclareCallBackEntry(NULL)
 };
@@ -144,6 +126,51 @@ dlgStartupShowModal()
     delete wf;
     return true;
   }
+
+  // Determine window size
+  int window_width = wf->get_width();
+  int window_height = wf->get_height();
+
+  bitmap_title.load(window_width > 272 && window_height > 272 ?
+                    IDB_TITLE_HD : IDB_TITLE);
+  SIZE title_size = bitmap_title.get_size();
+
+  // Determine logo size
+  bitmap_logo.load(window_width > 272 && window_height > 272 ?
+                   IDB_SWIFT_HD : IDB_SWIFT);
+  SIZE logo_size = bitmap_logo.get_size();
+
+  // Determine logo and title positions
+  bool hidetitle = false;
+  int logox, logoy, titlex, titley;
+  if (window_width > window_height) {
+    // Landscape
+    logox = (window_width - (logo_size.cx + title_size.cy + title_size.cx)) / 2;
+    logoy = (window_height - logo_size.cy - window_height / 10) / 2;
+    titlex = logox + logo_size.cx + title_size.cy;
+    titley = (window_height - title_size.cy - window_height / 10) / 2;
+  } else if (window_width < window_height) {
+    // Portrait
+    logox = (window_width - logo_size.cx) / 2;
+    logoy = (window_height - (logo_size.cy + title_size.cy * 2) -
+             window_height / 10) / 2;
+    titlex = (window_width - title_size.cx) / 2;
+    titley = logoy + logo_size.cy + title_size.cy;
+  } else {
+    // Square screen
+    logox = (window_width - logo_size.cx) / 2;
+    logoy = (window_height - logo_size.cy - window_height / 10) / 2;
+    hidetitle = true;
+  }
+
+  wc = ((WindowControl*)wf->FindByName(_T("frmLogo")));
+  wc->move(logox, logoy, logo_size.cx, logo_size.cy);
+
+  wc = ((WindowControl*)wf->FindByName(_T("frmTitle")));
+  if (hidetitle)
+    wc->hide();
+  else
+    wc->move(titlex, titley, title_size.cx, title_size.cy);
 
   if (wf->ShowModal() != mrOK) {
     delete wf;

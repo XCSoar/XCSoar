@@ -12,5 +12,6 @@
   <Button Name="cmdQuit" Caption="Quit" X="-75" Y="1" Width="-1" Height="30"/>
 
   <Label Name="lblVersion" X="8" Y="5" Width="-75" Height="18" Caption="" />
-  <Canvas Name="frmLogo" X="0" Y="30" Height="-60" OnPaint="OnLogoPaint" />
+  <Canvas Name="frmLogo" OnPaint="OnLogoPaint" />
+  <Canvas Name="frmTitle" OnPaint="OnTitlePaint" />
 </Form>
