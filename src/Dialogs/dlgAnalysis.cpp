@@ -238,11 +238,14 @@ Update(void)
     Units::TimeToText(timetext1, (int)stats.time_olc);
     _stprintf(sTmp,
               (Layout::landscape
-              ? _T("%s:\r\n  %d %s\r\n%s: %s\r\n%s: %d %s\r\n")
-              : _T("%s: %d %s\r\n%s: %s\r\n%s: %d %s\r\n")),
+              ? _T("%s:\r\n  %d %s\r\n%s:\r\n  %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
+              : _T("%s: %d %s\r\n%s: %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")),
               _("Distance"),
               (int)Units::ToUserUnit(stats.distance_olc, Units::DistanceUnit),
               Units::GetDistanceName(),
+              _("Score"),
+              (double)stats.score_olc,
+              _("pts"),
               _("Time"),
               timetext1,
               _("Speed"),
