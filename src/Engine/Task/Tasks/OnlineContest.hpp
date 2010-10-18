@@ -35,7 +35,7 @@ public:
                 const Trace &trace_sprint);
 
   void set_olc_rules(OLCRules _olc_rules) {
-    m_olc_rules = _olc_rules;
+    olc_rules = _olc_rules;
   }
 
   /**
@@ -84,16 +84,16 @@ public:
   const TracePointVector& get_olc_points() const;
 
 private:
-  OLCRules m_olc_rules;
+  OLCRules olc_rules;
   CommonStats &common_stats;
 
-  const Trace &m_trace_full;
-  const Trace &m_trace_sprint;
+  const Trace &trace_full;
+  const Trace &trace_sprint;
 
-  TracePointVector m_trace_points_full;
-  TracePointVector m_trace_points_sprint;
+  TracePointVector trace_points_full;
+  TracePointVector trace_points_sprint;
 
-  TracePointVector m_solution;
+  TracePointVector solution;
 
   bool run_olc(OLCDijkstra& dijkstra);
 

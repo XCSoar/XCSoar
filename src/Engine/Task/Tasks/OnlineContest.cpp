@@ -11,10 +11,10 @@ OnlineContest::OnlineContest(const OLCRules olc_rules,
                              CommonStats& stats,
                              const Trace& trace_full,
                              const Trace& trace_sprint):
-  m_olc_rules(olc_rules),
+  olc_rules(olc_rules),
   common_stats(stats),
-  m_trace_full(trace_full),
-  m_trace_sprint(trace_sprint),
+  trace_full(trace_full),
+  trace_sprint(trace_sprint),
   olc_sprint(*this),
   olc_fai(*this),
   olc_classic(*this)
@@ -41,8 +41,8 @@ OnlineContest::update_trace_sample(const AIRCRAFT_STATE &state,
 bool 
 OnlineContest::update_sample(const AIRCRAFT_STATE &state)
 {
-  return update_trace_sample(state, m_trace_points_full) |
-         update_trace_sample(state, m_trace_points_sprint);
+  return update_trace_sample(state, trace_points_full) |
+         update_trace_sample(state, trace_points_sprint);
 }
 
 #ifdef INSTRUMENT_TASK
@@ -58,7 +58,7 @@ OnlineContest::run_olc(OLCDijkstra &dijkstra)
   if (!dijkstra.score(common_stats.olc))
     return false;
 
-  dijkstra.copy_solution(m_solution);
+  dijkstra.copy_solution(solution);
   update_trace();
 
 #ifdef INSTRUMENT_TASK
@@ -71,8 +71,8 @@ OnlineContest::run_olc(OLCDijkstra &dijkstra)
 void
 OnlineContest::update_trace()
 {
-  m_trace_points_full = m_trace_full.get_trace_points(300);
-  m_trace_points_sprint = m_trace_sprint.get_trace_points(300);
+  trace_points_full = trace_full.get_trace_points(300);
+  trace_points_sprint = trace_sprint.get_trace_points(300);
 }
 
 bool 
@@ -81,10 +81,10 @@ OnlineContest::update_idle()
   // \todo: possibly scan each type in a round robin fashion?
   bool retval = false;
 
-  if (m_trace_points_full.size() < 10)
+  if (trace_points_full.size() < 10)
     update_trace();
 
-  switch (m_olc_rules) {
+  switch (olc_rules) {
   case OLC_Sprint:
     retval = run_olc(olc_sprint);
     break;
@@ -99,8 +99,8 @@ OnlineContest::update_idle()
   if (retval) {
 #ifdef DO_PRINT
     printf("# size %d/%d dist %g\n",
-           m_trace_points_full.size(), 
-           m_trace_points_sprint.size(), 
+           trace_points_full.size(), 
+           trace_points_sprint.size(), 
            (double)common_stats.olc.distance);
 #endif
   }
@@ -111,9 +111,9 @@ OnlineContest::update_idle()
 void
 OnlineContest::reset()
 {
-  m_trace_points_full.clear();
-  m_trace_points_sprint.clear();
-  m_solution.clear();
+  trace_points_full.clear();
+  trace_points_sprint.clear();
+  solution.clear();
   olc_sprint.reset();
   olc_fai.reset();
   olc_classic.reset();
@@ -122,13 +122,13 @@ OnlineContest::reset()
 const TracePointVector& 
 OnlineContest::get_trace_points(bool full_trace) const
 {
-  return full_trace ? m_trace_points_full : m_trace_points_sprint;
+  return full_trace ? trace_points_full : trace_points_sprint;
 }
 
 const TracePointVector& 
 OnlineContest::get_olc_points() const
 {
-  return m_solution;
+  return solution;
 }
 
 /*

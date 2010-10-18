@@ -545,9 +545,9 @@ std::ostream& operator<< (std::ostream& f,
     break;
   };
 
-  f << "# intercept " << aw.m_solution.location.Longitude << " " << aw.m_solution.location.Latitude 
-    << " dist " << aw.m_solution.distance << " alt " << aw.m_solution.altitude << " time " 
-    << aw.m_solution.elapsed_time << "\n";
+  f << "# intercept " << aw.solution.location.Longitude << " " << aw.solution.location.Latitude 
+    << " dist " << aw.solution.distance << " alt " << aw.solution.altitude << " time " 
+    << aw.solution.elapsed_time << "\n";
 
   return f;
 }
@@ -562,8 +562,8 @@ OnlineContest::print() const
   {
     std::ofstream fs("results/res-olc-trace.txt");
 
-    for (TracePointVector::const_iterator it = m_trace_points_full.begin();
-         it != m_trace_points_full.end(); ++it) {
+    for (TracePointVector::const_iterator it = trace_points_full.begin();
+         it != trace_points_full.end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
          << " " << it->NavAltitude << " " << it->time 
          << "\n";
@@ -573,22 +573,22 @@ OnlineContest::print() const
   {
     std::ofstream fs("results/res-olc-trace_sprint.txt");
 
-    for (TracePointVector::const_iterator it = m_trace_points_sprint.begin();
-         it != m_trace_points_sprint.end(); ++it) {
+    for (TracePointVector::const_iterator it = trace_points_sprint.begin();
+         it != trace_points_sprint.end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
          << " " << it->NavAltitude << " " << it->time 
          << "\n";
     }
   }
 
-  if (m_solution.empty()) 
+  if (solution.empty()) 
     return;
 
   if (positive(common_stats.olc.time)) {
     std::ofstream fs("results/res-olc-solution.txt");
 
-    for (TracePointVector::const_iterator it = m_solution.begin();
-         it != m_solution.end(); ++it) {
+    for (TracePointVector::const_iterator it = solution.begin();
+         it != solution.end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
          << " " << it->NavAltitude << " " << it->time 
          << "\n";
