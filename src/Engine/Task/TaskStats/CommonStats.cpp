@@ -42,6 +42,7 @@ CommonStats::reset()
   current_bugs = fixed_one;
   current_ballast = fixed_zero;
 
+  score_olc = fixed_zero;
   distance_olc = fixed_zero;
   time_olc = fixed_zero;
   speed_olc = fixed_zero;

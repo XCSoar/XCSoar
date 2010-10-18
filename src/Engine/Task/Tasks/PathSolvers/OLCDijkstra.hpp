@@ -73,7 +73,7 @@ public:
    *
    * @return Score (interpretation depends on OLC type)
    */
-  bool score(fixed &distance, fixed &speed, fixed &time);
+  bool score(fixed &score, fixed &distance, fixed &speed, fixed &time);
 
   /**
    * Copy the best OLC path solution
@@ -167,6 +167,7 @@ private:
   void save_solution();
 
   bool solution_found;
+  fixed best_score;
   fixed best_distance;
   fixed best_speed;
   fixed best_time;

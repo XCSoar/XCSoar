@@ -86,6 +86,8 @@ public:
   /** Ballast setting at last update */
   fixed current_ballast;
 
+  /** Score (pts) according to OLC rule */
+  fixed score_olc;
   /** Optimum distance (m) travelled according to OLC rule */
   fixed distance_olc;
   /** Time (s) of optimised OLC path */

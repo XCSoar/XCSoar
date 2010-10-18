@@ -53,6 +53,7 @@ OLCDijkstra::OLCDijkstra(OnlineContest& _olc, const unsigned n_legs,
   olc(_olc),
   m_finish_alt_diff(finish_alt_diff),
   solution_found(false),
+  best_score(fixed_zero),
   best_distance(fixed_zero),
   best_speed(fixed_zero),
   best_time(fixed_zero),
@@ -111,16 +112,18 @@ OLCDijkstra::reset()
   m_dijkstra.clear();
   n_points = 0;
   solution_found = false;
+  best_score = fixed_zero;
   best_distance = fixed_zero;
   best_speed = fixed_zero;
   best_time = fixed_zero;
 }
 
 bool
-OLCDijkstra::score(fixed& distance, fixed& speed, fixed& time)
+OLCDijkstra::score(fixed &score, fixed &distance, fixed &speed, fixed &time)
 {
   if (positive(calc_time())) {
     solution_found = true;
+    score = best_score;
     distance = best_distance;
     speed = best_speed;
     time = best_time;
@@ -220,10 +223,11 @@ OLCDijkstra::finish_satisfied(const ScanTaskPoint &sp) const
 void
 OLCDijkstra::save_solution()
 {
-  const fixed distance = calc_distance();
-  if (distance > best_distance) {
+  const fixed score = calc_score();
+  if (score > best_score) {
     std::copy(solution, solution + num_stages, best_solution);
-    best_distance = distance;
+    best_score = score;
+    best_distance = calc_distance();
     best_time = calc_time();
     if (positive(best_time))
       best_speed = best_distance / best_time;
