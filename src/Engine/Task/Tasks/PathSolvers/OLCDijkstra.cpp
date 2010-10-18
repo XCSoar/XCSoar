@@ -220,10 +220,10 @@ OLCDijkstra::finish_satisfied(const ScanTaskPoint &sp) const
 void
 OLCDijkstra::save_solution()
 {
-  const fixed the_distance = calc_distance();
-  if (the_distance > best_distance) {
+  const fixed distance = calc_distance();
+  if (distance > best_distance) {
     std::copy(solution, solution + num_stages, best_solution);
-    best_distance = the_distance;
+    best_distance = distance;
     best_time = calc_time();
     if (positive(best_time))
       best_speed = best_distance / best_time;
