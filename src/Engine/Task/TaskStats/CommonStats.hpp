@@ -13,6 +13,24 @@ typedef std::set<unsigned> WaypointIdSet;
 
 class Waypoint;
 
+struct OLCResult
+{
+  /** Score (pts) according to OLC rule */
+  fixed score;
+  /** Optimum distance (m) travelled according to OLC rule */
+  fixed distance;
+  /** Time (s) of optimised OLC path */
+  fixed time;
+  /** Speed (m/s) of optimised OLC path */
+  fixed speed;
+
+  OLCResult() :
+    score(fixed_zero),
+    distance(fixed_zero),
+    time(fixed_zero),
+    speed(fixed_zero) {}
+};
+
 /** 
  * Task statistics that are common across all managed tasks.
  * This is used for statistics for which it makes no sense to
@@ -86,14 +104,7 @@ public:
   /** Ballast setting at last update */
   fixed current_ballast;
 
-  /** Score (pts) according to OLC rule */
-  fixed score_olc;
-  /** Optimum distance (m) travelled according to OLC rule */
-  fixed distance_olc;
-  /** Time (s) of optimised OLC path */
-  fixed time_olc;
-  /** Speed (m/s) of optimised OLC path */
-  fixed speed_olc;
+  OLCResult olc;
 
   /**
    * Reset the stats as if never flown

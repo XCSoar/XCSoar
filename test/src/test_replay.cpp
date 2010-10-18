@@ -118,9 +118,9 @@ test_replay(const OLCRules olc_type)
 
   const CommonStats& stats = task_manager.get_common_stats();
   printf("# OLC dist %g speed %g time %g\n",
-         (double)stats.distance_olc,
-         (double)(stats.speed_olc*fixed(3.6)),
-         (double)stats.time_olc);
+         (double)stats.olc.distance,
+         (double)(stats.olc.speed*fixed(3.6)),
+         (double)stats.olc.time);
 
   if (verbose) {
     distance_counts();

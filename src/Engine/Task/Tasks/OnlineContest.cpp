@@ -55,8 +55,8 @@ OnlineContest::run_olc(OLCDijkstra &dijkstra)
   if (!dijkstra.solve())
     return false;
 
-  if (!dijkstra.score(common_stats.score_olc, common_stats.distance_olc,
-                      common_stats.speed_olc, common_stats.time_olc))
+  if (!dijkstra.score(common_stats.olc.score, common_stats.olc.distance,
+                      common_stats.olc.speed, common_stats.olc.time))
     return false;
 
   dijkstra.copy_solution(m_solution);
@@ -102,7 +102,7 @@ OnlineContest::update_idle()
     printf("# size %d/%d dist %g\n",
            m_trace_points_full.size(), 
            m_trace_points_sprint.size(), 
-           (double)common_stats.distance_olc);
+           (double)common_stats.olc.distance);
 #endif
   }
 

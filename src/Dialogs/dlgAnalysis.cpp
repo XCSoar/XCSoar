@@ -235,9 +235,9 @@ Update(void)
     wf->SetCaption(sTmp);
 
     TCHAR timetext1[100];
-    Units::TimeToText(timetext1, (int)stats.time_olc);
+    Units::TimeToText(timetext1, (int)stats.olc.time);
     TCHAR distance[100];
-    Units::FormatUserDistance(stats.distance_olc, distance, 100);
+    Units::FormatUserDistance(stats.olc.distance, distance, 100);
     _stprintf(sTmp,
               (Layout::landscape
               ? _T("%s:\r\n  %d %s\r\n%s:\r\n  %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
@@ -246,12 +246,12 @@ Update(void)
               distance,
               Units::GetDistanceName(),
               _("Score"),
-              (double)stats.score_olc,
+              (double)stats.olc.score,
               _("pts"),
               _("Time"),
               timetext1,
               _("Speed"),
-              (int)Units::ToUserUnit(stats.speed_olc, Units::TaskSpeedUnit),
+              (int)Units::ToUserUnit(stats.olc.speed, Units::TaskSpeedUnit),
               Units::GetTaskSpeedName());
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_T(""));

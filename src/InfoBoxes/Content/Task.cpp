@@ -586,17 +586,17 @@ InfoBoxContentOLC::Update(InfoBoxWindow &infobox)
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   if (!XCSoarInterface::SettingsComputer().enable_olc ||
-      common_stats.score_olc < fixed_one) {
+      common_stats.olc.score < fixed_one) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserDistance(common_stats.distance_olc, tmp, 32, false);
+  Units::FormatUserDistance(common_stats.olc.distance, tmp, 32, false);
   infobox.SetValue(tmp);
 
-  _stprintf(tmp, _T("%.1f pts"), (double)common_stats.score_olc);
+  _stprintf(tmp, _T("%.1f pts"), (double)common_stats.olc.score);
   infobox.SetComment(tmp);
 
   // Set Unit

@@ -172,17 +172,17 @@ TestOLC(const char *filename)
   putchar('\n');
 
   printf("classic: %.2f km / %.3f min / %.2f km/h\n",
-          (double)stats_classic.distance_olc / 1000,
-          (double)stats_classic.time_olc / 60,
-          (double)stats_classic.speed_olc * 3.6);
+          (double)stats_classic.olc.distance / 1000,
+          (double)stats_classic.olc.time / 60,
+          (double)stats_classic.olc.speed * 3.6);
   printf("fai: %.2f km / %.3f min / %.2f km/h\n",
-          (double)stats_fai.distance_olc / 1000,
-          (double)stats_fai.time_olc / 60,
-          (double)stats_fai.speed_olc * 3.6);
+          (double)stats_fai.olc.distance / 1000,
+          (double)stats_fai.olc.time / 60,
+          (double)stats_fai.olc.speed * 3.6);
   printf("sprint: %.2f km / %.3f min / %.2f km/h\n",
-          (double)stats_sprint.distance_olc / 1000,
-          (double)stats_sprint.time_olc / 60,
-          (double)stats_sprint.speed_olc * 3.6);
+          (double)stats_sprint.olc.distance / 1000,
+          (double)stats_sprint.olc.time / 60,
+          (double)stats_sprint.olc.speed * 3.6);
 }
 
 int main(int argc, char **argv)

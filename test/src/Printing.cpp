@@ -143,9 +143,9 @@ std::ostream& operator<< (std::ostream& f,
                           const CommonStats& ts)
 {
   f << "#### Common Stats\n";
-  f << "# olc dist " << ts.distance_olc << " (m)\n";
-  f << "# olc time " << ts.time_olc << " (s)\n";
-  f << "# olc speed " << ts.speed_olc << " (m/s)\n";
+  f << "# olc dist " << ts.olc.distance << " (m)\n";
+  f << "# olc time " << ts.olc.time << " (s)\n";
+  f << "# olc speed " << ts.olc.speed << " (m/s)\n";
   return f;
 }
 
@@ -584,7 +584,7 @@ OnlineContest::print() const
   if (m_solution.empty()) 
     return;
 
-  if (positive(common_stats.time_olc)) {
+  if (positive(common_stats.olc.time)) {
     std::ofstream fs("results/res-olc-solution.txt");
 
     for (TracePointVector::const_iterator it = m_solution.begin();
