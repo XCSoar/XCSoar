@@ -245,8 +245,6 @@ endif
 
 ifeq ($(TARGET),UNIX)
   TARGET_CPPFLAGS += -DDISABLEAUDIO
-  TARGET_CPPFLAGS += $(shell pkg-config --cflags gconf-2.0)
-  TARGET_LDLIBS += $(shell pkg-config --libs gconf-2.0)
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -256,8 +254,6 @@ ifeq ($(TARGET),ANDROID)
   TARGET_CPPFLAGS += -D__ISO_C_VISIBLE=1999 -D__POSIX_VISIBLE=0 -D__XPG_VISIBLE=0
   CXXFLAGS += -D__STDC_VERSION__=199901L
   TARGET_CPPFLAGS += -DDISABLEAUDIO
-  TARGET_CPPFLAGS += $(shell pkg-config --cflags gconf-2.0)
-  TARGET_LDLIBS += $(shell pkg-config --libs gconf-2.0)
 endif
 
 ####### compiler target
