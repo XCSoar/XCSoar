@@ -90,6 +90,13 @@ public:
   fixed calc_distance() const;
 
   /**
+   * Calculate score of best path
+   *
+   * @return Score (pts)
+   */
+  fixed calc_score() const;
+
+  /**
    * Calculate elapsed time of best path
    *
    * @return Distance (m)

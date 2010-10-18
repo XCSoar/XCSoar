@@ -147,6 +147,19 @@ OLCDijkstra::calc_distance() const
   return dist;
 }
 
+fixed
+OLCDijkstra::calc_score() const
+{
+  fixed score = fixed_zero;
+  for (unsigned i = 0; i + 1 < num_stages; ++i)
+    score += get_weighting(i) *
+             solution[i].distance(solution[i + 1].get_location());
+
+  static const fixed fixed_fifth(0.0002);
+  score *= fixed_fifth;
+  return score;
+}
+
 void
 OLCDijkstra::add_start_edges()
 {
