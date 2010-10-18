@@ -275,7 +275,8 @@ FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
   triangle[3].y = triangle[0].y;
 
   PolygonRotateShift(triangle, 4, radar_mid.x, radar_mid.y,
-                     task_direction - heading);
+                     task_direction - (enable_north_up ?
+                                       Angle::native(fixed_zero) : heading));
 
   // Draw the arrow
   canvas.polygon(triangle, 4);

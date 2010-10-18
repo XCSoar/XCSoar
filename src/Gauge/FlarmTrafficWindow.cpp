@@ -218,11 +218,8 @@ void
 FlarmTrafficWindow::Update(Angle new_direction, const FLARM_STATE &new_data,
                            const SETTINGS_TEAMCODE &new_settings)
 {
-  if (enable_north_up)
-    new_direction = Angle::native(fixed_zero);
-
   heading = new_direction;
-  fr.SetAngle(-heading);
+  fr.SetAngle(enable_north_up ? Angle::native(fixed_zero) : -heading);
   data = new_data;
   settings = new_settings;
 
@@ -372,7 +369,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   // Rotate and shift the arrow
   PolygonRotateShift(Arrow, 5, sc[i].x, sc[i].y,
-                     traffic.TrackBearing - heading);
+                     traffic.TrackBearing - (enable_north_up ?
+                                             Angle::native(fixed_zero) : heading));
 
   // Draw the polygon
   canvas.polygon(Arrow, 5);
