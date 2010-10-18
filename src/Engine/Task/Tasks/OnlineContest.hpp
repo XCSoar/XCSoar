@@ -24,9 +24,7 @@ public:
   /** 
    * Base constructor.
    * 
-   * @param te Task events callback class (shared among all tasks) 
-   * @param tb Global task behaviour settings
-   * @param gp Global glide polar used for navigation calculations
+   * @param olc_rules OLCRules that shall be used
    * @param stats Common stats to write OLC info to
    * @param trace_full Trace object containing full flight history for scanning
    * @param trace_sprint Trace object containing 2.5 hour flight history for scanning
