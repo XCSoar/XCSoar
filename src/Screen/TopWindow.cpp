@@ -172,7 +172,7 @@ TopWindow::invalidate()
   invalidated_lock.Unlock();
 
   SDL_Event event;
-  event.expose.type = SDL_VIDEOEXPOSE;
+  event.type = SDL_VIDEOEXPOSE;
   ::SDL_PushEvent(&event);
 }
 
