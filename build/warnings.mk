@@ -19,7 +19,10 @@ CXXFLAGS += -Wcast-align
 
 CFLAGS += $(WARNINGS)
 CFLAGS += -Wmissing-prototypes -Wstrict-prototypes
+
+ifneq ($(TARGET),ANDROID)
 CFLAGS += -Wnested-externs
+endif
 
 # make warnings fatal (for perfectionists)
 
