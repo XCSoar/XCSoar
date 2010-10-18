@@ -163,8 +163,8 @@ public:
   }
   
 private:
-  unsigned adjust_edge_value(const unsigned d) const {
-    return m_min ? d : MINMAX_OFFSET - d;
+  unsigned adjust_edge_value(const unsigned edge_value) const {
+    return m_min ? edge_value : MINMAX_OFFSET - edge_value;
   }
 
   /**
