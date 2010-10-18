@@ -2,7 +2,7 @@
 
 <Form Name="frmComboPopup" Width="240" Height="320" BackColor="0xFFFFFF">
   <Label Name="lblVersion" X="8" Y="2" Width="310" Height="20" Caption="" />
-  <Canvas Name="frmLogo" Width="80" Height="80" OnPaint="OnLogoPaint" />
+  <Canvas Name="frmLogo" OnPaint="OnLogoPaint" />
   <Canvas Name="frmTitle" OnPaint="OnTitlePaint" />
   <Label X="8" Y="200" Width="310" Height="20" Caption="What do you want to do:" />
   <SymbolButton Name="cmdFly" Caption="Fly" X="8" Y="225" Width="112" Height="30" OnClick="OnFlyClicked"/>
