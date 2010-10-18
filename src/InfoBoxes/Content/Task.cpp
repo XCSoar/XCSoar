@@ -595,6 +595,9 @@ InfoBoxContentOLC::Update(InfoBoxWindow &infobox)
   Units::FormatUserDistance(common_stats.distance_olc, tmp, 32, false);
   infobox.SetValue(tmp);
 
+  _stprintf(tmp, _T("%.1f pts"), (double)common_stats.score_olc);
+  infobox.SetComment(tmp);
+
   // Set Unit
   infobox.SetValueUnit(Units::DistanceUnit);
 }
