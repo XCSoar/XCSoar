@@ -87,10 +87,13 @@ public:
    * Clears the queues
    */
   void clear() {
+    // Clear the search queue
     while (!q.empty())
       q.pop();
 
+    // Clear the node_parent_map
     node_parents.clear();
+    // Clear the node_value_map
     node_values.clear();
   }
 
