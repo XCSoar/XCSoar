@@ -529,8 +529,8 @@ dlgTargetShowModal()
     return;
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
-                  Layout::landscape ? _T("IDR_XML_TARGET") :
-                                      _T("IDR_XML_TARGET_L"));
+                  Layout::landscape ? _T("IDR_XML_TARGET_L") :
+                                      _T("IDR_XML_TARGET"));
   if (!wf)
     return;
 
