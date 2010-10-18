@@ -217,6 +217,10 @@ FindDataPath()
     /* hard-coded path for Altair */
     return _tcsdup(_T("\\NOR Flash"));
 
+  if (is_android())
+    /* hard-coded path for Android */
+    return _tcsdup(_T("/sdcard/XCSoarData"));
+
 #ifdef _WIN32_WCE
   /* if XCSoar was started from a flash disk, put the XCSoarData onto
      it, too */
@@ -248,6 +252,10 @@ FindDataPath()
 const TCHAR *
 GetHomeDataPath(TCHAR *buffer)
 {
+  if (is_android())
+    /* hard-coded path for Android */
+    return NULL;
+
 #ifdef HAVE_POSIX
   /* on Unix or WINE, use ~/.xcsoar */
   const TCHAR *home = getenv("HOME");

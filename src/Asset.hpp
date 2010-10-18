@@ -143,6 +143,19 @@ is_altair()
 }
 
 /**
+ * Returns whether the application is running on Android
+ */
+static inline bool
+is_android()
+{
+#if defined(ANDROID)
+  return true;
+#else
+  return false;
+#endif
+}
+
+/**
  * Flag to activate extra clipping for some PNAs.
  * @return True if extra clipping needs to be done, False otherwise
  */
