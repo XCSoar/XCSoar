@@ -45,6 +45,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Event.hpp"
 #include "Util/StringUtil.hpp"
 
 bool
@@ -222,14 +223,6 @@ WndForm::SetTitleFont(const Font &font)
 }
 
 #ifndef ENABLE_SDL
-
-static bool
-is_user_input(UINT message)
-{
-  return message == WM_KEYDOWN || message == WM_KEYUP ||
-    message == WM_LBUTTONDOWN || message == WM_LBUTTONUP ||
-    message == WM_LBUTTONDBLCLK;
-}
 
 static bool
 is_allowed_map_message(UINT message)
