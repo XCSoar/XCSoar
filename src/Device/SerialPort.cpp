@@ -319,8 +319,9 @@ SerialPort::Write(const void *data, unsigned length)
 #else /* !HAVE_POSIX */
   if (hPort == INVALID_HANDLE_VALUE)
     return;
-
-  ::WriteFile(hPort, data, length, NULL, NULL);
+  DWORD NumberOfBytesWritten;
+  // lpNumberOfBytesWritten : This parameter can be NULL only when the lpOverlapped parameter is not NULL.
+  ::WriteFile(hPort, data, length, &NumberOfBytesWritten, NULL);
 #endif /* !HAVE_POSIX */
 }
 
