@@ -121,7 +121,12 @@ struct flat_event_map {
   unsigned char mode;
 
 #ifdef ENABLE_SDL
+#if defined(SDLK_SCANCODE_MASK) && SDLK_SCANCODE_MASK >= 0x10000
+  /* need a bigger type for SDL 1.3+ */
+  unsigned key;
+#else
   unsigned short key;
+#endif
 #else
   unsigned char key;
 #endif
