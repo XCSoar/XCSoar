@@ -38,8 +38,8 @@
 #include "TaskDijkstra.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 
-TaskDijkstra::TaskDijkstra(OrderedTask& _task):
-  NavDijkstra<SearchPoint>(_task.task_size()),
+TaskDijkstra::TaskDijkstra(OrderedTask& _task) :
+  NavDijkstra<SearchPoint> (_task.task_size()),
   task(_task),
   active_stage(_task.getActiveTaskPointIndex())
 {
@@ -49,12 +49,11 @@ TaskDijkstra::TaskDijkstra(OrderedTask& _task):
 void
 TaskDijkstra::get_sizes()
 {
-  for (unsigned stage=0; stage!= num_stages; ++stage) {
-    sp_sizes[stage]= task.get_tp_search_points(stage).size();
-  }
+  for (unsigned stage = 0; stage != num_stages; ++stage)
+    sp_sizes[stage] = task.get_tp_search_points(stage).size();
 }
 
-unsigned 
+unsigned
 TaskDijkstra::get_size(const unsigned stage) const
 {
   return sp_sizes[stage];
@@ -66,98 +65,89 @@ TaskDijkstra::get_point(const ScanTaskPoint &sp) const
   return task.get_tp_search_points(sp.first)[sp.second];
 }
 
-
-bool 
+bool
 TaskDijkstra::distance_max()
 {
-  if (num_stages<2) {
+  if (num_stages < 2)
     return 0;
-  }
 
   get_sizes();
 
-  const ScanTaskPoint start(0,0);
+  const ScanTaskPoint start(0, 0);
   DijkstraTaskPoint dijkstra(start, false);
 
-  const bool retval= distance_general(dijkstra);
-  if (retval) {
+  const bool retval = distance_general(dijkstra);
+  if (retval)
     save_max();
-  }
+
   return retval;
 }
 
-bool 
+bool
 TaskDijkstra::distance_min(const SearchPoint &currentLocation)
 {
-  if (num_stages<2) {
+  if (num_stages < 2)
     return 0;
-  }
 
   get_sizes();
 
-  const ScanTaskPoint start(max(1,(int)active_stage)-1,0);
+  const ScanTaskPoint start(max(1, (int)active_stage) - 1, 0);
   DijkstraTaskPoint dijkstra(start, true);
-  if (active_stage) {
+  if (active_stage)
     add_start_edges(dijkstra, currentLocation);
-  }
+
   const bool retval = distance_general(dijkstra);
-  if (retval) {
+  if (retval)
     save_min();
-  }
+
   return retval;
 }
 
-
-void 
+void
 TaskDijkstra::save_min()
 {
-  for (unsigned j=active_stage; j!=num_stages; ++j) {
+  for (unsigned j = active_stage; j != num_stages; ++j)
     task.set_tp_search_min(j, solution[j]);
-  }
 }
 
-
-void 
+void
 TaskDijkstra::save_max()
 {
-  for (unsigned j=0; j!=num_stages; ++j) {
+  for (unsigned j = 0; j != num_stages; ++j) {
     task.set_tp_search_max(j, solution[j]);
-    if (j<=active_stage) {
+    if (j <= active_stage)
       task.set_tp_search_achieved(j, solution[j]);
-    }
   }
 }
 
-
-void 
+void
 TaskDijkstra::add_edges(DijkstraTaskPoint &dijkstra,
-                       const ScanTaskPoint& curNode) 
+                        const ScanTaskPoint& curNode)
 {
-  ScanTaskPoint destination(curNode.first+1, 0);
+  ScanTaskPoint destination(curNode.first + 1, 0);
   const unsigned dsize = get_size(destination.first);
 
-  for (; destination.second!= dsize; ++destination.second) {
+  for (; destination.second != dsize; ++destination.second)
     dijkstra.link(destination, curNode, distance(curNode, destination));
-  }
 }
 
 void 
 TaskDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra,
-                             const SearchPoint &currentLocation) 
+                              const SearchPoint &currentLocation)
 {
-  dijkstra.pop(); // need to remove dummy first point
+  // need to remove dummy first point
+  dijkstra.pop();
 
   ScanTaskPoint destination(active_stage, 0);
   const unsigned dsize = get_size(destination.first);
 
-  for (; destination.second!= dsize; ++destination.second) {
-    dijkstra.link(destination, destination, distance(destination, currentLocation));
-  }
+  for (; destination.second != dsize; ++destination.second)
+    dijkstra.link(destination, destination,
+                  distance(destination, currentLocation));
 }
 
-
 /**
- * \todo 
+ * @todo
  * - only scan parts that are required, and prune out points
  *   that become irrelevant (strictly under-performing) 
  * - if in sector, prune out all default points that result in
@@ -169,5 +159,4 @@ TaskDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra,
  *   then search min after that from aircraft location
  *
  * - also update saved rank for potential pruning operations
- *
  */
