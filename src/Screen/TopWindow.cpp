@@ -170,9 +170,9 @@ TopWindow::invalidate()
   invalidated = true;
   invalidated_lock.Unlock();
 
-  SDL_ExposeEvent event;
-  event.type = SDL_VIDEOEXPOSE;
-  ::SDL_PushEvent((SDL_Event *)&event);
+  SDL_Event event;
+  event.expose.type = SDL_VIDEOEXPOSE;
+  ::SDL_PushEvent(&event);
 }
 
 void
