@@ -41,6 +41,17 @@ Copyright_License {
 
 #ifdef ENABLE_SDL
 
+#include <SDL_events.h>
+
+/**
+ * Is this a SDL_UserEvent?
+ */
+static inline bool
+is_user_event(const SDL_Event &event)
+{
+  return event.type >= SDL_USEREVENT && event.type <= SDL_NUMEVENTS - 1;
+}
+
 #else /* !ENABLE_SDL */
 
 #include <windef.h>

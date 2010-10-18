@@ -281,8 +281,7 @@ int WndForm::ShowModal(bool bEnableMap) {
     if (event.type == SDL_QUIT)
       break;
 
-    if (event.type >= SDL_USEREVENT && event.type <= SDL_NUMEVENTS-1 &&
-        event.user.data1 != NULL) {
+    if (is_user_event(event) && event.user.data1 != NULL) {
       Window *window = (Window *)event.user.data1;
       window->on_user(event.type - SDL_USEREVENT);
     } else
