@@ -138,7 +138,7 @@ public:
 #ifdef INSTRUMENT_TASK
     count_dijkstra_links++;
 #endif
-    push(node, parent, cur->second + minmax_dist(edge_value)); 
+    push(node, parent, cur->second + adjust_edge_value(edge_value)); 
   }
 
   /**
@@ -163,8 +163,8 @@ public:
   }
   
 private:
-  unsigned minmax_dist(const unsigned d) const {
-    return m_min? d:MINMAX_OFFSET-d;
+  unsigned adjust_edge_value(const unsigned d) const {
+    return m_min ? d : MINMAX_OFFSET - d;
   }
 
   /**
