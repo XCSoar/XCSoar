@@ -1609,14 +1609,9 @@ void dlgConfigurationShowModal(void)
                               szProfileEnableTAGauge,
                               XCSoarInterface::SetSettingsMap().EnableTAGauge);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpDebounceTimeout"));
-  if (wp) {
-    if ((int)XCSoarInterface::debounceTimeout != wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::debounceTimeout = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileDebounceTimeout, (int)XCSoarInterface::debounceTimeout);
-      changed = true;
-    }
-  }
+  changed |= SaveFormProperty(*wf, _T("prpDebounceTimeout"),
+                              szProfileDebounceTimeout,
+                              XCSoarInterface::debounceTimeout);
 
   changed |= SaveFormProperty(*wf, _T("prpAirspaceOutline"),
                               szProfileAirspaceBlackOutline,
