@@ -240,11 +240,10 @@ Update(void)
     Units::FormatUserDistance(stats.olc.distance, distance, 100);
     _stprintf(sTmp,
               (Layout::landscape
-              ? _T("%s:\r\n  %d %s\r\n%s:\r\n  %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
-              : _T("%s: %d %s\r\n%s: %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")),
+              ? _T("%s:\r\n  %s\r\n%s:\r\n  %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
+              : _T("%s: %s\r\n%s: %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")),
               _("Distance"),
               distance,
-              Units::GetDistanceName(),
               _("Score"),
               (double)stats.olc.score,
               _("pts"),
