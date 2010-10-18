@@ -114,11 +114,6 @@
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpAutoZoom" Caption="Auto zoom" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="Auto-zoom changes the zoom level during flight so that the map zooms in as the active waypoint is approached.  After passing a waypoint, the map zooms out to the next waypoint.">
-        <DataField DataType="boolean"/>
-      </Edit>
-    
       <Edit Name="prpCirclingZoom" Caption="Circling zoom" X="2" Width="-2" Height="22" CaptionWidth="100" Help="If enabled, then the map will zoom in automatically when entering circling mode and zoom out automatically when leaving circling mode.">
         <DataField DataType="boolean"/>
       </Edit>

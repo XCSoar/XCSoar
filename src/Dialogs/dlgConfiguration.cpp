@@ -723,7 +723,6 @@ setVariables()
   LoadFormProperty(*wf, _T("prpAltWarningMargin"), ugAltitude,
                    settings_computer.AltWarningMargin);
 
-  LoadFormProperty(*wf, _T("prpAutoZoom"), settings_map.AutoZoom);
   LoadFormProperty(*wf, _T("prpAirspaceOutline"),
                    settings_map.bAirspaceBlackOutline);
   LoadFormProperty(*wf, _T("prpLockSettingsInFlight"),
@@ -1622,10 +1621,6 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpAirspaceOutline"),
                               szProfileAirspaceBlackOutline,
                               XCSoarInterface::SetSettingsMap().bAirspaceBlackOutline);
-
-  changed |= SaveFormProperty(*wf, _T("prpAutoZoom"),
-                              szProfileAutoZoom,
-                              XCSoarInterface::SetSettingsMap().AutoZoom);
 
   int ival;
 
