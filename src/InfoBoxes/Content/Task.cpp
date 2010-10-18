@@ -583,12 +583,13 @@ InfoBoxContentHomeDistance::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentOLC::Update(InfoBoxWindow &infobox)
 {
-  if (!XCSoarInterface::SettingsComputer().enable_olc) {
+  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+
+  if (!XCSoarInterface::SettingsComputer().enable_olc ||
+      common_stats.score_olc < fixed_one) {
     infobox.SetInvalid();
     return;
   }
-
-  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   // Set Value
   TCHAR tmp[32];
