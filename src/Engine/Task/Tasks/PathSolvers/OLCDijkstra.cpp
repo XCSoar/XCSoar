@@ -50,7 +50,7 @@ OLCDijkstra::OLCDijkstra(OnlineContest& _olc, const unsigned n_legs,
                          const unsigned finish_alt_diff,
                          const bool full_trace):
   NavDijkstra<TracePoint>(n_legs + 1),
-  m_dijkstra(ScanTaskPoint(0, 0), false),
+  m_dijkstra(false),
   olc(_olc),
   m_finish_alt_diff(finish_alt_diff),
   solution_found(false),
