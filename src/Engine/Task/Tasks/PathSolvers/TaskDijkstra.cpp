@@ -38,11 +38,6 @@
 #include "TaskDijkstra.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 
-
-TaskDijkstra::~TaskDijkstra() {
-}
-
-
 TaskDijkstra::TaskDijkstra(OrderedTask& _task):
   NavDijkstra<SearchPoint>(_task.task_size()),
   task(_task),

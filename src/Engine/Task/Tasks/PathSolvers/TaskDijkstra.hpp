@@ -71,11 +71,6 @@ public:
  */
   TaskDijkstra(OrderedTask& _task);
 
-/**
- * Destructor, frees local variables
- */
-  ~TaskDijkstra();
-
 /** 
  * Search task points for targets within OZs to produce the
  * maximum-distance task.  Saves the max-distance solution 
