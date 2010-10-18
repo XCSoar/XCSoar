@@ -52,23 +52,22 @@ extern long count_olc;
 bool
 OnlineContest::run_olc(OLCDijkstra &dijkstra)
 {
-  if (dijkstra.solve()) {
-    if (!dijkstra.score(common_stats.distance_olc,
-                        common_stats.speed_olc,
-                        common_stats.time_olc))
-      return false;
+  if (!dijkstra.solve())
+    return false;
 
-    dijkstra.copy_solution(m_solution);
-    update_trace();
+  if (!dijkstra.score(common_stats.distance_olc,
+                      common_stats.speed_olc,
+                      common_stats.time_olc))
+    return false;
+
+  dijkstra.copy_solution(m_solution);
+  update_trace();
 
 #ifdef INSTRUMENT_TASK
-    count_olc++;
+  count_olc++;
 #endif
 
-    return true;
-  }
-
-  return false;
+  return true;
 }
 
 void
