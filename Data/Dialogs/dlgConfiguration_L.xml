@@ -431,11 +431,8 @@
         Help="Determines how the user is prompted for text input (filename, teamcode etc.)">
         <DataField DataType="enum" />
       </Edit>
-      </Panel>
-  
-    <Panel Name="frmAppearance">
     </Panel>
-
+  
     <Panel>
       <Edit Name="prpDisplayOrientation" Caption="Display Orientation" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="Rotate the display on devices that support it.">
