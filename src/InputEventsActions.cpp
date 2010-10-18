@@ -1591,6 +1591,8 @@ InputEvents::sub_AutoZoom(int vswitch)
   else
     SetSettingsMap().AutoZoom = (vswitch != 0); // 0 off, 1 on
 
+  Profile::Set(szProfileAutoZoom, SettingsMap().AutoZoom);
+
   if (SettingsMap().AutoZoom && SettingsMap().EnablePan)
     SetSettingsMap().EnablePan = false;
 }
@@ -1600,6 +1602,7 @@ InputEvents::sub_SetZoom(fixed value)
 {
   if (SettingsMap().AutoZoom) {
     SetSettingsMap().AutoZoom = false;  // disable autozoom if user manually changes zoom
+    Profile::Set(szProfileAutoZoom, false);
     Message::AddMessage(_("AutoZoom OFF"));
   }
   SetSettingsMap().MapScale = value;
