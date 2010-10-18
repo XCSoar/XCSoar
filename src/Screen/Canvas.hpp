@@ -53,7 +53,7 @@ Copyright_License {
 
 #ifdef ENABLE_SDL
 
-#include <SDL/SDL_gfxPrimitives.h>
+#include <SDL_gfxPrimitives.h>
 
 /* those are WIN32 macros - undefine, or Canvas::background_mode will
    break */

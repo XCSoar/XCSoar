@@ -43,7 +43,7 @@ Copyright_License {
 #error This header is SDL-only
 #endif
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 class Window;
 

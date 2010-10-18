@@ -41,7 +41,7 @@ Copyright_License {
 
 #include <windef.h>
 
-#include <SDL/SDL_keysym.h>
+#include <SDL_keysym.h>
 
 enum {
   VK_SPACE = SDLK_SPACE,

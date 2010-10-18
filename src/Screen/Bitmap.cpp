@@ -49,7 +49,7 @@ Copyright_License {
 #endif
 
 #ifdef ENABLE_SDL
-#include <SDL/SDL_endian.h>
+#include <SDL_endian.h>
 
   #ifdef WIN32
     #include <windows.h>

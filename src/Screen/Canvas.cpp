@@ -48,8 +48,8 @@ Copyright_License {
 
 #ifdef ENABLE_SDL
 
-#include <SDL/SDL_rotozoom.h>
-#include <SDL/SDL_imageFilter.h>
+#include <SDL_rotozoom.h>
+#include <SDL_imageFilter.h>
 
 
 void

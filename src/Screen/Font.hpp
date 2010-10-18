@@ -42,7 +42,7 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 
 #ifdef ENABLE_SDL
-  #include <SDL/SDL_ttf.h>
+#include <SDL_ttf.h>
 #endif
 
 #include <windows.h>

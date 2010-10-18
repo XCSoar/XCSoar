@@ -40,7 +40,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_COLOR_HPP
 
 #ifdef ENABLE_SDL
-  #include <SDL/SDL_video.h>
+#include <SDL_video.h>
 #else
   #include <windows.h>
 #endif
