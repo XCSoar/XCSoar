@@ -43,7 +43,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
 #include "InputEvents.h"
-#include "Compatibility/string.h"
 #include "Screen/Blank.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
@@ -59,6 +58,7 @@ Copyright_License {
 #include "Interface.hpp"
 
 #include <assert.h>
+#include <stdio.h>
 
 #include <algorithm>
 

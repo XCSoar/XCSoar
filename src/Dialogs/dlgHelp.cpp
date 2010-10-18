@@ -40,7 +40,8 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Units.hpp"
 #include "InputEvents.h"
-#include "Compatibility/string.h"
+
+#include <stdio.h>
 
 static WndForm *wf=NULL;
 

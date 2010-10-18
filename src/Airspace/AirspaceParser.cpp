@@ -54,6 +54,7 @@ Copyright_License {
 #include <tchar.h>
 #include <ctype.h>
 #include <assert.h>
+#include <stdio.h>
 
 enum asFileType {
   ftUnknown,

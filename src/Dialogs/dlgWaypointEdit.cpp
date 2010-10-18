@@ -44,7 +44,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
-#include "Compatibility/string.h"
 #include "Components.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "StringUtil.hpp"
@@ -53,6 +52,8 @@ Copyright_License {
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "RasterTerrain.h"
 #endif
+
+#include <stdio.h>
 
 static WndForm *wf=NULL;
 static Waypoint *global_wpt=NULL;

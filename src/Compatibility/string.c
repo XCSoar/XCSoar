@@ -41,7 +41,6 @@ Copyright_License {
 #ifdef HAVE_MSVCRT
 
 #include <stdlib.h>
-#include <wchar.h>
 
 int _wtoi(const wchar_t *ptr)
 {

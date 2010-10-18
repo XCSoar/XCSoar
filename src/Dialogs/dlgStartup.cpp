@@ -43,13 +43,14 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Screen/Bitmap.hpp"
 #include "MainWindow.hpp"
-#include "Compatibility/string.h"
 #include "Version.hpp"
 #include "Asset.hpp"
 #include "StringUtil.hpp"
 #include "LocalPath.hpp"
 #include "OS/PathName.hpp"
 #include "Compiler.h"
+
+#include <stdio.h>
 
 static WndForm *wf = NULL;
 extern TCHAR startProfileFile[];

@@ -39,7 +39,6 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Blackboard.hpp"
 #include "Airspace/AirspaceSorter.hpp"
-#include "Compatibility/string.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "MainWindow.hpp"
@@ -53,6 +52,7 @@ Copyright_License {
 
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceList=NULL;

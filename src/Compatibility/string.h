@@ -39,14 +39,9 @@ Copyright_License {
 #ifndef XCSOAR_COMPATIBILITY_STRING_H
 #define XCSOAR_COMPATIBILITY_STRING_H
 
-#include <tchar.h>
-#include <ctype.h>
-
 #ifndef HAVE_MSVCRT
 
-/* WINE is more strict, and doesn't give is sprintf() / _stprintf() if
-   we don't include stdio.h */
-#include <stdio.h>
+#include <ctype.h>
 
 static inline char *
 _strupr(char *p)
@@ -73,6 +68,8 @@ _strupr(char *p)
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include <wchar.h>
 
 _CRTIMP int __cdecl     _wtoi (const wchar_t *);
 
