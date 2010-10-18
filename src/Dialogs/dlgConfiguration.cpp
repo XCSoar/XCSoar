@@ -1622,18 +1622,17 @@ void dlgConfigurationShowModal(void)
                               szProfileAirspaceBlackOutline,
                               XCSoarInterface::SetSettingsMap().bAirspaceBlackOutline);
 
-  int ival;
-
   wp = (WndProperty*)wf->FindByName(_T("prpUTCOffset"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsFixed() * 3600);
-    if ((settings_computer.UTCOffset != ival)||(utcchanged)) {
+    int ival = iround(wp->GetDataField()->GetAsFixed() * 3600);
+    if ((settings_computer.UTCOffset != ival) || (utcchanged)) {
       settings_computer.UTCOffset = ival;
 
       // have to do this because registry variables can't be negative!
-      int lival = settings_computer.UTCOffset;
-      if (lival<0) { lival+= 24*3600; }
-      Profile::Set(szProfileUTCOffset, lival);
+      if (ival < 0)
+        ival += 24 * 3600;
+
+      Profile::Set(szProfileUTCOffset, ival);
       changed = true;
     }
   }
