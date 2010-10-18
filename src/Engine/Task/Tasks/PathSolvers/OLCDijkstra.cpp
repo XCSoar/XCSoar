@@ -37,6 +37,7 @@
 
 #include "OLCDijkstra.hpp"
 #include "Task/Tasks/OnlineContest.hpp"
+#include "Task/TaskStats/CommonStats.hpp"
 
 #include <algorithm>
 #include <assert.h>
@@ -119,14 +120,14 @@ OLCDijkstra::reset()
 }
 
 bool
-OLCDijkstra::score(fixed &score, fixed &distance, fixed &speed, fixed &time)
+OLCDijkstra::score(OLCResult &result)
 {
   if (positive(calc_time())) {
     solution_found = true;
-    score = best_score;
-    distance = best_distance;
-    speed = best_speed;
-    time = best_time;
+    result.score = best_score;
+    result.distance = best_distance;
+    result.speed = best_speed;
+    result.time = best_time;
 
     return true;
   }

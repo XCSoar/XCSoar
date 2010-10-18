@@ -43,6 +43,7 @@
 #include "Math/fixed.hpp"
 
 class OnlineContest;
+struct OLCResult;
 
 /**
  * Abstract class for OLC path searches
@@ -73,7 +74,7 @@ public:
    *
    * @return Score (interpretation depends on OLC type)
    */
-  bool score(fixed &score, fixed &distance, fixed &speed, fixed &time);
+  bool score(OLCResult &result);
 
   /**
    * Copy the best OLC path solution

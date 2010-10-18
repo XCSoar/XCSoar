@@ -55,8 +55,7 @@ OnlineContest::run_olc(OLCDijkstra &dijkstra)
   if (!dijkstra.solve())
     return false;
 
-  if (!dijkstra.score(common_stats.olc.score, common_stats.olc.distance,
-                      common_stats.olc.speed, common_stats.olc.time))
+  if (!dijkstra.score(common_stats.olc))
     return false;
 
   dijkstra.copy_solution(m_solution);
