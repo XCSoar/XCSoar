@@ -290,10 +290,12 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     y = fixed_zero;
   }
 
-  // Rotate x and y to have a track up display
-  FastRotation::Pair p = fr.Rotate(x, y);
-  x = fixed(p.first);
-  y = fixed(p.second);
+  if (!enable_north_up) {
+    // Rotate x and y to have a track up display
+    FastRotation::Pair p = fr.Rotate(x, y);
+    x = fixed(p.first);
+    y = fixed(p.second);
+  }
 
   // Calculate screen coordinates
   sc[i].x = radar_mid.x + iround(x * scale);
@@ -552,9 +554,11 @@ void
 FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
 {
   fixed x = fixed_zero, y = fixed_minus_one;
-  FastRotation::Pair p = fr.Rotate(x, y);
-  x = p.first;
-  y = p.second;
+  if (!enable_north_up) {
+    FastRotation::Pair p = fr.Rotate(x, y);
+    x = p.first;
+    y = p.second;
+  }
 
   canvas.set_text_color(Color::WHITE);
   canvas.select(hpRadar);
