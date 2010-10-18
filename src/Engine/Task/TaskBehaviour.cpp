@@ -75,8 +75,5 @@ TaskBehaviour::all_off()
 fixed 
 TaskBehaviour::get_safety_mc(const fixed fallback_mc) const
 {
-  if (safety_mc_use_current) 
-    return fallback_mc;
-  else
-    return safety_mc;
+  return (safety_mc_use_current ? fallback_mc : safety_mc);
 }
