@@ -7,7 +7,7 @@ ifeq ($(HAVE_WIN32),y)
 PROFILE_SOURCES += $(SRC)/Profile/Registry.cpp
 endif
 
-ifeq ($(TARGET),UNIX)
+ifeq ($(USE_GCONF),y)
 PROFILE_SOURCES += $(SRC)/Profile/GConf.cpp
 endif
 
