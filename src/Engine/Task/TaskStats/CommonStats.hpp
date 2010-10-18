@@ -3,28 +3,11 @@
 
 #include "Math/fixed.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
+#include "Task/TaskStats/OLCResult.hpp"
 
 #ifdef DO_PRINT
 #include <ostream>
 #endif
-
-struct OLCResult
-{
-  /** Score (pts) according to OLC rule */
-  fixed score;
-  /** Optimum distance (m) travelled according to OLC rule */
-  fixed distance;
-  /** Time (s) of optimised OLC path */
-  fixed time;
-  /** Speed (m/s) of optimised OLC path */
-  fixed speed;
-
-  OLCResult() :
-    score(fixed_zero),
-    distance(fixed_zero),
-    time(fixed_zero),
-    speed(fixed_zero) {}
-};
 
 /** 
  * Task statistics that are common across all managed tasks.

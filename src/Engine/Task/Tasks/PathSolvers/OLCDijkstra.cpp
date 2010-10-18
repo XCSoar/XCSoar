@@ -37,7 +37,7 @@
 
 #include "OLCDijkstra.hpp"
 #include "Task/Tasks/OnlineContest.hpp"
-#include "Task/TaskStats/CommonStats.hpp"
+#include "Task/TaskStats/OLCResult.hpp"
 
 #include <algorithm>
 #include <assert.h>
