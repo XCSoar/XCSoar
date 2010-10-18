@@ -61,6 +61,7 @@ FlarmTrafficWindow::FlarmTrafficWindow(unsigned _padding, bool _small)
    selection(-1), warning(-1),
    padding(_padding),
    small(_small),
+   enable_north_up(false),
    heading(Angle::radians(fixed_zero)),
    side_display_type(1)
 {
@@ -217,6 +218,9 @@ void
 FlarmTrafficWindow::Update(Angle new_direction, const FLARM_STATE &new_data,
                            const SETTINGS_TEAMCODE &new_settings)
 {
+  if (enable_north_up)
+    new_direction = Angle::native(fixed_zero);
+
   heading = new_direction;
   fr.SetAngle(-heading);
   data = new_data;

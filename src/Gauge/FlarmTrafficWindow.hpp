@@ -98,6 +98,7 @@ protected:
 
   POINT sc[FLARM_STATE::FLARM_MAX_TRAFFIC];
 
+  bool enable_north_up;
   Angle heading;
   FastRotation fr;
   FLARM_STATE data;

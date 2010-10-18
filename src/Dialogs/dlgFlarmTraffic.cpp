@@ -62,7 +62,6 @@
  */
 class FlarmTrafficControl : public FlarmTrafficWindow {
 protected:
-  bool enable_north_up;
   bool enable_auto_zoom;
   unsigned zoom;
   Font hfInfoValues, hfInfoLabels, hfCallSign;
@@ -72,7 +71,7 @@ protected:
 public:
   FlarmTrafficControl()
     :FlarmTrafficWindow(Layout::Scale(10)),
-     enable_north_up(false), enable_auto_zoom(true),
+     enable_auto_zoom(true),
      zoom(2),
      task_direction(Angle::degrees(fixed_minus_one)) {}
 
@@ -207,9 +206,6 @@ void
 FlarmTrafficControl::Update(Angle new_direction, const FLARM_STATE &new_data,
                             const SETTINGS_TEAMCODE &new_settings)
 {
-  if (enable_north_up)
-    new_direction = Angle::native(fixed_zero);
-
   FlarmTrafficWindow::Update(new_direction, new_data, new_settings);
 
   if (enable_auto_zoom || WarningMode())
