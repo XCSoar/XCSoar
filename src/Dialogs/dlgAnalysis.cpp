@@ -389,7 +389,8 @@ dlgAnalysisShowModal(int _page)
   ((WndButton *)wf->FindByName(_T("cmdClose")))->
       SetOnClickNotify(OnCloseClicked);
 
-  page = (analysis_page)_page;
+  if (_page >= 0)
+    page = (analysis_page)_page;
 
   Update();
 
