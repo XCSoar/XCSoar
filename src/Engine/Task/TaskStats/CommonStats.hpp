@@ -3,15 +3,10 @@
 
 #include "Math/fixed.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
-#include <set>
 
 #ifdef DO_PRINT
 #include <ostream>
 #endif
-
-typedef std::set<unsigned> WaypointIdSet;
-
-class Waypoint;
 
 struct OLCResult
 {
