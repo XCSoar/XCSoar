@@ -73,7 +73,7 @@ public:
    *
    * @return Score (interpretation depends on OLC type)
    */
-  bool score(fixed &the_distance, fixed &the_speed, fixed &the_time);
+  bool score(fixed &distance, fixed &speed, fixed &time);
 
   /**
    * Copy the best OLC path solution

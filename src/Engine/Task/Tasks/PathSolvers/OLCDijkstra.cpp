@@ -117,13 +117,13 @@ OLCDijkstra::reset()
 }
 
 bool
-OLCDijkstra::score(fixed& the_distance, fixed& the_speed, fixed& the_time)
+OLCDijkstra::score(fixed& distance, fixed& speed, fixed& time)
 {
   if (positive(calc_time())) {
     solution_found = true;
-    the_distance = best_distance;
-    the_speed = best_speed;
-    the_time = best_time;
+    distance = best_distance;
+    speed = best_speed;
+    time = best_time;
 
     return true;
   }
