@@ -209,7 +209,6 @@ const TCHAR szProfileAppStatusMessageAlignment[] = CONF("AppStatusMessageAlignme
 const TCHAR szProfileAppTextInputStyle[] = CONF("AppTextInputStyle");
 const TCHAR szProfileAppDialogStyle[] = CONF("AppDialogStyle");
 const TCHAR szProfileAppInfoBoxColors[] = CONF("AppInfoBoxColors");
-const TCHAR szProfileAppDefaultMapWidth[] = CONF("AppDefaultMapWidth");
 const TCHAR szProfileTeamcodeRefWaypoint[] = CONF("TeamcodeRefWaypoint");
 const TCHAR szProfileAppInfoBoxBorder[] = CONF("AppInfoBoxBorder");
 

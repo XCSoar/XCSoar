@@ -78,7 +78,6 @@ typedef enum {
 } InfoBoxBorderAppearance_t;
 
 struct Appearance {
-  int DefaultMapWidth;
   CompassAppearance_t CompassAppearance;
   IndFinalGlide_t IndFinalGlide;
   IndLandable_t IndLandable;

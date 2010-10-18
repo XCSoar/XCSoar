@@ -39,7 +39,6 @@ Copyright_License {
 #include "Appearance.hpp"
 
 struct Appearance Appearance = {
-  206,
   apCompassAltA,
   fgFinalGlideDefault,
   wpLandableDefault,

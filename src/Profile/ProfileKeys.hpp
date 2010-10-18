@@ -117,7 +117,6 @@ extern const TCHAR szProfileGestures[];
 extern const TCHAR szProfileAverEffTime[]; // VENTA6
 extern const TCHAR szProfileVarioGauge[];
 extern const TCHAR szProfileDebounceTimeout[];
-extern const TCHAR szProfileAppDefaultMapWidth[];
 extern const TCHAR szProfileAppIndFinalGlide[];
 extern const TCHAR szProfileAppIndLandable[];
 extern const TCHAR szProfileAppInverseInfoBox[];

@@ -435,9 +435,6 @@
     </Panel>
   
     <Panel Name="frmAppearance">
-      <Edit Name="prpAppDefaultMapWidth" Caption="Default map zoom*" X="2" Width="-2" Height="22" CaptionWidth="150">
-        <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="100" Max="400" Step="5"/>
-      </Edit>
     </Panel>
 
     <Panel>

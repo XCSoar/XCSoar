@@ -1252,8 +1252,6 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpAppInverseInfoBox"),
                    Appearance.InverseInfoBox);
-  LoadFormProperty(*wf, _T("prpAppDefaultMapWidth"),
-                   Appearance.DefaultMapWidth);
   LoadFormProperty(*wf, _T("prpGliderScreenPosition"),
                    XCSoarInterface::SettingsMap().GliderScreenPosition);
   LoadFormProperty(*wf, _T("prpTerrainContrast"),
@@ -2113,10 +2111,6 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpGliderScreenPosition"),
                               szProfileGliderScreenPosition,
                               XCSoarInterface::SetSettingsMap().GliderScreenPosition);
-
-  changed |= requirerestart |=
-    SaveFormProperty(*wf, _T("prpAppDefaultMapWidth"),
-                     szProfileAppDefaultMapWidth, Appearance.DefaultMapWidth);
 
   changed |= SaveFormProperty(*wf, _T("prpAppAveNeedle"), szProfileAppAveNeedle,
                               Appearance.GaugeVarioAveNeedle);

@@ -436,15 +436,12 @@ Profile::Use()
   if (Get(szProfileAppDialogStyle, Temp))
     DialogStyleSetting = (DialogStyle)Temp;
 
-  Get(szProfileAppDefaultMapWidth,
-		  Appearance.DefaultMapWidth);
   Get(szProfileAppInfoBoxColors,
 		  Appearance.InfoBoxColors);
   Get(szProfileAppAveNeedle,
 		  Appearance.GaugeVarioAveNeedle);
 
   // StateMessageAlign : center, topleft
-  // DefaultMapWidth: 206?
   // CompassAppearance (north arrow)
   //
   // DontShowLoggerIndicator
