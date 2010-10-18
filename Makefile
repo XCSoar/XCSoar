@@ -35,6 +35,7 @@ topdir = .
 include $(topdir)/build/bool.mk
 include $(topdir)/build/common.mk
 include $(topdir)/build/targets.mk
+include $(topdir)/build/android.mk
 include $(topdir)/build/debug.mk
 include $(topdir)/build/coverage.mk
 include $(topdir)/build/options.mk
@@ -374,7 +375,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/ProcessTimer.cpp \
 	$(SRC)/MainWindow.cpp \
 	$(SRC)/Components.cpp \
-	$(SRC)/XCSoar.cpp \
 	\
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Declaration.cpp \
@@ -395,6 +395,12 @@ XCSOAR_SOURCES := \
 #	$(SRC)/VarioSound.cpp \
 #	$(SRC)/WaveThread.cpp \
 
+
+ifeq ($(TARGET),ANDROID)
+XCSOAR_SOURCES += $(SRC)/Android/Main.cpp
+else
+XCSOAR_SOURCES += $(SRC)/XCSoar.cpp
+endif
 
 ifeq ($(TARGET),ALTAIR)
 XCSOAR_SOURCES += $(SRC)/Hardware/AltairControl.cpp
