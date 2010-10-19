@@ -41,6 +41,8 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
 
+#include <windef.h> /* for MAX_PATH */
+
 // General, open/close
 
 RasterTerrain *

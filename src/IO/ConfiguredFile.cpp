@@ -43,6 +43,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 
 #include <assert.h>
+#include <windef.h> /* for MAX_PATH */
 
 TLineReader *
 OpenConfiguredTextFile(const TCHAR *profile_key, ConvertLineReader::charset cs)

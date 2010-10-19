@@ -46,6 +46,7 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 
 #include <string.h>
+#include <windef.h> /* for MAX_PATH */
 
 #define XCSPROFILE "xcsoar-registry.prf"
 

@@ -54,6 +54,8 @@ Copyright_License {
 #include "OS/DynamicLibrary.hpp"
 #endif
 
+#include <windef.h> /* for MAX_PATH */
+
 #ifdef ANDROID
 
 #elif defined(HAVE_POSIX)

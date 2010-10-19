@@ -46,6 +46,8 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 
+#include <windef.h> /* for MAX_PATH */
+
 bool
 LoadConfiguredTopology(TopologyStore &store)
 {
