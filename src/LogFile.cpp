@@ -45,6 +45,10 @@ Copyright_License {
 #include <stdarg.h>
 #include <windef.h> // for MAX_PATH
 
+#ifdef ANDROID
+#include <android/log.h>
+#endif
+
 #if !defined(NDEBUG) && !defined(GNAV)
 /**
  * Saves the given string (Str) to the debug logfile
@@ -69,6 +73,10 @@ LogDebug(const TCHAR *Str, ...)
   va_start(ap, Str);
   _vstprintf(buf, Str, ap);
   va_end(ap);
+
+#ifdef ANDROID
+  __android_log_print(ANDROID_LOG_DEBUG, "XCSoar", "%s", buf);
+#endif
 
   TextWriter writer(szFileName, initialised);
   if (!writer.error())
@@ -102,6 +110,10 @@ LogStartUp(const TCHAR *Str, ...)
   va_start(ap, Str);
   _vstprintf(buf, Str, ap);
   va_end(ap);
+
+#ifdef ANDROID
+  __android_log_print(ANDROID_LOG_INFO, "XCSoar", "%s", buf);
+#endif
 
   TextWriter writer(szFileName, initialised);
   if (!writer.error())
