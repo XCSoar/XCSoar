@@ -55,7 +55,7 @@ namespace ProfileImpl = ProfileGConf;
 
 #include <stddef.h>
 #include <tchar.h>
-#include <windows.h>
+#include <wingdi.h>
 
 /**
  * Configuration structure for serial devices

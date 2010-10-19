@@ -41,7 +41,7 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
-#include <windows.h>
+#include <windef.h>
 #include <tchar.h>
 
 class ProfileWriter;
