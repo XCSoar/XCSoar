@@ -115,6 +115,11 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
     fprintf(stderr, "SDL_Init() has failed\n");
 
   screen.set();
+
+  /* apply the mode which was chosen by TopCanvas */
+  width = screen.get_width();
+  height = screen.get_height();
+
   ContainerWindow::set(NULL, cls, 0, 0, width, height, style);
 
 #ifdef _UNICODE
