@@ -55,7 +55,7 @@ Profile::GetScaleList(fixed *List, size_t Size)
 }
 
 bool
-ProfileImpl::Get(const TCHAR *key, DWORD &value_r)
+ProfileImpl::Get(const TCHAR *key, int &value_r)
 {
   return false;
 }
@@ -68,7 +68,7 @@ ProfileImpl::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
 }
 
 bool
-ProfileImpl::Set(const TCHAR *key, DWORD value)
+ProfileImpl::Set(const TCHAR *key, int value)
 {
   return false;
 }

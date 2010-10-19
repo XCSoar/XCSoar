@@ -41,27 +41,26 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
-#include <windef.h>
 #include <tchar.h>
 
 class ProfileWriter;
 
 namespace ProfileGConf {
-  bool Get(const TCHAR *szRegValue, DWORD &pPos);
+  bool Get(const TCHAR *szRegValue, int &pPos);
 
-  static inline bool Get(const TCHAR *key, int &value)
+  static inline bool Get(const TCHAR *key, unsigned &value)
   {
-    DWORD temp;
+    int temp;
     if (!Get(key, temp))
       return false;
 
-    value = temp;
+    value = (unsigned)temp;
     return true;
   }
 
   static inline bool Get(const TCHAR *key, short &value)
   {
-    DWORD temp;
+    int temp;
     if (!Get(key, temp))
       return false;
 
@@ -71,7 +70,7 @@ namespace ProfileGConf {
 
   static inline bool Get(const TCHAR *key, bool &value)
   {
-    DWORD temp;
+    int temp;
     if (!Get(key, temp))
       return false;
 
@@ -81,7 +80,7 @@ namespace ProfileGConf {
 
   static inline bool Get(const TCHAR *key, fixed &value)
   {
-    DWORD temp;
+    int temp;
     if (!Get(key, temp))
       return false;
 
@@ -89,21 +88,21 @@ namespace ProfileGConf {
     return true;
   }
 
-  bool Set(const TCHAR *szRegValue, DWORD Pos);
+  bool Set(const TCHAR *szRegValue, int Pos);
+
+  static inline bool Set(const TCHAR *key, unsigned value)
+  {
+    return Set(key, int(value));
+  }
 
   static inline bool Set(const TCHAR *key, bool value)
   {
-    return Set(key, value ? DWORD(1) : DWORD(0));
-  }
-
-  static inline bool Set(const TCHAR *key, int value)
-  {
-    return Set(key, DWORD(value));
+    return Set(key, value ? int(1) : int(0));
   }
 
   static inline bool Set(const TCHAR *key, long value)
   {
-    return Set(key, DWORD(value));
+    return Set(key, int(value));
   }
 
   bool Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize);

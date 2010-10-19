@@ -45,14 +45,14 @@ Copyright_License {
 
 namespace ProfileMap {
   typedef std::map<tstring, tstring> map_str_t;
-  typedef std::map<tstring, DWORD> map_num_t;
+  typedef std::map<tstring, int> map_num_t;
 
   static map_str_t map_str;
   static map_num_t map_num;
 }
 
 bool
-ProfileMap::Get(const TCHAR *szRegValue, DWORD &pPos)
+ProfileMap::Get(const TCHAR *szRegValue, int &pPos)
 {
   map_num_t::const_iterator it = map_num.find(szRegValue);
   if (it == map_num.end())
@@ -63,7 +63,7 @@ ProfileMap::Get(const TCHAR *szRegValue, DWORD &pPos)
 }
 
 bool
-ProfileMap::Set(const TCHAR *szRegValue, DWORD Pos)
+ProfileMap::Set(const TCHAR *szRegValue, int Pos)
 {
   map_num[szRegValue] = Pos;
   return true;

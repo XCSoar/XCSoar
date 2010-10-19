@@ -40,20 +40,20 @@ Copyright_License {
 #include "Config/GConf.hpp"
 
 bool
-ProfileGConf::Get(const TCHAR *szRegValue, DWORD &pPos)
+ProfileGConf::Get(const TCHAR *szRegValue, int &pPos)
 {
   int value;
   if (!GConf().get(szRegValue, value))
     return false;
 
-  pPos = (DWORD)value;
+  pPos = value;
   return true;
 }
 
 bool
-ProfileGConf::Set(const TCHAR *szRegValue, DWORD Pos)
+ProfileGConf::Set(const TCHAR *szRegValue, int Pos)
 {
-  return GConf().set(szRegValue, (int)Pos);
+  return GConf().set(szRegValue, Pos);
 }
 
 /**
