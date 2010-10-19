@@ -44,12 +44,4 @@ Copyright_License {
 #include <winuser.h>
 #include <wingdi.h>
 
-/* File I/O */
-
-static inline void Sleep(unsigned ms)
-{
-  const struct timespec ts = { ms / 1000, (long)ms % 1000000L };
-  nanosleep(&ts, NULL);
-}
-
 #endif

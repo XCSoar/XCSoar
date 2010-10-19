@@ -43,6 +43,14 @@ Copyright_License {
 
 #include <stdio.h>
 
+static inline void Sleep(unsigned ms)
+{
+  const struct timespec ts = { ms / 1000, (long)ms % 1000000L };
+  nanosleep(&ts, NULL);
+}
+
+/* File I/O */
+
 static inline int
 MoveFile(const TCHAR *oldpath, const TCHAR *newpath)
 {
