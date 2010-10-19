@@ -36,12 +36,16 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_UTILS_FONT_HPP
-#define XCSOAR_UTILS_FONT_HPP
+#ifndef XCSOAR_PROFILE_FONT_CONFIG_HPP
+#define XCSOAR_PROFILE_FONT_CONFIG_HPP
 
-#include <windows.h>
+#include <windef.h>
+#include <wingdi.h>
 #include <tchar.h>
 
-bool GetFontFromString(const TCHAR *Buffer, LOGFONT* lplf);
+namespace Profile {
+  bool GetFont(const TCHAR *key, LOGFONT* lplf);
+  void SetFont(const TCHAR *key, LOGFONT &logfont);
+};
 
 #endif

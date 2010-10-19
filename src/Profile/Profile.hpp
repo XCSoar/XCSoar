@@ -55,7 +55,6 @@ namespace ProfileImpl = ProfileGConf;
 
 #include <stddef.h>
 #include <tchar.h>
-#include <wingdi.h>
 
 /**
  * Configuration structure for serial devices
@@ -153,9 +152,6 @@ namespace Profile
 
   void GetDeviceConfig(unsigned n, DeviceConfig &config);
   void SetDeviceConfig(unsigned n, const DeviceConfig &config);
-
-  bool GetFont(const TCHAR *key, LOGFONT* lplf);
-  void SetFont(const TCHAR *key, LOGFONT &logfont);
 };
 
 #endif

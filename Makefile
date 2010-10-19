@@ -324,7 +324,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Units.cpp \
 	$(SRC)/FLARM/FlarmDetails.cpp \
 	$(SRC)/UtilsFile.cpp \
-	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsSettings.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/UtilsText.cpp \
@@ -341,6 +340,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Profile/Writer.cpp \
 	$(SRC)/Profile/ProfileGlue.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
+	$(SRC)/Profile/FontConfig.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \

@@ -44,7 +44,6 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Dialogs/XML.hpp"
 #include "WayPointFile.hpp"
-#include "UtilsFont.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Interface.hpp"
 #include "Sizes.h"
@@ -741,33 +740,4 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
   _tcscpy(buffer, CONF("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
   Set(buffer, config.driver_name);
-}
-
-bool
-Profile::GetFont(const TCHAR *key, LOGFONT* lplf)
-{
-  TCHAR Buffer[128];
-
-  assert(key != NULL);
-  assert(key[0] != '\0');
-  assert(lplf != NULL);
-
-  if (Get(key, Buffer, sizeof(Buffer) / sizeof(TCHAR)))
-    return GetFontFromString(Buffer, lplf);
-
-  return false;
-}
-
-void
-Profile::SetFont(const TCHAR *key, LOGFONT &logfont)
-{
-  TCHAR Buffer[256];
-
-  assert(key != NULL);
-  assert(key[0] != '\0');
-
-  _stprintf(Buffer, _T("%d,%d,0,0,%d,%d,0,0,0,0,0,%d,%d,%s"),
-            logfont.lfHeight, logfont.lfWidth, logfont.lfWeight, logfont.lfItalic,
-            logfont.lfQuality, logfont.lfPitchAndFamily, logfont.lfFaceName);
-  Profile::Set(key, Buffer);
 }

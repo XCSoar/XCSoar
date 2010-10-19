@@ -40,6 +40,7 @@ Copyright_License {
 #include "Appearance.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
+#include "Profile/FontConfig.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "DataField/Boolean.hpp"

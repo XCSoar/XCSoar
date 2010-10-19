@@ -544,7 +544,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Topology/XShape.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/UtilsText.cpp \
-	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
@@ -643,7 +642,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/UtilsText.cpp \
-	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Simulator.cpp \

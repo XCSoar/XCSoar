@@ -38,10 +38,10 @@ Copyright_License {
 
 #include "Screen/Fonts.hpp"
 #include "LogFile.hpp"
-#include "UtilsFont.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "ButtonLabel.hpp"
-#include "Profile/Profile.hpp"
+#include "Profile/ProfileKeys.hpp"
+#include "Profile/FontConfig.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/VirtualCanvas.hpp"
 #include "Appearance.hpp"
