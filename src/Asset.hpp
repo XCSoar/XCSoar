@@ -86,7 +86,7 @@ is_debug()
 static inline bool
 is_embedded()
 {
-#ifdef _WIN32_WCE
+#if defined(_WIN32_WCE) || defined(ANDROID)
   return true;
 #else
   return false;
