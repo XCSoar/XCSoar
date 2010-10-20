@@ -3,7 +3,7 @@
 
 #include "Math/fixed.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
-#include "Task/TaskStats/OLCResult.hpp"
+#include "Task/TaskStats/ContestResult.hpp"
 
 #ifdef DO_PRINT
 #include <ostream>
@@ -82,7 +82,7 @@ public:
   /** Ballast setting at last update */
   fixed current_ballast;
 
-  OLCResult olc;
+  ContestResult olc;
 
   /**
    * Reset the stats as if never flown

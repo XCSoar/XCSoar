@@ -37,7 +37,7 @@
 
 #include "OLCDijkstra.hpp"
 #include "Task/Tasks/OnlineContest.hpp"
-#include "Task/TaskStats/OLCResult.hpp"
+#include "Task/TaskStats/ContestResult.hpp"
 
 #include <algorithm>
 #include <assert.h>
@@ -120,7 +120,7 @@ OLCDijkstra::reset()
 }
 
 bool
-OLCDijkstra::score(OLCResult &result)
+OLCDijkstra::score(ContestResult &result)
 {
   if (positive(calc_time())) {
     solution_found = true;

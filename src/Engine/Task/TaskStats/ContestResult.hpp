@@ -1,7 +1,7 @@
-#ifndef OLC_RESULT_HPP
-#define OLC_RESULT_HPP
+#ifndef CONTEST_RESULT_HPP
+#define CONTEST_RESULT_HPP
 
-struct OLCResult
+struct ContestResult
 {
   /** Score (pts) according to OLC rule */
   fixed score;
@@ -12,7 +12,7 @@ struct OLCResult
   /** Speed (m/s) of optimised OLC path */
   fixed speed;
 
-  OLCResult() :
+  ContestResult() :
     score(fixed_zero),
     distance(fixed_zero),
     time(fixed_zero),
