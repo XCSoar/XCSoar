@@ -50,7 +50,7 @@ TaskManager::TaskManager(TaskEvents &te,
   task_ordered(te, task_behaviour, m_glide_polar),
   task_goto(te, task_behaviour, m_glide_polar),
   task_abort(te, task_behaviour, m_glide_polar, wps),
-  task_olc(task_behaviour.contest, common_stats.olc, trace_full, trace_sprint),
+  contest_manager(task_behaviour.contest, common_stats.olc, trace_full, trace_sprint),
   mode(MODE_NULL),
   active_task(NULL) {}
 
@@ -263,7 +263,7 @@ TaskManager::update(const AIRCRAFT_STATE &state,
 
   if (state.Flying)
     // always update OLC sampling task
-    retval |= task_olc.update_sample(state);
+    retval |= contest_manager.update_sample(state);
 
   update_common_stats(state);
 
@@ -284,7 +284,7 @@ TaskManager::update_idle(const AIRCRAFT_STATE& state)
     // If contest optimization is enabled
     // -> Optimize
     if (task_behaviour.enable_olc)
-      retval |= task_olc.update_idle();
+      retval |= contest_manager.update_idle();
   }
 
   if (active_task)
@@ -354,7 +354,7 @@ TaskManager::reset()
   task_ordered.reset();
   task_goto.reset();
   task_abort.reset();
-  task_olc.reset();
+  contest_manager.reset();
   common_stats.reset();
   m_glide_polar.set_cruise_efficiency(fixed_one);
   trace_full.clear();

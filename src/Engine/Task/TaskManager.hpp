@@ -368,7 +368,7 @@ public:
   void set_safety_polar(const GlidePolar& glide_polar);
 
   void set_contest(Contests contest) {
-    task_olc.set_contest(contest);
+    contest_manager.set_contest(contest);
   }
 
   /**
@@ -386,7 +386,7 @@ public:
    */
   gcc_pure
   const TracePointVector& get_olc_points() const {
-    return task_olc.get_olc_points();
+    return contest_manager.get_olc_points();
   }
 
   /**
@@ -396,7 +396,7 @@ public:
    */
   gcc_pure
   const TracePointVector& get_trace_points() const {
-    return task_olc.get_trace_points();
+    return contest_manager.get_trace_points();
   }
 
   /**
@@ -608,7 +608,7 @@ private:
   
   AbortTask task_abort;
 
-  ContestManager task_olc;
+  ContestManager contest_manager;
 
   TaskMode_t mode;
   AbstractTask* active_task;
