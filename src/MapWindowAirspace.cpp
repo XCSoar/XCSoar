@@ -236,7 +236,7 @@ MapWindow::DrawAirspaceIntersections(Canvas &canvas) const
 {
   for (unsigned i = m_airspace_intersections.size(); i--;) {
     POINT sc;
-    if (render_projection.LonLat2ScreenIfVisible(m_airspace_intersections[i], &sc))
+    if (render_projection.LonLat2ScreenIfVisible(m_airspace_intersections[i], sc))
       Graphics::hAirspaceInterceptBitmap.draw(canvas, bitmap_canvas, sc.x, sc.y);
   }
 }

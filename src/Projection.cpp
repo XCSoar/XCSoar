@@ -119,11 +119,11 @@ Projection::LonLatVisible(const GeoPoint &loc) const
 
 bool
 Projection::LonLat2ScreenIfVisible(const GeoPoint &loc,
-                                   POINT *sc) const
+                                   POINT &sc) const
 {
   if (LonLatVisible(loc)) {
-    *sc = LonLat2Screen(loc);
-    return PointVisible(*sc);
+    sc = LonLat2Screen(loc);
+    return PointVisible(sc);
   }
 
   return false;

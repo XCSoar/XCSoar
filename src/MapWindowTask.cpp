@@ -83,7 +83,7 @@ protected:
       return;
 
     POINT sc;
-    if (m_proj.LonLat2ScreenIfVisible(tp.get_location_remaining(), &sc))
+    if (m_proj.LonLat2ScreenIfVisible(tp.get_location_remaining(), sc))
       Graphics::hBmpTarget.draw(m_buffer, bitmap_canvas, sc.x, sc.y);
   }
 

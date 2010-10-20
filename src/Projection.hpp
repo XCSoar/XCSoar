@@ -69,7 +69,7 @@ public:
     return PanLocation;
   }
 
-  bool LonLat2ScreenIfVisible(const GeoPoint &loc, POINT *sc) const;
+  bool LonLat2ScreenIfVisible(const GeoPoint &loc, POINT &sc) const;
 
   gcc_pure
   bool LonLatVisible(const GeoPoint &loc) const;

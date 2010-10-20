@@ -91,7 +91,7 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
   if (!Calculated().TerrainWarningLocation.is_null()) {
     POINT sc;
     if (render_projection.LonLat2ScreenIfVisible(Calculated().TerrainWarningLocation,
-                                                 &sc))
+                                                 sc))
       Graphics::hTerrainWarning.draw(canvas, bitmap_canvas, sc.x, sc.y);
   }
 }

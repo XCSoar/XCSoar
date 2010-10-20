@@ -146,7 +146,7 @@ public:
   DrawWaypoint(const Waypoint& way_point, bool in_task = false)
   {
     POINT sc;
-    if (!projection.LonLat2ScreenIfVisible(way_point.Location, &sc))
+    if (!projection.LonLat2ScreenIfVisible(way_point.Location, sc))
       return;
 
     if (!projection.WaypointInScaleFilter(way_point) && !in_task)
