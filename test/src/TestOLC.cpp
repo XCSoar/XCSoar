@@ -39,7 +39,7 @@
 
 #include "Engine/Trace/Trace.hpp"
 #include "Engine/Task/TaskStats/CommonStats.hpp"
-#include "Engine/Task/Tasks/OnlineContest.hpp"
+#include "Engine/Task/Tasks/ContestManager.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
 
 #include <windef.h>
@@ -49,20 +49,20 @@
 ContestResult stats_classic;
 Trace full_trace_classic;
 Trace sprint_trace_classic(9000, 2, 300);
-OnlineContest olc_classic(OLC_Classic, stats_classic,
-                          full_trace_classic, full_trace_classic);
+ContestManager olc_classic(OLC_Classic, stats_classic,
+                           full_trace_classic, full_trace_classic);
 
 ContestResult stats_fai;
 Trace full_trace_fai;
 Trace sprint_trace_fai(9000, 2, 300);
-OnlineContest olc_fai(OLC_FAI, stats_fai,
-                      full_trace_fai, sprint_trace_fai);
+ContestManager olc_fai(OLC_FAI, stats_fai,
+                       full_trace_fai, sprint_trace_fai);
 
 ContestResult stats_sprint;
 Trace full_trace_sprint;
 Trace sprint_trace_sprint(9000, 2, 300);
-OnlineContest olc_sprint(OLC_Sprint, stats_sprint,
-                         full_trace_sprint, sprint_trace_sprint);
+ContestManager olc_sprint(OLC_Sprint, stats_sprint,
+                          full_trace_sprint, sprint_trace_sprint);
 
 class IgcReplayGlue:
   public IgcReplay

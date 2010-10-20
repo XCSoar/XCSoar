@@ -1,6 +1,6 @@
 #include "OLCClassic.hpp"
 
-OLCClassic::OLCClassic(OnlineContest& _olc):
+OLCClassic::OLCClassic(ContestManager& _olc):
   OLCDijkstra(_olc, 6, 3000) 
 {
 

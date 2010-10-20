@@ -5,7 +5,7 @@
  @todo potential to use 3d convex hull to speed search
 */
 
-OLCFAI::OLCFAI(OnlineContest& _olc):
+OLCFAI::OLCFAI(ContestManager& _olc):
   OLCDijkstra(_olc, 3, 3000) 
 {
 

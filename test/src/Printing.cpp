@@ -554,10 +554,10 @@ std::ostream& operator<< (std::ostream& f,
 
 
 
-#include "Task/Tasks/OnlineContest.hpp"
+#include "Task/Tasks/ContestManager.hpp"
 
 void
-OnlineContest::print() const 
+ContestManager::print() const 
 {
   {
     std::ofstream fs("results/res-olc-trace.txt");

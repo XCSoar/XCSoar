@@ -52,7 +52,7 @@ public:
  *
  * @param _olc The OLC task to solve for
  */
-  OLCFAI(OnlineContest& _olc);
+  OLCFAI(ContestManager& _olc);
 
 protected:
 

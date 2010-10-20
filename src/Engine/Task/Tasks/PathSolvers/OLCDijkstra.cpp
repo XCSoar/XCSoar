@@ -36,7 +36,7 @@
 */
 
 #include "OLCDijkstra.hpp"
-#include "Task/Tasks/OnlineContest.hpp"
+#include "Task/Tasks/ContestManager.hpp"
 #include "Task/TaskStats/ContestResult.hpp"
 
 #include <algorithm>
@@ -46,7 +46,7 @@
 #include <stdio.h>
 #endif
 
-OLCDijkstra::OLCDijkstra(OnlineContest& _olc, const unsigned n_legs,
+OLCDijkstra::OLCDijkstra(ContestManager& _olc, const unsigned n_legs,
                          const unsigned finish_alt_diff,
                          const bool full_trace):
   NavDijkstra<TracePoint>(n_legs + 1),
@@ -87,7 +87,7 @@ OLCDijkstra::solve()
       // no processing to perform!
       // @todo
       // problem with this is it will immediately ask
-      // OnlineContest for new data, which will be expensive
+      // ContestManager for new data, which will be expensive
       // instead, new data should arrive only when preconditions
       // are satisfied (significant difference and valid)
       return true;

@@ -18,7 +18,7 @@ class Trace;
 /**
  * Special task holder for Online Contest calculations
  */
-class OnlineContest {
+class ContestManager {
 public:
 
   /** 
@@ -30,7 +30,7 @@ public:
    * @param trace_sprint Trace object containing 2.5 hour flight history for scanning
    * 
    */
-  OnlineContest(const Contests _contest,
+  ContestManager(const Contests _contest,
                 ContestResult &_result, const Trace &trace_full,
                 const Trace &trace_sprint);
 

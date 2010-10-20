@@ -1,4 +1,4 @@
-#include "OnlineContest.hpp"
+#include "ContestManager.hpp"
 
 #include "Task/TaskStats/CommonStats.hpp"
 #include "Trace/Trace.hpp"
@@ -7,7 +7,7 @@
 #include <stdio.h>
 #endif
 
-OnlineContest::OnlineContest(const Contests _contest,
+ContestManager::ContestManager(const Contests _contest,
                              ContestResult &_result,
                              const Trace& trace_full,
                              const Trace& trace_sprint):
@@ -23,7 +23,7 @@ OnlineContest::OnlineContest(const Contests _contest,
 }
 
 bool 
-OnlineContest::update_trace_sample(const AIRCRAFT_STATE &state,
+ContestManager::update_trace_sample(const AIRCRAFT_STATE &state,
                                    TracePointVector& vec)
 {
   if (vec.empty())
@@ -39,7 +39,7 @@ OnlineContest::update_trace_sample(const AIRCRAFT_STATE &state,
 }
 
 bool 
-OnlineContest::update_sample(const AIRCRAFT_STATE &state)
+ContestManager::update_sample(const AIRCRAFT_STATE &state)
 {
   return update_trace_sample(state, trace_points_full) |
          update_trace_sample(state, trace_points_sprint);
@@ -50,7 +50,7 @@ extern long count_olc;
 #endif
 
 bool
-OnlineContest::run_olc(OLCDijkstra &dijkstra)
+ContestManager::run_olc(OLCDijkstra &dijkstra)
 {
   if (!dijkstra.solve())
     return false;
@@ -69,14 +69,14 @@ OnlineContest::run_olc(OLCDijkstra &dijkstra)
 }
 
 void
-OnlineContest::update_trace()
+ContestManager::update_trace()
 {
   trace_points_full = trace_full.get_trace_points(300);
   trace_points_sprint = trace_sprint.get_trace_points(300);
 }
 
 bool 
-OnlineContest::update_idle()
+ContestManager::update_idle()
 {
   // \todo: possibly scan each type in a round robin fashion?
   bool retval = false;
@@ -109,7 +109,7 @@ OnlineContest::update_idle()
 }
 
 void
-OnlineContest::reset()
+ContestManager::reset()
 {
   trace_points_full.clear();
   trace_points_sprint.clear();
@@ -120,13 +120,13 @@ OnlineContest::reset()
 }
 
 const TracePointVector& 
-OnlineContest::get_trace_points(bool full_trace) const
+ContestManager::get_trace_points(bool full_trace) const
 {
   return full_trace ? trace_points_full : trace_points_sprint;
 }
 
 const TracePointVector& 
-OnlineContest::get_olc_points() const
+ContestManager::get_olc_points() const
 {
   return solution;
 }

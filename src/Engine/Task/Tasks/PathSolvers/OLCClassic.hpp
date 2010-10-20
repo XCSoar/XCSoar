@@ -52,7 +52,7 @@ public:
  *
  * @param _olc The OLC task to solve for
  */
-  OLCClassic(OnlineContest& _olc);
+  OLCClassic(ContestManager& _olc);
 
 protected:
   void set_weightings();

@@ -8,7 +8,7 @@
   - note, this only searches 2.5 hour blocks, so should be able
     to handle larger number of points than other OLCDijkstra's
   - Therefore, consider having the trace points stored within
-    this instance instead of in OnlineContest.
+    this instance instead of in ContestManager.
   - Solutions must be improving as time goes on, so no need to search
     back from current best
   - with sampling at approx 300 points, 2.5 hours = 1pt/30s
@@ -33,7 +33,7 @@
     potentially implement as circular buffer (emulate as dequeue)
 */
 
-OLCSprint::OLCSprint(OnlineContest& _olc):
+OLCSprint::OLCSprint(ContestManager& _olc):
   OLCDijkstra(_olc, 4, 0, false)
 {
 

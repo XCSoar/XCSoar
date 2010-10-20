@@ -52,7 +52,7 @@ public:
  *
  * @param _olc The OLC task to solve for
  */
-  OLCSprint(OnlineContest& _olc);
+  OLCSprint(ContestManager& _olc);
 
   void reset();
 

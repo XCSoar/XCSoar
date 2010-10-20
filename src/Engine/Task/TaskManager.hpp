@@ -43,7 +43,7 @@
 #include "Tasks/AbortTask.hpp"
 #include "Tasks/GotoTask.hpp"
 #include "Tasks/OrderedTask.hpp"
-#include "Tasks/OnlineContest.hpp"
+#include "Tasks/ContestManager.hpp"
 #include "TaskStats/TaskStats.hpp"
 #include "TaskStats/CommonStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
@@ -608,7 +608,7 @@ private:
   
   AbortTask task_abort;
 
-  OnlineContest task_olc;
+  ContestManager task_olc;
 
   TaskMode_t mode;
   AbstractTask* active_task;

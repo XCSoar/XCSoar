@@ -66,7 +66,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/Tasks/GotoTask.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/OrderedTask.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/UnorderedTask.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/OnlineContest.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/ContestManager.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/IntermediatePoint.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/ObservationZoneClient.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/ObservationZonePoint.cpp \
