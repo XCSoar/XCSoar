@@ -50,7 +50,7 @@ TaskManager::TaskManager(TaskEvents &te,
   task_ordered(te, task_behaviour, m_glide_polar),
   task_goto(te, task_behaviour, m_glide_polar),
   task_abort(te, task_behaviour, m_glide_polar, wps),
-  task_olc(task_behaviour.olc_rules, common_stats, trace_full, trace_sprint),
+  task_olc(task_behaviour.contest, common_stats, trace_full, trace_sprint),
   mode(MODE_NULL),
   active_task(NULL) {}
 

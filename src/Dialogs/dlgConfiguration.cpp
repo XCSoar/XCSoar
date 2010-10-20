@@ -847,19 +847,19 @@ setVariables()
   LoadFormProperty(*wf, _T("prpBlockSTF"),
                    settings_computer.EnableBlockSTF);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpOLCRules"));
+  wp = (WndProperty*)wf->FindByName(_T("prpContests"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(rule_as_text((OLCRules)0)));
-    dfe->addEnumText(gettext(rule_as_text((OLCRules)1)));
-    dfe->addEnumText(gettext(rule_as_text((OLCRules)2)));
-    dfe->Set(settings_computer.olc_rules);
+    dfe->addEnumText(gettext(contest_as_text((Contests)0)));
+    dfe->addEnumText(gettext(contest_as_text((Contests)1)));
+    dfe->addEnumText(gettext(contest_as_text((Contests)2)));
+    dfe->Set(settings_computer.contest);
     wp->RefreshDisplay();
   }
 
   LoadFormProperty(*wf, _T("prpHandicap"),
-                   settings_computer.olc_handicap);
+                   settings_computer.contest_handicap);
 
   if(!Profile::Get(szProfileSpeedUnitsValue,Speed)) {
     Profile::Set(szProfileSpeedUnitsValue, Speed);
@@ -1859,14 +1859,14 @@ void dlgConfigurationShowModal(void)
   }
 
   {
-    unsigned t= settings_computer.olc_rules;
-    changed |= SaveFormProperty(*wf, _T("prpOLCRules"), szProfileOLCRules,
+    unsigned t= settings_computer.contest;
+    changed |= SaveFormProperty(*wf, _T("prpContests"), szProfileOLCRules,
                                 t);
-    settings_computer.olc_rules = (OLCRules)t;
+    settings_computer.contest = (Contests)t;
   }
 
   changed |= SaveFormProperty(*wf, _T("prpHandicap"), szProfileHandicap,
-                              settings_computer.olc_handicap);
+                              settings_computer.contest_handicap);
 
   PolarFileChanged = FinishFileField(*wf, _T("prpPolarFile"),
                                      szProfilePolarFile);

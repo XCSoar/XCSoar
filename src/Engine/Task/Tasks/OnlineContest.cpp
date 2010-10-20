@@ -7,11 +7,11 @@
 #include <stdio.h>
 #endif
 
-OnlineContest::OnlineContest(const OLCRules olc_rules,
+OnlineContest::OnlineContest(const Contests _contest,
                              CommonStats& stats,
                              const Trace& trace_full,
                              const Trace& trace_sprint):
-  olc_rules(olc_rules),
+  contest(_contest),
   common_stats(stats),
   trace_full(trace_full),
   trace_sprint(trace_sprint),
@@ -84,7 +84,7 @@ OnlineContest::update_idle()
   if (trace_points_full.size() < 10)
     update_trace();
 
-  switch (olc_rules) {
+  switch (contest) {
   case OLC_Sprint:
     retval = run_olc(olc_sprint);
     break;

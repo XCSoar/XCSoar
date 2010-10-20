@@ -351,7 +351,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   if (LoadPolarById(SettingsComputer(), gp))
     task_manager.set_glide_polar(gp);
 
-  task_manager.set_olc_rules(SettingsComputer().olc_rules);
+  task_manager.set_contest(SettingsComputer().contest);
 
   // Read the topology file(s)
   topology = new TopologyStore();

@@ -1,7 +1,7 @@
-#include "OLCRules.hpp"
+#include "Contests.hpp"
 
 const TCHAR *
-rule_as_text(OLCRules the_rule)
+contest_as_text(Contests the_rule)
 {
   switch (the_rule) {
   case OLC_Sprint:

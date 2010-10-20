@@ -386,7 +386,7 @@ bool test_effective_mc(int test_num, int n_wind)
 }
 
 
-bool test_olc(int n_wind, OLCRules olc_type)
+bool test_olc(int n_wind, Contests olc_type)
 {
   GlidePolar glide_polar(fixed_two);
   Waypoints waypoints;
@@ -402,7 +402,7 @@ bool test_olc(int n_wind, OLCRules olc_type)
                            waypoints);
 
   task_manager.get_task_behaviour().all_off();
-  task_manager.get_task_behaviour().olc_rules = olc_type;
+  task_manager.get_task_behaviour().contest = olc_type;
   task_manager.get_task_behaviour().enable_olc = true;
 
   task_manager.set_glide_polar(glide_polar);

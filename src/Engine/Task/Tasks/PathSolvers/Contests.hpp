@@ -3,13 +3,13 @@
 
 #include <tchar.h>
 
-enum OLCRules {
+enum Contests {
   OLC_Sprint = 0,
   OLC_FAI,
   OLC_Classic
 };
 
 const TCHAR *
-rule_as_text(OLCRules the_rule);
+contest_as_text(Contests the_rule);
 
 #endif

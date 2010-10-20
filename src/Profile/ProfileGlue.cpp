@@ -459,10 +459,10 @@ Profile::Use()
       (TaskBehaviour::AutoMCMode_t)Temp;
 
   if (Get(szProfileOLCRules, Temp))
-      settings_computer.olc_rules = (OLCRules)Temp;
+      settings_computer.contest = (Contests)Temp;
 
   Get(szProfileHandicap,
-      settings_computer.olc_handicap);
+      settings_computer.contest_handicap);
   Get(szProfileEnableExternalTriggerCruise,
       settings_computer.EnableExternalTriggerCruise);
 

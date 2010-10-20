@@ -9,7 +9,7 @@
 #include "PathSolvers/OLCSprint.hpp"
 #include "PathSolvers/OLCFAI.hpp"
 #include "PathSolvers/OLCClassic.hpp"
-#include "PathSolvers/OLCRules.hpp"
+#include "PathSolvers/Contests.hpp"
 
 class TaskPoint;
 class CommonStats;
@@ -24,18 +24,18 @@ public:
   /** 
    * Base constructor.
    * 
-   * @param olc_rules OLCRules that shall be used
+   * @param olc_rules Contests that shall be used
    * @param stats Common stats to write OLC info to
    * @param trace_full Trace object containing full flight history for scanning
    * @param trace_sprint Trace object containing 2.5 hour flight history for scanning
    * 
    */
-  OnlineContest(const OLCRules olc_rules,
+  OnlineContest(const Contests _contest,
                 CommonStats &stats, const Trace &trace_full,
                 const Trace &trace_sprint);
 
-  void set_olc_rules(OLCRules _olc_rules) {
-    olc_rules = _olc_rules;
+  void set_contest(Contests _contest) {
+    contest = _contest;
   }
 
   /**
@@ -84,7 +84,7 @@ public:
   const TracePointVector& get_olc_points() const;
 
 private:
-  OLCRules olc_rules;
+  Contests contest;
   CommonStats &common_stats;
 
   const Trace &trace_full;

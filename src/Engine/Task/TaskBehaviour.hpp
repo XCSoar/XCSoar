@@ -37,7 +37,7 @@
 #ifndef TASK_BEHAVIOUR_HPP
 #define TASK_BEHAVIOUR_HPP
 
-#include "Tasks/PathSolvers/OLCRules.hpp"
+#include "Tasks/PathSolvers/Contests.hpp"
 #include "OrderedTaskBehaviour.hpp"
 
 struct AIRCRAFT_STATE;
@@ -80,8 +80,8 @@ public:
 
   bool enable_olc; /**< Whether to do online OLC optimisation */
 
-  OLCRules olc_rules; /**< Rule set to scan for in OLC */
-  unsigned olc_handicap; /**< Handicap factor */
+  Contests contest; /**< Rule set to scan for in OLC */
+  unsigned contest_handicap; /**< Handicap factor */
 
   fixed safety_mc; /**< Safety MacCready value (m/s) used by abort task */
   bool safety_mc_use_current; /**< Whether to use safety mc value or current task polar MC */

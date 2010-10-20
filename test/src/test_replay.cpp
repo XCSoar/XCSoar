@@ -48,7 +48,7 @@ protected:
 };
 
 static bool
-test_replay(const OLCRules olc_type)
+test_replay(const Contests olc_type)
 {
 #ifdef DO_PRINT
   std::ofstream f("results/res-sample.txt");
@@ -66,7 +66,7 @@ test_replay(const OLCRules olc_type)
 
   task_manager.set_glide_polar(glide_polar);
 
-  task_manager.get_task_behaviour().olc_rules = olc_type;
+  task_manager.get_task_behaviour().contest = olc_type;
   task_manager.get_task_behaviour().enable_olc = true;
 
   ReplayLoggerSim sim;
