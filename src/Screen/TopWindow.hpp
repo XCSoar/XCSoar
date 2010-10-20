@@ -53,8 +53,6 @@ public:
   void set();
 
   void full_screen();
-
-  void expose();
 };
 #endif
 

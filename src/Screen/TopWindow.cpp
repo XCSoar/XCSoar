@@ -90,13 +90,6 @@ TopCanvas::full_screen()
 #endif
 }
 
-void
-TopCanvas::expose()
-{
-  Canvas::expose();
-  ::SDL_Flip(surface);
-}
-
 #endif /* ENABLE_SDL */
 
 TopWindow::TopWindow()
