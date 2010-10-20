@@ -385,8 +385,8 @@ public:
    * @return Vector of trace points selected for OLC
    */
   gcc_pure
-  const TracePointVector& get_olc_points() const {
-    return contest_manager.get_olc_points();
+  const TracePointVector& get_contest_solution() const {
+    return contest_manager.get_contest_solution();
   }
 
   /**

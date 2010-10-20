@@ -69,7 +69,7 @@ public:
    * @return Vector of trace points selected for OLC
    */
   gcc_pure
-  const TracePointVector& get_olc_points() const;
+  const TracePointVector& get_contest_solution() const;
 
 private:
   Contests contest;

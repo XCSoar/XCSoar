@@ -136,7 +136,7 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     fs.RenderOLC(canvas, rcgfx, XCSoarInterface::Basic(),
                  XCSoarInterface::SettingsComputer(),
                  XCSoarInterface::SettingsMap(),
-                 task->get_olc_points(), task->get_trace_points());
+                 task->get_contest_solution(), task->get_trace_points());
   }
     break;
   case ANALYSIS_PAGE_AIRSPACE:

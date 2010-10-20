@@ -120,7 +120,7 @@ ContestManager::reset()
 }
 
 const TracePointVector& 
-ContestManager::get_olc_points() const
+ContestManager::get_contest_solution() const
 {
   return solution;
 }
