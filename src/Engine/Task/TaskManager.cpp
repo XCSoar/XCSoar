@@ -389,12 +389,6 @@ TaskManager::set_glide_polar(const GlidePolar& glide_polar)
   m_glide_polar = glide_polar;
 }
 
-void 
-TaskManager::default_task(const GeoPoint &loc, const bool force)
-{
-  /// @todo implement default_task
-}
-
 TracePointVector 
 TaskManager::find_trace_points(const GeoPoint &loc, const fixed range,
                                const unsigned mintime,

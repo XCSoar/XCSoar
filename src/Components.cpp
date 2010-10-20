@@ -221,10 +221,6 @@ XCSoarInterface::AfterStartup()
     InputEvents::processGlideComputer(GCE_STARTUP_REAL);
   }
 
-  // Create default task if none exists
-  LogStartUp(_T("Create default task"));
-  task_manager.default_task(Basic().Location);
-
   SetSettingsComputer().enable_olc = true;
   protected_task_manager.task_load_default();
 
