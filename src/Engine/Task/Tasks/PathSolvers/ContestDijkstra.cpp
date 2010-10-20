@@ -92,12 +92,6 @@ ContestDijkstra::solve()
       return true;
   }
 
-  return solve_inner();
-}
-
-bool
-ContestDijkstra::solve_inner()
-{
   if (distance_general(m_dijkstra, 25)) {
     save_solution();
     return true;

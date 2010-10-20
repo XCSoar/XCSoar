@@ -151,12 +151,6 @@ protected:
   unsigned get_weighting(const unsigned index) const;
 
 private:
-  /**
-   * Iterate solver
-   * @return True if solver returned
-   */
-  bool solve_inner();
-
   const TracePointVector &trace;
   const unsigned m_finish_alt_diff;
 
