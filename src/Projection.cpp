@@ -100,14 +100,14 @@ Projection::LonLat2Screen(const GeoPoint &g) const
  */
 void
 Projection::LonLat2Screen(const GeoPoint *ptin, POINT *ptout,
-                          unsigned n, unsigned skip) const
+                          unsigned n) const
 {
   const GeoPoint *p = ptin;
   const GeoPoint *ptend = ptin + n;
 
   while (p < ptend) {
     *ptout++ = LonLat2Screen(*p);
-    p += skip;
+    p++;
   }
 }
 

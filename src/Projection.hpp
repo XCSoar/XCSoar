@@ -59,7 +59,7 @@ public:
   POINT LonLat2Screen(const GeoPoint &location) const;
 
   void LonLat2Screen(const GeoPoint *ptin, POINT *ptout,
-                     unsigned n, unsigned skip) const;
+                     unsigned n) const;
 
   const POINT &GetOrigScreen() const {
     return Orig_Screen;

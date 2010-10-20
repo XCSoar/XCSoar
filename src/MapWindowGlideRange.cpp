@@ -46,7 +46,7 @@ void MapWindow::CalculateScreenPositionsGroundline(void) {
   if (SettingsComputer().FinalGlideTerrain)
     render_projection.LonLat2Screen(Calculated().GlideFootPrint,
                                     Groundline,
-                                    TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1, 1);
+                                    TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1);
 }
 
 /**
