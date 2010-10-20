@@ -51,22 +51,23 @@ class AirspaceWarningCopy2 : public AirspaceWarningVisitor
 {
 public:
   void Visit(const AirspaceWarning& as) {
-    if (as.get_warning_state()== AirspaceWarning::WARNING_INSIDE) {
+    if (as.get_warning_state() == AirspaceWarning::WARNING_INSIDE)
       ids_inside.checked_append(&as.get_airspace());
-    } else if (as.get_warning_state()> AirspaceWarning::WARNING_CLEAR) {
+    else if (as.get_warning_state() > AirspaceWarning::WARNING_CLEAR)
       ids_warning.checked_append(&as.get_airspace());
-    }
-    if (!as.get_ack_expired()) {
+
+    if (!as.get_ack_expired())
       ids_acked.checked_append(&as.get_airspace());
-    }
   }
 
   bool is_warning(const AbstractAirspace& as) const {
     return find(as, ids_warning);
   }
+
   bool is_acked(const AbstractAirspace& as) const {
     return find(as, ids_acked);
   }
+
   bool is_inside(const AbstractAirspace& as) const {
     return find(as, ids_inside);
   }
@@ -88,19 +89,18 @@ public:
                      const AirspaceWarningCopy2 &warnings):
     AirspaceVisible(_settings, _altitude),
     m_border(_border),
-    m_warnings(warnings)
-    {
-    };
+    m_warnings(warnings) {}
 
-  virtual bool operator()( const AbstractAirspace& airspace ) const { 
+  virtual bool operator()(const AbstractAirspace& airspace) const {
     return condition(airspace);
   }
 
-  bool condition( const AbstractAirspace& airspace ) const { 
+  bool condition(const AbstractAirspace& airspace) const {
     return parent_condition(airspace) 
       || m_warnings.is_inside(airspace)
       || m_warnings.is_warning(airspace);
   }
+
 private:
   const bool &m_border;
   const AirspaceWarningCopy2 &m_warnings;
@@ -115,28 +115,30 @@ class AirspaceDetailsDialogVisitor:
 public:
   AirspaceDetailsDialogVisitor(const GeoPoint &location):
     m_airspace(NULL),
-    m_location(location)
-  {}
+    m_location(location) {}
 
   void Visit(const AirspacePolygon& as) {
     visit_general(as);
-  };
+  }
+
   void Visit(const AirspaceCircle& as) {
     visit_general(as);
-  };
+  }
+
   void visit_general(const AbstractAirspace& as) {
-    if (as.inside(m_location)) {
+    if (as.inside(m_location))
       m_airspace = &as;
-    }
-  };
+  }
+
   void display() {
-    if (m_airspace) {
+    if (m_airspace)
       dlgAirspaceDetails(*m_airspace);
-    }
-  };
+  }
+
   bool found() const {
     return m_airspace != NULL;
   }
+
 private:
   const AbstractAirspace *m_airspace;
   const GeoPoint &m_location;
