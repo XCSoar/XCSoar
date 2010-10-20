@@ -1,6 +1,6 @@
 # Rules for XCSoarSetup.dll
 
-ifeq ($(HAVE_CE)$(findstring $(TARGET),ALTAIR ALTAIRPORTRAIT),y)
+ifeq ($(HAVE_CE)$(findstring $(TARGET),ALTAIR),y)
 
 XCSOARSETUP_DLL = $(TARGET_BIN_DIR)/XCSoarSetup.dll
 XCSOARSETUP_SOURCES = \

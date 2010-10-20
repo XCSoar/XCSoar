@@ -396,7 +396,7 @@ XCSOAR_SOURCES := \
 #	$(SRC)/WaveThread.cpp \
 
 
-ifneq ($(findstring $(TARGET),ALTAIR ALTAIRPORTRAIT),)
+ifeq ($(TARGET),ALTAIR)
 XCSOAR_SOURCES += $(SRC)/Hardware/AltairControl.cpp
 endif
 

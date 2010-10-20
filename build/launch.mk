@@ -1,6 +1,6 @@
 # Rules for XCSoarLaunch.dll, the launcher for the PocketPC shell
 
-ifeq ($(HAVE_CE)$(findstring $(TARGET),ALTAIR ALTAIRPORTRAIT),y)
+ifeq ($(HAVE_CE)$(findstring $(TARGET),ALTAIR),y)
 
 LAUNCH_RESOURCE_FILES = $(BMP_LAUNCH_FLY_224) $(BMP_LAUNCH_SIM_224) 
 
