@@ -50,6 +50,7 @@ Copyright_License {
 namespace Directory
 {
   bool Exists(const TCHAR* path);
+  void Create(const TCHAR* path);
 }
 
 namespace File

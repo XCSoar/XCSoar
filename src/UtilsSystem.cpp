@@ -139,11 +139,7 @@ void CreateDirectoryIfAbsent(const TCHAR *filename) {
   if (Directory::Exists(fullname))
     return;
 
-#ifdef HAVE_POSIX
-  mkdir(fullname, 0777);
-#else /* !HAVE_POSIX */
-  CreateDirectory(fullname, NULL);
-#endif /* !HAVE_POSIX */
+  Directory::Create(fullname);
 }
 
 void

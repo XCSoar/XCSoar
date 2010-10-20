@@ -43,6 +43,16 @@ Copyright_License {
 #include <sys/types.h>
 #include <sys/stat.h>
 
+void
+Directory::Create(const TCHAR* path)
+{
+#ifdef HAVE_POSIX
+  mkdir(path, 0777);
+#else /* !HAVE_POSIX */
+  CreateDirectory(path, NULL);
+#endif /* !HAVE_POSIX */
+}
+
 bool
 Directory::Exists(const TCHAR* path)
 {
