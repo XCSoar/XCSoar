@@ -153,8 +153,6 @@ XCSoarInterface::LoadProfile()
   Profile::Load();
   Profile::Use();
 
-  ProgressGlue::Create(_("Initialising"));
-
   return true;
 }
 
@@ -293,6 +291,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   if (!LoadProfile())
     return false;
+
+  ProgressGlue::Create(_("Initialising"));
 
   LoadDisplayOrientation();
 
