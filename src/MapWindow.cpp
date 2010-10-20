@@ -62,10 +62,7 @@ MapWindow::MapWindow()
    marks(NULL), 
    cdi(NULL),
    ui_generation(1), buffer_generation(0),
-   scale_buffer(0),
-   TargetDrag_Location(GeoPoint(Angle::native(fixed_zero),
-                                Angle::native(fixed_zero))),
-   TargetDrag_State(0)
+   scale_buffer(0)
 {
   zoomclimb.CruiseMapScale = fixed_ten;
   zoomclimb.ClimbMapScale = fixed(0.25);

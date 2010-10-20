@@ -241,10 +241,6 @@ private:
   // display management
   void SwitchZoomClimb(void);
 
-  // state/localcopy/local data
-  GeoPoint TargetDrag_Location;
-  int TargetDrag_State;
-
   POINT Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1];
 
   ZoomClimb_t zoomclimb;
