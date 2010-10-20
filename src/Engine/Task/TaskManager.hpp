@@ -395,8 +395,8 @@ public:
    * @return Vector of trace points reduced for OLC
    */
   gcc_pure
-  const TracePointVector& get_trace_points() const {
-    return contest_manager.get_trace_points();
+  TracePointVector get_trace_points() const {
+    return trace_full.get_trace_points(300);
   }
 
   /**
