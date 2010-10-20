@@ -242,13 +242,6 @@ RenderTaskPoint::draw_target(const TaskPoint &tp)
 {
   if (!do_draw_target(tp)) 
     return;
-
-/*  
-    POINT sc;
-    if (map.LonLat2ScreenIfVisible(tp.get_location_remaining(), &sc)) {
-    Graphics::hBmpTarget.draw(get_canvas(), get_bitmap_canvas(), sc.x, sc.y);
-    }
-*/
 }
 
 void 
