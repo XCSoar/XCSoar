@@ -603,8 +603,8 @@ public:
 #ifdef ENABLE_SDL
     rc.left = get_left();
     rc.top = get_top();
-    rc.right = get_width();
-    rc.bottom = get_height();
+    rc.right = get_right();
+    rc.bottom = get_bottom();
 #else
     rc = get_screen_position();
 
