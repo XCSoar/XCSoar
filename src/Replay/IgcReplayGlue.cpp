@@ -57,9 +57,9 @@
 #include <algorithm>
 
 bool
-IgcReplayGlue::ScanBuffer(const TCHAR *buffer, fixed *Time,
-                             fixed *Latitude, fixed *Longitude,
-                             fixed *Altitude)
+IgcReplayGlue::ScanBuffer(const TCHAR* buffer, fixed &Time,
+                             fixed &Latitude, fixed &Longitude,
+                             fixed &Altitude)
 {
 
   if (IgcReplay::ScanBuffer(buffer, Time, Latitude, Longitude, Altitude))

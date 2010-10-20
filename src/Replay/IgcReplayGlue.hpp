@@ -55,8 +55,8 @@ protected:
                           const fixed speed, const Angle bearing,
                           const fixed alt, const fixed baroalt, const fixed t);
 
-  virtual bool ScanBuffer(const TCHAR *buffer, fixed *Time, fixed *Latitude,
-                          fixed *Longitude, fixed *Altitude);
+  virtual bool ScanBuffer(const TCHAR* buffer, fixed &Time, fixed &Latitude,
+                          fixed &Longitude, fixed &Altitude);
 private:
   PeriodClock clock;
 };

@@ -52,8 +52,8 @@ IgcReplay::IgcReplay() :
 }
 
 bool
-IgcReplay::ScanBuffer(const TCHAR *buffer, fixed *Time,
-                         fixed *Latitude, fixed *Longitude, fixed *Altitude)
+IgcReplay::ScanBuffer(const TCHAR* buffer, fixed &Time,
+                      fixed &Latitude, fixed &Longitude, fixed &Altitude)
 {
   int DegLat, DegLon;
   int MinLat, MinLon;
@@ -73,22 +73,22 @@ IgcReplay::ScanBuffer(const TCHAR *buffer, fixed *Time,
   if (lfound != 10)
     return false;
 
-  *Latitude = fixed(DegLat) + fixed(MinLat) / 60000;
+  Latitude = fixed(DegLat) + fixed(MinLat) / 60000;
   if (NoS == _T('S'))
-    *Latitude *= -1;
+    Latitude *= -1;
 
-  *Longitude = fixed(DegLon) + fixed(MinLon) / 60000;
+  Longitude = fixed(DegLon) + fixed(MinLon) / 60000;
   if (EoW == _T('W'))
-    *Longitude *= -1;
+    Longitude *= -1;
 
-  *Altitude = fixed(iAltitude);
-  *Time = fixed(Hour * 3600 + Minute * 60 + Second);
+  Altitude = fixed(iAltitude);
+  Time = fixed(Hour * 3600 + Minute * 60 + Second);
   return true;
 }
 
 bool
-IgcReplay::ReadPoint(fixed *Time, fixed *Latitude, fixed *Longitude,
-                        fixed *Altitude)
+IgcReplay::ReadPoint(fixed &Time, fixed &Latitude, fixed &Longitude,
+                     fixed &Altitude)
 {
   TCHAR *buffer;
 
@@ -174,7 +174,7 @@ IgcReplay::Update()
   while (cli.NeedData(t_simulation) && Enabled) {
     fixed t1 = fixed_zero;
     fixed Lat1, Lon1, Alt1;
-    Enabled = ReadPoint(&t1, &Lat1, &Lon1, &Alt1);
+    Enabled = ReadPoint(t1, Lat1, Lon1, Alt1);
 
     if (Enabled && positive(t1))
       cli.Update(t1, Lon1, Lat1, Alt1);

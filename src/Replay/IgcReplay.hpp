@@ -71,14 +71,14 @@ protected:
   virtual void on_advance(const GeoPoint &loc,
                           const fixed speed, const Angle bearing,
                           const fixed alt, const fixed baroalt, const fixed t) = 0;
-  virtual bool ScanBuffer(const TCHAR *buffer, fixed *Time, fixed *Latitude,
-                          fixed *Longitude, fixed *Altitude);
+  virtual bool ScanBuffer(const TCHAR* buffer, fixed &Time, fixed &Latitude,
+                          fixed &Longitude, fixed &Altitude);
 
   bool Enabled;
   fixed t_simulation;
 
-  bool ReadPoint(fixed *Time, fixed *Latitude, fixed *Longitude,
-                 fixed *Altitude);
+  bool ReadPoint(fixed &Time, fixed &Latitude, fixed &Longitude,
+                 fixed &Altitude);
 
 private:
   CatmullRomInterpolator cli;
