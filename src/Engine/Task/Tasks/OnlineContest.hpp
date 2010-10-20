@@ -31,7 +31,7 @@ public:
    * 
    */
   OnlineContest(const Contests _contest,
-                CommonStats &stats, const Trace &trace_full,
+                ContestResult &_result, const Trace &trace_full,
                 const Trace &trace_sprint);
 
   void set_contest(Contests _contest) {
@@ -85,7 +85,7 @@ public:
 
 private:
   Contests contest;
-  CommonStats &common_stats;
+  ContestResult &result;
 
   const Trace &trace_full;
   const Trace &trace_sprint;

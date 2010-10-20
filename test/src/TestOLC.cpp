@@ -46,19 +46,19 @@
 #include <assert.h>
 #include <cstdio>
 
-CommonStats stats_classic;
+ContestResult stats_classic;
 Trace full_trace_classic;
 Trace sprint_trace_classic(9000, 2, 300);
 OnlineContest olc_classic(OLC_Classic, stats_classic,
                           full_trace_classic, full_trace_classic);
 
-CommonStats stats_fai;
+ContestResult stats_fai;
 Trace full_trace_fai;
 Trace sprint_trace_fai(9000, 2, 300);
 OnlineContest olc_fai(OLC_FAI, stats_fai,
                       full_trace_fai, sprint_trace_fai);
 
-CommonStats stats_sprint;
+ContestResult stats_sprint;
 Trace full_trace_sprint;
 Trace sprint_trace_sprint(9000, 2, 300);
 OnlineContest olc_sprint(OLC_Sprint, stats_sprint,
@@ -172,17 +172,17 @@ TestOLC(const char *filename)
   putchar('\n');
 
   printf("classic: %.2f km / %.3f min / %.2f km/h\n",
-          (double)stats_classic.olc.distance / 1000,
-          (double)stats_classic.olc.time / 60,
-          (double)stats_classic.olc.speed * 3.6);
+          (double)stats_classic.distance / 1000,
+          (double)stats_classic.time / 60,
+          (double)stats_classic.speed * 3.6);
   printf("fai: %.2f km / %.3f min / %.2f km/h\n",
-          (double)stats_fai.olc.distance / 1000,
-          (double)stats_fai.olc.time / 60,
-          (double)stats_fai.olc.speed * 3.6);
+          (double)stats_fai.distance / 1000,
+          (double)stats_fai.time / 60,
+          (double)stats_fai.speed * 3.6);
   printf("sprint: %.2f km / %.3f min / %.2f km/h\n",
-          (double)stats_sprint.olc.distance / 1000,
-          (double)stats_sprint.olc.time / 60,
-          (double)stats_sprint.olc.speed * 3.6);
+          (double)stats_sprint.distance / 1000,
+          (double)stats_sprint.time / 60,
+          (double)stats_sprint.speed * 3.6);
 }
 
 int main(int argc, char **argv)

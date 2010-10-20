@@ -8,11 +8,11 @@
 #endif
 
 OnlineContest::OnlineContest(const Contests _contest,
-                             CommonStats& stats,
+                             ContestResult &_result,
                              const Trace& trace_full,
                              const Trace& trace_sprint):
   contest(_contest),
-  common_stats(stats),
+  result(_result),
   trace_full(trace_full),
   trace_sprint(trace_sprint),
   olc_sprint(*this),
@@ -55,7 +55,7 @@ OnlineContest::run_olc(OLCDijkstra &dijkstra)
   if (!dijkstra.solve())
     return false;
 
-  if (!dijkstra.score(common_stats.olc))
+  if (!dijkstra.score(result))
     return false;
 
   dijkstra.copy_solution(solution);
