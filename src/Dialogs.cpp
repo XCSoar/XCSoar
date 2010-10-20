@@ -38,20 +38,9 @@ Copyright_License {
 */
 
 #include "Dialogs.h"
-#include "Language.hpp"
-#include "Version.hpp"
-#include "LogFile.hpp"
-#include "MapWindowProjection.hpp"
+
 #include "MainWindow.hpp"
-#include "UtilsText.hpp"
-#include "UtilsSystem.hpp"
-#include "LocalPath.hpp"
-#include "SettingsMap.hpp"
-#include "InputEvents.h"
 #include "Interface.hpp"
-#include "Asset.hpp"
-#include "Interface.hpp"
-#include "MapWindow.hpp"
 #include "Waypoint/Waypoints.hpp"
 
 /**

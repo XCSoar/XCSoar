@@ -39,7 +39,6 @@ Copyright_License {
 #if !defined(XCSOAR_DIALOGS_H)
 #define XCSOAR_DIALOGS_H
 
-#include "FLARM/FlarmId.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Dialogs/ListPicker.hpp"
 
@@ -47,6 +46,7 @@ Copyright_License {
 #include "Util/tstring.hpp"
 
 struct GeoPoint;
+class FlarmId;
 class ComboList;
 class SingleWindow;
 class WndProperty;
