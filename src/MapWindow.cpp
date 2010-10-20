@@ -285,8 +285,7 @@ MapWindow::SwitchZoomClimb(void)
 }
 
 static DisplayMode_t
-ApplyUserForceDisplayMode(DisplayMode_t current,
-                          const SETTINGS_MAP &settings_map,
+ApplyUserForceDisplayMode(const SETTINGS_MAP &settings_map,
                           const DERIVED_INFO &derived_info)
 {
   if (settings_map.UserForceDisplayMode != dmNone)
@@ -304,7 +303,7 @@ MapWindow::ApplyScreenSize()
 {
   DisplayMode_t lastDisplayMode = visible_projection.GetDisplayMode();
   DisplayMode_t newDisplayMode =
-    ApplyUserForceDisplayMode(lastDisplayMode, SettingsMap(), Calculated());
+    ApplyUserForceDisplayMode(SettingsMap(), Calculated());
 
   if (newDisplayMode != lastDisplayMode) {
     visible_projection.SetDisplayMode(newDisplayMode);
