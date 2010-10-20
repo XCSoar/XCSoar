@@ -55,27 +55,25 @@ public:
   /**
    * Constructor
    *
-   * @param _olc The OLC task to solve for
-   * @param n_legs Maximum number of legs in OLC task
+   * @param _trace TracePointVector object reference to use for solving
+   * @param n_legs Maximum number of legs in Contest task
    * @param finish_alt_diff Maximum height loss from start to finish (m)
-   * @param full_trace Whether this OLC algorithm requires the full history or just the first 2.5 hours
    */
   ContestDijkstra(const TracePointVector &_trace, const unsigned n_legs,
                   const unsigned finish_alt_diff = 3000);
 
   /**
-   * Calculate the scored value of the OLC path
+   * Calculate the scored values of the Contest path
    *
-   * @param the_distance output distance (m) of scored path
-   * @param the_speed output speed (m/s) of scored path
-   * @param the_time output time (s) of scored path
+   * @param result The ContestResult reference
+   * in which the solution will be written
    *
-   * @return Score (interpretation depends on OLC type)
+   * @return True is solution was found, False otherwise
    */
   bool score(ContestResult &result);
 
   /**
-   * Copy the best OLC path solution
+   * Copy the best Contest path solution
    *
    * @param vec output vector
    */
@@ -104,7 +102,6 @@ public:
 
   /**
    * Reset the optimiser as if never flown
-   *
    */
   virtual void reset();
 
