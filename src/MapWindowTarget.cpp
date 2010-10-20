@@ -45,53 +45,60 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "SettingsMap.hpp"
 
-bool MapWindow::isClickOnTarget(const POINT pc)
+bool
+MapWindow::isClickOnTarget(const POINT pc)
 {
-  if (XCSoarInterface::SetSettingsMap().TargetPan) {
-
-    if (!protected_task_manager.target_is_locked(XCSoarInterface::SetSettingsMap().TargetPanIndex))
+  if (XCSoarInterface::SettingsMap().TargetPan) {
+    if (!protected_task_manager.target_is_locked(
+                                XCSoarInterface::SettingsMap().TargetPanIndex))
       return false;
+
     GeoPoint gnull;
     const GeoPoint& t = protected_task_manager.get_location_target(
-        XCSoarInterface::SetSettingsMap().TargetPanIndex,
-        gnull);
+        XCSoarInterface::SettingsMap().TargetPanIndex, gnull);
 
     if (t == gnull)
       return false;
 
     const POINT pt = visible_projection.LonLat2Screen(t);
     const GeoPoint gp = visible_projection.Screen2LonLat(pc.x, pc.y);
-    if (visible_projection.DistanceMetersToScreen(gp.distance((t))) < unsigned(Layout::Scale(10)) )
+    if (visible_projection.DistanceMetersToScreen(gp.distance(t)) <
+        unsigned(Layout::Scale(10)))
       return true;
   }
   return false;
 }
 
-bool MapWindow::isInSector(const int x, const int y)
+bool
+MapWindow::isInSector(const int x, const int y)
 {
   POINT dragPT;
   dragPT.x = x;
   dragPT.y = y;
 
-  if (XCSoarInterface::SetSettingsMap().TargetPan) {
+  if (XCSoarInterface::SettingsMap().TargetPan) {
     GeoPoint gp = visible_projection.Screen2LonLat(dragPT.x, dragPT.y);
     AIRCRAFT_STATE a;
     a.Location = gp;
-    return protected_task_manager.isInSector(XCSoarInterface::SetSettingsMap().TargetPanIndex, a);
+    return protected_task_manager.isInSector(
+                                  XCSoarInterface::SettingsMap().TargetPanIndex, a);
   }
   return false;
 }
 void
 MapWindow::TargetPaintDrag(Canvas &canvas, const POINT drag_last)
 {
-  Graphics::hBmpTarget.draw(canvas, get_bitmap_canvas(), drag_last.x, drag_last.y);
+  Graphics::hBmpTarget.draw(canvas, get_bitmap_canvas(),
+                            drag_last.x, drag_last.y);
 }
 
 bool MapWindow::TargetDragged(const int x, const int y)
 {
   GeoPoint gp = visible_projection.Screen2LonLat(x, y);
-  if (protected_task_manager.target_is_locked(XCSoarInterface::SetSettingsMap().TargetPanIndex)) {
-    protected_task_manager.set_target(XCSoarInterface::SetSettingsMap().TargetPanIndex, gp, true);
+  if (protected_task_manager.target_is_locked(
+                             XCSoarInterface::SettingsMap().TargetPanIndex)) {
+    protected_task_manager.set_target(
+                           XCSoarInterface::SettingsMap().TargetPanIndex, gp, true);
     return true;
   }
   return false;
