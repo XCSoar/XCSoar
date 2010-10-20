@@ -59,6 +59,10 @@ TopCanvas::set()
   unsigned width = 640, height = 480;
   Uint32 flags = SDL_ANYFORMAT;
 
+  /* we need async screen updates as long as we don't have a global
+     frame rate */
+  flags |= SDL_ASYNCBLIT;
+
   const SDL_VideoInfo *info = SDL_GetVideoInfo();
   assert(info != NULL);
 
