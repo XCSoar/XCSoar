@@ -197,36 +197,29 @@ Projection::CalculateScreenBounds(const fixed scale) const
       sb.north = max(g.Latitude, sb.north);
     }
   } else {
-    Angle xmin, xmax, ymin, ymax;
-
     GeoPoint g = Screen2LonLat(MapRect.left, MapRect.top);
-    xmin = g.Longitude;
-    xmax = g.Longitude;
-    ymin = g.Latitude;
-    ymax = g.Latitude;
+    sb.west = g.Longitude;
+    sb.east = g.Longitude;
+    sb.south = g.Latitude;
+    sb.north = g.Latitude;
 
     g = Screen2LonLat(MapRect.right, MapRect.top);
-    xmin = min(xmin, g.Longitude);
-    xmax = max(xmax, g.Longitude);
-    ymin = min(ymin, g.Latitude);
-    ymax = max(ymax, g.Latitude);
+    sb.west = min(sb.west, g.Longitude);
+    sb.east = max(sb.east, g.Longitude);
+    sb.south = min(sb.south, g.Latitude);
+    sb.north = max(sb.north, g.Latitude);
 
     g = Screen2LonLat(MapRect.right, MapRect.bottom);
-    xmin = min(xmin, g.Longitude);
-    xmax = max(xmax, g.Longitude);
-    ymin = min(ymin, g.Latitude);
-    ymax = max(ymax, g.Latitude);
+    sb.west = min(sb.west, g.Longitude);
+    sb.east = max(sb.east, g.Longitude);
+    sb.south = min(sb.south, g.Latitude);
+    sb.north = max(sb.north, g.Latitude);
 
     g = Screen2LonLat(MapRect.left, MapRect.bottom);
-    xmin = min(xmin, g.Longitude);
-    xmax = max(xmax, g.Longitude);
-    ymin = min(ymin, g.Latitude);
-    ymax = max(ymax, g.Latitude);
-
-    sb.west = xmin;
-    sb.east = xmax;
-    sb.south = ymin;
-    sb.north = ymax;
+    sb.west = min(sb.west, g.Longitude);
+    sb.east = max(sb.east, g.Longitude);
+    sb.south = min(sb.south, g.Latitude);
+    sb.north = max(sb.north, g.Latitude);
   }
 
   return sb;
