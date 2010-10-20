@@ -52,14 +52,14 @@ struct SETTINGS_COMPUTER;
 class Waypoint;
 class Canvas;
 
-
-class MapWindowProjection: public Projection
+class MapWindowProjection:
+  public Projection
 {
- public:
+public:
   MapWindowProjection();
 
   gcc_pure
-  fixed  GetScreenDistanceMeters(void) const;
+  fixed GetScreenDistanceMeters() const;
 
   gcc_pure
   virtual fixed GetMapScaleUser() const;
@@ -69,7 +69,7 @@ class MapWindowProjection: public Projection
     return Units::ToSysDistance(MapScale * fixed(0.001));
   }
 
-  const POINT &GetOrigAircraft(void) const {
+  const POINT &GetOrigAircraft() const {
     return Orig_Aircraft;
   }
 
@@ -89,9 +89,8 @@ class MapWindowProjection: public Projection
     return DisplayAircraftAngle;
   }
 
- protected:
+protected:
   DisplayMode_t DisplayMode;
-
   Angle DisplayAircraftAngle;
 
 public:
@@ -104,13 +103,11 @@ public:
 
   void InitialiseScaleList(const SETTINGS_MAP &settings, const RECT &rc);
 
-  // 4 = x*30/1000
   gcc_pure
   fixed DistancePixelsToMeters(const int x) const {
     return x * MapScale / Units::ToUserDistance(fixed(GetMapResolutionFactor()));
   }
 
-  //
   gcc_pure
   fixed RequestDistancePixelsToMeters(const int x) const {
     return x * _RequestedMapScale /
@@ -130,6 +127,7 @@ protected:
   fixed GetRequestedMapScale() const {
     return _RequestedMapScale;
   }
+
   bool IsOriginCentered() const {
     return _origin_centered;
   }
@@ -188,6 +186,7 @@ private:
   void CalculateOrientationTargetPan(const NMEA_INFO &nmea_info,
                                      const DERIVED_INFO &derived_info,
                                      const SETTINGS_MAP &settings);
+
   void CalculateOrientationNormal(const NMEA_INFO &nmea_info,
                                   const DERIVED_INFO &derived_info,
                                   const SETTINGS_MAP &settings);

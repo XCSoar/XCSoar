@@ -55,10 +55,7 @@ MapWindowProjection::MapWindowProjection():
   MapScale(5),
   _RequestedMapScale(5),
   _origin_centered(false),
-  ScaleListCount (0)
-{
-}
-
+  ScaleListCount (0) {}
 
 void
 MapWindowProjection::InitialiseScaleList(const SETTINGS_MAP &settings_map,
@@ -66,8 +63,8 @@ MapWindowProjection::InitialiseScaleList(const SETTINGS_MAP &settings_map,
 {
   MapRect = rc;
 
-  ScaleListCount = Profile::GetScaleList(ScaleList,
-                                         sizeof(ScaleList)/sizeof(ScaleList[0]));
+  ScaleListCount = Profile::GetScaleList(ScaleList, sizeof(ScaleList) /
+                                                    sizeof(ScaleList[0]));
   _RequestedMapScale = LimitMapScale(_RequestedMapScale, settings_map);
 }
 
@@ -79,11 +76,8 @@ MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
 }
 
 void
-MapWindowProjection::CalculateOrientationNormal
-(const NMEA_INFO &DrawInfo,
- const DERIVED_INFO &DerivedDrawInfo,
- const SETTINGS_MAP &settings)
-
+MapWindowProjection::CalculateOrientationNormal(const NMEA_INFO &DrawInfo,
+    const DERIVED_INFO &DerivedDrawInfo, const SETTINGS_MAP &settings)
 {
   Angle trackbearing = DrawInfo.TrackBearing;
 
@@ -96,7 +90,8 @@ MapWindowProjection::CalculateOrientationNormal
     _origin_centered = true;
 
     if (settings.DisplayOrientation == TRACKCIRCLE) {
-      DisplayAngle = DerivedDrawInfo.task_stats.current_leg.solution_remaining.Vector.Bearing;
+      DisplayAngle =
+          DerivedDrawInfo.task_stats.current_leg.solution_remaining.Vector.Bearing;
       DisplayAircraftAngle = trackbearing - DisplayAngle.GetAngle();
     } else {
       DisplayAngle = Angle::native(fixed_zero);
@@ -113,18 +108,13 @@ MapWindowProjection::CalculateOrientationNormal
 }
 
 void
-MapWindowProjection::CalculateOrientationTargetPan
-(const NMEA_INFO &DrawInfo,
- const DERIVED_INFO &DerivedDrawInfo,
- const SETTINGS_MAP &settings)
-
+MapWindowProjection::CalculateOrientationTargetPan(const NMEA_INFO &DrawInfo,
+    const DERIVED_INFO &DerivedDrawInfo, const SETTINGS_MAP &settings)
 {
-  if (DerivedDrawInfo.common_stats.active_taskpoint_index == settings.TargetPanIndex) {
-        CalculateOrientationNormal(DrawInfo,
-        DerivedDrawInfo,
-        settings);
-  }
-  else {
+  if (DerivedDrawInfo.common_stats.active_taskpoint_index ==
+      settings.TargetPanIndex) {
+    CalculateOrientationNormal(DrawInfo, DerivedDrawInfo, settings);
+  } else {
     DisplayAngle.SetAngle(Angle::native(fixed_zero));
     DisplayAircraftAngle = DrawInfo.TrackBearing;
   }
@@ -144,12 +134,12 @@ MapWindowProjection::CalculateOrigin(const RECT rc, const NMEA_INFO &DrawInfo,
     CalculateOrientationNormal(DrawInfo, DerivedDrawInfo, settings_map);
 
   if (_origin_centered || settings_map.EnablePan) {
-    Orig_Screen.x = (rc.left + rc.right)/2;
-    Orig_Screen.y = (rc.bottom + rc.top)/2;
+    Orig_Screen.x = (rc.left + rc.right) / 2;
+    Orig_Screen.y = (rc.bottom + rc.top) / 2;
   } else {
-    Orig_Screen.x = (rc.left + rc.right)/2;
-    Orig_Screen.y = ((rc.top - rc.bottom )*
-		     settings_map.GliderScreenPosition/100)+rc.bottom;
+    Orig_Screen.x = (rc.left + rc.right) / 2;
+    Orig_Screen.y = ((rc.top - rc.bottom) *
+                     settings_map.GliderScreenPosition / 100) + rc.bottom;
   }
 
   if (settings_map.EnablePan)
@@ -174,18 +164,15 @@ MapWindowProjection::CalculateMapScale(int scale) const
 {
   assert(scale >= 0 && scale < ScaleListCount);
 
-  return ScaleList[scale] * GetMapResolutionFactor()
-    / IBLSCALE(MapRect.right - MapRect.left);
+  return ScaleList[scale] * GetMapResolutionFactor() /
+         IBLSCALE(MapRect.right - MapRect.left);
 }
 
 fixed
 MapWindowProjection::LimitMapScale(fixed value,
-    const SETTINGS_MAP& settings_map)
+                                   const SETTINGS_MAP& settings_map)
 {
-
-  fixed minreasonable;
-
-  minreasonable = fixed(0.05);
+  fixed minreasonable = fixed(0.05);
 
   if (settings_map.AutoZoom && DisplayMode != dmCircling) {
 #ifdef OLD_TASK // auto zoom 
@@ -229,12 +216,11 @@ MapWindowProjection::StepMapScale(fixed scale, int Step) const
 int
 MapWindowProjection::FindMapScale(const fixed Value) const
 {
-
   int i;
   fixed BestFit(99999);
   int BestFitIdx = -1;
-  fixed DesiredScale = (Value * IBLSCALE(MapRect.right))
-                     / GetMapResolutionFactor();
+  fixed DesiredScale = Value * IBLSCALE(MapRect.right) /
+                       GetMapResolutionFactor();
 
   for (i = 0; i < ScaleListCount; i++) {
     fixed err = fabs(DesiredScale - ScaleList[i]) / DesiredScale;
@@ -271,7 +257,7 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   // if there is user intervention in the scale
   if (positive(settings_map.MapScale)) {
     fixed ext_mapscale = LimitMapScale(fixed(settings_map.MapScale),
-        settings_map);
+                                       settings_map);
     if (positive(ext_mapscale) && DisplayMode == DisplayModeLast)
       _RequestedMapScale = ext_mapscale;
   }
@@ -289,13 +275,13 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
 
   if (settings_map.TargetPan) {
     if (!TargetPanLast) { // just entered targetpan so save zoom
-     TargetPanLast = true;
-     TargetPanUnZoom = MapScale;
+      TargetPanLast = true;
+      TargetPanUnZoom = MapScale;
     }
     // set scale exactly so that waypoint distance is the zoom factor
     // across the screen
     _RequestedMapScale = LimitMapScale((fixed)Units::ToUserUnit(wpd / 4,
-        Units::DistanceUnit), settings_map);
+                                       Units::DistanceUnit), settings_map);
     ModifyMapScale(settings_map);
     return;
   }
@@ -329,14 +315,13 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
           / AutoZoomFactor, Units::DistanceUnit), settings_map);
       ModifyMapScale(settings_map);
     }
-  }
-  else if (TargetPanLast) {
+  } else if (TargetPanLast) {
     _RequestedMapScale = TargetPanUnZoom;
     ModifyMapScale(settings_map);
   }
 
   if (!settings_map.TargetPan && TargetPanLast)
-   TargetPanLast = false;
+    TargetPanLast = false;
 }
 
 void
