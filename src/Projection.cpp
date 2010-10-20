@@ -60,8 +60,8 @@ Projection::Screen2LonLat(int x, int y) const
 {
   const FastIntegerRotation::Pair p =
     DisplayAngle.Rotate(x - Orig_Screen.x, y - Orig_Screen.y);
-  const GeoPoint pg(Angle::native(fixed(p.first)*InvDrawScale),
-                    Angle::native(fixed(p.second)*InvDrawScale));
+  const GeoPoint pg(Angle::radians(fixed(p.first)*InvDrawScale),
+                    Angle::radians(fixed(p.second)*InvDrawScale));
 
   GeoPoint g;
   g.Latitude = PanLocation.Latitude - pg.Latitude;
@@ -79,9 +79,9 @@ Projection::LonLat2Screen(const GeoPoint &g) const
 {
   const GeoPoint d = PanLocation-g;
   const FastIntegerRotation::Pair p =
-    DisplayAngle.Rotate((int)(d.Longitude.value_native()
+    DisplayAngle.Rotate((int)(d.Longitude.value_radians()
                               * g.Latitude.fastcosine() * DrawScale),
-                        (int)(d.Latitude.value_native() * DrawScale));
+                        (int)(d.Latitude.value_radians() * DrawScale));
 
   POINT sc;
   sc.x = Orig_Screen.x - p.first;
@@ -144,11 +144,8 @@ Projection::PointVisible(const POINT &P) const
 void 
 Projection::SetScaleMetersToScreen(const fixed scale_meters_to_screen)
 {
-  static const fixed fixed_r 
-    (Angle::native(fixed_earth_r).value_radians());
-
   m_scale_meters_to_screen = scale_meters_to_screen;
-  DrawScale = fixed_r * m_scale_meters_to_screen;
+  DrawScale = fixed_earth_r * m_scale_meters_to_screen;
   InvDrawScale = fixed_one / DrawScale;
 }
 
