@@ -216,13 +216,12 @@ MapWindowProjection::StepMapScale(fixed scale, int Step) const
 int
 MapWindowProjection::FindMapScale(const fixed Value) const
 {
-  int i;
   fixed BestFit(99999);
   int BestFitIdx = -1;
   fixed DesiredScale = Value * IBLSCALE(MapRect.right) /
                        GetMapResolutionFactor();
 
-  for (i = 0; i < ScaleListCount; i++) {
+  for (int i = 0; i < ScaleListCount; i++) {
     fixed err = fabs(DesiredScale - ScaleList[i]) / DesiredScale;
     if (err < BestFit) {
       BestFit = err;
