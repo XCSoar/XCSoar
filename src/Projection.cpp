@@ -234,8 +234,7 @@ Projection::max_dimension(const RECT &rc)
 fixed
 Projection::GetMapScaleUser() const
 {
-  fixed map_scale = fixed(GetMapResolutionFactor()) / m_scale_meters_to_screen;
-  return map_scale;
+  return fixed(GetMapResolutionFactor()) / m_scale_meters_to_screen;
 }
 
 int
