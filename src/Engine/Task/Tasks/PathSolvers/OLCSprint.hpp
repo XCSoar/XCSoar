@@ -34,6 +34,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef OLC_SPRINT_HPP
 #define OLC_SPRINT_HPP
 
@@ -46,29 +47,24 @@ class OLCSprint:
   public OLCDijkstra
 {
 public:
-
-/**
- * Constructor
- *
- * @param _olc The OLC task to solve for
- */
+  /**
+   * Constructor
+   *
+   * @param _olc The OLC task to solve for
+   */
   OLCSprint(ContestManager& _olc);
 
   void reset();
 
 protected:
-
   bool admit_candidate(const ScanTaskPoint &candidate) const;
 
   void add_edges(DijkstraTaskPoint &dijkstra,
                  const ScanTaskPoint &origin);
 
 private:
-
   void add_start_edges();
-
   unsigned find_start() const;
-
 };
 
 #endif
