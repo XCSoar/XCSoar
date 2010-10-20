@@ -127,10 +127,10 @@ IntermediatePoint(GeoPoint loc1, GeoPoint loc2, const fixed dthis)
 static void
 DistanceBearingS(GeoPoint loc1, GeoPoint loc2, Angle *Distance, Angle *Bearing)
 {
-  fixed cloc1Latitude, sloc1Latitude;
-  loc1.Latitude.sin_cos(sloc1Latitude, cloc1Latitude);
-  fixed cloc2Latitude, sloc2Latitude;
-  loc2.Latitude.sin_cos(sloc2Latitude, cloc2Latitude);
+  fixed cos_lat1, sin_lat1;
+  loc1.Latitude.sin_cos(sin_lat1, cos_lat1);
+  fixed cos_lat2, sin_lat2;
+  loc2.Latitude.sin_cos(sin_lat2, cos_lat2);
 
   const fixed dlon = (loc2.Longitude - loc1.Longitude).value_radians();
 
@@ -139,22 +139,21 @@ DistanceBearingS(GeoPoint loc1, GeoPoint loc2, Angle *Distance, Angle *Bearing)
         * fixed_expand_x;
     const fixed s2 = sin(dlon / 2) * fixed_expand_x;
     const fixed a = max(fixed_zero, 
-                        min(fixed_expand_xsq, s1 * s1
-                            + cloc1Latitude * cloc2Latitude * s2 * s2));
+                        min(fixed_expand_xsq,
+                            s1 * s1 + cos_lat1 * cos_lat2 * s2 * s2));
 
     fixed distance2 = max(fixed_zero, 2 * atan2(sqrt(a), sqrt(fixed_expand_xsq - a)));
     *Distance = Angle::radians(distance2);
   }
 
   if (Bearing) {
-    fixed sindlon, cosdlon;
+    fixed sin_dlon, cos_dlon;
 
     // speedup for fixed since this is one call
-    sin_cos(dlon, &sindlon, &cosdlon);
+    sin_cos(dlon, &sin_dlon, &cos_dlon);
 
-    const fixed y = sindlon * cloc2Latitude;
-    const fixed x = cloc1Latitude * sloc2Latitude
-        - sloc1Latitude * cloc2Latitude * cosdlon;
+    const fixed y = sin_dlon * cos_lat2;
+    const fixed x = cos_lat1 * sin_lat2 - sin_lat1 * cos_lat2 * cos_dlon;
 
     *Bearing = (x == fixed_zero && y == fixed_zero)
       ? Angle::native(fixed_zero)
