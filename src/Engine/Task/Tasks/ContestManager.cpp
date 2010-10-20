@@ -101,7 +101,7 @@ ContestManager::update_idle()
     printf("# size %d/%d dist %g\n",
            trace_points_full.size(), 
            trace_points_sprint.size(), 
-           (double)common_stats.olc.distance);
+           (double)result.distance);
 #endif
   }
 
