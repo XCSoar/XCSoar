@@ -201,7 +201,7 @@ GetCaption(const XMLNode &Node)
 }
 
 static ControlPosition
-GetPosition(const XMLNode &Node, const RECT rc)
+GetPosition(const XMLNode &Node, const RECT rc, int bottom_most=-1)
 {
   ControlPosition pt;
 
@@ -215,6 +215,9 @@ GetPosition(const XMLNode &Node, const RECT rc)
     if (pt.y != -1)
       pt.y = Layout::Scale(pt.y);
   }
+
+  if (pt.y == -1)
+    pt.y = bottom_most;
 
   if (pt.x < -1) {
     pt.x += rc.right;
@@ -532,7 +535,8 @@ LoadDataField(const XMLNode &node, CallBackTableEntry *LookUpTable,
 static Window *
 LoadChild(WndForm &form, ContainerControl &Parent,
           CallBackTableEntry *LookUpTable,
-          XMLNode node, const DialogStyle eDialogStyle)
+          XMLNode node, const DialogStyle eDialogStyle,
+          int bottom_most=0)
 {
   Window *window = NULL;
 
@@ -541,7 +545,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
   const TCHAR* Name = GetName(node);
   const TCHAR* Caption = GetCaption(node);
   RECT rc = Parent.GetClientAreaWindow().get_client_rect();
-  ControlPosition pos = GetPosition(node, rc);
+  ControlPosition pos = GetPosition(node, rc, bottom_most);
   if (!pos.no_scaling)
     pos.x = ScaleWidth(pos.x, eDialogStyle);
 
@@ -831,14 +835,10 @@ LoadChildrenFromXML(WndForm &form, ContainerControl &Parent,
   for (int i = 0; i < Count; i++) {
     // Load each child control from the child nodes
     Window *window = LoadChild(form, Parent, LookUpTable,
-                               Node->getChildNode(i), eDialogStyle);
+                               Node->getChildNode(i), eDialogStyle,
+                               bottom_most);
     if (window == NULL)
       continue;
-
-    // If the client doesn't know where to go
-    // -> move it below the previous one
-    if (window->get_position().top == -1)
-      window->move(window->get_position().left, bottom_most);
 
     bottom_most = window->get_position().bottom;
   }
