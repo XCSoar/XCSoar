@@ -56,6 +56,4 @@
 // used by map window
 #define WPCIRCLESIZE        2
 
-#define SCALELISTSIZE  30
-
 #endif
