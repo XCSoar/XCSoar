@@ -77,8 +77,8 @@ UpdateChanging()
 
   fixed distance;
   Angle dir;
-  DistanceBearing(XCSoarInterface::Basic().Location, target->Location,
-      &distance, &dir);
+  XCSoarInterface::Basic().Location.distance_bearing(target->Location,
+                                                     distance, dir);
 
   // Fill distance field
   Units::FormatUserDistance(distance, tmp, 20);

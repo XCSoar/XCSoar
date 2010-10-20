@@ -109,7 +109,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
       fixed distance;
       Angle bearing;
 
-      DistanceBearing(Basic().Location, target_loc, &distance, &bearing);
+      Basic().Location.distance_bearing(target_loc, distance, bearing);
 
       FindLatitudeLongitude(Basic().Location, bearing,
                             distance * scalefact, &target_loc);

@@ -593,10 +593,8 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
 
   fixed distance;
   Angle bearing;
-  DistanceBearing(XCSoarInterface::Basic().Location,
-                  selected_waypoint->Location,
-                  &distance,
-                  &bearing);
+  XCSoarInterface::Basic().Location.distance_bearing(selected_waypoint->Location,
+                                                     distance, bearing);
 
   TCHAR DistanceText[MAX_PATH];
   Units::FormatUserDistance(distance, DistanceText, 10);

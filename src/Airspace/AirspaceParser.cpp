@@ -392,7 +392,7 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
 
   ReadCoords(&Comma[1], End);
 
-  DistanceBearing(temp_area.Center, Start, &Radius, &StartBearing);
+  temp_area.Center.distance_bearing(Start, Radius, StartBearing);
   Angle EndBearing = Bearing(temp_area.Center, End);
   TempPoint.Latitude = Start.Latitude;
   TempPoint.Longitude = Start.Longitude;
@@ -681,7 +681,7 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
   static const fixed fixed_75 = fixed(7.5);
   const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
 
-  DistanceBearing(temp_area.Center, from, &radius, &bearing_from);
+  temp_area.Center.distance_bearing(from, radius, bearing_from);
   bearing_to = Bearing(temp_area.Center, to);
 
   GeoPoint TempPoint;

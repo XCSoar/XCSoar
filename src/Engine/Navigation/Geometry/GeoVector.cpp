@@ -40,9 +40,7 @@
 GeoVector::GeoVector(const GeoPoint &source, const GeoPoint &target,
                      const bool is_average)
 {
-  GeoPoint loc1 = source;
-  GeoPoint loc2 = target;
-  ::DistanceBearing(loc1, loc2, &Distance, &Bearing);
+  source.distance_bearing(target, Distance, Bearing);
 }
 
 GeoPoint 

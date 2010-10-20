@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
   l2.Longitude = Angle::degrees(fixed(-0.3)); 
   l2.Latitude= Angle::degrees(fixed(1.0));
   fixed d; Angle b;
-  ::DistanceBearing(l1,l2,&d,&b);
+  l1.distance_bearing(l2, d, b);
   printf("Dist %g bearing %d\n",FIXED_DOUBLE(d),FIXED_INT(b.value_degrees()));
 
   return exit_status();
