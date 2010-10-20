@@ -46,23 +46,20 @@
 #include <assert.h>
 #include <cstdio>
 
+Trace full_trace;
+Trace sprint_trace(9000, 2, 300);
+
 ContestResult stats_classic;
-Trace full_trace_classic;
-Trace sprint_trace_classic(9000, 2, 300);
 ContestManager olc_classic(OLC_Classic, stats_classic,
-                           full_trace_classic, full_trace_classic);
+                           full_trace, sprint_trace);
 
 ContestResult stats_fai;
-Trace full_trace_fai;
-Trace sprint_trace_fai(9000, 2, 300);
 ContestManager olc_fai(OLC_FAI, stats_fai,
-                       full_trace_fai, sprint_trace_fai);
+                       full_trace, sprint_trace);
 
 ContestResult stats_sprint;
-Trace full_trace_sprint;
-Trace sprint_trace_sprint(9000, 2, 300);
 ContestManager olc_sprint(OLC_Sprint, stats_sprint,
-                          full_trace_sprint, sprint_trace_sprint);
+                          full_trace, sprint_trace);
 
 class IgcReplayGlue:
   public IgcReplay
@@ -112,28 +109,15 @@ IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
   new_state.Time = t;
   new_state.AltitudeAGL = alt;
 
-  full_trace_classic.append(new_state);
-  sprint_trace_classic.append(new_state);
+  full_trace.append(new_state);
+  sprint_trace.append(new_state);
+
   olc_classic.update_sample(new_state);
-
-  full_trace_classic.optimise_if_old();
-  sprint_trace_classic.optimise_if_old();
-
-
-  full_trace_fai.append(new_state);
-  sprint_trace_fai.append(new_state);
   olc_fai.update_sample(new_state);
-
-  full_trace_fai.optimise_if_old();
-  sprint_trace_fai.optimise_if_old();
-
-
-  full_trace_sprint.append(new_state);
-  sprint_trace_sprint.append(new_state);
   olc_sprint.update_sample(new_state);
 
-  full_trace_sprint.optimise_if_old();
-  sprint_trace_sprint.optimise_if_old();
+  full_trace.optimise_if_old();
+  sprint_trace.optimise_if_old();
 }
 
 void
