@@ -140,7 +140,7 @@ void CreateDirectoryIfAbsent(const TCHAR *filename) {
     return;
 
 #ifdef HAVE_POSIX
-  mkdir(filename, 0777);
+  mkdir(fullname, 0777);
 #else /* !HAVE_POSIX */
   CreateDirectory(fullname, NULL);
 #endif /* !HAVE_POSIX */
