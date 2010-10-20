@@ -6,7 +6,7 @@
 */
 
 OLCFAI::OLCFAI(const TracePointVector &_trace):
-  ContestDijkstra(_trace, 3, 3000) {}
+  ContestDijkstra(_trace, 3, 1000) {}
 
 bool 
 OLCFAI::finish_satisfied(const ScanTaskPoint &sp) const
