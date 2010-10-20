@@ -53,7 +53,8 @@ $(SM_OBJ): $(OUT)/include/Status_defaults.cpp
 ifeq ($(HAVE_WIN32),n)
 
 $(TARGET_OUTPUT_DIR)/XCSoar.rc: Data/XCSoar.rc src/resource.h | $(TARGET_OUTPUT_DIR)/dirstamp
-	$(HOSTCPP) -o $@ $< -I$(SRC) $(TARGET_CPPFLAGS)
+	@$(NQ)echo "  CPP     $@"
+	$(Q)$(HOSTCPP) -o $@ $< -I$(SRC) $(TARGET_CPPFLAGS)
 
 $(TARGET_OUTPUT_DIR)/include/resource_data.h: $(TARGET_OUTPUT_DIR)/XCSoar.rc \
 	$(RESOURCE_FILES) \
