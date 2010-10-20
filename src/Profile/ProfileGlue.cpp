@@ -560,48 +560,6 @@ Profile::SetSoundSettings()
       settings_computer.EnableSoundModes);
 }
 
-int
-Profile::GetScaleList(fixed *List, size_t Size)
-{
-  static const TCHAR Name[] = CONF("ScaleList");
-  TCHAR Buffer[128];
-  int Idx = 0;
-  double vlast = 0;
-  double val;
-
-  assert(List != NULL);
-  assert(Size > 0);
-
-  Set(Name, _T("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
-
-  if (!Get(Name, Buffer, sizeof(Buffer) / sizeof(TCHAR)))
-    return 0;
-
-  const TCHAR *p = Buffer;
-  while (Idx < (int)Size) {
-    TCHAR *endptr;
-    val = _tcstod(p, &endptr);
-    if (Idx > 0) {
-      List[Idx] = fixed(val + vlast) / 2;
-      Idx++;
-    }
-    List[Idx] = fixed(val);
-    Idx++;
-    vlast = val;
-
-    if (endptr == p)
-      return 0;
-    else if (*endptr == _T('\0'))
-      break;
-    else if (*endptr != _T(','))
-      return 0;
-
-    p = endptr + 1;
-  }
-
-  return Idx;
-}
-
 void
 Profile::SetAirspaceMode(int i)
 {

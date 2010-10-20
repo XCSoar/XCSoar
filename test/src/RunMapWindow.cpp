@@ -86,12 +86,6 @@ DeviceBlackboard device_blackboard;
 void
 DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt) {}
 
-int
-Profile::GetScaleList(fixed *List, size_t Size)
-{
-  return 0;
-}
-
 static Waypoints way_points;
 
 static TaskEvents task_events;

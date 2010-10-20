@@ -138,8 +138,6 @@ namespace Profile
    */
   void SetSoundSettings();
 
-  int GetScaleList(fixed *List, size_t Size);
-
   /**
    * Saves the airspace mode setting to the profile
    * @param i Airspace class index

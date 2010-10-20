@@ -48,12 +48,6 @@ Profile::SetFiles(const TCHAR* override)
 {
 }
 
-int
-Profile::GetScaleList(fixed *List, size_t Size)
-{
-  return 0;
-}
-
 #if defined(WIN32) && !defined(USE_PROFILE_MAP)
 bool
 ProfileImpl::Get(const TCHAR *key, DWORD &value_r)
