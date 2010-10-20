@@ -52,7 +52,7 @@ public:
    *
    * @param _olc The OLC task to solve for
    */
-  OLCSprint(ContestManager& _olc);
+  OLCSprint(const TracePointVector &_trace);
 
   void reset();
 

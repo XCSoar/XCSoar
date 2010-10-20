@@ -33,8 +33,8 @@
     potentially implement as circular buffer (emulate as dequeue)
 */
 
-OLCSprint::OLCSprint(ContestManager& _olc):
-  OLCDijkstra(_olc, 4, 0, false) {}
+OLCSprint::OLCSprint(const TracePointVector &_trace):
+  OLCDijkstra(_trace, 4, 0, false) {}
 
 void
 OLCSprint::reset()

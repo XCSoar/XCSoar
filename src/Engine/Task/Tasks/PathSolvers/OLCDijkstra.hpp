@@ -42,7 +42,6 @@
 #include "Navigation/TracePoint.hpp"
 #include "Math/fixed.hpp"
 
-class ContestManager;
 struct ContestResult;
 
 /**
@@ -61,7 +60,7 @@ public:
    * @param finish_alt_diff Maximum height loss from start to finish (m)
    * @param full_trace Whether this OLC algorithm requires the full history or just the first 2.5 hours
    */
-  OLCDijkstra(ContestManager& _olc, const unsigned n_legs,
+  OLCDijkstra(const TracePointVector &_trace, const unsigned n_legs,
               const unsigned finish_alt_diff = 3000,
               const bool full_trace = true);
 
@@ -162,7 +161,7 @@ private:
    */
   bool solve_inner();
 
-  ContestManager& olc;
+  const TracePointVector &trace;
   const unsigned m_finish_alt_diff;
 
   void save_solution();

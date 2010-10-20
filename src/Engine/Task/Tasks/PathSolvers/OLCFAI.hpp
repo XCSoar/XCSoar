@@ -52,7 +52,7 @@ public:
  *
  * @param _olc The OLC task to solve for
  */
-  OLCFAI(ContestManager& _olc);
+  OLCFAI(const TracePointVector &_trace);
 
 protected:
 

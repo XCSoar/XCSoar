@@ -46,12 +46,12 @@
 #include <stdio.h>
 #endif
 
-OLCDijkstra::OLCDijkstra(ContestManager& _olc, const unsigned n_legs,
+OLCDijkstra::OLCDijkstra(const TracePointVector &_trace, const unsigned n_legs,
                          const unsigned finish_alt_diff,
                          const bool full_trace):
   NavDijkstra<TracePoint>(n_legs + 1),
   m_dijkstra(false),
-  olc(_olc),
+  trace(_trace),
   m_finish_alt_diff(finish_alt_diff),
   solution_found(false),
   best_score(fixed_zero),
@@ -74,7 +74,7 @@ OLCDijkstra::solve()
 {
   if (m_dijkstra.empty()) {
     set_weightings();
-    n_points = olc.get_trace_points(m_full_trace).size();
+    n_points = trace.size();
   }
 
   if (n_points < num_stages)
@@ -195,7 +195,7 @@ const TracePoint &
 OLCDijkstra::get_point(const ScanTaskPoint &sp) const
 {
   assert(sp.second < n_points);
-  return olc.get_trace_points(m_full_trace)[sp.second];
+  return trace[sp.second];
 }
 
 unsigned

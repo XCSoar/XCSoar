@@ -5,8 +5,8 @@
  @todo potential to use 3d convex hull to speed search
 */
 
-OLCFAI::OLCFAI(ContestManager& _olc):
-  OLCDijkstra(_olc, 3, 3000) 
+OLCFAI::OLCFAI(const TracePointVector &_trace):
+  OLCDijkstra(_trace, 3, 3000)
 {
 
 }

@@ -15,9 +15,9 @@ ContestManager::ContestManager(const Contests _contest,
   result(_result),
   trace_full(trace_full),
   trace_sprint(trace_sprint),
-  olc_sprint(*this),
-  olc_fai(*this),
-  olc_classic(*this)
+  olc_sprint(trace_points_sprint),
+  olc_fai(trace_points_full),
+  olc_classic(trace_points_full)
 {
   reset();
 }

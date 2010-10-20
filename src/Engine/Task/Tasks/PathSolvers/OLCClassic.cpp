@@ -1,7 +1,7 @@
 #include "OLCClassic.hpp"
 
-OLCClassic::OLCClassic(ContestManager& _olc):
-  OLCDijkstra(_olc, 6, 3000) {}
+OLCClassic::OLCClassic(const TracePointVector &_trace):
+  OLCDijkstra(_trace, 6, 3000) {}
 
 void 
 OLCClassic::set_weightings()
