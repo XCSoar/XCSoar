@@ -273,13 +273,16 @@ TaskManager::update(const AIRCRAFT_STATE &state,
 bool 
 TaskManager::update_idle(const AIRCRAFT_STATE& state)
 {
-  // always update OLC
   bool retval = false;
 
   if (state.Flying) {
+    // Update the Traces even if contest
+    // optimization is not _currently_ enabled
     retval |= trace_full.optimise_if_old();
     retval |= trace_sprint.optimise_if_old();
 
+    // If contest optimization is enabled
+    // -> Optimize
     if (task_behaviour.enable_olc)
       retval |= task_olc.update_idle();
   }
