@@ -120,9 +120,9 @@ ContestManager::reset()
 }
 
 const TracePointVector& 
-ContestManager::get_trace_points(bool full_trace) const
+ContestManager::get_trace_points() const
 {
-  return full_trace ? trace_points_full : trace_points_sprint;
+  return trace_points_full;
 }
 
 const TracePointVector& 
