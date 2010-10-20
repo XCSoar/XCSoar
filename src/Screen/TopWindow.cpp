@@ -48,12 +48,25 @@ Copyright_License {
 #endif
 #endif /* !ENABLE_SDL */
 
+#include <assert.h>
+
 #ifdef ENABLE_SDL
 
 void
 TopCanvas::set()
 {
-  Canvas::set(::SDL_SetVideoMode(640, 480, 0, SDL_HWSURFACE|SDL_ANYFORMAT));
+  unsigned width = 640, height = 480;
+  Uint32 flags = SDL_ANYFORMAT;
+
+  const SDL_VideoInfo *info = SDL_GetVideoInfo();
+  assert(info != NULL);
+
+  if (info->hw_available)
+    flags |= SDL_HWSURFACE;
+  else
+    flags |= SDL_SWSURFACE;
+
+  Canvas::set(::SDL_SetVideoMode(width, height, 0, flags));
 }
 
 void
