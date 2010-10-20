@@ -43,9 +43,7 @@
 
 TaskAdvance::TaskAdvance():
     m_armed(false),
-    m_request_armed(false)
-{
-}
+    m_request_armed(false) {}
 
 void
 TaskAdvance::reset()
@@ -92,9 +90,9 @@ bool
 TaskAdvance::toggle_armed() 
 {
   m_armed = !m_armed;
-  if (m_armed) {
+  if (m_armed)
     m_request_armed = false;
-  }
+
   update_state();
   return m_armed;
 }
