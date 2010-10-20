@@ -851,9 +851,9 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(contest_as_text((Contests)0)));
-    dfe->addEnumText(gettext(contest_as_text((Contests)1)));
-    dfe->addEnumText(gettext(contest_as_text((Contests)2)));
+    dfe->addEnumText(_("OLC Sprint"));
+    dfe->addEnumText(_("OLC FAI"));
+    dfe->addEnumText(_("OLC Classic"));
     dfe->Set(settings_computer.contest);
     wp->RefreshDisplay();
   }
