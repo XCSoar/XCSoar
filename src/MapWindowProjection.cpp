@@ -40,7 +40,6 @@ Copyright_License {
 #include "Math/FastRotation.hpp"
 #include "Screen/Layout.hpp"
 #include "SettingsComputer.hpp"
-#include "Profile/Profile.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Waypoint/Waypoint.hpp"
@@ -63,8 +62,19 @@ MapWindowProjection::InitialiseScaleList(const SETTINGS_MAP &settings_map,
 {
   MapRect = rc;
 
-  ScaleListCount = Profile::GetScaleList(ScaleList, sizeof(ScaleList) /
-                                                    sizeof(ScaleList[0]));
+  ScaleList[0] = fixed_half;
+  ScaleList[1] = fixed_one;
+  ScaleList[2] = fixed_two;
+  ScaleList[3] = fixed(5);
+  ScaleList[4] = fixed_ten;
+  ScaleList[5] = fixed(20);
+  ScaleList[6] = fixed(50);
+  ScaleList[7] = fixed(100);
+  ScaleList[8] = fixed(200);
+  ScaleList[9] = fixed(500);
+  ScaleList[10] = fixed(1000);
+  ScaleListCount = 11;
+
   _RequestedMapScale = LimitMapScale(_RequestedMapScale, settings_map);
 }
 
