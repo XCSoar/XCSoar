@@ -81,7 +81,7 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
         Graphics::hBmpThermalSource.draw(canvas, bitmap_canvas, sc.x, sc.y);
       }
     }
-  } else if (projection.GetMapScaleKM() <= fixed_four) {
+  } else if (projection.GetMapScale() <= fixed(4000)) {
     for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
       if (ThermalSources[i].Visible) 
         Graphics::hBmpThermalSource.draw(canvas, bitmap_canvas,

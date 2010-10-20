@@ -65,8 +65,8 @@ public:
   virtual fixed GetMapScaleUser() const;
 
   gcc_pure
-  fixed GetMapScaleKM() const {
-    return Units::ToSysDistance(MapScale * fixed(0.001));
+  fixed GetMapScale() const {
+    return Units::ToSysDistance(MapScale);
   }
 
   const POINT &GetOrigAircraft() const {

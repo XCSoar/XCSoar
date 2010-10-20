@@ -201,7 +201,7 @@ public:
 
     } else {
       // non landable turnpoint
-      if (projection.GetMapScaleKM() <= fixed_four)
+      if (projection.GetMapScale() <= fixed(4000))
         icon = &Graphics::TurnPointIcon;
     }
 
