@@ -38,13 +38,13 @@
 #ifndef OLC_SPRINT_HPP
 #define OLC_SPRINT_HPP
 
-#include "OLCDijkstra.hpp"
+#include "ContestDijkstra.hpp"
 
 /**
  * Specialisation of Dijkstra for OLC Sprint (also known as OLC League) rules
  */
 class OLCSprint: 
-  public OLCDijkstra
+  public ContestDijkstra
 {
 public:
   /**

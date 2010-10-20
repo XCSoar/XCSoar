@@ -91,7 +91,7 @@ private:
 
   TracePointVector solution;
 
-  bool run_olc(OLCDijkstra& dijkstra);
+  bool run_olc(ContestDijkstra& dijkstra);
 
   OLCSprint olc_sprint;
   OLCFAI olc_fai;

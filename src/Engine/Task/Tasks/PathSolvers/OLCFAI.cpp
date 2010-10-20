@@ -6,7 +6,7 @@
 */
 
 OLCFAI::OLCFAI(const TracePointVector &_trace):
-  OLCDijkstra(_trace, 3, 3000)
+  ContestDijkstra(_trace, 3, 3000)
 {
 
 }
@@ -18,7 +18,7 @@ OLCFAI::finish_satisfied(const ScanTaskPoint &sp) const
   /// \todo implement checks for distance constraints
   // if d<500km, shortest leg >= 28% d; else shortest leg >= 25%d
 
-  return OLCDijkstra::finish_satisfied(sp);
+  return ContestDijkstra::finish_satisfied(sp);
 }
 
 
@@ -27,7 +27,7 @@ OLCFAI::admit_candidate(const ScanTaskPoint &candidate) const
 {
   /// \todo implement check for closure
   /// (end point is within 1km of start)
-  return OLCDijkstra::admit_candidate(candidate);
+  return ContestDijkstra::admit_candidate(candidate);
 }
 
 
@@ -38,7 +38,7 @@ OLCFAI::add_edges(DijkstraTaskPoint &dijkstra,
   ScanTaskPoint destination(origin.first+1, origin.second);
 
   if (!is_final(destination)) {
-    OLCDijkstra::add_edges(dijkstra, origin);
+    ContestDijkstra::add_edges(dijkstra, origin);
     return;
   }
 

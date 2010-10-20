@@ -48,7 +48,7 @@ struct ContestResult;
  * Abstract class for OLC path searches
  *
  */
-class OLCDijkstra:
+class ContestDijkstra:
   public NavDijkstra<TracePoint>
 {
 public:
@@ -60,7 +60,7 @@ public:
    * @param finish_alt_diff Maximum height loss from start to finish (m)
    * @param full_trace Whether this OLC algorithm requires the full history or just the first 2.5 hours
    */
-  OLCDijkstra(const TracePointVector &_trace, const unsigned n_legs,
+  ContestDijkstra(const TracePointVector &_trace, const unsigned n_legs,
               const unsigned finish_alt_diff = 3000,
               const bool full_trace = true);
 

@@ -38,13 +38,13 @@
 #ifndef OLC_CLASSIC_HPP
 #define OLC_CLASSIC_HPP
 
-#include "OLCDijkstra.hpp"
+#include "ContestDijkstra.hpp"
 
 /**
  * Specialisation of OLC Dijkstra for OLC Classic rules
  */
 class OLCClassic: 
-  public OLCDijkstra
+  public ContestDijkstra
 {
 public:
   /**

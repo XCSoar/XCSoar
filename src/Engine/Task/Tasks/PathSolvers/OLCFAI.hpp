@@ -37,13 +37,13 @@
 #ifndef OLC_FAI_HPP
 #define OLC_FAI_HPP
 
-#include "OLCDijkstra.hpp"
+#include "ContestDijkstra.hpp"
 
 /**
  * Specialisation of OLC Dijkstra for OLC FAI (triangle) rules
  */
 class OLCFAI: 
-  public OLCDijkstra
+  public ContestDijkstra
 {
 public:
 

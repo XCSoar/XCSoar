@@ -50,7 +50,7 @@ extern long count_olc;
 #endif
 
 bool
-ContestManager::run_olc(OLCDijkstra &dijkstra)
+ContestManager::run_olc(ContestDijkstra &dijkstra)
 {
   if (!dijkstra.solve())
     return false;

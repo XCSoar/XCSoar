@@ -6,7 +6,7 @@
 
 /*
   - note, this only searches 2.5 hour blocks, so should be able
-    to handle larger number of points than other OLCDijkstra's
+    to handle larger number of points than other ContestDijkstra's
   - Therefore, consider having the trace points stored within
     this instance instead of in ContestManager.
   - Solutions must be improving as time goes on, so no need to search
@@ -34,12 +34,12 @@
 */
 
 OLCSprint::OLCSprint(const TracePointVector &_trace):
-  OLCDijkstra(_trace, 4, 0, false) {}
+  ContestDijkstra(_trace, 4, 0, false) {}
 
 void
 OLCSprint::reset()
 {
-  OLCDijkstra::reset();
+  ContestDijkstra::reset();
 }
 
 bool 
@@ -49,7 +49,7 @@ OLCSprint::admit_candidate(const ScanTaskPoint &candidate) const
     if (get_point(candidate).time > solution[0].time + 9000)
       return false;
 
-  return OLCDijkstra::admit_candidate(candidate);
+  return ContestDijkstra::admit_candidate(candidate);
 }
 
 unsigned
@@ -84,7 +84,7 @@ OLCSprint::add_edges(DijkstraTaskPoint &dijkstra,
 {
   ScanTaskPoint destination(origin.first + 1, origin.second);
   if (!is_final(destination)) {
-    OLCDijkstra::add_edges(dijkstra, origin);
+    ContestDijkstra::add_edges(dijkstra, origin);
     return;
   }
 

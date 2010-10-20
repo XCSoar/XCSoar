@@ -35,7 +35,7 @@
 }
 */
 
-#include "OLCDijkstra.hpp"
+#include "ContestDijkstra.hpp"
 #include "Task/Tasks/ContestManager.hpp"
 #include "Task/TaskStats/ContestResult.hpp"
 
@@ -46,7 +46,7 @@
 #include <stdio.h>
 #endif
 
-OLCDijkstra::OLCDijkstra(const TracePointVector &_trace, const unsigned n_legs,
+ContestDijkstra::ContestDijkstra(const TracePointVector &_trace, const unsigned n_legs,
                          const unsigned finish_alt_diff,
                          const bool full_trace):
   NavDijkstra<TracePoint>(n_legs + 1),
@@ -64,13 +64,13 @@ OLCDijkstra::OLCDijkstra(const TracePointVector &_trace, const unsigned n_legs,
 }
 
 void
-OLCDijkstra::set_weightings()
+ContestDijkstra::set_weightings()
 {
   std::fill(m_weightings, m_weightings + num_stages - 1, 5);
 }
 
 bool
-OLCDijkstra::solve()
+ContestDijkstra::solve()
 {
   if (m_dijkstra.empty()) {
     set_weightings();
@@ -97,7 +97,7 @@ OLCDijkstra::solve()
 }
 
 bool
-OLCDijkstra::solve_inner()
+ContestDijkstra::solve_inner()
 {
   if (distance_general(m_dijkstra, 25)) {
     save_solution();
@@ -108,7 +108,7 @@ OLCDijkstra::solve_inner()
 }
 
 void
-OLCDijkstra::reset()
+ContestDijkstra::reset()
 {
   m_dijkstra.clear();
   n_points = 0;
@@ -120,7 +120,7 @@ OLCDijkstra::reset()
 }
 
 bool
-OLCDijkstra::score(ContestResult &result)
+ContestDijkstra::score(ContestResult &result)
 {
   if (positive(calc_time())) {
     solution_found = true;
@@ -136,13 +136,13 @@ OLCDijkstra::score(ContestResult &result)
 }
 
 fixed
-OLCDijkstra::calc_time() const
+ContestDijkstra::calc_time() const
 {
   return fixed(solution[num_stages - 1].time - solution[0].time);
 }
 
 fixed
-OLCDijkstra::calc_distance() const
+ContestDijkstra::calc_distance() const
 {
   fixed dist = fixed_zero;
   for (unsigned i = 0; i + 1 < num_stages; ++i)
@@ -152,7 +152,7 @@ OLCDijkstra::calc_distance() const
 }
 
 fixed
-OLCDijkstra::calc_score() const
+ContestDijkstra::calc_score() const
 {
   fixed score = fixed_zero;
   for (unsigned i = 0; i + 1 < num_stages; ++i)
@@ -165,7 +165,7 @@ OLCDijkstra::calc_score() const
 }
 
 void
-OLCDijkstra::add_start_edges()
+ContestDijkstra::add_start_edges()
 {
   m_dijkstra.pop();
 
@@ -176,7 +176,7 @@ OLCDijkstra::add_start_edges()
 }
 
 void
-OLCDijkstra::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& origin)
+ContestDijkstra::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& origin)
 {
   ScanTaskPoint destination(origin.first + 1, origin.second);
 
@@ -192,21 +192,21 @@ OLCDijkstra::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& origin)
 }
 
 const TracePoint &
-OLCDijkstra::get_point(const ScanTaskPoint &sp) const
+ContestDijkstra::get_point(const ScanTaskPoint &sp) const
 {
   assert(sp.second < n_points);
   return trace[sp.second];
 }
 
 unsigned
-OLCDijkstra::get_weighting(const unsigned i) const
+ContestDijkstra::get_weighting(const unsigned i) const
 {
   assert(i < num_stages - 1);
   return m_weightings[i];
 }
 
 bool
-OLCDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
+ContestDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
 {
   if (!is_final(candidate))
     return true;
@@ -216,13 +216,13 @@ OLCDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
 }
 
 bool
-OLCDijkstra::finish_satisfied(const ScanTaskPoint &sp) const
+ContestDijkstra::finish_satisfied(const ScanTaskPoint &sp) const
 {
   return admit_candidate(sp);
 }
 
 void
-OLCDijkstra::save_solution()
+ContestDijkstra::save_solution()
 {
   const fixed score = calc_score();
   if (score > best_score) {
@@ -238,7 +238,7 @@ OLCDijkstra::save_solution()
 }
 
 void
-OLCDijkstra::copy_solution(TracePointVector &vec)
+ContestDijkstra::copy_solution(TracePointVector &vec)
 {
   vec.clear();
   if (solution_found) {
