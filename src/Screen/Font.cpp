@@ -71,6 +71,10 @@ Font::set(const LOGFONT &log_font)
   const char *dejavu_ttf =
     "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf";
 
+#ifdef ANDROID
+  dejavu_ttf = "/sdcard/DejaVuSansCondensed.ttf";
+#endif
+
   return set(dejavu_ttf, log_font.lfHeight > 0 ? log_font.lfHeight : 10,
              log_font.lfWeight >= 700,
              log_font.lfItalic);
