@@ -41,7 +41,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-#ifndef WIN32
+#if !defined(WIN32) && !defined(USE_PROFILE_MAP)
 /* for GConf */
 #define PROFILE_KEY_PREFIX "/apps/XCSoar/"
 #endif
