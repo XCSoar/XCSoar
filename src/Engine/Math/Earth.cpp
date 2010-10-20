@@ -137,13 +137,12 @@ DistanceBearingS(GeoPoint loc1, GeoPoint loc2, Angle *Distance, Angle *Bearing)
   if (Distance) {
     const fixed s1 = ((loc2.Latitude - loc1.Latitude) * fixed_half).sin()
         * fixed_expand_x;
-    const fixed s2 = sin(dlon * fixed_half) * fixed_expand_x;
+    const fixed s2 = sin(dlon / 2) * fixed_expand_x;
     const fixed a = max(fixed_zero, 
                         min(fixed_expand_xsq, s1 * s1
                             + cloc1Latitude * cloc2Latitude * s2 * s2));
 
-    fixed distance2 = max(fixed_zero, fixed_two*atan2(sqrt(a),
-        sqrt(fixed_expand_xsq - a)));
+    fixed distance2 = max(fixed_zero, 2 * atan2(sqrt(a), sqrt(fixed_expand_xsq - a)));
     *Distance = Angle::radians(distance2);
   }
 
