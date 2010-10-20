@@ -61,8 +61,7 @@ public:
    * @param full_trace Whether this OLC algorithm requires the full history or just the first 2.5 hours
    */
   ContestDijkstra(const TracePointVector &_trace, const unsigned n_legs,
-              const unsigned finish_alt_diff = 3000,
-              const bool full_trace = true);
+                  const unsigned finish_alt_diff = 3000);
 
   /**
    * Calculate the scored value of the OLC path
@@ -175,8 +174,6 @@ private:
   TracePoint best_solution[MAX_STAGES];
 
   virtual void add_start_edges();
-
-  const bool m_full_trace;
 };
 
 #endif

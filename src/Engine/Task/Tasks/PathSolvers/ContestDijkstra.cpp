@@ -46,9 +46,9 @@
 #include <stdio.h>
 #endif
 
-ContestDijkstra::ContestDijkstra(const TracePointVector &_trace, const unsigned n_legs,
-                         const unsigned finish_alt_diff,
-                         const bool full_trace):
+ContestDijkstra::ContestDijkstra(const TracePointVector &_trace,
+                                 const unsigned n_legs,
+                                 const unsigned finish_alt_diff):
   NavDijkstra<TracePoint>(n_legs + 1),
   m_dijkstra(false),
   trace(_trace),
@@ -57,8 +57,7 @@ ContestDijkstra::ContestDijkstra(const TracePointVector &_trace, const unsigned 
   best_score(fixed_zero),
   best_distance(fixed_zero),
   best_speed(fixed_zero),
-  best_time(fixed_zero),
-  m_full_trace(full_trace)
+  best_time(fixed_zero)
 {
   reset();
 }

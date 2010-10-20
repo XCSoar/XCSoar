@@ -34,7 +34,7 @@
 */
 
 OLCSprint::OLCSprint(const TracePointVector &_trace):
-  ContestDijkstra(_trace, 4, 0, false) {}
+  ContestDijkstra(_trace, 4, 0) {}
 
 void
 OLCSprint::reset()
