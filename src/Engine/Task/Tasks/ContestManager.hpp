@@ -24,11 +24,12 @@ public:
   /** 
    * Base constructor.
    * 
-   * @param olc_rules Contests that shall be used
-   * @param stats Common stats to write OLC info to
-   * @param trace_full Trace object containing full flight history for scanning
-   * @param trace_sprint Trace object containing 2.5 hour flight history for scanning
-   * 
+   * @param _contest Contests that shall be used
+   * @param _result ContestRules to write result to
+   * @param trace_full Trace object reference
+   * containing full flight history for scanning
+   * @param trace_sprint Trace object reference
+   * containing 2.5 hour flight history for scanning
    */
   ContestManager(const Contests _contest,
                 ContestResult &_result, const Trace &trace_full,
@@ -48,10 +49,8 @@ public:
   bool update_sample(const AIRCRAFT_STATE &state);
 
   /**
-   * Update internal states (non-essential) for housework, or where functions are slow
-   * and would cause loss to real-time performance.
-   *
-   * @param state Aircraft state at this time step
+   * Update internal states (non-essential) for housework,
+   * or where functions are slow and would cause loss to real-time performance.
    *
    * @return True if internal state changed
    */
@@ -59,14 +58,13 @@ public:
 
   /** 
    * Reset the task (as if never flown)
-   * 
    */
   void reset();
 
   /**
-   * Retrieve olc solution vector
+   * Retrieve contest solution vector
    *
-   * @return Vector of trace points selected for OLC
+   * @return Vector of trace points selected for Contest
    */
   gcc_pure
   const TracePointVector& get_contest_solution() const;
