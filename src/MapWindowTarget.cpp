@@ -45,79 +45,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "SettingsMap.hpp"
 
-// TARGET STUFF
-
-// JMW to be used for target preview
-  /* This whole thing needs rework now that stuff is being passed in
-     via the SettingsMap
-
-bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
-  static double old_latitude;
-  static double old_longitude;
-  static bool old_pan=false;
-  static bool old_fullscreen=false;
-
-  if (!SettingsMap().TargetPan
-      || (SettingsMap().TargetPanIndex != target_point)) {
-    TargetDrag_State = 0;
-  }
-
-  if (do_pan && !TargetPan) {
-    old_latitude = PanLatitude;
-    old_longitude = PanLongitude;
-    old_pan = SettingsMap().EnablePan;
-    //JMW broken    EnablePan = true;
-    TargetPan = do_pan;
-
-    old_fullscreen = SettingsMap().FullScreen;
-    if (askFullScreen) {
-      askFullScreen = false;
-    }
-    SwitchZoomClimb();
-  }
-  if (do_pan) {
-    mutexTaskData.Lock();
-    if (ValidTaskPoint(target_point)) {
-      PanLongitude = WayPointList[task_points[target_point].Index].Longitude;
-      PanLatitude = WayPointList[task_points[target_point].Index].Latitude;
-      if (target_point==0) {
-        TargetZoomDistance = max(2e3, StartRadius*2);
-      } else if (!ValidTaskPoint(target_point+1)) {
-        TargetZoomDistance = max(2e3, FinishRadius*2);
-      } else if (AATEnabled) {
-        if (task_points[target_point].AATType == SECTOR) {
-          TargetZoomDistance = max(2e3, task_points[target_point].AATSectorRadius*2);
-        } else {
-          TargetZoomDistance = max(2e3, task_points[target_point].AATCircleRadius*2);
-        }
-      } else {
-        TargetZoomDistance = max(2e3, SectorRadius*2);
-      }
-    }
-    mutexTaskData.Unlock();
-  } else if (TargetPan) {
-    PanLongitude = old_longitude;
-    PanLatitude = old_latitude;
-    // JMW broken    EnablePan = old_pan;
-    TargetPan = do_pan;
-    if (old_fullscreen) {
-      askFullScreen = true;
-    }
-    SwitchZoomClimb();
-  }
-  TargetPan = do_pan;
-
-  mutexTaskData.Unlock();
-  return old_pan;
-}
-  */
-
-
-/*
-* set to -1 to turn off
-* returns old zoom value
-*/
-
 bool MapWindow::isClickOnTarget(const POINT pc)
 {
   if (XCSoarInterface::SetSettingsMap().TargetPan) {
@@ -169,19 +96,3 @@ bool MapWindow::TargetDragged(const int x, const int y)
   }
   return false;
 }
-
-
-/* JMW illegal
-  mutexTaskData.Lock();
-  if (TargetDrag_State >0) { // always return true if we're dragging
-			     // or just stopped dragging, so screen is
-			     // updated
-    *longitude = TargetDrag_Location.Longitude;
-    *latitude = TargetDrag_Location.Latitude;
-    if (TargetDrag_State == 2) {
-        TargetDrag_State = 0; // mouse up/ stop dragging
-    }
-    retval = true;
-  }
-  mutexTaskData.Unlock();
-*/
