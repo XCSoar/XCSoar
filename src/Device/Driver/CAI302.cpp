@@ -50,8 +50,8 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Math/FastMath.h"
+#include "OS/Sleep.h"
 
-#include <winbase.h> /* for Sleep() */
 #include <tchar.h>
 #include <stdlib.h>
 #include <stdio.h>

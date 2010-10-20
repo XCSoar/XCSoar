@@ -36,56 +36,23 @@ Copyright_License {
 }
 */
 
-//
+#ifndef XCSOAR_OS_SLEEP_H
 
+#ifdef WIN32
 
-// CAUTION!
-// caiGpsNavParseNMEA is called from com port read thread
-// all other functions are called from windows message loop thread
+#include <windows.h>
 
-#include "Device/Driver/CaiGpsNav.hpp"
-#include "Device/Driver.hpp"
-#include "Device/Port.hpp"
-#include "OS/Sleep.h"
+#else /* !WIN32 */
 
-#include <tchar.h>
+#include <time.h>
 
-static const char CtrlC = '\x03';
-
-class CaiGpsNavDevice : public AbstractDevice {
-private:
-  Port *port;
-
-public:
-  CaiGpsNavDevice(Port *_port):port(_port) {}
-
-public:
-  virtual bool Open();
-};
-
-bool
-CaiGpsNavDevice::Open()
+static inline void
+Sleep(unsigned ms)
 {
-  port->Write(CtrlC);
-  Sleep(50);
-  port->Write("NMEA\r");
-
-  // This is for a slightly different mode, that
-  // apparently outputs pressure info too...
-  //port->Write("PNP\r\n");
-  //port->Write("LOG 0\r\n");
-
-  return true;
+  const struct timespec ts = { ms / 1000, (long)ms % 1000000L };
+  nanosleep(&ts, NULL);
 }
 
-static Device *
-CaiGpsNavCreateOnPort(Port *com_port)
-{
-  return new CaiGpsNavDevice(com_port);
-}
+#endif /* !WIN32 */
 
-const struct DeviceRegister caiGpsNavDevice = {
-  _T("CAI GPS-NAV"),
-  drfGPS,
-  CaiGpsNavCreateOnPort,
-};
+#endif

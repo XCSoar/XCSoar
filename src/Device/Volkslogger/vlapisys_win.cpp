@@ -18,8 +18,8 @@
 #include "Device/Volkslogger/vla_support.h"
 #include "Device/Port.hpp"
 #include "ProgressGlue.hpp"
+#include "OS/Sleep.h"
 
-#include <windows.h> /* for Sleep() */
 #include <stdio.h>
 #if defined(HAVE_POSIX) || !defined(_WIN32_WCE)
 #include <time.h>

@@ -41,6 +41,7 @@ Copyright_License {
 #include "Language.hpp"
 #include "Message.hpp"
 #include "Asset.hpp"
+#include "OS/Sleep.h"
 
 #ifdef HAVE_POSIX
 #include <time.h>
