@@ -34,6 +34,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "TaskBehaviour.hpp"
 
 TaskBehaviour::TaskBehaviour():
@@ -54,25 +55,21 @@ TaskBehaviour::TaskBehaviour():
     safety_height_terrain(150.0),
     safety_height_arrival(300.0),
     start_max_speed_margin(0.0),
-    start_max_height_margin(0)
-{
-}
-
+    start_max_height_margin(0) {}
 
 void
 TaskBehaviour::all_off()
 {
-  optimise_targets_range=false;
-  optimise_targets_bearing=false;
-  auto_mc= false;
-  calc_cruise_efficiency=false;
-  calc_glide_required=false;
+  optimise_targets_range = false;
+  optimise_targets_bearing = false;
+  auto_mc = false;
+  calc_cruise_efficiency = false;
+  calc_glide_required = false;
   enable_olc = false;
   ordered_defaults.all_off();
 }
 
-
-fixed 
+fixed
 TaskBehaviour::get_safety_mc(const fixed fallback_mc) const
 {
   return (safety_mc_use_current ? fallback_mc : safety_mc);

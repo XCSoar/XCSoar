@@ -34,6 +34,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef TASK_BEHAVIOUR_HPP
 #define TASK_BEHAVIOUR_HPP
 
@@ -49,64 +50,85 @@ struct AIRCRAFT_STATE;
 class TaskBehaviour 
 {
 public:
-
-/** 
- * Constructor, sets default task behaviour
- * 
- */
+  /**
+   * Constructor, sets default task behaviour
+   */
   TaskBehaviour();
 
-  bool optimise_targets_range; /**< Option to enable positionining of AAT targets to achieve desired AAT minimum task time */
-  bool optimise_targets_bearing; /**< Option to enable positioning of AAT targets at optimal point on isoline */
-  bool auto_mc; /**< Option to enable calculation and setting of auto MacCready */
-
   /**
-   * Enumeration of auto MC modes
+   * Option to enable positionining of AAT targets to achieve
+   * desired AAT minimum task time
    */
+  bool optimise_targets_range;
+  /** Option to enable positioning of AAT targets at optimal point on isoline */
+  bool optimise_targets_bearing;
+  /** Option to enable calculation and setting of auto MacCready */
+  bool auto_mc;
+
+  /** Enumeration of auto MC modes */
   enum AutoMCMode_t {
-    AUTOMC_FINALGLIDE = 0, /**< Final glide only */
-    AUTOMC_CLIMBAVERAGE, /**< Climb average */
-    AUTOMC_BOTH /**< Final glide if above FG, else climb average */
+    /** Final glide only */
+    AUTOMC_FINALGLIDE = 0,
+    /** Climb average */
+    AUTOMC_CLIMBAVERAGE,
+    /** Final glide if above FG, else climb average */
+    AUTOMC_BOTH
   };
 
-  AutoMCMode_t auto_mc_mode; /**< Options for auto MC calculations */
+  /** Options for auto MC calculations */
+  AutoMCMode_t auto_mc_mode;
   
-  bool calc_cruise_efficiency; /**< Option to enable calculation of cruise efficiency */
-  bool calc_effective_mc; /**< Option to enable calculation of effective mc */
-  bool calc_glide_required; /**< Option to enable calculation of required sink rate for final glide */
-  bool goto_nonlandable; /**< Option to enable Goto tasks for non-landable waypoints */
+  /** Option to enable calculation of cruise efficiency */
+  bool calc_cruise_efficiency;
+  /** Option to enable calculation of effective mc */
+  bool calc_effective_mc;
+  /** Option to enable calculation of required sink rate for final glide */
+  bool calc_glide_required;
+  /** Option to enable Goto tasks for non-landable waypoints */
+  bool goto_nonlandable;
 
-  fixed risk_gamma; /**< Compensation factor for risk at low altitude */
+  /**< Compensation factor for risk at low altitude */
+  fixed risk_gamma;
 
-  bool enable_olc; /**< Whether to do online OLC optimisation */
+  /**< Whether to do online OLC optimisation */
+  bool enable_olc;
 
-  Contests contest; /**< Rule set to scan for in OLC */
-  unsigned contest_handicap; /**< Handicap factor */
+  /**< Rule set to scan for in OLC */
+  Contests contest;
+  /**< Handicap factor */
+  unsigned contest_handicap;
 
-  fixed safety_mc; /**< Safety MacCready value (m/s) used by abort task */
-  bool safety_mc_use_current; /**< Whether to use safety mc value or current task polar MC */
+  /**< Safety MacCready value (m/s) used by abort task */
+  fixed safety_mc;
+  /**< Whether to use safety mc value or current task polar MC */
+  bool safety_mc_use_current;
 
-  fixed safety_height_terrain; /**< Minimum height above terrain for arrival height at non-landable waypoint (m) */
-  fixed safety_height_arrival; /**< Minimum height above terrain for arrival height at landable waypoint (m) */
+  /**< Minimum height above terrain for arrival height at non-landable waypoint (m) */
+  fixed safety_height_terrain;
+  /**< Minimum height above terrain for arrival height at landable waypoint (m) */
+  fixed safety_height_arrival;
 
-  fixed start_max_speed_margin; /**< Margin in maximum ground speed (m/s) allowed in start sector */
-  unsigned start_max_height_margin; /**< Margin in maximum height (m) allowed in start sector */
+  /**< Margin in maximum ground speed (m/s) allowed in start sector */
+  fixed start_max_speed_margin;
+  /**< Margin in maximum height (m) allowed in start sector */
+  unsigned start_max_height_margin;
 
-  OrderedTaskBehaviour ordered_defaults; /**< Defaults for ordered task */
+  /**< Defaults for ordered task */
+  OrderedTaskBehaviour ordered_defaults;
 
-/** 
- * Convenience function (used primarily for testing) to disable
- * all expensive task behaviour functions.
- */
+  /**
+   * Convenience function (used primarily for testing) to disable
+   * all expensive task behaviour functions.
+   */
   void all_off();
 
-/** 
- * Return safety MC value (based on options)
- * 
- * @param fallback_mc Current glide polar mc value (m/s) 
- *
- * @return Safety MC value (m/s)
- */
+  /**
+   * Return safety MC value (based on options)
+   *
+   * @param fallback_mc Current glide polar mc value (m/s)
+   *
+   * @return Safety MC value (m/s)
+   */
   fixed get_safety_mc(const fixed fallback_mc) const;
 };
 
