@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Asset.hpp"
+#include "Profile/Profile.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "org_xcsoar_DemoRenderer.h"
@@ -49,6 +50,8 @@ JNIEXPORT void JNICALL
 Java_org_xcsoar_DemoRenderer_nativeInit(JNIEnv *env, jobject obj)
 {
   InitAsset();
+
+  Profile::SetFiles(_T(""));
 
   if (XCSoarInterface::Startup(NULL))
     CommonInterface::main_window.event_loop();
