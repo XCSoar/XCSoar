@@ -145,7 +145,7 @@ void
 Projection::SetScaleMetersToScreen(const fixed scale_meters_to_screen)
 {
   static const fixed fixed_r 
-    (Angle::native(fixed(fixed_earth_r)).value_radians());
+    (Angle::native(fixed_earth_r).value_radians());
 
   m_scale_meters_to_screen = scale_meters_to_screen;
   DrawScale = fixed_r * m_scale_meters_to_screen;
