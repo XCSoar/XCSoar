@@ -64,14 +64,6 @@ public:
   void reset();
 
   /**
-   * Retrieve trace vector
-   *
-   * @return Vector of all trace points
-   */
-  gcc_pure
-  const TracePointVector& get_trace_points() const;
-
-  /**
    * Retrieve olc solution vector
    *
    * @return Vector of trace points selected for OLC

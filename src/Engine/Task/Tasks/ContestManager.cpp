@@ -120,12 +120,6 @@ ContestManager::reset()
 }
 
 const TracePointVector& 
-ContestManager::get_trace_points() const
-{
-  return trace_points_full;
-}
-
-const TracePointVector& 
 ContestManager::get_olc_points() const
 {
   return solution;
