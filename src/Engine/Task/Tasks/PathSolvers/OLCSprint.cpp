@@ -45,9 +45,9 @@ OLCSprint::reset()
 bool 
 OLCSprint::admit_candidate(const ScanTaskPoint &candidate) const
 {
-  if (candidate.first > 0)
-    if (get_point(candidate).time > solution[0].time + 9000)
-      return false;
+  if (candidate.first > 0 &&
+      get_point(candidate).time > solution[0].time + 9000)
+    return false;
 
   return ContestDijkstra::admit_candidate(candidate);
 }
