@@ -34,6 +34,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef OLC_CLASSIC_HPP
 #define OLC_CLASSIC_HPP
 
@@ -46,12 +47,11 @@ class OLCClassic:
   public OLCDijkstra
 {
 public:
-
-/**
- * Constructor
- *
- * @param _olc The OLC task to solve for
- */
+  /**
+   * Constructor
+   *
+   * @param _olc The OLC task to solve for
+   */
   OLCClassic(ContestManager& _olc);
 
 protected:

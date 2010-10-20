@@ -1,10 +1,7 @@
 #include "OLCClassic.hpp"
 
 OLCClassic::OLCClassic(ContestManager& _olc):
-  OLCDijkstra(_olc, 6, 3000) 
-{
-
-}
+  OLCDijkstra(_olc, 6, 3000) {}
 
 void 
 OLCClassic::set_weightings()
