@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 #include "Screen/Event.hpp"
+#include "Asset.hpp"
 
 #ifdef ENABLE_SDL
 #include "PeriodClock.hpp"
@@ -65,6 +66,18 @@ TopCanvas::set()
     flags |= SDL_HWSURFACE;
   else
     flags |= SDL_SWSURFACE;
+
+  if (is_embedded()) {
+    flags |= SDL_FULLSCREEN;
+
+    /* select a full-screen video mode */
+    SDL_Rect **modes = SDL_ListModes(NULL, flags);
+    if (modes == NULL)
+      return;
+
+    width = modes[0]->w;
+    height = modes[0]->h;
+  }
 
   Canvas::set(::SDL_SetVideoMode(width, height, 0, flags));
 }
