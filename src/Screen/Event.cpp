@@ -36,52 +36,24 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_EVENT_HPP
-#define XCSOAR_SCREEN_EVENT_HPP
+#include "Screen/Event.hpp"
+#include "Screen/TopWindow.hpp"
 
-#ifdef ENABLE_SDL
-
-#include <SDL_version.h>
-#include <SDL_events.h>
-
-/**
- * Is this a SDL_UserEvent?
- */
-static inline bool
-is_user_event(const SDL_Event &event)
+bool
+EventLoop::get(SDL_Event &event)
 {
-#if SDL_VERSION_ATLEAST(1,3,0)
-  return event.type >= SDL_USEREVENT && event.type <= SDL_LASTEVENT;
-#else
-  return event.type >= SDL_USEREVENT && event.type <= SDL_NUMEVENTS - 1;
-#endif
+  if (event.type == SDL_QUIT)
+    return false;
+
+  return ::SDL_WaitEvent(&event);
 }
 
-class TopWindow;
-
-class EventLoop {
-  TopWindow &top_window;
-
-public:
-  EventLoop(TopWindow &_top_window)
-    :top_window(_top_window) {}
-
-  bool get(SDL_Event &event);
-  void dispatch(SDL_Event &event);
-};
-
-#else /* !ENABLE_SDL */
-
-#include <windef.h>
-
-static inline bool
-is_user_input(UINT message)
+void
+EventLoop::dispatch(SDL_Event &event)
 {
-  return message == WM_KEYDOWN || message == WM_KEYUP ||
-    message == WM_LBUTTONDOWN || message == WM_LBUTTONUP ||
-    message == WM_LBUTTONDBLCLK;
+  if (is_user_event(event) && event.user.data1 != NULL) {
+    Window *window = (Window *)event.user.data1;
+    window->on_user(event.type - SDL_USEREVENT);
+  } else
+    ((Window &)top_window).on_event(event);
 }
-
-#endif /* !ENABLE_SDL */
-
-#endif

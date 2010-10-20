@@ -31,7 +31,9 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/Dialog.cpp
 
 ifeq ($(ENABLE_SDL),y)
-SCREEN_SOURCES += $(SCREEN_SRC_DIR)/Timer.cpp
+SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/Event.cpp \
+	$(SCREEN_SRC_DIR)/Timer.cpp
 else
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/PaintCanvas.cpp

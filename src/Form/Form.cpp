@@ -276,17 +276,10 @@ int WndForm::ShowModal(bool bEnableMap) {
 
   update();
 
+  EventLoop loop(*(TopWindow *)get_root_owner());
   SDL_Event event;
-  while (mModalResult == 0 && SDL_WaitEvent(&event)) {
-    if (event.type == SDL_QUIT)
-      break;
-
-    if (is_user_event(event) && event.user.data1 != NULL) {
-      Window *window = (Window *)event.user.data1;
-      window->on_user(event.type - SDL_USEREVENT);
-    } else
-      parent->on_event(event);
-  }
+  while (mModalResult == 0 && loop.get(event))
+    loop.dispatch(event);
 
 #else /* !ENABLE_SDL */
   while ((mModalResult == 0) && GetMessage(&msg, NULL, 0, 0)) {

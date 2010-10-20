@@ -347,20 +347,12 @@ int
 TopWindow::event_loop()
 {
 #ifdef ENABLE_SDL
-  SDL_Event event;
-
   update();
 
-  while (SDL_WaitEvent(&event)) {
-    if (event.type == SDL_QUIT)
-      break;
-
-    if (is_user_event(event) && event.user.data1 != NULL) {
-      Window *window = (Window *)event.user.data1;
-      window->on_user(event.type - SDL_USEREVENT);
-    } else
-      on_event(event);
-  }
+  EventLoop loop(*this);
+  SDL_Event event;
+  while (loop.get(event))
+    loop.dispatch(event);
 
   SDL_Quit();
 
