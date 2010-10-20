@@ -78,8 +78,7 @@ struct GeoVector {
    * \todo
    * - handle is_average
    */
-  GeoVector(const GeoPoint &source, const GeoPoint &target,
-            const bool is_average=true);
+  GeoVector(const GeoPoint &source, const GeoPoint &target);
 
   /**
    * Adds the distance component of a geovector 

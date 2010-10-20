@@ -37,8 +37,7 @@
 #include "GeoVector.hpp"
 #include "Math/Earth.hpp"
 
-GeoVector::GeoVector(const GeoPoint &source, const GeoPoint &target,
-                     const bool is_average)
+GeoVector::GeoVector(const GeoPoint &source, const GeoPoint &target)
 {
   source.distance_bearing(target, Distance, Bearing);
 }
