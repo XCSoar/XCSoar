@@ -106,15 +106,14 @@ public:
   // 4 = x*30/1000
   gcc_pure
   fixed DistancePixelsToMeters(const int x) const {
-    return x * MapScale / Units::ToUserUnit(fixed(GetMapResolutionFactor()),
-                                            Units::DistanceUnit);
+    return x * MapScale / Units::ToUserDistance(fixed(GetMapResolutionFactor()));
   }
 
   //
   gcc_pure
   fixed RequestDistancePixelsToMeters(const int x) const {
-    return x * _RequestedMapScale / Units::ToUserUnit(fixed(GetMapResolutionFactor()),
-                                                      Units::DistanceUnit);
+    return x * _RequestedMapScale /
+           Units::ToUserDistance(fixed(GetMapResolutionFactor()));
   }
 
   gcc_pure
