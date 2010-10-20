@@ -121,9 +121,9 @@ public:
   fixed DistanceScreenToUser(const int x) const {
     return x * MapScale / GetMapResolutionFactor();
   }
-  fixed RequestMapScale(fixed x, const SETTINGS_MAP &settings_map) {
+
+  void RequestMapScale(fixed x, const SETTINGS_MAP &settings_map) {
     _RequestedMapScale = LimitMapScale(x, settings_map);
-    return _RequestedMapScale;
   }
 
 protected:
