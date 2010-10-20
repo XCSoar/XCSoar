@@ -183,6 +183,11 @@ struct GeoPoint {
   Angle bearing(const GeoPoint &other) const;
 
   /**
+   * Calculate great circle distance and initial bearing from this to the other
+   */
+  void distance_bearing(const GeoPoint &other, fixed &distance, Angle &bearing) const;
+
+  /**
    * Find distance along a great-circle path that this point
    * is projected to
    *
