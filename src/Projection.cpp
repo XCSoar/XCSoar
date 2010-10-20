@@ -198,35 +198,26 @@ Projection::CalculateScreenBounds(const fixed scale) const
     }
   } else {
     Angle xmin, xmax, ymin, ymax;
-    int x, y;
 
-    x = MapRect.left;
-    y = MapRect.top;
-    GeoPoint g = Screen2LonLat(x, y);
+    GeoPoint g = Screen2LonLat(MapRect.left, MapRect.top);
     xmin = g.Longitude;
     xmax = g.Longitude;
     ymin = g.Latitude;
     ymax = g.Latitude;
 
-    x = MapRect.right;
-    y = MapRect.top;
-    g = Screen2LonLat(x, y);
+    g = Screen2LonLat(MapRect.right, MapRect.top);
     xmin = min(xmin, g.Longitude);
     xmax = max(xmax, g.Longitude);
     ymin = min(ymin, g.Latitude);
     ymax = max(ymax, g.Latitude);
 
-    x = MapRect.right;
-    y = MapRect.bottom;
-    g = Screen2LonLat(x, y);
+    g = Screen2LonLat(MapRect.right, MapRect.bottom);
     xmin = min(xmin, g.Longitude);
     xmax = max(xmax, g.Longitude);
     ymin = min(ymin, g.Latitude);
     ymax = max(ymax, g.Latitude);
 
-    x = MapRect.left;
-    y = MapRect.bottom;
-    g = Screen2LonLat(x, y);
+    g = Screen2LonLat(MapRect.left, MapRect.bottom);
     xmin = min(xmin, g.Longitude);
     xmax = max(xmax, g.Longitude);
     ymin = min(ymin, g.Latitude);
