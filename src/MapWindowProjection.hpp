@@ -152,9 +152,6 @@ public:
   gcc_pure
   bool WaypointInScaleFilter(const Waypoint &way_point) const;
 
-  static bool WaypointInScaleFilter(const fixed scale,
-                                    const Waypoint &way_point);
-
 private:
   POINT Orig_Aircraft;
 
