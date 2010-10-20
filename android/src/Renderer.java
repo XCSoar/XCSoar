@@ -26,6 +26,8 @@ class DemoRenderer extends GLSurfaceView_SDL.Renderer {
         } catch (UnsatisfiedLinkError e) {
             Log.e(TAG, e.getMessage());
         }
+
+        Settings.nativeSetMouseUsed();
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
