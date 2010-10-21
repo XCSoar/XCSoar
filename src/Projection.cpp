@@ -49,11 +49,6 @@ Projection::Projection() :
 {
 }
 
-/**
- * Converts screen coordinates to a GeoPoint
- * @param x x-Coordinate on the screen
- * @param y y-Coordinate on the screen
- */
 GeoPoint
 Projection::ScreenToGeo(int x, int y) const
 {
@@ -69,10 +64,6 @@ Projection::ScreenToGeo(int x, int y) const
   return g;
 }
 
-/**
- * Converts a GeoPoint to screen coordinates
- * @param g GeoPoint to convert
- */
 POINT
 Projection::GeoToScreen(const GeoPoint &g) const
 {
@@ -88,15 +79,6 @@ Projection::GeoToScreen(const GeoPoint &g) const
   return sc;
 }
 
-/**
- * Converts a LatLon-based polygon to screen coordinates
- *
- * This one is optimised for long polygons.
- * @param ptin Input polygon
- * @param ptout Output polygon
- * @param n Number of points in the polygon
- * @param skip Number of corners to skip after a successful conversion
- */
 void
 Projection::GeoToScreen(const GeoPoint *ptin, POINT *ptout,
                           unsigned n) const

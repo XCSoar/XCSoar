@@ -51,12 +51,27 @@ public:
 
   virtual fixed GetMapScaleUser() const;
 
+  /**
+   * Converts screen coordinates to a GeoPoint
+   * @param x x-Coordinate on the screen
+   * @param y y-Coordinate on the screen
+   */
   gcc_pure
   GeoPoint ScreenToGeo(int x, int y) const;
 
+  /**
+   * Converts a GeoPoint to screen coordinates
+   * @param g GeoPoint to convert
+   */
   gcc_pure
   POINT GeoToScreen(const GeoPoint &location) const;
 
+  /**
+   * Converts a LatLon-based polygon to screen coordinates
+   * @param ptin Input polygon
+   * @param ptout Output polygon
+   * @param n Number of points in the polygon
+   */
   void GeoToScreen(const GeoPoint *ptin, POINT *ptout,
                      unsigned n) const;
 
