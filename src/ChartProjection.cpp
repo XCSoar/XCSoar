@@ -71,7 +71,7 @@ void ChartProjection::set_projection(const RECT &rc,
                                      const GeoPoint &center,
                                      const fixed radius)
 {
-  SetScaleMetersToScreen(fixed(max_dimension(rc)) / (radius * 2));
+  SetScale(fixed(max_dimension(rc)) / (radius * 2));
   SetGeoLocation(center);
   MapRect = rc;
   SetScreenOrigin((rc.left + rc.right) / 2, (rc.bottom + rc.top) / 2);

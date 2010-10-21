@@ -93,7 +93,7 @@ Projection::GeoToScreen(const GeoPoint *ptin, POINT *ptout,
 }
 
 void 
-Projection::SetScaleMetersToScreen(const fixed scale_meters_to_screen)
+Projection::SetScale(const fixed scale_meters_to_screen)
 {
   m_scale_meters_to_screen = scale_meters_to_screen;
   DrawScale = fixed_earth_r * m_scale_meters_to_screen;

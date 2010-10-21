@@ -248,7 +248,7 @@ MapWindowProjection::ModifyMapScale(const SETTINGS_MAP &settings_map)
   _RequestedMapScale = LimitMapScale(_RequestedMapScale, settings_map);
   MapScale = _RequestedMapScale;
 
-  SetScaleMetersToScreen(Units::ToUserDistance(fixed(GetMapResolutionFactor()) /
+  SetScale(Units::ToUserDistance(fixed(GetMapResolutionFactor()) /
                                                MapScale));
 }
 

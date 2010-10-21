@@ -55,7 +55,7 @@ Font Fonts::MapLabel;
 class TestProjection : public WindowProjection {
 public:
   TestProjection() {
-    SetScaleMetersToScreen(fixed(640) / (fixed(100) * 2));
+    SetScale(fixed(640) / (fixed(100) * 2));
     SetGeoLocation(GeoPoint(Angle::degrees(fixed(7.7061111111111114)),
                             Angle::degrees(fixed(51.051944444444445))));
     MapRect.left = 0;

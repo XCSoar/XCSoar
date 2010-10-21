@@ -137,7 +137,7 @@ protected:
   gcc_const
   static int GetMapResolutionFactor();
 
-  void SetScaleMetersToScreen(const fixed scale_meters_to_screen);
+  void SetScale(const fixed scale_meters_to_screen);
 
 private:
   /** This is the geographical location that the ScreenOrigin is mapped to */
