@@ -74,6 +74,14 @@ public:
   virtual fixed GetMapScaleUser() const;
 
   /**
+   * Convert a pixel distance to an angle on Earth's surface.
+   */
+  gcc_pure
+  Angle PixelsToAngle(int pixels) const {
+    return Angle::radians(pixels * InvDrawScale);
+  }
+
+  /**
    * Converts screen coordinates to a GeoPoint
    * @param x x-Coordinate on the screen
    * @param y y-Coordinate on the screen

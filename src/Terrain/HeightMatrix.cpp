@@ -105,9 +105,9 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
 
       GeoPoint gp;
       gp.Latitude = projection.GetGeoLocation().Latitude
-        - Angle::native(r.y * projection.GetScreenToGeoScale());
+        - projection.PixelsToAngle(r.y);
       gp.Longitude = projection.GetGeoLocation().Longitude
-        + Angle::native(r.x * projection.GetScreenToGeoScale())
+        + projection.PixelsToAngle(r.x)
         * gp.Latitude.invfastcosine();
 #else
       GeoPoint gp = projection.ScreenToGeo(x, y);

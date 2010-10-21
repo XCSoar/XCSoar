@@ -55,8 +55,7 @@ Projection::ScreenToGeo(int x, int y) const
   const FastIntegerRotation::Pair p =
     ScreenRotation.Rotate(x - ScreenOrigin.x, y - ScreenOrigin.y);
 
-  GeoPoint g(Angle::radians(fixed(p.first) * InvDrawScale),
-             Angle::radians(fixed(p.second) * InvDrawScale));
+  GeoPoint g(PixelsToAngle(p.first), PixelsToAngle(p.second));
 
   g.Latitude = GeoLocation.Latitude - g.Latitude;
   g.Longitude = GeoLocation.Longitude + g.Longitude * g.Latitude.invfastcosine();
