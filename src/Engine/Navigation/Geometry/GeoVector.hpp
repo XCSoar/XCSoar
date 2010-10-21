@@ -53,6 +53,11 @@ bool operator != (const GeoPoint&g1, const GeoPoint &g2);
  */
 struct GeoVector {
   /**
+   * Empty non-initializing constructor
+   */
+  GeoVector() {}
+
+  /**
    * Constructor given supplied distance/bearing 
    */
   GeoVector(const fixed distance, const Angle& bearing):
