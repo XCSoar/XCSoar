@@ -55,6 +55,14 @@ Copyright_License {
 
 #include <SDL_gfxPrimitives.h>
 
+#ifdef ENABLE_OPENGL
+#ifdef ANDROID
+#include <GLES/gl.h>
+#else
+#include <SDL/SDL_opengl.h>
+#endif
+#endif
+
 /* those are WIN32 macros - undefine, or Canvas::background_mode will
    break */
 #undef OPAQUE
@@ -204,8 +212,32 @@ public:
     // XXX
   }
 
+#ifdef ENABLE_OPENGL
+  void glColor(Color color) {
+    glColor4f(color.red() / 256., color.green() / 256.,
+              color.blue() / 256., 1.0);
+  }
+#endif
+
   void rectangle(int left, int top, int right, int bottom) {
     fill_rectangle(left, top, right, bottom, brush);
+
+#ifdef ENABLE_OPENGL
+    if (pen_over_brush() && surface->flags & SDL_OPENGL) {
+      glColor(pen.get_color());
+
+      const GLfloat v[] = {
+        left, top,
+        right, top,
+        right, bottom,
+        left, bottom,
+      };
+      glVertexPointer(2, GL_FLOAT, 0, v);
+      glDrawArrays(GL_LINE_LOOP, 0, 4);
+
+      return;
+    }
+#endif
 
     left += x_offset;
     right += x_offset;
@@ -233,6 +265,28 @@ public:
 
   void fill_rectangle(int left, int top, int right, int bottom,
                       const Color color) {
+#ifdef ENABLE_OPENGL
+    if (surface->flags & SDL_OPENGL) {
+      glColor(color);
+
+      const GLfloat v[] = {
+        left, top,
+        right, top,
+        right, bottom,
+        left, bottom,
+      };
+      glVertexPointer(2, GL_FLOAT, 0, v);
+
+#ifdef ANDROID
+      GLubyte i[] = { 0, 1, 2, 0, 2, 3 };
+      glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, i);
+#else
+      glDrawArrays(GL_QUADS, 0, 4);
+#endif
+      return;
+    }
+#endif
+
     fill_rectangle(left, top, right, bottom, map(color));
   }
 
@@ -307,6 +361,34 @@ public:
     if (brush.is_hollow() && !pen.defined())
       return;
 
+#ifdef ENABLE_OPENGL
+    if (surface->flags & SDL_OPENGL) {
+      GLfloat v[cPoints * 2];
+      for (unsigned i = 0; i < cPoints; ++i) {
+        v[i * 2] = lppt[i].x;
+        v[i * 2 + 1] = lppt[i].y;
+      }
+      glVertexPointer(2, GL_FLOAT, 0, v);
+
+      if (!brush.is_hollow()) {
+        glColor(brush.get_color());
+#ifdef ANDROID
+        // XXX
+        glDrawArrays(GL_TRIANGLES, 0, cPoints / 3);
+#else
+        glDrawArrays(GL_POLYGON, 0, cPoints);
+#endif
+      }
+
+      if (pen_over_brush()) {
+        glColor(pen.get_color());
+        glDrawArrays(GL_LINE_LOOP, 0, cPoints);
+      }
+
+      return;
+    }
+#endif
+
     Sint16 vx[cPoints], vy[cPoints];
 
     for (unsigned i = 0; i < cPoints; ++i) {
@@ -333,6 +415,17 @@ public:
   }
 
   void line(int ax, int ay, int bx, int by) {
+#ifdef ENABLE_OPENGL
+    if (surface->flags & SDL_OPENGL) {
+      glColor(pen.get_color());
+
+      const GLfloat v[] = { ax, ay, bx, by };
+      glVertexPointer(2, GL_FLOAT, 0, v);
+      glDrawArrays(GL_LINE_STRIP, 0, 2);
+      return;
+    }
+#endif
+
     ax += x_offset;
     bx += x_offset;
     ay += y_offset;

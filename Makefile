@@ -12,6 +12,8 @@
 #
 #   ENABLE_SDL  If set to "y", the UI is drawn with libSDL.
 #
+#   OPENGL      "y" means render with OpenGL.
+#
 #   DEBUG       If set to "y", the debugging version of XCSoar is built
 #               (default is "y")
 #

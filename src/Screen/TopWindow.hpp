@@ -55,7 +55,11 @@ public:
   void full_screen();
 
   void flip() {
+#ifdef ENABLE_OPENGL
+    ::SDL_GL_SwapBuffers();
+#else
     ::SDL_Flip(surface);
+#endif
   }
 };
 #endif

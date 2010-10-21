@@ -59,6 +59,11 @@ TopCanvas::set()
   unsigned width = 640, height = 480;
   Uint32 flags = SDL_ANYFORMAT;
 
+#ifdef ENABLE_OPENGL
+  ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+  flags |= SDL_OPENGL;
+#else /* !ENABLE_OPENGL */
   /* double buffering temporarily disabled on Android because
      Android's SDL port doesn't allow locking it then (which we need
      for SDL_gfx) */
@@ -79,6 +84,7 @@ TopCanvas::set()
     flags |= SDL_HWSURFACE;
   else
     flags |= SDL_SWSURFACE;
+#endif /* !ENABLE_OPENGL */
 
   if (is_embedded()) {
     flags |= SDL_FULLSCREEN;
@@ -93,6 +99,24 @@ TopCanvas::set()
   }
 
   Canvas::set(::SDL_SetVideoMode(width, height, 0, flags));
+
+#ifdef ENABLE_OPENGL
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+#ifdef ANDROID
+  glOrthof(0, get_width(), get_height(), 0, -1, 1);
+#else
+  glOrtho(0, get_width(), get_height(), 0, -1, 1);
+#endif
+
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+
+  glDisable(GL_DEPTH_TEST);
+  glEnable(GL_TEXTURE_2D);
+
+  glEnableClientState(GL_VERTEX_ARRAY);
+#endif
 }
 
 void

@@ -36,49 +36,62 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_SUB_CANVAS_HPP
-#define XCSOAR_SCREEN_SUB_CANVAS_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_HPP
+#define XCSOAR_SCREEN_OPENGL_HPP
 
-#include "Screen/Canvas.hpp"
+#include <SDL.h>
 
-#ifdef ENABLE_OPENGL
 #ifdef ANDROID
 #include <GLES/gl.h>
 #else
-#include <SDL/SDL_opengl.h>
-#endif
+#include <SDL_opengl.h>
 #endif
 
 /**
- * A #Canvas implementation which maps into a part of an existing
- * #Canvas.
+ * This class represents an OpenGL texture.
  */
-class SubCanvas : public Canvas {
+class GLTexture {
+  GLuint id;
+
 public:
-  SubCanvas(Canvas &canvas, int _x, int _y, unsigned _width, unsigned _height) {
-    surface = canvas.surface;
-    x_offset = canvas.x_offset + _x;
-    y_offset = canvas.y_offset + _y;
-    width = _width;
-    height = _height;
-
-#ifdef ENABLE_OPENGL
-    if (surface->flags & SDL_OPENGL) {
-      glMatrixMode(GL_PROJECTION);
-      glPushMatrix();
-      glTranslatef(_x, _y, 0);
-    }
-#endif
+  GLTexture() {
+    init();
   }
 
-  ~SubCanvas() {
-#ifdef ENABLE_OPENGL
-    if (surface->flags & SDL_OPENGL) {
-      glMatrixMode(GL_PROJECTION);
-      glPopMatrix();
-    }
-#endif
+  GLTexture(SDL_Surface *surface) {
+    init();
+    load(surface);
   }
+
+  ~GLTexture() {
+    glDeleteTextures(1, &id);
+  }
+
+protected:
+  void init() {
+    glGenTextures(1, &id);
+    bind();
+    configure();
+  }
+
+  static inline void configure() {
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  }
+
+  static void load(SDL_Surface *surface);
+
+public:
+  void bind() {
+    glBindTexture(GL_TEXTURE_2D, id);
+  }
+
+  static void draw(int x_offset, int y_offset,
+                   int dest_x, int dest_y,
+                   unsigned dest_width, unsigned dest_height,
+                   int src_x, int src_y,
+                   unsigned src_width, unsigned src_height,
+                   unsigned src_full_width, unsigned src_full_height);
 };
 
 #endif

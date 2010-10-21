@@ -42,6 +42,10 @@ Copyright_License {
 #include "Compatibility/gdi.h"
 #include "Asset.hpp" /* for needclipping */
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL.hpp"
+#endif
+
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h> /* for abs() */
@@ -50,7 +54,6 @@ Copyright_License {
 
 #include <SDL_rotozoom.h>
 #include <SDL_imageFilter.h>
-
 
 void
 Canvas::reset()
@@ -223,6 +226,19 @@ Canvas::copy(int dest_x, int dest_y,
       !clip(dest_y, dest_height, height))
     return;
 
+#ifdef ENABLE_OPENGL
+  if (surface->flags & SDL_OPENGL) {
+    glColor4f(1.0, 1.0, 1.0, 1.0);
+
+    GLTexture texture(src_surface);
+    texture.draw(x_offset, y_offset,
+                 dest_x, dest_y, dest_width, dest_height,
+                 src_x, src_y, dest_width, dest_height,
+                 src_surface->w, src_surface->h);
+    return;
+  }
+#endif
+
   SDL_Rect src_rect = { src_x, src_y, dest_width, dest_height };
   SDL_Rect dest_rect = { x_offset + dest_x, y_offset + dest_y };
 
@@ -279,6 +295,19 @@ Canvas::stretch(int dest_x, int dest_y,
                 unsigned src_width, unsigned src_height)
 {
   assert(src.surface != NULL);
+
+#ifdef ENABLE_OPENGL
+  if (surface->flags & SDL_OPENGL) {
+    glColor4f(1.0, 1.0, 1.0, 1.0);
+
+    GLTexture texture(src.surface);
+    texture.draw(x_offset, y_offset,
+                 dest_x, dest_y, dest_width, dest_height,
+                 src_x, src_y, src_width, src_height,
+                 src.surface->w, src.surface->h);
+    return;
+  }
+#endif
 
   SDL_Surface *zoomed =
     ::zoomSurface(src.surface, (double)dest_width / (double)src_width,
