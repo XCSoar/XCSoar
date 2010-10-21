@@ -82,10 +82,10 @@ WindowProjection::CalculateScreenBounds(const fixed scale) const
   BoundsRectangle sb;
 
   if (scale >= fixed_one) {
-    POINT screen_center = GeoToScreen(GeoLocation);
+    POINT screen_center = GeoToScreen(GetGeoLocation());
 
-    sb.west = sb.east = GeoLocation.Longitude;
-    sb.south = sb.north = GeoLocation.Latitude;
+    sb.west = sb.east = GetGeoLocation().Longitude;
+    sb.south = sb.north = GetGeoLocation().Latitude;
 
     int dx, dy;
     unsigned int maxsc = 0;

@@ -144,19 +144,18 @@ MapWindowProjection::CalculateOrigin(const RECT rc, const NMEA_INFO &DrawInfo,
     CalculateOrientationNormal(DrawInfo, DerivedDrawInfo, settings_map);
 
   if (_origin_centered || settings_map.EnablePan) {
-    ScreenOrigin.x = (rc.left + rc.right) / 2;
-    ScreenOrigin.y = (rc.bottom + rc.top) / 2;
+    SetScreenOrigin((rc.left + rc.right) / 2, (rc.bottom + rc.top) / 2);
   } else {
-    ScreenOrigin.x = (rc.left + rc.right) / 2;
-    ScreenOrigin.y = ((rc.top - rc.bottom) *
-                     settings_map.GliderScreenPosition / 100) + rc.bottom;
+    SetScreenOrigin((rc.left + rc.right) / 2,
+                    ((rc.top - rc.bottom) *
+                     settings_map.GliderScreenPosition / 100) + rc.bottom);
   }
 
   if (settings_map.EnablePan)
-    GeoLocation = settings_map.PanLocation;
+    SetGeoLocation(settings_map.PanLocation);
   else
     // Pan is off
-    GeoLocation = DrawInfo.Location;
+    SetGeoLocation(DrawInfo.Location);
 
   Orig_Aircraft = GeoToScreen(DrawInfo.Location);
 
