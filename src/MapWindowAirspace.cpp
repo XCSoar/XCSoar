@@ -145,7 +145,7 @@ public:
     set_buffer_pens(airspace);
 
     POINT center = m_proj.GeoToScreen(airspace.get_center());
-    unsigned radius = m_proj.DistanceMetersToScreen(airspace.get_radius());
+    unsigned radius = m_proj.GeoToScreenDistance(airspace.get_radius());
     draw_circle(m_buffer, center, radius);
   }
 

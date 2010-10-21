@@ -122,7 +122,7 @@ public:
     return DrawScale;
   }
 
-  unsigned DistanceMetersToScreen(const fixed x) const {
+  unsigned GeoToScreenDistance(const fixed x) const {
     return iround(scale * x);
   }
 

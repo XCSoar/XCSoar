@@ -62,7 +62,7 @@ MapWindow::isClickOnTarget(const POINT pc)
 
     const POINT pt = visible_projection.GeoToScreen(t);
     const GeoPoint gp = visible_projection.ScreenToGeo(pc.x, pc.y);
-    if (visible_projection.DistanceMetersToScreen(gp.distance(t)) <
+    if (visible_projection.GeoToScreenDistance(gp.distance(t)) <
         unsigned(Layout::Scale(10)))
       return true;
   }

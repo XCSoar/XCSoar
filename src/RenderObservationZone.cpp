@@ -79,7 +79,7 @@ RenderObservationZone::draw_segment(const Angle start_radial,
 void 
 RenderObservationZone::parms_oz(const CylinderZone& oz) 
 {
-  p_radius = m_proj.DistanceMetersToScreen(oz.getRadius());
+  p_radius = m_proj.GeoToScreenDistance(oz.getRadius());
   p_center = m_proj.GeoToScreen(oz.get_location());
 }
 
@@ -111,7 +111,7 @@ RenderObservationZone::Visit(const KeyholeZone& oz)
   parms_sector(oz);
   if (draw_style(false)) {
     draw_segment(oz.getStartRadial(), oz.getEndRadial());
-    p_radius = m_proj.DistanceMetersToScreen(fixed(500));
+    p_radius = m_proj.GeoToScreenDistance(fixed(500));
     draw_circle();
   }
   if (draw_style(!m_past)) {
@@ -127,7 +127,7 @@ RenderObservationZone::Visit(const BGAFixedCourseZone& oz)
   parms_sector(oz);
   if (draw_style(false)) {
     draw_segment(oz.getStartRadial(), oz.getEndRadial());
-    p_radius = m_proj.DistanceMetersToScreen(fixed(500));
+    p_radius = m_proj.GeoToScreenDistance(fixed(500));
     draw_circle();
   }
   if (draw_style(!m_past)) {
@@ -143,7 +143,7 @@ RenderObservationZone::Visit(const BGAEnhancedOptionZone& oz)
   parms_sector(oz);
   if (draw_style(false)) {
     draw_segment(oz.getStartRadial(), oz.getEndRadial());
-    p_radius = m_proj.DistanceMetersToScreen(fixed(500));
+    p_radius = m_proj.GeoToScreenDistance(fixed(500));
     draw_circle();
   }
   if (draw_style(!m_past)) {

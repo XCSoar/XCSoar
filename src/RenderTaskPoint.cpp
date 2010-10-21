@@ -284,7 +284,7 @@ RenderTaskPoint::draw_isoline(const AATPoint& tp)
   std::vector<POINT> screen; 
   static const fixed fixed_twentieth(1.0 / 20.0);
   
-  if (m_proj.DistanceMetersToScreen(seg.parametric(fixed_zero).
+  if (m_proj.GeoToScreenDistance(seg.parametric(fixed_zero).
                                     distance(seg.parametric(fixed_one)))>2) {
     
     for (fixed t = fixed_zero; t<=fixed_one; t+= fixed_twentieth) {

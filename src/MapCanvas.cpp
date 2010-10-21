@@ -58,7 +58,7 @@ void
 MapCanvas::circle(const GeoPoint &center, fixed radius)
 {
   POINT screen_center = projection.GeoToScreen(center);
-  unsigned screen_radius = projection.DistanceMetersToScreen(radius);
+  unsigned screen_radius = projection.GeoToScreenDistance(radius);
   canvas.circle(screen_center.x, screen_center.y, screen_radius);
 }
 
