@@ -137,6 +137,10 @@ protected:
   gcc_const
   static int GetMapResolutionFactor();
 
+  /**
+   * Sets the scaling factor
+   * @param scale_meters_to_screen New scale in px/m
+   */
   void SetScale(const fixed scale_meters_to_screen);
 
 private:
@@ -153,6 +157,8 @@ private:
 
   fixed DrawScale;
   fixed InvDrawScale;
+
+  /** This is the scaling factor in px/m */
   fixed m_scale_meters_to_screen;
 };
 
