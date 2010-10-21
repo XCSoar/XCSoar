@@ -100,17 +100,17 @@ MapWindowProjection::CalculateOrientationNormal(const NMEA_INFO &DrawInfo,
     _origin_centered = true;
 
     if (settings.DisplayOrientation == TRACKCIRCLE) {
-      ScreenRotation =
-          DerivedDrawInfo.task_stats.current_leg.solution_remaining.Vector.Bearing;
-      DisplayAircraftAngle = trackbearing - ScreenRotation.GetAngle();
+      SetScreenAngle(DerivedDrawInfo.task_stats.current_leg.
+                     solution_remaining.Vector.Bearing);
+      DisplayAircraftAngle = trackbearing - GetScreenAngle();
     } else {
-      ScreenRotation = Angle::native(fixed_zero);
+      SetScreenAngle(Angle::native(fixed_zero));
       DisplayAircraftAngle = trackbearing;
     }
   } else {
     // normal, glider forward
     _origin_centered = false;
-    ScreenRotation = trackbearing;
+    SetScreenAngle(trackbearing);
     DisplayAircraftAngle = Angle::native(fixed_zero);
   }
 
@@ -125,7 +125,7 @@ MapWindowProjection::CalculateOrientationTargetPan(const NMEA_INFO &DrawInfo,
       settings.TargetPanIndex) {
     CalculateOrientationNormal(DrawInfo, DerivedDrawInfo, settings);
   } else {
-    ScreenRotation.SetAngle(Angle::native(fixed_zero));
+    SetScreenAngle(Angle::native(fixed_zero));
     DisplayAircraftAngle = DrawInfo.TrackBearing;
   }
 }
