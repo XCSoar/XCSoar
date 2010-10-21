@@ -63,9 +63,19 @@ public:
   const POINT &GetScreenOrigin() const {
     return ScreenOrigin;
   }
+  void SetScreenOrigin(int x, int y) {
+    ScreenOrigin.x = x;
+    ScreenOrigin.y = y;
+  }
+  void SetScreenOrigin(POINT pt) {
+    ScreenOrigin = pt;
+  }
 
   const GeoPoint &GetGeoLocation() const {
     return GeoLocation;
+  }
+  void SetGeoLocation(GeoPoint g) {
+    GeoLocation = g;
   }
 
   fixed GetScreenToGeoScale() const {
