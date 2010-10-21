@@ -60,19 +60,19 @@ public:
   void GeoToScreen(const GeoPoint *ptin, POINT *ptout,
                      unsigned n) const;
 
-  const POINT &GetOrigScreen() const {
+  const POINT &GetScreenOrigin() const {
     return ScreenOrigin;
   }
 
-  const GeoPoint &GetPanLocation() const {
+  const GeoPoint &GetGeoLocation() const {
     return GeoLocation;
   }
 
-  fixed GetScreenScaleToLonLat() const {
+  fixed GetScreenToGeoScale() const {
     return InvDrawScale;
   }
 
-  fixed GetLonLatToScreenScale() const {
+  fixed GetGeoToScreenScale() const {
     return DrawScale;
   }
 
@@ -80,7 +80,7 @@ public:
     return iround(m_scale_meters_to_screen * x);
   }
 
-  Angle GetDisplayAngle() const {
+  Angle GetScreenAngle() const {
     return ScreenAngle.GetAngle();
   }
 

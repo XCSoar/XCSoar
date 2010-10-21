@@ -356,7 +356,7 @@ WayPointRenderer::render(Canvas &canvas, BitmapCanvas &bitmap_canvas,
   WaypointVisitorMap v(projection, settings_map, task_behaviour,
                        aircraft_state,
                        canvas, bitmap_canvas, glide_polar);
-  way_points->visit_within_range(projection.GetPanLocation(),
+  way_points->visit_within_range(projection.GetGeoLocation(),
                                  projection.GetScreenDistanceMeters(), v);
   if (task != NULL && settings_map.DisplayTextType == DISPLAYNAMEIFINTASK) {
     ProtectedTaskManager::Lease task_manager(*task);

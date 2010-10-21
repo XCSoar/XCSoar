@@ -96,7 +96,7 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
 
   case DRAG_PAN:
     XCSoarInterface::SetSettingsMap().PanLocation =
-      drag_projection.GetPanLocation() + drag_start_geopoint
+      drag_projection.GetGeoLocation() + drag_start_geopoint
       - drag_projection.ScreenToGeo(x, y);
 
     QuickRedraw(XCSoarInterface::SettingsMap());

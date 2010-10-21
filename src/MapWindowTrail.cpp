@@ -83,7 +83,7 @@ MapWindow::DrawTrail(Canvas &canvas) const
   }
 
   TracePointVector trace =
-    task->find_trace_points(projection.GetPanLocation(),
+    task->find_trace_points(projection.GetGeoLocation(),
                             projection.GetScreenDistanceMeters(),
                             min_time,
                             projection.DistancePixelsToMeters(3));

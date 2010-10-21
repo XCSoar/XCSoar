@@ -84,11 +84,11 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
 #ifndef SLOW_TERRAIN_STUFF
   // This code is quickest (by a little) but not so readable
 
-  const GeoPoint PanLocation = projection.GetPanLocation();
-  const fixed InvDrawScale = projection.GetScreenScaleToLonLat();
-  const POINT Orig_Screen = projection.GetOrigScreen();
-  const int cost = projection.GetDisplayAngle().ifastcosine();
-  const int sint = projection.GetDisplayAngle().ifastsine();
+  const GeoPoint PanLocation = projection.GetGeoLocation();
+  const fixed InvDrawScale = projection.GetScreenToGeoScale();
+  const POINT Orig_Screen = projection.GetScreenOrigin();
+  const int cost = projection.GetScreenAngle().ifastcosine();
+  const int sint = projection.GetScreenAngle().ifastsine();
 #endif
 
   for (unsigned y = 0; y < screen_height; y += quantisation_pixels) {

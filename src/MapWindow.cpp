@@ -131,14 +131,14 @@ void
 MapWindow::UpdateTerrain()
 {
   if (terrain == NULL ||
-      Distance(terrain_center, visible_projection.GetPanLocation()) < fixed(1000))
+      Distance(terrain_center, visible_projection.GetGeoLocation()) < fixed(1000))
     return;
 
   // always service terrain even if it's not used by the map,
   // because it's used by other calculations
   RasterTerrain::ExclusiveLease lease(*terrain);
-  lease->SetViewCenter(visible_projection.GetPanLocation());
-  terrain_center = visible_projection.GetPanLocation();
+  lease->SetViewCenter(visible_projection.GetGeoLocation());
+  terrain_center = visible_projection.GetGeoLocation();
 }
 
 void
@@ -149,7 +149,7 @@ MapWindow::UpdateWeather()
 
   if (weather != NULL) {
     weather->Reload((int)Basic().Time);
-    weather->SetViewCenter(visible_projection.GetPanLocation());
+    weather->SetViewCenter(visible_projection.GetGeoLocation());
   }
 }
 

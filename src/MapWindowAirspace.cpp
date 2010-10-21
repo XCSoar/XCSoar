@@ -266,14 +266,14 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
   // JMW TODO wasteful to draw twice, can't it be drawn once?
   // we are using two draws so borders go on top of everything
 
-  airspace_database->visit_within_range(render_projection.GetPanLocation(),
+  airspace_database->visit_within_range(render_projection.GetGeoLocation(),
                                         render_projection.GetScreenDistanceMeters(),
                                         v, visible);
   v.draw_intercepts();
 
   AirspaceOutlineRenderer outline_renderer(canvas, render_projection,
                                            SettingsMap().bAirspaceBlackOutline);
-  airspace_database->visit_within_range(render_projection.GetPanLocation(),
+  airspace_database->visit_within_range(render_projection.GetGeoLocation(),
                                         render_projection.GetScreenDistanceMeters(),
                                         outline_renderer, visible);
 

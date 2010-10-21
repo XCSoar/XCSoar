@@ -241,7 +241,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
 
     // Rotate and shift the arrow to the right position and angle
     PolygonRotateShift(Arrow, 5, sc.x, sc.y,
-                       traffic.TrackBearing - projection.GetDisplayAngle());
+                       traffic.TrackBearing - projection.GetScreenAngle());
 
     // Draw the arrow
     canvas.polygon(Arrow, 5);

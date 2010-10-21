@@ -126,9 +126,9 @@ BackgroundDrawHelper::sun_from_wind(const WindowProjection& projection,
   m_sun_elevation = Angle::degrees(fixed(40.0));
   // draw sun from constant angle if very low wind speed
   if (wind.norm < fixed_half) {
-    m_sun_azimuth = projection.GetDisplayAngle() + Angle::degrees(fixed(45.0));
+    m_sun_azimuth = projection.GetScreenAngle() + Angle::degrees(fixed(45.0));
   } else {
-    m_sun_azimuth = projection.GetDisplayAngle() - wind.bearing;
+    m_sun_azimuth = projection.GetScreenAngle() - wind.bearing;
   }
 }
 
@@ -141,7 +141,7 @@ BackgroundDrawHelper::DrawSpotHeight(Canvas &canvas,
   if (string_is_empty(Buffer))
     return;
 
-  POINT orig = map_projection.GetOrigScreen();
+  POINT orig = map_projection.GetScreenOrigin();
   RECT brect;
   SIZE tsize = canvas.text_size(Buffer);
 

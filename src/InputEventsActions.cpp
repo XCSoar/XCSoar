@@ -1168,7 +1168,7 @@ InputEvents::eventNearestWaypointDetails(const TCHAR *misc)
   else if (_tcscmp(misc, _T("pan")) == 0)
     // big range..
     PopupNearestWaypointDetails(way_points,
-                                XCSoarInterface::main_window.map.VisibleProjection().GetPanLocation(),
+                                XCSoarInterface::main_window.map.VisibleProjection().GetGeoLocation(),
                                 1.0e5);
 }
 
