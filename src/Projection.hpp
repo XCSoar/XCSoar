@@ -129,6 +129,9 @@ public:
   Angle GetScreenAngle() const {
     return ScreenRotation.GetAngle();
   }
+  void SetScreenAngle(Angle angle) {
+    ScreenRotation.SetAngle(angle);
+  }
 
 protected:
   gcc_const
