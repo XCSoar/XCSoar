@@ -106,13 +106,10 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
     // If Scaled mode is chosen, recalculate the
     // targets virtual position using the scale factor
     if ((SettingsMap().EnableFLARMMap == 2) && (scalefact > fixed_one)) {
-      fixed distance;
-      Angle bearing;
+      GeoVector gv = Basic().Location.distance_bearing(target_loc);
 
-      Basic().Location.distance_bearing(target_loc, distance, bearing);
-
-      FindLatitudeLongitude(Basic().Location, bearing,
-                            distance * scalefact, &target_loc);
+      FindLatitudeLongitude(Basic().Location, gv.Bearing,
+                            gv.Distance * scalefact, &target_loc);
     }
 
     // TODO feature: draw direction, rel height?
