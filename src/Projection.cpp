@@ -45,7 +45,7 @@ Copyright_License {
 Projection::Projection() :
   GeoLocation(Angle::native(fixed_zero), Angle::native(fixed_zero)),
   ScreenRotation(Angle::native(fixed_zero)),
-  m_scale_meters_to_screen(fixed_zero)
+  scale(fixed_zero)
 {
 }
 
@@ -93,17 +93,20 @@ Projection::GeoToScreen(const GeoPoint *ptin, POINT *ptout,
 }
 
 void 
-Projection::SetScale(const fixed scale_meters_to_screen)
+Projection::SetScale(const fixed _scale)
 {
-  m_scale_meters_to_screen = scale_meters_to_screen;
-  DrawScale = fixed_earth_r * m_scale_meters_to_screen;
+  scale = _scale;
+
+  // Calculate earth radius in pixels
+  DrawScale = fixed_earth_r * scale;
+  // Save inverted value for faster calculations
   InvDrawScale = fixed_one / DrawScale;
 }
 
 fixed
 Projection::GetMapScaleUser() const
 {
-  return fixed(GetMapResolutionFactor()) / m_scale_meters_to_screen;
+  return fixed(GetMapResolutionFactor()) / scale;
 }
 
 int
