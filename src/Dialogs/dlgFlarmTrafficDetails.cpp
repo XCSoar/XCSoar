@@ -75,22 +75,20 @@ UpdateChanging()
   if (!target || !target->defined())
     return;
 
-  fixed distance;
-  Angle dir;
-  XCSoarInterface::Basic().Location.distance_bearing(target->Location,
-                                                     distance, dir);
+  GeoVector gv =
+      XCSoarInterface::Basic().Location.distance_bearing(target->Location);
 
   // Fill distance field
-  Units::FormatUserDistance(distance, tmp, 20);
+  Units::FormatUserDistance(gv.Distance, tmp, 20);
   ((WndProperty *)wf->FindByName(_T("prpDistance")))->SetText(tmp);
 
   // Fill horizontal direction field
-  dir -= XCSoarInterface::Basic().TrackBearing;
-  dir = dir.as_delta();
-  if (dir.value_degrees() > fixed_one)
-    _stprintf(tmp, _T("%2.0f")_T(DEG)_T(" »"), (double)dir.value_degrees());
-  else if (dir.value_degrees() < fixed_minus_one)
-    _stprintf(tmp, _T("« ")_T("%2.0f")_T(DEG), (double)-dir.value_degrees());
+  gv.Bearing -= XCSoarInterface::Basic().TrackBearing;
+  gv.Bearing = gv.Bearing.as_delta();
+  if (gv.Bearing.value_degrees() > fixed_one)
+    _stprintf(tmp, _T("%2.0f")_T(DEG)_T(" »"), (double)gv.Bearing.value_degrees());
+  else if (gv.Bearing.value_degrees() < fixed_minus_one)
+    _stprintf(tmp, _T("« ")_T("%2.0f")_T(DEG), (double)-gv.Bearing.value_degrees());
   else
     _tcscpy(tmp, _T("«»"));
   ((WndProperty *)wf->FindByName(_T("prpDirectionH")))->SetText(tmp);
@@ -100,7 +98,8 @@ UpdateChanging()
   ((WndProperty *)wf->FindByName(_T("prpAltitude")))->SetText(tmp);
 
   // Fill vertical direction field
-  dir = Angle::radians((fixed)atan2(target->RelativeAltitude, distance)).as_delta();
+  Angle dir = Angle::radians((fixed)atan2(target->RelativeAltitude,
+                                          gv.Distance)).as_delta();
   if (dir.magnitude_degrees() > fixed_one)
     _stprintf(tmp, _T("%+2.0f")_T(DEG), (double)dir.value_degrees());
   else
