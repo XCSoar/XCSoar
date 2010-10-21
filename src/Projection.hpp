@@ -60,20 +60,41 @@ public:
   void GeoToScreen(const GeoPoint *ptin, POINT *ptout,
                      unsigned n) const;
 
+  /**
+   * Returns the origin/rotation center in screen coordinates
+   * @return The origin/rotation center in screen coordinates
+   */
   const POINT &GetScreenOrigin() const {
     return ScreenOrigin;
   }
+  /**
+   * Set the origin/rotation center to the given screen coordinates
+   * @param x Screen coordinate in x-direction
+   * @param y Screen coordinate in y-direction
+   */
   void SetScreenOrigin(int x, int y) {
     ScreenOrigin.x = x;
     ScreenOrigin.y = y;
   }
+  /**
+   * Set the origin/rotation center to the given screen coordinates
+   * @param pt Screen coordinate
+   */
   void SetScreenOrigin(POINT pt) {
     ScreenOrigin = pt;
   }
 
+  /**
+   * Returns the GeoPoint at the ScreenOrigin
+   * @return GeoPoint at the ScreenOrigin
+   */
   const GeoPoint &GetGeoLocation() const {
     return GeoLocation;
   }
+  /**
+   * Set the GeoPoint that relates to the ScreenOrigin
+   * @param g The new GeoPoint
+   */
   void SetGeoLocation(GeoPoint g) {
     GeoLocation = g;
   }
@@ -103,7 +124,13 @@ protected:
   FastIntegerRotation ScreenRotation;
 
 private:
+  /** This is the geographical location that the ScreenOrigin is mapped to */
   GeoPoint GeoLocation;
+
+  /**
+   * This is the point that the ScreenRotation will rotate around.
+   * It is also the point that the GeoLocation points to.
+   */
   POINT ScreenOrigin;
 
   fixed DrawScale;
