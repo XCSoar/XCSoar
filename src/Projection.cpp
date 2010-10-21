@@ -112,7 +112,7 @@ Projection::GeoToScreen(const GeoPoint *ptin, POINT *ptout,
 }
 
 bool
-Projection::LonLatVisible(const GeoPoint &loc) const
+Projection::GeoVisible(const GeoPoint &loc) const
 {
   return screenbounds_latlon.inside(loc);
 }
@@ -121,16 +121,16 @@ bool
 Projection::GeoToScreenIfVisible(const GeoPoint &loc,
                                    POINT &sc) const
 {
-  if (LonLatVisible(loc)) {
+  if (GeoVisible(loc)) {
     sc = GeoToScreen(loc);
-    return PointVisible(sc);
+    return ScreenVisible(sc);
   }
 
   return false;
 }
 
 bool
-Projection::PointVisible(const POINT &P) const
+Projection::ScreenVisible(const POINT &P) const
 {
   if ((P.x >= MapRect.left) &&
       (P.x <= MapRect.right) &&

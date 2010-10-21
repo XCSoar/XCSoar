@@ -72,10 +72,10 @@ public:
   bool GeoToScreenIfVisible(const GeoPoint &loc, POINT &sc) const;
 
   gcc_pure
-  bool LonLatVisible(const GeoPoint &loc) const;
+  bool GeoVisible(const GeoPoint &loc) const;
 
   gcc_pure
-  bool PointVisible(const POINT &P) const;
+  bool ScreenVisible(const POINT &P) const;
 
   fixed GetScreenScaleToLonLat() const {
     return InvDrawScale;
