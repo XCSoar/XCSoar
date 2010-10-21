@@ -139,8 +139,6 @@ protected:
 
   void SetScaleMetersToScreen(const fixed scale_meters_to_screen);
 
-  FastIntegerRotation ScreenRotation;
-
 private:
   /** This is the geographical location that the ScreenOrigin is mapped to */
   GeoPoint GeoLocation;
@@ -150,6 +148,8 @@ private:
    * It is also the point that the GeoLocation points to.
    */
   POINT ScreenOrigin;
+
+  FastIntegerRotation ScreenRotation;
 
   fixed DrawScale;
   fixed InvDrawScale;

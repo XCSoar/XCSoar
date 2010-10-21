@@ -43,8 +43,8 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 Projection::Projection() :
-  ScreenRotation(Angle::native(fixed_zero)),
   GeoLocation(Angle::native(fixed_zero), Angle::native(fixed_zero)),
+  ScreenRotation(Angle::native(fixed_zero)),
   m_scale_meters_to_screen(fixed_zero)
 {
 }
