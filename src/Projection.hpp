@@ -81,7 +81,7 @@ public:
   }
 
   Angle GetScreenAngle() const {
-    return ScreenAngle.GetAngle();
+    return ScreenRotation.GetAngle();
   }
 
 protected:
@@ -92,7 +92,7 @@ protected:
 
   GeoPoint GeoLocation;
   POINT ScreenOrigin;
-  FastIntegerRotation ScreenAngle;
+  FastIntegerRotation ScreenRotation;
 
 private:
   fixed DrawScale;

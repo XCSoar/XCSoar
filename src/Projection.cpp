@@ -44,7 +44,7 @@ Copyright_License {
 
 Projection::Projection() :
   GeoLocation(Angle::native(fixed_zero), Angle::native(fixed_zero)),
-  ScreenAngle(Angle::native(fixed_zero)),
+  ScreenRotation(Angle::native(fixed_zero)),
   m_scale_meters_to_screen(fixed_zero)
 {
 }
@@ -58,7 +58,7 @@ GeoPoint
 Projection::ScreenToGeo(int x, int y) const
 {
   const FastIntegerRotation::Pair p =
-    ScreenAngle.Rotate(x - ScreenOrigin.x, y - ScreenOrigin.y);
+    ScreenRotation.Rotate(x - ScreenOrigin.x, y - ScreenOrigin.y);
 
   GeoPoint g(Angle::radians(fixed(p.first) * InvDrawScale),
              Angle::radians(fixed(p.second) * InvDrawScale));
@@ -78,7 +78,7 @@ Projection::GeoToScreen(const GeoPoint &g) const
 {
   const GeoPoint d = GeoLocation-g;
   const FastIntegerRotation::Pair p =
-    ScreenAngle.Rotate((int)(d.Longitude.value_radians()
+    ScreenRotation.Rotate((int)(d.Longitude.value_radians()
                               * g.Latitude.fastcosine() * DrawScale),
                         (int)(d.Latitude.value_radians() * DrawScale));
 
