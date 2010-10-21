@@ -142,6 +142,4 @@ struct GeoVector {
   Angle Bearing;
 };
 
-//bool operator != (const GeoVector&g1, const GeoVector &g2);
-
 #endif
