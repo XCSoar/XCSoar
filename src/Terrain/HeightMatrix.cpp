@@ -84,16 +84,13 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
 #ifndef SLOW_TERRAIN_STUFF
   // This code is quickest (by a little) but not so readable
 
-  const GeoPoint PanLocation = projection.GetGeoLocation();
-  const fixed InvDrawScale = projection.GetScreenToGeoScale();
-  const POINT Orig_Screen = projection.GetScreenOrigin();
   const int cost = projection.GetScreenAngle().ifastcosine();
   const int sint = projection.GetScreenAngle().ifastsine();
 #endif
 
   for (unsigned y = 0; y < screen_height; y += quantisation_pixels) {
 #ifndef SLOW_TERRAIN_STUFF
-    const int dy = y - Orig_Screen.y;
+    const int dy = y - projection.GetScreenOrigin().y;
     const int dycost = dy * cost+512;
     const int dysint = dy * sint-512;
 #endif
@@ -102,13 +99,15 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
 
     for (unsigned x = 0; x < screen_width; x += quantisation_pixels) {
 #ifndef SLOW_TERRAIN_STUFF
-      const int dx = x - Orig_Screen.x;
+      const int dx = x - projection.GetScreenOrigin().x;
       const POINT r = { (dx * cost - dysint) / 1024,
                         (dycost + dx * sint) / 1024 };
 
       GeoPoint gp;
-      gp.Latitude = PanLocation.Latitude - Angle::native(r.y * InvDrawScale);
-      gp.Longitude = PanLocation.Longitude + Angle::native(r.x * InvDrawScale)
+      gp.Latitude = projection.GetGeoLocation().Latitude
+        - Angle::native(r.y * projection.GetScreenToGeoScale());
+      gp.Longitude = projection.GetGeoLocation().Longitude
+        + Angle::native(r.x * projection.GetScreenToGeoScale())
         * gp.Latitude.invfastcosine();
 #else
       GeoPoint gp = projection.ScreenToGeo(x, y);
