@@ -34,7 +34,9 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "Navigation/GeoPoint.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
 #include "Math/Earth.hpp"
 
 GeoPoint 
@@ -66,6 +68,14 @@ GeoPoint::distance_bearing(const GeoPoint &other, fixed &distance,
                            Angle &bearing) const
 {
   ::DistanceBearing(*this, other, &distance, &bearing);
+}
+
+GeoVector
+GeoPoint::distance_bearing(const GeoPoint &other) const
+{
+  GeoVector gv;
+  ::DistanceBearing(*this, other, &gv.Distance, &gv.Bearing);
+  return gv;
 }
 
 fixed 

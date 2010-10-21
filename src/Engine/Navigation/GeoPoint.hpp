@@ -43,6 +43,8 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Compiler.h"
 
+class GeoVector;
+
 /**
  * Geodetic coordinate expressed as Longitude and Latitude angles.
  */
@@ -186,6 +188,12 @@ struct GeoPoint {
    * Calculate great circle distance and initial bearing from this to the other
    */
   void distance_bearing(const GeoPoint &other, fixed &distance, Angle &bearing) const;
+
+  /**
+   * Calculate great circle distance and initial bearing from this to the other
+   */
+  gcc_pure
+  GeoVector distance_bearing(const GeoPoint &other) const;
 
   /**
    * Find distance along a great-circle path that this point
