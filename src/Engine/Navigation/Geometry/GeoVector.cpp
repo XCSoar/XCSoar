@@ -39,7 +39,7 @@
 
 GeoVector::GeoVector(const GeoPoint &source, const GeoPoint &target)
 {
-  source.distance_bearing(target, Distance, Bearing);
+  *this = source.distance_bearing(target);
 }
 
 GeoPoint 
