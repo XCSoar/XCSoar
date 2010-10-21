@@ -174,7 +174,7 @@ MapWindowProjection::CalculateMapScale(int scale) const
   assert(scale >= 0 && scale < ScaleListCount);
 
   return ScaleList[scale] * GetMapResolutionFactor() /
-         IBLSCALE(MapRect.right - MapRect.left);
+         IBLSCALE(GetScreenWidth());
 }
 
 fixed
