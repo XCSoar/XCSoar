@@ -72,10 +72,10 @@ void ChartProjection::set_projection(const RECT &rc,
                                      const fixed radius)
 {
   SetScaleMetersToScreen(fixed(max_dimension(rc)) / (radius * 2));
-  PanLocation = center;
+  GeoLocation = center;
   MapRect = rc;
-  Orig_Screen.x = (rc.left + rc.right)/2;
-  Orig_Screen.y = (rc.bottom + rc.top)/2;
+  ScreenOrigin.x = (rc.left + rc.right)/2;
+  ScreenOrigin.y = (rc.bottom + rc.top)/2;
   UpdateScreenBounds();
 }
 

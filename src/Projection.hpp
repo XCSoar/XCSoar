@@ -61,11 +61,11 @@ public:
                      unsigned n) const;
 
   const POINT &GetOrigScreen() const {
-    return Orig_Screen;
+    return ScreenOrigin;
   }
 
   const GeoPoint &GetPanLocation() const {
-    return PanLocation;
+    return GeoLocation;
   }
 
   fixed GetScreenScaleToLonLat() const {
@@ -81,7 +81,7 @@ public:
   }
 
   Angle GetDisplayAngle() const {
-    return DisplayAngle.GetAngle();
+    return ScreenAngle.GetAngle();
   }
 
 protected:
@@ -90,9 +90,9 @@ protected:
 
   void SetScaleMetersToScreen(const fixed scale_meters_to_screen);
 
-  GeoPoint PanLocation;
-  POINT Orig_Screen;
-  FastIntegerRotation DisplayAngle;
+  GeoPoint GeoLocation;
+  POINT ScreenOrigin;
+  FastIntegerRotation ScreenAngle;
 
 private:
   fixed DrawScale;

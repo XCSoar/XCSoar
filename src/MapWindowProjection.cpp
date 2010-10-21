@@ -100,17 +100,17 @@ MapWindowProjection::CalculateOrientationNormal(const NMEA_INFO &DrawInfo,
     _origin_centered = true;
 
     if (settings.DisplayOrientation == TRACKCIRCLE) {
-      DisplayAngle =
+      ScreenAngle =
           DerivedDrawInfo.task_stats.current_leg.solution_remaining.Vector.Bearing;
-      DisplayAircraftAngle = trackbearing - DisplayAngle.GetAngle();
+      DisplayAircraftAngle = trackbearing - ScreenAngle.GetAngle();
     } else {
-      DisplayAngle = Angle::native(fixed_zero);
+      ScreenAngle = Angle::native(fixed_zero);
       DisplayAircraftAngle = trackbearing;
     }
   } else {
     // normal, glider forward
     _origin_centered = false;
-    DisplayAngle = trackbearing;
+    ScreenAngle = trackbearing;
     DisplayAircraftAngle = Angle::native(fixed_zero);
   }
 
@@ -125,7 +125,7 @@ MapWindowProjection::CalculateOrientationTargetPan(const NMEA_INFO &DrawInfo,
       settings.TargetPanIndex) {
     CalculateOrientationNormal(DrawInfo, DerivedDrawInfo, settings);
   } else {
-    DisplayAngle.SetAngle(Angle::native(fixed_zero));
+    ScreenAngle.SetAngle(Angle::native(fixed_zero));
     DisplayAircraftAngle = DrawInfo.TrackBearing;
   }
 }
@@ -144,19 +144,19 @@ MapWindowProjection::CalculateOrigin(const RECT rc, const NMEA_INFO &DrawInfo,
     CalculateOrientationNormal(DrawInfo, DerivedDrawInfo, settings_map);
 
   if (_origin_centered || settings_map.EnablePan) {
-    Orig_Screen.x = (rc.left + rc.right) / 2;
-    Orig_Screen.y = (rc.bottom + rc.top) / 2;
+    ScreenOrigin.x = (rc.left + rc.right) / 2;
+    ScreenOrigin.y = (rc.bottom + rc.top) / 2;
   } else {
-    Orig_Screen.x = (rc.left + rc.right) / 2;
-    Orig_Screen.y = ((rc.top - rc.bottom) *
+    ScreenOrigin.x = (rc.left + rc.right) / 2;
+    ScreenOrigin.y = ((rc.top - rc.bottom) *
                      settings_map.GliderScreenPosition / 100) + rc.bottom;
   }
 
   if (settings_map.EnablePan)
-    PanLocation = settings_map.PanLocation;
+    GeoLocation = settings_map.PanLocation;
   else
     // Pan is off
-    PanLocation = DrawInfo.Location;
+    GeoLocation = DrawInfo.Location;
 
   Orig_Aircraft = GeoToScreen(DrawInfo.Location);
 

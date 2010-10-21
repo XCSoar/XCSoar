@@ -43,8 +43,8 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 Projection::Projection() :
-  PanLocation(Angle::native(fixed_zero), Angle::native(fixed_zero)),
-  DisplayAngle(Angle::native(fixed_zero)),
+  GeoLocation(Angle::native(fixed_zero), Angle::native(fixed_zero)),
+  ScreenAngle(Angle::native(fixed_zero)),
   m_scale_meters_to_screen(fixed_zero)
 {
 }
@@ -58,13 +58,13 @@ GeoPoint
 Projection::ScreenToGeo(int x, int y) const
 {
   const FastIntegerRotation::Pair p =
-    DisplayAngle.Rotate(x - Orig_Screen.x, y - Orig_Screen.y);
+    ScreenAngle.Rotate(x - ScreenOrigin.x, y - ScreenOrigin.y);
 
   GeoPoint g(Angle::radians(fixed(p.first) * InvDrawScale),
              Angle::radians(fixed(p.second) * InvDrawScale));
 
-  g.Latitude = PanLocation.Latitude - g.Latitude;
-  g.Longitude = PanLocation.Longitude + g.Longitude * g.Latitude.invfastcosine();
+  g.Latitude = GeoLocation.Latitude - g.Latitude;
+  g.Longitude = GeoLocation.Longitude + g.Longitude * g.Latitude.invfastcosine();
 
   return g;
 }
@@ -76,15 +76,15 @@ Projection::ScreenToGeo(int x, int y) const
 POINT
 Projection::GeoToScreen(const GeoPoint &g) const
 {
-  const GeoPoint d = PanLocation-g;
+  const GeoPoint d = GeoLocation-g;
   const FastIntegerRotation::Pair p =
-    DisplayAngle.Rotate((int)(d.Longitude.value_radians()
+    ScreenAngle.Rotate((int)(d.Longitude.value_radians()
                               * g.Latitude.fastcosine() * DrawScale),
                         (int)(d.Latitude.value_radians() * DrawScale));
 
   POINT sc;
-  sc.x = Orig_Screen.x - p.first;
-  sc.y = Orig_Screen.y + p.second;
+  sc.x = ScreenOrigin.x - p.first;
+  sc.y = ScreenOrigin.y + p.second;
   return sc;
 }
 

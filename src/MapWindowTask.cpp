@@ -228,7 +228,7 @@ MapWindow::DrawProjectedTrack(Canvas &canvas) const
   } else {
     pt[1].y = (long)(max(canvas.get_width(), canvas.get_height()) * -1.2);
     PolygonRotateShift(pt, 2, Orig_Aircraft.x, Orig_Aircraft.y,
-		       bearing-DisplayAngle);
+		       bearing-ScreenAngle);
   }
 
   Pen dash_pen(Pen::DASH, IBLSCALE(2), Color(0, 0, 0));
