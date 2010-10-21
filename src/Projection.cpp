@@ -45,7 +45,7 @@ Copyright_License {
 Projection::Projection() :
   GeoLocation(Angle::native(fixed_zero), Angle::native(fixed_zero)),
   ScreenRotation(Angle::native(fixed_zero)),
-  scale(fixed_zero)
+  scale(fixed_one)
 {
 }
 
