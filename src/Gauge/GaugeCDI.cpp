@@ -124,11 +124,11 @@ GaugeCDI::on_user(unsigned id)
 {
   switch ((msg)id) {
   case MSG_UPDATE:
-    update_async(track_bearing, waypoint_bearing);
+    Update(track_bearing, waypoint_bearing);
     return true;
 
   case MSG_HIDE:
-    show();
+    hide();
     return true;
   }
 
