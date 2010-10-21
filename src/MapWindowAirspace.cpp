@@ -144,7 +144,7 @@ public:
     buffer_render_start();
     set_buffer_pens(airspace);
 
-    POINT center = m_proj.LonLat2Screen(airspace.get_center());
+    POINT center = m_proj.GeoToScreen(airspace.get_center());
     unsigned radius = m_proj.DistanceMetersToScreen(airspace.get_radius());
     draw_circle(m_buffer, center, radius);
   }
@@ -236,7 +236,7 @@ MapWindow::DrawAirspaceIntersections(Canvas &canvas) const
 {
   for (unsigned i = m_airspace_intersections.size(); i--;) {
     POINT sc;
-    if (render_projection.LonLat2ScreenIfVisible(m_airspace_intersections[i], sc))
+    if (render_projection.GeoToScreenIfVisible(m_airspace_intersections[i], sc))
       Graphics::hAirspaceInterceptBitmap.draw(canvas, bitmap_canvas, sc.x, sc.y);
   }
 }

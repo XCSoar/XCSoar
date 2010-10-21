@@ -53,12 +53,12 @@ public:
   virtual fixed GetMapScaleUser() const;
 
   gcc_pure
-  GeoPoint Screen2LonLat(int x, int y) const;
+  GeoPoint ScreenToGeo(int x, int y) const;
 
   gcc_pure
-  POINT LonLat2Screen(const GeoPoint &location) const;
+  POINT GeoToScreen(const GeoPoint &location) const;
 
-  void LonLat2Screen(const GeoPoint *ptin, POINT *ptout,
+  void GeoToScreen(const GeoPoint *ptin, POINT *ptout,
                      unsigned n) const;
 
   const POINT &GetOrigScreen() const {
@@ -69,7 +69,7 @@ public:
     return PanLocation;
   }
 
-  bool LonLat2ScreenIfVisible(const GeoPoint &loc, POINT &sc) const;
+  bool GeoToScreenIfVisible(const GeoPoint &loc, POINT &sc) const;
 
   gcc_pure
   bool LonLatVisible(const GeoPoint &loc) const;

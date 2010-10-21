@@ -102,11 +102,11 @@ RasterRenderer::ScanMap(const RasterMap &map, const Projection &projection)
 {
   unsigned x = projection.GetScreenWidth() / 2;
   unsigned y = projection.GetScreenHeight() / 2;
-  GeoPoint Gmid = projection.Screen2LonLat(x, y);
+  GeoPoint Gmid = projection.ScreenToGeo(x, y);
 
   pixel_size = fixed_sqrt_half *
     Distance(Gmid,
-             projection.Screen2LonLat(x + quantisation_pixels,
+             projection.ScreenToGeo(x + quantisation_pixels,
                                       y + quantisation_pixels));
 
   // set resolution

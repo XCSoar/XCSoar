@@ -44,7 +44,7 @@ Copyright_License {
 
 void MapWindow::CalculateScreenPositionsGroundline(void) {
   if (SettingsComputer().FinalGlideTerrain)
-    render_projection.LonLat2Screen(Calculated().GlideFootPrint,
+    render_projection.GeoToScreen(Calculated().GlideFootPrint,
                                     Groundline,
                                     TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1);
 }
@@ -90,7 +90,7 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
 
   if (!Calculated().TerrainWarningLocation.is_null()) {
     POINT sc;
-    if (render_projection.LonLat2ScreenIfVisible(Calculated().TerrainWarningLocation,
+    if (render_projection.GeoToScreenIfVisible(Calculated().TerrainWarningLocation,
                                                  sc))
       Graphics::hTerrainWarning.draw(canvas, bitmap_canvas, sc.x, sc.y);
   }

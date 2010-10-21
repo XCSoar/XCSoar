@@ -121,7 +121,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
     POINT sc, sc_name, sc_av;
 
     // If FLARM target not on the screen, move to the next one
-    if (!projection.LonLat2ScreenIfVisible(target_loc, sc))
+    if (!projection.GeoToScreenIfVisible(target_loc, sc))
       continue;
 
     // Draw the name 16 points below the icon
@@ -257,7 +257,7 @@ MapWindow::DrawTeammate(Canvas &canvas) const
 {
   if (SettingsComputer().TeammateCodeValid) {
     POINT sc;
-    if (render_projection.LonLat2ScreenIfVisible(Calculated().TeammateLocation,
+    if (render_projection.GeoToScreenIfVisible(Calculated().TeammateLocation,
                                                  sc))
       Graphics::hBmpTeammatePosition.draw(canvas, bitmap_canvas, sc.x, sc.y);
   }

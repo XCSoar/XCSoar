@@ -56,7 +56,7 @@ Projection::Projection() :
  * @param y y-Coordinate on the screen
  */
 GeoPoint
-Projection::Screen2LonLat(int x, int y) const
+Projection::ScreenToGeo(int x, int y) const
 {
   const FastIntegerRotation::Pair p =
     DisplayAngle.Rotate(x - Orig_Screen.x, y - Orig_Screen.y);
@@ -75,7 +75,7 @@ Projection::Screen2LonLat(int x, int y) const
  * @param g GeoPoint to convert
  */
 POINT
-Projection::LonLat2Screen(const GeoPoint &g) const
+Projection::GeoToScreen(const GeoPoint &g) const
 {
   const GeoPoint d = PanLocation-g;
   const FastIntegerRotation::Pair p =
@@ -99,14 +99,14 @@ Projection::LonLat2Screen(const GeoPoint &g) const
  * @param skip Number of corners to skip after a successful conversion
  */
 void
-Projection::LonLat2Screen(const GeoPoint *ptin, POINT *ptout,
+Projection::GeoToScreen(const GeoPoint *ptin, POINT *ptout,
                           unsigned n) const
 {
   const GeoPoint *p = ptin;
   const GeoPoint *ptend = ptin + n;
 
   while (p < ptend) {
-    *ptout++ = LonLat2Screen(*p);
+    *ptout++ = GeoToScreen(*p);
     p++;
   }
 }
@@ -118,11 +118,11 @@ Projection::LonLatVisible(const GeoPoint &loc) const
 }
 
 bool
-Projection::LonLat2ScreenIfVisible(const GeoPoint &loc,
+Projection::GeoToScreenIfVisible(const GeoPoint &loc,
                                    POINT &sc) const
 {
   if (LonLatVisible(loc)) {
-    sc = LonLat2Screen(loc);
+    sc = GeoToScreen(loc);
     return PointVisible(sc);
   }
 
@@ -162,7 +162,7 @@ Projection::CalculateScreenBounds(const fixed scale) const
   BoundsRectangle sb;
 
   if (scale >= fixed_one) {
-    POINT screen_center = LonLat2Screen(PanLocation);
+    POINT screen_center = GeoToScreen(PanLocation);
 
     sb.west = sb.east = PanLocation.Longitude;
     sb.south = sb.north = PanLocation.Latitude;
@@ -187,32 +187,32 @@ Projection::CalculateScreenBounds(const fixed scale) const
       POINT p;
       p.x = screen_center.x + iround(ang.fastcosine() * maxsc * scale);
       p.y = screen_center.y + iround(ang.fastsine() * maxsc * scale);
-      GeoPoint g = Screen2LonLat(p.x, p.y);
+      GeoPoint g = ScreenToGeo(p.x, p.y);
       sb.west = min(g.Longitude, sb.west);
       sb.south = min(g.Latitude, sb.south);
       sb.east = max(g.Longitude, sb.east);
       sb.north = max(g.Latitude, sb.north);
     }
   } else {
-    GeoPoint g = Screen2LonLat(MapRect.left, MapRect.top);
+    GeoPoint g = ScreenToGeo(MapRect.left, MapRect.top);
     sb.west = g.Longitude;
     sb.east = g.Longitude;
     sb.south = g.Latitude;
     sb.north = g.Latitude;
 
-    g = Screen2LonLat(MapRect.right, MapRect.top);
+    g = ScreenToGeo(MapRect.right, MapRect.top);
     sb.west = min(sb.west, g.Longitude);
     sb.east = max(sb.east, g.Longitude);
     sb.south = min(sb.south, g.Latitude);
     sb.north = max(sb.north, g.Latitude);
 
-    g = Screen2LonLat(MapRect.right, MapRect.bottom);
+    g = ScreenToGeo(MapRect.right, MapRect.bottom);
     sb.west = min(sb.west, g.Longitude);
     sb.east = max(sb.east, g.Longitude);
     sb.south = min(sb.south, g.Latitude);
     sb.north = max(sb.north, g.Latitude);
 
-    g = Screen2LonLat(MapRect.left, MapRect.bottom);
+    g = ScreenToGeo(MapRect.left, MapRect.bottom);
     sb.west = min(sb.west, g.Longitude);
     sb.east = max(sb.east, g.Longitude);
     sb.south = min(sb.south, g.Latitude);

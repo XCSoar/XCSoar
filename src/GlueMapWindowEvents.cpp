@@ -97,7 +97,7 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
   case DRAG_PAN:
     XCSoarInterface::SetSettingsMap().PanLocation =
       drag_projection.GetPanLocation() + drag_start_geopoint
-      - drag_projection.Screen2LonLat(x, y);
+      - drag_projection.ScreenToGeo(x, y);
 
     QuickRedraw(XCSoarInterface::SettingsMap());
     ActionInterface::SendSettingsMap(true);
@@ -127,7 +127,7 @@ GlueMapWindow::on_mouse_down(int x, int y)
 
   drag_start.x = x;
   drag_start.y = y;
-  drag_start_geopoint = visible_projection.Screen2LonLat(x, y);
+  drag_start_geopoint = visible_projection.ScreenToGeo(x, y);
   drag_last = drag_start;
 
   if (SettingsMap().TargetPan) {
@@ -191,7 +191,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
     if (click_time > 50 &&
         compare_squared(drag_start.x - x, drag_start.y - y,
                         Layout::Scale(36)) == 1) {
-      GeoPoint G = visible_projection.Screen2LonLat(x, y);
+      GeoPoint G = visible_projection.ScreenToGeo(x, y);
 
       double distance = hypot(drag_start.x - x, drag_start.y - y);
 

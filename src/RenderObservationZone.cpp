@@ -80,15 +80,15 @@ void
 RenderObservationZone::parms_oz(const CylinderZone& oz) 
 {
   p_radius = m_proj.DistanceMetersToScreen(oz.getRadius());
-  p_center = m_proj.LonLat2Screen(oz.get_location());
+  p_center = m_proj.GeoToScreen(oz.get_location());
 }
 
 void 
 RenderObservationZone::parms_sector(const SectorZone& oz) 
 {
   parms_oz(oz);
-  p_start = m_proj.LonLat2Screen(oz.get_SectorStart());
-  p_end = m_proj.LonLat2Screen(oz.get_SectorEnd());
+  p_start = m_proj.GeoToScreen(oz.get_SectorStart());
+  p_end = m_proj.GeoToScreen(oz.get_SectorEnd());
 }
 
 void 

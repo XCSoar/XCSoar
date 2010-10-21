@@ -158,7 +158,7 @@ MapWindowProjection::CalculateOrigin(const RECT rc, const NMEA_INFO &DrawInfo,
     // Pan is off
     PanLocation = DrawInfo.Location;
 
-  Orig_Aircraft = LonLat2Screen(DrawInfo.Location);
+  Orig_Aircraft = GeoToScreen(DrawInfo.Location);
 
   UpdateScreenBounds();
 }

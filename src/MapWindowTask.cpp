@@ -83,7 +83,7 @@ protected:
       return;
 
     POINT sc;
-    if (m_proj.LonLat2ScreenIfVisible(tp.get_location_remaining(), sc))
+    if (m_proj.GeoToScreenIfVisible(tp.get_location_remaining(), sc))
       Graphics::hBmpTarget.draw(m_buffer, bitmap_canvas, sc.x, sc.y);
   }
 
@@ -130,7 +130,7 @@ protected:
       if ((idist != ilast) && (idist > 0) && (idist < 1000)) {
         TCHAR Buffer[5];
         _stprintf(Buffer, _T("%d"), idist);
-        POINT sc = m_proj.LonLat2Screen(dloc);
+        POINT sc = m_proj.GeoToScreen(dloc);
         RECT brect;
         SIZE tsize = m_canvas.text_size(Buffer);
 
@@ -220,8 +220,8 @@ MapWindow::DrawProjectedTrack(Canvas &canvas) const
     FindLatitudeLongitude(start,
 			  bearing, f_high*screen_range,
 			  &p2);
-    LonLat2Screen(p1, pt[0]);
-    LonLat2Screen(p2, pt[1]);
+    GeoToScreen(p1, pt[0]);
+    GeoToScreen(p2, pt[1]);
   } else if (fabs(bearing-Calculated().WaypointBearing)<10) {
     // too small an error to bother
     return;

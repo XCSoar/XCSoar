@@ -256,8 +256,8 @@ RenderTaskPoint::draw_task_line(const GeoPoint& start, const GeoPoint& end)
   POINT p_p;
   POINT Arrow[3] = { {6,6}, {-6,6}, {0,0} };
   
-  const POINT p_start = m_proj.LonLat2Screen(start);
-  const POINT p_end = m_proj.LonLat2Screen(end);
+  const POINT p_start = m_proj.GeoToScreen(start);
+  const POINT p_end = m_proj.GeoToScreen(end);
   
   const Angle ang = Angle::radians(atan2(fixed(p_end.x - p_start.x),
                                          fixed(p_start.y - p_end.y))).as_bearing();
@@ -289,7 +289,7 @@ RenderTaskPoint::draw_isoline(const AATPoint& tp)
     
     for (fixed t = fixed_zero; t<=fixed_one; t+= fixed_twentieth) {
       GeoPoint ga = seg.parametric(t);
-      screen.push_back(m_proj.LonLat2Screen(ga));
+      screen.push_back(m_proj.GeoToScreen(ga));
     }
     if (screen.size()>=2) {
       m_buffer.select(pen_isoline);

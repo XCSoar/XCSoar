@@ -107,7 +107,7 @@ void Marks::Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 
   for (unsigned i = 0; i < marker_store.size(); i++) {
     POINT sc;
-    if (projection.LonLat2ScreenIfVisible(marker_store[i], sc))
+    if (projection.GeoToScreenIfVisible(marker_store[i], sc))
       icon.draw(canvas, bitmap_canvas, sc.x, sc.y);
   }
 }

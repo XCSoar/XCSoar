@@ -111,7 +111,7 @@ HeightMatrix::Fill(const RasterMap &map, const Projection &projection,
       gp.Longitude = PanLocation.Longitude + Angle::native(r.x * InvDrawScale)
         * gp.Latitude.invfastcosine();
 #else
-      GeoPoint gp = projection.Screen2LonLat(x, y);
+      GeoPoint gp = projection.ScreenToGeo(x, y);
 #endif
 
       short h = map.GetField(gp);

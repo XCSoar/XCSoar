@@ -354,7 +354,7 @@ DrawTrace(Chart &chart, const ChartProjection& proj,
   POINT last;
   for (TracePointVector::const_iterator it = trace.begin();
        it != trace.end(); ++it) {
-    POINT sc = proj.LonLat2Screen(it->get_location());
+    POINT sc = proj.GeoToScreen(it->get_location());
     if (it != trace.begin())
       chart.StyleLine(sc, last, style);
 

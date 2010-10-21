@@ -90,10 +90,10 @@ MapWindow::on_paint(Canvas &canvas)
 
     const RECT buffer_rect = buffer_projection.GetMapRect();
     const POINT top_left =
-      visible_projection.LonLat2Screen(buffer_projection.Screen2LonLat(buffer_rect.left,
+      visible_projection.GeoToScreen(buffer_projection.ScreenToGeo(buffer_rect.left,
                                                                        buffer_rect.top));
     POINT bottom_right =
-      visible_projection.LonLat2Screen(buffer_projection.Screen2LonLat(buffer_rect.right,
+      visible_projection.GeoToScreen(buffer_projection.ScreenToGeo(buffer_rect.right,
                                                                        buffer_rect.bottom));
 
     /* compensate for rounding errors in destination area */

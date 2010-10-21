@@ -231,7 +231,7 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
           POINT sc;
           const GeoPoint l = point2GeoPoint(line.point[jj]);
 
-          if (projection.LonLat2ScreenIfVisible(l, sc))
+          if (projection.GeoToScreenIfVisible(l, sc))
             icon.draw(canvas, bitmap_canvas, sc.x, sc.y);
         }
       }
@@ -245,7 +245,7 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 
         for (unsigned i = 0; i < msize; ++i) {
           GeoPoint g = point2GeoPoint(line.point[i]);
-          pt[i] = projection.LonLat2Screen(g);
+          pt[i] = projection.GeoToScreen(g);
         }
 
         canvas.polyline(pt, msize);
@@ -262,7 +262,7 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
         for (unsigned i = 0; i < msize; ++i) {
           GeoPoint g = point2GeoPoint(*in);
           in += iskip;
-          pt[i] = projection.LonLat2Screen(g);
+          pt[i] = projection.GeoToScreen(g);
         }
 
         canvas.polygon(pt, msize);
@@ -317,7 +317,7 @@ TopologyFile::PaintLabels(Canvas &canvas,
       for (unsigned i = 0; i < (unsigned)line.numpoints; i += iskip) {
         GeoPoint g = point2GeoPoint(line.point[i]);
         in += iskip;
-        POINT pt = projection.LonLat2Screen(g);
+        POINT pt = projection.GeoToScreen(g);
 
         if (pt.x <= minx) {
           minx = pt.x;
