@@ -46,12 +46,29 @@ class WindowProjection:
   public Projection
 {
 public:
+  /**
+   * Converts a geographical location to a screen coordinate if the
+   * location is within the visible bounds
+   * @param loc Geographical location
+   * @param sc Screen coordinate (output)
+   * @return True if the location is within the bounds
+   */
   bool GeoToScreenIfVisible(const GeoPoint &loc, POINT &sc) const;
 
+  /**
+   * Checks whether a geographical location is within the visible bounds
+   * @param loc Geographical location
+   * @return True if the location is within the bounds
+   */
   gcc_pure
   bool GeoVisible(const GeoPoint &loc) const;
 
   gcc_pure
+  /**
+   * Checks whether a screen coordinate is within the visible bounds
+   * @param P Screen coordinate
+   * @return True if the screen coordinate is within the bounds
+   */
   bool ScreenVisible(const POINT &P) const;
 
   const RECT &GetMapRect() const {
