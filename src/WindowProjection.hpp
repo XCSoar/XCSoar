@@ -63,12 +63,12 @@ public:
   gcc_pure
   bool GeoVisible(const GeoPoint &loc) const;
 
-  gcc_pure
   /**
    * Checks whether a screen coordinate is within the visible bounds
    * @param P Screen coordinate
    * @return True if the screen coordinate is within the bounds
    */
+  gcc_pure
   bool ScreenVisible(const POINT &P) const;
 
   const RECT &GetMapRect() const {
