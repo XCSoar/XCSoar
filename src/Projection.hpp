@@ -45,6 +45,28 @@ Copyright_License {
 
 #include <windef.h>
 
+/**
+ * This is a class that can be used for converting geographical into screen
+ * coordinates and vice-versa.
+ *
+ * For doing so one needs to at least set a scaling factor (m/px) by calling
+ * the SetScale() function.
+ *
+ *  Optional features
+ * -------------------
+ *
+ * ScreenOrigin: By calling SetScreenOrigin the screen origin offset
+ * can be set. This is the offset that the screen coordinates will be shifted
+ * in the conversion functions. It is also the point of rotation for the
+ * ScreenRotation.
+ *
+ * GeoLocation: By calling the SetGeoLocation() function the ScreenOrigin can
+ * be mapped to a new geographical location, which will be taken into account
+ * when converting other coordinates.
+ *
+ * ScreenRotation: By calling SetScreenAngle() the rotation angle for the
+ * conversions can be set.
+ */
 class Projection {
 public:
   Projection();
