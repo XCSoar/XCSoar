@@ -98,7 +98,7 @@ RasterRenderer::~RasterRenderer()
 }
 
 void
-RasterRenderer::ScanMap(const RasterMap &map, const Projection &projection)
+RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection)
 {
   unsigned x = projection.GetScreenWidth() / 2;
   unsigned y = projection.GetScreenHeight() / 2;

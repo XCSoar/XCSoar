@@ -46,7 +46,7 @@ Copyright_License {
 #include <windef.h>
 
 class RasterMap;
-class Projection;
+class WindowProjection;
 
 class HeightMatrix : private NonCopyable {
   AllocatedArray<short> data;
@@ -63,7 +63,7 @@ protected:
   void SetSize(unsigned width, unsigned height, unsigned quantisation_pixels);
 
 public:
-  void Fill(const RasterMap &map, const Projection &map_projection,
+  void Fill(const RasterMap &map, const WindowProjection &map_projection,
             unsigned quantisation_pixels);
 
   unsigned get_width() const {

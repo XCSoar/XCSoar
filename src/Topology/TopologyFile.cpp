@@ -128,7 +128,7 @@ TopologyFile::ConvertRect(const BoundsRectangle &br)
 }
 
 void
-TopologyFile::updateCache(const Projection &map_projection)
+TopologyFile::updateCache(const WindowProjection &map_projection)
 {
   if (!shapefileopen)
     return;
@@ -188,7 +188,7 @@ TopologyFile::GetSkipSteps(double map_scale) const
 
 void
 TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-                const Projection &projection) const
+                const WindowProjection &projection) const
 {
   if (!shapefileopen)
     return;
@@ -274,7 +274,7 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 
 void
 TopologyFile::PaintLabels(Canvas &canvas,
-                      const Projection &projection, LabelBlock &label_block,
+                      const WindowProjection &projection, LabelBlock &label_block,
                       const SETTINGS_MAP &settings_map) const
 {
   if (!shapefileopen || settings_map.DeclutterLabels >= 2)

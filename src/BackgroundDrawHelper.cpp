@@ -86,7 +86,7 @@ BackgroundDrawHelper::set_weather(const RasterWeather *weather)
 
 void 
 BackgroundDrawHelper::Draw(Canvas& canvas,
-                           const Projection& proj,
+                           const WindowProjection& proj,
                            const SETTINGS_MAP& settings_map)
 {
   if (m_terrain == NULL) {
@@ -120,7 +120,7 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
 }
 
 void
-BackgroundDrawHelper::sun_from_wind(const Projection& projection,
+BackgroundDrawHelper::sun_from_wind(const WindowProjection& projection,
                                     const SpeedVector& wind)
 {
   m_sun_elevation = Angle::degrees(fixed(40.0));
@@ -134,7 +134,7 @@ BackgroundDrawHelper::sun_from_wind(const Projection& projection,
 
 void
 BackgroundDrawHelper::DrawSpotHeight(Canvas &canvas,
-                                     const Projection &map_projection,
+                                     const WindowProjection &map_projection,
                                      LabelBlock &block,
                                      const TCHAR *Buffer, POINT pt)
 {
@@ -160,7 +160,7 @@ BackgroundDrawHelper::DrawSpotHeight(Canvas &canvas,
 
 void
 BackgroundDrawHelper::DrawSpotHeights(Canvas &canvas, 
-                                      const Projection &proj,
+                                      const WindowProjection &proj,
                                       LabelBlock& block)
 {
   if (m_weather == NULL || m_weather->GetParameter() == 0 ||

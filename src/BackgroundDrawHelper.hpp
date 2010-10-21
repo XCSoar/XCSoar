@@ -40,7 +40,7 @@ Copyright_License {
 #define BACKGROUND_DRAW_HELPER_HPP
 
 class Canvas;
-class Projection;
+class WindowProjection;
 struct SETTINGS_MAP;
 class TerrainRenderer;
 struct SpeedVector;
@@ -61,21 +61,21 @@ public:
   ~BackgroundDrawHelper();
 
   void Draw(Canvas& canvas,
-            const Projection& proj,
+            const WindowProjection& proj,
             const SETTINGS_MAP& settings_map);
 
   void DrawSpotHeights(Canvas& canvas,
-                       const Projection &proj,
+                       const WindowProjection &proj,
                        LabelBlock& block);
 
-  void sun_from_wind(const Projection& proj,
+  void sun_from_wind(const WindowProjection& proj,
                      const SpeedVector& wind);
   void reset();
   void set_terrain(const RasterTerrain *terrain);
   void set_weather(const RasterWeather *weather);
 
 private:
-  static void DrawSpotHeight(Canvas &canvas, const Projection &map_projection,
+  static void DrawSpotHeight(Canvas &canvas, const WindowProjection &map_projection,
                              LabelBlock &block, const TCHAR *Buffer, POINT pt);
 
 private:

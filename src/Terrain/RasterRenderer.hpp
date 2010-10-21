@@ -47,7 +47,7 @@ Copyright_License {
 
 class Canvas;
 class RasterMap;
-class Projection;
+class WindowProjection;
 struct COLORRAMP;
 
 class RasterRenderer : private NonCopyable {
@@ -93,7 +93,7 @@ public:
   /**
    * Scan the map and fill the height matrix.
    */
-  void ScanMap(const RasterMap &map, const Projection &projection);
+  void ScanMap(const RasterMap &map, const WindowProjection &projection);
 
   /**
    * Convert the height matrix into the image.

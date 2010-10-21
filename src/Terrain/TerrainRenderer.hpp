@@ -45,7 +45,7 @@ Copyright_License {
 #include <windef.h>
 
 class Canvas;
-class Projection;
+class WindowProjection;
 class RasterTerrain;
 struct COLORRAMP;
 
@@ -105,7 +105,7 @@ public:
     TerrainBrightness = _TerrainBrightness;
   }
 
-  virtual void Draw(Canvas &canvas, const Projection &map_projection,
+  virtual void Draw(Canvas &canvas, const WindowProjection &map_projection,
                     const Angle sunazimuth, const Angle sunelevation);
 };
 

@@ -49,7 +49,7 @@ Copyright_License {
 
 struct GeoPoint;
 class Canvas;
-class Projection;
+class WindowProjection;
 struct BoundsRectangle;
 class LabelBlock;
 struct SETTINGS_MAP;
@@ -73,7 +73,7 @@ public:
    */
   ~TopologyFile();
 
-  void updateCache(const Projection &map_projection);
+  void updateCache(const WindowProjection &map_projection);
 
   /**
    * Paints the polygons, lines and points/icons in the TopologyFile
@@ -82,7 +82,7 @@ public:
    * @param projection
    */
   void Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-             const Projection &projection) const;
+             const WindowProjection &projection) const;
 
   /**
    * Paints a topology label if the space is available in the LabelBlock
@@ -92,7 +92,7 @@ public:
    * @param settings_map
    */
   void PaintLabels(Canvas &canvas,
-                   const Projection &projection, LabelBlock &label_block,
+                   const WindowProjection &projection, LabelBlock &label_block,
                    const SETTINGS_MAP &settings_map) const;
 
   /**

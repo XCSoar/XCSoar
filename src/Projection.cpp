@@ -112,14 +112,13 @@ Projection::GeoToScreen(const GeoPoint *ptin, POINT *ptout,
 }
 
 bool
-Projection::GeoVisible(const GeoPoint &loc) const
+WindowProjection::GeoVisible(const GeoPoint &loc) const
 {
   return screenbounds_latlon.inside(loc);
 }
 
 bool
-Projection::GeoToScreenIfVisible(const GeoPoint &loc,
-                                   POINT &sc) const
+WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc, POINT &sc) const
 {
   if (GeoVisible(loc)) {
     sc = GeoToScreen(loc);
@@ -130,7 +129,7 @@ Projection::GeoToScreenIfVisible(const GeoPoint &loc,
 }
 
 bool
-Projection::ScreenVisible(const POINT &P) const
+WindowProjection::ScreenVisible(const POINT &P) const
 {
   if ((P.x >= MapRect.left) &&
       (P.x <= MapRect.right) &&
@@ -150,13 +149,13 @@ Projection::SetScaleMetersToScreen(const fixed scale_meters_to_screen)
 }
 
 void
-Projection::UpdateScreenBounds() 
+WindowProjection::UpdateScreenBounds()
 {
   screenbounds_latlon = CalculateScreenBounds(fixed_zero);
 }
 
 BoundsRectangle
-Projection::CalculateScreenBounds(const fixed scale) const
+WindowProjection::CalculateScreenBounds(const fixed scale) const
 {
   // compute lat lon extents of visible screen
   BoundsRectangle sb;
@@ -223,7 +222,7 @@ Projection::CalculateScreenBounds(const fixed scale) const
 }
 
 long
-Projection::max_dimension(const RECT &rc)
+WindowProjection::max_dimension(const RECT &rc)
 {
   return std::max(rc.right - rc.left, rc.bottom - rc.top);
 }

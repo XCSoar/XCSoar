@@ -1561,7 +1561,7 @@ InputEvents::sub_Pan(int vswitch)
 void
 InputEvents::sub_PanCursor(int dx, int dy)
 {
-  const Projection &projection = main_window.map.VisibleProjection();
+  const WindowProjection &projection = main_window.map.VisibleProjection();
 
   const RECT &MapRect = projection.GetMapRect();
   int X = (MapRect.right + MapRect.left) / 2;

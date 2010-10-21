@@ -53,7 +53,7 @@ class Waypoint;
 class Canvas;
 
 class MapWindowProjection:
-  public Projection
+  public WindowProjection
 {
 public:
   MapWindowProjection();

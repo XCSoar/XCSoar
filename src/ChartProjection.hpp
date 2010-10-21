@@ -48,7 +48,7 @@ class OrderedTaskPoint;
  * typically scaled to fill the canvas
  */
 class ChartProjection:
-  public Projection
+  public WindowProjection
 {
 public:
 

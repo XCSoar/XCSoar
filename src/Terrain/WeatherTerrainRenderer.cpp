@@ -151,7 +151,7 @@ WeatherTerrainRenderer::do_scan_spot()
 
 void
 WeatherTerrainRenderer::Draw(Canvas &canvas,
-                             const Projection &projection,
+                             const WindowProjection &projection,
                              const Angle sunazimuth, const Angle sunelevation)
 {
   bool do_water = true;

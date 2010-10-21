@@ -43,7 +43,7 @@ Copyright_License {
 #include "Compatibility/path.h"
 
 void
-TopologyStore::ScanVisibility(const Projection &m_projection)
+TopologyStore::ScanVisibility(const WindowProjection &m_projection)
 {
   // check if any needs to have cache updates because wasnt
   // visible previously when bounds moved
@@ -69,7 +69,7 @@ TopologyStore::~TopologyStore()
  */
 void
 TopologyStore::Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-                    const Projection &projection) const
+                    const WindowProjection &projection) const
 {
   for (int z = 0; z < MAXTOPOLOGY; z++) {
     if (topology_store[z])
@@ -78,7 +78,7 @@ TopologyStore::Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 }
 
 void
-TopologyStore::DrawLabels(Canvas &canvas, const Projection &projection,
+TopologyStore::DrawLabels(Canvas &canvas, const WindowProjection &projection,
                           LabelBlock &label_block,
                           const SETTINGS_MAP &settings_map) const
 {

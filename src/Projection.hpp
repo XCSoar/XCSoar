@@ -69,14 +69,6 @@ public:
     return PanLocation;
   }
 
-  bool GeoToScreenIfVisible(const GeoPoint &loc, POINT &sc) const;
-
-  gcc_pure
-  bool GeoVisible(const GeoPoint &loc) const;
-
-  gcc_pure
-  bool ScreenVisible(const POINT &P) const;
-
   fixed GetScreenScaleToLonLat() const {
     return InvDrawScale;
   }
@@ -92,6 +84,34 @@ public:
   Angle GetDisplayAngle() const {
     return DisplayAngle.GetAngle();
   }
+
+protected:
+  gcc_const
+  static int GetMapResolutionFactor();
+
+  void SetScaleMetersToScreen(const fixed scale_meters_to_screen);
+
+  GeoPoint PanLocation;
+  POINT Orig_Screen;
+  FastIntegerRotation DisplayAngle;
+
+private:
+  fixed DrawScale;
+  fixed InvDrawScale;
+  fixed m_scale_meters_to_screen;
+};
+
+class WindowProjection:
+  public Projection
+{
+public:
+  bool GeoToScreenIfVisible(const GeoPoint &loc, POINT &sc) const;
+
+  gcc_pure
+  bool GeoVisible(const GeoPoint &loc) const;
+
+  gcc_pure
+  bool ScreenVisible(const POINT &P) const;
 
   const RECT &GetMapRect() const {
     return MapRect;
@@ -116,14 +136,6 @@ public:
   BoundsRectangle CalculateScreenBounds(const fixed scale) const;
 
 protected:
-  gcc_const
-  static int GetMapResolutionFactor();
-
-  void SetScaleMetersToScreen(const fixed scale_meters_to_screen);
-
-  GeoPoint PanLocation;
-  POINT Orig_Screen;
-  FastIntegerRotation DisplayAngle;
   RECT MapRect;
 
   gcc_pure
@@ -132,9 +144,6 @@ protected:
   void UpdateScreenBounds();
 
 private:
-  fixed DrawScale;
-  fixed InvDrawScale;
-  fixed m_scale_meters_to_screen; 
   BoundsRectangle screenbounds_latlon;
 };
 

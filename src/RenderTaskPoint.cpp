@@ -53,7 +53,7 @@ Copyright_License {
 #include "SettingsMap.hpp"
 
 RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
-                                 const Projection &_projection,
+                                 const WindowProjection &_projection,
                                  const SETTINGS_MAP &_settings_map,
                                  RenderObservationZone &_ozv,
                                  const bool draw_bearing,

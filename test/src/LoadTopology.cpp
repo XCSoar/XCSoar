@@ -52,7 +52,7 @@ Copyright_License {
 
 Font Fonts::MapLabel;
 
-class TestProjection : public Projection {
+class TestProjection : public WindowProjection {
 public:
   TestProjection() {
     SetScaleMetersToScreen(fixed(640) / (fixed(100) * 2));

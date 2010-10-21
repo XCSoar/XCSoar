@@ -98,7 +98,7 @@ Marks::MarkLocation(const GeoPoint &loc,
 }
 
 void Marks::Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-                 const Projection &projection)
+                 const WindowProjection &projection)
 {
   Poco::ScopedRWLock protect(lock, false); // read only
 

@@ -45,7 +45,7 @@ Copyright_License {
 
 class Canvas;
 class BitmapCanvas;
-class Projection;
+class WindowProjection;
 class LabelBlock;
 class TopologyFile;
 struct SETTINGS_MAP;
@@ -64,11 +64,11 @@ public:
   TopologyStore();
   ~TopologyStore();
 
-  void ScanVisibility(const Projection &m_projection);
+  void ScanVisibility(const WindowProjection &m_projection);
   void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-            const Projection &projection) const;
+            const WindowProjection &projection) const;
   void DrawLabels(Canvas &canvas,
-                  const Projection &projection, LabelBlock &label_block,
+                  const WindowProjection &projection, LabelBlock &label_block,
                   const SETTINGS_MAP &settings_map) const;
 
   void Load(NLineReader &reader, const TCHAR* Directory);

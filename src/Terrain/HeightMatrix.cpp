@@ -69,7 +69,7 @@ HeightMatrix::SetSize(unsigned width, unsigned height,
 }
 
 void
-HeightMatrix::Fill(const RasterMap &map, const Projection &projection,
+HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
                    unsigned quantisation_pixels)
 {
   const unsigned screen_width = projection.GetScreenWidth();

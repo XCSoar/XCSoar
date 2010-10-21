@@ -48,7 +48,7 @@ Copyright_License {
 #include <math.h>
 
 MapWindowProjection::MapWindowProjection():
-  Projection(),
+  WindowProjection(),
   DisplayMode(dmCruise),
   DisplayAircraftAngle(Angle::native(fixed_zero)),
   MapScale(5),

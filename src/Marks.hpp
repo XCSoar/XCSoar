@@ -44,7 +44,7 @@ Copyright_License {
 
 #include <vector>
 
-class Projection;
+class WindowProjection;
 class Canvas;
 struct GeoPoint;
 struct BrokenDateTime;
@@ -57,7 +57,7 @@ public:
 
   void Reset();
   void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-            const Projection &projection);
+            const WindowProjection &projection);
   void MarkLocation(const GeoPoint &loc,
                     const BrokenDateTime &time,
                     bool play_sound);

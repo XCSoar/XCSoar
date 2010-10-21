@@ -44,7 +44,7 @@ Copyright_License {
 #include "MapCanvas.hpp"
 
 class Canvas;
-class Projection;
+class WindowProjection;
 class RenderObservationZone;
 class OrderedTaskPoint;
 struct SETTINGS_MAP;
@@ -54,12 +54,12 @@ class RenderTaskPoint:
 {
 protected:
   Canvas &m_canvas, &m_buffer;
-  const Projection &m_proj;
+  const WindowProjection &m_proj;
   MapCanvas map_canvas;
   const SETTINGS_MAP &m_settings_map;
 
 public:
-  RenderTaskPoint(Canvas &_canvas, const Projection &_projection,
+  RenderTaskPoint(Canvas &_canvas, const WindowProjection &_projection,
                   const SETTINGS_MAP &_settings_map,
                   RenderObservationZone &_ozv,
                   const bool draw_bearing,

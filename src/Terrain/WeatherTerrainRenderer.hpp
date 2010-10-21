@@ -48,7 +48,7 @@ public:
   WeatherTerrainRenderer(const RasterTerrain *_terrain,
                          const RasterWeather *_weather);
 
-  virtual void Draw(Canvas &canvas, const Projection &map_projection,
+  virtual void Draw(Canvas &canvas, const WindowProjection &map_projection,
                     const Angle sunazimuth, const Angle sunelevation);
 
 private:

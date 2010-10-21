@@ -46,7 +46,7 @@
 #include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
 
 static void
-PaintTask(Canvas &canvas, const Projection &projection,
+PaintTask(Canvas &canvas, const WindowProjection &projection,
           const OrderedTask &task,
           const GeoPoint &location, const SETTINGS_MAP &settings_map,
           const RasterTerrain *terrain)

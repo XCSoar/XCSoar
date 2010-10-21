@@ -240,7 +240,7 @@ TerrainRenderer::CopyTo(Canvas &canvas, unsigned width, unsigned height)
  */
 void
 TerrainRenderer::Draw(Canvas &canvas,
-                      const Projection &map_projection,
+                      const WindowProjection &map_projection,
                       const Angle sunazimuth, const Angle sunelevation)
 {
   const bool do_water = true;
