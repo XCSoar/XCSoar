@@ -40,7 +40,6 @@ Copyright_License {
 #define XCSOAR_PROJECTION_HPP
 
 #include "Navigation/GeoPoint.hpp"
-#include "Geo/BoundsRectangle.hpp"
 #include "Math/FastRotation.hpp"
 #include "Compiler.h"
 

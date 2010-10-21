@@ -38,10 +38,7 @@ Copyright_License {
 
 #include "WindowProjection.hpp"
 
-#include "Math/Earth.hpp"
 #include "Math/Angle.hpp"
-#include "Screen/Layout.hpp"
-#include "Units.hpp"
 
 bool
 WindowProjection::GeoVisible(const GeoPoint &loc) const

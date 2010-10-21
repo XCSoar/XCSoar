@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_WINDOW_PROJECTION_HPP
 
 #include "Projection.hpp"
+#include "Geo/BoundsRectangle.hpp"
 
 class WindowProjection:
   public Projection

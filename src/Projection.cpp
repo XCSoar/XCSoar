@@ -41,7 +41,6 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Math/Angle.hpp"
 #include "Screen/Layout.hpp"
-#include "Units.hpp"
 
 Projection::Projection() :
   PanLocation(Angle::native(fixed_zero), Angle::native(fixed_zero)),
