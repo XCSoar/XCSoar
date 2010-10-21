@@ -591,16 +591,14 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   _stprintf(sTmp, _T("%02d:%02d"), sunsethours, sunsetmins);
   ((WndProperty *)wf->FindByName(_T("prpSunset")))->SetText(sTmp);
 
-  fixed distance;
-  Angle bearing;
-  XCSoarInterface::Basic().Location.distance_bearing(selected_waypoint->Location,
-                                                     distance, bearing);
+  GeoVector gv = XCSoarInterface::Basic().Location.
+                 distance_bearing(selected_waypoint->Location);
 
   TCHAR DistanceText[MAX_PATH];
-  Units::FormatUserDistance(distance, DistanceText, 10);
+  Units::FormatUserDistance(gv.Distance, DistanceText, 10);
   ((WndProperty *)wf->FindByName(_T("prpDistance"))) ->SetText(DistanceText);
 
-  _stprintf(sTmp, _T("%d")_T(DEG), iround(bearing.value_degrees()));
+  _stprintf(sTmp, _T("%d")_T(DEG), iround(gv.Bearing.value_degrees()));
   ((WndProperty *)wf->FindByName(_T("prpBearing"))) ->SetText(sTmp);
 
   GlidePolar glide_polar = protected_task_manager.get_glide_polar();
