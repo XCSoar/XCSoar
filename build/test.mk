@@ -370,6 +370,7 @@ LOAD_TOPOLOGY_SOURCES = \
 	$(SRC)/Topology/TopologyFile.cpp \
 	$(SRC)/Topology/XShape.cpp \
 	$(SRC)/Projection.cpp \
+	$(SRC)/WindowProjection.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \
@@ -489,6 +490,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Projection.cpp \
+	$(SRC)/WindowProjection.cpp \
 	$(SRC)/RenderObservationZone.cpp \
 	$(SRC)/BackgroundDrawHelper.cpp \
 	$(SRC)/MapWindow.cpp \

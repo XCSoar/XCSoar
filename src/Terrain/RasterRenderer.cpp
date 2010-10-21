@@ -41,7 +41,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Screen/Ramp.hpp"
 #include "Screen/Layout.hpp"
-#include "Projection.hpp"
+#include "WindowProjection.hpp"
 #include "Asset.hpp"
 
 #include <assert.h>

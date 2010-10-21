@@ -6,7 +6,7 @@
 #include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Screen/Graphics.hpp"
-#include "Projection.hpp"
+#include "WindowProjection.hpp"
 #include "SettingsMap.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"

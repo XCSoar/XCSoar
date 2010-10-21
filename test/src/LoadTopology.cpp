@@ -43,7 +43,7 @@ Copyright_License {
 #include "Topology/TopologyStore.hpp"
 #include "OS/PathName.hpp"
 #include "IO/ZipLineReader.hpp"
-#include "Projection.hpp"
+#include "WindowProjection.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Font.hpp"
 

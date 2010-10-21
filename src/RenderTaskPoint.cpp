@@ -40,7 +40,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
-#include "Projection.hpp"
+#include "WindowProjection.hpp"
 #include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
 #include "Task/TaskPoints/AATIsolineSegment.hpp"
 #include "Task/TaskPoints/StartPoint.hpp"

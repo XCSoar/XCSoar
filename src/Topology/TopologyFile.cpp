@@ -40,7 +40,7 @@ Copyright_License {
 #include "Topology/XShape.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Util.hpp"
-#include "Projection.hpp"
+#include "WindowProjection.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/LabelBlock.hpp"

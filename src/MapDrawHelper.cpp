@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "MapDrawHelper.hpp"
 #include "Screen/Canvas.hpp"
-#include "Projection.hpp"
+#include "WindowProjection.hpp"
 #include "SettingsMap.hpp"
 #include "MapCanvas.hpp"
 

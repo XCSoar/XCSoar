@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "Projection.hpp"
+#include "WindowProjection.hpp"
 #include "Engine/Navigation/TracePoint.hpp"
 
 class TaskManager;

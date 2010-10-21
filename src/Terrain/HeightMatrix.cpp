@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "HeightMatrix.hpp"
 #include "RasterMap.hpp"
-#include "Projection.hpp"
+#include "WindowProjection.hpp"
 
 #include <algorithm>
 #include <assert.h>

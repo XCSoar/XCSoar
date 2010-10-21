@@ -45,7 +45,7 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 #include "IO/DataFile.hpp"
 #include "Navigation/GeoPoint.hpp"
-#include "Projection.hpp"
+#include "WindowProjection.hpp"
 #include "DateTime.hpp"
 
 Marks::Marks()

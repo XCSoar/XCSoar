@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_MAPWINDOW_PROJECTION_HPP
 #define XCSOAR_MAPWINDOW_PROJECTION_HPP
 
-#include "Projection.hpp"
+#include "WindowProjection.hpp"
 #include "Units.hpp"
 #include "SettingsMap.hpp"
 #include "Sizes.h"

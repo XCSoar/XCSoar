@@ -39,7 +39,7 @@ Copyright_License {
 #include "Terrain/TerrainRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Screen/Ramp.hpp"
-#include "Projection.hpp"
+#include "WindowProjection.hpp"
 
 #include <assert.h>
 

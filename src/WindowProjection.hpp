@@ -36,69 +36,55 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_PROJECTION_HPP
-#define XCSOAR_PROJECTION_HPP
+#ifndef XCSOAR_WINDOW_PROJECTION_HPP
+#define XCSOAR_WINDOW_PROJECTION_HPP
 
-#include "Navigation/GeoPoint.hpp"
-#include "Geo/BoundsRectangle.hpp"
-#include "Math/FastRotation.hpp"
-#include "Compiler.h"
+#include "Projection.hpp"
 
-#include <windef.h>
-
-class Projection {
+class WindowProjection:
+  public Projection
+{
 public:
-  Projection();
-
-  virtual fixed GetMapScaleUser() const;
+  bool GeoToScreenIfVisible(const GeoPoint &loc, POINT &sc) const;
 
   gcc_pure
-  GeoPoint ScreenToGeo(int x, int y) const;
+  bool GeoVisible(const GeoPoint &loc) const;
 
   gcc_pure
-  POINT GeoToScreen(const GeoPoint &location) const;
+  bool ScreenVisible(const POINT &P) const;
 
-  void GeoToScreen(const GeoPoint *ptin, POINT *ptout,
-                     unsigned n) const;
-
-  const POINT &GetOrigScreen() const {
-    return Orig_Screen;
+  const RECT &GetMapRect() const {
+    return MapRect;
   }
 
-  const GeoPoint &GetPanLocation() const {
-    return PanLocation;
+  /**
+   * Returns the width of the map area in pixels.
+   */
+  unsigned GetScreenWidth() const {
+    return MapRect.right - MapRect.left;
   }
 
-  fixed GetScreenScaleToLonLat() const {
-    return InvDrawScale;
+  /**
+   * Returns the height of the map area in pixels.
+   */
+  unsigned GetScreenHeight() const {
+    return MapRect.bottom - MapRect.top;
   }
 
-  fixed GetLonLatToScreenScale() const {
-    return DrawScale;
-  }
-
-  unsigned DistanceMetersToScreen(const fixed x) const {
-    return iround(m_scale_meters_to_screen * x);
-  }
-
-  Angle GetDisplayAngle() const {
-    return DisplayAngle.GetAngle();
-  }
+  // used by terrain renderer, topology and airspace
+  gcc_pure
+  BoundsRectangle CalculateScreenBounds(const fixed scale) const;
 
 protected:
-  gcc_const
-  static int GetMapResolutionFactor();
+  RECT MapRect;
 
-  void SetScaleMetersToScreen(const fixed scale_meters_to_screen);
+  gcc_pure
+  static long max_dimension(const RECT &rc);
 
-  GeoPoint PanLocation;
-  POINT Orig_Screen;
-  FastIntegerRotation DisplayAngle;
+  void UpdateScreenBounds();
 
 private:
-  fixed DrawScale;
-  fixed InvDrawScale;
-  fixed m_scale_meters_to_screen;
+  BoundsRectangle screenbounds_latlon;
 };
 
 #endif
