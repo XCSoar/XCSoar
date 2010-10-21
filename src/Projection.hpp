@@ -163,6 +163,14 @@ public:
     ScreenRotation.SetAngle(angle);
   }
 
+  /**
+   * Creates a FastRowRotation object base on the current screen
+   * rotation angle and the specified screen row.
+   */
+  FastRowRotation GetScreenAngleRotation(int y) const {
+    return FastRowRotation(ScreenRotation, y);
+  }
+
 protected:
   gcc_const
   static int GetMapResolutionFactor();

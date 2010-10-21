@@ -97,6 +97,8 @@ class FastIntegerRotation {
   Angle angle;
   int cost, sint;
 
+  friend class FastRowRotation;
+
 public:
   typedef std::pair<int,int> Pair;
 
@@ -128,6 +130,27 @@ public:
   gcc_pure
   Pair Rotate(const Pair p) const {
     return Rotate(p.first, p.second);
+  }
+};
+
+/**
+ * Similar to FastIntegerRotation, but supports scanning one screen
+ * row (y is constant).
+ */
+class FastRowRotation {
+  const int cost, sint, y_cost, y_sint;
+
+public:
+  typedef FastIntegerRotation::Pair Pair;
+
+  FastRowRotation(const FastIntegerRotation &fir, int y)
+    :cost(fir.cost), sint(fir.sint),
+     y_cost(y * cost + 512), y_sint(y * sint - 512) {}
+
+  gcc_pure
+  Pair Rotate(int x) const {
+    return Pair((x * cost - y_sint + 512) / 1024,
+                (y_cost + x * sint + 512) / 1024);
   }
 };
 

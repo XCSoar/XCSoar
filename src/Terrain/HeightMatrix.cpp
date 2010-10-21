@@ -81,33 +81,22 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
   minimum = 0x7fff;
   maximum = 0;
 
-#ifndef SLOW_TERRAIN_STUFF
-  // This code is quickest (by a little) but not so readable
-
-  const int cost = projection.GetScreenAngle().ifastcosine();
-  const int sint = projection.GetScreenAngle().ifastsine();
-#endif
-
   for (unsigned y = 0; y < screen_height; y += quantisation_pixels) {
-#ifndef SLOW_TERRAIN_STUFF
-    const int dy = y - projection.GetScreenOrigin().y;
-    const int dycost = dy * cost+512;
-    const int dysint = dy * sint-512;
-#endif
+    const FastRowRotation rotation =
+      projection.GetScreenAngleRotation(y - projection.GetScreenOrigin().y);
 
     short *p = data.begin() + y * width / quantisation_pixels;
 
     for (unsigned x = 0; x < screen_width; x += quantisation_pixels) {
 #ifndef SLOW_TERRAIN_STUFF
-      const int dx = x - projection.GetScreenOrigin().x;
-      const POINT r = { (dx * cost - dysint) / 1024,
-                        (dycost + dx * sint) / 1024 };
+      const FastRowRotation::Pair r =
+        rotation.Rotate(x - projection.GetScreenOrigin().x);
 
       GeoPoint gp;
-      gp.Latitude = projection.GetGeoLocation().Latitude
-        - projection.PixelsToAngle(r.y);
-      gp.Longitude = projection.GetGeoLocation().Longitude
-        + projection.PixelsToAngle(r.x)
+       gp.Latitude = projection.GetGeoLocation().Latitude
+         - projection.PixelsToAngle(r.second);
+       gp.Longitude = projection.GetGeoLocation().Longitude
+         + projection.PixelsToAngle(r.first)
         * gp.Latitude.invfastcosine();
 #else
       GeoPoint gp = projection.ScreenToGeo(x, y);
