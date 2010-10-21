@@ -100,11 +100,12 @@ protected:
 
   void SetScaleMetersToScreen(const fixed scale_meters_to_screen);
 
-  GeoPoint GeoLocation;
-  POINT ScreenOrigin;
   FastIntegerRotation ScreenRotation;
 
 private:
+  GeoPoint GeoLocation;
+  POINT ScreenOrigin;
+
   fixed DrawScale;
   fixed InvDrawScale;
   fixed m_scale_meters_to_screen;
