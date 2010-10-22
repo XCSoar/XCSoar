@@ -65,7 +65,7 @@ namespace Registry {
     if (!Get(key, temp))
       return false;
 
-    value = temp;
+    value = (short)temp;
     return true;
   }
 
