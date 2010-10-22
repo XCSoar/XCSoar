@@ -88,7 +88,7 @@ MapWindow::set(ContainerWindow &parent, const RECT &rc)
                           style);
 
   // initialize other systems
-  visible_projection.InitialiseScaleList(SettingsMap(), get_client_rect());
+  visible_projection.Initialize(SettingsMap(), get_client_rect());
   buffer_projection = visible_projection;
 
   cdi = new GaugeCDI(parent); /* XXX better attach to "this"? */

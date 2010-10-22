@@ -57,7 +57,7 @@ MapWindowProjection::MapWindowProjection():
   ScaleListCount (0) {}
 
 void
-MapWindowProjection::InitialiseScaleList(const SETTINGS_MAP &settings_map,
+MapWindowProjection::Initialize(const SETTINGS_MAP &settings_map,
                                          const RECT &rc)
 {
   MapRect = rc;

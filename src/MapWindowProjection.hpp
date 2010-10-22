@@ -101,7 +101,7 @@ public:
                        const SETTINGS_COMPUTER &settings_computer,
                        const SETTINGS_MAP &settings_map);
 
-  void InitialiseScaleList(const SETTINGS_MAP &settings, const RECT &rc);
+  void Initialize(const SETTINGS_MAP &settings, const RECT &rc);
 
   gcc_pure
   fixed DistancePixelsToMeters(const int x) const {
