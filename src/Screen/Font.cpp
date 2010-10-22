@@ -117,7 +117,10 @@ Font::set(const TCHAR* facename, int height, bool bold, bool italic)
   font.lfHeight = (long)height;
   font.lfWeight = (long)(bold ? FW_BOLD : FW_MEDIUM);
   font.lfItalic = italic;
-  font.lfQuality = ANTIALIASED_QUALITY;
+  if (is_altair()) // better would be: if (screen.dpi() < 100)
+    font.lfQuality = NONANTIALIASED_QUALITY;
+  else
+    font.lfQuality = ANTIALIASED_QUALITY;
   return Font::set(font);
 }
 
