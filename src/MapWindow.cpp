@@ -285,8 +285,8 @@ MapWindow::SwitchZoomClimb(void)
 }
 
 static DisplayMode_t
-ApplyUserForceDisplayMode(const SETTINGS_MAP &settings_map,
-                          const DERIVED_INFO &derived_info)
+GetNewDisplayMode(const SETTINGS_MAP &settings_map,
+                  const DERIVED_INFO &derived_info)
 {
   if (settings_map.UserForceDisplayMode != dmNone)
     return settings_map.UserForceDisplayMode;
@@ -302,8 +302,7 @@ void
 MapWindow::UpdateDisplayMode()
 {
   DisplayMode_t lastDisplayMode = visible_projection.GetDisplayMode();
-  DisplayMode_t newDisplayMode =
-    ApplyUserForceDisplayMode(SettingsMap(), Calculated());
+  DisplayMode_t newDisplayMode = GetNewDisplayMode(SettingsMap(), Calculated());
 
   if (newDisplayMode != lastDisplayMode) {
     visible_projection.SetDisplayMode(newDisplayMode);
