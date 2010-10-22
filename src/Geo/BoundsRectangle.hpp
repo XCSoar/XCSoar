@@ -90,6 +90,27 @@ struct BoundsRectangle {
     return GeoPoint(west.Fraction(east, fixed_half),
                     south.Fraction(north, fixed_half));
   }
+
+  /**
+   * Returns a scaled version of the BoundsRectangle.
+   * The bounds are scaled around the center by the given factor.
+   * @param factor The scaling factor
+   * @return A scaled version of the BoundsRectangle
+   */
+  BoundsRectangle scale(fixed factor) const {
+    Angle diff_lat_half =
+        (north - south).as_bearing() / fixed_two * (factor - fixed_one);
+    Angle diff_lon_half =
+        (east - west).as_bearing() / fixed_two * (factor - fixed_one);
+
+    BoundsRectangle br = *this;
+    br.east += diff_lon_half;
+    br.west -= diff_lon_half;
+    br.north += diff_lat_half;
+    br.south -= diff_lat_half;
+
+    return br;
+  }
 };
 
 #endif
