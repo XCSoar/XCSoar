@@ -301,11 +301,11 @@ GetNewDisplayMode(const SETTINGS_MAP &settings_map,
 void
 MapWindow::UpdateDisplayMode()
 {
-  DisplayMode_t lastDisplayMode = visible_projection.GetDisplayMode();
-  DisplayMode_t newDisplayMode = GetNewDisplayMode(SettingsMap(), Calculated());
+  DisplayMode_t old_mode = visible_projection.GetDisplayMode();
+  DisplayMode_t new_mode = GetNewDisplayMode(SettingsMap(), Calculated());
 
-  if (newDisplayMode != lastDisplayMode) {
-    visible_projection.SetDisplayMode(newDisplayMode);
+  if (new_mode != old_mode) {
+    visible_projection.SetDisplayMode(new_mode);
     SwitchZoomClimb();
   }
 }
