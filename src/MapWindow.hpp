@@ -236,7 +236,7 @@ private:
   void DrawThreadLoop ();
   void DrawThreadInitialise (void);
 
-  void ApplyScreenSize();
+  void UpdateDisplayMode();
 
   // display management
   void SwitchZoomClimb(void);

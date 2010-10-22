@@ -116,7 +116,7 @@ MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
 void
 MapWindow::UpdateProjection()
 {
-  ApplyScreenSize();
+  UpdateDisplayMode();
   visible_projection.ExchangeBlackboard(Calculated(), SettingsMap());
 }
 
@@ -299,7 +299,7 @@ ApplyUserForceDisplayMode(const SETTINGS_MAP &settings_map,
 }
 
 void
-MapWindow::ApplyScreenSize()
+MapWindow::UpdateDisplayMode()
 {
   DisplayMode_t lastDisplayMode = visible_projection.GetDisplayMode();
   DisplayMode_t newDisplayMode =
