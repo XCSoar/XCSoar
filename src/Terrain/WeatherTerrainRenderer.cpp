@@ -154,7 +154,7 @@ WeatherTerrainRenderer::Draw(Canvas &canvas,
                              const WindowProjection &projection,
                              const Angle sunazimuth, const Angle sunelevation)
 {
-  bool do_water = true;
+  bool do_water = false;
   unsigned height_scale;
   const int interp_levels = 5;
   const bool is_terrain = false;
