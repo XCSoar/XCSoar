@@ -183,12 +183,12 @@ private:
    * @param derived_info
    * @param settings
    */
-  void CalculateOrientationTargetPan(const NMEA_INFO &nmea_info,
-                                     const DERIVED_INFO &derived_info,
+  void CalculateOrientationTargetPan(const NMEA_INFO &basic,
+                                     const DERIVED_INFO &derived,
                                      const SETTINGS_MAP &settings);
 
-  void CalculateOrientationNormal(const NMEA_INFO &nmea_info,
-                                  const DERIVED_INFO &derived_info,
+  void CalculateOrientationNormal(const NMEA_INFO &basic,
+                                  const DERIVED_INFO &derived,
                                   const SETTINGS_MAP &settings);
 
   bool _origin_centered;

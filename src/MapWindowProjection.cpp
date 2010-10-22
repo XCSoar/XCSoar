@@ -86,10 +86,10 @@ MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
 }
 
 void
-MapWindowProjection::CalculateOrientationNormal(const NMEA_INFO &DrawInfo,
-    const DERIVED_INFO &DerivedDrawInfo, const SETTINGS_MAP &settings)
+MapWindowProjection::CalculateOrientationNormal(const NMEA_INFO &basic,
+    const DERIVED_INFO &derived, const SETTINGS_MAP &settings)
 {
-  Angle trackbearing = DrawInfo.TrackBearing;
+  Angle trackbearing = basic.TrackBearing;
 
   if ((settings.DisplayOrientation == NORTHUP)
       || ((settings.DisplayOrientation == NORTHTRACK)
@@ -100,7 +100,7 @@ MapWindowProjection::CalculateOrientationNormal(const NMEA_INFO &DrawInfo,
     _origin_centered = true;
 
     if (settings.DisplayOrientation == TRACKCIRCLE) {
-      SetScreenAngle(DerivedDrawInfo.task_stats.current_leg.
+      SetScreenAngle(derived.task_stats.current_leg.
                      solution_remaining.Vector.Bearing);
       DisplayAircraftAngle = trackbearing - GetScreenAngle();
     } else {
@@ -118,15 +118,15 @@ MapWindowProjection::CalculateOrientationNormal(const NMEA_INFO &DrawInfo,
 }
 
 void
-MapWindowProjection::CalculateOrientationTargetPan(const NMEA_INFO &DrawInfo,
-    const DERIVED_INFO &DerivedDrawInfo, const SETTINGS_MAP &settings)
+MapWindowProjection::CalculateOrientationTargetPan(const NMEA_INFO &basic,
+    const DERIVED_INFO &derived, const SETTINGS_MAP &settings)
 {
-  if (DerivedDrawInfo.common_stats.active_taskpoint_index ==
+  if (derived.common_stats.active_taskpoint_index ==
       settings.TargetPanIndex) {
-    CalculateOrientationNormal(DrawInfo, DerivedDrawInfo, settings);
+    CalculateOrientationNormal(basic, derived, settings);
   } else {
     SetScreenAngle(Angle::native(fixed_zero));
-    DisplayAircraftAngle = DrawInfo.TrackBearing;
+    DisplayAircraftAngle = basic.TrackBearing;
   }
 }
 
