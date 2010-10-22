@@ -107,14 +107,14 @@ MapWindowProjection::CalculateOrientationNormal(const NMEA_INFO &basic,
       SetScreenAngle(Angle::native(fixed_zero));
       DisplayAircraftAngle = trackbearing;
     }
+
+    DisplayAircraftAngle = DisplayAircraftAngle.as_bearing();
   } else {
     // normal, glider forward
     _origin_centered = false;
     SetScreenAngle(trackbearing);
     DisplayAircraftAngle = Angle::native(fixed_zero);
   }
-
-  DisplayAircraftAngle = DisplayAircraftAngle.as_bearing();
 }
 
 void
