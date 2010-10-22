@@ -403,7 +403,7 @@ DataFieldFileReader::checkFilter(const TCHAR *filename, const TCHAR *filter)
   // filter = e.g. "*.igc" or "config/*.prf"
   // todo: make filters like "config/*.prf" work
 
-  TCHAR *ptr;
+  const TCHAR *ptr;
   TCHAR upfilter[MAX_PATH];
 
   // if invalid or short filter "*" -> return true
