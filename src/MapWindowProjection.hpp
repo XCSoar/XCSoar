@@ -73,9 +73,17 @@ public:
     return Orig_Aircraft;
   }
 
-  // called on receipt of new data, to trigger projection/scale change functions
-  void ExchangeBlackboard(const DERIVED_INFO &derived_info,
-                          const SETTINGS_MAP &settings_map);
+  /**
+   * sets the map scale based on three possible inputs:
+   * If TerrainPan is enabled, then uses that parameter
+   * Else If settings_map.MapScale > 0, uses that value (which
+   * will be reset back to zero during the blackboard copy)
+   * Else If AutoZoom is enabled, scales to DerivedDrawInfo.ZoomDistance
+   * @param derived_info
+   * @param settings_map
+   */
+  void UpdateMapScale(const DERIVED_INFO &derived_info,
+                      const SETTINGS_MAP &settings_map);
 
   DisplayMode_t GetDisplayMode() const {
     return DisplayMode;
@@ -164,17 +172,6 @@ private:
    */
   void ModifyMapScale(const SETTINGS_MAP &settings_map);
 
-  /**
-   * sets the map scale based on three possible inputs:
-   * If TerrainPan is enabled, then uses that parameter
-   * Else If settings_map.MapScale > 0, uses that value (which
-   * will be reset back to zero during the blackboard copy)
-   * Else If AutoZoom is enabled, scales to DerivedDrawInfo.ZoomDistance
-   * @param derived_info
-   * @param settings_map
-   */
-  void UpdateMapScale(const DERIVED_INFO &derived_info,
-                      const SETTINGS_MAP &settings_map);
   /**
    * sets orientation for dlgTarget
    * if he next tp is the one being viewed by dlgTarget

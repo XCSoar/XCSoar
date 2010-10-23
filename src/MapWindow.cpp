@@ -117,7 +117,7 @@ void
 MapWindow::UpdateProjection()
 {
   UpdateDisplayMode();
-  visible_projection.ExchangeBlackboard(Calculated(), SettingsMap());
+  visible_projection.UpdateMapScale(Calculated(), SettingsMap());
 }
 
 void

@@ -59,7 +59,7 @@ GlueMapWindow::QuickRedraw(const SETTINGS_MAP &_settings_map)
                                      SettingsComputer(),
                                      SettingsMap());
 
-  visible_projection.ExchangeBlackboard(Calculated(), SettingsMap());
+  visible_projection.UpdateMapScale(Calculated(), SettingsMap());
 
   ++ui_generation;
 

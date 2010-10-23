@@ -332,14 +332,6 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
     TargetPanLast = false;
 }
 
-void
-MapWindowProjection::ExchangeBlackboard(const DERIVED_INFO &derived_info,
-                                        const SETTINGS_MAP &settings_map)
-{
-  UpdateMapScale(derived_info, settings_map);
-  // done here to avoid double latency due to locks
-}
-
 fixed 
 MapWindowProjection::GetMapScaleUser() const 
 {
