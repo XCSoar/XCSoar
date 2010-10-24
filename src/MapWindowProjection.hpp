@@ -110,7 +110,7 @@ public:
 
   gcc_pure
   fixed DistancePixelsToMeters(const int x) const {
-    return x * Units::ToSysDistance(MapScale) / GetMapResolutionFactor();
+    return x * GetMapScale() / GetMapResolutionFactor();
   }
 
   gcc_pure
@@ -121,7 +121,7 @@ public:
 
   gcc_pure
   fixed DistanceScreenToUser(const int x) const {
-    return x * MapScale / GetMapResolutionFactor();
+    return x * GetMapScaleUser() / GetMapResolutionFactor();
   }
 
   void RequestMapScale(fixed x, const SETTINGS_MAP &settings_map) {
