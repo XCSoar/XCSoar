@@ -85,18 +85,24 @@ MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
                                                  fixed_ten));
 }
 
+bool
+MapWindowProjection::IsOriginCentered(const DisplayOrientation_t orientation)
+{
+  return (orientation == NORTHUP
+      || (orientation == NORTHTRACK
+          && DisplayMode != dmCircling)
+      || ((orientation == NORTHCIRCLE
+           || orientation == TRACKCIRCLE)
+          && DisplayMode == dmCircling));
+}
+
 void
 MapWindowProjection::CalculateOrientationNormal(const NMEA_INFO &basic,
     const DERIVED_INFO &derived, const SETTINGS_MAP &settings)
 {
   Angle trackbearing = basic.TrackBearing;
 
-  if ((settings.DisplayOrientation == NORTHUP)
-      || ((settings.DisplayOrientation == NORTHTRACK)
-          && (DisplayMode != dmCircling))
-      || (((settings.DisplayOrientation == NORTHCIRCLE)
-           || (settings.DisplayOrientation == TRACKCIRCLE))
-          && (DisplayMode == dmCircling))) {
+  if (IsOriginCentered(settings.DisplayOrientation)) {
     _origin_centered = true;
 
     if (settings.DisplayOrientation == TRACKCIRCLE) {

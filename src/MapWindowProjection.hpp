@@ -135,9 +135,7 @@ protected:
     return _RequestedMapScale;
   }
 
-  bool IsOriginCentered() const {
-    return _origin_centered;
-  }
+  bool IsOriginCentered(const DisplayOrientation_t orientation);
 
   fixed StepMapScale(int Step) const;
 
