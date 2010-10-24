@@ -278,7 +278,7 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   if (settings_map.TargetPan)
     wpd = fixed(settings_map.TargetZoomDistance);
   else
-    wpd = DerivedDrawInfo.ZoomDistance;
+    wpd = DerivedDrawInfo.AutoZoomDistance;
 
   if (settings_map.TargetPan) {
     if (!TargetPanLast) { // just entered targetpan so save zoom

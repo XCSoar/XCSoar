@@ -78,7 +78,7 @@ public:
    * If TerrainPan is enabled, then uses that parameter
    * Else If settings_map.MapScale > 0, uses that value (which
    * will be reset back to zero during the blackboard copy)
-   * Else If AutoZoom is enabled, scales to DerivedDrawInfo.ZoomDistance
+   * Else If AutoZoom is enabled, scales to DerivedDrawInfo.AutoZoomDistance
    * @param derived_info
    * @param settings_map
    */

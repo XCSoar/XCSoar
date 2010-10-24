@@ -277,7 +277,7 @@ struct DERIVED_INFO:
 
   SpeedVector estimated_wind;   /**< Wind speed, direction */
 
-  fixed ZoomDistance; /**< Distance to zoom to for autozoom */
+  fixed AutoZoomDistance; /**< Distance to zoom to for autozoom */
 
   fixed TimeSunset; /**< Local time of sunset */
 
