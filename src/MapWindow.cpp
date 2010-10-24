@@ -62,13 +62,13 @@ MapWindow::MapWindow()
    marks(NULL), 
    cdi(NULL),
    ui_generation(1), buffer_generation(0),
-   scale_buffer(0)
-{
-  zoomclimb.CruiseMapScale = fixed_ten;
-  zoomclimb.ClimbMapScale = fixed(0.25);
-  zoomclimb.last_isclimb = false;
-  zoomclimb.last_targetpan = false;
-}
+   scale_buffer(0) {}
+
+ZoomClimb_t::ZoomClimb_t():
+  CruiseMapScale(fixed_ten),
+  ClimbMapScale(fixed(0.25)),
+  last_isclimb(false),
+  last_targetpan(false) {}
 
 /**
  * Destructor of the MapWindow class

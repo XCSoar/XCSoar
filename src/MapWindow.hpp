@@ -64,6 +64,8 @@ struct ZoomClimb_t
   fixed ClimbMapScale;
   bool last_isclimb;
   bool last_targetpan;
+
+  ZoomClimb_t();
 };
 
 class TopologyStore;
