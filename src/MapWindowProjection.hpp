@@ -48,9 +48,7 @@ Copyright_License {
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
-struct SETTINGS_COMPUTER;
 class Waypoint;
-class Canvas;
 
 class MapWindowProjection:
   public WindowProjection
