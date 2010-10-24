@@ -110,7 +110,7 @@ public:
 
   gcc_pure
   fixed DistancePixelsToMeters(const int x) const {
-    return x * MapScale / Units::ToUserDistance(fixed(GetMapResolutionFactor()));
+    return x * Units::ToSysDistance(MapScale) / GetMapResolutionFactor();
   }
 
   gcc_pure
