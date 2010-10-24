@@ -132,11 +132,6 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT &rc, const MapWindowProjectio
   int Height;
   Units_t Unit;
 
-  /*
-  if (ScaleChangeFeedback)
-    MapWidth = projection.RequestDistancePixelsToMeters(rc.right - rc.left);
-  else
-  */
   MapWidth = projection.DistancePixelsToMeters(rc.right - rc.left);
 
   canvas.select(Fonts::MapBold);
