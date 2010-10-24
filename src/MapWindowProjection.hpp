@@ -185,7 +185,6 @@ private:
                                   const DERIVED_INFO &derived,
                                   const SETTINGS_MAP &settings);
 
-  bool _origin_centered;
   fixed LimitMapScale(fixed value, const SETTINGS_MAP &settings);
 
   gcc_pure

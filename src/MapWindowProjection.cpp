@@ -53,7 +53,6 @@ MapWindowProjection::MapWindowProjection():
   DisplayAircraftAngle(Angle::native(fixed_zero)),
   MapScale(5),
   _RequestedMapScale(5),
-  _origin_centered(false),
   ScaleListCount (0) {}
 
 void
@@ -103,8 +102,6 @@ MapWindowProjection::CalculateOrientationNormal(const NMEA_INFO &basic,
   Angle trackbearing = basic.TrackBearing;
 
   if (IsOriginCentered(settings.DisplayOrientation)) {
-    _origin_centered = true;
-
     if (settings.DisplayOrientation == TRACKCIRCLE) {
       SetScreenAngle(derived.task_stats.current_leg.
                      solution_remaining.Vector.Bearing);
@@ -117,7 +114,6 @@ MapWindowProjection::CalculateOrientationNormal(const NMEA_INFO &basic,
     DisplayAircraftAngle = DisplayAircraftAngle.as_bearing();
   } else {
     // normal, glider forward
-    _origin_centered = false;
     SetScreenAngle(trackbearing);
     DisplayAircraftAngle = Angle::native(fixed_zero);
   }
@@ -148,13 +144,13 @@ MapWindowProjection::CalculateOrigin(const RECT rc, const NMEA_INFO &DrawInfo,
   else
     CalculateOrientationNormal(DrawInfo, DerivedDrawInfo, settings_map);
 
-  if (_origin_centered || settings_map.EnablePan) {
+  if (IsOriginCentered(settings_map.DisplayOrientation) ||
+      settings_map.EnablePan)
     SetScreenOrigin((rc.left + rc.right) / 2, (rc.bottom + rc.top) / 2);
-  } else {
+  else
     SetScreenOrigin((rc.left + rc.right) / 2,
                     ((rc.top - rc.bottom) *
                      settings_map.GliderScreenPosition / 100) + rc.bottom);
-  }
 
   if (settings_map.EnablePan)
     SetGeoLocation(settings_map.PanLocation);
