@@ -56,7 +56,6 @@ GlueMapWindow::QuickRedraw(const SETTINGS_MAP &_settings_map)
 
   visible_projection.CalculateOrigin(get_client_rect(),
                                      Basic(), Calculated(),
-                                     SettingsComputer(),
                                      SettingsMap());
 
   visible_projection.UpdateMapScale(Calculated(), SettingsMap());

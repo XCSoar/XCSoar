@@ -133,7 +133,6 @@ MapWindowProjection::CalculateOrientationTargetPan(const NMEA_INFO &basic,
 void
 MapWindowProjection::CalculateOrigin(const RECT rc, const NMEA_INFO &DrawInfo,
     const DERIVED_INFO &DerivedDrawInfo,
-    const SETTINGS_COMPUTER &settings_computer,
     const SETTINGS_MAP &settings_map)
 {
   MapRect = rc;
