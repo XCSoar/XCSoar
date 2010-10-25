@@ -82,6 +82,14 @@ public:
   }
 
   /**
+   * Convert a an angle on Earth's surface to a pixel distance.
+   */
+  gcc_pure
+  fixed AngleToPixels(Angle angle) const {
+    return angle.value_radians() * DrawScale;
+  }
+
+  /**
    * Converts screen coordinates to a GeoPoint
    * @param x x-Coordinate on the screen
    * @param y y-Coordinate on the screen
