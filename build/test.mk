@@ -205,6 +205,7 @@ DEBUG_PROGRAM_NAMES = \
 	LoadTopology \
 	RunWayPointParser RunDeviceDriver \
 	RunCanvas RunMapWindow RunDialog \
+	RunProgressWindow \
 	RunAirspaceWarningDialog
 
 ifeq ($(TARGET),UNIX)
@@ -619,6 +620,29 @@ RUN_DIALOG_LDADD = \
 $(RUN_DIALOG_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(RUN_DIALOG_BIN): LDLIBS += $(SCREEN_LDLIBS)
 $(RUN_DIALOG_BIN): $(RUN_DIALOG_OBJS) $(RUN_DIALOG_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_PROGRESS_WINDOW_SOURCES = \
+	$(SRC)/Version.cpp \
+	$(SRC)/Thread/Debug.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Screen/ProgressWindow.cpp \
+	$(SRC)/Screen/ProgressBar.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(TEST_SRC_DIR)/FakeInterface.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/RunProgressWindow.cpp
+RUN_PROGRESS_WINDOW_OBJS = $(call SRC_TO_OBJ,$(RUN_PROGRESS_WINDOW_SOURCES))
+RUN_PROGRESS_WINDOW_BIN = $(TARGET_BIN_DIR)/RunProgressWindow$(TARGET_EXEEXT)
+RUN_PROGRESS_WINDOW_LDADD = \
+	$(SCREEN_LIBS) \
+	$(MATH_LIBS) \
+	$(RESOURCE_BINARY)
+$(RUN_PROGRESS_WINDOW_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(RUN_PROGRESS_WINDOW_BIN): LDLIBS += $(SCREEN_LDLIBS)
+$(RUN_PROGRESS_WINDOW_BIN): $(RUN_PROGRESS_WINDOW_OBJS) $(RUN_PROGRESS_WINDOW_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
