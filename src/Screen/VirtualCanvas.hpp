@@ -63,7 +63,7 @@ public:
 
 #ifdef ENABLE_SDL
   void resize(unsigned _width, unsigned _height) {
-    if (_width != get_width() && _height != get_height())
+    if (_width != get_width() || _height != get_height())
       set(*this, _width, _height);
   }
 
