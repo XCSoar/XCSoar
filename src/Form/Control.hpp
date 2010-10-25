@@ -89,7 +89,7 @@ public:
    * function defined by mOnHelpCallback
    * @return
    */
-  virtual int OnHelp();
+  int OnHelp();
 
   /**
    * Sets the function that should be called when the help button is pressed
@@ -143,7 +143,8 @@ public:
    * @param Value The new background color
    * @return The old background color
    */
-  virtual void SetBackColor(Color Value);
+  void SetBackColor(Color Value);
+
   /**
    * Return the Control's background color
    * @return The Control's background color
@@ -164,7 +165,7 @@ public:
    * Sets the Caption/Text of the Control
    * @param Value The new Caption/Text of the Control
    */
-  virtual void SetCaption(const TCHAR *Value);
+  void SetCaption(const TCHAR *Value);
 
   /**
    * Sets the Helptext of the Control
