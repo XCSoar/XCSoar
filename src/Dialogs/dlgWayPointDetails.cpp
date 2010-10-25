@@ -510,7 +510,7 @@ OnRemoveFromTaskClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnImagePaint(WindowControl *Sender, Canvas &canvas)
+OnImagePaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   (void)Sender;
 

@@ -49,8 +49,8 @@ class ContainerWindow;
  */
 class WndOwnerDrawFrame : public WindowControl {
 public:
-  typedef void (*OnPaintCallback_t)(WindowControl *Sender, Canvas &canvas);
-  typedef bool (*OnMouseDownCallback_t)(WindowControl *Sender, int x, int y);
+  typedef void (*OnPaintCallback_t)(WndOwnerDrawFrame *Sender, Canvas &canvas);
+  typedef bool (*OnMouseDownCallback_t)(WndOwnerDrawFrame *Sender, int x, int y);
 
 public:
   WndOwnerDrawFrame(ContainerWindow &parent,

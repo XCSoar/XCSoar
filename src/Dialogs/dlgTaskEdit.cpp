@@ -105,7 +105,7 @@ OnNewClicked(WindowControl * Sender)
 }
 
 static void
-OnTaskPaint(WindowControl *Sender, Canvas &canvas)
+OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   PaintTask(canvas, Sender->get_client_rect(), *ordered_task,
             XCSoarInterface::Basic().Location,
@@ -229,7 +229,7 @@ OnMoveDownClicked(WindowControl * Sender)
 }
 
 static bool
-OnTaskViewClick(WindowControl *Sender, int x, int y)
+OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y)
 {
   if (!fullscreen) {
     wTaskView->move(0, 0, wf->GetClientAreaWindow().get_width(),

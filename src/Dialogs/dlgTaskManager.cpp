@@ -117,7 +117,7 @@ OnDeclareClicked(WindowControl * Sender)
 
 
 static void
-OnTaskPaint(WindowControl *Sender, Canvas &canvas)
+OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   PaintTask(canvas, Sender->get_client_rect(), *ordered_task,
             XCSoarInterface::Basic().Location,

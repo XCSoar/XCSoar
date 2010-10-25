@@ -69,7 +69,7 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnTextPaint(WindowControl *Sender, Canvas &canvas)
+OnTextPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   // background is painted in the base-class
 

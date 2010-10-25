@@ -53,14 +53,14 @@ static Bitmap bitmap_title;
 static Bitmap bitmap_logo;
 
 static void
-OnLogoPaint(WindowControl *Sender, Canvas &canvas)
+OnLogoPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   BitmapCanvas bitmap_canvas(canvas, bitmap_logo);
   canvas.stretch(bitmap_canvas);
 }
 
 static void
-OnTitlePaint(WindowControl *Sender, Canvas &canvas)
+OnTitlePaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   BitmapCanvas bitmap_canvas(canvas, bitmap_title);
   canvas.stretch(bitmap_canvas);

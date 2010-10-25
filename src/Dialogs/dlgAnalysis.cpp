@@ -94,7 +94,7 @@ SetCalcCaption(const TCHAR* caption)
 }
 
 static void
-OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
+OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   RECT rcgfx = Sender->get_client_rect();
 

@@ -102,7 +102,7 @@ get_cursor_name()
 }
 
 static void
-OnTaskPaint(WindowControl *Sender, Canvas &canvas)
+OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   RECT rc = Sender->get_client_rect();
 
