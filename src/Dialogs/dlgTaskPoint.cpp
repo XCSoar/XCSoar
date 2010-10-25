@@ -49,7 +49,6 @@ Copyright_License {
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/Visitors/TaskVisitor.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
-#include "Screen/Chart.hpp"
 #include "Gauge/TaskView.hpp"
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
 
@@ -339,8 +338,7 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
 
   if (!tp) {
-    Chart chart(canvas, rc);
-    chart.DrawNoData();
+    canvas.clear_white();
     return;
   }
 

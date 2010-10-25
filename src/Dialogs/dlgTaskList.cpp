@@ -39,8 +39,6 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
-
-#include "Screen/Chart.hpp"
 #include "TaskStore.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
@@ -108,8 +106,7 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 
   OrderedTask* ordered_task = get_cursor_task();
   if (ordered_task == NULL || !ordered_task->check_task()) {
-    Chart chart(canvas, rc);
-    chart.DrawNoData();
+    canvas.clear_white();
     return;
   }
 
