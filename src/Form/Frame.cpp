@@ -37,15 +37,18 @@ Copyright_License {
 */
 
 #include "Form/Frame.hpp"
+#include "Screen/Fonts.hpp"
 #include "Screen/VirtualCanvas.hpp"
 
 WndFrame::WndFrame(ContainerWindow &parent,
                    int X, int Y, int Width, int Height,
-                   Color background_color,
+                   Color _background_color,
                    const WindowStyle style)
-  :mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
+  :background_color(_background_color),
+   font(&Fonts::Map),
+   mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
 {
-  SetBackColor(background_color);
+  text[0] = _T('\0');
 
   set(parent, X, Y, Width, Height, style);
 }
@@ -58,6 +61,13 @@ WndFrame::SetAlignCenter()
   invalidate();
 }
 
+void
+WndFrame::SetText(const TCHAR *_text)
+{
+  _tcscpy(text, _text);
+  invalidate();
+}
+
 unsigned
 WndFrame::GetTextHeight()
 {
@@ -65,8 +75,8 @@ WndFrame::GetTextHeight()
   ::InflateRect(&rc, -2, -2); // todo border width
 
   VirtualCanvas canvas(1, 1);
-  canvas.select(*GetFont());
-  canvas.formatted_text(&rc, mCaption, mCaptionStyle | DT_CALCRECT);
+  canvas.select(*font);
+  canvas.formatted_text(&rc, text, mCaptionStyle | DT_CALCRECT);
 
   return rc.bottom - rc.top;
 }
@@ -74,19 +84,15 @@ WndFrame::GetTextHeight()
 void
 WndFrame::on_paint(Canvas &canvas)
 {
-  canvas.clear(GetBackColor());
+  canvas.clear(background_color);
 
-  if (mCaption[0] == 0)
-    return;
-
-  canvas.set_text_color(GetForeColor());
-  canvas.set_background_color(GetBackColor());
+  canvas.set_text_color(Color::BLACK);
   canvas.background_transparent();
 
-  canvas.select(*GetFont());
+  canvas.select(*font);
 
   RECT rc = get_client_rect();
   InflateRect(&rc, -2, -2); // todo border width
 
-  canvas.formatted_text(&rc, mCaption, mCaptionStyle);
+  canvas.formatted_text(&rc, text, mCaptionStyle);
 }

@@ -39,9 +39,13 @@ Copyright_License {
 #ifndef XCSOAR_FORM_FRAME_HPP
 #define XCSOAR_FORM_FRAME_HPP
 
-#include "Form/Control.hpp"
+#include "Screen/PaintWindow.hpp"
 
-class WndFrame : public WindowControl {
+class WndFrame : public PaintWindow {
+  Color background_color;
+  const Font *font;
+  TCHAR text[256];
+
 public:
   WndFrame(ContainerWindow &parent,
            int X, int Y, int Width, int Height,
@@ -49,6 +53,21 @@ public:
            const WindowStyle style=WindowStyle());
 
   void SetAlignCenter();
+
+  void SetFont(const Font &_font) {
+    font = &_font;
+    invalidate();
+  }
+
+  void SetText(const TCHAR *_text);
+
+  const TCHAR *GetCaption() const {
+    return text;
+  }
+
+  void SetCaption(const TCHAR *_text) {
+    SetText(_text);
+  }
 
   unsigned GetTextHeight();
 

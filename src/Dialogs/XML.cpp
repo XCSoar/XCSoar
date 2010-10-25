@@ -735,9 +735,6 @@ LoadChild(WndForm &form, ContainerControl &Parent,
                                    pos.x, pos.y, size.cx, size.cy,
                                    Parent.GetBackColor(), style);
 
-    // Set the fore- and background color
-    LoadColors(*frame, node);
-
     // Set the caption
     frame->SetCaption(Caption);
 
