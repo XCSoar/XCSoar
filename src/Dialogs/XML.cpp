@@ -690,7 +690,9 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     style.control_parent();
 
-    PanelControl *frame = new PanelControl(Parent, pos.x, pos.y, size.cx, size.cy, style);
+    PanelControl *frame = new PanelControl(Parent.GetClientAreaWindow(),
+                                           pos.x, pos.y, size.cx, size.cy,
+                                           Parent.GetBackColor(), style);
 
     // Set the fore- and background color
     LoadColors(*frame, node);
