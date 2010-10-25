@@ -722,7 +722,8 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     // Create the DrawControl
     WndOwnerDrawFrame* canvas =
-        new WndOwnerDrawFrame(Parent, pos.x, pos.y, size.cx, size.cy,
+      new WndOwnerDrawFrame(Parent.GetClientAreaWindow(),
+                            pos.x, pos.y, size.cx, size.cy,
                               style, PaintCallback);
 
     // Set the fore- and background color

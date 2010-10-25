@@ -37,16 +37,16 @@ Copyright_License {
 */
 
 #include "Form/Draw.hpp"
-#include "Form/Container.hpp"
+#include "Screen/ContainerWindow.hpp"
 
-WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerControl &parent,
+WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerWindow &parent,
                                      int X, int Y, int Width, int Height,
                                      const WindowStyle style,
                                      OnPaintCallback_t OnPaintCallback)
   :mOnPaintCallback(OnPaintCallback),
    mOnMouseDownCallback(NULL)
 {
-  set(parent.GetClientAreaWindow(), X, Y, Width, Height, style);
+  set(parent, X, Y, Width, Height, style);
 }
 
 void

@@ -41,7 +41,7 @@ Copyright_License {
 
 #include "Form/Control.hpp"
 
-class ContainerControl;
+class ContainerWindow;
 
 /**
  * This class is used for creating custom drawn content.
@@ -53,7 +53,7 @@ public:
   typedef bool (*OnMouseDownCallback_t)(WindowControl *Sender, int x, int y);
 
 public:
-  WndOwnerDrawFrame(ContainerControl &parent,
+  WndOwnerDrawFrame(ContainerWindow &parent,
                     int X, int Y, int Width, int Height,
                     const WindowStyle style,
                     OnPaintCallback_t OnPaintCallback);
