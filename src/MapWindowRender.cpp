@@ -180,9 +180,6 @@ MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT &rc)
 {
   const NMEA_INFO &data = Basic();
 
-  // overlays
-  DrawCDI();
-
   DrawMapScale(canvas, rc, render_projection);
   DrawMapScale2(canvas, rc, render_projection);
   DrawCompass(canvas, rc);

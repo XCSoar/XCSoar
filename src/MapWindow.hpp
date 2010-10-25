@@ -72,7 +72,6 @@ class TopologyStore;
 class RasterTerrain;
 class RasterWeather;
 class Marks;
-class GaugeCDI;
 class Waypoints;
 class Waypoint;
 class Airspaces;
@@ -124,8 +123,6 @@ protected:
 
   Marks *marks;
 
-  GaugeCDI *cdi;
-
   /**
    * Tracks whether the buffer canvas contains valid data.  We use
    * those attributes to prevent showing invalid data on the map, when
@@ -142,7 +139,6 @@ protected:
 
 public:
   MapWindow();
-  virtual ~MapWindow();
 
   static bool register_class(HINSTANCE hInstance);
 
@@ -292,7 +288,6 @@ public:
   void DrawThermalBand(Canvas &canvas, const RECT &rc) const;
   void DrawGlideThroughTerrain(Canvas &canvas) const;
   void DrawTerrainAbove(Canvas &hDC, Canvas &buffer);
-  void DrawCDI();
 
   //  void DrawSpeedToFly(HDC hDC, RECT rc);
   void DrawFLARMTraffic(Canvas &canvas) const;

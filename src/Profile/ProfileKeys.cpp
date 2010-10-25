@@ -183,8 +183,6 @@ const TCHAR szProfileSoundTask[] = CONF("SoundTask");
 const TCHAR szProfileSoundModes[] = CONF("SoundModes");
 const TCHAR szProfileNettoSpeed[] = CONF("NettoSpeed");
 const TCHAR szProfileAccelerometerZero[] = CONF("AccelerometerZero");
-const TCHAR szProfileCDICruise[] = CONF("CDICruise");
-const TCHAR szProfileCDICircling[] = CONF("CDICircling");
 
 const TCHAR szProfileAutoBlank[] = CONF("AutoBlank");
 const TCHAR szProfileAutoBacklight[] = CONF("AutoBacklight");

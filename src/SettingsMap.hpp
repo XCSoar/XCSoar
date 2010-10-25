@@ -91,10 +91,7 @@ struct SETTINGS_MAP {
   bool EnableTrailDrift;
   /** Indicate extra distance reqd. if deviating from target heading */
   bool EnableDetourCostMarker;
-  /** Show compass in cruise mode */
-  bool EnableCDICruise;
-  /** Show compass in circling mode */
-  bool EnableCDICircling;
+
   /** Automatic zoom when closing in on waypoint */
   bool AutoZoom;
   int SnailWidthScale;

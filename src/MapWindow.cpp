@@ -43,7 +43,6 @@ Copyright_License {
 #include "Topology/TopologyStore.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
-#include "Gauge/GaugeCDI.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Math/Earth.hpp"
 
@@ -60,7 +59,6 @@ MapWindow::MapWindow()
    weather(NULL),
    airspace_database(NULL), airspace_warnings(NULL), task(NULL),
    marks(NULL), 
-   cdi(NULL),
    ui_generation(1), buffer_generation(0),
    scale_buffer(0) {}
 
@@ -69,14 +67,6 @@ ZoomClimb_t::ZoomClimb_t():
   ClimbMapScale(fixed(0.25)),
   last_isclimb(false),
   last_targetpan(false) {}
-
-/**
- * Destructor of the MapWindow class
- */
-MapWindow::~MapWindow()
-{
-  delete cdi;
-}
 
 void
 MapWindow::set(ContainerWindow &parent, const RECT &rc)
@@ -90,8 +80,6 @@ MapWindow::set(ContainerWindow &parent, const RECT &rc)
   // initialize other systems
   visible_projection.Initialize(SettingsMap(), get_client_rect());
   buffer_projection = visible_projection;
-
-  cdi = new GaugeCDI(parent); /* XXX better attach to "this"? */
 }
 
 /**

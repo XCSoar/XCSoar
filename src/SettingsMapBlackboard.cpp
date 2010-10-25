@@ -47,8 +47,6 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.DeclutterLabels = 0;
   settings_map.EnableTrailDrift = false;
   settings_map.EnableDetourCostMarker = false;
-  settings_map.EnableCDICruise = false;
-  settings_map.EnableCDICircling = false;
   settings_map.AutoZoom = false;
   settings_map.SnailWidthScale = 16;
   settings_map.WindArrowStyle = 0;

@@ -366,9 +366,6 @@ Profile::Use()
   Get(szProfileSoundModes,
       settings_computer.EnableSoundModes);
 
-  settings_map.EnableCDICruise = 0;
-  settings_map.EnableCDICircling = 0;
-
 #ifdef HAVE_BLANK
   Get(szProfileAutoBlank,
       settings_map.EnableAutoBlank);

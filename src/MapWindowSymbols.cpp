@@ -571,17 +571,3 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas) const
 
   canvas.polygon(Arrow, sizeof(Arrow) / sizeof(Arrow[0]));
 }
-
-#include "Gauge/GaugeCDI.hpp"
-
-void MapWindow::DrawCDI() {
-  if (Calculated().Circling ?
-      !SettingsMap().EnableCDICircling :
-      !SettingsMap().EnableCDICruise) {
-    cdi->hide_async();
-    return;
-  }
-
-  cdi->update_async(Basic().TrackBearing,
-                    Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing);
-}

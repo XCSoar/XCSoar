@@ -57,7 +57,6 @@ Copyright_License {
 #include "Topology/TopologyStore.hpp"
 #include "Topology/TopologyGlue.hpp"
 #include "Dialogs.h"
-#include "Gauge/GaugeCDI.hpp"
 #include "Logger/LoggerImpl.hpp"
 #include "Audio/Sound.hpp"
 #include "ButtonLabel.hpp"
@@ -100,11 +99,6 @@ static RasterTerrain *terrain;
 Logger logger;
 
 unsigned InfoBoxLayout::ControlWidth = 100;
-
-GaugeCDI::GaugeCDI(ContainerWindow &parent) {}
-void GaugeCDI::update_async(Angle TrackBearing, Angle WaypointBearing) {}
-void GaugeCDI::hide_async() {}
-bool GaugeCDI::on_user(unsigned id) { return true; }
 
 LoggerImpl::LoggerImpl() {}
 LoggerImpl::~LoggerImpl() {}

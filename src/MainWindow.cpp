@@ -52,7 +52,6 @@ Copyright_License {
 #include "Gauge/GaugeFLARM.hpp"
 #include "Gauge/GaugeThermalAssistant.hpp"
 #include "Gauge/GaugeVario.hpp"
-#include "Gauge/GaugeCDI.hpp"
 #include "MenuBar.hpp"
 #include "Appearance.hpp"
 
