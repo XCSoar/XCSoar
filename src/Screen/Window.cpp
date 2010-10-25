@@ -240,7 +240,7 @@ Window::show()
     return;
 
   visible = true;
-  expose();
+  parent->invalidate();
 }
 
 void
