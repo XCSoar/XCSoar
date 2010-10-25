@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <Form Width="320" Height="240" Caption="Analysis">
-  <Canvas Name="frmGrid" X="90" Y="2" Width="-1" Height="218" Border="1" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnAnalysisPaint" />
+  <Canvas Name="frmGrid" X="90" Y="2" Width="-1" Height="218" Border="1" OnPaint="OnAnalysisPaint" />
 
   <Label Name="frmInfo" X="0" Y="5" Width="90" Height="120"/>
 

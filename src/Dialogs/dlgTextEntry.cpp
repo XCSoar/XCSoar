@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Screen/Fonts.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "SettingsMap.hpp"
@@ -71,9 +72,10 @@ OnCloseClicked(gcc_unused WndButton &button)
 static void
 OnTextPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
-  // background is painted in the base-class
+  canvas.clear(Color(0x40, 0x40, 0x00));
 
   // Do the actual painting of the text
+  canvas.select(Fonts::Map);
 
   SIZE tsize = canvas.text_size(edittext);
   SIZE tsizec = canvas.text_size(edittext, cursor);
@@ -99,6 +101,7 @@ OnTextPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   canvas.polyline(p + 1, 4);
 
   canvas.background_transparent();
+  canvas.set_text_color(Color::WHITE);
   canvas.text(p[0].x, p[0].y, edittext);
 }
 

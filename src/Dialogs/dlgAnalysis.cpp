@@ -96,6 +96,10 @@ SetCalcCaption(const TCHAR* caption)
 static void
 OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
+  canvas.clear(Color(0x40, 0x40, 0x00));
+  canvas.set_text_color(Color::WHITE);
+  canvas.select(Fonts::Map);
+
   RECT rcgfx = Sender->get_client_rect();
 
   // background is painted in the base-class

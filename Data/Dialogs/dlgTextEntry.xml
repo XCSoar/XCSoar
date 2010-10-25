@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <Form Name="frmTextEntry" X="5" Y="5" Width="200" Height="83" Caption="Edit text">
-  <Canvas Name="frmGrid" X="2" Y="2" Width="-2" Height="35" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTextPaint" />
+  <Canvas Name="frmGrid" X="2" Y="2" Width="-2" Height="35" OnPaint="OnTextPaint" />
 
   <Button Name="cmdClose" Caption="Close" X="5" Y="38" Width="60" Height="26" OnClick="OnCloseClicked" />
   <Button Name="cmdDown" Caption="A+" X="67" Y="38" Width="27" Height="26" OnClick="OnDownClicked" />
