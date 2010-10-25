@@ -37,33 +37,24 @@ Copyright_License {
 */
 
 #include "Screen/Bitmap.hpp"
+#include "Gauge/LogoView.hpp"
 #include "Dialogs/Internal.hpp"
 #include "resource.h"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "Simulator.hpp"
-#include "Version.hpp"
 
 #include <stdio.h>
 
 #ifdef SIMULATOR_AVAILABLE
 
 static WndForm *wf = NULL;
-static Bitmap bitmap_title;
-static Bitmap bitmap_logo;
 
 static void
 OnLogoPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
-  BitmapCanvas bitmap_canvas(canvas, bitmap_logo);
-  canvas.stretch(bitmap_canvas);
-}
-
-static void
-OnTitlePaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
-{
-  BitmapCanvas bitmap_canvas(canvas, bitmap_title);
-  canvas.stretch(bitmap_canvas);
+  canvas.clear_white();
+  DrawLogo(canvas, Sender->get_client_rect());
 }
 
 static void
@@ -79,7 +70,6 @@ OnFlyClicked(gcc_unused WndButton &button)
 }
 
 static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnTitlePaint),
   DeclareCallBackEntry(OnLogoPaint),
   DeclareCallBackEntry(NULL)
 };
@@ -95,13 +85,6 @@ dlgSimulatorPromptShowModal()
                                       _T("IDR_XML_SIMULATORPROMPT"));
   assert(wf != NULL);
 
-  TCHAR temp[MAX_PATH];
-  _stprintf(temp, _T("XCSoar v%s"), XCSoar_VersionString);
-
-  WndFrame *label = ((WndFrame *)wf->FindByName(_T("lblVersion")));
-  assert(label != NULL);
-  label->SetCaption(temp);
-
   WndButton* wb;
   wb = ((WndButton *)wf->FindByName(_T("cmdSimulator")));
   assert(wb != NULL);
@@ -110,52 +93,6 @@ dlgSimulatorPromptShowModal()
   wb = ((WndButton *)wf->FindByName(_T("cmdFly")));
   assert(wb != NULL);
   wb->SetOnClickNotify(OnFlyClicked);
-
-  // Determine window size
-  int window_width = wf->get_width();
-  int window_height = wf->get_height();
-
-  bitmap_title.load(window_width > 272 && window_height > 272 ?
-                    IDB_TITLE_HD : IDB_TITLE);
-  SIZE title_size = bitmap_title.get_size();
-
-  // Determine logo size
-  bitmap_logo.load(window_width > 272 && window_height > 272 ?
-                   IDB_SWIFT_HD : IDB_SWIFT);
-  SIZE logo_size = bitmap_logo.get_size();
-
-  // Determine logo and title positions
-  bool hidetitle = false;
-  int logox, logoy, titlex, titley;
-  if (window_width > window_height) {
-    // Landscape
-    logox = (window_width - (logo_size.cx + title_size.cy + title_size.cx)) / 2;
-    logoy = (window_height - logo_size.cy - Layout::Scale(100)) / 2;
-    titlex = logox + logo_size.cx + title_size.cy;
-    titley = (window_height - title_size.cy - Layout::Scale(100)) / 2;
-  } else if (window_width < window_height) {
-    // Portrait
-    logox = (window_width - logo_size.cx) / 2;
-    logoy = (window_height - (logo_size.cy + title_size.cy * 2) -
-             Layout::Scale(100)) / 2;
-    titlex = (window_width - title_size.cx) / 2;
-    titley = logoy + logo_size.cy + title_size.cy;
-  } else {
-    // Square screen
-    logox = (window_width - logo_size.cx) / 2;
-    logoy = (window_height - logo_size.cy - Layout::Scale(100)) / 2;
-    hidetitle = true;
-  }
-
-  WindowControl* wc;
-  wc = ((WindowControl*)wf->FindByName(_T("frmLogo")));
-  wc->move(logox, logoy, logo_size.cx, logo_size.cy);
-
-  wc = ((WindowControl*)wf->FindByName(_T("frmTitle")));
-  if (hidetitle)
-    wc->hide();
-  else
-    wc->move(titlex, titley, title_size.cx, title_size.cy);
 
   bool retval = (wf->ShowModal() == mrOK);
 
