@@ -54,7 +54,7 @@ SDLTimer::callback(Uint32 interval, void *param)
 {
   SDLTimer *timer = (SDLTimer *)param;
 
-  timer->window.on_timer(timer);
+  timer->window.send_timer(timer);
 
   return interval;
 }

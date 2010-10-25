@@ -161,6 +161,7 @@ public:
 #ifdef ENABLE_SDL
   enum {
     EVENT_USER = SDL_USEREVENT,
+    EVENT_TIMER,
   };
 
   friend class SDLTimer;
@@ -782,6 +783,18 @@ public:
     ::PostMessage(hWnd, WM_USER + id, (WPARAM)0, (LPARAM)0);
 #endif /* !ENABLE_SDL */
   }
+
+#ifdef ENABLE_SDL
+  void send_timer(SDLTimer *timer) {
+    SDL_Event event;
+    event.user.type = EVENT_TIMER;
+    event.user.code = 0;
+    event.user.data1 = this;
+    event.user.data2 = timer;
+
+    ::SDL_PushEvent(&event);
+  }
+#endif
 
 protected:
 #ifdef ENABLE_SDL
