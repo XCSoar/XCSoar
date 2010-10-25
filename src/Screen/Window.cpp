@@ -227,7 +227,6 @@ Window::expose()
   if (!visible)
     return;
 
-  canvas.expose();
   if (parent != NULL)
     parent->expose_child(*this);
 }
