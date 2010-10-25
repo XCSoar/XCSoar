@@ -48,6 +48,9 @@ Copyright_License {
 
 class TextWindowStyle : public WindowStyle {
 public:
+  TextWindowStyle() {}
+  TextWindowStyle(const WindowStyle other):WindowStyle(other) {}
+
   void left() {
 #ifndef ENABLE_SDL
     style |= SS_LEFT;
