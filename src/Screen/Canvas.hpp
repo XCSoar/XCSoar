@@ -239,19 +239,19 @@ public:
   }
 
   void clear() {
-    rectangle(0, 0, surface->w, surface->h);
+    rectangle(0, 0, get_width(), get_height());
   }
 
   void clear(const HWColor color) {
-    fill_rectangle(0, 0, surface->w, surface->h, color);
+    fill_rectangle(0, 0, get_width(), get_height(), color);
   }
 
   void clear(const Color color) {
-    fill_rectangle(0, 0, surface->w, surface->h, color);
+    fill_rectangle(0, 0, get_width(), get_height(), color);
   }
 
   void clear(const Brush &brush) {
-    fill_rectangle(0, 0, surface->w, surface->h, brush);
+    fill_rectangle(0, 0, get_width(), get_height(), brush);
   }
 
   void clear_white() {

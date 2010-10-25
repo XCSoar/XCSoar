@@ -206,7 +206,7 @@ Canvas::copy(int dest_x, int dest_y,
 void
 Canvas::copy(const Canvas &src, int src_x, int src_y)
 {
-  copy(0, 0, src.surface->w, src.surface->h, src, src_x, src_y);
+  copy(0, 0, src.get_width(), src.get_height(), src, src_x, src_y);
 }
 
 void
