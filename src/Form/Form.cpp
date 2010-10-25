@@ -178,7 +178,7 @@ WndForm::FilterAdvanced(bool advanced)
 bool
 WndForm::on_resize(unsigned width, unsigned height)
 {
-  ContainerControl::on_resize(width, height);
+  ContainerWindow::on_resize(width, height);
   UpdateLayout();
   return true;
 }
@@ -191,7 +191,7 @@ WndForm::on_destroy()
 
   kill_timer(cbTimerID);
 
-  ContainerControl::on_destroy();
+  ContainerWindow::on_destroy();
   return true;
 }
 
@@ -203,7 +203,7 @@ WndForm::on_timer(timer_t id)
       mOnTimerNotify(*this);
     return true;
   } else
-    return ContainerControl::on_timer(id);
+    return ContainerWindow::on_timer(id);
 }
 
 bool
@@ -377,7 +377,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 void
 WndForm::on_paint(Canvas &canvas)
 {
-  ContainerControl::on_paint(canvas);
+  ContainerWindow::on_paint(canvas);
 
   // Get window coordinates
   RECT rcClient = get_client_rect();
@@ -386,7 +386,7 @@ WndForm::on_paint(Canvas &canvas)
   canvas.raised_edge(rcClient);
 
   // Set the colors
-  canvas.set_text_color(GetForeColor());
+  canvas.set_text_color(Color::BLACK);
   canvas.set_background_color(mColorTitle);
   canvas.background_transparent();
 
@@ -417,5 +417,4 @@ void
 WndForm::SetBackColor(Color Value)
 {
   client_area.SetBackColor(Value);
-  ContainerControl::SetBackColor(Value);
 }

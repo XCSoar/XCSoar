@@ -453,7 +453,9 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
   form = new WndForm(Parent, pos.x, pos.y, size.cx, size.cy, Caption, style);
 
   // Set fore- and background colors
-  LoadColors(*form, node);
+  Color color;
+  if (StringToColor(node.getAttribute(_T("BackColor")), color))
+    form->SetBackColor(color);
 
   // Load the children controls
   LoadChildrenFromXML(*form, form->GetClientAreaWindow(), form->GetBackColor(),

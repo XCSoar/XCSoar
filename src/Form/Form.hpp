@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_FORM_FORM_HPP
 #define XCSOAR_FORM_FORM_HPP
 
-#include "Form/Container.hpp"
+#include "Screen/ContainerWindow.hpp"
 #include "Dialogs.h"
 #include "Util/tstring.hpp"
 
@@ -53,7 +53,7 @@ class PeriodClock;
  * A WndForm represents a Window with a titlebar.
  * It is used to display the XML dialogs and MessageBoxes.
  */
-class WndForm: public ContainerControl
+class WndForm: public ContainerWindow
 {
   struct tstring_less_than {
     bool operator()(const tstring &a, const tstring &b) const
@@ -76,6 +76,10 @@ class WndForm: public ContainerControl
 
   public:
     ClientAreaWindow():mCommandCallback(NULL) {}
+
+    Color GetBackColor() const {
+      return background_color;
+    }
 
     void SetBackColor(Color color) {
       background_color = color;
@@ -133,6 +137,8 @@ protected:
   virtual void on_paint(Canvas &canvas);
 
   timer_t cbTimerID;
+
+  TCHAR mCaption[256];
 
 public:
   /**
@@ -221,6 +227,10 @@ public:
 
   int ShowModal(bool bEnableMap = false);
 
+  const TCHAR *GetCaption() const {
+    return mCaption;
+  }
+
   /** Set the titlebar text */
   void SetCaption(const TCHAR *Value);
 
@@ -229,6 +239,10 @@ public:
   virtual bool on_destroy();
   virtual bool on_timer(timer_t id);
   virtual bool on_command(unsigned id, unsigned code);
+
+  Color GetBackColor() const {
+    return client_area.GetBackColor();
+  }
 
   /** Set the background color of the window */
   void SetBackColor(Color Value);

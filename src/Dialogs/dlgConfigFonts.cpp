@@ -176,7 +176,6 @@ RefreshFonts()
     sample->SetFont(TempMapLabelFont);
 
   // now fix the rest of the dlgConfiguration fonts:
-  wf->SetFont(TempMapWindowBoldFont);
   wf->SetTitleFont(TempMapWindowBoldFont);
 }
 
