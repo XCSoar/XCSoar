@@ -174,14 +174,22 @@ public:
 protected:
 #ifdef ENABLE_SDL
   ContainerWindow *parent;
+
+private:
   int left, top;
+
+protected:
   BufferCanvas canvas;
+
+private:
   const Font *font;
 
   bool visible;
   bool focused;
 #else
   HWND hWnd;
+
+private:
   WNDPROC prev_wndproc;
 #endif
 
