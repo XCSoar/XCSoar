@@ -72,6 +72,10 @@ RasterBuffer::get_interpolated(unsigned lx, unsigned ly,
   const unsigned int dy = (ly == height - 1) ? 0 : width;
   const short *tm = data + ly * width + lx;
 
+  if (is_special(*tm) || is_special(tm[dx]) ||
+      is_special(tm[dy]) || is_special(tm[dx + dy]))
+    return *tm;
+
   if (ix > iy) {
     // lower triangle
     return *tm + ((ix * (tm[dx] - *tm) - iy * (tm[dx] - tm[dx + dy])) >> 8);
