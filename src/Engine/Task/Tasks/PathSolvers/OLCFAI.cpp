@@ -11,10 +11,30 @@ OLCFAI::OLCFAI(const TracePointVector &_trace):
 bool 
 OLCFAI::finish_satisfied(const ScanTaskPoint &sp) const
 {
-  /// \todo implement checks for distance constraints
-  // if d<500km, shortest leg >= 28% d; else shortest leg >= 25%d
+  if (!ContestDijkstra::finish_satisfied(sp))
+    return false;
 
-  return ContestDijkstra::finish_satisfied(sp);
+  // if d<500km, shortest leg >= 28% d; else shortest leg >= 25%d
+  fixed dist = fixed_zero;
+  fixed shortest_leg = fixed_minus_one;
+  for (unsigned i = 0; i + 1 < num_stages; i++) {
+    fixed leg = solution[i].get_location().distance(solution[i+1].get_location());
+    if (leg <= fixed_zero)
+      break;
+
+    dist += leg;
+
+    if (shortest_leg < fixed_zero)
+      shortest_leg = leg;
+    else if (shortest_leg > leg)
+      shortest_leg = leg;
+  }
+
+  shortest_leg = shortest_leg / dist;
+  if (dist > fixed(500000))
+    return (shortest_leg > fixed(0.25));
+  else
+    return (shortest_leg > fixed(0.28));
 }
 
 bool 
