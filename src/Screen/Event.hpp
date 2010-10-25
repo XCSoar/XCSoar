@@ -44,19 +44,6 @@ Copyright_License {
 #include <SDL_version.h>
 #include <SDL_events.h>
 
-/**
- * Is this a SDL_UserEvent?
- */
-static inline bool
-is_user_event(const SDL_Event &event)
-{
-#if SDL_VERSION_ATLEAST(1,3,0)
-  return event.type >= SDL_USEREVENT && event.type <= SDL_LASTEVENT;
-#else
-  return event.type >= SDL_USEREVENT && event.type <= SDL_NUMEVENTS - 1;
-#endif
-}
-
 class TopWindow;
 
 class EventLoop {

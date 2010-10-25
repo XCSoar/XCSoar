@@ -159,6 +159,10 @@ class Window : private NonCopyable {
 
 public:
 #ifdef ENABLE_SDL
+  enum {
+    EVENT_USER = SDL_USEREVENT,
+  };
+
   friend class SDLTimer;
   friend class WindowCanvas;
   typedef SDLTimer *timer_t;
@@ -768,8 +772,8 @@ public:
   void send_user(unsigned id) {
 #ifdef ENABLE_SDL
     SDL_Event event;
-    event.user.type = SDL_USEREVENT + id;
-    event.user.code = 0;
+    event.user.type = EVENT_USER;
+    event.user.code = (int)id;
     event.user.data1 = this;
     event.user.data2 = NULL;
 

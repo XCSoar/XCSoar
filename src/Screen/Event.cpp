@@ -51,9 +51,9 @@ EventLoop::get(SDL_Event &event)
 void
 EventLoop::dispatch(SDL_Event &event)
 {
-  if (is_user_event(event) && event.user.data1 != NULL) {
+  if (event.type == Window::EVENT_USER && event.user.data1 != NULL) {
     Window *window = (Window *)event.user.data1;
-    window->on_user(event.type - SDL_USEREVENT);
+    window->on_user(event.user.code);
   } else
     ((Window &)top_window).on_event(event);
 }
