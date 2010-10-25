@@ -3,7 +3,7 @@
 <Form Name="frmTaskPoint" Width="320" Height="240" Caption="Waypoint">
   <Button Caption="Close" X="2" Width="70" Height="22" OnClick="OnCloseClicked"/>
 
-  <Canvas Name="frmTaskView" X="2" Y="26" Width="70" Height="70" Border="1" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
+  <Canvas Name="frmTaskView" X="2" Y="26" Width="70" Height="70" Border="1" OnPaint="OnTaskPaint" />
 
   <Button Name="butRemove" Caption="Remove" X="2" Width="70" Height="22" OnClick="OnRemoveClicked"/>
   <Button Name="butRelocate" Caption="Relocate" X="2" Width="70" Height="22" OnClick="OnRelocateClicked"/>

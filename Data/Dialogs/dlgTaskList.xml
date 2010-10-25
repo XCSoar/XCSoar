@@ -9,6 +9,6 @@
   <Button Name="cmdRename" Caption="Rename" X="81" Y="158" Width="77" Height="22" OnClick="OnRenameClicked"/>
   <Button Name="cmdDelete" Caption="Delete" X="160" Y="158" Width="77" Height="22" OnClick="OnDeleteClicked"/>
 
-  <Canvas Name="frmTaskView" X="2" Y="182" Width="115" Height="-2" Border="1" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
+  <Canvas Name="frmTaskView" X="2" Y="182" Width="115" Height="-2" Border="1" OnPaint="OnTaskPaint" />
   <Label Name="frmSummary" X="119" Y="182" Width="-2" Height="-2" Border="1"/>
 </Form>

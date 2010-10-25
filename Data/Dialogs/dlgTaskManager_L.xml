@@ -7,6 +7,6 @@
 
   <Button Name="cmdDeclare" Caption="Declare" X="2" Y="201" Width="98" Height="22" OnClick="OnDeclareClicked"/>
 
-  <Canvas Name="frmTaskView" X="102" Y="2" Width="215" Height="220" Border="1" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
+  <Canvas Name="frmTaskView" X="102" Y="2" Width="215" Height="220" Border="1" OnPaint="OnTaskPaint" />
 
 </Form>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <Form Name="frmTaskEdit" Width="240" Height="320" Caption="Edit Task">
-  <Canvas Name="frmTaskView" X="2" Y="184" Width="115" Height="118" Border="1" BackColor="0x404000" ForeColor="0xFFFFFF" OnPaint="OnTaskPaint" />
+  <Canvas Name="frmTaskView" X="2" Y="184" Width="115" Height="118" Border="1" OnPaint="OnTaskPaint" />
 
   <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="77" Height="22" OnClick="OnCloseClicked"/>
   <SymbolButton Name="cmdDown" Caption="v" X="176" Y="2" Width="30" Height="22" OnClick="OnMoveDownClicked"/>
