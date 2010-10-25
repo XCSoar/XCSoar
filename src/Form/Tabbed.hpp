@@ -42,8 +42,6 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Util/StaticArray.hpp"
 
-#include <vector>
-
 class TabbedControl : public ContainerWindow {
 public:
   TabbedControl(ContainerWindow &parent,
