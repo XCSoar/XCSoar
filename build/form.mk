@@ -4,7 +4,6 @@ FORM_SRC_DIR = $(SRC)/Form
 
 FORM_SOURCES = \
 	$(FORM_SRC_DIR)/Control.cpp \
-	$(FORM_SRC_DIR)/Container.cpp \
 	$(FORM_SRC_DIR)/Panel.cpp \
 	$(FORM_SRC_DIR)/Form.cpp \
 	$(FORM_SRC_DIR)/Button.cpp \

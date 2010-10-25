@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Form/Edit.hpp"
-#include "Form/Container.hpp"
 #include "Form/Internal.hpp"
 #include "DataField/Base.hpp"
 #include "Screen/Bitmap.hpp"
