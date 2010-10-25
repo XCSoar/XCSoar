@@ -46,9 +46,6 @@ WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerControl &parent,
   :mOnPaintCallback(OnPaintCallback),
    mOnMouseDownCallback(NULL)
 {
-  SetForeColor(parent.GetForeColor());
-  SetBackColor(parent.GetBackColor());
-
   set(parent.GetClientAreaWindow(), X, Y, Width, Height, style);
 }
 
