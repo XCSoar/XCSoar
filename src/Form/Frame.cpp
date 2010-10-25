@@ -39,15 +39,15 @@ Copyright_License {
 #include "Form/Frame.hpp"
 #include "Screen/VirtualCanvas.hpp"
 
-WndFrame::WndFrame(ContainerControl &parent,
+WndFrame::WndFrame(ContainerWindow &parent,
                    int X, int Y, int Width, int Height,
+                   Color background_color,
                    const WindowStyle style)
   :mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
 {
-  SetForeColor(parent.GetForeColor());
-  SetBackColor(parent.GetBackColor());
+  SetBackColor(background_color);
 
-  set(parent.GetClientAreaWindow(), X, Y, Width, Height, style);
+  set(parent, X, Y, Width, Height, style);
 }
 
 void

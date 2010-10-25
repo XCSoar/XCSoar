@@ -39,12 +39,13 @@ Copyright_License {
 #ifndef XCSOAR_FORM_FRAME_HPP
 #define XCSOAR_FORM_FRAME_HPP
 
-#include "Form/Container.hpp"
+#include "Form/Control.hpp"
 
 class WndFrame : public WindowControl {
 public:
-  WndFrame(ContainerControl &parent,
+  WndFrame(ContainerWindow &parent,
            int X, int Y, int Width, int Height,
+           Color background_color,
            const WindowStyle style=WindowStyle());
 
   void SetAlignCenter();

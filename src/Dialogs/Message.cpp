@@ -116,7 +116,9 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
              style);
 
   // Create text element
-  wText = new WndFrame(wf, 0, Layout::Scale(2), Width, Height);
+  wText = new WndFrame(wf.GetClientAreaWindow(),
+                       0, Layout::Scale(2), Width, Height,
+                       wf.GetBackColor());
 
   wText->SetCaption(lpText);
   wText->SetAlignCenter();

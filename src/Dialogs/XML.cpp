@@ -731,7 +731,9 @@ LoadChild(WndForm &form, ContainerControl &Parent,
   // FrameControl (WndFrame)
   } else if (_tcscmp(node.getName(), _T("Label")) == 0){
     // Create the FrameControl
-    WndFrame* frame = new WndFrame(Parent, pos.x, pos.y, size.cx, size.cy, style);
+    WndFrame* frame = new WndFrame(Parent.GetClientAreaWindow(),
+                                   pos.x, pos.y, size.cx, size.cy,
+                                   Parent.GetBackColor(), style);
 
     // Set the fore- and background color
     LoadColors(*frame, node);
