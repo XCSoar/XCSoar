@@ -114,11 +114,20 @@ WndForm::WndForm(SingleWindow &_main_window,
                   mClientRect.bottom - mClientRect.top, client_style);
   client_area.SetBackColor(GetBackColor());
 
-  cbTimerID = set_timer(1001, 500);
-
 #if !defined(ENABLE_SDL) && !defined(NDEBUG)
   ::SetWindowText(hWnd, mCaption);
 #endif
+}
+
+void
+WndForm::SetTimerNotify(TimerNotifyCallback_t OnTimerNotify)
+{
+  if (mOnTimerNotify != NULL && OnTimerNotify == NULL)
+    kill_timer(cbTimerID);
+  else if (mOnTimerNotify == NULL && OnTimerNotify != NULL)
+    cbTimerID = set_timer(1001, 500);
+
+  mOnTimerNotify = OnTimerNotify;
 }
 
 WndForm::~WndForm()
@@ -189,7 +198,8 @@ WndForm::on_destroy()
   if (mModalResult == 0)
     mModalResult = mrCancel;
 
-  kill_timer(cbTimerID);
+  if (mOnTimerNotify != NULL)
+    kill_timer(cbTimerID);
 
   ContainerWindow::on_destroy();
   return true;
