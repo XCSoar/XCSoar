@@ -55,13 +55,14 @@ public:
   OLCFAI(const TracePointVector &_trace);
 
 protected:
+  bool finish_satisfied(const ScanTaskPoint &sp) const;
+  bool fai_triangle_satisfied(const ScanTaskPoint &sp) const;
+  bool triangle_closed(const ScanTaskPoint &sp) const;
 
   void add_edges(DijkstraTaskPoint &dijkstra,
                  const ScanTaskPoint &curNode);
 
   bool admit_candidate(const ScanTaskPoint &candidate) const;
-  bool finish_satisfied(const ScanTaskPoint &sp) const;
-
 };
 
 #endif
