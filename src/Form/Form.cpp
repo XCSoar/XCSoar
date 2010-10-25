@@ -190,7 +190,7 @@ WndForm::on_timer(timer_t id)
 {
   if (id == cbTimerID) {
     if (mOnTimerNotify)
-      mOnTimerNotify(this);
+      mOnTimerNotify(*this);
     return true;
   } else
     return ContainerControl::on_timer(id);
@@ -320,7 +320,7 @@ int WndForm::ShowModal(bool bEnableMap) {
       continue;
 
     if (msg.message == WM_KEYDOWN && mOnKeyDownNotify != NULL &&
-        mOnKeyDownNotify(this, msg.wParam))
+        mOnKeyDownNotify(*this, msg.wParam))
       continue;
 
     if (msg.message == WM_KEYDOWN && identify_descendant(msg.hwnd) &&

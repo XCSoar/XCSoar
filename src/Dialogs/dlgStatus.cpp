@@ -107,7 +107,7 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static bool
-FormKeyDown(WindowControl *Sender, unsigned key_code)
+FormKeyDown(WndForm &Sender, unsigned key_code)
 {
   (void)Sender;
   switch (key_code) {
@@ -504,7 +504,7 @@ UpdateValuesTask(void)
 }
 
 static void
-OnTimerNotify(WindowControl * Sender)
+OnTimerNotify(WndForm &Sender)
 {
   (void)Sender;
   UpdateValuesSystem();

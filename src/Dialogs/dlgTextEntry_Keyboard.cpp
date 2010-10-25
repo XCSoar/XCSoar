@@ -103,7 +103,7 @@ DoCharacter(TCHAR character)
 }
 
 static bool
-FormKeyDown(WindowControl *Sender, unsigned key_code)
+FormKeyDown(WndForm &Sender, unsigned key_code)
 {
   switch (key_code) {
   case VK_RIGHT:

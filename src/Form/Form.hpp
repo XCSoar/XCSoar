@@ -89,9 +89,8 @@ class WndForm: public ContainerControl
   };
 
 public:
-  typedef void (*TimerNotifyCallback_t)(WindowControl *Sender);
-  typedef bool (*KeyDownNotifyCallback_t)(WindowControl *Sender,
-      unsigned key_code);
+  typedef void (*TimerNotifyCallback_t)(WndForm &Sender);
+  typedef bool (*KeyDownNotifyCallback_t)(WndForm &Sender, unsigned key_code);
 
 private:
   /**

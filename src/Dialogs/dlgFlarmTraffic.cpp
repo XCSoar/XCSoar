@@ -501,7 +501,7 @@ OnNorthUp(CheckBoxControl &control)
  * @return True if the event was handled, False otherwise
  */
 static bool
-FormKeyDown(WindowControl *Sender, unsigned key_code)
+FormKeyDown(WndForm &Sender, unsigned key_code)
 {
   (void)Sender;
 
@@ -548,7 +548,7 @@ Update()
  * repainting of the radar
  */
 static void
-OnTimerNotify(WindowControl * Sender)
+OnTimerNotify(WndForm &Sender)
 {
   (void)Sender;
   Update();

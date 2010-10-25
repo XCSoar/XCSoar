@@ -168,7 +168,7 @@ SetBallast(void)
  * input due to the dump function.
  */
 static void
-OnTimerNotify(WindowControl * Sender)
+OnTimerNotify(WndForm &Sender)
 {
   (void)Sender;
 
@@ -246,7 +246,7 @@ dlgBasicSettingsShowModal()
   changed = false;
 
   wf->SetTimerNotify(OnTimerNotify);
-  OnTimerNotify(NULL);
+  OnTimerNotify(*wf);
 
   SetButtons();
 

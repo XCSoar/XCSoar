@@ -164,32 +164,32 @@ static void OnCloseClicked(WindowControl * Sender) {
 
 
 static bool
-OnKeyDown(WindowControl *Sender, unsigned key_code)
+OnKeyDown(WndForm &Sender, unsigned key_code)
 {
   switch(key_code){
     case VK_ESCAPE:
-      OnCloseClicked(Sender);
+      OnCloseClicked(NULL);
     return true;
 
 #ifdef GNAV
     case VK_APP1:
     case '6':
-      OnAckClicked(Sender);
+      OnAckClicked(NULL);
     return true;
 
     case VK_APP2:
     case '7':
-      OnAck1Clicked(Sender);
+      OnAck1Clicked(NULL);
     return true;
 
     case VK_APP3:
     case '8':
-      OnAck2Clicked(Sender);
+      OnAck2Clicked(NULL);
     return true;
 
     case VK_APP4:
     case '9':
-      OnEnableClicked(Sender);
+      OnEnableClicked(NULL);
     return true;
 #endif
 
@@ -412,7 +412,7 @@ update_list()
 }
 
 static void
-OnTimer(WindowControl * Sender)
+OnTimer(WndForm &Sender)
 {
   update_list();
 }

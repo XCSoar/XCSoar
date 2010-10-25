@@ -195,7 +195,7 @@ Update()
  * update of the variable fields of the dialog
  */
 static void
-OnTimerNotify(WindowControl * Sender)
+OnTimerNotify(WndForm &Sender)
 {
   (void)Sender;
   UpdateChanging();

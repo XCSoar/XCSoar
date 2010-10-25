@@ -187,7 +187,7 @@ OnTargetClicked(WindowControl * Sender)
   wf->show();
 }
 
-static void OnTimerNotify(WindowControl * Sender) {
+static void OnTimerNotify(WndForm &Sender) {
   (void)Sender;
   RefreshCalculator();
 }

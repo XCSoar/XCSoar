@@ -700,7 +700,7 @@ OnSchemeZanderClicked(WindowControl * Sender)
 }
 
 static bool
-FormKeyDown(WindowControl *Sender, unsigned key_code)
+FormKeyDown(WndForm &Sender, unsigned key_code)
 {
   switch (key_code) {
   // JMW NO! This disables editing! //   case VK_LEFT:

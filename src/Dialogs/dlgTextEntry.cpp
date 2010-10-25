@@ -143,7 +143,7 @@ MoveCursor(void)
 }
 
 static bool
-FormKeyDown(WindowControl *Sender, unsigned key_code)
+FormKeyDown(WndForm &Sender, unsigned key_code)
 {
   (void)Sender;
 
@@ -186,25 +186,25 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
 static void
 OnLeftClicked(WndButton &button)
 {
-  FormKeyDown(NULL, VK_LEFT);
+  FormKeyDown(*wf, VK_LEFT);
 }
 
 static void
 OnRightClicked(WndButton &button)
 {
-  FormKeyDown(NULL, VK_RIGHT);
+  FormKeyDown(*wf, VK_RIGHT);
 }
 
 static void
 OnUpClicked(WndButton &button)
 {
-  FormKeyDown(NULL, VK_UP);
+  FormKeyDown(*wf, VK_UP);
 }
 
 static void
 OnDownClicked(WndButton &button)
 {
-  FormKeyDown(NULL, VK_DOWN);
+  FormKeyDown(*wf, VK_DOWN);
 }
 
 static CallBackTableEntry CallBackTable[] = {

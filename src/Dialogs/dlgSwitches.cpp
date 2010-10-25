@@ -72,7 +72,7 @@ UpdateValues()
 }
 
 static void
-OnTimerNotify(WindowControl * Sender)
+OnTimerNotify(WndForm &Sender)
 {
   (void)Sender;
   UpdateValues();

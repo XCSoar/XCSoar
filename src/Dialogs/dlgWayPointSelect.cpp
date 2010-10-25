@@ -487,7 +487,7 @@ OnWPSCloseClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnTimerNotify(WindowControl * Sender)
+OnTimerNotify(WndForm &Sender)
 {
   (void)Sender;
   if (filter_data.direction_index == 1) {
@@ -501,7 +501,7 @@ OnTimerNotify(WindowControl * Sender)
 }
 
 static bool
-FormKeyDown(WindowControl *Sender, unsigned key_code)
+FormKeyDown(WndForm &Sender, unsigned key_code)
 {
   type_filter NewIndex = filter_data.type_index;
 
