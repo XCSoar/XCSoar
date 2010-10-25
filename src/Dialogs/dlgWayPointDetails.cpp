@@ -671,7 +671,6 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
 
   wCommand->hide();
   wSpecial->hide();
-  wImage->SetCaption(_("Blank!"));
   wImage->SetOnPaintNotify(OnImagePaint);
 
   WndButton *wb;

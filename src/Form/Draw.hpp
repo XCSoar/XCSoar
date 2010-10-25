@@ -47,7 +47,7 @@ class ContainerWindow;
  * This class is used for creating custom drawn content.
  * It is based on the WindowControl class.
  */
-class WndOwnerDrawFrame : public WindowControl {
+class WndOwnerDrawFrame : public PaintWindow {
 public:
   typedef void (*OnPaintCallback_t)(WndOwnerDrawFrame *Sender, Canvas &canvas);
   typedef bool (*OnMouseDownCallback_t)(WndOwnerDrawFrame *Sender, int x, int y);

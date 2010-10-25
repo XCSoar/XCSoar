@@ -726,9 +726,6 @@ LoadChild(WndForm &form, ContainerControl &Parent,
                             pos.x, pos.y, size.cx, size.cy,
                               style, PaintCallback);
 
-    // Set the fore- and background color
-    LoadColors(*canvas, node);
-
     window = canvas;
 
   // FrameControl (WndFrame)

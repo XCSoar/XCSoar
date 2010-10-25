@@ -52,15 +52,8 @@ WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerWindow &parent,
 void
 WndOwnerDrawFrame::on_paint(Canvas &canvas)
 {
-  canvas.clear(GetBackColor());
-
   if (mOnPaintCallback == NULL)
     return;
-
-  canvas.select(*GetFont());
-  canvas.set_text_color(GetForeColor());
-  canvas.set_background_color(GetBackColor());
-  canvas.background_transparent();
 
   mOnPaintCallback(this, canvas);
 }
