@@ -56,12 +56,12 @@ public:
 
   gcc_const
   static bool is_water(short h) {
-    return h == 0;
+    return h <= 0 && !is_invalid(h);
   }
 
   gcc_const
   static bool is_special(short h) {
-    return is_invalid(h) || is_water(h);
+    return h <= 0;
   }
 
 private:
