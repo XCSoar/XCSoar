@@ -222,6 +222,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Gauge/GaugeThermalAssistant.cpp \
 	$(SRC)/Gauge/GaugeVario.cpp \
 	$(SRC)/Gauge/TaskView.cpp \
+	$(SRC)/Gauge/LogoView.cpp \
 	\
 	$(SRC)/AirfieldDetails.cpp \
 	$(SRC)/MenuData.cpp \

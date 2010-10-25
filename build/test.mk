@@ -630,6 +630,7 @@ RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Screen/ProgressWindow.cpp \
 	$(SRC)/Screen/ProgressBar.cpp \
 	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Gauge/LogoView.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \

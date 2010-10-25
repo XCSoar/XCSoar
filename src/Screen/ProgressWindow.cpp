@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "Screen/ProgressWindow.hpp"
 #include "Screen/BitmapCanvas.hpp"
-#include "Version.hpp"
+#include "Gauge/LogoView.hpp"
 #include "resource.h"
 
 #include <algorithm>
@@ -55,13 +55,8 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 
   unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
 
-  // Load logo
-  bitmap_logo.load(width > 272 && height > 272 ? IDB_SWIFT_HD : IDB_SWIFT);
   // Load progress bar background
   bitmap_progress_border.load(IDB_PROGRESSBORDER);
-
-  // Adjust the title to larger screens
-  bitmap_title.load(width > 272 && height > 272 ? IDB_TITLE_HD : IDB_TITLE);
 
   // Determine text height
   VirtualCanvas canvas(1, 1);
@@ -71,12 +66,6 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   unsigned progress_height = height / 20;
   unsigned progress_horizontal_border = progress_height / 2;
   progress_border_height = progress_height * 2;
-
-  // Initialize version text field
-  TextWindowStyle version_style;
-  version_style.left();
-  version.set(*this, XCSoar_ProductToken, 0, 0,
-              width - progress_height * 2, text_height, version_style);
 
   // Initialize message text field
   TextWindowStyle message_style;
@@ -92,7 +81,6 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
                    width - progress_height,
                    progress_height, pb_style);
 
-  version.install_wndproc(); // needed for on_color()
   message.install_wndproc(); // needed for on_color()
 
   // Set progress bar step size and range
@@ -160,46 +148,12 @@ ProgressWindow::on_paint(Canvas &canvas)
   int window_width = canvas.get_width();
   int window_height = canvas.get_height();
 
-  // Determine logo size
-  SIZE logo_size = bitmap_logo.get_size();
-
-  // Determine title image size
-  SIZE title_size = bitmap_title.get_size();
-
-  int logox, logoy, titlex, titley;
-
-  bool hidetitle = false;
-
-  // Determine logo and title positions
-  if (window_width > window_height) {
-    // Landscape
-    logox = (window_width - (logo_size.cx + title_size.cy + title_size.cx)) / 2;
-    logoy = (window_height - logo_size.cy - progress_border_height) / 2;
-    titlex = logox + logo_size.cx + title_size.cy;
-    titley = (window_height - title_size.cy - progress_border_height) / 2;
-  } else if (window_width < window_height) {
-    // Portrait
-    logox = (window_width - logo_size.cx) / 2;
-    logoy = (window_height - (logo_size.cy + title_size.cy * 2) -
-             progress_border_height) / 2;
-    titlex = (window_width - title_size.cx) / 2;
-    titley = logoy + logo_size.cy + title_size.cy;
-  } else {
-    // Square screen
-    logox = (window_width - logo_size.cx) / 2;
-    logoy = (window_height - logo_size.cy - progress_border_height) / 2;
-    hidetitle = true;
-  }
-
-  // Draw 'XCSoar N.N' title
-  if (!hidetitle){
-    bitmap_canvas.select(bitmap_title);
-    canvas.copy(titlex, titley, title_size.cx, title_size.cy, bitmap_canvas, 0, 0);
-  }
-
-  // Draw XCSoar swift logo
-  bitmap_canvas.select(bitmap_logo);
-  canvas.copy(logox, logoy, logo_size.cx, logo_size.cy, bitmap_canvas, 0, 0);
+  RECT logo_rect;
+  logo_rect.left = 0;
+  logo_rect.top = 0;
+  logo_rect.right = window_width;
+  logo_rect.bottom = window_height - progress_border_height;
+  DrawLogo(canvas, logo_rect);
 
   // Draw progress bar background
   bitmap_canvas.select(bitmap_progress_border);

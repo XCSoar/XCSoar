@@ -36,44 +36,21 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_PROGRESS_WINDOW_HXX
-#define XCSOAR_SCREEN_PROGRESS_WINDOW_HXX
+#ifndef XCSOAR_LOGO_VIEW_HPP
+#define XCSOAR_LOGO_VIEW_HPP
 
-#include "ContainerWindow.hpp"
-#include "TextWindow.hpp"
-#include "ProgressBar.hpp"
-#include "Bitmap.hpp"
+#include <windef.h>
+
+class Canvas;
 
 /**
- * The XCSoar splash screen with a progress bar.
+ * Draws the XCSoar logo and the version number into the Canvas, with
+ * a white background.
+ *
+ * @param canvas the Canvas to draw on
+ * @param rc the region within the Canvas to draw into
  */
-class ProgressWindow : public ContainerWindow {
-  Color background_color;
-  Brush background_brush;
-
-  Bitmap bitmap_progress_border;
-
-  TextWindow message;
-
-  ProgressBar progress_bar;
-  unsigned position;
-
-  unsigned text_height;
-  unsigned progress_border_height;
-public:
-  explicit ProgressWindow(ContainerWindow &parent);
-
-  void set_message(const TCHAR *text);
-
-  void set_range(unsigned min_value, unsigned max_value);
-  void set_step(unsigned size);
-  void set_pos(unsigned value);
-  void step();
-
-protected:
-  virtual bool on_erase(Canvas &canvas);
-  virtual void on_paint(Canvas &canvas);
-  virtual Brush *on_color(Window &window, Canvas &canvas);
-};
+void
+DrawLogo(Canvas &canvas, const RECT &rc);
 
 #endif
