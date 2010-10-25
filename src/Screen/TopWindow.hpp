@@ -105,7 +105,6 @@ public:
 #ifdef ENABLE_SDL
   virtual void invalidate();
 
-  virtual void expose(const RECT &rect);
   virtual void expose();
 #endif /* ENABLE_SDL */
 

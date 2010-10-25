@@ -680,12 +680,6 @@ public:
   virtual void invalidate();
 
   /**
-   * Ensures that the specified rectangle is updated on the physical
-   * screen.
-   */
-  virtual void expose(const RECT &rect);
-
-  /**
    * Ensures that the window is updated on the physical screen.
    */
   virtual void expose();

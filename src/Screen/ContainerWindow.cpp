@@ -198,7 +198,7 @@ ContainerWindow::expose_child(const Window &child)
               child_canvas.get_width(),
               child_canvas.get_height(),
               child_canvas, 0, 0);
-  expose(child.get_position());
+  expose();
 }
 
 #else /* !ENABLE_SDL */

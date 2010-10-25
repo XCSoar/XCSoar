@@ -222,18 +222,6 @@ Window::invalidate()
 }
 
 void
-Window::expose(const RECT &rect)
-{
-  if (!visible)
-    return;
-
-  canvas.expose(rect.left, rect.top,
-                rect.right - rect.left, rect.bottom - rect.top);
-  if (parent != NULL)
-    parent->expose_child(*this);
-}
-
-void
 Window::expose()
 {
   if (!visible)

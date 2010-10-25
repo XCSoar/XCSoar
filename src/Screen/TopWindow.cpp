@@ -212,13 +212,6 @@ TopWindow::invalidate()
 }
 
 void
-TopWindow::expose(const RECT &rect) {
-  ContainerWindow::expose(rect);
-  screen.copy(canvas);
-  screen.expose();
-}
-
-void
 TopWindow::expose() {
   ContainerWindow::expose();
   screen.copy(canvas);
