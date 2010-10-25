@@ -112,6 +112,7 @@ public:
   const POINT &GetScreenOrigin() const {
     return ScreenOrigin;
   }
+
   /**
    * Set the origin/rotation center to the given screen coordinates
    * @param x Screen coordinate in x-direction
@@ -121,6 +122,7 @@ public:
     ScreenOrigin.x = x;
     ScreenOrigin.y = y;
   }
+
   /**
    * Set the origin/rotation center to the given screen coordinates
    * @param pt Screen coordinate
@@ -136,6 +138,7 @@ public:
   const GeoPoint &GetGeoLocation() const {
     return GeoLocation;
   }
+
   /**
    * Set the GeoPoint that relates to the ScreenOrigin
    * @param g The new GeoPoint
@@ -152,13 +155,27 @@ public:
     return DrawScale;
   }
 
+  /**
+   * Converts a geographical distance (m) to a screen distance (px)
+   * @param x A geographical distance (m)
+   * @return The converted distance in px
+   */
   unsigned GeoToScreenDistance(const fixed x) const {
     return iround(scale * x);
   }
 
+  /**
+   * Returns the current screen rotation angle
+   * @return Screen rotation angle
+   */
   Angle GetScreenAngle() const {
     return ScreenRotation.GetAngle();
   }
+
+  /**
+   * Sets the screen rotation angle
+   * @param angle New screen rotation angle
+   */
   void SetScreenAngle(Angle angle) {
     ScreenRotation.SetAngle(angle);
   }
@@ -191,9 +208,15 @@ private:
    */
   POINT ScreenOrigin;
 
+  /**
+   * FastIntegerRotation instance for fast
+   * rotation in the conversion functions
+   */
   FastIntegerRotation ScreenRotation;
 
+  /** The earth's radius in screen coordinates (px) */
   fixed DrawScale;
+  /** Inverted value of DrawScale for faster calculations */
   fixed InvDrawScale;
 
   /** This is the scaling factor in px/m */
