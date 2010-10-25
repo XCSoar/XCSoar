@@ -1,13 +1,11 @@
 <?xml version="1.0"?>
 
-<Form Name="frmStartup" Width="320" Height="240" Caption="" BackColor="0xFFFFFF">
-  <Panel Name="frmShade" X="0" Y="-60" BackColor="0xDADBAB">
-    <Button Name="cmdClose" Caption="Continue" X="2" Width="-2" Height="30"/>
+<Form Name="frmStartup" Width="320" Height="240" Caption="">
+  <Button Name="cmdClose" Caption="Continue" X="2" Y="-60" Width="-2" Height="30"/>
 
-    <Edit Name="prpProfile" Caption="Profile" X="2" Width="-2" Height="25" CaptionWidth="60" BackColor="0xDADBAB">
-      <DataField DataType="filereader"/>
-    </Edit>
-  </Panel>
+  <Edit Name="prpProfile" Caption="Profile" X="2" Width="-2" Height="25" CaptionWidth="60">
+    <DataField DataType="filereader"/>
+  </Edit>
 
   <Button Name="cmdQuit" Caption="Quit" X="-75" Y="1" Width="-1" Height="30"/>
 
