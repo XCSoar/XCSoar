@@ -113,10 +113,9 @@ dlgStartupShowModal()
   TCHAR temp[MAX_PATH];
 
   _stprintf(temp, _T("XCSoar v%s"), XCSoar_VersionString);
-  WindowControl* wc;
-  wc = ((WindowControl *)wf->FindByName(_T("lblVersion")));
-  if (wc)
-    wc->SetCaption(temp);
+  WndFrame *label = (WndFrame *)wf->FindByName(_T("lblVersion"));
+  assert(label != NULL);
+  label->SetCaption(temp);
 
   dfe->ScanDirectoryTop(is_altair() ? _T("config/*.prf") : _T("*.prf"));
   dfe->Lookup(startProfileFile);
@@ -163,14 +162,14 @@ dlgStartupShowModal()
     hidetitle = true;
   }
 
-  wc = ((WindowControl*)wf->FindByName(_T("frmLogo")));
-  wc->move(logox, logoy, logo_size.cx, logo_size.cy);
+  Window *window = wf->FindByName(_T("frmLogo"));
+  window->move(logox, logoy, logo_size.cx, logo_size.cy);
 
-  wc = ((WindowControl*)wf->FindByName(_T("frmTitle")));
+  window = wf->FindByName(_T("frmTitle"));
   if (hidetitle)
-    wc->hide();
+    window->hide();
   else
-    wc->move(titlex, titley, title_size.cx, title_size.cy);
+    window->move(titlex, titley, title_size.cx, title_size.cy);
 
   if (wf->ShowModal() != mrOK) {
     delete wf;
