@@ -221,7 +221,7 @@ RasterTileCache::GetField(unsigned int lx, unsigned int ly) const
 
   for (unsigned i = 0; i < ActiveTiles.length(); ++i) {
     short h = ActiveTiles[i].GetField(px, py, ix, iy);
-    if (h != RasterBuffer::TERRAIN_INVALID) {
+    if (!RasterBuffer::is_invalid(h)) {
       ActiveTiles.move_to_front(i);
       return h;
     }

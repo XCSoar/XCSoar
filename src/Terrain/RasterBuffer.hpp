@@ -49,6 +49,21 @@ public:
   /** invalid value for terrain */
   static const short TERRAIN_INVALID = -32768;
 
+  gcc_const
+  static bool is_invalid(short h) {
+    return h == TERRAIN_INVALID;
+  }
+
+  gcc_const
+  static bool is_water(short h) {
+    return h == 0;
+  }
+
+  gcc_const
+  static bool is_special(short h) {
+    return is_invalid(h) || is_water(h);
+  }
+
 private:
   unsigned width, height;
   short *data;

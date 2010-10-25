@@ -159,10 +159,10 @@ RasterRenderer::GenerateUnshadedImage(bool is_terrain, unsigned height_scale)
 
     for (unsigned x = height_matrix.get_width(); x > 0; --x) {
       short h = *src;
-      if (h == RasterBuffer::TERRAIN_INVALID) {
+      if (RasterBuffer::is_invalid(h)) {
         /* outside the terrain file bounds: white background */
         *p++ = BGRColor(0xff, 0xff, 0xff);
-      } else if (h != 0) {
+      } else if (!RasterBuffer::is_water(h)) {
         h = height_factor > 0
           ? (h - min_height) * 254 / height_factor
           : min(254, h >> height_scale);
@@ -178,7 +178,7 @@ RasterRenderer::GenerateUnshadedImage(bool is_terrain, unsigned height_scale)
 static int
 checked_height_difference(int a, int b)
 {
-  return a == RasterBuffer::TERRAIN_INVALID || b == RasterBuffer::TERRAIN_INVALID
+  return RasterBuffer::is_special(a) || RasterBuffer::is_special(b)
     ? 0
     : a - b;
 }
@@ -227,10 +227,10 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
 
     for (unsigned x = 0; x < height_matrix.get_width(); ++x, ++src) {
       short h = *src;
-      if (h == RasterBuffer::TERRAIN_INVALID) {
+      if (RasterBuffer::is_invalid(h)) {
         /* outside the terrain file bounds: white background */
         *p++ = BGRColor(0xff, 0xff, 0xff);
-      } else if (h != 0) {
+      } else if (!RasterBuffer::is_water(h)) {
         h = height_factor > 0
           ? (h - min_height) * 254 / height_factor
           : min(254, h >> height_scale);

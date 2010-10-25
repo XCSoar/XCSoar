@@ -103,7 +103,7 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
 #endif
 
       short h = map.GetField(gp);
-      if (h != RasterBuffer::TERRAIN_INVALID) {
+      if (!RasterBuffer::is_special(h)) {
         if (h < minimum)
           minimum = h;
         if (h > maximum)
