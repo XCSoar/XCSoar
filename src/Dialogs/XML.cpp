@@ -697,13 +697,10 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
                                            pos.x, pos.y, size.cx, size.cy,
                                            background_color, style);
 
-    // Set the fore- and background color
-    LoadColors(*frame, node);
-
     window = frame;
 
     // Load children controls from the XMLNode
-    LoadChildrenFromXML(form, *frame, frame->GetBackColor(),
+    LoadChildrenFromXML(form, *frame, background_color,
                         LookUpTable, &node, eDialogStyle);
 
   // KeyboardControl

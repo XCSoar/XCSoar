@@ -42,16 +42,15 @@ PanelControl::PanelControl(ContainerWindow &parent,
                            int x, int y, unsigned width, unsigned height,
                            Color _background_color,
                            const WindowStyle style)
+  :background_color(_background_color)
 {
-  SetBackColor(_background_color);
-
   set(parent, x, y, width, height, style);
 }
 
 void
 PanelControl::on_paint(Canvas &canvas)
 {
-  canvas.clear(GetBackColor());
+  canvas.clear(background_color);
 
-  ContainerControl::on_paint(canvas);
+  ContainerWindow::on_paint(canvas);
 }

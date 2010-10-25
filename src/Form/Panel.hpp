@@ -39,12 +39,14 @@ Copyright_License {
 #ifndef XCSOAR_FORM_PANEL_HPP
 #define XCSOAR_FORM_PANEL_HPP
 
-#include "Form/Container.hpp"
+#include "Screen/ContainerWindow.hpp"
 
 /**
  * The PanelControl class implements the simplest form of a ContainerControl
  */
-class PanelControl : public ContainerControl {
+class PanelControl : public ContainerWindow {
+  Color background_color;
+
 public:
   /**
    * Constructor of the PanelControl class
