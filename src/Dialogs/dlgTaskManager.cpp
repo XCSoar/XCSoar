@@ -85,14 +85,14 @@ RefreshView()
   wTaskView->invalidate();
 }
 
-static void OnCloseClicked(WindowControl * Sender)
+static void OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
   if (CommitTaskChanges())
     wf->SetModalResult(mrOK);
 }
 
-static void OnEditClicked(WindowControl * Sender)
+static void OnEditClicked(WndButton &Sender)
 {
   (void)Sender;
   task_modified |= dlgTaskEditShowModal(*parent_window, &ordered_task);
@@ -100,7 +100,7 @@ static void OnEditClicked(WindowControl * Sender)
     RefreshView();
 }
 
-static void OnListClicked(WindowControl * Sender)
+static void OnListClicked(WndButton &Sender)
 {
   (void)Sender;
   task_modified |= dlgTaskListShowModal(*parent_window, &ordered_task);
@@ -109,7 +109,7 @@ static void OnListClicked(WindowControl * Sender)
 }
 
 static void
-OnDeclareClicked(WindowControl * Sender)
+OnDeclareClicked(WndButton &Sender)
 {
   (void)Sender;
   logger.LoggerDeviceDeclare(*ordered_task);

@@ -57,7 +57,7 @@ static const Waypoint* way_point = NULL;
 
 static AbstractTaskFactory::LegalPointVector point_types;
 
-static void OnCloseClicked(WindowControl * Sender)
+static void OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrOK);
@@ -166,7 +166,7 @@ OnSelect()
 }
 
 static void 
-OnSelectClicked(WindowControl * Sender)
+OnSelectClicked(WndButton &Sender)
 {
   OnSelect();
 }

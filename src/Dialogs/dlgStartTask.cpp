@@ -45,7 +45,7 @@ static WndForm *wf=NULL;
 
 bool startIsValid = false;
 
-static void OnCloseClicked(WindowControl * Sender){
+static void OnCloseClicked(WndButton &Sender){
 	(void)Sender;
   wf->SetModalResult(mrOK);
 }
@@ -55,7 +55,7 @@ static void StartTaskAnyway(bool valid) {
 }
 
 
-static void OnStartTaskAnywayClicked(WindowControl * Sender){
+static void OnStartTaskAnywayClicked(WndButton &Sender){
 	(void)Sender;
         StartTaskAnyway(true);
   wf->SetModalResult(mrOK);

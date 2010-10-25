@@ -71,14 +71,14 @@ SetButtons()
 }
 
 static void
-OnCloseClicked(WindowControl * Sender)
+OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
 static void
-OnBallastDump(WindowControl *Sender)
+OnBallastDump(WndButton &Sender)
 {
   (void)Sender;
 

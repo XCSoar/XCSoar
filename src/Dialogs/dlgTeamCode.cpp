@@ -178,7 +178,7 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnCloseClicked(WindowControl * Sender)
+OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrOK);

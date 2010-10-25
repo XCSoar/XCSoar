@@ -47,14 +47,14 @@ Copyright_License {
 static WndForm *wf = NULL;
 
 static void
-OnStopClicked(WindowControl * Sender)
+OnStopClicked(WndButton &Sender)
 {
 	(void)Sender;
   replay.Stop();
 }
 
 static void
-OnStartClicked(WindowControl * Sender)
+OnStartClicked(WndButton &Sender)
 {
 	(void)Sender;
   WndProperty* wp;
@@ -68,7 +68,7 @@ OnStartClicked(WindowControl * Sender)
 }
 
 static void
-OnCloseClicked(WindowControl * Sender)
+OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrOK);

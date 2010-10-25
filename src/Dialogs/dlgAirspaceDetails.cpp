@@ -55,7 +55,7 @@ static const AbstractAirspace* airspace;
 static WndForm *wf = NULL;
 
 static void
-OnAcknowledgeClicked(WindowControl * Sender)
+OnAcknowledgeClicked(WndButton &Sender)
 {
   (void)Sender;
 
@@ -76,7 +76,7 @@ OnAcknowledgeClicked(WindowControl * Sender)
 }
 
 static void
-OnCloseClicked(WindowControl * Sender)
+OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrOK);

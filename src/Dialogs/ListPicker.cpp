@@ -63,7 +63,7 @@ OnHelpClicked(WndButton &button)
 }
 
 static void
-OnCloseClicked(WindowControl * Sender)
+OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
 
@@ -77,7 +77,7 @@ OnComboPopupListEnter(unsigned i)
 }
 
 static void
-OnCancelClicked(WindowControl * Sender)
+OnCancelClicked(WndButton &Sender)
 {
   (void)Sender;
 

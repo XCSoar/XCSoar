@@ -69,7 +69,7 @@ static bool TargetMoveMode = false;
 static bool IsLocked = true;
 
 static void
-OnOKClicked(WindowControl * Sender)
+OnOKClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrOK);
@@ -288,7 +288,7 @@ RefreshCalculator()
   if (wp)
     wp->set_visible(!TargetMoveMode);
 
-  WindowControl* wc = (WindowControl*)wf->FindByName(_T("btnOK"));
+  WndButton *wc = (WndButton *)wf->FindByName(_T("btnOK"));
   if (wc)
     wc->set_visible(!TargetMoveMode);
 
@@ -342,7 +342,7 @@ OnTimerNotify(WndForm &Sender)
 }
 
 static void
-OnMoveClicked(WindowControl * Sender)
+OnMoveClicked(WndButton &Sender)
 {
   (void)Sender;
   TargetMoveMode = !TargetMoveMode;
@@ -352,7 +352,7 @@ OnMoveClicked(WindowControl * Sender)
 }
 
 static void
-OnIsLockedClicked(WindowControl * Sender)
+OnIsLockedClicked(WndButton &Sender)
 {
   (void)Sender;
   IsLocked = !IsLocked;

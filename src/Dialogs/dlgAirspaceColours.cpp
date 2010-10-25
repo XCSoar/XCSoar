@@ -71,7 +71,7 @@ OnAirspaceColoursListEnter(unsigned i)
 }
 
 static void
-OnCloseClicked(WindowControl * Sender)
+OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
   ItemIndex = -1;

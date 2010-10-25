@@ -54,21 +54,21 @@ static bool locked;
 static void LoadGUI();
 
 static void
-OnCloseClicked(WindowControl * Sender)
+OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
 static void
-OnCancelClicked(WindowControl * Sender)
+OnCancelClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrCancel);
 }
 
 static void
-OnResetClicked(WindowControl * Sender)
+OnResetClicked(WndButton &Sender)
 {
   (void)Sender;
 

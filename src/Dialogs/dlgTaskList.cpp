@@ -57,7 +57,7 @@ static OrderedTask* active_task = NULL;
 static bool task_modified;
 
 static void
-OnCloseClicked(WindowControl * Sender)
+OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrCancel);
@@ -273,19 +273,19 @@ UpdateButtons()
 }
 
 static void 
-OnLoadSaveClicked(WindowControl * Sender)
+OnLoadSaveClicked(WndButton &Sender)
 {
   OnLoadSave();
 }
 
 static void
-OnDeleteClicked(WindowControl * Sender)
+OnDeleteClicked(WndButton &Sender)
 {
   OnDelete();
 }
 
 static void
-OnRenameClicked(WindowControl * Sender)
+OnRenameClicked(WndButton &Sender)
 {
   OnRename();
 }

@@ -64,7 +64,7 @@ static unsigned active_index = 0;
 static int next_previous = 0;
 
 static void
-OnCloseClicked(WindowControl * Sender)
+OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrOK);
@@ -349,7 +349,7 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 }
 
 static void 
-OnRemoveClicked(WindowControl * Sender) 
+OnRemoveClicked(WndButton &Sender) 
 {
   (void)Sender;
 
@@ -361,7 +361,7 @@ OnRemoveClicked(WindowControl * Sender)
 }
 
 static void
-OnDetailsClicked(WindowControl * Sender)
+OnDetailsClicked(WndButton &Sender)
 {
   OrderedTaskPoint* task_point = ordered_task->get_tp(active_index);
   if (task_point)
@@ -369,7 +369,7 @@ OnDetailsClicked(WindowControl * Sender)
 }
 
 static void
-OnRelocateClicked(WindowControl *Sender)
+OnRelocateClicked(WndButton &Sender)
 {
   const Waypoint *wp = dlgWayPointSelect(*parent_window,
                                          XCSoarInterface::Basic().Location);
@@ -382,7 +382,7 @@ OnRelocateClicked(WindowControl *Sender)
 }
 
 static void
-OnTypeClicked(WindowControl * Sender)
+OnTypeClicked(WndButton &Sender)
 {
   if (dlgTaskPointType(*parent_window, &ordered_task, active_index)) {
     task_modified = true;
@@ -391,7 +391,7 @@ OnTypeClicked(WindowControl * Sender)
 }
 
 static void
-OnPreviousClicked(WindowControl * Sender)
+OnPreviousClicked(WndButton &Sender)
 {
   (void)Sender;
   next_previous=-1;
@@ -399,7 +399,7 @@ OnPreviousClicked(WindowControl * Sender)
 }
 
 static void
-OnNextClicked(WindowControl * Sender)
+OnNextClicked(WndButton &Sender)
 {
   (void)Sender;
   next_previous=1;

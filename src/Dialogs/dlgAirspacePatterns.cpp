@@ -67,7 +67,7 @@ OnAirspacePatternsListEnter(unsigned i)
 }
 
 static void
-OnCloseClicked(WindowControl * Sender)
+OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrCancel);

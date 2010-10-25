@@ -627,7 +627,7 @@ PageSwitched()
 }
 
 static void
-OnNextClicked(WindowControl * Sender)
+OnNextClicked(WndButton &Sender)
 {
   (void)Sender;
   tabbed->NextPage();
@@ -635,7 +635,7 @@ OnNextClicked(WindowControl * Sender)
 }
 
 static void
-OnPrevClicked(WindowControl * Sender)
+OnPrevClicked(WndButton &Sender)
 {
   (void)Sender;
   tabbed->PreviousPage();
@@ -651,7 +651,7 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnSaveClicked(WindowControl * Sender)
+OnSaveClicked(WndButton &Sender)
 {
   (void)Sender;
   UpdateParameters(false);
@@ -663,7 +663,7 @@ OnSaveClicked(WindowControl * Sender)
 }
 
 static void
-OnDemoClicked(WindowControl * Sender)
+OnDemoClicked(WndButton &Sender)
 {
   (void)Sender;
   // retrieve changes from form
@@ -672,28 +672,28 @@ OnDemoClicked(WindowControl * Sender)
 }
 
 static void
-OnSchemeVegaClicked(WindowControl * Sender)
+OnSchemeVegaClicked(WndButton &Sender)
 {
   (void)Sender;
   SetParametersScheme(0);
 }
 
 static void
-OnSchemeBorgeltClicked(WindowControl * Sender)
+OnSchemeBorgeltClicked(WndButton &Sender)
 {
   (void)Sender;
   SetParametersScheme(1);
 }
 
 static void
-OnSchemeCambridgeClicked(WindowControl * Sender)
+OnSchemeCambridgeClicked(WndButton &Sender)
 {
   (void)Sender;
   SetParametersScheme(2);
 }
 
 static void
-OnSchemeZanderClicked(WindowControl * Sender)
+OnSchemeZanderClicked(WndButton &Sender)
 {
   (void)Sender;
   SetParametersScheme(3);

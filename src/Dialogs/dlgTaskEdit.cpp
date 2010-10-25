@@ -55,7 +55,7 @@ static OrderedTask* ordered_task = NULL;
 static bool task_modified = false;
 
 static void
-OnCloseClicked(WindowControl * Sender)
+OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrCancel);
@@ -81,7 +81,7 @@ RefreshView()
 }
 
 static void
-OnPropertiesClicked(WindowControl * Sender)
+OnPropertiesClicked(WndButton &Sender)
 {
   (void)Sender;
   task_modified |= dlgTaskPropertiesShowModal(*parent_window, &ordered_task);
@@ -89,7 +89,7 @@ OnPropertiesClicked(WindowControl * Sender)
 }
 
 static void
-OnNewClicked(WindowControl * Sender)
+OnNewClicked(WndButton &Sender)
 {
   (void)Sender;
 
@@ -177,7 +177,7 @@ OnTaskListEnter(unsigned ItemIndex)
 }
 
 static void
-OnSaveClicked(WindowControl * Sender)
+OnSaveClicked(WndButton &Sender)
 {
   (void)Sender;
   if (!ordered_task->check_task()) {
@@ -193,7 +193,7 @@ OnSaveClicked(WindowControl * Sender)
 }
 
 static void
-OnMoveUpClicked(WindowControl * Sender)
+OnMoveUpClicked(WndButton &Sender)
 {
   if (!wTaskPoints)
     return;
@@ -211,7 +211,7 @@ OnMoveUpClicked(WindowControl * Sender)
 }
 
 static void
-OnMoveDownClicked(WindowControl * Sender)
+OnMoveDownClicked(WndButton &Sender)
 {
   if (!wTaskPoints)
     return;

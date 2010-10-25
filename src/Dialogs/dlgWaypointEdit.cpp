@@ -365,7 +365,7 @@ static void GetValues(void) {
 }
 
 
-static void OnCloseClicked(WindowControl * Sender){
+static void OnCloseClicked(WndButton &Sender){
 	(void)Sender;
   wf->SetModalResult(mrOK);
 }

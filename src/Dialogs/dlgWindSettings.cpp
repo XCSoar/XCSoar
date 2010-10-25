@@ -51,14 +51,14 @@ Copyright_License {
 static WndForm *wf = NULL;
 
 static void
-OnCancel(WindowControl * Sender)
+OnCancel(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrCancel);
 }
 
 static void
-OnOkay(WindowControl * Sender)
+OnOkay(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrOK);

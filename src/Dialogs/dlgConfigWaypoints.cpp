@@ -60,7 +60,7 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnWaypointNewClicked(WindowControl * Sender)
+OnWaypointNewClicked(WndButton &Sender)
 {
   (void)Sender;
 
@@ -73,7 +73,7 @@ OnWaypointNewClicked(WindowControl * Sender)
 }
 
 static void
-OnWaypointEditClicked(WindowControl * Sender)
+OnWaypointEditClicked(WndButton &Sender)
 {
   (void)Sender;
 
@@ -102,14 +102,14 @@ SaveWaypoints()
 }
 
 static void
-OnWaypointSaveClicked(WindowControl * Sender)
+OnWaypointSaveClicked(WndButton &Sender)
 {
   (void)Sender;
   SaveWaypoints();
 }
 
 static void
-OnWaypointDeleteClicked(WindowControl * Sender)
+OnWaypointDeleteClicked(WndButton &Sender)
 {
   (void)Sender;
 #ifdef OLD_TASK

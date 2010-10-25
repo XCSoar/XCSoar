@@ -132,19 +132,19 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
 }
 
 static void
-OnBackspace(WindowControl * Sender)
+OnBackspace(WndButton &Sender)
 {
   DoBackspace();
 }
 
 static void
-OnOk(WindowControl * Sender)
+OnOk(WndButton &Sender)
 {
   wf->SetModalResult(mrOK);
 }
 
 static void
-OnCancel(WindowControl * Sender)
+OnCancel(WndButton &Sender)
 {
   wf->SetModalResult(mrCancel);
 }
@@ -158,7 +158,7 @@ ClearText(void)
 }
 
 static void
-OnClear(WindowControl * Sender)
+OnClear(WndButton &Sender)
 {
   ClearText();
 }

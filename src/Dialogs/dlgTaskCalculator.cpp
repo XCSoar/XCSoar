@@ -58,14 +58,14 @@ static fixed emc;
 static fixed cruise_efficiency;
 
 static void
-OnCancelClicked(WindowControl * Sender)
+OnCancelClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrCancel);
 }
 
 static void
-OnOKClicked(WindowControl * Sender)
+OnOKClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrOK);
@@ -179,7 +179,7 @@ RefreshCalculator(void)
 }
 
 static void
-OnTargetClicked(WindowControl * Sender)
+OnTargetClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->hide();

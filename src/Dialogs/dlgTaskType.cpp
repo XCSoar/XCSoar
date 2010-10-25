@@ -89,7 +89,7 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
               sTmp);
 }
 
-static void OnCloseClicked(WindowControl * Sender)
+static void OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrCancel);
@@ -125,7 +125,7 @@ OnTaskListEnter(unsigned ItemIndex)
   OnSelect();
 }
 
-static void OnSelectClicked(WindowControl * Sender)
+static void OnSelectClicked(WndButton &Sender)
 {
   OnSelect();
 }

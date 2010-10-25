@@ -107,7 +107,7 @@ AutoHide()
 }
 
 /** ack inside */
-static void OnAckClicked(WindowControl * Sender){
+static void OnAckClicked(WndButton &Sender){
   (void)Sender;
 
   const AbstractAirspace *airspace = GetSelectedAirspace();
@@ -119,7 +119,7 @@ static void OnAckClicked(WindowControl * Sender){
 }
 
 /** ack warn */
-static void OnAck1Clicked(WindowControl * Sender){
+static void OnAck1Clicked(WndButton &Sender){
   (void)Sender;
 
   const AbstractAirspace *airspace = GetSelectedAirspace();
@@ -131,7 +131,7 @@ static void OnAck1Clicked(WindowControl * Sender){
 }
 
 /** ack day */
-static void OnAck2Clicked(WindowControl * Sender){
+static void OnAck2Clicked(WndButton &Sender){
   (void)Sender;
 
   const AbstractAirspace *airspace = GetSelectedAirspace();
@@ -143,7 +143,7 @@ static void OnAck2Clicked(WindowControl * Sender){
 }
 
 /** unack */
-static void OnEnableClicked(WindowControl * Sender) {
+static void OnEnableClicked(WndButton &Sender) {
   (void)Sender;
 
   const AbstractAirspace *airspace = GetSelectedAirspace();
@@ -154,7 +154,7 @@ static void OnEnableClicked(WindowControl * Sender) {
   }
 }
 
-static void OnCloseClicked(WindowControl * Sender) {
+static void OnCloseClicked(WndButton &Sender) {
 	(void)Sender;
 
   wf->hide();
@@ -168,28 +168,28 @@ OnKeyDown(WndForm &Sender, unsigned key_code)
 {
   switch(key_code){
     case VK_ESCAPE:
-      OnCloseClicked(NULL);
+      OnCloseClicked(*(WndButton *)NULL);
     return true;
 
 #ifdef GNAV
     case VK_APP1:
     case '6':
-      OnAckClicked(NULL);
+      OnAckClicked(*(WndButton *)NULL);
     return true;
 
     case VK_APP2:
     case '7':
-      OnAck1Clicked(NULL);
+      OnAck1Clicked(*(WndButton *)NULL);
     return true;
 
     case VK_APP3:
     case '8':
-      OnAck2Clicked(NULL);
+      OnAck2Clicked(*(WndButton *)NULL);
     return true;
 
     case VK_APP4:
     case '9':
-      OnEnableClicked(NULL);
+      OnEnableClicked(*(WndButton *)NULL);
     return true;
 #endif
 
@@ -403,7 +403,7 @@ update_list()
 
     if (wf && wf->is_visible())
       // auto close
-      OnCloseClicked(NULL);
+      OnCloseClicked(*(WndButton *)NULL);
     else
       wAirspaceList->invalidate();
 

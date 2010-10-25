@@ -290,14 +290,14 @@ NextPage(int Step)
 }
 
 static void
-OnNextClicked(WindowControl * Sender)
+OnNextClicked(WndButton &Sender)
 {
   (void)Sender;
   NextPage(+1);
 }
 
 static void
-OnPrevClicked(WindowControl * Sender)
+OnPrevClicked(WndButton &Sender)
 {
   (void)Sender;
   NextPage(-1);
@@ -333,7 +333,7 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
 }
 
 static void
-OnCalcClicked(WindowControl *Sender)
+OnCalcClicked(WndButton &Sender)
 {
   (void)Sender;
   if (page == ANALYSIS_PAGE_BAROGRAPH)

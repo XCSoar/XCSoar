@@ -202,13 +202,13 @@ ReadValues()
 }
 
 
-static void OnCloseClicked(WindowControl * Sender)
+static void OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
-static void OnTypeClicked(WindowControl * Sender)
+static void OnTypeClicked(WndButton &Sender)
 {
   (void)Sender;
   dlgTaskTypeShowModal(*parent_window, &ordered_task);

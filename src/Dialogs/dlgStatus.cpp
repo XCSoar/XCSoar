@@ -129,14 +129,14 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
 }
 
 static void
-OnNextClicked(WindowControl * Sender)
+OnNextClicked(WndButton &Sender)
 {
   (void)Sender;
   NextPage();
 }
 
 static void
-OnPrevClicked(WindowControl * Sender)
+OnPrevClicked(WndButton &Sender)
 {
   (void)Sender;
   PrevPage();
