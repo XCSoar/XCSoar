@@ -776,17 +776,14 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
 
     TabbedControl *tabbed = new TabbedControl(parent,
                                               pos.x, pos.y, size.cx, size.cy,
-                                              background_color, style);
-
-    // Set the fore- and background color
-    LoadColors(*tabbed, node);
+                                              style);
 
     window = tabbed;
 
     const unsigned n = node.nChildNode();
     for (unsigned i = 0; i < n; ++i) {
       // Load each child control from the child nodes
-      Window *child = LoadChild(form, *tabbed, tabbed->GetBackColor(),
+      Window *child = LoadChild(form, *tabbed, background_color,
                                 LookUpTable,
                                 node.getChildNode(i), eDialogStyle);
       if (child != NULL)

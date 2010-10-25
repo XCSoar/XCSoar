@@ -42,12 +42,9 @@ Copyright_License {
 
 TabbedControl::TabbedControl(ContainerWindow &parent,
                              int x, int y, unsigned width, unsigned height,
-                             Color _background_color,
                              const WindowStyle style)
   :current(0)
 {
-  SetBackColor(_background_color);
-
   set(parent, x, y, width, height, style);
 }
 
@@ -101,7 +98,7 @@ TabbedControl::PreviousPage()
 bool
 TabbedControl::on_resize(unsigned width, unsigned height)
 {
-  ContainerControl::on_resize(width, height);
+  ContainerWindow::on_resize(width, height);
 
   const RECT rc = get_client_rect();
   for (unsigned i = tabs.size(); i--;)

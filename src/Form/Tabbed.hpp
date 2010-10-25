@@ -39,16 +39,15 @@ Copyright_License {
 #ifndef XCSOAR_FORM_TABBED_HPP
 #define XCSOAR_FORM_TABBED_HPP
 
-#include "Form/Container.hpp"
+#include "Screen/ContainerWindow.hpp"
 #include "Util/StaticArray.hpp"
 
 #include <vector>
 
-class TabbedControl : public ContainerControl {
+class TabbedControl : public ContainerWindow {
 public:
   TabbedControl(ContainerWindow &parent,
                 int x, int y, unsigned width, unsigned height,
-                Color _background_color,
                 const WindowStyle style=WindowStyle());
 
   void AddClient(Window *w);
