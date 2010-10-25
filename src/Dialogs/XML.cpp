@@ -612,8 +612,10 @@ LoadChild(WndForm &form, ContainerControl &Parent,
       edit_style.vscroll();
     }
 
-    window = W = new WndProperty(Parent, Caption, pos.x, pos.y, size.cx, size.cy,
-                                 CaptionWidth, style, edit_style,
+    window = W = new WndProperty(Parent.GetClientAreaWindow(), Caption,
+                                 pos.x, pos.y, size.cx, size.cy,
+                                 CaptionWidth, Parent.GetBackColor(),
+                                 style, edit_style,
                                  DataNotifyCallback);
 
     // Set the fore- and background color

@@ -159,11 +159,12 @@ Bitmap WndProperty::hBmpRight32;
 
 int WndProperty::InstCount = 0;
 
-WndProperty::WndProperty(ContainerControl &parent,
+WndProperty::WndProperty(ContainerWindow &parent,
                          const TCHAR *Caption,
                          int X, int Y,
                          int Width, int Height,
                          int CaptionWidth,
+                         Color _background_color,
                          const WindowStyle style,
                          const EditWindowStyle edit_style,
                          DataChangeCallback_t DataChangeNotify)
@@ -176,7 +177,7 @@ WndProperty::WndProperty(ContainerControl &parent,
 {
   _tcscpy(mCaption, Caption);
 
-  set(parent.GetClientAreaWindow(), X, Y, Width, Height, style);
+  set(parent, X, Y, Width, Height, style);
 
   edit.set(*this, mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y, edit_style);
   edit.install_wndproc();
@@ -187,8 +188,7 @@ WndProperty::WndProperty(ContainerControl &parent,
   ::SetWindowText(hWnd, Caption);
 #endif
 
-  SetForeColor(parent.GetForeColor());
-  SetBackColor(parent.GetBackColor());
+  SetBackColor(_background_color);
 
   if (InstCount == 0) {
     hBmpLeft32.load(IDB_DLGBUTTONLEFT32);
