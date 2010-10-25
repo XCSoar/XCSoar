@@ -157,6 +157,16 @@ WndForm::GetClientAreaWindow(void)
   return client_area;
 }
 
+Window *
+WndForm::FindByName(const TCHAR *name)
+{
+  name_to_window_t::iterator i = name_to_window.find(name);
+  if (i == name_to_window.end())
+    return NULL;
+
+  return i->second;
+}
+
 void
 WndForm::FilterAdvanced(bool advanced)
 {

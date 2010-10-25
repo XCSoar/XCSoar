@@ -184,13 +184,7 @@ public:
    * @param name the name of the #Window that is searched
    * @return the Window, or NULL if not found
    */
-  Window *FindByName(const TCHAR *name) {
-    name_to_window_t::iterator i = name_to_window.find(name);
-    if (i == name_to_window.end())
-      return NULL;
-
-    return i->second;
-  }
+  Window *FindByName(const TCHAR *name);
 
   /**
    * Finds the ancestor window with the specified name.
@@ -198,12 +192,8 @@ public:
    * @param name the name of the #Window that is searched
    * @return the Window, or NULL if not found
    */
-  virtual const Window *FindByName(const TCHAR *name) const {
-    name_to_window_t::const_iterator i = name_to_window.find(name);
-    if (i == name_to_window.end())
-      return NULL;
-
-    return i->second;
+  const Window *FindByName(const TCHAR *name) const {
+    return const_cast<WndForm *>(this)->FindByName(name);
   }
 
   /**
