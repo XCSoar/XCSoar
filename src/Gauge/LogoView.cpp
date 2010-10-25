@@ -48,10 +48,14 @@ DrawLogo(Canvas &canvas, const RECT &rc)
   const unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
 
   // Load logo
-  Bitmap bitmap_logo(width > 272 && height > 272 ? IDB_SWIFT_HD : IDB_SWIFT);
+  Bitmap bitmap_logo((width >= 290 && height >= 170) ||
+                     (width >= 170 && height >= 210)
+                     ? IDB_SWIFT_HD : IDB_SWIFT);
 
   // Adjust the title to larger screens
-  Bitmap bitmap_title(width > 272 && height > 272 ? IDB_TITLE_HD : IDB_TITLE);
+  Bitmap bitmap_title((width >= 530 && height >= 60) ||
+                      (width >= 170 && height >= 250)
+                      ? IDB_TITLE_HD : IDB_TITLE);
 
   BitmapCanvas bitmap_canvas(canvas);
 
@@ -66,13 +70,13 @@ DrawLogo(Canvas &canvas, const RECT &rc)
   bool hidetitle = false;
 
   // Determine logo and title positions
-  if (width > height) {
+  if ((unsigned)(logo_size.cx + title_size.cy + title_size.cx) <= width) {
     // Landscape
     logox = (width - (logo_size.cx + title_size.cy + title_size.cx)) / 2;
     logoy = (height - logo_size.cy) / 2;
     titlex = logox + logo_size.cx + title_size.cy;
     titley = (height - title_size.cy) / 2;
-  } else if (width < height) {
+  } else if ((unsigned)(logo_size.cy + title_size.cy * 2) <= height) {
     // Portrait
     logox = (width - logo_size.cx) / 2;
     logoy = (height - (logo_size.cy + title_size.cy * 2)) / 2;
