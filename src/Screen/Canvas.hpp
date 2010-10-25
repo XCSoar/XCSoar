@@ -66,10 +66,12 @@ Copyright_License {
  */
 class Canvas : private NonCopyable {
   friend class WindowCanvas;
+  friend class SubCanvas;
 
 protected:
   SDL_Surface *surface;
 
+  int x_offset, y_offset;
   unsigned width, height;
 
   Pen pen;
@@ -83,7 +85,7 @@ protected:
 
 public:
   Canvas()
-    :surface(NULL), width(0), height(0),
+    :surface(NULL), x_offset(0), y_offset(0), width(0), height(0),
      font(NULL), background_mode(OPAQUE) {}
   explicit Canvas(SDL_Surface *_surface)
     :surface(_surface), width(_surface->w), height(_surface->h),
@@ -203,6 +205,11 @@ public:
   }
 
   void rectangle(int left, int top, int right, int bottom) {
+    left += x_offset;
+    right += x_offset;
+    top += y_offset;
+    bottom += y_offset;
+
     fill_rectangle(left, top, right, bottom, brush);
 
     if (pen_over_brush())
@@ -214,6 +221,11 @@ public:
                       const HWColor color) {
     if (left >= right || top >= bottom)
       return;
+
+    left += x_offset;
+    right += x_offset;
+    top += y_offset;
+    bottom += y_offset;
 
     SDL_Rect r = { left, top, right - left, bottom - top };
     SDL_FillRect(surface, &r, color);
@@ -298,8 +310,8 @@ public:
     Sint16 vx[cPoints], vy[cPoints];
 
     for (unsigned i = 0; i < cPoints; ++i) {
-      vx[i] = lppt[i].x;
-      vy[i] = lppt[i].y;
+      vx[i] = x_offset + lppt[i].x;
+      vy[i] = y_offset + lppt[i].y;
     }
 
     if (!brush.is_hollow())
@@ -321,6 +333,11 @@ public:
   }
 
   void line(int ax, int ay, int bx, int by) {
+    ax += x_offset;
+    bx += x_offset;
+    ay += y_offset;
+    by += y_offset;
+
     ::lineColor(surface, ax, ay, bx, by, pen.get_color().gfx_color());
   }
 
@@ -342,6 +359,9 @@ public:
   void line_to(int x, int y);
 
   void circle(int x, int y, unsigned radius) {
+    x += x_offset;
+    y += y_offset;
+
     if (!brush.is_hollow())
       ::filledCircleColor(surface, x, y, radius,
                           brush.get_color().gfx_color());
@@ -504,6 +524,9 @@ public:
    * Makes sure the given area is updated on the screen.
    */
   void expose(Sint32 x, Sint32 y, Sint32 w, Sint32 h) {
+    x += x_offset;
+    y += y_offset;
+
     ::SDL_UpdateRect(surface, x, y, w, h);
   }
 

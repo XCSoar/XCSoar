@@ -81,6 +81,9 @@ Canvas::segment(int x, int y, unsigned radius,
 {
   // XXX horizon
 
+  x += x_offset;
+  y += y_offset;
+
   if (!brush.is_hollow())
     ::filledPieColor(surface, x, y, radius, 
                      (int)start.value_degrees() - 90,
@@ -170,7 +173,7 @@ Canvas::text(int x, int y, const TCHAR *text)
   if (s == NULL)
     return;
 
-  SDL_Rect dest = { x, y };
+  SDL_Rect dest = { x_offset + x, y_offset + y };
   // XXX non-opaque?
   ::SDL_BlitSurface(s, NULL, surface, &dest);
   ::SDL_FreeSurface(s);
@@ -198,7 +201,7 @@ Canvas::copy(int dest_x, int dest_y,
   assert(src.surface != NULL);
 
   SDL_Rect src_rect = { src_x, src_y, dest_width, dest_height };
-  SDL_Rect dest_rect = { dest_x, dest_y };
+  SDL_Rect dest_rect = { x_offset + dest_x, y_offset + dest_y };
 
   ::SDL_BlitSurface(src.surface, &src_rect, surface, &dest_rect);
 }
@@ -269,7 +272,7 @@ Canvas::stretch(int dest_x, int dest_y,
     (src_y * dest_height) / src_height,
     dest_width, dest_height
   };
-  SDL_Rect dest_rect = { dest_x, dest_y };
+  SDL_Rect dest_rect = { x_offset + dest_x, y_offset + dest_y };
 
   ::SDL_BlitSurface(zoomed, &src_rect, surface, &dest_rect);
   ::SDL_FreeSurface(zoomed);
@@ -438,6 +441,9 @@ Canvas::copy_or(int dest_x, int dest_y,
 {
   assert(src.surface != NULL);
 
+  dest_x += x_offset;
+  dest_y += y_offset;
+
   ::blit_or(surface, dest_x, dest_y, dest_width, dest_height,
             src.surface, src_x, src_y);
 }
@@ -448,6 +454,9 @@ Canvas::copy_and(int dest_x, int dest_y,
                  const Canvas &src, int src_x, int src_y)
 {
   assert(src.surface != NULL);
+
+  dest_x += x_offset;
+  dest_y += y_offset;
 
   ::blit_and(surface, dest_x, dest_y, dest_width, dest_height,
              src.surface, src_x, src_y);
@@ -461,6 +470,9 @@ Canvas::stretch_or(int dest_x, int dest_y,
                    unsigned src_width, unsigned src_height)
 {
   assert(src.surface != NULL);
+
+  dest_x += x_offset;
+  dest_y += y_offset;
 
   SDL_Surface *zoomed =
     ::zoomSurface(src.surface, (double)dest_width / (double)src_width,
@@ -487,6 +499,9 @@ Canvas::stretch_and(int dest_x, int dest_y,
                     unsigned src_width, unsigned src_height)
 {
   assert(src.surface != NULL);
+
+  dest_x += x_offset;
+  dest_y += y_offset;
 
   SDL_Surface *zoomed =
     ::zoomSurface(src.surface, (double)dest_width / (double)src_width,
