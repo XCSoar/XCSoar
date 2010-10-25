@@ -98,10 +98,9 @@ dlgSimulatorPromptShowModal()
   TCHAR temp[MAX_PATH];
   _stprintf(temp, _T("XCSoar v%s"), XCSoar_VersionString);
 
-  WindowControl* wc;
-  wc = ((WindowControl *)wf->FindByName(_T("lblVersion")));
-  assert(wc != NULL);
-  wc->SetCaption(temp);
+  WndFrame *label = ((WndFrame *)wf->FindByName(_T("lblVersion")));
+  assert(label != NULL);
+  label->SetCaption(temp);
 
   WndButton* wb;
   wb = ((WndButton *)wf->FindByName(_T("cmdSimulator")));
@@ -148,6 +147,7 @@ dlgSimulatorPromptShowModal()
     hidetitle = true;
   }
 
+  WindowControl* wc;
   wc = ((WindowControl*)wf->FindByName(_T("frmLogo")));
   wc->move(logox, logoy, logo_size.cx, logo_size.cy);
 
