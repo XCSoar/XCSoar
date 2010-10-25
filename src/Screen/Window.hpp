@@ -690,9 +690,6 @@ public:
    */
   virtual void expose();
 #else /* !ENABLE_SDL */
-  void expose(const RECT &rect) {}
-  void expose() {}
-
   HDC BeginPaint(PAINTSTRUCT *ps) {
     assert_thread();
 
