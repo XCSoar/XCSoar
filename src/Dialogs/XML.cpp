@@ -768,8 +768,9 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     style.control_parent();
 
-    TabbedControl *tabbed = new TabbedControl(Parent,
-                                              pos.x, pos.y, size.cx, size.cy, style);
+    TabbedControl *tabbed = new TabbedControl(Parent.GetClientAreaWindow(),
+                                              pos.x, pos.y, size.cx, size.cy,
+                                              Parent.GetBackColor(), style);
 
     // Set the fore- and background color
     LoadColors(*tabbed, node);

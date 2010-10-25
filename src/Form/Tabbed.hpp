@@ -46,8 +46,9 @@ Copyright_License {
 
 class TabbedControl : public ContainerControl {
 public:
-  TabbedControl(ContainerControl &parent,
+  TabbedControl(ContainerWindow &parent,
                 int x, int y, unsigned width, unsigned height,
+                Color _background_color,
                 const WindowStyle style=WindowStyle());
 
   void AddClient(Window *w);

@@ -40,15 +40,15 @@ Copyright_License {
 
 #include <assert.h>
 
-TabbedControl::TabbedControl(ContainerControl &parent,
+TabbedControl::TabbedControl(ContainerWindow &parent,
                              int x, int y, unsigned width, unsigned height,
+                             Color _background_color,
                              const WindowStyle style)
   :current(0)
 {
-  SetForeColor(parent.GetForeColor());
-  SetBackColor(parent.GetBackColor());
+  SetBackColor(_background_color);
 
-  set(parent.GetClientAreaWindow(), x, y, width, height, style);
+  set(parent, x, y, width, height, style);
 }
 
 void
