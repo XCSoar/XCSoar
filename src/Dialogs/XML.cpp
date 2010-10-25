@@ -91,7 +91,8 @@ typedef Window *(*CreateWindowCallback_t)(ContainerWindow &parent,
                                           const WindowStyle style);
 
 static void
-LoadChildrenFromXML(WndForm &form, ContainerControl &parent,
+LoadChildrenFromXML(WndForm &form, ContainerWindow &parent,
+                    Color background_color,
                     CallBackTableEntry *LookUpTable,
                     XMLNode *Node, const DialogStyle eDialogStyle);
 
@@ -455,7 +456,8 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
   LoadColors(*form, node);
 
   // Load the children controls
-  LoadChildrenFromXML(*form, *form, LookUpTable, &node, dialog_style);
+  LoadChildrenFromXML(*form, form->GetClientAreaWindow(), form->GetBackColor(),
+                      LookUpTable, &node, dialog_style);
 
   // If XML error occurred -> Error messagebox + cancel
   if (XMLNode::GlobalError) {
@@ -523,17 +525,16 @@ LoadDataField(const XMLNode &node, CallBackTableEntry *LookUpTable,
 }
 
 /**
- * Creates a control from the given XMLNode as a child of the given parent
- * ContainerControl.
+ * Creates a control from the given XMLNode as a child of the given
+ * parent.
  *
  * @param form the WndForm object
- * @param Parent The parent ContainerControl
  * @param LookUpTable The parent CallBackTable
  * @param node The XMLNode that represents the control
  * @param eDialogStyle The parent's dialog style
  */
 static Window *
-LoadChild(WndForm &form, ContainerControl &Parent,
+LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
           CallBackTableEntry *LookUpTable,
           XMLNode node, const DialogStyle eDialogStyle,
           int bottom_most=0)
@@ -544,7 +545,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
   // and caption of the control
   const TCHAR* Name = GetName(node);
   const TCHAR* Caption = GetCaption(node);
-  RECT rc = Parent.GetClientAreaWindow().get_client_rect();
+  RECT rc = parent.get_client_rect();
   ControlPosition pos = GetPosition(node, rc, bottom_most);
   if (!pos.no_scaling)
     pos.x = ScaleWidth(pos.x, eDialogStyle);
@@ -612,9 +613,9 @@ LoadChild(WndForm &form, ContainerControl &Parent,
       edit_style.vscroll();
     }
 
-    window = W = new WndProperty(Parent.GetClientAreaWindow(), Caption,
+    window = W = new WndProperty(parent, Caption,
                                  pos.x, pos.y, size.cx, size.cy,
-                                 CaptionWidth, Parent.GetBackColor(),
+                                 CaptionWidth, background_color,
                                  style, edit_style,
                                  DataNotifyCallback);
 
@@ -650,7 +651,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     style.tab_stop();
 
-    window = new WndButton(Parent.GetClientAreaWindow(), Caption,
+    window = new WndButton(parent, Caption,
                            pos.x, pos.y, size.cx, size.cy,
                            style,
                            ClickCallback);
@@ -665,7 +666,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     style.tab_stop();
 
-    window = new CheckBoxControl(Parent.GetClientAreaWindow(), Caption,
+    window = new CheckBoxControl(parent, Caption,
                                  pos.x, pos.y, size.cx, size.cy,
                                  style,
                                  ClickCallback);
@@ -681,9 +682,9 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     style.tab_stop();
 
-    window = new WndSymbolButton(Parent.GetClientAreaWindow(), Caption,
+    window = new WndSymbolButton(parent, Caption,
                                  pos.x, pos.y, size.cx, size.cy,
-                                 style, Parent.GetBackColor(),
+                                 style, background_color,
                                  ClickCallback);
 
   // PanelControl (WndPanel)
@@ -692,9 +693,9 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     style.control_parent();
 
-    PanelControl *frame = new PanelControl(Parent.GetClientAreaWindow(),
+    PanelControl *frame = new PanelControl(parent,
                                            pos.x, pos.y, size.cx, size.cy,
-                                           Parent.GetBackColor(), style);
+                                           background_color, style);
 
     // Set the fore- and background color
     LoadColors(*frame, node);
@@ -702,7 +703,8 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     window = frame;
 
     // Load children controls from the XMLNode
-    LoadChildrenFromXML(form, *frame, LookUpTable, &node, eDialogStyle);
+    LoadChildrenFromXML(form, *frame, frame->GetBackColor(),
+                        LookUpTable, &node, eDialogStyle);
 
   // KeyboardControl
   } else if (_tcscmp(node.getName(), _T("Keyboard")) == 0) {
@@ -712,8 +714,8 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     // Create the KeyboardControl
     KeyboardControl *kb =
-      new KeyboardControl(Parent.GetClientAreaWindow(),
-                          pos.x, pos.y, size.cx, size.cy, Parent.GetBackColor(),
+      new KeyboardControl(parent,
+                          pos.x, pos.y, size.cx, size.cy, background_color,
                           CharacterCallback, style);
 
     window = kb;
@@ -726,7 +728,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     // Create the DrawControl
     WndOwnerDrawFrame* canvas =
-      new WndOwnerDrawFrame(Parent.GetClientAreaWindow(),
+      new WndOwnerDrawFrame(parent,
                             pos.x, pos.y, size.cx, size.cy,
                               style, PaintCallback);
 
@@ -735,9 +737,9 @@ LoadChild(WndForm &form, ContainerControl &Parent,
   // FrameControl (WndFrame)
   } else if (_tcscmp(node.getName(), _T("Label")) == 0){
     // Create the FrameControl
-    WndFrame* frame = new WndFrame(Parent.GetClientAreaWindow(),
+    WndFrame* frame = new WndFrame(parent,
                                    pos.x, pos.y, size.cx, size.cy,
-                                   Parent.GetBackColor(), style);
+                                   background_color, style);
 
     // Set the caption
     frame->SetCaption(Caption);
@@ -761,7 +763,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     else
       style.sunken_edge();
 
-    window = new WndListFrame(Parent.GetClientAreaWindow(),
+    window = new WndListFrame(parent,
                               pos.x, pos.y, size.cx, size.cy,
                               style,
                               item_height);
@@ -772,9 +774,9 @@ LoadChild(WndForm &form, ContainerControl &Parent,
 
     style.control_parent();
 
-    TabbedControl *tabbed = new TabbedControl(Parent.GetClientAreaWindow(),
+    TabbedControl *tabbed = new TabbedControl(parent,
                                               pos.x, pos.y, size.cx, size.cy,
-                                              Parent.GetBackColor(), style);
+                                              background_color, style);
 
     // Set the fore- and background color
     LoadColors(*tabbed, node);
@@ -784,7 +786,8 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     const unsigned n = node.nChildNode();
     for (unsigned i = 0; i < n; ++i) {
       // Load each child control from the child nodes
-      Window *child = LoadChild(form, *tabbed, LookUpTable,
+      Window *child = LoadChild(form, *tabbed, tabbed->GetBackColor(),
+                                LookUpTable,
                                 node.getChildNode(i), eDialogStyle);
       if (child != NULL)
         tabbed->AddClient(child);
@@ -797,7 +800,7 @@ LoadChild(WndForm &form, ContainerControl &Parent,
     if (create == NULL)
       return NULL;
 
-    window = create(Parent.GetClientAreaWindow(),
+    window = create(parent,
                     pos.x, pos.y, size.cx, size.cy, style);
   }
 
@@ -824,7 +827,8 @@ LoadChild(WndForm &form, ContainerControl &Parent,
  * @param eDialogStyle The parent's dialog style
  */
 static void
-LoadChildrenFromXML(WndForm &form, ContainerControl &Parent,
+LoadChildrenFromXML(WndForm &form, ContainerWindow &parent,
+                    Color background_color,
                     CallBackTableEntry *LookUpTable,
                     XMLNode *Node, const DialogStyle eDialogStyle)
 {
@@ -836,7 +840,7 @@ LoadChildrenFromXML(WndForm &form, ContainerControl &Parent,
   // Iterate through the childnodes
   for (int i = 0; i < Count; i++) {
     // Load each child control from the child nodes
-    Window *window = LoadChild(form, Parent, LookUpTable,
+    Window *window = LoadChild(form, parent, background_color, LookUpTable,
                                Node->getChildNode(i), eDialogStyle,
                                bottom_most);
     if (window == NULL)
