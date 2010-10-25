@@ -69,6 +69,9 @@ class Canvas : private NonCopyable {
 
 protected:
   SDL_Surface *surface;
+
+  unsigned width, height;
+
   Pen pen;
   Brush brush;
   TTF_Font *font;
@@ -80,15 +83,18 @@ protected:
 
 public:
   Canvas()
-    :surface(NULL),
+    :surface(NULL), width(0), height(0),
      font(NULL), background_mode(OPAQUE) {}
   explicit Canvas(SDL_Surface *_surface)
-    :surface(_surface), font(NULL), background_mode(OPAQUE) {}
+    :surface(_surface), width(_surface->w), height(_surface->h),
+     font(NULL), background_mode(OPAQUE) {}
 
   void set(SDL_Surface *_surface) {
     reset();
 
     surface = _surface;
+    width = surface->w;
+    height = surface->h;
   }
 
   void reset();
@@ -110,11 +116,11 @@ public:
   }
 
   unsigned get_width() const {
-    return surface->w;
+    return width;
   }
 
   unsigned get_height() const {
-    return surface->h;
+    return height;
   }
 
   gcc_pure

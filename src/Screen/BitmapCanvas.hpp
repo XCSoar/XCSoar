@@ -64,6 +64,8 @@ public:
 
   void select(const Bitmap &bitmap) {
     surface = bitmap.native();
+    width = surface->w;
+    height = surface->h;
   }
 
   void clear() {
