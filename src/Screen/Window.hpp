@@ -663,10 +663,13 @@ public:
   }
 
 #ifdef ENABLE_SDL
-  void paint() {
+  void paint_into(Canvas &dest, int x_offset, int y_offset) {
     if (font != NULL)
       canvas.select(*font);
     on_paint(canvas);
+    dest.copy(x_offset, y_offset,
+              canvas.get_width(), canvas.get_height(),
+              canvas, 0, 0);
   }
 
   virtual void invalidate();

@@ -141,13 +141,7 @@ ContainerWindow::on_paint(Canvas &canvas)
     if (!child.is_visible())
       continue;
 
-    child.paint();
-
-    WindowCanvas child_canvas(child);
-    canvas.copy(child.get_left(), child.get_top(),
-                child_canvas.get_width(),
-                child_canvas.get_height(),
-                child_canvas, 0, 0);
+    child.paint_into(canvas, child.get_left(), child.get_top());
   }
 }
 
