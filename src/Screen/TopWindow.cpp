@@ -206,8 +206,13 @@ TopWindow::invalidate()
   invalidated = true;
   invalidated_lock.Unlock();
 
+  /* wake up the event loop */
+  /* note that SDL_NOEVENT is not documented, but since we just want
+     to wake up without actually sending an event, I hope this works
+     on all future SDL versions; if SDL_NOEVENT ever gets remove, I'll
+     have to come up with something else */
   SDL_Event event;
-  event.type = SDL_VIDEOEXPOSE;
+  event.type = SDL_NOEVENT;
   ::SDL_PushEvent(&event);
 }
 
@@ -215,6 +220,21 @@ void
 TopWindow::expose() {
   on_paint(screen);
   screen.expose();
+}
+
+void
+TopWindow::refresh()
+{
+  invalidated_lock.Lock();
+  if (!invalidated) {
+    invalidated_lock.Unlock();
+    return;
+  }
+
+  invalidated = false;
+  invalidated_lock.Unlock();
+
+  expose();
 }
 
 #endif /* ENABLE_SDL */

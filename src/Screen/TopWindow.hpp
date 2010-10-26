@@ -106,6 +106,8 @@ public:
   virtual void invalidate();
 
   virtual void expose();
+
+  void refresh();
 #endif /* ENABLE_SDL */
 
   void close() {

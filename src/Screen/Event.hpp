@@ -49,9 +49,15 @@ class TopWindow;
 class EventLoop {
   TopWindow &top_window;
 
+  /**
+   * True if working on a bulk of events.  At the end of that bulk,
+   * TopWindow::validate() gets called.
+   */
+  bool bulk;
+
 public:
   EventLoop(TopWindow &_top_window)
-    :top_window(_top_window) {}
+    :top_window(_top_window), bulk(false) {}
 
   bool get(SDL_Event &event);
   void dispatch(SDL_Event &event);
