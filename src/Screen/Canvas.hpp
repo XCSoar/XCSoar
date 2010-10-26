@@ -205,12 +205,12 @@ public:
   }
 
   void rectangle(int left, int top, int right, int bottom) {
+    fill_rectangle(left, top, right, bottom, brush);
+
     left += x_offset;
     right += x_offset;
     top += y_offset;
     bottom += y_offset;
-
-    fill_rectangle(left, top, right, bottom, brush);
 
     if (pen_over_brush())
       ::rectangleColor(surface, left, top, right, bottom,
