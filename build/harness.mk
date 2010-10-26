@@ -13,10 +13,6 @@ TEST_SRC = \
 	$(TEST_SRC_DIR)/TaskEventsPrint.cpp \
 	$(TEST_SRC_DIR)/tap.c
 
-ifeq ($(HAVE_WIN32),y)
-TEST_SRC += $(TEST_SRC_DIR)/winmain.cpp
-endif
-
 HARNESS_LIBS = $(TARGET_OUTPUT_DIR)/harness.a
 
 $(HARNESS_LIBS): $(call SRC_TO_OBJ,$(TEST_SRC))
