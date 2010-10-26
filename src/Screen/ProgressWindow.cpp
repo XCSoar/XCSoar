@@ -168,6 +168,8 @@ ProgressWindow::on_paint(Canvas &canvas)
                  window_width, progress_border_height,
                  bitmap_canvas, 0, 0,
                  progress_bitmap_width, progress_bitmap_height);
+
+  ContainerWindow::on_paint(canvas);
 }
 
 Brush *
