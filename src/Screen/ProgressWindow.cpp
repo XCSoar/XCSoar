@@ -59,8 +59,12 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   bitmap_progress_border.load(IDB_PROGRESSBORDER);
 
   // Determine text height
+#ifdef ENABLE_SDL
+  text_height = 20; // XXX font bootstrapping on SDL needed
+#else
   VirtualCanvas canvas(1, 1);
   text_height = canvas.text_height(_T("W"));
+#endif
 
   // Make progress bar height proportional to window height
   unsigned progress_height = height / 20;
