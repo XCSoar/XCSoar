@@ -177,6 +177,7 @@ protected:
 
 private:
   int left, top;
+  unsigned width, height;
 
 protected:
   BufferCanvas canvas;
@@ -267,11 +268,11 @@ public:
   }
 
   unsigned get_width() const {
-    return canvas.get_width();
+    return width;
   }
 
   unsigned get_height() const {
-    return canvas.get_height();
+    return height;
   }
 
   int get_right() const {
@@ -367,6 +368,8 @@ public:
     assert_thread();
 
 #ifdef ENABLE_SDL
+    this->width = width;
+    this->height = height;
     canvas.resize(width, height);
     invalidate();
     on_resize(width, height);

@@ -76,12 +76,19 @@ Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
             int left, int top, unsigned width, unsigned height,
             const WindowStyle window_style)
 {
+  assert(width > 0);
+  assert(width < 0x1000000);
+  assert(height > 0);
+  assert(height < 0x1000000);
+
   double_clicks = window_style.double_clicks;
 
 #ifdef ENABLE_SDL
   this->parent = parent;
   this->left = left;
   this->top = top;
+  this->width = width;
+  this->height = height;
 
   visible = window_style.visible;
 
