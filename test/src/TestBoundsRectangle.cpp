@@ -42,7 +42,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(10);
+  plan_tests(12);
 
   GeoPoint g;
 
@@ -68,6 +68,10 @@ int main(int argc, char **argv)
   ok1(equals(b.south, 4));
 
   ok1(!b.empty());
+
+  g = b.center();
+  ok1(equals(g.Latitude, 5));
+  ok1(equals(g.Longitude, 5));
 
   return exit_status();;
 }
