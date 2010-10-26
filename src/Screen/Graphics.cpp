@@ -61,9 +61,6 @@ Pen Graphics::hAirspacePens[AIRSPACECLASSCOUNT];
 Brush Graphics::hAirspaceBrushes[NUMAIRSPACEBRUSHES];
 Bitmap Graphics::hAirspaceBitmap[NUMAIRSPACEBRUSHES];
 
-Brush Graphics::infoSelectedBrush;
-Brush Graphics::infoUnselectedBrush;
-
 Pen Graphics::hSnailPens[NUMSNAILCOLORS];
 Color Graphics::hSnailColours[NUMSNAILCOLORS];
 
@@ -75,7 +72,6 @@ MaskedIcon Graphics::hFLARMTraffic;
 MaskedIcon Graphics::hLogger, Graphics::hLoggerOff;
 MaskedIcon Graphics::hCruise, Graphics::hClimb,
            Graphics::hFinalGlide, Graphics::hAbort;
-MaskedIcon Graphics::hAutoMacCready;
 MaskedIcon Graphics::hGPSStatus1, Graphics::hGPSStatus2;
 
 Brush Graphics::hBackgroundBrush;
@@ -83,7 +79,6 @@ Brush Graphics::hBackgroundBrush;
 Pen Graphics::hpAircraft;
 Pen Graphics::hpAircraftBorder;
 Pen Graphics::hpWind;
-Pen Graphics::hpWindThick;
 Pen Graphics::hpBearing;
 Pen Graphics::hpBestCruiseTrack;
 Pen Graphics::hpCompass;
@@ -95,10 +90,6 @@ Pen Graphics::hpFinalGlideBelowLandable;
 Pen Graphics::hpMapScale;
 Pen Graphics::hpTerrainLine;
 Pen Graphics::hpTerrainLineBg;
-Pen Graphics::hpSpeedFast;
-Pen Graphics::hpSpeedSlow;
-Pen Graphics::hpStartFinishThick;
-Pen Graphics::hpStartFinishThin;
 
 Brush Graphics::hbCompass;
 Brush Graphics::hbThermalBand;
@@ -108,9 +99,6 @@ Brush Graphics::hbFinalGlideBelowLandable;
 Brush Graphics::hbFinalGlideAbove;
 Brush Graphics::hbWind;
 
-Pen Graphics::hpCompassBorder;
-Brush Graphics::hBrushFlyingModeAbort;
-
 MaskedIcon Graphics::SmallIcon, Graphics::TurnPointIcon;
 MaskedIcon Graphics::AirportReachableIcon, Graphics::AirportUnreachableIcon;
 MaskedIcon Graphics::FieldReachableIcon, Graphics::FieldUnreachableIcon;
@@ -119,13 +107,6 @@ MaskedIcon Graphics::hBmpTarget;
 MaskedIcon Graphics::hBmpTeammatePosition;
 
 Bitmap Graphics::hBmpMapScale;
-Bitmap Graphics::hBmpClimbeAbort;
-Bitmap Graphics::hBmpUnitKm;
-Bitmap Graphics::hBmpUnitSm;
-Bitmap Graphics::hBmpUnitNm;
-Bitmap Graphics::hBmpUnitM;
-Bitmap Graphics::hBmpUnitFt;
-Bitmap Graphics::hBmpUnitMpS;
 
 // used for flarm
 Brush Graphics::AlarmBrush;
@@ -157,12 +138,6 @@ Graphics::GetAirspaceBrushByClass(const int i, const SETTINGS_MAP &settings)
   return GetAirspaceBrush(settings.iAirspaceBrush[i]);
 }
 
-const Color Graphics::ColorSelected = Color(0xC0, 0xC0, 0xC0);
-const Color Graphics::ColorUnselected = Color::WHITE;
-const Color Graphics::ColorWarning = Color::RED;
-const Color Graphics::ColorOK = Color::BLUE;
-const Color Graphics::ColorBlack = Color::BLACK;
-const Color Graphics::ColorMidGrey = Color::GRAY;
 
 const Color Graphics::inv_redColor = Color(0xff, 0x70, 0x70);
 const Color Graphics::inv_blueColor = Color(0x90, 0x90, 0xff);
@@ -201,9 +176,6 @@ Graphics::Initialise()
 
   LoadUnitSymbols();
 
-  infoSelectedBrush.set(Graphics::ColorSelected);
-  infoUnselectedBrush.set(Graphics::ColorUnselected);
-
   AlarmBrush.set(Color::RED);
   WarningBrush.set(Color(0xFF, 0xA2, 0x00));
   TrafficBrush.set(Color::GREEN);
@@ -218,7 +190,6 @@ Graphics::Initialise()
   hLoggerOff.load_big(IDB_LOGGEROFF, IDB_LOGGEROFF_HD);
   hBmpTeammatePosition.load_big(IDB_TEAMMATE_POS, IDB_TEAMMATE_POS_HD);
 
-  hAutoMacCready.load(IDB_AUTOMACCREADY, false);
   hCruise.load_big(IDB_CRUISE, IDB_CRUISE_HD, false);
   hClimb.load_big(IDB_CLIMB, IDB_CLIMB_HD, false);
   hFinalGlide.load_big(IDB_FINALGLIDE, IDB_FINALGLIDE_HD, false);
@@ -245,7 +216,6 @@ Graphics::Initialise()
   hbWind.set(Color::GRAY);
 
   hBmpMapScale.load(IDB_MAPSCALE_A);
-  hBrushFlyingModeAbort.set(Color::RED);
 
   hBmpThermalSource.load_big(IDB_THERMALSOURCE, IDB_THERMALSOURCE_HD);
   hBmpTarget.load_big(IDB_TARGET, IDB_TARGET_HD);
@@ -258,11 +228,7 @@ Graphics::Initialise()
   hbFinalGlideBelowLandable.set(Color(0xFF, 180, 0x00));
   hbFinalGlideAbove.set(Color::GREEN);
 
-  hpCompassBorder.set(Layout::Scale(3), Color::WHITE);
-
   hpWind.set(Layout::Scale(2), Color::BLACK);
-
-  hpWindThick.set(Layout::Scale(4), Color(255, 220, 220));
 
   hpBearing.set(Layout::Scale(2), Color::BLACK);
   hpBestCruiseTrack.set(Layout::Scale(1), Color::BLUE);
@@ -275,13 +241,6 @@ Graphics::Initialise()
   hpFinalGlideBelowLandable.set(Layout::Scale(1), Color(255, 196, 0));
 
   hpFinalGlideAbove.set(Layout::Scale(1), Color(0xA0, 0xFF, 0xA0));
-
-  hpSpeedSlow.set(Layout::Scale(1), Color::RED);
-  hpSpeedFast.set(Layout::Scale(1), Color::GREEN);
-
-  hpStartFinishThick.set(Layout::Scale(5), TaskColor);
-
-  hpStartFinishThin.set(Layout::Scale(1), Color::RED);
 
   hpMapScale.set(Layout::Scale(1), Color::BLACK);
   hpTerrainLine.set(Pen::DASH, Layout::Scale(1), Color(0x30, 0x30, 0x30));

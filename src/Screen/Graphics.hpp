@@ -67,9 +67,6 @@ namespace Graphics {
   extern Brush hAirspaceBrushes[NUMAIRSPACEBRUSHES];
   extern Bitmap hAirspaceBitmap[NUMAIRSPACEBRUSHES];
 
-  extern Brush infoSelectedBrush;
-  extern Brush infoUnselectedBrush;
-
   extern Pen hSnailPens[NUMSNAILCOLORS];
   extern Color hSnailColours[NUMSNAILCOLORS];
 
@@ -80,7 +77,6 @@ namespace Graphics {
   extern MaskedIcon hFLARMTraffic;
   extern MaskedIcon hLogger, hLoggerOff;
   extern MaskedIcon hCruise, hClimb, hFinalGlide, hAbort;
-  extern MaskedIcon hAutoMacCready;
   extern MaskedIcon hGPSStatus1, hGPSStatus2;
 
   extern Brush hBackgroundBrush;
@@ -88,7 +84,6 @@ namespace Graphics {
   extern Pen hpAircraft;
   extern Pen hpAircraftBorder;
   extern Pen hpWind;
-  extern Pen hpWindThick;
   extern Pen hpBearing;
   extern Pen hpBestCruiseTrack;
   extern Pen hpCompass;
@@ -100,10 +95,6 @@ namespace Graphics {
   extern Pen hpMapScale;
   extern Pen hpTerrainLine;
   extern Pen hpTerrainLineBg;
-  extern Pen hpSpeedFast;
-  extern Pen hpSpeedSlow;
-  extern Pen hpStartFinishThick;
-  extern Pen hpStartFinishThin;
 
   extern Brush hbCompass;
   extern Brush hbThermalBand;
@@ -113,9 +104,6 @@ namespace Graphics {
   extern Brush hbFinalGlideAbove;
   extern Brush hbWind;
 
-  extern Pen hpCompassBorder;
-  extern Brush hBrushFlyingModeAbort;
-
   extern MaskedIcon SmallIcon, TurnPointIcon;
   extern MaskedIcon AirportReachableIcon, AirportUnreachableIcon;
   extern MaskedIcon FieldReachableIcon, FieldUnreachableIcon;
@@ -124,13 +112,6 @@ namespace Graphics {
   extern MaskedIcon hBmpTeammatePosition;
 
   extern Bitmap hBmpMapScale;
-  extern Bitmap hBmpClimbeAbort;
-  extern Bitmap hBmpUnitKm;
-  extern Bitmap hBmpUnitSm;
-  extern Bitmap hBmpUnitNm;
-  extern Bitmap hBmpUnitM;
-  extern Bitmap hBmpUnitFt;
-  extern Bitmap hBmpUnitMpS;
 
   // used for flarm
   extern Brush AlarmBrush;
@@ -149,14 +130,6 @@ namespace Graphics {
   extern const Color inv_yellowColor;
   extern const Color inv_greenColor;
   extern const Color inv_magentaColor;
-
-  // these used for infoboxes/buttons
-  extern const Color ColorSelected;
-  extern const Color ColorUnselected;
-  extern const Color ColorWarning;
-  extern const Color ColorOK;
-  extern const Color ColorBlack;
-  extern const Color ColorMidGrey;
 };
 
 #endif

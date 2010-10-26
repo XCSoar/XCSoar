@@ -18,7 +18,6 @@
 #define IDB_CLIMB_HD                   5213
 #define IDB_FINALGLIDE                  214
 #define IDB_FINALGLIDE_HD              5214
-#define IDB_AUTOMACCREADY               215
 #define IDB_TOWN                        218
 #define IDB_TOWN_HD                    5218
 #define IDB_MARK                        219
