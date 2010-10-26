@@ -77,12 +77,6 @@ class DemoGLSurfaceView extends GLSurfaceView_SDL {
   @Override public boolean onTouchEvent(final MotionEvent event)
   {
     touchInput.process(event);
-    // Wait a bit, and try to synchronize to app framerate, or event thread will eat all CPU and we'll lose FPS
-    synchronized (mRenderer) {
-      try {
-        mRenderer.wait(300L);
-      } catch (InterruptedException e) { }
-    }
     return true;
   };
 
