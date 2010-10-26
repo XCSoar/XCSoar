@@ -82,37 +82,7 @@ WindowProjection::CalculateScreenBounds(const fixed scale) const
   BoundsRectangle sb;
 
   if (scale >= fixed_one) {
-    POINT screen_center = GeoToScreen(GetGeoLocation());
-
-    sb.west = sb.east = GetGeoLocation().Longitude;
-    sb.south = sb.north = GetGeoLocation().Latitude;
-
-    int dx, dy;
-    unsigned int maxsc = 0;
-    dx = screen_center.x - MapRect.right;
-    dy = screen_center.y - MapRect.top;
-    maxsc = max(maxsc, isqrt4(dx * dx + dy * dy));
-    dx = screen_center.x - MapRect.left;
-    dy = screen_center.y - MapRect.top;
-    maxsc = max(maxsc, isqrt4(dx * dx + dy * dy));
-    dx = screen_center.x - MapRect.left;
-    dy = screen_center.y - MapRect.bottom;
-    maxsc = max(maxsc, isqrt4(dx * dx + dy * dy));
-    dx = screen_center.x - MapRect.right;
-    dy = screen_center.y - MapRect.bottom;
-    maxsc = max(maxsc, isqrt4(dx * dx + dy * dy));
-
-    for (int i = 0; i < 10; i++) {
-      const Angle ang = Angle::degrees(i * fixed_360 / 10);
-      POINT p;
-      p.x = screen_center.x + iround(ang.fastcosine() * maxsc * scale);
-      p.y = screen_center.y + iround(ang.fastsine() * maxsc * scale);
-      GeoPoint g = ScreenToGeo(p.x, p.y);
-      sb.west = min(g.Longitude, sb.west);
-      sb.south = min(g.Latitude, sb.south);
-      sb.east = max(g.Longitude, sb.east);
-      sb.north = max(g.Latitude, sb.north);
-    }
+    return sb.scale(scale);
   } else {
     GeoPoint g = ScreenToGeo(MapRect.left, MapRect.top);
     sb.west = g.Longitude;
