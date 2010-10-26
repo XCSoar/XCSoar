@@ -1,4 +1,4 @@
-TARGETS = PC PPC2000 PPC2003 PPC2003X WM5 ALTAIR WINE UNIX ANDROID
+TARGETS = PC PPC2000 PPC2003 PPC2003X WM5 ALTAIR WINE UNIX ANDROID CYGWIN
 
 # These targets are built when you don't specify the TARGET variable.
 DEFAULT_TARGETS = PC PPC2000 PPC2003 WM5 ALTAIR WINE
@@ -32,6 +32,12 @@ ifeq ($(TARGET),PC)
   CONFIG_PC := y
 endif
 
+ifeq ($(TARGET),CYGWIN)
+  CONFIG_CYGWIN := y
+else
+  CONFIG_CYGWIN := n
+endif
+
 ifeq ($(TARGET),WINE)
   CONFIG_WINE := y
 endif
@@ -62,6 +68,12 @@ ifeq ($(CONFIG_PC),y)
     TCPATH :=
   endif
 
+  CPU := i586
+  MCPU := -march=$(CPU)
+endif
+
+ifeq ($(CONFIG_CYGWIN),y)
+  TCPATH := i686-pc-cygwin-
   CPU := i586
   MCPU := -march=$(CPU)
 endif
@@ -127,9 +139,9 @@ endif
 
 ifeq ($(TARGET),CYGWIN)
   HAVE_POSIX := y
-  HAVE_WIN32 := n
+  HAVE_WIN32 := y
   HAVE_MSVCRT := n
-  HAVE_VASPRINTF := n
+  HAVE_VASPRINTF := y
 endif
 
 ifeq ($(TARGET),PPC2000)
@@ -160,6 +172,10 @@ endif
 ifeq ($(CONFIG_PC),y)
   WINVER = 0x0500
   TARGET := PC
+endif
+
+ifeq ($(CONFIG_CYGWIN),y)
+  WINVER = 0x0500
 endif
 
 ifeq ($(CONFIG_WINE),y)
@@ -276,26 +292,35 @@ ifeq ($(TARGET),PC)
 endif
 
 ifeq ($(HAVE_WIN32),y)
-  ifeq ($(CONFIG_PC),n)
+  ifeq ($(CONFIG_PC)$(CONFIG_CYGWIN),nn)
     TARGET_LDFLAGS := -Wl,--major-subsystem-version=$(CE_MAJOR)
     TARGET_LDFLAGS += -Wl,--minor-subsystem-version=$(CE_MINOR)
   endif
 
   ifneq ($(TARGET),WINE)
+  ifneq ($(TARGET),CYGWIN)
     # link libstdc++-6.dll statically, so we don't have to distribute it
     TARGET_LDFLAGS += -static
+  endif
   endif
 endif
 
 ifeq ($(HAVE_POSIX),y)
 ifneq ($(TARGET),ANDROID)
   TARGET_LDFLAGS += -lpthread
+  ifneq ($(TARGET),CYGWIN)
   TARGET_LDFLAGS += -lrt # for clock_gettime()
+  endif
 endif
 endif
 
 ifeq ($(CONFIG_PC),y)
   TARGET_LDLIBS := -lcomctl32 -lkernel32 -luser32 -lgdi32 -ladvapi32 -lwinmm -lmsimg32 -lstdc++
+endif
+
+ifeq ($(CONFIG_CYGWIN),y)
+  TARGET_LDLIBS := -lcomctl32 -lkernel32 -luser32 -lgdi32 -ladvapi32 -lwinmm -lmsimg32 -lstdc++
+  TARGET_LDLIBS += -lintl
 endif
 
 ifeq ($(HAVE_CE),y)

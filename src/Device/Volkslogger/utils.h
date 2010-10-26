@@ -27,7 +27,9 @@ char *itoa(int value, char *digits, int base);
 
 char *ltoa(long value, char *digits, int base);
 
+#ifndef __CYGWIN__
 char *strupr(char *str);
+#endif
 
 #endif
 

@@ -84,6 +84,7 @@ char *ltoa(long value, char *digits, int base)
   return digits;
 }
 
+#ifndef __CYGWIN__
 char *strupr(char *str)
 {
   char *string = str;
@@ -96,3 +97,4 @@ char *strupr(char *str)
 
   return string;
 }
+#endif
