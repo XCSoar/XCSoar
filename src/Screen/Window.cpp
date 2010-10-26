@@ -334,6 +334,11 @@ Window::on_mouse_up(int x, int y)
 bool
 Window::on_mouse_double(int x, int y)
 {
+#ifdef ENABLE_SDL
+  if (!double_clicks)
+    return on_mouse_down(x, y);
+#endif
+
   return false;
 }
 
