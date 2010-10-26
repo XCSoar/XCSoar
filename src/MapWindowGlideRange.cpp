@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "MapWindow.hpp"
 #include "Screen/Graphics.hpp"
-#include "Screen/Fonts.hpp"
+#include "Screen/Icon.hpp"
 
 #include <stdio.h>
 

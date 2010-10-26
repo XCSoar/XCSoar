@@ -42,6 +42,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/UnitSymbol.hpp"
+#include "Screen/Icon.hpp"
 #include "Math/Screen.hpp"
 #include "Math/Constants.h"
 #include "Logger/Logger.hpp"

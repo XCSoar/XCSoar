@@ -40,6 +40,7 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Icon.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "StringUtil.hpp"

@@ -39,6 +39,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Icon.hpp"
 #include "Screen/Layout.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/ProtectedTaskManager.hpp"

@@ -40,12 +40,13 @@ Copyright_License {
 #define SCREEN_GRAPHICS_HPP
 
 #include "Sizes.h"
-#include "Screen/Bitmap.hpp"
-#include "Screen/Icon.hpp"
-#include "Screen/Brush.hpp"
-#include "Screen/Color.hpp"
-#include "Screen/Pen.hpp"
 #include "Airspace/AirspaceClass.hpp"
+
+class Bitmap;
+class MaskedIcon;
+class Brush;
+class Color;
+class Pen;
 
 struct SETTINGS_MAP;
 class LabelBlock;
