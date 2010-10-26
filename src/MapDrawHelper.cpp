@@ -126,14 +126,6 @@ MapDrawHelper::buffer_render_start()
 
 void 
 MapDrawHelper::clear_buffer() {
-  static const Color whitecolor(0xff,0xff,0xff);
-  m_buffer.background_transparent();
-  m_buffer.set_background_color(whitecolor);
-  m_buffer.set_text_color(whitecolor);
   m_buffer.clear_white();
-  
-  m_stencil.background_transparent();
-  m_stencil.set_background_color(whitecolor);
-  m_stencil.set_text_color(whitecolor);
   m_stencil.clear_white();
 }
