@@ -78,6 +78,10 @@ LogDebug(const TCHAR *Str, ...)
   __android_log_print(ANDROID_LOG_DEBUG, "XCSoar", "%s", buf);
 #endif
 
+#if defined(HAVE_POSIX) && !defined(ANDROID) && !defined(NDEBUG)
+  fprintf(stderr, "%s\n", buf);
+#endif
+
   TextWriter writer(szFileName, initialised);
   if (!writer.error())
     writer.writeln(buf);
@@ -113,6 +117,10 @@ LogStartUp(const TCHAR *Str, ...)
 
 #ifdef ANDROID
   __android_log_print(ANDROID_LOG_INFO, "XCSoar", "%s", buf);
+#endif
+
+#if defined(HAVE_POSIX) && !defined(ANDROID) && !defined(NDEBUG)
+  fprintf(stderr, "%s\n", buf);
 #endif
 
   TextWriter writer(szFileName, initialised);
