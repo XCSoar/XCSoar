@@ -72,7 +72,10 @@ TopCanvas::set()
   const SDL_VideoInfo *info = SDL_GetVideoInfo();
   assert(info != NULL);
 
-  if (info->hw_available)
+  /* hardware surface temporarily disabled on Android because
+     Android's SDL port doesn't allow locking it then (which we need
+     for SDL_gfx) */
+  if (!is_android() && info->hw_available)
     flags |= SDL_HWSURFACE;
   else
     flags |= SDL_SWSURFACE;
