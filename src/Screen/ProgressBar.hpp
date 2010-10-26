@@ -51,6 +51,13 @@ public:
 };
 
 class ProgressBar : public Window {
+#ifdef ENABLE_SDL
+  unsigned min_value, max_value, value, step_size;
+
+public:
+  ProgressBar():min_value(0), max_value(0), value(0), step_size(1) {}
+#endif
+
 public:
   void set(ContainerWindow &parent,
            int left, int top, unsigned width, unsigned height,
@@ -60,6 +67,11 @@ public:
   void set_position(unsigned value);
   void set_step(unsigned size);
   void step();
+
+#ifdef ENABLE_SDL
+protected:
+  virtual void on_paint(Canvas &canvas);
+#endif
 };
 
 #endif

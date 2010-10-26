@@ -42,7 +42,8 @@ Copyright_License {
 #ifndef ENABLE_SDL
 #include <commctrl.h>
 #else
-// XXX
+#include "Screen/Canvas.hpp"
+
 static const TCHAR*const PROGRESS_CLASS = NULL;
 #endif
 
@@ -79,7 +80,11 @@ ProgressBar::set_range(unsigned min_value, unsigned max_value)
   assert_thread();
 
 #ifdef ENABLE_SDL
-  // XXX
+  this->min_value = min_value;
+  this->max_value = max_value;
+  value = 0;
+  step_size = 1;
+  expose();
 #else /* !ENABLE_SDL */
   ::SendMessage(hWnd,
                 PBM_SETRANGE, (WPARAM)0,
@@ -94,7 +99,8 @@ ProgressBar::set_position(unsigned value)
   assert_thread();
 
 #ifdef ENABLE_SDL
-  // XXX
+  this->value = value;
+  expose();
 #else /* !ENABLE_SDL */
   ::SendMessage(hWnd, PBM_SETPOS,
                 value, 0);
@@ -108,7 +114,8 @@ ProgressBar::set_step(unsigned size)
   assert_thread();
 
 #ifdef ENABLE_SDL
-  // XXX
+  step_size = size;
+  expose();
 #else /* !ENABLE_SDL */
   ::SendMessage(hWnd,
                 PBM_SETSTEP, (WPARAM)size, (LPARAM)0);
@@ -122,9 +129,29 @@ ProgressBar::step()
   assert_thread();
 
 #ifdef ENABLE_SDL
-  // XXX
+  value += step_size;
+  expose();
 #else /* !ENABLE_SDL */
   ::SendMessage(hWnd, PBM_STEPIT,
                 (WPARAM)0, (LPARAM)0);
 #endif /* !ENABLE_SDL */
 }
+
+#ifdef ENABLE_SDL
+void
+ProgressBar::on_paint(Canvas &canvas)
+{
+  unsigned position = 0;
+  if (min_value < max_value) {
+    unsigned value = this->value;
+    if (value < min_value)
+      value = min_value;
+    else if (value > max_value)
+      value = max_value;
+    position = (value - min_value) * get_width() / (max_value - min_value);
+  }
+
+  canvas.fill_rectangle(0, 0, position, get_height(), Color::GREEN);
+  canvas.fill_rectangle(position, 0, get_width(), get_height(), Color::WHITE);
+}
+#endif
