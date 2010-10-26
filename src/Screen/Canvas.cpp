@@ -173,9 +173,8 @@ Canvas::text(int x, int y, const TCHAR *text)
   if (s == NULL)
     return;
 
-  SDL_Rect dest = { x_offset + x, y_offset + y };
   // XXX non-opaque?
-  ::SDL_BlitSurface(s, NULL, surface, &dest);
+  copy(x, y, s);
   ::SDL_FreeSurface(s);
 }
 
@@ -216,9 +215,9 @@ clip(int &position, unsigned &length, unsigned max)
 void
 Canvas::copy(int dest_x, int dest_y,
              unsigned dest_width, unsigned dest_height,
-             const Canvas &src, int src_x, int src_y)
+             SDL_Surface *src_surface, int src_x, int src_y)
 {
-  assert(src.surface != NULL);
+  assert(src_surface != NULL);
 
   if (!clip(dest_x, dest_width, width) ||
       !clip(dest_y, dest_height, height))
@@ -227,7 +226,7 @@ Canvas::copy(int dest_x, int dest_y,
   SDL_Rect src_rect = { src_x, src_y, dest_width, dest_height };
   SDL_Rect dest_rect = { x_offset + dest_x, y_offset + dest_y };
 
-  ::SDL_BlitSurface(src.surface, &src_rect, surface, &dest_rect);
+  ::SDL_BlitSurface(src_surface, &src_rect, surface, &dest_rect);
 }
 
 void
@@ -291,14 +290,9 @@ Canvas::stretch(int dest_x, int dest_y,
 
   ::SDL_SetColorKey(zoomed, 0, 0);
 
-  SDL_Rect src_rect = {
-    (src_x * dest_width) / src_width,
-    (src_y * dest_height) / src_height,
-    dest_width, dest_height
-  };
-  SDL_Rect dest_rect = { x_offset + dest_x, y_offset + dest_y };
-
-  ::SDL_BlitSurface(zoomed, &src_rect, surface, &dest_rect);
+  copy(dest_x, dest_y, dest_width, dest_height,
+       zoomed, (src_x * dest_width) / src_width,
+       (src_y * dest_height) / src_height);
   ::SDL_FreeSurface(zoomed);
 }
 

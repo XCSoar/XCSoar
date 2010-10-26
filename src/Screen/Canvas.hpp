@@ -422,7 +422,19 @@ public:
 
   void copy(int dest_x, int dest_y,
             unsigned dest_width, unsigned dest_height,
-            const Canvas &src, int src_x, int src_y);
+            SDL_Surface *surface, int src_x, int src_y);
+
+  void copy(int dest_x, int dest_y, SDL_Surface *surface) {
+    copy(dest_x, dest_y, surface->w, surface->h, surface, 0, 0);
+  }
+
+  void copy(int dest_x, int dest_y,
+            unsigned dest_width, unsigned dest_height,
+            const Canvas &src, int src_x, int src_y) {
+    copy(dest_x, dest_y, dest_width, dest_height,
+         src.surface, src_x, src_y);
+  }
+
   void copy(const Canvas &src, int src_x, int src_y);
   void copy(const Canvas &src);
 
