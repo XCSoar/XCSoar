@@ -138,9 +138,6 @@ MainWindow::InitialiseConfigured()
   ButtonLabel::SetLabelText(0,_T("MODE"));
   ButtonLabel::SetFont(Fonts::Map);
 
-  map.set(*this, map_rect);
-  map.set_font(Fonts::Map);
-
   WindowStyle hidden;
   hidden.hide();
 
@@ -168,6 +165,9 @@ MainWindow::InitialiseConfigured()
   ta = new GaugeThermalAssistant(*this, 0, rc.bottom - sz, sz, sz,
                                  hidden_border);
   ta->bring_to_top();
+
+  map.set(*this, map_rect);
+  map.set_font(Fonts::Map);
 
   LogStartUp(_T("Initialise message system"));
   popup.set(rc);
