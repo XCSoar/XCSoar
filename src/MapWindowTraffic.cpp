@@ -84,11 +84,6 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
   fixed screenrange = projection.GetScreenDistanceMeters();
   fixed scalefact = screenrange / 6000;
 
-  // Create the brushes for filling the arrow (red/yellow/green)
-  static const Brush AlarmBrush(Color::RED);
-  static const Brush WarningBrush(Color(0xFF, 0xA2, 0x00));
-  static const Brush TrafficBrush(Color::GREEN);
-
   // Saves the McCready value
   const fixed MACCREADY = get_glide_polar().get_mc();
 
@@ -220,15 +215,15 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
     // Select brush depending on AlarmLevel
     switch (traffic.AlarmLevel) {
     case 1:
-      canvas.select(WarningBrush);
+      canvas.select(Graphics::WarningBrush);
       break;
     case 2:
     case 3:
-      canvas.select(AlarmBrush);
+      canvas.select(Graphics::AlarmBrush);
       break;
     case 0:
     case 4:
-      canvas.select(TrafficBrush);
+      canvas.select(Graphics::TrafficBrush);
       break;
     }
 
