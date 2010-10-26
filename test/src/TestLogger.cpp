@@ -148,5 +148,5 @@ int main(int argc, char **argv)
   grecord.SetFileName(path);
   ok1(grecord.VerifyGRecordInFile());
 
-  return 0;
+  return exit_status();
 }

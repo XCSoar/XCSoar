@@ -100,5 +100,5 @@ int main(int argc, char **argv)
   ok1(equals(Angle::degrees(fixed_270).BiSector(Angle::degrees(fixed_180)),
                 315));
 
-  return 0;
+  return exit_status();
 }

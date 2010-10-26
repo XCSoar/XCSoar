@@ -70,5 +70,5 @@ int main(int argc, char **argv)
   distance = ProjectedDistance(a, b, middle);
   ok1(distance > fixed(9100/2) && distance < fixed(9140/2));
 
-  return 0;
+  return exit_status();
 }

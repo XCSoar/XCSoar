@@ -49,8 +49,6 @@ RasterMap::GetField(const GeoPoint &location) const
 static void
 TestWinPilot()
 {
-  plan_tests(15);
-
   WayPointFile *f = WayPointFile::create(_T("test/data/waypoints.dat"), 0);
   ok1(f != NULL);
 
@@ -80,7 +78,9 @@ TestWinPilot()
 
 int main(int argc, char **argv)
 {
+  plan_tests(15);
+
   TestWinPilot();
 
-  return 0;
+  return exit_status();
 }

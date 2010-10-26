@@ -63,5 +63,5 @@ int main(int argc, char **argv)
   ok1(between(sun.TimeOfSunRise, 7.32, 7.41));
   ok1(between(sun.EveningTwilight, 19.81, 19.82));
 
-  return 0;
+  return exit_status();
 }

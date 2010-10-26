@@ -218,5 +218,5 @@ int main(int argc, char **argv)
 
   check_ascending_keys(irt);
 
-  return 0;
+  return exit_status();
 }

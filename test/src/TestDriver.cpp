@@ -137,5 +137,5 @@ int main(int argc, char **argv)
   TestCAI302();
   TestLX();
 
-  return 0;
+  return exit_status();
 }

@@ -62,5 +62,5 @@ int main(int argc, char **argv)
   ok1(equals(Units::ToUserTemperature(fixed_zero), -459.67));
   ok1(equals(Units::ToSysTemperature(fixed_zero), 255.37));
 
-  return 0;
+  return exit_status();
 }
