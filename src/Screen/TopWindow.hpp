@@ -53,6 +53,10 @@ public:
   void set();
 
   void full_screen();
+
+  void flip() {
+    ::SDL_Flip(surface);
+  }
 };
 #endif
 

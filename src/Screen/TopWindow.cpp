@@ -59,6 +59,12 @@ TopCanvas::set()
   unsigned width = 640, height = 480;
   Uint32 flags = SDL_ANYFORMAT;
 
+  /* double buffering temporarily disabled on Android because
+     Android's SDL port doesn't allow locking it then (which we need
+     for SDL_gfx) */
+  if (!is_android())
+    flags |= SDL_DOUBLEBUF;
+
   /* we need async screen updates as long as we don't have a global
      frame rate */
   flags |= SDL_ASYNCBLIT;
@@ -219,7 +225,7 @@ TopWindow::invalidate()
 void
 TopWindow::expose() {
   on_paint(screen);
-  screen.expose();
+  screen.flip();
 }
 
 void
