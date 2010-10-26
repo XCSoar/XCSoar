@@ -39,8 +39,6 @@ Copyright_License {
 #include "Screen/BufferWindow.hpp"
 #include "Screen/WindowCanvas.hpp"
 
-#ifndef ENABLE_SDL
-
 bool
 BufferWindow::on_create()
 {
@@ -68,8 +66,6 @@ BufferWindow::on_resize(unsigned width, unsigned height)
   PaintWindow::on_resize(width, height);
   return true;
 }
-
-#endif /* !ENABLE_SDL */
 
 void
 BufferWindow::on_paint(Canvas &canvas)

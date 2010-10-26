@@ -52,7 +52,7 @@ class WindowCanvas : public Canvas {
 #ifdef ENABLE_SDL
 public:
   explicit WindowCanvas(Window &window)
-    :Canvas(window.canvas.surface) {}
+    :Canvas(::SDL_GetVideoSurface()) {}
 
 #else /* !ENABLE_SDL */
 

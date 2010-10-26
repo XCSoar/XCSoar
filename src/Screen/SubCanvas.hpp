@@ -36,38 +36,24 @@ Copyright_License {
 }
 */
 
-#include "Screen/TextWindow.hpp"
+#ifndef XCSOAR_SCREEN_SUB_CANVAS_HPP
+#define XCSOAR_SCREEN_SUB_CANVAS_HPP
 
-#include <commctrl.h>
-
-void
-TextWindow::set(ContainerWindow &parent, const TCHAR *_text,
-                int left, int top, unsigned width, unsigned height,
-                const TextWindowStyle style)
-{
-#ifdef ENABLE_SDL
-  if (_text != NULL)
-    text = _text;
-  else
-    text.clear();
-#endif
-
-  Window::set(&parent, WC_STATIC, _text,
-              left, top, width, height,
-              style);
-}
-
-#ifdef ENABLE_SDL
 #include "Screen/Canvas.hpp"
 
-void
-TextWindow::on_paint(Canvas &canvas)
-{
-  canvas.clear_white();
+/**
+ * A #Canvas implementation which maps into a part of an existing
+ * #Canvas.
+ */
+class SubCanvas : public Canvas {
+public:
+  SubCanvas(Canvas &canvas, int _x, int _y, unsigned _width, unsigned _height) {
+    surface = canvas.surface;
+    x_offset = canvas.x_offset + _x;
+    y_offset = canvas.y_offset + _y;
+    width = _width;
+    height = _height;
+  }
+};
 
-  canvas.set_text_color(Color::BLACK);
-  canvas.background_transparent();
-  canvas.text(1, 1, text.c_str());
-}
-
-#endif /* ENABLE_SDL */
+#endif

@@ -45,7 +45,6 @@ Copyright_License {
 #include "Compiler.h"
 
 #ifdef ENABLE_SDL
-#include "Screen/BufferCanvas.hpp"
 #include "Screen/Timer.hpp"
 #endif /* ENABLE_SDL */
 
@@ -179,9 +178,6 @@ private:
   int left, top;
   unsigned width, height;
 
-protected:
-  BufferCanvas canvas;
-
 private:
   const Font *font;
 
@@ -248,7 +244,7 @@ protected:
 public:
   bool defined() const {
 #ifdef ENABLE_SDL
-    return canvas.defined();
+    return width > 0;
 #else
     return hWnd != NULL;
 #endif
@@ -370,7 +366,7 @@ public:
 #ifdef ENABLE_SDL
     this->width = width;
     this->height = height;
-    canvas.resize(width, height);
+
     invalidate();
     on_resize(width, height);
 #else /* !ENABLE_SDL */
@@ -679,14 +675,7 @@ public:
   }
 
 #ifdef ENABLE_SDL
-  void paint_into(Canvas &dest, int x_offset, int y_offset) {
-    if (font != NULL)
-      canvas.select(*font);
-    on_paint(canvas);
-    dest.copy(x_offset, y_offset,
-              canvas.get_width(), canvas.get_height(),
-              canvas, 0, 0);
-  }
+  void setup(Canvas &canvas);
 
   virtual void invalidate();
 

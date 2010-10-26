@@ -47,25 +47,15 @@ Copyright_License {
  */
 class BufferWindow : public PaintWindow {
 private:
-#ifndef ENABLE_SDL
   BufferCanvas buffer;
-#endif /* !ENABLE_SDL */
 
 public:
   Canvas &get_canvas() {
-#ifdef ENABLE_SDL
-    return canvas;
-#else
     return buffer;
-#endif
   }
 
   const Canvas &get_canvas() const {
-#ifdef ENABLE_SDL
-    return canvas;
-#else
     return buffer;
-#endif
   }
 
   /**
@@ -76,12 +66,10 @@ public:
   }
 
 protected:
-#ifndef ENABLE_SDL
   virtual bool on_create();
   virtual bool on_destroy();
 
   virtual bool on_resize(unsigned width, unsigned height);
-#endif /* !ENABLE_SDL */
 
   virtual void on_paint(Canvas &canvas);
 };

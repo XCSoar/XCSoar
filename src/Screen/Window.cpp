@@ -92,8 +92,6 @@ Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
 
   visible = window_style.visible;
 
-  canvas.set(width, height);
-
   if (parent != NULL)
     parent->add_child(*this);
 
@@ -141,7 +139,6 @@ Window::reset()
 
 #ifdef ENABLE_SDL
   on_destroy();
-  canvas.reset();
 #else /* !ENABLE_SDL */
   if (hWnd != NULL) {
     ::DestroyWindow(hWnd);
@@ -222,6 +219,13 @@ Window::set_focus()
 }
 
 void
+Window::setup(Canvas &canvas)
+{
+  if (font != NULL)
+    canvas.select(*font);
+}
+
+void
 Window::invalidate()
 {
   if (visible && parent != NULL)
@@ -235,7 +239,7 @@ Window::expose()
     return;
 
   if (parent != NULL)
-    parent->expose_child(*this);
+    parent->expose();
 }
 
 void

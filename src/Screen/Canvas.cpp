@@ -193,12 +193,36 @@ Canvas::bottom_right_text(int x, int y, const TCHAR *_text)
   text(x - size.cx, y - size.cy, _text);
 }
 
+static bool
+clip(int &position, unsigned &length, unsigned max)
+{
+  if (position < 0) {
+    if (length <= (unsigned)-position)
+      return false;
+
+    length -= -position;
+    position = 0;
+  }
+
+  if ((unsigned)position >= max)
+    return false;
+
+  if (position + length >= max)
+    length = max - position;
+
+  return true;
+}
+
 void
 Canvas::copy(int dest_x, int dest_y,
              unsigned dest_width, unsigned dest_height,
              const Canvas &src, int src_x, int src_y)
 {
   assert(src.surface != NULL);
+
+  if (!clip(dest_x, dest_width, width) ||
+      !clip(dest_y, dest_height, height))
+    return;
 
   SDL_Rect src_rect = { src_x, src_y, dest_width, dest_height };
   SDL_Rect dest_rect = { x_offset + dest_x, y_offset + dest_y };

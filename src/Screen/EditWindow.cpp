@@ -53,6 +53,7 @@ EditWindow::set(ContainerWindow &parent, int left, int top,
 }
 
 #ifdef ENABLE_SDL
+#include "Screen/Canvas.hpp"
 
 void
 EditWindow::on_paint(Canvas &canvas)

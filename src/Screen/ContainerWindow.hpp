@@ -115,8 +115,6 @@ public:
    */
   gcc_pure
   virtual Window *get_focused_window();
-
-  void expose_child(const Window &child);
 #endif /* ENABLE_SDL */
 
   /**

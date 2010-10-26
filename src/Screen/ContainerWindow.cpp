@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Screen/ContainerWindow.hpp"
-#include "Screen/WindowCanvas.hpp"
 
 #ifndef ENABLE_SDL
 #include "Screen/ButtonWindow.hpp"
@@ -46,6 +45,8 @@ Copyright_License {
 #include <assert.h>
 
 #ifdef ENABLE_SDL
+
+#include "Screen/SubCanvas.hpp"
 
 ContainerWindow::ContainerWindow()
   :active_child(NULL)
@@ -141,7 +142,10 @@ ContainerWindow::on_paint(Canvas &canvas)
     if (!child.is_visible())
       continue;
 
-    child.paint_into(canvas, child.get_left(), child.get_top());
+    SubCanvas sub_canvas(canvas, child.get_left(), child.get_top(),
+                         child.get_width(), child.get_height());
+    child.setup(sub_canvas);
+    child.on_paint(sub_canvas);
   }
 }
 
@@ -188,17 +192,6 @@ ContainerWindow::get_focused_window()
     return active_child->get_focused_window();
 
   return NULL;
-}
-
-void
-ContainerWindow::expose_child(const Window &child)
-{
-  const WindowCanvas child_canvas(const_cast<Window &>(child));
-  canvas.copy(child.get_left(), child.get_top(),
-              child_canvas.get_width(),
-              child_canvas.get_height(),
-              child_canvas, 0, 0);
-  expose();
 }
 
 #else /* !ENABLE_SDL */

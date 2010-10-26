@@ -134,7 +134,6 @@ public:
 
 #ifdef ENABLE_SDL
     // XXX
-    on_paint(canvas);
     expose();
 #else /* !ENABLE_SDL */
     ::UpdateWindow(hWnd);
