@@ -42,7 +42,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(12);
+  plan_tests(16);
 
   GeoPoint g;
 
@@ -72,6 +72,11 @@ int main(int argc, char **argv)
   g = b.center();
   ok1(equals(g.Latitude, 5));
   ok1(equals(g.Longitude, 5));
+
+  ok1(b.inside(Angle::degrees(fixed(7)), Angle::degrees(fixed(4.5))));
+  ok1(!b.inside(Angle::degrees(fixed(9)), Angle::degrees(fixed(4.5))));
+  ok1(!b.inside(Angle::degrees(fixed(7)), Angle::degrees(fixed(1))));
+  ok1(!b.inside(Angle::degrees(fixed(9)), Angle::degrees(fixed(1))));
 
   return exit_status();;
 }
