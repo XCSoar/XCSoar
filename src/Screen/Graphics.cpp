@@ -74,8 +74,6 @@ MaskedIcon Graphics::hCruise, Graphics::hClimb,
            Graphics::hFinalGlide, Graphics::hAbort;
 MaskedIcon Graphics::hGPSStatus1, Graphics::hGPSStatus2;
 
-Brush Graphics::hBackgroundBrush;
-
 Pen Graphics::hpAircraft;
 Pen Graphics::hpAircraftBorder;
 Pen Graphics::hpWind;
@@ -146,7 +144,6 @@ const Color Graphics::inv_greenColor = Color::GREEN;
 const Color Graphics::inv_magentaColor = Color::MAGENTA;
 
 const Color Graphics::TaskColor = Color(0, 120, 0);
-const Color Graphics::BackgroundColor = Color::WHITE;
 
 const Color Graphics::Colours[] = {
   Color::RED,
@@ -179,8 +176,6 @@ Graphics::Initialise()
   AlarmBrush.set(Color::RED);
   WarningBrush.set(Color(0xFF, 0xA2, 0x00));
   TrafficBrush.set(Color::GREEN);
-
-  hBackgroundBrush.set(BackgroundColor);
 
   hFLARMTraffic.load_big(IDB_FLARMTRAFFIC, IDB_FLARMTRAFFIC_HD);
   hTerrainWarning.load_big(IDB_TERRAINWARNING, IDB_TERRAINWARNING_HD);

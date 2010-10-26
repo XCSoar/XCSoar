@@ -44,7 +44,6 @@ Copyright_License {
 #include "Navigation/SpeedVector.hpp"
 #include "WindowProjection.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "Util/StringUtil.hpp"
 
@@ -92,11 +91,11 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
   if (m_terrain == NULL) {
     // terrain may have been re-set, so may need new renderer
     reset();
-    canvas.clear(Graphics::hBackgroundBrush);
+    canvas.clear_white();
     return;
   }
   if (!settings_map.EnableTerrain) {
-    canvas.clear(Graphics::hBackgroundBrush);
+    canvas.clear_white();
     return;
   }
 

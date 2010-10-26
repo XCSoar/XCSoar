@@ -119,7 +119,6 @@ namespace Graphics {
   extern Brush TrafficBrush;
 
   // misc
-  extern const Color BackgroundColor;
   extern const Color TaskColor;
   extern const Color Colours[NUMAIRSPACECOLORS];
 
