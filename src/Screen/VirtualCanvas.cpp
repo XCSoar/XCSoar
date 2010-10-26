@@ -88,7 +88,7 @@ VirtualCanvas::set(unsigned _width, unsigned _height)
   const SDL_PixelFormat *format = video->format;
 
   SDL_Surface *surface;
-  surface = ::SDL_CreateRGBSurface(SDL_HWSURFACE, _width, _height,
+  surface = ::SDL_CreateRGBSurface(SDL_SWSURFACE, _width, _height,
                                    format->BitsPerPixel,
                                    format->Rmask, format->Gmask,
                                    format->Bmask, format->Amask);
