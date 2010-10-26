@@ -115,7 +115,12 @@ Bitmap::load(unsigned id)
 #endif
 
   SDL_RWops *rw = SDL_RWFromConstMem(bmp_data, bmp_size);
-  surface = SDL_LoadBMP_RW(rw, 1);
+  SDL_Surface *original = ::SDL_LoadBMP_RW(rw, 1);
+  if (original == NULL)
+    return false;
+
+  surface = ::SDL_DisplayFormat(original);
+  ::SDL_FreeSurface(original);
 
 #ifdef WIN32
   free(header);
@@ -236,9 +241,13 @@ bool
 Bitmap::load_file(const TCHAR *path)
 {
 #ifdef ENABLE_SDL
-  surface = ::SDL_LoadBMP(path);
-  if (surface != NULL)
-    return true;
+  SDL_Surface *original = ::SDL_LoadBMP(path);
+  if (original != NULL) {
+    surface = ::SDL_DisplayFormat(original);
+    ::SDL_FreeSurface(original);
+    if (surface != NULL)
+      return true;
+  }
 #endif
 
 #ifdef HAVE_AYGSHELL_DLL
