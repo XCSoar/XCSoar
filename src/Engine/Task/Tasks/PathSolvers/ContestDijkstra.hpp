@@ -88,10 +88,12 @@ public:
 
   /**
    * Calculate score of best path
-   *
+   * This is specialised by each contest type, defaults to
+   * speed in kph measured by weighted distance divided by time
+   * 
    * @return Score (pts)
    */
-  fixed calc_score() const;
+  virtual fixed calc_score() const;
 
   /**
    * Calculate elapsed time of best path
