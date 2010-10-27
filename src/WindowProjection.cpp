@@ -79,35 +79,13 @@ BoundsRectangle
 WindowProjection::CalculateScreenBounds(const fixed scale) const
 {
   // compute lat lon extents of visible screen
-  BoundsRectangle sb;
-
-  if (scale >= fixed_one) {
+  if (scale >= fixed_one)
     return screenbounds_latlon.scale(scale);
-  } else {
-    GeoPoint g = ScreenToGeo(MapRect.left, MapRect.top);
-    sb.west = g.Longitude;
-    sb.east = g.Longitude;
-    sb.south = g.Latitude;
-    sb.north = g.Latitude;
 
-    g = ScreenToGeo(MapRect.right, MapRect.top);
-    sb.west = min(sb.west, g.Longitude);
-    sb.east = max(sb.east, g.Longitude);
-    sb.south = min(sb.south, g.Latitude);
-    sb.north = max(sb.north, g.Latitude);
-
-    g = ScreenToGeo(MapRect.right, MapRect.bottom);
-    sb.west = min(sb.west, g.Longitude);
-    sb.east = max(sb.east, g.Longitude);
-    sb.south = min(sb.south, g.Latitude);
-    sb.north = max(sb.north, g.Latitude);
-
-    g = ScreenToGeo(MapRect.left, MapRect.bottom);
-    sb.west = min(sb.west, g.Longitude);
-    sb.east = max(sb.east, g.Longitude);
-    sb.south = min(sb.south, g.Latitude);
-    sb.north = max(sb.north, g.Latitude);
-  }
+  BoundsRectangle sb(ScreenToGeo(MapRect.left, MapRect.top));
+  sb.merge(ScreenToGeo(MapRect.right, MapRect.top));
+  sb.merge(ScreenToGeo(MapRect.right, MapRect.bottom));
+  sb.merge(ScreenToGeo(MapRect.left, MapRect.bottom));
 
   return sb;
 }
