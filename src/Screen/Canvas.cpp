@@ -176,7 +176,15 @@ Canvas::text(int x, int y, const TCHAR *text)
   if (s == NULL)
     return;
 
-  // XXX non-opaque?
+  if (s->format->palette != NULL && s->format->palette->ncolors >= 2) {
+    s->format->palette->colors[1] = text_color;
+
+    if (background_mode == OPAQUE) {
+      s->flags &= ~SDL_SRCCOLORKEY;
+      s->format->palette->colors[0] = background_color;
+    }
+  }
+
   copy(x, y, s);
   ::SDL_FreeSurface(s);
 }
