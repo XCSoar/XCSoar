@@ -45,25 +45,21 @@ VersionMax = 32767.0
 3 = ,"ARM Files",,..\bin
 4 = ,"ARM Files",,..\bin
 6 = ,"Input Files",,..\..\..\Data\Input
-7 = ,"Language Files",,..\..\po
 
 [SourceDisksNames.armv4]
 1 = ,"ARM Files",,..\bin
 3 = ,"ARM Files",,..\bin
 4 = ,"ARM Files",,..\bin
 6 = ,"Input Files",,..\..\..\Data\Input
-7 = ,"Language Files",,..\..\po
 
 [SourceDisksFiles]
 XCSoar.exe = 1
 XCSoarLaunch.dll = 3
 XCSoarSetup.dll = 4
 default.xci = 6
-de.mo = 7
-pl.mo = 7
 
 [DefaultInstall]
-CopyFiles = TheFiles,Files.Windows,Files.Language,Files.Input
+CopyFiles = TheFiles,Files.Windows,Files.Input
 CEShortcuts = Links
 AddReg = AddRegistry
 CESetupDLL=XCSoarSetup.dll
@@ -71,7 +67,6 @@ CESetupDLL=XCSoarSetup.dll
 [DestinationDirs]
 Files.Windows = 0,%CE2% ; "\Windows" directory
 TheFiles = 0, %InstallDir%
-Files.Language = 0, "%CE5%\XCSoarData"
 Files.Input = 0, "%CE5%\XCSoarData"
 Links = 0,%CE11% ; "\Windows\Start Menu" directory
 
@@ -84,10 +79,6 @@ XCSoarLaunch.dll, XCSoarLaunch.dll,,0x40000000
 
 [Files.Input]
 default.xci
-
-[Files.Language]
-de.mo
-pl.mo
 
 [AddRegistry]
 HKLM,\Software\Microsoft\Today\Items\%AppName%,Type,0x00010001,4
