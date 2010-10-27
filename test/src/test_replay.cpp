@@ -8,14 +8,56 @@
 #include <fstream>
 #endif
 
-std::string score_file;
+ContestResult official_score_classic,
+  official_score_sprint,
+  official_score_fai;
+fixed official_index;
 
-void get_score_file(void);
+inline void load_score_file(std::ifstream& fscore,
+                            ContestResult& score)
+{
+  double tmp;
+  fscore >> tmp; score.score = (fixed)tmp;
+  fscore >> tmp; score.distance = (fixed)tmp;
+  fscore >> tmp; score.speed = (fixed)tmp;
+  if (score.speed>fixed_zero) {
+    score.time = fixed(3600)*score.distance/score.speed;
+  } else {
+    score.time = fixed_zero;
+  }
+  if (verbose) {
+    std::cout << "#   score " << score.score << "\n";
+    std::cout << "#   distance " << score.distance << " (km)\n";
+    std::cout << "#   speed " << score.speed << " (kph)\n";
+    std::cout << "#   time " << score.time << " (sec)\n";
+  }
+}
 
-void get_score_file(void) {
+
+inline void load_scores(void) {
   // replay_file
   int index = replay_file.find_last_of(".");
-  score_file = replay_file.substr(0, index) + ".txt";
+  std::string score_file = replay_file.substr(0, index) + ".txt";
+  if (verbose) {
+    std::cout << "# replay file: " << replay_file << "\n";
+    std::cout << "# score file: " << score_file << "\n";
+  }
+  std::ifstream fscore(score_file.c_str());
+  double tmp;
+  fscore >> tmp; tmp = (fixed)official_index;
+  if (verbose) {
+    std::cout << "# OLC-Classic\n";
+  }
+  load_score_file(fscore, official_score_classic);
+  if (verbose) {
+    std::cout << "# OLC-Sprint\n";
+  }
+  load_score_file(fscore, official_score_sprint);
+  if (verbose) {
+    std::cout << "# OLC-FAI\n";
+  }
+  load_score_file(fscore, official_score_fai);
+  fscore.close();
 }
 
 class ReplayLoggerSim: public IgcReplay
@@ -84,11 +126,7 @@ test_replay(const Contests olc_type)
   ConvertCToT(szFilename, replay_file.c_str());
   sim.SetFilename(szFilename);
 
-  get_score_file();
-  if (verbose) {
-    std::cout << "# replay: " << replay_file << "\n";
-    std::cout << "# score: " << score_file << "\n";
-  }
+  load_scores();
 
   sim.Start();
 
