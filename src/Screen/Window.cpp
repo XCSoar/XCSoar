@@ -139,6 +139,9 @@ Window::reset()
 
 #ifdef ENABLE_SDL
   on_destroy();
+
+  width = 0;
+  height = 0;
 #else /* !ENABLE_SDL */
   if (hWnd != NULL) {
     ::DestroyWindow(hWnd);

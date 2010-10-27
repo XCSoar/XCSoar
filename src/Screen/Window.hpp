@@ -197,7 +197,8 @@ private:
 public:
 #ifdef ENABLE_SDL
   Window()
-    :parent(NULL), font(NULL),
+    :parent(NULL), width(0), height(0),
+     font(NULL),
      visible(true), focused(false),
      double_clicks(false) {}
 #else
