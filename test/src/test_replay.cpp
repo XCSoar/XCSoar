@@ -13,6 +13,26 @@ ContestResult official_score_classic,
   official_score_fai;
 fixed official_index;
 
+inline void output_score(const char* header,
+                         const ContestResult& score)
+{
+  std::cout << header << "\n";
+  std::cout << "#   score " << score.score << "\n";
+  std::cout << "#   distance " << score.distance << " (km)\n";
+  std::cout << "#   speed " << score.speed << " (kph)\n";
+  std::cout << "#   time " << score.time << " (sec)\n";
+}
+
+inline bool compare_scores(const ContestResult& official,
+                           const ContestResult& estimated)
+{
+  if (verbose) {
+    output_score("#  Official:", official);
+    output_score("#  Estimated:", estimated);
+  }
+  return true;
+}
+
 inline void load_score_file(std::ifstream& fscore,
                             ContestResult& score)
 {
@@ -25,12 +45,7 @@ inline void load_score_file(std::ifstream& fscore,
   } else {
     score.time = fixed_zero;
   }
-  if (verbose) {
-    std::cout << "#   score " << score.score << "\n";
-    std::cout << "#   distance " << score.distance << " (km)\n";
-    std::cout << "#   speed " << score.speed << " (kph)\n";
-    std::cout << "#   time " << score.time << " (sec)\n";
-  }
+  score.speed /= fixed(3.6);
 }
 
 
@@ -45,17 +60,8 @@ inline void load_scores(void) {
   std::ifstream fscore(score_file.c_str());
   double tmp;
   fscore >> tmp; tmp = (fixed)official_index;
-  if (verbose) {
-    std::cout << "# OLC-Classic\n";
-  }
   load_score_file(fscore, official_score_classic);
-  if (verbose) {
-    std::cout << "# OLC-Sprint\n";
-  }
   load_score_file(fscore, official_score_sprint);
-  if (verbose) {
-    std::cout << "# OLC-FAI\n";
-  }
   load_score_file(fscore, official_score_fai);
   fscore.close();
 }
@@ -100,7 +106,8 @@ protected:
 };
 
 static bool
-test_replay(const Contests olc_type)
+test_replay(const Contests olc_type, 
+            const ContestResult &official_score)
 {
 #ifdef DO_PRINT
   std::ofstream f("results/res-sample.txt");
@@ -127,6 +134,23 @@ test_replay(const Contests olc_type)
   sim.SetFilename(szFilename);
 
   load_scores();
+
+  if (verbose) {
+    switch (olc_type) {
+    case OLC_Sprint:
+      std::cout << "# OLC-Sprint\n";
+      break;
+    case OLC_FAI:
+      std::cout << "# OLC-FAI\n";
+      break;
+    case OLC_Classic:
+      std::cout << "# OLC-Classic\n";
+      break;
+    default:
+      std::cout << "# Unknown!\n";
+      break;
+    }
+  }
 
   sim.Start();
 
@@ -171,17 +195,20 @@ test_replay(const Contests olc_type)
   };
   sim.Stop();
 
-  const CommonStats& stats = task_manager.get_common_stats();
-  printf("# OLC dist %g speed %g time %g\n",
-         (double)stats.olc.distance,
-         (double)(stats.olc.speed*fixed(3.6)),
-         (double)stats.olc.time);
-
   if (verbose) {
     distance_counts();
   }
+  ContestResult handicapped_result = task_manager.get_common_stats().olc;
+  switch (olc_type) {
+  case OLC_Sprint:
+    handicapped_result.score *= fixed(200)/(fixed(100)+official_index);
+    break;
+  default:
+    handicapped_result.score *= fixed(100)/official_index;
+  };
 
-  return true;
+  return compare_scores(official_score, 
+                        handicapped_result);
 }
 
 
@@ -195,9 +222,9 @@ int main(int argc, char** argv)
 
   plan_tests(3);
 
-  ok(test_replay(OLC_Classic),"replay classic",0);
-  ok(test_replay(OLC_Sprint),"replay sprint",0);
-  ok(test_replay(OLC_FAI),"replay fai",0);
+  ok(test_replay(OLC_Classic, official_score_classic),"replay classic",0);
+  ok(test_replay(OLC_Sprint, official_score_sprint),"replay sprint",0);
+  ok(test_replay(OLC_FAI, official_score_fai),"replay fai",0);
 
   return exit_status();
 }
