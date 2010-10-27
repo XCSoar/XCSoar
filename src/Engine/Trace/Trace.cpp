@@ -332,10 +332,7 @@ TracePointVector
 Trace::find_within_range(const GeoPoint &loc, const fixed range,
                          const unsigned mintime, const fixed resolution) const
 {
-  AIRCRAFT_STATE state;
-  state.Location = loc;
-  state.Time = fixed(mintime);
-  TracePoint bb_target(state, task_projection);
+  TracePoint bb_target(loc, task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
   const unsigned rrange = task_projection.project_range(loc, resolution);
 

@@ -24,6 +24,14 @@ public:
  */
   TracePoint():time(0-1),last_time(0-1) {};
 
+  /**
+   * Constructor for a TracePoint which is only used as parameter to
+   * TraceTree::find_within_range().  It initializes only the
+   * SearchPoint base class.
+   */
+  TracePoint(const GeoPoint &location, const TaskProjection &tp)
+    :SearchPoint(location, tp, true) {}
+
 /** 
  * Constructor for actual trace points
  * 
