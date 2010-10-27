@@ -59,6 +59,9 @@ CheckTextFile(const TCHAR *path, const char *const* expect)
     if (strncmp(*expect, "HFFTYFR TYPE:", 13) == 0) {
       ok1(strncmp(line, "HFFTYFR TYPE:", 13) == 0);
     } else {
+      if (strcmp(line, *expect)) {
+        printf("# \"%s\" fails to match with \"%s\"\n", line, *expect);
+      }
       ok1(strcmp(line, *expect) == 0);
     }
 
