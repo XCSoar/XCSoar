@@ -154,6 +154,7 @@ ContestDijkstra::calc_score() const
 
   static const fixed fixed_fifth(0.0002);
   score *= fixed_fifth;
+  // @todo: apply handicap
   return score;
 }
 
