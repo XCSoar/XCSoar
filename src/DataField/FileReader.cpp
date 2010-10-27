@@ -211,6 +211,8 @@ DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filter)
     else if (S_ISREG(st.st_mode) && fnmatch(filter, ent->d_name, 0) == 0)
       addFile(ent->d_name, FileName);
   }
+
+  closedir(dir);
 #else /* !HAVE_POSIX */
   HANDLE hFind; // file handle
   WIN32_FIND_DATA FindFileData;
