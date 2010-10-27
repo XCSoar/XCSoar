@@ -18,8 +18,8 @@ inline void output_score(const char* header,
 {
   std::cout << header << "\n";
   std::cout << "#   score " << score.score << "\n";
-  std::cout << "#   distance " << score.distance << " (km)\n";
-  std::cout << "#   speed " << score.speed << " (kph)\n";
+  std::cout << "#   distance " << score.distance/fixed(1000) << " (km)\n";
+  std::cout << "#   speed " << score.speed*fixed(3.6) << " (kph)\n";
   std::cout << "#   time " << score.time << " (sec)\n";
 }
 
@@ -46,6 +46,7 @@ inline void load_score_file(std::ifstream& fscore,
     score.time = fixed_zero;
   }
   score.speed /= fixed(3.6);
+  score.distance *= fixed(1000);
 }
 
 
@@ -59,7 +60,7 @@ inline void load_scores(void) {
   }
   std::ifstream fscore(score_file.c_str());
   double tmp;
-  fscore >> tmp; tmp = (fixed)official_index;
+  fscore >> tmp; official_index = (fixed)tmp;
   load_score_file(fscore, official_score_classic);
   load_score_file(fscore, official_score_sprint);
   load_score_file(fscore, official_score_fai);
@@ -199,9 +200,10 @@ test_replay(const Contests olc_type,
     distance_counts();
   }
   ContestResult handicapped_result = task_manager.get_common_stats().olc;
+  fixed fact(fixed(200)/(fixed(100)+official_index));
   switch (olc_type) {
   case OLC_Sprint:
-    handicapped_result.score *= fixed(200)/(fixed(100)+official_index);
+    handicapped_result.score *= fact;
     break;
   default:
     handicapped_result.score *= fixed(100)/official_index;
@@ -222,9 +224,9 @@ int main(int argc, char** argv)
 
   plan_tests(3);
 
-  ok(test_replay(OLC_Classic, official_score_classic),"replay classic",0);
-  ok(test_replay(OLC_Sprint, official_score_sprint),"replay sprint",0);
   ok(test_replay(OLC_FAI, official_score_fai),"replay fai",0);
+  ok(test_replay(OLC_Sprint, official_score_sprint),"replay sprint",0);
+  ok(test_replay(OLC_Classic, official_score_classic),"replay classic",0);
 
   return exit_status();
 }
