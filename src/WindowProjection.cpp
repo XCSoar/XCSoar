@@ -82,7 +82,7 @@ WindowProjection::CalculateScreenBounds(const fixed scale) const
   BoundsRectangle sb;
 
   if (scale >= fixed_one) {
-    return sb.scale(scale);
+    return screenbounds_latlon.scale(scale);
   } else {
     GeoPoint g = ScreenToGeo(MapRect.left, MapRect.top);
     sb.west = g.Longitude;
