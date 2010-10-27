@@ -146,7 +146,13 @@ DataNodeXML::save(const TCHAR* path)
   if (file == NULL)
     return false;
 
-  fprintf(file, "%S", serialise().c_str());
+  fprintf(file,
+#ifdef _UNICODE
+          "%S",
+#else
+          "%s",
+#endif
+          serialise().c_str());
 
   fclose(file);
 
