@@ -402,7 +402,7 @@ bool test_olc(int n_wind, Contests olc_type)
                            waypoints);
 
   task_manager.get_task_behaviour().all_off();
-  task_manager.get_task_behaviour().contest = olc_type;
+  task_manager.set_contest(olc_type);
   task_manager.get_task_behaviour().enable_olc = true;
 
   task_manager.set_glide_polar(glide_polar);

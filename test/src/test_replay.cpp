@@ -66,7 +66,7 @@ test_replay(const Contests olc_type)
 
   task_manager.set_glide_polar(glide_polar);
 
-  task_manager.get_task_behaviour().contest = olc_type;
+  task_manager.set_contest(olc_type);
   task_manager.get_task_behaviour().enable_olc = true;
 
   ReplayLoggerSim sim;
