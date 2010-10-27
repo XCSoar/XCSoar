@@ -353,6 +353,19 @@ public:
   }
 
   void polyline(const POINT *lppt, unsigned cPoints) {
+#ifdef ENABLE_OPENGL
+    if (surface->flags & SDL_OPENGL) {
+      GLfloat v[cPoints * 2];
+      for (unsigned i = 0; i < cPoints; ++i) {
+        v[i * 2] = lppt[i].x;
+        v[i * 2 + 1] = lppt[i].y;
+      }
+      glVertexPointer(2, GL_FLOAT, 0, v);
+      glDrawArrays(GL_LINE_LOOP, 0, cPoints);
+      return;
+    }
+#endif
+
     for (unsigned i = 1; i < cPoints; ++i)
       line(lppt[i - 1].x, lppt[i - 1].y, lppt[i].x, lppt[i].y);
   }
