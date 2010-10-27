@@ -50,19 +50,30 @@ using std::min;
 #endif
 
 class TestWindow : public SingleWindow {
-  ButtonWindow buffer_button, close_button;
+#ifndef ENABLE_OPENGL
+  ButtonWindow buffer_button;
+#endif
+  ButtonWindow close_button;
   unsigned page;
+#ifndef ENABLE_OPENGL
   bool buffered;
   BufferCanvas buffer;
+#endif
 
   enum {
     ID_START = 100,
+#ifndef ENABLE_OPENGL
     ID_BUFFER,
+#endif
     ID_CLOSE
   };
 
 public:
-  TestWindow():page(0), buffered(false) {}
+  TestWindow():page(0)
+#ifndef ENABLE_OPENGL
+              , buffered(false)
+#endif
+  {}
 
   static bool register_class(HINSTANCE hInstance) {
 #ifdef ENABLE_SDL
@@ -91,7 +102,9 @@ public:
 
     RECT rc = get_client_rect();
 
+#ifndef ENABLE_OPENGL
     buffer_button.set(*this, _T("Buffer"), ID_BUFFER, 5, rc.bottom - 30, 65, 25);
+#endif
 
     close_button.set(*this, _T("Close"), ID_CLOSE, rc.right - 70, rc.bottom - 30, 65, 25);
   }
@@ -166,16 +179,20 @@ private:
 
     canvas.set_text_color(Color(0, 0, 128));
     canvas.text(5, 5, label);
+#ifndef ENABLE_OPENGL
     canvas.text(5, 25,
                 buffered ? _T("buffered") : _T("not buffered"));
+#endif
   }
 
   void update() {
+#ifndef ENABLE_OPENGL
     if (buffered) {
       buffer.clear_white();
 
       paint(buffer);
     }
+#endif
 
     PaintWindow::invalidate();
   }
@@ -196,6 +213,7 @@ protected:
       close();
       return true;
 
+#ifndef ENABLE_OPENGL
     case ID_BUFFER:
       buffered = !buffered;
       if (buffered) {
@@ -205,6 +223,7 @@ protected:
         buffer.reset();
       update();
       return true;
+#endif
     }
 
     return SingleWindow::on_command(id, code);
@@ -218,14 +237,18 @@ protected:
   */
 
   virtual void on_paint(Canvas &canvas) {
+#ifndef ENABLE_OPENGL
     if (!buffered) {
+#endif
       // due to a limitation of our PaintCanvas class, we cannot rely on
       // background erasing with on_erase()
       canvas.clear_white();
 
       paint(canvas);
+#ifndef ENABLE_OPENGL
     } else
       canvas.copy(buffer);
+#endif
 
     SingleWindow::on_paint(canvas);
   }

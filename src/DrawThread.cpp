@@ -28,6 +28,8 @@ Copyright_License {
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 
+#ifndef ENABLE_OPENGL
+
 void
 DrawThread::ExchangeBlackboard()
 {
@@ -124,3 +126,5 @@ DrawThread::run()
     }
   }
 }
+
+#endif

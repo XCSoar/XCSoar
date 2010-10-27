@@ -62,7 +62,6 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "resource.h"
 #include "GlideComputer.hpp"
-#include "DrawThread.hpp"
 #include "StatusMessage.hpp"
 #include "CalculationThread.hpp"
 #include "InstrumentThread.hpp"
@@ -89,13 +88,20 @@ Copyright_License {
 #include "ProgressGlue.hpp"
 #include "Pages.hpp"
 
+#ifndef ENABLE_OPENGL
+#include "DrawThread.hpp"
+#endif
+
 FileCache *file_cache;
 Marks *marks;
 TopologyStore *topology;
 RasterTerrain *terrain;
 RasterWeather RASP;
 
+#ifndef ENABLE_OPENGL
 DrawThread *draw_thread;
+#endif
+
 CalculationThread *calculation_thread;
 InstrumentThread *instrument_thread;
 
@@ -414,10 +420,12 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   // Finally ready to go.. all structures must be present before this.
 
   // Create the drawing thread
+#ifndef ENABLE_OPENGL
   LogStartUp(_T("CreateDrawingThread"));
   draw_thread = new DrawThread(main_window.map, main_window.flarm,
                                main_window.ta);
   draw_thread->start();
+#endif
 
   // Show the infoboxes
   LogStartUp(_T("ShowInfoBoxes"));
@@ -450,7 +458,10 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   globalRunningEvent.trigger();
   calculation_thread->resume();
+
+#ifndef ENABLE_OPENGL
   draw_thread->resume();
+#endif
 
   return true;
 }
@@ -492,7 +503,9 @@ XCSoarInterface::Shutdown(void)
   // Stop threads
   LogStartUp(_T("CloseDrawingThread"));
   closeTriggerEvent.trigger();
+#ifndef ENABLE_OPENGL
   draw_thread->stop();
+#endif
   calculation_thread->stop();
 
   if (instrument_thread != NULL)
@@ -508,9 +521,11 @@ XCSoarInterface::Shutdown(void)
   LogStartUp(_T("- instrument thread returned"));
 
   //  Wait for the drawing thread to finish
+#ifndef ENABLE_OPENGL
   draw_thread->join();
   LogStartUp(_T("- draw thread returned"));
   delete draw_thread;
+#endif
 
   // Close the AirspaceWarning dialog if still open
   LogStartUp(_T("dlgAirspaceWarningDeInit"));

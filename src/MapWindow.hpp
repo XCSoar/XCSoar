@@ -28,7 +28,9 @@ Copyright_License {
 #include "MapWindowProjection.hpp"
 #include "MapWindowTimer.hpp"
 #include "Screen/DoubleBufferWindow.hpp"
+#ifndef ENABLE_OPENGL
 #include "Screen/BufferCanvas.hpp"
+#endif
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "MapWindowBlackboard.hpp"
@@ -66,7 +68,8 @@ class GlidePolar;
 class ContainerWindow;
 class WayPointLabelList;
 
-class MapWindow : public DoubleBufferWindow,
+class MapWindow :
+  public DoubleBufferWindow,
   public MapWindowBlackboard,
   public MapWindowTimer
 {
@@ -77,12 +80,14 @@ protected:
    */
   MapWindowProjection visible_projection;
 
+#ifndef ENABLE_OPENGL
   /**
    * The projection of the buffer.  This differs from
    * visible_projection only after the projection was modified, until
    * the DrawThread has finished drawing the new projection.
    */
   MapWindowProjection buffer_projection;
+#endif
 
   /**
    * The projection of the DrawThread.  This is used to render the new
@@ -108,6 +113,7 @@ protected:
 
   Marks *marks;
 
+#ifndef ENABLE_OPENGL
   /**
    * Tracks whether the buffer canvas contains valid data.  We use
    * those attributes to prevent showing invalid data on the map, when
@@ -121,6 +127,7 @@ protected:
    * zooming and panning, to give instant visual feedback.
    */
   unsigned scale_buffer;
+#endif
 
 public:
   MapWindow();
@@ -216,7 +223,9 @@ public:
 
 private:
 
+#ifndef ENABLE_OPENGL
   void DrawThreadLoop ();
+#endif
 
   void UpdateDisplayMode();
 
@@ -287,11 +296,13 @@ protected:
     UpdateWeather();
   }
 
+#ifndef ENABLE_OPENGL
 private:
   // graphics vars
 
   BufferCanvas buffer_canvas;
   BufferCanvas stencil_canvas;
+#endif
 
 protected:
   mutable BitmapCanvas bitmap_canvas;

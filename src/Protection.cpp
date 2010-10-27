@@ -89,7 +89,9 @@ void CreateCalculationThread(void) {
 void
 SuspendAllThreads()
 {
+#ifndef ENABLE_OPENGL
   draw_thread->suspend();
+#endif
   calculation_thread->suspend();
 }
 
@@ -97,5 +99,7 @@ void
 ResumeAllThreads()
 {
   calculation_thread->resume();
+#ifndef ENABLE_OPENGL
   draw_thread->resume();
+#endif
 }

@@ -115,7 +115,11 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
                         XCSoarInterface::SettingsComputer().EnableSoundModes);
   }
 
+#ifdef ENABLE_OPENGL
+  CommonInterface::main_window.map.invalidate();
+#else
   draw_thread->trigger_redraw();
+#endif
 }
 
 void

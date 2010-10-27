@@ -37,6 +37,7 @@ GlueMapWindow::QuickRedraw(const SETTINGS_MAP &_settings_map)
 
   ReadSettingsMap(_settings_map);
 
+#ifndef ENABLE_OPENGL
   /* update the Projection */
 
   visible_projection.Update(get_client_rect(), Basic(), Calculated(),
@@ -49,6 +50,8 @@ GlueMapWindow::QuickRedraw(const SETTINGS_MAP &_settings_map)
   /* quickly stretch the existing buffer into the window */
 
   scale_buffer = 2;
+#endif
+
   invalidate();
 }
 
@@ -85,7 +88,9 @@ GlueMapWindow::Idle()
     }
 
   } while (RenderTimeAvailable() &&
+#ifndef ENABLE_OPENGL
            !draw_thread->is_triggered() &&
+#endif
            (still_dirty = terrain_dirty || topology_dirty || weather_dirty));
 
   return still_dirty;

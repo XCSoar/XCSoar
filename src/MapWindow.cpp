@@ -43,9 +43,12 @@ MapWindow::MapWindow()
    terrain_center(Angle::native(fixed_zero), Angle::native(fixed_zero)),
    weather(NULL),
    airspace_database(NULL), airspace_warnings(NULL), task(NULL),
-   marks(NULL), 
-   ui_generation(1), buffer_generation(0),
-   scale_buffer(0) {}
+   marks(NULL)
+#ifndef ENABLE_OPENGL
+  , ui_generation(1), buffer_generation(0),
+   scale_buffer(0)
+#endif
+{}
 
 ZoomClimb_t::ZoomClimb_t():
   CruiseMapScale(fixed_ten),
@@ -64,7 +67,10 @@ MapWindow::set(ContainerWindow &parent, const RECT &rc)
 
   // initialize other systems
   visible_projection.Initialize(SettingsMap(), get_client_rect());
+
+#ifndef ENABLE_OPENGL
   buffer_projection = visible_projection;
+#endif
 }
 
 /**
@@ -126,6 +132,7 @@ MapWindow::UpdateWeather()
   }
 }
 
+#ifndef ENABLE_OPENGL
 /**
  * Handles the drawing of the moving map and is called by the DrawThread
  */
@@ -154,6 +161,7 @@ MapWindow::DrawThreadLoop(void)
 
   flip();
 }
+#endif
 
 bool
 MapWindow::register_class(HINSTANCE hInstance)

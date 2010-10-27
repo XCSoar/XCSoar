@@ -24,6 +24,8 @@ Copyright_License {
 #include "Screen/DoubleBufferWindow.hpp"
 #include "Screen/WindowCanvas.hpp"
 
+#ifndef ENABLE_OPENGL
+
 bool
 DoubleBufferWindow::on_create()
 {
@@ -68,3 +70,5 @@ DoubleBufferWindow::on_paint(Canvas &canvas)
   ScopeLock protect(mutex);
   canvas.copy(get_visible_canvas());
 }
+
+#endif

@@ -24,6 +24,8 @@ Copyright_License {
 #include "Screen/BufferWindow.hpp"
 #include "Screen/WindowCanvas.hpp"
 
+#ifndef ENABLE_OPENGL
+
 bool
 BufferWindow::on_create()
 {
@@ -52,8 +54,15 @@ BufferWindow::on_resize(unsigned width, unsigned height)
   return true;
 }
 
+#endif
+
 void
 BufferWindow::on_paint(Canvas &canvas)
 {
+#ifdef ENABLE_OPENGL
+  /* paint directly on OpenGL */
+  on_paint_buffer(canvas);
+#else
   canvas.copy(buffer);
+#endif
 }

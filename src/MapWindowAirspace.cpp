@@ -120,7 +120,9 @@ public:
     m_warnings(warnings),
     pen_thick(Pen::SOLID, IBLSCALE(10), Color(0x00, 0x00, 0x00)),
     pen_medium(Pen::SOLID, IBLSCALE(3), Color(0x00, 0x00, 0x00)) {
+#ifndef ENABLE_OPENGL
     m_use_stencil = true;
+#endif
   }
 
   void Visit(const AirspaceCircle& airspace) {
@@ -172,6 +174,7 @@ private:
                                             iAirspaceBrush[airspace.get_type()]]);
     m_buffer.white_pen();
 
+#ifndef ENABLE_OPENGL
     if (m_warnings.is_warning(airspace) || m_warnings.is_inside(airspace)) {
       m_stencil.black_brush();
       m_stencil.select(pen_medium);
@@ -179,6 +182,7 @@ private:
       m_stencil.select(pen_thick);
       m_stencil.hollow_brush();
     }
+#endif
 
   }
 
@@ -243,7 +247,9 @@ MapWindow::DrawAirspace(Canvas &canvas)
     airspace_warnings->visit_warnings(awc);
 
   MapDrawHelper helper(canvas,
+#ifndef ENABLE_OPENGL
                        buffer_canvas, stencil_canvas,
+#endif
                        render_projection,
                         SettingsMap());
   AirspaceVisitorMap v(helper, awc);

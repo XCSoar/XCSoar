@@ -24,15 +24,22 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Screen/WindowCanvas.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Protection.hpp"
+#include "DeviceBlackboard.hpp"
+#endif
+
 bool
 MapWindow::on_resize(unsigned width, unsigned height)
 {
   DoubleBufferWindow::on_resize(width, height);
 
+#ifndef ENABLE_OPENGL
   ++ui_generation;
 
   buffer_canvas.grow(width, height);
   stencil_canvas.grow(width, height);
+#endif
 
   return true;
 }
@@ -44,8 +51,10 @@ MapWindow::on_create()
     return false;
 
   WindowCanvas canvas(*this);
+#ifndef ENABLE_OPENGL
   buffer_canvas.set(canvas);
   stencil_canvas.set(canvas);
+#endif
   bitmap_canvas.set(canvas);
   return true;
 }
@@ -53,8 +62,10 @@ MapWindow::on_create()
 bool
 MapWindow::on_destroy()
 {
+#ifndef ENABLE_OPENGL
   buffer_canvas.reset();
   stencil_canvas.reset();
+#endif
 
   DoubleBufferWindow::on_destroy();
   return true;
@@ -63,6 +74,29 @@ MapWindow::on_destroy()
 void
 MapWindow::on_paint(Canvas &canvas)
 {
+#ifdef ENABLE_OPENGL
+
+  /* copy device_blackboard to MapWindow */
+
+  mutexBlackboard.Lock();
+  ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated(),
+                 device_blackboard.SettingsComputer(),
+                 device_blackboard.SettingsMap());
+  mutexBlackboard.Unlock();
+
+  UpdateProjection();
+
+  /* paint it */
+
+  Render(canvas, get_client_rect());
+
+  /* copy MapWindow to device_blackboard */
+
+  mutexBlackboard.Lock();
+  device_blackboard.ReadMapProjection(VisibleProjection());
+  mutexBlackboard.Unlock();
+
+#else /* !ENABLE_OPENGL */
   if (buffer_generation == ui_generation)
     DoubleBufferWindow::on_paint(canvas);
   else if (scale_buffer > 0) {
@@ -130,4 +164,5 @@ MapWindow::on_paint(Canvas &canvas)
        started: the buffer has invalid data, paint a white window
        instead */
     canvas.clear_white();
+#endif /* !ENABLE_OPENGL */
 }

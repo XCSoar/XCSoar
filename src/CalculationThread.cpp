@@ -30,6 +30,11 @@ Copyright_License {
 #include "DrawThread.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Interface.hpp"
+#include "MainWindow.hpp"
+#endif
+
 /**
  * Constructor of the CalculationThread class
  * @param _glide_computer The GlideComputer used for the CalculationThread
@@ -83,7 +88,11 @@ CalculationThread::tick()
   // if (new GPS data)
   if (gps_updated) {
     // inform map new data is ready
+#ifdef ENABLE_OPENGL
+    CommonInterface::main_window.map.invalidate();
+#else
     draw_thread->trigger_redraw();
+#endif
 
     if (!glide_computer.Basic().TotalEnergyVarioAvailable)
       // emulate vario update

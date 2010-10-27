@@ -167,9 +167,11 @@ GlueMapWindow::on_mouse_up(int x, int y)
     break;
 
   case DRAG_PAN:
+#ifndef ENABLE_OPENGL
     /* allow the use of the stretched last buffer for the next two
        redraws */
     scale_buffer = 2;
+#endif
     return true;
 
   case DRAG_SIMULATOR:
@@ -333,6 +335,10 @@ GlueMapWindow::on_cancel_mode()
 void
 GlueMapWindow::on_paint(Canvas &canvas)
 {
+#ifdef ENABLE_OPENGL
+  Idle();
+#endif
+
   MapWindow::on_paint(canvas);
 
   // Draw center screen cross hair in pan mode

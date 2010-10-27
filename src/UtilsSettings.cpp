@@ -67,7 +67,9 @@ bool InputFileChanged = false;
 static void
 SettingsEnter()
 {
+#ifndef ENABLE_OPENGL
   draw_thread->suspend();
+#endif
 
   // This prevents the map and calculation threads from doing anything
   // with shared data while it is being changed (also prevents drawing)
@@ -160,7 +162,9 @@ SettingsLeave()
       || TopologyFileChanged) {
     ProgressGlue::Close();
     XCSoarInterface::main_window.map.set_focus();
+#ifndef ENABLE_OPENGL
     draw_thread->trigger_redraw();
+#endif
   }
 
   if (DevicePortChanged)

@@ -34,6 +34,7 @@ Copyright_License {
  * copies the other buffer to the screen.
  */
 class DoubleBufferWindow : public PaintWindow {
+#ifndef ENABLE_OPENGL
 private:
   BufferCanvas buffers[2];
 
@@ -81,6 +82,7 @@ protected:
   virtual bool on_create();
   virtual bool on_destroy();
   virtual void on_paint(Canvas &canvas);
+#endif
 };
 
 #endif

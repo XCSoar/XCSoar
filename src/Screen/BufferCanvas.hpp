@@ -26,7 +26,9 @@ Copyright_License {
 
 #include "Screen/VirtualCanvas.hpp"
 
-#ifdef ENABLE_SDL
+#ifdef ENABLE_OPENGL
+// No buffered Canvas on pure OpenGL
+#elif defined(ENABLE_SDL)
 #define BufferCanvas VirtualCanvas
 #else /* !ENABLE_SDL */
 

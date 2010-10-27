@@ -75,6 +75,12 @@ Copyright_License {
 using std::min;
 #endif
 
+#ifdef ENABLE_OPENGL
+Mutex mutexBlackboard;
+#include "MapProjectionBlackboard.hpp"
+void MapProjectionBlackboard::ReadMapProjection(const MapWindowProjection &) {}
+#endif
+
 DeviceBlackboard device_blackboard;
 
 void
@@ -248,6 +254,8 @@ GenerateBlackboard(MapWindow &map)
   map.UpdateProjection();
 }
 
+#ifndef ENABLE_OPENGL
+
 class DrawThread {
 public:
   static void Draw(MapWindow &map) {
@@ -256,6 +264,8 @@ public:
     map.DrawThreadLoop();
   }
 };
+
+#endif
 
 #ifndef WIN32
 int main(int argc, char **argv)
@@ -287,7 +297,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   GenerateBlackboard(window.map);
   window.set(0, 0, 640, 480);
   Fonts::Initialize();
+#ifndef ENABLE_OPENGL
   DrawThread::Draw(window.map);
+#endif
   window.show();
 
   window.event_loop();

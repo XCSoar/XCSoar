@@ -154,6 +154,10 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
 
   fixed vval;
 
+#ifdef ENABLE_OPENGL
+  InitDone = false;
+#endif
+
   if (!InitDone){
     ValueHeight = 4 + Fonts::CDI.get_capital_height()
                     + Fonts::Title.get_capital_height();

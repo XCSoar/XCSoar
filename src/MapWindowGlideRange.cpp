@@ -47,6 +47,9 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   if (!Basic().flight.Flying)
     return;
 
+#ifdef ENABLE_OPENGL
+  // XXX implement
+#else
   Canvas &buffer = buffer_canvas;
 
   buffer.set_background_color(Color::WHITE);
@@ -58,6 +61,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   buffer.polygon(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
 
   canvas.copy_transparent_white(buffer);
+#endif
 }
 
 

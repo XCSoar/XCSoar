@@ -34,6 +34,10 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Sizes.h"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/SubCanvas.hpp"
+#endif
+
 #include <algorithm>
 #include <stdio.h>
 #include <assert.h>
@@ -373,11 +377,16 @@ InfoBoxWindow::Paint(Canvas &canvas)
 void
 InfoBoxWindow::PaintInto(Canvas &dest, int xoff, int yoff, int width, int height)
 {
+#ifdef ENABLE_OPENGL
+  SubCanvas canvas(dest, xoff, yoff, width, height);
+  Paint(canvas);
+#else
   SIZE size = get_size();
   BufferCanvas buffer(dest, size.cx, size.cy);
 
   Paint(buffer);
   dest.stretch(xoff, yoff, width, height, buffer, 0, 0, size.cx, size.cy);
+#endif
 }
 
 void

@@ -25,29 +25,38 @@ Copyright_License {
 #define XCSOAR_SCREEN_BUFFER_WINDOW_HXX
 
 #include "Screen/PaintWindow.hpp"
+
+#ifndef ENABLE_OPENGL
 #include "Screen/BufferCanvas.hpp"
+#endif
 
 /**
  * A #PaintWindow with buffered painting, to avoid flickering.
  */
 class BufferWindow : public PaintWindow {
+#ifndef ENABLE_OPENGL
 private:
   BufferCanvas buffer;
+#endif
 
 public:
   /**
    * Repaints the buffer, and copies it onto the physical screen.
    */
   void repaint() {
+#ifndef ENABLE_OPENGL
     on_paint_buffer(buffer);
+#endif
     invalidate();
   }
 
 protected:
+#ifndef ENABLE_OPENGL
   virtual bool on_create();
   virtual bool on_destroy();
 
   virtual bool on_resize(unsigned width, unsigned height);
+#endif
 
   virtual void on_paint(Canvas &canvas);
 

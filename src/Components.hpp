@@ -53,7 +53,9 @@ extern TopologyStore *topology;
 extern RasterTerrain *terrain;
 extern RasterWeather RASP;
 extern GlideComputer glide_computer;
+#ifndef ENABLE_OPENGL
 extern DrawThread *draw_thread;
+#endif
 extern CalculationThread *calculation_thread;
 extern InstrumentThread *instrument_thread;
 
