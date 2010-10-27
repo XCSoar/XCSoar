@@ -17,9 +17,13 @@ static void
 polar_mc(const fixed mc)
 {
   GlidePolar polar(mc);
-  ofile << mc << " " << polar.get_VbestLD() << " " << polar.get_bestLD() 
-        << " " << polar.get_Vmin() << " " << polar.get_Smin() 
-        << " " << polar.get_Vmax() << " " << polar.get_Smax() << "\n";
+  ofile << (double)mc << " " 
+        << (double)polar.get_VbestLD() << " " 
+        << (double)polar.get_bestLD() << " " 
+        << (double)polar.get_Vmin() << " " 
+        << (double)polar.get_Smin() << " " 
+        << (double)polar.get_Vmax() << " " 
+        << (double)polar.get_Smax() << "\n";
 }
 
 static void
@@ -32,19 +36,22 @@ basic_polar(const fixed mc)
 
   GlidePolar polar(mc);
   for (fixed V= Vmin; V<= polar.get_Vmax(); V+= fixed(0.25)) {
-    pfile << mc << " " << V << " " << -polar.SinkRate(V) << " " << V/polar.SinkRate(V)
+    pfile << (double)mc << " " 
+          << (double)V << " " 
+          << -(double)polar.SinkRate(V) << " " 
+          << (double)(V/polar.SinkRate(V))
           << "\n";
   }
 
-  mfile << mc 
+  mfile << (double)mc 
         << " " << 0
-        << " " << mc
-        << " " << polar.get_bestLD() 
+        << " " << (double)mc
+        << " " << (double)polar.get_bestLD() 
         << "\n";
-  mfile << mc 
-        << " " << polar.get_VbestLD() 
-        << " " << -polar.get_SbestLD() 
-        << " " << polar.get_bestLD() 
+  mfile << (double)mc 
+        << " " << (double)polar.get_VbestLD() 
+        << " " << -(double)polar.get_SbestLD() 
+        << " " << (double)polar.get_bestLD() 
         << "\n";
 }
 
@@ -68,12 +75,12 @@ test_glide_alt(const fixed h, const fixed W, const fixed Wangle,
   GeoVector vect(fixed(400.0));
   GlideState gs(vect, fixed_zero, ac.NavAltitude, ac.wind);
   GlideResult gr = polar.solve(gs);
-  hfile << h << " " 
-        << gr.AltitudeDifference << " "
-        << gr.TimeElapsed << " " 
-        << gr.VOpt << " " 
-        << W << " "
-        << Wangle << " "
+  hfile << (double)h << " " 
+        << (double)gr.AltitudeDifference << " "
+        << (double)gr.TimeElapsed << " " 
+        << (double)gr.VOpt << " " 
+        << (double)W << " "
+        << (double)Wangle << " "
         << "\n";
 }
 
@@ -100,13 +107,13 @@ test_glide_stf(const fixed h, const fixed W, const fixed Wangle, const fixed S,
 
   fixed Vstf = polar.speed_to_fly(ac, gr, false);
 
-  hfile << h << " " 
-        << gr.AltitudeDifference << " "
-        << gr.VOpt << " " 
-        << Vstf << " " 
-        << W << " "
-        << Wangle << " "
-        << ac.NettoVario << " "
+  hfile << (double)h << " " 
+        << (double)gr.AltitudeDifference << " "
+        << (double)gr.VOpt << " " 
+        << (double)Vstf << " " 
+        << (double)W << " "
+        << (double)Wangle << " "
+        << (double)ac.NettoVario << " "
         << "\n";
 }
 
@@ -205,10 +212,10 @@ test_glide_cb(const fixed h, const fixed W, const fixed Wangle,
 
   gr.calc_deferred(ac);
 
-  hfile << W << " "
-        << Wangle << " "
-        << gr.Vector.Bearing << " "
-        << gr.CruiseTrackBearing << " "
+  hfile << (double)W << " "
+        << (double)Wangle << " "
+        << (double)gr.Vector.Bearing.value_degrees() << " "
+        << (double)gr.CruiseTrackBearing.value_degrees() << " "
         << "\n";
 }
 
