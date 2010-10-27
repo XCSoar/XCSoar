@@ -582,11 +582,12 @@ ContestManager::print() const
     }
   }
 
+  std::ofstream fs("results/res-olc-solution.txt");
+
   if (solution.empty()) 
     return;
 
   if (positive(result.time)) {
-    std::ofstream fs("results/res-olc-solution.txt");
 
     for (TracePointVector::const_iterator it = solution.begin();
          it != solution.end(); ++it) {
