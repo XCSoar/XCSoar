@@ -8,6 +8,16 @@
 #include <fstream>
 #endif
 
+std::string score_file;
+
+void get_score_file(void);
+
+void get_score_file(void) {
+  // replay_file
+  int index = replay_file.find_last_of(".");
+  score_file = replay_file.substr(0, index) + ".txt";
+}
+
 class ReplayLoggerSim: public IgcReplay
 {
 public:
@@ -73,6 +83,13 @@ test_replay(const Contests olc_type)
   TCHAR szFilename[MAX_PATH];
   ConvertCToT(szFilename, replay_file.c_str());
   sim.SetFilename(szFilename);
+
+  get_score_file();
+  if (verbose) {
+    std::cout << "# replay: " << replay_file << "\n";
+    std::cout << "# score: " << score_file << "\n";
+  }
+
   sim.Start();
 
   bool do_print = verbose;
