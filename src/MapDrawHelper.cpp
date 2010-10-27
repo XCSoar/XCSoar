@@ -110,7 +110,6 @@ MapDrawHelper::buffer_render_finish()
       m_buffer.copy_transparent_black(m_stencil);
     }
     m_canvas.copy_and(m_buffer);
-    m_buffer.background_opaque();
     m_buffer_drawn = false;
   }
 }

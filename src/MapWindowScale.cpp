@@ -116,8 +116,11 @@ draw_bitmap(Canvas &canvas, BitmapCanvas &bitmap_canvas, const Bitmap &bitmap,
             const unsigned src_x_offset, const unsigned src_y_offset,
             const unsigned src_width, const unsigned src_height)
 {
+#ifndef ENABLE_SDL
   bitmap_canvas.background_opaque();
   bitmap_canvas.set_text_color(Color::WHITE);
+#endif
+
   bitmap_canvas.select(bitmap);
   canvas.scale_copy(x, y, bitmap_canvas, src_x_offset, src_y_offset,
                     src_width, src_height);

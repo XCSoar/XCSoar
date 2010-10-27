@@ -70,8 +70,6 @@ MaskedIcon::draw(Canvas &canvas,
                  BitmapCanvas &bitmap_canvas, 
                  int x, int y) const
 {
-  bitmap_canvas.background_opaque();
-  bitmap_canvas.set_text_color(Color::WHITE);
   bitmap_canvas.select(bitmap);
 
   canvas.copy_or(x - origin.x, y - origin.y, size.cx, size.cy,
