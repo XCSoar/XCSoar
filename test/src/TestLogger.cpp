@@ -86,7 +86,7 @@ static const char *const expect[] = {
   "C040910112233000000000001",
   "C0000000N00000000ETAKEOFF",
   "C5103117N00742367EBERGNEUSTADT",
-  "C5037933N01043567ESUHL",
+  "C5037932N01043567ESUHL",
   "C5103117N00742367EBERGNEUSTADT",
   "C0000000N00000000ELANDING",
   "B1122385103117N00742367EA004900048700000",
@@ -107,7 +107,7 @@ int main(int argc, char **argv)
   static const GeoPoint home(Angle::degrees(fixed(7.7061111111111114)),
                              Angle::degrees(fixed(51.051944444444445)));
   static const GeoPoint tp(Angle::degrees(fixed(10.726111111111111)),
-                           Angle::degrees(fixed(50.632222222222225)));
+                           Angle::degrees(fixed(50.6322)));
 
   static NMEA_INFO i;
   i.DateTime.year = 2010;
