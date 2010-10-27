@@ -488,6 +488,14 @@ Canvas::copy_or(int dest_x, int dest_y,
 {
   assert(src.surface != NULL);
 
+#ifdef ENABLE_OPENGL
+  if (surface->flags & SDL_OPENGL) {
+    stretch_or(dest_x, dest_y, dest_width, dest_height,
+               src, src_x, src_y, dest_width, dest_height);
+    return;
+  }
+#endif
+
   dest_x += x_offset;
   dest_y += y_offset;
 
@@ -501,6 +509,14 @@ Canvas::copy_and(int dest_x, int dest_y,
                  const Canvas &src, int src_x, int src_y)
 {
   assert(src.surface != NULL);
+
+#ifdef ENABLE_OPENGL
+  if (surface->flags & SDL_OPENGL) {
+    stretch_and(dest_x, dest_y, dest_width, dest_height,
+                src, src_x, src_y, dest_width, dest_height);
+    return;
+  }
+#endif
 
   dest_x += x_offset;
   dest_y += y_offset;
@@ -517,6 +533,18 @@ Canvas::stretch_or(int dest_x, int dest_y,
                    unsigned src_width, unsigned src_height)
 {
   assert(src.surface != NULL);
+
+#ifdef ENABLE_OPENGL
+  if (surface->flags & SDL_OPENGL) {
+    glPushAttrib(GL_COLOR_BUFFER_BIT);
+    glEnable(GL_COLOR_LOGIC_OP);
+    glLogicOp(GL_OR);
+    stretch(dest_x, dest_y, dest_width, dest_height,
+            src, src_x, src_y, src_width, src_height);
+    glPopAttrib();
+    return;
+  }
+#endif
 
   dest_x += x_offset;
   dest_y += y_offset;
@@ -546,6 +574,18 @@ Canvas::stretch_and(int dest_x, int dest_y,
                     unsigned src_width, unsigned src_height)
 {
   assert(src.surface != NULL);
+
+#ifdef ENABLE_OPENGL
+  if (surface->flags & SDL_OPENGL) {
+    glPushAttrib(GL_COLOR_BUFFER_BIT);
+    glEnable(GL_COLOR_LOGIC_OP);
+    glLogicOp(GL_AND);
+    stretch(dest_x, dest_y, dest_width, dest_height,
+            src, src_x, src_y, src_width, src_height);
+    glPopAttrib();
+    return;
+  }
+#endif
 
   dest_x += x_offset;
   dest_y += y_offset;
