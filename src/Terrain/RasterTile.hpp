@@ -2,7 +2,7 @@
 #define XCSOAR_RASTERTILE_HPP
 
 #include "Terrain/RasterBuffer.hpp"
-#include "Geo/BoundsRectangle.hpp"
+#include "Geo/GeoBounds.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/ActiveList.hpp"
 #include "Util/StaticArray.hpp"
@@ -101,7 +101,7 @@ class RasterTileCache : private NonCopyable {
   struct CacheHeader {
     enum { VERSION = 0x1 };
     unsigned version, width, height, num_marker_segments;
-    BoundsRectangle bounds;
+    GeoBounds bounds;
   };
 
   StaticArray<MarkerSegmentInfo, 8192> segments;
@@ -119,7 +119,7 @@ private:
   RasterBuffer Overview;
   bool scan_overview;
   unsigned int width, height;
-  BoundsRectangle bounds;
+  GeoBounds bounds;
 
 public:
   gcc_pure
@@ -148,7 +148,7 @@ public:
 
   void Reset();
 
-  const BoundsRectangle &GetBounds() const {
+  const GeoBounds &GetBounds() const {
     return bounds;
   }
 

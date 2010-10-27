@@ -117,7 +117,7 @@ TopologyFile::ClearCache()
 }
 
 rectObj
-TopologyFile::ConvertRect(const BoundsRectangle &br)
+TopologyFile::ConvertRect(const GeoBounds &br)
 {
   rectObj dest;
   dest.minx = br.west.value_degrees();
@@ -137,7 +137,7 @@ TopologyFile::updateCache(const WindowProjection &map_projection)
     /* not visible, don't update cache now */
     return;
 
-  const BoundsRectangle screenRect =
+  const GeoBounds screenRect =
     map_projection.CalculateScreenBounds(fixed_zero);
   if (cache_bounds.inside(screenRect))
     /* the cache is still fresh */

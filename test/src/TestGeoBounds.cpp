@@ -35,7 +35,7 @@
 }
 */
 
-#include "Geo/BoundsRectangle.hpp"
+#include "Geo/GeoBounds.hpp"
 #include "TestUtil.hpp"
 
 #include <stdio.h>
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
   g.Latitude = Angle::degrees(fixed(4));
   g.Longitude = Angle::degrees(fixed(2));
 
-  BoundsRectangle b(g);
+  GeoBounds b(g);
 
   ok1(equals(b.east, 2));
   ok1(equals(b.west, 2));

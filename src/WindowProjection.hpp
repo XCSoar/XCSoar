@@ -40,7 +40,7 @@ Copyright_License {
 #define XCSOAR_WINDOW_PROJECTION_HPP
 
 #include "Projection.hpp"
-#include "Geo/BoundsRectangle.hpp"
+#include "Geo/GeoBounds.hpp"
 
 class WindowProjection:
   public Projection
@@ -91,7 +91,7 @@ public:
 
   // used by terrain renderer, topology and airspace
   gcc_pure
-  BoundsRectangle CalculateScreenBounds(const fixed scale) const;
+  GeoBounds CalculateScreenBounds(const fixed scale) const;
 
 protected:
   RECT MapRect;
@@ -102,7 +102,7 @@ protected:
   void UpdateScreenBounds();
 
 private:
-  BoundsRectangle screenbounds_latlon;
+  GeoBounds screenbounds_latlon;
 };
 
 #endif

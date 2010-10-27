@@ -75,14 +75,14 @@ WindowProjection::UpdateScreenBounds()
   screenbounds_latlon = CalculateScreenBounds(fixed_zero);
 }
 
-BoundsRectangle
+GeoBounds
 WindowProjection::CalculateScreenBounds(const fixed scale) const
 {
   // compute lat lon extents of visible screen
   if (scale >= fixed_one)
     return screenbounds_latlon.scale(scale);
 
-  BoundsRectangle sb(ScreenToGeo(MapRect.left, MapRect.top));
+  GeoBounds sb(ScreenToGeo(MapRect.left, MapRect.top));
   sb.merge(ScreenToGeo(MapRect.right, MapRect.top));
   sb.merge(ScreenToGeo(MapRect.right, MapRect.bottom));
   sb.merge(ScreenToGeo(MapRect.left, MapRect.bottom));

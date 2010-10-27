@@ -41,7 +41,7 @@ Copyright_License {
 #define TOPOLOGY_H
 
 #include "shapelib/mapshape.h"
-#include "Geo/BoundsRectangle.hpp"
+#include "Geo/GeoBounds.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Icon.hpp"
@@ -50,7 +50,7 @@ Copyright_License {
 struct GeoPoint;
 class Canvas;
 class WindowProjection;
-struct BoundsRectangle;
+struct GeoBounds;
 class LabelBlock;
 struct SETTINGS_MAP;
 class XShape;
@@ -113,12 +113,12 @@ private:
    * The current scope of the shape cache.  If the screen exceeds this
    * rectangle, then we need to update the cache.
    */
-  BoundsRectangle cache_bounds;
+  GeoBounds cache_bounds;
 
   XShape** shpCache;
 
   unsigned GetSkipSteps(double map_scale) const;
-  static rectObj ConvertRect(const BoundsRectangle &br);
+  static rectObj ConvertRect(const GeoBounds &br);
 
 protected:
   void ClearCache();

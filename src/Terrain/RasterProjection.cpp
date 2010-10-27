@@ -37,11 +37,11 @@ Copyright_License {
 */
 
 #include "RasterProjection.hpp"
-#include "Geo/BoundsRectangle.hpp"
+#include "Geo/GeoBounds.hpp"
 #include "Math/Earth.hpp"
 
 void
-RasterProjection::set(const BoundsRectangle &bounds,
+RasterProjection::set(const GeoBounds &bounds,
                       unsigned width, unsigned height)
 {
   x_scale = fixed(width) /

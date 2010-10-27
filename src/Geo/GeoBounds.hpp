@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_GEO_BOUNDS_RECTANGLE_HPP
-#define XCSOAR_GEO_BOUNDS_RECTANGLE_HPP
+#ifndef XCSOAR_GEO_RECT_HPP
+#define XCSOAR_GEO_RECT_HPP
 
 #include "Navigation/GeoPoint.hpp"
 
@@ -47,14 +47,14 @@ Copyright_License {
  * goal is to perform fast overlap checks, e.g. to determine if an
  * object is visible on the screen.
  */
-struct BoundsRectangle {
+struct GeoBounds {
   Angle west, north, east, south;
 
-  BoundsRectangle() {}
-  BoundsRectangle(const GeoPoint pt)
+  GeoBounds() {}
+  GeoBounds(const GeoPoint pt)
     :west(pt.Longitude), north(pt.Latitude),
      east(pt.Longitude), south(pt.Latitude) {}
-  BoundsRectangle(const GeoPoint _north_west, const GeoPoint _south_east)
+  GeoBounds(const GeoPoint _north_west, const GeoPoint _south_east)
     :west(_north_west.Longitude), north(_north_west.Latitude),
      east(_south_east.Longitude), south(_south_east.Latitude) {}
 
@@ -81,7 +81,7 @@ struct BoundsRectangle {
     return inside(pt.Longitude, pt.Latitude);
   }
 
-  bool inside(const BoundsRectangle &interior) const {
+  bool inside(const GeoBounds &interior) const {
     return inside(interior.west, interior.north) &&
       inside(interior.east, interior.south);
   }
@@ -92,18 +92,18 @@ struct BoundsRectangle {
   }
 
   /**
-   * Returns a scaled version of the BoundsRectangle.
+   * Returns a scaled version of the GeoBounds.
    * The bounds are scaled around the center by the given factor.
    * @param factor The scaling factor
-   * @return A scaled version of the BoundsRectangle
+   * @return A scaled version of the GeoBounds
    */
-  BoundsRectangle scale(fixed factor) const {
+  GeoBounds scale(fixed factor) const {
     Angle diff_lat_half =
         (north - south).as_bearing() / fixed_two * (factor - fixed_one);
     Angle diff_lon_half =
         (east - west).as_bearing() / fixed_two * (factor - fixed_one);
 
-    BoundsRectangle br = *this;
+    GeoBounds br = *this;
     br.east += diff_lon_half;
     br.west -= diff_lon_half;
     br.north += diff_lat_half;

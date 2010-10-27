@@ -45,7 +45,7 @@ Copyright_License {
 
 #include <utility>
 
-struct BoundsRectangle;
+struct GeoBounds;
 
 /**
  * This class manages the projection from GeoPoint to RasterMap
@@ -56,7 +56,7 @@ class RasterProjection {
   fixed x_scale, y_scale;
 
 public:
-  void set(const BoundsRectangle &bounds, unsigned width, unsigned height);
+  void set(const GeoBounds &bounds, unsigned width, unsigned height);
 
   gcc_const std::pair<unsigned, unsigned>
   project(const GeoPoint &location) const {

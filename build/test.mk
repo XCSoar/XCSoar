@@ -55,7 +55,7 @@ TEST_NAMES = \
 	test_pressure \
 	test_task \
 	TestAngle TestUnits TestEarth TestSunEphemeris \
-	TestRadixTree TestBoundsRectangle \
+	TestRadixTree TestGeoBounds \
 	TestLogger TestDriver \
 	TestWayPointFile
 
@@ -70,12 +70,12 @@ $(TARGET_BIN_DIR)/TestAngle$(TARGET_EXEEXT): $(TEST_ANGLE_OBJS) $(TEST_ANGLE_LDA
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
-TEST_BOUNDSRECT_SOURCES = \
+TEST_GEO_BOUNDS_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
-	$(TEST_SRC_DIR)/TestBoundsRectangle.cpp
-TEST_BOUNDSRECT_OBJS = $(call SRC_TO_OBJ,$(TEST_BOUNDSRECT_SOURCES))
-TEST_BOUNDSRECT_LDADD = $(MATH_LIBS)
-$(TARGET_BIN_DIR)/TestBoundsRectangle$(TARGET_EXEEXT): $(TEST_BOUNDSRECT_OBJS) $(TEST_BOUNDSRECT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	$(TEST_SRC_DIR)/TestGeoBounds.cpp
+TEST_GEO_BOUNDS_OBJS = $(call SRC_TO_OBJ,$(TEST_GEO_BOUNDS_SOURCES))
+TEST_GEO_BOUNDS_LDADD = $(MATH_LIBS)
+$(TARGET_BIN_DIR)/TestGeoBounds$(TARGET_EXEEXT): $(TEST_GEO_BOUNDS_OBJS) $(TEST_GEO_BOUNDS_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 

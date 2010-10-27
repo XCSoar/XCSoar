@@ -95,7 +95,7 @@ RasterMap::SetViewCenter(const GeoPoint &location)
   if (!raster_tile_cache.GetInitialised())
     return;
 
-  const BoundsRectangle &bounds = raster_tile_cache.GetBounds();
+  const GeoBounds &bounds = raster_tile_cache.GetBounds();
 
   int x = angle_to_pixel(location.Longitude, bounds.west, bounds.east,
                          raster_tile_cache.GetWidth());
