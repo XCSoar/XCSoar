@@ -132,7 +132,7 @@ GlideComputerAirData::ProcessVertical()
   LD();
   CruiseLD();
 
-  if (!Basic().flight.OnGround && !Calculated().Circling)
+  if (Basic().flight.Flying && !Calculated().Circling)
     SetCalculated().AverageLD = rotaryLD.calculate();
 
   Average30s();
@@ -404,7 +404,7 @@ GlideComputerAirData::LD()
       UpdateLD(Calculated().LD, DistanceFlown,
                LastBasic().NavAltitude - Basic().NavAltitude, fixed(0.1));
 
-    if (!Basic().flight.OnGround && !Calculated().Circling)
+    if (Basic().flight.Flying && !Calculated().Circling)
       rotaryLD.add((int)DistanceFlown, (int)Basic().NavAltitude);
   }
 
