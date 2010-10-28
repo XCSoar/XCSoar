@@ -713,6 +713,11 @@ setVariables()
   LoadFormProperty(*wf, _T("prpUTCOffset"),
                    fixed(iround(fixed(settings_computer.UTCOffset) / 1800)) / 2);
 
+#ifdef WIN32
+  if (is_embedded() && !is_altair())
+    ((WndProperty*)wf->FindByName(_T("prpUTCOffset")))->hide();
+#endif
+
   SetLocalTime();
 
   LoadFormProperty(*wf, _T("prpClipAltitude"), ugAltitude,
