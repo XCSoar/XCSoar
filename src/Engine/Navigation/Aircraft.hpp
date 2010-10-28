@@ -167,7 +167,7 @@ struct FLYING_STATE
    * @param time Time the aircraft is stationary
    * @param on_ground Whether the aircraft is known to be on the ground
    */
-  void flying_state_stationary(const fixed time, const bool on_ground=false);
+  void flying_state_stationary(const fixed time);
 
 private:
   void flying_state_check(const fixed time);

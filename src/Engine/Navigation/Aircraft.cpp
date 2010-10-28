@@ -90,12 +90,12 @@ FLYING_STATE::flying_state_moving(const fixed time)
 }
 
 void
-FLYING_STATE::flying_state_stationary(const fixed time, const bool on_ground)
+FLYING_STATE::flying_state_stationary(const fixed time)
 {
   if (TimeInFlight)
     TimeInFlight--;
 
-  if (on_ground && TimeOnGround<30)
+  if (TimeOnGround<30)
     TimeOnGround++;
 
   flying_state_check(time);

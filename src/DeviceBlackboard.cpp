@@ -671,12 +671,11 @@ DeviceBlackboard::FlightState(const GlidePolar& glide_polar)
     return;
 
   // Speed too high for being on the ground
-  if (Basic().GroundSpeed > glide_polar.get_Vtakeoff()) {
+  if (Basic().GroundSpeed > glide_polar.get_Vtakeoff() ||
+      (Calculated().TerrainValid && Basic().AltitudeAGL > fixed(300))) {
     SetBasic().flight.flying_state_moving(Basic().Time);
   } else {
-    const bool on_ground = Calculated().TerrainValid &&
-      Basic().AltitudeAGL < fixed(300);
-    SetBasic().flight.flying_state_stationary(Basic().Time, on_ground);
+    SetBasic().flight.flying_state_stationary(Basic().Time);
   }
 }
 
