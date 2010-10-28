@@ -82,22 +82,28 @@ FLYING_STATE::flying_state_reset()
 void
 FLYING_STATE::flying_state_moving(const fixed time)
 {
+  // Increase InFlight countdown for further evaluation
   if (TimeInFlight < 60)
     TimeInFlight++;
 
+  // We are moving so we are certainly not on the ground
   TimeOnGround = 0;
+
+  // Update flying state
   flying_state_check(time);
 }
 
 void
 FLYING_STATE::flying_state_stationary(const fixed time)
 {
+  // Decrease InFlight countdown for further evaluation
   if (TimeInFlight)
     TimeInFlight--;
 
   if (TimeOnGround<30)
     TimeOnGround++;
 
+  // Update flying state
   flying_state_check(time);
 }
 
@@ -113,8 +119,9 @@ FLYING_STATE::flying_state_check(const fixed time)
   // if available
 
   if (!Flying) {
-    // detect takeoff
+    // We are moving for 10sec now
     if (TimeInFlight > 10) {
+      // We certainly must be flying after 10sec movement
       Flying = true;
       TakeOffTime = time;
       FlightTime = fixed_zero;
@@ -123,11 +130,14 @@ FLYING_STATE::flying_state_check(const fixed time)
     // update time of flight
     FlightTime = time - TakeOffTime;
 
-    // detect landing
-    if (TimeInFlight == 0) {
-      // have been stationary for a minute
+    // We are not moving anymore for 60sec now
+    if (TimeInFlight == 0)
+      // We are probably not flying anymore
       Flying = false;
-    }
   }
+
+  // If we are not certainly flying we are probably on the ground
+  // To make sure that we are, wait for 10sec to make sure there
+  // is no more movement
   OnGround = (!Flying) && (TimeOnGround > 10);
 }
