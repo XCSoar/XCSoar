@@ -1052,9 +1052,9 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
   char t_laa1[50];
-  sprintf(t_laa1, "%d,%d,%d,%d,2,DDA85C,%d,0,0,0,1", l, n1, e1, h1, t1);
+  sprintf(t_laa1, "%d,%d,%d,%d,2,DDA85C,%d,0,35,0,1", l, n1, e1, h1, t1);
   char t_laa2[50];
-  sprintf(t_laa2, "0,%d,%d,%d,2,AA9146,%d,0,0,0,1", n2, e2, h2, t2);
+  sprintf(t_laa2, "0,%d,%d,%d,2,AA9146,%d,0,27,0,1", n2, e2, h2, t2);
 
   char t_lau[50];
   sprintf(t_lau, "2,1,2,1,%d", l);
