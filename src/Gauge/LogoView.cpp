@@ -54,7 +54,7 @@ DrawLogo(Canvas &canvas, const RECT &rc)
 
   // Adjust the title to larger screens
   Bitmap bitmap_title((width >= 530 && height >= 60) ||
-                      (width >= 170 && height >= 250)
+                      (width >= 330 && height >= 250)
                       ? IDB_TITLE_HD : IDB_TITLE);
 
   BitmapCanvas bitmap_canvas(canvas);
