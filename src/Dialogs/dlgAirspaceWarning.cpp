@@ -490,6 +490,5 @@ void dlgAirspaceWarningDeInit()
     wf->SetModalResult(mrOK);
   }
   delete wf;
-  wf = NULL;
 }
 
