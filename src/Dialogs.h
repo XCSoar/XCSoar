@@ -56,9 +56,6 @@ class Airspaces;
 class AbstractAirspace;
 class AbstractTaskFactory;
 class OrderedTaskPoint;
-namespace Pages {
-  struct PageLayout;
-}
 
 void StartupScreen();
 
@@ -90,7 +87,6 @@ void dlgConfigurationShowModal();
 void dlgConfigFontsShowModal();
 void dlgConfigWaypointsShowModal();
 void dlgConfigInfoboxesShowModal(InfoBoxManager::mode _mode);
-Pages::PageLayout dlgConfigPageShowModal(Pages::PageLayout _pl, bool include_empty);
 void dlgVegaDemoShowModal();
 bool dlgConfigurationVarioShowModal();
 void dlgLoggerReplayShowModal();

@@ -602,10 +602,6 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
         <DataField DataType="boolean"/>
       </Edit>
     </Panel>
-
-    <Panel Name="frmPages">
-      <List Name="lstPages" X="0" Width="-1" Height="-1" />
-    </Panel>
   
     <Panel Name="frmSpecials">
       <Edit Name="prpAppInfoBoxModel" Caption="Device model" X="2" Width="-2" Height="22" CaptionWidth="150"

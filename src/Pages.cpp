@@ -153,6 +153,7 @@ Pages::GetLayout(int page)
   return &pages[page];
 }
 
+#ifdef EXPERIMENTAL_PAGES_CODE
 bool
 Pages::MakeProfileKey(TCHAR* buffer, int page)
 {
@@ -162,33 +163,6 @@ Pages::MakeProfileKey(TCHAR* buffer, int page)
   _tcscpy(buffer, CONF("Page"));
   _stprintf(buffer + _tcslen(buffer), _T("%d"), page + 1);
   return true;
-}
-
-void
-Pages::PageLayout::MakeTitle(TCHAR* buffer)
-{
-  switch (Type) {
-  case t_Map:
-    _tcscpy(buffer, _("Map"));
-
-    switch (MapInfoBoxes) {
-    case mib_Normal:
-      _tcscat(buffer, _T(" "));
-      _tcscat(buffer, _("w. infoboxes"));
-      break;
-
-    case mib_Aux:
-      _tcscat(buffer, _T(" "));
-      _tcscat(buffer, _("w. aux. infoboxes"));
-      break;
-    }
-    break;
-
-  case t_Empty:
-  default:
-    _tcscpy(buffer, _T("---"));
-    break;
-  }
 }
 
 void
@@ -268,12 +242,14 @@ Pages::SaveToProfile()
     Profile::Set(key, value);
   }
 }
+#endif /* EXPERIMENTAL_PAGES_CODE */
 
 void
 Pages::LoadFromProfile()
 {
   LoadDefault();
 
+#ifdef EXPERIMENTAL_PAGES_CODE
   for (int i = 0; i < 8; i++) {
     TCHAR key[64] = _T("");
     TCHAR value[255] = _T("");
@@ -283,6 +259,7 @@ Pages::LoadFromProfile()
 
     ParseProfileValue(value, i);
   }
+#endif
 
   Update();
 }

@@ -74,7 +74,6 @@ Copyright_License {
 #include "Compiler.h"
 #include "Screen/Graphics.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
-#include "Pages.hpp"
 #include "Hardware/Display.hpp"
 #include "OS/PathName.hpp"
 
@@ -97,7 +96,6 @@ enum config_page {
   PAGE_TASK_RULES,
   PAGE_INFOBOXES,
   PAGE_LOGGER,
-  PAGE_PAGES,
   PAGE_EXPERIMENTAL,
 };
 
@@ -118,7 +116,6 @@ static const TCHAR *const captions[] = {
   N_("Default task rules"),
   N_("InfoBoxes"),
   N_("Logger"),
-  N_("Pages"),
   N_("Experimental features"),
 };
 
@@ -1419,21 +1416,6 @@ FinishDeviceFields(DeviceConfig &config, int &driver_index,
 }
 
 static void
-OnPagesListItemPaint(Canvas &canvas, const RECT rc, unsigned i)
-{
-  using namespace Pages;
-
-  TCHAR buffer[255];
-  PageLayout* pl = GetLayout(i);
-  assert(pl != NULL);
-
-  pl->MakeTitle(buffer);
-
-  canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
-              buffer);
-}
-
-static void
 PrepareConfigurationDialog()
 {
   gcc_unused ScopeBusyIndicator busy;
@@ -1471,14 +1453,6 @@ PrepareConfigurationDialog()
 
   configuration_tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
   assert(configuration_tabbed != NULL);
-
-  WndListFrame* PagesList = NULL;
-  PagesList = ((WndListFrame *)wf->FindByName(_T("lstPages")));
-  assert(PagesList != NULL);
-  PagesList->SetPaintItemCallback(OnPagesListItemPaint);
-  PagesList->SetLength(8);
-  PagesList->SetOrigin(0);
-  PagesList->SetCursorIndex(0);
 
   wf->FilterAdvanced(XCSoarInterface::UserLevel>0);
 

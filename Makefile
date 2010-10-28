@@ -118,7 +118,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgChecklist.cpp \
 	$(SRC)/Dialogs/dlgComboPicker.cpp \
 	$(SRC)/Dialogs/dlgConfiguration.cpp \
-	$(SRC)/Dialogs/dlgConfigPage.cpp \
 	$(SRC)/Dialogs/dlgConfigFonts.cpp \
 	$(SRC)/Dialogs/dlgConfigInfoboxes.cpp \
 	$(SRC)/Dialogs/dlgConfigWaypoints.cpp \

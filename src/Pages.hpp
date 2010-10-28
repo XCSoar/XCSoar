@@ -64,7 +64,6 @@ namespace Pages
 
     void ParseConfigString(TCHAR* str);
     void MakeConfigString(TCHAR* str);
-    void MakeTitle(TCHAR* str);
   };
 
   /**
