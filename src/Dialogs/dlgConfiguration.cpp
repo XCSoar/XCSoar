@@ -1980,9 +1980,12 @@ void dlgConfigurationShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxGeom"));
   if (wp) {
-    if (InfoBoxLayout::InfoBoxGeometry != (unsigned)wp->GetDataField()->GetAsInteger()) {
-      InfoBoxLayout::InfoBoxGeometry = (unsigned)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileInfoBoxGeometry, InfoBoxLayout::InfoBoxGeometry);
+    if (InfoBoxLayout::InfoBoxGeometry !=
+        (InfoBoxLayout::Layouts)wp->GetDataField()->GetAsInteger()) {
+      InfoBoxLayout::InfoBoxGeometry =
+          (InfoBoxLayout::Layouts)wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileInfoBoxGeometry,
+                   (unsigned)InfoBoxLayout::InfoBoxGeometry);
       changed = true;
       requirerestart = true;
     }

@@ -60,7 +60,7 @@ leaving 220 = 110 control width
 
 namespace InfoBoxLayout
 {
-  unsigned InfoBoxGeometry = ibTop4Bottom4;
+  Layouts InfoBoxGeometry = ibTop4Bottom4;
   unsigned ControlWidth;
   unsigned ControlHeight;
   unsigned TitleHeight;
@@ -166,7 +166,9 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
 void
 InfoBoxLayout::LoadGeometry(RECT rc)
 {
-  Profile::Get(szProfileInfoBoxGeometry, InfoBoxGeometry);
+  unsigned tmp;
+  if (Profile::Get(szProfileInfoBoxGeometry, tmp))
+    InfoBoxGeometry = (Layouts)tmp;
 
   if (Layout::landscape) {
     if (InfoBoxGeometry < ibLeft8)
@@ -178,7 +180,7 @@ InfoBoxLayout::LoadGeometry(RECT rc)
       InfoBoxGeometry = ibTop4Bottom4;
   }
 
-  Profile::Set(szProfileInfoBoxGeometry, InfoBoxGeometry);
+  Profile::Set(szProfileInfoBoxGeometry, (unsigned)InfoBoxGeometry);
 
   if (InfoBoxGeometry == ibGNav)
     numInfoWindows = 9;

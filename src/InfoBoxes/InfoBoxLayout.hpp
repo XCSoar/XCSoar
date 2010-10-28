@@ -63,7 +63,7 @@ namespace InfoBoxLayout
   };
 
   extern bool fullscreen;
-  extern unsigned InfoBoxGeometry;
+  extern Layouts InfoBoxGeometry;
   extern unsigned ControlWidth, ControlHeight, TitleHeight;
   extern unsigned numInfoWindows;
 
