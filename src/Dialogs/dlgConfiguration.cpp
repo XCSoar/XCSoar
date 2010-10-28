@@ -1136,8 +1136,8 @@ setVariables()
     dfe = (DataFieldEnum*)wp->GetDataField();
 
     dfe->addEnumText(_("8 Top + Bottom (Portrait)")); // 0
-    dfe->addEnumText(_("8 Top (Portrait)"));  // 1
-    dfe->addEnumText(_("8 Bottom (Portrait)"));  // 2
+    dfe->addEnumText(_("8 Bottom (Portrait)"));  // 1
+    dfe->addEnumText(_("8 Top (Portrait)"));  // 2
     dfe->addEnumText(_("8 Left + Right (Landscape)"));  // 3
     dfe->addEnumText(_("8 Left (Landscape)"));  // 4
     dfe->addEnumText(_("8 Right (Landscape)")); // 5
