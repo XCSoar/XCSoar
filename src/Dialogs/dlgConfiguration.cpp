@@ -440,7 +440,7 @@ SetLocalTime(void)
 {
   WndProperty* wp;
   TCHAR temp[20];
-  Units::TimeToText(temp, (int)TimeLocal((int)(XCSoarInterface::Basic().Time)));
+  Units::TimeToText(temp, TimeLocal(XCSoarInterface::Basic().Time));
 
   wp = (WndProperty*)wf->FindByName(_T("prpLocalTime"));
   if (wp) {
