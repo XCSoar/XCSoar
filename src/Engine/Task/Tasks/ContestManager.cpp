@@ -55,8 +55,10 @@ ContestManager::run_olc(ContestDijkstra &dijkstra)
   if (!dijkstra.solve())
     return false;
 
-  if (!dijkstra.score(result))
+  if (!dijkstra.score(result)) {
+    update_trace();
     return false;
+  }
 
   dijkstra.copy_solution(solution);
   update_trace();
