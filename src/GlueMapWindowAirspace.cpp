@@ -37,6 +37,9 @@ Copyright_License {
 */
 
 #include "GlueMapWindow.hpp"
+#include "Util/StaticArray.hpp"
+#include "Screen/Layout.hpp"
+#include "Screen/Fonts.hpp"
 #include "Dialogs.h"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
@@ -46,6 +49,8 @@ Copyright_License {
 #include "Airspace/AirspaceVisibility.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+
+#include <algorithm>
 
 class AirspaceWarningCopy2 : public AirspaceWarningVisitor
 {
@@ -112,9 +117,14 @@ private:
 class AirspaceDetailsDialogVisitor: 
   public AirspaceVisitor
 {
+  static const AirspaceDetailsDialogVisitor *instance;
+  SingleWindow &parent_window;
+  StaticArray<const AbstractAirspace *, 32> airspaces;
+
 public:
-  AirspaceDetailsDialogVisitor(const GeoPoint &location):
-    m_airspace(NULL),
+  AirspaceDetailsDialogVisitor(SingleWindow &_parent_window,
+                               const GeoPoint &location)
+    :parent_window(_parent_window),
     m_location(location) {}
 
   void Visit(const AirspacePolygon& as) {
@@ -127,25 +137,88 @@ public:
 
   void visit_general(const AbstractAirspace& as) {
     if (as.inside(m_location))
-      m_airspace = &as;
+      airspaces.checked_append(&as);
+  }
+
+  void sort() {
+    std::sort(airspaces.begin(), airspaces.end(), CompareAirspaceBase);
   }
 
   void display() {
-    if (m_airspace)
-      dlgAirspaceDetails(*m_airspace);
+    if (airspaces.empty())
+      return;
+
+    switch (airspaces.size()) {
+    case 0:
+      /* no (visible) airspace here */
+      break;
+
+    case 1:
+      /* only one airspace, show it */
+      dlgAirspaceDetails(*airspaces[0]);
+      break;
+
+    default:
+      /* more than one airspace: show a list */
+      instance = this;
+      int i = ListPicker(parent_window,
+                         _("Airspaces at this location"),
+                         airspaces.size(), 0,
+                         Layout::Scale(30),
+                         PaintListItem, NULL);
+      assert(i >= -1 && i < (int)airspaces.size());
+      if (i >= 0)
+        dlgAirspaceDetails(*airspaces[i]);
+    }
   }
 
   bool found() const {
-    return m_airspace != NULL;
+    return !airspaces.empty();
   }
 
 private:
-  const AbstractAirspace *m_airspace;
   const GeoPoint &m_location;
+
+  static bool CompareAirspaceBase(const AbstractAirspace *a,
+                                  const AbstractAirspace *b) {
+    return a->get_base_altitude() > b->get_base_altitude();
+  }
+
+  static void PaintListItem(Canvas &canvas, const RECT rc, unsigned idx) {
+    const AbstractAirspace &airspace = *instance->airspaces[idx];
+
+    const Font &name_font = Fonts::MapBold;
+    const Font &small_font = Fonts::MapLabel;
+
+    canvas.select(name_font);
+    canvas.text_clipped(rc.left + Layout::FastScale(2),
+                        rc.top + Layout::FastScale(2), rc,
+                        airspace.get_name_text(true).c_str());
+
+    canvas.select(small_font);
+    canvas.text_clipped(rc.left + Layout::FastScale(2),
+                        rc.top + name_font.get_height() + Layout::FastScale(4),
+                        rc, airspace.get_type_text(true));
+
+    SIZE size = canvas.text_size(_T("9999 m AGL"));
+    unsigned altitude_width = size.cx;
+    unsigned altitude_height = size.cy;
+
+    canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
+                        rc.top + Layout::FastScale(2), rc,
+                        airspace.get_top_text(true).c_str());
+
+    canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
+                        rc.top + altitude_height + Layout::FastScale(4) / 2,
+                        rc, airspace.get_base_text(true).c_str());
+  }
 };
 
+/* sorry about this ugly global variable.. */
+const AirspaceDetailsDialogVisitor *AirspaceDetailsDialogVisitor::instance;
+
 bool
-GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location) const
+GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location)
 {
   if (airspace_database == NULL)
     return false;
@@ -154,7 +227,8 @@ GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location) const
   if (airspace_warnings != NULL)
     airspace_warnings->visit_warnings(awc);
 
-  AirspaceDetailsDialogVisitor airspace_copy_popup(location);
+  AirspaceDetailsDialogVisitor airspace_copy_popup(*(SingleWindow *)get_root_owner(),
+                                                   location);
   const AirspaceMapVisible visible(SettingsComputer(),
                                    Basic().GetAltitudeBaroPreferred(),
                                    false, awc);
@@ -162,6 +236,7 @@ GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location) const
   airspace_database->visit_within_range(location, fixed(100.0),
                                         airspace_copy_popup, visible);
 
+  airspace_copy_popup.sort();
   airspace_copy_popup.display();
 
   return airspace_copy_popup.found();

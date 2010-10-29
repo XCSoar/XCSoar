@@ -74,7 +74,7 @@ private:
    */
   Projection drag_projection;
 
-  bool AirspaceDetailsAtPoint(const GeoPoint &location) const;
+  bool AirspaceDetailsAtPoint(const GeoPoint &location);
 
 protected:
   // events
