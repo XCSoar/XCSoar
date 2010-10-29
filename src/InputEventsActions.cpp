@@ -101,6 +101,9 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "UtilsSettings.hpp"
 #include "Pages.hpp"
 #include "Hardware/AltairControl.hpp"
+#include "Airspace/AirspaceVisibility.hpp"
+#include "Airspace/AirspaceSoonestSort.hpp"
+#include "LocalTime.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -1120,9 +1123,6 @@ InputEvents::eventRepeatStatusMessage(const TCHAR *misc)
 // If the aircraft is within airspace, this displays the distance and bearing
 // to the nearest exit to the airspace.
 
-#include "Airspace/AirspaceVisibility.hpp"
-#include "Airspace/AirspaceSoonestSort.hpp"
-
 void 
 InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) 
 {
@@ -1648,9 +1648,6 @@ InputEvents::sub_ScaleZoom(int vswitch)
 
   sub_SetZoom(value);
 }
-
-#include "LocalTime.hpp"
-
 
 void
 InputEvents::eventTaskTransition(const TCHAR *misc)
