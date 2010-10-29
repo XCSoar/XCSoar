@@ -278,8 +278,6 @@ namespace Units
    */
   bool LatitudeToString(Angle Latitude, TCHAR *Buffer, size_t size);
 
-  void NotifyUnitChanged();
-
   gcc_const
   const TCHAR *GetSpeedName();
 
