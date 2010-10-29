@@ -38,7 +38,6 @@ Copyright_License {
 #include "Interface.hpp"
 
 HINSTANCE CommonInterface::hInst;
-bool CommonInterface::EnableAutoBacklight;
 
 void
 ActionInterface::SignalShutdown(bool force)

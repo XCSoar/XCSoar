@@ -608,10 +608,6 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
         Help="Select your PNA model to make full use of its hardware capabilities. If it is not included, use Generic type.">
         <DataField DataType="enum"/>
       </Edit>
-  
-      <Edit Name="prpAutoBacklight" Caption="Auto Backlight" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Set automatic backlight for this device. Max brightness and no timeout if on external power, otherwise max brightneess and a 5 minutes timeout on batteries. After timeout screen blanks to save energy.">
-        <DataField DataType="boolean"/>
-      </Edit>
     </Panel>
   </Tabbed>
 </Form>

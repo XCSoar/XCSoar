@@ -1296,14 +1296,6 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAutoBacklight")); // VENTA4
-  if (wp) {
-    wp->set_visible(model_is_hp31x());
-    DataFieldBoolean *df = (DataFieldBoolean *)wp->GetDataField();
-    df->Set(CommonInterface::EnableAutoBacklight);
-    wp->RefreshDisplay();
-  }
-
   LoadFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
                    settings_computer.ordered_defaults.finish_min_height);
   LoadFormProperty(*wf, _T("prpStartMaxHeight"), ugAltitude,
@@ -2120,10 +2112,6 @@ void dlgConfigurationShowModal(void)
                               szProfileAutoBlank,
                               XCSoarInterface::SetSettingsMap().EnableAutoBlank);
 #endif
-
-  changed |= SaveFormProperty(*wf, _T("prpAutoBacklight"),
-                              szProfileAutoBacklight,
-                              CommonInterface::EnableAutoBacklight);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainContrast"));
   if (wp) {

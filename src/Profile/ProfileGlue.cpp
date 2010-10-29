@@ -371,9 +371,6 @@ Profile::Use()
       settings_map.EnableAutoBlank);
 #endif
 
-  Get(szProfileAutoBacklight,
-      XCSoarInterface::EnableAutoBacklight);
-
   Get(szProfileGestures,
       settings_computer.EnableGestures);
 

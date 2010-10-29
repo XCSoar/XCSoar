@@ -124,10 +124,6 @@ public:
 
 private:
   static InterfaceBlackboard blackboard;
-
-public:
-  // settings
-  static bool EnableAutoBacklight;
 };
 
 /** 
