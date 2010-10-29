@@ -47,8 +47,8 @@ class TLineReader;
 
 typedef void (*pt2Event)(const TCHAR *);
 
-class InputEvents {
-public:
+namespace InputEvents
+{
   enum mode {
     MODE_INVALID = -1,
     MODE_DEFAULT,
@@ -57,130 +57,118 @@ public:
     MODE_MENU
   };
 
-private:
-  static mode current_mode;
-  static Mutex mutexEventQueue;
- private:
-  static unsigned MenuTimeOut;
-  static void ProcessMenuTimer();
-  static void DoQueuedEvents(void);
- public:
-  static void ProcessTimer();
-  static void ShowMenu();
-  static void HideMenu();
-  static void ResetMenuTimeOut();
+  void ProcessTimer();
+  void ShowMenu();
+  void HideMenu();
+  void ResetMenuTimeOut();
 
-  static void readFile();
-  static void readFile(TLineReader &reader);
-  static mode mode2int(const TCHAR *mode, bool create);
-  static void setMode(mode mode);
-  static void setMode(const TCHAR *mode);
-  static mode getModeID();
-  static unsigned findKey(const TCHAR *data);
-  static int findGCE(const TCHAR *data);
-  static int findNE(const TCHAR *data);
-  static pt2Event findEvent(const TCHAR *);
+  void readFile();
+  void readFile(TLineReader &reader);
+  mode mode2int(const TCHAR *mode, bool create);
+  void setMode(mode mode);
+  void setMode(const TCHAR *mode);
+  mode getModeID();
+  unsigned findKey(const TCHAR *data);
+  int findGCE(const TCHAR *data);
+  int findNE(const TCHAR *data);
+  pt2Event findEvent(const TCHAR *);
 
   /**
    * Looks up the specified key code, and returns the associated event
    * id.  Returns 0 if the key was not found.
    */
-  static unsigned key_to_event(mode mode, unsigned key_code);
+  unsigned key_to_event(mode mode, unsigned key_code);
 
-  static bool processKey(unsigned key);
-  static bool processNmea(unsigned key);
-  static bool processButton(unsigned bindex);
-  static bool processGlideComputer(unsigned gce_id);
-  static void processGo(unsigned event_id);
-  static unsigned makeEvent(void (*event)(const TCHAR *),
+  bool processKey(unsigned key);
+  bool processNmea(unsigned key);
+  bool processButton(unsigned bindex);
+  bool processGlideComputer(unsigned gce_id);
+  void processGo(unsigned event_id);
+  unsigned makeEvent(void (*event)(const TCHAR *),
                             const TCHAR *misc, unsigned next = 0);
-  static void makeLabel(mode mode_id, const TCHAR *label,
+  void makeLabel(mode mode_id, const TCHAR *label,
                         unsigned location, unsigned event_id);
 
-  static void drawButtons(mode Mode);
+  void drawButtons(mode Mode);
 
 
   // helpers (temporary)
 
-  static void sub_TerrainTopology(int vswitch);
-  static void sub_Pan(int vswitch);
-  static void sub_PanCursor(int dx, int dy);
-  static void sub_AutoZoom(int vswitch);
-  static void sub_ScaleZoom(int vswitch);
-  static void sub_SetZoom(fixed value);
+  void sub_TerrainTopology(int vswitch);
+  void sub_Pan(int vswitch);
+  void sub_PanCursor(int dx, int dy);
+  void sub_AutoZoom(int vswitch);
+  void sub_ScaleZoom(int vswitch);
+  void sub_SetZoom(fixed value);
 
   // -------
 
-  static void eventAbortTask(const TCHAR *misc);
-  static void eventAdjustForecastTemperature(const TCHAR *misc);
-  static void eventAdjustVarioFilter(const TCHAR *misc);
-  static void eventAdjustWaypoint(const TCHAR *misc);
-  static void eventAnalysis(const TCHAR *misc);
-  static void eventArmAdvance(const TCHAR *misc);
-  static void eventAudioDeadband(const TCHAR *misc);
-  static void eventBallast(const TCHAR *misc);
-  static void eventBugs(const TCHAR *misc);
-  static void eventCalculator(const TCHAR *misc);
-  static void eventChangeInfoBoxType(const TCHAR *misc);
-  static void eventChecklist(const TCHAR *misc);
-  static void eventClearAirspaceWarnings(const TCHAR *misc);
-  static void eventClearStatusMessages(const TCHAR *misc);
-  static void eventClearWarningsOrTerrainTopology(const TCHAR *misc);
-  static void eventDoInfoKey(const TCHAR *misc);
-  static void eventLogger(const TCHAR *misc);
-  static void eventMacCready(const TCHAR *misc);
-  static void eventMainMenu(const TCHAR *misc);
-  static void eventMarkLocation(const TCHAR *misc);
-  static void eventMode(const TCHAR *misc);
-  static void eventNearestAirspaceDetails(const TCHAR *misc);
-  static void eventNearestWaypointDetails(const TCHAR *misc);
-  static void eventNull(const TCHAR *misc);
-  static void eventPan(const TCHAR *misc);
-  static void eventPlaySound(const TCHAR *misc);
-  static void eventProfileLoad(const TCHAR *misc);
-  static void eventProfileSave(const TCHAR *misc);
-  static void eventRepeatStatusMessage(const TCHAR *misc);
-  static void eventRun(const TCHAR *misc);
-  static void eventScreenModes(const TCHAR *misc);
-  static void eventSelectInfoBox(const TCHAR *misc);
-  static void eventSendNMEA(const TCHAR *misc);
-  static void eventSendNMEAPort1(const TCHAR *misc);
-  static void eventSendNMEAPort2(const TCHAR *misc);
-  static void eventSetup(const TCHAR *misc);
-  static void eventSnailTrail(const TCHAR *misc);
-  static void eventAirSpace(const TCHAR *misc); // VENTA3
-  static void eventSounds(const TCHAR *misc);
-  static void eventStatus(const TCHAR *misc);
-  static void eventStatusMessage(const TCHAR *misc);
-  static void eventTaskLoad(const TCHAR *misc);
-  static void eventTaskSave(const TCHAR *misc);
-  static void eventTaskTransition(const TCHAR *misc);
-  static void eventTerrainTopology(const TCHAR *misc);
-  static void eventWaypointDetails(const TCHAR *misc);
-  static void eventWind(const TCHAR *misc);
-  static void eventZoom(const TCHAR *misc);
-  static void eventBrightness(const TCHAR *misc);
-  static void eventDeclutterLabels(const TCHAR *misc);
-  static void eventExit(const TCHAR *misc);
-  static void eventFLARMRadar(const TCHAR *misc);
-  static void eventThermalAssistant(const TCHAR *misc);
-  static void eventBeep(const TCHAR *misc);
-  static void eventUserDisplayModeForce(const TCHAR *misc);
-  static void eventAirspaceDisplayMode(const TCHAR *misc);
-  static void eventAutoLogger(const TCHAR *misc);
-  static void eventGotoLookup(const TCHAR *misc);
-  static void eventAddWaypoint(const TCHAR *misc);
-  static void eventOrientation(const TCHAR *misc);
-  static void eventFlarmTraffic(const TCHAR *misc);
+  void eventAbortTask(const TCHAR *misc);
+  void eventAdjustForecastTemperature(const TCHAR *misc);
+  void eventAdjustVarioFilter(const TCHAR *misc);
+  void eventAdjustWaypoint(const TCHAR *misc);
+  void eventAnalysis(const TCHAR *misc);
+  void eventArmAdvance(const TCHAR *misc);
+  void eventAudioDeadband(const TCHAR *misc);
+  void eventBallast(const TCHAR *misc);
+  void eventBugs(const TCHAR *misc);
+  void eventCalculator(const TCHAR *misc);
+  void eventChangeInfoBoxType(const TCHAR *misc);
+  void eventChecklist(const TCHAR *misc);
+  void eventClearAirspaceWarnings(const TCHAR *misc);
+  void eventClearStatusMessages(const TCHAR *misc);
+  void eventClearWarningsOrTerrainTopology(const TCHAR *misc);
+  void eventDoInfoKey(const TCHAR *misc);
+  void eventLogger(const TCHAR *misc);
+  void eventMacCready(const TCHAR *misc);
+  void eventMainMenu(const TCHAR *misc);
+  void eventMarkLocation(const TCHAR *misc);
+  void eventMode(const TCHAR *misc);
+  void eventNearestAirspaceDetails(const TCHAR *misc);
+  void eventNearestWaypointDetails(const TCHAR *misc);
+  void eventNull(const TCHAR *misc);
+  void eventPan(const TCHAR *misc);
+  void eventPlaySound(const TCHAR *misc);
+  void eventProfileLoad(const TCHAR *misc);
+  void eventProfileSave(const TCHAR *misc);
+  void eventRepeatStatusMessage(const TCHAR *misc);
+  void eventRun(const TCHAR *misc);
+  void eventScreenModes(const TCHAR *misc);
+  void eventSelectInfoBox(const TCHAR *misc);
+  void eventSendNMEA(const TCHAR *misc);
+  void eventSendNMEAPort1(const TCHAR *misc);
+  void eventSendNMEAPort2(const TCHAR *misc);
+  void eventSetup(const TCHAR *misc);
+  void eventSnailTrail(const TCHAR *misc);
+  void eventAirSpace(const TCHAR *misc); // VENTA3
+  void eventSounds(const TCHAR *misc);
+  void eventStatus(const TCHAR *misc);
+  void eventStatusMessage(const TCHAR *misc);
+  void eventTaskLoad(const TCHAR *misc);
+  void eventTaskSave(const TCHAR *misc);
+  void eventTaskTransition(const TCHAR *misc);
+  void eventTerrainTopology(const TCHAR *misc);
+  void eventWaypointDetails(const TCHAR *misc);
+  void eventWind(const TCHAR *misc);
+  void eventZoom(const TCHAR *misc);
+  void eventBrightness(const TCHAR *misc);
+  void eventDeclutterLabels(const TCHAR *misc);
+  void eventExit(const TCHAR *misc);
+  void eventFLARMRadar(const TCHAR *misc);
+  void eventThermalAssistant(const TCHAR *misc);
+  void eventBeep(const TCHAR *misc);
+  void eventUserDisplayModeForce(const TCHAR *misc);
+  void eventAirspaceDisplayMode(const TCHAR *misc);
+  void eventAutoLogger(const TCHAR *misc);
+  void eventGotoLookup(const TCHAR *misc);
+  void eventAddWaypoint(const TCHAR *misc);
+  void eventOrientation(const TCHAR *misc);
+  void eventFlarmTraffic(const TCHAR *misc);
   // -------
 
 #ifdef _INPUTDEBUG_
-  static void showErrors();
+  void showErrors();
 #endif
-
- private:
-  static bool processGlideComputer_real(unsigned gce_id);
-  static bool processNmea_real(unsigned key);
 };
 
 

@@ -86,6 +86,19 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include <stdio.h>
 #include <stdlib.h>
 
+namespace InputEvents
+{
+  mode current_mode = InputEvents::MODE_DEFAULT;
+  Mutex mutexEventQueue;
+
+  unsigned MenuTimeOut = 0;
+  void ProcessMenuTimer();
+  void DoQueuedEvents(void);
+
+  bool processGlideComputer_real(unsigned gce_id);
+  bool processNmea_real(unsigned key);
+};
+
 // Sensible maximums
 enum {
   MAX_MODE = 64,
@@ -143,9 +156,6 @@ struct flat_label {
   unsigned short event;
   const TCHAR *label;
 };
-
-// Current modes - map mode to integer (primitive hash)
-InputEvents::mode InputEvents::current_mode = InputEvents::MODE_DEFAULT;
 
 /** Map mode to location */
 static TCHAR mode_map[MAX_MODE][MAX_MODE_STRING] = {
@@ -221,8 +231,6 @@ static const TCHAR *const Text2NE[] = {
 #include "InputEvents_Text2NE.cpp"
   NULL
 };
-
-Mutex InputEvents::mutexEventQueue;
 
 static void
 apply_defaults(const TCHAR *const* default_modes,
@@ -1026,8 +1034,6 @@ InputEvents::processGo(unsigned eventid)
       InputEvents::processGo(Events[eventid].next);
   }
 }
-
-unsigned InputEvents::MenuTimeOut = 0;
 
 void
 InputEvents::HideMenu()
