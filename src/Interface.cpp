@@ -66,11 +66,7 @@ MainWindow CommonInterface::main_window(status_messages);
 // settings used only by interface thread scope
 bool ActionInterface::LockSettingsInFlight = true;
 unsigned ActionInterface::UserLevel = 0; // used by dlgConfiguration
-#if defined(GNAV) || defined(PCGNAV)
-unsigned XCSoarInterface::debounceTimeout = 0;
-#else
 unsigned XCSoarInterface::debounceTimeout = 250;
-#endif
 unsigned ActionInterface::MenuTimeoutMax = MENUTIMEOUTMAX;
 
 void
@@ -155,6 +151,9 @@ XCSoarInterface::CheckShutdown()
 bool
 XCSoarInterface::Debounce(void)
 {
+#if defined(GNAV) || defined(PCGNAV)
+  return true;
+#else
   static PeriodClock fps_last;
 
   ResetDisplayTimeOut();
@@ -165,6 +164,7 @@ XCSoarInterface::Debounce(void)
     return false;
 
   return fps_last.check_update(debounceTimeout);
+#endif
 }
 
 /**
