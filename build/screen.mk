@@ -48,6 +48,14 @@ SCREEN_LIBS = $(TARGET_OUTPUT_DIR)/screen.a
 SCREEN_LDLIBS = $(SDL_LDLIBS)
 SCREEN_CPPFLAGS = $(SDL_CPPFLAGS)
 
+ifeq ($(HAVE_WIN32),y)
+ifeq ($(HAVE_CE),y)
+SCREEN_LDLIBS += -lcommctrl
+else
+SCREEN_LDLIBS += -lcomctl32 -luser32 -lgdi32 -lmsimg32
+endif
+endif
+
 $(SCREEN_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(SCREEN_LIBS): $(SCREEN_OBJS)
 	@$(NQ)echo "  AR      $@"

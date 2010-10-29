@@ -315,16 +315,16 @@ endif
 endif
 
 ifeq ($(CONFIG_PC),y)
-  TARGET_LDLIBS := -lcomctl32 -lkernel32 -luser32 -lgdi32 -ladvapi32 -lwinmm -lmsimg32 -lstdc++
+  TARGET_LDLIBS := -lwinmm -lstdc++
 endif
 
 ifeq ($(CONFIG_CYGWIN),y)
-  TARGET_LDLIBS := -lcomctl32 -lkernel32 -luser32 -lgdi32 -ladvapi32 -lwinmm -lmsimg32 -lstdc++
+  TARGET_LDLIBS := -lwinmm -lstdc++
   TARGET_LDLIBS += -lintl
 endif
 
 ifeq ($(HAVE_CE),y)
-  TARGET_LDLIBS := -lcommctrl -lstdc++
+  TARGET_LDLIBS := -lstdc++
 
   ifneq ($(TARGET),ALTAIR)
     TARGET_CPPFLAGS += -DHAVE_NOTE_PRJ_DLL
