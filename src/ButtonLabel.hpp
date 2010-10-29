@@ -39,13 +39,13 @@ Copyright_License {
 #ifndef BUTTON_LABEL_HPP
 #define BUTTON_LABEL_HPP
 
-#include "Interface.hpp"
+#include <tchar.h>
 
 class Font;
 class ContainerWindow;
 class MenuBar;
 
-class ButtonLabel: public ActionInterface
+class ButtonLabel
 {
 protected:
   static MenuBar *bar;

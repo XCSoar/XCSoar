@@ -256,6 +256,30 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   return invalid;
 }
 
+static const NMEA_INFO &
+Basic()
+{
+  return CommonInterface::Basic();
+}
+
+static const DERIVED_INFO &
+Calculated()
+{
+  return CommonInterface::Calculated();
+}
+
+static const SETTINGS_COMPUTER &
+SettingsComputer()
+{
+  return CommonInterface::SettingsComputer();
+}
+
+static const SETTINGS_MAP &
+SettingsMap()
+{
+  return CommonInterface::SettingsMap();
+}
+
 bool
 ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 {
@@ -376,7 +400,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     }
   }
 
-  CondReplaceInString(main_window.GetFullScreen(), OutBuffer,
+  CondReplaceInString(CommonInterface::main_window.GetFullScreen(), OutBuffer,
                       _T("$(FullScreenToggleActionName)"),
                       _("Off"), _("On"), Size);
   CondReplaceInString(SettingsMap().AutoZoom, OutBuffer,
