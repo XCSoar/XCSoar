@@ -76,6 +76,10 @@ public:
   #ifdef ENABLE_SDL
   bool set(const char *file, int ptsize, bool bold = false,
            bool italic = false);
+#ifdef _UNICODE
+  bool set(const TCHAR *facename, int height, bool bold = false,
+           bool italic = false);
+#endif
   #else
   bool set(const TCHAR* facename, int height, bool bold = false,
            bool italic = false);

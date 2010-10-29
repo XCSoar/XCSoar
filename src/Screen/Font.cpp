@@ -64,6 +64,18 @@ Font::set(const char *file, int ptsize, bool bold, bool italic)
   return true;
 }
 
+#ifdef _UNICODE
+bool
+Font::set(const TCHAR *facename, int height, bool bold, bool italic)
+{
+  LOGFONT lf;
+  lf.lfWeight = bold ? 700 : 500;
+  lf.lfHeight = height;
+  lf.lfItalic = italic;
+  return set(lf);
+}
+#endif
+
 bool
 Font::set(const LOGFONT &log_font)
 {
