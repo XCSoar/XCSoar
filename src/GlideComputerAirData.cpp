@@ -499,10 +499,6 @@ GlideComputerAirData::ProcessIdle()
 void
 GlideComputerAirData::TakeoffLanding()
 {
-  if (Basic().GroundSpeed > fixed_one)
-    // stop system from shutting down if moving
-    XCSoarInterface::InterfaceTimeoutReset();
-
   if (Basic().flight.Flying && !LastBasic().flight.Flying)
     OnTakeoff();
   else if (!Basic().flight.Flying && LastBasic().flight.Flying)

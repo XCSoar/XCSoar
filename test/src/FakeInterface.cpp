@@ -46,4 +46,3 @@ ActionInterface::SignalShutdown(bool force)
 }
 
 bool XCSoarInterface::Debounce() { return false; }
-void XCSoarInterface::InterfaceTimeoutReset(void) {}

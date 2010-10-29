@@ -54,7 +54,6 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 
 static Mutex mutexInterfaceTimeout;
-static int interface_timeout;
 static bool doForceShutdown = false;
 
 InterfaceBlackboard CommonInterface::blackboard;
@@ -138,13 +137,6 @@ ActionInterface::SendSettingsMap(const bool trigger_draw)
 }
 
 void
-XCSoarInterface::InterfaceTimeoutReset()
-{
-  ScopeLock protect(mutexInterfaceTimeout);
-  interface_timeout = 0;
-}
-
-void
 ActionInterface::SignalShutdown(bool force)
 {
   doForceShutdown = force;
@@ -177,7 +169,6 @@ XCSoarInterface::Debounce(void)
   static PeriodClock fps_last;
 
   ResetDisplayTimeOut();
-  InterfaceTimeoutReset();
 
   if (SettingsMap().ScreenBlanked)
     // prevent key presses working if screen is blanked,

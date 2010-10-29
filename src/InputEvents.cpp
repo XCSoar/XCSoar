@@ -840,10 +840,6 @@ InputEvents::processKey(unsigned dWord)
   if (!globalRunningEvent.test())
     return false;
 
-  /* JMW illegal, should be done by gui handler loop
-  InterfaceTimeoutReset();
-  */
-
   // get current mode
   InputEvents::mode mode = InputEvents::getModeID();
 
@@ -903,9 +899,6 @@ InputEvents::processNmea_real(unsigned ne_id)
     return false;
 
   int event_id = 0;
-
-  // JMW not required
-  //  InterfaceTimeoutReset();
 
   // Valid input ?
   if (ne_id >= NE_COUNT)

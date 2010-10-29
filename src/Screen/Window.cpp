@@ -490,7 +490,6 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_LBUTTONDOWN:
-    XCSoarInterface::InterfaceTimeoutReset();
     if (on_mouse_down(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
@@ -499,7 +498,6 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_LBUTTONUP:
-    XCSoarInterface::InterfaceTimeoutReset();
     if (on_mouse_up(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
@@ -515,7 +513,6 @@ Window::on_message(HWND _hWnd, UINT message,
          built-in window class such as BUTTON */
       return on_message(_hWnd, WM_LBUTTONDOWN, wParam, lParam);
 
-    XCSoarInterface::InterfaceTimeoutReset();
     if (on_mouse_double(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
@@ -526,7 +523,6 @@ Window::on_message(HWND _hWnd, UINT message,
 
 #ifdef WM_MOUSEWHEEL
   case WM_MOUSEWHEEL:
-    XCSoarInterface::InterfaceTimeoutReset();
     if (on_mouse_wheel(GET_WHEEL_DELTA_WPARAM(wParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
@@ -536,7 +532,6 @@ Window::on_message(HWND _hWnd, UINT message,
 #endif
 
   case WM_KEYDOWN:
-    XCSoarInterface::InterfaceTimeoutReset();
     if (on_key_down(wParam)) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
@@ -545,7 +540,6 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_KEYUP:
-    XCSoarInterface::InterfaceTimeoutReset();
     if (on_key_up(wParam)) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
@@ -554,7 +548,6 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_COMMAND:
-    XCSoarInterface::InterfaceTimeoutReset();
     if (on_command(LOWORD(wParam), HIWORD(wParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();

@@ -314,10 +314,6 @@ int WndForm::ShowModal(bool bEnableMap) {
     }
     */
 
-    if (msg.message == WM_KEYDOWN) {
-      XCSoarInterface::InterfaceTimeoutReset();
-    }
-
     if (is_user_input(msg.message)
         && !identify_descendant(msg.hwnd) // not current window or child
         && !is_allowed_map(msg.hwnd, msg.message, bEnableMap))
