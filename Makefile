@@ -93,12 +93,11 @@ include $(topdir)/build/install.mk
 ######## compiler flags
 
 INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR) -I$(SRC)/WayPoint
-CPPFLAGS += $(GCONF_CPPFLAGS)
 
 ####### linker configuration
 
 LDFLAGS = $(TARGET_LDFLAGS) $(FLAGS_PROFILE)
-LDLIBS = $(TARGET_LDLIBS) $(GCONF_LDLIBS)
+LDLIBS = $(TARGET_LDLIBS)
 
 ####### sources
 
@@ -471,7 +470,7 @@ endif
 $(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS) $(XCSOAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
-	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(SCREEN_LDLIBS) -o $@
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(SCREEN_LDLIBS) $(PROFILE_LDLIBS) -o $@
 
 IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o
 
