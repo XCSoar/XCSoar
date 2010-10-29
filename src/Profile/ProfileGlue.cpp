@@ -353,20 +353,6 @@ Profile::Use()
   Get(szProfileAppAveNeedle,
 		  Appearance.GaugeVarioAveNeedle);
 
-  // StateMessageAlign : center, topleft
-  // CompassAppearance (north arrow)
-  //
-  // DontShowLoggerIndicator
-  // FlightModeIcon
-  // DontShowAutoMacCready
-  // MapScale
-  // MapScale2
-  // BestCruiseTrack
-  // Aircraft
-  // IndFinalGlide
-  // IndLandable
-
-
   if (Get(szProfileAutoMcMode, Temp))
     settings_computer.auto_mc_mode =
       (TaskBehaviour::AutoMCMode_t)Temp;
