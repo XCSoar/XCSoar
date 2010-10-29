@@ -54,6 +54,10 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "Waypoint/Waypoint.hpp"
 
+#ifdef _UNICODE
+#include <windows.h>
+#endif
+
 class VolksloggerDevice : public AbstractDevice {
 private:
   Port *port;
@@ -136,6 +140,20 @@ static unsigned nturnpoints = 0;
 static bool
 VLDeclAddWayPoint(const Waypoint &way_point);
 
+static void
+CopyToNarrowBuffer(char *dest, size_t max_size, const TCHAR *src)
+{
+#ifdef _UNICODE
+    if (WideCharToMultiByte(CP_ACP, 0, src, -1,
+                            dest, max_size,
+                            NULL, NULL) <= 0)
+      dest[0] = 0;
+#else
+    strncpy(dest, src, max_size - 1);
+    dest[max_size - 1] = 0;
+#endif
+}
+
 bool
 VolksloggerDevice::Declare(const Declaration *decl)
 {
@@ -157,15 +175,17 @@ VolksloggerDevice::Declare(const Declaration *decl)
       //      vl.read_db_and_declaration();
     }
 
-    char temp[100];
-    sprintf(temp, "%S", decl->PilotName);
-    strncpy(vl.declaration.flightinfo.pilot, temp, 64);
+    CopyToNarrowBuffer(vl.declaration.flightinfo.pilot,
+                       sizeof(vl.declaration.flightinfo.pilot),
+                       decl->PilotName);
 
-    sprintf(temp, "%S", decl->AircraftRego);
-    strncpy(vl.declaration.flightinfo.competitionid, temp, 3);
+    CopyToNarrowBuffer(vl.declaration.flightinfo.competitionid,
+                       sizeof(vl.declaration.flightinfo.competitionid),
+                       decl->AircraftRego);
 
-    sprintf(temp, "%S", decl->AircraftType);
-    strncpy(vl.declaration.flightinfo.competitionclass, temp, 12);
+    CopyToNarrowBuffer(vl.declaration.flightinfo.competitionclass,
+                       sizeof(vl.declaration.flightinfo.competitionclass),
+                       decl->AircraftType);
 
 #ifdef OLD_TASK
     if (way_points.verify_index(XCSoarInterface::SettingsComputer().HomeWaypoint)) {
@@ -276,29 +296,26 @@ VolksloggerDevice::Declare(const Declaration *decl)
   return ok;
 }
 
+static void
+CopyWaypoint(VLAPI_DATA::WPT &dest, const Waypoint &src)
+{
+  CopyToNarrowBuffer(dest.name, sizeof(dest.name), src.Name.c_str());
+  dest.lon = src.Location.Longitude.value_degrees();
+  dest.lat = src.Location.Latitude.value_degrees();
+}
 
 static bool
 VLDeclAddWayPoint(const Waypoint &way_point)
 {
-  char temp[100];
-  sprintf(temp, "%S", way_point.Name.c_str());
-
   if (nturnpoints == 0) {
-    strncpy(vl.declaration.task.startpoint.name, temp, 6);
-    vl.declaration.task.startpoint.lon = way_point.Location.Longitude.value_degrees();
-    vl.declaration.task.startpoint.lat = way_point.Location.Latitude.value_degrees();
+    CopyWaypoint(vl.declaration.task.startpoint, way_point);
     nturnpoints++;
   } else {
-    strncpy(vl.declaration.task.turnpoints[nturnpoints-1].name, temp, 6);
-    vl.declaration.task.turnpoints[nturnpoints-1].lon =
-      way_point.Location.Longitude.value_degrees();
-    vl.declaration.task.turnpoints[nturnpoints-1].lat =
-      way_point.Location.Latitude.value_degrees();
+    CopyWaypoint(vl.declaration.task.turnpoints[nturnpoints-1], way_point);
     nturnpoints++;
   }
-  strncpy(vl.declaration.task.finishpoint.name, temp, 6);
-  vl.declaration.task.finishpoint.lon = way_point.Location.Longitude.value_degrees();
-  vl.declaration.task.finishpoint.lat = way_point.Location.Latitude.value_degrees();
+
+  CopyWaypoint(vl.declaration.task.finishpoint, way_point);
 
   return true;
 
