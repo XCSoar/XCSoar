@@ -494,7 +494,7 @@ public:
 
   gcc_pure
   unsigned text_height(const TCHAR *text) const {
-    return text_size(_T("W")).cy;
+    return font != NULL ? TTF_FontHeight(font) : 0;
   }
 
   void text(int x, int y, const TCHAR *text);
