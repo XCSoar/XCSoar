@@ -443,6 +443,10 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
   case dsScaledCentered:
     pos = SetPositionCentered(pos, rc, size);
     break;
+
+  case dsScaled:
+  case dsFixed:
+    break;
   }
 
   // Create the dialog

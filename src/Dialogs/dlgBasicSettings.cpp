@@ -104,6 +104,11 @@ OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
       wp->RefreshDisplay();
     }
     break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daSpecial:
+    return;
   }
 }
 
@@ -194,6 +199,10 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
     changed = true;
     SetBallast();
     break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+    return;
   }
 }
 
@@ -207,6 +216,11 @@ OnBugsData(DataField *_Sender, DataField::DataAccessKind_t Mode)
     glide_polar->set_bugs(Sender->GetAsFixed() / 100);
     changed = true;
     break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daSpecial:
+    return;
   }
 }
 
@@ -219,6 +233,11 @@ OnTempData(DataField *_Sender, DataField::DataAccessKind_t Mode)
     CuSonde::setForecastTemperature(Units::ToUserUnit(Units::ToSysTemperature(Sender->GetAsFixed()),
                                                       unGradCelcius));
     break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daSpecial:
+    return;
   }
 }
 

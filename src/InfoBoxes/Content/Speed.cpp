@@ -91,6 +91,9 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
     device_blackboard.SetTrackBearing(
         XCSoarInterface::Basic().TrackBearing + a5);
     return true;
+
+  case ibkEnter:
+    break;
   }
 
   return false;
@@ -126,6 +129,12 @@ InfoBoxContentSpeedIndicated::HandleKey(const InfoBoxKeyCodes keycode)
                         ? _("Calibrate ON")
                         : _("Calibrate OFF"));
     return true;
+
+  case ibkLeft:
+  case ibkDown:
+  case ibkUp:
+  case ibkRight:
+    break;
   }
 
   return false;
@@ -161,6 +170,12 @@ InfoBoxContentSpeed::HandleKey(const InfoBoxKeyCodes keycode)
                         _("Calibrate ON") :
                         _("Calibrate OFF"));
     return true;
+
+  case ibkUp:
+  case ibkDown:
+  case ibkLeft:
+  case ibkRight:
+    break;
   }
 
   return false;

@@ -366,6 +366,9 @@ OnFilterDistance(DataField *Sender, DataField::DataAccessKind_t Mode)
     filter_data.distance_index = Sender->GetAsInteger();
     UpdateList();
     break;
+
+  case DataField::daSpecial:
+    return;
   }
 }
 
@@ -379,6 +382,9 @@ OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mode)
     filter_data.direction_index = Sender->GetAsInteger();
     UpdateList();
     break;
+
+  case DataField::daSpecial:
+    return;
   }
 }
 
@@ -392,6 +398,9 @@ OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode)
     filter_data.type_index = (type_filter)Sender->GetAsInteger();
     UpdateList();
     break;
+
+  case DataField::daSpecial:
+    return;
   }
 }
 

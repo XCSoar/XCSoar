@@ -610,6 +610,12 @@ InfoBoxContentOLC::HandleKey(const InfoBoxKeyCodes keycode)
   case ibkEnter:
     dlgAnalysisShowModal(7);
     return true;
+
+  case ibkUp:
+  case ibkDown:
+  case ibkLeft:
+  case ibkRight:
+    break;
   }
 
   return false;

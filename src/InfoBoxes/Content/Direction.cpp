@@ -74,6 +74,11 @@ InfoBoxContentTrack::HandleKey(const InfoBoxKeyCodes keycode)
     device_blackboard.SetTrackBearing(
         XCSoarInterface::Basic().TrackBearing - a5);
     return true;
+
+  case ibkLeft:
+  case ibkRight:
+  case ibkEnter:
+    break;
   }
 
   return false;

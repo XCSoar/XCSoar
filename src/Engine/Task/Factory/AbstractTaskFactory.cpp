@@ -179,6 +179,12 @@ AbstractTaskFactory::getType(const OrderedTaskPoint* point) const
       return FINISH_CYLINDER;
     } 
     break;
+
+  case TaskPoint::UNORDERED:
+    /* obviously, when we check the type of an OrderedTaskPoint, we
+       should never get type==UNORDERED. */
+    assert(false);
+    break;
   } 
 
   // fail, should never get here
@@ -540,6 +546,12 @@ AbstractTaskFactory::validType(OrderedTaskPoint *new_tp, unsigned position) cons
 
   case TaskPoint::FINISH:
     return validAbstractType(POINT_FINISH, position);
+
+  case TaskPoint::UNORDERED:
+    /* obviously, when we check the type of an OrderedTaskPoint, we
+       should never get type==UNORDERED. */
+    assert(false);
+    break;
   }
 
   return false;

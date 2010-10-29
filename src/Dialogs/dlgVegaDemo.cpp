@@ -77,6 +77,11 @@ static void OnVegaDemoW(DataField *Sender,
       VegaDemoW = Units::ToSysVSpeed(Sender->GetAsFixed());
       VegaWriteDemo();
     break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daSpecial:
+    return;
   }
 }
 
@@ -88,6 +93,11 @@ static void OnVegaDemoV(DataField *Sender,
       VegaDemoV = Units::ToSysSpeed(Sender->GetAsFixed());
       VegaWriteDemo();
     break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daSpecial:
+    return;
   }
 }
 
@@ -99,6 +109,11 @@ static void OnVegaDemoAudioClimb(DataField *Sender,
       VegaDemoAudioClimb = (Sender->GetAsInteger()==1);
       VegaWriteDemo();
     break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daSpecial:
+    return;
   }
 }
 

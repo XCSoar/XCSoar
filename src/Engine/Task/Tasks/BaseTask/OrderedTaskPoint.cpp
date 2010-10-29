@@ -180,6 +180,11 @@ OrderedTaskPoint::clone(const TaskBehaviour &task_behaviour,
     return new FinishPoint(get_oz()->clone(&waypoint->Location),
                            task_projection, *waypoint, task_behaviour,
                            ordered_task_behaviour);
+
+  case UNORDERED:
+    /* an OrderedTaskPoint must never be UNORDERED */
+    assert(false);
+    break;
   }
 
   return NULL;

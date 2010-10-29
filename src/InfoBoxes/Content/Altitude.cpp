@@ -98,6 +98,9 @@ InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
     device_blackboard.SetTrackBearing(
         XCSoarInterface::Basic().TrackBearing + a5);
     return true;
+
+  case ibkEnter:
+    break;
   }
 
   return false;

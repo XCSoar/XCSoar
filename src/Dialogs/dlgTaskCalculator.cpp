@@ -213,6 +213,10 @@ OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
     SetMC(MACCREADY);
     RefreshCalculator();
     break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+    return;
   }
 }
 
@@ -241,6 +245,10 @@ OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
     }
 #endif
     break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+    return;
   }
 }
 

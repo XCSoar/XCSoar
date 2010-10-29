@@ -90,6 +90,11 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
   case ibkDown:
     CuSonde::adjustForecastTemperature(-0.5);
     return true;
+
+  case ibkLeft:
+  case ibkRight:
+  case ibkEnter:
+    break;
   }
 
   return false;

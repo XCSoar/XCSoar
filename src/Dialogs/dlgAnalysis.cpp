@@ -267,6 +267,10 @@ Update(void)
     wInfo->SetCaption(_T(""));
     SetCalcCaption(_("Warnings"));
     break;
+
+  case ANALYSIS_PAGE_COUNT:
+    assert(false);
+    break;
   }
 
   wGrid->set_visible(page < ANALYSIS_PAGE_COUNT);

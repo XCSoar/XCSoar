@@ -373,6 +373,11 @@ OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
       }
     }
     break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daSpecial:
+    return;
   }
 }
 
@@ -402,6 +407,11 @@ OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode)
       }
     }
     break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daSpecial:
+    return;
   }
 }
 
@@ -456,6 +466,11 @@ OnTaskPointData(DataField *Sender, DataField::DataAccessKind_t Mode)
       RefreshTargetPoint();
     }
     break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daSpecial:
+    return;
   }
 }
 

@@ -272,6 +272,11 @@ OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t Mode)
   case DataField::daChange:
     UpdateDeviceSetupButton(0, Sender->GetAsString());
     break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daSpecial:
+    return;
   }
 }
 
@@ -282,6 +287,11 @@ OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t Mode)
   case DataField::daChange:
     UpdateDeviceSetupButton(1, Sender->GetAsString());
     break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daSpecial:
+    return;
   }
 }
 
@@ -464,6 +474,11 @@ OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode)
     }
     SetLocalTime();
     break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daSpecial:
+    return;
   }
 }
 
@@ -485,6 +500,11 @@ OnPolarFileData(DataField *Sender, DataField::DataAccessKind_t Mode)
       }
     }
     break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daSpecial:
+    return;
   }
 }
 
@@ -511,6 +531,11 @@ OnPolarTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
       }
     }
     break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daSpecial:
+    return;
   }
 }
 
@@ -604,6 +629,9 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
     switch (config.port_type) {
     case DeviceConfig::SERIAL:
       dfe->Set(config.port_index + num_port_types);
+      break;
+
+    case DeviceConfig::AUTO:
       break;
     }
 
