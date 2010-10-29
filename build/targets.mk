@@ -232,10 +232,6 @@ ifeq ($(HAVE_MSVCRT),y)
   TARGET_CPPFLAGS += -DUNICODE -D_UNICODE
 endif
 
-ifeq ($(HAVE_POSIX)$(CONFIG_PC),nn)
-  TARGET_INCLUDES += -I$(SRC)/mingw32compat
-endif
-
 ifeq ($(HAVE_WIN32),n)
   TARGET_INCLUDES += -I$(SRC)/unix
 endif
