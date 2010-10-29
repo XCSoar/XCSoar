@@ -53,7 +53,6 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "Screen/Blank.hpp"
 
-static Mutex mutexInterfaceTimeout;
 bool ActionInterface::doForceShutdown = false;
 
 InterfaceBlackboard CommonInterface::blackboard;
