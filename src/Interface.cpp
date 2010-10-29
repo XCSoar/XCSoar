@@ -146,20 +146,11 @@ ActionInterface::SignalShutdown(bool force)
 bool
 XCSoarInterface::CheckShutdown()
 {
-  static bool ShutdownRequested = false;
-
   if (doForceShutdown)
     return true;
 
-  if (ShutdownRequested)
-    return false;
-
-  ShutdownRequested = true;
-  bool retval = (MessageBoxX(_("Quit program?"), _T("XCSoar"),
-                             MB_YESNO | MB_ICONQUESTION) == IDYES);
-  ShutdownRequested = false;
-
-  return retval;
+  return MessageBoxX(_("Quit program?"), _T("XCSoar"),
+                     MB_YESNO | MB_ICONQUESTION) == IDYES;
 }
 
 // Debounce input buttons (does not matter which button is pressed)
