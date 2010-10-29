@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Device/Driver/Vega.hpp"
-#include "Device/Parser.hpp"
 #include "Device/Internal.hpp"
 #include "Device/Driver.hpp"
 #include "Protection.hpp"
@@ -48,9 +47,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "NMEA/InputLine.hpp"
 
-#include <windows.h>
 #include <tchar.h>
-#include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 #include <algorithm>
