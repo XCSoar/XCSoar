@@ -143,15 +143,6 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
       MessageBeep(MB_ICONEXCLAMATION);
 #endif
     }
-
-    // If GPS connected but no lock, must be in hangar
-    if (InterfaceTimeoutCheck()) {
-      if (is_altair()) {
-        // TODO feature: ask question about shutdown or give warning
-        // then shutdown if no activity.
-        // Shutdown();
-      }
-    }
   } else if (connected_now) {
     // !navwarning
     wait_connect = false;
