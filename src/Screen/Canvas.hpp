@@ -176,10 +176,6 @@ public:
     font = _font.native();
   }
 
-  TTF_Font *get_font() const {
-    return font;
-  }
-
   void set_text_color(const Color c) {
     text_color = c;
   }
