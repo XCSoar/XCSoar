@@ -18,7 +18,9 @@
 #include <zzip/fetch.h>
 
 #include <ctype.h>
+#ifdef ZZIP_DISABLED
 #include <errno.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
@@ -200,8 +202,13 @@ __zzip_fetch_disk_trailer(int fd, zzip_off_t filesize,
     zzip_ssize_t maplen = 0;    /* mmap(),read(),getpagesize() use size_t !! */
     char *fd_map = 0;
 
+#ifdef ZZIP_DISABLED
     if (! trailer)
         { return(EINVAL); }
+#else
+    if (! trailer)
+        { return(ZZIP_OUTOFMEM); }
+#endif
 
     if (filesize < __sizeof(struct zzip_disk_trailer))
           { return(ZZIP_DIR_TOO_SHORT); }
