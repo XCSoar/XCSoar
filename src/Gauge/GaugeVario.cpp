@@ -793,7 +793,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
 
     // new ballast 0, hide value
     if (BALLAST < fixed(0.001))
-      _stprintf(Temp, _T(""));
+      Temp[0] = _T('\0');
     else
       _stprintf(Temp, _T("%.0f%%"), (double)(BALLAST * 100));
 
@@ -872,7 +872,7 @@ GaugeVario::RenderBugs(Canvas &canvas)
     }
 
     if (BUGS > fixed(0.999))
-      _stprintf(Temp, _T(""));
+      Temp[0] = _T('\0');
     else
       _stprintf(Temp, _T("%.0f%%"), (double)((fixed_one - BUGS) * 100));
 

@@ -45,6 +45,7 @@ Copyright_License {
 #include "StatusMessage.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
+#include "OS/PathName.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -120,7 +121,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
   if (argc < 2) {
-    fprintf(stderr, "Usage: %s XMLFILE\n", argv[0]);
+    fprintf(stderr, "Usage: RunDialog XMLFILE\n");
     return 1;
   }
 
@@ -132,7 +133,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   WndForm *form = LoadDialog(NULL, main_window, argv[1]);
   if (form == NULL) {
-    fprintf(stderr, "Failed to load resource '%s'\n", argv[1]);
+    fprintf(stderr, "Failed to load resource '%s'\n",
+            (const char *)NarrowPathName(argv[1]));
     return 1;
   }
 

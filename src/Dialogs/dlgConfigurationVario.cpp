@@ -196,7 +196,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
       wp->GetDataField()->SetAsInteger((int)ext_setvalue);
       wp->RefreshDisplay();
     }
-    _stprintf(requesttext, _T("PDVSC,S,%s,%d"), name, ext_setvalue);
+    _stprintf(requesttext, _T("PDVSC,S,%s,%ld"), name, ext_setvalue);
     VarioWriteNMEA(requesttext);
 
     if (!is_simulator())

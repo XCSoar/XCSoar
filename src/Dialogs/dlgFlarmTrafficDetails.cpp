@@ -103,7 +103,7 @@ UpdateChanging()
   if (dir.magnitude_degrees() > fixed_one)
     _stprintf(tmp, _T("%+2.0f")_T(DEG), (double)dir.value_degrees());
   else
-    _stprintf(tmp, _T("--"), (double)dir.value_degrees());
+    _tcscpy(tmp, _T("--"));
   ((WndProperty *)wf->FindByName(_T("prpDirectionV")))->SetText(tmp);
 
   // Fill climb speed field

@@ -831,7 +831,7 @@ FlightStatistics::CaptionBarograph(TCHAR *sTmp)
 {
   ScopeLock lock(mutexStats);
   if (Altitude_Ceiling.sum_n < 2) {
-    _stprintf(sTmp, _T("\0"));
+    sTmp[0] = _T('\0');
   } else if (Altitude_Ceiling.sum_n < 4) {
     _stprintf(sTmp, _T("%s:\r\n  %.0f-%.0f %s"),
               _("Working band"),
@@ -860,7 +860,7 @@ FlightStatistics::CaptionClimb(TCHAR* sTmp)
 {
   ScopeLock lock(mutexStats);
   if (ThermalAverage.sum_n == 0) {
-    _stprintf(sTmp, _T("\0"));
+    sTmp[0] = _T('\0');
   } else if (ThermalAverage.sum_n == 1) {
     _stprintf(sTmp, _T("%s:\r\n  %3.1f %s"),
               _("Av climb"),

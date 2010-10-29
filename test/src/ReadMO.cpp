@@ -1,4 +1,5 @@
 #include "MOLoader.hpp"
+#include "OS/PathName.hpp"
 
 #include <stdio.h>
 
@@ -26,7 +27,7 @@ int main(int argc, char **argv) {
 
   MOLoader mo(path);
   if (mo.error()) {
-    fprintf(stderr, "Failed to load %s\n", path);
+    fprintf(stderr, "Failed to load %s\n", (const char *)NarrowPathName(path));
     return 2;
   }
 
