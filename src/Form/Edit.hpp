@@ -134,6 +134,11 @@ public:
 
   void SetFont(const Font &font);
 
+  void set_enabled(bool enabled) {
+    WindowControl::set_enabled(enabled);
+    edit.set_enabled(enabled);
+  }
+
 protected:
   virtual bool on_resize(unsigned width, unsigned height);
 
