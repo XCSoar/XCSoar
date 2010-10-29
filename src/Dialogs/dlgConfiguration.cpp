@@ -742,7 +742,7 @@ setVariables()
 
 #ifdef WIN32
   if (is_embedded() && !is_altair())
-    ((WndProperty*)wf->FindByName(_T("prpUTCOffset")))->hide();
+    ((WndProperty*)wf->FindByName(_T("prpUTCOffset")))->set_enabled(false);
 #endif
 
   SetLocalTime();
