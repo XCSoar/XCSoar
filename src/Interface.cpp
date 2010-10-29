@@ -137,13 +137,6 @@ ActionInterface::SendSettingsMap(const bool trigger_draw)
   // TODO: trigger refresh if the settings are changed
 }
 
-bool
-XCSoarInterface::InterfaceTimeoutZero()
-{
-  ScopeLock protect(mutexInterfaceTimeout);
-  return (interface_timeout == 0);
-}
-
 void
 XCSoarInterface::InterfaceTimeoutReset()
 {
