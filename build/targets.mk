@@ -10,7 +10,6 @@ CONFIG_WINE := n
 HAVE_CE := n
 HAVE_FPU := y
 XSCALE := n
-GTARGET := $(TARGET)
 
 ifeq ($(TARGET),PPC2000)
   HAVE_CE := y
@@ -25,7 +24,6 @@ ifeq ($(TARGET),PPC2003X)
   CONFIG_PPC2003 := y
   HAVE_CE := y
   XSCALE := y
-  GTARGET := PPC2003
 endif
 
 ifeq ($(TARGET),PC)
