@@ -38,9 +38,7 @@ Copyright_License {
 #ifndef XCSOAR_PROCESS_TIMER_H
 #define XCSOAR_PROCESS_TIMER_H
 
-#include "Interface.hpp"
-
-class ProcessTimer: public XCSoarInterface {
+class ProcessTimer {
 public:
   static void Process    ();
 private:

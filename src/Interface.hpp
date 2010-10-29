@@ -131,6 +131,8 @@ private:
  * that can perform actions
  */
 class ActionInterface: public CommonInterface {
+  friend class ProcessTimer;
+
 public:
   // settings
   static unsigned MenuTimeoutMax;

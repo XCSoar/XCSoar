@@ -80,7 +80,7 @@ ProcessTimer::MessageProcessTimer()
 {
   // don't display messages if airspace warning dialog is active
   if (!dlgAirspaceWarningVisible()) {
-    if (main_window.popup.Render()) {
+    if (CommonInterface::main_window.popup.Render()) {
       // turn screen on if blanked and receive a new message
       ResetDisplayTimeOut();
     }
@@ -104,11 +104,11 @@ ProcessTimer::CommonProcessTimer()
 {
   CheckDisplayTimeOut(false);
 
-  DisplayModes();
-  ExchangeBlackboard();
+  ActionInterface::DisplayModes();
+  XCSoarInterface::ExchangeBlackboard();
 
   // send ignore command
-  SetSettingsMap().MapScale = fixed_zero;
+  CommonInterface::SetSettingsMap().MapScale = fixed_zero;
 
   InfoBoxManager::ProcessTimer();
   InputEvents::ProcessTimer();
@@ -126,14 +126,16 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
   static bool wait_connect = false;
   static bool wait_lock = false;
 
-  if (!Basic().gps.Connected) {
+  const GPS_STATE &gps = CommonInterface::Basic().gps;
+
+  if (!gps.Connected) {
     // if gps is not connected, set navwarning to true so
     // calculations flight timers don't get updated
     device_blackboard.SetNAVWarning(true);
   }
 
   bool connected_now = device_blackboard.LowerConnection();
-  if (connected_now && Basic().gps.NAVWarning) {
+  if (connected_now && gps.NAVWarning) {
     if (!wait_lock) {
       // waiting for lock first time
       wait_lock = true;
@@ -196,7 +198,8 @@ ProcessTimer::Process(void)
 
     // also service replay logger
     if (replay.Update()) {
-      if (Basic().gps.MovementDetected && !replay.NmeaReplayEnabled())
+      if (CommonInterface::Basic().gps.MovementDetected &&
+          !replay.NmeaReplayEnabled())
         replay.Stop();
 
       device_blackboard.RaiseConnection();
