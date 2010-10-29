@@ -52,6 +52,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Logger/Logger.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "Interface.hpp"
 
 static PeriodClock last_team_code_update;
 

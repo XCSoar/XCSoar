@@ -47,6 +47,7 @@ Copyright_License {
 #include "Appearance.hpp"
 #include "Defines.h"
 #include "Asset.hpp"
+#include "Sizes.h"
 
 #include <algorithm>
 

@@ -50,6 +50,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "InputEvents.h"
 #include "Compatibility/string.h" /* for _ttoi() */
+#include "Units.hpp"
 
 #include <math.h>
 #include <ctype.h>

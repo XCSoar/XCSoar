@@ -51,6 +51,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "Math/FastMath.h"
 #include "Compiler.h"
+#include "Interface.hpp"
 
 #include <algorithm>
 
