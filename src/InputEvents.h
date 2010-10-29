@@ -40,14 +40,14 @@ Copyright_License {
 
 #include <tchar.h>
 
-#include "Interface.hpp"
 #include "Thread/Mutex.hpp"
+#include "Math/fixed.hpp"
 
 class TLineReader;
 
 typedef void (*pt2Event)(const TCHAR *);
 
-class InputEvents: public ActionInterface {
+class InputEvents {
 public:
   enum mode {
     MODE_INVALID = -1,

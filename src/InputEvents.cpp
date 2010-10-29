@@ -60,6 +60,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 */
 
 #include "InputEvents.h"
+#include "Interface.hpp"
 #include "Protection.hpp"
 #include "LogFile.hpp"
 #include "Compatibility/vk.h"
@@ -1031,7 +1032,7 @@ unsigned InputEvents::MenuTimeOut = 0;
 void
 InputEvents::HideMenu()
 {
-  MenuTimeOut = MenuTimeoutMax;
+  MenuTimeOut = XCSoarInterface::MenuTimeoutMax;
   ProcessMenuTimer();
   ResetDisplayTimeOut();
 }
@@ -1046,7 +1047,8 @@ InputEvents::ResetMenuTimeOut()
 void
 InputEvents::ShowMenu()
 {
-  if (SettingsMap().EnablePan && !SettingsMap().TargetPan)
+  if (XCSoarInterface::SettingsMap().EnablePan &&
+      !XCSoarInterface::SettingsMap().TargetPan)
     /* disable pan mode before displaying the normal menu; leaving pan
        mode enabled would be confusing for the user, and doesn't look
        consistent */
@@ -1067,8 +1069,9 @@ void
 InputEvents::ProcessMenuTimer()
 {
   if (!InfoBoxManager::HasFocus()) {
-    if (MenuTimeOut == MenuTimeoutMax) {
-      if (SettingsMap().EnablePan && !SettingsMap().TargetPan) {
+    if (MenuTimeOut == XCSoarInterface::MenuTimeoutMax) {
+      if (XCSoarInterface::SettingsMap().EnablePan &&
+          !XCSoarInterface::SettingsMap().TargetPan) {
         setMode(MODE_PAN);
       } else {
         setMode(MODE_DEFAULT);
