@@ -88,6 +88,9 @@ OrderedTaskFactoryDescription(OrderedTask::Factory_t type)
   switch(type) {
   case OrderedTask::FACTORY_RT:
     return _T("Racing task around turnpoints");
+  case OrderedTask::FACTORY_FAI_GENERAL:
+    /// @todo: JMW pls fill intended text here
+    return _T("FAI rules, generic");
   case OrderedTask::FACTORY_FAI_TRIANGLE:
     return _T("FAI rules, path from a start to two turnpoints and return");
   case OrderedTask::FACTORY_FAI_OR:
