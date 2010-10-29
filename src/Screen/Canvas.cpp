@@ -205,13 +205,6 @@ Canvas::text_opaque(int x, int y, const RECT &rc, const TCHAR *_text)
   text(x, y, _text);
 }
 
-void
-Canvas::bottom_right_text(int x, int y, const TCHAR *_text)
-{
-  SIZE size = text_size(_text);
-  text(x - size.cx, y - size.cy, _text);
-}
-
 static bool
 clip(int &position, unsigned &length, unsigned max)
 {
@@ -776,18 +769,6 @@ Canvas::text_clipped(int x, int y, unsigned width, const TCHAR *text)
   RECT rc;
   ::SetRect(&rc, x, y, x + min(width, (unsigned)size.cx), y + size.cy);
   text_clipped(x, y, rc, text);
-}
-
-void
-Canvas::bottom_right_text(int x, int y, const TCHAR *text)
-{
-  size_t length = _tcslen(text);
-  SIZE size;
-
-  // XXX use SetTextAlign() instead?
-  ::GetTextExtentPoint(dc, text, length, &size);
-  ::ExtTextOut(dc, x - size.cx, y - size.cy,
-               0, NULL, text, length, NULL);
 }
 
 void

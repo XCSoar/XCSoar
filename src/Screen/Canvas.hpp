@@ -512,8 +512,6 @@ public:
     this->text(x, y, text);
   }
 
-  void bottom_right_text(int x, int y, const TCHAR *text);
-
   void formatted_text(RECT *rc, const TCHAR *text, unsigned format) {
     // XXX
     this->text(rc->left, rc->top, text);
@@ -942,8 +940,6 @@ public:
 
   void text_clipped(int x, int y, const RECT &rc, const TCHAR *text);
   void text_clipped(int x, int y, unsigned width, const TCHAR *text);
-
-  void bottom_right_text(int x, int y, const TCHAR *text);
 
   void formatted_text(RECT *rc, const TCHAR *text, unsigned format) {
     ::DrawText(dc, text, -1, rc, format);
