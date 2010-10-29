@@ -537,13 +537,6 @@ location=7
 
 mode=Display2
 type=key
-data=9
-event=Brightness
-label=Bright
-location=8
-
-mode=Display2
-type=key
 data=0
 event=DeclutterLabels show
 event=DeclutterLabels toggle
