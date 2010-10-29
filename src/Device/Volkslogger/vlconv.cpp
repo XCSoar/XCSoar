@@ -216,7 +216,7 @@ public:
       if (NTP > 12)
         NTP = 12;
 
-      //JMW TODO??? strftime(sTDECL,sizeof sTDECL,"%d%m%y%H%M%S",&TDECL);
+      strftime(sTDECL,sizeof sTDECL,"%d%m%y%H%M%S",&TDECL);
 
       // If no FDT field was received from the logger (from FW 161 upwards)
       // we have to create one
@@ -846,7 +846,7 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, lpb bin_puffer,
     sprintf(igcheader.TZN, "UTC%c%02d:%02d", (tzn < 0 ? '-' : '+'), tzh, tzm);
   }
 
-  // TODO JMW: strftime(igcheader.DTE,sizeof(igcheader.DTE),"%d%m%y",&firsttime);
+  strftime(igcheader.DTE,sizeof(igcheader.DTE),"%d%m%y",&firsttime);
   igcheader.output(igcfile_version, oo_fillin);
 
   if (igcfile_version >= 414 || (task.STA.koord.lat != 0)
@@ -947,7 +947,7 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, lpb bin_puffer,
 
       igcfix.pressure_alt = pressure2altitude(igcfix.press);
 
-      //JMWTODO			strftime(igcfix.time,sizeof(igcfix.time),"%H%M%S",&realtime);
+      strftime(igcfix.time,sizeof(igcfix.time),"%H%M%S",&realtime);
       fprintf(Ausgabedatei, "B%06s%02u%05u%c%03u%05u%c%c%05ld%05ld%03u",
           igcfix.time, igcfix.latdeg, igcfix.latmin, ((igcfix.lat < 0) ? 'S'
               : 'N'), igcfix.londeg, igcfix.lonmin, ((igcfix.lon < 0) ? 'W'
@@ -984,10 +984,12 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, lpb bin_puffer,
       }
       Untertyp = (p2[0]);
       switch (Untertyp) {
-      case FLDEPEV: //JMWTODO strftime(igcfix.time,sizeof(igcfix.time),"%H%M%S",&realtime);
+      case FLDEPEV:
+        strftime(igcfix.time,sizeof(igcfix.time),"%H%M%S",&realtime);
         fprintf(Ausgabedatei, "E%06sPEVEVENTBUTTON PRESSED\n", igcfix.time);
         break;
-      case FLDETKF: //JMWTODO strftime(igcfix.time,sizeof(igcfix.time),"%H%M%S",&realtime);
+      case FLDETKF:
+        strftime(igcfix.time,sizeof(igcfix.time),"%H%M%S",&realtime);
         fprintf(Ausgabedatei, "LGCSTKF%06sTAKEOFF DETECTED\n", igcfix.time);
         break;
       }
