@@ -140,13 +140,15 @@ DataNodeXML::save(const TCHAR* path)
   if (file == NULL)
     return false;
 
-  fprintf(file,
+  const TCHAR* text = serialise().c_str();
+
 #ifdef _UNICODE
-          "%S",
+  char text2[_tcslen(text) * 4];
+  ::WideCharToMultiByte(CP_ACP, 0, text, -1, text2, sizeof(text2), NULL, NULL);
+  fprintf(file, "%s", text2);
 #else
-          "%s",
+  fprintf(file, "%s", text);
 #endif
-          serialise().c_str());
 
   fclose(file);
 
