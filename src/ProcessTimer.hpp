@@ -38,14 +38,16 @@ Copyright_License {
 #ifndef XCSOAR_PROCESS_TIMER_H
 #define XCSOAR_PROCESS_TIMER_H
 
-class ProcessTimer {
+class ProcessTimer
+{
 public:
-  static void Process    ();
+  static void Process();
+
 private:
-  static void CommonProcessTimer    (void);
+  static void CommonProcessTimer();
   static int ConnectionProcessTimer(int itimeout);
-  static void SystemProcessTimer(void);
-  static void HeapCompact(void);
+  static void SystemProcessTimer();
+  static void HeapCompact();
   static void MessageProcessTimer();
   static void AirspaceProcessTimer();
 };

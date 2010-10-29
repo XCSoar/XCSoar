@@ -79,23 +79,20 @@ void
 ProcessTimer::MessageProcessTimer()
 {
   // don't display messages if airspace warning dialog is active
-  if (!dlgAirspaceWarningVisible()) {
-    if (CommonInterface::main_window.popup.Render()) {
+  if (!dlgAirspaceWarningVisible())
+    if (CommonInterface::main_window.popup.Render())
       // turn screen on if blanked and receive a new message
       ResetDisplayTimeOut();
-    }
-  }
 }
 
 void
 ProcessTimer::AirspaceProcessTimer()
 {
-  if (globalRunningEvent.test()) {
-    if (airspaceWarningEvent.test()) {
-      airspaceWarningEvent.reset();
-      ResetDisplayTimeOut();
-      dlgAirspaceWarningShowDlg();
-    }
+  if (globalRunningEvent.test() &&
+      airspaceWarningEvent.test()) {
+    airspaceWarningEvent.reset();
+    ResetDisplayTimeOut();
+    dlgAirspaceWarningShowDlg();
   }
 }
 
@@ -128,11 +125,10 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
 
   const GPS_STATE &gps = CommonInterface::Basic().gps;
 
-  if (!gps.Connected) {
+  if (!gps.Connected)
     // if gps is not connected, set navwarning to true so
     // calculations flight timers don't get updated
     device_blackboard.SetNAVWarning(true);
-  }
 
   bool connected_now = device_blackboard.LowerConnection();
   if (connected_now && gps.NAVWarning) {
