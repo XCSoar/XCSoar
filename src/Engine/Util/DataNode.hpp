@@ -51,140 +51,140 @@ class DataNode
 public:
   virtual ~DataNode();
 
-/** 
- * Retrieve name of this node
- * 
- * @return Copy of name
- */
+  /**
+   * Retrieve name of this node
+   *
+   * @return Copy of name
+   */
   virtual const tstring get_name() const = 0;
 
-/** 
- * Add child to this node
- * 
- * @param name Name of child
- * 
- * @return Pointer to new child
- */
+  /**
+   * Add child to this node
+   *
+   * @param name Name of child
+   *
+   * @return Pointer to new child
+   */
   virtual DataNode* add_child(const tstring &name) = 0;
 
-/** 
- * Retrieve child by index
- * 
- * @param i Index of child
- * 
- * @return Pointer to child if found, or NULL
- */
+  /**
+   * Retrieve child by index
+   *
+   * @param i Index of child
+   *
+   * @return Pointer to child if found, or NULL
+   */
   virtual DataNode* get_child(unsigned i) const = 0;
 
-/** 
- * Retrieve child by name
- * 
- * @param name Name of child
- * @param i Optional, index of child (if more than one found)
- * 
- * @return Pointer to child if found, or NULL
- */
+  /**
+   * Retrieve child by name
+   *
+   * @param name Name of child
+   * @param i Optional, index of child (if more than one found)
+   *
+   * @return Pointer to child if found, or NULL
+   */
   virtual DataNode* get_child_by_name(const tstring name, const unsigned i=0) const = 0;
 
-/** 
- * Generate canonical serialised form of this node
- * 
- * @return Text representing the node
- */
+  /**
+   * Generate canonical serialised form of this node
+   *
+   * @return Text representing the node
+   */
   virtual const tstring serialise() = 0;
 
-/** 
- * Set named attribute value
- * 
- * @param name Name of attribute
- * @param value Value of attribute
- */
+  /**
+   * Set named attribute value
+   *
+   * @param name Name of attribute
+   * @param value Value of attribute
+   */
   virtual void set_attribute(const tstring &name, const tstring value) = 0;
 
-/** 
- * Set named attribute value, with numeric to text conversion
- * 
- * @param name Name of attribute
- * @param value Value (fixed)
- */
+  /**
+   * Set named attribute value, with numeric to text conversion
+   *
+   * @param name Name of attribute
+   * @param value Value (fixed)
+   */
   void set_attribute(const tstring &name, fixed value);
 
   void set_attribute(const tstring &name, Angle value);
 
-/** 
- * Set named attribute value, with numeric to text conversion
- * 
- * @param name Name of attribute
- * @param value Value (int)
- */
+  /**
+   * Set named attribute value, with numeric to text conversion
+   *
+   * @param name Name of attribute
+   * @param value Value (int)
+   */
   void set_attribute(const tstring &name, int value);
 
-/** 
- * Set named attribute value, with numeric to text conversion
- * 
- * @param name Name of attribute
- * @param value Value (unsigned int)
- */
+  /**
+   * Set named attribute value, with numeric to text conversion
+   *
+   * @param name Name of attribute
+   * @param value Value (unsigned int)
+   */
   void set_attribute(const tstring &name, unsigned value);
 
-/** 
- * Set named attribute value, with numeric to text conversion
- * 
- * @param name Name of attribute
- * @param value Value (boolean)
- */
+  /**
+   * Set named attribute value, with numeric to text conversion
+   *
+   * @param name Name of attribute
+   * @param value Value (boolean)
+   */
   void set_attribute(const tstring &name, bool &value);
 
-/** 
- * Retrieve named attribute value
- * 
- * @param name Name of attribute
- * @param value Value (written)
- * 
- * @return True if attribute exists
- */
+  /**
+   * Retrieve named attribute value
+   *
+   * @param name Name of attribute
+   * @param value Value (written)
+   *
+   * @return True if attribute exists
+   */
   virtual bool get_attribute(const tstring &name, tstring &value) const = 0;
 
-/** 
- * Retrieve named attribute value, with numeric conversion
- * 
- * @param name Name of attribute
- * @param value Value (written)
- * 
- * @return True if attribute exists
- */
+  /**
+   * Retrieve named attribute value, with numeric conversion
+   *
+   * @param name Name of attribute
+   * @param value Value (written)
+   *
+   * @return True if attribute exists
+   */
   bool get_attribute(const tstring &name, fixed &value) const;
 
   bool get_attribute(const tstring &name, Angle &value) const;
 
-/** 
- * Retrieve named attribute value, with numeric conversion
- * 
- * @param name Name of attribute
- * @param value Value (written)
- * 
- * @return True if attribute exists
- */
+  /**
+   * Retrieve named attribute value, with numeric conversion
+   *
+   * @param name Name of attribute
+   * @param value Value (written)
+   *
+   * @return True if attribute exists
+   */
   bool get_attribute(const tstring &name, int &value) const;
 
-/** 
- * Retrieve named attribute value, with numeric conversion
- * 
- * @param name Name of attribute
- * @param value Value (written)
- * 
- * @return True if attribute exists
- */
+  /**
+   * Retrieve named attribute value, with numeric conversion
+   *
+   * @param name Name of attribute
+   * @param value Value (written)
+   *
+   * @return True if attribute exists
+   */
   bool get_attribute(const tstring &name, unsigned &value) const;
 
-/** 
- * Retrieve named attribute value, with numeric conversion
- * 
- * @param name Name of attribute
- * @param value Value (written)
- * 
- * @return True if attribute exists
- */
+  /**
+   * Retrieve named attribute value, with numeric conversion
+   *
+   * @param name Name of attribute
+   * @param value Value (written)
+   *
+   * @return True if attribute exists
+   */
   bool get_attribute(const tstring &name, bool &value) const;
 };
 

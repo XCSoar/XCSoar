@@ -43,13 +43,13 @@ DataNode::~DataNode()
 {
 }
 
-void 
+void
 DataNode::set_attribute(const tstring &name, Angle value)
 {
   set_attribute(name, value.value_degrees());
 }
 
-void 
+void
 DataNode::set_attribute(const tstring &name, fixed value)
 {
   TCHAR buf[100];
@@ -57,7 +57,7 @@ DataNode::set_attribute(const tstring &name, fixed value)
   set_attribute(name, buf);
 }
 
-void 
+void
 DataNode::set_attribute(const tstring &name, int value)
 {
   TCHAR buf[100];
@@ -65,7 +65,7 @@ DataNode::set_attribute(const tstring &name, int value)
   set_attribute(name, buf);
 }
 
-void 
+void
 DataNode::set_attribute(const tstring &name, unsigned value)
 {
   TCHAR buf[100];
@@ -73,7 +73,7 @@ DataNode::set_attribute(const tstring &name, unsigned value)
   set_attribute(name, buf);
 }
 
-void 
+void
 DataNode::set_attribute(const tstring &name, bool &value)
 {
   TCHAR buf[100];
@@ -81,8 +81,8 @@ DataNode::set_attribute(const tstring &name, bool &value)
   set_attribute(name, buf);
 }
 
-bool 
-DataNode::get_attribute(const tstring &name, Angle &value) const 
+bool
+DataNode::get_attribute(const tstring &name, Angle &value) const
 {
   bool retval;
   fixed v = value.value_degrees();
@@ -91,9 +91,8 @@ DataNode::get_attribute(const tstring &name, Angle &value) const
   return retval;
 }
 
-
-bool 
-DataNode::get_attribute(const tstring &name, fixed &value) const 
+bool
+DataNode::get_attribute(const tstring &name, fixed &value) const
 {
   tstring val;
   if (get_attribute(name, val)) {
@@ -104,7 +103,7 @@ DataNode::get_attribute(const tstring &name, fixed &value) const
   }
 }
 
-bool 
+bool
 DataNode::get_attribute(const tstring &name, int &value) const
 {
   tstring val;
@@ -116,7 +115,7 @@ DataNode::get_attribute(const tstring &name, int &value) const
   }
 }
 
-bool 
+bool
 DataNode::get_attribute(const tstring &name, unsigned &value) const
 {
   tstring val;
@@ -128,12 +127,12 @@ DataNode::get_attribute(const tstring &name, unsigned &value) const
   }
 }
 
-bool 
+bool
 DataNode::get_attribute(const tstring &name, bool &value) const
 {
   tstring val;
   if (get_attribute(name, val)) {
-    value = (_tcstol(val.c_str(), NULL, 0)>0);
+    value = (_tcstol(val.c_str(), NULL, 0) > 0);
     return true;
   } else {
     return false;
