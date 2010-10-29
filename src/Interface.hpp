@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_INTERFACE_HPP)
+#ifndef XCSOAR_INTERFACE_HPP
 #define XCSOAR_INTERFACE_HPP
 
 #include "InterfaceBlackboard.hpp"
