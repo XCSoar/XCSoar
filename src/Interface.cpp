@@ -52,6 +52,9 @@ Copyright_License {
 #include "Gauge/GaugeFLARM.hpp"
 #include "PeriodClock.hpp"
 #include "Screen/Blank.hpp"
+#include "LogFile.hpp"
+#include "Protection.hpp"
+#include "DeviceBlackboard.hpp"
 
 bool ActionInterface::doForceShutdown = false;
 
@@ -69,10 +72,6 @@ unsigned XCSoarInterface::debounceTimeout = 0;
 unsigned XCSoarInterface::debounceTimeout = 250;
 #endif
 unsigned ActionInterface::MenuTimeoutMax = MENUTIMEOUTMAX;
-
-#include "LogFile.hpp"
-#include "Protection.hpp"
-#include "DeviceBlackboard.hpp"
 
 void
 XCSoarInterface::ExchangeBlackboard()
