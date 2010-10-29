@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#if !defined(__UNITS_H)
-#define __UNITS_H
+#ifndef XCSOAR_UNITS_HPP
+#define XCSOAR_UNITS_HPP
 
 #include "Math/fixed.hpp"
 #include "Compiler.h"
