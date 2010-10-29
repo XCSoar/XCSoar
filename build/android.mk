@@ -46,7 +46,7 @@ $(ANDROID_BUILD)/build.xml: android/AndroidManifest.xml $(ANDROID_BUILD)/res/dra
 	$(Q)mkdir -p $(ANDROID_BUILD)/res
 	$(Q)ln -s ../../../android/AndroidManifest.xml ../../../android/src ../bin $(@D)/
 	$(Q)ln -s ../../../../android/res/values $(@D)/res/
-	$(Q)$(ANDROID_SDK)/tools/android update project --path $(@D) --target android-4
+	$(Q)$(ANDROID_SDK)/tools/android update project --path $(@D) --target $(ANDROID_PLATFORM)
 	@touch $@
 
 # add dependency to this source file

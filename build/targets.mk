@@ -100,8 +100,15 @@ endif
 
 ifeq ($(TARGET),ANDROID)
   ANDROID_NDK ?= $(HOME)/opt/android-ndk-r4-crystax
-  ANDROID_NDK_PLATFORM ?= $(ANDROID_NDK)/build/platforms/android-8
-  TCPATH = $(ANDROID_NDK)/build/prebuilt/linux-x86/arm-eabi-4.4.0/bin/arm-eabi-
+
+  ANDROID_PLATFORM = android-4
+  ANDROID_ARCH = arm
+  ANDROID_ABI2 = arm-eabi
+  ANDROID_GCC_VERSION = 4.4.0
+
+  ANDROID_NDK_PLATFORM = $(ANDROID_NDK)/build/platforms/$(ANDROID_PLATFORM)
+  ANDROID_TARGET_ROOT = $(ANDROID_NDK_PLATFORM)/arch-$(ANDROID_ARCH)
+  TCPATH = $(ANDROID_NDK)/build/prebuilt/linux-x86/$(ANDROID_ABI2)-$(ANDROID_GCC_VERSION)/bin/$(ANDROID_ABI2)-
 
   MCPU := -march=armv5te -mtune=xscale -msoft-float -fpic -mthumb-interwork -ffunction-sections -funwind-tables -fstack-protector -fno-short-enums
 endif
@@ -243,7 +250,7 @@ ifeq ($(HAVE_WIN32),n)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  TARGET_CPPFLAGS += -I$(ANDROID_NDK_PLATFORM)/arch-arm/usr/include
+  TARGET_CPPFLAGS += -I$(ANDROID_TARGET_ROOT)/usr/include
   TARGET_CPPFLAGS += -DANDROID
   TARGET_CPPFLAGS += -D__ARM_ARCH_5__ -D__ARM_ARCH_5T__ -D__ARM_ARCH_5E__ -D__ARM_ARCH_5TE__
   TARGET_CPPFLAGS += -D__ISO_C_VISIBLE=1999 -D__POSIX_VISIBLE=0 -D__XPG_VISIBLE=0
