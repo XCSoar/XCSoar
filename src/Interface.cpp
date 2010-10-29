@@ -54,7 +54,7 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 
 static Mutex mutexInterfaceTimeout;
-static bool doForceShutdown = false;
+bool ActionInterface::doForceShutdown = false;
 
 InterfaceBlackboard CommonInterface::blackboard;
 HINSTANCE CommonInterface::hInst; // The current instance

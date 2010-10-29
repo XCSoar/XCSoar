@@ -141,6 +141,8 @@ protected:
   static void DisplayModes();
   static void SendSettingsComputer();
 
+  static bool doForceShutdown;
+
 public:
   static void SendSettingsMap(const bool trigger_draw = false);
 
