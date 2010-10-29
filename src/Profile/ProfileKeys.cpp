@@ -144,6 +144,7 @@ const TCHAR szProfileDrawTerrain[] = CONF("DrawTerrain");
 const TCHAR szProfileDrawTopology[] = CONF("DrawTopology");
 const TCHAR szProfileFinalGlideTerrain[] = CONF("FinalGlideTerrain");
 const TCHAR szProfileAutoWind[] = CONF("AutoWind");
+const TCHAR szProfileExternalWind[] = CONF("ExternalWind");
 const TCHAR szProfileHomeWaypoint[] = CONF("HomeWaypoint");
 const TCHAR szProfileAlternate1[] = CONF("Alternate1"); // VENTA3
 const TCHAR szProfileAlternate2[] = CONF("Alternate2");

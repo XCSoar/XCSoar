@@ -203,6 +203,11 @@
         <DataField DataType="enum"/>
       </Edit>
     
+      <Edit Name="prpExternalWind" Caption="External wind" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="If enabled, then the wind vector received from external devices overrides XCSoar's internal wind calculation.">
+        <DataField DataType="boolean"/>
+      </Edit>
+
       <Edit Name="prpAutoMcMode" Caption="Auto Mc mode" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="This option defines which auto MacCready algorithm is used.
 [Final glide] adjusts Mc for fastest arrival.  For OLC sprint tasks, the MacCready is adjusted in order to cover the greatest distance in the remaining time and reach the finish height.

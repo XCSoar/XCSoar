@@ -312,6 +312,9 @@ Profile::Use()
   Get(szProfileAutoWind,
       settings_computer.AutoWindMode);
 
+  Get(szProfileExternalWind,
+      settings_computer.ExternalWind);
+
   Get(szProfileCircleZoom,
       settings_map.CircleZoom);
 

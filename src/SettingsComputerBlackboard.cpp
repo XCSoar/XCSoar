@@ -43,6 +43,7 @@ Copyright_License {
 SettingsComputerBlackboard::SettingsComputerBlackboard()
 {
   settings_computer.AutoWindMode= D_AUTOWIND_CIRCLING;
+  settings_computer.ExternalWind = true;
   settings_computer.EnableBlockSTF = false;
 
   settings_computer.TeamCodeRefWaypoint = -1;

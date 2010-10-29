@@ -862,6 +862,8 @@ setVariables()
     wp->RefreshDisplay();
   }
 
+  LoadFormProperty(*wf, _T("prpExternalWind"), settings_computer.ExternalWind);
+
   wp = (WndProperty*)wf->FindByName(_T("prpAutoMcMode"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1697,6 +1699,10 @@ void dlgConfigurationShowModal(void)
 
   changed |= SaveFormProperty(*wf, _T("prpAutoWind"), szProfileAutoWind,
                               settings_computer.AutoWindMode);
+
+  changed |= SaveFormProperty(*wf, _T("prpExternalWind"),
+                              szProfileExternalWind,
+                              settings_computer.ExternalWind);
 
   changed |= SaveFormProperty(*wf, _T("prpWindArrowStyle"),
                               szProfileWindArrowStyle,

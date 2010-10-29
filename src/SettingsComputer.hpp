@@ -80,6 +80,12 @@ struct SETTINGS_WIND {
  */
   int AutoWindMode; 
 
+  /**
+   * If enabled, then the wind vector received from external devices
+   * overrides XCSoar's internal wind calculation.
+   */
+  bool ExternalWind;
+
   SpeedVector ManualWind;
 };
 
