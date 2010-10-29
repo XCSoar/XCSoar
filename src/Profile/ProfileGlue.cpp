@@ -524,8 +524,6 @@ Profile::Use()
   if (Get(szProfileSafetyMacCready, Temp))
     settings_computer.safety_mc = fixed(Temp) / 10;
 
-  Get(szProfileUserLevel, XCSoarInterface::UserLevel);
-
   if (Get(szProfileRiskGamma, Temp))
     settings_computer.risk_gamma = fixed(Temp) / 10;
 

@@ -65,7 +65,6 @@ MainWindow CommonInterface::main_window(status_messages);
 
 // settings used only by interface thread scope
 bool ActionInterface::LockSettingsInFlight = true;
-unsigned ActionInterface::UserLevel = 0; // used by dlgConfiguration
 unsigned XCSoarInterface::debounceTimeout = 250;
 unsigned ActionInterface::MenuTimeoutMax = MENUTIMEOUTMAX;
 

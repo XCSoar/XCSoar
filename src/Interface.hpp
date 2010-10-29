@@ -150,7 +150,6 @@ public:
   // ideally these should be protected
   static void SignalShutdown(bool force);
   static bool LockSettingsInFlight;
-  static unsigned UserLevel;
 };
 
 /** 

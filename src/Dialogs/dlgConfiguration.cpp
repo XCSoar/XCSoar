@@ -259,10 +259,9 @@ UpdateDeviceSetupButton(unsigned DeviceIdx, const TCHAR *Name)
 static void
 OnUserLevel(CheckBoxControl &control)
 {
-  XCSoarInterface::UserLevel = (int)control.get_checked();
   changed = true;
-  Profile::Set(szProfileUserLevel,(int)XCSoarInterface::UserLevel);
-  wf->FilterAdvanced(XCSoarInterface::UserLevel>0);
+  Profile::Set(szProfileUserLevel, control.get_checked());
+  wf->FilterAdvanced(control.get_checked());
 }
 
 static void
@@ -1462,8 +1461,12 @@ PrepareConfigurationDialog()
 
   wf->SetKeyDownNotify(FormKeyDown);
 
+  bool expert_mode = false;
+  Profile::Get(szProfileUserLevel, expert_mode);
+
   CheckBox *cb = (CheckBox *)wf->FindByName(_T("Expert"));
-  cb->set_checked(XCSoarInterface::UserLevel > 0);
+  cb->set_checked(expert_mode);
+  wf->FilterAdvanced(expert_mode);
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
@@ -1478,8 +1481,6 @@ PrepareConfigurationDialog()
 
   configuration_tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
   assert(configuration_tabbed != NULL);
-
-  wf->FilterAdvanced(XCSoarInterface::UserLevel>0);
 
   if (!is_embedded() || !is_altair()) {
     wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
