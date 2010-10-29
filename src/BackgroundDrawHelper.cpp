@@ -51,7 +51,6 @@ BackgroundDrawHelper::BackgroundDrawHelper():
   m_rend(NULL),
   m_terrain(NULL),
   m_weather(NULL),
-  m_sun_elevation(Angle::degrees(fixed(40))),
   m_sun_azimuth(Angle::degrees(fixed(45)))
 {
 }
@@ -114,15 +113,13 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
                       settings_map.TerrainContrast,
                       settings_map.TerrainBrightness);
   m_rend->Draw(canvas, proj,
-               m_sun_azimuth,
-               m_sun_elevation);
+               m_sun_azimuth);
 }
 
 void
 BackgroundDrawHelper::sun_from_wind(const WindowProjection& projection,
                                     const SpeedVector& wind)
 {
-  m_sun_elevation = Angle::degrees(fixed(40.0));
   // draw sun from constant angle if very low wind speed
   if (wind.norm < fixed_half) {
     m_sun_azimuth = projection.GetScreenAngle() - Angle::degrees(fixed(45.0));

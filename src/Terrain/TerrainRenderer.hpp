@@ -88,7 +88,7 @@ protected:
   /**
    * Convert the height matrix into the image, with slope shading.
    */
-  void GenerateSlopeImage(const Angle sunazimuth, const Angle sunelevation);
+  void GenerateSlopeImage(const Angle sunazimuth);
 
   void ColorTable();
   void CopyTo(Canvas &canvas, unsigned width, unsigned height);
@@ -106,7 +106,7 @@ public:
   }
 
   virtual void Draw(Canvas &canvas, const WindowProjection &map_projection,
-                    const Angle sunazimuth, const Angle sunelevation);
+                    const Angle sunazimuth);
 };
 
 #endif

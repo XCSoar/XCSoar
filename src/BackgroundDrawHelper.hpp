@@ -82,7 +82,6 @@ private:
   TerrainRenderer* m_rend;
   const RasterTerrain *m_terrain;
   const RasterWeather *m_weather;
-  Angle m_sun_elevation;
   Angle m_sun_azimuth;
 };
 

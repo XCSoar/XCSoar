@@ -49,7 +49,7 @@ public:
                          const RasterWeather *_weather);
 
   virtual void Draw(Canvas &canvas, const WindowProjection &map_projection,
-                    const Angle sunazimuth, const Angle sunelevation);
+                    const Angle sunazimuth);
 
 private:
   const RasterWeather *weather;

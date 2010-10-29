@@ -120,7 +120,7 @@ void
 RasterRenderer::GenerateImage(bool is_terrain, bool do_shading,
                               unsigned height_scale,
                               int contrast, int brightness,
-                              const Angle sunazimuth, const Angle sunelevation)
+                              const Angle sunazimuth)
 {
   if (image == NULL ||
       height_matrix.get_width() > image->GetWidth() ||
@@ -136,7 +136,7 @@ RasterRenderer::GenerateImage(bool is_terrain, bool do_shading,
 
   if (do_shading)
     GenerateSlopeImage(is_terrain, height_scale, contrast, brightness,
-                       sunazimuth, sunelevation);
+                       sunazimuth);
   else
     GenerateUnshadedImage(is_terrain, height_scale);
 }
@@ -288,8 +288,7 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
 void
 RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
                                    int contrast, int brightness,
-                                   const Angle sunazimuth,
-                                   const Angle sunelevation)
+                                   const Angle sunazimuth)
 {
   const Angle fudgeelevation =
     Angle::degrees(fixed(10.0 + 80.0 * brightness / 255.0));

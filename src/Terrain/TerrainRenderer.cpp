@@ -234,14 +234,11 @@ TerrainRenderer::CopyTo(Canvas &canvas, unsigned width, unsigned height)
  * @param canvas The drawing canvas
  * @param map_projection The Projection
  * @param sunazimuth Azimuth of the sun (for terrain shading)
- * @param sunelevation Azimuth of the sun (for terrain shading)
- * @param loc Current location
- * @return (?)
  */
 void
 TerrainRenderer::Draw(Canvas &canvas,
                       const WindowProjection &map_projection,
-                      const Angle sunazimuth, const Angle sunelevation)
+                      const Angle sunazimuth)
 {
   const bool do_water = true;
   const unsigned height_scale = 4;
@@ -263,7 +260,7 @@ TerrainRenderer::Draw(Canvas &canvas,
 
   raster_renderer.GenerateImage(is_terrain, do_shading, height_scale,
                                 TerrainContrast, TerrainBrightness,
-                                sunazimuth, sunelevation);
+                                sunazimuth);
 
   CopyTo(canvas, map_projection.GetScreenWidth(),
          map_projection.GetScreenHeight());

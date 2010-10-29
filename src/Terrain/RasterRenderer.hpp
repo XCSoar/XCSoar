@@ -100,7 +100,7 @@ public:
    */
   void GenerateImage(bool is_terrain, bool do_shading,
                      unsigned height_scale, int contrast, int brightness,
-                     const Angle sunazimuth, const Angle sunelevation);
+                     const Angle sunazimuth);
 
   const RawBitmap &GetImage() const {
     return *image;
@@ -123,7 +123,7 @@ protected:
    */
   void GenerateSlopeImage(bool is_terrain, unsigned height_scale,
                           int contrast, int brightness,
-                          const Angle sunazimuth, const Angle sunelevation);
+                          const Angle sunazimuth);
 };
 
 #endif
