@@ -47,6 +47,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Interface.hpp"
 #include "Sizes.h"
+#include "UnitsGlue.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -78,12 +79,6 @@ CheckInfoTypes()
 void
 Profile::Use()
 {
-  unsigned Speed = 0;
-  unsigned Distance = 0;
-  unsigned TaskSpeed = 0;
-  unsigned Lift = 0;
-  unsigned Altitude = 0;
-  unsigned Temperature = 0;
   unsigned Temp = 0;
   int i;
 
@@ -115,86 +110,7 @@ Profile::Use()
   }
 #endif
 
-  if (Get(szProfileLatLonUnits, Temp))
-    Units::SetCoordinateFormat((CoordinateFormats_t)Temp);
-
-  Get(szProfileSpeedUnitsValue, Speed);
-  switch (Speed) {
-  case 0:
-    Units::SetUserSpeedUnit(unStatuteMilesPerHour);
-    Units::SetUserWindSpeedUnit(unStatuteMilesPerHour);
-    break;
-  case 1:
-    Units::SetUserSpeedUnit(unKnots);
-    Units::SetUserWindSpeedUnit(unKnots);
-    break;
-  case 2:
-  default:
-    Units::SetUserSpeedUnit(unKiloMeterPerHour);
-    Units::SetUserWindSpeedUnit(unKiloMeterPerHour);
-    break;
-  }
-
-  Get(szProfileTaskSpeedUnitsValue, TaskSpeed);
-  switch (TaskSpeed) {
-  case 0:
-    Units::SetUserTaskSpeedUnit(unStatuteMilesPerHour);
-    break;
-  case 1:
-    Units::SetUserTaskSpeedUnit(unKnots);
-    break;
-  case 2:
-  default:
-    Units::SetUserTaskSpeedUnit(unKiloMeterPerHour);
-    break;
-  }
-
-  Get(szProfileDistanceUnitsValue,Distance);
-  switch (Distance) {
-  case 0:
-    Units::SetUserDistanceUnit(unStatuteMiles);
-    break;
-  case 1:
-    Units::SetUserDistanceUnit(unNauticalMiles);
-    break;
-  case 2:
-  default:
-    Units::SetUserDistanceUnit(unKiloMeter);
-    break;
-  }
-
-  Get(szProfileAltitudeUnitsValue, Altitude);
-  switch (Altitude) {
-  case 0:
-    Units::SetUserAltitudeUnit(unFeet);
-    break;
-  case 1:
-  default:
-    Units::SetUserAltitudeUnit(unMeter);
-    break;
-  }
-
-  Get(szProfileTemperatureUnitsValue, Temperature);
-  switch (Temperature) {
-  default:
-  case 0:
-    Units::SetUserTemperatureUnit(unGradCelcius);
-    break;
-  case 1:
-    Units::SetUserTemperatureUnit(unGradFahrenheit);
-    break;
-  }
-
-  Get(szProfileLiftUnitsValue, Lift);
-  switch (Lift) {
-  case 0:
-    Units::SetUserVerticalSpeedUnit(unKnots);
-    break;
-  case 1:
-  default:
-    Units::SetUserVerticalSpeedUnit(unMeterPerSecond);
-    break;
-  }
+  Units::LoadFromProfile();
 
   for (i = 0; i < MAXINFOWINDOWS; i++) {
     if (Get(szProfileDisplayType[i], Temp))
