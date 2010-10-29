@@ -44,6 +44,10 @@ Copyright_License {
 
 #include <assert.h>
 
+#ifdef _UNICODE
+#include <windows.h>
+#endif
+
 const IGCWriter::LogPoint_GPSPosition &
 IGCWriter::LogPoint_GPSPosition::operator=(const NMEA_INFO &gps_info)
 {
@@ -149,11 +153,21 @@ IGCWriter::write_tstring(const char *a, const TCHAR *b)
 {
   size_t a_length = strlen(a);
   size_t b_length = _tcslen(b);
-  char buffer[a_length + b_length * 2 + 1];
+  char buffer[a_length + b_length * 4 + 1];
   memcpy(buffer, a, a_length);
 
 #ifdef _UNICODE
-  sprintf(buffer, "%s%S", a, b);
+  if (b_length > 0) {
+    int len = ::WideCharToMultiByte(CP_ACP, 0, b, b_length,
+                                    buffer + a_length, b_length * 4,
+                                    NULL, NULL);
+    if (len <= 0)
+      return false;
+
+    a_length += len;
+  }
+
+  buffer[a_length] = 0;
 #else
   memcpy(buffer + a_length, b, b_length + 1);
 #endif
@@ -276,9 +290,7 @@ IGCWriter::AddDeclaration(const GeoPoint &location, const TCHAR *ID)
 void
 IGCWriter::LoggerNote(const TCHAR *text)
 {
-  char fulltext[500];
-  sprintf(fulltext, "LPLT%S", text);
-  writeln(fulltext);
+  write_tstring("LPLT", text);
 }
 
 void
