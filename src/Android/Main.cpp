@@ -36,6 +36,7 @@ Copyright_License {
 }
 */
 
+#include "Simulator.hpp"
 #include "Asset.hpp"
 #include "Profile/Profile.hpp"
 #include "MainWindow.hpp"
@@ -49,6 +50,10 @@ Copyright_License {
 JNIEXPORT void JNICALL
 Java_org_xcsoar_DemoRenderer_nativeInit(JNIEnv *env, jobject obj)
 {
+  /* force simulatior mode until GPS support has been implemented */
+  global_simulator_flag = true;
+  sim_set_in_cmd_line_flag = true;
+
   InitAsset();
 
   Profile::SetFiles(_T(""));
