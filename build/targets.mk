@@ -360,5 +360,5 @@ endif
 
 ifeq ($(TARGET),ANDROID)
   TARGET_EXEEXT := .so
-  TARGET_LDFLAGS += -nostdlib -Wl,-shared,-Bsymbolic
+  TARGET_LDFLAGS += -nostdlib -Wl,-shared,-Bsymbolic -Wl,--no-undefined
 endif
