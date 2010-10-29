@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "ResourceLoader.hpp"
+#include "OS/PathName.hpp"
 
 #ifdef HAVE_AYGSHELL_DLL
 #include "OS/AYGShellDLL.hpp"
@@ -242,7 +243,8 @@ bool
 Bitmap::load_file(const TCHAR *path)
 {
 #ifdef ENABLE_SDL
-  SDL_Surface *original = ::SDL_LoadBMP(path);
+  NarrowPathName narrow_path(path);
+  SDL_Surface *original = ::SDL_LoadBMP(narrow_path);
   if (original != NULL) {
     surface = ::SDL_DisplayFormat(original);
     ::SDL_FreeSurface(original);
