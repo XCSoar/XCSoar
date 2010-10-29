@@ -58,6 +58,7 @@ typedef enum {
 #define BORDERLEFT   (1<<bkLeft)
 
 class Font;
+class Angle;
 
 struct InfoBoxLook {
   Pen border_pen, selector_pen;
@@ -173,11 +174,22 @@ public:
    * @param Value New value of the InfoBox value
    */
   void SetValue(const TCHAR *Value);
+
+  /**
+   * Sets the InfoBox value to the given angle.
+   */
+  void SetValue(Angle value, const TCHAR *suffix=_T(""));
+
   /**
    * Sets the InfoBox comment to the given Value
    * @param Value New value of the InfoBox comment
    */
   void SetComment(const TCHAR *Value);
+
+  /**
+   * Sets the InfoBox comment to the given angle.
+   */
+  void SetComment(Angle value, const TCHAR *suffix=_T(""));
 
   /**
    * Sets the color of the InfoBox value to the given value

@@ -60,11 +60,8 @@ InfoBoxContentBearing::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f")_T(DEG)_T("T"),
-            (double)XCSoarInterface::Calculated().task_stats.current_leg.
-            solution_remaining.Vector.Bearing.value_degrees());
-  infobox.SetValue(tmp);
+  infobox.SetValue(XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing,
+                   _T("T"));
 }
 
 void
@@ -575,9 +572,7 @@ InfoBoxContentHomeDistance::Update(InfoBoxWindow &infobox)
   // Set Unit
   infobox.SetValueUnit(Units::DistanceUnit);
 
-  _stprintf(tmp, _T("%d")_T(DEG),
-            (int)common_stats.vector_home.Bearing.value_degrees());
-  infobox.SetComment(tmp);
+  infobox.SetComment(common_stats.vector_home.Bearing);
 }
 
 void

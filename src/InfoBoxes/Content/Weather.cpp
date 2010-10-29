@@ -113,17 +113,11 @@ InfoBoxContentWindSpeed::Update(InfoBoxWindow &infobox)
   infobox.SetValueUnit(Units::WindSpeedUnit);
 
   // Set Comment
-  _stprintf(tmp, _T("%2.0f")_T(DEG)_T("T"),
-            (double)XCSoarInterface::Basic().wind.bearing.value_degrees());
-  infobox.SetComment(tmp);
+  infobox.SetComment(XCSoarInterface::Basic().wind.bearing, _T("T"));
 }
 
 void
 InfoBoxContentWindBearing::Update(InfoBoxWindow &infobox)
 {
-  // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f")_T(DEG)_T("T"),
-            (double)XCSoarInterface::Basic().wind.bearing.value_degrees());
-  infobox.SetValue(tmp);
+  infobox.SetValue(XCSoarInterface::Basic().wind.bearing, _T("T"));
 }

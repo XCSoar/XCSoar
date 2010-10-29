@@ -117,10 +117,8 @@ InfoBoxContentTeamBearing::Update(InfoBoxWindow &infobox)
   if (XCSoarInterface::SettingsComputer().TeamFlarmIdTarget.defined() ||
       XCSoarInterface::SettingsComputer().TeammateCodeValid == true){
     // Set Value
-    TCHAR tmp[32];
-    _stprintf(tmp, _T("%2.0f")_T(DEG)_T("T"), (double)
-              XCSoarInterface::Calculated().TeammateBearing.value_degrees());
-    infobox.SetValue(tmp);
+    infobox.SetValue(XCSoarInterface::Calculated().TeammateBearing,
+                     _T("T"));
   }
   else
     infobox.SetValueInvalid();

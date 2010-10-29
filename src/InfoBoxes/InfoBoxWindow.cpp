@@ -50,6 +50,8 @@ Copyright_License {
 #include "Sizes.h"
 
 #include <algorithm>
+#include <stdio.h>
+#include <assert.h>
 
 using std::max;
 
@@ -116,6 +118,16 @@ InfoBoxWindow::SetValue(const TCHAR *Value)
 }
 
 void
+InfoBoxWindow::SetValue(Angle value, const TCHAR *suffix)
+{
+  assert(suffix != NULL);
+
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%d")_T(DEG)_T("%s"), (int)value.value_degrees(), suffix);
+  SetValue(tmp);
+}
+
+void
 InfoBoxWindow::SetColor(int value)
 {
   if (!Appearance.InfoBoxColors)
@@ -162,6 +174,16 @@ InfoBoxWindow::SetComment(const TCHAR *Value)
     mComment[COMMENTSIZE] = '\0';
     invalidate(recComment);
   }
+}
+
+void
+InfoBoxWindow::SetComment(Angle value, const TCHAR *suffix)
+{
+  assert(suffix != NULL);
+
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("%d")_T(DEG)_T("%s"), (int)value.value_degrees(), suffix);
+  SetComment(tmp);
 }
 
 void

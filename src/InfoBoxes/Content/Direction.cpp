@@ -50,11 +50,7 @@ Copyright_License {
 void
 InfoBoxContentTrack::Update(InfoBoxWindow &infobox)
 {
-  // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f")_T(DEG)_T("T"),
-            (double)XCSoarInterface::Basic().TrackBearing.value_degrees());
-  infobox.SetValue(tmp);
+  infobox.SetValue(XCSoarInterface::Basic().TrackBearing, _T("T"));
 }
 
 bool
