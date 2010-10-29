@@ -94,6 +94,7 @@ Bitmap::load(unsigned id)
 
   /* duplicate the BMP file and re-insert the BITMAPFILEHEADER which
      is not included in this .EXE file */
+  size_t size = data.second;
   BITMAPFILEHEADER *header = (BITMAPFILEHEADER *)malloc(sizeof(*header) + size);
   if (header == NULL)
     /* out of memory */
