@@ -752,8 +752,6 @@ InputEvents::eventWind(const TCHAR *misc)
 {
 }
 
-int jmw_demo=0;
-
 // SendNMEA
 //  Sends a user-defined NMEA string to an external instrument.
 //   The string sent is prefixed with the start character '$'
@@ -813,10 +811,8 @@ InputEvents::eventAdjustVarioFilter(const TCHAR *misc)
     VarioWriteNMEA(_T("PDVSC,S,VarioTimeConstant,1"));
   else if (_tcscmp(misc, _T("statistics")) == 0) {
     VarioWriteNMEA(_T("PDVSC,S,Diagnostics,1"));
-    jmw_demo = 0;
   } else if (_tcscmp(misc, _T("diagnostics")) == 0) {
     VarioWriteNMEA(_T("PDVSC,S,Diagnostics,2"));
-    jmw_demo = 0;
   } else if (_tcscmp(misc, _T("psraw")) == 0)
     VarioWriteNMEA(_T("PDVSC,S,Diagnostics,3"));
   else if (_tcscmp(misc, _T("switch")) == 0)
@@ -824,11 +820,9 @@ InputEvents::eventAdjustVarioFilter(const TCHAR *misc)
   else if (_tcscmp(misc, _T("democlimb")) == 0) {
     VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"));
     VarioWriteNMEA(_T("PDVSC,S,DemoMode,2"));
-    jmw_demo = 2;
   } else if (_tcscmp(misc, _T("demostf"))==0) {
     VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"));
     VarioWriteNMEA(_T("PDVSC,S,DemoMode,1"));
-    jmw_demo = 1;
   } else if (_tcscmp(misc, _T("accel")) == 0) {
     switch (naccel) {
     case 0:
