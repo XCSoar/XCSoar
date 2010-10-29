@@ -190,6 +190,15 @@ Canvas::text(int x, int y, const TCHAR *text)
 }
 
 void
+Canvas::text(int x, int y, const TCHAR *_text, size_t length)
+{
+  TCHAR copy[length + 1];
+  _tcsncpy(copy, _text, length);
+  copy[length] = _T('\0');
+  text(x, y, copy);
+}
+
+void
 Canvas::text_opaque(int x, int y, const RECT &rc, const TCHAR *_text)
 {
   fill_rectangle(rc, background_color);
