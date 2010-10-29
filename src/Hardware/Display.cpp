@@ -40,11 +40,8 @@ Copyright_License {
 
 #include "Asset.hpp"
 
-#ifndef HAVE_POSIX
-#include "Screen/RootCanvas.hpp"
-#endif
-
 #ifdef WIN32
+#include "Screen/RootDC.hpp"
 #include "Config/Registry.hpp"
 #include "OS/GlobalEvent.hpp"
 
@@ -53,29 +50,28 @@ Copyright_License {
 
 #ifdef HAVE_HARDWARE_BLANK
 
-#include "Screen/RootCanvas.hpp"
 #include "Hardware/VideoPower.h"
 
 bool
 Display::BlankSupported()
 {
-  RootCanvas canvas;
+  RootDC dc;
   int i = SETPOWERMANAGEMENT;
-  return ExtEscape(canvas, QUERYESCSUPPORT,
+  return ExtEscape(dc, QUERYESCSUPPORT,
                    sizeof(i), (LPCSTR)&i, 0, NULL) > 0;
 }
 
 bool
 Display::Blank(bool blank)
 {
-  RootCanvas canvas;
+  RootDC dc;
 
   VIDEO_POWER_MANAGEMENT vpm;
   vpm.Length = sizeof(vpm);
   vpm.DPMSVersion = 0x0001;
   vpm.PowerState = blank ? VideoPowerOff : VideoPowerOn;
 
-  return ExtEscape(canvas, SETPOWERMANAGEMENT,
+  return ExtEscape(dc, SETPOWERMANAGEMENT,
                    sizeof(vpm), (LPCSTR)&vpm, 0, NULL) > 0;
 }
 
@@ -226,9 +222,9 @@ Display::RotateRestore()
 int
 Display::GetXDPI()
 {
-#ifndef HAVE_POSIX
-  RootCanvas canvas;
-  return GetDeviceCaps(canvas, LOGPIXELSX);
+#ifdef WIN32
+  RootDC dc;
+  return GetDeviceCaps(dc, LOGPIXELSX);
 #else
   return 96;
 #endif
@@ -237,9 +233,9 @@ Display::GetXDPI()
 int
 Display::GetYDPI()
 {
-#ifndef HAVE_POSIX
-  RootCanvas canvas;
-  return GetDeviceCaps(canvas, LOGPIXELSY);
+#ifdef WIN32
+  RootDC dc;
+  return GetDeviceCaps(dc, LOGPIXELSY);
 #else
   return 96;
 #endif

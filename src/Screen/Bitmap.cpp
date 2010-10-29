@@ -44,7 +44,7 @@ Copyright_License {
 #endif
 
 #ifdef HAVE_IMGDECMP_DLL
-#include "Screen/RootCanvas.hpp"
+#include "Screen/RootDC.hpp"
 #include "OS/ImgDeCmpDLL.hpp"
 #endif
 
@@ -208,7 +208,7 @@ load_imgdecmp_file(const TCHAR *path)
 
   BYTE buffer[1024];
   HBITMAP bitmap;
-  RootCanvas canvas;
+  RootDC dc;
 
   DecompressImageInfo dii;
   dii.dwSize = sizeof(dii);
@@ -217,9 +217,9 @@ load_imgdecmp_file(const TCHAR *path)
   dii.dwBufferCurrent = 0;
   dii.phBM = &bitmap;
   dii.ppImageRender = NULL;
-  dii.iBitDepth = GetDeviceCaps(canvas, BITSPIXEL);
+  dii.iBitDepth = GetDeviceCaps(dc, BITSPIXEL);
   dii.lParam = (LPARAM)file;
-  dii.hdc = canvas;
+  dii.hdc = dc;
   dii.iScale = 100;
   dii.iMaxWidth = 10000;
   dii.iMaxHeight = 10000;
