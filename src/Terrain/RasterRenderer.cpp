@@ -294,8 +294,8 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
   const Angle fudgeelevation =
     Angle::degrees(fixed(10.0 + 80.0 * brightness / 255.0));
 
-  const int sx = (int)(255 * fudgeelevation.fastcosine() * sunazimuth.fastsine());
-  const int sy = (int)(255 * fudgeelevation.fastcosine() * sunazimuth.fastcosine());
+  const int sx = (int)(255 * fudgeelevation.fastcosine() * -sunazimuth.fastsine());
+  const int sy = (int)(255 * fudgeelevation.fastcosine() * -sunazimuth.fastcosine());
   const int sz = (int)(255 * fudgeelevation.fastsine());
 
   GenerateSlopeImage(is_terrain, height_scale, contrast,
