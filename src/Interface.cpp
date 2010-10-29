@@ -144,19 +144,6 @@ XCSoarInterface::InterfaceTimeoutReset()
   interface_timeout = 0;
 }
 
-bool
-XCSoarInterface::InterfaceTimeoutCheck()
-{
-  ScopeLock protect(mutexInterfaceTimeout);
-  if (interface_timeout > 60 * 10) {
-    interface_timeout = 0;
-    return true;
-  }
-
-  interface_timeout++;
-  return false;
-}
-
 void
 ActionInterface::SignalShutdown(bool force)
 {

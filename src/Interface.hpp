@@ -162,7 +162,6 @@ public:
   static bool Debounce();
 
   static void InterfaceTimeoutReset();
-  static bool InterfaceTimeoutCheck();
   static bool CheckShutdown();
 
   static void AfterStartup();
