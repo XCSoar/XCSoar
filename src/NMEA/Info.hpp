@@ -348,6 +348,16 @@ struct NMEA_INFO {
    */
   bool ExternalWindAvailable;
 
+  /**
+   * The wind read from the device.  If ExternalWindAvailable is
+   * false, then this value is undefined.
+   */
+  SpeedVector ExternalWind;
+
+  /**
+   * The effective wind vector; depending on the settings, this is
+   * either ExternalWind, calculated wind or manual wind.
+   */
   SpeedVector wind;
 
   /**
@@ -456,7 +466,7 @@ struct NMEA_INFO {
     // XXX MacCready, Ballast, Bugs
 
     if (!ExternalWindAvailable && add.ExternalWindAvailable) {
-      wind = add.wind;
+      ExternalWind = add.ExternalWind;
       ExternalWindAvailable = add.ExternalWindAvailable;
     }
 

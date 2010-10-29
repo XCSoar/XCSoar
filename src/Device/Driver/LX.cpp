@@ -107,7 +107,8 @@ LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   line.skip(6);
 
-  GPS_INFO->ExternalWindAvailable = ReadSpeedVector(line, GPS_INFO->wind);
+  GPS_INFO->ExternalWindAvailable =
+    ReadSpeedVector(line, GPS_INFO->ExternalWind);
 
   TriggerVarioUpdate();
 

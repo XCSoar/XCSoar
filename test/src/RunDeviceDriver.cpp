@@ -196,7 +196,8 @@ Dump(const NMEA_INFO &basic)
 
   if (basic.ExternalWindAvailable)
     printf("Wind=%d/%d\n",
-           (int)basic.wind.bearing.value_degrees(), (int)basic.wind.norm);
+           (int)basic.ExternalWind.bearing.value_degrees(),
+           (int)basic.ExternalWind.norm);
 
   if (basic.TemperatureAvailable)
     printf("OutsideAirTemperature=%d\n", (int)basic.OutsideAirTemperature);

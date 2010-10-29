@@ -548,12 +548,12 @@ DeviceBlackboard::Vario()
 void
 DeviceBlackboard::Wind()
 {
-  if (!Basic().ExternalWindAvailable) {
-    if (SettingsComputer().AutoWindMode == 0)
-      SetBasic().wind = SettingsComputer().ManualWind;
-    else
-      SetBasic().wind = Calculated().estimated_wind;
-  }
+  if (Basic().ExternalWindAvailable)
+    SetBasic().wind = Basic().ExternalWind;
+  else if (SettingsComputer().AutoWindMode == 0)
+    SetBasic().wind = SettingsComputer().ManualWind;
+  else
+    SetBasic().wind = Calculated().estimated_wind;
 }
 
 /**
