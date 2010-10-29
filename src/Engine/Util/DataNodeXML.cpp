@@ -77,8 +77,7 @@ DataNodeXML::createRoot(const tstring &node_name)
 const tstring
 DataNodeXML::serialise()
 {
-  int size;
-  LPTSTR text = m_xml_node->createXMLString(1, &size);
+  LPTSTR text = m_xml_node->createXMLString(1, NULL);
   return tstring(text);
 }
 
