@@ -289,7 +289,6 @@ namespace Units
 
   gcc_const
   const TCHAR *GetAltitudeName();
-  gcc_const
 
   gcc_const
   const TCHAR *GetTemperatureName();
