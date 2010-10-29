@@ -176,11 +176,13 @@ int main(int argc, char **argv)
 
     device_blackboard.tick(*(const GlidePolar *)NULL);
 
-    fixed speed, bearing;
+    fixed speed;
+    Angle bearing;
     int quality = WindZigZagUpdate(device_blackboard.Basic(),
                                    device_blackboard.Calculated(),
                                    speed, bearing);
     if (quality > 0)
-      printf("quality=%d: %d degrees; %d m/s\n", quality, (int)bearing, (int)speed);
+      printf("quality=%d: %d degrees; %d m/s\n", quality,
+             (int)bearing.value_degrees(), (int)speed);
   }
 }

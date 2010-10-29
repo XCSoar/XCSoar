@@ -66,7 +66,7 @@ public:
   SunEphemeris sun;
   virtual void ProcessIdle();
 
-  void SetWindEstimate(fixed wind_speed, fixed wind_bearing,
+  void SetWindEstimate(fixed wind_speed, Angle wind_bearing,
 		       const int quality=3); // JMW check
   WindAnalyser   windanalyser; // JMW TODO, private and lock-protected
 

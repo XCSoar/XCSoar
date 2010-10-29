@@ -517,7 +517,7 @@ WindZigZagCheckAirData(const NMEA_INFO &basic)
 
 int
 WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
-                 fixed &zzwindspeed, fixed &zzwindbearing)
+                 fixed &zzwindspeed, Angle &zzwindbearing)
 {
   static fixed tLastEstimate(-1);
 
@@ -564,7 +564,7 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
     tLastEstimate = basic.Time;
 
     zzwindspeed = V_wind_estimate;
-    zzwindbearing = theta_wind_estimate.value_degrees();
+    zzwindbearing = theta_wind_estimate;
 
     // calculate error quality
     int quality;

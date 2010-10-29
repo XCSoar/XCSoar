@@ -163,7 +163,7 @@ GlideComputerAirData::Wind()
       && !Basic().gps.Replay
       && (Basic().TrueAirspeed > m_task.get_glide_polar().get_Vtakeoff())) {
     fixed zz_wind_speed;
-    fixed zz_wind_bearing;
+    Angle zz_wind_bearing;
     int quality;
     quality = WindZigZagUpdate(Basic(), Calculated(),
                                zz_wind_speed, zz_wind_bearing);
@@ -204,11 +204,10 @@ GlideComputerAirData::DoWindCirclingAltitude()
 }
 
 void
-GlideComputerAirData::SetWindEstimate(fixed wind_speed, fixed wind_bearing,
+GlideComputerAirData::SetWindEstimate(fixed wind_speed, Angle wind_bearing,
                                       const int quality)
 {
-  Vector v_wind = Vector(SpeedVector(Angle::degrees(wind_bearing),
-                                     wind_speed));
+  Vector v_wind = Vector(SpeedVector(wind_bearing, wind_speed));
 
   windanalyser.slot_newEstimate(Basic(), SetCalculated(), v_wind, quality);
 }
