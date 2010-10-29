@@ -10,23 +10,8 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 
-import android.util.Log;
-
 class DemoRenderer extends GLSurfaceView_SDL.Renderer {
-    private static final String TAG = "XCSoar";
-    public static boolean loaded = false;
-
     static {
-        try {
-            System.loadLibrary("sdl-1.2");
-            System.loadLibrary("sdl_gfx");
-            System.loadLibrary("sdl_ttf");
-            System.loadLibrary("application");
-            loaded = true;
-        } catch (UnsatisfiedLinkError e) {
-            Log.e(TAG, e.getMessage());
-        }
-
         Settings.nativeSetMouseUsed();
     }
 

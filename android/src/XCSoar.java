@@ -7,10 +7,23 @@ import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.os.Build;
 
 public class XCSoar extends Activity {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!Native.loaded) {
+            TextView tv = new TextView(this);
+            tv.setText("Failed to load the native XCSoar libary.\n" +
+                       "Report this problem to us, and include the following information:\n" +
+                       "ABI=" + Build.CPU_ABI + "\n" +
+                       "PRODUCT=" + Build.PRODUCT + "\n" +
+                       "FINGERPRINT=" + Build.FINGERPRINT + "\n" +
+                       "error=" + Native.error);
+            setContentView(tv);
+            return;
+        }
 
         // fullscreen mode
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -24,6 +37,9 @@ public class XCSoar extends Activity {
 
     public void initSDL()
     {
+        if (!Native.loaded)
+            return;
+
         mGLView = new DemoGLSurfaceView(this);
         setContentView(mGLView);
         // Receive keyboard events
