@@ -56,36 +56,33 @@ DataNodeXML::~DataNodeXML()
   delete m_xml_node;
 }
 
-
 DataNode* 
 DataNodeXML::load(const TCHAR* path)
 {
   NarrowPathName buf(path);
   XMLNode child = XMLNode::openFileHelper(buf);
-  if (child.isEmpty()) {
+  if (child.isEmpty())
     return NULL;
-  }
+
   return new DataNodeXML(child);
 }
 
-
-DataNodeXML* 
+DataNodeXML*
 DataNodeXML::createRoot(const tstring &node_name)
 {
   XMLNode new_root = XMLNode::createRoot(stringDup(node_name));
   return new DataNodeXML(new_root);
 }
 
-const tstring 
+const tstring
 DataNodeXML::serialise()
 {
   int size;
-  LPTSTR text = m_xml_node->createXMLString(1,&size);
+  LPTSTR text = m_xml_node->createXMLString(1, &size);
   return tstring(text);
 }
 
-
-const tstring 
+const tstring
 DataNodeXML::get_name() const
 {
   return tstring(m_xml_node->getName());
@@ -97,35 +94,33 @@ DataNodeXML::add_child(const tstring &name)
   return new DataNodeXML(m_xml_node->AddChild(stringDup(name), false));
 }
 
-
-DataNode* 
+DataNode*
 DataNodeXML::get_child_by_name(const tstring name, const unsigned i) const
 {
   XMLNode child = m_xml_node->getChildNode(name.c_str(), i);
-  if (child.isEmpty()) {
+  if (child.isEmpty())
     return NULL;
-  }
+
   return new DataNodeXML(child);
 }
-
 
 DataNode*
 DataNodeXML::get_child(unsigned i) const
 {
   XMLNode child = m_xml_node->getChildNode(i);
-  if (child.isEmpty()) {
+  if (child.isEmpty())
     return NULL;
-  }
+
   return new DataNodeXML(child);
 }
 
-void 
+void
 DataNodeXML::set_attribute(const tstring &name, const tstring value)
 {
   m_xml_node->AddAttribute(stringDup(name), stringDup(value));
 }
 
-bool 
+bool
 DataNodeXML::get_attribute(const tstring &name, tstring &value) const
 {
   const TCHAR *v = m_xml_node->getAttribute(name.c_str());
@@ -137,7 +132,7 @@ DataNodeXML::get_attribute(const tstring &name, tstring &value) const
   return true;
 }
 
-bool 
+bool
 DataNodeXML::save(const TCHAR* path)
 {
   /// @todo make xml writing portable (unicode etc)
@@ -158,5 +153,3 @@ DataNodeXML::save(const TCHAR* path)
 
   return true;
 }
-
-

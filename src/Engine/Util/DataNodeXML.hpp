@@ -57,36 +57,37 @@ protected:
    * @return Initialised object
    */
   explicit DataNodeXML(const XMLNode& the_node);
+
 public:
   ~DataNodeXML();
 
-/** 
- * Create a DataNode tree from an XML file
- * 
- * @param path Path to file to load
- * 
- * @return Root node (or NULL on failure)
- */
+  /**
+   * Create a DataNode tree from an XML file
+   *
+   * @param path Path to file to load
+   *
+   * @return Root node (or NULL on failure)
+   */
   static DataNode* load(const TCHAR* path);
 
-/** 
- * Create root node
- * 
- * @param node_name Name of root node
- * 
- * @return Pointer to root node
- */
+  /**
+   * Create root node
+   *
+   * @param node_name Name of root node
+   *
+   * @return Pointer to root node
+   */
   static DataNodeXML* createRoot(const tstring &node_name);
 
   const tstring serialise();
 
-/** 
- * Save tree canonically to file
- * 
- * @param path Path of file to save to
- * 
- * @return True on success
- */  
+  /**
+   * Save tree canonically to file
+   *
+   * @param path Path of file to save to
+   *
+   * @return True on success
+   */
   bool save(const TCHAR* path);
 
   const tstring get_name() const;
@@ -97,6 +98,7 @@ public:
 
   void set_attribute(const tstring &name, const tstring value);
   bool get_attribute(const tstring &name, tstring &value) const;
+
 private:
   XMLNode *m_xml_node;
 };
