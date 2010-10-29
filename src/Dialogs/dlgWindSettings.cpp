@@ -78,10 +78,14 @@ dlgWindSettingsShowModal(void)
   if (wf == NULL)
     return;
 
+  const bool external_wind = XCSoarInterface::Basic().ExternalWindAvailable &&
+    XCSoarInterface::SettingsComputer().ExternalWind;
+
   WndProperty* wp;
 
   wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
   if (wp) {
+    wp->set_enabled(!external_wind);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), unKiloMeterPerHour)));
     df.SetUnits(Units::GetSpeedName());
@@ -91,13 +95,21 @@ dlgWindSettingsShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
   if (wp) {
+    wp->set_enabled(!external_wind);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.Set(XCSoarInterface::Basic().wind.bearing.value_degrees());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAutoWind"));
-  if (wp) {
+  assert(wp != NULL);
+  if (external_wind) {
+    wp->set_enabled(false);
+    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
+    df.addEnumText(_("External"));
+    df.Set(0);
+    wp->RefreshDisplay();
+  } else {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Manual"));
@@ -120,18 +132,21 @@ dlgWindSettingsShowModal(void)
     return;
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
-  if (wp)
-    XCSoarInterface::SetSettingsComputer().ManualWind.norm =
+  if (!external_wind) {
+    wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
+    if (wp)
+      XCSoarInterface::SetSettingsComputer().ManualWind.norm =
         Units::ToSysSpeed(wp->GetDataField()->GetAsFixed());
 
-  wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
-  if (wp)
-    XCSoarInterface::SetSettingsComputer().ManualWind.bearing =
-            Angle::degrees(wp->GetDataField()->GetAsFixed());
+    wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
+    if (wp)
+      XCSoarInterface::SetSettingsComputer().ManualWind.bearing =
+        Angle::degrees(wp->GetDataField()->GetAsFixed());
 
-  SaveFormProperty(*wf, _T("prpAutoWind"), szProfileAutoWind,
-                   XCSoarInterface::SetSettingsComputer().AutoWindMode);
+    SaveFormProperty(*wf, _T("prpAutoWind"), szProfileAutoWind,
+                     XCSoarInterface::SetSettingsComputer().AutoWindMode);
+  }
+
   SaveFormProperty(*wf, _T("prpTrailDrift"),
                    XCSoarInterface::SetSettingsMap().EnableTrailDrift);
 
