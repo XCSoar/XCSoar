@@ -651,12 +651,13 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
 
     // Create the ButtonControl
 
-    style.tab_stop();
+    ButtonWindowStyle bstyle(style);
+    bstyle.tab_stop();
+    bstyle.multiline();
 
     window = new WndButton(parent, Caption,
                            pos.x, pos.y, size.cx, size.cy,
-                           style,
-                           ClickCallback);
+                           bstyle, ClickCallback);
 
   } else if (_tcscmp(node.getName(), _T("CheckBox")) == 0) {
     // Determine ClickCallback function
