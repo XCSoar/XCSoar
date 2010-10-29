@@ -40,6 +40,7 @@ Copyright_License {
 #include "Topology/TopologyFile.hpp"
 #include "StringUtil.hpp"
 #include "IO/LineReader.hpp"
+#include "OS/PathName.hpp"
 #include "Compatibility/path.h"
 
 void
@@ -106,13 +107,7 @@ TopologyStore::Load(NLineReader &reader, const TCHAR* Directory)
   int numtopo = 0;
   char ShapeFilename[MAX_PATH];
 
-#ifdef _UNICODE
-  if (WideCharToMultiByte(CP_ACP, 0, Directory, -1, ShapeFilename, MAX_PATH,
-                          NULL, NULL) <= 0)
-    return;
-#else
-  strcpy(ShapeFilename, Directory);
-#endif
+  strcpy(ShapeFilename, NarrowPathName(Directory));
   strcat(ShapeFilename, DIR_SEPARATOR_S);
 
   char *ShapeFilenameEnd = ShapeFilename + strlen(ShapeFilename);
