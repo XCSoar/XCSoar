@@ -43,42 +43,36 @@ Copyright_License {
 #include <math.h>
 #include <string.h>
 
-void ConvertBearingToTeamCode(const Angle bearing, TCHAR *code);
-void NumberToTeamCode(double value, TCHAR *code, int minCiffers);
-Angle GetBearing(const TCHAR *code);
-fixed GetRange(const TCHAR *code);
-int GetValueFromTeamCode(const TCHAR *code, int maxCount);
-
 #define TEAMCODE_COMBINATIONS 1296
 
 /**
- * Calculates the teamcode of the given bearing and distance
- * @param code The teamcode (pointer)
- * @param bearing Bearing to the reference waypoint
- * @param range Distance to the reference waypoint
+ * Decodes the TeamCode
+ * @param code The teamcode (or part of it)
+ * @param maxCount Maximum chars to decode
+ * @return The decoded value
  */
-void
-GetTeamCode(TCHAR *code, Angle bearing, fixed range)
+static int
+GetValueFromTeamCode(const TCHAR *code, int maxCount)
 {
-  // Clear teamcode
-	memset(code, 0, sizeof(TCHAR) * 10);
-	// Calculate bearing part of the teamcode
-	ConvertBearingToTeamCode(bearing, code);
-	// Calculate distance part of the teamcode
-  NumberToTeamCode(range / 100, &code[2], 0);
-}
+  int val = 0;
+  int charPos = 0;
 
-/**
- * Converts a given bearing to the bearing part of the teamcode
- * @param bearing Bearing to the reference waypoint
- * @param code The teamcode (pointer)
- */
-void
-ConvertBearingToTeamCode(const Angle bearing, TCHAR *code)
-{
-  const double bamValue = bearing.as_bearing().value_degrees() / 360
-                          * TEAMCODE_COMBINATIONS;
-  NumberToTeamCode(bamValue, code, 2);
+  while (code[charPos] != 0 && charPos < maxCount) {
+    int cifferVal = 0;
+
+    if (code[charPos] >= '0' && code[charPos] <= '9') {
+      cifferVal = (int)(code[charPos] - '0');
+    } else if (code[charPos] >= 'A' && code[charPos] <= 'Z') {
+      cifferVal = (int)(code[charPos] + -'A') + 10;
+    }
+
+    val = val * 36;
+    val += (int)cifferVal;
+
+    charPos++;
+  }
+
+  return val;
 }
 
 /**
@@ -87,7 +81,7 @@ ConvertBearingToTeamCode(const Angle bearing, TCHAR *code)
  * @param code The teamcode (pointer)
  * @param minCiffers Number of chars for the teamcode
  */
-void
+static void
 NumberToTeamCode(double value, TCHAR *code, int minCiffers)
 {
 	int maxCif = 0;
@@ -124,11 +118,24 @@ NumberToTeamCode(double value, TCHAR *code, int minCiffers)
 }
 
 /**
+ * Converts a given bearing to the bearing part of the teamcode
+ * @param bearing Bearing to the reference waypoint
+ * @param code The teamcode (pointer)
+ */
+static void
+ConvertBearingToTeamCode(const Angle bearing, TCHAR *code)
+{
+  const double bamValue = bearing.as_bearing().value_degrees() / 360
+                          * TEAMCODE_COMBINATIONS;
+  NumberToTeamCode(bamValue, code, 2);
+}
+
+/**
  * Calculates the bearing from the given teamcode
  * @param code The teamcode
  * @return Bearing to the reference waypoint
  */
-Angle
+static Angle
 GetBearing(const TCHAR *code)
 {
   // Get the first two values from teamcode (1-2)
@@ -143,42 +150,12 @@ GetBearing(const TCHAR *code)
  * @param code The teamcode
  * @return Distance to the reference waypoint
  */
-fixed
+static fixed
 GetRange(const TCHAR *code)
 {
   // Get last three values from teamcode (3-5)
 	int val = GetValueFromTeamCode(&code[2], 3);
 	return fixed(val * 100);
-}
-
-/**
- * Decodes the TeamCode
- * @param code The teamcode (or part of it)
- * @param maxCount Maximum chars to decode
- * @return The decoded value
- */
-int
-GetValueFromTeamCode(const TCHAR *code, int maxCount)
-{
-	int val = 0;
-	int charPos = 0;
-
-	while (code[charPos] != 0 && charPos < maxCount) {
-		int cifferVal = 0;
-
-		if (code[charPos] >= '0' && code[charPos] <= '9') {
-      cifferVal = (int)(code[charPos] - '0');
-    } else if (code[charPos] >= 'A' && code[charPos] <= 'Z') {
-      cifferVal = (int)(code[charPos] + -'A') + 10;
-    }
-
-		val = val * 36;
-		val += (int)cifferVal;
-
-		charPos++;
-	}
-
-	return val;
 }
 
 /**
@@ -200,6 +177,23 @@ GetTeamCodePosition(GeoPoint wpPos, const TCHAR *TeamCode)
 	GeoPoint position;
   FindLatitudeLongitude(wpPos, bearing, distance, &position);
   return position;
+}
+
+/**
+ * Calculates the teamcode of the given bearing and distance
+ * @param code The teamcode (pointer)
+ * @param bearing Bearing to the reference waypoint
+ * @param range Distance to the reference waypoint
+ */
+void
+GetTeamCode(TCHAR *code, Angle bearing, fixed range)
+{
+  // Clear teamcode
+  memset(code, 0, sizeof(TCHAR) * 10);
+  // Calculate bearing part of the teamcode
+  ConvertBearingToTeamCode(bearing, code);
+  // Calculate distance part of the teamcode
+  NumberToTeamCode(range / 100, &code[2], 0);
 }
 
 void
