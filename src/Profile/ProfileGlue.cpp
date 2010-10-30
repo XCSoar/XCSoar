@@ -39,6 +39,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Profile/UnitsConfig.hpp"
 #include "Profile/InfoBoxConfig.hpp"
+#include "Profile/AirspaceConfig.hpp"
 #include "LogFile.hpp"
 #include "Appearance.hpp"
 #include "GlideRatio.hpp"
@@ -54,7 +55,6 @@ void
 Profile::Use()
 {
   unsigned Temp = 0;
-  int i;
 
   LogStartUp(_T("Read registry settings"));
 
@@ -77,12 +77,6 @@ Profile::Use()
 		  settings_task.start_max_height_margin);
   Get(szProfileStartMaxSpeedMargin,
 		  settings_task.start_max_speed_margin);
-
-#ifdef OLD_TASK // airspace priority
-  for (i = 0; i < AIRSPACECLASSCOUNT; i++) {
-    Get(szProfileAirspacePriority[i], AirspacePriority[i]);
-  }
-#endif
 
   LoadUnits();
   LoadInfoBoxes();
@@ -156,21 +150,7 @@ Profile::Use()
   Get(szProfilePolarID,
       settings_computer.POLARID);
 
-  for (i = 0; i < AIRSPACECLASSCOUNT; i++) {
-    if (Get(szProfileAirspaceMode[i], Temp)) {
-      settings_computer.DisplayAirspaces[i] = (Temp & 0x1) != 0;
-      settings_computer.airspace_warnings.class_warnings[i] = (Temp & 0x2) != 0;
-    }
-
-    Get(szProfileBrush[i],
-        settings_map.iAirspaceBrush[i]);
-    Get(szProfileColour[i],
-        settings_map.iAirspaceColour[i]);
-    if (settings_map.iAirspaceColour[i] >= NUMAIRSPACECOLORS)
-      settings_map.iAirspaceColour[i] = 0;
-    if (settings_map.iAirspaceBrush[i] >= NUMAIRSPACEBRUSHES)
-      settings_map.iAirspaceBrush[i] = 0;
-  }
+  LoadAirspaceConfig();
 
   Get(szProfileAirspaceBlackOutline,
       settings_map.bAirspaceBlackOutline);
