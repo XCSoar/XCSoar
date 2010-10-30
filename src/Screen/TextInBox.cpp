@@ -140,7 +140,6 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
           TextInBoxMode_t Mode, const RECT &MapRect, LabelBlock *label_block)
 {
   RECT brect;
-  POINT org;
 
   bool drawn = false;
 
@@ -149,9 +148,6 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       || (y < MapRect.top - WPCIRCLESIZE)
       || (y > MapRect.bottom + WPCIRCLESIZE))
     return drawn; // FIX Not drawn really
-
-  org.x = x;
-  org.y = y;
 
   canvas.white_brush();
 
