@@ -58,9 +58,7 @@ TextInBoxMoveInView(POINT &offset, RECT &brect, const RECT &MapRect)
   if (MapRect.top > brect.top) {
     int d = MapRect.top - brect.top;
     brect.top += d;
-    brect.bottom += d;
     offset.y += d;
-    brect.bottom -= d;
     brect.left -= d;
     offset.x -= d;
     res = true;
