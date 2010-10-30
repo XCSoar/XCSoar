@@ -136,8 +136,8 @@ ConvertBearingToTeamCode(const Angle bearing, TCHAR *code)
  * @param code The teamcode
  * @return Bearing to the reference waypoint
  */
-static Angle
-GetBearing(const TCHAR *code)
+Angle
+TeamCode::GetBearing() const
 {
   // Get the first two values from teamcode (1-2)
 	int val = GetValueFromTeamCode(code, 2);
@@ -151,8 +151,8 @@ GetBearing(const TCHAR *code)
  * @param code The teamcode
  * @return Distance to the reference waypoint
  */
-static fixed
-GetRange(const TCHAR *code)
+fixed
+TeamCode::GetRange() const
 {
   // Get last three values from teamcode (3-5)
 	int val = GetValueFromTeamCode(&code[2], 3);
@@ -198,8 +198,8 @@ TeamCode::GetCode() const
 GeoPoint
 TeamCode::GetLocation(const GeoPoint ref) const
 {
-  Angle bearing = GetBearing(code);
-  fixed distance = GetRange(code);
+  Angle bearing = GetBearing();
+  fixed distance = GetRange();
 
   return FindLatitudeLongitude(ref, bearing, distance);
 }

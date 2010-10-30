@@ -58,6 +58,9 @@ public:
   gcc_pure
   GeoPoint GetLocation(const GeoPoint ref) const;
 
+  Angle GetBearing() const;
+  fixed GetRange() const;
+
   void Update(Angle bearing, fixed range);
   void Update(const TCHAR* _code);
 
