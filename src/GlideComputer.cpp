@@ -214,7 +214,8 @@ GlideComputer::CalculateTeammateBearingRange()
   if (SettingsComputer().TeammateCodeValid) {
     // Calculate bearing and distance to teammate
     SetCalculated().TeammateLocation =
-        GetTeamCodePosition(wp->Location, SettingsComputer().TeammateCode);
+        GetTeamCodePosition(wp->Location,
+                            SettingsComputer().TeammateCode.GetCode());
 
     // Save bearing and distance to teammate in Calculated
     SetCalculated().TeammateBearing =
@@ -307,8 +308,7 @@ GlideComputer::FLARM_ScanTraffic()
   fixed distance = wp->Location.distance(traffic->Location);
 
   // Calculate TeamCode and save it in Calculated
-  GetTeamCode(XCSoarInterface::SetSettingsComputer().TeammateCode,
-              bearing, distance);
+  XCSoarInterface::SetSettingsComputer().TeammateCode.Update(bearing, distance);
   XCSoarInterface::SetSettingsComputer().TeammateCodeValid = true;
 }
 

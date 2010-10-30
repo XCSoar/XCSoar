@@ -59,7 +59,7 @@ InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
 
   // Set Comment
   if (XCSoarInterface::SettingsComputer().TeammateCodeValid == true){
-    infobox.SetComment(XCSoarInterface::SettingsComputer().TeammateCode);
+    infobox.SetComment(XCSoarInterface::SettingsComputer().TeammateCode.GetCode());
     if (!XCSoarInterface::SettingsComputer().TeamFlarmTracking)
       infobox.SetColorBottom(0);
     else if (XCSoarInterface::Basic().flarm.FindTraffic(

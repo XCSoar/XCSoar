@@ -101,7 +101,7 @@ Update()
 
   wp = (WndProperty*)wf->FindByName(_T("prpMateCode"));
   if (wp) {
-    wp->SetText(XCSoarInterface::SettingsComputer().TeammateCode);
+    wp->SetText(XCSoarInterface::SettingsComputer().TeammateCode.GetCode());
     wp->RefreshDisplay();
   }
 
@@ -119,7 +119,7 @@ OnCodeClicked(gcc_unused WndButton &button)
   TCHAR newTeammateCode[10];
 
   _tcsncpy(newTeammateCode,
-           XCSoarInterface::SettingsComputer().TeammateCode, 10);
+           XCSoarInterface::SettingsComputer().TeammateCode.GetCode(), 10);
 
   if (!dlgTextEntryShowModal(newTeammateCode, 7))
     return;
@@ -131,9 +131,8 @@ OnCodeClicked(gcc_unused WndButton &button)
     newTeammateCode[i] = 0;
   }
 
-  _tcsncpy(XCSoarInterface::SetSettingsComputer().TeammateCode,
-           newTeammateCode, 10);
-  if (!string_is_empty(XCSoarInterface::SettingsComputer().TeammateCode)) {
+  XCSoarInterface::SetSettingsComputer().TeammateCode.Update(newTeammateCode);
+  if (!string_is_empty(XCSoarInterface::SettingsComputer().TeammateCode.GetCode())) {
     XCSoarInterface::SetSettingsComputer().TeammateCodeValid = true;
     XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = false;
   }

@@ -68,7 +68,6 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.UTCOffset = 0;
 
   // for user-set teammate code
-  settings_computer.TeammateCode[0] = 0;
   settings_computer.TeammateCodeValid = false;
   settings_computer.TeamFlarmIdTarget.clear();
 

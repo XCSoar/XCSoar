@@ -47,6 +47,7 @@ Copyright_License {
 #include "Engine/Navigation/SpeedVector.hpp"
 
 #include "SettingsAirspace.hpp"
+#include "TeamCodeCalculation.h"
 
 // control of calculations, these only changed by user interface
 // but are used read-only by calculations
@@ -129,7 +130,7 @@ struct SETTINGS_TEAMCODE {
   bool TeamFlarmTracking;       /**< Whether to enable tracking by FLARM */
 
   TCHAR TeamFlarmCNTarget[4];   /**< CN of the glider to track */
-  TCHAR TeammateCode[10];       /**< auto-detected, see also in Info.h */
+  TeamCode TeammateCode;       /**< auto-detected, see also in Info.h */
 
   bool TeammateCodeValid;       /**< Whether the teammate code is valid */  
   FlarmId TeamFlarmIdTarget; /**< FlarmId of the glider to track */
