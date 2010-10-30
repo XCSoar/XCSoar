@@ -47,6 +47,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/DisplayConfig.hpp"
+#include "Profile/DeviceConfig.hpp"
 #include "Logger/Logger.hpp"
 #include "Device/Register.hpp"
 #include "Device/List.hpp"

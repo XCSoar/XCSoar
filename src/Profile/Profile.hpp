@@ -56,31 +56,6 @@ namespace ProfileImpl = ProfileGConf;
 #include <stddef.h>
 #include <tchar.h>
 
-/**
- * Configuration structure for serial devices
- */
-struct DeviceConfig {
-  enum port_type {
-    /**
-     * Serial port, i.e. COMx / RS-232.
-     */
-    SERIAL,
-
-    /**
-     * Attempt to auto-discover the GPS source.
-     *
-     * On Windows CE, this opens the GPS Intermediate Driver Multiplexer.
-     * @see http://msdn.microsoft.com/en-us/library/bb202042.aspx
-     */
-    AUTO,
-  };
-
-  port_type port_type;          /**< Type of the port */
-  unsigned port_index;          /**< Index of the port */
-  unsigned speed_index;         /**< Speed index (baud rate) */
-  TCHAR driver_name[32];        /**< Name of the driver */
-};
-
 namespace Profile
 {
   using namespace ProfileImpl;
@@ -147,9 +122,6 @@ namespace Profile
   void SetAirspaceBrush(int i, int c);
 
   void SetInfoBoxes(int Index,int InfoType);
-
-  void GetDeviceConfig(unsigned n, DeviceConfig &config);
-  void SetDeviceConfig(unsigned n, const DeviceConfig &config);
 };
 
 #endif
