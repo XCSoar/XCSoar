@@ -45,9 +45,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Dialogs/XML.hpp"
 #include "WayPointFile.hpp"
-#include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Interface.hpp"
-#include "Sizes.h"
 
 #include <assert.h>
 #include <stdio.h>
