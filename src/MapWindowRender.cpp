@@ -180,7 +180,14 @@ MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT &rc)
 {
   const NMEA_INFO &data = Basic();
 
-  DrawMapScale(canvas, rc, render_projection);
+  {
+    /* hold the lock to protect this->bitmap_canvas; since
+       DrawMapScale() is called from the main thread by on_paint(), we
+       need to serialize access to it */
+    ScopeLock protect(DoubleBufferWindow::mutex);
+    DrawMapScale(canvas, rc, render_projection);
+  }
+
   DrawMapScale2(canvas, rc, render_projection);
   DrawCompass(canvas, rc);
 
