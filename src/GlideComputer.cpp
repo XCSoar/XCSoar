@@ -225,7 +225,7 @@ GlideComputer::CalculateTeammateBearingRange()
     SetCalculated().TeammateBearing =
         Basic().Location.bearing(Calculated().TeammateLocation);
     SetCalculated().TeammateRange =
-        Basic().Location.distance(Calculated().TeammateLocation);;
+        Basic().Location.distance(Calculated().TeammateLocation);
 
     // Hysteresis for GlideComputerEvent
     // If (closer than 100m to the teammates last position and "event" not reset)
