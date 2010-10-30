@@ -3,6 +3,9 @@
 
 #include "Waypoint/WaypointVisitor.hpp"
 
+#include <stdio.h>
+#include <tchar.h>
+
 class WaypointVisitorPrint: public WaypointVisitor {
 public:
   WaypointVisitorPrint():count(0) {};
@@ -10,7 +13,7 @@ public:
   virtual void Visit(const Waypoint& wp) {
     if (verbose) {
 #ifdef DO_PRINT
-      printf("# visiting wp %d, '%s'\n", wp.id, wp.Name.c_str());
+      _tprintf(_T("# visiting wp %d, '%s'\n"), wp.id, wp.Name.c_str());
 #endif
     }
     count++;
