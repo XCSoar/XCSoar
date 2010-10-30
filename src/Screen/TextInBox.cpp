@@ -46,40 +46,40 @@ Copyright_License {
 #include "Sizes.h" /* for WPCIRCLESIZE */
 
 static bool
-TextInBoxMoveInView(POINT *offset, RECT *brect, const RECT &MapRect)
+TextInBoxMoveInView(POINT &offset, RECT &brect, const RECT &MapRect)
 {
   bool res = false;
 
   int LabelMargin = 4;
 
-  offset->x = 0;
-  offset->y = 0;
+  offset.x = 0;
+  offset.y = 0;
 
-  if (MapRect.top > brect->top) {
-    int d = MapRect.top - brect->top;
-    brect->top += d;
-    brect->bottom += d;
-    offset->y += d;
-    brect->bottom -= d;
-    brect->left -= d;
-    offset->x -= d;
+  if (MapRect.top > brect.top) {
+    int d = MapRect.top - brect.top;
+    brect.top += d;
+    brect.bottom += d;
+    offset.y += d;
+    brect.bottom -= d;
+    brect.left -= d;
+    offset.x -= d;
     res = true;
   }
 
-  if (MapRect.right < brect->right) {
-    int d = MapRect.right - brect->right;
+  if (MapRect.right < brect.right) {
+    int d = MapRect.right - brect.right;
 
-    if (offset->y < LabelMargin) {
+    if (offset.y < LabelMargin) {
       int dy;
 
       if (d > -LabelMargin) {
-        dy = LabelMargin - offset->y;
+        dy = LabelMargin - offset.y;
         if (d > -dy)
           dy = -d;
       } else {
-        int x = d + (brect->right - brect->left) + 10;
+        int x = d + (brect.right - brect.left) + 10;
 
-        dy = x - offset->y;
+        dy = x - offset.y;
 
         if (dy < 0)
           dy = 0;
@@ -88,46 +88,46 @@ TextInBoxMoveInView(POINT *offset, RECT *brect, const RECT &MapRect)
           dy = LabelMargin;
       }
 
-      brect->top += dy;
-      brect->bottom += dy;
-      offset->y += dy;
+      brect.top += dy;
+      brect.bottom += dy;
+      offset.y += dy;
     }
 
-    brect->right += d;
-    brect->left += d;
-    offset->x += d;
+    brect.right += d;
+    brect.left += d;
+    offset.x += d;
 
     res = true;
   }
 
-  if (MapRect.bottom < brect->bottom) {
-    if (offset->x == 0) {
-      int d = MapRect.bottom - brect->bottom;
-      brect->top += d;
-      brect->bottom += d;
-      offset->y += d;
+  if (MapRect.bottom < brect.bottom) {
+    if (offset.x == 0) {
+      int d = MapRect.bottom - brect.bottom;
+      brect.top += d;
+      brect.bottom += d;
+      offset.y += d;
     } else {
-      if (offset->x < -LabelMargin) {
-        int d = -(brect->bottom - brect->top) - 10;
-        brect->top += d;
-        brect->bottom += d;
-        offset->y += d;
+      if (offset.x < -LabelMargin) {
+        int d = -(brect.bottom - brect.top) - 10;
+        brect.top += d;
+        brect.bottom += d;
+        offset.y += d;
       } else {
-        int d = -(2 * offset->x + (brect->bottom - brect->top));
-        brect->top += d;
-        brect->bottom += d;
-        offset->y += d;
+        int d = -(2 * offset.x + (brect.bottom - brect.top));
+        brect.top += d;
+        brect.bottom += d;
+        offset.y += d;
       }
     }
 
     res = true;
   }
 
-  if (MapRect.left > brect->left) {
-    int d = MapRect.left - brect->left;
-    brect->right += d;
-    brect->left += d;
-    offset->x += d;
+  if (MapRect.left > brect.left) {
+    int d = MapRect.left - brect.left;
+    brect.right += d;
+    brect.left += d;
+    offset.x += d;
     res = true;
   }
 
@@ -179,7 +179,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     if (Mode.AsFlag.AlignRight)
       x -= 3;
 
-    if (TextInBoxMoveInView(&offset, &brect, MapRect)) {
+    if (TextInBoxMoveInView(offset, brect, MapRect)) {
       x += offset.x;
       y += offset.y;
     }
@@ -211,7 +211,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     if (Mode.AsFlag.AlignRight)
       x -= 2;
 
-    if (TextInBoxMoveInView(&offset, &brect, MapRect)) {
+    if (TextInBoxMoveInView(offset, brect, MapRect)) {
       x += offset.x;
       y += offset.y;
     }
