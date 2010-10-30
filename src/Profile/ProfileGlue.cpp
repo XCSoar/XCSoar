@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Profile/Profile.hpp"
+#include "Profile/UnitsConfig.hpp"
 #include "LogFile.hpp"
 #include "Appearance.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
@@ -47,7 +48,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Interface.hpp"
 #include "Sizes.h"
-#include "UnitsGlue.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -110,7 +110,7 @@ Profile::Use()
   }
 #endif
 
-  Units::LoadFromProfile();
+  LoadUnits();
 
   for (i = 0; i < MAXINFOWINDOWS; i++) {
     if (Get(szProfileDisplayType[i], Temp))

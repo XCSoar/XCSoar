@@ -36,12 +36,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_UNITS_GLUE_HPP
-#define XCSOAR_UNITS_GLUE_HPP
+#ifndef XCSOAR_PROFILE_UNITS_CONFIG_HPP
+#define XCSOAR_PROFILE_UNITS_CONFIG_HPP
 
-namespace Units
+namespace Profile
 {
-  void LoadFromProfile();
+  void LoadUnits();
 };
 
 #endif

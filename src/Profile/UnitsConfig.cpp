@@ -36,12 +36,13 @@ Copyright_License {
 }
 */
 
-#include "UnitsGlue.hpp"
-#include "Units.hpp"
+#include "Profile/UnitsConfig.hpp"
+
 #include "Profile/Profile.hpp"
+#include "Units.hpp"
 
 void
-Units::LoadFromProfile()
+Profile::LoadUnits()
 {
   unsigned Speed = 0;
   unsigned Distance = 0;
@@ -51,84 +52,84 @@ Units::LoadFromProfile()
   unsigned Temperature = 0;
   unsigned Temp = 0;
 
-  if (Profile::Get(szProfileLatLonUnits, Temp))
-    SetCoordinateFormat((CoordinateFormats_t)Temp);
+  if (Get(szProfileLatLonUnits, Temp))
+    Units::SetCoordinateFormat((CoordinateFormats_t)Temp);
 
-  Profile::Get(szProfileSpeedUnitsValue, Speed);
+  Get(szProfileSpeedUnitsValue, Speed);
   switch (Speed) {
   case 0:
-    SetUserSpeedUnit(unStatuteMilesPerHour);
-    SetUserWindSpeedUnit(unStatuteMilesPerHour);
+    Units::SetUserSpeedUnit(unStatuteMilesPerHour);
+    Units::SetUserWindSpeedUnit(unStatuteMilesPerHour);
     break;
   case 1:
-    SetUserSpeedUnit(unKnots);
-    SetUserWindSpeedUnit(unKnots);
+    Units::SetUserSpeedUnit(unKnots);
+    Units::SetUserWindSpeedUnit(unKnots);
     break;
   case 2:
   default:
-    SetUserSpeedUnit(unKiloMeterPerHour);
-    SetUserWindSpeedUnit(unKiloMeterPerHour);
+    Units::SetUserSpeedUnit(unKiloMeterPerHour);
+    Units::SetUserWindSpeedUnit(unKiloMeterPerHour);
     break;
   }
 
-  Profile::Get(szProfileTaskSpeedUnitsValue, TaskSpeed);
+  Get(szProfileTaskSpeedUnitsValue, TaskSpeed);
   switch (TaskSpeed) {
   case 0:
-    SetUserTaskSpeedUnit(unStatuteMilesPerHour);
+    Units::SetUserTaskSpeedUnit(unStatuteMilesPerHour);
     break;
   case 1:
-    SetUserTaskSpeedUnit(unKnots);
+    Units::SetUserTaskSpeedUnit(unKnots);
     break;
   case 2:
   default:
-    SetUserTaskSpeedUnit(unKiloMeterPerHour);
+    Units::SetUserTaskSpeedUnit(unKiloMeterPerHour);
     break;
   }
 
-  Profile::Get(szProfileDistanceUnitsValue,Distance);
+  Get(szProfileDistanceUnitsValue,Distance);
   switch (Distance) {
   case 0:
-    SetUserDistanceUnit(unStatuteMiles);
+    Units::SetUserDistanceUnit(unStatuteMiles);
     break;
   case 1:
-    SetUserDistanceUnit(unNauticalMiles);
+    Units::SetUserDistanceUnit(unNauticalMiles);
     break;
   case 2:
   default:
-    SetUserDistanceUnit(unKiloMeter);
+    Units::SetUserDistanceUnit(unKiloMeter);
     break;
   }
 
-  Profile::Get(szProfileAltitudeUnitsValue, Altitude);
+  Get(szProfileAltitudeUnitsValue, Altitude);
   switch (Altitude) {
   case 0:
-    SetUserAltitudeUnit(unFeet);
+    Units::SetUserAltitudeUnit(unFeet);
     break;
   case 1:
   default:
-    SetUserAltitudeUnit(unMeter);
+    Units::SetUserAltitudeUnit(unMeter);
     break;
   }
 
-  Profile::Get(szProfileTemperatureUnitsValue, Temperature);
+  Get(szProfileTemperatureUnitsValue, Temperature);
   switch (Temperature) {
   default:
   case 0:
-    SetUserTemperatureUnit(unGradCelcius);
+    Units::SetUserTemperatureUnit(unGradCelcius);
     break;
   case 1:
-    SetUserTemperatureUnit(unGradFahrenheit);
+    Units::SetUserTemperatureUnit(unGradFahrenheit);
     break;
   }
 
-  Profile::Get(szProfileLiftUnitsValue, Lift);
+  Get(szProfileLiftUnitsValue, Lift);
   switch (Lift) {
   case 0:
-    SetUserVerticalSpeedUnit(unKnots);
+    Units::SetUserVerticalSpeedUnit(unKnots);
     break;
   case 1:
   default:
-    SetUserVerticalSpeedUnit(unMeterPerSecond);
+    Units::SetUserVerticalSpeedUnit(unMeterPerSecond);
     break;
   }
 }
