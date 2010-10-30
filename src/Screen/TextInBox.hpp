@@ -56,7 +56,6 @@ typedef union
     unsigned AlignCenter :1;
     unsigned WhiteBorder :1;
     unsigned WhiteBold :1;
-    unsigned NoSetFont :1;
     unsigned Color :3;
   } AsFlag;
 } TextInBoxMode_t;
