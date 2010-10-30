@@ -38,9 +38,9 @@ Copyright_License {
 
 #include "Profile/Profile.hpp"
 #include "Profile/UnitsConfig.hpp"
+#include "Profile/InfoBoxConfig.hpp"
 #include "LogFile.hpp"
 #include "Appearance.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
 #include "GlideRatio.hpp"
 #include "Screen/Fonts.hpp"
 #include "Dialogs/XML.hpp"
@@ -51,30 +51,6 @@ Copyright_License {
 
 #include <assert.h>
 #include <stdio.h>
-
-// This function checks to see if Final Glide mode infoboxes have been
-// initialised.  If all are zero, then the current configuration was
-// using XCSoarV3 infoboxes, so copy settings from cruise mode.
-static void
-CheckInfoTypes()
-{
-  if (InfoBoxManager::IsEmpty(InfoBoxManager::MODE_CRUISE))
-    return;
-
-  bool iszero_fg = InfoBoxManager::IsEmpty(InfoBoxManager::MODE_FINAL_GLIDE);
-  bool iszero_aux = InfoBoxManager::IsEmpty(InfoBoxManager::MODE_AUXILIARY);
-  if (!iszero_fg && !iszero_aux)
-    return;
-
-  for (unsigned i = 0; i < MAXINFOWINDOWS; ++i) {
-    if (iszero_fg)
-      InfoBoxManager::SetType(i, InfoBoxManager::GetType(i, InfoBoxManager::MODE_CRUISE),
-                              InfoBoxManager::MODE_FINAL_GLIDE);
-    if (iszero_aux)
-      InfoBoxManager::SetType(i, InfoBoxManager::GetType(i, InfoBoxManager::MODE_CRUISE),
-                              InfoBoxManager::MODE_AUXILIARY);
-  }
-}
 
 void
 Profile::Use()
@@ -111,14 +87,7 @@ Profile::Use()
 #endif
 
   LoadUnits();
-
-  for (i = 0; i < MAXINFOWINDOWS; i++) {
-    if (Get(szProfileDisplayType[i], Temp))
-      InfoBoxManager::SetTypes(i, Temp);
-  }
-
-  // check against V3 infotypes
-  CheckInfoTypes();
+  LoadInfoBoxes();
 
   SETTINGS_MAP &settings_map = XCSoarInterface::SetSettingsMap();
 

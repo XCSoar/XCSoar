@@ -41,6 +41,7 @@ Copyright_License {
 
 namespace Profile
 {
+  void LoadInfoBoxes();
   void SetInfoBoxes(int Index, int InfoType);
 };
 
