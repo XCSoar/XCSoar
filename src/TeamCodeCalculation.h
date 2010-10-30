@@ -51,4 +51,20 @@ GeoPoint GetTeamCodePosition(GeoPoint wpPos, const TCHAR *TeamMateCode);
 Angle GetTeammateBearingFromRef(const TCHAR *code);
 fixed GetTeammateRangeFromRef(const TCHAR *code);
 
+class TeamCode
+{
+public:
+  TeamCode() {
+    code[0] = 0;
+  }
+
+  const TCHAR* GetCode() const;
+
+  void Update(Angle bearing, fixed range);
+  void Update(const TCHAR* _code);
+
+private:
+  TCHAR code[10];
+};
+
 #endif

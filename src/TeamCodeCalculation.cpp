@@ -219,3 +219,22 @@ GetTeamCodePosition(GeoPoint wpPos, const TCHAR *TeamCode)
   FindLatitudeLongitude(wpPos, bearing, distance, &position);
   return position;
 }
+
+void
+TeamCode::Update(Angle bearing, fixed range)
+{
+  GetTeamCode(code, bearing, range);
+}
+
+void
+TeamCode::Update(const TCHAR* _code)
+{
+  _tcsncpy(code, _code, 9);
+  code[9] = 0;
+}
+
+const TCHAR*
+TeamCode::GetCode() const
+{
+  return code;
+}
