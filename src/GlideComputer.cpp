@@ -216,11 +216,11 @@ GlideComputer::CalculateTeammateBearingRange()
     SetCalculated().TeammateLocation =
         SettingsComputer().TeammateCode.GetLocation(wp->Location);
 
+    GeoVector team_vector(Basic().Location, Calculated().TeammateLocation);
+
     // Save bearing and distance to teammate in Calculated
-    SetCalculated().TeammateBearing =
-        Basic().Location.bearing(Calculated().TeammateLocation);
-    SetCalculated().TeammateRange =
-        Basic().Location.distance(Calculated().TeammateLocation);
+    SetCalculated().TeammateBearing = team_vector.Bearing;
+    SetCalculated().TeammateRange = team_vector.Distance;
 
     // Hysteresis for GlideComputerEvent
     // If (closer than 100m to the teammates last position and "event" not reset)
