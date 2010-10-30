@@ -214,8 +214,7 @@ GlideComputer::CalculateTeammateBearingRange()
   if (SettingsComputer().TeammateCodeValid) {
     // Calculate bearing and distance to teammate
     SetCalculated().TeammateLocation =
-        GetTeamCodePosition(wp->Location,
-                            SettingsComputer().TeammateCode.GetCode());
+        SettingsComputer().TeammateCode.GetLocation(wp->Location);
 
     // Save bearing and distance to teammate in Calculated
     SetCalculated().TeammateBearing =

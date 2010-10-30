@@ -212,3 +212,9 @@ TeamCode::GetCode() const
 {
   return code;
 }
+
+GeoPoint
+TeamCode::GetLocation(const GeoPoint ref) const
+{
+  return GetTeamCodePosition(ref, code);
+}

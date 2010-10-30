@@ -57,6 +57,7 @@ public:
   }
 
   const TCHAR* GetCode() const;
+  GeoPoint GetLocation(const GeoPoint ref) const;
 
   void Update(Angle bearing, fixed range);
   void Update(const TCHAR* _code);
