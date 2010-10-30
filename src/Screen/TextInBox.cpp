@@ -45,13 +45,12 @@ Copyright_License {
 #include "Appearance.hpp"
 #include "Sizes.h" /* for WPCIRCLESIZE */
 
-static bool
-TextInBoxMoveInView(POINT &offset, RECT &brect, const RECT &MapRect)
+static POINT
+TextInBoxMoveInView(RECT &brect, const RECT &MapRect)
 {
-  bool res = false;
-
   int LabelMargin = 4;
 
+  POINT offset;
   offset.x = 0;
   offset.y = 0;
 
@@ -61,7 +60,6 @@ TextInBoxMoveInView(POINT &offset, RECT &brect, const RECT &MapRect)
     offset.y += d;
     brect.left -= d;
     offset.x -= d;
-    res = true;
   }
 
   if (MapRect.right < brect.right) {
@@ -94,8 +92,6 @@ TextInBoxMoveInView(POINT &offset, RECT &brect, const RECT &MapRect)
     brect.right += d;
     brect.left += d;
     offset.x += d;
-
-    res = true;
   }
 
   if (MapRect.bottom < brect.bottom) {
@@ -117,8 +113,6 @@ TextInBoxMoveInView(POINT &offset, RECT &brect, const RECT &MapRect)
         offset.y += d;
       }
     }
-
-    res = true;
   }
 
   if (MapRect.left > brect.left) {
@@ -126,10 +120,9 @@ TextInBoxMoveInView(POINT &offset, RECT &brect, const RECT &MapRect)
     brect.right += d;
     brect.left += d;
     offset.x += d;
-    res = true;
   }
 
-  return res;
+  return offset;
 }
 
 static void
@@ -183,8 +176,6 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
 
   bool drawn = false;
   if (Mode.AsFlag.Border || Mode.AsFlag.WhiteBorder) {
-    POINT offset;
-
     brect.left = x - 2;
     brect.right = brect.left + tsize.cx + 4;
     brect.top = y + ((tsize.cy + 4) >> 3) - 2;
@@ -193,10 +184,9 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     if (Mode.AsFlag.AlignRight)
       x -= 3;
 
-    if (TextInBoxMoveInView(offset, brect, MapRect)) {
-      x += offset.x;
-      y += offset.y;
-    }
+    POINT offset = TextInBoxMoveInView(brect, MapRect);
+    x += offset.x;
+    y += offset.y;
 
     if (label_block ? label_block->check(brect) : true) {
       if (Mode.AsFlag.Border)
@@ -215,8 +205,6 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       drawn = true;
     }
   } else if (Mode.AsFlag.FillBackground) {
-    POINT offset;
-
     brect.left = x - 1;
     brect.right = brect.left + tsize.cx + 1;
     brect.top = y + ((tsize.cy + 4) >> 3);
@@ -225,10 +213,9 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     if (Mode.AsFlag.AlignRight)
       x -= 2;
 
-    if (TextInBoxMoveInView(offset, brect, MapRect)) {
-      x += offset.x;
-      y += offset.y;
-    }
+    POINT offset = TextInBoxMoveInView(brect, MapRect);
+    x += offset.x;
+    y += offset.y;
 
     if (label_block ? label_block->check(brect) : true) {
       canvas.set_background_color(Color::WHITE);
