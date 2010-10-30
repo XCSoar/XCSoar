@@ -42,6 +42,7 @@
 #include "TestUtil.hpp"
 
 #include <assert.h>
+#include <cstdio>
 
 static void
 CheckTextFile(const TCHAR *path, const char *const* expect)
