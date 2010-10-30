@@ -158,13 +158,11 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
 {
   RECT brect;
 
-  bool drawn = false;
-
   if ((x < MapRect.left - WPCIRCLESIZE)
       || (x > MapRect.right + (WPCIRCLESIZE * 3))
       || (y < MapRect.top - WPCIRCLESIZE)
       || (y > MapRect.bottom + WPCIRCLESIZE))
-    return drawn; // FIX Not drawn really
+    return false; // FIX Not drawn really
 
   canvas.white_brush();
 
@@ -185,6 +183,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     y -= tsize.cy / 2;
   }
 
+  bool drawn = false;
   if (Mode.AsFlag.Border || Mode.AsFlag.WhiteBorder) {
     POINT offset;
 
