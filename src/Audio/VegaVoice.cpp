@@ -36,17 +36,13 @@ Copyright_License {
 }
 */
 
-#include "SettingsComputer.hpp"
 #include "Audio/VegaVoice.h"
-#include "Protection.hpp"
-#include "InputEvents.h"  // used for altair beep hack
-#include "Device/device.hpp"
+#include "SettingsComputer.hpp"
 #include "Units.hpp"
-#include "Interface.hpp"
+#include "NMEA/Info.hpp"
+#include "NMEA/Derived.hpp"
 
-#include <tchar.h>
-#include <math.h>
-
+#include <stdio.h>
 
 enum {
   VWI_ZERO=20,
