@@ -40,6 +40,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
+#include "Profile/InfoBoxConfig.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "DataField/Enum.hpp"

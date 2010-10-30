@@ -120,8 +120,6 @@ namespace Profile
   void SetAirspaceMode(int i);
   void SetAirspaceColor(int i, int c);
   void SetAirspaceBrush(int i, int c);
-
-  void SetInfoBoxes(int Index,int InfoType);
 };
 
 #endif

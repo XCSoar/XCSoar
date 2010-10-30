@@ -483,9 +483,3 @@ Profile::SetAirspaceBrush(int i, int c)
 {
   Set(szProfileBrush[i], c);
 }
-
-void
-Profile::SetInfoBoxes(int Index, int the_type)
-{
-  Set(szProfileDisplayType[Index], the_type);
-}
