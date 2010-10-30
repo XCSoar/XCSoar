@@ -101,8 +101,8 @@ public:
   virtual void visit_general(const AbstractAirspace& as) {
     if (do_report) {
 #ifdef DO_PRINT
-      *fout << "# Name: " << as.get_name_text() 
-            << " " << as.get_vertical_text() 
+      *fout << "# Name: " << as.get_name_text().c_str()
+            << " " << as.get_vertical_text().c_str()
             << "\n";
 #endif
     }
