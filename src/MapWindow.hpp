@@ -252,8 +252,6 @@ private:
 
   void CalculateScreenPositionsGroundline();
   void CalculateScreenPositionsThermalSources();
-  void MapWaypointLabelRender(Canvas &canvas, const RECT &rc,
-                              const WayPointLabelList &labels);
 
   // display renderers
   void DrawAircraft(Canvas &canvas) const;
