@@ -345,7 +345,7 @@ OnCalcClicked(WndButton &Sender)
 
   if (page == ANALYSIS_PAGE_CLIMB) {
     wf->hide();
-    dlgTaskCalculatorShowModal(XCSoarInterface::main_window);
+    dlgTaskCalculatorShowModal(*(SingleWindow *)wf->get_root_owner());
     wf->show();
   }
 
@@ -360,7 +360,7 @@ OnCalcClicked(WndButton &Sender)
 
   if ((page == ANALYSIS_PAGE_TASK) || (page == ANALYSIS_PAGE_TASK_SPEED)) {
     wf->hide();
-    dlgTaskCalculatorShowModal(XCSoarInterface::main_window);
+    dlgTaskCalculatorShowModal(*(SingleWindow *)wf->get_root_owner());
     wf->show();
   }
 
@@ -379,14 +379,14 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgAnalysisShowModal(int _page)
+dlgAnalysisShowModal(SingleWindow &parent, int _page)
 {
   wf = NULL;
   wGrid = NULL;
   wInfo = NULL;
   wCalc = NULL;
 
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, parent,
                   Layout::landscape ? _T("IDR_XML_ANALYSIS_L") :
                                       _T("IDR_XML_ANALYSIS"));
   if (!wf)

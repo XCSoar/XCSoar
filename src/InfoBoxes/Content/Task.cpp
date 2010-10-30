@@ -603,7 +603,7 @@ InfoBoxContentOLC::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
   case ibkEnter:
-    dlgAnalysisShowModal(7);
+    dlgAnalysisShowModal(XCSoarInterface::main_window, 7);
     return true;
 
   case ibkUp:

@@ -646,7 +646,7 @@ void
 InputEvents::eventAnalysis(const TCHAR *misc)
 {
   (void)misc;
-  dlgAnalysisShowModal();
+  dlgAnalysisShowModal(XCSoarInterface::main_window);
 }
 
 // WaypointDetails

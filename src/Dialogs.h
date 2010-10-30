@@ -108,7 +108,9 @@ void dlgWindSettingsShowModal();
 void dlgStartTaskShowModal(bool *validStart, double Time, double Speed,
     double Altitude);
 
-void dlgAnalysisShowModal(int page = -1);
+void
+dlgAnalysisShowModal(SingleWindow &parent, int page = -1);
+
 void dlgStatusShowModal(int page);
 
 void dlgSwitchesShowModal();
