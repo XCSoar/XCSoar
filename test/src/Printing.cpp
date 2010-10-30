@@ -545,9 +545,10 @@ std::ostream& operator<< (std::ostream& f,
     break;
   };
 
-  f << "# intercept " << aw.solution.location.Longitude << " " << aw.solution.location.Latitude 
-    << " dist " << aw.solution.distance << " alt " << aw.solution.altitude << " time " 
-    << aw.solution.elapsed_time << "\n";
+  const AirspaceInterceptSolution &solution = aw.get_solution();
+  f << "# intercept " << solution.location.Longitude << " " << solution.location.Latitude
+    << " dist " << solution.distance << " alt " << solution.altitude << " time "
+    << solution.elapsed_time << "\n";
 
   return f;
 }
@@ -584,7 +585,7 @@ ContestManager::print() const
   if (solution.empty()) 
     return;
 
-  if (positive(common_stats.olc.time)) {
+  if (positive(result.time)) {
     std::ofstream fs("results/res-olc-solution.txt");
 
     for (TracePointVector::const_iterator it = solution.begin();
