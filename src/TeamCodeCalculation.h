@@ -53,18 +53,48 @@ public:
     code[0] = 0;
   }
 
+  /**
+   * Returns the current team code
+   * @return Current team code
+   */
   const TCHAR* GetCode() const;
 
+  /**
+   * Returns the position of the team member in respect to
+   * the given reference waypoint
+   * @param ref Reference waypoint
+   * @return The team member's position
+   */
   gcc_pure
   GeoPoint GetLocation(const GeoPoint ref) const;
 
+  /**
+   * Returns the bearing from the reference point to the team member
+   * @return Bearing from the reference point to the team member
+   */
   Angle GetBearing() const;
+
+  /**
+   * Returns the distance from the reference point to the team member
+   * @return Distance from the reference point to the team member
+   */
   fixed GetRange() const;
 
+  /**
+   * Updates the team code with the given parameters
+   * @param bearing New bearing
+   * @param range New range
+   */
   void Update(Angle bearing, fixed range);
+
+  /**
+   * Updates the team code to the given code
+   * @param _code The new team code
+   */
   void Update(const TCHAR* _code);
 
 private:
+  /** The team code */
   TCHAR code[10];
 };
 

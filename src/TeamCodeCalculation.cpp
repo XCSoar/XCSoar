@@ -131,11 +131,6 @@ ConvertBearingToTeamCode(const Angle bearing, TCHAR *code)
   NumberToTeamCode(bamValue, code, 2);
 }
 
-/**
- * Calculates the bearing from the given teamcode
- * @param code The teamcode
- * @return Bearing to the reference waypoint
- */
 Angle
 TeamCode::GetBearing() const
 {
@@ -146,11 +141,6 @@ TeamCode::GetBearing() const
 	return Angle::degrees(fixed(val * 360.0 / TEAMCODE_COMBINATIONS)).as_bearing();
 }
 
-/**
- * Calculates the distance from the given teamcode
- * @param code The teamcode
- * @return Distance to the reference waypoint
- */
 fixed
 TeamCode::GetRange() const
 {
