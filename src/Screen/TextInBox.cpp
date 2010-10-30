@@ -134,6 +134,23 @@ TextInBoxMoveInView(POINT &offset, RECT &brect, const RECT &MapRect)
   return res;
 }
 
+static void
+RenderShadowedText(Canvas &canvas, const TCHAR* text, int x, int y)
+{
+  canvas.background_transparent();
+
+  canvas.set_text_color(Color::WHITE);
+  canvas.text(x + 1, y, text);
+  canvas.text(x + 2, y, text);
+  canvas.text(x - 1, y, text);
+  canvas.text(x - 2, y, text);
+  canvas.text(x, y + 1, text);
+  canvas.text(x, y - 1, text);
+
+  canvas.set_text_color(Color::BLACK);
+  canvas.text(x, y, text);
+}
+
 // returns true if really wrote something
 bool
 TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
@@ -228,20 +245,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     brect.bottom = brect.top + 3 + tsize.cy - ((tsize.cy + 4) >> 3);
 
     if (label_block ? label_block->check(brect) : true) {
-      canvas.set_text_color(Color::WHITE);
-
-      canvas.text(x + 1, y, Value);
-      canvas.text(x + 2, y, Value);
-      canvas.text(x - 1, y, Value);
-      canvas.text(x - 2, y, Value);
-      canvas.text(x, y + 1, Value);
-      canvas.text(x, y - 1, Value);
-
-      canvas.background_transparent();
-      canvas.set_text_color(Color::BLACK);
-      canvas.text(x, y, Value);
-      canvas.background_opaque();
-
+      RenderShadowedText(canvas, Value, x, y);
       drawn = true;
     }
   } else {
