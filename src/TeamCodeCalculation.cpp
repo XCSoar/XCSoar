@@ -160,25 +160,6 @@ GetRange(const TCHAR *code)
 }
 
 /**
- * Calculates distance and bearing to the teammate by decoding the given
- * teamcode and comparing the value with own bearing and distance to
- * the reference waypoint
- * @param ownBear Own bearing to the reference waypoint
- * @param ownDist Own distance to the reference waypoint
- * @param TeamMateCode The teamcode
- * @param bearToMate Bearing to the teammate (pointer)
- * @param distToMate Distance to the teammate (pointer)
- */
-static GeoPoint
-GetTeamCodePosition(GeoPoint wpPos, const TCHAR *TeamCode)
-{
-  Angle bearing = GetBearing(TeamCode);
-	fixed distance = GetRange(TeamCode);
-
-	return FindLatitudeLongitude(wpPos, bearing, distance);
-}
-
-/**
  * Calculates the teamcode of the given bearing and distance
  * @param code The teamcode (pointer)
  * @param bearing Bearing to the reference waypoint
@@ -217,5 +198,8 @@ TeamCode::GetCode() const
 GeoPoint
 TeamCode::GetLocation(const GeoPoint ref) const
 {
-  return GetTeamCodePosition(ref, code);
+  Angle bearing = GetBearing(code);
+  fixed distance = GetRange(code);
+
+  return FindLatitudeLongitude(ref, bearing, distance);
 }
