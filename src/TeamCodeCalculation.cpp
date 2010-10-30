@@ -159,14 +159,8 @@ TeamCode::GetRange() const
 	return fixed(val * 100);
 }
 
-/**
- * Calculates the teamcode of the given bearing and distance
- * @param code The teamcode (pointer)
- * @param bearing Bearing to the reference waypoint
- * @param range Distance to the reference waypoint
- */
-static void
-GetTeamCode(TCHAR *code, Angle bearing, fixed range)
+void
+TeamCode::Update(Angle bearing, fixed range)
 {
   // Clear teamcode
   memset(code, 0, sizeof(TCHAR) * 10);
@@ -174,12 +168,6 @@ GetTeamCode(TCHAR *code, Angle bearing, fixed range)
   ConvertBearingToTeamCode(bearing, code);
   // Calculate distance part of the teamcode
   NumberToTeamCode(range / 100, &code[2], 0);
-}
-
-void
-TeamCode::Update(Angle bearing, fixed range)
-{
-  GetTeamCode(code, bearing, range);
 }
 
 void
