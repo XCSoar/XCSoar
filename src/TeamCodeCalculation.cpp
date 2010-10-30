@@ -39,6 +39,7 @@ Copyright_License {
 #include "TeamCodeCalculation.h"
 #include "Math/Constants.h"
 #include "Engine/Math/Earth.hpp"
+#include "Math/Angle.hpp"
 
 #include <math.h>
 #include <string.h>
@@ -168,7 +169,7 @@ GetRange(const TCHAR *code)
  * @param bearToMate Bearing to the teammate (pointer)
  * @param distToMate Distance to the teammate (pointer)
  */
-GeoPoint
+static GeoPoint
 GetTeamCodePosition(GeoPoint wpPos, const TCHAR *TeamCode)
 {
   Angle bearing = GetBearing(TeamCode);
@@ -183,7 +184,7 @@ GetTeamCodePosition(GeoPoint wpPos, const TCHAR *TeamCode)
  * @param bearing Bearing to the reference waypoint
  * @param range Distance to the reference waypoint
  */
-void
+static void
 GetTeamCode(TCHAR *code, Angle bearing, fixed range)
 {
   // Clear teamcode

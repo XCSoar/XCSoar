@@ -40,14 +40,10 @@ Copyright_License {
 #define	TEAMCALCULATION_H
 
 #include "Math/fixed.hpp"
-#include "Math/Angle.hpp"
-
 #include <tchar.h>
 
 struct GeoPoint;
-
-void GetTeamCode(TCHAR *code, Angle bearing, fixed range);
-GeoPoint GetTeamCodePosition(GeoPoint wpPos, const TCHAR *TeamMateCode);
+class Angle;
 
 class TeamCode
 {
