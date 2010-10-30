@@ -47,6 +47,7 @@ Copyright_License {
 #define XCSOAR_MATH_EARTH_HPP
 
 #include "Navigation/GeoPoint.hpp"
+#include "Compiler.h"
 
 extern const fixed fixed_earth_r;
 extern const fixed fixed_inv_earth_r;
@@ -89,6 +90,7 @@ GeoPoint IntermediatePoint(GeoPoint loc1, GeoPoint loc2, const fixed dthis);
  */
 fixed DoubleDistance(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3);
 
+gcc_const
 GeoPoint FindLatitudeLongitude(GeoPoint loc, Angle Bearing, fixed Distance);
 
 #endif
