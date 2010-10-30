@@ -216,6 +216,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunWindZigZag \
 	RunCanvas RunMapWindow RunDialog \
 	RunProgressWindow \
+	RunAnalysis \
 	RunAirspaceWarningDialog
 
 ifeq ($(TARGET),UNIX)
@@ -700,6 +701,99 @@ $(RUN_PROGRESS_WINDOW_BIN): LDLIBS += $(SCREEN_LDLIBS)
 $(RUN_PROGRESS_WINDOW_BIN): $(RUN_PROGRESS_WINDOW_OBJS) $(RUN_PROGRESS_WINDOW_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_ANALYSIS_SOURCES = \
+	$(SRC)/NMEA/ThermalBand.cpp \
+	$(SRC)/OS/PathName.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/Task/ProtectedTaskManager.cpp \
+	$(SRC)/Math/Screen.cpp \
+	$(SRC)/Atmosphere.cpp \
+	$(SRC)/Wind/WindAnalyser.cpp \
+	$(SRC)/Wind/WindStore.cpp \
+	$(SRC)/Wind/WindMeasurementList.cpp \
+	$(SRC)/Wind/WindZigZag.cpp \
+	$(SRC)/Projection.cpp \
+	$(SRC)/WindowProjection.cpp \
+	$(SRC)/MapWindowProjection.cpp \
+	$(SRC)/ChartProjection.cpp \
+	$(SRC)/RenderTask.cpp \
+	$(SRC)/RenderTaskPoint.cpp \
+	$(SRC)/RenderObservationZone.cpp \
+	$(SRC)/MapCanvas.cpp \
+	$(SRC)/Units.cpp \
+	$(SRC)/Appearance.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Screen/Chart.cpp \
+	$(SRC)/Screen/Graphics.cpp \
+	$(SRC)/Screen/Ramp.cpp \
+	$(SRC)/Screen/Util.cpp \
+	$(SRC)/Screen/UnitSymbol.cpp \
+	$(SRC)/Thread/Debug.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Poco/RWLock.cpp \
+	$(SRC)/Profile/Profile.cpp \
+	$(SRC)/Profile/ProfileKeys.cpp \
+	$(SRC)/Profile/FontConfig.cpp \
+	$(SRC)/Profile/Writer.cpp \
+	$(SRC)/Terrain/RasterBuffer.cpp \
+	$(SRC)/Terrain/RasterProjection.cpp \
+	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterMap.cpp \
+	$(SRC)/Terrain/RasterTerrain.cpp \
+	$(SRC)/Terrain/GlideTerrain.cpp \
+	$(SRC)/xmlParser.cpp \
+	$(SRC)/Dialogs/XML.cpp \
+	$(SRC)/Dialogs/dlgAnalysis.cpp \
+	$(SRC)/Dialogs/dlgHelp.cpp \
+	$(SRC)/Dialogs/dlgComboPicker.cpp \
+	$(SRC)/Dialogs/ListPicker.cpp \
+	$(SRC)/FlightStatistics.cpp \
+	$(SRC)/GlideRatio.cpp \
+	$(SRC)/GlideComputer.cpp \
+	$(SRC)/GlideComputerBlackboard.cpp \
+	$(SRC)/GlideComputerTask.cpp \
+	$(SRC)/GlideComputerInterface.cpp \
+	$(SRC)/GlideComputerAirData.cpp \
+	$(SRC)/GlideComputerStats.cpp \
+	$(SRC)/SettingsComputerBlackboard.cpp \
+	$(SRC)/SettingsMapBlackboard.cpp \
+	$(SRC)/Audio/VegaVoice.cpp \
+	$(SRC)/TeamCodeCalculation.cpp \
+	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
+	$(SRC)/Math/SunEphemeris.cpp \
+	$(SRC)/Compatibility/string.c \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/FakePersist.cpp \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeInterface.cpp \
+	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
+	$(TEST_SRC_DIR)/RunAnalysis.cpp
+RUN_ANALYSIS_OBJS = $(call SRC_TO_OBJ,$(RUN_ANALYSIS_SOURCES))
+RUN_ANALYSIS_BIN = $(TARGET_BIN_DIR)/RunAnalysis$(TARGET_EXEEXT)
+RUN_ANALYSIS_LDADD = \
+	$(PROFILE_LIBS) \
+	$(FORM_LIBS) \
+	$(SCREEN_LIBS) \
+	$(DATA_FIELD_LIBS) \
+	$(ENGINE_LIBS) \
+	$(JASPER_LIBS) \
+	$(IO_LIBS) \
+	$(ZZIP_LIBS) \
+	$(UTIL_LIBS) \
+	$(MATH_LIBS) \
+	$(RESOURCE_BINARY)
+$(RUN_ANALYSIS_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(RUN_ANALYSIS_BIN): LDLIBS += $(SCREEN_LDLIBS)
+$(RUN_ANALYSIS_BIN): $(RUN_ANALYSIS_OBJS) $(RUN_ANALYSIS_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(PROFILE_LDLIBS) -o $@
 
 RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Poco/RWLock.cpp \
