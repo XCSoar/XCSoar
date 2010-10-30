@@ -112,14 +112,6 @@ namespace Profile
    * Saves the sound settings to the profile
    */
   void SetSoundSettings();
-
-  /**
-   * Saves the airspace mode setting to the profile
-   * @param i Airspace class index
-   */
-  void SetAirspaceMode(int i);
-  void SetAirspaceColor(int i, int c);
-  void SetAirspaceBrush(int i, int c);
 };
 
 #endif

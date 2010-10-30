@@ -42,6 +42,14 @@ Copyright_License {
 namespace Profile
 {
   void LoadAirspaceConfig();
+
+  /**
+   * Saves the airspace mode setting to the profile
+   * @param i Airspace class index
+   */
+  void SetAirspaceMode(int i);
+  void SetAirspaceColor(int i, int c);
+  void SetAirspaceBrush(int i, int c);
 };
 
 #endif

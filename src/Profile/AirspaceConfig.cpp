@@ -69,3 +69,30 @@ Profile::LoadAirspaceConfig()
       settings_map.iAirspaceBrush[i] = 0;
   }
 }
+
+void
+Profile::SetAirspaceMode(int i)
+{
+  const SETTINGS_AIRSPACE &settings_airspace =
+    XCSoarInterface::SettingsComputer();
+
+  int val = 0;
+  if (settings_airspace.DisplayAirspaces[i])
+    val |= 0x1;
+  if (settings_airspace.airspace_warnings.class_warnings[i])
+    val |= 0x2;
+
+  Set(szProfileAirspaceMode[i], val);
+}
+
+void
+Profile::SetAirspaceColor(int i, int c)
+{
+  Set(szProfileColour[i], c);
+}
+
+void
+Profile::SetAirspaceBrush(int i, int c)
+{
+  Set(szProfileBrush[i], c);
+}
