@@ -66,7 +66,7 @@ main(int argc, char **argv)
       x = -1.0e-8;
 
     printf("  %lldLL,\n",
-           (int64_t)((double)fixed::resolution / x));
+           (long long)((double)fixed::resolution / x));
   }
   puts("#else");
   puts("const fixed INVCOSINETABLE[4096] = {");
