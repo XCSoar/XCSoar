@@ -152,24 +152,6 @@ GetRange(const TCHAR *code)
 }
 
 /**
- * @see GetBearing()
- */
-Angle
-GetTeammateBearingFromRef(const TCHAR *code)
-{
-	return GetBearing(code);
-}
-
-/**
- * @see GetRange()
- */
-fixed
-GetTeammateRangeFromRef(const TCHAR *code)
-{
-	return GetRange(code);
-}
-
-/**
  * Decodes the TeamCode
  * @param code The teamcode (or part of it)
  * @param maxCount Maximum chars to decode

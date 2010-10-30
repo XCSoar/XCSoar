@@ -48,8 +48,6 @@ struct GeoPoint;
 
 void GetTeamCode(TCHAR *code, Angle bearing, fixed range);
 GeoPoint GetTeamCodePosition(GeoPoint wpPos, const TCHAR *TeamMateCode);
-Angle GetTeammateBearingFromRef(const TCHAR *code);
-fixed GetTeammateRangeFromRef(const TCHAR *code);
 
 class TeamCode
 {
